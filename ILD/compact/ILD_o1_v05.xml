@@ -1,0 +1,209 @@
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0" 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+    <info name="ILD_o1_v05"
+        title="ILD Mokka model used for the DBD - ported to DD4hep"
+        author="F. Gaede"
+        url="http://ilcsoft.desy.de"
+        status="experimantal"
+        version="$Id:$">
+        <comment>ILD Mokka model used for the DBD - ported to DD4hep </comment>        
+    </info>
+  
+    <includes>
+        <gdmlFile  ref="elements.xml"/>
+        <gdmlFile  ref="materials.xml"/>
+        <!--pyBuilder ref="../drivers"/-->
+    </includes>
+  
+    <define>
+        <constant name="world_side"             value="10*m"/>
+        <constant name="world_x"                value="world_side/2"/>
+        <constant name="world_y"                value="world_side/2"/>
+        <constant name="world_z"                value="world_side/2"/>        
+
+	<!-- global parameters from Mokka model ILD_o1_v05 -->
+	<constant name="BCal_PairMonitor" value="1"/>
+	<constant name="BCal_SpanningPhi" value="320"/>
+	<constant name="BCal_TubeIncomingRadius" value="15"/>
+	<constant name="BCal_dAbsorber" value="3.5"/>
+	<constant name="BCal_dGraphite" value="100"/>
+	<constant name="BCal_nLayers" value="30"/>
+	<constant name="BCal_nWafers" value="8"/>
+	<constant name="BCal_rInner" value="20"/>
+	<constant name="BCal_rOuter" value="150"/>
+	<constant name="BCal_rSegmentation" value="8"/>
+	<constant name="Coil_Yoke_radial_clearance" value="250"/>
+	<constant name="Coil_extra_size" value="1522"/>
+	<constant name="Ecal_Alveolus_Air_Gap" value="0.5"/>
+	<constant name="Ecal_Barrel_halfZ" value="2350"/>
+	<constant name="Ecal_Si_thickness" value=".5"/>
+	<constant name="Ecal_Slab_H_fiber_thickness" value="0.55"/>
+	<constant name="Ecal_Slab_PCB_thickness" value="0.8"/>
+	<constant name="Ecal_Slab_copper_thickness" value="0.4"/>
+	<constant name="Ecal_Slab_glue_gap" value="0.1"/>
+	<constant name="Ecal_Slab_ground_thickness" value="0.1"/>
+	<constant name="Ecal_Slab_shielding" value="0.1"/>
+	<constant name="Ecal_Tpc_gap" value="35"/>
+	<constant name="Ecal_barrel_number_of_towers" value="5"/>
+	<constant name="Ecal_cells_size" value="4.9"/>
+	<constant name="Ecal_endcap_center_box_size" value="800.0"/>
+	<constant name="Ecal_endcap_extra_size" value="60.8"/>
+	<constant name="Ecal_endcap_zmin" value="2450.0"/>
+	<constant name="Ecal_fiber_thickness" value=".15"/>
+	<constant name="Ecal_front_face_thickness" value="2"/>
+	<constant name="Ecal_guard_ring_size" value="0.5"/>
+	<constant name="Ecal_lateral_face_thickness" value="2"/>
+	<constant name="Ecal_nlayers2" value="9"/>
+	<constant name="Ecal_support_thickness" value="9.3"/>
+	<constant name="Field_nominal_value" value="3.5"/>
+	<constant name="Hcal_Coil_additional_gap" value="29.5"/>
+	<constant name="Hcal_Ecal_gap" value="30"/>
+	<constant name="Hcal_apply_Birks_law" value="1"/>
+	<constant name="Hcal_back_plate_thickness" value="15"/>
+	<constant name="Hcal_cells_size" value="30"/>
+	<constant name="Hcal_endcap_center_box_size" value="700.0"/>
+	<constant name="Hcal_endcap_ecal_gap" value="15"/>
+	<constant name="Hcal_endcap_nlayers" value="48"/>
+	<!--constant name="Hcal_endcap_radiator_material" value="Iron"/-->
+	<constant name="Hcal_endcap_radiator_thickness" value="20"/>
+	<constant name="Hcal_endcap_sensitive_center_box" value="0.0"/>
+	<constant name="Hcal_endcap_zmin" value="2670.7"/>
+	<constant name="Hcal_fiber_gap" value="2.7"/>
+	<constant name="Hcal_lateral_structure_thickness" value="15"/>
+	<constant name="Hcal_layer_air_gap" value="2"/>
+	<constant name="Hcal_layer_support_length" value="0"/>
+	<constant name="Hcal_middle_stave_gaps" value="10"/>
+	<constant name="Hcal_modules_gap" value="0"/>
+	<constant name="Hcal_nlayers" value="48"/>
+	<constant name="Hcal_radiator_thickness" value="20.0"/>
+	<!--constant name="Hcal_sensitive_model" value="scintillator"/-->
+	<constant name="Hcal_stave_gaps" value="10"/>
+	<constant name="ILC_Main_Crossing_Angle" value="14"/>
+	<constant name="LHcal_BCal_clearance" value="390"/>
+	<constant name="LHcal_zend" value="3085"/>
+	<constant name="Lcal_inner_radius" value="80.0"/>
+	<constant name="Lcal_outer_radius" value="195.2"/>
+	<constant name="Lcal_z_begin" value="2505.0"/>
+	<constant name="Lcal_z_thickness" value="135.6"/>
+	<constant name="SIT1_Half_Length_Z" value="384.2"/>
+	<constant name="SIT1_Radius" value="179.232"/>
+	<constant name="SIT2_Half_Length_Z" value="672.35"/>
+	<constant name="SIT2_Radius" value="272.363"/>
+	<constant name="TPC_Ecal_Hcal_barrel_halfZ" value="2350"/>
+	<constant name="TPC_inner_radius" value="329"/>
+	<constant name="TPC_outer_radius" value="1808"/>
+	<constant name="TUBE_IPOuterBulge_end_radius" value="184"/>
+	<constant name="TUBE_IPOuterBulge_end_z" value="2364.5"/>
+	<constant name="TUBE_IPOuterTube_end_radius" value="24"/>
+	<constant name="TUBE_IPOuterTube_end_z" value="230"/>
+	<constant name="TUBE_IPOuterTube_start_radius" value="24"/>
+	<constant name="TUBE_IPOuterTube_start_z" value="150"/>
+	<constant name="TUBE_crossing_angle" value="14"/>
+	<constant name="TUBE_opening_angle" value="0.07876"/>
+	<constant name="VXD_active_silicon_thickness" value="0.05"/>
+	<constant name="VXD_inner_radius" value="16"/>
+	<constant name="VXD_length_r1" value="62.5"/>
+	<constant name="VXD_length_r3" value="125"/>
+	<constant name="VXD_radius_r1" value="16"/>
+	<constant name="VXD_radius_r3" value="37"/>
+	<constant name="VXD_radius_r5" value="58"/>
+	<constant name="VXD_side_band_electronics_width" value="0.5"/>
+	<!--constant name="VXD_support_ladder_material" value="graphite"/-->
+	<constant name="VXD_support_ladder_thickness" value="0.134"/>
+	<constant name="Yoke_endcap_inner_radius" value="300"/>
+	<constant name="Yoke_thickness" value="2550"/>
+
+	<!-- FIXME: string constants not supported  !!!??? -->
+    </define>
+
+  
+    <!--limits>
+        <limitset name="cal_limits">
+            <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
+        </limitset>
+        <limitset name="TPC_limits">
+            <limit name="step_length_max" particles="*" value="10.0" unit="mm" />
+        </limitset>
+        <limitset name="Tracker_limits">
+            <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
+        </limitset>
+    </limits-->
+
+    <display>
+      <!-- fixme:  white comes out as red !!!???? |  vis name="WhiteVis"         alpha="0.0" r="1.0" g="1.0"  b="1.0"   showDaughters="true"  visible="true"/ --> 
+      <vis name="WhiteVis"         alpha="0.0" r=".96" g=".96"  b=".96"   showDaughters="true"  visible="true"/>
+
+      <vis name="RedVis"           alpha="1.0" r="1.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
+      <vis name="GreenVis"         alpha="1.0" r="0.0" g="1.0"  b="0.0"   showDaughters="true"  visible="true"/>
+      <vis name="BlueVis"          alpha="1.0" r="0.0" g="0.0"  b="1.0"   showDaughters="true"  visible="true"/>
+
+      <vis name="CyanVis"          alpha="1.0" r="0.0" g="1.0"  b="1.0"   showDaughters="true"  visible="true"/>
+      <vis name="MagentaVis"       alpha="1.0" r="1.0" g="0.0"  b="1.0"   showDaughters="true"  visible="true"/>
+      <vis name="YellowVis"        alpha="1.0" r="1.0" g="1.0"  b="0.0"   showDaughters="true"  visible="true"/>
+
+      <vis name="BlackVis"         alpha="1.0" r="0.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
+
+      <vis name="GrayVis"          alpha="1.0" r="0.5" g="0.5"  b="0.5"   showDaughters="true"  visible="true"/>
+
+      <vis name="VXDVis"        alpha="0.1" r="0.1" g=".5"  b=".5"   showDaughters="true"  visible="true"/>
+      <vis name="VXDLayerVis"   alpha="1.0" r="0.1" g=".5"  b=".5"   showDaughters="true"  visible="true"/>
+      <vis name="VXDSupportVis" alpha="1.0" r="0.0" g="1.0" b="0.0"  showDaughters="true" visible="true"/>
+    </display>
+
+    <detectors>
+        <comment>Trackers</comment>
+
+        <detector name="VTX" type="VXD04" vis="VXDVis" id="1" limits="Tracker_limits" readout="VXDCollection" insideTrackingVolume="true">
+	  
+          <tubs rmin="0*mm" rmax="180*mm" zhalf="380.*mm" name="envelope"/>
+
+	  <!-- database : TMP_DB10 -->
+	  <!-- SQL command: "select * from layers_common_parameters;"  -->
+	  <layers_common_parameters id="1" electronics_structure_thickness="0.1" active_silicon_thickness="0.05" support_structure_radial_thickness="0.49392" end_electronics_half_z="5" 
+				    strip_final_beampipe_radious="24.3"	side_band_electronics_option="1" end_ladd_electronics_option="1" side_band_electronics_width="0.5" 
+				    side_band_electronics_thickness="0.05" active_side_band_electronics_option="0" layer_gap="2" flex_cable_material="G4_KAPTON" flex_cable_thickness="0.05"
+				    foam_spacer_material="SiC_foam" foam_spacer_thickness="0.94" metal_traces_material="G4_Al" metal_traces_thickness="0.01" cool_pipe_material="titanium" 
+				    cool_pipe_inner_radius="0.75" cool_pipe_outer_radius="1" external_kapton_thickness="0.05" external_metal_thickness="0.009"  />
+	  <!-- SQL command: "SELECT * FROM cryostat;"  -->
+	  <cryostat id="1" alu_skin_inner_radious="100" alu_skin_tickness="0.5" foam_inner_radious="90" foam_tickness="10" foam_half_z="166.6*mm" endplate_inner_radious="24.2" 
+		    cryostat_option="1" cryostat_apperture="30" cryostat_apperture_radius="1.5"  />
+	  <!-- SQL command: "select * from support_shell;"  -->
+	  <support_shell id="0" inner_radious="65" half_z="145" thickess="0.49392" endplate_inner_radious="30" endplate_inner_radius_L1="15.7" endplate_outer_radius_L1="20" 
+			 offset_ladder_block="0.28224" beryllium_ladder_block_length="5" beryllium_ladder_block_thickness="0.25" shell_endplate_thickness="2" forward_shell_half_z="6.5"  />
+	  <!-- SQL command: "select * from layer;"  -->
+	  <layer id="1" layer_radius="16" ladder_length="62.5" ladder_width="5.5" nb_ladder="10" ladder_gap="0" strip_line_final_z="150" end_electronics_width="5.5" 
+		 initial_kapton_striplines_thickness="0.04566" final_kapton_striplines_thickness="0.02435" initial_metal_striplines_thickness="0.00806" 
+		 final_metal_striplines_thickness="0.0043" support_width="4.5"  />
+	  <layer id="2" layer_radius="16" ladder_length="62.5" ladder_width="5.5" nb_ladder="10" ladder_gap="0" strip_line_final_z="150" end_electronics_width="5.5" 
+		 initial_kapton_striplines_thickness="0.04566" final_kapton_striplines_thickness="0.02435" initial_metal_striplines_thickness="0.00806" 
+		 final_metal_striplines_thickness="0.0043" support_width="4.5"  />
+	  <layer id="3" layer_radius="37" ladder_length="125" ladder_width="11" nb_ladder="11" ladder_gap="0" strip_line_final_z="150" end_electronics_width="11" 
+		 initial_kapton_striplines_thickness="0.04102" final_kapton_striplines_thickness="0.05059" initial_metal_striplines_thickness="0.00724" 
+		 final_metal_striplines_thickness="0.00893" support_width="10"  />
+	  <layer id="4" layer_radius="37" ladder_length="125" ladder_width="11" nb_ladder="11" ladder_gap="0" strip_line_final_z="150" end_electronics_width="11" 
+		 initial_kapton_striplines_thickness="0.04102" final_kapton_striplines_thickness="0.05059" initial_metal_striplines_thickness="0.00724" 
+		 final_metal_striplines_thickness="0.00893" support_width="10"  />
+	  <layer id="5" layer_radius="58" ladder_length="125" ladder_width="11" nb_ladder="17" ladder_gap="0" strip_line_final_z="150" end_electronics_width="11" 
+		 initial_kapton_striplines_thickness="0.04044" final_kapton_striplines_thickness="0.07819" initial_metal_striplines_thickness="0.00714" 
+		 final_metal_striplines_thickness="0.0138" support_width="10"  />
+	  <layer id="6" layer_radius="58" ladder_length="125" ladder_width="11" nb_ladder="17" ladder_gap="0" strip_line_final_z="150" end_electronics_width="11" 
+		 initial_kapton_striplines_thickness="0.04044" final_kapton_striplines_thickness="0.07819" initial_metal_striplines_thickness="0.00714" 
+		 final_metal_striplines_thickness="0.0138" support_width="10"  />
+        </detector> <!--vxd-->
+
+    </detectors> 
+
+    <readouts>
+        <readout name="VXDCollection">
+            <id>system:5,side:-2,layer:9,module:8,sensor:8</id>
+        </readout>
+    </readouts>
+ <fields>
+   <field type="solenoid" name="GlobalSolenoid" inner_field="3.5*tesla"
+	  outer_field="-1.5*tesla" zmax="TPC_Ecal_Hcal_barrel_halfZ"
+	  inner_radius="TPC_outer_radius"
+	  outer_radius="world_side" />
+ </fields> 
+</lccdd>
