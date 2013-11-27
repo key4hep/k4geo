@@ -42,6 +42,15 @@ set( ROOT_COMPONENT_LIBRARIES Geom Reflex)
 
 
 find_package( Gear REQUIRED)
+
+find_package(Geant4 REQUIRED gdml ui_all vis_all)
+#if(NOT Geant4_clhep_FOUND)
+#  find_package(CLHEP REQUIRED)
+#  set(Geant4_INCLUDE_DIRS ${Geant4_INCLUDE_DIRS} ${CLHEP_INCLUDE_DIRS})
+#  set(Geant4_LIBRARIES ${Geant4_LIBRARIES} ${CLHEP_LIBRARIES})
+#endif()
+INCLUDE(${Geant4_USE_FILE})   # this also takes care of geant 4 definitions and include dirs
+
 #-------------------------------------------------------------
 # add additional packages here
 
@@ -52,6 +61,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/include
   include
   ${DD4hep_INCLUDE_DIRS}
   ${ROOT_INCLUDE_DIR}
+  ${Geant4_INCLUDE_DIRS}
   ${GEAR_INCLUDE_DIRS}
  )
 
@@ -71,6 +81,13 @@ target_link_libraries(${PackageName} ${DD4hep_LIBRARIES}
   ${ROOT_LIBRARIES} ${ROOT_COMPONENT_LIBRARIES} 
   ${GEAR_LIBRARIES}
   )
+
+
+#---------- the main program ----------------------------------
+
+add_executable( dd_sim ./src/ddsim.cpp)
+target_link_libraries( dd_sim ${DD4hep_LIBRARIES}  ${ROOT_LIBRARIES} ${ROOT_COMPONENT_LIBRARIES}   ${Geant4_LIBRARIES} )
+
 
 #---Rootmap generation--------------------------------------------------------------
 
@@ -98,7 +115,7 @@ INSTALL(FILES ${hfiles}
   )
 
 
-install(TARGETS ${PackageName}
+install(TARGETS ${PackageName}  dd_sim
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   )
