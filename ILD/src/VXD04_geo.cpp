@@ -1,21 +1,9 @@
-// $Id:$
 //====================================================================
-//  DD4hep detector description for ILD (ported from Mokka)
+//  DDSim - LC simulation based on DD4hep 
 //--------------------------------------------------------------------
-//
-//  @author: F.Gaede, DESY, Nov 2013
-//  - ported from Mokka driver VXD04.cc
-//  - see comments starting with '//**' for
-//     hints on porting issues
-//
-//  Mokka History:
-// - first implementation -- Damien Grandjean, April 2003
-// - fixed geometry overlap -- Adrian Vogel, 2005-12-12
-// - added optional GEAR output -- R. Lippe, DESY, 2006-09-04
-// -modification for double layer geometry -- Damien Grandjean, February 2008
-// -increased realism in the description of the ladders, the Be support and the cabling, added cooling tubes Y. Voutsinas, September 2011
+//  F.Gaede, DESY
+//  $Id:$
 //====================================================================
-
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4Hep/TGeoUnits.h"
 #include <math.h>
@@ -49,10 +37,25 @@ struct XMLHandlerDB{
 
 
 
-//############################################################################################################
-
-
+/** Construction of VTX detector, ported from Mokka driver VXD04.cc
+ *
+ *  Mokka History:
+ * - first implementation -- Damien Grandjean, April 2003
+ * - fixed geometry overlap -- Adrian Vogel, 2005-12-12
+ * - added optional GEAR output -- R. Lippe, DESY, 2006-09-04
+ * -modification for double layer geometry -- Damien Grandjean, February 2008
+ * -increased realism in the description of the ladders, the Be support and the cabling, added cooling tubes Y. Voutsinas, September 2011
+ *
+ *  @author: F.Gaede, DESY, Nov 2013
+ *
+ */
 static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
+
+  //------------------------------------------
+  //  See comments starting with '//**' for
+  //     hints on porting issues
+  //------------------------------------------
+
   
   xml_det_t    x_det = e;
   string       name  = x_det.nameStr();
