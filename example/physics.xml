@@ -15,18 +15,19 @@
 
   <physicslist name="Geant4PhysicsList/MyPhysics.0">
     <extends name="QGSP_BERT"/>
+
     <!-- fg : use QGSP_BERT as is ....    
-    <particles>
-      <construct name="G4Geantino"/>
-      <construct name="G4ChargedGeantino"/>
-      <construct name="G4Electron"/>
-      <construct name="G4Gamma"/>
-      <construct name="G4BosonConstructor"/>
-      <construct name="G4LeptonConstructor"/>
-      <construct name="G4MesonConstructor"/>
-      <construct name="G4BaryonConstructor"/>
-    </particles>
-    --->
+	 <particles>
+	 <construct name="G4Geantino"/>
+	 <construct name="G4ChargedGeantino"/>
+	 <construct name="G4Electron"/>
+	 <construct name="G4Gamma"/>
+	 <construct name="G4BosonConstructor"/>
+	 <construct name="G4LeptonConstructor"/>
+	 <construct name="G4MesonConstructor"/>
+	 <construct name="G4BaryonConstructor"/>
+	 </particles> 
+    -->
   </physicslist>
 <!--
   <sequences>
