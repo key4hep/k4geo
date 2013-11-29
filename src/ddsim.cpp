@@ -8,6 +8,8 @@
 #include "DDG4/Geant4Config.h"
 #include <iostream>
 
+#include "DDSim/G4lcioSimHit.h"
+
 using namespace DD4hep::Simulation::Setup;
 
 /** Simple main program to get started with DDSim.

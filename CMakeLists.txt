@@ -41,6 +41,7 @@ find_package( ROOT REQUIRED )
 set( ROOT_COMPONENT_LIBRARIES Geom Reflex)
 
 
+find_package( LCIO REQUIRED)
 find_package( Gear REQUIRED)
 
 find_package(Geant4 REQUIRED gdml ui_all vis_all)
@@ -62,10 +63,11 @@ include_directories( ${CMAKE_SOURCE_DIR}/include
   ${DD4hep_INCLUDE_DIRS}
   ${ROOT_INCLUDE_DIR}
   ${Geant4_INCLUDE_DIRS}
+  ${LCIO_INCLUDE_DIRS}
   ${GEAR_INCLUDE_DIRS}
  )
 
-file(GLOB sources ./ILD/src/*.cpp )
+file(GLOB sources ./src/* ./ILD/src/*.cpp )
 file(GLOB headers ./ILD/include/*.h)
 
 include(DD4hep_XML_setup)
@@ -79,6 +81,8 @@ add_library(${PackageName} SHARED ${sources})
 
 target_link_libraries(${PackageName} ${DD4hep_LIBRARIES}  
   ${ROOT_LIBRARIES} ${ROOT_COMPONENT_LIBRARIES} 
+  ${Geant4_LIBRARIES}
+  ${LCIO_LIBRARIES}
   ${GEAR_LIBRARIES}
   )
 

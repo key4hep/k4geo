@@ -98,10 +98,11 @@
       </action>
     </sequence>
 
+
     <sequence sd="VTX" type="Geant4SensDetActionSequence">
       <!--filter name="GeantinoRejector"/-->
       <filter name="EnergyDepositMinimumCut"/>
-      <action name="Geant4SimpleTrackerAction/VXDCollection"/>
+      <action name="DDSimTrackerAction/VXDCollection"/>
     </sequence>
 
     <!--
