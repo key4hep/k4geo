@@ -55,20 +55,20 @@
        
        Note: registered global filters MUST be unique.
        However, not all filters need to registered....
-
-       <filters>
-       <filter name="GeantinoRejectFilter/GeantinoRejector"/>
+  -->
+  <filters>
+    <filter name="GeantinoRejectFilter/GeantinoRejector"/>
        <filter name="ParticleRejectFilter/OpticalPhotonRejector">
-       <properties particle="opticalphoton"/>
+	 <properties particle="opticalphoton"/>
        </filter>
        <filter name="ParticleSelectFilter/OpticalPhotonSelector">
-       <properties particle="opticalphoton"/>
+	 <properties particle="opticalphoton"/>
        </filter>
-       <filter name="EnergyDepositMinimumCut">
-       <properties Cut="10"/>
+       <filter name="EnergyDepositMinimumCut/SiTracker">
+	 <properties Cut="0.01"/>
        </filter>
-       </filters>
-  -->
+  </filters>
+ 
 
   <!-- List of known action sequences.
        Note: Action sequences exist for each of the various geant4 callback,
@@ -90,22 +90,34 @@
 	<properties Output="simple_lcio"/>
       </action>
     </sequence>
-    <sequence name="Geant4GeneratorActionSequence/GeneratorAction">
-      <action name="Geant4ParticleGun/gun">
+    <!--sequence name="Geant4GeneratorActionSequence/GeneratorAction">
+	<action name="Geant4ParticleGun/gun">
         <properties energy="500"
-  	  	    particle="'e-'"
-		    multiplicity="1"/>
-      </action>
-    </sequence>
+	particle="'e-'"
+	multiplicity="1"/>
+	</action-->
 
+    <sequence name="Geant4GeneratorActionSequence/GeneratorAction">
+      <action name="LCIOGeneratorAction">
+        <properties LCIOFileName="infile.slcio" 
+		    SkipNEvents="1" />
+      </action>
+
+    </sequence>
 
     <sequence sd="VTX" type="Geant4SensDetActionSequence">
       <!--filter name="GeantinoRejector"/-->
+      <filter name="EnergyDepositMinimumCut/SiTracker"/>
+      <action name="TRKSiSD00/VXDCollection"/>
+    </sequence>
+    
+    <!--
+    <sequence sd="VTX" type="Geant4SensDetActionSequence">
+      <filter name="GeantinoRejector"/>
       <filter name="EnergyDepositMinimumCut"/>
       <action name="DDSimTrackerAction/VXDCollection"/>
     </sequence>
 
-    <!--
     <sequence sd="SiVertexBarrel" type="Geant4SensDetActionSequence">
       <filter name="GeantinoRejector"/>
       <filter name="EnergyDepositMinimumCut"/>

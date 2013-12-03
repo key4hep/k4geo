@@ -613,10 +613,11 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       
       vxd.setVisAttributes(lcdd,  "GreenVis" , ElectronicsBandLogical ) ;
       
-      // XXXX fixme: SD XXX   
-      // if (active_side_band_electronics_option==1)  ElectronicsBandLogical->SetSensitiveDetector(theVXDSD);
-      ElectronicsBandLogical.setSensitiveDetector(sens);
-
+      //fixme: turn off sensitive sidebands for now - not sure they cause problems in the volume manager ....
+      active_side_band_electronics_option = 0 ;
+      if(active_side_band_electronics_option==1)
+	ElectronicsBandLogical.setSensitiveDetector(sens);
+      
       
       double side_band_electronic_offset_phi = offset_phi - (side_band_electronics_option * ladder_width);
       
@@ -637,17 +638,18 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 				     Transform3D( rot, Position((layer_radius+(side_band_electronics_thickness/2.)+layer_gap)*sin(phirot2)+side_band_electronic_offset_phi*cos(phirot2),
 								-(layer_radius+(side_band_electronics_thickness/2.)+layer_gap)*cos(phirot2)+side_band_electronic_offset_phi*sin(phirot2),
 								Z))  ) ;
-
+	  
 	  //**fg: choose sensor 1 for sensitive electronics side band
-	  pv.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(elec_loop)  ).addPhysVolID("sensor", 1 ).addPhysVolID("side", 1 )   ;
+	  if(active_side_band_electronics_option==1)
+	    pv.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(elec_loop)  ).addPhysVolID("sensor", 1 ).addPhysVolID("side", 1 )   ;
 
 	  pv = envelope.placeVolume( ElectronicsBandLogical,
 				     Transform3D( rot, Position((layer_radius+(side_band_electronics_thickness/2.)+layer_gap)*sin(phirot2)+side_band_electronic_offset_phi*cos(phirot2),
 								-(layer_radius+(side_band_electronics_thickness/2.)+layer_gap)*cos(phirot2)+side_band_electronic_offset_phi*sin(phirot2),
 								-Z))  );
 
-	  //**fg: choose sensor 1 for sensitive electronics side band
-	  pv.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(elec_loop)  ).addPhysVolID("sensor", 1 ).addPhysVolID("side", -1 )   ;
+	  if(active_side_band_electronics_option==1)
+	    pv.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(elec_loop)  ).addPhysVolID("sensor", 1 ).addPhysVolID("side", -1 )   ;
 	  
 	}
 
@@ -668,10 +670,16 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 				     Transform3D( rot, Position((layer_radius-(side_band_electronics_thickness/2.))*sin(phirot2)+side_band_electronic_offset_phi*cos(phirot2),
 								-(layer_radius-(side_band_electronics_thickness/2.))*cos(phirot2)+side_band_electronic_offset_phi*sin(phirot2),
 								Z))  );
+
+	  if(active_side_band_electronics_option==1)
+	    pv.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(elec_loop)  ).addPhysVolID("sensor", 1 ).addPhysVolID("side", 1 )   ;
+
 	  pv = envelope.placeVolume( ElectronicsBandLogical,
 				     Transform3D( rot, Position((layer_radius-(side_band_electronics_thickness/2.))*sin(phirot2)+side_band_electronic_offset_phi*cos(phirot2),
 								-(layer_radius-(side_band_electronics_thickness/2.))*cos(phirot2)+side_band_electronic_offset_phi*sin(phirot2),
 								-Z))  );
+	  if(active_side_band_electronics_option==1)
+	    pv.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(elec_loop)  ).addPhysVolID("sensor", 1 ).addPhysVolID("side", -1 )   ;
 	}
       }      
     }
@@ -857,8 +865,6 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
     vxd.setVisAttributes(lcdd,  "BlueVis" , SiActiveLayerLogical ) ;
 
-    // XXXX fixme: SD XXX   
-    // SiActiveLayerLogical->SetSensitiveDetector(theVXDSD);
     SiActiveLayerLogical.setSensitiveDetector(sens);
    
     double active_offset_phi = offset_phi +(side_band_electronics_option * side_band_electronics_width/2.); 
@@ -873,6 +879,12 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       // encoder[ILDCellID0::layer]  =  LayerId -1;
       // encoder[ILDCellID0::module] = active_loop ;
       // cellID0 = encoder.lowWord() ;  
+
+
+      if (LayerId==2 ) {
+
+	std::cout << "  ***** place ladder "  << int(active_loop) << " for " << _toString( LayerId , "SiActiveLayer_%02d") << std::endl ;
+      }
 
       if (LayerId==2||LayerId==4||LayerId==6) {
 	
@@ -901,6 +913,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	pv = envelope.placeVolume( SiActiveLayerLogical,  Transform3D( rot, Position((layer_radius-(active_silicon_thickness/2.))*sin(phirot2)+active_offset_phi*cos(phirot2),
 										     -(layer_radius-(active_silicon_thickness/2.))*cos(phirot2)+active_offset_phi*sin(phirot2),
 										     -Z)) );
+
 	pv.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(active_loop)  ).addPhysVolID("sensor", 0 ).addPhysVolID("side", -1 )   ;
 
       }		  
@@ -1128,8 +1141,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   Volume mother =  lcdd.pickMotherVolume( vxd ) ;
   
   pv = mother.placeVolume(envelope);
-  
-  pv.addPhysVolID( "system", x_det.id() ).addPhysVolID("side",0 ) ;
+
+  pv.addPhysVolID( "system", x_det.id() ) ; //.addPhysVolID("side", 0 ) ;
   
   vxd.setVisAttributes( lcdd, x_det.visStr(), envelope );
   //  if( vxd.isValid() ) 

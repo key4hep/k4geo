@@ -14,6 +14,7 @@
 #include "UTIL/Operators.h"
 #include "UTIL/ILDConf.h"
 
+//#include <iostream>
 
 namespace DD4hep {
   namespace Simulation   {
@@ -54,6 +55,7 @@ namespace DD4hep {
       // need to write the description to the collection - look it up via the cellID of the first hit
       lcio::SimTrackerHit* hit   = g4col->hit(0) ;
       long cellID = (  ( ( hit->getCellID1() << 32 ) & 0xffffffff00000000 )  |  ( hit->getCellID0() & 0xffffffff ) ) ; 
+
       std::string     dsc   = encoding(  /*VolumeManager*/ args.first , cellID );
       UTIL::CellIDEncoder<lcio::SimTrackerHit> decoder(dsc,col);
       

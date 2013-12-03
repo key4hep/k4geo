@@ -23,13 +23,11 @@ namespace dd4hep {
 namespace DDSim{
   
   
-  /** Simple Tracker type - wrapping SimTrkHit ... why is this needed ?
+  /** Simple Tracker type - wrapping SimTrackerHit ... is this needed ?
    */
-  struct DDSimTracker{
-    //    typedef SimTrkHit Hit ;
-    typedef lcio::SimTrackerHitImpl Hit ;
-  } ;
+  struct DDSimTracker{  typedef lcio::SimTrackerHitImpl Hit ; } ;
   
+
   // copied from Geant4SDActions.cpp (why is this not a public class ??????)
   
   /** Simple SensitiveAction class ...
@@ -38,13 +36,18 @@ namespace DDSim{
   protected:
     /// Collection identifiers
     size_t m_collectionID;
-    
+
+    // properties:
+    bool _detailedHitsStoring ; 
+
   public:
     //    typedef SimpleHit::Contribution HitContribution;
     // Standard , initializing constructor
     Geant4SensitiveAction(dd4hep::Geant4Context* context, const std::string& name, DetElement det, LCDD& lcdd)
       : Geant4Sensitive(context,name,det,lcdd), m_collectionID(0) {
       
+      declareProperty("detailedHitsStoring", _detailedHitsStoring ) ;
+
       defineCollections();
       dd4hep::InstanceCount::increment(this);
     }

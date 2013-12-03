@@ -155,7 +155,7 @@
     <detectors>
         <comment>Trackers</comment>
 
-        <detector name="VTX" type="VXD04" vis="VXDVis" id="1" limits="Tracker_limits" readout="VXDCollection" insideTrackingVolume="true">
+        <detector name="VTX" type="VXD04" vis="VXDVis" id="42" limits="Tracker_limits" readout="VXDCollection" insideTrackingVolume="true">
 	  
           <tubs rmin="0*mm" rmax="180*mm" zhalf="380.*mm" name="envelope"/>
 
