@@ -91,9 +91,11 @@
 	<constant name="SIT1_Radius" value="179.232"/>
 	<constant name="SIT2_Half_Length_Z" value="672.35"/>
 	<constant name="SIT2_Radius" value="272.363"/>
-	<constant name="TPC_Ecal_Hcal_barrel_halfZ" value="2350"/>
-	<constant name="TPC_inner_radius" value="329"/>
-	<constant name="TPC_outer_radius" value="1808"/>
+
+	<constant name="TPC_Ecal_Hcal_barrel_halfZ" value="2350*mm"/>
+	<constant name="TPC_inner_radius" value="329*mm"/>
+	<constant name="TPC_outer_radius" value="1808*mm"/>
+
 	<constant name="TUBE_IPOuterBulge_end_radius" value="184"/>
 	<constant name="TUBE_IPOuterBulge_end_z" value="2364.5"/>
 	<constant name="TUBE_IPOuterTube_end_radius" value="24"/>
@@ -102,16 +104,18 @@
 	<constant name="TUBE_IPOuterTube_start_z" value="150"/>
 	<constant name="TUBE_crossing_angle" value="14"/>
 	<constant name="TUBE_opening_angle" value="0.07876"/>
-	<constant name="VXD_active_silicon_thickness" value="0.05"/>
-	<constant name="VXD_inner_radius" value="16"/>
-	<constant name="VXD_length_r1" value="62.5"/>
-	<constant name="VXD_length_r3" value="125"/>
-	<constant name="VXD_radius_r1" value="16"/>
-	<constant name="VXD_radius_r3" value="37"/>
-	<constant name="VXD_radius_r5" value="58"/>
-	<constant name="VXD_side_band_electronics_width" value="0.5"/>
+	<constant name="VXD_active_silicon_thickness" value="0.05*mm"/>
+
+	<constant name="VXD_inner_radius" value="16*mm"/>
+	<constant name="VXD_length_r1" value="62.5*mm"/>
+	<constant name="VXD_length_r3" value="125*mm"/>
+	<constant name="VXD_radius_r1" value="16*mm"/>
+	<constant name="VXD_radius_r3" value="37*mm"/>
+	<constant name="VXD_radius_r5" value="58*mm"/>
+	<constant name="VXD_side_band_electronics_width" value="0.5*mm"/>
 	<!--constant name="VXD_support_ladder_material" value="graphite"/-->
-	<constant name="VXD_support_ladder_thickness" value="0.134"/>
+	<constant name="VXD_support_ladder_thickness" value="0.134*mm"/>
+
 	<constant name="Yoke_endcap_inner_radius" value="300"/>
 	<constant name="Yoke_thickness" value="2550"/>
 
@@ -143,17 +147,19 @@
       <!-- fixme:  white comes out as red !!!???? |  vis name="WhiteVis"         alpha="0.0" r="1.0" g="1.0"  b="1.0"   showDaughters="true"  visible="true"/ --> 
       <vis name="WhiteVis"         alpha="0.0" r=".96" g=".96"  b=".96"   showDaughters="true"  visible="true"/>
 
+      <vis name="Invisible"         alpha="0.0" r="0" g="0"  b="0"   showDaughters="false"  visible="false"/>
+
       <vis name="RedVis"           alpha="1.0" r="1.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
       <vis name="GreenVis"         alpha="1.0" r="0.0" g="1.0"  b="0.0"   showDaughters="true"  visible="true"/>
       <vis name="BlueVis"          alpha="1.0" r="0.0" g="0.0"  b="1.0"   showDaughters="true"  visible="true"/>
-
       <vis name="CyanVis"          alpha="1.0" r="0.0" g="1.0"  b="1.0"   showDaughters="true"  visible="true"/>
       <vis name="MagentaVis"       alpha="1.0" r="1.0" g="0.0"  b="1.0"   showDaughters="true"  visible="true"/>
       <vis name="YellowVis"        alpha="1.0" r="1.0" g="1.0"  b="0.0"   showDaughters="true"  visible="true"/>
-
       <vis name="BlackVis"         alpha="1.0" r="0.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
-
       <vis name="GrayVis"          alpha="1.0" r="0.5" g="0.5"  b="0.5"   showDaughters="true"  visible="true"/>
+
+      <vis name="TPCVis"        alpha="0.1" r="0" g="0"  b="0"   showDaughters="true"  visible="true"/>
+      <vis name="TPCMotherVis"  alpha="0.1" r="0.9" g="0.9"  b="0.9"   showDaughters="true"  visible="false"/>
 
       <vis name="VXDVis"        alpha="0.1" r="0.1" g=".5"  b=".5"   showDaughters="true"  visible="true"/>
       <vis name="VXDLayerVis"   alpha="1.0" r="0.1" g=".5"  b=".5"   showDaughters="true"  visible="true"/>
@@ -167,66 +173,133 @@
 
     </display>
 
+    <materials>
+      <material name="TPC_endplate_mix">
+	<!--D value="1.7" unit="g/cm3"/-->
+	<composite n="74" ref="G4_AIR"/>
+	<composite n="12" ref="g10"/>
+	<composite n="14" ref="G4_Al"/>
+      </material>      
+    </materials>
+
     <detectors>
         <comment>Trackers</comment>
 
-        <detector name="VTX" type="VXD04" vis="VXDVis" id="42" limits="Tracker_limits" readout="VXDCollection" insideTrackingVolume="true">
+        <detector name="VTX" type="VXD04" vis="VXDVis" id="1" limits="Tracker_limits" readout="VXDCollection" insideTrackingVolume="true">
 	  
           <tubs rmin="0*mm" rmax="180*mm" zhalf="380.*mm" name="envelope"/>
 
 	  <!-- database : TMP_DB10 -->
 	  <!-- SQL command: "select * from layers_common_parameters;"  -->
-	  <layers_common_parameters id="1" electronics_structure_thickness="0.1" active_silicon_thickness="0.05" support_structure_radial_thickness="0.49392" end_electronics_half_z="5" 
-				    strip_final_beampipe_radious="24.3"	side_band_electronics_option="1" end_ladd_electronics_option="1" side_band_electronics_width="0.5" 
-				    side_band_electronics_thickness="0.05" active_side_band_electronics_option="0" layer_gap="2" flex_cable_material="G4_KAPTON" flex_cable_thickness="0.05"
-				    foam_spacer_material="SiC_foam" foam_spacer_thickness="0.94" metal_traces_material="G4_Al" metal_traces_thickness="0.01" cool_pipe_material="titanium" 
-				    cool_pipe_inner_radius="0.75" cool_pipe_outer_radius="1" external_kapton_thickness="0.05" external_metal_thickness="0.009"  />
+	  <layers_common_parameters id="1" electronics_structure_thickness="0.1*mm" active_silicon_thickness="0.05*mm" support_structure_radial_thickness="0.49392*mm" end_electronics_half_z="5*mm" 
+				    strip_final_beampipe_radious="24.3*mm"	side_band_electronics_option="1" end_ladd_electronics_option="1" side_band_electronics_width="0.5*mm" 
+				    side_band_electronics_thickness="0.05*mm" active_side_band_electronics_option="0" layer_gap="2*mm" flex_cable_material="G4_KAPTON" flex_cable_thickness="0.05*mm"
+				    foam_spacer_material="SiC_foam" foam_spacer_thickness="0.94*mm" metal_traces_material="G4_Al" metal_traces_thickness="0.01*mm" cool_pipe_material="titanium" 
+				    cool_pipe_inner_radius="0.75*mm" cool_pipe_outer_radius="1*mm" external_kapton_thickness="0.05*mm" external_metal_thickness="0.009*mm"  />
 	  <!-- SQL command: "SELECT * FROM cryostat;"  -->
-	  <cryostat id="1" alu_skin_inner_radious="100" alu_skin_tickness="0.5" foam_inner_radious="90" foam_tickness="10" foam_half_z="166.6*mm" endplate_inner_radious="24.2" 
-		    cryostat_option="1" cryostat_apperture="30" cryostat_apperture_radius="1.5"  />
+	  <cryostat id="1" alu_skin_inner_radious="100*mm" alu_skin_tickness="0.5*mm" foam_inner_radious="90*mm" foam_tickness="10*mm" foam_half_z="166.6*mm" endplate_inner_radious="24.2*mm" 
+		    cryostat_option="1" cryostat_apperture="30*mm" cryostat_apperture_radius="1.5*mm"  />
 	  <!-- SQL command: "select * from support_shell;"  -->
-	  <support_shell id="0" inner_radious="65" half_z="145" thickess="0.49392" endplate_inner_radious="30" endplate_inner_radius_L1="15.7" endplate_outer_radius_L1="20" 
-			 offset_ladder_block="0.28224" beryllium_ladder_block_length="5" beryllium_ladder_block_thickness="0.25" shell_endplate_thickness="2" forward_shell_half_z="6.5"  />
+	  <support_shell id="0" inner_radious="65*mm" half_z="145*mm" thickess="0.49392*mm" endplate_inner_radious="30*mm" endplate_inner_radius_L1="15.7*mm" endplate_outer_radius_L1="20*mm" 
+			 offset_ladder_block="0.28224*mm" beryllium_ladder_block_length="5*mm" beryllium_ladder_block_thickness="0.25*mm" shell_endplate_thickness="2*mm" forward_shell_half_z="6.5*mm"  />
 	  <!-- SQL command: "select * from layer;"  -->
-	  <layer id="1" layer_radius="16" ladder_length="62.5" ladder_width="5.5" nb_ladder="10" ladder_gap="0" strip_line_final_z="150" end_electronics_width="5.5" 
-		 initial_kapton_striplines_thickness="0.04566" final_kapton_striplines_thickness="0.02435" initial_metal_striplines_thickness="0.00806" 
-		 final_metal_striplines_thickness="0.0043" support_width="4.5"  />
-	  <layer id="2" layer_radius="16" ladder_length="62.5" ladder_width="5.5" nb_ladder="10" ladder_gap="0" strip_line_final_z="150" end_electronics_width="5.5" 
-		 initial_kapton_striplines_thickness="0.04566" final_kapton_striplines_thickness="0.02435" initial_metal_striplines_thickness="0.00806" 
-		 final_metal_striplines_thickness="0.0043" support_width="4.5"  />
-	  <layer id="3" layer_radius="37" ladder_length="125" ladder_width="11" nb_ladder="11" ladder_gap="0" strip_line_final_z="150" end_electronics_width="11" 
-		 initial_kapton_striplines_thickness="0.04102" final_kapton_striplines_thickness="0.05059" initial_metal_striplines_thickness="0.00724" 
-		 final_metal_striplines_thickness="0.00893" support_width="10"  />
-	  <layer id="4" layer_radius="37" ladder_length="125" ladder_width="11" nb_ladder="11" ladder_gap="0" strip_line_final_z="150" end_electronics_width="11" 
-		 initial_kapton_striplines_thickness="0.04102" final_kapton_striplines_thickness="0.05059" initial_metal_striplines_thickness="0.00724" 
-		 final_metal_striplines_thickness="0.00893" support_width="10"  />
-	  <layer id="5" layer_radius="58" ladder_length="125" ladder_width="11" nb_ladder="17" ladder_gap="0" strip_line_final_z="150" end_electronics_width="11" 
-		 initial_kapton_striplines_thickness="0.04044" final_kapton_striplines_thickness="0.07819" initial_metal_striplines_thickness="0.00714" 
-		 final_metal_striplines_thickness="0.0138" support_width="10"  />
-	  <layer id="6" layer_radius="58" ladder_length="125" ladder_width="11" nb_ladder="17" ladder_gap="0" strip_line_final_z="150" end_electronics_width="11" 
-		 initial_kapton_striplines_thickness="0.04044" final_kapton_striplines_thickness="0.07819" initial_metal_striplines_thickness="0.00714" 
-		 final_metal_striplines_thickness="0.0138" support_width="10"  />
+	  <layer id="1" layer_radius="VXD_radius_r1" ladder_length="VXD_length_r1" ladder_width="5.5*mm" nb_ladder="10" ladder_gap="0" strip_line_final_z="150*mm" end_electronics_width="5.5*mm" 
+		 initial_kapton_striplines_thickness="0.04566*mm" final_kapton_striplines_thickness="0.02435*mm" initial_metal_striplines_thickness="0.00806*mm" 
+		 final_metal_striplines_thickness="0.0043*mm" support_width="4.5*mm"  />
+	  <layer id="2" layer_radius="VXD_radius_r1" ladder_length="VXD_length_r1" ladder_width="5.5*mm" nb_ladder="10" ladder_gap="0" strip_line_final_z="150*mm" end_electronics_width="5.5*mm" 
+		 initial_kapton_striplines_thickness="0.04566*mm" final_kapton_striplines_thickness="0.02435*mm" initial_metal_striplines_thickness="0.00806*mm" 
+		 final_metal_striplines_thickness="0.0043*mm" support_width="4.5*mm"  />
+	  <layer id="3" layer_radius="VXD_radius_r3" ladder_length="VXD_length_r3" ladder_width="11*mm" nb_ladder="11" ladder_gap="0*mm" strip_line_final_z="150*mm" end_electronics_width="11*mm" 
+		 initial_kapton_striplines_thickness="0.04102*mm" final_kapton_striplines_thickness="0.05059*mm" initial_metal_striplines_thickness="0.00724*mm" 
+		 final_metal_striplines_thickness="0.00893*mm" support_width="10*mm"  />
+	  <layer id="4" layer_radius="VXD_radius_r3" ladder_length="VXD_length_r3" ladder_width="11*mm" nb_ladder="11" ladder_gap="0*mm" strip_line_final_z="150*mm" end_electronics_width="11*mm" 
+		 initial_kapton_striplines_thickness="0.04102*mm" final_kapton_striplines_thickness="0.05059*mm" initial_metal_striplines_thickness="0.00724*mm" 
+		 final_metal_striplines_thickness="0.00893*mm" support_width="10*mm"  />
+	  <layer id="5" layer_radius="VXD_radius_r5" ladder_length="VXD_length_r3" ladder_width="11*mm" nb_ladder="17" ladder_gap="0*mm" strip_line_final_z="150*mm" end_electronics_width="11*mm" 
+		 initial_kapton_striplines_thickness="0.04044*mm" final_kapton_striplines_thickness="0.07819*mm" initial_metal_striplines_thickness="0.00714*mm" 
+		 final_metal_striplines_thickness="0.0138*mm" support_width="10*mm"  />
+	  <layer id="6" layer_radius="VXD_radius_r5" ladder_length="VXD_length_r3" ladder_width="11*mm" nb_ladder="17" ladder_gap="0*mm" strip_line_final_z="150*mm" end_electronics_width="11*mm" 
+		 initial_kapton_striplines_thickness="0.04044*mm" final_kapton_striplines_thickness="0.07819*mm" initial_metal_striplines_thickness="0.00714*mm" 
+		 final_metal_striplines_thickness="0.0138*mm" support_width="10*mm"  />
         </detector> <!--vxd-->
+	
+	
+        <detector name="TPC" type="TPC10" vis="TPCVis" id="1" limits="Tracker_limits" readout="TPCCollection" insideTrackingVolume="true">
+	  <!-- database : tpc10_01 -->
+	  <!-- SQL command: "SELECT * FROM `global`;"  -->
+	  <global TPC_pad_height="6*mm" TPC_pad_width="1*mm"  TPC_max_step_length="5*mm" dr_InnerWall="25*mm" dr_InnerServiceArea="30*mm" dr_OuterServiceArea="30*mm" 
+		  dr_OuterWall="60*mm" dz_Cathode="0.06*mm" dz_Readout="25*mm" dz_Endplate="100*mm" 
+		  chamber_Gas="TDR_gas" sensitive_threshold_eV="32*eV"  />
 
+	  <!-- SQL command: "SELECT * FROM `cathode`;"  -->
+	  <cathode dz_Cathode_Insulator="0.0275" dz_Cathode_Conductor="0.0025" material_Cathode_Insulator="G4_KAPTON" 
+		   material_Cathode_Conductor="G4_Cu" dr_Cathode_Grip="20" dz_Cathode_Grip="15" material_Cathode_Grip="SiC_foam"  />
+	  
+	  <!-- SQL command: "SELECT * FROM `innerWall`;"  -->
+	  <innerWall>
+	    <row dr="0.01" material="G4_Al"  />
+	    <row dr="0.05" material="G4_KAPTON"  />
+	    <row dr="0.3" material="g10"  />
+	    <row dr="24.22" material="G4_AIR"  />
+	    <row dr="0.3" material="g10"  />
+	    <row dr="0.05" material="G4_KAPTON"  />
+	    <row dr="0.07" material="G4_Cu"  />
+	  </innerWall>
+	    <!-- SQL command: "SELECT * FROM `outerWall`;"  -->
+	  <outerWall>
+	    <row dr="0.07" material="G4_Cu"  />
+	    <row dr="0.05" material="G4_KAPTON"  />
+	    <row dr="0.3" material="g10"  />
+	    <row dr="59.22" material="G4_AIR"  />
+	    <row dr="0.3" material="g10"  />
+	    <row dr="0.05" material="G4_KAPTON"  />
+	    <row dr="0.01" material="G4_Al"  />
+	  </outerWall>
+	  <!-- SQL command: "SELECT * FROM `readout`;"  -->
+	  <readout>
+	    <row dz="0.003" material="G4_Cu" comment="gating"  />
+	    <row dz="0.03" material="G4_KAPTON" comment="gating"  />
+	    <row dz="0.003" material="G4_Cu" comment="gating"  />
+	    <row dz="4.447" material="TDR_gas" comment="gating"  />
+	    <row dz="0.003" material="G4_Cu" comment="mpgd"  />
+	    <row dz="0.03" material="G4_KAPTON" comment="mpgd"  />
+	    <row dz="0.003" material="G4_Cu" comment="mpgd"  />
+	    <row dz="4.447" material="TDR_gas" comment="mpgd"  />
+	    <row dz="0.003" material="G4_Cu" comment="mpgd"  />
+	    <row dz="0.03" material="G4_KAPTON" comment="mpgd"  />
+	    <row dz="0.003" material="G4_Cu" comment="mpgd"  />
+	    <row dz="4.447" material="TDR_gas" comment="mpgd"  />
+	    <row dz="0.05" material="G4_Cu" comment="pads"  />
+	    <row dz="2" material="g10" comment="structural"  />
+	    <row dz="0.5" material="G4_Si" comment="electronics"  />
+	    <row dz="2" material="epoxy" comment="structural"  />
+	    <row dz="1" material="G4_KAPTON" comment="structural"  />
+	    <row dz="2" material="G4_Al" comment="Cooling"  />
+	    <row dz="1" material="G4_KAPTON" comment="structural"  />
+	    <row dz="3" material="CarbonFiber" comment="structural"  />
+	  </readout>
+	</detector>
 
-    <detector name="BeamCal" type="BeamCal" vis="BeamCalVis" id="1" readout="BeamCalCollection" insideTrackingVolume="false">
+	<detector name="BeamCal" type="BeamCal" vis="BeamCalVis" id="1" readout="BeamCalCollection" insideTrackingVolume="false">
+	  <dimensions inner_r = "BeamCal_rmin" inner_z = "BeamCal_zmin" outer_r = "BeamCal_rmax" />
+	  <layer repeat="40" >
+	    <slice material = "TungstenDens24" thickness = "0.271*cm" type="absorber" vis="BCLayerVis1"/>
+	    <slice material = "Silicon" thickness = "0.032*cm" sensitive = "yes"      vis="BCLayerVis2"  />
+	    <slice material = "Copper"  thickness = "0.005*cm"                        vis="BCLayerVis3"/>
+	    <slice material = "Kapton"  thickness = "0.030*cm"                        vis="BCLayerVis4"/>
+	    <slice material = "Air"     thickness = "0.033*cm" />
+	  </layer>
+	</detector>
 
-      <dimensions inner_r = "BeamCal_rmin" inner_z = "BeamCal_zmin" outer_r = "BeamCal_rmax" />
-      <layer repeat="40" >
-        <slice material = "TungstenDens24" thickness = "0.271*cm" type="absorber" vis="BCLayerVis1"/>
-        <slice material = "Silicon" thickness = "0.032*cm" sensitive = "yes"      vis="BCLayerVis2"  />
-        <slice material = "Copper"  thickness = "0.005*cm"                        vis="BCLayerVis3"/>
-        <slice material = "Kapton"  thickness = "0.030*cm"                        vis="BCLayerVis4"/>
-        <slice material = "Air"     thickness = "0.033*cm" />
-      </layer>
-
-    </detector>
-
-
-    </detectors> 
+      </detectors> 
 
     <readouts>
         <readout name="VXDCollection">
+	  <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
+            <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+        </readout>
+        <readout name="TPCCollection">
+	  <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
             <id>system:5,side:-2,layer:9,module:8,sensor:8</id>
         </readout>
 

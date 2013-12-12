@@ -90,20 +90,20 @@
 	<properties Output="simple_lcio"/>
       </action>
     </sequence>
-    <!--sequence name="Geant4GeneratorActionSequence/GeneratorAction">
+    <sequence name="Geant4GeneratorActionSequence/GeneratorAction">
 	<action name="Geant4ParticleGun/gun">
         <properties energy="500"
 	particle="'e-'"
 	multiplicity="1"/>
-	</action-->
+	</action>
+   </sequence>
 
-    <sequence name="Geant4GeneratorActionSequence/GeneratorAction">
+    <!--sequence name="Geant4GeneratorActionSequence/GeneratorAction">
       <action name="LCIOGeneratorAction">
         <properties LCIOFileName="infile.slcio" 
 		    SkipNEvents="1" />
       </action>
-
-    </sequence>
+    </sequence-->
 
     <sequence sd="VTX" type="Geant4SensDetActionSequence">
       <!--filter name="GeantinoRejector"/-->
@@ -111,6 +111,11 @@
       <action name="TRKSiSD00/VXDCollection"/>
     </sequence>
     
+    <sequence sd="TPC" type="Geant4SensDetActionSequence">
+      <!--filter name="GeantinoRejector"/-->
+      <filter name="EnergyDepositMinimumCut/SiTracker"/>
+      <action name="TRKSiSD00/TPCCollection"/>
+    </sequence>
     <!--
     <sequence sd="VTX" type="Geant4SensDetActionSequence">
       <filter name="GeantinoRejector"/>

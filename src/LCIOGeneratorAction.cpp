@@ -4,7 +4,7 @@
 //  F.Gaede, DESY
 //  $Id:$
 //====================================================================
-#include "LCIOGeneratorAction.h"
+#include "DDSim/LCIOGeneratorAction.h"
 
 // Framework include files
 #include "DD4hep/InstanceCount.h"
@@ -75,6 +75,14 @@ namespace DDSim {
     }
     
     lcio::LCEvent* evt = _rdr->readNextEvent() ;
+
+    if( ! evt ) {
+
+      //      return ; // what do do in case of EOF ???
+
+      throw lcio::DataNotAvailableException(" LCIOGeneratorAction - too many events requested: EOF reached " ) ; 
+
+    }
 
     lcio::LCCollection* col =  evt->getCollection( _MCParticleCollectionName ) ;
 
@@ -206,8 +214,13 @@ namespace DDSim {
 	//std::cout << " ..finished" << std::endl;
 	std::set<G4PrimaryParticle*>::iterator setit;
 	for (setit=g4set.begin() ; setit != g4set.end(); setit++ ){
+
+	  // G4ThreeVector vtx( mcp->getVertex()[0] ,  mcp->getVertex()[1] ,  mcp->getVertex()[2] ) ;
+	  // G4PrimaryVertex* vertex = new G4PrimaryVertex( vtx , particle_time );
+ 
 	  vertex->SetPrimary(*setit);
-	  //std::cout << "G4PrimaryParticle ("<< (*setit)->GetPDGcode() << ") added to G4PrimaryVertex." << std::endl;
+
+	  // event->AddPrimaryVertex( vertex );
 	}
       }
     }

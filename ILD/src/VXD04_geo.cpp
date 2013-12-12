@@ -61,11 +61,11 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   string       name  = x_det.nameStr();
   
   //---- envelope: cylinder of air:
-  //xml_comp_t  x_tube (x_det.child(_U(tubs)));
-  //Tube        envelope_cylinder( x_tube.rmin(), x_tube.rmax(), x_tube.zhalf() );
-  //Volume      envelope( "vxd_envelope_cyl", envelope_cylinder , lcdd.air() );
+  xml_comp_t  x_tube (x_det.child(_U(tubs)));
+  Tube        envelope_cylinder( x_tube.rmin(), x_tube.rmax(), x_tube.zhalf() );
+  Volume      envelope( "vxd_envelope_cyl", envelope_cylinder , lcdd.air() );
   //--------------------------------
-  Assembly envelope( name + "_assembly"  ) ;
+  //Assembly envelope( name + "_assembly"  ) ;
   //--------------------------------
   
   PlacedVolume pv;
@@ -501,7 +501,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	
 	phirot2 = phirot*AnnulusBlock_loop;
 
-	RotationZYX rot( 0, phirot2 , (pi*0.5) ) ;
+	RotationZYX rot( 0, phirot2 ,  pi*0.5 ) ;
 	
 	double ZAnnulusBlock = ladder_length + end_electronics_half_z + (beryllium_ladder_block_length*2.);
 	    
@@ -614,7 +614,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       vxd.setVisAttributes(lcdd,  "GreenVis" , ElectronicsBandLogical ) ;
       
       //fixme: turn off sensitive sidebands for now - not sure they cause problems in the volume manager ....
-      active_side_band_electronics_option = 0 ;
+      // active_side_band_electronics_option = 0 ;
       if(active_side_band_electronics_option==1)
 	ElectronicsBandLogical.setSensitiveDetector(sens);
       
@@ -897,25 +897,25 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	pv = envelope.placeVolume( SiActiveLayerLogical,  Transform3D( rot, Position((layer_radius+(active_silicon_thickness/2.)+layer_gap)*sin(phirot2)+active_offset_phi*cos(phirot2),
 										     -(layer_radius+(active_silicon_thickness/2.)+layer_gap)*cos(phirot2)+active_offset_phi*sin(phirot2),
 										     -Z)) );
-
+	
 	pv.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(active_loop)  ).addPhysVolID("sensor", 0 ).addPhysVolID("side", -1 )   ;
-
+	
 
       } else if (LayerId==1||LayerId==3||LayerId==5) { 
 
 	pv = envelope.placeVolume( SiActiveLayerLogical,  Transform3D( rot, Position((layer_radius-(active_silicon_thickness/2.))*sin(phirot2)+active_offset_phi*cos(phirot2),
 										     -(layer_radius-(active_silicon_thickness/2.))*cos(phirot2)+active_offset_phi*sin(phirot2),
 										     Z)) ) ;
-
+	
 	pv.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(active_loop)  ).addPhysVolID("sensor", 0 ).addPhysVolID("side", 1 )   ;
-
-	    
+	
+	
 	pv = envelope.placeVolume( SiActiveLayerLogical,  Transform3D( rot, Position((layer_radius-(active_silicon_thickness/2.))*sin(phirot2)+active_offset_phi*cos(phirot2),
-										     -(layer_radius-(active_silicon_thickness/2.))*cos(phirot2)+active_offset_phi*sin(phirot2),
-										     -Z)) );
-
+	 									     -(layer_radius-(active_silicon_thickness/2.))*cos(phirot2)+active_offset_phi*sin(phirot2),
+	 									     -Z)) );
+	
 	pv.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(active_loop)  ).addPhysVolID("sensor", 0 ).addPhysVolID("side", -1 )   ;
-
+	
       }		  
 
     }

@@ -17,8 +17,8 @@
 #include "DD4hep/InstanceCount.h"
 
 //#include "lcio.h"
+#include "Exceptions.h"
 #include "IMPL/SimTrackerHitImpl.h"
-
 
 namespace dd4hep {
   using namespace DD4hep::Simulation  ;

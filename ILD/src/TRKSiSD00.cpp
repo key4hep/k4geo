@@ -20,7 +20,7 @@
 #include <cassert>
 
 //**********************
-#define DEBUGTRKSD
+//#define DEBUGTRKSD
 //**********************
 
 
@@ -89,8 +89,8 @@ namespace DDSim {
     dd4hep::VolumeID postID = volMgr.volumeID( stepH.postTouchable() );
     
 
-    if( preID == 0 || preID == 0xffffffe1 ) {
-
+    if( preID == 0 ) {
+      
       std::cout << " ##################################################################### \n " 
 		<< "  WARNING:   TRKSiSD00::process -  invalid prestep volumeID : " << preID  << " \n " 
 		<< " ##################################################################### \n "  ;
@@ -98,11 +98,11 @@ namespace DDSim {
       return false; // this should never happen really ??????
     }
     
-    // debug
-    std::cout << " --------------------------------------------------- \n "
-	      << "    prestep volID "  << ( preID )  << " \n " 
-	      << "    poststep volID " << ( postID ) << " \n " 
-	      << " --------------------------------------------------- \n " ;
+    // // debug
+    // std::cout << " --------------------------------------------------- \n "
+    // 	      << "    prestep volID "  << decoder( preID )  << " \n " 
+    // 	      << "    poststep volID " << decoder( postID ) << " \n " 
+    // 	      << " --------------------------------------------------- \n " ;
     
     if( !_detailedHitsStoring){
       

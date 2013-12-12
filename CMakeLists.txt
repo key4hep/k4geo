@@ -60,7 +60,7 @@ INCLUDE(${Geant4_USE_FILE})   # this also takes care of geant 4 definitions and 
 
 include_directories( ${CMAKE_SOURCE_DIR}/include
   ${CMAKE_SOURCE_DIR}/ILD/include
-  include/DDSim
+#  include/DDSim
   ${DD4hep_INCLUDE_DIRS}
   ${ROOT_INCLUDE_DIR}
   ${Geant4_INCLUDE_DIRS}
