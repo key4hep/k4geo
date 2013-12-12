@@ -5,8 +5,8 @@
 //  $Id:$
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
-#include "DD4Hep/TGeoUnits.h"
-#include <math.h>
+#include "DD4hep/TGeoUnits.h"
+#include <cmath>
 
 
 //#include "GearWrapper.h"

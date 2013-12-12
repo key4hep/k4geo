@@ -17,7 +17,7 @@
 #include "G4SDManager.hh"
 #include "G4ios.hh"
 #include "globals.hh"
-#include <assert.h>
+#include <cassert>
 
 //**********************
 #define DEBUGTRKSD
@@ -95,7 +95,7 @@ namespace DDSim {
 		<< "  WARNING:   TRKSiSD00::process -  invalid prestep volumeID : " << preID  << " \n " 
 		<< " ##################################################################### \n "  ;
       
-      return ; // this should never happen really ??????
+      return false; // this should never happen really ??????
     }
     
     // debug
