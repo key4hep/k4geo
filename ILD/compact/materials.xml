@@ -432,4 +432,21 @@
       <fraction n="0.0017" ref="C"/>
       <fraction n="0.014" ref="Mn"/>
     </material>
+
+    <comment> materials introduced for the BeamCal</comment>
+    <material name="TungstenDens24">
+      <D value="17.8" unit="g/cm3"/>
+      <fraction n="0.93" ref="W"/>
+      <fraction n="0.061" ref="Ni"/>
+      <fraction n="0.009" ref="Fe"/>
+    </material>
+
+    <material name="Kapton">
+      <D value="1.43" unit="g/cm3" />
+      <composite n="22" ref="C"/>
+      <composite n="10" ref="H" />
+      <composite n="2" ref="N" />
+      <composite n="5" ref="O" />
+    </material>
+
   </materials>

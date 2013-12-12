@@ -116,6 +116,14 @@
 	<constant name="Yoke_thickness" value="2550"/>
 
 	<!-- FIXME: string constants not supported  !!!??? -->
+
+
+	<comment>Dummy Parameters for the BeamCal</comment>
+	<constant name="BeamCal_rmin"  value="30*mm"/>
+	<constant name="BeamCal_rmax"  value="15*cm"/>
+	<constant name="BeamCal_zmin"  value="3.3*m"/>
+	<!-- <constant name="CrossingAngle"  value="14*mrad"/> -->
+
     </define>
 
   
@@ -150,6 +158,13 @@
       <vis name="VXDVis"        alpha="0.1" r="0.1" g=".5"  b=".5"   showDaughters="true"  visible="true"/>
       <vis name="VXDLayerVis"   alpha="1.0" r="0.1" g=".5"  b=".5"   showDaughters="true"  visible="true"/>
       <vis name="VXDSupportVis" alpha="1.0" r="0.0" g="1.0" b="0.0"  showDaughters="true" visible="true"/>
+
+      <vis name="MyBeamCalVis"    r="1.0" g="1.0"  b="1.0" alpha="0.5" showDaughters="true"  visible="false"/>
+      <vis name="BCLayerVis1"       r="1.0" g="0.0"  b="0.0" alpha="1" showDaughters="true"  visible="true"/>
+      <vis name="BCLayerVis2"       r="0.0" g="1.0"  b="0.0" alpha="1" showDaughters="true"  visible="true"/>
+      <vis name="BCLayerVis3"       r="0.0" g="0.0"  b="1.0" alpha="1" showDaughters="true"  visible="true"/>
+      <vis name="BCLayerVis4"       r="1.0" g="0.0"  b="1.0" alpha="1" showDaughters="true"  visible="true"/>
+
     </display>
 
     <detectors>
@@ -193,12 +208,33 @@
 		 final_metal_striplines_thickness="0.0138" support_width="10"  />
         </detector> <!--vxd-->
 
+
+    <detector name="BeamCal" type="BeamCal" vis="BeamCalVis" id="1" readout="BeamCalCollection" insideTrackingVolume="false">
+
+      <dimensions inner_r = "BeamCal_rmin" inner_z = "BeamCal_zmin" outer_r = "BeamCal_rmax" />
+      <layer repeat="40" >
+        <slice material = "TungstenDens24" thickness = "0.271*cm" type="absorber" vis="BCLayerVis1"/>
+        <slice material = "Silicon" thickness = "0.032*cm" sensitive = "yes"      vis="BCLayerVis2"  />
+        <slice material = "Copper"  thickness = "0.005*cm"                        vis="BCLayerVis3"/>
+        <slice material = "Kapton"  thickness = "0.030*cm"                        vis="BCLayerVis4"/>
+        <slice material = "Air"     thickness = "0.033*cm" />
+      </layer>
+
+    </detector>
+
+
     </detectors> 
 
     <readouts>
         <readout name="VXDCollection">
             <id>system:5,side:-2,layer:9,module:8,sensor:8</id>
         </readout>
+
+	<readout name="BeamCalCollection">
+	  <segmentation type="GridXYZ" gridSizeX="0.35*cm" gridSizeY="0.35*cm" />
+	  <id>system:8,layer:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id>
+	</readout>
+
     </readouts>
  <fields>
    <field type="solenoid" name="GlobalSolenoid" inner_field="3.5*tesla"
