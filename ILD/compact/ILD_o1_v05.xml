@@ -25,14 +25,14 @@
 
 	<!-- global parameters from Mokka model ILD_o1_v05 -->
 	<constant name="BCal_PairMonitor" value="1"/>
-	<constant name="BCal_SpanningPhi" value="320"/>
-	<constant name="BCal_TubeIncomingRadius" value="15"/>
-	<constant name="BCal_dAbsorber" value="3.5"/>
-	<constant name="BCal_dGraphite" value="100"/>
+	<constant name="BCal_CutOutSpanningPhi" value="40*deg"/>
+	<constant name="BCal_TubeIncomingRadius" value="15*mm"/>
+	<constant name="BCal_dAbsorber" value="3.5*mm"/>
+	<constant name="BCal_dGraphite" value="100*mm"/>
 	<constant name="BCal_nLayers" value="30"/>
 	<constant name="BCal_nWafers" value="8"/>
-	<constant name="BCal_rInner" value="20"/>
-	<constant name="BCal_rOuter" value="150"/>
+	<constant name="BCal_rInner" value="20*mm"/>
+	<constant name="BCal_rOuter" value="150*mm"/>
 	<constant name="BCal_rSegmentation" value="8"/>
 	<constant name="Coil_Yoke_radial_clearance" value="250"/>
 	<constant name="Coil_extra_size" value="1522"/>
@@ -80,9 +80,9 @@
 	<constant name="Hcal_radiator_thickness" value="20.0"/>
 	<!--constant name="Hcal_sensitive_model" value="scintillator"/-->
 	<constant name="Hcal_stave_gaps" value="10"/>
-	<constant name="ILC_Main_Crossing_Angle" value="14"/>
-	<constant name="LHcal_BCal_clearance" value="390"/>
-	<constant name="LHcal_zend" value="3085"/>
+	<constant name="ILC_Main_Crossing_Angle" value="14*mrad"/>
+	<constant name="LHcal_BCal_clearance" value="390*mm"/>
+	<constant name="LHcal_zend" value="3085*mm"/>
 	<constant name="Lcal_inner_radius" value="80.0"/>
 	<constant name="Lcal_outer_radius" value="195.2"/>
 	<constant name="Lcal_z_begin" value="2505.0"/>
@@ -281,14 +281,26 @@
 	</detector>
 
 	<detector name="BeamCal" type="BeamCal" vis="BeamCalVis" id="1" readout="BeamCalCollection" insideTrackingVolume="false">
-	  <dimensions inner_r = "BeamCal_rmin" inner_z = "BeamCal_zmin" outer_r = "BeamCal_rmax" />
-	  <layer repeat="40" >
-	    <slice material = "TungstenDens24" thickness = "0.271*cm" type="absorber" vis="BCLayerVis1"/>
-	    <slice material = "Silicon" thickness = "0.032*cm" sensitive = "yes"      vis="BCLayerVis2"  />
-	    <slice material = "Copper"  thickness = "0.005*cm"                        vis="BCLayerVis3"/>
-	    <slice material = "Kapton"  thickness = "0.030*cm"                        vis="BCLayerVis4"/>
-	    <slice material = "Air"     thickness = "0.033*cm" />
+	  <parameter crossingangle="ILC_Main_Crossing_Angle" 
+		     cutoutspanningangle="40*deg" 
+		     incomingbeampiperadius="BCal_TubeIncomingRadius"/>
+
+	  <dimensions inner_r = "BCal_rInner" 
+		      inner_z = "LHcal_zend + LHcal_BCal_clearance" 
+		      outer_r = "BCal_rOuter" />
+
+	  <layer repeat="1" >
+            <slice material = "C"         thickness = "BCal_dGraphite" vis="LayerVis1"      layerType="holeForIncomingBeampipe"/>
 	  </layer>
+
+	  <layer repeat="BCal_nLayers" >
+	    <slice material = "TungstenDens24" thickness = "BCal_dAbsorber"        vis="BCLayerVis1" layerType="holeForIncomingBeampipe" />
+	    <slice material = "Silicon" thickness = "0.3004*mm" sensitive = "yes"  vis="BCLayerVis2"/>
+	    <slice material = "Copper"  thickness = "0.0004*mm"                    vis="BCLayerVis3"/>
+	    <slice material = "Kapton"  thickness = "0.15*mm"                      vis="BCLayerVis4"/>
+	    <slice material = "Air"     thickness = "0.05*mm" />
+	  </layer>
+
 	</detector>
 
       </detectors> 

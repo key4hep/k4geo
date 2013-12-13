@@ -74,29 +74,20 @@
 
 
     <detector name="BeamCal" type="BeamCal" vis="MyBeamCalVis" id="1" readout="BeamCalHits" insideTrackingVolume="false">
+      <parameter crossingangle="20*mrad"  cutoutspanningangle="10*deg" incomingbeampiperadius="3.5*mm"/>
       <dimensions inner_r = "BeamCal_rmin" inner_z = "BeamCal_zmin" outer_r = "BeamCal_rmax" />
-      <layer repeat="10" >
-        <slice material = "TungstenDens24" thickness = "4.271*cm" type="absorber" vis="LayerVis1"/>
-        <slice material = "Silicon" thickness = "3.032*cm" sensitive = "yes"      vis="LayerVis2"  />
-        <slice material = "Copper"  thickness = "2.005*cm"                        vis="LayerVis3"/>
-        <slice material = "Kapton"  thickness = "1.030*cm"                        vis="LayerVis4"/>
-        <slice material = "Air"     thickness = "0.033*cm" />
+
+      <layer repeat="1" >
+        <slice material = "C"         thickness = "10.00*cm" vis="LayerVis1"      layerType="holeForIncomingBeampipe"/>
+      </layer>
+      <layer repeat="30" >
+        <slice material = "TungstenDens24" thickness = "0.271*cm" vis="LayerVis2"  layerType="holeForIncomingBeampipe" />
+        <slice material = "Silicon"        thickness = "0.032*cm" vis="LayerVis3"  layerType="keyholeshape" sensitive="yes"      />
+        <slice material = "Copper"         thickness = "0.005*cm" vis="LayerVis3"  layerType="keyholeshape" />
+        <slice material = "Kapton"         thickness = "0.030*cm" vis="LayerVis4"  layerType="keyholeshape" />
+        <slice material = "Air"            thickness = "0.033*cm"                  layerType="keyholeshape" />
       </layer>
     </detector>
-
-    
-    <!-- <detector id="14" name="BeamCal2" reflect="true" type="ForwardDetector" readout="BeamCalHits" vis="BeamCalVis" calorimeterType="BEAM"> -->
-    <!--   <comment>Beam Calorimeter</comment> -->
-    <!--   <dimensions outer_r="BeamCal_rmax" inner_r="0.0*cm" inner_z="BeamCal_zmin" /> -->
-    <!--   <beampipe crossing_angle="CrossingAngle" outgoing_r="OutgoingBP_radius + 0.05*cm" incoming_r="IncomingBP_radius + 0.05*cm" /> -->
-    <!--   <layer repeat="50"> -->
-    <!--     <slice material="TungstenDens24" thickness="0.271*cm" /> -->
-    <!--     <slice material="Silicon" thickness="0.032*cm" sensitive="yes" /> -->
-    <!--     <slice material="Copper" thickness="0.005*cm" /> -->
-    <!--     <slice material="Kapton" thickness="0.030*cm" /> -->
-    <!--     <slice material="Air" thickness="0.033*cm" /> -->
-    <!--   </layer> -->
-    <!-- </detector> -->
 
   </detectors>
 

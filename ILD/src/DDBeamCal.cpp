@@ -1,6 +1,3 @@
-//#include "DDBeamCal.hh"
-
-
 #include <DD4hep/DetFactoryHelper.h>
 #include <XML/Layering.h>
 
@@ -32,42 +29,47 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   // counter for the current layer to be placed
   int thisLayerId = 1;
 
-  //GlobalParameters we have to know about
-  const double fullCrossingAngle = 0.020/*rad*/;
-  const double incomingBeamPipeRadius = 3.5/*mm*/;
+  //Parameters we have to know about
+  DD4hep::XML::Component xmlParameter = xmlBeamCal.child(_Unicode(parameter));
+  const double degFullCrossingAngle  = xmlParameter.attr< double >(_Unicode(crossingangle));
+  const double mradFullCrossingAngle = degFullCrossingAngle*M_PI/180.0;
+  std::cout << " The crossing angle is: " << mradFullCrossingAngle  << std::endl;
 
+  //Create the section cutout for the sensor and readout volumes
+  const double bcalCutOutSpan  = xmlParameter.attr< double >(_Unicode(cutoutspanningangle));
+  const double bcalCutOutStart = -bcalCutOutSpan*0.5;
+  const double bcalCutOutEnd   = bcalCutOutStart + bcalCutOutSpan;
+  const double incomingBeamPipeRadius = xmlParameter.attr< double >( _Unicode(incomingbeampiperadius) );
 
+  std::cout << bcalCutOutStart << std::endl;
+  std::cout << bcalCutOutSpan  << std::endl;
+  std::cout << bcalCutOutEnd   << std::endl;
+  std::cout << incomingBeamPipeRadius  << std::endl;
   ////////////////////////////////////////////////////////////////////////////////
   //Calculations for the position of the incoming beampipe
   ////////////////////////////////////////////////////////////////////////////////
 
   // this needs the full crossing angle, because the beamCal is centred on the
   // outgoing beampipe, and the incoming beampipe is a full crossing agle away
-  const DD4hep::Geometry::Position    incomingBeamPipePosition( std::tan(fullCrossingAngle) * bcalCentreZ, 0.0, 0.0);
+  const DD4hep::Geometry::Position    incomingBeamPipePosition( std::tan(mradFullCrossingAngle) * bcalCentreZ, 0.0, 0.0);
   //The extra parenthesis are paramount!
-  const DD4hep::Geometry::Rotation3D  incomingBeamPipeRotation( ( DD4hep::Geometry::RotationY( fullCrossingAngle ) ) );
+  const DD4hep::Geometry::Rotation3D  incomingBeamPipeRotation( ( DD4hep::Geometry::RotationY( mradFullCrossingAngle ) ) );
   const DD4hep::Geometry::Transform3D incomingBPTransform( incomingBeamPipeRotation, incomingBeamPipePosition );
 
   //Envelope to place the layers in
-  DD4hep::Geometry::Tube envelopeTube (bcalInnerR,bcalOuterR,bcalThickness/2,0,2*M_PI);
+  DD4hep::Geometry::Tube envelopeTube (bcalInnerR, bcalOuterR, bcalThickness*0.5, 0, 360 );
   DD4hep::Geometry::Tube incomingBeamPipe (0.0, incomingBeamPipeRadius, bcalThickness);//we want this to be longer than the BeamCal
   DD4hep::Geometry::SubtractionSolid envelope (envelopeTube, incomingBeamPipe, incomingBPTransform);
   DD4hep::Geometry::Volume     envelopeVol(detName+"_envelope",envelope,air);
 
-
-
-  //Create the section cutout for the sensor and readout volumes
-#warning "These need to be picked up from XML"
-  const double bcalCutOutStart =-M_PI *  20/180;
-  const double bcalCutOutEnd   = M_PI *  20/180;
-
   //This should be calculated or at least cross-checked
+#pragma message("What about the special case when the incoming beampipe would be completely inside the outgoing beam pipe?")
   DD4hep::Geometry::Position incomingBeamPipeAtEndOfBeamCalPosition(-incomingBeamPipeRadius, incomingBeamPipeRadius, bcalInnerZ+bcalThickness);
-  incomingBeamPipeAtEndOfBeamCalPosition = DD4hep::Geometry::RotationY(-fullCrossingAngle) * incomingBeamPipeAtEndOfBeamCalPosition;
-  const double cutOutRadius = (incomingBeamPipeAtEndOfBeamCalPosition.Rho())+0.1;
-  std::cout << "cutOutRadius: " << cutOutRadius << " mm " << std::endl;
-
-  //const double cutOutRadius    = 80;
+  //This Rotation needs to be the fullCrossing angle, because the incoming beampipe has that much to the outgoing beam pipe
+  //And the BeamCal is centred on the outgoing beampipe
+  incomingBeamPipeAtEndOfBeamCalPosition = DD4hep::Geometry::RotationY(-mradFullCrossingAngle) * incomingBeamPipeAtEndOfBeamCalPosition;
+  const double cutOutRadius = ( incomingBeamPipeAtEndOfBeamCalPosition.Rho() ) + 0.01/*cm*/;
+  std::cout << "cutOutRadius: " << cutOutRadius << " cm " << std::endl;
 
   DD4hep::Geometry::Tube cutOutTube (0.0, cutOutRadius, bcalThickness, bcalCutOutStart, bcalCutOutEnd);
 
@@ -76,7 +78,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   ////////////////////////////////////////////////////////////////////////////////
 
   //Loop over all the layer (repeat=NN) sections
-  //_U is define to create unicodestring, right?
+  //This is the starting point to place all layers, we need this when we have more than one layer block
+  double referencePosition = -bcalThickness*0.5;
   for(DD4hep::XML::Collection_t coll(xmlBeamCal,_U(layer)); coll; ++coll)  {
     DD4hep::XML::Component xmlLayer(coll); //we know this thing is a layer
 
@@ -106,8 +109,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
 	bool isAbsorberStructure(false);
 	try {
-	  std::string sliceType = compSlice.attr< std::string >(_U(type));
-	  if ( sliceType.compare("absorber") == 0 ){
+	  const std::string& sliceType = compSlice.attr< std::string >(_Unicode(layerType));
+	  if ( sliceType.compare("holeForIncomingBeampipe") == 0 ){
 	    isAbsorberStructure=true;
 	  } // else {
 	  //   throw std::runtime_error("Unknown type of slice in BeamCal, use \"absorber\" or nothing");
@@ -125,7 +128,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	  //If we have the absorber structure then we create the slice with a hole at the position of the outgoing beam pipe
 	  ///In This case we have to know the global position of the slice, because the cutout depends on the outgoing beam pipe position
 	  const double thisPositionZ = bcalCentreZ - bcalThickness*0.5 + (thisLayerId-1)*layerThickness+ sliceThickness*0.5;
-	  const DD4hep::Geometry::Position thisBPPosition( std::tan(fullCrossingAngle) * thisPositionZ, 0.0, 0.0);
+	  const DD4hep::Geometry::Position thisBPPosition( std::tan(mradFullCrossingAngle) * thisPositionZ, 0.0, 0.0);
 	  //The extra parenthesis are paramount!
 	  const DD4hep::Geometry::Transform3D thisBPTransform( incomingBeamPipeRotation, thisBPPosition );
 	  slice_subtracted = DD4hep::Geometry::SubtractionSolid(sliceBase, incomingBeamPipe, thisBPTransform);
@@ -154,8 +157,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
       //Do we need unique IDs for each piece?
       layer_vol.setVisAttributes(lcdd,xmlLayer.visStr());
 
-      DD4hep::Geometry::Position layer_pos(0,0,-bcalThickness*0.5+(thisLayerId-0.5)*layerThickness);
-
+      DD4hep::Geometry::Position layer_pos(0,0,referencePosition+0.5*layerThickness);
+      referencePosition += layerThickness;
       DD4hep::Geometry::PlacedVolume pv = envelopeVol.placeVolume(layer_vol,layer_pos);
       pv.addPhysVolID("layer",thisLayerId);
 
@@ -165,18 +168,15 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
   }// for all layer collections
 
-  const DD4hep::Geometry::Position bcForwardPos (std::tan(-0.5*fullCrossingAngle)*bcalCentreZ,0.0, bcalCentreZ);
-  const DD4hep::Geometry::Position bcBackwardPos(std::tan(-0.5*fullCrossingAngle)*bcalCentreZ,0.0,-bcalCentreZ);
-  const DD4hep::Geometry::Rotation3D bcForwardRot ( DD4hep::Geometry::RotationY(-fullCrossingAngle*0.5 ) );//Minus??
-  const DD4hep::Geometry::Rotation3D bcBackwardRot( DD4hep::Geometry::RotationZYX ( (M_PI), (M_PI-fullCrossingAngle*0.5), (0.0)));
+  const DD4hep::Geometry::Position bcForwardPos (std::tan(-0.5*mradFullCrossingAngle)*bcalCentreZ,0.0, bcalCentreZ);
+  const DD4hep::Geometry::Position bcBackwardPos(std::tan(-0.5*mradFullCrossingAngle)*bcalCentreZ,0.0,-bcalCentreZ);
+  const DD4hep::Geometry::Rotation3D bcForwardRot ( DD4hep::Geometry::RotationY(-mradFullCrossingAngle*0.5 ) );
+  const DD4hep::Geometry::Rotation3D bcBackwardRot( DD4hep::Geometry::RotationZYX ( (M_PI), (M_PI-mradFullCrossingAngle*0.5), (0.0)));
 
-  // const DD4hep::Geometry::Position bcForwardPos (std::tan(-fullCrossingAngle)*bcalCentreZ,0.0, bcalCentreZ);
-  // const DD4hep::Geometry::Position bcBackwardPos(std::tan(-fullCrossingAngle)*bcalCentreZ,0.0,-bcalCentreZ);
-  // //const DD4hep::Geometry::Rotation3D bcForwardRot ( (DD4hep::Geometry::RotationY(fullCrossingAngle)) );
-  // const DD4hep::Geometry::Rotation3D   bcBackwardRot( DD4hep::Geometry::RotationZYX ( (M_PI), (M_PI-fullCrossingAngle), (0.0)));
+  DD4hep::Geometry::DetElement beamcals ( detName, xmlBeamCal.id() );
+  DD4hep::Geometry::DetElement sdet ( "BeamCal01", xmlBeamCal.id() );
+  DD4hep::Geometry::DetElement rdet ( "BeamCal02", xmlBeamCal.id() );
 
-  DD4hep::Geometry::DetElement sdet ( detName, xmlBeamCal.id() );
-  DD4hep::Geometry::DetElement rdet ( detName, xmlBeamCal.id() );
   DD4hep::Geometry::Volume motherVol = lcdd.pickMotherVolume(sdet);
 
   DD4hep::Geometry::PlacedVolume pv =
@@ -190,8 +190,11 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   pv2.addPhysVolID("system",xmlBeamCal.id());
   pv2.addPhysVolID("barrel", 2);
   rdet.setPlacement(pv2);
+ 
+  beamcals.add(sdet);
+  beamcals.add(rdet);
 
-  return sdet;
+  return beamcals;
 }
 
 DECLARE_DETELEMENT(BeamCal,create_detector)
