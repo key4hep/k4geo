@@ -78,11 +78,11 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   //  code ported from VXD04::construct() :
   //##################################
   
-  // double sPhi = 0 * deg;
-  // double dPhi = 360 * deg;
+  double sPhi = 0 * deg;
+  double dPhi = 360 * deg;
   //** DD4hep/TGeo seems to need rad (as opposed to the manual)
-  double sPhi = 0 ;
-  double dPhi = 2*M_PI;
+  //double sPhi = 0 ;
+  //double dPhi = 2*M_PI;
   
   
   //****************************************
