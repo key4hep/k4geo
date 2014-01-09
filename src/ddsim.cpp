@@ -23,7 +23,7 @@ int main(int argc, char** argv)  {
 
   if( argc < 2 ){
     std::cout << " --- Usage: \n " 
-	      << " dd_sim  ../ILD/compact/ILD_o1_v05.xml sensitive_detectors.xml sequences.xml physics.xml " 
+	      << " dd_sim  ../ILD/compact/ILD_o1_v05.xml [sensitive_detectors.xml] sequences.xml physics.xml " 
 	      << std::endl ; 
     exit( 0 ) ;
   }
