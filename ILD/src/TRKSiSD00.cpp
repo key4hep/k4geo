@@ -98,11 +98,11 @@ namespace DDSim {
       return false; // this should never happen really ??????
     }
     
-    // // debug
+    // debug
     // std::cout << " --------------------------------------------------- \n "
-    // 	      << "    prestep volID "  << decoder( preID )  << " \n " 
-    // 	      << "    poststep volID " << decoder( postID ) << " \n " 
-    // 	      << " --------------------------------------------------- \n " ;
+    //  	      << "    prestep volID "  << decoder( preID )  << " \n " 
+    //  	      << "    poststep volID " << decoder( postID ) << " \n " 
+    //  	      << " --------------------------------------------------- \n " ;
     
     if( !_detailedHitsStoring){
       

@@ -9,8 +9,7 @@
 #include "DDSim/Exceptions.h"
 #include <math.h>
 
-
-//#include "GearWrapper.h"
+#include "GearWrapper.h"
 
 using namespace std;
 using namespace DD4hep;
@@ -111,9 +110,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   //    Material* const material_TPC_Gas = CGAGeometryManager::GetMaterial(db->fetchString("chamber_Gas"));
   Material material_TPC_Gas =  lcdd.material(db->fetchString("chamber_Gas") ) ;
 
-#ifdef MOKKA_GEAR
-  _gear_gas_material = material_TPC_Gas; 
-#endif
+  // #ifdef MOKKA_GEAR
+  //   _gear_gas_material = material_TPC_Gas; 
+  // #endif
     
   const double sensitive_threshold_eV  = db->fetchDouble("sensitive_threshold_eV") ;
     
@@ -297,7 +296,7 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
     
   }
   
-  cout << "TPC10: Inner wall material corresponds to " << int( fracRadLengthInnerWall * 1000) / 10.0 << "% of a radiation length." << endl;
+  cout << "TPC10: Inner wall material corresponds to " << int( fracRadLengthInnerWall * 1000) / 10. << "% of a radiation length." << endl;
   cout << "TPC10: Inner wall effective X0 = " << std::setw(4) << dr_InnerWall / fracRadLengthInnerWall<< endl;  
 
 

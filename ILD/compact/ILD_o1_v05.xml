@@ -223,16 +223,17 @@
 		 final_metal_striplines_thickness="0.0138*mm" support_width="10*mm"  />
         </detector> <!--vxd-->
 	
+        <!-- <include "SIT_04.xml"/> -->
 	
         <detector name="TPC" type="TPC10" vis="TPCVis" id="1" limits="Tracker_limits" readout="TPCCollection" insideTrackingVolume="true">
 	  <!-- database : tpc10_01 -->
 	  <!-- SQL command: "SELECT * FROM `global`;"  -->
-	  <global TPC_pad_height="6*mm" TPC_pad_width="1*mm"  TPC_max_step_length="5*mm" dr_InnerWall="25*mm" dr_InnerServiceArea="30*mm" dr_OuterServiceArea="30*mm" 
-		  dr_OuterWall="60*mm" dz_Cathode="0.06*mm" dz_Readout="25*mm" dz_Endplate="100*mm" 
+	  <global TPC_pad_height="6*mm" TPC_pad_width="1*mm"  TPC_max_step_length="5*mm" dr_InnerWall="25*mm" dr_InnerServiceArea="30*mm" dr_OuterServiceArea="30*mm"
+		  dr_OuterWall="60*mm" dz_Cathode="0.06*mm" dz_Readout="25*mm" dz_Endplate="100*mm"
 		  chamber_Gas="TDR_gas" sensitive_threshold_eV="32*eV"  />
 
 	  <!-- SQL command: "SELECT * FROM `cathode`;"  -->
-	  <cathode dz_Cathode_Insulator="0.0275*mm" dz_Cathode_Conductor="0.0025*mm" material_Cathode_Insulator="G4_KAPTON" 
+	  <cathode dz_Cathode_Insulator="0.0275*mm" dz_Cathode_Conductor="0.0025*mm" material_Cathode_Insulator="G4_KAPTON"
 		   material_Cathode_Conductor="G4_Cu" dr_Cathode_Grip="20*mm" dz_Cathode_Grip="15*mm" material_Cathode_Grip="SiC_foam"  />
 	  
 	  <!-- SQL command: "SELECT * FROM `innerWall`;"  -->
@@ -312,17 +313,17 @@
         </readout>
         <readout name="TPCCollection">
 	  <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
-            <id>system:5,side:-2,layer:9,module:8,sensor:8</id>
+            <id>system:5,side:2,layer:9,module:8,sensor:8</id>
         </readout>
 
 	<readout name="BeamCalCollection">
-	  <segmentation type="GridXYZ" gridSizeX="0.35*cm" gridSizeY="0.35*cm" />
+	  <segmentation type="CartesianGridXYZ" grid_size_x="0.35*cm" grid_size_y="0.35*cm"  grid_size_z="0.35*cm" gridSizeX="0.35*cm" gridSizeY="0.35*cm" gridSizeZ="0.35*cm"/>
 	  <id>system:8,layer:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id>
 	</readout>
-
+	
     </readouts>
  <fields>
-   <field type="solenoid" name="GlobalSolenoid" inner_field="3.5*tesla"
+   <field type="solenoid" name="GlobalSolenoid" inner_field="Field_nominal_value*tesla"
 	  outer_field="-1.5*tesla" zmax="TPC_Ecal_Hcal_barrel_halfZ"
 	  inner_radius="TPC_outer_radius"
 	  outer_radius="world_side" />

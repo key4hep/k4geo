@@ -24,6 +24,7 @@ namespace dd4hep {
   using namespace DD4hep::Simulation  ;
   using namespace DD4hep::DDSegmentation ;
   using namespace DD4hep ;
+  using DD4hep::VolumeID ;
 }
 
 
