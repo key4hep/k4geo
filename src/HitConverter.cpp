@@ -77,6 +77,7 @@ namespace DD4hep {
       
       lcio::LCCollectionVec* col = new lcio::LCCollectionVec(lcio::LCIO::SIMCALORIMETERHIT);
       col->reserve( nhits ) ;
+      col->setFlag(UTIL::make_bitset32(LCIO::CHBIT_LONG,LCIO::CHBIT_STEP));
 
       // need to write the description to the collection - look it up via the cellID of the first hit
       lcio::SimCalorimeterHit* hit   = g4col->hit(0) ;
