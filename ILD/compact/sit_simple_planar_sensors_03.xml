@@ -1,0 +1,30 @@
+<!-- 
+     SIT parameters for ILD_o1_v5  
+-->
+
+<detector name="SIT" type="SIT_Simple_Planar" vis="SITVis" id="ILDDetID_SIT" readout="SITCollection" insideTrackingVolume="true">
+
+  <!-- database : sit_simple_planar_sensors_03 -->
+
+  <!-- SQL command: "select * from extended_reconstruction_parameters;"  -->
+  <reco strip_width_mm="0.0125*mm" strip_length_mm="92*mm" strip_pitch_mm="0.05*mm" strip_angle_deg="7*deg"  />
+  
+  <!-- SQL command: "select * from global;"  -->
+  <global sensitive_thickness="0.2*mm" support_thickness="1*mm" sensor_length="92*mm" 
+	  sensitive_mat="G4_Si" support_mat="G4_C" sensitive_threshold_KeV="64*keV"  />
+
+  <!-- SQL command: "select * from sit_layers;"  -->
+  <layer layer_id="1" sensitive_radius="153*mm" n_sensors_per_ladder="8" n_ladders="10" 
+	 ladder_clearance="0.1*mm" faces_IP="1" is_SIT1="1" is_SIT2="0"  />
+
+  <layer layer_id="2" sensitive_radius="155.5*mm" n_sensors_per_ladder="8" n_ladders="10" 
+	 ladder_clearance="0.1*mm" faces_IP="0" is_SIT1="0" is_SIT2="0"  />
+
+  <layer layer_id="3" sensitive_radius="300*mm" n_sensors_per_ladder="14" n_ladders="19" 
+	 ladder_clearance="0.1*mm" faces_IP="1" is_SIT1="0" is_SIT2="1"  />
+
+  <layer layer_id="4" sensitive_radius="302.5*mm" n_sensors_per_ladder="14" n_ladders="19" 
+	 ladder_clearance="0.1*mm" faces_IP="0" is_SIT1="0" is_SIT2="0"  />
+
+</detector>
+

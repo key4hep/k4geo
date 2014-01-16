@@ -60,12 +60,12 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   xml_det_t    x_det = e;
   string       name  = x_det.nameStr();
   
-  //---- envelope: cylinder of air:
-  xml_comp_t  x_tube (x_det.child(_U(tubs)));
-  Tube        envelope_cylinder( x_tube.rmin(), x_tube.rmax(), x_tube.zhalf() );
-  Volume      envelope( "vxd_envelope_cyl", envelope_cylinder , lcdd.air() );
+  //---- envelope: cylinder of air ---- does not work as simply as here - would need to define real enclosing volume....
+  // xml_comp_t  x_tube (x_det.child(_U(tubs)));
+  // Tube        envelope_cylinder( x_tube.rmin(), x_tube.rmax(), x_tube.zhalf() );
+  // Volume      envelope( "vxd_envelope_cyl", envelope_cylinder , lcdd.air() );
   //--------------------------------
-  //Assembly envelope( name + "_assembly"  ) ;
+  Assembly envelope( name + "_assembly"  ) ;
   //--------------------------------
   
   PlacedVolume pv;

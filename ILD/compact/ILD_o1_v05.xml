@@ -23,6 +23,29 @@
         <constant name="world_y"                value="world_side/2"/>
         <constant name="world_z"                value="world_side/2"/>        
 
+	<!--- constants defined in class UTIL::ILDConfig  -->
+	<!-- constant name="ILDCellID0_encoder_string"   value="subdet:5,side:-2,layer:9,module:8,sensor:8"/ -->
+
+	<constant name="ILDDetID_NOTUSED"   value="  0"/>
+	<constant name="ILDDetID_VXD"       value="  1"/>
+	<constant name="ILDDetID_SIT"       value="  2"/>
+	<constant name="ILDDetID_FTD"       value="  3"/>
+	<constant name="ILDDetID_TPC"       value="  4"/>
+	<constant name="ILDDetID_SET"       value="  5"/>
+	<constant name="ILDDetID_ETD"       value="  6"/>
+	<constant name="ILDDetID_ECAL"      value=" 20"/>
+	<constant name="ILDDetID_ECAL_PLUG" value=" 21"/>
+	<constant name="ILDDetID_HCAL"      value=" 22"/>
+	<constant name="ILDDetID_HCAL_RING" value=" 23"/>
+	<constant name="ILDDetID_LCAL"      value=" 24"/>
+	<constant name="ILDDetID_BCAL"      value=" 25"/>
+	<constant name="ILDDetID_LHCAL"     value=" 26"/>
+	<constant name="ILDDetID_YOKE"      value=" 27"/>
+	<constant name="ILDDetID_bwd"       value="- 1"/>
+	<constant name="ILDDetID_barrel"    value="  0"/>
+	<constant name="ILDDetID_fwd"       value="  1"/>
+	
+
 	<!-- global parameters from Mokka model ILD_o1_v05 -->
 	<constant name="BCal_PairMonitor" value="1"/>
 	<constant name="BCal_CutOutSpanningPhi" value="40*deg"/>
@@ -87,10 +110,11 @@
 	<constant name="Lcal_outer_radius" value="195.2"/>
 	<constant name="Lcal_z_begin" value="2505.0"/>
 	<constant name="Lcal_z_thickness" value="135.6"/>
-	<constant name="SIT1_Half_Length_Z" value="384.2"/>
-	<constant name="SIT1_Radius" value="179.232"/>
-	<constant name="SIT2_Half_Length_Z" value="672.35"/>
-	<constant name="SIT2_Radius" value="272.363"/>
+
+	<!-- <constant name="SIT1_Half_Length_Z" value="384.2"/> -->
+	<!-- <constant name="SIT1_Radius" value="179.232"/> -->
+	<!-- <constant name="SIT2_Half_Length_Z" value="672.35"/> -->
+	<!-- <constant name="SIT2_Radius" value="272.363"/> -->
 
 	<constant name="TPC_Ecal_Hcal_barrel_halfZ" value="2350*mm"/>
 	<constant name="TPC_inner_radius" value="329*mm"/>
@@ -148,6 +172,7 @@
       <vis name="WhiteVis"         alpha="0.0" r=".96" g=".96"  b=".96"   showDaughters="true"  visible="true"/>
 
       <vis name="Invisible"         alpha="0.0" r="0" g="0"  b="0"   showDaughters="false"  visible="false"/>
+      <vis name="SeeThrough"         alpha="0.0" r="0" g="0"  b="0"   showDaughters="true"  visible="false"/>
 
       <vis name="RedVis"           alpha="1.0" r="1.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
       <vis name="GreenVis"         alpha="1.0" r="0.0" g="1.0"  b="0.0"   showDaughters="true"  visible="true"/>
@@ -163,13 +188,14 @@
 
       <vis name="VXDVis"        alpha="0.1" r="0.1" g=".5"  b=".5"   showDaughters="true"  visible="true"/>
       <vis name="VXDLayerVis"   alpha="1.0" r="0.1" g=".5"  b=".5"   showDaughters="true"  visible="true"/>
-      <vis name="VXDSupportVis" alpha="1.0" r="0.0" g="1.0" b="0.0"  showDaughters="true" visible="true"/>
+      <vis name="VXDSupportVis" alpha="1.0" r="0.0" g="1.0" b="0.0"  showDaughters="true"  visible="true"/>
 
-      <vis name="MyBeamCalVis"    r="1.0" g="1.0"  b="1.0" alpha="0.5" showDaughters="true"  visible="false"/>
-      <vis name="BCLayerVis1"       r="1.0" g="0.0"  b="0.0" alpha="1" showDaughters="true"  visible="true"/>
-      <vis name="BCLayerVis2"       r="0.0" g="1.0"  b="0.0" alpha="1" showDaughters="true"  visible="true"/>
-      <vis name="BCLayerVis3"       r="0.0" g="0.0"  b="1.0" alpha="1" showDaughters="true"  visible="true"/>
-      <vis name="BCLayerVis4"       r="1.0" g="0.0"  b="1.0" alpha="1" showDaughters="true"  visible="true"/>
+
+      <vis name="MyBeamCalVis"  alpha="0.5"  r="1.0" g="1.0"  b="1.0" showDaughters="true"  visible="false"/>
+      <vis name="BCLayerVis1"   alpha="1.0"  r="1.0" g="0.0"  b="0.0" showDaughters="true"  visible="true"/>
+      <vis name="BCLayerVis2"   alpha="1.0"  r="0.0" g="1.0"  b="0.0" showDaughters="true"  visible="true"/>
+      <vis name="BCLayerVis3"   alpha="1.0"  r="0.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
+      <vis name="BCLayerVis4"   alpha="1.0"  r="1.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
 
     </display>
 
@@ -185,124 +211,17 @@
     <detectors>
         <comment>Trackers</comment>
 
-        <detector name="VTX" type="VXD04" vis="VXDVis" id="1" limits="Tracker_limits" readout="VXDCollection" insideTrackingVolume="true">
-	  
-          <tubs rmin="0*mm" rmax="180*mm" zhalf="380.*mm" name="envelope"/>
-
-	  <!-- database : TMP_DB10 -->
-	  <!-- SQL command: "select * from layers_common_parameters;"  -->
-	  <layers_common_parameters id="1" electronics_structure_thickness="0.1*mm" active_silicon_thickness="0.05*mm" support_structure_radial_thickness="0.49392*mm" end_electronics_half_z="5*mm" 
-				    strip_final_beampipe_radious="24.3*mm"	side_band_electronics_option="1" end_ladd_electronics_option="1" side_band_electronics_width="0.5*mm" 
-				    side_band_electronics_thickness="0.05*mm" active_side_band_electronics_option="0" layer_gap="2*mm" flex_cable_material="G4_KAPTON" flex_cable_thickness="0.05*mm"
-				    foam_spacer_material="SiC_foam" foam_spacer_thickness="0.94*mm" metal_traces_material="G4_Al" metal_traces_thickness="0.01*mm" cool_pipe_material="titanium" 
-				    cool_pipe_inner_radius="0.75*mm" cool_pipe_outer_radius="1*mm" external_kapton_thickness="0.05*mm" external_metal_thickness="0.009*mm"  />
-	  <!-- SQL command: "SELECT * FROM cryostat;"  -->
-	  <cryostat id="1" alu_skin_inner_radious="100*mm" alu_skin_tickness="0.5*mm" foam_inner_radious="90*mm" foam_tickness="10*mm" foam_half_z="166.6*mm" endplate_inner_radious="24.2*mm" 
-		    cryostat_option="1" cryostat_apperture="30*mm" cryostat_apperture_radius="1.5*mm"  />
-	  <!-- SQL command: "select * from support_shell;"  -->
-	  <support_shell id="0" inner_radious="65*mm" half_z="145*mm" thickess="0.49392*mm" endplate_inner_radious="30*mm" endplate_inner_radius_L1="15.7*mm" endplate_outer_radius_L1="20*mm" 
-			 offset_ladder_block="0.28224*mm" beryllium_ladder_block_length="5*mm" beryllium_ladder_block_thickness="0.25*mm" shell_endplate_thickness="2*mm" forward_shell_half_z="6.5*mm"  />
-	  <!-- SQL command: "select * from layer;"  -->
-	  <layer id="1" layer_radius="VXD_radius_r1" ladder_length="VXD_length_r1" ladder_width="5.5*mm" nb_ladder="10" ladder_gap="0" strip_line_final_z="150*mm" end_electronics_width="5.5*mm" 
-		 initial_kapton_striplines_thickness="0.04566*mm" final_kapton_striplines_thickness="0.02435*mm" initial_metal_striplines_thickness="0.00806*mm" 
-		 final_metal_striplines_thickness="0.0043*mm" support_width="4.5*mm"  />
-	  <layer id="2" layer_radius="VXD_radius_r1" ladder_length="VXD_length_r1" ladder_width="5.5*mm" nb_ladder="10" ladder_gap="0" strip_line_final_z="150*mm" end_electronics_width="5.5*mm" 
-		 initial_kapton_striplines_thickness="0.04566*mm" final_kapton_striplines_thickness="0.02435*mm" initial_metal_striplines_thickness="0.00806*mm" 
-		 final_metal_striplines_thickness="0.0043*mm" support_width="4.5*mm"  />
-	  <layer id="3" layer_radius="VXD_radius_r3" ladder_length="VXD_length_r3" ladder_width="11*mm" nb_ladder="11" ladder_gap="0*mm" strip_line_final_z="150*mm" end_electronics_width="11*mm" 
-		 initial_kapton_striplines_thickness="0.04102*mm" final_kapton_striplines_thickness="0.05059*mm" initial_metal_striplines_thickness="0.00724*mm" 
-		 final_metal_striplines_thickness="0.00893*mm" support_width="10*mm"  />
-	  <layer id="4" layer_radius="VXD_radius_r3" ladder_length="VXD_length_r3" ladder_width="11*mm" nb_ladder="11" ladder_gap="0*mm" strip_line_final_z="150*mm" end_electronics_width="11*mm" 
-		 initial_kapton_striplines_thickness="0.04102*mm" final_kapton_striplines_thickness="0.05059*mm" initial_metal_striplines_thickness="0.00724*mm" 
-		 final_metal_striplines_thickness="0.00893*mm" support_width="10*mm"  />
-	  <layer id="5" layer_radius="VXD_radius_r5" ladder_length="VXD_length_r3" ladder_width="11*mm" nb_ladder="17" ladder_gap="0*mm" strip_line_final_z="150*mm" end_electronics_width="11*mm" 
-		 initial_kapton_striplines_thickness="0.04044*mm" final_kapton_striplines_thickness="0.07819*mm" initial_metal_striplines_thickness="0.00714*mm" 
-		 final_metal_striplines_thickness="0.0138*mm" support_width="10*mm"  />
-	  <layer id="6" layer_radius="VXD_radius_r5" ladder_length="VXD_length_r3" ladder_width="11*mm" nb_ladder="17" ladder_gap="0*mm" strip_line_final_z="150*mm" end_electronics_width="11*mm" 
-		 initial_kapton_striplines_thickness="0.04044*mm" final_kapton_striplines_thickness="0.07819*mm" initial_metal_striplines_thickness="0.00714*mm" 
-		 final_metal_striplines_thickness="0.0138*mm" support_width="10*mm"  />
-        </detector> <!--vxd-->
+	<include ref="vxd07.xml"/>
 	
-        <!-- <include "SIT_04.xml"/> -->
-	
-        <detector name="TPC" type="TPC10" vis="TPCVis" id="1" limits="Tracker_limits" readout="TPCCollection" insideTrackingVolume="true">
-	  <!-- database : tpc10_01 -->
-	  <!-- SQL command: "SELECT * FROM `global`;"  -->
-	  <global TPC_pad_height="6*mm" TPC_pad_width="1*mm"  TPC_max_step_length="5*mm" dr_InnerWall="25*mm" dr_InnerServiceArea="30*mm" dr_OuterServiceArea="30*mm"
-		  dr_OuterWall="60*mm" dz_Cathode="0.06*mm" dz_Readout="25*mm" dz_Endplate="100*mm"
-		  chamber_Gas="TDR_gas" sensitive_threshold_eV="32*eV"  />
+	<include ref="sit_simple_planar_sensors_03.xml"/>
 
-	  <!-- SQL command: "SELECT * FROM `cathode`;"  -->
-	  <cathode dz_Cathode_Insulator="0.0275*mm" dz_Cathode_Conductor="0.0025*mm" material_Cathode_Insulator="G4_KAPTON"
-		   material_Cathode_Conductor="G4_Cu" dr_Cathode_Grip="20*mm" dz_Cathode_Grip="15*mm" material_Cathode_Grip="SiC_foam"  />
-	  
-	  <!-- SQL command: "SELECT * FROM `innerWall`;"  -->
-	  <innerWall>
-	    <row dr="0.01*mm" material="G4_Al"  />
-	    <row dr="0.05*mm" material="G4_KAPTON"  />
-	    <row dr="0.3*mm" material="g10"  />
-	    <row dr="24.22*mm" material="G4_AIR"  />
-	    <row dr="0.3*mm" material="g10"  />
-	    <row dr="0.05*mm" material="G4_KAPTON"  />
-	    <row dr="0.07*mm" material="G4_Cu"  />
-	  </innerWall>
-	    <!-- SQL command: "SELECT * FROM `outerWall`;"  -->
-	  <outerWall>
-	    <row dr="0.07*mm" material="G4_Cu"  />
-	    <row dr="0.05*mm" material="G4_KAPTON"  />
-	    <row dr="0.3*mm" material="g10"  />
-	    <row dr="59.22*mm" material="G4_AIR"  />
-	    <row dr="0.3*mm" material="g10"  />
-	    <row dr="0.05*mm" material="G4_KAPTON"  />
-	    <row dr="0.01*mm" material="G4_Al"  />
-	  </outerWall>
-	  <!-- SQL command: "SELECT * FROM `readout`;"  -->
-	  <readout>
-	    <row dz="0.003*mm" material="G4_Cu" comment="gating"  />
-	    <row dz="0.03*mm" material="G4_KAPTON" comment="gating"  />
-	    <row dz="0.003*mm" material="G4_Cu" comment="gating"  />
-	    <row dz="4.447*mm" material="TDR_gas" comment="gating"  />
-	    <row dz="0.003*mm" material="G4_Cu" comment="mpgd"  />
-	    <row dz="0.03*mm" material="G4_KAPTON" comment="mpgd"  />
-	    <row dz="0.003*mm" material="G4_Cu" comment="mpgd"  />
-	    <row dz="4.447*mm" material="TDR_gas" comment="mpgd"  />
-	    <row dz="0.003*mm" material="G4_Cu" comment="mpgd"  />
-	    <row dz="0.03*mm" material="G4_KAPTON" comment="mpgd"  />
-	    <row dz="0.003*mm" material="G4_Cu" comment="mpgd"  />
-	    <row dz="4.447*mm" material="TDR_gas" comment="mpgd"  />
-	    <row dz="0.05*mm" material="G4_Cu" comment="pads"  />
-	    <row dz="2*mm" material="g10" comment="structural"  />
-	    <row dz="0.5*mm" material="G4_Si" comment="electronics"  />
-	    <row dz="2*mm" material="epoxy" comment="structural"  />
-	    <row dz="1*mm" material="G4_KAPTON" comment="structural"  />
-	    <row dz="2*mm" material="G4_Al" comment="Cooling"  />
-	    <row dz="1*mm" material="G4_KAPTON" comment="structural"  />
-	    <row dz="3*mm" material="CarbonFiber" comment="structural"  />
-	  </readout>
-	</detector>
+	<include ref="tpc10_01.xml"/>
 
-	<detector name="BeamCal" type="BeamCal" vis="BeamCalVis" id="1" readout="BeamCalCollection" insideTrackingVolume="false">
-	  <parameter crossingangle="ILC_Main_Crossing_Angle" 
-		     cutoutspanningangle="40*deg" 
-		     incomingbeampiperadius="BCal_TubeIncomingRadius"/>
+	<include ref="set_simple_planar_sensors_01.xml"/>
 
-	  <dimensions inner_r = "BCal_rInner" 
-		      inner_z = "LHcal_zend + LHcal_BCal_clearance" 
-		      outer_r = "BCal_rOuter" />
+        <comment>Calorimeters</comment>
 
-	  <layer repeat="1" >
-            <slice material = "C"         thickness = "BCal_dGraphite" vis="LayerVis1"      layerType="holeForIncomingBeampipe"/>
-	  </layer>
-
-	  <layer repeat="BCal_nLayers" >
-	    <slice material = "TungstenDens24" thickness = "BCal_dAbsorber"        vis="BCLayerVis1" layerType="holeForIncomingBeampipe" />
-	    <slice material = "Silicon" thickness = "0.3004*mm" sensitive = "yes"  vis="BCLayerVis2"/>
-	    <slice material = "Copper"  thickness = "0.0004*mm"                    vis="BCLayerVis3"/>
-	    <slice material = "Kapton"  thickness = "0.15*mm"                      vis="BCLayerVis4"/>
-	    <slice material = "Air"     thickness = "0.05*mm" />
-	  </layer>
-
-	</detector>
+	<include ref="BeamCal08.xml"/>
 
       </detectors> 
 
@@ -311,7 +230,15 @@
 	  <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
             <id>system:5,side:2,layer:9,module:8,sensor:8</id>
         </readout>
+        <readout name="SITCollection">
+	  <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
+            <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+        </readout>
         <readout name="TPCCollection">
+	  <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
+            <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+        </readout>
+        <readout name="SETCollection">
 	  <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
             <id>system:5,side:2,layer:9,module:8,sensor:8</id>
         </readout>

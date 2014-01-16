@@ -12,10 +12,11 @@
   --
   --   To run batch: set UI=""
   -->
+
   <!--kernel UI="UI" NumEvents="1"/-->  
   <kernel UI=""
-	  NumEvents="3" 
-	  />  
+	NumEvents="3" 
+	/>  
 
 
   <!-- List of globally known actions. These actions will be registered with the Geant4Kernel 
@@ -108,12 +109,15 @@
 		    Property_string="'Hello_1'"/>
       </action>
       <action name="UserEvent_2"/>
+
+      <action name="Geant4Output2LCIO/LCIOOutput">
+      	<properties Output="simple_lcio.slcio"/>
+      </action>
+
       <!-- <action name="Geant4Output2ROOT/RootOutput"> -->
       <!-- 	<properties Output="simple.root"/> -->
       <!-- </action> -->
-      <action name="Geant4Output2LCIO/LCIOOutput">
-	<properties Output="simple_lcio"/>
-      </action>
+
     </sequence>
     <sequence name="Geant4GeneratorActionSequence/GeneratorAction">
       <action name="Geant4ParticleGun/Gun">
@@ -136,10 +140,22 @@
       <action name="TRKSiSD00/VXDCollection"/>
     </sequence>
     
+    <sequence sd="SIT" type="Geant4SensDetActionSequence">
+      <filter name="GeantinoRejector"/>
+      <filter name="EnergyDepositMinimumCut/SiTracker"/>
+      <action name="TRKSiSD00/SITCollection"/>
+    </sequence>
+    
     <sequence sd="TPC" type="Geant4SensDetActionSequence">
       <filter name="GeantinoRejector"/>
       <filter name="EnergyDepositMinimumCut/SiTracker"/>
       <action name="TRKSiSD00/TPCCollection"/>
+    </sequence>
+
+    <sequence sd="SET" type="Geant4SensDetActionSequence">
+      <filter name="GeantinoRejector"/>
+      <filter name="EnergyDepositMinimumCut/SiTracker"/>
+      <action name="TRKSiSD00/SETCollection"/>
     </sequence>
 
     <!--

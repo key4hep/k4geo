@@ -9,7 +9,7 @@
 #include "DDSim/Exceptions.h"
 #include <math.h>
 
-#include "GearWrapper.h"
+//#include "GearWrapper.h"
 
 using namespace std;
 using namespace DD4hep;
