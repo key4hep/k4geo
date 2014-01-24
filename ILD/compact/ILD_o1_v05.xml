@@ -81,28 +81,28 @@
 	<constant name="Ecal_nlayers2" value="9"/>
 	<constant name="Ecal_support_thickness" value="9.3"/>
 	<constant name="Field_nominal_value" value="3.5"/>
-	<constant name="Hcal_Coil_additional_gap" value="29.5"/>
-	<constant name="Hcal_Ecal_gap" value="30"/>
+	<constant name="Hcal_Coil_additional_gap" value="29.5*mm"/>
+	<constant name="Hcal_Ecal_gap" value="30*mm"/>
 	<constant name="Hcal_apply_Birks_law" value="1"/>
-	<constant name="Hcal_back_plate_thickness" value="15"/>
-	<constant name="Hcal_cells_size" value="30"/>
-	<constant name="Hcal_endcap_center_box_size" value="700.0"/>
-	<constant name="Hcal_endcap_ecal_gap" value="15"/>
+	<constant name="Hcal_back_plate_thickness" value="15*mm"/>
+	<constant name="Hcal_cells_size" value="30*mm"/>
+	<constant name="Hcal_endcap_center_box_size" value="700.0*mm"/>
+	<constant name="Hcal_endcap_ecal_gap" value="15*mm"/>
 	<constant name="Hcal_endcap_nlayers" value="48"/>
 	<!--constant name="Hcal_endcap_radiator_material" value="Iron"/-->
-	<constant name="Hcal_endcap_radiator_thickness" value="20"/>
-	<constant name="Hcal_endcap_sensitive_center_box" value="0.0"/>
-	<constant name="Hcal_endcap_zmin" value="2670.7"/>
-	<constant name="Hcal_fiber_gap" value="2.7"/>
-	<constant name="Hcal_lateral_structure_thickness" value="15"/>
-	<constant name="Hcal_layer_air_gap" value="2"/>
-	<constant name="Hcal_layer_support_length" value="0"/>
-	<constant name="Hcal_middle_stave_gaps" value="10"/>
-	<constant name="Hcal_modules_gap" value="0"/>
+	<constant name="Hcal_endcap_radiator_thickness" value="20*mm"/>
+	<constant name="Hcal_endcap_sensitive_center_box" value="0.0*mm"/>
+	<constant name="Hcal_endcap_zmin" value="2670.7*mm"/>
+	<constant name="Hcal_fiber_gap" value="2.7*mm"/>
+	<constant name="Hcal_lateral_structure_thickness" value="15*mm"/>
+	<constant name="Hcal_layer_air_gap" value="2*mm"/>
+	<constant name="Hcal_layer_support_length" value="0*mm"/>
+	<constant name="Hcal_middle_stave_gaps" value="10*mm"/>
+	<constant name="Hcal_modules_gap" value="0*mm"/>
 	<constant name="Hcal_nlayers" value="48"/>
-	<constant name="Hcal_radiator_thickness" value="20.0"/>
+	<constant name="Hcal_radiator_thickness" value="20.0*mm"/>
 	<!--constant name="Hcal_sensitive_model" value="scintillator"/-->
-	<constant name="Hcal_stave_gaps" value="10"/>
+	<constant name="Hcal_stave_gaps" value="10*mm"/>
 	<constant name="ILC_Main_Crossing_Angle" value="14*mrad"/>
 	<constant name="LHcal_BCal_clearance" value="390*mm"/>
 	<constant name="LHcal_zend" value="3085*mm"/>
