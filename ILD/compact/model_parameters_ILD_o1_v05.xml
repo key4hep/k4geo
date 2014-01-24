@@ -1,0 +1,244 @@
+<!-- 
+     global model parameters for model: ILD_o1_v05
+     extracted from Mokka DB at pollin1.in2p3.fr - db: models03
+     on 16/01/2014
+     at 16:53:18
+-->
+<define>
+  <!-- FIXME: string constants not supported  !!!??? -->
+
+  <constant name="BCal_PairMonitor" value="1"/>
+  <constant name="BCal_SpanningPhi" value="320"/>
+  <constant name="BCal_TubeIncomingRadius" value="15*mm"/>
+  <constant name="BCal_dAbsorber" value="3.5*mm"/>
+  <constant name="BCal_dGraphite" value="100*mm"/>
+  <constant name="BCal_nLayers" value="30"/>
+  <constant name="BCal_nWafers" value="8"/>
+  <constant name="BCal_rInner" value="20*mm"/>
+  <constant name="BCal_rOuter" value="150*mm"/>
+  <constant name="BCal_rSegmentation" value="8"/>
+  <constant name="BuildHcalElectronicsInterface" value="1"/>
+
+  <constant name="Coil_Yoke_lateral_clearance" value="200.0*mm"/>
+  <constant name="Coil_Yoke_radial_clearance" value="250*mm"/>
+  <constant name="Coil_extra_size" value="1522*mm"/>
+  <!--constant name="Coil_inner_radius" value="None"/-->
+  <constant name="Coil_thickness" value="750.0*mm"/>
+
+  <constant name="EcalBarrelServices_RailDistanceToRight" value="166.5*mm"/>
+  <constant name="EcalBarrelServices_RailHeight" value="30.0*mm"/>
+  <constant name="EcalBarrelServices_RailSeparation" value="380.0*mm"/>
+  <constant name="EcalBarrelServices_RailWidth" value="103.25*mm"/>
+  <constant name="EcalBarrelServices_ZMinus_FirstInterrail_Cu_Thickness" value="1.8*mm"/>
+  <constant name="EcalBarrelServices_ZMinus_FirstInterrail_PE_Thickness" value="4.5*mm"/>
+  <constant name="EcalBarrelServices_ZMinus_SecondInterrail_Cu_Thickness" value="0.9*mm"/>
+  <constant name="EcalBarrelServices_ZPlus_FirstInterrail_Cu_Thickness" value="1.09*mm"/>
+  <constant name="EcalBarrelServices_ZPlus_FirstInterrail_PE_Thickness" value="2.67*mm"/>
+  <constant name="EcalBarrelServices_ZPlus_SecondInterrail_Cu_Thickness" value="0.61*mm"/>
+  <constant name="EcalBarrel_EndCapServices_ZMinus_Cu_Thickness" value="5.2*mm"/>
+  <constant name="EcalBarrel_EndCapServices_ZMinus_PE_Thickness" value="12.4*mm"/>
+  <constant name="EcalBarrel_EndCapServices_ZPlus_Cu_Thickness" value="3.5*mm"/>
+  <constant name="EcalBarrel_EndCapServices_ZPlus_PE_Thickness" value="8.3*mm"/>
+  <constant name="Ecal_Alveolus_Air_Gap" value="0.5*mm"/>
+  <constant name="Ecal_Barrel_halfZ" value="2350*mm"/>
+  <constant name="Ecal_EC_Ring_gap" value="10*mm"/>
+  <constant name="Ecal_Lcal_ring_gap" value="54.8*mm"/>
+  <constant name="Ecal_MPPC_size" value="0.91*mm"/>
+  <constant name="Ecal_Sc_MPPC_breadth" value="2.5*mm"/>
+  <constant name="Ecal_Sc_N_strips_across_module" value="4"/>
+  <constant name="Ecal_Sc_Si_mix" value="000000000000000"/>
+  <constant name="Ecal_Sc_number_of_virtual_cells" value="9"/>
+  <constant name="Ecal_Sc_reflector_thickness" value="0.057*mm"/>
+  <constant name="Ecal_Sc_thickness" value="2.0*mm"/>
+  <constant name="Ecal_Si_thickness" value=".5*mm"/>
+  <constant name="Ecal_Slab_H_fiber_thickness" value="0.55*mm"/>
+  <constant name="Ecal_Slab_PCB_thickness" value="0.8*mm"/>
+  <constant name="Ecal_Slab_Sc_PCB_thickness" value="0.8*mm"/>
+  <constant name="Ecal_Slab_copper_thickness" value="0.4*mm"/>
+  <constant name="Ecal_Slab_glue_gap" value="0.1*mm"/>
+  <constant name="Ecal_Slab_ground_thickness" value="0.1*mm"/>
+  <constant name="Ecal_Slab_shielding" value="0.1*mm"/>
+  <constant name="Ecal_Tpc_gap" value="35*mm"/>
+  <constant name="Ecal_barrel_number_of_towers" value="5"/>
+  <constant name="Ecal_cables_gap" value="100.*mm"/>
+  <constant name="Ecal_cells_size" value="4.9*mm"/>
+  <constant name="Ecal_endcap_center_box_size" value="800.0*mm"/>
+  <constant name="Ecal_endcap_extra_size" value="60.8*mm"/>
+  <constant name="Ecal_endcap_outer_radius" value="1926.1*mm"/>
+  <constant name="Ecal_endcap_plug_rmin" value="250.0*mm"/>
+  <constant name="Ecal_endcap_zmax" value="2500.*mm"/>
+  <constant name="Ecal_endcap_zmin" value="2450.0*mm"/>
+  <constant name="Ecal_fiber_thickness" value=".15*mm"/>
+  <constant name="Ecal_front_face_thickness" value="2*mm"/>
+  <constant name="Ecal_guard_ring_size" value="0.5*mm"/>
+  <constant name="Ecal_lateral_face_thickness" value="2*mm"/>
+  <constant name="Ecal_n_wafers_per_tower" value="2"/>
+  <constant name="Ecal_nlayers1" value="20"/>
+  <constant name="Ecal_nlayers2" value="9"/>
+  <constant name="Ecal_nlayers3" value="0"/>
+  <constant name="Ecal_outer_radius" value="1910*mm"/>
+  <constant name="Ecal_radiator_layers_set1_thickness" value="2.1*mm"/>
+  <constant name="Ecal_radiator_layers_set2_thickness" value="4.2*mm"/>
+  <constant name="Ecal_radiator_layers_set3_thickness" value="0*mm"/>
+  <!--constant name="Ecal_radiator_material" value="tungsten"/-->
+  <constant name="Ecal_support_thickness" value="9.3*mm"/>
+  <constant name="FieldPropagator_LargestAcceptableStep" value="-1"/>
+  <constant name="Field_nominal_value" value="3.5"/>
+  <constant name="HcalServicesModule_InnerServicesWidth" value="200.0*mm"/>
+  <constant name="HcalServicesModule_ZMinus_Cu_Thickness" value="8.2*mm"/>
+  <constant name="HcalServicesModule_ZMinus_PE_Thickness" value="27.5*mm"/>
+  <constant name="HcalServicesModule_ZMinus_StainlessSteel_Thickness" value="15.0*mm"/>
+  <constant name="HcalServicesModule_ZPlus_Cu_Thickness" value="7.4*mm"/>
+  <constant name="HcalServicesModule_ZPlus_PE_Thickness" value="25.6*mm"/>
+  <constant name="HcalServicesModule_ZPlus_StainlessSteel_Thickness" value="15.0*mm"/>
+  <constant name="HcalServices_outer_Cu_thickness" value="0.4*mm"/>
+  <constant name="HcalServices_outer_FR4_thickness" value="2.8*mm"/>
+  <constant name="Hcal_Coil_additional_gap" value="29.5*mm"/>
+  <constant name="Hcal_Cu_thickness" value="0.1*mm"/>
+  <constant name="Hcal_Ecal_gap" value="30*mm"/>
+  <constant name="Hcal_PCB_thickness" value="0.7*mm"/>
+  <constant name="Hcal_R_max" value="2900.*mm"/>
+  <constant name="Hcal_apply_Birks_law" value="1"/>
+  <constant name="Hcal_back_plate_thickness" value="15*mm"/>
+  <constant name="Hcal_barrel_end_module_type" value="1"/>
+  <constant name="Hcal_cells_size" value="30*mm"/>
+  <constant name="Hcal_digitization_tile_size" value="30*mm"/>
+  <constant name="Hcal_endcap_cables_gap" value="214*mm"/>
+  <constant name="Hcal_endcap_center_box_size" value="700.0*mm"/>
+  <constant name="Hcal_endcap_ecal_gap" value="15*mm"/>
+  <constant name="Hcal_endcap_lateral_structure_thickness" value="5.0*mm"/>
+  <constant name="Hcal_endcap_layer_air_gap" value="2.5*mm"/>
+  <constant name="Hcal_endcap_module_number" value="16*mm"/>
+  <constant name="Hcal_endcap_module_width" value="375.0*mm"/>
+  <constant name="Hcal_endcap_nlayers" value="48"/>
+  <!--constant name="Hcal_endcap_radiator_material" value="Iron"/-->
+  <constant name="Hcal_endcap_radiator_thickness" value="20*mm"/>
+  <constant name="Hcal_endcap_sensitive_center_box" value="0.0*mm"/>
+  <constant name="Hcal_endcap_services_module_width" value="100.0*mm"/>
+  <constant name="Hcal_endcap_zmin" value="2670.7*mm"/>
+  <constant name="Hcal_fiber_gap" value="2.7*mm"/>
+  <constant name="Hcal_lateral_structure_thickness" value="15*mm"/>
+  <constant name="Hcal_layer_air_gap" value="2*mm"/>
+  <constant name="Hcal_layer_support_length" value="0*mm"/>
+  <constant name="Hcal_middle_stave_gaps" value="10*mm"/>
+  <constant name="Hcal_modules_gap" value="0*mm"/>
+  <constant name="Hcal_nlayers" value="48"/>
+  <constant name="Hcal_radial_ring_inner_gap" value="50*mm"/>
+  <!--constant name="Hcal_radiator_material" value="Iron"/-->
+  <constant name="Hcal_radiator_thickness" value="20.0*mm"/>
+  <constant name="Hcal_ring" value="1"/>
+  <constant name="Hcal_scintillator_thickness" value="3.0*mm"/>
+  <!--constant name="Hcal_sensitive_model" value="scintillator"/-->
+  <constant name="Hcal_stave_gaps" value="3*mm"/>
+  <constant name="Hcal_steel_cassette_thickness" value="0.5*mm"/>
+
+  <constant name="ILC_Main_Crossing_Angle" value="14*mrad"/>
+
+  <constant name="LHcal_BCal_clearance" value="390*mm"/>
+  <constant name="LHcal_Electronics_space" value="19.4*mm"/>
+  <constant name="LHcal_cell_size" value="10*mm"/>
+  <constant name="LHcal_inner_radius" value="93*mm"/>
+  <constant name="LHcal_lateral_face_thickness" value="10*mm"/>
+  <constant name="LHcal_nlayers" value="40"/>
+  <constant name="LHcal_radiator_thickness" value="10*mm"/>
+  <constant name="LHcal_zend" value="3085*mm"/>
+  <constant name="LHcal_zmin_displacement" value="30*mm"/>
+  <constant name="Lcal_beam_pipe_clearance" value="0.5*mm"/>
+  <constant name="Lcal_extra_size" value="26*mm"/>
+  <constant name="Lcal_inner_radius" value="80.0*mm"/>
+  <constant name="Lcal_layer_gap" value="0.25*mm"/>
+  <constant name="Lcal_n_layers" value="30*mm"/>
+  <constant name="Lcal_n_tiles" value="12"/>
+  <constant name="Lcal_nstrips_phi" value="48"/>
+  <constant name="Lcal_nstrips_theta" value="64"/>
+  <constant name="Lcal_outer_radius" value="195.2*mm"/>
+  <constant name="Lcal_phi_offset" value="0"/>
+  <constant name="Lcal_sensor_phi_offset" value="3.75"/>
+  <constant name="Lcal_silicon_thickness" value="0.32*mm"/>
+  <constant name="Lcal_support_thickness" value="0.2*mm"/>
+  <constant name="Lcal_tile_gap" value="1.2*mm"/>
+  <constant name="Lcal_tungsten_thickness" value="3.5*mm"/>
+  <!--constant name="Lcal_type" value="pad"/-->
+  <constant name="Lcal_z_begin" value="2505.0*mm"/>
+  <constant name="Lcal_z_thickness" value="135.6*mm"/>
+
+  <constant name="SIT12_cable_thickness" value="0.063*mm"/>
+  <constant name="SIT1_Half_Length_Z" value="384.2*mm"/>
+  <constant name="SIT1_Radius" value="179.232*mm"/>
+  <constant name="SIT2_Half_Length_Z" value="672.35*mm"/>
+  <constant name="SIT2_Radius" value="272.363*mm"/>
+
+  <constant name="SServices_FTD2_cone_thickness" value="0.040*mm"/>
+  <constant name="SServices_FTD3_cone_thickness" value="0.020*mm"/>
+  <constant name="SServices_FTD7_cables_thickness" value="0.85*mm"/>
+  <!--constant name="SServices_FTD_db_name" value="ftd_simple_staggered_02"/-->
+
+  <constant name="TPC_Ecal_Hcal_barrel_halfZ" value="2200.00*mm"/>
+  <constant name="TPC_inner_radius" value="329*mm"/>
+  <constant name="TPC_max_step_length" value="10*mm"/>
+  <constant name="TPC_outer_radius" value="1808*mm"/>
+  <constant name="TPC_pad_height" value="6*mm"/>
+  <constant name="TPC_pad_width" value="1*mm"/>
+
+  <constant name="TUBE_IPOuterBulge_end_radius" value="184*mm"/>
+  <constant name="TUBE_IPOuterBulge_end_z" value="2364.5*mm"/>
+  <constant name="TUBE_IPOuterTube_end_radius" value="24*mm"/>
+  <constant name="TUBE_IPOuterTube_end_z" value="230*mm"/>
+  <constant name="TUBE_IPOuterTube_start_radius" value="24*mm"/>
+  <constant name="TUBE_IPOuterTube_start_z" value="150*mm"/>
+
+  <constant name="TUBE_crossing_angle" value="14*mrad"/>
+  <constant name="TUBE_opening_angle" value="0.07876*rad"/> <!-- fixme ??? -->
+
+  <constant name="VXD_active_side_band_electronics_option" value="0"/>
+  <constant name="VXD_active_silicon_thickness" value="0.05*mm"/>
+  <constant name="VXD_cryostat_option" value="1"/>
+  <constant name="VXD_end_ladd_electronics_half_length" value="5*mm"/>
+  <constant name="VXD_end_ladd_electronics_option" value="1"/>
+  <constant name="VXD_end_ladd_electronics_thickness" value="0.1*mm"/>
+  <constant name="VXD_flex_cable_thickness" value="0.05*mm"/>
+  <!--constant name="VXD_foam_spacer_material" value="SiC_foam"/-->
+  <constant name="VXD_foam_spacer_thickness" value="0.94*mm"/>
+  <constant name="VXD_inner_radius" value="16*mm"/>
+  <constant name="VXD_layer_gap" value="2.0*mm"/>
+  <constant name="VXD_length_r1" value="62.5*mm"/>
+  <constant name="VXD_length_r3" value="125*mm"/>
+  <constant name="VXD_length_r5" value="125*mm"/>
+  <constant name="VXD_metal_traces_thickness" value="0.01*mm"/>
+  <constant name="VXD_radius_r1" value="16*mm"/>
+  <constant name="VXD_radius_r3" value="37*mm"/>
+  <constant name="VXD_radius_r5" value="58*mm"/>
+  <constant name="VXD_side_band_electronics_option" value="1*mm"/>
+  <constant name="VXD_side_band_electronics_thickness" value="0.05*mm"/>
+  <constant name="VXD_side_band_electronics_width" value="0.5*mm"/>
+  <!--constant name="VXD_support_ladder_material" value="graphite"/-->
+  <constant name="VXD_support_ladder_thickness" value="0.134*mm"/>
+  <constant name="VXD_width_r1" value="5.5*mm"/>
+  <constant name="VXD_width_r3" value="11*mm"/>
+  <constant name="VXD_width_r5" value="11*mm"/>
+
+
+  <constant name="Yoke_BField_cutoff" value="1.5"/>
+  <constant name="Yoke_Z_start_endcaps" value="6625*mm"/>
+  <constant name="Yoke_barrel_inner_radius" value="4450.00*mm"/>
+  <constant name="Yoke_endcap_inner_radius" value="300*mm"/>
+  <constant name="Yoke_thickness" value="2550*mm"/>
+  <constant name="Yoke_with_plug" value="1"/>
+
+  <constant name="tpcEndplateServicesRing1_R" value="450*mm"/>
+  <constant name="tpcEndplateServicesRing1_ro" value="1.555*mm"/>
+  <constant name="tpcEndplateServicesRing2_R" value="650*mm"/>
+  <constant name="tpcEndplateServicesRing2_ro" value="1.555*mm"/>
+  <constant name="tpcEndplateServicesRing3_R" value="850*mm"/>
+  <constant name="tpcEndplateServicesRing3_ro" value="1.555*mm"/>
+  <constant name="tpcEndplateServicesRing4_R" value="1050*mm"/>
+  <constant name="tpcEndplateServicesRing4_ro" value="1.555*mm"/>
+  <constant name="tpcEndplateServicesRing5_R" value="1250*mm"/>
+  <constant name="tpcEndplateServicesRing5_ro" value="1.555*mm"/>
+  <constant name="tpcEndplateServicesRing6_R" value="1450*mm"/>
+  <constant name="tpcEndplateServicesRing6_ro" value="1.555*mm"/>
+  <constant name="tpcEndplateServicesRing7_R" value="1650*mm"/>
+  <constant name="tpcEndplateServicesRing7_ro" value="2.985*mm"/>
+  <constant name="tpcEndplateServicesRing8_R" value="1750*mm"/>
+  <constant name="tpcEndplateServicesRing8_ro" value="2.453*mm"/>
+</define>

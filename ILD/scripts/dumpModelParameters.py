@@ -31,8 +31,9 @@ file = open( outfile , 'w' )
 # create a Cursor object
 cur = db.cursor()
 
-# --- select all global parameter for the model that are not NULL 
-cur.execute("select sub_detector.driver, sharing.parameter, sharing.driver_default_value from ingredients,sub_detector,sharing where (ingredients.model=\""+model+"\" and ingredients.sub_detector=sub_detector.name and sharing.driver=sub_detector.driver and sharing.driver_default_value IS NOT NULL) ;")
+# --- select all global parameter for the model 
+cur.execute("select sub_detector.driver, sharing.parameter, sharing.driver_default_value from ingredients,sub_detector,sharing where (ingredients.model=\""+model+"\" and ingredients.sub_detector=sub_detector.name and sharing.driver=sub_detector.driver) ;")
+#cur.execute("select sub_detector.driver, sharing.parameter, sharing.driver_default_value from ingredients,sub_detector,sharing where (ingredients.model=\""+model+"\" and ingredients.sub_detector=sub_detector.name and sharing.driver=sub_detector.driver and sharing.driver_default_value IS NOT NULL) ;")
 
 
 #--- param dict:
@@ -66,6 +67,12 @@ print >>file, " -->"
 
 
 for k in sorted( params ):
-   v = params[ k ] 
-   print >>file, "<constant name=\"" + k + "\" value=\"" + v + "\"/>"
+   v = params[ k ]
+   if v:
+      print >>file, "<constant name=\"" + k + "\" value=\"" + str(v) + "\"/>"
+   else:
+      cur.execute("select name, default_value from parameters where name=\"" + k + "\";")
+      for row in cur.fetchall() :
+          v = row[1]
+      print >>file, "<constant name=\"" + k + "\" value=\"" + str(v) + "\"/>"
 

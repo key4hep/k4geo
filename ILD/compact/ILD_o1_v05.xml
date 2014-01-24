@@ -47,6 +47,9 @@
 	
 
 	<!-- global parameters from Mokka model ILD_o1_v05 -->
+<<<<<<< .mine
+	<include ref="model_parameters_ILD_o1_v05.xml"/>
+=======
 	<constant name="BCal_PairMonitor" value="1"/>
 	<constant name="BCal_CutOutSpanningPhi" value="40*deg"/>
 	<constant name="BCal_TubeIncomingRadius" value="15*mm"/>
@@ -110,40 +113,23 @@
 	<constant name="Lcal_outer_radius" value="195.2"/>
 	<constant name="Lcal_z_begin" value="2505.0"/>
 	<constant name="Lcal_z_thickness" value="135.6"/>
+>>>>>>> .r25
 
-	<!-- <constant name="SIT1_Half_Length_Z" value="384.2"/> -->
-	<!-- <constant name="SIT1_Radius" value="179.232"/> -->
-	<!-- <constant name="SIT2_Half_Length_Z" value="672.35"/> -->
-	<!-- <constant name="SIT2_Radius" value="272.363"/> -->
-
-	<constant name="TPC_Ecal_Hcal_barrel_halfZ" value="2350*mm"/>
-	<constant name="TPC_inner_radius" value="329*mm"/>
-	<constant name="TPC_outer_radius" value="1808*mm"/>
-
-	<constant name="TUBE_IPOuterBulge_end_radius" value="184"/>
-	<constant name="TUBE_IPOuterBulge_end_z" value="2364.5"/>
-	<constant name="TUBE_IPOuterTube_end_radius" value="24"/>
-	<constant name="TUBE_IPOuterTube_end_z" value="230"/>
-	<constant name="TUBE_IPOuterTube_start_radius" value="24"/>
-	<constant name="TUBE_IPOuterTube_start_z" value="150"/>
-	<constant name="TUBE_crossing_angle" value="14"/>
-	<constant name="TUBE_opening_angle" value="0.07876"/>
-	<constant name="VXD_active_silicon_thickness" value="0.05*mm"/>
-
-	<constant name="VXD_inner_radius" value="16*mm"/>
-	<constant name="VXD_length_r1" value="62.5*mm"/>
-	<constant name="VXD_length_r3" value="125*mm"/>
-	<constant name="VXD_radius_r1" value="16*mm"/>
-	<constant name="VXD_radius_r3" value="37*mm"/>
-	<constant name="VXD_radius_r5" value="58*mm"/>
-	<constant name="VXD_side_band_electronics_width" value="0.5*mm"/>
-	<!--constant name="VXD_support_ladder_material" value="graphite"/-->
-	<constant name="VXD_support_ladder_thickness" value="0.134*mm"/>
-
-	<constant name="Yoke_endcap_inner_radius" value="300"/>
-	<constant name="Yoke_thickness" value="2550"/>
-
-	<!-- FIXME: string constants not supported  !!!??? -->
+	<!-- ######### parameters as computed in Ecal04 driver: ################  --> 
+	<constant name="Ecal_Barrel_module_dim_z" value="2*Ecal_Barrel_halfZ/5." />
+	<constant name="Ecal_module_thickness" value="Ecal_nlayers1 * Ecal_radiator_layers_set1_thickness + Ecal_nlayers2 * Ecal_radiator_layers_set2_thickness + Ecal_nlayers3 * Ecal_radiator_layers_set3_thickness" />
+	<constant name="EC_module_z_offset" value="Ecal_Barrel_module_dim_z*2.5+Ecal_cables_gap+Ecal_module_thickness/2" />
+	<constant name="Ecal_inner_radius" value=" TPC_outer_radius + Ecal_Tpc_gap " />
+	<constant name="Ecal_outer_radius" value=" Ecal_inner_radius + Ecal_module_thickness " />
+	<constant name="Ecal_endcap_zmax" value="  EC_module_z_offset + Ecal_module_thickness / 2" />
+	<constant name="Ecal_endcap_zmin" value="  EC_module_z_offset - Ecal_module_thickness / 2" />  
+	<constant name="Lcal_z_begin" value="Ecal_endcap_zmin" />  
+	<constant name="Ecal_endcap_plug_rmin" value="Ecal_Lcal_ring_gap + Lcal_outer_radius" />  
+	<constant name="Ecal_endcap_rmax" value="Ecal_inner_radius + Ecal_module_thickness + Ecal_endcap_extra_size" />
+	<constant name="Ecal_endcap_outer_radius" value="Ecal_endcap_rmax" />  
+	<constant name="tracker_region_rmax" value="TPC_outer_radius" />  
+	<constant name="tracker_region_zmax" value="Ecal_endcap_zmin" />  
+	<!-- ######### end of parameters as computed in Ecal04 driver: ################  --> 
 
 
 	<comment>Dummy Parameters for the BeamCal</comment>
@@ -183,7 +169,10 @@
       <vis name="BlackVis"         alpha="1.0" r="0.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
       <vis name="GrayVis"          alpha="1.0" r="0.5" g="0.5"  b="0.5"   showDaughters="true"  visible="true"/>
 
-      <vis name="TPCVis"        alpha="0.1" r="0" g="0"  b="0"   showDaughters="true"  visible="true"/>
+
+      <vis name="TubeVis"   alpha="0.1" r="1.0" g="0.7"  b="0.5"   showDaughters="true"  visible="true"/>
+
+      <vis name="TPCVis"        alpha="0.1" r="0" g="0"  b="0"         showDaughters="true"  visible="true"/>
       <vis name="TPCMotherVis"  alpha="0.1" r="0.9" g="0.9"  b="0.9"   showDaughters="true"  visible="false"/>
 
       <vis name="VXDVis"        alpha="0.1" r="0.1" g=".5"  b=".5"   showDaughters="true"  visible="true"/>
@@ -210,6 +199,8 @@
 
     <detectors>
         <comment>Trackers</comment>
+
+	<include ref="tubeX06_14.xml"/>
 
 	<include ref="vxd07.xml"/>
 	
