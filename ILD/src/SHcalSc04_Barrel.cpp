@@ -92,6 +92,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double      TPC_Ecal_Hcal_barrel_halfZ       = lcdd.constant<double>("TPC_Ecal_Hcal_barrel_halfZ"); 
   double      Hcal_middle_stave_gaps           = lcdd.constant<double>("Hcal_middle_stave_gaps");
   double      Hcal_layer_air_gap               = lcdd.constant<double>("Hcal_layer_air_gap");
+
   double      Hcal_module_radius               = lcdd.constant<double>("Hcal_outer_radius");
 
   int         Hcal_nlayers                     = lcdd.constant<int>("Hcal_nlayers");
@@ -100,6 +101,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   //double      Hcal_outer_radius                = lcdd.constant<double>("Hcal_outer_radius");
   //double      Hcal_Barrel_rotation             = lcdd.constant<double>("Hcal_Barrel_rotation");
 
+
+
+  double      TPC_outer_radius               = lcdd.constant<double>("TPC_outer_radius");
+  std::cout << " ***********TPC_outer_radius " << TPC_outer_radius  << std::endl ;
+
+  double      Ecal_outer_radius               = lcdd.constant<double>("Ecal_outer_radius");
+  std::cout << " ***********Ecal_outer_radius " <<  Ecal_outer_radius << std::endl ;
 //====================================================================
 //
 // general calculated parameters
@@ -111,9 +119,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   
   // Moved the calculation into ILD_o1_v05.xml
-  //double Hcal_module_radius = Hcal_inner_radius /  cos(M_PI/8.)
-  //                          + ( Hcal_radiator_thickness + Hcal_chamber_thickness ) * Hcal_nlayers
-  //                          + Hcal_back_plate_thickness;
+  // double Hcal_module_radius = Hcal_inner_radius /  cos(M_PI/8.)
+  //   + ( Hcal_radiator_thickness + Hcal_chamber_thickness ) * Hcal_nlayers
+  //   + Hcal_back_plate_thickness;
+  // std::cout << " *********** hcal outer radius : " << Hcal_module_radius  << std::endl ;
+
 
   double Hcal_y_dim1_for_x  = Hcal_module_radius*cos(M_PI/8.) - Hcal_inner_radius;
   double Hcal_bottom_dim_x  = 2.*Hcal_inner_radius*tan(M_PI/8.)- Hcal_stave_gaps;
