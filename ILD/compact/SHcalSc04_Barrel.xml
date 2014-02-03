@@ -10,7 +10,8 @@
     <layer>
         <slice material = "Air"            thickness = "Hcal_fiber_gap"     vis="HcalBarrelAirVis" />
         <slice material = "Cu"             thickness = "Hcal_Cu_thickness"  />
-        <slice material = "FR4"            thickness = "Hcal_PCB_thickness" />
+        <!-- <slice material = "FR4"            thickness = "Hcal_PCB_thickness" /> -->
+        <slice material = "PCB"            thickness = "Hcal_PCB_thickness" />
         <slice material = "G4_POLYSTYRENE" thickness = "Hcal_scintillator_thickness" sensitive = "yes"  vis="CyanVis"/>
     </layer>
 </detector>

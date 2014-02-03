@@ -425,7 +425,7 @@
     <element name="Mn">
       <fraction n="1" ref="Mn55"/>
     </element>
-    <material name="S235" state="solid">
+    <material name="Steel235" state="solid">
       <MEE unit="eV" value="285.146562707739"/>
       <D unit="g/cm3" value="7.87"/>
       <fraction n="0.9843" ref="Fe"/>

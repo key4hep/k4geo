@@ -47,86 +47,31 @@
 	
 
 	<!-- global parameters from Mokka model ILD_o1_v05 -->
-<<<<<<< .mine
 	<include ref="model_parameters_ILD_o1_v05.xml"/>
-=======
-	<constant name="BCal_PairMonitor" value="1"/>
-	<constant name="BCal_CutOutSpanningPhi" value="40*deg"/>
-	<constant name="BCal_TubeIncomingRadius" value="15*mm"/>
-	<constant name="BCal_dAbsorber" value="3.5*mm"/>
-	<constant name="BCal_dGraphite" value="100*mm"/>
-	<constant name="BCal_nLayers" value="30"/>
-	<constant name="BCal_nWafers" value="8"/>
-	<constant name="BCal_rInner" value="20*mm"/>
-	<constant name="BCal_rOuter" value="150*mm"/>
-	<constant name="BCal_rSegmentation" value="8"/>
-	<constant name="Coil_Yoke_radial_clearance" value="250"/>
-	<constant name="Coil_extra_size" value="1522"/>
-	<constant name="Ecal_Alveolus_Air_Gap" value="0.5"/>
-	<constant name="Ecal_Barrel_halfZ" value="2350"/>
-	<constant name="Ecal_Si_thickness" value=".5"/>
-	<constant name="Ecal_Slab_H_fiber_thickness" value="0.55"/>
-	<constant name="Ecal_Slab_PCB_thickness" value="0.8"/>
-	<constant name="Ecal_Slab_copper_thickness" value="0.4"/>
-	<constant name="Ecal_Slab_glue_gap" value="0.1"/>
-	<constant name="Ecal_Slab_ground_thickness" value="0.1"/>
-	<constant name="Ecal_Slab_shielding" value="0.1"/>
-	<constant name="Ecal_Tpc_gap" value="35"/>
-	<constant name="Ecal_barrel_number_of_towers" value="5"/>
-	<constant name="Ecal_cells_size" value="4.9"/>
-	<constant name="Ecal_endcap_center_box_size" value="800.0"/>
-	<constant name="Ecal_endcap_extra_size" value="60.8"/>
-	<constant name="Ecal_endcap_zmin" value="2450.0"/>
-	<constant name="Ecal_fiber_thickness" value=".15"/>
-	<constant name="Ecal_front_face_thickness" value="2"/>
-	<constant name="Ecal_guard_ring_size" value="0.5"/>
-	<constant name="Ecal_lateral_face_thickness" value="2"/>
-	<constant name="Ecal_nlayers2" value="9"/>
-	<constant name="Ecal_support_thickness" value="9.3"/>
-	<constant name="Field_nominal_value" value="3.5"/>
-	<constant name="Hcal_Coil_additional_gap" value="29.5*mm"/>
-	<constant name="Hcal_Ecal_gap" value="30*mm"/>
-	<constant name="Hcal_apply_Birks_law" value="1"/>
-	<constant name="Hcal_back_plate_thickness" value="15*mm"/>
-	<constant name="Hcal_cells_size" value="30*mm"/>
-	<constant name="Hcal_endcap_center_box_size" value="700.0*mm"/>
-	<constant name="Hcal_endcap_ecal_gap" value="15*mm"/>
-	<constant name="Hcal_endcap_nlayers" value="48"/>
-	<!--constant name="Hcal_endcap_radiator_material" value="Iron"/-->
-	<constant name="Hcal_endcap_radiator_thickness" value="20*mm"/>
-	<constant name="Hcal_endcap_sensitive_center_box" value="0.0*mm"/>
-	<constant name="Hcal_endcap_zmin" value="2670.7*mm"/>
-	<constant name="Hcal_fiber_gap" value="2.7*mm"/>
-	<constant name="Hcal_lateral_structure_thickness" value="15*mm"/>
-	<constant name="Hcal_layer_air_gap" value="2*mm"/>
-	<constant name="Hcal_layer_support_length" value="0*mm"/>
-	<constant name="Hcal_middle_stave_gaps" value="10*mm"/>
-	<constant name="Hcal_modules_gap" value="0*mm"/>
-	<constant name="Hcal_nlayers" value="48"/>
-	<constant name="Hcal_radiator_thickness" value="20.0*mm"/>
-	<!--constant name="Hcal_sensitive_model" value="scintillator"/-->
-	<constant name="Hcal_stave_gaps" value="10*mm"/>
-	<constant name="ILC_Main_Crossing_Angle" value="14*mrad"/>
-	<constant name="LHcal_BCal_clearance" value="390*mm"/>
-	<constant name="LHcal_zend" value="3085*mm"/>
-	<constant name="Lcal_inner_radius" value="80.0"/>
-	<constant name="Lcal_outer_radius" value="195.2"/>
-	<constant name="Lcal_z_begin" value="2505.0"/>
-	<constant name="Lcal_z_thickness" value="135.6"/>
->>>>>>> .r25
 
 	<!-- ######### parameters as computed in Ecal04 driver: ################  --> 
-	<constant name="Ecal_Barrel_module_dim_z" value="2*Ecal_Barrel_halfZ/5." />
-	<constant name="Ecal_module_thickness" value="Ecal_nlayers1 * Ecal_radiator_layers_set1_thickness + Ecal_nlayers2 * Ecal_radiator_layers_set2_thickness + Ecal_nlayers3 * Ecal_radiator_layers_set3_thickness" />
-	<constant name="EC_module_z_offset" value="Ecal_Barrel_module_dim_z*2.5+Ecal_cables_gap+Ecal_module_thickness/2" />
-	<constant name="Ecal_inner_radius" value=" TPC_outer_radius + Ecal_Tpc_gap " />
-	<constant name="Ecal_outer_radius" value=" Ecal_inner_radius + Ecal_module_thickness " />
-	<constant name="Ecal_endcap_zmax" value="  EC_module_z_offset + Ecal_module_thickness / 2" />
-	<constant name="Ecal_endcap_zmin" value="  EC_module_z_offset - Ecal_module_thickness / 2" />  
-	<constant name="Lcal_z_begin" value="Ecal_endcap_zmin" />  
-	<constant name="Ecal_endcap_plug_rmin" value="Ecal_Lcal_ring_gap + Lcal_outer_radius" />  
-	<constant name="Ecal_endcap_rmax" value="Ecal_inner_radius + Ecal_module_thickness + Ecal_endcap_extra_size" />
-	<constant name="Ecal_endcap_outer_radius" value="Ecal_endcap_rmax" />  
+	<!-- <constant name="Ecal_Barrel_module_dim_z" value="2*Ecal_Barrel_halfZ/5." /> -->
+	<!-- <constant name="Ecal_module_thickness" value="Ecal_nlayers1 * Ecal_radiator_layers_set1_thickness + Ecal_nlayers2 * Ecal_radiator_layers_set2_thickness + Ecal_nlayers3 * Ecal_radiator_layers_set3_thickness" /> -->
+	<!-- <constant name="EC_module_z_offset" value="Ecal_Barrel_module_dim_z*2.5+Ecal_cables_gap+Ecal_module_thickness/2" /> -->
+	<!-- <constant name="Ecal_inner_radius" value=" TPC_outer_radius + Ecal_Tpc_gap " /> -->
+	<!-- <constant name="Ecal_outer_radius" value=" Ecal_inner_radius + Ecal_module_thickness " /> -->
+
+	<!-- FIXME: for now we set the Ecal_outer_radius to the right value  - the computation above is incomplete ..... -->
+	<constant name="Ecal_outer_radius" value="2028.*mm" /> 
+
+	<!-- <constant name="Ecal_endcap_zmax" value="  EC_module_z_offset + Ecal_module_thickness / 2" /> -->
+	<!-- <constant name="Ecal_endcap_zmin" value="  EC_module_z_offset - Ecal_module_thickness / 2" />   -->
+	<!-- <constant name="Lcal_z_begin" value="Ecal_endcap_zmin" />   -->
+	<!-- <constant name="Ecal_endcap_plug_rmin" value="Ecal_Lcal_ring_gap + Lcal_outer_radius" />   -->
+	<!-- <constant name="Ecal_endcap_rmax" value="Ecal_inner_radius + Ecal_module_thickness + Ecal_endcap_extra_size" /> -->
+	<!-- <constant name="Ecal_endcap_outer_radius" value="Ecal_endcap_rmax" />   -->
+
+	<constant name="Hcal_inner_radius" value="Ecal_outer_radius+Hcal_Ecal_gap" />  
+
+	<!-- new number from K.Gadow for ILD_o1_v05 -->
+	<constant name="Hcal_outer_radius" value="3395.46*mm"/> 
+
+
 	<constant name="tracker_region_rmax" value="TPC_outer_radius" />  
 	<constant name="tracker_region_zmax" value="Ecal_endcap_zmin" />  
 	<!-- ######### end of parameters as computed in Ecal04 driver: ################  --> 
@@ -212,6 +157,8 @@
 
         <comment>Calorimeters</comment>
 
+	<include ref="SHcalSc04_Barrel.xml"/>
+
 	<include ref="BeamCal08.xml"/>
 
       </detectors> 
@@ -234,8 +181,13 @@
             <id>system:5,side:2,layer:9,module:8,sensor:8</id>
         </readout>
 
+	<readout name="HcalBarrelRegCollection">
+	  <segmentation type="CartesianGridXYZ" grid_size_x="0.35*cm" grid_size_y="0.35*cm"  grid_size_z="0.35*cm"/>
+	  <id>system:8,layer:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id>
+	</readout>
+
 	<readout name="BeamCalCollection">
-	  <segmentation type="CartesianGridXYZ" grid_size_x="0.35*cm" grid_size_y="0.35*cm"  grid_size_z="0.35*cm" gridSizeX="0.35*cm" gridSizeY="0.35*cm" gridSizeZ="0.35*cm"/>
+	  <segmentation type="CartesianGridXYZ" grid_size_x="0.35*cm" grid_size_y="0.35*cm"  grid_size_z="0.35*cm" />
 	  <id>system:8,layer:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id>
 	</readout>
 	
