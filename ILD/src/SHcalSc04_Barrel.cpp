@@ -92,6 +92,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double      TPC_Ecal_Hcal_barrel_halfZ       = lcdd.constant<double>("TPC_Ecal_Hcal_barrel_halfZ"); 
   double      Hcal_middle_stave_gaps           = lcdd.constant<double>("Hcal_middle_stave_gaps");
   double      Hcal_layer_air_gap               = lcdd.constant<double>("Hcal_layer_air_gap");
+  double      Hcal_module_radius               = lcdd.constant<double>("Hcal_outer_radius");
 
   int         Hcal_nlayers                     = lcdd.constant<int>("Hcal_nlayers");
 
@@ -108,9 +109,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double Hcal_total_dim_y   = Hcal_nlayers * (Hcal_radiator_thickness + Hcal_chamber_thickness) 
                             + Hcal_back_plate_thickness;
 
-  double Hcal_module_radius = Hcal_inner_radius /  cos(M_PI/8.)
-                            + ( Hcal_radiator_thickness + Hcal_chamber_thickness ) * Hcal_nlayers
-                            + Hcal_back_plate_thickness;
+  
+  // Moved the calculation into ILD_o1_v05.xml
+  //double Hcal_module_radius = Hcal_inner_radius /  cos(M_PI/8.)
+  //                          + ( Hcal_radiator_thickness + Hcal_chamber_thickness ) * Hcal_nlayers
+  //                          + Hcal_back_plate_thickness;
 
   double Hcal_y_dim1_for_x  = Hcal_module_radius*cos(M_PI/8.) - Hcal_inner_radius;
   double Hcal_bottom_dim_x  = 2.*Hcal_inner_radius*tan(M_PI/8.)- Hcal_stave_gaps;
@@ -176,7 +179,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   Trapezoid stave_shaper_LP(THX_LP, BHX_LP, DHZ_LP, DHZ_LP, YXH_LP); //DD4hep Trapezoid is TGeoTrd2
 
-  Tube solidCaloTube_LP(0, Hcal_module_radius, DHZ_LP);
+  Tube solidCaloTube_LP(0, Hcal_module_radius, DHZ_LP+0.0001);// added delta to avoid touch surface
 
   IntersectionSolid Module_lateral_plate(stave_shaper_LP, solidCaloTube_LP, tran3D);
 
