@@ -31,13 +31,23 @@ file = open( outfile , 'w' )
 # create a Cursor object
 cur = db.cursor()
 
-# --- select all global parameter for the model 
+#--- param dict:
+params = {} 
+
+#----- select all global parameters
+cur.execute("select * from parameters ;")
+
+
+#--- overwrite values in the dict:
+for row in cur.fetchall() :
+    params[ row[0] ] = row[2]
+
+
+# --- now select all sharing parameters for the model 
 cur.execute("select sub_detector.driver, sharing.parameter, sharing.driver_default_value from ingredients,sub_detector,sharing where (ingredients.model=\""+model+"\" and ingredients.sub_detector=sub_detector.name and sharing.driver=sub_detector.driver) ;")
 #cur.execute("select sub_detector.driver, sharing.parameter, sharing.driver_default_value from ingredients,sub_detector,sharing where (ingredients.model=\""+model+"\" and ingredients.sub_detector=sub_detector.name and sharing.driver=sub_detector.driver and sharing.driver_default_value IS NOT NULL) ;")
 
 
-#--- param dict:
-params = {} 
 
 # --- safe params in dict
 for row in cur.fetchall() :
