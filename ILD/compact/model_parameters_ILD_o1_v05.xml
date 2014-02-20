@@ -60,7 +60,7 @@
   <constant name="Ecal_Slab_ground_thickness" value="0.1*mm"/>
   <constant name="Ecal_Slab_shielding" value="0.1*mm"/>
   <constant name="Ecal_Tpc_gap" value="35*mm"/>
-  <constant name="Ecal_barrel_number_of_towers" value="5*mm"/>
+  <constant name="Ecal_barrel_number_of_towers" value="5"/>
   <constant name="Ecal_cables_gap" value="100.*mm"/>
   <constant name="Ecal_cells_size" value="4.9*mm"/>
   <constant name="Ecal_endcap_center_box_size" value="800.0*mm"/>
