@@ -68,6 +68,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   DetElement  sdet(det_name,x_det.id());
   Volume      motherVol = lcdd.pickMotherVolume(sdet);
 
+  sens.setType("calorimeter");
 
   // Some verbose output
   cout << " \n\n\n CREATE DETECTOR: SHcalSC04_Barrel" << endl;
@@ -81,7 +82,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 // Use them to build HcalBarrel
 //
 //====================================================================
-  // The way to reaad constant from XML/LCDD file.
+  // The way to read constant from XML/LCDD file.
   double      Hcal_radiator_thickness          = lcdd.constant<double>("Hcal_radiator_thickness");
   double      Hcal_chamber_thickness           = lcdd.constant<double>("Hcal_chamber_thickness");
   double      Hcal_inner_radius                = lcdd.constant<double>("Hcal_inner_radius");
@@ -345,7 +346,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	Volume slice_vol(slice_name,Box(x_length,z_width,slice_thickness/2.),slice_material);
 	
 	if ( x_slice.isSensitive() ) {
-	  sens.setType("calorimeter");
 	  slice_vol.setSensitiveDetector(sens);
 	}
 	// Set region, limitset, and vis.
@@ -414,15 +414,15 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
        stave_id++)
     {
       module_z_offset = - (Hcal_normal_dim_z + Hcal_modules_gap + Hcal_lateral_plate_thickness)/2.;
-
+      
+      double phirot = stave_phi_offset;
+      RotationZYX rot(0,phirot,M_PI*0.5);
+      Rotation3D rot3D(rot);
 
       for (int module_id = 1;
          module_id <=2;
          module_id++)
 	{
-	  double phirot = stave_phi_offset;
-	  RotationZYX rot(0,phirot,M_PI*0.5);
-	  Rotation3D rot3D(rot);
 	  Position xyzVec(-Y*sin(phirot), Y*cos(phirot), module_z_offset);
 	  Transform3D tran3D(rot3D,xyzVec);
 	  
@@ -431,13 +431,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  pv.addPhysVolID("stave",stave_id);
 	  pv.addPhysVolID("module",module_id);
 
-	  Position xyzVec_LP(-Y*sin(phirot), Y*cos(phirot),0);
-	  Transform3D tran3D_LP(rot3D,xyzVec_LP);
-
-	  pv = envelope_assembly.placeVolume(EnvLogHcalModuleBarrel_LP,tran3D_LP);
-	  
 	  module_z_offset = - module_z_offset;
 	}
+
+      Position xyzVec_LP(-Y*sin(phirot), Y*cos(phirot),0);
+      Transform3D tran3D_LP(rot3D,xyzVec_LP);
+      pv = envelope_assembly.placeVolume(EnvLogHcalModuleBarrel_LP,tran3D_LP);
 
       stave_phi_offset -=  M_PI/4.;
     }  //-------- end loop over HCAL BARREL staves ----------------------------
