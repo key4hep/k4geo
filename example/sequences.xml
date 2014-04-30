@@ -12,11 +12,9 @@
   --
   --   To run batch: set UI=""
   -->
-
   <!--kernel UI="UI" NumEvents="1"/-->  
-  <kernel UI=""
-	NumEvents="3" 
-	/>  
+
+  <kernel UI="" NumEvents="1" />  
 
 
   <!-- List of globally known actions. These actions will be registered with the Geant4Kernel 
@@ -90,7 +88,13 @@
     <filter name="ParticleSelectFilter/OpticalPhotonSelector">
         <properties particle="opticalphoton"/>
     </filter>
-    <filter name="EnergyDepositMinimumCut">
+    <filter name="EnergyDepositMinimumCut/SiTracker">
+      <properties Cut="10*keV"/>
+    </filter>
+    <filter name="EnergyDepositMinimumCut/ECal">
+      <properties Cut="10*keV"/>
+    </filter>
+    <filter name="EnergyDepositMinimumCut/HCal">
       <properties Cut="10*keV"/>
     </filter>
   </filters>
@@ -109,30 +113,29 @@
 		    Property_string="'Hello_1'"/>
       </action>
       <action name="UserEvent_2"/>
-
-      <action name="Geant4Output2LCIO/LCIOOutput">
-      	<properties Output="simple_lcio.slcio"/>
-      </action>
-
       <!-- <action name="Geant4Output2ROOT/RootOutput"> -->
       <!-- 	<properties Output="simple.root"/> -->
       <!-- </action> -->
-
+      <action name="Geant4Output2LCIO/LCIOOutput">
+	<properties Output="simple_lcio"/>
+      </action>
     </sequence>
+
     <sequence name="Geant4GeneratorActionSequence/GeneratorAction">
       <action name="Geant4ParticleGun/Gun">
         <properties energy="5000*MeV"
-  	  	    particle="'e-'"
-		    direction = "(1.0, 1.0 , -0.1)"
-		    multiplicity="1"/>
+    	  	    particle="'e-'"
+    		    direction = "(1.0, 1.0 , -0.1)"
+    		    multiplicity="1"/>
       </action>
     </sequence>
-    <!--sequence name="Geant4GeneratorActionSequence/GeneratorAction">
-      <action name="LCIOGeneratorAction">
-        <properties LCIOFileName="infile.slcio" 
-		    SkipNEvents="1" />
-      </action>
-    </sequence-->
+
+    <!-- <sequence name="Geant4GeneratorActionSequence/GeneratorAction"> -->
+    <!--   <action name="LCIOGeneratorAction"> -->
+    <!--     <properties LCIOFileName="infile.slcio"  -->
+    <!-- 		    SkipNEvents="0" /> -->
+    <!--   </action> -->
+    <!-- </sequence> -->
 
     <sequence sd="VTX" type="Geant4SensDetActionSequence">
       <filter name="GeantinoRejector"/>
@@ -154,65 +157,22 @@
 
     <sequence sd="SET" type="Geant4SensDetActionSequence">
       <filter name="GeantinoRejector"/>
-      <filter name="EnergyDepositMinimumCut/SiTracker"/>
+      <filter name="EnergyDepositMinimumCut/SiTracker" />
       <action name="TRKSiSD00/SETCollection"/>
     </sequence>
-
-    <!--
-    <sequence sd="SiVertexBarrel" type="Geant4SensDetActionSequence">
-      <filter name="GeantinoRejector"/>
-      <filter name="EnergyDepositMinimumCut"/>
-      <action name="Geant4SimpleTrackerAction/SiVertexBarrelHandler"/>
-    </sequence>
-    <sequence sd="SiVertexEndcap" type="Geant4SensDetActionSequence">
-      <filter name="GeantinoRejector"/>
-      <filter name="EnergyDepositMinimumCut"/>
-      <action name="Geant4SimpleTrackerAction/SiVertexEndcapHandler"/>
-    </sequence>
-    <sequence sd="SiTrackerBarrel" type="Geant4SensDetActionSequence">
-      <filter name="GeantinoRejector"/>
-      <filter name="EnergyDepositMinimumCut"/>
-      <action name="Geant4SimpleTrackerAction/SiTrackerBarrelHandler"/>
-    </sequence>
-    <sequence sd="SiTrackerEndcap" type="Geant4SensDetActionSequence">
-      <action name="Geant4SimpleTrackerAction/SiTrackerEndcapHandler"/>
-    </sequence>
-    <sequence sd="SiTrackerForward" type="Geant4SensDetActionSequence">
-      <action name="Geant4SimpleTrackerAction/SiTrackerForwardHandler"/>
-    </sequence>
+    
     <sequence sd="EcalBarrel" type="Geant4SensDetActionSequence">
-      <action name="Geant4SimpleCalorimeterAction/EcalBarrelHandler"/>
+      <filter name="GeantinoRejector"/>
+      <filter name="EnergyDepositMinimumCut" Cut="1*keV"/>
+      <action name="Geant4SimpleCalorimeterAction/Ecal"/> 
+      <!-- <action name="TRKSiSD00/EcalBarrelCollection"/> -->
     </sequence>
-    <sequence sd="EcalEndcap" type="Geant4SensDetActionSequence">
-      <action name="Geant4SimpleCalorimeterAction/EcalEndCapHandler"/>
-    </sequence>
-    <sequence sd="HcalBarrel" type="Geant4SensDetActionSequence">
-      <action name="Geant4SimpleCalorimeterAction/HcalBarrelHandler">
-	<filter name="OpticalPhotonRejector"/>
-      </action>
-      <action name="Geant4SimpleOpticalCalorimeterAction/HcalBarrelHandler">
-	<filter name="OpticalPhotonSelector"/>
-      </action>
-    </sequence>
-    <sequence sd="HcalEndcap" type="Geant4SensDetActionSequence">
-      <action name="Geant4SimpleCalorimeterAction/HcalEndcapHandler"/>
-    </sequence>
-    <sequence sd="HcalPlug" type="Geant4SensDetActionSequence">
-      <action name="Geant4SimpleCalorimeterAction/HcalPlugHandler"/>
-    </sequence>
-    <sequence sd="MuonBarrel" type="Geant4SensDetActionSequence">
-      <action name="Geant4SimpleCalorimeterAction/MuonBarrelHandler"/>
-    </sequence>
-    <sequence sd="MuonEndcap" type="Geant4SensDetActionSequence">
-      <action name="Geant4SimpleCalorimeterAction/MuonEndcapHandler"/>
-    </sequence>
-    <sequence sd="LumiCal" type="Geant4SensDetActionSequence">
-      <action name="Geant4SimpleCalorimeterAction/LumiCalHandler"/>
-    </sequence>
-    <sequence sd="BeamCal" type="Geant4SensDetActionSequence">
-      <action name="Geant4SimpleCalorimeterAction/BeamCalHandler"/>
-    </sequence>
-  -->
 
+    <sequence sd="HcalBarrel" type="Geant4SensDetActionSequence">
+      <filter name="GeantinoRejector"/>
+      <filter name="EnergyDepositMinimumCut" Cut="1*keV"/>
+      <action name="Geant4SimpleCalorimeterAction/Hcal"/> 
+    </sequence>
+        
   </sequences>
 </geant4_setup>

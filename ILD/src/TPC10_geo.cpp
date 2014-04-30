@@ -82,10 +82,10 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   //   //  code ported from TPC10::construct() :
   //   //##################################
   
-  const double phi1 =   0.0 * deg ;
-  const double phi2 = 360.0 * deg;
-  // const double phi1 =   0.0 ;
-  // const double phi2 =  2*M_PI ;
+  // const double phi1 =   0.0 * deg ;
+  // const double phi2 = 360.0 * deg;
+  const double phi1 =   0.0 ;
+  const double phi2 =  2*M_PI ;
   //  
   const double dzTotal           = lcdd.constant<double>("TPC_Ecal_Hcal_barrel_halfZ") * 2. ; 
   const double rInner            = lcdd.constant<double>("TPC_inner_radius") ;

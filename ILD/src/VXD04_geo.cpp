@@ -6,15 +6,19 @@
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/TGeoUnits.h"
+
+#include "DDRec/Surface.h"
+
+//#include "DDRec/DDGear.h"
+//#define MOKKA_GEAR
+
 #include <cmath>
-
-
-//#include "GearWrapper.h"
 
 using namespace std;
 using namespace DD4hep;
 using namespace tgeo ;
 using namespace DD4hep::Geometry;
+using namespace DDRec;
 
 
 /** Wrapper class to replace the Database class used in Mokka to read the parameters.
@@ -51,6 +55,9 @@ struct XMLHandlerDB{
  */
 static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
+
+  //  std::cout << " VXD04 - LCDD.BuildType = " << lcdd.buildType() << std::endl ;
+
   //------------------------------------------
   //  See comments starting with '//**' for
   //     hints on porting issues
@@ -78,11 +85,11 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   //  code ported from VXD04::construct() :
   //##################################
   
-  double sPhi = 0 * deg;
-  double dPhi = 360 * deg;
+  // double sPhi = 0 * deg;
+  // double dPhi = 360 * deg;
   //** DD4hep/TGeo seems to need rad (as opposed to the manual)
-  //double sPhi = 0 ;
-  //double dPhi = 2*M_PI;
+  double sPhi = 0 ;
+  double dPhi = 2*M_PI;
   
   
   //****************************************
@@ -375,111 +382,111 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       }
     }
 
-    // #ifdef MOKKA_GEAR
+// #ifdef MOKKA_GEAR
     
-//       //Definition of the VXDSupport composite material. It is going to be used only during the reconstruction stage, for tracking purposes. It consists by three layers: metal traces, flex cable and the foam spacer support with user defined materials and thicknesses. Here we define the element and calculate its effective radiation length, atomic number and atomic mass. For the simulation, the more realistic 3 different layers structure is being used.   
+//     //Definition of the VXDSupport composite material. It is going to be used only during the reconstruction stage, for tracking purposes. It consists by three layers: metal traces, flex cable and the foam spacer support with user defined materials and thicknesses. Here we define the element and calculate its effective radiation length, atomic number and atomic mass. For the simulation, the more realistic 3 different layers structure is being used.   
 
-//       double MetalDensity = metalTracesMaterial->GetDensity()/(g/mm3);
-//       double KaptonDensity = flexCableMaterial->GetDensity()/(g/mm3);
-//       double FoamDensity = foamSpacerMaterial->GetDensity()/(g/mm3);
+//     double MetalDensity = metalTracesMaterial->GetMaterial()->GetDensity()/(g/mm3);
+//     double KaptonDensity = flexCableMaterial->GetMaterial()->GetDensity()/(g/mm3);
+//     double FoamDensity = foamSpacerMaterial->GetMaterial()->GetDensity()/(g/mm3);
 
-//       double VXDSupportThickness = metal_traces_thickness + flex_cable_thickness + foam_spacer_thickness;
+//     double VXDSupportThickness = metal_traces_thickness + flex_cable_thickness + foam_spacer_thickness;
 
-//       //calculations of thickness fractions of each layer of the support
-//       metalTF = metal_traces_thickness / VXDSupportThickness;
-//       foamTF = foam_spacer_thickness / VXDSupportThickness;
-//       flexTF = flex_cable_thickness / VXDSupportThickness;
+//     //calculations of thickness fractions of each layer of the support
+//     double metalTF = metal_traces_thickness / VXDSupportThickness;
+//     double foamTF = foam_spacer_thickness / VXDSupportThickness;
+//     double flexTF = flex_cable_thickness / VXDSupportThickness;
 
-//       double elemVol = 1/(mm2);
+//     double elemVol = 1/(mm2);
 
-//       double VXDSupportMass = foam_spacer_thickness*(elemVol)*FoamDensity + flex_cable_thickness*(elemVol)*KaptonDensity + metal_traces_thickness*(elemVol)*MetalDensity;
+//     double VXDSupportMass = foam_spacer_thickness*(elemVol)*FoamDensity + flex_cable_thickness*(elemVol)*KaptonDensity + metal_traces_thickness*(elemVol)*MetalDensity;
 
-//       double VXDSupportDensity = VXDSupportMass/1/(mm3) ;
+//     double VXDSupportDensity = VXDSupportMass/1/(mm3) ;
 
-//       double foamFM = 100. * ((foam_spacer_thickness*(elemVol)*FoamDensity) / VXDSupportMass) ;
-//       double kaptonFM = 100. * ((flex_cable_thickness*(elemVol)*KaptonDensity) / VXDSupportMass) ;
-//       double metalFM = 100. * ((metal_traces_thickness*(elemVol)*MetalDensity) / VXDSupportMass) ;
+//     double foamFM = 100. * ((foam_spacer_thickness*(elemVol)*FoamDensity) / VXDSupportMass) ;
+//     double kaptonFM = 100. * ((flex_cable_thickness*(elemVol)*KaptonDensity) / VXDSupportMass) ;
+//     double metalFM = 100. * ((metal_traces_thickness*(elemVol)*MetalDensity) / VXDSupportMass) ;
 
-//       //Calculation of an effective radiation length for the support based on the mass fraction of each material
+//     //Calculation of an effective radiation length for the support based on the mass fraction of each material
 
-//       double VXDSupportRadLen = 1. / ((metalTF/metalTracesMaterial->GetRadlen()) + (flexTF/flexCableMaterial->GetRadlen()) + (foamTF/foamSpacerMaterial->GetRadlen()));
+//     double VXDSupportRadLen = 1. / ((metalTF/metalTracesMaterial->GetMaterial()->GetRadLen()) + (flexTF/flexCableMaterial->GetMaterial()->GetRadLen()) + (foamTF/foamSpacerMaterial->GetMaterial()->GetRadLen()));
 
-//       //Calculation of the effective atomic number of the VXD support. The Z effectives are obtained from the formula: Zeff = Sum(Wi*Zi) where Wi are the mass fractions of the elements that consist the material 
+//     //Calculation of the effective atomic number of the VXD support. The Z effectives are obtained from the formula: Zeff = Sum(Wi*Zi) where Wi are the mass fractions of the elements that consist the material 
 
-//       Material *carbon = CGAGeometryManager::GetMaterial("carbon");
-//       Material *silicon = CGAGeometryManager::GetMaterial("silicon");
-//       Material *hydrogen = CGAGeometryManager::GetMaterial("H2");
-//       Material *nitro = CGAGeometryManager::GetMaterial("N2");
-//       Material *oxygen = CGAGeometryManager::GetMaterial("oxygen");
+//     Material *carbon = CGAGeometryManager::GetMaterial("carbon");
+//     Material *silicon = CGAGeometryManager::GetMaterial("silicon");
+//     Material *hydrogen = CGAGeometryManager::GetMaterial("H2");
+//     Material *nitro = CGAGeometryManager::GetMaterial("N2");
+//     Material *oxygen = CGAGeometryManager::GetMaterial("oxygen");
 
-//       double C_Z = carbon->GetZ();
-//       double Si_Z = silicon->GetZ();
-//       double C_A = carbon->GetA()/g;
-//       double Si_A = silicon->GetA()/g;
-//       double H_Z = hydrogen->GetZ();
-//       double H_A = hydrogen->GetA()/g;
-//       double N_Z = nitro->GetZ();
-//       double N_A = nitro->GetA()/g;
-//       double O_Z = oxygen->GetZ();
-//       double O_A = oxygen->GetA()/g;
-
-
-//       double foamZeff = C_Z*(C_A/(C_A+Si_A)) + Si_Z*(Si_A/(C_A+Si_A));
+//     double C_Z = carbon->GetZ();
+//     double Si_Z = silicon->GetZ();
+//     double C_A = carbon->GetA()/g;
+//     double Si_A = silicon->GetA()/g;
+//     double H_Z = hydrogen->GetZ();
+//     double H_A = hydrogen->GetA()/g;
+//     double N_Z = nitro->GetZ();
+//     double N_A = nitro->GetA()/g;
+//     double O_Z = oxygen->GetZ();
+//     double O_A = oxygen->GetA()/g;
 
 
-//       double metalZ = metalTracesMaterial->GetZ();
-//       double metalA = metalTracesMaterial->GetA()/g;
+//     double foamZeff = C_Z*(C_A/(C_A+Si_A)) + Si_Z*(Si_A/(C_A+Si_A));
+
+
+//     double metalZ = metalTracesMaterial->GetZ();
+//     double metalA = metalTracesMaterial->GetA()/g;
       
-//       //Calculation of kapton effective Z - weight fractions for each element taken from NIST dB
+//     //Calculation of kapton effective Z - weight fractions for each element taken from NIST dB
 
-//       double flexZeff = H_Z*0.026362 + C_Z*0.691133 + N_Z*0.073270 + O_Z*0.209235;
+//     double flexZeff = H_Z*0.026362 + C_Z*0.691133 + N_Z*0.073270 + O_Z*0.209235;
 
-//       double VXDSupportZeff = (metalFM/100.)*metalZ + (kaptonFM/100.)*flexZeff + (foamFM/100.)*foamZeff;
+//     double VXDSupportZeff = (metalFM/100.)*metalZ + (kaptonFM/100.)*flexZeff + (foamFM/100.)*foamZeff;
 
 
-//       //Calculation of the effective atomic mass of the VXD support. The Z effectives are obtained from the formula: Aeff = Zeff / (Z/A)eff where (Z/A)eff = Sum Wi*Zi/Ai
+//     //Calculation of the effective atomic mass of the VXD support. The Z effectives are obtained from the formula: Aeff = Zeff / (Z/A)eff where (Z/A)eff = Sum Wi*Zi/Ai
 
-//       double metalZA = metalZ/metalA;
-//       double foamZAeff = (C_A/(C_A+Si_A))*(C_Z/C_A) + (Si_A/(C_A+Si_A))*(Si_Z/Si_A);
-//       double flexZAeff = (H_Z/H_A)*0.026362 + (C_Z/C_A)*0.691133 + (N_Z/N_A)*0.073270 + (O_Z/O_A)*0.209235;
+//     double metalZA = metalZ/metalA;
+//     double foamZAeff = (C_A/(C_A+Si_A))*(C_Z/C_A) + (Si_A/(C_A+Si_A))*(Si_Z/Si_A);
+//     double flexZAeff = (H_Z/H_A)*0.026362 + (C_Z/C_A)*0.691133 + (N_Z/N_A)*0.073270 + (O_Z/O_A)*0.209235;
 
-//       double VXDSupportZAeff = (metalFM/100.)*metalZA + (kaptonFM/100.)*flexZAeff + (foamFM/100.)*foamZAeff;
+//     double VXDSupportZAeff = (metalFM/100.)*metalZA + (kaptonFM/100.)*flexZAeff + (foamFM/100.)*foamZAeff;
 
-//       double VXDSupportAeff = VXDSupportZeff / VXDSupportZAeff;
+//     double VXDSupportAeff = VXDSupportZeff / VXDSupportZAeff;
 
-//       //Calculation of the effective nuclear interaction length of the VXD support
+//     //Calculation of the effective nuclear interaction length of the VXD support
 
-//       double VXDSupportIntLength = 1. / ((metalTF/metalTracesMaterial->GetNuclearInterLength()) + (flexTF/flexCableMaterial->GetNuclearInterLength()) + (foamTF/foamSpacerMaterial->GetNuclearInterLength()));
+//     double VXDSupportIntLength = 1. / ((metalTF/metalTracesMaterial->GetNuclearInterLength()) + (flexTF/flexCableMaterial->GetNuclearInterLength()) + (foamTF/foamSpacerMaterial->GetNuclearInterLength()));
 
-//       //Here we call the SimpleMaterial class of gear. The density should be converted to kg/m3
-//       VXDSupportDensity = 1000000*VXDSupportDensity;
+//     //Here we call the SimpleMaterial class of gear. The density should be converted to kg/m3
+//     VXDSupportDensity = 1000000*VXDSupportDensity;
 
-//       VXDSupportMaterial = new gear::SimpleMaterialImpl("VXDSupportMaterial", VXDSupportAeff, VXDSupportZeff, VXDSupportDensity, VXDSupportRadLen, VXDSupportIntLength );
+//     VXDSupportMaterial = new gear::SimpleMaterialImpl("VXDSupportMaterial", VXDSupportAeff, VXDSupportZeff, VXDSupportDensity, VXDSupportRadLen, VXDSupportIntLength );
 
-//       //_________________________________________________________________________________________________________
-//       //
+//     //_________________________________________________________________________________________________________
+//     //
 
-//       helpLayer thisLadder ;
-//       if (LayerId==2||LayerId==4||LayerId==6) 
-// 	{ 
-// 	  thisLadder.distance  = layer_radius + layer_gap * 0.5 ;
-// 	}
-//       if (LayerId==1||LayerId==3||LayerId==5) 
-// 	{ 
-// 	  thisLadder.distance  = layer_radius  ;
-// 	}      
-//       //      thisLadder.distance  = layer_radius ;
-//       thisLadder.offset    = offset_phi ;
-//       thisLadder.thickness = VXDSupportThickness ;
-//       thisLadder.length    = ladder_length ;
-//       thisLadder.width     = (ladder_width*2.)+(side_band_electronics_option*side_band_electronics_width) ;
-//       thisLadder.radLength = VXDSupportMaterial->getRadLength()/mm ;
+//     helpLayer thisLadder ;
+//     if (LayerId==2||LayerId==4||LayerId==6) 
+//       { 
+// 	thisLadder.distance  = layer_radius + layer_gap * 0.5 ;
+//       }
+//     if (LayerId==1||LayerId==3||LayerId==5) 
+//       { 
+// 	thisLadder.distance  = layer_radius  ;
+//       }      
+//     //      thisLadder.distance  = layer_radius ;
+//     thisLadder.offset    = offset_phi ;
+//     thisLadder.thickness = VXDSupportThickness ;
+//     thisLadder.length    = ladder_length ;
+//     thisLadder.width     = (ladder_width*2.)+(side_band_electronics_option*side_band_electronics_width) ;
+//     thisLadder.radLength = VXDSupportMaterial->GetMaterial()->getRadLength()/mm ;
 
  
-//       // find out type
-//       if( side_band_electronics_option == 0 &&  end_ladd_electronics_option == 1) gearHelpType = gear::ZPlanarParametersImpl::CCD  ;
-//       if( side_band_electronics_option == 1 &&  end_ladd_electronics_option == 0 ) gearHelpType = gear::ZPlanarParametersImpl::CMOS ;
-//       if( side_band_electronics_option == 1 &&  end_ladd_electronics_option == 1) gearHelpType = gear::ZPlanarParametersImpl::HYBRID ;
+//     // find out type
+//     if( side_band_electronics_option == 0 &&  end_ladd_electronics_option == 1) gearHelpType = gear::ZPlanarParametersImpl::CCD  ;
+//     if( side_band_electronics_option == 1 &&  end_ladd_electronics_option == 0 ) gearHelpType = gear::ZPlanarParametersImpl::CMOS ;
+//     if( side_band_electronics_option == 1 &&  end_ladd_electronics_option == 1) gearHelpType = gear::ZPlanarParametersImpl::HYBRID ;
 
 // #endif
 
@@ -867,6 +874,19 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
     SiActiveLayerLogical.setSensitiveDetector(sens);
    
+
+    //====== create the meassurement surface ===================
+    Vector3D u( 1. , 0. , 0. ) ;
+    Vector3D v( 0. , 1. , 0. ) ;
+    Vector3D n( 0. , 0. , 1. ) ;
+    //    Vector3D o( 0. , 0. , 0. ) ;
+
+    double supp_thick = metal_traces_thickness + flex_cable_thickness + foam_spacer_thickness;
+
+    VolPlane surf( SiActiveLayerLogical , SurfaceType(SurfaceType::Sensitive) , active_silicon_thickness/2 + supp_thick/2 , active_silicon_thickness/2 , u,v,n ) ; //,o ) ;
+    //============================================================
+
+
     double active_offset_phi = offset_phi +(side_band_electronics_option * side_band_electronics_width/2.); 
       
     for (double active_loop=0;active_loop<nb_ladder;active_loop++){
@@ -879,6 +899,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       // encoder[ILDCellID0::layer]  =  LayerId -1;
       // encoder[ILDCellID0::module] = active_loop ;
       // cellID0 = encoder.lowWord() ;  
+
+      std::string ladderNameP =  _toString( LayerId , "SiActiveLayer_%02d_posZ") + _toString( (int)active_loop, "_%02d" ) ;
+      std::string ladderNameN =  _toString( LayerId , "SiActiveLayer_%02d_negZ") + _toString( (int)active_loop, "_%02d" ) ;
 
 
       if (LayerId==2 ) {
@@ -894,11 +917,20 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	
 	pv.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(active_loop)  ).addPhysVolID("sensor", 0 ).addPhysVolID("side", 1 )   ;
 
+	DetElement   ladderDEposZ( vxd ,  ladderNameP , x_det.id() );
+	ladderDEposZ.setPlacement( pv ) ;
+	volSurfaceList( ladderDEposZ )->push_back( surf ) ;
+
+
 	pv = envelope.placeVolume( SiActiveLayerLogical,  Transform3D( rot, Position((layer_radius+(active_silicon_thickness/2.)+layer_gap)*sin(phirot2)+active_offset_phi*cos(phirot2),
 										     -(layer_radius+(active_silicon_thickness/2.)+layer_gap)*cos(phirot2)+active_offset_phi*sin(phirot2),
 										     -Z)) );
 	
 	pv.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(active_loop)  ).addPhysVolID("sensor", 0 ).addPhysVolID("side", -1 )   ;
+
+	DetElement   ladderDEnegZ( vxd ,   ladderNameN , x_det.id() );
+	ladderDEnegZ.setPlacement( pv ) ;
+	volSurfaceList( ladderDEnegZ )->push_back( surf ) ;
 	
 
       } else if (LayerId==1||LayerId==3||LayerId==5) { 
@@ -909,10 +941,17 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	
 	pv.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(active_loop)  ).addPhysVolID("sensor", 0 ).addPhysVolID("side", 1 )   ;
 	
+	DetElement   ladderDEposZ( vxd ,  ladderNameP , x_det.id() );
+	ladderDEposZ.setPlacement( pv ) ;
+	volSurfaceList( ladderDEposZ )->push_back( surf ) ;
+
 	
 	pv = envelope.placeVolume( SiActiveLayerLogical,  Transform3D( rot, Position((layer_radius-(active_silicon_thickness/2.))*sin(phirot2)+active_offset_phi*cos(phirot2),
 	 									     -(layer_radius-(active_silicon_thickness/2.))*cos(phirot2)+active_offset_phi*sin(phirot2),
 	 									     -Z)) );
+	DetElement   ladderDEnegZ( vxd ,  ladderNameN , x_det.id() );
+	ladderDEnegZ.setPlacement( pv ) ;
+	volSurfaceList( ladderDEnegZ )->push_back( surf ) ;
 	
 	pv.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(active_loop)  ).addPhysVolID("sensor", 0 ).addPhysVolID("side", -1 )   ;
 	
@@ -940,7 +979,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     //       else  {
     // 	thisSens.width     = ladder_width*2.; 
     //       }
-    //       thisSens.radLength = (SiActiveLayerLogical->GetMaterial())->GetRadlen()/mm ;
+    //       thisSens.radLength = (SiActiveLayerLogical->GetMaterial())->GetRadLen()/mm ;
       
     //       // save information for gear
     //       gearHelpLadders.push_back( thisLadder );
@@ -1119,7 +1158,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   // 				      shell_inner_radious+shell_thickess ,                  // outer radius
   // 				      shell_half_z ,                                        // half length
   // 				      gearHelpGap ,                                         // shell gap
-  // 				      (SupportShellLogical->GetMaterial())->GetRadlen()/mm ) ; // shell rad length
+  // 				      (SupportShellLogical->GetMaterial())->GetRadLen()/mm ) ; // shell rad length
   
   //     // add all layers
   //     for( int i = 0 ; i < gearHelpCount ; i++ ) {
