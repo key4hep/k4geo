@@ -13,9 +13,13 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   //Materials
   DD4hep::Geometry::Material air = lcdd.air();
 
-  //Access to the XML File
+   //Access to the XML File
   DD4hep::XML::DetElement xmlBeamCal = xmlHandle;
   const std::string detName = xmlBeamCal.nameStr();
+
+ //--------------------------------
+  DD4hep::Geometry::Assembly assembly( detName + "_assembly"  ) ;
+  //--------------------------------
 
   DD4hep::XML::Dimension dimensions =  xmlBeamCal.dimensions();
 
@@ -57,7 +61,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   const DD4hep::Geometry::Transform3D incomingBPTransform( incomingBeamPipeRotation, incomingBeamPipePosition );
 
   //Envelope to place the layers in
-  DD4hep::Geometry::Tube envelopeTube (bcalInnerR, bcalOuterR, bcalThickness*0.5, 0, 360 );
+  DD4hep::Geometry::Tube envelopeTube (bcalInnerR, bcalOuterR, bcalThickness*0.5 );
   DD4hep::Geometry::Tube incomingBeamPipe (0.0, incomingBeamPipeRadius, bcalThickness);//we want this to be longer than the BeamCal
   DD4hep::Geometry::SubtractionSolid envelope (envelopeTube, incomingBeamPipe, incomingBPTransform);
   DD4hep::Geometry::Volume     envelopeVol(detName+"_envelope",envelope,air);
@@ -180,19 +184,23 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   DD4hep::Geometry::Volume motherVol = lcdd.pickMotherVolume(sdet);
 
   DD4hep::Geometry::PlacedVolume pv =
-    motherVol.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcForwardRot, bcForwardPos ) );
+    assembly.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcForwardRot, bcForwardPos ) );
   pv.addPhysVolID("system",xmlBeamCal.id());
   pv.addPhysVolID("barrel", 1);
   sdet.setPlacement(pv);
 
   DD4hep::Geometry::PlacedVolume pv2 =
-    motherVol.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcBackwardRot, bcBackwardPos ) );
+    assembly.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcBackwardRot, bcBackwardPos ) );
   pv2.addPhysVolID("system",xmlBeamCal.id());
   pv2.addPhysVolID("barrel", 2);
   rdet.setPlacement(pv2);
  
   beamcals.add(sdet);
   beamcals.add(rdet);
+
+  pv = motherVol.placeVolume( assembly ) ;
+  pv.addPhysVolID("system",xmlBeamCal.id());
+  beamcals.setPlacement( pv ) ;
 
   return beamcals;
 }
