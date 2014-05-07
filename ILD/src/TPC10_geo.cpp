@@ -7,6 +7,8 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/TGeoUnits.h"
 #include "DDSim/Exceptions.h"
+#include "DDRec/Surface.h"
+
 #include <math.h>
 
 //#include "GearWrapper.h"
@@ -16,6 +18,7 @@ using namespace DD4hep;
 using namespace tgeo ;
 using namespace DD4hep::Geometry;
 using namespace DDSim ;
+using namespace DDRec ;
 
 
 namespace{
@@ -226,7 +229,7 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
   //------------ Volume for the whole TPC, Field Cage, Cathode, and Endplate and Sensitive ----------------//
   
   Tube tpc_motherSolid(rInner ,rOuter ,dzTotal/2.0 , phi1 , phi1+phi2 ); 
-    Volume tpc_motherLog(  "TPCLog", tpc_motherSolid, material_TPC_Gas );
+  Volume tpc_motherLog(  "TPCLog", tpc_motherSolid, material_TPC_Gas );
   pv = envelope.placeVolume( tpc_motherLog ) ;
   tpc.setVisAttributes(lcdd,  "TPCMotherVis" ,  tpc_motherLog ) ;
 
@@ -241,6 +244,10 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
 
   //-------------------------------------------------------------------------------------------------------//
 
+  // vectors for cylinder surfaces for field cage
+  Vector3D u( 0. , 1. , 0. ) ;
+  Vector3D v( 0. , 0. , 1. ) ;
+  Vector3D n( 1. , 0. , 0. ) ;
 
   //-------------------------------- inner wall construction ----------------------------------------//
 
@@ -248,6 +255,11 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
   Volume innerWallLog( "TPCInnerWallLog", innerWallSolid, materialAir ) ; 
   pv = tpc_motherLog.placeVolume( innerWallLog ) ;
   tpc.setVisAttributes(lcdd,  "CyanVis" ,  innerWallLog ) ;
+
+
+  Vector3D ocyl(  rInner + 0.5*dr_InnerWall , 0. , 0. ) ;
+  VolCylinder surfI( innerWallLog , SurfaceType( SurfaceType::Helper ) ,0.5*dr_InnerWall  , 0.5*dr_InnerWall , u,v,n , ocyl ) ;
+  volSurfaceList( tpc )->push_back(  surfI ) ;
 
   int layerCounter = 0;
   double fracRadLengthInnerWall = 0;
@@ -308,6 +320,10 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
   Volume outerWallLog( "TPCOuterWallLog" , outerWallSolid, materialAir);
   pv = tpc_motherLog.placeVolume( outerWallLog ) ;
   tpc.setVisAttributes(lcdd,  "CyanVis" ,  outerWallLog );
+
+  ocyl.fill(   rOuter - 0.5*dr_OuterWall  , 0., 0. ) ;
+  VolCylinder surfO( outerWallLog , SurfaceType( SurfaceType::Helper ) ,0.5*dr_OuterWall  , 0.5*dr_OuterWall , u,v,n , ocyl ) ;
+  volSurfaceList( tpc )->push_back(  surfO ) ;
 
   layerCounter = 0;
   double fracRadLengthOuterWall = 0;
@@ -422,17 +438,23 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
   // new PVPlacement(Transform3D(RotationMatrix().rotateY(   0 * deg), ThreeVector(0, 0, +( dz_Cathode/2.0 + dz_Sensitive/2.0 ) )), sensitiveGasLog, "TPCSensitiveLog_+z", motherLog, false, 0);
   // new PVPlacement(Transform3D(RotationMatrix().rotateY( 180 * deg), ThreeVector(0, 0, -( dz_Cathode/2.0 + dz_Sensitive/2.0 ) )), sensitiveGasLog, "TPCSensitiveLog_-z", motherLog, false, 1);
 
+  DetElement   sensGasDEfwd( tpc ,  "tpc_sensGas_fwd", x_det.id() );
+  DetElement   sensGasDEbwd( tpc ,  "tpc_sensGas_bwd", x_det.id() );
+
   pv = tpc_motherLog.placeVolume( sensitiveGasLog , Transform3D( RotationY( 0.) , Position(0, 0, +( dz_Cathode/2.0 + dz_Sensitive/2.0 ) ) ) ) ;
   pv.addPhysVolID("side", +1 ) ; 
-
+  sensGasDEfwd.setPlacement( pv ) ;
+ 
   pv = tpc_motherLog.placeVolume( sensitiveGasLog , Transform3D( RotationY( pi ) , Position(0, 0, -( dz_Cathode/2.0 + dz_Sensitive/2.0 ) ) ) ) ;
   pv.addPhysVolID("side", -1 ) ; 
+  sensGasDEbwd.setPlacement( pv ) ;
   
 
   //debug:  tpc.setVisAttributes(lcdd,  "RedVis" ,  sensitiveGasLog) ;
   tpc.setVisAttributes(lcdd,  "Invisible" ,  sensitiveGasLog) ;
 
   //---------------------------------------------------- Pad row doublets -------------------------------------------------------------------------------//
+
   for (int layer = 0; layer < numberPadRows; layer++) {
     
     // create twice the number of rings as there are pads, producing an lower and upper part of the pad with the boundry between them the pad-ring centre
@@ -453,11 +475,24 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
     tpc.setVisAttributes(lcdd,  "Invisible" ,  lowerlayerLog) ;
     tpc.setVisAttributes(lcdd,  "Invisible" ,  upperlayerLog) ;
     
+
+    DetElement   layerDEfwd( sensGasDEfwd ,   _toString( layer, "tpc_row_fwd_%03d") , x_det.id() );
+    DetElement   layerDEbwd( sensGasDEbwd ,   _toString( layer, "tpc_row_bwd_%03d") , x_det.id() );
+ 
+    Vector3D o(  inner_upperlayer_radius +1e-9  , 0. , 0. ) ;
+
+    VolCylinder surf( upperlayerLog , SurfaceType(SurfaceType::Sensitive, SurfaceType::Invisible ) ,  (padHeight/2.0) ,  (padHeight/2.0) , u,v,n ,o ) ;
+    volSurfaceList( layerDEfwd )->push_back( surf ) ;
+    volSurfaceList( layerDEbwd )->push_back( surf ) ;
+
+
     pv = sensitiveGasLog.placeVolume( lowerlayerLog ) ;
     pv.addPhysVolID("layer", layer+1 ).addPhysVolID( "module", 0 ).addPhysVolID("sensor", 1 ) ;
 
     pv = sensitiveGasLog.placeVolume( upperlayerLog ) ;
     pv.addPhysVolID("layer", layer+1 ).addPhysVolID( "module", 0 ).addPhysVolID("sensor", 2 ) ;
+    layerDEfwd.setPlacement( pv ) ;
+    layerDEbwd.setPlacement( pv ) ;
 
     lowerlayerLog.setSensitiveDetector(sens);
     upperlayerLog.setSensitiveDetector(sens);
@@ -513,9 +548,20 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
   Volume endplateLog( "TPCEndplateLog",endplateSolid, endplate_MaterialMix );
   tpc.setVisAttributes(lcdd,  "CyanVis" ,  endplateLog );
  
+  // add a plane to the endcap volume 
+  // note: u and v are exchanged: normal is along z ...      
+  DetElement   endcapDEfwd( tpc ,  "tpc_endcap_fwd", x_det.id() );
+  DetElement   endcapDEbwd( tpc ,  "tpc_endcap_bwd", x_det.id() );
+  VolPlane surf( endplateLog , SurfaceType( SurfaceType::Helper ) ,  dz_Endplate / 2.0 + dz_Readout / 2 ,  dz_Endplate / 2.0 , u , n , v ) ;
+  volSurfaceList( endcapDEfwd )->push_back( surf ) ;
+  volSurfaceList( endcapDEbwd )->push_back( surf ) ;
+
   // note: as opposed to the readout, the endpate is not placed inside the gas volume
   pv = tpc_motherLog.placeVolume( endplateLog , Transform3D( RotationY( 0. ) , Position(0, 0, +(dz_GasVolume + (dz_Endplate / 2.0))) ) );
+  endcapDEfwd.setPlacement( pv ) ;
   pv = tpc_motherLog.placeVolume( endplateLog , Transform3D( RotationY( pi ) , Position(0, 0, -(dz_GasVolume + (dz_Endplate / 2.0))) ) );
+  endcapDEbwd.setPlacement( pv ) ;
+  
   // new PVPlacement(Transform3D(RotationMatrix().rotateY(  0 * deg), ThreeVector( 0, 0, +(dz_GasVolume + (dz_Endplate / 2.0) ))), endplateLog, "TPCEndplate_+z", motherLog, false, 0);
   // new PVPlacement(Transform3D(RotationMatrix().rotateY(180 * deg), ThreeVector( 0, 0, -(dz_GasVolume + (dz_Endplate / 2.0) ))), endplateLog, "TPCEndplate_-z", motherLog, false, 1);
 
