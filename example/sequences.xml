@@ -14,7 +14,7 @@
   -->
   <!--kernel UI="UI" NumEvents="1"/-->  
 
-  <kernel UI="" NumEvents="1" />  
+  <kernel UI="UI" NumEvents="1" />  
 
 
   <!-- List of globally known actions. These actions will be registered with the Geant4Kernel 
@@ -38,11 +38,19 @@
 
     <!-- UI handler initializing vis and ui. NAME IS FIXED/COMMON KNOWLEDGE -->
     <action name="Geant4UIManager/UI">
-      <properties HaveVIS="0"
+      <properties HaveVIS="1"
 		  HaveUI="1"
-		  SetupUI="run.mac"
-		  SessionType="csh"/>
+		  SetupUI="vis.mac"
+		  SessionType="Qt"/>
      </action>
+
+    <!-- <action name="Geant4UIManager/UI"> -->
+    <!--   <properties HaveVIS="0" -->
+    <!-- 		  HaveUI="1" -->
+    <!-- 		  SetupUI="run.mac" -->
+    <!-- 		  SessionType="csh"/> -->
+    <!--  </action> -->
+
     <!-- void and empty for the time being.... NAME IS FIXED/COMMON KNOWLEDGE -->
     <action name="Geant4DummyTruthHandler/MonteCarloTruthHandler"/>
   </actions>

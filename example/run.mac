@@ -18,11 +18,14 @@
 #/gun/direction 1. 1. 100000.
 #/gun/energy 3 GeV
 
-/ddg4/gun/direction_x 1.
-/ddg4/gun/direction_y 1
-/ddg4/gun/direction_z .1
-/ddg4/gun/particle mu+
-/ddg4/gun/energy 3000
+#/ddg4/Gun/direction 1. 1. 0.1 
+
+#/ddg4/gun/direction_x 1.
+#/ddg4/gun/direction_y 1
+#/ddg4/gun/direction_z .1
+
+/ddg4/Gun/particle mu+
+/ddg4/Gun/energy 3000
 
 
 /run/beamOn 3
