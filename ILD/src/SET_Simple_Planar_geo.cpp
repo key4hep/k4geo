@@ -287,16 +287,32 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     Volume setSenLogical(  _toString( layer_id,"SET_SenLogical_%02d"), setSenSolid,sensitiveMat ) ; 
     
     setSenLogical.setSensitiveDetector(sens);
-
     
-      //====== create the meassurement surface ===================
-    Vector3D u( 0. , 1. , 0. ) ;
-    Vector3D v( 0. , 0. , 1. ) ;
-    Vector3D n( 1. , 0. , 0. ) ;
+    
+    
+    //====== create the meassurement surface ===================
+    Vector3D u,v,n ;
+    
+    if( faces_IP == 0 ){
+      // will be rotated around z-axis later
+      u.fill(  0. ,  -1. , 0. ) ;
+      v.fill(  0. ,   0. , 1. ) ;
+      n.fill( -1. ,   0. , 0. ) ;
 
-    //fg FIXME: as the inner layers are turned upside down, the normal will poin t inwards
-    //         -> this needs some thought - a possible solution would be to create different 
-    //            volumes for the inner layers ...     
+      // implement 7 deg stereo angle 
+      u.fill( 0. , -cos( 3.5/180.*M_PI  ) , -sin( 3.5/180.*M_PI  ) ) ;
+      v.fill( 0. , -sin( 3.5/180.*M_PI  ) ,  cos( 3.5/180.*M_PI  ) ) ;
+
+    } else {
+
+      u.fill( 0. , 1. , 0. ) ;
+      v.fill( 0. , 0. , 1. ) ;
+      n.fill( 1. , 0. , 0. ) ;
+
+      // implement 7 deg stereo angle 
+      u.fill( 0. ,  cos( 3.5/180.*M_PI  ) ,  sin( 3.5/180.*M_PI  ) ) ;
+      v.fill( 0. , -sin( 3.5/180.*M_PI  ) ,  cos( 3.5/180.*M_PI  ) ) ;
+    }
 
     double inner_thick =  sensitive_thickness / 2.0 ;
     double outer_thick =  sensitive_thickness / 2.0 + support_thickness ;  // support is on top
