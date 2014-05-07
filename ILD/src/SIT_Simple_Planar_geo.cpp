@@ -6,6 +6,7 @@
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/TGeoUnits.h"
+#include "DDRec/Surface.h"
 #include <cmath>
 
 //#include "GearWrapper.h"
@@ -14,6 +15,7 @@ using namespace std;
 using namespace DD4hep;
 using namespace tgeo ;
 using namespace DD4hep::Geometry;
+using namespace DDRec ;
 
 
 /** Wrapper class to replace the Database class used in Mokka to read the parameters.
@@ -183,9 +185,16 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     is_SIT2              = db->fetchInt("is_SIT2") ;
     ladder_clearance     = db->fetchDouble("ladder_clearance") ;
 
-        
+
+    // create assembly and DetElement for the layer
+    std::string layerName = _toString( layer_id , "layer_%d"  );
+    Assembly layer_assembly( layerName ) ;
+    PlacedVolume pv = envelope.placeVolume( layer_assembly ) ;
+    DetElement layerDE( sit , layerName  , x_det.id() );
+    layerDE.setPlacement( pv ) ;
+
+
     const double ladder_dphi = ( twopi / n_ladders ) ;
-    //FIXME: ????/    const double ladder_dphi = ( twopi / n_ladders ) * rad;
 
     sensitive_inner_radius = sensitive_radius - 0.5 *sensitive_thickness;
     ladder_width = 2*(tan(ladder_dphi*0.5)*sensitive_inner_radius - ladder_clearance) ;
@@ -286,6 +295,26 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     sitSenLogical.setSensitiveDetector(sens);
 
 
+    //====== create the meassurement surface ===================
+    Vector3D u( 0. , 1. , 0. ) ;
+    Vector3D v( 0. , 0. , 1. ) ;
+    Vector3D n( 1. , 0. , 0. ) ;
+
+    //fg FIXME: as the inner layers are turned upside down, the normal will poin t inwards
+    //         -> this needs some thought - a possible solution would be to create different 
+    //            volumes for the inner layers ...     
+
+    double inner_thick =  sensitive_thickness / 2.0 ;
+    double outer_thick =  sensitive_thickness / 2.0 + support_thickness ;  // support is on top
+   
+    VolPlane surf( sitSenLogical , SurfaceType(SurfaceType::Sensitive) ,inner_thick, outer_thick , u,v,n ) ; //,o ) ;
+
+    // vector of sensor placements - needed for DetElements in ladder loop below
+    std::vector<PlacedVolume> pvV(  layer_geom.n_sensors_per_ladder ) ;
+
+    //============================================================
+
+
     for (int isensor=0; isensor < layer_geom.n_sensors_per_ladder ; ++isensor) {
       
       // encoder.reset() ;  // reset to 0
@@ -300,6 +329,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       pv = sitSenEnvelopeLogical.placeVolume( sitSenLogical, Transform3D( RotationY(0.) , Position( xpos, ypos, zpos)  ) );
       
       pv.addPhysVolID("sensor",  isensor + 1 ) ; 
+      pvV[isensor] = pv ;
     }					      
     
     sit.setVisAttributes(lcdd, "SeeThrough",  sitLadderLogical ) ;
@@ -340,10 +370,22 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     for( int i = 0 ; i < n_ladders ; ++i ){
       
-      std::stringstream ladder_enum;
+      std::stringstream ladder_enum; ladder_enum << "sit_ladder_" << layer_id << "_" << i;
       
-      ladder_enum << i;
-      
+
+      DetElement   ladderDE( layerDE ,  ladder_enum.str() , x_det.id() );
+
+      for (int isensor=0; isensor < layer_geom.n_sensors_per_ladder ; ++isensor) {
+
+	std::stringstream sensor_ss ;  sensor_ss << ladder_enum.str() << "_" << isensor ;
+	
+	DetElement sensorDE( ladderDE, sensor_ss.str() ,  x_det.id() );
+	sensorDE.setPlacement( pvV[isensor] ) ;
+
+	volSurfaceList( sensorDE )->push_back(  surf ) ;
+      }					      
+    
+
       // RotationMatrix *rot = new RotationMatrix();
       // rot->rotateZ( i * -ladder_dphi );
       
@@ -367,13 +409,15 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	phi_rot += M_PI ;
       }
 
-      pv = envelope.placeVolume( sitLadderLogical, Transform3D( RotationZYX(  phi_rot, 0. , 0. ), 
-								Position( (sensitive_radius+dr) * cos(i * ladder_dphi), 
-									  (sensitive_radius+dr) * sin(i * ladder_dphi), 
-									  0. ) ) ) ;
+      pv = layer_assembly.placeVolume( sitLadderLogical, Transform3D( RotationZYX(  phi_rot, 0. , 0. ), 
+								      Position( (sensitive_radius+dr) * cos(i * ladder_dphi), 
+										(sensitive_radius+dr) * sin(i * ladder_dphi), 
+										0. ) ) ) ;
       
       pv.addPhysVolID("layer", layer_id ).addPhysVolID("module", i+1 ) ; 
 
+
+      ladderDE.setPlacement( pv ) ;
     }
     
     
