@@ -153,7 +153,7 @@
 
 	<include ref="tpc10_01.xml"/>
 
-	<include ref="set_simple_planar_sensors_01.xml"/> 
+	<include ref="set_simple_planar_sensors_01.xml"/>
 
         <comment>Calorimeters</comment>
 

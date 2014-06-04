@@ -14,7 +14,7 @@
   -->
   <!--kernel UI="UI" NumEvents="1"/-->  
 
-  <kernel UI="UI" NumEvents="1" />  
+  <kernel UI="" NumEvents="1" />  
 
 
   <!-- List of globally known actions. These actions will be registered with the Geant4Kernel 
@@ -99,6 +99,9 @@
     <filter name="EnergyDepositMinimumCut/SiTracker">
       <properties Cut="10*keV"/>
     </filter>
+    <filter name="EnergyDepositMinimumCut/TPC">
+      <properties Cut="0.1*keV"/>
+    </filter>
     <filter name="EnergyDepositMinimumCut/ECal">
       <properties Cut="10*keV"/>
     </filter>
@@ -140,7 +143,7 @@
 
     <!-- <sequence name="Geant4GeneratorActionSequence/GeneratorAction"> -->
     <!--   <action name="LCIOGeneratorAction"> -->
-    <!--     <properties LCIOFileName="infile.slcio"  -->
+    <!--     <properties LCIOFileName="infile.slcio" -->
     <!-- 		    SkipNEvents="0" /> -->
     <!--   </action> -->
     <!-- </sequence> -->
@@ -159,7 +162,7 @@
     
     <sequence sd="TPC" type="Geant4SensDetActionSequence">
       <filter name="GeantinoRejector"/>
-      <filter name="EnergyDepositMinimumCut/SiTracker"/>
+      <filter name="EnergyDepositMinimumCut/TPC"/>
       <action name="TRKSiSD00/TPCCollection"/>
     </sequence>
 
@@ -169,18 +172,18 @@
       <action name="TRKSiSD00/SETCollection"/>
     </sequence>
     
-    <sequence sd="EcalBarrel" type="Geant4SensDetActionSequence">
-      <filter name="GeantinoRejector"/>
-      <filter name="EnergyDepositMinimumCut" Cut="1*keV"/>
-      <action name="Geant4SimpleCalorimeterAction/Ecal"/> 
-      <!-- <action name="TRKSiSD00/EcalBarrelCollection"/> -->
-    </sequence>
+    <!-- <sequence sd="EcalBarrel" type="Geant4SensDetActionSequence"> -->
+    <!--   <filter name="GeantinoRejector"/> -->
+    <!--   <filter name="EnergyDepositMinimumCut" Cut="1*keV"/> -->
+    <!--   <action name="Geant4SimpleCalorimeterAction/Ecal"/>  -->
+    <!--   <\!-- <action name="TRKSiSD00/EcalBarrelCollection"/> -\-> -->
+    <!-- </sequence> -->
 
-    <sequence sd="HcalBarrel" type="Geant4SensDetActionSequence">
-      <filter name="GeantinoRejector"/>
-      <filter name="EnergyDepositMinimumCut" Cut="1*keV"/>
-      <action name="Geant4SimpleCalorimeterAction/Hcal"/> 
-    </sequence>
+    <!-- <sequence sd="HcalBarrel" type="Geant4SensDetActionSequence"> -->
+    <!--   <filter name="GeantinoRejector"/> -->
+    <!--   <filter name="EnergyDepositMinimumCut" Cut="1*keV"/> -->
+    <!--   <action name="Geant4SimpleCalorimeterAction/Hcal"/>  -->
+    <!-- </sequence> -->
         
   </sequences>
 </geant4_setup>

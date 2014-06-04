@@ -1122,9 +1122,6 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     pv = supp_assembly.placeVolume( styBarrelLog ) ;
 
     //====== create a material surface for the cryostat barrel ===================
-    Vector3D uc( 0. , 1. , 0. ) ;
-    Vector3D vc( 0. , 0. , 1. ) ;
-    Vector3D nc( 1. , 0. , 0. ) ;
 
     double rc =  ( rAlu + drAlu /2.) ;
     Vector3D oc( rc , 0. , 0.  ) ;
@@ -1132,7 +1129,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     double outer_thick = drAlu/2. ;
     double inner_thick = drAlu/2. + drSty ;
 
-    VolCylinder surfC( aluBarrelLog , SurfaceType(SurfaceType::Helper) , inner_thick , outer_thick, uc,vc,nc,oc ) ;
+    VolCylinder surfC( aluBarrelLog , SurfaceType(SurfaceType::Helper) , inner_thick , outer_thick, oc ) ;
 
     volSurfaceList( suppDE )->push_back( surfC ) ;
     //============================================================

@@ -112,7 +112,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   // G4VisAttributes *vacuumVisAttrib = new G4VisAttributes(G4Colour(0.0, 0.0, 0.5)); // dark blue
   // vacuumVisAttrib->SetVisibility(false); // there isn't anything, so what do you expect?
   
-  const double crossingAngle = lcdd.constant<double>("ILC_Main_Crossing_Angle") / 2 / mrad / 1000. ; // only half the angle
+  const double crossingAngle = lcdd.constant<double>("ILC_Main_Crossing_Angle") / 2 ; //  only half the angle
   
   // const String dbName = env.GetDBName() + "_" + env.GetParameterAsString("ILC_Main_Crossing_Angle");
   // Database *db = new Database(dbName.c_str());
@@ -294,7 +294,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       
 
       // solid for the tube (including vacuum and wall): a solid cone
-      ConeSegment tubeSolid( zHalf, rOuterStart, 0, rOuterEnd , phi1, phi2);
+      ConeSegment tubeSolid( zHalf, 0, rOuterStart, 0, rOuterEnd , phi1, phi2);
         
       // tube consists of vacuum
       Volume tubeLog( volName, tubeSolid, coreMaterial ) ;
@@ -304,6 +304,11 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       pv = envelope.placeVolume( tubeLog,  transformer );
       pv = envelope.placeVolume( tubeLog,  transmirror );
       
+      // std::cout << " *** placing tubes for volume " << volName << ": "  << transformer  << transmirror 
+      // 		<< " rotation : " << RotationY(rotateAngle) 	<< std::endl 
+      // 		<< " angle : " << rotateAngle	<< std::endl 
+      // 		<< " zPos: " << zPosition	<< std::endl ;
+
       // if inner and outer radii are equal, then omit the tube wall
       if (rInnerStart != rOuterStart || rInnerEnd != rOuterEnd) {
 	
@@ -320,316 +325,380 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       }
     }  
       break;
-      //    }
       
-    }
-  } // XXX
+    case kPunchedCenter: {
+      // a volume on the z-axis with one or two inner holes
+      // (implemented as a cone from which tubes are punched out)
+      
+      const double rUpstreamPunch = rInnerStart; // just alias names denoting what is meant here
+      const double rDnstreamPunch = rInnerEnd; // (the database entries are "abused" in this case)
+      
+      // relative transformations for the composition of the SubtractionVolumes
+      Transform3D upstreamTransformer(RotationY(-crossingAngle), Position(zPosition * tan(-crossingAngle), 0, 0));
+      Transform3D dnstreamTransformer(RotationY(+crossingAngle), Position(zPosition * tan(+crossingAngle), 0, 0));
+  
+      // absolute transformations for the final placement in the world (angles always equal zero and 180 deg)
+      Transform3D placementTransformer(RotationY(rotateAngle), RotateY( Position(0, 0, zPosition) , rotateAngle) );
+      Transform3D placementTransmirror(RotationY(mirrorAngle), RotateY( Position(0, 0, zPosition) , mirrorAngle) );
+  
+      // solid for the tube (including vacuum and wall): a solid cone
+      ConeSegment tubeSolid( zHalf, 0, rOuterStart, 0, rOuterEnd, phi1, phi2);
+        
+      // tube consists of vacuum (will later have two different daughters)
+      Volume tubeLog0( volName + "_0", tubeSolid, coreMaterial );
+      Volume tubeLog1( volName + "_1", tubeSolid, coreMaterial );
 
-  //     case kPunchedCenter: {
-  //       // a volume on the z-axis with one or two inner holes
-  //       // (implemented as a cone from which tubes are punched out)
+      // tubeLog0->SetVisAttributes(vacuumVisAttrib);
+      // tubeLog1->SetVisAttributes(vacuumVisAttrib);
+      // //FIXME debug
+      // tube.setVisAttributes(lcdd, "TubeVis"  , tubeLog0 );
+      // tube.setVisAttributes(lcdd, "TubeVis"  , tubeLog1 );
+        
+      // placement of the tube in the world, both at +z and -z
+      pv = envelope.placeVolume( tubeLog0, placementTransformer );
+      pv = envelope.placeVolume( tubeLog1, placementTransmirror );
+      // new PVPlacement(placementTransformer, tubeLog0, volName, worldLog, false, 0);
+      // new PVPlacement(placementTransmirror, tubeLog1, volName, worldLog, false, 1);
+
+      // std::cout << " *** placing tubes for volume " << volName << ": "  << placementTransformer  << placementTransmirror 
+      // 		<< " rotation : " << RotationY(rotateAngle) 	<< std::endl 
+      // 		<< " angle : " << rotateAngle	<< std::endl 
+      // 		<< " zPos: " << zPosition	<< std::endl ;
+
+
+        
+      // the wall solid and placeholders for possible SubtractionSolids
+      ConeSegment wholeSolid(  zHalf, 0, rOuterStart, 0, rOuterEnd, phi1, phi2);
       
-  //       const double rUpstreamPunch = rInnerStart; // just alias names denoting what is meant here
-  //       const double rDnstreamPunch = rInnerEnd; // (the database entries are "abused" in this case)
+      Solid tmpSolid0, tmpSolid1, wallSolid0, wallSolid1;
+      // VSolid *tmpSolid0, *tmpSolid1, *wallSolid0, *wallSolid1;
       
-  //       // relative transformations for the composition of the SubtractionVolumes
-  //       Transform3D upstreamTransformer(RotationMatrix().rotateY(-crossingAngle), ThreeVector(zPosition * tan(-crossingAngle), 0, 0));
-  //       Transform3D dnstreamTransformer(RotationMatrix().rotateY(+crossingAngle), ThreeVector(zPosition * tan(+crossingAngle), 0, 0));
-  
-  //       // absolute transformations for the final placement in the world (angles always equal zero and 180 deg)
-  //       Transform3D placementTransformer(RotationMatrix().rotateY(rotateAngle), ThreeVector(0, 0, zPosition).rotateY(rotateAngle));
-  //       Transform3D placementTransmirror(RotationMatrix().rotateY(mirrorAngle), ThreeVector(0, 0, zPosition).rotateY(mirrorAngle));
-  
-  //       // solid for the tube (including vacuum and wall): a solid cone
-  //       Cons *tubeSolid = new Cons(volName, 0, rOuterStart, 0, rOuterEnd, zHalf, phi1, phi2);
-        
-  //       // tube consists of vacuum (will later have two different daughters)
-  //       LogicalVolume *tubeLog0 = new LogicalVolume(tubeSolid, coreMaterial, volName + "_0", 0, 0, 0, true);
-  //       LogicalVolume *tubeLog1 = new LogicalVolume(tubeSolid, coreMaterial, volName + "_1", 0, 0, 0, true);
-  //       tubeLog0->SetVisAttributes(vacuumVisAttrib);
-  //       tubeLog1->SetVisAttributes(vacuumVisAttrib);
-        
-  //       // placement of the tube in the world, both at +z and -z
-  //       new PVPlacement(placementTransformer, tubeLog0, volName, worldLog, false, 0);
-  //       new PVPlacement(placementTransmirror, tubeLog1, volName, worldLog, false, 1);
-        
-  //       // the wall solid and placeholders for possible SubtractionSolids
-  //       Cons *wholeSolid = new Cons(volName + "_wall_whole", 0, rOuterStart, 0, rOuterEnd, zHalf, phi1, phi2);
-  //       VSolid *tmpSolid0, *tmpSolid1, *wallSolid0, *wallSolid1;
-  
-  //       // the punched subtraction solids can be asymmetric and therefore have to be created twice:
-  //       // one time in the "right" way, another time in the "reverse" way, because the "mirroring"
-  //       // rotation around the y-axis will not only exchange +z and -z, but also +x and -x
-  //       if (rUpstreamPunch) { // do we need a hole on the upstream branch?
-  //         Tubs *upstreamPunch = new Tubs(volName + "_wall_punch_up", 0, rUpstreamPunch, 5 * zHalf, phi1, phi2); // a bit longer
-  //         tmpSolid0 = new SubtractionSolid(volName + "_wall_tmp_0", wholeSolid, upstreamPunch, upstreamTransformer);
-  //         tmpSolid1 = new SubtractionSolid(volName + "_wall_tmp_1", wholeSolid, upstreamPunch, dnstreamTransformer); // [sic]
-  //       } else { // dont't do anything, just pass on the unmodified shape
-  //         tmpSolid0 = wholeSolid;
-  //         tmpSolid1 = wholeSolid;
-  //       }
-  
-  //       if (rDnstreamPunch) { // do we need a hole on the downstream branch?
-  //         Tubs *dnstreamPunch = new Tubs(volName + "_wall_punch_dn", 0, rDnstreamPunch, 5 * zHalf, phi1, phi2); // a bit longer
-  //         wallSolid0 = new SubtractionSolid(volName + "_wall_0", tmpSolid0, dnstreamPunch, dnstreamTransformer);
-  //         wallSolid1 = new SubtractionSolid(volName + "_wall_1", tmpSolid1, dnstreamPunch, upstreamTransformer); // [sic]
-  //       } else { // dont't do anything, just pass on the unmodified shape
-  //         wallSolid0 = tmpSolid0;
-  //         wallSolid1 = tmpSolid1;
-  //       }
-  
-  //       // the wall consists of the material given in the database
-  //       LogicalVolume *wallLog0 = new LogicalVolume(wallSolid0, wallMaterial, volName + "_wall_0", 0, 0, 0, true);
-  //       LogicalVolume *wallLog1 = new LogicalVolume(wallSolid1, wallMaterial, volName + "_wall_1", 0, 0, 0, true);
-  //       wallLog0->SetVisAttributes(wallVisAttrib);
-  //       wallLog1->SetVisAttributes(wallVisAttrib);
-  
-  //       // placement as a daughter volumes of the tube
-  //       new PVPlacement(0, ThreeVector(), wallLog0, volName + "_wall", tubeLog0, false, 0);
-  //       new PVPlacement(0, ThreeVector(), wallLog1, volName + "_wall", tubeLog1, false, 1);
-  //       break;
-  //     }
-  //     case kPunchedUpstream:
-  //     case kPunchedDnstream: {
-  //       // a volume on the upstream or downstream branch with two inner holes
-  //       // (implemented as a cone from which another tube is punched out)
+      // the punched subtraction solids can be asymmetric and therefore have to be created twice:
+      // one time in the "right" way, another time in the "reverse" way, because the "mirroring"
+      // rotation around the y-axis will not only exchange +z and -z, but also +x and -x
+
+      if ( rUpstreamPunch > 1e-6 ) { // do we need a hole on the upstream branch?
+       	Tube upstreamPunch( 0, rUpstreamPunch, 5 * zHalf, phi1, phi2); // a bit longer
+       	tmpSolid0 = SubtractionSolid( wholeSolid, upstreamPunch, upstreamTransformer);
+       	tmpSolid1 = SubtractionSolid( wholeSolid, upstreamPunch, dnstreamTransformer); // [sic]
+      } else { // dont't do anything, just pass on the unmodified shape
+       	tmpSolid0 = wholeSolid;
+       	tmpSolid1 = wholeSolid;
+      }
       
-  //       const double rCenterPunch = (crossType == kPunchedUpstream) ? (rInnerStart) : (rInnerEnd); // just alias names denoting what is meant here
-  //       const double rOffsetPunch = (crossType == kPunchedDnstream) ? (rInnerStart) : (rInnerEnd); // (the database entries are "abused" in this case)
+      if (rDnstreamPunch > 1e-6 ) { // do we need a hole on the downstream branch?
+       	Tube dnstreamPunch( 0, rDnstreamPunch, 5 * zHalf, phi1, phi2); // a bit longer
+       	wallSolid0 = SubtractionSolid( tmpSolid0, dnstreamPunch, dnstreamTransformer);
+       	wallSolid1 = SubtractionSolid( tmpSolid1, dnstreamPunch, upstreamTransformer); // [sic]
+      } else { // dont't do anything, just pass on the unmodified shape
+       	wallSolid0 = tmpSolid0;
+       	wallSolid1 = tmpSolid1;
+      }
+
+
+      // the wall consists of the material given in the database
+      Volume wallLog0( volName + "_wall_0", wallSolid0, wallMaterial );
+      Volume wallLog1( volName + "_wall_1", wallSolid1, wallMaterial );
       
-  //       // relative transformations for the composition of the SubtractionVolumes
-  //       Transform3D punchTransformer(RotationMatrix().rotateY(-2 * rotateAngle), ThreeVector(zPosition * tan(-2 * rotateAngle), 0, 0));
-  //       Transform3D punchTransmirror(RotationMatrix().rotateY(+2 * rotateAngle), ThreeVector(zPosition * tan(+2 * rotateAngle), 0, 0));
-  
-  //       // absolute transformations for the final placement in the world
-  //       Transform3D placementTransformer(RotationMatrix().rotateY(rotateAngle), ThreeVector(0, 0, zPosition).rotateY(rotateAngle));
-  //       Transform3D placementTransmirror(RotationMatrix().rotateY(mirrorAngle), ThreeVector(0, 0, zPosition).rotateY(mirrorAngle));
-  
-  //       // solid for the tube (including vacuum and wall): a solid cone
-  //       Cons *tubeSolid = new Cons(volName, 0, rOuterStart, 0, rOuterEnd, zHalf, phi1, phi2);
-        
-  //       // tube consists of vacuum (will later have two different daughters)
-  //       LogicalVolume *tubeLog0 = new LogicalVolume(tubeSolid, coreMaterial, volName + "_0", 0, 0, 0, true);
-  //       LogicalVolume *tubeLog1 = new LogicalVolume(tubeSolid, coreMaterial, volName + "_1", 0, 0, 0, true);
-  //       tubeLog0->SetVisAttributes(vacuumVisAttrib);
-  //       tubeLog1->SetVisAttributes(vacuumVisAttrib);
-        
-  //       // placement of the tube in the world, both at +z and -z
-  //       new PVPlacement(placementTransformer, tubeLog0, volName, worldLog, false, 0);
-  //       new PVPlacement(placementTransmirror, tubeLog1, volName, worldLog, false, 1);
-        
-  //       // the wall solid and the piece (only a tube, for the moment) which will be punched out
-  //       Cons *wholeSolid = new Cons(volName + "_wall_whole", rCenterPunch, rOuterStart, rCenterPunch, rOuterEnd, zHalf, phi1, phi2);
-  //       Tubs *punchSolid = new Tubs(volName + "_wall_punch", 0, rOffsetPunch, 5 * zHalf, phi1, phi2); // a bit longer
-  
-  //       // the punched subtraction solids can be asymmetric and therefore have to be created twice:
-  //       // one time in the "right" way, another time in the "reverse" way, because the "mirroring"
-  //       // rotation around the y-axis will not only exchange +z and -z, but also +x and -x
-  //       SubtractionSolid *wallSolid0 = new SubtractionSolid(volName + "_wall_0", wholeSolid, punchSolid, punchTransformer);
-  //       SubtractionSolid *wallSolid1 = new SubtractionSolid(volName + "_wall_1", wholeSolid, punchSolid, punchTransmirror);
-  
-  //       // the wall consists of the material given in the database
-  //       LogicalVolume *wallLog0 = new LogicalVolume(wallSolid0, wallMaterial, volName + "_wall_0", 0, 0, 0, true);
-  //       LogicalVolume *wallLog1 = new LogicalVolume(wallSolid1, wallMaterial, volName + "_wall_1", 0, 0, 0, true);
-  //       wallLog0->SetVisAttributes(wallVisAttrib);
-  //       wallLog1->SetVisAttributes(wallVisAttrib);
-  
-  //       // placement as a daughter volumes of the tube
-  //       new PVPlacement(0, ThreeVector(), wallLog0, volName + "_wall", tubeLog0, false, 0);
-  //       new PVPlacement(0, ThreeVector(), wallLog1, volName + "_wall", tubeLog1, false, 1);
-  //       break;
-  //     }
-  //     case kUpstreamClippedFront:
-  //     case kDnstreamClippedFront:
-  //     case kUpstreamSlicedFront:
-  //     case kDnstreamSlicedFront: {
-  //       // a volume on the upstream or donwstream branch, but with the front face parallel to the xy-plane
-  //       // or to a piece tilted in the other direction ("sliced" like a salami with 2 * rotateAngle)
-  //       // (implemented as a slightly longer cone from which the end is clipped off)
+      tube.setVisAttributes(lcdd, "TubeVis"  , wallLog0);
+      tube.setVisAttributes(lcdd, "TubeVis"  , wallLog1);
       
-  //       // the volume which will be used for clipping: a solid tube
-  //       const double clipSize = rOuterStart; // the right order of magnitude for the clipping volume (alias name)
-  //       Tubs *clipSolid = new Tubs(volName + "_clip", 0, 2 * clipSize, clipSize, phi1, phi2); // should be large enough
+      // placement as a daughter volumes of the tube
+      pv = tubeLog0.placeVolume( wallLog0, Position() );
+      pv = tubeLog1.placeVolume( wallLog1, Position() );
+      // new PVPlacement(0, Position(), wallLog0, volName + "_wall", tubeLog0, false, 0);
+      // new PVPlacement(0, Position(), wallLog1, volName + "_wall", tubeLog1, false, 1);
+      
+      break;
+    }
+
+
+    case kPunchedUpstream:
+    case kPunchedDnstream: {
+      // a volume on the upstream or downstream branch with two inner holes
+      // (implemented as a cone from which another tube is punched out)
+      
+      const double rCenterPunch = (crossType == kPunchedUpstream) ? (rInnerStart) : (rInnerEnd); // just alias names denoting what is meant here
+      const double rOffsetPunch = (crossType == kPunchedDnstream) ? (rInnerStart) : (rInnerEnd); // (the database entries are "abused" in this case)
+      
+      // relative transformations for the composition of the SubtractionVolumes
+      Transform3D punchTransformer(RotationY(-2 * rotateAngle), Position(zPosition * tan(-2 * rotateAngle), 0, 0));
+      Transform3D punchTransmirror(RotationY(+2 * rotateAngle), Position(zPosition * tan(+2 * rotateAngle), 0, 0));
+      
+      // absolute transformations for the final placement in the world
+      Transform3D placementTransformer(RotationY(rotateAngle), RotateY( Position(0, 0, zPosition) , rotateAngle) );
+      Transform3D placementTransmirror(RotationY(mirrorAngle), RotateY( Position(0, 0, zPosition) , mirrorAngle) );
+      
+      // solid for the tube (including vacuum and wall): a solid cone
+      ConeSegment tubeSolid( zHalf, 0, rOuterStart, 0, rOuterEnd, phi1, phi2);
+      
+      // tube consists of vacuum (will later have two different daughters)
+      Volume tubeLog0( volName + "_0", tubeSolid, coreMaterial );
+      Volume tubeLog1( volName + "_1", tubeSolid, coreMaterial );
+
+      // tubeLog0->SetVisAttributes(vacuumVisAttrib);
+      // tubeLog1->SetVisAttributes(vacuumVisAttrib);
+      
+      // placement of the tube in the world, both at +z and -z
+      pv = envelope.placeVolume( tubeLog0, placementTransformer );
+      pv = envelope.placeVolume( tubeLog1, placementTransmirror );
+      // new PVPlacement(placementTransformer, tubeLog0, volName, worldLog, false, 0);
+      // new PVPlacement(placementTransmirror, tubeLog1, volName, worldLog, false, 1);
+      // std::cout << " *** placing tubes for volume " << volName << ": "  << placementTransformer  << placementTransmirror 
+      // 		<< " rotation : " << RotationY(rotateAngle) 	<< std::endl 
+      // 		<< " angle : " << rotateAngle	<< std::endl 
+      // 		<< " zPos: " << zPosition	<< std::endl ;
+
+      
+      // the wall solid and the piece (only a tube, for the moment) which will be punched out
+      ConeSegment wholeSolid( zHalf, rCenterPunch , rOuterStart, rCenterPunch, rOuterEnd, phi1, phi2);
+      
+      Tube punchSolid( 0, rOffsetPunch, 5 * zHalf, phi1, phi2); // a bit longer
+      
+      // the punched subtraction solids can be asymmetric and therefore have to be created twice:
+      // one time in the "right" way, another time in the "reverse" way, because the "mirroring"
+      // rotation around the y-axis will not only exchange +z and -z, but also +x and -x
+      SubtractionSolid wallSolid0( wholeSolid, punchSolid, punchTransformer);
+      SubtractionSolid wallSolid1( wholeSolid, punchSolid, punchTransmirror);
+
+      // the wall consists of the material given in the database
+      Volume wallLog0( volName + "_wall_0", wallSolid0, wallMaterial );
+      Volume wallLog1( volName + "_wall_1", wallSolid1, wallMaterial );
+      
+      tube.setVisAttributes(lcdd, "TubeVis"  , wallLog0 );
+      tube.setVisAttributes(lcdd, "TubeVis"  , wallLog1 );
+      
+      
+      // placement as a daughter volumes of the tube
+      pv = tubeLog0.placeVolume( wallLog0 , Position() );
+      pv = tubeLog1.placeVolume( wallLog1 , Position() );
+      // new PVPlacement(0, Position(), wallLog0, volName + "_wall", tubeLog0, false, 0);
+      // new PVPlacement(0, Position(), wallLog1, volName + "_wall", tubeLog1, false, 1);
+      
+      break;
+    }
+      
+      case kUpstreamClippedFront:
+      case kDnstreamClippedFront:
+      case kUpstreamSlicedFront:
+      case kDnstreamSlicedFront: {
+        // a volume on the upstream or donwstream branch, but with the front face parallel to the xy-plane
+        // or to a piece tilted in the other direction ("sliced" like a salami with 2 * rotateAngle)
+        // (implemented as a slightly longer cone from which the end is clipped off)
+      
+        // the volume which will be used for clipping: a solid tube
+        const double clipSize = rOuterStart; // the right order of magnitude for the clipping volume (alias name)
+        Tube clipSolid( 0, 2 * clipSize, clipSize, phi1, phi2); // should be large enough
         
-  //       // relative transformations for the composition of the SubtractionVolumes
-  //       const double clipAngle = (crossType == kUpstreamClippedFront || crossType == kDnstreamClippedFront) ? (rotateAngle) : (2 * rotateAngle);
-  //       const double clipShift = (zStart - clipSize) / cos(clipAngle) - (zPosition - clipSize / 2); // question: why is this correct?
-  //       Transform3D clipTransformer(RotationMatrix().rotateY(-clipAngle), ThreeVector(0, 0, clipShift));
-  //       Transform3D clipTransmirror(RotationMatrix().rotateY(+clipAngle), ThreeVector(0, 0, clipShift));
+        // relative transformations for the composition of the SubtractionVolumes
+        const double clipAngle = (crossType == kUpstreamClippedFront || crossType == kDnstreamClippedFront) ? (rotateAngle) : (2 * rotateAngle);
+        const double clipShift = (zStart - clipSize) / cos(clipAngle) - (zPosition - clipSize / 2); // question: why is this correct?
+        Transform3D clipTransformer(RotationY(-clipAngle), Position(0, 0, clipShift));
+        Transform3D clipTransmirror(RotationY(+clipAngle), Position(0, 0, clipShift));
   
-  //       // absolute transformations for the final placement in the world
-  //       Transform3D placementTransformer(RotationMatrix().rotateY(rotateAngle), ThreeVector(0, 0, zPosition - clipSize / 2).rotateY(rotateAngle));
-  //       Transform3D placementTransmirror(RotationMatrix().rotateY(mirrorAngle), ThreeVector(0, 0, zPosition - clipSize / 2).rotateY(mirrorAngle));
+        // absolute transformations for the final placement in the world
+        Transform3D placementTransformer(RotationY(rotateAngle), RotateY( Position(0, 0, zPosition - clipSize / 2) , rotateAngle) );
+        Transform3D placementTransmirror(RotationY(mirrorAngle), RotateY( Position(0, 0, zPosition - clipSize / 2) , mirrorAngle) );
   
-  //       // solid for the tube (including vacuum and wall): a solid cone
-  //       Cons *wholeSolid = new Cons(volName + "_whole", 0, rOuterStart, 0, rOuterEnd, zHalf + clipSize / 2, phi1, phi2); // a bit longer
+        // solid for the tube (including vacuum and wall): a solid cone
+
+         ConeSegment wholeSolid(  zHalf + clipSize / 2, 0, rOuterStart, 0, rOuterEnd,  phi1, phi2); // a bit longer
   
-  //       // clip away the protruding end
-  //       SubtractionSolid *tubeSolid0 = new SubtractionSolid(volName + "_0", wholeSolid, clipSolid, clipTransformer);
-  //       SubtractionSolid *tubeSolid1 = new SubtractionSolid(volName + "_1", wholeSolid, clipSolid, clipTransmirror);
+         // clip away the protruding end
+         SubtractionSolid tubeSolid0( wholeSolid, clipSolid, clipTransformer);
+         SubtractionSolid tubeSolid1( wholeSolid, clipSolid, clipTransmirror);
+
+        // tube consists of vacuum (will later have two different daughters)
+        Volume tubeLog0( volName + "_0", tubeSolid0, coreMaterial );
+        Volume tubeLog1( volName + "_1", tubeSolid1, coreMaterial );
+        // tubeLog0->SetVisAttributes(vacuumVisAttrib);
+        // tubeLog1->SetVisAttributes(vacuumVisAttrib);
         
-  //       // tube consists of vacuum (will later have two different daughters)
-  //       LogicalVolume *tubeLog0 = new LogicalVolume(tubeSolid0, coreMaterial, volName + "_0", 0, 0, 0, true);
-  //       LogicalVolume *tubeLog1 = new LogicalVolume(tubeSolid1, coreMaterial, volName + "_1", 0, 0, 0, true);
-  //       tubeLog0->SetVisAttributes(vacuumVisAttrib);
-  //       tubeLog1->SetVisAttributes(vacuumVisAttrib);
-        
-  //       // placement of the tube in the world, both at +z and -z
-  //       new PVPlacement(placementTransformer, tubeLog0, volName, worldLog, false, 0);
-  //       new PVPlacement(placementTransmirror, tubeLog1, volName, worldLog, false, 1);
+        // placement of the tube in the world, both at +z and -z
+	pv = envelope.placeVolume( tubeLog0, placementTransformer );
+	pv = envelope.placeVolume( tubeLog1, placementTransmirror );
+        // new PVPlacement(placementTransformer, tubeLog0, volName, worldLog, false, 0);
+        // new PVPlacement(placementTransmirror, tubeLog1, volName, worldLog, false, 1);
+      // std::cout << " *** placing tubes for volume " << volName << ": "  << placementTransformer  << placementTransmirror 
+      // 		<< " rotation : " << RotationY(rotateAngle) 	<< std::endl 
+      // 		<< " angle : " << rotateAngle	<< std::endl 
+      // 		<< " zPos: " << zPosition	<< std::endl ;
        
-  //       if (rInnerStart != rOuterStart || rInnerEnd != rOuterEnd) {
-  //         // the wall solid: a tubular cone
-  //         Cons *wallWholeSolid = new Cons(volName + "_wall_whole", rInnerStart, rOuterStart, rInnerEnd, rOuterEnd, zHalf + clipSize / 2, phi1, phi2); // a bit longer
+        if (rInnerStart != rOuterStart || rInnerEnd != rOuterEnd) {
+          // the wall solid: a tubular cone
+          ConeSegment wallWholeSolid(  zHalf + clipSize / 2, rInnerStart, rOuterStart, rInnerEnd, rOuterEnd, phi1, phi2); // a bit longer
         
-  //         // clip away the protruding end
-  //         SubtractionSolid *wallSolid0 = new SubtractionSolid(volName + "_wall_0", wallWholeSolid, clipSolid, clipTransformer);
-  //         SubtractionSolid *wallSolid1 = new SubtractionSolid(volName + "_wall_1", wallWholeSolid, clipSolid, clipTransmirror);
+          // clip away the protruding end
+          SubtractionSolid wallSolid0( wallWholeSolid, clipSolid, clipTransformer);
+          SubtractionSolid wallSolid1( wallWholeSolid, clipSolid, clipTransmirror);
         
-  //         // the wall consists of the material given in the database
-  //         LogicalVolume *wallLog0 = new LogicalVolume(wallSolid0, wallMaterial, volName + "_wall_0", 0, 0, 0, true);
-  //         LogicalVolume *wallLog1 = new LogicalVolume(wallSolid1, wallMaterial, volName + "_wall_1", 0, 0, 0, true);
-  //         wallLog0->SetVisAttributes(wallVisAttrib);
-  //         wallLog1->SetVisAttributes(wallVisAttrib);
+          // the wall consists of the material given in the database
+          Volume wallLog0( volName + "_wall_0", wallSolid0, wallMaterial );
+          Volume wallLog1( volName + "_wall_1", wallSolid1, wallMaterial );
+
+	  tube.setVisAttributes(lcdd, "TubeVis"  , wallLog0 );
+	  tube.setVisAttributes(lcdd, "TubeVis"  , wallLog1 );
         
-  //         // placement as a daughter volumes of the tube
-  //         new PVPlacement(0, ThreeVector(), wallLog0, volName + "_wall", tubeLog0, false, 0);
-  //         new PVPlacement(0, ThreeVector(), wallLog1, volName + "_wall", tubeLog1, false, 1);
-  //       }
-  //       break;
-  //     }
-  //     case kUpstreamClippedRear:
-  //     case kDnstreamClippedRear:
-  //     case kUpstreamSlicedRear:
-  //     case kDnstreamSlicedRear: {
-  //       // a volume on the upstream or donwstream branch, but with the rear face parallel to the xy-plane
-  //       // or to a piece tilted in the other direction ("sliced" like a salami with 2 * rotateAngle)
-  //       // (implemented as a slightly longer cone from which the end is clipped off)
+          // placement as a daughter volumes of the tube
+	  pv = tubeLog0.placeVolume( wallLog0, Position() );
+	  pv = tubeLog1.placeVolume( wallLog1, Position() );
+          // new PVPlacement(0, Position(), wallLog0, volName + "_wall", tubeLog0, false, 0);
+          // new PVPlacement(0, Position(), wallLog1, volName + "_wall", tubeLog1, false, 1);
+        }
+        break;
+      }
+	
+    case kUpstreamClippedRear:
+    case kDnstreamClippedRear:
+    case kUpstreamSlicedRear:
+    case kDnstreamSlicedRear: {
+      // a volume on the upstream or donwstream branch, but with the rear face parallel to the xy-plane
+      // or to a piece tilted in the other direction ("sliced" like a salami with 2 * rotateAngle)
+      // (implemented as a slightly longer cone from which the end is clipped off)
       
-  //       // the volume which will be used for clipping: a solid tube
-  //       const double clipSize = rOuterEnd; // the right order of magnitude for the clipping volume (alias name)
-  //       Tubs *clipSolid = new Tubs(volName + "_clip", 0, 2 * clipSize, clipSize, phi1, phi2); // should be large enough
-        
-  //       // relative transformations for the composition of the SubtractionVolumes
-  //       const double clipAngle = (crossType == kUpstreamClippedRear || crossType == kDnstreamClippedRear) ? (rotateAngle) : (2 * rotateAngle);
-  //       const double clipShift = (zEnd + clipSize) / cos(clipAngle) - (zPosition + clipSize / 2); // question: why is this correct?
-  //       Transform3D clipTransformer(RotationMatrix().rotateY(-clipAngle), ThreeVector(0, 0, clipShift));
-  //       Transform3D clipTransmirror(RotationMatrix().rotateY(+clipAngle), ThreeVector(0, 0, clipShift));
-  
-  //       // absolute transformations for the final placement in the world
-  //       Transform3D placementTransformer(RotationMatrix().rotateY(rotateAngle), ThreeVector(0, 0, zPosition + clipSize / 2).rotateY(rotateAngle));
-  //       Transform3D placementTransmirror(RotationMatrix().rotateY(mirrorAngle), ThreeVector(0, 0, zPosition + clipSize / 2).rotateY(mirrorAngle));
-  
-  //       // solid for the tube (including vacuum and wall): a solid cone
-  //       Cons *wholeSolid = new Cons(volName + "_whole", 0, rOuterStart, 0, rOuterEnd, zHalf + clipSize / 2, phi1, phi2); // a bit longer
-  
-  //       // clip away the protruding end
-  //       SubtractionSolid *tubeSolid0 = new SubtractionSolid(volName + "_0", wholeSolid, clipSolid, clipTransformer);
-  //       SubtractionSolid *tubeSolid1 = new SubtractionSolid(volName + "_1", wholeSolid, clipSolid, clipTransmirror);
-        
-  //       // tube consists of vacuum (will later have two different daughters)
-  //       LogicalVolume *tubeLog0 = new LogicalVolume(tubeSolid0, coreMaterial, volName + "_0", 0, 0, 0, true);
-  //       LogicalVolume *tubeLog1 = new LogicalVolume(tubeSolid1, coreMaterial, volName + "_1", 0, 0, 0, true);
-  //       tubeLog0->SetVisAttributes(vacuumVisAttrib);
-  //       tubeLog1->SetVisAttributes(vacuumVisAttrib);
-        
-  //       // placement of the tube in the world, both at +z and -z
-  //       new PVPlacement(placementTransformer, tubeLog0, volName, worldLog, false, 0);
-  //       new PVPlacement(placementTransmirror, tubeLog1, volName, worldLog, false, 1);
-       
-  //       if (rInnerStart != rOuterStart || rInnerEnd != rOuterEnd) {
-  //         // the wall solid: a tubular cone
-  //         Cons *wallWholeSolid = new Cons(volName + "_wall_whole", rInnerStart, rOuterStart, rInnerEnd, rOuterEnd, zHalf + clipSize / 2, phi1, phi2); // a bit longer
-        
-  //         // clip away the protruding end
-  //         SubtractionSolid *wallSolid0 = new SubtractionSolid(volName + "_wall_0", wallWholeSolid, clipSolid, clipTransformer);
-  //         SubtractionSolid *wallSolid1 = new SubtractionSolid(volName + "_wall_1", wallWholeSolid, clipSolid, clipTransmirror);
-        
-  //         // the wall consists of the material given in the database
-  //         LogicalVolume *wallLog0 = new LogicalVolume(wallSolid0, wallMaterial, volName + "_wall_0", 0, 0, 0, true);
-  //         LogicalVolume *wallLog1 = new LogicalVolume(wallSolid1, wallMaterial, volName + "_wall_1", 0, 0, 0, true);
-  //         wallLog0->SetVisAttributes(wallVisAttrib);
-  //         wallLog1->SetVisAttributes(wallVisAttrib);
-        
-  //         // placement as a daughter volumes of the tube
-  //         new PVPlacement(0, ThreeVector(), wallLog0, volName + "_wall", tubeLog0, false, 0);
-  //         new PVPlacement(0, ThreeVector(), wallLog1, volName + "_wall", tubeLog1, false, 1);
-  //       }
-  //       break;
-  //     }
-  //     case kUpstreamClippedBoth:
-  //     case kDnstreamClippedBoth:
-  //     case kUpstreamSlicedBoth:
-  //     case kDnstreamSlicedBoth: {
-  //       // a volume on the upstream or donwstream branch, but with both faces parallel to the xy-plane
-  //       // or to a piece tilted in the other direction ("sliced" like a salami with 2 * rotateAngle)
-  //       // (implemented as a slightly longer cone from which the end is clipped off)
+      // the volume which will be used for clipping: a solid tube
+      const double clipSize = rOuterEnd; // the right order of magnitude for the clipping volume (alias name)
+      Tube clipSolid( 0, 2 * clipSize, clipSize, phi1, phi2); // should be large enough
       
-  //       // the volume which will be used for clipping: a solid tube
-  //       const double clipSize = rOuterEnd; // the right order of magnitude for the clipping volume (alias name)
-  //       Tubs *clipSolid = new Tubs(volName + "_clip", 0, 2 * clipSize, clipSize, phi1, phi2); // should be large enough
+      // relative transformations for the composition of the SubtractionVolumes
+      const double clipAngle = (crossType == kUpstreamClippedRear || crossType == kDnstreamClippedRear) ? (rotateAngle) : (2 * rotateAngle);
+      const double clipShift = (zEnd + clipSize) / cos(clipAngle) - (zPosition + clipSize / 2); // question: why is this correct?
+      Transform3D clipTransformer(RotationY(-clipAngle), Position(0, 0, clipShift));
+      Transform3D clipTransmirror(RotationY(+clipAngle), Position(0, 0, clipShift));
+      
+      // absolute transformations for the final placement in the world
+      Transform3D placementTransformer(RotationY(rotateAngle), RotateY( Position(0, 0, zPosition + clipSize / 2) , rotateAngle) );
+      Transform3D placementTransmirror(RotationY(mirrorAngle), RotateY( Position(0, 0, zPosition + clipSize / 2) , mirrorAngle) );
+      
+      // solid for the tube (including vacuum and wall): a solid cone
+      ConeSegment wholeSolid( 0, rOuterStart, 0, rOuterEnd, zHalf + clipSize / 2, phi1, phi2); // a bit longer
+      
+      // clip away the protruding end
+      SubtractionSolid tubeSolid0( wholeSolid, clipSolid, clipTransformer);
+      SubtractionSolid tubeSolid1( wholeSolid, clipSolid, clipTransmirror);
+      
+      // tube consists of vacuum (will later have two different daughters)
+      Volume tubeLog0( volName + "_0", tubeSolid0, coreMaterial );
+      Volume tubeLog1( volName + "_1", tubeSolid1, coreMaterial );
+      // tubeLog0->SetVisAttributes(vacuumVisAttrib);
+      // tubeLog1->SetVisAttributes(vacuumVisAttrib);
+      
+      // placement of the tube in the world, both at +z and -z
+      pv = envelope.placeVolume( tubeLog0, placementTransformer );
+      pv = envelope.placeVolume( tubeLog1, placementTransmirror );
+      // new PVPlacement(placementTransformer, tubeLog0, volName, worldLog, false, 0);
+      // new PVPlacement(placementTransmirror, tubeLog1, volName, worldLog, false, 1);
+      // std::cout << " *** placing tubes for volume " << volName << ": "  << placementTransformer  << placementTransmirror 
+      // 		<< " rotation : " << RotationY(rotateAngle) 	<< std::endl 
+      // 		<< " angle : " << rotateAngle	<< std::endl 
+      // 		<< " zPos: " << zPosition	<< std::endl ;
+      
+      if (rInnerStart != rOuterStart || rInnerEnd != rOuterEnd) {
+	// the wall solid: a tubular cone
+	ConeSegment wallWholeSolid( rInnerStart, rOuterStart, rInnerEnd, rOuterEnd, zHalf + clipSize / 2, phi1, phi2); // a bit longer
         
-  //       // relative transformations for the composition of the SubtractionVolumes
-  //       const double clipAngle = (crossType == kUpstreamClippedBoth || crossType == kDnstreamClippedBoth) ? (rotateAngle) : (2 * rotateAngle);
-  //       const double clipShiftFrnt = (zStart - clipSize) / cos(clipAngle) - zPosition;
-  //       const double clipShiftRear = (zEnd   + clipSize) / cos(clipAngle) - zPosition;
-  //       Transform3D clipTransformerFrnt(RotationMatrix().rotateY(-clipAngle), ThreeVector(0, 0, clipShiftFrnt));
-  //       Transform3D clipTransformerRear(RotationMatrix().rotateY(-clipAngle), ThreeVector(0, 0, clipShiftRear));
-  //       Transform3D clipTransmirrorFrnt(RotationMatrix().rotateY(+clipAngle), ThreeVector(0, 0, clipShiftFrnt));
-  //       Transform3D clipTransmirrorRear(RotationMatrix().rotateY(+clipAngle), ThreeVector(0, 0, clipShiftRear));
-  
-  //       // absolute transformations for the final placement in the world
-  //       Transform3D placementTransformer(RotationMatrix().rotateY(rotateAngle), ThreeVector(0, 0, zPosition).rotateY(rotateAngle));
-  //       Transform3D placementTransmirror(RotationMatrix().rotateY(mirrorAngle), ThreeVector(0, 0, zPosition).rotateY(mirrorAngle));
-  
-  //       // solid for the tube (including vacuum and wall): a solid cone
-  //       Cons *wholeSolid = new Cons(volName + "_whole", 0, rOuterStart, 0, rOuterEnd, zHalf + clipSize, phi1, phi2); // a bit longer
-  
-  //       // clip away the protruding ends
-  //       SubtractionSolid *tmpSolid0  = new SubtractionSolid(volName + "_tmp_0", wholeSolid, clipSolid, clipTransformerFrnt);
-  //       SubtractionSolid *tmpSolid1  = new SubtractionSolid(volName + "_tmp_1", wholeSolid, clipSolid, clipTransmirrorFrnt);
-  //       SubtractionSolid *tubeSolid0 = new SubtractionSolid(volName + "_0",     tmpSolid0,  clipSolid, clipTransformerRear);
-  //       SubtractionSolid *tubeSolid1 = new SubtractionSolid(volName + "_1",     tmpSolid1,  clipSolid, clipTransmirrorRear);
+	// clip away the protruding end
+	SubtractionSolid wallSolid0( wallWholeSolid, clipSolid, clipTransformer);
+	SubtractionSolid wallSolid1( wallWholeSolid, clipSolid, clipTransmirror);
         
-  //       // tube consists of vacuum (will later have two different daughters)
-  //       LogicalVolume *tubeLog0 = new LogicalVolume(tubeSolid0, coreMaterial, volName + "_0", 0, 0, 0, true);
-  //       LogicalVolume *tubeLog1 = new LogicalVolume(tubeSolid1, coreMaterial, volName + "_1", 0, 0, 0, true);
-  //       tubeLog0->SetVisAttributes(vacuumVisAttrib);
-  //       tubeLog1->SetVisAttributes(vacuumVisAttrib);
+	// the wall consists of the material given in the database
+	Volume wallLog0( volName + "_wall_0", wallSolid0, wallMaterial );
+	Volume wallLog1( volName + "_wall_1", wallSolid1, wallMaterial );
+
+	tube.setVisAttributes(lcdd, "TubeVis"  , wallLog0 );
+	tube.setVisAttributes(lcdd, "TubeVis"  , wallLog1 );
         
-  //       // placement of the tube in the world, both at +z and -z
-  //       new PVPlacement(placementTransformer, tubeLog0, volName, worldLog, false, 0);
-  //       new PVPlacement(placementTransmirror, tubeLog1, volName, worldLog, false, 1);
+	// placement as a daughter volumes of the tube
+	pv = tubeLog0.placeVolume( wallLog0, Transform3D() );
+	pv = tubeLog1.placeVolume( wallLog1, Transform3D() );
+	// new PVPlacement(0, Position(), wallLog0, volName + "_wall", tubeLog0, false, 0);
+	// new PVPlacement(0, Position(), wallLog1, volName + "_wall", tubeLog1, false, 1);
+      }
+      break;
+    }
+
+    case kUpstreamClippedBoth:
+    case kDnstreamClippedBoth:
+    case kUpstreamSlicedBoth:
+    case kDnstreamSlicedBoth: {
+      // a volume on the upstream or donwstream branch, but with both faces parallel to the xy-plane
+      // or to a piece tilted in the other direction ("sliced" like a salami with 2 * rotateAngle)
+      // (implemented as a slightly longer cone from which the end is clipped off)
+      
+      // the volume which will be used for clipping: a solid tube
+      const double clipSize = rOuterEnd; // the right order of magnitude for the clipping volume (alias name)
+      Tube clipSolid( 0, 2 * clipSize, clipSize, phi1, phi2); // should be large enough
+        
+      // relative transformations for the composition of the SubtractionVolumes
+      const double clipAngle = (crossType == kUpstreamClippedBoth || crossType == kDnstreamClippedBoth) ? (rotateAngle) : (2 * rotateAngle);
+      const double clipShiftFrnt = (zStart - clipSize) / cos(clipAngle) - zPosition;
+      const double clipShiftRear = (zEnd   + clipSize) / cos(clipAngle) - zPosition;
+      Transform3D clipTransformerFrnt(RotationY(-clipAngle), Position(0, 0, clipShiftFrnt));
+      Transform3D clipTransformerRear(RotationY(-clipAngle), Position(0, 0, clipShiftRear));
+      Transform3D clipTransmirrorFrnt(RotationY(+clipAngle), Position(0, 0, clipShiftFrnt));
+      Transform3D clipTransmirrorRear(RotationY(+clipAngle), Position(0, 0, clipShiftRear));
+  
+      // absolute transformations for the final placement in the world
+      Transform3D placementTransformer(RotationY(rotateAngle), RotateY( Position(0, 0, zPosition) , rotateAngle) );
+      Transform3D placementTransmirror(RotationY(mirrorAngle), RotateY( Position(0, 0, zPosition) , mirrorAngle) );
+      
+      // solid for the tube (including vacuum and wall): a solid cone
+      ConeSegment wholeSolid( 0, rOuterStart, 0, rOuterEnd, zHalf + clipSize, phi1, phi2); // a bit longer
+      
+      // clip away the protruding ends
+      SubtractionSolid tmpSolid0 ( wholeSolid, clipSolid, clipTransformerFrnt);
+      SubtractionSolid tmpSolid1 ( wholeSolid, clipSolid, clipTransmirrorFrnt);
+      SubtractionSolid tubeSolid0( tmpSolid0,  clipSolid, clipTransformerRear);
+      SubtractionSolid tubeSolid1( tmpSolid1,  clipSolid, clipTransmirrorRear);
+        
+      // tube consists of vacuum (will later have two different daughters)
+      Volume tubeLog0( volName + "_0", tubeSolid0, coreMaterial );
+      Volume tubeLog1( volName + "_1", tubeSolid1, coreMaterial );
+      // tubeLog0->SetVisAttributes(vacuumVisAttrib);
+      // tubeLog1->SetVisAttributes(vacuumVisAttrib);
+        
+      // placement of the tube in the world, both at +z and -z
+      pv = envelope.placeVolume( tubeLog0, placementTransformer );
+      pv = envelope.placeVolume( tubeLog1, placementTransmirror );
+      // new PVPlacement(placementTransformer, tubeLog0, volName, worldLog, false, 0);
+      // new PVPlacement(placementTransmirror, tubeLog1, volName, worldLog, false, 1);
+      // std::cout << " *** placing tubes for volume " << volName << ": "  << placementTransformer  << placementTransmirror 
+      // 		<< " rotation : " << RotationY(rotateAngle) 	<< std::endl 
+      // 		<< " angle : " << rotateAngle	<< std::endl 
+      // 		<< " zPos: " << zPosition	<< std::endl ;
        
-  //       if (rInnerStart != rOuterStart || rInnerEnd != rOuterEnd) {
-  //         // the wall solid: a tubular cone
-  //         Cons *wallWholeSolid = new Cons(volName + "_wall_whole", rInnerStart, rOuterStart, rInnerEnd, rOuterEnd, zHalf + clipSize, phi1, phi2); // a bit longer
+      if (rInnerStart != rOuterStart || rInnerEnd != rOuterEnd) {
+	// the wall solid: a tubular cone
+	ConeSegment wallWholeSolid( rInnerStart, rOuterStart, rInnerEnd, rOuterEnd, zHalf + clipSize, phi1, phi2); // a bit longer
         
-  //         // clip away the protruding ends
-  //         SubtractionSolid *wallTmpSolid0 = new SubtractionSolid(volName + "_wall_tmp_0", wallWholeSolid, clipSolid, clipTransformerFrnt);
-  //         SubtractionSolid *wallTmpSolid1 = new SubtractionSolid(volName + "_wall_tmp_1", wallWholeSolid, clipSolid, clipTransmirrorFrnt);
-  //         SubtractionSolid *wallSolid0    = new SubtractionSolid(volName + "_wall_0",     wallTmpSolid0,  clipSolid, clipTransformerRear);
-  //         SubtractionSolid *wallSolid1    = new SubtractionSolid(volName + "_wall_1",     wallTmpSolid1,  clipSolid, clipTransmirrorRear);
+	// clip away the protruding ends
+	SubtractionSolid wallTmpSolid0( wallWholeSolid, clipSolid, clipTransformerFrnt);
+	SubtractionSolid wallTmpSolid1( wallWholeSolid, clipSolid, clipTransmirrorFrnt);
+	SubtractionSolid wallSolid0   ( wallTmpSolid0,  clipSolid, clipTransformerRear);
+	SubtractionSolid wallSolid1   ( wallTmpSolid1,  clipSolid, clipTransmirrorRear);
         
-  //         // the wall consists of the material given in the database
-  //         LogicalVolume *wallLog0 = new LogicalVolume(wallSolid0, wallMaterial, volName + "_wall_0", 0, 0, 0, true);
-  //         LogicalVolume *wallLog1 = new LogicalVolume(wallSolid1, wallMaterial, volName + "_wall_1", 0, 0, 0, true);
-  //         wallLog0->SetVisAttributes(wallVisAttrib);
-  //         wallLog1->SetVisAttributes(wallVisAttrib);
+	// the wall consists of the material given in the database
+	Volume wallLog0(volName + "_wall_0", wallSolid0, wallMaterial );
+	Volume wallLog1(volName + "_wall_1", wallSolid1, wallMaterial );
+
+	tube.setVisAttributes(lcdd, "TubeVis"  , wallLog0 );
+	tube.setVisAttributes(lcdd, "TubeVis"  , wallLog1 );
         
-  //         // placement as a daughter volumes of the tube
-  //         new PVPlacement(0, ThreeVector(), wallLog0, volName + "_wall", tubeLog0, false, 0);
-  //         new PVPlacement(0, ThreeVector(), wallLog1, volName + "_wall", tubeLog1, false, 1);
-  //       }
-  //       break;
-  //     }
-  //     default: {
-  //       Control::Log("TubeX01: Unimplemented \"crossType\" code.");
-  //       return false; // fatal failure
-  //     }
-  //   } // switch (crossType)
-  // } // while (db->getTuple())
- 
+	// placement as a daughter volumes of the tube
+	pv = tubeLog0.placeVolume( wallLog0, Transform3D() );
+	pv = tubeLog1.placeVolume( wallLog1, Transform3D() );
+	// new PVPlacement(0, Position(), wallLog0, volName + "_wall", tubeLog0, false, 0);
+	// new PVPlacement(0, Position(), wallLog1, volName + "_wall", tubeLog1, false, 1);
+      }
+      break;
+    }
+    default: {
+      //        Control::Log("TubeX01: Unimplemented \"crossType\" code.");
+      return false; // fatal failure
+    }
+    } // switch (crossType)
+  } // while (db->getTuple())
+  
   
   
   //######################################################################################################################################################################

@@ -244,11 +244,6 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
 
   //-------------------------------------------------------------------------------------------------------//
 
-  // vectors for cylinder surfaces for field cage
-  Vector3D u( 0. , 1. , 0. ) ;
-  Vector3D v( 0. , 0. , 1. ) ;
-  Vector3D n( 1. , 0. , 0. ) ;
-
   //-------------------------------- inner wall construction ----------------------------------------//
 
   Tube innerWallSolid(rInner ,rInner + dr_InnerWall ,dz_Wall / 2.0 , phi1 ,phi1+phi2 ); 
@@ -258,7 +253,7 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
 
 
   Vector3D ocyl(  rInner + 0.5*dr_InnerWall , 0. , 0. ) ;
-  VolCylinder surfI( innerWallLog , SurfaceType( SurfaceType::Helper ) ,0.5*dr_InnerWall  , 0.5*dr_InnerWall , u,v,n , ocyl ) ;
+  VolCylinder surfI( innerWallLog , SurfaceType( SurfaceType::Helper ) ,0.5*dr_InnerWall  , 0.5*dr_InnerWall , ocyl ) ;
   volSurfaceList( tpc )->push_back(  surfI ) ;
 
   int layerCounter = 0;
@@ -322,7 +317,7 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
   tpc.setVisAttributes(lcdd,  "CyanVis" ,  outerWallLog );
 
   ocyl.fill(   rOuter - 0.5*dr_OuterWall  , 0., 0. ) ;
-  VolCylinder surfO( outerWallLog , SurfaceType( SurfaceType::Helper ) ,0.5*dr_OuterWall  , 0.5*dr_OuterWall , u,v,n , ocyl ) ;
+  VolCylinder surfO( outerWallLog , SurfaceType( SurfaceType::Helper ) ,0.5*dr_OuterWall  , 0.5*dr_OuterWall , ocyl ) ;
   volSurfaceList( tpc )->push_back(  surfO ) ;
 
   layerCounter = 0;
@@ -481,7 +476,7 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
  
     Vector3D o(  inner_upperlayer_radius +1e-9  , 0. , 0. ) ;
 
-    VolCylinder surf( upperlayerLog , SurfaceType(SurfaceType::Sensitive, SurfaceType::Invisible ) ,  (padHeight/2.0) ,  (padHeight/2.0) , u,v,n ,o ) ;
+    VolCylinder surf( upperlayerLog , SurfaceType(SurfaceType::Sensitive, SurfaceType::Invisible ) ,  (padHeight/2.0) ,  (padHeight/2.0) ,o ) ;
     volSurfaceList( layerDEfwd )->push_back( surf ) ;
     volSurfaceList( layerDEbwd )->push_back( surf ) ;
 
@@ -552,7 +547,13 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
   // note: u and v are exchanged: normal is along z ...      
   DetElement   endcapDEfwd( tpc ,  "tpc_endcap_fwd", x_det.id() );
   DetElement   endcapDEbwd( tpc ,  "tpc_endcap_bwd", x_det.id() );
-  VolPlane surf( endplateLog , SurfaceType( SurfaceType::Helper ) ,  dz_Endplate / 2.0 + dz_Readout / 2 ,  dz_Endplate / 2.0 , u , n , v ) ;
+
+  // vectors for endplate plane
+  Vector3D u( 0. , 1. , 0. ) ;
+  Vector3D v( 1. , 0. , 0. ) ;
+  Vector3D n( 0. , 0. , 1. ) ;
+  
+  VolPlane surf( endplateLog , SurfaceType( SurfaceType::Helper ) ,  dz_Endplate / 2.0 + dz_Readout / 2 ,  dz_Endplate / 2.0 , u , v, n ) ;
   volSurfaceList( endcapDEfwd )->push_back( surf ) ;
   volSurfaceList( endcapDEbwd )->push_back( surf ) ;
 
