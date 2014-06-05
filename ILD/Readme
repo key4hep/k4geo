@@ -47,7 +47,11 @@ mysql> select ingredients.sub_detector, sub_detector.driver, sub_detector.subdri
 ######################################################################################################
 #
 #  modified MySQLWrapper to create xml files (per database) with all parameters from select commands:
-
+#  create directory
+#  ./mokka_xml_dump
+#  and then run, e.g.
+#  Mokka -M ILD_o1_v05
+ 
  TMP_DB07.xml
  beamcalX08.xml
  ftd_simple_staggered_02.xml

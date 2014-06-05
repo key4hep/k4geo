@@ -125,6 +125,12 @@
       <vis name="VXDSupportVis" alpha="1.0" r="0.0" g="1.0" b="0.0"  showDaughters="true"  visible="true"/>
 
 
+      <vis name="FTDSensitiveVis" alpha="1.0"  r="1.0"  g="1.0" b="0.45" showDaughters="true" visible="true"/>
+      <vis name="FTDSupportVis"   alpha="1.0"  r="1.0"  g="0.5" b="0.5"  showDaughters="true" visible="true"/>
+      <vis name="FTDHolePetalVis" alpha="1.0"  r="0.5"  g="0.5" b="1.0" showDaughters="true" visible="true"/>
+      <vis name="FTDCylVis"       alpha="0.45" r="0.2"  g="0.9" b="0.98" showDaughters="true" visible="true"/>
+      <vis name="FTDCablesVis"    alpha="1.0"  r="0.0"  g="0.9" b="0.0"  showDaughters="true" visible="true"/>
+      
       <vis name="MyBeamCalVis"  alpha="0.5"  r="1.0" g="1.0"  b="1.0" showDaughters="true"  visible="false"/>
       <vis name="BCLayerVis1"   alpha="1.0"  r="1.0" g="0.0"  b="0.0" showDaughters="true"  visible="true"/>
       <vis name="BCLayerVis2"   alpha="1.0"  r="0.0" g="1.0"  b="0.0" showDaughters="true"  visible="true"/>
@@ -147,21 +153,23 @@
 
 	<include ref="tubeX06_14.xml"/>
 
-	<include ref="vxd07.xml"/>
+	<include ref="ftd_simple_staggered_02.xml"/>
+
+	<!-- <include ref="vxd07.xml"/> -->
 	
-	<include ref="sit_simple_planar_sensors_03.xml"/>
+	<!-- <include ref="sit_simple_planar_sensors_03.xml"/> -->
 
-	<include ref="tpc10_01.xml"/>
+	<!-- <include ref="tpc10_01.xml"/> -->
 
-	<include ref="set_simple_planar_sensors_01.xml"/>
+	<!-- <include ref="set_simple_planar_sensors_01.xml"/> -->
 
         <comment>Calorimeters</comment>
 
-	<include ref="SEcal04_Barrel.xml"/>
+	<!-- <include ref="SEcal04_Barrel.xml"/> -->
 
-	<include ref="SHcalSc04_Barrel.xml"/>
+	<!-- <include ref="SHcalSc04_Barrel.xml"/> -->
 
-	<include ref="BeamCal08.xml"/>
+	<!-- <include ref="BeamCal08.xml"/> -->
 
       </detectors> 
 
@@ -171,6 +179,10 @@
             <id>system:5,side:2,layer:9,module:8,sensor:8</id>
         </readout>
         <readout name="SITCollection">
+	  <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
+            <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+        </readout>
+        <readout name="FTDCollection">
 	  <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
             <id>system:5,side:2,layer:9,module:8,sensor:8</id>
         </readout>
