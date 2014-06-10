@@ -8,7 +8,7 @@
   <!-- SQL command: "select * from common_parameters;"  --> 
   <common_parameters ftd1_vtx3_distance_z="95*mm" ftd7_ecal_distance_z="200*mm" ftd1_sit1_radial_diff="-1*mm" ftd2_sit1_radial_diff="-1*mm" ftd3_sit2_radial_diff="-1*mm" 
 		     ftd4to7_tpc_radial_gap="20*mm" beamtube_clearance="15*mm" cables_thickness="0.08*mm" cable_shield_thickness="0.1*mm" outer_cylinder_total_thickness="1*mm"
-		     petal_half_angle_support="11.25*mm" petal_y_ratio="0.5015*mm"  />
+		     petal_half_angle_support="11.25*deg" petal_y_ratio="0.5015*mm"  />
   
   
   <!-- SQL command: "select * from extended_reconstruction_parameters;"  --> 

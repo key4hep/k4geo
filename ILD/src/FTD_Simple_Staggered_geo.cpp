@@ -6,17 +6,20 @@
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/TGeoUnits.h"
+#include "DD4hep/DetFactoryHelper.h"
 
 #include "DDRec/Surface.h"
 #include "FTD_Simple_Staggered.h"
 
 #define DEBUG_VALUES
+//#define DEBUG_PETAL 1
 
 //#include "DDRec/DDGear.h"
 //#define MOKKA_GEAR
 
 #include <cmath>
 #include <string>
+#include <map>
 
 using namespace std;
 using namespace DD4hep;
@@ -51,6 +54,9 @@ struct EnvLCDD{
   inline double GetParameterAsDouble(const std::string& name) const {  return _lcdd->constant<double>( name ) ; } 
 } ;
 
+/// Storing all the gear parameters
+std::map<int,std::vector<double> > _ftdparameters;
+
 
 /// Global environment variables
 glEnviron _glEnv;
@@ -60,6 +66,24 @@ dbInfoCommon _dbParCommon;
 dbInfoDisk _dbParDisk;
 /// reco DB Parameters
 dbExtended_reconstruction_parameters _dbParExReco;
+double _inner_radius = 0.0;
+double _outer_radius = 0.0;
+double _z_position = 0.0;
+double _beamTubeRadius = 0.0;
+double _zEnd = 0.0;
+Material _SiMat ;
+Material _KaptonMat ;
+Material _CuMat ;
+Material _AirMat ;
+Material _CarbonFiberMat ;
+
+
+// function prototpyes
+double Getdy(const double & innerRadius );
+double Getdx( const double & innerRadius );
+void DoAndPlaceDisk( LCDD& lcdd,DetElement det,std::map<std::string,double> valuesDict, Volume  mother ) ;
+void petalSupport( LCDD& lcdd,DetElement det,  std::map<std::string,double> valuesDict, Volume  FTDPetalAirLogical ) ;
+Trap SemiPetalSolid(const double& petal_cp_support_dy, const std::string& whereItgoes, const bool isSilicon ) ;
 
 
 //=========================== PARAMETERS SETTERS FUNCTIONS ====================================/
@@ -390,11 +414,11 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
     //... 
     int disk_number(-1);
-    double _inner_radius = 0.0;
-    double _outer_radius = 0.0;
-    double _z_position = 0.0;
-    double _beamTubeRadius = 0.0;
-    double _zEnd = 0.0;
+    // double _inner_radius = 0.0;
+    // double _outer_radius = 0.0;
+    // double _z_position = 0.0;
+    // double _beamTubeRadius = 0.0;
+    // double _zEnd = 0.0;
 
     // Get and set the parameters disk specific
     SetParDisk( db );
@@ -624,8 +648,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     Volume FTDDiskLogical( "FTDAirDiskLogical", FTDDiskSolid, _AirMat ) ;
 
     //    FTDDiskLogical->SetVisAttributes(VisAttAirDisk);
-    //fixme debug
-    ftd.setVisAttributes(lcdd,  "FTDVis" , FTDDiskLogical ) ;
+    ftd.setVisAttributes(lcdd,  "SeeThrough", FTDDiskLogical ) ;
 
 		
     
@@ -636,13 +659,6 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     // rotDiskPositive->rotateZ(-pi/2.0);
     
     // Transform3D transPositive( *rotDiskPositive, Position( 0.,0.,_z_position) );
-    
-
-    RotationZYX rotDiskPositive( -pi/2.0, pi , 0. ) ; 
-    Transform3D transPositive( rotDiskPositive,  Position( 0.,0.,_z_position) );      
-    pv = main_assembly.placeVolume( FTDDiskLogical, transPositive ) ;
-
-    //FIXME: how to handle reflection factory ????
 
     // // Place the positive copy in the world
     // Phys = ReflectionFactory::Instance()->Place( transPositive,
@@ -652,13 +668,12 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     // 						 false,
     // 						 disk_number);
     // registerPV( Phys );
+
+    RotationZYX rotDiskPositive( -pi/2.0, pi , 0. ) ; 
+    Transform3D transPositive( rotDiskPositive,  Position( 0.,0.,_z_position) );      
+    pv = main_assembly.placeVolume( FTDDiskLogical, transPositive ) ;
     
-
-
     
-
-
-
 #ifdef DEBUG_VALUES
     cout << "===================================================================== " << "\n" <<
       "FTDAirDisk:\n" << 
@@ -674,212 +689,221 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     
 //     // Place negative copy
-// #ifndef DEBUG_POSITIVE
-// 		RotationMatrix *rotDiskNegative = new RotationMatrix();
-// 		rotDiskNegative->rotateZ(-pi/2.0);
+#ifndef DEBUG_POSITIVE
+    // 		RotationMatrix *rotDiskNegative = new RotationMatrix();
+    // 		rotDiskNegative->rotateZ(-pi/2.0);
     
-// 		Transform3D transNegative( *rotDiskNegative, Position( 0.,0.,-_z_position ) );
-//     //Specular image
-// 		transNegative = transNegative*ReflectX3D();
+    // 		Transform3D transNegative( *rotDiskNegative, Position( 0.,0.,-_z_position ) );
+    //     //Specular image
+    // 		transNegative = transNegative*ReflectX3D();
+    
+    // 		Phys = ReflectionFactory::Instance()->Place( transNegative,
+    //                                                   "FTDAirDisk",
+    //                                                   FTDDiskLogical,
+    //                                                   worldLog,
+    //                                                   false,
+    //                                                   -disk_number);
+    // 		registerPV( Phys );
+    
+    
+    //FIXME: simply handle reflection factory as additional placement of the same envelope volume
+    //       what are the implications ?
+    RotationZYX rotDiskNegative( -pi/2.0, 0 , 0. ) ; 
+    Transform3D transNegative( rotDiskNegative,  Position( 0.,0., -_z_position) );      
+    pv = main_assembly.placeVolume( FTDDiskLogical, transNegative ) ;
+    
+    
+    
+    
+#ifdef DEBUG_VALUES
+    cout << "===================================================================== " << "\n" <<
+      "FTDAirDisk:\n" << 
+      " Inner Radius= " << _inner_radius <<  "\n" <<
+      " Outer Radius= " << _outer_radius <<  "\n" <<
+      " thickness =   " << max_half_thickness_disk*2.0 << "\n" <<
+      " placed at \n" << 
+      " x =   " <<  transNegative.Translation().Vect().X() << "\n" <<
+      " y =   " <<  transNegative.Translation().Vect().Y() << "\n" <<
+      " z =   " <<  transNegative.Translation().Vect().Z() << "\n" <<
+      endl;
+#endif
+    
+#endif
+    //=END=============================== AIR DISK  =================================END=/
+    
+    //=================================== AIR PETAL =====================================/
+    // Air container for the petal: the mother of the real support petal and the silicon 
+    // sensors. This air petal will be placed inside the Air Disk,
+    // generating N rotated copies along the z-axis.               
+    //  Input parameters:     dxMax                                _
+    //                      --------                              | |    
+    //                      \      /   |                          | |              
+    //       XY-Plane        \    /    | dy          YZ-Plane     | |    
+    //                        \__/     |                          |_|     
+    //                        dxMin                                dz
+    // 
+    //                     dxMax: given by the database
+    //                     dxMin: depends of the _inner_radius of each disk
+    //                     dy:    heigth, depends of each disk
+    //                     dz:    thickness of the supports + thickness of Si
+    //                     theta: given by the db, semi-angle which defines the trapezoid
 		
-// 		Phys = ReflectionFactory::Instance()->Place( transNegative,
-//                                                   "FTDAirDisk",
-//                                                   FTDDiskLogical,
-//                                                   worldLog,
-//                                                   false,
-//                                                   -disk_number);
-// 		registerPV( Phys );
-    
-// #ifdef DEBUG_VALUES
-// 		cout << "===================================================================== " << "\n" <<
-//     "FTDAirDisk:\n" << 
-//     " Inner Radius= " << _inner_radius <<  "\n" <<
-//     " Outer Radius= " << _outer_radius <<  "\n" <<
-//     " thickness =   " << max_half_thickness_disk*2.0 << "\n" <<
-//     " placed at \n" << 
-//     " x =   " <<  transNegative.dx() << "\n" <<
-//     " y =   " <<  transNegative.dy() << "\n" <<
-//     " z =   " <<  transNegative.dz() << "\n" <<
-//     endl;
-// #endif
-    
-    
-// #endif
-//     //=END=============================== AIR DISK  =================================END=/
-    
-//     //=================================== AIR PETAL =====================================/
-//     // Air container for the petal: the mother of the real support petal and the silicon 
-//     // sensors. This air petal will be placed inside the Air Disk,
-//     // generating N rotated copies along the z-axis.               
-//     //  Input parameters:     dxMax                                _
-//     //                      --------                              | |    
-//     //                      \      /   |                          | |              
-//     //       XY-Plane        \    /    | dy          YZ-Plane     | |    
-//     //                        \__/     |                          |_|     
-//     //                        dxMin                                dz
-//     // 
-//     //                     dxMax: given by the database
-//     //                     dxMin: depends of the _inner_radius of each disk
-//     //                     dy:    heigth, depends of each disk
-//     //                     dz:    thickness of the supports + thickness of Si
-//     //                     theta: given by the db, semi-angle which defines the trapezoid
-		
-//     // Dimensions for the disk
-    
-//     const double petal_cp_supp_half_dxMin = Getdx( _inner_radius )/2.0;
-//     const double petal_cp_support_dy = Getdy(_inner_radius);
-    
-//     // ------------------------------------------------------------------------
-    
-    
-//     Trap *FTDPetalAirSolid = new Trap( "FTDPetalAirSolid",
-//                                           petalairthickness_half, //thickness (calculated in the disk zone)
-//                                           0.0,
-//                                           0.0,
-//                                           petal_cp_support_dy/2.0,  // dy
-//                                           petal_cp_supp_half_dxMin, //dxMin 
-//                                           _dbParDisk.petal_cp_support_dxMax/2.0, //dxMax
-//                                           0.0,
-//                                           petal_cp_support_dy/2.0,  // dy
-//                                           petal_cp_supp_half_dxMin,  // dxMin
-//                                           _dbParDisk.petal_cp_support_dxMax/2.0, //dxMax
-//                                           0.0);
-    
-    
-    
-// 		LogicalVolume *FTDPetalAirLogical = new LogicalVolume(FTDPetalAirSolid,
-//                                                               _AirMat,
-//                                                               "FTDPetalAirLogical", 
-//                                                               0, 
-//                                                               0, 
-//                                                               0);
-// 		FTDPetalAirLogical->SetVisAttributes(VisAttAirPetal);
-    
-		
-//     // Placing N-copies of the air petal inside the air disk. The copies are built using the z-axis as
-//     // the axis of rotation
-// 		const int petal_max_number = (int)(360.0*deg/(2.0*theta)) ; 
-// 		for (int i = 0; i < petal_max_number; i++)		
-//         { 
-// #ifdef DEBUG_PETAL
-//           if(i != DEBUG_PETAL )
-//               {
-//             continue;
-//               }
-// #endif
-//           RotationMatrix *rotPetal = new RotationMatrix();
-          
-//           // Put the petal in the position inside the disk
-//           double petalCdtheta = i*2.0*theta;
-//           rotPetal->rotateZ(-petalCdtheta);
-          
-//           int zsign = pow((double)-1,i);
-          
-          
-          
-          
-//           // Petal i=0 parameters for gear
-//           if( i == 0 )
-//               {
-//             _ftdparameters[gearpar::PHI0].push_back(petalCdtheta);
-//             _ftdparameters[gearpar::PETAL0SIGNOFFSET].push_back(zsign);
-//               }
-// #ifdef DEBUG_PETAL
-//           _ftdparameters[gearpar::PHI0].push_back(0);
-//           _ftdparameters[gearpar::PETAL0SIGNOFFSET].push_back(1);
-// #endif
-          
-//           double dx = (petal_cp_support_dy/2.0 + _inner_radius)*sin(i*2.0*theta);
-//           double dy = (petal_cp_support_dy/2.0 + _inner_radius)*cos(i*2.0*theta); 
-//           double dz = zsign*( _dbParDisk.petal_support_zoffset) ;
-          
-//           Transform3D transPetal( *rotPetal, Position( dx, dy, dz) );
-          
-          
-//           Phys = ReflectionFactory::Instance()->Place(
-//                                                         transPetal,
-//                                                         "FTDPetalAir",
-//                                                         FTDPetalAirLogical,
-//                                                         FTDDiskLogical,
-//                                                         false,
-//                                                         i+1);
-//           registerPV( Phys );
-          
-// #ifdef DEBUG_VALUES
-//           cout << "===================================================================== " << "\n" <<
-//           "FTDPetalAir:\n" << 
-//           " Petal Offset = " << zsign*_dbParDisk.petal_support_zoffset << 
-//           " Inner Radius= " << _inner_radius <<  "\n" <<
-//           " Outer Radius= " << _outer_radius <<  "\n" <<
-//           " xMax = " << _dbParDisk.petal_cp_support_dxMax <<  "\n" <<
-//           " xMin = " << 2.0*petal_cp_supp_half_dxMin << "\n" <<
-//           " dy =   " << petal_cp_support_dy << "\n" <<
-//           " thickness =   " << petalairthickness_half*2.0 << "\n" <<
-//           " placed at \n" << 
-//           " x =   " <<  transPetal.dx() << "\n" <<
-//           " y =   " <<  transPetal.dy() << "\n" <<
-//           " z =   " <<  transPetal.dz() << "\n" <<
-//           endl;
-// #endif
-          
-//         }   
-    
-//     //Gear disk parameters
-// 		int sensorType = gear::FTDParameters::PIXEL;  
-//                 int isDoubleSided = false;
-//                 int nSensors = 1;
-// 		if( _dbParDisk.sensor_is_pixel != 1 ) {
-                  
-//                   sensorType = gear::FTDParameters::STRIP;
-//                   isDoubleSided = true;
-//                   nSensors = 2;
-//                 }
-// #ifdef DEBUG_PETAL
-// 		_ftdparameters[gearpar::NPETALS].push_back(1);
-// #else
-// 		_ftdparameters[gearpar::NPETALS].push_back(petal_max_number);
-// #endif
-// 		_ftdparameters[gearpar::SENSORTYPE].push_back(sensorType);
-//                 _ftdparameters[gearpar::ISDOUBLESIDED].push_back(isDoubleSided);
-//                 _ftdparameters[gearpar::NSENSORS].push_back(nSensors);
-// 		_ftdparameters[gearpar::ZPOSITION].push_back(_z_position);
-// 		_ftdparameters[gearpar::ZOFFSET].push_back(_dbParDisk.petal_support_zoffset);		
-// 		_ftdparameters[gearpar::ALPHA].push_back(0.0); // staggered design has no tilt
-// 		_ftdparameters[gearpar::HALFANGLEPETAL].push_back(_dbParCommon.petal_half_angle_support);
-    
-//     //=END=============================== AIR PETAL =================================END=/
-    
-//     //=========================== PETALS & SENSORS ==============================/ 
-    
-// 		/******************************************************
-//      ** Support, sensors and electronics are built via   **
-//      ** DoAnPlaceDisk, see the appropiate functions:     **
-//      **                                                  **  
-//      **   +---------------------++--------------------+  **
-//      **   |    Petal Supports   ||       sensors      |  **
-//      **   +---------------------++--------------------+  **
-//      **   | petalSupportPixels  || pixelSensors       |  **
-//      **   +---------------------++--------------------+  **
-//      **                                                  **
-//      **                                                  **
-//      **                                                  **
-//      ******************************************************/
-    
-// 		std::map<std::string,double> valuesDict;
-    
-// 		valuesDict["petal_cp_supp_half_dxMin"] = petal_cp_supp_half_dxMin;
-// 		valuesDict["petal_cp_support_dy"] = petal_cp_support_dy;
-// 		valuesDict["_inner_radius"] = _inner_radius;
-    
-		
-// 		DoAndPlaceDisk( valuesDict, FTDPetalAirLogical );		
-    
-//     //=END======================= PETALS, SENSORS & ELECT. ==========================END=/ 
-    
-//   } while(db->getTuple()!=NULL);
-  
+    // Dimensions for the disk
+ 
+    const double petal_cp_supp_half_dxMin = Getdx( _inner_radius )/2.0;
+    const double petal_cp_support_dy = Getdy(_inner_radius);
+ 
+    // ------------------------------------------------------------------------
+ 
+    std::cout << "*** Petal parameters : petal_cp_supp_half_dxMin=" << petal_cp_supp_half_dxMin
+	      << " _dbParDisk.petal_cp_support_dxMax/2.0 =" << _dbParDisk.petal_cp_support_dxMax/2.0
+	      << " petal_cp_support_dy/2.0 =" << petal_cp_support_dy/2.0
+	      << " petalairthickness_half =" << petalairthickness_half << std::endl ;
 
 
+    Trap FTDPetalAirSolid( petalairthickness_half, //thickness (calculated in the disk zone)
+    			   0.0,
+    			   0.0,
+    			   petal_cp_support_dy/2.0,  // dy
+    			   petal_cp_supp_half_dxMin, //dxMin 
+    			   _dbParDisk.petal_cp_support_dxMax/2.0, //dxMax
+    			   0.0,
+    			   petal_cp_support_dy/2.0,  // dy
+    			   petal_cp_supp_half_dxMin,  // dxMin
+    			   _dbParDisk.petal_cp_support_dxMax/2.0, //dxMax
+    			   0.0);
+ 
+    Volume FTDPetalAirLogical("FTDPetalAirLogical", FTDPetalAirSolid, _AirMat ) ;
+
+    //fixme debug
+    //    ftd.setVisAttributes(lcdd,  "RedVis" , FTDPetalAirLogical ) ;
+    ftd.setVisAttributes(lcdd,  "SeeThrough" , FTDPetalAirLogical ) ;
+
+		
+    // Placing N-copies of the air petal inside the air disk. The copies are built using the z-axis as
+    // the axis of rotation
+    const int petal_max_number = (int)(360.0*deg/(2.0*theta)) ; 
+
+    for (int i = 0; i < petal_max_number; i++){ 
+
+#ifdef DEBUG_PETAL
+      if(i != DEBUG_PETAL ) {
+	continue;
+      }
+#endif
+
+      // Put the petal in the position inside the disk
+      double petalCdtheta = i*2.0*theta;
+      
+      //      RotationMatrix *rotPetal = new RotationMatrix();
+      //      rotPetal->rotateZ(-petalCdtheta);
+      
+      RotationZ rotPetal( -petalCdtheta );
+
+      int zsign = pow((double)-1,i);
+      
+      // Petal i=0 parameters for gear
+      if( i == 0 ) {
+	_ftdparameters[gearpar::PHI0].push_back(petalCdtheta);
+	_ftdparameters[gearpar::PETAL0SIGNOFFSET].push_back(zsign);
+      }
+#ifdef DEBUG_PETAL
+      _ftdparameters[gearpar::PHI0].push_back(0);
+      _ftdparameters[gearpar::PETAL0SIGNOFFSET].push_back(1);
+#endif
+      
+      double dx = (petal_cp_support_dy/2.0 + _inner_radius)*sin(i*2.0*theta);
+      double dy = (petal_cp_support_dy/2.0 + _inner_radius)*cos(i*2.0*theta); 
+      double dz = zsign*( _dbParDisk.petal_support_zoffset) ;
+      
+      Transform3D transPetal( rotPetal, Position( dx, dy, dz) );
+      
+      
+      // Phys = ReflectionFactory::Instance()->Place(
+      // 						  transPetal,
+      // 						  "FTDPetalAir",
+      // 						  FTDPetalAirLogical,
+      // 						  FTDDiskLogical,
+      // 						  false,
+      // 						  i+1);
+      // registerPV( Phys );
+
+      pv = FTDDiskLogical.placeVolume( FTDPetalAirLogical, transPetal ) ;
+      
+
+#ifdef DEBUG_VALUES
+      cout << "===================================================================== " << "\n" <<
+	"FTDPetalAir:\n" << 
+	" Petal Offset = " << zsign*_dbParDisk.petal_support_zoffset << 
+	" Inner Radius= " << _inner_radius <<  "\n" <<
+	" Outer Radius= " << _outer_radius <<  "\n" <<
+	" xMax = " << _dbParDisk.petal_cp_support_dxMax <<  "\n" <<
+	" xMin = " << 2.0*petal_cp_supp_half_dxMin << "\n" <<
+	" dy =   " << petal_cp_support_dy << "\n" <<
+	" thickness =   " << petalairthickness_half*2.0 << "\n" <<
+	" placed at \n" << 
+	" x =   " <<  transPetal.Translation().Vect().X() << "\n" <<
+	" y =   " <<  transPetal.Translation().Vect().Y() << "\n" <<
+	" z =   " <<  transPetal.Translation().Vect().Z() << "\n" <<
+	endl;
+#endif
+      
+    }   
+    
+    
+#ifdef DD4HEP_WITH_GEAR // ------------------------ Gear disk parameters
+    int sensorType = gear::FTDParameters::PIXEL;  
+    int isDoubleSided = false;
+    int nSensors = 1;
+    if( _dbParDisk.sensor_is_pixel != 1 ) {
+      
+      sensorType = gear::FTDParameters::STRIP;
+      isDoubleSided = true;
+      nSensors = 2;
+    }
+#ifdef DEBUG_PETAL
+    _ftdparameters[gearpar::NPETALS].push_back(1);
+#else
+    _ftdparameters[gearpar::NPETALS].push_back(petal_max_number);
+#endif
+    _ftdparameters[gearpar::SENSORTYPE].push_back(sensorType);
+    _ftdparameters[gearpar::ISDOUBLESIDED].push_back(isDoubleSided);
+    _ftdparameters[gearpar::NSENSORS].push_back(nSensors);
+    _ftdparameters[gearpar::ZPOSITION].push_back(_z_position);
+    _ftdparameters[gearpar::ZOFFSET].push_back(_dbParDisk.petal_support_zoffset);		
+    _ftdparameters[gearpar::ALPHA].push_back(0.0); // staggered design has no tilt
+    _ftdparameters[gearpar::HALFANGLEPETAL].push_back(_dbParCommon.petal_half_angle_support);
+    
+#endif
+    //=END=============================== AIR PETAL =================================END=/
+    
+    //=========================== PETALS & SENSORS ==============================/ 
+    
+    /******************************************************
+     ** Support, sensors and electronics are built via   **
+     ** DoAnPlaceDisk, see the appropiate functions:     **
+     **                                                  **  
+     **   +---------------------++--------------------+  **
+     **   |    Petal Supports   ||       sensors      |  **
+     **   +---------------------++--------------------+  **
+     **   | petalSupportPixels  || pixelSensors       |  **
+     **   +---------------------++--------------------+  **
+     **                                                  **
+     **                                                  **
+     **                                                  **
+     ******************************************************/
+    
+    std::map<std::string,double> valuesDict;
+    
+    valuesDict["petal_cp_supp_half_dxMin"] = petal_cp_supp_half_dxMin;
+    valuesDict["petal_cp_support_dy"] = petal_cp_support_dy;
+    valuesDict["_inner_radius"] = _inner_radius;
+    
+    DoAndPlaceDisk( lcdd, ftd, valuesDict, FTDPetalAirLogical );		
+    
+    //=END======================= PETALS, SENSORS & ELECT. ==========================END=/ 
+    
+    
   } //**************** LOOP over disks *******************************
 
 
@@ -902,7 +926,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 //                                              phi1, 
 //                                              phi2);
   
-//   LogicalVolume *FTDOuterCylinderLogical= new LogicalVolume(FTDOuterCylinderSolid,
+//   Volume FTDOuterCylinderLogical(FTDOuterCylinderSolid,
 //                                                                 _KaptonMat,
 //                                                                 "FTDOuterCylinder", 
 //                                                                 0, 
@@ -966,7 +990,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 //                                              phi1, 
 //                                              phi2);
 	
-//   LogicalVolume *FTDInnerCylinderLogical= new LogicalVolume(FTDInnerCylinderSolid,
+//   Volume FTDInnerCylinderLogical(FTDInnerCylinderSolid,
 //                                                                 _KaptonMat,
 //                                                                 "FTDInnerCylinder", 
 //                                                                 0, 
@@ -983,7 +1007,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 //                                            phi1, 
 //                                            phi2);
   
-//   LogicalVolume *FTDCableShieldLogical= new LogicalVolume(FTDCableShieldSolid,
+//   Volume FTDCableShieldLogical(FTDCableShieldSolid,
 //                                                               _KaptonMat,
 //                                                               "FTDInnerCableShield", 
 //                                                               0, 
@@ -1000,7 +1024,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 //                                       phi1, 
 //                                       phi2);
   
-//   LogicalVolume *FTDCablesLogical= new LogicalVolume(FTDCablesSolid,
+//   Volume FTDCablesLogical(FTDCablesSolid,
 //                                                          _CuMat,
 //                                                          "FTDInnerCables", 
 //                                                          0, 
@@ -1055,168 +1079,273 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 //   db = 0;  
   
 // 	return true;
-// }
+// 
 
 
-// //================================ PETAL BUILD FUNCTIONS ======================================/
-// //***********************************************************************************************
-// // Build the support, sensors and electronics, choosing what technology have the current disk    
-// //
-// // Input Parameters: 
-// //                   valuesDict: map (name variable, its value)  containing some dimension-disk 
-// //                               parameters, to be passed to the real building functions
-// //                   mother:     LogicalVolume where will be placed the volumes are going to
-// //                               build.
-// //
-// void FTD_Simple_Staggered::DoAndPlaceDisk( std::map<std::string,double> valuesDict, LogicalVolume * mother )
-// {
-  
-//   petalSupport( valuesDict, mother ) ; // support is placed at 0,0,0 withing the petal
-//   petalSensor( valuesDict, mother );
-  
-// }
 
-// //***********************************************************************************************
-// // Build the petal  support. The support is a trapezoid made of foam.
-// //
-// // Input Parameters: 
-// //                   valuesDict: map (name variable, its value)  containing some dimension-disk 
-// //                               parameters, to be passed to the real building functions
-// //                   mother:     LogicalVolume the volumes built are to be placed.
+  
+  //######################################################################################################################################################################
+  
+  
+  //--------------------------------------
+  
+  Volume mother =  lcdd.pickMotherVolume( ftd ) ;
+  
+  pv = mother.placeVolume(main_assembly);
 
-// void FTD_Simple_Staggered::petalSupport( std::map<std::string,double> valuesDict, LogicalVolume * FTDPetalAirLogical )
-// {
-// 	double petal_cp_supp_half_dxMin = valuesDict["petal_cp_supp_half_dxMin"];
-// 	double petal_cp_support_dy = valuesDict["petal_cp_support_dy"];
-// 	double _inner_radius = valuesDict["_inner_radius"];
+  pv.addPhysVolID( "system", x_det.id() ) ; //.addPhysVolID("side", 0 ) ;
   
-// 	if( _dbParDisk.sensor_is_pixel == 1)
-// 	{
-// 	      Trap *FTDPetalSupportSolid = new Trap( "FTDPetalSupportSolid",
-//                                                   _dbParDisk.petal_cp_support_thickness/2.0, //thickness
-//                                                   0.0,
-//                                                   0.0,
-//                                                   petal_cp_support_dy/2.0,  // dy
-//                                                   petal_cp_supp_half_dxMin, //dxMin 
-//                                                   _dbParDisk.petal_cp_support_dxMax/2.0, //dxMax
-//                                                   0.0,
-//                                                   petal_cp_support_dy/2.0,  // dy
-//                                                   petal_cp_supp_half_dxMin,  // dxMin
-//                                                   _dbParDisk.petal_cp_support_dxMax/2.0, //dxMax
-//                                                   0.0);
+  ftd.setVisAttributes( lcdd, x_det.visStr(), main_assembly );
+  //  if( ftd.isValid() ) 
+  ftd.setPlacement(pv);
   
-// 	      LogicalVolume *FTDPetalSupportLogical = new LogicalVolume(FTDPetalSupportSolid,
-//                                                                       _CarbonFiberMat, 
-//                                                                       "FTDPetalSupportLogical", 
-//                                                                       0, 
-//                                                                       0, 
-//                                                                       0);
-// 	      FTDPetalSupportLogical->SetVisAttributes(_VisAttSupport);
-  
-//  	      Position Ta;
-// 	      Ta.setX(0.0); 
-// 	      Ta.setY(0.0); 
-// 	      Ta.setZ(0.0); 
-  
-// 	      PhysicalVolumesPair Phys = ReflectionFactory::Instance()->Place(
-//                                                                             Transform3D(RotationMatrix(),Ta),
-//                                                                             "FTDPetalSupport",
-//                                                                             FTDPetalSupportLogical,
-//                                                                             FTDPetalAirLogical,
-//                                                                             false,
-//                                                                             0);
-// 	      registerPV(Phys);
-// 	}
-// 	else
-// 	{
-// 	      Trap *FTDPetalSupportCPSolid = new Trap( "FTDPetalCPSupport",
-// 	      		_dbParDisk.petal_cp_support_thickness/2.0 *mm,//thickness
-// 	      		0.0,
-// 	      		0.0,
-// 	      		petal_cp_support_dy/2.0,  // height
-// 	      		petal_cp_supp_half_dxMin * mm, 
-// 	      		_dbParDisk.petal_cp_support_dxMax/2.0 * mm,
-// 	      		0.0,
-// 	      		petal_cp_support_dy/2.0,  // height
-// 	      		petal_cp_supp_half_dxMin * mm, 
-// 	      		_dbParDisk.petal_cp_support_dxMax/2.0 * mm,
-// 	      		0.0);
+  return ftd;
+}
 
+DECLARE_DETELEMENT(FTD_Simple_Staggered ,create_element);
+
+
+
+
+
+
+
+
+
+//===================================================================================================================================================================================
+
+//================================ PETAL BUILD FUNCTIONS ======================================/
+
+//***********************************************************************************************
+// Build the support, sensors and electronics, choosing what technology have the current disk    
+//
+// Input Parameters: 
+//                   valuesDict: map (name variable, its value)  containing some dimension-disk 
+//                               parameters, to be passed to the real building functions
+//                   mother:     Volume where will be placed the volumes are going to
+//                               build.
+//
+void DoAndPlaceDisk( LCDD& lcdd,DetElement det,  std::map<std::string,double> valuesDict, Volume  mother )
+{
+
+  petalSupport(lcdd, det, valuesDict, mother ) ; // support is placed at 0,0,0 withing the petal
+  //  petalSensor( valuesDict, mother );
+
+}
+
+//***********************************************************************************************
+// Build the petal  support. The support is a trapezoid made of foam.
+//
+// Input Parameters: 
+//                   valuesDict: map (name variable, its value)  containing some dimension-disk 
+//                               parameters, to be passed to the real building functions
+//                   mother:     Volume the volumes built are to be placed.
+
+
+void petalSupport( LCDD& lcdd, DetElement ftd,  std::map<std::string,double> valuesDict, Volume  FTDPetalAirLogical )
+{
+  double petal_cp_supp_half_dxMin = valuesDict["petal_cp_supp_half_dxMin"];
+  double petal_cp_support_dy = valuesDict["petal_cp_support_dy"];
+  double _inner_radius = valuesDict["_inner_radius"];
+
+  if( _dbParDisk.sensor_is_pixel == 1) {
+
+    Trap FTDPetalSupportSolid( _dbParDisk.petal_cp_support_thickness/2.0, //thickness
+			       0.0,
+			       0.0,
+			       petal_cp_support_dy/2.0,  // dy
+			       petal_cp_supp_half_dxMin, //dxMin 
+			       _dbParDisk.petal_cp_support_dxMax/2.0, //dxMax
+			       0.0,
+			       petal_cp_support_dy/2.0,  // dy
+			       petal_cp_supp_half_dxMin,  // dxMin
+			       _dbParDisk.petal_cp_support_dxMax/2.0, //dxMax
+			       0.0);
+    
+    Volume FTDPetalSupportLogical( _toString(  _dbParDisk.disk_number, "FTDPetalSupportLogical_%d" ), FTDPetalSupportSolid, _CarbonFiberMat );
+				      
+    ftd.setVisAttributes(lcdd,  "FTDSupportVis" , FTDPetalSupportLogical ) ; 
+
+    // Position Ta;
+    // Ta.setX(0.0); 
+    // Ta.setY(0.0); 
+    // Ta.setZ(0.0); 
+
+    // PhysicalVolumesPair Phys = ReflectionFactory::Instance()->Place(
+    // 								    Transform3D(RotationMatrix(),Ta),
+    // 								    "FTDPetalSupport",
+    // 								    FTDPetalSupportLogical,
+    // 								    FTDPetalAirLogical,
+    // 								    false,
+    // 								    0);
+    //   registerPV(Phys);
+
+    PlacedVolume pv = FTDPetalAirLogical.placeVolume( FTDPetalSupportLogical , Transform3D() ) ;
+
+
+
+  }  else {
+
+    Trap FTDPetalSupportCPSolid( _dbParDisk.petal_cp_support_thickness/2.0,//thickness
+				 0.0,
+				 0.0,
+				 petal_cp_support_dy/2.0,  // height
+				 petal_cp_supp_half_dxMin, 
+				 _dbParDisk.petal_cp_support_dxMax/2.0,
+				 0.0,
+				 petal_cp_support_dy/2.0,  // height
+				 petal_cp_supp_half_dxMin, 
+				 _dbParDisk.petal_cp_support_dxMax/2.0,
+				 0.0);
+    
 	      
-// 	      //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Holes  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%/
-// 	      Trap *FTDPetalSupportHoleDownSolid = SemiPetalSolid( petal_cp_support_dy, "DOWN", false );
-// 	      Trap *FTDPetalSupportHoleUpSolid  = SemiPetalSolid( petal_cp_support_dy, "UP", false );
-	      
-// 	      // some transformation needed 
-// 	      const double petal_cp_holes_separation = 10.0*mm; // WARNING! HARDCODED...
+    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Holes  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%/
+    //fg   Trap FTDPetalSupportHoleDownSolid = SemiPetalSolid( petal_cp_support_dy, "DOWN", false );
+    //fg   Trap FTDPetalSupportHoleUpSolid   = SemiPetalSolid( petal_cp_support_dy, "UP", false );
+    //fg	      
+    //fg   // some transformation needed 
+    //fg   const double petal_cp_holes_separation = 10.0*mm; // WARNING! HARDCODED...
+    //fg   
+    //fg   // RotationMatrix * idRot = new RotationMatrix;
+    //fg   Position movDown( 0.0, -petal_cp_support_dy/4.0+petal_cp_holes_separation/4.0, 0.0 );
+    //fg   Position movUp( 0.0, petal_cp_support_dy/4.0-petal_cp_holes_separation/4.0, 0.0);
+    
+    //fg----- SemiPetalSolid does not seem to work - compute hole parameters here instead:
 
-// 	      RotationMatrix * idRot = new RotationMatrix;
-// 	      Position movDown( 0.0, -petal_cp_support_dy/4.0+petal_cp_holes_separation/4.0, 0.0 );
-// 	      Position movUp( 0.0, petal_cp_support_dy/4.0-petal_cp_holes_separation/4.0, 0.0);
-	      
-// 	      SubtractionSolid *FTDPetalSupportSolid_Prov = new SubtractionSolid("FTDPetalSupport_Prov",
-// 	      		FTDPetalSupportCPSolid,
-// 	      		FTDPetalSupportHoleDownSolid,
-// 	      		idRot,
-// 	      		movDown
-// 	      		);
-// 	      SubtractionSolid *FTDPetalSupportSolid = new SubtractionSolid("FTDPetalSupport",
-// 	      		FTDPetalSupportSolid_Prov,
-// 	      		FTDPetalSupportHoleUpSolid,
-// 	      		idRot,
-// 	      		movUp
-// 	      		);
-// 	      //%END%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Holes  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%END%/
+    // the space frame width 
+    double spfw = 10 * mm ; //fg: fixme - hardcoded width of the support spaceframe ...
 
-// 	      // Petal support with two holes substracted
-// 	      LogicalVolume *FTDPetalSupportLogical = new LogicalVolume(FTDPetalSupportSolid,
-//     	      		_CarbonFiberMat,
-//     	      		"FTDPetalSupport", 
-//     	      		0, 
-//     	      		0, 
-//     	      		0);
-// 	      FTDPetalSupportLogical->SetVisAttributes(_VisAttSupport);
+    double dxmin = petal_cp_supp_half_dxMin*2. ;
+    double dxmax = _dbParDisk.petal_cp_support_dxMax  ;
+
+    double ybase = petal_cp_support_dy / ( dxmax / dxmin  - 1. )  ;
+
+    // compute y_base to use intercept theorem for computing
+    //  the x-widths of the wholes at various y-values
+    //                        dxMax                                  _
+    //                     -----------   |                          | |    
+    //                     \         /   |                          | |              
+    //       XY-Plane       \ dxMin /    | dy          YZ-Plane     | |    
+    //                       \_____/     |                          |_|     
+    //                        \   /    |                            dz
+    //                         \ /     | ybase
+    //                          v      |
+
+    double petal_hole_dy =  ( petal_cp_support_dy - 3 * spfw ) / 2. ;
+
+    double petal_hole_down_dxMin = ( ( ybase + spfw                        ) / ybase  ) * dxmin  - 2. * spfw ; 
+    double petal_hole_down_dxMax = ( ( ybase + spfw    + petal_hole_dy     ) / ybase  ) * dxmin  - 2. * spfw ; 
+    double petal_hole_up_dxMin   = ( ( ybase + spfw *2 + petal_hole_dy     ) / ybase  ) * dxmin  - 2. * spfw ; 
+    double petal_hole_up_dxMax   = ( ( ybase + spfw *2 + petal_hole_dy * 2 ) / ybase  ) * dxmin  - 2. * spfw ; 
+    
+    // Trap FTDPetalSupportHoleDownSolid(  2.*_dbParDisk.petal_cp_support_thickness/2.0,//thickness
+    // 					0.0,
+    // 					0.0,
+    // 					petal_hole_dy/2.0,  // height
+    // 					petal_hole_down_dxMin/2., 
+    // 					petal_hole_down_dxMax/2., 
+    // 					0.0,
+    // 					0.0,
+    // 					petal_hole_dy/2.0,  // height
+    // 					petal_hole_down_dxMin/2., 
+    // 					petal_hole_down_dxMax/2. ) ;
+    
+    // Trap FTDPetalSupportHoleUpSolid(   2.*_dbParDisk.petal_cp_support_thickness/2.0,//thickness
+    // 				      0.0,
+    // 				      0.0,
+    // 				      petal_hole_dy/2.0,  // height
+    // 				      petal_hole_up_dxMin/2., 
+    // 				      petal_hole_up_dxMax/2., 
+    // 				      0.0,
+    // 				      0.0,
+    // 				      petal_hole_dy/2.0,  // height
+    // 				      petal_hole_up_dxMin/2., 
+    // 				      petal_hole_up_dxMax/2. ) ;
+    
+    //fg: FIXME: cutting out the above trapezoids does not seem to work (possibly a ROOT or DD4hep issue ?? )
+    //           for now cut out boxes with the mean width of the trapezoid ....
+    Box FTDPetalSupportHoleDownSolid( (petal_hole_down_dxMin+petal_hole_down_dxMax)/4.,  petal_hole_dy/2.0,   2.*_dbParDisk.petal_cp_support_thickness/2.0 ) ; 
+    Box FTDPetalSupportHoleUpSolid(   (petal_hole_up_dxMin  +petal_hole_up_dxMax  )/4.,  petal_hole_dy/2.0,   2.*_dbParDisk.petal_cp_support_thickness/2.0 ) ; 
+
+ 
+    Position movDown( 0.0,  -( petal_hole_dy /2.  + spfw / 2. ) , 0.0 );
+    Position movUp(   0.0,   ( petal_hole_dy /2.  + spfw / 2. ) , 0.0 );
 
 
-// 	      // Placing all together ( support petal boolean  ) inside the air petal container
-// 	      PhysicalVolumesPair Phys = ReflectionFactory::Instance()->Place(
-// 	      		Transform3D(),
-// 	      		"FTDPetalSupport",
-// 	      		FTDPetalSupportLogical,
-// 	      		FTDPetalAirLogical,
-// 	      		false,
-// 	      		0);
-// 	      registerPV(Phys);
-// 	}
-// 	//-END--------------------------- Central Part ----------------------------------END-/
+    // std::cout << " *** support holes parameters : " 
+    // 	      << " petal_hole_dy "  <<   petal_hole_dy 
+    // 	      << " petal_hole_down_dxMin "  <<  petal_hole_down_dxMin 
+    // 	      << " petal_hole_down_dxMax "  <<   petal_hole_down_dxMax
+    // 	      << " petal_hole_up_dxMin "  <<   petal_hole_up_dxMin 
+    // 	      << " petal_hole_up_dxMax "  <<   petal_hole_up_dxMax 
+    // 	      << " y shift: " << ( petal_hole_dy /4.  + spfw / 2. )  ;
+    
+    
+    
+    //fg----- END: SemiPetalSolid does not seem to work - compute hole parameters here instead:
+    
+    
+    SubtractionSolid FTDPetalSupportSolid_Prov( FTDPetalSupportCPSolid, FTDPetalSupportHoleDownSolid, movDown ) ;
+    SubtractionSolid FTDPetalSupportSolid( FTDPetalSupportSolid_Prov, FTDPetalSupportHoleUpSolid, movUp ) ;
+    
+    //fg: debug stuff - cutting out tubes and boxes...
+    //    Tube tubehole( 0, 20*mm , 2.*_dbParDisk.petal_cp_support_thickness ); 
+    //    Box tubehole( 20*mm , 20*mm , 2.*_dbParDisk.petal_cp_support_thickness ); 
+    // SubtractionSolid FTDPetalSupportSolid_Prov( FTDPetalSupportCPSolid, tubehole , movDown ) ;
+    // SubtractionSolid FTDPetalSupportSolid( FTDPetalSupportSolid_Prov, tubehole , movUp ) ;
+
+
+    //%END%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Holes  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%END%/
+    
+    // Petal support with two holes substracted
+    Volume FTDPetalSupportLogical (_toString(  _dbParDisk.disk_number, "FTDPetalSupportLogical_%d" ), FTDPetalSupportSolid,  _CarbonFiberMat ) ;
+
+    ftd.setVisAttributes(lcdd,  "FTDSupportVis" , FTDPetalSupportLogical ) ; 
+    //ftd.setVisAttributes(lcdd,  "Green Vis" , FTDPetalSupportLogical ) ; 
+
+
+      // // Placing all together ( support petal boolean  ) inside the air petal container
+      // PhysicalVolumesPair Phys = ReflectionFactory::Instance()->Place(
+      // 								      Transform3D(),
+      // 								      "FTDPetalSupport",
+      // 								      FTDPetalSupportLogical,
+      // 								      FTDPetalAirLogical,
+      // 								      false,
+      // 								      0);
+      // registerPV(Phys);
+
+      PlacedVolume pv = FTDPetalAirLogical.placeVolume( FTDPetalSupportLogical , Transform3D() ) ;
+
+    }
+  //-END--------------------------- Central Part ----------------------------------END-/
 	
-  
-// #ifdef DEBUG_VALUES
-//   cout << "===================================================================== " << "\n" <<
-//   "FTDPetalSupport:\n" << 
-//   " Inner Radius= " << _inner_radius <<  "\n" <<
-//   " Outer Radius= " << _outer_radius <<  "\n" <<
-//   " xMax = " << _dbParDisk.petal_cp_support_dxMax <<  "\n" <<
-//   " xMin = " << 2.0*petal_cp_supp_half_dxMin << "\n" <<
-//   " dy =   " << petal_cp_support_dy << "\n" <<
-//   " thickness =   " << _dbParDisk.petal_cp_support_thickness << "\n" <<
-//  // " placed at \n" << 
-//  // " x =   " <<  Ta.getX() << "\n" <<
-//  // " y =   " <<  Ta.getY() << "\n" <<
-//  // " z =   " <<  Ta.getZ() << "\n" <<
-//   endl;
-// #endif
-  
-  
-  
-  
-//   // Gear Ladder 
-// 	_ftdparameters[gearpar::SUPPORTRINNER].push_back(_inner_radius);
-// 	_ftdparameters[gearpar::SUPPORTLENGTHMIN].push_back(2.0*petal_cp_supp_half_dxMin);
-// 	_ftdparameters[gearpar::SUPPORTLENGTHMAX].push_back(_dbParDisk.petal_cp_support_dxMax);
-// 	_ftdparameters[gearpar::SUPPORTWIDTH].push_back(petal_cp_support_dy);
-// 	_ftdparameters[gearpar::SUPPORTTHICKNESS].push_back(_dbParDisk.petal_cp_support_thickness);
-// }
+
+#ifdef DEBUG_VALUES
+  cout << "===================================================================== " << "\n" <<
+    "FTDPetalSupport:\n" << 
+    " Inner Radius= " << _inner_radius <<  "\n" <<
+    " Outer Radius= " << _outer_radius <<  "\n" <<
+    " xMax = " << _dbParDisk.petal_cp_support_dxMax <<  "\n" <<
+    " xMin = " << 2.0*petal_cp_supp_half_dxMin << "\n" <<
+    " dy =   " << petal_cp_support_dy << "\n" <<
+    " thickness =   " << _dbParDisk.petal_cp_support_thickness << "\n" <<
+    // " placed at \n" << 
+    // " x =   " <<  Ta.getX() << "\n" <<
+    // " y =   " <<  Ta.getY() << "\n" <<
+    // " z =   " <<  Ta.getZ() << "\n" <<
+    endl;
+#endif
+
+
+
+
+  // Gear Ladder 
+  _ftdparameters[gearpar::SUPPORTRINNER].push_back(_inner_radius);
+  _ftdparameters[gearpar::SUPPORTLENGTHMIN].push_back(2.0*petal_cp_supp_half_dxMin);
+  _ftdparameters[gearpar::SUPPORTLENGTHMAX].push_back(_dbParDisk.petal_cp_support_dxMax);
+  _ftdparameters[gearpar::SUPPORTWIDTH].push_back(petal_cp_support_dy);
+  _ftdparameters[gearpar::SUPPORTTHICKNESS].push_back(_dbParDisk.petal_cp_support_thickness);
+}
 
 // //***********************************************************************************************
 // // Build the petal sensitive. The sensitive volume is a trapezoid made of silicon.
@@ -1224,9 +1353,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 // // Input Parameters: 
 // //                   valuesDict: map (name variable, its value)  containing some dimension-disk 
 // //                               parameters, to be passed to the real building functions
-// //                   mother:     LogicalVolume the volumes built are to be placed.
+// //                   mother:     Volume the volumes built are to be placed.
 
-// void FTD_Simple_Staggered::petalSensor( std::map<std::string,double> valuesDict, LogicalVolume * FTDPetalAirLogical )
+// void petalSensor( std::map<std::string,double> valuesDict, Volume  FTDPetalAirLogical )
 // {
 // 	double petal_half_dxMin = valuesDict["petal_cp_supp_half_dxMin"];
 // 	double petal_dy = valuesDict["petal_cp_support_dy"];
@@ -1256,7 +1385,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 //     sensitive_det = _theFTDSD_strip;
 //   }
   
-// 	LogicalVolume *FTDPetalSensitiveLogical = new LogicalVolume(FTDPetalSeinsitiveSolid,
+// 	Volume FTDPetalSensitiveLogical (FTDPetalSeinsitiveSolid,
 //                                                                   _SiMat, 
 //                                                                   "FTDPetalSensitiveLogical", 
 //                                                                   0, 
@@ -1345,7 +1474,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 //   //                                      _dbParDisk.disks_Si_thickness/2.0
 //   //                                      );
 //   //    
-//   //	LogicalVolume * FTDPixelLogical = new LogicalVolume( FTDPixelSolid,
+//   //	Volume  FTDPixelLogical ( FTDPixelSolid,
 //   //                                                            _SiMat,
 //   //                                                            "FTDPixelSensor",
 //   //                                                            0,
@@ -1461,164 +1590,163 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 // //=END============================ PETAL BUILD FUNCTIONS ==================================END=/
 
 
-// //============================= PETAL DIMENSION FUNCTIONS =====================================/
-// // Functions to extract relative dimensions of the petals. The mechanical design for the petals
-// // is made taking as reference one disk (disk 1 for pixels, disk 4 for strips), so the petal
-// // is parametrized using variables given for the database (or calculates from them). All the
-// // dimensions of the petal are extracted having the inner radius and outer radius of the disk,
-// // the top length of the petal and the angle defined by the petal using trigonometry.
-// //
-// //   (*)outer radius
-// //                    dxMax/2                     dxMax
-// //	           ============               =============
-// //	          |          //               \           /
-// //      dy        |  (*)<--/ /                 \  PETAL  /
-// //	          |      /  /                   \       /
-// //	          -====/===/--> dxMin/2          =======   dxMin
-// //	          |  /    /   
-// //  inner radius  |/     /
-// //                -·····/
-// //	          |    /             dy = _outer_radius*cos( arcsin(dxMax/(2*_outer_radius)) ) - _inner_radius
-// //	          |   /              ( a = dxMax/(2*tag(theta)) - _inner_radius - dy )
-// //	 a        |  /               dxMin = 2*tan(theta)*( _inner_radius + a )
-// //	          |-/ theta
-// //	          |/
-// //    
-// //
-// // So, changing the inner radius it'll change the dy and dxMin as well, providing the diferents widths
-// // of the petal, needed to build the sensors, holes, etc...
+//============================= PETAL DIMENSION FUNCTIONS =====================================/
+// Functions to extract relative dimensions of the petals. The mechanical design for the petals
+// is made taking as reference one disk (disk 1 for pixels, disk 4 for strips), so the petal
+// is parametrized using variables given for the database (or calculates from them). All the
+// dimensions of the petal are extracted having the inner radius and outer radius of the disk,
+// the top length of the petal and the angle defined by the petal using trigonometry.
+//
+//   (*)outer radius
+//                    dxMax/2                     dxMax
+//	           ============               =============
+//	          |          //               \           /
+//      dy        |  (*)<--/ /                 \  PETAL  /
+//	          |      /  /                   \       /
+//	          -====/===/--> dxMin/2          =======   dxMin
+//	          |  /    /   
+//  inner radius  |/     /
+//                -·····/
+//	          |    /             dy = _outer_radius*cos( arcsin(dxMax/(2*_outer_radius)) ) - _inner_radius
+//	          |   /              ( a = dxMax/(2*tag(theta)) - _inner_radius - dy )
+//	 a        |  /               dxMin = 2*tan(theta)*( _inner_radius + a )
+//	          |-/ theta
+//	          |/
+//    
+//
+// So, changing the inner radius it'll change the dy and dxMin as well, providing the diferents widths
+// of the petal, needed to build the sensors, holes, etc...
 
-// //------------------------------------------------------------------------------------------
-// // Get the dy of the petal which corresponds to a given radius
-// //
-// // Input Parameters:   inner radius
-// // Output Parameters:  dy
-// double FTD_Simple_Staggered::Getdy(const double & innerRadius )
-// {
-// 	return _outer_radius*cos( asin(_dbParDisk.petal_cp_support_dxMax/(2.0*_outer_radius)) ) - innerRadius;
-// }
-// //------------------------------------------------------------------------------------------
-// // Get the dxMin of the petal which corresponds to a given radius
-// //
-// // Input Parameters:   inner radius
-// // Output Parameters:  dxMin
-// double FTD_Simple_Staggered::Getdx( const double & innerRadius )
-// {
-// 	double a = _dbParDisk.petal_cp_support_dxMax/(2.0*tan(_dbParCommon.petal_half_angle_support)) - innerRadius - 
-//   Getdy( innerRadius );
-	
-// 	return 2.0*(innerRadius + a)*tan(_dbParCommon.petal_half_angle_support);
-// }
-
-// //------------------------------------------------------------------------------------------
-// // Get the dimensions of the up and down holes or the silicon up or down sensors:
-// // 
-// // Input parameters:      
-// //                   petal_cp_support_dy: height of the air petal container
-// //                   whereItgoes:         "UP" or "DOWN", where is placed
-// //                   isSilicon:           True of False, define if is the sensor or the holes
-// //
-// // Output:         
-// //                  std::vector<double>* =  [ xMin_half, xMax_half, dy_half, thickness_half ]
-// std::vector<double> * FTD_Simple_Staggered::GetPetalDimensions( const double& petal_cp_support_dy, const String & whereItgoes, const bool isSilicon )
-// {
-// 	const double theta = _dbParCommon.petal_half_angle_support;
-	
-// 	double central_separation_y = 10.0*mm/2.0; //HARDCODED _dbParDisk.petal_cp_holes_separation/2.0;
-// 	double x_dim = 6.0*mm/cos(theta);          //HARDCODED _dbParDisk.petal_cp_holes_width_support/cos(theta);
-// 	double y_dimension = 10.0*mm;        // HARDCODED _dbParDisk.petal_cp_holes_separation;
-// 	double half_thickness = _dbParDisk.petal_cp_support_thickness/2.0;
+//------------------------------------------------------------------------------------------
+// Get the dy of the petal which corresponds to a given radius
+//
+// Input Parameters:   inner radius
+// Output Parameters:  dy
+  double Getdy(const double & innerRadius ){
     
-//         //Silicon detector or Hole?
-// 	if(isSilicon)
-//         {
-// 		central_separation_y = 0.0;
-// 		const double padUp_Si_dxMax = 118.46*mm; 
-// 		x_dim = (_dbParDisk.petal_cp_support_dxMax-padUp_Si_dxMax)/2.0; // HARDCODED
-// 		//x_dim = (_dbParDisk.petal_cp_support_dxMax-_dbParDisk.padUp_Si_dxMax)/2.0;
-// 		y_dimension = y_dimension/2.0;
-// 		half_thickness = _dbParDisk.disks_Si_thickness/2.0;
-//         }
+    return _outer_radius*cos( asin(_dbParDisk.petal_cp_support_dxMax/(2.0*_outer_radius)) ) - innerRadius;
+  }
+//------------------------------------------------------------------------------------------
+// Get the dxMin of the petal which corresponds to a given radius
+//
+// Input Parameters:   inner radius
+// Output Parameters:  dxMin
+ double Getdx( const double & innerRadius ) {
+   
+   double a = _dbParDisk.petal_cp_support_dxMax/(2.0*tan(_dbParCommon.petal_half_angle_support)) - innerRadius - 
+     Getdy( innerRadius );
+   
+   return 2.0*(innerRadius + a)*tan(_dbParCommon.petal_half_angle_support);
+ }
+ 
+//------------------------------------------------------------------------------------------
+// Get the dimensions of the up and down holes or the silicon up or down sensors:
+// 
+// Input parameters:      
+//                   petal_cp_support_dy: height of the air petal container
+//                   whereItgoes:         "UP" or "DOWN", where is placed
+//                   isSilicon:           True of False, define if is the sensor or the holes
+//
+// Output:         
+//                  std::vector<double>* =  [ xMin_half, xMax_half, dy_half, thickness_half ]
+std::vector<double> GetPetalDimensions( const double& petal_cp_support_dy, const std::string & whereItgoes, const bool isSilicon )
+{
+  const double theta = _dbParCommon.petal_half_angle_support;
 	
-// 	double pseudo_radius_up;
-// 	double pseudo_radius_down;
-//         // Up or down?
-// 	if( whereItgoes == "UP" )
-//         {
+  double central_separation_y = 10.0*mm/2.0; //HARDCODED _dbParDisk.petal_cp_holes_separation/2.0;
+  double x_dim = 6.0*mm/cos(theta);          //HARDCODED _dbParDisk.petal_cp_holes_width_support/cos(theta);
+  double y_dimension = 10.0*mm;        // HARDCODED _dbParDisk.petal_cp_holes_separation;
+  double half_thickness = _dbParDisk.petal_cp_support_thickness/2.0;
+    
+  //Silicon detector or Hole?
+  if(isSilicon)
+    {
+      central_separation_y = 0.0;
+      const double padUp_Si_dxMax = 118.46*mm; 
+      x_dim = (_dbParDisk.petal_cp_support_dxMax-padUp_Si_dxMax)/2.0; // HARDCODED
+      //x_dim = (_dbParDisk.petal_cp_support_dxMax-_dbParDisk.padUp_Si_dxMax)/2.0;
+      y_dimension = y_dimension/2.0;
+      half_thickness = _dbParDisk.disks_Si_thickness/2.0;
+    }
+	
+  double pseudo_radius_up;
+  double pseudo_radius_down;
+  // Up or down?
+  if( whereItgoes == "UP" )
+    {
         
-// 		pseudo_radius_up   = _inner_radius+petal_cp_support_dy - y_dimension;
-// 		pseudo_radius_down = _inner_radius+petal_cp_support_dy*_dbParCommon.petal_y_ratio + central_separation_y ;
-//         }
-// 	else if( whereItgoes == "DOWN" )
-//         {
-// 		pseudo_radius_up = _inner_radius + petal_cp_support_dy*_dbParCommon.petal_y_ratio - central_separation_y;
-// 		pseudo_radius_down = _inner_radius + y_dimension;
-//         }
-// 	else
-//         {
-// 		cout << "FTD_Simple_Staggered: Internal Error: The function FTD_Simple_Staggered::SemiPetalSolid is not well called, the " <<
-//         "4th argument must be \"UP\" or \"DOWN\".\n Check the code!!" << endl;
-// 		exit(-1);
-//         }
-// 	const double xMin_half = (Getdx( pseudo_radius_down ) - x_dim)/2.0;
-// 	const double xMax_half = (Getdx( pseudo_radius_up )- x_dim)/2.0;
-// 	const double dy = pseudo_radius_up - pseudo_radius_down;
-// #ifdef DEBUG_VALUES
-// 	cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ \n" <<
-//     "    IsSilicon?: " << isSilicon <<  
-//     " " << whereItgoes <<
-//     " xMin=" << 2.*xMin_half << 
-//     " xMax=" << 2.0*xMax_half << 
-//     " dy= " << dy << std::endl;
-// 	cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ \n" << endl;
-// #endif
-// 	std::vector<double> * dimensions = new std::vector<double>;
-// 	dimensions->push_back( xMin_half );
-// 	dimensions->push_back( xMax_half );
-// 	dimensions->push_back( dy/2.0 );
-// 	dimensions->push_back( half_thickness );
+      pseudo_radius_up   = _inner_radius+petal_cp_support_dy - y_dimension;
+      pseudo_radius_down = _inner_radius+petal_cp_support_dy*_dbParCommon.petal_y_ratio + central_separation_y ;
+    }
+  else if( whereItgoes == "DOWN" )
+    {
+      pseudo_radius_up = _inner_radius + petal_cp_support_dy*_dbParCommon.petal_y_ratio - central_separation_y;
+      pseudo_radius_down = _inner_radius + y_dimension;
+    }
+  else
+    {
+      cout << "FTD_Simple_Staggered: Internal Error: The function SemiPetalSolid is not well called, the " <<
+        "4th argument must be \"UP\" or \"DOWN\".\n Check the code!!" << endl;
+      exit(-1);
+    }
+  const double xMin_half = (Getdx( pseudo_radius_down ) - x_dim)/2.0;
+  const double xMax_half = (Getdx( pseudo_radius_up )- x_dim)/2.0;
+  const double dy = pseudo_radius_up - pseudo_radius_down;
+#ifdef DEBUG_VALUES
+  cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ \n" <<
+    "    IsSilicon?: " << isSilicon <<  
+    " " << whereItgoes <<
+    " xMin=" << 2.*xMin_half << 
+    " xMax=" << 2.0*xMax_half << 
+    " dy= " << dy << std::endl;
+  cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ \n" << endl;
+#endif
+  std::vector<double>  dimensions ;
+  dimensions.push_back( xMin_half );
+  dimensions.push_back( xMax_half );
+  dimensions.push_back( dy/2.0 );
+  dimensions.push_back( half_thickness );
     
-// 	return dimensions;
-// }
-// //
-// //    //------------------------------------------------------------------------------------------
-// //    // Construction of the up and down holes or the silicon up or down sensors
-// //    // 
-// //    // Input parameters:      
-// //    //                   petal_cp_support_dy: height of the air petal container
-// //    //                   whereItgoes:         "UP" or "DOWN", where is placed
-// //    //                   isSilicon:           True of False, define if is the sensor or the holes
-// Trap * FTD_Simple_Staggered::SemiPetalSolid( const double& petal_cp_support_dy, const String& whereItgoes, const bool isSilicon )
-// {
-//         // Get dimensions
-// 	std::vector<double> * dimensions = GetPetalDimensions( petal_cp_support_dy, whereItgoes, isSilicon );
-// 	double xMin_half = dimensions->at(0);
-// 	double xMax_half = dimensions->at(1);
-// 	double dy_half = dimensions->at(2);
-// 	double half_thickness = dimensions->at(3);
-// 	delete dimensions;
+  return dimensions;
+}
 
-// 	Trap *FTDSemiPetalSolid = new Trap( "FTDSemiPetal"+whereItgoes+"Support",
-//                                            half_thickness * mm,//thickness
-//                                            0.0,
-//                                            0.0,
-//                                            dy_half,  // height
-//                                            xMin_half * mm, 
-//                                            xMax_half * mm,
-//                                            0.0,
-//                                            dy_half,  // height
-//                                            xMin_half * mm, 
-//                                            xMax_half * mm,
-//                                            0.0);
-	
-// 	return FTDSemiPetalSolid;
-// }
-// //=END========================= PETAL DIMENSION FUNCTIONS =================================END=/
+//------------------------------------------------------------------------------------------
+// Construction of the up and down holes or the silicon up or down sensors
+// 
+// Input parameters:      
+//                   petal_cp_support_dy: height of the air petal container
+//                   whereItgoes:         "UP" or "DOWN", where is placed
+//                   isSilicon:           True of False, define if is the sensor or the holes
+
+//-------------------------------------------------------------------------------------------------------------------
+Trap SemiPetalSolid( const double& petal_cp_support_dy, const std::string& whereItgoes, const bool isSilicon ){
+  // Get dimensions
+  const std::vector<double>&  dimensions = GetPetalDimensions( petal_cp_support_dy, whereItgoes, isSilicon );
+  double xMin_half      = dimensions[0];
+  double xMax_half      = dimensions[1];
+  double dy_half        = dimensions[2];
+  double half_thickness = dimensions[3];
+  
+  return Trap( half_thickness,//thickness
+	       0.0,
+	       0.0,
+	       dy_half,  // height
+	       xMin_half, 
+	       xMax_half,
+	       0.0,
+	       dy_half,  // height
+	       xMin_half, 
+	       xMax_half,
+	       0.0 ) ;
+  
+  //  return FTDSemiPetalSolid ;
+ }
+ //=END========================= PETAL DIMENSION FUNCTIONS =================================END=/
 
 
 // //*********************************************************************************************
 // // Register two ftd sensitive detectors, one for the pixel disks and one for the strip disks
-// void FTD_Simple_Staggered::RegisterSDs( Database * db )
+// void RegisterSDs( Database * db )
 // {
 //   // Getting parameters disk-specific
 //   db->exec("select * from disks;");
@@ -1627,7 +1755,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 //   double minDiskThickness (MAXFLOAT);
 //   do
 //     	{
-//     _dbParDisk.disks_Si_thickness = db->fetchDouble("disk_si_thickness") * mm ;
+//     _dbParDisk.disks_Si_thickness = db->fetchDouble("disk_si_thickness")  ;
 //     if(minDiskThickness>_dbParDisk.disks_Si_thickness)
 //         {
 // 			minDiskThickness = _dbParDisk.disks_Si_thickness;
@@ -1643,7 +1771,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 // }
 
 
-// void FTD_Simple_Staggered::registerPV(const PhysicalVolumesPair & pvPair )
+// void registerPV(const PhysicalVolumesPair & pvPair )
 // {
 // 	if( pvPair.first != 0 )
 //       {
@@ -1658,7 +1786,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 // //================================ GEAR STUFF FUNCTIONS ====================================/
 // #ifdef MOKKA_GEAR
 
-// void FTD_Simple_Staggered::GearSetup()
+// void GearSetup()
 // {	
 //   //--- Added carbon fiber.  
 //   //    TODO: It is needed some other changes??  
@@ -1737,22 +1865,3 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 // 	gearMgr->setFTDParameters(ftdParam);
 // }
 
-  
-  //######################################################################################################################################################################
-  
-  
-  //--------------------------------------
-  
-  Volume mother =  lcdd.pickMotherVolume( ftd ) ;
-  
-  pv = mother.placeVolume(main_assembly);
-
-  pv.addPhysVolID( "system", x_det.id() ) ; //.addPhysVolID("side", 0 ) ;
-  
-  ftd.setVisAttributes( lcdd, x_det.visStr(), main_assembly );
-  //  if( ftd.isValid() ) 
-  ftd.setPlacement(pv);
-  
-  return ftd;
-}
-DECLARE_DETELEMENT(FTD_Simple_Staggered ,create_element);
