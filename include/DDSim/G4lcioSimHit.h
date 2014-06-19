@@ -13,6 +13,7 @@
 #include "lcio.h"
 #include "IMPL/SimTrackerHitImpl.h"
 #include "IMPL/SimCalorimeterHitImpl.h"
+#include "IMPL/MCParticleImpl.h"
 #include "UTIL/Operators.h"
 
 #include <iostream>
@@ -80,6 +81,8 @@ namespace DDSim {
   typedef G4lcioSimHit<lcio::SimCalorimeterHitImpl> SimCaloHit ;
   typedef G4THitsCollection<SimCaloHit> SimCaloHitsCollection;
 
+  typedef G4lcioSimHit<lcio::MCParticleImpl> MCParticleHitWrapper ;
+  typedef G4THitsCollection<MCParticleHitWrapper> MCParticleCollection;
 
 
   // extern G4Allocator<SimTrkHit> SimTrkHitAllocator;

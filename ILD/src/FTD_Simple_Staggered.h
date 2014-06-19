@@ -25,28 +25,28 @@
 class gearpar {
 
 public:
-    static const short NPETALS             = 1; 
-    static const short ZOFFSET             = 2;
-    static const short ALPHA               = 3;
-    static const short PHI0                = 4;
-    static const short PETAL0SIGNOFFSET    = 5;
-    static const short HALFANGLEPETAL      = 6;
-    static const short ZPOSITION           = 7;
-    static const short SUPPORTRINNER       = 8;
-    static const short SUPPORTLENGTHMIN    = 9;
-    static const short SUPPORTLENGTHMAX    =10; 
-    static const short SUPPORTWIDTH        =11; 
-    static const short SUPPORTTHICKNESS    =12;
-    static const short SUPPORTRANDLENGTH   =13; 
-    static const short SENSITIVERINNER     =14; 
-    static const short SENSITIVELENGTHMIN  =15; 
-    static const short SENSITIVELENGTHMAX  =16;
-    static const short SENSITIVEWIDTH      =17; 
-    static const short SENSIVIVERANLENGHT  =18;
-    static const short SENSITIVETHICKNESS  =19; 
-    static const short SENSORTYPE          =20; 
-    static const short NSENSORS            =21;
-    static const short ISDOUBLESIDED       =22;
+  static const short NPETALS             = 1; 
+  static const short ZOFFSET             = 2;
+  static const short ALPHA               = 3;
+  static const short PHI0                = 4;
+  static const short PETAL0SIGNOFFSET    = 5;
+  static const short HALFANGLEPETAL      = 6;
+  static const short ZPOSITION           = 7;
+  static const short SUPPORTRINNER       = 8;
+  static const short SUPPORTLENGTHMIN    = 9;
+  static const short SUPPORTLENGTHMAX    =10; 
+  static const short SUPPORTWIDTH        =11; 
+  static const short SUPPORTTHICKNESS    =12;
+  static const short SUPPORTRANDLENGTH   =13; 
+  static const short SENSITIVERINNER     =14; 
+  static const short SENSITIVELENGTHMIN  =15; 
+  static const short SENSITIVELENGTHMAX  =16;
+  static const short SENSITIVEWIDTH      =17; 
+  static const short SENSIVIVERANLENGHT  =18;
+  static const short SENSITIVETHICKNESS  =19; 
+  static const short SENSORTYPE          =20; 
+  static const short NSENSORS            =21;
+  static const short ISDOUBLESIDED       =22;
     
 };
 
@@ -56,45 +56,47 @@ public:
  */
 struct glEnviron
 {
-    double TPC_Ecal_Hcal_barrel_halfZ;
-    double Ecal_endcap_zmin;
-    double TPC_inner_radius;
+  double TPC_Ecal_Hcal_barrel_halfZ;
+  double Ecal_endcap_zmin;
+  double TPC_inner_radius;
 	
-    double SIT1_Half_Length_Z;
-    double SIT2_Half_Length_Z;
-    double SIT1_Radius;
-    double SIT2_Radius;
-    double VXD_layer3_maxZ;
+  double SIT1_Half_Length_Z;
+  double SIT2_Half_Length_Z;
+  double SIT1_Radius;
+  double SIT2_Radius;
+  double VXD_layer3_maxZ;
 	
-    double zEnd_IPOuterTube;
-    double rEnd_IPOuterTube;
-    double zEnd_IPOuterBulge;
-    double rEnd_IPOuterBulge;
+  double zEnd_IPOuterTube;
+  double rEnd_IPOuterTube;
+  double zEnd_IPOuterBulge;
+  double rEnd_IPOuterBulge;
 	
-    double beamTubeTangent;
+  double beamTubeTangent;
 };
 
 /// Helper struct
 struct dbInfoCommon
 {
-	double ftd1_vtx3_distance_z;
-	double ftd7_ecal_distance_z;
-	double ftd1_sit1_radial_diff;
-	double ftd2_sit1_radial_diff;
-	double ftd3_sit2_radial_diff;
-	double ftd4to7_tpc_radial_gap;
+  double ftd1_vtx3_distance_z;
+  double ftd7_ecal_distance_z;
+  double ftd1_sit1_radial_diff;
+  double ftd2_sit1_radial_diff;
+  double ftd3_sit2_radial_diff;
+  double ftd4to7_tpc_radial_gap;
     
-	double beamTubeClearance;
-	double cables_thickness;
-	double cable_shield_thickness;
+  double beamTubeClearance;
+  double cables_thickness;
+  double cable_shield_thickness;
     
-	double outer_cylinder_total_thickness;
-	double inner_cylinder_total_thickness;
+  double outer_cylinder_total_thickness;
+  double inner_cylinder_total_thickness;
     
-        // Petal specific
-	double petal_half_angle_support;  // theta
-	double petal_y_ratio;
-    
+  // Petal specific
+  double petal_half_angle_support;  // theta
+  double petal_y_ratio;
+
+  //fg: additional parameter:
+  double support_spaceframe_width ;
 };
 
 /// helper struct

@@ -97,7 +97,7 @@
         <properties particle="opticalphoton"/>
     </filter>
     <filter name="EnergyDepositMinimumCut/SiTracker">
-      <properties Cut="10*keV"/>
+      <properties Cut="10.*keV"/>
     </filter>
     <filter name="EnergyDepositMinimumCut/TPC">
       <properties Cut="0.1*keV"/>
@@ -135,10 +135,11 @@
     <sequence name="Geant4GeneratorActionSequence/GeneratorAction">
       <action name="Geant4ParticleGun/Gun">
         <properties energy="5000*MeV"
-    	  	    particle="'e-'"
-    		    direction = "(1.0, 1.0 , -0.1)"
+    	  	    particle="'mu-'"
+    		    direction = "(1., 1.0 , 0.1 )"
     		    multiplicity="1"/>
       </action>
+
     </sequence>
 
     <!-- <sequence name="Geant4GeneratorActionSequence/GeneratorAction"> -->
@@ -152,6 +153,12 @@
       <filter name="GeantinoRejector"/>
       <filter name="EnergyDepositMinimumCut/SiTracker"/>
       <action name="TRKSiSD00/VXDCollection"/>
+    </sequence>
+
+    <sequence sd="FTD" type="Geant4SensDetActionSequence">
+      <filter name="GeantinoRejector"/>
+      <filter name="EnergyDepositMinimumCut/SiTracker"/>
+      <action name="TRKSiSD00/FTDCollection"/>
     </sequence>
     
     <sequence sd="SIT" type="Geant4SensDetActionSequence">
@@ -172,18 +179,23 @@
       <action name="TRKSiSD00/SETCollection"/>
     </sequence>
     
-    <!-- <sequence sd="EcalBarrel" type="Geant4SensDetActionSequence"> -->
-    <!--   <filter name="GeantinoRejector"/> -->
-    <!--   <filter name="EnergyDepositMinimumCut" Cut="1*keV"/> -->
-    <!--   <action name="Geant4SimpleCalorimeterAction/Ecal"/>  -->
-    <!--   <\!-- <action name="TRKSiSD00/EcalBarrelCollection"/> -\-> -->
-    <!-- </sequence> -->
 
-    <!-- <sequence sd="HcalBarrel" type="Geant4SensDetActionSequence"> -->
-    <!--   <filter name="GeantinoRejector"/> -->
-    <!--   <filter name="EnergyDepositMinimumCut" Cut="1*keV"/> -->
-    <!--   <action name="Geant4SimpleCalorimeterAction/Hcal"/>  -->
-    <!-- </sequence> -->
+     <!-- use TRKSiSD for the calorimeters as well until we have -->
+     <!-- proper sensitive detectors  -->
+
+    <sequence sd="EcalBarrel" type="Geant4SensDetActionSequence">
+      <filter name="GeantinoRejector"/>
+      <filter name="EnergyDepositMinimumCut" Cut="1*keV"/>
+      <action name="Geant4SimpleCalorimeterAction/Ecal"/>
+      <!-- <action name="TRKSiSD00/EcalBarrelCollection"/> -->
+    </sequence>
+
+    <sequence sd="HcalBarrel" type="Geant4SensDetActionSequence">
+      <filter name="GeantinoRejector"/>
+      <filter name="EnergyDepositMinimumCut" Cut="1*keV"/>
+      <action name="TRKSiSD00/HcalBarrelCollection"/>
+      <!-- <action name="Geant4SimpleCalorimeterAction/Hcal"/> -->
+    </sequence>
         
   </sequences>
 </geant4_setup>

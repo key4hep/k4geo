@@ -18,7 +18,7 @@
     </includes>
   
     <define>
-        <constant name="world_side"             value="10*m"/>
+        <constant name="world_side"             value="30*m"/>
         <constant name="world_x"                value="world_side/2"/>
         <constant name="world_y"                value="world_side/2"/>
         <constant name="world_z"                value="world_side/2"/>        
@@ -153,25 +153,25 @@
     <detectors>
         <comment>Trackers</comment>
 
-	<include ref="tubeX06_14.xml"/>
+	<!-- <include ref="tubeX06_14.xml"/> -->
 
 	<include ref="ftd_simple_staggered_02.xml"/>
 
-	<!-- <include ref="vxd07.xml"/> -->
+	<include ref="vxd07.xml"/>
 	
-	<!-- <include ref="sit_simple_planar_sensors_03.xml"/> -->
+	<include ref="sit_simple_planar_sensors_03.xml"/>
 
-	<!-- <include ref="tpc10_01.xml"/> -->
+	<include ref="tpc10_01.xml"/>
 
-	<!-- <include ref="set_simple_planar_sensors_01.xml"/> -->
+	<include ref="set_simple_planar_sensors_01.xml"/>
 
         <comment>Calorimeters</comment>
 
-	<!-- <include ref="SEcal04_Barrel.xml"/> -->
+	<include ref="SEcal04_Barrel.xml"/>
 
-	<!-- <include ref="SHcalSc04_Barrel.xml"/> -->
+	<include ref="SHcalSc04_Barrel.xml"/>
 
-	<!-- <include ref="BeamCal08.xml"/> -->
+	<include ref="BeamCal08.xml"/>
 
       </detectors> 
 
