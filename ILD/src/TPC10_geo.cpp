@@ -5,7 +5,7 @@
 //  $Id:$
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
-#include "DD4hep/TGeoUnits.h"
+#include "DD4hep/DD4hepUnits.h"
 #include "DDSim/Exceptions.h"
 #include "DDRec/Surface.h"
 
@@ -15,7 +15,7 @@
 
 using namespace std;
 using namespace DD4hep;
-using namespace tgeo ;
+using namespace dd4hep ;
 using namespace DD4hep::Geometry;
 using namespace DDSim ;
 using namespace DDRec ;
