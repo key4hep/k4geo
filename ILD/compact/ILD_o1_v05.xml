@@ -153,7 +153,7 @@
     <detectors>
         <comment>Trackers</comment>
 
-	<!-- <include ref="tubeX06_14.xml"/> -->
+	<include ref="tubeX06_14.xml"/>
 
 	<include ref="ftd_simple_staggered_02.xml"/>
 
@@ -170,6 +170,8 @@
 	<include ref="SEcal04_Barrel.xml"/>
 
 	<include ref="SHcalSc04_Barrel.xml"/>
+
+	<include ref="SHcalSc04_Endcaps.xml"/>
 
 	<include ref="BeamCal08.xml"/>
 
