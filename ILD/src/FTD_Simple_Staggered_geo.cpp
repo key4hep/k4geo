@@ -1312,37 +1312,30 @@ void petalSupport( LCDD& lcdd, DetElement ftd,  std::map<std::string,double> val
     double petal_hole_up_dxMin   = ( ( ybase + spfw *2 + petal_hole_dy     ) / ybase  ) * dxmin  - 2. * spfw ; 
     double petal_hole_up_dxMax   = ( ( ybase + spfw *2 + petal_hole_dy * 2 ) / ybase  ) * dxmin  - 2. * spfw ; 
     
-    // Trap FTDPetalSupportHoleDownSolid(  2.*_dbParDisk.petal_cp_support_thickness/2.0,//thickness
-    // 					0.0,
-    // 					0.0,
-    // 					petal_hole_dy/2.0,  // height
-    // 					petal_hole_down_dxMin/2., 
-    // 					petal_hole_down_dxMax/2., 
-    // 					0.0,
-    // 					0.0,
-    // 					petal_hole_dy/2.0,  // height
-    // 					petal_hole_down_dxMin/2., 
-    // 					petal_hole_down_dxMax/2. ) ;
+    Trap FTDPetalSupportHoleDownSolid(  2.*_dbParDisk.petal_cp_support_thickness/2.0,//thickness
+    					0.0,
+    					0.0,
+    					petal_hole_dy/2.0,  // height
+    					petal_hole_down_dxMin/2., 
+    					petal_hole_down_dxMax/2., 
+    					0.0,
+    					petal_hole_dy/2.0,  // height
+    					petal_hole_down_dxMin/2., 
+    					petal_hole_down_dxMax/2., 
+    					0.0) ;
     
-    // Trap FTDPetalSupportHoleUpSolid(   2.*_dbParDisk.petal_cp_support_thickness/2.0,//thickness
-    // 				      0.0,
-    // 				      0.0,
-    // 				      petal_hole_dy/2.0,  // height
-    // 				      petal_hole_up_dxMin/2., 
-    // 				      petal_hole_up_dxMax/2., 
-    // 				      0.0,
-    // 				      0.0,
-    // 				      petal_hole_dy/2.0,  // height
-    // 				      petal_hole_up_dxMin/2., 
-    // 				      petal_hole_up_dxMax/2. ) ;
+    Trap FTDPetalSupportHoleUpSolid(   2.*_dbParDisk.petal_cp_support_thickness/2.0,//thickness
+    				      0.0,
+    				      0.0,
+    				      petal_hole_dy/2.0,  // height
+    				      petal_hole_up_dxMin/2., 
+    				      petal_hole_up_dxMax/2., 
+    				      0.0,
+    				      petal_hole_dy/2.0,  // height
+    				      petal_hole_up_dxMin/2., 
+    				      petal_hole_up_dxMax/2.,
+    				      0.0 ) ;
     
-    //fg: FIXME: cutting out the above trapezoids does not seem to work (possibly a ROOT or DD4hep issue ?? )
-    //           for now cut out boxes with the mean width of the trapezoid ....
-    // -> https://sft.its.cern.ch/jira/browse/DDFORHEP-5
-    Box FTDPetalSupportHoleDownSolid( (petal_hole_down_dxMin+petal_hole_down_dxMax)/4.,  petal_hole_dy/2.0,   2.*_dbParDisk.petal_cp_support_thickness/2.0 ) ; 
-    Box FTDPetalSupportHoleUpSolid(   (petal_hole_up_dxMin  +petal_hole_up_dxMax  )/4.,  petal_hole_dy/2.0,   2.*_dbParDisk.petal_cp_support_thickness/2.0 ) ; 
-
- 
     Position movDown( 0.0,  -( petal_hole_dy /2.  + spfw / 2. ) , 0.0 );
     Position movUp(   0.0,   ( petal_hole_dy /2.  + spfw / 2. ) , 0.0 );
 
@@ -1467,9 +1460,9 @@ VolVec petalSensor(  LCDD& lcdd, DetElement ftd, SensitiveDetector sens, std::ma
 
   FTDPetalSensitiveLogical.setSensitiveDetector( sens ) ;
 
+  //ftd.setVisAttributes(  lcdd, "SeeThrough" , FTDPetalSensitiveLogical );
   ftd.setVisAttributes(  lcdd, "FTDSensitiveVis" , FTDPetalSensitiveLogical );
-  //fixme:  ftd.setSensitiveDetector(sensitive_det);
-  
+
   
   // front sensor
   Position Ta( 0. , 0. , (_dbParDisk.petal_cp_support_thickness + _dbParDisk.disks_Si_thickness)/2.0 ) ;    
