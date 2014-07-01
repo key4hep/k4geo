@@ -13,7 +13,7 @@
 
 using namespace std;
 using namespace DD4hep;
-using namespace dd4hep ;
+//using namespace dd4hep ;
 using namespace DD4hep::Geometry;
 using namespace DDRec ;
 
@@ -192,7 +192,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     layerDE.setPlacement( pv ) ;
 
 
-    const double ladder_dphi = ( twopi / n_ladders ) ;
+    const double ladder_dphi = ( dd4hep::twopi / n_ladders ) ;
 
     double sensitive_inner_radius = sensitive_radius - 0.5 * sensitive_thickness;
     double ladder_width = 2*(tan(ladder_dphi*0.5)*sensitive_inner_radius - ladder_clearance) ;
@@ -282,7 +282,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     Box setSenSolid( (sensitive_thickness ) / 2.0 ,
 		     layer_geom.ladder_width  / 2.0,
-		     (layer_geom.sensor_length / 2.0 ) - 1.e-06*mm ); // added tolerance to avoid false overlap detection
+		     (layer_geom.sensor_length / 2.0 ) - 1.e-06*dd4hep::mm ); // added tolerance to avoid false overlap detection
     
     Volume setSenLogical(  _toString( layer_id,"SET_SenLogical_%02d"), setSenSolid,sensitiveMat ) ; 
     
@@ -300,8 +300,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       n.fill( -1. ,   0. , 0. ) ;
 
       // implement 7 deg stereo angle 
-      u.fill( 0. , -cos( 3.5/180.*M_PI  ) , -sin( 3.5/180.*M_PI  ) ) ;
-      v.fill( 0. , -sin( 3.5/180.*M_PI  ) ,  cos( 3.5/180.*M_PI  ) ) ;
+      u.fill( 0. , -cos( 3.5 * dd4hep::deg  ) , -sin( 3.5 * dd4hep::deg  ) ) ;
+      v.fill( 0. , -sin( 3.5 * dd4hep::deg  ) ,  cos( 3.5 * dd4hep::deg  ) ) ;
 
     } else {
 
@@ -310,14 +310,14 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       n.fill( 1. , 0. , 0. ) ;
 
       // implement 7 deg stereo angle 
-      u.fill( 0. ,  cos( 3.5/180.*M_PI  ) ,  sin( 3.5/180.*M_PI  ) ) ;
-      v.fill( 0. , -sin( 3.5/180.*M_PI  ) ,  cos( 3.5/180.*M_PI  ) ) ;
+      u.fill( 0. ,  cos( 3.5 * dd4hep::deg  ) ,  sin( 3.5 * dd4hep::deg  ) ) ;
+      v.fill( 0. , -sin( 3.5 * dd4hep::deg  ) ,  cos( 3.5 * dd4hep::deg  ) ) ;
     }
 
     double inner_thick =  sensitive_thickness / 2.0 ;
     double outer_thick =  sensitive_thickness / 2.0 + support_thickness ;  // support is on top
    
-    VolPlane surf( setSenLogical , SurfaceType(SurfaceType::Sensitive) ,inner_thick, outer_thick , u,v,n ) ; //,o ) ;
+    VolPlane surf( setSenLogical , SurfaceType(SurfaceType::Sensitive,SurfaceType::Measurement1D) ,inner_thick, outer_thick , u,v,n ) ; //,o ) ;
  
     // vector of sensor placements - needed for DetElements in ladder loop below
     std::vector<PlacedVolume> pvV(  layer_geom.n_sensors_per_ladder ) ;
