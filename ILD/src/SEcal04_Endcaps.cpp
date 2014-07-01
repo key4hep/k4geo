@@ -33,7 +33,6 @@
 		construct.
 		Inside SEcal04, some parameters, which used by Ecal Endcaps, come from
 		Ecal Barrel. They can be ssen here again.
-		TODO: build ECRing.
  */
 
 #include "DD4hep/DetFactoryHelper.h"
@@ -230,9 +229,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double Ecal_endcap_Tube_rmax = Lcal_outer_radius + Ecal_Lcal_ring_gap;
   
   PolyhedraRegular ECPolyHedra(8, M_PI/8.,rInner, rOuter, zPlane);
-  Tube CenterECTub(0., Ecal_endcap_Tube_rmax, module_thickness+0.0001);
+  //Tube CenterECTub(0., Ecal_endcap_Tube_rmax, module_thickness+0.0001);
+  //SubtractionSolid EndCapSolid( ECPolyHedra, CenterECTub);
 
-  SubtractionSolid EndCapSolid( ECPolyHedra, CenterECTub);
+  Box  CenterECBox(Ecal_endcap_center_box_size/2.,Ecal_endcap_center_box_size/2.,module_thickness+0.0001);
+  SubtractionSolid EndCapSolid( ECPolyHedra, CenterECBox);
 
   Volume EnvLogEndCap("endcap",EndCapSolid,air);
  
@@ -485,7 +486,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 
 
-    //TODO:: build endcapring!!!!!!
 
 
 
