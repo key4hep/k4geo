@@ -14,7 +14,7 @@
   -->
   <!--kernel UI="UI" NumEvents="1"/-->  
 
-  <kernel UI="" NumEvents="10" />  
+  <kernel UI="" NumEvents="9" />  
 
 
   <!-- List of globally known actions. These actions will be registered with the Geant4Kernel 
