@@ -1,0 +1,107 @@
+###################################################################################################
+#
+#  DDSim 
+#
+#  Linear collider simulation models based on DD4hep and Geant4.  
+#
+#
+#  F.Gaede, DESY, 2014
+###################################################################################################
+
+
+Requirements:
+-------------
+ - DD4hep built with Boost, Geant4 and LCIO
+ - Gear
+
+
+Download and Installation:
+--------------------------
+
+Downlaod source code, e.g:
+
+
+  mkdir DDSim ; cd DDSim 
+
+  svn co https://svnsrv.desy.de/public/ddsim/DDSim/trunk
+
+  (or if you have developers rights:   svn co https://svnsrv.desy.de/basic/ddsim/DDSim/trunk)
+
+  cd trunk ; mkdir build ; cd build
+
+
+Initialize ROOT:
+
+  . /afs/desy.de/project/ilcsoft/sw/x86_64_gcc44_sl6/root/5.34.10/bin/thisroot.sh
+
+Configure with CMake specifying pathes to DD4hep, Geant4, LCIO and GEAR, e.g.:
+
+   cmake -DDD4hep_DIR=~/DD4hep/trunk  \
+         -DD4HEP_USE_BOOST=ON
+         -D LCIO_DIR=/afs/desy.de/project/ilcsoft/sw/x86_64_gcc44_sl6/v01-17-05/lcio/v02-04-03 \
+         -D GEAR_DIR=/afs/desy.de/project/ilcsoft/sw/x86_64_gcc44_sl6/v01-17-05/gear/v01-04 \
+         -D Geant4_DIR=/afs/desy.de/project/ilcsoft/sw/x86_64_gcc44_sl6/geant4/9.6.p01/lib64/Geant4-9.6.1  ..
+
+
+Build and install everything:
+
+  make -j 2 install
+
+
+
+
+Running the simulation
+----------------------
+
+There is a program called dd_sim which is based on DDG4 that runs the speciefied detector and the 
+sequences (user actions) defined in the sequences.xml file.
+
+Modify examples/sequences.xml as needed. 
+
+
+If you want to use the an LCIO file with MCParticle collection as input, use the sequence:
+
+    <sequence name="Geant4GeneratorActionSequence/GeneratorAction">
+      <action name="LCIOGeneratorAction">
+        <properties LCIOFileName="mcparticles.slcio"
+    		    SkipNEvents="0" />
+      </action>
+    </sequence>
+
+
+You can use any LCIO file with an MCParticle collection as input. If you have an stdhep file,
+run the following command to create an LCIO file:
+
+  stdhepjob infile.stdhep outfile.slcio -1
+
+
+You can also modify the python script ./example/lcio_particle_gun.py in order to create
+an LCIO input file with single particles:
+
+  export PYTHONPATH=${LCIO}/src/python:${ROOTSYS}/lib
+  python lcio_particle_gun.py
+
+
+There is also an example input file with 10 singe muons in example/mcparticles.slcio.
+
+
+You can then run the simulation:
+
+    dd_sim ../ILD/compact/ILD_o1_v05.xml ../example/sequences.xml ../example/physics.xml
+
+this creates an lcio file simple_lcio.slcio with sim hits and MCParticles - you can look at it:
+
+   anajob simple_lcio.slcio
+
+
+or display it in the teve display:
+
+   ln -s simple_lcio.slcio teve_infile.slcio
+
+   teveDisplay ../ILD/compact/ILD_o1_v05.xml
+
+
+
+
+
+
