@@ -42,7 +42,7 @@ set( ROOT_COMPONENT_LIBRARIES Geom Reflex)
 
 
 find_package( LCIO REQUIRED)
-find_package( GEAR REQUIRED)
+#find_package( GEAR REQUIRED)
 
 find_package(Geant4 REQUIRED gdml ui_all vis_all)
 #if(NOT Geant4_clhep_FOUND)
