@@ -227,6 +227,12 @@ namespace DDSim {
 
     // Put the vertex to G4Event object
     event->AddPrimaryVertex( vertex );
+
+    
+    // Add the MCParticle collection to the context ( testing ... ) 
+
+    context()->event().addExtension( col , typeid( EVENT::LCCollection ), 0);
+
   }
 
 

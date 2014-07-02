@@ -169,7 +169,7 @@
 
 	<include ref="SEcal04_Barrel.xml"/>
 
-	<include ref="SEcal04_Endcaps.xml"/>
+	<!-- <include ref="SEcal04_Endcaps.xml"/> -->
 
 	<include ref="SHcalSc04_Barrel.xml"/>
 
