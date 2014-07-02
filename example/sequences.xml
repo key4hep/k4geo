@@ -14,7 +14,7 @@
   -->
   <!--kernel UI="UI" NumEvents="1"/-->  
 
-  <kernel UI="" NumEvents="1" />  
+  <kernel UI="" NumEvents="10" />  
 
 
   <!-- List of globally known actions. These actions will be registered with the Geant4Kernel 
@@ -118,36 +118,38 @@
   -->
   <sequences>
     <sequence name="Geant4EventActionSequence/EventAction">
-      <action name="Geant4TestEventAction/UserEvent_1">
-        <properties Property_int="01234"
-  	  	    Property_double="1e11"
-		    Property_string="'Hello_1'"/>
-      </action>
-      <action name="UserEvent_2"/>
-      <!-- <action name="Geant4Output2ROOT/RootOutput"> -->
-      <!-- 	<properties Output="simple.root"/> -->
+
+      <!-- <action name="Geant4TestEventAction/UserEvent_1"> -->
+      <!--   <properties Property_int="01234" -->
+      <!-- 	  	    Property_double="1e11" -->
+      <!-- 		    Property_string="'Hello_1'"/> -->
       <!-- </action> -->
+
+      <action name="LCIOEventAction">
+      </action>
+
       <action name="Geant4Output2LCIO/LCIOOutput">
 	<properties Output="simple_lcio"/>
-      </action>
-    </sequence>
-
-    <sequence name="Geant4GeneratorActionSequence/GeneratorAction">
-      <action name="Geant4ParticleGun/Gun">
-        <properties energy="5000*MeV"
-    	  	    particle="'mu-'"
-    		    direction = "(1., 1.0 , 0.1 )"
-    		    multiplicity="1"/>
       </action>
 
     </sequence>
 
     <!-- <sequence name="Geant4GeneratorActionSequence/GeneratorAction"> -->
-    <!--   <action name="LCIOGeneratorAction"> -->
-    <!--     <properties LCIOFileName="infile.slcio" -->
-    <!-- 		    SkipNEvents="0" /> -->
+    <!--   <action name="Geant4ParticleGun/Gun"> -->
+    <!--     <properties energy="5000*MeV" -->
+    <!-- 	  	    particle="'mu-'" -->
+    <!-- 		    direction = "(1., 1.0 , 0.1 )" -->
+    <!-- 		    multiplicity="1"/> -->
     <!--   </action> -->
+
     <!-- </sequence> -->
+
+    <sequence name="Geant4GeneratorActionSequence/GeneratorAction">
+      <action name="LCIOGeneratorAction">
+        <properties LCIOFileName="mcparticles.slcio"
+    		    SkipNEvents="0" />
+      </action>
+    </sequence>
 
     <sequence sd="VTX" type="Geant4SensDetActionSequence">
       <filter name="GeantinoRejector"/>
@@ -193,8 +195,8 @@
     <sequence sd="HcalBarrel" type="Geant4SensDetActionSequence">
       <filter name="GeantinoRejector"/>
       <filter name="EnergyDepositMinimumCut" Cut="1*keV"/>
-      <action name="TRKSiSD00/HcalBarrelCollection"/>
-      <!-- <action name="Geant4SimpleCalorimeterAction/Hcal"/> -->
+      <!-- <action name="TRKSiSD00/HcalBarrelCollection"/> -->
+      <action name="Geant4SimpleCalorimeterAction/Hcal"/>
     </sequence>
         
   </sequences>
