@@ -28,7 +28,7 @@
 #include <math.h> 
 
 //****************************
-#define SDHcalBarrel_DEBUG
+//#define SDHcalBarrel_DEBUG
 //****************************
 
 #include "IMPL/SimCalorimeterHitImpl.h"
@@ -88,9 +88,9 @@ namespace DDSim {
     dd4hep::Geant4VolumeManager volMgr = dd4hep::Geant4Mapping::instance().volumeManager();
     dd4hep::BitField64& decoder = *  m_readout.idSpec().decoder() ;
     dd4hep::VolumeID preID  = volMgr.volumeID( stepH.preTouchable() );
-    dd4hep::VolumeID postID  = volMgr.volumeID( stepH.postTouchable() );
 
 #ifdef SDHcalBarrel_DEBUG
+    dd4hep::VolumeID postID  = volMgr.volumeID( stepH.postTouchable() );
     G4cout << " ***************** DEBUG information! " << G4endl ;
     G4cout << " ***************** Original :  preID : " << decoder(preID)  << G4endl ; 
     G4cout << " ***************** Original : postID : " << decoder(postID) << G4endl ; 
