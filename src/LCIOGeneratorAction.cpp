@@ -84,7 +84,9 @@ namespace DDSim {
 
     }
 
-    lcio::LCCollection* col =  evt->getCollection( _MCParticleCollectionName ) ;
+    // get MCParticle collection from event
+    // and take ownership (as we add it to the output event ) ...
+    lcio::LCCollection* col =  evt->takeCollection( _MCParticleCollectionName ) ;
 
     //============================================================
     //  code ported from Mokka HepLCIOInterfaceNew.cc
