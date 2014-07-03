@@ -152,11 +152,11 @@
 
     <detectors>
         <comment>Trackers</comment>
-<!--
+
 	<include ref="tubeX06_14.xml"/>
 
 	<include ref="ftd_simple_staggered_02.xml"/>
--->
+
 	<include ref="vxd07.xml"/>
 	
 	<include ref="sit_simple_planar_sensors_03.xml"/>
