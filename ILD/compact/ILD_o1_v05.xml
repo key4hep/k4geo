@@ -173,7 +173,7 @@
 
 	<include ref="SHcalSc04_Barrel.xml"/>
 
-	<include ref="SHcalSc04_Endcaps.xml"/>
+	<!-- <include ref="SHcalSc04_Endcaps.xml"/> -->
 
 	<include ref="BeamCal08.xml"/>
 
@@ -205,7 +205,7 @@
 	  <!--  TODO: implement Sensitive detector driver-->	
 	  <!-- <segmentation type="CartesianGridXYZ" grid_size_x="0.35*cm" grid_size_y="0.35*cm"  grid_size_z="0.35*cm"/> -->
 	  <!-- <id>system:8,layer:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id> -->
-	  <id>system:5,layer:8,module:5,stave:5,tower:3,slice:5,x:32:-16,y:-16</id> 
+	  <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,I:32:-16,J:-16</id> 
 	</readout>
 
 	<readout name="EcalEndcapsCollection">
@@ -219,7 +219,7 @@
 	  <!--  TODO: implement Sensitive detector driver-->	
 	  <segmentation type="CartesianGridXYZ" grid_size_x="0.35*cm" grid_size_y="0.35*cm"  grid_size_z="0.35*cm"/>
 	  <!-- <id>system:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id> -->
-	  <id>system:5,layer:8,module:5,stave:5,tower:3,slice:5,x:32:-16,y:-16</id>
+	  <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,I:32:-16,J:-16</id>
 	</readout>
 
  	<readout name="HcalEndcapsCollection">

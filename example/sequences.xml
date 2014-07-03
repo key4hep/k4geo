@@ -182,22 +182,23 @@
     </sequence>
     
 
-     <!-- use TRKSiSD for the calorimeters as well until we have -->
+     <!-- use simple SD for the calorimeters as well until we have -->
      <!-- proper sensitive detectors  -->
 
     <sequence sd="EcalBarrel" type="Geant4SensDetActionSequence">
-      <filter name="GeantinoRejector"/>
-      <filter name="EnergyDepositMinimumCut" Cut="1*keV"/>
-      <action name="Geant4SimpleCalorimeterAction/Ecal"/>
-      <!-- <action name="TRKSiSD00/EcalBarrelCollection"/> -->
+      <action name="SDHcalBarrel/EcalBarrelRegCollection">
+      <properties cellSize="{1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0 }"
+                  applyBirksLawFlag="false"/> 
+      </action>   
     </sequence>
 
     <sequence sd="HcalBarrel" type="Geant4SensDetActionSequence">
-      <filter name="GeantinoRejector"/>
-      <filter name="EnergyDepositMinimumCut" Cut="1*keV"/>
-      <!-- <action name="TRKSiSD00/HcalBarrelCollection"/> -->
-      <action name="Geant4SimpleCalorimeterAction/Hcal"/>
+      <action name="SDHcalBarrel/HcalBarrelRegCollection">
+      <properties cellSize="{3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0 }"
+                  applyBirksLawFlag="true"/> 
+      </action>   
     </sequence>
+
         
   </sequences>
 </geant4_setup>
