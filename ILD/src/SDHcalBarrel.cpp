@@ -356,13 +356,10 @@ namespace DDSim {
 
     dd4hep::Geant4StepHandler stepH( aStep );
     dd4hep::Geant4VolumeManager volMgr = dd4hep::Geant4Mapping::instance().volumeManager();
-    dd4hep::BitField64& decoder = *  m_readout.idSpec().decoder() ;
 
     dd4hep::VolumeID preID  = volMgr.volumeID( stepH.preTouchable() );
 
-    dd4hep::VolumeID postID = volMgr.volumeID( stepH.postTouchable() );
-
-    
+   
     if( preID == 0 ) {
       
       G4cout << " #####################################################################  "    << G4endl; 
@@ -372,21 +369,6 @@ namespace DDSim {
       return false; // this should never happen really ??
     }
     
-    
-    G4int PrelayerNumber  =  decoder(  preID )["layer"] ;
-    G4int PostlayerNumber =  decoder( postID )["layer"] ;
-
-    if( (PrelayerNumber > PostlayerNumber) 
-	|| (PrelayerNumber < PostlayerNumber) ) {
-      G4cout    << " ------ process () ---------------------------------- \n "
-		<< "    prestep volID "  << decoder( preID )  << " \n " 
-		<< "    poststep volID " << decoder( postID ) << " \n " 
-		<< "    PrelayerNumber " << PrelayerNumber << " \n " 
-		<< "    PostlayerNumber " << PostlayerNumber << " \n " 
-		<< " --------------------------------------------------- \n "
-		<< G4endl;
-    }
-
 
     emSaturation = new G4EmSaturation();
 
