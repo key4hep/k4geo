@@ -1,4 +1,4 @@
-<detector name="EcalEndcaps" type="SEcal04_Endcaps" id="9" readout="EcalEndcapsCollection" vis="GreenVis" >
+<detector name="EcalEndcap" type="SEcal04_Endcaps" id="9" readout="EcalEndcapsCollection" vis="GreenVis" >
     <comment>EM Calorimeter Endcaps</comment>
 
     <staves  material = "TungstenDens24"  vis="BlueVis"/>

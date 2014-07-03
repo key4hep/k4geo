@@ -192,6 +192,13 @@
       </action>   
     </sequence>
 
+    <sequence sd="EcalEndcap" type="Geant4SensDetActionSequence">
+      <action name="SDHcalBarrel/EcalEndcapsCollection">
+      <properties cellSize="{1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0 }"
+                  applyBirksLawFlag="false"/> 
+      </action>   
+    </sequence>
+
     <sequence sd="HcalBarrel" type="Geant4SensDetActionSequence">
       <action name="SDHcalBarrel/HcalBarrelRegCollection">
       <properties cellSize="{3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0 }"
