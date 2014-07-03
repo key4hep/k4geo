@@ -42,9 +42,21 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   Material    Steel235    = lcdd.material(x_det.materialStr());
   int         numSides    = dim.numsides();
 
-  DetElement   sdet(det_name,x_det.id());
+  int           det_id    = x_det.id();
+
+  DetElement   sdet(det_name,det_id);
   Volume      motherVol = lcdd.pickMotherVolume(sdet); 
-  
+ 
+  Assembly envelope_assembly( det_name + "assembly"  ) ;  
+  PlacedVolume  env_phv   = motherVol.placeVolume(envelope_assembly);
+
+  env_phv.addPhysVolID("system",det_id);
+  sdet.setPlacement(env_phv);
+
+  sens.setType("calorimeter");
+
+  DetElement    stave_det("module0stave0",det_id);
+ 
   // The way to reaad constant from XML/LCDD file.
   double      Hcal_radiator_thickness          = lcdd.constant<double>("Hcal_radiator_thickness");
   double      Hcal_lateral_structure_thickness = lcdd.constant<double>("Hcal_lateral_structure_thickness");
@@ -95,15 +107,16 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       
       // Create Hcal Endcap Chamber without radiator
       // Place into the Hcal Encap module envelope, after each radiator 
-      int layer_num = 0;
+      int layer_num = 1;
       for(xml_coll_t c(x_det,_U(layer)); c; ++c)  {
 	xml_comp_t   x_layer = c;
 	int          repeat = x_layer.repeat();          // Get number of layers.
-	const Layer* lay    = layering.layer(layer_num); // Get the layer from the layering engine.
-	
+	//const Layer* lay    = layering.layer(layer_num); // Get the layer from the layering engine.
+	//	double layer_thickness = lay->thickness();
+
+	double layer_thickness = layering.layer(layer_num)->thickness();
 	string layer_name      = envelopeVol_name+"_layer";
-	double layer_thickness = lay->thickness();
-	DetElement  layer(layer_name,layer_name,x_det.id());
+	DetElement  layer(stave_det,layer_name,det_id);
 	
 	// Active Layer box & volume
 	double active_layer_dim_x = box_half_x - Hcal_lateral_structure_thickness;
@@ -128,7 +141,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  string   slice_name      = layer_name + _toString(slice_number,"_slice%d");
 	  double   slice_thickness = x_slice.thickness();
 	  Material slice_material  = lcdd.material(x_slice.materialStr());
-	  DetElement slice(layer,_toString(slice_number,"slice%d"),x_det.id());
+	  DetElement slice(layer,_toString(slice_number,"slice%d"),det_id);
 	  
 	  slice_pos_y += slice_thickness / 2.0;
 	  
@@ -171,7 +184,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 							   Position(0,layer_pos_y,0));
 	  // registry the ID of Layer, stave and module
 	  layer_phv.addPhysVolID("layer",layer_num);
-	  layer_phv.addPhysVolID("endcapID",endcapID);
+	  //layer_phv.addPhysVolID("tower",endcapID);
 	  // then setPlacement for it.
 	  layer.setPlacement(layer_phv);
 	  
@@ -224,17 +237,20 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  
 	  EndcapModule_pos_z = (module_num==0)?EndcapModule_pos_z:-EndcapModule_pos_z;
 
-	  PlacedVolume env_phv = motherVol.placeVolume(envelopeVol,
+	  PlacedVolume env_phv = envelope_assembly.placeVolume(envelopeVol,
 						       Transform3D(RotationX(rot_EM),
 								   Translation3D(EndcapModule_pos_x,
 										 EndcapModule_pos_y,
 										 EndcapModule_pos_z)));
-	  
+	  env_phv.addPhysVolID("tower",endcapID);	  
 	  env_phv.addPhysVolID("stave",stave_num);   // y: up /down
 	  env_phv.addPhysVolID("module",module_num); // z: +/-
-	  env_phv.addPhysVolID("system",x_det.id());
-	  sdet.setPlacement(env_phv);
-	  
+	  env_phv.addPhysVolID("system",det_id);
+	  //sdet.setPlacement(env_phv);
+
+	  DetElement sd = (module_num==0&&stave_num==0) ? stave_det : stave_det.clone(_toString(module_num,"module%d")+_toString(stave_num,"stave%d"));	  
+	  sd.setPlacement(env_phv);	  
+
 	}
 	
       }
