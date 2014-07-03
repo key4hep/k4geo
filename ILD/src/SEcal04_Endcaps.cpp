@@ -68,7 +68,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   sens.setType("calorimeter");
 
-  DetElement    stave_det("module0stave0",det_id);
+  DetElement    module_det("module0",det_id);
 
 
 //====================================================================
@@ -339,7 +339,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  
 	  Box        l_box(alveolus_dim_z/2.-tolerance,EC_alveolus_dim_x/2.-tolerance,l_thickness/2.0-tolerance);
 	  Volume     l_vol(det_name+"_"+l_name+"_"+tower_name,l_box,air);
-	  DetElement layer(stave_det, l_name+tower_name, det_id);
+	  DetElement layer(module_det, l_name+tower_name, det_id);
 	  
 	  l_vol.setVisAttributes(lcdd.visAttributes(x_layer.visStr()));
 	  
@@ -511,18 +511,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
     PlacedVolume pv = envelope_assembly.placeVolume(EnvLogEndCap,tran3D);
     pv.addPhysVolID("module",module_id); // z: +/-
-    stave_det.setPlacement(pv);
+
+    DetElement sd = (module_num==0) ? module_det : module_det.clone(_toString(module_num,"module%d"));
+    sd.setPlacement(pv);
+
   }
   
 
-  //====================================================================
-  // Place Ecal Endcaps assembly envelope into the world volume
-  //====================================================================
-
-  env_phv = motherVol.placeVolume(envelope_assembly);
-  env_phv.addPhysVolID("system", sdet.id());
-  sdet.setVisAttributes( lcdd, x_det.visStr(),  envelope_assembly);
-  sdet.setPlacement(env_phv);
   return sdet;
   
 }
