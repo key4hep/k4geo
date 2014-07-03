@@ -199,6 +199,13 @@
       </action>   
     </sequence>
 
+    <sequence sd="HcalEndcap" type="Geant4SensDetActionSequence">
+      <action name="SDHcalEndcap/HcalEndcapsCollection">
+      <properties cellSize="{3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0 }"
+                  applyBirksLawFlag="true"/> 
+      </action>   
+    </sequence>
+
         
   </sequences>
 </geant4_setup>

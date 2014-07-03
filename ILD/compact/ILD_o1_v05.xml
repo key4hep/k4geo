@@ -173,7 +173,7 @@
 
 	<include ref="SHcalSc04_Barrel.xml"/>
 
-	<!-- <include ref="SHcalSc04_Endcaps.xml"/> -->
+	<include ref="SHcalSc04_Endcaps.xml"/>
 
 	<include ref="BeamCal08.xml"/>
 
@@ -226,7 +226,7 @@
  	  <!--  TODO: implement Sensitive detector driver-->	
  	  <segmentation type="CartesianGridXYZ" grid_size_x="0.35*cm" grid_size_y="0.35*cm"  grid_size_z="0.35*cm"/>
  	  <!-- <id>system:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id> -->
- 	  <id>system:5,layer:8,module:1,stave:5,endcapID:7,slice:5,x:32:-16,y:-16</id>
+ 	  <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,I:32:-16,J:-16</id>
  	</readout>
 
 	<readout name="BeamCalCollection">
