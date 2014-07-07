@@ -142,9 +142,9 @@ namespace DDSim {
     G4ThreeVector postlocalPosition = thepostTouchable->GetHistory()->
       GetTopTransform().TransformPoint(postworldPosition);
 
-    G4ThreeVector localMiddlePoint = ( prelocalPosition + postlocalPosition ) * 0.5;
+    //G4ThreeVector localMiddlePoint = ( prelocalPosition + postlocalPosition ) * 0.5;
 
-    //G4ThreeVector localMiddlePoint = prelocalPosition;
+    G4ThreeVector localMiddlePoint = prelocalPosition;
 
     double offSize  = 0.0;
 
@@ -195,14 +195,18 @@ namespace DDSim {
 
     }
 
-
-#ifdef SDHcalBarrel_DEBUG 
+#ifdef SDHcalBarrel_DEBUG
+    if( abs(preworldPosition[0]-postworldPosition[0])> _cellSize.at(currentLayer-1)
+	|| abs(preworldPosition[1]-postworldPosition[1])> _cellSize.at(currentLayer-1)
+	|| abs(preworldPosition[1]-postworldPosition[1])> _cellSize.at(currentLayer-1) )
+    {
     G4cout   <<" \n preworldPosition: "  << preworldPosition
 	     <<" \n postworldPosition: " << postworldPosition
 	     <<" \n prelocalPosition: "  << prelocalPosition
 	     <<" \n postlocalPosition: " << postlocalPosition
 	     <<" \n worldMiddlePoint: "  << worldMiddlePoint
 	     << G4endl;
+  }
 #endif
 
 #ifdef SDHcalBarrel_DEBUG 

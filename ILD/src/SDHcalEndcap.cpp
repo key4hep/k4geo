@@ -142,9 +142,9 @@ namespace DDSim {
     G4ThreeVector postlocalPosition = thepostTouchable->GetHistory()->
       GetTopTransform().TransformPoint(postworldPosition);
 
-    G4ThreeVector localMiddlePoint = ( prelocalPosition + postlocalPosition ) * 0.5;
+    //G4ThreeVector localMiddlePoint = ( prelocalPosition + postlocalPosition ) * 0.5;
 
-    //G4ThreeVector localMiddlePoint = prelocalPosition;
+    G4ThreeVector localMiddlePoint = prelocalPosition;
 
     double offSize  = 0.0;
 
