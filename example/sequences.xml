@@ -182,36 +182,36 @@
     </sequence>
     
 
-     <!-- use simple SD for the calorimeters as well until we have -->
-     <!-- proper sensitive detectors  -->
+    <!--  <\!-- use simple SD for the calorimeters as well until we have -\-> -->
+    <!--  <\!-- proper sensitive detectors  -\-> -->
 
-    <sequence sd="EcalBarrel" type="Geant4SensDetActionSequence">
-      <action name="SDHcalBarrel/EcalBarrelRegCollection">
-      <properties cellSize="{1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0 }"
-                  applyBirksLawFlag="false"/> 
-      </action>   
-    </sequence>
+    <!-- <sequence sd="EcalBarrel" type="Geant4SensDetActionSequence"> -->
+    <!--   <action name="SDHcalBarrel/EcalBarrelRegCollection"> -->
+    <!--   <properties cellSize="{1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0 }" -->
+    <!--               applyBirksLawFlag="false"/>  -->
+    <!--   </action>    -->
+    <!-- </sequence> -->
 
-    <sequence sd="EcalEndcap" type="Geant4SensDetActionSequence">
-      <action name="SDHcalBarrel/EcalEndcapsCollection">
-      <properties cellSize="{1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0 }"
-                  applyBirksLawFlag="false"/> 
-      </action>   
-    </sequence>
+    <!-- <sequence sd="EcalEndcap" type="Geant4SensDetActionSequence"> -->
+    <!--   <action name="SDHcalBarrel/EcalEndcapsCollection"> -->
+    <!--   <properties cellSize="{1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0 }" -->
+    <!--               applyBirksLawFlag="false"/> -->
+    <!--   </action> -->
+    <!-- </sequence> -->
 
-    <sequence sd="HcalBarrel" type="Geant4SensDetActionSequence">
-      <action name="SDHcalBarrel/HcalBarrelRegCollection">
-      <properties cellSize="{3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0 }"
-                  applyBirksLawFlag="true"/> 
-      </action>   
-    </sequence>
+    <!-- <sequence sd="HcalBarrel" type="Geant4SensDetActionSequence"> -->
+    <!--   <action name="SDHcalBarrel/HcalBarrelRegCollection"> -->
+    <!--   <properties cellSize="{3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0 }" -->
+    <!--               applyBirksLawFlag="true"/>  -->
+    <!--   </action>    -->
+    <!-- </sequence> -->
 
-    <sequence sd="HcalEndcap" type="Geant4SensDetActionSequence">
-      <action name="SDHcalEndcap/HcalEndcapsCollection">
-      <properties cellSize="{3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0 }"
-                  applyBirksLawFlag="true"/> 
-      </action>   
-    </sequence>
+    <!-- <sequence sd="HcalEndcap" type="Geant4SensDetActionSequence"> -->
+    <!--   <action name="SDHcalEndcap/HcalEndcapsCollection"> -->
+    <!--   <properties cellSize="{3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0 }" -->
+    <!--               applyBirksLawFlag="true"/>  -->
+    <!--   </action>    -->
+    <!-- </sequence> -->
 
         
   </sequences>

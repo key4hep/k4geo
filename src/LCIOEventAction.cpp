@@ -50,6 +50,8 @@ namespace DDSim {
 
        evt->addCollection( col , "MCParticle" ) ;
 
+       //       std::cout << " ########## LCIOEventAction::saveEvent() : add MCParticle collection to the event ... " << std::endl ;
+
      } else { 
 
        std::cout << " ########## LCIOEventAction::saveEvent() : invalid event pointer in context()->event().extension<lcio::LCEventImpl>()" << std::endl ;

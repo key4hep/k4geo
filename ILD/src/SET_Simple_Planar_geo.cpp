@@ -448,4 +448,5 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   return set;
 }
-DECLARE_DETELEMENT(SET_Simple_Planar,create_element);
+DECLARE_DETELEMENT(SET_Simple_Planar,create_element)
+

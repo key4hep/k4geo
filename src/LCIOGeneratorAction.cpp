@@ -20,7 +20,7 @@
 #include "lcio.h"
 #include "IO/LCReader.h"
 #include "EVENT/LCEvent.h"
-#include "EVENT/LCCollection.h"
+#include "IMPL/LCCollectionVec.h"
 #include "IMPL/MCParticleImpl.h"
 
 // C/C++ include files
@@ -78,15 +78,16 @@ namespace DDSim {
 
     if( ! evt ) {
 
-      //      return ; // what do do in case of EOF ???
+      //      return ; // what do we do in case of EOF ???
 
       throw lcio::DataNotAvailableException(" LCIOGeneratorAction - too many events requested: EOF reached " ) ; 
 
     }
 
-    // get MCParticle collection from event
-    // and take ownership (as we add it to the output event ) ...
-    lcio::LCCollection* col =  evt->takeCollection( _MCParticleCollectionName ) ;
+    // get MCParticle collection from event and take ownership (as we add it to the output event ) ...
+    // also have to reset the transient flag that is set by takeCollection ...
+    lcio::LCCollectionVec* col =  dynamic_cast<lcio::LCCollectionVec*> ( evt->takeCollection( _MCParticleCollectionName ) ) ;
+    col->setTransient( false ) ;
 
     //============================================================
     //  code ported from Mokka HepLCIOInterfaceNew.cc
@@ -233,7 +234,7 @@ namespace DDSim {
     
     // Add the MCParticle collection to the context ( testing ... ) 
 
-    context()->event().addExtension( col , typeid( EVENT::LCCollection ), 0);
+    context()->event().addExtension<EVENT::LCCollection>( col , false );
 
   }
 

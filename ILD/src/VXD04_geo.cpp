@@ -1244,4 +1244,4 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   return vxd;
 }
-DECLARE_DETELEMENT(VXD04,create_element);
+DECLARE_DETELEMENT(VXD04,create_element)

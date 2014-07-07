@@ -1176,11 +1176,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   return ftd;
 }
 
-DECLARE_DETELEMENT(FTD_Simple_Staggered ,create_element);
-
-
-
-
+DECLARE_DETELEMENT(FTD_Simple_Staggered ,create_element)
 
 
 

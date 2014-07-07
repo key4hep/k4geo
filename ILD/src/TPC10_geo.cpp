@@ -605,4 +605,4 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
   
   return tpc;
 }
-DECLARE_DETELEMENT(TPC10,create_element);
+DECLARE_DETELEMENT(TPC10,create_element)

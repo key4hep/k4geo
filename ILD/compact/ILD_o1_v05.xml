@@ -165,17 +165,17 @@
 
 	<include ref="set_simple_planar_sensors_01.xml"/>
 
-        <comment>Calorimeters</comment>
+        <!-- <comment>Calorimeters</comment> -->
 
-	<include ref="SEcal04_Barrel.xml"/>
+	<!-- <include ref="SEcal04_Barrel.xml"/> -->
 
-	<include ref="SEcal04_Endcaps.xml"/>
+	<!-- <include ref="SEcal04_Endcaps.xml"/> -->
 
-	<include ref="SHcalSc04_Barrel.xml"/>
+	<!-- <include ref="SHcalSc04_Barrel.xml"/> -->
 
-	<include ref="SHcalSc04_Endcaps.xml"/>
+	<!-- <include ref="SHcalSc04_Endcaps.xml"/> -->
 
-	<include ref="BeamCal08.xml"/>
+	<!-- <include ref="BeamCal08.xml"/> -->
 
       </detectors> 
 

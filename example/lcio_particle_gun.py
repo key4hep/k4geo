@@ -17,7 +17,7 @@ from array import array
 from pyLCIO import UTIL, EVENT, IMPL, IO, IOIMPL
 
 #---- number of events per momentum bin -----
-nevt = 10
+nevt = 100
 
 outfile = "mcparticles.slcio"
 
@@ -34,13 +34,15 @@ random.seed()
 #========== particle properties ===================
 
 #momenta = [ 1. , 3., 5., 10., 15., 25., 50., 100. ]
-momenta = [ 10. ]
+momenta = [ 1. ]
 
 genstat  = 1
 pdg = 13
+#pdg = 211
 mass =  0.105658 
 charge = -1.
 theta = 70./180. * math.pi 
+#theta = 30./180. * math.pi 
 
 decayLen = 1.e32 
 #=================================================

@@ -717,4 +717,4 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   return tube;
 }
-DECLARE_DETELEMENT(TubeX01,create_element);
+DECLARE_DETELEMENT(TubeX01,create_element)
