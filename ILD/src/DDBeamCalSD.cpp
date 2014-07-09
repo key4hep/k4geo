@@ -5,46 +5,31 @@
 //  $Id:$
 //====================================================================
 #include "DDBeamCalSD.h"
-
-#include "DDG4/Geant4StepHandler.h"
-#include "DDG4/Geant4VolumeManager.h"
-#include "DDG4/Geant4Mapping.h"
-
-#include "DDSegmentation/BitField64.h"
-
-
-//Geant4
 #include "G4Step.hh"
-#include "G4StepPoint.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4TransportationManager.hh"
-#include "G4TouchableHistory.hh"
-#include "G4AffineTransform.hh"
-#include "G4SDManager.hh"
-#include "G4ios.hh"
-#include "globals.hh"
-
 //LCIO
 #include "IMPL/SimCalorimeterHitImpl.h"
-
-
-#include <cassert>
-
 
 namespace DDSim {
 
   bool DDBeamCalSD::process(G4Step* aStep,G4TouchableHistory* /*history*/) {
 
     DD4hep::VolumeID myCellID = cellID(aStep);//inherited from Geant4Sensitive
+#pragma warning "FIXME: Use bitshifting intead of pointer casting"
     int *cellIDs = (int*)&myCellID;
+
     //Treat energy deposit
     G4double eDep = aStep->GetTotalEnergyDeposit();
-    //Add at the hit to the collection
+
+    //Create the hit
     IMPL::SimCalorimeterHitImpl* hit = new IMPL::SimCalorimeterHitImpl ;
     hit->setEnergy(eDep);
     hit->setCellID0(cellIDs[0]);
     hit->setCellID1(cellIDs[1]);
+    G4ThreeVector lp = (aStep->GetPreStepPoint()->GetPosition()+aStep->GetPostStepPoint()->GetPosition())*0.5;
+    float localposition[] = { (float)lp[0], (float)lp[1], (float)lp[2]};
+    hit->setPosition(localposition);
     collection(m_collectionID)->add(hit);
+    //Add at the hit to the collection
 
     return true;
 
