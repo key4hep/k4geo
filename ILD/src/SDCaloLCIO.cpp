@@ -4,14 +4,14 @@
 //  A.Sailer, CERN
 //  $Id:$
 //====================================================================
-#include "DDBeamCalSD.h"
+#include "SDCaloLCIO.h"
 #include "G4Step.hh"
 //LCIO
 #include "IMPL/SimCalorimeterHitImpl.h"
 
 namespace DDSim {
 
-  bool DDBeamCalSD::process(G4Step* aStep,G4TouchableHistory* /*history*/) {
+  bool SDCaloLCIO::process(G4Step* aStep,G4TouchableHistory* /*history*/) {
 
     DD4hep::VolumeID myCellID = cellID(aStep);//inherited from Geant4Sensitive
 #pragma warning "FIXME: Use bitshifting intead of pointer casting"
@@ -25,6 +25,9 @@ namespace DDSim {
     hit->setEnergy(eDep);
     hit->setCellID0(cellIDs[0]);
     hit->setCellID1(cellIDs[1]);
+    std::cout << " CellID "<< std::hex << myCellID  << std::endl;
+    std::cout << " CellID0 "<< std::hex << cellIDs[0]  << std::endl;
+    std::cout << " CellID1 "<< std::hex << cellIDs[1]  << std::endl;
     G4ThreeVector lp = (aStep->GetPreStepPoint()->GetPosition()+aStep->GetPostStepPoint()->GetPosition())*0.5;
     float localposition[] = { (float)lp[0], (float)lp[1], (float)lp[2]};
     hit->setPosition(localposition);
@@ -41,9 +44,9 @@ namespace DDSim {
 
 namespace DD4hep{
   namespace Simulation{
-    typedef DDSim::DDBeamCalSD DDBeamCalSD;
+    typedef DDSim::SDCaloLCIO SDCaloLCIO;
   }
 }
 #include "DDG4/Factories.h"
 
-DECLARE_GEANT4SENSITIVE(DDBeamCalSD)
+DECLARE_GEANT4SENSITIVE(SDCaloLCIO)

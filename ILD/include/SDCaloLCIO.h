@@ -3,8 +3,8 @@
 //--------------------------------------------------------------------
 //  A.Sailer, CERN
 //====================================================================
-#ifndef DDBeamCalSD_h
-#define DDBeamCalSD_h 1
+#ifndef SDCaloLCIO_h
+#define SDCaloLCIO_h 1
 
 
 #include "DDG4/Geant4SensDetAction.h"
@@ -28,7 +28,7 @@ namespace dd4hep {
 
 namespace DDSim {
 
-  class DDBeamCalSD : public dd4hep::Geant4Sensitive {
+  class SDCaloLCIO : public dd4hep::Geant4Sensitive {
   
   protected:
     size_t m_collectionID;
@@ -37,7 +37,7 @@ namespace DDSim {
   public:
     //======================================================================================================
   
-    DDBeamCalSD(dd4hep::Geant4Context* mContext, const std::string& mName, DetElement mDet, LCDD& mLcdd):
+    SDCaloLCIO(dd4hep::Geant4Context* mContext, const std::string& mName, DetElement mDet, LCDD& mLcdd):
       Geant4Sensitive(mContext,mName,mDet,mLcdd), m_collectionID(-1), _detailedHitsStoring(false)
     {
       declareProperty("detailedHitsStoring", _detailedHitsStoring =0) ;
@@ -46,7 +46,7 @@ namespace DDSim {
     }
   
     /// Default destructor
-    virtual ~DDBeamCalSD(){
+    virtual ~SDCaloLCIO(){
       dd4hep::InstanceCount::decrement(this);
     }
   
