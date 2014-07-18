@@ -8,11 +8,11 @@
 #include "DDG4/Geant4Config.h"
 #include <iostream>
 
-#include "DDSim/G4lcioSimHit.h"
+//#include "DDSim/G4lcioSimHit.h"
 
 using namespace DD4hep::Simulation::Setup;
 
-/** Simple main program to get started with DDSim.
+/** Simple main program to run a simulation with DDG4
  *  Loops over all xml files given on command line:
  *   - first file defines geometry
  *   - subsequent files configure the application
@@ -22,7 +22,7 @@ int main(int argc, char** argv)  {
 
 
   if( argc < 2 ){
-    std::cout << " --- Usage: \n " 
+    std::cout << " --- Usage example: \n " 
 	      << " dd_sim  ../ILD/compact/ILD_o1_v05.xml [sensitive_detectors.xml] sequences.xml physics.xml " 
 	      << std::endl ; 
     exit( 0 ) ;
@@ -38,16 +38,13 @@ int main(int argc, char** argv)  {
   std::string geoFile = "file:" ;
   geoFile += argv[1] ;
 
-  kernel.loadGeometry( geoFile ) ;  //"file:../DD4hep.trunk/DDExamples/CLICSiD/compact/compact.xml");
+  kernel.loadGeometry( geoFile ) ; 
 
   for( int i=2 ; i < argc  ; ++i ) {
     
     std::cerr << "  will open xml file " << argv[i] <<  " and load to kernel ..." << std::endl ;
 
     kernel.loadXML( argv[i] ) ;
-    // kernel.loadXML("sensitive_detectors.xml");
-    // kernel.loadXML("sequences.xml");
-    // kernel.loadXML("physics.xml");
   }
 
   kernel.configure();
