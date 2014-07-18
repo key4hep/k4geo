@@ -75,7 +75,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 //====================================================================
 //
 // Read all the constant from ILD_o1_v05.xml
-// Use them to build Ecal endcaps
+// Use them to build Ecal ECRing
 //
 //====================================================================
 
@@ -92,7 +92,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double Ecal_fiber_thickness               = lcdd.constant<double>("Ecal_fiber_thickness");
   double Ecal_Si_thickness                  = lcdd.constant<double>("Ecal_Si_thickness");
   
-  //double Ecal_inner_radius                  = lcdd.constant<double>("TPC_outer_radius") +lcdd.constant<double>("Ecal_Tpc_gap");
   double Ecal_radiator_thickness1           = lcdd.constant<double>("Ecal_radiator_layers_set1_thickness");
   double Ecal_radiator_thickness2           = lcdd.constant<double>("Ecal_radiator_layers_set2_thickness");
   double Ecal_radiator_thickness3           = lcdd.constant<double>("Ecal_radiator_layers_set3_thickness");
@@ -101,15 +100,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double Ecal_support_thickness             = lcdd.constant<double>("Ecal_support_thickness");
   double Ecal_front_face_thickness          = lcdd.constant<double>("Ecal_front_face_thickness");
   double Ecal_lateral_face_thickness        = lcdd.constant<double>("Ecal_lateral_face_thickness");
-  double Ecal_Slab_H_fiber_thickness        = lcdd.constant<double>("Ecal_Slab_H_fiber_thickness");
-
+ 
   double Ecal_Slab_Sc_PCB_thickness         = lcdd.constant<double>("Ecal_Slab_Sc_PCB_thickness");
   double Ecal_Sc_thickness                  = lcdd.constant<double>("Ecal_Sc_thickness");
   double Ecal_Sc_reflector_thickness        = lcdd.constant<double>("Ecal_Sc_reflector_thickness");
 
   double Ecal_EC_Ring_gap                   = lcdd.constant<double>("Ecal_EC_Ring_gap");
 
-  //double Ecal_endcap_extra_size             = lcdd.constant<double>("Ecal_endcap_extra_size");
   double Ecal_cables_gap                    = lcdd.constant<double>("Ecal_cables_gap");
   double Lcal_outer_radius                  = lcdd.constant<double>("Lcal_outer_radius");
   double Ecal_Lcal_ring_gap                 = lcdd.constant<double>("Ecal_Lcal_ring_gap");
@@ -118,7 +115,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   int    Ecal_nlayers1                      = lcdd.constant<int>("Ecal_nlayers1");
   int    Ecal_nlayers2                      = lcdd.constant<int>("Ecal_nlayers2");
   int    Ecal_nlayers3                      = lcdd.constant<int>("Ecal_nlayers3");
-  int    Ecal_barrel_number_of_towers       = lcdd.constant<int>("Ecal_barrel_number_of_towers");
   
 
 
@@ -171,21 +167,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   std::cout << "Ecal_Barrel_module_dim_z  = " << Ecal_Barrel_module_dim_z  << std::endl;
 #endif
 
-  // The alveolus size takes in account the module Z size
-  // but also 4 fiber layers for the alveoulus wall, the all
-  // divided by the number of towers
-  double alveolus_dim_z = 
-    (Ecal_Barrel_module_dim_z - 2. * Ecal_lateral_face_thickness) /
-    Ecal_barrel_number_of_towers - 
-    2 * N_FIBERS_ALVOULUS  * Ecal_fiber_thickness  - 
-    2 * Ecal_Slab_H_fiber_thickness -
-    2 * Ecal_Slab_shielding;
-
-
-#ifdef VERBOSE
-  std::cout << "alveolus_dim_z = " <<  alveolus_dim_z << std::endl;
-#endif
-
   int n_total_layers = Ecal_nlayers1 + Ecal_nlayers2 + Ecal_nlayers3;
   Number_of_Si_Layers_in_Barrel = n_total_layers+1;
 
@@ -214,6 +195,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 #endif
   
 
+  double ECRingSiplateSize = Ecal_endcap_center_box_size 
+    - 2 * Ecal_EC_Ring_gap
+    - 2 * Ecal_lateral_face_thickness;
+
+
 // ========= Create Ecal end cap ring   ====================================
 //  It will be the volume for palcing the Ecal endcaps alveolus(i.e. Layers).
 //  And the structure W plate.
@@ -236,30 +222,196 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 
   //==============================================================
-  // TODO: to build the layer and place into the ECRing
+  // build the layer and place into the ECRing
   //==============================================================
 
 
+  //-------------------------------------------------------
+  // Radiator and towers placements inside the ECRing module
+  //-------------------------------------------------------
 
+  // We count the layers starting from IP and from 1,
+  // so odd layers should be inside slabs and
+  // even ones on the structure.
+  //
+  double z_floor = 
+    - module_thickness/2 +
+    Ecal_front_face_thickness + 
+    N_FIBERS_ALVOULUS * Ecal_fiber_thickness;
 
-
-
-
-
-
-
-
-
-
-
-
-
-  
-    // Set stave visualization.
-    if (x_staves)   {
-      EnvLogECRing.setVisAttributes(lcdd.visAttributes(x_staves.visStr()));
-    }
+  double l_pos_z = z_floor;
  
+  //-------------------- start loop over ECAL layers ----------------------
+  // Loop over the sets of layer elements in the detector.
+  int l_num = 1;
+  for(xml_coll_t li(x_det,_U(layer)); li; ++li)  {
+    xml_comp_t x_layer = li;
+    int repeat = x_layer.repeat();
+    // Loop over number of repeats for this layer.
+    for (int j=0; j<repeat; j++)    {
+      
+      string l_name = _toString(l_num,"layer%d");
+      double l_thickness = layering.layer(l_num-1)->thickness();  // Layer's thickness.
+      l_pos_z  += l_thickness/2.;
+      
+      int EC_Number_of_towers = 0; 
+
+      double radiator_dim_y = -1.0; //to be updated with slice radiator thickness 
+      
+
+	  
+      // We use the same method able to create the Barrel
+      // Slabs, so we have to rotate it later when placing 
+      // into the EC modules.
+      //
+      // We use the same method able to create the Barrel
+      // radiator plates between slabs, but with the good
+      // dimensions to avoid to rotate it later when placing 
+      // into the EC modules.
+      
+      // While the towers have the same shape use the same 
+      // logical volumes and parameters.
+      
+      
+      string tower_name = _toString(EC_Number_of_towers,"tower%d");
+
+      
+      // build the ECRing layer, a box with hole in the middle 
+      
+      Tube CenterECTubForSi(0.,
+			    Lcal_outer_radius + Ecal_Lcal_ring_gap + 0.001, // + tolerance,
+			    module_thickness,
+			    0.,
+			    2 * M_PI);
+
+      Box  ECRingSiBox( ECRingSiplateSize/ 2. - tolerance, ECRingSiplateSize/ 2. - tolerance, l_thickness/2.0-tolerance);
+
+      SubtractionSolid ECRingSiSolid( ECRingSiBox, CenterECTubForSi);
+	  
+
+      Volume     l_vol(det_name+"_"+l_name+"_"+tower_name,ECRingSiSolid,air);
+      DetElement layer(module_det, l_name+tower_name, det_id);
+	  
+      l_vol.setVisAttributes(lcdd.visAttributes(x_layer.visStr()));
+      
+      
+      
+      // Loop over the sublayers or slices for this layer.
+      int s_num = 1;
+      double s_pos_z = -(l_thickness / 2);
+      
+      //--------------------------------------------------------------------------------
+      // BuildECRing keep the Alveolus structure, the same as the Barrel and Endcap
+      //--------------------------------------------------------------------------------
+	
+      for(xml_coll_t si(x_layer,_U(slice)); si; ++si)  {
+	xml_comp_t x_slice = si;
+	string     s_name  =  _toString(s_num,"slice%d");
+	double     s_thick = x_slice.thickness();
+	    
+	double slab_dim_x = ECRingSiplateSize/ 2.-tolerance;
+	double slab_dim_y = s_thick;
+	double slab_dim_z = ECRingSiplateSize/ 2.-tolerance;
+	    
+	Box        s_box(slab_dim_x,slab_dim_z,slab_dim_y);
+
+	SubtractionSolid ECRingSiSliceSolid( s_box, CenterECTubForSi);
+
+	Volume     s_vol(det_name+"_"+l_name+"_"+s_name,ECRingSiSliceSolid,lcdd.material(x_slice.materialStr()));
+	DetElement slice(layer,s_name,det_id);
+	    
+	s_vol.setVisAttributes(lcdd.visAttributes(x_slice.visStr()));
+
+#ifdef VERBOSE	    
+	std::cout<<"x_slice.materialStr(): "<< x_slice.materialStr() <<std::endl;
+#endif
+	if (x_slice.materialStr().compare(x_staves.materialStr()) == 0)
+	  radiator_dim_y = s_thick;
+	// W StructureLayer has the same thickness as W radiator layer in the Alveolus layer
+	    
+	if ( x_slice.isSensitive() ) {
+	  s_vol.setSensitiveDetector(sens);
+	}
+	slice.setAttributes(lcdd,s_vol,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
+	
+	// Slice placement.
+	PlacedVolume slice_phv = l_vol.placeVolume(s_vol,Position(0,0,s_pos_z+s_thick/2));
+	
+	if ( x_slice.isSensitive() ) {
+	  slice_phv.addPhysVolID("slice",s_num);
+	}
+	slice.setPlacement(slice_phv);
+	// Increment Z position of slice.
+	s_pos_z += s_thick;
+	
+	// Increment slice number.
+	++s_num;
+      }        
+      
+      
+      if(radiator_dim_y <= 0) {
+	stringstream err;
+	err << " \n ERROR: The subdetector " << x_det.nameStr() << " geometry parameter -- radiator_dim_y = " << radiator_dim_y ;
+	err << " \n Please check the radiator material name in the subdetector xml file";
+	throw runtime_error(err.str());
+      }
+      
+      // #########################
+      // BuildECRingStructureLayer
+      // #########################
+      
+	  
+      string bs_name="bs";
+      
+      //Box        EndcapStructureLayer_box(radiator_dim_x/2.,radiator_dim_z/2.,radiator_dim_y/2.);
+      Box        EndcapStructureLayer_box(ECRingSiplateSize/ 2. - tolerance, ECRingSiplateSize/ 2. - tolerance, radiator_dim_y/2.);
+      SubtractionSolid  EndcapStructureLayerSolid( EndcapStructureLayer_box, CenterECTubForSi);
+      
+      Volume     EndcapStructureLayer_vol(det_name+"_"+l_name+"_"+bs_name,EndcapStructureLayerSolid,lcdd.material(x_staves.materialStr()));
+      
+      EndcapStructureLayer_vol.setVisAttributes(lcdd.visAttributes(x_layer.visStr()));	
+      
+  
+      int i_stave = 1;
+      int i_tower = 1;
+      
+      Position l_pos(0,0,l_pos_z);
+      RotationZYX rot(0,0,0);
+      Transform3D tran3D(rot,l_pos);
+	      
+      PlacedVolume layer_phv = EnvLogECRing.placeVolume(l_vol,tran3D);
+      layer_phv.addPhysVolID("layer", l_num);
+      layer_phv.addPhysVolID("tower", i_tower);
+      layer_phv.addPhysVolID("stave", i_stave);
+      layer.setPlacement(layer_phv);
+	      
+      
+      // Without last W StructureLayer, the last part is Si SD even layer.
+      // the last number of  Ecal_nlayers1, Ecal_nlayers2 and  Ecal_nlayers3 is odd.
+      int even_layer = l_num*2;
+      if(even_layer > Ecal_nlayers1 + Ecal_nlayers2 + Ecal_nlayers3) continue;
+      
+      double bsl_pos_z = l_pos_z + l_thickness/2. + (radiator_dim_y/2. + Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE));
+      
+      Position   bsl_pos(0,0,bsl_pos_z);
+      Transform3D bsl_tran3D(rot,bsl_pos);
+      PlacedVolume  EndcapStructureLayer_phv = EnvLogECRing.placeVolume(EndcapStructureLayer_vol,bsl_tran3D);
+	      
+     
+      // Increment to next layer Z position.
+      l_pos_z +=   (l_thickness/2. +(radiator_dim_y/2. + Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE))*2.);
+      
+      ++l_num;
+      
+    }
+  }
+ 
+  
+  // Set stave visualization.
+  if (x_staves)   {
+    EnvLogECRing.setVisAttributes(lcdd.visAttributes(x_staves.visStr()));
+  }
+  
 
   //====================================================================
   // Place Ecal Endcap module into the assembly envelope volume
