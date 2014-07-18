@@ -1,0 +1,8 @@
+
+
+ --------
+| v00-01 |   first beta release of DDSim
+ --------    - ILD detector (ported from Mokka ILD_o1_v05) with :
+                 VXD, SIT, FTD, SET, TPC,
+                 EcalBarrel, HcalBarrel, EcalEndcap, HcalEndcap, EcalRing, beamcal
+             - sensitive detectors still experimental
