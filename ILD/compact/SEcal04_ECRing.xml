@@ -1,0 +1,44 @@
+<detector name="EcalECRing" type="SEcal04_ECRing" id="10" readout="EcalEndcapRingCollection" vis="GreenVis" >
+    <comment>EM Calorimeter Endcaps</comment>
+
+    <staves  material = "TungstenDens24"  vis="BlueVis"/>
+
+    <layer repeat="Ecal_nlayers1/2" vis="BlueVis" > <!-- 10 double SD Layers, and 5 W palte after each double SD Layer -->
+        <!-- Here is only the active layer, each layer have 5 alveolus -->
+        <slice material = "G4_AIR"         thickness = "Ecal_Alveolus_Air_Gap/2." />
+        <slice material = "siPCBMix"       thickness = "Ecal_Slab_PCB_thickness+Ecal_Slab_copper_thickness+Ecal_Slab_shielding" />
+        <slice material = "G4_AIR"         thickness = "Ecal_Slab_glue_gap" />
+        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes" vis="RedVis" />
+        <!--slice material = "groundMix"      thickness = "Ecal_Slab_ground_thickness" /-->
+        <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness" />
+        <slice material = "G4_AIR"         thickness = "Ecal_fiber_thickness" />
+        <slice material = "TungstenDens24"   thickness = "Ecal_radiator_layers_set1_thickness"  vis="BlueVis" />
+        <slice material = "G4_AIR"         thickness = "Ecal_fiber_thickness" />
+        <!--slice material = "groundMix"      thickness = "Ecal_Slab_ground_thickness" /-->
+        <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness" />
+        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes" vis="RedVis" />
+        <slice material = "G4_AIR"         thickness = "Ecal_Slab_glue_gap" />
+        <slice material = "siPCBMix"       thickness = "Ecal_Slab_PCB_thickness+Ecal_Slab_copper_thickness+Ecal_Slab_shielding" />
+        <slice material = "G4_AIR"         thickness = "Ecal_Alveolus_Air_Gap/2." />
+        <!-- There is a structure after each active layer. (W+Fiber) W will be built inside dirver, 2 Fiber will be used in placement, not here. -->
+     </layer>
+    <layer repeat="(Ecal_nlayers2+1)/2" vis="BlueVis"> <!-- 5 double SD Layers, and 4 W palte after each double SD Layer, without the last W plate -->
+        <!-- Here is only the active layer, each layer have 5 alveolus -->
+        <slice material = "G4_AIR"         thickness = "Ecal_Alveolus_Air_Gap/2." />
+        <slice material = "siPCBMix"       thickness = "Ecal_Slab_PCB_thickness+Ecal_Slab_copper_thickness+Ecal_Slab_shielding" />
+        <slice material = "G4_AIR"         thickness = "Ecal_Slab_glue_gap" />
+        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes" vis="RedVis" />
+        <!--slice material = "groundMix"      thickness = "Ecal_Slab_ground_thickness" /-->
+        <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness" />
+        <slice material = "G4_AIR"         thickness = "Ecal_fiber_thickness" />
+        <slice material = "TungstenDens24"   thickness = "Ecal_radiator_layers_set2_thickness"  vis="BlueVis" />
+        <slice material = "G4_AIR"         thickness = "Ecal_fiber_thickness" />
+        <!--slice material = "groundMix"      thickness = "Ecal_Slab_ground_thickness" /-->
+        <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness" />
+        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes" vis="RedVis" />
+        <slice material = "G4_AIR"         thickness = "Ecal_Slab_glue_gap" />
+        <slice material = "siPCBMix"       thickness = "Ecal_Slab_PCB_thickness+Ecal_Slab_copper_thickness+Ecal_Slab_shielding" />
+        <slice material = "G4_AIR"         thickness = "Ecal_Alveolus_Air_Gap/2." />
+        <!-- There is a structure after each active layer.(W+Fiber) will be built inside dirver, 2 Fiber will be used in placement, not here. -->
+    </layer>
+</detector>
