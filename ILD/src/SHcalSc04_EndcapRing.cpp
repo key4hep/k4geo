@@ -107,11 +107,16 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double      Hcal_endcap_cables_gap           = lcdd.constant<double>("Hcal_endcap_cables_gap");
   double      Hcal_endcap_ecal_gap             = lcdd.constant<double>("Hcal_endcap_ecal_gap");
 
+  double      Hcal_Cu_thickness                = lcdd.constant<double>("Hcal_Cu_thickness");
+  double      Hcal_PCB_thickness               = lcdd.constant<double>("Hcal_PCB_thickness");
+
+  int         Hcal_endcap_nlayers              = lcdd.constant<int>("Hcal_endcap_nlayers");
+
   int         Hcal_ring                        = lcdd.constant<int>("Hcal_ring");
 
   //TODO: thinking about how to pass the updated value at runtime from other inner drivers? 
-  double      Ecal_endcap_zmax                 = 2635*mm;  //= lcdd.constant<double>("Ecal_endcap_zmax");
-  double      Ecal_endcap_outer_radius         = 2088.8*mm;//= lcdd.constant<double>("Ecal_endcap_outer_radius");
+  double      Ecal_endcap_zmax                 = 263.5; //cm //= lcdd.constant<double>("Ecal_endcap_zmax");
+  double      Ecal_endcap_outer_radius         = 208.88;//cm //= lcdd.constant<double>("Ecal_endcap_outer_radius");
 
 
 //====================================================================
@@ -210,21 +215,21 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   pRMin = Ecal_endcap_outer_radius
     + Hcal_radial_ring_inner_gap;
 
-  double zPlane[2];
-  zPlane[0]=-pDz;
-  zPlane[1]=-zPlane[0];
+  //double zPlane[2];
+  //zPlane[0]=-pDz;
+  //zPlane[1]=-zPlane[0];
 
   double zlen = pDz*2.;
 
-  double rInner[2],rOuter[2];
-  rInner[0]=rInner[1]=pRMin;
-  rOuter[0]=rOuter[1]=pRMax;
+  //double rInner[2],rOuter[2];
+  //rInner[0]=rInner[1]=pRMin;
+  //rOuter[0]=rOuter[1]=pRMax;
 
   double rmin = pRMin;
   double rmax = pRMax;
-  
+  int numSide = 8;
 
-  PolyhedraRegular HcalEndCapRingSolid( 8, M_PI/8., rmin, rmax,  zlen);
+  PolyhedraRegular HcalEndCapRingSolid( numSide, M_PI/8., rmin, rmax,  zlen);
 
   Volume  HcalEndCapRingLogical("HcalEndCapRingLogical",HcalEndCapRingSolid, Steel235);
 
@@ -236,19 +241,199 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 
 
+  double lpRMax, lpDz, lpRMin;
+
+  //lpRMax = rmax * cos(M_PI/numSide) - Hcal_lateral_plate_thickness;
+  lpRMax = rmax - Hcal_lateral_plate_thickness;
+
+  lpDz = Hcal_chamber_thickness / 2.;
+
+  //lpRMin = rmin * cos(M_PI/numSide) + Hcal_lateral_plate_thickness;
+  lpRMin = rmin + Hcal_lateral_plate_thickness;
+
+  // G4Polyhedra Envelope parameters
+  double phiStart = M_PI/8.;
+  //double phiTotal = 2.*pi;
+  //int numSide     = motherPolyhedraParameters->numSide;
+  //int numZPlanes  = 2;
+
+  //double zPlane[2];
+  //zPlane[0] = - pDz;
+  //zPlane[1] = - zPlane[0];
+
+  //double rInner[2],rOuter[2];
+  //rInner[0] = rInner[1] = pRMin;
+  //rOuter[0] = rOuter[1] = pRMax;
+
+  /*
+#ifdef SHCALSC04_DEBUG
+  if(rings==true){
+    G4cout<<"    EndcapRingsSensitive: Rinner="<<pRMin<<"mm Router="<<pRMax<<G4endl<<G4endl;
+  }
+#endif
+  */
+
+  double lzlen = lpDz*2.;
+
+  PolyhedraRegular HcalEndCapRingChamberSolid( numSide, phiStart, lpRMin, lpRMax,  lzlen);
+
+  Box IntersectionStaveBox( lpRMax, lpRMax, Hcal_total_dim_y);
+
+  // set up the translation and rotation for the intersection process 
+  // this happens in the mother volume coordinate system, so a coordinate transformation is needed
+  Position IntersectXYZtrans((pRMax + (Hcal_stave_gaps/2.)), 
+			     (pRMax + (Hcal_stave_gaps/2.)),
+			     (Hcal_total_dim_y/2.));
+
+  RotationZYX rot(0.,0.,0.);
+  Transform3D tran3D(rot,IntersectXYZtrans);
+  // intersect the octagonal layer with a square to get only one quadrant
+  IntersectionSolid  HcalEndCapRingStaveSolid( HcalEndCapRingChamberSolid, IntersectionStaveBox, tran3D); 
+
+  Volume HcalEndCapRingStaveLogical("HcalEndCapRingStaveLogical",HcalEndCapRingStaveSolid, air);
+
+  int EC_Number_of_towers = 0; 
 
 
 
+  // chamber placements
+  int number_of_chambers = Hcal_endcap_nlayers;
+  int possible_number_of_chambers = (int) floor( zlen / (Hcal_chamber_thickness + Hcal_endcap_radiator_thickness));
+  if(possible_number_of_chambers < number_of_chambers)
+    number_of_chambers = possible_number_of_chambers;
 
 
+  //place the four staves in their right positions
+  for (int stave_id = 1;
+       stave_id <= 4;
+       stave_id++)
+    {
+      //if(stave_id > 2) break;
+      
+      for (int layer_id = 1;
+	   layer_id <= number_of_chambers;
+	   layer_id++)
+	{
+	  //if(layer_id > 4) break;
+	  
+	  
+	  double Zoff = - ( zlen/2.)
+	    + (layer_id-1) *(Hcal_chamber_thickness + Hcal_endcap_radiator_thickness)
+	    + Hcal_endcap_radiator_thickness 
+	    + (Hcal_chamber_thickness - Hcal_PCB_thickness - Hcal_Cu_thickness)/2.;
+	  
+	  double layer_thickness = lzlen;
+	  
+	  //====================================================================
+	  // Create Hcal EndcapRing Chamber without radiator
+	  // Place into the Hcal EndcapRing logical, after each radiator 
+	  //====================================================================
+	  xml_coll_t c(x_det,_U(layer));
+	  xml_comp_t   x_layer = c;
+	  string layer_name      = det_name+_toString(layer_id,"_layer%d");
+	  
+	  // Create the slices (sublayers) within the Hcal Barrel Chamber.
+	  double slice_pos_z = -(layer_thickness/2.);
+	  int slice_number = 0;
+	  for(xml_coll_t k(x_layer,_U(slice)); k; ++k)  {
+	    xml_comp_t x_slice = k;
+	    string   slice_name      = layer_name + _toString(slice_number,"_slice%d");
+	    double   slice_thickness = x_slice.thickness();
+	    Material slice_material  = lcdd.material(x_slice.materialStr());
+	    DetElement slice(layer_name,_toString(slice_number,"slice%d"),x_det.id());
+	    
+	    slice_pos_z += slice_thickness/2.;
+	    
+	    // Slice volume
+	    PolyhedraRegular slicePolyhedraRegularSolid( numSide, phiStart, lpRMin, lpRMax,  slice_thickness);
+	    
+	    Box sliceIntersectionStaveBox( lpRMax, lpRMax, Hcal_total_dim_y);
+	    
+	    // set up the translation and rotation for the intersection process 
+	    // this happens in the mother volume coordinate system, so a coordinate transformation is needed
+	    Position IntersectXYZtrans((pRMax + (Hcal_stave_gaps/2.)), 
+				       (pRMax + (Hcal_stave_gaps/2.)),
+				       (Hcal_total_dim_y/2.));
+	    
+	    RotationZYX rot(0.,0.,0.);
+	    Transform3D tran3D(rot,IntersectXYZtrans);
+	    // intersect the octagonal layer with a square to get only one quadrant
+	    IntersectionSolid  slice_Solid( slicePolyhedraRegularSolid, sliceIntersectionStaveBox, tran3D); 
+	    
+	    //Volume HcalEndCapRingStaveLogical("HcalEndCapRingStaveLogical",HcalEndCapRingStaveSolid, air);
+	    
+	    Volume slice_vol(slice_name,slice_Solid,slice_material);
+	    
+	    if ( x_slice.isSensitive() ) {
+	      slice_vol.setSensitiveDetector(sens);
+	    }
+	    // Set region, limitset, and vis.
+	    slice_vol.setAttributes(lcdd,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
+	    // slice PlacedVolume
+	    PlacedVolume slice_phv = HcalEndCapRingStaveLogical.placeVolume(slice_vol,Position(0.,0.,slice_pos_z));
+	    if ( x_slice.isSensitive() ) {
+	      int slice_id  = (layer_id > Hcal_nlayers)? 1:-1;
+	      slice_phv.addPhysVolID("layer",layer_id).addPhysVolID("slice",slice_id);
+	      //slice_phv.addPhysVolID("K",logical_layer_id).addPhysVolID("slice",slice_id);
+	      cout<<"  layer_id:  "<< layer_id<<"   slice_id:  "<<slice_id <<endl;
+	    }
+	    
+	    slice.setPlacement(slice_phv);
+	    // Increment x position for next slice.
+	    slice_pos_z += slice_thickness/2.;
+	    // Increment slice number.
+	    ++slice_number;             
+	  }
+	  
+	  
+	  
+	  string l_name = _toString(layer_id,"layer%d");
+	  string stave_name = _toString(stave_id,"stave%d");
+	  DetElement layer(module_det, l_name+stave_name, det_id);
+	  
+	  double angle_module = M_PI/2. * ( stave_id );
+	  
+	  Position l_pos(0., 0., Zoff);
+	  RotationZ rotz(angle_module);
+	  Position l_new = rotz*l_pos;  
+	  
+	  RotationZYX rot(angle_module,0,0);
+	  Transform3D tran3D(rot,l_new);
+	      
+	  PlacedVolume layer_phv = HcalEndCapRingLogical.placeVolume(HcalEndCapRingStaveLogical,tran3D);
+	  layer_phv.addPhysVolID("layer", layer_id);
+	  layer_phv.addPhysVolID("tower", EC_Number_of_towers);
+	  layer_phv.addPhysVolID("stave", stave_id);
+	  layer.setPlacement(layer_phv);
+
+	}
 
 
+      /*
+     theSD->AddLayer(layer_id,
+		      0,
+		      0,
+		      Zoff);
+
+#ifdef MOKKA_GEAR
+      // count the layers
+      if(rings==true){
+	helpEndcapRing.count += 1;
+
+	// position of layer as offset + half thickness
+	helpEndcapRing.layerPos.push_back(Zoff + std::abs(zPlane[0]) + (Hcal_PCB_thickness + Hcal_Cu_thickness)/2 ) ;
+
+	helpEndcapRing.sensThickness.push_back( Hcal_scintillator_thickness );
+	helpEndcapRing.steelCassetteThickness.push_back( Hcal_steel_cassette_thickness );
+	helpEndcapRing.PCBThickness.push_back(Hcal_PCB_thickness);
+	helpEndcapRing.CuThickness.push_back(Hcal_Cu_thickness);
+      }
 
 
+#endif
+      */
 
-
-
-
+    }  
 
 
 
@@ -269,9 +454,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double endcap_z_offset = Ecal_endcap_zmin + pDz;
   
   for(int module_num=0;module_num<2;module_num++) {
+    //if(module_num >= 1) break;
 
     int module_id = module_num;
-    double this_module_z_offset = ( module_id == 0 ) ? endcap_z_offset : - endcap_z_offset; 
+    double this_module_z_offset = ( module_id == 0 ) ? -endcap_z_offset : endcap_z_offset; 
     double this_module_rotY = ( module_id == 0 ) ? 0:M_PI; 
   
     Position xyzVec(0,0,this_module_z_offset);
