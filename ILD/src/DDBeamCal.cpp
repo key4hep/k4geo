@@ -10,10 +10,12 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
   std::cout << __PRETTY_FUNCTION__  << std::endl;
   std::cout << "Here is my BeamCal"  << std::endl;
+  std::cout << " and this is the sensitive detector: " << &sens  << std::endl;
+  sens.setType("calorimeter");
   //Materials
   DD4hep::Geometry::Material air = lcdd.air();
 
-   //Access to the XML File
+  //Access to the XML File
   DD4hep::XML::DetElement xmlBeamCal = xmlHandle;
   const std::string detName = xmlBeamCal.nameStr();
 
@@ -35,9 +37,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
   //Parameters we have to know about
   DD4hep::XML::Component xmlParameter = xmlBeamCal.child(_Unicode(parameter));
-  const double degFullCrossingAngle  = xmlParameter.attr< double >(_Unicode(crossingangle));
-  const double mradFullCrossingAngle = degFullCrossingAngle*M_PI/180.0;
-  std::cout << " The crossing angle is: " << mradFullCrossingAngle  << std::endl;
+  const double mradFullCrossingAngle  = xmlParameter.attr< double >(_Unicode(crossingangle));
+  std::cout << " The crossing angle is: " << mradFullCrossingAngle << " radian"  << std::endl;
 
   //Create the section cutout for the sensor and readout volumes
   const double bcalCutOutSpan  = xmlParameter.attr< double >(_Unicode(cutoutspanningangle));
@@ -45,10 +46,11 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   const double bcalCutOutEnd   = bcalCutOutStart + bcalCutOutSpan;
   const double incomingBeamPipeRadius = xmlParameter.attr< double >( _Unicode(incomingbeampiperadius) );
 
-  std::cout << bcalCutOutStart << std::endl;
-  std::cout << bcalCutOutSpan  << std::endl;
-  std::cout << bcalCutOutEnd   << std::endl;
-  std::cout << incomingBeamPipeRadius  << std::endl;
+  std::cout << "bcalCutOutSpan  "<< bcalCutOutSpan  << " Radian"<< std::endl;
+  std::cout << "bcalCutOutSpan  "<< bcalCutOutSpan*180/M_PI  << " DEGREE"<< std::endl;
+  std::cout << "bcalCutOutStart "<< bcalCutOutStart << " Radian"<< std::endl;
+  std::cout << "bcalCutOutEnd   "<< bcalCutOutEnd   << " Radian"<< std::endl;
+  std::cout << "incommingBeamPipeRadius: "<< incomingBeamPipeRadius  << std::endl;
   ////////////////////////////////////////////////////////////////////////////////
   //Calculations for the position of the incoming beampipe
   ////////////////////////////////////////////////////////////////////////////////
@@ -75,6 +77,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   const double cutOutRadius = ( incomingBeamPipeAtEndOfBeamCalPosition.Rho() ) + 0.01/*cm*/;
   std::cout << "cutOutRadius: " << cutOutRadius << " cm " << std::endl;
 
+  //we use bcalThickness on purpose to make the subtraction work properly
   DD4hep::Geometry::Tube cutOutTube (0.0, cutOutRadius, bcalThickness, bcalCutOutStart, bcalCutOutEnd);
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -129,11 +132,13 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
 
 	if(isAbsorberStructure) {
-	  //If we have the absorber structure then we create the slice with a hole at the position of the outgoing beam pipe
-	  ///In This case we have to know the global position of the slice, because the cutout depends on the outgoing beam pipe position
+	  //If we have the absorber structure then we create the slice with a
+	  //hole at the position of the outgoing beam pipe. In This case we have
+	  //to know the global position of the slice, because the cutout depends
+	  //on the outgoing beam pipe position
 	  const double thisPositionZ = bcalCentreZ - bcalThickness*0.5 + (thisLayerId-1)*layerThickness+ sliceThickness*0.5;
 	  const DD4hep::Geometry::Position thisBPPosition( std::tan(mradFullCrossingAngle) * thisPositionZ, 0.0, 0.0);
-	  //The extra parenthesis are paramount!
+	  //The extra parenthesis are paramount! But.. there are none
 	  const DD4hep::Geometry::Transform3D thisBPTransform( incomingBeamPipeRotation, thisBPPosition );
 	  slice_subtracted = DD4hep::Geometry::SubtractionSolid(sliceBase, incomingBeamPipe, thisBPTransform);
 	} else {
@@ -145,7 +150,6 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	DD4hep::Geometry::Volume slice_vol (sliceName,slice_subtracted,slice_mat);
 
 	if ( compSlice.isSensitive() )  {
-	  sens.setType("calorimeter");
 	  slice_vol.setSensitiveDetector(sens);
 	}
 
