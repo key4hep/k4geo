@@ -46,8 +46,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   const double bcalCutOutEnd   = bcalCutOutStart + bcalCutOutSpan;
   const double incomingBeamPipeRadius = xmlParameter.attr< double >( _Unicode(incomingbeampiperadius) );
 
-  std::cout << "bcalCutOutSpan  "<< bcalCutOutSpan  << " Radian"<< std::endl;
-  std::cout << "bcalCutOutSpan  "<< bcalCutOutSpan*180/M_PI  << " DEGREE"<< std::endl;
+  std::cout << "bcalCutOutSpan  "<< bcalCutOutSpan/dd4hep::mrad  << " Radian"<< std::endl;
+  std::cout << "bcalCutOutSpan  "<< bcalCutOutSpan/dd4hep::degree  << " DEGREE"<< std::endl;
   std::cout << "bcalCutOutStart "<< bcalCutOutStart << " Radian"<< std::endl;
   std::cout << "bcalCutOutEnd   "<< bcalCutOutEnd   << " Radian"<< std::endl;
   std::cout << "incommingBeamPipeRadius: "<< incomingBeamPipeRadius  << std::endl;
@@ -67,6 +67,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   DD4hep::Geometry::Tube incomingBeamPipe (0.0, incomingBeamPipeRadius, bcalThickness);//we want this to be longer than the BeamCal
   DD4hep::Geometry::SubtractionSolid envelope (envelopeTube, incomingBeamPipe, incomingBPTransform);
   DD4hep::Geometry::Volume     envelopeVol(detName+"_envelope",envelope,air);
+  envelopeVol.setVisAttributes(lcdd,xmlBeamCal.visStr());
 
   //This should be calculated or at least cross-checked
 #pragma message("What about the special case when the incoming beampipe would be completely inside the outgoing beam pipe?")
@@ -74,8 +75,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   //This Rotation needs to be the fullCrossing angle, because the incoming beampipe has that much to the outgoing beam pipe
   //And the BeamCal is centred on the outgoing beampipe
   incomingBeamPipeAtEndOfBeamCalPosition = DD4hep::Geometry::RotationY(-mradFullCrossingAngle) * incomingBeamPipeAtEndOfBeamCalPosition;
-  const double cutOutRadius = ( incomingBeamPipeAtEndOfBeamCalPosition.Rho() ) + 0.01/*cm*/;
-  std::cout << "cutOutRadius: " << cutOutRadius << " cm " << std::endl;
+  const double cutOutRadius = ( incomingBeamPipeAtEndOfBeamCalPosition.Rho() ) + 0.01*dd4hep::cm;
+  std::cout << "cutOutRadius: " << cutOutRadius/dd4hep::cm << " cm " << std::endl;
 
   //we use bcalThickness on purpose to make the subtraction work properly
   DD4hep::Geometry::Tube cutOutTube (0.0, cutOutRadius, bcalThickness, bcalCutOutStart, bcalCutOutEnd);

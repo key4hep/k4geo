@@ -2,24 +2,27 @@
      beamcal parameters for ILD 
 -->
 
-<detector name="BeamCal" type="BeamCal" vis="BeamCalVis" id="ILDDetID_BCAL" readout="BeamCalCollection" insideTrackingVolume="false">
+<detector name="BeamCal" type="BeamCal" vis="SeeThrough" id="ILDDetID_BCAL"
+	  readout="BeamCalCollection" insideTrackingVolume="false" >
   <parameter crossingangle="ILC_Main_Crossing_Angle"
 	     cutoutspanningangle="40*deg"
-	     incomingbeampiperadius="BCal_TubeIncomingRadius"/>
+	     incomingbeampiperadius="BCal_TubeIncomingRadius"
+	     />
   
   <dimensions inner_r = "BCal_rInner"
 	      inner_z = "LHcal_zend + LHcal_BCal_clearance"
 	      outer_r = "BCal_rOuter" />
   
-  <layer repeat="1" >
+  <layer repeat="1" vis="SeeThrough">
     <slice material = "C"         thickness = "BCal_dGraphite" vis="LayerVis1"      layerType="holeForIncomingBeampipe"/>
   </layer>
   
-  <layer repeat="BCal_nLayers" >
+  <layer repeat="BCal_nLayers" vis="SeeThrough">
     <slice material = "TungstenDens24" thickness = "BCal_dAbsorber"        vis="BCLayerVis1" layerType="holeForIncomingBeampipe" />
     <slice material = "Silicon" thickness = "0.3004*mm" sensitive = "yes"  vis="BCLayerVis2"/>
     <slice material = "Copper"  thickness = "0.0004*mm"                    vis="BCLayerVis3"/>
     <slice material = "Kapton"  thickness = "0.15*mm"                      vis="BCLayerVis4"/>
     <slice material = "Air"     thickness = "0.05*mm" />
   </layer>
+
 </detector>
