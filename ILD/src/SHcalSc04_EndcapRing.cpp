@@ -224,8 +224,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double rmax = pRMax;
   
 
-  //Polyhedra HcalEndCapRingSolid( M_PI/8., 2.*M_PI, 8, 2, zPlane, rInner, rOuter);
-  //PolyhedraRegular HcalEndCapRingSolid( 8, rInner, rOuter,  zPlane);
   PolyhedraRegular HcalEndCapRingSolid( 8, M_PI/8., rmin, rmax,  zlen);
 
   Volume  HcalEndCapRingLogical("HcalEndCapRingLogical",HcalEndCapRingSolid, Steel235);
