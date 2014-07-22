@@ -358,7 +358,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    double     s_thick = x_slice.thickness();
 	    
 	    double slab_dim_x = alveolus_dim_z/2.-tolerance;
-	    double slab_dim_y = s_thick;
+	    double slab_dim_y = s_thick/2.-tolerance;
 	    double slab_dim_z = EC_alveolus_dim_x/2.-tolerance;
 	    
 	    Box        s_box(slab_dim_x,slab_dim_z,slab_dim_y);
