@@ -309,9 +309,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	string     s_name  =  _toString(s_num,"slice%d");
 	double     s_thick = x_slice.thickness();
 	    
-	double slab_dim_x = ECRingSiplateSize/ 2.-tolerance;
-	double slab_dim_y = s_thick;
-	double slab_dim_z = ECRingSiplateSize/ 2.-tolerance;
+	double slab_dim_x = ECRingSiplateSize/2.-tolerance;
+	double slab_dim_y = s_thick/2.-tolerance;
+	double slab_dim_z = ECRingSiplateSize/2.-tolerance;
 	    
 	Box        s_box(slab_dim_x,slab_dim_z,slab_dim_y);
 
