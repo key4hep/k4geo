@@ -290,8 +290,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   // intersect the octagonal layer with a square to get only one quadrant
   IntersectionSolid  HcalEndCapRingStaveSolid( HcalEndCapRingChamberSolid, IntersectionStaveBox, tran3D); 
 
-  Volume HcalEndCapRingStaveLogical("HcalEndCapRingStaveLogical",HcalEndCapRingStaveSolid, air);
-
   int EC_Number_of_towers = 0; 
 
 
@@ -332,6 +330,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  xml_comp_t   x_layer = c;
 	  string layer_name      = det_name+_toString(layer_id,"_layer%d");
 	  
+	  Volume HcalEndCapRingStaveLogical("HcalEndCapRingStaveLogical",HcalEndCapRingStaveSolid, air);
+
 	  // Create the slices (sublayers) within the Hcal Barrel Chamber.
 	  double slice_pos_z = -(layer_thickness/2.);
 	  int slice_number = 0;
