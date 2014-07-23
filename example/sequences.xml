@@ -213,6 +213,13 @@
     <!--   </action>    -->
     <!-- </sequence> -->
 
+    <!-- <sequence sd="HcalEndcapRing" type="Geant4SensDetActionSequence"> -->
+    <!--   <action name="SDHcalEndcap/HcalEndcapRingCollection"> -->
+    <!--   <properties cellSize="{3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0 }" -->
+    <!--               applyBirksLawFlag="true"/>  -->
+    <!--   </action>    -->
+    <!-- </sequence> -->
+
         
   </sequences>
 </geant4_setup>
