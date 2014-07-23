@@ -34,11 +34,14 @@ namespace DDSim {
     size_t m_collectionID;
     bool _detailedHitsStoring ;
 
+    typedef std::map<DD4hep::CellID, IMPL::SimCalorimeterHitImpl* > MapCellHit;
+    MapCellHit m_mapHits;
+
   public:
     //======================================================================================================
   
     SDCaloLCIO(dd4hep::Geant4Context* mContext, const std::string& mName, DetElement mDet, LCDD& mLcdd):
-      Geant4Sensitive(mContext,mName,mDet,mLcdd), m_collectionID(-1), _detailedHitsStoring(false)
+      Geant4Sensitive(mContext,mName,mDet,mLcdd), m_collectionID(-1), _detailedHitsStoring(false), m_mapHits()
     {
       declareProperty("detailedHitsStoring", _detailedHitsStoring =0) ;
       defineCollections();
@@ -64,6 +67,8 @@ namespace DDSim {
     /// G4VSensitiveDetector interface: Method invoked at the end of each event.
     virtual void end(G4HCofThisEvent* hce) {
       dd4hep::Geant4Sensitive::end(hce);
+      //Clear the map, hits are owned by the collection, so we don't have to delete them.
+      m_mapHits.clear();
     }
   
     /// G4VSensitiveDetector interface: Method for generating hit(s) using the G4Step object.
@@ -72,9 +77,18 @@ namespace DDSim {
     /// G4VSensitiveDetector interface: Method invoked if the event was aborted.
     virtual void clear(G4HCofThisEvent* hce) {
       dd4hep::Geant4Sensitive::clear(hce);
+      m_mapHits.clear();
     }
   
     //======================================================================================================
+
+    //Helper functions
+
+    /// Create a new LCIO hit and add it to the collections
+    bool createNewHit(G4Step *aStep, DD4hep::CellID myCellID);
+
+    /// add a new MC Contribution to the Calo Hit
+    void addContribution(G4Step *aStep, IMPL::SimCalorimeterHitImpl *hit);
 
   };
 
