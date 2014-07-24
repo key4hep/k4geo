@@ -500,9 +500,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   
   for(int module_num=0;module_num<2;module_num++) {
 
-    int module_id = module_num;
-    double this_module_z_offset = ( module_id == 0 ) ? EC_module_z_offset : - EC_module_z_offset; 
-    double this_module_rotY = ( module_id == 0 ) ? 0:M_PI; 
+    int module_id = ( module_num == 0 ) ? 0:6;
+    double this_module_z_offset = ( module_id == 0 ) ? - EC_module_z_offset : EC_module_z_offset; 
+    double this_module_rotY = ( module_id == 0 ) ? M_PI:0; 
   
     Position xyzVec(0,0,this_module_z_offset);
     RotationZYX rot(0,this_module_rotY,0);
@@ -510,7 +510,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     Transform3D tran3D(rot3D,xyzVec);
 
     PlacedVolume pv = envelope_assembly.placeVolume(EnvLogEndCap,tran3D);
-    pv.addPhysVolID("module",module_id); // z: +/-
+    pv.addPhysVolID("module",module_id); // z: -/+ 0/6
 
     DetElement sd = (module_num==0) ? module_det : module_det.clone(_toString(module_num,"module%d"));
     sd.setPlacement(pv);
