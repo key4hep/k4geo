@@ -232,10 +232,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  }
 	
 	for(int module_num=0;module_num<2;module_num++) {
+
+	  int module_id = (module_num==0)? 0:6;
 	  
-	  rot_EM = (module_num==0)?(M_PI/2.0):(-M_PI/2.0);
+	  rot_EM = (module_id==0)?(-M_PI/2.0):(M_PI/2.0);
 	  
-	  EndcapModule_pos_z = (module_num==0)?EndcapModule_pos_z:-EndcapModule_pos_z;
+	  EndcapModule_pos_z = (module_id==0)? -EndcapModule_pos_z:EndcapModule_pos_z;
 
 	  PlacedVolume env_phv = envelope_assembly.placeVolume(envelopeVol,
 						       Transform3D(RotationX(rot_EM),
@@ -244,7 +246,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 										 EndcapModule_pos_z)));
 	  env_phv.addPhysVolID("tower",endcapID);	  
 	  env_phv.addPhysVolID("stave",stave_num);   // y: up /down
-	  env_phv.addPhysVolID("module",module_num); // z: +/-
+	  env_phv.addPhysVolID("module",module_id); // z: -/+ 0/6
 	  env_phv.addPhysVolID("system",det_id);
 	  //sdet.setPlacement(env_phv);
 

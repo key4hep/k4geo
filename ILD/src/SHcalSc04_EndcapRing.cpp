@@ -452,9 +452,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double endcap_z_offset = Ecal_endcap_zmin + pDz;
   
   for(int module_num=0;module_num<2;module_num++) {
-    //if(module_num >= 1) break;
 
-    int module_id = module_num;
+    int module_id = ( module_num == 0 ) ? 0:6;
     double this_module_z_offset = ( module_id == 0 ) ? -endcap_z_offset : endcap_z_offset; 
     double this_module_rotY = ( module_id == 0 ) ? 0:M_PI; 
   
