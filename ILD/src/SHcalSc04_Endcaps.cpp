@@ -216,8 +216,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	
 	double EndcapModule_pos_x = 0;
 	double EndcapModule_pos_y = 0;
-	double EndcapModule_pos_z = Hcal_endcap_zmin + box_half_y;
+	double EndcapModule_pos_z = 0;
 	double rot_EM = 0;
+
+	double EndcapModule_center_pos_z = Hcal_endcap_zmin + box_half_y;
 	
 	switch (stave_num)
 	  {
@@ -237,7 +239,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  
 	  rot_EM = (module_id==0)?(-M_PI/2.0):(M_PI/2.0);
 	  
-	  EndcapModule_pos_z = (module_id==0)? -EndcapModule_pos_z:EndcapModule_pos_z;
+	  EndcapModule_pos_z = (module_id==0)? -EndcapModule_center_pos_z:EndcapModule_center_pos_z;
 
 	  PlacedVolume env_phv = envelope_assembly.placeVolume(envelopeVol,
 						       Transform3D(RotationX(rot_EM),
@@ -250,7 +252,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  env_phv.addPhysVolID("system",det_id);
 	  //sdet.setPlacement(env_phv);
 
-	  DetElement sd = (module_num==0&&stave_num==0) ? stave_det : stave_det.clone(_toString(module_num,"module%d")+_toString(stave_num,"stave%d"));	  
+	  DetElement sd = (module_num==0&&stave_num==0) ? stave_det : stave_det.clone(_toString(module_id,"module%d")+_toString(stave_num,"stave%d"));	  
 	  sd.setPlacement(env_phv);	  
 
 	}
