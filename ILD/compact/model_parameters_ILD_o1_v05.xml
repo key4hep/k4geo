@@ -202,7 +202,8 @@
   <constant name="TCMTTranslateX" value="0.0*mm"/>
   <constant name="TCMTTranslateY" value="0.0*mm"/>
   <constant name="TPC_ECal_gap" value="20.00*mm"/>
-  <constant name="TPC_Ecal_Hcal_barrel_halfZ" value="2200.00*mm"/>
+  <!--constant name="TPC_Ecal_Hcal_barrel_halfZ" value="2200.00*mm"/-->
+  <constant name="TPC_Ecal_Hcal_barrel_halfZ" value="Ecal_Barrel_halfZ"/>
   <constant name="TPC_electronics_air_percent" value="86.00"/>
   <constant name="TPC_electronics_backend_thickness" value="230.00*mm"/>
   <constant name="TPC_electronics_cu_percent" value="1.56"/>
