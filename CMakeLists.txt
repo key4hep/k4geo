@@ -40,6 +40,9 @@ find_package( ROOT REQUIRED )
 #find_package( ROOT REQUIRED COMPONENTS Geom Reflex)
 set( ROOT_COMPONENT_LIBRARIES Geom Reflex)
 
+if(DD4HEP_USE_XERCESC)
+  find_package(XercesC)
+endif()
 
 find_package( LCIO REQUIRED)
 #find_package( GEAR REQUIRED)
@@ -71,6 +74,9 @@ include_directories( ${CMAKE_SOURCE_DIR}/include
 file(GLOB sources ./src/* ./ILD/src/*.cpp )
 file(GLOB headers ./ILD/include/*.h)
 
+if(DD4HEP_USE_XERCESC)
+  find_package(XercesC)
+endif()
 include(DD4hep_XML_setup)
 
 if(DD4HEP_USE_PYROOT)
@@ -80,7 +86,7 @@ endif()
 
 add_library(${PackageName} SHARED ${sources})
 
-target_link_libraries(${PackageName} ${DD4hep_LIBRARIES}  
+target_link_libraries(${PackageName} ${DD4hep_LIBRARIES}  DD4hepG4
   ${ROOT_LIBRARIES} ${ROOT_COMPONENT_LIBRARIES} 
   ${Geant4_LIBRARIES}
   ${LCIO_LIBRARIES}
@@ -91,7 +97,7 @@ target_link_libraries(${PackageName} ${DD4hep_LIBRARIES}
 #---------- the main program ----------------------------------
 
 add_executable( dd_sim ./src/ddsim.cpp)
-target_link_libraries( dd_sim ${DD4hep_LIBRARIES}  ${ROOT_LIBRARIES} ${ROOT_COMPONENT_LIBRARIES}   ${Geant4_LIBRARIES} )
+target_link_libraries( dd_sim ${DD4hep_LIBRARIES} DD4hepG4 ${ROOT_LIBRARIES} ${ROOT_COMPONENT_LIBRARIES}   ${Geant4_LIBRARIES} )
 
 
 #---Rootmap generation--------------------------------------------------------------

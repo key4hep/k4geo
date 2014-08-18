@@ -7,6 +7,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/DD4hepUnits.h"
 #include "DD4hep/DetFactoryHelper.h"
+#include "XMLHandlerDB.h"
 
 #include "DDRec/Surface.h"
 #include "FTD_Simple_Staggered.h"
@@ -27,25 +28,6 @@ using namespace DD4hep;
 using namespace dd4hep ;
 using namespace DD4hep::Geometry;
 using namespace DDRec;
-
-
-/** Wrapper class to replace the Database class used in Mokka to read the parameters.
- *  Assumes parameters are stored as attributes of the corresponding xml element.
- */
-struct XMLHandlerDB{
-  xml_comp_t x_det ;
-  /** C'tor initializes the handle */
-  XMLHandlerDB(xml_comp_t det) : x_det(det) {}
-  
-  double fetchDouble( const char* _name){ return  x_det.attr<double>( _name )  ; }
-  
-  int fetchInt( const char* _name){ return  x_det.attr<int>( _name ) ; }
-  
-  std::string fetchString( const char* _name){ return  x_det.attr<string>( _name ) ;}
-  
-  /** allow this to be used as a 'pointer' ( as was used for Mokka Database object)*/
-  XMLHandlerDB* operator->() { return this ; }
-};
 
 /// helper to wrap access to global constants
 struct EnvLCDD{

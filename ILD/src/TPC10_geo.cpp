@@ -8,6 +8,7 @@
 #include "DD4hep/DD4hepUnits.h"
 #include "DDSim/Exceptions.h"
 #include "DDRec/Surface.h"
+#include "XMLHandlerDB.h"
 
 #include <math.h>
 
@@ -19,28 +20,6 @@ using namespace dd4hep ;
 using namespace DD4hep::Geometry;
 using namespace DDSim ;
 using namespace DDRec ;
-
-
-namespace{
-/** Wrapper class to replace the Database class used in Mokka to read the parameters.
- *  Assumes parameters are stored as attributes of the corresponding xml element.
- */
-struct XMLHandlerDB{
-  xml_comp_t x_det ;
-  /** C'tor initializes the handle */
-  XMLHandlerDB(xml_comp_t det) : x_det(det) {}
-  
-  double fetchDouble( const char* _name){ return  x_det.attr<double>( _name )  ; }
-
-  int    fetchInt( const char* _name){ return  x_det.attr<int>( _name ) ; }
-
-  std::string fetchString( const char* _name){ return  x_det.attr<string>( _name ) ;}
-
-  /** allow this to be used as a 'pointer' ( as was used for Mokka Database object)*/
-  XMLHandlerDB* operator->() { return this ; }
-};
-
-}
 
 /** Construction of TPC detector, ported from Mokka driver TPC10.cc
  * Mokka History:
