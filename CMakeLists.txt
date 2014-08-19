@@ -86,7 +86,7 @@ endif()
 
 add_library(${PackageName} SHARED ${sources})
 
-target_link_libraries(${PackageName} ${DD4hep_LIBRARIES}  DD4hepG4
+target_link_libraries(${PackageName} ${DD4hep_LIBRARIES}
   ${ROOT_LIBRARIES} ${ROOT_COMPONENT_LIBRARIES} 
   ${Geant4_LIBRARIES}
   ${LCIO_LIBRARIES}
@@ -97,7 +97,7 @@ target_link_libraries(${PackageName} ${DD4hep_LIBRARIES}  DD4hepG4
 #---------- the main program ----------------------------------
 
 add_executable( dd_sim ./src/ddsim.cpp)
-target_link_libraries( dd_sim ${DD4hep_LIBRARIES} DD4hepG4 ${ROOT_LIBRARIES} ${ROOT_COMPONENT_LIBRARIES}   ${Geant4_LIBRARIES} )
+target_link_libraries( dd_sim ${DD4hep_LIBRARIES} ${ROOT_LIBRARIES} ${ROOT_COMPONENT_LIBRARIES}   ${Geant4_LIBRARIES} )
 
 
 #---Rootmap generation--------------------------------------------------------------
