@@ -1,4 +1,21 @@
 
+ --------
+| v00-02 |   second beta release of DDSim
+ --------    
+       M.Frank:  
+       - add initial version of DDEve.xml
+       - create header file with class XMLHandlerDB
+
+       Sh.Lu:
+       - implement EndcapRings for Ecal and Hcal
+       - many fixes to calorimter drivers
+
+
+       A.Sailer:
+       - implement 'canonical' SD for creating lcio::SimCalorimeterHits
+       	 using the readout/segmentation to compute cellID and position  
+       - fixes for BeamCal driver
+
 
  --------
 | v00-01 |   first beta release of DDSim

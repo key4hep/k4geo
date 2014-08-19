@@ -49,6 +49,11 @@ Build and install everything:
 
 
 
+Initialize the environment:
+
+ . ./bin/thisDDSim.sh
+
+
 
 Running the simulation
 ----------------------
@@ -101,7 +106,7 @@ or display it in the teve display:
    teveDisplay ../ILD/compact/ILD_o1_v05.xml
 
 
-
-
-
-
+ or use the new DDEve:
+ root
+ .x $DD4hepINSTALL/examples/DDEve/DDEve.C()
+ # and then load ./ILD/eve/DDEve.xml
