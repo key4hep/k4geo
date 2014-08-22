@@ -211,45 +211,62 @@
             <id>system:5,side:2,layer:9,module:8,sensor:8</id>
         </readout>
 
+
+	<!-- use simple CartesianGridXY segmentation: -->
+	<!-- <readout name="EcalBarrelCollection"> -->
+	<!--   <segmentation type="CartesianGridXY" grid_size_x="0.5*cm" grid_size_y="0.5*cm"/> -->
+	<!--   <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id> -->
+	<!-- </readout> -->
+
+	<!-- <readout name="EcalEndcapsCollection"> -->
+	<!--   <segmentation type="CartesianGridXY" grid_size_x="0.5*cm" grid_size_y="0.5*cm"/> -->
+	<!--   <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,y:-16</id> -->
+	<!-- </readout> -->
+
+	<!-- <readout name="EcalEndcapRingCollection"> -->
+	<!--   <segmentation type="CartesianGridXY" grid_size_x="0.5*cm" grid_size_y="0.5*cm"/> -->
+	<!--   <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id> -->
+	<!-- </readout> -->
+
+	<!-- <readout name="HcalBarrelRegCollection"> -->
+	<!--   <segmentation type="CartesianGridXY" grid_size_x="3*cm" grid_size_y="3*cm"/> -->
+	<!--   <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,y:-16</id> -->
+	<!-- </readout> -->
+
+	<!-- <readout name="HcalEndcapsCollection"> -->
+	<!--   <segmentation type="CartesianGridXZ" grid_size_x="3*cm" grid_size_z="3*cm"/> -->
+	<!--   <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,z:-16</id> -->
+	<!-- </readout> -->
+
+	<!-- <readout name="HcalEndcapRingCollection"> -->
+	<!--   <segmentation type="CartesianGridXY" grid_size_x="3*cm" grid_size_y="3*cm"/> -->
+	<!--   <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id> -->
+	<!-- </readout> -->
+
+
+
+
 	<readout name="EcalBarrelCollection">
-	  <!--  TODO: implement Sensitive detector driver-->	
-	  <!-- <segmentation type="CartesianGridXYZ" grid_size_x="0.35*cm" grid_size_y="0.35*cm"  grid_size_z="0.35*cm"/> -->
-	  <!-- <id>system:8,layer:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id> -->
 	  <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,I:32:-16,J:-16</id> 
 	</readout>
 
 	<readout name="EcalEndcapsCollection">
-	  <!--  TODO: implement Sensitive detector driver-->	
-	  <!-- <segmentation type="CartesianGridXYZ" grid_size_x="0.35*cm" grid_size_y="0.35*cm"  grid_size_z="0.35*cm"/> -->
-	  <!-- <id>system:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id> -->
 	  <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,I:32:-16,J:-16</id>
 	</readout>
 
 	<readout name="EcalEndcapRingCollection">
-	  <!--  TODO: implement Sensitive detector driver-->	
-	  <!-- <segmentation type="CartesianGridXYZ" grid_size_x="0.35*cm" grid_size_y="0.35*cm"  grid_size_z="0.35*cm"/> -->
-	  <!-- <id>system:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id> -->
 	  <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,I:32:-16,J:-16</id>
 	</readout>
 
 	<readout name="HcalBarrelRegCollection">
-	  <!--  TODO: implement Sensitive detector driver-->	
-	  <!-- <segmentation type="CartesianGridXYZ" grid_size_x="0.35*cm" grid_size_y="0.35*cm"  grid_size_z="0.35*cm"/> -->
-	  <!-- <id>system:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id> -->
 	  <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,I:32:-16,J:-16</id>
 	</readout>
 
  	<readout name="HcalEndcapsCollection">
- 	  <!--  TODO: implement Sensitive detector driver-->	
- 	  <!-- <segmentation type="CartesianGridXYZ" grid_size_x="0.35*cm" grid_size_y="0.35*cm"  grid_size_z="0.35*cm"/> -->
- 	  <!-- <id>system:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id> -->
  	  <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,I:32:-16,J:-16</id>
  	</readout>
 
  	<readout name="HcalEndcapRingCollection">
- 	  <!--  TODO: implement Sensitive detector driver-->	
- 	  <!-- <segmentation type="CartesianGridXYZ" grid_size_x="0.35*cm" grid_size_y="0.35*cm"  grid_size_z="0.35*cm"/> -->
- 	  <!-- <id>system:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id> -->
  	  <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,I:32:-16,J:-16</id>
  	</readout>
 

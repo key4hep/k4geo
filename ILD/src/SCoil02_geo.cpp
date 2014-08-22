@@ -56,9 +56,12 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   //  Assembly envelope( name + "_assembly"  ) ;
   //--------------------------------
   
+
   PlacedVolume pv;
   
   DetElement   coil(  name, x_det.id()  ) ;
+
+  coil.setVisAttributes( lcdd, "SeeThrough" , envelope );
   
   //  sens.setType("tracker");
 

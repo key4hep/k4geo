@@ -42,7 +42,7 @@ pdg = 13
 mass =  0.105658 
 charge = -1.
 theta = 70./180. * math.pi 
-#theta = 30./180. * math.pi 
+#theta = 20./180. * math.pi 
 
 decayLen = 1.e32 
 #=================================================

@@ -182,8 +182,19 @@
     </sequence>
     
 
+
     <!-- use simple SD for the calorimeters as well until we have -->
     <!-- proper sensitive detectors  -->
+
+    <!-- SDs with simple segmentations: -->
+    <!-- <sequence sd="EcalBarrel" type="Geant4SensDetActionSequence">     <action name="SDCaloLCIO/EcalBarrelCollection">     </action> </sequence> -->
+    <!-- <sequence sd="EcalEndcap" type="Geant4SensDetActionSequence">     <action name="SDCaloLCIO/EcalEndcapsCollection">    </action> </sequence> -->
+    <!-- <\!-- <sequence sd="EcalEndcapRing" type="Geant4SensDetActionSequence"> <action name="SDCaloLCIO/EcalEndcapRingCollection"> </action> </sequence> -\-> -->
+    
+    <!-- <sequence sd="HcalBarrel"     type="Geant4SensDetActionSequence"> <action name="SDCaloLCIO/HcalBarrelCollection">     </action> </sequence> -->
+    <!-- <sequence sd="HcalEndcap"     type="Geant4SensDetActionSequence"> <action name="SDCaloLCIO/HcalEndcapsCollection">    </action> </sequence> -->
+    <!-- <sequence sd="HcalEndcapRing" type="Geant4SensDetActionSequence"> <action name="SDCaloLCIO/HcalEndcapRingCollection"> </action> </sequence> -->
+
 
     <sequence sd="EcalBarrel" type="Geant4SensDetActionSequence">
       <action name="SDHcalBarrel/EcalBarrelRegCollection">
