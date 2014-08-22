@@ -17,7 +17,7 @@
 
 namespace DDSim {
 
-  inline G4ThreeVector localToGlobalCoordinates(G4Step *aStep, G4ThreeVector& localPosition) {
+  inline G4ThreeVector localToGlobalCoordinates(G4Step *aStep, G4ThreeVector const& localPosition) {
 
     G4StepPoint* preStepPoint = aStep->GetPreStepPoint();
     G4TouchableHandle theTouchable = preStepPoint->GetTouchableHandle();
@@ -36,7 +36,7 @@ namespace DDSim {
     G4double eDep = aStep->GetTotalEnergyDeposit();
 
     const DD4hep::DDSegmentation::Vector3D& posVec = m_readout.segmentation()->position(myCellID);
-    G4ThreeVector localCell(posVec.X, posVec.Y, posVec.Z);
+    const G4ThreeVector localCell(CM_2_MM*posVec.X, CM_2_MM*posVec.Y, CM_2_MM*posVec.Z);
     const G4ThreeVector& globalCell = localToGlobalCoordinates(aStep, localCell);
     G4ThreeVector hitPos = (aStep->GetPreStepPoint()->GetPosition()+aStep->GetPostStepPoint()->GetPosition())*0.5;
 

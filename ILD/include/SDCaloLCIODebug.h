@@ -29,10 +29,10 @@ namespace DDSim {
     SDCaloLCIODebug(dd4hep::Geant4Context* mContext, const std::string& mName, DetElement mDet, LCDD& mLcdd):
       SDCaloLCIO(mContext, mName, mDet, mLcdd),
       m_file(TFile::Open( TString(mName)+TString(".root") , "RECREATE" )),
-      hDeltaX(new TH1D("hDeltaX", "hDeltaX;x[cm]", 2000, -10, 10)),
-      hDeltaY(new TH1D("hDeltaY", "hDeltaY;y[cm]", 2000, -10, 10)),
-      hZ(new TH1D("hZ", "hZ;z[cm]", 20000, -1000, 1000)),
-      hEdep(new TH2D("hEdep", "Edep[MeV];x[cm];y[cm]", 400, -20, 20, 400, -20, 20))
+      hDeltaX(new TH1D("hDeltaX", "hDeltaX;x[mm]", 6000, -30, 30)),
+      hDeltaY(new TH1D("hDeltaY", "hDeltaY;y[mm]", 6000, -30, 30)),
+      hZ(new TH1D("hZ", "hZ;z[mm]", 20000, -4000, 4000)),
+      hEdep(new TH2D("hEdep", "Edep[MeV];x[mm];y[mm]", 400, -20, 20, 400, -20, 20))
     {
       defineCollections();
       dd4hep::InstanceCount::increment(this);

@@ -72,7 +72,7 @@ namespace DDSim {
 
     //calculate global cell position
     const DD4hep::DDSegmentation::Vector3D& posVec = m_readout.segmentation()->position(myCellID);
-    const G4ThreeVector localCellPosition(posVec.X, posVec.Y, posVec.Z);
+    const G4ThreeVector localCellPosition(CM_2_MM*posVec.X, CM_2_MM*posVec.Y, CM_2_MM*posVec.Z);
     const G4ThreeVector& globalCellPosition = localToGlobalCoordinates(aStep, localCellPosition);
     float globalPosition[] = { (float)globalCellPosition[0], (float)globalCellPosition[1], (float)globalCellPosition[2]};
     hit->setPosition(globalPosition);
