@@ -41,6 +41,8 @@
 	<constant name="ILDDetID_BCAL"      value=" 25"/>
 	<constant name="ILDDetID_LHCAL"     value=" 26"/>
 	<constant name="ILDDetID_YOKE"      value=" 27"/>
+	<constant name="ILDDetID_COIL"      value=" 28"/>
+
 	<constant name="ILDDetID_bwd"       value="- 1"/>
 	<constant name="ILDDetID_barrel"    value="  0"/>
 	<constant name="ILDDetID_fwd"       value="  1"/>
@@ -70,6 +72,8 @@
 
 	<!-- new number from K.Gadow for ILD_o1_v05 -->
 	<constant name="Hcal_outer_radius" value="3395.46*mm"/> 
+	
+	<!-- <constant name="Hcal_R_max" value="Hcal_outer_radius"/> -->
 
 
 	<constant name="tracker_region_rmax" value="TPC_outer_radius" />  
@@ -180,6 +184,8 @@
 	<include ref="SHcalSc04_EndcapRing.xml"/>
 
 	<include ref="BeamCal08.xml"/>
+
+	<include ref="coil03.xml"/>
 
       </detectors> 
 
