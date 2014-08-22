@@ -9,6 +9,7 @@
 //LCIO
 #include "IMPL/SimCalorimeterHitImpl.h"
 #include "DD4hep/Segmentations.h"
+#include "DD4hep/DD4hepUnits.h"
 
 #include <G4TouchableHistory.hh>
 #include <G4AffineTransform.hh>
@@ -72,7 +73,7 @@ namespace DDSim {
 
     //calculate global cell position
     const DD4hep::DDSegmentation::Vector3D& posVec = m_readout.segmentation()->position(myCellID);
-    const G4ThreeVector localCellPosition(CM_2_MM*posVec.X, CM_2_MM*posVec.Y, CM_2_MM*posVec.Z);
+    const G4ThreeVector localCellPosition( posVec.X / dd4hep::mm  , posVec.Y / dd4hep::mm , posVec.Z / dd4hep::mm );
     const G4ThreeVector& globalCellPosition = localToGlobalCoordinates(aStep, localCellPosition);
     float globalPosition[] = { (float)globalCellPosition[0], (float)globalCellPosition[1], (float)globalCellPosition[2]};
     hit->setPosition(globalPosition);
