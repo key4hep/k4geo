@@ -1,0 +1,5 @@
+<!-- comment>Calorimeters</comment -->
+<detector name="YokeBarrel" type="Yoke05_Barrel" id="ILDDetID_YOKE" readout="YokeBarrelCollection" vis="GreenVis" insideTrackingVolume="false" >
+    <dimensions numsides="12" rmin="Yoke_barrel_inner_radius" z="Yoke_barrel_halfZ" />
+    <material name="Iron"/> 
+</detector>
