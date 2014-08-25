@@ -50,7 +50,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   std::cout << "bcalCutOutSpan  "<< bcalCutOutSpan/dd4hep::degree  << " DEGREE"<< std::endl;
   std::cout << "bcalCutOutStart "<< bcalCutOutStart << " Radian"<< std::endl;
   std::cout << "bcalCutOutEnd   "<< bcalCutOutEnd   << " Radian"<< std::endl;
-  std::cout << "incommingBeamPipeRadius: "<< incomingBeamPipeRadius  << std::endl;
+  std::cout << "incommingBeamPipeRadius: "<< incomingBeamPipeRadius/dd4hep::cm << " cm"  << std::endl;
   ////////////////////////////////////////////////////////////////////////////////
   //Calculations for the position of the incoming beampipe
   ////////////////////////////////////////////////////////////////////////////////
@@ -98,14 +98,24 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
     for(DD4hep::XML::Collection_t l(xmlLayer,_U(slice)); l; ++l)
       layerThickness += xml_comp_t(l).thickness();
 
-    std::cout << "Total Length " << bcalThickness  << std::endl;
-    std::cout << "Layer Thickness " << layerThickness  << std::endl;
+    std::cout << "Total Length "    << bcalThickness/dd4hep::cm  << " cm" << std::endl;
+    std::cout << "Layer Thickness " << layerThickness/dd4hep::cm << " cm" << std::endl;
 
     //Loop for repeat=NN
     for(int i=0, repeat=xmlLayer.repeat(); i<repeat; ++i)  {
 
       std::string layer_name = detName + DD4hep::XML::_toString(thisLayerId,"_layer%d");
-      DD4hep::Geometry::Volume layer_vol(layer_name,DD4hep::Geometry::Tube(bcalInnerR,bcalOuterR,layerThickness/2),air);
+      DD4hep::Geometry::Tube layer_base(bcalInnerR,bcalOuterR,layerThickness*0.5);
+      DD4hep::Geometry::SubtractionSolid layer_subtracted;
+      { // put this in extra block to limit scope
+	const double thisPositionZ = bcalCentreZ + referencePosition + layerThickness*0.5;
+	const DD4hep::Geometry::Position thisBPPosition( std::tan(mradFullCrossingAngle) * thisPositionZ, 0.0, 0.0);
+	const DD4hep::Geometry::Transform3D thisBPTransform( incomingBeamPipeRotation, thisBPPosition );
+	layer_subtracted = DD4hep::Geometry::SubtractionSolid(layer_base, incomingBeamPipe, thisBPTransform);
+      }
+
+      DD4hep::Geometry::Volume layer_vol(layer_name,layer_subtracted,air);
+
 
       int sliceID=1;
       double inThisLayerPosition = -layerThickness*0.5;
@@ -137,7 +147,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	  //hole at the position of the outgoing beam pipe. In This case we have
 	  //to know the global position of the slice, because the cutout depends
 	  //on the outgoing beam pipe position
-	  const double thisPositionZ = bcalCentreZ - bcalThickness*0.5 + (thisLayerId-1)*layerThickness+ sliceThickness*0.5;
+	  const double thisPositionZ = bcalCentreZ + referencePosition + 0.5*layerThickness + inThisLayerPosition + sliceThickness*0.5;
 	  const DD4hep::Geometry::Position thisBPPosition( std::tan(mradFullCrossingAngle) * thisPositionZ, 0.0, 0.0);
 	  //The extra parenthesis are paramount! But.. there are none
 	  const DD4hep::Geometry::Transform3D thisBPTransform( incomingBeamPipeRotation, thisBPPosition );
