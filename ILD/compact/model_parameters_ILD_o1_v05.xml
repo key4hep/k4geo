@@ -273,8 +273,10 @@
   <constant name="VXD_width_r4" value="11*mm"/>
   <constant name="VXD_width_r5" value="11*mm"/>
   <constant name="Yoke_BField_cutoff" value="1.5"/>
-  <constant name="Yoke_Barrel_Half_Z" value="7200.00  	*mm"/>
-  <constant name="Yoke_Z_start_endcaps" value="6625*mm"/>
+  <constant name="Yoke_Barrel_Half_Z" value="7200.00*mm"/>
+  <!-- <constant name="Yoke_Z_start_endcaps" value="6625*mm"/> -->
+  <!-- has been updated by driver SCoil02 to the following value -->
+  <constant name="Yoke_Z_start_endcaps" value="4072.0*mm"/>
   <constant name="Yoke_barrel_inner_radius" value="4450.00*mm"/>
   <constant name="Yoke_endcap_inner_radius" value="300*mm"/>
   <constant name="Yoke_thickness" value="2550*mm"/>
