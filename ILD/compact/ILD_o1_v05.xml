@@ -273,7 +273,7 @@
  	</readout>
 
  	<!-- <readout name="YokeBarrelCollection"> -->
- 	<!--  <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,I:32:-16,J:-16</id> -->
+ 	<!--  <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,I:32:-16,J:-16</id> -->
  	<!-- </readout> -->
 
 	<readout name="BeamCalCollection">
