@@ -231,6 +231,12 @@
       </action>
     </sequence>
 
+    <sequence sd="YokeBarrel" type="Geant4SensDetActionSequence">
+      <action name="SDHcalEndcap/YokeBarrelCollection">
+      <properties cellSize="{3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0}"
+                  applyBirksLawFlag="false"/>
+      </action>
+    </sequence>
         
   </sequences>
 </geant4_setup>
