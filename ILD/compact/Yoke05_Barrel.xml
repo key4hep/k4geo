@@ -2,15 +2,9 @@
 <detector name="YokeBarrel" type="Yoke05_Barrel" id="ILDDetID_YOKE" readout="YokeBarrelCollection" vis="YellowVis" insideTrackingVolume="false" >
     <dimensions numsides="12" rmin="Yoke_barrel_inner_radius" z="Yoke_barrel_halfZ" />
     <material name="Iron"/> 
-    <layer repeat="13" vis="SeeThrough">
+    <layer repeat="14" vis="SeeThrough">
         <slice material = "Air"            thickness = "10.0*mm"                    vis="YellowVis" />
         <slice material = "G4_POLYSTYRENE" thickness = "20.0*mm" sensitive = "yes"  vis="CyanVis"   />
         <slice material = "Air"            thickness = "10.0*mm"                    vis="YellowVis" />
     </layer>
 </detector>
-
-    <!-- <layer repeat="number_of_layers+3"> -->
-    <!--    <slice material = "Air"            thickness = "layer_thickness/4.0"                    vis="YellowVis" /> -->
-    <!--    <slice material = "G4_POLYSTYRENE" thickness = "layer_thickness/2.0" sensitive = "yes"  vis="CyanVis"   /> -->
-    <!--    <slice material = "Air"            thickness = "layer_thickness/4.0"                    vis="Invisible" /> -->
-    <!-- </layer> -->
