@@ -58,14 +58,15 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   DetElement    sdet      (det_name,det_id);
   Volume        motherVol = lcdd.pickMotherVolume(sdet);
 
-  //Assembly envelope_assembly( det_name + "assembly"  ) ;  
-  PlacedVolume pv;
+  Assembly envelope_assembly( det_name + "assembly"  ) ;  
+  PlacedVolume  env_phv   = motherVol.placeVolume(envelope_assembly);
+
+  env_phv.addPhysVolID("system",det_id);
+  sdet.setPlacement(env_phv);
 
   sens.setType("yoke");
 
-  DetElement    module_det("module0",det_id);
-
-
+ 
 //====================================================================
 //
 // Read all the constant from ILD_o1_v05.xml
@@ -73,8 +74,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 //
 //====================================================================
   double Yoke_barrel_inner_radius           = lcdd.constant<double>("Yoke_barrel_inner_radius");
-  double Yoke_thickness                     = lcdd.constant<double>("Yoke_thickness");
-  double Yoke_Barrel_Half_Z                 = lcdd.constant<double>("Yoke_Barrel_Half_Z");  
+  //double Yoke_thickness                     = lcdd.constant<double>("Yoke_thickness");
+  //double Yoke_Barrel_Half_Z                 = lcdd.constant<double>("Yoke_Barrel_Half_Z");  
   double Yoke_Z_start_endcaps               = lcdd.constant<double>("Yoke_Z_start_endcaps");
 
 
@@ -108,23 +109,23 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 // general calculated parameters
 //
 //====================================================================
-  double Yoke_outer_radius                  = Yoke_barrel_inner_radius + Yoke_thickness;
-
 
   //port from Mokka Yoke05, the following parameters used by Yoke05
   int    symmetry            = nsides;
   double rInnerBarrel        = Yoke_barrel_inner_radius;
   double zStartEndcap        = Yoke_Z_start_endcaps; // has been updated to 4072.0*mm by driver SCoil02 
-  //double yokeBarrelEndcapGap = barrel_endcap_gap;
 
+  //TODO: put all magic numbers into ILD_o1_v05.xml file.
+  double gap_thickness = 4.0;
+  double iron_thickness = 10.0; //10.0 cm
+  int number_of_layers = 10;
 
   //... Barrel parameters: 
   //... tolerance 1 mm
-  //double yokeBarrelThickness    = gap_thickness 
-  //  + number_of_layers*(iron_thickness + gap_thickness) 
-  //  + 3*(5.6*iron_thickness + gap_thickness) 
-  //  + 1*mm;
-  double yokeBarrelThickness    =    Yoke_thickness;
+  double yokeBarrelThickness    = gap_thickness 
+    + number_of_layers*(iron_thickness + gap_thickness) 
+    + 3*(5.6*iron_thickness + gap_thickness) 
+    + 0.1; // the tolerance 1 mm
 
   double rOuterBarrel           =    rInnerBarrel + yokeBarrelThickness;    
   double z_halfBarrel           =    zStartEndcap - yokeBarrelEndcapGap;    
@@ -139,7 +140,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   cout << "  ...Yoke  db: symmetry             " << symmetry <<endl;
   cout << "  ...Yoke  db: rInnerBarrel         " << rInnerBarrel <<endl;
   cout << "  ...Yoke  db: zStartEndcap         " << zStartEndcap <<endl;
- 
+
+  cout << "  ...Muon  db: iron_thickness       " << iron_thickness <<endl;
+  cout << "  ...Muon  db: gap_thickness        " << gap_thickness <<endl;
+  cout << "  ...Muon  db: number_of_layers     " << number_of_layers <<endl;
+
+  cout << "  ...Muon par: yokeBarrelThickness  " << yokeBarrelThickness <<endl;
+  cout << "  ...Muon par: Barrel_half_z        " << z_halfBarrel <<endl;
 
 
 
@@ -148,7 +155,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   Volume mod_vol(det_name+"_module", YokeBarrelSolid, yokeMaterial);
 
-  mod_vol.setVisAttributes(lcdd.visAttributes("YellowVis"));
+  mod_vol.setVisAttributes(lcdd.visAttributes(x_det.visStr()));
      
  
 //====================================================================
@@ -165,16 +172,17 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
       // Loop over number of repeats for this layer.
       for (int i=0; i<repeat; i++)    {
-	//if(i>0) continue;
+	//if(i>11) continue;
 	string l_name = _toString(l_num,"layer%d");
-	double l_thickness = layering.layer(l_num-1)->thickness();  // Layer's thickness.
+	//double l_thickness = layering.layer(l_num-1)->thickness();  // Layer's thickness.
+	double l_thickness = layering.layer(i)->thickness();  // Layer's thickness.
 	
-	double gap_thickness = l_thickness;
-	double iron_thickness = 10.0; //10.0 cm
+	//double gap_thickness = l_thickness;
+	//double iron_thickness = 10.0; //10.0 cm
 
 	double radius_low = rInnerBarrel+ 0.05 + i*gap_thickness + i*iron_thickness; 
 	//rInnerBarrel+ 0.5*mm + i*gap_thickness + i*iron_thickness; 
-	//double radius_mid       = radius_low+0.5*gap_thickness;  
+	//double radius_mid      = radius_low+0.5*gap_thickness;  
 	//double radius_sensitive = radius_mid;
 
 	if( i>=10 ) radius_low =  rInnerBarrel + 0.05 + i*gap_thickness  + (i+(i-10)*4.6)*iron_thickness;
@@ -197,7 +205,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 	Box        ChamberSolid(dx,l_thickness/2.0, dy);
 	Volume     ChamberLog(det_name+"_"+l_name,ChamberSolid,air);
-	DetElement layer(module_det, l_name, det_id);
+	DetElement layer(l_name, det_id);
 
 	ChamberLog.setVisAttributes(lcdd.visAttributes(x_layer.visStr()));
 
@@ -210,8 +218,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	//--------------------------------------------------------------------------------
 	// Build Layer, Sensitive Scintilator in the middle, and Air tolorance at two sides 
 	//--------------------------------------------------------------------------------
-	double radiator_dim_y = -1.0; //to be updated with slice radiator thickness 
-	
 	for(xml_coll_t si(x_layer,_U(slice)); si; ++si)  {
 	  xml_comp_t x_slice = si;
 	  string     s_name  =  _toString(s_num,"slice%d");
@@ -236,10 +242,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 	  Position   s_pos(0,s_pos_y,0);      // Position of the layer.
 	  PlacedVolume  s_phv = ChamberLog.placeVolume(s_vol,s_pos);
-	  
+	  slice.setPlacement(s_phv);
+
 	  if ( x_slice.isSensitive() ) {
-	    s_phv.addPhysVolID("layer",l_num).addPhysVolID("slice",s_num);
-	    cout<<" Yoke layer_id:  "<< l_num<<"   slice_id:  "<<s_num <<endl;
+	    s_phv.addPhysVolID("slice",s_num);
+	    double radius_sensitive = radius_low+0.5*l_thickness;
+	    cout << "  ...Barrel i, position: "<<i <<" "<<radius_sensitive<<endl;
 	  }
 
 	  slice.setPlacement(s_phv);
@@ -258,7 +266,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 	for(int j=0;j<symmetry;j++)
 	  {
-	    //if(j>0) continue;
 	    double Y = radius_low + l_thickness/2.0;
 	    Position xyzVec(-Y*sin(phirot), Y*cos(phirot), 0);
 
@@ -267,9 +274,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 	    Transform3D tran3D(rot3D,xyzVec); 
 	    PlacedVolume layer_phv =  mod_vol.placeVolume(ChamberLog,tran3D);
-	    layer_phv.addPhysVolID("layer", l_num);	    
-	    layer.setPlacement(layer_phv);
-
+	    layer_phv.addPhysVolID("layer", l_num).addPhysVolID("stave",j+1);
+	    string     stave_name  =  _toString(j+1,"stave%d");
+	    string stave_layer_name = stave_name+_toString(l_num,"layer%d");
+	    DetElement stave(stave_layer_name,det_id);;
+	    stave.setPlacement(layer_phv);
+	    sdet.add(stave);
 	    phirot -= M_PI/symmetry*2.0;
 
 	  }
@@ -280,7 +290,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 
 //====================================================================
-// Place Yoke05 Barrel stave module into the assembly envelope
+// Place Yoke05 Barrel stave module into the world volume
 //====================================================================
 
   for (int module_id = 1; module_id < 4; module_id++)
@@ -289,23 +299,16 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       
       Position pos(0,0,module_z_offset);
       
-      pv = motherVol.placeVolume(mod_vol,pos);
-      pv.addPhysVolID("module",module_id).addPhysVolID("system", sdet.id());
-      DetElement sd = (module_id==0) ? module_det : module_det.clone(_toString(module_id,"module%d"));
-      sd.setPlacement(pv);
+      PlacedVolume m_phv = envelope_assembly.placeVolume(mod_vol,pos);
+      m_phv.addPhysVolID("module",module_id).addPhysVolID("system", det_id);
+      m_phv.addPhysVolID("tower", 1);// Not used
+      string m_name = _toString(module_id,"module%d");
+      DetElement sd (m_name,det_id);
+      sd.setPlacement(m_phv);
       sdet.add(sd);
       
     }
 
-
-
-//====================================================================
-// Place Coil into the world volume
-//====================================================================
-  
-  //pv = motherVol.placeVolume(envelope_assembly);
-  //pv.addPhysVolID("system", sdet.id());
-  //sdet.setPlacement(pv);
   
   return sdet;
 }
