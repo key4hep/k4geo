@@ -233,7 +233,7 @@
 
     <sequence sd="YokeBarrel" type="Geant4SensDetActionSequence">
       <action name="SDHcalEndcap/YokeBarrelCollection">
-      <properties cellSize="{3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0}"
+      <properties cellSize="{3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0}"
                   applyBirksLawFlag="false"/>
       </action>
     </sequence>
