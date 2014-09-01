@@ -75,32 +75,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 //====================================================================
   double Yoke_barrel_inner_radius           = lcdd.constant<double>("Yoke_barrel_inner_radius");
   double Yoke_endcap_inner_radius           = lcdd.constant<double>("Yoke_endcap_inner_radius");
-  //double Yoke_thickness                     = lcdd.constant<double>("Yoke_thickness");
-  //double Yoke_Barrel_Half_Z                 = lcdd.constant<double>("Yoke_Barrel_Half_Z");  
   double Yoke_Z_start_endcaps               = lcdd.constant<double>("Yoke_Z_start_endcaps");
-
-
-  //Database *db = new Database(env.GetDBName());
-  //db->exec("SELECT * FROM `yoke`;");
-  //db->getTuple();
-  ////... Geometry parameters from the environment and from the database
-  //symmetry = db->fetchInt("symmetry");
-  //const G4double rInnerBarrel  = 
-  //  env.GetParameterAsDouble("Yoke_barrel_inner_radius");
-  //const G4double rInnerEndcap  = 
-  //  env.GetParameterAsDouble("Yoke_endcap_inner_radius");
-  //const G4double zStartEndcap  = 
-  //  env.GetParameterAsDouble("Yoke_Z_start_endcaps");
-  //
-  //db->exec("SELECT * FROM `muon`;");
-  //db->getTuple();
-  //iron_thickness               = db->fetchDouble("iron_thickness");
-  //G4double gap_thickness       = db->fetchDouble("layer_thickness");
-  //number_of_layers             = db->fetchInt("number_of_layers");
-  //G4double yokeBarrelEndcapGap = db->fetchInt("barrel_endcap_gap");
-  //G4double cell_dim_x          = db->fetchDouble("cell_size");
-  //G4double cell_dim_z          = db->fetchDouble("cell_size"); 
-  //G4double chamber_thickness   = 10*mm;  
 
   double yokeBarrelEndcapGap     = 2.5;// ?? lcdd.constant<double>("barrel_endcap_gap"); //25.0*mm
 
@@ -161,6 +136,101 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   mod_vol.setVisAttributes(lcdd.visAttributes(x_det.visStr()));
      
+
+//====================================================================
+// Build chamber volume
+//====================================================================
+  //double gap_thickness       = db->fetchDouble("layer_thickness");
+
+  //-------------------- start loop over Yoke layers ----------------------
+    // Loop over the sets of layer elements in the detector.
+    int l_num = 1;
+    for(xml_coll_t li(x_det,_U(layer)); li; ++li)  {
+      xml_comp_t x_layer = li;
+      int repeat = x_layer.repeat();
+
+      // Loop over number of repeats for this layer.
+      for (int i=0; i<repeat; i++)    {
+	//if(i>11) continue;
+	string l_name = _toString(l_num,"layer%d");
+	double l_thickness = layering.layer(i)->thickness();  // Layer's thickness.
+	
+	PolyhedraRegular ChamberSolid( symmetry, M_PI/symmetry, rInnerEndcap + tolerance, rOuterEndcap - tolerance,  l_thickness);
+	Volume     ChamberLog(det_name+"_"+l_name,ChamberSolid,air);
+	DetElement layer(l_name, det_id);
+
+	ChamberLog.setVisAttributes(lcdd.visAttributes(x_layer.visStr()));
+
+	// Loop over the sublayers or slices for this layer.
+	int s_num = 1;
+	double s_pos_z = -(l_thickness / 2);
+
+
+	
+	//--------------------------------------------------------------------------------
+	// Build Layer, Sensitive Scintilator in the middle, and Air tolorance at two sides 
+	//--------------------------------------------------------------------------------
+	for(xml_coll_t si(x_layer,_U(slice)); si; ++si)  {
+	  xml_comp_t x_slice = si;
+	  string     s_name  =  _toString(s_num,"slice%d");
+	  double     s_thickness = x_slice.thickness();
+
+	  PolyhedraRegular sliceSolid( symmetry, M_PI/symmetry, rInnerEndcap + tolerance, rOuterEndcap - tolerance,  l_thickness);
+	  Volume     s_vol(det_name+"_"+l_name+"_"+s_name,sliceSolid,lcdd.material(x_slice.materialStr()));
+          DetElement slice(layer,s_name,det_id);
+
+	  if ( x_slice.isSensitive() ) {
+	    s_vol.setSensitiveDetector(sens);
+	  }
+	  // Set region, limitset, and vis.
+	  s_vol.setAttributes(lcdd,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
+
+	  s_pos_z += s_thickness/2.;
+
+	  Position   s_pos(0,0,s_pos_z);      // Position of the layer.
+	  PlacedVolume  s_phv = ChamberLog.placeVolume(s_vol,s_pos);
+	  slice.setPlacement(s_phv);
+
+	  if ( x_slice.isSensitive() ) {
+	    s_phv.addPhysVolID("slice",s_num);
+	  }
+
+	  slice.setPlacement(s_phv);
+	  // Increment x position for next slice.
+	  s_pos_z += s_thickness/2.;
+
+	  ++s_num;
+
+	}
+	
+	++l_num;
+
+
+	double shift_middle    = - yokeEndcapThickness/2 + 0.05 //0.5*mm 
+	  + iron_thickness*(i+1) 
+	  + (i+0.5)*gap_thickness; 
+	
+	if( i>= 10)
+	  {
+	    shift_middle    = - yokeEndcapThickness/2 + 0.05 //0.5*mm 
+	      + iron_thickness*(i+1+(i-9)*4.6) + (i+0.5)*gap_thickness; 
+	  }	
+
+	Position xyzVec(0,0,shift_middle);
+	
+	PlacedVolume layer_phv =  mod_vol.placeVolume(ChamberLog,xyzVec);
+	layer_phv.addPhysVolID("layer", l_num);
+	//string stave_name  = "stave1";
+	string stave_layer_name = "stave1"+_toString(l_num,"layer%d");
+	DetElement stave(stave_layer_name,det_id);;
+	stave.setPlacement(layer_phv);
+	sdet.add(stave);
+
+	
+      }
+
+    }  
+
 
 //====================================================================
 // Place Yoke05 Endcaps module into the world volume
