@@ -185,6 +185,8 @@
 
 	<include ref="Yoke05_Barrel.xml"/>
 
+	<include ref="Yoke05_Endcaps.xml"/>
+
 	<include ref="BeamCal08.xml"/>
 
 	<include ref="coil03.xml"/>
@@ -273,6 +275,10 @@
  	</readout>
 
  	<readout name="YokeBarrelCollection">
+ 	 <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,I:32:-16,J:-16</id>
+ 	</readout>
+
+ 	<readout name="YokeEndcapsCollection">
  	 <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,I:32:-16,J:-16</id>
  	</readout>
 
