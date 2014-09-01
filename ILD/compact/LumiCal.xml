@@ -1,0 +1,29 @@
+<!-- 
+     LumiCal parameters for ILD 
+-->
+
+<detector name="LumiCal" type="LumiCal" vis="SeeThrough" id="ILDDetID_BCAL"
+	  readout="LumiCalCollection" insideTrackingVolume="false" >
+  <parameter crossingangle="ILC_Main_Crossing_Angle"
+	     cutoutspanningangle="40*deg"
+	     incomingbeampiperadius="BCal_TubeIncomingRadius"
+	     />
+  
+  <dimensions inner_r = "80*mm"
+	      inner_z = "2500*mm"
+	      outer_r = "195.2*mm"
+	      modules = "12"
+	      phi_sectors = "4"
+	      r_sectors = "64"
+	      phi_gap = "2*mm"
+	      r_gap = "2*mm" />
+
+  
+  <layer repeat="30" vis="SeeThrough">
+    <slice material = "TungstenDens24" thickness = "3.5*mm" 		   vis="BCLayerVis1" />
+    <slice material = "Air"     thickness = "0.1*mm" />
+    <slice material = "Silicon" thickness = "0.355*mm" 	sensitive = "yes"  vis="BCLayerVis2"/>
+    <slice material = "Copper"  thickness = "0.4*mm"                    vis="BCLayerVis3"/>
+  </layer>
+
+</detector>
