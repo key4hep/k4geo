@@ -76,6 +76,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double Yoke_barrel_inner_radius           = lcdd.constant<double>("Yoke_barrel_inner_radius");
   double Yoke_endcap_inner_radius           = lcdd.constant<double>("Yoke_endcap_inner_radius");
   double Yoke_Z_start_endcaps               = lcdd.constant<double>("Yoke_Z_start_endcaps");
+  double HCAL_R_max                         = lcdd.constant<double>("Hcal_outer_radius");
 
   double yokeBarrelEndcapGap     = 2.5;// ?? lcdd.constant<double>("barrel_endcap_gap"); //25.0*mm
 
@@ -232,12 +233,37 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
     }  
 
+//====================================================================
+// Check Yoke05 plug module
+//====================================================================
+    bool   build_plug = false;
+    double HCAL_z         = 393.7;
+    double HCAL_plug_gap  = 4.5;
+    double plug_thickness = zStartEndcap-HCAL_z-HCAL_plug_gap;
+    
+    double rInnerPlug           =    Yoke_endcap_inner_radius;
+    double rOuterPlug           =    HCAL_R_max;
+    double Yoke_Plug_module_dim_z =  plug_thickness;
+
+    // Is there a space to build Yoke plug
+    if( Yoke_Plug_module_dim_z > 0 ) 
+      {
+	build_plug = true;
+
+	cout << "  ...Plug par: build_plug is true, there is space to build yoke plug" <<endl;
+	cout << "  ...Plug par: HCAL_half_z          " << HCAL_z <<endl;
+	cout << "  ...Plug par: HCAL_Plug_Gap        " << HCAL_plug_gap <<endl;
+	cout << "  ...Plug par: Plug Thickness       " << plug_thickness <<endl;
+	cout << "  ...Plug par: Plug Radius          " << HCAL_R_max <<endl;
+
+      }
 
 //====================================================================
 // Place Yoke05 Endcaps module into the world volume
 //====================================================================
 
-  double zEndcap          =   zStartEndcap + yokeEndcapThickness/2;
+  double zEndcap          =   zStartEndcap + yokeEndcapThickness/2.0 + 0.1; // Need 0.1 (1.0*mm) according to the Mokka Yoke05 driver.
+  double zPlug            =   zStartEndcap - plug_thickness/2.0 -0.05; //  Need 0.05 (0.5*mm) according to the Mokka Yoke05 driver.
   
   for(int module_num=0;module_num<2;module_num++) {
 
@@ -257,6 +283,22 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     DetElement sd (m_name,det_id);
     sd.setPlacement(pv);
     sdet.add(sd);
+
+    //====================================================================
+    // If Place Yoke05 Endcaps module into the world volume
+    //====================================================================
+    if(build_plug == true){
+      PolyhedraRegular YokePlugSolid( symmetry, M_PI/symmetry, rInnerPlug, rOuterPlug,  Yoke_Plug_module_dim_z);
+      Volume plug_vol(det_name+"_plug", YokePlugSolid, yokeMaterial);
+      plug_vol.setVisAttributes(lcdd.visAttributes(x_det.visStr()));
+
+      double this_plug_z_offset = ( module_id == 0 ) ? - zPlug : zPlug; 
+      Position   plug_pos(0,0,this_plug_z_offset);
+      PlacedVolume  plug_phv = envelope_assembly.placeVolume(plug_vol,plug_pos);
+      string plug_name = _toString(module_id,"plug%d");
+      DetElement plug (plug_name,det_id);
+      plug.setPlacement(plug_phv);
+    }
 
   }
 
