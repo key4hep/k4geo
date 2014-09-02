@@ -285,7 +285,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     sdet.add(sd);
 
     //====================================================================
-    // If Place Yoke05 Endcaps module into the world volume
+    // If build_plug is true, Place the plug module into the world volume
     //====================================================================
     if(build_plug == true){
       PolyhedraRegular YokePlugSolid( symmetry, M_PI/symmetry, rInnerPlug, rOuterPlug,  Yoke_Plug_module_dim_z);
