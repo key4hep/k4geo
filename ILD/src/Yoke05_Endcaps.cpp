@@ -110,9 +110,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double rOuterEndcap           =    rInnerBarrel + yokeBarrelThickness;
   double z_halfBarrel           =    zStartEndcap - yokeBarrelEndcapGap;    
 
-
-  // In this release the number of modules is fixed to 3
-  double Yoke_Endcap_module_dim_z =  yokeEndcapThickness+0.1; //1.0*mm;
+  //Port from Mokka: 
+  // Endcap Thickness has no tolerance
+  // But the placement should shift_middle by -0.05 (0.5*mm) later
+  double Yoke_Endcap_module_dim_z =  yokeEndcapThickness;
 
   cout<<" Build the yoke within this dimension "<<endl;
   cout << "  ...Yoke  db: symmetry             " << symmetry <<endl;
@@ -206,13 +207,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	++l_num;
 
 
-	double shift_middle    = - yokeEndcapThickness/2 + 0.05 //0.5*mm 
+	double shift_middle    = - yokeEndcapThickness/2 - 0.05 //0.5*mm 
 	  + iron_thickness*(i+1) 
 	  + (i+0.5)*gap_thickness; 
 	
 	if( i>= 10)
 	  {
-	    shift_middle    = - yokeEndcapThickness/2 + 0.05 //0.5*mm 
+	    shift_middle    = - yokeEndcapThickness/2 - 0.05 //0.5*mm 
 	      + iron_thickness*(i+1+(i-9)*4.6) + (i+0.5)*gap_thickness; 
 	  }	
 
