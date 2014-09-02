@@ -175,7 +175,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  string     s_name  =  _toString(s_num,"slice%d");
 	  double     s_thickness = x_slice.thickness();
 
-	  PolyhedraRegular sliceSolid( symmetry, M_PI/symmetry, rInnerEndcap + tolerance, rOuterEndcap - tolerance,  l_thickness);
+	  PolyhedraRegular sliceSolid( symmetry, M_PI/symmetry, rInnerEndcap + tolerance, rOuterEndcap - tolerance,  s_thickness);
 	  Volume     s_vol(det_name+"_"+l_name+"_"+s_name,sliceSolid,lcdd.material(x_slice.materialStr()));
           DetElement slice(layer,s_name,det_id);
 
