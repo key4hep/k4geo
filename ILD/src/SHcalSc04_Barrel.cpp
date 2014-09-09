@@ -41,6 +41,89 @@ using namespace DD4hep;
 using namespace DD4hep::Geometry;
 
 
+// After reading in all the necessary parameters.
+// To check the radius range and the space for placing the total layers
+bool validate(double rInner, double rOuter, double radiatorThickness, double layerThickness, int layerNumber){
+  
+  bool Error = false;
+  bool Warning = false;
+  double spaceAllowed = rOuter*cos(M_PI/16.) - rInner;
+  double spaceNeeded  = (radiatorThickness + layerThickness)* layerNumber;
+  double spaceToleranted  = (radiatorThickness + layerThickness)* (layerNumber+1);
+  double rOuterRecommaned = ( rInner + spaceNeeded )/cos(M_PI/16.);
+  int layerNumberRecommaned = floor( ( spaceAllowed ) / (radiatorThickness + layerThickness) );
+
+
+  if( spaceNeeded > spaceAllowed )
+    {
+      cout<<"\n Error: Layer number is more than it can be built!" <<endl;
+      Error = true;
+    }
+  else if ( spaceToleranted < spaceAllowed )
+    {
+      cout<<"\n Warning: Layer number is less than it is able to build!" <<endl;
+      Warning = true;
+    }
+  else
+    {
+      cout<<"\n SHcalSC04_Barrel has been validated and start to build it." <<endl;
+      Error = false;
+      Warning = false;
+    }
+
+  if( Error )
+    {
+      cout<<"\n ============> First Help Documentation <=============== \n"
+	  <<" When you see this message, that means you are crashing the module. \n"
+	  <<" Please take a cup of cafe, and think about what you want to do! \n"
+	  <<" Here are few FirstAid# for you. Please read them carefully. \n"
+	  <<" \n"
+	  <<" ###  FirstAid 1: ###\n"
+	  <<" If you want to build HCAL within the rInner and rOuter range, \n"
+	  <<" please reduce the layer number to " << layerNumberRecommaned <<" \n"
+	  <<" with the current layer thickness structure. \n"
+	  <<" \n"
+	  <<" You may redisgn the layer structure and thickness, too. \n"
+	  <<" \n"
+	  <<" ###  FirstAid 2: ###\n"
+	  <<" If you want to build HCAL with this layer number and the layer thickness, \n"
+	  <<" you have to update rOuter to "<< rOuterRecommaned*10. <<"*mm \n"
+	  <<" and to inform other subdetector, you need this space for building your design. \n"
+	  <<" \n"
+	  <<" ###  FirstAid 3: ###\n"
+	  <<" Do you think that you are looking for another type of HCAL driver? \n"
+	  <<" \n"
+	  <<endl; 
+      return Error;
+    } 
+  else if( Warning )
+    {
+      cout<<"\n ============> First Help Documentation <=============== \n"
+	  <<" When you see this warning message, that means you are changing the module. \n"
+	  <<" Please take a cup of cafe, and think about what you want to do! \n"
+	  <<" Here are few FirstAid# for you. Please read them carefully. \n"
+	  <<" \n"
+	  <<" ###  FirstAid 1: ###\n"
+	  <<" If you want to build HCAL within the rInner and rOuter range, \n"
+	  <<" You could build the layer number up to " << layerNumberRecommaned <<" \n"
+	  <<" with the current layer thickness structure. \n"
+	  <<" \n"
+	  <<" You may redisgn the layer structure and thickness, too. \n"
+	  <<" \n"
+	  <<" ###  FirstAid 2: ###\n"
+	  <<" If you want to build HCAL with this layer number and the layer thickness, \n"
+	  <<" you could reduce rOuter to "<< rOuterRecommaned*10. <<"*mm \n"
+	  <<" and to reduce the back plate thickness, which you may not need for placing layer. \n"
+	  <<" \n"
+	  <<" ###  FirstAid 3: ###\n"
+	  <<" Do you think that you are looking for another type of HCAL driver? \n"
+	  <<" \n"
+	  <<endl; 
+      return Warning;
+    }
+  else { return 0; }
+
+}
 
 static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens)  {
 
@@ -109,6 +192,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   double      Ecal_outer_radius               = lcdd.constant<double>("Ecal_outer_radius");
   std::cout << " ***********Ecal_outer_radius " <<  Ecal_outer_radius << std::endl ;
+
+  validate(Hcal_inner_radius, Hcal_module_radius, Hcal_radiator_thickness, Hcal_chamber_thickness, Hcal_nlayers);
+
 //====================================================================
 //
 // general calculated parameters
