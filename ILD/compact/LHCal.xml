@@ -1,0 +1,27 @@
+<!-- 
+     LHCal parameters for ILD 
+-->
+
+<detector name="LHCal" type="LHCal" vis="SeeThrough" id="ILDDetID_LHCAL"
+	  readout="LHCalCollection" insideTrackingVolume="false" >
+  <parameter crossingangle="ILC_Main_Crossing_Angle"
+	     cutoutspanningangle="40*deg"
+	     incomingbeampiperadius="BCal_TubeIncomingRadius"
+	     />
+  
+  <dimensions width = "650*mm"
+	      inner_z = "2680*mm"
+	      height = "650*mm"
+	      inner_r = "100*mm"
+	      offset = "0*mm"
+	/>          
+
+  
+  <layer repeat="40" vis="SeeThrough">
+    <slice material = "TungstenDens24" thickness = "10*mm" 		   vis="BCLayerVis1" />
+    <slice material = "Air"     thickness = "0.1*mm"  />
+    <slice material = "Silicon" thickness = "1.0*mm" 	sensitive = "yes"  vis="BCLayerVis2"/>
+    <slice material = "Copper"  thickness = "1.9*mm"                    vis="BCLayerVis3"/>
+  </layer>
+
+</detector>
