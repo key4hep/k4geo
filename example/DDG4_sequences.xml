@@ -100,28 +100,11 @@
   <sequences>
     <sequence name="Geant4EventActionSequence/EventAction">
 
-      <!-- <action name="Geant4TestEventAction/UserEvent_1"> -->
-      <!--   <properties Property_int="01234" -->
-      <!-- 	  	    Property_double="1e11" -->
-      <!-- 		    Property_string="'Hello_1'"/> -->
-      <!-- </action> -->
-
-      <action name="LCIOEventAction">
-      </action>
-
       <action name="Geant4Output2LCIO/LCIOOutput">
 	<properties Output="simple_lcio"/>
       </action>
 
     </sequence>
-
-    <!-- <sequence name="Geant4GeneratorActionSequence/GeneratorAction"> -->
-    <!--   <action name="Geant4ParticleGun/Gun"> -->
-    <!--     <properties energy="5000*MeV" -->
-    <!-- 	  	    particle="'mu-'" -->
-    <!-- 		    direction = "(1., 1.0 , 0.1 )" -->
-    <!-- 		    multiplicity="1"/> -->
-    <!--   </action> -->
 
     <!-- </sequence> -->
 
