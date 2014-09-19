@@ -64,7 +64,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   env_phv.addPhysVolID("system",det_id);
   sdet.setPlacement(env_phv);
 
-  sens.setType("yoke");
+  sens.setType("calorimeter");
 
  
 //====================================================================

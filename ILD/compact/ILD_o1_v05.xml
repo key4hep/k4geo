@@ -217,39 +217,39 @@
 
 
 	<!-- use simple CartesianGridXY segmentation: -->
-	<!-- <readout name="EcalBarrelCollection"> -->
-	<!--   <segmentation type="CartesianGridXY" grid_size_x="0.5*cm" grid_size_y="0.5*cm"/> -->
-	<!--   <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id> -->
-	<!-- </readout> -->
+	<readout name="EcalBarrelCollection">
+	  <segmentation type="CartesianGridXY" grid_size_x="0.5*cm" grid_size_y="0.5*cm"/>
+	  <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id>
+	</readout>
 
-	<!-- <readout name="EcalEndcapsCollection"> -->
-	<!--   <segmentation type="CartesianGridXY" grid_size_x="0.5*cm" grid_size_y="0.5*cm"/> -->
-	<!--   <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,y:-16</id> -->
-	<!-- </readout> -->
+	<readout name="EcalEndcapsCollection">
+	  <segmentation type="CartesianGridXY" grid_size_x="0.5*cm" grid_size_y="0.5*cm"/>
+	  <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,y:-16</id>
+	</readout>
 
-	<!-- <readout name="EcalEndcapRingCollection"> -->
-	<!--   <segmentation type="CartesianGridXY" grid_size_x="0.5*cm" grid_size_y="0.5*cm"/> -->
-	<!--   <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id> -->
-	<!-- </readout> -->
+	<readout name="EcalEndcapRingCollection">
+	  <segmentation type="CartesianGridXY" grid_size_x="0.5*cm" grid_size_y="0.5*cm"/>
+	  <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id>
+	</readout>
 
-	<!-- <readout name="HcalBarrelRegCollection"> -->
-	<!--   <segmentation type="CartesianGridXY" grid_size_x="3*cm" grid_size_y="3*cm"/> -->
-	<!--   <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,y:-16</id> -->
-	<!-- </readout> -->
+	<readout name="HcalBarrelRegCollection">
+	  <segmentation type="CartesianGridXY" grid_size_x="3*cm" grid_size_y="3*cm"/>
+	  <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,y:-16</id>
+	</readout>
 
-	<!-- <readout name="HcalEndcapsCollection"> -->
-	<!--   <segmentation type="CartesianGridXZ" grid_size_x="3*cm" grid_size_z="3*cm"/> -->
-	<!--   <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,z:-16</id> -->
-	<!-- </readout> -->
+	<readout name="HcalEndcapsCollection">
+	  <segmentation type="CartesianGridXZ" grid_size_x="3*cm" grid_size_z="3*cm"/>
+	  <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,z:-16</id>
+	</readout>
 
-	<!-- <readout name="HcalEndcapRingCollection"> -->
-	<!--   <segmentation type="CartesianGridXY" grid_size_x="3*cm" grid_size_y="3*cm"/> -->
-	<!--   <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id> -->
-	<!-- </readout> -->
-
-
+	<readout name="HcalEndcapRingCollection">
+	  <segmentation type="CartesianGridXY" grid_size_x="3*cm" grid_size_y="3*cm"/>
+	  <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id>
+	</readout>
 
 
+
+<!--
 	<readout name="EcalBarrelCollection">
 	  <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,I:32:-16,J:-16</id> 
 	</readout>
@@ -273,13 +273,15 @@
  	<readout name="HcalEndcapRingCollection">
  	  <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,I:32:-16,J:-16</id>
  	</readout>
-
+-->
  	<readout name="YokeBarrelCollection">
- 	 <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,I:32:-16,J:-16</id>
+	  <segmentation type="CartesianGridXY" grid_size_x="0.5*cm" grid_size_y="0.5*cm"/>
+ 	 <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id>
  	</readout>
 
  	<readout name="YokeEndcapsCollection">
- 	 <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,I:32:-16,J:-16</id>
+	  <segmentation type="CartesianGridXZ" grid_size_x="3*cm" grid_size_z="3*cm"/>
+ 	 <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,z:-16</id>
  	</readout>
 
 	<readout name="BeamCalCollection">
