@@ -140,8 +140,8 @@
 
   <readouts>
     <readout name="LumiCalCollection">
-      <segmentation type="CartesianGridXY" grid_size_x="0.1*cm" grid_size_y="0.1*cm" offset_x="0*cm" />
-      <id>system:8,barrel:3,layer:5,slice:5,x:-16,y:-16 </id>
+      <segmentation type="PolarGridRPhi" grid_size_r="1.8*mm" grid_size_phi="130.899*mrad" offset_r="80*mm"   />
+      <id>system:8,barrel:3,layer:5,slice:5,R:-16,phi:-16 </id>
     </readout>
     
   </readouts>
