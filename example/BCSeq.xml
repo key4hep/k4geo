@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<geant4_setup>
+
+  <kernel UI="" NumEvents="100" />
+
+
+  <!-- List of globally known actions. These actions will be registered with the Geant4Kernel 
+     object and may be retrieved by there using the action name.
+  
+     Note: registered actions MUST be unique.
+     However, not all actions need to registered....
+     Only register those, you later need to retrieve by name.
+  -->
+  <actions>
+    <action name="Geant4TestRunAction/RunInit">
+      <properties Property_int="12345"
+		  Property_double="-5e15"
+		  Property_string="Startrun: Hello_2"/>
+     </action>
+    <action name="Geant4TestEventAction/UserEvent_2">
+      <properties Property_int="1234"
+		  Property_double="5e15"
+		  Property_string="Hello_2"/>
+     </action>
+
+    <!-- UI handler initializing vis and ui. NAME IS FIXED/COMMON KNOWLEDGE -->
+    <action name="Geant4UIManager/UI">
+      <properties HaveVIS="0"
+		  HaveUI="1"
+		  SessionType="tcsh"/>
+     </action>
+
+    <!-- void and empty for the time being.... NAME IS FIXED/COMMON KNOWLEDGE -->
+    <action name="Geant4DummyTruthHandler/MonteCarloTruthHandler"/>
+  </actions>
+
+  <!-- List of known phases.
+     Note: Phases can only be attached to the program at very well defined moments,
+     which are explained in the documentation.
+     These are typically the "standard" moments: BeginRun, EndRun, BeginEvent, etc.
+     and the calls after processing the hits of each sensitive detector.
+  
+  -->
+  <phases>
+    <phase type="RunAction/begin">
+      <action name="RunInit"/>
+      <action name="Geant4TestRunAction/UserRunInit">
+	<properties Property_int="1234"
+		    Property_double="5e15"
+		    Property_string="'Hello_2'"/>
+      </action>
+    </phase>
+    <phase type="EventAction/begin">
+      <action name="UserEvent_2"/>
+    </phase>
+    <phase type="EventAction/end">
+      <action name="UserEvent_2"/>
+    </phase>
+  </phases>
+
+  <!-- List of globally known filters. Filters are called by Geant4 before the
+     hit processing in the sensitive detectors start. The global filters
+     may be shared between many sensitive detectors. Alternatively filters
+     may be directly attached to the sensitive detector in question.
+     Attributes are directly passed as properties to the filter action.
+  
+     Note: registered global filters MUST be unique.
+     However, not all filters need to registered....
+  -->
+  <filters>
+    <filter name="GeantinoRejectFilter/GeantinoRejector"/>
+    <filter name="ParticleRejectFilter/OpticalPhotonRejector">
+        <properties particle="opticalphoton"/>
+    </filter>
+    <filter name="ParticleSelectFilter/OpticalPhotonSelector">
+        <properties particle="opticalphoton"/>
+    </filter>
+    <filter name="EnergyDepositMinimumCut/SiTracker">
+      <properties Cut="10.*keV"/>
+    </filter>
+    <filter name="EnergyDepositMinimumCut/TPC">
+      <properties Cut="0.1*keV"/>
+    </filter>
+    <filter name="EnergyDepositMinimumCut/ECal">
+      <properties Cut="10*keV"/>
+    </filter>
+    <filter name="EnergyDepositMinimumCut/HCal">
+      <properties Cut="10*keV"/>
+    </filter>
+  </filters>
+
+  <!-- List of known action sequences.
+     Note: Action sequences exist for each of the various geant4 callback,
+     which are explained in the documentation, such as EventAction, RunAction, etc
+     and the calls after processing the hits of each sensitive detector.
+  
+  -->
+  <sequences>
+    <sequence name="Geant4EventActionSequence/EventAction">
+
+      <action name="Geant4TestEventAction/UserEvent_1">
+        <properties Property_int="01234"
+      	  	    Property_double="1e11"
+      		    Property_string="'Hello_1'"/>
+      </action>
+
+      <action name="LCIOEventAction">
+      </action>
+
+      <action name="Geant4Output2LCIO/LCIOOutput">
+	<properties Output="simple_lcio_electrons"/>
+      </action>
+
+    </sequence>
+
+    <!-- <sequence name="Geant4GeneratorActionSequence/GeneratorAction"> -->
+    <!--   <action name="Geant4ParticleGun/Gun"> -->
+    <!--     <properties energy="5000*MeV" -->
+    <!-- 	  	    particle="'mu-'" -->
+    <!-- 		    direction = "(1., 1.0 , 0.1 )" -->
+    <!-- 		    multiplicity="1"/> -->
+    <!--   </action> -->
+    <!-- </sequence> -->
+
+    <sequence name="Geant4GeneratorActionSequence/GeneratorAction">
+      <action name="LCIOGeneratorAction">
+        <properties LCIOFileName="electrons.slcio"
+    		    SkipNEvents="0" />
+      </action>
+    </sequence>
+
+
+    <sequence sd="BeamCal" type="Geant4SensDetActionSequence">
+      <filter name="GeantinoRejector"/>
+      <action name="SDCaloLCIODebug/BeamCalCollection"/>
+    </sequence>
+
+
+
+  </sequences>
+</geant4_setup>

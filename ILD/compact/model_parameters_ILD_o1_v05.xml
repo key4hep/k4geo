@@ -17,11 +17,13 @@
   <constant name="BCal_rSegmentation" value="8"/>
   <constant name="BuildHcalElectronicsInterface" value="1"/>
   <constant name="ChipPackageThickness" value="1.4*mm"/>
+
   <constant name="Coil_Yoke_lateral_clearance" value="200.0*mm"/>
   <constant name="Coil_Yoke_radial_clearance" value="250*mm"/>
   <constant name="Coil_extra_size" value="1522*mm"/>
   <constant name="Coil_inner_radius" value="0"/>
   <constant name="Coil_thickness" value="750.0*mm"/>
+
   <constant name="DHcal_max_step" value="10.0*mm"/>
   <constant name="EcalBarrelServices_RailDistanceToRight" value="166.5*mm"/>
   <constant name="EcalBarrelServices_RailHeight" value="30.0*mm"/>
@@ -111,12 +113,14 @@
   <constant name="HcalServices_outer_FR4_thickness" value="2.8*mm"/>
   <constant name="HcalTranslateX" value="0.0*mm"/>
   <constant name="HcalTranslateY" value="0.0*mm"/>
+
   <constant name="Hcal_Coil_additional_gap" value="29.5*mm"/>
+
   <constant name="Hcal_Cu_thickness" value="0.1*mm"/>
   <constant name="Hcal_Ecal_gap" value="30*mm"/>
   <constant name="Hcal_MinNumCellsInTransvPlane" value="32"/>
   <constant name="Hcal_PCB_thickness" value="0.7*mm"/>
-  <constant name="Hcal_R_max" value="2900.*mm"/>
+  <!--fg: don't use this variable - replaced with Hcal_outer_rafius  <constant name="Hcal_R_max" value="2900.*mm"/> -->
   <constant name="Hcal_apply_Birks_law" value="1"/>
   <constant name="Hcal_back_plate_thickness" value="15*mm"/>
   <constant name="Hcal_barrel_end_module_type" value="1"/>
@@ -202,7 +206,8 @@
   <constant name="TCMTTranslateX" value="0.0*mm"/>
   <constant name="TCMTTranslateY" value="0.0*mm"/>
   <constant name="TPC_ECal_gap" value="20.00*mm"/>
-  <constant name="TPC_Ecal_Hcal_barrel_halfZ" value="2200.00*mm"/>
+  <!--constant name="TPC_Ecal_Hcal_barrel_halfZ" value="2200.00*mm"/-->
+  <constant name="TPC_Ecal_Hcal_barrel_halfZ" value="Ecal_Barrel_halfZ"/>
   <constant name="TPC_electronics_air_percent" value="86.00"/>
   <constant name="TPC_electronics_backend_thickness" value="230.00*mm"/>
   <constant name="TPC_electronics_cu_percent" value="1.56"/>
@@ -268,8 +273,10 @@
   <constant name="VXD_width_r4" value="11*mm"/>
   <constant name="VXD_width_r5" value="11*mm"/>
   <constant name="Yoke_BField_cutoff" value="1.5"/>
-  <constant name="Yoke_Barrel_Half_Z" value="7200.00  	*mm"/>
-  <constant name="Yoke_Z_start_endcaps" value="6625*mm"/>
+  <constant name="Yoke_Barrel_Half_Z" value="7200.00*mm"/>
+  <!-- <constant name="Yoke_Z_start_endcaps" value="6625*mm"/> -->
+  <!-- has been updated by driver SCoil02 to the following value -->
+  <constant name="Yoke_Z_start_endcaps" value="4072.0*mm"/>
   <constant name="Yoke_barrel_inner_radius" value="4450.00*mm"/>
   <constant name="Yoke_endcap_inner_radius" value="300*mm"/>
   <constant name="Yoke_thickness" value="2550*mm"/>

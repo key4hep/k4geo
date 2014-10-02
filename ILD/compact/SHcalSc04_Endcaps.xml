@@ -1,4 +1,4 @@
-<detector id="8" name="HcalEndcap" type="SHcalSc04_Endcaps" readout="HcalEndcapsCollection"  vis="GreenVis" calorimeterType="HAD_ENDCAP">
+<detector id="ILDDetID_HCAL" name="HcalEndcap" type="SHcalSc04_Endcaps" readout="HcalEndcapsCollection"  vis="GreenVis" calorimeterType="HAD_ENDCAP">
     <comment>Hadron Calorimeter Endcap</comment>
 
     <material name="Steel235"/><!-- radiator and the thickness has been defined in the main xml file-->
