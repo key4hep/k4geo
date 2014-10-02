@@ -126,10 +126,10 @@ INSTALL(FILES ${hfiles}
   )
 
 
-#install(TARGETS ${PackageName}  dd_sim
-#  RUNTIME DESTINATION bin
-#  LIBRARY DESTINATION lib
-#  )
+install(TARGETS ${PackageName}
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  )
 # to do: add corresponding uninstall...
 #-------------------------------------------------------
 
