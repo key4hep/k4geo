@@ -189,6 +189,10 @@
 
 	<include ref="BeamCal08.xml"/>
 
+	<include ref="LumiCal.xml"/>
+
+	<!-- <include ref="LHCal.xml"/> -->
+
 	<include ref="coil03.xml"/>
 
       </detectors> 
@@ -285,10 +289,20 @@
  	</readout>
 
 	<readout name="BeamCalCollection">
-	  <segmentation type="CartesianGridXYZ" grid_size_x="0.35*cm" grid_size_y="0.35*cm"  grid_size_z="0.35*cm" />
+	  <segmentation type="CartesianGridXY" grid_size_x="0.35*cm" grid_size_y="0.35*cm"  grid_size_z="0.35*cm" />
 	  <id>system:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id>
 	</readout>
 	
+	<readout name="LumiCalCollection">
+	  <segmentation type="CartesianGridXY" grid_size_x="0.1*cm" grid_size_y="0.1*cm" offset_x="0*cm" />
+	  <id>system:8,barrel:3,layer:5,slice:5,x:-16,y:-16 </id>
+	</readout>
+
+	<readout name="LHCalCollection">
+	  <segmentation type="CartesianGridXY" grid_size_x="0.1*cm" grid_size_y="0.1*cm" offset_x="0*cm" />
+	  <id>system:8,barrel:3,layer:5,slice:5,x:-16,y:-16 </id>
+	</readout>
+
     </readouts>
  <fields>
    <field type="solenoid" name="GlobalSolenoid" inner_field="Field_nominal_value*tesla"

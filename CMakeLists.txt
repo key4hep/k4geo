@@ -95,9 +95,9 @@ target_link_libraries(${PackageName} ${DD4hep_LIBRARIES}
 
 
 #---------- the main program ----------------------------------
-
-add_executable( dd_sim ./src/ddsim.cpp)
-target_link_libraries( dd_sim ${DD4hep_LIBRARIES} ${ROOT_LIBRARIES} ${ROOT_COMPONENT_LIBRARIES}   ${Geant4_LIBRARIES} )
+# dd_sim is now part of DD4hep
+#add_executable( dd_sim ./src/ddsim.cpp)
+#target_link_libraries( dd_sim ${DD4hep_LIBRARIES} ${ROOT_LIBRARIES} ${ROOT_COMPONENT_LIBRARIES}   ${Geant4_LIBRARIES} )
 
 
 #---Rootmap generation--------------------------------------------------------------
@@ -126,10 +126,10 @@ INSTALL(FILES ${hfiles}
   )
 
 
-install(TARGETS ${PackageName}  dd_sim
-  RUNTIME DESTINATION bin
-  LIBRARY DESTINATION lib
-  )
+#install(TARGETS ${PackageName}  dd_sim
+#  RUNTIME DESTINATION bin
+#  LIBRARY DESTINATION lib
+#  )
 # to do: add corresponding uninstall...
 #-------------------------------------------------------
 

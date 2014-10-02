@@ -14,7 +14,7 @@
   -->
   <!--kernel UI="UI" NumEvents="1"/-->  
 
-  <kernel UI="" NumEvents="2" />  
+  <kernel UI="" NumEvents="3" />  
 
   <!-- List of globally known actions. These actions will be registered with the Geant4Kernel 
        object and may be retrieved by there using the action name.
@@ -38,6 +38,15 @@
     <!-- 		  SetupUI="run.mac" -->
     <!-- 		  SessionType="csh"/> -->
     <!--  </action> -->
+
+
+    <action name="Geant4TCUserParticleHandler/UserParticleHandler">
+      <properties  Control="true"
+		   OutputLevel="4"
+		   TrackingVolume_Zmax = "2350*mm"
+		   TrackingVolume_Rmax = "1808*mm"
+		   />
+    </action>
 
     <!-- void and empty for the time being.... NAME IS FIXED/COMMON KNOWLEDGE -->
   </actions>
@@ -111,18 +120,28 @@
     <sequence name="Geant4GeneratorActionSequence/GeneratorAction">
       <action name="Geant4GeneratorActionInit/GenerationInit"/>
 
+      <!-- <action name="LCIOInputAction/LCIO1"> -->
+      <!--   <properties Input="LCIOStdHepReader|/Users/gaede/ILDConfig/trunk/StandardConfig/current/bbudsc_3evt.stdhep" -->
+      <!-- 		    OutputLevel="4" -->
+      <!-- 		    Mask="1" -->
+      <!-- 		    MomentumScale="1."/> -->
+      <!-- </action> -->
+
+      <!--   <properties Input="LCIOStdHepReader|/data/ilcsoft/data/E500-TDR_ws.P2f_z_l.Gwhizard-1_95.eR.pL.I250108.001.stdhep" -->
+
       <action name="LCIOInputAction/LCIO1">
-        <properties Input="LCIOStdHepReader|/home/frankm/SW/data/bbbb_3TeV.stdhep"
-		    OutputLevel="4"
-		    Mask="1"
-		    MomentumScale="0.02"/>
+        <properties Input="LCIOFileReader|mcparticles.slcio"
+      	OutputLevel="4"
+      	Mask="1"
+      	MomentumScale="1."/>
       </action>
-      <action name="Geant4InteractionVertexSmear/Smear1">
-        <properties OutputLevel="4"
-		    Mask="1"
-		    Offset="(-20*mm, -10*mm, -10*mm, 0*ns)"
-		    Sigma="(12*mm, 8*mm, 8*mm, 0*ns)"/>
-      </action>
+
+      <!-- <action name="Geant4InteractionVertexSmear/Smear1"> -->
+      <!--   <properties OutputLevel="4" -->
+      <!-- 		    Mask="1" -->
+      <!-- 		    Offset="(-20*mm, -10*mm, -10*mm, 0*ns)" -->
+      <!-- 		    Sigma="(12*mm, 8*mm, 8*mm, 0*ns)"/> -->
+      <!-- </action> -->
 
       <action name="Geant4InteractionMerger/InteractionMerger">
         <properties OutputLevel="4"/>
@@ -133,8 +152,10 @@
       </action>
 
       <action name="Geant4ParticleHandler/ParticleHandler">
-        <properties OutputLevel="4"
-		    SaveProcesses="['Decay']"/>
+        <properties Control="true"
+		    SaveProcesses="['Decay']"
+  	  	    MinimalKineticEnergy="1*MeV"/>
+	<adopt name="UserParticleHandler"/>
       </action>
 
     </sequence>
@@ -188,6 +209,14 @@
 
     <sequence sd="HcalEndcap" type="Geant4SensDetActionSequence">
       <action name="Geant4CalorimeterAction/HcalEndcapsCollection"/> 
+    </sequence>
+
+    <sequence sd="LumiCal" type="Geant4SensDetActionSequence">
+      <action name="Geant4CalorimeterAction/LumiCal"/> 
+    </sequence>
+
+    <sequence sd="BeamCal" type="Geant4SensDetActionSequence">
+      <action name="Geant4CalorimeterAction/BeamCal"/> 
     </sequence>
 
     <sequence sd="HcalEndcapRing" type="Geant4SensDetActionSequence">

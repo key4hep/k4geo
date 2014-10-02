@@ -58,26 +58,33 @@ Initialize the environment:
 Running the simulation
 ----------------------
 
-There is a program called dd_sim which is based on DDG4 that runs the speciefied detector and the 
+There is a program called dd_sim in DD4hep which is based on DDG4 that runs the specified detector and the 
 sequences (user actions) defined in the sequences.xml file.
 
-Modify examples/sequences.xml as needed. 
+Modify examples/DDG4_sequences.xml as needed. 
 
 
-If you want to use the an LCIO file with MCParticle collection as input, use the sequence:
+Depending on wether you want to use stdhep or an LCIO file with MCParticle collection as input, use the 
+one of the follwing actions:
 
-    <sequence name="Geant4GeneratorActionSequence/GeneratorAction">
-      <action name="LCIOGeneratorAction">
-        <properties LCIOFileName="mcparticles.slcio"
-    		    SkipNEvents="0" />
+   <sequence name="Geant4GeneratorActionSequence/GeneratorAction">
+      <action name="Geant4GeneratorActionInit/GenerationInit"/>
+
+      <!-- <action name="LCIOInputAction/LCIO1"> -->
+      <!--   <properties Input="LCIOStdHepReader|/Users/gaede/ILDConfig/trunk/StandardConfig/current/bbudsc_3evt.stdhep" -->
+      <!-- 		    OutputLevel="4" -->
+      <!-- 		    Mask="1" -->
+      <!-- 		    MomentumScale="1."/> -->
+      <!-- </action> -->
+
+      <action name="LCIOInputAction/LCIO1">
+        <properties Input="LCIOFileReader|mcparticles.slcio"
+      	OutputLevel="4"
+      	Mask="1"
+      	MomentumScale="1."/>
       </action>
-    </sequence>
 
-
-You can use any LCIO file with an MCParticle collection as input. If you have an stdhep file,
-run the following command to create an LCIO file:
-
-  stdhepjob infile.stdhep outfile.slcio -1
+    ...
 
 
 You can also modify the python script ./example/lcio_particle_gun.py in order to create
@@ -87,12 +94,12 @@ an LCIO input file with single particles:
   python lcio_particle_gun.py
 
 
-There is also an example input file with 10 singe muons in example/mcparticles.slcio.
+There is an example input file with 10 singe muons in example/mcparticles.slcio.
 
 
 You can then run the simulation:
 
-    dd_sim ../ILD/compact/ILD_o1_v05.xml ../example/sequences.xml ../example/physics.xml
+    dd_sim ../ILD/compact/ILD_o1_v05.xml ../example/DDG4_sequences.xml ../example/physics.xml
 
 this creates an lcio file simple_lcio.slcio with sim hits and MCParticles - you can look at it:
 

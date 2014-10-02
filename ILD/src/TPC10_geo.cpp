@@ -8,11 +8,11 @@
 #include "DD4hep/DD4hepUnits.h"
 #include "DDSim/Exceptions.h"
 #include "DDRec/Surface.h"
+#include "DDRec/DetectorData.h"
 #include "XMLHandlerDB.h"
 
 #include <math.h>
 
-//#include "GearWrapper.h"
 
 using namespace std;
 using namespace DD4hep;
@@ -238,7 +238,7 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
   int layerCounter = 0;
   double fracRadLengthInnerWall = 0;
   double rCursor = rInner ;
-  double gear_inner_wall_material_total_density = 0.0;
+  //  double gear_inner_wall_material_total_density = 0.0;
 
 //   db->exec("SELECT * FROM `innerWall`;");
 //   while (db->getTuple()) {
@@ -264,21 +264,17 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
     cout << "TPC10: Add Material to Inner Wall: dr =  " << std::setw(4) << dr / mm << " mm. Material = " 
 	 << layerMaterial->GetName() << " X0 = " << layerMaterial->GetMaterial()->GetRadLen() << "  " <<  dr / layerMaterial->GetMaterial()->GetRadLen() << "% X0" << endl;
     
-#ifdef MOKKA_GEAR
-    
-    gear_inner_wall_material_total_density += layerMaterial->GetDensity() * (dr / dr_InnerWall);    
-    std::string material_name = db->fetchString("material");
-
-    cout << "TPC10: gear_inner_wall_material_total_density = " << std::setw(4) << gear_inner_wall_material_total_density << endl;   
-    
-    if( gear_inner_wall_material_thicknesses.find( material_name ) ==  gear_inner_wall_material_thicknesses.end() ) {
-      gear_inner_wall_material_thicknesses[ material_name ] = dr;
-    }
-    else {
-      gear_inner_wall_material_thicknesses[ material_name ] += dr;
-    }
-    
-#endif
+// #ifdef MOKKA_GEAR
+//     gear_inner_wall_material_total_density += layerMaterial->GetDensity() * (dr / dr_InnerWall);    
+//     std::string material_name = db->fetchString("material");
+//     cout << "TPC10: gear_inner_wall_material_total_density = " << std::setw(4) << gear_inner_wall_material_total_density << endl;   
+//     if( gear_inner_wall_material_thicknesses.find( material_name ) ==  gear_inner_wall_material_thicknesses.end() ) {
+//       gear_inner_wall_material_thicknesses[ material_name ] = dr;
+//     }
+//     else {
+//       gear_inner_wall_material_thicknesses[ material_name ] += dr;
+//     }
+// #endif
     
   }
   
@@ -324,23 +320,19 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
     cout << "TPC10: Add Material to Outer Wall: dr =  " << std::setw(4) << dr / mm << " mm. Material = " << layerMaterial->GetName() << " X0 = "
 	 << layerMaterial->GetMaterial()->GetRadLen() << "  " <<  dr / layerMaterial->GetMaterial()->GetRadLen() << "% X0" << endl;
     
-#ifdef MOKKA_GEAR
-    
-    gear_outer_wall_material_total_density += layerMaterial->GetDensity() * (dr / dr_OuterWall);    
-    std::string material_name = db->fetchString("material");
-    
-    cout << "TPC10: gear_outer_wall_material_total_density = " << std::setw(4) << gear_outer_wall_material_total_density << endl;   
-    
-    if( gear_outer_wall_material_thicknesses.find( material_name ) ==  gear_outer_wall_material_thicknesses.end() )
-      {
-	gear_outer_wall_material_thicknesses[ material_name ] = dr;
-      }
-    else
-      {
-      	gear_outer_wall_material_thicknesses[ material_name ] += dr;
-      }
-    
-#endif  
+// #ifdef MOKKA_GEAR
+//     gear_outer_wall_material_total_density += layerMaterial->GetDensity() * (dr / dr_OuterWall);    
+//     std::string material_name = db->fetchString("material");
+//     cout << "TPC10: gear_outer_wall_material_total_density = " << std::setw(4) << gear_outer_wall_material_total_density << endl;   
+//     if( gear_outer_wall_material_thicknesses.find( material_name ) ==  gear_outer_wall_material_thicknesses.end() )
+//       {
+// 	gear_outer_wall_material_thicknesses[ material_name ] = dr;
+//       }
+//     else
+//       {
+//       	gear_outer_wall_material_thicknesses[ material_name ] += dr;
+//       }
+//#endif  
     
   }
   cout << "TPC10: Outer wall material corresponds to " << int( fracRadLengthOuterWall * 1000) / 10.0 << "% of a radiation length." << endl;
@@ -547,25 +539,39 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
 
   cout << "TPC10: Total Endplate material corresponds to " << (fracRadLengthReadout * 100.0) + (dz_Endplate / (endplate_MaterialMix->GetMaterial()->GetRadLen() / mm) * 100.0 ) << "% of a radiation length." << endl;
   
-#ifdef MOKKA_GEAR
-  
-  // save the parameters needed to write the gear file ...
 
-  _gear_r_min = rInner;
-  _gear_r_max = rOuter;
-  _gear_inner_wall_thickness = dr_InnerWall;
-  _gear_outer_wall_thickness = dr_OuterWall;
+// #ifdef MOKKA_GEAR
+//   // save the parameters needed to write the gear file ...
+//   _gear_r_min = rInner;
+//   _gear_r_max = rOuter;
+//   _gear_inner_wall_thickness = dr_InnerWall;
+//   _gear_outer_wall_thickness = dr_OuterWall;
+//   _gear_r_min_readout = rMin_Sensitive;
+//   _gear_r_max_readout = rMin_Sensitive + numberPadRows*padHeight;
+//   _gear_n_rows_readout = numberPadRows;
+//   _gear_pad_height = padHeight;
+//   _gear_pad_width = padWidth;
+//   _gear_max_drift_length = dz_Sensitive + dz_Cathode/2.0; // SJA: cathode has to be added as the sensitive region does not start at 0.00    
+//   _gear_z_anode = dzTotal - dz_Endplate; // the edge of the readout terminating the drift volume
+// #endif
+  
 
-  _gear_r_min_readout = rMin_Sensitive;
-  _gear_r_max_readout = rMin_Sensitive + numberPadRows*padHeight;
-  _gear_n_rows_readout = numberPadRows;
-  _gear_pad_height = padHeight;
-  _gear_pad_width = padWidth;
+  FixedPadSizeTPCData* tpcData = new FixedPadSizeTPCData ;
+
+  tpcData->zHalf = dzTotal/2.0 ; 
+  tpcData->rMin = rInner;
+  tpcData->rMax = rOuter;
+  tpcData->innerWallThickness = dr_InnerWall;
+  tpcData->outerWallThickness = dr_OuterWall;
+  tpcData->rMinReadout = rMin_Sensitive;
+  tpcData->rMaxReadout = rMin_Sensitive + numberPadRows*padHeight;
+  tpcData->maxRow = numberPadRows;
+  tpcData->padHeight = padHeight;
+  tpcData->padWidth = padWidth;
+  tpcData->driftLength = dz_Sensitive + dz_Cathode/2.0; // SJA: cathode has to be added as the sensitive region does not start at 0.00    
+  //  tpcData.z_anode = dzTotal - dz_Endplate; // the edge of the readout terminating the drift volume
   
-  _gear_max_drift_length = dz_Sensitive + dz_Cathode/2.0; // SJA: cathode has to be added as the sensitive region does not start at 0.00    
-  _gear_z_anode = dzTotal - dz_Endplate; // the edge of the readout terminating the drift volume
-  
-#endif
+  tpc.addExtension< FixedPadSizeTPCData >( tpcData )   ; 
 
   //######################################################################################################################################################################
   
