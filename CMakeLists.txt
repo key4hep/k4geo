@@ -8,7 +8,7 @@ project(${PackageName})
 
 # project version
 SET( ${PackageName}_VERSION_MAJOR 0 )
-SET( ${PackageName}_VERSION_MINOR 2 )
+SET( ${PackageName}_VERSION_MINOR 3 )
 SET( ${PackageName}_VERSION_PATCH 0 )
 
 SET( ${PackageName}_VERSION "${${PackageName}_VERSION_MAJOR}.${${PackageName}_VERSION_MINOR}" )
@@ -44,16 +44,18 @@ if(DD4HEP_USE_XERCESC)
   find_package(XercesC)
 endif()
 
-find_package( LCIO REQUIRED)
+#find_package( LCIO REQUIRED)
 #find_package( GEAR REQUIRED)
 
-find_package(Geant4 REQUIRED gdml ui_all vis_all)
+#xxfind_package(Geant4 REQUIRED gdml ui_all vis_all)
+
 #if(NOT Geant4_clhep_FOUND)
 #  find_package(CLHEP REQUIRED)
 #  set(Geant4_INCLUDE_DIRS ${Geant4_INCLUDE_DIRS} ${CLHEP_INCLUDE_DIRS})
 #  set(Geant4_LIBRARIES ${Geant4_LIBRARIES} ${CLHEP_LIBRARIES})
 #endif()
-INCLUDE(${Geant4_USE_FILE})   # this also takes care of geant 4 definitions and include dirs
+
+#xINCLUDE(${Geant4_USE_FILE})   # this also takes care of geant 4 definitions and include dirs
 
 #-------------------------------------------------------------
 # add additional packages here
@@ -61,18 +63,22 @@ INCLUDE(${Geant4_USE_FILE})   # this also takes care of geant 4 definitions and 
 
 #-------------------------------------------------------------
 
-include_directories( ${CMAKE_SOURCE_DIR}/include
-  ${CMAKE_SOURCE_DIR}/ILD/include
-#  include/DDSim
+include_directories( ${CMAKE_SOURCE_DIR}/detector/include
   ${DD4hep_INCLUDE_DIRS}
   ${ROOT_INCLUDE_DIR}
-  ${Geant4_INCLUDE_DIRS}
-  ${LCIO_INCLUDE_DIRS}
-  ${GEAR_INCLUDE_DIRS}
  )
+#  ${Geant4_INCLUDE_DIRS}
+#  ${LCIO_INCLUDE_DIRS}
+#  ${GEAR_INCLUDE_DIRS}
 
-file(GLOB sources ./src/* ./ILD/src/*.cpp )
-file(GLOB headers ./ILD/include/*.h)
+file(GLOB sources 
+  ./detector/tracker/*.cpp 
+  ./detector/calorimeter/*.cpp 
+  ./detector/fcal/*.cpp 
+  ./detector/other/*.cpp 
+  )
+
+#file(GLOB headers ./ILD/include/*.h)
 
 if(DD4HEP_USE_XERCESC)
   find_package(XercesC)
@@ -88,10 +94,11 @@ add_library(${PackageName} SHARED ${sources})
 
 target_link_libraries(${PackageName} ${DD4hep_LIBRARIES}
   ${ROOT_LIBRARIES} ${ROOT_COMPONENT_LIBRARIES} 
-  ${Geant4_LIBRARIES}
-  ${LCIO_LIBRARIES}
-  ${GEAR_LIBRARIES}
   )
+
+#  ${GEAR_LIBRARIES}
+#  ${LCIO_LIBRARIES}
+#  ${Geant4_LIBRARIES}
 
 
 #---------- the main program ----------------------------------

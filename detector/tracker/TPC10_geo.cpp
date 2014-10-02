@@ -6,7 +6,7 @@
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/DD4hepUnits.h"
-#include "DDSim/Exceptions.h"
+#include "DDSimExceptions.h"
 #include "DDRec/Surface.h"
 #include "DDRec/DetectorData.h"
 #include "XMLHandlerDB.h"
