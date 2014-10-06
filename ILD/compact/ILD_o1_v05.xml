@@ -279,13 +279,13 @@
  	</readout>
 -->
  	<readout name="YokeBarrelCollection">
-	  <segmentation type="CartesianGridXY" grid_size_x="0.5*cm" grid_size_y="0.5*cm"/>
- 	 <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id>
+	  <segmentation type="CartesianGridXZ" grid_size_x="0.5*cm" grid_size_z="0.5*cm"/>
+ 	 <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,z:-16</id>
  	</readout>
 
  	<readout name="YokeEndcapsCollection">
-	  <segmentation type="CartesianGridXZ" grid_size_x="3*cm" grid_size_z="3*cm"/>
- 	 <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,z:-16</id>
+	  <segmentation type="CartesianGridXY" grid_size_x="3*cm" grid_size_y="3*cm"/>
+ 	 <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id>
  	</readout>
 
 	<readout name="BeamCalCollection">
