@@ -192,7 +192,7 @@
     
 
     <sequence sd="EcalBarrel" type="Geant4SensDetActionSequence">
-      <action name="Geant4CalorimeterAction/EcalBarrelHandler"/>
+      <action name="Geant4CalorimeterAction/EcalBarrelCollection"/>
     </sequence>
 
     <sequence sd="EcalEndcap" type="Geant4SensDetActionSequence">
