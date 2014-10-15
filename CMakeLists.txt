@@ -47,7 +47,7 @@ endif()
 #find_package( LCIO REQUIRED)
 #find_package( GEAR REQUIRED)
 
-#xxfind_package(Geant4 REQUIRED gdml ui_all vis_all)
+find_package(Geant4 REQUIRED gdml ui_all vis_all)
 
 #if(NOT Geant4_clhep_FOUND)
 #  find_package(CLHEP REQUIRED)
@@ -55,7 +55,7 @@ endif()
 #  set(Geant4_LIBRARIES ${Geant4_LIBRARIES} ${CLHEP_LIBRARIES})
 #endif()
 
-#xINCLUDE(${Geant4_USE_FILE})   # this also takes care of geant 4 definitions and include dirs
+INCLUDE(${Geant4_USE_FILE})   # this also takes care of geant 4 definitions and include dirs
 
 #-------------------------------------------------------------
 # add additional packages here
@@ -94,11 +94,11 @@ add_library(${PackageName} SHARED ${sources})
 
 target_link_libraries(${PackageName} ${DD4hep_LIBRARIES}
   ${ROOT_LIBRARIES} ${ROOT_COMPONENT_LIBRARIES} 
+  ${Geant4_LIBRARIES}
   )
 
 #  ${GEAR_LIBRARIES}
 #  ${LCIO_LIBRARIES}
-#  ${Geant4_LIBRARIES}
 
 
 #---------- the main program ----------------------------------
