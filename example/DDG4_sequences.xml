@@ -181,7 +181,10 @@
     <sequence sd="TPC" type="Geant4SensDetActionSequence">
       <filter name="GeantinoRejector"/>
       <filter name="EnergyDepositMinimumCut/TPC"/>
-      <action name="Geant4TrackerAction/TPC"/>
+      <action name="Geant4TrackerAction/TPC">
+	<properties HitCreationMode="2" /> <!--DETAILED_MODE --> 
+      </action>
+      
     </sequence>
 
     <sequence sd="SET" type="Geant4SensDetActionSequence">
