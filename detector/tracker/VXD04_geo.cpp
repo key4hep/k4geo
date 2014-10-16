@@ -8,6 +8,7 @@
 #include "DD4hep/DD4hepUnits.h"
 
 #include "DDRec/Surface.h"
+#include "DDRec/DetectorData.h"
 #include "XMLHandlerDB.h"
 
 //#include "DDRec/DDGear.h"
@@ -20,6 +21,7 @@ using namespace DD4hep;
 using namespace dd4hep ;
 using namespace DD4hep::Geometry;
 using namespace DDRec;
+
 
 
 
@@ -180,6 +182,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
   Material activeMaterial =  lcdd.material("G4_Si"); //silicon_2.33gccm"); 
   
+
+  DDRec::ZPlanarData*  zPlanarData = new ZPlanarData ;
 
 // #ifdef MOKKA_GEAR
 //   // some variables for storing information for MOKKA_GEAR
@@ -485,6 +489,24 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
 // #endif
 
+    DDRec::ZPlanarData::LayerLayout thisLayer ;
+    
+    if (LayerId==2||LayerId==4||LayerId==6) { 
+      
+      thisLayer.distanceSupport  = layer_radius + layer_gap * 0.5 ;
+      
+    }else if (LayerId==1||LayerId==3||LayerId==5) {
+      
+      thisLayer.distanceSupport  = layer_radius  ;
+    }      
+    
+    thisLayer.offsetSupport    = offset_phi ;
+    thisLayer.thicknessSupport = metal_traces_thickness + flex_cable_thickness + foam_spacer_thickness ;
+    thisLayer.zHalfSupport    = ladder_length ;
+    thisLayer.widthSupport     = (ladder_width*2.)+(side_band_electronics_option*side_band_electronics_width) ;
+    //     thisLayer.radLength = VXDSupportMaterial->GetMaterial()->getRadLength()/mm ;
+    
+    
     // ****************************************************************************************
     // **********************   Berylium annulus block *****************************************
     // ****************************************************************************************
@@ -989,6 +1011,39 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     // #endif
 
 
+    //--- fill DDRec::ZPlanarData
+
+    if (LayerId==2||LayerId==4||LayerId==6)  { 
+
+      thisLayer.distanceSensitive  = layer_gap + layer_radius;
+
+    } else if (LayerId==1||LayerId==3||LayerId==5) { 
+
+      thisLayer.distanceSensitive  = layer_radius  - active_silicon_thickness ;
+    }
+    thisLayer.offsetSensitive    = active_offset_phi ;
+    thisLayer.thicknessSensitive = active_silicon_thickness ;
+    thisLayer.zHalfSensitive    = ladder_length ;
+
+    if (active_side_band_electronics_option==1) {
+
+      thisLayer.widthSensitive     = ladder_width*2.+side_band_electronics_width ;
+
+    } else  {
+
+      thisLayer.widthSensitive      = ladder_width*2.; 
+    }
+
+    thisLayer.ladderNumber = (int) nb_ladder  ;
+    thisLayer.phi0 =  -pi/2.  ;
+    
+    zPlanarData->layers.push_back( thisLayer ) ;
+
+    // gearHelpGap = std::max( gearHelpGap , ladder_gap ) ;
+    // gearHelpCount ++ ;
+
+
+
   } // --- end loop over layers ----------------------------------------------------------------------------------------
 
 
@@ -1209,8 +1264,14 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   // #endif
   
+  zPlanarData->rInnerShell = shell_inner_radious  ;
+  zPlanarData->rOuterShell = shell_inner_radious+shell_thickess ;
+  zPlanarData->zHalfShell  = shell_half_z ;
+  zPlanarData->gapShell    = 0. ;
   //######################################################################################################################################################################
   
+  vxd.addExtension< ZPlanarData >( zPlanarData ) ;
+
   
   //--------------------------------------
   
