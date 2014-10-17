@@ -1,0 +1,1096 @@
+<!--
+      Example steering file to run a standard reconstruction
+      on events simulated with DD4hep/DDSim for
+      detector ILD_o1_v05.
+
+      Based on bbudsc_3evt_stdreco.xml form ILDconfig
+
+      Status:  - experimental
+               - working so far: 
+                 - digitization for VXD, SIT, SET, TPC
+                 - SiliconTracking, Clupatra, FullLDC
+
+      @author F.Gaede, CERN/DESY
+      @date Oct 2014
+-->
+
+
+ <marlin>
+   
+   <execute>
+     <processor name="MyAIDAProcessor"/>
+     
+     <!-- =========  overlay gamma gamma background  === -->
+     <!-- activate for production -->
+     <!-- <processor name="BgOverlay" /> -->
+
+     <processor name="MyFixCellIDs" type="FixCellIDs"/>
+
+    <!-- ========== track digitization and tracking  === -->
+     <processor name="VXDPlanarDigiProcessor"/>
+
+     <processor name="SITPlanarDigiProcessor"/>
+     <processor name="SITSpacePointBuilder" />
+
+     <!-- <processor name="FTDPixelPlanarDigiProcessor"/> -->
+     <!-- <processor name="FTDStripPlanarDigiProcessor"/> -->
+     <!-- <processor name="FTDSpacePointBuilder"/> -->
+
+     <processor name="SETPlanarDigiProcessor"/>
+     <processor name="SETSpacePointBuilder" />
+
+     <processor name="MyTPCDigiProcessor"/>
+     
+     <!-- ========== the new C++ tracking =============== -->
+     
+     <processor name="MyClupatraProcessor" />
+      
+     <processor name="MySiliconTracking_MarlinTrk"/>
+     <!-- <processor name="MyForwardTracking"/><\!--create fwd tracks in parallel -\-> -->
+     <!-- <processor name="MyTrackSubsetProcessor" /><\!-- combine Silicon and Forward Tracking -\->      -->
+     <processor name="MyFullLDCTracking_MarlinTrk"/>
+
+     <!-- <\!-- ========== the track cheater   ================= -\-> -->
+     <!-- <\!-- XXXprocessor name="MyTruthTracker"/ -\->     -->
+
+     <!-- <\!-- ========== the post tracking patrec   ================= -\-> -->
+
+     <!-- <processor name="MyV0Finder"/>                 -->
+     <!-- <processor name="MyKinkFinder"/>          -->
+     
+     <!-- <\!-- ========== calorimeter digitization and PFA ======= -\-> -->
+     <!-- <processor name="MyNewLDCCaloDigi"/>     -->
+     <!-- <processor name="MySimpleBCalDigi"/>     -->
+     <!-- <processor name="MySimpleLCalDigi"/>     -->
+     <!-- <processor name="MySimpleLHCalDigi"/>    -->
+     <!-- <processor name="MySimpleMuonDigi"/>     -->
+     
+     <!-- <processor name="MyMarlinPandora"/> -->
+     <!-- <processor name="MyBCalReco"/> -->
+
+     <!-- ========== particle ID ============================ -->
+     <!--processor name="MyPFOID" /-->
+
+     <!-- ========== full and DST output ==================== -->
+     <processor name="MyRecoMCTruthLinker"/>
+     
+     <!-- <\!-- ========== vertex finder ========================== -\-> -->
+     <!-- <processor name="VertexFinder"/> -->
+     
+     <processor name="MyLCIOOutputProcessor"/>
+     <!-- <processor name="DSTOutput"/> -->
+   </execute>
+
+   <global>
+      <parameter name="LCIOInputFiles">
+        simple_lcio.slcio
+      </parameter>
+      <parameter name="GearXMLFile" value="GearOutput.xml"/>
+      <parameter name="MaxRecordNumber" value="0"/>
+      <parameter name="SkipNEvents" value="0"/>
+      <parameter name="SupressCheck" value="false"/>
+      <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MESSAGE </parameter>
+      <parameter name="RandomSeed" value="1234567890" />
+   </global>
+
+ <processor name="MyLCIOOutputProcessor" type="LCIOOutputProcessor">
+  <!--   standard output: full reconstruction keep all collections -->
+  <parameter name="LCIOOutputFile" type="string" >
+       outputfile.slcio
+  </parameter>
+  <parameter name="LCIOWriteMode" type="string" value="WRITE_NEW"/>
+  <!--parameter name="SplitFileSizekB" type="int" value="1992294"/-->
+ </processor>
+
+  <processor name="MyFixCellIDs" type="FixCellIDs">
+    <!--fix CellID0 for old TrackerHits ...-->
+    <!--Name of the SIT TrackerHit collection-->
+    <parameter name="SITCollectionName" type="string" lcioInType="TrackerHit">XXXSITCollection </parameter>
+    <!--Name of the SET TrackerHit collection-->
+    <parameter name="SETCollectionName" type="string" lcioInType="TrackerHit">XXXSETCollection </parameter>
+    <!--Name of the TPC TrackerHit collection-->
+    <parameter name="TPCCollectionName" type="string" lcioInType="TrackerHit">XXXAllTPCTrackerHits </parameter>
+    <!--Name of the VXD TrackerHit collection-->
+    <parameter name="VXDCollectionName" type="string" lcioInType="TrackerHit">VXDCollection </parameter>
+    <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+    <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+  </processor>
+
+ <processor name="DSTOutput" type="LCIOOutputProcessor">
+   <!--   
+     DST output: drop all hits, skim MCParticles and keep final Tracks, Clusters, Vertices and  ReconstructedParticles 
+   -->
+   <parameter name="LCIOOutputFile" type="string" >
+       ./bbudsc_3evt_DST.slcio 
+   </parameter>
+   <parameter name="DropCollectionTypes" type="StringVec"> 
+       MCParticle 
+       SimTrackerHit 
+       SimCalorimeterHit
+       TrackerHit 
+       TrackerHitPlane 
+       CalorimeterHit 
+       LCRelation
+       Track 
+       LCFloatVec      
+    </parameter>
+    <parameter name="FullSubsetCollections" type="StringVec" value="MCParticlesSkimmed"/>
+    <parameter name="KeepCollectionNames" type="StringVec"> 
+      MCParticlesSkimmed 
+      MarlinTrkTracks
+      MCTruthMarlinTrkTracksLink
+      MarlinTrkTracksMCTruthLink
+      RecoMCTruthLink
+    </parameter>
+    <parameter name="LCIOWriteMode" type="string" value="WRITE_NEW"/>
+    <!--parameter name="SplitFileSizekB" type="int" value="1992294"/-->
+ </processor>
+ 
+ <processor name="MyAIDAProcessor" type="AIDAProcessor">
+ <!--Processor that handles AIDA files. Creates on directory per processor.  Processors only need to create and fill the histograms, clouds and tuples. Needs to be the first ActiveProcessor-->
+  <!-- compression of output file 0: false >0: true (default) -->
+  <parameter name="Compress" type="int" value="1"/>
+  <!-- filename without extension-->
+  <parameter name="FileName" type="string" value="bbudsc_3evt_stdreco"/>
+  <!-- type of output file xml (default) or root ( only OpenScientist)-->
+  <parameter name="FileType" type="string" value="root "/>
+</processor>
+
+
+ <processor name="BgOverlay" type="Overlay">
+  <!--Opens a second (chain of) lcio file(s) and overlays events...-->
+  <!--Pairs of collection to be merged-->
+  <parameter name="CollectionMap" type="StringVec">
+    BeamCalCollection                     BeamCalCollection                     
+    COILCollection                        COILCollection                        
+    EcalBarrelSiliconCollection           EcalBarrelSiliconCollection           
+    EcalBarrelSiliconPreShowerCollection  EcalBarrelSiliconPreShowerCollection  
+    EcalEndcapRingCollection              EcalEndcapRingCollection              
+    EcalEndcapRingPreShowerCollection     EcalEndcapRingPreShowerCollection     
+    EcalEndcapSiliconCollection           EcalEndcapSiliconCollection           
+    EcalEndcapSiliconPreShowerCollection  EcalEndcapSiliconPreShowerCollection  
+    FTD_PIXELCollection                   FTD_PIXELCollection                   
+    FTD_STRIPCollection                   FTD_STRIPCollection                   
+    HcalBarrelRegCollection               HcalBarrelRegCollection               
+    HcalEndCapRingsCollection             HcalEndCapRingsCollection             
+    HcalEndCapsCollection                 HcalEndCapsCollection                 
+    LumiCalCollection                     LumiCalCollection  
+    LHcalCollection                       LHcalCollection
+    MCParticle                            MCParticle                            
+    MuonBarrelCollection                  MuonBarrelCollection                  
+    MuonEndCapCollection                  MuonEndCapCollection                  
+    SETCollection                         SETCollection                         
+    SITCollection                         SITCollection                         
+    TPCCollection                         TPCCollection                         
+    TPCSpacePointCollection               TPCSpacePointCollection               
+    VXDCollection                         VXDCollection                         
+  </parameter>
+  <!--Name of the lcio input file(s)-->
+  <parameter name="InputFileNames" type="StringVec"> 
+      /afs/desy.de/project/ilcsoft/www/html/data/ilctest/sv01-14-01-p00.mILD_o1_v05.E1000-B1b_ws.Paa_lowpt.I106472.eR80.pL20-00001.slcio
+  </parameter>
+  <!--Overlay each event with this number of background events. (default 0)-->
+  <parameter name="NumberOverlayEvents" type="int"> 0 </parameter>
+
+  <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+  <!--parameter name="Verbosity" type="string"> DEBUG5 </parameter-->
+
+  <!--Add additional background events according to a poisson distribution with this expectation value. (non, if parameter not set)-->
+  <parameter name="expBG" type="double">4.1 </parameter>
+  <!--Overlay each event with the content of one run.-->
+  <parameter name="runOverlay" type="bool">false </parameter>
+
+  <!--Maximum number of events to skip between overlayd events (choosen from flat intervall [0,NSkipEventsRandom] )-->
+  <parameter name="NSkipEventsRandom" type="int">0</parameter>
+
+</processor>
+
+
+ <processor name="VXDPlanarDigiProcessor" type="PlanarDigiProcessor">
+   <!--PlanarDigiProcessor creates TrackerHits from SimTrackerHits, smearing them according to the input parameters.-->
+   <!--whether hits are 1D strip hits-->
+   <parameter name="IsStrip" type="bool">false </parameter>
+   <!--resolution in direction of u-->
+   <parameter name="ResolutionU" type="float"> 0.0028 0.006 0.004 0.004 0.004 0.004 </parameter>
+   <!--resolution in direction of v-->
+   <parameter name="ResolutionV" type="float"> 0.0028 0.006 0.004 0.004 0.004 0.004  </parameter>
+   <!--Name of the Input SimTrackerHit collection-->
+   <parameter name="SimTrackHitCollectionName" type="string" lcioInType="SimTrackerHit">VXDCollection </parameter>
+   <!--Name of TrackerHit SimTrackHit relation collection-->
+   <parameter name="SimTrkHitRelCollection" type="string" lcioOutType="LCRelation">VXDTrackerHitRelations </parameter>
+   <!--Name of the TrackerHit output collection-->
+   <parameter name="TrackerHitCollectionName" type="string" lcioOutType="TrackerHitPlane">VXDTrackerHits </parameter>
+   <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+   <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+ </processor>
+ 
+
+ <processor name="SITPlanarDigiProcessor" type="PlanarDigiProcessor">
+   <!--PlanarDigiProcessor creates TrackerHits from SimTrackerHits, smearing them according to the input parameters.-->
+   <!--whether hits are 1D strip hits-->
+   <parameter name="IsStrip" type="bool">true </parameter>
+   <!--resolution in direction of u-->
+   <parameter name="ResolutionU" type="float">0.007 </parameter>
+   <!--resolution in direction of v-->
+   <parameter name="ResolutionV" type="float">0 </parameter>
+   <!--Name of the Input SimTrackerHit collection-->
+   <parameter name="SimTrackHitCollectionName" type="string" lcioInType="SimTrackerHit">SITCollection </parameter>
+   <!--Name of TrackerHit SimTrackHit relation collection-->
+   <parameter name="SimTrkHitRelCollection" type="string" lcioOutType="LCRelation">SITTrackerHitRelations </parameter>
+   <!--Name of the TrackerHit output collection-->
+   <parameter name="TrackerHitCollectionName" type="string" lcioOutType="TrackerHitPlane">SITTrackerHits </parameter>
+   <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+   <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+ </processor>
+
+
+ <processor name="SITSpacePointBuilder" type="SpacePointBuilder">
+   <!--SpacePointBuilder combine si-strip measurements into 3D spacepoints (1TrackerHitPlanar+1TrackHitPlanar = 1 TrackerHit), that can be used by reconstruction-->
+   <!--Name of the SpacePoint SimTrackerHit relation collection-->
+   <parameter name="SimHitSpacePointRelCollection" type="string" lcioOutType="LCRelation"> SITSpacePointRelations </parameter>
+   <!--SpacePointsCollection-->
+   <parameter name="SpacePointsCollection" type="string" lcioOutType="TrackerHit"> SITSpacePoints </parameter>
+  <!--TrackerHitCollection-->  
+  <parameter name="TrackerHitCollection" type="string" lcioInType="TrackerHitPlane"> SITTrackerHits </parameter>
+  <!--The name of the input collection of the relations of the TrackerHits to SimHits-->
+  <parameter name="TrackerHitSimHitRelCollection" type="string" lcioInType="LCRelation"> SITTrackerHitRelations </parameter>
+  <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+  <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+</processor>
+
+
+ <processor name="FTDPixelPlanarDigiProcessor" type="PlanarDigiProcessor">
+   <!--PlanarDigiProcessor creates TrackerHits from SimTrackerHits, smearing them according to the input parameters.-->
+   <!--whether hits are 1D strip hits-->
+   <parameter name="IsStrip" type="bool">false </parameter>
+   <!--resolution in direction of u-->
+   <parameter name="ResolutionU" type="float">0.003 </parameter>
+   <!--resolution in direction of v-->
+   <parameter name="ResolutionV" type="float">0.003 </parameter>
+   <!--Name of the Input SimTrackerHit collection-->
+   <parameter name="SimTrackHitCollectionName" type="string" lcioInType="SimTrackerHit">FTD_PIXELCollection </parameter>
+   <!--Name of TrackerHit SimTrackHit relation collection-->
+   <parameter name="SimTrkHitRelCollection" type="string" lcioOutType="LCRelation">FTDPixelTrackerHitRelations </parameter>
+   <!--Name of the TrackerHit output collection-->
+   <parameter name="TrackerHitCollectionName" type="string" lcioOutType="TrackerHitPlane">FTDPixelTrackerHits </parameter>
+   <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+   <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+ </processor>
+
+
+ <processor name="FTDStripPlanarDigiProcessor" type="PlanarDigiProcessor">
+   <!--PlanarDigiProcessor creates TrackerHits from SimTrackerHits, smearing them according to the input parameters.-->
+   <!--whether hits are 1D strip hits-->
+   <parameter name="IsStrip" type="bool">true </parameter>
+   <!--resolution in direction of u-->
+   <parameter name="ResolutionU" type="float">0.007 </parameter>
+   <!--resolution in direction of v-->
+   <parameter name="ResolutionV" type="float">0.0 </parameter>
+   <!--Name of the Input SimTrackerHit collection-->
+   <parameter name="SimTrackHitCollectionName" type="string" lcioInType="SimTrackerHit">FTD_STRIPCollection </parameter>
+   <!--Name of TrackerHit SimTrackHit relation collection-->
+   <parameter name="SimTrkHitRelCollection" type="string" lcioOutType="LCRelation">FTDStripTrackerHitRelations </parameter>
+   <!--Name of the TrackerHit output collection-->
+   <parameter name="TrackerHitCollectionName" type="string" lcioOutType="TrackerHitPlane">FTDStripTrackerHits </parameter>
+   <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+   <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+ </processor>
+
+ 
+ <processor name="SETPlanarDigiProcessor" type="PlanarDigiProcessor">
+   <!--PlanarDigiProcessor creates TrackerHits from SimTrackerHits, smearing them according to the input parameters.-->
+   <!--whether hits are 1D strip hits-->
+   <parameter name="IsStrip" type="bool">true </parameter>
+   <!--resolution in direction of u-->
+   <parameter name="ResolutionU" type="float">0.007 </parameter>
+   <!--resolution in direction of v-->
+   <parameter name="ResolutionV" type="float">0 </parameter>
+   <!--Name of the Input SimTrackerHit collection-->
+   <parameter name="SimTrackHitCollectionName" type="string" lcioInType="SimTrackerHit">SETCollection </parameter>
+   <!--Name of TrackerHit SimTrackHit relation collection-->
+   <parameter name="SimTrkHitRelCollection" type="string" lcioOutType="LCRelation">SETTrackerHitRelations </parameter>
+   <!--Name of the TrackerHit output collection-->
+   <parameter name="TrackerHitCollectionName" type="string" lcioOutType="TrackerHitPlane">SETTrackerHits </parameter>
+   <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+   <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+ </processor>
+
+
+ <processor name="SETSpacePointBuilder" type="SpacePointBuilder">
+   <!--SpacePointBuilder combine si-strip measurements into 3D spacepoints (1TrackerHitPlanar+1TrackHitPlanar = 1 TrackerHit), that can be used by reconstruction-->
+   <!--Name of the SpacePoint SimTrackerHit relation collection-->
+   <parameter name="SimHitSpacePointRelCollection" type="string" lcioOutType="LCRelation"> SETSpacePointRelations </parameter>
+   <!--SpacePointsCollection-->
+   <parameter name="SpacePointsCollection" type="string" lcioOutType="TrackerHit"> SETSpacePoints </parameter>
+  <!--TrackerHitCollection-->  
+  <parameter name="TrackerHitCollection" type="string" lcioInType="TrackerHitPlane"> SETTrackerHits </parameter>
+  <!--The name of the input collection of the relations of the TrackerHits to SimHits-->
+  <parameter name="TrackerHitSimHitRelCollection" type="string" lcioInType="LCRelation"> SETTrackerHitRelations </parameter>
+  <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+  <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+</processor>
+
+
+ <processor name="FTDSpacePointBuilder" type="SpacePointBuilder">
+   <!--SpacePointBuilder combine si-strip measurements into 3D spacepoints (1TrackerHitPlanar+1TrackHitPlanar = 1 TrackerHit), that can be used by reconstruction-->
+   <!--Name of the SpacePoint SimTrackerHit relation collection-->
+   <parameter name="SimHitSpacePointRelCollection" type="string" lcioOutType="LCRelation">FTDSpacePointRelations </parameter>
+   <!--SpacePointsCollection-->
+   <parameter name="SpacePointsCollection" type="string" lcioOutType="TrackerHit">FTDSpacePoints </parameter>                                                                
+   <!--TrackerHitCollection-->
+   <parameter name="TrackerHitCollection" type="string" lcioInType="TrackerHitPlane">FTDStripTrackerHits </parameter>
+   <!--The name of the input collection of the relations of the TrackerHits to SimHits-->
+   <parameter name="TrackerHitSimHitRelCollection" type="string" lcioInType="LCRelation">FTDStripTrackerHitRelations </parameter>
+   <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+   <!--parameter name="Verbosity" type="string">DEBUG </parameter-->                                            
+ </processor>
+
+
+
+  <processor name="MyTPCDigiProcessor" type="TPCDigiProcessor">
+ <!--Produces TPC TrackerHit collection from SimTrackerHit collection, smeared in RPhi and Z. A search is made for adjacent hits on a pad row, if they are closer in z and r-phi than the steering parameters _doubleHitResRPhi (default value 2.0 mm) and _doubleHitResZ (default value 5.0 mm) they are considered to overlap. Clusters of hits smaller than _maxMerge (default value 3) are merged into a single tracker hit, with the position given as the average poision of the hits in phi and in z. Clusters which have _maxMerge hits or more are determined to be identifiable as multiple hits, and are not added to the tracker hit collection. This of course means that good hits caught up in a cluster of background hits will be lossed.-->
+  <!--R-Phi Diffusion Coefficent in TPC-->
+  <parameter name="DiffusionCoeffRPhi" type="float">0.025 </parameter>
+  <!--Z Diffusion Coefficent in TPC-->
+  <parameter name="DiffusionCoeffZ" type="float">0.08 </parameter>
+  <!--Defines the minimum distance for two seperable hits in RPhi-->
+  <parameter name="DoubleHitResolutionRPhi" type="float">2 </parameter>
+  <!--Defines the minimum distance for two seperable hits in Z-->
+  <parameter name="DoubleHitResolutionZ" type="float">5 </parameter>
+  <!--Defines spatial slice in RP-->
+  <parameter name="HitSortingBinningRPhi" type="float">2 </parameter>
+  <!--Defines spatial slice in Z-->
+  <parameter name="HitSortingBinningZ" type="float">5 </parameter>
+  <!--Defines the maximum number of adjacent hits which can be merged-->
+  <parameter name="MaxClusterSizeForMerge" type="int">3 </parameter>
+  <!--Number of Effective electrons per pad in TPC-->
+  <parameter name="N_eff" type="int">22 </parameter>
+  <!--Pad Phi Resolution constant in TPC-->
+  <parameter name="PointResolutionPadPhi" type="float">0.9 </parameter>
+  <!--R-Phi Resolution constant in TPC-->
+  <parameter name="PointResolutionRPhi" type="float">0.05 </parameter>
+  <!--TPC Z Resolution Coefficent independent of diffusion-->
+  <parameter name="PointResolutionZ" type="float">0.4 </parameter>
+  <!--whether or not to use hits without proper cell ID (pad row)-->
+  <parameter name="RejectCellID0" type="int">1 </parameter>
+  <!--Name of the LowPt SimTrackerHit collection Produced by Mokka TPC Driver TPC0X-->
+  <parameter name="TPCLowPtCollectionName" type="string" lcioInType="SimTrackerHit">TPCLowPtCollection </parameter>
+  <!--Name of the default pad-row based SimTrackerHit collection-->
+  <parameter name="TPCPadRowHitCollectionName" type="string" lcioInType="SimTrackerHit">TPCCollection </parameter>
+  <!--Name of the additional space point collection which provides additional guide hits between pad row centers.-->
+  <parameter name="TPCSpacePointCollectionName" type="string" lcioInType="SimTrackerHit">TPCSpacePointCollection </parameter>
+  <!--Name of the Output TrackerHit collection-->
+  <parameter name="TPCTrackerHitsCol" type="string" lcioOutType="TrackerHit"> TPCTrackerHits </parameter>
+  <!--Name of the Name of TrackerHit SimTrackHit relation collection-->
+  <parameter name="SimTrkHitRelCollection" type="string" lcioOutType="LCRelation">TPCTrackerHitRelations </parameter>
+  <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+  <!--parameter name="Verbosity" type="string"> MESSAGE </parameter-->
+</processor>
+
+
+  <processor name="MyClupatraProcessor" type="ClupatraProcessor">
+    <!--ClupatraProcessor : nearest neighbour clustering seeded pattern recognition-->
+    <!--the maximum chi2-distance for which a hit is considered for merging -->
+    <parameter name="Chi2Cut" type="float">100 </parameter>
+    <!--optionally create some debug collection with intermediate track segments and used and unused hits-->
+    <parameter name="CreateDebugCollections" type="bool"> false true  </parameter>
+    <!--Cut for distance between hits in mm-->
+    <parameter name="DistanceCut" type="float">40 </parameter>
+    <!--allowed fraction of hits in same pad row per track-->
+    <parameter name="DuplicatePadRowFraction" type="float">0.1 </parameter>
+    <!--Use Energy Loss in Fit-->
+    <parameter name="EnergyLossOn" type="bool"> true </parameter>
+    <!--the maximum delta Chi2 for which a hit is added to a track segement-->
+    <parameter name="MaxDeltaChi2" type="float">35 </parameter>
+    <!--the maximum number of layers without finding a hit before hit search search is stopped -->
+    <parameter name="MaxStepWithoutHit" type="int">6 </parameter>
+    <!--minimum fraction of layers that have a given multiplicity, when forcing a cluster into sub clusters-->
+    <parameter name="MinLayerFractionWithMultiplicity" type="float">0.5 </parameter>
+    <!--minimum number of layers that have a given multiplicity, when forcing a cluster into sub clusters-->
+    <parameter name="MinLayerNumberWithMultiplicity" type="int">3 </parameter>
+    <!--minimum number of hits per cluster-->
+    <parameter name="MinimumClusterSize" type="int">6 </parameter>
+    <!--Use MultipleScattering in Fit-->
+    <parameter name="MultipleScatteringOn" type="bool">false true </parameter>
+    <!--number of bins in z over total length of TPC - hits from different z bins are nver merged-->
+    <parameter name="NumberOfZBins" type="int">150 </parameter>
+    <!--Name of the output collection-->
+    <parameter name="OutputCollection" type="string" lcioOutType="Track">ClupatraTracks </parameter>
+    <!--Name of the output collection that has the individual track segments-->
+    <parameter name="SegmentCollectionName" type="string" lcioOutType="Track">ClupatraTrackSegments </parameter>
+
+    <!--number of pad rows used in initial seed clustering-->
+    <parameter name="PadRowRange" type="int">15 </parameter>
+    
+    <!--try to pick up hits from Si-trackers-->
+    <parameter name="pickUpSiHits" type="bool">false </parameter>
+    <!--name of the SIT hit collections - used to extend TPC tracks if (pickUpSiHits==true)-->
+    <parameter name="SITHitCollection" type="string">SITTrackerHits </parameter>
+    <!--name of the VXD hit collections - used to extend TPC tracks if (pickUpSiHits==true)-->
+    <parameter name="VXDHitCollection" type="string">VXDTrackerHits </parameter>
+    
+    <!--Smooth All Mesurement Sites in Fit-->
+    <parameter name="SmoothOn" type="bool">false </parameter>
+    <!--Name of the tpc hit input collections-->
+    <parameter name="TPCHitCollection" type="string" lcioInType="TrackerHit">TPCTrackerHits </parameter>
+    
+   <!--maximum radial distance [mm] from outer field cage of last hit, such that the track is considered to end at the end -->
+   <parameter name="TrackEndsOuterCentralDist" type="float">25 </parameter>
+   <!--maximum distance in z [mm] from endplate of last hit, such that the track is considered to end at the end -->
+   <parameter name="TrackEndsOuterForwardDist" type="float">40 </parameter>
+   <!--minimum curvature omega of a track segment for being considered a curler-->
+   <parameter name="TrackIsCurlerOmega" type="float">0.001 </parameter>
+   <!--maximum radial distance [mm] from inner field cage of first hit, such that the track is considered to start at the beginning -->
+   <parameter name="TrackStartsInnerDist" type="float">25 </parameter>
+
+   <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+   <!--parameter name="Verbosity" type="string">MESSAGE DEBUG5 </parameter-->
+  </processor>
+
+ <processor name="MySiliconTracking_MarlinTrk" type="SiliconTracking_MarlinTrk">
+ <!--Pattern recognition in silicon trackers-->
+  <!--Angle Cut For Merging-->
+  <parameter name="AngleCutForMerging" type="float">0.1 </parameter>
+  <!--Check for Delta rays hits in hit-to-track assignment-->
+  <parameter name="CheckForDelta" type="int">1 </parameter>
+  <!--Chi2 Fit Cut-->
+  <parameter name="Chi2FitCut" type="float">120 </parameter>
+  <!--Chi2 Prefit Cut-->
+  <parameter name="Chi2PrefitCut" type="float">1e+10 </parameter>
+  <!--Chi2WRphiQuartet-->
+  <parameter name="Chi2WRphiQuartet" type="float">1 </parameter>
+  <!--Chi2WRphiSeptet-->
+  <parameter name="Chi2WRphiSeptet" type="float">1 </parameter>
+  <!--Chi2WRphiTriplet-->
+  <parameter name="Chi2WRphiTriplet" type="float">1 </parameter>
+  <!--Chi2WZQuartet-->
+  <parameter name="Chi2WZQuartet" type="float">0.5 </parameter>
+  <!--Chi2WZSeptet-->
+  <parameter name="Chi2WZSeptet" type="float">0.5 </parameter>
+  <!--Chi2WZTriplet-->
+  <parameter name="Chi2WZTriplet" type="float">0.5 </parameter>
+  <!--cut on D0 for tracks-->
+  <parameter name="CutOnD0" type="float">100 </parameter>
+  <!--cut on Pt-->
+  <parameter name="CutOnPt" type="float">0.05 </parameter>
+  <!--cut on Z0 for tracks-->
+  <parameter name="CutOnZ0" type="float">100 </parameter>
+  <!--Use Energy Loss in Fit-->
+  <parameter name="EnergyLossOn" type="bool"> true </parameter>
+  <!--FTD Pixel Hit Collection Name-->
+  <parameter name="FTDPixelHitCollectionName" type="string" lcioInType="TrackerHitPlane"> FTDPixelTrackerHits </parameter>
+  <!--FTD FTDSpacePoint Collection Name-->
+  <parameter name="FTDSpacePointCollection" type="string" lcioInType="TrackerHit"> FTDSpacePoints </parameter>
+  <!--Fast attachment-->
+  <parameter name="FastAttachment" type="int">0 </parameter>
+  <!--Value used for the initial d0 variance of the trackfit-->
+  <parameter name="InitialTrackErrorD0" type="float">1e+06 </parameter>
+  <!--Value used for the initial omega variance of the trackfit-->
+  <parameter name="InitialTrackErrorOmega" type="float">0.0001 </parameter>
+  <!--Value used for the initial phi0 variance of the trackfit-->
+  <parameter name="InitialTrackErrorPhi0" type="float">100 </parameter>
+  <!--Value used for the initial tanL variance of the trackfit-->
+  <parameter name="InitialTrackErrorTanL" type="float">100 </parameter>
+  <!--Value used for the initial z0 variance of the trackfit-->
+  <parameter name="InitialTrackErrorZ0" type="float">1e+06 </parameter>
+  <!--Combinations of Hits in Layers-->
+  <parameter name="LayerCombinations" type="IntVec"> 
+    8 6 5  8 6 4  8 6 3  8 6 2
+    8 5 3  8 5 2  8 4 3  8 4 2  
+    6 5 3  6 5 2  6 4 3  6 4 2 
+    6 3 1  6 3 0  6 2 1  6 2 0 
+    5 3 1  5 3 0  5 2 1  5 2 0
+    4 3 1  4 3 0  4 2 1  4 2 0    
+  </parameter>
+  <!--Combinations of Hits in FTD-->
+  <parameter name="LayerCombinationsFTD" type="IntVec"> 
+    13 11  9    13 11 8    13 10 9    13 10 8
+    12 11  9    12 11 8    12 10 9    12 10 8
+    11  9  7    11  9 6    11  8 7    11  8 6 
+    10  9  7    10  9 6    10  8 7    10  8 6
+    9  7  5     9  7 4     9  6 5     9  6 4
+    8  7  5     8  7 4     8  6 5     8  6 4
+    7  5  3     7  5 2     7  4 3     7  4 2
+    6  5  3     6  5 2     6  4 3     6  4 2
+    5  3  1     5  3 0     5  2 1     5  2 0
+    4  3  1     4  3 0     4  2 1     4  2 0
+  </parameter>
+  <!--Maximum Chi-squared value allowed when assigning a hit to a track-->
+  <parameter name="MaxChi2PerHit" type="double">100 </parameter>
+  <!--Maximal number of hits allowed in one theta-phi sector in VXD/SIT and FTD-->
+  <parameter name="MaxHitsPerSector" type="int">100 </parameter>
+  <!--MinDistCutAttach-->
+  <parameter name="MinDistCutAttach" type="float">2.5 </parameter>
+  <!--Minimal distance of track hit to the delta electron hit-->
+  <parameter name="MinDistToDelta" type="float">0.25 </parameter>
+  <!--MinLayerToAttach-->
+  <parameter name="MinLayerToAttach" type="int">-1 </parameter>
+  <!--minimal hits-->
+  <parameter name="MinimalHits" type="int">3 </parameter>
+  <!--Use MultipleScattering in Fit-->
+  <parameter name="MultipleScatteringOn" type="bool"> true </parameter>
+  <!--Number of divisions in Phi-->
+  <parameter name="NDivisionsInPhi" type="int"> 80 </parameter>
+  <!--Number of divisions in Phi for FTD-->
+  <parameter name="NDivisionsInPhiFTD" type="int"> 30 </parameter>
+  <!--Number of divisions in Theta-->
+  <parameter name="NDivisionsInTheta" type="int"> 80 </parameter>
+  <!--Maximal number of hits for which a track with n hits is better than one with n-1hits. (defaut 5)-->
+  <parameter name="NHitsChi2" type="int">5 </parameter>
+  <!--Run MarlinTrk Diagnostics. MarlinTrk must be compiled with MARLINTRK_DIAGNOSTICS_ON defined-->
+  <parameter name="RunMarlinTrkDiagnostics" type="bool">false </parameter>
+  <!--SIT Hit Collection Name-->
+  <parameter name="SITHitCollectionName" type="string" lcioInType="TrackerHit"> SITSpacePoints </parameter>
+  <!--Silicon track Collection Name-->
+  <parameter name="SiTrackCollectionName" type="string" lcioOutType="Track">SiTracks </parameter>
+ <!--Smooth All Mesurement Sites in Fit-->
+  <parameter name="SmoothOn" type="bool"> false </parameter>
+  <!--Use SIT-->
+  <parameter name="UseSIT" type="int">1 </parameter>
+  <!--UseEventDisplay-->
+  <parameter name="UseEventDisplay" type="bool"> false </parameter>
+  <!--VTX Hit Collection Name-->
+  <parameter name="VTXHitCollectionName" type="string" lcioInType="TrackerHitPlane">VXDTrackerHits </parameter>
+  <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+  <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+</processor>
+
+
+<processor name="MyTrackSubsetProcessor" type="TrackSubsetProcessor">
+   <!--TrackSubsetProcessor takes tracks from multiple sources and outputs them (or modified versions, or a subset of them) as one track collection.-->
+   <!--Use Energy Loss in Fit-->
+   <parameter name="EnergyLossOn" type="bool">true </parameter>
+   <!--Use MultipleScattering in Fit-->
+   <parameter name="MultipleScatteringOn" type="bool">true </parameter>
+   <!--The parameter omega for the HNN. Controls the influence of the quality indicator.-->
+   <parameter name="Omega" type="double">0.75 </parameter>
+   <!--Smooth All Measurement Sites in Fit-->
+   <parameter name="SmoothOn" type="bool">false </parameter>
+   <!--A vector of the input track collections-->
+   <parameter name="TrackInputCollections" type="StringVec">ForwardTracks SiTracks  </parameter>
+   <!--Name of the output track collection-->
+   <parameter name="TrackOutputCollection" type="string" lcioOutType="Track">SubsetTracks </parameter>
+   <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+   <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+</processor>
+  
+<processor name="MyFullLDCTracking_MarlinTrk" type="FullLDCTracking_MarlinTrk">
+ <!--Performs full tracking in ILD detector-->
+  <!--Cut on Opening Angle for forced merging of Si and TPC segments-->
+  <parameter name="AngleCutForForcedMerging" type="float">0.05 </parameter>
+  <!--Cut on Opening Angle for merging Si and TPC segments-->
+  <parameter name="AngleCutForMerging" type="float">0.1 </parameter>
+  <!--Assign ETD Hits-->
+  <parameter name="AssignETDHits" type="int">0 </parameter>
+  <!--Assign left over FTD hits-->
+  <parameter name="AssignFTDHits" type="int">1 </parameter>
+  <!--Assign SET Hits-->
+  <parameter name="AssignSETHits" type="int"> 1 </parameter>
+  <!--Assign left over SIT hits-->
+  <parameter name="AssignSITHits" type="int">1 </parameter>
+  <!--Assign left over TPC hits-->
+  <parameter name="AssignTPCHits" type="int">0 </parameter>
+  <!--Assign left over VTX hits-->
+  <parameter name="AssignVTXHits" type="int">1 </parameter>
+  <!--Cut on fit Chi2-->
+  <parameter name="Chi2FitCut" type="float">100 </parameter>
+  <!--Cut on the number of the Si hits for tracks with no TPC hits-->
+  <parameter name="CutOnSiHits" type="int">4 </parameter>
+  <!--Cut on the number of the TPC hits for tracks with no Si hits-->
+  <parameter name="CutOnTPCHits" type="int">10 </parameter>
+  <!--Cut on the track parameter D0-->
+  <parameter name="CutOnTrackD0" type="float">500 </parameter>
+  <!--Cut on the track parameter Z0-->
+  <parameter name="CutOnTrackZ0" type="float">500 </parameter>
+  <!--Cut on D0 difference for forced merging of Si and TPC segments-->
+  <parameter name="D0CutForForcedMerging" type="float">50 </parameter>
+  <!--Cut on D0 difference for merging of Si and TPC segments-->
+  <parameter name="D0CutForMerging" type="float">500 </parameter>
+  <!--Cut on D0 difference for merging TPC segments-->
+  <parameter name="D0CutToMergeTPCSegments" type="float">100 </parameter>
+  <!--Activate debugging?-->
+  <parameter name="Debug" type="int">0 </parameter>
+  <!--Cut on dP/P difference for merging TPC segments-->
+  <parameter name="DeltaPCutToMergeTPCSegments" type="float">0.1 </parameter>
+  <!--Use Energy Loss in Fit-->
+  <parameter name="EnergyLossOn" type="bool"> true </parameter>
+  <!--Cut on distance between track and FTD hits-->
+  <parameter name="FTDHitToTrackDistance" type="float">2 </parameter>
+ <!--FTD Pixel Hit Collection Name-->
+  <parameter name="FTDPixelHitCollectionName" type="string" lcioInType="TrackerHitPlane"> FTDPixelTrackerHits </parameter>
+  <!--FTD FTDSpacePoint Collection Name-->
+  <parameter name="FTDSpacePointCollection" type="string" lcioInType="TrackerHit"> FTDSpacePoints </parameter>
+  <!--Forbid overlap in Z for combining TPC segments with tracks having Si hits-->
+  <parameter name="ForbidOverlapInZComb" type="int">0 </parameter>
+  <!--Forbid overlap in Z for the merged TPC segments-->
+  <parameter name="ForbidOverlapInZTPC" type="int">0 </parameter>
+  <!--Force merging of Si and TPC segments?-->
+  <parameter name="ForceSiTPCMerging" type="int">0 </parameter>
+  <!--Force merging of TPC Segments?-->
+  <parameter name="ForceTPCSegmentsMerging" type="int"> 0 </parameter>
+  <!--Value used for the initial d0 variance of the trackfit-->
+  <parameter name="InitialTrackErrorD0" type="float">1e+06 </parameter>
+  <!--Value used for the initial omega variance of the trackfit-->
+  <parameter name="InitialTrackErrorOmega" type="float">0.0001 </parameter>
+  <!--Value used for the initial phi0 variance of the trackfit-->
+  <parameter name="InitialTrackErrorPhi0" type="float">100 </parameter>
+  <!--Value used for the initial tanL variance of the trackfit-->
+  <parameter name="InitialTrackErrorTanL" type="float">100 </parameter>
+  <!--Value used for the initial z0 variance of the trackfit-->
+  <parameter name="InitialTrackErrorZ0" type="float">1e+06 </parameter>
+  <!--LDC track collection name-->
+  <parameter name="LDCTrackCollection" type="string" lcioOutType="Track">MarlinTrkTracks </parameter>
+  <!--Maximum Chi-squared value allowed when assigning a hit to a track-->
+  <parameter name="MaxChi2PerHit" type="double">100 </parameter>
+  <!--Use MultipleScattering in Fit-->
+  <parameter name="MultipleScatteringOn" type="bool"> true </parameter>
+  <!--number of hits for outward extrapolation-->
+  <parameter name="NHitsExtrapolation" type="int">35 </parameter>
+  <!--Cut on Omega difference for forced merging of Si and TPC segments-->
+  <parameter name="OmegaCutForForcedMerging" type="float">0.15 </parameter>
+  <!--Cut on Omega difference for merging Si and TPC segments-->
+  <parameter name="OmegaCutForMerging" type="float">0.25 </parameter>
+  <!--Cut on Pt of tracks for merging TPC segments-->
+  <parameter name="PtCutToMergeTPCSegments" type="float">1.2 </parameter>
+  <!--Run MarlinTrk Diagnostics. MarlinTrk must be compiled with MARLINTRK_DIAGNOSTICS_ON defined-->
+  <parameter name="RunMarlinTrkDiagnostics" type="bool">false </parameter>
+  <!--SET Hit Collection Name-->
+  <parameter name="SETHitCollection" type="string" lcioInType="TrackerHit">SETSpacePoints </parameter>
+  <!--Cut on distance between track and SET hits-->
+  <parameter name="SETHitToTrackDistance" type="float">50 </parameter>
+  <!--SIT Hit Collection Name-->
+  <parameter name="SITHitCollection" type="string" lcioInType="TrackerHit">SITSpacePoints </parameter>
+  <!--Cut on distance between track and SIT hits-->
+  <parameter name="SITHitToTrackDistance" type="float">2 </parameter>
+  <!--Si Track Collection-->
+  <parameter name="SiTracks" type="string" lcioInType="Track">SubsetTracks </parameter>
+  <!--Si Track to Collection-->
+  <parameter name="SiTracksMCPRelColl" type="string" lcioInType="LCRelation">SubsetTracksMCTruthLink </parameter>
+ <!--Smooth All Mesurement Sites in Fit-->
+  <parameter name="SmoothOn" type="bool">true </parameter>
+  <!--TPC Hit Collection Name-->
+  <parameter name="TPCHitCollection" type="string" lcioInType="TrackerHit">TPCTrackerHits </parameter>
+  <!--Cut on distance between track and TPC hits-->
+  <parameter name="TPCHitToTrackDistance" type="float">15 </parameter>
+  <!--TPC Track Collection-->
+  <parameter name="TPCTracks" type="string" lcioInType="Track">ClupatraTracks </parameter>
+  <!--TPC Track to MCP Relation Collection Name-->
+  <parameter name="TPCTracksMCPRelColl" type="string" lcioInType="LCRelation">TPCTracksMCTruthLink </parameter>
+  <!--VTX Hit Collection Name-->
+  <parameter name="VTXHitCollection" type="string" lcioInType="TrackerHit">VXDTrackerHits </parameter>
+  <!--Cut on distance between track and VTX hits-->
+  <parameter name="VTXHitToTrackDistance" type="float">1.5 </parameter>
+  <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+  <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+  <!--Cut on Z0 difference for forced merging of Si and TPC segments-->
+  <parameter name="Z0CutForForcedMerging" type="float">200 </parameter>
+  <!--Cut on Z0 difference for merging of Si and TPC segments-->
+  <parameter name="Z0CutForMerging" type="float">1000 </parameter>
+  <!--Cut on Z0 difference for merging TPC segments-->
+  <parameter name="Z0CutToMergeTPCSegments" type="float">5000 </parameter>
+  <!--Cut on cos theta between the two momentum vectors when considering merger of high Pt tracks-->
+  <parameter name="cosThetaCutHighPtMerge" type="float">0.99 </parameter>
+  <!--cut on cos theta between the two momentum vectors when considering merger of high Pt tracks for softer dp/p cut-->
+  <parameter name="cosThetaCutSoftHighPtMerge" type="float">0.998 </parameter>
+  <!--cut on 3D distance between hit and helix extrapolation when considering merger of high Pt tracks-->
+  <parameter name="hitDistanceCutHighPtMerge" type="float">25 </parameter>
+  <!--cut on maximum fraction of outliers when considering merger of high Pt tracks-->
+  <parameter name="maxFractionOfOutliersCutHighPtMerge" type="float">0.95 </parameter>
+  <!--cut for max 3D distance between any hit and helix extrapolation when considering merger of high Pt tracks-->
+  <parameter name="maxHitDistanceCutHighPtMerge" type="float">50 </parameter>
+  <!--cut on dp/p when considering merger of high Pt tracks-->
+  <parameter name="momDiffCutHighPtMerge" type="float">0.01 </parameter>
+  <!--softer cut on dp/p when considering merger of high Pt tracks-->
+  <parameter name="momDiffCutSoftHighPtMerge" type="float">0.25 </parameter>
+</processor>
+
+<processor name="MyForwardTracking" type="ForwardTracking">
+   <!--ForwardTracking reconstructs tracks through the FTDs-->
+   <!--Name of the Forward Tracking output collection-->
+   <parameter name="ForwardTrackCollection" type="string" lcioOutType="Track">ForwardTracks </parameter>
+   <!--Use Energy Loss in Fit-->
+   <parameter name="EnergyLossOn" type="bool">true </parameter>
+   <!--FTD Hit Collections-->
+   <parameter name="FTDHitCollections" type="StringVec">FTDPixelTrackerHits FTDSpacePoints</parameter>
+   <!--Use MultipleScattering in Fit-->
+   <parameter name="MultipleScatteringOn" type="bool">true </parameter>
+   <!--Smooth All Measurement Sites in Fit-->
+   <parameter name="SmoothOn" type="bool">false </parameter>
+   <!--The chi2 probability value below which tracks will be cut-->
+   <parameter name="Chi2ProbCut" type="double">0.0 </parameter>
+   <!--the maximum chi2/Ndf that is allowed as result of a helix fit-->
+   <parameter name="HelixFitMax" type="double">500 </parameter>
+   <!--The maximum distance of overlapping hits-->
+   <parameter name="OverlappingHitsDistMax" type="double">3.5 </parameter>
+   <!--The minimum number of hits to create a track-->
+   <parameter name="HitsPerTrackMin" type="int">3 </parameter>
+   <!--The method used to find the best non overlapping subset of tracks. Available are: SubsetHopfieldNN and SubsetSimple-->
+   <parameter name="BestSubsetFinder" type="string">SubsetSimple </parameter>
+   <!--Whether when adding hits to a track only the track with highest quality should be further processed-->
+   <parameter name="TakeBestVersionOfTrack" type="bool">true </parameter>
+   <!--If the automaton has more connections than this it will be redone with the next parameters-->
+   <parameter name="MaxConnectionsAutomaton" type="int">100000 </parameter>
+   <!--Maximal number of hits allowed on a sector-->
+   <parameter name="MaxHitsPerSector" type="int">1000 </parameter>
+   
+   <parameter name="Crit2_DeltaPhi_min" type="float">0 0</parameter>
+   <parameter name="Crit2_DeltaPhi_max" type="float">30 0.8</parameter>
+   <parameter name="Crit2_DeltaRho_min" type="float">20</parameter>
+   <parameter name="Crit2_DeltaRho_max" type="float">150</parameter>
+   <parameter name="Crit2_RZRatio_min" type="float">1.002</parameter>
+   <parameter name="Crit2_RZRatio_max" type="float">1.08</parameter>
+   <parameter name="Crit2_StraightTrackRatio_min" type="float">0.9 0.99</parameter>
+   <parameter name="Crit2_StraightTrackRatio_max" type="float">1.02 1.01</parameter>
+   
+   <parameter name="Crit3_3DAngle_min" type="float">0 0</parameter>
+   <parameter name="Crit3_3DAngle_max" type="float">10 0.35</parameter>
+   <parameter name="Crit3_ChangeRZRatio_min" type="float">0.995 0.999</parameter>
+   <parameter name="Crit3_ChangeRZRatio_max" type="float">1.015 1.001</parameter>
+   <parameter name="Crit3_IPCircleDist_min" type="float">0 0</parameter>
+   <parameter name="Crit3_IPCircleDist_max" type="float">20 1.5</parameter>
+   <parameter name="Crit3_PT_min" type="float">0.1</parameter>
+   <parameter name="Crit3_PT_max" type="float">99999999</parameter>
+   
+   <parameter name="Crit4_3DAngleChange_min" type="float">0.8 0.99</parameter>
+   <parameter name="Crit4_3DAngleChange_max" type="float">1.3 1.01</parameter>
+   <parameter name="Crit4_DistToExtrapolation_min" type="float">0 0</parameter>
+   <parameter name="Crit4_DistToExtrapolation_max" type="float">1.0 0.05</parameter>
+   
+   <parameter name="Criteria" type="StringVec">
+      Crit2_DeltaPhi
+      Crit2_DeltaRho
+      Crit2_RZRatio
+      Crit2_StraightTrackRatio
+      
+      Crit3_3DAngle
+      Crit3_ChangeRZRatio
+      Crit3_IPCircleDist
+      Crit3_PT
+      
+      Crit4_DistToExtrapolation
+      Crit4_3DAngleChange
+   </parameter>
+   
+   <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+   <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+   
+</processor> 
+
+<processor name="MyTruthTracker" type="TruthTracker">
+  <!--Creates Track Collection from MC Truth. Can handle composite spacepoints as long as they consist of two TrackerHits-->
+  <!--Use Energy Loss in Fit-->
+  <parameter name="EnergyLossOn" type="bool">true </parameter>
+  <!--Fit the Tracks with MarlinTrk, otherwise take track parameters from MCParticle-->
+  <parameter name="FitTracksWithMarlinTrk" type="bool">true </parameter>
+  <!--Transverse Momentum Threshold MC particles which will produce tracks GeV-->
+  <parameter name="MCpThreshold" type="float">0.1 </parameter>
+  <!--Use MultipleScattering in Fit-->
+  <parameter name="MultipleScatteringOn" type="bool">true </parameter>
+  <!--Name of the output track collection-->
+
+  <!-- FIXME: for testing write out 'cheated' MarlinTrkTracks -->
+  <parameter name="OutputTrackCollectionName" type="string" lcioOutType="Track"> TruthTracks </parameter>
+
+  <!--Name of the MCParticle-Track Relations collection for output tracks-->
+  <parameter name="OutputTrackRelCollection" type="string" lcioOutType="LCRelation">TruthTracksMCP </parameter>
+  <!--Smooth All Mesurement Sites in Fit-->
+  <parameter name="SmoothOn" type="bool"> true </parameter>
+  <!--Name of the tracker hit input collections-->
+  <parameter name="TrackerHitsInputCollections" type="StringVec" lcioInType="TrackerHit">VXDTrackerHits SITSpacePoints FTDPixelTrackerHits FTDSpacePoints TPCTrackerHits SETSpacePoints  </parameter>
+  <!--Name of the lcrelation collections, that link the TrackerHits to their SimTrackerHits. Have to be in same order as TrackerHitsInputCollections!!!-->
+  <parameter name="TrackerHitsRelInputCollections" type="StringVec" lcioInType="LCRelation">VXDTrackerHitRelations SITSpacePointRelations FTDPixelTrackerHitRelations FTDSpacePointRelations TPCTrackerHitRelations SETSpacePointRelations  </parameter>
+  <!--Fit the Tracks with MarlinTrk using iterative approach. If 3 consecutive hits fail to be included then the  current fit is written out and a new fit started. Use instead of FitTracksWithMarlinTrk.-->
+  <parameter name="UseIterativeFitting" type="bool">  true </parameter>
+  <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+  <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+</processor>
+ 
+
+<!--########## KinkFinder ###################################### -->
+
+<processor name="MyKinkFinder" type="KinkFinder">
+  <parameter name="DebugPrinting" type="int"> 0</parameter>
+  <parameter name="TrackCollection" type="string"> MarlinTrkTracks</parameter>
+</processor>
+
+<!--######  MyV0Finder ##########################################-->
+ <processor name="MyV0Finder" type="V0Finder">
+  <parameter name="TrackCollection" type="string"> MarlinTrkTracks</parameter>
+  <parameter name="MassRangeGamma"  type="float">  0.01 </parameter>
+  <parameter name="MassRangeK0S"    type="float">  0.02 </parameter>
+  <parameter name="MassRangeL0"     type="float">  0.02 </parameter>
+ </processor>
+
+
+<!--######  MyNewLDCCaloDigi ##########################################-->
+
+
+ <processor name="MyNewLDCCaloDigi" type="NewLDCCaloDigi">
+ <!--LDC digitizer...-->
+  <!--Calibration coefficients for ECAL-->
+  <parameter name="CalibrECAL" type="FloatVec">42.91 85.82  </parameter> <!-- was 40.91 81.81 -->
+  <!--Calibration coefficients for HCAL-->
+  <parameter name="CalibrHCAL" type="FloatVec">54.7  </parameter> <!-- was 34.8 -->
+  <!--ECAL Collection Names-->
+  <parameter name="ECALCollections" type="StringVec">EcalBarrelSiliconCollection EcalEndcapSiliconCollection  EcalEndcapRingCollection </parameter>
+  <!--Index of ECal Layers-->
+  <parameter name="ECALLayers" type="IntVec">20 100  </parameter>
+  <!--Threshold for ECAL Hits in GeV-->
+  <parameter name="ECALThreshold" type="float">5e-05 </parameter>
+  <!--HCAL Collection Names-->
+  <parameter name="HCALCollections" type="StringVec">HcalBarrelRegCollection  HcalEndCapsCollection HcalEndCapRingsCollection</parameter>
+  <!--Index of HCal Layers-->
+  <parameter name="HCALLayers" type="IntVec">100  </parameter>
+  <!--Threshold for HCAL Hits in GeV-->
+  <parameter name="HCALThreshold" type="float">0.00025 </parameter>
+  <!--Digital Ecal-->
+  <parameter name="IfDigitalEcal" type="int">0 </parameter>
+  <!--Digital Hcal-->
+  <parameter name="IfDigitalHcal" type="int">0 </parameter>
+  <!--name for the new collection -->
+  <parameter name="ECALOutputCollection0" type="stringVec">ECALBarrel </parameter>
+  <parameter name="ECALOutputCollection1" type="stringVec">ECALEndcap </parameter>
+  <parameter name="ECALOutputCollection2" type="stringVec">ECALOther </parameter>
+  <parameter name="HCALOutputCollection0" type="stringVec">HCALBarrel </parameter>
+  <parameter name="HCALOutputCollection1" type="stringVec">HCALEndcap </parameter>
+  <parameter name="HCALOutputCollection2" type="stringVec">HCALOther </parameter>
+  <!--CaloHit Relation Collection-->
+  <parameter name="RelationCollName" type="string">RelationCaloHit </parameter>
+  <!--Gap Correction-->
+  <parameter name="ECALGapCorrection" type="int"> 1 </parameter>
+  <!--Gap Correction Fudge Factor-->
+  <parameter name="ECALGapCorrectionFactor" type="int"> 1.0 </parameter>
+  <parameter name="ECALModuleGapCorrectionFactor" type="int"> 0.0 </parameter>
+</processor>
+
+
+<!--######  SimpleBCALDigi ##########################################-->
+
+ <processor name="MySimpleBCalDigi" type="SimpleLCalDigi">
+ <!--Performs simple digitization of sim calo hits...-->
+  <!--Calibration coefficients for LCAL-->
+  <parameter name="CalibrLCAL" type="FloatVec">1.</parameter>
+  <!--LCAL Collection Names-->
+  <parameter name="LCALCollections" type="StringVec">BeamCalCollection</parameter>
+  <!--LCAL Collection of real Hits-->
+  <parameter name="LCALOutputCollection" type="string">BCAL</parameter>
+  <!--Threshold for LCAL Hits in GeV-->
+  <parameter name="LCALThreshold" type="float">1e-06 </parameter>
+  <!--MuonHit Relation Collection-->
+  <parameter name="RelationOutputCollection" type="string">RelationBCalHit </parameter>
+</processor>
+
+<!--######  SimpleLCalDigi ##########################################-->
+
+ <processor name="MySimpleLCalDigi" type="SimpleLCalDigi">
+   <!--Performs simple digitization of sim calo hits...-->
+   <!--Calibration coefficients for LCAL-->
+   <parameter name="CalibrLCAL" type="FloatVec">89.0</parameter>
+   <!--LCAL Collection Names-->
+   <parameter name="LCALCollections" type="StringVec"> LumiCalCollection  </parameter>
+   <!--LCAL Collection of real Hits-->
+   <parameter name="LCALOutputCollection" type="string">LCAL </parameter>
+   <!--Threshold for LCALHits in GeV-->
+   <parameter name="LCALThreshold" type="float">0e-04 </parameter>
+   <!--LCALHit Relation Collection-->
+   <parameter name="RelationOutputCollection" type="string">RelationLcalHit </parameter>
+ </processor>
+					  
+<!--######  SimpleLHCALDigi ##########################################-->
+
+ <processor name="MySimpleLHCalDigi" type="SimpleLHCalDigi">
+ <!--Performs simple digitization of sim calo hits...-->
+  <!--Calibration coefficients for LHCAL-->
+  <parameter name="CalibrLHCAL" type="FloatVec">150</parameter>
+  <!--LHCAL Collection Names-->
+  <parameter name="LHCALCollections" type="StringVec"> LHcalCollection</parameter>
+  <!--LHCAL Collection of real Hits-->
+  <parameter name="LHCALOutputCollection" type="string">LHCAL </parameter>
+  <!--Threshold for LHCAL Hits in GeV-->
+  <parameter name="LHCALThreshold" type="float">1e-06 </parameter>
+  <!--LHCALHit Relation Collection-->
+  <parameter name="RelationOutputCollection" type="string">RelationLHcalHit </parameter>
+</processor>
+
+<!--######  SimpleMuonDigi ##########################################-->
+
+ <processor name="MySimpleMuonDigi" type="SimpleMuonDigi">
+ <!--Performs simple digitization of sim calo hits...-->
+  <!--Calibration coefficients for MUON-->
+  <parameter name="CalibrMUON" type="FloatVec">56.7</parameter>
+  <!-- maximum hit energy for a MUON hit -->
+  <parameter name="MaxHitEnergyMUON" type="float">2.0</parameter>
+  <!--MUON Collection Names-->
+  <parameter name="MUONCollections" type="StringVec">
+   MuonBarrelCollection MuonEndCapCollection</parameter>
+  <!--MUON Collection of real Hits-->
+  <parameter name="MUONOutputCollection" type="string">MUON </parameter>
+  <!--Threshold for MUON Hits in GeV-->
+  <parameter name="MUONThreshold" type="float">1e-06 </parameter>
+  <!--MuonHit Relation Collection-->
+  <parameter name="RelationOutputCollection" type="string">RelationMuonHit </parameter>
+</processor>
+
+<!--########## MarlinPandora ###################################### -->
+
+<processor name="MyMarlinPandora" type="PandoraPFANewProcessor">
+  <parameter name="PandoraSettingsXmlFile" type="String"> PandoraSettingsDefault.xml </parameter>
+  <!-- Collection names -->
+  <parameter name="TrackCollections" type="StringVec">MarlinTrkTracks</parameter>
+  <parameter name="ECalCaloHitCollections" type="StringVec">ECALBarrel ECALEndcap ECALOther</parameter>
+  <parameter name="HCalCaloHitCollections" type="StringVec">HCALBarrel HCALEndcap HCALOther</parameter>
+  <parameter name="LCalCaloHitCollections" type="StringVec">LCAL</parameter>
+  <parameter name="LHCalCaloHitCollections" type="StringVec">LHCAL</parameter>
+  <parameter name="MuonCaloHitCollections" type="StringVec">MUON</parameter>
+  <parameter name="MCParticleCollections" type="StringVec">MCParticle</parameter>
+  <parameter name="RelCaloHitCollections" type="StringVec">RelationCaloHit RelationMuonHit</parameter>
+  <parameter name="RelTrackCollections" type="StringVec">MarlinTrkTracksMCP</parameter>
+  <parameter name="KinkVertexCollections" type="StringVec">KinkVertices</parameter>
+  <parameter name="ProngVertexCollections" type="StringVec">ProngVertices</parameter>
+  <parameter name="SplitVertexCollections" type="StringVec">SplitVertices</parameter>
+  <parameter name="V0VertexCollections" type="StringVec">V0Vertices</parameter>
+  <parameter name="ClusterCollectionName" type="String">PandoraClusters</parameter>
+  <parameter name="PFOCollectionName" type="String">PandoraPFOs</parameter>
+  <!-- Calibration constants -->
+  <parameter name="ECalToMipCalibration" type="float">160.0</parameter>
+  <parameter name="HCalToMipCalibration" type="float">34.8</parameter>
+  <parameter name="ECalMipThreshold" type="float">0.5</parameter>
+  <parameter name="HCalMipThreshold" type="float">0.3</parameter>
+  <parameter name="ECalToEMGeVCalibration" type="float">1.007</parameter>
+  <parameter name="HCalToEMGeVCalibration" type="float">1.007</parameter>
+  <parameter name="ECalToHadGeVCalibrationBarrel" type="float">1.075</parameter>
+  <parameter name="ECalToHadGeVCalibrationEndCap" type="float">1.075</parameter>
+  <parameter name="HCalToHadGeVCalibration" type="float">1.027</parameter>
+  <parameter name="MuonToMipCalibration" type="float">10.0</parameter>
+  <parameter name="DigitalMuonHits" type="int">0</parameter>
+  <parameter name="MaxHCalHitHadronicEnergy" type="float">1.</parameter> 
+  <parameter name="AbsorberRadiationLength" type="float">0.2857</parameter>
+  <!--Whether to calculate track states manually, rather than copy stored fitter values-->
+  <parameter name="UseOldTrackStateCalculation" type="int">0 </parameter>
+  <!--<parameter name="NEventsToSkip" type="int">0</parameter>-->
+  <!--parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MESSAGE DEBUG </parameter-->
+</processor>
+
+<!--################################################ -->
+<processor name="MyBCalReco" type="BCalReco">
+ <!--Filling Histograms with deposited energy from beamstrahlung pairs in BeamCal-->
+  <!--Name of the Beamcal clusters collection-->
+  <parameter name="BCALClusterName" type="string" lcioOutType="Cluster">BCALClusters </parameter>
+  <!--Name of the Beamcal cluster to mc-particle relation collection-->
+  <parameter name="BCALMCTruthLinkName" type="string" lcioOutType="LCRelation">BCALMCTruthLink </parameter>
+  <!-- Name of input file for background energy density-->
+  <parameter name="BackgroundFilename" type="string">
+      bg_aver.sv01-14-p00.mILD_o1_v05.E1000-B1b_ws.PBeamstr-pairs.I210000.root
+  </parameter>
+  <!--Collection of SimCalorimeterHits in BeamCal-->
+  <parameter name="BeamCalHitCol" type="string">BCAL </parameter>
+  <!--Name of the MCParticle collection-->
+  <parameter name="CollectionName" type="string" lcioInType="MCParticle">MCParticle </parameter>
+  <!-- Event Clusters Histgram X axis range [n] (10 by default)-->
+  <parameter name="EventClustersHistoRange" type="int">10 </parameter>
+  <!--Name of the Beamcal reconstructed particles collection-->
+  <parameter name="RecoPartCollectionName" type="string" lcioOutType="ReconstructedParticle">BCALParticles </parameter>
+  <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+  <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+</processor>
+<!--################################################ -->
+
+ <processor name="MyPFOID" type="PFOID">
+  <!--Performs particle identification-->
+  <!--Debugging?-->
+  <parameter name="Debug" type="int">0 </parameter>
+  <!--Boundaries for energy binning-->
+  <parameter name="EnergyBoundaries" type="FloatVec">0 10 1e+07  </parameter>
+  <!--Name of files containing pdfs for charged particles-->
+  <parameter name="FilePDFName" type="StringVec">
+    pdf_charged_lt10.txt pdf_charged_ge10.txt
+  </parameter>
+  <!--Name of the PFO collection-->
+  <parameter name="RecoParticleCollection" type="string">PandoraPFOs</parameter>
+  <!--Name of files containing pdfs for neutral particles-->
+  <parameter name="neutralFilePDFName" type="StringVec">
+      pdf_neutral_lt10.txt pdf_neutral_ge10.txt
+  </parameter>
+ </processor>
+
+<!--################################################ -->
+
+
+
+ <processor name="MyRecoMCTruthLinker" type="RecoMCTruthLinker">
+ <!--links RecontructedParticles to the MCParticle based on number of hits used-->
+  <!--Name of the MCParticle input collection-->
+  <parameter name="MCParticleCollection" type="string" lcioInType="MCParticle"> MCParticle </parameter>
+  <!--Name of the ReconstructedParticles input collection-->
+  <parameter name="RecoParticleCollection" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs </parameter>
+  <!--Name of the  SimCalorimeterHit - CalorimeterHit relation-->
+  <parameter name="SimCalorimeterHitRelationName" type="string" lcioInType="LCRelation"> RelationCaloHit </parameter>
+  <!--Name of the Tracks input collection-->
+  <parameter name="TrackCollection" type="string" lcioInType="Track">MarlinTrkTracks </parameter>
+  <!--Name of the trackMCTruthLink output collection - not created if empty()-->
+  <parameter name="TrackMCTruthLinkName" type="string" lcioOutType="LCRelation"> MarlinTrkTracksMCTruthLink </parameter>
+  <!--Name of the MCParticle to Track relation output collection - not created if empty()-->
+  <parameter name="MCTruthTrackLinkName" type="string" lcioOutType="LCRelation"> MCTruthMarlinTrkTracksLink </parameter>
+   <!--Name of the skimmed MCParticle  output collection-->
+  <parameter name="MCParticlesSkimmedName" type="string" lcioOutType="MCParticle"> MCParticlesSkimmed </parameter>
+  <!--Name of the RecoMCTruthLink output collection-->
+  <parameter name="RecoMCTruthLinkName" type="string" lcioOutType="LCRelation"> RecoMCTruthLink </parameter>
+  <!--PDG codes of particles of which the daughters will be kept in the skimmmed MCParticle collection-->
+  <parameter name="KeepDaughtersPDG" type="IntVec"> 22 111 310 13 211 321</parameter>
+  <!--true: use relations for TrackerHits, false : use getRawHits -->
+  <parameter name="UseTrackerHitRelations" type="bool">true </parameter>
+  <!--If Using Particle Gun Ignore Gen Stat-->
+  <parameter name="UsingParticleGun" type="bool">false </parameter>
+  <!--Names of the SimTrackerHits input collection-->
+  <parameter name="SimTrackerHitCollections" type="StringVec" lcioInType="SimTrackerHit">VXDCollection SITCollection FTD_PIXELCollection FTD_STRIPCollection TPCCollection SETCollection  </parameter>
+  <!--Name of the lcrelation collections, that link the TrackerHits to their SimTrackerHits. -->
+  <parameter name="TrackerHitsRelInputCollections" type="StringVec" lcioInType="LCRelation">VXDTrackerHitRelations SITSpacePointRelations FTDPixelTrackerHitRelations FTDSpacePointRelations TPCTrackerHitRelations SETSpacePointRelations  </parameter>
+  <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+  <!--parameter name="Verbosity" type="string"> DEBUG </parameter-->
+  </processor>
+
+
+  <processor name="VertexFinder" type="LcfiplusProcessor">
+
+    <!-- run primary and secondary vertex finders -->
+    <parameter name="Algorithms" type="stringVec"> PrimaryVertexFinder BuildUpVertex </parameter>
+    <parameter name="ReadSubdetectorEnergies" type="int" value="1"/> <!-- true for ILD -->
+    <parameter name="UpdateVertexRPDaughters" type="int" value="1"/> <!-- false for non-updative PandoraPFOs -->
+    <parameter name="TrackHitOrdering" type="int" value="1"/> <!-- Track hit ordering: 0=ILD-LOI,SID-DBD, 1=ILD-DBD -->
+    <parameter name="PrintEventNumber" type="int" value="0"/> <!-- 0 for not printing event number, n for printing every n events -->
+
+    <!-- specify input collection names -->
+    <parameter name="PFOCollection" type="string" value="PandoraPFOs" />
+    <parameter name="PrimaryVertexCollectionName" type="string" value="PrimaryVertex" />
+    <parameter name="BuildUpVertexCollectionName" type="string" value="BuildUpVertex" />
+    <parameter name="BuildUpVertex.V0VertexCollectionName" type="string" value="BuildUpVertex_V0" />
+
+    <!-- parameters for primary vertex finder -->
+    <parameter name="PrimaryVertexFinder.TrackMaxD0" type="double" value="20." />
+    <parameter name="PrimaryVertexFinder.TrackMaxZ0" type="double" value="20." />
+    <parameter name="PrimaryVertexFinder.TrackMinVtxFtdHits" type="int" value="1" />
+    <parameter name="PrimaryVertexFinder.Chi2Threshold" type="double" value="25." />
+
+    <!-- parameters for secondary vertex finder -->
+    <parameter name="BuildUpVertex.TrackMaxD0" type="double" value="10." />
+    <parameter name="BuildUpVertex.TrackMaxZ0" type="double" value="20." />
+    <parameter name="BuildUpVertex.TrackMinPt" type="double" value="0.1" />
+    <parameter name="BuildUpVertex.TrackMaxD0Err" type="double" value="0.1" />
+    <parameter name="BuildUpVertex.TrackMaxZ0Err" type="double" value="0.1" />
+    <parameter name="BuildUpVertex.TrackMinTpcHits" type="int" value="10000" />
+    <parameter name="BuildUpVertex.TrackMinFtdHits" type="int" value="10000" />
+    <parameter name="BuildUpVertex.TrackMinVxdHits" type="int" value="10000" />
+    <parameter name="BuildUpVertex.TrackMinVxdFtdHits" type="int" value="0" />
+    <parameter name="BuildUpVertex.PrimaryChi2Threshold" type="double" value="25." />
+    <parameter name="BuildUpVertex.SecondaryChi2Threshold" type="double" value="9." />
+    <parameter name="BuildUpVertex.MassThreshold" type="double" value="10." />
+    <parameter name="BuildUpVertex.MinDistFromIP" type="double" value="0.3" />
+    <parameter name="BuildUpVertex.MaxChi2ForDistOrder" type="double" value="1.0" />
+    <parameter name="BuildUpVertex.AssocIPTracks" type="int" value="1" />
+    <parameter name="BuildUpVertex.AssocIPTracksMinDist" type="double" value="0." />
+    <parameter name="BuildUpVertex.AssocIPTracksChi2RatioSecToPri" type="double" value="2.0" />
+    <parameter name="BuildUpVertex.UseV0Selection" type="int" value="1" />
+
+  </processor>
+  
+</marlin>
