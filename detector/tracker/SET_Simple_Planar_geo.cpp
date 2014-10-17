@@ -7,6 +7,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/DD4hepUnits.h"
 #include "DDRec/Surface.h"
+#include "DDRec/DetectorData.h"
 #include "XMLHandlerDB.h"
 #include <cmath>
 
@@ -76,21 +77,24 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   sens.setType("tracker");
 
+  DDRec::ZPlanarData*  zPlanarData = new ZPlanarData ;
+
   //######################################################################################################################################################################
   //  code ported from SET_Simple_Planar::construct() :
   //##################################
 
   extended_reconstruction_parameters _e_r_p;
-
+  
   // *********************
   //  Read and Store the Extended Reconstruction Parameters which are passed directly through to gear. Note others may be added below
   // db->exec("select * from extended_reconstruction_parameters;");
   // db->getTuple();
+  XMLHandlerDB db = XMLHandlerDB(  x_det.child( _Unicode( reconstruction ) ) ) ;
   
-  // _e_r_p.strip_width_mm  = db->fetchDouble("strip_width_mm")  ;
-  // _e_r_p.strip_length_mm = db->fetchDouble("strip_length_mm") ;
-  // _e_r_p.strip_pitch_mm  = db->fetchDouble("strip_pitch_mm")  ;
-  // _e_r_p.strip_angle_deg = db->fetchDouble("strip_angle_deg") ;
+  zPlanarData->widthStrip  = db->fetchDouble("strip_width")  ;
+  zPlanarData->lengthStrip = db->fetchDouble("strip_length") ;
+  zPlanarData->pitchStrip  = db->fetchDouble("strip_pitch")  ;
+  zPlanarData->angleStrip  = db->fetchDouble("strip_angle") ;
   
   // *********************
   
@@ -98,7 +102,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   //... db common_parameters
   // // db->exec("select * from global;");
   // // db->getTuple();
-  XMLHandlerDB db = XMLHandlerDB(  x_det.child( _Unicode( global ) ) ) ;
+  db = XMLHandlerDB(  x_det.child( _Unicode( global ) ) ) ;
 
   // Sensitive Thickness  
   double sensitive_thickness = db->fetchDouble("sensitive_thickness") ;
@@ -205,6 +209,26 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     //   (*Control::globalModelParameters)["SET2_Half_Length_Z"] = osshalfz.str();
     // }
     
+    DDRec::ZPlanarData::LayerLayout thisLayer ;
+    thisLayer.sensorsPerLadder = number_of_sensors_per_half * 2.0 ;
+    thisLayer.lengthSensor     = sensor_length ;
+    
+    thisLayer.distanceSupport  = support_radius;
+    thisLayer.offsetSupport    = 0. ;
+    thisLayer.thicknessSupport = support_thickness ;
+    thisLayer.zHalfSupport     = half_z ;
+    thisLayer.widthSupport     = ladder_width ;
+    
+    thisLayer.distanceSensitive  = sensitive_radius - 0.5 *sensitive_thickness;
+    thisLayer.offsetSensitive    = 0. ;
+    thisLayer.thicknessSensitive = sensitive_thickness ;
+    thisLayer.zHalfSensitive     = half_z ;
+    thisLayer.widthSensitive     = ladder_width ;
+    
+    thisLayer.ladderNumber =  n_ladders;
+    thisLayer.phi0         =  0. ;
+    
+    zPlanarData->layers.push_back( thisLayer ) ;
     
     SET_Layer layer_geom ;
     std::vector<SET_Layer> SET_Layers;
@@ -318,7 +342,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       
       pv = setSenEnvelopeLogical.placeVolume( setSenLogical, Transform3D( RotationY(0.) , Position( xpos, ypos, zpos)  ) );
       
-      pv.addPhysVolID("sensor",  isensor + 1 ) ; 
+      pv.addPhysVolID("sensor",  isensor ) ; 
+      //fixme: what is the correct numbering convention ?
+      // pv.addPhysVolID("sensor",  isensor + 1 ) ; 
       pvV[isensor] = pv ;
    }					      
     
@@ -403,8 +429,10 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 									  (sensitive_radius+dr) * sin(i * ladder_dphi), 
 									  0. ) ) ) ;
       
-      pv.addPhysVolID("layer", layer_id ).addPhysVolID("module", i+1 ) ; 
-
+      pv.addPhysVolID("layer", layer_id ).addPhysVolID("module", i ) ; 
+      //fixme: what is the correct numbering convention ?
+      //pv.addPhysVolID("layer", layer_id ).addPhysVolID("module", i+1 ) ; 
+      
       ladderDE.setPlacement( pv ) ;
     }
     
@@ -414,7 +442,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   cout << "SET_Simple_Planar done.\n" << endl;
   //######################################################################################################################################################################
   
-  
+  set.addExtension< ZPlanarData >( zPlanarData ) ;
+
   //--------------------------------------
   
   Volume mother =  lcdd.pickMotherVolume( set ) ;
