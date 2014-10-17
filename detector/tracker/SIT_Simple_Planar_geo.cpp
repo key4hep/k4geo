@@ -7,14 +7,15 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/DD4hepUnits.h"
 #include "DDRec/Surface.h"
+#include "DDRec/DetectorData.h"
 #include "XMLHandlerDB.h"
 #include <cmath>
 
-//#include "GearWrapper.h"
+
 
 using namespace std;
 using namespace DD4hep;
-//using namespace dd4hep ;
+
 using namespace DD4hep::Geometry;
 using namespace DDRec ;
 
@@ -33,14 +34,14 @@ struct SIT_Layer {
 
 //std::vector<SIT_Layer> _SIT_Layers;
   
-/** helper struct */
-struct extended_reconstruction_parameters {
-  double sensor_length_mm;
-  double strip_width_mm;
-  double strip_length_mm;
-  double strip_pitch_mm;
-  double strip_angle_deg;
-};
+// /** helper struct */
+// struct extended_reconstruction_parameters {
+//   double sensor_length_mm;
+//   double strip_width_mm;
+//   double strip_length_mm;
+//   double strip_pitch_mm;
+//   double strip_angle_deg;
+// };
 
 //extended_reconstruction_parameters _e_r_p;
 
@@ -77,21 +78,25 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   sens.setType("tracker");
 
+
+  DDRec::ZPlanarData*  zPlanarData = new ZPlanarData ;
+
   //######################################################################################################################################################################
   //  code ported from SIT_Simple_Planar::construct() :
   //##################################
 
-  extended_reconstruction_parameters _e_r_p;
+  //  extended_reconstruction_parameters _e_r_p;
 
   // *********************
   //  Read and Store the Extended Reconstruction Parameters which are passed directly through to gear. Note others may be added below
   // db->exec("select * from extended_reconstruction_parameters;");
   // db->getTuple();
+  XMLHandlerDB db = XMLHandlerDB(  x_det.child( _Unicode( reconstruction ) ) ) ;
   
-  // _e_r_p.strip_width_mm  = db->fetchDouble("strip_width_mm")  *mm;
-  // _e_r_p.strip_length_mm = db->fetchDouble("strip_length_mm") *mm;
-  // _e_r_p.strip_pitch_mm  = db->fetchDouble("strip_pitch_mm")  *mm;
-  // _e_r_p.strip_angle_deg = db->fetchDouble("strip_angle_deg") *deg;
+  zPlanarData->widthStrip  = db->fetchDouble("strip_width")  ;
+  zPlanarData->lengthStrip = db->fetchDouble("strip_length") ;
+  zPlanarData->pitchStrip  = db->fetchDouble("strip_pitch")  ;
+  zPlanarData->angleStrip  = db->fetchDouble("strip_angle") ;
   
   // *********************
   
@@ -99,7 +104,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   //... db common_parameters
   // // db->exec("select * from global;");
   // // db->getTuple();
-  XMLHandlerDB db = XMLHandlerDB(  x_det.child( _Unicode( global ) ) ) ;
+  db = XMLHandlerDB(  x_det.child( _Unicode( global ) ) ) ;
 
   // Sensitive Thickness  
   double sensitive_thickness = db->fetchDouble("sensitive_thickness") ;
@@ -209,10 +214,28 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     //   (*Control::globalModelParameters)["SIT2_Half_Length_Z"] = osshalfz.str();
     // }
     
-    _e_r_p.sensor_length_mm  =sensor_length;
-    
+    DDRec::ZPlanarData::LayerLayout thisLayer ;
+    thisLayer.sensorsPerLadder = n_sensors_per_ladder ;
+    thisLayer.lengthSensor     = sensor_length ;
+
+    thisLayer.distanceSupport  = support_radius;
+    thisLayer.offsetSupport    = 0. ;
+    thisLayer.thicknessSupport = support_thickness ;
+    thisLayer.zHalfSupport     = half_z ;
+    thisLayer.widthSupport     = ladder_width ;
+
+    thisLayer.distanceSensitive  = sensitive_radius - 0.5 *sensitive_thickness;
+    thisLayer.offsetSensitive    = 0. ;
+    thisLayer.thicknessSensitive = sensitive_thickness ;
+    thisLayer.zHalfSensitive     = half_z ;
+    thisLayer.widthSensitive     = ladder_width ;
+
+    thisLayer.ladderNumber =  n_ladders;
+    thisLayer.phi0         =  0. ;
+
+    zPlanarData->layers.push_back( thisLayer ) ;
+
     SIT_Layer layer_geom ;
-    
     layer_geom.n_ladders = n_ladders;
     layer_geom.sensor_length =sensor_length;
     layer_geom.n_sensors_per_ladder = n_sensors_per_ladder;
@@ -221,27 +244,26 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     layer_geom.support_inner_radius = support_radius;
     layer_geom.ladder_width = ladder_width ;
     layer_geom.ladder_dphi = ladder_dphi;
-    
     std::vector<SIT_Layer>SIT_Layers;
     SIT_Layers.push_back(layer_geom) ;
     
     
     std::cout << "SIT_Simple_Planar: Layer:" << layer_id
-	      << "\t half length = " << layer_geom.half_z
-	      << "\t sensor length = " << layer_geom.sensor_length
-	      << "\t n sensors per ladder = " << layer_geom.n_sensors_per_ladder
-	      << "\t min r sensitive = " << layer_geom.sensitive_inner_radius
-	      << "\t min r support = " << layer_geom.support_inner_radius
-	      << "\t n ladders = " << layer_geom.n_ladders
-	      << "\t ladder width = " << layer_geom.ladder_width
-	      << "\t ladder clearance = " << ladder_clearance
-	      << "\t ladder dphi = " << ladder_dphi
-	      << "\t sensitive mat = " <<sensitiveMat->GetName()
-	      << "\t support mat = " <<supportMat->GetName()
-	      << "\t faces_IP = " << faces_IP
-	      << "\t is_SIT1 = " << is_SIT1
-	      << "\t is_SIT2 = " << is_SIT2
-	      << std::endl;
+    	      << "\t half length = " << layer_geom.half_z
+    	      << "\t sensor length = " << layer_geom.sensor_length
+    	      << "\t n sensors per ladder = " << layer_geom.n_sensors_per_ladder
+    	      << "\t min r sensitive = " << layer_geom.sensitive_inner_radius
+    	      << "\t min r support = " << layer_geom.support_inner_radius
+    	      << "\t n ladders = " << layer_geom.n_ladders
+    	      << "\t ladder width = " << layer_geom.ladder_width
+    	      << "\t ladder clearance = " << ladder_clearance
+    	      << "\t ladder dphi = " << ladder_dphi
+    	      << "\t sensitive mat = " <<sensitiveMat->GetName()
+    	      << "\t support mat = " <<supportMat->GetName()
+    	      << "\t faces_IP = " << faces_IP
+    	      << "\t is_SIT1 = " << is_SIT1
+    	      << "\t is_SIT2 = " << is_SIT2
+    	      << std::endl;
     
         
     // std::stringstream name_base;
@@ -326,7 +348,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       
       pv = sitSenEnvelopeLogical.placeVolume( sitSenLogical, Transform3D( RotationY(0.) , Position( xpos, ypos, zpos)  ) );
       
-      pv.addPhysVolID("sensor",  isensor + 1 ) ; 
+      pv.addPhysVolID("sensor",  isensor ) ; 
+      //fixme: what is the correct numbering convention ?
+      // pv.addPhysVolID("sensor",  isensor + 1 ) ; 
       pvV[isensor] = pv ;
     }					      
     
@@ -412,8 +436,10 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 										(sensitive_radius+dr) * sin(i * ladder_dphi), 
 										0. ) ) ) ;
       
-      pv.addPhysVolID("layer", layer_id ).addPhysVolID("module", i+1 ) ; 
-
+      pv.addPhysVolID("layer", layer_id ).addPhysVolID("module", i ) ; 
+      //fixme: what is the correct numbering convention ?
+      //pv.addPhysVolID("layer", layer_id ).addPhysVolID("module", i+1 ) ; 
+ 
 
       ladderDE.setPlacement( pv ) ;
     }
@@ -424,6 +450,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   cout << "SIT_Simple_Planar done.\n" << endl;
   //######################################################################################################################################################################
   
+  sit.addExtension< ZPlanarData >( zPlanarData ) ;
   
   //--------------------------------------
   
