@@ -1,0 +1,9 @@
+<!-- 
+     SService00 parameters for ILD_o1_v5  
+-->
+
+<detector name="SServices00" type="SServices00" id="ILDDetID_NOTUSED" vis="RedVis" insideTrackingVolume="false" sensitive="no">
+<!--
+   First test version!
+-->
+</detector>
