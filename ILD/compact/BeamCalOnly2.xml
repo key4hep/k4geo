@@ -140,8 +140,8 @@
 
   <readouts>
     <readout name="BeamCalCollection">
-      <segmentation type="CartesianGridXY" grid_size_x="0.1*cm" grid_size_y="0.1*cm" offset_x="0*cm" />
-      <id>system:8,barrel:3,layer:5,slice:5,x:-16,y:-16 </id>
+      <segmentation type="CartesianGridXY" grid_size_x="100*cm" grid_size_y="100*cm" offset_x="0*cm" />
+      <id>system:8,barrel:3,layer:6,slice:5,x:-16,y:-16 </id>
     </readout>
     
   </readouts>
