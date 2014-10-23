@@ -141,7 +141,7 @@
   <readouts>
     <readout name="LHCalCollection">
       <segmentation type="CartesianGridXY" grid_size_x="0.1*cm" grid_size_y="0.1*cm" offset_x="0*cm" />
-      <id>system:8,barrel:3,layer:5,slice:5,x:-16,y:-16 </id>
+      <id>system:8,barrel:3,layer:6,slice:5,x:-16,y:-16 </id>
     </readout>
     
   </readouts>
