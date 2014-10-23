@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <geant4_setup>
 
-  <kernel UI="" NumEvents="100" />
+  <kernel UI="UI" NumEvents="1" />
 
 
   <!-- List of globally known actions. These actions will be registered with the Geant4Kernel 
@@ -25,7 +25,7 @@
 
     <!-- UI handler initializing vis and ui. NAME IS FIXED/COMMON KNOWLEDGE -->
     <action name="Geant4UIManager/UI">
-      <properties HaveVIS="0"
+      <properties HaveVIS="1"
 		  HaveUI="1"
 		  SessionType="tcsh"/>
      </action>
@@ -104,9 +104,6 @@
       		    Property_string="'Hello_1'"/>
       </action>
 
-      <action name="LCIOEventAction">
-      </action>
-
       <action name="Geant4Output2LCIO/LCIOOutput">
 	<properties Output="simple_lcio_electrons"/>
       </action>
@@ -123,16 +120,32 @@
     <!-- </sequence> -->
 
     <sequence name="Geant4GeneratorActionSequence/GeneratorAction">
-      <action name="LCIOGeneratorAction">
-        <properties LCIOFileName="electrons.slcio"
-    		    SkipNEvents="0" />
+      <action name="Geant4ParticleGun/Gun">
+        <properties Control="true"
+		    energy="5*GeV"
+  	  	    particle="'e-'"
+		    multiplicity="1"
+		    direction="(0.001,0.03,1)"/>
+      </action>
+      <action name="Geant4ParticleHandler/ParticleHandler">
+        <properties Control="true"
+		    SaveProcesses="['Decay']"
+  	  	    MinimalKineticEnergy="100*MeV"/>
+	<adopt name="UserParticleHandler"/>
       </action>
     </sequence>
 
 
+    <!-- <sequence name="Geant4GeneratorActionSequence/GeneratorAction"> -->
+    <!--   <action name="LCIOInputAction"> -->
+    <!--     <properties Input="electrons.slcio"/> -->
+    <!--   </action> -->
+    <!-- </sequence> -->
+
+
     <sequence sd="BeamCal" type="Geant4SensDetActionSequence">
       <filter name="GeantinoRejector"/>
-      <action name="SDCaloLCIODebug/BeamCalCollection"/>
+      <action name="Geant4SimpleCalorimeterAction/BeamCalCollection"/>
     </sequence>
 
 
