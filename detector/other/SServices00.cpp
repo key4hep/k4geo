@@ -36,6 +36,35 @@ using namespace DD4hep;
 using namespace dd4hep;
 using namespace DD4hep::Geometry;
 
+bool BuildTPCEndplateServices(PlacedVolume *pVol,Assembly *envelope)
+{
+
+  return true;
+}
+
+bool BuildEcalBarrelServices(PlacedVolume *pVol,Assembly *envelope)
+{
+
+  return true;
+}
+
+bool BuildEcalBarrel_EndCapServices(PlacedVolume *pVol,Assembly *envelope)
+{
+
+  return true;
+}
+
+bool BuildHcalBarrel_EndCapServices(PlacedVolume *pVol,Assembly *envelope)
+{
+
+  return true;
+}
+
+bool BuildSitCables(PlacedVolume *pVol,Assembly *envelope)
+{
+
+  return true;
+}
 
 
 static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector sens)  {
@@ -58,6 +87,15 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector sens)  
 //====================================================================
   cout << "\nBuilding SServices00"<< endl;
 
+  //BuildTPCEndplateServices(&pv,&envelope_assembly);
+
+  //BuildEcalBarrelServices(&pv,&envelope_assembly);
+
+  //BuildEcalBarrel_EndCapServices(&pv,&envelope_assembly);
+
+  //BuildHcalBarrel_EndCapServices(&pv,&envelope_assembly);
+
+  //BuildSitCables(&pv,&envelope_assembly);
 
 
 //====================================================================
