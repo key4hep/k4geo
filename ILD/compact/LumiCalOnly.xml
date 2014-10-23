@@ -141,7 +141,7 @@
   <readouts>
     <readout name="LumiCalCollection">
       <segmentation type="PolarGridRPhi" grid_size_r="1.8*mm" grid_size_phi="130.899*mrad" offset_r="80*mm"   />
-      <id>system:8,barrel:3,layer:5,slice:5,R:-16,phi:-16 </id>
+      <id>system:8,barrel:3,layer:6,slice:5,r:-16,phi:-16 </id>
     </readout>
     
   </readouts>
