@@ -195,7 +195,7 @@
 
 	<include ref="coil03.xml"/>
 
-	<include ref="SServices00.xml"/>
+	<!--include ref="SServices00.xml"/-->
 
       </detectors> 
 
