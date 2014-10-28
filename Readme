@@ -117,3 +117,41 @@ or display it in the teve display:
  root
  .x $DD4hepINSTALL/examples/DDEve/DDEve.C()
  # and then load ./ILD/eve/DDEve.xml
+
+
+
+
+=============================================================================================================
+
+ Running the reconstruction with Marlin 
+ ---------------------------------------
+
+ EXPERIMENTAL !!
+
+
+1. create a gear file from the DD4hep detector model, e.g.
+
+   convertToGear default ../trunk/ILD/compact/ILD_o1_v05.xml gear_ILD_o1_v05_dd4hep.xml
+
+ Note: currently this is still incomplete
+ In order to run tracking at least the following elements need to be added manually :
+
+  <detector name="BeamPipe" geartype="GearParameters">
+  <detector name="EcalBarrel" geartype="CalorimeterParameters">
+         
+  <material name="VXDSupportMaterial" A="2.075865162e+01" Z="1.039383117e+01" density="2.765900000e+02" radLength="1.014262421e+03" intLength="3.341388059e+03" />
+
+  for example from original Mokka gear files ( or use $DDSIM/example/gear_ILD_o1_v05_dd4hep.xml )
+
+
+
+2. run simulation (as described above), e.g.:
+
+ dd_sim ../ILD/compact/ILD_o1_v05.xml ../example/DDG4_sequences.xml ../example/physics.xml
+
+
+
+
+3. run the standard reconstruction ( tracking only so far ):
+
+ Marlin ../example/ild_dd4hep_stdreco.xml --global.LCIOInputFiles=./simple_lcio.slcio --MyLCIOOutputProcessor.LCIOOutputFile=./simple_lcio_REC.slcio

@@ -32,9 +32,9 @@
      <processor name="SITPlanarDigiProcessor"/>
      <processor name="SITSpacePointBuilder" />
 
-     <!-- <processor name="FTDPixelPlanarDigiProcessor"/> -->
-     <!-- <processor name="FTDStripPlanarDigiProcessor"/> -->
-     <!-- <processor name="FTDSpacePointBuilder"/> -->
+     <processor name="FTDPixelPlanarDigiProcessor"/>
+     <processor name="FTDStripPlanarDigiProcessor"/>
+     <processor name="FTDSpacePointBuilder"/>
 
      <processor name="SETPlanarDigiProcessor"/>
      <processor name="SETSpacePointBuilder" />
@@ -46,8 +46,8 @@
      <processor name="MyClupatraProcessor" />
       
      <processor name="MySiliconTracking_MarlinTrk"/>
-     <!-- <processor name="MyForwardTracking"/><\!--create fwd tracks in parallel -\-> -->
-     <!-- <processor name="MyTrackSubsetProcessor" /><\!-- combine Silicon and Forward Tracking -\->      -->
+     <processor name="MyForwardTracking"/><!--create fwd tracks in parallel -->
+     <processor name="MyTrackSubsetProcessor" /><!-- combine Silicon and Forward Tracking -->
      <processor name="MyFullLDCTracking_MarlinTrk"/>
 
      <!-- <\!-- ========== the track cheater   ================= -\-> -->
@@ -85,11 +85,11 @@
       <parameter name="LCIOInputFiles">
         simple_lcio.slcio
       </parameter>
-      <parameter name="GearXMLFile" value="GearOutput.xml"/>
+      <parameter name="GearXMLFile" value="gear_ILD_o1_v05.xml"/>
       <parameter name="MaxRecordNumber" value="0"/>
       <parameter name="SkipNEvents" value="0"/>
       <parameter name="SupressCheck" value="false"/>
-      <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MESSAGE </parameter>
+      <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> DEBUG2 MESSAGE </parameter>
       <parameter name="RandomSeed" value="1234567890" />
    </global>
 
@@ -104,6 +104,8 @@
 
   <processor name="MyFixCellIDs" type="FixCellIDs">
     <!--fix CellID0 for old TrackerHits ...-->
+    <!--Name of the FTD TrackerHit collection-->
+    <parameter name="FTDCollectionName" type="string" lcioInType="TrackerHit">FTDCollection </parameter>
     <!--Name of the SIT TrackerHit collection-->
     <parameter name="SITCollectionName" type="string" lcioInType="TrackerHit">XXXSITCollection </parameter>
     <!--Name of the SET TrackerHit collection-->
@@ -268,7 +270,7 @@
    <!--resolution in direction of v-->
    <parameter name="ResolutionV" type="float">0.003 </parameter>
    <!--Name of the Input SimTrackerHit collection-->
-   <parameter name="SimTrackHitCollectionName" type="string" lcioInType="SimTrackerHit">FTD_PIXELCollection </parameter>
+   <parameter name="SimTrackHitCollectionName" type="string" lcioInType="SimTrackerHit">FTDCollection FTD_PIXELCollection </parameter>
    <!--Name of TrackerHit SimTrackHit relation collection-->
    <parameter name="SimTrkHitRelCollection" type="string" lcioOutType="LCRelation">FTDPixelTrackerHitRelations </parameter>
    <!--Name of the TrackerHit output collection-->
