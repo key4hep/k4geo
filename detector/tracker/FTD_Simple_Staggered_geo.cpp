@@ -10,10 +10,11 @@
 #include "XMLHandlerDB.h"
 
 #include "DDRec/Surface.h"
+#include "DDRec/DetectorData.h"
 #include "FTD_Simple_Staggered.h"
 
-//#define DEBUG_VALUES
-//#define DEBUG_PETAL 1
+// #define DEBUG_VALUES
+// #define DEBUG_PETAL 4
 
 //#include "DDRec/DDGear.h"
 //#define MOKKA_GEAR
@@ -151,10 +152,10 @@ void SetdbParCommon(xml_comp_t x_det)
   {
     XMLHandlerDB db(  x_det.child( _Unicode( extended_reconstruction_parameters ) ) );
     
-    _dbParExReco.strip_width_mm = db->fetchDouble("strip_width_mm") ;
-    _dbParExReco.strip_length_mm = db->fetchDouble("strip_length_mm") ;
-    _dbParExReco.strip_pitch_mm = db->fetchDouble("strip_pitch_mm") ;
-    _dbParExReco.strip_angle_deg = db->fetchDouble("strip_angle_deg") ;
+    _dbParExReco.strip_width  = db->fetchDouble("strip_width")   ;
+    _dbParExReco.strip_length = db->fetchDouble("strip_length")  ;
+    _dbParExReco.strip_pitch  = db->fetchDouble("strip_pitch")   ;
+    _dbParExReco.strip_angle  = db->fetchDouble("strip_angle")   ;
   }
 
 #ifdef DEBUG_VALUES
@@ -172,10 +173,10 @@ void SetdbParCommon(xml_comp_t x_det)
        << "ftd4to7_tpc_radial_gap = " << _dbParCommon.ftd4to7_tpc_radial_gap << " \n"   
        << "petal_half_angle_support = " << _dbParCommon.petal_half_angle_support << " \n"   
        << "petal_y_ratio = " << _dbParCommon.petal_y_ratio << " \n"   
-       << "strip_width_mm = " << _dbParExReco.strip_width_mm << " \n"   
-       << "strip_length_mm = " << _dbParExReco.strip_length_mm << " \n"   
-       << "strip_pitch_mm = " << _dbParExReco.strip_pitch_mm << " \n"   
-       << "strip_angle_deg = " << _dbParExReco.strip_angle_deg << " \n"   
+       << "strip_width = " << _dbParExReco.strip_width << " \n"   
+       << "strip_length = " << _dbParExReco.strip_length << " \n"   
+       << "strip_pitch = " << _dbParExReco.strip_pitch << " \n"   
+       << "strip_angle = " << _dbParExReco.strip_angle << " \n"   
        << endl;
 
 #endif
@@ -263,17 +264,26 @@ void SetParDisk( XMLHandlerDB db)
  * TubeX01:TUBE_IPOuterBulge_end_z
  * TubeX01:TUBE_IPOuterBulge_end_radius
  *
- * October 15th 2008, Steve Aplin using description from SiLC Collaboration
- * September 7th 2010, Jordi Duarte using mechanical design from IFCA group
  *
+ * History:
+ *  May 2014: FG: original port from Mokka
+ *  Oct 2014  FG: - added class ZDiskPetalsData as interface to reconstruction (initially to 
+ *                  instantiate gear::FTDParameters )  
+ *                - changed rotations and translations to a more natural one (positive sense of rotation, etc.)
+ *                - 'replaced' usage of reflection in original code with individual placements
+ *                  in distinct disks on either side of the origin (see comments in code for placements
+                    of 
+ * 
  * Mokka History:  
  * - first implementation P. Mora de Freitas (sept 02)
  * - fixed geometry overlap -- Adrian Vogel, 2005-12-05
  * - implemented new GEAR interface -- K. Harder, T. Pinto Jayawardena  2007-07-31
  * - SFtd03: Modified version of SFtd02: Rewritten as a self scaling driver which does not
  *   make use of a seperate super driver. Steve Aplin (May 2008)
+ *   October 15th 2008, Steve Aplin using description from SiLC Collaboration
  * - Fixes a bug in SFtd04.cc which meant that the copper cables on thin 
  *   inside of the cylinder were far to thick (SJA 28/05/09)
+ *   September 7th 2010, Jordi Duarte using mechanical design from IFCA group
  * - SFtd06: Modified version of SFtd05 implementing realistic details of the disks 
  *           4,5,6,7 structure. -- J. Duarte Campderros (Sept. 2010)
  *           Added realistic description to disks 1,2,3. Changed disk 3 to micro-strips 
@@ -322,7 +332,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   //--------------------------------
 
 
-  //######################################################################################################################################################################
+   DDRec::ZDiskPetalsData*  zDiskPetalsData = new ZDiskPetalsData ;
+
+ //######################################################################################################################################################################
   //  code ported from FTD_Simple_Staggered::construct() :
   //##################################
   
@@ -640,11 +652,18 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     // 						      0, 
     // 						      0, 
     // 						      0);
-    Volume FTDDiskLogical(  _toString(  _dbParDisk.disk_number, "FTDAirDiskLogical_%d" ), FTDDiskSolid, _AirMat ) ;
-    //    printVolume( FTDDiskLogical ) ; 
+
+    //fg: Volume FTDDiskLogical(  _toString(  _dbParDisk.disk_number, "FTDAirDiskLogical_%d" ), FTDDiskSolid, _AirMat ) ;
+    //fg: replace the logical volume for the disks with two individual ones for the pos. and neg. z axis respectively
+    //fg: this way we do not need a reflection and can position the petals with different transforms on either side...
+    Volume FTDDiskLogicalPZ(  _toString(  _dbParDisk.disk_number, "FTDAirDiskLogicalPZ_%d" ), FTDDiskSolid, _AirMat ) ;
+    Volume FTDDiskLogicalNZ(  _toString(  _dbParDisk.disk_number, "FTDAirDiskLogicalNZ_%d" ), FTDDiskSolid, _AirMat ) ;
+
 
     //    FTDDiskLogical->SetVisAttributes(VisAttAirDisk);
-    ftd.setVisAttributes(lcdd,  "SeeThrough", FTDDiskLogical ) ;
+    //    ftd.setVisAttributes(lcdd,  "SeeThrough", FTDDiskLogical ) ;
+    ftd.setVisAttributes(lcdd,  "SeeThrough", FTDDiskLogicalPZ ) ;
+    ftd.setVisAttributes(lcdd,  "SeeThrough", FTDDiskLogicalNZ ) ;
 
 		
     
@@ -665,14 +684,17 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     // 						 disk_number);
     // registerPV( Phys );
 
-    RotationZYX rotDiskPositive( -pi/2.0, pi , 0. ) ; 
+    ///fg RotationZYX rotDiskPositive( -pi/2.0, pi , 0. ) ; 
+    //fg use unrotated air disks...
+    RotationZYX rotDiskPositive(0,0,0) ; 
     Transform3D transPositive( rotDiskPositive,  Position( 0.,0.,_z_position) );      
-    pv = main_assembly.placeVolume( FTDDiskLogical, transPositive ) ;
+
+    pv = main_assembly.placeVolume( FTDDiskLogicalPZ, transPositive ) ;
 
     DetElement   diskDEposZ( ftd ,   _toString(  _dbParDisk.disk_number, "FTDDisk_%d_posZ" ) , x_det.id() );
     diskDEposZ.setPlacement( pv ) ;
 
-    pv.addPhysVolID("layer", disk_number ).addPhysVolID("side", 1 )   ;
+    pv.addPhysVolID("layer", disk_number - 1  ).addPhysVolID("side", 1 )   ;
 
     
 #ifdef DEBUG_VALUES
@@ -707,17 +729,17 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     // 		registerPV( Phys );
     
     
-    //fg: simply handle reflection factory as additional placement of the same envelope volume
-    //    what are the implications ?
-    RotationZYX rotDiskNegative( -pi/2.0, 0 , 0. ) ; 
+    //fg RotationZYX rotDiskNegative( -pi/2.0, 0 , 0. ) ; 
+    //fg use unrotated air disks...
+    RotationZYX rotDiskNegative(0,0,0) ; 
     Transform3D transNegative( rotDiskNegative,  Position( 0.,0., -_z_position) );      
-    pv = main_assembly.placeVolume( FTDDiskLogical, transNegative ) ;
+    pv = main_assembly.placeVolume( FTDDiskLogicalNZ, transNegative ) ;
 
     DetElement   diskDEnegZ( ftd ,   _toString(  _dbParDisk.disk_number, "FTDDisk_%d_negZ" ) , x_det.id() );
     diskDEnegZ.setPlacement( pv ) ;
 
 
-    pv.addPhysVolID("layer", disk_number ).addPhysVolID("side", -1 )   ;
+    pv.addPhysVolID("layer", disk_number -1  ).addPhysVolID("side", -1 )   ;
 
     
     
@@ -787,13 +809,14 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     ftd.setVisAttributes(lcdd,  "SeeThrough" , FTDPetalAirLogical ) ;
 
 		
-
-    DEVec petVecposZ ;
-    DEVec petVecnegZ ;
-
     // Placing N-copies of the air petal inside the air disk. The copies are built using the z-axis as
     // the axis of rotation
     const int petal_max_number = (int)(360.0*deg/(2.0*theta)) ; 
+
+    DEVec petVecposZ(petal_max_number) ;
+    DEVec petVecnegZ(petal_max_number) ;
+
+    double zSignPetal0 = 1. ;
 
     for (int i = 0; i < petal_max_number; i++){ 
 
@@ -805,29 +828,41 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
       // Put the petal in the position inside the disk
       double petalCdtheta = i*2.0*theta;
-      
-      //      RotationMatrix *rotPetal = new RotationMatrix();
-      //      rotPetal->rotateZ(-petalCdtheta);
-      
-      RotationZ rotPetal( -petalCdtheta );
+      //fg: changed this to positve rotation
+            
+      //fg: the petals at negative z are numbered in positive sense of rotation
+      //    for the ones at positve z, we have to flip around the petal (rotY(pi)) 
+      //    and then rotate in the negative direction around the new (inverted) z-axis
+      //    -> this really mimicks the reflection of the petal disk:
+      //       changed sense of rotation and flipped petals !!
+      RotationZ   rotPetalNZ(    petalCdtheta - pi/2.             );
+      RotationZYX rotPetalPZ( -( petalCdtheta - pi/2. ) , pi , 0. );
 
       int zsign = pow((double)-1,i);
-      
+     
       // Petal i=0 parameters for gear
       if( i == 0 ) {
-	_ftdparameters[gearpar::PHI0].push_back(petalCdtheta);
+	_ftdparameters[gearpar::PHI0].push_back(petalCdtheta );
 	_ftdparameters[gearpar::PETAL0SIGNOFFSET].push_back(zsign);
+	zSignPetal0 = zsign ;
       }
 #ifdef DEBUG_PETAL
       _ftdparameters[gearpar::PHI0].push_back(0);
       _ftdparameters[gearpar::PETAL0SIGNOFFSET].push_back(1);
 #endif
       
-      double dx = (petal_cp_support_dy/2.0 + _inner_radius)*sin(i*2.0*theta);
-      double dy = (petal_cp_support_dy/2.0 + _inner_radius)*cos(i*2.0*theta); 
+      //fg: exchanged sin() and cos() in order to have a normal positve sense 
+      //    of rotation around z-axis
+      double dx = (petal_cp_support_dy/2.0 + _inner_radius)*cos( petalCdtheta );
+      double dy = (petal_cp_support_dy/2.0 + _inner_radius)*sin( petalCdtheta ); 
       double dz = zsign*( _dbParDisk.petal_support_zoffset) ;
       
-      Transform3D transPetal( rotPetal, Position( dx, dy, dz) );
+      Transform3D transPetalPZ( rotPetalPZ, Position( dx, dy, -dz) );
+
+      //fg: at negative z we just exchange the sign of the z-offset
+      dx = (petal_cp_support_dy/2.0 + _inner_radius)*cos( petalCdtheta );
+      dy = (petal_cp_support_dy/2.0 + _inner_radius)*sin( petalCdtheta ); 
+      Transform3D transPetalNZ( rotPetalNZ, Position( dx, dy,  dz) );
       
       
       // Phys = ReflectionFactory::Instance()->Place(
@@ -839,8 +874,15 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       // 						  i+1);
       // registerPV( Phys );
 
-      pv = FTDDiskLogical.placeVolume( FTDPetalAirLogical, transPetal ) ;
+      //      pv = FTDDiskLogical.placeVolume( FTDPetalAirLogical, transPetal ) ;
+      pv = FTDDiskLogicalPZ.placeVolume( FTDPetalAirLogical, transPetalPZ ) ;
+
       pv.addPhysVolID("module", i ) ;
+
+      pv = FTDDiskLogicalNZ.placeVolume( FTDPetalAirLogical, transPetalNZ ) ;
+
+      pv.addPhysVolID("module", i ) ;
+
 
       // create DetElements for every petal
       std::stringstream sspz ;  sspz << "ftd_petal_posZ_" << disk_number << "_"  << i  ;
@@ -849,8 +891,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       DetElement petalDEnegZ( diskDEnegZ, ssnz.str() ,  x_det.id() );
       petalDEposZ.setPlacement( pv ) ;
       petalDEnegZ.setPlacement( pv ) ;
-      petVecposZ.push_back( petalDEposZ );
-      petVecnegZ.push_back( petalDEnegZ );
+      petVecposZ[i] =  petalDEposZ ;
+      petVecnegZ[i] =  petalDEnegZ ;
 
 
 #ifdef DEBUG_VALUES
@@ -863,16 +905,54 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	" xMin = " << 2.0*petal_cp_supp_half_dxMin << "\n" <<
 	" dy =   " << petal_cp_support_dy << "\n" <<
 	" thickness =   " << petalairthickness_half*2.0 << "\n" <<
-	" placed at \n" << 
-	" x =   " <<  transPetal.Translation().Vect().X() << "\n" <<
-	" y =   " <<  transPetal.Translation().Vect().Y() << "\n" <<
-	" z =   " <<  transPetal.Translation().Vect().Z() << "\n" <<
+	" placed at (pos z)  \n" << 
+	" x =   " <<  transPetalPZ.Translation().Vect().X() << "\n" <<
+	" y =   " <<  transPetalPZ.Translation().Vect().Y() << "\n" <<
+	" z =   " <<  transPetalPZ.Translation().Vect().Z() << "\n" <<
 	endl;
 #endif
       
     } // end petal loop ...  
     
     
+    // -------- reconstruction parameters  ----------------
+    DDRec::ZDiskPetalsData::LayerLayout thisLayer ;
+    
+    int isDoubleSided = false;
+    int nSensors = 1;
+
+    if( _dbParDisk.sensor_is_pixel != 1 ) {
+      isDoubleSided = true;
+      nSensors = 2;
+    }
+
+    thisLayer.typeFlags[ DDRec::ZDiskPetalsData::SensorType::DoubleSided ] = isDoubleSided ;
+    thisLayer.typeFlags[ DDRec::ZDiskPetalsData::SensorType::Pixel ]	   = _dbParDisk.sensor_is_pixel ;
+
+    thisLayer.petalHalfAngle	  = _dbParCommon.petal_half_angle_support ;
+    thisLayer.alphaPetal	  = 0. ;	// petals are othogonal to z-axis
+    thisLayer.zPosition		  = _z_position ;
+    thisLayer.petalNumber	  = petal_max_number ;
+    thisLayer.sensorsPerPetal	  = nSensors ; 
+    thisLayer.phi0		  = 0.  ;
+    thisLayer.zOffsetSupport	  = - zSignPetal0 *  fabs( _dbParDisk.petal_support_zoffset ) ; // sign of offset is negative (!?)
+    thisLayer.distanceSupport	  = _inner_radius ;
+    thisLayer.thicknessSupport	  = _dbParDisk.petal_cp_support_thickness ;
+    thisLayer.widthInnerSupport	  = 2. * petal_cp_supp_half_dxMin ;
+    thisLayer.widthOuterSupport	  = _dbParDisk.petal_cp_support_dxMax ;
+    thisLayer.lengthSupport	  = petal_cp_support_dy ;
+    thisLayer.zOffsetSensitive	  = zSignPetal0 * ( fabs( _dbParDisk.petal_support_zoffset ) +  0.5 * (_dbParDisk.disks_Si_thickness+_dbParDisk.petal_cp_support_thickness)  )  ;
+    thisLayer.distanceSensitive	  = _inner_radius ; 
+    thisLayer.thicknessSensitive  = _dbParDisk.disks_Si_thickness ;
+    thisLayer.widthInnerSensitive =  2. * petal_cp_supp_half_dxMin ;
+    thisLayer.widthOuterSensitive = _dbParDisk.petal_cp_support_dxMax ;
+    thisLayer.lengthSensitive	  = petal_cp_support_dy ;
+    
+    zDiskPetalsData->layers.push_back( thisLayer ) ;
+
+    // -------- end reconstruction parameters  ----------------
+
+  
 #ifdef DD4HEP_WITH_GEAR // ------------------------ Gear disk parameters
     int sensorType = gear::FTDParameters::PIXEL;  
     int isDoubleSided = false;
@@ -947,6 +1027,11 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     // one or two (for double layers ) for positve and negative z each 
     for (int i = 0; i < petal_max_number; i++){ 
 
+#ifdef DEBUG_PETAL
+      if(i != DEBUG_PETAL ) {
+	continue;
+      }
+#endif
       //create DetElements for sensors - one per sensitive petal
       std::stringstream sspz ;  sspz << "ftd_sensor_posZ_" << disk_number << "_"  << i << "_0"  ;
       std::stringstream ssnz ;  ssnz << "ftd_sensor_negZ_" << disk_number << "_"  << i << "_0"  ;
@@ -1142,6 +1227,15 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   //######################################################################################################################################################################
   
+
+  zDiskPetalsData->widthStrip  = _dbParExReco.strip_width  ;
+  zDiskPetalsData->lengthStrip = _dbParExReco.strip_length ;
+  zDiskPetalsData->pitchStrip  = _dbParExReco.strip_pitch  ;
+  zDiskPetalsData->angleStrip  = _dbParExReco.strip_angle  ;
+  
+
+
+  ftd.addExtension< ZDiskPetalsData >( zDiskPetalsData ) ;
   
   //--------------------------------------
   
@@ -1876,31 +1970,31 @@ void GearSetup()
   for(unsigned int layer = 0; layer < _ftdparameters[gearpar::NPETALS].size(); layer++)
     {
       // Extract all the param
-      int nPetals       = (int)_ftdparameters[gearpar::NPETALS].at(layer);
-      int nSensors      = (int) _ftdparameters[gearpar::NSENSORS].at(layer);
-      bool isDoubleSided = (bool)_ftdparameters[gearpar::ISDOUBLESIDED].at(layer);
-      int sensorType    = (int)_ftdparameters[gearpar::SENSORTYPE].at(layer);
-      double phalfangle = _ftdparameters[gearpar::HALFANGLEPETAL].at(layer);
-      double phi0       = _ftdparameters[gearpar::PHI0].at(layer);
+      int	nPetals       =   (int)_ftdparameters[gearpar::NPETALS].at(layer);
+      int	nSensors      =   (int) _ftdparameters[gearpar::NSENSORS].at(layer);
+      bool	isDoubleSided =   (bool)_ftdparameters[gearpar::ISDOUBLESIDED].at(layer);
+      int	sensorType    =   (int)_ftdparameters[gearpar::SENSORTYPE].at(layer);
+      double	phalfangle    =   _ftdparameters[gearpar::HALFANGLEPETAL].at(layer);
+      double	phi0	      =   _ftdparameters[gearpar::PHI0].at(layer);
       // Correct the sign: axis of the trapezoids built inside a ref. with Z --> -Z
-      double signoffset = -_ftdparameters[gearpar::PETAL0SIGNOFFSET].at(layer);
-      double alpha      = _ftdparameters[gearpar::ALPHA].at(layer);
-      double zposition  = _ftdparameters[gearpar::ZPOSITION].at(layer);
-      double zoffset    = _ftdparameters[gearpar::ZOFFSET].at(layer);
-      double suprtRin   = _ftdparameters[gearpar::SUPPORTRINNER].at(layer);
-      double suprtThic  = _ftdparameters[gearpar::SUPPORTTHICKNESS].at(layer);
-      double suprtLMin  = _ftdparameters[gearpar::SUPPORTLENGTHMIN].at(layer);
-      double suprtLMax  = _ftdparameters[gearpar::SUPPORTLENGTHMAX].at(layer);
-      double suprtW     = _ftdparameters[gearpar::SUPPORTWIDTH].at(layer);
-      //double suprtRL   = _ftdparameters[gearpar::SUPPORTRADLENGTH].at(layer); FIXME
-      double suprtRL   = Si_RadLen;
-      double sensitRin  = _ftdparameters[gearpar::SENSITIVERINNER].at(layer);
-      double sensitThic = _ftdparameters[gearpar::SENSITIVETHICKNESS].at(layer);
-      double sensitLMin = _ftdparameters[gearpar::SENSITIVELENGTHMIN].at(layer);
-      double sensitLMax = _ftdparameters[gearpar::SENSITIVELENGTHMAX].at(layer);
-      double sensitW    = _ftdparameters[gearpar::SENSITIVEWIDTH].at(layer);
-      //double sensitRL   = _ftdparameters[gearpar::SENSITIVERADLENGTH].at(layer); //FIXME
-      double sensitRL   = Si_RadLen;
+      double	signoffset    = - _ftdparameters[gearpar::PETAL0SIGNOFFSET].at(layer);
+      double	alpha	      =   _ftdparameters[gearpar::ALPHA].at(layer);
+      double	zposition     =   _ftdparameters[gearpar::ZPOSITION].at(layer);
+      double	zoffset	      =   _ftdparameters[gearpar::ZOFFSET].at(layer);
+      double	suprtRin      =   _ftdparameters[gearpar::SUPPORTRINNER].at(layer);
+      double	suprtThic     =   _ftdparameters[gearpar::SUPPORTTHICKNESS].at(layer);
+      double	suprtLMin     =   _ftdparameters[gearpar::SUPPORTLENGTHMIN].at(layer);
+      double	suprtLMax     =   _ftdparameters[gearpar::SUPPORTLENGTHMAX].at(layer);
+      double	suprtW	      =   _ftdparameters[gearpar::SUPPORTWIDTH].at(layer);
+      //double suprtRL	      =   _ftdparameters[gearpar::SUPPORTRADLENGTH].at(layer); FIXME
+      double	suprtRL	      =    Si_RadLen;
+      double	sensitRin     =   _ftdparameters[gearpar::SENSITIVERINNER].at(layer);
+      double	sensitThic    =   _ftdparameters[gearpar::SENSITIVETHICKNESS].at(layer);
+      double	sensitLMin    =   _ftdparameters[gearpar::SENSITIVELENGTHMIN].at(layer);
+      double	sensitLMax    =   _ftdparameters[gearpar::SENSITIVELENGTHMAX].at(layer);
+      double	sensitW	      =   _ftdparameters[gearpar::SENSITIVEWIDTH].at(layer);
+      //double sensitRL	      =   _ftdparameters[gearpar::SENSITIVERADLENGTH].at(layer); //FIXME
+      double	sensitRL      = Si_RadLen;
     
       ftdParam->addLayer( nPetals, nSensors, isDoubleSided, sensorType, phalfangle, phi0, alpha,zposition, zoffset, signoffset,
 			  suprtRin, suprtThic, 
@@ -1914,10 +2008,10 @@ void GearSetup()
   
   // Add the extended_reconstruction_parameters
   
-  ftdParam->setDoubleVal("strip_width_mm",_dbParExReco.strip_width_mm);
-  ftdParam->setDoubleVal("strip_length_mm",_dbParExReco.strip_length_mm);
-  ftdParam->setDoubleVal("strip_pitch_mm",_dbParExReco.strip_pitch_mm);
-  ftdParam->setDoubleVal("strip_angle_deg",_dbParExReco.strip_angle_deg);
+  ftdParam->setDoubleVal("strip_width", _dbParExReco.strip_width );
+  ftdParam->setDoubleVal("strip_length",_dbParExReco.strip_length);
+  ftdParam->setDoubleVal("strip_pitch", _dbParExReco.strip_pitch );
+  ftdParam->setDoubleVal("strip_angle", _dbParExReco.strip_angle );
   
   
   gearMgr->setFTDParameters(ftdParam);

@@ -13,7 +13,7 @@
   
   
   <!-- SQL command: "select * from extended_reconstruction_parameters;"  --> 
-  <extended_reconstruction_parameters strip_width_mm="0.001*mm" strip_length_mm="250" strip_pitch_mm="0.01*mm" strip_angle_deg="5*deg"  />
+  <extended_reconstruction_parameters strip_width="0.001*mm" strip_length="250*mm" strip_pitch="0.01*mm" strip_angle="5*deg"  />
   
 
   <!-- SQL command: "select * from disks;"  --> 

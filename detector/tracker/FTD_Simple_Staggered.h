@@ -103,10 +103,10 @@ struct dbInfoCommon
 struct dbExtended_reconstruction_parameters
 {
 
-  double strip_width_mm;    
-  double strip_length_mm;   
-  double strip_pitch_mm;    
-  double strip_angle_deg;   
+  double strip_width;    
+  double strip_length;   
+  double strip_pitch;    
+  double strip_angle;   
   
 };
 
