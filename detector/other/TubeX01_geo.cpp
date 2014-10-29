@@ -6,11 +6,10 @@
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/DD4hepUnits.h"
+#include "DDRec/DetectorData.h"
 #include "XMLHandlerDB.h"
 #include <cmath>
 #include <map>
-
-//#include "GearWrapper.h"
 
 typedef std::map<std::string, double> TReferenceMap;
  
@@ -77,6 +76,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   DetElement   tube(  name, x_det.id()  ) ;
   
+  DDRec::ConicalSupportData* beampipeData = new DDRec::ConicalSupportData ;
+
   //######################################################################################################################################################################
   //  code ported from TubeX01::construct() :
   //##################################
@@ -167,6 +168,16 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     const std::string volName      = "tube_" + db->fetchString("name");
     
     
+
+    if( crossType == kCenter ) { // store only the central sections !
+
+      DDRec::ConicalSupportData::Section section ;
+      section.rInner = rInnerStart ;
+      section.rOuter = rOuterStart ;
+      section.zPos   = zStart ;
+      beampipeData->sections.push_back( section ) ;
+    }
+
     //fixme
     // if( saveToGear ){
     
@@ -684,6 +695,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   //######################################################################################################################################################################
   
+  tube.addExtension< DDRec::ConicalSupportData >( beampipeData ) ;
+
   //--------------------------------------
   
   Volume mother =  lcdd.pickMotherVolume( tube ) ;

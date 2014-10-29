@@ -134,19 +134,15 @@
             <parameter name="strip_width_mm" type="double" value="1.250000000e-02" />
             <parameter name="n_sensors_per_ladder" type="IntVec" value="50 50" />
         </detector>
+
+        <detector name="BeamPipe" geartype="GearParameters">
+            <parameter name="RInner" type="DoubleVec" value="1.450000000e+01 1.450000000e+01 2.300000000e+01 2.300000000e+01 2.300000000e+01 2.300000000e+01 3.447600000e+01 5.670600000e+01 8.927400000e+01 1.218430000e+02 1.544520000e+02 1.830000000e+02 1.830000000e+02" />
+            <parameter name="ROuter" type="DoubleVec" value="1.500000000e+01 1.500000000e+01 2.400000000e+01 2.367000000e+01 2.500000000e+01 2.500700000e+01 3.724500000e+01 5.889300000e+01 9.081900000e+01 1.230670000e+02 1.554450000e+02 1.839900000e+02 1.838500000e+02" />
+            <parameter name="Z" type="DoubleVec" value="0.000000000e+00 8.000000000e+01 1.500000000e+02 1.750000000e+02 2.200000000e+02 2.300000000e+02 4.008000000e+02 6.745000000e+02 1.075500000e+03 1.476500000e+03 1.878000000e+03 2.229500000e+03 2.279500000e+03" />
+        </detector>
+
 <!-- ***************************************** elements below added from canonical (Mokka) gear file ************************************************************ -->
 
-
-       <detector name="BeamPipe" geartype="GearParameters">
-            <parameter name="BeamPipeHalfZ" type="double" value="1.360500000e+03" />
-            <parameter name="BeamPipeProperties_RadLen" type="double" value="3.527597571e+02" />
-            <parameter name="BeamPipeProperties_dEdx" type="double" value="2.941795296e-04" />
-            <parameter name="BeamPipeRadius" type="double" value="1.450000000e+01" />
-            <parameter name="BeamPipeThickness" type="double" value="5.000000000e-01" />
-            <parameter name="RInner" type="DoubleVec" value="1.450000000e+01 1.450000000e+01 2.300000000e+01 2.300000000e+01 2.300000000e+01 2.300000000e+01 3.447600000e+01 5.670600000e+01 8.927400000e+01 1.218430000e+02 1.544520000e+02 1.830000000e+02" />
-            <parameter name="ROuter" type="DoubleVec" value="1.500000000e+01 1.500000000e+01 2.400000000e+01 2.367000000e+01 2.500000000e+01 2.500700000e+01 3.648300000e+01 5.947500000e+01 9.146100000e+01 1.233880000e+02 1.556760000e+02 1.839930000e+02" />
-            <parameter name="Z" type="DoubleVec" value="0.000000000e+00 8.000000000e+01 1.500000000e+02 1.750000000e+02 2.200000000e+02 2.300000000e+02 5.358000000e+02 8.095000000e+02 1.210500000e+03 1.611500000e+03 2.013000000e+03 2.364500000e+03" />
-        </detector>
 
         <detector name="EcalBarrel" geartype="CalorimeterParameters">
             <layout type="Barrel" symmetry="8" phi0="0.000000000e+00" />

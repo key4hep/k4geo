@@ -157,7 +157,7 @@
     <detectors>
         <comment>Trackers</comment>
 
-	<!-- <include ref="tubeX06_14.xml"/> -->
+	<include ref="tubeX06_14.xml"/>
 
 	<include ref="ftd_simple_staggered_02.xml"/>
 
