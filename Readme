@@ -155,3 +155,20 @@ or display it in the teve display:
 3. run the standard reconstruction ( tracking only so far ):
 
  Marlin ../example/ild_dd4hep_stdreco.xml --global.LCIOInputFiles=./simple_lcio.slcio --MyLCIOOutputProcessor.LCIOOutputFile=./simple_lcio_REC.slcio
+
+
+
+4. look at the result w/ the CED event display, e.g.
+
+ ced2go -d ../example/gear_ILD_o1_v05_ORG.xml -t ../example/ced2go-template.xml simple_lcio_REC.slcio
+
+
+
+
+
+
+
+
+
+
+

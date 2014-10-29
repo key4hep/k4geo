@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!-- ?xml-stylesheet type="text/xsl" href="http://ilcsoft.desy.de/marlin/marlin.xsl"? -->
+<!-- ?xml-stylesheet type="text/xsl" href="marlin.xsl"? -->
+
+<!-- Loading shared library : /afs/desy.de/group/it/ilcsoft/v01-07/CEDViewer/v00-07-01/lib/libCEDViewer.so -->
+<!--##########################################
+    #                                        #
+    #     Example steering file for marlin   #
+    #                                        #
+    ##########################################-->
+
+
+<marlin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ilcsoft.desy.de/marlin/marlin.xsd">
+ <execute>
+  $Viewer$
+ </execute>
+
+ <global>
+<parameter name="LCIOInputFiles"> 
+$LCIOInputFiles$
+  </parameter>
+
+  <!-- limit the number of processed records (run+evt): -->  
+  <parameter name="MaxRecordNumber" value="5001" />  
+  <parameter name="SkipNEvents" value="0" />  
+  <parameter name="SupressCheck" value="false" />  
+  <parameter name="GearXMLFile"> $GearXMLFile$ </parameter>  
+  <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> DEBUG0 MESSAGE  </parameter>  
+  <!-- parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MESSAGE  </parameter --> 
+
+ </global>
+
+ <processor name="MyAIDAProcessor" type="AIDAProcessor">
+ <!--Processor that handles AIDA files. Creates on directory per processor.  Processors only need to create and fill the histograms, clouds and tuples. Needs to be the first ActiveProcessor-->
+  <!-- compression of output file 0: false >0: true (default) -->
+  <parameter name="Compress" type="int">1 </parameter>
+  <!-- filename without extension-->
+  <parameter name="FileName" type="string">aida_file </parameter>
+  <!-- type of output file xml (default) or root ( only OpenScientist)-->
+  <parameter name="FileType" type="string">xml </parameter>
+</processor>
+
+
+  <!--collection to be displayed ( ColName, marker type[0-2], size)-->
+<processor name="MyCEDViewer" type="CEDViewer">
+    <parameter name="DrawInLayer"> 
+       
+       VXDCollection 0 5 1
+       SITCollection 0 5 1
+       FTD_PIXELCollection 0 5 1
+       FTD_STRIPCollection 0 5 1
+       FTDCollection 0 5 1
+       TPCCollection 0 3 1
+       SETCollection 0 3 1
+       ETDCollection 0 3 1
+       
+       VXDTrackerHits       0  5  11
+       SITTrackerHits       0  5  11
+       TPCTrackerHits       0  5  11
+       FTDTrackerHits       0  5  11
+       FTDStripTrackerHits  0  5  11
+       FTDPixelTrackerHits  0  5  11
+       FTDSpacePoints       0  5  11
+
+
+       HcalEndCapsCollection       0 3 2
+       MuonBarrelCollection        0 3 2
+       MuonEndCapCollection        0 3 2
+
+       HcalBarrelRegCollection     0 3 2
+       HcalEndCapRingsCollection   0 3 2
+
+       BeamCalCollection           0 3 2 
+
+       LHcalCollection             0 3 2
+       LumiCalCollection           0 3 2
+       YokeBarrelCollection        0 3 2
+       YokeEndcapsCollection       0 3 2
+
+       EcalBarrelSiliconCollection 0 3 2
+       EcalBarrelSiliconPreShower  0 3 2
+       EcalEndcapsCollection       0 3 2  
+       EcalEndcapRingPreShower     0 3 2  
+       EcalEndcapRingCollection    0 3 2
+       EcalEndcapSiliconPreShower  0 3 2  
+       EcalEndcapSiliconCollection 0 3 2  
+
+       HcalBarrelCollection        0 3 2
+       HcalEndcapsCollection       0 3 2
+       HcalEndcapRingsCollection   0 3 2
+       EcalBarrelCollection        0 3 2
+       EcalEndcapRingCollection    0 3 2
+       EcalEndcapsCollection       0 3 2
+
+       HCALEndcap   0 5 12
+       HCALOther    0 5 12
+       MUON         0 2 12
+       LHCAL        0 3 12  
+       LCAL         0 3 12
+       BCAL         0 3 12
+       ECALBarrel   0 2 12
+       ECALEndcap   0 2 12
+       ECALOther    0 2 12
+       HCALBarrel   0 5 12
+
+       TruthTracks      0 3 3
+       ForwardTracks    0 3 4
+       SiTracks         0 5 5
+       ClupatraTracks   0 5 6
+       MarlinTrkTracks  0 5 7
+
+
+       PandoraClusters  0 3 8
+       PandoraPFANewPFOs      0 3 9
+       
+       MCParticle 0 3 0
+
+
+
+
+     </parameter>
+  <XXXparameter name="DrawCollection" type="StringVec">
+
+
+    VXDCollection                 0  1
+    SITCollection                 0  1
+    TPCCollection                 0  1
+    ETDCollection                 0  1
+    FTDCollection                 0  1
+    SETCollection                 0  1
+
+    VTXTrackerHits                2  4
+    SITTrackerHits                2  4
+    AllTPCTrackerHits             2  4
+    ETDTrackerHits                2  4
+    FTDTrackerHits                2  4
+    SETTrackerHits                2  4
+
+    LDCTracks                     0  1
+
+    MuonBarrelCollection          0  1
+    MuonEndCapCollection          0  1
+    BeamCalCollection             0  1
+    EcalBarrelCollection          0  1
+    EcalBarrelSiliconCollection   0  1
+    EcalEndcapCollection          0  1
+    EcalEndcapSiliconCollection   0  1
+    EcalEndcapRingCollection      0  1
+    HcalBarrelRegCollection       0  1
+    HcalEndCapRingsCollection     0  1
+    HcalEndCapsCollection         0  1
+    LHcalCollection               0  1
+    LumiCalCollection             0  1
+
+    LHCAL                         0  1
+    ECALBarrel                    0  1
+    ECALEndcap                    0  1
+    BCAL                          0  1
+    HCALBarrel                    0  1
+    HCALEndcap                    0  1
+    LCAL                          0  1
+    MUON                          0  1
+
+    PandoraClusters               0  1
+
+    MCParticle                    0  1
+
+    PandoraPFOs                   0  1
+    PandoraPFANewPFOs             0  1 
+<!--
+    SiTracks
+    TPCTracks
+    V0RecoParticles
+-->
+  </XXXparameter>
+
+</processor>
+
+ <processor name="MyConditionsProcessor" type="ConditionsProcessor">
+ <!--ConditionsProcessor provides access to conditions data  transparently from LCIO files or a databases, using LCCD-->
+  <!--Initialization of a conditions database handler-->
+  <!--parameter name="DBCondHandler" type="StringVec">conditionsName /lccd/myfolder HEAD  </parameter-->
+  <!--Initialization of a conditions db file handler-->
+  <!--parameter name="DBFileHandler" type="StringVec">conditionsName conditions.slcio collectionName  </parameter-->
+  <!--Initialization string for conditions database-->
+  <parameter name="DBInit" type="string">localhost:lccd_test:calvin:hobbes </parameter>
+  <!--Initialization of a data file handler-->
+  <!--parameter name="DataFileHandler" type="StringVec">conditionsName  </parameter-->
+  <!--Initialization of a simple conditions file handler-->
+  <!--parameter name="SimpleFileHandler" type="StringVec">conditionsName conditions.slcio collectionName  </parameter-->
+</processor>
+
+ <processor name="MyConvertToMIPScale" type="ConvertToMIPScale">
+ <!--transforms the energy amplitude of each calorimeter hit passing the cut into the MIP scale-->
+  <!--Cut in MIPs on the amplitudes in the ECAL collection-->
+  <parameter name="CutECAL" type="float">0 </parameter>
+  <!--Cut in MIPs on the amplitudes in the HCAL collection-->
+  <parameter name="CutHCAL" type="float">0 </parameter>
+  <!--ECAL Input Collection Name-->
+  <parameter name="ECALInputCollectionName" type="string" lcioInType="CalorimeterHit">ECAL </parameter>
+  <!--ECAL Output Collection Name, stores calorimeter hits with amplitudes in MIP energy scale-->
+  <parameter name="ECALOutputCollectionName" type="string" lcioOutType="CalorimeterHit">ECAL_MIP </parameter>
+  <!--HCAL Input Collection Name-->
+  <parameter name="HCALInputCollectionName" type="string" lcioInType="CalorimeterHit">HCAL </parameter>
+  <!--HCAL Output Collection Name, stores calorimeter hits with amplitudes in MIP energy scale-->
+  <parameter name="HCALOutputCollectionName" type="string" lcioOutType="CalorimeterHit">HCAL_MIP </parameter>
+  <!--Coefficients for the MIP calibration in the ECAL in GeV/MIP-->
+  <parameter name="MIPCoeffEcal" type="FloatVec">1 1  </parameter>
+  <!--Coefficients for the MIP calibration in the HCAL in GeV/MIP-->
+  <parameter name="MIPCoeffHcal" type="FloatVec">1  </parameter>
+</processor>
+
+ <processor name="MyCutOnCosThetaQQbar" type="CutOnCosThetaQQbar">
+ <!--The output condition of this processor is false as long as the |cos(theta)| > cutCosTheta and true otherwise.-->
+  <!--cut on |cos(theta)|-->
+  <parameter name="cutCosTheta" type="double">1 </parameter>
+</processor>
+
+ <processor name="MyCutOnGEANT4Bug" type="CutOnGEANT4Bug">
+ <!--The output condition of this processor is true as long as no track has more than a factor of k more energy deposited in the calorimeter as its energy given by momentum and mass. This should cut out events where GEANT4 produces additional energy depositions. If at least one such a track is found the return value is false. Only tracks with an energy larger than eMin are taken into account.-->
+  <!--Calibration coefficients for ECAL-->
+  <parameter name="calibrCoeffECAL" type="FloatVec">33.0235 93.5682  </parameter>
+  <!--Calibration coefficients for HCAL-->
+  <parameter name="calibrCoeffHCAL" type="FloatVec">21.1963  </parameter>
+  <!--name of the LC Relation collection between Calorimeterhits and SimCalorimeterhits-->
+  <parameter name="colNameRelationCaloHitToSimCaloHit" type="string">RelationCaloHit </parameter>
+  <!--name of the LC Relation collection between Tracks and MC particles-->
+  <parameter name="colNameRelationTrackToMCP" type="string">TrueTrackToMCP </parameter>
+  <!--name of the Track collection-->
+  <parameter name="colNameTracks" type="string">Tracks </parameter>
+  <!--minimal energy of tracks taken into account (in GeV)-->
+  <parameter name="eMin" type="double">5 </parameter>
+  <!--if the track has more than k times its MC energy deposited the return value is set to false-->
+  <parameter name="k" type="double">1.75 </parameter>
+</processor>
+
+ <processor name="MyDSTViewer" type="DSTViewer">
+ <!--CED based event display for DST files-->
+  <!--Jet Collections Names'-->
+  <parameter name="JetCollections" type="StringVec" lcioInType="ReconstructedParticle"> Durham_2Jets Durham_3Jets Durham_4Jets Durham_5Jets Durham_6Jets </parameter>
+  <!--Particle Collection Name-->
+  <parameter name="ParticleCollection" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs </parameter>
+  <!--Layer for Reco Particles-->
+  <parameter name="LayerReco" type="int" value="9"/>
+  <!--Magnetic Field-->
+  <parameter name="MagneticField" type="float" value="3.5"/>
+  <!--Wait for Keyboard before proceed-->
+  <parameter name="WaitForKeyboard" type="int" value="1"/>
+</processor>
+
+ <processor name="MyDrawMCParticles" type="DrawMCParticles">
+ <!--DrawMCParticles draws the MC Particle prediction w/o calorimeters in the ced display-->
+  <!--Energy Cut in GeV-->
+  <parameter name="EnergyCut" type="double">0.01 </parameter>
+  <!--Name of the MCParticle collection-->
+  <parameter name="MCCollectionName" type="string">MCParticle </parameter>
+  <!--Wait for Keyboard before proceed-->
+  <parameter name="WaitForKeyboard" type="int">1 </parameter>
+  <!--Radius of the innermost detector component (VTX) in cylindrical coordinates-->
+  <parameter name="rIn" type="double">15.5 </parameter>
+  <!--z coordinate of the innermost detector component (VTX) in cylindrical coordinates-->
+  <parameter name="zIn" type="double">50 </parameter>
+</processor>
+
+ <processor name="MyGenericViewer" type="GenericViewer">
+ <!--Drawing Utility-->
+  <!--Calo Hit Collection Names-->
+  <parameter name="CaloHitCollections" type="StringVec" lcioInType="CalorimeterHit"> BCAL ECALBarrel ECALEndcap ECALOther HCALBarrel HCALEndcap HCALOther LC
+AL LHCAL MUON </parameter>
+  <!--Cluster Collection Name-->
+  <parameter name="ClusterCollection" type="string" lcioInType="Cluster"> PandoraClusters </parameter>
+  <!--Particle Collection Name-->
+  <parameter name="ParticleCollection" type="string" lcioInType="ReconstructedParticle"> Durham_2Jets </parameter>
+  <!--Sim Calo Hit Collection Names-->
+  <parameter name="SimCaloHitCollections" type="StringVec" lcioInType="SimCalorimeterHit"> BeamCalCollection EcalBarrelCollection EcalBarrelPreShowerCollect
+ion EcalEndcapCollection EcalEndcapPreShowerCollection EcalEndcapRingCollection EcalEndcapRingPreShowerCollection HcalBarrelRegCollection HcalEndCapRingsCol
+lection HcalEndCapsCollection LHcalCollection LumiCalCollection MuonEndCapCollection </parameter>
+  <!--Sim Tracker Hit Collection Names-->
+  <parameter name="SimTrackerHitCollections" type="StringVec" lcioInType="SimTrackerHit"> ETDCollection FTDCollection SETCollection SITCollection TPCCollect
+ion TPCSpacePointCollection VXDCollection </parameter>
+  <!--Track Collection Name-->
+  <parameter name="TrackCollection" type="string" lcioInType="Track"> LDCTracks </parameter>
+  <!--Tracker Hit Collection Names-->
+  <parameter name="TrackerHitCollections" type="StringVec" lcioInType="TrackerHit"> AllTPCTrackerHits DroppedTPCTrackeHits ETDTrackerHits FTDTrackerHits SET
+TrackerHits SITTrackerHits UsedTPCTrackerHits VTXTrackerHits </parameter>
+  <!--True Cluster Collection Name-->
+  <parameter name="TrueClusterCollection" type="string" lcioInType="Cluster"> PandoraClusters </parameter>
+  <!--True Track Collection Name-->
+  <parameter name="TrueTrackCollection" type="string" lcioInType="Track"> SiTracks </parameter>
+  <!--Detector Model-->
+  <parameter name="DetectorModel" type="int" value="0 "/>
+  <!--Layer for Calo Hits-->
+  <parameter name="LayerCaloHit" type="int" value="1"/>
+  <!--Layer for Reco Clusters-->
+  <parameter name="LayerClusters" type="int" value="-1"/>
+  <!--Layer for Reco Particles-->
+  <parameter name="LayerReco" type="int" value="-1"/>
+  <!--Layer for Sim Calo Hits-->
+  <parameter name="LayerSimCaloHit" type="int" value="2"/>
+  <!--Layer for Sim Tracker Hits-->
+  <parameter name="LayerSimTrackerHit" type="int" value="3"/>
+  <!--Layer for Tracker Hits-->
+  <parameter name="LayerTrackerHit" type="int" value="-1"/>
+  <!--Layer for Tracks-->
+  <parameter name="LayerTracks" type="int" value="-1"/>
+  <!--Layer for True Clusters-->
+  <parameter name="LayerTrueClusters" type="int" value="-1"/>
+  <!--Layer for True Tracks-->
+  <parameter name="LayerTrueTracks" type="int" value="-1"/>
+  <!--Magnetic Field-->
+  <parameter name="MagneticField" type="float" value="3.5"/>
+  <!--Wait for Keyboard before proceed-->
+  <parameter name="WaitForKeyboard" type="int" value="1"/>
+</processor>
+
+ <processor name="MyHEP_RecordProcessor" type="HEP_RecordProcessor">
+ <!--HEP record balance and drawing-->
+</processor>
+
+ <processor name="MyLCIOOutputProcessor" type="LCIOOutputProcessor">
+ <!--Writes the current event to the specified LCIO outputfile. Needs to be the last ActiveProcessor.-->
+  <!--drops the named collections from the event-->
+  <!--parameter name="DropCollectionNames" type="StringVec">TPCHits HCalHits  </parameter-->
+  <!--drops all collections of the given type from the event-->
+  <!--parameter name="DropCollectionTypes" type="StringVec">SimTrackerHit SimCalorimeterHit  </parameter-->
+  <!-- write complete objects in subset collections to the file (i.e. ignore subset flag)-->
+  <!--parameter name="FullSubsetCollections" type="StringVec">MCParticlesSkimmed  </parameter-->
+  <!--force keep of the named collections - overrules DropCollectionTypes (and DropCollectionNames)-->
+  <!--parameter name="KeepCollectionNames" type="StringVec">MyPreciousSimTrackerHits  </parameter-->
+  <!-- name of output file -->
+  <parameter name="LCIOOutputFile" type="string">outputfile.slcio </parameter>
+  <!--write mode for output file:  WRITE_APPEND or WRITE_NEW-->
+  <parameter name="LCIOWriteMode" type="string">None </parameter>
+  <!--will split output file if size in kB exceeds given value - doesn't work with APPEND and NEW-->
+  <!--parameter name="SplitFileSizekB" type="int">1992294 </parameter-->
+</processor>
+
+ <processor name="MyPGDBP" type="PGDBP">
+ <!--Physical and Geometrical Database (for Boojum at least)-->
+</processor>
+
+ <processor name="MySelectEvents" type="SelectEvents">
+ <!--SelectEvent Processor selects certain events from input files-->
+  <!--First Event-->
+  <parameter name="FirstEvent" type="int">0 </parameter>
+  <!--Last Event-->
+  <parameter name="LastEvent" type="int">0 </parameter>
+</processor>
+
+ <processor name="MySimpleFastMCProcessor" type="SimpleFastMCProcessor">
+ <!--SimpleFastMCProcessor creates ReconstrcutedParticles from MCParticles according to the resolution given in the steering file.-->
+  <!--Resolution of charged particles in polar angle range:  d(1/P)  th_min  th_max-->
+  <parameter name="ChargedResolution" type="FloatVec">5e-05 0 1.5708  </parameter>
+  <!--Name of the MCParticle input collection-->
+  <parameter name="InputCollectionName" type="string" lcioInType="MCParticle">MCParticle </parameter>
+  <!--Name of the MCTruthMapping output collection-->
+  <parameter name="MCTruthMappingCollectionName" type="string" lcioOutType="LCRelation">MCTruthMapping </parameter>
+  <!--No reconstructed particles are produced for smaller momenta (in [GeV])-->
+  <parameter name="MomentumCut" type="float">0.001 </parameter>
+  <!--Resolution dE/E=A+B/sqrt(E/GeV) of neutral hadrons in polar angle range: A  B th_min  th_max-->
+  <parameter name="NeutralHadronResolution" type="FloatVec">0.04 0.5 0 1.5708  </parameter>
+  <!--Resolution dE/E=A+B/sqrt(E/GeV) of photons in polar angle range: A  B th_min  th_max-->
+  <parameter name="PhotonResolution" type="FloatVec">0.01 0.1 0 1.5708  </parameter>
+  <!--Name of the ReconstructedParticles output collection-->
+  <parameter name="RecoParticleCollectionName" type="string" lcioOutType="ReconstructedParticle">ReconstructedParticles </parameter>
+</processor>
+
+ <processor name="MySimpleTimer" type="SimpleTimer">
+ <!--MARLIN Processor 'SimpleTimer', offers simple timer utilities-->
+  <!--Mode-->
+  <parameter name="Mode" type="int">0 </parameter>
+  <!--Seconds to Wait-->
+  <parameter name="SecondsToWait" type="int">0 </parameter>
+</processor>
+
+ <processor name="MySkipNEvents" type="SkipNEvents">
+ <!--The output condition of this processor is false for the first n LCEvents. Afterwards it is set to true.-->
+  <!--number of LCEvents to skip-->
+  <parameter name="nSkip" type="int">0 </parameter>
+</processor>
+
+ <processor name="MyStdHepReader" type="StdHepReader">
+ <!--Reads StdHep files as input and creates LCIO events with MCParticle collections. Make sure to not specify any LCIOInputFiles in the steering in order to read StdHep files.-->
+  <!--input file-->
+  <parameter name="StdHepFileName" type="string">input.stdhep </parameter>
+</processor>
+
+ <processor name="MyTestProcessor" type="TestProcessor">
+ <!--Simple processor to test the marlin application. Prints run and event number.-->
+</processor>
+
+ <processor name="MyVertexViewer" type="VertexViewer">
+ <!--Vertex Drawing Utility-->
+  <!--Cut On D0-->
+  <parameter name="CutOnD0" type="float">1e+20 </parameter>
+  <!--Cut On Z0-->
+  <parameter name="CutOnZ0" type="float">1e+20 </parameter>
+  <!--Detector Model-->
+  <parameter name="DetectorModel" type="int">0 </parameter>
+  <!--Layer for SimTrackerHits-->
+  <parameter name="LayerSimTrackerHits" type="int">-1 </parameter>
+  <!--Layer for TrackerHits-->
+  <parameter name="LayerTrackerHits" type="int">-1 </parameter>
+  <!--Layer for Tracks-->
+  <parameter name="LayerTracks" type="int">-1 </parameter>
+  <!--Layer for True Tracks-->
+  <parameter name="LayerTrueTracks" type="int">-1 </parameter>
+  <!--SimTrakerHit Collection Name-->
+  <parameter name="SimTrakerHitCollection" type="StringVec">VXDCollection  </parameter>
+  <!--Track Collection Name-->
+  <parameter name="TrackCollection" type="string">SiTracks </parameter>
+  <!--Track MCP Rel Collection Name-->
+  <parameter name="TrackMCPRelCollection" type="string">SiTracksMCP </parameter>
+  <!--TrackerHit Collection Name-->
+  <parameter name="TrackerHitCollection" type="StringVec">VTXTrackerHits FTDTrackerHits SITTrackerHits TPCTrackerHits  </parameter>
+  <!--True Track Collection Name-->
+  <parameter name="TrueTrackCollection" type="string">TrueTracks </parameter>
+  <!--True Track MCP Relation Collection Name-->
+  <parameter name="TrueTrackMCPRelCollection" type="string">TrueTracksMCP </parameter>
+</processor>
+
+
+</marlin>

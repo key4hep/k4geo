@@ -1,0 +1,373 @@
+<gear>
+    <global detectorName="ILD_o1_v05" />
+    <!--Gear XML file automatically created with GearXML::createXMLFile ....-->
+    <BField type="ConstantBField" x="0.000000000e+00" y="0.000000000e+00" z="3.500000000e+00" />
+    <detectors>
+        <detector geartype="TPCParameters" name="TPC">
+            <maxDriftLength value="2.225000000e+03" />
+            <driftVelocity value="0.000000000e+00" />
+            <coordinateType value="polar" />
+            <modules>
+                <module>
+                    <moduleID value="0" />
+                    <readoutFrequency value="0.000000000e+00" />
+                    <PadRowLayout2D type="FixedPadSizeDiskLayout" rMin="3.840000000e+02" rMax="1.716000000e+03" padHeight="6.000000000e+00" padWidth="1.000000000e+00" maxRow="222" padGap="0.000000000e+00" phiMax="6.283185307e+00" />
+                    <offset x_r="0.000000000e+00" y_phi="0.000000000e+00" />
+                    <angle value="0.000000000e+00" />
+                    <enlargeActiveAreaBy value="0.000000000e+00" />
+                </module>
+            </modules>
+            <parameter name="TPCGasProperties_RadLen" type="double" value="1.155205461e+05" />
+            <parameter name="TPCGasProperties_dEdx" type="double" value="2.668179899e-07" />
+            <parameter name="TPCInnerWallProperties_RadLen" type="double" value="4.897358990e+03" />
+            <parameter name="TPCInnerWallProperties_dEdx" type="double" value="1.337022999e-05" />
+            <parameter name="TPCOuterWallProperties_RadLen" type="double" value="1.157708759e+04" />
+            <parameter name="TPCOuterWallProperties_dEdx" type="double" value="5.700578061e-06" />
+            <parameter name="TPCWallProperties_RadLen" type="double" value="4.897358990e+03" />
+            <parameter name="TPCWallProperties_dEdx" type="double" value="1.337022999e-05" />
+            <parameter name="tpcInnerRadius" type="double" value="3.290000000e+02" />
+            <parameter name="tpcInnerWallThickness" type="double" value="2.500000000e+01" />
+            <parameter name="tpcOuterRadius" type="double" value="1.808000000e+03" />
+            <parameter name="tpcOuterWallThickness" type="double" value="6.000000000e+01" />
+            <parameter name="tpcZAnode" type="double" value="4.600000000e+03" />
+        </detector>
+        <detector name="EcalBarrel" geartype="CalorimeterParameters">
+            <layout type="Barrel" symmetry="8" phi0="0.000000000e+00" />
+            <dimensions inner_r="1.847415655e+03" outer_z="2.350000000e+03" />
+            <layer repeat="19" thickness="5.250000000e+00" absorberThickness="2.100000000e+00" cellSize0="5.083333333e+00" cellSize1="5.083333333e+00" />
+            <layer repeat="1" thickness="6.300000000e+00" absorberThickness="2.100000000e+00" cellSize0="5.083333333e+00" cellSize1="5.083333333e+00" />
+            <layer repeat="9" thickness="7.350000000e+00" absorberThickness="4.200000000e+00" cellSize0="5.083333333e+00" cellSize1="5.083333333e+00" />
+        </detector>
+        <detector name="EcalEndcap" geartype="CalorimeterParameters">
+            <layout type="Endcap" symmetry="2" phi0="0.000000000e+00" />
+            <dimensions inner_r="4.000000000e+02" outer_r="2.088800000e+03" inner_z="2.450000000e+03" />
+            <layer repeat="19" thickness="5.250000000e+00" absorberThickness="2.100000000e+00" cellSize0="5.083333333e+00" cellSize1="5.083333333e+00" />
+            <layer repeat="1" thickness="6.300000000e+00" absorberThickness="2.100000000e+00" cellSize0="5.083333333e+00" cellSize1="5.083333333e+00" />
+            <layer repeat="9" thickness="7.350000000e+00" absorberThickness="4.200000000e+00" cellSize0="5.083333333e+00" cellSize1="5.083333333e+00" />
+        </detector>
+        <detector name="EcalPlug" geartype="CalorimeterParameters">
+            <layout type="Endcap" symmetry="2" phi0="0.000000000e+00" />
+            <dimensions inner_r="2.500000000e+02" outer_r="4.000000000e+02" inner_z="2.450000000e+03" />
+            <layer repeat="19" thickness="5.250000000e+00" absorberThickness="2.100000000e+00" cellSize0="5.083333333e+00" cellSize1="5.083333333e+00" />
+            <layer repeat="1" thickness="6.300000000e+00" absorberThickness="2.100000000e+00" cellSize0="5.083333333e+00" cellSize1="5.083333333e+00" />
+            <layer repeat="9" thickness="7.350000000e+00" absorberThickness="4.200000000e+00" cellSize0="5.083333333e+00" cellSize1="5.083333333e+00" />
+        </detector>
+        <detector name="YokeBarrel" geartype="CalorimeterParameters">
+            <layout type="Barrel" symmetry="12" phi0="0.000000000e+00" />
+            <dimensions inner_r="4.424959961e+03" outer_z="4.072000000e+03" />
+            <layer repeat="1" thickness="4.000000000e+01" absorberThickness="0.000000000e+00" cellSize0="3.000000000e+01" cellSize1="3.000000000e+01" />
+            <layer repeat="10" thickness="1.400000000e+02" absorberThickness="1.000000000e+02" cellSize0="3.000000000e+01" cellSize1="3.000000000e+01" />
+            <layer repeat="3" thickness="6.000000000e+02" absorberThickness="5.600000000e+02" cellSize0="3.000000000e+01" cellSize1="3.000000000e+01" />
+        </detector>
+        <detector name="YokeEndcap" geartype="CalorimeterParameters">
+            <layout type="Endcap" symmetry="2" phi0="0.000000000e+00" />
+            <dimensions inner_r="3.000000000e+02" outer_r="7.665959961e+03" inner_z="4.072000000e+03" />
+            <layer repeat="10" thickness="1.400000000e+02" absorberThickness="1.000000000e+02" cellSize0="3.000000000e+01" cellSize1="3.000000000e+01" />
+            <layer repeat="2" thickness="6.000000000e+02" absorberThickness="5.600000000e+02" cellSize0="3.000000000e+01" cellSize1="3.000000000e+01" />
+        </detector>
+        <detector name="YokePlug" geartype="CalorimeterParameters">
+            <layout type="Endcap" symmetry="2" phi0="0.000000000e+00" />
+            <dimensions inner_r="3.000000000e+02" outer_r="3.076719499e+03" inner_z="3.982000000e+03" />
+            <parameter name="YokePlugThickness" type="double" value="9.000000000e+01" />
+        </detector>
+        <detector name="HcalBarrel" geartype="CalorimeterParameters">
+            <layout type="Barrel" symmetry="8" phi0="0.000000000e+00" />
+            <dimensions inner_r="2.058000000e+03" outer_z="2.350000000e+03" />
+            <layer repeat="48" thickness="2.650000000e+01" absorberThickness="2.000000000e+01" cellSize0="3.032467532e+01" cellSize1="3.000000000e+01" />
+            <parameter name="Hcal_barrel_end_module_type" type="int" value="1" />
+            <parameter name="Hcal_outer_polygon_order" type="int" value="16" />
+            <parameter name="Hcal_outer_polygon_phi0" type="int" value="0" />
+            <parameter name="Hcal_Cu_thickness" type="double" value="1.000000000e-01" />
+            <parameter name="Hcal_PCB_thickness" type="double" value="7.000000000e-01" />
+            <parameter name="Hcal_back_plate_thickness" type="double" value="1.500000000e+01" />
+            <parameter name="Hcal_lateral_structure_thickness" type="double" value="1.500000000e+01" />
+            <parameter name="Hcal_layer_air_gap" type="double" value="2.000000000e+00" />
+            <parameter name="Hcal_middle_stave_gaps" type="double" value="1.000000000e+01" />
+            <parameter name="Hcal_modules_gap" type="double" value="0.000000000e+00" />
+            <parameter name="Hcal_scintillator_thickness" type="double" value="3.000000000e+00" />
+            <parameter name="Hcal_stave_gaps" type="double" value="1.000000000e+01" />
+            <parameter name="Hcal_virtual_cell_size" type="double" value="3.000000000e+01" />
+            <parameter name="TPC_Ecal_Hcal_barrel_halfZ" type="double" value="2.350000000e+03" />
+        </detector>
+        <detector name="HcalEndcap" geartype="CalorimeterParameters">
+            <layout type="Endcap" symmetry="2" phi0="0.000000000e+00" />
+            <dimensions inner_r="3.500000000e+02" outer_r="3.246928703e+03" inner_z="2.650000000e+03" />
+            <layer repeat="48" thickness="2.650000000e+01" absorberThickness="2.000000000e+01" cellSize0="3.000000000e+01" cellSize1="3.000000000e+01" />
+            <parameter name="Hcal_Cu_thickness" type="double" value="1.000000000e-01" />
+            <parameter name="Hcal_PCB_thickness" type="double" value="7.000000000e-01" />
+            <parameter name="Hcal_endcap_lateral_structure_thickness" type="double" value="5.000000000e+00" />
+            <parameter name="Hcal_endcap_layer_air_gap" type="double" value="2.500000000e+00" />
+            <parameter name="Hcal_endcap_module_width" type="double" value="3.750000000e+02" />
+            <parameter name="Hcal_endcap_sensitive_center_box" type="double" value="0.000000000e+00" />
+            <parameter name="Hcal_scintillator_thickness" type="double" value="3.000000000e+00" />
+            <parameter name="Hcal_stave_gaps" type="double" value="1.000000000e+01" />
+            <parameter name="Hcal_steel_cassette_thickness" type="double" value="5.000000000e-01" />
+            <parameter name="Hcal_virtual_cell_size" type="double" value="3.000000000e+01" />
+        </detector>
+        <detector name="HcalRing" geartype="CalorimeterParameters">
+            <layout type="Endcap" symmetry="2" phi0="0.000000000e+00" />
+            <dimensions inner_r="2.138800000e+03" outer_r="3.137000000e+03" inner_z="2.450000000e+03" />
+            <layer repeat="6" thickness="2.650000000e+01" absorberThickness="2.220000000e+01" cellSize0="3.000000000e+01" cellSize1="3.000000000e+01" />
+            <parameter name="Hcal_Cu_thickness" type="double" value="1.000000000e-01" />
+            <parameter name="Hcal_PCB_thickness" type="double" value="7.000000000e-01" />
+            <parameter name="Hcal_lateral_structure_thickness" type="double" value="1.500000000e+01" />
+            <parameter name="Hcal_scintillator_thickness" type="double" value="3.000000000e+00" />
+            <parameter name="Hcal_stave_gaps" type="double" value="1.000000000e+01" />
+            <parameter name="Hcal_steel_cassette_thickness" type="double" value="5.000000000e-01" />
+            <parameter name="Hcal_virtual_cell_size" type="double" value="3.000000000e+01" />
+        </detector>
+        <detector name="Lcal" geartype="CalorimeterParameters">
+            <layout type="Endcap" symmetry="1" phi0="0.000000000e+00" />
+            <dimensions inner_r="8.402209443e+01" outer_r="1.940000000e+02" inner_z="2.506900000e+03" />
+            <layer repeat="30" thickness="4.290000000e+00" absorberThickness="3.500000000e+00" cellSize0="1.718404774e+00" cellSize1="1.308996939e-01" />
+            <parameter name="beam_crossing_angle" type="double" value="1.400000000e+01" />
+        </detector>
+        <detector name="LHcal" geartype="CalorimeterParameters">
+            <layout type="Endcap" symmetry="2" phi0="0.000000000e+00" />
+            <dimensions inner_r="9.300000000e+01" outer_r="3.306000000e+02" inner_z="2.680000000e+03" />
+            <layer repeat="40" thickness="1.312500000e+01" absorberThickness="1.000000000e+01" cellSize0="1.000000000e+01" cellSize1="1.000000000e+01" />
+            <parameter name="beam_crossing_angle" type="double" value="1.400000000e+01" />
+        </detector>
+        <detector name="BeamCal" geartype="CalorimeterParameters">
+            <layout type="Endcap" symmetry="2" phi0="0.000000000e+00" />
+            <dimensions inner_r="2.001000000e+01" outer_r="1.500000000e+02" inner_z="3.485699600e+03" />
+            <layer repeat="30" thickness="4.000800000e+00" absorberThickness="3.500000000e+00" cellSize0="7.646470588e+00" cellSize1="1.000000000e+00" />
+            <parameter name="beam_crossing_angle" type="double" value="1.400000000e+01" />
+            <parameter name="cylinder_spanning_phi" type="double" value="5.585053606e+00" />
+            <parameter name="cylinder_starting_phi" type="double" value="3.490658504e+00" />
+            <parameter name="dead_area_outer_r" type="double" value="6.588882353e+01" />
+            <parameter name="pairsMonitorZ" type="double" value="3.485849800e+03" />
+            <parameter name="phi_segmentation" type="DoubleVec" value="2.327105669e-01 2.327105669e-01 1.745329252e-01 1.396263402e-01 1.396263402e-01 1.163552835e-01 9.973310011e-02 8.726646260e-02 8.726646260e-02 7.757018898e-02 6.981317008e-02 6.981317008e-02 6.346651825e-02 5.817764173e-02 5.817764173e-02 5.370243852e-02 4.986655006e-02" />
+        </detector>
+        <detector name="VXD" geartype="ZPlanarParameters">
+            <type technology="HYBRID" />
+            <shell halfLength="1.450000000e+02" gap="0.000000000e+00" innerRadius="6.500000000e+01" outerRadius="6.549392000e+01" radLength="3.527597571e+02" />
+            <layers>
+                <layer nLadders="10" phi0="-1.570796327e+00">
+                    <ladder distance="1.600000000e+01" thickness="1.000000000e+00" width="1.150000000e+01" length="6.250000000e+01" offset="-1.874869853e+00" radLength="1.014262421e+03" />
+                    <sensitive distance="1.595000000e+01" thickness="5.000000000e-02" width="1.100000000e+01" length="6.250000000e+01" offset="-1.624869853e+00" radLength="9.366070445e+01" />
+                </layer>
+                <layer nLadders="10" phi0="-1.570796327e+00">
+                    <ladder distance="1.700000000e+01" thickness="1.000000000e+00" width="1.150000000e+01" length="6.250000000e+01" offset="-1.874869853e+00" radLength="1.014262421e+03" />
+                    <sensitive distance="1.800000000e+01" thickness="5.000000000e-02" width="1.100000000e+01" length="6.250000000e+01" offset="-1.624869853e+00" radLength="9.366070445e+01" />
+                </layer>
+                <layer nLadders="11" phi0="-1.570796327e+00">
+                    <ladder distance="3.700000000e+01" thickness="1.000000000e+00" width="2.250000000e+01" length="1.250000000e+02" offset="-1.837940563e+00" radLength="1.014262421e+03" />
+                    <sensitive distance="3.695000000e+01" thickness="5.000000000e-02" width="2.200000000e+01" length="1.250000000e+02" offset="-1.587940563e+00" radLength="9.366070445e+01" />
+                </layer>
+                <layer nLadders="11" phi0="-1.570796327e+00">
+                    <ladder distance="3.800000000e+01" thickness="1.000000000e+00" width="2.250000000e+01" length="1.250000000e+02" offset="-1.837940563e+00" radLength="1.014262421e+03" />
+                    <sensitive distance="3.900000000e+01" thickness="5.000000000e-02" width="2.200000000e+01" length="1.250000000e+02" offset="-1.587940563e+00" radLength="9.366070445e+01" />
+                </layer>
+                <layer nLadders="17" phi0="-1.570796327e+00">
+                    <ladder distance="5.800000000e+01" thickness="1.000000000e+00" width="2.250000000e+01" length="1.250000000e+02" offset="-2.636744400e+00" radLength="1.014262421e+03" />
+                    <sensitive distance="5.795000000e+01" thickness="5.000000000e-02" width="2.200000000e+01" length="1.250000000e+02" offset="-2.386744400e+00" radLength="9.366070445e+01" />
+                </layer>
+                <layer nLadders="17" phi0="-1.570796327e+00">
+                    <ladder distance="5.900000000e+01" thickness="1.000000000e+00" width="2.250000000e+01" length="1.250000000e+02" offset="-2.636744400e+00" radLength="1.014262421e+03" />
+                    <sensitive distance="6.000000000e+01" thickness="5.000000000e-02" width="2.200000000e+01" length="1.250000000e+02" offset="-2.386744400e+00" radLength="9.366070445e+01" />
+                </layer>
+            </layers>
+        </detector>
+        <detector name="FTD" geartype="FTDParameters">
+            <layers>
+                <layer nPetals="16" nSensors="1" isDoubleSided="0" sensorType="PIXEL" petalOpenningAngle="1.963495408e-01" phi0="0.000000000e+00" alpha="0.000000000e+00" zoffset="1.500000000e+00" zsign0="-1.000000000e+00" zposition="2.200000000e+02">
+                    <support thickness="1.000000000e+00" width="1.075723890e+02" lengthMin="2.920504287e+01" lengthMax="7.200000000e+01" rInner="4.000000000e+01" radLength="9.366070445e+01" />
+                    <sensitive thickness="2.000000000e-02" width="1.075723890e+02" lengthMin="2.920504287e+01" lengthMax="7.200000000e+01" rInner="4.000000000e+01" radLength="9.366070445e+01" />
+                </layer>
+                <layer nPetals="16" nSensors="1" isDoubleSided="0" sensorType="PIXEL" petalOpenningAngle="1.963495408e-01" phi0="0.000000000e+00" alpha="0.000000000e+00" zoffset="1.500000000e+00" zsign0="-1.000000000e+00" zposition="3.713094000e+02">
+                    <support thickness="1.000000000e+00" width="9.689766827e+01" lengthMin="3.345171082e+01" lengthMax="7.200000000e+01" rInner="5.067472075e+01" radLength="9.366070445e+01" />
+                    <sensitive thickness="2.000000000e-02" width="9.689766827e+01" lengthMin="3.345171082e+01" lengthMax="7.200000000e+01" rInner="5.067472075e+01" radLength="9.366070445e+01" />
+                </layer>
+                <layer nPetals="16" nSensors="2" isDoubleSided="1" sensorType="STRIP" petalOpenningAngle="1.963495408e-01" phi0="0.000000000e+00" alpha="0.000000000e+00" zoffset="1.500000000e+00" zsign0="-1.000000000e+00" zposition="6.449058000e+02">
+                    <support thickness="2.000000000e+00" width="2.214518302e+02" lengthMin="3.439098440e+01" lengthMax="1.224900000e+02" rInner="7.110630075e+01" radLength="9.366070445e+01" />
+                    <sensitive thickness="2.000000000e-01" width="2.214518302e+02" lengthMin="3.439098440e+01" lengthMax="1.224900000e+02" rInner="7.110630075e+01" radLength="9.366070445e+01" />
+                </layer>
+                <layer nPetals="16" nSensors="2" isDoubleSided="1" sensorType="STRIP" petalOpenningAngle="1.963495408e-01" phi0="0.000000000e+00" alpha="0.000000000e+00" zoffset="1.500000000e+00" zsign0="-1.000000000e+00" zposition="1.046116600e+03">
+                    <support thickness="2.000000000e+00" width="2.018783081e+02" lengthMin="4.217781563e+01" lengthMax="1.224900000e+02" rInner="1.009913833e+02" radLength="9.366070445e+01" />
+                    <sensitive thickness="2.000000000e-01" width="2.018783081e+02" lengthMin="4.217781563e+01" lengthMax="1.224900000e+02" rInner="1.009913833e+02" radLength="9.366070445e+01" />
+                </layer>
+                <layer nPetals="16" nSensors="2" isDoubleSided="1" sensorType="STRIP" petalOpenningAngle="1.963495408e-01" phi0="0.000000000e+00" alpha="0.000000000e+00" zoffset="1.500000000e+00" zsign0="-1.000000000e+00" zposition="1.447327400e+03">
+                    <support thickness="2.000000000e+00" width="1.719932255e+02" lengthMin="5.406684067e+01" lengthMax="1.224900000e+02" rInner="1.308764659e+02" radLength="9.366070445e+01" />
+                    <sensitive thickness="2.000000000e-01" width="1.719932255e+02" lengthMin="5.406684067e+01" lengthMax="1.224900000e+02" rInner="1.308764659e+02" radLength="9.366070445e+01" />
+                </layer>
+                <layer nPetals="16" nSensors="2" isDoubleSided="1" sensorType="STRIP" petalOpenningAngle="1.963495408e-01" phi0="0.000000000e+00" alpha="0.000000000e+00" zoffset="1.500000000e+00" zsign0="-1.000000000e+00" zposition="1.848535850e+03">
+                    <support thickness="2.000000000e+00" width="1.421083180e+02" lengthMin="6.595579608e+01" lengthMax="1.224900000e+02" rInner="1.607613734e+02" radLength="9.366070445e+01" />
+                    <sensitive thickness="2.000000000e-01" width="1.421083180e+02" lengthMin="6.595579608e+01" lengthMax="1.224900000e+02" rInner="1.607613734e+02" radLength="9.366070445e+01" />
+                </layer>
+                <layer nPetals="16" nSensors="2" isDoubleSided="1" sensorType="STRIP" petalOpenningAngle="1.963495408e-01" phi0="0.000000000e+00" alpha="0.000000000e+00" zoffset="1.500000000e+00" zsign0="-1.000000000e+00" zposition="2.250000000e+03">
+                    <support thickness="2.000000000e+00" width="1.122043641e+02" lengthMin="7.785232860e+01" lengthMax="1.224900000e+02" rInner="1.906653273e+02" radLength="9.366070445e+01" />
+                    <sensitive thickness="2.000000000e-01" width="1.122043641e+02" lengthMin="7.785232860e+01" lengthMax="1.224900000e+02" rInner="1.906653273e+02" radLength="9.366070445e+01" />
+                </layer>
+            </layers>
+            <parameter name="strip_angle_deg" type="double" value="5.000000000e+00" />
+            <parameter name="strip_length_mm" type="double" value="2.500000000e+02" />
+            <parameter name="strip_pitch_mm" type="double" value="1.000000000e-02" />
+            <parameter name="strip_width_mm" type="double" value="1.000000000e-03" />
+        </detector>
+        <detector name="SIT" geartype="ZPlanarParameters">
+            <type technology="CCD" />
+            <shell halfLength="0.000000000e+00" gap="0.000000000e+00" innerRadius="0.000000000e+00" outerRadius="0.000000000e+00" radLength="0.000000000e+00" />
+            <layers>
+                <layer nLadders="10" phi0="0.000000000e+00">
+                    <ladder distance="1.531000000e+02" thickness="1.000000000e+00" width="9.916044311e+01" length="3.680000000e+02" offset="0.000000000e+00" radLength="2.134851878e+02" />
+                    <sensitive distance="1.529000000e+02" thickness="2.000000000e-01" width="9.916044311e+01" length="3.680000000e+02" offset="0.000000000e+00" radLength="9.366070445e+01" />
+                </layer>
+                <layer nLadders="10" phi0="0.000000000e+00">
+                    <ladder distance="1.544000000e+02" thickness="1.000000000e+00" width="1.001352022e+02" length="3.680000000e+02" offset="0.000000000e+00" radLength="2.134851878e+02" />
+                    <sensitive distance="1.554000000e+02" thickness="2.000000000e-01" width="1.001352022e+02" length="3.680000000e+02" offset="0.000000000e+00" radLength="9.366070445e+01" />
+                </layer>
+                <layer nLadders="19" phi0="0.000000000e+00">
+                    <ladder distance="3.001000000e+02" thickness="1.000000000e+00" width="9.988891763e+01" length="6.440000000e+02" offset="0.000000000e+00" radLength="2.134851878e+02" />
+                    <sensitive distance="2.999000000e+02" thickness="2.000000000e-01" width="9.988891763e+01" length="6.440000000e+02" offset="0.000000000e+00" radLength="9.366070445e+01" />
+                </layer>
+                <layer nLadders="19" phi0="0.000000000e+00">
+                    <ladder distance="3.014000000e+02" thickness="1.000000000e+00" width="1.003895291e+02" length="6.440000000e+02" offset="0.000000000e+00" radLength="2.134851878e+02" />
+                    <sensitive distance="3.024000000e+02" thickness="2.000000000e-01" width="1.003895291e+02" length="6.440000000e+02" offset="0.000000000e+00" radLength="9.366070445e+01" />
+                </layer>
+            </layers>
+            <parameter name="sensor_length_mm" type="double" value="9.200000000e+01" />
+            <parameter name="strip_angle_deg" type="double" value="7.000000000e+00" />
+            <parameter name="strip_length_mm" type="double" value="9.200000000e+01" />
+            <parameter name="strip_pitch_mm" type="double" value="5.000000000e-02" />
+            <parameter name="strip_width_mm" type="double" value="1.250000000e-02" />
+            <parameter name="n_sensors_per_ladder" type="IntVec" value="8 8 14 14" />
+        </detector>
+        <detector name="SET" geartype="ZPlanarParameters">
+            <type technology="CCD" />
+            <shell halfLength="0.000000000e+00" gap="0.000000000e+00" innerRadius="0.000000000e+00" outerRadius="0.000000000e+00" radLength="0.000000000e+00" />
+            <layers>
+                <layer nLadders="24" phi0="0.000000000e+00">
+                    <ladder distance="1.811100000e+03" thickness="1.000000000e+00" width="4.766190158e+02" length="2.300000000e+03" offset="0.000000000e+00" radLength="2.134851878e+02" />
+                    <sensitive distance="1.810900000e+03" thickness="2.000000000e-01" width="4.766190158e+02" length="2.300000000e+03" offset="0.000000000e+00" radLength="9.366070445e+01" />
+                </layer>
+                <layer nLadders="24" phi0="0.000000000e+00">
+                    <ladder distance="1.812400000e+03" thickness="1.000000000e+00" width="4.770139733e+02" length="2.300000000e+03" offset="0.000000000e+00" radLength="2.134851878e+02" />
+                    <sensitive distance="1.813400000e+03" thickness="2.000000000e-01" width="4.770139733e+02" length="2.300000000e+03" offset="0.000000000e+00" radLength="9.366070445e+01" />
+                </layer>
+            </layers>
+            <parameter name="sensor_length_mm" type="double" value="9.200000000e+01" />
+            <parameter name="strip_angle_deg" type="double" value="7.000000000e+00" />
+            <parameter name="strip_length_mm" type="double" value="9.200000000e+01" />
+            <parameter name="strip_pitch_mm" type="double" value="5.000000000e-02" />
+            <parameter name="strip_width_mm" type="double" value="1.250000000e-02" />
+            <parameter name="n_sensors_per_ladder" type="IntVec" value="50 50" />
+        </detector>
+        <detector name="BeamPipe" geartype="GearParameters">
+            <parameter name="BeamPipeHalfZ" type="double" value="1.360500000e+03" />
+            <parameter name="BeamPipeProperties_RadLen" type="double" value="3.527597571e+02" />
+            <parameter name="BeamPipeProperties_dEdx" type="double" value="2.941795296e-04" />
+            <parameter name="BeamPipeRadius" type="double" value="1.450000000e+01" />
+            <parameter name="BeamPipeThickness" type="double" value="5.000000000e-01" />
+            <parameter name="RInner" type="DoubleVec" value="1.450000000e+01 1.450000000e+01 2.300000000e+01 2.300000000e+01 2.300000000e+01 2.300000000e+01 3.447600000e+01 5.670600000e+01 8.927400000e+01 1.218430000e+02 1.544520000e+02 1.830000000e+02" />
+            <parameter name="ROuter" type="DoubleVec" value="1.500000000e+01 1.500000000e+01 2.400000000e+01 2.367000000e+01 2.500000000e+01 2.500700000e+01 3.648300000e+01 5.947500000e+01 9.146100000e+01 1.233880000e+02 1.556760000e+02 1.839930000e+02" />
+            <parameter name="Z" type="DoubleVec" value="0.000000000e+00 8.000000000e+01 1.500000000e+02 1.750000000e+02 2.200000000e+02 2.300000000e+02 5.358000000e+02 8.095000000e+02 1.210500000e+03 1.611500000e+03 2.013000000e+03 2.364500000e+03" />
+        </detector>
+        <detector name="CoilParameters" geartype="GearParameters">
+            <parameter name="Coil_cryostat_c_modules_half_z" type="double" value="1.224000000e+03" />
+            <parameter name="Coil_cryostat_c_modules_inner_radius" type="double" value="3.599960000e+03" />
+            <parameter name="Coil_cryostat_c_modules_outer_radius" type="double" value="3.984960000e+03" />
+            <parameter name="Coil_cryostat_half_z" type="double" value="3.872000000e+03" />
+            <parameter name="Coil_cryostat_inner_cyl_half_z" type="double" value="3.872000000e+03" />
+            <parameter name="Coil_cryostat_inner_cyl_inner_radius" type="double" value="3.424960000e+03" />
+            <parameter name="Coil_cryostat_inner_cyl_outer_radius" type="double" value="4.214960000e+03" />
+            <parameter name="Coil_cryostat_inner_radius" type="double" value="3.424960000e+03" />
+            <parameter name="Coil_cryostat_mandrel_half_z" type="double" value="3.675000000e+03" />
+            <parameter name="Coil_cryostat_mandrel_inner_radius" type="double" value="3.984960000e+03" />
+            <parameter name="Coil_cryostat_mandrel_outer_radius" type="double" value="4.059960000e+03" />
+            <parameter name="Coil_cryostat_modules_half_z" type="double" value="7.960000000e+02" />
+            <parameter name="Coil_cryostat_modules_inner_radius" type="double" value="3.599960000e+03" />
+            <parameter name="Coil_cryostat_modules_outer_radius" type="double" value="3.984960000e+03" />
+            <parameter name="Coil_cryostat_outer_cyl_half_z" type="double" value="3.872000000e+03" />
+            <parameter name="Coil_cryostat_outer_cyl_inner_radius" type="double" value="4.144960000e+03" />
+            <parameter name="Coil_cryostat_outer_cyl_outer_radius" type="double" value="4.174960000e+03" />
+            <parameter name="Coil_cryostat_outer_radius" type="double" value="4.174960000e+03" />
+            <parameter name="Coil_cryostat_scint1_inner_radius" type="double" value="3.514960000e+03" />
+            <parameter name="Coil_cryostat_scint1_outer_radius" type="double" value="3.524960000e+03" />
+            <parameter name="Coil_cryostat_scint1_zposend" type="double" value="3.972000000e+03" />
+            <parameter name="Coil_cryostat_scint1_zposin" type="double" value="3.772000000e+03" />
+            <parameter name="Coil_cryostat_scint2_inner_radius" type="double" value="3.529960000e+03" />
+            <parameter name="Coil_cryostat_scint2_outer_radius" type="double" value="3.539960000e+03" />
+            <parameter name="Coil_cryostat_scint2_zposend" type="double" value="3.972000000e+03" />
+            <parameter name="Coil_cryostat_scint2_zposin" type="double" value="3.772000000e+03" />
+            <parameter name="Coil_cryostat_scint3_inner_radius" type="double" value="4.084960000e+03" />
+            <parameter name="Coil_cryostat_scint3_outer_radius" type="double" value="4.094960000e+03" />
+            <parameter name="Coil_cryostat_scint3_zposend" type="double" value="3.972000000e+03" />
+            <parameter name="Coil_cryostat_scint3_zposin" type="double" value="3.772000000e+03" />
+            <parameter name="Coil_cryostat_scint4_inner_radius" type="double" value="4.069960000e+03" />
+            <parameter name="Coil_cryostat_scint4_outer_radius" type="double" value="4.079960000e+03" />
+            <parameter name="Coil_cryostat_scint4_zposend" type="double" value="3.972000000e+03" />
+            <parameter name="Coil_cryostat_scint4_zposin" type="double" value="3.772000000e+03" />
+            <parameter name="Coil_cryostat_side_l_half_z" type="double" value="2.500000000e+01" />
+            <parameter name="Coil_cryostat_side_l_inner_radius" type="double" value="3.464960000e+03" />
+            <parameter name="Coil_cryostat_side_l_outer_radius" type="double" value="4.144960000e+03" />
+            <parameter name="Coil_cryostat_side_r_half_z" type="double" value="2.500000000e+01" />
+            <parameter name="Coil_cryostat_side_r_inner_radius" type="double" value="3.464960000e+03" />
+            <parameter name="Coil_cryostat_side_r_outer_radius" type="double" value="4.144960000e+03" />
+            <parameter name="Coil_material_c_modules" type="string" value="aluminium" />
+            <parameter name="Coil_material_inner_cyl" type="string" value="aluminium" />
+            <parameter name="Coil_material_mandrel" type="string" value="aluminium" />
+            <parameter name="Coil_material_modules" type="string" value="aluminium" />
+            <parameter name="Coil_material_outer_cyl" type="string" value="aluminium" />
+            <parameter name="Coil_material_scint1" type="string" value="polystyrene" />
+            <parameter name="Coil_material_scint2" type="string" value="polystyrene" />
+            <parameter name="Coil_material_scint3" type="string" value="polystyrene" />
+            <parameter name="Coil_material_scint4" type="string" value="polystyrene" />
+            <parameter name="Coil_material_side_l" type="string" value="aluminium" />
+            <parameter name="Coil_material_side_r" type="string" value="aluminium" />
+        </detector>
+        <detector name="MokkaParameters" geartype="GearParameters">
+            <parameter name="Ecal_endcap_outer_radius" type="string" value="2088.8" />
+            <parameter name="Ecal_endcap_plug_rmin" type="string" value="250" />
+            <parameter name="Ecal_endcap_zmax" type="string" value="2635" />
+            <parameter name="Ecal_endcap_zmin" type="string" value="2450" />
+            <parameter name="Ecal_outer_radius" type="string" value="2028" />
+            <parameter name="Hcal_R_max" type="string" value="3395.46" />
+            <parameter name="Hcal_endcap_zmin" type="string" value="2650" />
+            <parameter name="LHcal_zend" type="string" value="3205" />
+            <parameter name="Lcal_z_begin" type="string" value="2506.9" />
+            <parameter name="Lcal_z_thickness" type="string" value="128.1" />
+            <parameter name="MokkaModel" type="string" value="ILD_o1_v05" />
+            <parameter name="MokkaVersion" type="string" value="trunk" />
+            <parameter name="SIT1_Half_Length_Z" type="string" value="368" />
+            <parameter name="SIT1_Radius" type="string" value="152.9" />
+            <parameter name="SIT2_Half_Length_Z" type="string" value="644" />
+            <parameter name="SIT2_Radius" type="string" value="299.9" />
+            <parameter name="TPC_Ecal_Hcal_barrel_halfZ" type="string" value="2350" />
+            <parameter name="TUBE_IPOuterBulge_end_radius" type="string" value="183.993" />
+            <parameter name="TUBE_IPOuterBulge_end_z" type="string" value="2364.5" />
+            <parameter name="TUBE_IPOuterTube_end_radius" type="string" value="25" />
+            <parameter name="TUBE_IPOuterTube_end_z" type="string" value="230" />
+            <parameter name="TUBE_IPOuterTube_start_radius" type="string" value="25" />
+            <parameter name="TUBE_IPOuterTube_start_z" type="string" value="220" />
+            <parameter name="Yoke_Z_start_endcaps" type="string" value="4072" />
+            <parameter name="Yoke_barrel_inner_radius" type="string" value="4424.9599609375" />
+            <parameter name="calorimeter_region_rmax" type="string" value="3395.46" />
+            <parameter name="calorimeter_region_zmax" type="string" value="3937" />
+            <parameter name="tracker_region_rmax" type="string" value="1842.9" />
+            <parameter name="tracker_region_zmax" type="string" value="2350" />
+        </detector>
+        <detector name="VXDInfra" geartype="GearParameters">
+            <parameter name="ActiveLayerProperties_dEdx" type="double" value="3.870163611e-04" />
+            <parameter name="BeSupportEndplateThickness" type="double" value="2.000000000e+00" />
+            <parameter name="BeSupport_dEdx" type="double" value="2.941795296e-04" />
+            <parameter name="CryostatAlHalfZ" type="double" value="1.766000000e+02" />
+            <parameter name="CryostatAlInnerR" type="double" value="2.420000000e+01" />
+            <parameter name="CryostatAlRadius" type="double" value="1.000000000e+02" />
+            <parameter name="CryostatAlThickness" type="double" value="5.000000000e-01" />
+            <parameter name="CryostatAlZEndCap" type="double" value="1.768500000e+02" />
+            <parameter name="Cryostat_RadLen" type="double" value="8.896317758e+01" />
+            <parameter name="Cryostat_dEdx" type="double" value="4.350185478e-04" />
+            <parameter name="ElectronicEndLength" type="double" value="1.000000000e+01" />
+            <parameter name="ElectronicEndThickness" type="double" value="1.000000000e-01" />
+            <parameter name="StripLineBeamPipeRadius" type="double" value="2.430000000e+01" />
+            <parameter name="VXDEndPlateInnerRadius" type="double" value="3.000000000e+01" />
+            <parameter name="VXDSupport_dEdx" type="double" value="4.818634270e-05" />
+            <parameter name="LadderGaps" type="DoubleVec" value="0.000000000e+00 0.000000000e+00 0.000000000e+00 0.000000000e+00 0.000000000e+00 0.000000000e+00" />
+            <parameter name="StripLineFinalZ" type="DoubleVec" value="1.500000000e+02 1.500000000e+02 1.500000000e+02 1.500000000e+02 1.500000000e+02 1.500000000e+02" />
+        </detector>
+    </detectors>
+    <materials>
+        <material name="VXDSupportMaterial" A="2.075865162e+01" Z="1.039383117e+01" density="2.765900000e+02" radLength="1.014262421e+03" intLength="3.341388059e+03" />
+    </materials>
+</gear>
