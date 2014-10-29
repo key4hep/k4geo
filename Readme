@@ -139,8 +139,6 @@ or display it in the teve display:
   <detector name="EcalBarrel" geartype="CalorimeterParameters">
   <detector name="EcalEndcap" geartype="CalorimeterParameters">
 
-  <material name="VXDSupportMaterial" A="2.075865162e+01" Z="1.039383117e+01" density="2.765900000e+02" radLength="1.014262421e+03" intLength="3.341388059e+03" />
-
   for example from original Mokka gear files ( or use $DDSIM/example/gear_ILD_o1_v05_dd4hep.xml )
 
 

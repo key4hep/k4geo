@@ -160,7 +160,7 @@
             <layer repeat="9" thickness="7.350000000e+00" absorberThickness="4.200000000e+00" cellSize0="5.083333333e+00" cellSize1="5.083333333e+00" />
         </detector>
  
-
+<!-- ***************************************** end: elements added from canonical (Mokka) gear file ************************************************************ -->
 
     </detectors>
 
