@@ -133,6 +133,9 @@ or display it in the teve display:
 
    convertToGear default ../trunk/ILD/compact/ILD_o1_v05.xml gear_ILD_o1_v05_dd4hep.xml
 
+ [ Friendly reminder: in order to work you need to explicitly build DD4hep with GEAR enabled. 
+   Use the flag -DDD4HEP_USE_GEAR="ON" for the cmake command. ]
+
  Note: currently this is still incomplete
  In order to run tracking at least the following elements need to be added manually :
 
