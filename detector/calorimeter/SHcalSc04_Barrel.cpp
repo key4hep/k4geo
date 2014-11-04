@@ -9,7 +9,10 @@
 //====================================================================
 
  /* History:  
-  
+
+   F.Gaede: 11/2014 added DDRec::LayeredCalorimeterData for reconstruction
+                   (experimental: could be superseeded by DDRec::Calorimeter interface)
+
    initial version: 
    F.Gaede: identical to  Hcal03 driver except that an additional gap
             for the fibres is introduced between scintillator and steel
@@ -35,6 +38,7 @@
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "XML/Layering.h"
+#include "DDRec/DetectorData.h"
 
 using namespace std;
 using namespace DD4hep;
@@ -178,6 +182,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double      Hcal_layer_air_gap               = lcdd.constant<double>("Hcal_layer_air_gap");
 
   double      Hcal_module_radius               = lcdd.constant<double>("Hcal_outer_radius");
+  double      Hcal_cells_size                  = lcdd.constant<double>("Hcal_cells_size");
+
+
 
   int         Hcal_nlayers                     = lcdd.constant<int>("Hcal_nlayers");
 
@@ -193,7 +200,21 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double      Ecal_outer_radius               = lcdd.constant<double>("Ecal_outer_radius");
   std::cout << " ***********Ecal_outer_radius " <<  Ecal_outer_radius << std::endl ;
 
+
   validate(Hcal_inner_radius, Hcal_module_radius, Hcal_radiator_thickness, Hcal_chamber_thickness, Hcal_nlayers);
+
+
+  //========== fill data for reconstruction ============================
+  DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
+  caloData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
+  caloData->symmetry = 8  ; //fg: also hardcoded below 
+  caloData->phi0 = 0 ; // fg: also hardcoded below 
+
+  /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
+  caloData->extent[0] = Hcal_inner_radius ;
+  caloData->extent[1] = Hcal_module_radius ;
+  caloData->extent[2] = 0. ;
+  caloData->extent[3] = TPC_Ecal_Hcal_barrel_halfZ ;
 
 //====================================================================
 //
@@ -224,8 +245,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   //                                                 * HcalBarrel_layers + Hcal_back_plate_thickness;
   //double Hcal_module_radius               = Hcal_inner_radius + totalThickness_Hcal_Barrel;
 
-  //double Hcal_cell_dim_x            = Hcal_cells_size;
-  //double Hcal_cell_dim_z            = Hcal_regular_chamber_dim_z / floor (Hcal_regular_chamber_dim_z/Hcal_cell_dim_x);
+  double Hcal_cell_dim_x            = Hcal_cells_size;
+  double Hcal_cell_dim_z            = Hcal_regular_chamber_dim_z / floor (Hcal_regular_chamber_dim_z/Hcal_cell_dim_x);
   //double Hcal_digi_cell_dim_x       = Hcal_digi_cells_size;
   //double Hcal_digi_cell_dim_z       = Hcal_regular_chamber_dim_z / floor (Hcal_regular_chamber_dim_z/Hcal_digi_cell_dim_x);
 
@@ -474,6 +495,23 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 							chamber_z_offset,
 							chamber_y_offset + chambers_y_off_correction));
       
+
+
+      //-----------------------------------------------------------------------------------------
+      if( layer_id <= Hcal_nlayers ){ // add the first set of layers to the reconstruction data
+	DDRec::LayeredCalorimeterData::Layer caloLayer ;
+	
+	caloLayer.distance = Hcal_inner_radius + chamber_y_offset + chambers_y_off_correction ;
+	caloLayer.thickness = Hcal_chamber_thickness + Hcal_radiator_thickness ;
+	caloLayer.absorberThickness = Hcal_radiator_thickness ;
+	caloLayer.cellSize0 = Hcal_cell_dim_z ;
+	caloLayer.cellSize1 = Hcal_cell_dim_x ;
+	
+	caloData->layers.push_back( caloLayer ) ;
+      }
+      //-----------------------------------------------------------------------------------------
+
+      
     }//end loop over HCAL nlayers;
   
 
@@ -531,6 +569,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 //====================================================================
 // Place HCAL Barrel assembly envelope into the world volume
 //====================================================================
+
+  sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
 
   pv = motherVol.placeVolume(envelope_assembly);
   pv.addPhysVolID("system", sdet.id());

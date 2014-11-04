@@ -162,14 +162,14 @@
 	<include ref="ftd_simple_staggered_02.xml"/>
 
 	<include ref="vxd07.xml"/>
-	
+ 	
 	<include ref="sit_simple_planar_sensors_03.xml"/>
 
 	<include ref="tpc10_01.xml"/>
 
 	<include ref="set_simple_planar_sensors_01.xml"/>
 
-        <!-- <comment>Calorimeters</comment> -->
+        <comment>Calorimeters</comment>
 
 	<include ref="SEcal04_Barrel.xml"/>
 
@@ -224,32 +224,32 @@
 
 	<!-- use simple CartesianGridXY segmentation: -->
 	<readout name="EcalBarrelCollection">
-	  <segmentation type="CartesianGridXY" grid_size_x="0.5*cm" grid_size_y="0.5*cm"/>
+	  <segmentation type="CartesianGridXY" grid_size_x="Ecal_cells_size" grid_size_y="Ecal_cells_size"/>
 	  <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id>
 	</readout>
 
 	<readout name="EcalEndcapsCollection">
-	  <segmentation type="CartesianGridXY" grid_size_x="0.5*cm" grid_size_y="0.5*cm"/>
+	  <segmentation type="CartesianGridXY" grid_size_x="Ecal_cells_size" grid_size_y="Ecal_cells_size"/>
 	  <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,y:-16</id>
 	</readout>
 
 	<readout name="EcalEndcapRingCollection">
-	  <segmentation type="CartesianGridXY" grid_size_x="0.5*cm" grid_size_y="0.5*cm"/>
+	  <segmentation type="CartesianGridXY" grid_size_x="Ecal_cells_size" grid_size_y="Ecal_cells_size"/>
 	  <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id>
 	</readout>
 
 	<readout name="HcalBarrelRegCollection">
-	  <segmentation type="CartesianGridXY" grid_size_x="3*cm" grid_size_y="3*cm"/>
+	  <segmentation type="CartesianGridXY" grid_size_x="Hcal_cells_size" grid_size_y="Hcal_cells_size"/>
 	  <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,y:-16</id>
 	</readout>
 
 	<readout name="HcalEndcapsCollection">
-	  <segmentation type="CartesianGridXZ" grid_size_x="3*cm" grid_size_z="3*cm"/>
+	  <segmentation type="CartesianGridXZ" grid_size_x="Hcal_cells_size" grid_size_z="Hcal_cells_size"/>
 	  <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,z:-16</id>
 	</readout>
 
 	<readout name="HcalEndcapRingCollection">
-	  <segmentation type="CartesianGridXY" grid_size_x="3*cm" grid_size_y="3*cm"/>
+	  <segmentation type="CartesianGridXY" grid_size_x="Hcal_cells_size" grid_size_y="Hcal_cells_size"/>
 	  <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id>
 	</readout>
 
