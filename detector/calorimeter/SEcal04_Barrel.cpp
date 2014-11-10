@@ -8,40 +8,33 @@
 //  $Id:$
 //====================================================================
 
- /* History:  
-  
-// *******************************************************
-// *                                                     *
-// *                      Mokka                          * 
-// *   - the detailed geant4 simulation for ILC   -      *
-// *                                                     *
-// * For more information about Mokka, visit the         *
-// *                                                     *
-// *  Mokka.in2p3.fr  Mokka home page.                   *
-// *                                                     *
-// *******************************************************
-//
-// $Id: SEcal04.cc,v 1.1 2009/06/04 11:40:42 musat Exp $
-// $Name: mokka-07-00 $
-//
-// 
-//
-// SEcal04.cc
-//
-   Shaojun Lu:  Ported from Mokka SEcal04 Barrel part. Read the constants from XML
-                instead of the DB. Then build the Barrel in the same way with DD4hep
-		construct.
- */
-
 #include "DD4hep/DetFactoryHelper.h"
 #include "XML/Layering.h"
 #include "TGeoTrd2.h"
+
+#include "DDRec/Extensions/LayeringExtensionImpl.h"
+#include "DDRec/Extensions/SubdetectorExtensionImpl.h"
+#include "DDRec/Surface.h"
+
 
 using namespace std;
 using namespace DD4hep;
 using namespace DD4hep::Geometry;
 
 #define VERBOSE 1
+
+/** SEcal04.cc
+ *
+ *  @author: Shaojun Lu, DESY
+ *  @version $Id:$
+ *              Ported from Mokka SEcal04 Barrel part. Read the constants from XML
+ *              instead of the DB. Then build the Barrel in the same way with DD4hep
+ * 		construct.
+ * @history: F.Gaede, CERN/DESY, Nov. 10, 2014
+ *              added information for reconstruction: LayeringExtension and surfaces (experimental)
+ *              removed DetElement for slices (not needed) increased muktiplicity for layer DetElement
+ *              along tower index  
+ */
 
 static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens)  {
   static double tolerance = 0e0;
@@ -266,7 +259,28 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     l_pos_z -= y_floor;
 
 
-  //-------------------- start loop over ECAL layers ----------------------
+    // ------------- create extension objects for reconstruction -----------------
+    DDRec::LayeringExtensionImpl* layeringExtension = new DDRec::LayeringExtensionImpl ;
+    DDRec::SubdetectorExtensionImpl* subDetExtension = new DDRec::SubdetectorExtensionImpl( sdet )  ;
+    Position layerNormal(0,0,1); //fg: defines direction of thickness in Box for layer slices
+    
+    subDetExtension->setIsBarrel(true) ;
+    subDetExtension->setNSides( 8 ) ;
+    //    subDetExtension->setPhi0( 0 ) ;
+    subDetExtension->setRMin( Ecal_inner_radius ) ;
+    subDetExtension->setRMax( ( Ecal_inner_radius + module_thickness ) / cos( M_PI/8. ) ) ;
+    subDetExtension->setZMin( 0. ) ;
+    subDetExtension->setZMax( Ecal_Barrel_halfZ ) ;
+    
+
+    // base vectors for surfaces:
+    DDSurfaces::Vector3D u(1,0,0) ;
+    DDSurfaces::Vector3D v(0,1,0) ;
+    DDSurfaces::Vector3D n(0,0,1) ;
+
+    //------------------------------------------------------------------------------------
+
+    //-------------------- start loop over ECAL layers ----------------------
     // Loop over the sets of layer elements in the detector.
     int l_num = 1;
     for(xml_coll_t li(x_det,_U(layer)); li; ++li)  {
@@ -282,14 +296,35 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 	Box        l_box(l_dim_x-tolerance,stave_z-tolerance,l_thickness/2.0-tolerance);
 	Volume     l_vol(det_name+"_"+l_name,l_box,air);
-	DetElement layer(stave_det, l_name, det_id);
 
 	l_vol.setVisAttributes(lcdd.visAttributes(x_layer.visStr()));
+
+	//fg: need vector of DetElements for towers ! 
+	//    DetElement layer(stave_det, l_name, det_id);
+	std::vector< DetElement > layers( Ecal_barrel_number_of_towers )  ;
+	
+	// place layer 5 times in module. at same layer position (towers !)
+	double l_pos_y = Ecal_Barrel_module_dim_z / 2.;
+       	for (int i=0; i<Ecal_barrel_number_of_towers; i++){ // need four clone
+
+	  layers[i] = DetElement( stave_det, l_name+_toString(i,"tower%02d") , det_id ) ;
+
+	  l_pos_y -= stave_z;
+	  Position   l_pos(0,l_pos_y,l_pos_z-l_thickness/2.);      // Position of the layer.
+	  PlacedVolume layer_phv = mod_vol.placeVolume(l_vol,l_pos);
+	  layer_phv.addPhysVolID("layer", l_num);
+	  layer_phv.addPhysVolID("tower", i);
+
+	  layers[i].setPlacement(layer_phv);
+	  l_pos_y -= stave_z;
+	}
+
+
+
 
 	// Loop over the sublayers or slices for this layer.
 	int s_num = 1;
 	double s_pos_z = -(l_thickness / 2);
-
 
 
 	//--------------------------------------------------------------------------------
@@ -312,7 +347,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 	  Box        s_box(slab_dim_x,slab_dim_z,slab_dim_y);
 	  Volume     s_vol(det_name+"_"+l_name+"_"+s_name,s_box,lcdd.material(x_slice.materialStr()));
-          DetElement slice(layer,s_name,det_id);
+	  //fg: not needed          DetElement slice(layer,s_name,det_id);
 
 	  s_vol.setVisAttributes(lcdd.visAttributes(x_slice.visStr()));
 
@@ -324,15 +359,26 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
           if ( x_slice.isSensitive() ) {
 	    s_vol.setSensitiveDetector(sens);
 	  }
-          slice.setAttributes(lcdd,s_vol,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
+	  //fg: not needed   slice.setAttributes(lcdd,s_vol,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
 
           // Slice placement.
           PlacedVolume slice_phv = l_vol.placeVolume(s_vol,Position(0,0,s_pos_z+s_thick/2));
 
           if ( x_slice.isSensitive() ) {
+
 	    slice_phv.addPhysVolID("slice",s_num);
+
+	    // add a measurement surface to the layer for every sensitive slice:
+	    DDRec::VolPlane surf( s_vol , DDSurfaces::SurfaceType(DDSurfaces::SurfaceType::Sensitive) , slab_dim_y , slab_dim_y , u,v,n ) ; //,o ) ;
+
+	    // add them to the layers of all towers
+	    for (int i=0; i<Ecal_barrel_number_of_towers; i++){
+	      DDRec::volSurfaceList(  layers[i] )->push_back(  surf ) ;
+	    }
 	  }
-          slice.setPlacement(slice_phv);
+
+	  //fg: not needed   slice.setPlacement(slice_phv);
+
           // Increment Z position of slice.
           s_pos_z += s_thick;
                                         
@@ -373,17 +419,20 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	barrelStructureLayer_vol.setVisAttributes(lcdd.visAttributes(x_layer.visStr()));	
 
 	
-	// place 5 times in module. at same layer position.
-	double l_pos_y = Ecal_Barrel_module_dim_z / 2.;
-	for (int i=0; i<Ecal_barrel_number_of_towers; i++){ // need four clone
-	  l_pos_y -= stave_z;
-	  Position   l_pos(0,l_pos_y,l_pos_z-l_thickness/2.);      // Position of the layer.
-	  PlacedVolume layer_phv = mod_vol.placeVolume(l_vol,l_pos);
-	  layer_phv.addPhysVolID("layer", l_num);
-	  layer_phv.addPhysVolID("tower", i);
-	  layer.setPlacement(layer_phv);
-	  l_pos_y -= stave_z;
-	}
+	//fg: now done above before slice loop
+	// // place 5 times in module. at same layer position.
+	// double l_pos_y = Ecal_Barrel_module_dim_z / 2.;
+	// for (int i=0; i<Ecal_barrel_number_of_towers; i++){ // need four clone
+	//   l_pos_y -= stave_z;
+	//   Position   l_pos(0,l_pos_y,l_pos_z-l_thickness/2.);      // Position of the layer.
+	//   PlacedVolume layer_phv = mod_vol.placeVolume(l_vol,l_pos);
+	//   layer_phv.addPhysVolID("layer", l_num);
+	//   layer_phv.addPhysVolID("tower", i);
+	//   layer.setPlacement(layer_phv);
+	//   l_pos_y -= stave_z;
+	// }
+
+
         // Increment to next layer Z position.
         l_pos_z -= l_thickness;          
 
