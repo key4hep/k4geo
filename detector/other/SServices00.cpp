@@ -112,6 +112,39 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector sens)  
   //           BuildEcalBarrelServices
   //==================================================
 
+  // start to prepare the Material and geometry as Mokka
+  Material air;
+  double Ecal_outer_radius = lcdd.constant<double>("Ecal_outer_radius");
+  double Ecal_inner_radius = lcdd.constant<double>("Ecal_inner_radius");
+  double module_thickness = Ecal_outer_radius - Ecal_inner_radius;
+ 
+   // module barrel key parameters
+   double bottom_dim_x = 2. * tan(M_PI/8.) * Ecal_inner_radius +
+     module_thickness/sin(M_PI/4.);
+ 
+   double top_dim_x = bottom_dim_x - 2 * module_thickness;
+ 
+   double RailHeight = lcdd.constant<double>("EcalBarrelServices_RailHeight");
+
+   cout<<"\n Ecal_inner_radius: " << Ecal_inner_radius
+       <<"\n Ecal_outer_radius: " << Ecal_outer_radius
+       <<"\n  module_thickness: " << module_thickness 
+       <<"\n      bottom_dim_x: " << bottom_dim_x
+       <<"\n         top_dim_x: " << top_dim_x
+       <<"\n        RailHeight: " << RailHeight
+       <<"\n" <<endl;
+
+
+  // start to build Ecal Barrel services with the class BuildEcalBarrelServices
+  BuildEcalBarrelServices EcalBarrelServices;
+  EcalBarrelServices.setMaterial(air);
+  EcalBarrelServices.sethalfZ(TPC_Ecal_Hcal_barrel_halfZ);
+  EcalBarrelServices.setTopDimX(top_dim_x);
+  EcalBarrelServices.setRailHeight(RailHeight);
+  EcalBarrelServices.setOutRadius(Ecal_outer_radius);
+  EcalBarrelServices.setModuleThickness(module_thickness);
+  EcalBarrelServices.DoBuildEcalBarrelServices(&pv,&envelope_assembly);
+
 
 
 

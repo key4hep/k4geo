@@ -49,3 +49,51 @@ private:
   vector< pair<double,double> > tpcEndplateServicesRing_R_ro;  
 };
 
+
+
+//=====================================
+// class for  BuildEcalBarrelServices
+//=====================================
+class BuildEcalBarrelServices {
+
+public:
+  BuildEcalBarrelServices(){};
+  ~BuildEcalBarrelServices(){};
+
+  void setMaterial (Material air4container) {container_Material = air4container;};
+  void sethalfZ (double TPC_Ecal_Hcal_barrel_halfZ){Ecal_barrel_halfZ = TPC_Ecal_Hcal_barrel_halfZ ;};
+  void setTopDimX (double dim_x){top_dim_x = dim_x ;};
+  void setRailHeight (double height){RailHeight = height ;};
+  void setOutRadius (double outer_radius){Ecal_outer_radius = outer_radius ;};
+  void setModuleThickness (double thickness){ module_thickness = thickness ;};
+
+  // to build Ecal Barrel service into the service assembly 
+  bool DoBuildEcalBarrelServices(PlacedVolume *pVol,Assembly *envelope){
+
+    Box ContainerSolid(top_dim_x/2., RailHeight/2., Ecal_barrel_halfZ); 
+    Volume containerLogical("EcalBarrelServicesContainerLogical",ContainerSolid,container_Material);
+
+    for (int stave_id = 1; stave_id < 9 ; stave_id++)
+      {
+	double phirot = (stave_id-1) * M_PI/4.;
+	RotationZYX rot(-phirot,0,0);
+	//Position  stavePosition(module_thickness * sin(M_PI/4.), Ecal_outer_radius + RailHeight/2., 0);
+	Position  stavePosition((Ecal_outer_radius + RailHeight/2.)*sin(phirot) + module_thickness * sin(M_PI/4.)*cos(-phirot), 
+				(Ecal_outer_radius + RailHeight/2.)*cos(phirot)+module_thickness * sin(M_PI/4.)*sin(-phirot), 
+				0 );
+	Transform3D tran3D(rot,stavePosition);
+	*pVol = envelope->placeVolume(containerLogical,tran3D);
+      }
+    
+    
+    return true;
+  };
+
+private:
+  Material container_Material;
+  double Ecal_barrel_halfZ;
+  double top_dim_x;
+  double RailHeight;
+  double Ecal_outer_radius;
+  double module_thickness;
+};
