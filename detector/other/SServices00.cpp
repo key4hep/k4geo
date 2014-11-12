@@ -38,51 +38,6 @@ using namespace DD4hep;
 using namespace dd4hep;
 using namespace DD4hep::Geometry;
 
-/*
-bool BuildTPCEndplateServices(PlacedVolume *pVol,Assembly *envelope)
-{
-  //Todo: change the hard code numbers, and read them from parameters XML file.
-  Material copper;
-  double TPC_Ecal_Hcal_barrel_halfZ=235.0;
-  double tpcEndplateServicesRing_R[8] = {45.0, 65.0, 85.0, 105.0, 125.0, 145.0, 165.0, 175.0};
-  double tpcEndplateServicesRing_ro[8] = {0.1555, 0.1555, 0.1555, 0.1555, 0.1555, 0.1555, 0.2985, 0.2453};
-  for(int i=0;i<8;i++){
-    Torus solidTube(tpcEndplateServicesRing_R[i], 0, tpcEndplateServicesRing_ro[i], 0, 2*M_PI);
-    double z_position = TPC_Ecal_Hcal_barrel_halfZ + tpcEndplateServicesRing_ro[i];
-    Volume EnvTube("service_tube",solidTube,copper);
-    Position pos1(0,0,z_position);
-    *pVol = envelope->placeVolume(EnvTube,pos1);
-    Position pos2(0,0,-z_position);
-    *pVol = envelope->placeVolume(EnvTube,pos2);
-  } 
-
-  return true;
-}
-
-bool BuildEcalBarrelServices(PlacedVolume *pVol,Assembly *envelope)
-{
-
-  return true;
-}
-
-bool BuildEcalBarrel_EndCapServices(PlacedVolume *pVol,Assembly *envelope)
-{
-
-  return true;
-}
-
-bool BuildHcalBarrel_EndCapServices(PlacedVolume *pVol,Assembly *envelope)
-{
-
-  return true;
-}
-
-bool BuildSitCables(PlacedVolume *pVol,Assembly *envelope)
-{
-
-  return true;
-}
-*/
 
 static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector sens)  {
 
@@ -105,7 +60,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector sens)  
   cout << "\nBuilding SServices00"<< endl;
 
   //==================================================
-  //BuildTPCEndplateServices(&pv,&envelope_assembly);
+  //           BuildTPCEndplateServices
   //==================================================
   
   // start to prepare the Material and geometry as Mokka
@@ -149,9 +104,16 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector sens)  
   
   TPCEndplateServices.DoBuildTPCEndplateServices(&pv,&envelope_assembly);
  
-  //BuildTPCEndplateServices(&pv,&envelope_assembly);
 
-  //BuildEcalBarrelServices(&pv,&envelope_assembly);
+
+
+ 
+  //==================================================
+  //           BuildEcalBarrelServices
+  //==================================================
+
+
+
 
   //BuildEcalBarrel_EndCapServices(&pv,&envelope_assembly);
 
