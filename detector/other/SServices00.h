@@ -77,7 +77,7 @@ public:
   void setRailWidth (double width) {RailWidth = width;};
 
   void setZMinus_FirstInterrail_PE_Thickness  (double PE_Thickness_ZMF) {ZMinus_FirstInterrail_PE_Thickness = PE_Thickness_ZMF;};
-  void seZMinus_FirstInterrail_Cu_Thicknesst  (double Cu_Thickness_ZMF) {ZMinus_FirstInterrail_Cu_Thickness = Cu_Thickness_ZMF;};
+  void setZMinus_FirstInterrail_Cu_Thicknesst  (double Cu_Thickness_ZMF) {ZMinus_FirstInterrail_Cu_Thickness = Cu_Thickness_ZMF;};
   void setZMinus_SecondInterrail_Cu_Thickness (double Cu_Thickness_ZMS) {ZMinus_SecondInterrail_Cu_Thickness = Cu_Thickness_ZMS;};
 
   void setZPlus_FirstInterrail_PE_Thickness  (double PE_Thickness_ZPF) {ZPlus_FirstInterrail_PE_Thickness = PE_Thickness_ZPF;};
@@ -293,5 +293,148 @@ private:
   Material aluminium;
   Material polyethylene;
   Material copper;
+
+};
+
+
+
+
+
+
+//=====================================
+// class for BuildEcalBarrel_EndCapServices
+//=====================================
+class BuildEcalBarrel_EndCapServices {
+
+public:
+  BuildEcalBarrel_EndCapServices(){};
+  ~BuildEcalBarrel_EndCapServices(){};
+
+  void setMaterialAir (Material air4container) {air = air4container;};
+  void setMaterialPolyethylene (Material PE) {polyethylene = PE;};
+  void setMaterialCopper (Material Cu) {copper = Cu;};
+
+  void sethalfZ (double TPC_Ecal_Hcal_barrel_halfZ){Ecal_barrel_halfZ = TPC_Ecal_Hcal_barrel_halfZ ;};
+  void setTopDimX (double dim_x){top_dim_x = dim_x ;};
+  void setModuleThickness (double thickness){ module_thickness = thickness ;};
+  void setInnerServicesWidth (double width){InnerServicesWidth = width;};
+  void setEcal_cables_gap(double gap){Ecal_cables_gap = gap;};
+  void setOutRadius (double outer_radius){Ecal_outer_radius = outer_radius ;};
+
+  void setZMinus_PE_Thickness (double PE_Thickness_ZM) {ZMinus_PE_Thickness = PE_Thickness_ZM;};
+  void setZMinus_Cu_Thickness (double Cu_Thickness_ZM) {ZMinus_Cu_Thickness = Cu_Thickness_ZM;};
+
+  void setZPlus_PE_Thickness (double PE_Thickness_ZP) {ZPlus_PE_Thickness = PE_Thickness_ZP;};
+  void setZPlus_Cu_Thickness (double Cu_Thickness_ZP) {ZPlus_Cu_Thickness = Cu_Thickness_ZP;};
+
+
+  // to build Ecal Barrel service into the service assembly 
+  bool DoBuildEcalBarrel_EndCapServices(PlacedVolume *pVol,Assembly *envelope){
+
+    double containerThickness = ZMinus_PE_Thickness + ZMinus_Cu_Thickness;
+    double z_position = -Ecal_barrel_halfZ -containerThickness/2.;
+    double container_x_dim = top_dim_x/2. + module_thickness*sin(pi/4.) - InnerServicesWidth/2.;
+    double Cu_Thickness = ZMinus_Cu_Thickness;
+    double PE_Thickness = ZMinus_PE_Thickness;
+
+    for(int i=0; i<=1; i++){
+
+      if(Ecal_cables_gap < containerThickness) return false;
+	//Control::Abort(
+	//	       "EcalBarrel_EndCap services: Cu+PE thicknesses exceed Ecal_cables_gap",
+	//	       MOKKA_ERROR_BAD_DATABASE_PARAMETERS);
+
+      Box ContainerSolid(container_x_dim/2., module_thickness/2., containerThickness/2.); 
+
+      string containerLogical_name  = "containerLogical"+_toString(i,"_%d");
+      Volume containerLogical(containerLogical_name,ContainerSolid,air);
+
+
+      Box PESolid(container_x_dim/2., module_thickness/2., PE_Thickness/2.);
+ 
+      string PELogical_name  = "PELogical"+_toString(i,"_%d");
+      Volume PELogical(PELogical_name,PESolid,polyethylene);
+
+      Position  PosPE(0,0,containerThickness/2. - PE_Thickness/2.);
+      
+      *pVol = containerLogical.placeVolume(PELogical,PosPE);
+      
+      Box Cu_Solid(container_x_dim/2., module_thickness/2., Cu_Thickness/2.); 
+      
+      string Cu_Logical_name  = "Cu_Logical"+_toString(i,"_%d");
+      Volume Cu_Logical(Cu_Logical_name,Cu_Solid,copper);
+      
+      Position  PosCu(0,0,-containerThickness/2. + Cu_Thickness/2.);
+      
+      *pVol = containerLogical.placeVolume(Cu_Logical,PosCu);
+
+      
+      for (int stave_id = 1; stave_id < 9 ; stave_id++){
+	
+	double phirot = (stave_id-1) * M_PI/4;
+	
+	RotationZYX rot;
+	Position stavePosition;
+	
+        if(z_position > 0) {
+	  RotationZYX rot_P(-phirot,0,0);
+	  rot = rot_P;
+	  Position stavePosition_P((Ecal_outer_radius - module_thickness/2.)*sin(phirot)+(InnerServicesWidth/2. + container_x_dim/2.)*cos(-phirot),
+				   (Ecal_outer_radius - module_thickness/2.)*cos(phirot)+(InnerServicesWidth/2. + container_x_dim/2.)*sin(-phirot), 
+				   z_position);
+
+	  stavePosition = stavePosition_P;
+	}
+	else
+	  {
+	    RotationZYX rot_M(phirot,M_PI,0);
+	    rot = rot_M;
+	    Position stavePosition_M((Ecal_outer_radius - module_thickness/2.)*sin(phirot)+(-InnerServicesWidth/2. - container_x_dim/2.)*cos(-phirot),
+				     (Ecal_outer_radius - module_thickness/2.)*cos(phirot)+(-InnerServicesWidth/2. - container_x_dim/2.)*sin(-phirot),
+				     z_position);
+	    
+	    stavePosition = stavePosition_M;
+	  }
+	
+	Transform3D tran3D(rot,stavePosition);
+	*pVol = envelope->placeVolume(containerLogical,tran3D);
+	
+      }
+      
+      containerThickness = ZPlus_PE_Thickness + ZPlus_Cu_Thickness;
+      z_position = Ecal_barrel_halfZ + containerThickness/2.;
+      
+      Cu_Thickness = ZPlus_Cu_Thickness;
+      PE_Thickness = ZPlus_PE_Thickness;
+      
+    }
+
+
+    return true;
+  };
+
+
+private:
+  double Ecal_barrel_halfZ;
+  double top_dim_x;
+  double module_thickness;
+  double InnerServicesWidth;
+  double Ecal_cables_gap;
+  double Ecal_outer_radius;
+
+//-Z thicknesses
+  double ZMinus_PE_Thickness;
+  double ZMinus_Cu_Thickness;
+
+//+Z thicknesses 
+  double ZPlus_PE_Thickness;
+  double ZPlus_Cu_Thickness;
+
+  double OldRailSeparation;
+
+  Material air;
+  Material polyethylene;
+  Material copper;
+
 
 };

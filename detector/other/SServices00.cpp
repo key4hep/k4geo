@@ -170,7 +170,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector sens)  
   EcalBarrelServices.setRailWidth(RailWidth);
 
   EcalBarrelServices.setZMinus_FirstInterrail_PE_Thickness(ZMinus_FirstInterrail_PE_Thickness);
-  EcalBarrelServices.seZMinus_FirstInterrail_Cu_Thicknesst(ZMinus_FirstInterrail_Cu_Thickness);
+  EcalBarrelServices.setZMinus_FirstInterrail_Cu_Thicknesst(ZMinus_FirstInterrail_Cu_Thickness);
   EcalBarrelServices.setZMinus_SecondInterrail_Cu_Thickness(ZMinus_SecondInterrail_Cu_Thickness);
 
   EcalBarrelServices.setZPlus_FirstInterrail_PE_Thickness(ZPlus_FirstInterrail_PE_Thickness);
@@ -183,7 +183,39 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector sens)  
 
 
 
-  //BuildEcalBarrel_EndCapServices(&pv,&envelope_assembly);
+  //==================================================
+  //          BuildEcalBarrel_EndCapServices
+  //==================================================
+
+  // start to prepare the Material and geometry as Mokka
+  double ZMinus_PE_Thickness = lcdd.constant<double>("EcalBarrel_EndCapServices_ZMinus_PE_Thickness");
+  double ZMinus_Cu_Thickness = lcdd.constant<double>("EcalBarrel_EndCapServices_ZMinus_Cu_Thickness");
+  double ZPlus_PE_Thickness = lcdd.constant<double>("EcalBarrel_EndCapServices_ZPlus_PE_Thickness");
+  double ZPlus_Cu_Thickness = lcdd.constant<double>("EcalBarrel_EndCapServices_ZPlus_Cu_Thickness");
+  double Ecal_cables_gap = lcdd.constant<double>("Ecal_cables_gap");
+  double InnerServicesWidth = lcdd.constant<double>("HcalServicesModule_InnerServicesWidth");
+
+  BuildEcalBarrel_EndCapServices EcalBarrel_EndCapServices;
+  EcalBarrel_EndCapServices.setMaterialAir(lcdd.air());
+  EcalBarrel_EndCapServices.setMaterialPolyethylene(lcdd.material("G4_POLYSTYRENE"));
+  EcalBarrel_EndCapServices.setMaterialCopper(lcdd.material("Cu"));
+  EcalBarrel_EndCapServices.sethalfZ(TPC_Ecal_Hcal_barrel_halfZ);
+  EcalBarrel_EndCapServices.setTopDimX(top_dim_x);
+  EcalBarrel_EndCapServices.setOutRadius(Ecal_outer_radius);
+  EcalBarrel_EndCapServices.setModuleThickness(module_thickness);
+  EcalBarrel_EndCapServices.setInnerServicesWidth(InnerServicesWidth);
+  EcalBarrel_EndCapServices.setEcal_cables_gap(Ecal_cables_gap);
+  EcalBarrel_EndCapServices.setZMinus_PE_Thickness(ZMinus_PE_Thickness);
+  EcalBarrel_EndCapServices.setZMinus_Cu_Thickness(ZMinus_Cu_Thickness);
+  EcalBarrel_EndCapServices.setZPlus_PE_Thickness(ZPlus_PE_Thickness);
+  EcalBarrel_EndCapServices.setZPlus_Cu_Thickness(ZPlus_Cu_Thickness);
+
+  EcalBarrel_EndCapServices.DoBuildEcalBarrel_EndCapServices(&pv,&envelope_assembly);
+
+
+
+
+
 
   //BuildHcalBarrel_EndCapServices(&pv,&envelope_assembly);
 
