@@ -311,7 +311,7 @@ static Ref_t create_ecal_barrel(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	  
 	  // The rotation in Mokka is right hand rule, and the rotation in DD4hep is clockwise
 	  // So there is a negative sign when port Mokka into DD4hep 
-	  Transform3D tr(RotationZYX(0, phirot, M_PI*/2.),Translation3D(X*cos(phirot)-Y*sin(phirot),
+	  Transform3D tr(RotationZYX(0, phirot, M_PI/2.),Translation3D(X*cos(phirot)-Y*sin(phirot),
 								      X*sin(phirot)+Y*cos(phirot),
 								      module_z_offset));
 	  PlacedVolume pv = envelope_assembly.placeVolume(mod_vol,tr);
