@@ -1,0 +1,12 @@
+###################################################################################################
+#
+#  DDSim
+#
+#  CLIC detector model(s) based on DD4hep & Geant4
+#
+#  F.Gaede, DESY, 2014
+#  D.Protopopescu, Glasgow, 2014
+#
+###################################################################################################
+
+This directory holds the XML (and other) CLIC-specific configurations. 
