@@ -66,6 +66,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector sens)  
   // start to prepare the Material and geometry as Mokka
   double TPC_Ecal_Hcal_barrel_halfZ =lcdd.constant<double>("TPC_Ecal_Hcal_barrel_halfZ");
 
+  XMLHandlerDB db = XMLHandlerDB(  x_det.child( _Unicode( TPC_Cooling ) ) ) ;
+
   const int MAX_TPC_RINGS =  db->fetchInt("number_of_rings");;
   double tpcEndplateServices_R[MAX_TPC_RINGS];
   double tpcEndplateServices_r[MAX_TPC_RINGS];
