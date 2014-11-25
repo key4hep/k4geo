@@ -66,34 +66,22 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector sens)  
   // start to prepare the Material and geometry as Mokka
   double TPC_Ecal_Hcal_barrel_halfZ =lcdd.constant<double>("TPC_Ecal_Hcal_barrel_halfZ");
 
-  const int MAX_TPC_RINGS = 8;
+  const int MAX_TPC_RINGS =  db->fetchInt("number_of_rings");;
   double tpcEndplateServices_R[MAX_TPC_RINGS];
   double tpcEndplateServices_r[MAX_TPC_RINGS];
 
-  tpcEndplateServices_R[0] = lcdd.constant<double>("tpcEndplateServicesRing1_R");
-  tpcEndplateServices_r[0] = lcdd.constant<double>("tpcEndplateServicesRing1_ro");
+  for(xml_coll_t c( x_det ,_U(ring)); c; ++c)  {
+    
+    xml_comp_t  x_ring( c );
+    db = XMLHandlerDB( x_ring )  ;
+    
+    int ring_id = db->fetchInt("ring_id");
+    cout <<" ring_id : " << ring_id <<endl;
 
-  tpcEndplateServices_R[1] = lcdd.constant<double>("tpcEndplateServicesRing2_R");
-  tpcEndplateServices_r[1] = lcdd.constant<double>("tpcEndplateServicesRing2_ro");
+    tpcEndplateServices_R[ring_id] = db->fetchDouble("tpcEndplateServicesRing_R");
+    tpcEndplateServices_r[ring_id] = db->fetchDouble("tpcEndplateServicesRing_ro");
 
-  tpcEndplateServices_R[2] = lcdd.constant<double>("tpcEndplateServicesRing3_R");
-  tpcEndplateServices_r[2] = lcdd.constant<double>("tpcEndplateServicesRing3_ro");
-
-  tpcEndplateServices_R[3] = lcdd.constant<double>("tpcEndplateServicesRing4_R");
-  tpcEndplateServices_r[3] = lcdd.constant<double>("tpcEndplateServicesRing4_ro");
-
-  tpcEndplateServices_R[4] = lcdd.constant<double>("tpcEndplateServicesRing5_R");
-  tpcEndplateServices_r[4] = lcdd.constant<double>("tpcEndplateServicesRing5_ro");
-
-  tpcEndplateServices_R[5] = lcdd.constant<double>("tpcEndplateServicesRing6_R");
-  tpcEndplateServices_r[5] = lcdd.constant<double>("tpcEndplateServicesRing6_ro");
-
-  tpcEndplateServices_R[6] = lcdd.constant<double>("tpcEndplateServicesRing7_R");
-  tpcEndplateServices_r[6] = lcdd.constant<double>("tpcEndplateServicesRing7_ro");
-
-  tpcEndplateServices_R[7] = lcdd.constant<double>("tpcEndplateServicesRing8_R");
-  tpcEndplateServices_r[7] = lcdd.constant<double>("tpcEndplateServicesRing8_ro");
- 
+  }
  
   // start to build TPC cooling rings with the class BuildTPCEndplateServices
   BuildTPCEndplateServices TPCEndplateServices;
