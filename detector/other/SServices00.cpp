@@ -39,7 +39,7 @@ using namespace dd4hep;
 using namespace DD4hep::Geometry;
 
 
-static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector sens)  {
+static Ref_t create_element(LCDD& lcdd, xml_h element, Ref_t)  {
 
   static double tolerance = 0e0;
 
