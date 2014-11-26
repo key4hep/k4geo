@@ -51,8 +51,15 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   DetElement    sdet      (det_name,det_id);
   Volume        motherVol = lcdd.pickMotherVolume(sdet);
 
-  Assembly envelope_assembly( det_name + "assembly"  ) ;  
-  PlacedVolume  env_phv   = motherVol.placeVolume(envelope_assembly);
+  xml_comp_t    x_dim     = x_det.dimensions();
+  int           nsides    = x_dim.numsides();
+  double        inner_r   = x_dim.rmin();
+  double        dphi      = (2*M_PI/nsides);
+  double        hphi      = dphi/2;
+  double        outer_r   = x_dim.rmax();
+  PolyhedraRegular hedra  (nsides,inner_r,outer_r+tolerance*2e0,x_dim.z()*2.0);
+  Volume        envelope  (det_name+"_envelope",hedra,air);
+  PlacedVolume  env_phv   = motherVol.placeVolume(envelope,RotationZYX(0,0,M_PI/nsides));
 
   env_phv.addPhysVolID("system",det_id);
   sdet.setPlacement(env_phv);
@@ -464,16 +471,16 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     
     
 //====================================================================
-// Place ECAL Barrel stave module into the assembly envelope
+// Place ECAL Barrel stave module into the envelope volume
 //====================================================================
     double X,Y;
     X = module_thickness * sin(M_PI/4.);
     Y = Ecal_inner_radius + module_thickness / 2.;
     
-    for (int stave_id = 1; stave_id < 9 ; stave_id++)
+    for (int stave_id = 1; stave_id <= nsides ; stave_id++)
       for (int module_id = 1; module_id < 6; module_id++)
 	{
-	  double phirot =  (stave_id-1) * M_PI/4.;
+	  double phirot =  (stave_id-1) * dphi - hphi;
 	  double module_z_offset =  (2 * module_id-6) * Ecal_Barrel_module_dim_z/2.;
 	  
 	  // And the rotation in Mokka is right hand rule, and the rotation in DD4hep is clockwise rule
@@ -481,7 +488,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  Transform3D tr(RotationZYX(0,phirot,M_PI*0.5),Translation3D(X*cos(phirot)-Y*sin(phirot),
 								      X*sin(phirot)+Y*cos(phirot),
 								      module_z_offset));
-	  PlacedVolume pv = envelope_assembly.placeVolume(mod_vol,tr);
+	  PlacedVolume pv = envelope.placeVolume(mod_vol,tr);
 	  pv.addPhysVolID("system",det_id);
 	  pv.addPhysVolID("module",module_id);
 	  pv.addPhysVolID("stave",stave_id);
@@ -491,8 +498,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  
 	}
     
-    // Set envelope_assembly volume attributes.
-    envelope_assembly.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+    // Set envelope volume attributes.
+    envelope.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
     return sdet;
 }
 

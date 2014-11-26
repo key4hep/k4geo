@@ -1,7 +1,7 @@
 <detector name="EcalBarrel" type="SEcal04_Barrel" id="ILDDetID_ECAL" readout="EcalBarrelCollection" vis="BlueVis" >
 
     <comment>EM Calorimeter Barrel</comment>
-    <dimensions numsides="8" rmin="Ecal_inner_radius" z="TPC_Ecal_Hcal_barrel_halfZ" />
+    <dimensions numsides="8" rmin="Ecal_inner_radius" rmax="Ecal_outer_radius" z="TPC_Ecal_Hcal_barrel_halfZ" />
     <staves  material = "TungstenDens24"  vis="BlueVis"/>
 
     <layer repeat="Ecal_nlayers1/2" vis="SeeThrough" > <!-- 10 double SD Layers, and 5 W palte after each double SD Layer -->
