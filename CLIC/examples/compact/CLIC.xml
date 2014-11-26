@@ -7,7 +7,7 @@
         author="Marko Petric for the CLICdp Collaboration"
         url=""
         status="example"
-        version="example 1.0">
+        version="example1">
         <comment>The compact format for the CLIC Detector</comment>
     </info>
     
@@ -207,25 +207,25 @@
     </display>
     
     <comment>Additional design specific material definitions</comment>
-    <include ref="CLIC/Materials.xml"/>
+    <include ref="CLIC_example1/Materials.xml"/>
     
     <comment>Tracking detectors</comment>
-    <include ref="CLIC/VXD.xml"/>
-    <include ref="CLIC/SIT.xml"/>
+    <include ref="CLIC_example1/VXD.xml"/>
+    <include ref="CLIC_example1/SIT.xml"/>
     
     <comment>Calorimeters</comment>
-    <include ref="CLIC/ECAL.xml"/>
-    <include ref="CLIC/HCAL.xml"/>
-    <include ref="CLIC/MUON.xml"/>
-    <include ref="CLIC/LCAL.xml"/>
-    <include ref="CLIC/BCAL.xml"/>
+    <include ref="CLIC_example1/ECAL.xml"/>
+    <include ref="CLIC_example1/HCAL.xml"/>
+    <include ref="CLIC_example1/MUON.xml"/>
+    <include ref="CLIC_example1/LCAL.xml"/>
+    <include ref="CLIC_example1/BCAL.xml"/>
     
     <comment>Beampipe</comment>
-    <include ref="CLIC/Beampipe.xml"/>
+    <include ref="CLIC_example1/Beampipe.xml"/>
     
     <comment>Dead material, supports and magnet</comment>
-    <include ref="CLIC/Shields.xml"/>
-    <include ref="CLIC/SOLN.xml"/>
+    <include ref="CLIC_example1/Shields.xml"/>
+    <include ref="CLIC_example1/SOLN.xml"/>
     
     <fields>
         <field name="GlobalSolenoid" type="solenoid"
