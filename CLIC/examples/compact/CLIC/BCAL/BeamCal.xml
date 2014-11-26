@@ -1,0 +1,17 @@
+<detectors>
+    <detector id="14" name="BeamCal" reflect="true" type="DD4hep_ForwardDetector" readout="BeamCalHits" vis="BeamCalVis" calorimeterType="BEAM">
+        
+        <comment>Beam Calorimeter</comment>
+        
+        <dimensions outer_r="BeamCal_rmax" inner_r="0.0*cm" inner_z="BeamCal_zmin" />
+        <beampipe crossing_angle="BeamCal_crossingAngle" outgoing_r="BeamCal_outgoing_r" incoming_r="BeamCal_incoming_r" />
+        <layer repeat="50">
+            <slice material="TungstenDens24" thickness="0.271*cm" />
+            <slice material="Silicon" thickness="0.032*cm" sensitive="yes" />
+            <slice material="Copper" thickness="0.005*cm" />
+            <slice material="Kapton" thickness="0.030*cm" />
+            <slice material="Air" thickness="0.033*cm" />
+        </layer>
+    </detector>
+    
+</detectors>

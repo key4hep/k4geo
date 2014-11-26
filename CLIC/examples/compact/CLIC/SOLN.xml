@@ -1,0 +1,32 @@
+<!-- ====================================================================== -->
+<!--                                                                        -->
+<!--    XML description of the complete SiD tracker detector                -->
+<!--    of the SiD linear collider detector design.                         -->
+<!--                                                                        -->
+<!--    Contained are the required                                          -->
+<!--      ++ global constants used uniquely by this module                  -->
+<!--      ++ visualization attributes                                       -->
+<!--      ++ the definition of the readout structure and the                -->
+<!--         readout segmentation (if necessary)                            -->
+<!--      ++ the include statements for the sensitive detectors and         -->
+<!--         the corresponding support structure(s)                         -->
+<!--                                                                        -->
+<!--                                                                        -->
+<!--   @author  M.Frank                                                     -->
+<!--   @date    14/11/2014                                                  -->
+<!--                                                                        -->
+<!-- ====================================================================== -->
+
+<lccdd>
+    
+    <!--  Definition of the used visualization attributes    -->
+    <display>
+        <vis name="SolenoidBarrelLayerVis" alpha="1" r="0"    g="0.3"  b="0.3" showDaughters="false" visible="true"/>
+        <vis name="SolenoidCoilEndsVis"    alpha="1" r="0"    g="0.9"  b="0.9" showDaughters="false" visible="true"/>
+        <vis name="AntiSolenoidVis"        alpha="1" r="0.3"  g="1"    b="1"   showDaughters="false" visible="true"/>
+    </display>
+    
+    <include ref="SOLN/Solenoid.xml"/>
+    
+    
+</lccdd>
