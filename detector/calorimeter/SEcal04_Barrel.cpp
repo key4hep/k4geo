@@ -32,7 +32,7 @@ using namespace DD4hep::Geometry;
  * 		construct.
  * @history: F.Gaede, CERN/DESY, Nov. 10, 2014
  *              added information for reconstruction: LayeringExtension and surfaces (experimental)
- *              removed DetElement for slices (not needed) increased muktiplicity for layer DetElement
+ *              removed DetElement for slices (not needed) increased multiplicity for layer DetElement
  *              along tower index  
  */
 
@@ -500,6 +500,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     
     // Set envelope volume attributes.
     envelope.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+    
+    sdet.addExtension< DDRec::LayeringExtension >( layeringExtension ) ;
+    sdet.addExtension< DDRec::SubdetectorExtension >( subDetExtension ) ;
+
+
     return sdet;
 }
 
