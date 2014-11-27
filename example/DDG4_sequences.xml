@@ -163,25 +163,30 @@
     <sequence sd="VTX" type="Geant4SensDetActionSequence">
       <filter name="GeantinoRejector"/>
       <filter name="EnergyDepositMinimumCut/SiTracker"/>
-      <action name="Geant4TrackerAction/VTX"/>
+      <action name="Geant4TrackerCombineAction/VTX"/>
+      <!-- <action name="Geant4TrackerAction/VTX"/> -->
     </sequence>
+
 
     <sequence sd="FTD" type="Geant4SensDetActionSequence">
       <filter name="GeantinoRejector"/>
       <filter name="EnergyDepositMinimumCut/SiTracker"/>
-      <action name="Geant4TrackerAction/FTD"/>
+      <action name="Geant4TrackerCombineAction/FTD"/>
+      <!-- <action name="Geant4TrackerAction/FTD"/> -->
     </sequence>
     
     <sequence sd="SIT" type="Geant4SensDetActionSequence">
       <filter name="GeantinoRejector"/>
       <filter name="EnergyDepositMinimumCut/SiTracker"/>
-      <action name="Geant4TrackerAction/SIT"/>
+      <action name="Geant4TrackerCombineAction/SIT"/>
+      <!-- <action name="Geant4TrackerAction/SIT"/> -->
     </sequence>
     
     <sequence sd="TPC" type="Geant4SensDetActionSequence">
       <filter name="GeantinoRejector"/>
       <filter name="EnergyDepositMinimumCut/TPC"/>
-      <action name="Geant4TrackerAction/TPC">
+      <action name="Geant4TrackerCombineAction/TPC">
+      <!-- <action name="Geant4TrackerAction/TPC"> -->
 	<properties HitCreationMode="2" /> <!--DETAILED_MODE --> 
       </action>
       
@@ -190,7 +195,8 @@
     <sequence sd="SET" type="Geant4SensDetActionSequence">
       <filter name="GeantinoRejector"/>
       <filter name="EnergyDepositMinimumCut/SiTracker" />
-      <action name="Geant4TrackerAction/SET"/>
+      <action name="Geant4TrackerCombineAction/SET"/>
+      <!-- <action name="Geant4TrackerAction/SET"/> -->
     </sequence>
     
 

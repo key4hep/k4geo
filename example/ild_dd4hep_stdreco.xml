@@ -25,8 +25,9 @@
      <!-- <processor name="BgOverlay" /> -->
 
      <processor name="MyFixCellIDs" type="FixCellIDs"/>
+     <processor name="MySplitCollectionByLayer" />
 
-    <!-- ========== track digitization and tracking  === -->
+     <!-- ========== track digitization and tracking  === -->
      <processor name="VXDPlanarDigiProcessor"/>
 
      <processor name="SITPlanarDigiProcessor"/>
@@ -50,23 +51,23 @@
      <processor name="MyTrackSubsetProcessor" /><!-- combine Silicon and Forward Tracking -->
      <processor name="MyFullLDCTracking_MarlinTrk"/>
 
-     <!-- <\!-- ========== the track cheater   ================= -\-> -->
-     <!-- <\!-- XXXprocessor name="MyTruthTracker"/ -\->     -->
+     <!-- ========== the track cheater   ================= -->
+     <!-- XXXprocessor name="MyTruthTracker"/ -->
 
-     <!-- <\!-- ========== the post tracking patrec   ================= -\-> -->
+     <!-- ========== the post tracking patrec   ================= -->
 
-     <!-- <processor name="MyV0Finder"/>                 -->
-     <!-- <processor name="MyKinkFinder"/>          -->
+     <processor name="MyV0Finder"/>
+     <processor name="MyKinkFinder"/>
      
-     <!-- <\!-- ========== calorimeter digitization and PFA ======= -\-> -->
-     <!-- <processor name="MyNewLDCCaloDigi"/>     -->
-     <!-- <processor name="MySimpleBCalDigi"/>     -->
-     <!-- <processor name="MySimpleLCalDigi"/>     -->
-     <!-- <processor name="MySimpleLHCalDigi"/>    -->
-     <!-- <processor name="MySimpleMuonDigi"/>     -->
+     <!-- ========== calorimeter digitization and PFA ======= -->
+     <processor name="MyNewLDCCaloDigi"/>
+     <processor name="MySimpleBCalDigi"/>
+     <processor name="MySimpleLCalDigi"/>
+     <processor name="MySimpleLHCalDigi"/>
+     <processor name="MySimpleMuonDigi"/>
      
-     <!-- <processor name="MyMarlinPandora"/> -->
-     <!-- <processor name="MyBCalReco"/> -->
+     <processor name="MyMarlinPandora"/>
+      <processor name="MyBCalReco"/>
 
      <!-- ========== particle ID ============================ -->
      <!--processor name="MyPFOID" /-->
@@ -74,11 +75,11 @@
      <!-- ========== full and DST output ==================== -->
      <processor name="MyRecoMCTruthLinker"/>
      
-     <!-- <\!-- ========== vertex finder ========================== -\-> -->
+     <!-- ========== vertex finder ========================== -->
      <!-- <processor name="VertexFinder"/> -->
      
      <processor name="MyLCIOOutputProcessor"/>
-     <!-- <processor name="DSTOutput"/> -->
+     <processor name="DSTOutput"/>
    </execute>
 
    <global>
@@ -89,7 +90,7 @@
       <parameter name="MaxRecordNumber" value="0"/>
       <parameter name="SkipNEvents" value="0"/>
       <parameter name="SupressCheck" value="false"/>
-      <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> DEBUG2 MESSAGE </parameter>
+      <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> DEBUG5 MESSAGE </parameter>
       <parameter name="RandomSeed" value="1234567890" />
    </global>
 
@@ -116,6 +117,16 @@
     <parameter name="VXDCollectionName" type="string" lcioInType="TrackerHit">VXDCollection </parameter>
     <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
     <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+  </processor>
+
+  <processor name="MySplitCollectionByLayer" type="SplitCollectionByLayer">
+    <!--split a hit collection based on the layer number of the hits -->
+    <!--Name of the input collection with hits-->
+    <parameter name="InputCollection" type="string">FTDCollection </parameter>
+    <!--Name of the output collection with start and end layer number-->
+    <parameter name="OutputCollections" type="StringVec">FTD_PIXELCollection 0 1 FTD_STRIPCollection 2 6  </parameter>
+    <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+    <!-- <parameter name="Verbosity" type="string">DEBUG </parameter> -->
   </processor>
 
  <processor name="DSTOutput" type="LCIOOutputProcessor">
@@ -270,7 +281,7 @@
    <!--resolution in direction of v-->
    <parameter name="ResolutionV" type="float">0.003 </parameter>
    <!--Name of the Input SimTrackerHit collection-->
-   <parameter name="SimTrackHitCollectionName" type="string" lcioInType="SimTrackerHit">FTDCollection FTD_PIXELCollection </parameter>
+   <parameter name="SimTrackHitCollectionName" type="string" lcioInType="SimTrackerHit"> FTD_PIXELCollection </parameter>
    <!--Name of TrackerHit SimTrackHit relation collection-->
    <parameter name="SimTrkHitRelCollection" type="string" lcioOutType="LCRelation">FTDPixelTrackerHitRelations </parameter>
    <!--Name of the TrackerHit output collection-->
@@ -828,19 +839,37 @@
 
 
  <processor name="MyNewLDCCaloDigi" type="NewLDCCaloDigi">
+
+  <!--name of the part of the cellID that holds the layer-->
+  <parameter name="CellIDLayerString" type="string"> layer </parameter>
+  <!--name of the part of the cellID that holds the module-->
+  <parameter name="CellIDModuleString" type="string"> module </parameter>
+  <!--name of the part of the cellID that holds the stave-->
+  <parameter name="CellIDStaveString" type="string"> stave </parameter>
+
  <!--LDC digitizer...-->
   <!--Calibration coefficients for ECAL-->
   <parameter name="CalibrECAL" type="FloatVec">42.91 85.82  </parameter> <!-- was 40.91 81.81 -->
   <!--Calibration coefficients for HCAL-->
   <parameter name="CalibrHCAL" type="FloatVec">54.7  </parameter> <!-- was 34.8 -->
   <!--ECAL Collection Names-->
-  <parameter name="ECALCollections" type="StringVec">EcalBarrelSiliconCollection EcalEndcapSiliconCollection  EcalEndcapRingCollection </parameter>
+  <parameter name="ECALCollections" type="StringVec">
+    EcalBarrelCollection
+    EcalEndcapRingCollection
+    EcalEndcapsCollection
+  </parameter>
+  <!-- <parameter name="ECALCollections" type="StringVec">EcalBarrelSiliconCollection EcalEndcapSiliconCollection  EcalEndcapRingCollection </parameter> -->
   <!--Index of ECal Layers-->
   <parameter name="ECALLayers" type="IntVec">20 100  </parameter>
   <!--Threshold for ECAL Hits in GeV-->
   <parameter name="ECALThreshold" type="float">5e-05 </parameter>
   <!--HCAL Collection Names-->
-  <parameter name="HCALCollections" type="StringVec">HcalBarrelRegCollection  HcalEndCapsCollection HcalEndCapRingsCollection</parameter>
+  <parameter name="HCALCollections" type="StringVec">
+    HcalBarrelRegCollection
+    HcalEndcapRingCollection
+    HcalEndcapsCollection
+  </parameter>
+  <!-- <parameter name="HCALCollections" type="StringVec">HcalBarrelRegCollection  HcalEndCapsCollection HcalEndCapRingsCollection</parameter> -->
   <!--Index of HCal Layers-->
   <parameter name="HCALLayers" type="IntVec">100  </parameter>
   <!--Threshold for HCAL Hits in GeV-->
@@ -870,6 +899,10 @@
 
  <processor name="MySimpleBCalDigi" type="SimpleLCalDigi">
  <!--Performs simple digitization of sim calo hits...-->
+
+  <!--name of the part of the cellID that holds the layer-->
+  <parameter name="CellIDLayerString" type="string"> layer </parameter>
+
   <!--Calibration coefficients for LCAL-->
   <parameter name="CalibrLCAL" type="FloatVec">1.</parameter>
   <!--LCAL Collection Names-->
@@ -886,6 +919,10 @@
 
  <processor name="MySimpleLCalDigi" type="SimpleLCalDigi">
    <!--Performs simple digitization of sim calo hits...-->
+
+  <!--name of the part of the cellID that holds the layer-->
+  <parameter name="CellIDLayerString" type="string"> layer </parameter>
+
    <!--Calibration coefficients for LCAL-->
    <parameter name="CalibrLCAL" type="FloatVec">89.0</parameter>
    <!--LCAL Collection Names-->
@@ -902,6 +939,10 @@
 
  <processor name="MySimpleLHCalDigi" type="SimpleLHCalDigi">
  <!--Performs simple digitization of sim calo hits...-->
+
+  <!--name of the part of the cellID that holds the layer-->
+  <parameter name="CellIDLayerString" type="string"> layer </parameter>
+
   <!--Calibration coefficients for LHCAL-->
   <parameter name="CalibrLHCAL" type="FloatVec">150</parameter>
   <!--LHCAL Collection Names-->
@@ -916,8 +957,12 @@
 
 <!--######  SimpleMuonDigi ##########################################-->
 
- <processor name="MySimpleMuonDigi" type="SimpleMuonDigi">
- <!--Performs simple digitization of sim calo hits...-->
+<processor name="MySimpleMuonDigi" type="SimpleMuonDigi">
+  <!--Performs simple digitization of sim calo hits...-->
+  
+  <!--name of the part of the cellID that holds the layer-->
+  <parameter name="CellIDLayerString" type="string"> layer </parameter>
+  
   <!--Calibration coefficients for MUON-->
   <parameter name="CalibrMUON" type="FloatVec">56.7</parameter>
   <!-- maximum hit energy for a MUON hit -->
