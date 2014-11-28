@@ -1,5 +1,5 @@
 //====================================================================
-//  DDSim - LC simulation based on DD4hep 
+//  lcgeo - LC simulation based on DD4hep 
 //--------------------------------------------------------------------
 //  F.Gaede, DESY
 //  17.07.2014
@@ -10,7 +10,7 @@
 //LCIO
 #include "IMPL/SimTrackerHitImpl.h"
 
-namespace DDSim {
+namespace lcgeo {
 
   bool SDTrackerLCIO::process(G4Step* aStep,G4TouchableHistory* /*history*/) {
 
@@ -37,13 +37,13 @@ namespace DDSim {
 
   }
 
-} // namespace DDSim
+} // namespace lcgeo
 
 //##############################################################################################
 
 namespace DD4hep{
   namespace Simulation{
-    typedef DDSim::SDTrackerLCIO SDTrackerLCIO;
+    typedef lcgeo::SDTrackerLCIO SDTrackerLCIO;
   }
 }
 #include "DDG4/Factories.h"

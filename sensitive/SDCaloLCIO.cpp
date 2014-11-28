@@ -1,5 +1,5 @@
 //====================================================================
-//  DDSim - LC simulation based on DD4hep 
+//  lcgeo - LC simulation based on DD4hep 
 //--------------------------------------------------------------------
 //  A.Sailer, CERN
 //  $Id:$
@@ -16,7 +16,7 @@
 
 
 
-namespace DDSim {
+namespace lcgeo {
 
   inline G4ThreeVector localToGlobalCoordinates(G4Step *aStep, G4ThreeVector const& localPosition) {
 
@@ -91,13 +91,13 @@ namespace DDSim {
 
   }
 
-} // namespace DDSim
+} // namespace lcgeo
 
 //##############################################################################################
 
 namespace DD4hep{
   namespace Simulation{
-    typedef DDSim::SDCaloLCIO SDCaloLCIO;
+    typedef lcgeo::SDCaloLCIO SDCaloLCIO;
   }
 }
 #include "DDG4/Factories.h"

@@ -1,6 +1,6 @@
 <!--
       Example steering file to run a standard reconstruction
-      on events simulated with DD4hep/DDSim for
+      on events simulated with DD4hep/lcgeo for
       detector ILD_o1_v05.
 
       Based on bbudsc_3evt_stdreco.xml form ILDconfig

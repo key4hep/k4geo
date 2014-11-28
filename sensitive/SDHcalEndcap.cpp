@@ -1,6 +1,6 @@
 //
 //====================================================================
-//  DDSim - LC simulation based on DD4hep 
+//  lcgeo - LC simulation based on DD4hep 
 //--------------------------------------------------------------------
 //  SensitiveDetector driver for HcalEndcap
 //
@@ -41,7 +41,7 @@
 
 #include "DDSegmentation/BitField64.h"
 
-namespace DDSim {
+namespace lcgeo {
 
 
   void SDHcalEndcap::DrawAll()
@@ -369,13 +369,13 @@ namespace DDSim {
   }
 
 
-} // namespace DDSim
+} // namespace lcgeo
 
 //##############################################################################################
 
 namespace DD4hep{
   namespace Simulation{
-    typedef DDSim::SDHcalEndcap SDHcalEndcap;
+    typedef lcgeo::SDHcalEndcap SDHcalEndcap;
   }
 }
 #include "DDG4/Factories.h"

@@ -1,5 +1,5 @@
 //====================================================================
-//  DDSim - LC simulation based on DD4hep 
+//  lcgeo - LC simulation based on DD4hep 
 //--------------------------------------------------------------------
 //  F.Gaede, DESY
 //====================================================================
@@ -28,7 +28,7 @@ namespace dd4hep {
 }
 
 
-namespace DDSim {
+namespace lcgeo {
 
   /** Sensitive detector for silicon trackers - ported from Mokka TRKSiSD00  
    *  (http://polzope.in2p3.fr:8081/MOKKA)

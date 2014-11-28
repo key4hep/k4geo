@@ -1,5 +1,5 @@
 //====================================================================
-//  DDSim - LC simulation based on DD4hep 
+//  lcgeo - LC simulation based on DD4hep 
 //--------------------------------------------------------------------
 //  F.Gaede, DESY
 //  17.07.2014
@@ -27,7 +27,7 @@ namespace dd4hep {
 }
 
 
-namespace DDSim {
+namespace lcgeo {
 
   class SDTrackerLCIO : public dd4hep::Geant4Sensitive {
   

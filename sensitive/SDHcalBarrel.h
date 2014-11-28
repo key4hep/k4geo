@@ -1,5 +1,5 @@
 //====================================================================
-//  DDSim - LC simulation based on DD4hep 
+//  lcgeo - LC simulation based on DD4hep 
 //--------------------------------------------------------------------
 //  SensitiveDetector driver for HcalBarrel
 //
@@ -36,7 +36,7 @@ namespace dd4hep {
 }
 
 
-namespace DDSim {
+namespace lcgeo {
 
   /** Sensitive detector for ILD HcalBarrel - ported from Mokka SDHcalBarrel 
    *  (http://polzope.in2p3.fr:8081/MOKKA)

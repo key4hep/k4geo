@@ -1,6 +1,6 @@
 //
 //====================================================================
-//  DDSim - LC simulation based on DD4hep 
+//  lcgeo - LC simulation based on DD4hep 
 //--------------------------------------------------------------------
 //  SensitiveDetector driver for HcalBarrel
 //
@@ -41,7 +41,7 @@
 
 #include "DDSegmentation/BitField64.h"
 
-namespace DDSim {
+namespace lcgeo {
 
 
   void SDHcalBarrel::DrawAll()
@@ -385,13 +385,13 @@ namespace DDSim {
   }
 
 
-} // namespace DDSim
+} // namespace lcgeo
 
 //##############################################################################################
 
 namespace DD4hep{
   namespace Simulation{
-    typedef DDSim::SDHcalBarrel SDHcalBarrel;
+    typedef lcgeo::SDHcalBarrel SDHcalBarrel;
   }
 }
 #include "DDG4/Factories.h"

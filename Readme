@@ -1,8 +1,8 @@
 ###################################################################################################
 #
-#  DDSim 
+#  lcgeo 
 #
-#  Linear collider simulation models based on DD4hep and Geant4.  
+#  Linear collider detector models based on DD4hep.
 #
 #
 #  F.Gaede, DESY, 2014
@@ -21,11 +21,11 @@ Download and Installation:
 Downlaod source code, e.g:
 
 
-  mkdir DDSim ; cd DDSim 
+  mkdir lcgeo ; cd lcgeo 
 
-  svn co https://svnsrv.desy.de/public/ddsim/DDSim/trunk
+  svn co https://svnsrv.desy.de/public/ddsim/lcgeo/trunk
 
-  (or if you have developers rights:   svn co https://svnsrv.desy.de/basic/ddsim/DDSim/trunk)
+  (or if you have developers rights:   svn co https://svnsrv.desy.de/basic/ddsim/lcgeo/trunk)
 
   cd trunk ; mkdir build ; cd build
 
@@ -51,7 +51,7 @@ Build and install everything:
 
 Initialize the environment:
 
- . ./bin/thisDDSim.sh
+ . ./bin/thislcgeo.sh
 
 
 

@@ -1,5 +1,5 @@
 //====================================================================
-//  DDSim - LC simulation based on DD4hep 
+//  lcgeo - LC simulation based on DD4hep 
 //--------------------------------------------------------------------
 //  F.Gaede, DESY
 //  $Id:$
@@ -32,7 +32,7 @@
 
 #include "DDSegmentation/BitField64.h"
 
-namespace DDSim {
+namespace lcgeo {
 
 
   //dodao PK
@@ -422,7 +422,7 @@ namespace DDSim {
     hit->setCellID1( ( cellID >> 32 ) & 0xffffffff   ) ;
   
     hit->setEDep( DepositedEnergy ) ;
-    // printout(dd4hep::INFO,"DDSimTracker","%s> Add hit with deposit:%f  Pos:%f %f %f - cellID0: 0x%x cellID1: 0x%x",
+    // printout(dd4hep::INFO,"lcgeoTracker","%s> Add hit with deposit:%f  Pos:%f %f %f - cellID0: 0x%x cellID1: 0x%x",
     // 	     c_name(),step->GetTotalEnergyDeposit(),position.X(),position.Y(),position.Z() , hit->getCellID0() ,hit->getCellID1() );
   
     double pos[3] ;
@@ -521,13 +521,13 @@ namespace DDSim {
   }
 
 
-} // namespace DDSim
+} // namespace lcgeo
 
 //##############################################################################################
 
 namespace DD4hep{
   namespace Simulation{
-    typedef DDSim::TRKSiSD00 TRKSiSD00;
+    typedef lcgeo::TRKSiSD00 TRKSiSD00;
   }
 }
 #include "DDG4/Factories.h"

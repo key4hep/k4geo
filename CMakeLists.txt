@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3 FATAL_ERROR)
 
 #---------------------------
-set( PackageName DDSim )
+set( PackageName lcgeo )
 #---------------------------
 
 project(${PackageName})

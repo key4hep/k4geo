@@ -1,5 +1,5 @@
 //====================================================================
-//  DDSim - LC simulation based on DD4hep 
+//  lcgeo - LC simulation based on DD4hep 
 //--------------------------------------------------------------------
 //  A.Sailer, CERN
 //====================================================================
@@ -14,7 +14,7 @@
 #include <TH2D.h>
 
 
-namespace DDSim {
+namespace lcgeo {
 
   class SDCaloLCIODebug :  public SDCaloLCIO {
   

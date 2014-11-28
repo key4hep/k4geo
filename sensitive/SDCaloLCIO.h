@@ -1,5 +1,5 @@
 //====================================================================
-//  DDSim - LC simulation based on DD4hep 
+//  lcgeo - LC simulation based on DD4hep 
 //--------------------------------------------------------------------
 //  A.Sailer, CERN
 //====================================================================
@@ -26,7 +26,7 @@ namespace dd4hep {
 }
 
 
-namespace DDSim {
+namespace lcgeo {
 
   class SDCaloLCIO : public dd4hep::Geant4Sensitive {
   
