@@ -5,7 +5,7 @@
 //  Ported from Mokka
 //--------------------------------------------------------------------
 //  S.Lu, DESY
-//  $Id:$
+//  $Id$
 //====================================================================
 
 #include "DD4hep/DetFactoryHelper.h"
@@ -26,7 +26,7 @@ using namespace DD4hep::Geometry;
 /** SEcal04.cc
  *
  *  @author: Shaojun Lu, DESY
- *  @version $Id:$
+ *  @version $Id$
  *              Ported from Mokka SEcal04 Barrel part. Read the constants from XML
  *              instead of the DB. Then build the Barrel in the same way with DD4hep
  * 		construct.

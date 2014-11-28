@@ -7,7 +7,7 @@
         author="F. Gaede"
         url="http://aidasoft.cern.ch/dd4hep"
         status="development"
-        version="$Id:$">
+        version="$Id$">
     <comment>geant4 example novice N04 ported to DD4hep </comment>        
   </info>
   

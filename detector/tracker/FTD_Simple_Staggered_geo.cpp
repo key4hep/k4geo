@@ -2,7 +2,7 @@
 //  DDSim - LC detector models in DD4hep 
 //--------------------------------------------------------------------
 //  F.Gaede, DESY
-//  $Id:$
+//  $Id$
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/DD4hepUnits.h"
@@ -297,7 +297,7 @@ void SetParDisk( XMLHandlerDB db)
  *   S.J. Aplin (Nov 2011)
  *
  *  @author: F.Gaede, DESY, May 2014
- *  @version $Id:$
+ *  @version $Id$
  */
 static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 

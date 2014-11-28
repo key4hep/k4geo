@@ -42,7 +42,7 @@ namespace lcgeo {
    *  (http://polzope.in2p3.fr:8081/MOKKA)
    *
    *  @author: S.Lu, DESY, Jan 2014
-   *  @version: $Id:$
+   *  @version: $Id$
    */
 
   class SDHcalEndcap : public dd4hep::Geant4Sensitive

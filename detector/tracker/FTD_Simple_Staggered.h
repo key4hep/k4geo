@@ -4,7 +4,7 @@
  * 
  * @author F.Gaede, DESY 
  * @date  May 2014
- * @version $Id:$
+ * @version $Id$
  */
 #ifndef FTD_Simple_Staggered_h
 #define FTD_Simple_Staggered_h 1

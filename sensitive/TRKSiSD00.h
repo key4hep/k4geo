@@ -34,7 +34,7 @@ namespace lcgeo {
    *  (http://polzope.in2p3.fr:8081/MOKKA)
    *
    *  @author: F.Gaede, DESY, Nov 2013
-   *  @version: $Id:$
+   *  @version: $Id$
    */
   class TRKSiSD00 : public dd4hep::Geant4Sensitive {
   

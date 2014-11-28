@@ -2,7 +2,7 @@
 //  lcgeo - LC simulation based on DD4hep
 //--------------------------------------------------------------------
 //  A.Sailer, CERN
-//  $Id:$
+//  $Id$
 //====================================================================
 #include "SDCaloLCIODebug.h"
 #include "G4Step.hh"

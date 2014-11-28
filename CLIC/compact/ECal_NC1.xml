@@ -7,7 +7,7 @@
         author="F. Gaede, D. Protopopescu"
         url="http://ilcsoft.desy.de"
         status="experimental"
-        version="$Id:$">
+        version="$Id$">
         <comment>New CLIC detector model ported to DD4hep</comment>        
     </info>
   

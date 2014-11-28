@@ -7,7 +7,7 @@
         author="F. Gaede"
         url="http://ilcsoft.desy.de"
         status="experimantal"
-        version="$Id:$">
+        version="$Id$">
         <comment>ILD Mokka model used for the DBD - ported to DD4hep </comment>        
     </info>
   

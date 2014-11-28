@@ -2,7 +2,7 @@
 //  DDSim - LC detector models in DD4hep 
 //--------------------------------------------------------------------
 //  F.Gaede, DESY
-//  $Id:$
+//  $Id$
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/DD4hepUnits.h"
