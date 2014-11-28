@@ -1,5 +1,5 @@
 //====================================================================
-//  DDSim - LC simulation based on DD4hep 
+//  DDSim - LC detector models in DD4hep 
 //--------------------------------------------------------------------
 //  DD4hep Geometry driver for YokeEndcaps
 //  Ported from Mokka
