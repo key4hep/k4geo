@@ -34,13 +34,12 @@ Initialize ROOT:
 
   . /afs/desy.de/project/ilcsoft/sw/x86_64_gcc44_sl6/root/5.34.10/bin/thisroot.sh
 
-Configure with CMake specifying pathes to DD4hep, Geant4, LCIO and GEAR, e.g.:
+Configure with CMake specifying the path to DD4hep
 
-   cmake -DDD4hep_DIR=~/DD4hep/trunk  \
-         -DD4HEP_USE_BOOST=ON
-         -D LCIO_DIR=/afs/desy.de/project/ilcsoft/sw/x86_64_gcc44_sl6/v01-17-05/lcio/v02-04-03 \
-         -D GEAR_DIR=/afs/desy.de/project/ilcsoft/sw/x86_64_gcc44_sl6/v01-17-05/gear/v01-04 \
-         -D Geant4_DIR=/afs/desy.de/project/ilcsoft/sw/x86_64_gcc44_sl6/geant4/9.6.p01/lib64/Geant4-9.6.1  ..
+ cmake -DDD4hep_DIR=~/DD4hep/trunk ..
+
+( Depending on whether you have ilcsoft initialized, you might have to specify the pathes
+  to LCIO, Gear and Geant4 )
 
 
 Build and install everything:

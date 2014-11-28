@@ -104,7 +104,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, Ref_t)  {
 
   // start to prepare the Material and geometry as Mokka
   double Ecal_outer_radius = lcdd.constant<double>("Ecal_outer_radius");
-  double Ecal_inner_radius = lcdd.constant<double>("Ecal_inner_radius");
+  double Ecal_inner_radius                  = lcdd.constant<double>("TPC_outer_radius") +lcdd.constant<double>("Ecal_Tpc_gap");
   double module_thickness = Ecal_outer_radius - Ecal_inner_radius;
  
   // module barrel key parameters
