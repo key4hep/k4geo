@@ -303,24 +303,20 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     Vector3D u,v,n ;
 
     if( faces_IP == 0 ){
-      // will be rotated around z-axis later
-      u.fill(  0. ,  -1. , 0. ) ;
-      v.fill(  0. ,   0. , 1. ) ;
+
       n.fill( -1. ,   0. , 0. ) ;
 
       // implement 7 deg stereo angle 
-      u.fill( 0. , -cos( 3.5 * dd4hep::deg  ) , -sin( 3.5 * dd4hep::deg  ) ) ;
-      v.fill( 0. , -sin( 3.5 * dd4hep::deg  ) ,  cos( 3.5 * dd4hep::deg  ) ) ;
+      u.fill( 0. ,  cos( 7.0 * dd4hep::deg  ) , -sin( 7.0 * dd4hep::deg  ) ) ;
+      v.fill( 0. ,  sin( 7.0 * dd4hep::deg  ) ,  cos( 7.0 * dd4hep::deg  ) ) ;
 
     } else {
 
-      u.fill( 0. , 1. , 0. ) ;
-      v.fill( 0. , 0. , 1. ) ;
       n.fill( 1. , 0. , 0. ) ;
 
       // implement 7 deg stereo angle 
-      u.fill( 0. ,  cos( 3.5 * dd4hep::deg  ) ,  sin( 3.5 * dd4hep::deg  ) ) ;
-      v.fill( 0. , -sin( 3.5 * dd4hep::deg  ) ,  cos( 3.5 * dd4hep::deg  ) ) ;
+      u.fill( 0. , -cos( 7.0 * dd4hep::deg  ) ,  sin( 7.0 * dd4hep::deg  ) ) ;
+      v.fill( 0. ,  sin( 7.0 * dd4hep::deg  ) ,  cos( 7.0 * dd4hep::deg  ) ) ;
     }
 
 
