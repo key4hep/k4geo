@@ -132,30 +132,37 @@ bool validate(double rInner, double rOuter, double radiatorThickness, double lay
 }
 
 static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens)  {
-
-  xml_det_t   x_det     = element;
+  static double tolerance = 0e0;
+  xml_det_t   x_det       = element;
   string      det_name    = x_det.nameStr();
-  Layering    layering(x_det);
 
-  //xml_dim_t   dim         = x_det.dimensions();
-  //string      det_type    = x_det.typeStr();
-
+  xml_comp_t   x_dim      = x_det.dimensions();
+  int          nsides     = x_dim.numsides();
 
   Material    air         = lcdd.air();
-  Material    Steel235    = lcdd.material(x_det.materialStr());
-
-  //int         numSides    = dim.numsides();
+  Material    env_mat     = lcdd.material(x_dim.materialStr());
 
   // Hcal Barrel module shapers' parameters
-  //double      detZ              = dim.z();
-  //double      Hcal_inner_radius = dim.rmin();
+  double        Hcal_inner_radius   = x_dim.rmin();
+  double        Hcal_outer_radius   = x_dim.rmax();
+  double        detZ                = x_dim.zhalf();
 
+  xml_comp_t    env_pos     = x_det.position();
+  xml_comp_t    env_rot     = x_det.rotation();
 
-  Assembly envelope_assembly( det_name + "assembly"  ) ;
-  PlacedVolume pv;
+  Position      pos(env_pos.x(),env_pos.y(),env_pos.z());
+  RotationZYX   rotZYX(env_rot.z(),env_rot.y(),env_rot.x());
+
+  Transform3D   tr(rotZYX,pos);
+
+  xml_comp_t    x_staves  = x_det.staves();
+  Material      Steel235    = lcdd.material(x_staves.materialStr());
 
   DetElement  sdet(det_name,x_det.id());
   Volume      motherVol = lcdd.pickMotherVolume(sdet);
+
+  PlacedVolume pv;
+
 
   sens.setType("calorimeter");
 
@@ -174,7 +181,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   // The way to read constant from XML/LCDD file.
   double      Hcal_radiator_thickness          = lcdd.constant<double>("Hcal_radiator_thickness");
   double      Hcal_chamber_thickness           = lcdd.constant<double>("Hcal_chamber_thickness");
-  double      Hcal_inner_radius                = lcdd.constant<double>("Hcal_inner_radius");
   double      Hcal_back_plate_thickness        = lcdd.constant<double>("Hcal_back_plate_thickness");
   double      Hcal_lateral_plate_thickness     = lcdd.constant<double>("Hcal_lateral_structure_thickness");
   double      Hcal_stave_gaps                  = lcdd.constant<double>("Hcal_stave_gaps");
@@ -182,19 +188,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double      TPC_Ecal_Hcal_barrel_halfZ       = lcdd.constant<double>("TPC_Ecal_Hcal_barrel_halfZ"); 
   double      Hcal_middle_stave_gaps           = lcdd.constant<double>("Hcal_middle_stave_gaps");
   double      Hcal_layer_air_gap               = lcdd.constant<double>("Hcal_layer_air_gap");
-
-  double      Hcal_module_radius               = lcdd.constant<double>("Hcal_outer_radius");
   double      Hcal_cells_size                  = lcdd.constant<double>("Hcal_cells_size");
 
-
-
   int         Hcal_nlayers                     = lcdd.constant<int>("Hcal_nlayers");
-
-  //double      Hcal_inner_radius                = lcdd.constant<double>("HcalBarrel_rmin");
-  //double      Hcal_outer_radius                = lcdd.constant<double>("Hcal_outer_radius");
-  //double      Hcal_Barrel_rotation             = lcdd.constant<double>("Hcal_Barrel_rotation");
-
-
 
   double      TPC_outer_radius               = lcdd.constant<double>("TPC_outer_radius");
   std::cout << " ***********TPC_outer_radius " << TPC_outer_radius  << std::endl ;
@@ -203,18 +199,18 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   std::cout << " ***********Ecal_outer_radius " <<  Ecal_outer_radius << std::endl ;
 
 
-  validate(Hcal_inner_radius, Hcal_module_radius, Hcal_radiator_thickness, Hcal_chamber_thickness, Hcal_nlayers);
+  validate(Hcal_inner_radius, Hcal_outer_radius, Hcal_radiator_thickness, Hcal_chamber_thickness, Hcal_nlayers);
 
 
   //========== fill data for reconstruction ============================
   DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
   caloData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
-  caloData->symmetry = 8  ; //fg: also hardcoded below 
+  caloData->symmetry = nsides  ;
   caloData->phi0 = 0 ; // fg: also hardcoded below 
 
   /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
   caloData->extent[0] = Hcal_inner_radius ;
-  caloData->extent[1] = Hcal_module_radius ;
+  caloData->extent[1] = Hcal_outer_radius ;
   caloData->extent[2] = 0. ;
   caloData->extent[3] = TPC_Ecal_Hcal_barrel_halfZ ;
 
@@ -227,25 +223,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double Hcal_total_dim_y   = Hcal_nlayers * (Hcal_radiator_thickness + Hcal_chamber_thickness) 
                             + Hcal_back_plate_thickness;
 
-  
-  // Moved the calculation into ILD_o1_v05.xml
-  // double Hcal_module_radius = Hcal_inner_radius /  cos(M_PI/8.)
-  //   + ( Hcal_radiator_thickness + Hcal_chamber_thickness ) * Hcal_nlayers
-  //   + Hcal_back_plate_thickness;
-  // std::cout << " *********** hcal outer radius : " << Hcal_module_radius  << std::endl ;
-
-
-  double Hcal_y_dim1_for_x  = Hcal_module_radius*cos(M_PI/8.) - Hcal_inner_radius;
-  double Hcal_bottom_dim_x  = 2.*Hcal_inner_radius*tan(M_PI/8.)- Hcal_stave_gaps;
+  double Hcal_y_dim1_for_x  = Hcal_outer_radius*cos(M_PI/nsides) - Hcal_inner_radius;
+  double Hcal_bottom_dim_x  = 2.*Hcal_inner_radius*tan(M_PI/nsides)- Hcal_stave_gaps;
   double Hcal_normal_dim_z  = (2 * TPC_Ecal_Hcal_barrel_halfZ - Hcal_modules_gap)/2.;
 
  //only the middle has the steel plate.
   double Hcal_regular_chamber_dim_z = Hcal_normal_dim_z - Hcal_lateral_plate_thickness;
-
-
-  //double totalThickness_Hcal_Barrel       = (Hcal_radiator_thickness + Hcal_chamber_thickness) 
-  //                                                 * HcalBarrel_layers + Hcal_back_plate_thickness;
-  //double Hcal_module_radius               = Hcal_inner_radius + totalThickness_Hcal_Barrel;
 
   double Hcal_cell_dim_x            = Hcal_cells_size;
   double Hcal_cell_dim_z            = Hcal_regular_chamber_dim_z / floor (Hcal_regular_chamber_dim_z/Hcal_cell_dim_x);
@@ -253,6 +236,22 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   //double Hcal_digi_cell_dim_z       = Hcal_regular_chamber_dim_z / floor (Hcal_regular_chamber_dim_z/Hcal_digi_cell_dim_x);
 
  
+// ========= Create Hcal Barrel envelope   ====================================
+
+  double        inner_r   = Hcal_inner_radius;
+  double        outer_r   = Hcal_inner_radius + Hcal_total_dim_y;
+
+  // The shape PolyhedraRegular for envelope. You may define your shape.
+  PolyhedraRegular hedra_shaper(nsides,inner_r,outer_r+tolerance,detZ*2.0);
+  Tube             tube_shaper(0, Hcal_outer_radius, detZ*2.0);
+  IntersectionSolid barrelSolid(hedra_shaper, tube_shaper);
+
+  Volume        envelope  (det_name+"_envelope",barrelSolid,env_mat);
+  PlacedVolume  env_phv   = motherVol.placeVolume(envelope,tr);
+  envelope.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+  env_phv.addPhysVolID("system", sdet.id());
+
+
 
 
 // ========= Create Hcal Barrel stave   ====================================
@@ -265,13 +264,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
  
   // stave modules shaper parameters
   double BHX  = (Hcal_bottom_dim_x + Hcal_stave_gaps)/2.;
-  double THX  = (Hcal_total_dim_y + Hcal_inner_radius)*tan(M_PI/8.);
+  double THX  = (Hcal_total_dim_y + Hcal_inner_radius)*tan(M_PI/nsides);
   double YXH  = Hcal_total_dim_y / 2.;
   double DHZ  = (Hcal_normal_dim_z - Hcal_lateral_plate_thickness) / 2.;
 
   Trapezoid stave_shaper(  THX, BHX, DHZ, DHZ, YXH); //DD4hep Trapezoid is TGeoTrd2
 
-  Tube solidCaloTube(0, Hcal_module_radius, DHZ+0.0001); // added delta to avoid touch surface with layer chambers
+  Tube solidCaloTube(0, Hcal_outer_radius, DHZ+0.0001); // added delta to avoid touch surface with layer chambers
   
   RotationZYX rot(0,0,M_PI/2.);
 
@@ -299,7 +298,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   Trapezoid stave_shaper_LP(THX_LP, BHX_LP, DHZ_LP, DHZ_LP, YXH_LP); //DD4hep Trapezoid is TGeoTrd2
 
-  Tube solidCaloTube_LP(0, Hcal_module_radius, DHZ_LP+0.0001);// added delta to avoid touch surface
+  Tube solidCaloTube_LP(0, Hcal_outer_radius, DHZ_LP+0.0001);// added delta to avoid touch surface
 
   IntersectionSolid Module_lateral_plate(stave_shaper_LP, solidCaloTube_LP, tran3D);
 
@@ -310,7 +309,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 
 #ifdef SHCALSC04_DEBUG
-  std::cout<< " ==> Hcal_module_radius: "<<Hcal_module_radius <<std::endl;
+  std::cout<< " ==> Hcal_outer_radius: "<<Hcal_outer_radius <<std::endl;
 #endif
 
 
@@ -327,7 +326,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   // Place the Layer Chamber into the Stave module
   // place the Stave module into the asembly Volume
   // place the module middle lateral plate into asembly Volume
-  // place the assembly Volume into the world 
+  // place the envelope Volume into the world 
 
   //TODO: re-thinking about the parameters name
   double x_length; //dimension of an Hcal barrel layer on the x-axis
@@ -339,7 +338,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   double xOffset = 0.;//the x_length of a barrel layer is calculated as a
   //barrel x-dimension plus (bottom barrel) or minus
-  //(top barrel) an x-offset, which depends on the angle M_PI/8
+  //(top barrel) an x-offset, which depends on the angle M_PI/nsides
 
   double xShift = 0.;//Geant4 draws everything in the barrel related to the 
   //center of the bottom barrel, so we need to shift the layers to
@@ -353,7 +352,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   for (int layer_id = 1; layer_id <= (2*Hcal_nlayers); layer_id++)
     {
  
-      double TanPiDiv8 = tan(M_PI/8.);
+      double TanPiDiv8 = tan(M_PI/nsides);
       double x_total   = 0.;
       double x_halfLength;
       x_length  = 0.;
@@ -368,7 +367,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
       //---- bottom barrel------------------------------------------------------------
       if( logical_layer_id *(Hcal_radiator_thickness + Hcal_chamber_thickness)
-	  < (Hcal_module_radius * cos(M_PI/8.) - Hcal_inner_radius ) ) {
+	  < (Hcal_outer_radius * cos(M_PI/nsides) - Hcal_inner_radius ) ) {
 	xOffset = (logical_layer_id * Hcal_radiator_thickness 
 		   + (logical_layer_id -1) * Hcal_chamber_thickness) * TanPiDiv8;
 
@@ -378,7 +377,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
       } else {//----- top barrel -------------------------------------------------
 	double y_layerID = logical_layer_id * (Hcal_radiator_thickness + Hcal_chamber_thickness) + Hcal_inner_radius;
-	double ro_layer = Hcal_module_radius - Hcal_radiator_thickness;
+	double ro_layer = Hcal_outer_radius - Hcal_radiator_thickness;
 	
 	x_total = sqrt( ro_layer * ro_layer - y_layerID * y_layerID);
 	
@@ -522,21 +521,19 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 
 //====================================================================
-// Place HCAL Barrel stave module into the assembly envelope
+// Place HCAL Barrel stave module into the envelope
 //====================================================================
   double stave_phi_offset,  module_z_offset;
 
   double Y = Hcal_inner_radius + Hcal_total_dim_y / 2.;
 
-
-  //TODO: rotaion M_PI/8.0 (22.5 degree) with the updated engineering design, after agree with all sub-detectors.
-  stave_phi_offset = 0;
-
+  stave_phi_offset = M_PI/nsides -M_PI/2.;
 
 
   //-------- start loop over HCAL BARREL staves ----------------------------
+
   for (int stave_id = 1;
-       stave_id <= 8;
+       stave_id <=nsides;
        stave_id++)
     {
       module_z_offset = - (Hcal_normal_dim_z + Hcal_modules_gap + Hcal_lateral_plate_thickness)/2.;
@@ -552,8 +549,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  Position xyzVec(-Y*sin(phirot), Y*cos(phirot), module_z_offset);
 	  Transform3D tran3D(rot3D,xyzVec);
 	  
-	  // Place Hcal Barrel volume into the assembly volume
-	  pv = envelope_assembly.placeVolume(EnvLogHcalModuleBarrel,tran3D);
+	  // Place Hcal Barrel volume into the envelope volume
+	  pv = envelope.placeVolume(EnvLogHcalModuleBarrel,tran3D);
 	  pv.addPhysVolID("stave",stave_id);
 	  pv.addPhysVolID("module",module_id);
 
@@ -562,21 +559,19 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
       Position xyzVec_LP(-Y*sin(phirot), Y*cos(phirot),0);
       Transform3D tran3D_LP(rot3D,xyzVec_LP);
-      pv = envelope_assembly.placeVolume(EnvLogHcalModuleBarrel_LP,tran3D_LP);
+      pv = envelope.placeVolume(EnvLogHcalModuleBarrel_LP,tran3D_LP);
 
-      stave_phi_offset -=  M_PI/4.;
+      stave_phi_offset -=  M_PI*2.0/nsides;
     }  //-------- end loop over HCAL BARREL staves ----------------------------
 
 
 //====================================================================
-// Place HCAL Barrel assembly envelope into the world volume
+// Place HCAL Barrel envelope into the world volume
 //====================================================================
 
   sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
 
-  pv = motherVol.placeVolume(envelope_assembly);
-  pv.addPhysVolID("system", sdet.id());
-  sdet.setVisAttributes( lcdd, x_det.visStr(),  envelope_assembly);
+  sdet.setVisAttributes( lcdd, x_det.visStr(),  envelope);
   sdet.setPlacement(pv);
   return sdet;
 
