@@ -39,10 +39,12 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "XML/Layering.h"
 #include "DDRec/DetectorData.h"
+#include "DDSimExceptions.h"
 
 using namespace std;
 using namespace DD4hep;
 using namespace DD4hep::Geometry;
+using namespace DDSim ;
 
 
 // After reading in all the necessary parameters.
@@ -60,12 +62,12 @@ bool validate(double rInner, double rOuter, double radiatorThickness, double lay
 
   if( spaceNeeded > spaceAllowed )
     {
-      cout<<"\n Error: Layer number is more than it can be built!" <<endl;
+      cout<<"\n ERROR: Layer number is more than it can be built!" <<endl;
       Error = true;
     }
   else if ( spaceToleranted < spaceAllowed )
     {
-      cout<<"\n Warning: Layer number is less than it is able to build!" <<endl;
+      cout<<"\n WARNING: Layer number is less than it is able to build!" <<endl;
       Warning = true;
     }
   else
@@ -98,7 +100,7 @@ bool validate(double rInner, double rOuter, double radiatorThickness, double lay
 	  <<" Do you think that you are looking for another type of HCAL driver? \n"
 	  <<" \n"
 	  <<endl; 
-      return Error;
+       throw GeometryException(  "SHcalSc04_Barrel: Error: Layer number is more than it can be built!"   ) ;
     } 
   else if( Warning )
     {
@@ -125,7 +127,7 @@ bool validate(double rInner, double rOuter, double radiatorThickness, double lay
 	  <<endl; 
       return Warning;
     }
-  else { return 0; }
+  else { return true; }
 
 }
 
