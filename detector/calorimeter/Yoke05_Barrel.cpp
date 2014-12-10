@@ -52,17 +52,22 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   Material      air       = lcdd.air();
   Material      vacuum    = lcdd.vacuum();
 
-  Material      yokeMaterial  = lcdd.material(x_det.materialStr());;
+  xml_comp_t    x_staves  = x_det.staves();
+  Material      yokeMaterial  = lcdd.material(x_staves.materialStr());
+
+  Material      env_mat     = lcdd.material(x_dim.materialStr());
+
+  xml_comp_t    env_pos     = x_det.position();
+  xml_comp_t    env_rot     = x_det.rotation();
+
+  Position      pos(env_pos.x(),env_pos.y(),env_pos.z());
+  RotationZYX   rotZYX(env_rot.z(),env_rot.y(),env_rot.x());
+
+  Transform3D   tr(rotZYX,pos);
 
   int           det_id    = x_det.id();
   DetElement    sdet      (det_name,det_id);
   Volume        motherVol = lcdd.pickMotherVolume(sdet);
-
-  Assembly envelope_assembly( det_name + "assembly"  ) ;  
-  PlacedVolume  env_phv   = motherVol.placeVolume(envelope_assembly);
-
-  env_phv.addPhysVolID("system",det_id);
-  sdet.setPlacement(env_phv);
 
   sens.setType("calorimeter");
 
@@ -148,9 +153,17 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   cout << "  ...Muon par: yokeBarrelThickness  " << yokeBarrelThickness <<endl;
   cout << "  ...Muon par: Barrel_half_z        " << z_halfBarrel <<endl;
 
+// ========= Create Yoke Barrel envelope   ====================================
+  PolyhedraRegular barrelSolid( symmetry, M_PI/symmetry, rInnerBarrel, rOuterBarrel,  Yoke_Barrel_module_dim_z*3.0);
+  Volume           envelope  (det_name+"_envelope",barrelSolid,env_mat);
+  PlacedVolume     env_phv   = motherVol.placeVolume(envelope,tr);
+  envelope.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+  env_phv.addPhysVolID("system",det_id);
+  sdet.setPlacement(env_phv);
 
 
 
+// ========= Create Yoke Barrel module   ====================================
   PolyhedraRegular YokeBarrelSolid( symmetry, M_PI/symmetry, rInnerBarrel, rOuterBarrel,  Yoke_Barrel_module_dim_z);
 
   Volume mod_vol(det_name+"_module", YokeBarrelSolid, yokeMaterial);
@@ -299,7 +312,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       
       Position pos(0,0,module_z_offset);
       
-      PlacedVolume m_phv = envelope_assembly.placeVolume(mod_vol,pos);
+      PlacedVolume m_phv = envelope.placeVolume(mod_vol,pos);
       m_phv.addPhysVolID("module",module_id).addPhysVolID("system", det_id);
       m_phv.addPhysVolID("tower", 1);// Not used
       string m_name = _toString(module_id,"module%d");
