@@ -280,7 +280,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   IntersectionSolid barrelModuleSolid(stave_shaper, solidCaloTube, tran3D);
 
-  Volume  EnvLogHcalModuleBarrel(det_name+"_envelope",barrelModuleSolid,Steel235);
+  Volume  EnvLogHcalModuleBarrel(det_name+"_module",barrelModuleSolid,Steel235);
 
   EnvLogHcalModuleBarrel.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
 
