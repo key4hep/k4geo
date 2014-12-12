@@ -20,22 +20,22 @@
   <support_shell id="0" inner_radious="65*mm" half_z="145*mm" thickess="0.49392*mm" endplate_inner_radious="30*mm" endplate_inner_radius_L1="15.7*mm" endplate_outer_radius_L1="20*mm" 
 		 offset_ladder_block="0.28224*mm" beryllium_ladder_block_length="5*mm" beryllium_ladder_block_thickness="0.25*mm" shell_endplate_thickness="2*mm" forward_shell_half_z="6.5*mm"  />
   <!-- SQL command: "select * from layer;"  -->
+  <layer id="0" layer_radius="VXD_radius_r1" ladder_length="VXD_length_r1" ladder_width="5.5*mm" nb_ladder="10" ladder_gap="0" strip_line_final_z="150*mm" end_electronics_width="5.5*mm" 
+	 initial_kapton_striplines_thickness="0.04566*mm" final_kapton_striplines_thickness="0.02435*mm" initial_metal_striplines_thickness="0.00806*mm" 
+	 final_metal_striplines_thickness="0.0043*mm" support_width="4.5*mm"  />
   <layer id="1" layer_radius="VXD_radius_r1" ladder_length="VXD_length_r1" ladder_width="5.5*mm" nb_ladder="10" ladder_gap="0" strip_line_final_z="150*mm" end_electronics_width="5.5*mm" 
 	 initial_kapton_striplines_thickness="0.04566*mm" final_kapton_striplines_thickness="0.02435*mm" initial_metal_striplines_thickness="0.00806*mm" 
 	 final_metal_striplines_thickness="0.0043*mm" support_width="4.5*mm"  />
-  <layer id="2" layer_radius="VXD_radius_r1" ladder_length="VXD_length_r1" ladder_width="5.5*mm" nb_ladder="10" ladder_gap="0" strip_line_final_z="150*mm" end_electronics_width="5.5*mm" 
-	 initial_kapton_striplines_thickness="0.04566*mm" final_kapton_striplines_thickness="0.02435*mm" initial_metal_striplines_thickness="0.00806*mm" 
-	 final_metal_striplines_thickness="0.0043*mm" support_width="4.5*mm"  />
+  <layer id="2" layer_radius="VXD_radius_r3" ladder_length="VXD_length_r3" ladder_width="11*mm" nb_ladder="11" ladder_gap="0*mm" strip_line_final_z="150*mm" end_electronics_width="11*mm" 
+	 initial_kapton_striplines_thickness="0.04102*mm" final_kapton_striplines_thickness="0.05059*mm" initial_metal_striplines_thickness="0.00724*mm" 
+	 final_metal_striplines_thickness="0.00893*mm" support_width="10*mm"  />
   <layer id="3" layer_radius="VXD_radius_r3" ladder_length="VXD_length_r3" ladder_width="11*mm" nb_ladder="11" ladder_gap="0*mm" strip_line_final_z="150*mm" end_electronics_width="11*mm" 
 	 initial_kapton_striplines_thickness="0.04102*mm" final_kapton_striplines_thickness="0.05059*mm" initial_metal_striplines_thickness="0.00724*mm" 
 	 final_metal_striplines_thickness="0.00893*mm" support_width="10*mm"  />
-  <layer id="4" layer_radius="VXD_radius_r3" ladder_length="VXD_length_r3" ladder_width="11*mm" nb_ladder="11" ladder_gap="0*mm" strip_line_final_z="150*mm" end_electronics_width="11*mm" 
-	 initial_kapton_striplines_thickness="0.04102*mm" final_kapton_striplines_thickness="0.05059*mm" initial_metal_striplines_thickness="0.00724*mm" 
-	 final_metal_striplines_thickness="0.00893*mm" support_width="10*mm"  />
-  <layer id="5" layer_radius="VXD_radius_r5" ladder_length="VXD_length_r3" ladder_width="11*mm" nb_ladder="17" ladder_gap="0*mm" strip_line_final_z="150*mm" end_electronics_width="11*mm" 
+  <layer id="4" layer_radius="VXD_radius_r5" ladder_length="VXD_length_r3" ladder_width="11*mm" nb_ladder="17" ladder_gap="0*mm" strip_line_final_z="150*mm" end_electronics_width="11*mm" 
 	 initial_kapton_striplines_thickness="0.04044*mm" final_kapton_striplines_thickness="0.07819*mm" initial_metal_striplines_thickness="0.00714*mm" 
 	 final_metal_striplines_thickness="0.0138*mm" support_width="10*mm"  />
-  <layer id="6" layer_radius="VXD_radius_r5" ladder_length="VXD_length_r3" ladder_width="11*mm" nb_ladder="17" ladder_gap="0*mm" strip_line_final_z="150*mm" end_electronics_width="11*mm" 
+  <layer id="5" layer_radius="VXD_radius_r5" ladder_length="VXD_length_r3" ladder_width="11*mm" nb_ladder="17" ladder_gap="0*mm" strip_line_final_z="150*mm" end_electronics_width="11*mm" 
 	 initial_kapton_striplines_thickness="0.04044*mm" final_kapton_striplines_thickness="0.07819*mm" initial_metal_striplines_thickness="0.00714*mm" 
 	 final_metal_striplines_thickness="0.0138*mm" support_width="10*mm"  />
 </detector> <!--vxd-->

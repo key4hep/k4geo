@@ -201,7 +201,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   // db->exec("select * from layer;");
   //   do{
   //**fg: get parameters for first layer - needed below
-  double ladder_1_length = 0 ;
+  double ladder_0_length = 0 ;
 
   for(xml_coll_t c( x_det ,_U(layer)); c; ++c)  {
     
@@ -211,8 +211,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     int LayerId = db->fetchInt("id");
     double layer_radius = db->fetchDouble("layer_radius");
     double ladder_length  = db->fetchDouble("ladder_length");
-    if( LayerId == 1 ) {
-      ladder_1_length = ladder_length ; 
+    if( LayerId == 0 ) {
+      ladder_0_length = ladder_length ; 
     }
     double ladder_width = db->fetchDouble("ladder_width");
     double support_width = db->fetchDouble("support_width");
@@ -321,7 +321,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       -((ladder_width+(side_band_electronics_option*side_band_electronics_width/2.))
 	+(ladder_clothest_approch+cos(phirot)*2*(active_silicon_thickness+flex_cable_thickness+metal_traces_thickness))/sin(phirot));
     
-    if (LayerId==1||LayerId==3||LayerId==5)  {  //------------------------------------------------------------------------
+    if (LayerId==0||LayerId==2||LayerId==4)  {  //------------------------------------------------------------------------
        
       for (double ladder_loop=0;ladder_loop<nb_ladder;ladder_loop++) {
 	
@@ -357,7 +357,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
  										  0.))  );
       }
       
-    } else if (LayerId==2||LayerId==4||LayerId==6) { //------------------------------------------------------------------------
+    } else if (LayerId==1||LayerId==3||LayerId==5) { //------------------------------------------------------------------------
       
       for (double ladder_loop=0;ladder_loop<nb_ladder;ladder_loop++) {
 	
@@ -491,11 +491,11 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
     DDRec::ZPlanarData::LayerLayout thisLayer ;
     
-    if (LayerId==2||LayerId==4||LayerId==6) { 
+    if (LayerId==1||LayerId==3||LayerId==5) { 
       
       thisLayer.distanceSupport  = layer_radius + layer_gap * 0.5 ;
       
-    }else if (LayerId==1||LayerId==3||LayerId==5) {
+    }else if (LayerId==0||LayerId==2||LayerId==4) {
       
       thisLayer.distanceSupport  = layer_radius  ;
     }      
@@ -513,7 +513,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     //only one block per superlayer
 
-    if (LayerId==2) {
+    if (LayerId==1) {
       
       Box BerylliumAnnulusBlockSolid( ladder_width, beryllium_ladder_block_length, beryllium_ladder_block_thickness);
       
@@ -538,7 +538,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 											     -ZAnnulusBlock))  );
       }	
 
-    } else if (LayerId==4||LayerId==6)  { 
+    } else if (LayerId==3||LayerId==5)  { 
       
       beryllium_ladder_block_length2 = beryllium_ladder_block_length + (shell_half_z - (end_electronics_half_z *3.* end_ladd_electronics_option)-ladder_length);
       
@@ -587,7 +587,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       
       double end_ladd_electronic_offset_phi = offset_phi +(side_band_electronics_option * side_band_electronics_width/2.);
       
-      if (LayerId==2||LayerId==4||LayerId==6) {       
+      if (LayerId==1||LayerId==3||LayerId==5) {       
 	
 	for (double elec_loop=0; elec_loop<nb_ladder;elec_loop++) {
 	  
@@ -606,7 +606,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 								-Z))  );
 	}
 	
-      } else if (LayerId==1||LayerId==3||LayerId==5)  {       
+      } else if (LayerId==0||LayerId==2||LayerId==4)  {       
 	
 	for (double elec_loop=0; elec_loop<nb_ladder;elec_loop++) {
 	  
@@ -645,7 +645,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       
       double side_band_electronic_offset_phi = offset_phi - (side_band_electronics_option * ladder_width);
       
-      if (LayerId==2||LayerId==4||LayerId==6) {       
+      if (LayerId==1||LayerId==3||LayerId==5) {       
 	
 	for (double elec_loop=0; elec_loop<nb_ladder;elec_loop++) {   
 	  
@@ -716,7 +716,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     double strip_line_start_z=0.;
     
-    if (LayerId==1||LayerId==2) {
+    if (LayerId==0||LayerId==1) {
       strip_line_start_z = ladder_length + ladder_gap/2. +( end_electronics_half_z * 2.)+ shell_thickess + beryllium_ladder_block_length*2 ; // to avoid overlaps
     } else {
       strip_line_start_z = shell_half_z + shell_endplate_thickness;//ladder_length + ladder_gap/2. - end_electronics_half_z * 2.+ shell_thickess  ; // to avoid overlaps
@@ -731,7 +731,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
     assert (strip_line_half_z>0);
 
-    if (LayerId==1||LayerId==3||LayerId==5) {
+    if (LayerId==0||LayerId==2||LayerId==4) {
       
       //Here we define the solid and logical volumes of the kapton strip lines
       ConeSegment KaptonLinesSolid( strip_line_half_z, 
@@ -828,12 +828,12 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
     //one cooling pipe for each double layer
  
-    if (LayerId==4 || LayerId==6) {
+    if (LayerId==3 || LayerId==5) {
 
       pv = supp_assembly.placeVolume( CoolPipeLogical, Transform3D( RotationZYX() , Position(0., 0.,   ZEndPlateCoolPipes+cool_pipe_outer_radius  )) ) ; 
       pv = supp_assembly.placeVolume( CoolPipeLogical, Transform3D( RotationZYX() , Position(0., 0., -(ZEndPlateCoolPipes+cool_pipe_outer_radius) )) ) ; 
       
-    } else if (LayerId==2)  { 
+    } else if (LayerId==1)  { 
       
       pv = supp_assembly.placeVolume( CoolPipeLogical, Transform3D( RotationZYX() , Position(0., 0.,   ZEndPlateCoolPipesL1 + cool_pipe_outer_radius + shell_thickess) )) ;
       pv = supp_assembly.placeVolume( CoolPipeLogical, Transform3D( RotationZYX() , Position(0., 0., -(ZEndPlateCoolPipesL1 + cool_pipe_outer_radius + shell_thickess)) ));
@@ -843,7 +843,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     // *** cooling pipe connecting the pipes at the central be support endplate to the layer 1 support endplate  ****
     //***************************************************************************************************************
 
-    if (LayerId==2){
+    if (LayerId==1){
 
       double thetaTube = atan((support_endplate_inner_radious - (layer_radius + layer_gap + 2*cool_pipe_outer_radius)) / (shell_half_z - ZEndPlateCoolPipesL1)) ;
 
@@ -921,12 +921,12 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       std::string ladderNameN =  _toString( LayerId , "SiActiveLayer_%02d_negZ") + _toString( (int)active_loop, "_%02d" ) ;
 
 
-      if (LayerId==2 ) {
+      if (LayerId==1 ) {
 
 	std::cout << "  ***** place ladder "  << int(active_loop) << " for " << _toString( LayerId , "SiActiveLayer_%02d") << std::endl ;
       }
 
-      if (LayerId==2||LayerId==4||LayerId==6) {
+      if (LayerId==1||LayerId==3||LayerId==5) {
 	
 	pv = layer_assembly.placeVolume( SiActiveLayerLogical,  Transform3D( rot, Position((layer_radius+(active_silicon_thickness/2.)+layer_gap)*sin(phirot2)+active_offset_phi*cos(phirot2),
 										     -(layer_radius+(active_silicon_thickness/2.)+layer_gap)*cos(phirot2)+active_offset_phi*sin(phirot2),
@@ -950,7 +950,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	volSurfaceList( ladderDEnegZ )->push_back( surf ) ;
 	
 
-      } else if (LayerId==1||LayerId==3||LayerId==5) { 
+      } else if (LayerId==0||LayerId==2||LayerId==4) { 
 
 	pv = layer_assembly.placeVolume( SiActiveLayerLogical,  Transform3D( rot, Position((layer_radius-(active_silicon_thickness/2.))*sin(phirot2)+active_offset_phi*cos(phirot2),
 										     -(layer_radius-(active_silicon_thickness/2.))*cos(phirot2)+active_offset_phi*sin(phirot2),
@@ -1013,11 +1013,11 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
     //--- fill DDRec::ZPlanarData
 
-    if (LayerId==2||LayerId==4||LayerId==6)  { 
+    if (LayerId==1||LayerId==3||LayerId==5)  { 
 
       thisLayer.distanceSensitive  = layer_gap + layer_radius;
 
-    } else if (LayerId==1||LayerId==3||LayerId==5) { 
+    } else if (LayerId==0||LayerId==2||LayerId==4) { 
 
       thisLayer.distanceSensitive  = layer_radius  - active_silicon_thickness ;
     }
@@ -1083,7 +1083,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   // ************support endplates for the layer 1************
   
   double support_endplate_half_z_L1 = shell_thickess/2;
-  double ladder_length = ladder_1_length ;
+  double ladder_length = ladder_0_length ;
   
   Tube EndPlateShellSolidL1( support_endplate_inner_radious_L1, support_endplate_outer_radious_L1, support_endplate_half_z_L1, sPhi, sPhi+dPhi ) ;
   
