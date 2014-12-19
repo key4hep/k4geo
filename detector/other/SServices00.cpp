@@ -68,7 +68,10 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, Ref_t)  {
 
   XMLHandlerDB db = XMLHandlerDB(  x_det.child( _Unicode( TPC_Cooling ) ) ) ;
 
-  const int MAX_TPC_RINGS =  db->fetchInt("number_of_rings");;
+  const int N_TPC_RINGS =  db->fetchInt("number_of_rings");;
+  //fg: keeep gcc on SL5 happy:
+  static const int MAX_TPC_RINGS = 1024 ;
+
   double tpcEndplateServices_R[MAX_TPC_RINGS];
   double tpcEndplateServices_r[MAX_TPC_RINGS];
 
@@ -90,7 +93,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, Ref_t)  {
   //TPCEndplateServices.setMaterial(lcdd.material("copper"));
   TPCEndplateServices.setMaterial(lcdd.material("Cu"));
   TPCEndplateServices.sethalfZ(TPC_Ecal_Hcal_barrel_halfZ);
-  for(int i=0;i<MAX_TPC_RINGS;i++)
+  for(int i=0;i<N_TPC_RINGS;i++)
     TPCEndplateServices.settpcEndplateServicesRing_R_ro(tpcEndplateServices_R[i],tpcEndplateServices_r[i]);
   
   TPCEndplateServices.DoBuildTPCEndplateServices(&pv,&envelope_assembly);

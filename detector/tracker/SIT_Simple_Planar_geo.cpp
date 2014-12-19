@@ -321,8 +321,15 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
 
     double inner_thick =  sensitive_thickness / 2.0 ;
-    double outer_thick =  sensitive_thickness / 2.0 + support_thickness ;  // support is on top
+    double outer_thick =  sensitive_thickness / 2.0 ;
    
+    if( faces_IP ){
+      outer_thick += support_thickness ;
+    } else { 
+      inner_thick += support_thickness ;
+    }
+
+
     VolPlane surf( sitSenLogical , SurfaceType(SurfaceType::Sensitive,SurfaceType::Measurement1D) ,inner_thick, outer_thick , u,v,n ) ; //,o ) ;
 
     // vector of sensor placements - needed for DetElements in ladder loop below

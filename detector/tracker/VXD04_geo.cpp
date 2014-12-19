@@ -900,7 +900,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
     double supp_thick = metal_traces_thickness + flex_cable_thickness + foam_spacer_thickness;
 
-    VolPlane surf( SiActiveLayerLogical , SurfaceType(SurfaceType::Sensitive) , active_silicon_thickness/2 + supp_thick/2 , active_silicon_thickness/2 , u,v,n ) ; //,o ) ;
+    //fg: set inner and outer thickness to sens/2+sup as  every other layer is flipped -> will just add a bit of air ...
+    VolPlane surf( SiActiveLayerLogical , SurfaceType(SurfaceType::Sensitive) , active_silicon_thickness/2 + supp_thick  , active_silicon_thickness/2 + supp_thick , u,v,n ) ; //,o ) ;
     //============================================================
 
 
