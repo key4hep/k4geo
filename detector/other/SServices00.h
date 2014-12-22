@@ -29,7 +29,7 @@ public:
   };
 
   // to build TPC cooling rings into the service assembly 
-  bool DoBuildTPCEndplateServices(PlacedVolume *pVol,Assembly *envelope){
+  bool DoBuildTPCEndplateServices(PlacedVolume &pVol,Assembly &envelope){
     for( vector< pair<double,double> >::const_iterator it = tpcEndplateServicesRing_R_ro.begin() ; 
 	 it != tpcEndplateServicesRing_R_ro.end(); ++it){
       Torus solidTube(it->first, 0, it->second, 0, 2*M_PI);
@@ -37,9 +37,9 @@ public:
       Volume EnvTube("service_tube",solidTube,cooling_Material);
       //EnvTube.setVisAttributes("RedVis");
       Position pos1(0,0,z_position);
-      *pVol = envelope->placeVolume(EnvTube,pos1);
+      pVol = envelope.placeVolume(EnvTube,pos1);
       Position pos2(0,0,-z_position);
-      *pVol = envelope->placeVolume(EnvTube,pos2);
+      pVol = envelope.placeVolume(EnvTube,pos2);
     } 
     return true;
   };
@@ -89,7 +89,7 @@ public:
   void setRailSeparationChanged(void) {RailSeparationChanged = false;};
 
   // to fill the detail service layers into the container
-  bool FillEcalBarrelServicesContainer(PlacedVolume *pVol, Volume *pContainerLogical){
+  bool FillEcalBarrelServicesContainer(PlacedVolume &pVol, Volume &pContainerLogical){
 
     if(fabs(
 	    top_dim_x/2. - (RailDistanceToRight + RailWidth*1.5 + RailSeparation)
@@ -115,7 +115,7 @@ public:
       {
 	Position pos(railPosition,0,0);
 	
-	*pVol = pContainerLogical->placeVolume(railLogical,pos);
+	pVol = pContainerLogical.placeVolume(railLogical,pos);
 	
         railPosition -= (RailWidth + RailSeparation);
       }
@@ -152,7 +152,7 @@ public:
 		   -RailHeight/2. + ZMinus_FirstInterrail_PE_Thickness/2.,
 		   -Ecal_barrel_halfZ + moduleLength*(i+1/2.));
     
-    *pVol = pContainerLogical->placeVolume(PELogical,posPE);
+    pVol = pContainerLogical.placeVolume(PELogical,posPE);
     
     
     
@@ -167,7 +167,7 @@ public:
 		    -RailHeight/2. + ZMinus_FirstInterrail_PE_Thickness+ZMinus_FirstInterrail_Cu_Thickness/2.,
 		    -Ecal_barrel_halfZ + moduleLength*(i+1/2.));
     
-    *pVol = pContainerLogical->placeVolume(Cu_1_Logical,posCu1);
+    pVol = pContainerLogical.placeVolume(Cu_1_Logical,posCu1);
     
     
     
@@ -182,7 +182,7 @@ public:
 		    -RailHeight/2. + ZMinus_SecondInterrail_Cu_Thickness/2.,
 		    -Ecal_barrel_halfZ + moduleLength*(i+1/2.));
     
-    *pVol = pContainerLogical->placeVolume(Cu_2_Logical,posCu2);
+    pVol = pContainerLogical.placeVolume(Cu_2_Logical,posCu2);
   }
 
 
@@ -204,7 +204,7 @@ public:
 		   -RailHeight/2. + ZPlus_FirstInterrail_PE_Thickness/2.,
 		   Ecal_barrel_halfZ - moduleLength*(i+1/2.));
     
-    *pVol = pContainerLogical->placeVolume(PELogical,posPE);
+    pVol = pContainerLogical.placeVolume(PELogical,posPE);
     
  
     // Cu_1
@@ -217,7 +217,7 @@ public:
 		    -RailHeight/2. + ZPlus_FirstInterrail_PE_Thickness+ZPlus_FirstInterrail_Cu_Thickness/2.,
 		    Ecal_barrel_halfZ - moduleLength*(i+1/2.));
 
-    *pVol = pContainerLogical->placeVolume(Cu_1_Logical,posCu1);
+    pVol = pContainerLogical.placeVolume(Cu_1_Logical,posCu1);
     
     
     
@@ -231,7 +231,7 @@ public:
 		    -RailHeight/2. + ZPlus_SecondInterrail_Cu_Thickness/2.,
 		    Ecal_barrel_halfZ - moduleLength*(i+1/2.));
 
-    *pVol = pContainerLogical->placeVolume(Cu_2_Logical,posCu2);
+    pVol = pContainerLogical.placeVolume(Cu_2_Logical,posCu2);
 
   }
 
@@ -240,14 +240,14 @@ public:
   };
 
   // to build Ecal Barrel service into the service assembly 
-  bool DoBuildEcalBarrelServices(PlacedVolume *pVol,Assembly *envelope){
+  bool DoBuildEcalBarrelServices(PlacedVolume &pVol,Assembly &envelope){
 
     Box ContainerSolid(top_dim_x/2., RailHeight/2., Ecal_barrel_halfZ); 
     Volume containerLogical("EcalBarrelServicesContainerLogical",ContainerSolid,air);
     //containerLogical.setVisAttributes("SeeThrough");
     //containerLogical.setVisAttributes("MagentaVis");
 
-    if(!FillEcalBarrelServicesContainer(pVol,&containerLogical))
+    if(!FillEcalBarrelServicesContainer(pVol,containerLogical))
       return false;
 
     for (int stave_id = 1; stave_id < 9 ; stave_id++)
@@ -259,7 +259,7 @@ public:
 				(Ecal_outer_radius + RailHeight/2.)*cos(phirot)+module_thickness * sin(M_PI/4.)*sin(-phirot), 
 				0 );
 	Transform3D tran3D(rot,stavePosition);
-	*pVol = envelope->placeVolume(containerLogical,tran3D);
+	pVol = envelope.placeVolume(containerLogical,tran3D);
       }
     
     return true;
@@ -329,7 +329,7 @@ public:
 
 
   // to build Ecal Barrel service into the service assembly 
-  bool DoBuildEcalBarrel_EndCapServices(PlacedVolume *pVol,Assembly *envelope){
+  bool DoBuildEcalBarrel_EndCapServices(PlacedVolume &pVol,Assembly &envelope){
 
     double containerThickness = ZMinus_PE_Thickness + ZMinus_Cu_Thickness;
     double z_position = -Ecal_barrel_halfZ -containerThickness/2.;
@@ -357,7 +357,7 @@ public:
 
       Position  PosPE(0,0,containerThickness/2. - PE_Thickness/2.);
       
-      *pVol = containerLogical.placeVolume(PELogical,PosPE);
+      pVol = containerLogical.placeVolume(PELogical,PosPE);
       
       Box Cu_Solid(container_x_dim/2., module_thickness/2., Cu_Thickness/2.); 
       
@@ -366,7 +366,7 @@ public:
       
       Position  PosCu(0,0,-containerThickness/2. + Cu_Thickness/2.);
       
-      *pVol = containerLogical.placeVolume(Cu_Logical,PosCu);
+      pVol = containerLogical.placeVolume(Cu_Logical,PosCu);
 
       
       for (int stave_id = 1; stave_id < 9 ; stave_id++){
@@ -397,7 +397,7 @@ public:
 	  }
 	
 	Transform3D tran3D(rot,stavePosition);
-	*pVol = envelope->placeVolume(containerLogical,tran3D);
+	pVol = envelope.placeVolume(containerLogical,tran3D);
 	
       }
       

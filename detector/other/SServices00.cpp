@@ -96,7 +96,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, Ref_t)  {
   for(int i=0;i<N_TPC_RINGS;i++)
     TPCEndplateServices.settpcEndplateServicesRing_R_ro(tpcEndplateServices_R[i],tpcEndplateServices_r[i]);
   
-  TPCEndplateServices.DoBuildTPCEndplateServices(&pv,&envelope_assembly);
+  TPCEndplateServices.DoBuildTPCEndplateServices(pv,envelope_assembly);
  
 
 
@@ -171,7 +171,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, Ref_t)  {
   EcalBarrelServices.setZPlus_SecondInterrail_Cu_Thickness(ZPlus_SecondInterrail_Cu_Thickness);
   EcalBarrelServices.setOldRailSeparation(OldRailSeparation);
 
-  EcalBarrelServices.DoBuildEcalBarrelServices(&pv,&envelope_assembly);
+  EcalBarrelServices.DoBuildEcalBarrelServices(pv,envelope_assembly);
 
 
 
@@ -203,16 +203,16 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, Ref_t)  {
   EcalBarrel_EndCapServices.setZPlus_PE_Thickness(ZPlus_PE_Thickness);
   EcalBarrel_EndCapServices.setZPlus_Cu_Thickness(ZPlus_Cu_Thickness);
 
-  EcalBarrel_EndCapServices.DoBuildEcalBarrel_EndCapServices(&pv,&envelope_assembly);
+  EcalBarrel_EndCapServices.DoBuildEcalBarrel_EndCapServices(pv,envelope_assembly);
 
 
 
 
 
 
-  //BuildHcalBarrel_EndCapServices(&pv,&envelope_assembly);
+  //BuildHcalBarrel_EndCapServices(pv,envelope_assembly);
 
-  //BuildSitCables(&pv,&envelope_assembly);
+  //BuildSitCables(pv,envelope_assembly);
 
 
 //====================================================================
