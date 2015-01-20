@@ -1,0 +1,75 @@
+<!-- ====================================================================== -->
+<!--                                                                        -->
+<!--    XML description of the complete SiD tracker detector                -->
+<!--    of the SiD linear collider detector design.                         -->
+<!--                                                                        -->
+<!--    Contained are the required                                          -->
+<!--      ++ global constants used uniquely by this module                  -->
+<!--      ++ visualization attributes                                       -->
+<!--      ++ the definition of the readout structure and the                -->
+<!--         readout segmentation (if necessary)                            -->
+<!--      ++ the include statements for the sensitive detectors and         -->
+<!--         the corresponding support structure(s)                         -->
+<!--                                                                        -->
+<!--                                                                        -->
+<!--   @author  M.Frank                                                     -->
+<!--   @date    14/11/2014                                                  -->
+<!--                                                                        -->
+<!-- ====================================================================== -->
+
+<lccdd>
+    
+    <!--  Definition of the used visualization attributes    -->
+    <display>
+        <vis name="EcalBarrelVis"       alpha="1.0" r="1.0"  g="1.0"  b="0.0"  showDaughters="true" visible="false"/>
+        <vis name="EcalStaveVis"        alpha="1.0" r="0.0"  g="0.0"  b="1.0"  showDaughters="true" visible="true"/>
+        <vis name="EcalLayerVis"        alpha="1.0" r="0.8"  g="0.8"  b="0.0"  showDaughters="true" visible="true"/>
+        
+        <vis name="EcalSensitiveVis"    alpha="1.0" r="0.7"  g="0.3"  b="0.0"  showDaughters="false" visible="true"/>
+        <vis name="EcalAbsorberVis"     alpha="1.0" r="0.4"  g="0.4"  b="0.0"  showDaughters="false" visible="true"/>
+        
+        <vis name="EcalEndcapVis"       alpha="1.0" r="0.77" g="0.74" b="0.86" showDaughters="true" visible="true"/>
+    </display>
+    
+    <!--  Definition of the readout segmentation/definition  -->
+    <readouts>
+        <readout name="EcalBarrelHits">
+            <segmentation type="CartesianGridXY" grid_size_x="3.5" grid_size_y="3.5" />
+            <id>system:8,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id>
+        </readout>
+    </readouts>
+    
+    <!--  Includes for sensitives and support                -->
+    <detectors>
+        <detector id="EcalBarrel_ID" name="EcalBarrel" type="DD4hep_EcalBarrel" readout="EcalBarrelHits" vis="EcalBarrelVis" calorimeterType="EM_BARREL">
+            
+            <comment>Electromagnetic Calorimeter Barrel</comment>
+            
+            <dimensions numsides="(int) CaloSides" rmin="EcalBarrel_rmin" z="EcalBarrel_zmax*2" />
+            <staves vis="EcalStaveVis"/>
+            <layer repeat="1" vis="EcalLayerVis">
+                <slice material = "Silicon" thickness = "0.032*cm" sensitive="yes" limits="cal_limits" vis="EcalSensitiveVis"/>
+                <slice material = "Copper"  thickness = "0.005*cm" vis="EcalAbsorberVis"/>
+                <slice material = "Kapton"  thickness = "0.030*cm" vis="EcalAbsorberVis"/>
+                <slice material = "Air"     thickness = "0.033*cm" vis="InvisibleNoDaughters"/>
+            </layer>
+            <layer repeat="20" vis="EcalLayerVis">
+                <slice material = "TungstenDens24" thickness = "0.25*cm" vis="EcalAbsorberVis"/>
+                <slice material = "Air"     thickness = "0.025*cm" vis="InvisibleNoDaughters"/>
+                <slice material = "Silicon" thickness = "0.032*cm" sensitive="yes" limits="cal_limits" vis="EcalSensitiveVis"/>
+                <slice material = "Copper"  thickness = "0.005*cm" vis="EcalAbsorberVis"/>
+                <slice material = "Kapton"  thickness = "0.030*cm" vis="EcalAbsorberVis"/>
+                <slice material = "Air"     thickness = "0.033*cm" vis="InvisibleNoDaughters"/>
+            </layer>
+            <layer repeat="10" vis="EcalLayerVis">
+                <slice material = "TungstenDens24" thickness = "0.5*cm" vis="EcalAbsorberVis"/>
+                <slice material = "Air"     thickness = "0.025*cm" vis="InvisibleNoDaughters"/>
+                <slice material = "Silicon" thickness = "0.032*cm" sensitive="yes" limits="cal_limits" vis="EcalSensitiveVis"/>
+                <slice material = "Copper"  thickness = "0.005*cm" vis="EcalAbsorberVis"/>
+                <slice material = "Kapton"  thickness = "0.030*cm" vis="EcalAbsorberVis"/>
+                <slice material = "Air"     thickness = "0.033*cm" vis="InvisibleNoDaughters"/>
+            </layer>
+        </detector>
+    </detectors>
+
+</lccdd>

@@ -1,0 +1,66 @@
+<!-- ====================================================================== -->
+<!--                                                                        -->
+<!--    XML description of the complete SiD tracker detector                -->
+<!--    of the SiD linear collider detector design.                         -->
+<!--                                                                        -->
+<!--    Contained are the required                                          -->
+<!--      ++ global constants used uniquely by this module                  -->
+<!--      ++ visualization attributes                                       -->
+<!--      ++ the definition of the readout structure and the                -->
+<!--         readout segmentation (if necessary)                            -->
+<!--      ++ the include statements for the sensitive detectors and         -->
+<!--         the corresponding support structure(s)                         -->
+<!--                                                                        -->
+<!--                                                                        -->
+<!--   @author  M.Frank                                                     -->
+<!--   @date    14/11/2014                                                  -->
+<!--                                                                        -->
+<!-- ====================================================================== -->
+
+<lccdd>
+    <!--  Definition of global dictionary constants          -->
+    <define>
+    </define>
+    
+    <!--  Definition of the readout segmentation/definition  -->
+    <readouts>
+        <readout name="EcalEndcapHits">
+            <segmentation type="CartesianGridXY" grid_size_x="3.5" grid_size_y="3.5" />
+            <id>system:8,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id>
+        </readout>
+    </readouts>
+    
+    <!--  Includes for sensitives and support                -->
+    <detectors>
+        <detector id="EcalEndcap_ID" name="EcalEndcap" type="DD4hep_PolyhedraEndcapCalorimeter2" reflect="true" readout="EcalEndcapHits" vis="EcalEndcapVis" calorimeterType="EM_ENDCAP">
+            
+            <comment>Electromagnetic Calorimeter Endcaps</comment>
+            
+            <dimensions numsides="(int) CaloSides" zmin="EcalEndcap_zmin" rmin="EcalEndcap_rmin" rmax="EcalEndcap_rmax" />
+            <layer repeat="1" vis="EcalLayerVis">
+                <slice material = "Silicon" thickness = "0.032*cm" sensitive="yes" limits="cal_limits" vis="EcalSensitiveVis"/>
+                <slice material = "Copper"  thickness = "0.005*cm" vis="EcalAbsorberVis"/>
+                <slice material = "Kapton"  thickness = "0.030*cm" vis="EcalAbsorberVis"/>
+                <slice material = "Air"     thickness = "0.033*cm" vis="InvisibleNoDaughters"/>
+            </layer>
+            <layer repeat="20" vis="EcalLayerVis">
+                <slice material = "TungstenDens24" thickness = "0.25*cm" />
+                <slice material = "Air"     thickness = "0.025*cm" vis="InvisibleNoDaughters"/>
+                <slice material = "Silicon" thickness = "0.032*cm" sensitive="yes" limits="cal_limits" vis="EcalSensitiveVis"/>
+                <slice material = "Copper"  thickness = "0.005*cm" vis="EcalAbsorberVis"/>
+                <slice material = "Kapton"  thickness = "0.030*cm" vis="EcalAbsorberVis"/>
+                <slice material = "Air"     thickness = "0.033*cm" vis="InvisibleNoDaughters"/>
+            </layer>
+            <layer repeat="10" vis="EcalLayerVis">
+                <slice material = "TungstenDens24" thickness = "0.5*cm" />
+                <slice material = "Air"     thickness = "0.025*cm" vis="InvisibleNoDaughters"/>
+                <slice material = "Silicon" thickness = "0.032*cm" sensitive="yes" limits="cal_limits" vis="EcalSensitiveVis"/>
+                <slice material = "Copper"  thickness = "0.005*cm" vis="EcalAbsorberVis"/>
+                <slice material = "Kapton"  thickness = "0.030*cm" vis="EcalAbsorberVis"/>
+                <slice material = "Air"     thickness = "0.033*cm" vis="InvisibleNoDaughters"/>
+            </layer>
+        </detector>
+    </detectors>
+    <!--
+     -->
+</lccdd>
