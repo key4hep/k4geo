@@ -38,7 +38,11 @@ lcioInputFile  = 'mcparticles.slcio'
 
 lcioOutputFile = 'simple_lcio.slcio'
 
+physicsList    = 'FTFP_BERT'  # 'QGSP_BERT'
+
 #---subset of detectors to initialize (all if list is empty)
+# this does not work, as the complete geometry form the compact.xml files
+# is already instantiated ...
 #detectorList = []
 #detectorList = ['VTX','SIT','FTD']
 
@@ -176,7 +180,7 @@ def run():
 
 #=================================================================================
   # Now build the physics list:
-  phys = simple.setupPhysics('QGSP_BERT')
+  phys = simple.setupPhysics( physicsList )
 
   #fg: do we need these really ?
   #fg:  ph = DDG4.PhysicsList(kernel,'Geant4PhysicsList/Myphysics')

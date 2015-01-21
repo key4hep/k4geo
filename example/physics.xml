@@ -16,11 +16,11 @@
 		stepper="HelixSimpleRunge"
 		equation="Mag_UsualEqRhs">
     </attributes>
-  </properties>
+  </properties>`
 
-  <sequences>
-    <sequence name="Geant4PhysicsListSequence/PhysicsList" decays="true" extends="FTFP_BERT"/>
-  </sequences>
+  <!-- <sequences> -->
+  <!--   <sequence name="Geant4PhysicsListSequence/PhysicsList" decays="true" extends="FTFP_BERT"/> -->
+  <!-- </sequences> -->
 
   
 </geant4_setup>
