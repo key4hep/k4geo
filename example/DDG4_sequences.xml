@@ -14,7 +14,7 @@
   -->
   <!--kernel UI="UI" NumEvents="1"/-->  
 
-  <kernel UI="" NumEvents="3" />  
+  <kernel UI="" NumEvents="1000" />  
 
   <!-- List of globally known actions. These actions will be registered with the Geant4Kernel 
        object and may be retrieved by there using the action name.
@@ -87,7 +87,7 @@
       <properties particle="opticalphoton"/>
     </filter>
     <filter name="EnergyDepositMinimumCut/SiTracker">
-      <properties Cut="10.*keV"/>
+      <properties Cut="1.*keV"/>
     </filter>
     <filter name="EnergyDepositMinimumCut/TPC">
       <properties Cut="0.1*keV"/>
@@ -163,8 +163,8 @@
     <sequence sd="VTX" type="Geant4SensDetActionSequence">
       <filter name="GeantinoRejector"/>
       <filter name="EnergyDepositMinimumCut/SiTracker"/>
-      <action name="Geant4TrackerCombineAction/VTX"/>
-      <!-- <action name="Geant4TrackerAction/VTX"/> -->
+      <!-- <action name="Geant4TrackerCombineAction/VTX"/> -->
+      <action name="Geant4TrackerAction/VTX"/>
     </sequence>
 
 
@@ -178,8 +178,8 @@
     <sequence sd="SIT" type="Geant4SensDetActionSequence">
       <filter name="GeantinoRejector"/>
       <filter name="EnergyDepositMinimumCut/SiTracker"/>
-      <action name="Geant4TrackerCombineAction/SIT"/>
-      <!-- <action name="Geant4TrackerAction/SIT"/> -->
+      <!-- <action name="Geant4TrackerCombineAction/SIT"/> -->
+      <action name="Geant4TrackerAction/SIT"/>
     </sequence>
     
     <sequence sd="TPC" type="Geant4SensDetActionSequence">
@@ -187,9 +187,8 @@
       <filter name="EnergyDepositMinimumCut/TPC"/>
       <action name="Geant4TrackerCombineAction/TPC">
       <!-- <action name="Geant4TrackerAction/TPC"> -->
-	<properties HitCreationMode="2" /> <!--DETAILED_MODE --> 
+    	<properties HitCreationMode="2" /> <!--DETAILED_MODE -->
       </action>
-      
     </sequence>
 
     <sequence sd="SET" type="Geant4SensDetActionSequence">

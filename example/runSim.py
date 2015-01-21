@@ -1,11 +1,5 @@
-#
-import os, time, DDG4
-from DDG4 import OutputLevel as Output
-from SystemOfUnits import *
 import sys
 
-#
-#
 """
 
    DD4hep simulation example setup using the python configuration
@@ -16,26 +10,59 @@ import sys
 
 """
 
-#==================================================================================
+#------------------------------------------------
+# read the compact xml file from the command line
 #
+try:
+  compactFile = sys.argv[1]
+except IndexError:
+  print " usage:  python runSim.py compact.xml"
+  print
+  sys.exit(1)
+
+#-----------------------------------------------
+
+import os, time, DDG4
+from DDG4 import OutputLevel as Output
+from SystemOfUnits import *
+
+
+#==================================================================================
+###################################################################################
 # some configuration variables (could go to a seperate 'steering' file)
 #
-numberOfEvents = 3
-lcioInputFile  = 'mcparticles.slcio'
-lcioOutputFile = 'simple_lcio.slcio'
-compactFile = sys.argv[1]
 
+numberOfEvents = 3
+
+lcioInputFile  = 'mcparticles.slcio'
+
+lcioOutputFile = 'simple_lcio.slcio'
+
+#---subset of detectors to initialize (all if list is empty)
+#detectorList = []
+#detectorList = ['VTX','SIT','FTD']
+
+#
+###################################################################################
 #==================================================================================
 
+
+
+
 def getDetectorLists( lcdd ):
-  ''' get lists of trackers and calorimeters defined in lcdd '''
+  ''' get lists of trackers and calorimeters that are defined in lcdd (the compact xml file)'''
+#  if len(detectorList):
+#    print " subset list of detectors given - will only instantiate these: " , detectorList
   t,c = [],[]
-  for i in DDG4.Iter( lcdd.detectors() ):
+  for i in lcdd.detectors():
     det = DDG4.DetElement(i.second)
-    sd =  lcdd.sensitiveDetector( det.name() )
+    name = det.name()
+    sd =  lcdd.sensitiveDetector( name )
     if sd.isValid():
       type = sd.type()
-      print 'getDetectorLists - found detctor ' ,  det.name() , ' type: ' , type
+#      if len(detectorList) and not(name in detectorList):
+#        continue
+      print 'getDetectorLists - found active detctor ' ,  name , ' type: ' , type
       if type == "tracker":
         t.append( det.name() )
       if type == "calorimeter":
@@ -46,6 +73,7 @@ def getDetectorLists( lcdd ):
 #==================================================================================
 
 def run():
+
   kernel = DDG4.Kernel()
 
   try:
@@ -68,6 +96,7 @@ def run():
   lcdd = kernel.lcdd() 
 
   DDG4.importConstants( lcdd ) 
+
 #----------------------------------------------------------------------------------
 
   simple = DDG4.Simple( kernel, tracker='Geant4TrackerAction',calo='Geant4CalorimeterAction')
@@ -107,16 +136,8 @@ def run():
   part.OutputLevel = Output.INFO #generator_output_level
   part.enableUI()
   user = DDG4.Action(kernel,"Geant4TCUserParticleHandler/UserParticleHandler")
-
-#fixme: accessing the properties fdoes not work on macos (issue with map iteration)
-#  tracker_region_zmax = lcdd.properties()["tracker_region_zmax"]
-#  tracker_region_rmax = lcdd.properties()["tracker_region_rmax"] 
-#   
-#  print "setting tracking volume to zmax: " ,tracker_region_zmax  , " rmax: " ,  tracker_region_rmax , " " , DDG4.tracker_region_rmax
-#
-#  user.TrackingVolume_Zmax = tracker_region_rmax
-#  user.TrackingVolume_Rmax = tracker_region_rmax
-
+  user.TrackingVolume_Zmax = DDG4.tracker_region_zmax
+  user.TrackingVolume_Rmax = DDG4.tracker_region_rmax
 #  user.enableUI()
   part.adopt(user)
 
