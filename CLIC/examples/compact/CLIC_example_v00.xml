@@ -28,7 +28,6 @@
         <constant name="MuonSides" value="8"/>
         
         <constant name="EcalBarrel_ID" value="6"/>
-        <constant name="EcalBarrel_rmin" value="126.50*cm + world_side - world_side"/>
         <constant name="EcalBarrel_rmin" value="126.50*cm"/>
         <constant name="EcalBarrel_zmax" value="176.50*cm"/>
         
@@ -37,6 +36,11 @@
         <!-- Correction from going from inner circle to outer circle -->
         <constant name="EcalEndcap_rmax" value="(EcalBarrel_rmin - 1.5*cm) / (cos(pi/CaloSides))"/>
         <constant name="EcalEndcap_zmin" value="165.70*cm"/>
+
+
+        <constant name="tracker_region_zmax" value="EcalBarrel_zmax"/>
+        <constant name="tracker_region_rmax" value="EcalEndcap_rmax"/>
+
         
         <constant name="HcalBarrel_ID" value="8"/>
         <constant name="HcalBarrel_rmin" value="141.90*cm"/>
