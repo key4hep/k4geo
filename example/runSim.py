@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import sys
 
 """
@@ -32,11 +33,14 @@ from SystemOfUnits import *
 # some configuration variables (could go to a seperate 'steering' file)
 #
 
-numberOfEvents = 3
+numberOfEvents = 10
 
 lcioInputFile  = 'mcparticles.slcio'
+#lcioInputFile  = 'mcparticles_single_muon_5GeV_7deg.slcio'
+#lcioInputFile  = 'mcparticles_single_muon_5GeV_85deg.slcio'
 
 lcioOutputFile = 'simple_lcio.slcio'
+#lcioOutputFile = lcioInputFile[:len(lcioInputFile)-len('.slcio')]+'_SIM.slcio'
 
 physicsList    = 'FTFP_BERT'  # 'QGSP_BERT'
 
@@ -45,6 +49,21 @@ physicsList    = 'FTFP_BERT'  # 'QGSP_BERT'
 # is already instantiated ...
 #detectorList = []
 #detectorList = ['VTX','SIT','FTD']
+
+
+#-------- dictionary for configuration variables used below ----------------------
+cfgDict = {}
+
+#---- B field stepping -------
+cfgDict['field.stepper']            = "HelixSimpleRunge"
+cfgDict['field.equation']           = "Mag_UsualEqRhs"
+cfgDict['field.eps_min']            = 5e-05*mm
+cfgDict['field.eps_max']            = 0.001*mm
+cfgDict['field.min_chord_step']     = 0.01*mm
+cfgDict['field.delta_chord']        = 0.25*mm
+cfgDict['field.delta_intersection'] = 1e-05*mm
+cfgDict['field.delta_one_step']     = 0.001*mm
+
 
 #
 ###################################################################################
@@ -90,12 +109,7 @@ def run():
 
   example_dir = lcgeo_dir+'/example';
 
-#  kernel.loadGeometry("file:"+lcgeo_dir+"/ILD/compact/ILD_o1_v05.xml")
   kernel.loadGeometry("file:"+ compactFile )
-
-  ##fg: fixme: this defines setup parameters for the B-field
-  ##    would like to do this from pyhton ...
-  kernel.loadXML("file:"+example_dir+"/physics.xml")
 
   lcdd = kernel.lcdd() 
 
@@ -103,7 +117,7 @@ def run():
 
 #----------------------------------------------------------------------------------
 
-  simple = DDG4.Simple( kernel, tracker='Geant4TrackerAction',calo='Geant4CalorimeterAction')
+  simple = DDG4.Geant4( kernel, tracker='Geant4TrackerAction',calo='Geant4CalorimeterAction')
 
   simple.printDetectors()
 
@@ -115,6 +129,19 @@ def run():
   kernel.NumEvents=numberOfEvents 
 
 #-----------------------------------------------------------------------------------
+#  setup the magnetic field:
+
+  field = simple.addConfig('Geant4FieldTrackingSetupAction/MagFieldTrackingSetup')
+  field.stepper            = cfgDict['field.stepper']
+  field.equation           = cfgDict['field.equation']          
+  field.eps_min            = cfgDict['field.eps_min']           
+  field.eps_max            = cfgDict['field.eps_max']           
+  field.min_chord_step     = cfgDict['field.min_chord_step']    
+  field.delta_chord        = cfgDict['field.delta_chord']       
+  field.delta_intersection = cfgDict['field.delta_intersection']
+  field.delta_one_step     = cfgDict['field.delta_one_step']    
+
+#----------------------------------------------------------------------------------
 
   # Configure Run actions
   run1 = DDG4.RunAction(kernel,'Geant4TestRunAction/RunInit')
