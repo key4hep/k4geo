@@ -875,22 +875,22 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       // registerPV( Phys );
 
       //      pv = FTDDiskLogical.placeVolume( FTDPetalAirLogical, transPetal ) ;
-      pv = FTDDiskLogicalPZ.placeVolume( FTDPetalAirLogical, transPetalPZ ) ;
-
-      pv.addPhysVolID("module", i ) ;
-
-      pv = FTDDiskLogicalNZ.placeVolume( FTDPetalAirLogical, transPetalNZ ) ;
-
-      pv.addPhysVolID("module", i ) ;
-
 
       // create DetElements for every petal
       std::stringstream sspz ;  sspz << "ftd_petal_posZ_" << disk_number << "_"  << i  ;
       std::stringstream ssnz ;  ssnz << "ftd_petal_negZ_" << disk_number << "_"  << i  ;
       DetElement petalDEposZ( diskDEposZ, sspz.str() ,  x_det.id() );
       DetElement petalDEnegZ( diskDEnegZ, ssnz.str() ,  x_det.id() );
+
+      pv = FTDDiskLogicalPZ.placeVolume( FTDPetalAirLogical, transPetalPZ ) ;
+      pv.addPhysVolID("module", i ) ;
       petalDEposZ.setPlacement( pv ) ;
+
+
+      pv = FTDDiskLogicalNZ.placeVolume( FTDPetalAirLogical, transPetalNZ ) ;
+      pv.addPhysVolID("module", i ) ;
       petalDEnegZ.setPlacement( pv ) ;
+
       petVecposZ[i] =  petalDEposZ ;
       petVecnegZ[i] =  petalDEnegZ ;
 
