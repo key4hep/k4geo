@@ -47,13 +47,13 @@
             
             <comment>Readout and Cabling</comment>
             
-            <layer id="1" inner_r = "VertexBarrel_r1" outer_r="VertexBarrel_r1 + 0.02*cm"  inner_z= "VertexBarrel_zmax + 0.1*cm" vis="GreenVis">
+            <layer id="1" inner_r = "VertexBarrel_r1" outer_r = "VertexBarrel_r1 + 0.02*cm"  inner_z= "VertexBarrel_zmax + 0.1*cm">
                 <slice material = "G10" thickness ="0.5*cm"/>
             </layer>
-            <layer id="2" inner_r = "VertexBarrel_r2" outer_r="VertexBarrel_r2 + 0.02*cm" inner_z="VertexBarrel_zmax + 0.1*cm" vis = "BlueVis">
+            <layer id="2" inner_r = "VertexBarrel_r2" outer_r = "VertexBarrel_r2 + 0.02*cm"  inner_z= "VertexBarrel_zmax + 0.1*cm">
                 <slice material = "G10" thickness ="0.5*cm"/>
             </layer>
-            <layer id="3" inner_r = "VertexBarrel_r3" outer_r="VertexBarrel_r3 + 0.02*cm"  inner_z="VertexBarrel_zmax + 0.1*cm" vis="RedVis">
+            <layer id="3" inner_r = "VertexBarrel_r3" outer_r = "VertexBarrel_r3 + 0.02*cm"  inner_z= "VertexBarrel_zmax + 0.1*cm">
                 <slice material = "G10" thickness ="0.5*cm"/>
             </layer>
             <layer id="4" inner_r = "VertexBarrel_r4" outer_r = "VertexBarrel_r4 + 0.02*cm"  inner_z= "VertexBarrel_zmax + 0.1*cm">

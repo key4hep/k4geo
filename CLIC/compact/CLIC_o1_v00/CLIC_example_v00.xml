@@ -221,7 +221,7 @@
     
     <include ref="VertexBarrel_o1_v01.xml"/>
     <include ref="VertexEndcap_o1_v01.xml"/>
-    <include ref="VertexSupport_o1_v01.xml"/>
+    <!--include ref="VertexSupport_o1_v01.xml"/-->
     
     <include ref="TrackerBarrel_o1_v01.xml"/>
     <include ref="TrackerEndcap_o1_v01.xml"/>
