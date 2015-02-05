@@ -1011,17 +1011,41 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
 
     //---- meassurement surface vectors 
-    Vector3D u( 1. , 0. , 0. ) ;
-    Vector3D v( 0. , 1. , 0. ) ;
-    Vector3D n( 0. , 0. , 1. ) ;
+    Vector3D u0( 1. , 0. ,  0. ) ;
+    Vector3D v0( 0. , 1. ,  0. ) ;
+    Vector3D n0( 0. , 0. , -1. ) ;
+    Vector3D u1,v1,n1 ;
     
     double supp_thick = _dbParDisk.petal_cp_support_thickness ;
     double active_silicon_thickness =  _dbParDisk.disks_Si_thickness  ;
 
-    VolPlane surf0( volV[0].first , SurfaceType(SurfaceType::Sensitive) , active_silicon_thickness/2 , active_silicon_thickness/2 + supp_thick/2 ,  u,v,n ) ;
-    VolPlane surf1( volV[1].first , SurfaceType(SurfaceType::Sensitive) , active_silicon_thickness/2 + supp_thick/2 , active_silicon_thickness/2 ,  u,v,n ) ; ;
+    SurfaceType surfType(SurfaceType::Sensitive) ;
+
+
+    if( ! _dbParDisk.sensor_is_pixel ){  // strip sensor
+      
+      surfType.setProperty( SurfaceType::Measurement1D , true ) ;
+      
+      // implement stereo angle 
+      double strip_angle  = _dbParExReco.strip_angle  ;
+      
+      // choose the rotation here such that is compatible with
+      // the old gear based system implementation:
+
+      u0.fill(  cos( strip_angle ) , -sin( strip_angle  ) , 0. ) ;
+      v0.fill(  sin( strip_angle ) ,  cos( strip_angle  ) , 0. ) ;
+
+      n1.fill(   0., 0., -1. ) ;
+      u1.fill(  cos( strip_angle ) ,  sin( strip_angle  ) , 0. ) ;
+      v1.fill( -sin( strip_angle ) ,  cos( strip_angle  ) , 0. ) ;
+
+    }
+
+    VolPlane surf0( volV[0].first , surfType , active_silicon_thickness/2 , active_silicon_thickness/2 + supp_thick/2 ,  u0,v0,n0 ) ;
+    VolPlane surf1( volV[1].first , surfType , active_silicon_thickness/2 + supp_thick/2 , active_silicon_thickness/2 ,  u1,v1,n1 ) ; ;
 
     //----
+
 
     // create DetElements for every sensor and assign to the petal DEs
     // one or two (for double layers ) for positve and negative z each 
