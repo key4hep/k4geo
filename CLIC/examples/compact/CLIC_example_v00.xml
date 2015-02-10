@@ -240,6 +240,18 @@
     <include ref="CLIC_example_v00/Shields_o1_v01.xml"/>
     <include ref="CLIC_example_v00/Solenoid_o1_v01.xml"/>
     
+    <plugins>
+      <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
+	<argument value="SiTrackerBarrel"/>
+	<argument value="dimension=1"/>
+      </plugin>
+      <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
+	<argument value="SiVertexBarrel"/>
+	<argument value="dimension=2"/>
+      </plugin>
+
+    </plugins>
+    
     <fields>
         <field name="GlobalSolenoid" type="solenoid"
             inner_field="5.0*tesla"
