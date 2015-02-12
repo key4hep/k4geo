@@ -423,6 +423,7 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
 
   for (int layer = 0; layer < numberPadRows; layer++) {
     
+#if 0
     // create twice the number of rings as there are pads, producing an lower and upper part of the pad with the boundry between them the pad-ring centre
     
     const double inner_lowerlayer_radius = rMin_Sensitive + (layer * (padHeight));
@@ -453,16 +454,47 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
 
 
     pv = sensitiveGasLog.placeVolume( lowerlayerLog ) ;
-    pv.addPhysVolID("layer", layer+1 ).addPhysVolID( "module", 0 ).addPhysVolID("sensor", 1 ) ;
+    pv.addPhysVolID("layer", layer ).addPhysVolID( "module", 0 ).addPhysVolID("sensor", 1 ) ;
 
     pv = sensitiveGasLog.placeVolume( upperlayerLog ) ;
-    pv.addPhysVolID("layer", layer+1 ).addPhysVolID( "module", 0 ).addPhysVolID("sensor", 2 ) ;
+    pv.addPhysVolID("layer", layer ).addPhysVolID( "module", 0 ).addPhysVolID("sensor", 2 ) ;
     layerDEfwd.setPlacement( pv ) ;
     layerDEbwd.setPlacement( pv ) ;
 
     lowerlayerLog.setSensitiveDetector(sens);
     upperlayerLog.setSensitiveDetector(sens);
 
+#else
+    // create just one volume per pad ring
+    
+    const double inner_radius = rMin_Sensitive + (layer * (padHeight) );
+    const double outer_radius = inner_radius +  padHeight ;
+    
+    Tube layerSolid( inner_radius, outer_radius, dz_Sensitive / 2.0, phi1, phi2);
+
+    Volume layerLog( _toString( layer ,"TPC_layer_log_%02d") , layerSolid, material_TPC_Gas );
+
+    tpc.setVisAttributes(lcdd,  "Invisible" ,  layerLog) ;
+    
+    DetElement   layerDEfwd( sensGasDEfwd ,   _toString( layer, "tpc_row_fwd_%03d") , x_det.id() );
+    DetElement   layerDEbwd( sensGasDEbwd ,   _toString( layer, "tpc_row_bwd_%03d") , x_det.id() );
+ 
+    Vector3D o(  inner_radius + (padHeight/2.0)  , 0. , 0. ) ;
+
+    VolCylinder surf( layerLog , SurfaceType(SurfaceType::Sensitive, SurfaceType::Invisible ) ,  (padHeight/2.0) ,  (padHeight/2.0) ,o ) ;
+
+    volSurfaceList( layerDEfwd )->push_back( surf ) ;
+    volSurfaceList( layerDEbwd )->push_back( surf ) ;
+
+    pv = sensitiveGasLog.placeVolume( layerLog ) ;
+    pv.addPhysVolID("layer", layer  ).addPhysVolID( "module", 0 ) ;
+
+    layerDEfwd.setPlacement( pv ) ;
+    layerDEbwd.setPlacement( pv ) ;
+
+    layerLog.setSensitiveDetector(sens);
+
+#endif
   }
 
   // Assembly of the TPC Readout
