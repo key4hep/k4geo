@@ -21,7 +21,7 @@
     
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
-        <readout name="SiVertexEndcapHits">
+        <readout name="VertexEndcapHits">
             <id>system:8,barrel:3,layer:4,wedge:6,module:6,sensor:1,side:32:-2,strip:26</id>
         </readout>
     </readouts>
@@ -30,7 +30,7 @@
         
         <comment>Vertex Detector Endcaps</comment>
         
-        <detector id="2" name="SiVertexEndcap" type="DD4hep_SiTrackerEndcap2" readout="SiVertexEndcapHits" reflect="true">
+        <detector id="2" name="VertexEndcap" type="VertexEndcap_o1_v01" readout="VertexEndcapHits" reflect="true">
             <module name="SiVertexEndcapModule1">
                 <trd x1="VertexEndcap_rmin1 * tan(pi/(VertexEndcapModules-0.1))" x2="VertexEndcap_rmax * sin(pi/(VertexEndcapModules-0.1*cm))" z="(VertexEndcap_rmax - VertexEndcap_rmin1) / 2" />
                 <module_component thickness="0.005*cm" material="Silicon" sensitive="true"  vis="SiVertexSensitiveVis"/>

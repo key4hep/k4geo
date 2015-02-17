@@ -32,14 +32,14 @@
     
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
-        <readout name="SiVertexBarrelHits">
+        <readout name="VertexBarrelHits">
             <id>system:8,barrel:3,layer:4,module:14,sensor:2,side:32:-2,strip:24</id>
         </readout>
     </readouts>
     
     <!--  Includes for sensitives and support                -->
     <detectors>
-        <detector id="VertexBarrel_ID" name="SiVertexBarrel" type="DD4hep_SiTrackerBarrel" readout="SiVertexBarrelHits" insideTrackingVolume="true">
+        <detector id="VertexBarrel_ID" name="VertexBarrel" type="VertexBarrel_o1_v01" readout="VertexBarrelHits" insideTrackingVolume="true">
             
             <comment>Vertex Detector Barrel</comment>
             
