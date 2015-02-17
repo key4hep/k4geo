@@ -79,32 +79,32 @@
                     <position z="-0.0050*cm"/>
                 </module_component>
             </module>
-            <layer module="VtxBarrelModuleInner1" id="1" vis="SiVertexBarrelLayerVis">
+            <layer module="VtxBarrelModuleInner1" id="0" vis="SiVertexBarrelLayerVis">
                 <barrel_envelope inner_r="VertexBarrel_r1 - 0.08*cm" outer_r="VertexBarrel_r1 + 0.08*cm" z_length="VertexBarrel_zmax * 2"/>
                 <rphi_layout phi_tilt="0.0" nphi="18" phi0="0.2618" rc="VertexBarrel_r1" dr="-0.6*mm"/>
                 <z_layout dr="0.0" z0="0.0" nz="1"/>
             </layer>
-            <layer module="VtxBarrelModuleInner2" id="2" vis="SiVertexBarrelLayerVis">
+            <layer module="VtxBarrelModuleInner2" id="1" vis="SiVertexBarrelLayerVis">
                 <barrel_envelope inner_r="VertexBarrel_r1 + 1.7*mm-0.08*cm" outer_r="VertexBarrel_r1 + 1.7*mm+0.08*cm" z_length="VertexBarrel_zmax * 2"/>
                 <rphi_layout phi_tilt="0.0" nphi="18" phi0="0.2618" rc="VertexBarrel_r1+1.7*mm" dr="-0.6*mm"/>
                 <z_layout dr="0.0" z0="0.0" nz="1"/>
             </layer>
-            <layer module="VtxBarrelModuleOuter1" id="3" vis="SiVertexBarrelLayerVis">
+            <layer module="VtxBarrelModuleOuter1" id="2" vis="SiVertexBarrelLayerVis">
                 <barrel_envelope inner_r="VertexBarrel_r3 - 0.08*cm" outer_r="VertexBarrel_r3 + 0.08*cm" z_length="VertexBarrel_zmax * 2"/>
                 <rphi_layout phi_tilt="0.0" nphi="24" phi0="0.0" rc="VertexBarrel_r3" dr="-0.6*mm"/>
                 <z_layout dr="0.0" z0="0.0" nz="1"/>
             </layer>
-            <layer module="VtxBarrelModuleOuter2" id="4" vis="SiVertexBarrelLayerVis">
+            <layer module="VtxBarrelModuleOuter2" id="3" vis="SiVertexBarrelLayerVis">
                 <barrel_envelope inner_r="VertexBarrel_r3 + 1.7*mm- 0.08*cm" outer_r="VertexBarrel_r3 + 1.7*mm+0.08*cm" z_length="VertexBarrel_zmax * 2"/>
                 <rphi_layout phi_tilt="0.0" nphi="24" phi0="0.0" rc="VertexBarrel_r3+1.7*mm" dr="-0.6*mm"/>
                 <z_layout dr="0.0" z0="0.0" nz="1"/>
             </layer>
-            <layer module="VtxBarrelModuleOuter1" id="5" vis="SiVertexBarrelLayerVis">
+            <layer module="VtxBarrelModuleOuter1" id="4" vis="SiVertexBarrelLayerVis">
                 <barrel_envelope inner_r="VertexBarrel_r5 - 0.08*cm" outer_r="VertexBarrel_r5 + 0.08*cm" z_length="VertexBarrel_zmax * 2"/>
                 <rphi_layout phi_tilt="0.0" nphi="36" phi0="0.0" rc="VertexBarrel_r5" dr="-0.6*mm"/>
                 <z_layout dr="0.0" z0="0.0" nz="1"/>
             </layer>
-            <layer module="VtxBarrelModuleOuter2" id="6" vis="SiVertexBarrelLayerVis">
+            <layer module="VtxBarrelModuleOuter2" id="5" vis="SiVertexBarrelLayerVis">
                 <barrel_envelope inner_r="VertexBarrel_r5 +1.7*mm-0.08*cm" outer_r="VertexBarrel_r5 + 1.7*mm+0.08*cm" z_length="VertexBarrel_zmax * 2"/>
                 <rphi_layout phi_tilt="0.0" nphi="36" phi0="0.0" rc="VertexBarrel_r5+1.7*mm" dr="-0.6*mm"/>
                 <z_layout dr="0.0" z0="0.0" nz="1"/>
