@@ -29,6 +29,10 @@ ENDIF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
 
 
+#---Options-------------------------------------------------------------------------
+
+option(BUILD_TESTING "Enable and build tests" ON)
+
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 find_package( DD4hep REQUIRED)
@@ -123,6 +127,15 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/this${PackageName}.sh
   DESTINATION bin
   )
 
+
+#---Testing-------------------------------------------------------------------------
+if(BUILD_TESTING)
+
+  include(CTest)
+  enable_testing()
+  #add_subdirectory(DDTest)
+
+endif(BUILD_TESTING)
 
 #--- install target-------------------------------------
 
