@@ -136,7 +136,7 @@
         <constant name="BeamPipe_zmin" value="CentralBeamPipe_zmax + (BeamPipe_thickness - CentralBeamPipe_thickness)/bp_cone_slope"/>
         <constant name="BeamPipeLiner_thickness" value="0.0*cm"/>
         
-        <constant name="VertexEndcap_ID" value="2"/>
+        <constant name="VertexEndcap_ID" value="3"/>
         <constant name="VertexEndcap_rmax" value="11.5*cm"/>
         <constant name="VertexEndcap_z1" value="12.0*cm"/>
         <constant name="VertexEndcap_z2" value="16.0*cm"/>
@@ -149,7 +149,7 @@
         <constant name="VertexEndcap_rmin3" value="CentralBeamPipe_rmax + VertexEndcap_offset"/>
         <constant name="VertexEndcap_rmin4" value="(VertexEndcap_z4 - CentralBeamPipe_zmax)*bp_cone_slope + CentralBeamPipe_rmax + VertexEndcap_offset"/>
         
-        <constant name="SiTrackerBarrel_ID" value="3"/>
+        <constant name="SiTrackerBarrel_ID" value="2"/>
         <constant name="SiTrackerEndcap_ID" value="4"/>
         
         <constant name="ForwardTracker_ID" value="5"/>
