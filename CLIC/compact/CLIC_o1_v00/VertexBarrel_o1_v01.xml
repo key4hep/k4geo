@@ -33,7 +33,7 @@
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
         <readout name="VertexBarrelHits">
-            <id>system:8,barrel:3,layer:4,module:14,sensor:2,side:32:-2,strip:24</id>
+            <id>system:5,side:-2,layer:9,module:8,sensor:8,barrel:3</id>
         </readout>
     </readouts>
     

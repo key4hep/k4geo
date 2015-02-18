@@ -246,7 +246,7 @@
             <argument value="dimension=1"/>
         </plugin>
         <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
-            <argument value="SiVertexBarrel"/>
+            <argument value="VertexBarrel"/>
             <argument value="dimension=2"/>
         </plugin>
     </plugins>
