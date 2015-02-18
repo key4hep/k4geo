@@ -13,11 +13,11 @@ using namespace std;
 using namespace DD4hep;
 using namespace DD4hep::Geometry;
 
-static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
+static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
   static double tolerance = 0e0;
   Layering      layering (e);
   xml_det_t     x_det     = e;
-  Material      air       = lcdd.air();
+ //unused:   Material      air       = lcdd.air();
 
   int           det_id    = x_det.id();
   string        det_name  = x_det.nameStr();
@@ -25,10 +25,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   xml_comp_t    x_dim     = x_det.dimensions();
   int           nsides    = x_dim.numsides();
 
-  double        dphi      = (2*M_PI/nsides);
-  double        hphi      = dphi/2;
+  //unused:  double        dphi      = (2*M_PI/nsides);
+  //unused:  double        hphi      = dphi/2;
 
-  double        thickness = layering.totalThickness();
+  //unused:  double        thickness = layering.totalThickness();
 
   double        inner_r   = x_dim.rmin();
   double        outer_r   = x_dim.rmax();
@@ -45,7 +45,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
   Transform3D   tr(rotZYX,pos);
 
-  xml_comp_t    x_staves  = x_det.staves();
+  //unused:  xml_comp_t    x_staves  = x_det.staves();
 
 
   DetElement    sdet      (det_name,det_id);
@@ -54,7 +54,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   // The shape PolyhedraRegular for envelope. You may define your shape.
   PolyhedraRegular hedra  (nsides,inner_r,outer_r+tolerance*2e0,x_dim.zhalf()*2.0);
   Volume        envelope  (det_name+"_envelope",hedra,env_mat);
-  PlacedVolume  env_phv   = motherVol.placeVolume(envelope,tr);
+  //unused:  PlacedVolume  env_phv   = 
+  motherVol.placeVolume(envelope,tr);
 
 
   // Then build and place the layers into the envelope in your way here.

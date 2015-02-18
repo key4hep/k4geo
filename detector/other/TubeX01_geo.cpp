@@ -57,7 +57,7 @@ namespace {
  *  @author: F.Gaede, DESY, Jan 2014
  *
  */
-static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
+static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
 
   //------------------------------------------
   //  See comments starting with '//**' for
@@ -131,7 +131,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   double beam_thickness = -99999;
   
   
-  bool saveToGear = true; // as long as this is true the vectors gearValZ, gearValRInner and gearValROuter will be filled in the coming loop
+  //unused: bool saveToGear = true; // as long as this is true the vectors gearValZ, gearValRInner and gearValROuter will be filled in the coming loop
   
   // db->exec("SELECT * FROM `tube`;");
   // while (db->getTuple()) {
@@ -241,7 +241,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       std::cout << "TubeX01: You are trying to build a crossing geometry without a crossing angle.\n"
 	"This is probably not what you want - better check your geometry data!" << std::endl ;
 
-      return false; // premature exit, Mokka will abort now
+      return 0 ;//false; // premature exit, Mokka will abort now
     }
 
     register double tmpAngle;
@@ -686,7 +686,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     }
     default: {
       //        Control::Log("TubeX01: Unimplemented \"crossType\" code.");
-      return false; // fatal failure
+      return 0 ; // fatal failure
     }
     } // switch (crossType)
   } // while (db->getTuple())

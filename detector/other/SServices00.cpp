@@ -41,7 +41,7 @@ using namespace DD4hep::Geometry;
 
 static Ref_t create_element(LCDD& lcdd, xml_h element, Ref_t)  {
 
-  static double tolerance = 0e0;
+  //unused:  static double tolerance = 0e0;
 
   xml_det_t x_det = element;
   string det_name = x_det.nameStr();

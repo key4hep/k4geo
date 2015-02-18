@@ -13,18 +13,18 @@ using namespace std;
 using namespace DD4hep;
 using namespace DD4hep::Geometry;
 
-static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
-  static double tolerance = 0e0;
+static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
+  //unused:  static double tolerance = 0e0;
   Layering      layering (e);
   xml_det_t     x_det     = e;
-  Material      air       = lcdd.air();
+  //unused:  Material      air       = lcdd.air();
 
   int           det_id    = x_det.id();
   string        det_name  = x_det.nameStr();
 
   xml_comp_t    x_dim     = x_det.dimensions();
 
-  double        thickness = layering.totalThickness();
+  //unused:  double        thickness = layering.totalThickness();
 
   double        inner_r   = x_dim.rmin();
   double        outer_r   = x_dim.rmax();
@@ -41,7 +41,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
   Transform3D   tr(rotZYX,pos);
 
-  xml_comp_t    x_staves  = x_det.staves();
+  //unused:  xml_comp_t    x_staves  = x_det.staves();
 
 
   DetElement    sdet      (det_name,det_id);
@@ -50,7 +50,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   // The shape Tube for envelope. You may define your shape.
   Tube          tubeSolid (inner_r, outer_r, x_dim.zhalf());
   Volume        envelope  (det_name+"_envelope",tubeSolid,env_mat);
-  PlacedVolume  env_phv   = motherVol.placeVolume(envelope,tr);
+  //unused:  PlacedVolume  env_phv   = 
+  motherVol.placeVolume(envelope,tr);
 
 
   // Then build and place the layers into the envelope in your way here.
