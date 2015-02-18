@@ -66,7 +66,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             c_vol.setLimitSet(lcdd, x_comp.limitsStr());
             c_vol.setVisAttributes(lcdd, x_comp.visStr());
             if ( x_comp.isSensitive() ) {
-//                 pv.addPhysVolID("wafer",wafer_number++); //FIXME not needed (no ID spec wafer )
+                //         pv.addPhysVolID("wafer",wafer_number++);
                 c_vol.setSensitiveDetector(sens);
                 sensitives[m_nam].push_back(pv);
             }
