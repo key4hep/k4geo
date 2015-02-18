@@ -26,7 +26,7 @@ using namespace DD4hep::Geometry;
 static Ref_t create_ecal_barrel(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   static double tolerance = 0e0;
   Material      air       = lcdd.air();
-  Material      vacuum    = lcdd.vacuum();
+  //unused:  Material      vacuum    = lcdd.vacuum();
 
   xml_det_t     x_det     = e;
   Layering      layering (e);
@@ -64,7 +64,7 @@ static Ref_t create_ecal_barrel(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   double Ecal_fiber_thickness         = lcdd.constant<double>("Ecal_fiber_thickness");
   double Ecal_front_face_thickness    = lcdd.constant<double>("Ecal_front_face_thickness");
   double Ecal_lateral_face_thickness  = lcdd.constant<double>("Ecal_lateral_face_thickness");
-  double Ecal_Slab_H_fiber_thickness  = lcdd.constant<double>("Ecal_Slab_H_fiber_thickness");
+  //unused:  double Ecal_Slab_H_fiber_thickness  = lcdd.constant<double>("Ecal_Slab_H_fiber_thickness");
 
 #ifdef VERBOSE
   std::cout << " barrel_halfz  = " << dim.z()  << std::endl;
@@ -126,7 +126,7 @@ static Ref_t create_ecal_barrel(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     l_pos_z -= y_floor;
 
     // ------------------ create extension objects for reconstruction ------------------
-    DDRec::LayeringExtensionImpl* layeringExtension = new DDRec::LayeringExtensionImpl ;
+    //unused:   DDRec::LayeringExtensionImpl* layeringExtension = new DDRec::LayeringExtensionImpl ;
     DDRec::SubdetectorExtensionImpl* subDetExtension = new DDRec::SubdetectorExtensionImpl( sdet )  ;
     Position layerNormal(0,0,1); //fg: defines direction of thickness in Box for layer slices
     
@@ -281,7 +281,8 @@ static Ref_t create_ecal_barrel(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	l_pos_z -= (Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE));
 
 	Position   bsl_pos(0,0,bsl_pos_z);      // Position of the layer.
-	PlacedVolume  barrelStructureLayer_phv = mod_vol.placeVolume(barrelStructureLayer_vol,bsl_pos);
+	//unused: PlacedVolume  barrelStructureLayer_phv = 
+	mod_vol.placeVolume(barrelStructureLayer_vol,bsl_pos);
 
 	l_dim_x -=  (Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE));	
 	l_pos_z -= (radiator_dim_y + Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE));

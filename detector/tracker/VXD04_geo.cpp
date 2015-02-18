@@ -98,9 +98,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   double metal_traces_thickness = db->fetchDouble("metal_traces_thickness");
   double electronics_structure_thickness = db->fetchDouble("electronics_structure_thickness");
   double active_silicon_thickness =   db->fetchDouble("active_silicon_thickness");
-  double support_structure_radial_thickness =    db->fetchDouble("support_structure_radial_thickness");
+  //unused:  double support_structure_radial_thickness =    db->fetchDouble("support_structure_radial_thickness");
   double end_electronics_half_z=    db->fetchDouble("end_electronics_half_z");
-  double strip_final_beampipe_radious =    db->fetchDouble("strip_final_beampipe_radious");
+  //unused: double strip_final_beampipe_radious =    db->fetchDouble("strip_final_beampipe_radious");
   int    side_band_electronics_option=    db->fetchInt("side_band_electronics_option");
   std::string  flex_cable_material=    db->fetchString("flex_cable_material");
   std::string  metal_traces_material=    db->fetchString("metal_traces_material");
@@ -149,7 +149,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   double support_endplate_inner_radious = db->fetchDouble("endplate_inner_radious");
   double support_endplate_inner_radious_L1 = db->fetchDouble("endplate_inner_radius_L1");
   double support_endplate_outer_radious_L1 = db->fetchDouble("endplate_outer_radius_L1");
-  double offset_ladder_block = db->fetchDouble("offset_ladder_block");
+  //unused:  double offset_ladder_block = db->fetchDouble("offset_ladder_block");
   double beryllium_ladder_block_length = db->fetchDouble("beryllium_ladder_block_length");
   double beryllium_ladder_block_thickness = db->fetchDouble("beryllium_ladder_block_thickness");
   double beryllium_ladder_block_length2=0.;
@@ -217,7 +217,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     double ladder_width = db->fetchDouble("ladder_width");
     double support_width = db->fetchDouble("support_width");
     double ladder_gap = db->fetchDouble("ladder_gap");
-    double strip_line_final_z = db->fetchDouble("strip_line_final_z");
+    //unused:    double strip_line_final_z = db->fetchDouble("strip_line_final_z");
     double initial_kapton_striplines_thickness = db->fetchDouble("initial_kapton_striplines_thickness");
     double final_kapton_striplines_thickness = db->fetchDouble("final_kapton_striplines_thickness");
     double initial_metal_striplines_thickness = db->fetchDouble("initial_metal_striplines_thickness");

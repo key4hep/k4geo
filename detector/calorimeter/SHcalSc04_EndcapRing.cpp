@@ -44,7 +44,7 @@ using namespace DD4hep::Geometry;
 //#define VERBOSE 1
 
 static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens)  {
-  static double tolerance = 0e0;
+  //unused:  static double tolerance = 0e0;
 
   xml_det_t   x_det     = element;
   string      det_name    = x_det.nameStr();
@@ -90,8 +90,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double      Hcal_stave_gaps                  = lcdd.constant<double>("Hcal_stave_gaps");
   double      Hcal_modules_gap                 = lcdd.constant<double>("Hcal_modules_gap"); 
   double      TPC_Ecal_Hcal_barrel_halfZ       = lcdd.constant<double>("TPC_Ecal_Hcal_barrel_halfZ"); 
-  double      Hcal_middle_stave_gaps           = lcdd.constant<double>("Hcal_middle_stave_gaps");
-  double      Hcal_layer_air_gap               = lcdd.constant<double>("Hcal_layer_air_gap");
+  //unused:  double      Hcal_middle_stave_gaps           = lcdd.constant<double>("Hcal_middle_stave_gaps");
+  //unused:  double      Hcal_layer_air_gap               = lcdd.constant<double>("Hcal_layer_air_gap");
 
   double      Hcal_module_radius               = lcdd.constant<double>("Hcal_outer_radius");
 
@@ -112,7 +112,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   int         Hcal_endcap_nlayers              = lcdd.constant<int>("Hcal_endcap_nlayers");
 
-  int         Hcal_ring                        = lcdd.constant<int>("Hcal_ring");
+  //unused:  int         Hcal_ring                        = lcdd.constant<int>("Hcal_ring");
 
   //TODO: thinking about how to pass the updated value at runtime from other inner drivers? 
   double      Ecal_endcap_zmax                 = 263.5; //cm //= lcdd.constant<double>("Ecal_endcap_zmax");
@@ -137,11 +137,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 
   double Hcal_y_dim1_for_x  = Hcal_module_radius*cos(M_PI/8.) - Hcal_inner_radius;
-  double Hcal_bottom_dim_x  = 2.*Hcal_inner_radius*tan(M_PI/8.)- Hcal_stave_gaps;
+  //unused:  double Hcal_bottom_dim_x  = 2.*Hcal_inner_radius*tan(M_PI/8.)- Hcal_stave_gaps;
   double Hcal_normal_dim_z  = (2 * TPC_Ecal_Hcal_barrel_halfZ - Hcal_modules_gap)/2.;
 
  //only the middle has the steel plate.
-  double Hcal_regular_chamber_dim_z = Hcal_normal_dim_z - Hcal_lateral_plate_thickness;
+  //unused:  double Hcal_regular_chamber_dim_z = Hcal_normal_dim_z - Hcal_lateral_plate_thickness;
 
 
   //double totalThickness_Hcal_Barrel       = (Hcal_radiator_thickness + Hcal_chamber_thickness) 

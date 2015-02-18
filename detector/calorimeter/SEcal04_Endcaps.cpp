@@ -53,7 +53,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   Layering      layering (element);
 
   Material      air       = lcdd.air();
-  Material      vacuum    = lcdd.vacuum();
+  //unused:  Material      vacuum    = lcdd.vacuum();
 
   int           det_id    = x_det.id();
   xml_comp_t    x_staves  = x_det.staves();
@@ -108,8 +108,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   double Ecal_endcap_extra_size             = lcdd.constant<double>("Ecal_endcap_extra_size");
   double Ecal_cables_gap                    = lcdd.constant<double>("Ecal_cables_gap");
-  double Lcal_outer_radius                  = lcdd.constant<double>("Lcal_outer_radius");
-  double Ecal_Lcal_ring_gap                 = lcdd.constant<double>("Ecal_Lcal_ring_gap");
+  //unused:  double Lcal_outer_radius                  = lcdd.constant<double>("Lcal_outer_radius");
+  //unused:  double Ecal_Lcal_ring_gap                 = lcdd.constant<double>("Ecal_Lcal_ring_gap");
   double Ecal_endcap_center_box_size        = lcdd.constant<double>("Ecal_endcap_center_box_size");
 
   int    Ecal_nlayers1                      = lcdd.constant<int>("Ecal_nlayers1");
@@ -226,7 +226,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double rOuter = Ecal_endcap_rmax;
   double zPlane = module_thickness;
 
-  double Ecal_endcap_Tube_rmax = Lcal_outer_radius + Ecal_Lcal_ring_gap;
+  //unused:  double Ecal_endcap_Tube_rmax = Lcal_outer_radius + Ecal_Lcal_ring_gap;
   
   PolyhedraRegular ECPolyHedra(8, M_PI/8.,rInner, rOuter, zPlane);
   //Tube CenterECTub(0., Ecal_endcap_Tube_rmax, module_thickness+0.0001);
@@ -459,7 +459,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	      Position   bsl_pos(-(y_floor + EC_alveolus_dim_y/2),-(-EC_alveolus_dim_x/2 + x_right),bsl_pos_z);      // Position of the layer.
 	      Position bsl_new = rotz*bsl_pos;
 	      Transform3D bsl_tran3D(rot,bsl_new);
-	      PlacedVolume  EndcapStructureLayer_phv = EnvLogEndCap.placeVolume(EndcapStructureLayer_vol,bsl_tran3D);
+	      //unused:  PlacedVolume  EndcapStructureLayer_phv = 
+	      EnvLogEndCap.placeVolume(EndcapStructureLayer_vol,bsl_tran3D);
 	      
 	    }
 	  

@@ -37,7 +37,7 @@ using namespace DDRec ;
  *  @author: F.Gaede, DESY, Aug 2014
  */
 
-static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
+static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
 
   //------------------------------------------
   //  See comments starting with '//**' for
@@ -185,7 +185,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   VisAttributes * VisAtt_c1 = new VisAttributes(Colour(1.,0.5,0.5));
   VisAtt_c1->SetForceWireframe(true);
   //VisAtt_c1->SetForceSolid(true);
-  CoilCorrectLogical_1  coil.setVisAttributes( lcdd, "VisAtt_c1);
+  CoilCorrectLogical_1  coil.setVisAttributes( lcdd, "VisAtt_c1");
 
   .setPlacement(0,
 		    ThreeVector(0., 0., -1632.*dd4hep::mm*3/2-612.),
@@ -221,7 +221,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   VisAttributes * VisAtt_md = new VisAttributes(Colour(0.7,0.7,0.7));
   VisAtt_md->SetForceWireframe(true);
   //VisAtt_md->SetForceSolid(true);
-  CoilMandrelLogical  coil.setVisAttributes( lcdd, "VisAtt_md);
+  CoilMandrelLogical  coil.setVisAttributes( lcdd, "VisAtt_md");
 
   .setPlacement(0,
 		    ThreeVector(0., 0., 0.),
@@ -276,7 +276,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   VisAttributes * VisAtt_s1 = new VisAttributes(Colour(0.5,0.5,1.));
   VisAtt_s1->SetForceWireframe(true);
   //VisAtt_s1->SetForceSolid(true);
-  CoilScintLogical_1  coil.setVisAttributes( lcdd, "VisAtt_s1);
+  CoilScintLogical_1  coil.setVisAttributes( lcdd, "VisAtt_s1");
   CoilScintLogical_1->SetSensitiveDetector(theCoilSD);
 
   .setPlacement(0,
@@ -318,7 +318,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   VisAttributes * VisAtt_s2 = new VisAttributes(Colour(0.75,0.75,1.));
   VisAtt_s2->SetForceWireframe(true);
   //VisAtt_s2->SetForceSolid(true);
-  CoilScintLogical_2  coil.setVisAttributes( lcdd, "VisAtt_s2);
+  CoilScintLogical_2  coil.setVisAttributes( lcdd, "VisAtt_s2");
   CoilScintLogical_2->SetSensitiveDetector(theCoilSD);
 
   .setPlacement(0,
@@ -361,7 +361,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   VisAttributes * VisAtt_s3 = new VisAttributes(Colour(0.5,0.5,1.));
   VisAtt_s3->SetForceWireframe(true);
   //VisAtt_s3->SetForceSolid(true);
-  CoilScintLogical_3  coil.setVisAttributes( lcdd, "VisAtt_s3);
+  CoilScintLogical_3  coil.setVisAttributes( lcdd, "VisAtt_s3");
   CoilScintLogical_3->SetSensitiveDetector(theCoilSD);
 
   .setPlacement(0,
@@ -403,7 +403,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   VisAttributes * VisAtt_s4 = new VisAttributes(Colour(0.75,0.75,1.));
   VisAtt_s4->SetForceWireframe(true);
   //VisAtt_s4->SetForceSolid(true);
-  CoilScintLogical_4  coil.setVisAttributes( lcdd, "VisAtt_s4);
+  CoilScintLogical_4  coil.setVisAttributes( lcdd, "VisAtt_s4");
   CoilScintLogical_4->SetSensitiveDetector(theCoilSD);
 
   .setPlacement(0,

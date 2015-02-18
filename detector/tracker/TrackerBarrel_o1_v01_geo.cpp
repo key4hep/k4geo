@@ -32,7 +32,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         xml_comp_t m_env  = x_mod.child(_U(module_envelope));
         string     m_nam  = x_mod.nameStr();
         Volume     m_vol(m_nam,Box(m_env.width()/2,m_env.length()/2,m_env.thickness()/2),air);
-        int        ncomponents = 0, wafer_number = 0;
+        int        ncomponents = 0; //unused:, wafer_number = 0;
         
         if ( volumes.find(m_nam) != volumes.end() )   {
             printout(ERROR,"SiTrackerBarrel","Logics error in building modules.");

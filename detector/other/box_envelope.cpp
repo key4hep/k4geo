@@ -13,8 +13,8 @@ using namespace std;
 using namespace DD4hep;
 using namespace DD4hep::Geometry;
 
-static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
-  static double tolerance = 0e0;
+static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
+  //unused:  static double tolerance = 0e0;
   Layering      layering (e);
   xml_det_t     x_det     = e;
   Material      air       = lcdd.air();
@@ -24,7 +24,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
   xml_comp_t    x_dim     = x_det.dimensions();
 
-  double        thickness = layering.totalThickness();
+  //unused:  double        thickness = layering.totalThickness();
 
   double        dim_x   = x_dim.X();
   double        dim_y   = x_dim.Y();

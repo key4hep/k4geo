@@ -96,7 +96,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   //   _gear_gas_material = material_TPC_Gas; 
   // #endif
     
-  const double sensitive_threshold_eV  = db->fetchDouble("sensitive_threshold_eV") ;
+  //unused:  const double sensitive_threshold_eV  = db->fetchDouble("sensitive_threshold_eV") ;
     
 
   //   db->exec("SELECT * FROM `cathode`;");
@@ -149,8 +149,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   // Material mixture for end of endplate zone 
   //  db->exec("SELECT * FROM `endplate_mixture`;");
 
-  double endplate_mixture_total = 0.0;
-  double densityTotal = 0.0 ;
+  //unused:  double endplate_mixture_total = 0.0;
+  //unused:  double densityTotal = 0.0 ;
 
   //fg: don't create the material on the fly but define it in the xml file
   // // std::map<Material* const, double> material_fractions;
@@ -298,7 +298,7 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
   layerCounter = 0;
   double fracRadLengthOuterWall = 0;
   rCursor = rOuter - dr_OuterWall ;
-  double gear_outer_wall_material_total_density = 0.0;
+  //unused:  double gear_outer_wall_material_total_density = 0.0;
  
   // db->exec("SELECT * FROM `outerWall`;");
   // while (db->getTuple()) {

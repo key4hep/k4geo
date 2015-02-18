@@ -131,7 +131,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   // // int cellID0 = encoder.lowWord() ;
   
   //... The SIT Sensitive detector
-  double sensitive_threshold_KeV = db->fetchDouble("sensitive_threshold_KeV")  ;
+  //unused:  double sensitive_threshold_KeV = db->fetchDouble("sensitive_threshold_KeV")  ;
   
   //FIXME: the SD  ...
   // // _theSITSD = 
