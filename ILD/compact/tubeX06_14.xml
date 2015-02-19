@@ -56,6 +56,8 @@
   <section crossType="0" zStart="2250*mm" zEnd="2259*mm" rInnerStart="183*mm" rInnerEnd="183*mm" rOuterStart="183.85*mm" rOuterEnd="183.85*mm" material="G4_Al"
   	   name="IPOuterLink" zStartRef="ecalEnd" zEndRef="ecalEnd" rInnerStartRef="lcalOuterR" rInnerEndRef="lcalOuterR" rOuterStartRef="lcalOuterR" rOuterEndRef="lcalOuterR"  />
 
+  <!-- rInnerStart should be 0.0*mm, rInnerStart defines the hole aligned with the outgoing beam-line, which does not exist for this section.
+       This mistake was already present in the database and is fixed in Beampipe_o1_v01_01.xml -->
   <section crossType="3" zStart="2259*mm" zEnd="2260*mm" rInnerStart="78.5*mm" rInnerEnd="78.5*mm" rOuterStart="184*mm" rOuterEnd="184*mm" material="G4_Be" 
 	   name="LumiCalFront" zStartRef="ecalEnd" zEndRef="ecalEnd" rInnerStartRef="" rInnerEndRef="lcalInnerR" rOuterStartRef="lcalOuterR" rOuterEndRef="lcalOuterR"  />
 
