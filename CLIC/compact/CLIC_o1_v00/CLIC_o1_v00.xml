@@ -135,7 +135,8 @@
         <constant name="bp_cone_slope" value="(BeamPipe_rmax-CentralBeamPipe_rmax)/(tracking_region_zmax-CentralBeamPipe_zmax)"/>
         <constant name="BeamPipe_zmin" value="CentralBeamPipe_zmax + (BeamPipe_thickness - CentralBeamPipe_thickness)/bp_cone_slope"/>
         <constant name="BeamPipeLiner_thickness" value="0.0*cm"/>
-        
+        <constant name="bpEnd" value="12500*mm"/>
+
         <constant name="VertexEndcap_ID" value="3"/>
         <constant name="VertexEndcap_rmax" value="11.5*cm"/>
         <constant name="VertexEndcap_z1" value="12.0*cm"/>
@@ -173,7 +174,7 @@
         
         <constant name="IncomingBP_radius" value="0.25*cm"/>
         <constant name="IncomingBP_thickness" value="0.05*cm"/>
-        <constant name="OutgoingBP_radius" value="tan(CrossingAngle/2/rad)*BeamCal_zmin"/>
+        <constant name="OutgoingBP_radius" value="tan(CrossingAngle/2)*BeamCal_zmin"/>
         <constant name="OutgoingBP_thickness" value="0.1*cm"/>
         
         <constant name="BeamCal_crossingAngle" value="CrossingAngle"/>
