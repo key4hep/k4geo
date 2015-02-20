@@ -131,8 +131,7 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
   //     hints on porting issues
   //------------------------------------------
 
-  std::cout << __PRETTY_FUNCTION__  << std::endl;
-  std::cout << "Here is my Beampipe"  << std::endl;
+  std::cout << "This is the Beampipe:"  << std::endl;
 
   Material air = lcdd.air();
   Material vac = lcdd.vacuum();
@@ -141,12 +140,9 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
   DD4hep::XML::DetElement xmlBeampipe = xmlHandle;
   const std::string name = xmlBeampipe.nameStr();
 
-
   //--------------------------------
   Assembly envelope( name + "_assembly"  ) ;
   //--------------------------------
-  
-  PlacedVolume pv;
 
   DD4hep::Geometry::DetElement tube(  name, xmlBeampipe.id()  ) ;
 
@@ -156,28 +152,14 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
   //  code ported from TubeX01::construct() :
   //##################################
   
-  // double phi1 =   0 * deg;
-  // double phi2 = 360 * deg;
   //** DD4hep/TGeo seems to need rad (as opposed to the manual)
-  double phi1 = 0 ;
-  double phi2 = 2*M_PI;
-  
-  //  // some visualization attributes for the tube wall and the vacuum inside
-  // G4VisAttributes *wallVisAttrib = new G4VisAttributes(G4Colour(1.0, 0.7, 0.5)); // light brown
-  // //wallVisAttrib->SetForceSolid(true);
-  // G4VisAttributes *vacuumVisAttrib = new G4VisAttributes(G4Colour(0.0, 0.0, 0.5)); // dark blue
-  // vacuumVisAttrib->SetVisibility(false); // there isn't anything, so what do you expect?
+  const double phi1 = 0 ;
+  const double phi2 = 360.0*dd4hep::degree;
   
   //Parameters we have to know about
   DD4hep::XML::Component xmlParameter = xmlBeampipe.child(_Unicode(parameter));
   const double crossingAngle  = xmlParameter.attr< double >(_Unicode(crossingangle))*0.5; //  only half the angle
 
-  bool firstPiece = true;
-  std::string material = "";
-  double beam_inner_radius = -99999;
-  double beam_thickness = -99999;
-  
-  
   for(xml_coll_t c( xmlBeampipe ,Unicode("section")); c; ++c) {
 
     xml_comp_t xmlSection( c );
@@ -212,13 +194,6 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
       beampipeData->sections.push_back( section ) ;
     }
 
-    if(firstPiece) { 
-      firstPiece = false;
-      material = sectionMat.name();
-      beam_inner_radius = rInnerStart;
-      beam_thickness = thickness;
-    }
-
     // things which can be calculated immediately
     const double zHalf       = fabs(zEnd - zStart) * 0.5; // half z length of the cone
     const double zPosition   = fabs(zEnd + zStart) * 0.5; // middle z position
@@ -233,8 +208,6 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
     const double mirrorAngle = M_PI - rotateAngle; // for the "mirrored" placement at -z
     // the "mirroring" in fact is done by a rotation of (almost) 180 degrees around the y-axis
 
-    
-    
     switch (crossType) {
     case kCenter:
     case kUpstream:
@@ -245,22 +218,15 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
       Transform3D transformer(RotationY(rotateAngle), RotateY( Position(0, 0, zPosition), rotateAngle) );
       Transform3D transmirror(RotationY(mirrorAngle), RotateY( Position(0, 0, zPosition), mirrorAngle) );
       
-
       // solid for the tube (including vacuum and wall): a solid cone
       ConeSegment tubeSolid( zHalf, 0, rOuterStart, 0, rOuterEnd , phi1, phi2);
         
       // tube consists of vacuum
       Volume tubeLog( volName, tubeSolid, coreMaterial ) ;
-      //      tubeLog->SetVisAttributes(vacuumVisAttrib);
       
       // placement of the tube in the world, both at +z and -z
-      pv = envelope.placeVolume( tubeLog,  transformer );
-      pv = envelope.placeVolume( tubeLog,  transmirror );
-      
-      // std::cout << " *** placing tubes for volume " << volName << ": "  << transformer  << transmirror 
-      // 		<< " rotation : " << RotationY(rotateAngle) 	<< std::endl 
-      // 		<< " angle : " << rotateAngle	<< std::endl 
-      // 		<< " zPos: " << zPosition	<< std::endl ;
+      envelope.placeVolume( tubeLog,  transformer );
+      envelope.placeVolume( tubeLog,  transmirror );
 
       // if inner and outer radii are equal, then omit the tube wall
       if (rInnerStart != rOuterStart || rInnerEnd != rOuterEnd) {
@@ -275,7 +241,7 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
 	tubeLog.setVisAttributes(lcdd, "VacVis");
 	
 	// placement as a daughter volume of the tube, will appear in both placements of the tube
-	pv = tubeLog.placeVolume( wallLog,  Transform3D() );
+	tubeLog.placeVolume( wallLog,  Transform3D() );
       }
     }  
       break;
@@ -301,31 +267,15 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
       // tube consists of vacuum (will later have two different daughters)
       Volume tubeLog0( volName + "_0", tubeSolid, coreMaterial );
       Volume tubeLog1( volName + "_1", tubeSolid, coreMaterial );
-
-      // tubeLog0->SetVisAttributes(vacuumVisAttrib);
-      // tubeLog1->SetVisAttributes(vacuumVisAttrib);
-      // //FIXME debug
-      // tube.setVisAttributes(lcdd, "TubeVis"  , tubeLog0 );
-      // tube.setVisAttributes(lcdd, "TubeVis"  , tubeLog1 );
         
       // placement of the tube in the world, both at +z and -z
-      pv = envelope.placeVolume( tubeLog0, placementTransformer );
-      pv = envelope.placeVolume( tubeLog1, placementTransmirror );
-      // new PVPlacement(placementTransformer, tubeLog0, volName, worldLog, false, 0);
-      // new PVPlacement(placementTransmirror, tubeLog1, volName, worldLog, false, 1);
+      envelope.placeVolume( tubeLog0, placementTransformer );
+      envelope.placeVolume( tubeLog1, placementTransmirror );
 
-      // std::cout << " *** placing tubes for volume " << volName << ": "  << placementTransformer  << placementTransmirror 
-      // 		<< " rotation : " << RotationY(rotateAngle) 	<< std::endl 
-      // 		<< " angle : " << rotateAngle	<< std::endl 
-      // 		<< " zPos: " << zPosition	<< std::endl ;
-
-
-        
       // the wall solid and placeholders for possible SubtractionSolids
       ConeSegment wholeSolid(  zHalf, 0, rOuterStart, 0, rOuterEnd, phi1, phi2);
       
       Solid tmpSolid0, tmpSolid1, wallSolid0, wallSolid1;
-      // VSolid *tmpSolid0, *tmpSolid1, *wallSolid0, *wallSolid1;
       
       // the punched subtraction solids can be asymmetric and therefore have to be created twice:
       // one time in the "right" way, another time in the "reverse" way, because the "mirroring"
@@ -349,7 +299,6 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
        	wallSolid1 = tmpSolid1;
       }
 
-
       // the wall consists of the material given in the XML
       Volume wallLog0( volName + "_wall_0", wallSolid0, wallMaterial );
       Volume wallLog1( volName + "_wall_1", wallSolid1, wallMaterial );
@@ -360,14 +309,11 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
       tubeLog1.setVisAttributes(lcdd, "VacVis");
 
       // placement as a daughter volumes of the tube
-      pv = tubeLog0.placeVolume( wallLog0, Position() );
-      pv = tubeLog1.placeVolume( wallLog1, Position() );
-      // new PVPlacement(0, Position(), wallLog0, volName + "_wall", tubeLog0, false, 0);
-      // new PVPlacement(0, Position(), wallLog1, volName + "_wall", tubeLog1, false, 1);
+      tubeLog0.placeVolume( wallLog0, Position() );
+      tubeLog1.placeVolume( wallLog1, Position() );
       
       break;
     }
-
 
     case kPunchedUpstream:
     case kPunchedDnstream: {
@@ -391,21 +337,11 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
       // tube consists of vacuum (will later have two different daughters)
       Volume tubeLog0( volName + "_0", tubeSolid, coreMaterial );
       Volume tubeLog1( volName + "_1", tubeSolid, coreMaterial );
-
-      // tubeLog0->SetVisAttributes(vacuumVisAttrib);
-      // tubeLog1->SetVisAttributes(vacuumVisAttrib);
       
       // placement of the tube in the world, both at +z and -z
-      pv = envelope.placeVolume( tubeLog0, placementTransformer );
-      pv = envelope.placeVolume( tubeLog1, placementTransmirror );
-      // new PVPlacement(placementTransformer, tubeLog0, volName, worldLog, false, 0);
-      // new PVPlacement(placementTransmirror, tubeLog1, volName, worldLog, false, 1);
-      // std::cout << " *** placing tubes for volume " << volName << ": "  << placementTransformer  << placementTransmirror 
-      // 		<< " rotation : " << RotationY(rotateAngle) 	<< std::endl 
-      // 		<< " angle : " << rotateAngle	<< std::endl 
-      // 		<< " zPos: " << zPosition	<< std::endl ;
+      envelope.placeVolume( tubeLog0, placementTransformer );
+      envelope.placeVolume( tubeLog1, placementTransmirror );
 
-      
       // the wall solid and the piece (only a tube, for the moment) which will be punched out
       ConeSegment wholeSolid( zHalf, rCenterPunch , rOuterStart, rCenterPunch, rOuterEnd, phi1, phi2);
       
@@ -428,10 +364,8 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
       tubeLog1.setVisAttributes(lcdd, "VacVis");
       
       // placement as a daughter volumes of the tube
-      pv = tubeLog0.placeVolume( wallLog0 , Position() );
-      pv = tubeLog1.placeVolume( wallLog1 , Position() );
-      // new PVPlacement(0, Position(), wallLog0, volName + "_wall", tubeLog0, false, 0);
-      // new PVPlacement(0, Position(), wallLog1, volName + "_wall", tubeLog1, false, 1);
+      tubeLog0.placeVolume( wallLog0 , Position() );
+      tubeLog1.placeVolume( wallLog1 , Position() );
       
       break;
     }
@@ -469,18 +403,10 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
       // tube consists of vacuum (will later have two different daughters)
       Volume tubeLog0( volName + "_0", tubeSolid0, coreMaterial );
       Volume tubeLog1( volName + "_1", tubeSolid1, coreMaterial );
-      // tubeLog0->SetVisAttributes(vacuumVisAttrib);
-      // tubeLog1->SetVisAttributes(vacuumVisAttrib);
         
       // placement of the tube in the world, both at +z and -z
-      pv = envelope.placeVolume( tubeLog0, placementTransformer );
-      pv = envelope.placeVolume( tubeLog1, placementTransmirror );
-      // new PVPlacement(placementTransformer, tubeLog0, volName, worldLog, false, 0);
-      // new PVPlacement(placementTransmirror, tubeLog1, volName, worldLog, false, 1);
-      // std::cout << " *** placing tubes for volume " << volName << ": "  << placementTransformer  << placementTransmirror 
-      // 		<< " rotation : " << RotationY(rotateAngle) 	<< std::endl 
-      // 		<< " angle : " << rotateAngle	<< std::endl 
-      // 		<< " zPos: " << zPosition	<< std::endl ;
+      envelope.placeVolume( tubeLog0, placementTransformer );
+      envelope.placeVolume( tubeLog1, placementTransmirror );
        
       if (rInnerStart != rOuterStart || rInnerEnd != rOuterEnd) {
 	// the wall solid: a tubular cone
@@ -500,12 +426,9 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
 	tubeLog0.setVisAttributes(lcdd, "VacVis");
 	tubeLog1.setVisAttributes(lcdd, "VacVis");
 
-        
 	// placement as a daughter volumes of the tube
-	pv = tubeLog0.placeVolume( wallLog0, Position() );
-	pv = tubeLog1.placeVolume( wallLog1, Position() );
-	// new PVPlacement(0, Position(), wallLog0, volName + "_wall", tubeLog0, false, 0);
-	// new PVPlacement(0, Position(), wallLog1, volName + "_wall", tubeLog1, false, 1);
+	tubeLog0.placeVolume( wallLog0, Position() );
+	tubeLog1.placeVolume( wallLog1, Position() );
       }
     }
       break;
@@ -542,18 +465,10 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
       // tube consists of vacuum (will later have two different daughters)
       Volume tubeLog0( volName + "_0", tubeSolid0, coreMaterial );
       Volume tubeLog1( volName + "_1", tubeSolid1, coreMaterial );
-      // tubeLog0->SetVisAttributes(vacuumVisAttrib);
-      // tubeLog1->SetVisAttributes(vacuumVisAttrib);
       
       // placement of the tube in the world, both at +z and -z
-      pv = envelope.placeVolume( tubeLog0, placementTransformer );
-      pv = envelope.placeVolume( tubeLog1, placementTransmirror );
-      // new PVPlacement(placementTransformer, tubeLog0, volName, worldLog, false, 0);
-      // new PVPlacement(placementTransmirror, tubeLog1, volName, worldLog, false, 1);
-      // std::cout << " *** placing tubes for volume " << volName << ": "  << placementTransformer  << placementTransmirror 
-      // 		<< " rotation : " << RotationY(rotateAngle) 	<< std::endl 
-      // 		<< " angle : " << rotateAngle	<< std::endl 
-      // 		<< " zPos: " << zPosition	<< std::endl ;
+      envelope.placeVolume( tubeLog0, placementTransformer );
+      envelope.placeVolume( tubeLog1, placementTransmirror );
       
       if (rInnerStart != rOuterStart || rInnerEnd != rOuterEnd) {
 	// the wall solid: a tubular cone
@@ -574,10 +489,8 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
 	tubeLog1.setVisAttributes(lcdd, "VacVis");
         
 	// placement as a daughter volumes of the tube
-	pv = tubeLog0.placeVolume( wallLog0, Transform3D() );
-	pv = tubeLog1.placeVolume( wallLog1, Transform3D() );
-	// new PVPlacement(0, Position(), wallLog0, volName + "_wall", tubeLog0, false, 0);
-	// new PVPlacement(0, Position(), wallLog1, volName + "_wall", tubeLog1, false, 1);
+	tubeLog0.placeVolume( wallLog0, Transform3D() );
+	tubeLog1.placeVolume( wallLog1, Transform3D() );
       }
       break;
     }
@@ -619,18 +532,10 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
       // tube consists of vacuum (will later have two different daughters)
       Volume tubeLog0( volName + "_0", tubeSolid0, coreMaterial );
       Volume tubeLog1( volName + "_1", tubeSolid1, coreMaterial );
-      // tubeLog0->SetVisAttributes(vacuumVisAttrib);
-      // tubeLog1->SetVisAttributes(vacuumVisAttrib);
         
       // placement of the tube in the world, both at +z and -z
-      pv = envelope.placeVolume( tubeLog0, placementTransformer );
-      pv = envelope.placeVolume( tubeLog1, placementTransmirror );
-      // new PVPlacement(placementTransformer, tubeLog0, volName, worldLog, false, 0);
-      // new PVPlacement(placementTransmirror, tubeLog1, volName, worldLog, false, 1);
-      // std::cout << " *** placing tubes for volume " << volName << ": "  << placementTransformer  << placementTransmirror 
-      // 		<< " rotation : " << RotationY(rotateAngle) 	<< std::endl 
-      // 		<< " angle : " << rotateAngle	<< std::endl 
-      // 		<< " zPos: " << zPosition	<< std::endl ;
+      envelope.placeVolume( tubeLog0, placementTransformer );
+      envelope.placeVolume( tubeLog1, placementTransmirror );
        
       if (rInnerStart != rOuterStart || rInnerEnd != rOuterEnd) {
 	// the wall solid: a tubular cone
@@ -653,23 +558,17 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
 	tubeLog1.setVisAttributes(lcdd, "VacVis");
         
 	// placement as a daughter volumes of the tube
-	pv = tubeLog0.placeVolume( wallLog0, Transform3D() );
-	pv = tubeLog1.placeVolume( wallLog1, Transform3D() );
-	// new PVPlacement(0, Position(), wallLog0, volName + "_wall", tubeLog0, false, 0);
-	// new PVPlacement(0, Position(), wallLog1, volName + "_wall", tubeLog1, false, 1);
+	tubeLog0.placeVolume( wallLog0, Transform3D() );
+	tubeLog1.placeVolume( wallLog1, Transform3D() );
       }
       break;
     }
     default: {
-      //        Control::Log("TubeX01: Unimplemented \"crossType\" code.");
       return false; // fatal failure
     }
 
     }//end switch
   }//for all xmlSections
-
-
-
 
   //######################################################################################################################################################################
   
@@ -678,14 +577,11 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
   //--------------------------------------
   
   Volume mother =  lcdd.pickMotherVolume( tube ) ;
-  
-  pv = mother.placeVolume(envelope);
-
+  PlacedVolume pv(mother.placeVolume(envelope));
   pv.addPhysVolID( "system", xmlBeampipe.id() ) ; //.addPhysVolID("side", 0 ) ;
 
   tube.setVisAttributes( lcdd, xmlBeampipe.visStr(), envelope );
 
-  //  if( tube.isValid() ) 
   tube.setPlacement(pv);
   
   return tube;
