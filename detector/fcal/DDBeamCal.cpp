@@ -69,8 +69,6 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   DD4hep::Geometry::Volume     envelopeVol(detName+"_envelope",envelope,air);
   envelopeVol.setVisAttributes(lcdd,xmlBeamCal.visStr());
 
-  //This should be calculated or at least cross-checked
-#pragma message("What about the special case when the incoming beampipe would be completely inside the outgoing beam pipe?")
   DD4hep::Geometry::Position incomingBeamPipeAtEndOfBeamCalPosition(-incomingBeamPipeRadius, incomingBeamPipeRadius, bcalInnerZ+bcalThickness);
   //This Rotation needs to be the fullCrossing angle, because the incoming beampipe has that much to the outgoing beam pipe
   //And the BeamCal is centred on the outgoing beampipe
