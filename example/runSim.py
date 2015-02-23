@@ -36,11 +36,12 @@ from SystemOfUnits import *
 numberOfEvents = 10
 
 lcioInputFile  = 'mcparticles.slcio'
+#lcioInputFile  = 'mcparticles_single_muon_5GeV_10deg.slcio'
 #lcioInputFile  = 'mcparticles_single_muon_5GeV_7deg.slcio'
 #lcioInputFile  = 'mcparticles_single_muon_5GeV_85deg.slcio'
 
 lcioOutputFile = 'simple_lcio.slcio'
-#lcioOutputFile = lcioInputFile[:len(lcioInputFile)-len('.slcio')]+'_SIM.slcio'
+#lcioOutputFile = lcioInputFile[:len(lcioInputFile)-len('.slcio')]+'_SIM_simple.slcio'
 
 physicsList    = 'FTFP_BERT'  # 'QGSP_BERT'
 
@@ -101,13 +102,13 @@ def run():
 
   try:
     install_dir = os.environ['DD4hepINSTALL']
-    lcgeo_dir   = os.environ['LCGEO']
+#    lcgeo_dir   = os.environ['LCGEO']
   except (KeyError):
-    print " please set the environment variables DD4hepINSTALL and  "
-    print "        LCGEO to your DD4hep/lcgeo installation pathes ! "
+    print " please set the environment variable  DD4hepINSTALL  "
+    print "        to your DD4hep installation path ! "
     exit(1)
 
-  example_dir = lcgeo_dir+'/example';
+#  example_dir = lcgeo_dir+'/example';
 
   kernel.loadGeometry("file:"+ compactFile )
 
@@ -197,6 +198,7 @@ def run():
     print 'simple.setupTracker(  ' , t , ')'
     seq,act = simple.setupTracker( t )
     seq.add(f1)
+    act.HitCreationMode = 2
 
 # ---- add the calorimeters:
 
