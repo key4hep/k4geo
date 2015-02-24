@@ -217,4 +217,4 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   return beamcals;
 }
 
-DECLARE_DETELEMENT(BeamCal,create_detector)
+DECLARE_DETELEMENT(BeamCal_o1_v01,create_detector)

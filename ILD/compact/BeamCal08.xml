@@ -2,7 +2,7 @@
      beamcal parameters for ILD 
 -->
 
-<detector name="BeamCal" type="BeamCal" vis="SeeThrough" id="ILDDetID_BCAL"
+<detector name="BeamCal" type="BeamCal_o1_v01" vis="SeeThrough" id="ILDDetID_BCAL"
 	  readout="BeamCalCollection" insideTrackingVolume="false" >
   <parameter crossingangle="ILC_Main_Crossing_Angle"
 	     cutoutspanningangle="40*deg"
