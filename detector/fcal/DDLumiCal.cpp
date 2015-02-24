@@ -37,8 +37,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
   //Parameters we have to know about
   DD4hep::XML::Component xmlParameter = xmlLumiCal.child(_Unicode(parameter));
-  const double mradFullCrossingAngle  = xmlParameter.attr< double >(_Unicode(crossingangle));
-  std::cout << " The crossing angle is: " << mradFullCrossingAngle << " radian"  << std::endl;
+  const double fullCrossingAngle  = xmlParameter.attr< double >(_Unicode(crossingangle));
+  std::cout << " The crossing angle is: " << fullCrossingAngle << " radian"  << std::endl;
 
 
   //Envelope to place the layers in
@@ -114,10 +114,10 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
   }// for all layer collections
 
-  const DD4hep::Geometry::Position bcForwardPos (std::tan(-0.5*mradFullCrossingAngle)*lcalCentreZ,0.0, lcalCentreZ);
-  const DD4hep::Geometry::Position bcBackwardPos(std::tan(-0.5*mradFullCrossingAngle)*lcalCentreZ,0.0,-lcalCentreZ);
-  const DD4hep::Geometry::Rotation3D bcForwardRot ( DD4hep::Geometry::RotationY(-mradFullCrossingAngle*0.5 ) );
-  const DD4hep::Geometry::Rotation3D bcBackwardRot( DD4hep::Geometry::RotationZYX ( (M_PI), (M_PI-mradFullCrossingAngle*0.5), (0.0)));
+  const DD4hep::Geometry::Position bcForwardPos (std::tan(0.5*fullCrossingAngle)*lcalCentreZ,0.0, lcalCentreZ);
+  const DD4hep::Geometry::Position bcBackwardPos(std::tan(0.5*fullCrossingAngle)*lcalCentreZ,0.0,-lcalCentreZ);
+  const DD4hep::Geometry::Rotation3D bcForwardRot ( DD4hep::Geometry::RotationY(fullCrossingAngle*0.5 ) );
+  const DD4hep::Geometry::Rotation3D bcBackwardRot( DD4hep::Geometry::RotationZYX ( (M_PI), (M_PI-fullCrossingAngle*0.5), (0.0)));
 
   DD4hep::Geometry::DetElement LumiCals ( detName, xmlLumiCal.id() );
   DD4hep::Geometry::DetElement sdet ( "LumiCal01", xmlLumiCal.id() );
