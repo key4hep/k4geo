@@ -8,9 +8,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 					       DD4hep::XML::Handle_t xmlHandle,
 					       DD4hep::Geometry::SensitiveDetector sens) {
 
-  std::cout << __PRETTY_FUNCTION__  << std::endl;
-  std::cout << "Here is my BeamCal"  << std::endl;
-  std::cout << " and this is the sensitive detector: " << &sens  << std::endl;
+  std::cout << "This is the BeamCal"  << std::endl;
   sens.setType("calorimeter");
   //Materials
   DD4hep::Geometry::Material air = lcdd.air();
@@ -37,12 +35,13 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
   //Parameters we have to know about
   DD4hep::XML::Component xmlParameter = xmlBeamCal.child(_Unicode(parameter));
-  const double mradFullCrossingAngle  = xmlParameter.attr< double >(_Unicode(crossingangle));
-  std::cout << " The crossing angle is: " << mradFullCrossingAngle << " radian"  << std::endl;
+  const double fullCrossingAngle  = xmlParameter.attr< double >(_Unicode(crossingangle));
+  std::cout << " The crossing angle is: " << fullCrossingAngle << " radian"  << std::endl;
 
   //Create the section cutout for the sensor and readout volumes
+  // The cutout sits on the negative x-axis, i.e. phi~=180degrees
   const double bcalCutOutSpan  = xmlParameter.attr< double >(_Unicode(cutoutspanningangle));
-  const double bcalCutOutStart = -bcalCutOutSpan*0.5;
+  const double bcalCutOutStart = 180.0*dd4hep::degree-bcalCutOutSpan*0.5;
   const double bcalCutOutEnd   = bcalCutOutStart + bcalCutOutSpan;
   const double incomingBeamPipeRadius = xmlParameter.attr< double >( _Unicode(incomingbeampiperadius) );
 
@@ -56,10 +55,10 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   ////////////////////////////////////////////////////////////////////////////////
 
   // this needs the full crossing angle, because the beamCal is centred on the
-  // outgoing beampipe, and the incoming beampipe is a full crossing agle away
-  const DD4hep::Geometry::Position    incomingBeamPipePosition( std::tan(mradFullCrossingAngle) * bcalCentreZ, 0.0, 0.0);
+  // outgoing beampipe, and the incoming beampipe is a full crossing angle away
+  const DD4hep::Geometry::Position    incomingBeamPipePosition( std::tan(-fullCrossingAngle) * bcalCentreZ, 0.0, 0.0);
   //The extra parenthesis are paramount!
-  const DD4hep::Geometry::Rotation3D  incomingBeamPipeRotation( ( DD4hep::Geometry::RotationY( mradFullCrossingAngle ) ) );
+  const DD4hep::Geometry::Rotation3D  incomingBeamPipeRotation( ( DD4hep::Geometry::RotationY( -fullCrossingAngle ) ) );
   const DD4hep::Geometry::Transform3D incomingBPTransform( incomingBeamPipeRotation, incomingBeamPipePosition );
 
   //Envelope to place the layers in
@@ -72,7 +71,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   DD4hep::Geometry::Position incomingBeamPipeAtEndOfBeamCalPosition(-incomingBeamPipeRadius, incomingBeamPipeRadius, bcalInnerZ+bcalThickness);
   //This Rotation needs to be the fullCrossing angle, because the incoming beampipe has that much to the outgoing beam pipe
   //And the BeamCal is centred on the outgoing beampipe
-  incomingBeamPipeAtEndOfBeamCalPosition = DD4hep::Geometry::RotationY(-mradFullCrossingAngle) * incomingBeamPipeAtEndOfBeamCalPosition;
+  incomingBeamPipeAtEndOfBeamCalPosition = DD4hep::Geometry::RotationY(-fullCrossingAngle) * incomingBeamPipeAtEndOfBeamCalPosition;
   const double cutOutRadius = ( incomingBeamPipeAtEndOfBeamCalPosition.Rho() ) + 0.01*dd4hep::cm;
   std::cout << "cutOutRadius: " << cutOutRadius/dd4hep::cm << " cm " << std::endl;
 
@@ -107,7 +106,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
       DD4hep::Geometry::SubtractionSolid layer_subtracted;
       { // put this in extra block to limit scope
 	const double thisPositionZ = bcalCentreZ + referencePosition + layerThickness*0.5;
-	const DD4hep::Geometry::Position thisBPPosition( std::tan(mradFullCrossingAngle) * thisPositionZ, 0.0, 0.0);
+	const DD4hep::Geometry::Position thisBPPosition( std::tan(-fullCrossingAngle) * thisPositionZ, 0.0, 0.0);
 	const DD4hep::Geometry::Transform3D thisBPTransform( incomingBeamPipeRotation, thisBPPosition );
 	layer_subtracted = DD4hep::Geometry::SubtractionSolid(layer_base, incomingBeamPipe, thisBPTransform);
       }
@@ -146,7 +145,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	  //to know the global position of the slice, because the cutout depends
 	  //on the outgoing beam pipe position
 	  const double thisPositionZ = bcalCentreZ + referencePosition + 0.5*layerThickness + inThisLayerPosition + sliceThickness*0.5;
-	  const DD4hep::Geometry::Position thisBPPosition( std::tan(mradFullCrossingAngle) * thisPositionZ, 0.0, 0.0);
+	  const DD4hep::Geometry::Position thisBPPosition( std::tan(-fullCrossingAngle) * thisPositionZ, 0.0, 0.0);
 	  //The extra parenthesis are paramount! But.. there are none
 	  const DD4hep::Geometry::Transform3D thisBPTransform( incomingBeamPipeRotation, thisBPPosition );
 	  slice_subtracted = DD4hep::Geometry::SubtractionSolid(sliceBase, incomingBeamPipe, thisBPTransform);
@@ -185,10 +184,10 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
   }// for all layer collections
 
-  const DD4hep::Geometry::Position bcForwardPos (std::tan(-0.5*mradFullCrossingAngle)*bcalCentreZ,0.0, bcalCentreZ);
-  const DD4hep::Geometry::Position bcBackwardPos(std::tan(-0.5*mradFullCrossingAngle)*bcalCentreZ,0.0,-bcalCentreZ);
-  const DD4hep::Geometry::Rotation3D bcForwardRot ( DD4hep::Geometry::RotationY(-mradFullCrossingAngle*0.5 ) );
-  const DD4hep::Geometry::Rotation3D bcBackwardRot( DD4hep::Geometry::RotationZYX ( (M_PI), (M_PI-mradFullCrossingAngle*0.5), (0.0)));
+  const DD4hep::Geometry::Position bcForwardPos (std::tan(0.5*fullCrossingAngle)*bcalCentreZ,0.0, bcalCentreZ);
+  const DD4hep::Geometry::Position bcBackwardPos(std::tan(0.5*fullCrossingAngle)*bcalCentreZ,0.0,-bcalCentreZ);
+  const DD4hep::Geometry::Rotation3D bcForwardRot ( DD4hep::Geometry::RotationY(+fullCrossingAngle*0.5 ) );
+  const DD4hep::Geometry::Rotation3D bcBackwardRot( DD4hep::Geometry::RotationZYX ( (180*dd4hep::degree), (180*dd4hep::degree-fullCrossingAngle*0.5), (0.0)));
 
   DD4hep::Geometry::DetElement beamcals ( detName, xmlBeamCal.id() );
   DD4hep::Geometry::DetElement sdet ( "BeamCal01", xmlBeamCal.id() );
