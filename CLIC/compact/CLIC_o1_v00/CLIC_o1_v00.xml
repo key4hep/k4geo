@@ -180,7 +180,16 @@
         <constant name="BeamCal_crossingAngle" value="CrossingAngle"/>
         <constant name="BeamCal_outgoing_r" value="OutgoingBP_radius + 0.05*cm"/>
         <constant name="BeamCal_incoming_r" value="IncomingBP_radius + 0.05*cm"/>
-        
+
+	<constant name="BCal_TubeIncomingRadius" value="3.5*mm"/>
+	<constant name="BCal_dGraphite" value="100*mm"/>
+	<constant name="BCal_dAbsorber" value="3.5*mm"/>
+	<constant name="BCal_nLayers" value="40"/>
+	<constant name="BCal_rInner" value="32*mm"/>
+	<constant name="BCal_rOuter" value="150*mm"/>
+	<constant name="BCal_SpanningPhi" value="350*degree"/>
+	<constant name="BCal_zInner" value="3.180699600e+03*mm"/>
+
     </define>
     
     

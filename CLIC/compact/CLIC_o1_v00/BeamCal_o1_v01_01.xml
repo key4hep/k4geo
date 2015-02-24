@@ -1,0 +1,48 @@
+<!-- 
+     BeamCal parameters for CLIC
+-->
+<lccdd>
+
+  <!--  Definition of the readout segmentation/definition  -->
+  <readouts>
+    <readout name="BeamCalHits">
+      <segmentation type="CartesianGridXY" grid_size_x="0.35*cm" grid_size_y="0.35*cm" />
+      <id>system:8,layer:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+  <display>
+    <vis name="BeamCalVis"  alpha="0.5"  r="0.3" g="0.7"  b="1.0" showDaughters="false"  visible="true"/>
+    <vis name="BCLayerVis1"   alpha="1.0"  r="1.0" g="0.0"  b="0.0" showDaughters="true"  visible="true"/>
+    <vis name="BCLayerVis2"   alpha="1.0"  r="0.0" g="1.0"  b="0.0" showDaughters="true"  visible="true"/>
+    <vis name="BCLayerVis3"   alpha="1.0"  r="0.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
+    <vis name="BCLayerVis4"   alpha="1.0"  r="1.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
+  </display>
+
+  <detectors>
+    <detector name="BeamCal" type="BeamCal_o1_v01" vis="BeamCalVis" id="14" 
+	      readout="BeamCalHits" insideTrackingVolume="false" >
+      <parameter crossingangle="CrossingAngle"
+		 cutoutspanningangle="10*deg"
+		 incomingbeampiperadius="BCal_TubeIncomingRadius"
+		 />
+      
+      <dimensions inner_r = "BCal_rInner"
+		  inner_z = "BCal_zInner"
+		  outer_r = "BCal_rOuter" />
+      
+      <layer repeat="1" vis="SeeThrough">
+	<slice material = "C" thickness = "BCal_dGraphite" vis="LayerVis1"      layerType="holeForIncomingBeampipe"/>
+      </layer>
+      
+      <layer repeat="BCal_nLayers" vis="SeeThrough">
+	<slice material = "TungstenDens24" thickness = "BCal_dAbsorber" vis="BCLayerVis1"  layerType="holeForIncomingBeampipe" />
+	<slice material = "Silicon"        thickness = "0.3004*mm"      vis="BCLayerVis2"  sensitive = "yes"  />
+	<slice material = "Copper"         thickness = "0.0004*mm"      vis="BCLayerVis3"                     />
+	<slice material = "Kapton"         thickness = "0.15*mm"        vis="BCLayerVis4"                     />
+	<slice material = "Air"            thickness = "0.05*mm" />
+      </layer>
+
+    </detector>
+  </detectors>
+</lccdd>
