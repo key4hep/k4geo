@@ -56,7 +56,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
 
   // The shape PolyhedraRegular for envelope. You may define your shape.
   PolyhedraRegular hedra_solid (nsides,0,outer_r+tolerance*2e0, (endcap_zstart + endcap_zhalf*2.0)*2.0 );
-  Tube             tube_hole(0, inner_r+tolerance*2e0,endcap_zstart+endcap_zhalf*2.0+2.0e-5);
+  //Tube             tube_hole(0, inner_r+tolerance*2e0,endcap_zstart+endcap_zhalf*2.0+2.0e-5);
+  Cone             tube_hole(endcap_zstart+endcap_zhalf*2.0+2.0e-5, 0, inner_r+tolerance*2e0, 0, inner_r+tolerance*2e0);
   SubtractionSolid hedratube(hedra_solid,tube_hole);
 
   if( endcap_zstart > 0.0 ){

@@ -48,7 +48,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
   Volume        motherVol = lcdd.pickMotherVolume(sdet);
 
   // The shape Tube for envelope. You may define your shape.
-  Tube          tubeSolid (inner_r, outer_r, x_dim.zhalf());
+  //Tube          tubeSolid (inner_r, outer_r, x_dim.zhalf());
+  Cone          tubeSolid ( x_dim.zhalf(), inner_r, outer_r, inner_r, outer_r);
   Volume        envelope  (det_name+"_envelope",tubeSolid,env_mat);
   //unused:  PlacedVolume  env_phv   = 
   motherVol.placeVolume(envelope,tr);
