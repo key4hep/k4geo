@@ -197,7 +197,6 @@ namespace lcgeo {
 
 #ifdef SDHcalBarrel_DEBUG
     if( abs(preworldPosition[0]-postworldPosition[0])> _cellSize.at(currentLayer-1)
-	|| abs(preworldPosition[1]-postworldPosition[1])> _cellSize.at(currentLayer-1)
 	|| abs(preworldPosition[1]-postworldPosition[1])> _cellSize.at(currentLayer-1) )
     {
     G4cout   <<" \n preworldPosition: "  << preworldPosition
