@@ -37,7 +37,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   Layering    layering(x_det);
   xml_dim_t   dim         = x_det.dimensions();
   string      det_name    = x_det.nameStr();
-  string      det_type    = x_det.typeStr();
+  //unused: string      det_type    = x_det.typeStr();
   Material    air         = lcdd.air();
   Material    Steel235    = lcdd.material(x_det.materialStr());
   int         numSides    = dim.numsides();

@@ -476,9 +476,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 //---------------------------  Chamber Placements -----------------------------------------
       // module x and y offsets (needed for the SD)
-      double Xoff,Yoff;
-      Xoff = 0.;
-      Yoff = Hcal_inner_radius + Hcal_total_dim_y/2.;
+      //unused: double Xoff,Yoff;
+      //unused: Xoff = 0.;
+      //unused: Yoff = Hcal_inner_radius + Hcal_total_dim_y/2.;
       
       double chamber_x_offset, chamber_y_offset, chamber_z_offset;
       chamber_x_offset = xShift;
