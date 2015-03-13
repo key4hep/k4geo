@@ -54,9 +54,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
   // The shape PolyhedraRegular for envelope. You may define your shape.
   PolyhedraRegular hedra  (nsides,inner_r,outer_r+tolerance*2e0,x_dim.zhalf()*2.0);
   Volume        envelope  (det_name+"_envelope",hedra,env_mat);
-  //unused:  PlacedVolume  env_phv   = 
-  motherVol.placeVolume(envelope,tr);
 
+  PlacedVolume  env_phv   =  motherVol.placeVolume(envelope,tr);
+  sdet.setPlacement( env_phv ) ;
 
   // Then build and place the layers into the envelope in your way here.
 

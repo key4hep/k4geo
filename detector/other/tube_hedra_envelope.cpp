@@ -57,9 +57,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
   PolyhedraRegular hedra_hole (nsides,0,inner_r+tolerance*2e0,x_dim.zhalf()*2.0+1.0e-5);
   SubtractionSolid tubehedra(tube_solid,hedra_hole);
   Volume        envelope  (det_name+"_envelope",tubehedra,env_mat);
-  //unused:  PlacedVolume  env_phv   = 
-  motherVol.placeVolume(envelope,tr);
 
+  PlacedVolume  env_phv =  motherVol.placeVolume(envelope,tr);
+  sdet.setPlacement( env_phv ) ;
 
   // Then build and place the layers into the envelope in your way here.
 

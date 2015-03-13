@@ -58,9 +58,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
   Box              box_hole(inner_r+tolerance*2e0, inner_r+tolerance*2e0,x_dim.zhalf()+1.0e-5);
   SubtractionSolid hedrabox(hedra_solid,box_hole,rotZYX_box);
   Volume        envelope  (det_name+"_envelope",hedrabox,env_mat);
- //unused:  PlacedVolume  env_phv   = 
-  motherVol.placeVolume(envelope,tr);
 
+  PlacedVolume  env_phv   =  motherVol.placeVolume(envelope,tr);
+  sdet.setPlacement( env_phv );
 
   // Then build and place the layers into the envelope in your way here.
 

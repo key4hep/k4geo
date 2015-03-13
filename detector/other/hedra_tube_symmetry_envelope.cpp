@@ -61,6 +61,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
   SubtractionSolid hedratube(hedra_solid,tube_hole);
 
   if( endcap_zstart > 0.0 ){
+
     PolyhedraRegular hedra_cut (nsides,0,outer_r+tolerance*2e0+1.0e-5, endcap_zstart*2.0 );
     SubtractionSolid hedratube_env(hedratube,hedra_cut);
 
@@ -69,8 +70,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
 
     // Then build and place the layers into the envelope in your way here.
 
-    //unused:  PlacedVolume  env_phv   = 
-    motherVol.placeVolume(envelope,tr);
+    PlacedVolume  env_phv  =  motherVol.placeVolume(envelope,tr);
+    sdet.setPlacement( env_phv ) ;
+
   }else {
     cout<<" WARNING: hedra_tube_sys_envelope: Nothing has been built!"<<endl;
     cout<<" WARNING: Please check \"zstart\" value larger than 0.0*mm"<<endl;

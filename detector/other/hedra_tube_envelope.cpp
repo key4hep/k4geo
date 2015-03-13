@@ -57,12 +57,18 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
   Cone             tube_hole(x_dim.zhalf()+1.0e-5, 0, inner_r+tolerance*2e0, 0, inner_r+tolerance*2e0);
   SubtractionSolid hedratube(hedra_solid,tube_hole);
   Volume        envelope  (det_name+"_envelope",hedratube,env_mat);
-  //unused:  PlacedVolume  env_phv   = 
-  motherVol.placeVolume(envelope,tr);
 
+  Assembly ass ;
+  PlacedVolume pv  = ass.placeVolume( envelope, tr );
+  
   Position      posMZ(env_pos.x(),env_pos.y(),-env_pos.z());
   Transform3D   trMZ(rotZYX,posMZ);
-  motherVol.placeVolume(envelope,trMZ);
+  
+  //  PlacedVolume  env_phv  = motherVol.placeVolume(envelope,trMZ);
+  pv = ass.placeVolume(envelope,trMZ);
+  
+  PlacedVolume env_phv = motherVol.placeVolume( ass ) ;
+  sdet.setPlacement( env_phv );
 
 
   // Then build and place the layers into the envelope in your way here.
