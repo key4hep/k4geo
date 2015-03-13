@@ -24,9 +24,9 @@
       <section type="Center"               start="2080*mm" end="2645*mm"   rMin1="235.2*mm"  rMin2="235.2*mm"              rMax1="240.0*mm" rMax2="240.0*mm"                  material="Iron"      name="BP04"/>
       <section type="PunchedCenter"        start="2645*mm" end="2646*mm"   rMin1="0.0*mm"    rMin2="98.0*mm"               rMax1="240.0*mm" rMax2="240.0*mm"                  material="Iron"      name="LCOpen"/>
       <section type="DnstreamClippedFront" start="2646*mm" end="3170*mm"   rMin1="98.0*mm"   rMin2="98.0*mm"               rMax1="99.0*mm"  rMax2="99.0*mm"                   material="Iron"      name="BP06"/>
-      <section type="PunchedDnstream"      start="3170*mm" end="3181*mm"   rMin1="2.7*mm"    rMin2="31.0*mm"               rMax1="99.0*mm"  rMax2="99.0*mm"                   material="Iron"      name="BP07"/>
-      <section type="Dnstream"             start="3181*mm" end="3500*mm"   rMin1="31.0*mm"   rMin2="31.0*mm"               rMax1="32.0*mm"  rMax2="32.0*mm"                   material="Iron"      name="BP08"/>
-      <section type="UpstreamSlicedFront"  start="3181*mm" end="3281*mm"   rMin1="2.7*mm"    rMin2="2.7*mm"                rMax1="3.7*mm"   rMax2="3.7*mm"                    material="Iron"      name="BP_Up1"/>
+      <section type="PunchedDnstream"      start="3170*mm" end="3171*mm"   rMin1="2.7*mm"    rMin2="31.0*mm"               rMax1="99.0*mm"  rMax2="99.0*mm"                   material="Iron"      name="BP07"/>
+      <section type="Dnstream"             start="3171*mm" end="3500*mm"   rMin1="31.0*mm"   rMin2="31.0*mm"               rMax1="32.0*mm"  rMax2="32.0*mm"                   material="Iron"      name="BP08"/>
+      <section type="UpstreamSlicedFront"  start="3171*mm" end="3281*mm"   rMin1="2.7*mm"    rMin2="2.7*mm"                rMax1="3.7*mm"   rMax2="3.7*mm"                    material="Iron"      name="BP_Up1"/>
       <section type="Upstream"             start="3281*mm" end="12500*mm"  rMin1="2.7*mm"    rMin2="2.7*mm"                rMax1="3.7*mm"   rMax2="3.7*mm"                    material="Iron"      name="BP_Up2"/>
       <section type="Dnstream"             start="3500*mm" end="12500*mm"  rMin1="31.0*mm"   rMin2="bpEnd*tan(10*mrad)"    rMax1="32.0*mm"  rMax2="bpEnd*tan(10*mrad)+2.0*mm" material="Iron"      name="BP09"/>
 
