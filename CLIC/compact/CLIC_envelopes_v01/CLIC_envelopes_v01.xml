@@ -109,15 +109,12 @@
   
     
     <detectors>
-        <detector name="Tracker" type="GenericPolyhedralBarrelEnvelope" id="1" vis="YellowVis" >
-            <dimensions nsides_inner="8" nsides_outer="0" rmin="100" rmax="400" zhalf="TrackerHalfZ" offset="0*deg" material = "Air" />
+        <detector name="Tracker" type="GenericBarrelEnvelope" id="1" vis="BlackVis" >
+            <dimensions nsides_inner="0" nsides_outer="0" rmin="100" rmax="400" zhalf="TrackerHalfZ" phi0_offset="45*deg" material = "Air" />
             <position x="0*mm" y="0*mm" z="0*mm"/>
             <rotation x="0*deg" y="0*deg" z="0*deg"/>
         </detector>
     </detectors> 
-
-
-
 
     
 
