@@ -201,9 +201,11 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
     Material wallMaterial    = sectionMat;
 
     // this could mess up your geometry, so better check it
-    if (not checkForSensibleGeometry(crossingAngle, crossType))
-      return false;
+    if (not checkForSensibleGeometry(crossingAngle, crossType)){
 
+      throw std::runtime_error( " Beampipe_o1_v01_geo.cpp : checkForSensibleGeometry() failed " ) ;
+      //      return false;
+    }
     const double rotateAngle = getCurrentAngle(crossingAngle, crossType); // for the placement at +z (better make it const now)
     const double mirrorAngle = M_PI - rotateAngle; // for the "mirrored" placement at -z
     // the "mirroring" in fact is done by a rotation of (almost) 180 degrees around the y-axis
@@ -564,7 +566,9 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
       break;
     }
     default: {
-      return false; // fatal failure
+      throw std::runtime_error( " Beampipe_o1_v01_geo.cpp : fatal failure !! ??  " ) ;
+
+      //      return false; // fatal failure
     }
 
     }//end switch
