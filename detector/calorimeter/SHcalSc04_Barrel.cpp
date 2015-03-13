@@ -572,7 +572,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
 
   sdet.setVisAttributes( lcdd, x_det.visStr(),  envelope);
-  sdet.setPlacement(pv);
+  sdet.setPlacement(env_phv);
   return sdet;
 
 }
