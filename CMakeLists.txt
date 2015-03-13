@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3 FATAL_ERROR)
 
+SET( CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic -Wno-long-long")
+
 #---------------------------
 set( PackageName lcgeo )
 #---------------------------
