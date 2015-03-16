@@ -5,6 +5,9 @@
 //  A.Sailer, CERN
 //  $Id$
 //====================================================================
+
+#include "OtherDetectorHelpers.h"
+
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/DD4hepUnits.h"
 #include "DDRec/DetectorData.h"
@@ -26,69 +29,6 @@ using DD4hep::Geometry::Tube;
 using DD4hep::Geometry::PlacedVolume;
 using DD4hep::Geometry::Assembly;
 
-namespace {
-  typedef enum { // These constants are also used in the MySQL database:
-    kCenter                     = 0, // centered on the z-axis
-    kUpstream                   = 1, // on the upstream branch, rotated by half the crossing angle
-    kDnstream                   = 2, // on the downstream branch, rotated by half the crossing angle
-    kPunchedCenter              = 3, // centered, with one or two inner holes
-    kPunchedUpstream            = 4, // on the upstream branch, with two inner holes
-    kPunchedDnstream            = 5, // on the downstrem branch, with two inner holes
-    kUpstreamClippedFront       = 6, // upstream, with the front face parallel to the xy-plane
-    kDnstreamClippedFront       = 7, // downstream, with the front face parallel to the xy-plane
-    kUpstreamClippedRear        = 8, // upstream, with the rear face parallel to the xy-plane
-    kDnstreamClippedRear        = 9, // downstream, with the rear face parallel to the xy-plane
-    kUpstreamClippedBoth        = 10, // upstream, with both faces parallel to the xy-plane
-    kDnstreamClippedBoth        = 11, // downstream, with both faces parallel to the xy-plane
-    kUpstreamSlicedFront        = 12, // upstream, with the front face parallel to a tilted piece
-    kDnstreamSlicedFront        = 13, // downstream, with the front face parallel to a tilted piece
-    kUpstreamSlicedRear         = 14, // upstream, with the rear face parallel to a tilted piece
-    kDnstreamSlicedRear         = 15, // downstream, with the rear face parallel to a tilted piece
-    kUpstreamSlicedBoth         = 16, // upstream, with both faces parallel to a tilted piece
-    kDnstreamSlicedBoth         = 17 // downstream, with both faces parallel to a tilted piece
-  } ECrossType;
-}//namespace
-
-
-
-bool checkForSensibleGeometry(double crossingAngle, ECrossType crossType) {
-  if (crossingAngle == 0 && crossType != kCenter) {
-    std::cout << "TubeX01: You are trying to build a crossing geometry without a crossing angle.\n"
-      "This is probably not what you want - better check your geometry data!" << std::endl ;
-    return false; // premature exit, dd4hep will abort now
-  }
-  return true;
-}
-
-
-double getCurrentAngle( double crossingAngle, ECrossType crossType ) {
-  double tmpAngle;
-  switch (crossType) {
-  case kUpstream:
-  case kPunchedUpstream:
-  case kUpstreamClippedFront:
-  case kUpstreamClippedRear:
-  case kUpstreamClippedBoth:
-  case kUpstreamSlicedFront:
-  case kUpstreamSlicedRear:
-  case kUpstreamSlicedBoth:
-    tmpAngle = -crossingAngle; break;
-  case kDnstream:
-  case kPunchedDnstream:
-  case kDnstreamClippedFront:
-  case kDnstreamClippedRear:
-  case kDnstreamClippedBoth:
-  case kDnstreamSlicedFront:
-  case kDnstreamSlicedRear:
-  case kDnstreamSlicedBoth:
-    tmpAngle = +crossingAngle; break;
-  default:
-    tmpAngle = 0; break;
-  }
-
-  return tmpAngle;
-}
-
 /** Construction of VTX detector, ported from Mokka driver TubeX01.cc
  *
  *  Mokka History:
@@ -103,27 +43,6 @@ double getCurrentAngle( double crossingAngle, ECrossType crossType ) {
 static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
 					      DD4hep::XML::Handle_t xmlHandle,
 					      DD4hep::Geometry::SensitiveDetector /*sens*/) {
-
-
-  std::map< std::string, ECrossType > CrossTypes;
-  CrossTypes["Center"]                = kCenter               ;
-  CrossTypes["Upstream"]              = kUpstream             ;
-  CrossTypes["Dnstream"]              = kDnstream             ;
-  CrossTypes["PunchedCenter"]         = kPunchedCenter        ;
-  CrossTypes["PunchedUpstream"]       = kPunchedUpstream      ;
-  CrossTypes["PunchedDnstream"]       = kPunchedDnstream      ;
-  CrossTypes["UpstreamClippedFront"]  = kUpstreamClippedFront ;
-  CrossTypes["DnstreamClippedFront"]  = kDnstreamClippedFront ;
-  CrossTypes["UpstreamClippedRear"]   = kUpstreamClippedRear  ;
-  CrossTypes["DnstreamClippedRear"]   = kDnstreamClippedRear  ;
-  CrossTypes["UpstreamClippedBoth"]   = kUpstreamClippedBoth  ;
-  CrossTypes["DnstreamClippedBoth"]   = kDnstreamClippedBoth  ;
-  CrossTypes["UpstreamSlicedFront"]   = kUpstreamSlicedFront  ;
-  CrossTypes["DnstreamSlicedFront"]   = kDnstreamSlicedFront  ;
-  CrossTypes["UpstreamSlicedRear"]    = kUpstreamSlicedRear   ;
-  CrossTypes["DnstreamSlicedRear"]    = kDnstreamSlicedRear   ;
-  CrossTypes["UpstreamSlicedBoth"]    = kUpstreamSlicedBoth   ;
-  CrossTypes["DnstreamSlicedBoth"]    = kDnstreamSlicedBoth   ;
 
 
   //------------------------------------------
@@ -161,7 +80,7 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
 
     xml_comp_t xmlSection( c );
     
-    ECrossType crossType = CrossTypes[xmlSection.attr< std::string >(_Unicode(type))];
+    ODH::ECrossType crossType = ODH::getCrossType(xmlSection.attr< std::string >(_Unicode(type)));
     const double zStart       = xmlSection.attr< double > (_Unicode(start));
     const double zEnd         = xmlSection.attr< double > (_Unicode(end));
     const double rInnerStart  = xmlSection.attr< double > (_Unicode(rMin1));
@@ -183,7 +102,7 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
 	      << std::setw(15) << volName
 	      << std::setw(15) << sectionMat.name()  << std::endl;    
 
-    if( crossType == kCenter ) { // store only the central sections !
+    if( crossType == ODH::kCenter ) { // store only the central sections !
       DD4hep::DDRec::ConicalSupportData::Section section ;
       section.rInner = rInnerStart ;
       section.rOuter = rOuterStart ;
@@ -208,9 +127,9 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
     // the "mirroring" in fact is done by a rotation of (almost) 180 degrees around the y-axis
 
     switch (crossType) {
-    case kCenter:
-    case kUpstream:
-    case kDnstream: {
+    case ODH::kCenter:
+    case ODH::kUpstream:
+    case ODH::kDnstream: {
       // a volume on the z-axis, on the upstream branch, or on the downstream branch
       
       // absolute transformations for the placement in the world
@@ -245,7 +164,7 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
     }  
       break;
       
-    case kPunchedCenter: {
+    case ODH::kPunchedCenter: {
       // a volume on the z-axis with one or two inner holes
       // (implemented as a cone from which tubes are punched out)
       
@@ -314,13 +233,13 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
       break;
     }
 
-    case kPunchedUpstream:
-    case kPunchedDnstream: {
+    case ODH::kPunchedUpstream:
+    case ODH::kPunchedDnstream: {
       // a volume on the upstream or downstream branch with two inner holes
       // (implemented as a cone from which another tube is punched out)
       
-      const double rCenterPunch = (crossType == kPunchedUpstream) ? (rInnerStart) : (rInnerEnd); // just alias names denoting what is meant here
-      const double rOffsetPunch = (crossType == kPunchedDnstream) ? (rInnerStart) : (rInnerEnd); // (the database entries are "abused" in this case)
+      const double rCenterPunch = (crossType == ODH::kPunchedUpstream) ? (rInnerStart) : (rInnerEnd); // just alias names denoting what is meant here
+      const double rOffsetPunch = (crossType == ODH::kPunchedDnstream) ? (rInnerStart) : (rInnerEnd); // (the database entries are "abused" in this case)
       
       // relative transformations for the composition of the SubtractionVolumes
       Transform3D punchTransformer(RotationY(-2 * rotateAngle), Position(zPosition * tan(-2 * rotateAngle), 0, 0));
@@ -369,10 +288,10 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
       break;
     }
       
-    case kUpstreamClippedFront:
-    case kDnstreamClippedFront:
-    case kUpstreamSlicedFront:
-    case kDnstreamSlicedFront: {
+    case ODH::kUpstreamClippedFront:
+    case ODH::kDnstreamClippedFront:
+    case ODH::kUpstreamSlicedFront:
+    case ODH::kDnstreamSlicedFront: {
       // a volume on the upstream or donwstream branch, but with the front face parallel to the xy-plane
       // or to a piece tilted in the other direction ("sliced" like a salami with 2 * rotateAngle)
       // (implemented as a slightly longer cone from which the end is clipped off)
@@ -382,7 +301,7 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
       Tube clipSolid( 0, 2 * clipSize, clipSize, phi1, phi2); // should be large enough
         
       // relative transformations for the composition of the SubtractionVolumes
-      const double clipAngle = (crossType == kUpstreamClippedFront || crossType == kDnstreamClippedFront) ? (rotateAngle) : (2 * rotateAngle);
+      const double clipAngle = (crossType == ODH::kUpstreamClippedFront || crossType == ODH::kDnstreamClippedFront) ? (rotateAngle) : (2 * rotateAngle);
       const double clipShift = (zStart - clipSize) / cos(clipAngle) - (zPosition - clipSize / 2); // question: why is this correct?
       Transform3D clipTransformer(RotationY(-clipAngle), Position(0, 0, clipShift));
       Transform3D clipTransmirror(RotationY(+clipAngle), Position(0, 0, clipShift));
@@ -432,10 +351,10 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
     }
       break;
 
-    case kUpstreamClippedRear:
-    case kDnstreamClippedRear:
-    case kUpstreamSlicedRear:
-    case kDnstreamSlicedRear: {
+    case ODH::kUpstreamClippedRear:
+    case ODH::kDnstreamClippedRear:
+    case ODH::kUpstreamSlicedRear:
+    case ODH::kDnstreamSlicedRear: {
       // a volume on the upstream or donwstream branch, but with the rear face parallel to the xy-plane
       // or to a piece tilted in the other direction ("sliced" like a salami with 2 * rotateAngle)
       // (implemented as a slightly longer cone from which the end is clipped off)
@@ -445,7 +364,7 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
       Tube clipSolid( 0, 2 * clipSize, clipSize, phi1, phi2); // should be large enough
       
       // relative transformations for the composition of the SubtractionVolumes
-      const double clipAngle = (crossType == kUpstreamClippedRear || crossType == kDnstreamClippedRear) ? (rotateAngle) : (2 * rotateAngle);
+      const double clipAngle = (crossType == ODH::kUpstreamClippedRear || crossType == ODH::kDnstreamClippedRear) ? (rotateAngle) : (2 * rotateAngle);
       const double clipShift = (zEnd + clipSize) / cos(clipAngle) - (zPosition + clipSize / 2); // question: why is this correct?
       Transform3D clipTransformer(RotationY(-clipAngle), Position(0, 0, clipShift));
       Transform3D clipTransmirror(RotationY(+clipAngle), Position(0, 0, clipShift));
@@ -494,10 +413,10 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
       break;
     }
 
-    case kUpstreamClippedBoth:
-    case kDnstreamClippedBoth:
-    case kUpstreamSlicedBoth:
-    case kDnstreamSlicedBoth: {
+    case ODH::kUpstreamClippedBoth:
+    case ODH::kDnstreamClippedBoth:
+    case ODH::kUpstreamSlicedBoth:
+    case ODH::kDnstreamSlicedBoth: {
       // a volume on the upstream or donwstream branch, but with both faces parallel to the xy-plane
       // or to a piece tilted in the other direction ("sliced" like a salami with 2 * rotateAngle)
       // (implemented as a slightly longer cone from which the end is clipped off)
@@ -507,7 +426,7 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
       Tube clipSolid( 0, 2 * clipSize, clipSize, phi1, phi2); // should be large enough
         
       // relative transformations for the composition of the SubtractionVolumes
-      const double clipAngle = (crossType == kUpstreamClippedBoth || crossType == kDnstreamClippedBoth) ? (rotateAngle) : (2 * rotateAngle);
+      const double clipAngle = (crossType == ODH::kUpstreamClippedBoth || crossType == ODH::kDnstreamClippedBoth) ? (rotateAngle) : (2 * rotateAngle);
       const double clipShiftFrnt = (zStart - clipSize) / cos(clipAngle) - zPosition;
       const double clipShiftRear = (zEnd   + clipSize) / cos(clipAngle) - zPosition;
       Transform3D clipTransformerFrnt(RotationY(-clipAngle), Position(0, 0, clipShiftFrnt));
