@@ -169,8 +169,8 @@
 
         <comment>Calorimeters</comment>
 
-	<detector name="EcalBarrelEnv" type="DD4hep_Envelope" id="1000+ILDDetID_ECAL"  vis="BlueVis" >
-	  <shape name="PolyhedraEnvelope" type="polyhedra_envelope">
+	<detector name="EcalBarrelEnv" type="DD4hep_SubdetectorAssembly" id="1000+ILDDetID_ECAL"  vis="BlueVis" >
+	  <shape name="PolyhedraEnvelope" type="PolyhedraEnvelope">
 	    <dimensions numsides="8" rmin="1900*mm" rmax="2500*mm" zhalf="2200*mm"  material = "Air" />
 	    <position x="0*mm" y="0*mm" z="0*mm"/>
 	    <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/8"/>
