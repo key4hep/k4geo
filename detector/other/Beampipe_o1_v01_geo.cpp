@@ -133,9 +133,6 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
 
   std::cout << "This is the Beampipe:"  << std::endl;
 
-  Material air = lcdd.air();
-  Material vac = lcdd.vacuum();
-
   //Access to the XML File
   DD4hep::XML::DetElement xmlBeampipe = xmlHandle;
   const std::string name = xmlBeampipe.nameStr();
