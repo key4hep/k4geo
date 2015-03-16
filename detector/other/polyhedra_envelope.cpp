@@ -15,20 +15,14 @@ using namespace DD4hep::Geometry;
 
 static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
   static double tolerance = 0e0;
-  Layering      layering (e);
+  //  Layering      layering (e);
   xml_det_t     x_det     = e;
- //unused:   Material      air       = lcdd.air();
 
   int           det_id    = x_det.id();
   string        det_name  = x_det.nameStr();
 
   xml_comp_t    x_dim     = x_det.dimensions();
   int           nsides    = x_dim.numsides();
-
-  //unused:  double        dphi      = (2*M_PI/nsides);
-  //unused:  double        hphi      = dphi/2;
-
-  //unused:  double        thickness = layering.totalThickness();
 
   double        inner_r   = x_dim.rmin();
   double        outer_r   = x_dim.rmax();
@@ -66,3 +60,5 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
 }
 
 DECLARE_DETELEMENT(polyhedra_envelope,create_detector)
+
+//DECLARE_XMLELEMENT(polyhedra_envelope,create_detector)
