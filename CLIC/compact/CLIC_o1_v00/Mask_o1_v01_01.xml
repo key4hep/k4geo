@@ -1,0 +1,47 @@
+<lccdd>
+  <!--  Definition of global dictionary constants          -->
+  <define>
+  </define>
+
+  <!--  Definition of the used visualization attributes    -->
+  <display>
+    <vis name="MaskVis" alpha="1.0" r="1.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
+
+    <vis name="BPMVis" alpha="1.0" r="0.5" g="0.8"  b="1.0"   showDaughters="true"  visible="true"/>
+    <vis name="KickerVis" alpha="1.0" r="0.1" g="0.8"  b="0.8"   showDaughters="true"  visible="true"/>
+    <vis name="QD0Vis" alpha="1.0" r="1.0" g="0.5"  b="0.2"   showDaughters="true"  visible="true"/>
+    <vis name="SupportVis" alpha="1.0" r="0.2" g="0.6" b="0.2"   showDaughters="true"  visible="true"/>
+
+  </display>
+
+
+  <detectors>
+    <comment>Beampipe</comment>
+
+    <detector name="BPM" type="Mask_o1_v01" insideTrackingVolume="false" vis="BPMVis">
+      <parameter crossingangle="CrossingAngle" />
+      <section type="Dnstream"  start= "3480*mm" end= "3570*mm" rMin1="35*mm" rMin2="35*mm" rMax1="54*mm" rMax2="54*mm" material="Steel235" name="BPM" />
+    </detector>
+
+    <detector name="Kicker" type="Mask_o1_v01" insideTrackingVolume="false" vis="KickerVis">
+      <parameter crossingangle="CrossingAngle" />
+      <section type="Upstream"  start= "3580*mm" end= "3880*mm" rMin1="4*mm" rMin2="4*mm" rMax1="25*mm" rMax2="25*mm" material="Steel235" name="Kicker" />
+    </detector>
+
+    <detector name="QD0" type="Mask_o1_v01" insideTrackingVolume="false" vis="QD0Vis">
+      <parameter crossingangle="CrossingAngle" />
+      <section type="Upstream"  start= "4256*mm" end= "6965*mm" rMin1="3.83*mm" rMin2="3.83*mm" rMax1="35*mm" rMax2="35*mm" material="Steel235" name="QD0" />
+    </detector>
+
+    <detector name="Support" type="Mask_o1_v01" insideTrackingVolume="false" vis="SupportVis">
+      <parameter crossingangle="CrossingAngle" />
+      <section type="PunchedCenter"  start= "2835*mm" end= "2875*mm" rMin1=  "0*mm" rMin2="100*mm" rMax1="400.00*mm" rMax2="400.00*mm" material="Steel235" name="Sup1" />
+      <section type="Center"         start= "2875*mm" end= "7500*mm" rMin1="300*mm" rMin2="300*mm" rMax1="400.00*mm" rMax2="400.00*mm" material="Steel235" name="Sup2" />
+      <section type="PunchedCenter"  start= "3181*mm" end= "3461*mm" rMin1=  "0*mm" rMin2="165*mm" rMax1="299.99*mm" rMax2="299.99*mm" material="Steel235" name="Sup3" />
+    </detector>
+
+
+  </detectors>
+</lccdd>
+
+
