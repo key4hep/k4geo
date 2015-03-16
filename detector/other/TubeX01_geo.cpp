@@ -125,11 +125,6 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
   }
   if (usingOffsets) std::cout << "TubeX01: Be sure you know what you're doing!" << std::endl ;
   
-  bool firstPiece = true;
-  std::string material = "";
-  double beam_inner_radius = -99999;
-  double beam_thickness = -99999;
-  
   
   //unused: bool saveToGear = true; // as long as this is true the vectors gearValZ, gearValRInner and gearValROuter will be filled in the coming loop
   
@@ -162,7 +157,6 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
     const double rInnerStart  = db->fetchDouble("rInnerStart") + rInnerStartOffset;
     const double rInnerEnd    = db->fetchDouble("rInnerEnd")   + rInnerEndOffset;
     const double rOuterStart  = db->fetchDouble("rOuterStart") + rOuterStartOffset;
-    const double thickness    = rOuterStart - rInnerStart;
     const double rOuterEnd    = db->fetchDouble("rOuterEnd")   + rOuterEndOffset;
     const std::string materialName = db->fetchString("material");
     const std::string volName      = "tube_" + db->fetchString("name");
@@ -222,13 +216,6 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
       
     //   }
     
-    if(firstPiece)
-      { 
-  	firstPiece = false;
-  	material = materialName;
-  	beam_inner_radius = rInnerStart;
-  	beam_thickness = thickness;
-      }
     // things which can be calculated immediately
     double zHalf        = fabs(zEnd - zStart) / 2; // half z length of the cone
     const double zPosition    = fabs(zEnd + zStart) / 2; // middle z position

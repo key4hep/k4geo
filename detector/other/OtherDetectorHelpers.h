@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <map>
+#include <stdexcept>
 
 namespace ODH {//OtherDetectorHelpers
 
