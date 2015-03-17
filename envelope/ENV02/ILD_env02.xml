@@ -1,0 +1,180 @@
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0" 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+    <info name="workshop"
+        title="workshop model envelopes "
+        author="S. Lu"
+        url="http://ilcsoft.desy.de"
+        status="experimantal"
+        version="$Id:$">
+        <comment> model envelopes in DD4hep </comment>        
+    </info>
+  
+    <includes>
+        <gdmlFile  ref="elements.xml"/>
+        <gdmlFile  ref="materials.xml"/>
+    </includes>
+  
+    <define>
+        <constant name="world_side"             value="30*m"/>
+        <constant name="world_x"                value="world_side/2"/>
+        <constant name="world_y"                value="world_side/2"/>
+        <constant name="world_z"                value="world_side/2"/>        
+
+	<constant name="ILDDetID_NOTUSED"   value="  0"/>
+	<constant name="ILDDetID_VXD"       value="  1"/>
+	<constant name="ILDDetID_SIT"       value="  2"/>
+	<constant name="ILDDetID_FTD"       value="  3"/>
+	<constant name="ILDDetID_TPC"       value="  4"/>
+	<constant name="ILDDetID_SET"       value="  5"/>
+	<constant name="ILDDetID_ETD"       value="  6"/>
+	<constant name="ILDDetID_ECAL"      value=" 20"/>
+	<constant name="ILDDetID_ECAL_PLUG" value=" 21"/>
+	<constant name="ILDDetID_HCAL"      value=" 22"/>
+	<constant name="ILDDetID_HCAL_RING" value=" 23"/>
+	<constant name="ILDDetID_LCAL"      value=" 24"/>
+	<constant name="ILDDetID_BCAL"      value=" 25"/>
+	<constant name="ILDDetID_LHCAL"     value=" 26"/>
+	<constant name="ILDDetID_YOKE"      value=" 27"/>
+	<constant name="ILDDetID_COIL"      value=" 28"/>
+
+	<constant name="ILDDetID_bwd"       value="- 1"/>
+	<constant name="ILDDetID_barrel"    value="  0"/>
+	<constant name="ILDDetID_fwd"       value="  1"/>
+	
+
+	<constant name="Ecal_cells_size"  value="10.*mm" /> 
+	<constant name="Hcal_cells_size"  value="30.*mm" /> 
+	<constant name="nsides" value="8"/> 
+    </define>
+
+    <display>
+      <vis name="WhiteVis"         alpha="0.0" r=".96" g=".96"  b=".96"   showDaughters="true"  visible="true"/>
+      <vis name="Invisible"        alpha="0.0" r="0"   g="0"    b="0"     showDaughters="false" visible="false"/>
+      <vis name="SeeThrough"       alpha="0.0" r="0"   g="0"    b="0"     showDaughters="true"  visible="false"/>
+      <vis name="RedVis"           alpha="1.0" r="1.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
+      <vis name="GreenVis"         alpha="1.0" r="0.0" g="1.0"  b="0.0"   showDaughters="true"  visible="true"/>
+      <vis name="BlueVis"          alpha="1.0" r="0.0" g="0.0"  b="1.0"   showDaughters="true"  visible="true"/>
+      <vis name="CyanVis"          alpha="1.0" r="0.0" g="1.0"  b="1.0"   showDaughters="true"  visible="true"/>
+      <vis name="MagentaVis"       alpha="1.0" r="1.0" g="0.0"  b="1.0"   showDaughters="true"  visible="true"/>
+      <vis name="YellowVis"        alpha="1.0" r="1.0" g="1.0"  b="0.0"   showDaughters="true"  visible="true"/>
+      <vis name="BlackVis"         alpha="1.0" r="0.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
+      <vis name="GrayVis"          alpha="1.0" r="0.5" g="0.5"  b="0.5"   showDaughters="true"  visible="true"/>
+    </display>
+
+    <detectors>
+        <comment> Example Envelopes </comment>
+	<!-- detector name and driver(type) defined in detector -->
+	<!-- The envelope shape will be defined with "dimensions" by "type" -->
+	<!-- User has permission to define the envelope type, -->
+	<!-- and the createEnvelope driver will create the envelope shape -->
+	<detector name="HcalBarrelEnv" type="Envelope" id="1000+ILDDetID_ECAL"  vis="BlueVis" >
+
+	  <!-- envelope shape type included in the dimensions, for example "ILDHcalBarrelEnvelope" -->
+	  <dimensions type="ILDHcalBarrelEnvelope" numsides="8" rmin="2500*mm" rmax="4500*mm" zhalf="2200*mm"  material = "Air" />
+
+	  <!-- The "ILDHcalBarrelEnvelope" shape implemented by user with lcgeo -->
+	  <!-- The following shapes come from DD4hep plugins -->
+	  <!-- All the possible shapes could be used to create envelope -->
+<!--
+	  <dimensions type="Box" dx="1900*mm" dy="2500*mm" dz="2200*mm"  material = "Air" />
+	  <dimensions type="ConeSegment" rmin="1900*mm" rmax="2500*mm" dz="4400*mm" startphi="0*deg" deltaphi="360*deg"   material = "Air" />
+	  <dimensions type="Tube" numsides="8" rmin="1900*mm" rmax="2500*mm" dz="4400*mm" startphi="0*deg" deltaphi="360*deg" material = "Air" />
+	  <dimensions type="EllipticalTube" numsides="8" a="1900*mm" b="2500*mm" dz="4400*mm"  material = "Air" />
+	  <dimensions type="Cone" numsides="8" rmin1="0*mm" rmax1="500*mm" rmin2="1900*mm" rmax2="2500*mm" z="4400*mm"  material = "Air" />
+	  <dimensions type="Trapezoid" numsides="8" x1="1900*mm" x2="2900*mm" y1="2500*mm" y2="3500*mm" z="4400*mm"  material = "Air" />
+	  <dimensions type="Torus" numsides="8" r="4000*mm" rmin="900*mm" rmax="1200*mm" phi="180*deg" deltaphi="360*deg"  material = "Air" />
+	  <dimensions type="Paraboloid" numsides="8" rmin="1900*mm" rmax="2500*mm" dz="4400*mm"  material = "Air" />
+	  <dimensions type="Hyperboloid" numsides="8" rmin="10*mm" rmax="30*mm" dz="4400*mm" inner_stereo="15" outer_stereo="18"  material = "Air" />
+	  <dimensions type="PolyhedraRegular" numsides="8" rmin="1900*mm" rmax="2500*mm" dz="4400*mm"  material = "Air" />
+	  <dimensions type="EightPointSolid" numsides="8" dz="400*mm"  material = "Air">
+	    <vertex x="200*mm" y="100*mm"/>
+	    <vertex x="-200*mm" y="200*mm"/>
+	    <vertex x="-90*mm" y="-100*mm"/>
+	    <vertex x="200*mm" y="-200*mm"/>
+	    <vertex x="150*mm" y="150*mm"/>
+	    <vertex x="-200*mm" y="200*mm"/>
+	    <vertex x="-200*mm" y="-200*mm"/>
+	    <vertex x="200*mm" y="-100*mm"/>
+	  </dimensions>
+	  <dimensions type="Sphere" numsides="8" rmin="1900*mm" rmax="2500*mm"  theta="0*deg" deltatheta="180*deg" phi="0*deg" deltaphi="360*deg"  material = "Air" />
+	  <dimensions type="Trap" numsides="8" z="500*mm" theta="180*deg" phi="0*deg" y1="200*mm" x1="100*mm" x2="300*mm" alpha="60*deg" y2="400*mm" x3="500*mm" x4="600*mm" alpha2="180*deg" material = "Air" />
+          <dimensions type="Polycone" numsides="8"  startphi="0*deg" deltaphi="360*deg" material = "Air">
+	    <zplane rmin="190*mm" rmax="250*mm" z="400*mm"/>
+	    <zplane rmin="290*mm" rmax="350*mm" z="600*mm"/>
+	    <zplane rmin="390*mm" rmax="450*mm" z="1000*mm"/>
+	    <zplane rmin="390*mm" rmax="450*mm" z="1800*mm"/>
+	  </dimensions>
+-->
+	  <position x="0*mm" y="0*mm" z="0*mm"/>
+	  <rotation x="0*deg" y="0*deg" z="0*deg"/>
+	  <!--rotation x="0*deg" y="0*deg" z="90*deg-180*deg/8"/-->
+	</detector>
+
+    </detectors> 
+
+    <readouts>
+ 	<!-- use simple CartesianGridXY segmentation: -->
+	<readout name="EcalBarrelCollection">
+	  <segmentation type="CartesianGridXY" grid_size_x="Ecal_cells_size" grid_size_y="Ecal_cells_size"/>
+	  <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id>
+	</readout>
+
+	<readout name="EcalEndcapsCollection">
+	  <segmentation type="CartesianGridXY" grid_size_x="Ecal_cells_size" grid_size_y="Ecal_cells_size"/>
+	  <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,y:-16</id>
+	</readout>
+
+	<readout name="EcalEndcapRingCollection">
+	  <segmentation type="CartesianGridXY" grid_size_x="Ecal_cells_size" grid_size_y="Ecal_cells_size"/>
+	  <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id>
+	</readout>
+
+	<readout name="HcalBarrelRegCollection">
+	  <segmentation type="CartesianGridXY" grid_size_x="Hcal_cells_size" grid_size_y="Hcal_cells_size"/>
+	  <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,y:-16</id>
+	</readout>
+
+	<readout name="HcalEndcapsCollection">
+	  <segmentation type="CartesianGridXZ" grid_size_x="Hcal_cells_size" grid_size_z="Hcal_cells_size"/>
+	  <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,z:-16</id>
+	</readout>
+
+	<readout name="HcalEndcapRingCollection">
+	  <segmentation type="CartesianGridXY" grid_size_x="Hcal_cells_size" grid_size_y="Hcal_cells_size"/>
+	  <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id>
+	</readout>
+ 	<readout name="YokeBarrelCollection">
+	  <segmentation type="CartesianGridXZ" grid_size_x="0.5*cm" grid_size_z="0.5*cm"/>
+ 	 <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,z:-16</id>
+ 	</readout>
+
+ 	<readout name="YokeEndcapsCollection">
+	  <segmentation type="CartesianGridXY" grid_size_x="3*cm" grid_size_y="3*cm"/>
+ 	 <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id>
+ 	</readout>
+
+	<readout name="BeamCalCollection">
+	  <segmentation type="CartesianGridXY" grid_size_x="0.35*cm" grid_size_y="0.35*cm"  grid_size_z="0.35*cm" />
+	  <id>system:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id>
+	</readout>
+	
+	<readout name="LumiCalCollection">
+	  <segmentation type="CartesianGridXY" grid_size_x="0.1*cm" grid_size_y="0.1*cm" offset_x="0*cm" />
+	  <id>system:8,barrel:3,layer:5,slice:5,x:-16,y:-16 </id>
+	</readout>
+
+	<readout name="LHCalCollection">
+	  <segmentation type="CartesianGridXY" grid_size_x="0.1*cm" grid_size_y="0.1*cm" offset_x="0*cm" />
+	  <id>system:8,barrel:3,layer:5,slice:5,x:-16,y:-16 </id>
+	</readout>
+
+    </readouts>
+ <fields>
+   <field type="solenoid" name="GlobalSolenoid" inner_field="Field_nominal_value*tesla"
+	  outer_field="-1.5*tesla" zmax="TPC_Ecal_Hcal_barrel_halfZ"
+	  inner_radius="TPC_outer_radius"
+	  outer_radius="world_side" />
+ </fields> 
+</lccdd>
