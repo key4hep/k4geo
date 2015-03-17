@@ -263,7 +263,7 @@
     
     <fields>
         <field name="GlobalSolenoid" type="solenoid"
-            inner_field="5.0*tesla"
+            inner_field="4.0*tesla"
             outer_field="-1.5*tesla"
             zmax="SolenoidCoilOuterZ"
             outer_radius="SolenoidalFieldRadius">
