@@ -14,3 +14,12 @@ teveDisplay ILD_env02.xml
 
 
 
+https://root.cern.ch/root/html/TGeoShape.html
+The TGeoBBox looks like an envelope for all shapes.
+
+
+# use detector type "Envelope" only.
+# each detecotr has its own shape,
+# and the shape type defined in dimensions
+# details: between <detectors> and </detectors>
+teveDisplay ILD_Barel_env02.xml
