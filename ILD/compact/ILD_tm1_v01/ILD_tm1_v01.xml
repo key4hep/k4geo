@@ -159,6 +159,26 @@
     <detectors>
         <comment>Trackers</comment>
 
+
+        <comment>Calorimeters</comment>
+
+
+	<detector name="HcalBarrelEnvelope" type="DD4hep_SubdetectorAssembly" id="1000+ILDDetID_ECAL"  vis="BlueVis" >
+
+	  <shape name="EcalBarrelEnvelopeShape" type="ILDHcalBarrelEnvelope"   
+		  numsides="8" rmin="Hcal_inner_radius" rmax="Hcal_outer_radius" zhalf="TPC_Ecal_Hcal_barrel_halfZ"  
+		  material="Air" >
+
+	    <rotation x="0" y="0" z="180*deg/8"/>
+	  </shape>
+	  <composite name="HcalBarrel"/>
+	</detector>
+    </detectors> 
+
+
+      <include ref="SHcalSc04_Barrel.xml"/>
+
+
 	<!--  <include ref="tubeX06_14.xml"/>  -->
 	<!-- <include ref="Beampipe_o1_v01_01.xml"/> -->
 	<!-- <include ref="ftd_simple_staggered_02.xml"/> -->
@@ -167,20 +187,10 @@
 	<!-- <include ref="tpc10_01.xml"/> -->
 	<!-- <include ref="set_simple_planar_sensors_01.xml"/> -->
 
-        <comment>Calorimeters</comment>
-
-	<detector name="EcalBarrelEnv" type="DD4hep_SubdetectorAssembly" id="1000+ILDDetID_ECAL"  vis="BlueVis" >
-	  <shape name="PolyhedraEnvelope" type="PolyhedraEnvelope">
-	    <dimensions numsides="8" rmin="1900*mm" rmax="2500*mm" zhalf="2200*mm"  material = "Air" />
-	    <position x="0*mm" y="0*mm" z="0*mm"/>
-	    <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/8"/>
-	  </shape>
-	</detector>
-
 	<!-- <include ref="SEcal04_Barrel.xml"/> -->
 	<!-- <include ref="SEcal04_Endcaps.xml"/> -->
 	<!-- <include ref="SEcal04_ECRing.xml"/> -->
-	<!-- <\!-- <include ref="SHcalSc04_Barrel.xml"/> -\-> -->
+	<!-- <include ref="SHcalSc04_Barrel.xml"/> -->
 	<!-- <include ref="SHcalSc04_Endcaps.xml"/> -->
 	<!-- <include ref="SHcalSc04_EndcapRing.xml"/> -->
 	<!-- <include ref="Yoke05_Barrel.xml"/> -->
@@ -190,8 +200,6 @@
 	<!-- <\!-- <include ref="LHCal.xml"/> -\-> -->
 	<!-- <include ref="coil03.xml"/> -->
 	<!-- <include ref="SServices00.xml"/> -->
-
-      </detectors> 
 
     <readouts>
         <readout name="VXDCollection">
