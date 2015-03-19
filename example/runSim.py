@@ -33,14 +33,16 @@ from SystemOfUnits import *
 # some configuration variables (could go to a seperate 'steering' file)
 #
 
-numberOfEvents = 10
+numberOfEvents = 1000
 
-lcioInputFile  = 'mcparticles.slcio'
+#lcioInputFile  = 'mcparticles.slcio'
 #lcioInputFile  = 'mcparticles_single_muon_5GeV_10deg.slcio'
 #lcioInputFile  = 'mcparticles_single_muon_5GeV_7deg.slcio'
-#lcioInputFile  = 'mcparticles_single_muon_5GeV_85deg.slcio'
+lcioInputFile  = 'mcparticles_single_muon_5GeV_85deg.slcio'
 
-lcioOutputFile = 'simple_lcio.slcio'
+lcioOutputFile = 'simpleCLIC_single_muon_5GeV_85deg.slcio'
+#lcioOutputFile = 'simpleILD_single_muon_5GeV_85deg.slcio'
+#lcioOutputFile = 'simple_lcio.slcio'
 #lcioOutputFile = lcioInputFile[:len(lcioInputFile)-len('.slcio')]+'_SIM_simple.slcio'
 
 physicsList    = 'FTFP_BERT'  # 'QGSP_BERT'
