@@ -157,26 +157,18 @@
     </materials>
 
     <detectors>
-        <comment>Trackers</comment>
-
-
-        <comment>Calorimeters</comment>
-
-
-	<detector name="HcalBarrelEnvelope" type="DD4hep_SubdetectorAssembly" id="1000+ILDDetID_ECAL"  vis="BlueVis" >
-
+	<detector name="HcalBarrelEnvelope" type="DD4hep_SubdetectorAssembly" id="1000+ILDDetID_ECAL"
+		  vis="BlueVis" >
 	  <shape name="EcalBarrelEnvelopeShape" type="ILDHcalBarrelEnvelope"   
-		  numsides="8" rmin="Hcal_inner_radius" rmax="Hcal_outer_radius" zhalf="TPC_Ecal_Hcal_barrel_halfZ"  
+		  numsides="8" rmin="Hcal_inner_radius" rmax="Hcal_outer_radius" 
+		  zhalf="TPC_Ecal_Hcal_barrel_halfZ"  
 		  material="Air" >
-
 	    <rotation x="0" y="0" z="180*deg/8"/>
 	  </shape>
 	  <composite name="HcalBarrel"/>
 	</detector>
     </detectors> 
-
-
-      <include ref="SHcalSc04_Barrel.xml"/>
+    <include ref="SHcalSc04_Barrel_v01.xml"/>
 
 
 	<!--  <include ref="tubeX06_14.xml"/>  -->

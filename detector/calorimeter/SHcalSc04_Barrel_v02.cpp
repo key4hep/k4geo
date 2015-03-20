@@ -166,26 +166,16 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   DetElement  sdet( det_name,x_det.id() );
 
 
-  // --- this driver assumes that an external envelope has been created for it ---------
+  // --- create an envelope volume and position it into the world ---------------------
 
-  //    Volume       motherEnvelope  =  lcdd.pickMotherVolume(sdet); 
+  Volume envelope = create_placed_envelope( lcdd,  element , sdet ) ;
 
-  //    Assembly     envelope( det_name + "_assembly")   ;    // replace the old envelope with an assembly 
-
-  //    PlacedVolume env_phv   =  motherEnvelope.placeVolume( envelope );
-
-  //    sdet.setPlacement( env_phv );
-
-  //  env_phv.addPhysVolID("system", sdet.id());
-
-  Volume envelope = create_envelope( lcdd,  element , sdet ) ;
+  if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
 
   //-----------------------------------------------------------------------------------
 
 
   PlacedVolume pv;
-
-
 
   sens.setType("calorimeter");
 
@@ -347,7 +337,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   // Place the Layer Chamber into the Stave module
   // place the Stave module into the asembly Volume
   // place the module middle lateral plate into asembly Volume
-  // place the envelope Volume into the world 
 
   //TODO: re-thinking about the parameters name
   double x_length; //dimension of an Hcal barrel layer on the x-axis
@@ -592,7 +581,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
 
-  sdet.setVisAttributes( lcdd, x_det.visStr(),  envelope);
+  //  sdet.setVisAttributes( lcdd, x_det.visStr(),  envelope);
 
  
   return sdet;

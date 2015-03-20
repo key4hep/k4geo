@@ -117,6 +117,7 @@
       <vis name="YellowVis"        alpha="1.0" r="1.0" g="1.0"  b="0.0"   showDaughters="true"  visible="true"/>
       <vis name="BlackVis"         alpha="1.0" r="0.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
       <vis name="GrayVis"          alpha="1.0" r="0.5" g="0.5"  b="0.5"   showDaughters="true"  visible="true"/>
+      <vis name="LightGrayVis"     alpha="1.0" r="0.95" g="0.95"  b="0.95"   showDaughters="true"  visible="true"/>
 
 
       <!-- <vis name="TubeVis"   alpha="0.1" r="1.0" g="0.7"  b="0.5"   showDaughters="true"  visible="true"/> -->
@@ -163,15 +164,10 @@
         <comment>Calorimeters</comment>
 
 
-	<detector name="HcalBarrelEnvelope" type="DD4hep_SubdetectorAssembly" id="1000+ILDDetID_ECAL"  vis="BlueVis" >
-
-	  <composite name="HcalBarrel"/>
-	</detector>
-    </detectors> 
-
-
       <include ref="SHcalSc04_Barrel_v02.xml"/>
 
+
+    </detectors> 
 
 	<!--  <include ref="tubeX06_14.xml"/>  -->
 	<!-- <include ref="Beampipe_o1_v01_01.xml"/> -->
