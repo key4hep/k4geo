@@ -26,16 +26,16 @@ class DD4hepSimulation(object):
   def __init__(self):
     self.compactFile = ""
     self.inputFile = ""
-    self.outputFile = ""
+    self.outputFile = "dummyOutput.slcio"
     self.runType = "batch"
     self.printLevel = Output.INFO
 
-    self.numberOfEvents = -1
+    self.numberOfEvents = 0
     self.skipNEvents = 0
     self.physicsList = "FTFP_BERT"
     self.crossingAngleBoost = 0.0
     self.macroFile = ''
-    
+
     self.magneticFieldDict = {}
 
   @staticmethod
@@ -56,16 +56,16 @@ class DD4hepSimulation(object):
     parser = argparse.ArgumentParser("RunProg: Run DDG4")
     parser.add_argument("compactFile", action="store")
     parser.add_argument("runType", action="store", choices=("batch","vis","run","shell"))
-    
+
     parser.add_argument("--inputFile", "-I", action="store")
-    parser.add_argument("--outputFile","-O", action="store")
+    parser.add_argument("--outputFile","-O", action="store", default=self.outputFile)
     parser.add_argument("-v", "--printLevel", action="store", default=3, dest="printLevel")
     parser.add_argument("--nEvents", "-N", action="store", dest="numberOfEvents", default=self.numberOfEvents)
     parser.add_argument("--skipNEvents", action="store", dest="skipNEvents", default=self.skipNEvents)
     parser.add_argument("--physicsList", action="store", dest="physicsList", default=self.physicsList)
     parser.add_argument("--crossingAngleBoost", action="store", dest="crossingAngleBoost", default = self.crossingAngleBoost)
     parser.add_argument("--macroFile", "-M", action="store", dest="macroFile", default = self.macroFile)
-    
+
     parsed = parser.parse_args()
     print "parsed things", parsed
     self.compactFile = parsed.compactFile
@@ -79,9 +79,13 @@ class DD4hepSimulation(object):
     self.physicsList = parsed.physicsList
     self.crossingAngleBoost = parsed.crossingAngleBoost
     self.macroFile = parsed.macroFile
-    if self.runType == "batch" and not self.numberOfEvents:
-      print "ERROR: Batch mode requested, but did not set number of events"
-      exit(1)
+    if self.runType == "batch":
+      if not self.numberOfEvents:
+        print "ERROR: Batch mode requested, but did not set number of events"
+        exit(1)
+      if not self.inputFile:
+        print "ERROR: Batch mode requested, but did not set number of events"
+        exit(1)
 
   def setupMagneticField(self, simple):
     self.magneticFieldSetup()
@@ -95,7 +99,7 @@ class DD4hepSimulation(object):
     field.delta_intersection = self.magneticFieldDict['field.delta_intersection']
     field.delta_one_step     = self.magneticFieldDict['field.delta_one_step']
 
-    
+
   def magneticFieldSetup(self):
     """options for the magneticFieldStepper"""
 
@@ -108,7 +112,7 @@ class DD4hepSimulation(object):
     self.magneticFieldDict['field.delta_chord']        = 0.25*mm
     self.magneticFieldDict['field.delta_intersection'] = 1e-05*mm
     self.magneticFieldDict['field.delta_one_step']     = 0.001*mm
-    
+
   @staticmethod
   def getDetectorLists( lcdd ):
     ''' get lists of trackers and calorimeters that are defined in lcdd (the compact xml file)'''
@@ -135,7 +139,7 @@ class DD4hepSimulation(object):
 
   def run(self):
     """setup the geometry and dd4hep and geant4 and do what was asked to be done"""
-    
+
     kernel = DDG4.Kernel()
     DD4hep.setPrintLevel(self.printLevel)
     #kernel.setOutputLevel('Compact',1)
@@ -180,21 +184,24 @@ class DD4hepSimulation(object):
     kernel.runAction().add(run1)
 
     # Configure I/O
+
     evt_lcio = simple.setupLCIOOutput('LcioOutput', self.outputFile )
 
     actionList = []
-    
-    gen = DDG4.GeneratorAction(kernel,"LCIOInputAction/LCIO1")
-    gen.Sync = self.skipNEvents
-    gen.Input="LCIOFileReader|"+self.inputFile
-    
-    actionList.append(gen)
+
+    if self.inputFile:
+      gen = DDG4.GeneratorAction(kernel,"LCIOInputAction/LCIO1")
+      gen.Sync = self.skipNEvents
+      gen.Input="LCIOFileReader|"+self.inputFile
+      actionList.append(gen)
+
     if self.crossingAngleBoost:
       lbo = DDG4.GeneratorAction(kernel, "Geant4InteractionVertexBoost")
       lbo.Angle = 0.01
       actionList.append(lbo)
-      
-    simple.buildInputStage( actionList , output_level=DDG4.OutputLevel.DEBUG )
+
+    if actionList:
+      simple.buildInputStage( actionList , output_level=DDG4.OutputLevel.DEBUG )
 
     #================================================================================================
 
