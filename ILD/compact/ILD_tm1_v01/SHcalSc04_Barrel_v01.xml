@@ -1,6 +1,6 @@
 <!-- comment>Calorimeters</comment -->
 <detectors>
-<detector name="HcalBarrel" type="SHcalSc04_Barrel_v01" id="ILDDetID_HCAL" readout="HcalBarrelRegCollection" vis="GreenVis" insideTrackingVolume="false" >
+<detector name="HcalBarrelDetail" type="SHcalSc04_Barrel_v01" id="ILDDetID_HCAL" readout="HcalBarrelRegCollection" vis="GreenVis" insideTrackingVolume="false" >
     <comment>Hadron Calorimeter Barrel</comment>
 
     <dimensions numsides="8" rmin="Hcal_inner_radius" rmax="Hcal_outer_radius" zhalf="TPC_Ecal_Hcal_barrel_halfZ"  material="Air" />

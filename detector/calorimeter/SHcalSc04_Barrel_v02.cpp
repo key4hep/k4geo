@@ -44,7 +44,7 @@
 #include "XML/Layering.h"
 #include "DDRec/DetectorData.h"
 #include "DDSimExceptions.h"
-#include "./envelope.h"
+#include "envelope.h"
 
 using namespace std;
 using namespace DD4hep;

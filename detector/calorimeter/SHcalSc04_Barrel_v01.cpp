@@ -162,20 +162,23 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   xml_comp_t    x_staves  = x_det.staves();
   Material      Steel235    = lcdd.material(x_staves.materialStr());
 
-  DetElement  sdet(det_name,x_det.id());
+  // DetElement  sdet(det_name,x_det.id());
 
 
   // --- this driver assumes that an external envelope has been created for it ---------
 
-    Volume       motherEnvelope  =  lcdd.pickMotherVolume(sdet); 
+    DetElement sdet = lcdd.detector( "HcalBarrel" ) ;
+    Volume envelope = sdet.volume() ;
 
-    Assembly     envelope( det_name + "_assembly")   ;    // replace the old envelope with an assembly 
+    //    Volume       motherEnvelope  =  lcdd.pickMotherVolume(sdet); 
 
-    PlacedVolume env_phv   =  motherEnvelope.placeVolume( envelope );
 
-    sdet.setPlacement( env_phv );
+    // Assembly     envelope( det_name + "_assembly")   ;    // replace the old envelope with an assembly 
 
-    env_phv.addPhysVolID("system", sdet.id());
+    // PlacedVolume env_phv   =  motherEnvelope.placeVolume( envelope );
+
+    // sdet.setPlacement( env_phv );
+    // env_phv.addPhysVolID("system", sdet.id());
 
   //-----------------------------------------------------------------------------------
 

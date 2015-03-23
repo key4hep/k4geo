@@ -1,9 +1,9 @@
 <!-- comment>Calorimeters</comment -->
 <detectors>
   <detector name="HcalBarrel" type="SHcalSc04_Barrel_v02" id="ILDDetID_HCAL" readout="HcalBarrelRegCollection" 
-	    vis="BlueVis" insideTrackingVolume="false" >
+	    vis="ILD_HCALVis" insideTrackingVolume="false" >
     
-    <envelope vis="LightGrayVis">
+    <envelope vis="ILD_HCALVis">
       <shape type="ILDHcalBarrelEnvelope"
       	     numsides="8" rmin="Hcal_inner_radius" rmax="Hcal_outer_radius" zhalf="TPC_Ecal_Hcal_barrel_halfZ"
       	     material="Air" >

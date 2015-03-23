@@ -2,7 +2,15 @@
      TPC parameters for ILD_o1_v5  
 -->
 
-<detector name="TPC" type="TPC10" vis="TPCVis" id="ILDDetID_TPC" limits="Tracker_limits" readout="TPCCollection" insideTrackingVolume="true">
+<detector name="TPC" type="TPC10" vis="ILD_TPCVis" id="ILDDetID_TPC" limits="Tracker_limits" readout="TPCCollection" insideTrackingVolume="true">
+
+
+  <envelope vis="ILD_TPCVis">
+    <shape type="Tube" rmin="TPC_inner_radius" rmax="TPC_outer_radius" 
+	   dz="TPC_Ecal_Hcal_barrel_halfZ"  material = "Air" />
+  </envelope>
+  
+
   <!-- database : tpc10_01 -->
   <!-- SQL command: "SELECT * FROM `global`;"  -->
   <global TPC_pad_height="6*mm" TPC_pad_width="1*mm"  TPC_max_step_length="5*mm" dr_InnerWall="25*mm" dr_InnerServiceArea="30*mm" dr_OuterServiceArea="30*mm"

@@ -159,46 +159,46 @@
     <detectors>
         <comment>Trackers</comment>
 
-	 <include ref="tubeX06_14.xml"/> 
-	<!-- <\!-- <include ref="Beampipe_o1_v01_01.xml"/> -\-> -->
+	<!--  <include ref="tubeX06_14.xml"/>  -->
+	<!-- <\!-- <\\!-- <include ref="Beampipe_o1_v01_01.xml"/> -\\-> -\-> -->
 
-	<include ref="ftd_simple_staggered_02.xml"/>
+	<!-- <include ref="ftd_simple_staggered_02.xml"/> -->
 
-	<include ref="vxd07.xml"/> 
+	<!-- <include ref="vxd07.xml"/>  -->
  	
-	<include ref="sit_simple_planar_sensors_03.xml"/>
+	<!-- <include ref="sit_simple_planar_sensors_03.xml"/> -->
 
-	<include ref="tpc10_01.xml"/>
+	<!-- <include ref="tpc10_01.xml"/> -->
 
-	<include ref="set_simple_planar_sensors_01.xml"/>
+	<!-- <include ref="set_simple_planar_sensors_01.xml"/> -->
 
-        <comment>Calorimeters</comment>
+        <!-- <comment>Calorimeters</comment> -->
 
-	<include ref="SEcal04_Barrel.xml"/>
+	<!-- <include ref="SEcal04_Barrel.xml"/> -->
 
-	<include ref="SEcal04_Endcaps.xml"/>
+	<!-- <include ref="SEcal04_Endcaps.xml"/> -->
 
-	<include ref="SEcal04_ECRing.xml"/>
+	<!-- <include ref="SEcal04_ECRing.xml"/> -->
 
-	<include ref="SHcalSc04_Barrel.xml"/>
+	<!-- <include ref="SHcalSc04_Barrel.xml"/> -->
 
-	<include ref="SHcalSc04_Endcaps.xml"/>
+	<!-- <include ref="SHcalSc04_Endcaps.xml"/> -->
 
-	<include ref="SHcalSc04_EndcapRing.xml"/>
+	<!-- <include ref="SHcalSc04_EndcapRing.xml"/> -->
 
-	<include ref="Yoke05_Barrel.xml"/>
+	<!-- <include ref="Yoke05_Barrel.xml"/> -->
 
-	<include ref="Yoke05_Endcaps.xml"/>
+	<!-- <include ref="Yoke05_Endcaps.xml"/> -->
 
-	<include ref="BeamCal08.xml"/>
+	<!-- <include ref="BeamCal08.xml"/> -->
 
-	<include ref="LumiCal.xml"/>
+	<!-- <include ref="LumiCal.xml"/> -->
 
-	<!-- <include ref="LHCal.xml"/> -->
+	<!-- <\!-- <include ref="LHCal.xml"/> -\-> -->
 
-	<include ref="coil03.xml"/>
+	<!-- <include ref="coil03.xml"/> -->
 
-	<include ref="SServices00.xml"/>
+	<!-- <include ref="SServices00.xml"/> -->
 
       </detectors> 
 

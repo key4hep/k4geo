@@ -9,6 +9,7 @@
 #include "DDSimExceptions.h"
 #include "DDRec/Surface.h"
 #include "DDRec/DetectorData.h"
+#include "envelope.h"
 #include "XMLHandlerDB.h"
 
 #include <math.h>
@@ -45,19 +46,20 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   xml_det_t    x_det = e;
   string       name  = x_det.nameStr();
-  
-  //---- envelope: cylinder of air:
-  //xml_comp_t  x_tube (x_det.child(_U(tubs)));
-  //Tube        envelope_cylinder( x_tube.rmin(), x_tube.rmax(), x_tube.zhalf() );
-  //Volume      envelope( "tpc_envelope_cyl", envelope_cylinder , lcdd.air() );
-  //--------------------------------
-  Assembly envelope( name + "_assembly"  ) ;
-  //--------------------------------
-  
-  PlacedVolume pv;
-  
+
   DetElement   tpc(  name, x_det.id()  ) ;
   
+
+ // --- create an envelope volume and position it into the world ---------------------
+
+  Volume envelope = create_placed_envelope( lcdd,  e , tpc ) ;
+
+  if( lcdd.buildType() == BUILD_ENVELOPE ) return tpc ;
+
+  //-----------------------------------------------------------------------------------
+
+  PlacedVolume pv;  
+
   sens.setType("tracker");
 
   //   //######################################################################################################################################################################
@@ -610,15 +612,13 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
   
   //--------------------------------------
   
-  Volume mother =  lcdd.pickMotherVolume( tpc ) ;
-  
-  pv = mother.placeVolume(envelope);
-
-  pv.addPhysVolID( "system", x_det.id() ) ; //.addPhysVolID("side", 0 ) ;
+  // Volume mother =  lcdd.pickMotherVolume( tpc ) ;
+  // pv = mother.placeVolume(envelope);
+  // pv.addPhysVolID( "system", x_det.id() ) ; //.addPhysVolID("side", 0 ) ;
   
   tpc.setVisAttributes( lcdd, x_det.visStr(), envelope );
   //  if( tpc.isValid() ) 
-  tpc.setPlacement(pv);
+  // tpc.setPlacement(pv);
   
   return tpc;
 }
