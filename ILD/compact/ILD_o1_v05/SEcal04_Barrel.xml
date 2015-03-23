@@ -1,6 +1,15 @@
 <detector name="EcalBarrel" type="SEcal04_Barrel" id="ILDDetID_ECAL" readout="EcalBarrelCollection" vis="BlueVis" >
 
     <comment>EM Calorimeter Barrel</comment>
+
+    <envelope vis="ILD_ECALVis">
+      <shape type="PolyhedraRegular" numsides="8"  rmin="TPC_outer_radius+Ecal_Tpc_gap" rmax="Ecal_outer_radius" 
+	     dz="2.*TPC_Ecal_Hcal_barrel_halfZ"  material = "Air" />
+      <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/8"/>
+    </envelope>
+    
+
+
     <dimensions numsides="8" rmin="TPC_outer_radius+Ecal_Tpc_gap" rmax="Ecal_outer_radius" z="TPC_Ecal_Hcal_barrel_halfZ" />
     <staves  material = "TungstenDens24"  vis="BlueVis"/>
 

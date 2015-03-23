@@ -15,6 +15,7 @@
 #include "DDRec/Extensions/LayeringExtensionImpl.h"
 #include "DDRec/Extensions/SubdetectorExtensionImpl.h"
 #include "DDRec/Surface.h"
+#include "XML/Utilities.h"
 
 
 using namespace std;
@@ -30,10 +31,13 @@ using namespace DD4hep::Geometry;
  *              Ported from Mokka SEcal04 Barrel part. Read the constants from XML
  *              instead of the DB. Then build the Barrel in the same way with DD4hep
  * 		construct.
+ *
  * @history: F.Gaede, CERN/DESY, Nov. 10, 2014
  *              added information for reconstruction: LayeringExtension and surfaces (experimental)
  *              removed DetElement for slices (not needed) increased multiplicity for layer DetElement
  *              along tower index  
+ *   F.Gaede: 03/2015: 
+ *            create the envelope volume with create_placed_envelope() using the xml 
  */
 
 static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens)  {
@@ -49,7 +53,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   int           det_id    = x_det.id();
   xml_comp_t    x_staves  = x_det.staves();
   DetElement    sdet      (det_name,det_id);
-  Volume        motherVol = lcdd.pickMotherVolume(sdet);
 
   xml_comp_t    x_dim     = x_det.dimensions();
   int           nsides    = x_dim.numsides();
@@ -57,12 +60,16 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double        dphi      = (2*M_PI/nsides);
   double        hphi      = dphi/2;
   double        outer_r   = x_dim.rmax();
-  PolyhedraRegular hedra  (nsides,inner_r,outer_r+tolerance*2e0,x_dim.z()*2.0);
-  Volume        envelope  (det_name+"_envelope",hedra,air);
-  PlacedVolume  env_phv   = motherVol.placeVolume(envelope,RotationZYX(0,0,M_PI/nsides));
 
-  env_phv.addPhysVolID("system",det_id);
-  sdet.setPlacement(env_phv);
+
+ // --- create an envelope volume and position it into the world ---------------------
+
+  Volume envelope = XML::createPlacedEnvelope( lcdd,  element , sdet ) ;
+
+  if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
+
+  //-----------------------------------------------------------------------------------
+
 
   sens.setType("calorimeter");
 

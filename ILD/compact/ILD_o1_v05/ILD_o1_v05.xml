@@ -145,6 +145,17 @@
       <vis name="BCLayerVis3"   alpha="1.0"  r="0.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
       <vis name="BCLayerVis4"   alpha="1.0"  r="1.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
 
+      <!-- colors used in Mokka and CED for ILD -->
+      <vis name="ILD_SITVis"  alpha="1.0" r="0.86" g="0.86"  b="0.86" showDaughters="true"  visible="true"/>
+      <vis name="ILD_SETVis"  alpha="1.0" r="0.86" g="0.86"  b="0.86" showDaughters="true"  visible="true"/>
+      <vis name="ILD_TPCVis"  alpha="1.0" r="0.96" g="0.95"  b="0.0" showDaughters="true"  visible="true"/>
+      <vis name="ILD_ECALVis" alpha="1.0" r="0.48" g="0.95"  b="0.0" showDaughters="true"  visible="true"/>
+      <vis name="ILD_HCALVis" alpha="1.0" r="0.76" g="0.76"  b="0.19" showDaughters="true"  visible="true"/>
+      <vis name="ILD_YOKEVis" alpha="1.0" r="0.09" g="0.76"  b="0.76" showDaughters="true"  visible="true"/>
+      <vis name="ILD_COILVis" alpha="1.0" r="0.28" g="0.28"  b="0.86" showDaughters="true"  visible="true"/>
+      <vis name="ILD_FTDVis"  alpha="1.0" r="0.39" g="0.1"  b="0.57" showDaughters="true"  visible="true"/>
+      <vis name="ILD_FCALVis" alpha="1.0" r="0.67" g="0.66"  b="0.67" showDaughters="true"  visible="true"/>
+
     </display>
 
     <materials>
@@ -174,7 +185,7 @@
 
         <!-- <comment>Calorimeters</comment> -->
 
-	<!-- <include ref="SEcal04_Barrel.xml"/> -->
+	<include ref="SEcal04_Barrel.xml"/>
 
 	<!-- <include ref="SEcal04_Endcaps.xml"/> -->
 
