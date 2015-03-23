@@ -4,7 +4,13 @@
 
 <detector name="VTX" type="VXD04" vis="VXDVis" id="ILDDetID_VXD" limits="Tracker_limits" readout="VXDCollection" insideTrackingVolume="true">
   
-  <tubs rmin="0*mm" rmax="180*mm" zhalf="380.*mm" name="envelope"/>
+  <envelope vis="ILD_VXDVis">
+    <!-- fixme: need to cut out a cone section for the beam pipe : how to define this ???? -->
+    <shape type="Tube" rmin="VXD_inner_radius" rmax="VXD_outer_radius" 
+	   dz="VXD_zhalf"  material = "Air" />
+  </envelope>
+
+
 
   <!-- database : TMP_DB10 -->
   <!-- SQL command: "select * from layers_common_parameters;"  -->

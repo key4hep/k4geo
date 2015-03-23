@@ -80,6 +80,11 @@
 	<constant name="SIT_inner_radius" value="152*mm"/> 
 	<constant name="SIT_outer_radius" value="312*mm"/> 
 	<constant name="SIT_zhalf"        value="672.35*mm"/> 
+
+	<!--***** fixme: need to have the proper envelope values for the VXD ... ***** -->
+	<constant name="VXD_inner_radius" value="15*mm"/> 
+	<constant name="VXD_outer_radius" value="101*mm"/> 
+	<constant name="VXD_zhalf"        value="177.6*mm"/> 
 	
 
 
@@ -183,23 +188,23 @@
 
 	<!-- <include ref="ftd_simple_staggered_02.xml"/> -->
 
-	<!-- <include ref="vxd07.xml"/>  -->
+	<include ref="vxd07.xml"/>
  	
 	<include ref="sit_simple_planar_sensors_03.xml"/>
 
-	<!-- <include ref="tpc10_01.xml"/> -->
+	<include ref="tpc10_01.xml"/>
 
 	<!-- <include ref="set_simple_planar_sensors_01.xml"/> -->
 
         <!-- <comment>Calorimeters</comment> -->
 
-	<!-- <include ref="SEcal04_Barrel.xml"/> -->
+	<include ref="SEcal04_Barrel.xml"/>
 
 	<!-- <include ref="SEcal04_Endcaps.xml"/> -->
 
 	<!-- <include ref="SEcal04_ECRing.xml"/> -->
 
-	<!-- <include ref="SHcalSc04_Barrel.xml"/> -->
+	<include ref="SHcalSc04_Barrel.xml"/>
 
 	<!-- <include ref="SHcalSc04_Endcaps.xml"/> -->
 

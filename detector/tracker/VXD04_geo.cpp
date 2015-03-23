@@ -9,6 +9,7 @@
 
 #include "DDRec/Surface.h"
 #include "DDRec/DetectorData.h"
+#include "XML/Utilities.h"
 #include "XMLHandlerDB.h"
 
 //#include "DDRec/DDGear.h"
@@ -38,27 +39,20 @@ using namespace DDRec;
  *
  */
 static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
-
-
-  //  std::cout << " VXD04 - LCDD.BuildType = " << lcdd.buildType() << std::endl ;
-
-  //------------------------------------------
-  //  See comments starting with '//**' for
-  //     hints on porting issues
-  //------------------------------------------
-
   
   xml_det_t    x_det = e;
   string       name  = x_det.nameStr();
   
-  //---- envelope: cylinder of air ---- does not work as simply as here - would need to define real enclosing volume....
-  // xml_comp_t  x_tube (x_det.child(_U(tubs)));
-  // Tube        envelope_cylinder( x_tube.rmin(), x_tube.rmax(), x_tube.zhalf() );
-  // Volume      envelope( "vxd_envelope_cyl", envelope_cylinder , lcdd.air() );
-  //--------------------------------
-  Assembly main_assembly( name + "_assembly"  ) ;
-  //--------------------------------
   DetElement   vxd(  name, x_det.id()  ) ;
+  
+  // --- create an envelope volume and position it into the world ---------------------
+  
+  Volume envelope = XML::createPlacedEnvelope( lcdd,  e , vxd ) ;
+  
+  if( lcdd.buildType() == BUILD_ENVELOPE ) return vxd ;
+
+  //-----------------------------------------------------------------------------------
+
 
   sens.setType("tracker");
 
@@ -67,7 +61,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
   Assembly supp_assembly( name + "_support_assembly"  ) ;
 
-  PlacedVolume pv = main_assembly.placeVolume( supp_assembly ) ;
+  PlacedVolume pv = envelope.placeVolume( supp_assembly ) ;
 
   DetElement suppDE( vxd , name+"_support" , x_det.id() )  ;
   suppDE.setPlacement( pv ) ;
@@ -77,6 +71,10 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   //######################################################################################################################################################################
   //  code ported from VXD04::construct() :
   //##################################
+  //------------------------------------------
+  //  See comments starting with '//**' for
+  //     hints on porting issues
+  //------------------------------------------
   
   // double sPhi = 0 * deg;
   // double dPhi = 360 * deg;
@@ -236,7 +234,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
 
     Assembly layer_assembly( _toString( LayerId , "layer_assembly_%d"  ) ) ;
-    PlacedVolume pv = main_assembly.placeVolume( layer_assembly ) ;
+    PlacedVolume pv = envelope.placeVolume( layer_assembly ) ;
 
 
     //replacing support ladder with flex cable (kapton+metal) & adding a foam spacer
@@ -1276,16 +1274,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   //--------------------------------------
   
-  Volume mother =  lcdd.pickMotherVolume( vxd ) ;
   
-  pv = mother.placeVolume(main_assembly);
+  vxd.setVisAttributes( lcdd, x_det.visStr(), envelope );
 
-  pv.addPhysVolID( "system", x_det.id() ) ; //.addPhysVolID("side", 0 ) ;
-  
-  vxd.setVisAttributes( lcdd, x_det.visStr(), main_assembly );
-  //  if( vxd.isValid() ) 
-  vxd.setPlacement(pv);
-  
   return vxd;
 }
 DECLARE_DETELEMENT(VXD04,create_element)
