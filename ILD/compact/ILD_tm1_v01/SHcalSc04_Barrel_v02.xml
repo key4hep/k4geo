@@ -4,11 +4,10 @@
 	    vis="ILD_HCALVis" insideTrackingVolume="false" >
     
     <envelope vis="ILD_HCALVis">
-      <shape type="ILDHcalBarrelEnvelope"
-      	     numsides="8" rmin="Hcal_inner_radius" rmax="Hcal_outer_radius" zhalf="TPC_Ecal_Hcal_barrel_halfZ"
-      	     material="Air" >
+      <shape type="BooleanShape" operation="Subtraction" material="Air" >
+	<shape type="Tube" rmin="0.0" rmax="Hcal_outer_radius" dz="TPC_Ecal_Hcal_barrel_halfZ"/>
+        <shape type="PolyhedraRegular"  numsides="8" rmin="0.0" rmax="Hcal_inner_radius" dz="2*TPC_Ecal_Hcal_barrel_halfZ+10*mm"/>     
       </shape>
-      <position x="0" y="0" z="0"/>
       <rotation x="0" y="0" z="90*deg-180*deg/8"/>
     </envelope>
     
