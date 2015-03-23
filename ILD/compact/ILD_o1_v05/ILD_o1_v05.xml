@@ -90,7 +90,7 @@
     </define>
 
   
-    <!--limits>
+    <limits>
         <limitset name="cal_limits">
             <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
         </limitset>
@@ -100,7 +100,7 @@
         <limitset name="Tracker_limits">
             <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
         </limitset>
-    </limits-->
+    </limits>
 
     <display>
       <!-- fixme:  white comes out as red !!!???? |  vis name="WhiteVis"         alpha="0.0" r="1.0" g="1.0"  b="1.0"   showDaughters="true"  visible="true"/ --> 
@@ -179,7 +179,7 @@
  	
 	<!-- <include ref="sit_simple_planar_sensors_03.xml"/> -->
 
-	<!-- <include ref="tpc10_01.xml"/> -->
+	<include ref="tpc10_01.xml"/>
 
 	<!-- <include ref="set_simple_planar_sensors_01.xml"/> -->
 
@@ -191,7 +191,7 @@
 
 	<!-- <include ref="SEcal04_ECRing.xml"/> -->
 
-	<!-- <include ref="SHcalSc04_Barrel.xml"/> -->
+	<include ref="SHcalSc04_Barrel.xml"/>
 
 	<!-- <include ref="SHcalSc04_Endcaps.xml"/> -->
 

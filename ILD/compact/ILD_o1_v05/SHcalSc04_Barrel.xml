@@ -2,6 +2,15 @@
 <detector name="HcalBarrel" type="SHcalSc04_Barrel" id="ILDDetID_HCAL" readout="HcalBarrelRegCollection" vis="GreenVis" insideTrackingVolume="false" >
     <comment>Hadron Calorimeter Barrel</comment>
 
+    <envelope vis="ILD_HCALVis">
+      <shape type="BooleanShape" operation="Subtraction" material="Air" >
+	<shape type="Tube" rmin="0.0" rmax="Hcal_outer_radius" dz="TPC_Ecal_Hcal_barrel_halfZ"/>
+        <shape type="PolyhedraRegular"  numsides="8" rmin="0.0" rmax="Hcal_inner_radius" dz="2*TPC_Ecal_Hcal_barrel_halfZ+10*mm"/>     
+      </shape>
+      <rotation x="0" y="0" z="90*deg-180*deg/8"/>
+    </envelope>
+
+
     <dimensions numsides="8" rmin="Hcal_inner_radius" rmax="Hcal_outer_radius" zhalf="TPC_Ecal_Hcal_barrel_halfZ"  material="Air" />
     <position x="0*mm" y="0*mm" z="0*mm"/>
     <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/8"/>

@@ -9,7 +9,7 @@
 #include "DDSimExceptions.h"
 #include "DDRec/Surface.h"
 #include "DDRec/DetectorData.h"
-#include "envelope.h"
+#include "XML/Utilities.h"
 #include "XMLHandlerDB.h"
 
 #include <math.h>
@@ -52,7 +52,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
  // --- create an envelope volume and position it into the world ---------------------
 
-  Volume envelope = create_placed_envelope( lcdd,  e , tpc ) ;
+  Volume envelope = XML::createPlacedEnvelope( lcdd,  e , tpc ) ;
 
   if( lcdd.buildType() == BUILD_ENVELOPE ) return tpc ;
 

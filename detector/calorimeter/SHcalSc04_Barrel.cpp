@@ -9,7 +9,10 @@
 //====================================================================
 
  /* History:  
-
+    
+   F.Gaede: 03/2015: SHcalSc04_Barrel:
+                     create envelope volume with XML::CreatePlacedEnvelope() using the xml 
+		     
    F.Gaede: 11/2014 added DDRec::LayeredCalorimeterData for reconstruction
                    (experimental: could be superseeded by DDRec::Calorimeter interface)
 
@@ -38,6 +41,7 @@
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "XML/Layering.h"
+#include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"
 #include "DDSimExceptions.h"
 
@@ -140,29 +144,37 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   int          nsides     = x_dim.numsides();
 
   Material    air         = lcdd.air();
-  Material    env_mat     = lcdd.material(x_dim.materialStr());
+  //  Material    env_mat     = lcdd.material(x_dim.materialStr());
 
   // Hcal Barrel module shapers' parameters
   double        Hcal_inner_radius   = x_dim.rmin();
   double        Hcal_outer_radius   = x_dim.rmax();
   double        detZ                = x_dim.zhalf();
 
-  xml_comp_t    env_pos     = x_det.position();
-  xml_comp_t    env_rot     = x_det.rotation();
+  // xml_comp_t    env_pos     = x_det.position();
+  // xml_comp_t    env_rot     = x_det.rotation();
 
-  Position      pos(env_pos.x(),env_pos.y(),env_pos.z());
-  RotationZYX   rotZYX(env_rot.z(),env_rot.y(),env_rot.x());
+  // Position      pos(env_pos.x(),env_pos.y(),env_pos.z());
+  // RotationZYX   rotZYX(env_rot.z(),env_rot.y(),env_rot.x());
 
-  Transform3D   tr(rotZYX,pos);
+  //  Transform3D   tr(rotZYX,pos);
 
   xml_comp_t    x_staves  = x_det.staves();
   Material      Steel235    = lcdd.material(x_staves.materialStr());
 
-  DetElement  sdet(det_name,x_det.id());
-  Volume      motherVol = lcdd.pickMotherVolume(sdet);
+  DetElement  sdet( det_name,x_det.id() );
+
+
+  // --- create an envelope volume and position it into the world ---------------------
+  
+  Volume envelope = XML::createPlacedEnvelope( lcdd,  element , sdet ) ;
+  
+  if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
+
+  //-----------------------------------------------------------------------------------
+
 
   PlacedVolume pv;
-
 
   sens.setType("calorimeter");
 
@@ -246,11 +258,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   Tube             tube_shaper(0, Hcal_outer_radius, detZ*2.0);
   IntersectionSolid barrelSolid(hedra_shaper, tube_shaper);
 
-  Volume        envelope  (det_name+"_envelope",barrelSolid,env_mat);
-  PlacedVolume  env_phv   = motherVol.placeVolume(envelope,tr);
-  envelope.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
-  env_phv.addPhysVolID("system", sdet.id());
-
+  //  Volume        envelope  (det_name+"_envelope",barrelSolid,env_mat);
+  //  PlacedVolume  env_phv   = motherVol.placeVolume(envelope,tr);
+  //  envelope.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
 
 
 
@@ -326,7 +336,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   // Place the Layer Chamber into the Stave module
   // place the Stave module into the asembly Volume
   // place the module middle lateral plate into asembly Volume
-  // place the envelope Volume into the world 
 
   //TODO: re-thinking about the parameters name
   double x_length; //dimension of an Hcal barrel layer on the x-axis
@@ -571,12 +580,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
 
-  sdet.setVisAttributes( lcdd, x_det.visStr(),  envelope);
-  sdet.setPlacement(env_phv);
+ 
   return sdet;
 
 }
-
-
 
 DECLARE_DETELEMENT(SHcalSc04_Barrel, create_detector)
