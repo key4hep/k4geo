@@ -4,6 +4,12 @@
 
 <detector name="SIT" type="SIT_Simple_Planar" vis="SITVis" id="ILDDetID_SIT" readout="SITCollection" insideTrackingVolume="true">
 
+  <envelope vis="ILD_SITVis">
+    <shape type="Tube" rmin="SIT_inner_radius" rmax="SIT_outer_radius" 
+	   dz="SIT_zhalf"  material = "Air" />
+  </envelope>
+  
+
   <!-- database : sit_simple_planar_sensors_03 -->
 
   <!-- SQL command: "select * from extended_reconstruction_parameters;"  -->

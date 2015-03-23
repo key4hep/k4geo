@@ -8,6 +8,7 @@
 #include "DD4hep/DD4hepUnits.h"
 #include "DDRec/Surface.h"
 #include "DDRec/DetectorData.h"
+#include "XML/Utilities.h"
 #include "XMLHandlerDB.h"
 #include <cmath>
 
@@ -64,17 +65,18 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   xml_det_t    x_det = e;
   string       name  = x_det.nameStr();
   
-  //---- envelope: cylinder of air:
-  //xml_comp_t  x_tube (x_det.child(_U(tubs)));
-  //Tube        envelope_cylinder( x_tube.rmin(), x_tube.rmax(), x_tube.zhalf() );
-  //Volume      envelope( "sit_envelope_cyl", envelope_cylinder , lcdd.air() );
-  //--------------------------------
-  Assembly envelope( name + "_assembly"  ) ;
-  //--------------------------------
+  DetElement   sit(  name, x_det.id()  ) ;
+  
+  // --- create an envelope volume and position it into the world ---------------------
+  
+  Volume envelope = XML::createPlacedEnvelope( lcdd,  e , sit ) ;
+  
+  if( lcdd.buildType() == BUILD_ENVELOPE ) return sit ;
+  
+  //-----------------------------------------------------------------------------------
   
   PlacedVolume pv;
   
-  DetElement   sit(  name, x_det.id()  ) ;
   
   sens.setType("tracker");
 
@@ -176,7 +178,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     // create assembly and DetElement for the layer
     std::string layerName = _toString( layer_id , "layer_%d"  );
     Assembly layer_assembly( layerName ) ;
-    PlacedVolume pv = envelope.placeVolume( layer_assembly ) ;
+    pv = envelope.placeVolume( layer_assembly ) ;
     DetElement layerDE( sit , layerName  , x_det.id() );
     layerDE.setPlacement( pv ) ;
 
@@ -457,15 +459,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   //--------------------------------------
   
-  Volume mother =  lcdd.pickMotherVolume( sit ) ;
-  
-  pv = mother.placeVolume(envelope);
-
-  pv.addPhysVolID( "system", x_det.id() ) ; //.addPhysVolID("side", 0 ) ;
-  
   sit.setVisAttributes( lcdd, x_det.visStr(), envelope );
-  //  if( sit.isValid() ) 
-  sit.setPlacement(pv);
   
   return sit;
 }
