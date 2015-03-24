@@ -24,9 +24,16 @@
     </readouts>
     
     <detectors>
-        <detector id="HcalBarrel_ID" name="HcalBarrel" type="DD4hep_PolyhedraBarrelCalorimeter2" readout="HcalBarrelHits" vis="HcalBarrelVis" calorimeterType="HAD_BARREL" gap="0.*cm" material="Steel235">
+        <detector id="HcalBarrel_ID" name="HcalBarrel" type="HCalBarrel_o1_v01" readout="HcalBarrelHits" vis="HcalBarrelVis" calorimeterType="HAD_BARREL" gap="0.*cm" material="Steel235">
             
             <comment>Hadron Calorimeter Barrel</comment>
+
+    <envelope vis="HcalBarrelVis">
+      <shape type="PolyhedraRegular" numsides="(int) CaloSides"  rmin="HcalBarrel_rmin" rmax="265.65*cm" 
+	     dz="EcalBarrel_zmax*2"  material = "Air" />
+      <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/8"/>
+    </envelope>
+
             
             <dimensions numsides="(int) CaloSides" rmin="HcalBarrel_rmin" z="EcalBarrel_zmax*2"/>
             <staves vis="HcalStavesVis"/>
