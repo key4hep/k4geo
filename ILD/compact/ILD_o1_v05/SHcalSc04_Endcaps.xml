@@ -1,6 +1,17 @@
 <detector id="ILDDetID_HCAL" name="HcalEndcap" type="SHcalSc04_Endcaps" readout="HcalEndcapsCollection"  vis="GreenVis" calorimeterType="HAD_ENDCAP">
     <comment>Hadron Calorimeter Endcap</comment>
 
+    <envelope vis="ILD_HCALVis">    
+      <shape type="BooleanShape" operation="Subtraction" material="Air" >
+        <shape type="BooleanShape" operation="Subtraction" material="Air">
+	  <shape type="Tube" rmin="0.0" rmax="Hcal_outer_radius" dz="Hcal_endcap_zmin+Hcal_outer_radius-Hcal_inner_radius"/>
+	  <shape type="Box" dx="Hcal_endcap_center_box_size/2." dy="Hcal_endcap_center_box_size/2." dz="Hcal_endcap_zmin+Hcal_outer_radius-Hcal_inner_radius+1.0*mm"/>
+        </shape>
+	<shape type="Tube" rmin="0.0" rmax="Hcal_outer_radius+1.0*mm" dz="Hcal_endcap_zmin-0.1*mm"/>
+      </shape>
+      <rotation x="0" y="0" z="0"/>
+    </envelope>
+
     <material name="Steel235"/><!-- radiator and the thickness has been defined in the main xml file-->
 
     <dimensions numsides="16"><!-- the detail demensions list. there are 16 in this version. -->
