@@ -27,6 +27,7 @@
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
 #include "XML/Layering.h"
+#include "XML/Utilities.h"
 
 using namespace std;
 using namespace DD4hep;
@@ -47,11 +48,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   DetElement   sdet(det_name,det_id);
   Volume      motherVol = lcdd.pickMotherVolume(sdet); 
  
-  Assembly envelope_assembly( det_name + "assembly"  ) ;  
-  PlacedVolume  env_phv   = motherVol.placeVolume(envelope_assembly);
+  // --- create an envelope volume and position it into the world ---------------------
 
-  env_phv.addPhysVolID("system",det_id);
-  sdet.setPlacement(env_phv);
+  Volume envelope = XML::createPlacedEnvelope( lcdd,  element , sdet ) ;
+  
+  if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
+  //-----------------------------------------------------------------------------------
 
   sens.setType("calorimeter");
 
@@ -241,11 +243,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  
 	  EndcapModule_pos_z = (module_id==0)? -EndcapModule_center_pos_z:EndcapModule_center_pos_z;
 
-	  PlacedVolume env_phv = envelope_assembly.placeVolume(envelopeVol,
-						       Transform3D(RotationX(rot_EM),
-								   Translation3D(EndcapModule_pos_x,
-										 EndcapModule_pos_y,
-										 EndcapModule_pos_z)));
+	  PlacedVolume env_phv = envelope.placeVolume(envelopeVol,
+						      Transform3D(RotationX(rot_EM),
+								  Translation3D(EndcapModule_pos_x,
+										EndcapModule_pos_y,
+										EndcapModule_pos_z)));
 	  env_phv.addPhysVolID("tower",endcapID);	  
 	  env_phv.addPhysVolID("stave",stave_num);   // y: up /down
 	  env_phv.addPhysVolID("module",module_id); // z: -/+ 0/6
