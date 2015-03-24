@@ -212,10 +212,10 @@
   <constant name="TPC_electronics_backend_thickness" value="230.00*mm"/>
   <constant name="TPC_electronics_cu_percent" value="1.56"/>
   <constant name="TPC_electronics_kapton_percent" value="12.4400"/>
-  <constant name="TPC_inner_radius" value="329*mm"/>
+  <!-- <constant name="TPC_inner_radius" value="329*mm"/> -->
   <constant name="TPC_inner_wall_thickness" value="1.16*mm"/>
   <constant name="TPC_max_step_length" value="10*mm"/>
-  <constant name="TPC_outer_radius" value="1808*mm"/>
+  <!-- <constant name="TPC_outer_radius" value="1808*mm"/> -->
   <constant name="TPC_outer_wall_thickness" value="1.51*mm"/>
   <constant name="TPC_pad_height" value="6*mm"/>
   <constant name="TPC_pad_width" value="1*mm"/>

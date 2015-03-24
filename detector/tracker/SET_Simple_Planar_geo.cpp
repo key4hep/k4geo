@@ -9,6 +9,7 @@
 #include "DDRec/Surface.h"
 #include "DDRec/DetectorData.h"
 #include "XMLHandlerDB.h"
+#include "XML/Utilities.h"
 #include <cmath>
 
 //#include "GearWrapper.h"
@@ -62,18 +63,20 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   xml_det_t    x_det = e;
   string       name  = x_det.nameStr();
+
+  DetElement   set(  name, x_det.id()  ) ;
   
-  //---- envelope: cylinder of air:
-  //xml_comp_t  x_tube (x_det.child(_U(tubs)));
-  //Tube        envelope_cylinder( x_tube.rmin(), x_tube.rmax(), x_tube.zhalf() );
-  //Volume      envelope( "set_envelope_cyl", envelope_cylinder , lcdd.air() );
-  //--------------------------------
-  Assembly envelope( name + "_assembly"  ) ;
-  //--------------------------------
+  // --- create an envelope volume and position it into the world ---------------------
+  
+  Volume envelope = XML::createPlacedEnvelope( lcdd,  e , set ) ;
+  
+  if( lcdd.buildType() == BUILD_ENVELOPE ) return set ;
+  
+  //-----------------------------------------------------------------------------------
+
   
   PlacedVolume pv;
   
-  DetElement   set(  name, x_det.id()  ) ;
   
   sens.setType("tracker");
 
@@ -446,15 +449,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
   //--------------------------------------
   
-  Volume mother =  lcdd.pickMotherVolume( set ) ;
-  
-  pv = mother.placeVolume(envelope);
-
-  pv.addPhysVolID( "system", x_det.id() ) ; //.addPhysVolID("side", 0 ) ;
   
   set.setVisAttributes( lcdd, x_det.visStr(), envelope );
-  //  if( set.isValid() ) 
-  set.setPlacement(pv);
   
   return set;
 }
