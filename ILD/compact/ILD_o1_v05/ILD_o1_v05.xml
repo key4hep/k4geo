@@ -77,44 +77,104 @@
                to make this more explicit                
 	-->
 
+	<constant name="Ecal_endcap_zmax" value="2635.*mm"/>
+
 	<!--used in FTD -->
 
 	<constant name="VXD_length_r3" value="125*mm"/>
 
 	<constant name="TUBE_IPOuterTube_start_radius"  value="24*mm"/>
 	<constant name="TUBE_IPOuterTube_start_z"       value="150*mm"/>
-	<constant name="TUBE_IPOuterTube_end_radius"    value="24*mm"/>
+	<constant name="TUBE_IPOuterTube_end_radius"    value="25*mm"/>
+	<constant name="TUBE_IPOuterTube_end_z"         value="230*mm"/>
 
 	<!--fixme: from Mokka DB we have these values: -->
-	<constant name="TUBE_IPOuterTube_end_z"         value="230*mm"/>
-	<constant name="TUBE_IPOuterBulge_end_radius"   value="184*mm"/>
-	<constant name="TUBE_IPOuterBulge_end_z"        value="2364.5*mm"/>
+	<!-- <constant name="TUBE_IPOuterBulge_end_radius"   value="184*mm"/> -->
+	<!-- <constant name="TUBE_IPOuterBulge_end_z"        value="2364.5*mm"/> -->
 	<!-- ... in the beamcal driver/xml these values are used !!! -->
-	<!-- <constant name="TUBE_IPOuterTube_end_z"         value="371.3*mm+Ecal_endcap_zmax-2470.5*mm"/> -->
-	<!-- <constant name="TUBE_IPOuterBulge_end_radius"   value="183.993*mm+Lcal_outer_radius-195.2*mm"/> -->
+	<constant name="TUBE_IPOuterBulge_end_radius"   value="183.993*mm+Lcal_outer_radius-195.2*mm"/>
 	<!-- <constant name="TUBE_IPOuterBulge_end_z"        value="2200*mm+Ecal_endcap_zmax-2470.5*mm"/> -->
+
+
+
 
 	<constant name="SIT1_Half_Length_Z" value="368.00*mm"/>
 	<constant name="SIT1_Radius"        value="153.00*mm"/>
 	<constant name="SIT2_Half_Length_Z" value="644.00*mm"/>
 	<constant name="SIT2_Radius"        value="299.90*mm"/>
 
+	<constant name="Ecal_Barrel_halfZ" value="2350*mm"/>
 	<constant name="TPC_Ecal_Hcal_barrel_halfZ" value="Ecal_Barrel_halfZ"/>
 	<constant name="Ecal_endcap_zmin" value="2450.0*mm"/>
 
+	<constant name="TUBE_IPOuterBulge_end_z"        value="TPC_Ecal_Hcal_barrel_halfZ"/> 
 	<!-- end FTD -->
 
+	<!-- fg: add helper parameters for the two innermost segments of the beam pipe
+	         needed for construction of the VXD envelope
+	     fixme: use thes in the Beampipe xml !!!
+	-->
+	<constant name="TUBE_IPInnerTube_end_z"         value="80*mm"/>
+	<constant name="TUBE_IPInnerBulge_end_radius"   value="24*mm"/>
+	<constant name="TUBE_IPInnerBulge_end_z"        value="150*mm"/>
+
 	
+
+	<comment>
+	 ...  these are the values we have in the gear_ILD_o1_v05.xml from Mokka ....
+	 
+	      ->   use them as these are (should be) the runtime values after 
+                   detector instantiation
+
+	      -> simply overwrite them for now  ...
+
+	</comment>
+	 
+        <!-- <detector name="MokkaParameters" geartype="GearParameters"> -->
+        <constant name="Ecal_endcap_outer_radius" type="string" value="2088.8" />
+        <constant name="Ecal_endcap_plug_rmin" type="string" value="250" />
+        <constant name="Ecal_endcap_zmax" type="string" value="2635" />
+        <constant name="Ecal_endcap_zmin" type="string" value="2450" />
+        <constant name="Ecal_outer_radius" type="string" value="2028" />
+        <constant name="Hcal_R_max" type="string" value="3395.46" />
+        <constant name="Hcal_endcap_zmin" type="string" value="2650" />
+        <constant name="LHcal_zend" type="string" value="3205" />
+        <constant name="Lcal_z_begin" type="string" value="2506.9" />
+        <constant name="Lcal_z_thickness" type="string" value="128.1" />
+        <constant name="MokkaModel" type="string" value="ILD_o1_v05" />
+        <constant name="MokkaVersion" type="string" value="trunk" />
+        <constant name="SIT1_Half_Length_Z" type="string" value="368" />
+        <constant name="SIT1_Radius" type="string" value="152.9" />
+        <constant name="SIT2_Half_Length_Z" type="string" value="644" />
+        <constant name="SIT2_Radius" type="string" value="299.9" />
+        <constant name="TPC_Ecal_Hcal_barrel_halfZ" type="string" value="2350" />
+        <constant name="TUBE_IPOuterBulge_end_radius" type="string" value="183.993" />
+        <constant name="TUBE_IPOuterBulge_end_z" type="string" value="2364.5" />
+        <constant name="TUBE_IPOuterTube_end_radius" type="string" value="25" />
+        <constant name="TUBE_IPOuterTube_end_z" type="string" value="230" />
+        <constant name="TUBE_IPOuterTube_start_radius" type="string" value="25" />
+        <constant name="TUBE_IPOuterTube_start_z" type="string" value="220" />
+        <constant name="Yoke_Z_start_endcaps" type="string" value="4072" />
+        <constant name="Yoke_barrel_inner_radius" type="string" value="4424.9599609375" />
+        <constant name="calorimeter_region_rmax" type="string" value="3395.46" />
+        <constant name="calorimeter_region_zmax" type="string" value="3937" />
+        <!-- <constant name="tracker_region_rmax" type="string" value="1842.9" /> -->
+        <!-- <constant name="tracker_region_zmax" type="string" value="2350" /> -->
+        <!-- </detector> -->
 
 
 	<!-- ################### ENVELOPE PARAMETERS ######################################################## -->
 
 	<constant name="env_safety" value="0.1*mm"/>
 
-	<!--***** fixme: need to have the proper envelope values for the VXD ... ***** -->
-	<constant name="VXD_inner_radius" value="15*mm"/> 
-	<constant name="VXD_outer_radius" value="101*mm"/> 
-	<constant name="VXD_zhalf"        value="177.6*mm"/> 
+	<!--***** fixme: need to have the proper envelope values from the VXD paramaters ... ***** -->
+	<constant name="VXD_inner_radius"   value=" 15*mm "/> 
+	<constant name="VXD_outer_radius"   value=" 101*mm "/> 
+	<constant name="VXD_zhalf"          value=" 177.6*mm "/> 
+	<constant name="VXD_cone_zstart"    value=" TUBE_IPInnerTube_end_z "/> 
+	<constant name="VXD_cone_zend"      value=" TUBE_IPInnerBulge_end_z "/> 
+	<constant name="VXD_inner_radius_1" value=" TUBE_IPInnerBulge_end_radius + env_safety "/> 
+
 
 	<constant name="SIT_inner_radius"    value="SIT1_Radius - env_safety"/> 
 	<constant name="SIT_outer_radius_1"  value="SIT2_Radius - env_safety"/> 
@@ -130,7 +190,7 @@
 	<constant name="FTD_outer_radius_1"  value=" SIT_inner_radius   - env_safety"/> 
 	<constant name="FTD_outer_radius_2"  value=" SIT_outer_radius_1 - env_safety"/> 
 	<constant name="FTD_outer_radius"    value=" TPC_inner_radius - env_safety"/> 
-	<constant name="FTD_zhalf"           value=" TPC_zhalf   - env_safety"/> 
+	<constant name="FTD_zhalf"           value=" TUBE_IPOuterBulge_end_z"/> 
 	<constant name="FTD_zstart_0"        value=" VXD_zhalf   + env_safety"/> 
 	<constant name="FTD_zstart_1"        value=" SIT_zhalf_1 + env_safety"/> 
 	<constant name="FTD_zstart_2"        value=" SIT_zhalf   + env_safety"/> 
@@ -242,11 +302,11 @@
         <comment>Trackers</comment>
 
 	<!--  <include ref="tubeX06_14.xml"/>  -->
-	<!-- <include ref="Beampipe_o1_v01_01.xml"/> -->
+	<include ref="Beampipe_o1_v01_01.xml"/>
 
 	<include ref="ftd_simple_staggered_02.xml"/>
 
-	<!-- <include ref="vxd07.xml"/> -->
+	<include ref="vxd07.xml"/>
  	
 	<include ref="sit_simple_planar_sensors_03.xml"/>
 
@@ -269,7 +329,7 @@
 
 	<!-- <include ref="SHcalSc04_EndcapRing.xml"/> -->
 
-	<!-- <include ref="Yoke05_Barrel.xml"/> -->
+	<include ref="Yoke05_Barrel.xml"/>
 
 	<!-- <include ref="Yoke05_Endcaps.xml"/> -->
 
@@ -279,7 +339,7 @@
 
 	<!-- <\!-- <include ref="LHCal.xml"/> -\-> -->
 
-	<!-- <include ref="coil03.xml"/> -->
+	<include ref="coil03.xml"/>
 
 	<!-- <include ref="SServices00.xml"/> -->
 

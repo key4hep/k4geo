@@ -5,9 +5,27 @@
 <detector name="VTX" type="VXD04" vis="VXDVis" id="ILDDetID_VXD" limits="Tracker_limits" readout="VXDCollection" insideTrackingVolume="true">
   
   <envelope vis="ILD_VXDVis">
-    <!-- fixme: need to cut out a cone section for the beam pipe : how to define this ???? -->
-    <shape type="Tube" rmin="VXD_inner_radius" rmax="VXD_outer_radius" 
-	   dz="VXD_zhalf"  material = "Air" />
+    <shape type="BooleanShape" operation="Subtraction" material="Air" >
+      <shape type="BooleanShape" operation="Subtraction" material="Air" >
+	<shape type="BooleanShape" operation="Subtraction" material="Air" >
+	  <shape type="BooleanShape" operation="Subtraction" material="Air" >
+	    <shape type="Tube" rmin="VXD_inner_radius" rmax="VXD_outer_radius" dz="VXD_zhalf" />
+	    <shape type="Tube" rmin="0." rmax="VXD_inner_radius_1" dz="(VXD_zhalf - VXD_cone_zend)/2. + env_safety " />
+	    <position x="0" y="0" z="VXD_zhalf-(VXD_zhalf - VXD_cone_zend)/2.+ env_safety"/> 
+	  </shape>
+	  <shape type="Tube" rmin="0." rmax="VXD_inner_radius_1" dz="(VXD_zhalf - VXD_cone_zend)/2. + env_safety " />
+	  <position x="0" y="0" z="- ( VXD_zhalf-(VXD_zhalf - VXD_cone_zend)/2.+ env_safety ) "/> 
+	  <rotation x="0" y="180.*deg" z="0" />
+	</shape>
+	<shape type="Cone" rmin1="0" rmax1="VXD_inner_radius" rmin2="0" rmax2="VXD_inner_radius_1" 
+	       z="(VXD_cone_zend-VXD_cone_zstart)/2. + env_safety "/>
+	<position x="0" y="0" z="VXD_cone_zstart+(VXD_cone_zend-VXD_cone_zstart)/2."/> 
+      </shape>
+      <shape type="Cone" rmin1="0" rmax1="VXD_inner_radius" rmin2="0" rmax2="VXD_inner_radius_1" 
+	     z="(VXD_cone_zend-VXD_cone_zstart)/2. + env_safety "/>
+      <position x="0" y="0" z="-(VXD_cone_zstart+(VXD_cone_zend-VXD_cone_zstart)/2.)"/> 
+      <rotation x="0" y="180.*deg" z="0" />
+    </shape>
   </envelope>
 
 

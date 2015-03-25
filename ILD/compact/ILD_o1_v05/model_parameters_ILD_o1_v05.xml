@@ -43,7 +43,7 @@
   <constant name="EcalTranslateX" value="0.0*mm"/>
   <constant name="EcalTranslateY" value="0.0*mm"/>
   <constant name="Ecal_Alveolus_Air_Gap" value="0.5*mm"/>
-  <constant name="Ecal_Barrel_halfZ" value="2350*mm"/>
+  <!-- <constant name="Ecal_Barrel_halfZ" value="2350*mm"/> -->
   <constant name="Ecal_EC_Ring_gap" value="10*mm"/>
   <constant name="Ecal_Lcal_ring_gap" value="54.8*mm"/>
   <constant name="Ecal_MPPC_size" value="0.91*mm"/>
@@ -69,7 +69,7 @@
   <constant name="Ecal_endcap_extra_size" value="60.8*mm"/>
   <constant name="Ecal_endcap_outer_radius" value="1926.1*mm"/>
   <constant name="Ecal_endcap_plug_rmin" value="250.0*mm"/>
-  <constant name="Ecal_endcap_zmax" value="2500.*mm"/>
+  <!-- <constant name="Ecal_endcap_zmax" value="2500.*mm"/> -->
   <!-- <constant name="Ecal_endcap_zmin" value="2450.0*mm"/> -->
   <constant name="Ecal_fiber_thickness" value=".15*mm"/>
   <constant name="Ecal_front_face_thickness" value="2*mm"/>
