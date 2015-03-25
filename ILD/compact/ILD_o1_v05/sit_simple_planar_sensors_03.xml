@@ -5,8 +5,12 @@
 <detector name="SIT" type="SIT_Simple_Planar" vis="SITVis" id="ILDDetID_SIT" readout="SITCollection" insideTrackingVolume="true">
 
   <envelope vis="ILD_SITVis">
-    <shape type="Tube" rmin="SIT_inner_radius" rmax="SIT_outer_radius" 
-	   dz="SIT_zhalf"  material = "Air" />
+
+    <shape type="BooleanShape" operation="Union" material="Air" >
+      <shape type="Tube" rmin="SIT_inner_radius"   rmax="SIT_outer_radius_1" dz="SIT_zhalf_1" />
+      <shape type="Tube" rmin="SIT_outer_radius_1" rmax="SIT_outer_radius"   dz="SIT_zhalf" />
+    </shape>
+
   </envelope>
   
 

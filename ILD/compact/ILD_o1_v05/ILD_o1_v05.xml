@@ -48,60 +48,108 @@
 	<constant name="ILDDetID_fwd"       value="  1"/>
 	
 
-	<!-- global parameters from Mokka model ILD_o1_v05 -->
+	<!-- *****  global parameters from Mokka model ILD_o1_v05 **** -->
+
 	<include ref="model_parameters_ILD_o1_v05.xml"/>
 
-	<!-- ######### parameters as computed in Ecal04 driver: ################  --> 
-	<!-- <constant name="Ecal_Barrel_module_dim_z" value="2*Ecal_Barrel_halfZ/5." /> -->
-	<!-- <constant name="Ecal_module_thickness" value="Ecal_nlayers1 * Ecal_radiator_layers_set1_thickness + Ecal_nlayers2 * Ecal_radiator_layers_set2_thickness + Ecal_nlayers3 * Ecal_radiator_layers_set3_thickness" /> -->
-	<!-- <constant name="EC_module_z_offset" value="Ecal_Barrel_module_dim_z*2.5+Ecal_cables_gap+Ecal_module_thickness/2" /> -->
-	<!-- <constant name="Ecal_inner_radius" value=" TPC_outer_radius + Ecal_Tpc_gap " /> -->
-	<!-- <constant name="Ecal_outer_radius" value=" Ecal_inner_radius + Ecal_module_thickness " /> -->
+	<!-- ***** end global parameters from Mokka model ILD_o1_v05 **** -->
 
-	<!-- FIXME: for now we set the Ecal_outer_radius to the right value  - the computation above is incomplete ..... -->
+
+
+
+	<!-- fixme: revise these parameters and their use for the envelopes -->
+
 	<constant name="Ecal_outer_radius" value="2028.*mm" /> 
-
-	<!-- <constant name="Ecal_endcap_zmax" value="  EC_module_z_offset + Ecal_module_thickness / 2" /> -->
-	<!-- <constant name="Ecal_endcap_zmin" value="  EC_module_z_offset - Ecal_module_thickness / 2" />   -->
-	<!-- <constant name="Lcal_z_begin" value="Ecal_endcap_zmin" />   -->
-	<!-- <constant name="Ecal_endcap_plug_rmin" value="Ecal_Lcal_ring_gap + Lcal_outer_radius" />   -->
-	<!-- <constant name="Ecal_endcap_rmax" value="Ecal_inner_radius + Ecal_module_thickness + Ecal_endcap_extra_size" /> -->
-	<!-- <constant name="Ecal_endcap_outer_radius" value="Ecal_endcap_rmax" />   -->
 
 	<constant name="Hcal_inner_radius" value="Ecal_outer_radius+Hcal_Ecal_gap" />  
 
 	<!-- new number from K.Gadow for ILD_o1_v05 -->
 	<constant name="Hcal_outer_radius" value="3395.46*mm"/> 
-	
-	<!-- <constant name="Hcal_R_max" value="Hcal_outer_radius"/> -->
 
+
+
+
+	<!-- #####################################################
+	     global parameters used in subdetector drivers 
+	     other the one they were created for
+             - these are often the ones modified by Mokka drivers at runtime ...
+             - moved here from model_parameters_ILD_o1_v05.xml
+               to make this more explicit                
+	-->
+
+	<!--used in FTD -->
+
+	<constant name="VXD_length_r3" value="125*mm"/>
+
+	<constant name="TUBE_IPOuterTube_start_radius"  value="24*mm"/>
+	<constant name="TUBE_IPOuterTube_start_z"       value="150*mm"/>
+	<constant name="TUBE_IPOuterTube_end_radius"    value="24*mm"/>
+
+	<!--fixme: from Mokka DB we have these values: -->
+	<constant name="TUBE_IPOuterTube_end_z"         value="230*mm"/>
+	<constant name="TUBE_IPOuterBulge_end_radius"   value="184*mm"/>
+	<constant name="TUBE_IPOuterBulge_end_z"        value="2364.5*mm"/>
+	<!-- ... in the beamcal driver/xml these values are used !!! -->
+	<!-- <constant name="TUBE_IPOuterTube_end_z"         value="371.3*mm+Ecal_endcap_zmax-2470.5*mm"/> -->
+	<!-- <constant name="TUBE_IPOuterBulge_end_radius"   value="183.993*mm+Lcal_outer_radius-195.2*mm"/> -->
+	<!-- <constant name="TUBE_IPOuterBulge_end_z"        value="2200*mm+Ecal_endcap_zmax-2470.5*mm"/> -->
+
+	<constant name="SIT1_Half_Length_Z" value="368.00*mm"/>
+	<constant name="SIT1_Radius"        value="153.00*mm"/>
+	<constant name="SIT2_Half_Length_Z" value="644.00*mm"/>
+	<constant name="SIT2_Radius"        value="299.90*mm"/>
+
+	<constant name="TPC_Ecal_Hcal_barrel_halfZ" value="Ecal_Barrel_halfZ"/>
+	<constant name="Ecal_endcap_zmin" value="2450.0*mm"/>
+
+	<!-- end FTD -->
+
+	
+
+
+	<!-- ################### ENVELOPE PARAMETERS ######################################################## -->
+
+	<constant name="env_safety" value="0.1*mm"/>
 
 	<!--***** fixme: need to have the proper envelope values for the VXD ... ***** -->
 	<constant name="VXD_inner_radius" value="15*mm"/> 
 	<constant name="VXD_outer_radius" value="101*mm"/> 
 	<constant name="VXD_zhalf"        value="177.6*mm"/> 
 
-	<!--***** fixme: need to have the proper envelope values for the SIT ... ***** -->
-	<constant name="SIT_inner_radius" value="152*mm"/> 
-	<constant name="SIT_outer_radius" value="312*mm"/> 
-	<constant name="SIT_zhalf"        value="672.35*mm"/> 
+	<constant name="SIT_inner_radius"    value="SIT1_Radius - env_safety"/> 
+	<constant name="SIT_outer_radius_1"  value="SIT2_Radius - env_safety"/> 
+	<constant name="SIT_zhalf_1"         value="SIT1_Half_Length_Z + env_safety "/> 
+	<constant name="SIT_outer_radius"    value="SIT2_Radius / cos(pi/8.) "/> 
+	<constant name="SIT_zhalf"           value="SIT2_Half_Length_Z + env_safety "/> 
 
-	<constant name="TPC_inner_radius" value="329*mm"/>
-	<constant name="TPC_outer_radius" value="1808*mm"/>
-	<constant name="TPC_zhalf"        value="TPC_Ecal_Hcal_barrel_halfZ"/> 
+	<constant name="TPC_inner_radius"    value="329*mm"/>
+	<constant name="TPC_outer_radius"    value="1808*mm"/>
+	<constant name="TPC_zhalf"           value="TPC_Ecal_Hcal_barrel_halfZ"/> 
 
-	
-	<constant name="SET_inner_radius" value="TPC_outer_radius+1*mm"/> 
+	<constant name="FTD_inner_radius"    value=" TUBE_IPOuterTube_end_radius + env_safety"/> 
+	<constant name="FTD_outer_radius_1"  value=" SIT_inner_radius   - env_safety"/> 
+	<constant name="FTD_outer_radius_2"  value=" SIT_outer_radius_1 - env_safety"/> 
+	<constant name="FTD_outer_radius"    value=" TPC_inner_radius - env_safety"/> 
+	<constant name="FTD_zhalf"           value=" TPC_zhalf   - env_safety"/> 
+	<constant name="FTD_zstart_0"        value=" VXD_zhalf   + env_safety"/> 
+	<constant name="FTD_zstart_1"        value=" SIT_zhalf_1 + env_safety"/> 
+	<constant name="FTD_zstart_2"        value=" SIT_zhalf   + env_safety"/> 
+	<constant name="FTD_cone_zstart"     value=" TUBE_IPOuterTube_end_z "/> 
+	<constant name="FTD_cone_radius"     value=" TUBE_IPOuterBulge_end_radius  + env_safety"/> 
+
+
+	<constant name="SET_inner_radius" value="TPC_outer_radius+ env_safety "/> 
 	<constant name="SET_outer_radius" value="SET_inner_radius+ 0.99 * TPC_ECal_gap "/> 
 	<constant name="SET_zhalf"        value="TPC_zhalf"/> 
 
 	
+	<!-- ########### END ENVELOPE PARAMETERS ############################################################## -->
 
 
 
 	<constant name="tracker_region_rmax" value="TPC_outer_radius" />  
 	<constant name="tracker_region_zmax" value="Ecal_endcap_zmin" />  
-	<!-- ######### end of parameters as computed in Ecal04 driver: ################  --> 
+
 
 
 	<comment>Dummy Parameters for the BeamCal</comment>
@@ -196,9 +244,9 @@
 	<!--  <include ref="tubeX06_14.xml"/>  -->
 	<!-- <include ref="Beampipe_o1_v01_01.xml"/> -->
 
-	<!-- <include ref="ftd_simple_staggered_02.xml"/> -->
+	<include ref="ftd_simple_staggered_02.xml"/>
 
-	<include ref="vxd07.xml"/>
+	<!-- <include ref="vxd07.xml"/> -->
  	
 	<include ref="sit_simple_planar_sensors_03.xml"/>
 
@@ -206,17 +254,18 @@
 
 	<include ref="set_simple_planar_sensors_01.xml"/>
 
-        <!-- <comment>Calorimeters</comment> -->
+        <comment>Calorimeters</comment>
 
 	<include ref="SEcal04_Barrel.xml"/>
 
-	<!-- <include ref="SEcal04_Endcaps.xml"/> -->
+	<include ref="SEcal04_Endcaps.xml"/>
 
 	<!-- <include ref="SEcal04_ECRing.xml"/> -->
 
 	<include ref="SHcalSc04_Barrel.xml"/>
 
-	<!-- <include ref="SHcalSc04_Endcaps.xml"/> -->
+
+	<include ref="SHcalSc04_Endcaps.xml"/>
 
 	<!-- <include ref="SHcalSc04_EndcapRing.xml"/> -->
 

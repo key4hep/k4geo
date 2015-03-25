@@ -70,7 +70,7 @@
   <constant name="Ecal_endcap_outer_radius" value="1926.1*mm"/>
   <constant name="Ecal_endcap_plug_rmin" value="250.0*mm"/>
   <constant name="Ecal_endcap_zmax" value="2500.*mm"/>
-  <constant name="Ecal_endcap_zmin" value="2450.0*mm"/>
+  <!-- <constant name="Ecal_endcap_zmin" value="2450.0*mm"/> -->
   <constant name="Ecal_fiber_thickness" value=".15*mm"/>
   <constant name="Ecal_front_face_thickness" value="2*mm"/>
   <constant name="Ecal_guard_ring_size" value="0.5*mm"/>
@@ -194,10 +194,10 @@
   <constant name="PCB_Thickness" value="0.8*mm"/>
   <constant name="PadSeparation" value="0.408*mm"/>
   <constant name="SIT12_cable_thickness" value="0.063*mm"/>
-  <constant name="SIT1_Half_Length_Z" value="384.2*mm"/>
-  <constant name="SIT1_Radius" value="179.232*mm"/>
-  <constant name="SIT2_Half_Length_Z" value="672.35*mm"/>
-  <constant name="SIT2_Radius" value="272.363*mm"/>
+  <!-- <constant name="SIT1_Half_Length_Z" value="384.2*mm"/> -->
+  <!-- <constant name="SIT1_Radius" value="179.232*mm"/> -->
+  <!-- <constant name="SIT2_Half_Length_Z" value="672.35*mm"/> -->
+  <!-- <constant name="SIT2_Radius" value="272.363*mm"/> -->
   <constant name="SServices_FTD2_cone_thickness" value="0.040*mm"/>
   <constant name="SServices_FTD3_cone_thickness" value="0.020*mm"/>
   <constant name="SServices_FTD7_cables_thickness" value="0.85*mm"/>
@@ -207,7 +207,7 @@
   <constant name="TCMTTranslateY" value="0.0*mm"/>
   <constant name="TPC_ECal_gap" value="20.00*mm"/>
   <!--constant name="TPC_Ecal_Hcal_barrel_halfZ" value="2200.00*mm"/-->
-  <constant name="TPC_Ecal_Hcal_barrel_halfZ" value="Ecal_Barrel_halfZ"/>
+  <!-- <constant name="TPC_Ecal_Hcal_barrel_halfZ" value="Ecal_Barrel_halfZ"/> -->
   <constant name="TPC_electronics_air_percent" value="86.00"/>
   <constant name="TPC_electronics_backend_thickness" value="230.00*mm"/>
   <constant name="TPC_electronics_cu_percent" value="1.56"/>
@@ -219,12 +219,12 @@
   <constant name="TPC_outer_wall_thickness" value="1.51*mm"/>
   <constant name="TPC_pad_height" value="6*mm"/>
   <constant name="TPC_pad_width" value="1*mm"/>
-  <constant name="TUBE_IPOuterBulge_end_radius" value="184*mm"/>
-  <constant name="TUBE_IPOuterBulge_end_z" value="2364.5*mm"/>
-  <constant name="TUBE_IPOuterTube_end_radius" value="24*mm"/>
-  <constant name="TUBE_IPOuterTube_end_z" value="230*mm"/>
-  <constant name="TUBE_IPOuterTube_start_radius" value="24*mm"/>
-  <constant name="TUBE_IPOuterTube_start_z" value="150*mm"/>
+  <!-- <constant name="TUBE_IPOuterBulge_end_radius" value="184*mm"/> -->
+  <!-- <constant name="TUBE_IPOuterBulge_end_z" value="2364.5*mm"/> -->
+  <!-- <constant name="TUBE_IPOuterTube_end_radius" value="24*mm"/> -->
+  <!-- <constant name="TUBE_IPOuterTube_end_z" value="230*mm"/> -->
+  <!-- <constant name="TUBE_IPOuterTube_start_radius" value="24*mm"/> -->
+  <!-- <constant name="TUBE_IPOuterTube_start_z" value="150*mm"/> -->
   <constant name="TUBE_central_inner_radius" value="14.*mm"/>
   <constant name="TUBE_central_thickness" value="0.5*mm"/>
   <constant name="TUBE_crossing_angle" value="14*mrad"/>
@@ -251,7 +251,7 @@
   <constant name="VXD_layer_gap" value="2.0*mm"/>
   <constant name="VXD_length_r1" value="62.5*mm"/>
   <constant name="VXD_length_r2" value="125*mm"/>
-  <constant name="VXD_length_r3" value="125*mm"/>
+  <!-- <constant name="VXD_length_r3" value="125*mm"/> -->
   <constant name="VXD_length_r4" value="125*mm"/>
   <constant name="VXD_length_r5" value="125*mm"/>
   <!-- <constant name="VXD_metal_traces_material" value=""aluminium""/> -->

@@ -8,6 +8,7 @@
 #include "DD4hep/DD4hepUnits.h"
 #include "DD4hep/DetFactoryHelper.h"
 #include "XMLHandlerDB.h"
+#include "XML/Utilities.h"
 
 #include "DDRec/Surface.h"
 #include "DDRec/DetectorData.h"
@@ -313,10 +314,19 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   xml_det_t    x_det = e;
   string       name  = x_det.nameStr();
   
-  //--------------------------------
-  Assembly main_assembly( name + "_assembly"  ) ;
-  //--------------------------------
   DetElement   ftd(  name, x_det.id()  ) ;
+
+ // --- create an envelope volume and position it into the world ---------------------
+  
+  Volume envelope = XML::createPlacedEnvelope( lcdd,  e , ftd ) ;
+  
+  if( lcdd.buildType() == BUILD_ENVELOPE ) return ftd ;
+  
+  //-----------------------------------------------------------------------------------
+  
+  PlacedVolume pv;
+
+  
 
   sens.setType("tracker");
 
@@ -325,7 +335,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
   Assembly supp_assembly( name + "_support_assembly"  ) ;
 
-  PlacedVolume pv = main_assembly.placeVolume( supp_assembly ) ;
+  pv = envelope.placeVolume( supp_assembly ) ;
 
   DetElement suppDE( ftd , name+"_support" , x_det.id() )  ;
   suppDE.setPlacement( pv ) ;
@@ -689,7 +699,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     RotationZYX rotDiskPositive(0,0,0) ; 
     Transform3D transPositive( rotDiskPositive,  Position( 0.,0.,_z_position) );      
 
-    pv = main_assembly.placeVolume( FTDDiskLogicalPZ, transPositive ) ;
+    pv = envelope.placeVolume( FTDDiskLogicalPZ, transPositive ) ;
 
     DetElement   diskDEposZ( ftd ,   _toString(  _dbParDisk.disk_number, "FTDDisk_%d_posZ" ) , x_det.id() );
     diskDEposZ.setPlacement( pv ) ;
@@ -733,7 +743,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     //fg use unrotated air disks...
     RotationZYX rotDiskNegative(0,0,0) ; 
     Transform3D transNegative( rotDiskNegative,  Position( 0.,0., -_z_position) );      
-    pv = main_assembly.placeVolume( FTDDiskLogicalNZ, transNegative ) ;
+    pv = envelope.placeVolume( FTDDiskLogicalNZ, transNegative ) ;
 
     DetElement   diskDEnegZ( ftd ,   _toString(  _dbParDisk.disk_number, "FTDDisk_%d_negZ" ) , x_det.id() );
     diskDEnegZ.setPlacement( pv ) ;
@@ -1263,16 +1273,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   //--------------------------------------
   
-  Volume mother =  lcdd.pickMotherVolume( ftd ) ;
-  
-  pv = mother.placeVolume(main_assembly);
 
-  pv.addPhysVolID( "system", x_det.id() ) ; //.addPhysVolID("side", 0 ) ;
-  
-  ftd.setVisAttributes( lcdd, x_det.visStr(), main_assembly );
-  //  if( ftd.isValid() ) 
-  ftd.setPlacement(pv);
-  
   return ftd;
 }
 

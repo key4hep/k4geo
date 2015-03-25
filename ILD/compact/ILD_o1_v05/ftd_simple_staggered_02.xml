@@ -5,6 +5,32 @@
 
 <detector name="FTD" type="FTD_Simple_Staggered" vis="FTDVis" id="ILDDetID_FTD" limits="Tracker_limits" readout="FTDCollection" insideTrackingVolume="true">
 
+  <envelope vis="ILD_FTDVis">
+
+    <shape type="BooleanShape" operation="Subtraction" material="Air" >
+      <shape type="BooleanShape" operation="Subtraction" material="Air" >
+	<shape type="BooleanShape" operation="Subtraction" material="Air" >
+    	  <shape type="BooleanShape" operation="Subtraction" material="Air" >
+    	    <shape type="BooleanShape" operation="Subtraction" material="Air" >
+    	      <shape type="Tube" rmin="FTD_inner_radius"   rmax="FTD_outer_radius" dz="FTD_zhalf"  />
+    	      <shape type="Tube" rmin="0." rmax="FTD_outer_radius+env_safety" dz="FTD_zstart_0" />
+    	    </shape>
+    	    <shape type="Tube" rmin="FTD_outer_radius_1" rmax="FTD_outer_radius+env_safety" dz="FTD_zstart_1" />
+    	  </shape>
+    	  <shape type="Tube" rmin="FTD_outer_radius_2" rmax="FTD_outer_radius+env_safety" dz="FTD_zstart_2" />
+	</shape>
+	<shape type="Cone" rmin1="0" rmax1="FTD_inner_radius" rmin2="0" rmax2="FTD_cone_radius" 
+	       z="(FTD_zhalf-FTD_cone_zstart)/2. + env_safety "/>
+	<position x="0" y="0" z="FTD_cone_zstart+(FTD_zhalf-FTD_cone_zstart)/2."/> 
+      </shape>
+      <shape type="Cone" rmin1="0" rmax1="FTD_inner_radius" rmin2="0" rmax2="FTD_cone_radius" 
+	     z="(FTD_zhalf-FTD_cone_zstart)/2. + env_safety "/>
+      <position x="0" y="0" z="-FTD_cone_zstart-(FTD_zhalf-FTD_cone_zstart)/2."/> 
+      <rotation x="0" y="180.*deg" z="0" />
+    </shape>
+  </envelope>
+  
+
   <!-- SQL command: "select * from common_parameters;"  --> 
   <common_parameters ftd1_vtx3_distance_z="95*mm" ftd7_ecal_distance_z="200*mm" ftd1_sit1_radial_diff="-1*mm" ftd2_sit1_radial_diff="-1*mm" ftd3_sit2_radial_diff="-1*mm" 
 		     ftd4to7_tpc_radial_gap="20*mm" beamtube_clearance="15*mm" cables_thickness="0.08*mm" cable_shield_thickness="0.1*mm" outer_cylinder_total_thickness="1*mm"
