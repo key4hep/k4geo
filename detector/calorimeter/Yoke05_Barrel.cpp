@@ -32,6 +32,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "XML/Layering.h"
 #include "TGeoTrd2.h"
+#include "XML/Utilities.h"
 
 using namespace std;
 using namespace DD4hep;
@@ -68,6 +69,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   int           det_id    = x_det.id();
   DetElement    sdet      (det_name,det_id);
   Volume        motherVol = lcdd.pickMotherVolume(sdet);
+
+  // --- create an envelope volume and position it into the world ---------------------
+
+  Volume envelope = XML::createPlacedEnvelope( lcdd,  element , sdet ) ;
+
+  if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
+
+  //-----------------------------------------------------------------------------------
 
   sens.setType("calorimeter");
 
@@ -152,15 +161,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   cout << "  ...Muon par: yokeBarrelThickness  " << yokeBarrelThickness <<endl;
   cout << "  ...Muon par: Barrel_half_z        " << z_halfBarrel <<endl;
-
-// ========= Create Yoke Barrel envelope   ====================================
-  PolyhedraRegular barrelSolid( symmetry, M_PI/symmetry, rInnerBarrel, rOuterBarrel,  Yoke_Barrel_module_dim_z*3.0);
-  Volume           envelope  (det_name+"_envelope",barrelSolid,env_mat);
-  PlacedVolume     env_phv   = motherVol.placeVolume(envelope,tr);
-  envelope.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
-  env_phv.addPhysVolID("system",det_id);
-  sdet.setPlacement(env_phv);
-
 
 
 // ========= Create Yoke Barrel module   ====================================
