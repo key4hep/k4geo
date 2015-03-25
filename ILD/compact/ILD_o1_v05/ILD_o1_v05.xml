@@ -165,42 +165,66 @@
 
 	<!-- ################### ENVELOPE PARAMETERS ######################################################## -->
 
+	<comment> suggested naming convention:
+	
+	main parameters:
+	
+    	DET_inner_radius    : inner radius of tube like envelope  ( inscribed cylinder ) 
+	DET_outer_radius    : outer radius of tube like envelope  ( circumscribed cylinder )
+	DET_half_length     : half length along z axis
+	DET_min_z           : smallest absolute value on z-axis
+	DET_max_z           : largest  absolute value on z-axis
+	DET_inner_symmetry  : number of sides on the inside  ( 0 for tube ) 
+	DET_outer_symmetry  : number of sides on the inside  ( 0 for tube )
+	DET_inner_phi0      : optional rotation of the inner polygon ( in r-phi plane ) 
+	DET_outer_phi0      : optional rotation of the outer polygon ( in r-phi plane ) 
+	
+	additional parameters for cutting away volumes/shapes use one of the above with a number
+	appended and/or an extra specifiaction such as cone ( for a cut away cone )
+	
+	DET_inner_radius_1
+	DET_outer_radius_2
+	DET_cone_min_z
+	DET_cone_max_z
+	
+	</comment> 
+
 	<constant name="env_safety" value="0.1*mm"/>
 
 	<!--***** fixme: need to have the proper envelope values from the VXD paramaters ... ***** -->
 	<constant name="VXD_inner_radius"   value=" 15*mm "/> 
 	<constant name="VXD_outer_radius"   value=" 101*mm "/> 
-	<constant name="VXD_zhalf"          value=" 177.6*mm "/> 
-	<constant name="VXD_cone_zstart"    value=" TUBE_IPInnerTube_end_z "/> 
-	<constant name="VXD_cone_zend"      value=" TUBE_IPInnerBulge_end_z "/> 
+	<constant name="VXD_half_length"    value=" 177.6*mm "/> 
+	<constant name="VXD_cone_min_z"     value=" TUBE_IPInnerTube_end_z "/> 
+	<constant name="VXD_cone_max_z"     value=" TUBE_IPInnerBulge_end_z "/> 
 	<constant name="VXD_inner_radius_1" value=" TUBE_IPInnerBulge_end_radius + env_safety "/> 
 
 
 	<constant name="SIT_inner_radius"    value="SIT1_Radius - env_safety"/> 
 	<constant name="SIT_outer_radius_1"  value="SIT2_Radius - env_safety"/> 
-	<constant name="SIT_zhalf_1"         value="SIT1_Half_Length_Z + env_safety "/> 
+	<constant name="SIT_half_length_1"   value="SIT1_Half_Length_Z + env_safety "/> 
 	<constant name="SIT_outer_radius"    value="SIT2_Radius / cos(pi/8.) "/> 
-	<constant name="SIT_zhalf"           value="SIT2_Half_Length_Z + env_safety "/> 
+	<constant name="SIT_half_length"     value="SIT2_Half_Length_Z + env_safety "/> 
 
 	<constant name="TPC_inner_radius"    value="329*mm"/>
 	<constant name="TPC_outer_radius"    value="1808*mm"/>
-	<constant name="TPC_zhalf"           value="TPC_Ecal_Hcal_barrel_halfZ"/> 
+	<constant name="TPC_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ"/> 
 
 	<constant name="FTD_inner_radius"    value=" TUBE_IPOuterTube_end_radius + env_safety"/> 
 	<constant name="FTD_outer_radius_1"  value=" SIT_inner_radius   - env_safety"/> 
 	<constant name="FTD_outer_radius_2"  value=" SIT_outer_radius_1 - env_safety"/> 
 	<constant name="FTD_outer_radius"    value=" TPC_inner_radius - env_safety"/> 
-	<constant name="FTD_zhalf"           value=" TUBE_IPOuterBulge_end_z"/> 
-	<constant name="FTD_zstart_0"        value=" VXD_zhalf   + env_safety"/> 
-	<constant name="FTD_zstart_1"        value=" SIT_zhalf_1 + env_safety"/> 
-	<constant name="FTD_zstart_2"        value=" SIT_zhalf   + env_safety"/> 
-	<constant name="FTD_cone_zstart"     value=" TUBE_IPOuterTube_end_z "/> 
+	<constant name="FTD_half_length"     value=" TUBE_IPOuterBulge_end_z"/> 
+	<constant name="FTD_min_z_0"         value=" VXD_half_length   + env_safety"/> 
+	<constant name="FTD_min_z_1"         value=" SIT_half_length_1 + env_safety"/> 
+	<constant name="FTD_min_z_2"         value=" SIT_half_length   + env_safety"/> 
+	<constant name="FTD_cone_min_z"      value=" TUBE_IPOuterTube_end_z "/> 
 	<constant name="FTD_cone_radius"     value=" TUBE_IPOuterBulge_end_radius  + env_safety"/> 
 
 
-	<constant name="SET_inner_radius" value="TPC_outer_radius+ env_safety "/> 
-	<constant name="SET_outer_radius" value="SET_inner_radius+ 0.99 * TPC_ECal_gap "/> 
-	<constant name="SET_zhalf"        value="TPC_zhalf"/> 
+	<constant name="SET_inner_radius"    value="TPC_outer_radius+ env_safety "/> 
+	<constant name="SET_outer_radius"    value="SET_inner_radius+ 0.99 * TPC_ECal_gap "/> 
+	<constant name="SET_half_length"     value="TPC_half_length"/> 
 
 	
 	<!-- ########### END ENVELOPE PARAMETERS ############################################################## -->
@@ -301,8 +325,7 @@
     <detectors>
         <comment>Trackers</comment>
 
-	<!--  <include ref="tubeX06_14.xml"/>  -->
-	<include ref="Beampipe_o1_v01_01.xml"/>
+	<!-- <include ref="Beampipe_o1_v01_01.xml"/> -->
 
 	<include ref="ftd_simple_staggered_02.xml"/>
 
@@ -337,7 +360,7 @@
 
 	<!-- <include ref="LumiCal.xml"/> -->
 
-	<!-- <\!-- <include ref="LHCal.xml"/> -\-> -->
+	<!-- <include ref="LHCal.xml"/> -->
 
 	<include ref="coil03.xml"/>
 

@@ -5,8 +5,7 @@
 <detector name="SET" type="SET_Simple_Planar" vis="SETVis" id="ILDDetID_SET" readout="SETCollection" insideTrackingVolume="true">
 
   <envelope vis="ILD_SETVis">
-    <shape type="Tube" rmin="SET_inner_radius" rmax="SET_outer_radius" 
-	   dz="SET_zhalf"  material = "Air" />
+    <shape type="Tube" rmin="SET_inner_radius" rmax="SET_outer_radius" dz="SET_half_length"  material = "Air" />
   </envelope>
   
 

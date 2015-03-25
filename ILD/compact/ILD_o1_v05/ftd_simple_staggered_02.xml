@@ -12,20 +12,20 @@
 	<shape type="BooleanShape" operation="Subtraction" material="Air" >
     	  <shape type="BooleanShape" operation="Subtraction" material="Air" >
     	    <shape type="BooleanShape" operation="Subtraction" material="Air" >
-    	      <shape type="Tube" rmin="FTD_inner_radius"   rmax="FTD_outer_radius" dz="FTD_zhalf"  />
-    	      <shape type="Tube" rmin="0." rmax="FTD_outer_radius+env_safety" dz="FTD_zstart_0" />
+    	      <shape type="Tube" rmin="FTD_inner_radius"   rmax="FTD_outer_radius" dz="FTD_half_length"  />
+    	      <shape type="Tube" rmin="0." rmax="FTD_outer_radius+env_safety" dz="FTD_min_z_0" />
     	    </shape>
-    	    <shape type="Tube" rmin="FTD_outer_radius_1" rmax="FTD_outer_radius+env_safety" dz="FTD_zstart_1" />
+    	    <shape type="Tube" rmin="FTD_outer_radius_1" rmax="FTD_outer_radius+env_safety" dz="FTD_min_z_1" />
     	  </shape>
-    	  <shape type="Tube" rmin="FTD_outer_radius_2" rmax="FTD_outer_radius+env_safety" dz="FTD_zstart_2" />
+    	  <shape type="Tube" rmin="FTD_outer_radius_2" rmax="FTD_outer_radius+env_safety" dz="FTD_min_z_2" />
 	</shape>
 	<shape type="Cone" rmin1="0" rmax1="FTD_inner_radius" rmin2="0" rmax2="FTD_cone_radius" 
-	       z="(FTD_zhalf-FTD_cone_zstart)/2. + env_safety "/>
-	<position x="0" y="0" z="FTD_cone_zstart+(FTD_zhalf-FTD_cone_zstart)/2."/> 
+	       z="(FTD_half_length-FTD_cone_min_z)/2. + env_safety "/>
+	<position x="0" y="0" z="FTD_cone_min_z+(FTD_half_length-FTD_cone_min_z)/2."/> 
       </shape>
       <shape type="Cone" rmin1="0" rmax1="FTD_inner_radius" rmin2="0" rmax2="FTD_cone_radius" 
-	     z="(FTD_zhalf-FTD_cone_zstart)/2. + env_safety "/>
-      <position x="0" y="0" z="-FTD_cone_zstart-(FTD_zhalf-FTD_cone_zstart)/2."/> 
+	     z="(FTD_half_length-FTD_cone_min_z)/2. + env_safety "/>
+      <position x="0" y="0" z="-FTD_cone_min_z-(FTD_half_length-FTD_cone_min_z)/2."/> 
       <rotation x="0" y="180.*deg" z="0" />
     </shape>
   </envelope>
