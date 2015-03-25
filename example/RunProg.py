@@ -167,8 +167,10 @@ class DD4hepSimulation(object):
       print "ERROR: unknown runType"
       exit(1)
 
-    #gun = simple.setupGun(name="gun", particle="mu-", energy=10*GeV, isotrop=False)
-    #gun.direction = (30,0,1000)
+    if self.runType in ("vis", "shell", "run"):
+      gun = simple.setupGun(name="gun", particle="e-", energy=10*GeV, isotrop=False)
+      gun.direction = (0,0,1000)
+
     #kernel.UI="csh"
     kernel.NumEvents=self.numberOfEvents
 
@@ -214,8 +216,12 @@ class DD4hepSimulation(object):
     #part.OutputLevel = Output.INFO #generator_output_level
     part.enableUI()
     user = DDG4.Action(kernel,"Geant4TCUserParticleHandler/UserParticleHandler")
-    user.TrackingVolume_Zmax = DDG4.tracker_region_zmax
-    user.TrackingVolume_Rmax = DDG4.tracker_region_rmax
+    try:
+      user.TrackingVolume_Zmax = DDG4.tracker_region_zmax
+      user.TrackingVolume_Rmax = DDG4.tracker_region_rmax
+    except AttributeError as e:
+      print "No Attribute: ", str(e)
+
     #  user.enableUI()
     part.adopt(user)
 
