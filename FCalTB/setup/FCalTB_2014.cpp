@@ -23,27 +23,33 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   DD4hep::Geometry::Assembly assembly( detName + "_assembly"  ) ;
   //--------------------------------
 
+  //Parameters we have to know about
+  DD4hep::XML::Component xmlParameter = xmlLumiCal.child(_Unicode(parameter));
+  const double sensorCentreOffset = xmlParameter.attr< double >(_Unicode(sensorCentreOffset));
+  const double squareSideLength   = xmlParameter.attr< double >(_Unicode(squareSideLength));
+
   DD4hep::XML::Dimension dimensions =  xmlLumiCal.dimensions();
 
   //LumiCal Dimensions
   const double lcalInnerR = dimensions.inner_r();
   const double lcalOuterR = dimensions.outer_r();
   const double lcalInnerZ = dimensions.inner_z();
-  const double lcalThickness = DD4hep::Layering(xmlLumiCal).totalThickness();
+  const double lcalThickness = DD4hep::Layering( xmlLumiCal ).totalThickness();
   const double lcalCentreZ = lcalInnerZ+lcalThickness*0.5;
 
+  const double startAngle = -15*dd4hep::deg+90*dd4hep::degree;
+  const double endAngle   =  15*dd4hep::deg+90*dd4hep::degree;
+
+  const double offsetArc    = (lcalOuterR+lcalInnerR)*0.5;
+  const double centreSquare = (lcalOuterR-sensorCentreOffset)-(lcalOuterR+lcalInnerR)*0.5;
   // counter for the current layer to be placed
   int thisLayerId = 1;
 
-  //Parameters we have to know about
-  DD4hep::XML::Component xmlParameter = xmlLumiCal.child(_Unicode(parameter));
-  const double fullCrossingAngle  = xmlParameter.attr< double >(_Unicode(crossingangle));
-  std::cout << " The crossing angle is: " << fullCrossingAngle << " radian"  << std::endl;
 
 
   //Envelope to place the layers in
-  DD4hep::Geometry::Tube envelopeTube (lcalInnerR, lcalOuterR, lcalThickness*0.5 );
-  DD4hep::Geometry::Volume     envelopeVol(detName+"_envelope",envelopeTube,air);
+  DD4hep::Geometry::Box envelopeBox (squareSideLength*0.5, squareSideLength*0.5, lcalThickness*0.5);
+  DD4hep::Geometry::Volume envelopeVol(detName+"_envelope",envelopeBox,air);
   envelopeVol.setVisAttributes(lcdd,xmlLumiCal.visStr());
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -70,10 +76,9 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
     for(int i=0, repeat=xmlLayer.repeat(); i<repeat; ++i)  {
 
       std::string layer_name = detName + DD4hep::XML::_toString(thisLayerId,"_layer%d");
-      DD4hep::Geometry::Tube layer_base(lcalInnerR,lcalOuterR,layerThickness*0.5);
-      
-      DD4hep::Geometry::Volume layer_vol(layer_name,layer_base,air);
+      DD4hep::Geometry::Box layer_base(squareSideLength*0.5, squareSideLength*0.5, layerThickness*0.5);
 
+      DD4hep::Geometry::Volume layer_vol(layer_name,layer_base,air);
 
       int sliceID=1;
       double inThisLayerPosition = -layerThickness*0.5;
@@ -83,18 +88,45 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	const std::string sliceName = layer_name + DD4hep::XML::_toString(sliceID,"slice%d");
 	DD4hep::Geometry::Material   slice_mat  = lcdd.material(compSlice.materialStr());
 
-	DD4hep::Geometry::Tube sliceBase(lcalInnerR,lcalOuterR,sliceThickness/2);
 
-	DD4hep::Geometry::Volume slice_vol (sliceName,sliceBase,slice_mat);
+	const std::string& sliceType = compSlice.attr< std::string >(_Unicode(type));
 
-	if ( compSlice.isSensitive() )  {
-	  slice_vol.setSensitiveDetector(sens);
-	}
+	if ( sliceType.compare("Square") == 0 ){
 
-	slice_vol.setAttributes(lcdd,compSlice.regionStr(),compSlice.limitsStr(),compSlice.visStr());
-	DD4hep::Geometry::PlacedVolume pv = layer_vol.placeVolume(slice_vol,
-								  DD4hep::Geometry::Position(0,0,inThisLayerPosition+sliceThickness*0.5));
-	pv.addPhysVolID("slice",sliceID);
+	  DD4hep::Geometry::Box sliceBase(squareSideLength*0.5,squareSideLength*0.5,sliceThickness/2);
+	  DD4hep::Geometry::Volume slice_vol (sliceName,sliceBase,slice_mat);
+
+	  if ( compSlice.isSensitive() )  {
+	    slice_vol.setSensitiveDetector(sens);
+	  }
+
+	  slice_vol.setAttributes(lcdd,compSlice.regionStr(),compSlice.limitsStr(),compSlice.visStr());
+	  DD4hep::Geometry::PlacedVolume pv =
+	    layer_vol.placeVolume(slice_vol,
+				  DD4hep::Geometry::Position(0,0.0,inThisLayerPosition+sliceThickness*0.5));
+	  pv.addPhysVolID("slice",sliceID);
+
+	} else {
+
+
+	  DD4hep::Geometry::Tube sliceBase(lcalInnerR,lcalOuterR,sliceThickness/2, startAngle, endAngle);
+	  DD4hep::Geometry::Volume slice_vol (sliceName,sliceBase,slice_mat);
+
+	  if ( compSlice.isSensitive() )  {
+	    slice_vol.setSensitiveDetector(sens);
+	  }
+
+	  slice_vol.setAttributes(lcdd,compSlice.regionStr(),compSlice.limitsStr(),compSlice.visStr());
+	  DD4hep::Geometry::PlacedVolume pv = layer_vol.placeVolume(slice_vol,
+								    DD4hep::Geometry::Position(0,-offsetArc,inThisLayerPosition+sliceThickness*0.5));
+	  pv.addPhysVolID("slice",sliceID);
+
+      }//not a square
+
+
+
+
+
 	inThisLayerPosition += sliceThickness;
 	++sliceID;
       }//For all slices in this layer
@@ -114,31 +146,20 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
   }// for all layer collections
 
-  const DD4hep::Geometry::Position bcForwardPos (std::tan(0.5*fullCrossingAngle)*lcalCentreZ,0.0, lcalCentreZ);
-  const DD4hep::Geometry::Position bcBackwardPos(std::tan(0.5*fullCrossingAngle)*lcalCentreZ,0.0,-lcalCentreZ);
-  const DD4hep::Geometry::Rotation3D bcForwardRot ( DD4hep::Geometry::RotationY(fullCrossingAngle*0.5 ) );
-  const DD4hep::Geometry::Rotation3D bcBackwardRot( DD4hep::Geometry::RotationZYX ( (M_PI), (M_PI-fullCrossingAngle*0.5), (0.0)));
+  const DD4hep::Geometry::Position bcForwardPos ( 0.0 , -centreSquare, lcalCentreZ);
 
   DD4hep::Geometry::DetElement LumiCals ( detName, xmlLumiCal.id() );
   DD4hep::Geometry::DetElement sdet ( "LumiCal01", xmlLumiCal.id() );
-  DD4hep::Geometry::DetElement rdet ( "LumiCal02", xmlLumiCal.id() );
 
   DD4hep::Geometry::Volume motherVol = lcdd.pickMotherVolume(sdet);
 
   DD4hep::Geometry::PlacedVolume pv =
-    assembly.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcForwardRot, bcForwardPos ) );
+    assembly.placeVolume(envelopeVol, bcForwardPos );
   pv.addPhysVolID("system",xmlLumiCal.id());
   pv.addPhysVolID("barrel", 1);
   sdet.setPlacement(pv);
 
-  DD4hep::Geometry::PlacedVolume pv2 =
-    assembly.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcBackwardRot, bcBackwardPos ) );
-  pv2.addPhysVolID("system",xmlLumiCal.id());
-  pv2.addPhysVolID("barrel", 2);
-  rdet.setPlacement(pv2);
- 
   LumiCals.add(sdet);
-  LumiCals.add(rdet);
 
   pv = motherVol.placeVolume( assembly ) ;
   pv.addPhysVolID("system",xmlLumiCal.id());
@@ -147,4 +168,4 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   return LumiCals;
 }
 
-DECLARE_DETELEMENT(LumiCal_o1_v01,create_detector)
+DECLARE_DETELEMENT(FCalTB_2014,create_detector)
