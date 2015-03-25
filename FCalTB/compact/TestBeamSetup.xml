@@ -1,0 +1,60 @@
+<!-- 
+     LumiCal parameters for ILD 
+-->
+
+
+<lccdd>
+
+
+  <readouts>
+    <readout name="TestBeamCollection">
+      <segmentation type="CartesianGridXY" grid_size_x="0.35*cm" grid_size_y="0.35*cm" />
+      <id>system:8,layer:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+
+  <display>
+    <vis name="LumiCalVis"   alpha="0.5"  r="0.7" g="0.7"  b="0.0" showDaughters="true"  visible="false"/>
+    <vis name="TungstenVis"  alpha="1.0"  r="1.0" g="0.0"  b="0.0" showDaughters="true"  visible="true"/>
+    <vis name="AirVis"       alpha="1.0"  r="0.0" g="1.0"  b="0.0" showDaughters="true"  visible="false"/>
+    <vis name="SensorVis"    alpha="1.0"  r="0.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
+    <vis name="PCBVis"       alpha="1.0"  r="0.0" g="1.0"  b="0.0" showDaughters="true"  visible="true"/>
+  </display>
+
+  <detectors>
+
+    <detector name="FCalTestBeam" type="FCalTB_2014" vis="LumiCalVis" id="13" 
+	      readout="TestBeamCollection" insideTrackingVolume="false" >
+
+      <parameter crossingangle="CrossingAngle" 
+		 sensorCentreOffset="18*mm"
+		 squareSideLength="140*mm"
+		 />
+      
+      <dimensions inner_r = "80*mm"
+		  outer_r = "180.0*mm"
+		  inner_z = "1*m"
+		  sensorSpanning = "30*degrees"
+		  />
+
+      <layer repeat="1" vis="LumiCalVis">
+	<slice material = "TungstenDens24" thickness = "3.5*mm"   vis="TungstenVis"   type="Square"             />
+	<slice material = "Air"            thickness = "1*mm"     vis="AirVis"        type="Square"             />
+      </layer>
+      
+      <layer repeat="4" vis="LumiCalVis">
+	<slice material = "TungstenDens24" thickness = "3.5*mm"   vis="TungstenVis"   type="Square"             />
+	<slice material = "Air"            thickness = "1.18*mm"     vis="AirVis"        type="Square"             />
+	<slice material = "Silicon"        thickness = "0.32*mm"  vis="SensorVis"     type="Arc"    sensitive = "yes" />
+	<slice material = "Copper"         thickness = "0.005*mm" vis="CuVis"         type="Square"              />
+	<slice material = "G10"            thickness = "2.490*mm" vis="PCBVis"        type="Square"              />
+	<slice material = "Copper"         thickness = "0.005*mm" vis="CuVis"         type="Square"              />
+	<slice material = "Air"            thickness = "1.5*mm"     vis="AirVis"        type="Square"              />
+	<slice material = "TungstenDens24" thickness = "3.5*mm"   vis="TungstenVis"   type="Square"              />
+	<slice material = "Air"            thickness = "1*mm"     vis="AirVis"        type="Square"              />
+      </layer>
+
+    </detector>
+  </detectors>
+</lccdd>
