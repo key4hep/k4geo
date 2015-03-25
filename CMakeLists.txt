@@ -83,6 +83,7 @@ file(GLOB sources
   ./detector/calorimeter/*.cpp 
   ./detector/fcal/*.cpp 
   ./detector/other/*.cpp 
+  ./FCalTB/setup/*.cpp
   )
 
 #file(GLOB headers ./ILD/include/*.h)
