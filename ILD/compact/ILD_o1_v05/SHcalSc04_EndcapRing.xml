@@ -2,6 +2,17 @@
 <detector name="HcalEndcapRing" type="SHcalSc04_EndcapRing" id="ILDDetID_HCAL_RING" readout="HcalEndcapRingCollection" vis="GreenVis" insideTrackingVolume="false" >
     <comment>Hadron Calorimeter EndcapRing</comment>
 
+    <envelope vis="ILD_HCALVis">
+      <shape type="BooleanShape" operation="Subtraction" material="Air"> <!-- create envelope by cuting away the middle part -->
+	<shape type="BooleanShape" operation="Intersection" material="Air" >
+	  <shape type="Box" dx="Hcal_outer_radius" dy="Hcal_outer_radius" dz="Ecal_endcap_zmin+HcalEndcapRing_thickness+10.0*mm"/> <!--Box defined the coordinate system-->
+          <shape type="PolyhedraRegular"  numsides="8" rmin="Ecal_outer_radius+Ecal_endcap_extra_size+Hcal_radial_ring_inner_gap" rmax="Hcal_outer_radius*0.923879533" dz="2*(Ecal_endcap_zmin+HcalEndcapRing_thickness)+1.0*mm" material="Air"/>     
+	  <rotation x="0" y="0" z="90*deg-180*deg/8"/>
+	</shape>
+	<shape type="Box" dx="Hcal_outer_radius+1.0*mm" dy="Hcal_outer_radius+1.0*mm" dz="Ecal_endcap_zmin-1.0*mm"/>
+      </shape>
+    </envelope>
+
     <!-- absorber material-->
     <material name="Steel235"/>     
     <staves  material = "Steel235"  vis="GreenVis"/>
