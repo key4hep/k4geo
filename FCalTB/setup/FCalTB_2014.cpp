@@ -9,34 +9,33 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 					       DD4hep::Geometry::SensitiveDetector sens) {
 
   std::cout << __PRETTY_FUNCTION__  << std::endl;
-  std::cout << "Here is my LumiCal"  << std::endl;
+  std::cout << "Here is my TestBeamSetup"  << std::endl;
   std::cout << " and this is the sensitive detector: " << &sens  << std::endl;
   sens.setType("calorimeter");
   //Materials
   DD4hep::Geometry::Material air = lcdd.air();
 
   //Access to the XML File
-  DD4hep::XML::DetElement xmlLumiCal = xmlHandle;
-  const std::string detName = xmlLumiCal.nameStr();
+  DD4hep::XML::DetElement xmlTestBeamSetup = xmlHandle;
+  const std::string detName = xmlTestBeamSetup.nameStr();
 
  //--------------------------------
   DD4hep::Geometry::Assembly assembly( detName + "_assembly"  ) ;
   //--------------------------------
 
   //Parameters we have to know about
-  DD4hep::XML::Component xmlParameter = xmlLumiCal.child(_Unicode(parameter));
+  DD4hep::XML::Component xmlParameter = xmlTestBeamSetup.child(_Unicode(parameter));
   const double sensorCentreOffset = xmlParameter.attr< double >(_Unicode(sensorCentreOffset));
   const double squareSideLength   = xmlParameter.attr< double >(_Unicode(squareSideLength));
 
-  DD4hep::XML::Dimension dimensions =  xmlLumiCal.dimensions();
+  DD4hep::XML::Dimension dimensions =  xmlTestBeamSetup.dimensions();
 
-  //LumiCal Dimensions
+  //TestBeamSetup Dimensions
   const double lcalInnerR = dimensions.inner_r();
   const double lcalOuterR = dimensions.outer_r();
   const double lcalInnerZ = dimensions.inner_z();
-  const double lcalThickness = DD4hep::Layering( xmlLumiCal ).totalThickness();
+  const double lcalThickness = DD4hep::Layering( xmlTestBeamSetup ).totalThickness();
   const double lcalCentreZ = lcalInnerZ+lcalThickness*0.5;
-
   const double startAngle = -15*dd4hep::deg+90*dd4hep::degree;
   const double endAngle   =  15*dd4hep::deg+90*dd4hep::degree;
 
@@ -50,7 +49,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   //Envelope to place the layers in
   DD4hep::Geometry::Box envelopeBox (squareSideLength*0.5, squareSideLength*0.5, lcalThickness*0.5);
   DD4hep::Geometry::Volume envelopeVol(detName+"_envelope",envelopeBox,air);
-  envelopeVol.setVisAttributes(lcdd,xmlLumiCal.visStr());
+  envelopeVol.setVisAttributes(lcdd,xmlTestBeamSetup.visStr());
 
   ////////////////////////////////////////////////////////////////////////////////
   // Create all the layers
@@ -59,7 +58,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   //Loop over all the layer (repeat=NN) sections
   //This is the starting point to place all layers, we need this when we have more than one layer block
   double referencePosition = -lcalThickness*0.5;
-  for(DD4hep::XML::Collection_t coll(xmlLumiCal,_U(layer)); coll; ++coll)  {
+  for(DD4hep::XML::Collection_t coll(xmlTestBeamSetup,_U(layer)); coll; ++coll)  {
     DD4hep::XML::Component xmlLayer(coll); //we know this thing is a layer
 
 
@@ -148,24 +147,24 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
   const DD4hep::Geometry::Position bcForwardPos ( 0.0 , -centreSquare, lcalCentreZ);
 
-  DD4hep::Geometry::DetElement LumiCals ( detName, xmlLumiCal.id() );
-  DD4hep::Geometry::DetElement sdet ( "LumiCal01", xmlLumiCal.id() );
+  DD4hep::Geometry::DetElement TestBeamSetups ( detName, xmlTestBeamSetup.id() );
+  DD4hep::Geometry::DetElement sdet ( "TestBeamSetup01", xmlTestBeamSetup.id() );
 
   DD4hep::Geometry::Volume motherVol = lcdd.pickMotherVolume(sdet);
 
   DD4hep::Geometry::PlacedVolume pv =
     assembly.placeVolume(envelopeVol, bcForwardPos );
-  pv.addPhysVolID("system",xmlLumiCal.id());
+  pv.addPhysVolID("system",xmlTestBeamSetup.id());
   pv.addPhysVolID("barrel", 1);
   sdet.setPlacement(pv);
 
-  LumiCals.add(sdet);
+  TestBeamSetups.add(sdet);
 
   pv = motherVol.placeVolume( assembly ) ;
-  pv.addPhysVolID("system",xmlLumiCal.id());
-  LumiCals.setPlacement( pv ) ;
+  pv.addPhysVolID("system",xmlTestBeamSetup.id());
+  TestBeamSetups.setPlacement( pv ) ;
 
-  return LumiCals;
+  return TestBeamSetups;
 }
 
 DECLARE_DETELEMENT(FCalTB_2014,create_detector)
