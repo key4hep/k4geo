@@ -69,7 +69,8 @@ INCLUDE(${Geant4_USE_FILE})   # this also takes care of geant 4 definitions and 
 
 #-------------------------------------------------------------
 
-include_directories( ${CMAKE_SOURCE_DIR}/detector/include
+include_directories( ${CMAKE_SOURCE_DIR}/detector/include )
+include_directories( SYSTEM
   ${DD4hep_INCLUDE_DIRS}
   ${ROOT_INCLUDE_DIR}
  )
