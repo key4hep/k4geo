@@ -2,14 +2,16 @@
 <detector name="YokeBarrel" type="Yoke05_Barrel" id="ILDDetID_YOKE" readout="YokeBarrelCollection" vis="YellowVis" insideTrackingVolume="false" buildType="BUILD_ENVELOPE">
     <envelope vis="ILD_YOKEVis">
       <shape type="BooleanShape" operation="Intersection" material="Air" >
-	<shape type="Box" dx="Yoke_barrel_inner_radius+Yoke_thickness+1.0*mm" dy="Yoke_barrel_inner_radius+Yoke_thickness+1.0*mm" dz="Yoke_Z_start_endcaps"/> <!--Box defined the coordinate system-->
-	<shape type="PolyhedraRegular" numsides="12"  rmin="Yoke_barrel_inner_radius-1.0*mm" rmax="Yoke_barrel_inner_radius+Yoke_thickness"
-               dz="2.0*(Yoke_Z_start_endcaps-25.0*mm)+1.0*mm"  material = "Air" />
-	<rotation x="0*deg" y="0*deg" z="90*deg-180*deg/12"/>
+	<shape type="Box" dx="Yoke_outer_radius + env_safety" dy="Yoke_outer_radius + env_safety"
+	       dz="Yoke_half_length + env_safety"/> <!--Box defined the coordinate system-->
+	<shape type="PolyhedraRegular" numsides="Yoke_symmetry"  rmin="Yoke_inner_radius" 
+	       rmax="Yoke_outer_radius" dz="2.0*Yoke_half_length"  material = "Air" />
+	<rotation x="0*deg" y="0*deg" z="90*deg-180*deg/Yoke_symmetry"/>
       </shape>
     </envelope>
 
-    <dimensions numsides="12" rmin="Yoke_barrel_inner_radius" rmax="Yoke_barrel_inner_radius+Yoke_thickness" zhalf="Yoke_Z_start_endcaps-25.0*mm"  material="Air"/>
+    <dimensions numsides="Yoke_symmetry" rmin="Yoke_inner_radius" rmax="Yoke_outer_radius" 
+		zhalf="Yoke_half_length"  material="Air"/>
     <position x="0*mm" y="0*mm" z="0*mm"/>
     <rotation x="0*deg" y="0*deg" z="0*deg"/>
     <staves  material = "Iron"  vis="BlueVis"/>
