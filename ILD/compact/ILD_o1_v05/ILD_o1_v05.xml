@@ -226,6 +226,15 @@
 	<constant name="SET_outer_radius"    value="SET_inner_radius+ 0.99 * TPC_ECal_gap "/> 
 	<constant name="SET_half_length"     value="TPC_half_length"/> 
 
+	<!-- NOTE: All envelope parameters could be fundamental with value, when built alone.   -->
+	<!-- NOTE: The envelope parameters could be derivative or shared, when built together. -->
+	<constant name="Ecal_Hcal_symmetry"   value="8"/>                             <!-- Fundamental -->
+
+	<constant name="Ecal_inner_radius"    value="TPC_outer_radius+Ecal_Tpc_gap"/> <!-- Derivative  -->
+	<constant name="Ecal_outer_radius"    value="Ecal_outer_radius"/>             <!-- FixMe! Trap -->
+	<constant name="Ecal_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ"/>    <!-- Shared ILD  -->
+	<constant name="Ecal_symmetry"        value="Ecal_Hcal_symmetry"/>            <!-- Shared ILD  -->
+
 	
 	<!-- ########### END ENVELOPE PARAMETERS ############################################################## -->
 
