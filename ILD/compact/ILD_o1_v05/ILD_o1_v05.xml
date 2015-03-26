@@ -238,6 +238,11 @@
 	<constant name="Yoke_half_length"     value="4047.0*mm"/>      <!-- explicity Fundamental -->
 	<constant name="Yoke_symmetry"        value="12"/>             <!-- explicity Fundamental -->
 
+	<constant name="EcalEndcap_inner_radius"    value="Ecal_endcap_center_box_size/2.0"/> <!-- Fundamental -->
+	<constant name="EcalEndcap_outer_radius"    value="Ecal_outer_radius+Ecal_endcap_extra_size"/>
+	<constant name="EcalEndcap_min_z"           value="Ecal_endcap_zmin"/>            <!-- Shared ILD  -->
+	<constant name="EcalEndcap_max_z"           value="EcalEndcap_min_z+(Ecal_outer_radius-Ecal_inner_radius)"/>
+	<constant name="EcalEndcap_symmetry"        value="Ecal_Hcal_symmetry"/>          <!-- Shared ILD  -->
 	
 	<!-- ########### END ENVELOPE PARAMETERS ############################################################## -->
 

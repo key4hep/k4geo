@@ -4,14 +4,14 @@
     <envelope vis="ILD_ECALVis">    
       <shape type="BooleanShape" operation="Subtraction" material="Air"> <!--3. create envelope by cuting away the middle part --> 
 	<shape type="BooleanShape" operation="Subtraction" material="Air"> <!--2. create box hole in octagon -->
-          <shape type="BooleanShape" operation="Intersection" material="Air"> <!--1. create octagon solid-->
-	    <shape type="Box" dx="Ecal_outer_radius+Ecal_endcap_extra_size" dy="Ecal_outer_radius+Ecal_endcap_extra_size" dz="(Ecal_endcap_zmin+Ecal_outer_radius-TPC_outer_radius-Ecal_Tpc_gap)+1.0*mm"/>
-	    <shape type="Box" dx="Ecal_outer_radius+Ecal_endcap_extra_size" dy="Ecal_outer_radius+Ecal_endcap_extra_size" dz="(Ecal_endcap_zmin+Ecal_outer_radius-TPC_outer_radius-Ecal_Tpc_gap)+0.9*mm"/>
-	    <rotation x="0*deg" y="0*deg" z="45*deg"/> <!--Intersection two boxes with 45 degree to create octagon solid-->
+          <shape type="BooleanShape" operation="Intersection" material="Air"> <!--1. create octagon solid, the box defined the coordinate-->
+	    <shape type="Box" dx="EcalEndcap_outer_radius + 1.5*env_safety" dy="EcalEndcap_outer_radius + 1.5*env_safety" dz="EcalEndcap_max_z + env_safety"/>
+	    <shape type="PolyhedraRegular"  numsides="EcalEndcap_symmetry" rmin="0" rmax="EcalEndcap_outer_radius + env_safety" dz="2.0*EcalEndcap_max_z + env_safety"/>   
+	    <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/EcalEndcap_symmetry"/>
 	  </shape>
-	  <shape type="Box" dx="Ecal_endcap_center_box_size/2." dy="Ecal_endcap_center_box_size/2." dz="(Ecal_endcap_zmin+Ecal_outer_radius-TPC_outer_radius-Ecal_Tpc_gap)+10*mm"/>
+	  <shape type="Box" dx="EcalEndcap_inner_radius - env_safety" dy="EcalEndcap_inner_radius - env_safety" dz="EcalEndcap_max_z + 2.0*env_safety"/>
 	</shape>
-	<shape type="Box" dx="Ecal_outer_radius+Ecal_endcap_extra_size+1.0*mm" dy="Ecal_outer_radius+Ecal_endcap_extra_size+1.0*mm" dz="Ecal_endcap_zmin-1.0*mm"/>
+	<shape type="Box" dx="EcalEndcap_outer_radius + 2.0*env_safety" dy="EcalEndcap_outer_radius + 2.0*env_safety" dz="EcalEndcap_min_z - env_safety"/>
       </shape>
     </envelope>
 
