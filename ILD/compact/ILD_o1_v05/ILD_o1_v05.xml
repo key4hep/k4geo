@@ -247,7 +247,7 @@
 	<constant name="HcalEndcap_inner_radius"    value="Hcal_endcap_center_box_size/2.0"/><!-- Fundamental -->
 	<constant name="HcalEndcap_outer_radius"    value="Hcal_outer_radius"/>              <!-- Shared ILD  -->
 	<constant name="HcalEndcap_min_z"           value="Hcal_endcap_zmin"/>               <!-- Fundamental -->
-	<constant name="HcalEndcap_max_z"           value="HcalEndcap_min_z+(Hcal_outer_radius-Hcal_inner_radius)"/>
+	<constant name="HcalEndcap_max_z"           value="HcalEndcap_min_z+1287.0*mm"/>     <!-- FixMe! Trap SHcalSc04_Endcaps.xml-->
 	
 	<constant name="HcalEndcapRing_inner_radius"    value="EcalEndcap_outer_radius+Hcal_radial_ring_inner_gap"/>
 	<constant name="HcalEndcapRing_outer_radius"    value="Hcal_outer_radius*0.923879533"/>  <!-- cos(pi/8)   -->
@@ -265,8 +265,12 @@
 	<constant name="YokwEndcapPlug_outer_radius"    value="Hcal_outer_radius"/>
 	<constant name="YokeEndcapPlug_min_z"           value="3981.5*mm"/> <!-- FixMe! Trap. and Mokka hardcode number -->
 	<constant name="YokeEndcapPlug_max_z"           value="YokeEndcap_min_z"/>
-	<constant name="YokwEndcapPlug_symmetry"        value="Yoke_symmetry"/>
+	<constant name="YokwEndcapPlug_symmetry"        value="Yoke_symmetry"/>                  <!-- Shared ILD  -->
 
+	<constant name="EcalECRing_inner_radius"    value="Lcal_outer_radius + Ecal_Lcal_ring_gap"/>
+	<constant name="EcalECRing_outer_radius"    value="Ecal_endcap_center_box_size/2.0-Ecal_EC_Ring_gap"/>
+	<constant name="EcalECRing_min_z"           value="EcalEndcap_min_z"/>               <!-- Shared ILD  -->
+	<constant name="EcalECRing_max_z"           value="EcalEndcap_max_z"/>               <!-- Shared ILD  -->
 
 	<!-- ########### END ENVELOPE PARAMETERS ############################################################## -->
 
@@ -384,7 +388,7 @@
 
 	<include ref="SEcal04_Endcaps.xml"/>
 
-	<!-- <include ref="SEcal04_ECRing.xml"/> -->
+	<include ref="SEcal04_ECRing.xml"/>
 
 	<include ref="SHcalSc04_Barrel.xml"/>
 
