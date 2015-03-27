@@ -243,6 +243,11 @@
 	<constant name="EcalEndcap_min_z"           value="Ecal_endcap_zmin"/>            <!-- Shared ILD  -->
 	<constant name="EcalEndcap_max_z"           value="EcalEndcap_min_z+(Ecal_outer_radius-Ecal_inner_radius)"/>
 	<constant name="EcalEndcap_symmetry"        value="Ecal_Hcal_symmetry"/>          <!-- Shared ILD  -->
+
+	<constant name="HcalEndcap_inner_radius"    value="Hcal_endcap_center_box_size/2.0"/><!-- Fundamental -->
+	<constant name="HcalEndcap_outer_radius"    value="Hcal_outer_radius"/>              <!-- Shared ILD  -->
+	<constant name="HcalEndcap_min_z"           value="Hcal_endcap_zmin"/>               <!-- Fundamental -->
+	<constant name="HcalEndcap_max_z"           value="HcalEndcap_min_z+(Hcal_outer_radius-Hcal_inner_radius)"/>
 	
 	<!-- ########### END ENVELOPE PARAMETERS ############################################################## -->
 
