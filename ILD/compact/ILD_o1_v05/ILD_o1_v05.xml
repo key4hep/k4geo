@@ -255,6 +255,19 @@
 	<constant name="HcalEndcapRing_max_z"           value="EcalEndcap_max_z"/>               <!-- Shared ILD  -->
 	<constant name="HcalEndcapRing_symmetry"        value="Ecal_Hcal_symmetry"/>             <!-- Shared ILD  -->
 	
+	<!-- Yoke05_Endcaps geometry driver include Yoke endcap plug -->
+	<constant name="YokwEndcap_inner_radius"    value="Yoke_endcap_inner_radius"/>           <!-- Fundamental -->
+	<constant name="YokwEndcap_outer_radius"    value="Yoke_outer_radius"/>                  <!-- Shared ILD  -->
+	<constant name="YokeEndcap_min_z"           value="Yoke_Z_start_endcaps"/>               <!-- FixMe! Trap Coil -->
+	<constant name="YokeEndcap_max_z"           value="YokeEndcap_min_z+(Yoke_outer_radius-Yoke_inner_radius)"/>
+	<constant name="YokwEndcap_symmetry"        value="Yoke_symmetry"/>                      <!-- Shared ILD  -->
+	<constant name="YokwEndcapPlug_inner_radius"    value="YokwEndcap_inner_radius"/>
+	<constant name="YokwEndcapPlug_outer_radius"    value="Hcal_outer_radius"/>
+	<constant name="YokeEndcapPlug_min_z"           value="3981.5*mm"/> <!-- FixMe! Trap. and Mokka hardcode number -->
+	<constant name="YokeEndcapPlug_max_z"           value="YokeEndcap_min_z"/>
+	<constant name="YokwEndcapPlug_symmetry"        value="Yoke_symmetry"/>
+
+
 	<!-- ########### END ENVELOPE PARAMETERS ############################################################## -->
 
 
@@ -381,7 +394,7 @@
 
 	<include ref="Yoke05_Barrel.xml"/>
 
-	<!-- <include ref="Yoke05_Endcaps.xml"/> -->
+	<include ref="Yoke05_Endcaps.xml"/>
 
 	<!-- <include ref="BeamCal08.xml"/> -->
 

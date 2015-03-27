@@ -1,5 +1,25 @@
 <!-- comment>Calorimeters</comment -->
 <detector name="YokeEndcap" type="Yoke05_Endcaps" id="ILDDetID_YOKE" readout="YokeEndcapsCollection" vis="YellowVis" insideTrackingVolume="false" >
+
+    <envelope vis="ILD_YOKEVis">
+      <shape type="BooleanShape" operation="Subtraction" material="Air">
+	<shape type="BooleanShape" operation="Subtraction" material="Air">
+          <shape type="BooleanShape" operation="Intersection" material="Air">
+	    <shape type="Box" dx="YokwEndcap_outer_radius + 1.5*env_safety" dy="YokwEndcap_outer_radius + 1.5*env_safety"
+		   dz="YokeEndcap_max_z + env_safety"/>
+	    <shape type="PolyhedraRegular" numsides="YokwEndcap_symmetry"  rmin="YokwEndcap_inner_radius - env_safety" 
+		   rmax="YokwEndcap_outer_radius + env_safety" dz="2.*YokeEndcap_max_z + env_safety" />
+	    <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/YokwEndcap_symmetry"/>
+	  </shape>
+	  <shape type="Box" dx="YokwEndcap_outer_radius + 1.5*env_safety" dy="YokwEndcap_outer_radius + 1.5*env_safety"
+		 dz="YokeEndcapPlug_min_z - env_safety"/>
+	</shape>
+	<shape type="PolyhedraRegular" numsides="YokwEndcapPlug_symmetry"  rmin="YokwEndcapPlug_outer_radius + env_safety" 
+	       rmax="YokwEndcap_outer_radius + 2.0*env_safety" dz="2.*YokeEndcap_min_z - env_safety" />
+	<rotation x="0*deg" y="0*deg" z="90*deg-180*deg/YokwEndcapPlug_symmetry"/>
+      </shape>
+    </envelope>
+
     <dimensions numsides="12" rmin="Yoke_barrel_inner_radius" z="Yoke_barrel_halfZ" />
     <material name="Iron"/> 
     <layer repeat="12" vis="SeeThrough">
