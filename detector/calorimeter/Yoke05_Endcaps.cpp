@@ -31,7 +31,7 @@
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "XML/Layering.h"
-#include "TGeoTrd2.h"
+#include "XML/Utilities.h"
 
 using namespace std;
 using namespace DD4hep;
@@ -58,11 +58,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   DetElement    sdet      (det_name,det_id);
   Volume        motherVol = lcdd.pickMotherVolume(sdet);
 
-  Assembly envelope_assembly( det_name + "assembly"  ) ;  
-  PlacedVolume  env_phv   = motherVol.placeVolume(envelope_assembly);
+  // --- create an envelope volume and position it into the world ---------------------
+  
+  Volume envelope = XML::createPlacedEnvelope( lcdd,  element , sdet ) ;
+  
+  if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
 
-  env_phv.addPhysVolID("system",det_id);
-  sdet.setPlacement(env_phv);
+  //-----------------------------------------------------------------------------------
 
   sens.setType("calorimeter");
 
@@ -276,7 +278,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     Rotation3D rot3D(rot);
     Transform3D tran3D(rot3D,xyzVec);
 
-    PlacedVolume pv = envelope_assembly.placeVolume(mod_vol,tran3D);
+    PlacedVolume pv = envelope.placeVolume(mod_vol,tran3D);
     pv.addPhysVolID("module",module_id); // z: -/+ 0/6
 
     string m_name = _toString(module_id,"module%d");
@@ -294,7 +296,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
       double this_plug_z_offset = ( module_id == 0 ) ? - zPlug : zPlug; 
       Position   plug_pos(0,0,this_plug_z_offset);
-      PlacedVolume  plug_phv = envelope_assembly.placeVolume(plug_vol,plug_pos);
+      PlacedVolume  plug_phv = envelope.placeVolume(plug_vol,plug_pos);
       string plug_name = _toString(module_id,"plug%d");
       DetElement plug (plug_name,det_id);
       plug.setPlacement(plug_phv);
