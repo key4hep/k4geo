@@ -249,6 +249,12 @@
 	<constant name="HcalEndcap_min_z"           value="Hcal_endcap_zmin"/>               <!-- Fundamental -->
 	<constant name="HcalEndcap_max_z"           value="HcalEndcap_min_z+(Hcal_outer_radius-Hcal_inner_radius)"/>
 	
+	<constant name="HcalEndcapRing_inner_radius"    value="EcalEndcap_outer_radius+Hcal_radial_ring_inner_gap"/>
+	<constant name="HcalEndcapRing_outer_radius"    value="Hcal_outer_radius*0.923879533"/>  <!-- cos(pi/8)   -->
+	<constant name="HcalEndcapRing_min_z"           value="EcalEndcap_min_z"/>               <!-- Shared ILD  -->
+	<constant name="HcalEndcapRing_max_z"           value="EcalEndcap_max_z"/>               <!-- Shared ILD  -->
+	<constant name="HcalEndcapRing_symmetry"        value="Ecal_Hcal_symmetry"/>             <!-- Shared ILD  -->
+	
 	<!-- ########### END ENVELOPE PARAMETERS ############################################################## -->
 
 
@@ -369,10 +375,9 @@
 
 	<include ref="SHcalSc04_Barrel.xml"/>
 
-
 	<include ref="SHcalSc04_Endcaps.xml"/>
 
-	<!-- <include ref="SHcalSc04_EndcapRing.xml"/> -->
+	<include ref="SHcalSc04_EndcapRing.xml"/>
 
 	<include ref="Yoke05_Barrel.xml"/>
 
