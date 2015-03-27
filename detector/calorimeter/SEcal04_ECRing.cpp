@@ -38,7 +38,7 @@
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "XML/Layering.h"
-#include "DD4hep/Shapes.h"
+#include "XML/Utilities.h"
 
 using namespace std;
 using namespace DD4hep;
@@ -61,11 +61,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   DetElement    sdet      (det_name,det_id);
   Volume        motherVol = lcdd.pickMotherVolume(sdet);
 
-  Assembly envelope_assembly( det_name + "assembly"  ) ;  
-  PlacedVolume  env_phv   = motherVol.placeVolume(envelope_assembly);
+  // --- create an envelope volume and position it into the world ---------------------
+  
+  Volume envelope = XML::createPlacedEnvelope( lcdd,  element , sdet ) ;
+  
+  if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
 
-  env_phv.addPhysVolID("system",det_id);
-  sdet.setPlacement(env_phv);
+  //-----------------------------------------------------------------------------------
 
   sens.setType("calorimeter");
 
@@ -213,7 +215,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double Ecal_endcap_Tube_rmax = Lcal_outer_radius + Ecal_Lcal_ring_gap;
   
   Tube CenterECTub(0., Ecal_endcap_Tube_rmax, module_thickness);
-  Box  CenterECBox(Ecal_endcap_center_box_size/2.,Ecal_endcap_center_box_size/2.,module_thickness/2.);
+  Box  CenterECBox((Ecal_endcap_center_box_size/2. - Ecal_EC_Ring_gap),
+		   (Ecal_endcap_center_box_size/2. - Ecal_EC_Ring_gap),
+		   module_thickness/2.);
 
   SubtractionSolid ECRingSolid( CenterECBox, CenterECTub);
 
@@ -431,7 +435,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     Rotation3D rot3D(rot);
     Transform3D tran3D(rot3D,xyzVec);
 
-    PlacedVolume pv = envelope_assembly.placeVolume(EnvLogECRing,tran3D);
+    PlacedVolume pv = envelope.placeVolume(EnvLogECRing,tran3D);
     pv.addPhysVolID("module",module_id); // z: -/+ 0/6
 
     DetElement sd = (module_num==0) ? module_det : module_det.clone(_toString(module_num,"module%d"));
