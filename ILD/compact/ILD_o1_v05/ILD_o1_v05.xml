@@ -110,7 +110,11 @@
 	<constant name="TUBE_IPInnerBulge_end_radius"   value="24*mm"/>
 	<constant name="TUBE_IPInnerBulge_end_z"        value="150*mm"/>
 
-	
+	<constant name="Hcal_Coil_additional_gap" value="29.5*mm"/>
+
+	<constant name="Coil_extra_size" value="1522*mm"/>
+	<constant name="Coil_thickness" value="750.0*mm"/>
+
 
 	<comment>
 	 ...  these are the values we have in the gear_ILD_o1_v05.xml from Mokka ....
@@ -271,6 +275,11 @@
 	<constant name="EcalEndcapRing_outer_radius"    value="Ecal_endcap_center_box_size/2.0-Ecal_EC_Ring_gap"/>
 	<constant name="EcalEndcapRing_min_z"           value="EcalEndcap_min_z"/>               <!-- Shared ILD  -->
 	<constant name="EcalEndcapRing_max_z"           value="EcalEndcap_max_z"/>               <!-- Shared ILD  -->
+
+
+	<constant name="Coil_inner_radius"    value="Hcal_outer_radius+Hcal_Coil_additional_gap"/> 
+	<constant name="Coil_outer_radius"    value="Hcal_outer_radius+Hcal_Coil_additional_gap+Coil_thickness"/>                      
+	<constant name="Coil_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ+Coil_extra_size"/>      
 
 	<!-- ########### END ENVELOPE PARAMETERS ############################################################## -->
 

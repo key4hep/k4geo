@@ -8,6 +8,7 @@
 #include "DD4hep/DD4hepUnits.h"
 #include "DDRec/Surface.h"
 #include "XMLHandlerDB.h"
+#include "XML/Utilities.h"
 #include <cmath>
 
 //#include "GearWrapper.h"
@@ -37,33 +38,28 @@ using namespace DDRec ;
  *  @author: F.Gaede, DESY, Aug 2014
  */
 
-static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
+static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*/)  {
 
   //------------------------------------------
   //  See comments starting with '//**' for
   //     hints on porting issues
   //------------------------------------------
 
-  
-  xml_det_t    x_det = e;
+  xml_det_t    x_det = element;
   string       name  = x_det.nameStr();
-  
-  //---- envelope: cylinder of air:
-  xml_comp_t  x_tube (x_det.child(_U(tubs)));
-  Tube        envelope_cylinder( x_tube.rmin(), x_tube.rmax(), x_tube.zhalf() );
-  Volume      envelope( "coil_envelope_cyl", envelope_cylinder , lcdd.air() );
-  //--------------------------------
-  //  Assembly envelope( name + "_assembly"  ) ;
-  //--------------------------------
-  
-
-  PlacedVolume pv;
-  
+    
   DetElement   coil(  name, x_det.id()  ) ;
 
-  coil.setVisAttributes( lcdd, "SeeThrough" , envelope );
-  
-  //  sens.setType("tracker");
+ // --- create an envelope volume and position it into the world ---------------------
+
+  Volume envelope = XML::createPlacedEnvelope( lcdd,  element , coil ) ;
+
+  if( lcdd.buildType() == BUILD_ENVELOPE ) return coil ;
+
+  //-----------------------------------------------------------------------------------
+
+  PlacedVolume pv;
+
 
   //######################################################################################################################################################################
   //  code ported from Coil02::construct() :
@@ -71,9 +67,11 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
   
   cout << "\nBuilding Coil..." << endl;
 
+  xml_comp_t  x_tube (x_det.child(_U(tube)));
+
   double inner_radius = x_tube.rmin() ;
   double outer_radius = x_tube.rmax() ;
-  double half_z       = x_tube.zhalf() ;
+  double half_z       = x_tube.dz() ;
 
   cout << "\n... cryostat inner_radius " << inner_radius 
        << "\n... cryostat outer_radius " << outer_radius
@@ -81,7 +79,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
        << endl;
   
 
-  Material coilMaterial = lcdd.material( "G4_Al") ;
+  Material coilMaterial = lcdd.material( x_tube.materialStr() ) ;
 
 
   //FG: for now fall back to a simple tube filled with Al
@@ -92,6 +90,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
 #if !code_is_cleaned_up 
 
   Tube   coil_tube( x_tube.rmin(), x_tube.rmax(), x_tube.zhalf() );
+
   Volume coil_vol( "coil_vol", coil_tube , coilMaterial );
   pv  =  envelope.placeVolume( coil_vol ) ;
   coil.setVisAttributes( lcdd, "BlueVis" , coil_vol );
@@ -590,15 +589,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
   
   //--------------------------------------
   
-  Volume mother =  lcdd.pickMotherVolume( coil ) ;
-  
-  pv = mother.placeVolume(envelope);
-
-  pv.addPhysVolID( "system", x_det.id() ) ; //.addPhysVolID("side", 0 ) ;
-  
-  coil.setVisAttributes( lcdd, x_det.visStr(), envelope );
-  //  if( coil.isValid() ) 
-  coil.setPlacement(pv);
+  //coil.setVisAttributes( lcdd, x_det.visStr(), envelope );
   
   return coil;
 }
