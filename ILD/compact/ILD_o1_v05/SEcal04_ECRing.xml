@@ -4,12 +4,12 @@
     <envelope vis="ILD_ECALVis">    
       <shape type="BooleanShape" operation="Subtraction" material="Air">
 	<shape type="BooleanShape" operation="Subtraction" material="Air">
-	  <shape type="Box" dx="EcalECRing_outer_radius + env_safety" dy="EcalECRing_outer_radius + env_safety"
-		 dz="EcalECRing_max_z + env_safety"/>
-	  <shape type="Tube" rmin="0" rmax="EcalECRing_inner_radius - env_safety" dz="2.0*EcalECRing_max_z + env_safety"/>
+	  <shape type="Box" dx="EcalEndcapRing_outer_radius + env_safety" dy="EcalEndcapRing_outer_radius + env_safety"
+		 dz="EcalEndcapRing_max_z + env_safety"/>
+	  <shape type="Tube" rmin="0" rmax="EcalEndcapRing_inner_radius - env_safety" dz="2.0*EcalEndcapRing_max_z + env_safety"/>
 	</shape>
-	<shape type="Box" dx="EcalECRing_outer_radius + 1.5*env_safety" dy="EcalECRing_outer_radius + 1.5*env_safety"
-	       dz="EcalECRing_min_z - env_safety"/>
+	<shape type="Box" dx="EcalEndcapRing_outer_radius + 1.5*env_safety" dy="EcalEndcapRing_outer_radius + 1.5*env_safety"
+	       dz="EcalEndcapRing_min_z - env_safety"/>
       </shape>
     </envelope>
 
