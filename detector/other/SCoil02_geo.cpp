@@ -89,7 +89,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
 
 #if !code_is_cleaned_up 
 
-  Tube   coil_tube( x_tube.rmin(), x_tube.rmax(), x_tube.zhalf() );
+  Tube   coil_tube( x_tube.rmin(), x_tube.rmax(), x_tube.dz() );
 
   Volume coil_vol( "coil_vol", coil_tube , coilMaterial );
   pv  =  envelope.placeVolume( coil_vol ) ;
