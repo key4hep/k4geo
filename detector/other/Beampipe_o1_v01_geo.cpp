@@ -11,6 +11,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/DD4hepUnits.h"
 #include "DDRec/DetectorData.h"
+#include "XML/Utilities.h"
 #include "XMLHandlerDB.h"
 #include <cmath>
 #include <map>
@@ -56,11 +57,16 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
   DD4hep::XML::DetElement xmlBeampipe = xmlHandle;
   const std::string name = xmlBeampipe.nameStr();
 
-  //--------------------------------
-  Assembly envelope( name + "_assembly"  ) ;
-  //--------------------------------
 
   DD4hep::Geometry::DetElement tube(  name, xmlBeampipe.id()  ) ;
+
+  // --- create an envelope volume and position it into the world ---------------------
+  
+  Volume envelope = DD4hep::XML::createPlacedEnvelope( lcdd,  xmlHandle , tube ) ;
+  
+  if( lcdd.buildType() == DD4hep::BUILD_ENVELOPE ) return tube ;
+  
+  //-----------------------------------------------------------------------------------
 
   DD4hep::DDRec::ConicalSupportData* beampipeData = new DD4hep::DDRec::ConicalSupportData ;
 
@@ -496,13 +502,13 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
 
   //--------------------------------------
   
-  Volume mother =  lcdd.pickMotherVolume( tube ) ;
-  PlacedVolume pv(mother.placeVolume(envelope));
-  pv.addPhysVolID( "system", xmlBeampipe.id() ) ; //.addPhysVolID("side", 0 ) ;
+  // // Volume mother =  lcdd.pickMotherVolume( tube ) ;
+  // // PlacedVolume pv(mother.placeVolume(envelope));
+  // // pv.addPhysVolID( "system", xmlBeampipe.id() ) ; //.addPhysVolID("side", 0 ) ;
 
   tube.setVisAttributes( lcdd, xmlBeampipe.visStr(), envelope );
 
-  tube.setPlacement(pv);
+  // // tube.setPlacement(pv);
   
   return tube;
 }

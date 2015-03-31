@@ -1,4 +1,10 @@
 <detector name="Tube" type="Beampipe_o1_v01" vis="BeamPipeVis" id="ILDDetID_NOTUSED">
+
+  <envelope vis="BlueVis">
+    <shape type="Assembly"/>
+  </envelope>
+  
+
   <parameter crossingangle="ILC_Main_Crossing_Angle" />
   
   <!-- database : tubeX06_14 --> 
