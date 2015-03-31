@@ -4,15 +4,31 @@
 
 <detector name="LHCal" type="LHCal" vis="SeeThrough" id="ILDDetID_LHCAL"
 	  readout="LHCalCollection" insideTrackingVolume="false" >
+
+  <envelope vis="ILD_ECALVis">    
+    <shape type="BooleanShape" operation="Subtraction" material="Air">
+      <shape type="BooleanShape" operation="Subtraction" material="Air">
+	<shape type="Box" dx="LHCal_outer_radius + env_safety" 
+	       dy="LHCal_outer_radius + env_safety" 
+	       dz="LHCal_max_z + env_safety"/>
+	<shape type="Tube" rmin="0.0" rmax="LHCal_inner_radius - env_safety" 
+	       dz="LHCal_max_z + 2.0*env_safety"/>
+      </shape>
+      <shape type="Box" dx="LHCal_outer_radius + 1.5*env_safety"
+	     dy="LHCal_outer_radius + 1.5*env_safety"
+	     dz="LHCal_min_z - env_safety"/>
+    </shape>
+  </envelope>  
+
   <parameter crossingangle="ILC_Main_Crossing_Angle"
 	     cutoutspanningangle="40*deg"
 	     incomingbeampiperadius="BCal_TubeIncomingRadius"
 	     />
   
-  <dimensions width = "650*mm"
-	      inner_z = "2680*mm"
-	      height = "650*mm"
-	      inner_r = "100*mm"
+  <dimensions width = "LHCal_outer_radius*2.0"
+	      inner_z = "LHCal_min_z"
+	      height = "LHCal_outer_radius*2.0"
+	      inner_r = "LHCal_inner_radius"
 	      offset = "0*mm"
 	/>          
 

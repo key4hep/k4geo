@@ -1,5 +1,6 @@
 #include <DD4hep/DetFactoryHelper.h>
 #include <XML/Layering.h>
+#include "XML/Utilities.h"
 
 #include <string>
 
@@ -19,9 +20,16 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   DD4hep::XML::DetElement xmlLHCal = xmlHandle;
   const std::string detName = xmlLHCal.nameStr();
 
- //--------------------------------
-  DD4hep::Geometry::Assembly assembly( detName + "_assembly"  ) ;
-  //--------------------------------
+  DD4hep::Geometry::DetElement sdet ( detName, xmlLHCal.id() );
+  DD4hep::Geometry::Volume motherVol = lcdd.pickMotherVolume(sdet);
+
+  // --- create an envelope volume and position it into the world ---------------------
+  
+  DD4hep::Geometry::Volume envelope = DD4hep::XML::createPlacedEnvelope( lcdd,  xmlHandle , sdet ) ;
+  
+  if( lcdd.buildType() == DD4hep::BUILD_ENVELOPE ) return sdet ;
+  
+  //-----------------------------------------------------------------------------------
 
   DD4hep::XML::Dimension dimensions =  xmlLHCal.dimensions();
 
@@ -52,9 +60,11 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   //Envelope to place the layers in
   DD4hep::Geometry::Box envelopeBox (lhcalwidth*0.5, lhcalheight*0.5, lhcalThickness*0.5 );
   DD4hep::Geometry::Tube incomingBeamPipe (0.0, lhcalInnerR, lhcalThickness);//we want this to be longer than the LHCal
-  DD4hep::Geometry::SubtractionSolid envelope (envelopeBox, incomingBeamPipe, incomingBPTransform);
-  DD4hep::Geometry::Volume     envelopeVol(detName+"_envelope",envelope,air);
+
+  DD4hep::Geometry::SubtractionSolid LHCalModule (envelopeBox, incomingBeamPipe, incomingBPTransform);
+  DD4hep::Geometry::Volume     envelopeVol(detName+"_module",LHCalModule,air);
   envelopeVol.setVisAttributes(lcdd,xmlLHCal.visStr());
+
 
   ////////////////////////////////////////////////////////////////////////////////
   // Create all the layers
@@ -133,37 +143,21 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
   }// for all layer collections
 
+ 
   const DD4hep::Geometry::Position bcForwardPos (lhcaloffset,0.0, lhcalCentreZ);
   const DD4hep::Geometry::Position bcBackwardPos(-1.0*lhcaloffset,0.0,-lhcalCentreZ);
   const DD4hep::Geometry::Rotation3D bcForwardRot ( DD4hep::Geometry::RotationY( 0 ) );
   const DD4hep::Geometry::Rotation3D bcBackwardRot( DD4hep::Geometry::RotationY( M_PI )  );
 
-  DD4hep::Geometry::DetElement LHCals ( detName, xmlLHCal.id() );
-  DD4hep::Geometry::DetElement sdet ( "LHCal01", xmlLHCal.id() );
-  DD4hep::Geometry::DetElement rdet ( "LHCal02", xmlLHCal.id() );
-
-  DD4hep::Geometry::Volume motherVol = lcdd.pickMotherVolume(sdet);
-
   DD4hep::Geometry::PlacedVolume pv =
-    assembly.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcForwardRot, bcForwardPos ) );
-  pv.addPhysVolID("system",xmlLHCal.id());
+    envelope.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcForwardRot, bcForwardPos ) );
   pv.addPhysVolID("barrel", 1);
-  sdet.setPlacement(pv);
 
   DD4hep::Geometry::PlacedVolume pv2 =
-    assembly.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcBackwardRot, bcBackwardPos ) );
-  pv2.addPhysVolID("system",xmlLHCal.id());
+    envelope.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcBackwardRot, bcBackwardPos ) );
   pv2.addPhysVolID("barrel", 2);
-  rdet.setPlacement(pv2);
- 
-  LHCals.add(sdet);
-  LHCals.add(rdet);
 
-  pv = motherVol.placeVolume( assembly ) ;
-  pv.addPhysVolID("system",xmlLHCal.id());
-  LHCals.setPlacement( pv ) ;
-
-  return LHCals;
+  return sdet;
 }
 
 DECLARE_DETELEMENT(LHCal,create_detector)
