@@ -1,0 +1,30 @@
+\documentclass[landscape]{standalone}
+\standaloneconfig{border=20pt}
+\usepackage{tikz}
+\usepackage{graphicx}
+\begin{document}
+\begin{tikzpicture}
+\draw  [dashed] ( 0.0 , 4.74770998292 )   --  ( 0.0 , 0 )  ;
+
+\node [rotate=-90] at (0.0,0) {{\verb#   0#}};
+\draw  [dashed] ( 0.0 , 4.74770998292 )   --  ( 0 , 4.74770998292 )  ;
+
+\node [left] at (0,4.74770998292) {{\verb#SIT_inner_radius#}};
+\draw  [dashed] ( 0.0 , 10.0794727796 )   --  ( 0 , 10.0794727796 )  ;
+
+\node [left] at (0,10.0794727796) {{\verb#SIT_outer_radius#}};
+\draw  [dashed] ( 20.0 , 10.0794727796 )   --  ( 20.0 , 0 )  ;
+
+\node [rotate=-90] at (20.0,0) {{\verb#                 SIT_half_length#}};
+\draw  [dashed] ( 20.0 , 9.30911349169 )   --  ( 0 , 9.30911349169 )  ;
+
+\node [left] at (0,9.30911349169) {{\verb#SIT_outer_radius_1#}};
+\draw  [dashed] ( 11.4299021891 , 9.30911349169 )   --  ( 11.4299021891 , 0 )  ;
+
+\node [rotate=-90] at (11.4299021891,0) {{\verb#                   SIT_half_length_1#}};
+\draw  [ultra thick] ( 0.0 , 4.74770998292 )   --  ( 0.0 , 10.0794727796 )   --  ( 20.0 , 10.0794727796 )   --  ( 20.0 , 9.30911349169 )   --  ( 11.4299021891 , 9.30911349169 )   --  ( 11.4299021891 , 4.74770998292 )   --  ( 0.0 , 4.74770998292 )  ;
+
+\draw  [<->,thick] ( 0 , 12.5993409745 )   --  ( 0 , 0 )   --  ( 25.0 , 0 )  ;
+
+\end{tikzpicture}
+\end{document}

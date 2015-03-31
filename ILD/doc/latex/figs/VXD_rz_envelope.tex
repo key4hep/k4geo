@@ -1,0 +1,33 @@
+\documentclass[landscape]{standalone}
+\standaloneconfig{border=20pt}
+\usepackage{tikz}
+\usepackage{graphicx}
+\begin{document}
+\begin{tikzpicture}
+\draw  [dashed] ( 0.0 , 1.8018018018 )   --  ( 0.0 , 0 )  ;
+
+\node [rotate=-90] at (0.0,0) {{\verb#   0#}};
+\draw  [dashed] ( 0.0 , 1.8018018018 )   --  ( 0 , 1.8018018018 )  ;
+
+\node [left] at (0,1.8018018018) {{\verb#VXD_inner_radius#}};
+\draw  [dashed] ( 0.0 , 6.75675675676 )   --  ( 0 , 6.75675675676 )  ;
+
+\node [left] at (0,6.75675675676) {{\verb#VXD_outer_radius#}};
+\draw  [dashed] ( 20.0 , 6.75675675676 )   --  ( 20.0 , 0 )  ;
+
+\node [rotate=-90] at (20.0,0) {{\verb#                 VXD_half_length#}};
+\draw  [dashed] ( 20.0 , 2.71396396396 )   --  ( 0 , 2.71396396396 )  ;
+
+\node [left] at (0,2.71396396396) {{\verb#VXD_inner_radius_1#}};
+\draw  [dashed] ( 16.8918918919 , 2.71396396396 )   --  ( 16.8918918919 , 0 )  ;
+
+\node [rotate=-90] at (16.8918918919,0) {{\verb#                VXD_cone_max_z#}};
+\draw  [dashed] ( 9.00900900901 , 1.8018018018 )   --  ( 9.00900900901 , 0 )  ;
+
+\node [rotate=-90] at (9.00900900901,0) {{\verb#                VXD_cone_min_z#}};
+\draw  [ultra thick] ( 0.0 , 1.8018018018 )   --  ( 0.0 , 6.75675675676 )   --  ( 20.0 , 6.75675675676 )   --  ( 20.0 , 2.71396396396 )   --  ( 16.8918918919 , 2.71396396396 )   --  ( 9.00900900901 , 1.8018018018 )   --  ( 0.0 , 1.8018018018 )  ;
+
+\draw  [<->,thick] ( 0 , 8.44594594595 )   --  ( 0 , 0 )   --  ( 25.0 , 0 )  ;
+
+\end{tikzpicture}
+\end{document}

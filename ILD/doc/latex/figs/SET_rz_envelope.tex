@@ -1,0 +1,24 @@
+\documentclass[landscape]{standalone}
+\standaloneconfig{border=20pt}
+\usepackage{tikz}
+\usepackage{graphicx}
+\begin{document}
+\begin{tikzpicture}
+\draw  [dashed] ( 0.0 , 15.3880851064 )   --  ( 0.0 , 0 )  ;
+
+\node [rotate=-90] at (0.0,0) {{\verb#   0#}};
+\draw  [dashed] ( 0.0 , 15.3880851064 )   --  ( 0 , 15.3880851064 )  ;
+
+\node [left] at (0,15.3880851064) {{\verb#SET_inner_radius#}};
+\draw  [dashed] ( 0.0 , 15.5565957447 )   --  ( 0 , 15.5565957447 )  ;
+
+\node [left] at (0,15.5565957447) {{\verb#SET_outer_radius#}};
+\draw  [dashed] ( 20.0 , 15.5565957447 )   --  ( 20.0 , 0 )  ;
+
+\node [rotate=-90] at (20.0,0) {{\verb#                 SET_half_length#}};
+\draw  [ultra thick] ( 0.0 , 15.3880851064 )   --  ( 0.0 , 15.5565957447 )   --  ( 20.0 , 15.5565957447 )   --  ( 20.0 , 15.3880851064 )   --  ( 0.0 , 15.3880851064 )  ;
+
+\draw  [<->,thick] ( 0 , 19.4457446809 )   --  ( 0 , 0 )   --  ( 25.0 , 0 )  ;
+
+\end{tikzpicture}
+\end{document}

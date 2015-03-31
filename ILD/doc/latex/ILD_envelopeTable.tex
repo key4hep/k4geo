@@ -1,0 +1,55 @@
+\documentclass[a4]{article}
+\usepackage{multirow}
+\usepackage[a4paper,top=3cm, bottom=2.5cm, left=1cm, right=2cm ]{geometry}
+\begin{document}
+\begin{tabular}{|l | c | c | c | l r |}
+\hline
+\multicolumn{6}{|c|}{} \\
+\multicolumn{6}{|c|}{\large{Envelope parameters for ILD\_o1\_v05}} \\
+\multicolumn{6}{|c|}{} \\
+\hline
+ detector & inner radius & outer radius & half length  & \multicolumn{2}{c|}{additional parameters} \\
+          &              &              & min z, max z &          &        \\
+\hline
+VXD & 16.0 & 60.0 & 177.6 & \small{\verb#VXD_cone_min_z#} & 80.0  \\ 
+ & & & & \small{\verb#VXD_cone_max_z#} & 150.0  \\ 
+ & & & & \small{\verb#VXD_inner_radius_1#} & 24.1  \\ 
+\hline
+FTD & 25.1 & 328.9 & 2350.0 & \small{\verb#FTD_outer_radius_1#} & 152.8  \\ 
+ & & & & \small{\verb#FTD_outer_radius_2#} & 299.7  \\ 
+ & & & & \small{\verb#FTD_min_z_0#} & 177.7  \\ 
+ & & & & \small{\verb#FTD_min_z_1#} & 368.2  \\ 
+ & & & & \small{\verb#FTD_min_z_2#} & 644.2  \\ 
+ & & & & \small{\verb#FTD_cone_min_z#} & 230.0  \\ 
+ & & & & \small{\verb#FTD_cone_radius#} & 184.1  \\ 
+\hline
+SIT & 152.9 & 324.6 & 644.1 & \small{\verb#SIT_outer_radius_1#} & 299.8  \\ 
+ & & & & \small{\verb#SIT_half_length_1#} & 368.1  \\ 
+\hline
+TPC & 329.0 & 1808.0 & 2350.0 &  &   \\ 
+\hline
+SET & 1808.1 & 1827.9 & 2350.0 &  &   \\ 
+\hline
+Ecal & 1843.0 & 2028.0 & 2350.0 & \small{\verb#Ecal_Hcal_symmetry#} & 8.0  \\ 
+ & & & & \small{\verb#Ecal_symmetry#} & 8.0  \\ 
+\hline
+EcalEndcap & 400.0 & 2088.8 & 2450.0, 2635.0 &  &   \\ 
+\hline
+EcalEndcapRing & 250.0 & 390.0 & 2450.0, 2635.0 &  &   \\ 
+\hline
+Hcal & 2058.0 & 3395.5 & 2350.0 & \small{\verb#Hcal_inner_symmetry#} & 8.0  \\ 
+\hline
+HcalEndcap & 350.0 & 3395.5 & 2670.7, 3957.7 & \small{\verb#EcalEndcap_symmetry#} & 8.0  \\ 
+\hline
+HcalEndcapRing & 2138.8 & 3137.0 & 2450.0, 2635.0 & \small{\verb#HcalEndcapRing_symmetry#} & 8.0  \\ 
+\hline
+Coil & 3425.0 & 4175.0 & 3872.0 &  &   \\ 
+\hline
+Yoke & 4424.0 & 7725.0 & 4047.0 & \small{\verb#Yoke_symmetry#} & 12.0  \\ 
+\hline
+YokeEndcap & 300.0 & 7725.0 & 4072.0, 7373.0 & \small{\verb#YokeEndcap_symmetry#} & 12.0  \\ 
+\hline
+YokeEndcapPlug & 300.0 & 3395.5 & 3981.5, 4072.0 & \small{\verb#YokeEndcapPlug_symmetry#} & 12.0  \\ 
+\hline
+\end{tabular}
+\end{document}
