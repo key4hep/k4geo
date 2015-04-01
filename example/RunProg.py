@@ -111,7 +111,7 @@ class DD4hepSimulation(object):
     self.magneticFieldDict['field.min_chord_step']     = 0.01*mm
     self.magneticFieldDict['field.delta_chord']        = 0.25*mm
     self.magneticFieldDict['field.delta_intersection'] = 1e-05*mm
-    self.magneticFieldDict['field.delta_one_step']     = 0.001*mm
+    self.magneticFieldDict['field.delta_one_step']     = 1e-04*mm
 
   @staticmethod
   def getDetectorLists( lcdd ):
