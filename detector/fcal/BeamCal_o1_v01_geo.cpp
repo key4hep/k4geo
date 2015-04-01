@@ -196,9 +196,6 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
   }// for all layer collections
 
-  std::cout <<"std::tan(0.5*fullCrossingAngle)*bcalCentreZ :"<< std::tan(0.5*fullCrossingAngle)*bcalCentreZ <<std::endl;
-  std::cout <<"std::cos(0.5*fullCrossingAngle) :"<< std::cos(0.5*fullCrossingAngle) <<std::endl;
-
   const DD4hep::Geometry::Position bcForwardPos (std::tan(0.5*fullCrossingAngle)*bcalCentreZ,0.0, bcalCentreZ);
   const DD4hep::Geometry::Position bcBackwardPos(std::tan(0.5*fullCrossingAngle)*bcalCentreZ,0.0,-bcalCentreZ);
   const DD4hep::Geometry::Rotation3D bcForwardRot ( DD4hep::Geometry::RotationY(+fullCrossingAngle*0.5 ) );
