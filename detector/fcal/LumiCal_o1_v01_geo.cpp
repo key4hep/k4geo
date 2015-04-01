@@ -1,5 +1,6 @@
 #include <DD4hep/DetFactoryHelper.h>
 #include <XML/Layering.h>
+#include "XML/Utilities.h"
 
 #include <string>
 
@@ -19,9 +20,16 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   DD4hep::XML::DetElement xmlLumiCal = xmlHandle;
   const std::string detName = xmlLumiCal.nameStr();
 
- //--------------------------------
-  DD4hep::Geometry::Assembly assembly( detName + "_assembly"  ) ;
-  //--------------------------------
+  DD4hep::Geometry::DetElement sdet ( detName, xmlLumiCal.id() );
+  DD4hep::Geometry::Volume motherVol = lcdd.pickMotherVolume(sdet);
+
+  // --- create an envelope volume and position it into the world ---------------------
+  
+  DD4hep::Geometry::Volume envelope = DD4hep::XML::createPlacedEnvelope( lcdd,  xmlHandle , sdet ) ;
+  
+  if( lcdd.buildType() == DD4hep::BUILD_ENVELOPE ) return sdet ;
+  
+  //-----------------------------------------------------------------------------------
 
   DD4hep::XML::Dimension dimensions =  xmlLumiCal.dimensions();
 
@@ -43,7 +51,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
   //Envelope to place the layers in
   DD4hep::Geometry::Tube envelopeTube (lcalInnerR, lcalOuterR, lcalThickness*0.5 );
-  DD4hep::Geometry::Volume     envelopeVol(detName+"_envelope",envelopeTube,air);
+  DD4hep::Geometry::Volume     envelopeVol(detName+"_module",envelopeTube,air);
   envelopeVol.setVisAttributes(lcdd,xmlLumiCal.visStr());
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -119,32 +127,15 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   const DD4hep::Geometry::Rotation3D bcForwardRot ( DD4hep::Geometry::RotationY(fullCrossingAngle*0.5 ) );
   const DD4hep::Geometry::Rotation3D bcBackwardRot( DD4hep::Geometry::RotationZYX ( (M_PI), (M_PI-fullCrossingAngle*0.5), (0.0)));
 
-  DD4hep::Geometry::DetElement LumiCals ( detName, xmlLumiCal.id() );
-  DD4hep::Geometry::DetElement sdet ( "LumiCal01", xmlLumiCal.id() );
-  DD4hep::Geometry::DetElement rdet ( "LumiCal02", xmlLumiCal.id() );
-
-  DD4hep::Geometry::Volume motherVol = lcdd.pickMotherVolume(sdet);
-
   DD4hep::Geometry::PlacedVolume pv =
-    assembly.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcForwardRot, bcForwardPos ) );
-  pv.addPhysVolID("system",xmlLumiCal.id());
+    envelope.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcForwardRot, bcForwardPos ) );
   pv.addPhysVolID("barrel", 1);
-  sdet.setPlacement(pv);
 
   DD4hep::Geometry::PlacedVolume pv2 =
-    assembly.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcBackwardRot, bcBackwardPos ) );
-  pv2.addPhysVolID("system",xmlLumiCal.id());
+    envelope.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcBackwardRot, bcBackwardPos ) );
   pv2.addPhysVolID("barrel", 2);
-  rdet.setPlacement(pv2);
- 
-  LumiCals.add(sdet);
-  LumiCals.add(rdet);
 
-  pv = motherVol.placeVolume( assembly ) ;
-  pv.addPhysVolID("system",xmlLumiCal.id());
-  LumiCals.setPlacement( pv ) ;
-
-  return LumiCals;
+  return sdet;
 }
 
 DECLARE_DETELEMENT(LumiCal_o1_v01,create_detector)
