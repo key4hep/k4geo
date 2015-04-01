@@ -56,10 +56,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   xml_comp_t    x_dim     = x_det.dimensions();
   int           nsides    = x_dim.numsides();
-  double        inner_r   = x_dim.rmin();
   double        dphi      = (2*M_PI/nsides);
   double        hphi      = dphi/2;
-  double        outer_r   = x_dim.rmax();
 
 
  // --- create an envelope volume and position it into the world ---------------------
