@@ -277,26 +277,33 @@
 	<constant name="EcalEndcapRing_max_z"           value="EcalEndcap_max_z"/>               <!-- Shared ILD  -->
 
 	<!-- forward calorimeter -->
-	<!-- The values are copied from dimensions in LHcal.xml -->
-	<constant name="LHCal_inner_radius"        value="100*mm"/>
-	<constant name="LHCal_outer_radius"        value="325*mm"/>
-	<constant name="LHCal_min_z"               value="2680*mm"/>
-	<constant name="LHCal_max_z"               value="LHCal_min_z+520.0*mm"/>
+	<constant name="COS_halfCrossingAngle"         value="0.999976"/>
+
+	<!-- The values are copied from dimensions in LHCal.xml -->
+	<constant name="LHCal_thickness"               value="520.0*mm"/>
+	<constant name="LHCal_inner_radius"            value="100*mm"/>
+	<constant name="LHCal_outer_radius"            value="325*mm"/>
+	<constant name="LHCal_min_z"                   value="2680*mm"/>
+	<constant name="LHCal_max_z"                   value="LHCal_min_z+LHCal_thickness"/>
 
 	<!-- BeamCal envelope is rotated according to the ILC_Main_Crossing_Angle -->
-	<!-- Two helper parameters for creating rotated envelope -->
-	<constant name="COS_halfCrossingAngle"                value="0.999976"/>
-	<constant name="BeamCal_thickness"                    value="220.0024*mm"/>
+	<constant name="BeamCal_thickness"             value="220.0024*mm"/>
+	<constant name="BeamCal_inner_radius"          value="BCal_rInner"/>
+	<constant name="BeamCal_outer_radius"          value="BCal_rOuter"/>
+	<constant name="BeamCal_min_z"                 value="LHcal_zend + LHcal_BCal_clearance"/>
+	<constant name="BeamCal_max_z"                 value="BeamCal_min_z + BeamCal_thickness"/>
+	<constant name="BeamCal_tubeIncoming_radius"   value="15.0*mm"/>
 
-	<constant name="BeamCal_inner_radius"                 value="BCal_rInner"/>
-	<constant name="BeamCal_outer_radius"                 value="BCal_rOuter"/>
-	<constant name="BeamCal_min_z"                        value="LHcal_zend + LHcal_BCal_clearance"/>
-	<constant name="BeamCal_max_z"                        value="BeamCal_min_z + BeamCal_thickness"/>
-	<constant name="BeamCal_tubeIncoming_radius"          value="15.0*mm"/>
+	<!-- The values are copied from dimensions in LumiCal.xml -->
+	<constant name="LumiCal_thickness"             value="130.65*mm"/>
+	<constant name="LumiCal_inner_radius"          value="80*mm"/>
+	<constant name="LumiCal_outer_radius"          value="195.2*mm"/>
+	<constant name="LumiCal_min_z"                 value="2500*mm"/>
+	<constant name="LumiCal_max_z"                 value="LumiCal_min_z+LumiCal_thickness"/>
 
 
 	<constant name="Coil_inner_radius"    value="Hcal_outer_radius+Hcal_Coil_additional_gap"/> 
-	<constant name="Coil_outer_radius"    value="Hcal_outer_radius+Hcal_Coil_additional_gap+Coil_thickness"/>                      
+	<constant name="Coil_outer_radius"    value="Hcal_outer_radius+Hcal_Coil_additional_gap+Coil_thickness"/>
 	<constant name="Coil_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ+Coil_extra_size"/>      
 
 	<!-- ########### END ENVELOPE PARAMETERS ############################################################## -->
@@ -429,7 +436,7 @@
 
 	<include ref="BeamCal08.xml"/>
 
-	<!-- <include ref="LumiCal.xml"/> -->
+	<include ref="LumiCal.xml"/>
 
 	<include ref="LHCal.xml"/>
 
