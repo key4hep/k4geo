@@ -1,5 +1,6 @@
 #include <DD4hep/DetFactoryHelper.h>
 #include <XML/Layering.h>
+#include "XML/Utilities.h"
 
 #include <string>
 
@@ -17,9 +18,19 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   DD4hep::XML::DetElement xmlBeamCal = xmlHandle;
   const std::string detName = xmlBeamCal.nameStr();
 
- //--------------------------------
-  DD4hep::Geometry::Assembly assembly( detName + "_assembly"  ) ;
-  //--------------------------------
+  DD4hep::Geometry::DetElement sdet ( detName, xmlBeamCal.id() );
+  DD4hep::Geometry::Volume motherVol = lcdd.pickMotherVolume(sdet);
+
+  // --- create an envelope volume and position it into the world ---------------------
+  
+  DD4hep::Geometry::Volume envelope = DD4hep::XML::createPlacedEnvelope( lcdd,  xmlHandle , sdet ) ;
+  
+  if( lcdd.buildType() == DD4hep::BUILD_ENVELOPE ) return sdet ;
+  
+  //-----------------------------------------------------------------------------------
+
+
+
 
   DD4hep::XML::Dimension dimensions =  xmlBeamCal.dimensions();
 
@@ -62,12 +73,13 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   const DD4hep::Geometry::Transform3D incomingBPTransform( incomingBeamPipeRotation, incomingBeamPipePosition );
 
   //Envelope to place the layers in
+  
   DD4hep::Geometry::Tube envelopeTube (bcalInnerR, bcalOuterR, bcalThickness*0.5 );
   DD4hep::Geometry::Tube incomingBeamPipe (0.0, incomingBeamPipeRadius, bcalThickness);//we want this to be longer than the BeamCal
-  DD4hep::Geometry::SubtractionSolid envelope (envelopeTube, incomingBeamPipe, incomingBPTransform);
-  DD4hep::Geometry::Volume     envelopeVol(detName+"_envelope",envelope,air);
+  DD4hep::Geometry::SubtractionSolid BeamCalModule (envelopeTube, incomingBeamPipe, incomingBPTransform);
+  DD4hep::Geometry::Volume     envelopeVol(detName+"_module",BeamCalModule,air);
   envelopeVol.setVisAttributes(lcdd,xmlBeamCal.visStr());
-
+  
   DD4hep::Geometry::Position incomingBeamPipeAtEndOfBeamCalPosition(-incomingBeamPipeRadius, incomingBeamPipeRadius, bcalInnerZ+bcalThickness);
   //This Rotation needs to be the fullCrossing angle, because the incoming beampipe has that much to the outgoing beam pipe
   //And the BeamCal is centred on the outgoing beampipe
@@ -184,37 +196,25 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
   }// for all layer collections
 
+  std::cout <<"std::tan(0.5*fullCrossingAngle)*bcalCentreZ :"<< std::tan(0.5*fullCrossingAngle)*bcalCentreZ <<std::endl;
+  std::cout <<"std::cos(0.5*fullCrossingAngle) :"<< std::cos(0.5*fullCrossingAngle) <<std::endl;
+
   const DD4hep::Geometry::Position bcForwardPos (std::tan(0.5*fullCrossingAngle)*bcalCentreZ,0.0, bcalCentreZ);
   const DD4hep::Geometry::Position bcBackwardPos(std::tan(0.5*fullCrossingAngle)*bcalCentreZ,0.0,-bcalCentreZ);
   const DD4hep::Geometry::Rotation3D bcForwardRot ( DD4hep::Geometry::RotationY(+fullCrossingAngle*0.5 ) );
   const DD4hep::Geometry::Rotation3D bcBackwardRot( DD4hep::Geometry::RotationZYX ( (180*dd4hep::degree), (180*dd4hep::degree-fullCrossingAngle*0.5), (0.0)));
-
-  DD4hep::Geometry::DetElement beamcals ( detName, xmlBeamCal.id() );
-  DD4hep::Geometry::DetElement sdet ( "BeamCal01", xmlBeamCal.id() );
-  DD4hep::Geometry::DetElement rdet ( "BeamCal02", xmlBeamCal.id() );
-
-  DD4hep::Geometry::Volume motherVol = lcdd.pickMotherVolume(sdet);
-
+  
   DD4hep::Geometry::PlacedVolume pv =
-    assembly.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcForwardRot, bcForwardPos ) );
-  pv.addPhysVolID("system",xmlBeamCal.id());
+    envelope.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcForwardRot, bcForwardPos ) );
   pv.addPhysVolID("barrel", 1);
-  sdet.setPlacement(pv);
+
 
   DD4hep::Geometry::PlacedVolume pv2 =
-    assembly.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcBackwardRot, bcBackwardPos ) );
-  pv2.addPhysVolID("system",xmlBeamCal.id());
+    envelope.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcBackwardRot, bcBackwardPos ) );
   pv2.addPhysVolID("barrel", 2);
-  rdet.setPlacement(pv2);
- 
-  beamcals.add(sdet);
-  beamcals.add(rdet);
 
-  pv = motherVol.placeVolume( assembly ) ;
-  pv.addPhysVolID("system",xmlBeamCal.id());
-  beamcals.setPlacement( pv ) ;
 
-  return beamcals;
+  return sdet;
 }
 
 DECLARE_DETELEMENT(BeamCal_o1_v01,create_detector)
