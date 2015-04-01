@@ -276,6 +276,13 @@
 	<constant name="EcalEndcapRing_min_z"           value="EcalEndcap_min_z"/>               <!-- Shared ILD  -->
 	<constant name="EcalEndcapRing_max_z"           value="EcalEndcap_max_z"/>               <!-- Shared ILD  -->
 
+	<!-- forward calorimeter -->
+	<!-- The values are copied from dimensions in LHcal.xml -->
+	<constant name="LHCal_inner_radius"        value="100*mm"/>
+	<constant name="LHCal_outer_radius"        value="325*mm"/>
+	<constant name="LHCal_min_z"               value="2680*mm"/>
+	<constant name="LHCal_max_z"               value="LHCal_min_z+520.0*mm"/>
+
 
 	<constant name="Coil_inner_radius"    value="Hcal_outer_radius+Hcal_Coil_additional_gap"/> 
 	<constant name="Coil_outer_radius"    value="Hcal_outer_radius+Hcal_Coil_additional_gap+Coil_thickness"/>                      
@@ -413,7 +420,7 @@
 
 	<!-- <include ref="LumiCal.xml"/> -->
 
-	<!-- <include ref="LHCal.xml"/> -->
+	<include ref="LHCal.xml"/>
 
 	<include ref="coil03.xml"/>
 
