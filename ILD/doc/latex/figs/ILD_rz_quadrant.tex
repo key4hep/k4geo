@@ -1,7 +1,8 @@
-\documentclass[landscape]{standalone}
+\documentclass[a4]{standalone}
 \standaloneconfig{border=20pt}
 \usepackage{tikz}
 \usepackage{graphicx}
+\usepackage[a4paper,top=3cm, bottom=2.5cm, left=1cm, right=2cm ]{geometry}
 \begin{document}
 \definecolor{VXDcol}{RGB}{255,255,255}
 \definecolor{SITcol}{RGB}{221,221,221}
@@ -41,6 +42,12 @@
 \draw  [fill=YOKEcol] ( 39.815 , 3.0 )   --  ( 39.815 , 33.9546 )   --  ( 40.72 , 33.9546 )   --  ( 40.72 , 3.0 )   --  ( 39.815 , 3.0 )  ;
 
 \draw  [fill=COILcol] ( 0.0 , 34.2496 )   --  ( 0.0 , 41.7496 )   --  ( 38.72 , 41.7496 )   --  ( 38.72 , 34.2496 )   --  ( 0.0 , 34.2496 )  ;
+
+\draw  [fill=SITcol] ( 34.75 , 0.2 )   --  ( 34.75 , 1.5 )   --  ( 36.950024 , 1.5 )   --  ( 36.950024 , 0.2 )   --  ( 34.75 , 0.2 )  ;
+
+\draw  [fill=SITcol] ( 25.0 , 0.8 )   --  ( 25.0 , 1.952 )   --  ( 26.3065 , 1.952 )   --  ( 26.3065 , 0.8 )   --  ( 25.0 , 0.8 )  ;
+
+\draw  [fill=SITcol] ( 26.8 , 1.0 )   --  ( 26.8 , 3.25 )   --  ( 32.0 , 3.25 )   --  ( 32.0 , 1.0 )   --  ( 26.8 , 1.0 )  ;
 
 \end{tikzpicture}
 \end{document}

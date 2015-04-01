@@ -50,7 +50,11 @@ envDict['YokeEndcap'] = [ 'YokeEndcap_inner_radius', 'YokeEndcap_outer_radius', 
 
 envDict['YokeEndcapPlug'] = [ 'YokeEndcapPlug_inner_radius', 'YokeEndcapPlug_outer_radius', 'YokeEndcapPlug_min_z', 'YokeEndcapPlug_max_z', 'YokeEndcapPlug_symmetry' ]
 
+envDict['BeamCal'] = [ 'BeamCal_inner_radius', 'BeamCal_outer_radius', 'BeamCal_min_z', 'BeamCal_max_z', 'BeamCal_thickness', 'BeamCal_tubeIncoming_radius' ]
 
+envDict['LumiCal'] = [ 'LumiCal_inner_radius', 'LumiCal_outer_radius', 'LumiCal_min_z', 'LumiCal_max_z', 'LumiCal_thickness' ] 
+
+envDict['LHCal']   = [ 'LHCal_inner_radius', 'LHCal_outer_radius', 'LHCal_min_z', 'LHCal_max_z', 'LHCal_thickness' ]
 
 
 #----- define the envelope shape points in rz ------------
@@ -160,16 +164,34 @@ envRZDict['Coil'] = [ ( '0'               , 'Coil_inner_radius'  ) ,
                       ( '0'               , 'Coil_inner_radius'  ) ]
 
 
+envRZDict['BeamCal'] = [ ( 'BeamCal_min_z' , 'BeamCal_inner_radius'  ) ,  
+                         ( 'BeamCal_min_z' , 'BeamCal_outer_radius'  ) ,
+                         ( 'BeamCal_max_z' , 'BeamCal_outer_radius'  ) ,
+                         ( 'BeamCal_max_z' , 'BeamCal_inner_radius'  ) ,
+                         ( 'BeamCal_min_z' , 'BeamCal_inner_radius'  ) ]
+
+envRZDict['LumiCal'] = [ ( 'LumiCal_min_z' , 'LumiCal_inner_radius'  ) ,  
+                         ( 'LumiCal_min_z' , 'LumiCal_outer_radius'  ) ,
+                         ( 'LumiCal_max_z' , 'LumiCal_outer_radius'  ) ,
+                         ( 'LumiCal_max_z' , 'LumiCal_inner_radius'  ) ,
+                         ( 'LumiCal_min_z' , 'LumiCal_inner_radius'  ) ]
+
+envRZDict['LHCal'] = [ ( 'LHCal_min_z' , 'LHCal_inner_radius'  ) ,  
+                       ( 'LHCal_min_z' , 'LHCal_outer_radius'  ) ,
+                       ( 'LHCal_max_z' , 'LHCal_outer_radius'  ) ,
+                       ( 'LHCal_max_z' , 'LHCal_inner_radius'  ) ,
+                       ( 'LHCal_min_z' , 'LHCal_inner_radius'  ) ]
+
+
+
 #-----------------------------------------------
 
 try:
   dictFile = sys.argv[1]
-  texFile  = sys.argv[2]
 
 except IndexError:
-  print " usage:  python documentEnvelopes.py pyDict.py output.tex"
+  print " usage:  python documentEnvelopes.py pyDict.py "
   print "    pyDict.py : python file with a data dictionary (created with extractParameters)"
-  print "    output.tex: latex outputfile "  
   print  
   sys.exit(1)
 
@@ -187,9 +209,10 @@ def run():
 ##    writeTexFile( 'TPC', '_rz_envelope' , getRZEnvCmds, 20 )
 ##    writeTexFile( 'SET', '_rz_envelope' , getRZEnvCmds, 20 )
 
-##    writeTexFile( 'ILD', '_rz_quadrant' , getILDRZQuadrantCmds, 20 )
+    writeTexFile( 'ILD', '_rz_quadrant' , getILDRZQuadrantCmds, 20 )
 
-    writeILDEnvTable('ILD_enevelope_table.tex' )
+##    writeILDEnvTable('ILD_enevelope_table.tex' )
+
 #-----------------------------------------------
 def writeILDEnvTable( file ):
     fn = './ILD_envelopeTable.tex'
@@ -199,7 +222,7 @@ def writeILDEnvTable( file ):
     cmds.extend( getDocHeaderCmds( 'article', ['multirow'] ))
 
     dets = ['VXD','FTD','SIT','TPC','SET', 'Ecal', 'EcalEndcap', 'EcalEndcapRing', 
-            'Hcal', 'HcalEndcap', 'HcalEndcapRing', 'Coil', 'Yoke', 'YokeEndcap', 'YokeEndcapPlug' ]
+            'Hcal', 'HcalEndcap', 'HcalEndcapRing', 'Coil', 'Yoke', 'YokeEndcap', 'YokeEndcapPlug', 'BeamCal', 'LHCal', 'LumiCal' ]
 
 
     cmds.extend( getEnvelopeTableCmds( dets , '\\large{Envelope parameters for ILD\_o1\_v05}' ) )
@@ -247,15 +270,15 @@ def getTableLinesCmds(det):
 
     if( ri in params):
         line += ( ("%.1f"%values[ ri ] ) + ' & ' )
+        params.remove( ri ) 
     else:
         line += ' -  & ' 
-    params.remove( ri ) 
 
     if( ro in params):
         line += ( ("%.1f"% values[ ro ] ) + ' & ' )
+        params.remove( ro ) 
     else:
         line += ' -  & ' 
-    params.remove( ro ) 
 
     if( hl in params):
         line += ( ("%.1f"% values[ hl ] ) + ' & ' )
@@ -316,6 +339,9 @@ def getILDRZQuadrantCmds(det, width):
     cmds.append(  lineOStr('[fill=YOKEcol]',  getEnvPoints('YokeEndcap',scale)  ) )
     cmds.append(  lineOStr('[fill=YOKEcol]',  getEnvPoints('YokeEndcapPlug',scale)  ) )
     cmds.append(  lineOStr('[fill=COILcol]',  getEnvPoints('Coil',scale)  ) )
+    cmds.append(  lineOStr('[fill=SITcol]',  getEnvPoints('BeamCal',scale)  ) )
+    cmds.append(  lineOStr('[fill=SITcol]',  getEnvPoints('LumiCal',scale)  ) )
+    cmds.append(  lineOStr('[fill=SITcol]',  getEnvPoints('LHCal',scale)  ) )
         
 
     cmds.append(  '\\end{tikzpicture}' )
