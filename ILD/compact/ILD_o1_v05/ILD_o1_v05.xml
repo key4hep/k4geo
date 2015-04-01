@@ -283,6 +283,17 @@
 	<constant name="LHCal_min_z"               value="2680*mm"/>
 	<constant name="LHCal_max_z"               value="LHCal_min_z+520.0*mm"/>
 
+	<!-- BeamCal envelope is rotated according to the ILC_Main_Crossing_Angle -->
+	<!-- Two helper parameters for creating rotated envelope -->
+	<constant name="COS_halfCrossingAngle"                value="0.999976"/>
+	<constant name="BeamCal_thickness"                    value="220.0024*mm"/>
+
+	<constant name="BeamCal_inner_radius"                 value="BCal_rInner"/>
+	<constant name="BeamCal_outer_radius"                 value="BCal_rOuter"/>
+	<constant name="BeamCal_min_z"                        value="LHcal_zend + LHcal_BCal_clearance"/>
+	<constant name="BeamCal_max_z"                        value="BeamCal_min_z + BeamCal_thickness"/>
+	<constant name="BeamCal_tubeIncoming_radius"          value="15.0*mm"/>
+
 
 	<constant name="Coil_inner_radius"    value="Hcal_outer_radius+Hcal_Coil_additional_gap"/> 
 	<constant name="Coil_outer_radius"    value="Hcal_outer_radius+Hcal_Coil_additional_gap+Coil_thickness"/>                      
@@ -416,7 +427,7 @@
 
 	<include ref="Yoke05_Endcaps.xml"/>
 
-	<!-- <include ref="BeamCal08.xml"/> -->
+	<include ref="BeamCal08.xml"/>
 
 	<!-- <include ref="LumiCal.xml"/> -->
 
