@@ -123,19 +123,15 @@
         <constant name="VertexBarrel_r5" value="7.7*cm"/>
         
         
-        <constant name="CentralBeamPipe_zmax" value="23.0*cm"/>
-        <constant name="CentralBeamPipe_rmax" value="VertexBarrel_r1 - 0.2*cm"/>
-        <constant name="CentralBeamPipe_thickness" value="CentralBeamPipe_rmax * 0.02"/> <!-- 1% of the diameter -->
-        <constant name="CentralBeamPipe_rmin" value="CentralBeamPipe_rmax - CentralBeamPipe_thickness"/>
-        <constant name="BeamPipe_thickness" value="0.4*cm"/>
-        <constant name="BeamPipe_endThickness" value="0.1*cm"/>
-        <constant name="BeamPipe_zmax" value="LumiCal_zmin - 0.5*cm"/>
-        <constant name="BeamPipe_rmax" value="19.0*cm"/>
-        <constant name="BeamPipe_rmin" value="BeamPipe_rmax - BeamPipe_thickness"/>
-        <constant name="bp_cone_slope" value="(BeamPipe_rmax-CentralBeamPipe_rmax)/(tracking_region_zmax-CentralBeamPipe_zmax)"/>
-        <constant name="BeamPipe_zmin" value="CentralBeamPipe_zmax + (BeamPipe_thickness - CentralBeamPipe_thickness)/bp_cone_slope"/>
-        <constant name="BeamPipeLiner_thickness" value="0.0*cm"/>
-        <constant name="bpEnd" value="12500*mm"/>
+        <constant name="CentralBeamPipe_zmax" value="260.*mm"/>
+        <constant name="CentralBeamPipe_rmax" value="30.0*mm"/>
+
+        <constant name="ConeBeamPipe_zmax" value="2080*mm"/>
+        <constant name="ConeBeamPipe_rmax" value="240.0*mm"/>
+
+        <constant name="BigBeamPipe_zmax" value="2645*mm"/>
+
+        <constant name="BeamPipe_end" value="12500*mm"/>
 
         <constant name="VertexEndcap_ID" value="3"/>
         <constant name="VertexEndcap_rmax" value="11.5*cm"/>
