@@ -17,7 +17,7 @@ import sys
 try:
   compactFile = sys.argv[1]
 except IndexError:
-  print " usage:  python runSim.py compact.xml"
+  print " usage:  python ddsim.py compact.xml"
   print
   sys.exit(1)
 
