@@ -173,7 +173,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
   caloData->extent[0] = rInnerBarrel ;
-  caloData->extent[1] = halfBarrel ;
+  caloData->extent[1] = rOuterBarrel ;
   caloData->extent[2] = 0. ;
   caloData->extent[3] = z_halfBarrel ;
 
