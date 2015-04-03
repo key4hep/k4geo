@@ -32,6 +32,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
+#include "DDRec/DetectorData.h"
 
 using namespace std;
 using namespace DD4hep;
@@ -79,6 +80,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double Yoke_endcap_inner_radius           = lcdd.constant<double>("Yoke_endcap_inner_radius");
   double Yoke_Z_start_endcaps               = lcdd.constant<double>("Yoke_Z_start_endcaps");
   double HCAL_R_max                         = lcdd.constant<double>("Hcal_outer_radius");
+  double Yoke_cells_size                    = lcdd.constant<double>("Yoke_cells_size");
 
   double yokeBarrelEndcapGap     = 2.5;// ?? lcdd.constant<double>("barrel_endcap_gap"); //25.0*mm
 
@@ -118,6 +120,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   // But the placement should shift_middle by -0.05 (0.5*mm) later
   double Yoke_Endcap_module_dim_z =  yokeEndcapThickness;
 
+  double Yoke_cell_dim_x        = rOuterEndcap*2.0 / floor (rOuterEndcap*2.0/Yoke_cells_size);
+  double Yoke_cell_dim_y        = Yoke_cell_dim_x;
+
   cout<<" Build the yoke within this dimension "<<endl;
   cout << "  ...Yoke  db: symmetry             " << symmetry <<endl;
   cout << "  ...Yoke  db: rInnerEndcap         " << rInnerEndcap <<endl;
@@ -131,6 +136,18 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   cout << "  ...Muon par: yokeEndcapThickness  " << yokeEndcapThickness <<endl;
   cout << "  ...Muon par: Barrel_half_z        " << z_halfBarrel <<endl;
 
+  //========== fill data for reconstruction ============================
+  DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
+  caloData->layoutType = DDRec::LayeredCalorimeterData::EndcapLayout ;
+  caloData->inner_symmetry = symmetry  ;
+  caloData->outer_symmetry = symmetry  ;
+  caloData->phi0 = 0 ; // hardcoded
+
+  /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
+  caloData->extent[0] = rInnerEndcap ;
+  caloData->extent[1] = rOuterEndcap ;
+  caloData->extent[2] = zStartEndcap ;
+  caloData->extent[3] = zStartEndcap + Yoke_Endcap_module_dim_z ;
 
 
 
@@ -230,6 +247,20 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	stave.setPlacement(layer_phv);
 	sdet.add(stave);
 
+      //-----------------------------------------------------------------------------------------
+	DDRec::LayeredCalorimeterData::Layer caloLayer ;
+	
+	double radiator_thickness = gap_thickness + iron_thickness - l_thickness;
+	if ( i>=10 ) radiator_thickness = gap_thickness + 5.6*iron_thickness - l_thickness;
+
+	caloLayer.distance = shift_middle ;
+	caloLayer.thickness = l_thickness + radiator_thickness ;
+	caloLayer.absorberThickness = radiator_thickness ;
+	caloLayer.cellSize0 = Yoke_cell_dim_x ;
+	caloLayer.cellSize1 = Yoke_cell_dim_y ;
+	
+	caloData->layers.push_back( caloLayer ) ;
+      //-----------------------------------------------------------------------------------------
 	
       }
 
@@ -304,6 +335,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   }
 
+  sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
   
   return sdet;
 }
