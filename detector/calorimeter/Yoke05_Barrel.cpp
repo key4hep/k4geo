@@ -315,8 +315,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       //-----------------------------------------------------------------------------------------
 	DDRec::LayeredCalorimeterData::Layer caloLayer ;
 	
-	double radiator_thickness = 0.05 + gap_thickness + iron_thickness;
-	if ( i>=10 ) radiator_thickness = 0.05 + gap_thickness + 4.6*iron_thickness;
+	double radiator_thickness = gap_thickness + iron_thickness - l_thickness;
+	if ( i>=10 ) radiator_thickness = gap_thickness + 5.6*iron_thickness - l_thickness;
 
 	caloLayer.distance = radius_low ;
 	caloLayer.thickness = l_thickness + radiator_thickness ;
