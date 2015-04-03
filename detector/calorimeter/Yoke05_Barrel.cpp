@@ -33,6 +33,7 @@
 #include "XML/Layering.h"
 #include "TGeoTrd2.h"
 #include "XML/Utilities.h"
+#include "DDRec/DetectorData.h"
 
 using namespace std;
 using namespace DD4hep;
@@ -91,7 +92,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   //double Yoke_thickness                     = lcdd.constant<double>("Yoke_thickness");
   //double Yoke_Barrel_Half_Z                 = lcdd.constant<double>("Yoke_Barrel_Half_Z");  
   double Yoke_Z_start_endcaps               = lcdd.constant<double>("Yoke_Z_start_endcaps");
-
+  double Yoke_cells_size                    = lcdd.constant<double>("Yoke_cells_size");
 
   //Database *db = new Database(env.GetDBName());
   //db->exec("SELECT * FROM `yoke`;");
@@ -148,7 +149,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   // In this release the number of modules is fixed to 3
   double Yoke_Barrel_module_dim_z = 2.0*(zStartEndcap-yokeBarrelEndcapGap)/3.0 ;
 
-
+  double Yoke_cell_dim_x        = Yoke_cells_size;
+  double Yoke_cell_dim_z        = Yoke_Barrel_module_dim_z / floor (Yoke_Barrel_module_dim_z/Yoke_cell_dim_x);
 
   cout<<" Build the yoke within this dimension "<<endl;
   cout << "  ...Yoke  db: symmetry             " << symmetry <<endl;
@@ -161,6 +163,19 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   cout << "  ...Muon par: yokeBarrelThickness  " << yokeBarrelThickness <<endl;
   cout << "  ...Muon par: Barrel_half_z        " << z_halfBarrel <<endl;
+
+  //========== fill data for reconstruction ============================
+  DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
+  caloData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
+  caloData->inner_symmetry = symmetry  ;
+  caloData->outer_symmetry = symmetry  ;
+  caloData->phi0 = 0 ; // also hardcoded below
+
+  /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
+  caloData->extent[0] = rInnerBarrel ;
+  caloData->extent[1] = halfBarrel ;
+  caloData->extent[2] = 0. ;
+  caloData->extent[3] = z_halfBarrel ;
 
 
 // ========= Create Yoke Barrel module   ====================================
@@ -296,6 +311,21 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    phirot -= M_PI/symmetry*2.0;
 
 	  }
+
+      //-----------------------------------------------------------------------------------------
+	DDRec::LayeredCalorimeterData::Layer caloLayer ;
+	
+	double radiator_thickness = 0.05 + gap_thickness + iron_thickness;
+	if ( i>=10 ) radiator_thickness = 0.05 + gap_thickness + 4.6*iron_thickness;
+
+	caloLayer.distance = radius_low ;
+	caloLayer.thickness = l_thickness + radiator_thickness ;
+	caloLayer.absorberThickness = radiator_thickness ;
+	caloLayer.cellSize0 = Yoke_cell_dim_z ;
+	caloLayer.cellSize1 = Yoke_cell_dim_x ;
+	
+	caloData->layers.push_back( caloLayer ) ;
+      //-----------------------------------------------------------------------------------------
 	
       }
 
@@ -322,6 +352,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       
     }
 
+  sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
   
   return sdet;
 }
