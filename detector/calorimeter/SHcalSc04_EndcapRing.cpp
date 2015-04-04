@@ -37,6 +37,7 @@
 #include "XML/Layering.h"
 #include "DD4hep/Shapes.h"
 #include "XML/Utilities.h"
+#include "DDRec/DetectorData.h"
 
 using namespace std;
 using namespace DD4hep;
@@ -120,7 +121,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   //TODO: thinking about how to pass the updated value at runtime from other inner drivers? 
   double      Ecal_endcap_zmax                 = 263.5; //cm //= lcdd.constant<double>("Ecal_endcap_zmax");
   double      Ecal_endcap_outer_radius         = 208.88;//cm //= lcdd.constant<double>("Ecal_endcap_outer_radius");
-
+  double      Hcal_cells_size                  = lcdd.constant<double>("Hcal_cells_size");
 
 //====================================================================
 //
@@ -237,6 +238,19 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   Volume  HcalEndCapRingLogical("HcalEndCapRingLogical",HcalEndCapRingSolid, Steel235);
 
 
+  //========== fill data for reconstruction ============================
+  DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
+  caloData->layoutType = DDRec::LayeredCalorimeterData::EndcapLayout ;
+  caloData->inner_symmetry = numSide  ;
+  caloData->outer_symmetry = numSide  ;
+  caloData->phi0 = 0 ; // hardcoded 
+
+  /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
+  caloData->extent[0] = rmin ;
+  caloData->extent[1] = rmax ;
+  caloData->extent[2] = start_z ;
+  caloData->extent[3] = stop_z  ;
+
 
   //==============================================================
   // build the layer and place into the Hcal EndcapRing
@@ -309,14 +323,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
        stave_id <= 4;
        stave_id++)
     {
-      //if(stave_id > 2) break;
       
       for (int layer_id = 1;
 	   layer_id <= number_of_chambers;
 	   layer_id++)
 	{
-	  //if(layer_id > 4) break;
-	  
 	  
 	  double Zoff = - ( zlen/2.)
 	    + (layer_id-1) *(Hcal_chamber_thickness + Hcal_endcap_radiator_thickness)
@@ -407,6 +418,21 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  layer_phv.addPhysVolID("stave", stave_id);
 	  layer.setPlacement(layer_phv);
 
+
+	  //-----------------------------------------------------------------------------------------
+	  if ( caloData->layers.size() <= number_of_chambers ) {
+	    DDRec::LayeredCalorimeterData::Layer caloLayer ;
+
+	    caloLayer.distance = start_z + Zoff;
+	    caloLayer.thickness = Hcal_chamber_thickness + Hcal_endcap_radiator_thickness ;
+	    caloLayer.absorberThickness = Hcal_endcap_radiator_thickness ;
+	    caloLayer.cellSize0 = Hcal_cells_size ;
+	    caloLayer.cellSize1 = Hcal_cells_size ;
+	    
+	    caloData->layers.push_back( caloLayer ) ;
+	  }
+	  //-----------------------------------------------------------------------------------------
+
 	}
 
 
@@ -473,6 +499,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   }
   
+  sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
 
   return sdet;
   
