@@ -28,6 +28,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
+#include "DDRec/DetectorData.h"
 
 using namespace std;
 using namespace DD4hep;
@@ -64,7 +65,25 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double      Hcal_lateral_structure_thickness = lcdd.constant<double>("Hcal_lateral_structure_thickness");
   double      Hcal_layer_air_gap               = lcdd.constant<double>("Hcal_layer_air_gap");
   double      Hcal_endcap_zmin                 = lcdd.constant<double>("Hcal_endcap_zmin");
+
+  double      Hcal_cells_size                  = lcdd.constant<double>("Hcal_cells_size");
+  double      HcalEndcap_inner_radius          = lcdd.constant<double>("HcalEndcap_inner_radius");
+  double      HcalEndcap_outer_radius          = lcdd.constant<double>("HcalEndcap_outer_radius");
+  double      HcalEndcap_min_z                 = lcdd.constant<double>("HcalEndcap_min_z");
+  double      HcalEndcap_max_z                 = lcdd.constant<double>("HcalEndcap_max_z");
   
+  //========== fill data for reconstruction ============================
+  DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
+  caloData->layoutType = DDRec::LayeredCalorimeterData::EndcapLayout ;
+  caloData->inner_symmetry = 4  ; // hard code cernter box hole
+  caloData->outer_symmetry = 0  ; // outer tube, or 8 for Octagun
+  caloData->phi0 = 0 ;
+
+  /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
+  caloData->extent[0] = HcalEndcap_inner_radius ;
+  caloData->extent[1] = HcalEndcap_inner_radius ;
+  caloData->extent[2] = HcalEndcap_min_z ;
+  caloData->extent[3] = HcalEndcap_max_z ;
   
 
   int endcapID = 0;
@@ -191,6 +210,21 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  layer.setPlacement(layer_phv);
 	  
 	  
+	  //-----------------------------------------------------------------------------------------
+	  if ( caloData->layers.size() <= repeat ) {
+	    DDRec::LayeredCalorimeterData::Layer caloLayer ;
+	
+	    caloLayer.distance = HcalEndcap_min_z + layer_pos_y ;
+	    caloLayer.thickness = layer_thickness + Hcal_radiator_thickness ;
+	    caloLayer.absorberThickness = Hcal_radiator_thickness ;
+	    caloLayer.cellSize0 = Hcal_cells_size ;
+	    caloLayer.cellSize1 = Hcal_cells_size ;
+	    
+	    caloData->layers.push_back( caloLayer ) ;
+	  }
+	  //-----------------------------------------------------------------------------------------
+	  
+	  
 	  // ===== Prepare for next layer (i.e. next Chamber) =========================
 	  // Prepare the chamber placement position and the chamber dimension
 	  // ==========================================================================
@@ -265,7 +299,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       
     }
   
-  
+  sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;  
   
   return sdet;
 }
