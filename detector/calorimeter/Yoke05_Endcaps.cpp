@@ -253,7 +253,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	double radiator_thickness = gap_thickness + iron_thickness - l_thickness;
 	if ( i>=10 ) radiator_thickness = gap_thickness + 5.6*iron_thickness - l_thickness;
 
-	caloLayer.distance = shift_middle ;
+	caloLayer.distance = zStartEndcap + yokeEndcapThickness/2.0 + shift_middle ;
 	caloLayer.thickness = l_thickness + radiator_thickness ;
 	caloLayer.absorberThickness = radiator_thickness ;
 	caloLayer.cellSize0 = Yoke_cell_dim_x ;
