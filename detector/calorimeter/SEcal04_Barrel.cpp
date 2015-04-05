@@ -16,7 +16,7 @@
 #include "DDRec/Extensions/SubdetectorExtensionImpl.h"
 #include "DDRec/Surface.h"
 #include "XML/Utilities.h"
-
+#include "DDRec/DetectorData.h"
 
 using namespace std;
 using namespace DD4hep;
@@ -114,6 +114,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   int    Ecal_nlayers3                      = lcdd.constant<int>("Ecal_nlayers3");
   int    Ecal_barrel_number_of_towers       = lcdd.constant<int>("Ecal_barrel_number_of_towers");
   
+  double      Ecal_cells_size                  = lcdd.constant<double>("Ecal_cells_size");
   
 //====================================================================
 //
@@ -284,6 +285,17 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     subDetExtension->setZMin( 0. ) ;
     subDetExtension->setZMax( Ecal_Barrel_halfZ ) ;
     
+    //========== fill data for reconstruction ============================
+    DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
+    caloData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
+    caloData->inner_symmetry = nsides  ;
+    caloData->phi0 = 0 ; // hardcoded 
+    
+    /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
+    caloData->extent[0] = Ecal_inner_radius ;
+    caloData->extent[1] = ( Ecal_inner_radius + module_thickness ) / cos( M_PI/8. ) ;
+    caloData->extent[2] = 0. ;
+    caloData->extent[3] = Ecal_Barrel_halfZ ;
 
     // base vectors for surfaces:
     DDSurfaces::Vector3D u(1,0,0) ;
@@ -444,6 +456,17 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	//   l_pos_y -= stave_z;
 	// }
 
+	//-----------------------------------------------------------------------------------------
+	DDRec::LayeredCalorimeterData::Layer caloLayer ;
+	
+	caloLayer.distance = Ecal_inner_radius + module_thickness/2.0 + l_pos_z ;
+	caloLayer.thickness = l_thickness + radiator_dim_y ;
+	caloLayer.absorberThickness = radiator_dim_y ;
+	caloLayer.cellSize0 = Ecal_cells_size ;
+	caloLayer.cellSize1 = Ecal_cells_size ;
+	
+	caloData->layers.push_back( caloLayer ) ;
+	//-----------------------------------------------------------------------------------------
 
         // Increment to next layer Z position.
         l_pos_z -= l_thickness;          
@@ -508,6 +531,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     
     sdet.addExtension< DDRec::LayeringExtension >( layeringExtension ) ;
     sdet.addExtension< DDRec::SubdetectorExtension >( subDetExtension ) ;
+    sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ; 
 
 
     return sdet;
