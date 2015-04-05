@@ -420,7 +420,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 
 	  //-----------------------------------------------------------------------------------------
-	  if ( caloData->layers.size() <= number_of_chambers ) {
+	  if ( caloData->layers.size() <= (unsigned int)number_of_chambers ) {
 	    DDRec::LayeredCalorimeterData::Layer caloLayer ;
 
 	    caloLayer.distance = Ecal_endcap_zmin + pDz + Zoff;

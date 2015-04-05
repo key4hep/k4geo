@@ -81,7 +81,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
   caloData->extent[0] = HcalEndcap_inner_radius ;
-  caloData->extent[1] = HcalEndcap_inner_radius ;
+  caloData->extent[1] = HcalEndcap_outer_radius ;
   caloData->extent[2] = HcalEndcap_min_z ;
   caloData->extent[3] = HcalEndcap_max_z ;
   
@@ -211,7 +211,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  
 	  
 	  //-----------------------------------------------------------------------------------------
-	  if ( caloData->layers.size() <= repeat ) {
+	  if ( caloData->layers.size() <= (unsigned int)repeat ) {
 	    DDRec::LayeredCalorimeterData::Layer caloLayer ;
 	
 	    caloLayer.distance = Hcal_endcap_zmin + box_half_y + layer_pos_y ;
