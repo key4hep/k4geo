@@ -192,6 +192,7 @@
   <!-- <constant name="Lcal_type" value="pad"/> -->
   <constant name="Lcal_z_begin" value="2505.0*mm"/>
   <constant name="Lcal_z_thickness" value="135.6*mm"/>
+  <constant name="LumiCal_cell_size" value="10*mm"/>
   <constant name="PCB_Thickness" value="0.8*mm"/>
   <constant name="PadSeparation" value="0.408*mm"/>
   <constant name="SIT12_cable_thickness" value="0.063*mm"/>

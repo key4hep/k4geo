@@ -1,6 +1,7 @@
 #include <DD4hep/DetFactoryHelper.h>
 #include <XML/Layering.h>
 #include "XML/Utilities.h"
+#include "DDRec/DetectorData.h"
 
 #include <string>
 
@@ -39,6 +40,20 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   const double lcalInnerZ = dimensions.inner_z();
   const double lcalThickness = DD4hep::Layering(xmlLumiCal).totalThickness();
   const double lcalCentreZ = lcalInnerZ+lcalThickness*0.5;
+
+  double LumiCal_cell_size      = lcdd.constant<double>("LumiCal_cell_size");
+  //========== fill data for reconstruction ============================
+  DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
+  caloData->layoutType = DDRec::LayeredCalorimeterData::EndcapLayout ;
+  caloData->inner_symmetry = 0  ; // hardcoded tube
+  caloData->outer_symmetry = 0  ; 
+  caloData->phi0 = 0 ;
+
+  /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
+  caloData->extent[0] = lcalInnerR ;
+  caloData->extent[1] = lcalOuterR ;
+  caloData->extent[2] = lcalInnerZ ;
+  caloData->extent[3] = lcalInnerZ + lcalThickness ;
 
   // counter for the current layer to be placed
   int thisLayerId = 1;
@@ -85,6 +100,9 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
       int sliceID=1;
       double inThisLayerPosition = -layerThickness*0.5;
+
+      double radiator_thickness = 0.0;
+
       for(DD4hep::XML::Collection_t collSlice(xmlLayer,_U(slice)); collSlice; ++collSlice)  {
 	DD4hep::XML::Component compSlice = collSlice;
 	const double      sliceThickness = compSlice.thickness();
@@ -94,6 +112,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	DD4hep::Geometry::Tube sliceBase(lcalInnerR,lcalOuterR,sliceThickness/2);
 
 	DD4hep::Geometry::Volume slice_vol (sliceName,sliceBase,slice_mat);
+
+	if ( compSlice.materialStr().compare("TungstenDens24") == 0 ) radiator_thickness = sliceThickness;
 
 	if ( compSlice.isSensitive() )  {
 	  slice_vol.setSensitiveDetector(sens);
@@ -106,6 +126,18 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	inThisLayerPosition += sliceThickness;
 	++sliceID;
       }//For all slices in this layer
+
+      //-----------------------------------------------------------------------------------------
+      DDRec::LayeredCalorimeterData::Layer caloLayer ;
+      
+      caloLayer.distance = lcalCentreZ + referencePosition+0.5*layerThickness ;
+      caloLayer.thickness = layerThickness ;
+      caloLayer.absorberThickness = radiator_thickness ;
+      caloLayer.cellSize0 = LumiCal_cell_size ;
+      caloLayer.cellSize1 = LumiCal_cell_size ;
+      
+      caloData->layers.push_back( caloLayer ) ;
+      //-----------------------------------------------------------------------------------------
 
       //Why are we doing this for each layer, this just needs to be done once and then placed multiple times
       //Do we need unique IDs for each piece?
@@ -134,6 +166,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   DD4hep::Geometry::PlacedVolume pv2 =
     envelope.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcBackwardRot, bcBackwardPos ) );
   pv2.addPhysVolID("barrel", 2);
+
+  sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
 
   return sdet;
 }
