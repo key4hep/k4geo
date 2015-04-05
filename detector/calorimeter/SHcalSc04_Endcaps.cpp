@@ -214,7 +214,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  if ( caloData->layers.size() <= repeat ) {
 	    DDRec::LayeredCalorimeterData::Layer caloLayer ;
 	
-	    caloLayer.distance = HcalEndcap_min_z + layer_pos_y ;
+	    caloLayer.distance = Hcal_endcap_zmin + box_half_y + layer_pos_y ;
 	    caloLayer.thickness = layer_thickness + Hcal_radiator_thickness ;
 	    caloLayer.absorberThickness = Hcal_radiator_thickness ;
 	    caloLayer.cellSize0 = Hcal_cells_size ;
