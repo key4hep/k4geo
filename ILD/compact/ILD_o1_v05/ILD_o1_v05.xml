@@ -538,7 +538,7 @@
  	</readout>
 
 	<readout name="BeamCalCollection">
-	  <segmentation type="CartesianGridXY" grid_size_x="0.35*cm" grid_size_y="0.35*cm"  grid_size_z="0.35*cm" />
+	  <segmentation type="CartesianGridXY" grid_size_x="BeamCal_cell_size" grid_size_y="BeamCal_cell_size"  grid_size_z="BeamCal_cell_size" />
 	  <id>system:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id>
 	</readout>
 	

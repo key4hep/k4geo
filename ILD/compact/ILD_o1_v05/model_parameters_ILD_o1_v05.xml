@@ -15,6 +15,7 @@
   <constant name="BCal_rInner" value="20*mm"/>
   <constant name="BCal_rOuter" value="150*mm"/>
   <constant name="BCal_rSegmentation" value="8"/>
+  <constant name="BeamCal_cell_size" value="3.5*mm"/>
   <constant name="BuildHcalElectronicsInterface" value="1"/>
   <constant name="ChipPackageThickness" value="1.4*mm"/>
 

@@ -1,6 +1,7 @@
 #include <DD4hep/DetFactoryHelper.h>
 #include <XML/Layering.h>
 #include "XML/Utilities.h"
+#include "DDRec/DetectorData.h"
 
 #include <string>
 
@@ -40,6 +41,20 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   const double bcalInnerZ = dimensions.inner_z();
   const double bcalThickness = DD4hep::Layering(xmlBeamCal).totalThickness();
   const double bcalCentreZ = bcalInnerZ+bcalThickness*0.5;
+
+  double BeamCal_cell_size      = lcdd.constant<double>("BeamCal_cell_size");
+  //========== fill data for reconstruction ============================
+  DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
+  caloData->layoutType = DDRec::LayeredCalorimeterData::EndcapLayout ;
+  caloData->inner_symmetry = 0  ; // hardcoded tube
+  caloData->outer_symmetry = 0  ;
+  caloData->phi0 = 0 ;
+
+  /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
+  caloData->extent[0] = bcalInnerR ;
+  caloData->extent[1] = bcalOuterR ;
+  caloData->extent[2] = bcalInnerZ ;
+  caloData->extent[3] = bcalInnerZ + bcalThickness ;
 
   // counter for the current layer to be placed
   int thisLayerId = 1;
@@ -128,6 +143,9 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
       int sliceID=1;
       double inThisLayerPosition = -layerThickness*0.5;
+
+      double radiator_thickness = 0.0;
+
       for(DD4hep::XML::Collection_t collSlice(xmlLayer,_U(slice)); collSlice; ++collSlice)  {
 	DD4hep::XML::Component compSlice = collSlice;
 	const double      sliceThickness = compSlice.thickness();
@@ -161,6 +179,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	  //The extra parenthesis are paramount! But.. there are none
 	  const DD4hep::Geometry::Transform3D thisBPTransform( incomingBeamPipeRotation, thisBPPosition );
 	  slice_subtracted = DD4hep::Geometry::SubtractionSolid(sliceBase, incomingBeamPipe, thisBPTransform);
+	  radiator_thickness = sliceThickness;
 	} else {
 	  //If we do not have the absorber structure then we create the slice with a wedge cutout, i.e, keyhole shape
 	  /// Is it better to join two pieces or subtract two pieces?
@@ -180,6 +199,18 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	inThisLayerPosition += sliceThickness;
 	++sliceID;
       }//For all slices in this layer
+
+      //-----------------------------------------------------------------------------------------
+      DDRec::LayeredCalorimeterData::Layer caloLayer ;
+      
+      caloLayer.distance = bcalCentreZ + referencePosition+0.5*layerThickness ;
+      caloLayer.thickness = layerThickness ;
+      caloLayer.absorberThickness = radiator_thickness ;
+      caloLayer.cellSize0 = BeamCal_cell_size ;
+      caloLayer.cellSize1 = BeamCal_cell_size ;
+      
+      caloData->layers.push_back( caloLayer ) ;
+      //-----------------------------------------------------------------------------------------
 
       //Why are we doing this for each layer, this just needs to be done once and then placed multiple times
       //Do we need unique IDs for each piece?
@@ -210,6 +241,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
     envelope.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcBackwardRot, bcBackwardPos ) );
   pv2.addPhysVolID("barrel", 2);
 
+  sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
 
   return sdet;
 }
