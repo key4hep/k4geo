@@ -46,8 +46,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   double LHcal_cell_size      = lcdd.constant<double>("LHcal_cell_size");
   double LHCal_outer_radius   = lcdd.constant<double>("LHCal_outer_radius");
   //========== fill data for reconstruction ============================
-  DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
-  caloData->layoutType = DDRec::LayeredCalorimeterData::EndcapLayout ;
+  DD4hep::DDRec::LayeredCalorimeterData* caloData = new DD4hep::DDRec::LayeredCalorimeterData ;
+  caloData->layoutType = DD4hep::DDRec::LayeredCalorimeterData::EndcapLayout ;
   caloData->inner_symmetry = 0  ; // hard code cernter pipe hole
   caloData->outer_symmetry = 4  ; // outer box
   caloData->phi0 = 0 ;
@@ -149,7 +149,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
       }//For all slices in this layer
 
       //-----------------------------------------------------------------------------------------
-      DDRec::LayeredCalorimeterData::Layer caloLayer ;
+      DD4hep::DDRec::LayeredCalorimeterData::Layer caloLayer ;
       
       caloLayer.distance = lhcalCentreZ + referencePosition+0.5*layerThickness ;
       caloLayer.thickness = layerThickness ;
@@ -189,7 +189,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
     envelope.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcBackwardRot, bcBackwardPos ) );
   pv2.addPhysVolID("barrel", 2);
 
-  sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
+  sdet.addExtension< DD4hep::DDRec::LayeredCalorimeterData >( caloData ) ;
 
   return sdet;
 }

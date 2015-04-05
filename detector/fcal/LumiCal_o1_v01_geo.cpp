@@ -43,8 +43,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
   double LumiCal_cell_size      = lcdd.constant<double>("LumiCal_cell_size");
   //========== fill data for reconstruction ============================
-  DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
-  caloData->layoutType = DDRec::LayeredCalorimeterData::EndcapLayout ;
+  DD4hep::DDRec::LayeredCalorimeterData* caloData = new DD4hep::DDRec::LayeredCalorimeterData ;
+  caloData->layoutType = DD4hep::DDRec::LayeredCalorimeterData::EndcapLayout ;
   caloData->inner_symmetry = 0  ; // hardcoded tube
   caloData->outer_symmetry = 0  ; 
   caloData->phi0 = 0 ;
@@ -128,7 +128,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
       }//For all slices in this layer
 
       //-----------------------------------------------------------------------------------------
-      DDRec::LayeredCalorimeterData::Layer caloLayer ;
+      DD4hep::DDRec::LayeredCalorimeterData::Layer caloLayer ;
       
       caloLayer.distance = lcalCentreZ + referencePosition+0.5*layerThickness ;
       caloLayer.thickness = layerThickness ;
@@ -167,7 +167,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
     envelope.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcBackwardRot, bcBackwardPos ) );
   pv2.addPhysVolID("barrel", 2);
 
-  sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
+  sdet.addExtension< DD4hep::DDRec::LayeredCalorimeterData >( caloData ) ;
 
   return sdet;
 }
