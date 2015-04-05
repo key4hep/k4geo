@@ -39,6 +39,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
+#include "DDRec/DetectorData.h"
 
 using namespace std;
 using namespace DD4hep;
@@ -119,7 +120,24 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   int    Ecal_nlayers3                      = lcdd.constant<int>("Ecal_nlayers3");
   
 
+  double      Ecal_cells_size               = lcdd.constant<double>("Ecal_cells_size");
+  double      EcalEndcapRing_inner_radius   = lcdd.constant<double>("EcalEndcapRing_inner_radius");
+  double      EcalEndcapRing_outer_radius   = lcdd.constant<double>("EcalEndcapRing_outer_radius");
+  double      EcalEndcapRing_min_z          = lcdd.constant<double>("EcalEndcapRing_min_z");
+  double      EcalEndcapRing_max_z          = lcdd.constant<double>("EcalEndcapRing_max_z");
 
+  //========== fill data for reconstruction ============================
+  DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
+  caloData->layoutType = DDRec::LayeredCalorimeterData::EndcapLayout ;
+  caloData->inner_symmetry = 0  ; // hard code cernter pipe hole
+  caloData->outer_symmetry = 4  ; // outer box
+  caloData->phi0 = 0 ;
+
+  /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
+  caloData->extent[0] = EcalEndcapRing_inner_radius ;
+  caloData->extent[1] = EcalEndcapRing_outer_radius ;
+  caloData->extent[2] = EcalEndcapRing_min_z ;
+  caloData->extent[3] = EcalEndcapRing_max_z ;
 
 
 //====================================================================
@@ -401,6 +419,17 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       Transform3D bsl_tran3D(rot,bsl_pos);
       PlacedVolume  EndcapStructureLayer_phv = EnvLogECRing.placeVolume(EndcapStructureLayer_vol,bsl_tran3D);
 	      
+      //-----------------------------------------------------------------------------------------
+      DDRec::LayeredCalorimeterData::Layer caloLayer ;
+      
+      caloLayer.distance = EcalEndcapRing_min_z + l_pos_z ;
+      caloLayer.thickness = l_thickness + radiator_dim_y ;
+      caloLayer.absorberThickness = radiator_dim_y ;
+      caloLayer.cellSize0 = Ecal_cells_size ;
+      caloLayer.cellSize1 = Ecal_cells_size ;
+      
+      caloData->layers.push_back( caloLayer ) ;
+      //-----------------------------------------------------------------------------------------
      
       // Increment to next layer Z position.
       l_pos_z +=   (l_thickness/2. +(radiator_dim_y/2. + Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE))*2.);
@@ -443,6 +472,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   }
   
+  sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ; 
 
   return sdet;
   
