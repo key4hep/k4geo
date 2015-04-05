@@ -422,7 +422,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       //-----------------------------------------------------------------------------------------
       DDRec::LayeredCalorimeterData::Layer caloLayer ;
       
-      caloLayer.distance = EcalEndcapRing_min_z + l_pos_z ;
+      caloLayer.distance = Ecal_Barrel_module_dim_z * 2.5 + Ecal_cables_gap + module_thickness/2.0 + l_pos_z ;
       caloLayer.thickness = l_thickness + radiator_dim_y ;
       caloLayer.absorberThickness = radiator_dim_y ;
       caloLayer.cellSize0 = Ecal_cells_size ;
