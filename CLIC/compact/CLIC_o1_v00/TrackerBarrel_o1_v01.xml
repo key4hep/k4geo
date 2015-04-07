@@ -37,7 +37,7 @@
     </readouts>
     
     <detectors>
-        <detector id="SiTrackerBarrel_ID" name="SiTrackerBarrel" type="TrackerBarrel_o1_v01" readout="SiTrackerBarrelHits" region="SiTrackerBarrelRegion" limits="SiTrackerBarrelRegionLimitSet">
+        <detector id="SiTrackerBarrel_ID" name="SiTrackerBarrel" type="DD4hep_SiTrackerBarrel" readout="SiTrackerBarrelHits" region="SiTrackerBarrelRegion" limits="SiTrackerBarrelRegionLimitSet">
             
             <comment>Silicon Outer Tracker Barrel</comment>
             
