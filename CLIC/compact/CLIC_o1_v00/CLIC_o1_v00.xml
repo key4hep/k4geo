@@ -226,16 +226,16 @@
     
     <include ref="Beampipe_o1_v01.xml"/>
     
-    <include ref="BeamCal_o1_v01.xml"/>
-    <include ref="LumiCal_o1_v01.xml"/>
+    <!--include ref="BeamCal_o1_v01.xml"/>
+    <include ref="LumiCal_o1_v01.xml"/-->
     
     <include ref="VertexBarrel_o1_v01.xml"/>
     <include ref="VertexEndcap_o1_v01.xml"/>
     <include ref="VertexSupport_o1_v01.xml"/>
     
-    <include ref="TrackerBarrel_o1_v01.xml"/>
+    <!--include ref="TrackerBarrel_o1_v01.xml"/-->
     <include ref="TrackerEndcap_o1_v01.xml"/>
-    <include ref="TrackerSupport_o1_v01.xml"/>
+    <!--include ref="TrackerSupport_o1_v01.xml"/>
     
     <include ref="ECalBarrel_o1_v01.xml"/>
     <include ref="ECalEndcap_o1_v01.xml"/>
@@ -248,7 +248,7 @@
     <include ref="YokeEndcap_o1_v01.xml"/>
     
     <include ref="Shields_o1_v01.xml"/>
-    <include ref="Solenoid_o1_v01.xml"/>
+    <include ref="Solenoid_o1_v01.xml"/-->
     
     <plugins>
         <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">

@@ -1,0 +1,123 @@
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+    
+    <info name="CLIC"
+        title="CLIC"
+        author="Marko Petric"
+        url="https://twiki.cern.ch/twiki/bin/view/CLIC/NewCLIC"
+        status="development"
+        version="$Id: 2015-1-4 marko.petric@cern.ch $">
+        <comment>The compact format for the CLIC Detector design</comment>
+    </info>
+    
+    <includes>
+        <gdmlFile  ref="elements.xml"/>
+        <gdmlFile  ref="materials.xml"/>
+    </includes>
+    
+    <define>
+        <constant name="world_side" value="30000*mm"/>
+        <constant name="world_x" value="world_side"/>
+        <constant name="world_y" value="world_side"/>
+        <constant name="world_z" value="world_side"/>
+        
+        <constant name="CrossingAngle" value="0.020*rad"/>
+
+
+	<constant name="DetID_NOTUSED"   value="  0"/>
+	<constant name="DetID_VXD"       value="  1"/>
+	<constant name="DetID_IT"        value="  2"/>
+	<constant name="DetID_OT"        value="  3"/>
+	<constant name="DetID_ECAL"      value=" 20"/>
+	<constant name="DetID_ECAL_PLUG" value=" 21"/>
+	<constant name="DetID_HCAL"      value=" 22"/>
+	<constant name="DetID_LCAL"      value=" 24"/>
+	<constant name="DetID_BCAL"      value=" 25"/>
+	<constant name="DetID_YOKE"      value=" 27"/>
+	<constant name="DetID_COIL"      value=" 28"/>
+
+	<constant name="DetID_bwd"       value="- 1"/>
+	<constant name="DetID_barrel"    value="  0"/>
+	<constant name="DetID_fwd"       value="  1"/>
+
+
+
+        <constant name="CentralBeamPipe_zmax" value="260.*mm"/>
+        <constant name="CentralBeamPipe_rmax" value="30.0*mm"/>
+        <constant name="ConeBeamPipe_zmax" value="2080*mm"/>
+        <constant name="ConeBeamPipe_rmax" value="240.0*mm"/>
+        <constant name="BigBeamPipe_zmax" value="2645*mm"/>
+        <constant name="BeamPipe_end" value="12500*mm"/>
+
+
+
+	<!-- ################### ENVELOPE PARAMETERS ######################################################## -->
+
+	<comment> suggested naming convention:
+	
+	main parameters:
+	
+    	DET_inner_radius    : inner radius of tube like envelope  ( inscribed cylinder ) 
+	DET_outer_radius    : outer radius of tube like envelope  ( circumscribed cylinder )
+	DET_half_length     : half length along z axis
+	DET_min_z           : smallest absolute value on z-axis
+	DET_max_z           : largest  absolute value on z-axis
+	DET_inner_symmetry  : number of sides on the inside  ( 0 for tube ) 
+	DET_outer_symmetry  : number of sides on the inside  ( 0 for tube )
+	DET_inner_phi0      : optional rotation of the inner polygon ( in r-phi plane ) 
+	DET_outer_phi0      : optional rotation of the outer polygon ( in r-phi plane ) 
+	
+	additional parameters for cutting away volumes/shapes use one of the above with a number
+	appended and/or an extra specifiaction such as cone ( for a cut away cone )
+	
+	DET_inner_radius_1
+	DET_outer_radius_2
+	DET_cone_min_z
+	DET_cone_max_z
+	
+	</comment> 
+
+        <constant name="OuterTracker_inner_radious" value="580*mm"/>
+        <constant name="OuterTracker_outer_radous" value="1500*mm"/>
+        <constant name="OuterTracker_half_lenght" value="2350*mm"/>
+
+        <constant name="InnerTracker_inner_radious" value="61*mm"/>
+        <constant name="InnerTracker_outer_radous" value="580*mm"/>
+        <constant name="InnerTracker_half_lenght" value="2350*mm"/>
+
+        
+    </define>   
+ 
+        <limits>
+        <limitset name="cal_limits">
+            <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
+        </limitset>
+        <limitset name="SiTrackerBarrelRegionLimitSet">
+            <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
+            <limit name="track_length_max" particles="*" value="5.0" unit="mm" />
+            <limit name="time_max" particles="*" value="5.0" unit="ns" />
+            <limit name="ekin_min" particles="*" value="0.01" unit="MeV" />
+            <limit name="range_min" particles="*" value="5.0" unit="mm" />
+        </limitset>
+    </limits>
+    <regions>
+        <region name="SiTrackerBarrelRegion" eunit="MeV" lunit="mm" cut="0.001" threshold="0.001">
+            <limitsetref name="SiTrackerBarrelRegionLimitSet"/>
+        </region>
+    </regions>
+
+
+
+   <display>
+    
+      <vis name="OTVis"  alpha="1.0" r="1.6" g="0.6"  b="0.6" showDaughters="true"  visible="true"/>
+
+    </display>   
+ <include ref="Materials_v01.xml"/>
+
+    <include ref="Beampipe_o1_v01_01.xml"/>
+
+    <include ref="InnerTracker_o1_v01.xml"/>
+
+</lccdd>
