@@ -1,43 +1,43 @@
 <lccdd>
-
-  <comment>Tracking detectors</comment>
-  <detectors>
-    <detector name="OuterTrackers" type="DD4hep_SubdetectorAssembly" vis="OTVis">
-      <shape name="OuterTrackersEnvelope" type="Tube" rmin="OuterTracker_inner_radious" rmax="OuterTracker_outer_radous" dz="OuterTracker_half_lenght" material="Air">
-      </shape>
-      <comment>Outer Tracker Assembly</comment>
-      <composite name="OuterTrackerBarrel"/>
-      <composite name="OuterTrackerEndcap"/>
-    </detector>
-  </detectors>
-
-   
+    
+    <comment>Tracking detectors</comment>
+    <detectors>
+        <detector name="OuterTrackers" type="DD4hep_SubdetectorAssembly" vis="OTVis">
+            <shape name="OuterTrackersEnvelope" type="Tube" rmin="OuterTracker_inner_radious" rmax="OuterTracker_outer_radious" dz="OuterTracker_half_length" material="Air">
+            </shape>
+            <comment>Outer Tracker Assembly</comment>
+            <composite name="OuterTrackerBarrel"/>
+            <composite name="OuterTrackerEndcap"/>
+        </detector>
+    </detectors>
+    
+    
     <!--  Definition of the used visualization attributes    -->
     <display>
-        <vis name="SiTrackerLayerVis"   alpha="1.0" r="1.0" g="1.0" b="0.6" showDaughters="true" visible="true"/>
-        <vis name="SiTrackerModuleVis"  alpha="0.1" r="0.0" g="1.0" b="0.6" showDaughters="false" visible="true"/>
-        <vis name="SiTrackerForwardVis" alpha="1.0" r="0.8" g="0.1" b="0.1" showDaughters="false" visible="true"/>
+        <vis name="OuterTrackerLayerVis"   alpha="1.0" r="1.0" g="1.0" b="0.6" showDaughters="true" visible="true"/>
+        <vis name="OuterTrackerModuleVis"  alpha="0.1" r="0.0" g="1.0" b="0.6" showDaughters="false" visible="true"/>
+        <vis name="OuterTrackerForwardVis" alpha="1.0" r="0.8" g="0.1" b="0.1" showDaughters="false" visible="true"/>
     </display>
     
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
-        <readout name="SiTrackerBarrelHits">
+        <readout name="OuterTrackerBarrelHits">
             <id>system:5,side:-2,layer:9,module:8,sensor:8,barrel:3</id>
         </readout>
-        <readout name="SiTrackerEndcapHits">
+        <readout name="OuterTrackerEndcapHits">
             <id>system:8,barrel:3,layer:4,module:14,sensor:2,side:32:-2,strip:20</id>
         </readout>
     </readouts>
-
+    
     
     <detectors>
-        <detector id="1" name="OuterTrackerBarrel" type="TrackerBarrel_o1_v01" readout="SiTrackerBarrelHits" region="SiTrackerBarrelRegion" limits="SiTrackerBarrelRegionLimitSet">
+        <detector id="1" name="OuterTrackerBarrel" type="TrackerBarrel_o1_v01" readout="OuterTrackerBarrelHits" region="SiTrackerBarrelRegion" limits="SiTrackerBarrelRegionLimitSet">
             <envelope vis="OTVis">
-		<shape type="Assembly"/>
-	    </envelope>
+                <shape type="Assembly"/>
+            </envelope>
             <comment>Silicon Outer Tracker Barrel</comment>
-         
-            <module name="SiTrackerModule_Layer2" vis="SiTrackerModuleVis">
+            
+            <module name="SiTrackerModule_Layer2" vis="OuterTrackerModuleVis">
                 <module_envelope width="97.79*mm" length="97.79*mm" thickness="0.3*cm"/>
                 <module_component width="97.79*mm" length="97.79*mm" thickness="0.02*cm" material="PEEK" sensitive="false">
                     <position z="-0.14*cm" />
@@ -67,7 +67,7 @@
                     <position z="0.146*cm"/>
                 </module_component>
             </module>
-            <module name="SiTrackerModule_Layer3" vis="SiTrackerModuleVis">
+            <module name="SiTrackerModule_Layer3" vis="OuterTrackerModuleVis">
                 <module_envelope width="97.79*mm" length="97.79*mm" thickness="0.3*cm"/>
                 <module_component width="97.79*mm" length="97.79*mm" thickness="0.02*cm" material="PEEK" sensitive="false">
                     <position z="-0.14*cm" />
@@ -97,7 +97,7 @@
                     <position z="0.146*cm"/>
                 </module_component>
             </module>
-            <module name="SiTrackerModule_Layer4" vis="SiTrackerModuleVis">
+            <module name="SiTrackerModule_Layer4" vis="OuterTrackerModuleVis">
                 <module_envelope width="97.79*mm" length="97.79*mm" thickness="0.3*cm"/>
                 <module_component width="97.79*mm" length="97.79*mm" thickness="0.02*cm" material="PEEK" sensitive="false">
                     <position z="-0.14*cm" />
@@ -127,31 +127,31 @@
                     <position z="0.146*cm"/>
                 </module_component>
             </module>
-            <layer module="SiTrackerModule_Layer2" id="2" vis="SiTrackerLayerVis">
+            <layer module="SiTrackerModule_Layer2" id="2" vis="OuterTrackerLayerVis">
                 <barrel_envelope inner_r="715.075*mm" outer_r="756.0*mm" z_length="1013.9 * 2*mm"/>
                 <rphi_layout phi_tilt="0.11493*rad" nphi="58" phi0="0.058*rad" rc="(716.355 + 5.0)*mm" dr="0.0"/>
                 <z_layout dr="4.0*mm" z0="954.625*mm" nz="23"/>
             </layer>
-            <layer module="SiTrackerModule_Layer3" id="3" vis="SiTrackerLayerVis">
+            <layer module="SiTrackerModule_Layer3" id="3" vis="OuterTrackerLayerVis">
                 <barrel_envelope inner_r="965.075*mm" outer_r="1012.0*mm" z_length="1272.3 * 2*mm"/>
                 <rphi_layout phi_tilt="0.11502*rad" nphi="80" phi0="0.0436*rad" rc="(966.355 + 5.0)*mm" dr="0.0"/>
                 <z_layout dr="4.0*mm" z0="1213.073*mm" nz="29"/>
             </layer>
-            <layer module="SiTrackerModule_Layer4" id="4" vis="SiTrackerLayerVis">
+            <layer module="SiTrackerModule_Layer4" id="4" vis="OuterTrackerLayerVis">
                 <barrel_envelope inner_r="1215.075*mm" outer_r="1263.0*mm" z_length="1535.7 * 2*mm"/>
                 <rphi_layout phi_tilt="0.11467*rad" nphi="102" phi0="0.01745*rad" rc="(1216.355 + 5.0)*mm" dr="0.0"/>
                 <z_layout dr="4.0*mm" z0="1476.497*mm" nz="35"/>
             </layer>
         </detector>
     </detectors>
-
+    
     
     <detectors>
-        <detector id="7" name="OuterTrackerEndcap" type="DD4hep_SiTrackerEndcap2" readout="SiTrackerEndcapHits" reflect="true">
+        <detector id="7" name="OuterTrackerEndcap" type="DD4hep_SiTrackerEndcap2" readout="OuterTrackerEndcapHits" reflect="true">
             
             <comment>Silicon Outer Tracker Endcaps</comment>
             
-            <module name="Module1" vis="SiTrackerModuleVis">
+            <module name="Module1" vis="OuterTrackerModuleVis">
                 <trd x1="36.112*mm" x2="46.635*mm" z="100.114/2*mm" />
                 <module_component thickness="0.00052*cm"   material="Copper" />
                 <module_component thickness="0.0051*cm"   material="Kapton" />
@@ -166,7 +166,7 @@
                 <module_component thickness="0.0051*cm"   material="Kapton" />
                 <module_component thickness="0.00052*cm"   material="Copper" />
             </module>
-            <module name="Module2" vis="SiTrackerModuleVis">
+            <module name="Module2" vis="OuterTrackerModuleVis">
                 <trd x1="45.245*mm" x2="54.680*mm" z="89.773/2*mm" />
                 <module_component thickness="0.00079*cm"   material="Copper" />
                 <module_component thickness="0.0078*cm"   material="Kapton" />
@@ -181,7 +181,7 @@
                 <module_component thickness="0.0078*cm"   material="Kapton" />
                 <module_component thickness="0.00079*cm"   material="Copper" />
             </module>
-
+            
             <layer id="2">
                 <ring r="625.654*mm" zstart="(1041.067+1.75)*mm" nmodules="48" dz="1.75*mm" module="Module2"/>
                 <ring r="703.666*mm" zstart="(1033.725+1.75)*mm" nmodules="54" dz="1.75*mm" module="Module2" phi0="pi/54"/>
@@ -205,7 +205,7 @@
             </layer>
         </detector>
     </detectors>
-
-
-
+    
+    
+    
 </lccdd>
