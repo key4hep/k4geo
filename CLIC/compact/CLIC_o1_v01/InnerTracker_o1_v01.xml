@@ -7,15 +7,24 @@
             <shape type="BooleanShape" operation="Subtraction" material="Air" >
                 <shape type="BooleanShape" operation="Subtraction">
                     <shape type="BooleanShape" operation="Subtraction">
-                        <shape type="Tube" rmin="InnerTracker_inner_radious" rmax="InnerTracker_outer_radous" dz="InnerTracker_half_lenght"/>
-                        <shape type="Tube" rmin="0." rmax="100*mm" dz="780*mm" />
+                        <shape type="BooleanShape" operation="Subtraction">
+                            <shape type="BooleanShape" operation="Subtraction"  >
+                                <shape type="Tube" rmin="0" rmax="InnerTracker_outer_radous" dz="InnerTracker_half_lenght"/>
+                                <shape type="Cone" rmin1="0" rmax1="CentralBeamPipe_rmax" rmin2="0" rmax2="ConeBeamPipe_rmax" z="(ConeBeamPipe_zmax-CentralBeamPipe_zmax)/2.0"/>
+                                <position x="0" y="0" z="(ConeBeamPipe_zmax-CentralBeamPipe_zmax)/2.0 + CentralBeamPipe_zmax" />
+                            </shape>
+                            <shape type="Cone" rmin2="0" rmax2="CentralBeamPipe_rmax" rmin1="0" rmax1="ConeBeamPipe_rmax" z="(ConeBeamPipe_zmax-CentralBeamPipe_zmax)/2.0"/>
+                            <position x="0" y="0" z="-(ConeBeamPipe_zmax-CentralBeamPipe_zmax)/2.0 - CentralBeamPipe_zmax" />
+                        </shape>
+                        <shape type="Tube" rmin="0" rmax="ConeBeamPipe_rmax" dz="(InnerTracker_half_lenght-ConeBeamPipe_zmax)/2.0"/>
+                        <position x="0" y="0" z="(InnerTracker_half_lenght-ConeBeamPipe_zmax)/2.0+ConeBeamPipe_zmax" />
                     </shape>
-                    <shape type="Cone" rmin1="0" rmax1="CentralBeamPipe_rmax" rmin2="0" rmax2="ConeBeamPipe_rmax" z="(ConeBeamPipe_zmax-CentralBeamPipe_zmax)/2."/>
-                    <position x="0" y="0" z="(ConeBeamPipe_zmax-CentralBeamPipe_zmax)/2." />
+                    <shape type="Tube" rmin="0" rmax="ConeBeamPipe_rmax" dz="(InnerTracker_half_lenght-ConeBeamPipe_zmax)/2.0"/>
+                    <position x="0" y="0" z="-(InnerTracker_half_lenght-ConeBeamPipe_zmax)/2.0-ConeBeamPipe_zmax" />
                 </shape>
-                <shape type="Cone" rmin1="0" rmax1="ConeBeamPipe_rmax" rmin2="0" rmax2="CentralBeamPipe_rmax" z="(ConeBeamPipe_zmax-CentralBeamPipe_zmax)/2."/>
-                <position x="0" y="0" z="-(ConeBeamPipe_zmax-CentralBeamPipe_zmax)/2." />
+                <shape type="Tube" rmin="0" rmax="Vertex_outer_radious" dz="Vertex_half_length"/>
             </shape>
+            
             
             <comment>Outer Tracker Assembly</comment>
             <composite name="InnerTrackerBarrel"/>

@@ -78,13 +78,19 @@
 	
 	</comment> 
 
-        <constant name="OuterTracker_inner_radious" value="580*mm"/>
-        <constant name="OuterTracker_outer_radous" value="1500*mm"/>
-        <constant name="OuterTracker_half_lenght" value="2350*mm"/>
+        <constant name="Vertex_inner_radious" value="30*mm"/>
+        <constant name="Vertex_outer_radious" value="61*mm"/>
+        <constant name="Vertex_half_length" value="300*mm"/>
 
         <constant name="InnerTracker_inner_radious" value="61*mm"/>
         <constant name="InnerTracker_outer_radous" value="580*mm"/>
         <constant name="InnerTracker_half_lenght" value="2350*mm"/>
+
+        <constant name="OuterTracker_inner_radious" value="580*mm"/>
+        <constant name="OuterTracker_outer_radous" value="1500*mm"/>
+        <constant name="OuterTracker_half_lenght" value="2350*mm"/>
+
+
 
         
     </define>   

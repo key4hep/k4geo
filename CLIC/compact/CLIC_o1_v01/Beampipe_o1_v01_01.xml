@@ -16,6 +16,9 @@
 
     <detector name="Beampipe" type="Beampipe_o1_v01" insideTrackingVolume="true" vis="BeamPipeVis">
       <parameter crossingangle="CrossingAngle" />
+  <envelope vis="BlueVis">
+    <shape type="Assembly"/>
+  </envelope>
 
       <!--             &A                       Z1                  Z2                    RIn1                RIn2                                 ROut1                        ROut2                                              Material -->
       <section type="Center"               start="0*mm"    end="CentralBeamPipe_zmax" rMin1="29.4*mm"  rMin2="29.4*mm"                         rMax1="CentralBeamPipe_rmax"  rMax2="CentralBeamPipe_rmax"                   material="Beryllium" name="VertexInner"/>
