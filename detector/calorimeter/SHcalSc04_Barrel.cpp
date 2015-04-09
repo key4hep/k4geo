@@ -218,6 +218,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
   caloData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
   caloData->inner_symmetry = nsides  ;
+  caloData->outer_symmetry = 0  ;
   caloData->phi0 = 0 ; // fg: also hardcoded below 
 
   /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.

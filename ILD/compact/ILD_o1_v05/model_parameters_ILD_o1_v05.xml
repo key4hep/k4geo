@@ -169,11 +169,11 @@
   <constant name="LHcal_BCal_clearance" value="390*mm"/>
   <constant name="LHcal_Electronics_space" value="19.4*mm"/>
   <constant name="LHcal_cell_size" value="10*mm"/>
-  <constant name="LHcal_inner_radius" value="93*mm"/>
+  <!-- <constant name="LHcal_inner_radius" value="93*mm"/> -->
   <constant name="LHcal_lateral_face_thickness" value="10*mm"/>
   <constant name="LHcal_nlayers" value="40"/>
   <constant name="LHcal_radiator_thickness" value="10*mm"/>
-  <constant name="LHcal_zend" value="3085*mm"/>
+  <!-- <constant name="LHcal_zend" value="3085*mm"/> -->
   <constant name="LHcal_zmin_displacement" value="30*mm"/>
   <constant name="Lcal_beam_pipe_clearance" value="0.5*mm"/>
   <constant name="Lcal_extra_size" value="26*mm"/>

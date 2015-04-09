@@ -115,6 +115,7 @@
 	<constant name="Coil_extra_size" value="1522*mm"/>
 	<constant name="Coil_thickness" value="750.0*mm"/>
 
+	<constant name="LHcal_inner_radius" value="93*mm"/>
 
 	<comment>
 	 ...  these are the values we have in the gear_ILD_o1_v05.xml from Mokka ....
@@ -134,7 +135,7 @@
         <!-- <constant name="Ecal_outer_radius" type="string" value="2028" /> -->
         <constant name="Hcal_R_max" type="string" value="3395.46" />
         <constant name="Hcal_endcap_zmin" type="string" value="2650" />
-        <constant name="LHcal_zend" type="string" value="3205" />
+        <constant name="LHcal_zend" value="3085*mm"/>
         <constant name="Lcal_z_begin" type="string" value="2506.9" />
         <constant name="Lcal_z_thickness" type="string" value="128.1" />
         <constant name="MokkaModel" type="string" value="ILD_o1_v05" />
