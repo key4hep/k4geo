@@ -147,8 +147,10 @@
     
     
     <detectors>
-        <detector id="7" name="OuterTrackerEndcap" type="DD4hep_SiTrackerEndcap2" readout="OuterTrackerEndcapHits" reflect="true">
-            
+        <detector id="7" name="OuterTrackerEndcap" type="TrackerEndcap_o1_v01" readout="OuterTrackerEndcapHits" reflect="true">
+            <envelope vis="OTVis">
+                <shape type="Assembly"/>
+            </envelope>    
             <comment>Silicon Outer Tracker Endcaps</comment>
             
             <module name="Module1" vis="OuterTrackerModuleVis">
