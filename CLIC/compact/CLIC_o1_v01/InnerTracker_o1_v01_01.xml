@@ -16,10 +16,10 @@
                             <shape type="Cone" rmin2="0" rmax2="CentralBeamPipe_rmax" rmin1="0" rmax1="ConeBeamPipe_rmax" z="(ConeBeamPipe_zmax-CentralBeamPipe_zmax)/2.0"/>
                             <position x="0" y="0" z="-(ConeBeamPipe_zmax-CentralBeamPipe_zmax)/2.0 - CentralBeamPipe_zmax" />
                         </shape>
-                        <shape type="Tube" rmin="0" rmax="ConeBeamPipe_rmax" dz="(InnerTracker_half_length-ConeBeamPipe_zmax)/2.0"/>
+                        <shape type="Tube" rmin="0" rmax="ConeBeamPipe_rmax" dz="(InnerTracker_half_length-ConeBeamPipe_zmax)/2.0+env_safety"/>
                         <position x="0" y="0" z="(InnerTracker_half_length-ConeBeamPipe_zmax)/2.0+ConeBeamPipe_zmax" />
                     </shape>
-                    <shape type="Tube" rmin="0" rmax="ConeBeamPipe_rmax" dz="(InnerTracker_half_length-ConeBeamPipe_zmax)/2.0"/>
+                    <shape type="Tube" rmin="0" rmax="ConeBeamPipe_rmax" dz="(InnerTracker_half_length-ConeBeamPipe_zmax)/2.0+env_safety"/>
                     <position x="0" y="0" z="-(InnerTracker_half_length-ConeBeamPipe_zmax)/2.0-ConeBeamPipe_zmax" />
                 </shape>
                 <shape type="Tube" rmin="0" rmax="Vertex_outer_radious" dz="Vertex_half_length"/>

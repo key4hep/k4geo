@@ -77,6 +77,8 @@
             DET_cone_max_z
             
         </comment>
+
+	<constant name="env_safety" value="0.1*mm"/>
         
         <constant name="Vertex_inner_radious" value="30*mm"/>
         <constant name="Vertex_outer_radious" value="61*mm"/>
@@ -125,7 +127,7 @@
     
     <include ref="Beampipe_o1_v01_01.xml"/>
     
-    <include ref="InnerTracker_o1_v01.xml"/>
-    <include ref="OuterTracker_o1_v01.xml"/>
+    <include ref="InnerTracker_o1_v01_01.xml"/>
+    <include ref="OuterTracker_o1_v01_01.xml"/>
     
 </lccdd>
