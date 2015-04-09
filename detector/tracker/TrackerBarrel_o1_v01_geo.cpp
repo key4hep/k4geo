@@ -7,6 +7,7 @@
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
+#include "XML/Utilities.h"
 
 using namespace std;
 using namespace DD4hep;
@@ -19,10 +20,19 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     int         det_id    = x_det.id();
     string      det_name  = x_det.nameStr();
     DetElement  sdet       (det_name,det_id);
-    Assembly    assembly   (det_name);
+    // Assembly    assembly   (det_name);
     map<string, Volume>    volumes;
     map<string, Placements>  sensitives;
     PlacedVolume pv;
+    
+    
+    // --- create an envelope volume and position it into the world ---------------------
+    
+    Volume envelope = XML::createPlacedEnvelope( lcdd,  e , sdet ) ;
+    
+    if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
+    
+    //-----------------------------------------------------------------------------------
     
     sens.setType("tracker");
     
@@ -43,7 +53,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         for(xml_coll_t ci(x_mod,_U(module_component)); ci; ++ci, ++ncomponents)  {
             xml_comp_t x_comp = ci;
             xml_comp_t x_pos  = x_comp.position(false);
-            xml_comp_t x_rot  = x_comp.rotation(false);        
+            xml_comp_t x_rot  = x_comp.rotation(false);
             string     c_nam  = _toString(ncomponents,"component%d");
             Box        c_box(x_comp.width()/2,x_comp.length()/2,x_comp.thickness()/2);
             Volume     c_vol(c_nam,c_box,lcdd.material(x_comp.materialStr()));
@@ -102,7 +112,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         double z_incr   = nz > 1 ? (2.0 * z0) / (nz - 1) : 0.0;
         // Starting z for sensor placement along Z axis.
         double sensor_z = -z0;
-        int module_idx =0;  
+        int module_idx =0;
         // Loop over the number of sensors in phi.
         for (int ii = 0; ii < nphi; ii++)        {
             double dx = z_dr * std::cos(phic + phi_tilt);        // Delta x of sensor position.
@@ -157,17 +167,17 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             sensor_z  = -z0;           // Reset the Z placement parameter for sensor.
         }
         // Create the PhysicalVolume for the layer.
-        pv = assembly.placeVolume(lay_vol); // Place layer in mother
+        pv = envelope.placeVolume(lay_vol); // Place layer in mother
         pv.addPhysVolID("layer", lay_id);       // Set the layer ID.
         lay_elt.setAttributes(lcdd,lay_vol,x_layer.regionStr(),x_layer.limitsStr(),x_layer.visStr());
         lay_elt.setPlacement(pv);
     }
-    sdet.setAttributes(lcdd,assembly,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
-    assembly.setVisAttributes(lcdd.invisible());
-    pv = lcdd.pickMotherVolume(sdet).placeVolume(assembly);
-    pv.addPhysVolID("system", det_id);      // Set the subdetector system ID.
-    pv.addPhysVolID("barrel", 0);           // Flag this as a barrel subdetector.
-    sdet.setPlacement(pv);
+    sdet.setAttributes(lcdd,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+    //envelope.setVisAttributes(lcdd.invisible());
+    /*pv = lcdd.pickMotherVolume(sdet).placeVolume(assembly);
+     pv.addPhysVolID("system", det_id);      // Set the subdetector system ID.
+     pv.addPhysVolID("barrel", 0);           // Flag this as a barrel subdetector.
+     sdet.setPlacement(pv);*/
     return sdet;
 }
 
