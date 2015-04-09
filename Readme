@@ -16,10 +16,10 @@ Requirements:
 
 
 Download and Installation:
---------------------------
+===========================
 
 Downlaod source code, e.g:
-
+--------------------------
 
   mkdir lcgeo ; cd lcgeo 
 
@@ -31,6 +31,7 @@ Downlaod source code, e.g:
 
 
 Initialize ROOT:
+----------------
 
   . /afs/desy.de/project/ilcsoft/sw/x86_64_gcc44_sl6/root/5.34.10/bin/thisroot.sh
 
@@ -38,84 +39,81 @@ Configure with CMake specifying the path to DD4hep
 
  cmake -DDD4hep_DIR=~/DD4hep/trunk ..
 
-( Depending on whether you have ilcsoft initialized, you might have to specify the pathes
+( Depending on whether you have ilcsoft initialized or not, you might have to specify the pathes
   to LCIO, Gear and Geant4 )
 
 
 Build and install everything:
-
+----------------------------
   make -j 2 install
-
+ 
+  cd ..
 
 
 Initialize the environment:
+--------------------------
 
  . ./bin/thislcgeo.sh
 
 
 
-Running the simulation
-----------------------
+Running some examples
+======================
 
-There is a program called dd_sim in DD4hep which is based on DDG4 that runs the specified detector and the 
-sequences (user actions) defined in the sequences.xml file.
-
-Modify examples/DDG4_sequences.xml as needed. 
+ cd ./example
 
 
-Depending on wether you want to use stdhep or an LCIO file with MCParticle collection as input, use the 
-one of the follwing actions:
+Create single particle input file
+---------------------------------
 
-   <sequence name="Geant4GeneratorActionSequence/GeneratorAction">
-      <action name="Geant4GeneratorActionInit/GenerationInit"/>
-
-      <!-- <action name="LCIOInputAction/LCIO1"> -->
-      <!--   <properties Input="LCIOStdHepReader|/Users/gaede/ILDConfig/trunk/StandardConfig/current/bbudsc_3evt.stdhep" -->
-      <!-- 		    OutputLevel="4" -->
-      <!-- 		    Mask="1" -->
-      <!-- 		    MomentumScale="1."/> -->
-      <!-- </action> -->
-
-      <action name="LCIOInputAction/LCIO1">
-        <properties Input="LCIOFileReader|mcparticles.slcio"
-      	OutputLevel="4"
-      	Mask="1"
-      	MomentumScale="1."/>
-      </action>
-
-    ...
-
-
-You can also modify the python script ./example/lcio_particle_gun.py in order to create
+Modify the python script ./example/lcio_particle_gun.py in order to create
 an LCIO input file with single particles:
 
   export PYTHONPATH=${LCIO}/src/python:${ROOTSYS}/lib
   python lcio_particle_gun.py
 
+There is also example input file with 10 singe muons: ./mcparticles.slcio
 
-There is an example input file with 10 singe muons in example/mcparticles.slcio.
 
+Run the simulation:
+--------------------
 
-You can then run the simulation:
+   python ddsim.py ../ILD/compact/ILD_o1_v05/ILD_o1_v05.xml
 
-    dd_sim ../ILD/compact/ILD_o1_v05.xml ../example/DDG4_sequences.xml ../example/physics.xml
+This creates an lcio file simple_lcio.slcio with sim hits and MCParticles.
 
-this creates an lcio file simple_lcio.slcio with sim hits and MCParticles - you can look at it:
+You can look at it in the ususal way
 
    anajob simple_lcio.slcio
 
+   dumpevent simple_lcio.slcio 1
 
-or display it in the teve display:
+
+Modify ddsim.py as needed to read other input files.
+
+
+
+Event displays:
+---------------
+
+There are several ways for visualizing the detector geometry and the simulated events:
+
+1) CED event display
+
+ced2go -d gear_ILD_o1_v05_ORG.xml -t ced2go-template.xml simple_lcio.slcio
+
+
+2) teveDisplay
 
    ln -s simple_lcio.slcio teve_infile.slcio
+   teveDisplay ../ILD/compact/ILD_o1_v05/ILD_o1_v05.xml
 
-   teveDisplay ../ILD/compact/ILD_o1_v05.xml
 
+3) DDEve:
 
- or use the new DDEve:
- root
- .x $DD4hepINSTALL/examples/DDEve/DDEve.C()
- # and then load ./ILD/eve/DDEve.xml
+  root
+  .x $DD4hepINSTALL/examples/DDEve/DDEve.C()
+  # and then load ../ILD/compact/ILD_o1_v05/DDEve.xml
 
 
 
@@ -135,20 +133,13 @@ or display it in the teve display:
  [ Friendly reminder: in order to work you need to explicitly build DD4hep with GEAR enabled. 
    Use the flag -DDD4HEP_USE_GEAR="ON" for the cmake command. ]
 
- Note: currently this is still incomplete
- In order to run tracking at least the following elements need to be added manually :
-
-  <detector name="EcalBarrel" geartype="CalorimeterParameters">
-  <detector name="EcalEndcap" geartype="CalorimeterParameters">
-
-  for example from original Mokka gear files ( or use $DDSIM/example/gear_ILD_o1_v05_dd4hep.xml )
-
+ Note: currently this might still be incomplete and you can copy missing information
+ for example from the original Mokka gear files ( or use $DDSIM/example/gear_ILD_o1_v05_dd4hep.xml )
 
 
 2. run simulation (as described above), e.g.:
 
- dd_sim ../ILD/compact/ILD_o1_v05.xml ../example/DDG4_sequences.xml ../example/physics.xml
-
+   python ddsim.py ../ILD/compact/ILD_o1_v05/ILD_o1_v05.xml
 
 
 
