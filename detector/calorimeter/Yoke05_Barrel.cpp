@@ -179,7 +179,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 
 // ========= Create Yoke Barrel module   ====================================
-  PolyhedraRegular YokeBarrelSolid( symmetry, M_PI/symmetry, rInnerBarrel, rOuterBarrel,  Yoke_Barrel_module_dim_z);
+  PolyhedraRegular YokeBarrelSolid( symmetry, M_PI/2.0-M_PI/symmetry, rInnerBarrel, rOuterBarrel,  Yoke_Barrel_module_dim_z);
 
   Volume mod_vol(det_name+"_module", YokeBarrelSolid, yokeMaterial);
 
