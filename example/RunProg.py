@@ -35,7 +35,7 @@ class DD4hepSimulation(object):
     self.physicsList = "FTFP_BERT"
     self.crossingAngleBoost = 0.0
     self.macroFile = ''
-
+    self.gun = False
     self.magneticFieldDict = {}
 
   @staticmethod
@@ -66,6 +66,8 @@ class DD4hepSimulation(object):
     parser.add_argument("--crossingAngleBoost", action="store", dest="crossingAngleBoost", default = self.crossingAngleBoost)
     parser.add_argument("--macroFile", "-M", action="store", dest="macroFile", default = self.macroFile)
 
+    parser.add_argument("--gun", "-G", action="store_true", dest="gun", default=self.gun)
+
     parsed = parser.parse_args()
     print "parsed things", parsed
     self.compactFile = parsed.compactFile
@@ -79,12 +81,14 @@ class DD4hepSimulation(object):
     self.physicsList = parsed.physicsList
     self.crossingAngleBoost = parsed.crossingAngleBoost
     self.macroFile = parsed.macroFile
+    self.gun = parsed.gun
+
     if self.runType == "batch":
       if not self.numberOfEvents:
         print "ERROR: Batch mode requested, but did not set number of events"
         exit(1)
-      if not self.inputFile:
-        print "ERROR: Batch mode requested, but did not set number of events"
+      if not self.inputFile and not self.gun:
+        print "ERROR: Batch mode requested, but did not set inputfile or gun"
         exit(1)
 
   def setupMagneticField(self, simple):
@@ -167,10 +171,6 @@ class DD4hepSimulation(object):
       print "ERROR: unknown runType"
       exit(1)
 
-    if self.runType in ("vis", "shell", "run"):
-      gun = simple.setupGun(name="gun", particle="e-", energy=10*GeV, isotrop=False)
-      gun.direction = (0,0,1000)
-
     #kernel.UI="csh"
     kernel.NumEvents=self.numberOfEvents
 
@@ -187,9 +187,20 @@ class DD4hepSimulation(object):
 
     # Configure I/O
 
-    evt_lcio = simple.setupLCIOOutput('LcioOutput', self.outputFile )
+    evt_lcio = simple.setupLCIOOutput('LcioOutput', self.outputFile)
 
     actionList = []
+
+    if self.gun and not self.inputFile:
+      gun = DDG4.GeneratorAction(kernel,"Geant4ParticleGun/"+"Gun")
+      gun.energy      = 10*GeV
+      gun.particle    = "e-"
+      gun.multiplicity = 1
+      gun.position     = (0.0,0.0,0.0)
+      gun.isotrop      = True
+      gun.direction    = (0,0,1)
+      #actionList.append(gun)
+      kernel.generatorAction().add(gun)
 
     if self.inputFile:
       gen = DDG4.GeneratorAction(kernel,"LCIOInputAction/LCIO1")
