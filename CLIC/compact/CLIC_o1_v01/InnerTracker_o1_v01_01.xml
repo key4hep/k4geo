@@ -9,7 +9,7 @@
                     <shape type="BooleanShape" operation="Subtraction">
                         <shape type="BooleanShape" operation="Subtraction">
                             <shape type="BooleanShape" operation="Subtraction"  >
-                                <shape type="Tube" rmin="CentralBeamPipe_rmax" rmax="InnerTracker_outer_radious" dz="InnerTracker_half_length+env_safety"/>
+                                <shape type="Tube" rmin="CentralBeamPipe_rmax" rmax="InnerTracker_outer_radius" dz="InnerTracker_half_length+env_safety"/>
                                 <shape type="Cone" rmin1="0" rmax1="CentralBeamPipe_rmax" rmin2="0" rmax2="ConeBeamPipe_rmax" z="(ConeBeamPipe_zmax-CentralBeamPipe_zmax)/2.0"/>
                                 <position x="0" y="0" z="(ConeBeamPipe_zmax-CentralBeamPipe_zmax)/2.0 + CentralBeamPipe_zmax" />
                             </shape>
@@ -22,7 +22,7 @@
                     <shape type="Tube" rmin="0" rmax="ConeBeamPipe_rmax" dz="(InnerTracker_half_length-ConeBeamPipe_zmax)/2.0+env_safety"/>
                     <position x="0" y="0" z="-(InnerTracker_half_length-ConeBeamPipe_zmax)/2.0-ConeBeamPipe_zmax" />
                 </shape>
-                <shape type="Tube" rmin="0" rmax="Vertex_outer_radious" dz="Vertex_half_length"/>
+                <shape type="Tube" rmin="0" rmax="Vertex_outer_radius" dz="Vertex_half_length"/>
             </shape>
             
             

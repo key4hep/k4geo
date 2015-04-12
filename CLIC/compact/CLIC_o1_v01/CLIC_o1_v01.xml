@@ -80,20 +80,29 @@
         
         <constant name="env_safety" value="0.1*mm"/>
         
-        <constant name="Vertex_inner_radious" value="30*mm"/>
-        <constant name="Vertex_outer_radious" value="102*mm"/>
+        <constant name="Vertex_inner_radius" value="30*mm"/>
+        <constant name="Vertex_outer_radius" value="102*mm"/>
         <constant name="Vertex_half_length" value="260*mm"/>
         
-        <constant name="InnerTracker_inner_radious" value="61*mm"/>
-        <constant name="InnerTracker_outer_radious" value="580*mm"/>
+        <constant name="InnerTracker_inner_radius" value="61*mm"/>
+        <constant name="InnerTracker_outer_radius" value="580*mm"/>
         <constant name="InnerTracker_half_length" value="2350*mm"/>
         
-        <constant name="OuterTracker_inner_radious" value="580*mm"/>
-        <constant name="OuterTracker_outer_radious" value="1500*mm"/>
+        <constant name="OuterTracker_inner_radius" value="580*mm"/>
+        <constant name="OuterTracker_outer_radius" value="1500*mm"/>
         <constant name="OuterTracker_half_length" value="2350*mm"/>
+
+        <constant name="ECalBarrel_inner_radius" value="1500*mm"/>
+        <constant name="ECalBarrel_outer_radius" value="1659*mm"/>
+        <constant name="ECalBarrel_half_length" value="2359*mm"/>
+        <constant name="ECalBarrel_symmetry" value="8"/>
         
-        
-        
+        <constant name="ECalEndcap_inner_radius" value="410*mm"/>
+        <constant name="ECalEndcap_outer_radius" value="1400*mm"/>
+        <constant name="ECalEndcap_min_z" value="2350*mm"/>
+        <constant name="ECalEndcap_max_z" value="2509*mm"/>
+        <constant name="ECalEndcap_outer_symmetry" value="8"/>
+        <constant name="ECalEndcap_inner_symmetry" value="4"/>        
         
     </define>
     
@@ -122,16 +131,21 @@
         <vis name="VXDVis"  alpha="1.0" r="0.2" g="0.2"  b="0.2" showDaughters="true"  visible="true"/>
         <vis name="ITVis"  alpha="1.0" r="0.54" g="0.43"  b="0.04" showDaughters="true"  visible="true"/>
         <vis name="OTVis"  alpha="1.0" r="0.8" g="0.8"  b="0.4" showDaughters="true"  visible="true"/>
-        
+        <vis name="ECALVis"  alpha="1.0" r="0.2" g="0.6"  b="0" showDaughters="true"  visible="true"/>        
         
     </display>
     <include ref="Materials_v01.xml"/>
     
-    <include ref="Beampipe_o1_v01_01.xml"/>
+    <!--include ref="Beampipe_o1_v01_01.xml"/>
     
     <include ref="Vertex_o1_v01_01.xml"/>
     
     <include ref="InnerTracker_o1_v01_01.xml"/>
     <include ref="OuterTracker_o1_v01_01.xml"/>
+
+    <include ref="ECalBarrel_o1_v01_01.xml"/-->
+    <include ref="ECalEndcap_o1_v01_01.xml"/>
+
+
     
 </lccdd>

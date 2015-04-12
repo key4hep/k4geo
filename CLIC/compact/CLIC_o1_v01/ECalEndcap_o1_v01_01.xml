@@ -1,0 +1,44 @@
+<lccdd>
+    
+    
+    
+    <!--  Definition of the readout segmentation/definition  -->
+    <readouts>
+        <readout name="ECalEndcapHits">
+            <segmentation type="CartesianGridXY" grid_size_x="3.5" grid_size_y="3.5" />
+            <id>system:8,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id>
+        </readout>
+    </readouts>
+    
+    <!--  Includes for sensitives and support                -->
+    <detectors>
+        
+        <detector name="ECalEndcap" type="ECalEndcap_o1_v01" id="15" readout="ECalEndcapHits" vis="ECALVis" >
+            
+            <comment>EM Calorimeter Barrel</comment>
+            
+            <envelope vis="ECALVis">
+                <shape type="BooleanShape" operation="Subtraction" material="Air">
+                    <shape type="BooleanShape" operation="Subtraction">
+                        <shape type="PolyhedraRegular"  numsides="ECalEndcap_outer_symmetry" rmin="0" rmax="ECalEndcap_outer_radius" dz="2.0*ECalEndcap_max_z"/>
+                        <shape type="PolyhedraRegular"  numsides="ECalEndcap_outer_symmetry" rmin="0" rmax="ECalEndcap_outer_radius+env_safety" dz="2.0*ECalEndcap_min_z"/>
+                    </shape>
+                    <shape type="Box" dx="ECalEndcap_inner_radius" dy="ECalEndcap_inner_radius" dz="ECalEndcap_max_z + 2.0*env_safety"/>
+                    <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/ECalEndcap_outer_symmetry-180*deg/ECalEndcap_inner_symmetry"/>
+                </shape>
+                <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/ECalEndcap_outer_symmetry"/>
+            </envelope>
+            
+        </detector>
+        
+    </detectors>
+    
+    
+    
+    
+    
+    
+    
+</lccdd>
+
+
