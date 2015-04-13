@@ -1,0 +1,44 @@
+<lccdd>
+    
+    
+    
+    <!--  Definition of the readout segmentation/definition  -->
+    <readouts>
+        <readout name="ECalPlugHits">
+            <segmentation type="CartesianGridXY" grid_size_x="3.5" grid_size_y="3.5" />
+            <id>system:8,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id>
+        </readout>
+    </readouts>
+    
+    <!--  Includes for sensitives and support                -->
+    <detectors>
+        
+        <detector name="ECalPlug" type="ECalPlug_o1_v01" id="15" readout="ECalPlugHits" vis="ECALVis" >
+            
+            <comment>EM Calorimeter Barrel</comment>
+            
+            
+            <envelope vis="ECALVis">
+                <shape type="BooleanShape" operation="Subtraction" material="Air">
+                    <shape type="BooleanShape" operation="Subtraction" material="Air">
+                        <shape type="Box" dx="ECalPlug_outer_radius" dy="ECalPlug_outer_radius" dz="ECalPlug_max_z"/>
+                        <shape type="Tube" rmin="0" rmax="ECalPlug_inner_radius" dz="2.0*ECalPlug_max_z"/>
+                    </shape>
+                    <shape type="Box" dx="ECalPlug_outer_radius" dy="ECalPlug_outer_radius" dz="ECalPlug_min_z"/>
+                </shape>
+            </envelope>
+            
+            
+        </detector>
+        
+    </detectors>
+    
+    
+    
+    
+    
+    
+    
+</lccdd>
+
+

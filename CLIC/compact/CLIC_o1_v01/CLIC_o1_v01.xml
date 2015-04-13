@@ -86,11 +86,11 @@
         
         <constant name="InnerTracker_inner_radius" value="61*mm"/>
         <constant name="InnerTracker_outer_radius" value="580*mm"/>
-        <constant name="InnerTracker_half_length" value="2350*mm"/>
+        <constant name="InnerTracker_half_length" value="2345*mm"/>
         
         <constant name="OuterTracker_inner_radius" value="580*mm"/>
         <constant name="OuterTracker_outer_radius" value="1500*mm"/>
-        <constant name="OuterTracker_half_length" value="2350*mm"/>
+        <constant name="OuterTracker_half_length" value="2345*mm"/>
 
         <constant name="ECalBarrel_inner_radius" value="1500*mm"/>
         <constant name="ECalBarrel_outer_radius" value="1659*mm"/>
@@ -102,7 +102,14 @@
         <constant name="ECalEndcap_min_z" value="2350*mm"/>
         <constant name="ECalEndcap_max_z" value="2509*mm"/>
         <constant name="ECalEndcap_outer_symmetry" value="8"/>
-        <constant name="ECalEndcap_inner_symmetry" value="4"/>        
+        <constant name="ECalEndcap_inner_symmetry" value="4"/>   
+
+        <constant name="ECalPlug_inner_radius" value="200*mm"/>
+        <constant name="ECalPlug_outer_radius" value="380*mm"/>
+        <constant name="ECalPlug_min_z" value="2350*mm"/>
+        <constant name="ECalPlug_max_z" value="2509*mm"/>
+        <constant name="ECalPlug_outer_symmetry" value="4"/>
+        <constant name="ECalPlug_inner_symmetry" value="0"/>       
         
     </define>
     
@@ -136,16 +143,16 @@
     </display>
     <include ref="Materials_v01.xml"/>
     
-    <!--include ref="Beampipe_o1_v01_01.xml"/>
+    <include ref="Beampipe_o1_v01_01.xml"/>
     
     <include ref="Vertex_o1_v01_01.xml"/>
     
     <include ref="InnerTracker_o1_v01_01.xml"/>
     <include ref="OuterTracker_o1_v01_01.xml"/>
 
-    <include ref="ECalBarrel_o1_v01_01.xml"/-->
+    <include ref="ECalBarrel_o1_v01_01.xml"/>
     <include ref="ECalEndcap_o1_v01_01.xml"/>
-
+    <include ref="ECalPlug_o1_v01_01.xml"/>
 
     
 </lccdd>
