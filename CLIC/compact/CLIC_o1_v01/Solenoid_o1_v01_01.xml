@@ -1,0 +1,25 @@
+<lccdd>
+    
+    <!--  Includes for sensitives and support                -->
+    <detectors>
+        
+        <detector name="Solenoid" type="Solenoid_o1_v01" id="15" vis="SOLVis" >
+            
+            
+            <envelope vis="SOLVis">
+                <shape type="Tube" rmin="Solenoid_inner_radius" rmax="Solenoid_outer_radius" dz="Solenoid_half_length" material="Air"/> 
+            </envelope>
+            
+        </detector>
+        
+    </detectors>
+    
+    
+    
+    
+    
+    
+    
+</lccdd>
+
+

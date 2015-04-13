@@ -1,0 +1,44 @@
+<lccdd>
+    
+    
+    
+    <!--  Definition of the readout segmentation/definition  -->
+    <readouts>
+        <readout name="YokeEndcapHits">
+            <segmentation type="CartesianGridXY" grid_size_x="3.5" grid_size_y="3.5" />
+            <id>system:8,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id>
+        </readout>
+    </readouts>
+    
+    <!--  Includes for sensitives and support                -->
+    <detectors>
+        
+        <detector name="YokeEndcap" type="YokeEndcap_o1_v01" id="15" readout="YokeEndcapHits" vis="YOKEVis" >
+            
+            <comment>EM Calorimeter Barrel</comment>
+            
+            <envelope vis="YOKEVis">
+                <shape type="BooleanShape" operation="Subtraction" material="Air">
+                    <shape type="BooleanShape" operation="Subtraction">
+                        <shape type="PolyhedraRegular"  numsides="YokeEndcap_outer_symmetry" rmin="0" rmax="YokeEndcap_outer_radius" dz="2.0*YokeEndcap_max_z"/>
+                        <shape type="PolyhedraRegular"  numsides="YokeEndcap_outer_symmetry" rmin="0" rmax="YokeEndcap_outer_radius+env_safety" dz="2.0*YokeEndcap_min_z"/>
+                    </shape>
+                    <shape type="Box" dx="YokeEndcap_inner_radius" dy="YokeEndcap_inner_radius" dz="YokeEndcap_max_z + 2.0*env_safety"/>
+                    <rotation x="0*deg" y="0*deg" z="-90*deg+180*deg/YokeEndcap_outer_symmetry"/>
+                </shape>
+                <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/YokeEndcap_outer_symmetry"/>
+            </envelope>
+            
+        </detector>
+        
+    </detectors>
+    
+    
+    
+    
+    
+    
+    
+</lccdd>
+
+
