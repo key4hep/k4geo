@@ -104,7 +104,7 @@
         <constant name="ECalEndcap_outer_symmetry" value="8"/>
         <constant name="ECalEndcap_inner_symmetry" value="4"/>
         
-        <constant name="ECalPlug_inner_radius" value="200*mm"/>
+        <constant name="ECalPlug_inner_radius" value="240*mm"/>
         <constant name="ECalPlug_outer_radius" value="380*mm"/>
         <constant name="ECalPlug_min_z" value="2350*mm"/>
         <constant name="ECalPlug_max_z" value="2509*mm"/>

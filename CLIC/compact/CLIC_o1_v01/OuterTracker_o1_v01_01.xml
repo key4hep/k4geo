@@ -205,6 +205,30 @@
                 <ring r="1124.167*mm" zstart="(1562.916+1.75)*mm" nmodules="78" dz="1.75*mm" module="Module2" phi0="pi/78"/>
                 <ring r="1206.937*mm" zstart="(1555.647+1.75)*mm" nmodules="84" dz="1.75*mm" module="Module2"/>
             </layer>
+
+            <layer id="5">
+                <ring r="625.654*mm" zstart="(1606.936+300)*mm" nmodules="48" dz="1.75*mm" module="Module2"/>
+                <ring r="703.666*mm" zstart="(1599.595+300)*mm" nmodules="54" dz="1.75*mm" module="Module2" phi0="pi/54"/>
+                <ring r="793.448*mm" zstart="(1592.206+300)*mm" nmodules="58" dz="1.75*mm" module="Module2" phi0="pi/58"/>
+                <ring r="874.239*mm" zstart="(1584.864+300)*mm" nmodules="64" dz="1.75*mm" module="Module2"/>
+                <ring r="958.364*mm" zstart="(1577.567+300)*mm" nmodules="68" dz="1.75*mm" module="Module2"/>
+                <ring r="1040.970*mm" zstart="(1570.222+300)*mm" nmodules="72" dz="1.75*mm" module="Module2"/>
+                <ring r="1124.167*mm" zstart="(1562.916+300)*mm" nmodules="78" dz="1.75*mm" module="Module2" phi0="pi/78"/>
+                <ring r="1206.937*mm" zstart="(1555.647+300)*mm" nmodules="84" dz="1.75*mm" module="Module2"/>
+            </layer>
+
+
+            <layer id="6">
+                <ring r="625.654*mm" zstart="(1606.936+600)*mm" nmodules="48" dz="1.75*mm" module="Module2"/>
+                <ring r="703.666*mm" zstart="(1599.595+600)*mm" nmodules="54" dz="1.75*mm" module="Module2" phi0="pi/54"/>
+                <ring r="793.448*mm" zstart="(1592.206+600)*mm" nmodules="58" dz="1.75*mm" module="Module2" phi0="pi/58"/>
+                <ring r="874.239*mm" zstart="(1584.864+600)*mm" nmodules="64" dz="1.75*mm" module="Module2"/>
+                <ring r="958.364*mm" zstart="(1577.567+600)*mm" nmodules="68" dz="1.75*mm" module="Module2"/>
+                <ring r="1040.970*mm" zstart="(1570.222+600)*mm" nmodules="72" dz="1.75*mm" module="Module2"/>
+                <ring r="1124.167*mm" zstart="(1562.916+600)*mm" nmodules="78" dz="1.75*mm" module="Module2" phi0="pi/78"/>
+                <ring r="1206.937*mm" zstart="(1555.647+600)*mm" nmodules="84" dz="1.75*mm" module="Module2"/>
+            </layer>
+
         </detector>
     </detectors>
     
