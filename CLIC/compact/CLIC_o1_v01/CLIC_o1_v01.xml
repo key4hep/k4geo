@@ -123,6 +123,9 @@
         <constant name="HCalEndcap_max_z" value="4129*mm"/>
         <constant name="HCalEndcap_inner_symmetry" value="4"/>
         <constant name="HCalEndcap_outer_symmetry" value="16"/>
+        <constant name="HCalEndcap_zcutout  " value="200*mm"/>
+        <constant name="HCalEndcap_rcutout" value="180*mm"/>
+
         
         <constant name="Solenoid_inner_radius" value="3440*mm"/>
         <constant name="Solenoid_outer_radius" value="4304*mm"/>

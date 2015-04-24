@@ -1,34 +1,34 @@
 <lccdd>
     <!--  Definition of global dictionary constants          -->
     <define>
-        <constant name="HcalEndcap_layers" value="60"/>
-        <constant name="HcalEndcap_layer_thickness" value="2.0*cm + 0.65*cm"/>
-        <constant name="HcalBarrel_layers" value="(int) 75"/>
-        <constant name="HcalBarrel_layer_thickness" value="1.0*cm + 0.65*cm"/>
+        <constant name="HCalEndcap_layers" value="60"/>
+        <constant name="HCalEndcap_layer_thickness" value="2.0*cm + 0.65*cm"/>
+        <constant name="HCalBarrel_layers" value="(int) 60"/>
+        <constant name="HCalBarrel_layer_thickness" value="2.0*cm + 0.65*cm"/>
     </define>
     
     <!--  Definition of the used visualization attributes    -->
     <display>
-        <vis name="HcalBarrelVis"    alpha="1" r="0.0"  g="0.3"  b="0.8" showDaughters="true" visible="true"/>
-        <vis name="HcalStavesVis"    alpha="1" r="0.0"  g="0.0"  b="0.1" showDaughters="true" visible="false"/>
-        <vis name="HcalLayerVis"     alpha="1" r="0.0"  g="0.5"  b="1.0" showDaughters="true" visible="false"/>
-        <vis name="HcalSensorVis"    alpha="1" r="1.0"  g="0.0"  b="0.2" showDaughters="true" visible="true"/>
-        <vis name="HcalAbsorberVis"  alpha="1" r="0.4"  g="0.4"  b="0.6" showDaughters="true" visible="true"/>
+        <vis name="HCalBarrelVis"    alpha="1" r="0.0"  g="0.3"  b="0.8" showDaughters="true" visible="true"/>
+        <vis name="HCalStavesVis"    alpha="1" r="0.0"  g="0.0"  b="0.1" showDaughters="true" visible="false"/>
+        <vis name="HCalLayerVis"     alpha="1" r="0.0"  g="0.5"  b="1.0" showDaughters="true" visible="false"/>
+        <vis name="HCalSensorVis"    alpha="1" r="1.0"  g="0.0"  b="0.2" showDaughters="true" visible="true"/>
+        <vis name="HCalAbsorberVis"  alpha="1" r="0.4"  g="0.4"  b="0.6" showDaughters="true" visible="true"/>
         
-        <vis name="HcalEndcapVis"          alpha="1" r="1"    g="1"    b="0.1" showDaughters="false" visible="true"/>
-        <vis name="HcalEndcapLayerVis"     alpha="1" r="1"    g="0"    b="0.5" showDaughters="false" visible="true"/>
+        <vis name="HCalEndcapVis"          alpha="1" r="1"    g="1"    b="0.1" showDaughters="false" visible="true"/>
+        <vis name="HCalEndcapLayerVis"     alpha="1" r="1"    g="0"    b="0.5" showDaughters="false" visible="true"/>
     </display>
     
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
-        <readout name="HcalBarrelHits">
+        <readout name="HCalBarrelHits">
             <segmentation type="CartesianGridXY" grid_size_x="3.0*cm" grid_size_y="3.0*cm" />
             <id>system:8,barrel:3,module:6,layer:8,slice:5,x:32:-16,y:-16</id>
         </readout>
     </readouts>
     
     <detectors>
-        <detector id="101" name="HcalBarrel" type="HCalBarrel_o1_v01" readout="HcalBarrelHits" vis="HCALVis" calorimeterType="HAD_BARREL" gap="0.*cm" material="Steel235">
+        <detector id="101" name="HCalBarrel" type="HCalBarrel_o1_v01" readout="HCalBarrelHits" vis="HCALVis" calorimeterType="HAD_BARREL" gap="0.*cm" material="Steel235">
             
             <comment>Hadron Calorimeter Barrel</comment>
             
@@ -43,15 +43,19 @@
             
             
             <dimensions numsides="HCalBarrel_inner_symmetry" rmin="HCalBarrel_inner_radius" z="HCalBarrel_half_length*2"/>
-            <staves vis="HcalStavesVis"/>
-            <layer repeat="(int)HcalBarrel_layers">
-                <slice material="TungstenDens24" thickness="1.00*cm" vis="HcalAbsorberVis"/>
-                <slice material="Polystyrene" thickness="0.50*cm" sensitive="yes" limits="cal_limits" vis="HcalSensorVis"/>
-                <slice material="Air" thickness="0.15*cm" vis="InvisibleNoDaughters"/>
+            <staves vis="HCalStavesVis"/>
+            <layer repeat="(int) HCalBarrel_layers" vis="HCalLayerVis">
+                <slice material="Steel235" thickness="19*mm" vis="HCalAbsorberVis"/>
+                <slice material="Steel235" thickness="0.5*mm" vis="HCalAbsorberVis"/>
+                <slice material="Polystyrene" thickness="3*mm" sensitive="yes" limits="cal_limits" vis="HCalSensorVis"/>
+                <slice material="Copper" thickness="0.1*mm" vis="HCalCopperVis"/>
+                <slice material="PCB" thickness="0.7*mm" vis="HCalPCBVis"/>
+                <slice material="Steel235" thickness="0.5*mm" vis="HCalAbsorberVis"/>
+                <slice material="Air" thickness="2.7*mm" vis="InvisibleNoDaughters"/>
             </layer>
         </detector>
         
     </detectors>
-    
+
 </lccdd>
 
