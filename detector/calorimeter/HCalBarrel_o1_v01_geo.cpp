@@ -20,7 +20,7 @@ static void placeStaves(DetElement& parent, DetElement& stave, double rmin, int 
   double innerRotation = innerAngle;
   
   //need both numbers to align with envelope
-  double offsetRotation = M_PI/numsides_out - M_PI/numsides_in ;
+  double offsetRotation = -(M_PI/numsides_out -2*M_PI/numsides_in);
  
   double sectCenterRadius = rmin + total_thickness / 2;
   double rotX = M_PI / 2;
