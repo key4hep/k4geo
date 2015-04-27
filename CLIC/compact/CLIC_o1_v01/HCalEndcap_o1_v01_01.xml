@@ -33,23 +33,24 @@
             </envelope>
             
             
-            <dimensions numsides="(int) HCalEndcap_outer_symmetry" zmin="HCalEndcap_min_z" rmin="HCalEndcap_inner_radius" rmax="HCalEndcap_outer_radius" rmin2="HCalEndcap_rcutout" z2="HCalEndcap_cutout_layers * HCalEndcap_layer_thickness"/>
+            <dimensions nsides_inner="HCalEndcap_inner_symmetry" nsides_outer="(int) HCalEndcap_outer_symmetry" zmin="HCalEndcap_min_z" rmin="HCalEndcap_inner_radius" rmax="HCalEndcap_outer_radius" rmin2="HCalEndcap_rcutout" z2="HCalEndcap_cutout_layers * HCalEndcap_layer_thickness" phi0="0"/>
+            
             <layer repeat="HCalEndcap_cutout_layers" gap="HCalEndcap_rcutout" vis="HCalEndcapLayerVis">
-              <slice material="Steel235" thickness="19*mm" vis="HCalAbsorberVis"/>
-              <slice material="Steel235" thickness="0.5*mm" vis="HCalAbsorberVis"/>
+              <slice material="Steel235" thickness="0.5*mm" vis="HCalAbsorberVis" radiator="yes"/>
+              <slice material="Steel235" thickness="19*mm" vis="HCalAbsorberVis" radiator="yes"/>
               <slice material="Polystyrene" thickness="3*mm" sensitive="yes" limits="cal_limits" vis="HCalSensorVis"/>
               <slice material="Copper" thickness="0.1*mm" vis="HCalCopperVis"/>
               <slice material="PCB" thickness="0.7*mm" vis="HCalPCBVis"/>
-              <slice material="Steel235" thickness="0.5*mm" vis="HCalAbsorberVis"/>
+              <slice material="Steel235" thickness="0.5*mm" vis="HCalAbsorberVis" radiator="yes"/>
               <slice material="Air" thickness="2.7*mm" vis="InvisibleNoDaughters"/>
             </layer>
             <layer repeat="HCalEndcap_layers - HCalEndcap_cutout_layers " vis="HCalEndcapLayerVis">
-              <slice material="Steel235" thickness="19*mm" vis="HCalAbsorberVis"/>
-              <slice material="Steel235" thickness="0.5*mm" vis="HCalAbsorberVis"/>
+              <slice material="Steel235" thickness="0.5*mm" vis="HCalAbsorberVis" radiator="yes"/>
+              <slice material="Steel235" thickness="19*mm" vis="HCalAbsorberVis" radiator="yes"/>
               <slice material="Polystyrene" thickness="3*mm" sensitive="yes" limits="cal_limits" vis="HCalSensorVis"/>
               <slice material="Copper" thickness="0.1*mm" vis="HCalCopperVis"/>
               <slice material="PCB" thickness="0.7*mm" vis="HCalPCBVis"/>
-              <slice material="Steel235" thickness="0.5*mm" vis="HCalAbsorberVis"/>
+              <slice material="Steel235" thickness="0.5*mm" vis="HCalAbsorberVis" radiator="yes"/>
               <slice material="Air" thickness="2.7*mm" vis="InvisibleNoDaughters"/>
             </layer>
             

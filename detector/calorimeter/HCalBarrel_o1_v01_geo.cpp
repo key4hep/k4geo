@@ -15,17 +15,20 @@ using namespace std;
 using namespace DD4hep;
 using namespace DD4hep::Geometry;
 
-static void placeStaves(DetElement& parent, DetElement& stave, double rmin, int numsides, double total_thickness,
+static void placeStaves(DetElement& parent, DetElement& stave, double rmin, int numsides_in, int numsides_out, double total_thickness,
 			Volume envelopeVolume, double innerAngle, Volume sectVolume) {
   double innerRotation = innerAngle;
-  double offsetRotation = -innerRotation / 2;
+  
+  //need both numbers to align with envelope
+  double offsetRotation = M_PI/numsides_out - M_PI/numsides_in ;
+ 
   double sectCenterRadius = rmin + total_thickness / 2;
   double rotX = M_PI / 2;
   double rotY = -offsetRotation;
   double posX = -sectCenterRadius * std::sin(rotY);
   double posY = sectCenterRadius * std::cos(rotY);
 
-  for (int module = 1; module <= numsides; ++module) {
+  for (int module = 1; module <= numsides_in; ++module) {
     DetElement det = module > 1 ? stave.clone(_toString(module,"stave%d")) : stave;
     Transform3D trafo(RotationZYX(0, rotY, rotX), Translation3D(-posX, -posY, 0));
     PlacedVolume pv = envelopeVolume.placeVolume(sectVolume,trafo);
@@ -60,15 +63,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens) {
   DetElement stave("stave1", x_det.id());
   //  Volume motherVol = lcdd.pickMotherVolume(sdet);
   
-  //Create caloData object to extend driver with data required for reconstruction
-  DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
-  caloData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
-  caloData->inner_symmetry = nsides_inner;
-  caloData->outer_symmetry = nsides_outer; 
-  caloData->phi0 = phi0;
-  
-  
-  
   for (xml_coll_t c(x_det, _U(layer)); c; ++c) {
     xml_comp_t x_layer = c;
     int repeat = x_layer.repeat();
@@ -81,6 +75,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens) {
   Volume envelopeVol = XML::createPlacedEnvelope( lcdd,  e , sdet ) ;
 
   if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
+
+  //Create caloData object to extend driver with data required for reconstruction
+  DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
+  caloData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
+  caloData->inner_symmetry = nsides_inner;
+  caloData->outer_symmetry = nsides_outer; 
+  caloData->phi0 = phi0;
+
 
   //-----------------------------------------------------------------------------------
 
@@ -129,7 +131,6 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
       DetElement layer(stave, layer_name, layer_num);
       //### layeringExtension->setLayer(layer_num, layer, layerNormal);
       
-      DDRec::LayeredCalorimeterData::Layer caloLayer ;
       
       
       // Layer position in Z within the stave.
@@ -187,6 +188,7 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
       layer_phv.addPhysVolID("layer", layer_num);
       layer.setPlacement(layer_phv);
       
+      DDRec::LayeredCalorimeterData::Layer caloLayer ;
       caloLayer.distance = layer_pos_z;
       caloLayer.thickness = layer_thickness;
       caloLayer.absorberThickness = totalAbsorberThickness;
@@ -212,7 +214,7 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
     stave.setVisAttributes(lcdd, staves.visStr(), staveOuterVol);
   }
   // Place the staves.
-  placeStaves(sdet, stave, rmin, nsides_inner, totalThickness, envelopeVol, innerAngle, staveOuterVol);
+  placeStaves(sdet, stave, rmin, nsides_inner,nsides_outer, totalThickness, envelopeVol, innerAngle, staveOuterVol);
   // Set envelope volume attributes.
   envelopeVol.setAttributes(lcdd, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   

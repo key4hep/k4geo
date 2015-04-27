@@ -36,7 +36,7 @@
                 <shape type="BooleanShape" operation="Subtraction"  material = "Air" >
                     <shape type="PolyhedraRegular" numsides="HCalBarrel_outer_symmetry"  rmin="0" rmax="HCalBarrel_outer_radius" dz="HCalBarrel_half_length*2" />
                     <shape type="PolyhedraRegular" numsides="HCalBarrel_inner_symmetry"  rmin="0" rmax="HCalBarrel_inner_radius" dz="HCalBarrel_half_length*2+env_safety" />
-                    <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/HCalBarrel_outer_symmetry"/>
+                    <rotation x="0*deg" y="0*deg" z="180*deg/HCalBarrel_outer_symmetry-180*deg/HCalBarrel_inner_symmetry"/>
                 </shape>
                 <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/HCalBarrel_outer_symmetry"/>
             </envelope>
