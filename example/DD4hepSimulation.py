@@ -219,8 +219,9 @@ class DD4hepSimulation(object):
       gun.particle    = "e-"
       gun.multiplicity = 1
       gun.position     = (0.0,0.0,0.0)
-      gun.isotrop      = True
+      gun.isotrop      = False
       gun.direction    = (0,0,1)
+      gun.enableUI()
       #actionList.append(gun)
       kernel.generatorAction().add(gun)
 
