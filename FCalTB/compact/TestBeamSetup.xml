@@ -8,8 +8,16 @@
 
   <readouts>
     <readout name="TestBeamCollection">
-      <segmentation type="CartesianGridXY" grid_size_x="0.35*cm" grid_size_y="0.35*cm" />
-      <id>system:8,layer:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id>
+      <!-- <segmentation type="PolarGridRPhi" grid_size_r="1.8*cm" -->
+      <!--                  grid_size_phi="7.5*degree" -->
+      <!--                  offset_phi="90*degree" -->
+      <!--                  offset_r="80*mm"/> -->
+
+      <segmentation type="PolarGridRPhi2"
+                    grid_r_values="80.0*mm 81.7*mm 81.8*mm 83.5*mm 83.6*mm 85.3*mm 85.4*mm 87.1*mm 87.2*mm 88.9*mm 89.0*mm 90.7*mm 90.8*mm 92.5*mm 92.6*mm 94.3*mm 94.4*mm 96.1*mm 96.2*mm 97.9*mm 98.0*mm 99.7*mm 99.8*mm 101.5*mm 101.6*mm 103.3*mm 103.4*mm 105.1*mm 105.2*mm 106.9*mm 107.0*mm 108.7*mm 108.8*mm 110.5*mm 110.6*mm 112.3*mm 112.4*mm 114.1*mm 114.2*mm 115.9*mm 116.0*mm 117.7*mm 117.8*mm 119.5*mm 119.6*mm 121.3*mm 121.4*mm 123.1*mm 123.2*mm 124.9*mm 125.0*mm 126.7*mm 126.8*mm 128.5*mm 128.6*mm 130.3*mm 130.4*mm 132.1*mm 132.2*mm 133.9*mm 134.0*mm 135.7*mm 135.8*mm 137.5*mm 137.6*mm 139.3*mm 139.4*mm 141.1*mm 141.2*mm 142.9*mm 143.0*mm 144.7*mm 144.8*mm 146.5*mm 146.6*mm 148.3*mm 148.4*mm 150.1*mm 150.2*mm 151.9*mm 152.0*mm 153.7*mm 153.8*mm 155.5*mm 155.6*mm 157.3*mm 157.4*mm 159.1*mm 159.2*mm 160.9*mm 161.0*mm 162.7*mm 162.8*mm 164.5*mm 164.6*mm 166.3*mm 166.4*mm 168.1*mm 168.2*mm 169.9*mm 170.0*mm 171.7*mm 171.8*mm 173.5*mm 173.6*mm 175.3*mm 175.4*mm 177.1*mm 177.2*mm 178.9*mm 179.0*mm 180.7*mm 180.8*mm 182.5*mm 182.6*mm 184.3*mm 184.4*mm 186.1*mm 186.2*mm 187.9*mm 188.0*mm 189.7*mm 189.8*mm 191.5*mm 191.6*mm 193.3*mm 193.4*mm 195.1*mm 195.2*mm"
+                    grid_phi_values="7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree 7.5*degree"
+                    offset_phi="90*degree-15*degree"/> <!-- phi bin must not be negative in this case -->
+      <id>system:8,barrel:3,layer:8,slice:5,r:32:-16,phi:-16</id>
     </readout>
   </readouts>
 
@@ -25,34 +33,31 @@
   <detectors>
 
     <detector name="FCalTestBeam" type="FCalTB_2014" vis="LumiCalVis" id="13" 
-	      readout="TestBeamCollection" insideTrackingVolume="false" >
+              readout="TestBeamCollection" insideTrackingVolume="false" >
 
-      <parameter crossingangle="CrossingAngle" 
-		 sensorCentreOffset="18*mm"
-		 squareSideLength="140*mm"
-		 />
+      <parameter sensorCentreOffset="18*mm" squareSideLength="140*mm" />
       
       <dimensions inner_r = "80*mm"
-		  outer_r = "180.0*mm"
-		  inner_z = "1*m"
-		  sensorSpanning = "30*degrees"
-		  />
+                  outer_r = "180.0*mm"
+                  inner_z = "1*m"
+                  sensorSpanning = "30*degrees"
+                  />
 
       <layer repeat="1" vis="LumiCalVis">
-	<slice material = "TungstenDens24" thickness = "3.5*mm"   vis="TungstenVis"   type="Square"             />
-	<slice material = "Air"            thickness = "1*mm"     vis="AirVis"        type="Square"             />
+        <slice material = "TungstenDens24" thickness = "3.5*mm"   vis="TungstenVis"   type="Square"             />
+        <slice material = "Air"            thickness = "1*mm"     vis="AirVis"        type="Square"             />
       </layer>
       
       <layer repeat="4" vis="LumiCalVis">
-	<slice material = "TungstenDens24" thickness = "3.5*mm"   vis="TungstenVis"   type="Square"             />
-	<slice material = "Air"            thickness = "1.18*mm"     vis="AirVis"        type="Square"             />
-	<slice material = "Silicon"        thickness = "0.32*mm"  vis="SensorVis"     type="Arc"    sensitive = "yes" />
-	<slice material = "Copper"         thickness = "0.005*mm" vis="CuVis"         type="Square"              />
-	<slice material = "G10"            thickness = "2.490*mm" vis="PCBVis"        type="Square"              />
-	<slice material = "Copper"         thickness = "0.005*mm" vis="CuVis"         type="Square"              />
-	<slice material = "Air"            thickness = "1.5*mm"     vis="AirVis"        type="Square"              />
-	<slice material = "TungstenDens24" thickness = "3.5*mm"   vis="TungstenVis"   type="Square"              />
-	<slice material = "Air"            thickness = "1*mm"     vis="AirVis"        type="Square"              />
+        <slice material = "TungstenDens24" thickness = "3.5*mm"   vis="TungstenVis"   type="Square"             />
+        <slice material = "Air"            thickness = "1.18*mm"  vis="AirVis"        type="Square"             />
+        <slice material = "Silicon"        thickness = "0.32*mm"  vis="SensorVis"     type="Arc"     sensitive = "yes" />
+        <slice material = "Copper"         thickness = "0.005*mm" vis="CuVis"         type="Square"              />
+        <slice material = "G10"            thickness = "2.490*mm" vis="PCBVis"        type="Square"              />
+        <slice material = "Copper"         thickness = "0.005*mm" vis="CuVis"         type="Square"              />
+        <slice material = "Air"            thickness = "1.5*mm"   vis="AirVis"        type="Square"              />
+        <slice material = "TungstenDens24" thickness = "3.5*mm"   vis="TungstenVis"   type="Square"              />
+        <slice material = "Air"            thickness = "1*mm"     vis="AirVis"        type="Square"              />
       </layer>
 
     </detector>

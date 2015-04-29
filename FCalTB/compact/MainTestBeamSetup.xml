@@ -22,8 +22,9 @@
         <constant name="world_y" value="world_side"/>
         <constant name="world_z" value="world_side"/>
         
-        <constant name="CrossingAngle" value="0.00*rad"/>
-        
+	<!-- to limit the amount of MCParticles stored -->
+	<constant name="tracker_region_rmax" value="1*cm" />
+	<constant name="tracker_region_zmax" value="1*cm" />
 
     </define>
     
