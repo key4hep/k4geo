@@ -1,7 +1,24 @@
+<!-- ====================================================================== -->
+<!--                                                                        -->
+<!--    XML description of the CLIC NDM ECal Barrel detector                -->
+<!--                                                                        -->
+<!--    Contained are the required                                          -->
+<!--      ++ global constants used uniquely by this module                  -->
+<!--      ++ visualization attributes                                       -->
+<!--      ++ the definition of the readout structure and the                -->
+<!--         readout segmentation (if necessary)                            -->
+<!--      ++ the include statements for the sensitive detectors and         -->
+<!--         the corresponding support structure(s)                         -->
+<!--                                                                        -->
+<!--                                                                        -->
+<!--   @author  D.Protopopescu                                              -->
+<!--   @date    06/05/2015                                                  -->
+<!--   Envelope-enabled version based on the CLIC_o1_v00 version            -->
+<!--                                                                        -->
+<!-- ====================================================================== -->
+
 <lccdd>
-    
-    
-    
+        
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
         <readout name="EcalBarrelHits">
@@ -10,6 +27,15 @@
         </readout>
     </readouts>
     
+    <!--  Definition of the used visualization attributes    -->
+    <display>
+        <vis name="EcalStaveVis"        alpha="1.0" r="0.0"  g="0.8"  b="1.0"  showDaughters="true"  visible="true"/>
+        <vis name="EcalLayerVis"        alpha="1.0" r="0.8"  g="0.8"  b="0.0"  showDaughters="true"  visible="true"/>
+        <vis name="EcalSensitiveVis"    alpha="1.0" r="0.7"  g="0.3"  b="0.0"  showDaughters="false" visible="true"/>
+        <vis name="EcalAbsorberVis"     alpha="1.0" r="0.4"  g="0.4"  b="0.0"  showDaughters="false" visible="true"/>
+        <vis name="EcalEndcapVis"       alpha="1.0" r="0.77" g="0.74" b="0.86" showDaughters="true" visible="true"/>
+    </display>
+
     <!--  Includes for sensitives and support                -->
     <detectors>
         
@@ -22,6 +48,41 @@
                 <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/ECalBarrel_symmetry"/>
             </envelope>
             
+            <parameter num_towers="5" TowersAirGap="2*mm" TowersFaceThickness="2.40*mm" BaseMaterial="TungstenDens24"/>
+
+            <!-- Notice the new conventions for these parameters -->
+            <dimensions numsides="ECalBarrel_symmetry" rmin="ECalBarrel_inner_radius" rmax="ECalBarrel_outer_radius" z="ECalBarrel_half_length*2" />
+            <staves vis="EcalStaveVis"/>
+            <layer repeat="1" vis="EcalLayerVis" thickness="21.6*mm"><!-- total 2.4 mm -->
+                <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/>
+                <slice material = "siPCBMix"       thickness = "1.30*mm" vis="EcalAbsorberVis"/>
+                <slice material = "Air"            thickness = "0.10*mm" vis="InvisibleNoDaughters"/><!-- glue -->
+                <slice material = "Silicon"        thickness = "0.50*mm" sensitive="yes" limits="cal_limits" vis="EcalSensitiveVis"/>
+                <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="EcalAbsorberVis"/>
+                <slice material = "Air"            thickness = "0.15*cm" vis="InvisibleNoDaughters"/><!-- fiber -->
+            </layer>
+            <layer repeat="17" vis="EcalLayerVis" thickness="24.0*mm"><!-- total 17 x 4.9 mm -->
+                <slice material = "TungstenDens24" thickness = "2.40*mm" vis="EcalAbsorberVis"/>
+                <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
+                <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="EcalAbsorberVis"/>
+                <slice material = "Silicon"        thickness = "0.50*mm" sensitive="yes" limits="cal_limits" vis="EcalSensitiveVis"/>
+                <slice material = "Air"            thickness = "0.10*mm" vis="InvisibleNoDaughters"/><!-- glue -->
+                <slice material = "siPCBMix"       thickness = "1.30*mm" vis="EcalAbsorberVis"/>
+                <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/>
+            </layer>
+            <layer repeat="8" vis="EcalLayerVis" thickness="48.0*mm"><!-- total 8 x 7.3 mm -->
+                <slice material = "TungstenDens24" thickness = "4.80*mm" vis="EcalAbsorberVis"/>
+                <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
+                <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="EcalAbsorberVis"/>
+                <slice material = "Silicon"        thickness = "0.50*mm" sensitive="yes" limits="cal_limits" vis="EcalSensitiveVis"/>
+                <slice material = "Air"            thickness = "0.10*mm" vis="InvisibleNoDaughters"/><!-- glue -->
+                <slice material = "siPCBMix"       thickness = "1.30*mm" vis="EcalAbsorberVis"/>
+                <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/>
+            </layer>
+            <layer repeat="1" vis="EcalLayerVis" thickness="4.80*mm"><!-- total 4.8 mm -->
+                <slice material = "TungstenDens24" thickness = "4.80*mm" vis="EcalAbsorberVis"/>
+            </layer>
+ 
         </detector>
         
     </detectors>
