@@ -37,32 +37,32 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     //-----------------------------------------------------------------------------------
     
-    
-    return sdet; //just temporary
-    
     Layering      layering (e);
     Material      air       = lcdd.air();
     xml_comp_t    x_staves  = x_det.staves();
     xml_comp_t    x_dim     = x_det.dimensions();
     int           nsides    = x_dim.numsides();
     double        inner_r   = x_dim.rmin();
+    double        r_max     = x_dim.rmax();
     double        dphi      = (2*M_PI/nsides);
     double        hphi      = dphi/2;
     double        mod_z     = layering.totalThickness();
     double        outer_r   = inner_r + mod_z;//*std::cos(hphi);
     double        totThick  = mod_z;
-    //  Volume        motherVol = lcdd.pickMotherVolume(sdet);
     PolyhedraRegular hedra  (nsides,inner_r,inner_r+totThick+tolerance*2e0,x_dim.z());
-    //  Volume        envelope  (det_name,hedra,air);
-    //  PlacedVolume  env_phv   = motherVol.placeVolume(envelope,RotationZYX(0,0,M_PI/nsides));
-    
-    
-    
-    
+        
+    if(outer_r > r_max) { // throw exception and exit
+      std::cout << "ERROR: Layers don't fit within the envelope volume!" << std::endl;
+      exit(-8); 
+    }
+
     // Each stave is composed of 5 alveoli
-    int n_towers = 5;
-    double towersAirGap = 0.2;//cm
-    
+    DD4hep::XML::Component xmlParameter = x_det.child(_Unicode(parameter));
+    const int n_towers = (int) xmlParameter.attr<double>(_Unicode(num_towers));
+    const double towersAirGap = xmlParameter.attr<double>(_Unicode(TowersAirGap));
+    const double faceThickness = xmlParameter.attr<double>(_Unicode(TowersFaceThickness));
+    Material WDens24 = lcdd.material(xmlParameter.attr<string>(_Unicode(BaseMaterial)));
+
     DetElement    stave_det("alveolus0",det_id);
     double dx = mod_z / std::sin(dphi); // dx per layer
     dx = 0.;
@@ -80,10 +80,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                   trd_x2, // Inner side, i.e. the "long"  X side.
                   trd_y1, // Corresponds to subdetector (or module) Z.
                   trd_y2, //
-                  trd_z); // Thickness, in Y for top stave, when rotated.
-    
-    Volume mod_vol("alveolus",trd,air);
-    
+                  trd_z); // Thickness, in Y for top stave, when rotated
+
+    Volume mod_vol("alveolus",trd,WDens24);
+        
     sens.setType("calorimeter");
     {// =====  buildBarrelStave(lcdd, sens, module_volume) =====
         // Parameters for computing the layer X dimension:
@@ -111,7 +111,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                 l_dim_x -= xcut/2;
                 
                 Position   l_pos(0,0,l_pos_z+l_thickness/2);      // Position of the layer.
-                Box        l_box(l_dim_x*2-tolerance,stave_z*2-tolerance,l_thickness-tolerance);
+                Box        l_box(l_dim_x*2-tolerance,stave_z*2-faceThickness*2-tolerance,l_thickness-tolerance);
                 Volume     l_vol(l_name,l_box,air);
                 DetElement layer(stave_det, l_name, det_id);
                 
@@ -123,7 +123,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                     xml_comp_t x_slice = si;
                     string     s_name  = _toString(s_num,"slice%d");
                     double     s_thick = x_slice.thickness();
-                    Box        s_box(l_dim_x*2-tolerance,stave_z*2-tolerance,s_thick-tolerance);
+                    Box        s_box(l_dim_x*2-tolerance,stave_z*2-faceThickness*2-tolerance,s_thick-tolerance);
                     Volume     s_vol(s_name,s_box,lcdd.material(x_slice.materialStr()));
                     DetElement slice(layer,s_name,det_id);
                     
@@ -132,7 +132,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                     }
                     slice.setAttributes(lcdd,s_vol,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
                     
-                    // Slice placement.
+                    // There are three compartments for each slice, could add a loop here ...
+
+                    // Slice placement
                     PlacedVolume slice_phv = l_vol.placeVolume(s_vol,Position(0,0,s_pos_z+s_thick/2));
                     slice_phv.addPhysVolID("slice", s_num);
                     slice.setPlacement(slice_phv);
@@ -155,7 +157,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             }
         }
     }
-    
+
     // Set visualization.
     if ( x_staves )   {
         mod_vol.setVisAttributes(lcdd.visAttributes(x_staves.visStr()));
@@ -183,7 +185,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             DetElement sd = mid==0 ? stave_det : stave_det.clone(_toString(mid,"alveolus%d"));
             sd.setPlacement(pv);
             sdet.add(sd);
-        }
+	}
     }
     // Set envelope volume attributes.
     envelope.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
