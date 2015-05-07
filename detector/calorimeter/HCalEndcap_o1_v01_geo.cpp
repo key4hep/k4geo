@@ -41,8 +41,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   double      rmin      = dim.rmin();
   double      rmax      = dim.rmax(); /// FIXME: IS THIS RIGHT?
   double      zmin      = dim.zmin();
-  float       rcutout   = dim.hasAttr(_U(rmin2)) ? dim.rmin2() : 0;
-  float       zcutout   = dim.hasAttr(_U(z2)) ? dim.z2() : 0;
   double      phi0      = dim.phi0();
   
   
@@ -50,12 +48,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   double      totalThickness = layering.totalThickness();
   
   PolyhedraRegular polyVolume(nsides_outer,rmin,rmax,totalThickness);
-  PolyhedraRegular cutoutPolyVolume(nsides_inner,0,rmin+rcutout,zcutout);
-  Position cutoutPos(0,0,(zcutout-totalThickness)/2.0);
-//   RotationZYX
-  std::cout<<"Cutout z width will be  "<<zcutout<<std::endl; 
+
   
-  Volume      endcapVol("endcap",SubtractionSolid(polyVolume,cutoutPolyVolume,cutoutPos),air);
+  Volume      endcapVol("endcap",polyVolume,air);
+  
   DetElement  endcapA(sdet,"endcap",det_id);
   Ref_t(endcapA)->SetName((det_name+"_A").c_str());
   
@@ -82,11 +78,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     double           l_thick  = layering.layer(l_num-1)->thickness();
     string           l_name   = _toString(layerType,"layer%d");
     int              l_repeat = x_layer.repeat();
-    float            l_rcutout = x_layer.hasAttr(_U(gap)) ? x_layer.gap() : 0;
     
     std::cout<<"Number of layers in group "<<layerType<<" : "<<l_repeat<<std::endl; 
     
-    Volume           l_vol(l_name,PolyhedraRegular(nsides_outer,rmin+l_rcutout,rmax,l_thick),air);
+    Volume           l_vol(l_name,PolyhedraRegular(nsides_outer,rmin,rmax,l_thick),air);
+    
     vector<PlacedVolume> sensitives;
     
     int s_num = 1;
@@ -97,7 +93,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       string     s_name  = _toString(s_num,"slice%d");
       double     s_thick = x_slice.thickness();
       Material   s_mat   = lcdd.material(x_slice.materialStr());
-      Volume     s_vol(s_name,PolyhedraRegular(nsides_outer,rmin+l_rcutout,rmax,s_thick),s_mat);
+      Volume     s_vol(s_name,PolyhedraRegular(nsides_outer,rmin,rmax,s_thick),s_mat);
       
       s_vol.setVisAttributes(lcdd.visAttributes(x_slice.visStr()));
       sliceZ += s_thick/2;

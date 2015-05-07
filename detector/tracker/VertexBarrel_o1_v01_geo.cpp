@@ -9,6 +9,8 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
 #include "XML/Utilities.h"
+#include "DDRec/DetectorData.h"
+
 
 using namespace std;
 using namespace DD4hep;
@@ -33,6 +35,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
     
     //-----------------------------------------------------------------------------------
+    
+    DDRec::ZPlanarData*  zPlanarData = new DDRec::ZPlanarData() ;
     
     
     
@@ -114,6 +118,23 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         double module_z = -z0;
         int module = 1;
         
+        DDRec::ZPlanarData::LayerLayout thisLayer ;
+        
+        thisLayer.distanceSupport  = rc  ; //FIXME
+    
+        thisLayer.offsetSupport    =  0; //FIXME
+        thisLayer.thicknessSupport = 0; //FIXME
+        thisLayer.zHalfSupport    = 0; //FIXME
+        thisLayer.widthSupport     = 0 ; //FIXME
+        
+        thisLayer.distanceSensitive = rc; //FIXME:probably need to correct for si position
+        thisLayer.offsetSensitive  = 0. ; //FIXME
+        thisLayer.thicknessSensitive = 0 ;//FIXME
+        thisLayer.zHalfSensitive    = 0 ;//FIXME
+        thisLayer.widthSensitive =0.;//FIXME
+        thisLayer.ladderNumber = (int) nphi  ;
+        thisLayer.phi0 =  phic;
+        
         // Loop over the number of modules in phi.
         for (int ii = 0; ii < nphi; ii++)        {
             double dx = z_dr * std::cos(phic + phi_tilt);        // Delta x of module position.
@@ -160,6 +181,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         pv.addPhysVolID("layer", lay_id);       // Set the layer ID.
         lay_elt.setAttributes(lcdd,lay_vol,x_layer.regionStr(),x_layer.limitsStr(),x_layer.visStr());
         lay_elt.setPlacement(pv);
+        
+        zPlanarData->layers.push_back( thisLayer ) ;
+        
     }
     sdet.setAttributes(lcdd,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
     /*envelope.setVisAttributes(lcdd.invisible());
