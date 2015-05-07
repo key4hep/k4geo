@@ -15,19 +15,17 @@ using namespace std;
 using namespace DD4hep;
 using namespace DD4hep::Geometry;
 
-static void placeStaves(DetElement& parent, DetElement& stave, double rmin, int numsides_in, int numsides_out, double staveVol_center,
+static void placeStaves(DetElement& parent, DetElement& stave, double rmin, int numsides, double total_thickness,
 			Volume envelopeVolume, double innerAngle, Volume sectVolume) {
   double innerRotation = innerAngle;
-  
-  //need both numbers to align with envelope
-  double offsetRotation = -(M_PI/numsides_out -2*M_PI/numsides_in);
-  double sectCenterRadius = rmin + staveVol_center;
+  double offsetRotation = -innerRotation / 2;
+  double sectCenterRadius = rmin + total_thickness / 2;
   double rotX = M_PI / 2;
   double rotY = -offsetRotation;
   double posX = -sectCenterRadius * std::sin(rotY);
   double posY = sectCenterRadius * std::cos(rotY);
 
-  for (int module = 1; module <= numsides_in; ++module) {
+  for (int module = 1; module <= numsides; ++module) {
     DetElement det = module > 1 ? stave.clone(_toString(module,"stave%d")) : stave;
     Transform3D trafo(RotationZYX(0, rotY, rotX), Translation3D(-posX, -posY, 0));
     PlacedVolume pv = envelopeVolume.placeVolume(sectVolume,trafo);
@@ -53,14 +51,22 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens) {
   int totalRepeat = 0;
   int totalSlices = 0;
   double gap = xml_dim_t(x_det).gap();
-  int nsides_inner = dim.nsides_inner();
-  int nsides_outer = dim.nsides_outer();
+  int nsides = dim.numsides();
   double phi0 = dim.phi0();
   double detZ = dim.z();
   double rmin = dim.rmin();
   DetElement sdet(det_name, x_det.id());
   DetElement stave("stave1", x_det.id());
   //  Volume motherVol = lcdd.pickMotherVolume(sdet);
+  
+  //Create caloData object to extend driver with data required for reconstruction
+  DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
+  caloData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
+  caloData->inner_symmetry = nsides;
+  caloData->outer_symmetry = nsides; 
+  caloData->phi0 = phi0;
+  
+  
   
   for (xml_coll_t c(x_det, _U(layer)); c; ++c) {
     xml_comp_t x_layer = c;
@@ -75,67 +81,39 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens) {
 
   if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
 
-  //Create caloData object to extend driver with data required for reconstruction
-  DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
-  caloData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
-  caloData->inner_symmetry = nsides_inner;
-  caloData->outer_symmetry = nsides_outer; 
-  caloData->phi0 = phi0;
-
-
   //-----------------------------------------------------------------------------------
 
-//  PolyhedraRegular polyhedra(nsides_inner, rmin, rmin + totalThickness, detZ);
+//  PolyhedraRegular polyhedra(nsides, rmin, rmin + totalThickness, detZ);
 //  Volume envelopeVol(det_name, polyhedra, air);
 
 std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl;
 
   // Add the subdetector envelope to the structure.
-  double innerAngle = 2 * M_PI / nsides_inner;
+  double innerAngle = 2 * M_PI / nsides;
   double halfInnerAngle = innerAngle / 2;
   double tan_inner = std::tan(halfInnerAngle) * 2;
   double innerFaceLen = rmin * tan_inner;
+  double outerFaceLen = (rmin + totalThickness) * tan_inner;
   double staveThickness = totalThickness;
-  
-  double r_outer_face = rmin + totalThickness;
-  
-  double rc = r_outer_face*std::cos(M_PI/nsides_inner);
-  //Length where layers start shrinking
-  double thresholdLayerLength = rc * tan_inner;
-  double outerFaceLen = 2*r_outer_face* std::tan(M_PI/nsides_outer);
-  double staveVol_center = (staveThickness -(r_outer_face-rc )) / 2;
   
   /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
   caloData->extent[0] = rmin ;
-  caloData->extent[1] = r_outer_face;
+  caloData->extent[1] = rmin + totalThickness ;
   caloData->extent[2] = 0. ;
   caloData->extent[3] = detZ/2.0 ;
   
-  Trapezoid staveTrdOuterL(innerFaceLen / 2, thresholdLayerLength / 2, detZ / 2, detZ / 2, staveVol_center);
-  Trapezoid staveTrdOuterU(thresholdLayerLength / 2, outerFaceLen / 2, detZ / 2, detZ / 2, (r_outer_face-rc)/ 2);
-  
-  Position upperShift(0,0,staveThickness/2);
-  
-  Volume staveOuterVol("stave_outer", UnionSolid(staveTrdOuterL,staveTrdOuterU,upperShift), air);
-  
+  Trapezoid staveTrdOuter(innerFaceLen / 2, outerFaceLen / 2, detZ / 2, detZ / 2, staveThickness / 2);
+  Volume staveOuterVol("stave_outer", staveTrdOuter, air);
 
-
-
-  Trapezoid staveTrdInnerL(innerFaceLen / 2 -gap, thresholdLayerLength / 2 -gap, detZ / 2, detZ / 2, (staveThickness -(r_outer_face-rc )) / 2);
-  Trapezoid staveTrdInnerU(thresholdLayerLength / 2 - gap, outerFaceLen / 2 -gap, detZ / 2, detZ / 2, (r_outer_face-rc)/ 2);
-  
-  Volume staveInnerVol("stave_inner", UnionSolid(staveTrdInnerL,staveTrdInnerU,upperShift), air);
-
-
-
+  Trapezoid staveTrdInner(innerFaceLen / 2 - gap, outerFaceLen / 2 - gap, detZ / 2, detZ / 2, staveThickness / 2);
+  Volume staveInnerVol("stave_inner", staveTrdInner, air);
 
   double layerOuterAngle = (M_PI - innerAngle) / 2;
   double layerInnerAngle = (M_PI / 2 - layerOuterAngle);
-  double layer_pos_z = -staveVol_center;
+  double layer_pos_z = -(staveThickness / 2);
   double layer_dim_x = innerFaceLen / 2 - gap * 2;
   int layer_num = 1;
-  
-  
+
   //#### LayeringExtensionImpl* layeringExtension = new LayeringExtensionImpl();
   //#### Position layerNormal(0,0,1);
 
@@ -150,6 +128,7 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
       DetElement layer(stave, layer_name, layer_num);
       //### layeringExtension->setLayer(layer_num, layer, layerNormal);
       
+      DDRec::LayeredCalorimeterData::Layer caloLayer ;
       
       
       // Layer position in Z within the stave.
@@ -207,8 +186,7 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
       layer_phv.addPhysVolID("layer", layer_num);
       layer.setPlacement(layer_phv);
       
-      DDRec::LayeredCalorimeterData::Layer caloLayer ;
-      caloLayer.distance = rmin+layer_pos_z;
+      caloLayer.distance = layer_pos_z;
       caloLayer.thickness = layer_thickness;
       caloLayer.absorberThickness = totalAbsorberThickness;
       caloLayer.cellSize0 = 30.0; //FIXME only temporary. Should get from Surfaces/Segmentation?
@@ -216,21 +194,10 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
       
       caloData->layers.push_back( caloLayer ) ;
       
-      
-      // Increment the layer Z position.
-      layer_pos_z += layer_thickness / 2;
-      
-      double absLayerPos = layer_pos_z + rmin + staveVol_center;
-      
       // Increment the layer X dimension.
       layer_dim_x += layer_thickness * std::tan(layerInnerAngle);    // * 2;
-      
-      if( absLayerPos + layer_thickness>= rc && nsides_outer>nsides_inner) {
-        ///FIXME: Can be optimized a bit further (recover some dead space)
-        layer_dim_x -= layer_thickness * std::tan(layerInnerAngle) + (layer_thickness)/std::tan(2*M_PI/nsides_outer);
-
-      }
-
+      // Increment the layer Z position.
+      layer_pos_z += layer_thickness / 2;
       // Increment the layer number.
       ++layer_num;
     }
@@ -244,13 +211,13 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
     stave.setVisAttributes(lcdd, staves.visStr(), staveOuterVol);
   }
   // Place the staves.
-  placeStaves(sdet, stave, rmin, nsides_inner,nsides_outer, staveVol_center, envelopeVol, innerAngle, staveOuterVol);
+  placeStaves(sdet, stave, rmin, nsides, totalThickness, envelopeVol, innerAngle, staveOuterVol);
   // Set envelope volume attributes.
   envelopeVol.setAttributes(lcdd, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   
   /*
     *  double z_offset = dim.hasAttr(_U(z_offset)) ? dim.z_offset() : 0.0;
-    *  Transform3D transform(RotationZ(M_PI / nsides_inner), Translation3D(0, 0, z_offset));
+    *  Transform3D transform(RotationZ(M_PI / nsides), Translation3D(0, 0, z_offset));
     *  PlacedVolume env_phv = motherVol.placeVolume(envelopeVol, transform);
     *  env_phv.addPhysVolID("system", sdet.id());
     *  env_phv.addPhysVolID("barrel", 0);

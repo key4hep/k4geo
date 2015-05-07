@@ -42,7 +42,7 @@
             </envelope>
             
             
-            <dimensions nsides_inner="HCalBarrel_inner_symmetry" nsides_outer="HCalBarrel_outer_symmetry" rmin="HCalBarrel_inner_radius" z="HCalBarrel_half_length*2" phi0="0*rad"/>
+            <dimensions numsides="HCalBarrel_inner_symmetry" rmin="HCalBarrel_inner_radius" z="HCalBarrel_half_length*2" phi0="0*rad"/>
             <staves vis="HCalStavesVis"/>
             <layer repeat="(int) HCalBarrel_layers" vis="HCalLayerVis">
                 <slice material="Steel235" thickness="0.5*mm" vis="HCalAbsorberVis" radiator="yes"/>
