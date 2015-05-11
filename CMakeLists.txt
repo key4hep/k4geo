@@ -37,37 +37,13 @@ option(BUILD_TESTING "Enable and build tests" ON)
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-find_package( DD4hep REQUIRED)
-
-set(CMAKE_MODULE_PATH  ${CMAKE_MODULE_PATH}  ${DD4hep_ROOT}/cmake ) 
-include( DD4hep )
-
-find_package( ROOT REQUIRED )
+find_package(DD4hep REQUIRED COMPONENTS DDRec)
+find_package(ROOT REQUIRED)
 #find_package( ROOT REQUIRED COMPONENTS Geom Reflex)
 set( ROOT_COMPONENT_LIBRARIES Geom Reflex)
 
-if(DD4HEP_USE_XERCESC)
-  find_package(XercesC)
-endif()
-
 #find_package( LCIO REQUIRED)
 #find_package( GEAR REQUIRED)
-
-find_package(Geant4 REQUIRED gdml ui_all vis_all)
-
-#if(NOT Geant4_clhep_FOUND)
-#  find_package(CLHEP REQUIRED)
-#  set(Geant4_INCLUDE_DIRS ${Geant4_INCLUDE_DIRS} ${CLHEP_INCLUDE_DIRS})
-#  set(Geant4_LIBRARIES ${Geant4_LIBRARIES} ${CLHEP_LIBRARIES})
-#endif()
-
-INCLUDE(${Geant4_USE_FILE})   # this also takes care of geant 4 definitions and include dirs
-
-#-------------------------------------------------------------
-# add additional packages here
-
-
-#-------------------------------------------------------------
 
 include_directories( ${CMAKE_SOURCE_DIR}/detector/include )
 include_directories( SYSTEM
@@ -88,49 +64,16 @@ file(GLOB sources
 
 #file(GLOB headers ./ILD/include/*.h)
 
-if(DD4HEP_USE_XERCESC)
-  find_package(XercesC)
-endif()
-include(DD4hep_XML_setup)
-
 if(DD4HEP_USE_PYROOT)
   ROOT_GENERATE_DICTIONARY(G__ILDEx ${headers} LINKDEF include/ROOT/LinkDef.h)
   list(APPEND sources G__ILDEx.cxx)
 endif()
 
-add_library(${PackageName} SHARED ${sources})
-
-target_link_libraries(${PackageName} ${DD4hep_LIBRARIES}
-  ${ROOT_LIBRARIES} ${ROOT_COMPONENT_LIBRARIES} 
-  ${Geant4_LIBRARIES}
-  )
-
-#  ${GEAR_LIBRARIES}
-#  ${LCIO_LIBRARIES}
-
-
-#---------- the main program ----------------------------------
-# dd_sim is now part of DD4hep
-#add_executable( dd_sim ./src/ddsim.cpp)
-#target_link_libraries( dd_sim ${DD4hep_LIBRARIES} ${ROOT_LIBRARIES} ${ROOT_COMPONENT_LIBRARIES}   ${Geant4_LIBRARIES} )
-
-
-#---Rootmap generation--------------------------------------------------------------
-
-if(APPLE)
-  dd4hep_generate_rootmap_apple(${PackageName} )
-else()
-  dd4hep_generate_rootmap(${PackageName} )
-endif()
-
-
-#---- configure run environment ---------------
-configure_file( ${DD4hep_ROOT}/cmake/thisdd4hep_package.sh.in  this${PackageName}.sh @ONLY)
-
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/this${PackageName}.sh
-  DESTINATION bin
-  )
-
+#Create target, library, rootmap, install
+add_dd4hep_plugin(${PackageName} SHARED ${sources})
+target_link_libraries(${PackageName} ${DD4hep_LIBRARIES} ${DD4hep_COMPONENT_LIBRARIES})
+#Create this_package.sh file, and install
+dd4hep_instantiate_package(${PackageName})
 
 #---Testing-------------------------------------------------------------------------
 if(BUILD_TESTING)
@@ -142,19 +85,8 @@ if(BUILD_TESTING)
 
 endif(BUILD_TESTING)
 
-#--- install target-------------------------------------
-
-
+#--- install remaining targets--------------------------
 FILE(GLOB hfiles "ILD/include/*.h")
 INSTALL(FILES ${hfiles} 
   DESTINATION include/${PackageName} 
   )
-
-
-install(TARGETS ${PackageName}
-  RUNTIME DESTINATION bin
-  LIBRARY DESTINATION lib
-  )
-# to do: add corresponding uninstall...
-#-------------------------------------------------------
-
