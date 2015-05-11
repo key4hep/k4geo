@@ -71,7 +71,7 @@ endif()
 
 #Create target, library, rootmap, install
 add_dd4hep_plugin(${PackageName} SHARED ${sources})
-target_link_libraries(${PackageName} ${DD4hep_LIBRARIES} ${DD4hep_COMPONENT_LIBRARIES})
+target_link_libraries(${PackageName} ${DD4hep_LIBRARIES} ${DD4hep_COMPONENT_LIBRARIES} ${ROOT_LIBRARIES})
 #Create this_package.sh file, and install
 dd4hep_instantiate_package(${PackageName})
 
