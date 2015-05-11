@@ -259,6 +259,7 @@
             <argument value="VertexBarrel"/>
             <argument value="dimension=2"/>
         </plugin>
+        <plugin name="InstallSurfaceManager"/>
     </plugins>
     
     <fields>

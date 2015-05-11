@@ -554,7 +554,12 @@
 	</readout>
 
     </readouts>
- <fields>
+
+    <plugins>
+        <plugin name="InstallSurfaceManager"/>
+    </plugins>
+
+<fields>
    <field type="solenoid" name="GlobalSolenoid" inner_field="Field_nominal_value*tesla"
 	  outer_field="-1.5*tesla" zmax="TPC_Ecal_Hcal_barrel_halfZ"
 	  inner_radius="TPC_outer_radius"
