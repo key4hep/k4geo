@@ -1,7 +1,7 @@
 //=========================================================================
 //  Barrel ECal driver implementation for the CLIC NDM
 //-------------------------------------------------------------------------
-//  Baseon on
+//  Based on
 //   * S. Lu's driver for SiWEcalBarrel, ported from Mokka
 //   * M. Frank's generic driver EcalBarrel_geo.cpp
 //-------------------------------------------------------------------------
@@ -30,7 +30,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     // --- create an envelope volume and position it into the world ---------------------
     
-    Volume envelope = XML::createPlacedEnvelope(lcdd, e, sdet) ;
+    Volume envelope = XML::createPlacedEnvelope(lcdd, e, sdet);
     
     if(lcdd.buildType() == BUILD_ENVELOPE) return sdet;
     
@@ -53,19 +53,23 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     double        hphi      = dphi/2.;
     double        mod_z     = layering.totalThickness();
     double        outer_r   = (inner_r + mod_z)/std::cos(hphi); // circumscribing circle radius
+    double        r_max     = x_dim.rmax()/std::cos(hphi);      // corrected definition (!)
+
+    // The barrel is composed of 12 x 5 towers, each with 17 + 8 layers made of 7 slices 
+    // One could group 5 towers per stave and split each tower into 3 stacks 
 
     std::cout << "Tower height/thickness: " << mod_z << std::endl;
-    std::cout << "Check: r_out=" << outer_r << " and r_max=" << x_dim.rmax() << std::endl;
-    if(outer_r > x_dim.rmax()) { // throw exception 
+    std::cout << "Check: r_out=" << outer_r << " and r_max=" << r_max << std::endl;
+    if(outer_r > r_max) { // throw exception 
       throw std::runtime_error("ERROR: Layers don't fit within the envelope volume!");
     }
 
     DetElement tower_det("tower0", det_id);
     
-    // Compute the top and bottom face measurements
+    // Compute stave dimensions
     double dx = mod_z*(std::tan(hphi) + 1./std::tan(dphi));               // lateral shift
     double trd_x1 = inner_r*std::tan(hphi) + dx/2. - tolerance;           // inner, long side
-    double trd_x2 = (inner_r + mod_z)*std::tan(hphi) - dx/2. - tolerance; // outer, short side
+    double trd_x2 = outer_r*std::sin(hphi) - dx/2. - tolerance;           // outer, short side
     double trd_y1 = x_dim.z()/2. - tolerance;                             // and y2 = y1
     double trd_z  = mod_z/2.;
     
@@ -108,7 +112,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                 
                 string l_name = _toString(l_num, "layer%d");
                 double l_thickness = layering.layer(j)->thickness();  // this layer's thickness          
-		std::cout << l_name << " thickness: " << l_thickness << std::endl;
+		//std::cout << l_name << " thickness: " << l_thickness << std::endl;
                 l_dim_x -= l_thickness/tan_beta;                      // decreasing width 
 
                 Position   l_pos(0., 0., l_pos_z + l_thickness/2.);   // position of the layer
@@ -124,7 +128,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                     xml_comp_t x_slice = si;
                     string     s_name  = _toString(s_num,"slice%d");
                     double     s_thick = x_slice.thickness();
-		    std::cout << s_name << " thickness: " << s_thick <<std::endl;
+		    //std::cout << s_name << " thickness: " << s_thick <<std::endl;
                     Box        s_box(l_dim_x - tolerance, l_dim_y - tolerance, s_thick/2.);
                     Volume     s_vol(s_name, s_box, lcdd.material(x_slice.materialStr()));
                     DetElement slice(layer, s_name, det_id);
@@ -164,9 +168,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     }
     
     // Phi start for staves/towers
-    double phi = M_PI / nsides;
-    double mod_x_off = dx / 2.;               // Stave/tower X offset
-    double mod_y_off = inner_r + mod_z / 2.;  // Stave/tower Y offset
+    double phi = M_PI/nsides;
+    double mod_x_off = dx/2 + tolerance;               // Stave/tower X offset
+    double mod_y_off = inner_r + mod_z/2 + tolerance;  // Stave/tower Y offset
     
     // Create the towers
     for (int t = 0; t < n_towers; t++)  {
