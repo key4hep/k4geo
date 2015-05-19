@@ -147,6 +147,19 @@
         <constant name="YokeEndcap_outer_symmetry" value="12"/>
         <constant name="YokeEndcap_inner_symmetry" value="0"/>
         
+        <constant name="LumiCal_inner_radius" value="100*mm"/>
+        <constant name="LumiCal_outer_radius" value="340*mm"/>
+        <constant name="LumiCal_min_z" value="2539*mm"/>
+        <constant name="LumiCal_max_z" value="2710*mm"/>
+        
+        <constant name="BeamCal_inner_radius" value="32*mm"/>
+        <constant name="BeamCal_outer_radius" value="150*mm"/>
+        <constant name="BeamCal_min_z" value="3181*mm"/>
+        <constant name="BeamCal_max_z" value="3441*mm"/>
+
+
+        <constant name="tracker_region_zmax" value="OuterTracker_half_length"/>
+        <constant name="tracker_region_rmax" value="OuterTracker_outer_radius"/>        
     </define>
     
     <limits>

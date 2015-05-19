@@ -13,7 +13,7 @@
     <!--  Includes for sensitives and support                -->
     <detectors>
         
-        <detector name="ECalPlug" type="ECalPlug_o1_v01" id="15" readout="ECalPlugHits" vis="ECALVis" >
+        <detector name="ECalPlug" type="ECalPlug_o1_v01" id="DetID_ECal_Plug" readout="ECalPlugHits" vis="ECALVis" >
             
             <comment>EM Calorimeter Barrel</comment>
             
@@ -24,7 +24,7 @@
                         <shape type="Box" dx="ECalPlug_outer_radius" dy="ECalPlug_outer_radius" dz="ECalPlug_max_z"/>
                         <shape type="Tube" rmin="0" rmax="ECalPlug_inner_radius" dz="2.0*ECalPlug_max_z"/>
                     </shape>
-                    <shape type="Box" dx="ECalPlug_outer_radius" dy="ECalPlug_outer_radius" dz="ECalPlug_min_z"/>
+                    <shape type="Box" dx="ECalPlug_outer_radius*1.1" dy="ECalPlug_outer_radius*1.1" dz="ECalPlug_min_z"/>
                 </shape>
             </envelope>
             
