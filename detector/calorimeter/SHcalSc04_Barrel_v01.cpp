@@ -236,7 +236,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double YXH_LP  = YXH;
 
   //build lateral palte here to simulate lateral plate in the middle of barrel.
-  double DHZ_LP  = Hcal_lateral_plate_thickness; 
+  double DHZ_LP  = Hcal_lateral_plate_thickness/2.0; 
 
   Trapezoid stave_shaper_LP(THX_LP, BHX_LP, DHZ_LP, DHZ_LP, YXH_LP);
 
@@ -321,7 +321,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	
 	x_total = sqrt( ro_layer * ro_layer - y_layerID * y_layerID);
 	
-	x_length = x_total - Hcal_middle_stave_gaps;
+	x_length = x_total - Hcal_middle_stave_gaps - 2*Hcal_layer_air_gap;
 	
 	x_halfLength = x_length/2.;
 	
@@ -459,7 +459,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 //====================================================================
 // Place HCAL Barrel stave module into the envelope
 //====================================================================
-  double stave_phi_offset,  module_z_offset;
+  double stave_phi_offset,  module_z_offset,  lateral_plate_z_offset;
 
   double Y = Hcal_inner_radius + Hcal_total_dim_y / 2.;
 
@@ -473,7 +473,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
        stave_id++)
     {
       module_z_offset = - (Hcal_normal_dim_z + Hcal_modules_gap + Hcal_lateral_plate_thickness)/2.;
-      
+      lateral_plate_z_offset = - (Hcal_lateral_plate_thickness + Hcal_modules_gap)/2.;
+
       double phirot = stave_phi_offset;
       RotationZYX rot(0,phirot,M_PI*0.5);
       Rotation3D rot3D(rot);
@@ -490,12 +491,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  pv.addPhysVolID("stave",stave_id);
 	  pv.addPhysVolID("module",module_id);
 
+	  Position xyzVec_LP(-Y*sin(phirot), Y*cos(phirot),lateral_plate_z_offset);
+	  Transform3D tran3D_LP(rot3D,xyzVec_LP);
+	  pv = envelope.placeVolume(EnvLogHcalModuleBarrel_LP,tran3D_LP);
+
 	  module_z_offset = - module_z_offset;
+	  lateral_plate_z_offset = - lateral_plate_z_offset;
 	}
 
-      Position xyzVec_LP(-Y*sin(phirot), Y*cos(phirot),0);
-      Transform3D tran3D_LP(rot3D,xyzVec_LP);
-      pv = envelope.placeVolume(EnvLogHcalModuleBarrel_LP,tran3D_LP);
 
       stave_phi_offset -=  M_PI*2.0/Hcal_inner_symmetry;
     }  //-------- end loop over HCAL BARREL staves ----------------------------
