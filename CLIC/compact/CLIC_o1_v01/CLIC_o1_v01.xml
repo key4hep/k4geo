@@ -182,22 +182,22 @@
     </display>
     <include ref="Materials_v01.xml"/>
     
-    <!--include ref="Beampipe_o1_v01_01.xml"/>
+    <include ref="Beampipe_o1_v01_01.xml"/>
     
     <include ref="Vertex_o1_v01_01.xml"/>
     
     <include ref="InnerTracker_o1_v01_01.xml"/>
-    <include ref="OuterTracker_o1_v01_01.xml"/-->
+    <include ref="OuterTracker_o1_v01_01.xml"/>
     
     <include ref="ECalBarrel_o1_v01_01.xml"/>
     <include ref="ECalEndcap_o1_v01_01.xml"/>
-    <!--include ref="ECalPlug_o1_v01_01.xml"/>
+    <include ref="ECalPlug_o1_v01_01.xml"/>
     
-    <!-- <include ref="HCalBarrel_o1_v01_01.xml"/> -->
-    <!-- <include ref="HCalEndcap_o1_v01_01.xml"/> -->
-    <!-- <include ref="Solenoid_o1_v01_01.xml"/> -->
+    <include ref="HCalBarrel_o1_v01_01.xml"/>
+    <include ref="HCalEndcap_o1_v01_01.xml"/>
+    <include ref="Solenoid_o1_v01_01.xml"/>
     
     <include ref="YokeBarrel_o1_v01_01.xml"/>
-    <include ref="YokeEndcap_o1_v01_01.xml"/-->
+    <include ref="YokeEndcap_o1_v01_01.xml"/>
     
 </lccdd>
