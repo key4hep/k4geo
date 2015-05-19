@@ -49,7 +49,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         int        ncomponents = 0, sensor_number = 1;
         
         if ( volumes.find(m_nam) != volumes.end() )   {
-            printout(ERROR,"SiTrackerBarrel","Logics error in building modules.");
+            printout(ERROR,"VertexBarrel","Logics error in building modules.");
             throw runtime_error("Logics error in building modules.");
         }
         volumes[m_nam] = m_vol;
