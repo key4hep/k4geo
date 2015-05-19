@@ -53,7 +53,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     double        hphi      = dphi/2.;
     double        mod_z     = layering.totalThickness();
     double        outer_r   = (inner_r + mod_z)/std::cos(hphi); // circumscribing circle radius
-    double        r_max     = x_dim.rmax()/std::cos(hphi);      // corrected definition (!)
+    double        r_max     = x_dim.rmax(); // /std::cos(hphi); // corrected definition (!)
 
     // The barrel is composed of 12 x 5 towers, each with 17 + 8 layers made of 7 slices 
     // One could group 5 towers per stave and split each tower into 3 stacks 
