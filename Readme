@@ -69,7 +69,7 @@ Create single particle input file
 Modify the python script ./example/lcio_particle_gun.py in order to create
 an LCIO input file with single particles:
 
-  export PYTHONPATH=${LCIO}/src/python:${ROOTSYS}/lib
+  export PYTHONPATH=${LCIO}/src/python:${ROOTSYS}/lib:$PYTHONPATH
   python lcio_particle_gun.py
 
 There is also example input file with 10 singe muons: ./mcparticles.slcio

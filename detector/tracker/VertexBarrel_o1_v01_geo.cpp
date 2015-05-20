@@ -186,6 +186,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         
     }
     sdet.setAttributes(lcdd,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+    sdet.addExtension< DDRec::ZPlanarData >( zPlanarData ) ;
+    
     /*envelope.setVisAttributes(lcdd.invisible());
      pv = lcdd.pickMotherVolume(sdet).placeVolume(envelope);
      pv.addPhysVolID("system", det_id);      // Set the subdetector system ID.
