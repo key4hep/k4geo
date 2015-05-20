@@ -35,7 +35,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
     
     //-----------------------------------------------------------------------------------
-    
+	return sdet; //Temporary fox for the duplicated volumes -> Please fix it Dan.    
     DD4hep::XML::Component xmlParameter = x_det.child(_Unicode(parameter));
     const double tolerance = xmlParameter.attr<double>(_Unicode(ecal_endcap_tolerance));
     const double faceThickness = xmlParameter.attr<double>(_Unicode(FaceThickness));
