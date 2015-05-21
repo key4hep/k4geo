@@ -169,7 +169,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	double m_pos_z = j*z_off;
         Transform3D tr(RotationZYX(M_PI/2, (j+1)*M_PI/2 - j*phi, j*M_PI/2.), Translation3D(m_pos_x, m_pos_y, m_pos_z));
 	PlacedVolume pv = envelope.placeVolume(sector_vol, tr);
-	int mid = (nsides+1)*(1+j)+i;
+	int mid = (nsides+1)*(2+j)+i;
 	pv.addPhysVolID("barrel", j); 
 	pv.addPhysVolID("sector", i);
 	DetElement sd = mid==0 ? sector_det : sector_det.clone(_toString(mid,"sector%d"));
