@@ -17,7 +17,7 @@ using namespace DDSim ;
 
 static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens)  {
   
-  //double boundarySafety = 0.0001;
+  double boundarySafety = 0.0001;
 
   xml_det_t   x_det       = element;
   string      det_name    = x_det.nameStr();
@@ -112,51 +112,26 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   //  Itself will be placed into the world volume.
   // ==========================================================================
  
-  //double chambers_y_off_correction = 0.;
- 
-  // stave modules shaper parameters
-  //double BHX  = (Hcal_bottom_dim_x + Hcal_stave_gaps)/2.;
-  //double THX  = (Hcal_total_dim_y + Hcal_inner_radius)*tan(M_PI/Hcal_inner_symmetry);
-  //double YXH  = Hcal_total_dim_y / 2.;
-  //double DHZ  = (Hcal_normal_dim_z - Hcal_lateral_plate_thickness) / 2.;
-
-  //Trapezoid stave_shaper(  THX, BHX, DHZ, DHZ, YXH);
-
-  //Tube solidCaloTube(0, Hcal_outer_radius, DHZ+boundarySafety);
-  
-  //RotationZYX rot(0,0,M_PI/2.);
-
-  //Rotation3D rot3D(rot);
-  //Position xyzVec(0,0,(Hcal_inner_radius + Hcal_total_dim_y / 2.));
-  //Transform3D tran3D(rot3D,xyzVec);
-
-  //IntersectionSolid barrelModuleSolid(stave_shaper, solidCaloTube, tran3D);
-
-  //Volume  EnvLogHcalModuleBarrel(det_name+"_module",barrelModuleSolid,stavesMaterial);
   Assembly EnvLogHcalModuleBarrel(det_name+"_module");
 
   EnvLogHcalModuleBarrel.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
 
 
 
-  //stave modules lateral plate shaper parameters
-  //double BHX_LP  = BHX;
-  //double THX_LP  = THX;
-  //double YXH_LP  = YXH;
+  double DHZ_LP  = Hcal_lateral_plate_thickness/2.0; 
 
-  //build lateral palte here to simulate lateral plate in the middle of barrel.
-  //double DHZ_LP  = Hcal_lateral_plate_thickness/2.0; 
+  PolyhedraRegular stave_shaper_LP(Hcal_inner_symmetry, 
+				   Hcal_inner_radius, Hcal_outer_radius, DHZ_LP);
 
-  //Trapezoid stave_shaper_LP(THX_LP, BHX_LP, DHZ_LP, DHZ_LP, YXH_LP);
+  Tube solidCaloTube_LP(0, Hcal_outer_radius, DHZ_LP+boundarySafety);
 
-  //Tube solidCaloTube_LP(0, Hcal_outer_radius, DHZ_LP+boundarySafety);
+  RotationZYX rot(0,0, M_PI/Hcal_inner_symmetry);
 
-  //IntersectionSolid Module_lateral_plate(stave_shaper_LP, solidCaloTube_LP, tran3D);
+  IntersectionSolid Module_lateral_plate(stave_shaper_LP, solidCaloTube_LP,rot);
 
-  //Volume  EnvLogHcalModuleBarrel_LP(det_name+"_Module_lateral_plate",Module_lateral_plate,stavesMaterial);
-  //Assembly EnvLogHcalModuleBarrel_LP(det_name+"_Module_lateral_plate");
+  Volume  EnvLogHcalModuleBarrel_LP(det_name+"_Module_lateral_plate",Module_lateral_plate,stavesMaterial);
 
-  //EnvLogHcalModuleBarrel_LP.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+  EnvLogHcalModuleBarrel_LP.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
 
 
 
@@ -183,7 +158,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 
   //-------------------- start loop over HCAL layers ----------------------
-  double layerThickness =  Hcal_radiator_thickness +Hcal_chamber_thickness;
+  double layer_thickness =  Hcal_radiator_thickness +Hcal_chamber_thickness;
   double AngleRatio=tan(M_PI/Hcal_inner_symmetry);//"k", updated for flexible symmetry
   double d_InnerOctoSize=AngleRatio*Hcal_inner_radius;//"d"
 
@@ -191,13 +166,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     {
  
       double yn = sqrt(Hcal_outer_radius*Hcal_outer_radius -
-		       (Hcal_inner_radius + layer_id*layerThickness)*(Hcal_inner_radius + layer_id*layerThickness));
+		       (Hcal_inner_radius + layer_id*layer_thickness)*(Hcal_inner_radius + layer_id*layer_thickness));
 
       //updated for flexible symmetry
-      double Yn = d_InnerOctoSize - layer_id*layerThickness/tan(M_PI*2.0/Hcal_inner_symmetry);
+      double Yn = d_InnerOctoSize - layer_id*layer_thickness/tan(M_PI*2.0/Hcal_inner_symmetry);
 
-      double halfX = Hcal_chamber_thickness/2.;
-      double halfY = (yn+Yn)/2.-Hcal_layer_air_gap;
+      double halfX = layer_thickness/2.;
+      double halfY = (yn+Yn)/2. - boundarySafety;
       double halfZ = Hcal_regular_chamber_dim_z / 2.;
 
       xShift = (yn-Yn)/2.;
@@ -212,15 +187,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       cout <<"layer_id: "<< layer_id <<endl;
       cout <<" chamber x:y:z:   "<<halfZ*2.<<":"<<halfY*2.<<":"<<halfX*2.<<endl;
 
-      Box ChamberSolid((halfY + Hcal_layer_air_gap), //Add gap at two sides, do not need to build air gaps individualy.
-		       halfZ,   //z attention!
+      Box ChamberSolid(halfY,  //Add gap at two sides, do not need to build air gaps individualy.
+		       halfZ,  //z attention!
 		       halfX); //y attention!
 
       string ChamberLogical_name      = det_name+_toString(layer_id,"_layer%d");
 
       Volume ChamberLogical(ChamberLogical_name, ChamberSolid, air);   
-
-      double layer_thickness = halfX*2.;
 
 
       //====================================================================
@@ -244,7 +217,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	slice_pos_z += slice_thickness/2.;
 	
 	// Slice volume & box
-	Volume slice_vol(slice_name,Box(halfY,halfZ,halfX),slice_material);
+	Volume slice_vol(slice_name,Box((halfY - Hcal_layer_air_gap),halfZ,slice_thickness/2.),slice_material);
 	
 	if ( x_slice.isSensitive() ) {
 	  slice_vol.setSensitiveDetector(sens);
@@ -276,22 +249,18 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 
       chamber_y_offset = -(-Hcal_total_dim_y/2. 
-			   + (layer_id-1) *(Hcal_chamber_thickness + Hcal_radiator_thickness)
-			   + Hcal_radiator_thickness + Hcal_chamber_thickness/2.);
+			   + (layer_id-1) * layer_thickness
+			   + layer_thickness/2.);
 
 
       pv =  EnvLogHcalModuleBarrel.placeVolume(ChamberLogical,
 					       Position(chamber_x_offset,
 							chamber_z_offset,
 							chamber_y_offset ));
-      //chamber_y_offset + chambers_y_off_correction));
-      
-
       
       //-----------------------------------------------------------------------------------------
       DDRec::LayeredCalorimeterData::Layer caloLayer ;
       
-      //caloLayer.distance = Hcal_inner_radius + Hcal_total_dim_y/2.0 + chamber_y_offset + chambers_y_off_correction ;
       caloLayer.distance = Hcal_inner_radius + Hcal_total_dim_y/2.0 + chamber_y_offset ;
       caloLayer.thickness = Hcal_chamber_thickness + Hcal_radiator_thickness ;
       caloLayer.absorberThickness = Hcal_radiator_thickness ;
@@ -312,8 +281,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   //====================================================================
   // Place HCAL Barrel stave module into the envelope
   //====================================================================
-  //double stave_phi_offset,  module_z_offset,  lateral_plate_z_offset;
-  double stave_phi_offset,  module_z_offset ;
+  double stave_phi_offset,  module_z_offset,  lateral_plate_z_offset;
   
   double Y = Hcal_inner_radius + Hcal_total_dim_y / 2.;
 
@@ -327,7 +295,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
        stave_id++)
     {
       module_z_offset = - (Hcal_normal_dim_z + Hcal_modules_gap + Hcal_lateral_plate_thickness)/2.;
-      //lateral_plate_z_offset = - (Hcal_lateral_plate_thickness + Hcal_modules_gap)/2.;
+      lateral_plate_z_offset = - (Hcal_lateral_plate_thickness + Hcal_modules_gap)/2.;
 
       double phirot = stave_phi_offset;
       RotationZYX rot(0,phirot,M_PI*0.5);
@@ -345,12 +313,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  pv.addPhysVolID("stave",stave_id);
 	  pv.addPhysVolID("module",module_id);
 
-	  //Position xyzVec_LP(-Y*sin(phirot), Y*cos(phirot),lateral_plate_z_offset);
-	  //Transform3D tran3D_LP(rot3D,xyzVec_LP);
-	  //pv = envelope.placeVolume(EnvLogHcalModuleBarrel_LP,tran3D_LP);
+	  if (stave_id == 1) { //place only once for the whole lateral_plate
+	    Position xyzVec_LP(0, 0,lateral_plate_z_offset);
+	    pv = envelope.placeVolume(EnvLogHcalModuleBarrel_LP,xyzVec_LP);
+	    lateral_plate_z_offset = - lateral_plate_z_offset;
+	  }
 
 	  module_z_offset = - module_z_offset;
-	  //lateral_plate_z_offset = - lateral_plate_z_offset;
 	}
 
 
