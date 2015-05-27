@@ -8,6 +8,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
 #include "XML/Utilities.h"
+#include "DDRec/DetectorData.h"
 
 using namespace std;
 using namespace DD4hep;
@@ -33,6 +34,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
     
     //-----------------------------------------------------------------------------------
+    DDRec::ZPlanarData*  zPlanarData = new DDRec::ZPlanarData() ;
     
     sens.setType("tracker");
     
@@ -45,8 +47,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         int        ncomponents = 0; //unused:, wafer_number = 0;
         
         if ( volumes.find(m_nam) != volumes.end() )   {
-            printout(ERROR,"SiTrackerBarrel","Logics error in building modules.");
-            throw runtime_error("Logics error in building modules.");
+            printout(ERROR,"TrackerBarrel","Logics error in building modules.");
+            throw runtime_error("Logic error in building modules.");
         }
         volumes[m_nam] = m_vol;
         m_vol.setVisAttributes(lcdd.visAttributes(x_mod.visStr()));
@@ -113,6 +115,25 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         // Starting z for sensor placement along Z axis.
         double sensor_z = -z0;
         int module_idx =0;
+        
+        
+        DDRec::ZPlanarData::LayerLayout thisLayer ;
+        
+        thisLayer.distanceSupport  = rc  ; //FIXME
+        
+        thisLayer.offsetSupport    =  0; //FIXME
+        thisLayer.thicknessSupport = 0; //FIXME
+        thisLayer.zHalfSupport    = 0; //FIXME
+        thisLayer.widthSupport     = 0 ; //FIXME
+        
+        thisLayer.distanceSensitive = rc; //FIXME:probably need to correct for si position
+        thisLayer.offsetSensitive  = 0. ; //FIXME
+        thisLayer.thicknessSensitive = 0 ;//FIXME
+        thisLayer.zHalfSensitive    = 0 ;//FIXME
+        thisLayer.widthSensitive =0.;//FIXME
+        thisLayer.ladderNumber = (int) nphi  ;
+        thisLayer.phi0 =  phic;
+        
         // Loop over the number of sensors in phi.
         for (int ii = 0; ii < nphi; ii++)        {
             double dx = z_dr * std::cos(phic + phi_tilt);        // Delta x of sensor position.
@@ -171,8 +192,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         pv.addPhysVolID("layer", lay_id);       // Set the layer ID.
         lay_elt.setAttributes(lcdd,lay_vol,x_layer.regionStr(),x_layer.limitsStr(),x_layer.visStr());
         lay_elt.setPlacement(pv);
+        
+        zPlanarData->layers.push_back( thisLayer ) ;
+        
     }
     sdet.setAttributes(lcdd,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+    sdet.addExtension< DDRec::ZPlanarData >( zPlanarData ) ;
+    
     //envelope.setVisAttributes(lcdd.invisible());
     /*pv = lcdd.pickMotherVolume(sdet).placeVolume(assembly);
      pv.addPhysVolID("system", det_id);      // Set the subdetector system ID.
