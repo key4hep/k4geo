@@ -89,7 +89,7 @@
         <constant name="env_safety" value="0.1*mm"/>
         
         <constant name="Vertex_inner_radius" value="30*mm"/>
-        <constant name="Vertex_outer_radius" value="102*mm"/>
+        <constant name="Vertex_outer_radius" value="111*mm"/>
         <constant name="Vertex_half_length" value="260*mm"/>
         
         <constant name="InnerTracker_inner_radius" value="61*mm"/>
@@ -211,7 +211,7 @@
     <include ref="Solenoid_o1_v01_01.xml"/>
     
     <include ref="YokeBarrel_o1_v01_01.xml"/>
-    <include ref="YokeEndcap_o1_v01_01.xml"/>
+    <include ref="YokeEndcap_o1_v01_01.xml"/-->
     
     
     <plugins>
