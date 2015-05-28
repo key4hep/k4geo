@@ -61,7 +61,7 @@ namespace lcgeo {
   {
     G4double energyDeposition = aStep->GetTotalEnergyDeposit();
     G4double length = aStep->GetStepLength();
-    G4double niel = 0.; //aStep->GetNonIonisingEnergyDeposit(); //FIXME
+    G4double niel   = aStep->GetNonIonizingEnergyDeposit();
     const G4Track* track = aStep->GetTrack();
     const G4ParticleDefinition* particle = track->GetDefinition();
     const G4MaterialCutsCouple* couple = track->GetMaterialCutsCouple();
