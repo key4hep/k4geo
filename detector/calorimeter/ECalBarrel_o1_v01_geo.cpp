@@ -16,6 +16,7 @@
 #include "XML/Layering.h"
 #include "TGeoTrd2.h"
 #include "XML/Utilities.h"
+#include "DDRec/DetectorData.h"
 
 using namespace std;
 using namespace DD4hep;
@@ -57,7 +58,21 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
     // The barrel is composed of 12 x 5 towers, each with 17 + 8 layers made of 7 slices 
     // One could group 5 towers per stave and split each tower into 3 stacks 
-
+    
+    //Create caloData object to extend driver with data required for reconstruction
+    //Added by Nikiforos, 28/05/15. Should not interfere with driver
+    DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
+    caloData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
+    caloData->inner_symmetry = nsides;
+    caloData->outer_symmetry = nsides; 
+    caloData->phi0 = 0.; //FIXME
+    /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
+    caloData->extent[0] = inner_r ;
+    caloData->extent[1] = outer_r;
+    caloData->extent[2] = 0. ;
+    caloData->extent[3] = x_dim.z()/2.0 ;
+    
+    
     std::cout << "Tower height/thickness: " << mod_z << std::endl;
     std::cout << "Check: r_out=" << outer_r << " and r_max=" << r_max << std::endl;
     if(outer_r > r_max) { // throw exception 
@@ -109,7 +124,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             int repeat = x_layer.repeat();
             // Loop over number of repeats for this layer.
             for (int j=0; j<repeat; j++)  {
-                
+              DDRec::LayeredCalorimeterData::Layer caloLayer ;
+              
                 string l_name = _toString(l_num, "layer%d");
                 double l_thickness = layering.layer(j)->thickness();  // this layer's thickness          
 		//std::cout << l_name << " thickness: " << l_thickness << std::endl;
@@ -123,6 +139,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                 // Loop over the sublayers or slices for this layer
                 int s_num = 1;
                 double s_pos_z = -(l_thickness/2);
+                double totalAbsorberThickness=0.;
+                
                 for(xml_coll_t si(x_layer,_U(slice)); si; ++si)  {
 
                     xml_comp_t x_slice = si;
@@ -136,6 +154,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                     if ( x_slice.isSensitive() ) {
                         s_vol.setSensitiveDetector(sens);
                     }
+                    
+                    char val = x_slice.hasAttr(_U(radiator)) ? x_slice.attr < string > (_U(radiator))[0] : 'f';
+                    val = std::toupper(val);
+                    bool isAbsorber =  (val == 'T' || val == 'Y');
+                    
+                    if( isAbsorber ==true)
+                      totalAbsorberThickness+= s_thick;
+                    
                     slice.setAttributes(lcdd, s_vol, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
 
                     // Slice placement
@@ -155,6 +181,16 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                 PlacedVolume layer_phv = tower_vol.placeVolume(l_vol, l_pos);
                 layer_phv.addPhysVolID("layer", l_num);
                 layer.setPlacement(layer_phv);
+                
+                caloLayer.distance = l_pos_z + l_thickness/2.;
+                caloLayer.thickness = l_thickness;
+                caloLayer.absorberThickness = totalAbsorberThickness;
+                caloLayer.cellSize0 = 5.1; //FIXME only temporary. Should get from Surfaces/Segmentation?
+                caloLayer.cellSize1 = 5.1; //FIXME
+                
+                caloData->layers.push_back( caloLayer ) ;
+                
+                
                 // Increment to next layer Z position
                 l_pos_z += l_thickness;
                 ++l_num;
@@ -194,6 +230,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     }
     // Set envelope volume attributes
     envelope.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+    
+    //FOR NOW, USE A MORE "SIMPLE" VERSION OF EXTENSIONS, INCLUDING NECESSARY GEAR PARAMETERS
+    //Copied from Frank's SHcalSc04 Implementation
+    sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
+    
     return sdet;
 }
 

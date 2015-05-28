@@ -119,21 +119,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         
         DDRec::ZPlanarData::LayerLayout thisLayer ;
         
-        thisLayer.distanceSupport  = rc  ; //FIXME
-        
-        thisLayer.offsetSupport    =  0; //FIXME
-        thisLayer.thicknessSupport = 0; //FIXME
-        thisLayer.zHalfSupport    = 0; //FIXME
-        thisLayer.widthSupport     = 0 ; //FIXME
-        
-        thisLayer.distanceSensitive = rc; //FIXME:probably need to correct for si position
-        thisLayer.offsetSensitive  = 0. ; //FIXME
-        thisLayer.thicknessSensitive = 0 ;//FIXME
-        thisLayer.zHalfSensitive    = 0 ;//FIXME
-        thisLayer.widthSensitive =0.;//FIXME
-        thisLayer.ladderNumber = (int) nphi  ;
-        thisLayer.phi0 =  phic;
-        
+       
         // Loop over the number of sensors in phi.
         for (int ii = 0; ii < nphi; ii++)        {
             double dx = z_dr * std::cos(phic + phi_tilt);        // Delta x of sensor position.
@@ -165,11 +151,48 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                 pv.addPhysVolID(_U(sensor), sensor_idx);
                 sens_elt.setPlacement(pv);
                 for(size_t ic=0; ic<waferVols.size(); ++ic)  {
+//                     std::cout<<"Layer: "<<lay_id<<" phiIdx: "<<ii<<" zidx: "<<j<<" wafer idx: "<<ic<<std::endl;
                     PlacedVolume wafer_pv = waferVols[ic];
                     DetElement comp_elt(sens_elt,wafer_pv.volume().name(),sensor_idx);
                     comp_elt.setPlacement(wafer_pv);
+                    
+                    ///GET GEAR INFORMATION FROM FIRST "MODULE" IN Z AND phi
+                    ///NOTE WORKS ONLY FOR ONE WAFER
+                    if (ii==0 && j==0 && ic==0){
+                      
+                      DD4hep::Geometry::Box mod_shape(m_env.solid()), comp_shape(wafer_pv.volume().solid());
+                      
+                      const double* trans = comp_elt.placement()->GetMatrix()->GetTranslation();
+                      double half_module_thickness = mod_shape->GetDZ();
+                      double half_silicon_thickness = comp_shape->GetDZ();
+                      
+                      double sensitive_z_position  = trans[2];
+                      
+                      double outer_thickness = half_module_thickness + sensitive_z_position;
+                      double inner_thickness = half_module_thickness - sensitive_z_position;
+                      
+                      thisLayer.distanceSupport  = rc  ;
+                     
+                      thisLayer.offsetSupport    =  0; 
+                      thisLayer.thicknessSupport = inner_thickness- half_silicon_thickness;
+                      thisLayer.zHalfSupport    = mod_shape->GetDY(); 
+                      thisLayer.widthSupport     = 2*mod_shape->GetDX(); 
+                      
+                      thisLayer.distanceSensitive = rc+sensitive_z_position; 
+                      thisLayer.offsetSensitive  = 0. ;
+                      thisLayer.thicknessSensitive = 2*half_silicon_thickness;//Assembled along Z
+                      thisLayer.zHalfSensitive    = comp_shape->GetDY();
+                      thisLayer.widthSensitive = 2*comp_shape->GetDX();
+                      thisLayer.ladderNumber = (int) nphi  ;
+                      thisLayer.phi0 =  phic;
+                      
+                      
+                      
+                    }
+                    
                 }
                 
+
                 /// Increase counters etc.
                 sensor_idx++;
                 // Adjust the x and y coordinates of the sensor.
