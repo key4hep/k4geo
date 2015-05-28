@@ -211,7 +211,7 @@
     <include ref="Solenoid_o1_v01_01.xml"/>
     
     <include ref="YokeBarrel_o1_v01_01.xml"/>
-    <include ref="YokeEndcap_o1_v01_01.xml"/-->
+    <include ref="YokeEndcap_o1_v01_01.xml"/>
     
     
     <plugins>
