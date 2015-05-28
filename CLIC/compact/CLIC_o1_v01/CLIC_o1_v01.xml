@@ -45,9 +45,10 @@
         
         <constant name="DetID_Yoke"             value=" 12"/>
         <constant name="DetID_Coil"             value=" 13"/>        
-        
-        <constant name="DetID_BeamCal"          value=" 14"/>
-        <constant name="DetID_LumiCal"          value=" 15"/>
+
+        <constant name="DetID_LumiCal"          value=" 14"/>
+        <constant name="DetID_BeamCal"          value=" 15"/>
+
         
 
         
@@ -55,7 +56,7 @@
         <constant name="CentralBeamPipe_rmax" value="30.0*mm"/>
         <constant name="ConeBeamPipe_zmax" value="2080*mm"/>
         <constant name="ConeBeamPipe_rmax" value="240.0*mm"/>
-        <constant name="BigBeamPipe_zmax" value="2645*mm"/>
+        <constant name="BigBeamPipe_zmax" value="2330*mm"/>
         <constant name="BeamPipe_end" value="12500*mm"/>
         
         
@@ -105,15 +106,15 @@
         <constant name="ECalBarrel_half_length" value="2389*mm"/>
         <constant name="ECalBarrel_symmetry" value="12"/>
         
-        <constant name="ECalEndcap_inner_radius" value="410*mm"/>
+        <constant name="ECalEndcap_inner_radius" value="430*mm"/>
         <constant name="ECalEndcap_outer_radius" value="1400*mm"/>
         <constant name="ECalEndcap_min_z" value="2350*mm"/>
         <constant name="ECalEndcap_max_z" value="2509*mm"/>
         <constant name="ECalEndcap_outer_symmetry" value="12"/>
         <constant name="ECalEndcap_inner_symmetry" value="4"/>
         
-        <constant name="ECalPlug_inner_radius" value="360*mm"/>
-        <constant name="ECalPlug_outer_radius" value="380*mm"/>
+        <constant name="ECalPlug_inner_radius" value="380*mm"/>
+        <constant name="ECalPlug_outer_radius" value="400*mm"/>
         <constant name="ECalPlug_min_z" value="2350*mm"/>
         <constant name="ECalPlug_max_z" value="2509*mm"/>
         <constant name="ECalPlug_outer_symmetry" value="4"/>
@@ -149,8 +150,9 @@
         
         <constant name="LumiCal_inner_radius" value="100*mm"/>
         <constant name="LumiCal_outer_radius" value="340*mm"/>
-        <constant name="LumiCal_min_z" value="2539*mm"/>
-        <constant name="LumiCal_max_z" value="2710*mm"/>
+        <constant name="LumiCal_min_z" value="2338*mm"/>
+        <constant name="LumiCal_max_z" value="2509*mm"/>
+        <constant name="LumiCal_dz" value="(LumiCal_max_z-LumiCal_min_z)/2.0"/>
         
         <constant name="BeamCal_inner_radius" value="32*mm"/>
         <constant name="BeamCal_outer_radius" value="150*mm"/>
@@ -191,8 +193,9 @@
         <vis name="HCALVis"  alpha="1.0" r="0.078" g="0.01176"  b="0.588" showDaughters="true"  visible="true"/>
         <vis name="SOLVis"  alpha="1.0" r="0.4" g="0.4"  b="0.4" showDaughters="true"  visible="true"/>
         <vis name="YOKEVis"  alpha="1.0" r="0.6" g="0.0"  b="0.0" showDaughters="true"  visible="true"/>
-        
+        <vis name="LCALVis"  alpha="1.0" r="0.35" g="0.0"  b="0.47" showDaughters="true"  visible="true"/>
     </display>
+    
     <include ref="Materials_v01.xml"/>
     
     <include ref="Beampipe_o1_v01_01.xml"/>
@@ -213,7 +216,9 @@
     <include ref="YokeBarrel_o1_v01_01.xml"/>
     <include ref="YokeEndcap_o1_v01_01.xml"/>
     
-    
+    <include ref="LumiCal_o1_v01_01.xml"/>
+
+
     <plugins>
         <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
             <argument value="InnerTrackerBarrel"/>

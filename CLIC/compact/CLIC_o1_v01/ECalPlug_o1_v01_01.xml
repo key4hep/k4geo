@@ -22,9 +22,22 @@
                 <shape type="BooleanShape" operation="Subtraction" material="Air">
                     <shape type="BooleanShape" operation="Subtraction" material="Air">
                         <shape type="Box" dx="ECalPlug_outer_radius" dy="ECalPlug_outer_radius" dz="ECalPlug_max_z"/>
-                        <shape type="Tube" rmin="0" rmax="ECalPlug_inner_radius" dz="2.0*ECalPlug_max_z"/>
+                        <shape type="Box" dx="ECalPlug_outer_radius*1.1" dy="ECalPlug_outer_radius*1.1" dz="ECalPlug_min_z"/>
                     </shape>
-                    <shape type="Box" dx="ECalPlug_outer_radius*1.1" dy="ECalPlug_outer_radius*1.1" dz="ECalPlug_min_z"/>
+                    <shape type="BooleanShape" operation="union" material="Air">
+                        <shape type="BooleanShape" operation="Intersection">
+                            <shape type="Box"  dx="world_side" dy="world_side" dz="world_side"/>
+                            <shape type="Tube"  rmin="0" rmax="LumiCal_outer_radius+3*cm" dz="LumiCal_dz*2"/>
+                            <position x="tan(0.5*CrossingAngle)*(LumiCal_min_z+LumiCal_dz)" y="0" z="LumiCal_min_z+LumiCal_dz"/>
+                            <rotation x="0" y="0.5*CrossingAngle" z="0"/>
+                        </shape>
+                        <shape type="BooleanShape" operation="Intersection">
+                            <shape type="Box"  dx="world_side" dy="world_side" dz="world_side"/>
+                            <shape type="Tube"  rmin="0" rmax="LumiCal_outer_radius+3*cm" dz="LumiCal_dz*2"/>
+                            <position x="tan(0.5*CrossingAngle)*(LumiCal_min_z+LumiCal_dz)" y="0" z="-(LumiCal_min_z+LumiCal_dz)"/>
+                            <rotation x="0" y="-0.5*CrossingAngle" z="0"/>
+                        </shape>
+                    </shape>
                 </shape>
             </envelope>
             
