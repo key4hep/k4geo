@@ -54,6 +54,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     double        z_max     = x_dim.zmax();
     double        mod_z     = layering.totalThickness() + 2*tolerance;
 
+    if(outsides != 12 && insides != 4){ // throw exception
+      throw std::runtime_error("ERROR: This driver is for 12/4 symmetry!");
+    }
+
     sens.setType("calorimeter");
     
     std::cout << "Global tolerance: " << tolerance << " cm" << std::endl;

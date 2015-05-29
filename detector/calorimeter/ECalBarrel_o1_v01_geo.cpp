@@ -42,10 +42,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     const int n_towers = (int) xmlParameter.attr<double>(_Unicode(num_towers));
     const double towersAirGap = xmlParameter.attr<double>(_Unicode(TowersAirGap));
     const double faceThickness = xmlParameter.attr<double>(_Unicode(TowersFaceThickness));
-    Material WDens24 = lcdd.material(xmlParameter.attr<string>(_Unicode(AlveolusMaterial)));
-    double eCal_cell_size      = lcdd.constant<double>("ECal_cell_size"); //Should try to obtain from segmentation
-    
-
+    Material Composite = lcdd.material(xmlParameter.attr<string>(_Unicode(AlveolusMaterial)));
+    double eCal_cell_size = lcdd.constant<double>("ECal_cell_size"); //Should try to obtain from segmentation
       
     Layering      layering (e);
     Material      air       = lcdd.air();
@@ -57,13 +55,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     double        hphi      = dphi/2.;
     double        mod_z     = layering.totalThickness();
     double        outer_r   = (inner_r + mod_z)/std::cos(hphi); // circumscribing circle radius
-    double        r_max     = x_dim.rmax(); // /std::cos(hphi); // corrected definition (!)
-
-    // The barrel is composed of 12 x 5 towers, each with 17 + 8 layers made of 7 slices 
-    // One could group 5 towers per stave and split each tower into 3 stacks 
+    double        r_max     = x_dim.rmax()/std::cos(hphi);      // see http://cern.ch/go/r9mZ
     
-    //Create caloData object to extend driver with data required for reconstruction
-    //Added by Nikiforos, 28/05/15. Should not interfere with driver
+    // Create caloData object to extend driver with data required for reconstruction
+    // Added by Nikiforos, 28/05/15. Should not interfere with driver but it does
     DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
     caloData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
     caloData->inner_symmetry = nsides;
@@ -71,13 +66,15 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     caloData->phi0 = 0.; //FIXME
     /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
     caloData->extent[0] = inner_r ;
-    caloData->extent[1] = outer_r;
+    caloData->extent[1] = outer_r; // check !!
     caloData->extent[2] = 0. ;
     caloData->extent[3] = x_dim.z()/2.0 ;
     
-    
+    // The barrel is composed of 12 x 5 towers, each with 17 + 8 layers made of 7 slices
+    // One could group 5 towers per stave and split each tower into 3 stacks
+
     std::cout << "Tower height/thickness: " << mod_z << std::endl;
-    std::cout << "Check: r_out=" << outer_r << " and r_max=" << r_max << std::endl;
+    std::cout << "Got r_out = " << outer_r << " and r_max = " << r_max << std::endl;
     if(outer_r > r_max) { // throw exception 
       throw std::runtime_error("ERROR: Layers don't fit within the envelope volume!");
     }
@@ -107,7 +104,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                   trd_y1, // Depth at bottom face
                   trd_y1, // Depth at top face y2=y1
                   trd_z); // Height of the tower, when rotated
-    Volume tower_vol("tower", twr, WDens24); // solid tungsten volume
+    Volume tower_vol("tower", twr, Composite); // solid tungsten volume
         
     sens.setType("calorimeter");
 
@@ -125,12 +122,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             
             xml_comp_t x_layer = li;
             int repeat = x_layer.repeat();
+
             // Loop over number of repeats for this layer.
             for (int j=0; j<repeat; j++)  {
-              DDRec::LayeredCalorimeterData::Layer caloLayer ;
+
+                DDRec::LayeredCalorimeterData::Layer caloLayer ;
               
                 string l_name = _toString(l_num, "layer%d");
-                double l_thickness = layering.layer(j)->thickness();  // this layer's thickness          
+                double l_thickness = layering.layer(l_num-1)->thickness();  // this layer's thickness          
 		//std::cout << l_name << " thickness: " << l_thickness << std::endl;
                 l_dim_x -= l_thickness/tan_beta;                      // decreasing width 
 
@@ -193,7 +192,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                 
                 caloData->layers.push_back( caloLayer ) ;
                 
-                
                 // Increment to next layer Z position
                 l_pos_z += l_thickness;
                 ++l_num;
@@ -209,7 +207,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     // Phi start for staves/towers
     double phi = M_PI/nsides;
     double mod_x_off = dx/2 + tolerance;               // Stave/tower X offset
-    double mod_y_off = inner_r + mod_z/2 + tolerance;  // Stave/tower Y offset
+    double mod_y_off = (inner_r + outer_r)/2;          // Stave/tower Y offset
     
     // Create the towers
     for (int t = 0; t < n_towers; t++)  {
