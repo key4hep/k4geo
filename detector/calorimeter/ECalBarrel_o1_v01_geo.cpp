@@ -43,7 +43,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     const double towersAirGap = xmlParameter.attr<double>(_Unicode(TowersAirGap));
     const double faceThickness = xmlParameter.attr<double>(_Unicode(TowersFaceThickness));
     Material WDens24 = lcdd.material(xmlParameter.attr<string>(_Unicode(AlveolusMaterial)));
+    double eCal_cell_size      = lcdd.constant<double>("ECal_cell_size"); //Should try to obtain from segmentation
     
+
+      
     Layering      layering (e);
     Material      air       = lcdd.air();
     xml_comp_t    x_staves  = x_det.staves();
@@ -185,8 +188,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                 caloLayer.distance = l_pos_z + l_thickness/2.;
                 caloLayer.thickness = l_thickness;
                 caloLayer.absorberThickness = totalAbsorberThickness;
-                caloLayer.cellSize0 = 5.1; //FIXME only temporary. Should get from Surfaces/Segmentation?
-                caloLayer.cellSize1 = 5.1; //FIXME
+                caloLayer.cellSize0 = eCal_cell_size;
+                caloLayer.cellSize1 = eCal_cell_size;
                 
                 caloData->layers.push_back( caloLayer ) ;
                 

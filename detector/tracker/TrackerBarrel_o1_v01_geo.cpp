@@ -175,13 +175,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                      
                       thisLayer.offsetSupport    =  0; 
                       thisLayer.thicknessSupport = inner_thickness- half_silicon_thickness;
-                      thisLayer.zHalfSupport    = mod_shape->GetDY(); 
+                      thisLayer.zHalfSupport    = nz*mod_shape->GetDY(); 
                       thisLayer.widthSupport     = 2*mod_shape->GetDX(); 
                       
                       thisLayer.distanceSensitive = rc+sensitive_z_position; 
                       thisLayer.offsetSensitive  = 0. ;
                       thisLayer.thicknessSensitive = 2*half_silicon_thickness;//Assembled along Z
-                      thisLayer.zHalfSensitive    = comp_shape->GetDY();
+                      thisLayer.zHalfSensitive    = nz*comp_shape->GetDY();
                       thisLayer.widthSensitive = 2*comp_shape->GetDX();
                       thisLayer.ladderNumber = (int) nphi  ;
                       thisLayer.phi0 =  phic;

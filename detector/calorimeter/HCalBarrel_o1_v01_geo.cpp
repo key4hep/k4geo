@@ -58,6 +58,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens) {
   DetElement sdet(det_name, x_det.id());
   DetElement stave("stave1", x_det.id());
   //  Volume motherVol = lcdd.pickMotherVolume(sdet);
+  double hCal_cell_size      = lcdd.constant<double>("HCal_cell_size"); //Should try to obtain from segmentation
   
   //Create caloData object to extend driver with data required for reconstruction
   DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
@@ -189,8 +190,8 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
       caloLayer.distance = layer_pos_z;
       caloLayer.thickness = layer_thickness;
       caloLayer.absorberThickness = totalAbsorberThickness;
-      caloLayer.cellSize0 = 30.0; //FIXME only temporary. Should get from Surfaces/Segmentation?
-      caloLayer.cellSize1 = 30.0; //FIXME
+      caloLayer.cellSize0 = hCal_cell_size;
+      caloLayer.cellSize1 = hCal_cell_size;
       
       caloData->layers.push_back( caloLayer ) ;
       
