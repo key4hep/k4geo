@@ -3,7 +3,9 @@
     <comment>Tracking detectors</comment>
     <detectors>
         <detector name="Vertex" type="DD4hep_SubdetectorAssembly" vis="VXDVis">
-            <shape name="VertexEnvelope" type="Tube" rmin="Vertex_inner_radius" rmax="Vertex_outer_radius" dz="Vertex_half_length" material="Air">
+            <shape type="BooleanShape" operation="Union" material="Air">
+                <shape type="Tube" rmin="Vertex_inner_radius" rmax="Vertex_outer_radius-1*mm" dz="Vertex_half_length"/>
+                <shape type="Tube" rmin="Vertex_inner_radius+0.3*cm" rmax="Vertex_outer_radius-2*env_safety" dz="Vertex_half_length+0.5*cm-env_safety"/>
             </shape>
             <comment>Outer Tracker Assembly</comment>
             <composite name="VertexBarrel"/>
@@ -21,12 +23,12 @@
     
     <define>
         <constant name="VertexBarrel_zmax" value="13.0*cm"/>
-        <constant name="VertexBarrel_r1" value="3.0825*cm"/>
-        <constant name="VertexBarrel_r2" value="3.1125*cm"/>
-        <constant name="VertexBarrel_r3" value="4.3825*cm"/>
-        <constant name="VertexBarrel_r4" value="4.4125*cm"/>
-        <constant name="VertexBarrel_r5" value="5.7825*cm"/>
-        <constant name="VertexBarrel_r6" value="5.8125*cm"/>
+        <constant name="VertexBarrel_r1" value="3.1*cm"/>
+        <constant name="VertexBarrel_r2" value="3.3*cm"/>
+        <constant name="VertexBarrel_r3" value="4.4*cm"/>
+        <constant name="VertexBarrel_r4" value="4.6*cm"/>
+        <constant name="VertexBarrel_r5" value="5.8*cm"/>
+        <constant name="VertexBarrel_r6" value="6.0*cm"/>
         
         <constant name="VertexEndcap_rmax" value="102*mm"/>
         <constant name="VertexEndcap_z1" value="160*mm"/>
@@ -63,69 +65,69 @@
             <comment>Vertex Detector Barrel</comment>
             
             <module name="VtxBarrelModuleInner1" vis="SiVertexBarrelModuleVis">
-                <module_envelope width="10.0*mm" length="(VertexBarrel_zmax - 0.1*cm) * 2" thickness="0.2*mm"/>
-                <module_component width="7.8*mm" length="(VertexBarrel_zmax - 0.15*cm) * 2" thickness="0.0065*cm" material="Carbon" sensitive="false">
+                <module_envelope width="13.0*mm" length="(VertexBarrel_zmax - 0.1*cm) * 2" thickness="0.2*mm"/>
+                <module_component width="10.8*mm" length="(VertexBarrel_zmax - 0.15*cm) * 2" thickness="0.0065*cm" material="Carbon" sensitive="false">
                     <position z="0.0050*cm"/>
                 </module_component>
-                <module_component width="9.8*mm" length="(VertexBarrel_zmax - 0.15*cm) * 2" thickness="0.005*cm" material="Silicon" sensitive="true">
+                <module_component width="12.8*mm" length="(VertexBarrel_zmax - 0.15*cm) * 2" thickness="0.005*cm" material="Silicon" sensitive="true">
                     <position z="-0.0050*cm"/>
                 </module_component>
             </module>
             <module name="VtxBarrelModuleInner2" vis="SiVertexBarrelModuleVis">
-                <module_envelope width="10.0*mm" length="(VertexBarrel_zmax - 0.1*cm) * 2" thickness="0.2*mm"/>
-                <module_component width="9.8*mm" length="(VertexBarrel_zmax - 0.15*cm) * 2" thickness="0.005*cm" material="Silicon" sensitive="true">
+                <module_envelope width="13.0*mm" length="(VertexBarrel_zmax - 0.1*cm) * 2" thickness="0.2*mm"/>
+                <module_component width="12.8*mm" length="(VertexBarrel_zmax - 0.15*cm) * 2" thickness="0.005*cm" material="Silicon" sensitive="true">
                     <position z="0.0050*cm"/>
                 </module_component>
-                <module_component width="7.8*mm" length="(VertexBarrel_zmax - 0.15*cm) * 2" thickness="0.0065*cm" material="Carbon" sensitive="false">
+                <module_component width="10.8*mm" length="(VertexBarrel_zmax - 0.15*cm) * 2" thickness="0.0065*cm" material="Carbon" sensitive="false">
                     <position z="-0.0050*cm"/>
                 </module_component>
             </module>
             <module name="VtxBarrelModuleOuter1" vis="SiVertexBarrelModuleVis">
-                <module_envelope width="14.0*mm" length="(VertexBarrel_zmax - 0.1*cm) * 2" thickness="0.2*mm"/>
-                <module_component width="11.6*mm" length="(VertexBarrel_zmax - 0.15*cm) * 2" thickness="0.0065*cm" material="Carbon" sensitive="false">
+                <module_envelope width="26.0*mm" length="(VertexBarrel_zmax - 0.1*cm) * 2" thickness="0.2*mm"/>
+                <module_component width="23.6*mm" length="(VertexBarrel_zmax - 0.15*cm) * 2" thickness="0.0065*cm" material="Carbon" sensitive="false">
                     <position z="0.0050*cm"/>
                 </module_component>
-                <module_component width="13.8*mm" length="(VertexBarrel_zmax - 0.15*cm) * 2" thickness="0.005*cm" material="Silicon" sensitive="true">
+                <module_component width="25.8*mm" length="(VertexBarrel_zmax - 0.15*cm) * 2" thickness="0.005*cm" material="Silicon" sensitive="true">
                     <position z="-0.0050*cm"/>
                 </module_component>
             </module>
             <module name="VtxBarrelModuleOuter2" vis="SiVertexBarrelModuleVis">
-                <module_envelope width="14.0*mm" length="(VertexBarrel_zmax - 0.1*cm) * 2" thickness="0.2*mm"/>
-                <module_component width="13.8*mm" length="(VertexBarrel_zmax - 0.15*cm) * 2" thickness="0.005*cm" material="Silicon" sensitive="true">
+                <module_envelope width="26.0*mm" length="(VertexBarrel_zmax - 0.1*cm) * 2" thickness="0.2*mm"/>
+                <module_component width="25.8*mm" length="(VertexBarrel_zmax - 0.15*cm) * 2" thickness="0.005*cm" material="Silicon" sensitive="true">
                     <position z="0.0050*cm"/>
                 </module_component>
-                <module_component width="11.6*mm" length="(VertexBarrel_zmax - 0.15*cm) * 2" thickness="0.0065*cm" material="Carbon" sensitive="false">
+                <module_component width="23.6*mm" length="(VertexBarrel_zmax - 0.15*cm) * 2" thickness="0.0065*cm" material="Carbon" sensitive="false">
                     <position z="-0.0050*cm"/>
                 </module_component>
             </module>
             <layer module="VtxBarrelModuleInner1" id="0" vis="SiVertexBarrelLayerVis">
-                <barrel_envelope inner_r="VertexBarrel_r1 - 0.08*cm" outer_r="VertexBarrel_r1 + 0.08*cm" z_length="VertexBarrel_zmax * 2"/>
-                <rphi_layout phi_tilt="0.0" nphi="18" phi0="0.2618" rc="VertexBarrel_r1" dr="-0.6*mm"/>
+                <barrel_envelope inner_r="VertexBarrel_r1 - 0.08*cm" outer_r="VertexBarrel_r1 + 0.1*cm" z_length="VertexBarrel_zmax * 2"/>
+                <rphi_layout phi_tilt="2.5*deg" nphi="16" phi0="0" rc="VertexBarrel_r1" dr="0"/>
                 <z_layout dr="0.0" z0="0.0" nz="1"/>
             </layer>
             <layer module="VtxBarrelModuleInner2" id="1" vis="SiVertexBarrelLayerVis">
-                <barrel_envelope inner_r="VertexBarrel_r1 + 1.7*mm-0.08*cm" outer_r="VertexBarrel_r1 + 1.7*mm+0.08*cm" z_length="VertexBarrel_zmax * 2"/>
-                <rphi_layout phi_tilt="0.0" nphi="18" phi0="0.2618" rc="VertexBarrel_r1+1.7*mm" dr="-0.6*mm"/>
+                <barrel_envelope inner_r="VertexBarrel_r2 -0.1*cm" outer_r="VertexBarrel_r2 + 0.25*cm" z_length="VertexBarrel_zmax * 2"/>
+                <rphi_layout phi_tilt="2.5*deg" nphi="16" phi0="0" rc="VertexBarrel_r2" dr="0"/>
                 <z_layout dr="0.0" z0="0.0" nz="1"/>
             </layer>
             <layer module="VtxBarrelModuleOuter1" id="2" vis="SiVertexBarrelLayerVis">
-                <barrel_envelope inner_r="VertexBarrel_r3 - 0.08*cm" outer_r="VertexBarrel_r3 + 0.08*cm" z_length="VertexBarrel_zmax * 2"/>
-                <rphi_layout phi_tilt="0.0" nphi="24" phi0="0.0" rc="VertexBarrel_r3" dr="-0.6*mm"/>
+                <barrel_envelope inner_r="VertexBarrel_r3 - 0.25*cm" outer_r="VertexBarrel_r3 + 0.1*cm" z_length="VertexBarrel_zmax * 2"/>
+                <rphi_layout phi_tilt="2.*deg" nphi="12" phi0="0.0" rc="VertexBarrel_r3" dr="0.0"/>
                 <z_layout dr="0.0" z0="0.0" nz="1"/>
             </layer>
             <layer module="VtxBarrelModuleOuter2" id="3" vis="SiVertexBarrelLayerVis">
-                <barrel_envelope inner_r="VertexBarrel_r3 + 1.7*mm- 0.08*cm" outer_r="VertexBarrel_r3 + 1.7*mm+0.08*cm" z_length="VertexBarrel_zmax * 2"/>
-                <rphi_layout phi_tilt="0.0" nphi="24" phi0="0.0" rc="VertexBarrel_r3+1.7*mm" dr="-0.6*mm"/>
+                <barrel_envelope inner_r="VertexBarrel_r4 - 0.1*cm" outer_r="VertexBarrel_r4 +0.25*cm" z_length="VertexBarrel_zmax * 2"/>
+                <rphi_layout phi_tilt="2.*deg" nphi="12" phi0="0.0" rc="VertexBarrel_r4" dr="0"/>
                 <z_layout dr="0.0" z0="0.0" nz="1"/>
             </layer>
             <layer module="VtxBarrelModuleOuter1" id="4" vis="SiVertexBarrelLayerVis">
-                <barrel_envelope inner_r="VertexBarrel_r5 - 0.08*cm" outer_r="VertexBarrel_r5 + 0.08*cm" z_length="VertexBarrel_zmax * 2"/>
-                <rphi_layout phi_tilt="0.0" nphi="36" phi0="0.0" rc="VertexBarrel_r5" dr="-0.6*mm"/>
+                <barrel_envelope inner_r="VertexBarrel_r5 - 0.25*cm" outer_r="VertexBarrel_r5 + 0.1*cm" z_length="VertexBarrel_zmax * 2"/>
+                <rphi_layout phi_tilt="3.*deg" nphi="16" phi0="0.0" rc="VertexBarrel_r5" dr="0"/>
                 <z_layout dr="0.0" z0="0.0" nz="1"/>
             </layer>
             <layer module="VtxBarrelModuleOuter2" id="5" vis="SiVertexBarrelLayerVis">
-                <barrel_envelope inner_r="VertexBarrel_r5 +1.7*mm-0.08*cm" outer_r="VertexBarrel_r5 + 1.7*mm+0.08*cm" z_length="VertexBarrel_zmax * 2"/>
-                <rphi_layout phi_tilt="0.0" nphi="36" phi0="0.0" rc="VertexBarrel_r5+1.7*mm" dr="-0.6*mm"/>
+                <barrel_envelope inner_r="VertexBarrel_r6-0.1*cm" outer_r="VertexBarrel_r6 +0.25*cm" z_length="VertexBarrel_zmax * 2"/>
+                <rphi_layout phi_tilt="3.*deg" nphi="16" phi0="0.0" rc="VertexBarrel_r6" dr="0"/>
                 <z_layout dr="0.0" z0="0.0" nz="1"/>
             </layer>
         </detector>
@@ -156,7 +158,7 @@
                 <module_component thickness="0.005*cm" material="Silicon" vis="SiVertexPassiveVis"/>
                 <module_component thickness="0.005*cm" material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
             </module>
-              <layer id="0"  vis="SiVertexLayerVis">
+            <layer id="0"  vis="SiVertexLayerVis">
                 <ring r="(VertexEndcap_rmax + VertexEndcap_rmin1) / 2" zstart="VertexEndcap_z1" nmodules="(int) VertexEndcapModules" dz="0.546*cm" phi0="pi/(VertexEndcapModules-0.1)" module="SiVertexEndcapModule1"/>
             </layer>
             <layer id="1"  vis="SiVertexLayerVis">

@@ -8,21 +8,24 @@
                 <shape type="BooleanShape" operation="Subtraction">
                     <shape type="BooleanShape" operation="Subtraction">
                         <shape type="BooleanShape" operation="Subtraction">
-                            <shape type="BooleanShape" operation="Subtraction"  >
-                                <shape type="Tube" rmin="CentralBeamPipe_rmax" rmax="InnerTracker_outer_radius" dz="InnerTracker_half_length+env_safety"/>
-                                <shape type="Cone" rmin1="0" rmax1="CentralBeamPipe_rmax" rmin2="0" rmax2="ConeBeamPipe_rmax" z="(ConeBeamPipe_zmax-CentralBeamPipe_zmax)/2.0"/>
-                                <position x="0" y="0" z="(ConeBeamPipe_zmax-CentralBeamPipe_zmax)/2.0 + CentralBeamPipe_zmax" />
+                            <shape type="BooleanShape" operation="Subtraction">
+                                <shape type="BooleanShape" operation="Subtraction"  >
+                                    <shape type="Tube" rmin="CentralBeamPipe_rmax" rmax="InnerTracker_outer_radius" dz="InnerTracker_half_length+env_safety"/>
+                                    <shape type="Cone" rmin1="0" rmax1="CentralBeamPipe_rmax" rmin2="0" rmax2="ConeBeamPipe_rmax" z="(ConeBeamPipe_zmax-CentralBeamPipe_zmax)/2.0"/>
+                                    <position x="0" y="0" z="(ConeBeamPipe_zmax-CentralBeamPipe_zmax)/2.0 + CentralBeamPipe_zmax" />
+                                </shape>
+                                <shape type="Cone" rmin2="0" rmax2="CentralBeamPipe_rmax" rmin1="0" rmax1="ConeBeamPipe_rmax" z="(ConeBeamPipe_zmax-CentralBeamPipe_zmax)/2.0"/>
+                                <position x="0" y="0" z="-(ConeBeamPipe_zmax-CentralBeamPipe_zmax)/2.0 - CentralBeamPipe_zmax" />
                             </shape>
-                            <shape type="Cone" rmin2="0" rmax2="CentralBeamPipe_rmax" rmin1="0" rmax1="ConeBeamPipe_rmax" z="(ConeBeamPipe_zmax-CentralBeamPipe_zmax)/2.0"/>
-                            <position x="0" y="0" z="-(ConeBeamPipe_zmax-CentralBeamPipe_zmax)/2.0 - CentralBeamPipe_zmax" />
+                            <shape type="Tube" rmin="0" rmax="ConeBeamPipe_rmax" dz="(InnerTracker_half_length-ConeBeamPipe_zmax)/2.0+env_safety"/>
+                            <position x="0" y="0" z="(InnerTracker_half_length-ConeBeamPipe_zmax)/2.0+ConeBeamPipe_zmax" />
                         </shape>
                         <shape type="Tube" rmin="0" rmax="ConeBeamPipe_rmax" dz="(InnerTracker_half_length-ConeBeamPipe_zmax)/2.0+env_safety"/>
-                        <position x="0" y="0" z="(InnerTracker_half_length-ConeBeamPipe_zmax)/2.0+ConeBeamPipe_zmax" />
+                        <position x="0" y="0" z="-(InnerTracker_half_length-ConeBeamPipe_zmax)/2.0-ConeBeamPipe_zmax" />
                     </shape>
-                    <shape type="Tube" rmin="0" rmax="ConeBeamPipe_rmax" dz="(InnerTracker_half_length-ConeBeamPipe_zmax)/2.0+env_safety"/>
-                    <position x="0" y="0" z="-(InnerTracker_half_length-ConeBeamPipe_zmax)/2.0-ConeBeamPipe_zmax" />
+                    <shape type="Tube" rmin="0" rmax="Vertex_outer_radius" dz="Vertex_half_length"/>
                 </shape>
-                <shape type="Tube" rmin="0" rmax="Vertex_outer_radius" dz="Vertex_half_length"/>
+                <shape type="Tube" rmin="Vertex_inner_radius+0.3*cm" rmax="Vertex_outer_radius" dz="Vertex_half_length+0.5*cm"/>
             </shape>
             
             
@@ -189,19 +192,19 @@
                 <ring r="449.180*mm-1*cm" zstart="(1622.603+1.75)*mm" nmodules="40" dz="1.75*mm" module="Module1"/>
                 <ring r="538.520*mm-1*cm" zstart="(1614.335+1.75)*mm" nmodules="40" dz="1.75*mm" module="Module2"/>
             </layer>
-
+            
             <layer id="5">
                 <ring r="353.991*mm-1*cm" zstart="(1630.835+300)*mm" nmodules="32" dz="1.75*mm" module="Module1"/>
                 <ring r="449.180*mm-1*cm" zstart="(1622.603+300)*mm" nmodules="40" dz="1.75*mm" module="Module1"/>
                 <ring r="538.520*mm-1*cm" zstart="(1614.335+300)*mm" nmodules="40" dz="1.75*mm" module="Module2"/>
             </layer>
-
+            
             <layer id="6">
                 <ring r="353.991*mm-1*cm" zstart="(1630.835+600)*mm" nmodules="32" dz="1.75*mm" module="Module1"/>
                 <ring r="449.180*mm-1*cm" zstart="(1622.603+600)*mm" nmodules="40" dz="1.75*mm" module="Module1"/>
                 <ring r="538.520*mm-1*cm" zstart="(1614.335+600)*mm" nmodules="40" dz="1.75*mm" module="Module2"/>
             </layer>
-
+            
         </detector>
     </detectors>
     
