@@ -158,7 +158,8 @@
         <constant name="BeamCal_outer_radius" value="150*mm"/>
         <constant name="BeamCal_min_z" value="3181*mm"/>
         <constant name="BeamCal_max_z" value="3441*mm"/>
-
+        <constant name="BeamCal_dz" value="(BeamCal_max_z-BeamCal_min_z)/2.0"/>
+        
 
         <constant name="tracker_region_zmax" value="OuterTracker_half_length"/>
         <constant name="tracker_region_rmax" value="OuterTracker_outer_radius"/>        
@@ -194,6 +195,7 @@
         <vis name="SOLVis"  alpha="1.0" r="0.4" g="0.4"  b="0.4" showDaughters="true"  visible="true"/>
         <vis name="YOKEVis"  alpha="1.0" r="0.6" g="0.0"  b="0.0" showDaughters="true"  visible="true"/>
         <vis name="LCALVis"  alpha="1.0" r="0.35" g="0.0"  b="0.47" showDaughters="true"  visible="true"/>
+        <vis name="BCALVis"  alpha="1.0" r="0.0" g="0.4"  b="0.4" showDaughters="true"  visible="true"/>
     </display>
     
     <include ref="Materials_v01.xml"/>
@@ -217,7 +219,7 @@
     <include ref="YokeEndcap_o1_v01_01.xml"/>
     
     <include ref="LumiCal_o1_v01_01.xml"/>
-
+    <include ref="BeamCal_o1_v01_01.xml"/>
 
     <plugins>
         <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
