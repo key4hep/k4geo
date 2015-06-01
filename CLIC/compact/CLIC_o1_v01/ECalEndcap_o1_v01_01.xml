@@ -24,7 +24,7 @@
     <readouts>
         <readout name="ECalEndcapHits">
             <segmentation type="CartesianGridXY" grid_size_x="5.1" grid_size_y="5.1" />
-            <id>system:8,barrel:-2,sector:4,panel:4,layer:8,slice:5,x:32:-16,y:-16</id>
+            <id>system:5,barrel:2,sector:2,panel:2,layer:15,slice:4,x:32:-16,y:-16</id>
         </readout>
     </readouts>
     
