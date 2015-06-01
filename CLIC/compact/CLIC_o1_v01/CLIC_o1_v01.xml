@@ -43,8 +43,8 @@
         <constant name="DetID_HCAL_Barrel"      value=" 10"/>
         <constant name="DetID_HCAL_Endcap"      value=" 11"/>
         
-        <constant name="DetID_Yoke"             value=" 12"/>
-        <constant name="DetID_Coil"             value=" 13"/>        
+        <constant name="DetID_Yoke_Barrel"      value=" 12"/>
+        <constant name="DetID_Yoke_Endcap"      value=" 13"/>
 
         <constant name="DetID_LumiCal"          value=" 14"/>
         <constant name="DetID_BeamCal"          value=" 15"/>
