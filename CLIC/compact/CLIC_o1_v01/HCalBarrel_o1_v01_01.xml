@@ -35,11 +35,7 @@
             <comment>Hadron Calorimeter Barrel</comment>
             
             <envelope vis="HCALVis">
-                <shape type="BooleanShape" operation="Subtraction"  material = "Air" >
-                  <shape type="PolyhedraRegular" numsides="HCalBarrel_symmetry"  rmin="0" rmax="HCalBarrel_outer_radius" dz="HCalBarrel_half_length*2" />
-                  <shape type="PolyhedraRegular" numsides="HCalBarrel_symmetry"  rmin="0" rmax="HCalBarrel_inner_radius" dz="HCalBarrel_half_length*2+env_safety" />
-                    <rotation x="0*deg" y="0*deg" z="0"/>
-                </shape>
+                <shape type="PolyhedraRegular" numsides="HCalBarrel_symmetry"  rmin="HCalBarrel_inner_radius-10*env_safety" rmax="HCalBarrel_outer_radius+10*env_safety" dz="HCalBarrel_half_length*2+10*env_safety" material = "Air"/>
                 <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/HCalBarrel_symmetry"/>
             </envelope>
             

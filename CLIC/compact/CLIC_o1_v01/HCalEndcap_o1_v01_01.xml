@@ -20,11 +20,10 @@
             <envelope vis="HCALVis">
                 <shape type="BooleanShape" operation="Subtraction" material="Air">
                     <shape type="BooleanShape" operation="Subtraction">
-                        <shape type="PolyhedraRegular"  numsides="HCalEndcap_outer_symmetry" rmin="0" rmax="HCalEndcap_outer_radius" dz="2.0*HCalEndcap_max_z"/>
-                        <shape type="PolyhedraRegular"  numsides="HCalEndcap_outer_symmetry" rmin="0" rmax="HCalEndcap_outer_radius+env_safety" dz="2.0*HCalEndcap_min_z"/>
+                        <shape type="PolyhedraRegular"  numsides="HCalEndcap_outer_symmetry" rmin="0" rmax="HCalEndcap_outer_radius+ 10.0*env_safety" dz="2.0*HCalEndcap_max_z+2*env_safety"/>
+                        <shape type="PolyhedraRegular"  numsides="HCalEndcap_outer_symmetry" rmin="0" rmax="HCalEndcap_outer_radius+ 100.0*env_safety" dz="2.0*HCalEndcap_min_z-2*env_safety"/>
                     </shape>
-                    <shape type="Box" dx="HCalEndcap_inner_radius" dy="HCalEndcap_inner_radius" dz="HCalEndcap_max_z + 2.0*env_safety"/>
-                    <rotation x="0*deg" y="0*deg" z="-90*deg+180*deg/HCalEndcap_outer_symmetry"/>
+                    <shape type="Tube"  rmin="0" rmax="HCalEndcap_inner_radius-env_safety" dz="2.0*HCalEndcap_max_z+4*env_safety"/>
                 </shape>
                 <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/HCalEndcap_outer_symmetry"/>
             </envelope>
