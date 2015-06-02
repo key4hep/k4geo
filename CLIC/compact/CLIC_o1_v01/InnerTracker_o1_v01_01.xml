@@ -204,11 +204,11 @@
                 <module_component thickness="0.0078*cm"   material="Kapton" />
                 <module_component thickness="0.00079*cm"   material="Copper" />
             </module>
-            <layer id="1">
+            <!--layer id="1"> THIS IS NOT A LAYER BUT CAN BE HERE FOR POSSIBEL STUDIES
                 <ring r="InnerTracker_Endcap_outer_radius_1" zstart="InnerTracker_Endcap_z_1" nmodules="16" dz="1.75*mm" module="Module1" />
                 <ring r="InnerTracker_Endcap_outer_radius_1-InnerTracker_r_offset" zstart="InnerTracker_Endcap_z_1+InnerTracker_z_offset" nmodules="16" dz="1.75*mm" module="Module1"/>
-            </layer>
-            <layer id="2">
+            </layer-->
+            <layer id="1">
                 <ring r="InnerTracker_Endcap_outer_radius_2" zstart="InnerTracker_Endcap_z_2" nmodules="36" dz="1.75*mm" module="Module2" />
                 <ring r="InnerTracker_Endcap_outer_radius_2-InnerTracker_r_offset" zstart="InnerTracker_Endcap_z_2+InnerTracker_z_offset" nmodules="36" dz="1.75*mm" module="Module2"/>
                 <ring r="InnerTracker_Endcap_outer_radius_2-2*InnerTracker_r_offset" zstart="InnerTracker_Endcap_z_2+2*InnerTracker_z_offset" nmodules="30" dz="1.75*mm" module="Module1"/>
@@ -216,14 +216,14 @@
                 <ring r="InnerTracker_Endcap_outer_radius_2-4*InnerTracker_r_offset" zstart="InnerTracker_Endcap_z_2+4*InnerTracker_z_offset" nmodules="16" dz="1.75*mm" module="Module1"/>
                 <ring r="InnerTracker_Endcap_outer_radius_2-4.6*InnerTracker_r_offset" zstart="InnerTracker_Endcap_z_2+5*InnerTracker_z_offset" nmodules="14" dz="1.75*mm" module="Module1"/>
             </layer>
-            <layer id="3">
+            <layer id="2">
                 <ring r="InnerTracker_Endcap_outer_radius_3" zstart="InnerTracker_Endcap_z_3" nmodules="36" dz="1.75*mm" module="Module2" />
                 <ring r="InnerTracker_Endcap_outer_radius_3-InnerTracker_r_offset" zstart="InnerTracker_Endcap_z_3+InnerTracker_z_offset" nmodules="36" dz="1.75*mm" module="Module2"/>
                 <ring r="InnerTracker_Endcap_outer_radius_3-2*InnerTracker_r_offset" zstart="InnerTracker_Endcap_z_3+2*InnerTracker_z_offset" nmodules="30" dz="1.75*mm" module="Module1"/>
                 <ring r="InnerTracker_Endcap_outer_radius_3-3*InnerTracker_r_offset" zstart="InnerTracker_Endcap_z_3+3*InnerTracker_z_offset" nmodules="26" dz="1.75*mm" module="Module1"/>
                 <ring r="InnerTracker_Endcap_outer_radius_3-4*InnerTracker_r_offset" zstart="InnerTracker_Endcap_z_3+4*InnerTracker_z_offset" nmodules="16" dz="1.75*mm" module="Module1"/>
             </layer>
-            <layer id="4">
+            <layer id="3">
                 <ring r="InnerTracker_Endcap_outer_radius_4" zstart="InnerTracker_Endcap_z_4" nmodules="36" dz="1.75*mm" module="Module2" />
                 <ring r="InnerTracker_Endcap_outer_radius_4-InnerTracker_r_offset" zstart="InnerTracker_Endcap_z_4+InnerTracker_z_offset" nmodules="36" dz="1.75*mm" module="Module2"/>
                 <ring r="InnerTracker_Endcap_outer_radius_4-2*InnerTracker_r_offset" zstart="InnerTracker_Endcap_z_4+2*InnerTracker_z_offset" nmodules="30" dz="1.75*mm" module="Module1"/>
@@ -231,21 +231,21 @@
                 <ring r="InnerTracker_Endcap_outer_radius_4-3.7*InnerTracker_r_offset" zstart="InnerTracker_Endcap_z_4+4*InnerTracker_z_offset" nmodules="16" dz="1.75*mm" module="Module1"/>
             </layer>
             
-            <layer id="5">
+            <layer id="4">
                 <ring r="InnerTracker_Endcap_outer_radius_5" zstart="InnerTracker_Endcap_z_5" nmodules="36" dz="1.75*mm" module="Module2" />
                 <ring r="InnerTracker_Endcap_outer_radius_5-InnerTracker_r_offset" zstart="InnerTracker_Endcap_z_5+InnerTracker_z_offset" nmodules="36" dz="1.75*mm" module="Module2"/>
                 <ring r="InnerTracker_Endcap_outer_radius_5-2*InnerTracker_r_offset" zstart="InnerTracker_Endcap_z_5+2*InnerTracker_z_offset" nmodules="30" dz="1.75*mm" module="Module1"/>
                 <ring r="InnerTracker_Endcap_outer_radius_5-3*InnerTracker_r_offset" zstart="InnerTracker_Endcap_z_5+3*InnerTracker_z_offset" nmodules="26" dz="1.75*mm" module="Module1"/>
             </layer>
             
-            <layer id="6">
+            <layer id="5">
                 <ring r="InnerTracker_Endcap_outer_radius_6" zstart="InnerTracker_Endcap_z_6" nmodules="36" dz="1.75*mm" module="Module2" />
                 <ring r="InnerTracker_Endcap_outer_radius_6-InnerTracker_r_offset" zstart="InnerTracker_Endcap_z_6+InnerTracker_z_offset" nmodules="36" dz="1.75*mm" module="Module2"/>
                 <ring r="InnerTracker_Endcap_outer_radius_6-2*InnerTracker_r_offset" zstart="InnerTracker_Endcap_z_6+2*InnerTracker_z_offset" nmodules="30" dz="1.75*mm" module="Module1"/>
                 <ring r="InnerTracker_Endcap_outer_radius_6-2.8*InnerTracker_r_offset" zstart="InnerTracker_Endcap_z_6+3*InnerTracker_z_offset" nmodules="26" dz="1.75*mm" module="Module1"/>
             </layer>
             
-            <layer id="7">
+            <layer id="6">
                 <ring r="InnerTracker_Endcap_outer_radius_7" zstart="InnerTracker_Endcap_z_7" nmodules="36" dz="1.75*mm" module="Module2" />
                 <ring r="InnerTracker_Endcap_outer_radius_7-InnerTracker_r_offset" zstart="InnerTracker_Endcap_z_7+InnerTracker_z_offset" nmodules="36" dz="1.75*mm" module="Module2"/>
                 <ring r="InnerTracker_Endcap_outer_radius_7-2*InnerTracker_r_offset" zstart="InnerTracker_Endcap_z_7+2*InnerTracker_z_offset" nmodules="30" dz="1.75*mm" module="Module1"/>
