@@ -23,7 +23,7 @@
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
         <readout name="ECalEndcapHits">
-            <segmentation type="CartesianGridXY" grid_size_x="5.1" grid_size_y="5.1" />
+            <segmentation type="CartesianGridXY" grid_size_x="3.5" grid_size_y="3.5" />
             <id>system:5,barrel:2,sector:2,panel:2,layer:15,slice:4,x:32:-16,y:-16</id>
         </readout>
     </readouts>
@@ -40,7 +40,7 @@
     </display>
 
     <detectors>        
-        <detector name="ECalEndcap" type="ECalEndcap_o1_v01" id="15" readout="ECalEndcapHits" vis="ECALVis">
+        <detector name="ECalEndcap" type="ECalEndcap_o1_v01" id="DetID_ECal_Endcap" readout="ECalEndcapHits" vis="ECALVis">
             
             <comment>EM Calorimeter EndCap</comment>
             
