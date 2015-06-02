@@ -1,5 +1,16 @@
 <lccdd>
     
+    <define>
+        <constant name="OuterTracker_Barrel_radius_0" value="840*mm"/>
+        <constant name="OuterTracker_Barrel_half_length_0" value="1030*mm"/>
+        
+        <constant name="OuterTracker_Barrel_radius_1" value="1145*mm"/>
+        <constant name="OuterTracker_Barrel_half_length_1" value="1330*mm"/>
+        
+        <constant name="OuterTracker_Barrel_radius_2" value="1450*mm"/>
+        <constant name="OuterTracker_Barrel_half_length_2" value="1630*mm"/>
+    </define>
+    
     <comment>Tracking detectors</comment>
     <detectors>
         <detector name="OuterTrackers" type="DD4hep_SubdetectorAssembly" vis="OTVis">
@@ -128,19 +139,19 @@
                 </module_component>
             </module>
             <layer module="SiTrackerModule_Layer2" id="2" vis="OuterTrackerLayerVis">
-                <barrel_envelope inner_r="715.075*mm" outer_r="756.0*mm" z_length="1013.9 * 2*mm"/>
-                <rphi_layout phi_tilt="0.11493*rad" nphi="58" phi0="0.058*rad" rc="(716.355 + 5.0)*mm" dr="0.0"/>
-                <z_layout dr="4.0*mm" z0="954.625*mm" nz="23"/>
-            </layer>
+                <barrel_envelope inner_r="OuterTracker_Barrel_radius_0-6.28*mm" outer_r="OuterTracker_Barrel_radius_0+23.645*mm" z_length="OuterTracker_Barrel_half_length_0*2.01"/>
+                <rphi_layout phi_tilt="0.11493*rad" nphi="58" phi0="0.058*rad" rc="OuterTracker_Barrel_radius_0" dr="0.0"/>
+                <z_layout dr="4.0*mm" z0="OuterTracker_Barrel_half_length_0-97.79*mm/2.0" nz="23"/>
+            </layer>            
             <layer module="SiTrackerModule_Layer3" id="3" vis="OuterTrackerLayerVis">
-                <barrel_envelope inner_r="965.075*mm" outer_r="1012.0*mm" z_length="1272.3 * 2*mm"/>
-                <rphi_layout phi_tilt="0.11502*rad" nphi="80" phi0="0.0436*rad" rc="(966.355 + 5.0)*mm" dr="0.0"/>
-                <z_layout dr="4.0*mm" z0="1213.073*mm" nz="29"/>
+                <barrel_envelope inner_r="OuterTracker_Barrel_radius_1-6.28*mm" outer_r="OuterTracker_Barrel_radius_1+27.645*mm" z_length="OuterTracker_Barrel_half_length_1*2.01"/>
+                <rphi_layout phi_tilt="0.11502*rad" nphi="80" phi0="0.0436*rad" rc="OuterTracker_Barrel_radius_1" dr="0.0"/>
+                <z_layout dr="4.0*mm" z0="OuterTracker_Barrel_half_length_1-97.79*mm/2.0" nz="29"/>
             </layer>
             <layer module="SiTrackerModule_Layer4" id="4" vis="OuterTrackerLayerVis">
-                <barrel_envelope inner_r="1215.075*mm" outer_r="1263.0*mm" z_length="1535.7 * 2*mm"/>
-                <rphi_layout phi_tilt="0.11467*rad" nphi="102" phi0="0.01745*rad" rc="(1216.355 + 5.0)*mm" dr="0.0"/>
-                <z_layout dr="4.0*mm" z0="1476.497*mm" nz="35"/>
+                <barrel_envelope inner_r="OuterTracker_Barrel_radius_2-6.28*mm" outer_r="OuterTracker_Barrel_radius_2+27.645*mm" z_length="OuterTracker_Barrel_half_length_2*2.01"/>
+                <rphi_layout phi_tilt="0.11467*rad" nphi="102" phi0="0.01745*rad" rc="OuterTracker_Barrel_radius_2" dr="0.0"/>
+                <z_layout dr="4.0*mm" z0="OuterTracker_Barrel_half_length_2-97.79*mm/2.0" nz="35"/>
             </layer>
         </detector>
     </detectors>

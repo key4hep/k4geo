@@ -1,4 +1,12 @@
 <lccdd>
+    <define>
+        <constant name="InnerTracker_Barrel_radius_0" value="230*mm"/>
+        <constant name="InnerTracker_Barrel_half_length_0" value="430*mm"/>
+        
+        <constant name="InnerTracker_Barrel_radius_1" value="535*mm"/>
+        <constant name="InnerTracker_Barrel_half_length_1" value="730*mm"/>
+    </define>
+    
     
     <comment>Tracking detectors</comment>
     <detectors>
@@ -120,14 +128,14 @@
                 </module_component>
             </module>
             <layer module="SiTrackerModule_Layer0" id="0" vis="InnerTrackerLayerVis">
-                <barrel_envelope inner_r="215.075*mm" outer_r="245.0*mm" z_length="578 * 2*mm"/>
-                <rphi_layout phi_tilt="0.17506*rad" nphi="20" phi0="0." rc="(216.355 + 5.0)*mm" dr="0.0"/>
-                <z_layout dr="4.0*mm" z0="512.128*mm" nz="13"/>
+                <barrel_envelope inner_r="InnerTracker_Barrel_radius_0-6.28*mm" outer_r="InnerTracker_Barrel_radius_0+23.645*mm" z_length="InnerTracker_Barrel_half_length_0*2.01"/>
+                <rphi_layout phi_tilt="0.17506*rad" nphi="20" phi0="0." rc="InnerTracker_Barrel_radius_0" dr="0.0"/>
+                <z_layout dr="4.0*mm" z0="InnerTracker_Barrel_half_length_0-97.79*mm/2.0" nz="13"/>
             </layer>
             <layer module="SiTrackerModule_Layer1" id="1" vis="InnerTrackerLayerVis">
-                <barrel_envelope inner_r="465.075*mm" outer_r="501.0*mm" z_length="749.8 * 2*mm"/>
-                <rphi_layout phi_tilt="0.12217*rad" nphi="38" phi0="0.087*rad" rc="(466.355 + 5.0)*mm" dr="0.0"/>
-                <z_layout dr="4.0*mm" z0="690.605*mm" nz="17"/>
+                <barrel_envelope inner_r="InnerTracker_Barrel_radius_1-6.28*mm" outer_r="InnerTracker_Barrel_radius_1+29.45*mm" z_length="InnerTracker_Barrel_half_length_1*2.01"/>
+                <rphi_layout phi_tilt="0.12217*rad" nphi="38" phi0="0.087*rad" rc="InnerTracker_Barrel_radius_1" dr="0.0"/>
+                <z_layout dr="4.0*mm" z0="InnerTracker_Barrel_half_length_1-97.79*mm/2.0" nz="17"/>
             </layer>
         </detector>
     </detectors>
