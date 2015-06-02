@@ -425,7 +425,7 @@
 
 	<include ref="SEcal04_ECRing.xml"/>
 
-	<include ref="SHcalSc04_Barrel.xml"/>
+	<include ref="SHcalSc04_Barrel_v01.xml"/>
 
 	<include ref="SHcalSc04_Endcaps.xml"/>
 
