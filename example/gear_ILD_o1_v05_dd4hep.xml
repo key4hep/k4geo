@@ -41,6 +41,12 @@
             <layer repeat="10" thickness="9.000000000e+00" absorberThickness="2.100000000e+00" cellSize0="4.900000000e+00" cellSize1="4.900000000e+00" />
             <layer repeat="5" thickness="1.320000000e+01" absorberThickness="4.200000000e+00" cellSize0="4.900000000e+00" cellSize1="4.900000000e+00" />
         </detector>
+        <detector name="EcalPlug" geartype="CalorimeterParameters">
+          <layout type="Endcap" symmetry="4" phi0="0.000000000e+00" />
+          <dimensions inner_r="2.500000000e+02" outer_r="3.900000000e+02" inner_z="2.450000000e+03" />
+          <layer repeat="10" thickness="9.000000000e+00" absorberThickness="2.100000000e+00" cellSize0="4.900000000e+00" cellSize1="4.900000000e+00" />
+          <layer repeat="4" thickness="1.320000000e+01" absorberThickness="4.200000000e+00" cellSize0="4.900000000e+00" cellSize1="4.900000000e+00" />
+        </detector>
         <detector name="YokeBarrel" geartype="CalorimeterParameters">
             <layout type="Barrel" symmetry="12" phi0="0.000000000e+00" />
             <dimensions inner_r="4.450000000e+03" outer_z="4.047000000e+03" />
@@ -65,7 +71,24 @@
             <dimensions inner_r="3.500000000e+02" outer_r="3.395460000e+03" inner_z="2.670700000e+03" />
             <layer repeat="49" thickness="2.650000000e+01" absorberThickness="2.000000000e+01" cellSize0="3.000000000e+01" cellSize1="3.000000000e+01" />
         </detector>
-        <detector name="BeamCal" geartype="CalorimeterParameters">
+        <detector name="HcalRing" geartype="CalorimeterParameters">
+          <layout type="Endcap" symmetry="8" phi0="0.000000000e+00" />
+          <dimensions inner_r="2.138800000e+03" outer_r="3.136995997e+03" inner_z="2.450000000e+03" />
+          <layer repeat="7" thickness="2.650000000e+01" absorberThickness="2.000000000e+01" cellSize0="3.000000000e+01" cellSize1="3.000000000e+01" />
+        </detector>
+        <detector name="Lcal" geartype="CalorimeterParameters">
+            <layout type="Endcap" symmetry="0" phi0="0.000000000e+00" />
+            <dimensions inner_r="8.000000000e+01" outer_r="1.952000000e+02" inner_z="2.500000000e+03" />
+            <layer repeat="30" thickness="4.355000000e+00" absorberThickness="3.500000000e+00" cellSize0="1.000000000e+01" cellSize1="1.000000000e+01" />
+            <parameter name="beam_crossing_angle" type="double" value="0.000000000e+00" />
+        </detector>
+        <detector name="LHcal" geartype="CalorimeterParameters">
+            <layout type="Endcap" symmetry="4" phi0="0.000000000e+00" />
+            <dimensions inner_r="1.000000000e+02" outer_r="3.250000000e+02" inner_z="2.680000000e+03" />
+            <layer repeat="40" thickness="1.300000000e+01" absorberThickness="1.000000000e+01" cellSize0="1.000000000e+01" cellSize1="1.000000000e+01" />
+            <parameter name="beam_crossing_angle" type="double" value="0.000000000e+00" />
+        </detector>
+	<detector name="BeamCal" geartype="CalorimeterParameters">
             <layout type="Endcap" symmetry="0" phi0="0.000000000e+00" />
             <dimensions inner_r="2.000000000e+01" outer_r="1.500000000e+02" inner_z="3.475000000e+03" />
             <layer repeat="1" thickness="1.000000000e+02" absorberThickness="1.000000000e+02" cellSize0="3.500000000e+00" cellSize1="3.500000000e+00" />
