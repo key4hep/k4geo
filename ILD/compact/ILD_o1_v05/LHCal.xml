@@ -2,7 +2,7 @@
      LHCal parameters for ILD 
 -->
 
-<detector name="LHCal" type="LHCal" vis="SeeThrough" id="ILDDetID_LHCAL"
+<detector name="LHcal" type="LHCal" vis="SeeThrough" id="ILDDetID_LHCAL"
 	  readout="LHCalCollection" insideTrackingVolume="false" >
 
   <envelope vis="ILD_FCALVis">    

@@ -1,5 +1,5 @@
 <!-- comment>Calorimeters</comment -->
-<detector name="HcalEndcapRing" type="SHcalSc04_EndcapRing" id="ILDDetID_HCAL_RING" readout="HcalEndcapRingCollection" vis="GreenVis" insideTrackingVolume="false" >
+<detector name="HcalRing" type="SHcalSc04_EndcapRing" id="ILDDetID_HCAL_RING" readout="HcalEndcapRingCollection" vis="GreenVis" insideTrackingVolume="false" >
     <comment>Hadron Calorimeter EndcapRing</comment>
 
     <envelope vis="ILD_HCALVis">

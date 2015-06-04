@@ -1,4 +1,4 @@
-<detector name="EcalECRing" type="SEcal04_ECRing" id="ILDDetID_ECAL_PLUG" readout="EcalEndcapRingCollection" vis="BlueVis" >
+<detector name="EcalPlug" type="SEcal04_ECRing" id="ILDDetID_ECAL_PLUG" readout="EcalEndcapRingCollection" vis="BlueVis" >
     <comment>EM Calorimeter Endcaps</comment>
 
     <envelope vis="ILD_ECALVis">    
