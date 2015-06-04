@@ -562,7 +562,7 @@
 <fields>
    <field type="solenoid" name="GlobalSolenoid" inner_field="Field_nominal_value*tesla"
 	  outer_field="-1.5*tesla" zmax="TPC_Ecal_Hcal_barrel_halfZ"
-	  inner_radius="TPC_outer_radius"
+	  inner_radius="Coil_inner_radius"
 	  outer_radius="world_side" />
  </fields> 
 </lccdd>
