@@ -33,9 +33,15 @@ from SystemOfUnits import *
 # some configuration variables (could go to a seperate 'steering' file)
 #
 
-numberOfEvents = 1000
+numberOfEvents = 3
+
+# ---------------------------------------
+# input file: either .slcio or .stdhep
+# --------------------------------------
 
 lcioInputFile  = 'mcparticles.slcio'
+
+#lcioInputFile  = 'bbudsc_3evt.stdhep'
 #lcioInputFile  = 'bbudsc_3evt_dd4hep.slcio'
 #lcioInputFile  = 'mcparticles_single_muon_5GeV_10deg.slcio'
 #lcioInputFile  = 'mcparticles_single_muon_5GeV_7deg.slcio'
@@ -159,8 +165,12 @@ def run():
   evt_lcio = simple.setupLCIOOutput('LcioOutput', lcioOutputFile )
   
   gen = DDG4.GeneratorAction(kernel,"LCIOInputAction/LCIO1")
-  gen.Input="LCIOFileReader|"+lcioInputFile
 
+  if( lcioInputFile[ (len(lcioInputFile)-6 ) : ] == ".slcio" ):
+    gen.Input="LCIOFileReader|"+lcioInputFile
+  else:
+    gen.Input="LCIOStdHepFileReader|"+lcioInputFile
+    
   simple.buildInputStage( [gen] , output_level=DDG4.OutputLevel.INFO )
 
 #================================================================================================
