@@ -17,6 +17,7 @@
 #include "TGeoTrd2.h"
 #include "TMath.h"
 #include "XML/Utilities.h"
+#include "DDRec/DetectorData.h"
 
 using namespace std;
 using namespace DD4hep;
@@ -53,7 +54,24 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     double        z_min     = x_dim.zmin();
     double        z_max     = x_dim.zmax();
     double        mod_z     = layering.totalThickness() + 2*tolerance;
-
+    double eCal_cell_size = lcdd.constant<double>("ECal_cell_size"); //Should try to obtain from segmentation
+    
+    
+    
+    //Create caloData object to extend driver with data required for reconstruction
+    DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
+    caloData->layoutType = DDRec::LayeredCalorimeterData::EndcapLayout ;
+    caloData->inner_symmetry = insides;
+    caloData->outer_symmetry = outsides; 
+    caloData->phi0 = 0; ///FIXME
+    /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
+    caloData->extent[0] = inner_r;
+    caloData->extent[1] = outer_r ; ///FIXME: CHECK WHAT IS NEEDED (EXSCRIBED?)
+    caloData->extent[2] = z_min ;
+    caloData->extent[3] = z_min + mod_z;
+    
+    
+    
     if(outsides != 12 && insides != 4){ // throw exception
       throw std::runtime_error("ERROR: This driver is for 12/4 symmetry!");
     }
@@ -146,7 +164,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
 	// Loop over number of repeats for this layer.
 	for (int k=0; k<repeat; k++)  {
-	  
+    DDRec::LayeredCalorimeterData::Layer caloLayer ;
+    
 	  string l_name = _toString(100*m + l_num, "layer%d");
 	  double l_thickness = layering.layer(l_num-1)->thickness();  // this layer's thickness	  
 	  Position   l_pos(0, 0, l_pos_z + l_thickness/2.);           // position of the layer
@@ -158,6 +177,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	  // Loop over the slices for this layer
 	  int s_num = 1;
 	  double s_pos_z = -(l_thickness/2);
+    double totalAbsorberThickness=0.;
+    
 	  for(xml_coll_t si(x_layer,_U(slice)); si; ++si)  {
 	    
 	    xml_comp_t x_slice = si;
@@ -175,6 +196,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	    }
 	    slice.setAttributes(lcdd, s_vol, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
 	    
+      char val = x_slice.hasAttr(_U(radiator)) ? x_slice.attr < string > (_U(radiator))[0] : 'f';
+      val = std::toupper(val);
+      bool isAbsorber =  (val == 'T' || val == 'Y');
+      
+      if( isAbsorber ==true)
+        totalAbsorberThickness+= s_thick;
+      
+      
 	    // Slice placement
 	    PlacedVolume slice_phv = l_vol.placeVolume(s_vol, Position(0, 0, s_pos_z + s_thick/2));
 	    slice_phv.addPhysVolID("slice", s_num);
@@ -201,7 +230,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	  PlacedVolume layer_phv = panel_vol.placeVolume(l_vol, l_pos);
 	  layer_phv.addPhysVolID("layer", 100*m + l_num);
 	  layer.setPlacement(layer_phv);
-
+    
+    caloLayer.distance = l_pos_z + l_thickness/2.;
+    caloLayer.thickness = l_thickness;
+    caloLayer.absorberThickness = totalAbsorberThickness;
+    caloLayer.cellSize0 = eCal_cell_size;
+    caloLayer.cellSize1 = eCal_cell_size;
 	  // Increment to next layer Z position
 	  l_pos_z += l_thickness;
 	  // Increment layer number
@@ -253,6 +287,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
     // Set envelope volume attributes
     envelope.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+    
+    sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
+    
     return sdet;
 }
 

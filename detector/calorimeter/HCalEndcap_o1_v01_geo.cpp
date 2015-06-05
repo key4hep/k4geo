@@ -46,6 +46,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   Layering    layering(x_det);
   double      totalThickness = layering.totalThickness();
+  double hCal_cell_size      = lcdd.constant<double>("HCal_cell_size"); //Should try to obtain from segmentation
   
   PolyhedraRegular polyVolume(nsides_outer,rmin,rmax,totalThickness);
 
@@ -135,8 +136,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       caloLayer.distance = zmin + layerZ;
       caloLayer.thickness = l_thick;
       caloLayer.absorberThickness = totalAbsorberThickness;
-      caloLayer.cellSize0 = 30.0; //FIXME only temporary. Should get from Surfaces/Segmentation?
-      caloLayer.cellSize1 = 30.0; //FIXME
+      caloLayer.cellSize0 = hCal_cell_size; //FIXME only temporary. Should get from Surfaces/Segmentation?
+      caloLayer.cellSize1 = hCal_cell_size; //FIXME
       
       
       layerZ += l_thick/2;

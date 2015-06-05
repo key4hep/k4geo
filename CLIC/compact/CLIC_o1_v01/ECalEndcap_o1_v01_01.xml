@@ -62,7 +62,7 @@
 
             <staves vis="EcalStaveVis" />
               <layer repeat="17" vis="EcalLayerVis">
-                <slice material = "TungstenDens24" thickness = "1.20*mm" vis="EcalAbsorberVis"/>
+                <slice material = "TungstenDens24" thickness = "1.20*mm" vis="EcalAbsorberVis" radiator="yes"/>
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
                 <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="EcalAbsorberVis"/>
                 <slice material = "Silicon"        thickness = "0.50*mm" sensitive="yes" limits="cal_limits" vis="EcalSensitiveVis"/>
@@ -71,7 +71,7 @@
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/>
             </layer>
             <layer repeat="8" vis="EcalLayerVis">
-                <slice material = "TungstenDens24" thickness = "2.40*mm" vis="EcalAbsorberVis"/>
+                <slice material = "TungstenDens24" thickness = "2.40*mm" vis="EcalAbsorberVis" radiator="yes"/>
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
                 <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="EcalAbsorberVis"/>
                 <slice material = "Silicon"        thickness = "0.50*mm" sensitive="yes" limits="cal_limits" vis="EcalSensitiveVis"/>
