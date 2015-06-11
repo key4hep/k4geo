@@ -7,7 +7,7 @@
     <readouts>
         <readout name="LumiCalCollection">
             <segmentation type="CartesianGridXY" grid_size_x="LumiCal_cell_size" grid_size_y="LumiCal_cell_size" offset_x="0*cm" />
-            <id>system:8,barrel:3,layer:5,slice:5,x:-16,y:-16 </id>
+            <id>system:8,barrel:3,layer:6,slice:5,x:-16,y:-16 </id>
         </readout>
     </readouts>
     
@@ -46,7 +46,7 @@
             r_gap = "2*mm" />
             
             
-            <layer repeat="30" vis="SeeThrough">
+            <layer repeat="40" vis="SeeThrough">
                 <slice material = "TungstenDens24" thickness = "3.5*mm" 		   vis="BCLayerVis1" />
                 <slice material = "Air"     thickness = "0.1*mm" />
                 <slice material = "Silicon" thickness = "0.355*mm" 	sensitive = "yes"  vis="BCLayerVis2"/>

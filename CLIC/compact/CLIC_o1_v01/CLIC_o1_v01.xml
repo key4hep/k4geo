@@ -29,34 +29,35 @@
         
         <constant name="DetID_VXD_Barrel"       value=" 1"/>
         <constant name="DetID_VXD_Endcap"       value=" 2"/>
-
+        
         <constant name="DetID_IT_Barrel"        value=" 3"/>
         <constant name="DetID_IT_Endcap"        value=" 4"/>
-
+        
         <constant name="DetID_OT_Barrel"        value=" 5"/>
         <constant name="DetID_OT_Endcap"        value=" 6"/>
-
+        
         <constant name="DetID_ECal_Barrel"      value=" 7"/>
         <constant name="DetID_ECal_Endcap"      value=" 8"/>
         <constant name="DetID_ECal_Plug"        value=" 9"/>
         
         <constant name="DetID_HCAL_Barrel"      value=" 10"/>
         <constant name="DetID_HCAL_Endcap"      value=" 11"/>
+        <constant name="DetID_HCAL_Ring"        value=" 12"/>
         
-        <constant name="DetID_Yoke_Barrel"      value=" 12"/>
-        <constant name="DetID_Yoke_Endcap"      value=" 13"/>
-
-        <constant name="DetID_LumiCal"          value=" 14"/>
-        <constant name="DetID_BeamCal"          value=" 15"/>
-
+        <constant name="DetID_Yoke_Barrel"      value=" 13"/>
+        <constant name="DetID_Yoke_Endcap"      value=" 14"/>
         
-
+        <constant name="DetID_LumiCal"          value=" 15"/>
+        <constant name="DetID_BeamCal"          value=" 16"/>
+        
+        
+        
         
         <constant name="CentralBeamPipe_zmax" value="260.*mm"/>
         <constant name="CentralBeamPipe_rmax" value="30.0*mm"/>
         <constant name="ConeBeamPipe_zmax" value="2080*mm"/>
         <constant name="ConeBeamPipe_rmax" value="240.0*mm"/>
-        <constant name="BigBeamPipe_zmax" value="2330*mm"/>
+        <constant name="BigBeamPipe_zmax" value="2530*mm"/>
         <constant name="BeamPipe_end" value="12500*mm"/>
         
         
@@ -103,36 +104,41 @@
         
         <constant name="ECalBarrel_inner_radius" value="1500*mm"/>
         <constant name="ECalBarrel_outer_radius" value="1659*mm"/>
-        <constant name="ECalBarrel_half_length" value="2389*mm"/>
+        <constant name="ECalBarrel_half_length" value="2250*mm"/>
         <constant name="ECalBarrel_symmetry" value="12"/>
         
-        <constant name="ECalEndcap_inner_radius" value="430*mm"/>
-        <constant name="ECalEndcap_outer_radius" value="1400*mm"/>
+        <constant name="ECalEndcap_inner_radius" value="410*mm"/>
+        <constant name="ECalEndcap_outer_radius" value="1700*mm"/>
         <constant name="ECalEndcap_min_z" value="2350*mm"/>
         <constant name="ECalEndcap_max_z" value="2509*mm"/>
         <constant name="ECalEndcap_outer_symmetry" value="12"/>
-        <constant name="ECalEndcap_inner_symmetry" value="4"/>
+        <constant name="ECalEndcap_inner_symmetry" value="12"/>
         
-        <constant name="ECalPlug_inner_radius" value="380*mm"/>
-        <constant name="ECalPlug_outer_radius" value="400*mm"/>
+        <constant name="ECalPlug_inner_radius" value="260*mm"/>
+        <constant name="ECalPlug_outer_radius" value="380*mm"/>
         <constant name="ECalPlug_min_z" value="2350*mm"/>
         <constant name="ECalPlug_max_z" value="2509*mm"/>
-        <constant name="ECalPlug_outer_symmetry" value="4"/>
-        <constant name="ECalPlug_inner_symmetry" value="0"/>
+        <constant name="ECalPlug_outer_symmetry" value="12"/>
+        <constant name="ECalPlug_inner_symmetry" value="12"/>
         
         <constant name="HCalBarrel_inner_radius" value="1697*mm"/>
         <constant name="HCalBarrel_outer_radius" value="3287*mm"/>
-        <constant name="HCalBarrel_half_length" value="2389*mm"/>
-        <constant name="HCalBarrel_symmetry" value="12"/>        
+        <constant name="HCalBarrel_half_length" value="2250*mm"/>
+        <constant name="HCalBarrel_symmetry" value="12"/>
         
         <constant name="HCalEndcap_inner_radius" value="250*mm"/>
         <constant name="HCalEndcap_outer_radius" value="3203*mm"/>
         <constant name="HCalEndcap_min_z" value="2539*mm"/>
         <constant name="HCalEndcap_max_z" value="4129*mm"/>
-        <constant name="HCalEndcap_inner_symmetry" value="0"/>
-        <constant name="HCalEndcap_outer_symmetry" value="12"/>
-        <constant name="HCalEndcap_zcutout  " value="200*mm"/>
+        <constant name="HCalEndcap_symmetry" value="12"/>
+        <constant name="HCalEndcap_zcutout" value="200*mm"/>
         <constant name="HCalEndcap_rcutout" value="180*mm"/>
+        
+        <constant name="HCalRing_inner_radius" value="1730*mm"/>
+        <constant name="HCalRing_outer_radius" value="HCalEndcap_outer_radius"/>
+        <constant name="HCalRing_min_z" value="2400*mm"/>
+        <constant name="HCalRing_max_z" value="2539*mm"/>
+        <constant name="HCalRing_symmetry" value="12"/>
         
         <constant name="Solenoid_inner_radius" value="3440*mm"/>
         <constant name="Solenoid_outer_radius" value="4304*mm"/>
@@ -152,8 +158,8 @@
         
         <constant name="LumiCal_inner_radius" value="100*mm"/>
         <constant name="LumiCal_outer_radius" value="340*mm"/>
-        <constant name="LumiCal_min_z" value="2338*mm"/>
-        <constant name="LumiCal_max_z" value="2509*mm"/>
+        <constant name="LumiCal_min_z" value="2539*mm"/>
+        <constant name="LumiCal_max_z" value="2714*mm"/>
         <constant name="LumiCal_dz" value="(LumiCal_max_z-LumiCal_min_z)/2.0"/>
         
         <constant name="BeamCal_inner_radius" value="32*mm"/>
@@ -162,9 +168,9 @@
         <constant name="BeamCal_max_z" value="3441*mm"/>
         <constant name="BeamCal_dz" value="(BeamCal_max_z-BeamCal_min_z)/2.0"/>
         
-
+        
         <constant name="tracker_region_zmax" value="OuterTracker_half_length"/>
-        <constant name="tracker_region_rmax" value="OuterTracker_outer_radius"/>        
+        <constant name="tracker_region_rmax" value="OuterTracker_outer_radius"/>
     </define>
     
     <limits>
@@ -210,7 +216,7 @@
     <include ref="OuterTracker_o1_v01_01.xml"/>
     
     <include ref="ECalBarrel_o1_v01_01.xml"/>
-    <include ref="ECalEndcap_o1_v01_01.xml"/>
+    <include ref="ECalEndcap_o2_v01_01.xml"/>
     <include ref="ECalPlug_o1_v01_01.xml"/>
     
     <include ref="HCalBarrel_o1_v01_01.xml"/>
@@ -223,7 +229,7 @@
     
     <include ref="LumiCal_o1_v01_01.xml"/>
     <include ref="BeamCal_o1_v01_01.xml"/>
-
+    
     <plugins>
         <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
             <argument value="InnerTrackerBarrel"/>
@@ -245,21 +251,21 @@
             <argument value="OuterTrackerEndcap"/>
             <argument value="dimension=1"/>
         </plugin>
-
-
+        
+        
         <plugin name="InstallSurfaceManager"/>
     </plugins>
-   
+    
     <fields>
         <field name="GlobalSolenoid" type="solenoid"
-           inner_field="4.0*tesla"
-           outer_field="-1.5*tesla"
-           zmax="SolenoidCoilOuterZ"
-           outer_radius="SolenoidalFieldRadius">
+            inner_field="4.0*tesla"
+            outer_field="-1.5*tesla"
+            zmax="SolenoidCoilOuterZ"
+            outer_radius="SolenoidalFieldRadius">
         </field>
     </fields>
     
     
     
 </lccdd>
-	
+

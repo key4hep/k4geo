@@ -1,6 +1,6 @@
 <lccdd>
     
-    
+       
     
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
@@ -13,33 +13,43 @@
     <!--  Includes for sensitives and support                -->
     <detectors>
         
-        <detector name="ECalPlug" type="ECalPlug_o1_v01" id="DetID_ECal_Plug" readout="ECalPlugHits" vis="ECALVis" >
+        <detector name="ECalPlug" type="ECalEndcap_o2_v01" id="DetID_ECal_Plug" readout="ECalPlugHits" vis="ECALVis" >
             
-            <comment>EM Calorimeter Barrel</comment>
-            
+            <comment>Hadronic Calorimeter Endcap</comment>
             
             <envelope vis="ECALVis">
                 <shape type="BooleanShape" operation="Subtraction" material="Air">
-                    <shape type="BooleanShape" operation="Subtraction" material="Air">
-                        <shape type="Box" dx="ECalPlug_outer_radius" dy="ECalPlug_outer_radius" dz="ECalPlug_max_z"/>
-                        <shape type="Box" dx="ECalPlug_outer_radius*1.1" dy="ECalPlug_outer_radius*1.1" dz="ECalPlug_min_z"/>
+                        <shape type="PolyhedraRegular"  numsides="ECalPlug_outer_symmetry" rmin="ECalPlug_inner_radius-env_safety" rmax="ECalPlug_outer_radius+ 10.0*env_safety" dz="2.0*ECalPlug_max_z+2*env_safety"/>
+                        <shape type="PolyhedraRegular"  numsides="ECalPlug_outer_symmetry" rmin="0" rmax="ECalPlug_outer_radius+ 100.0*env_safety" dz="2.0*ECalPlug_min_z-2*env_safety"/>
                     </shape>
-                    <shape type="BooleanShape" operation="union" material="Air">
-                        <shape type="BooleanShape" operation="Intersection">
-                            <shape type="Box"  dx="world_side" dy="world_side" dz="world_side"/>
-                            <shape type="Tube"  rmin="0" rmax="LumiCal_outer_radius+3*cm" dz="LumiCal_dz*2"/>
-                            <position x="tan(0.5*CrossingAngle)*(LumiCal_min_z+LumiCal_dz)" y="0" z="LumiCal_min_z+LumiCal_dz"/>
-                            <rotation x="0" y="0.5*CrossingAngle" z="0"/>
-                        </shape>
-                        <shape type="BooleanShape" operation="Intersection">
-                            <shape type="Box"  dx="world_side" dy="world_side" dz="world_side"/>
-                            <shape type="Tube"  rmin="0" rmax="LumiCal_outer_radius+3*cm" dz="LumiCal_dz*2"/>
-                            <position x="tan(0.5*CrossingAngle)*(LumiCal_min_z+LumiCal_dz)" y="0" z="-(LumiCal_min_z+LumiCal_dz)"/>
-                            <rotation x="0" y="-0.5*CrossingAngle" z="0"/>
-                        </shape>
-                    </shape>
-                </shape>
+                <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/ECalPlug_outer_symmetry"/>
             </envelope>
+            
+            
+            <dimensions nsides_inner="ECalPlug_inner_symmetry" nsides_outer="(int) ECalPlug_outer_symmetry" zmin="ECalPlug_min_z" rmin="ECalPlug_inner_radius" rmax="ECalPlug_outer_radius" phi0="0"/>
+            
+            <layer repeat="17" vis="EcalLayerVis">
+                <slice material = "TungstenDens24" thickness = "1.20*mm" vis="EcalAbsorberVis" radiator="yes"/>
+                <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
+                <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="EcalAbsorberVis"/>
+                <slice material = "Silicon"        thickness = "0.50*mm" sensitive="yes" limits="cal_limits" vis="EcalSensitiveVis"/>
+                <slice material = "Air"            thickness = "0.10*mm" vis="InvisibleNoDaughters"/><!-- glue -->
+                <slice material = "siPCBMix"       thickness = "1.20*mm" vis="EcalAbsorberVis"/>
+                <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/>
+            </layer>
+            <layer repeat="8" vis="EcalLayerVis">
+                <slice material = "TungstenDens24" thickness = "2.40*mm" vis="EcalAbsorberVis" radiator="yes"/>
+                <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
+                <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="EcalAbsorberVis"/>
+                <slice material = "Silicon"        thickness = "0.50*mm" sensitive="yes" limits="cal_limits" vis="EcalSensitiveVis"/>
+                <slice material = "Air"            thickness = "0.10*mm" vis="InvisibleNoDaughters"/><!-- glue -->
+                <slice material = "siPCBMix"       thickness = "1.20*mm" vis="EcalAbsorberVis"/>
+                <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/>
+            </layer>
+            <layer repeat="1" vis="EcalLayerVis">
+                <slice material = "TungstenDens24" thickness = "2.40*mm" vis="EcalAbsorberVis"/>
+                <slice material = "CarbonFiber_25percent" thickness = "10.0*mm" vis="CompositeVis"/>
+            </layer>
             
             
         </detector>
