@@ -270,7 +270,7 @@
         </plugin>
         <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
             <argument value="OuterTrackerEndcap"/>
-            <argument value="dimension=1"/>
+            <argument value="dimension=2"/>
         </plugin>
     </plugins>
     
