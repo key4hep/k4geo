@@ -210,7 +210,7 @@
     
     <include ref="Beampipe_o1_v01_01.xml"/>
     
-    <include ref="Vertex_o1_v01_01.xml"/>
+    <include ref="Vertex_o2_v01_01.xml"/>
     
     <include ref="InnerTracker_o1_v01_01.xml"/>
     <include ref="OuterTracker_o1_v01_01.xml"/>
@@ -231,28 +231,6 @@
     <include ref="BeamCal_o1_v01_01.xml"/>
     
     <plugins>
-        <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
-            <argument value="InnerTrackerBarrel"/>
-            <argument value="dimension=1"/>
-        </plugin>
-        <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
-            <argument value="OuterTrackerBarrel"/>
-            <argument value="dimension=1"/>
-        </plugin>
-        <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
-            <argument value="VertexBarrel"/>
-            <argument value="dimension=2"/>
-        </plugin>
-        <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
-            <argument value="InnerTrackerEndcap"/>
-            <argument value="dimension=1"/>
-        </plugin>
-        <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
-            <argument value="OuterTrackerEndcap"/>
-            <argument value="dimension=1"/>
-        </plugin>
-        
-        
         <plugin name="InstallSurfaceManager"/>
     </plugins>
     

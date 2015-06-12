@@ -205,9 +205,9 @@
                 <module_component thickness="0.00079*cm"   material="Copper" />
             </module>
             <!--layer id="1"> THIS IS NOT A LAYER BUT CAN BE HERE FOR POSSIBEL STUDIES
-                <ring r="InnerTracker_Endcap_outer_radius_1" zstart="InnerTracker_Endcap_z_1" nmodules="16" dz="1.75*mm" module="Module1" />
-                <ring r="InnerTracker_Endcap_outer_radius_1-InnerTracker_r_offset" zstart="InnerTracker_Endcap_z_1+InnerTracker_z_offset" nmodules="16" dz="1.75*mm" module="Module1"/>
-            </layer-->
+             <ring r="InnerTracker_Endcap_outer_radius_1" zstart="InnerTracker_Endcap_z_1" nmodules="16" dz="1.75*mm" module="Module1" />
+             <ring r="InnerTracker_Endcap_outer_radius_1-InnerTracker_r_offset" zstart="InnerTracker_Endcap_z_1+InnerTracker_z_offset" nmodules="16" dz="1.75*mm" module="Module1"/>
+             </layer-->
             <layer id="1">
                 <ring r="InnerTracker_Endcap_outer_radius_2" zstart="InnerTracker_Endcap_z_2" nmodules="36" dz="1.75*mm" module="Module2" />
                 <ring r="InnerTracker_Endcap_outer_radius_2-InnerTracker_r_offset" zstart="InnerTracker_Endcap_z_2+InnerTracker_z_offset" nmodules="36" dz="1.75*mm" module="Module2"/>
@@ -254,6 +254,18 @@
             
         </detector>
     </detectors>
+    
+    
+    <plugins>
+        <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
+            <argument value="InnerTrackerBarrel"/>
+            <argument value="dimension=1"/>
+        </plugin>
+        <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
+            <argument value="InnerTrackerEndcap"/>
+            <argument value="dimension=1"/>
+        </plugin>
+    </plugins>
     
     
     

@@ -273,6 +273,16 @@
         </detector>
     </detectors>
     
+    <plugins>
+        <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
+            <argument value="OuterTrackerBarrel"/>
+            <argument value="dimension=1"/>
+        </plugin>
+        <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
+            <argument value="OuterTrackerEndcap"/>
+            <argument value="dimension=1"/>
+        </plugin>
+    </plugins>
     
     
 </lccdd>
