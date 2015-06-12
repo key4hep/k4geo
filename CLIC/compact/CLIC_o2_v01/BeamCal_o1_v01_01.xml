@@ -1,0 +1,72 @@
+<lccdd>
+    
+    <define>
+        <constant name="BeamCal_cell_size" value="1*mm"/>
+    </define>
+    
+    <readouts>
+        <readout name="BeamCalCollection">
+            <segmentation type="CartesianGridXY" grid_size_x="BeamCal_cell_size" grid_size_y="BeamCal_cell_size" offset_x="0*cm" />
+            <id>system:8,layer:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id>
+        </readout>
+    </readouts>
+    
+    <detectors>
+        <detector name="BeamCal" type="BeamCal_o1_v01" vis="SeeThrough" id="DetID_BeamCal" readout="BeamCalCollection" insideTrackingVolume="false" >
+            
+            <envelope vis="BCALVis">
+                <shape type="BooleanShape" operation="Union"  material="Air">
+                    <shape type="BooleanShape" operation="Intersection">
+                        <shape type="Box"  dx="world_side" dy="world_side" dz="world_side"/>
+                        <shape type="BooleanShape" operation="Subtraction">
+                            <shape type="Tube"  rmin="BeamCal_inner_radius" rmax="BeamCal_outer_radius+env_safety" dz="BeamCal_dz+env_safety"/>
+                            <shape type="Tube"  rmin="0" rmax="3.5*mm" dz="BeamCal_dz+10*env_safety"/>
+                            <position x="tan(-CrossingAngle)*(BeamCal_min_z+BeamCal_dz)" y="0" z="0"/>
+                            <rotation x="0" y="-CrossingAngle" z="0"/>
+                        </shape>
+                        <position x="tan(0.5*CrossingAngle)*(BeamCal_min_z+BeamCal_dz)" y="0" z="(BeamCal_min_z+BeamCal_dz)"/>
+                        <rotation x="0" y="0.5*CrossingAngle" z="0"/>
+                    </shape>
+                    <shape type="BooleanShape" operation="Intersection">
+                        <shape type="Box"  dx="world_side" dy="world_side" dz="world_side"/>
+                        <shape type="BooleanShape" operation="Subtraction">
+                            <shape type="Tube"  rmin="BeamCal_inner_radius" rmax="BeamCal_outer_radius+env_safety" dz="BeamCal_dz+env_safety"/>
+                            <shape type="Tube"  rmin="0" rmax="3.5*mm" dz="BeamCal_dz+10*env_safety"/>
+                            <position x="tan(-CrossingAngle)*(BeamCal_min_z+BeamCal_dz)" y="0" z="0"/>
+                            <rotation x="0" y="-CrossingAngle" z="0"/>
+                        </shape>
+                        <position x="tan(0.5*CrossingAngle)*(BeamCal_min_z+BeamCal_dz)" y="0" z="-(BeamCal_min_z+BeamCal_dz)"/>
+                        <rotation x="0" y="180*deg-CrossingAngle*0.5" z="180*deg"/>
+                    </shape>
+                </shape>
+            </envelope>
+            
+            <parameter crossingangle="CrossingAngle"
+            cutoutspanningangle="10*deg"
+            incomingbeampiperadius="3.5*mm"
+            />
+            
+            <dimensions inner_r = "BeamCal_inner_radius"
+            inner_z = "BeamCal_min_z"
+            outer_r = "BeamCal_outer_radius" />
+            
+            <layer repeat="1" vis="SeeThrough">
+                <slice material = "C" thickness = "100*mm" vis="LayerVis1"      layerType="holeForIncomingBeampipe"/>
+            </layer>
+            
+            <layer repeat="40" vis="SeeThrough">
+                <slice material = "TungstenDens24" thickness = "3.5*mm" vis="BCLayerVis1"  layerType="holeForIncomingBeampipe" />
+                <slice material = "Silicon"        thickness = "0.3004*mm"      vis="BCLayerVis2"  sensitive = "yes"  />
+                <slice material = "Copper"         thickness = "0.0004*mm"      vis="BCLayerVis3"                     />
+                <slice material = "Kapton"         thickness = "0.15*mm"        vis="BCLayerVis4"                     />
+                <slice material = "Air"            thickness = "0.05*mm" />
+            </layer>
+            
+            
+            
+        </detector>
+    </detectors>
+    
+</lccdd>
+
+
