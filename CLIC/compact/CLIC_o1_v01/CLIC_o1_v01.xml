@@ -210,7 +210,7 @@
     
     <include ref="Beampipe_o1_v01_01.xml"/>
     
-    <include ref="Vertex_o2_v01_01.xml"/>
+    <include ref="Vertex_o1_v01_01.xml"/>
     
     <include ref="InnerTracker_o1_v01_01.xml"/>
     <include ref="OuterTracker_o1_v01_01.xml"/>
