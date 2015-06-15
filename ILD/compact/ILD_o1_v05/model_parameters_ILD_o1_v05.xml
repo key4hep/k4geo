@@ -6,7 +6,7 @@
 -->
 <define>
   <constant name="BCal_PairMonitor" value="1"/>
-  <constant name="BCal_SpanningPhi" value="320"/>
+  <!-- <constant name="BCal_SpanningPhi" value="320.*degree"/> -->
   <constant name="BCal_TubeIncomingRadius" value="15*mm"/>
   <constant name="BCal_dAbsorber" value="3.5*mm"/>
   <constant name="BCal_dGraphite" value="100*mm"/>
@@ -165,7 +165,6 @@
   <constant name="Hcal_stave_gaps" value="3*mm"/>
   <constant name="Hcal_steel_cassette_thickness" value="0.5*mm"/>
   <constant name="Hcal_time_cut" value="150"/>
-  <constant name="ILC_Main_Crossing_Angle" value="14*mrad"/>
   <constant name="LHcal_BCal_clearance" value="390*mm"/>
   <constant name="LHcal_Electronics_space" value="19.4*mm"/>
   <constant name="LHcal_cell_size" value="10*mm"/>

@@ -2,9 +2,18 @@
 | v00-04 |   ****** renamed to lcgeo ******************
  --------    
 
-     
+     - many changes and developements:
 
+     - first 'complete' prototypes of ILD_o1_v05 
+       and CLIC_o2_v01 simulation models
 
+     - introduced envelopes for all sub detector
+
+     - added examples/ddsim.py for running the 
+       simulation
+
+     - plugins for adding surfaces to the CLIC model
+     - ... 
 
 //======================================================================
  --------

@@ -29,7 +29,7 @@
   <parameter name="SupressCheck" value="false" />  
   <parameter name="GearXMLFile" value="gear_ILD_o1_v05_dd4hep.xml"/>
   <parameter name="DD4hepXMLFile" value="../ILD/compact/ILD_o1_v05.xml"/>
-  <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT">ERROR DEBUG6 </parameter> 
+  <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MESSAGE DEBUG5 </parameter> 
   <parameter name="RandomSeed" value="1234567890" />
   <!-- optionally limit the collections that are read from the input file: -->  
   <!--parameter name="LCIOReadCollectionNames">MCParticle PandoraPFOs</parameter-->

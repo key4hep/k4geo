@@ -159,7 +159,9 @@
         <!-- <constant name="tracker_region_zmax" type="string" value="2350" /> -->
         <!-- </detector> -->
 
-
+	<constant name="BCal_SpanningPhi" value="320*degree"/>
+	<constant name="ILC_Main_Crossing_Angle" value="14*mrad"/>
+	  
 	<!-- ################### ENVELOPE PARAMETERS ######################################################## -->
 
 	<comment> suggested naming convention:
@@ -450,23 +452,23 @@
     <readouts>
         <readout name="VXDCollection">
 	  <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
-            <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+            <id>system:5,side:-2,layer:9,module:8,sensor:8</id>
         </readout>
         <readout name="SITCollection">
 	  <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
-            <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+            <id>system:5,side:-2,layer:9,module:8,sensor:8</id>
         </readout>
         <readout name="FTDCollection">
 	  <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
-            <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+            <id>system:5,side:-2,layer:9,module:8,sensor:8</id>
         </readout>
         <readout name="TPCCollection">
 	  <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
-            <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+            <id>system:5,side:-2,layer:9,module:8,sensor:8</id>
         </readout>
         <readout name="SETCollection">
 	  <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
-            <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+            <id>system:5,side:-2,layer:9,module:8,sensor:8</id>
         </readout>
 
 
@@ -539,7 +541,13 @@
  	</readout>
 
 	<readout name="BeamCalCollection">
-	  <segmentation type="CartesianGridXY" grid_size_x="BeamCal_cell_size" grid_size_y="BeamCal_cell_size"  grid_size_z="BeamCal_cell_size" />
+	  <!-- <segmentation type="CartesianGridXY" grid_size_x="BeamCal_cell_size" grid_size_y="BeamCal_cell_size"  grid_size_z="BeamCal_cell_size" /> -->
+	  
+	  <segmentation type="PolarGridRPhi2"
+	  		grid_r_values="3.200*cm 3.9876*cm 4.7742*cm 5.5608*cm 6.3474*cm 7.134*cm 7.9206*cm 8.7072 9.4938 10.2804 11.067 11.8536 12.6402 13.4268 14.2134 150.0*mm"
+			grid_phi_values="BCal_SpanningPhi/(4*8) BCal_SpanningPhi/(5*8) BCal_SpanningPhi/(6*8) BCal_SpanningPhi/(6*8) BCal_SpanningPhi/(7*8) BCal_SpanningPhi/(8*8) BCal_SpanningPhi/(9*8) BCal_SpanningPhi/(9*8) BCal_SpanningPhi/(10*8) BCal_SpanningPhi/(11*8) BCal_SpanningPhi/(12*8) BCal_SpanningPhi/(12*8) BCal_SpanningPhi/(13*8) BCal_SpanningPhi/(14*8) BCal_SpanningPhi/(15*8)"
+			offset_phi="-180*degree+(360*degree-BCal_SpanningPhi)*0.5"
+	  		/>
 	  <id>system:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id>
 	</readout>
 	
