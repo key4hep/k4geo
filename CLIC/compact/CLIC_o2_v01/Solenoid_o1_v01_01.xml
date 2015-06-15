@@ -57,46 +57,7 @@
         
     </detectors>
     
-    
-    
-    <detectors>
-        <detector name="AntiSolenoids" type="DD4hep_SubdetectorAssembly" vis="SOLVis">
-            
-            <shape type="BooleanShape" operation="Subtraction" material="Air">
-                <shape type="Tube" rmin="HCalEndcap_inner_radius" rmax="YokeEndcap_inner_radius-5*env_safety" dz="YokeEndcap_max_z"/>
-                <shape type="Tube" rmin="0" rmax="YokeEndcap_inner_radius+10*env_safety" dz="HCalEndcap_max_z+5*env_safety"/>
-            </shape>
-            
-            <comment>HCalEndcap Assembly</comment>
-            <composite name="AntiSolenoid_Forward"/>
-            <composite name="AntiSolenoid_Backward"/>
-        </detector>
-    </detectors>
-    
-    
-    <detectors>
-        <detector name="AntiSolenoid_Forward" type="AntiSolenoid_o1_v01" insideTrackingVolume="false" vis="SOLVis">
-            <envelope vis="SOLVis">
-                <shape type="Assembly"/>
-            </envelope>
-            <material name="Steel235" />
-            <zplane rmin="HCalEndcap_inner_radius + 1.0*cm" rmax="YokeEndcap_inner_radius - 1.0*cm" z="HCalEndcap_max_z + 1.0*cm"/>
-            <zplane rmin="HCalEndcap_inner_radius + 1.0*cm" rmax="YokeEndcap_inner_radius - 1.0*cm" z="YokeEndcap_max_z"/>
-        </detector>
-    </detectors>
-    
-    
-    <detectors>
-        <detector name="AntiSolenoid_Backward" type="AntiSolenoid_o1_v01" insideTrackingVolume="false" vis="SOLVis">
-            <envelope vis="SOLVis">
-                <shape type="Assembly"/>
-            </envelope>
-            <material name="Steel235" />
-            <zplane rmin="HCalEndcap_inner_radius + 1.0*cm" rmax="YokeEndcap_inner_radius - 1.0*cm" z="-HCalEndcap_max_z - 1.0*cm"/>
-            <zplane rmin="HCalEndcap_inner_radius + 1.0*cm" rmax="YokeEndcap_inner_radius - 1.0*cm" z="-YokeEndcap_max_z"/>
-        </detector>
-    </detectors>
-    
+
     
     
     
