@@ -45,7 +45,7 @@
     </display>
 
     <detectors>        
-        <detector name="ECalBarrel" type="ECalBarrel_o1_v01" id="DetID_ECal_Barrel" readout="EcalBarrelHits" vis="BlueVis" >
+        <detector name="ECalBarrel" type="ECalBarrel_o1_v01" id="DetID_ECal_Barrel" readout="ECalBarrelCollection" vis="BlueVis" >
             
             <comment>EM Calorimeter Barrel</comment>
             

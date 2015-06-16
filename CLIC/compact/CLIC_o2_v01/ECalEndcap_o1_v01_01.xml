@@ -40,7 +40,7 @@
     </display>
     
     <detectors>
-        <detector name="ECalEndcap" type="ECalEndcap_o1_v01" id="DetID_ECal_Endcap" readout="ECalEndcapHits" vis="ECALVis">
+        <detector name="ECalEndcap" type="ECalEndcap_o1_v01" id="DetID_ECal_Endcap" readout="ECalEndcapCollection" vis="ECALVis">
             
             <comment>EM Calorimeter EndCap</comment>
             

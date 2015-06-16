@@ -13,7 +13,7 @@
     <!--  Includes for sensitives and support                -->
     <detectors>
         
-        <detector name="YokeEndcap" type="YokeEndcap_o1_v01" id="DetID_Yoke_Endcap" readout="YokeEndcapHits" vis="YOKEVis" >
+        <detector name="YokeEndcap" type="YokeEndcap_o1_v01" id="DetID_Yoke_Endcap" readout="YokeEndcapCollection" vis="YOKEVis" >
             
             <comment>EM Calorimeter Barrel</comment>
             

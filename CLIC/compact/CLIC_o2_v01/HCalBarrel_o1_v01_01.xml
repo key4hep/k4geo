@@ -1,8 +1,8 @@
 <lccdd>
     <!--  Definition of global dictionary constants          -->
     <define>
-        <constant name="HCalEndcap_layers" value="60"/>
-        <constant name="HCalEndcap_layer_thickness" value="2.0*cm + 0.65*cm"/>
+        <constant name="HCalBarrel_layers" value="(int) 60"/>
+        <constant name="HCalBarrel_layer_thickness" value="2.0*cm + 0.65*cm"/>
         <constant name="HCal_cell_size" value="3.0*cm"/>
         
     </define>
@@ -28,7 +28,7 @@
     </readouts>
     
     <detectors>
-        <detector id="101" name="HCalBarrel" type="HCalBarrel_o1_v01" readout="HCalBarrelHits" vis="HCALVis" calorimeterType="HAD_BARREL" gap="0.*cm" material="Steel235">
+        <detector id="101" name="HCalBarrel" type="HCalBarrel_o1_v01" readout="HCalBarrelCollection" vis="HCALVis" calorimeterType="HAD_BARREL" gap="0.*cm" material="Steel235">
             
             <comment>Hadron Calorimeter Barrel</comment>
             

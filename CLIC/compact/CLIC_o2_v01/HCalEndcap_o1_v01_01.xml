@@ -2,8 +2,6 @@
     <define>
         <constant name="HCalEndcap_layers" value="60"/>
         <constant name="HCalEndcap_layer_thickness" value="2.0*cm + 0.65*cm"/>
-        <constant name="HCalBarrel_layers" value="(int) 60"/>
-        <constant name="HCalBarrel_layer_thickness" value="2.0*cm + 0.65*cm"/>
         <constant name="HCal_cell_size" value="3.0*cm"/>
         <constant name="HCalEndcap_cutout_layers" value="- floor( -HCalEndcap_zcutout / HCalEndcap_layer_thickness)"/>
         <constant name="HCalRing_layers" value=" floor( (HCalEndcap_min_z - HCalRing_min_z) / HCalEndcap_layer_thickness + 0.5)"/>
@@ -53,7 +51,7 @@
 
     <detectors>
         
-        <detector name="HCalEndcap" type="HCalEndcap_o1_v01" id="DetID_HCAL_Endcap" readout="HCalEndcapHits" vis="HCALVis" >
+        <detector name="HCalEndcap" type="HCalEndcap_o1_v01" id="DetID_HCAL_Endcap" readout="HCalEndcapCollection" vis="HCALVis" >
             
             <comment>Hadronic Calorimeter Endcap</comment>
             
@@ -93,7 +91,7 @@
     
     <detectors>
         
-        <detector name="HCalRing" type="HCalEndcap_o1_v01" id="DetID_HCAL_Ring" readout="HCalRingHits" vis="HCALVis" >
+        <detector name="HCalRing" type="HCalEndcap_o1_v01" id="DetID_HCAL_Ring" readout="HCalRingCollection" vis="HCALVis" >
             
             <comment>Hadronic Calorimeter Endcap</comment>
             

@@ -13,7 +13,7 @@
     <!--  Includes for sensitives and support                -->
     <detectors>
         
-        <detector name="ECalEndcap" type="ECalEndcap_o2_v01" id="15" readout="ECalEndcapHits" vis="ECALVis" >
+        <detector name="ECalEndcap" type="ECalEndcap_o2_v01" id="15" readout="ECalEndcapCollection" vis="ECALVis" >
             
             <comment>Hadronic Calorimeter Endcap</comment>
             

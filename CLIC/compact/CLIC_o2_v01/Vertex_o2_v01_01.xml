@@ -79,7 +79,7 @@
          
          *********************************************
          -->
-        <detector name="VertexBarrel" type="ZPlanarTracker" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelHits" insideTrackingVolume="true">
+        <detector name="VertexBarrel" type="ZPlanarTracker" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelCollection" insideTrackingVolume="true">
             
             <layer nLadders="VertexBarrel_Layer1_Staves" phi0="0" id="0">
                 <ladder distance="VertexBarrel_r1+VertexBarrel_Sensitive_Thickness" thickness="VertexBarrel_Support_Thickness" width="VertexBarrel_Layer1_width-1.2*mm" length="VertexBarrel_zmax" offset="VertexBarrel_Layer1_offset"    material="Carbon" />
@@ -116,7 +116,7 @@
     
     
     <detectors>
-        <detector id="DetID_VXD_Endcap" name="VertexEndcap" type="VertexEndcap_o1_v01" readout="VertexEndcapHits" reflect="true">
+        <detector id="DetID_VXD_Endcap" name="VertexEndcap" type="VertexEndcap_o1_v01" readout="VertexEndcapCollection" reflect="true">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>

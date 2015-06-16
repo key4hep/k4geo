@@ -88,7 +88,7 @@
     </readouts>
     
     <detectors>
-        <detector id="DetID_IT_Barrel" name="InnerTrackerBarrel" type="TrackerBarrel_o1_v01" readout="InnerTrackerBarrelHits" region="SiTrackerBarrelRegion" limits="SiTrackerBarrelRegionLimitSet">
+        <detector id="DetID_IT_Barrel" name="InnerTrackerBarrel" type="TrackerBarrel_o1_v01" readout="InnerTrackerBarrelCollection" region="SiTrackerBarrelRegion" limits="SiTrackerBarrelRegionLimitSet">
             <envelope vis="OTVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -168,7 +168,7 @@
     </detectors>
     
     <detectors>
-        <detector id="DetID_IT_Endcap" name="InnerTrackerEndcap" type="TrackerEndcap_o1_v01" readout="InnerTrackerEndcapHits" reflect="true">
+        <detector id="DetID_IT_Endcap" name="InnerTrackerEndcap" type="TrackerEndcap_o1_v01" readout="InnerTrackerEndcapCollection" reflect="true">
             <envelope vis="OTVis">
                 <shape type="Assembly"/>
             </envelope>
