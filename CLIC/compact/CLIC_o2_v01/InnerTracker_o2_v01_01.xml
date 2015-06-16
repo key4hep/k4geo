@@ -79,10 +79,10 @@
     
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
-        <readout name="InnerTrackerBarrelHits">
+        <readout name="InnerTrackerBarrelCollection">
             <id>system:5,side:-2,layer:9,module:8,sensor:8,barrel:3</id>
         </readout>
-        <readout name="InnerTrackerEndcapHits">
+        <readout name="InnerTrackerEndcapCollection">
             <id>system:8,barrel:3,layer:4,module:14,sensor:2,side:32:-2,strip:20</id>
         </readout>
     </readouts>

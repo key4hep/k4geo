@@ -4,7 +4,7 @@
     
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
-        <readout name="ECalEndcapHits">
+        <readout name="ECalEndcapCollection">
             <segmentation type="CartesianGridXY" grid_size_x="ECal_cell_size" grid_size_y="ECal_cell_size" />
             <id>system:8,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id>
         </readout>

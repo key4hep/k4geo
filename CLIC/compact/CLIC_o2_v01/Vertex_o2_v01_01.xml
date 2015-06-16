@@ -60,10 +60,10 @@
     
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
-        <readout name="VertexBarrelHits">
+        <readout name="VertexBarrelCollection">
             <id>system:5,side:-2,layer:9,module:8,sensor:8,barrel:3</id>
         </readout>
-        <readout name="VertexEndcapHits">
+        <readout name="VertexEndcapCollection">
             <id>system:8,barrel:3,layer:4,wedge:6,module:6,sensor:1,side:32:-2,strip:26</id>
         </readout>
     </readouts>
