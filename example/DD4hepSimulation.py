@@ -216,7 +216,7 @@ class DD4hepSimulation(object):
     if self.gun and not self.inputFile:
       gun = DDG4.GeneratorAction(kernel,"Geant4ParticleGun/"+"Gun")
       gun.energy      = 10*GeV
-      gun.particle    = "e-"
+      gun.particle    = "mu-"
       gun.multiplicity = 1
       gun.position     = (0.0,0.0,0.0)
       gun.isotrop      = False
@@ -233,7 +233,7 @@ class DD4hepSimulation(object):
 
     if self.crossingAngleBoost:
       lbo = DDG4.GeneratorAction(kernel, "Geant4InteractionVertexBoost")
-      lbo.Angle = 0.01
+      lbo.Angle = self.crossingAngleBoost
       actionList.append(lbo)
 
     if actionList:
