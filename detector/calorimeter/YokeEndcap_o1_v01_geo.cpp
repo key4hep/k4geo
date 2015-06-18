@@ -2,14 +2,14 @@
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"
+#include "DDSegmentation/Segmentation.h"
 
 using namespace std;
 using namespace DD4hep;
 using namespace DD4hep::Geometry;
 
 static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
-    static double tolerance = 0e0;
-    
+   
     xml_det_t     x_det     = e;
     int           det_id    = x_det.id();
     string        det_name  = x_det.nameStr();
@@ -32,7 +32,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     double      rmax      = dim.rmax(); /// FIXME: IS THIS RIGHT?
     double      zmin      = dim.zmin();
     double      phi0      = dim.phi0();
+    Readout readout = sens.readout();
+    Segmentation seg = readout.segmentation();
     
+    std::vector<double> cellSizeVector = seg.segmentation()->cellDimensions(0); //Assume uniform cell sizes, provide dummy cellID
+    double cell_sizeX      = cellSizeVector[0];
+    double cell_sizeY      = cellSizeVector[1];    
     
     Layering    layering(x_det);
     double      totalThickness = layering.totalThickness();
@@ -76,6 +81,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         vector<PlacedVolume> sensitives;
         
         int s_num = 1;
+        int sensor_num=0; //Actually, in our reconstruction paradigm only one sensor is assumed per layer
+        
         double sliceZ = -l_thick/2;
         double totalAbsorberThickness=0.;
         for(xml_coll_t s(x_layer,_U(slice)); s; ++s)  {
@@ -88,11 +95,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             s_vol.setVisAttributes(lcdd.visAttributes(x_slice.visStr()));
             sliceZ += s_thick/2;
             PlacedVolume s_phv = l_vol.placeVolume(s_vol,Position(0,0,sliceZ));
-            s_phv.addPhysVolID("slice",s_num);
             if ( x_slice.isSensitive() )  {
                 sens.setType("calorimeter");
                 s_vol.setSensitiveDetector(sens);
                 sensitives.push_back(s_phv);
+                s_phv.addPhysVolID("submodule",sensor_num);
+                sensor_num++;
+                
             }
             
             char val = x_slice.hasAttr(_U(radiator)) ? x_slice.attr < string > (_U(radiator))[0] : 'f';
@@ -125,8 +134,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             caloLayer.distance = zmin + layerZ;
             caloLayer.thickness = l_thick;
             caloLayer.absorberThickness = totalAbsorberThickness;
-            caloLayer.cellSize0 = 30.0; //FIXME only temporary. Should get from Surfaces/Segmentation?
-            caloLayer.cellSize1 = 30.0; //FIXME
+            caloLayer.cellSize0 = cell_sizeX; 
+            caloLayer.cellSize1 = cell_sizeY; 
+            caloData->layers.push_back( caloLayer ) ;
             
             
             layerZ += l_thick/2;
@@ -144,13 +154,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     //Removed rotations to align with envelope
     pv = envelope.placeVolume(endcapVol,Transform3D(RotationZYX(0,0,0),
                                                     Position(0,0,z_pos)));
-    pv.addPhysVolID("barrel", 1);
+    pv.addPhysVolID("side", 1);
     endcapA.setPlacement(pv);
     
     //Removed rotations
     pv = envelope.placeVolume(endcapVol,Transform3D(RotationZYX(0,M_PI,0),
                                                     Position(0,0,-z_pos)));
-    pv.addPhysVolID("barrel", 2);
+    pv.addPhysVolID("side", 2);
     endcapB.setPlacement(pv);
     
     //   pv.addPhysVolID("system", det_id);

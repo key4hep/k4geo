@@ -11,6 +11,8 @@
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"
+#include "DDSegmentation/Segmentation.h"
+
 
 using namespace std;
 using namespace DD4hep;
@@ -47,7 +49,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   Layering    layering(x_det);
   double      totalThickness = layering.totalThickness();
-  double hCal_cell_size      = lcdd.constant<double>("HCal_cell_size"); //Should try to obtain from segmentation
+  Readout readout = sens.readout();
+  Segmentation seg = readout.segmentation();
+  
+  std::vector<double> cellSizeVector = seg.segmentation()->cellDimensions(0); //Assume uniform cell sizes, provide dummy cellID
+  double cell_sizeX      = cellSizeVector[0];
+  double cell_sizeY      = cellSizeVector[1];
+
   
   PolyhedraRegular polyVolume(nsides_outer,rmin,rmax,totalThickness);
   PolyhedraRegular cutoutPolyVolume(nsides_inner,0,rmin+rcutout,zcutout);
@@ -103,7 +111,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       s_vol.setVisAttributes(lcdd.visAttributes(x_slice.visStr()));
       sliceZ += s_thick/2;
       PlacedVolume s_phv = l_vol.placeVolume(s_vol,Position(0,0,sliceZ));
-      s_phv.addPhysVolID("slice",s_num);
       if ( x_slice.isSensitive() )  {
         sens.setType("calorimeter");
         s_vol.setSensitiveDetector(sens);
@@ -140,8 +147,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       caloLayer.distance = zmin + layerZ;
       caloLayer.thickness = l_thick;
       caloLayer.absorberThickness = totalAbsorberThickness;
-      caloLayer.cellSize0 = hCal_cell_size; //FIXME only temporary. Should get from Surfaces/Segmentation?
-      caloLayer.cellSize1 = hCal_cell_size; //FIXME
+      caloLayer.cellSize0 = cell_sizeX;
+      caloLayer.cellSize1 = cell_sizeY; 
       
       
       layerZ += l_thick/2;
@@ -159,13 +166,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   //Removed rotations to align with envelope
   pv = envelope.placeVolume(endcapVol,Transform3D(RotationZYX(0,0,0),
                                                   Position(0,0,z_pos)));
-  pv.addPhysVolID("barrel", 1);
+  pv.addPhysVolID("side", 1);
   endcapA.setPlacement(pv);
   
   //Removed rotations
   pv = envelope.placeVolume(endcapVol,Transform3D(RotationZYX(0,M_PI,0),
                                                   Position(0,0,-z_pos)));
-  pv.addPhysVolID("barrel", 2);
+  pv.addPhysVolID("side", 2);
   endcapB.setPlacement(pv);
   
 //   pv.addPhysVolID("system", det_id);

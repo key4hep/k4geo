@@ -40,11 +40,11 @@
     <readouts>
         <readout name="HCalEndcapCollection">
             <segmentation type="CartesianGridXY" grid_size_x="3.5" grid_size_y="3.5" />
-            <id>system:8,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id>
+            <id>system:5,side:2,module:8,stave:4,layer:9,submodule:4,x:32:-16,y:-16</id>
         </readout>
         <readout name="HCalRingCollection">
             <segmentation type="CartesianGridXY" grid_size_x="3.5" grid_size_y="3.5" />
-            <id>system:8,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id>
+            <id>system:5,side:2,module:8,stave:4,layer:9,submodule:4,x:32:-16,y:-16</id>
         </readout>
     </readouts>
     

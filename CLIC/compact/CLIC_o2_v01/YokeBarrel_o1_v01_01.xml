@@ -3,6 +3,8 @@
     <define>
         <constant name="YokeBarrel_layers" value="6"/>
         <constant name="YokeBarrel_layer_thickness" value="10.0*cm + 4.0*cm"/>
+        <constant name="Yoke_cell_size" value="3.0*cm"/>
+        
     </define>
     
     <!--  Definition of the used visualization attributes    -->
@@ -22,8 +24,8 @@
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
         <readout name="YokeBarrelCollection">
-            <segmentation type="CartesianGridXY" grid_size_x="3.0*cm" grid_size_y="3.0*cm" />
-            <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
+            <segmentation type="CartesianGridXY" grid_size_x="Yoke_cell_size" grid_size_y="Yoke_cell_size" />
+            <id>system:5,side:2,layer:9,module:8,stave:4,submodule:4,x:32:-16,y:-16</id>
         </readout>
     </readouts>
     
@@ -57,7 +59,7 @@
                 <slice material="Air" thickness="0.35*cm" />
                 <slice material="Aluminum" thickness="0.1*cm" />
                 <slice material="Air" thickness="1.0*cm" />
-                <slice material="Iron" thickness="39.0*cm" vis="YokeAbsorberVis"/>
+                <slice material="Iron" thickness="39.0*cm" vis="YokeAbsorberVis" radiator="yes"/>
             </layer>
             
 

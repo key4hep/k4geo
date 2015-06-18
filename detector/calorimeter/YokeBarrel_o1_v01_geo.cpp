@@ -9,6 +9,8 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
+#include "DDRec/DetectorData.h"
+#include "DDSegmentation/Segmentation.h"
 
 using namespace std;
 using namespace DD4hep;
@@ -28,7 +30,7 @@ static void placeStaves(DetElement& parent, DetElement& stave, double rmin, int 
     DetElement det = module > 1 ? stave.clone(_toString(module,"stave%d")) : stave;
     Transform3D trafo(RotationZYX(0, rotY, rotX), Translation3D(-posX, -posY, 0));
     PlacedVolume pv = envelopeVolume.placeVolume(sectVolume,trafo);
-    // Not a valid volID: pv.addPhysVolID("stave", 0);
+    pv.addPhysVolID("stave", 0);
     pv.addPhysVolID("module", module);
     det.setPlacement(pv);
     parent.add(det);
@@ -55,8 +57,21 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens) {
   double rmin = dim.rmin();
   DetElement sdet(det_name, x_det.id());
   DetElement stave("stave1", x_det.id());
+  Readout readout = sens.readout();
+  Segmentation seg = readout.segmentation();
+  
+  std::vector<double> cellSizeVector = seg.segmentation()->cellDimensions(0); //Assume uniform cell sizes, provide dummy cellID
+  double cell_sizeX      = cellSizeVector[0];
+  double cell_sizeY      = cellSizeVector[1];  
 //  Volume motherVol = lcdd.pickMotherVolume(sdet);
 
+  //Create caloData object to extend driver with data required for reconstruction
+  DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
+  caloData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
+  caloData->inner_symmetry = numSides;
+  caloData->outer_symmetry = numSides; 
+  caloData->phi0 = 0;
+  
   for (xml_coll_t c(x_det, _U(layer)); c; ++c) {
     xml_comp_t x_layer = c;
     int repeat = x_layer.repeat();
@@ -111,6 +126,8 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
       DetElement layer(stave, layer_name, layer_num);
       //### layeringExtension->setLayer(layer_num, layer, layerNormal);
 
+      DDRec::LayeredCalorimeterData::Layer caloLayer ;
+      
       // Layer position in Z within the stave.
       layer_pos_z += layer_thickness / 2;
       // Layer box & volume
@@ -119,32 +136,44 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
       // Create the slices (sublayers) within the layer.
       double slice_pos_z = -(layer_thickness / 2);
       int slice_number = 1;
+      double totalAbsorberThickness=0.;
+      int sensor_number=0;
       for (xml_coll_t k(x_layer, _U(slice)); k; ++k) {
-	xml_comp_t x_slice = k;
-	string slice_name = _toString(slice_number, "slice%d");
-	double slice_thickness = x_slice.thickness();
-	Material slice_material = lcdd.material(x_slice.materialStr());
-	DetElement slice(layer, slice_name, slice_number);
+        xml_comp_t x_slice = k;
+        string slice_name = _toString(slice_number, "slice%d");
+        double slice_thickness = x_slice.thickness();
+        Material slice_material = lcdd.material(x_slice.materialStr());
+        DetElement slice(layer, slice_name, slice_number);
 
-	slice_pos_z += slice_thickness / 2;
-	// Slice volume & box
-	Volume slice_vol(slice_name, Box(layer_dim_x, detZ / 2, slice_thickness / 2), slice_material);
+        slice_pos_z += slice_thickness / 2;
+        // Slice volume & box
+        Volume slice_vol(slice_name, Box(layer_dim_x, detZ / 2, slice_thickness / 2), slice_material);
+        char val = x_slice.hasAttr(_U(radiator)) ? x_slice.attr < string > (_U(radiator))[0] : 'f';
+        val = std::toupper(val);
+        bool isAbsorber =  (val == 'T' || val == 'Y');
+        
+        if( isAbsorber ==true)
+          totalAbsorberThickness+= slice_thickness;
+        
 
-	if (x_slice.isSensitive()) {
-	  sens.setType("calorimeter");
-	  slice_vol.setSensitiveDetector(sens);
-	}
-	// Set region, limitset, and vis.
-	slice_vol.setAttributes(lcdd, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
-	// slice PlacedVolume
-	PlacedVolume slice_phv = layer_vol.placeVolume(slice_vol, Position(0, 0, slice_pos_z));
-	slice_phv.addPhysVolID("slice", slice_number);
-
-	slice.setPlacement(slice_phv);
-	// Increment Z position for next slice.
-	slice_pos_z += slice_thickness / 2;
-	// Increment slice number.
-	++slice_number;
+        // Set region, limitset, and vis.
+        slice_vol.setAttributes(lcdd, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+        // slice PlacedVolume
+        PlacedVolume slice_phv = layer_vol.placeVolume(slice_vol, Position(0, 0, slice_pos_z));
+        slice.setPlacement(slice_phv);
+        
+        if (x_slice.isSensitive()) {
+          sens.setType("calorimeter");
+          slice_vol.setSensitiveDetector(sens);
+          slice_phv.addPhysVolID("submodule", sensor_number); 
+          
+          sensor_number++;
+        }
+        
+        // Increment Z position for next slice.
+        slice_pos_z += slice_thickness / 2;
+        // Increment slice number.
+        ++slice_number;
       }
       // Set region, limitset, and vis.
       layer_vol.setAttributes(lcdd, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
@@ -152,8 +181,19 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
       // Layer physical volume.
       PlacedVolume layer_phv = staveInnerVol.placeVolume(layer_vol, Position(0, 0, layer_pos_z));
       layer_phv.addPhysVolID("layer", layer_num);
+      layer_phv.addPhysVolID("side", 0); ///FIXME! Should try to set in parent
+      
       layer.setPlacement(layer_phv);
 
+      
+      caloLayer.distance = layer_pos_z;
+      caloLayer.thickness = layer_thickness;
+      caloLayer.absorberThickness = totalAbsorberThickness;
+      caloLayer.cellSize0 = cell_sizeX;
+      caloLayer.cellSize1 = cell_sizeY;
+      
+      caloData->layers.push_back( caloLayer ) ;
+      
       // Increment the layer X dimension.
       layer_dim_x += layer_thickness * std::tan(layerInnerAngle);    // * 2;
       // Increment the layer Z position.
@@ -175,16 +215,11 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
   // Set envelope volume attributes.
   envelopeVol.setAttributes(lcdd, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
 
-/*
-  double z_offset = dim.hasAttr(_U(z_offset)) ? dim.z_offset() : 0.0;
-  Transform3D transform(RotationZ(M_PI / numSides), Translation3D(0, 0, z_offset));
-  PlacedVolume env_phv = motherVol.placeVolume(envelopeVol, transform);
-  env_phv.addPhysVolID("system", sdet.id());
-  env_phv.addPhysVolID("barrel", 0);
-  sdet.setPlacement(env_phv);*/
 
-  //#### sdet.addExtension<SubdetectorExtension>(new SubdetectorExtensionImpl(sdet));
-  //#### sdet.addExtension<LayeringExtension>(layeringExtension);
+
+  sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
+  
+  
   return sdet;
 }
 

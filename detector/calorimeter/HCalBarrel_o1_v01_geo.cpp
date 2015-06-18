@@ -10,6 +10,7 @@
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"
+#include "DDSegmentation/Segmentation.h"
 
 using namespace std;
 using namespace DD4hep;
@@ -58,7 +59,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens) {
   DetElement sdet(det_name, x_det.id());
   DetElement stave("stave1", x_det.id());
   //  Volume motherVol = lcdd.pickMotherVolume(sdet);
-  double hCal_cell_size      = lcdd.constant<double>("HCal_cell_size"); //Should try to obtain from segmentation
+  Readout readout = sens.readout();
+  Segmentation seg = readout.segmentation();
+  
+  std::vector<double> cellSizeVector = seg.segmentation()->cellDimensions(0); //Assume uniform cell sizes, provide dummy cellID
+  double cell_sizeX      = cellSizeVector[0];
+  double cell_sizeY      = cellSizeVector[1];
   
   //Create caloData object to extend driver with data required for reconstruction
   DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
@@ -171,7 +177,6 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
         slice_vol.setAttributes(lcdd, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
         // slice PlacedVolume
         PlacedVolume slice_phv = layer_vol.placeVolume(slice_vol, Position(0, 0, slice_pos_z));
-        slice_phv.addPhysVolID("slice", slice_number);
         
         slice.setPlacement(slice_phv);
         // Increment Z position for next slice.
@@ -190,8 +195,8 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
       caloLayer.distance = layer_pos_z;
       caloLayer.thickness = layer_thickness;
       caloLayer.absorberThickness = totalAbsorberThickness;
-      caloLayer.cellSize0 = hCal_cell_size;
-      caloLayer.cellSize1 = hCal_cell_size;
+      caloLayer.cellSize0 = cell_sizeX;
+      caloLayer.cellSize1 = cell_sizeY;
       
       caloData->layers.push_back( caloLayer ) ;
       
@@ -216,17 +221,7 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
   // Set envelope volume attributes.
   envelopeVol.setAttributes(lcdd, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   
-  /*
-    *  double z_offset = dim.hasAttr(_U(z_offset)) ? dim.z_offset() : 0.0;
-    *  Transform3D transform(RotationZ(M_PI / nsides), Translation3D(0, 0, z_offset));
-    *  PlacedVolume env_phv = motherVol.placeVolume(envelopeVol, transform);
-    *  env_phv.addPhysVolID("system", sdet.id());
-    *  env_phv.addPhysVolID("barrel", 0);
-    *  sdet.setPlacement(env_phv);*/
-  
-  //FIXME TO BE REVISITED. 
-  //#### sdet.addExtension<SubdetectorExtension>(new SubdetectorExtensionImpl(sdet));
-  //#### sdet.addExtension<LayeringExtension>(layeringExtension);
+
   //FOR NOW, USE A MORE "SIMPLE" VERSION OF EXTENSIONS, INCLUDING NECESSARY GEAR PARAMETERS
   //Copied from Frank's SHcalSc04 Implementation
   sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;

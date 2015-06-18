@@ -17,6 +17,7 @@
 #include "TGeoTrd2.h"
 #include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"
+#include "DDSegmentation/Segmentation.h"
 
 using namespace std;
 using namespace DD4hep;
@@ -43,8 +44,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     const double towersAirGap = xmlParameter.attr<double>(_Unicode(TowersAirGap));
     const double faceThickness = xmlParameter.attr<double>(_Unicode(TowersFaceThickness));
     Material Composite = lcdd.material(xmlParameter.attr<string>(_Unicode(AlveolusMaterial)));
-    double eCal_cell_size = lcdd.constant<double>("ECal_cell_size"); //Should try to obtain from segmentation
-      
+    Readout readout = sens.readout();
+    Segmentation seg = readout.segmentation();
+    
+    std::vector<double> cellSizeVector = seg.segmentation()->cellDimensions(0); //Assume uniform cell sizes, provide dummy cellID
+    double cell_sizeX      = cellSizeVector[0];
+    double cell_sizeY      = cellSizeVector[1];
+    
     Layering      layering (e);
     Material      air       = lcdd.air();
     xml_comp_t    x_staves  = x_det.staves();
@@ -168,7 +174,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
                     // Slice placement
                     PlacedVolume slice_phv = l_vol.placeVolume(s_vol, Position(0., 0., s_pos_z + s_thick/2.));
-                    slice_phv.addPhysVolID("slice", s_num);
                     slice.setPlacement(slice_phv);
                     // Increment Z position of slice
                     s_pos_z += s_thick;
@@ -187,8 +192,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                 caloLayer.distance = l_pos_z + l_thickness/2.;
                 caloLayer.thickness = l_thickness;
                 caloLayer.absorberThickness = totalAbsorberThickness;
-                caloLayer.cellSize0 = eCal_cell_size;
-                caloLayer.cellSize1 = eCal_cell_size;
+                caloLayer.cellSize0 = cell_sizeX;
+                caloLayer.cellSize1 = cell_sizeY;
                 
                 caloData->layers.push_back( caloLayer ) ;
                 
@@ -221,9 +226,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             PlacedVolume pv = envelope.placeVolume(tower_vol, tr);
             int mid = (nsides+1)*t+i; 
             //pv.addPhysVolID("system",det_id); // not needed
-            pv.addPhysVolID("barrel", 0);
-            pv.addPhysVolID("tower", t);
-	    pv.addPhysVolID("stave", i);
+            pv.addPhysVolID("side", 0); //should set once in parent volume placement
+            pv.addPhysVolID("module", t); ///FIXME! DRIVER DEVELOPER PLEASE CHECK IF ASSIGNMENTS MAKE SENSE
+            pv.addPhysVolID("stave", i);
             DetElement sd = mid==0 ? tower_det : tower_det.clone(_toString(mid,"tower%d"));
             sd.setPlacement(pv);
             sdet.add(sd);
