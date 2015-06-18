@@ -1,5 +1,5 @@
 <!-- comment>Calorimeters</comment -->
-<detector name="YokeEndcap" type="Yoke05_Endcaps" id="ILDDetID_YOKE" readout="YokeEndcapsCollection" vis="YellowVis" insideTrackingVolume="false" >
+<detector name="YokeEndcap" type="Yoke05_Endcaps" id="ILDDetID_YOKE_ENDCAP" readout="YokeEndcapsCollection" vis="YellowVis" insideTrackingVolume="false" >
 
     <envelope vis="ILD_YOKEVis">
       <shape type="BooleanShape" operation="Subtraction" material="Air">

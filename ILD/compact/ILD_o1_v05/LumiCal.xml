@@ -2,7 +2,7 @@
      LumiCal parameters for ILD 
 -->
 
-<detector name="Lcal" type="LumiCal_o1_v01" vis="SeeThrough" id="ILDDetID_BCAL"
+<detector name="Lcal" type="LumiCal_o1_v01" vis="SeeThrough" id="ILDDetID_LCAL"
 	  readout="LumiCalCollection" insideTrackingVolume="false" >
   
   <!-- LumiCal envelope is rotated according to the ILC_Main_Crossing_Angle at +z and -z -->

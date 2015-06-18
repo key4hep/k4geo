@@ -1,4 +1,4 @@
-<detector id="ILDDetID_HCAL" name="HcalEndcap" type="SHcalSc04_Endcaps" readout="HcalEndcapsCollection"  vis="GreenVis" calorimeterType="HAD_ENDCAP">
+<detector id="ILDDetID_HCAL_ENDCAP" name="HcalEndcap" type="SHcalSc04_Endcaps" readout="HcalEndcapsCollection"  vis="GreenVis" calorimeterType="HAD_ENDCAP">
     <comment>Hadron Calorimeter Endcap</comment>
 
     <envelope vis="ILD_HCALVis">    

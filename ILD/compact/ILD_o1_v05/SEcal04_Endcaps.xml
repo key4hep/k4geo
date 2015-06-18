@@ -1,4 +1,4 @@
-<detector name="EcalEndcap" type="SEcal04_Endcaps" id="ILDDetID_ECAL" readout="EcalEndcapsCollection" vis="BlueVis" >
+<detector name="EcalEndcap" type="SEcal04_Endcaps" id="ILDDetID_ECAL_ENDCAP" readout="EcalEndcapsCollection" vis="BlueVis" >
     <comment>EM Calorimeter Endcaps</comment>
 
     <envelope vis="ILD_ECALVis">    
