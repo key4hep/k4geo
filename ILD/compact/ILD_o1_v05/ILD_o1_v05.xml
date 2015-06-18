@@ -552,7 +552,7 @@
                         offset_phi="-180*degree+(360*degree-BCal_SpanningPhi)*0.5"
 	  		/>
 
-	  <id>system:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id>
+	  <id>system:8,barrel:3,layer:8,slice:5,r:32:16,phi:16</id>
 	</readout>
 	
 	<readout name="LumiCalCollection">
