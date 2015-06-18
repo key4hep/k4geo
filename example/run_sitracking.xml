@@ -9,7 +9,8 @@
 <marlin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ilcsoft.desy.de/marlin/marlin.xsd">
  <execute>
    <processor name="MyAIDAProcessor"/>
-   
+   <processor name="InitDD4hep"/>
+  
    <!-- ========== track digitization and tracking  === -->
    <processor name="VXDPlanarDigiProcessor"/>
    <processor name="SITPlanarDigiProcessor"/>
@@ -35,6 +36,10 @@
   <!--parameter name="LCIOReadCollectionNames">MCParticle PandoraPFOs</parameter-->
  </global>
 
+
+ <processor name="InitDD4hep" type="InitializeDD4hep">
+   <parameter name="DD4hepXMLFile" type="string">Simple_ILD.xml </parameter>
+ </processor>
 
  <processor name="MyLCIOOutputProcessor" type="LCIOOutputProcessor">
   <!--   standard output: full reconstruction keep all collections -->
