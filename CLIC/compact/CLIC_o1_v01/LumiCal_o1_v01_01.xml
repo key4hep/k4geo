@@ -6,8 +6,12 @@
     
     <readouts>
         <readout name="LumiCalCollection">
-            <segmentation type="CartesianGridXY" grid_size_x="LumiCal_cell_size" grid_size_y="LumiCal_cell_size" offset_x="0*cm" />
-            <id>system:8,barrel:3,layer:6,slice:5,x:-16,y:-16 </id>
+	    <segmentation type="PolarGridRPhi"
+			  grid_size_r="(LumiCal_outer_radius-LumiCal_inner_radius)/64"
+			  grid_size_phi="360/48*degree"
+			  offset_r="LumiCal_inner_radius"
+			  />
+	    <id>system:8,barrel:3,layer:8,slice:8,r:32:-16,phi:-16</id>
         </readout>
     </readouts>
     
@@ -31,10 +35,7 @@
                 </shape>
             </envelope>
             
-            <parameter crossingangle="CrossingAngle"
-            cutoutspanningangle="40*deg"
-            incomingbeampiperadius="BCal_TubeIncomingRadius"
-            />
+            <parameter crossingangle="CrossingAngle" />
             
             <dimensions inner_r = "LumiCal_inner_radius"
             inner_z = "LumiCal_min_z"
