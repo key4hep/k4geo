@@ -544,16 +544,21 @@
 	  <!-- <segmentation type="CartesianGridXY" grid_size_x="BeamCal_cell_size" grid_size_y="BeamCal_cell_size"  grid_size_z="BeamCal_cell_size" /> -->
 	  
 	  <segmentation type="PolarGridRPhi2"
-	  		grid_r_values="3.200*cm 3.9876*cm 4.7742*cm 5.5608*cm 6.3474*cm 7.134*cm 7.9206*cm 8.7072 9.4938 10.2804 11.067 11.8536 12.6402 13.4268 14.2134 150.0*mm"
-			grid_phi_values="BCal_SpanningPhi/(4*8) BCal_SpanningPhi/(5*8) BCal_SpanningPhi/(6*8) BCal_SpanningPhi/(6*8) BCal_SpanningPhi/(7*8) BCal_SpanningPhi/(8*8) BCal_SpanningPhi/(9*8) BCal_SpanningPhi/(9*8) BCal_SpanningPhi/(10*8) BCal_SpanningPhi/(11*8) BCal_SpanningPhi/(12*8) BCal_SpanningPhi/(12*8) BCal_SpanningPhi/(13*8) BCal_SpanningPhi/(14*8) BCal_SpanningPhi/(15*8)"
-			offset_phi="-180*degree+(360*degree-BCal_SpanningPhi)*0.5"
+			grid_r_values="20.00*mm 27.6565*mm 35.3029*mm 42.9494*mm 50.5959*mm 58.2424*mm 65.8888*mm 73.5353*mm 81.1818*mm 88.8282*mm 96.4747*mm 104.121*mm 111.768*mm 119.414*mm 127.061*mm 134.707*mm 142.354*mm 150.0*mm"
+			grid_phi_values="BCal_SpanningPhi/(3*8) BCal_SpanningPhi/(3*8) BCal_SpanningPhi/(4*8) BCal_SpanningPhi/(5*8) BCal_SpanningPhi/(5*8) BCal_SpanningPhi/(6*8) BCal_SpanningPhi/(7*8) BCal_SpanningPhi/(8*8) BCal_SpanningPhi/(8*8) BCal_SpanningPhi/(9*8) BCal_SpanningPhi/(10*8) BCal_SpanningPhi/(10*8) BCal_SpanningPhi/(11*8) BCal_SpanningPhi/(12*8) BCal_SpanningPhi/(12*8) BCal_SpanningPhi/(13*8) BCal_SpanningPhi/(14*8)"
+                        offset_phi="-180*degree+(360*degree-BCal_SpanningPhi)*0.5"
 	  		/>
+
 	  <id>system:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id>
 	</readout>
 	
 	<readout name="LumiCalCollection">
-	  <segmentation type="CartesianGridXY" grid_size_x="LumiCal_cell_size" grid_size_y="LumiCal_cell_size" offset_x="0*cm" />
-	  <id>system:8,barrel:3,layer:5,slice:5,x:-16,y:-16 </id>
+	    <segmentation type="PolarGridRPhi"
+			  grid_size_r="(LumiCal_outer_radius-LumiCal_inner_radius)/64"
+			  grid_size_phi="360/48*degree"
+			  offset_r="LumiCal_inner_radius"
+			  />
+	    <id>system:8,barrel:3,layer:8,slice:8,r:32:-16,phi:-16</id>
 	</readout>
 
 	<readout name="LHCalCollection">
