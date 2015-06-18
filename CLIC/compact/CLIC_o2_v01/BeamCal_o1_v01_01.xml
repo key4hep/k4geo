@@ -2,12 +2,31 @@
     
     <define>
         <constant name="BeamCal_cell_size" value="1*mm"/>
+        <constant name="BeamCal_spanning_angle" value="350*degree"/>
     </define>
     
     <readouts>
         <readout name="BeamCalCollection">
-            <segmentation type="CartesianGridXY" grid_size_x="BeamCal_cell_size" grid_size_y="BeamCal_cell_size" offset_x="0*cm" />
-            <id>system:8,layer:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id>
+	    <segmentation type="PolarGridRPhi2"
+			  grid_r_values="3.200*cm 3.9876*cm 4.7742*cm 5.5608*cm 6.3474*cm 7.134*cm 7.9206*cm 8.7072*cm 9.4938*cm 10.2804*cm 11.067*cm 11.8536*cm 12.6402*cm 13.4268*cm 14.2134*cm 15.0*cm"
+			  grid_phi_values="350/(4*8)*degree
+					   350/(5*8)*degree
+					   350/(6*8)*degree
+					   350/(6*8)*degree
+					   350/(7*8)*degree
+					   350/(8*8)*degree
+					   350/(9*8)*degree
+					   350/(9*8)*degree
+					   350/(10*8)*degree
+					   350/(11*8)*degree
+					   350/(12*8)*degree
+					   350/(12*8)*degree
+					   350/(13*8)*degree
+					   350/(14*8)*degree
+					   350/(15*8)*degree"
+			  offset_phi="-180*degree+(360*degree-BeamCal_spanning_angle)*0.5"
+			  />
+	    <id>system:8,barrel:3,layer:8,slice:5,r:32:16,phi:16</id>
         </readout>
     </readouts>
     
@@ -42,7 +61,7 @@
             </envelope>
             
             <parameter crossingangle="CrossingAngle"
-            cutoutspanningangle="10*deg"
+            cutoutspanningangle="360*degree-BeamCal_spanning_angle"
             incomingbeampiperadius="3.5*mm"
             />
             
