@@ -192,7 +192,7 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
       caloLayer.cellSize0 = cell_sizeX;
       caloLayer.cellSize1 = cell_sizeY;
       
-      caloData->layers.push_back( caloLayer ) ;
+      caloData->layers.push_back( caloLayer ) ; //PROBLEM WHEN HAVING TWO ACTIVE ELEMENTS PER LAYER
       
       // Increment the layer X dimension.
       layer_dim_x += layer_thickness * std::tan(layerInnerAngle);    // * 2;

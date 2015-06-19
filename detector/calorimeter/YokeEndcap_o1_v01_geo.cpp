@@ -136,7 +136,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             caloLayer.absorberThickness = totalAbsorberThickness;
             caloLayer.cellSize0 = cell_sizeX; 
             caloLayer.cellSize1 = cell_sizeY; 
-            caloData->layers.push_back( caloLayer ) ;
+            caloData->layers.push_back( caloLayer ) ; //PROBLEM WHEN HAVING MORE THAN ONE ACTIVE ELEMENTS PER LAYER
             
             
             layerZ += l_thick/2;
