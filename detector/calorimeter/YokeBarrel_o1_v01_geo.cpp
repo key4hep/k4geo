@@ -99,6 +99,12 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
   double innerFaceLen = rmin * tan_inner;
   double outerFaceLen = (rmin + totalThickness) * tan_inner;
   double staveThickness = totalThickness;
+  
+  /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
+  caloData->extent[0] = rmin ;
+  caloData->extent[1] = rmin + totalThickness ;
+  caloData->extent[2] = 0. ;
+  caloData->extent[3] = detZ/2.0 ;
 
   Trapezoid staveTrdOuter(innerFaceLen / 2, outerFaceLen / 2, detZ / 2, detZ / 2, staveThickness / 2);
   Volume staveOuterVol("stave_outer", staveTrdOuter, air);
