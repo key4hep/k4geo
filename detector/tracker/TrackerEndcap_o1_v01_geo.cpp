@@ -10,6 +10,8 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "XML/Utilities.h"
 #include <map>
+#include "DDRec/DetectorData.h"
+
 
 using namespace std;
 using namespace DD4hep;
@@ -37,6 +39,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     //-----------------------------------------------------------------------------------
     
+    DDRec::ZDiskPetalsData*  zDiskPetalsData = new DDRec::ZDiskPetalsData ;
     
     
     envelope.setVisAttributes(lcdd.invisible());
@@ -97,6 +100,33 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             double phi      = phi0;
             Placements& sensVols = sensitives[m_nam];
             
+            DDRec::ZDiskPetalsData::LayerLayout thisLayer ;
+            
+            ///FIXME! ALL THIS NEEDS TO BE CHECKED
+            thisLayer.typeFlags[ DDRec::ZDiskPetalsData::SensorType::DoubleSided ] = false ; ///CHECK FIXME
+            thisLayer.typeFlags[ DDRec::ZDiskPetalsData::SensorType::Pixel ]     = false ;  ///CHECK
+            
+            thisLayer.petalHalfAngle   = 0;
+            thisLayer.alphaPetal    = 0. ;  // petals are othogonal to z-axis
+            thisLayer.zPosition     = zstart;
+            thisLayer.petalNumber   = nmodules ;
+            thisLayer.sensorsPerPetal   = 0 ; 
+            thisLayer.phi0      = phi  ;
+            thisLayer.zOffsetSupport    = 0;
+            thisLayer.distanceSupport   = r ;
+            thisLayer.thicknessSupport    = 0 ;
+            thisLayer.widthInnerSupport   =0;
+            thisLayer.widthOuterSupport   = 0;
+            thisLayer.lengthSupport   = 0 ;
+            thisLayer.zOffsetSensitive    = 0 ;
+            thisLayer.distanceSensitive   = r ; 
+            thisLayer.thicknessSensitive  = 0;
+            thisLayer.widthInnerSensitive =  0 ;
+            thisLayer.widthOuterSensitive = 0 ;
+            thisLayer.lengthSensitive   = 0;
+            
+            zDiskPetalsData->layers.push_back( thisLayer ) ;
+            
             for(int k=0; k<nmodules; ++k) {
                 string m_base = _toString(l_id,"layer%d") + _toString(mod_num,"_module%d");
                 double x = -r*std::cos(phi);
@@ -128,10 +158,18 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             }
         }
     }
-    /*
-     pv = motherVol.placeVolume(envelope);
-     pv.addPhysVolID("system",det_id);
-     sdet.setPlacement(pv);*/
+
+    //FIXME: DO WE HAVE ACCESS TO THIS INFO? DO WE NEED IT FOR THE EVENT DISPLAY (NO OTHER USE)?
+    zDiskPetalsData->widthStrip  = 0;
+    zDiskPetalsData->lengthStrip =0 ;
+    zDiskPetalsData->pitchStrip  = 0 ;
+    zDiskPetalsData->angleStrip  = 0;
+    
+    
+    
+    sdet.addExtension< DDRec::ZDiskPetalsData >( zDiskPetalsData ) ;
+    
+    
     return sdet;
 }
 
