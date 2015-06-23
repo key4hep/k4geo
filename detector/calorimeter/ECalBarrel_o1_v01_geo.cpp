@@ -72,7 +72,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     caloData->phi0 = 0.; //FIXME
     /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
     caloData->extent[0] = inner_r ;
-    caloData->extent[1] = outer_r; // check !!
+    caloData->extent[1] = x_dim.rmax(); // check !!
     caloData->extent[2] = 0. ;
     caloData->extent[3] = x_dim.z()/2.0 ;
     
