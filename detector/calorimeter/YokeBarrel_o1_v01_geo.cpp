@@ -192,7 +192,7 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
       layer.setPlacement(layer_phv);
 
       
-      caloLayer.distance = layer_pos_z;
+      caloLayer.distance = rmin + staveThickness / 2 + layer_pos_z;
       caloLayer.thickness = layer_thickness;
       caloLayer.absorberThickness = totalAbsorberThickness;
       caloLayer.cellSize0 = cell_sizeX;

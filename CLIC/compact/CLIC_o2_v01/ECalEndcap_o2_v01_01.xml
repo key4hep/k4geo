@@ -47,7 +47,7 @@
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/>
             </layer>
             <layer repeat="1" vis="ECalLayerVis">
-                <slice material = "TungstenDens24" thickness = "2.40*mm" vis="ECalAbsorberVis"/>
+                <slice material = "TungstenDens24" thickness = "2.40*mm" vis="ECalAbsorberVis" radiator="yes"/>
                 <slice material = "CarbonFiber_25percent" thickness = "10.0*mm" vis="CompositeVis"/>
             </layer>
             

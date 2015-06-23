@@ -131,7 +131,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             
             ///FIXME: IS ORIENTATION RIGHT? WHICH SIDE DO WE NEED TO ADD TO STRUCTURE?
             DDRec::LayeredCalorimeterData::Layer caloLayer ;
-            caloLayer.distance = zmin + layerZ;
+            caloLayer.distance = zmin + totalThickness/2 + layerZ;
             caloLayer.thickness = l_thick;
             caloLayer.absorberThickness = totalAbsorberThickness;
             caloLayer.cellSize0 = cell_sizeX; 
