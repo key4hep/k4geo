@@ -189,7 +189,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                 layer_phv.addPhysVolID("layer", l_num);
                 layer.setPlacement(layer_phv);
                 
-                caloLayer.distance = l_pos_z + l_thickness/2.;
+                ///FIXME! DRIVER DEVELOPER CHECK THESE VALUES!
+                caloLayer.distance = inner_r+trd_z+ l_pos_z; //Need to have distance from origin! 
                 caloLayer.thickness = l_thickness;
                 caloLayer.absorberThickness = totalAbsorberThickness;
                 caloLayer.cellSize0 = cell_sizeX;
