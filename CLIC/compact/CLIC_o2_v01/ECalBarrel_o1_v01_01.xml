@@ -59,7 +59,7 @@
             <dimensions numsides="ECalBarrel_symmetry" rmin="ECalBarrel_inner_radius" rmax="ECalBarrel_outer_radius" z="ECalBarrel_half_length*2" />
             <staves vis="ECalStaveVis" />
             <layer repeat="17" vis="ECalLayerVis">
-                <slice material = "TungstenDens24" thickness = "1.20*mm" vis="ECalAbsorberVis"/>
+                <slice material = "TungstenDens24" thickness = "1.20*mm" vis="ECalAbsorberVis" radiator="yes"/>
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
                 <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="ECalAbsorberVis"/>
                 <slice material = "Silicon"        thickness = "0.50*mm" sensitive="yes" limits="cal_limits" vis="ECalSensitiveVis"/>
@@ -68,7 +68,7 @@
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/>
             </layer>
             <layer repeat="8" vis="ECalLayerVis">
-                <slice material = "TungstenDens24" thickness = "2.40*mm" vis="ECalAbsorberVis"/>
+                <slice material = "TungstenDens24" thickness = "2.40*mm" vis="ECalAbsorberVis" radiator="yes"/>
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
                 <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="ECalAbsorberVis"/>
                 <slice material = "Silicon"        thickness = "0.50*mm" sensitive="yes" limits="cal_limits" vis="ECalSensitiveVis"/>
@@ -77,7 +77,7 @@
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/>
             </layer>
             <layer repeat="1" vis="ECalLayerVis">
-                <slice material = "TungstenDens24" thickness = "2.40*mm" vis="ECalAbsorberVis"/>
+                <slice material = "TungstenDens24" thickness = "2.40*mm" vis="ECalAbsorberVis" radiator="yes"/>
 		<slice material = "CarbonFiber_25percent" thickness = "10.0*mm" vis="CompositeVis"/>
             </layer>
  
