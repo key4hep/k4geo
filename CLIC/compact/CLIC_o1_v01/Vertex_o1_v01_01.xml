@@ -171,5 +171,15 @@
     </detectors>
     
     
+    <plugins>
+      <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
+        <argument value="VertexBarrel"/>
+        <argument value="dimension=2"/>
+      </plugin>
+      <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
+        <argument value="VertexEndcap"/>
+        <argument value="dimension=2"/>
+      </plugin>
+    </plugins>
     
 </lccdd>

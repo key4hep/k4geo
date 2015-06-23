@@ -102,9 +102,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             
             DDRec::ZDiskPetalsData::LayerLayout thisLayer ;
             
-            ///FIXME! ALL THIS NEEDS TO BE CHECKED
+            ///FIXME! ALL THIS NEEDS TO BE CHECKED and actually are not needed for CED
             thisLayer.typeFlags[ DDRec::ZDiskPetalsData::SensorType::DoubleSided ] = false ; ///CHECK FIXME
             thisLayer.typeFlags[ DDRec::ZDiskPetalsData::SensorType::Pixel ]     = false ;  ///CHECK
+            
+            DD4hep::Geometry::Trapezoid mod_shape(m_vol.solid());
+            
             
             thisLayer.petalHalfAngle   = 0;
             thisLayer.alphaPetal    = 0. ;  // petals are othogonal to z-axis
@@ -114,7 +117,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             thisLayer.phi0      = phi  ;
             thisLayer.zOffsetSupport    = 0;
             thisLayer.distanceSupport   = r ;
-            thisLayer.thicknessSupport    = 0 ;
+            thisLayer.thicknessSupport    = mod_shape->GetDY() ; //FIXME
             thisLayer.widthInnerSupport   =0;
             thisLayer.widthOuterSupport   = 0;
             thisLayer.lengthSupport   = 0 ;
@@ -123,7 +126,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             thisLayer.thicknessSensitive  = 0;
             thisLayer.widthInnerSensitive =  0 ;
             thisLayer.widthOuterSensitive = 0 ;
-            thisLayer.lengthSensitive   = 0;
+            thisLayer.lengthSensitive   = 2*mod_shape->GetDZ();
             
             zDiskPetalsData->layers.push_back( thisLayer ) ;
             
@@ -159,7 +162,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         }
     }
 
-    //FIXME: DO WE HAVE ACCESS TO THIS INFO? DO WE NEED IT FOR THE EVENT DISPLAY (NO OTHER USE)?
+    //FIXME: we don't need these for the event display
     zDiskPetalsData->widthStrip  = 0;
     zDiskPetalsData->lengthStrip =0 ;
     zDiskPetalsData->pitchStrip  = 0 ;
