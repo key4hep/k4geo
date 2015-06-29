@@ -1,0 +1,106 @@
+<detector name="Tube" type="TubeX01" vis="TubeVis" id="ILDDetID_NOTUSED">
+  
+  <!-- database : tubeX06_14 --> 
+  
+  <!-- SQL command: "SELECT * FROM `_references`;"  --> 
+  <reference globalName="Ecal_endcap_zmax" localName="ecalEnd" assumption="2470.5*mm"  />
+  <reference globalName="VXD_inner_radius" localName="vtxInnerR" assumption="16*mm"  />
+  <reference globalName="LHcal_inner_radius" localName="lhcalInnerR" assumption="132*mm"  />
+  <reference globalName="Lcal_outer_radius" localName="lcalOuterR" assumption="195.2*mm"  />
+  <reference globalName="Lcal_inner_radius" localName="lcalInnerR" assumption="80*mm"  />
+  <reference globalName="LHcal_zend" localName="lhcalEnd" assumption="3100*mm"  />
+  <reference globalName="Lcal_z_begin" localName="lcalBegin" assumption="2342.4*mm"  />
+  
+  
+  <!-- SQL command: "SELECT * FROM `tube`;"  -->
+
+
+  <section crossType="0" zStart="0*mm" zEnd="80*mm" rInnerStart="14.5*mm" rInnerEnd="14.5*mm" rOuterStart="15*mm" rOuterEnd="15*mm" material="G4_Be"
+  	   name="IPInnerTube" zStartRef="" zEndRef="" rInnerStartRef="vtxInnerR" rInnerEndRef="vtxInnerR" rOuterStartRef="vtxInnerR" rOuterEndRef="vtxInnerR"  />
+
+  <section crossType="0" zStart="80*mm" zEnd="150*mm" rInnerStart="14.5*mm" rInnerEnd="23*mm" rOuterStart="15*mm" rOuterEnd="24*mm" material="G4_Be"
+  	   name="IPInnerBulge" zStartRef="" zEndRef="" rInnerStartRef="vtxInnerR" rInnerEndRef="" rOuterStartRef="vtxInnerR" rOuterEndRef=""  />
+
+  <section crossType="0" zStart="150*mm" zEnd="175*mm" rInnerStart="23*mm" rInnerEnd="23*mm" rOuterStart="24*mm" rOuterEnd="24*mm" material="G4_Be"
+  	   name="IPOuterTube" zStartRef="" zEndRef="" rInnerStartRef="" rInnerEndRef="" rOuterStartRef="" rOuterEndRef=""  />
+
+  <section crossType="0" zStart="175*mm" zEnd="220*mm" rInnerStart="23*mm" rInnerEnd="23*mm" rOuterStart="23.67*mm" rOuterEnd="23.67*mm" material="G4_Al"
+  	   name="IPOuterTube" zStartRef="" zEndRef="" rInnerStartRef="" rInnerEndRef="" rOuterStartRef="" rOuterEndRef=""  />
+
+
+
+  <section crossType="0" zStart="220*mm" zEnd="230*mm" rInnerStart="23*mm" rInnerEnd="23*mm" rOuterStart="25*mm" rOuterEnd="25*mm" material="G4_Al"
+  	   name="IPOuterTube" zStartRef="" zEndRef="" rInnerStartRef="" rInnerEndRef="" rOuterStartRef="" rOuterEndRef=""  />
+
+  <section crossType="0" zStart="230*mm" zEnd="371.3*mm" rInnerStart="23*mm" rInnerEnd="34.476*mm" rOuterStart="25.007*mm" rOuterEnd="36.483*mm" material="G4_Al"
+  	   name="IPOuterBulge" zStartRef="" zEndRef="ecalEnd" rInnerStartRef="" rInnerEndRef="lcalOuterR" rOuterStartRef="" rOuterEndRef="lcalOuterR"  />
+
+  <section crossType="0" zStart="371.3*mm" zEnd="645*mm" rInnerStart="34.476*mm" rInnerEnd="56.706*mm" rOuterStart="37.245*mm" rOuterEnd="59.475*mm" material="G4_Al"
+  	   name="IPOuterBulge" zStartRef="ecalEnd" zEndRef="ecalEnd" rInnerStartRef="" rInnerEndRef="lcalOuterR" rOuterStartRef="" rOuterEndRef="lcalOuterR"  />
+
+  <section crossType="0" zStart="645*mm" zEnd="1046*mm" rInnerStart="56.706*mm" rInnerEnd="89.274*mm" rOuterStart="58.893*mm" rOuterEnd="91.461*mm" material="G4_Al"
+  	   name="IPOuterBulge" zStartRef="ecalEnd" zEndRef="ecalEnd" rInnerStartRef="" rInnerEndRef="lcalOuterR" rOuterStartRef="" rOuterEndRef="lcalOuterR"  />
+
+  <section crossType="0" zStart="1046*mm" zEnd="1447*mm" rInnerStart="89.274*mm" rInnerEnd="121.843*mm" rOuterStart="90.819*mm" rOuterEnd="123.388*mm" material="G4_Al"
+  	   name="IPOuterBulge" zStartRef="ecalEnd" zEndRef="ecalEnd" rInnerStartRef="" rInnerEndRef="lcalOuterR" rOuterStartRef="" rOuterEndRef="lcalOuterR"  />
+
+  <section crossType="0" zStart="1447*mm" zEnd="1848.5*mm" rInnerStart="121.843*mm" rInnerEnd="154.452*mm" rOuterStart="123.067*mm" rOuterEnd="155.676*mm" material="G4_Al"
+  	   name="IPOuterBulge" zStartRef="ecalEnd" zEndRef="ecalEnd" rInnerStartRef="" rInnerEndRef="lcalOuterR" rOuterStartRef="" rOuterEndRef="lcalOuterR"  />
+
+  <section crossType="0" zStart="1848.5*mm" zEnd="2200*mm" rInnerStart="154.452*mm" rInnerEnd="183*mm" rOuterStart="155.445*mm" rOuterEnd="183.993*mm" material="G4_Al"
+  	   name="IPOuterBulge" zStartRef="ecalEnd" zEndRef="ecalEnd" rInnerStartRef="" rInnerEndRef="lcalOuterR" rOuterStartRef="" rOuterEndRef="lcalOuterR"  />
+
+  <section crossType="0" zStart="2200*mm" zEnd="2250*mm" rInnerStart="183*mm" rInnerEnd="183*mm" rOuterStart="183.99*mm" rOuterEnd="183.99*mm" material="G4_Al"
+  	   name="IPOuterLink" zStartRef="ecalEnd" zEndRef="ecalEnd" rInnerStartRef="lcalOuterR" rInnerEndRef="lcalOuterR" rOuterStartRef="lcalOuterR" rOuterEndRef="lcalOuterR"  />
+
+  <section crossType="0" zStart="2250*mm" zEnd="2259*mm" rInnerStart="183*mm" rInnerEnd="183*mm" rOuterStart="183.85*mm" rOuterEnd="183.85*mm" material="G4_Al"
+  	   name="IPOuterLink" zStartRef="ecalEnd" zEndRef="ecalEnd" rInnerStartRef="lcalOuterR" rInnerEndRef="lcalOuterR" rOuterStartRef="lcalOuterR" rOuterEndRef="lcalOuterR"  />
+
+  <!-- rInnerStart should be 0.0*mm, rInnerStart defines the hole aligned with the outgoing beam-line, which does not exist for this section.
+       This mistake was already present in the database and is fixed in Beampipe_o1_v01_01.xml -->
+  <section crossType="3" zStart="2259*mm" zEnd="2260*mm" rInnerStart="78.5*mm" rInnerEnd="78.5*mm" rOuterStart="184*mm" rOuterEnd="184*mm" material="G4_Be" 
+	   name="LumiCalFront" zStartRef="ecalEnd" zEndRef="ecalEnd" rInnerStartRef="" rInnerEndRef="lcalInnerR" rOuterStartRef="lcalOuterR" rOuterEndRef="lcalOuterR"  />
+
+  <section crossType="7" zStart="2260*mm" zEnd="3369*mm" rInnerStart="78.5*mm" rInnerEnd="78.5*mm" rOuterStart="79.5*mm" rOuterEnd="79.5*mm" material="G4_Fe"
+  	   name="LumiCalInner" zStartRef="ecalEnd" zEndRef="lhcalEnd" rInnerStartRef="lcalInnerR" rInnerEndRef="lcalInnerR" rOuterStartRef="lcalInnerR" rOuterEndRef="lcalInnerR"  />
+
+  <section crossType="5" zStart="3369*mm" zEnd="3370*mm" rInnerStart="14*mm" rInnerEnd="17*mm" rOuterStart="79.5*mm" rOuterEnd="79.5*mm" material="G4_Fe"
+  	   name="BeamCalFront" zStartRef="lhcalEnd" zEndRef="lhcalEnd" rInnerStartRef="" rInnerEndRef="" rOuterStartRef="lcalInnerR" rOuterEndRef="lcalInnerR"  />
+
+  <section crossType="12" zStart="3370*mm" zEnd="3380*mm" rInnerStart="14*mm" rInnerEnd="14*mm" rOuterStart="15*mm" rOuterEnd="15*mm" material="G4_Fe"
+  	   name="BeamCalLinkUpstream" zStartRef="lhcalEnd" zEndRef="lhcalEnd" rInnerStartRef="" rInnerEndRef="" rOuterStartRef="" rOuterEndRef=""  />
+
+  <section crossType="1" zStart="3380*mm" zEnd="4049*mm" rInnerStart="14*mm" rInnerEnd="14*mm" rOuterStart="15*mm" rOuterEnd="15*mm" material="G4_Fe"
+  	   name="BeamCalInnerUpstream" zStartRef="lhcalEnd" zEndRef="" rInnerStartRef="" rInnerEndRef="" rOuterStartRef="" rOuterEndRef=""  />
+
+  <section crossType="1" zStart="4049*mm" zEnd="4050*mm" rInnerStart="9*mm" rInnerEnd="9*mm" rOuterStart="15*mm" rOuterEnd="15*mm" material="G4_Fe"
+  	   name="QD0Front" zStartRef="" zEndRef="" rInnerStartRef="" rInnerEndRef="" rOuterStartRef="" rOuterEndRef=""  />
+
+  <section crossType="1" zStart="4050*mm" zEnd="12500*mm" rInnerStart="9*mm" rInnerEnd="9*mm" rOuterStart="10*mm" rOuterEnd="10*mm" material="G4_Fe"
+  	   name="MainUpstream" zStartRef="" zEndRef="" rInnerStartRef="" rInnerEndRef="" rOuterStartRef="" rOuterEndRef=""  />
+
+  <section crossType="2" zStart="3370*mm" zEnd="3380*mm" rInnerStart="17*mm" rInnerEnd="17*mm" rOuterStart="18*mm" rOuterEnd="18*mm" material="G4_Fe"
+  	   name="BeamCalLinkDnstream" zStartRef="lhcalEnd" zEndRef="lhcalEnd" rInnerStartRef="" rInnerEndRef="" rOuterStartRef="" rOuterEndRef=""  />
+
+  <section crossType="2" zStart="3380*mm" zEnd="5999*mm" rInnerStart="17*mm" rInnerEnd="17*mm" rOuterStart="18*mm" rOuterEnd="18*mm" material="G4_Fe"
+  	   name="BeamCalInnerDnstream" zStartRef="lhcalEnd" zEndRef="" rInnerStartRef="" rInnerEndRef="" rOuterStartRef="" rOuterEndRef=""  />
+
+  <section crossType="2" zStart="5999*mm" zEnd="6000*mm" rInnerStart="17*mm" rInnerEnd="17*mm" rOuterStart="20*mm" rOuterEnd="20*mm" material="G4_Fe"
+  	   name="QDEX1AFront" zStartRef="" zEndRef="" rInnerStartRef="" rInnerEndRef="" rOuterStartRef="" rOuterEndRef=""  />
+
+  <section crossType="2" zStart="6000*mm" zEnd="7741*mm" rInnerStart="17*mm" rInnerEnd="17*mm" rOuterStart="18*mm" rOuterEnd="18*mm" material="G4_Fe"
+  	   name="QDEX1AInner" zStartRef="" zEndRef="" rInnerStartRef="" rInnerEndRef="" rOuterStartRef="" rOuterEndRef=""  />
+
+  <section crossType="2" zStart="7741*mm" zEnd="7839*mm" rInnerStart="17*mm" rInnerEnd="23*mm" rOuterStart="18*mm" rOuterEnd="24*mm" material="G4_Fe"
+  	   name="QDEX1ALink" zStartRef="" zEndRef="" rInnerStartRef="" rInnerEndRef="" rOuterStartRef="" rOuterEndRef=""  />
+
+  <section crossType="2" zStart="7839*mm" zEnd="9681*mm" rInnerStart="23*mm" rInnerEnd="23*mm" rOuterStart="24*mm" rOuterEnd="24*mm" material="G4_Fe"
+  	   name="QDEX1BInner" zStartRef="" zEndRef="" rInnerStartRef="" rInnerEndRef="" rOuterStartRef="" rOuterEndRef=""  />
+
+  <section crossType="2" zStart="9681*mm" zEnd="9779*mm" rInnerStart="23*mm" rInnerEnd="29*mm" rOuterStart="24*mm" rOuterEnd="30*mm" material="G4_Fe"
+  	   name="QDEX1BLink" zStartRef="" zEndRef="" rInnerStartRef="" rInnerEndRef="" rOuterStartRef="" rOuterEndRef=""  />
+
+  <section crossType="2" zStart="9779*mm" zEnd="12500*mm" rInnerStart="29*mm" rInnerEnd="29*mm" rOuterStart="30*mm" rOuterEnd="30*mm" material="G4_Fe"
+  	   name="QFEX2AInner" zStartRef="" zEndRef="" rInnerStartRef="" rInnerEndRef="" rOuterStartRef="" rOuterEndRef=""  />
+
+</detector>
