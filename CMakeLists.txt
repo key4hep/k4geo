@@ -72,8 +72,23 @@ endif()
 #Create target, library, rootmap, install
 add_dd4hep_plugin(${PackageName} SHARED ${sources})
 target_link_libraries(${PackageName} ${DD4hep_LIBRARIES} ${DD4hep_COMPONENT_LIBRARIES} ${ROOT_LIBRARIES})
+
 #Create this_package.sh file, and install
-dd4hep_instantiate_package(${PackageName})
+#FG: this appends the the patch environment variabels (unitl v00-12) but we should prepend ....
+#dd4hep_instantiate_package(${PackageName})
+#-> for now do this here:
+
+INCLUDE( DD4hepMacros )
+
+configure_file( cmake/thislcgeo.sh.in  thislcgeo.sh @ONLY)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/thislcgeo.sh
+  DESTINATION bin
+  )
+
+#--------------------------------------------------------------------------------------------
+
+
 
 #---Testing-------------------------------------------------------------------------
 if(BUILD_TESTING)
