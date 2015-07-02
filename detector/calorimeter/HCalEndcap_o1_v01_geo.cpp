@@ -76,7 +76,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   caloData->layoutType = DDRec::LayeredCalorimeterData::EndcapLayout ;
   caloData->inner_symmetry = nsides_inner;
   caloData->outer_symmetry = nsides_outer; 
-  caloData->phi0 = phi0;
+  caloData->phi0=phi0; //NOTE: DEPRECATED! USE INNER AND OUTER PHI0
+  caloData->inner_phi0 = phi0; //FIXME
+  caloData->outer_phi0 = 0.; //FIXME
+  caloData->gap0 = 0.; //FIXME
+  caloData->gap1 = 0.; //FIXME
+  caloData->gap2 = 0.; //FIXME  
+  
   /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
   caloData->extent[0] = rmin ;
   caloData->extent[1] = rmax ; ///FIXME: CHECK WHAT IS NEEDED (EXSCRIBED?)
@@ -117,11 +123,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         sensitives.push_back(s_phv);
       }
       
-      char val = x_slice.hasAttr(_U(radiator)) ? x_slice.attr < string > (_U(radiator))[0] : 'f';
-      val = std::toupper(val);
-      bool isAbsorber =  (val == 'T' || val == 'Y');
-      
-      if( isAbsorber ==true)
+      if( x_slice.isRadiator() ==true)
         totalAbsorberThickness+= s_thick;
       
       sliceZ += s_thick/2;
