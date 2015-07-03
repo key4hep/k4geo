@@ -11,7 +11,7 @@ project(${PackageName})
 # project version
 SET( ${PackageName}_VERSION_MAJOR 0 )
 SET( ${PackageName}_VERSION_MINOR 4 )
-SET( ${PackageName}_VERSION_PATCH 0 )
+SET( ${PackageName}_VERSION_PATCH 1 )
 
 SET( ${PackageName}_VERSION "${${PackageName}_VERSION_MAJOR}.${${PackageName}_VERSION_MINOR}" )
 SET( ${PackageName}_SOVERSION "${${PackageName}_VERSION_MAJOR}.${${PackageName}_VERSION_MINOR}" )
@@ -74,21 +74,7 @@ add_dd4hep_plugin(${PackageName} SHARED ${sources})
 target_link_libraries(${PackageName} ${DD4hep_LIBRARIES} ${DD4hep_COMPONENT_LIBRARIES} ${ROOT_LIBRARIES})
 
 #Create this_package.sh file, and install
-#FG: this appends the the patch environment variabels (unitl v00-12) but we should prepend ....
-#dd4hep_instantiate_package(${PackageName})
-#-> for now do this here:
-
-INCLUDE( DD4hepMacros )
-
-configure_file( cmake/thislcgeo.sh.in  thislcgeo.sh @ONLY)
-
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/thislcgeo.sh
-  DESTINATION bin
-  )
-
-#--------------------------------------------------------------------------------------------
-
-
+dd4hep_instantiate_package(${PackageName})
 
 #---Testing-------------------------------------------------------------------------
 if(BUILD_TESTING)

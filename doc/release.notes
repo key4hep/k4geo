@@ -1,3 +1,16 @@
+ -----------
+| v00-04-01 |  - patch release   
+ -----------    
+
+   F.Gaede
+
+    - added a new starting point for SDHcal development: ILD_o2_v01
+       - based on ILD_o1_v05 as released in (v00-04/ilcsoft v01-17-07)
+       - copied SHcalSc04_Barrel_v01.cpp to Hcal_Barrel_SD_v01.cpp
+       - copied SHcalSc04_Barrel_v01.xml to Hcal_Barrel_SD_v01.xml
+
+    - removed outdated ILD_o2_v00
+
 
      N. Nikiforou
      - Changed CLIC calorimeters to use new isRadiator() helper function and 
