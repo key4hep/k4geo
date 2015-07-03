@@ -69,12 +69,20 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     caloData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
     caloData->inner_symmetry = nsides;
     caloData->outer_symmetry = nsides; 
-    caloData->phi0=0; //NOTE: DEPRECATED! USE INNER AND OUTER PHI0
-    caloData->inner_phi0 = 0; //FIXME
-    caloData->outer_phi0 = 0.; //FIXME
+    
+    /** NOTE: phi0=0 means lower face flat parallel to experimental floor
+     *  This is achieved by rotating the modules with respect to the envelope
+     *  which is assumed to be a Polyhedron and has its axes rotated with respect
+     *  to the world by 180/nsides. In any other case (e.g. if you want to have
+     *  a tip of the calorimeter touching the ground) this value needs to be computed
+     */
+    
+    caloData->inner_phi0 = 0.; 
+    caloData->outer_phi0 = 0.; 
     caloData->gap0 = 0.; //FIXME
     caloData->gap1 = 0.; //FIXME
     caloData->gap2 = 0.; //FIXME  
+    
     /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
     caloData->extent[0] = inner_r ;
     caloData->extent[1] = x_dim.rmax(); // check !!
@@ -243,6 +251,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     //FOR NOW, USE A MORE "SIMPLE" VERSION OF EXTENSIONS, INCLUDING NECESSARY GEAR PARAMETERS
     //Copied from Frank's SHcalSc04 Implementation
     sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
+    
+    //NOTE: If the envelope is not a polyhedron (eg. if you use a tube)
+    //you may need to rotate so the axes match  
     
     return sdet;
 }

@@ -42,7 +42,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   double      rmin      = dim.rmin();
   double      rmax      = dim.rmax(); /// FIXME: IS THIS RIGHT?
   double      zmin      = dim.zmin();
-  double      phi0      = dim.phi0();
   
   
   Layering    layering(x_det);
@@ -71,12 +70,20 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   caloData->layoutType = DDRec::LayeredCalorimeterData::EndcapLayout ;
   caloData->inner_symmetry = nsides_inner;
   caloData->outer_symmetry = nsides_outer; 
-  caloData->phi0=phi0; //NOTE: DEPRECATED! USE INNER AND OUTER PHI0
-  caloData->inner_phi0 = phi0; //FIXME
-  caloData->outer_phi0 = 0.; //FIXME
+  
+  /** NOTE: phi0=0 means lower face flat parallel to experimental floor
+   *  This is achieved by rotating the modules with respect to the envelope
+   *  which is assumed to be a Polyhedron and has its axes rotated with respect
+   *  to the world by 180/nsides. In any other case (e.g. if you want to have
+   *  a tip of the calorimeter touching the ground) this value needs to be computed
+   */
+  
+  caloData->inner_phi0 = 0.; 
+  caloData->outer_phi0 = 0.; 
   caloData->gap0 = 0.; //FIXME
   caloData->gap1 = 0.; //FIXME
   caloData->gap2 = 0.; //FIXME  
+  
   /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
   caloData->extent[0] = rmin ;
   caloData->extent[1] = rmax ; ///FIXME: CHECK WHAT IS NEEDED (EXSCRIBED?)

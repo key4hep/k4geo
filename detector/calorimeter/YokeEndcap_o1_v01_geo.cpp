@@ -26,12 +26,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     //   std::cout<<"Building Yoke EndCap inside envelope."<<std::endl;
     xml_dim_t   dim       = x_det.dimensions();
     Material    air       = lcdd.air();
-    int         nsides_inner = dim.nsides_inner();
-    int         nsides_outer = dim.nsides_outer();
+    int         nsides    = dim.numsides();
     double      rmin      = dim.rmin();
     double      rmax      = dim.rmax(); /// FIXME: IS THIS RIGHT?
     double      zmin      = dim.zmin();
-    double      phi0      = dim.phi0();
     Readout readout = sens.readout();
     Segmentation seg = readout.segmentation();
     
@@ -42,7 +40,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     Layering    layering(x_det);
     double      totalThickness = layering.totalThickness();
     
-    PolyhedraRegular polyVolume(nsides_outer,rmin,rmax,totalThickness);
+    PolyhedraRegular polyVolume(nsides,rmin,rmax,totalThickness);
     
     
     Volume      endcapVol("endcap",polyVolume,air);
@@ -57,11 +55,18 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     //Create caloData object to extend driver with data required for reconstruction
     DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
     caloData->layoutType = DDRec::LayeredCalorimeterData::EndcapLayout ;
-    caloData->inner_symmetry = nsides_inner;
-    caloData->outer_symmetry = nsides_outer;
-    caloData->phi0=phi0; //NOTE: DEPRECATED! USE INNER AND OUTER PHI0
-    caloData->inner_phi0 = phi0; //FIXME
-    caloData->outer_phi0 = 0.; //FIXME
+    caloData->inner_symmetry = nsides;
+    caloData->outer_symmetry = nsides;
+
+    /** NOTE: phi0=0 means lower face flat parallel to experimental floor
+     *  This is achieved by rotating the modules with respect to the envelope
+     *  which is assumed to be a Polyhedron and has its axes rotated with respect
+     *  to the world by 180/nsides. In any other case (e.g. if you want to have
+     *  a tip of the calorimeter touching the ground) this value needs to be computed
+     */
+         
+    caloData->inner_phi0 = 0.; 
+    caloData->outer_phi0 = 0.; 
     caloData->gap0 = 0.; //FIXME
     caloData->gap1 = 0.; //FIXME
     caloData->gap2 = 0.; //FIXME  
@@ -82,7 +87,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         
         std::cout<<"Number of layers in group "<<layerType<<" : "<<l_repeat<<std::endl;
         
-        Volume           l_vol(l_name,PolyhedraRegular(nsides_outer,rmin,rmax,l_thick),air);
+        Volume           l_vol(l_name,PolyhedraRegular(nsides,rmin,rmax,l_thick),air);
         
         vector<PlacedVolume> sensitives;
         
@@ -96,7 +101,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             string     s_name  = _toString(s_num,"slice%d");
             double     s_thick = x_slice.thickness();
             Material   s_mat   = lcdd.material(x_slice.materialStr());
-            Volume     s_vol(s_name,PolyhedraRegular(nsides_outer,rmin,rmax,s_thick),s_mat);
+            Volume     s_vol(s_name,PolyhedraRegular(nsides,rmin,rmax,s_thick),s_mat);
             
             s_vol.setVisAttributes(lcdd.visAttributes(x_slice.visStr()));
             sliceZ += s_thick/2;
@@ -154,6 +159,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     DetElement  endcapB = endcapA.clone(det_name+"_B",x_det.id());
     
     //Removed rotations to align with envelope
+    //NOTE: If the envelope is not a polyhedron (eg. if you use a tube)
+    //you may need to rotate so the axes match
     pv = envelope.placeVolume(endcapVol,Transform3D(RotationZYX(0,0,0),
                                                     Position(0,0,z_pos)));
     pv.addPhysVolID("side", 1);
