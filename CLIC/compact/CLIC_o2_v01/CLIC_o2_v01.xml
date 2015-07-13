@@ -50,7 +50,8 @@
         <constant name="DetID_LumiCal"          value=" 15"/>
         <constant name="DetID_BeamCal"          value=" 16"/>
         
-        
+        <constant name="DetID_ECAL_ENDCAP_FACE"    value="18"/>
+        <constant name="DetID_ECAL_BARREL_FACE"    value="19"/>
         
         
         <constant name="CentralBeamPipe_zmax" value="260.*mm"/>
@@ -218,6 +219,8 @@
     <include ref="ECalBarrel_o1_v01_01.xml"/>
     <include ref="ECalEndcap_o2_v01_01.xml"/>
     <include ref="ECalPlug_o1_v01_01.xml"/>
+    <include ref="ECalBarrelFace_o1_v01_01.xml"/>
+    <include ref="ECalEndcapFace_o1_v01_01.xml"/>
     
     <include ref="HCalBarrel_o1_v01_01.xml"/>
     <include ref="HCalEndcap_o1_v01_01.xml"/>

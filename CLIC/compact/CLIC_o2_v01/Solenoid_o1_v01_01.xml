@@ -38,6 +38,9 @@
                 <shape type="Tube" rmin="Solenoid_inner_radius-2*env_safety" rmax="Solenoid_outer_radius+2*env_safety" dz="Solenoid_half_length+2*env_safety" material="Air"/>
             </envelope>
             
+            <!-- only needed if we decide to pass these to reco structure -->
+            <!--<dimensions rmin="Solenoid_inner_radius" z="SolenoidBarrelOuterZ"/> -->
+            
             
             <layer id="1" inner_r="SolenoidBarrelInnerRadius" outer_z="SolenoidBarrelOuterZ" vis="SolenoidBarrelLayerVis">
                 <slice material="Steel235" thickness="SolenoidBarrelInnerCryostatThickness" />

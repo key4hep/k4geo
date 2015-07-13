@@ -3,6 +3,8 @@
 #include "XML/Layering.h"
 #include "TGeoTrd2.h"
 #include "XML/Utilities.h"
+#include "DDRec/DetectorData.h"
+
 
 using namespace std;
 using namespace DD4hep;
@@ -15,6 +17,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     int           det_id    = x_det.id();
     string        det_name  = x_det.nameStr();
     DetElement    sdet      (det_name,det_id);
+    //Below needed only for reco structure
+//     Layering layering(x_det);
+//     double totalThickness = layering.totalThickness();
+//     xml_dim_t dim = x_det.dimensions();
+//     double detZ = dim.z();
+//     double rmin = dim.rmin();
     
     // --- create an envelope volume and position it into the world ---------------------
     
@@ -23,6 +31,19 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
     
     //-----------------------------------------------------------------------------------
+    
+    //DISABLE FOR NOW, TRY USING ENVELOPE VOLUME IN RECO.
+    //TO ENABLE, UNCOMMENT LINE 93 AT THE END TOO
+//     //Create caloData object to extend driver with data required for reconstruction
+//     DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
+//     caloData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
+//     /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
+//     caloData->extent[0] = rmin ;
+//     caloData->extent[1] = rmin + totalThickness ;
+//     caloData->extent[2] = 0. ;
+//     caloData->extent[3] = detZ;
+    //No other information needed, e.g. no layers needed. This may change but for now pandora just needs dimensions
+    
     Material air = lcdd.air();
     PlacedVolume pv;
     int n = 0;
@@ -69,9 +90,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         sdet.setCombineHits(x_det.combineHits(),sens);
     }
     
-    //pv = lcdd.pickMotherVolume(sdet).placeVolume(envelope);
-    //pv.addPhysVolID("system",sdet.id()).addPhysVolID("barrel",0);
-    //sdet.setPlacement(pv);
+//     sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
+    
     return sdet;
     
 }
