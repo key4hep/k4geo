@@ -1,0 +1,23 @@
+<lccdd>
+  
+<readout name="ECalBarrelFaceReadout">
+  <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+</readout>
+    
+<detector name="EcalBarrelFace" type="PolyhedralBarrelSurfaces" id="DetID_ECAL_BARREL_FACE" readout="ECalBarrelFaceReadout" vis="BlueVis" >
+
+    <comment>Surfaces at the face of the Ecal Barrel </comment>
+
+    <envelope vis="ECALVis">
+      <shape type="PolyhedraRegular" numsides="ECal_symmetry"  rmin="ECal_inner_radius - 3*env_safety" 
+             rmax="Ecal_inner_radius - 2*env_safety" dz="2.*ECalBarrel_half_length + env_safety"  material = "Air" />
+      <rotation x="0*deg" y="0*deg" z="-180*deg/Ecal_symmetry"/>
+    </envelope>
+    
+    <dimensions numsides="ECalBarrel_symmetry" rmin="ECalBarrel_inner_radius - 3*env_safety" 
+                rmax="ECalBarrel_inner_radius - 2*env_safety" zhalf="ECalBarrel_half_length"
+                phi0="-180*deg/ECalBarrel_symmetry" material = "Air" />
+
+</detector>
+</lccdd>
+  

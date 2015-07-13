@@ -1,0 +1,37 @@
+<lccdd>
+  
+  <readout name="ECalEndcapFaceReadout">
+    <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+  </readout>
+  
+  
+  <detector name="ECalEndcapFace" type="PolyhedralEndcapSurfaces" id="DetID_ECAL_ENDCAP_FACE" readout="ECalEndcapFaceReadout" vis="BlueVis" >
+    
+    <comment>Surfaces at the face of the ECal Endcap </comment>
+    
+    
+    <envelope vis="ILD_ECALVis">    
+      
+      <shape type="BooleanShape" operation="Subtraction" material="Air"> 
+        <shape type="BooleanShape" operation="Subtraction" material="Air"> 
+          <shape type="PolyhedraRegular"  numsides="ECalEndcap_symmetry" rmin="0" rmax="ECalEndcap_outer_radius + env_safety" dz="2.0*ECalEndcap_min_z - env_safety"/>   
+          <shape type="PolyhedraRegular"  numsides="ECalEndcap_symmetry" rmin="0" rmax="ECalEndcap_outer_radius + 2.*env_safety" dz="2.0*ECalEndcap_min_z - 2.* env_safety"/>    
+        </shape>
+        <!-- <shape type="Box" dx="ECalEndcap_inner_radius - env_safety" dy="ECalEndcap_inner_radius - env_safety" dz="ECalEndcap_max_z + 2.0*env_safety"/> -->
+        <!-- <rotation x="0*deg" y="0*deg" z="-180*ECalEndcap_symmetry"/> -->
+        
+        <!-- cut out small cylindrical section arount the beam pipe  -->
+        <shape type="Tube" rmin="0." rmax="FTD_cone_radius" dz="ECalEndcap_max_z + 2.0*env_safety" />
+      </shape>
+      
+      <rotation x="0*deg" y="0*deg" z="-180*deg/ECalEndcap_symmetry"/>
+    </envelope>
+    
+    
+    <dimensions nsides="ECalEndcap_symmetry" rmin="FTD_cone_radius" 
+                rmax="ECalEndcap_outer_radius" z0="ECalEndcap_min_z-1.5*env_safety"  z1="ECalEndcap_min_z-0.5*env_safety" 
+                phi0="-180*deg/ECalEndcap_symmetry" material = "Air" />
+    
+    </detector>
+</lccdd>
+  
