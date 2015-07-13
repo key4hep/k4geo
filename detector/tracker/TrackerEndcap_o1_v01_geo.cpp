@@ -116,13 +116,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             thisLayer.sensorsPerPetal   = 0 ; 
             thisLayer.phi0      = phi  ;
             thisLayer.zOffsetSupport    = 0;
-            thisLayer.distanceSupport   = r ;
+            thisLayer.distanceSupport   = r - mod_shape->GetDZ() ;
             thisLayer.thicknessSupport    = mod_shape->GetDY() ; //FIXME
-            thisLayer.widthInnerSupport   =0;
+            thisLayer.widthInnerSupport   = 0;
             thisLayer.widthOuterSupport   = 0;
             thisLayer.lengthSupport   = 0 ;
             thisLayer.zOffsetSensitive    = 0 ;
-            thisLayer.distanceSensitive   = r ; 
+            thisLayer.distanceSensitive   = r - mod_shape->GetDZ() ; 
             thisLayer.thicknessSensitive  = 0;
             thisLayer.widthInnerSensitive =  0 ;
             thisLayer.widthOuterSensitive = 0 ;
