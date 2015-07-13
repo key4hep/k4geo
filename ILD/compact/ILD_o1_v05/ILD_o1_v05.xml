@@ -33,6 +33,10 @@
 	<constant name="ILDDetID_TPC"          value="  4"/>
 	<constant name="ILDDetID_SET"          value="  5"/>
 	<constant name="ILDDetID_ETD"          value="  6"/>
+
+	<constant name="ILDDetID_ECAL_ENDCAP_FACE"    value="18"/>
+	<constant name="ILDDetID_ECAL_BARREL_FACE"    value="19"/>
+
 	<constant name="ILDDetID_ECAL"         value=" 20"/>
 	<constant name="ILDDetID_ECAL_PLUG"    value=" 21"/>
 	<constant name="ILDDetID_HCAL"         value=" 22"/>
@@ -411,22 +415,26 @@
         <comment>Trackers</comment>
 
 	<include ref="Beampipe_o1_v01_01.xml"/>
-
+	
 	<include ref="ftd_simple_staggered_02.xml"/>
-
+	
 	<include ref="vxd07.xml"/>
  	
 	<include ref="sit_simple_planar_sensors_03.xml"/>
-
+	
 	<include ref="tpc10_01.xml"/>
-
+	
 	<include ref="set_simple_planar_sensors_01.xml"/>
-
+	
         <comment>Calorimeters</comment>
-
+	
 	<include ref="SEcal04_Barrel.xml"/>
 
 	<include ref="SEcal04_Endcaps.xml"/>
+
+	<include ref="EcalBarrelFace_v00.xml"/>
+
+	<include ref="EcalEndcapFace_v00.xml"/>
 
 	<include ref="SEcal04_ECRing.xml"/>
 
@@ -440,7 +448,7 @@
 
 	<include ref="Yoke05_Endcaps.xml"/>
 
-	<include ref="BeamCal08.xml"/>
+	 <include ref="BeamCal08.xml"/>
 
 	<include ref="LumiCal.xml"/>
 
@@ -448,7 +456,7 @@
 
 	<include ref="coil03.xml"/>
 
-	<!-- <\!-- <include ref="SServices00.xml"/> -\-> -->
+	<!-- <include ref="SServices00.xml"/> -->
 
       </detectors> 
 
@@ -474,8 +482,17 @@
             <id>system:5,side:2,layer:9,module:8,sensor:8</id>
         </readout>
 
+	<readout name="EcalBarrelFaceReadout">
+          <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+	</readout>
+
+	<readout name="EcalEndcapFaceReadout">
+          <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+	</readout>
+
 
 	<!-- use simple CartesianGridXY segmentation: -->
+
 	<readout name="EcalBarrelCollection">
 	  <segmentation type="CartesianGridXY" grid_size_x="Ecal_cells_size" grid_size_y="Ecal_cells_size"/>
 	  <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id>
