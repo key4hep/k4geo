@@ -17,6 +17,9 @@
 #include <map>
 #include <string>
 
+using namespace DD4hep;
+using namespace DD4hep::Geometry;
+
 using DD4hep::Geometry::Transform3D;
 using DD4hep::Geometry::Position;
 using DD4hep::Geometry::RotationY;
@@ -42,7 +45,7 @@ using DD4hep::Geometry::Assembly;
  *
  */
 static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
-					      DD4hep::XML::Handle_t xmlHandle,
+					      xml_h element,
 					      DD4hep::Geometry::SensitiveDetector /*sens*/) {
 
 
@@ -54,7 +57,7 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
   std::cout << "This is the Beampipe:"  << std::endl;
 
   //Access to the XML File
-  DD4hep::XML::DetElement xmlBeampipe = xmlHandle;
+  xml_det_t xmlBeampipe = element;
   const std::string name = xmlBeampipe.nameStr();
 
 
@@ -62,7 +65,7 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
 
   // --- create an envelope volume and position it into the world ---------------------
   
-  Volume envelope = DD4hep::XML::createPlacedEnvelope( lcdd,  xmlHandle , tube ) ;
+  Volume envelope = DD4hep::XML::createPlacedEnvelope( lcdd,  element , tube ) ;
   
   if( lcdd.buildType() == DD4hep::BUILD_ENVELOPE ) return tube ;
   

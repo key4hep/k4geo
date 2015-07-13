@@ -27,8 +27,11 @@ using DD4hep::Geometry::Tube;
 using DD4hep::Geometry::PlacedVolume;
 using DD4hep::Geometry::Assembly;
 
+using namespace DD4hep;
+using namespace DD4hep::Geometry;
+
 static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
-					      DD4hep::XML::Handle_t xmlHandle,
+					      xml_h xmlHandle,
 					      DD4hep::Geometry::SensitiveDetector /*sens*/) {
 
   //------------------------------------------
@@ -39,7 +42,7 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
   std::cout << "This is the Mask:"  << std::endl;
 
   //Access to the XML File
-  DD4hep::XML::DetElement xmlMask = xmlHandle;
+  xml_det_t xmlMask = xmlHandle;
   const std::string name = xmlMask.nameStr();
 
   //--------------------------------

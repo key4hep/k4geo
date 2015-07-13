@@ -5,9 +5,12 @@
 
 #include <string>
 
+using namespace DD4hep;
+using namespace DD4hep::Geometry;
+
 
 static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
-					       DD4hep::XML::Handle_t xmlHandle,
+					       xml_h element,
 					       DD4hep::Geometry::SensitiveDetector sens) {
 
   std::cout << "This is the BeamCal"  << std::endl;
@@ -16,15 +19,14 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   DD4hep::Geometry::Material air = lcdd.air();
 
   //Access to the XML File
-  DD4hep::XML::DetElement xmlBeamCal = xmlHandle;
-  const std::string detName = xmlBeamCal.nameStr();
+  xml_det_t     xmlBeamCal  = element;
+  std::string   detName     = xmlBeamCal.nameStr();
 
   DD4hep::Geometry::DetElement sdet ( detName, xmlBeamCal.id() );
-  DD4hep::Geometry::Volume motherVol = lcdd.pickMotherVolume(sdet);
 
   // --- create an envelope volume and position it into the world ---------------------
   
-  DD4hep::Geometry::Volume envelope = DD4hep::XML::createPlacedEnvelope( lcdd,  xmlHandle , sdet ) ;
+  DD4hep::Geometry::Volume envelope = DD4hep::XML::createPlacedEnvelope( lcdd,  element , sdet ) ;
   
   if( lcdd.buildType() == DD4hep::BUILD_ENVELOPE ) return sdet ;
   

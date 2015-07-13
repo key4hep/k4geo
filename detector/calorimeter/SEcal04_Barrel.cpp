@@ -392,12 +392,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 	    slice_phv.addPhysVolID("slice",s_num);
 
-	    // add a measurement surface to the layer for every sensitive slice:
-	    DDRec::VolPlane surf( s_vol , DDSurfaces::SurfaceType(DDSurfaces::SurfaceType::Sensitive) , slab_dim_y , slab_dim_y , u,v,n ) ; //,o ) ;
-
-	    // add them to the layers of all towers
-	    for (int i=0; i<Ecal_barrel_number_of_towers; i++){
-	      DDRec::volSurfaceList(  layers[i] )->push_back(  surf ) ;
+	    if ( l_num == 1  ){ 
+	      // add a helper surface to the 1st layer's sensitive slice:
+	      DDRec::VolPlane surf( s_vol , DDSurfaces::SurfaceType(DDSurfaces::SurfaceType::Helper) , slab_dim_y , slab_dim_y , u,v,n ) ; //,o ) ;
+	      
+	      // add them to the layers of all towers
+	      for (int i=0; i<Ecal_barrel_number_of_towers; i++){
+		DDRec::volSurfaceList(  layers[i] )->push_back(  surf ) ;
+	      }
 	    }
 	  }
 
@@ -517,7 +519,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 								      X*sin(phirot)+Y*cos(phirot),
 								      module_z_offset));
 	  PlacedVolume pv = envelope.placeVolume(mod_vol,tr);
-	  pv.addPhysVolID("system",det_id);
+	  //	  pv.addPhysVolID("system",det_id);
 	  pv.addPhysVolID("module",module_id);
 	  pv.addPhysVolID("stave",stave_id);
 	  DetElement sd = (module_id==0&&stave_id==0) ? stave_det : stave_det.clone(_toString(module_id,"module%d")+_toString(stave_id,"stave%d"));

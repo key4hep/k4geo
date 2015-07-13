@@ -3,9 +3,12 @@
 
 #include <string>
 
+using namespace DD4hep;
+using namespace DD4hep::Geometry;
+
 
 static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
-					       DD4hep::XML::Handle_t xmlHandle,
+					        xml_h element,
 					       DD4hep::Geometry::SensitiveDetector sens) {
 
   std::cout << __PRETTY_FUNCTION__  << std::endl;
@@ -16,7 +19,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   DD4hep::Geometry::Material air = lcdd.air();
 
   //Access to the XML File
-  DD4hep::XML::DetElement xmlLumiCal = xmlHandle;
+  xml_det_t     xmlLumiCal    = element;
   const std::string detName = xmlLumiCal.nameStr();
 
  //--------------------------------
