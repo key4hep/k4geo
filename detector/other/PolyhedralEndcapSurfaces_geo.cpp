@@ -60,8 +60,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector sens)  
   sens.setType("tracker");
 
   // base vectors for surfaces:
-  DDSurfaces::Vector3D u(1,0,0) ;
-  DDSurfaces::Vector3D v(0,1,0) ;
+  DDSurfaces::Vector3D u(0,1,0) ;
+  DDSurfaces::Vector3D v(1,0,0) ;
   DDSurfaces::Vector3D n(0,0,1) ;
   
   
@@ -75,7 +75,11 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector sens)  
     
   phVol.setSensitiveDetector(sens);
   
-  DDRec::VolPlane surf( phVol,DDSurfaces::SurfaceType(DDSurfaces::SurfaceType::Sensitive), thick/4., thick/4., u,v,n ) ;
+  //fixme: the drawing of endcap surfaces in a polyhedral shape does not work right now 
+  //       -> set surface to be invisible for now
+  DDRec::VolPlane surf( phVol,DDSurfaces::SurfaceType(DDSurfaces::SurfaceType::Sensitive, 
+						      DDSurfaces::SurfaceType::Invisible), 
+			thick/4., thick/4., u,v,n ) ;
   
   DDRec::volSurfaceList( fwdDE  )->push_back(  surf ) ;
 
@@ -93,11 +97,10 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector sens)  
   
   phVol.setSensitiveDetector(sens);
   
-  // DDRec::VolPlane surf( phVol,DDSurfaces::SurfaceType(DDSurfaces::SurfaceType::Sensitive), thick/4., thick/4., u,v,n ) ;
   
   DDRec::volSurfaceList( bwdDE  )->push_back(  surf ) ;
 
-  pv = envelope.placeVolume( phVol , Position( 0., 0., zpos ) ) ;
+  pv = envelope.placeVolume( phVol , Position( 0., 0., -zpos ) ) ;
 
   pv.addPhysVolID("layer", 0 ).addPhysVolID( "side" , -1 )  ;
     
