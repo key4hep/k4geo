@@ -6,7 +6,8 @@
     </readouts>
     
     <detectors>
-        <detector name="ECalBarrelFace" type="PolyhedralBarrelSurfaces" id="DetID_ECAL_BARREL_FACE" readout="ECalBarrelFaceReadout" vis="BlueVis" >
+        <!-- Notice name has to be like this, with small c in Ecal -->
+        <detector name="EcalBarrelFace" type="PolyhedralBarrelSurfaces" id="DetID_ECAL_BARREL_FACE" readout="ECalBarrelFaceReadout" vis="BlueVis" >
             <comment>Surfaces at the face of the Ecal Barrel </comment>
             <envelope vis="ECALVis">
                 <shape type="PolyhedraRegular" numsides="ECalBarrel_symmetry"  rmin="ECalBarrel_inner_radius-0.0001" rmax="ECalBarrel_inner_radius - 0.00005" dz="2.*ECalBarrel_half_length + 1.0*env_safety"  material = "Air" />

@@ -5,7 +5,7 @@
         </readout>
     </readouts>
     <detectors>
-        <detector name="ECalEndcapFace" type="PolyhedralEndcapSurfaces" id="DetID_ECAL_ENDCAP_FACE" readout="ECalEndcapFaceReadout" vis="BlueVis" >
+        <detector name="EcalEndcapFace" type="PolyhedralEndcapSurfaces" id="DetID_ECAL_ENDCAP_FACE" readout="ECalEndcapFaceReadout" vis="BlueVis" >
             <comment>Surfaces at the face of the ECal Endcap </comment>
             <envelope vis="ECALVis">    
                 <shape type="BooleanShape" operation="Subtraction" material="Air"> 
