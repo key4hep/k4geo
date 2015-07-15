@@ -21,8 +21,8 @@
     </envelope>
 
 
-    <dimensions nsides="EcalEndcap_symmetry" rmin="FTD_cone_radius" 
-		rmax="EcalEndcap_outer_radius" z0="EcalEndcap_min_z-1.5*env_safety"  z1="EcalEndcap_min_z-0.5*env_safety" 
+    <dimensions nsides="EcalEndcap_symmetry" rmin="FTD_cone_radius+env_safety" 
+		rmax="EcalEndcap_outer_radius" z0="EcalEndcap_min_z-0.9*env_safety"  z1="EcalEndcap_min_z-0.6*env_safety" 
 		phi0="-180*deg/EcalEndcap_symmetry" material = "Air" />
 
 </detector>
