@@ -5,12 +5,8 @@
 
 #include <string>
 
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
-
-
 static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
-					       xml_h element,
+					       DD4hep::XML::Handle_t element,
 					       DD4hep::Geometry::SensitiveDetector sens) {
 
   std::cout << "This is the BeamCal"  << std::endl;
@@ -19,7 +15,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   DD4hep::Geometry::Material air = lcdd.air();
 
   //Access to the XML File
-  xml_det_t     xmlBeamCal  = element;
+  DD4hep::XML::DetElement xmlBeamCal  = element;
   std::string   detName     = xmlBeamCal.nameStr();
 
   DD4hep::Geometry::DetElement sdet ( detName, xmlBeamCal.id() );
