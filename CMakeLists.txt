@@ -42,6 +42,9 @@ find_package(ROOT REQUIRED)
 #find_package( ROOT REQUIRED COMPONENTS Geom Reflex)
 set( ROOT_COMPONENT_LIBRARIES Geom Reflex)
 
+find_package( Boost REQUIRED ) 
+include_directories( SYSTEM ${Boost_INCLUDE_DIRS} )
+
 #find_package( LCIO REQUIRED)
 #find_package( GEAR REQUIRED)
 

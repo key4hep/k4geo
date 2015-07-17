@@ -8,20 +8,24 @@
      - Example XML for the fields section of the compact XML
 
             <field name="DetectorMap" type="FieldBrBz"
-                   filename="ILDMap.root"
+                   filename="${lcgeo_DIR}/fieldmaps/ILDMap_KB_20150204_BRhoZ.root"
                tree="fieldmap:rho:z:Brho:Bz"
                rScale = "1.0"
                zScale = "1.0"
                bScale = "1.0"
                rhoMin = "5*mm"
                zMin = "5*mm"
-               rhoMax = "7000*mm"
-               zMax = "7000*mm"
-               nRho = "699"
-               nZ = "699"
+               rhoMax = "7005*mm"
+               zMax = "7005*mm"
+               nRho = "701"
+               nZ = "701"
                >
             </field>
 
+     - added ./fieldmaps/ILDMap_KB_20150204_BRhoZ.root 
+       latest field simulation for ILD by K.Buesser
+
+     - requires BOOST
 
    N. Nikiforou
      - added  EcalBarrelFace_v00.xml/EcalEndcapFace_v00.xml to CLIC_o2_v01
