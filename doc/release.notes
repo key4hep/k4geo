@@ -4,7 +4,24 @@
  --------    
 
    A.Sailer
-     - starte development of FieldMapBrBz.cpp 
+     - Implemented FieldMapBrBz.cpp, based on the 2D Fieldmap of Mokka FieldX03
+     - Example XML for the fields section of the compact XML
+
+            <field name="DetectorMap" type="FieldBrBz"
+                   filename="ILDMap.root"
+               tree="fieldmap:rho:z:Brho:Bz"
+               rScale = "1.0"
+               zScale = "1.0"
+               bScale = "1.0"
+               rhoMin = "5*mm"
+               zMin = "5*mm"
+               rhoMax = "7000*mm"
+               zMax = "7000*mm"
+               nRho = "699"
+               nZ = "699"
+               >
+            </field>
+
 
    N. Nikiforou
      - added  EcalBarrelFace_v00.xml/EcalEndcapFace_v00.xml to CLIC_o2_v01
