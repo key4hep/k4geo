@@ -291,6 +291,7 @@ class DD4hepSimulation(object):
     for calo in cal:
       print 'simple.setupCalorimeter(  ' , calo , ')'
       seq,act = simple.setupCalorimeter( calo )
+      act.HitCreationMode = 2
 
 
   #=================================================================================

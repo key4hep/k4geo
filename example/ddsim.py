@@ -220,6 +220,7 @@ def run():
   for c in cal:
     print 'simple.setupCalorimeter(  ' , c , ')'
     seq,act = simple.setupCalorimeter( c )
+    act.HitCreationMode = 2
 
 
 #=================================================================================
