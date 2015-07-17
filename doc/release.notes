@@ -1,3 +1,21 @@
+
+ --------
+| v00-05 | 
+ --------    
+
+   A.Sailer
+     - starte development of FieldMapBrBz.cpp 
+
+   N. Nikiforou
+     - added  EcalBarrelFace_v00.xml/EcalEndcapFace_v00.xml to CLIC_o2_v01
+     - Enabled detailed shower mode for calorimeters by default in ddsim.py/DD4hepSimulation.py
+
+   F.Gaede
+     - added PolyhedralBarrelSurfaces_geo.cpp/PolyhedralBarrelSurfaces_geo.cpp
+     - to be used for track states at the calorimeters
+     - added as EcalBarrelFace_v00.xml/EcalEndcapFace_v00.xml to ILD_o1_v05
+
+
  -----------
 | v00-04-01 |  - patch release   
  -----------    

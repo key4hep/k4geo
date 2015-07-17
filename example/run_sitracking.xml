@@ -10,6 +10,7 @@
  <execute>
    <processor name="MyAIDAProcessor"/>
    <processor name="InitDD4hep"/>
+   <processor name="MyStatusmonitor" />
   
    <!-- ========== track digitization and tracking  === -->
    <processor name="VXDPlanarDigiProcessor"/>
@@ -25,7 +26,7 @@
  <global>
   <parameter name="LCIOInputFiles"> simjob.slcio </parameter>
   <!-- limit the number of processed records (run+evt): -->  
-  <parameter name="MaxRecordNumber" value="0" />  
+  <parameter name="MaxRecordNumber" value="5" />  
   <parameter name="SkipNEvents" value="0" />  
   <parameter name="SupressCheck" value="false" />  
   <parameter name="GearXMLFile" value="gear_ILD_o1_v05_dd4hep.xml"/>
@@ -36,6 +37,14 @@
   <!--parameter name="LCIOReadCollectionNames">MCParticle PandoraPFOs</parameter-->
  </global>
 
+
+ <processor name="MyStatusmonitor" type="Statusmonitor">
+ <!--Statusmonitor prints out information on running Marlin Job: Prints number of runs run and current number of the event. Counting is sequential and not the run or event ID.-->
+  <!--Print the event number every N events-->
+  <parameter name="HowOften" type="int">1 </parameter>
+  <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+  <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+</processor>
 
  <processor name="InitDD4hep" type="InitializeDD4hep">
    <parameter name="DD4hepXMLFile" type="string">Simple_ILD.xml </parameter>
