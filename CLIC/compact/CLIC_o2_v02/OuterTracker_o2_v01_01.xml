@@ -1,0 +1,278 @@
+<lccdd>
+    
+    <define>
+        <constant name="OuterTracker_Barrel_radius_0" value="840*mm"/>
+        <constant name="OuterTracker_Barrel_half_length_0" value="1030*mm"/>
+        
+        <constant name="OuterTracker_Barrel_radius_1" value="1145*mm"/>
+        <constant name="OuterTracker_Barrel_half_length_1" value="1330*mm"/>
+        
+        <constant name="OuterTracker_Barrel_radius_2" value="1450*mm"/>
+        <constant name="OuterTracker_Barrel_half_length_2" value="1630*mm"/>
+        
+        
+        <constant name="OuterTracker_Endcap_outer_radius_1" value="800*mm"/>
+        <constant name="OuterTracker_Endcap_z_1" value="1050*mm"/>
+        
+        <constant name="OuterTracker_Endcap_outer_radius_2" value="1125*mm"/>
+        <constant name="OuterTracker_Endcap_z_2" value="1350*mm"/>
+        
+        <constant name="OuterTracker_Endcap_outer_radius_3" value="1440*mm"/>
+        <constant name="OuterTracker_Endcap_z_3" value="1660*mm"/>
+        
+        <constant name="OuterTracker_Endcap_outer_radius_4" value="1440*mm"/>
+        <constant name="OuterTracker_Endcap_z_4" value="1930*mm"/>
+        
+        <constant name="OuterTracker_Endcap_outer_radius_5" value="1440*mm"/>
+        <constant name="OuterTracker_Endcap_z_5" value="2230*mm"/>
+        
+        <constant name="OuterTracker_r_offset" value="83.197*mm"/>
+        <constant name="OuterTracker_z_offset" value="7.269*mm"/>
+    </define>
+    
+    <comment>Tracking detectors</comment>
+    <detectors>
+        <detector name="OuterTrackers" type="DD4hep_SubdetectorAssembly" vis="OTVis">
+            <shape name="OuterTrackersEnvelope" type="Tube" rmin="OuterTracker_inner_radius" rmax="OuterTracker_outer_radius" dz="OuterTracker_half_length" material="Air">
+            </shape>
+            <comment>Outer Tracker Assembly</comment>
+            <composite name="OuterTrackerBarrel"/>
+            <composite name="OuterTrackerEndcap"/>
+        </detector>
+    </detectors>
+    
+    
+    <!--  Definition of the used visualization attributes    -->
+    <display>
+        <vis name="OuterTrackerLayerVis"   alpha="1.0" r="1.0" g="1.0" b="0.6" showDaughters="true" visible="true"/>
+        <vis name="OuterTrackerModuleVis"  alpha="0.1" r="0.0" g="1.0" b="0.6" showDaughters="false" visible="true"/>
+        <vis name="OuterTrackerForwardVis" alpha="1.0" r="0.8" g="0.1" b="0.1" showDaughters="false" visible="true"/>
+    </display>
+    
+    <!--  Definition of the readout segmentation/definition  -->
+    <readouts>
+        <readout name="OuterTrackerBarrelCollection">
+            <id>system:5,side:-2,layer:9,module:8,sensor:8,barrel:3</id>
+        </readout>
+        <readout name="OuterTrackerEndcapCollection">
+            <id>system:8,barrel:3,layer:4,module:14,sensor:2,side:32:-2,strip:20</id>
+        </readout>
+    </readouts>
+    
+    
+    <detectors>
+        <detector id="DetID_OT_Barrel" name="OuterTrackerBarrel" type="TrackerBarrel_o1_v01" readout="OuterTrackerBarrelCollection" region="SiTrackerBarrelRegion" limits="SiTrackerBarrelRegionLimitSet">
+            <envelope vis="OTVis">
+                <shape type="Assembly"/>
+            </envelope>
+            <comment>Silicon Outer Tracker Barrel</comment>
+            
+            <module name="SiTrackerModule_Layer2" vis="OuterTrackerModuleVis">
+                <module_envelope width="97.79*mm" length="97.79*mm" thickness="0.3*cm"/>
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.02*cm" material="PEEK" sensitive="false">
+                    <position z="-0.14*cm" />
+                </module_component>
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.016*cm" material="CarbonFiber_50D" sensitive="false">
+                    <position z="-0.122*cm" />
+                </module_component>
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.18*cm" material="Rohacell31_50D" sensitive="false">
+                    <position z="-0.024*cm" />
+                </module_component>
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.0175*cm" material="Epoxy" sensitive="false">
+                    <position z="0.07475*cm" />
+                </module_component>
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.016*cm" material="CarbonFiber_50D" sensitive="false">
+                    <position z="0.0915*cm" />
+                </module_component>
+                <module_component width="92.031*mm" length="92.031*mm" thickness="0.03*cm" material="Silicon" sensitive="true">
+                    <position z="0.1145*cm"/>
+                </module_component>
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.00048*cm" material="Silicon" sensitive="false">
+                    <position z="0.12974*cm"/>
+                </module_component>
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.0064*cm" material="Kapton" sensitive="false">
+                    <position z="0.1375*cm"/>
+                </module_component>
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.00065*cm" material="Copper" sensitive="false">
+                    <position z="0.146*cm"/>
+                </module_component>
+            </module>
+            <module name="SiTrackerModule_Layer3" vis="OuterTrackerModuleVis">
+                <module_envelope width="97.79*mm" length="97.79*mm" thickness="0.3*cm"/>
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.02*cm" material="PEEK" sensitive="false">
+                    <position z="-0.14*cm" />
+                </module_component>
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.016*cm" material="CarbonFiber_50D" sensitive="false">
+                    <position z="-0.122*cm" />
+                </module_component>
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.18*cm" material="Rohacell31_50D" sensitive="false">
+                    <position z="-0.024*cm" />
+                </module_component>
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.0175*cm" material="Epoxy" sensitive="false">
+                    <position z="0.07475*cm" />
+                </module_component>
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.016*cm" material="CarbonFiber_50D" sensitive="false">
+                    <position z="0.0915*cm" />
+                </module_component>
+                <module_component width="92.031*mm" length="92.031*mm" thickness="0.03*cm" material="Silicon" sensitive="true">
+                    <position z="0.1145*cm"/>
+                </module_component>
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.00048*cm" material="Silicon" sensitive="false">
+                    <position z="0.12974*cm"/>
+                </module_component>
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.0078*cm" material="Kapton" sensitive="false">
+                    <position z="0.1375*cm"/>
+                </module_component>
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.00079*cm" material="Copper" sensitive="false">
+                    <position z="0.146*cm"/>
+                </module_component>
+            </module>
+            <module name="SiTrackerModule_Layer4" vis="OuterTrackerModuleVis">
+                <module_envelope width="97.79*mm" length="97.79*mm" thickness="0.3*cm"/>
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.02*cm" material="PEEK" sensitive="false">
+                    <position z="-0.14*cm" />
+                </module_component>
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.016*cm" material="CarbonFiber_50D" sensitive="false">
+                    <position z="-0.122*cm" />
+                </module_component>
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.18*cm" material="Rohacell31_50D" sensitive="false">
+                    <position z="-0.024*cm" />
+                </module_component>
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.0175*cm" material="Epoxy" sensitive="false">
+                    <position z="0.07475*cm" />
+                </module_component>
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.016*cm" material="CarbonFiber_50D" sensitive="false">
+                    <position z="0.0915*cm" />
+                </module_component>
+                <module_component width="92.031*mm" length="92.031*mm" thickness="0.03*cm" material="Silicon" sensitive="true">
+                    <position z="0.1145*cm"/>
+                </module_component>
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.00048*cm" material="Silicon" sensitive="false">
+                    <position z="0.12974*cm"/>
+                </module_component>
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.0091*cm" material="Kapton" sensitive="false">
+                    <position z="0.1375*cm"/>
+                </module_component>
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.00093*cm" material="Copper" sensitive="false">
+                    <position z="0.146*cm"/>
+                </module_component>
+            </module>
+            <layer module="SiTrackerModule_Layer2" id="0" vis="OuterTrackerLayerVis">
+                <barrel_envelope inner_r="OuterTracker_Barrel_radius_0-6.28*mm" outer_r="OuterTracker_Barrel_radius_0+23.645*mm" z_length="OuterTracker_Barrel_half_length_0*2.01"/>
+                <rphi_layout phi_tilt="0.11493*rad" nphi="58" phi0="0.058*rad" rc="OuterTracker_Barrel_radius_0" dr="0.0"/>
+                <z_layout dr="4.0*mm" z0="OuterTracker_Barrel_half_length_0-97.79*mm/2.0" nz="23"/>
+            </layer>
+            <layer module="SiTrackerModule_Layer3" id="1" vis="OuterTrackerLayerVis">
+                <barrel_envelope inner_r="OuterTracker_Barrel_radius_1-6.28*mm" outer_r="OuterTracker_Barrel_radius_1+27.645*mm" z_length="OuterTracker_Barrel_half_length_1*2.01"/>
+                <rphi_layout phi_tilt="0.11502*rad" nphi="80" phi0="0.0436*rad" rc="OuterTracker_Barrel_radius_1" dr="0.0"/>
+                <z_layout dr="4.0*mm" z0="OuterTracker_Barrel_half_length_1-97.79*mm/2.0" nz="29"/>
+            </layer>
+            <layer module="SiTrackerModule_Layer4" id="2" vis="OuterTrackerLayerVis">
+                <barrel_envelope inner_r="OuterTracker_Barrel_radius_2-6.28*mm" outer_r="OuterTracker_Barrel_radius_2+27.645*mm" z_length="OuterTracker_Barrel_half_length_2*2.01"/>
+                <rphi_layout phi_tilt="0.11467*rad" nphi="102" phi0="0.01745*rad" rc="OuterTracker_Barrel_radius_2" dr="0.0"/>
+                <z_layout dr="4.0*mm" z0="OuterTracker_Barrel_half_length_2-97.79*mm/2.0" nz="35"/>
+            </layer>
+        </detector>
+    </detectors>
+    
+    
+    <detectors>
+        <detector id="DetID_OT_Endcap" name="OuterTrackerEndcap" type="TrackerEndcap_o1_v01" readout="OuterTrackerEndcapCollection" reflect="true">
+            <envelope vis="OTVis">
+                <shape type="Assembly"/>
+            </envelope>
+            <comment>Silicon Outer Tracker Endcaps</comment>
+            
+            <module name="Module1" vis="OuterTrackerModuleVis">
+                <trd x1="36.112*mm" x2="46.635*mm" z="100.114/2*mm" />
+                <module_component thickness="0.00052*cm"   material="Copper" />
+                <module_component thickness="0.0051*cm"   material="Kapton" />
+                <module_component thickness="0.00048*cm" material="Silicon" />
+                <module_component thickness="0.03*cm"   material="Silicon" sensitive="true" />
+                <module_component thickness="0.016*cm" material="CarbonFiber_50D" />
+                <module_component thickness="0.18*cm" material="Rohacell31_50D" />
+                <module_component thickness="0.016*cm" material="CarbonFiber_50D" />
+            </module>
+            <module name="Module2" vis="OuterTrackerModuleVis">
+                <trd x1="45.245*mm" x2="54.680*mm" z="89.773/2*mm" />
+                <module_component thickness="0.00079*cm"   material="Copper" />
+                <module_component thickness="0.0078*cm"   material="Kapton" />
+                <module_component thickness="0.00048*cm" material="Silicon" />
+                <module_component thickness="0.03*cm"   material="Silicon" sensitive="true" />
+                <module_component thickness="0.016*cm" material="CarbonFiber_50D" />
+                <module_component thickness="0.18*cm" material="Rohacell31_50D" />
+                <module_component thickness="0.016*cm" material="CarbonFiber_50D" />
+            </module>
+            
+            <layer id="0">
+                <ring r="OuterTracker_Endcap_outer_radius_1" zstart="OuterTracker_Endcap_z_1" nmodules="54" dz="1.75*mm" module="Module2" phi0="pi/54"/>
+                <ring r="OuterTracker_Endcap_outer_radius_1-OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_1+OuterTracker_z_offset" nmodules="48" dz="1.75*mm" module="Module2"/>
+                <ring r="OuterTracker_Endcap_outer_radius_1-2*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_1+2*OuterTracker_z_offset" nmodules="44" dz="1.75*mm" module="Module2"/>
+            </layer>
+            <layer id="1">
+                <ring r="OuterTracker_Endcap_outer_radius_2" zstart="OuterTracker_Endcap_z_2" nmodules="68" dz="1.75*mm" module="Module2" />
+                <ring r="OuterTracker_Endcap_outer_radius_2-OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_2+OuterTracker_z_offset" nmodules="64" dz="1.75*mm" module="Module2"/>
+                <ring r="OuterTracker_Endcap_outer_radius_2-2*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_2+2*OuterTracker_z_offset" nmodules="58" dz="1.75*mm" module="Module2" phi0="pi/58"/>
+                <ring r="OuterTracker_Endcap_outer_radius_2-3*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_2+3*OuterTracker_z_offset" nmodules="54" dz="1.75*mm" module="Module2" phi0="pi/54"/>
+                <ring r="OuterTracker_Endcap_outer_radius_2-4*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_2+4*OuterTracker_z_offset" nmodules="48" dz="1.75*mm" module="Module2"/>
+                <ring r="OuterTracker_Endcap_outer_radius_2-5*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_2+5*OuterTracker_z_offset" nmodules="40" dz="1.75*mm" module="Module2"/>
+                <ring r="OuterTracker_Endcap_outer_radius_2-6*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_2+6*OuterTracker_z_offset" nmodules="40" dz="1.75*mm" module="Module2"/>
+            </layer>
+            <layer id="2">
+                <ring r="OuterTracker_Endcap_outer_radius_3" zstart="OuterTracker_Endcap_z_3" nmodules="84" dz="1.75*mm" module="Module2" />
+                <ring r="OuterTracker_Endcap_outer_radius_3-OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+OuterTracker_z_offset" nmodules="78" dz="1.75*mm" module="Module2" phi0="pi/78"/>
+                <ring r="OuterTracker_Endcap_outer_radius_3-2*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+2*OuterTracker_z_offset" nmodules="72" dz="1.75*mm" module="Module2" />
+                <ring r="OuterTracker_Endcap_outer_radius_3-3*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+3*OuterTracker_z_offset" nmodules="68" dz="1.75*mm" module="Module2" />
+                <ring r="OuterTracker_Endcap_outer_radius_3-4*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+4*OuterTracker_z_offset" nmodules="64" dz="1.75*mm" module="Module2"/>
+                <ring r="OuterTracker_Endcap_outer_radius_3-5*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+5*OuterTracker_z_offset" nmodules="58" dz="1.75*mm" module="Module2" phi0="pi/58"/>
+                <ring r="OuterTracker_Endcap_outer_radius_3-6*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+6*OuterTracker_z_offset" nmodules="54" dz="1.75*mm" module="Module2" phi0="pi/54"/>
+                <ring r="OuterTracker_Endcap_outer_radius_3-7*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+7*OuterTracker_z_offset" nmodules="48" dz="1.75*mm" module="Module2"/>
+                <ring r="OuterTracker_Endcap_outer_radius_3-8*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+8*OuterTracker_z_offset" nmodules="48" dz="1.75*mm" module="Module2"/>
+                <ring r="OuterTracker_Endcap_outer_radius_3-9*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+9*OuterTracker_z_offset" nmodules="44" dz="1.75*mm" module="Module2"/>
+                <ring r="OuterTracker_Endcap_outer_radius_3-9.8*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+10*OuterTracker_z_offset" nmodules="44" dz="1.75*mm" module="Module2"/>
+            </layer>
+            
+            <layer id="3">
+                <ring r="OuterTracker_Endcap_outer_radius_4" zstart="OuterTracker_Endcap_z_4" nmodules="84" dz="1.75*mm" module="Module2" />
+                <ring r="OuterTracker_Endcap_outer_radius_4-OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+OuterTracker_z_offset" nmodules="78" dz="1.75*mm" module="Module2" phi0="pi/78"/>
+                <ring r="OuterTracker_Endcap_outer_radius_4-2*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+2*OuterTracker_z_offset" nmodules="72" dz="1.75*mm" module="Module2" />
+                <ring r="OuterTracker_Endcap_outer_radius_4-3*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+3*OuterTracker_z_offset" nmodules="68" dz="1.75*mm" module="Module2" />
+                <ring r="OuterTracker_Endcap_outer_radius_4-4*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+4*OuterTracker_z_offset" nmodules="64" dz="1.75*mm" module="Module2"/>
+                <ring r="OuterTracker_Endcap_outer_radius_4-5*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+5*OuterTracker_z_offset" nmodules="58" dz="1.75*mm" module="Module2" phi0="pi/58"/>
+                <ring r="OuterTracker_Endcap_outer_radius_4-6*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+6*OuterTracker_z_offset" nmodules="54" dz="1.75*mm" module="Module2" phi0="pi/54"/>
+                <ring r="OuterTracker_Endcap_outer_radius_4-7*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+7*OuterTracker_z_offset" nmodules="48" dz="1.75*mm" module="Module2"/>
+                <ring r="OuterTracker_Endcap_outer_radius_4-8*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+8*OuterTracker_z_offset" nmodules="48" dz="1.75*mm" module="Module2"/>
+                <ring r="OuterTracker_Endcap_outer_radius_4-9*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+9*OuterTracker_z_offset" nmodules="44" dz="1.75*mm" module="Module2"/>
+                <ring r="OuterTracker_Endcap_outer_radius_4-9.8*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+10*OuterTracker_z_offset" nmodules="44" dz="1.75*mm" module="Module2"/>
+            </layer>
+             
+             <layer id="4">
+                 <ring r="OuterTracker_Endcap_outer_radius_5" zstart="OuterTracker_Endcap_z_5" nmodules="84" dz="1.75*mm" module="Module2" />
+                 <ring r="OuterTracker_Endcap_outer_radius_5-OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+OuterTracker_z_offset" nmodules="78" dz="1.75*mm" module="Module2" phi0="pi/78"/>
+                 <ring r="OuterTracker_Endcap_outer_radius_5-2*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+2*OuterTracker_z_offset" nmodules="72" dz="1.75*mm" module="Module2" />
+                 <ring r="OuterTracker_Endcap_outer_radius_5-3*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+3*OuterTracker_z_offset" nmodules="68" dz="1.75*mm" module="Module2" />
+                 <ring r="OuterTracker_Endcap_outer_radius_5-4*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+4*OuterTracker_z_offset" nmodules="64" dz="1.75*mm" module="Module2"/>
+                 <ring r="OuterTracker_Endcap_outer_radius_5-5*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+5*OuterTracker_z_offset" nmodules="58" dz="1.75*mm" module="Module2" phi0="pi/58"/>
+                 <ring r="OuterTracker_Endcap_outer_radius_5-6*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+6*OuterTracker_z_offset" nmodules="54" dz="1.75*mm" module="Module2" phi0="pi/54"/>
+                 <ring r="OuterTracker_Endcap_outer_radius_5-7*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+7*OuterTracker_z_offset" nmodules="48" dz="1.75*mm" module="Module2"/>
+                 <ring r="OuterTracker_Endcap_outer_radius_5-8*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+8*OuterTracker_z_offset" nmodules="48" dz="1.75*mm" module="Module2"/>
+                 <ring r="OuterTracker_Endcap_outer_radius_5-9*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+9*OuterTracker_z_offset" nmodules="44" dz="1.75*mm" module="Module2"/>
+                 <ring r="OuterTracker_Endcap_outer_radius_5-9.8*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+10*OuterTracker_z_offset" nmodules="44" dz="1.75*mm" module="Module2"/>
+             </layer>
+            
+        </detector>
+    </detectors>
+    
+    <plugins>
+        <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
+            <argument value="OuterTrackerBarrel"/>
+            <argument value="dimension=1"/>
+        </plugin>
+        <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
+            <argument value="OuterTrackerEndcap"/>
+            <argument value="dimension=2"/>
+        </plugin>
+    </plugins>
+    
+    
+</lccdd>
