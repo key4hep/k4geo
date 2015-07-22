@@ -414,7 +414,7 @@
     <detectors>
         <comment>Trackers</comment>
 
-	<include ref="Beampipe_o1_v01_01.xml"/>
+	<!--include ref="Beampipe_o1_v01_01.xml"/>
 	
 	<include ref="ftd_simple_staggered_02.xml"/>
 	
@@ -440,11 +440,11 @@
 
 	<include ref="SHcalSc04_Barrel_v01.xml"/>
 
-	<include ref="SHcalSc04_Endcaps.xml"/>
+	<include ref="SHcalSc04_Endcaps.xml"/-->
 
 	<include ref="SHcalSc04_EndcapRing.xml"/>
 
-	<include ref="Yoke05_Barrel.xml"/>
+	<!--include ref="Yoke05_Barrel.xml"/>
 
 	<include ref="Yoke05_Endcaps.xml"/>
 
@@ -454,7 +454,7 @@
 
 	<include ref="LHCal.xml"/>
 
-	<include ref="coil03.xml"/>
+	<include ref="coil03.xml"/-->
 
 	<!-- <include ref="SServices00.xml"/> -->
 

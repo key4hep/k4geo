@@ -223,7 +223,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     // Phi start for staves/towers
     double phi = M_PI/nsides;
     double mod_x_off = dx/2 + tolerance;               // Stave/tower X offset
-    double mod_y_off = (inner_r + outer_r)/2;          // Stave/tower Y offset
+    double mod_y_off = inner_r + mod_z/2.0;            // Stave/tower Y offset, http://cern.ch/go/r9mZ
     
     // Create the towers
     for (int t = 0; t < n_towers; t++)  {
