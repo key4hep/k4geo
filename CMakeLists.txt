@@ -37,7 +37,7 @@ option(BUILD_TESTING "Enable and build tests" ON)
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-find_package(DD4hep REQUIRED COMPONENTS DDRec)
+find_package(DD4hep REQUIRED COMPONENTS DDRec DDG4)
 find_package(ROOT REQUIRED)
 #find_package( ROOT REQUIRED COMPONENTS Geom Reflex)
 set( ROOT_COMPONENT_LIBRARIES Geom Reflex)
@@ -45,19 +45,23 @@ set( ROOT_COMPONENT_LIBRARIES Geom Reflex)
 find_package( Boost REQUIRED ) 
 include_directories( SYSTEM ${Boost_INCLUDE_DIRS} )
 
+find_package( Geant4 REQUIRED ) 
+
 #find_package( LCIO REQUIRED)
 #find_package( GEAR REQUIRED)
 
 include_directories( ${CMAKE_SOURCE_DIR}/detector/include )
 include_directories( SYSTEM
   ${DD4hep_INCLUDE_DIRS}
+  ${DD4hep_COMPONENTS_INCLUDE_DIRS}
+  ${Geant4_INCLUDE_DIRS}
   ${ROOT_INCLUDE_DIR}
  )
-#  ${Geant4_INCLUDE_DIRS}
 #  ${LCIO_INCLUDE_DIRS}
 #  ${GEAR_INCLUDE_DIRS}
 
 file(GLOB sources 
+  ./sensitive/TPCSDAction.cpp 
   ./detector/tracker/*.cpp 
   ./detector/calorimeter/*.cpp 
   ./detector/fcal/*.cpp 
@@ -74,7 +78,7 @@ endif()
 
 #Create target, library, rootmap, install
 add_dd4hep_plugin(${PackageName} SHARED ${sources})
-target_link_libraries(${PackageName} ${DD4hep_LIBRARIES} ${DD4hep_COMPONENT_LIBRARIES} ${ROOT_LIBRARIES})
+target_link_libraries(${PackageName} ${DD4hep_LIBRARIES} ${DD4hep_COMPONENT_LIBRARIES} ${ROOT_LIBRARIES} ${Geant4_LIBRARIES} )
 
 #Create this_package.sh file, and install
 dd4hep_instantiate_package(${PackageName})

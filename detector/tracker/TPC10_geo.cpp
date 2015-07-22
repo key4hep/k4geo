@@ -425,7 +425,7 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
 
   for (int layer = 0; layer < numberPadRows; layer++) {
     
-#if 0
+#if 1
     // create twice the number of rings as there are pads, producing an lower and upper part of the pad with the boundry between them the pad-ring centre
     
     const double inner_lowerlayer_radius = rMin_Sensitive + (layer * (padHeight));
@@ -448,18 +448,24 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
     DetElement   layerDEfwd( sensGasDEfwd ,   _toString( layer, "tpc_row_fwd_%03d") , x_det.id() );
     DetElement   layerDEbwd( sensGasDEbwd ,   _toString( layer, "tpc_row_bwd_%03d") , x_det.id() );
  
-    Vector3D o(  inner_upperlayer_radius +1e-9  , 0. , 0. ) ;
-
+    Vector3D o(  inner_upperlayer_radius  , 0. , 0. ) ;
     VolCylinder surf( upperlayerLog , SurfaceType(SurfaceType::Sensitive, SurfaceType::Invisible ) ,  (padHeight/2.0) ,  (padHeight/2.0) ,o ) ;
+
+    // Vector3D o(  outer_lowerlayer_radius - 1e-10  , 0. , 0. ) ;
+    // VolCylinder surf( lowerlayerLog , SurfaceType(SurfaceType::Sensitive, SurfaceType::Invisible ) ,  (padHeight/2.0) ,  (padHeight/2.0) ,o ) ;
+
+
     volSurfaceList( layerDEfwd )->push_back( surf ) ;
     volSurfaceList( layerDEbwd )->push_back( surf ) ;
 
 
     pv = sensitiveGasLog.placeVolume( lowerlayerLog ) ;
     pv.addPhysVolID("layer", layer ).addPhysVolID( "module", 0 ).addPhysVolID("sensor", 1 ) ;
+    // layerDEfwd.setPlacement( pv ) ;
+    // layerDEbwd.setPlacement( pv ) ;
 
     pv = sensitiveGasLog.placeVolume( upperlayerLog ) ;
-    pv.addPhysVolID("layer", layer ).addPhysVolID( "module", 0 ).addPhysVolID("sensor", 2 ) ;
+    pv.addPhysVolID("layer", layer ).addPhysVolID( "module", 0 ).addPhysVolID("sensor", 0 ) ;
     layerDEfwd.setPlacement( pv ) ;
     layerDEbwd.setPlacement( pv ) ;
 
