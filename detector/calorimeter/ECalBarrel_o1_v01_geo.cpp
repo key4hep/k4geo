@@ -221,7 +221,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     }
     
     // Phi start for staves/towers
-    double phi = M_PI/nsides;
+    double phi = M_PI/2.0 - M_PI/nsides;               // following the envelope rotation, ECalBarrel_o1_v01_01.xml
     double mod_x_off = dx/2 + tolerance;               // Stave/tower X offset
     double mod_y_off = inner_r + mod_z/2.0;            // Stave/tower Y offset, http://cern.ch/go/r9mZ
     
