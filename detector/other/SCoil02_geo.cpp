@@ -10,6 +10,7 @@
 #include "XMLHandlerDB.h"
 #include "XML/Utilities.h"
 #include <cmath>
+#include "DDRec/DetectorData.h"
 
 //#include "GearWrapper.h"
 
@@ -590,7 +591,17 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
   //--------------------------------------
   
   //coil.setVisAttributes( lcdd, x_det.visStr(), envelope );
-  
+  //added coded by Thorben Quast
+  //the coil is modelled as a calorimeter layer to be consistent with the 
+  //implementation of the solenoid (layers) of CLIC
+  DDRec::LayeredCalorimeterData* coilData = new DDRec::LayeredCalorimeterData;
+  DDRec::LayeredCalorimeterData::Layer coilLayer;
+  coilLayer.distance = inner_radius;
+  coilLayer.thickness = outer_radius - inner_radius;
+  coilLayer.cellSize0 = 0;        //equivalent to 
+  coilLayer.cellSize1 = half_z;    //half extension along z-axis
+  coilData->layers.push_back(coilLayer);
+  coil.addExtension< DDRec::LayeredCalorimeterData >( coilData ) ;
   return coil;
 }
 DECLARE_DETELEMENT(SCoil02,create_element)
