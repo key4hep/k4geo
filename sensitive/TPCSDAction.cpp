@@ -163,7 +163,7 @@ namespace DD4hep {
 	fLowPtHitCollection = sensitive->collection(2) ;
 
 	Geant4StepHandler h(step);
-	dumpStep( h , step ) ;
+	//	dumpStep( h , step ) ;
 
 	// FIXME: 
 	// (i) in the following algorithm if a particle "appears" within a pad-ring half and 
