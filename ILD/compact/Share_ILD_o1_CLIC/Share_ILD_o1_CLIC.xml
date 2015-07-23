@@ -73,7 +73,7 @@
 
 	<constant name="env_safety" value="0.1*mm"/>
 
-
+	<constant name="TPC_Ecal_Hcal_barrel_halfZ"  value="2350*mm"/>
 
         <constant name="ECalBarrel_inner_radius" value="1843*mm"/>
         <constant name="ECalBarrel_outer_radius" value="2028*mm"/>
@@ -87,6 +87,8 @@
 	<constant name="Hcal_inner_symmetry"     value="8"/>
 
 
+	<constant name="Hcal_Coil_additional_gap"    value="29.5*mm"/>
+	<constant name="Coil_inner_radius"           value="Hcal_outer_radius+Hcal_Coil_additional_gap"/> 
 
     </define>
 
