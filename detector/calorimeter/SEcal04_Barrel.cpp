@@ -289,11 +289,15 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
     caloData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
     caloData->inner_symmetry = nsides  ;
+    //added by Thorben Quast
+    caloData->outer_symmetry = nsides  ;
     caloData->phi0 = 0 ; // hardcoded 
     
     /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
     caloData->extent[0] = Ecal_inner_radius ;
-    caloData->extent[1] = ( Ecal_inner_radius + module_thickness ) / cos( M_PI/8. ) ;
+    //line fixed by Thorben Quast since actual conversion is made during the drawing
+    caloData->extent[1] = ( Ecal_inner_radius + module_thickness );
+    //caloData->extent[1] = ( Ecal_inner_radius + module_thickness ) / cos( M_PI/8. ) ;
     caloData->extent[2] = 0. ;
     caloData->extent[3] = Ecal_Barrel_halfZ ;
 
