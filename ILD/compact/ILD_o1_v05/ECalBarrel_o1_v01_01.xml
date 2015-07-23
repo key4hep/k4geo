@@ -34,7 +34,7 @@
     </define>
  
     <readouts>
-        <readout name="EcalBarrelHits">
+        <readout name="EcalBarrelCollection">
             <segmentation type="CartesianGridXY" grid_size_x="ECal_cell_size" grid_size_y="ECal_cell_size" />
             <id>system:5,side:2,module:8,stave:4,layer:9,submodule:4,x:32:-16,y:-16</id>
             <!-- Marcus says 8 for ‘system’, Frank says 5 is enough -->  
@@ -53,7 +53,7 @@
     </display>
 
     <detectors>        
-        <detector name="ECalBarrel" type="ECalBarrel_o1_v01" id="ILDDetID_ECAL" readout="EcalBarrelHits" vis="BlueVis" >
+        <detector name="ECalBarrel" type="ECalBarrel_o1_v01" id="ILDDetID_ECAL" readout="EcalBarrelCollection" vis="BlueVis" >
             
             <comment>EM Calorimeter Barrel</comment>
             
@@ -67,7 +67,7 @@
 
             <dimensions numsides="Ecal_symmetry" rmin="Ecal_inner_radius" rmax="Ecal_outer_radius" z="Ecal_half_length*2" />
             <staves vis="EcalStaveVis" />
-            <layer repeat="17" vis="EcalLayerVis">
+            <layer repeat="20" vis="EcalLayerVis">
                 <slice material = "TungstenDens24" thickness = "2.40*mm" vis="EcalAbsorberVis"/>
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
                 <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="EcalAbsorberVis"/>
@@ -76,7 +76,7 @@
                 <slice material = "siPCBMix"       thickness = "0.80*mm" vis="EcalAbsorberVis"/>
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/>
             </layer>
-            <layer repeat="8" vis="EcalLayerVis">
+            <layer repeat="10" vis="EcalLayerVis">
                 <slice material = "TungstenDens24" thickness = "4.80*mm" vis="EcalAbsorberVis"/>
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
                 <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="EcalAbsorberVis"/>
