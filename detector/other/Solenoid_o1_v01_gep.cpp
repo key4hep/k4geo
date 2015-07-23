@@ -47,7 +47,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     Material air = lcdd.air();
     PlacedVolume pv;
     int n = 0;
-    
+
+    //added code by Thorben Quast for event display
+    DDRec::LayeredCalorimeterData* solenoidData = new DDRec::LayeredCalorimeterData;
+    solenoidData->inner_symmetry = 0;
+    solenoidData->outer_symmetry = 0;
+
     for(xml_coll_t i(x_det,_U(layer)); i; ++i, ++n)  {
         xml_comp_t x_layer = i;
         string  l_name = det_name+_toString(n,"_layer%d");
@@ -64,6 +69,15 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             Material mat = lcdd.material(x_slice.materialStr());
             string s_name= l_name+_toString(m,"_slice%d");
             double thickness = x_slice.thickness();
+
+            //added code by Thorben Quast for event display
+            DDRec::LayeredCalorimeterData::Layer solenoidLayer;
+            solenoidLayer.distance = r;
+            solenoidLayer.thickness = thickness;
+            solenoidLayer.cellSize0 = 0;    //equivalent to 
+            solenoidLayer.cellSize1 = z;    //half extension along z-axis
+            solenoidData->layers.push_back(solenoidLayer);
+
             Tube   s_tub(r,r+thickness,z,2*M_PI);
             Volume s_vol(s_name, s_tub, mat);
             
@@ -91,7 +105,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     }
     
 //     sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
-    
+    //added code by Thorben Quast for event display
+    sdet.addExtension< DDRec::LayeredCalorimeterData >( solenoidData ) ;
+
+
     return sdet;
     
 }
