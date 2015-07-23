@@ -1020,7 +1020,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
       thisLayer.distanceSensitive  = layer_radius  - active_silicon_thickness ;
     }
-    thisLayer.offsetSensitive    = active_offset_phi ;
+    //Adjusted by Thorben Quast to provide consistency with CLIC while drawing for CED
+    //Please check as the prefactor is simply chosen for the geometry to match the hits
+    thisLayer.offsetSensitive    = 0.5*active_offset_phi ;
     thisLayer.thicknessSensitive = active_silicon_thickness ;
     thisLayer.zHalfSensitive    = ladder_length ;
 
