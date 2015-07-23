@@ -25,6 +25,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     map<string, Volume>    volumes;
     map<string, Placements>  sensitives;
     PlacedVolume pv;
+    double tempwidth = 0;
     
     
     // --- create an envelope volume and position it into the world ---------------------
@@ -44,6 +45,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         xml_comp_t m_env  = x_mod.child(_U(module_envelope));
         string     m_nam  = x_mod.nameStr();
         Volume     m_vol(m_nam,Box(m_env.width()/2,m_env.length()/2,m_env.thickness()/2),air);
+        tempwidth = m_env.width()/2;
         int        ncomponents = 0; //unused:, wafer_number = 0;
         
         if ( volumes.find(m_nam) != volumes.end() )   {
@@ -99,6 +101,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         double     rc       = x_layout.rc();                // Radius of the sensor center.
         int        nphi     = x_layout.nphi();              // Number of sensors in phi.
         double     rphi_dr  = x_layout.dr();                // The delta radius of every other sensor.
+        
         double     phi_incr = (M_PI * 2) / nphi;            // Phi increment for one sensor.
         double     phic     = phi0;                         // Phi of the sensor center.
         double     z0       = z_layout.z0();                // Z position of first sensor in phi.
@@ -175,19 +178,18 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                      
                       thisLayer.offsetSupport    =  0; 
                       thisLayer.thicknessSupport = inner_thickness- half_silicon_thickness;
-                      thisLayer.zHalfSupport    = nz*mod_shape->GetDY(); 
+                      thisLayer.zHalfSupport    = z0 + mod_shape->GetDY();
                       thisLayer.widthSupport     = 2*mod_shape->GetDX(); 
                       
                       thisLayer.distanceSensitive = rc+sensitive_z_position; 
                       thisLayer.offsetSensitive  = 0. ;
                       thisLayer.thicknessSensitive = 2*half_silicon_thickness;//Assembled along Z
-                      thisLayer.zHalfSensitive    = nz*comp_shape->GetDY();
+                      //Changed by Thorben Quast (same applies to zHalfSupport)
+                      //z0 = center of most right sensor, comp_shape-GetDY() = half length of one sensitive are of the module
+                      thisLayer.zHalfSensitive    = z0 + comp_shape->GetDY();
                       thisLayer.widthSensitive = 2*comp_shape->GetDX();
                       thisLayer.ladderNumber = (int) nphi  ;
                       thisLayer.phi0 =  phic;
-                      
-                      
-                      
                     }
                     
                 }
