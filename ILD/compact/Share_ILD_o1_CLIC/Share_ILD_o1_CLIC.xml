@@ -101,6 +101,13 @@
 	<constant name="Hcal_inner_symmetry"     value="8"/>
 
 
+	<constant name="HcalEndcapRing_inner_radius"    value="2138.8*mm"/>
+	<constant name="HcalEndcapRing_outer_radius"    value="3137*mm"/>
+	<constant name="HcalEndcapRing_min_z"           value="2450*mm"/>
+	<constant name="HcalEndcapRing_max_z"           value="2635*mm"/>
+	<constant name="HcalEndcapRing_symmetry"        value="8"/>
+
+
 	<constant name="Hcal_Coil_additional_gap"    value="29.5*mm"/>
 	<constant name="Coil_inner_radius"           value="Hcal_outer_radius+Hcal_Coil_additional_gap"/> 
 
@@ -183,6 +190,7 @@
     <include ref="ECalPlug_o1_v01_01.xml"/>
 
     <include ref="SHcalSc04_Barrel_v01.xml"/>
+    <include ref="SHcalSc04_EndcapRing.xml"/>
 
 
     <plugins>
