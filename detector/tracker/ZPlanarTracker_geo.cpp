@@ -214,7 +214,6 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
     //    tracker.setVisAttributes(lcdd, x_det.visStr(),laddervol);
     
-
     // is this needed ??
     layer_assembly->GetShape()->ComputeBBox() ;
 
@@ -246,6 +245,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   tracker.addExtension< DDRec::ZPlanarData >( zPlanarData ) ;
   
   Volume mother =  lcdd.pickMotherVolume( tracker ) ;
+
+  //set the vis Attribute (added by Thorben Quast)
+  assembly.setVisAttributes(lcdd, x_det.visStr());
 
   pv = mother.placeVolume(assembly);
   
