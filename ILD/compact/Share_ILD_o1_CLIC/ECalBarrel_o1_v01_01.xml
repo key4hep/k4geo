@@ -67,8 +67,8 @@
 
             <dimensions numsides="ECalBarrel_symmetry" rmin="ECalBarrel_inner_radius" rmax="ECalBarrel_outer_radius" z="ECalBarrel_half_length*2" />
             <staves vis="EcalStaveVis" />
-            <layer repeat="17" vis="EcalLayerVis">
-                <slice material = "TungstenDens24" thickness = "1.20*mm" vis="EcalAbsorberVis"/>
+            <layer repeat="Ecal_nlayers1" vis="EcalLayerVis">
+                <slice material = "TungstenDens24" thickness = "2.10*mm" vis="EcalAbsorberVis"/>
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
                 <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="EcalAbsorberVis"/>
                 <slice material = "Silicon"        thickness = "0.50*mm" sensitive="yes" limits="cal_limits" vis="EcalSensitiveVis"/>
@@ -76,8 +76,8 @@
                 <slice material = "siPCBMix"       thickness = "0.80*mm" vis="EcalAbsorberVis"/>
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/>
             </layer>
-            <layer repeat="8" vis="EcalLayerVis">
-                <slice material = "TungstenDens24" thickness = "2.40*mm" vis="EcalAbsorberVis"/>
+            <layer repeat="Ecal_nlayers2" vis="EcalLayerVis">
+                <slice material = "TungstenDens24" thickness = "4.20*mm" vis="EcalAbsorberVis"/>
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
                 <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="EcalAbsorberVis"/>
                 <slice material = "Silicon"        thickness = "0.50*mm" sensitive="yes" limits="cal_limits" vis="EcalSensitiveVis"/>
