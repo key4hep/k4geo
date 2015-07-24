@@ -33,7 +33,7 @@ from SystemOfUnits import *
 # some configuration variables (could go to a seperate 'steering' file)
 #
 
-numberOfEvents = 3
+numberOfEvents = 10
 
 # ---------------------------------------
 # input file: either .slcio or .stdhep
@@ -50,7 +50,7 @@ lcioInputFile  = 'mcparticles.slcio'
 #lcioOutputFile = 'simpleCLIC_single_muon_5GeV_85deg.slcio'
 #lcioOutputFile = 'simpleILD_single_muon_5GeV_85deg.slcio'
 lcioOutputFile = 'simple_lcio.slcio'
-#lcioOutputFile = lcioInputFile[:len(lcioInputFile)-len('.slcio')]+'_SIM_simple.slcio'
+#lcioOutputFile = lcioInputFile[:len(lcioInputFile)-len('.slcio')]+'_SIM.slcio'
 
 physicsList    = 'FTFP_BERT'  # 'QGSP_BERT'
 
@@ -127,7 +127,7 @@ def run():
 
 #----------------------------------------------------------------------------------
 
-  simple = DDG4.Geant4( kernel, tracker='Geant4TrackerAction',calo='Geant4CalorimeterAction')
+  simple = DDG4.Geant4( kernel, tracker='Geant4TrackerCombineAction',calo='Geant4ScintillatorCalorimeterAction')
 ## Apply BirksLaw effect for Scintillator Calorimeter by using 'Geant4ScintillatorCalorimeterAction'.
 #  simple = DDG4.Geant4( kernel, tracker='Geant4TrackerAction',calo='Geant4ScintillatorCalorimeterAction')
 
@@ -211,7 +211,10 @@ def run():
 
   for t in trk:
     print 'simple.setupTracker(  ' , t , ')'
-    seq,act = simple.setupTracker( t )
+    if( 'tpc' in t.lower() ):
+      seq,act = simple.setupTracker( t ,type='TPCSDAction')
+    else:
+      seq,act = simple.setupTracker( t )
     seq.add(f1)
     act.HitCreationMode = 2
 
