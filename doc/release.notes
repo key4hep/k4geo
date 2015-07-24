@@ -26,6 +26,11 @@
    - activated in TPC10_geo.cpp
      -> hits should be exactly on pad row centers ...
 
+   - updated ddsim.py :
+      - use TrackerCombineAction and Geant4ScintillatorCalorimeterAction
+        as defaults for all detectors
+      - use TPCSDAction for TPC 
+
 
    A.Sailer
      - Implemented FieldMapBrBz.cpp, based on the 2D Fieldmap of Mokka FieldX03
