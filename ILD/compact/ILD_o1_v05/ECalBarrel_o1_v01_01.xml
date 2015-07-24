@@ -53,11 +53,11 @@
     </display>
 
     <detectors>        
-        <detector name="ECalBarrel" type="ECalBarrel_o1_v01" id="ILDDetID_ECAL" readout="EcalBarrelCollection" vis="BlueVis" >
+        <detector name="EcalBarrel" type="ECalBarrel_o1_v01" id="ILDDetID_ECAL" readout="EcalBarrelCollection" vis="BlueVis" >
             
             <comment>EM Calorimeter Barrel</comment>
             
-            <envelope vis="ECALVis">
+            <envelope vis="ILD_ECALVis">
                 <shape type="PolyhedraRegular" numsides="Ecal_symmetry"  rmin="Ecal_inner_radius - env_safety" rmax="Ecal_outer_radius + env_safety" dz="2.*Ecal_half_length + env_safety"  material="Air"/>
 		<!-- Radii definitions as in http://cern.ch/go/r9mZ -->
                 <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/Ecal_symmetry"/>

@@ -3,6 +3,30 @@
 | v00-05 | 
  --------    
 
+   S.Lu 
+   - updated Ecal and Hcal in Share_ILD_o1_CLIC
+
+   T.Quast
+   - fixed DetectorData structure for several drivers
+     ( as needed for drawing the detector w/ DD4hep in CED )
+
+
+   M. Petric
+   - added CLIC_o2_v02 model w/ simplified Ecal barrel
+     ECalBarrel_o2_v01_01.xml in order to set correct W thicknesses
+
+   F.Gaede
+   - use new Ecal barrel driver ECalBarrel_o1_v01_01.xml
+     in ILD_o1_v05 model ( updated parameter names )
+
+   - added TPCSDAction.cpp 
+     - ported from Mokka/TPCSD04.cc
+   - introduces Geant4 dependency 
+      -> to be addressed ...
+   - activated in TPC10_geo.cpp
+     -> hits should be exactly on pad row centers ...
+
+
    A.Sailer
      - Implemented FieldMapBrBz.cpp, based on the 2D Fieldmap of Mokka FieldX03
      - Example XML for the fields section of the compact XML

@@ -240,6 +240,8 @@
 	<constant name="Ecal_outer_radius"    value="2028.*mm"/>                      <!-- FixMe! Trap -->
 	<constant name="Ecal_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ"/>    <!-- Shared ILD  -->
 	<constant name="Ecal_symmetry"        value="Ecal_Hcal_symmetry"/>            <!-- Shared ILD  -->
+        <constant name="EcalEndcap_outer_symmetry" value="Ecal_Hcal_symmetry"/>
+        <constant name="EcalEndcap_inner_symmetry" value="4"/>
 
 	<constant name="Hcal_inner_radius"    value="Ecal_outer_radius+Hcal_Ecal_gap"/> <!-- Derivative  -->
 	<constant name="Hcal_outer_radius"    value="3395.46*mm"/>                      <!-- FixMe! Trap -->
@@ -430,14 +432,13 @@
 	
 	<include ref="ECalBarrel_o1_v01_01.xml"/>
 
-	<!-- <include ref="SEcal04_Barrel.xml"/> -->
-	<!-- <include ref="SEcal04_Endcaps.xml"/> -->
+	<include ref="SEcal04_Endcaps.xml"/>
+
+	<include ref="SEcal04_ECRing.xml"/>
 
 	<include ref="EcalBarrelFace_v00.xml"/>
 
 	<include ref="EcalEndcapFace_v00.xml"/>
-
-	<include ref="SEcal04_ECRing.xml"/>
 
 	<include ref="SHcalSc04_Barrel_v01.xml"/>
 
