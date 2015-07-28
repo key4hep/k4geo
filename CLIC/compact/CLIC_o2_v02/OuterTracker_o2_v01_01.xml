@@ -55,7 +55,7 @@
             <id>system:5,side:-2,layer:9,module:8,sensor:8,barrel:3</id>
         </readout>
         <readout name="OuterTrackerEndcapCollection">
-            <id>system:8,barrel:3,layer:4,module:14,sensor:2,side:32:-2,strip:20</id>
+            <id>system:5,side:-2,layer:9,module:8,sensor:8,barrel:3</id>
         </readout>
     </readouts>
     
@@ -177,7 +177,7 @@
     
     
     <detectors>
-        <detector id="DetID_OT_Endcap" name="OuterTrackerEndcap" type="TrackerEndcap_o1_v01" readout="OuterTrackerEndcapCollection" reflect="true">
+        <detector id="DetID_OT_Endcap" name="OuterTrackerEndcap" type="TrackerEndcap_o1_v02" readout="OuterTrackerEndcapCollection" reflect="true">
             <envelope vis="OTVis">
                 <shape type="Assembly"/>
             </envelope>

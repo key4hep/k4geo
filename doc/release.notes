@@ -1,3 +1,13 @@
+   N. Nikiforou
+   - Added TrackerEndcap_o1_v02_geo.cpp (svn cp'd from TrackerEndcap_o1_v01_geo.cpp) which supports 
+     ILD ID encoding and implements ring modules. Elements (enumerated as "sensors") in one ring 
+     (constant R) have the same "module" number but different sensor number. 
+     Also modified the CLIC_o2_v02 model compact (InnerTracker_o2_v01_01.xml 
+     and OuterTracker_o2_v01_01.xml) to use the new driver. Also now implements the "side" bitfield
+     side=0 is positive, side=1 is negative. 
+   - Introduced new driver VertexEndcap_o1_v02 and necessary changes to compact file for CLIC_o2_v02.
+     The new xml also implements double layers in the endcap but with each layer having its own ID. 
+     Also, in the new VertexEndcap driver similar changes as above VertexEndcap.
 
  --------
 | v00-05 | 
