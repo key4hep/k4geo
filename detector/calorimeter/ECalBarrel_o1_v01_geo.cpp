@@ -56,12 +56,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     xml_comp_t    x_staves  = x_det.staves();
     xml_comp_t    x_dim     = x_det.dimensions();
     int           nsides    = x_dim.numsides();
-    double        inner_r   = x_dim.rmin();                     // inscribing circle radius
+    double        inner_r   = x_dim.rmin();                     // inscribed cylinder
     double        dphi      = (2.*M_PI/nsides);
     double        hphi      = dphi/2.;
     double        mod_z     = layering.totalThickness();
-    double        outer_r   = (inner_r + mod_z)/std::cos(hphi); // circumscribing circle radius
-    double        r_max     = x_dim.rmax()/std::cos(hphi);      // see http://cern.ch/go/r9mZ
+    double        r_max     = x_dim.rmax()/std::cos(hphi);      // circumscribed cylinder, see http://cern.ch/go/r9mZ
+    double        outer_r   = (inner_r + mod_z)/std::cos(hphi); // r_outer of actual module
     
     // Create caloData object to extend driver with data required for reconstruction
     // Added by Nikiforos, 28/05/15. Should not interfere with driver but it does
@@ -84,8 +84,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     caloData->gap2 = 0.; //FIXME  
     
     /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
-    caloData->extent[0] = inner_r ;
-    caloData->extent[1] = x_dim.rmax(); // check !!
+    caloData->extent[0] = inner_r;
+    caloData->extent[1] = x_dim.rmax();
     caloData->extent[2] = 0. ;
     caloData->extent[3] = x_dim.z()/2.0 ;
     
@@ -93,7 +93,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     // One could group 5 towers per stave and split each tower into 3 stacks
 
     std::cout << "Tower height/thickness: " << mod_z << std::endl;
-    std::cout << "Got r_out = " << outer_r << " and r_max = " << r_max << std::endl;
+    std::cout << "Got r_inner = " << inner_r << std::endl;
+    std::cout << "Got r_outer = " << outer_r << " and r_max = " << r_max << std::endl;
     if(outer_r > r_max) { // throw exception 
       throw std::runtime_error("ERROR: Layers don't fit within the envelope volume!");
     }
@@ -126,6 +127,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     Volume tower_vol("tower", twr, Composite); // solid tungsten volume
         
     sens.setType("calorimeter");
+
+    // Start position and angle for staves/towers
+    double phi = M_PI/2.0 - M_PI/nsides;               // following the envelope rotation, ECalBarrel_o1_v01_01.xml
+    double mod_x_off = dx/2 + tolerance;               // Stave/tower X offset
+    double mod_y_off = (inner_r + r_max*cos(hphi))/2;  // Stave/tower Y offset - mid-envelope placement
 
     {// Build the tower, layer by layer and slice by slice
 
@@ -167,7 +173,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                     xml_comp_t x_slice = si;
                     string     s_name  = _toString(s_num,"slice%d");
                     double     s_thick = x_slice.thickness();
-		    //std::cout << s_name << " thickness: " << s_thick <<std::endl;
+		    //std::cout << s_name << " thickness: " << s_thick << std::endl;
                     Box        s_box(l_dim_x - tolerance, l_dim_y - tolerance, s_thick/2.);
                     Volume     s_vol(s_name, s_box, lcdd.material(x_slice.materialStr()));
                     DetElement slice(layer, s_name, det_id);
@@ -199,8 +205,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                 layer_phv.addPhysVolID("layer", l_num);
                 layer.setPlacement(layer_phv);
                 
-                ///FIXME! DRIVER DEVELOPER CHECK THESE VALUES!
-                caloLayer.distance = inner_r+trd_z+ l_pos_z; //Need to have distance from origin! 
+                caloLayer.distance = mod_y_off + trd_z + l_pos_z + l_thickness/2.; // to center
                 caloLayer.thickness = l_thickness;
                 caloLayer.absorberThickness = totalAbsorberThickness;
                 caloLayer.cellSize0 = cell_sizeX;
@@ -219,12 +224,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     if ( x_staves )   {
         tower_vol.setVisAttributes(lcdd.visAttributes(x_staves.visStr()));
     }
-    
-    // Phi start for staves/towers
-    double phi = M_PI/2.0 - M_PI/nsides;               // following the envelope rotation, ECalBarrel_o1_v01_01.xml
-    double mod_x_off = dx/2 + tolerance;               // Stave/tower X offset
-    double mod_y_off = inner_r + mod_z/2.0;            // Stave/tower Y offset, http://cern.ch/go/r9mZ
-    
+        
     // Create the towers
     for (int t = 0; t < n_towers; t++)  {
         // Create nsides staves
@@ -238,7 +238,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             int mid = (nsides+1)*t+i; 
             //pv.addPhysVolID("system",det_id); // not needed
             pv.addPhysVolID("side", 0); //should set once in parent volume placement
-            pv.addPhysVolID("module", t); ///FIXME! DRIVER DEVELOPER PLEASE CHECK IF ASSIGNMENTS MAKE SENSE
+            pv.addPhysVolID("module", t); ///FIXME! DRIVER DEVELOPER PLEASE CHECK IF ASSIGNMENTS MAKE SENSE 
+            // D.P. >> Please define "make sense". ;)
             pv.addPhysVolID("stave", i);
             DetElement sd = mid==0 ? tower_det : tower_det.clone(_toString(mid,"tower%d"));
             sd.setPlacement(pv);
