@@ -79,15 +79,15 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     caloData->inner_phi0 = 0.; 
     caloData->outer_phi0 = 0.; 
-    caloData->gap0 = 0.; //FIXME
-    caloData->gap1 = 0.; //FIXME
-    caloData->gap2 = 0.; //FIXME  
+    caloData->gap0 = 0.; //FIXME - what is this?
+    caloData->gap1 = 0.; //FIXME - how?
+    caloData->gap2 = 0.; //FIXME 
     
     /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
     caloData->extent[0] = inner_r;
-    caloData->extent[1] = x_dim.rmax();
-    caloData->extent[2] = 0. ;
-    caloData->extent[3] = x_dim.z()/2.0 ;
+    caloData->extent[1] = outer_r; // or r_max ?
+    caloData->extent[2] = -x_dim.z()/2;
+    caloData->extent[3] = x_dim.z()/2;
     
     // The barrel is composed of 12 x 5 towers, each with 17 + 8 layers made of 7 slices
     // One could group 5 towers per stave and split each tower into 3 stacks
@@ -239,7 +239,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             //pv.addPhysVolID("system",det_id); // not needed
             pv.addPhysVolID("side", 0); //should set once in parent volume placement
             pv.addPhysVolID("module", t); ///FIXME! DRIVER DEVELOPER PLEASE CHECK IF ASSIGNMENTS MAKE SENSE 
-            // D.P. >> Please define "make sense". ;)
+            // D.P. >> Please define "make sense". ;) Do you mean "is this needed"?
             pv.addPhysVolID("stave", i);
             DetElement sd = mid==0 ? tower_det : tower_det.clone(_toString(mid,"tower%d"));
             sd.setPlacement(pv);
