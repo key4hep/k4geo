@@ -88,13 +88,6 @@
         <constant name="ECalEndcap_outer_symmetry" value="8"/>
         <constant name="ECalEndcap_inner_symmetry" value="4"/>
 
-        <constant name="ECalPlug_inner_radius"     value="250*mm"/>
-        <constant name="ECalPlug_outer_radius"     value="390*mm"/>
-        <constant name="ECalPlug_min_z"            value="2450*mm"/>
-        <constant name="ECalPlug_max_z"            value="2635*mm"/>
-        <constant name="ECalPlug_outer_symmetry"   value="8"/>
-        <constant name="ECalPlug_inner_symmetry"   value="8"/>
-
 	<constant name="Hcal_inner_radius"       value="2058.0*mm"/>
 	<constant name="Hcal_outer_radius"       value="3395.46*mm"/>
 	<constant name="Hcal_half_length"        value="2350.0*mm"/>
@@ -187,7 +180,6 @@
 
     <include ref="ECalBarrel_o1_v01_01.xml"/>
     <include ref="SECalEndcap_o1_v01_01.xml"/>
-    <!-- <include ref="ECalPlug_o1_v01_01.xml"/> -->
 
     <include ref="SHcalSc04_Barrel_v01.xml"/>
     <include ref="SHcalSc04_EndcapRing.xml"/>
