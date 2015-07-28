@@ -3,6 +3,7 @@
 //-------------------------------------------------------------------------
 //  Based on
 //   * D.Protopopescu's ECalEndcap_o1_v01_geo.cpp
+//   * https://www.evernote.com/l/AJ0hig1OWixLH7McEetl6XiioRlf4ycRPzw
 //-------------------------------------------------------------------------
 //  S.Lu, DESY
 //  $Id:  $
