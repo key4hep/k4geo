@@ -177,7 +177,8 @@ class DD4hepSimulation(object):
 
   #----------------------------------------------------------------------------------
 
-    simple = DDG4.Geant4( kernel, tracker='Geant4TrackerAction',calo='Geant4CalorimeterAction')
+    #simple = DDG4.Geant4( kernel, tracker='Geant4TrackerAction',calo='Geant4CalorimeterAction')
+    simple = DDG4.Geant4( kernel, tracker='Geant4TrackerCombineAction',calo='Geant4ScintillatorCalorimeterAction')
 
     simple.printDetectors()
 
@@ -282,7 +283,12 @@ class DD4hepSimulation(object):
 
     for tracker in trk:
       print 'simple.setupTracker(  ' , tracker , ')'
-      seq,act = simple.setupTracker( tracker )
+ 
+      if( 'tpc' in tracker.lower() ):
+        seq,act = simple.setupTracker( t ,type='TPCSDAction')
+      else:
+        seq,act = simple.setupTracker( tracker )
+
       seq.add(f1)
       act.HitCreationMode = 2
 
