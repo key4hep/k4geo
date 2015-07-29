@@ -1,0 +1,88 @@
+<!-- ====================================================================== -->
+<!--                                                                        -->
+<!--    XML description of the ILD SiWEcal EndCaps                        -->
+<!--                                                                        -->
+<!--    Contained are the required                                          -->
+<!--      ++ envelope definition                                            -->
+<!--      ++ global constants used uniquely by this module                  -->
+<!--      ++ visualization attributes                                       -->
+<!--      ++ the definition of the readout structure and the                -->
+<!--         readout segmentation                                           -->
+<!--      ++ the include statements for the sensitive detectors and         -->
+<!--         the corresponding support structure(s)                         -->
+<!--                                                                        -->
+<!--                                                                        -->
+<!--   @author  S.Lu                                                        -->
+<!--   @date    28/07/2015                                                  -->
+<!--   Envelope-enabled version based on the CLIC_o1_v00 version            -->
+<!--                                                                        -->
+<!-- ====================================================================== -->
+
+<lccdd>
+    
+    <!--  Definition of the readout segmentation/definition  -->
+    <readouts>
+        <readout name="EcalEndcapHits">
+            <segmentation type="CartesianGridXY" grid_size_x="3.5*mm" grid_size_y="3.5*mm" />
+            <id>system:6,barrel:2,sector:2,panel:2,layer:14,slice:4,x:32:-16,y:-16</id>
+        </readout>
+    </readouts>
+    
+    <!--  Definitions of visualization attributes (uncomment if buildin EndCap alone)  -->
+    <display>
+        <!--vis name="EcalStaveVis"      alpha="1.0" r="0.0"  g="0.8"  b="1.0"  showDaughters="true"  visible="true"/>
+         <vis name="EcalLayerVis"      alpha="1.0" r="0.8"  g="0.8"  b="0.0"  showDaughters="true"  visible="true"/>
+         <vis name="EcalSensitiveVis"  alpha="1.0" r="0.7"  g="0.3"  b="0.0"  showDaughters="false" visible="true"/>
+         <vis name="EcalAbsorberVis"   alpha="1.0" r="0.4"  g="0.4"  b="0.0"  showDaughters="false" visible="true"/>
+         <vis name="EcalEndcapVis"     alpha="1.0" r="0.77" g="0.74" b="0.86" showDaughters="true"  visible="true"/>
+         <vis name="HiddenEnvelope"    alpha="0.0" r="1.0"  g="1.0"  b="1.0"  showDaughters="true"  visible="false"/>
+         <vis name="CompositeVis"  alpha="1.0" r="1.0"  g="0.0"  b="0.0"  showDaughters="true"  visible="true"/-->
+    </display>
+    
+    <detectors>
+        <detector name="EcalEndcap" type="SECalEndcap_o1_v01" id="ILDDetID_ECAL_ENDCAP" readout="EcalEndcapHits" vis="ECALVis">
+            
+            <comment>EM Calorimeter EndCap</comment>
+            
+            <envelope vis="ILD_ECALVis">
+                <shape type="BooleanShape" operation="Subtraction" material="Air">
+                    <shape type="BooleanShape" operation="Subtraction">
+                        <shape type="PolyhedraRegular"  numsides="EcalEndcap_outer_symmetry" rmin="0" rmax="EcalEndcap_outer_radius" dz="2.0*EcalEndcap_max_z"/>
+                        <!-- Radii definitions as in http://cern.ch/go/r9mZ -->
+                        <shape type="PolyhedraRegular"  numsides="EcalEndcap_outer_symmetry" rmin="0" rmax="EcalEndcap_outer_radius+env_safety" dz="2.0*EcalEndcap_min_z"/>
+                    </shape>
+                    <shape type="Box" dx="EcalEndcap_inner_radius" dy="EcalEndcap_inner_radius" dz="EcalEndcap_max_z + 2.0*env_safety"/>
+                    <rotation x="0*deg" y="0*deg" z="180*deg/EcalEndcap_outer_symmetry"/>
+                </shape>
+                <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/EcalEndcap_outer_symmetry"/>
+            </envelope>
+            
+            <parameter ecal_endcap_tolerance="env_safety" InSides="EcalEndcap_inner_symmetry" CarbonFiber="CarbonFiber_25percent" />
+            <dimensions numsides="EcalEndcap_outer_symmetry" rmin="EcalEndcap_inner_radius" rmax="EcalEndcap_outer_radius" zmin="EcalEndcap_min_z" zmax="EcalEndcap_max_z"/>
+            
+            <staves vis="EcalStaveVis" />
+            <layer repeat="20" vis="EcalLayerVis">
+                <slice material = "TungstenDens24" thickness = "2.10*mm" vis="EcalAbsorberVis" radiator="yes"/>
+                <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
+                <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="EcalAbsorberVis"/>
+                <slice material = "Silicon"        thickness = "0.50*mm" sensitive="yes" limits="cal_limits" vis="EcalSensitiveVis"/>
+                <slice material = "Air"            thickness = "0.10*mm" vis="InvisibleNoDaughters"/><!-- glue -->
+                <slice material = "siPCBMix"       thickness = "1.20*mm" vis="EcalAbsorberVis"/>
+                <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/>
+            </layer>
+            <layer repeat="10" vis="EcalLayerVis">
+                <slice material = "TungstenDens24" thickness = "4.20*mm" vis="EcalAbsorberVis" radiator="yes"/>
+                <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
+                <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="EcalAbsorberVis"/>
+                <slice material = "Silicon"        thickness = "0.50*mm" sensitive="yes" limits="cal_limits" vis="EcalSensitiveVis"/>
+                <slice material = "Air"            thickness = "0.10*mm" vis="InvisibleNoDaughters"/><!-- glue -->
+                <slice material = "siPCBMix"       thickness = "1.20*mm" vis="EcalAbsorberVis"/>
+                <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/>
+            </layer>
+        </detector>
+        
+    </detectors>
+    
+</lccdd>
+
+
