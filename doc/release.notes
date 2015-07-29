@@ -1,3 +1,8 @@
+
+ --------
+| v00-05 | 
+ --------    
+
    N. Nikiforou
    - Added TrackerEndcap_o1_v02_geo.cpp (svn cp'd from TrackerEndcap_o1_v01_geo.cpp) which supports 
      ILD ID encoding and implements ring modules. Elements (enumerated as "sensors") in one ring 
@@ -9,9 +14,6 @@
      The new xml also implements double layers in the endcap but with each layer having its own ID. 
      Also, in the new VertexEndcap driver similar changes as above VertexEndcap.
 
- --------
-| v00-05 | 
- --------    
 
    S.Lu 
    - updated Ecal and Hcal in Share_ILD_o1_CLIC
