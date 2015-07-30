@@ -448,7 +448,7 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
     DetElement   layerDEfwd( sensGasDEfwd ,   _toString( layer, "tpc_row_fwd_%03d") , x_det.id() );
     DetElement   layerDEbwd( sensGasDEbwd ,   _toString( layer, "tpc_row_bwd_%03d") , x_det.id() );
  
-    Vector3D o(  inner_upperlayer_radius  , 0. , 0. ) ;
+    Vector3D o(  inner_upperlayer_radius + 1e-10  , 0. , 0. ) ;
     VolCylinder surf( upperlayerLog , SurfaceType(SurfaceType::Sensitive, SurfaceType::Invisible ) ,  (padHeight/2.0) ,  (padHeight/2.0) ,o ) ;
 
     // Vector3D o(  outer_lowerlayer_radius - 1e-10  , 0. , 0. ) ;

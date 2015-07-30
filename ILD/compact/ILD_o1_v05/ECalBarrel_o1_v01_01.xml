@@ -68,7 +68,7 @@
             <dimensions numsides="Ecal_symmetry" rmin="Ecal_inner_radius" rmax="Ecal_outer_radius" z="Ecal_half_length*2" />
             <staves vis="EcalStaveVis" />
             <layer repeat="20" vis="EcalLayerVis">
-                <slice material = "TungstenDens24" thickness = "2.10*mm" vis="EcalAbsorberVis"/>
+                <slice material = "TungstenDens24" thickness = "2.10*mm" radiator="yes" vis="EcalAbsorberVis"/>
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
                 <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="EcalAbsorberVis"/>
                 <slice material = "Silicon"        thickness = "0.50*mm" sensitive="yes" limits="cal_limits" vis="EcalSensitiveVis"/>
@@ -77,7 +77,7 @@
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/>
             </layer>
             <layer repeat="10" vis="EcalLayerVis">
-                <slice material = "TungstenDens24" thickness = "4.20*mm" vis="EcalAbsorberVis"/>
+                <slice material = "TungstenDens24" thickness = "4.20*mm"  radiator="yes" vis="EcalAbsorberVis"/>
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
                 <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="EcalAbsorberVis"/>
                 <slice material = "Silicon"        thickness = "0.50*mm" sensitive="yes" limits="cal_limits" vis="EcalSensitiveVis"/>
@@ -86,7 +86,7 @@
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/>
             </layer>
             <layer repeat="1" vis="EcalLayerVis">
-                <slice material = "TungstenDens24" thickness = "2.40*mm" vis="EcalAbsorberVis"/>
+                <slice material = "TungstenDens24" thickness = "2.40*mm"  radiator="yes" vis="EcalAbsorberVis"/>
 		<slice material = "CarbonFiber_25percent" thickness = "10.0*mm" vis="CompositeVis"/>
             </layer>
  
