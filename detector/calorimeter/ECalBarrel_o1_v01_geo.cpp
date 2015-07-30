@@ -86,7 +86,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
     caloData->extent[0] = inner_r;
     caloData->extent[1] = outer_r; // or r_max ?
-    caloData->extent[2] = -x_dim.z()/2;
+    caloData->extent[2] = 0; //NN: for barrel detectors this is 0
     caloData->extent[3] = x_dim.z()/2;
     
     // The barrel is composed of 12 x 5 towers, each with 17 + 8 layers made of 7 slices
