@@ -39,8 +39,8 @@
      -> hits should be exactly on pad row centers ...
 
    - updated ddsim.py :
-      - use TrackerCombineAction and Geant4ScintillatorCalorimeterAction
-        as defaults for all detectors
+      - use Geant4ScintillatorCalorimeterAction
+        as defaults for all calorimeters
       - use TPCSDAction for TPC 
 
 
