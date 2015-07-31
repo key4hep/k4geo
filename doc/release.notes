@@ -28,8 +28,6 @@
      ECalBarrel_o2_v01_01.xml in order to set correct W thicknesses
 
    F.Gaede
-   - use new Ecal barrel driver ECalBarrel_o1_v01_01.xml
-     in ILD_o1_v05 model ( updated parameter names )
 
    - added TPCSDAction.cpp 
      - ported from Mokka/TPCSD04.cc
