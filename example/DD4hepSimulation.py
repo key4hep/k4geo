@@ -285,8 +285,8 @@ class DD4hepSimulation(object):
     for tracker in trk:
       print 'simple.setupTracker(  ' , tracker , ')'
  
-      if( 'tpc' in tracker.lower() ):
-        seq,act = simple.setupTracker( t ,type='TPCSDAction')
+      if 'tpc' in tracker.lower():
+        seq,act = simple.setupTracker( tracker ,type='TPCSDAction')
       else:
         seq,act = simple.setupTracker( tracker )
 
