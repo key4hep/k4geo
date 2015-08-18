@@ -81,7 +81,7 @@
                 <module_component width="97.79*mm" length="97.79*mm" thickness="0.0175*cm" material="Epoxy" sensitive="false">
                     <position z="0.07475*cm" />
                 </module_component>
-                <module_component width="97.79*mm" length="97.79*mm" thickness="0.016*cm" material="CarbonFiber_50D" sensitive="false">
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.016*cm" material="CarbonFiber_50D_B3" sensitive="false">
                     <position z="0.0915*cm" />
                 </module_component>
                 <module_component width="92.031*mm" length="92.031*mm" thickness="0.03*cm" material="Silicon" sensitive="true">
@@ -111,7 +111,7 @@
                 <module_component width="97.79*mm" length="97.79*mm" thickness="0.0175*cm" material="Epoxy" sensitive="false">
                     <position z="0.07475*cm" />
                 </module_component>
-                <module_component width="97.79*mm" length="97.79*mm" thickness="0.016*cm" material="CarbonFiber_50D" sensitive="false">
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.016*cm" material="CarbonFiber_50D_B4" sensitive="false">
                     <position z="0.0915*cm" />
                 </module_component>
                 <module_component width="92.031*mm" length="92.031*mm" thickness="0.03*cm" material="Silicon" sensitive="true">
@@ -141,7 +141,7 @@
                 <module_component width="97.79*mm" length="97.79*mm" thickness="0.0175*cm" material="Epoxy" sensitive="false">
                     <position z="0.07475*cm" />
                 </module_component>
-                <module_component width="97.79*mm" length="97.79*mm" thickness="0.016*cm" material="CarbonFiber_50D" sensitive="false">
+                <module_component width="97.79*mm" length="97.79*mm" thickness="0.016*cm" material="CarbonFiber_50D_B5" sensitive="false">
                     <position z="0.0915*cm" />
                 </module_component>
                 <module_component width="92.031*mm" length="92.031*mm" thickness="0.03*cm" material="Silicon" sensitive="true">
@@ -157,6 +157,7 @@
                     <position z="0.146*cm"/>
                 </module_component>
             </module>
+
             <layer module="SiTrackerModule_Layer2" id="0" vis="OuterTrackerLayerVis">
                 <barrel_envelope inner_r="OuterTracker_Barrel_radius_0-6.28*mm" outer_r="OuterTracker_Barrel_radius_0+23.645*mm" z_length="OuterTracker_Barrel_half_length_0*2.01"/>
                 <rphi_layout phi_tilt="0.11493*rad" nphi="58" phi0="0.058*rad" rc="OuterTracker_Barrel_radius_0" dr="0.0"/>
@@ -183,81 +184,92 @@
             </envelope>
             <comment>Silicon Outer Tracker Endcaps</comment>
             
-            <module name="Module1" vis="OuterTrackerModuleVis">
-                <trd x1="36.112*mm" x2="46.635*mm" z="100.114/2*mm" />
-                <module_component thickness="0.00052*cm"   material="Copper" />
-                <module_component thickness="0.0051*cm"   material="Kapton" />
-                <module_component thickness="0.00048*cm" material="Silicon" />
-                <module_component thickness="0.03*cm"   material="Silicon" sensitive="true" />
-                <module_component thickness="0.016*cm" material="CarbonFiber_50D" />
-                <module_component thickness="0.18*cm" material="Rohacell31_50D" />
-                <module_component thickness="0.016*cm" material="CarbonFiber_50D" />
-            </module>
-            <module name="Module2" vis="OuterTrackerModuleVis">
+            <module name="Module2_E2" vis="OuterTrackerModuleVis">
                 <trd x1="45.245*mm" x2="54.680*mm" z="89.773/2*mm" />
                 <module_component thickness="0.00079*cm"   material="Copper" />
                 <module_component thickness="0.0078*cm"   material="Kapton" />
                 <module_component thickness="0.00048*cm" material="Silicon" />
                 <module_component thickness="0.03*cm"   material="Silicon" sensitive="true" />
-                <module_component thickness="0.016*cm" material="CarbonFiber_50D" />
+                <module_component thickness="0.016*cm" material="CarbonFiber_50D_E2" />
                 <module_component thickness="0.18*cm" material="Rohacell31_50D" />
-                <module_component thickness="0.016*cm" material="CarbonFiber_50D" />
+                <module_component thickness="0.016*cm" material="CarbonFiber_50D_E2" />
             </module>
+            <module name="Module2_E3" vis="OuterTrackerModuleVis">
+                <trd x1="45.245*mm" x2="54.680*mm" z="89.773/2*mm" />
+                <module_component thickness="0.00079*cm"   material="Copper" />
+                <module_component thickness="0.0078*cm"   material="Kapton" />
+                <module_component thickness="0.00048*cm" material="Silicon" />
+                <module_component thickness="0.03*cm"   material="Silicon" sensitive="true" />
+                <module_component thickness="0.016*cm" material="CarbonFiber_50D_E3" />
+                <module_component thickness="0.18*cm" material="Rohacell31_50D" />
+                <module_component thickness="0.016*cm" material="CarbonFiber_50D_E3" />
+            </module>
+             <module name="Module2_E4" vis="OuterTrackerModuleVis">
+                <trd x1="45.245*mm" x2="54.680*mm" z="89.773/2*mm" />
+                <module_component thickness="0.00079*cm"   material="Copper" />
+                <module_component thickness="0.0078*cm"   material="Kapton" />
+                <module_component thickness="0.00048*cm" material="Silicon" />
+                <module_component thickness="0.03*cm"   material="Silicon" sensitive="true" />
+                <module_component thickness="0.016*cm" material="CarbonFiber_50D_E4" />
+                <module_component thickness="0.18*cm" material="Rohacell31_50D" />
+                <module_component thickness="0.016*cm" material="CarbonFiber_50D_E4" />
+            </module>              
+                        
             
             <layer id="0">
-                <ring r="OuterTracker_Endcap_outer_radius_1" zstart="OuterTracker_Endcap_z_1" nmodules="54" dz="1.75*mm" module="Module2" phi0="pi/54"/>
-                <ring r="OuterTracker_Endcap_outer_radius_1-OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_1+OuterTracker_z_offset" nmodules="48" dz="1.75*mm" module="Module2"/>
-                <ring r="OuterTracker_Endcap_outer_radius_1-2*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_1+2*OuterTracker_z_offset" nmodules="44" dz="1.75*mm" module="Module2"/>
+                <ring r="OuterTracker_Endcap_outer_radius_1" zstart="OuterTracker_Endcap_z_1" nmodules="54" dz="1.75*mm" module="Module2_E2" phi0="pi/54"/>
+                <ring r="OuterTracker_Endcap_outer_radius_1-OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_1+OuterTracker_z_offset" nmodules="48" dz="1.75*mm" module="Module2_E2"/>
+                <ring r="OuterTracker_Endcap_outer_radius_1-2*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_1+2*OuterTracker_z_offset" nmodules="44" dz="1.75*mm" module="Module2_E2"/>
             </layer>
             <layer id="1">
-                <ring r="OuterTracker_Endcap_outer_radius_2" zstart="OuterTracker_Endcap_z_2" nmodules="68" dz="1.75*mm" module="Module2" />
-                <ring r="OuterTracker_Endcap_outer_radius_2-OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_2+OuterTracker_z_offset" nmodules="64" dz="1.75*mm" module="Module2"/>
-                <ring r="OuterTracker_Endcap_outer_radius_2-2*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_2+2*OuterTracker_z_offset" nmodules="58" dz="1.75*mm" module="Module2" phi0="pi/58"/>
-                <ring r="OuterTracker_Endcap_outer_radius_2-3*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_2+3*OuterTracker_z_offset" nmodules="54" dz="1.75*mm" module="Module2" phi0="pi/54"/>
-                <ring r="OuterTracker_Endcap_outer_radius_2-4*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_2+4*OuterTracker_z_offset" nmodules="48" dz="1.75*mm" module="Module2"/>
-                <ring r="OuterTracker_Endcap_outer_radius_2-5*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_2+5*OuterTracker_z_offset" nmodules="40" dz="1.75*mm" module="Module2"/>
-                <ring r="OuterTracker_Endcap_outer_radius_2-6*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_2+6*OuterTracker_z_offset" nmodules="40" dz="1.75*mm" module="Module2"/>
+                <ring r="OuterTracker_Endcap_outer_radius_2" zstart="OuterTracker_Endcap_z_2" nmodules="68" dz="1.75*mm" module="Module2_E3" />
+                <ring r="OuterTracker_Endcap_outer_radius_2-OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_2+OuterTracker_z_offset" nmodules="64" dz="1.75*mm" module="Module2_E3"/>
+                <ring r="OuterTracker_Endcap_outer_radius_2-2*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_2+2*OuterTracker_z_offset" nmodules="58" dz="1.75*mm" module="Module2_E3" phi0="pi/58"/>
+                <ring r="OuterTracker_Endcap_outer_radius_2-3*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_2+3*OuterTracker_z_offset" nmodules="54" dz="1.75*mm" module="Module2_E3" phi0="pi/54"/>
+                <ring r="OuterTracker_Endcap_outer_radius_2-4*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_2+4*OuterTracker_z_offset" nmodules="48" dz="1.75*mm" module="Module2_E3"/>
+                <ring r="OuterTracker_Endcap_outer_radius_2-5*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_2+5*OuterTracker_z_offset" nmodules="40" dz="1.75*mm" module="Module2_E3"/>
+                <ring r="OuterTracker_Endcap_outer_radius_2-6*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_2+6*OuterTracker_z_offset" nmodules="40" dz="1.75*mm" module="Module2_E3"/>
             </layer>
             <layer id="2">
-                <ring r="OuterTracker_Endcap_outer_radius_3" zstart="OuterTracker_Endcap_z_3" nmodules="84" dz="1.75*mm" module="Module2" />
-                <ring r="OuterTracker_Endcap_outer_radius_3-OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+OuterTracker_z_offset" nmodules="78" dz="1.75*mm" module="Module2" phi0="pi/78"/>
-                <ring r="OuterTracker_Endcap_outer_radius_3-2*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+2*OuterTracker_z_offset" nmodules="72" dz="1.75*mm" module="Module2" />
-                <ring r="OuterTracker_Endcap_outer_radius_3-3*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+3*OuterTracker_z_offset" nmodules="68" dz="1.75*mm" module="Module2" />
-                <ring r="OuterTracker_Endcap_outer_radius_3-4*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+4*OuterTracker_z_offset" nmodules="64" dz="1.75*mm" module="Module2"/>
-                <ring r="OuterTracker_Endcap_outer_radius_3-5*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+5*OuterTracker_z_offset" nmodules="58" dz="1.75*mm" module="Module2" phi0="pi/58"/>
-                <ring r="OuterTracker_Endcap_outer_radius_3-6*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+6*OuterTracker_z_offset" nmodules="54" dz="1.75*mm" module="Module2" phi0="pi/54"/>
-                <ring r="OuterTracker_Endcap_outer_radius_3-7*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+7*OuterTracker_z_offset" nmodules="48" dz="1.75*mm" module="Module2"/>
-                <ring r="OuterTracker_Endcap_outer_radius_3-8*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+8*OuterTracker_z_offset" nmodules="48" dz="1.75*mm" module="Module2"/>
-                <ring r="OuterTracker_Endcap_outer_radius_3-9*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+9*OuterTracker_z_offset" nmodules="44" dz="1.75*mm" module="Module2"/>
-                <ring r="OuterTracker_Endcap_outer_radius_3-9.8*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+10*OuterTracker_z_offset" nmodules="44" dz="1.75*mm" module="Module2"/>
+                <ring r="OuterTracker_Endcap_outer_radius_3" zstart="OuterTracker_Endcap_z_3" nmodules="84" dz="1.75*mm" module="Module2_E4" />
+                <ring r="OuterTracker_Endcap_outer_radius_3-OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+OuterTracker_z_offset" nmodules="78" dz="1.75*mm" module="Module2_E4" phi0="pi/78"/>
+                <ring r="OuterTracker_Endcap_outer_radius_3-2*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+2*OuterTracker_z_offset" nmodules="72" dz="1.75*mm" module="Module2_E4" />
+                <ring r="OuterTracker_Endcap_outer_radius_3-3*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+3*OuterTracker_z_offset" nmodules="68" dz="1.75*mm" module="Module2_E4" />
+                <ring r="OuterTracker_Endcap_outer_radius_3-4*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+4*OuterTracker_z_offset" nmodules="64" dz="1.75*mm" module="Module2_E4"/>
+                <ring r="OuterTracker_Endcap_outer_radius_3-5*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+5*OuterTracker_z_offset" nmodules="58" dz="1.75*mm" module="Module2_E4" phi0="pi/58"/>
+                <ring r="OuterTracker_Endcap_outer_radius_3-6*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+6*OuterTracker_z_offset" nmodules="54" dz="1.75*mm" module="Module2_E4" phi0="pi/54"/>
+                <ring r="OuterTracker_Endcap_outer_radius_3-7*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+7*OuterTracker_z_offset" nmodules="48" dz="1.75*mm" module="Module2_E4"/>
+                <ring r="OuterTracker_Endcap_outer_radius_3-8*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+8*OuterTracker_z_offset" nmodules="48" dz="1.75*mm" module="Module2_E4"/>
+                <ring r="OuterTracker_Endcap_outer_radius_3-9*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+9*OuterTracker_z_offset" nmodules="44" dz="1.75*mm" module="Module2_E4"/>
+                <ring r="OuterTracker_Endcap_outer_radius_3-9.8*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_3+10*OuterTracker_z_offset" nmodules="44" dz="1.75*mm" module="Module2_E4"/>
             </layer>
             
             <layer id="3">
-                <ring r="OuterTracker_Endcap_outer_radius_4" zstart="OuterTracker_Endcap_z_4" nmodules="84" dz="1.75*mm" module="Module2" />
-                <ring r="OuterTracker_Endcap_outer_radius_4-OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+OuterTracker_z_offset" nmodules="78" dz="1.75*mm" module="Module2" phi0="pi/78"/>
-                <ring r="OuterTracker_Endcap_outer_radius_4-2*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+2*OuterTracker_z_offset" nmodules="72" dz="1.75*mm" module="Module2" />
-                <ring r="OuterTracker_Endcap_outer_radius_4-3*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+3*OuterTracker_z_offset" nmodules="68" dz="1.75*mm" module="Module2" />
-                <ring r="OuterTracker_Endcap_outer_radius_4-4*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+4*OuterTracker_z_offset" nmodules="64" dz="1.75*mm" module="Module2"/>
-                <ring r="OuterTracker_Endcap_outer_radius_4-5*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+5*OuterTracker_z_offset" nmodules="58" dz="1.75*mm" module="Module2" phi0="pi/58"/>
-                <ring r="OuterTracker_Endcap_outer_radius_4-6*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+6*OuterTracker_z_offset" nmodules="54" dz="1.75*mm" module="Module2" phi0="pi/54"/>
-                <ring r="OuterTracker_Endcap_outer_radius_4-7*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+7*OuterTracker_z_offset" nmodules="48" dz="1.75*mm" module="Module2"/>
-                <ring r="OuterTracker_Endcap_outer_radius_4-8*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+8*OuterTracker_z_offset" nmodules="48" dz="1.75*mm" module="Module2"/>
-                <ring r="OuterTracker_Endcap_outer_radius_4-9*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+9*OuterTracker_z_offset" nmodules="44" dz="1.75*mm" module="Module2"/>
-                <ring r="OuterTracker_Endcap_outer_radius_4-9.8*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+10*OuterTracker_z_offset" nmodules="44" dz="1.75*mm" module="Module2"/>
+                <ring r="OuterTracker_Endcap_outer_radius_4" zstart="OuterTracker_Endcap_z_4" nmodules="84" dz="1.75*mm" module="Module2_E4" />
+                <ring r="OuterTracker_Endcap_outer_radius_4-OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+OuterTracker_z_offset" nmodules="78" dz="1.75*mm" module="Module2_E4" phi0="pi/78"/>
+                <ring r="OuterTracker_Endcap_outer_radius_4-2*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+2*OuterTracker_z_offset" nmodules="72" dz="1.75*mm" module="Module2_E4" />
+                <ring r="OuterTracker_Endcap_outer_radius_4-3*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+3*OuterTracker_z_offset" nmodules="68" dz="1.75*mm" module="Module2_E4" />
+                <ring r="OuterTracker_Endcap_outer_radius_4-4*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+4*OuterTracker_z_offset" nmodules="64" dz="1.75*mm" module="Module2_E4"/>
+                <ring r="OuterTracker_Endcap_outer_radius_4-5*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+5*OuterTracker_z_offset" nmodules="58" dz="1.75*mm" module="Module2_E4" phi0="pi/58"/>
+                <ring r="OuterTracker_Endcap_outer_radius_4-6*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+6*OuterTracker_z_offset" nmodules="54" dz="1.75*mm" module="Module2_E4" phi0="pi/54"/>
+                <ring r="OuterTracker_Endcap_outer_radius_4-7*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+7*OuterTracker_z_offset" nmodules="48" dz="1.75*mm" module="Module2_E4"/>
+                <ring r="OuterTracker_Endcap_outer_radius_4-8*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+8*OuterTracker_z_offset" nmodules="48" dz="1.75*mm" module="Module2_E4"/>
+                <ring r="OuterTracker_Endcap_outer_radius_4-9*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+9*OuterTracker_z_offset" nmodules="44" dz="1.75*mm" module="Module2_E4"/>
+                <ring r="OuterTracker_Endcap_outer_radius_4-9.8*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_4+10*OuterTracker_z_offset" nmodules="44" dz="1.75*mm" module="Module2_E4"/>
             </layer>
              
              <layer id="4">
-                 <ring r="OuterTracker_Endcap_outer_radius_5" zstart="OuterTracker_Endcap_z_5" nmodules="84" dz="1.75*mm" module="Module2" />
-                 <ring r="OuterTracker_Endcap_outer_radius_5-OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+OuterTracker_z_offset" nmodules="78" dz="1.75*mm" module="Module2" phi0="pi/78"/>
-                 <ring r="OuterTracker_Endcap_outer_radius_5-2*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+2*OuterTracker_z_offset" nmodules="72" dz="1.75*mm" module="Module2" />
-                 <ring r="OuterTracker_Endcap_outer_radius_5-3*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+3*OuterTracker_z_offset" nmodules="68" dz="1.75*mm" module="Module2" />
-                 <ring r="OuterTracker_Endcap_outer_radius_5-4*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+4*OuterTracker_z_offset" nmodules="64" dz="1.75*mm" module="Module2"/>
-                 <ring r="OuterTracker_Endcap_outer_radius_5-5*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+5*OuterTracker_z_offset" nmodules="58" dz="1.75*mm" module="Module2" phi0="pi/58"/>
-                 <ring r="OuterTracker_Endcap_outer_radius_5-6*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+6*OuterTracker_z_offset" nmodules="54" dz="1.75*mm" module="Module2" phi0="pi/54"/>
-                 <ring r="OuterTracker_Endcap_outer_radius_5-7*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+7*OuterTracker_z_offset" nmodules="48" dz="1.75*mm" module="Module2"/>
-                 <ring r="OuterTracker_Endcap_outer_radius_5-8*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+8*OuterTracker_z_offset" nmodules="48" dz="1.75*mm" module="Module2"/>
-                 <ring r="OuterTracker_Endcap_outer_radius_5-9*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+9*OuterTracker_z_offset" nmodules="44" dz="1.75*mm" module="Module2"/>
-                 <ring r="OuterTracker_Endcap_outer_radius_5-9.8*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+10*OuterTracker_z_offset" nmodules="44" dz="1.75*mm" module="Module2"/>
+                 <ring r="OuterTracker_Endcap_outer_radius_5" zstart="OuterTracker_Endcap_z_5" nmodules="84" dz="1.75*mm" module="Module2_E4" />
+                 <ring r="OuterTracker_Endcap_outer_radius_5-OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+OuterTracker_z_offset" nmodules="78" dz="1.75*mm" module="Module2_E4" phi0="pi/78"/>
+                 <ring r="OuterTracker_Endcap_outer_radius_5-2*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+2*OuterTracker_z_offset" nmodules="72" dz="1.75*mm" module="Module2_E4" />
+                 <ring r="OuterTracker_Endcap_outer_radius_5-3*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+3*OuterTracker_z_offset" nmodules="68" dz="1.75*mm" module="Module2_E4" />
+                 <ring r="OuterTracker_Endcap_outer_radius_5-4*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+4*OuterTracker_z_offset" nmodules="64" dz="1.75*mm" module="Module2_E4"/>
+                 <ring r="OuterTracker_Endcap_outer_radius_5-5*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+5*OuterTracker_z_offset" nmodules="58" dz="1.75*mm" module="Module2_E4" phi0="pi/58"/>
+                 <ring r="OuterTracker_Endcap_outer_radius_5-6*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+6*OuterTracker_z_offset" nmodules="54" dz="1.75*mm" module="Module2_E4" phi0="pi/54"/>
+                 <ring r="OuterTracker_Endcap_outer_radius_5-7*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+7*OuterTracker_z_offset" nmodules="48" dz="1.75*mm" module="Module2_E4"/>
+                 <ring r="OuterTracker_Endcap_outer_radius_5-8*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+8*OuterTracker_z_offset" nmodules="48" dz="1.75*mm" module="Module2_E4"/>
+                 <ring r="OuterTracker_Endcap_outer_radius_5-9*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+9*OuterTracker_z_offset" nmodules="44" dz="1.75*mm" module="Module2_E4"/>
+                 <ring r="OuterTracker_Endcap_outer_radius_5-9.8*OuterTracker_r_offset" zstart="OuterTracker_Endcap_z_5+10*OuterTracker_z_offset" nmodules="44" dz="1.75*mm" module="Module2_E4"/>
              </layer>
             
         </detector>
