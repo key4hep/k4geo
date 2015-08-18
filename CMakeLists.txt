@@ -38,9 +38,9 @@ option(BUILD_TESTING "Enable and build tests" ON)
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 find_package(DD4hep REQUIRED COMPONENTS DDRec DDG4)
-find_package(ROOT REQUIRED)
+find_package(ROOT REQUIRED COMPONENTS Geom Reflex GenVector)
 #find_package( ROOT REQUIRED COMPONENTS Geom Reflex)
-set( ROOT_COMPONENT_LIBRARIES Geom Reflex)
+#set( ROOT_COMPONENT_LIBRARIES Geom Reflex)
 
 find_package( Boost REQUIRED ) 
 include_directories( SYSTEM ${Boost_INCLUDE_DIRS} )
