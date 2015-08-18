@@ -1,23 +1,3 @@
-<!-- ====================================================================== -->
-<!--                                                                        -->
-<!--    XML description of the CLIC NDM ECal Barrel detector                -->
-<!--                                                                        -->
-<!--    Contained are the required                                          -->
-<!--      ++ envelope definition                                            -->
-<!--      ++ global constants used uniquely by this module                  -->
-<!--      ++ visualization attributes                                       -->
-<!--      ++ the definition of the readout structure and the                -->
-<!--         readout segmentation (if necessary)                            -->
-<!--      ++ the include statements for the sensitive detectors and         -->
-<!--         the corresponding support structure(s)                         -->
-<!--                                                                        -->
-<!--                                                                        -->
-<!--   @author  D.Protopopescu                                              -->
-<!--   @date    06/05/2015                                                  -->
-<!--   Envelope-enabled version based on the CLIC_o1_v00 version            -->
-<!--                                                                        -->
-<!-- ====================================================================== -->
-
 <lccdd>
 
     <!--  Definition of the readout segmentation  -->
@@ -44,8 +24,8 @@
     </display>
 
     <detectors>        
-        <detector name="ECalBarrel" type="ECalBarrel_o1_v01" id="DetID_ECal_Barrel" readout="ECalBarrelCollection" vis="BlueVis" >
-            
+        <detector name="ECalBarrel" type="ECalBarrel_o2_v01" id="DetID_ECal_Barrel" readout="ECalBarrelCollection" vis="BlueVis" gap="0.*cm">
+
             <comment>EM Calorimeter Barrel</comment>
             
             <envelope vis="ECALVis">
@@ -54,9 +34,7 @@
                 <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/ECalBarrel_symmetry"/>
             </envelope>
             
-            <parameter num_towers="5" TowersAirGap="2.4*mm" TowersFaceThickness="1.60*mm" AlveolusMaterial="CarbonFiber_25percent" supportBarCrossSection="106*106*mm*mm" ecal_barrel_tolerance="env_safety"/>
-
-            <dimensions numsides="ECalBarrel_symmetry" rmin="ECalBarrel_inner_radius" rmax="ECalBarrel_outer_radius" z="ECalBarrel_half_length*2" />
+            <dimensions numsides="ECalBarrel_symmetry" rmin="ECalBarrel_inner_radius" z="ECalBarrel_half_length*2" />
             <staves vis="ECalStaveVis" />
             <layer repeat="17" vis="ECalLayerVis">
                 <slice material = "TungstenDens24" thickness = "2.40*mm" vis="ECalAbsorberVis" radiator="yes"/>
@@ -78,7 +56,7 @@
             </layer>
             <layer repeat="1" vis="ECalLayerVis">
                 <slice material = "TungstenDens24" thickness = "4.80*mm" vis="ECalAbsorberVis" radiator="yes"/>
-		<slice material = "CarbonFiber_25percent" thickness = "10.0*mm" vis="CompositeVis"/>
+		        <slice material = "CarbonFiber_25percent" thickness = "10.0*mm" vis="CompositeVis"/>
             </layer>
  
         </detector>
@@ -92,5 +70,8 @@
     
     
 </lccdd>
+
+
+
 
 
