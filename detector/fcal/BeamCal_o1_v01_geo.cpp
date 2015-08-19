@@ -122,7 +122,11 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
     std::cout << "Total Length "    << bcalThickness/dd4hep::cm  << " cm" << std::endl;
     std::cout << "Layer Thickness " << layerThickness/dd4hep::cm << " cm" << std::endl;
-
+    DD4hep::DDRec::LayeredCalorimeterData::Layer caloLayer ;
+    double nRadiationLengths=0.;
+    double nInteractionLengths=0.;
+    double thickness_sum=0;
+            
     //Loop for repeat=NN
     for(int i=0, repeat=xmlLayer.repeat(); i<repeat; ++i)  {
 
@@ -146,9 +150,9 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
       for(DD4hep::XML::Collection_t collSlice(xmlLayer,_U(slice)); collSlice; ++collSlice)  {
 	DD4hep::XML::Component compSlice = collSlice;
-	const double      sliceThickness = compSlice.thickness();
+	const double      slice_thickness = compSlice.thickness();
 	const std::string sliceName = layer_name + DD4hep::XML::_toString(sliceID,"slice%d");
-	DD4hep::Geometry::Material   slice_mat  = lcdd.material(compSlice.materialStr());
+	DD4hep::Geometry::Material   slice_material  = lcdd.material(compSlice.materialStr());
 
 	bool isAbsorberStructure(false);
 	try {
@@ -163,7 +167,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	  //std::cout << e.what()  << std::endl;
 	}
 
-	DD4hep::Geometry::Tube sliceBase(bcalInnerR,bcalOuterR,sliceThickness/2);
+	DD4hep::Geometry::Tube sliceBase(bcalInnerR,bcalOuterR,slice_thickness/2);
 	DD4hep::Geometry::SubtractionSolid slice_subtracted;
 
 
@@ -172,38 +176,61 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	  //hole at the position of the outgoing beam pipe. In This case we have
 	  //to know the global position of the slice, because the cutout depends
 	  //on the outgoing beam pipe position
-	  const double thisPositionZ = bcalCentreZ + referencePosition + 0.5*layerThickness + inThisLayerPosition + sliceThickness*0.5;
+	  const double thisPositionZ = bcalCentreZ + referencePosition + 0.5*layerThickness + inThisLayerPosition + slice_thickness*0.5;
 	  const DD4hep::Geometry::Position thisBPPosition( std::tan(-fullCrossingAngle) * thisPositionZ, 0.0, 0.0);
 	  //The extra parenthesis are paramount! But.. there are none
 	  const DD4hep::Geometry::Transform3D thisBPTransform( incomingBeamPipeRotation, thisBPPosition );
 	  slice_subtracted = DD4hep::Geometry::SubtractionSolid(sliceBase, incomingBeamPipe, thisBPTransform);
-	  radiator_thickness = sliceThickness;
+	  radiator_thickness = slice_thickness;
 	} else {
 	  //If we do not have the absorber structure then we create the slice with a wedge cutout, i.e, keyhole shape
 	  /// Is it better to join two pieces or subtract two pieces?
 	  slice_subtracted = DD4hep::Geometry::SubtractionSolid(sliceBase, cutOutTube, DD4hep::Geometry::Transform3D() );
 	}
 
-	DD4hep::Geometry::Volume slice_vol (sliceName,slice_subtracted,slice_mat);
+	DD4hep::Geometry::Volume slice_vol (sliceName,slice_subtracted,slice_material);
 
+        nRadiationLengths += slice_thickness/(2.*slice_material.radLength());
+        nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
+        thickness_sum += slice_thickness/2;
+                
 	if ( compSlice.isSensitive() )  {
 	  slice_vol.setSensitiveDetector(sens);
+          
+          //Store "inner" quantities
+          caloLayer.inner_nRadiationLengths = nRadiationLengths;
+          caloLayer.inner_nInteractionLengths = nInteractionLengths;
+          caloLayer.inner_thickness = thickness_sum;
+          //Store scintillator thickness
+          caloLayer.sensitive_thickness = slice_thickness;
+          
+          //Reset counters to measure "outside" quantitites
+          nRadiationLengths=0.;
+          nInteractionLengths=0.;
+          thickness_sum = 0.;
 	}
+	
+        nRadiationLengths += slice_thickness/(2.*slice_material.radLength());
+        nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
+        thickness_sum += slice_thickness/2;
+                	
 
 	slice_vol.setAttributes(lcdd,compSlice.regionStr(),compSlice.limitsStr(),compSlice.visStr());
 	DD4hep::Geometry::PlacedVolume pv = layer_vol.placeVolume(slice_vol,
-								  DD4hep::Geometry::Position(0,0,inThisLayerPosition+sliceThickness*0.5));
+								  DD4hep::Geometry::Position(0,0,inThisLayerPosition+slice_thickness*0.5));
 	pv.addPhysVolID("slice",sliceID);
-	inThisLayerPosition += sliceThickness;
+	inThisLayerPosition += slice_thickness;
 	++sliceID;
       }//For all slices in this layer
 
       //-----------------------------------------------------------------------------------------
-      DD4hep::DDRec::LayeredCalorimeterData::Layer caloLayer ;
       
-      caloLayer.distance = bcalCentreZ + referencePosition+0.5*layerThickness ;
-      caloLayer.thickness = layerThickness ;
-      caloLayer.absorberThickness = radiator_thickness ;
+      caloLayer.distance = bcalCentreZ + referencePosition;
+
+      caloLayer.outer_nRadiationLengths = nRadiationLengths;
+      caloLayer.outer_nInteractionLengths = nInteractionLengths;
+      caloLayer.outer_thickness = thickness_sum;
+            
       caloLayer.cellSize0 = BeamCal_cell_size ;
       caloLayer.cellSize1 = BeamCal_cell_size ;
       
