@@ -209,12 +209,12 @@
     
     <include ref="Materials_v01.xml"/>
     
-    <!--include ref="Beampipe_o1_v01_01.xml"/>
+    <include ref="Beampipe_o1_v01_01.xml"/>
     
     <include ref="Vertex_o2_v01_01.xml"/>
     
     <include ref="InnerTracker_o2_v01_01.xml"/>
-    <include ref="OuterTracker_o2_v01_01.xml"/-->
+    <include ref="OuterTracker_o2_v01_01.xml"/>
     
     <include ref="ECalBarrel_o1_v01_01.xml"/>
     <include ref="ECalEndcap_o2_v01_01.xml"/>
@@ -222,7 +222,7 @@
     <include ref="ECalBarrelFace_o1_v01_01.xml"/> 
     <include ref="ECalEndcapFace_o1_v01_01.xml"/> 
     
-   <!--include ref="HCalBarrel_o1_v01_01.xml"/>
+   <include ref="HCalBarrel_o1_v01_01.xml"/>
     <include ref="HCalEndcap_o1_v01_01.xml"/>
     
     <include ref="Solenoid_o1_v01_01.xml"/>
@@ -232,7 +232,7 @@
 
     <include ref="LumiCal_o1_v01_01.xml"/>
 
-    <include ref="BeamCal_o1_v01_01.xml"/-->
+    <include ref="BeamCal_o1_v01_01.xml"/>
     
     <plugins>
         <plugin name="InstallSurfaceManager"/>

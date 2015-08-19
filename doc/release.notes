@@ -1,4 +1,26 @@
 
+
+N. Nikiforou 19/08/2015 
+-----------------------
+
+   M.Petric
+   - Made a new version for CLIC named CLIC_o2_v03 which includes better representations
+     of X0 in the Trackers
+   N. Nikiforou
+   - Added new Generic Calorimeter drivers based on Polyhedra Calorimeters named
+     GenericCalBarrel and GenericCalEndcap. The Generic drivers
+     were obtained by svn cp from HCalBarrel and HCalEndcap respectively and are used
+     in the CLIC_o2_v03 model by the ECal, HCal and Yoke Endcaps, Barrels and Rings.
+     These new drivers (almost identical to the old ones) will be used to avoid making 
+     changes in all the drivers while developing the reconstruction framework.
+     Changes include:
+     - Cleaning up of old comments, old code snippets and featurs no longer used (like
+       multiple sensitive elements per layer which will not be supported by the reco).
+     - Introduction of the new LayeredCalorimeterStruct variables defined in DDRec:
+       - inner/outer thicknesses, nRad/nIntLengths and sensitive element thicknesses
+     - Avoidance of cloning of element volumes in the barrel case
+     - Start of counters (e.g. layer, module, stave, etc) from 0 rather than 1
+
  --------
 | v00-05 | 
  --------    

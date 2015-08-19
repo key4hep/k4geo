@@ -36,6 +36,10 @@ ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh
   python ${CMAKE_SOURCE_DIR}/example/RunProg.py --compactFile=${CMAKE_SOURCE_DIR}/CLIC/compact/CLIC_o2_v02/CLIC_o2_v02.xml --runType=batch -G --nEvents=1 --outputFile=testCLIC_o2_v02.slcio )
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
+SET( test_name "test_CLIC_o2_v03" )
+ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
+  python ${CMAKE_SOURCE_DIR}/example/RunProg.py --compactFile=${CMAKE_SOURCE_DIR}/CLIC/compact/CLIC_o2_v03/CLIC_o2_v03.xml --runType=batch -G --nEvents=1 --outputFile=testCLIC_o2_v03.slcio )
+SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
 #--------------------------------------------------
 
