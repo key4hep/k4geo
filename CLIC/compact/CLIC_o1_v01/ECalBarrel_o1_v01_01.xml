@@ -36,6 +36,9 @@
     <!--  Definitions of visualization attributes  -->
     <display>
         <vis name="EcalStaveVis"      alpha="1.0" r="0.0"  g="0.8"  b="1.0"  showDaughters="true"  visible="true"/>
+	<vis name="EcalTowerVis"      alpha="1.0" r="0.4"  g="0.4"  b="1.0"  showDaughters="true"  visible="true"/>
+	<vis name="EcalStackVis"      alpha="1.0" r="0.1"  g="0.4"  b="0.4"  showDaughters="true"  visible="true"/>
+	<vis name="EcalRailVis"       alpha="1.0" r="0.1"  g="0.1"  b="0.1"  showDaughters="false" visible="true"/>
         <vis name="EcalLayerVis"      alpha="1.0" r="0.8"  g="0.8"  b="0.0"  showDaughters="true"  visible="true"/>
         <vis name="EcalSensitiveVis"  alpha="1.0" r="0.7"  g="0.3"  b="0.0"  showDaughters="false" visible="true"/>
         <vis name="EcalAbsorberVis"   alpha="1.0" r="0.4"  g="0.4"  b="0.0"  showDaughters="false" visible="true"/>
@@ -55,10 +58,13 @@
                 <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/ECalBarrel_symmetry"/>
             </envelope>
             
-            <parameter num_towers="5" TowersAirGap="2.4*mm" TowersFaceThickness="1.60*mm" AlveolusMaterial="CarbonFiber_25percent" supportBarCrossSection="106*106*mm*mm" ecal_barrel_tolerance="env_safety"/>
+            <parameter num_towers="5" TowersAirGap="2.4*mm" TowersFaceThickness="1.60*mm" AlveolusMaterial="CarbonFiber_25percent" supportRailCrossSection="12*12*mm*mm" supportRailMaterial="Steel235" num_rails="3" stacks_per_tower="3" ecal_barrel_tolerance="env_safety"/>
 
             <dimensions numsides="ECalBarrel_symmetry" rmin="ECalBarrel_inner_radius" rmax="ECalBarrel_outer_radius" z="ECalBarrel_half_length*2" />
             <staves vis="EcalStaveVis" />
+	    <modules vis="EcalTowerVis" />
+	    <submodules vis="EcalStackVis" />
+	    <supports vis="EcalRailVis" /> 
             <layer repeat="17" vis="EcalLayerVis">
                 <slice material = "TungstenDens24" thickness = "1.20*mm" vis="EcalAbsorberVis"/>
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
