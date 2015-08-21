@@ -58,8 +58,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     Layering      layering (e);
     Material      air       = lcdd.air();
     xml_comp_t    x_staves  = x_det.staves();
-    //xml_comp_t    x_modules = x_det.modules();                - is this available?
-    //xml_comp_t    x_submodules = x_det.submodules();
     xml_comp_t    x_dim     = x_det.dimensions();
     int           nsides    = x_dim.numsides();
     double        inner_r   = x_dim.rmin();                     // inscribed cylinder
@@ -92,7 +90,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
     caloData->extent[0] = inner_r;
-    caloData->extent[1] = outer_r; // + ry/std::cos(hphi), or r_max ?
+    caloData->extent[1] = outer_r; // + 2*ry/std::cos(hphi), or r_max ?
     caloData->extent[2] = 0; //NN: for barrel detectors this is 0
     caloData->extent[3] = x_dim.z()/2;
 
@@ -111,20 +109,20 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     // https://root.cern.ch/root/html/TGeoTrd2.html
     // This stave is slightly bigger to contain the support rails
     Trapezoid stv(trd_x1, // Inner side, i.e. "long" X side
-                  trd_x2 - ry/std::tan(dphi), // Outer side, i.e. "short" X side
+                  trd_x2 - 2*ry/std::tan(dphi), // Outer side, i.e. "short" X side
                   trd_y1s,       // Depth at bottom face 
                   trd_y1s,       // Depth at top face y2=y1
                   trd_z + ry);   // Height of the stave, when rotated 
     Volume stave_vol("stave", stv, air);
 
-    std::cout << "Stave height/thickness: " << trd_z + ry << std::endl;
+    std::cout << "Stave height/thickness: " << 2*trd_z << std::endl;
     std::cout << "Got r_inner = " << inner_r << std::endl;
     std::cout << "Got r_outer = " << outer_r << " and r_max = " << r_max << std::endl;
-    if(outer_r + ry/std::cos(hphi) > r_max) { // throw exception
+    if(outer_r > r_max) { // throw exception 
       throw std::runtime_error("ERROR: Layers don't fit within the envelope volume!");
     }
 
-    // Create the trapezoid for the towers (5 of them per stave) with support rails
+    // Create the trapezoid for the towers (5 of them per stave) 
     double trd_y1t = (x_dim.z() - (n_towers-1)*towersAirGap)/n_towers/2 - tolerance;
     Trapezoid twr(trd_x1, // Inner side, i.e. the "long" X side
                   trd_x2, // Outer side, i.e. the "short" X side
@@ -138,7 +136,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     Volume rail_vol("tower_support_rail", rail, Steel);
 
     // Create trapezoids for each of the stacks (3 of them per tower)
-    double trd_y1 = (trd_y1t - (n_stacks - 1)*faceThickness)/n_stacks; 
+    double trd_y1 = (trd_y1t - (n_stacks - 1)*faceThickness)/n_stacks; // add end faces + tolerance
     Trapezoid stk(trd_x1, // Inner side, i.e. the "long" X side
                   trd_x2, // Outer side, i.e. the "short" X side
                   trd_y1, // Depth at bottom face
@@ -152,112 +150,121 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     double phi = M_PI/2.0 - M_PI/nsides;               // following the envelope rotation, ECalBarrel_o1_v01_01.xml
     double mod_x_off = dx/2 + tolerance;               // Module X offset
     double mod_y_off = (inner_r + r_max*cos(hphi))/2;  // Module Y offset - mid-envelope placement
-    // double mod_y_off = inner_r + trd_z + tolerance;
+    // double mod_y_off = inner_r + trd_z + 2*ry + tolerance;
 
     DetElement stave_det("stave0", det_id);    
+    DetElement tower_det0(stave_det, "tower0", det_id);
+    DetElement stack_det0(tower_det0, "stack0", det_id);
 
     for (int t = 0; t < n_towers; t++) {
       double t_pos_y = (t - (n_towers-1)/2)*(2*trd_y1t + towersAirGap);
-      DetElement tower_det(stave_det, _toString(t, "module%d"), det_id);
-      
+      string t_name = _toString(t+1, "module%d");
+      Volume tower_vol(t_name, twr, Composite); // solid C composite
+      DetElement tower_det = t==0 ? tower_det0 : tower_det0.clone(_toString(t, "module%d"));
+
       for (int m = 0; m < n_stacks; m++) { 
 	double m_pos_y = (m - (n_stacks-1)/2)*(2*trd_y1 + faceThickness);
-	DetElement stack_det(tower_det, _toString(m, "submodule%d"), det_id);
-	
-        // Parameters for computing the layer X dimension:
-        double l_dim_y  = trd_y1 - 2.*faceThickness;
-        double l_dim_x  = trd_x1; // Starting X dimension for the layer
-        double tan_beta = std::tan(dphi);
-        double l_pos_z  = -trd_z;
-        
-        // Loop over the sets of layer elements in the module
-        int l_num = 1;
-        for(xml_coll_t li(x_det,_U(layer)); li; ++li)  {
-	  
-	  xml_comp_t x_layer = li;
-	  int repeat = x_layer.repeat();
-	  
-	  // Loop over number of repeats for this layer.
-	  for (int j=0; j<repeat; j++)  {
-	    
-	    DDRec::LayeredCalorimeterData::Layer caloLayer ;
-            
-	    string l_name = _toString(l_num, "layer%d");
-	    double l_thickness = layering.layer(l_num-1)->thickness(); // layer thickness          
-	    // std::cout << l_name << " thickness: " << l_thickness << std::endl;
-	    l_dim_x -= l_thickness/tan_beta;                        // decreasing width 
-	    
-	    Position   l_pos(0., 0., l_pos_z + l_thickness/2.);     // layer position 
-	    Box        l_box(l_dim_x - tolerance, l_dim_y - tolerance, l_thickness/2.);
-	    Volume     l_vol(l_name, l_box, air);
-	    DetElement layer(stack_det, l_name, det_id);
-            
-	    // Loop over the sublayers or slices for this layer
-	    int s_num = 1;
-	    double s_pos_z = -(l_thickness/2);
-	    double totalAbsorberThickness=0.;
-            
-	    for(xml_coll_t si(x_layer,_U(slice)); si; ++si)  {
-	      
-	      xml_comp_t x_slice = si;
-	      string     s_name  = _toString(s_num,"slice%d");
-	      double     s_thick = x_slice.thickness();
-	      //std::cout << s_name << " thickness: " << s_thick << std::endl;
-	      Box        s_box(l_dim_x - tolerance, l_dim_y - tolerance, s_thick/2.);
-	      Volume     s_vol(s_name, s_box, lcdd.material(x_slice.materialStr()));
-	      DetElement slice(layer, s_name, det_id);
-              
-	      if ( x_slice.isSensitive() ) {
-		s_vol.setSensitiveDetector(sens);
-	      }
-              
-	      if( x_slice.isRadiator() == true)
-		totalAbsorberThickness+= s_thick;
-	      
-	      slice.setAttributes(lcdd, s_vol, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
-	      
-	      // Slice placement
-	      PlacedVolume slice_pv = l_vol.placeVolume(s_vol, Position(0., 0., s_pos_z + s_thick/2.));
-	      slice.setPlacement(slice_pv);
-	      // Increment Z position of slice
-	      s_pos_z += s_thick;
-              
-	      // Increment slice number
-	      ++s_num;
-	    }
-            
-	    // Set region, limitset, and visibility of layer
-	    layer.setAttributes(lcdd, l_vol, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
-            
-	    PlacedVolume layer_pv = stack_vol.placeVolume(l_vol, l_pos);
-	    layer_pv.addPhysVolID("layer", l_num);
-	    layer.setPlacement(layer_pv);
-            
-	    caloLayer.distance = mod_y_off + l_pos_z + l_thickness/2.; // to center
-	    caloLayer.thickness = l_thickness;
-	    caloLayer.absorberThickness = totalAbsorberThickness;
-	    caloLayer.cellSize0 = cell_sizeX;
-	    caloLayer.cellSize1 = cell_sizeY;
-            
-	    caloData->layers.push_back( caloLayer ) ;
-                
-	    // Increment to next layer Z position
-	    l_pos_z += l_thickness;
-	    ++l_num;
-	  }
-        }
-	//stack_det.setAttributes(lcdd, stack_vol, x_submodules.regionStr(), x_submodules.limitsStr(), x_submodules.visStr());
-	stack_vol.setVisAttributes(lcdd.visAttributes(x_staves.visStr())); // fix this!
+	string k_name = _toString(m+1, "submodule%d");
+	Volume stack_vol(k_name, stk, Composite); // solid C composite
+	DetElement stack_det = m+t==0 ? stack_det0 : stack_det0.clone(_toString(10*t+m, "submodule%d"));
 
+	if(m+t==0){ // do this only first time
+	  // Parameters for computing the layer X dimension:
+	  double l_dim_y  = trd_y1 - 2.*faceThickness;
+	  double l_dim_x  = trd_x1; // Starting X dimension for the layer
+	  double tan_beta = std::tan(dphi);
+	  double l_pos_z  = -trd_z;
+	  
+	  // Loop over the sets of layer elements in the module
+	  int l_num = 1;
+	  for(xml_coll_t li(x_det,_U(layer)); li; ++li)  {
+	    
+	    xml_comp_t x_layer = li;
+	    int repeat = x_layer.repeat();
+	    
+	    // Loop over number of repeats for this layer.
+	    for (int j=0; j<repeat; j++)  {
+	      
+	      DDRec::LayeredCalorimeterData::Layer caloLayer ;
+	      
+	      string l_name = _toString(l_num, "layer%d");
+	      double l_thickness = layering.layer(l_num-1)->thickness(); // layer thickness          
+	      // std::cout << l_name << " thickness: " << l_thickness << std::endl;
+	      l_dim_x -= l_thickness/tan_beta;                        // decreasing width 
+	      
+	      Position   l_pos(0., 0., l_pos_z + l_thickness/2.);     // layer position 
+	      Box        l_box(l_dim_x - tolerance, l_dim_y - tolerance, l_thickness/2.);
+	      Volume     l_vol(l_name, l_box, air);
+	      DetElement layer(stack_det0, l_name, det_id);
+	      
+	      // Loop over the sublayers or slices for this layer
+	      int s_num = 1;
+	      double s_pos_z = -(l_thickness/2);
+	      double totalAbsorberThickness=0.;
+	      
+	      for(xml_coll_t si(x_layer,_U(slice)); si; ++si)  {
+		
+		xml_comp_t x_slice = si;
+		string     s_name  = _toString(s_num, "slice%d");
+		double     s_thick = x_slice.thickness();
+		//std::cout << s_name << " thickness: " << s_thick << std::endl;
+		Box        s_box(l_dim_x - tolerance, l_dim_y - tolerance, s_thick/2.);
+		Volume     s_vol(s_name, s_box, lcdd.material(x_slice.materialStr()));
+		DetElement slice(layer, s_name, det_id);
+		
+		if ( x_slice.isSensitive() ) {
+		  s_vol.setSensitiveDetector(sens);
+		}
+		
+		if( x_slice.isRadiator() == true)
+		  totalAbsorberThickness+= s_thick;
+		
+		slice.setAttributes(lcdd, s_vol, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+		
+		// Slice placement
+		PlacedVolume slice_pv = l_vol.placeVolume(s_vol, Position(0., 0., s_pos_z + s_thick/2.));
+		//slice_pv.addPhysVolID("slice", s_num); 
+		slice.setPlacement(slice_pv);	  
+		// Increment Z position of slice
+		s_pos_z += s_thick;
+		
+		// Increment slice number
+		++s_num;
+	      }
+	      
+	      // Set region, limitset, and visibility of layer
+	      layer.setAttributes(lcdd, l_vol, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
+	      
+	      PlacedVolume layer_pv = stack_vol.placeVolume(l_vol, l_pos);
+	      layer_pv.addPhysVolID("layer", l_num);
+	      layer.setPlacement(layer_pv);
+	      
+	      caloLayer.distance = mod_y_off + l_pos_z + l_thickness/2.; // to center
+	      caloLayer.thickness = l_thickness;
+	      caloLayer.absorberThickness = totalAbsorberThickness;
+	      caloLayer.cellSize0 = cell_sizeX;
+	      caloLayer.cellSize1 = cell_sizeY;
+	      
+	      caloData->layers.push_back( caloLayer ) ;
+	      
+	      // Increment to next layer Z position
+	      l_pos_z += l_thickness;
+	      ++l_num;
+	    }
+	  }
+	}
+	//stack_det.setAttributes(lcdd, stack_vol, x_staves.regionStr(), x_staves.limitsStr(), x_staves.visStr());
+	stack_vol.setVisAttributes(lcdd.visAttributes(x_staves.visStr())); // fix this!
+	
 	PlacedVolume stack_pv = tower_vol.placeVolume(stack_vol, Position(0., m_pos_y, 0.));
-	stack_pv.addPhysVolID("submodule", m); // stack id (needed?)
+	stack_pv.addPhysVolID("submodule", m); 
 	stack_det.setPlacement(stack_pv);
       }
-      //tower_det.setAttributes(lcdd, tower_vol, x_modules.regionStr(), x_modules.limitsStr(), x_modules.visStr());
+      //tower_det.setAttributes(lcdd, tower_vol, x_staves.regionStr(), x_staves.limitsStr(), x_staves.visStr());
       tower_vol.setVisAttributes(lcdd.visAttributes(x_staves.visStr())); // fix this!
-
+      
       PlacedVolume tower_pv = stave_vol.placeVolume(tower_vol, Position(0., t_pos_y, -ry));
-      tower_pv.addPhysVolID("module", t);    // tower id (needed?)
+      tower_pv.addPhysVolID("module", t);  
       tower_det.setPlacement(tower_pv);
       
       // Create support rails
@@ -266,7 +273,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	DetElement rail_support(stave_det, _toString(10*t+r, "tower_support_rail%d"), det_id);
 	double r_pos_y = (r - (n_rails - 1)/2)*rail_spacing;
 	PlacedVolume rail_pv = stave_vol.placeVolume(rail_vol, Position(r_pos_y, t_pos_y, trd_z));
-	rail_vol.setVisAttributes(lcdd.visAttributes(x_staves.visStr()));
+	//rail_vol.setVisAttributes(lcdd.visAttributes(x_staves.visStr())); // fix!
 	rail_support.setPlacement(rail_pv);
       }
     }
@@ -286,10 +293,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       pv.addPhysVolID("stave", i);
       DetElement sd = i==0 ? stave_det : stave_det.clone(_toString(i, "stave%d"));
       sd.setPlacement(pv);
-      if(i==0){
-	pv.addPhysVolID("side", 0); //should set once in parent volume placement
-	// pv.addPhysVolID("system",det_id); // not needed (?)
-      }
+      pv.addPhysVolID("side", 0); //should set once in parent volume placement
+      //pv.addPhysVolID("system",det_id); // not needed (?)
       sdet.add(sd);
     }    
 
