@@ -230,7 +230,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	    layer.setAttributes(lcdd, l_vol, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
             
 	    PlacedVolume layer_pv = stack_vol.placeVolume(l_vol, l_pos);
-	    //layer_pv.addPhysVolID("layer", l_num);
+	    layer_pv.addPhysVolID("layer", l_num);
 	    layer.setPlacement(layer_pv);
             
 	    caloLayer.distance = mod_y_off + l_pos_z + l_thickness/2.; // to center
