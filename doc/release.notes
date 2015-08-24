@@ -1,3 +1,13 @@
+N.Nikiforou 24/08/2015
+----------------------
+ - Modified CLIC_o2_v03/ECalBarrel_o2_v01_01.xml, ECalEndcap_02_v01_01.xml and
+   ECalPlug_o1_v01_01.xml to avoid having layers without active element
+   which complicates implementation for reconstruction.
+   This was the case for the last (outermost) dead layer (absorber only).
+   Instead, added one more type of layer with only one repeat which includes the extra
+   absorber plate
+ - Fixed bug (?) in CLIC_o2_v03/ECalEndcap_02_v01_01.xml and ECalPlug_o1_v01_01.xml
+   which had different siPCBMix thickness compared to the ECalBarrel (1.20 mm -> 0.80 mm). 
 
 
 N. Nikiforou 19/08/2015 

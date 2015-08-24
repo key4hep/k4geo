@@ -140,8 +140,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens) {
         caloLayer.cellSize0 = cell_sizeX;
         caloLayer.cellSize1 = cell_sizeY;
 
-        // Layer position in Z within the stave.
-        layer_pos_z += layer_thickness / 2;
+
         // Layer box & volume
         Volume layer_vol(layer_type_name, Box(layer_dim_x, detZ / 2, layer_thickness / 2), air);
         
@@ -212,6 +211,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens) {
         for (int j = 0; j < repeat; j++) {
             string layer_name = _toString(layer_num, "layer%d");
             DetElement layer(stave, layer_name, layer_num);
+            
+            // Layer position in Z within the stave.
+            layer_pos_z += layer_thickness / 2;
             // Layer physical volume.
             PlacedVolume layer_phv = staveInnerVol.placeVolume(layer_vol, Position(0, 0, layer_pos_z));
             layer_phv.addPhysVolID("layer", layer_num);
@@ -220,7 +222,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens) {
             //The rest of the data is constant; only the distance needs to be updated  
             //Store the position up to the inner face of the layer
             caloLayer.distance = rmin+layer_pos_z + staveThickness / 2 - layer_thickness / 2; 
-
+            std::cout<<"Layer: "<<layer_num<<" Rmin: "<<rmin<<" layer_pos_z: "<<layer_pos_z<<" Dist: "<<caloLayer.distance<<" inner_thickness: "<<caloLayer.inner_thickness<<" outer_thickness: "<<caloLayer.outer_thickness<<std::endl;
             //Push back a copy to the caloData structure
             caloData->layers.push_back( caloLayer ) ;
             

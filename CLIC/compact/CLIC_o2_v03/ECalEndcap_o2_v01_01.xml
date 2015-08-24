@@ -28,32 +28,39 @@
             
             <dimensions nsides_inner="ECalEndcap_inner_symmetry" nsides_outer="(int) ECalEndcap_outer_symmetry" zmin="ECalEndcap_min_z" rmin="ECalEndcap_inner_radius" rmax="ECalEndcap_outer_radius"/>
             
-            <layer repeat="17" vis="EcalLayerVis">
+            <layer repeat="17" vis="ECalLayerVis">
                 <slice material = "TungstenDens24" thickness = "2.40*mm" vis="ECalAbsorberVis" radiator="yes"/>
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
                 <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="ECalAbsorberVis"/>
                 <slice material = "Silicon"        thickness = "0.50*mm" sensitive="yes" limits="cal_limits" vis="ECalSensitiveVis"/>
                 <slice material = "Air"            thickness = "0.10*mm" vis="InvisibleNoDaughters"/><!-- glue -->
-                <slice material = "siPCBMix"       thickness = "1.20*mm" vis="ECalAbsorberVis"/>
+                <slice material = "siPCBMix"       thickness = "0.80*mm" vis="ECalAbsorberVis"/>
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/>
             </layer>
-            <layer repeat="8" vis="ECalLayerVis">
+            <layer repeat="7" vis="ECalLayerVis">
                 <slice material = "TungstenDens24" thickness = "4.80*mm" vis="ECalAbsorberVis" radiator="yes"/>
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
                 <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="ECalAbsorberVis"/>
                 <slice material = "Silicon"        thickness = "0.50*mm" sensitive="yes" limits="cal_limits" vis="ECalSensitiveVis"/>
                 <slice material = "Air"            thickness = "0.10*mm" vis="InvisibleNoDaughters"/><!-- glue -->
-                <slice material = "siPCBMix"       thickness = "1.20*mm" vis="ECalAbsorberVis"/>
+                <slice material = "siPCBMix"       thickness = "0.80*mm" vis="ECalAbsorberVis"/>
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/>
             </layer>
+
+            <!-- Easier to stick with Layers that have one sensitive element-->
+            <!-- Rather than making a passive layer, make one more group of layers with one entry  -->
             <layer repeat="1" vis="ECalLayerVis">
+                <slice material = "TungstenDens24" thickness = "4.80*mm" vis="ECalAbsorberVis" radiator="yes"/>
+                <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
+                <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="ECalAbsorberVis"/>
+                <slice material = "Silicon"        thickness = "0.50*mm" sensitive="yes" limits="cal_limits" vis="ECalSensitiveVis"/>
+                <slice material = "Air"            thickness = "0.10*mm" vis="InvisibleNoDaughters"/><!-- glue -->
+                <slice material = "siPCBMix"       thickness = "0.80*mm" vis="ECalAbsorberVis"/>
+                <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/>
                 <slice material = "TungstenDens24" thickness = "4.80*mm" vis="ECalAbsorberVis" radiator="yes"/>
                 <slice material = "CarbonFiber_25percent" thickness = "10.0*mm" vis="CompositeVis"/>
             </layer>
-            
-            
         </detector>
-        
     </detectors>
     
     

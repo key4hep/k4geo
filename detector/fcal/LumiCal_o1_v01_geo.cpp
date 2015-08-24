@@ -157,7 +157,6 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
             caloLayer.outer_nRadiationLengths = nRadiationLengths;
             caloLayer.outer_nInteractionLengths = nInteractionLengths;
             caloLayer.outer_thickness = thickness_sum;
-            //Store scintillator thickness
             
             
             caloLayer.cellSize0 = LumiCal_cell_size ;
