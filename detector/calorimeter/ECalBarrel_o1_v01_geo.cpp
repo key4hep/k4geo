@@ -84,8 +84,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     caloData->inner_phi0 = 0.; 
     caloData->outer_phi0 = 0.; 
-    caloData->gap0 = 0.; //FIXME - what is this?
-    caloData->gap1 = 0.; //FIXME - how?
+    caloData->gap0 = 0.; //FIXME 
+    caloData->gap1 = 0.; //FIXME 
     caloData->gap2 = 0.; //FIXME 
     
     /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
@@ -129,11 +129,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                   trd_y1t, // Depth at bottom face
                   trd_y1t, // Depth at top face y2=y1
                   trd_z);  // Height of the tower, when rotated
-    Volume tower_vol("module", twr, Composite); // solid C composite 
-
+    
     // Create support rails
-    Box rail(ry, trd_y1t, ry);
-    Volume rail_vol("tower_support_rail", rail, Steel);
+    Box rail(ry, trd_y1s, ry); // y=trd_y1t for 3x5
 
     // Create trapezoids for each of the stacks (3 of them per tower)
     double trd_y1 = (trd_y1t - (n_stacks - 1)*faceThickness)/n_stacks; // add end faces + tolerance
@@ -142,7 +140,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                   trd_y1, // Depth at bottom face
                   trd_y1, // Depth at top face y2=y1
                   trd_z); // Height of the stack, when rotated
-    Volume stack_vol("submodule", stk, Composite); // solid C composite
 
     sens.setType("calorimeter");
 
@@ -153,23 +150,20 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     // double mod_y_off = inner_r + trd_z + 2*ry + tolerance;
 
     DetElement stave_det("stave0", det_id);    
-    DetElement tower_det0(stave_det, "tower0", det_id);
-    DetElement stack_det0(tower_det0, "stack0", det_id);
 
     for (int t = 0; t < n_towers; t++) {
       double t_pos_y = (t - (n_towers-1)/2)*(2*trd_y1t + towersAirGap);
       string t_name = _toString(t+1, "module%d");
       Volume tower_vol(t_name, twr, Composite); // solid C composite
-      DetElement tower_det = t==0 ? tower_det0 : tower_det0.clone(_toString(t, "module%d"));
+      DetElement tower_det(stave_det, t_name, det_id);
 
       for (int m = 0; m < n_stacks; m++) { 
 	double m_pos_y = (m - (n_stacks-1)/2)*(2*trd_y1 + faceThickness);
 	string k_name = _toString(m+1, "submodule%d");
 	Volume stack_vol(k_name, stk, Composite); // solid C composite
-	DetElement stack_det = m+t==0 ? stack_det0 : stack_det0.clone(_toString(10*t+m, "submodule%d"));
+        DetElement stack_det(tower_det, k_name, det_id);
 
-	if(m+t==0){ // do this only first time
-	  // Parameters for computing the layer X dimension:
+        { // Parameters for computing the layer X dimension:
 	  double l_dim_y  = trd_y1 - 2.*faceThickness;
 	  double l_dim_x  = trd_x1; // Starting X dimension for the layer
 	  double tan_beta = std::tan(dphi);
@@ -195,7 +189,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	      Position   l_pos(0., 0., l_pos_z + l_thickness/2.);     // layer position 
 	      Box        l_box(l_dim_x - tolerance, l_dim_y - tolerance, l_thickness/2.);
 	      Volume     l_vol(l_name, l_box, air);
-	      DetElement layer(stack_det0, l_name, det_id);
+	      DetElement layer(stack_det, l_name, det_id);
 	      
 	      // Loop over the sublayers or slices for this layer
 	      int s_num = 1;
@@ -223,7 +217,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 		
 		// Slice placement
 		PlacedVolume slice_pv = l_vol.placeVolume(s_vol, Position(0., 0., s_pos_z + s_thick/2.));
-		//slice_pv.addPhysVolID("slice", s_num); 
 		slice.setPlacement(slice_pv);	  
 		// Increment Z position of slice
 		s_pos_z += s_thick;
@@ -254,28 +247,31 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	  }
 	}
 	//stack_det.setAttributes(lcdd, stack_vol, x_staves.regionStr(), x_staves.limitsStr(), x_staves.visStr());
-	stack_vol.setVisAttributes(lcdd.visAttributes(x_staves.visStr())); // fix this!
+	stack_vol.setVisAttributes(lcdd.visAttributes(x_staves.visStr())); // Fix this!
 	
 	PlacedVolume stack_pv = tower_vol.placeVolume(stack_vol, Position(0., m_pos_y, 0.));
 	stack_pv.addPhysVolID("submodule", m); 
 	stack_det.setPlacement(stack_pv);
       }
       //tower_det.setAttributes(lcdd, tower_vol, x_staves.regionStr(), x_staves.limitsStr(), x_staves.visStr());
-      tower_vol.setVisAttributes(lcdd.visAttributes(x_staves.visStr())); // fix this!
+      tower_vol.setVisAttributes(lcdd.visAttributes(x_staves.visStr())); // Fix this!
       
       PlacedVolume tower_pv = stave_vol.placeVolume(tower_vol, Position(0., t_pos_y, -ry));
       tower_pv.addPhysVolID("module", t);  
       tower_det.setPlacement(tower_pv);
+    }
       
-      // Create support rails
-      double rail_spacing = trd_x2/2.;
-      for (int r = 0; r < n_rails; r++){
-	DetElement rail_support(stave_det, _toString(10*t+r, "tower_support_rail%d"), det_id);
-	double r_pos_y = (r - (n_rails - 1)/2)*rail_spacing;
-	PlacedVolume rail_pv = stave_vol.placeVolume(rail_vol, Position(r_pos_y, t_pos_y, trd_z));
-	//rail_vol.setVisAttributes(lcdd.visAttributes(x_staves.visStr())); // fix!
-	rail_support.setPlacement(rail_pv);
-      }
+    // Create support rails (move in the loop for 3x5, i.e. 3 rails per tower)
+    double rail_spacing = trd_x2/2.;
+    for (int r = 0; r < n_rails; r++){
+      string r_name = _toString(r, "support_rail%d");
+      Volume rail_vol(r_name, rail, Steel);
+      DetElement rail_support(stave_det, r_name, det_id);
+      double r_pos_y = (r - (n_rails - 1)/2)*rail_spacing;
+      //PlacedVolume rail_pv = stave_vol.placeVolume(rail_vol, Position(r_pos_y, t_pos_y, trd_z));//3x5
+      PlacedVolume rail_pv = stave_vol.placeVolume(rail_vol, Position(r_pos_y, 0., trd_z));//3
+      //rail_vol.setVisAttributes(lcdd.visAttributes(x_staves.visStr())); // fix!
+      rail_support.setPlacement(rail_pv);
     }
     
     // Set visualization
@@ -291,10 +287,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       Transform3D tr(RotationZYX(0., phi, M_PI/2.), Translation3D(-s_pos_x, -s_pos_y, -s_pos_z));
       PlacedVolume pv = envelope.placeVolume(stave_vol, tr);
       pv.addPhysVolID("stave", i);
-      DetElement sd = i==0 ? stave_det : stave_det.clone(_toString(i, "stave%d"));
-      sd.setPlacement(pv);
       pv.addPhysVolID("side", 0); //should set once in parent volume placement
       //pv.addPhysVolID("system",det_id); // not needed (?)
+      DetElement sd = i==0 ? stave_det : stave_det.clone(_toString(i, "stave%d"));
+      sd.setPlacement(pv);
       sdet.add(sd);
     }    
 
