@@ -8,6 +8,11 @@
 using namespace DD4hep;
 using namespace DD4hep::Geometry;
 
+// workaround for DD4hep v00-14 (and older) 
+#ifndef DD4HEP_VERSION_GE
+#define DD4HEP_VERSION_GE(a,b) 0 
+#endif
+
 static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
                                                xml_h element,
                                                DD4hep::Geometry::SensitiveDetector sens) {
@@ -124,13 +129,15 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
                 thickness_sum += slice_thickness/2;
                 
                 if ( compSlice.isSensitive() )  {
-                    //Store "inner" quantities
+
+ #if DD4HEP_VERSION_GE( 0, 15 )
+                   //Store "inner" quantities
                     caloLayer.inner_nRadiationLengths = nRadiationLengths;
                     caloLayer.inner_nInteractionLengths = nInteractionLengths;
                     caloLayer.inner_thickness = thickness_sum;
                     //Store scintillator thickness
                     caloLayer.sensitive_thickness = slice_thickness;
-                    
+#endif                    
                     //Reset counters to measure "outside" quantitites
                     nRadiationLengths=0.;
                     nInteractionLengths=0.;
@@ -154,10 +161,11 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
             ///Needs to be innermost face distance
             caloLayer.distance = lcalCentreZ + referencePosition;
 
+#if DD4HEP_VERSION_GE( 0, 15 )
             caloLayer.outer_nRadiationLengths = nRadiationLengths;
             caloLayer.outer_nInteractionLengths = nInteractionLengths;
             caloLayer.outer_thickness = thickness_sum;
-            
+#endif            
             
             caloLayer.cellSize0 = LumiCal_cell_size ;
             caloLayer.cellSize1 = LumiCal_cell_size ;

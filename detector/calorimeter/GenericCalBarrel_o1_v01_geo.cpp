@@ -16,6 +16,11 @@ using namespace std;
 using namespace DD4hep;
 using namespace DD4hep::Geometry;
 
+// workaround for DD4hep v00-14 (and older) 
+#ifndef DD4HEP_VERSION_GE
+#define DD4HEP_VERSION_GE(a,b) 0 
+#endif
+
 static void placeStaves(DetElement& parent, DetElement& stave, double rmin, int numsides, double total_thickness,
                         Volume envelopeVolume, double innerAngle, Volume sectVolume) {
     double innerRotation = innerAngle;
@@ -170,13 +175,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens) {
                 sens.setType("calorimeter");
                 slice_vol.setSensitiveDetector(sens);
                 
+#if DD4HEP_VERSION_GE( 0, 15 )
                 //Store "inner" quantities
                 caloLayer.inner_nRadiationLengths = nRadiationLengths;
                 caloLayer.inner_nInteractionLengths = nInteractionLengths;
                 caloLayer.inner_thickness = thickness_sum;
                 //Store scintillator thickness
                 caloLayer.sensitive_thickness = slice_thickness;
-
+#endif
                 //Reset counters to measure "outside" quantitites
                 nRadiationLengths=0.;
                 nInteractionLengths=0.;
@@ -198,11 +204,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens) {
             ++slice_number;
         }
         
+#if DD4HEP_VERSION_GE( 0, 15 )
         //Store "outer" quantities
         caloLayer.outer_nRadiationLengths = nRadiationLengths;
         caloLayer.outer_nInteractionLengths = nInteractionLengths;
         caloLayer.outer_thickness = thickness_sum;
-        
+#endif        
         
         // Set region, limitset, and vis.
         layer_vol.setAttributes(lcdd, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
@@ -222,7 +229,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens) {
             //The rest of the data is constant; only the distance needs to be updated  
             //Store the position up to the inner face of the layer
             caloLayer.distance = rmin+layer_pos_z + staveThickness / 2 - layer_thickness / 2; 
-            std::cout<<"Layer: "<<layer_num<<" Rmin: "<<rmin<<" layer_pos_z: "<<layer_pos_z<<" Dist: "<<caloLayer.distance<<" inner_thickness: "<<caloLayer.inner_thickness<<" outer_thickness: "<<caloLayer.outer_thickness<<std::endl;
+            std::cout<<"Layer: "<<layer_num<<" Rmin: "<<rmin<<" layer_pos_z: "<<layer_pos_z<<" Dist: "<<caloLayer.distance
+#if DD4HEP_VERSION_GE( 0, 15 )
+		     <<" inner_thickness: "<<caloLayer.inner_thickness<<" outer_thickness: "<<caloLayer.outer_thickness
+#endif
+		     <<std::endl;
             //Push back a copy to the caloData structure
             caloData->layers.push_back( caloLayer ) ;
             

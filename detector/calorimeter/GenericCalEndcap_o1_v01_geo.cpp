@@ -19,6 +19,11 @@ using namespace std;
 using namespace DD4hep;
 using namespace DD4hep::Geometry;
 
+// workaround for DD4hep v00-14 (and older) 
+#ifndef DD4HEP_VERSION_GE
+#define DD4HEP_VERSION_GE(a,b) 0 
+#endif
+
 static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     xml_det_t   x_det     = e;
     int         det_id    = x_det.id();
@@ -144,13 +149,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                 sens.setType("calorimeter");
                 slice_vol.setSensitiveDetector(sens);
                 
+#if DD4HEP_VERSION_GE( 0, 15 )
                 //Store "inner" quantities
                 caloLayer.inner_nRadiationLengths = nRadiationLengths;
                 caloLayer.inner_nInteractionLengths = nInteractionLengths;
                 caloLayer.inner_thickness = thickness_sum;
                 //Store scintillator thickness
                 caloLayer.sensitive_thickness = slice_thickness;
-
+#endif
                 //Reset counters to measure "outside" quantitites
                 nRadiationLengths=0.;
                 nInteractionLengths=0.;
@@ -165,11 +171,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             slice_num++;
         }
         
+#if DD4HEP_VERSION_GE( 0, 15 )
         //Store "outer" quantities
         caloLayer.outer_nRadiationLengths = nRadiationLengths;
         caloLayer.outer_nInteractionLengths = nInteractionLengths;
         caloLayer.outer_thickness = thickness_sum;
-        
+#endif        
         layer_vol.setVisAttributes(lcdd.visAttributes(x_layer.visStr()));
         
         
