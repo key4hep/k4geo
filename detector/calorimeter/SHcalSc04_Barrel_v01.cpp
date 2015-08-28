@@ -15,6 +15,10 @@ using namespace DD4hep;
 using namespace DD4hep::Geometry;
 using namespace DDSim ;
 
+// workaround for DD4hep v00-14 (and older) 
+#ifndef DD4HEP_VERSION_GE
+#define DD4HEP_VERSION_GE(a,b) 0 
+#endif
 
 // After reading in all the necessary parameters.
 // To check the radius range and the space for placing the total layers
@@ -163,6 +167,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   validateEnvelope(Hcal_inner_radius, Hcal_outer_radius, Hcal_radiator_thickness, Hcal_chamber_thickness, Hcal_nlayers);
 
+  Readout readout = sens.readout();
+  Segmentation seg = readout.segmentation();
+  
+  std::vector<double> cellSizeVector = seg.segmentation()->cellDimensions(0); //Assume uniform cell sizes, provide dummy cellID
+  double cell_sizeX      = cellSizeVector[0];
+  double cell_sizeY      = cellSizeVector[1];
 
   //========== fill data for reconstruction ============================
   DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
@@ -348,6 +358,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       //Vector newFractCellDim(fract_cell_dim_x, Hcal_chamber_thickness, Hcal_cell_dim_z);
       //theBarrilRegSD->SetFractCellDimPerLayer(layer_id, newFractCellDim);
 
+      DDRec::LayeredCalorimeterData::Layer caloLayer ;
+      caloLayer.cellSize0 = cell_sizeX;
+      caloLayer.cellSize1 = cell_sizeY;
 
 
       //--------------------------------------------------------------------------------
@@ -381,6 +394,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       // Create the slices (sublayers) within the Hcal Barrel Chamber.
       double slice_pos_z = -(layer_thickness/2.);
       int slice_number = 0;
+
+      double nRadiationLengths=0.;
+      double nInteractionLengths=0.;
+      double thickness_sum=0;
+
       for(xml_coll_t k(x_layer,_U(slice)); k; ++k)  {
 	xml_comp_t x_slice = k;
 	string   slice_name      = layer_name + _toString(slice_number,"_slice%d");
@@ -395,7 +413,26 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	
 	if ( x_slice.isSensitive() ) {
 	  slice_vol.setSensitiveDetector(sens);
+
+#if DD4HEP_VERSION_GE( 0, 15 )
+	  //Store "inner" quantities
+	  caloLayer.inner_nRadiationLengths = nRadiationLengths;
+	  caloLayer.inner_nInteractionLengths = nInteractionLengths;
+	  caloLayer.inner_thickness = thickness_sum;
+	  //Store scintillator thickness
+	  caloLayer.sensitive_thickness = slice_thickness;
+#endif
+	  //Reset counters to measure "outside" quantitites
+	  nRadiationLengths=0.;
+	  nInteractionLengths=0.;
+	  thickness_sum = 0.;
 	}
+
+	nRadiationLengths += slice_thickness/(2.*slice_material.radLength());
+	nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
+	thickness_sum += slice_thickness/2;
+
+
 	// Set region, limitset, and vis.
 	slice_vol.setAttributes(lcdd,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
 	// slice PlacedVolume
@@ -413,6 +450,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	++slice_number;             
       }
 
+#if DD4HEP_VERSION_GE( 0, 15 )
+      //Store "outer" quantities
+      caloLayer.outer_nRadiationLengths = nRadiationLengths;
+      caloLayer.outer_nInteractionLengths = nInteractionLengths;
+      caloLayer.outer_thickness = thickness_sum;
+#endif  
 
 //---------------------------  Chamber Placements -----------------------------------------
 
@@ -436,13 +479,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
       //-----------------------------------------------------------------------------------------
       if( layer_id <= Hcal_nlayers ){ // add the first set of layers to the reconstruction data
-	DDRec::LayeredCalorimeterData::Layer caloLayer ;
+	//DDRec::LayeredCalorimeterData::Layer caloLayer ;
 	
 	caloLayer.distance = Hcal_inner_radius + Hcal_total_dim_y/2.0 + chamber_y_offset + chambers_y_off_correction ;
 	caloLayer.thickness = Hcal_chamber_thickness + Hcal_radiator_thickness ;
 	caloLayer.absorberThickness = Hcal_radiator_thickness ;
-	caloLayer.cellSize0 = Hcal_cell_dim_z ;
-	caloLayer.cellSize1 = Hcal_cell_dim_x ;
+	//caloLayer.cellSize0 = Hcal_cell_dim_z ;
+	//caloLayer.cellSize1 = Hcal_cell_dim_x ;
 	
 	caloData->layers.push_back( caloLayer ) ;
       }
