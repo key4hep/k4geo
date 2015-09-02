@@ -95,79 +95,9 @@
         <D type="density" value="0.75" unit="g/cm3"/>
         <fraction n="0.65" ref="C"/>
         <fraction n="0.35" ref="Epoxy"/>
-    </material>
-
-
-    <material name="CarbonFiber_50D_B1">
-        <D type="density" value="0.0" unit="g/cm3"/>
-        <fraction n="0.65" ref="C"/>
-        <fraction n="0.35" ref="Epoxy"/>
-    </material>
+    </material>    
     
-    <material name="CarbonFiber_50D_B2">
-        <D type="density" value="13.0" unit="g/cm3"/>
-        <fraction n="0.65" ref="C"/>
-        <fraction n="0.35" ref="Epoxy"/>
-    </material>
-    
-    <material name="CarbonFiber_50D_B3">
-        <D type="density" value="13.0" unit="g/cm3"/>
-        <fraction n="0.65" ref="C"/>
-        <fraction n="0.35" ref="Epoxy"/>
-    </material>
-    
-    <material name="CarbonFiber_50D_B4">
-        <D type="density" value="15" unit="g/cm3"/>
-        <fraction n="0.65" ref="C"/>
-        <fraction n="0.35" ref="Epoxy"/>
-    </material>
-    
-    <material name="CarbonFiber_50D_B5">
-        <D type="density" value="15" unit="g/cm3"/>
-        <fraction n="0.65" ref="C"/>
-        <fraction n="0.35" ref="Epoxy"/>
-    </material>
-    
-    
-    
-   <material name="CarbonFiber_50D_E1">
-        <D type="density" value="0.0" unit="g/cm3"/>
-        <fraction n="0.65" ref="C"/>
-        <fraction n="0.35" ref="Epoxy"/>
-    </material>
-    
-    <material name="CarbonFiber_50D_E2">
-        <D type="density" value="0.8" unit="g/cm3"/>
-        <fraction n="0.65" ref="C"/>
-        <fraction n="0.35" ref="Epoxy"/>
-    </material>
-    
-    <material name="CarbonFiber_50D_E3">
-        <D type="density" value="6.0" unit="g/cm3"/>
-        <fraction n="0.65" ref="C"/>
-        <fraction n="0.35" ref="Epoxy"/>
-    </material>
-    
-    <material name="CarbonFiber_50D_E4">
-        <D type="density" value="10" unit="g/cm3"/>
-        <fraction n="0.65" ref="C"/>
-        <fraction n="0.35" ref="Epoxy"/>
-    </material>
-       
-    
-    
-    
-
-
-
-
-
-
-
-
-
-
-    
+  
     <material name="Rohacell31">
         <D type="density" value="0.032" unit="g/cm3"/>
         <composite n="9" ref="C"/>
