@@ -11,6 +11,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/DD4hepUnits.h"
 #include "DDRec/DetectorData.h"
+#include "DDRec/Surface.h"
 #include "XML/Utilities.h"
 #include "XMLHandlerDB.h"
 #include <cmath>
@@ -19,6 +20,8 @@
 
 using namespace DD4hep;
 using namespace DD4hep::Geometry;
+using namespace DD4hep::DDRec ;
+using namespace DDSurfaces ;
 
 using DD4hep::Geometry::Transform3D;
 using DD4hep::Geometry::Position;
@@ -32,6 +35,26 @@ using DD4hep::Geometry::Solid;
 using DD4hep::Geometry::Tube;
 using DD4hep::Geometry::PlacedVolume;
 using DD4hep::Geometry::Assembly;
+
+
+
+/// helper cylinder class to be used as IPLayer in the tracking code
+/// eventually this should probably be part of DDRec or DDKalTest ... 
+
+class SimpleCylinder : public VolCylinder{
+public:
+  SimpleCylinder( Volume vol, SurfaceType typ, double thickness_inner ,double thickness_outer, Vector3D o ) :  
+    VolCylinder( vol, typ, thickness_inner , thickness_outer, o ) {
+  }   
+  
+  virtual bool insideBounds(const Vector3D& point, double epsilon) const {
+    
+    // infinite cylinder ...
+    return ( std::abs ( distance( point ) ) < epsilon ) ;
+  }
+} ;
+
+
 
 /** Construction of VTX detector, ported from Mokka driver TubeX01.cc
  *
@@ -84,6 +107,9 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
   //Parameters we have to know about
   DD4hep::XML::Component xmlParameter = xmlBeampipe.child(_Unicode(parameter));
   const double crossingAngle  = xmlParameter.attr< double >(_Unicode(crossingangle))*0.5; //  only half the angle
+
+
+  double min_radius = 1.e99 ;
 
   for(xml_coll_t c( xmlBeampipe ,Unicode("section")); c; ++c) {
 
@@ -164,6 +190,15 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
 	// the wall consists of the material given in the XML
 	Volume wallLog ( volName + "_wall", wallSolid, wallMaterial);
 	
+	// add surface for tracking ....
+	double tube_thick =  rOuterStart - rInnerStart ;
+	Vector3D ocyl(  ( rOuterStart + rInnerStart ) / 2.  , 0. , 0. ) ;
+	VolCylinder cylSurf( wallLog , SurfaceType( SurfaceType::Helper ) , 0.5*tube_thick  , 0.5*tube_thick , ocyl ) ;
+	volSurfaceList( tube )->push_back( cylSurf ) ;
+	
+	if( rInnerStart < min_radius ) min_radius = rInnerStart ;
+	if( rOuterStart < min_radius ) min_radius = rOuterStart ;
+
 	wallLog.setVisAttributes(lcdd, "TubeVis");
 	tubeLog.setVisAttributes(lcdd, "VacVis");
 	
@@ -501,6 +536,12 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
 
   //######################################################################################################################################################################
   
+
+  // add a surface just inside the beampipe for tracking:
+  Vector3D oIPCyl( (min_radius-1.e-3)  , 0. , 0.  ) ;
+  SimpleCylinder ipCylSurf( envelope , SurfaceType( SurfaceType::Helper ) , 1.e-5  , 1e-5 , oIPCyl ) ;
+  volSurfaceList( tube )->push_back( ipCylSurf ) ;
+
   tube.addExtension< DD4hep::DDRec::ConicalSupportData >( beampipeData ) ;
 
   //--------------------------------------

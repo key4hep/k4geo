@@ -365,8 +365,8 @@
       <vis name="GrayVis"          alpha="1.0" r="0.5" g="0.5"  b="0.5"   showDaughters="true"  visible="true"/>
 
 
-      <!-- <vis name="TubeVis"   alpha="0.1" r="1.0" g="0.7"  b="0.5"   showDaughters="true"  visible="true"/> -->
-      <vis name="TubeVis"           alpha="1.0" r="1.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
+      <vis name="TubeVis"   alpha="0.1" r="1.0" g="0.7"  b="0.5"   showDaughters="true"  visible="true"/>
+      <!-- <vis name="TubeVis"           alpha="1.0" r="1.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/> -->
       <vis name="BeamPipeVis" alpha="0.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="false"/>
       <vis name="VacVis"   alpha="1.0" r="0.0" g="0.0"  b="0.0"   showDaughters="true"  visible="false"/>
 
@@ -416,6 +416,10 @@
     <detectors>
         <comment>Trackers</comment>
 
+	<!-- <detector name="IPLayer" type="AirTube" vis="VXDVis" id="13" insideTrackingVolume="true"> -->
+        <!--   <dimensions rmin="10.*mm" rmax="11.*mm" zhalf="6.250000000e+02*mm"/> -->
+	<!-- </detector> -->
+	
 	<include ref="Beampipe_o1_v01_01.xml"/>
 	
 	<include ref="ftd_simple_staggered_02.xml"/>
@@ -458,7 +462,7 @@
 
 	<include ref="coil03.xml"/>
 
-	<!-- <include ref="SServices00.xml"/> -->
+	<include ref="SServices00.xml"/>
 
       </detectors> 
 
