@@ -47,6 +47,11 @@ using namespace DD4hep::Geometry;
 
 //#define VERBOSE 1
 
+// workaround for DD4hep v00-14 (and older) 
+#ifndef DD4HEP_VERSION_GE
+#define DD4HEP_VERSION_GE(a,b) 0 
+#endif
+
 static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens)  {
   static double tolerance = 0e0;
 
@@ -74,6 +79,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   DetElement    module_det("module0",det_id);
 
+  Readout readout = sens.readout();
+  Segmentation seg = readout.segmentation();
+  
+  std::vector<double> cellSizeVector = seg.segmentation()->cellDimensions(0); //Assume uniform cell sizes, provide dummy cellID
+  double cell_sizeX      = cellSizeVector[0];
+  double cell_sizeY      = cellSizeVector[1];
 
 //====================================================================
 //
@@ -120,7 +131,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   int    Ecal_nlayers3                      = lcdd.constant<int>("Ecal_nlayers3");
   
 
-  double      Ecal_cells_size               = lcdd.constant<double>("Ecal_cells_size");
+  //double      Ecal_cells_size               = lcdd.constant<double>("Ecal_cells_size");
   double      EcalEndcapRing_inner_radius   = lcdd.constant<double>("EcalEndcapRing_inner_radius");
   double      EcalEndcapRing_outer_radius   = lcdd.constant<double>("EcalEndcapRing_outer_radius");
   double      EcalEndcapRing_min_z          = lcdd.constant<double>("EcalEndcapRing_min_z");
@@ -263,6 +274,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   double l_pos_z = z_floor;
  
+  DDRec::LayeredCalorimeterData::Layer caloLayer ;
+  caloLayer.cellSize0 = cell_sizeX;
+  caloLayer.cellSize1 = cell_sizeY;
+
   //-------------------- start loop over ECAL layers ----------------------
   // Loop over the sets of layer elements in the detector.
   int l_num = 1;
@@ -325,12 +340,16 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       //--------------------------------------------------------------------------------
       // BuildECRing keep the Alveolus structure, the same as the Barrel and Endcap
       //--------------------------------------------------------------------------------
+      double nRadiationLengths=0.;
+      double nInteractionLengths=0.;
+      double thickness_sum=0;
 	
       for(xml_coll_t si(x_layer,_U(slice)); si; ++si)  {
 	xml_comp_t x_slice = si;
 	string     s_name  =  _toString(s_num,"slice%d");
 	double     s_thick = x_slice.thickness();
-	    
+	Material slice_material  = lcdd.material(x_slice.materialStr());
+	  
 	double slab_dim_x = ECRingSiplateSize/2.-tolerance;
 	double slab_dim_y = s_thick/2.-tolerance;
 	double slab_dim_z = ECRingSiplateSize/2.-tolerance;
@@ -339,9 +358,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 	SubtractionSolid ECRingSiSliceSolid( s_box, CenterECTubForSi);
 
-	Volume     s_vol(det_name+"_"+l_name+"_"+s_name,ECRingSiSliceSolid,lcdd.material(x_slice.materialStr()));
+	Volume     s_vol(det_name+"_"+l_name+"_"+s_name,ECRingSiSliceSolid,slice_material);
 	DetElement slice(layer,s_name,det_id);
-	    
+	
 	s_vol.setVisAttributes(lcdd.visAttributes(x_slice.visStr()));
 
 #ifdef VERBOSE	    
@@ -353,7 +372,25 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    
 	if ( x_slice.isSensitive() ) {
 	  s_vol.setSensitiveDetector(sens);
+
+#if DD4HEP_VERSION_GE( 0, 15 )
+	  //Store "inner" quantities
+	  caloLayer.inner_nRadiationLengths = nRadiationLengths;
+	  caloLayer.inner_nInteractionLengths = nInteractionLengths;
+	  caloLayer.inner_thickness = thickness_sum;
+	  //Store sensitive slice thickness
+	  caloLayer.sensitive_thickness = s_thick;
+#endif
+	  //Reset counters to measure "outside" quantitites
+	  nRadiationLengths=0.;
+	  nInteractionLengths=0.;
+	  thickness_sum = 0.;
 	}
+			 
+	nRadiationLengths += s_thick/(2.*slice_material.radLength());
+	nInteractionLengths += s_thick/(2.*slice_material.intLength());
+	thickness_sum += s_thick/2;
+
 	slice.setAttributes(lcdd,s_vol,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
 	
 	// Slice placement.
@@ -369,7 +406,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	// Increment slice number.
 	++s_num;
       }        
-      
+
+#if DD4HEP_VERSION_GE( 0, 15 )
+      //Store "outer" quantities
+      caloLayer.outer_nRadiationLengths = nRadiationLengths;
+      caloLayer.outer_nInteractionLengths = nInteractionLengths;
+      caloLayer.outer_thickness = thickness_sum;
+#endif      
       
       if(radiator_dim_y <= 0) {
 	stringstream err;
@@ -420,13 +463,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       PlacedVolume  EndcapStructureLayer_phv = EnvLogECRing.placeVolume(EndcapStructureLayer_vol,bsl_tran3D);
 	      
       //-----------------------------------------------------------------------------------------
-      DDRec::LayeredCalorimeterData::Layer caloLayer ;
+      //DDRec::LayeredCalorimeterData::Layer caloLayer ;
       
       caloLayer.distance = Ecal_Barrel_module_dim_z * 2.5 + Ecal_cables_gap + module_thickness/2.0 + l_pos_z ;
       caloLayer.thickness = l_thickness + radiator_dim_y ;
       caloLayer.absorberThickness = radiator_dim_y ;
-      caloLayer.cellSize0 = Ecal_cells_size ;
-      caloLayer.cellSize1 = Ecal_cells_size ;
+      //caloLayer.cellSize0 = Ecal_cells_size ;
+      //caloLayer.cellSize1 = Ecal_cells_size ;
       
       caloData->layers.push_back( caloLayer ) ;
       //-----------------------------------------------------------------------------------------
