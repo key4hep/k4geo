@@ -68,4 +68,4 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
 }
 
-DECLARE_DETELEMENT(InnerTrackerSupport_o1_v01,create_detector)
+DECLARE_DETELEMENT(TrackerSupport_o1_v01,create_detector)
