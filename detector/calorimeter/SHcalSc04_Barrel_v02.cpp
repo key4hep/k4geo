@@ -15,6 +15,11 @@ using namespace DD4hep;
 using namespace DD4hep::Geometry;
 using namespace DDSim ;
 
+// workaround for DD4hep v00-14 (and older) 
+#ifndef DD4HEP_VERSION_GE
+#define DD4HEP_VERSION_GE(a,b) 0 
+#endif
+
 static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens)  {
   
   double boundarySafety = 0.0001;
@@ -38,6 +43,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   PlacedVolume pv;
 
   sens.setType("calorimeter");
+
+  Readout readout = sens.readout();
+  Segmentation seg = readout.segmentation();
+  
+  std::vector<double> cellSizeVector = seg.segmentation()->cellDimensions(0); //Assume uniform cell sizes, provide dummy cellID
+  double cell_sizeX      = cellSizeVector[0];
+  double cell_sizeY      = cellSizeVector[1];
 
   // Some verbose output
   cout << " \n\n\n CREATE DETECTOR: SHcalSC04_Barrel" << endl;
@@ -64,7 +76,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   //double      Hcal_stave_gaps                  = lcdd.constant<double>("Hcal_stave_gaps");
   double      Hcal_modules_gap                 = lcdd.constant<double>("Hcal_modules_gap"); 
   double      Hcal_layer_air_gap               = lcdd.constant<double>("Hcal_layer_air_gap");
-  double      Hcal_cells_size                  = lcdd.constant<double>("Hcal_cells_size");
+  //double      Hcal_cells_size                  = lcdd.constant<double>("Hcal_cells_size");
 
   int         Hcal_nlayers                     = lcdd.constant<int>("Hcal_nlayers");
 
@@ -103,8 +115,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   //only the middle has the steel plate.
   double Hcal_regular_chamber_dim_z = Hcal_normal_dim_z - Hcal_lateral_plate_thickness;
   
-  double Hcal_cell_dim_x            = Hcal_cells_size;
-  double Hcal_cell_dim_z            = Hcal_regular_chamber_dim_z / floor (Hcal_regular_chamber_dim_z/Hcal_cell_dim_x);
+  //double Hcal_cell_dim_x            = Hcal_cells_size;
+  //double Hcal_cell_dim_z            = Hcal_regular_chamber_dim_z / floor (Hcal_regular_chamber_dim_z/Hcal_cell_dim_x);
 
  
   // ========= Create Hcal Barrel stave   ====================================
@@ -156,6 +168,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   double xShift = 0.;
 
+  DDRec::LayeredCalorimeterData::Layer caloLayer ;
+  caloLayer.cellSize0 = cell_sizeX;
+  caloLayer.cellSize1 = cell_sizeY;
 
   //-------------------- start loop over HCAL layers ----------------------
   double layer_thickness =  Hcal_radiator_thickness +Hcal_chamber_thickness;
@@ -207,6 +222,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       // Create the slices (sublayers) within the Hcal Barrel Chamber.
       double slice_pos_z = -(layer_thickness/2.);
       int slice_number = 0;
+
+      double nRadiationLengths=0.;
+      double nInteractionLengths=0.;
+      double thickness_sum=0;
+
       for(xml_coll_t k(x_layer,_U(slice)); k; ++k)  {
 	xml_comp_t x_slice = k;
 	string   slice_name      = layer_name + _toString(slice_number,"_slice%d");
@@ -221,7 +241,25 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	
 	if ( x_slice.isSensitive() ) {
 	  slice_vol.setSensitiveDetector(sens);
+
+#if DD4HEP_VERSION_GE( 0, 15 )
+	  //Store "inner" quantities
+	  caloLayer.inner_nRadiationLengths = nRadiationLengths;
+	  caloLayer.inner_nInteractionLengths = nInteractionLengths;
+	  caloLayer.inner_thickness = thickness_sum;
+	  //Store scintillator thickness
+	  caloLayer.sensitive_thickness = slice_thickness;
+#endif
+	  //Reset counters to measure "outside" quantitites
+	  nRadiationLengths=0.;
+	  nInteractionLengths=0.;
+	  thickness_sum = 0.;
 	}
+
+	nRadiationLengths += slice_thickness/(2.*slice_material.radLength());
+	nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
+	thickness_sum += slice_thickness/2;
+
 	// Set region, limitset, and vis.
 	slice_vol.setAttributes(lcdd,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
 	// slice PlacedVolume
@@ -239,6 +277,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	++slice_number;             
       }
 
+#if DD4HEP_VERSION_GE( 0, 15 )
+      //Store "outer" quantities
+      caloLayer.outer_nRadiationLengths = nRadiationLengths;
+      caloLayer.outer_nInteractionLengths = nInteractionLengths;
+      caloLayer.outer_thickness = thickness_sum;
+#endif
 
       //---------------------------  Chamber Placements -----------------------------------------
 
@@ -259,13 +303,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 							chamber_y_offset ));
       
       //-----------------------------------------------------------------------------------------
-      DDRec::LayeredCalorimeterData::Layer caloLayer ;
+      //DDRec::LayeredCalorimeterData::Layer caloLayer ;
       
       caloLayer.distance = Hcal_inner_radius + Hcal_total_dim_y/2.0 + chamber_y_offset ;
       caloLayer.thickness = Hcal_chamber_thickness + Hcal_radiator_thickness ;
       caloLayer.absorberThickness = Hcal_radiator_thickness ;
-      caloLayer.cellSize0 = Hcal_cell_dim_z ;
-      caloLayer.cellSize1 = Hcal_cell_dim_x ;
+      //caloLayer.cellSize0 = Hcal_cell_dim_z ;
+      //caloLayer.cellSize1 = Hcal_cell_dim_x ;
       
       caloData->layers.push_back( caloLayer ) ;
       //-----------------------------------------------------------------------------------------
