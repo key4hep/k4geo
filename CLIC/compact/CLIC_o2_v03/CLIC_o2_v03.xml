@@ -195,15 +195,16 @@
     
     
     <display>
-        <vis name="VXDVis"   alpha="1.0" r="0.2"   g="0.2"     b="0.2"   showDaughters="true"  visible="true"/>
-        <vis name="ITVis"    alpha="1.0" r="0.54"  g="0.43"    b="0.04"  showDaughters="true"  visible="true"/>
-        <vis name="OTVis"    alpha="1.0" r="0.8"   g="0.8"     b="0.4"   showDaughters="true"  visible="true"/>
-        <vis name="ECALVis"  alpha="1.0" r="0.2"   g="0.6"     b="0"     showDaughters="true"  visible="true"/>
-        <vis name="HCALVis"  alpha="1.0" r="0.078" g="0.01176" b="0.588" showDaughters="true"  visible="true"/>
-        <vis name="SOLVis"   alpha="1.0" r="0.4"   g="0.4"     b="0.4"   showDaughters="true"  visible="true"/>
-        <vis name="YOKEVis"  alpha="1.0" r="0.6"   g="0.0"     b="0.0"   showDaughters="true"  visible="true"/>
-        <vis name="LCALVis"  alpha="1.0" r="0.35"  g="0.0"     b="0.47"  showDaughters="true"  visible="true"/>
-        <vis name="BCALVis"  alpha="1.0" r="0.0"   g="0.4"     b="0.4"   showDaughters="true"  visible="true"/>
+        <vis name="VXDVis"     alpha="1.0" r="0.2"   g="0.2"     b="0.2"   showDaughters="true"  visible="true"/>
+        <vis name="ITVis"      alpha="1.0" r="0.54"  g="0.43"    b="0.04"  showDaughters="true"  visible="true"/>
+        <vis name="OTVis"      alpha="1.0" r="0.8"   g="0.8"     b="0.4"   showDaughters="true"  visible="true"/>
+        <vis name="ECALVis"    alpha="1.0" r="0.2"   g="0.6"     b="0"     showDaughters="true"  visible="true"/>
+        <vis name="HCALVis"    alpha="1.0" r="0.078" g="0.01176" b="0.588" showDaughters="true"  visible="true"/>
+        <vis name="SOLVis"     alpha="1.0" r="0.4"   g="0.4"     b="0.4"   showDaughters="true"  visible="true"/>
+        <vis name="YOKEVis"    alpha="1.0" r="0.6"   g="0.0"     b="0.0"   showDaughters="true"  visible="true"/>
+        <vis name="LCALVis"    alpha="1.0" r="0.35"  g="0.0"     b="0.47"  showDaughters="true"  visible="true"/>
+        <vis name="BCALVis"    alpha="1.0" r="0.0"   g="0.4"     b="0.4"   showDaughters="true"  visible="true"/>        
+        <vis name="SupportVis" alpha="1"   r="0.2"   g="0.2"     b="0.2"   showDaughters="false" visible="true"/>        
     </display>
     
     <include ref="Materials_v01.xml"/>
