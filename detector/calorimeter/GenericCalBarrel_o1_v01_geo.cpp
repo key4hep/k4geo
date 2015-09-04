@@ -145,79 +145,80 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens) {
         caloLayer.cellSize0 = cell_sizeX;
         caloLayer.cellSize1 = cell_sizeY;
 
-
-        // Layer box & volume
-        Volume layer_vol(layer_type_name, Box(layer_dim_x, detZ / 2, layer_thickness / 2), air);
-        
-        // Create the slices (sublayers) within the layer.
-        double slice_pos_z = -(layer_thickness / 2);
-        int slice_number = 0;
-        
-        double nRadiationLengths=0.;
-        double nInteractionLengths=0.;
-        double thickness_sum=0;
-        
-        for (xml_coll_t k(x_layer, _U(slice)); k; ++k) {
-            xml_comp_t x_slice = k;
-            string slice_name = _toString(slice_number, "slice%d");
-            double slice_thickness = x_slice.thickness();
-            Material slice_material = lcdd.material(x_slice.materialStr());
-            
-            slice_pos_z += slice_thickness / 2;
-            // Slice volume & box
-            Volume slice_vol(slice_name, Box(layer_dim_x, detZ / 2, slice_thickness / 2), slice_material);
-            
-            nRadiationLengths += slice_thickness/(2.*slice_material.radLength());
-            nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
-            thickness_sum += slice_thickness/2;
-            
-            if (x_slice.isSensitive()) {
-                sens.setType("calorimeter");
-                slice_vol.setSensitiveDetector(sens);
-                
-#if DD4HEP_VERSION_GE( 0, 15 )
-                //Store "inner" quantities
-                caloLayer.inner_nRadiationLengths = nRadiationLengths;
-                caloLayer.inner_nInteractionLengths = nInteractionLengths;
-                caloLayer.inner_thickness = thickness_sum;
-                //Store scintillator thickness
-                caloLayer.sensitive_thickness = slice_thickness;
-#endif
-                //Reset counters to measure "outside" quantitites
-                nRadiationLengths=0.;
-                nInteractionLengths=0.;
-                thickness_sum = 0.;
-            } 
-            
-            nRadiationLengths += slice_thickness/(2.*slice_material.radLength());
-            nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
-            thickness_sum += slice_thickness/2;
-            
-            // Set region, limitset, and vis.
-            slice_vol.setAttributes(lcdd, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
-            // slice PlacedVolume
-            layer_vol.placeVolume(slice_vol, Position(0, 0, slice_pos_z));
-            
-            // Increment Z position for next slice.
-            slice_pos_z += slice_thickness / 2;
-            // Increment slice number.
-            ++slice_number;
-        }
-        
-#if DD4HEP_VERSION_GE( 0, 15 )
-        //Store "outer" quantities
-        caloLayer.outer_nRadiationLengths = nRadiationLengths;
-        caloLayer.outer_nInteractionLengths = nInteractionLengths;
-        caloLayer.outer_thickness = thickness_sum;
-#endif        
-        
-        // Set region, limitset, and vis.
-        layer_vol.setAttributes(lcdd, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
-        
         // Loop over repeats for this layer.
         for (int j = 0; j < repeat; j++) {
             string layer_name = _toString(layer_num, "layer%d");
             DetElement layer(stave, layer_name, layer_num);
+
+            // Layer box & volume
+            Volume layer_vol(layer_type_name, Box(layer_dim_x, detZ / 2, layer_thickness / 2), air);
+            
+            // Create the slices (sublayers) within the layer.
+            double slice_pos_z = -(layer_thickness / 2);
+            int slice_number = 0;
+            
+            double nRadiationLengths=0.;
+            double nInteractionLengths=0.;
+            double thickness_sum=0;
+            
+            for (xml_coll_t k(x_layer, _U(slice)); k; ++k) {
+                xml_comp_t x_slice = k;
+                string slice_name = _toString(slice_number, "slice%d");
+                double slice_thickness = x_slice.thickness();
+                Material slice_material = lcdd.material(x_slice.materialStr());
+                
+                slice_pos_z += slice_thickness / 2;
+                // Slice volume & box
+                Volume slice_vol(slice_name, Box(layer_dim_x, detZ / 2, slice_thickness / 2), slice_material);
+                
+                nRadiationLengths += slice_thickness/(2.*slice_material.radLength());
+                nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
+                thickness_sum += slice_thickness/2;
+                
+                if (x_slice.isSensitive()) {
+                    sens.setType("calorimeter");
+                    slice_vol.setSensitiveDetector(sens);
+                    
+#if DD4HEP_VERSION_GE( 0, 15 )
+                    //Store "inner" quantities
+                    caloLayer.inner_nRadiationLengths = nRadiationLengths;
+                    caloLayer.inner_nInteractionLengths = nInteractionLengths;
+                    caloLayer.inner_thickness = thickness_sum;
+                    //Store scintillator thickness
+                    caloLayer.sensitive_thickness = slice_thickness;
+#endif
+                    //Reset counters to measure "outside" quantitites
+                    nRadiationLengths=0.;
+                    nInteractionLengths=0.;
+                    thickness_sum = 0.;
+                } 
+                
+                nRadiationLengths += slice_thickness/(2.*slice_material.radLength());
+                nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
+                thickness_sum += slice_thickness/2;
+                
+                // Set region, limitset, and vis.
+                slice_vol.setAttributes(lcdd, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+                // slice PlacedVolume
+                layer_vol.placeVolume(slice_vol, Position(0, 0, slice_pos_z));
+                
+                // Increment Z position for next slice.
+                slice_pos_z += slice_thickness / 2;
+                // Increment slice number.
+                ++slice_number;
+            }
+            
+#if DD4HEP_VERSION_GE( 0, 15 )
+            //Store "outer" quantities
+            caloLayer.outer_nRadiationLengths = nRadiationLengths;
+            caloLayer.outer_nInteractionLengths = nInteractionLengths;
+            caloLayer.outer_thickness = thickness_sum;
+#endif        
+            
+            // Set region, limitset, and vis.
+            layer_vol.setAttributes(lcdd, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
+
+
             
             // Layer position in Z within the stave.
             layer_pos_z += layer_thickness / 2;
