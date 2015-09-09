@@ -40,6 +40,11 @@ using namespace DD4hep::Geometry;
 
 #define VERBOSE 1
 
+// workaround for DD4hep v00-14 (and older) 
+#ifndef DD4HEP_VERSION_GE
+#define DD4HEP_VERSION_GE(a,b) 0 
+#endif
+
 static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens)  {
   static double tolerance = 0e0;
 
@@ -80,7 +85,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double Yoke_endcap_inner_radius           = lcdd.constant<double>("Yoke_endcap_inner_radius");
   double Yoke_Z_start_endcaps               = lcdd.constant<double>("Yoke_Z_start_endcaps");
   double HCAL_R_max                         = lcdd.constant<double>("Hcal_outer_radius");
-  double Yoke_cells_size                    = lcdd.constant<double>("Yoke_cells_size");
+  //double Yoke_cells_size                    = lcdd.constant<double>("Yoke_cells_size");
 
   double yokeBarrelEndcapGap     = 2.5;// ?? lcdd.constant<double>("barrel_endcap_gap"); //25.0*mm
 
@@ -120,8 +125,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   // But the placement should shift_middle by -0.05 (0.5*mm) later
   double Yoke_Endcap_module_dim_z =  yokeEndcapThickness;
 
-  double Yoke_cell_dim_x        = rOuterEndcap*2.0 / floor (rOuterEndcap*2.0/Yoke_cells_size);
-  double Yoke_cell_dim_y        = Yoke_cell_dim_x;
+  //double Yoke_cell_dim_x        = rOuterEndcap*2.0 / floor (rOuterEndcap*2.0/Yoke_cells_size);
+  //double Yoke_cell_dim_y        = Yoke_cell_dim_x;
 
   cout<<" Build the yoke within this dimension "<<endl;
   cout << "  ...Yoke  db: symmetry             " << symmetry <<endl;
@@ -136,6 +141,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   cout << "  ...Muon par: yokeEndcapThickness  " << yokeEndcapThickness <<endl;
   cout << "  ...Muon par: Barrel_half_z        " << z_halfBarrel <<endl;
 
+  Readout readout = sens.readout();
+  Segmentation seg = readout.segmentation();
+  
+  std::vector<double> cellSizeVector = seg.segmentation()->cellDimensions(0); //Assume uniform cell sizes, provide dummy cellID
+  double cell_sizeX      = cellSizeVector[0];
+  double cell_sizeY      = cellSizeVector[1];
+  
   //========== fill data for reconstruction ============================
   DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
   caloData->layoutType = DDRec::LayeredCalorimeterData::EndcapLayout ;
@@ -175,6 +187,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	//if(i>11) continue;
 	string l_name = _toString(l_num,"layer%d");
 	double l_thickness = layering.layer(i)->thickness();  // Layer's thickness.
+
+	DDRec::LayeredCalorimeterData::Layer caloLayer ;
+	caloLayer.cellSize0 = cell_sizeX;
+	caloLayer.cellSize1 = cell_sizeY;
 	
 	PolyhedraRegular ChamberSolid( symmetry, M_PI/symmetry, rInnerEndcap + tolerance, rOuterEndcap - tolerance,  l_thickness);
 	Volume     ChamberLog(det_name+"_"+l_name,ChamberSolid,air);
@@ -191,18 +207,41 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	//--------------------------------------------------------------------------------
 	// Build Layer, Sensitive Scintilator in the middle, and Air tolorance at two sides 
 	//--------------------------------------------------------------------------------
+	double nRadiationLengths=0.;
+	double nInteractionLengths=0.;
+	double thickness_sum=0;
+	
 	for(xml_coll_t si(x_layer,_U(slice)); si; ++si)  {
 	  xml_comp_t x_slice = si;
 	  string     s_name  =  _toString(s_num,"slice%d");
 	  double     s_thickness = x_slice.thickness();
-
+	  Material slice_material  = lcdd.material(x_slice.materialStr());
+	  
 	  PolyhedraRegular sliceSolid( symmetry, M_PI/symmetry, rInnerEndcap + tolerance, rOuterEndcap - tolerance,  s_thickness);
-	  Volume     s_vol(det_name+"_"+l_name+"_"+s_name,sliceSolid,lcdd.material(x_slice.materialStr()));
+	  Volume     s_vol(det_name+"_"+l_name+"_"+s_name,sliceSolid,slice_material);
           DetElement slice(layer,s_name,det_id);
 
 	  if ( x_slice.isSensitive() ) {
 	    s_vol.setSensitiveDetector(sens);
+
+#if DD4HEP_VERSION_GE( 0, 15 )
+	  //Store "inner" quantities
+	  caloLayer.inner_nRadiationLengths = nRadiationLengths;
+	  caloLayer.inner_nInteractionLengths = nInteractionLengths;
+	  caloLayer.inner_thickness = thickness_sum;
+	  //Store scintillator thickness
+	  caloLayer.sensitive_thickness = s_thickness;
+#endif
+	  //Reset counters to measure "outside" quantitites
+	  nRadiationLengths=0.;
+	  nInteractionLengths=0.;
+	  thickness_sum = 0.;
 	  }
+
+	  nRadiationLengths += s_thickness/(2.*slice_material.radLength());
+	  nInteractionLengths += s_thickness/(2.*slice_material.intLength());
+	  thickness_sum += s_thickness/2;
+	  
 	  // Set region, limitset, and vis.
 	  s_vol.setAttributes(lcdd,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
 
@@ -223,6 +262,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  ++s_num;
 
 	}
+
+#if DD4HEP_VERSION_GE( 0, 15 )
+	//Store "outer" quantities
+	caloLayer.outer_nRadiationLengths = nRadiationLengths;
+	caloLayer.outer_nInteractionLengths = nInteractionLengths;
+	caloLayer.outer_thickness = thickness_sum;
+#endif
 	
 	++l_num;
 
@@ -248,7 +294,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	sdet.add(stave);
 
       //-----------------------------------------------------------------------------------------
-	DDRec::LayeredCalorimeterData::Layer caloLayer ;
+	//DDRec::LayeredCalorimeterData::Layer caloLayer ;
 	
 	double radiator_thickness = gap_thickness + iron_thickness - l_thickness;
 	if ( i>=10 ) radiator_thickness = gap_thickness + 5.6*iron_thickness - l_thickness;
@@ -256,8 +302,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	caloLayer.distance = zStartEndcap + yokeEndcapThickness/2.0 + shift_middle ;
 	caloLayer.thickness = l_thickness + radiator_thickness ;
 	caloLayer.absorberThickness = radiator_thickness ;
-	caloLayer.cellSize0 = Yoke_cell_dim_x ;
-	caloLayer.cellSize1 = Yoke_cell_dim_y ;
+	//caloLayer.cellSize0 = Yoke_cell_dim_x ;
+	//caloLayer.cellSize1 = Yoke_cell_dim_y ;
 	
 	caloData->layers.push_back( caloLayer ) ;
       //-----------------------------------------------------------------------------------------
