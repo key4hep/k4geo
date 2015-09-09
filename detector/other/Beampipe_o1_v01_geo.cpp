@@ -190,14 +190,17 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
 	// the wall consists of the material given in the XML
 	Volume wallLog ( volName + "_wall", wallSolid, wallMaterial);
 	
-	// add surface for tracking ....
-	double tube_thick =  rOuterStart - rInnerStart ;
-	Vector3D ocyl(  ( rOuterStart + rInnerStart ) / 2.  , 0. , 0. ) ;
-	VolCylinder cylSurf( wallLog , SurfaceType( SurfaceType::Helper ) , 0.5*tube_thick  , 0.5*tube_thick , ocyl ) ;
-	volSurfaceList( tube )->push_back( cylSurf ) ;
-	
-	if( rInnerStart < min_radius ) min_radius = rInnerStart ;
-	if( rOuterStart < min_radius ) min_radius = rOuterStart ;
+	if( crossType == ODH::kCenter ) { 
+
+	  // add surface for tracking ....
+	  double tube_thick =  rOuterStart - rInnerStart ;
+	  Vector3D ocyl(  ( rOuterStart + rInnerStart ) / 2.  , 0. , 0. ) ;
+	  VolCylinder cylSurf( wallLog , SurfaceType( SurfaceType::Helper ) , 0.5*tube_thick  , 0.5*tube_thick , ocyl ) ;
+	  volSurfaceList( tube )->push_back( cylSurf ) ;
+	  
+	  if( rInnerStart < min_radius ) min_radius = rInnerStart ;
+	  if( rOuterStart < min_radius ) min_radius = rOuterStart ;
+	}
 
 	wallLog.setVisAttributes(lcdd, "TubeVis");
 	tubeLog.setVisAttributes(lcdd, "VacVis");
