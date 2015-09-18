@@ -131,6 +131,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   int    Ecal_nlayers3                      = lcdd.constant<int>("Ecal_nlayers3");
   int    Ecal_barrel_number_of_towers       = lcdd.constant<int>("Ecal_barrel_number_of_towers");
   
+  double Ecal_guard_ring_size               = lcdd.constant<double>("Ecal_guard_ring_size");
+
   //double      Ecal_cells_size                  = lcdd.constant<double>("Ecal_cells_size");
   double      EcalEndcap_inner_radius          = lcdd.constant<double>("EcalEndcap_inner_radius");
   double      EcalEndcap_outer_radius          = lcdd.constant<double>("EcalEndcap_outer_radius");
@@ -234,6 +236,28 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
      (N_FIBERS_ALVOULUS + 1 ) * Ecal_fiber_thickness) +
     
     Ecal_support_thickness + Ecal_front_face_thickness;
+
+  //------------------------------------------------------------------------------------
+
+  DDRec::LayeredCalorimeterData::Layer caloLayer ;
+  caloLayer.cellSize0 = cell_sizeX;
+  caloLayer.cellSize1 = cell_sizeY;
+
+  //== For Wafer ===  
+  double cell_dim_x = caloLayer.cellSize0;
+  double total_Si_dim_z = alveolus_dim_z;
+
+  double util_SI_wafer_dim_z = 
+    total_Si_dim_z/2 -  2 * Ecal_guard_ring_size;
+
+  double cell_dim_z =  util_SI_wafer_dim_z/ 
+    floor(util_SI_wafer_dim_z/
+	  cell_dim_x);
+
+  int N_cells_in_Z = int(util_SI_wafer_dim_z/cell_dim_z);
+  int N_cells_in_X = N_cells_in_Z;
+  
+  cell_dim_x = cell_dim_z;
   
 #ifdef VERBOSE
   std::cout << " module_thickness = " << module_thickness  << std::endl;
@@ -318,9 +342,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   double l_pos_z = z_floor;
 
-  DDRec::LayeredCalorimeterData::Layer caloLayer ;
-  caloLayer.cellSize0 = cell_sizeX;
-  caloLayer.cellSize1 = cell_sizeY;
+  //  DDRec::LayeredCalorimeterData::Layer caloLayer ;
+  //  caloLayer.cellSize0 = cell_sizeX;
+  //  caloLayer.cellSize1 = cell_sizeY;
  
   //-------------------- start loop over ECAL layers ----------------------
   // Loop over the sets of layer elements in the detector.
@@ -330,7 +354,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     int repeat = x_layer.repeat();
     // Loop over number of repeats for this layer.
     for (int j=0; j<repeat; j++)    {
-      
       string l_name = _toString(l_num,"layer%d");
       double l_thickness = layering.layer(l_num-1)->thickness();  // Layer's thickness.
       l_pos_z  += l_thickness/2.;
@@ -415,7 +438,149 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    // W StructureLayer has the same thickness as W radiator layer in the Alveolus layer
 	    
 	    if ( x_slice.isSensitive() ) {
-	      s_vol.setSensitiveDetector(sens);
+	      //s_vol.setSensitiveDetector(sens);
+
+	    // Normal squared wafers
+	    double wafer_dim_x = 
+	      N_cells_in_X * cell_dim_x;
+	    double wafer_dim_z = 
+	      N_cells_in_Z * cell_dim_z;
+	    Box WaferSiSolid( wafer_dim_x/2,wafer_dim_z/2,slab_dim_y);
+
+	    double real_wafer_size_x =
+	      wafer_dim_z + 2 * Ecal_guard_ring_size;
+      
+	    int n_wafers_x =
+	      int(floor(slab_dim_z*2 / real_wafer_size_x));
+      
+	    double wafer_pos_x =
+	      -slab_dim_z + 
+	      Ecal_guard_ring_size +
+	      wafer_dim_z /2 ;
+	    int n_wafer_x;
+	    int wafer_num = 0;
+	    for (n_wafer_x = 1;
+		 n_wafer_x < n_wafers_x + 1;
+		 n_wafer_x++)
+	      {
+		double wafer_pos_z =
+		  -slab_dim_x + 
+		  Ecal_guard_ring_size +
+		  wafer_dim_x /2;
+		for (int n_wafer_z = 1;
+		     n_wafer_z < 3;
+		     n_wafer_z++)
+		  {
+		    wafer_num++;
+		    string Wafer_name  =  _toString(wafer_num,"wafer%d");
+		    Volume WaferSiLog(det_name+"_"+l_name+"_"+s_name+"_"+Wafer_name,WaferSiSolid,slice_material);
+		    WaferSiLog.setSensitiveDetector(sens);
+		    WaferSiLog.setVisAttributes(lcdd.visAttributes(x_slice.visStr()));
+		    PlacedVolume wafer_phv = s_vol.placeVolume(WaferSiLog,Position(wafer_pos_z,
+										   wafer_pos_x,
+										   0));
+		    wafer_phv.addPhysVolID("wafer", wafer_num);
+		    /*
+		    new MyPlacement(0,
+				    G4ThreeVector(wafer_pos_z,
+						  wafer_pos_x,
+						  0),
+				    WaferSiLog,
+				    "WaferSi",
+				    CommonSiLog,
+				    false,
+				    n_wafer_x*1000 + n_wafer_z);
+		    */
+		    wafer_pos_z +=
+		      wafer_dim_x +
+		      2 * Ecal_guard_ring_size;
+		  }
+		wafer_pos_x += 
+		  wafer_dim_z +
+		  2 * Ecal_guard_ring_size;
+	      }
+      
+	    // Magic wafers to complete the slab...
+	    // (wafers with variable number of cells just
+	    // to complete the slab. in reality we think that
+	    // we'll have just a few models of special wafers
+	    // for that.
+	    double resting_dim_x =
+	      slab_dim_z*2 - 
+	      (wafer_dim_z + 2 * Ecal_guard_ring_size) * 
+	      n_wafers_x;
+      
+	    if(resting_dim_x >
+	       (cell_dim_z + 2 * Ecal_guard_ring_size))
+	      {
+		int N_cells_x_remaining =
+		  int(floor((resting_dim_x - 
+			     2 * Ecal_guard_ring_size)
+			    /cell_dim_z));
+		wafer_dim_x =
+		  N_cells_x_remaining *
+		  cell_dim_z;
+	  
+		Box MagicWaferSiSolid( wafer_dim_z/2,wafer_dim_x/2,slab_dim_y);
+		/*
+		WaferSiSolid = 
+		  new G4Box("WaferSiSolid", 
+			    wafer_dim_z/2-G4GeometryTolerance::GetInstance()->GetSurfaceTolerance(),
+			    wafer_dim_x/2-G4GeometryTolerance::GetInstance()->GetSurfaceTolerance(),
+			    Ecal_Si_thickness/2-2*(G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()));
+	  
+		WaferSiLog =
+		  new G4LogicalVolume(WaferSiSolid,
+				      CGAGeometryManager::
+				      GetMaterial("silicon_2.33gccm"),
+				      "WaferSiLog", 
+				      0, 0, pULimits);  
+		WaferSiLog->SetVisAttributes(WaferSiVisAtt);
+		WaferSiLog->SetSensitiveDetector(theSD);
+		*/
+		wafer_pos_x =
+		  -slab_dim_z +
+		  n_wafers_x * real_wafer_size_x +
+		  (wafer_dim_x + 2 * Ecal_guard_ring_size)/2;
+	  
+		real_wafer_size_x =
+		  wafer_dim_x + 2 * Ecal_guard_ring_size;
+	  
+		double wafer_pos_z =
+		  -slab_dim_x + 
+		  Ecal_guard_ring_size +
+		  wafer_dim_z /2;
+		for (int n_wafer_z = 1;
+		     n_wafer_z < 3;
+		     n_wafer_z++)
+		  {
+		    wafer_num++;
+		    string MagicWafer_name  =  _toString(wafer_num,"MagicWafer%d");
+		    Volume MagicWaferSiLog(det_name+"_"+l_name+"_"+s_name+"_"+MagicWafer_name,MagicWaferSiSolid,slice_material);
+		    MagicWaferSiLog.setSensitiveDetector(sens);
+		    MagicWaferSiLog.setVisAttributes(lcdd.visAttributes(x_slice.visStr()));
+		    PlacedVolume wafer_phv = s_vol.placeVolume(MagicWaferSiLog,Position(wafer_pos_z,
+											wafer_pos_x,
+											0));
+		    wafer_phv.addPhysVolID("wafer", wafer_num);
+		    /*
+		    new MyPlacement(0,
+				    G4ThreeVector(wafer_pos_z,
+						  wafer_pos_x,
+						  0),
+				    WaferSiLog,
+				    "WaferSi",
+				    CommonSiLog,
+				    false,
+				    n_wafer_x*1000 + n_wafer_z);
+		    */
+		    wafer_pos_z +=
+		      wafer_dim_z +
+		      2 * Ecal_guard_ring_size;
+		  }
+	      }
+	    
+
 
 #if DD4HEP_VERSION_GE( 0, 15 )
 	      //Store "inner" quantities
@@ -577,7 +742,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double EC_module_z_offset = Ecal_Barrel_module_dim_z * 2.5 + Ecal_cables_gap + module_thickness /2;
   
   for(int module_num=0;module_num<2;module_num++) {
-
     int module_id = ( module_num == 0 ) ? 0:6;
     double this_module_z_offset = ( module_id == 0 ) ? - EC_module_z_offset : EC_module_z_offset; 
     double this_module_rotY = ( module_id == 0 ) ? M_PI:0; 
@@ -588,6 +752,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     Transform3D tran3D(rot3D,xyzVec);
 
     PlacedVolume pv = envelope.placeVolume(EnvLogEndCap,tran3D);
+
     pv.addPhysVolID("module",module_id); // z: -/+ 0/6
 
     DetElement sd = (module_num==0) ? module_det : module_det.clone(_toString(module_num,"module%d"));
