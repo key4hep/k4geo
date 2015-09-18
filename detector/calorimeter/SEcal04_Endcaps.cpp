@@ -745,9 +745,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     int module_id = ( module_num == 0 ) ? 0:6;
     double this_module_z_offset = ( module_id == 0 ) ? - EC_module_z_offset : EC_module_z_offset; 
     double this_module_rotY = ( module_id == 0 ) ? M_PI:0; 
-  
+
+    double this_module_rotZ = ( module_id == 0 ) ? M_PI/8 : -M_PI/8  ; 
+    
     Position xyzVec(0,0,this_module_z_offset);
-    RotationZYX rot(0,this_module_rotY,0);
+    RotationZYX rot( this_module_rotZ ,this_module_rotY, 0);
     Rotation3D rot3D(rot);
     Transform3D tran3D(rot3D,xyzVec);
 

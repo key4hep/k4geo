@@ -14,7 +14,7 @@
 
 #include "DDRec/Extensions/LayeringExtensionImpl.h"
 #include "DDRec/Extensions/SubdetectorExtensionImpl.h"
-#include "DDRec/Surface.h"
+//#include "DDRec/Surface.h"
 #include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"
 
@@ -336,10 +336,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     caloData->extent[2] = 0. ;
     caloData->extent[3] = Ecal_Barrel_halfZ ;
 
-    // base vectors for surfaces:
-    DDSurfaces::Vector3D u(1,0,0) ;
-    DDSurfaces::Vector3D v(0,1,0) ;
-    DDSurfaces::Vector3D n(0,0,1) ;
+    // // base vectors for surfaces:
+    // DDSurfaces::Vector3D u(1,0,0) ;
+    // DDSurfaces::Vector3D v(0,1,0) ;
+    // DDSurfaces::Vector3D n(0,0,1) ;
 
 
     //-------------------- start loop over ECAL layers ----------------------
@@ -561,15 +561,15 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 	    slice_phv.addPhysVolID("slice",s_num);
 
-	    if ( l_num == 1  ){ 
-	      // add a helper surface to the 1st layer's sensitive slice:
-	      DDRec::VolPlane surf( s_vol , DDSurfaces::SurfaceType(DDSurfaces::SurfaceType::Helper) , slab_dim_y , slab_dim_y , u,v,n ) ; //,o ) ;
+	    // if ( l_num == 1  ){ 
+	    //   // add a helper surface to the 1st layer's sensitive slice:
+	    //   DDRec::VolPlane surf( s_vol , DDSurfaces::SurfaceType(DDSurfaces::SurfaceType::Helper) , slab_dim_y , slab_dim_y , u,v,n ) ; //,o ) ;
 	      
-	      // add them to the layers of all towers
-	      for (int i=0; i<Ecal_barrel_number_of_towers; i++){
-		DDRec::volSurfaceList(  layers[i] )->push_back(  surf ) ;
-	      }
-	    }
+	    //   // add them to the layers of all towers
+	    //   for (int i=0; i<Ecal_barrel_number_of_towers; i++){
+	    // 	DDRec::volSurfaceList(  layers[i] )->push_back(  surf ) ;
+	    //   }
+	    // }
 	  }
 
 	  //fg: not needed   slice.setPlacement(slice_phv);

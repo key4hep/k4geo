@@ -34,8 +34,8 @@
 	<constant name="ILDDetID_SET"          value="  5"/>
 	<constant name="ILDDetID_ETD"          value="  6"/>
 
-	<constant name="ILDDetID_ECAL_ENDCAP_FACE"    value="18"/>
-	<constant name="ILDDetID_ECAL_BARREL_FACE"    value="19"/>
+	<!-- <constant name="ILDDetID_ECAL_ENDCAP_FACE"    value="18"/> -->
+	<!-- <constant name="ILDDetID_ECAL_BARREL_FACE"    value="19"/> -->
 
 	<constant name="ILDDetID_ECAL"         value=" 20"/>
 	<constant name="ILDDetID_ECAL_PLUG"    value=" 21"/>
@@ -60,12 +60,6 @@
 	<include ref="model_parameters_ILD_o1_v05.xml"/>
 
 	<!-- ***** end global parameters from Mokka model ILD_o1_v05 **** -->
-
-
-
-
-
-
 
 
 	<!-- #####################################################
@@ -416,10 +410,6 @@
     <detectors>
         <comment>Trackers</comment>
 
-	<!-- <detector name="IPLayer" type="AirTube" vis="VXDVis" id="13" insideTrackingVolume="true"> -->
-        <!--   <dimensions rmin="10.*mm" rmax="11.*mm" zhalf="6.250000000e+02*mm"/> -->
-	<!-- </detector> -->
-	
 	<include ref="Beampipe_o1_v01_01.xml"/>
 	
 	<include ref="ftd_simple_staggered_02.xml"/>
@@ -439,10 +429,6 @@
 	<include ref="SEcal04_Endcaps.xml"/>
 
 	<include ref="SEcal04_ECRing.xml"/>
-
-	<include ref="EcalBarrelFace_v00.xml"/>
-
-	<include ref="EcalEndcapFace_v00.xml"/>
 
 	<include ref="SHcalSc04_Barrel_v01.xml"/>
 
@@ -591,11 +577,29 @@
 	  <id>system:8,barrel:3,layer:6,slice:5,x:-16,y:-16 </id>
 	</readout>
 
-    </readouts>
+      </readouts>
 
-    <plugins>
-        <plugin name="InstallSurfaceManager"/>
-    </plugins>
+      <plugins>
+	<plugin name="DD4hep_CaloFaceEndcapSurfacePlugin">
+          <argument value="EcalEndcap"/>
+	  <argument value="zpos=EcalEndcap_max_z"    /> 
+	  <argument value="radius=EcalEndcap_outer_radius"  /> 
+	  <argument value="phi0=0"    /> 
+	  <argument value="symmetry=EcalEndcap_symmetry"/>
+	  <argument value="systemID=ILDDetID_ECAL_ENDCAP"/>
+	  <!-- <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> -->
+	</plugin>
+	<plugin name="DD4hep_CaloFaceBarrelSurfacePlugin">
+          <argument value="EcalBarrel"/>
+	  <argument value="length=2.*Ecal_half_length"    /> 
+	  <argument value="radius=Ecal_inner_radius"  /> 
+	  <argument value="phi0=0"    /> 
+	  <argument value="symmetry=Ecal_symmetry"/>
+	  <argument value="systemID=ILDDetID_ECAL"/>
+	  <!-- <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> -->
+	</plugin>
+	<plugin name="InstallSurfaceManager"/>
+      </plugins>
 
 <fields>
   <field type="solenoid" name="GlobalSolenoid" inner_field="Field_nominal_value*tesla"
