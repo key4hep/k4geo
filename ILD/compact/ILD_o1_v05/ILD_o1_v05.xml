@@ -505,7 +505,7 @@
 	</readout>
 	<readout name="EcalEndcapsCollection">
 	  <segmentation type="CartesianGridXY" grid_size_x="Ecal_cells_size" grid_size_y="Ecal_cells_size"/>
-	  <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,y:-16</id>
+	  <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,wafer:6,x:32:-16,y:-16</id>
 	</readout>
 
 	<readout name="EcalEndcapRingCollection">
