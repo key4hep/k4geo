@@ -53,11 +53,13 @@
 		<!-- Radii definitions as in http://cern.ch/go/r9mZ -->
                 <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/ECalBarrel_symmetry"/>
             </envelope>
-            
-            <parameter num_towers="5" TowersAirGap="2.4*mm" TowersFaceThickness="1.60*mm" AlveolusMaterial="CarbonFiber_25percent" supportBarCrossSection="106*106*mm*mm" ecal_barrel_tolerance="env_safety"/>
+            <parameter num_towers="5" TowersAirGap="2.4*mm" TowersFaceThickness="1.60*mm" AlveolusMaterial="CarbonFiber_25percent" supportRailCrossSection="12*12*mm*mm" supportRailMaterial="Steel235" num_rails="3" stacks_per_tower="3" ecal_barrel_tolerance="env_safety"/>
 
             <dimensions numsides="ECalBarrel_symmetry" rmin="ECalBarrel_inner_radius" rmax="ECalBarrel_outer_radius" z="ECalBarrel_half_length*2" />
-            <staves vis="ECalStaveVis" />
+            <staves vis="EcalStaveVis" />
+	    <modules vis="EcalTowerVis" />
+	    <submodules vis="EcalStackVis" />
+	    <supports vis="EcalRailVis" /> 
             <layer repeat="17" vis="ECalLayerVis">
                 <slice material = "TungstenDens24" thickness = "2.40*mm" vis="ECalAbsorberVis" radiator="yes"/>
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
