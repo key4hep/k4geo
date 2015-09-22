@@ -474,14 +474,6 @@
             <id>system:5,side:2,layer:9,module:8,sensor:8</id>
         </readout>
 
-	<readout name="EcalBarrelFaceReadout">
-          <id>system:5,side:2,layer:9,module:8,sensor:8</id>
-	</readout>
-
-	<readout name="EcalEndcapFaceReadout">
-          <id>system:5,side:2,layer:9,module:8,sensor:8</id>
-	</readout>
-
 
 	<!-- use simple CartesianGridXY segmentation: -->
 
