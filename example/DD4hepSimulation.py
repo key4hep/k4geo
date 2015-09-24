@@ -274,12 +274,11 @@ class DD4hepSimulation(object):
 
     actionList = []
 
-    if self.gun and not self.inputFile:
+    if self.gun:
       gun = DDG4.GeneratorAction(kernel,"Geant4ParticleGun/"+"Gun")
       gun = self.setGunOptions( gun )
-      gun.enableUI()
-      #actionList.append(gun)
-      kernel.generatorAction().add(gun)
+      gun.Standalone = False
+      actionList.append(gun)
 
     if self.inputFile:
       if self.inputFile.endswith(".slcio"):
