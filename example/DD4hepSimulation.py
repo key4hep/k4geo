@@ -113,6 +113,7 @@ class DD4hepSimulation(object):
 
     self.compactFile = parsed.compactFile
     self.inputFile = parsed.inputFile
+    self.__checkInputFile()
     self.outputFile = parsed.outputFile
     self.runType = parsed.runType
     self.printLevel = self.getOutputLevel(parsed.printLevel)
@@ -255,9 +256,22 @@ class DD4hepSimulation(object):
       kernel.generatorAction().add(gun)
 
     if self.inputFile:
-      gen = DDG4.GeneratorAction(kernel,"LCIOInputAction/LCIO1")
-      gen.Sync = self.skipNEvents
-      gen.Input="LCIOFileReader|"+self.inputFile
+      if self.inputFile.endswith(".slcio"):
+        gen = DDG4.GeneratorAction(kernel,"LCIOInputAction/LCIO1")
+        gen.Sync = self.skipNEvents
+        gen.Input="LCIOFileReader|"+self.inputFile
+      elif self.inputFile.endswith(".stdhep"):
+        gen = DDG4.GeneratorAction(kernel,"LCIOInputAction/STDHEP1")
+        gen.Sync = self.skipNEvents
+        gen.Input="LCIOStdHepReader|"+self.inputFile
+      elif self.inputFile.endswith(".HEPEvt"):
+        gen = DDG4.GeneratorAction(kernel,"LCIOInputAction/HEPEvt1")
+        gen.Sync = self.skipNEvents
+        gen.Input="Geant4EventReaderHepEvtShort|"+self.inputFile
+      elif self.inputFile.endswith(".hepevt"):
+        gen = DDG4.GeneratorAction(kernel,"Geant4InputAction/hepevt1")
+        gen.Sync = self.skipNEvents
+        gen.Input="Geant4EventReaderHepEvtLong|"+self.inputFile
       actionList.append(gen)
 
     if self.crossingAngleBoost:
@@ -353,3 +367,11 @@ class DD4hepSimulation(object):
     kernel.run()
     kernel.terminate()
 
+
+  def __checkInputFile(self):
+    """check if the inputfile is allowed, note that the filenames are case
+    sensitive, and in case of hepevt we depend on this to identify short and long versions of the content
+    """
+    if self.inputFile and not self.inputFile.endswith((".stdhep", ".slcio", ".HEPEvt", ".hepevt")):
+      self.errorMessages.append("ERROR: Unknown fileformat for input file: %s" % self.inputFile)
+    return
