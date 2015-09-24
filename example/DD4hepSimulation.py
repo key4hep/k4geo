@@ -14,6 +14,7 @@ import DDG4, DD4hep
 from DDG4 import OutputLevel as Output
 from SystemOfUnits import *
 import argparse
+from argparse import RawTextHelpFormatter
 import os
 import sys
 
@@ -85,7 +86,7 @@ class DD4hepSimulation(object):
 
   def parseOptions(self):
     """parse the command line options"""
-    parser = argparse.ArgumentParser("Usage RunProg ")
+    parser = argparse.ArgumentParser("Usage RunProg ", formatter_class=RawTextHelpFormatter)
 
     parser.add_argument("--steeringFile", "-S", action="store", default=None,
                         help="Steering file to change default values")
@@ -108,9 +109,7 @@ class DD4hepSimulation(object):
     parser.add_argument("--outputFile","-O", action="store", default=self.outputFile,
                         help="Outputfile from the simulation,only lcio output is supported")
     parser.add_argument("-v", "--printLevel", action="store", default=3, dest="printLevel",
-                        help="""Verbosity use 1(highest) to 7
-                        (least) verbose, or strings: VERBOSE, DEBUG, INFO,
-                        WARNING, ERROR, FATAL, ALWAYS""")
+                        help="""Verbosity use 1(most) to 7(least) verbose, \nor strings: VERBOSE, DEBUG, INFO, WARNING, ERROR, FATAL, ALWAYS""")
     parser.add_argument("--numberOfEvents", "-N", action="store", dest="numberOfEvents", default=self.numberOfEvents,
                         type=int, help="number of events to simulate, used in batch mode")
     parser.add_argument("--skipNEvents", action="store", dest="skipNEvents", default=self.skipNEvents, type=int,
@@ -157,8 +156,7 @@ class DD4hepSimulation(object):
         self.errorMessages.append("ERROR: Batch mode requested, but did not set inputfile or gun")
 
     if self.errorMessages:
-      for err in self.errorMessages:
-        print err
+      parser.epilog = "\n".join(self.errorMessages)
       parser.print_help()
       exit(1)
 
