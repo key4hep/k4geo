@@ -96,13 +96,13 @@ class DD4hepSimulation(object):
                         (least) verbose, or strings: VERBOSE, DEBUG, INFO,
                         WARNING, ERROR, FATAL, ALWAYS""")
     parser.add_argument("--numberOfEvents", "-N", action="store", dest="numberOfEvents", default=self.numberOfEvents,
-                        help="number of events to simulate, used in batch mode")
-    parser.add_argument("--skipNEvents", action="store", dest="skipNEvents", default=self.skipNEvents,
+                        type=int, help="number of events to simulate, used in batch mode")
+    parser.add_argument("--skipNEvents", action="store", dest="skipNEvents", default=self.skipNEvents, type=int,
                         help="Skip first N events when reading a file")
     parser.add_argument("--physicsList", action="store", dest="physicsList", default=self.physicsList,
                         help="Physics list to use in simulation")
     parser.add_argument("--crossingAngleBoost", action="store", dest="crossingAngleBoost", default=self.crossingAngleBoost,
-                        help="Lorentz boost for crossing angle, in mrad")
+                        type=int, help="Lorentz boost for crossing angle, in mrad")
     parser.add_argument("--macroFile", "-M", action="store", dest="macroFile", default = self.macroFile,
                         help="Macro file to run in shell or batch mode")
     parser.add_argument("--enableGun", "-G", action="store_true", dest="gun", default=self.gun,
