@@ -12,6 +12,7 @@ import DDG4, DD4hep
 from DDG4 import OutputLevel as Output
 from SystemOfUnits import *
 import argparse
+import os
 
 class DD4hepSimulation(object):
   """Class to hold all the parameters and functions to run simulation"""
@@ -32,6 +33,9 @@ class DD4hepSimulation(object):
     self.magneticFieldDict = {}
 
     self.errorMessages = []
+
+    ### use TCSH geant UI instead of QT
+    os.environ['G4UI_USE_TCSH'] = "1"
 
   @staticmethod
   def getOutputLevel( level ):
