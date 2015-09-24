@@ -90,7 +90,7 @@ class DD4hepSimulation(object):
                         help="""Verbosity use 1(highest) to 7
                         (least) verbose, or strings: VERBOSE, DEBUG, INFO,
                         WARNING, ERROR, FATAL, ALWAYS""")
-    parser.add_argument("--nEvents", "-N", action="store", dest="numberOfEvents", default=self.numberOfEvents,
+    parser.add_argument("--numberOfEvents", "-N", action="store", dest="numberOfEvents", default=self.numberOfEvents,
                         help="number of events to simulate, used in batch mode")
     parser.add_argument("--skipNEvents", action="store", dest="skipNEvents", default=self.skipNEvents,
                         help="Skip first N events when reading a file")
