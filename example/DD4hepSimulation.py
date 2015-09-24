@@ -31,6 +31,7 @@ class DD4hepSimulation(object):
     self.macroFile = ''
     self.gun = False
     self.magneticFieldDict = {}
+    self.detailedShowerMode = False
 
     self.errorMessages = []
 
@@ -102,6 +103,9 @@ class DD4hepSimulation(object):
     parser.add_argument("--enableGun", "-G", action="store_true", dest="gun", default=self.gun,
                         help="enable the DDG4 particle gun")
 
+    parser.add_argument("--enableDetailedShowerMode", action="store_true", dest="detailedShowerMode", default=self.detailedShowerMode,
+                        help="use detailed shower mode")
+
     ## now parse everything. The default values are now taken from the
     ## steeringFile if they were set so that the steering file parameters can be
     ## overwritten from the command line
@@ -119,6 +123,7 @@ class DD4hepSimulation(object):
     self.crossingAngleBoost = parsed.crossingAngleBoost
     self.macroFile = parsed.macroFile
     self.gun = parsed.gun
+    self.detailedShowerMode = parsed.detailedShowerMode
 
     if not self.compactFile:
       self.errorMessages.append("ERROR: No geometry compact file provided")
@@ -308,19 +313,21 @@ class DD4hepSimulation(object):
       print 'simple.setupTracker(  ' , tracker , ')'
  
       if 'tpc' in tracker.lower():
-        seq,act = simple.setupTracker( tracker ,type='TPCSDAction')
+        seq,act = simple.setupTracker( tracker, type='TPCSDAction')
       else:
         seq,act = simple.setupTracker( tracker )
 
       seq.add(f1)
-      act.HitCreationMode = 2
+      if self.detailedShowerMode:
+        act.HitCreationMode = 2
 
   # ---- add the calorimeters:
 
     for calo in cal:
       print 'simple.setupCalorimeter(  ' , calo , ')'
       seq,act = simple.setupCalorimeter( calo )
-      act.HitCreationMode = 2
+      if self.detailedShowerMode:
+        act.HitCreationMode = 2
 
 
   #=================================================================================
