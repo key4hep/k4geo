@@ -44,15 +44,31 @@ class DD4hepSimulation(object):
   @staticmethod
   def getOutputLevel( level ):
     """return output.LEVEL"""
-    level = int (level)
-    levels = { 1: Output.VERBOSE,
-               2: Output.DEBUG,
-               3: Output.INFO,
-               4: Output.WARNING,
-               5: Output.ERROR,
-               6: Output.FATAL,
-               7: Output.ALWAYS }
-    return levels[level]
+    try:
+      level = int(level)
+      levels = { 1: Output.VERBOSE,
+                 2: Output.DEBUG,
+                 3: Output.INFO,
+                 4: Output.WARNING,
+                 5: Output.ERROR,
+                 6: Output.FATAL,
+                 7: Output.ALWAYS }
+      return levels[level]
+    except ValueError:
+      try:
+        levels = { "VERBOSE": Output.VERBOSE,
+                   "DEBUG": Output.DEBUG,
+                   "INFO": Output.INFO,
+                   "WARNING": Output.WARNING,
+                   "ERROR": Output.ERROR,
+                   "FATAL": Output.FATAL,
+                   "ALWAYS": Output.ALWAYS }
+        return levels[level.upper()]
+      except ValueError:
+        print "Level is neither integer nor string"
+        raise
+    except KeyError:
+      print "LogLevel too high or unknown"
 
   def readSteeringFile(self, steeringFile):
     """Reads a steering file and sets the parameters to that of the
