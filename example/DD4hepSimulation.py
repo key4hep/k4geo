@@ -14,7 +14,7 @@ import DDG4, DD4hep
 from DDG4 import OutputLevel as Output
 from SystemOfUnits import *
 import argparse
-from argparse import RawTextHelpFormatter
+
 import os
 import sys
 
@@ -42,8 +42,7 @@ class DD4hepSimulation(object):
     ### use TCSH geant UI instead of QT
     os.environ['G4UI_USE_TCSH'] = "1"
 
-  @staticmethod
-  def getOutputLevel( level ):
+  def getOutputLevel(self, level):
     """return output.LEVEL"""
     try:
       level = int(level)
@@ -66,10 +65,11 @@ class DD4hepSimulation(object):
                    "ALWAYS": Output.ALWAYS }
         return levels[level.upper()]
       except ValueError:
-        print "Level is neither integer nor string"
-        raise
+        self.errorMessages.append( "ERROR: printLevel is neither integer nor string" )
+        return -1
     except KeyError:
-      print "LogLevel too high or unknown"
+      self.errorMessages.append( "ERROR: printLevel '%s' unknown" % level )
+      return -1
 
   def readSteeringFile(self, steeringFile):
     """Reads a steering file and sets the parameters to that of the
@@ -86,10 +86,11 @@ class DD4hepSimulation(object):
 
   def parseOptions(self):
     """parse the command line options"""
-    parser = argparse.ArgumentParser("Usage RunProg ", formatter_class=RawTextHelpFormatter)
+    parser = argparse.ArgumentParser("Running DD4hep Simulations:",
+                                     formatter_class=argparse.RawTextHelpFormatter)
 
     parser.add_argument("--steeringFile", "-S", action="store", default=None,
-                        help="Steering file to change default values")
+                        help="Steering file to change default behaviour")
 
     #first we parse just the steering file, but only if we don't want to see the help message
     if not any( opt in sys.argv for opt in ('-h','--help')):
@@ -98,28 +99,39 @@ class DD4hepSimulation(object):
 
     parser.add_argument("--compactFile", action="store", default=self.compactFile,
                         help="The compact XML file")
+
     parser.add_argument("--runType", action="store", choices=("batch","vis","run","shell"), default=self.runType,
-                        help="""The type of action to do in this invocation
-                        batch: just simulate some events, needs inputFile and numberOfEvents
-                        vis: enable visualisation
-                        run: enable interactive simulation of events
-                        shell: enable interactive session""")
+                        help="The type of action to do in this invocation"##Note: implicit string concatenation
+                        "\nbatch: just simulate some events, needs numberOfEvents, and input file or gun"
+                        "\nvis: enable visualisation"
+                        "\nrun: enable run the macro"
+                        "\nshell: enable interactive session")
+
     parser.add_argument("--inputFile", "-I", action="store", default=self.inputFile,
                         help="InputFile for simulation, lcio or stdhep files are supported")
+
     parser.add_argument("--outputFile","-O", action="store", default=self.outputFile,
                         help="Outputfile from the simulation,only lcio output is supported")
-    parser.add_argument("-v", "--printLevel", action="store", default=3, dest="printLevel",
-                        help="""Verbosity use 1(most) to 7(least) verbose, \nor strings: VERBOSE, DEBUG, INFO, WARNING, ERROR, FATAL, ALWAYS""")
+
+    parser.add_argument("-v", "--printLevel", action="store", default=self.printLevel, dest="printLevel",
+                        help="Verbosity use integers from 1(most) to 7(least) verbose"
+                        "\nor strings: VERBOSE, DEBUG, INFO, WARNING, ERROR, FATAL, ALWAYS")
+
     parser.add_argument("--numberOfEvents", "-N", action="store", dest="numberOfEvents", default=self.numberOfEvents,
                         type=int, help="number of events to simulate, used in batch mode")
+
     parser.add_argument("--skipNEvents", action="store", dest="skipNEvents", default=self.skipNEvents, type=int,
                         help="Skip first N events when reading a file")
+
     parser.add_argument("--physicsList", action="store", dest="physicsList", default=self.physicsList,
                         help="Physics list to use in simulation")
+
     parser.add_argument("--crossingAngleBoost", action="store", dest="crossingAngleBoost", default=self.crossingAngleBoost,
-                        type=int, help="Lorentz boost for crossing angle, in mrad")
-    parser.add_argument("--macroFile", "-M", action="store", dest="macroFile", default = self.macroFile,
-                        help="Macro file to run in shell or batch mode")
+                        type=float, help="Lorentz boost for the crossing angle, in radian!")
+
+    parser.add_argument("--macroFile", "-M", action="store", dest="macroFile", default=self.macroFile,
+                        help="Macro file to execute for runType 'run' or 'vis'")
+
     parser.add_argument("--enableGun", "-G", action="store_true", dest="gun", default=self.gun,
                         help="enable the DDG4 particle gun")
 
@@ -365,7 +377,7 @@ class DD4hepSimulation(object):
 
   #=================================================================================
     # Now build the physics list:
-    phys = simple.setupPhysics( self.physicsList )
+    _phys = simple.setupPhysics( self.physicsList )
 
     #fg: do we need these really ?
     #fg:  ph = DDG4.PhysicsList(kernel,'Geant4PhysicsList/Myphysics')
