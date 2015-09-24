@@ -7,12 +7,15 @@ Based on M. Frank and F. Gaede runSim.py
 
 """
 __RCSID__ = "$Id$"
+import ROOT
+ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 import DDG4, DD4hep
 from DDG4 import OutputLevel as Output
 from SystemOfUnits import *
 import argparse
 import os
+import sys
 
 class DD4hepSimulation(object):
   """Class to hold all the parameters and functions to run simulation"""
@@ -70,9 +73,11 @@ class DD4hepSimulation(object):
 
     parser.add_argument("--steeringFile", "-S", action="store", default=None,
                         help="Steering file to change default values")
-    #first we parse just the steering file
-    parsed, _unknown = parser.parse_known_args()
-    self.readSteeringFile(parsed.steeringFile)
+
+    #first we parse just the steering file, but only if we don't want to see the help message
+    if not any( opt in sys.argv for opt in ('-h','--help')):
+      parsed, _unknown = parser.parse_known_args()
+      self.readSteeringFile(parsed.steeringFile)
 
     parser.add_argument("--compactFile", action="store", default=self.compactFile,
                         help="The compact XML file")
