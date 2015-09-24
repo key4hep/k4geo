@@ -67,22 +67,40 @@ class DD4hepSimulation(object):
     """parse the command line options"""
     parser = argparse.ArgumentParser("Usage RunProg ")
 
-    parser.add_argument("--steeringFile", "-S", action="store", default=None)
+    parser.add_argument("--steeringFile", "-S", action="store", default=None,
+                        help="Steering file to change default values")
     #first we parse just the steering file
     parsed, _unknown = parser.parse_known_args()
     self.readSteeringFile(parsed.steeringFile)
 
-    parser.add_argument("--compactFile", action="store", default=self.compactFile)
-    parser.add_argument("--runType", action="store", choices=("batch","vis","run","shell"), default=self.runType)
-    parser.add_argument("--inputFile", "-I", action="store", default=self.inputFile)
-    parser.add_argument("--outputFile","-O", action="store", default=self.outputFile)
-    parser.add_argument("-v", "--printLevel", action="store", default=3, dest="printLevel")
-    parser.add_argument("--nEvents", "-N", action="store", dest="numberOfEvents", default=self.numberOfEvents)
-    parser.add_argument("--skipNEvents", action="store", dest="skipNEvents", default=self.skipNEvents)
-    parser.add_argument("--physicsList", action="store", dest="physicsList", default=self.physicsList)
-    parser.add_argument("--crossingAngleBoost", action="store", dest="crossingAngleBoost", default = self.crossingAngleBoost)
-    parser.add_argument("--macroFile", "-M", action="store", dest="macroFile", default = self.macroFile)
-    parser.add_argument("--enableGun", "-G", action="store_true", dest="gun", default=self.gun)
+    parser.add_argument("--compactFile", action="store", default=self.compactFile,
+                        help="The compact XML file")
+    parser.add_argument("--runType", action="store", choices=("batch","vis","run","shell"), default=self.runType,
+                        help="""The type of action to do in this invocation
+                        batch: just simulate some events, needs inputFile and numberOfEvents
+                        vis: enable visualisation
+                        run: enable interactive simulation of events
+                        shell: enable interactive session""")
+    parser.add_argument("--inputFile", "-I", action="store", default=self.inputFile,
+                        help="InputFile for simulation, lcio or stdhep files are supported")
+    parser.add_argument("--outputFile","-O", action="store", default=self.outputFile,
+                        help="Outputfile from the simulation,only lcio output is supported")
+    parser.add_argument("-v", "--printLevel", action="store", default=3, dest="printLevel",
+                        help="""Verbosity use 1(highest) to 7
+                        (least) verbose, or strings: VERBOSE, DEBUG, INFO,
+                        WARNING, ERROR, FATAL, ALWAYS""")
+    parser.add_argument("--nEvents", "-N", action="store", dest="numberOfEvents", default=self.numberOfEvents,
+                        help="number of events to simulate, used in batch mode")
+    parser.add_argument("--skipNEvents", action="store", dest="skipNEvents", default=self.skipNEvents,
+                        help="Skip first N events when reading a file")
+    parser.add_argument("--physicsList", action="store", dest="physicsList", default=self.physicsList,
+                        help="Physics list to use in simulation")
+    parser.add_argument("--crossingAngleBoost", action="store", dest="crossingAngleBoost", default=self.crossingAngleBoost,
+                        help="Lorentz boost for crossing angle, in mrad")
+    parser.add_argument("--macroFile", "-M", action="store", dest="macroFile", default = self.macroFile,
+                        help="Macro file to run in shell or batch mode")
+    parser.add_argument("--enableGun", "-G", action="store_true", dest="gun", default=self.gun,
+                        help="enable the DDG4 particle gun")
 
     ## now parse everything. The default values are now taken from the
     ## steeringFile if they were set so that the steering file parameters can be
