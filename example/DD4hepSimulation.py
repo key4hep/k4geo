@@ -276,12 +276,7 @@ class DD4hepSimulation(object):
 
     if self.gun and not self.inputFile:
       gun = DDG4.GeneratorAction(kernel,"Geant4ParticleGun/"+"Gun")
-      gun.energy      = 10*GeV
-      gun.particle    = "mu-"
-      gun.multiplicity = 1
-      gun.position     = (0.0,0.0,0.0)
-      gun.isotrop      = False
-      gun.direction    = (0,0,1)
+      gun = self.setGunOptions( gun )
       gun.enableUI()
       #actionList.append(gun)
       kernel.generatorAction().add(gun)
@@ -398,6 +393,15 @@ class DD4hepSimulation(object):
     kernel.run()
     kernel.terminate()
 
+  def setGunOptions( self, gun ):
+    """set the starting properties of the DDG4 particle gun"""
+    gun.energy      = 10*GeV
+    gun.particle    = "mu-"
+    gun.multiplicity = 1
+    gun.position     = (0.0,0.0,0.0)
+    gun.isotrop      = False
+    gun.direction    = (0,0,1)
+    return gun
 
   def __checkInputFile(self):
     """check if the inputfile is allowed, note that the filenames are case
