@@ -67,7 +67,7 @@ class DD4hepSimulation(object):
     """parse the command line options"""
     parser = argparse.ArgumentParser("Usage RunProg ")
 
-    parser.add_argument("steeringFile", nargs='?', action="store", default=None)
+    parser.add_argument("--steeringFile", "-S", action="store", default=None)
     #first we parse just the steering file
     parsed, _unknown = parser.parse_known_args()
     self.readSteeringFile(parsed.steeringFile)
