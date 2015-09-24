@@ -573,14 +573,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  nInteractionLengths += s_thick/(2.*slice_material.intLength());
 	  thickness_sum += s_thick/2;
 
-	  /*
-#if DD4HEP_VERSION_GE( 0, 15 )
-	  //Store "outer" quantities
-	  caloLayer.outer_nRadiationLengths = nRadiationLengths;
-	  caloLayer.outer_nInteractionLengths = nInteractionLengths;
-	  caloLayer.outer_thickness = thickness_sum;
-#endif  
-	  */
 
           // Slice placement.
           PlacedVolume slice_phv = l_vol.placeVolume(s_vol,Position(0,0,s_pos_z+s_thick/2));
@@ -589,10 +581,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 	    slice_phv.addPhysVolID("slice",s_num);
 
-	    //Reset counters to measure "outside" quantitites
-	    nRadiationLengths=0.;
-	    nInteractionLengths=0.;
-	    thickness_sum = 0.;
+	    //Reset counters to measure next "inner/outer" quantitites
+	    //Sensitive detector will be half inner, and half outer
+	    nRadiationLengths   = 0.;
+	    nInteractionLengths = 0.;
+	    thickness_sum       = 0.;
 
 	  }
 
@@ -637,20 +630,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 	barrelStructureLayer_vol.setVisAttributes(lcdd.visAttributes(x_layer.visStr()));	
 
-	
-	//fg: now done above before slice loop
-	// // place 5 times in module. at same layer position.
-	// double l_pos_y = Ecal_Barrel_module_dim_z / 2.;
-	// for (int i=0; i<Ecal_barrel_number_of_towers; i++){ // need four clone
-	//   l_pos_y -= stave_z;
-	//   Position   l_pos(0,l_pos_y,l_pos_z-l_thickness/2.);      // Position of the layer.
-	//   PlacedVolume layer_phv = mod_vol.placeVolume(l_vol,l_pos);
-	//   layer_phv.addPhysVolID("layer", l_num);
-	//   layer_phv.addPhysVolID("tower", i);
-	//   layer.setPlacement(layer_phv);
-	//   l_pos_y -= stave_z;
-	// }
-
 
         // Increment to next layer Z position.
         l_pos_z -= l_thickness;          
@@ -672,9 +651,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	
         ++l_num;
 
-	nRadiationLengths += radiator_dim_y/(stave_material.radLength());
+	nRadiationLengths   += radiator_dim_y/(stave_material.radLength());
 	nInteractionLengths += radiator_dim_y/(stave_material.intLength());
-	thickness_sum += radiator_dim_y;
+	thickness_sum       += radiator_dim_y;
       }
     }
   
@@ -705,7 +684,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 								      X*sin(phirot)+Y*cos(phirot),
 								      module_z_offset));
 	  PlacedVolume pv = envelope.placeVolume(mod_vol,tr);
-	  //	  pv.addPhysVolID("system",det_id);
 	  pv.addPhysVolID("module",module_id);
 	  pv.addPhysVolID("stave",stave_id);
 	  DetElement sd = (module_id==0&&stave_id==0) ? stave_det : stave_det.clone(_toString(module_id,"module%d")+_toString(stave_id,"stave%d"));
