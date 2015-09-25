@@ -295,8 +295,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   //the left (or to the right) with the quantity xShift
 
 
-
-
   //-------------------- start loop over HCAL layers ----------------------
 
   for (int layer_id = 1; layer_id <= (2*Hcal_nlayers); layer_id++)
@@ -382,6 +380,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
       double layer_thickness = y_height*2.;
 
+      double nRadiationLengths=0.;
+      double nInteractionLengths=0.;
+      double thickness_sum=0;
+
+      nRadiationLengths   = Hcal_radiator_thickness/(stavesMaterial.radLength());
+      nInteractionLengths = Hcal_radiator_thickness/(stavesMaterial.intLength());
+      thickness_sum       = Hcal_radiator_thickness;
 
 //====================================================================
 // Create Hcal Barrel Chamber without radiator
@@ -395,10 +400,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       double slice_pos_z = -(layer_thickness/2.);
       int slice_number = 0;
 
-      double nRadiationLengths=0.;
-      double nInteractionLengths=0.;
-      double thickness_sum=0;
-
       for(xml_coll_t k(x_layer,_U(slice)); k; ++k)  {
 	xml_comp_t x_slice = k;
 	string   slice_name      = layer_name + _toString(slice_number,"_slice%d");
@@ -410,13 +411,17 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	
 	// Slice volume & box
 	Volume slice_vol(slice_name,Box(x_length,z_width,slice_thickness/2.),slice_material);
+
+	nRadiationLengths   += slice_thickness/(2.*slice_material.radLength());
+	nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
+	thickness_sum       += slice_thickness/2;
 	
 	if ( x_slice.isSensitive() ) {
 	  slice_vol.setSensitiveDetector(sens);
 
 #if DD4HEP_VERSION_GE( 0, 15 )
 	  //Store "inner" quantities
-	  caloLayer.inner_nRadiationLengths = nRadiationLengths;
+	  caloLayer.inner_nRadiationLengths   = nRadiationLengths;
 	  caloLayer.inner_nInteractionLengths = nInteractionLengths;
 	  caloLayer.inner_thickness = thickness_sum;
 	  //Store scintillator thickness
@@ -428,9 +433,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  thickness_sum = 0.;
 	}
 
-	nRadiationLengths += slice_thickness/(2.*slice_material.radLength());
+	nRadiationLengths   += slice_thickness/(2.*slice_material.radLength());
 	nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
-	thickness_sum += slice_thickness/2;
+	thickness_sum       += slice_thickness/2;
 
 
 	// Set region, limitset, and vis.
@@ -479,13 +484,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
       //-----------------------------------------------------------------------------------------
       if( layer_id <= Hcal_nlayers ){ // add the first set of layers to the reconstruction data
-	//DDRec::LayeredCalorimeterData::Layer caloLayer ;
 	
-	caloLayer.distance = Hcal_inner_radius + Hcal_total_dim_y/2.0 + chamber_y_offset + chambers_y_off_correction ;
+	caloLayer.distance = Hcal_inner_radius + Hcal_total_dim_y/2.0 - (chamber_y_offset + chambers_y_off_correction) ;
 	caloLayer.thickness = Hcal_chamber_thickness + Hcal_radiator_thickness ;
 	caloLayer.absorberThickness = Hcal_radiator_thickness ;
-	//caloLayer.cellSize0 = Hcal_cell_dim_z ;
-	//caloLayer.cellSize1 = Hcal_cell_dim_x ;
 	
 	caloData->layers.push_back( caloLayer ) ;
       }
