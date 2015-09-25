@@ -23,7 +23,7 @@ class DD4hepSimulation(object):
 
   def __init__(self):
     self.compactFile = ""
-    self.inputFile = ""
+    self.inputFiles = []
     self.outputFile = "dummyOutput.slcio"
     self.runType = "batch"
     self.printLevel = Output.INFO
@@ -107,8 +107,8 @@ class DD4hepSimulation(object):
                         "\nrun: enable run the macro"
                         "\nshell: enable interactive session")
 
-    parser.add_argument("--inputFile", "-I", action="store", default=self.inputFile,
-                        help="InputFile for simulation, lcio or stdhep files are supported")
+    parser.add_argument("--inputFiles", "-I", nargs='+', action="store", default=self.inputFiles,
+                        help="InputFiles for simulation, lcio, stdhep, HEPEvt, and hepevt files are supported")
 
     parser.add_argument("--outputFile","-O", action="store", default=self.outputFile,
                         help="Outputfile from the simulation,only lcio output is supported")
@@ -144,9 +144,10 @@ class DD4hepSimulation(object):
     parsed = parser.parse_args()
 
     self.compactFile = parsed.compactFile
-    self.inputFile = parsed.inputFile
-    self.__checkInputFile()
+    self.inputFiles = parsed.inputFiles
+    self.__checkFileFormat( self.inputFiles, (".stdhep", ".slcio", ".HEPEvt", ".hepevt"))
     self.outputFile = parsed.outputFile
+    self.__checkFileFormat( self.outputFile, ('.root', '.slcio'))
     self.runType = parsed.runType
     self.printLevel = self.getOutputLevel(parsed.printLevel)
 
@@ -164,8 +165,8 @@ class DD4hepSimulation(object):
     if self.runType == "batch":
       if not self.numberOfEvents:
         self.errorMessages.append("ERROR: Batch mode requested, but did not set number of events")
-      if not self.inputFile and not self.gun:
-        self.errorMessages.append("ERROR: Batch mode requested, but did not set inputfile or gun")
+      if not self.inputFiles and not self.gun:
+        self.errorMessages.append("ERROR: Batch mode requested, but did not set inputFile(s) or gun")
 
     if self.errorMessages:
       parser.epilog = "\n".join(self.errorMessages)
@@ -270,7 +271,10 @@ class DD4hepSimulation(object):
 
     # Configure I/O
 
-    evt_lcio = simple.setupLCIOOutput('LcioOutput', self.outputFile)
+    if self.outputFile.endswith(".slcio"):
+      simple.setupLCIOOutput('LcioOutput', self.outputFile)
+    elif self.outputFile.endswith(".root"):
+      simple.setupROOTOutput('RootOutput', self.outputFile)
 
     actionList = []
 
@@ -278,31 +282,35 @@ class DD4hepSimulation(object):
       gun = DDG4.GeneratorAction(kernel,"Geant4ParticleGun/"+"Gun")
       gun = self.setGunOptions( gun )
       gun.Standalone = False
+      gun.Mask = 1
       actionList.append(gun)
-
-    if self.inputFile:
-      if self.inputFile.endswith(".slcio"):
-        gen = DDG4.GeneratorAction(kernel,"LCIOInputAction/LCIO1")
-        gen.Sync = self.skipNEvents
-        gen.Input="LCIOFileReader|"+self.inputFile
-      elif self.inputFile.endswith(".stdhep"):
-        gen = DDG4.GeneratorAction(kernel,"LCIOInputAction/STDHEP1")
-        gen.Sync = self.skipNEvents
-        gen.Input="LCIOStdHepReader|"+self.inputFile
-      elif self.inputFile.endswith(".HEPEvt"):
-        gen = DDG4.GeneratorAction(kernel,"LCIOInputAction/HEPEvt1")
-        gen.Sync = self.skipNEvents
-        gen.Input="Geant4EventReaderHepEvtShort|"+self.inputFile
-      elif self.inputFile.endswith(".hepevt"):
-        gen = DDG4.GeneratorAction(kernel,"Geant4InputAction/hepevt1")
-        gen.Sync = self.skipNEvents
-        gen.Input="Geant4EventReaderHepEvtLong|"+self.inputFile
-      actionList.append(gen)
-
-    if self.crossingAngleBoost:
+    if self.crossingAngleBoost and self.gun:
       lbo = DDG4.GeneratorAction(kernel, "Geant4InteractionVertexBoost")
       lbo.Angle = self.crossingAngleBoost
+      lbo.Mask = 1
       actionList.append(lbo)
+
+    for index,inputFile in enumerate(self.inputFiles, start=2):
+      if inputFile.endswith(".slcio"):
+        gen = DDG4.GeneratorAction(kernel,"LCIOInputAction/LCIO1")
+        gen.Input="LCIOFileReader|"+inputFile
+      elif inputFile.endswith(".stdhep"):
+        gen = DDG4.GeneratorAction(kernel,"LCIOInputAction/STDHEP1")
+        gen.Input="LCIOStdHepReader|"+inputFile
+      elif inputFile.endswith(".HEPEvt"):
+        gen = DDG4.GeneratorAction(kernel,"LCIOInputAction/HEPEvt1")
+        gen.Input="Geant4EventReaderHepEvtShort|"+inputFile
+      elif inputFile.endswith(".hepevt"):
+        gen = DDG4.GeneratorAction(kernel,"Geant4InputAction/hepevt1")
+        gen.Input="Geant4EventReaderHepEvtLong|"+inputFile
+      gen.Sync = self.skipNEvents
+      gen.Mask = index
+      actionList.append(gen)
+      if self.crossingAngleBoost:
+        lbo = DDG4.GeneratorAction(kernel, "Geant4InteractionVertexBoost")
+        lbo.Angle = self.crossingAngleBoost
+        lbo.Mask = index
+        actionList.append(lbo)
 
     if actionList:
       simple.buildInputStage( actionList , output_level=DDG4.OutputLevel.DEBUG )
@@ -402,10 +410,12 @@ class DD4hepSimulation(object):
     gun.direction    = (0,0,1)
     return gun
 
-  def __checkInputFile(self):
-    """check if the inputfile is allowed, note that the filenames are case
+  def __checkFileFormat(self, fileNames, extensions):
+    """check if the fileName is allowed, note that the filenames are case
     sensitive, and in case of hepevt we depend on this to identify short and long versions of the content
     """
-    if self.inputFile and not self.inputFile.endswith((".stdhep", ".slcio", ".HEPEvt", ".hepevt")):
-      self.errorMessages.append("ERROR: Unknown fileformat for input file: %s" % self.inputFile)
+    if isinstance( fileNames, basestring ):
+      fileNames = [fileNames]
+    if not all( fileName.endswith( extensions ) for fileName in fileNames ):
+      self.errorMessages.append("ERROR: Unknown fileformat for file: %s" % fileNames)
     return
