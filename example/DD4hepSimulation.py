@@ -34,6 +34,8 @@ class DD4hepSimulation(object):
     self.crossingAngleBoost = 0.0
     self.macroFile = ''
     self.gun = False
+    self.vertexSigma = [0.0, 0.0, 0.0, 0.0]
+    self.vertexOffset = [0.0, 0.0, 0.0, 0.0]
     self.magneticFieldDict = {}
     self.detailedShowerMode = False
 
@@ -129,6 +131,12 @@ class DD4hepSimulation(object):
     parser.add_argument("--crossingAngleBoost", action="store", dest="crossingAngleBoost", default=self.crossingAngleBoost,
                         type=float, help="Lorentz boost for the crossing angle, in radian!")
 
+    parser.add_argument("--vertexSigma", nargs=4, action="store", dest="vertexSigma", default=self.vertexSigma,
+                        type=float, help="FourVector of the Sigma for the Smearing of the Vertex position: x y z t")
+
+    parser.add_argument("--vertexOffset", nargs=4, action="store", dest="vertexOffset", default=self.vertexOffset,
+                        type=float, help="FourVector of translation for the Smearing of the Vertex position: x y z t")
+
     parser.add_argument("--macroFile", "-M", action="store", dest="macroFile", default=self.macroFile,
                         help="Macro file to execute for runType 'run' or 'vis'")
 
@@ -158,6 +166,8 @@ class DD4hepSimulation(object):
     self.macroFile = parsed.macroFile
     self.gun = parsed.gun
     self.detailedShowerMode = parsed.detailedShowerMode
+    self.vertexOffset = parsed.vertexOffset
+    self.vertexSigma = parsed.vertexSigma
 
     if not self.compactFile:
       self.errorMessages.append("ERROR: No geometry compact file provided")
@@ -284,11 +294,7 @@ class DD4hepSimulation(object):
       gun.Standalone = False
       gun.Mask = 1
       actionList.append(gun)
-    if self.crossingAngleBoost and self.gun:
-      lbo = DDG4.GeneratorAction(kernel, "Geant4InteractionVertexBoost")
-      lbo.Angle = self.crossingAngleBoost
-      lbo.Mask = 1
-      actionList.append(lbo)
+      self.__applyBoostOrSmear(kernel, actionList, 1)
 
     for index,inputFile in enumerate(self.inputFiles, start=2):
       if inputFile.endswith(".slcio"):
@@ -306,11 +312,7 @@ class DD4hepSimulation(object):
       gen.Sync = self.skipNEvents
       gen.Mask = index
       actionList.append(gen)
-      if self.crossingAngleBoost:
-        lbo = DDG4.GeneratorAction(kernel, "Geant4InteractionVertexBoost")
-        lbo.Angle = self.crossingAngleBoost
-        lbo.Mask = index
-        actionList.append(lbo)
+      self.__applyBoostOrSmear(kernel, actionList, index)
 
     if actionList:
       simple.buildInputStage( actionList , output_level=DDG4.OutputLevel.DEBUG )
@@ -419,3 +421,18 @@ class DD4hepSimulation(object):
     if not all( fileName.endswith( extensions ) for fileName in fileNames ):
       self.errorMessages.append("ERROR: Unknown fileformat for file: %s" % fileNames)
     return
+
+  def __applyBoostOrSmear( self, kernel, actionList, mask ):
+    """apply boost or smearing for given mask index"""
+    if self.crossingAngleBoost:
+      lbo = DDG4.GeneratorAction(kernel, "Geant4InteractionVertexBoost")
+      lbo.Angle = self.crossingAngleBoost
+      lbo.Mask = mask
+      actionList.append(lbo)
+
+    if any(self.vertexSigma) or any(self.vertexOffset):
+      vSmear = DDG4.GeneratorAction(kernel, "Geant4InteractionVertexSmear")
+      vSmear.Offset = self.vertexOffset
+      vSmear.Sigma = self.vertexSigma
+      vSmear.Mask = mask
+      actionList.append(vSmear)
