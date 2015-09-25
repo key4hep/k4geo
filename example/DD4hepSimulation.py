@@ -153,7 +153,7 @@ class DD4hepSimulation(object):
 
     self.compactFile = parsed.compactFile
     self.inputFiles = parsed.inputFiles
-    self.__checkFileFormat( self.inputFiles, (".stdhep", ".slcio", ".HEPEvt", ".hepevt"))
+    self.__checkFileFormat( self.inputFiles, (".stdhep", ".slcio", ".HEPEvt", ".hepevt", ".hepmc"))
     self.outputFile = parsed.outputFile
     self.__checkFileFormat( self.outputFile, ('.root', '.slcio'))
     self.runType = parsed.runType
@@ -309,6 +309,9 @@ class DD4hepSimulation(object):
       elif inputFile.endswith(".hepevt"):
         gen = DDG4.GeneratorAction(kernel,"Geant4InputAction/hepevt1")
         gen.Input="Geant4EventReaderHepEvtLong|"+inputFile
+      elif inputFile.endswith(".hepmc"):
+        gen = DDG4.GeneratorAction(kernel,"Geant4InputAction/hepmc1")
+        gen.Input="Geant4EventReaderHepMC|"+inputFile
       gen.Sync = self.skipNEvents
       gen.Mask = index
       actionList.append(gen)
