@@ -558,14 +558,36 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    caloLayer.outer_nInteractionLengths = s_thick/(2.*slice_material.intLength());
 	    caloLayer.outer_thickness           = s_thick/2;
 #endif
-
+	    /*
+	    std::cout<<" l_num: "<<l_num <<std::endl;
+	    std::cout<<" s_num: "<<s_num <<std::endl;
+	    std::cout<<" Ecal_inner_radius: "<< Ecal_inner_radius <<std::endl;
+	    std::cout<<" module_thickness: "<< module_thickness <<std::endl;
+	    std::cout<<" l_pos_z: "<< l_pos_z <<std::endl;
+	    std::cout<<" l_thickness: "<< l_thickness <<std::endl;
+	    std::cout<<" s_pos_z: "<< s_pos_z <<std::endl;
+	    std::cout<<" s_thick: "<< s_thick <<std::endl;
+	    std::cout<<" radiator_dim_y: "<< radiator_dim_y <<std::endl;
+	    */
 	    //-----------------------------------------------------------------------------------------
-	    caloLayer.distance  = Ecal_inner_radius + module_thickness/2.0 - l_pos_z + (s_pos_z+s_thick/2);
+	    caloLayer.distance  = Ecal_inner_radius + module_thickness/2.0 - l_pos_z + l_thickness/2. + (s_pos_z+s_thick/2);
 	    caloLayer.thickness = (l_thickness + radiator_dim_y)/2.0 ;
 	    caloLayer.absorberThickness = radiator_dim_y ;
 	    
 	    caloData->layers.push_back( caloLayer ) ;
 	    //-----------------------------------------------------------------------------------------
+
+	    std::cout<<" caloLayer.distance: "<< caloLayer.distance <<std::endl;
+
+	    std::cout<<" caloLayer.inner_nRadiationLengths: "<< caloLayer.inner_nRadiationLengths <<std::endl;
+	    std::cout<<" caloLayer.inner_nInteractionLengths: "<< caloLayer.inner_nInteractionLengths <<std::endl;
+	    std::cout<<" caloLayer.inner_thickness: "<< caloLayer.inner_thickness <<std::endl;
+	    std::cout<<" caloLayer.sensitive_thickness: "<< caloLayer.sensitive_thickness <<std::endl;
+
+	    std::cout<<" caloLayer.outer_nRadiationLengths: "<< caloLayer.outer_nRadiationLengths <<std::endl;
+	    std::cout<<" caloLayer.outer_nInteractionLengths: "<< caloLayer.outer_nInteractionLengths <<std::endl;
+	    std::cout<<" caloLayer.outer_thickness: "<< caloLayer.outer_thickness <<std::endl;
+
 
 	  }
 
