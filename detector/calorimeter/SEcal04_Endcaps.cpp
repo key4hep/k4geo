@@ -76,6 +76,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   sens.setType("calorimeter");
 
+  Material stave_material  = lcdd.material(x_staves.materialStr());
+
   DetElement    module_det("module0",det_id);
 
   Readout readout = sens.readout();
@@ -138,19 +140,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double      EcalEndcap_outer_radius          = lcdd.constant<double>("EcalEndcap_outer_radius");
   double      EcalEndcap_min_z                 = lcdd.constant<double>("EcalEndcap_min_z");
   double      EcalEndcap_max_z                 = lcdd.constant<double>("EcalEndcap_max_z");
-
-  //========== fill data for reconstruction ============================
-  DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
-  caloData->layoutType = DDRec::LayeredCalorimeterData::EndcapLayout ;
-  caloData->inner_symmetry = 4  ; // hard code cernter box hole
-  caloData->outer_symmetry = 8  ; // outer Octagun
-  caloData->phi0 = 0 ;
-
-  /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
-  caloData->extent[0] = EcalEndcap_inner_radius ;
-  caloData->extent[1] = EcalEndcap_outer_radius ;
-  caloData->extent[2] = EcalEndcap_min_z ;
-  caloData->extent[3] = EcalEndcap_max_z ;
 
 //====================================================================
 //
@@ -273,6 +262,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //~              EndcapStandardModule                 ~
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  double EC_module_z_offset = Ecal_Barrel_module_dim_z * 2.5 + Ecal_cables_gap + module_thickness /2;
 
   double Ecal_endcap_rmax  = Ecal_inner_radius 
     + module_thickness
@@ -342,12 +332,30 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   double l_pos_z = z_floor;
 
-  //  DDRec::LayeredCalorimeterData::Layer caloLayer ;
-  //  caloLayer.cellSize0 = cell_sizeX;
-  //  caloLayer.cellSize1 = cell_sizeY;
- 
+  //========== fill data for reconstruction ============================
+  DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
+  caloData->layoutType = DDRec::LayeredCalorimeterData::EndcapLayout ;
+  caloData->inner_symmetry = 4  ; // hard code cernter box hole
+  caloData->outer_symmetry = 8  ; // outer Octagun
+  caloData->phi0 = 0 ;
+
+  /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
+  caloData->extent[0] = EcalEndcap_inner_radius ;
+  caloData->extent[1] = EcalEndcap_outer_radius ;
+  caloData->extent[2] = EcalEndcap_min_z ;
+  caloData->extent[3] = EcalEndcap_max_z ;
+
   //-------------------- start loop over ECAL layers ----------------------
   // Loop over the sets of layer elements in the detector.
+
+  double nRadiationLengths=0.;
+  double nInteractionLengths=0.;
+  double thickness_sum=0;
+  
+  nRadiationLengths   = Ecal_radiator_thickness1/(stave_material.radLength());
+  nInteractionLengths = Ecal_radiator_thickness1/(stave_material.intLength());
+  thickness_sum       = Ecal_radiator_thickness1;
+
   int l_num = 1;
   for(xml_coll_t li(x_det,_U(layer)); li; ++li)  {
     xml_comp_t x_layer = li;
@@ -361,7 +369,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       int EC_Number_of_towers = 0; 
       double y_floor = EC_y_bottom;
       double radiator_dim_y = -1.0; //to be updated with slice radiator thickness 
-      
+
+      bool fill_DDRec = true; //Fill DDRec only once within loop while.
       while ( ( y_floor + EC_alveolus_dim_y) < EC_y_top )
 	{
 	  alv_upper_y = y_floor + EC_alveolus_dim_y;
@@ -410,10 +419,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  // BuildEndcapAlveolus: BuildSiliconSlab:
 	  //--------------------------------------------------------------------------------
 
-	  double nRadiationLengths=0.;
-	  double nInteractionLengths=0.;
-	  double thickness_sum=0;
-	
 	  for(xml_coll_t si(x_layer,_U(slice)); si; ++si)  {
 	    xml_comp_t x_slice = si;
 	    string     s_name  =  _toString(s_num,"slice%d");
@@ -436,7 +441,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    if (x_slice.materialStr().compare(x_staves.materialStr()) == 0)
 	      radiator_dim_y = s_thick;
 	    // W StructureLayer has the same thickness as W radiator layer in the Alveolus layer
-	    
+
+	    if (fill_DDRec) {
+	      nRadiationLengths   += s_thick/(2.*slice_material.radLength());
+	      nInteractionLengths += s_thick/(2.*slice_material.intLength());
+	      thickness_sum       += s_thick/2;
+	    }
+
 	    if ( x_slice.isSensitive() ) {
 	      //s_vol.setSensitiveDetector(sens);
 
@@ -480,17 +491,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 										   wafer_pos_x,
 										   0));
 		    wafer_phv.addPhysVolID("wafer", wafer_num);
-		    /*
-		    new MyPlacement(0,
-				    G4ThreeVector(wafer_pos_z,
-						  wafer_pos_x,
-						  0),
-				    WaferSiLog,
-				    "WaferSi",
-				    CommonSiLog,
-				    false,
-				    n_wafer_x*1000 + n_wafer_z);
-		    */
 		    wafer_pos_z +=
 		      wafer_dim_x +
 		      2 * Ecal_guard_ring_size;
@@ -522,22 +522,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 		  cell_dim_z;
 	  
 		Box MagicWaferSiSolid( wafer_dim_z/2,wafer_dim_x/2,slab_dim_y);
-		/*
-		WaferSiSolid = 
-		  new G4Box("WaferSiSolid", 
-			    wafer_dim_z/2-G4GeometryTolerance::GetInstance()->GetSurfaceTolerance(),
-			    wafer_dim_x/2-G4GeometryTolerance::GetInstance()->GetSurfaceTolerance(),
-			    Ecal_Si_thickness/2-2*(G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()));
-	  
-		WaferSiLog =
-		  new G4LogicalVolume(WaferSiSolid,
-				      CGAGeometryManager::
-				      GetMaterial("silicon_2.33gccm"),
-				      "WaferSiLog", 
-				      0, 0, pULimits);  
-		WaferSiLog->SetVisAttributes(WaferSiVisAtt);
-		WaferSiLog->SetSensitiveDetector(theSD);
-		*/
 		wafer_pos_x =
 		  -slab_dim_z +
 		  n_wafers_x * real_wafer_size_x +
@@ -563,17 +547,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 											wafer_pos_x,
 											0));
 		    wafer_phv.addPhysVolID("wafer", wafer_num);
-		    /*
-		    new MyPlacement(0,
-				    G4ThreeVector(wafer_pos_z,
-						  wafer_pos_x,
-						  0),
-				    WaferSiLog,
-				    "WaferSi",
-				    CommonSiLog,
-				    false,
-				    n_wafer_x*1000 + n_wafer_z);
-		    */
 		    wafer_pos_z +=
 		      wafer_dim_z +
 		      2 * Ecal_guard_ring_size;
@@ -581,24 +554,58 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	      }
 	    
 
-
+	    if (fill_DDRec) {
 #if DD4HEP_VERSION_GE( 0, 15 )
 	      //Store "inner" quantities
-	      caloLayer.inner_nRadiationLengths = nRadiationLengths;
+	      caloLayer.inner_nRadiationLengths   = nRadiationLengths;
 	      caloLayer.inner_nInteractionLengths = nInteractionLengths;
-	      caloLayer.inner_thickness = thickness_sum;
+	      caloLayer.inner_thickness           = thickness_sum;
 	      //Store sensitive slice thickness
 	      caloLayer.sensitive_thickness = s_thick;
+	      
+	      //Store "outer" quantities
+	      caloLayer.outer_nRadiationLengths   = s_thick/(2.*slice_material.radLength());
+	      caloLayer.outer_nInteractionLengths = s_thick/(2.*slice_material.intLength());
+	      caloLayer.outer_thickness           = s_thick/2;
 #endif
-	      //Reset counters to measure "outside" quantitites
-	      nRadiationLengths=0.;
-	      nInteractionLengths=0.;
-	      thickness_sum = 0.;
+
+	      std::cout<<" l_num: "<<l_num <<std::endl;
+	      std::cout<<" s_num: "<<s_num <<std::endl;
+	      std::cout<<" EC_module_z_offset: "<< EC_module_z_offset <<std::endl;
+	      std::cout<<" module_thickness: "<< module_thickness <<std::endl;
+	      std::cout<<" l_pos_z: "<< l_pos_z <<std::endl;
+	      std::cout<<" l_thickness: "<< l_thickness <<std::endl;
+	      std::cout<<" s_pos_z: "<< s_pos_z <<std::endl;
+	      std::cout<<" s_thick: "<< s_thick <<std::endl;
+	      std::cout<<" radiator_dim_y: "<< radiator_dim_y <<std::endl;
+	      
+	      //-----------------------------------------------------------------------------------------
+	      caloLayer.distance  = EC_module_z_offset + l_pos_z + (s_pos_z+s_thick/2);
+	      caloLayer.thickness = (l_thickness + radiator_dim_y)/2.0 ;
+	      caloLayer.absorberThickness = radiator_dim_y ;
+	      
+	      caloData->layers.push_back( caloLayer ) ;
+	      //-----------------------------------------------------------------------------------------
+
+	      std::cout<<" caloLayer.distance: "<< caloLayer.distance <<std::endl;
+	      
+	      std::cout<<" caloLayer.inner_nRadiationLengths: "<< caloLayer.inner_nRadiationLengths <<std::endl;
+	      std::cout<<" caloLayer.inner_nInteractionLengths: "<< caloLayer.inner_nInteractionLengths <<std::endl;
+	      std::cout<<" caloLayer.inner_thickness: "<< caloLayer.inner_thickness <<std::endl;
+	      std::cout<<" caloLayer.sensitive_thickness: "<< caloLayer.sensitive_thickness <<std::endl;
+	      
+	      std::cout<<" caloLayer.outer_nRadiationLengths: "<< caloLayer.outer_nRadiationLengths <<std::endl;
+	      std::cout<<" caloLayer.outer_nInteractionLengths: "<< caloLayer.outer_nInteractionLengths <<std::endl;
+	      std::cout<<" caloLayer.outer_thickness: "<< caloLayer.outer_thickness <<std::endl;
+
+	    }
 	    }
 
-	    nRadiationLengths += s_thick/(2.*slice_material.radLength());
-	    nInteractionLengths += s_thick/(2.*slice_material.intLength());
-	    thickness_sum += s_thick/2;
+	    if (fill_DDRec) {
+	      nRadiationLengths += s_thick/(2.*slice_material.radLength());
+	      nInteractionLengths += s_thick/(2.*slice_material.intLength());
+	      thickness_sum += s_thick/2;
+	    }
 
 	    slice.setAttributes(lcdd,s_vol,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
 	    
@@ -607,7 +614,17 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    
 	    if ( x_slice.isSensitive() ) {
 	      slice_phv.addPhysVolID("slice",s_num);
+
+	      if (fill_DDRec) {
+		//Reset counters to measure next "inner/outer" quantitites
+		//Sensitive detector will be half inner, and half outer
+		nRadiationLengths   = 0.;
+		nInteractionLengths = 0.;
+		thickness_sum       = 0.;
+	      }
+
 	    }
+
 	    slice.setPlacement(slice_phv);
 	    // Increment Z position of slice.
 	    s_pos_z += s_thick;
@@ -616,13 +633,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    ++s_num;
 	  }        
 	  
-#if DD4HEP_VERSION_GE( 0, 15 )
-	  //Store "outer" quantities
-	  caloLayer.outer_nRadiationLengths = nRadiationLengths;
-	  caloLayer.outer_nInteractionLengths = nInteractionLengths;
-	  caloLayer.outer_thickness = thickness_sum;
-#endif
-	  
+
 	  if(radiator_dim_y <= 0) {
 	    stringstream err;
 	    err << " \n ERROR: The subdetector " << x_det.nameStr() << " geometry parameter -- radiator_dim_y = " << radiator_dim_y ;
@@ -696,27 +707,19 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  y_floor += EC_alveolus_dim_y + fiber_inter_alveolus;
 	  
 	  EC_Number_of_towers++;
-	  
+
+	  fill_DDRec = false; 
 	}
       
-      //-----------------------------------------------------------------------------------------
-      //DDRec::LayeredCalorimeterData::Layer caloLayer ;
-	
-      caloLayer.distance = Ecal_Barrel_module_dim_z * 2.5 + Ecal_cables_gap + module_thickness/2.0 + l_pos_z ;
-      caloLayer.thickness = l_thickness + radiator_dim_y ;
-      caloLayer.absorberThickness = radiator_dim_y ;
-      //caloLayer.cellSize0 = Ecal_cells_size ;
-      //caloLayer.cellSize1 = Ecal_cells_size ;
-      
-      caloData->layers.push_back( caloLayer ) ;
-      //-----------------------------------------------------------------------------------------
 
       // Increment to next layer Z position.
       l_pos_z +=   (l_thickness/2. +(radiator_dim_y/2. + Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE))*2.);
       
       ++l_num;
  
-     
+      nRadiationLengths   += radiator_dim_y/(stave_material.radLength());
+      nInteractionLengths += radiator_dim_y/(stave_material.intLength());
+      thickness_sum       += radiator_dim_y;     
     }
   }
     
@@ -737,10 +740,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   //====================================================================
   // Place Ecal Endcap module into the assembly envelope volume
   //====================================================================
-  
-
-  double EC_module_z_offset = Ecal_Barrel_module_dim_z * 2.5 + Ecal_cables_gap + module_thickness /2;
-  
+   
   for(int module_num=0;module_num<2;module_num++) {
     int module_id = ( module_num == 0 ) ? 0:6;
     double this_module_z_offset = ( module_id == 0 ) ? - EC_module_z_offset : EC_module_z_offset; 
