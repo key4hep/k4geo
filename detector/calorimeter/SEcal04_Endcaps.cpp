@@ -580,8 +580,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	      std::cout<<" radiator_dim_y: "<< radiator_dim_y <<std::endl;
 	      
 	      //-----------------------------------------------------------------------------------------
-	      caloLayer.distance  = EC_module_z_offset + l_pos_z + (s_pos_z+s_thick/2);
-	      caloLayer.thickness = (l_thickness + radiator_dim_y)/2.0 ;
+	      caloLayer.distance  = EC_module_z_offset + l_pos_z + (s_pos_z+s_thick/2)
+		- caloLayer.inner_thickness ;// Will be added later at "DDMarlinPandora/DDGeometryCreator.cc:226" to get center of sensitive element
+	      caloLayer.thickness = caloLayer.inner_thickness + caloLayer.outer_thickness ;
 	      caloLayer.absorberThickness = radiator_dim_y ;
 	      
 	      caloData->layers.push_back( caloLayer ) ;
