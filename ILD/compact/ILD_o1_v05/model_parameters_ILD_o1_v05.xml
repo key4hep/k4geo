@@ -141,7 +141,7 @@
   <constant name="Hcal_endcap_radiator_thickness" value="20*mm"/>
   <constant name="Hcal_endcap_sensitive_center_box" value="0.0*mm"/>
   <constant name="Hcal_endcap_services_module_width" value="100.0*mm"/>
-  <constant name="Hcal_endcap_zmin" value="2670.7*mm"/>
+  <!--constant name="Hcal_endcap_zmin" value="2670.7*mm"/-->
   <constant name="Hcal_fiber_gap" value="2.7*mm"/>
   <constant name="Hcal_lateral_structure_thickness" value="15*mm"/>
   <constant name="Hcal_layer_air_gap" value="2*mm"/>
