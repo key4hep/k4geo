@@ -37,7 +37,7 @@ option(BUILD_TESTING "Enable and build tests" ON)
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-find_package(DD4hep REQUIRED COMPONENTS DDRec DDG4)
+find_package(DD4hep REQUIRED COMPONENTS DDSegmentation DDRec DDG4)
 find_package(ROOT REQUIRED COMPONENTS Geom Reflex GenVector)
 #find_package( ROOT REQUIRED COMPONENTS Geom Reflex)
 #set( ROOT_COMPONENT_LIBRARIES Geom Reflex)
@@ -62,6 +62,7 @@ include_directories( SYSTEM
 
 file(GLOB sources 
   ./sensitive/TPCSDAction.cpp 
+  ./sensitive/CaloPreShowerSDAction.cpp 
   ./detector/tracker/*.cpp 
   ./detector/calorimeter/*.cpp 
   ./detector/fcal/*.cpp 

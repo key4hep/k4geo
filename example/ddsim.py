@@ -222,7 +222,11 @@ def run():
 
   for c in cal:
     print 'simple.setupCalorimeter(  ' , c , ')'
-    seq,act = simple.setupCalorimeter( c )
+    if( 'ecal' in c.lower() ):
+      seq,act = simple.setupCalorimeter( c ,type='CaloPreShowerSDAction')
+      act.FirstLayerNumber = 1
+    else:
+      seq,act = simple.setupCalorimeter( c )
     act.HitCreationMode = 2
 
 
