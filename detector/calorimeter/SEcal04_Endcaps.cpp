@@ -485,7 +485,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 		    wafer_num++;
 		    string Wafer_name  =  _toString(wafer_num,"wafer%d");
 		    Volume WaferSiLog(det_name+"_"+l_name+"_"+s_name+"_"+Wafer_name,WaferSiSolid,slice_material);
-		    WaferSiLog.setSensitiveDetector(sens);
+		    //first layer was not used by DBD reco, just used as radiator material.		    
+		    if (l_num >1 ) WaferSiLog.setSensitiveDetector(sens);
 		    WaferSiLog.setVisAttributes(lcdd.visAttributes(x_slice.visStr()));
 		    PlacedVolume wafer_phv = s_vol.placeVolume(WaferSiLog,Position(wafer_pos_z,
 										   wafer_pos_x,
@@ -541,7 +542,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 		    wafer_num++;
 		    string MagicWafer_name  =  _toString(wafer_num,"MagicWafer%d");
 		    Volume MagicWaferSiLog(det_name+"_"+l_name+"_"+s_name+"_"+MagicWafer_name,MagicWaferSiSolid,slice_material);
-		    MagicWaferSiLog.setSensitiveDetector(sens);
+		    //first layer was not used by DBD reco, just used as radiator material.
+		    if ( l_num>1 ) MagicWaferSiLog.setSensitiveDetector(sens);
 		    MagicWaferSiLog.setVisAttributes(lcdd.visAttributes(x_slice.visStr()));
 		    PlacedVolume wafer_phv = s_vol.placeVolume(MagicWaferSiLog,Position(wafer_pos_z,
 											wafer_pos_x,
@@ -584,8 +586,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 		- caloLayer.inner_thickness ;// Will be added later at "DDMarlinPandora/DDGeometryCreator.cc:226" to get center of sensitive element
 	      caloLayer.thickness = caloLayer.inner_thickness + caloLayer.outer_thickness ;
 	      caloLayer.absorberThickness = radiator_dim_y ;
-	      
-	      caloData->layers.push_back( caloLayer ) ;
+
+	      //first layer was not used by DBD reco, just used as radiator material. 
+	      //Mokka save it into preShowerCollection.
+	      if ( l_num>1 ) caloData->layers.push_back( caloLayer ) ;
 	      //-----------------------------------------------------------------------------------------
 
 	      std::cout<<" caloLayer.distance: "<< caloLayer.distance <<std::endl;
