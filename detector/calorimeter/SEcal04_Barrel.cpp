@@ -356,6 +356,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     thickness_sum       = Ecal_radiator_thickness1;
 
     int l_num = 1;
+    bool isFirstSens = true;
     for(xml_coll_t li(x_det,_U(layer)); li; ++li)  {
       xml_comp_t x_layer = li;
       int repeat = x_layer.repeat();
@@ -574,8 +575,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	      - caloLayer.inner_thickness; // Will be added later at "DDMarlinPandora/DDGeometryCreator.cc:226" to get center of sensitive element
 	    caloLayer.thickness = caloLayer.inner_thickness + caloLayer.outer_thickness ;
 	    caloLayer.absorberThickness = radiator_dim_y ;
-	    
-	    caloData->layers.push_back( caloLayer ) ;
+
+	    //Only fill the layers information into DDRec after first layer as Mokka Gear.
+	    if (!isFirstSens) caloData->layers.push_back( caloLayer ) ;
 	    //-----------------------------------------------------------------------------------------
 
 	    std::cout<<" caloLayer.distance: "<< caloLayer.distance <<std::endl;
@@ -609,7 +611,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    nRadiationLengths   = 0.;
 	    nInteractionLengths = 0.;
 	    thickness_sum       = 0.;
-
+	    isFirstSens         = false;
 	  }
 
 	  //fg: not needed   slice.setPlacement(slice_phv);
