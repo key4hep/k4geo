@@ -123,8 +123,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double      Hcal_endcap_cables_gap           = lcdd.constant<double>("Hcal_endcap_cables_gap");
   double      Hcal_endcap_ecal_gap             = lcdd.constant<double>("Hcal_endcap_ecal_gap");
 
-  double      Hcal_Cu_thickness                = lcdd.constant<double>("Hcal_Cu_thickness");
-  double      Hcal_PCB_thickness               = lcdd.constant<double>("Hcal_PCB_thickness");
+  //double      Hcal_Cu_thickness                = lcdd.constant<double>("Hcal_Cu_thickness");
+  //double      Hcal_PCB_thickness               = lcdd.constant<double>("Hcal_PCB_thickness");
 
   int         Hcal_endcap_nlayers              = lcdd.constant<int>("Hcal_endcap_nlayers");
 
