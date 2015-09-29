@@ -154,7 +154,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double      Hcal_modules_gap                 = lcdd.constant<double>("Hcal_modules_gap"); 
   double      Hcal_middle_stave_gaps           = lcdd.constant<double>("Hcal_middle_stave_gaps");
   double      Hcal_layer_air_gap               = lcdd.constant<double>("Hcal_layer_air_gap");
-  double      Hcal_cells_size                  = lcdd.constant<double>("Hcal_cells_size");
+  //double      Hcal_cells_size                  = lcdd.constant<double>("Hcal_cells_size");
 
   int         Hcal_nlayers                     = lcdd.constant<int>("Hcal_nlayers");
 
@@ -203,8 +203,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
  //only the middle has the steel plate.
   double Hcal_regular_chamber_dim_z = Hcal_normal_dim_z - Hcal_lateral_plate_thickness;
 
-  double Hcal_cell_dim_x            = Hcal_cells_size;
-  double Hcal_cell_dim_z            = Hcal_regular_chamber_dim_z / floor (Hcal_regular_chamber_dim_z/Hcal_cell_dim_x);
+  //double Hcal_cell_dim_x            = Hcal_cells_size;
+  //double Hcal_cell_dim_z            = Hcal_regular_chamber_dim_z / floor (Hcal_regular_chamber_dim_z/Hcal_cell_dim_x);
 
  
 // ========= Create Hcal Barrel stave   ====================================
