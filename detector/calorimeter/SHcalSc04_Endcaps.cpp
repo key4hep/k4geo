@@ -46,7 +46,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   string      det_name    = x_det.nameStr();
   //unused: string      det_type    = x_det.typeStr();
   Material    air         = lcdd.air();
-  Material    Steel235    = lcdd.material(x_det.materialStr());
+  Material    stavesMaterial    = lcdd.material(x_det.materialStr());
   int         numSides    = dim.numsides();
 
   int           det_id    = x_det.id();
@@ -121,7 +121,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       // define the name of each endcap Module
       string envelopeVol_name   = det_name+_toString(endcapID,"_EndcapModule%d");
       
-      Volume envelopeVol(envelopeVol_name,EndcapModule,Steel235);
+      Volume envelopeVol(envelopeVol_name,EndcapModule,stavesMaterial);
       
       // Set envelope volume attributes.
       envelopeVol.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
@@ -133,7 +133,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       // ==========================================================================
       
       // create Layer (air) and place the slices (Polystyrene,Cu,FR4,air) into it. 
-      // place the Layer into the Hcal Endcap Modules envelope (Steel235).
+      // place the Layer into the Hcal Endcap Modules envelope (stavesMaterial).
       
       // First Hcal Chamber position, start after first radiator
       double layer_pos_y     = - box_half_y + Hcal_radiator_thickness;                      
@@ -177,6 +177,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	double nInteractionLengths=0.;
 	double thickness_sum=0;
 
+	nRadiationLengths   = Hcal_radiator_thickness/(stavesMaterial.radLength());
+	nInteractionLengths = Hcal_radiator_thickness/(stavesMaterial.intLength());
+	thickness_sum       = Hcal_radiator_thickness;
+
 	for(xml_coll_t k(x_layer,_U(slice)); k; ++k)  {
 	  xml_comp_t x_slice = k;
 	  string   slice_name      = layer_name + _toString(slice_number,"_slice%d");
@@ -189,6 +193,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  // Slice volume & box
 	  Volume slice_vol(slice_name,Box(active_layer_dim_x,slice_thickness/2.0,active_layer_dim_z),slice_material);
 	  
+	  nRadiationLengths   += slice_thickness/(2.*slice_material.radLength());
+	  nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
+	  thickness_sum       += slice_thickness/2;
+
 	  if ( x_slice.isSensitive() ) {
 	    sens.setType("calorimeter");
 	    slice_vol.setSensitiveDetector(sens);
@@ -256,13 +264,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  
 	  //-----------------------------------------------------------------------------------------
 	  if ( caloData->layers.size() < (unsigned int)repeat ) {
-	    //DDRec::LayeredCalorimeterData::Layer caloLayer ;
-	
-	    caloLayer.distance = Hcal_endcap_zmin + box_half_y + layer_pos_y ;
+
+	    caloLayer.distance = Hcal_endcap_zmin + box_half_y + layer_pos_y
+	      - caloLayer.inner_thickness ; // Will be added later at "DDMarlinPandora/DDGeometryCreator.cc:226" to get center of sensitive element
 	    caloLayer.thickness = layer_thickness + Hcal_radiator_thickness ;
 	    caloLayer.absorberThickness = Hcal_radiator_thickness ;
-	    //caloLayer.cellSize0 = Hcal_cells_size ;
-	    //caloLayer.cellSize1 = Hcal_cells_size ;
 	    
 	    caloData->layers.push_back( caloLayer ) ;
 	  }
