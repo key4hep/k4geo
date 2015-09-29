@@ -58,7 +58,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   Layering    layering(x_det);
 
   Material    air         = lcdd.air();
-  Material    Steel235    = lcdd.material(x_det.materialStr());
+  Material    stavesMaterial    = lcdd.material(x_det.materialStr());
 
   int           det_id    = x_det.id();
   xml_comp_t    x_staves  = x_det.staves();
@@ -118,7 +118,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   //double      Hcal_Barrel_rotation             = lcdd.constant<double>("Hcal_Barrel_rotation");
 
   double      Ecal_endcap_zmin                 = lcdd.constant<double>("Ecal_endcap_zmin");
-  double      Hcal_endcap_radiator_thickness   = lcdd.constant<double>("Hcal_endcap_radiator_thickness");
+  //double      Hcal_endcap_radiator_thickness   = lcdd.constant<double>("Hcal_endcap_radiator_thickness");
   double      Hcal_radial_ring_inner_gap       = lcdd.constant<double>("Hcal_radial_ring_inner_gap");
   double      Hcal_endcap_cables_gap           = lcdd.constant<double>("Hcal_endcap_cables_gap");
   double      Hcal_endcap_ecal_gap             = lcdd.constant<double>("Hcal_endcap_ecal_gap");
@@ -215,7 +215,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     - Ecal_endcap_zmin - Hcal_back_plate_thickness;
 
   int MaxNumberOfLayers = (int) (SpaceForLayers /
-				     (Hcal_chamber_thickness + Hcal_endcap_radiator_thickness));
+				     (Hcal_chamber_thickness + Hcal_radiator_thickness));
 
 
   cout<<"    HCAL endcap rings: Hcal_start_z:  "<< Hcal_start_z <<endl;
@@ -223,7 +223,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   cout<<"    HCAL endcap rings: SpaceForLayers:  "<< SpaceForLayers <<endl;
   cout<<"    HCAL endcap rings will have "<< MaxNumberOfLayers << " layers."<<endl;
 
-  stop_z = start_z + MaxNumberOfLayers * (Hcal_chamber_thickness + Hcal_endcap_radiator_thickness)
+  stop_z = start_z + MaxNumberOfLayers * (Hcal_chamber_thickness + Hcal_radiator_thickness)
     + Hcal_back_plate_thickness;
 
   pDz = (stop_z - start_z) / 2.;
@@ -247,7 +247,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   PolyhedraRegular HcalEndCapRingSolid( numSide, M_PI/8., rmin, rmax,  zlen);
 
-  Volume  HcalEndCapRingLogical("HcalEndCapRingLogical",HcalEndCapRingSolid, Steel235);
+  Volume  HcalEndCapRingLogical("HcalEndCapRingLogical",HcalEndCapRingSolid, stavesMaterial);
 
 
   //========== fill data for reconstruction ============================
@@ -325,7 +325,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   // chamber placements
   int number_of_chambers = Hcal_endcap_nlayers;
-  int possible_number_of_chambers = (int) floor( zlen / (Hcal_chamber_thickness + Hcal_endcap_radiator_thickness));
+  int possible_number_of_chambers = (int) floor( zlen / (Hcal_chamber_thickness + Hcal_radiator_thickness));
   if(possible_number_of_chambers < number_of_chambers)
     number_of_chambers = possible_number_of_chambers;
 
@@ -340,12 +340,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	   layer_id <= number_of_chambers;
 	   layer_id++)
 	{
-	  
-	  double Zoff = - ( zlen/2.)
-	    + (layer_id-1) *(Hcal_chamber_thickness + Hcal_endcap_radiator_thickness)
-	    + Hcal_endcap_radiator_thickness 
-	    + (Hcal_chamber_thickness - Hcal_PCB_thickness - Hcal_Cu_thickness)/2.;
-	  
+	  double Zoff = zlen/2.
+	    - (layer_id-1) *(Hcal_chamber_thickness + Hcal_radiator_thickness)
+	    - Hcal_radiator_thickness + Hcal_chamber_thickness/2.0;
+
 	  double layer_thickness = lzlen;
 	  
 	  //====================================================================
@@ -363,12 +361,16 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  caloLayer.cellSize1 = cell_sizeY;
 
 	  // Create the slices (sublayers) within the Hcal Barrel Chamber.
-	  double slice_pos_z = -(layer_thickness/2.);
+	  double slice_pos_z = layer_thickness/2.;
 	  int slice_number = 0;
 
 	  double nRadiationLengths=0.;
 	  double nInteractionLengths=0.;
 	  double thickness_sum=0;
+
+	  nRadiationLengths   = Hcal_radiator_thickness/(stavesMaterial.radLength());
+	  nInteractionLengths = Hcal_radiator_thickness/(stavesMaterial.intLength());
+	  thickness_sum       = Hcal_radiator_thickness;
 
 	  for(xml_coll_t k(x_layer,_U(slice)); k; ++k)  {
 	    xml_comp_t x_slice = k;
@@ -377,7 +379,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    Material slice_material  = lcdd.material(x_slice.materialStr());
 	    DetElement slice(layer_name,_toString(slice_number,"slice%d"),x_det.id());
 	    
-	    slice_pos_z += slice_thickness/2.;
+	    slice_pos_z -= slice_thickness/2.;
 	    
 	    // Slice volume
 	    PolyhedraRegular slicePolyhedraRegularSolid( numSide, phiStart, lpRMin, lpRMax,  slice_thickness);
@@ -399,6 +401,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    
 	    Volume slice_vol(slice_name,slice_Solid,slice_material);
 	    
+	    nRadiationLengths   += slice_thickness/(2.*slice_material.radLength());
+	    nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
+	    thickness_sum       += slice_thickness/2;
+
 	    if ( x_slice.isSensitive() ) {
 	      slice_vol.setSensitiveDetector(sens);
 
@@ -431,7 +437,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    
 	    slice.setPlacement(slice_phv);
 	    // Increment x position for next slice.
-	    slice_pos_z += slice_thickness/2.;
+	    slice_pos_z -= slice_thickness/2.;
 	    // Increment slice number.
 	    ++slice_number;             
 	  }
@@ -464,45 +470,18 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 
 	  //-----------------------------------------------------------------------------------------
-	  if ( caloData->layers.size() <= (unsigned int)number_of_chambers ) {
-	    //DDRec::LayeredCalorimeterData::Layer caloLayer ;
+	  if ( caloData->layers.size() < (unsigned int)number_of_chambers ) {
 
-	    caloLayer.distance = Ecal_endcap_zmin + pDz + Zoff;
-	    caloLayer.thickness = Hcal_chamber_thickness + Hcal_endcap_radiator_thickness ;
-	    caloLayer.absorberThickness = Hcal_endcap_radiator_thickness ;
-	    //caloLayer.cellSize0 = Hcal_cells_size ;
-	    //caloLayer.cellSize1 = Hcal_cells_size ;
+	    // distance to the surface of the radiator.
+	    caloLayer.distance = Ecal_endcap_zmin + (layer_id - 1)* (layer_thickness + Hcal_radiator_thickness) ;
+	    caloLayer.thickness = caloLayer.inner_thickness +caloLayer.outer_thickness ;
+	    caloLayer.absorberThickness = Hcal_radiator_thickness ;
 	    
 	    caloData->layers.push_back( caloLayer ) ;
 	  }
 	  //-----------------------------------------------------------------------------------------
 
 	}
-
-
-      /*
-     theSD->AddLayer(layer_id,
-		      0,
-		      0,
-		      Zoff);
-
-#ifdef MOKKA_GEAR
-      // count the layers
-      if(rings==true){
-	helpEndcapRing.count += 1;
-
-	// position of layer as offset + half thickness
-	helpEndcapRing.layerPos.push_back(Zoff + std::abs(zPlane[0]) + (Hcal_PCB_thickness + Hcal_Cu_thickness)/2 ) ;
-
-	helpEndcapRing.sensThickness.push_back( Hcal_scintillator_thickness );
-	helpEndcapRing.steelCassetteThickness.push_back( Hcal_steel_cassette_thickness );
-	helpEndcapRing.PCBThickness.push_back(Hcal_PCB_thickness);
-	helpEndcapRing.CuThickness.push_back(Hcal_Cu_thickness);
-      }
-
-
-#endif
-      */
 
     }  
 
