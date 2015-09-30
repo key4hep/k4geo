@@ -48,6 +48,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     const double supportRailCS = xmlParameter.attr<double>(_Unicode(supportRailCrossSection));
     Material Composite = lcdd.material(xmlParameter.attr<string>(_Unicode(AlveolusMaterial)));
     Material Steel = lcdd.material(xmlParameter.attr<string>(_Unicode(supportRailMaterial)));
+
     Readout readout = sens.readout();
     Segmentation seg = readout.segmentation();
     
@@ -70,8 +71,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     // Create caloData object to extend driver with data required for reconstruction
     // Added by Nikiforos, 28/05/15. Should not interfere with driver but it does
-    DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
-    caloData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
+    DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData;
+    caloData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout;
     caloData->inner_symmetry = nsides;
     caloData->outer_symmetry = nsides; 
     
@@ -84,17 +85,18 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     caloData->inner_phi0 = 0.; 
     caloData->outer_phi0 = 0.; 
-    caloData->gap0 = 0.; //FIXME 
-    caloData->gap1 = 0.; //FIXME 
-    caloData->gap2 = 0.; //FIXME 
-    
-    /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
+    // One should ensure that these sensitivity gaps are correctly used
+    caloData->gap0 = towersAirGap;  // the 4 gaps between the 5 towers, along z 
+    caloData->gap1 = faceThickness; // gaps between stacks in a module, along z
+    caloData->gap2 = tolerance*std::cos(hphi); // gaps where the staves overlap
+
+    // extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
     caloData->extent[0] = inner_r;
-    caloData->extent[1] = outer_r; // + 2*ry/std::cos(hphi), or r_max ?
-    caloData->extent[2] = 0; //NN: for barrel detectors this is 0
+    caloData->extent[1] = outer_r; // or r_max ?
+    caloData->extent[2] = 0.;      // NN: for barrel detectors this is 0
     caloData->extent[3] = x_dim.z()/2;
 
-    // This detector is now composed of 8 or 12 staves,
+    // This detector is now composed of 12 staves,
     // each stave made of 5 towers which contain each 3 stacks of 26 sensitive layers.
     // See schematics in http://cern.ch/go/MgF6
 
@@ -144,10 +146,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     sens.setType("calorimeter");
 
     // Start position and angle for the module
-    double phi = M_PI/2.0 - M_PI/nsides;               // following the envelope rotation, ECalBarrel_o1_v01_01.xml
-    double mod_x_off = dx/2 + tolerance;               // Module X offset
-    double mod_y_off = (inner_r + r_max*cos(hphi))/2;  // Module Y offset - mid-envelope placement
-    // double mod_y_off = inner_r + trd_z + 2*ry + tolerance;
+    double phi = M_PI/2.0 - M_PI/nsides;                // following the envelope rotation, ECalBarrel_o1_v01_01.xml
+    double mod_x_off = dx/2 + tolerance;                // Module X offset
+    //double mod_y_off = (inner_r + r_max*cos(hphi))/2; // Module Y offset - mid-envelope placement
+    double mod_y_off = inner_r + ry + trd_z + tolerance;// Module Y offset - inner r placement
+    std::cout << "Module y offset: " << mod_y_off << std::endl;
 
     DetElement stave_det("stave0", det_id);    
 
@@ -177,7 +180,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	    int repeat = x_layer.repeat();
 	    
 	    // Loop over number of repeats for this layer.
-	    for (int j=0; j<repeat; j++)  {
+	    for (int j=0; j<repeat; j++) {
 	      
 	      DDRec::LayeredCalorimeterData::Layer caloLayer ;
 	      
@@ -191,11 +194,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	      Volume     l_vol(l_name, l_box, air);
 	      DetElement layer(stack_det, l_name, det_id);
 	      
-	      // Loop over the sublayers or slices for this layer
-	      int s_num = 1;
-	      double s_pos_z = -(l_thickness/2);
-	      double totalAbsorberThickness=0.;
+	      // For caloData
+	      double totalAbsorberThickness = 0.;
+	      double nRadiationLengths = 0.;
+	      double nInteractionLengths = 0.;
 	      
+	      // Loop over the sublayers or slices for this layer
+              int s_num = 1;
+              double s_pos_z = -(l_thickness/2);
 	      for(xml_coll_t si(x_layer,_U(slice)); si; ++si)  {
 		
 		xml_comp_t x_slice = si;
@@ -203,16 +209,23 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 		double     s_thick = x_slice.thickness();
 		//std::cout << s_name << " thickness: " << s_thick << std::endl;
 		Box        s_box(l_dim_x - tolerance, l_dim_y - tolerance, s_thick/2.);
-		Volume     s_vol(s_name, s_box, lcdd.material(x_slice.materialStr()));
+		Material   slice_material  = lcdd.material(x_slice.materialStr());
+		Volume     s_vol(s_name, s_box, slice_material);
 		DetElement slice(layer, s_name, det_id);
-		
+
+		// For caloData
+		nRadiationLengths   += s_thick/(2.*slice_material.radLength());
+		nInteractionLengths += s_thick/(2.*slice_material.intLength());
+
 		if ( x_slice.isSensitive() ) {
 		  s_vol.setSensitiveDetector(sens);
+		  caloLayer.distance = s_pos_z + s_thick/.2 + l_pos_z + l_thickness/2. + mod_y_off - ry;
 		}
 		
-		if( x_slice.isRadiator() == true)
-		  totalAbsorberThickness+= s_thick;
-		
+		if( x_slice.isRadiator() == true) {
+		  totalAbsorberThickness += s_thick;
+		}
+
 		slice.setAttributes(lcdd, s_vol, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
 		
 		// Slice placement
@@ -232,12 +245,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	      layer_pv.addPhysVolID("layer", l_num);
 	      layer.setPlacement(layer_pv);
 	      
-	      caloLayer.distance = mod_y_off + l_pos_z + l_thickness/2.; // to center
 	      caloLayer.thickness = l_thickness;
 	      caloLayer.absorberThickness = totalAbsorberThickness;
 	      caloLayer.cellSize0 = cell_sizeX;
 	      caloLayer.cellSize1 = cell_sizeY;
-	      
+
+	      //std::cout << l_name << " caloLayer.distance " << caloLayer.distance << std::endl;
+              //std::cout << l_name << " caloLayer.absorberThickness: " << totalAbsorberThickness << std::endl;
+
 	      caloData->layers.push_back( caloLayer ) ;
 	      
 	      // Increment to next layer Z position
