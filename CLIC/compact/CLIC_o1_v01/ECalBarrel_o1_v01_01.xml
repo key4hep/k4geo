@@ -28,7 +28,7 @@
     <readouts>
         <readout name="EcalBarrelHits">
             <segmentation type="CartesianGridXY" grid_size_x="ECal_cell_size" grid_size_y="ECal_cell_size" />
-            <id>system:5,side:2,module:8,stave:4,layer:9,submodule:4,x:32:-16,y:-16</id>
+            <id>system:5,side:2,stave:4,module:8,submodule:4,layer:9,x:32:-16,y:-16</id>
             <!-- Marcus says 8 for ‘system’, Frank says 5 is enough -->  
         </readout>
     </readouts>
@@ -62,11 +62,11 @@
 
             <dimensions numsides="ECalBarrel_symmetry" rmin="ECalBarrel_inner_radius" rmax="ECalBarrel_outer_radius" z="ECalBarrel_half_length*2" />
             <staves vis="EcalStaveVis" />
-	    <modules vis="EcalTowerVis" />
+	    <!--modules vis="EcalTowerVis" />
 	    <submodules vis="EcalStackVis" />
-	    <supports vis="EcalRailVis" /> 
+	    <supports vis="EcalRailVis" /--> 
             <layer repeat="17" vis="EcalLayerVis">
-                <slice material = "TungstenDens24" thickness = "1.20*mm" vis="EcalAbsorberVis"/>
+                <slice material = "TungstenDens24" thickness = "2.40*mm" radiator="yes" vis="EcalAbsorberVis"/>
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
                 <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="EcalAbsorberVis"/>
                 <slice material = "Silicon"        thickness = "0.50*mm" sensitive="yes" limits="cal_limits" vis="EcalSensitiveVis"/>
@@ -74,8 +74,8 @@
                 <slice material = "siPCBMix"       thickness = "0.80*mm" vis="EcalAbsorberVis"/>
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/>
             </layer>
-            <layer repeat="8" vis="EcalLayerVis">
-                <slice material = "TungstenDens24" thickness = "2.40*mm" vis="EcalAbsorberVis"/>
+            <layer repeat="7" vis="EcalLayerVis">
+                <slice material = "TungstenDens24" thickness = "4.80*mm" radiator="yes" vis="EcalAbsorberVis"/>
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
                 <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="EcalAbsorberVis"/>
                 <slice material = "Silicon"        thickness = "0.50*mm" sensitive="yes" limits="cal_limits" vis="EcalSensitiveVis"/>
@@ -84,20 +84,22 @@
                 <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/>
             </layer>
             <layer repeat="1" vis="EcalLayerVis">
-                <slice material = "TungstenDens24" thickness = "2.40*mm" vis="EcalAbsorberVis"/>
+	        <slice material = "TungstenDens24" thickness = "4.80*mm" radiator="yes" vis="EcalAbsorberVis"/>
+                <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
+                <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="EcalAbsorberVis"/>
+                <slice material = "Silicon"        thickness = "0.50*mm" sensitive="yes" limits="cal_limits" vis="EcalSensitiveVis"/>
+                <slice material = "Air"            thickness = "0.10*mm" vis="InvisibleNoDaughters"/><!-- glue -->
+		<slice material = "siPCBMix"       thickness = "0.80*mm" vis="EcalAbsorberVis"/>
+                <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/>
+		<!-- same as previous up to here, now adding absorber and external wall -->
+                <slice material = "TungstenDens24" thickness = "4.80*mm" radiator="yes" vis="EcalAbsorberVis"/>
 		<slice material = "CarbonFiber_25percent" thickness = "10.0*mm" vis="CompositeVis"/>
             </layer>
  
         </detector>
         
     </detectors>
-    
-    
-    
-    
-    
-    
-    
+      
 </lccdd>
 
 
