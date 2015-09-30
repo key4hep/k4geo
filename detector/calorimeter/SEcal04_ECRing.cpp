@@ -77,6 +77,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   sens.setType("calorimeter");
 
+  Material stave_material  = lcdd.material(x_staves.materialStr());
+
   DetElement    module_det("module0",det_id);
 
   Readout readout = sens.readout();
@@ -280,7 +282,17 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   //-------------------- start loop over ECAL layers ----------------------
   // Loop over the sets of layer elements in the detector.
+
+  double nRadiationLengths=0.;
+  double nInteractionLengths=0.;
+  double thickness_sum=0;
+
+  nRadiationLengths   = Ecal_radiator_thickness1/(stave_material.radLength());
+  nInteractionLengths = Ecal_radiator_thickness1/(stave_material.intLength());
+  thickness_sum       = Ecal_radiator_thickness1;
+
   int l_num = 1;
+  bool isFirstSens = true;
   for(xml_coll_t li(x_det,_U(layer)); li; ++li)  {
     xml_comp_t x_layer = li;
     int repeat = x_layer.repeat();
@@ -340,9 +352,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       //--------------------------------------------------------------------------------
       // BuildECRing keep the Alveolus structure, the same as the Barrel and Endcap
       //--------------------------------------------------------------------------------
-      double nRadiationLengths=0.;
-      double nInteractionLengths=0.;
-      double thickness_sum=0;
 	
       for(xml_coll_t si(x_layer,_U(slice)); si; ++si)  {
 	xml_comp_t x_slice = si;
@@ -369,22 +378,36 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	if (x_slice.materialStr().compare(x_staves.materialStr()) == 0)
 	  radiator_dim_y = s_thick;
 	// W StructureLayer has the same thickness as W radiator layer in the Alveolus layer
+
+	nRadiationLengths   += s_thick/(2.*slice_material.radLength());
+	nInteractionLengths += s_thick/(2.*slice_material.intLength());
+	thickness_sum       += s_thick/2;
 	    
 	if ( x_slice.isSensitive() ) {
 	  s_vol.setSensitiveDetector(sens);
 
 #if DD4HEP_VERSION_GE( 0, 15 )
 	  //Store "inner" quantities
-	  caloLayer.inner_nRadiationLengths = nRadiationLengths;
+	  caloLayer.inner_nRadiationLengths   = nRadiationLengths;
 	  caloLayer.inner_nInteractionLengths = nInteractionLengths;
-	  caloLayer.inner_thickness = thickness_sum;
+	  caloLayer.inner_thickness           = thickness_sum;
 	  //Store sensitive slice thickness
-	  caloLayer.sensitive_thickness = s_thick;
+	  caloLayer.sensitive_thickness       = s_thick;
+
+	  //Store "outer" quantities
+	  caloLayer.outer_nRadiationLengths   = s_thick/(2.*slice_material.radLength());
+	  caloLayer.outer_nInteractionLengths = s_thick/(2.*slice_material.intLength());
+	  caloLayer.outer_thickness           = s_thick/2;
 #endif
-	  //Reset counters to measure "outside" quantitites
-	  nRadiationLengths=0.;
-	  nInteractionLengths=0.;
-	  thickness_sum = 0.;
+	  //-----------------------------------------------------------------------------------------
+	  caloLayer.distance = Ecal_Barrel_module_dim_z * 2.5 + Ecal_cables_gap + module_thickness/2.0 + l_pos_z
+	    + (s_pos_z+s_thick/2.0) - caloLayer.inner_thickness ;
+	  caloLayer.thickness = caloLayer.inner_thickness + caloLayer.outer_thickness ;
+	  caloLayer.absorberThickness = radiator_dim_y ;
+      
+	  if (!isFirstSens) caloData->layers.push_back( caloLayer ) ;
+	  //-----------------------------------------------------------------------------------------
+
 	}
 			 
 	nRadiationLengths += s_thick/(2.*slice_material.radLength());
@@ -398,6 +421,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	
 	if ( x_slice.isSensitive() ) {
 	  slice_phv.addPhysVolID("slice",s_num);
+
+	  //Reset counters to measure next "inner/outer" quantitites
+	  //Sensitive detector will be half inner, and half outer
+	  nRadiationLengths   = 0.;
+	  nInteractionLengths = 0.;
+	  thickness_sum       = 0.;
+	  isFirstSens         = false;
 	}
 	slice.setPlacement(slice_phv);
 	// Increment Z position of slice.
@@ -407,13 +437,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	++s_num;
       }        
 
-#if DD4HEP_VERSION_GE( 0, 15 )
-      //Store "outer" quantities
-      caloLayer.outer_nRadiationLengths = nRadiationLengths;
-      caloLayer.outer_nInteractionLengths = nInteractionLengths;
-      caloLayer.outer_thickness = thickness_sum;
-#endif      
-      
       if(radiator_dim_y <= 0) {
 	stringstream err;
 	err << " \n ERROR: The subdetector " << x_det.nameStr() << " geometry parameter -- radiator_dim_y = " << radiator_dim_y ;
@@ -462,23 +485,15 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       Transform3D bsl_tran3D(rot,bsl_pos);
       PlacedVolume  EndcapStructureLayer_phv = EnvLogECRing.placeVolume(EndcapStructureLayer_vol,bsl_tran3D);
 	      
-      //-----------------------------------------------------------------------------------------
-      //DDRec::LayeredCalorimeterData::Layer caloLayer ;
-      
-      caloLayer.distance = Ecal_Barrel_module_dim_z * 2.5 + Ecal_cables_gap + module_thickness/2.0 + l_pos_z ;
-      caloLayer.thickness = l_thickness + radiator_dim_y ;
-      caloLayer.absorberThickness = radiator_dim_y ;
-      //caloLayer.cellSize0 = Ecal_cells_size ;
-      //caloLayer.cellSize1 = Ecal_cells_size ;
-      
-      caloData->layers.push_back( caloLayer ) ;
-      //-----------------------------------------------------------------------------------------
      
       // Increment to next layer Z position.
       l_pos_z +=   (l_thickness/2. +(radiator_dim_y/2. + Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE))*2.);
       
       ++l_num;
-      
+ 
+      nRadiationLengths   += radiator_dim_y/(stave_material.radLength());
+      nInteractionLengths += radiator_dim_y/(stave_material.intLength());
+      thickness_sum       += radiator_dim_y;
     }
   }
  
