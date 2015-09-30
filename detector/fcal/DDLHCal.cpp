@@ -127,6 +127,14 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
       double radiator_thickness = 0.0;
 
+      DD4hep::DDRec::LayeredCalorimeterData::Layer caloLayer ;
+      caloLayer.cellSize0 = LHcal_cell_size ;
+      caloLayer.cellSize1 = LHcal_cell_size ;
+
+      double nRadiationLengths=0.;
+      double nInteractionLengths=0.;
+      double thickness_sum=0;
+
       for(DD4hep::XML::Collection_t collSlice(xmlLayer,_U(slice)); collSlice; ++collSlice)  {
 	DD4hep::XML::Component compSlice = collSlice;
 	const double      sliceThickness = compSlice.thickness();
@@ -142,9 +150,30 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
 	if ( compSlice.materialStr().compare("TungstenDens24") == 0 ) radiator_thickness = sliceThickness;
 
+	nRadiationLengths   += sliceThickness/(2.*slice_mat.radLength());
+	nInteractionLengths += sliceThickness/(2.*slice_mat.intLength());
+	thickness_sum       += sliceThickness/2.;
+
 	if ( compSlice.isSensitive() )  {
 	  slice_vol.setSensitiveDetector(sens);
+
+#if DD4HEP_VERSION_GE( 0, 15 )
+	  //Store "inner" quantities
+	  caloLayer.inner_nRadiationLengths   = nRadiationLengths;
+	  caloLayer.inner_nInteractionLengths = nInteractionLengths;
+	  caloLayer.inner_thickness           = thickness_sum;
+	  //Store scintillator thickness
+	  caloLayer.sensitive_thickness       = sliceThickness;
+#endif
+	  //Reset counters to measure "outside" quantitites
+	  nRadiationLengths   = 0.;
+	  nInteractionLengths = 0.;
+	  thickness_sum       = 0.;
 	}
+
+	nRadiationLengths   += sliceThickness/(2.*slice_mat.radLength());
+	nInteractionLengths += sliceThickness/(2.*slice_mat.intLength());
+	thickness_sum       += sliceThickness/2.;
 
 	slice_vol.setAttributes(lcdd,compSlice.regionStr(),compSlice.limitsStr(),compSlice.visStr());
 	DD4hep::Geometry::PlacedVolume pv = layer_vol.placeVolume(slice_vol, DD4hep::Geometry::Position(0,0,inThisLayerPosition+sliceThickness*0.5));
@@ -155,14 +184,17 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	++sliceID;
       }//For all slices in this layer
 
+
+#if DD4HEP_VERSION_GE( 0, 15 )
+      //Store "outer" quantities
+      caloLayer.outer_nRadiationLengths   = nRadiationLengths;
+      caloLayer.outer_nInteractionLengths = nInteractionLengths;
+      caloLayer.outer_thickness           = thickness_sum;
+#endif
       //-----------------------------------------------------------------------------------------
-      DD4hep::DDRec::LayeredCalorimeterData::Layer caloLayer ;
-      
-      caloLayer.distance = lhcalCentreZ + referencePosition+0.5*layerThickness ;
-      caloLayer.thickness = layerThickness ;
+      caloLayer.distance = lhcalCentreZ + referencePosition ; //+0.5*layerThickness ;
+      caloLayer.thickness = caloLayer.inner_thickness +caloLayer.outer_thickness ;
       caloLayer.absorberThickness = radiator_thickness ;
-      caloLayer.cellSize0 = LHcal_cell_size ;
-      caloLayer.cellSize1 = LHcal_cell_size ;
       
       caloData->layers.push_back( caloLayer ) ;
       //-----------------------------------------------------------------------------------------
