@@ -209,7 +209,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double nRadiationLengths=0.;
   double nInteractionLengths=0.;
   double thickness_sum=0;
-  double radiator_thickness = 0.05;
 
     int l_num = 1;
     for(xml_coll_t li(x_det,_U(layer)); li; ++li)  {
@@ -268,6 +267,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	//--------------------------------------------------------------------------------
 	// Build Layer, Sensitive Scintilator in the middle, and Air tolorance at two sides 
 	//--------------------------------------------------------------------------------
+	double radiator_thickness = 0.05; // Yoke05 Barrel: No radiator before first sensitive layer.
+      	if ( i>0 )   radiator_thickness = gap_thickness + iron_thickness - l_thickness;
+	if ( i>=10 ) radiator_thickness = gap_thickness + 5.6*iron_thickness - l_thickness;
 
 	nRadiationLengths   = radiator_thickness/(yokeMaterial.radLength());
 	nInteractionLengths = radiator_thickness/(yokeMaterial.intLength());
@@ -377,9 +379,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	caloLayer.absorberThickness = radiator_thickness ;
 	
 	caloData->layers.push_back( caloLayer ) ;
-
-      	radiator_thickness = gap_thickness + iron_thickness - l_thickness;
-	if ( i>=10 ) radiator_thickness = gap_thickness + 5.6*iron_thickness - l_thickness;
 
 	//-----------------------------------------------------------------------------------------
 	
