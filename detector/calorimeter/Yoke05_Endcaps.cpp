@@ -176,7 +176,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   //double gap_thickness       = db->fetchDouble("layer_thickness");
 
   //-------------------- start loop over Yoke layers ----------------------
-    // Loop over the sets of layer elements in the detector.
+  // Loop over the sets of layer elements in the detector.
+
+  double nRadiationLengths=0.;
+  double nInteractionLengths=0.;
+  double thickness_sum=0;
+
+
     int l_num = 1;
     for(xml_coll_t li(x_det,_U(layer)); li; ++li)  {
       xml_comp_t x_layer = li;
@@ -207,9 +213,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	//--------------------------------------------------------------------------------
 	// Build Layer, Sensitive Scintilator in the middle, and Air tolorance at two sides 
 	//--------------------------------------------------------------------------------
-	double nRadiationLengths=0.;
-	double nInteractionLengths=0.;
-	double thickness_sum=0;
+	double radiator_thickness = 0.05 + 0.5*gap_thickness + iron_thickness - l_thickness/2.0 ;
+	if ( i>0 )   radiator_thickness = gap_thickness + iron_thickness - l_thickness ;
+	if ( i>=10 ) radiator_thickness = gap_thickness + 5.6*iron_thickness - l_thickness ;
+
+	nRadiationLengths   = radiator_thickness/(yokeMaterial.radLength());
+	nInteractionLengths = radiator_thickness/(yokeMaterial.intLength());
+	thickness_sum       = radiator_thickness;
 	
 	for(xml_coll_t si(x_layer,_U(slice)); si; ++si)  {
 	  xml_comp_t x_slice = si;
@@ -221,16 +231,20 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  Volume     s_vol(det_name+"_"+l_name+"_"+s_name,sliceSolid,slice_material);
           DetElement slice(layer,s_name,det_id);
 
+	  nRadiationLengths   += s_thickness/(2.*slice_material.radLength());
+	  nInteractionLengths += s_thickness/(2.*slice_material.intLength());
+	  thickness_sum       += s_thickness/2;
+
 	  if ( x_slice.isSensitive() ) {
 	    s_vol.setSensitiveDetector(sens);
 
 #if DD4HEP_VERSION_GE( 0, 15 )
 	  //Store "inner" quantities
-	  caloLayer.inner_nRadiationLengths = nRadiationLengths;
+	  caloLayer.inner_nRadiationLengths   = nRadiationLengths;
 	  caloLayer.inner_nInteractionLengths = nInteractionLengths;
-	  caloLayer.inner_thickness = thickness_sum;
+	  caloLayer.inner_thickness           = thickness_sum;
 	  //Store scintillator thickness
-	  caloLayer.sensitive_thickness = s_thickness;
+	  caloLayer.sensitive_thickness       = s_thickness;
 #endif
 	  //Reset counters to measure "outside" quantitites
 	  nRadiationLengths=0.;
@@ -238,9 +252,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  thickness_sum = 0.;
 	  }
 
-	  nRadiationLengths += s_thickness/(2.*slice_material.radLength());
+	  nRadiationLengths   += s_thickness/(2.*slice_material.radLength());
 	  nInteractionLengths += s_thickness/(2.*slice_material.intLength());
-	  thickness_sum += s_thickness/2;
+	  thickness_sum       += s_thickness/2;
 	  
 	  // Set region, limitset, and vis.
 	  s_vol.setAttributes(lcdd,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
@@ -265,21 +279,21 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 #if DD4HEP_VERSION_GE( 0, 15 )
 	//Store "outer" quantities
-	caloLayer.outer_nRadiationLengths = nRadiationLengths;
+	caloLayer.outer_nRadiationLengths   = nRadiationLengths;
 	caloLayer.outer_nInteractionLengths = nInteractionLengths;
-	caloLayer.outer_thickness = thickness_sum;
+	caloLayer.outer_thickness           = thickness_sum;
 #endif
 	
 	++l_num;
 
 
-	double shift_middle    = - yokeEndcapThickness/2 - 0.05 //0.5*mm 
+	double shift_middle    = - yokeEndcapThickness/2 + 0.05 //0.5*mm 
 	  + iron_thickness*(i+1) 
 	  + (i+0.5)*gap_thickness; 
 	
 	if( i>= 10)
 	  {
-	    shift_middle    = - yokeEndcapThickness/2 - 0.05 //0.5*mm 
+	    shift_middle    = - yokeEndcapThickness/2 + 0.05 //0.5*mm 
 	      + iron_thickness*(i+1+(i-9)*4.6) + (i+0.5)*gap_thickness; 
 	  }	
 
@@ -294,18 +308,15 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	sdet.add(stave);
 
       //-----------------------------------------------------------------------------------------
-	//DDRec::LayeredCalorimeterData::Layer caloLayer ;
 	
-	double radiator_thickness = gap_thickness + iron_thickness - l_thickness;
-	if ( i>=10 ) radiator_thickness = gap_thickness + 5.6*iron_thickness - l_thickness;
 
-	caloLayer.distance = zStartEndcap + yokeEndcapThickness/2.0 + shift_middle ;
-	caloLayer.thickness = l_thickness + radiator_thickness ;
+	caloLayer.distance = zStartEndcap + yokeEndcapThickness/2.0 + shift_middle
+	  - caloLayer.inner_thickness ;
+	caloLayer.thickness = caloLayer.inner_thickness +caloLayer.outer_thickness ;
 	caloLayer.absorberThickness = radiator_thickness ;
-	//caloLayer.cellSize0 = Yoke_cell_dim_x ;
-	//caloLayer.cellSize1 = Yoke_cell_dim_y ;
 	
 	caloData->layers.push_back( caloLayer ) ;
+
       //-----------------------------------------------------------------------------------------
 	
       }
