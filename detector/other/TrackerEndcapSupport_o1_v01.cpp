@@ -33,11 +33,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)
 
   if (lcdd.buildType() == BUILD_ENVELOPE) return sdet ;
 
-
   Material   air       = lcdd.air();
   bool       reflect   = x_det.reflect();
 
-  //Assembly   assembly(det_name);
   PlacedVolume pv;
   int l_num = 0;
 
@@ -64,13 +62,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)
       string s_nam = l_nam + _toString(s_num, "_slice%d");
       Volume s_vol(s_nam, Tube(rmin, rmax, thick), mat);
 
-      if (x_slice.isSensitive()) {
-        sens.setType("tracker");
-        s_vol.setSensitiveDetector(sens);
-      }
       s_vol.setAttributes(lcdd, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
       pv = l_vol.placeVolume(s_vol, Position(0, 0, z - zmin - layerWidth / 2 + thick / 2));
-      pv.addPhysVolID("slice", s_num);
+      pv.addPhysVolID("sensor", s_num);
     }
 
     DetElement layer(sdet, l_nam + "_pos", l_num);
@@ -86,9 +80,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)
       sdet.add(layerR.setPlacement(pv));
     }
   }
-  if (x_det.hasAttr(_U(combineHits))) {
-    sdet.setCombineHits(x_det.attr<bool>(_U(combineHits)), sens);
-  }
+
 
   return sdet;
 }
