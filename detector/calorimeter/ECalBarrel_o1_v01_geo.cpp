@@ -186,7 +186,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	      
 	      string l_name = _toString(l_num, "layer%d");
 	      double l_thickness = layering.layer(l_num-1)->thickness(); // layer thickness          
-	      // std::cout << l_name << " thickness: " << l_thickness << std::endl;
 	      l_dim_x -= l_thickness/tan_beta;                        // decreasing width 
 	      
 	      Position   l_pos(0., 0., l_pos_z + l_thickness/2.);     // layer position 
@@ -196,8 +195,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	      
 	      // For caloData
 	      double totalAbsorberThickness = 0.;
-	      double nRadiationLengths = 0.;
-	      double nInteractionLengths = 0.;
 	      
 	      // Loop over the sublayers or slices for this layer
               int s_num = 1;
@@ -207,15 +204,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 		xml_comp_t x_slice = si;
 		string     s_name  = _toString(s_num, "slice%d");
 		double     s_thick = x_slice.thickness();
-		//std::cout << s_name << " thickness: " << s_thick << std::endl;
 		Box        s_box(l_dim_x - tolerance, l_dim_y - tolerance, s_thick/2.);
 		Material   slice_material  = lcdd.material(x_slice.materialStr());
 		Volume     s_vol(s_name, s_box, slice_material);
 		DetElement slice(layer, s_name, det_id);
-
-		// For caloData
-		nRadiationLengths   += s_thick/(2.*slice_material.radLength());
-		nInteractionLengths += s_thick/(2.*slice_material.intLength());
 
 		if ( x_slice.isSensitive() ) {
 		  s_vol.setSensitiveDetector(sens);
@@ -249,9 +241,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	      caloLayer.absorberThickness = totalAbsorberThickness;
 	      caloLayer.cellSize0 = cell_sizeX;
 	      caloLayer.cellSize1 = cell_sizeY;
-
-	      //std::cout << l_name << " caloLayer.distance " << caloLayer.distance << std::endl;
-              //std::cout << l_name << " caloLayer.absorberThickness: " << totalAbsorberThickness << std::endl;
 
 	      caloData->layers.push_back( caloLayer ) ;
 	      
@@ -315,9 +304,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     //FOR NOW, USE A MORE "SIMPLE" VERSION OF EXTENSIONS, INCLUDING NECESSARY GEAR PARAMETERS
     //Copied from Frank's SHcalSc04 Implementation
     sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
-    
-    //NOTE: If the envelope is not a polyhedron (eg. if you use a tube)
-    //you may need to rotate so the axes match  
     
     return sdet;
 }
