@@ -328,6 +328,9 @@ class DD4hepSimulation(object):
     #part.SaveProcesses = ['conv','Decay']
     part.SaveProcesses = ['Decay']
     part.MinimalKineticEnergy = 1*MeV
+    part.KeepAllParticles = False
+    part.PrintEndTracking = False
+    part.PrintStartTracking = False
     #part.OutputLevel = Output.INFO #generator_output_level
     part.enableUI()
     user = DDG4.Action(kernel,"Geant4TCUserParticleHandler/UserParticleHandler")
