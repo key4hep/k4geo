@@ -99,3 +99,11 @@ FILE(GLOB hfiles "ILD/include/*.h")
 INSTALL(FILES ${hfiles} 
   DESTINATION include/${PackageName} 
   )
+
+INSTALL(FILES DDSim/DD4hepSimulation.py
+  DESTINATION lib/python
+  )
+
+INSTALL(PROGRAMS DDSim/ddsim
+  DESTINATION bin
+  )
