@@ -22,7 +22,7 @@ using namespace std;
 using namespace DD4hep;
 using namespace DD4hep::Geometry;
 
-#define VERBOSE 1
+//#define VERBOSE 1
 
 // workaround for DD4hep v00-14 (and older) 
 #ifndef DD4HEP_VERSION_GE
@@ -213,9 +213,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     
     Ecal_support_thickness + Ecal_front_face_thickness;
   
-  //#ifdef VERBOSE
+#ifdef VERBOSE
   std::cout << "For information : module_thickness = " << module_thickness  << std::endl;
-  //#endif
+#endif
   
   // module barrel key parameters
   double  bottom_dim_x = 2. * tan(M_PI/8.) * Ecal_inner_radius +
@@ -413,9 +413,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  string     s_name  =  _toString(s_num,"slice%d");
 	  double     s_thick = x_slice.thickness();
 	  Material slice_material  = lcdd.material(x_slice.materialStr());
-
+#ifdef VERBOSE
 	  std::cout<<"Ecal_barrel_number_of_towers: "<< Ecal_barrel_number_of_towers <<std::endl;
-
+#endif
 	  double slab_dim_x = l_dim_x-tolerance;
 	  double slab_dim_y = s_thick/2.;
 	  double slab_dim_z = stave_z-tolerance;
@@ -425,8 +425,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  //fg: not needed          DetElement slice(layer,s_name,det_id);
 
 	  s_vol.setVisAttributes(lcdd.visAttributes(x_slice.visStr()));
-
+#ifdef VERBOSE
 	  std::cout<<"x_slice.materialStr(): "<< x_slice.materialStr() <<std::endl;
+#endif
 	  if (x_slice.materialStr().compare(x_staves.materialStr()) == 0){
 	    radiator_dim_y = s_thick;
 	  // W StructureLayer has the same thickness as W radiator layer in the Alveolus layer
@@ -439,7 +440,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    //Only fill the layers information into DDRec after first layer as Mokka Gear.
 	    caloLayer.thickness = caloLayer.inner_thickness + caloLayer.outer_thickness ;
 	    if (!isFirstSens){ caloData->layers.push_back( caloLayer ) ;
-
+#ifdef VERBOSE
 	    std::cout<<" caloLayer.distance: "<< caloLayer.distance <<std::endl;
 
 	    std::cout<<" caloLayer.inner_nRadiationLengths: "<< caloLayer.inner_nRadiationLengths <<std::endl;
@@ -453,6 +454,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 	    std::cout<<" EcalBarrel[1]==>caloLayer.inner_thickness + caloLayer.outer_thickness: "
 		     << caloLayer.inner_thickness + caloLayer.outer_thickness <<std::endl;
+#endif
 #endif
 	    }
 	    // Init for inner
@@ -586,7 +588,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    caloLayer.inner_thickness           = thickness_sum ;
 	    //Store sensitive slice thickness
 	    caloLayer.sensitive_thickness       = s_thick ;
-	    
+#ifdef VERBOSE	    
 	    std::cout<<" l_num: "<<l_num <<std::endl;
 	    std::cout<<" s_num: "<<s_num <<std::endl;
 	    std::cout<<" Ecal_inner_radius: "<< Ecal_inner_radius <<std::endl;
@@ -596,7 +598,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    std::cout<<" s_pos_z: "<< s_pos_z <<std::endl;
 	    std::cout<<" s_thick: "<< s_thick <<std::endl;
 	    std::cout<<" radiator_dim_y: "<< radiator_dim_y <<std::endl;
-	    
+#endif	    
 	    //-----------------------------------------------------------------------------------------
 	    caloLayer.distance  = Ecal_inner_radius + module_thickness/2.0 - l_pos_z + l_thickness/2. + (s_pos_z+s_thick/2.) 
 	      - caloLayer.inner_thickness;
@@ -644,7 +646,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	//Only fill the layers information into DDRec after second layer as Mokka Gear.
 	caloLayer.thickness = caloLayer.inner_thickness + caloLayer.outer_thickness ;
 	if (!isFirstSens) caloData->layers.push_back( caloLayer ) ;
-
+#ifdef VERBOSE
 	std::cout<<" caloLayer.distance: "<< caloLayer.distance <<std::endl;
 	
 	std::cout<<" caloLayer.inner_nRadiationLengths: "<< caloLayer.inner_nRadiationLengths <<std::endl;
@@ -658,6 +660,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 	std::cout<<" EcalBarrel[2]==>caloLayer.inner_thickness + caloLayer.outer_thickness: "
 		 << caloLayer.inner_thickness + caloLayer.outer_thickness <<std::endl;
+#endif
 #endif
 	// Init for next double layer
 	nRadiationLengths   = radiator_dim_y/(stave_material.radLength())

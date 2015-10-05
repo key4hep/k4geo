@@ -455,7 +455,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 		//Only fill the layers information into DDRec after first layer as Mokka Gear.
 		caloLayer.thickness = caloLayer.inner_thickness + caloLayer.outer_thickness ;
 		if (!isFirstSens){ caloData->layers.push_back( caloLayer ) ;
-		  
+#ifdef VERBOSE		  
 		  std::cout<<" caloLayer.distance: "<< caloLayer.distance <<std::endl;
 		  
 		  std::cout<<" caloLayer.inner_nRadiationLengths: "<< caloLayer.inner_nRadiationLengths <<std::endl;
@@ -469,6 +469,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 		  
 		  std::cout<<" EcalEndcaps[1]==>caloLayer.inner_thickness + caloLayer.outer_thickness: "
 			   << caloLayer.inner_thickness + caloLayer.outer_thickness <<std::endl;
+#endif
 #endif
 		}
 		nRadiationLengths   = 0. ;
@@ -599,7 +600,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	      caloLayer.inner_thickness           = thickness_sum ;
 	      //Store sensitive slice thickness
 	      caloLayer.sensitive_thickness       = s_thick ;
-	      
+#ifdef VERBOSE	      
 	      std::cout<<" l_num: "<<l_num <<std::endl;
 	      std::cout<<" s_num: "<<s_num <<std::endl;
 	      std::cout<<" Ecal_inner_radius: "<< Ecal_inner_radius <<std::endl;
@@ -609,7 +610,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	      std::cout<<" s_pos_z: "<< s_pos_z <<std::endl;
 	      std::cout<<" s_thick: "<< s_thick <<std::endl;
 	      std::cout<<" radiator_dim_y: "<< radiator_dim_y <<std::endl;
-	    
+#endif	    
 	      //-----------------------------------------------------------------------------------------
 	      caloLayer.distance  =  EC_module_z_offset + l_pos_z + (s_pos_z+s_thick/2)
 		- caloLayer.inner_thickness ;
@@ -744,7 +745,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	//Only fill the layers information into DDRec after second layer as Mokka Gear.
 	caloLayer.thickness = caloLayer.inner_thickness + caloLayer.outer_thickness ;
 	if (!isFirstSens) caloData->layers.push_back( caloLayer ) ;
-
+#ifdef VERBOSE
 	std::cout<<" caloLayer.distance: "<< caloLayer.distance <<std::endl;
 	
 	std::cout<<" caloLayer.inner_nRadiationLengths: "<< caloLayer.inner_nRadiationLengths <<std::endl;
@@ -758,6 +759,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 	std::cout<<" EcalEndcaps[2]==>caloLayer.inner_thickness + caloLayer.outer_thickness: "
 		 << caloLayer.inner_thickness + caloLayer.outer_thickness <<std::endl;
+#endif
 #endif
 
       nRadiationLengths   = radiator_dim_y/(stave_material.radLength())
