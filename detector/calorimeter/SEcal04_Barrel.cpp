@@ -351,9 +351,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     double nInteractionLengths = 0. ;
     double thickness_sum       = 0. ;
 
-    nRadiationLengths   = Ecal_radiator_thickness1/(stave_material.radLength());
-    nInteractionLengths = Ecal_radiator_thickness1/(stave_material.intLength());
-    thickness_sum       = Ecal_radiator_thickness1;
+    nRadiationLengths   = Ecal_radiator_thickness1/(stave_material.radLength())
+      + y_floor/air.radLength();
+    nInteractionLengths = Ecal_radiator_thickness1/(stave_material.intLength())
+      + y_floor/air.intLength();
+    thickness_sum       = Ecal_radiator_thickness1 + y_floor;
 
     int l_num = 1;
     bool isFirstSens = true;
@@ -432,7 +434,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 #if DD4HEP_VERSION_GE( 0, 15 )
 	    caloLayer.outer_nRadiationLengths   = nRadiationLengths;
 	    caloLayer.outer_nInteractionLengths = nInteractionLengths;
-	    caloLayer.outer_thickness           = thickness_sum; 
+	    caloLayer.outer_thickness           = thickness_sum;
 
 	    //Only fill the layers information into DDRec after first layer as Mokka Gear.
 	    caloLayer.thickness = caloLayer.inner_thickness + caloLayer.outer_thickness ;
@@ -453,6 +455,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 		     << caloLayer.inner_thickness + caloLayer.outer_thickness <<std::endl;
 #endif
 	    }
+	    // Init for inner
 	    nRadiationLengths   = 0. ;
 	    nInteractionLengths = 0. ;
 	    thickness_sum       = 0. ;	    
@@ -461,7 +464,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  }
 	  nRadiationLengths   += s_thick/(2.*slice_material.radLength());
 	  nInteractionLengths += s_thick/(2.*slice_material.intLength());
-	  thickness_sum       += s_thick/2;
+	  thickness_sum       += s_thick/2.;
 
           if ( x_slice.isSensitive() ) {
 	    //s_vol.setSensitiveDetector(sens);
@@ -595,12 +598,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    std::cout<<" radiator_dim_y: "<< radiator_dim_y <<std::endl;
 	    
 	    //-----------------------------------------------------------------------------------------
-	    caloLayer.distance  = Ecal_inner_radius + module_thickness/2.0 - l_pos_z + l_thickness/2. + (s_pos_z+s_thick/2) 
-	      - caloLayer.inner_thickness; // Will be added later at "DDMarlinPandora/DDGeometryCreator.cc:226" to get center of sensitive element
+	    caloLayer.distance  = Ecal_inner_radius + module_thickness/2.0 - l_pos_z + l_thickness/2. + (s_pos_z+s_thick/2.) 
+	      - caloLayer.inner_thickness;
 	    caloLayer.absorberThickness = radiator_dim_y ;
 
 	    //-----------------------------------------------------------------------------------------
 #endif
+	    // Init for outer
 	    nRadiationLengths   = 0. ;
 	    nInteractionLengths = 0. ;
 	    thickness_sum       = 0. ;
@@ -630,9 +634,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
         }        
 
 #if DD4HEP_VERSION_GE( 0, 15 )
-	caloLayer.outer_nRadiationLengths   = nRadiationLengths;
-	caloLayer.outer_nInteractionLengths = nInteractionLengths;
-	caloLayer.outer_thickness           = thickness_sum; 
+	caloLayer.outer_nRadiationLengths   = nRadiationLengths
+	  + (Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE))/air.radLength();
+	caloLayer.outer_nInteractionLengths = nInteractionLengths
+	  + (Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE))/air.intLength();
+	caloLayer.outer_thickness           = thickness_sum 
+	  + (Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE));
 
 	//Only fill the layers information into DDRec after second layer as Mokka Gear.
 	caloLayer.thickness = caloLayer.inner_thickness + caloLayer.outer_thickness ;
@@ -652,10 +659,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	std::cout<<" EcalBarrel[2]==>caloLayer.inner_thickness + caloLayer.outer_thickness: "
 		 << caloLayer.inner_thickness + caloLayer.outer_thickness <<std::endl;
 #endif
-
-	nRadiationLengths   = radiator_dim_y/(stave_material.radLength());
-	nInteractionLengths = radiator_dim_y/(stave_material.intLength());
-	thickness_sum       = radiator_dim_y;
+	// Init for next double layer
+	nRadiationLengths   = radiator_dim_y/(stave_material.radLength())
+	  + (Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE))/air.radLength();
+	nInteractionLengths = radiator_dim_y/(stave_material.intLength())
+	  + (Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE))/air.intLength();
+	thickness_sum       = radiator_dim_y
+	  + (Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE));
 	
 	if(radiator_dim_y <= 0) {
 	  stringstream err;
