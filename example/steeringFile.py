@@ -1,4 +1,4 @@
-from RunProg import DD4hepSimulation
+from DD4hepSimulation import DD4hepSimulation
 from SystemOfUnits import GeV
 ##We need to do this because DD4hepSimulation is calling execfile in a function and thus these things like GeV are only added to the local namespace of the function readSteeringFile
 global GeV
