@@ -22,7 +22,7 @@
         <!--slice material = "groundMix"      thickness = "Ecal_Slab_ground_thickness" /-->
         <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"              vis="Invisible" />
         <slice material = "G4_AIR"         thickness = "Ecal_fiber_thickness"                    vis="Invisible" />
-        <slice material = "TungstenDens24"   thickness = "Ecal_radiator_layers_set1_thickness"   vis="BlueVis"   />
+        <slice material = "TungstenDens24"   thickness = "Ecal_radiator_layers_set1_thickness"   vis="BlueVis"   radiator="yes"/>
         <slice material = "G4_AIR"         thickness = "Ecal_fiber_thickness"                    vis="Invisible" />
         <!--slice material = "groundMix"      thickness = "Ecal_Slab_ground_thickness" /-->
         <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"              vis="Invisible" />
@@ -41,7 +41,7 @@
         <!--slice material = "groundMix"      thickness = "Ecal_Slab_ground_thickness" /-->
         <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"              vis="Invisible" />
         <slice material = "G4_AIR"         thickness = "Ecal_fiber_thickness"                    vis="Invisible" />
-        <slice material = "TungstenDens24"   thickness = "Ecal_radiator_layers_set2_thickness"   vis="BlueVis"   />
+        <slice material = "TungstenDens24"   thickness = "Ecal_radiator_layers_set2_thickness"   vis="BlueVis"   radiator="yes"/>
         <slice material = "G4_AIR"         thickness = "Ecal_fiber_thickness"                    vis="Invisible" />
         <!--slice material = "groundMix"      thickness = "Ecal_Slab_ground_thickness" /-->
         <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"              vis="Invisible" />
