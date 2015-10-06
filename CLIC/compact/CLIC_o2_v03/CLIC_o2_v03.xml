@@ -36,9 +36,9 @@
         <constant name="DetID_OT_Barrel"        value=" 5"/>
         <constant name="DetID_OT_Endcap"        value=" 6"/>
         
-        <constant name="DetID_ECal_Barrel"      value=" 7"/>
-        <constant name="DetID_ECal_Endcap"      value=" 8"/>
-        <constant name="DetID_ECal_Plug"        value=" 9"/>
+        <constant name="DetID_ECal_Barrel"      value=" 20"/>
+        <constant name="DetID_ECal_Endcap"      value=" 29"/>
+        <constant name="DetID_ECal_Plug"        value=" 21"/>
         
         <constant name="DetID_HCAL_Barrel"      value=" 10"/>
         <constant name="DetID_HCAL_Endcap"      value=" 11"/>
@@ -49,9 +49,10 @@
         
         <constant name="DetID_LumiCal"          value=" 15"/>
         <constant name="DetID_BeamCal"          value=" 16"/>
-        
-        <constant name="DetID_ECAL_ENDCAP_FACE"    value="18"/>
-        <constant name="DetID_ECAL_BARREL_FACE"    value="19"/>
+
+        <!-- Not needed anymore since using the ECal IDs -->        
+<!--         <constant name="DetID_ECAL_ENDCAP_FACE"    value="18"/> -->
+<!--         <constant name="DetID_ECAL_BARREL_FACE"    value="19"/> -->
         
         
         <constant name="CentralBeamPipe_zmax" value="260.*mm"/>
@@ -232,8 +233,9 @@
     <include ref="ECalBarrel_o2_v01_01.xml"/>
     <include ref="ECalEndcap_o2_v01_01.xml"/>
     <include ref="ECalPlug_o1_v01_01.xml"/>
-    <include ref="ECalBarrelFace_o1_v01_01.xml"/> 
-    <include ref="ECalEndcapFace_o1_v01_01.xml"/> 
+    <!-- Not needed anymore since using plugin instead -->
+<!--     <include ref="ECalBarrelFace_o1_v01_01.xml"/>  -->
+<!--     <include ref="ECalEndcapFace_o1_v01_01.xml"/>  -->
     
     <include ref="HCalBarrel_o1_v01_01.xml"/>
     <include ref="HCalEndcap_o1_v01_01.xml"/>
@@ -248,6 +250,24 @@
     <include ref="BeamCal_o1_v01_01.xml"/>
     
     <plugins>
+	<plugin name="DD4hep_CaloFaceEndcapSurfacePlugin">
+          <argument value="ECalEndcap"/>
+	  <argument value="zpos=ECalEndcap_max_z"    /> 
+	  <argument value="radius=ECalEndcap_outer_radius"  /> 
+	  <argument value="phi0=0"    /> 
+	  <argument value="symmetry=ECalEndcap_outer_symmetry"/>
+	  <argument value="systemID=DetID_ECal_Endcap"/>
+	  <!-- <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> -->
+	</plugin>
+	<plugin name="DD4hep_CaloFaceBarrelSurfacePlugin">
+          <argument value="ECalBarrel"/>
+	  <argument value="length=2.*ECalBarrel_half_length"    /> 
+	  <argument value="radius=ECalBarrel_inner_radius"  /> 
+	  <argument value="phi0=0"    /> 
+	  <argument value="symmetry=ECalBarrel_symmetry"/>
+	  <argument value="systemID=DetID_ECal_Barrel"/>
+	  <!-- <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> -->
+	</plugin>
         <plugin name="InstallSurfaceManager"/>
     </plugins>
     
