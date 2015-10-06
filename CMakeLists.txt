@@ -100,8 +100,9 @@ INSTALL(FILES ${hfiles}
   DESTINATION include/${PackageName} 
   )
 
-INSTALL(FILES DDSim/DD4hepSimulation.py
+INSTALL(DIRECTORY DDSim/DDSim
   DESTINATION lib/python
+  FILES_MATCHING PATTERN *.py
   )
 
 INSTALL(PROGRAMS DDSim/ddsim
