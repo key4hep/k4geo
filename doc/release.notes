@@ -1,3 +1,13 @@
+A.Sailer 06/10/2015
+----------------------
+ - ddsim python simulator
+ * "ddsim --help" to print all the command line parameters currently available
+ * example/steeringFile.py to see an example steering file with some options
+ * to enable tab-completion for ddsim: requires bash (or zsh),bash-completion, and python argcomplete
+   (e.g. install with: [sudo] pip install argcomplete)
+   in the shell run: eval "$(register-python-argcomplete ddsim)"
+
+
 N.Nikiforou 24/08/2015
 ----------------------
  - Modified CLIC_o2_v03/ECalBarrel_o2_v01_01.xml, ECalEndcap_02_v01_01.xml and
