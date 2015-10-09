@@ -15,3 +15,5 @@ SIM.gun.direction = (1.0, 1.0, 1.0)
 SIM.enableGun = True
 
 SIM.part.minimalKineticEnergy = 1*MeV
+
+SIM.action.mapActions['tpc'] = "TPCSDAction"
