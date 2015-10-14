@@ -1,5 +1,6 @@
 //=========================================================================
-//  Barrel ECal driver implementation for the CLIC NDM
+//  Barrel ECal driver implementation for the CLIC NDM including
+//     Layering Extensions for DDRec/Pandora
 //-------------------------------------------------------------------------
 //  Based on
 //   * S. Lu's driver for SiWEcalBarrel, ported from Mokka
@@ -11,7 +12,7 @@
 //  $Id$
 //=========================================================================
 
-#define VERBOSE_LEVEL 1
+#define VERBOSE_LEVEL 2
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
@@ -56,7 +57,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     Readout readout = sens.readout();
     Segmentation seg = readout.segmentation();
     
-    std::vector<double> cellSizeVector = seg.segmentation()->cellDimensions(0); //Assume uniform cell sizes, provide dummy cellID
+    std::vector<double> cellSizeVector = seg.segmentation()->cellDimensions(0); 
+    //Assume uniform cell sizes, provide dummy cellID
     double cell_sizeX      = cellSizeVector[0];
     double cell_sizeY      = cellSizeVector[1];
     
@@ -74,8 +76,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     double        outer_r   = (inner_r + mod_z)/std::cos(hphi); // r_outer of actual module
     
     // Create extension objects for reconstruction -----------------
-    DDRec::LayeringExtensionImpl* layeringExtension = new DDRec::LayeringExtensionImpl ;
-    DDRec::SubdetectorExtensionImpl* subDetExtension = new DDRec::SubdetectorExtensionImpl( sdet )  ;
+    DDRec::LayeringExtensionImpl* layeringExtension = new DDRec::LayeringExtensionImpl;
+    DDRec::SubdetectorExtensionImpl* subDetExtension = new DDRec::SubdetectorExtensionImpl(sdet);
     Position layerNormal(0,0,1); // FG: defines direction of thickness in Box for layer slices
 
     subDetExtension->setIsBarrel(true) ;
@@ -206,7 +208,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	    
 	    string l_name = _toString(l_num, "layer%d");
 	    double l_thickness = layering.layer(l_num-1)->thickness(); // layer thickness          
-#if VERBOSE_LEVEL>2
+#if VERBOSE_LEVEL>1
 	    std::cout << l_name << " thickness: " << l_thickness << std::endl;
 #endif
 	    l_dim_x -= l_thickness/tan_beta;                        // decreasing width 
@@ -216,11 +218,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	    Volume     l_vol(l_name, l_box, air);
 	    DetElement layer(stack_det, l_name, det_id);
 
-	    DDRec::LayeredCalorimeterData::Layer caloLayer ;
-	    double nRadiationLengths   = 0. ;
-	    double nInteractionLengths = 0. ;
-	    double thickness_sum       = 0. ;
-	    double absorberThickness   = 0. ;	    
+	    DDRec::LayeredCalorimeterData::Layer caloLayer;
+	    double nRadiationLengths   = 0.;
+	    double nInteractionLengths = 0.;
+	    double thickness_sum       = 0.;
+	    double absorberThickness   = 0.;	    
 	    
 	    // Loop over the sublayers or slices for this layer
 	    int s_num = 1;
@@ -237,13 +239,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	      Material   slice_material  = lcdd.material(x_slice.materialStr());
 	      Volume     s_vol(s_name, s_box, slice_material);
 	      DetElement slice(layer, s_name, det_id);
+
+	      // For caloData (adding 1/2 here)
+              nRadiationLengths   += s_thick/2./slice_material.radLength();
+              nInteractionLengths += s_thick/2./slice_material.intLength();
+              thickness_sum       += s_thick/2.;
 	      
-	      // For caloData
-	      nRadiationLengths   += s_thick/(2.*slice_material.radLength());
-	      nInteractionLengths += s_thick/(2.*slice_material.intLength());
-	      thickness_sum       += s_thick/2;
-	      
-	      if ( x_slice.isSensitive() ) {
+	      if ( x_slice.isSensitive() ) { // only one per layer
 		s_vol.setSensitiveDetector(sens);
 		caloLayer.distance = s_pos_z + s_thick/.2 + l_pos_z + l_thickness/2. + mod_y_off - ry;
 		caloLayer.sensitive_thickness       = s_thick ;
@@ -251,18 +253,23 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 		caloLayer.inner_nInteractionLengths = nInteractionLengths;
 		caloLayer.inner_thickness           = thickness_sum;
 
-#if VERBOSE_LEVEL>0
+#if VERBOSE_LEVEL>1
 		std::cout << l_name << "." << s_name << ": is sensitive" << std::endl;
 		std::cout <<" caloLayer.inner_nRadiationLengths: "<< caloLayer.inner_nRadiationLengths << std::endl;
 		std::cout <<" caloLayer.inner_nInteractionLengths: "<< caloLayer.inner_nInteractionLengths << std::endl;
 		std::cout <<" caloLayer.inner_thickness: "<< caloLayer.inner_thickness << std::endl;
 		std::cout <<" caloLayer.sensitive_thickness: "<< caloLayer.sensitive_thickness << std::endl;
 #endif
-		// Inner done, start calculating outer
-		nRadiationLengths   = s_thick/(2.*slice_material.radLength());
-		nInteractionLengths = s_thick/(2.*slice_material.intLength());
-		thickness_sum       = s_thick/2;
+		// Inner quantities done, reset sums
+		nRadiationLengths   = 0.;
+		nInteractionLengths = 0.;
+		thickness_sum       = 0.;
 	      }
+
+	      // For caloData (adding the other 1/2 here)
+              nRadiationLengths   += s_thick/2./slice_material.radLength();
+              nInteractionLengths += s_thick/2./slice_material.intLength();
+              thickness_sum       += s_thick/2.;
 	      
 	      if( x_slice.isRadiator() == true) {
 	      	absorberThickness += s_thick;
@@ -295,7 +302,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	    caloLayer.cellSize0 = cell_sizeX;
 	    caloLayer.cellSize1 = cell_sizeY;
 
-#if VERBOSE_LEVEL>0
+#if VERBOSE_LEVEL>1
 	    std::cout <<" caloLayer.outer_nRadiationLengths: "<< caloLayer.outer_nRadiationLengths << std::endl;
 	    std::cout <<" caloLayer.outer_nInteractionLengths: "<< caloLayer.outer_nInteractionLengths << std::endl;
 	    std::cout <<" caloLayer.outer_thickness: "<< caloLayer.outer_thickness << std::endl;
