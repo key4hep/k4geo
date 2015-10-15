@@ -376,6 +376,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   // Materials definitions
   _SiMat     = lcdd.material("G4_Si") ; // silicon_2.33gccm");
+  //debug: faked silicon with 6.5 times the densitiy to mimick support
+  // _SiMat     = lcdd.material("FTD_Si") ; // silicon_2.33gccm");
   _KaptonMat = lcdd.material("G4_KAPTON"); //kapton");
   _CuMat     = lcdd.material("G4_Cu"); //copper"); 
   _AirMat    = lcdd.material("G4_AIR" ); //air");
@@ -1051,8 +1053,10 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
     }
 
-    VolPlane surf0( volV[0].first , surfType , active_silicon_thickness/2 , active_silicon_thickness/2 + supp_thick/2 ,  u0,v0,n0 ) ;
-    VolPlane surf1( volV[1].first , surfType , active_silicon_thickness/2 + supp_thick/2 , active_silicon_thickness/2 ,  u1,v1,n1 ) ; ;
+    VolPlane surf0( volV[0].first , surfType , active_silicon_thickness/2 + supp_thick/2, active_silicon_thickness/2 + supp_thick/2,  u0,v0,n0 ) ;
+    VolPlane surf1( volV[1].first , surfType , active_silicon_thickness/2 + supp_thick/2, active_silicon_thickness/2 + supp_thick/2,  u1,v1,n1 ) ; ;
+    // VolPlane surf0( volV[0].first , surfType , active_silicon_thickness/2 , active_silicon_thickness/2 + supp_thick/2 ,  u0,v0,n0 ) ;
+    // VolPlane surf1( volV[1].first , surfType , active_silicon_thickness/2 + supp_thick/2 , active_silicon_thickness/2 ,  u1,v1,n1 ) ; ;
 
     //----
 

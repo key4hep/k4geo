@@ -58,7 +58,6 @@ public:
     return ( std::abs( point.rho() - origin().rho() ) < epsilon && std::abs( point.z() ) < _half_length ) ; 
   }
   
-  /// create outer bounding lines for the given symmetry of the polyhedron
   virtual std::vector< std::pair<DDSurfaces::Vector3D, DDSurfaces::Vector3D> > getLines(unsigned nMax=100){
     
     std::vector< std::pair<DDSurfaces::Vector3D, DDSurfaces::Vector3D> >  lines ;
@@ -238,10 +237,30 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
 
 	  // add surface for tracking ....
 	  double tube_thick =  rOuterStart - rInnerStart ;
-	  Vector3D ocyl(  ( rOuterStart + rInnerStart ) / 2.  , 0. , 0. ) ;
-	  VolCylinder cylSurf( wallLog , SurfaceType( SurfaceType::Helper ) , 0.5*tube_thick  , 0.5*tube_thick , ocyl ) ;
-	  volSurfaceList( tube )->push_back( cylSurf ) ;
-	  
+
+
+	  if( rInnerStart == rInnerEnd ) {  // cylinder 
+	    
+	    Vector3D ocyl(  rInnerStart + tube_thick/2.  , 0. , 0. ) ;
+
+	    VolCylinder cylSurf( wallLog , SurfaceType( SurfaceType::Helper ) , 0.5*tube_thick  , 0.5*tube_thick , ocyl ) ;
+	    
+	    volSurfaceList( tube )->push_back( cylSurf ) ;
+
+	  }else{   // cone 
+	    
+	    double dr    = rInnerEnd - rInnerStart ;
+	    double theta = atan2( dr , 2.* zHalf ) ;
+
+	    Vector3D ocon(  rInnerStart + 0.5 * ( dr + tube_thick), 0. , 0. ) ;
+
+	    Vector3D v( 1. , 0. , theta, Vector3D::spherical ) ;
+
+	    VolCone conSurf( wallLog , SurfaceType( SurfaceType::Helper ) , 0.5*tube_thick  , 0.5*tube_thick , v, ocon ) ;
+
+	    volSurfaceList( tube )->push_back( conSurf ) ;
+	  }
+
 	  if( rInnerStart < min_radius ) min_radius = rInnerStart ;
 	  if( rOuterStart < min_radius ) min_radius = rOuterStart ;
 	}
