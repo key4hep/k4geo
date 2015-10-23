@@ -6,7 +6,7 @@
         title="ILD Mokka model used for the DBD - ported to DD4hep"
         author="F. Gaede"
         url="http://ilcsoft.desy.de"
-        status="experimantal"
+        status="experimental"
         version="$Id$">
         <comment>ILD Mokka model used for the DBD - ported to DD4hep </comment>        
     </info>
@@ -53,7 +53,7 @@
 
 	<!-- *****  global parameters from Mokka model ILD_o1_v05 **** -->
 
-	<include ref="model_parameters_ILD_o1_v05.xml"/>
+	<include ref="model_parameters_ILD_o2_v01.xml"/>
 
 	<!-- ***** end global parameters from Mokka model ILD_o1_v05 **** -->
 
@@ -424,7 +424,7 @@
 
         <comment>Calorimeters</comment>
 
-	<!-- <include ref="SEcal04_Barrel.xml"/> -->
+        <!-- <include ref="SEcal04_Barrel.xml"/> --> 
 
 	<!-- <include ref="SEcal04_Endcaps.xml"/> -->
 
