@@ -23,10 +23,12 @@ namespace DD4hep {
     struct CalorimeterWithPreShowerLayer: public Geant4Calorimeter{
       G4int _preShowerCollectionID ;
       G4int _firstLayerNumber ; 
+      G4int _innerSliceNumber ; 
       Geant4HitCollection *_preShowerCollection;
       CalorimeterWithPreShowerLayer() : Geant4Calorimeter(), 
 					_preShowerCollectionID(0),
 					_firstLayerNumber(1), //fixme: can we make this a parameter ?
+					_innerSliceNumber(10), //fixme: can we make this a parameter ?
 					_preShowerCollection(0)
       {}
     };
@@ -55,6 +57,7 @@ namespace DD4hep {
       defineCollections();
       InstanceCount::increment(this);
       declareProperty("FirstLayerNumber", m_userData._firstLayerNumber = 1 );
+      declareProperty("InnerSliceNumber", m_userData._innerSliceNumber = 10 );
     }
 
     /// Method for generating hit(s) using the information of G4Step object.
@@ -89,8 +92,9 @@ namespace DD4hep {
       DDSegmentation::BitField64& bf = *idspec.decoder() ;
       bf.setValue( cell )  ;
       int layer = bf["layer"] ;
+      int slice = bf["slice"] ;
       
-      HitCollection*  coll = ( layer== m_userData._firstLayerNumber ?  collection( m_userData._preShowerCollectionID ) : collection(m_collectionID) ) ;
+      HitCollection*  coll = ( (layer== m_userData._firstLayerNumber && slice == m_userData._innerSliceNumber) ?  collection( m_userData._preShowerCollectionID ) : collection(m_collectionID) ) ;
       
       Hit* hit = coll->find<Hit>(CellIDCompare<Hit>(cell));
       if ( h.totalEnergy() < std::numeric_limits<double>::epsilon() )  {
