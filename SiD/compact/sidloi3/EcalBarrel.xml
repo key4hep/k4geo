@@ -1,0 +1,27 @@
+<detector id="5" name="EcalBarrel" type="DD4hep_EcalBarrel" readout="EcalBarrelHits" vis="EcalBarrelVis" calorimeterType="EM_BARREL">
+  <comment>EM Calorimeter Barrel</comment>
+  <dimensions numsides="12" rmin="EcalBarrel_rmin" z="1765.0*2*mm" />
+  <staves />
+  <layer repeat="1">
+    <slice material = "Silicon" thickness = "0.032*cm" sensitive = "yes" limits="cal_limits" />
+    <slice material = "Copper"  thickness = "0.005*cm" />
+    <slice material = "Kapton"  thickness = "0.030*cm" />
+    <slice material = "Air"     thickness = "0.033*cm" />
+  </layer>
+  <layer repeat="20">
+    <slice material = "TungstenDens24" thickness = "0.25*cm" />
+    <slice material = "Air"     thickness = "0.025*cm" />
+    <slice material = "Silicon" thickness = "0.032*cm" sensitive = "yes" limits="cal_limits" />
+    <slice material = "Copper"  thickness = "0.005*cm" />
+    <slice material = "Kapton"  thickness = "0.030*cm" />
+    <slice material = "Air"     thickness = "0.033*cm" />
+  </layer>
+  <layer repeat="10">
+    <slice material = "TungstenDens24" thickness = "0.5*cm" />
+    <slice material = "Air"     thickness = "0.025*cm" />
+    <slice material = "Silicon" thickness = "0.032*cm" sensitive = "yes" limits="cal_limits" />
+    <slice material = "Copper"  thickness = "0.005*cm" />
+    <slice material = "Kapton"  thickness = "0.030*cm" />
+    <slice material = "Air"     thickness = "0.033*cm" />
+  </layer>
+</detector>

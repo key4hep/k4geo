@@ -1,0 +1,23 @@
+<detector id="9" name="MuonBarrel" type="DD4hep_PolyhedraBarrelCalorimeter2" readout="MuonBarrelHits" vis="MuonBarrelVis" calorimeterType="MUON_BARREL" gap="0.*cm" material="Steel235">
+  <comment>Muon Calorimeter Barrel</comment>
+  <dimensions numsides="8" rmin="3464.0*mm" z="2983.0 * 2*mm"/>
+  <staves />
+  <layer repeat="11" >
+    <slice material="Aluminum" thickness="0.1*cm" />
+    <slice material="Air" thickness="0.35*cm" />
+    <slice material="PyrexGlass" thickness="0.2*cm" />
+    <slice material="RPCGasDefault" thickness="0.2*cm" sensitive="yes" />
+    <slice material="PyrexGlass" thickness="0.2*cm" />
+    <slice material="Air" thickness="0.35*cm" />
+    <slice material="Aluminum" thickness="0.1*cm" />
+    <slice material="Aluminum" thickness="0.1*cm" />
+    <slice material="Air" thickness="0.35*cm" />
+    <slice material="PyrexGlass" thickness="0.2*cm" />
+    <slice material="RPCGasDefault" thickness="0.2*cm" sensitive="yes" />
+    <slice material="PyrexGlass" thickness="0.2*cm" />
+    <slice material="Air" thickness="0.35*cm" />
+    <slice material="Aluminum" thickness="0.1*cm" />
+    <slice material="Air" thickness="1.0*cm" />
+    <slice material="Iron" thickness="20.0*cm" />
+  </layer>
+</detector>
