@@ -26,6 +26,10 @@
     <constant name="EcalEndcap_zmin" value="1657.0*mm"/>
     <constant name="tracking_region_radius" value="EcalBarrel_rmin - 1.0*mm"/>
     <constant name="tracking_region_zmax" value="EcalEndcap_zmin - 1.0*mm"/>
+    
+    <constant name="tracker_region_rmax" value="tracking_region_radius" />  
+    <constant name="tracker_region_zmax" value="tracking_region_zmax" />  
+
     <constant name="VXD_CF_sensor" value="0.026*cm"/>
     <constant name="VXD_CF_support" value="0.05*cm"/>
     <constant name="bp_cone_slope" value="(8.96-1.20)/(185-6.25)"/>
@@ -140,10 +144,12 @@
 
     <include ref="SiTrackerEndcap.xml"/>
 
+    <include ref="SiTrackerBarrel.xml"/>
+ 
     <include ref="SiTrackerForward.xml"/>
 
 
-    <comment>Calorimeters</comment>
+    <!-- <comment>Calorimeters</comment> -->
 
     <include ref="EcalBarrel.xml"/>
     <include ref="EcalEndcap.xml"/>
@@ -163,8 +169,8 @@
     <comment>Dead material and supports</comment>
     <comment>Vertex Detector Supports and Readout</comment>
 
-    <!--  FG: fixme: should be split up into more individual files  ...v-->
-    <include ref="Support.xml"/>
+    <!-- <\!--  FG: fixme: should be split up into more individual files  ... -\-> -->
+    <!-- <include ref="Support.xml"/> -->
 
   </detectors>
 
