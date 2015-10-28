@@ -218,11 +218,13 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
       ConeSegment tubeSolid( zHalf, 0, rOuterStart, 0, rOuterEnd , phi1, phi2);
         
       // tube consists of vacuum
+      // place tube twice explicitely so we can attach surfaces to each one
       Volume tubeLog( volName, tubeSolid, coreMaterial ) ;
-      
+      Volume tubeLog2( volName, tubeSolid, coreMaterial ) ;
+
       // placement of the tube in the world, both at +z and -z
       envelope.placeVolume( tubeLog,  transformer );
-      envelope.placeVolume( tubeLog,  transmirror );
+      envelope.placeVolume( tubeLog2,  transmirror );
 
       // if inner and outer radii are equal, then omit the tube wall
       if (rInnerStart != rOuterStart || rInnerEnd != rOuterEnd) {
@@ -232,33 +234,39 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
         
 	// the wall consists of the material given in the XML
 	Volume wallLog ( volName + "_wall", wallSolid, wallMaterial);
+	Volume wallLog2( volName + "_wall2", wallSolid, wallMaterial);
 	
 	if( crossType == ODH::kCenter ) { 
 
 	  // add surface for tracking ....
-	  double tube_thick =  rOuterStart - rInnerStart ;
+	  const bool isCylinder = ( rInnerStart == rInnerEnd );
 
 
-	  if( rInnerStart == rInnerEnd ) {  // cylinder 
-	    
-	    Vector3D ocyl(  rInnerStart + tube_thick/2.  , 0. , 0. ) ;
+	  if (isCylinder) {  // cylinder
 
-	    VolCylinder cylSurf( wallLog , SurfaceType( SurfaceType::Helper ) , 0.5*tube_thick  , 0.5*tube_thick , ocyl ) ;
-	    
-	    volSurfaceList( tube )->push_back( cylSurf ) ;
+	    Vector3D ocyl(  rInnerStart + thickness/2.  , 0. , 0. ) ;
+
+	    VolCylinder cylSurf1( wallLog , SurfaceType( SurfaceType::Helper ) , 0.5*thickness  , 0.5*thickness , ocyl );
+	    VolCylinder cylSurf2( wallLog2, SurfaceType( SurfaceType::Helper ) , 0.5*thickness  , 0.5*thickness , ocyl );
+
+	    volSurfaceList( tube )->push_back( cylSurf1 );
+	    volSurfaceList( tube )->push_back( cylSurf2 );
 
 	  }else{   // cone 
 	    
-	    double dr    = rInnerEnd - rInnerStart ;
-	    double theta = atan2( dr , 2.* zHalf ) ;
+	    const double dr    = rInnerEnd - rInnerStart ;
+	    const double theta = atan2( dr , 2.* zHalf ) ;
 
-	    Vector3D ocon(  rInnerStart + 0.5 * ( dr + tube_thick), 0. , 0. ) ;
+	    Vector3D ocon( rInnerStart + 0.5 * ( dr + thickness ), 0. , 0. );
 
 	    Vector3D v( 1. , 0. , theta, Vector3D::spherical ) ;
 
-	    VolCone conSurf( wallLog , SurfaceType( SurfaceType::Helper ) , 0.5*tube_thick  , 0.5*tube_thick , v, ocon ) ;
+	    VolCone conSurf1( wallLog , SurfaceType( SurfaceType::Helper ) , 0.5*thickness  , 0.5*thickness , v, ocon );
+	    VolCone conSurf2( wallLog2, SurfaceType( SurfaceType::Helper ) , 0.5*thickness  , 0.5*thickness , v, ocon );
 
-	    volSurfaceList( tube )->push_back( conSurf ) ;
+	    volSurfaceList( tube )->push_back( conSurf1 );
+	    volSurfaceList( tube )->push_back( conSurf2 );
+
 	  }
 
 	  if( rInnerStart < min_radius ) min_radius = rInnerStart ;
@@ -266,10 +274,13 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
 	}
 
 	wallLog.setVisAttributes(lcdd, "TubeVis");
+	wallLog2.setVisAttributes(lcdd, "TubeVis");
 	tubeLog.setVisAttributes(lcdd, "VacVis");
+	tubeLog2.setVisAttributes(lcdd, "VacVis");
 	
 	// placement as a daughter volume of the tube, will appear in both placements of the tube
 	tubeLog.placeVolume( wallLog,  Transform3D() );
+	tubeLog2.placeVolume( wallLog2,  Transform3D() );
       }
     }  
       break;
