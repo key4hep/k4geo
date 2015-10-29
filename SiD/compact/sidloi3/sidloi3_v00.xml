@@ -169,10 +169,58 @@
     <comment>Dead material and supports</comment>
     <comment>Vertex Detector Supports and Readout</comment>
 
-    <!-- <\!--  FG: fixme: should be split up into more individual files  ... -\-> -->
+    <!--  FG: fixme: should be split up into more individual files  ... -->
     <!-- <include ref="Support.xml"/> -->
 
   </detectors>
+
+  <!-- ########################################################################### -->
+
+  <plugins>
+    <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
+      <argument value="SiVertexBarrel"/>
+      <argument value="dimension=2"/>
+    </plugin>	
+    <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
+      <argument value="SiVertexEndcap"/>
+      <argument value="dimension=2"/>
+    </plugin>
+    <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
+      <argument value="SiTrackerBarrel"/>
+      <argument value="dimension=1"/>
+    </plugin>	
+    <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
+      <argument value="SiTrackerEndcap"/>
+      <argument value="dimension=2"/>
+    </plugin>
+    <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
+      <argument value="SiTrackerForward"/>
+      <argument value="dimension=2"/>
+    </plugin>
+
+    <plugin name="DD4hep_CaloFaceEndcapSurfacePlugin">
+      <argument value="EcalEndcap"/>
+      <argument value="zpos=EcalEndcap_zmin"    />
+      <argument value="radius=1765.0*2*mm"  />
+      <argument value="phi0=0"    />
+      <argument value="symmetry=12"/>
+      <argument value="systemID=6"/>
+      <!-- <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> -->
+    </plugin>
+    <plugin name="DD4hep_CaloFaceBarrelSurfacePlugin">
+      <argument value="EcalBarrel"/>
+      <argument value="length=1765.0*2*mm"    />
+      <argument value="radius=EcalBarrel_rmin"  />
+      <argument value="phi0=0"    />
+      <argument value="symmetry=12"/>
+      <argument value="systemID=20"/>
+      <!-- <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> -->
+    </plugin>
+    <plugin name="InstallSurfaceManager"/>
+    
+  </plugins>
+
+
 
   <!-- ########################################################################### -->
 
