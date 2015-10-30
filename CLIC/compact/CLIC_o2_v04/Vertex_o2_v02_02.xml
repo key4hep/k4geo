@@ -31,7 +31,7 @@
         <constant name="VertexBarrel_r3" value="5.8*cm"/>
         
         <constant name="VertexBarrel_Sensitive_Thickness" value="5.000000000e-02*mm"/>
-        <constant name="VertexBarrel_Support_Thickness" value="31.5000000e-02*mm"/>
+        <constant name="VertexBarrel_Support_Thickness" value="1*mm"/>
         
         <constant name="VertexBarrel_Layer1_width" value="13*mm"/>
         <constant name="VertexBarrel_Layer2_width" value="24*mm"/>
