@@ -233,9 +233,6 @@
     <include ref="ECalBarrel_o2_v01_01.xml"/>
     <include ref="ECalEndcap_o2_v01_01.xml"/>
     <include ref="ECalPlug_o1_v01_01.xml"/>
-    <!-- Not needed anymore since using plugin instead -->
-<!--     <include ref="ECalBarrelFace_o1_v01_01.xml"/>  -->
-<!--     <include ref="ECalEndcapFace_o1_v01_01.xml"/>  -->
     
     <include ref="HCalBarrel_o1_v01_01.xml"/>
     <include ref="HCalEndcap_o1_v01_01.xml"/>
@@ -257,7 +254,6 @@
 	  <argument value="phi0=0"    /> 
 	  <argument value="symmetry=ECalEndcap_outer_symmetry"/>
 	  <argument value="systemID=DetID_ECal_Endcap"/>
-	  <!-- <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> -->
 	</plugin>
 	<plugin name="DD4hep_CaloFaceBarrelSurfacePlugin">
           <argument value="ECalBarrel"/>
@@ -266,7 +262,6 @@
 	  <argument value="phi0=0"    /> 
 	  <argument value="symmetry=ECalBarrel_symmetry"/>
 	  <argument value="systemID=DetID_ECal_Barrel"/>
-	  <!-- <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> -->
 	</plugin>
         <plugin name="InstallSurfaceManager"/>
     </plugins>
