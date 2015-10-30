@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0" 
        xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" 
        xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
@@ -22,8 +23,13 @@
     <constant name="world_x" value="world_side"/>
     <constant name="world_y" value="world_side"/>
     <constant name="world_z" value="world_side"/>
+
     <constant name="EcalBarrel_rmin" value="1265.0*mm"/>
     <constant name="EcalEndcap_zmin" value="1657.0*mm"/>
+
+    <constant name="HcalBarrel_rmin" value="1419.0*mm"/>
+    <constant name="HcalEndcap_zmin" value="1805.0*mm"/>
+
     <constant name="tracking_region_radius" value="EcalBarrel_rmin - 1.0*mm"/>
     <constant name="tracking_region_zmax" value="EcalEndcap_zmin - 1.0*mm"/>
     
@@ -152,9 +158,11 @@
     <!-- <comment>Calorimeters</comment> -->
 
     <include ref="EcalBarrel.xml"/>
+
     <include ref="EcalEndcap.xml"/>
 
     <include ref="HcalBarrel.xml"/>
+
     <include ref="HcalEndcap.xml"/>
 
     <include ref="MuonBarrel.xml"/>
@@ -180,7 +188,7 @@
     <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
       <argument value="SiVertexBarrel"/>
       <argument value="dimension=2"/>
-    </plugin>	
+    </plugin>
     <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
       <argument value="SiVertexEndcap"/>
       <argument value="dimension=2"/>
@@ -188,7 +196,7 @@
     <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
       <argument value="SiTrackerBarrel"/>
       <argument value="dimension=1"/>
-    </plugin>	
+    </plugin>
     <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
       <argument value="SiTrackerEndcap"/>
       <argument value="dimension=2"/>
@@ -239,23 +247,26 @@
       <id>system:6,barrel:3,layer:4,wedge:6,module:6,sensor:1,side:32:-2,strip:24</id>
     </readout>
     <readout name="EcalBarrelHits">
-      <segmentation type="CartesianGridXY" grid_size_x="3.5" grid_size_y="3.5" />
+      <segmentation type="CartesianGridXY" grid_size_x="3.5*mm" grid_size_y="3.5*mm" />
       <id>system:6,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id>
     </readout>        
     <readout name="EcalEndcapHits">
-      <segmentation type="CartesianGridXY" grid_size_x="3.5" grid_size_y="3.5" />
+      <segmentation type="CartesianGridXY" grid_size_x="3.5*mm" grid_size_y="3.5*mm" />
       <!-- <segmentation type="GlobalGridXY" grid_size_x="3.5" grid_size_y="3.5" /> -->
-      <id>system:6,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id>
+      <!-- <id>system:6,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id> -->
+      <id>system:5,side:2,module:8,stave:4,layer:9,submodule:4,x:32:-16,y:-16</id>
     </readout>
     <readout name="HcalBarrelHits">
       <segmentation type="CartesianGridXY" grid_size_x="1.0*cm" grid_size_y="1.0*cm" />
       <!-- <segmentation type="RegularNgonCartesianGridXY" gridSizeX="1.0*cm" gridSizeY="1.0*cm" /> -->
-      <id>system:6,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id>
+      <id>system:5,side:2,module:8,stave:4,layer:9,submodule:4,x:32:-16,y:-16</id>
+      <!-- <id>system:6,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id> -->
     </readout>
     <readout name="HcalEndcapHits">
       <segmentation type="CartesianGridXY" grid_size_x="1.0*cm" grid_size_y="1.0*cm" />
       <!-- <segmentation type="GlobalGridXY" gridSizeX="1.0*cm" gridSizeY="1.0*cm" /> -->
-      <id>system:6,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
+      <id>system:5,side:2,module:8,stave:4,layer:9,submodule:4,x:32:-16,y:-16</id>
+      <!-- <id>system:6,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id> -->
     </readout>
     <readout name="MuonBarrelHits">
       <segmentation type="CartesianGridXY" grid_size_x="3.0*cm" grid_size_y="3.0*cm" />
@@ -274,13 +285,13 @@
       <segmentation type="CartesianGridXY" grid_size_x="0.35*cm" grid_size_y="0.35*cm" />
       <!-- <segmentation type="GridXYZ" gridSizeX="0.35*cm" gridSizeY="0.35*cm" /> -->
       <!-- <id>system:8,layer:8,barrel:3,x:32:-16,y:-16</id> -->
-      <id>system:8,barrel:3,layer:8,slice:8,r:32:-16,phi:-16</id>
+      <id>system:8,barrel:3,layer:8,slice:8,x:32:-16,y:-16</id>
     </readout>
     <readout name="BeamCalHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.35*cm" grid_size_y="0.35*cm" />
       <!-- <segmentation type="GridXYZ" gridSizeX="0.35*cm" gridSizeY="0.35*cm" /> -->
       <!-- <id>system:8,layer:8,barrel:3,x:32:-16,y:-16</id> -->
-      <id>system:8,barrel:3,layer:8,slice:5,r:32:16,phi:16</id>
+      <id>system:8,barrel:3,layer:8,slice:5,x:32:16,y:16</id>
     </readout>
   </readouts>
   <fields>

@@ -1,6 +1,13 @@
-<detector id="5" name="EcalBarrel" type="DD4hep_EcalBarrel" readout="EcalBarrelHits" vis="EcalBarrelVis" calorimeterType="EM_BARREL">
+<detector id="5" name="EcalBarrel" type="GenericCalBarrel_o1_v01" readout="EcalBarrelHits" vis="EcalBarrelVis" calorimeterType="EM_BARREL" gap="0.*cm">
   <comment>EM Calorimeter Barrel</comment>
   <dimensions numsides="12" rmin="EcalBarrel_rmin" z="1765.0*2*mm" />
+
+  <envelope vis="EcalBarrelVis">
+    <shape type="PolyhedraRegular" numsides="12"  rmin="EcalBarrel_rmin-0.1*mm" rmax="HcalBarrel_rmin-1.*mm" dz="1765.1*2*mm"  material="Air"/>
+    <!-- Radii definitions as in http://cern.ch/go/r9mZ -->
+    <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/12"/>
+  </envelope>
+
   <staves />
   <layer repeat="1">
     <slice material = "Silicon" thickness = "0.032*cm" sensitive = "yes" limits="cal_limits" />

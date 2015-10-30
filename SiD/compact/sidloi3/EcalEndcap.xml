@@ -1,6 +1,19 @@
-<detector id="6" name="EcalEndcap" type="DD4hep_PolyhedraEndcapCalorimeter2" reflect="true" readout="EcalEndcapHits" vis="EcalEndcapVis" calorimeterType="EM_ENDCAP">
+<detector id="6" name="EcalEndcap" type="GenericCalEndcap_o1_v01" reflect="true" readout="EcalEndcapHits" vis="EcalEndcapVis" calorimeterType="EM_ENDCAP"gap="0.*cm">
   <comment>EM Calorimeter Endcaps</comment>
-  <dimensions numsides="12" zmin="EcalEndcap_zmin" rmin="200.0*mm" rmax="1294.1*mm" />
+
+
+  <dimensions numsides="12" zmin="EcalEndcap_zmin" rmin="200.0*mm" rmax="1250.0*mm"  nsides_inner="12" nsides_outer="12" />
+
+  <envelope vis="EcalEndcapVis">
+    <shape type="BooleanShape" operation="Subtraction" material="Air">
+      <shape type="PolyhedraRegular"  numsides="12" rmin="200.0*mm" rmax="1250.0*mm" dz="2.*HcalEndcap_zmin-1*mm" />
+      <shape type="PolyhedraRegular"  numsides="12" rmin="199.9*mm" rmax="1250.1*mm" dz="2.*EcalEndcap_zmin-1*mm"/>
+    </shape>
+    <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/12"/>
+  </envelope>
+  
+
+
   <layer repeat="1">
     <slice material = "Silicon" thickness = "0.032*cm" sensitive = "yes" limits="cal_limits" />
     <slice material = "Copper"  thickness = "0.005*cm" />
