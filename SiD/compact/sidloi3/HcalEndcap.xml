@@ -5,8 +5,8 @@
 
   <envelope vis="HcalEndcapVis">
     <shape type="BooleanShape" operation="Subtraction" material="Air">
-      <shape type="PolyhedraRegular"  numsides="12" rmin="200.0*mm" rmax="1403.0*mm" dz="3000.1*mm" />
-      <shape type="PolyhedraRegular"  numsides="12" rmin="199.9*mm" rmax="1403.1*mm" dz="1804.9*mm"/>
+      <shape type="PolyhedraRegular"  numsides="12" rmin="200.0*mm" rmax="1403.0*mm" dz="2.*3000.1*mm" />
+      <shape type="PolyhedraRegular"  numsides="12" rmin="199.9*mm" rmax="1403.1*mm" dz="2.*1804.9*mm"/>
     </shape>
     <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/12"/>
   </envelope>

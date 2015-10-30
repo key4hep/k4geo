@@ -1,9 +1,9 @@
 <detector id="7" name="HcalBarrel" type="GenericCalBarrel_o1_v01" readout="HcalBarrelHits" vis="HcalBarrelVis" calorimeterType="HAD_BARREL" gap="0.*cm" material="Steel235">
   <comment>Hadron Calorimeter Barrel</comment>
-  <dimensions numsides="12" rmin="HcalBarrel_rmin" z="3018.0 * 2*mm"/>
+  <dimensions numsides="12" rmin="HcalBarrel_rmin" z="2950.0 * 2*mm"/>
 
   <envelope vis="HcalBarrelVis">
-    <shape type="PolyhedraRegular" numsides="12"  rmin="HcalBarrel_rmin-0.1*mm" rmax="2501.0*mm+1*mm" dz="3018.0 * 2*mm+0.1*mm" material = "Air"/>
+    <shape type="PolyhedraRegular" numsides="12"  rmin="HcalBarrel_rmin-0.1*mm" rmax="2501.0*mm+1*mm" dz="2950.0 * 2*mm+0.1*mm" material = "Air"/>
     <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/12"/>
   </envelope>
 
