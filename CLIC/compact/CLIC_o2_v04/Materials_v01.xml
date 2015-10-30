@@ -26,6 +26,10 @@
             <D type="density" value="0.225" unit="g/cm3"/>
             <fraction n="1.0" ref="CarbonFiber"/>
         </material>
+        <material name="CarbonFiber_Vertex">
+            <D type="density" value="0.625" unit="g/cm3"/>
+            <fraction n="1.0" ref="CarbonFiber"/>
+        </material>        
         <material name="Rohacell31_50percent">
             <D type="density" value="0.016" unit="g/cm3"/>
             <fraction n="1.0" ref="Rohacell31"/>
