@@ -1,0 +1,19 @@
+<lccdd>
+    <readouts>
+        <readout name="ECalBarrelFaceReadout">
+            <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+        </readout>
+    </readouts>
+    
+    <detectors>
+        <!-- Notice name has to be like this, with small c in Ecal -->
+        <detector name="EcalBarrelFace" type="PolyhedralBarrelSurfaces" id="DetID_ECAL_BARREL_FACE" readout="ECalBarrelFaceReadout" vis="BlueVis" >
+            <comment>Surfaces at the face of the Ecal Barrel </comment>
+            <envelope vis="ECALVis">
+                <shape type="PolyhedraRegular" numsides="ECalBarrel_symmetry"  rmin="ECalBarrel_inner_radius-0.0001" rmax="ECalBarrel_inner_radius - 0.00005" dz="2.*ECalBarrel_half_length + 1.0*env_safety"  material = "Air" />
+                <rotation x="0*deg" y="0*deg" z="-180*deg/ECalBarrel_symmetry"/>
+            </envelope>
+            <dimensions numsides="ECalBarrel_symmetry" rmin="ECalBarrel_inner_radius - 0.00008" rmax="ECalBarrel_inner_radius - 0.00007" zhalf="ECalBarrel_half_length" phi0="-180*deg/ECalBarrel_symmetry" material = "Air" />
+        </detector>
+    </detectors>
+</lccdd>
