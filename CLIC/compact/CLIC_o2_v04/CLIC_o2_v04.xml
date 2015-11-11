@@ -55,7 +55,7 @@
 <!--         <constant name="DetID_ECAL_BARREL_FACE"    value="19"/> -->
         
         
-        <constant name="CentralBeamPipe_zmax" value="260.*mm"/>
+        <constant name="CentralBeamPipe_zmax" value="308.*mm"/>
         <constant name="CentralBeamPipe_rmax" value="30.0*mm"/>
         <constant name="ConeBeamPipe_zmax" value="2080*mm"/>
         <constant name="ConeBeamPipe_rmax" value="240.0*mm"/>
@@ -222,7 +222,7 @@
     
     <include ref="Materials_v01.xml"/>
     
-    <include ref="Beampipe_o1_v01_01.xml"/>
+    <include ref="Beampipe_o1_v01_02.xml"/>
     <include ref="BeamInstrumentation_o1_v01_01.xml"/>    
     
     <include ref="Vertex_o2_v02_02.xml"/>
