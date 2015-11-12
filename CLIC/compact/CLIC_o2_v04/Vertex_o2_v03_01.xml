@@ -9,7 +9,7 @@
             </shape>
             <comment>Outer Tracker Assembly</comment>
             <composite name="VertexBarrel"/>
-            <composite name="VertexEndcap"/>
+            <composite name="VertexEndcap"/> 
         </detector>
     </detectors>
     
@@ -37,9 +37,9 @@
         <constant name="VertexBarrel_Layer2_width" value="24*mm"/>
         <constant name="VertexBarrel_Layer3_width" value="23.5*mm"/>
         
-        <constant name="VertexBarrel_Layer1_offset" value="1*mm"/>
+        <constant name="VertexBarrel_Layer1_offset" value="2*mm"/>
         <constant name="VertexBarrel_Layer2_offset" value="1*mm"/>
-        <constant name="VertexBarrel_Layer3_offset" value="1*mm"/>
+        <constant name="VertexBarrel_Layer3_offset" value="1	*mm"/>
         
         <constant name="VertexBarrel_Layer1_Staves" value="16"/>
         <constant name="VertexBarrel_Layer2_Staves" value="12"/>
@@ -72,17 +72,8 @@
         </readout>
     </readouts>
     
-    <!--  Includes for sensitives and support                -->
+
     <detectors>
-        
-        <!--
-         *********************************************
-         
-         for debugging the tracking code replace the vertex with a simplified
-         one with a proper geometry until the real model is fixed
-         
-         *********************************************
-         -->
         <detector name="VertexBarrel" type="ZPlanarTracker" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelCollection" insideTrackingVolume="true">
             
             <layer nLadders="VertexBarrel_Layer1_Staves" phi0="0" id="0">
@@ -117,8 +108,7 @@
         
         
     </detectors>
-    
-    
+ 
     <detectors>
         <detector id="DetID_VXD_Endcap" name="VertexEndcap" type="VertexEndcap_o1_v02" readout="VertexEndcapCollection" reflect="true">
             <envelope vis="VXDVis">
@@ -126,7 +116,7 @@
             </envelope>
             <comment>Vertex Detector Endcaps</comment>
             <module name="SiVertexEndcapModule1">
-                <!-- inner facing module -->
+
                 <trd x1="VertexEndcap_rmin1 * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" x2="VertexEndcap_rmax * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" z="(VertexEndcap_rmax - VertexEndcap_rmin1) / 2" />
                 <module_component thickness="0.15*cm/2.0" material="Rohacell31" vis="SiVertexSupportVis" />
                 
@@ -138,7 +128,7 @@
                 <module_component thickness="0.005*cm" material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
             </module>
             <module name="SiVertexEndcapModule2">
-                <!-- outer facing module -->
+
                 <trd x1="VertexEndcap_rmin1 * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" x2="VertexEndcap_rmax * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" z="(VertexEndcap_rmax - VertexEndcap_rmin1) / 2" />
                 <module_component thickness="0.005*cm" material="Silicon" sensitive="true" vis="SiVertexSensitiveVis2"/>
                 <module_component thickness="0.005*cm" material="Silicon" vis="SiVertexPassiveVis"/>
@@ -168,14 +158,9 @@
                 <ring r="(VertexEndcap_rmax + VertexEndcap_rmin3) / 2" zstart="VertexEndcap_z3+VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0.546*cm" phi0="pi/(VertexEndcapModules-0.1)" module="SiVertexEndcapModule2"/>
             </layer>
         </detector>
-    </detectors>
+    </detectors> 
     
     <plugins>
-<!--  Surfaces are set in ZPlanarTracker driver for the barrel    
-      <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
-        <argument value="VertexBarrel"/>
-        <argument value="dimension=2"/>
-      </plugin>-->
       <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
         <argument value="VertexEndcap"/>
         <argument value="dimension=2"/>
