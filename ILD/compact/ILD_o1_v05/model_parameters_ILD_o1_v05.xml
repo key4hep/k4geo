@@ -162,7 +162,7 @@
   <!-- <constant name="Hcal_sensitive_model" value="scintillator"/> -->
   <constant name="Hcal_spacer_separation" value="100*mm"/>
   <constant name="Hcal_spacer_thickness" value="8*mm"/>
-  <constant name="Hcal_stave_gaps" value="3*mm"/>
+  <constant name="Hcal_stave_gaps" value="10*mm"/>
   <constant name="Hcal_steel_cassette_thickness" value="0.5*mm"/>
   <constant name="Hcal_time_cut" value="150"/>
   <constant name="LHcal_BCal_clearance" value="390*mm"/>

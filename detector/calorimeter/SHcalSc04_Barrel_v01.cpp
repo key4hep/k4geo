@@ -10,6 +10,9 @@
 #include "DDRec/DetectorData.h"
 #include "DDSimExceptions.h"
 
+#include <iostream>
+#include <vector>
+
 using namespace std;
 using namespace DD4hep;
 using namespace DD4hep::Geometry;
@@ -105,6 +108,9 @@ bool validateEnvelope(double rInner, double rOuter, double radiatorThickness, do
 }
 
 static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens)  {
+
+  std::vector<int> layer_offsetX;
+  std::vector<int> layer_offsetY;
 
   double boundarySafety = 0.0001;
 
@@ -368,6 +374,26 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       cout <<"layer_id: "<< layer_id <<endl;
       cout <<" chamber x:y:z:   "<<x_length*2.<<":"<<z_width*2.<<":"<<y_height*2.<<endl;
 
+      //check if x_length (scintillator length) is divisible with x_integerTileSize
+      if( layer_id <= Hcal_nlayers) {
+	double fracPart, intPart;
+	double temp = x_length*2./cell_sizeX;
+	fracPart = modf(temp, &intPart);
+	int noOfIntCells = int(temp);
+
+ 	if (fracPart == 0){ //divisible
+	  if ( noOfIntCells%2 ) layer_offsetX.push_back(0);
+	  else layer_offsetX.push_back(1);
+	}
+	else if (fracPart>0){
+	  if ( noOfIntCells%2 ) layer_offsetX.push_back(1);
+	  else layer_offsetX.push_back(0);
+	}
+
+	if ( (int)( (z_width*2.) / cell_sizeX)%2 ) layer_offsetY.push_back(0);
+	else layer_offsetY.push_back(1);
+      }
+
       Box ChamberSolid((x_length + Hcal_layer_air_gap),  //x + air gaps at two side, do not need to build air gaps individualy.
 			 z_width,   //z attention!
 			 y_height); //y attention!
@@ -496,10 +522,23 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
       
     }//end loop over HCAL nlayers;
+
+  // print out the segmentation setup for the current running model geometry
+  std::cout<<"Please use this segmentatin in compact file for HcalBarrelRegCollection."<<std::endl;
+  double online_cell_sizeY = (z_width*2.) / floor( (z_width*2.) / cell_sizeX );
+  std::cout<<" <segmentation type=\"TiledLayerGridXY\""
+  	   <<" grid_size_x=\""<< cell_sizeX <<"\""
+  	   <<" grid_size_y=\""<< online_cell_sizeY+0.00001 <<"\""
+	   <<" layer_offsetX=\"";
   
-
-
-
+  for (std::vector<int>::const_iterator i = layer_offsetX.begin(); i != layer_offsetX.end(); ++i)
+    std::cout << *i << ' ';
+  
+  if( (int)( (z_width*2.) / cell_sizeX)%2 )
+    std::cout << "\"/>" <<std::endl;
+  else 
+    std::cout <<"\"" << " offset_y=\""<<(online_cell_sizeY+0.00001)/2.<<"\"/>"<<std::endl;
+  
 
 
 //====================================================================
