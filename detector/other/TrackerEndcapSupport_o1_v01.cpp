@@ -1,26 +1,33 @@
-// $Id: $
-//==========================================================================
-//  AIDA Detector description implementation for LCD
-//--------------------------------------------------------------------------
-// Copyright (C) Organisation europeenne pour la Recherche nucleaire (CERN)
-// All rights reserved.
-//
-// For the licensing terms see $DD4hepINSTALL/LICENSE.
-// For the list of contributors see $DD4hepINSTALL/doc/CREDITS.
-//
-// Author     : M.Frank
-//
-//==========================================================================
-//
-// Specialized generic detector constructor
-//
-//==========================================================================
+#include "OtherDetectorHelpers.h"
+
 #include "DD4hep/DetFactoryHelper.h"
+#include "DD4hep/DD4hepUnits.h"
+#include "DDRec/DetectorData.h"
+#include "DDRec/Surface.h"
 #include "XML/Utilities.h"
+#include "XMLHandlerDB.h"
+#include <cmath>
+#include <map>
+#include <string>
 
 using namespace std;
 using namespace DD4hep;
 using namespace DD4hep::Geometry;
+using namespace DD4hep::DDRec ;
+using namespace DDSurfaces ;
+
+using DD4hep::Geometry::Transform3D;
+using DD4hep::Geometry::Position;
+using DD4hep::Geometry::RotationY;
+using DD4hep::Geometry::RotateY;
+using DD4hep::Geometry::ConeSegment;
+using DD4hep::Geometry::SubtractionSolid;
+using DD4hep::Geometry::Material;
+using DD4hep::Geometry::Volume;
+using DD4hep::Geometry::Solid;
+using DD4hep::Geometry::Tube;
+using DD4hep::Geometry::PlacedVolume;
+using DD4hep::Geometry::Assembly;
 
 static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)
 {
@@ -62,6 +69,15 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)
       string s_nam = l_nam + _toString(s_num, "_slice%d");
       Volume s_vol(s_nam, Tube(rmin, rmax, thick), mat);
 
+      //Add surface to the support
+      Vector3D ocyl(  0., 0. , z - zmin - layerWidth / 2 + thick / 2 );
+      Vector3D u(1.,0.,0.), v(0.,1.,0.), n(0.,0.,1.);      
+
+	  VolSurfaceHandle<VolPlaneImpl> cylSurf1( s_vol , SurfaceType( SurfaceType::Helper ) , 0.5*thick  , 0.5*thick , u, v, n, ocyl );
+
+	  volSurfaceList( sdet )->push_back( cylSurf1 );
+	   
+
       s_vol.setAttributes(lcdd, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
       pv = l_vol.placeVolume(s_vol, Position(0, 0, z - zmin - layerWidth / 2 + thick / 2));
       pv.addPhysVolID("sensor", s_num);
@@ -72,12 +88,37 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)
     pv.addPhysVolID("layer", l_num);
     pv.addPhysVolID("barrel", 1);
     layer.setPlacement(pv);
+    
     if (reflect)  {
-      pv = envelope.placeVolume(l_vol, Transform3D(RotationY(M_PI), Position(0, 0, -zmin - layerWidth / 2)));
-      pv.addPhysVolID("layer", l_num);
-      pv.addPhysVolID("barrel", 2);
-      DetElement layerR = layer.clone(l_nam + "_neg");
-      sdet.add(layerR.setPlacement(pv));
+	  Tube    l_tub2(rmin, rmax, layerWidth, 2 * M_PI);
+      Volume  l_vol2(l_nam, l_tub2, air);
+      l_vol2.setVisAttributes(lcdd, x_layer.visStr());
+      for (xml_coll_t j(x_layer, _U(slice)); j; ++j, ++s_num)  {
+        xml_comp_t x_slice = j;
+        double thick = x_slice.thickness();
+        Material mat = lcdd.material(x_slice.materialStr());
+        string s_nam = l_nam + _toString(s_num, "_slice%d");
+        Volume s_vol2(s_nam, Tube(rmin, rmax, thick), mat);
+
+        //Add surface to the support
+        Vector3D ocyl(  0., 0. , z - zmin - layerWidth / 2 + thick / 2 );
+        Vector3D u(1.,0.,0.), v(0.,1.,0.), n(0.,0.,1.);      
+
+	    VolSurfaceHandle<VolPlaneImpl> cylSurf2( s_vol2 , SurfaceType( SurfaceType::Helper ) , 0.5*thick  , 0.5*thick , u, v, -1.*n, -1.*ocyl );
+
+	    volSurfaceList( sdet )->push_back( cylSurf2 );
+	   
+
+        s_vol2.setAttributes(lcdd, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+        pv = l_vol2.placeVolume(s_vol2, Position(0, 0, -1.*(z - zmin - layerWidth / 2 + thick / 2)));
+        pv.addPhysVolID("sensor", s_num);
+      }
+
+    DetElement layer(sdet, l_nam + "_neg", l_num);
+    pv = envelope.placeVolume(l_vol2, Position(0, 0, -1.*(zmin + layerWidth / 2.)));
+    pv.addPhysVolID("layer", l_num);
+    pv.addPhysVolID("barrel", 2);
+    layer.setPlacement(pv);
     }
   }
 
