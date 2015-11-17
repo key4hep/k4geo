@@ -362,6 +362,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   int l_num = 1;
   bool isFirstSens = true;
+  int myLayerNum = 0 ;
+
   for(xml_coll_t li(x_det,_U(layer)); li; ++li)  {
     xml_comp_t x_layer = li;
     int repeat = x_layer.repeat();
@@ -638,7 +640,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    PlacedVolume slice_phv = l_vol.placeVolume(s_vol,Position(0,0,s_pos_z+s_thick/2));
 	    
 	    if ( x_slice.isSensitive() ) {
-	      slice_phv.addPhysVolID("slice",s_num);
+	      slice_phv.addPhysVolID("layer", myLayerNum++);
+	      //	      slice_phv.addPhysVolID("slice",s_num);
 	    }
 
 
@@ -695,7 +698,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	      Transform3D tran3D(rot,l_new); // The rotation of EC_alveolus in each stave, place same EC_alveolus into 4 stave.
 	      
 	      PlacedVolume layer_phv = EnvLogEndCap.placeVolume(l_vol,tran3D);
-	      layer_phv.addPhysVolID("layer", l_num);
+	      //layer_phv.addPhysVolID("layer", l_num);
 	      layer_phv.addPhysVolID("tower", EC_Number_of_towers);
 	      layer_phv.addPhysVolID("stave", i_stave);
 	      layer.setPlacement(layer_phv);
