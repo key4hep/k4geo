@@ -1,13 +1,33 @@
-#include "DD4hep/DetFactoryHelper.h"
-#include "DD4hep/Printout.h"
-#include "XML/Layering.h"
-#include "TGeoTrd2.h"
-#include "XML/Utilities.h"
+#include "OtherDetectorHelpers.h"
 
+#include "DD4hep/DetFactoryHelper.h"
+#include "DD4hep/DD4hepUnits.h"
+#include "DDRec/DetectorData.h"
+#include "DDRec/Surface.h"
+#include "XML/Utilities.h"
+#include "XMLHandlerDB.h"
+#include <cmath>
+#include <map>
+#include <string>
 
 using namespace std;
 using namespace DD4hep;
 using namespace DD4hep::Geometry;
+using namespace DD4hep::DDRec ;
+using namespace DDSurfaces ;
+
+using DD4hep::Geometry::Transform3D;
+using DD4hep::Geometry::Position;
+using DD4hep::Geometry::RotationY;
+using DD4hep::Geometry::RotateY;
+using DD4hep::Geometry::ConeSegment;
+using DD4hep::Geometry::SubtractionSolid;
+using DD4hep::Geometry::Material;
+using DD4hep::Geometry::Volume;
+using DD4hep::Geometry::Solid;
+using DD4hep::Geometry::Tube;
+using DD4hep::Geometry::PlacedVolume;
+using DD4hep::Geometry::Assembly;
 
 static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)
 {
@@ -45,6 +65,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)
 
       Tube   s_tub(r, r + thickness, z, 2 * M_PI);
       Volume s_vol(s_name, s_tub, mat);
+      
+      //Add surface to the support
+      Vector3D ocyl(  r + thickness/2.  , 0. , 0. );
+
+	  VolCylinder cylSurf1( s_vol , SurfaceType( SurfaceType::Helper ) , 0.5*thickness  , 0.5*thickness , ocyl );
+
+	  volSurfaceList( sdet )->push_back( cylSurf1 );
+
 
       r += thickness;
 
