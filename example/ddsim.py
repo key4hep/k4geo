@@ -225,7 +225,6 @@ def run():
     if( 'ecal' in c.lower() ):
       seq,act = simple.setupCalorimeter( c ,type='CaloPreShowerSDAction')
       act.FirstLayerNumber = 1
-      act.InnerSliceNumber = 10
     else:
       seq,act = simple.setupCalorimeter( c )
     act.HitCreationMode = 2
