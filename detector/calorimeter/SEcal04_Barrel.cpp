@@ -402,7 +402,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 	// Loop over the sublayers or slices for this layer.
 	int s_num = 1;
-	double s_pos_z = -(l_thickness / 2);
+	double s_pos_z = l_thickness / 2.;
 
 
 	//--------------------------------------------------------------------------------
@@ -621,7 +621,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 
           // Slice placement.
-          PlacedVolume slice_phv = l_vol.placeVolume(s_vol,Position(0,0,s_pos_z+s_thick/2));
+          PlacedVolume slice_phv = l_vol.placeVolume(s_vol,Position(0,0,s_pos_z-s_thick/2));
 
           if ( x_slice.isSensitive() ) {
 	    slice_phv.addPhysVolID("layer", myLayerNum++ );
@@ -631,7 +631,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  //fg: not needed   slice.setPlacement(slice_phv);
 
           // Increment Z position of slice.
-          s_pos_z += s_thick;
+          s_pos_z -= s_thick;
                                         
           // Increment slice number.
           ++s_num;
