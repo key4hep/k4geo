@@ -56,7 +56,7 @@
         <constant name="VertexEndcap_rmin2" value="CentralBeamPipe_rmax + VertexEndcap_offset"/>
         <constant name="VertexEndcap_rmin3" value="CentralBeamPipe_rmax + VertexEndcap_offset"/>
         <constant name="VertexEndcap_rmin4" value="CentralBeamPipe_rmax + VertexEndcap_offset"/>
-        <constant name="VertexEndcapModuleThickness" value="0.202*cm"/>
+        <constant name="VertexEndcapModuleThickness" value="1.05*mm"/>
         <constant name="VertexEndcapOverlap" value="1*mm"/>
     </define>
     
@@ -115,47 +115,38 @@
                 <shape type="Assembly"/>
             </envelope>
             <comment>Vertex Detector Endcaps</comment>
+            
             <module name="SiVertexEndcapModule1">
-
-                <trd x1="VertexEndcap_rmin1 * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" x2="VertexEndcap_rmax * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" z="(VertexEndcap_rmax - VertexEndcap_rmin1) / 2" />
-                <module_component thickness="0.15*cm/2.0" material="Rohacell31" vis="SiVertexSupportVis" />
-                
-                <module_component thickness="0.012*cm" material="CarbonFiber_Vertex" vis="SiVertexPassiveVis" />
-                <module_component thickness="0.0025*cm" material="Epoxy" vis="SiVertexPassiveVis"/>
-                <module_component thickness="0.1*cm" material="Silicon" vis="SiVertexPassiveVis"/>
-                <module_component thickness="0.0025*cm" material="Epoxy" vis="SiVertexPassiveVis"/>
+                <trd x1="VertexEndcap_rmin1 * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" x2="VertexEndcap_rmax * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" z="(VertexEndcap_rmax - VertexEndcap_rmin1) / 2" />             
+                <module_component thickness="0.95*mm" material="CarbonFiber_Vertex" vis="SiVertexPassiveVis" />
                 <module_component thickness="0.005*cm" material="Silicon" vis="SiVertexPassiveVis"/>
                 <module_component thickness="0.005*cm" material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
             </module>
+            
             <module name="SiVertexEndcapModule2">
-
                 <trd x1="VertexEndcap_rmin1 * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" x2="VertexEndcap_rmax * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" z="(VertexEndcap_rmax - VertexEndcap_rmin1) / 2" />
                 <module_component thickness="0.005*cm" material="Silicon" sensitive="true" vis="SiVertexSensitiveVis2"/>
                 <module_component thickness="0.005*cm" material="Silicon" vis="SiVertexPassiveVis"/>
-                <module_component thickness="0.0025*cm" material="Epoxy" vis="SiVertexPassiveVis"/>
-                <module_component thickness="0.1*cm" material="Silicon" vis="SiVertexPassiveVis"/>
-                <module_component thickness="0.0025*cm" material="Epoxy" vis="SiVertexPassiveVis"/>
-                <module_component thickness="0.012*cm" material="CarbonFiber_Vertex" vis="SiVertexPassiveVis" />
-                
-                <module_component thickness="0.15*cm/2.0" material="Rohacell31" vis="SiVertexSupportVis" />
+                <module_component thickness="0.95*mm" material="CarbonFiber_Vertex" vis="SiVertexPassiveVis" />
             </module>
+            
             <layer id="0"  vis="SiVertexLayerVis">
-                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin1) / 2" zstart="VertexEndcap_z1 - VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0.546*cm" phi0="pi/(VertexEndcapModules-0.1)" module="SiVertexEndcapModule1"/>
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin1) / 2" zstart="VertexEndcap_z1 - VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0.546*cm" phi0="pi/(VertexEndcapModules)" module="SiVertexEndcapModule1"/>
             </layer>
             <layer id="1"  vis="SiVertexLayerVis">
-                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin1) / 2" zstart="VertexEndcap_z1+VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0.546*cm" phi0="pi/(VertexEndcapModules-0.1)" module="SiVertexEndcapModule2"/>
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin1) / 2" zstart="VertexEndcap_z1+VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0.546*cm" phi0="pi/(VertexEndcapModules)" module="SiVertexEndcapModule2"/>
             </layer>
             <layer id="2"  vis="SiVertexLayerVis">
-                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin2) / 2" zstart="VertexEndcap_z2-VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0.546*cm" phi0="pi/(VertexEndcapModules-0.1)" module="SiVertexEndcapModule1"/>
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin2) / 2" zstart="VertexEndcap_z2-VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0.546*cm" phi0="pi/(VertexEndcapModules)" module="SiVertexEndcapModule1"/>
             </layer>
             <layer id="3"  vis="SiVertexLayerVis">
-                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin2) / 2" zstart="VertexEndcap_z2+VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0.546*cm" phi0="pi/(VertexEndcapModules-0.1)" module="SiVertexEndcapModule2"/>
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin2) / 2" zstart="VertexEndcap_z2+VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0.546*cm" phi0="pi/(VertexEndcapModules)" module="SiVertexEndcapModule2"/>
             </layer>
             <layer id="4"  vis="SiVertexLayerVis">
-                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin3) / 2" zstart="VertexEndcap_z3-VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0.546*cm" phi0="pi/(VertexEndcapModules-0.1)" module="SiVertexEndcapModule1"/>
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin3) / 2" zstart="VertexEndcap_z3-VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0.546*cm" phi0="pi/(VertexEndcapModules)" module="SiVertexEndcapModule1"/>
             </layer>
             <layer id="5"  vis="SiVertexLayerVis">
-                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin3) / 2" zstart="VertexEndcap_z3+VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0.546*cm" phi0="pi/(VertexEndcapModules-0.1)" module="SiVertexEndcapModule2"/>
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin3) / 2" zstart="VertexEndcap_z3+VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0.546*cm" phi0="pi/(VertexEndcapModules)" module="SiVertexEndcapModule2"/>
             </layer>
         </detector>
     </detectors> 
