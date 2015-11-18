@@ -102,32 +102,32 @@
             </module>
             <layer module="VtxBarrelModuleInner1" id="0" vis="SiVertexBarrelLayerVis">
                 <barrel_envelope inner_r="VertexBarrel_r1 - 0.08*cm" outer_r="VertexBarrel_r1 + 0.1*cm" z_length="VertexBarrel_zmax * 2"/>
-                <rphi_layout phi_tilt="2.5*deg" nphi="16" phi0="0" rc="VertexBarrel_r1" dr="0"/>
+                <rphi_layout phi_tilt="6*deg" nphi="16" phi0="0" rc="VertexBarrel_r1" dr="0"/>
                 <z_layout dr="0.0" z0="0.0" nz="1"/>
             </layer>
             <layer module="VtxBarrelModuleInner2" id="1" vis="SiVertexBarrelLayerVis">
                 <barrel_envelope inner_r="VertexBarrel_r2 -0.1*cm" outer_r="VertexBarrel_r2 + 0.25*cm" z_length="VertexBarrel_zmax * 2"/>
-                <rphi_layout phi_tilt="2.5*deg" nphi="16" phi0="0" rc="VertexBarrel_r2" dr="0"/>
+                <rphi_layout phi_tilt="6*deg" nphi="16" phi0="0" rc="VertexBarrel_r2" dr="0"/>
                 <z_layout dr="0.0" z0="0.0" nz="1"/>
             </layer>
             <layer module="VtxBarrelModuleOuter1" id="2" vis="SiVertexBarrelLayerVis">
                 <barrel_envelope inner_r="VertexBarrel_r3 - 0.25*cm" outer_r="VertexBarrel_r3 + 0.1*cm" z_length="VertexBarrel_zmax * 2"/>
-                <rphi_layout phi_tilt="2.*deg" nphi="12" phi0="0.0" rc="VertexBarrel_r3" dr="0.0"/>
+                <rphi_layout phi_tilt="6.1*deg" nphi="12" phi0="0.0" rc="VertexBarrel_r3" dr="0.0"/>
                 <z_layout dr="0.0" z0="0.0" nz="1"/>
             </layer>
             <layer module="VtxBarrelModuleOuter2" id="3" vis="SiVertexBarrelLayerVis">
                 <barrel_envelope inner_r="VertexBarrel_r4 - 0.1*cm" outer_r="VertexBarrel_r4 +0.25*cm" z_length="VertexBarrel_zmax * 2"/>
-                <rphi_layout phi_tilt="2.*deg" nphi="12" phi0="0.0" rc="VertexBarrel_r4" dr="0"/>
+                <rphi_layout phi_tilt="6.1*deg" nphi="12" phi0="0.0" rc="VertexBarrel_r4" dr="0"/>
                 <z_layout dr="0.0" z0="0.0" nz="1"/>
             </layer>
             <layer module="VtxBarrelModuleOuter1" id="4" vis="SiVertexBarrelLayerVis">
                 <barrel_envelope inner_r="VertexBarrel_r5 - 0.25*cm" outer_r="VertexBarrel_r5 + 0.1*cm" z_length="VertexBarrel_zmax * 2"/>
-                <rphi_layout phi_tilt="3.*deg" nphi="16" phi0="0.0" rc="VertexBarrel_r5" dr="0"/>
+                <rphi_layout phi_tilt="6.1*deg" nphi="16" phi0="0.0" rc="VertexBarrel_r5" dr="0"/>
                 <z_layout dr="0.0" z0="0.0" nz="1"/>
             </layer>
             <layer module="VtxBarrelModuleOuter2" id="5" vis="SiVertexBarrelLayerVis">
                 <barrel_envelope inner_r="VertexBarrel_r6-0.1*cm" outer_r="VertexBarrel_r6 +0.25*cm" z_length="VertexBarrel_zmax * 2"/>
-                <rphi_layout phi_tilt="3.*deg" nphi="16" phi0="0.0" rc="VertexBarrel_r6" dr="0"/>
+                <rphi_layout phi_tilt="6.1*deg" nphi="16" phi0="0.0" rc="VertexBarrel_r6" dr="0"/>
                 <z_layout dr="0.0" z0="0.0" nz="1"/>
             </layer>
         </detector>
@@ -172,14 +172,17 @@
     
     
     <plugins>
+		
       <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
         <argument value="VertexBarrel"/>
         <argument value="dimension=2"/>
       </plugin>
+      
       <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
         <argument value="VertexEndcap"/>
         <argument value="dimension=2"/>
       </plugin>
+      
     </plugins>
     
 </lccdd>
