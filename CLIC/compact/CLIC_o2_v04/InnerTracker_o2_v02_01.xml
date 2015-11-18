@@ -61,11 +61,12 @@
             </shape>
             
             
-            <comment>Outer Tracker Assembly</comment>
+            <comment>Inner Tracker Assembly</comment>
             <composite name="InnerTrackerBarrel"/>
             <composite name="InnerTrackerEndcap"/>
             <composite name="InnerTrackerBarrelSupport"/>
             <composite name="InnerTrackerEndcapSupport"/>            
+            <composite name="BeampipeShell"/>                        
         </detector>
     </detectors>
     
@@ -304,6 +305,16 @@
 	           <slice material="CarbonFiber" thickness="1.04/3.7*cm" />
            </layer>           
         </detector>
+        
+        
+        <detector name="BeampipeShell" type="ConicalSupport_o1_v01" reflect="true" insideTrackingVolume="true">
+		  <envelope>
+            <shape type="Assembly"/>
+          </envelope>
+            <section start="337*mm"  end="ConeBeamPipe_zmax"        rMin1="29.4*mm+5*mm"  rMin2="235.2*mm+5*mm" rMax1="33.4*mm+6*mm"           rMax2="ConeBeamPipe_rmax+6*mm" material="CarbonFiber" name="ConeSupport" vis="SupportVis"/>
+            <section start="2080*mm" end="InnerTracker_half_length" rMin1="235.2*mm+5*mm" rMin2="235.2*mm+5*mm" rMax1="ConeBeamPipe_rmax+6*mm" rMax2="ConeBeamPipe_rmax+6*mm" material="CarbonFiber" name="TubeSupport" vis="SupportVis"/>
+        </detector>
+        
         
     </detectors>
     

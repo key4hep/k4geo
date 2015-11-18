@@ -223,7 +223,7 @@
     <include ref="BeamInstrumentation_o1_v01_01.xml"/>    
     
     <include ref="Vertex_o2_v03_01.xml"/>
-    
+ 
     <include ref="InnerTracker_o2_v02_01.xml"/> 
     <include ref="OuterTracker_o2_v02_01.xml"/>
     
@@ -271,5 +271,6 @@
              outer_radius="Solenoid_Coil_radius">
       </field>
     </fields> 
+    
 </lccdd>
 

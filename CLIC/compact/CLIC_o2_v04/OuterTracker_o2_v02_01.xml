@@ -37,7 +37,7 @@
             <composite name="OuterTrackerBarrel"/>
             <composite name="OuterTrackerEndcap"/>
             <composite name="OuterTrackerBarrelSupport"/>
-            <composite name="OuterTrackerEndcapSupport"/>  
+            <composite name="OuterTrackerEndcapSupport"/>             
         </detector>
     </detectors>
     
