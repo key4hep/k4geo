@@ -184,7 +184,7 @@
     </detectors>
     
     
-    <detectors>
+    <detectors>	
         <detector name="OuterTrackerBarrelSupport" type="TrackerBarrelSupport_o1_v01" id="0" insideTrackingVolume="true" reflect="true" >
             <envelope>
                 <shape type="Assembly"/>

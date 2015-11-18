@@ -49,11 +49,6 @@
         
         <constant name="DetID_LumiCal"          value=" 15"/>
         <constant name="DetID_BeamCal"          value=" 16"/>
-
-        <!-- Not needed anymore since using the ECal IDs -->        
-<!--         <constant name="DetID_ECAL_ENDCAP_FACE"    value="18"/> -->
-<!--         <constant name="DetID_ECAL_BARREL_FACE"    value="19"/> -->
-        
         
         <constant name="CentralBeamPipe_zmax" value="308.*mm"/>
         <constant name="CentralBeamPipe_rmax" value="30.0*mm"/>
@@ -229,7 +224,7 @@
     
     <include ref="Vertex_o2_v03_01.xml"/>
     
-    <include ref="InnerTracker_o2_v02_01.xml"/>
+    <include ref="InnerTracker_o2_v02_01.xml"/> 
     <include ref="OuterTracker_o2_v02_01.xml"/>
     
     <include ref="ECalBarrel_o2_v01_01.xml"/>
@@ -275,6 +270,6 @@
              zmax="Solenoid_Coil_half_length"
              outer_radius="Solenoid_Coil_radius">
       </field>
-    </fields>
+    </fields> 
 </lccdd>
 
