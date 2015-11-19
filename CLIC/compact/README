@@ -1,0 +1,33 @@
+CLIC_o1_v01
+-Windmill vertex (ass in engineering design)
+-Thick petals with gaps
+-Tracker modules do not have right material budget
+- LLR ECal Barrel
+-Generil ECalEndcap
+-Polyhedral HCal, Solenoid and Yoke
+
+CLIC_o1_v01
+-Staggered vertex (for software compatibility)
+-Thick petals with gaps
+-Tracker modules do not have right material budget
+- LLR ECal Barrel
+-Polyhedral HCal, Solenoid and Yoke
+
+CLIC_o1_v02
+-Tracker modules do not have right material budget
+-Polyhedral ECal
+-Polyhedral HCal, Solenoid and Yoke
+
+CLIC_o1_v03
+-Tracker modules with right material budget and support tubes
+-One additional forward disk in tracker
+-Redesigned tracker layout
+-Generic ECal (GenericCalo has interface to Pandora)
+-Generic HCal, Solenoid and Yoke
+
+CLIC_o1_v04
+-Redesigned beampipe
+-Closed gaps in petals and corrected material budget
+-Added support shell for airflow around beampipe
+-Added surfaces to all necessary support structures
+
