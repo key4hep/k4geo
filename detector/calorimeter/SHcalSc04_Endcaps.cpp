@@ -68,6 +68,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   // The way to reaad constant from XML/LCDD file.
   double      Hcal_radiator_thickness          = lcdd.constant<double>("Hcal_radiator_thickness");
   double      Hcal_lateral_structure_thickness = lcdd.constant<double>("Hcal_lateral_structure_thickness");
+  double      Hcal_endcap_layer_air_gap        = lcdd.constant<double>("Hcal_endcap_layer_air_gap");
   double      Hcal_layer_air_gap               = lcdd.constant<double>("Hcal_layer_air_gap");
   double      Hcal_endcap_zmin                 = lcdd.constant<double>("Hcal_endcap_zmin");
 
@@ -152,9 +153,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	DetElement  layer(stave_det,layer_name,det_id);
 	
 	// Active Layer box & volume
-	double active_layer_dim_x = box_half_x - Hcal_lateral_structure_thickness;
+	double active_layer_dim_x = box_half_x - Hcal_lateral_structure_thickness - Hcal_endcap_layer_air_gap;
 	double active_layer_dim_y = layer_thickness/2.0;
-	double active_layer_dim_z = box_half_z;
+	double active_layer_dim_z = box_half_z;// - Hcal_lateral_structure_thickness - Hcal_endcap_layer_air_gap;
 	
 	// Build chamber including air gap
 	// The Layer will be filled with slices, 
