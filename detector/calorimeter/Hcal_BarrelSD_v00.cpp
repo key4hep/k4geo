@@ -11,12 +11,12 @@
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"
-#include "DDSimExceptions.h"
+#include "LcgeoExceptions.h"
 
 using namespace std;
 using namespace DD4hep;
 using namespace DD4hep::Geometry;
-using namespace DDSim ;
+using namespace lcgeo ;
 
 
 static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens)  {

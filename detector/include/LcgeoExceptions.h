@@ -8,7 +8,7 @@
 
 #include <exception> 
 
-namespace DDSim {
+namespace lcgeo {
   
   //define some exception to throw
   class GeometryException : public std::exception{

@@ -1,5 +1,5 @@
 //====================================================================
-//  DDSim - LC detector models in DD4hep 
+//  lcgeo - LC detector models in DD4hep 
 //--------------------------------------------------------------------
 //  DD4hep Geometry driver for SiWEcalBarrel
 //  Ported from Mokka

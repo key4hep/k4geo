@@ -8,12 +8,12 @@
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"
-#include "DDSimExceptions.h"
+#include "LcgeoExceptions.h"
 
 using namespace std;
 using namespace DD4hep;
 using namespace DD4hep::Geometry;
-using namespace DDSim ;
+using namespace lcgeo ;
 
 // workaround for DD4hep v00-14 (and older)
 #ifndef DD4HEP_VERSION_GE

@@ -17,7 +17,7 @@ from array import array
 from pyLCIO import UTIL, EVENT, IMPL, IO, IOIMPL
 
 #---- number of events per momentum bin -----
-nevt = 100
+nevt = 1000
 
 outfile = "mcparticles.slcio"
 
@@ -28,6 +28,8 @@ wrt = IOIMPL.LCFactory.getInstance().createLCWriter( )
 
 wrt.open( outfile , EVENT.LCIO.WRITE_NEW ) 
 
+print " opened outfile: " , outfile
+
 random.seed()
 
 
@@ -37,16 +39,25 @@ random.seed()
 momenta = [ 5. ]
 
 genstat  = 1
-pdg = 13
+pdg = -13
+charge = +1.
 #pdg = 211
 mass =  0.105658 
-charge = -1.
 theta = 85./180. * math.pi 
 #theta = 20./180. * math.pi 
 
 decayLen = 1.e32 
 #=================================================
 
+# write a RunHeader
+run = IMPL.LCRunHeaderImpl() 
+run.setRunNumber( 0 ) 
+run.parameters().setValue("Generator","${lcgeo}_DIR/examples/lcio_particle_gun.py")
+run.parameters().setValue("PDG", pdg )
+run.parameters().setValue("Charge", charge )
+run.parameters().setValue("Mass", mass )
+wrt.writeRunHeader( run ) 
+#================================================
 
 
 for p in momenta:

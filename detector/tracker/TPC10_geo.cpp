@@ -1,12 +1,13 @@
 //====================================================================
-//  DDSim - LC detector models in DD4hep 
+//  lcgeo - LC detector models in DD4hep 
 //--------------------------------------------------------------------
 //  F.Gaede, DESY
 //  $Id$
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/DD4hepUnits.h"
-#include "DDSimExceptions.h"
+#include "LcgeoExceptions.h"
+#include "lcgeo.h"
 #include "DDRec/Surface.h"
 #include "DDRec/DetectorData.h"
 #include "XML/Utilities.h"
@@ -14,12 +15,11 @@
 
 #include <math.h>
 
-
 using namespace std;
 using namespace DD4hep;
 using namespace dd4hep ;
 using namespace DD4hep::Geometry;
-using namespace DDSim ;
+using namespace lcgeo ;
 using namespace DDRec ;
 
 /** Construction of TPC detector, ported from Mokka driver TPC10.cc
@@ -61,6 +61,10 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   PlacedVolume pv;  
 
   sens.setType("tracker");
+
+
+
+  std::cout << " ** building TPC10_geo in lcgeo " << lcgeo::versionString() << std::endl ;
 
   //   //######################################################################################################################################################################
   //   //  code ported from TPC10::construct() :

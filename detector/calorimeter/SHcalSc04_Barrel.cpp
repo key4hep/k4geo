@@ -1,5 +1,5 @@
 //====================================================================
-//  DDSim - LC detector models in DD4hep 
+//  lcgeo - LC detector models in DD4hep 
 //--------------------------------------------------------------------
 //  DD4hep Geometry driver for HcalBarrel
 //  Ported from Mokka
@@ -43,12 +43,12 @@
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"
-#include "DDSimExceptions.h"
+#include "LcgeoExceptions.h"
 
 using namespace std;
 using namespace DD4hep;
 using namespace DD4hep::Geometry;
-using namespace DDSim ;
+using namespace lcgeo ;
 
 
 // After reading in all the necessary parameters.
