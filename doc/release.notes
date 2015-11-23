@@ -1,3 +1,10 @@
+A.Sailer 23/11/2015
+----------------------
+ - Added information to the lcio runHeader in ddsim. This needs the DD4hep revision 1984!
+   * The steeringFile content, commandline and resulting ddsim parameters are written
+   * geant4 and dd4hep version is written directly in dd4hep.
+   * user, workingdirectory and date are written as well
+
 A.Sailer 06/10/2015
 ----------------------
  - ddsim python simulator
