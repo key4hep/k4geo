@@ -112,9 +112,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     vector<PlacedVolume> sensitives;
     
-    int s_num = 1;
+    int s_num = 0;
     double sliceZ = -l_thick/2;
     double totalAbsorberThickness=0.;
+    double sens_pos= 0.;
+
     for(xml_coll_t s(x_layer,_U(slice)); s; ++s)  {
       xml_comp_t x_slice = s;
       string     s_name  = _toString(s_num,"slice%d");
@@ -129,6 +131,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         sens.setType("calorimeter");
         s_vol.setSensitiveDetector(sens);
         sensitives.push_back(s_phv);
+        sens_pos = sliceZ;
+
       }
       
       if( x_slice.isRadiator() ==true)
@@ -139,6 +143,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     }
     l_vol.setVisAttributes(lcdd.visAttributes(x_layer.visStr()));
     if ( l_repeat <= 0 ) throw std::runtime_error(x_det.nameStr()+"> Invalid repeat value");
+    
     for(int j=0; j<l_repeat; ++j) {
       string phys_lay = _toString(l_num,"layer%d");
       layerZ += l_thick/2;
@@ -154,14 +159,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       
       ///FIXME: IS ORIENTATION RIGHT? WHICH SIDE DO WE NEED TO ADD TO STRUCTURE?
       DDRec::LayeredCalorimeterData::Layer caloLayer ;
-      caloLayer.distance = zmin +  totalThickness/2 + layerZ;
+      caloLayer.distance = zmin +  totalThickness/2 + layerZ+sens_pos ;
       caloLayer.thickness = l_thick;
       caloLayer.absorberThickness = totalAbsorberThickness;
       caloLayer.cellSize0 = cell_sizeX;
       caloLayer.cellSize1 = cell_sizeY; 
       
       caloData->layers.push_back( caloLayer ) ;
-//       std::cout<<"Layer "<<j<<" distance= " <<caloLayer.distance << " layerZ= " << layerZ<<std::endl;
+      std::cout<<"Layer "<<j<<" distance= " <<caloLayer.distance/dd4hep::mm << " layerZ= " << layerZ/dd4hep::mm <<" zmin: "<<zmin/dd4hep::mm<<std::endl;
       layerZ += l_thick/2;
       ++l_num;
     }

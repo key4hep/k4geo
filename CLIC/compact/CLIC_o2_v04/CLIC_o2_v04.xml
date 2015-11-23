@@ -2,8 +2,8 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
     
-    <info name="CLIC"
-        title="CLIC"
+    <info name="CLIC_o2_v04"
+        title="CLIC detector model option 2 version 04"
         author="Marko Petric"
         url="https://twiki.cern.ch/twiki/bin/view/CLIC/NewCLIC"
         status="development"

@@ -104,7 +104,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens) {
 //  PolyhedraRegular polyhedra(nsides, rmin, rmin + totalThickness, detZ);
 //  Volume envelopeVol(det_name, polyhedra, air);
 
-std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl;
+// std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl;
 
   // Add the subdetector envelope to the structure.
   double innerAngle = 2 * M_PI / nsides;
@@ -134,6 +134,7 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
 
   //#### LayeringExtensionImpl* layeringExtension = new LayeringExtensionImpl();
   //#### Position layerNormal(0,0,1);
+      std::cout<<"XXX "<<std::setprecision(8);
 
   for (xml_coll_t c(x_det, _U(layer)); c; ++c) {
     xml_comp_t x_layer = c;
@@ -156,10 +157,11 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
 
       // Create the slices (sublayers) within the layer.
       double slice_pos_z = -(layer_thickness / 2);
-      int slice_number = 1;
+      int slice_number = 0;
       
       double totalAbsorberThickness=0.;
-      
+      double sens_pos= 0.;
+
       for (xml_coll_t k(x_layer, _U(slice)); k; ++k) {
         xml_comp_t x_slice = k;
         string slice_name = _toString(slice_number, "slice%d");
@@ -179,6 +181,7 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
         if (x_slice.isSensitive()) {
           sens.setType("calorimeter");
           slice_vol.setSensitiveDetector(sens);
+          sens_pos = slice_pos_z;
         } 
         // Set region, limitset, and vis.
         slice_vol.setAttributes(lcdd, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
@@ -198,10 +201,11 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
       PlacedVolume layer_phv = staveInnerVol.placeVolume(layer_vol, Position(0, 0, layer_pos_z));
       layer_phv.addPhysVolID("layer", layer_num);
       layer.setPlacement(layer_phv);
+
+      caloLayer.distance = rmin+layer_pos_z + staveThickness / 2 + sens_pos; //NEED TO START FROM ORIGIN
       
-      
-      ///FIXME! CHECK IF THEY ARE RIGHT. MIGHT BE OFF BY SOME TRIG FUNCTION OF SOME ANGLE
-      caloLayer.distance = rmin+layer_pos_z + staveThickness / 2; //NEED TO START FROM ORIGIN
+      std::cout<<" "<< caloLayer.distance/dd4hep::mm;
+
       caloLayer.thickness = layer_thickness;
       caloLayer.absorberThickness = totalAbsorberThickness;
       caloLayer.cellSize0 = cell_sizeX;
@@ -217,6 +221,8 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
       ++layer_num;
     }
   }
+  
+  std::cout<<std::endl;
 
   // Add stave inner physical volume to outer stave volume.
   staveOuterVol.placeVolume(staveInnerVol);
