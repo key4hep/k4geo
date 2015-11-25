@@ -17,3 +17,6 @@ SIM.enableGun = True
 SIM.part.minimalKineticEnergy = 1*MeV
 
 SIM.action.mapActions['tpc'] = "TPCSDAction"
+
+## if there is a user provided SDAction which needs additional parameters these can be passed as a dictionary
+SIM.action.mapActions['ecal'] = ( "CaloPreShowerSDAction", {"FirstLayerNumber": 1} )
