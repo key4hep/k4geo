@@ -172,7 +172,7 @@
 
     <include ref="BeamCal.xml"/>
 
-    <include ref="Beampipe.xml"/>
+    <include ref="BeamPipe.xml"/>
 
     <comment>Dead material and supports</comment>
     <comment>Vertex Detector Supports and Readout</comment>
