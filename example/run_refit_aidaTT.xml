@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!--##########################################
+    #                                        #
+    #     Example steering file for marlin   #
+    #                                        #
+    ##########################################-->
+
+
+<marlin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ilcsoft.desy.de/marlin/marlin.xsd">
+ <execute>
+   <!-- <processor name="MyFixCellIDs" /> -->
+   <processor name="InitDD4hep"/>
+   <processor name="MyRefitProcessor"/>
+   <processor name="MyLCIOOutputProcessor"/>  
+ </execute>
+
+ <global>
+  <parameter name="LCIOInputFiles"> simjob.slcio </parameter>
+  <!-- limit the number of processed records (run+evt): -->  
+  <parameter name="MaxRecordNumber" value="0" />  
+  <parameter name="SkipNEvents" value="0" />  
+  <parameter name="SupressCheck" value="false" />  
+  <parameter name="GearXMLFile" value="gear_ILD_o1_v05.xml"/>
+  <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MESSAGE DEBUG0</parameter> 
+  <parameter name="RandomSeed" value="1234567890" />
+  <!-- optionally limit the collections that are read from the input file: -->  
+  <!--parameter name="LCIOReadCollectionNames">MCParticle PandoraPFOs</parameter-->
+ </global>
+
+
+ <processor name="MyLCIOOutputProcessor" type="LCIOOutputProcessor">
+  <!--   standard output: full reconstruction keep all collections -->
+  <parameter name="LCIOOutputFile" type="string" >
+       refit_outputfile.slcio
+  </parameter>
+  <parameter name="LCIOWriteMode" type="string" value="WRITE_NEW"/>
+  <!--parameter name="SplitFileSizekB" type="int" value="1992294"/-->
+ </processor>
+
+ <processor name="MyFixCellIDs" type="FixCellIDs">
+   <!--if true, the side is decoded as +-1 in the cellID for the VXD (zplanar hits)-->
+   <parameter name="SetSideForVXD" type="bool"> true </parameter>
+   <!--Name of the VXD TrackerHit collection-->
+   <parameter name="VXDCollectionName" type="string" lcioInType="TrackerHit"> VXDTrackerHits </parameter>
+   <!--if true, the side is decoded as +-1 in the cellID for the TPC (zplanar hits)-->
+   <parameter name="SetSideForTPC" type="bool"> true </parameter>
+   <!--Name of the TPC TrackerHit collection-->
+   <parameter name="TPCCollectionName" type="string" lcioInType="TrackerHit"> TPCTrackerHits </parameter>
+   <!-- add  LayerOffset to layer index in cellID-->
+   <parameter name="LayerOffset" type="int"> 0 </parameter>
+   <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+   <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+ </processor>
+
+
+ <processor name="InitDD4hep" type="InitializeDD4hep">
+ <!--InitializeDD4hep reads a compact xml file and initializes the DD4hep::LCDD object-->
+  <!--Name of the DD4hep compact xml file to load-->
+  <parameter name="DD4hepXMLFile" type="string">
+    /data/ilcsoft/HEAD/lcgeo/HEAD/ILD/compact/ILD_o1_v05/ILD_o1_v05.xml
+  </parameter>
+</processor>
+
+ <processor name="MyRefitProcessor" type="RefitProcessor">
+ <!--RefitProcessor refits an input track collection, producing a new collection of tracks.-->
+
+ <!--Fit direction: -1: backward [default], +1: forward-->
+  <parameter name="FitDirection" type="int"> 1 </parameter>
+  <!--Use Energy Loss in Fit-->
+  <!-- TrackState to use for initialization of the fit: -1: refit from hits [default], 1: AtIP, 2: AtFirstHit, 3: AtLastHit, 4:AtCalo -->
+  <parameter name="InitialTrackState" type="int"> -1</parameter>
+  <parameter name="EnergyLossOn" type="bool"> true </parameter>
+  <!--Value used for the initial d0 variance of the trackfit-->
+  <parameter name="InitialTrackErrorD0" type="float">1e+06 </parameter>
+  <!--Value used for the initial omega variance of the trackfit-->
+  <parameter name="InitialTrackErrorOmega" type="float"> 0.0001</parameter>
+  <!--Value used for the initial phi0 variance of the trackfit-->
+  <parameter name="InitialTrackErrorPhi0" type="float">100 </parameter>
+  <!--Value used for the initial tanL variance of the trackfit-->
+  <parameter name="InitialTrackErrorTanL" type="float">100 </parameter>
+  <!--Value used for the initial z0 variance of the trackfit-->
+  <parameter name="InitialTrackErrorZ0" type="float"> 1e+06 </parameter>
+  <!--Name of the input track collection-->
+  <parameter name="InputTrackCollectionName" type="string" lcioInType="Track">  MarlinTrkTracks ExtrapolatedTracks ClupatraTracks SiTracks </parameter>
+  <!--Name of the MCParticle-Track Relations collection for input tracks-->
+  <parameter name="InputTrackRelCollection" type="string" lcioInType="LCRelation">XXX </parameter>
+  <!--Maximum Chi-squared value allowed when assigning a hit to a track-->
+  <parameter name="MaxChi2PerHit" type="float">1000 </parameter>
+  <!--Use MultipleScattering in Fit-->
+  <parameter name="MultipleScatteringOn" type="bool"> true </parameter>
+  <!--Name of the output track collection-->
+  <parameter name="OutputTrackCollectionName" type="string" lcioOutType="Track">AidaTTTracks </parameter>
+  <!--Name of the MCParticle-Track Relations collection for output tracks-->
+  <parameter name="OutputTrackRelCollection" type="string" lcioOutType="LCRelation"> XXX </parameter>
+  <!--Smooth All Mesurement Sites in Fit-->
+  <parameter name="SmoothOn" type="bool"> true </parameter>
+  <!--Name of the track fitting system to be used (KalTest, DDKalTest, aidaTT, ... )-->
+  <parameter name="TrackSystemName" type="string"> AidaTT DDKalTest </parameter>
+  <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+  <parameter name="Verbosity" type="string"> MESSAGE DEBUG </parameter>
+</processor>
+
+</marlin>
