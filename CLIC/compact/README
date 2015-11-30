@@ -1,11 +1,11 @@
-Production/Recomended version = CLIC_o2_v04
+Production/Recommended version = CLIC_o2_v04
 
 CLIC_o1_v01
--Windmill vertex (ass in engineering design)
+-Windmill vertex (as in engineering design)
 -Thick petals with gaps
 -Tracker modules do not have right material budget
 - LLR ECal Barrel
--Generil ECalEndcap
+-Generic ECalEndcap
 -Polyhedral HCal, Solenoid and Yoke
 
 CLIC_o1_v01
