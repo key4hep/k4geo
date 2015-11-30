@@ -1,5 +1,5 @@
 from DDSim.DD4hepSimulation import DD4hepSimulation
-from SystemOfUnits import mm, GeV, MeV
+from SystemOfUnits import mm, GeV, MeV, keV
 
 SIM = DD4hepSimulation()
 SIM.compactFile = "/data/sailer/software/LCGeo_Auth/ILD/compact/ILD_o1_v05/ILD_o1_v05.xml"
@@ -20,3 +20,9 @@ SIM.action.mapActions['tpc'] = "TPCSDAction"
 
 ## if there is a user provided SDAction which needs additional parameters these can be passed as a dictionary
 SIM.action.mapActions['ecal'] = ( "CaloPreShowerSDAction", {"FirstLayerNumber": 1} )
+
+## add filter to sensitive detectors:
+SIM.filter.mapDetFilter = {"VXD": "edep1kev"} ## default filter
+SIM.filter.mapDetFilter = {"FT": "geantino"} ## default filter
+SIM.filter.mapDetFilter = {"FTD": "edep3kev"} ## custom filter
+SIM.filter.filters['edep3kev'] = dict(name="EnergyDepositMinimumCut/3keV", parameter={"Cut": 3.0*keV} )

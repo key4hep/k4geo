@@ -1,3 +1,9 @@
+A.Sailer 30/11/2015
+----------------------
+  - Added steering of filter to ddsim
+    * assign filters to sensitive detectors
+    * create your own filters
+
 A.Sailer 23/11/2015
 ----------------------
  - Added information to the lcio runHeader in ddsim. This needs the DD4hep revision 1984!
