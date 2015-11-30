@@ -3,6 +3,8 @@ A.Sailer 30/11/2015
   - Added steering of filter to ddsim
     * assign filters to sensitive detectors
     * create your own filters
+  - Added dumpSteeringFile option to ddsim
+    * prints steeringFile to stdout with current values as default
 
 A.Sailer 23/11/2015
 ----------------------
