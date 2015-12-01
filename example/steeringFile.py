@@ -22,7 +22,11 @@ SIM.action.mapActions['tpc'] = "TPCSDAction"
 SIM.action.mapActions['ecal'] = ( "CaloPreShowerSDAction", {"FirstLayerNumber": 1} )
 
 ## add filter to sensitive detectors:
+# Either assign dict
 SIM.filter.mapDetFilter = {"VXD": "edep1kev"} ## default filter
-SIM.filter.mapDetFilter = {"FT": "geantino"} ## default filter
-SIM.filter.mapDetFilter = {"FTD": "edep3kev"} ## custom filter
+# or use bracket operator
+SIM.filter.mapDetFilter['VXD'] = "edep1kev" ## default filter
+SIM.filter.mapDetFilter['FTD'] = ["edep3kev","geantino"] ## custom filter
+
+#create your own filter with a dict containing name and parameter
 SIM.filter.filters['edep3kev'] = dict(name="EnergyDepositMinimumCut/3keV", parameter={"Cut": 3.0*keV} )
