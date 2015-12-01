@@ -1217,11 +1217,18 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     Vector3D vp( 0. , 1. , 0. ) ;
     Vector3D np( 0. , 0. , 1. ) ;
 
-    VolPlane surfPi( aluEndcapInnerLog , SurfaceType(SurfaceType::Helper) , inner_thick , outer_thick, up,vp,np) ;
+    // need to set the origin of this helper plane to be inside the material ( otherwise it would pick up the vacuum at the origin)
+    double mid_r = 0.5 * ( cryostat_apperture - cryostat_apperture_radius +  rInner  ) ;
+    Vector3D op_i( 0. , mid_r , 0. ) ;
+
+    VolPlane surfPi( aluEndcapInnerLog , SurfaceType(SurfaceType::Helper) , inner_thick , outer_thick, up,vp,np, op_i ) ;
     volSurfaceList( suppFwdInDE )->push_back( surfPi ) ;
     volSurfaceList( suppBwdInDE )->push_back( surfPi ) ;
     
-    VolPlane surfPo( aluEndcapOuterLog , SurfaceType(SurfaceType::Helper) , inner_thick , outer_thick, up,vp,np) ;
+    mid_r = 0.5 * ( cryostat_apperture + cryostat_apperture_radius + rSty + drSty ) ;
+    Vector3D op_o( 0. , mid_r , 0. ) ;
+
+    VolPlane surfPo( aluEndcapOuterLog , SurfaceType(SurfaceType::Helper) , inner_thick , outer_thick, up,vp,np, op_o) ;
     volSurfaceList( suppFwdOutDE )->push_back( surfPo ) ;
     volSurfaceList( suppBwdOutDE )->push_back( surfPo ) ;
     //============================================================

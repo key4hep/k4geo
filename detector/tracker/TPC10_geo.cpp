@@ -567,8 +567,12 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
   Vector3D u( 0. , 1. , 0. ) ;
   Vector3D v( 1. , 0. , 0. ) ;
   Vector3D n( 0. , 0. , 1. ) ;
+
+  // need to set the origin of this helper plane to be inside the material ( otherwise it would pick up the vacuum at the origin)
+  double mid_r = 0.5 * ( rOuter + rInner ) ;
+  Vector3D o( 0. , mid_r , 0. ) ;
   
-  VolPlane surf( endplateLog , SurfaceType( SurfaceType::Helper ) ,  dz_Endplate / 2.0 + dz_Readout / 2 ,  dz_Endplate / 2.0 , u , v, n ) ;
+  VolPlane surf( endplateLog , SurfaceType( SurfaceType::Helper ) ,  dz_Endplate / 2.0 + dz_Readout / 2 ,  dz_Endplate / 2.0 , u , v, n , o ) ;
   volSurfaceList( endcapDEfwd )->push_back( surf ) ;
   volSurfaceList( endcapDEbwd )->push_back( surf ) ;
 
