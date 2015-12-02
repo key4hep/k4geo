@@ -73,8 +73,12 @@
     
     <display>
         <vis name="InnerTrackerLayerVis"   alpha="1.0" r="1.0" g="1.0" b="0.6" showDaughters="true" visible="true"/>
-        <vis name="InnerTrackerModuleVis"  alpha="0.1" r="0.0" g="1.0" b="0.6" showDaughters="false" visible="true"/>
+        <vis name="InnerTrackerModuleVis"  alpha="0.1" r="0.0" g="1.0" b="0.6" showDaughters="true" visible="false"/>
         <vis name="InnerTrackerForwardVis" alpha="1.0" r="0.8" g="0.1" b="0.1" showDaughters="false" visible="true"/>
+        <vis name="RedVis" alpha="1.0" r="1" g="0" b="0" showDaughters="true" visible="true"/>
+        <vis name="BlueVis" alpha="1.0" r="0" g="0" b="1" showDaughters="true" visible="true"/>
+
+        
     </display>
     
     <!--  Definition of the readout segmentation/definition  -->
@@ -112,7 +116,7 @@
                 <module_component width="10*cm" length="10*cm" thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
                 <module_component width="10*cm" length="10*cm" thickness="0.12*mm"  material="CarbonFiber_50D" sensitive="false"/>
                 <module_component width="10*cm" length="10*cm" thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                
-                <module_component width="10*cm" length="10*cm" thickness="0.07*mm"  material="Aluminum"        sensitive="false"/>
+                <module_component width="10*cm" length="10*cm" thickness="0.07*mm"  material="Aluminum"        sensitive="false" vis="RedVis"/>
             </module>
  
             <layer module="InnerTrackerBarrelModule" id="0" vis="InnerTrackerLayerVis">
@@ -152,7 +156,7 @@
                 <module_component width="10*cm" length="10*cm" thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
                 <module_component width="10*cm" length="10*cm" thickness="0.12*mm"  material="CarbonFiber_50D" sensitive="false"/>
                 <module_component width="10*cm" length="10*cm" thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                
-                <module_component width="10*cm" length="10*cm" thickness="0.07*mm"  material="Aluminum"        sensitive="false"/>
+                <module_component width="10*cm" length="10*cm" thickness="0.07*mm"  material="Aluminum"        sensitive="false" vis="RedVis"/>
             </module>
             
             <module name="InnerTrackerEndcapModule_1" vis="InnerTrackerModuleVis">
@@ -172,7 +176,7 @@
                 <module_component width="10*cm" length="10*cm" thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
                 <module_component width="10*cm" length="10*cm" thickness="0.12*mm"  material="CarbonFiber_50D" sensitive="false"/>
                 <module_component width="10*cm" length="10*cm" thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                
-                <module_component width="10*cm" length="10*cm" thickness="0.07*mm"  material="Aluminum"        sensitive="false"/>
+                <module_component width="10*cm" length="10*cm" thickness="0.07*mm"  material="Aluminum"        sensitive="false" vis="RedVis"/>
             </module>
             
             
@@ -193,7 +197,7 @@
                 <module_component width="10*cm" length="10*cm" thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
                 <module_component width="10*cm" length="10*cm" thickness="0.12*mm"  material="CarbonFiber_50D" sensitive="false"/>
                 <module_component width="10*cm" length="10*cm" thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                
-                <module_component width="10*cm" length="10*cm" thickness="0.07*mm"  material="Aluminum"        sensitive="false"/>
+                <module_component width="10*cm" length="10*cm" thickness="0.07*mm"  material="Aluminum"        sensitive="false" vis="RedVis"/>
             </module>
             
             <module name="InnerTrackerEndcapModule_3" vis="InnerTrackerModuleVis">
@@ -213,7 +217,7 @@
                 <module_component width="10*cm" length="10*cm" thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
                 <module_component width="10*cm" length="10*cm" thickness="0.12*mm"  material="CarbonFiber_50D" sensitive="false"/>
                 <module_component width="10*cm" length="10*cm" thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                
-                <module_component width="10*cm" length="10*cm" thickness="0.07*mm"  material="Aluminum"        sensitive="false"/>
+                <module_component width="10*cm" length="10*cm" thickness="0.07*mm"  material="Aluminum"        sensitive="false" vis="RedVis"/>
             </module>            
             
             
