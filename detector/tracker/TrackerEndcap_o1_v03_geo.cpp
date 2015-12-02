@@ -141,7 +141,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                 double x = -r*std::cos(phi);
                 double y = -r*std::sin(phi);
                 DetElement module(sdet,m_base+"_pos",det_id);
-                pv = envelope.placeVolume(m_vol,Transform3D(RotationZYX(0,-M_PI/2-phi,-M_PI/2),Position(x,y,zstart+dz)));
+                pv = envelope.placeVolume(m_vol,Transform3D(RotationZYX(M_PI,-M_PI/2-phi,-M_PI/2),Position(x,y,zstart+dz)));
                 pv.addPhysVolID("barrel",1).addPhysVolID("side",0).addPhysVolID("layer", l_id).addPhysVolID("module",mod_num).addPhysVolID("sensor",k);
                 module.setPlacement(pv);
                 for(size_t ic=0; ic<sensVols.size(); ++ic)  {
@@ -151,7 +151,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                 }
                 
                 if ( reflect ) {
-                    pv = envelope.placeVolume(m_vol,Transform3D(RotationZYX(M_PI,-M_PI/2-phi,-M_PI/2),Position(x,y,-zstart-dz)));
+                    pv = envelope.placeVolume(m_vol,Transform3D(RotationZYX(0,-M_PI/2-phi,-M_PI/2),Position(x,y,-zstart-dz)));
                     pv.addPhysVolID("barrel",2).addPhysVolID("side",1).addPhysVolID("layer",l_id).addPhysVolID("module",mod_num).addPhysVolID("sensor",k);
                     DetElement r_module(sdet,m_base+"_neg",det_id);
                     r_module.setPlacement(pv);
