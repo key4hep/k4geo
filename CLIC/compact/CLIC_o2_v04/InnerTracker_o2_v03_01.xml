@@ -329,11 +329,11 @@
     
     
     <plugins>
-        <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
+        <plugin name="TrackerBarrelSurfacePlugin">
             <argument value="InnerTrackerBarrel"/>
-            <argument value="dimension=1"/>
+            <argument value="dimension=2"/>
         </plugin>	
-        <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
+        <plugin name="TrackerEndcapSurfacePlugin">
             <argument value="InnerTrackerEndcap"/>
             <argument value="dimension=2"/>
         </plugin>
