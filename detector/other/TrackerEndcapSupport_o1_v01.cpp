@@ -67,7 +67,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)
       double thick = x_slice.thickness();
       Material mat = lcdd.material(x_slice.materialStr());
       string s_nam = l_nam + _toString(s_num, "_slice%d");
-      Volume s_vol(s_nam, Tube(rmin, rmax, thick), mat);
+      Volume s_vol(s_nam, Tube(rmin, rmax, thick/2.), mat); //NN: Tube is a MyConeSeg, takes half thickness
 
       //Add surface to the support
       double mid_r = 0.5 * ( rmin + rmax ) ;
