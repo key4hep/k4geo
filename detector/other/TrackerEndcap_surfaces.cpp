@@ -32,6 +32,8 @@ void Installer<UserData>::install(DetElement component, PlacedVolume pv)   {
       double si_position         = trans[1];
       double outer_thickness = half_mod_thickness - si_position;
       double inner_thickness = half_mod_thickness + si_position;
+      //After the rotation of the module and placement to the endcap perpendicular to z
+      //the orientation should be n parallel to z, u along r and v along rPhi
       Vector3D u(0.,0.,1.), v(1.,0.,0.), n(0.,1.,0.), o(0.,0.,0.);
 
       VolPlane surf(comp_vol,Type(Type::Sensitive,Type::Measurement1D),
