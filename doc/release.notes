@@ -1,3 +1,23 @@
+N.Nikiforou 04/12/2015
+----------------------
+  - Modified CLIC_o2_v04 to use proper convention for listing slices in module composition.
+    In this convention, when you list a layer or a slice/component in a module, the top-most
+    element in the xml is the component that is closest to the IP (top-most is inner-most).
+  - Created new drivers and new xml files to use them
+     * TrackerBarrel_o1_v03 and TrackerEndcap_o1_v03 used by Inner/OuterTracker_o2_v03.xml
+     * VertexEndcap_o2_v03 used by Vertex_o2_v04_01
+  - Created new surface installer plugins copied from DD4hep that follow the convention discussed above
+    and used by the new drivers. They are listed below with the u,v,n and origin vectors as defined in 
+    the driver coordinate system :
+     * TrackerBarrelSurfacePlugin: u(-1.,0.,0.), v(0.,-1.,0.), n(0.,0.,1.), o(0.,0.,0.)
+        + Assumes the driver builds the module along the original +z axis, with the top-most slice
+          stacked perpendicular to z, closest to (0,0,0) with eventual rotations to place the module
+          in the barrel so that the slice is inner-most. This is the case now in TrackerBarrel_o1_v03 
+     * TrackerEndcapSurfacePlugin: u(0.,0.,1.), v(1.,0.,0.), n(0.,1.,0.), o(0.,0.,0.);
+        + Assumes the driver builds the module along the original +y axis, with the top-most slice
+          stacked perpendicular to y, closest to (0,0,0) with eventual rotations to place the module
+          in the barrel so that the slice is inner-most. This is the case now in TrackerEndcap_o1_v03 
+
 A.Sailer 30/11/2015
 ----------------------
   - Added steering of filter to ddsim
