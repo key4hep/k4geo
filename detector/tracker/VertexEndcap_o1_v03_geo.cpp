@@ -1,12 +1,12 @@
 //====================================================================
-//  AIDA Detector description implementation for LCD
+//  Vertex Detector implementation for the CLIC detector
 //--------------------------------------------------------------------
 //
-//  Author     : N. Nikiforou, modified from SiTrackerEndcap by M.Frank
+//  Author     : M.Petric
 //
 //  Comments: 
 //  Originally Forked from SiTrackerEndcap2 by M. Frank
-//  N. Nikiforou: This version is equivalent to VertexEndcap_o1_v03
+//  N. Nikiforou: This version is equivalent to TrackerEndcap_o1_v03
 //  and is compatible with the convention that modules are built so
 //  the top-most slice in the xml is the inner-most slice (closest to IP)
 //  when placed. This convention allows for the use of the TrackerEndcap_surfaces
@@ -14,10 +14,8 @@
 //====================================================================
 
 #include "DD4hep/DetFactoryHelper.h"
-#include "XML/Utilities.h"
 #include <map>
-#include "DDRec/DetectorData.h"
-
+#include "XML/Utilities.h"
 
 using namespace std;
 using namespace DD4hep;
@@ -44,8 +42,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
     
     //-----------------------------------------------------------------------------------
-    
-    DDRec::ZDiskPetalsData*  zDiskPetalsData = new DDRec::ZDiskPetalsData ;
     
     
     envelope.setVisAttributes(lcdd.invisible());
@@ -81,8 +77,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             c_vol.setVisAttributes(lcdd.visAttributes(c.visStr()));
             pv = m_volume.placeVolume(c_vol,Position(0,posY+c_thick/2,0));
             if ( c.isSensitive() ) {
-//                 sdet.check(n_sensor > 1,"TrackerEndcap:fromCompact: "+c_name+" Max of 1 sensitive elemets allowed!");
-//                 pv.addPhysVolID("sensor",n_sensor); //Not what we call sensor; see below
+                sdet.check(n_sensor > 1,"VertexEndcap::fromCompact: "+c_name+" Max of 1 modules allowed!");
+//                 pv.addPhysVolID("sensor",n_sensor); ///Not needed
                 c_vol.setSensitiveDetector(sens);
                 sensitives[m_nam].push_back(pv);
                 ++n_sensor;
@@ -109,51 +105,15 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             double phi      = phi0;
             Placements& sensVols = sensitives[m_nam];
             
-            DDRec::ZDiskPetalsData::LayerLayout thisLayer ;
-            
-            ///FIXME! ALL THIS NEEDS TO BE CHECKED and actually are not needed for CED
-            thisLayer.typeFlags[ DDRec::ZDiskPetalsData::SensorType::DoubleSided ] = false ; ///CHECK FIXME
-            thisLayer.typeFlags[ DDRec::ZDiskPetalsData::SensorType::Pixel ]     = false ;  ///CHECK
-            
-            DD4hep::Geometry::Trapezoid mod_shape(m_vol.solid());
-            
-            
-            thisLayer.petalHalfAngle   = 0;
-            thisLayer.alphaPetal    = 0. ;  // petals are othogonal to z-axis
-            thisLayer.zPosition     = zstart;
-            thisLayer.petalNumber   = nmodules ;
-            thisLayer.sensorsPerPetal   = 0 ; 
-            thisLayer.phi0      = phi  ;
-            thisLayer.zOffsetSupport    = 0;
-            thisLayer.distanceSupport   = r - mod_shape->GetDZ() ;
-            thisLayer.thicknessSupport    = mod_shape->GetDY() ; //FIXME
-            thisLayer.widthInnerSupport   = 0;
-            thisLayer.widthOuterSupport   = 0;
-            thisLayer.lengthSupport   = 0 ;
-            thisLayer.zOffsetSensitive    = 0 ;
-            thisLayer.distanceSensitive   = r - mod_shape->GetDZ() ; 
-            thisLayer.thicknessSensitive  = 0;
-            thisLayer.widthInnerSensitive =  0 ;
-            thisLayer.widthOuterSensitive = 0 ;
-            thisLayer.lengthSensitive   = 2*mod_shape->GetDZ();
-            
-            zDiskPetalsData->layers.push_back( thisLayer ) ;
-            
-            
-            //NOTE: As in the barrel, what we call "module" in the xml is like a single trapezoidal wafer
-            //For reasons of bit conservation in the encoding and to be more similar to the ILD geometry
-            //A module has to be something that consists of many "sensors" (wafers) 
-            //We chose to do it so one phi-ring is one module. i.e. Modules have constant R
-            
             for(int k=0; k<nmodules; ++k) {
-                string m_base = _toString(l_id,"layer%d") + _toString(mod_num,"_module%d") + _toString(k,"_sensor%d");
-                
+                string m_base = _toString(l_id,"layer%d") + _toString(mod_num,"_module%d")+ _toString(k,"_sensor%d");;
                 double x = -r*std::cos(phi);
                 double y = -r*std::sin(phi);
                 DetElement module(sdet,m_base+"_pos",det_id);
-                pv = envelope.placeVolume(m_vol,Transform3D(RotationZYX(M_PI,-M_PI/2-phi,-M_PI/2),Position(x,y,zstart+dz)));
+                pv = envelope.placeVolume(m_vol,Transform3D(RotationZYX(M_PI,-M_PI/2-phi,-M_PI/2),Position(x,y,zstart+dz*k)));
                 pv.addPhysVolID("barrel",1).addPhysVolID("side",0).addPhysVolID("layer", l_id).addPhysVolID("module",mod_num).addPhysVolID("sensor",k);
                 module.setPlacement(pv);
+                ///FIXME: We should remove option to have more than one sensitive element per layer since the reco does not support it
                 for(size_t ic=0; ic<sensVols.size(); ++ic)  {
                     PlacedVolume sens_pv = sensVols[ic];
                     DetElement comp_elt(module,sens_pv.volume().name(),mod_num);
@@ -161,7 +121,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                 }
                 
                 if ( reflect ) {
-                    pv = envelope.placeVolume(m_vol,Transform3D(RotationZYX(0,-M_PI/2-phi,-M_PI/2),Position(x,y,-zstart-dz)));
+                    pv = envelope.placeVolume(m_vol,Transform3D(RotationZYX(0,-M_PI/2-phi,-M_PI/2),Position(x,y,-zstart-dz*k)));
                     pv.addPhysVolID("barrel",2).addPhysVolID("side",1).addPhysVolID("layer",l_id).addPhysVolID("module",mod_num).addPhysVolID("sensor",k);
                     DetElement r_module(sdet,m_base+"_neg",det_id);
                     r_module.setPlacement(pv);
@@ -171,27 +131,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                         comp_elt.setPlacement(sens_pv);
                     }
                 }
-                dz   = -dz;
+                //dz   = -dz; //NOTE: For "spiraling" endcaps this is not needed. Could add xml option to turn on
                 phi += iphi;
             }
-            
-            //Increment module numner, i.e. ring
             ++mod_num;
         }
     }
 
-    //FIXME: we don't need these for the event display
-    zDiskPetalsData->widthStrip  = 0;
-    zDiskPetalsData->lengthStrip =0 ;
-    zDiskPetalsData->pitchStrip  = 0 ;
-    zDiskPetalsData->angleStrip  = 0;
-    
-    
-    
-    sdet.addExtension< DDRec::ZDiskPetalsData >( zDiskPetalsData ) ;
-    
-    
     return sdet;
 }
 
-DECLARE_DETELEMENT(TrackerEndcap_o1_v03,create_detector)
+DECLARE_DETELEMENT(VertexEndcap_o1_v03,create_detector)
