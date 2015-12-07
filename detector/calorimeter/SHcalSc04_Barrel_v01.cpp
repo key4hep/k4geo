@@ -8,6 +8,7 @@
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"
+#include "DDSegmentation/TiledLayerGridXY.h"
 #include "LcgeoExceptions.h"
 
 #include <iostream>
@@ -176,6 +177,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   Readout readout = sens.readout();
   Segmentation seg = readout.segmentation();
   
+  // check if we have a TiledLayerGridXY segmentation :
+  DD4hep::DDSegmentation::TiledLayerGridXY* tileSeg = 
+    dynamic_cast< DD4hep::DDSegmentation::TiledLayerGridXY*>( seg.segmentation() ) ;
+
+
+
   std::vector<double> cellSizeVector = seg.segmentation()->cellDimensions(0); //Assume uniform cell sizes, provide dummy cellID
   double cell_sizeX      = cellSizeVector[0];
   double cell_sizeY      = cellSizeVector[1];
@@ -522,6 +529,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
       
     }//end loop over HCAL nlayers;
+
+
+  if( tileSeg !=0 ){
+
+    // set the offsets directly in the TileSeg ...
+  }
 
   // print out the segmentation setup for the current running model geometry
   std::cout<<"Please use this segmentatin in compact file for HcalBarrelRegCollection."<<std::endl;
