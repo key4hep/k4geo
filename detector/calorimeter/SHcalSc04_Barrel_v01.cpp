@@ -389,12 +389,24 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	int noOfIntCells = int(temp);
 
  	if (fracPart == 0){ //divisible
-	  if ( noOfIntCells%2 ) layer_offsetX.push_back(0);
-	  else layer_offsetX.push_back(1);
+	  if ( noOfIntCells%2 ) {
+	    layer_offsetX.push_back(0);
+	    if( tileSeg !=0 ) tileSeg->setLayerOffsetX(0);
+	  }
+	  else {
+	    layer_offsetX.push_back(1);
+	    if( tileSeg !=0 ) tileSeg->setLayerOffsetX(1);
+	  }
 	}
 	else if (fracPart>0){
-	  if ( noOfIntCells%2 ) layer_offsetX.push_back(1);
-	  else layer_offsetX.push_back(0);
+	  if ( noOfIntCells%2 ) {
+	    layer_offsetX.push_back(1);
+	    if( tileSeg !=0 ) tileSeg->setLayerOffsetX(1);
+	  }
+	  else {
+	    layer_offsetX.push_back(0);
+	    if( tileSeg !=0 ) tileSeg->setLayerOffsetX(0);
+	  }
 	}
 
 	if ( (int)( (z_width*2.) / cell_sizeX)%2 ) layer_offsetY.push_back(0);
@@ -530,8 +542,18 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       
     }//end loop over HCAL nlayers;
 
-
   if( tileSeg !=0 ){
+    std::vector<double> LOX = tileSeg->layerOffsetX();
+    std::vector<double> LOY = tileSeg->layerOffsetY();
+
+    std::cout <<" layerOffsetX(): ";
+    for (std::vector<double>::const_iterator ix = LOX.begin(); ix != LOX.end(); ++ix)
+      std::cout << *ix << ' ';
+    std::cout << " " <<std::endl;
+    std::cout <<" layerOffsetY(): ";
+    for (std::vector<double>::const_iterator iy = LOY.begin(); iy != LOY.end(); ++iy)
+      std::cout << *iy << ' ';
+    std::cout << " " <<std::endl;
 
     // set the offsets directly in the TileSeg ...
   }
