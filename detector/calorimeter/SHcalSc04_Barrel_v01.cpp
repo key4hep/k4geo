@@ -110,9 +110,6 @@ bool validateEnvelope(double rInner, double rOuter, double radiatorThickness, do
 
 static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens)  {
 
-  std::vector<int> layer_offsetX;
-  std::vector<int> layer_offsetY;
-
   double boundarySafety = 0.0001;
 
   xml_det_t   x_det       = element;
@@ -390,27 +387,27 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
  	if (fracPart == 0){ //divisible
 	  if ( noOfIntCells%2 ) {
-	    layer_offsetX.push_back(0);
 	    if( tileSeg !=0 ) tileSeg->setLayerOffsetX(0);
 	  }
 	  else {
-	    layer_offsetX.push_back(1);
 	    if( tileSeg !=0 ) tileSeg->setLayerOffsetX(1);
 	  }
 	}
 	else if (fracPart>0){
 	  if ( noOfIntCells%2 ) {
-	    layer_offsetX.push_back(1);
 	    if( tileSeg !=0 ) tileSeg->setLayerOffsetX(1);
 	  }
 	  else {
-	    layer_offsetX.push_back(0);
 	    if( tileSeg !=0 ) tileSeg->setLayerOffsetX(0);
 	  }
 	}
 
-	if ( (int)( (z_width*2.) / cell_sizeX)%2 ) layer_offsetY.push_back(0);
-	else layer_offsetY.push_back(1);
+	if ( (int)( (z_width*2.) / cell_sizeX)%2 ){
+	  if( tileSeg !=0 ) tileSeg->setLayerOffsetX(0);
+	}
+	else {
+	  if( tileSeg !=0 ) tileSeg->setLayerOffsetX(1);
+	}
       }
 
       Box ChamberSolid((x_length + Hcal_layer_air_gap),  //x + air gaps at two side, do not need to build air gaps individualy.
@@ -543,6 +540,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     }//end loop over HCAL nlayers;
 
   if( tileSeg !=0 ){
+    // check the offsets directly in the TileSeg ...
     std::vector<double> LOX = tileSeg->layerOffsetX();
     std::vector<double> LOY = tileSeg->layerOffsetY();
 
@@ -554,26 +552,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     for (std::vector<double>::const_iterator iy = LOY.begin(); iy != LOY.end(); ++iy)
       std::cout << *iy << ' ';
     std::cout << " " <<std::endl;
-
-    // set the offsets directly in the TileSeg ...
   }
 
-  // print out the segmentation setup for the current running model geometry
-  std::cout<<"Please use this segmentatin in compact file for HcalBarrelRegCollection."<<std::endl;
-  double online_cell_sizeY = (z_width*2.) / floor( (z_width*2.) / cell_sizeX );
-  std::cout<<" <segmentation type=\"TiledLayerGridXY\""
-  	   <<" grid_size_x=\""<< cell_sizeX <<"\""
-  	   <<" grid_size_y=\""<< online_cell_sizeY+0.00001 <<"\""
-	   <<" layer_offsetX=\"";
-  
-  for (std::vector<int>::const_iterator i = layer_offsetX.begin(); i != layer_offsetX.end(); ++i)
-    std::cout << *i << ' ';
-  
-  if( (int)( (z_width*2.) / cell_sizeX)%2 )
-    std::cout << "\"/>" <<std::endl;
-  else 
-    std::cout <<"\"" << " offset_y=\""<<(online_cell_sizeY+0.00001)/2.<<"\"/>"<<std::endl;
-  
 
 
 //====================================================================
