@@ -58,10 +58,16 @@
         </detector>
     </detectors>
     
-    
-    
-    
-    
+    <plugins>
+        <plugin name="DD4hep_CaloFaceBarrelSurfacePlugin">
+            <argument value="ECalBarrel"/>
+            <argument value="length=2.*ECalBarrel_half_length"    /> 
+            <argument value="radius=ECalBarrel_inner_radius"  /> 
+            <argument value="phi0=0"    /> 
+            <argument value="symmetry=ECalBarrel_symmetry"/>
+            <argument value="systemID=DetID_ECal_Barrel"/>
+        </plugin>
+    </plugins>
     
     
 </lccdd>

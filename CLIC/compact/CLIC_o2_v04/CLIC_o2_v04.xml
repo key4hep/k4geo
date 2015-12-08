@@ -244,22 +244,6 @@
     <include ref="BeamCal_o1_v01_01.xml"/>
 
     <plugins>
-	  <plugin name="DD4hep_CaloFaceEndcapSurfacePlugin">
-        <argument value="ECalEndcap"/>
-	    <argument value="zpos=ECalEndcap_max_z"    /> 
-	    <argument value="radius=ECalEndcap_outer_radius"  /> 
-	    <argument value="phi0=0"    /> 
-	    <argument value="symmetry=ECalEndcap_outer_symmetry"/>
-	    <argument value="systemID=DetID_ECal_Endcap"/>
-	  </plugin>
-	  <plugin name="DD4hep_CaloFaceBarrelSurfacePlugin">
-        <argument value="ECalBarrel"/>
-	    <argument value="length=2.*ECalBarrel_half_length"    /> 
-	    <argument value="radius=ECalBarrel_inner_radius"  /> 
-	    <argument value="phi0=0"    /> 
-	    <argument value="symmetry=ECalBarrel_symmetry"/>
-	    <argument value="systemID=DetID_ECal_Barrel"/>
-	  </plugin>
       <plugin name="InstallSurfaceManager"/>
     </plugins>
 

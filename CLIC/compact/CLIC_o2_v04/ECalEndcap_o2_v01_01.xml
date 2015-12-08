@@ -50,12 +50,16 @@
         </detector>
     </detectors>
     
-    
-    
-    
-    
-    
-    
+    <plugins>
+        <plugin name="DD4hep_CaloFaceEndcapSurfacePlugin">
+            <argument value="ECalEndcap"/>
+	    <argument value="zpos=ECalEndcap_max_z"    /> 
+	    <argument value="radius=ECalEndcap_outer_radius"  /> 
+	    <argument value="phi0=0"    /> 
+	    <argument value="symmetry=ECalEndcap_outer_symmetry"/>
+	    <argument value="systemID=DetID_ECal_Endcap"/>
+	  </plugin>
+    </plugins>
 </lccdd>
 
 
