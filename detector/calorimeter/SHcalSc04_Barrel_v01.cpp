@@ -403,10 +403,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	}
 
 	if ( (int)( (z_width*2.) / cell_sizeX)%2 ){
-	  if( tileSeg !=0 ) tileSeg->setLayerOffsetX(0);
+	  if( tileSeg !=0 ) tileSeg->setLayerOffsetY(0);
 	}
 	else {
-	  if( tileSeg !=0 ) tileSeg->setLayerOffsetX(1);
+	  if( tileSeg !=0 ) tileSeg->setLayerOffsetY(1);
 	}
       }
 
