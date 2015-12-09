@@ -13,7 +13,7 @@
     </display>
     
     <define>
-        <constant name="VertexBarrel_zmax" value="50.0*cm"/>
+        <constant name="VertexBarrel_zmax" value="OuterTracker_half_length"/>
         <constant name="VertexBarrel_r1" value="3.1*cm"/>
         <constant name="VertexBarrel_r2" value="4.4*cm"/>
         <constant name="VertexBarrel_r3" value="5.8*cm"/>
