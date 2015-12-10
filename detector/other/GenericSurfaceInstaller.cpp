@@ -8,6 +8,10 @@
 // Assumes boxes are stacked along one of the primary axes, x,y or z 
 // The normal vector (n) must be along one of the axes (i.e. only one non-zero 
 // component). The inner/outer thicknesses are calculated according to n.
+// Note: Assumes module and component volumes are boxes. For Trapezoids,
+// a fitting box is built around the trapezoid which means dx1=dx2=dx1 and
+// dy1=dy2=dy. This is in principle fine, since we only access the thicknesses
+// (DY in the TrackerEncapSurfacePlugin example) which is supposed to be the same
 //==========================================================================
 
 namespace { 
@@ -33,16 +37,16 @@ namespace {
 namespace{
     template <> void Installer<UserData>::handle_arguments(int argc, char** argv)   {
 
-        //Initialize to zero so we can avoid having to explicitly provide as argument
-        data.uvector[0]=0.;
+        //Initialize to default so we can avoid having to explicitly provide as argument
+        data.uvector[0]=-1.;
         data.uvector[1]=0.;
         data.uvector[2]=0.;
         data.vvector[0]=0.;
-        data.vvector[1]=0.;
+        data.vvector[1]=-1.;
         data.vvector[2]=0.;
         data.nvector[0]=0.;
         data.nvector[1]=0.;
-        data.nvector[2]=0.;
+        data.nvector[2]=1.;
         data.ovector[0]=0.;
         data.ovector[1]=0.;
         data.ovector[2]=0.;
@@ -70,20 +74,22 @@ namespace{
                 if( name=="o_z" ) data.ovector[2]=value ; 
             }
         }
-    }  
     
-    /// Install measurement surfaces
-    template <typename UserData> 
-    void Installer<UserData>::install(DetElement component, PlacedVolume pv)   {
         std::cout <<"GenericSurfaceInstallerPlugin: vectors: ";
         std::cout <<"u( "<<data.uvector[0]<<" , "<<data.uvector[1]<<" , "<<data.uvector[2]<<") ";
         std::cout <<"v( "<<data.vvector[0]<<" , "<<data.vvector[1]<<" , "<<data.vvector[2]<<") ";
         std::cout <<"n( "<<data.nvector[0]<<" , "<<data.nvector[1]<<" , "<<data.nvector[2]<<") ";
         std::cout <<"o( "<<data.ovector[0]<<" , "<<data.ovector[1]<<" , "<<data.ovector[2]<<") "<<std::endl;
-        
+    
+    }  
+    
+    /// Install measurement surfaces
+    template <typename UserData> 
+    void Installer<UserData>::install(DetElement component, PlacedVolume pv)   {
         Volume comp_vol = pv.volume();
         if ( comp_vol.isSensitive() )  {  
             Volume mod_vol  = parentVolume(component);
+            //FIXME: WHAT IF TRAPEZOID? Should work if trapezoid since it will fit minimal box and dy1=dy2=dy
             DD4hep::Geometry::Box mod_shape(mod_vol.solid()), comp_shape(comp_vol.solid());
             
             if ( !comp_shape.isValid() || !mod_shape.isValid() )   {

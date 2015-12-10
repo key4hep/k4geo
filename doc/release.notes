@@ -1,3 +1,13 @@
+N.Nikiforou 10/12/2015
+----------------------
+  - Added GenericSurfaceInstaller in detector/other to install surfaces to a given
+    box-like volume. The u,v,n,o vectors are provided component-wise as arguments to the plugin.
+    If the volumes are trapezoids (as in the case of the endcap) the thickness dimension is supposed to be 
+    the same for both sides of the trapezoid (for example, dy1=dy2=dy) which is supposed to be handled
+    when "casting" the Trapezoid shape into a Box
+  - Added InnerTracker_o2_v03_02.xml and OuterTracker_o2_v03_02.xml in CLIC_o2_v04 (not used by default)
+    as examples using the new GenericSurfaceInstaller
+  
 N.Nikiforou 04/12/2015
 ----------------------
   - Modified CLIC_o2_v04 to use proper convention for listing slices in module composition.
