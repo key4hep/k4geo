@@ -1,0 +1,103 @@
+<lccdd>
+    
+    <define>
+        <constant name="OuterTracker_Barrel_radius_0" value="840*mm"/>
+        <constant name="OuterTracker_Barrel_half_length_0" value="1030*mm"/>
+        
+        <constant name="OuterTracker_Barrel_radius_1" value="1145*mm"/>
+        <constant name="OuterTracker_Barrel_half_length_1" value="1330*mm"/>
+        
+        <constant name="OuterTracker_Barrel_radius_2" value="1450*mm"/>
+        <constant name="OuterTracker_Barrel_half_length_2" value="1630*mm"/>
+        
+        
+        <constant name="OuterTracker_Endcap_outer_radius_0" value="OuterTracker_Barrel_radius_0"/>
+        <constant name="OuterTracker_Endcap_z_0" value="1040*mm"/>
+        
+        <constant name="OuterTracker_Endcap_outer_radius_1" value="OuterTracker_Barrel_radius_1"/>
+        <constant name="OuterTracker_Endcap_z_1" value="1340*mm"/>
+        
+        <constant name="OuterTracker_Endcap_outer_radius_2" value="OuterTracker_Barrel_radius_2"/>
+        <constant name="OuterTracker_Endcap_z_2" value="1640*mm"/>
+        
+        <constant name="OuterTracker_Endcap_outer_radius_3" value="OuterTracker_Barrel_radius_2"/>
+        <constant name="OuterTracker_Endcap_z_3" value="1930*mm"/>
+        
+        <constant name="OuterTracker_Endcap_outer_radius_4" value="OuterTracker_Barrel_radius_2"/>
+        <constant name="OuterTracker_Endcap_z_4" value="2230*mm"/>
+        
+    </define>
+    
+    
+    <!--  Definition of the used visualization attributes    -->
+    <display>
+        <vis name="OuterTrackerLayerVis"   alpha="1.0" r="1.0" g="1.0" b="0.6" showDaughters="true" visible="true"/>
+        <vis name="OuterTrackerModuleVis"  alpha="0.1" r="0.0" g="1.0" b="0.6" showDaughters="true" visible="false"/>
+        <vis name="OuterTrackerForwardVis" alpha="1.0" r="0.8" g="0.1" b="0.1" showDaughters="false" visible="true"/>     
+    </display>
+    
+    <!--  Definition of the readout segmentation/definition  -->
+    <readouts>
+        <readout name="OuterTrackerBarrelCollection">
+            <id>system:5,side:-2,layer:9,module:8,sensor:8,barrel:3</id>
+        </readout>
+        <readout name="OuterTrackerEndcapCollection">
+            <id>system:5,side:-2,layer:9,module:8,sensor:8,barrel:3</id>
+        </readout>
+    </readouts>
+    
+    
+    <detectors>
+        <detector id="DetID_OT_Barrel" name="OuterTrackerBarrel" type="TrackerBarrel_o1_v03" readout="OuterTrackerBarrelCollection" region="SiTrackerBarrelRegion" limits="SiTrackerBarrelRegionLimitSet">
+            <envelope vis="ITVis">
+                <shape type="Assembly"/>
+            </envelope>
+            <comment>Silicon Outer Tracker Barrel</comment>
+            
+            <module name="OuterTrackerBarrelModule" vis="OuterTrackerModuleVis">
+                <module_envelope width="80*cm" length="OuterTracker_half_length*2"/>
+                <!-- Build slices top-down from innermost slice (closest to IP) to outer-most (away from IP)-->
+                <module_component width="80*cm" length="OuterTracker_half_length*2" thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>
+                <module_component width="80*cm" length="OuterTracker_half_length*2" thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
+                <module_component width="80*cm" length="OuterTracker_half_length*2" thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
+                
+                <module_component width="80*cm" length="OuterTracker_half_length*2" thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
+                <module_component width="80*cm" length="OuterTracker_half_length*2" thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
+                <module_component width="80*cm" length="OuterTracker_half_length*2" thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
+                <module_component width="80*cm" length="OuterTracker_half_length*2" thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component width="80*cm" length="OuterTracker_half_length*2" thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
+
+                <module_component width="80*cm" length="OuterTracker_half_length*2" thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
+                <module_component width="80*cm" length="OuterTracker_half_length*2" thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
+                <module_component width="80*cm" length="OuterTracker_half_length*2" thickness="0.12*mm"  material="CarbonFiber_50D" sensitive="false"/>
+                <module_component width="80*cm" length="OuterTracker_half_length*2" thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                
+                <module_component width="80*cm" length="OuterTracker_half_length*2" thickness="0.07*mm"  material="Aluminum"        sensitive="false" vis="RedVis"/>
+            </module>
+ 
+            <layer module="OuterTrackerBarrelModule" id="0" vis="OuterTrackerLayerVis">
+                <rphi_layout phi_tilt="0*deg" nphi="1" phi0="0" rc="OuterTracker_Barrel_radius_0" dr="0.0"/>
+                <z_layout dr="0*mm" z0="0" nz="1"/>
+            </layer>
+            <layer module="OuterTrackerBarrelModule" id="1" vis="OuterTrackerLayerVis">
+                <rphi_layout phi_tilt="0*deg" nphi="1" phi0="0" rc="OuterTracker_Barrel_radius_1" dr="0.0"/>
+                <z_layout dr="1*mm" z0="0" nz="1"/>
+            </layer>
+            <layer module="OuterTrackerBarrelModule" id="2" vis="OuterTrackerLayerVis">
+                <rphi_layout phi_tilt="0*deg" nphi="1" phi0="0" rc="OuterTracker_Barrel_radius_2" dr="0.0"/>
+                <z_layout dr="0" z0="0" nz="1"/>
+            </layer>
+        </detector>
+    </detectors>
+    
+    
+    
+    
+    <plugins>
+        <plugin name="TrackerBarrelSurfacePlugin">
+            <argument value="OuterTrackerBarrel"/>
+            <argument value="dimension=2"/>
+        </plugin>
+    </plugins>
+    
+    
+</lccdd>

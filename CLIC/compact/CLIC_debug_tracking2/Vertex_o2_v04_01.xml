@@ -1,0 +1,121 @@
+<lccdd>
+   
+    
+    
+    <display>
+        <vis name="SiVertexModuleVis"    alpha="1.0" r="1" g="1"    b="0.6"     showDaughters="true"  visible="false"/>
+        <vis name="SiVertexSensitiveVis" alpha="1.0" r="1" g="0.2"  b="0.2"     showDaughters="true"  visible="true"/>
+        <vis name="SiVertexPassiveVis"   alpha="1.0" r="0" g="0.2"  b="1"       showDaughters="true"  visible="true"/>
+        <vis name="SiVertexLayerVis"     alpha="1.0" r="1" g="0.75" b="0"       showDaughters="false" visible="false"/>
+        <vis name="SiVertexSupportVis"   alpha="1.0" r="0" g="0"  b="0"         showDaughters="true"  visible="false"/>
+        <vis name="SiVertexSensitiveVis2" alpha="1.0" r="1" g="0.13"  b="0.92"  showDaughters="true"  visible="true"/>
+ 
+    </display>
+    
+    <define>
+        <constant name="VertexBarrel_zmax" value="OuterTracker_half_length"/>
+        <constant name="VertexBarrel_r1" value="3.1*cm"/>
+        <constant name="VertexBarrel_r2" value="4.4*cm"/>
+        <constant name="VertexBarrel_r3" value="5.8*cm"/>
+        
+        <constant name="VertexBarrel_Sensitive_Thickness" value="5.000000000e-02*mm"/>
+        <constant name="VertexBarrel_Support_Thickness" value="1*mm"/>
+        
+        <constant name="VertexBarrel_Layer1_width" value="1000*mm"/>
+        <constant name="VertexBarrel_Layer2_width" value="1000*mm"/>
+        <constant name="VertexBarrel_Layer3_width" value="1000*mm"/>
+        
+        <constant name="VertexBarrel_Layer1_offset" value="0*mm"/>
+        <constant name="VertexBarrel_Layer2_offset" value="0*mm"/>
+        <constant name="VertexBarrel_Layer3_offset" value="0*mm"/>
+        
+        <constant name="VertexBarrel_Layer1_Staves" value="1"/>
+        <constant name="VertexBarrel_Layer2_Staves" value="1"/>
+        <constant name="VertexBarrel_Layer3_Staves" value="1"/>
+        
+        <constant name="VertexEndcap_rmax" value="102*mm"/>
+        <constant name="VertexEndcap_z1" value="160*mm"/>
+        <constant name="VertexEndcap_z2" value="193.3*mm"/>
+        <constant name="VertexEndcap_z3" value="223.6*mm"/>
+        <constant name="VertexEndcap_z4" value="259*mm"/>
+        <constant name="VertexEndcap_offset" value="0.3*cm"/>
+        <constant name="VertexEndcapModules" value="1"/>
+        <constant name="VertexEndcap_rmin1" value="CentralBeamPipe_rmax + VertexEndcap_offset"/>
+        <constant name="VertexEndcap_rmin2" value="CentralBeamPipe_rmax + VertexEndcap_offset"/>
+        <constant name="VertexEndcap_rmin3" value="CentralBeamPipe_rmax + VertexEndcap_offset"/>
+        <constant name="VertexEndcap_rmin4" value="CentralBeamPipe_rmax + VertexEndcap_offset"/>
+        <constant name="VertexEndcapModuleThickness" value="1.05*mm"/>
+        <constant name="VertexEndcapOverlap" value="1*mm"/>
+    </define>
+    
+    
+    
+    <!--  Definition of the readout segmentation/definition  -->
+    <readouts>
+        <readout name="VertexBarrelCollection">
+            <id>system:5,side:-2,layer:9,module:8,sensor:8,barrel:3</id>
+        </readout>
+        <readout name="VertexEndcapCollection">
+            <id>system:5,side:-2,layer:9,module:8,sensor:8,barrel:3</id>
+        </readout>
+    </readouts>
+    
+
+    
+    <detectors>
+        <detector id="DetID_VXD_Endcap" name="VertexEndcap" type="VertexEndcap_o1_v03" readout="VertexEndcapCollection" reflect="true">
+            <envelope vis="VXDVis">
+                <shape type="Assembly"/>
+            </envelope>
+            <comment>Vertex Detector Endcaps</comment>
+            
+            <module name="SiVertexEndcapModule1" vis="SiVertexModuleVis">
+                <trd x1="VertexBarrel_Layer1_width" x2="VertexBarrel_Layer1_width" z="VertexBarrel_Layer1_width" />
+                <!-- Build slices top-down from innermost slice (closest to IP) to outer-most (away from IP)-->
+                <module_component thickness="0.005*cm" material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
+                <module_component thickness="0.005*cm" material="Silicon" vis="SiVertexPassiveVis"/>
+                <module_component thickness="0.95*mm" material="CarbonFiber_Vertex" vis="SiVertexPassiveVis" />
+            </module>
+            
+            <module name="SiVertexEndcapModule2" vis="SiVertexModuleVis">
+                <trd x1="VertexBarrel_Layer1_width" x2="VertexBarrel_Layer1_width" z="VertexBarrel_Layer1_width" />
+                <!-- Build slices top-down from innermost slice (closest to IP) to outer-most (away from IP)-->
+                <module_component thickness="0.95*mm" material="CarbonFiber_Vertex" vis="SiVertexPassiveVis" />
+                <module_component thickness="0.005*cm" material="Silicon" vis="SiVertexPassiveVis"/>
+                <module_component thickness="0.005*cm" material="Silicon" sensitive="true" vis="SiVertexSensitiveVis2"/>
+
+            </module>
+            
+            <layer id="0"  vis="SiVertexLayerVis">
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin1) / 2" zstart="VertexEndcap_z1 - VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0.546*cm" phi0="0" module="SiVertexEndcapModule1"/>
+            </layer>
+            <layer id="1"  vis="SiVertexLayerVis">
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin1) / 2" zstart="VertexEndcap_z1+VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0.546*cm" phi0="0" module="SiVertexEndcapModule2"/>
+            </layer>
+            <layer id="2"  vis="SiVertexLayerVis">
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin2) / 2" zstart="VertexEndcap_z2-VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0.546*cm" phi0="0" module="SiVertexEndcapModule1"/>
+            </layer>
+            <layer id="3"  vis="SiVertexLayerVis">
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin2) / 2" zstart="VertexEndcap_z2+VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0.546*cm" phi0="0" module="SiVertexEndcapModule2"/>
+            </layer>
+            <layer id="4"  vis="SiVertexLayerVis">
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin3) / 2" zstart="VertexEndcap_z3-VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0.546*cm" phi0="0" module="SiVertexEndcapModule1"/>
+            </layer>
+            <layer id="5"  vis="SiVertexLayerVis">
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin3) / 2" zstart="VertexEndcap_z3+VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0.546*cm" phi0="0" module="SiVertexEndcapModule2"/>
+            </layer>
+        </detector>
+    </detectors> 
+    
+    <plugins>
+      <plugin name="TrackerEndcapSurfacePlugin">
+        <argument value="VertexEndcap"/>
+        <argument value="dimension=2"/>
+      </plugin>
+    </plugins>
+    
+ 
+    
+    
+    
+</lccdd>
