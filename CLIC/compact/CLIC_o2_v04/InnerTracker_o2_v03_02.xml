@@ -133,7 +133,8 @@
     </detectors>
     
     <detectors>
-        <detector id="DetID_IT_Endcap" name="InnerTrackerEndcap" type="TrackerEndcap_o1_v03" readout="InnerTrackerEndcapCollection" reflect="true">
+        <!-- EXPERIMENTAL DRIVER USING A SIMPLISTIC ZPETALS STRUCTURE! --> 
+        <detector id="DetID_IT_Endcap" name="InnerTrackerEndcap" type="TrackerEndcap_o1_v04" readout="InnerTrackerEndcapCollection" reflect="true">
             <envelope vis="ITVis">
                 <shape type="Assembly"/>
             </envelope>

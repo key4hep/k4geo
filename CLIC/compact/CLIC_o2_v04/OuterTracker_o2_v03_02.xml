@@ -104,7 +104,8 @@
     
     
     <detectors>
-        <detector id="DetID_OT_Endcap" name="OuterTrackerEndcap" type="TrackerEndcap_o1_v03" readout="OuterTrackerEndcapCollection" reflect="true">
+        <!-- EXPERIMENTAL DRIVER USING A SIMPLISTIC ZPETALS STRUCTURE! --> 
+        <detector id="DetID_OT_Endcap" name="OuterTrackerEndcap" type="TrackerEndcap_o1_v04" readout="OuterTrackerEndcapCollection" reflect="true">
             <envelope vis="OTVis">
                 <shape type="Assembly"/>
             </envelope>
