@@ -574,7 +574,7 @@
       <plugins>
 	<plugin name="DD4hep_CaloFaceEndcapSurfacePlugin">
           <argument value="EcalEndcap"/>
-	  <argument value="zpos=EcalEndcap_max_z"    />
+	  <argument value="zpos=EcalEndcap_min_z"    />
 	  <argument value="radius=EcalEndcap_outer_radius"  />
 	  <argument value="phi0=0"    />
 	  <argument value="symmetry=EcalEndcap_symmetry"/>
@@ -595,7 +595,7 @@
 
 <fields>
   <field type="solenoid" name="GlobalSolenoid" inner_field="Field_nominal_value*tesla"
-  	  outer_field="-1.5*tesla" zmax="TPC_Ecal_Hcal_barrel_halfZ"
+  	  outer_field="-1.5*tesla" zmax="Coil_half_length"
   	  inner_radius="Coil_inner_radius"
   	  outer_radius="world_side" />
 
