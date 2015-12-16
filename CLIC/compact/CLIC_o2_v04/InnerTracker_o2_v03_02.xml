@@ -133,8 +133,7 @@
     </detectors>
     
     <detectors>
-        <!-- EXPERIMENTAL DRIVER USING A SIMPLISTIC ZPETALS STRUCTURE! --> 
-        <detector id="DetID_IT_Endcap" name="InnerTrackerEndcap" type="TrackerEndcap_o1_v04" readout="InnerTrackerEndcapCollection" reflect="true">
+        <detector id="DetID_IT_Endcap" name="InnerTrackerEndcap" type="TrackerEndcap_o1_v03" readout="InnerTrackerEndcapCollection" reflect="true">
             <envelope vis="ITVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -339,8 +338,8 @@
         <plugin name="GenericSurfaceInstallerPlugin">
             <argument value="InnerTrackerEndcap"/>
             <argument value="dimension=2"/>
-            <argument value="u_z=1."/>
-            <argument value="v_x=1."/>
+            <argument value="u_x=-1."/>
+            <argument value="v_z=1."/>
             <argument value="n_y=1."/>
         </plugin>
     </plugins>

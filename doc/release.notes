@@ -1,3 +1,17 @@
+N.Nikiforou 15/12/2015
+----------------------
+  - Switched CLIC_o2_v04 to using the GenericSurfaceInstaller. Changed therefore to using the following
+    includes (notice _02 at the end of the name):
+    * Vertex_o2_v04_02.xml
+    * InnerTracker_o2_v03_02.xml
+    * OuterTracker_o2_v03_02.xml
+  - Changed the orientation of the endcap uvn vectors for Vertex and Tracker to 
+    u(-1.,0.,0.), v(0.,0.,1.), n(0.,1.,0.), o(0.,0.,0.) using the GenericSurfaceInstaller rather than
+    the individual surface installers (for which the orientation of uvn remains as before). The 
+    vectors were set using plugin arguments in the xml. 
+  - GenericSurfaceInstaller: by default all u,v,n,o vector components are now set to 0 which means 
+    that the user has to define the non-zero components as arguments, otherwise the plugin fails
+    
 N.Nikiforou 10/12/2015
 ----------------------
   - Added GenericSurfaceInstaller in detector/other to install surfaces to a given

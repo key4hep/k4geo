@@ -104,8 +104,7 @@
     
     
     <detectors>
-        <!-- EXPERIMENTAL DRIVER USING A SIMPLISTIC ZPETALS STRUCTURE! --> 
-        <detector id="DetID_OT_Endcap" name="OuterTrackerEndcap" type="TrackerEndcap_o1_v04" readout="OuterTrackerEndcapCollection" reflect="true">
+        <detector id="DetID_OT_Endcap" name="OuterTrackerEndcap" type="TrackerEndcap_o1_v03" readout="OuterTrackerEndcapCollection" reflect="true">
             <envelope vis="OTVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -239,8 +238,8 @@
         <plugin name="GenericSurfaceInstallerPlugin">
             <argument value="OuterTrackerEndcap"/>
             <argument value="dimension=2"/>
-            <argument value="u_z=1."/>
-            <argument value="v_x=1."/>
+            <argument value="u_x=-1."/>
+            <argument value="v_z=1."/>
             <argument value="n_y=1."/>
         </plugin>
     </plugins>
