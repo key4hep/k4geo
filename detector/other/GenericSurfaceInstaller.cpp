@@ -37,16 +37,16 @@ namespace {
 namespace{
     template <> void Installer<UserData>::handle_arguments(int argc, char** argv)   {
 
-        //Initialize to default so we can avoid having to explicitly provide as argument
-        data.uvector[0]=-1.;
+        //Initialize defaults to zero
+        data.uvector[0]=0.;
         data.uvector[1]=0.;
         data.uvector[2]=0.;
         data.vvector[0]=0.;
-        data.vvector[1]=-1.;
+        data.vvector[1]=0.;
         data.vvector[2]=0.;
         data.nvector[0]=0.;
         data.nvector[1]=0.;
-        data.nvector[2]=1.;
+        data.nvector[2]=0.;
         data.ovector[0]=0.;
         data.ovector[1]=0.;
         data.ovector[2]=0.;
