@@ -8,7 +8,8 @@ N.Nikiforou 15/12/2015
   - Changed the orientation of the endcap uvn vectors for Vertex and Tracker to 
     u(-1.,0.,0.), v(0.,0.,1.), n(0.,1.,0.), o(0.,0.,0.) using the GenericSurfaceInstaller rather than
     the individual surface installers (for which the orientation of uvn remains as before). The 
-    vectors were set using plugin arguments in the xml. 
+    vectors were set using plugin arguments in the xml. The resulting orientation puts v along R
+    i.e. the "bad" measurement direction and u along -phi (clockwise). 
   - GenericSurfaceInstaller: by default all u,v,n,o vector components are now set to 0 which means 
     that the user has to define the non-zero components as arguments, otherwise the plugin fails
     
