@@ -1,0 +1,36 @@
+<detector id="6" name="EcalEndcap" type="GenericCalEndcap_o1_v01" reflect="true" readout="EcalEndcapHits" vis="EcalEndcapVis" calorimeterType="EM_ENDCAP" gap="0.*cm">
+  <comment>EM Calorimeter Endcaps</comment>
+
+  <dimensions numsides="EcalEndcap_outer_symmetry" zmin="EcalEndcap_zmin" rmin="EcalEndcap_rmin" rmax="EcalEndcap_rmax"  nsides_inner="EcalEndcap_inner_symmetry" nsides_outer="EcalEndcap_outer_symmetry" />
+
+  <envelope vis="EcalEndcapVis">
+    <shape type="BooleanShape" operation="Subtraction" material="Air">
+      <shape type="PolyhedraRegular"  numsides="EcalEndcap_outer_symmetry" rmin="EcalEndcap_rmin - env_safety" rmax="EcalEndcap_rmax + 10*env_safety" dz="2*EcalEndcap_zmax + 2*env_safety" />
+      <shape type="PolyhedraRegular"  numsides="EcalEndcap_outer_symmetry" rmin="0" rmax="EcalEndcap_rmax + 20*env_safety" dz="2*EcalEndcap_zmin - 2*env_safety" />
+    </shape>
+    <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/EcalEndcap_outer_symmetry" />
+  </envelope>
+  
+  <layer repeat="1">
+    <slice material = "Silicon" thickness = "0.032*cm" sensitive = "yes" limits="cal_limits" />
+    <slice material = "Copper"  thickness = "0.005*cm" />
+    <slice material = "Kapton"  thickness = "0.030*cm" />
+    <slice material = "Air"     thickness = "0.033*cm" />
+  </layer>
+  <layer repeat="20">
+    <slice material = "TungstenDens24" thickness = "0.25*cm" />
+    <slice material = "Air"     thickness = "0.025*cm" />
+    <slice material = "Silicon" thickness = "0.032*cm" sensitive = "yes" limits="cal_limits" />
+    <slice material = "Copper"  thickness = "0.005*cm" />
+    <slice material = "Kapton"  thickness = "0.030*cm" />
+    <slice material = "Air"     thickness = "0.033*cm" />
+  </layer>
+  <layer repeat="10">
+    <slice material = "TungstenDens24" thickness = "0.5*cm" />
+    <slice material = "Air"     thickness = "0.025*cm" />
+    <slice material = "Silicon" thickness = "0.032*cm" sensitive = "yes" limits="cal_limits" />
+    <slice material = "Copper"  thickness = "0.005*cm" />
+    <slice material = "Kapton"  thickness = "0.030*cm" />
+    <slice material = "Air"     thickness = "0.033*cm" />
+  </layer>
+</detector>

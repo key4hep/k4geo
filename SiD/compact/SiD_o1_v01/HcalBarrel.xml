@@ -1,0 +1,19 @@
+<detector id="7" name="HcalBarrel" type="GenericCalBarrel_o1_v01" readout="HcalBarrelHits" vis="HcalBarrelVis" calorimeterType="HAD_BARREL" gap="0.*cm" material="Steel235">
+  <comment>Hadron Calorimeter Barrel</comment>
+  <dimensions numsides="12" rmin="HcalBarrel_rmin" z="2950.0 * 2*mm"/>
+
+  <envelope vis="HcalBarrelVis">
+    <shape type="PolyhedraRegular" numsides="12"  rmin="HcalBarrel_rmin-0.1*mm" rmax="2501.0*mm+1*mm" dz="2950.0 * 2*mm+0.1*mm" material = "Air"/>
+    <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/12"/>
+  </envelope>
+
+  <staves />
+  <layer repeat="40">
+    <slice material = "Steel235" thickness = "1.89*cm" />
+    <slice material = "PyrexGlass" thickness = "0.11*cm" />
+    <slice material = "RPCGasDefault" thickness = "0.12*cm" sensitive = "yes" limits="cal_limits" />
+    <slice material = "PyrexGlass" thickness = "0.11*cm" />
+    <slice material = "G10" thickness = "0.3*cm" />
+    <slice material = "Air" thickness = "0.16*cm" />
+  </layer>
+</detector>

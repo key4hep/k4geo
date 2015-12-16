@@ -1,0 +1,27 @@
+<detector id="15" name="SiTrackerForward" type="DD4hep_SiTrackerEndcap2" readout="SiTrackerForwardHits" reflect="true" vis="SiTrackerForwardVis">    
+  <comment>Forward Tracker inside Vertex Support Barrel</comment>
+  <module name="SiTrackerForwardModule1">
+    <trd x1="5.620*mm" x2="32.435*mm" z="67.405*mm" />
+    <module_component thickness="0.002*cm" material="Silicon" sensitive="true" />
+    <module_component thickness="0.008*cm"   material="Silicon" />
+  </module>
+  <module name="SiTrackerForwardModule2">
+    <trd x1="15.167*mm" x2="32.435*mm" z="43.405*mm" />
+    <module_component thickness="0.002*cm" material="Silicon" sensitive="true" />
+    <module_component thickness="0.008*cm"   material="Silicon" />
+  </module>
+  <module name="SiTrackerForwardModule3">
+    <trd x1="23.522*mm" x2="32.435*mm" z="22.405*mm" />
+    <module_component thickness="0.002*cm" material="Silicon" sensitive="true" />
+    <module_component thickness="0.008*cm"   material="Silicon" />
+  </module>
+  <layer id="1">
+    <ring r="97.0*mm" zstart="211*mm" nmodules="16" dz="0.011*mm" module="SiTrackerForwardModule1"/>
+  </layer>
+  <layer id="2">
+    <ring r="121.0*mm" zstart="543*mm" nmodules="16" dz="0.011*mm" module="SiTrackerForwardModule2"/>
+  </layer>
+  <layer id="3">
+    <ring r="142.0*mm" zstart="834*mm" nmodules="16" dz="0.011*mm" module="SiTrackerForwardModule3"/>
+  </layer>
+</detector>

@@ -1,0 +1,22 @@
+<detector id="8" name="HcalEndcap" type="GenericCalEndcap_o1_v01" readout="HcalEndcapHits" vis="HcalEndcapVis" calorimeterType="HAD_ENDCAP" reflect="true">
+  <comment>Hadron Calorimeter Endcaps</comment>
+
+  <dimensions numsides="12" zmin="1805.0*mm" rmin="200.0*mm" rmax="1403.*mm"  nsides_inner="12" nsides_outer="12" />
+
+  <envelope vis="HcalEndcapVis">
+    <shape type="BooleanShape" operation="Subtraction" material="Air">
+      <shape type="PolyhedraRegular"  numsides="12" rmin="200.0*mm" rmax="1403.0*mm" dz="2.*3000.1*mm" />
+      <shape type="PolyhedraRegular"  numsides="12" rmin="199.9*mm" rmax="1403.1*mm" dz="2.*1804.9*mm"/>
+    </shape>
+    <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/12"/>
+  </envelope>
+
+  <layer repeat="45">
+    <slice material = "Steel235" thickness = "1.89*cm" />
+    <slice material = "PyrexGlass" thickness = "0.11*cm" />
+    <slice material = "RPCGasDefault" thickness = "0.12*cm" sensitive = "yes" limits="cal_limits" />
+    <slice material = "PyrexGlass" thickness = "0.11*cm" />
+    <slice material = "G10" thickness = "0.3*cm" />
+    <slice material = "Air" thickness = "0.16*cm" />
+  </layer>
+</detector>

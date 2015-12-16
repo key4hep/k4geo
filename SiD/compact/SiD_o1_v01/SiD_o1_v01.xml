@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0" 
+       xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" 
+       xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+  <info name="sidloi3"
+        title="Silicon Detector LOI"
+        author="Norman Graf, Jeremy McCormick, Dan Protopopescu"
+        url="http://confluence.slac.stanford.edu/display/ilc/sidloi"
+        status="development"
+        version="$Id: compact.xml,v 1.13 2011/01/26 23:46:56 jeremy Exp $">
+    <comment>The compact format for the Silicon Detector as described in the LOI 090204.  Includes global XY segmentation in cal endcaps.</comment>        
+  </info>
+
+  <includes>
+    <gdmlFile  ref="elements.xml"/>
+    <gdmlFile  ref="materials.xml"/>
+    <!--pyBuilder ref="../drivers"/-->
+  </includes>
+
+
+  <define>
+    <constant name="world_side" value="30000*mm"/>
+    <constant name="world_x" value="world_side"/>
+    <constant name="world_y" value="world_side"/>
+    <constant name="world_z" value="world_side"/>
+
+    <constant name="env_safety" value="0.1*mm"/>
+
+    <comment> suggested naming convention:
+
+      main parameters (see definitions in http://cern.ch/go/r9mZ):
+      
+      DET_rmin            : inner radius of tube like envelope  ( inscribed cylinder )
+      DET_rmax            : outer radius of tube like envelope  ( inscribed cylinder )
+      DET_half_length     : half length along z axis
+      DET_zmin            : smallest absolute value on z-axis
+      DET_zmax            : largest  absolute value on z-axis
+      DET_inner_symmetry  : number of sides on the inside  ( 0 for tube )
+      DET_outer_symmetry  : number of sides on the outside ( 0 for tube )
+      DET_symmetry        : number of sides if the same in- and outside
+      DET_inner_phi0      : optional rotation of the inner polygon ( in r-phi plane )
+      DET_outer_phi0      : optional rotation of the outer polygon ( in r-phi plane )
+      
+      additional parameters for cutting away volumes/shapes use one of the above with a number
+      appended and/or an extra specifiaction such as cone ( for a cut away cone )
+      
+      DET_inner_radius_1
+      DET_outer_radius_2
+      DET_cone_min_z
+      DET_cone_max_z
+      
+    </comment>    
+
+    <constant name="EcalBarrel_half_length" value="1765.0*mm" />
+    <constant name="EcalBarrel_rmin" value="1265.0*mm" />
+    <constant name="EcalBarrel_rmax" value="1403.0*mm" />
+    <constant name="EcalBarrel_symmetry" value="12" />
+   
+    <constant name="EcalEndcap_zmin" value="1657.0*mm" />
+    <constant name="EcalEndcap_zmax" value="1800.0*mm" />
+    <constant name="EcalEndcap_rmin"  value="216.0*mm" />
+    <constant name="EcalEndcap_rmax" value="1250.0*mm" />
+    <constant name="EcalEndcap_inner_symmetry" value="12" />
+    <constant name="EcalEndcap_outer_symmetry" value="12" />
+
+    <constant name="HcalBarrel_rmin" value="1419.0*mm"/>
+    <constant name="HcalEndcap_zmin" value="1805.0*mm"/>
+
+    <constant name="tracking_region_radius" value="EcalBarrel_rmin - 1.0*mm"/>
+    <constant name="tracking_region_zmax" value="EcalEndcap_zmin - 1.0*mm"/>
+    
+    <constant name="tracker_region_rmax" value="tracking_region_radius" />  
+    <constant name="tracker_region_zmax" value="tracking_region_zmax" />  
+
+    <constant name="VXD_CF_sensor" value="0.026*cm"/>
+    <constant name="VXD_CF_support" value="0.05*cm"/>
+    <constant name="bp_cone_slope" value="(8.96-1.20)/(185-6.25)"/>
+    <constant name="SolenoidBarrelInnerRadius" value="259.1*cm"/>
+    <constant name="SolenoidBarrelOuterZ" value="293.3*cm"/>
+    <constant name="SolenoidBarrelInnerCryostatThickness" value="3.0*cm"/>
+    <constant name="SolenoidBarrelInnerAirgapThickness" value="11.0*cm"/>
+    <constant name="SolenoidBarrelAlConductorThickness" value="38.4*cm"/>
+    <constant name="SolenoidBarrelQuenchbackThickness" value="5.0*cm"/>
+    <constant name="SolenoidBarrelOuterAirgapThickness" value="18.7*cm"/>
+    <constant name="SolenoidBarrelOuterCryostatThickness" value="4.0*cm"/>
+    <constant name="SolenoidEndcapCryostatThickness" value="5.0*cm"/>
+    <constant name="SolenoidEndcapAirgapThickness" value="19.0*cm"/>
+    <constant name="SolenoidBarrelConductorInnerRadius" value="SolenoidBarrelInnerRadius+SolenoidBarrelInnerCryostatThickness+SolenoidBarrelInnerAirgapThickness"/>
+    <constant name="SolenoidBarrelOuterCryostatInnerRadius" value="SolenoidBarrelConductorInnerRadius+SolenoidBarrelAlConductorThickness+SolenoidBarrelQuenchbackThickness"/>
+    <constant name="SolenoidBarrelOuterRadius" value="SolenoidBarrelOuterCryostatInnerRadius+SolenoidBarrelOuterAirgapThickness+SolenoidBarrelOuterCryostatThickness"/>
+    <constant name="SolenoidCoilOuterZ" value="SolenoidBarrelOuterZ-SolenoidEndcapCryostatThickness-SolenoidEndcapAirgapThickness"/>
+    <constant name="SolenoidalFieldRadius" value="(SolenoidBarrelConductorInnerRadius+SolenoidBarrelAlConductorThickness/2.)"/>
+  </define>
+  <materials>
+    <material name="TungstenDens23">
+      <D value="17.7" unit="g/cm3"/>
+      <fraction n="0.925" ref="W"/>
+      <fraction n="0.066" ref="Ni"/>
+      <fraction n="0.009" ref="Fe"/>
+    </material>
+    <material name="TungstenDens24">
+      <D value="17.8" unit="g/cm3"/>
+      <fraction n="0.93" ref="W"/>
+      <fraction n="0.061" ref="Ni"/>
+      <fraction n="0.009" ref="Fe"/>
+    </material>
+    <material name="TungstenDens25">
+      <D value="18.2" unit="g/cm3"/>
+      <fraction n="0.950" ref="W"/>
+      <fraction n="0.044" ref="Ni"/>
+      <fraction n="0.006" ref="Fe"/>
+    </material>
+    <material name="CarbonFiber_25percent">
+      <D type="density" value="0.375" unit="g/cm3"/>
+      <fraction n="1.0" ref="CarbonFiber"/>
+    </material>
+    <material name="CarbonFiber_15percent">
+      <D type="density" value="0.225" unit="g/cm3"/>
+      <fraction n="1.0" ref="CarbonFiber"/>
+    </material>
+    <material name="Rohacell31_50percent">
+      <D type="density" value="0.016" unit="g/cm3"/>
+      <fraction n="1.0" ref="Rohacell31"/>
+    </material>
+    <material name="Rohacell31_15percent">
+      <D type="density" value="0.0048" unit="g/cm3"/>
+      <fraction n="1.0" ref="Rohacell31"/>
+    </material>
+    <material name="BoratedPolyethylene5">
+      <D value="0.93" unit="g/cm3"/>
+      <fraction n="0.612" ref="C"/>
+      <fraction n="0.222" ref="O"/>
+      <fraction n="0.116" ref="H"/>
+      <fraction n="0.050" ref="B"/>
+    </material>
+    <material name="SiliconCarbide">
+      <D value="3.1" unit="g/cm3"/>
+      <composite n="1" ref="Si"/>
+      <composite n="1" ref="C"/>
+    </material> 
+    <material name="SiliconCarbide_6percent">
+      <D value="0.186" unit="g/cm3"/>
+      <fraction n="1.0" ref="SiliconCarbide"/>
+    </material>      
+  </materials>
+  <limits>
+    <limitset name="cal_limits">
+      <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
+    </limitset>
+  </limits>
+  <display>
+    <vis name="BeampipeVis" r="0.7734375" g="0.8671875" b="0.99609375" />
+
+    <vis name="SiVertexBarrelVis" r="0.5" g="0.7" b="0.4" />
+    <vis name="SiVertexEndcapVis" r="0.5" g="0.7" b="0.4" />
+
+    <vis name="SiTrackerForwardVis" r="0.8" g="0.1" b="0.1" />
+
+    <vis name="SiTrackerBarrelVis" r="0.8" g="1.0" b="0.1" />
+    <vis name="SiTrackerEndcapVis" r="0.8" g="1.0" b="0.1" />
+
+    <vis name="EcalBarrelVis" r="0.77" g="0.74" b="0.86" />
+    <vis name="EcalEndcapVis" r="0.77" g="0.74" b="0.86" />
+
+    <vis name="HcalBarrelVis" r="0.296875" g="0.48828125" b="0.4921875" />
+    <vis name="HcalEndcapVis" r="0.296875" g="0.48828125" b="0.4921875" />
+
+    <vis name="SolenoidCoilVis" r="0.20703125" g="0.453125" b="0.77734375" />
+
+    <vis name="MuonEndcapVis" r="0.28125" g="0.390625" b="0.625" />
+    <vis name="MuonBarrelVis" r="0.28125" g="0.390625" b="0.625" />
+
+    <vis name="LumiCalVis" r="0.5" g="0.5" b="0.5" />
+    <vis name="BeamCalVis" r="0.5" g="0.5" b="0.5" />
+
+  </display>
+
+
+  <!-- ########################################################################### -->
+  <detectors>
+    <comment>Trackers</comment> 
+    
+    <!--include ref="SiVertexBarrel.xml"/>
+
+    <include ref="SiVertexEndcap.xml"/>
+
+    <include ref="SiTrackerEndcap.xml"/>
+
+    <include ref="SiTrackerBarrel.xml"/>
+ 
+    <include ref="SiTrackerForward.xml"/-->
+
+    <!-- <comment>Calorimeters</comment> -->
+
+    <include ref="EcalBarrel_o1_v01_00.xml"/>
+
+    <include ref="EcalEndcap_o1_v01_00.xml"/>
+
+    <!--include ref="HcalBarrel.xml"/>
+
+    <include ref="HcalEndcap.xml"/>
+
+    <include ref="MuonBarrel.xml"/>
+    <include ref="MuonEndcap.xml"/>
+
+    <include ref="LumiCal.xml"/>
+
+    <include ref="BeamCal.xml"/>
+
+    <include ref="BeamPipe.xml"/-->
+
+    <comment>Dead material and supports</comment>
+    <comment>Vertex Detector Supports and Readout</comment>
+
+    <!--  FG: fixme: should be split up into more individual files  ... -->
+    <!-- <include ref="Support.xml"/> -->
+
+  </detectors>
+
+  <!-- ########################################################################### -->
+
+  <plugins>
+    <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
+      <argument value="SiVertexBarrel"/>
+      <argument value="dimension=2"/>
+    </plugin>
+    <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
+      <argument value="SiVertexEndcap"/>
+      <argument value="dimension=2"/>
+    </plugin>
+    <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
+      <argument value="SiTrackerBarrel"/>
+      <argument value="dimension=1"/>
+    </plugin>
+    <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
+      <argument value="SiTrackerEndcap"/>
+      <argument value="dimension=2"/>
+    </plugin>
+    <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
+      <argument value="SiTrackerForward"/>
+      <argument value="dimension=2"/>
+    </plugin>
+
+    <plugin name="DD4hep_CaloFaceEndcapSurfacePlugin">
+      <argument value="EcalEndcap"/>
+      <argument value="zpos=EcalEndcap_zmin"    />
+      <argument value="radius=1765.0*2*mm"  />
+      <argument value="phi0=0"    />
+      <argument value="symmetry=12"/>
+      <argument value="systemID=6"/>
+      <!-- <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> -->
+    </plugin>
+    <plugin name="DD4hep_CaloFaceBarrelSurfacePlugin">
+      <argument value="EcalBarrel"/>
+      <argument value="length=1765.0*2*mm"    />
+      <argument value="radius=EcalBarrel_rmin"  />
+      <argument value="phi0=0"    />
+      <argument value="symmetry=12"/>
+      <argument value="systemID=20"/>
+      <!-- <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> -->
+    </plugin>
+    <plugin name="InstallSurfaceManager"/>
+    
+  </plugins>
+
+
+
+  <!-- ########################################################################### -->
+
+
+  <readouts>
+    <readout name="SiTrackerEndcapHits">
+      <id>system:6,barrel:3,layer:4,module:16,sensor:1,side:32:-2,strip:20</id>
+    </readout>        
+    <readout name="SiTrackerBarrelHits">
+      <id>system:6,barrel:3,layer:4,module:12,sensor:1,side:32:-2,strip:20</id>
+    </readout>
+    <readout name="SiVertexBarrelHits">
+      <id>system:6,barrel:3,layer:4,module:12,sensor:1,side:32:-2,strip:24</id>
+    </readout>
+    <readout name="SiVertexEndcapHits">
+      <id>system:6,barrel:3,layer:4,wedge:6,module:6,sensor:1,side:32:-2,strip:24</id>
+    </readout>
+    <readout name="EcalBarrelHits">
+      <segmentation type="CartesianGridXY" grid_size_x="3.5*mm" grid_size_y="3.5*mm" />
+      <id>system:6,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id>
+    </readout>        
+    <readout name="EcalEndcapHits">
+      <segmentation type="CartesianGridXY" grid_size_x="3.5*mm" grid_size_y="3.5*mm" />
+      <!-- <segmentation type="GlobalGridXY" grid_size_x="3.5" grid_size_y="3.5" /> -->
+      <!-- <id>system:6,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id> -->
+      <id>system:5,side:2,module:8,stave:4,layer:9,submodule:4,x:32:-16,y:-16</id>
+    </readout>
+    <readout name="HcalBarrelHits">
+      <segmentation type="CartesianGridXY" grid_size_x="1.0*cm" grid_size_y="1.0*cm" />
+      <!-- <segmentation type="RegularNgonCartesianGridXY" gridSizeX="1.0*cm" gridSizeY="1.0*cm" /> -->
+      <id>system:5,side:2,module:8,stave:4,layer:9,submodule:4,x:32:-16,y:-16</id>
+      <!-- <id>system:6,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id> -->
+    </readout>
+    <readout name="HcalEndcapHits">
+      <segmentation type="CartesianGridXY" grid_size_x="1.0*cm" grid_size_y="1.0*cm" />
+      <!-- <segmentation type="GlobalGridXY" gridSizeX="1.0*cm" gridSizeY="1.0*cm" /> -->
+      <id>system:5,side:2,module:8,stave:4,layer:9,submodule:4,x:32:-16,y:-16</id>
+      <!-- <id>system:6,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id> -->
+    </readout>
+    <readout name="MuonBarrelHits">
+      <segmentation type="CartesianGridXY" grid_size_x="3.0*cm" grid_size_y="3.0*cm" />
+      <!-- <segmentation type="RegularNgonCartesianGridXY" gridSizeX="3.0*cm" gridSizeY="3.0*cm" /> -->
+      <id>system:8,barrel:3,module:4,layer:8,slice:4,x:32:-16,y:-16</id>
+    </readout>
+    <readout name="MuonEndcapHits">
+      <segmentation type="CartesianGridXY" grid_size_x="3.0*cm" grid_size_y="3.0*cm" />
+      <!-- <segmentation type="GlobalGridXY" gridSizeX="3.0*cm" gridSizeY="3.0*cm" /> -->
+      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
+    </readout>
+    <readout name="SiTrackerForwardHits">
+      <id>system:6,barrel:3,layer:4,wedge:6,module:6,sensor:1,side:32:-2,strip:24</id>
+    </readout>
+    <readout name="LumiCalHits">
+      <segmentation type="CartesianGridXY" grid_size_x="0.35*cm" grid_size_y="0.35*cm" />
+      <!-- <segmentation type="GridXYZ" gridSizeX="0.35*cm" gridSizeY="0.35*cm" /> -->
+      <!-- <id>system:8,layer:8,barrel:3,x:32:-16,y:-16</id> -->
+      <id>system:8,barrel:3,layer:8,slice:8,x:32:-16,y:-16</id>
+    </readout>
+    <readout name="BeamCalHits">
+      <segmentation type="CartesianGridXY" grid_size_x="0.35*cm" grid_size_y="0.35*cm" />
+      <!-- <segmentation type="GridXYZ" gridSizeX="0.35*cm" gridSizeY="0.35*cm" /> -->
+      <!-- <id>system:8,layer:8,barrel:3,x:32:-16,y:-16</id> -->
+      <id>system:8,barrel:3,layer:8,slice:5,x:32:16,y:16</id>
+    </readout>
+  </readouts>
+  <fields>
+    <field type="solenoid" name="GlobalSolenoid" inner_field="5.0*tesla"
+           outer_field="-0.6*tesla" zmax="1000*mm"
+           outer_radius="SolenoidalFieldRadius" />
+  </fields>
+</lccdd>

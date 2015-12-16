@@ -1,0 +1,34 @@
+<detector id="5" name="EcalBarrel" type="GenericCalBarrel_o1_v01" readout="EcalBarrelHits" vis="EcalBarrelVis" calorimeterType="EM_BARREL" gap="0.*cm">
+  <comment>EM Calorimeter Barrel</comment>
+  <dimensions numsides="EcalBarrel_symmetry" rmin="EcalBarrel_rmin" z="2*EcalBarrel_half_length" />
+
+  <envelope vis="EcalBarrelVis">
+    <shape type="PolyhedraRegular" numsides="EcalBarrel_symmetry"  rmin="EcalBarrel_rmin - env_safety" rmax="EcalBarrel_rmax + 10*env_safety" dz="2*EcalBarrel_half_length + 2*env_safety"  material="Air"/>
+    <!-- Radii definitions as in http://cern.ch/go/r9mZ -->
+    <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/EcalBarrel_symmetry"/>
+  </envelope>
+
+  <staves />
+  <layer repeat="1">
+    <slice material = "Silicon" thickness = "0.032*cm" sensitive = "yes" limits="cal_limits" />
+    <slice material = "Copper"  thickness = "0.005*cm" />
+    <slice material = "Kapton"  thickness = "0.030*cm" />
+    <slice material = "Air"     thickness = "0.033*cm" />
+  </layer>
+  <layer repeat="20">
+    <slice material = "TungstenDens24" thickness = "0.25*cm" />
+    <slice material = "Air"     thickness = "0.025*cm" />
+    <slice material = "Silicon" thickness = "0.032*cm" sensitive = "yes" limits="cal_limits" />
+    <slice material = "Copper"  thickness = "0.005*cm" />
+    <slice material = "Kapton"  thickness = "0.030*cm" />
+    <slice material = "Air"     thickness = "0.033*cm" />
+  </layer>
+  <layer repeat="10">
+    <slice material = "TungstenDens24" thickness = "0.5*cm" />
+    <slice material = "Air"     thickness = "0.025*cm" />
+    <slice material = "Silicon" thickness = "0.032*cm" sensitive = "yes" limits="cal_limits" />
+    <slice material = "Copper"  thickness = "0.005*cm" />
+    <slice material = "Kapton"  thickness = "0.030*cm" />
+    <slice material = "Air"     thickness = "0.033*cm" />
+  </layer>
+</detector>
