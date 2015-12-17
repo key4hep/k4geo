@@ -107,10 +107,13 @@
     </detectors>
     
     
-        <plugins>
-        <plugin name="TrackerEndcapSurfacePlugin">
+    <plugins>
+        <plugin name="GenericSurfaceInstallerPlugin">
             <argument value="InnerTrackerEndcap"/>
             <argument value="dimension=2"/>
+            <argument value="u_x=-1."/>
+            <argument value="v_z=1."/>
+            <argument value="n_y=1."/>
         </plugin>
     </plugins>
     
