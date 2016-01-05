@@ -377,6 +377,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       double y_floor = EC_y_bottom;
 
       bool fill_DDRec = true; //Fill DDRec only once within loop while.
+      bool fill_LayerID = true; //Fill LayerNumber only once within loop while.
       while ( ( y_floor + EC_alveolus_dim_y) < EC_y_top )
 	{
 	  alv_upper_y = y_floor + EC_alveolus_dim_y;
@@ -640,8 +641,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    PlacedVolume slice_phv = l_vol.placeVolume(s_vol,Position(0,0,s_pos_z+s_thick/2));
 	    
 	    if ( x_slice.isSensitive() ) {
-	      slice_phv.addPhysVolID("layer", myLayerNum++);
-	      //	      slice_phv.addPhysVolID("slice",s_num);
+	      if (fill_LayerID) {
+		slice_phv.addPhysVolID("layer", myLayerNum++);
+	      }
 	    }
 
 
@@ -729,6 +731,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  EC_Number_of_towers++;
 
 	  fill_DDRec = false; 
+	  fill_LayerID = false;
 	}
       
 
