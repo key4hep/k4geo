@@ -377,7 +377,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       double y_floor = EC_y_bottom;
 
       bool fill_DDRec = true; //Fill DDRec only once within loop while.
-      bool fill_LayerID = true; //Fill LayerNumber only once within loop while.
+      int increase_LayerID = 0;
+
       while ( ( y_floor + EC_alveolus_dim_y) < EC_y_top )
 	{
 	  alv_upper_y = y_floor + EC_alveolus_dim_y;
@@ -426,6 +427,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  // BuildEndcapAlveolus: BuildSiliconSlab:
 	  //--------------------------------------------------------------------------------
 
+	  increase_LayerID = 0;
 	  for(xml_coll_t si(x_layer,_U(slice)); si; ++si)  {
 	    xml_comp_t x_slice = si;
 	    string     s_name  =  _toString(s_num,"slice%d");
@@ -641,9 +643,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    PlacedVolume slice_phv = l_vol.placeVolume(s_vol,Position(0,0,s_pos_z+s_thick/2));
 	    
 	    if ( x_slice.isSensitive() ) {
-	      if (fill_LayerID) {
-		slice_phv.addPhysVolID("layer", myLayerNum++);
-	      }
+	      slice_phv.addPhysVolID("layer", myLayerNum+increase_LayerID);
+#ifdef VERBOSE
+	      std::cout << "current layer number = " << myLayerNum+increase_LayerID << std::endl;
+#endif	      
+	      increase_LayerID++;
 	    }
 
 
@@ -731,9 +735,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  EC_Number_of_towers++;
 
 	  fill_DDRec = false; 
-	  fill_LayerID = false;
 	}
-      
+
+      myLayerNum = myLayerNum + increase_LayerID;
 
       // Increment to next layer Z position.
       l_pos_z +=   (l_thickness/2. +(radiator_dim_y/2. + Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE))*2.);
