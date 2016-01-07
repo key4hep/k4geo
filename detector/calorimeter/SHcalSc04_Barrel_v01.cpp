@@ -4,6 +4,7 @@
 //  S.Lu, DESY
 //  $Id:  $
 //====================================================================
+#include "DD4hep/Printout.h"
 #include "DD4hep/DetFactoryHelper.h"
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
@@ -39,17 +40,17 @@ bool validateEnvelope(double rInner, double rOuter, double radiatorThickness, do
   
   if( spaceNeeded > spaceAllowed )
     {
-      cout<<"\n ERROR: Layer number is more than it can be built!" <<endl;
+      printout( DD4hep::ERROR,  "SHcalSc04_Barrel_v01", " Layer number is more than it can be built! "  ) ;
       Error = true;
     }
   else if ( spaceToleranted < spaceAllowed )
     {
-      cout<<"\n WARNING: Layer number is less than it is able to build!" <<endl;
+      printout( DD4hep::WARNING,  "SHcalSc04_Barrel_v01", " Layer number is less than it is able to build!" ) ;
       Warning = true;
     }
   else
     {
-      cout<<"\n SHcalSC04_Barrel has been validated and start to build it." <<endl;
+      printout( DD4hep::DEBUG,  "SHcalSc04_Barrel_v01"," has been validated and start to build it." ) ;
       Error = false;
       Warning = false;
     }
@@ -132,12 +133,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   sens.setType("calorimeter");
 
-  // Some verbose output
-  cout << " \n\n\n CREATE DETECTOR: SHcalSC04_Barrel" << endl;
-
-
-
-
 //====================================================================
 //
 // Read all the constant from ILD_o1_v05.xml
@@ -163,11 +158,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   int         Hcal_nlayers                     = lcdd.constant<int>("Hcal_nlayers");
 
   double      TPC_outer_radius               = lcdd.constant<double>("TPC_outer_radius");
-  std::cout << " ***********TPC_outer_radius " << TPC_outer_radius  << std::endl ;
 
   double      Ecal_outer_radius               = lcdd.constant<double>("Ecal_outer_radius");
-  std::cout << " ***********Ecal_outer_radius " <<  Ecal_outer_radius << std::endl ;
 
+  printout( DD4hep::DEBUG,  "SHcalSc04_Barrel_v01", "TPC_outer_radius : %e   - Ecal_outer_radius: %e ", TPC_outer_radius , Ecal_outer_radius) ;
 
   validateEnvelope(Hcal_inner_radius, Hcal_outer_radius, Hcal_radiator_thickness, Hcal_chamber_thickness, Hcal_nlayers);
 
@@ -374,9 +368,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       //--------------------------------------------------------------------------------
       //  build chamber box, with the calculated dimensions 
       //-------------------------------------------------------------------------------
-      cout <<" \n Start to build layer chamber "<<endl;
-      cout <<"layer_id: "<< layer_id <<endl;
-      cout <<" chamber x:y:z:   "<<x_length*2.<<":"<<z_width*2.<<":"<<y_height*2.<<endl;
+      printout( DD4hep::DEBUG,  "SHcalSc04_Barrel_v01", " \n Start to build layer chamber - layer_id: %d", layer_id ) ;
+      printout( DD4hep::DEBUG,  "SHcalSc04_Barrel_v01"," chamber x:y:z:  %e:%e:%e", x_length*2., z_width*2. , y_height*2. );
 
       //check if x_length (scintillator length) is divisible with x_integerTileSize
       if( layer_id <= Hcal_nlayers) {
@@ -487,7 +480,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	if ( x_slice.isSensitive() ) {
 	  int slice_id  = (layer_id > Hcal_nlayers)? 1:-1;
 	  slice_phv.addPhysVolID("layer",logical_layer_id).addPhysVolID("slice",slice_id);
-	  cout<<"  logical_layer_id:  "<< logical_layer_id<<"   slice_id:  "<<slice_id <<endl;
+	  printout( DD4hep::DEBUG,  "SHcalSc04_Barrel_v01", "  logical_layer_id:  %d  slice_id:  %d", logical_layer_id, slice_id  ) ;
 	}
 	
 	slice.setPlacement(slice_phv);
@@ -544,14 +537,17 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     std::vector<double> LOX = tileSeg->layerOffsetX();
     std::vector<double> LOY = tileSeg->layerOffsetY();
 
-    std::cout <<" layerOffsetX(): ";
+    std::stringstream sts ;
+    sts <<" layerOffsetX(): ";
     for (std::vector<double>::const_iterator ix = LOX.begin(); ix != LOX.end(); ++ix)
-      std::cout << *ix << ' ';
-    std::cout << " " <<std::endl;
-    std::cout <<" layerOffsetY(): ";
+      sts << *ix << ' ';
+    printout( DD4hep::DEBUG,  "SHcalSc04_Barrel_v01", "%s" , sts.str().c_str() ) ;
+    sts.clear() ; sts.str("") ;
+    sts <<" layerOffsetY(): ";
     for (std::vector<double>::const_iterator iy = LOY.begin(); iy != LOY.end(); ++iy)
-      std::cout << *iy << ' ';
-    std::cout << " " <<std::endl;
+      sts << *iy << ' ';
+    printout( DD4hep::DEBUG,  "SHcalSc04_Barrel_v01", "%s" , sts.str().c_str() ) ;
+
   }
 
 
