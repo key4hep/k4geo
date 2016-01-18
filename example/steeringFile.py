@@ -30,3 +30,12 @@ SIM.filter.mapDetFilter['FTD'] = ["edep3kev","geantino"] ## custom filter
 
 #create your own filter with a dict containing name and parameter
 SIM.filter.filters['edep3kev'] = dict(name="EnergyDepositMinimumCut/3keV", parameter={"Cut": 3.0*keV} )
+
+#chose the physicslist and range cut
+SIM.physics.list = "FTFP_BERT"
+SIM.physics.rangecut = 1*mm
+
+## Add parameters to the run header
+## This will store the Parameter "MyNewParameter" in the runHeader of the slcio file
+## all members are added to the runheader. Isn't Python beautiful?
+SIM.MyNewParameter = "Value"
