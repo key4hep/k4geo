@@ -62,11 +62,20 @@
 	      inner_z = "LHcal_zend + LHcal_BCal_clearance"
 	      outer_r = "BCal_rOuter" />
   
-  <layer repeat="1" vis="SeeThrough">
-    <slice material = "C"         thickness = "BCal_dGraphite" vis="LayerVis1"      layerType="holeForIncomingBeampipe"/>
-  </layer>
+  <!-- <layer repeat="1" vis="SeeThrough"> -->
+  <!--   <slice material = "C"         thickness = "BCal_dGraphite" vis="LayerVis1"      layerType="holeForIncomingBeampipe"/> -->
+  <!-- </layer> -->
   
-  <layer repeat="BCal_nLayers" vis="SeeThrough">
+  <layer repeat="1" vis="SeeThrough">
+    <slice material = "C"       thickness = "BCal_dGraphite" vis="LayerVis1"      layerType="holeForIncomingBeampipe"/>
+    <slice material = "TungstenDens24" thickness = "BCal_dAbsorber"        vis="BCLayerVis1" layerType="holeForIncomingBeampipe" />
+    <slice material = "Silicon" thickness = "0.3004*mm" sensitive = "yes"  vis="BCLayerVis2"/>
+    <slice material = "Copper"  thickness = "0.0004*mm"                    vis="BCLayerVis3"/>
+    <slice material = "Kapton"  thickness = "0.15*mm"                      vis="BCLayerVis4"/>
+    <slice material = "Air"     thickness = "0.05*mm" />
+  </layer>
+
+  <layer repeat="BCal_nLayers-1" vis="SeeThrough">
     <slice material = "TungstenDens24" thickness = "BCal_dAbsorber"        vis="BCLayerVis1" layerType="holeForIncomingBeampipe" />
     <slice material = "Silicon" thickness = "0.3004*mm" sensitive = "yes"  vis="BCLayerVis2"/>
     <slice material = "Copper"  thickness = "0.0004*mm"                    vis="BCLayerVis3"/>
