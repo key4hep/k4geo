@@ -382,7 +382,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	std::vector< DetElement > layers( Ecal_barrel_number_of_towers )  ;
 	
 	// place layer 5 times in module. at same layer position (towers !)
-	double l_pos_y = Ecal_Barrel_module_dim_z / 2.;
+	double l_pos_y = Ecal_Barrel_module_dim_z / 2. - Ecal_lateral_face_thickness;
        	for (int i=0; i<Ecal_barrel_number_of_towers; i++){ // need four clone
 
 	  layers[i] = DetElement( stave_det, l_name+_toString(i,"tower%02d") , det_id ) ;
