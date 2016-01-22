@@ -499,7 +499,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 		 n_wafer_x++)
 	      {
 		double wafer_pos_z =
-		  -slab_dim_z + 
+		  -alveolus_dim_z/2.0 + 
 		  Ecal_guard_ring_size +
 		  wafer_dim_z /2;
 		for (int n_wafer_z = 1;
@@ -558,7 +558,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 		  wafer_dim_x + 2 * Ecal_guard_ring_size;
 	  
 		double wafer_pos_z =
-		  -slab_dim_z + 
+		  -alveolus_dim_z/2.0 + 
 		  Ecal_guard_ring_size +
 		  wafer_dim_z /2;
 
