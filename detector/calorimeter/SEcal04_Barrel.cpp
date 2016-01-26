@@ -382,19 +382,26 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	std::vector< DetElement > layers( Ecal_barrel_number_of_towers )  ;
 	
 	// place layer 5 times in module. at same layer position (towers !)
-	double l_pos_y = Ecal_Barrel_module_dim_z / 2. - Ecal_lateral_face_thickness;
+	double l_pos_y = Ecal_Barrel_module_dim_z / 2. 
+	  - ( Ecal_lateral_face_thickness +
+	      Ecal_fiber_thickness * N_FIBERS_ALVOULUS +
+	      Ecal_Slab_shielding + 
+	      Ecal_Slab_H_fiber_thickness +
+	      alveolus_dim_z /2.);						  
        	for (int i=0; i<Ecal_barrel_number_of_towers; i++){ // need four clone
 
 	  layers[i] = DetElement( stave_det, l_name+_toString(i,"tower%02d") , det_id ) ;
 
-	  l_pos_y -= stave_z;
 	  Position   l_pos(0,l_pos_y,l_pos_z-l_thickness/2.);      // Position of the layer.
 	  PlacedVolume layer_phv = mod_vol.placeVolume(l_vol,l_pos);
 	  // layer_phv.addPhysVolID("layer", l_num);
 	  layer_phv.addPhysVolID("tower", i);
 
 	  layers[i].setPlacement(layer_phv);
-	  l_pos_y -= stave_z;
+	  l_pos_y -= (alveolus_dim_z + 
+		      2. * Ecal_fiber_thickness * N_FIBERS_ALVOULUS +
+		      2. * Ecal_Slab_H_fiber_thickness +
+		      2. * Ecal_Slab_shielding);
 	}
 
 
