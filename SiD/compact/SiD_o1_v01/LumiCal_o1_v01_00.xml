@@ -1,6 +1,12 @@
 <detector id="11" name="LumiCal" reflect="true" type="DD4hep_CylindricalEndcapCalorimeter" readout="LumiCalHits" vis="LumiCalVis" calorimeterType="LUMI">
   <comment>Luminosity Calorimeter</comment>
-  <dimensions inner_r = "6.0*cm" inner_z = "168.0*cm" outer_r = "19.5*cm" />
+  <dimensions inner_r = "LumiCal_rmin" outer_r = "LumiCal_rmax" inner_z = "LumiCal_zmin"/>
+  <envelope vis="LumiCalVis">
+   <shape type="BooleanShape" operation="Subtraction" material="Air">
+     <shape type="Tube" rmin="LumiCal_rmin" rmax="LumiCal_rmax + env_safety" dz="2*LumiCal_zmax + 2*env_safety"/>
+     <shape type="Tube" rmin="LumiCal_rmin" rmax="LumiCal_rmax + env_safety" dz="2*LumiCal_zmin - 2*env_safety"/>
+   </shape>
+  </envelope>
   <layer repeat="20" >
     <slice material = "TungstenDens24" thickness = "0.271*cm" />
     <slice material = "Silicon" thickness = "0.032*cm" sensitive = "yes" />

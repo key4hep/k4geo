@@ -1,14 +1,14 @@
 <detector id="8" name="HcalEndcap" type="GenericCalEndcap_o1_v01" readout="HcalEndcapHits" vis="HcalEndcapVis" calorimeterType="HAD_ENDCAP" reflect="true">
   <comment>Hadron Calorimeter Endcaps</comment>
 
-  <dimensions numsides="12" zmin="1805.0*mm" rmin="200.0*mm" rmax="1403.*mm"  nsides_inner="12" nsides_outer="12" />
+  <dimensions numsides="HCalEndcap_outer_symmetry" zmin="HCalEndcap_zmin" rmin="HCalEndcap_rmin" rmax="HCalEndcap_rmax"  nsides_inner="HCalEndcap_inner_symmetry" nsides_outer="HCalEndcap_outer_symmetry" />
 
   <envelope vis="HcalEndcapVis">
     <shape type="BooleanShape" operation="Subtraction" material="Air">
-      <shape type="PolyhedraRegular"  numsides="12" rmin="200.0*mm" rmax="1403.0*mm" dz="2.*3000.1*mm" />
-      <shape type="PolyhedraRegular"  numsides="12" rmin="199.9*mm" rmax="1403.1*mm" dz="2.*1804.9*mm"/>
+      <shape type="PolyhedraRegular" numsides="HCalEndcap_outer_symmetry" rmin="HCalEndcap_rmin - env_safety" rmax="HCalEndcap_rmax + env_safety" dz="2*HCalEndcap_zmax + 2*env_safety" />
+      <shape type="PolyhedraRegular" numsides="HCalEndcap_outer_symmetry" rmin="0" rmax="HCalEndcap_rmax + 5*env_safety" dz="2*HCalEndcap_zmin - 2*env_safety"/>
     </shape>
-    <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/12"/>
+    <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/HCalEndcap_outer_symmetry"/>
   </envelope>
 
   <layer repeat="45">

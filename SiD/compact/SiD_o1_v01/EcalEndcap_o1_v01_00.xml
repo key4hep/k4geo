@@ -5,8 +5,8 @@
 
   <envelope vis="EcalEndcapVis">
     <shape type="BooleanShape" operation="Subtraction" material="Air">
-      <shape type="PolyhedraRegular"  numsides="EcalEndcap_outer_symmetry" rmin="EcalEndcap_rmin - env_safety" rmax="EcalEndcap_rmax + 10*env_safety" dz="2*EcalEndcap_zmax + 2*env_safety" />
-      <shape type="PolyhedraRegular"  numsides="EcalEndcap_outer_symmetry" rmin="0" rmax="EcalEndcap_rmax + 20*env_safety" dz="2*EcalEndcap_zmin - 2*env_safety" />
+      <shape type="PolyhedraRegular"  numsides="EcalEndcap_outer_symmetry" rmin="EcalEndcap_rmin - env_safety" rmax="EcalEndcap_rmax + env_safety" dz="2*EcalEndcap_zmax + 2*env_safety" />
+      <shape type="PolyhedraRegular"  numsides="EcalEndcap_outer_symmetry" rmin="0" rmax="EcalEndcap_rmax + 2*env_safety" dz="2*EcalEndcap_zmin - 2*env_safety" />
     </shape>
     <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/EcalEndcap_outer_symmetry" />
   </envelope>

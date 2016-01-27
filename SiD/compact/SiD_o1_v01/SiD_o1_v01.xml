@@ -17,7 +17,6 @@
     <!--pyBuilder ref="../drivers"/-->
   </includes>
 
-
   <define>
     <constant name="world_side" value="30000*mm"/>
     <constant name="world_x" value="world_side"/>
@@ -44,10 +43,10 @@
       additional parameters for cutting away volumes/shapes use one of the above with a number
       appended and/or an extra specifiaction such as cone ( for a cut away cone )
       
-      DET_inner_radius_1
-      DET_outer_radius_2
-      DET_cone_min_z
-      DET_cone_max_z
+      DET_rmin_1
+      DET_rmin_2
+      DET_cone_zmin
+      DET_cone_zmax
       
     </comment>    
 
@@ -63,11 +62,30 @@
     <constant name="EcalEndcap_inner_symmetry" value="12" />
     <constant name="EcalEndcap_outer_symmetry" value="12" />
 
-    <constant name="HcalBarrel_rmin" value="1419.0*mm"/>
-    <constant name="HcalEndcap_zmin" value="1805.0*mm"/>
+    <constant name="HcalBarrel_half_length" value="2950.0*mm" />
+    <constant name="HcalBarrel_rmin" value="1409.0*mm" />
+    <constant name="HcalBarrel_rmax" value="2501.0*mm" />
+    <constant name="HcalBarrel_symmetry" value="12" />
 
-    <constant name="tracking_region_radius" value="EcalBarrel_rmin - 1.0*mm"/>
-    <constant name="tracking_region_zmax" value="EcalEndcap_zmin - 1.0*mm"/>
+    <constant name="HCalEndcap_zmin" value="1801.0*mm"/>
+    <constant name="HCalEndcap_zmax" value="3000.0*mm"/>
+    <constant name="HCalEndcap_rmin" value="216.0*mm"/>
+    <constant name="HCalEndcap_rmax" value="1403.0*mm"/>
+    <constant name="HCalEndcap_inner_symmetry" value="12"/>
+    <constant name="HCalEndcap_outer_symmetry" value="12"/>
+
+    <constant name="BeamCal_rmin" value="0.0*mm"/>
+    <constant name="BeamCal_rmax" value="129.6*mm"/>
+    <constant name="BeamCal_zmin" value="3039.0*mm"/>
+    <constant name="BeamCal_zmax" value="3399.0*mm"/>
+
+    <constant name="LumiCal_rmin" value="60.0*mm"/>
+    <constant name="LumiCal_rmax" value="195.0*mm"/>
+    <constant name="LumiCal_zmin" value="1557.0*mm"/>
+    <constant name="LumiCal_zmax" value="1700.0*mm"/>
+
+    <constant name="tracking_region_radius" value="EcalBarrel_rmin - 10*env_safety"/>
+    <constant name="tracking_region_zmax" value="EcalEndcap_zmin - 10*env_safety"/>
     
     <constant name="tracker_region_rmax" value="tracking_region_radius" />  
     <constant name="tracker_region_zmax" value="tracking_region_zmax" />  
@@ -91,58 +109,7 @@
     <constant name="SolenoidCoilOuterZ" value="SolenoidBarrelOuterZ-SolenoidEndcapCryostatThickness-SolenoidEndcapAirgapThickness"/>
     <constant name="SolenoidalFieldRadius" value="(SolenoidBarrelConductorInnerRadius+SolenoidBarrelAlConductorThickness/2.)"/>
   </define>
-  <materials>
-    <material name="TungstenDens23">
-      <D value="17.7" unit="g/cm3"/>
-      <fraction n="0.925" ref="W"/>
-      <fraction n="0.066" ref="Ni"/>
-      <fraction n="0.009" ref="Fe"/>
-    </material>
-    <material name="TungstenDens24">
-      <D value="17.8" unit="g/cm3"/>
-      <fraction n="0.93" ref="W"/>
-      <fraction n="0.061" ref="Ni"/>
-      <fraction n="0.009" ref="Fe"/>
-    </material>
-    <material name="TungstenDens25">
-      <D value="18.2" unit="g/cm3"/>
-      <fraction n="0.950" ref="W"/>
-      <fraction n="0.044" ref="Ni"/>
-      <fraction n="0.006" ref="Fe"/>
-    </material>
-    <material name="CarbonFiber_25percent">
-      <D type="density" value="0.375" unit="g/cm3"/>
-      <fraction n="1.0" ref="CarbonFiber"/>
-    </material>
-    <material name="CarbonFiber_15percent">
-      <D type="density" value="0.225" unit="g/cm3"/>
-      <fraction n="1.0" ref="CarbonFiber"/>
-    </material>
-    <material name="Rohacell31_50percent">
-      <D type="density" value="0.016" unit="g/cm3"/>
-      <fraction n="1.0" ref="Rohacell31"/>
-    </material>
-    <material name="Rohacell31_15percent">
-      <D type="density" value="0.0048" unit="g/cm3"/>
-      <fraction n="1.0" ref="Rohacell31"/>
-    </material>
-    <material name="BoratedPolyethylene5">
-      <D value="0.93" unit="g/cm3"/>
-      <fraction n="0.612" ref="C"/>
-      <fraction n="0.222" ref="O"/>
-      <fraction n="0.116" ref="H"/>
-      <fraction n="0.050" ref="B"/>
-    </material>
-    <material name="SiliconCarbide">
-      <D value="3.1" unit="g/cm3"/>
-      <composite n="1" ref="Si"/>
-      <composite n="1" ref="C"/>
-    </material> 
-    <material name="SiliconCarbide_6percent">
-      <D value="0.186" unit="g/cm3"/>
-      <fraction n="1.0" ref="SiliconCarbide"/>
-    </material>      
-  </materials>
+
   <limits>
     <limitset name="cal_limits">
       <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
@@ -180,7 +147,7 @@
   <detectors>
     <comment>Trackers</comment> 
     
-    <!--include ref="SiVertexBarrel.xml"/>
+    <!--include ref="SiVertexBarrel_o1_v01_00.xml"/>
 
     <include ref="SiVertexEndcap.xml"/>
 
@@ -190,24 +157,24 @@
  
     <include ref="SiTrackerForward.xml"/-->
 
-    <!-- <comment>Calorimeters</comment> -->
+    <comment>Calorimeters</comment>
 
     <include ref="EcalBarrel_o1_v01_00.xml"/>
 
     <include ref="EcalEndcap_o1_v01_00.xml"/>
 
-    <!--include ref="HcalBarrel.xml"/>
+    <include ref="HcalBarrel_o1_v01_00.xml"/>
 
-    <include ref="HcalEndcap.xml"/>
+    <include ref="HcalEndcap_o1_v01_00.xml"/>
 
-    <include ref="MuonBarrel.xml"/>
-    <include ref="MuonEndcap.xml"/>
+    <!--include ref="MuonBarrel.xml"/>
+    <include ref="MuonEndcap.xml"/-->
 
-    <include ref="LumiCal.xml"/>
+    <include ref="LumiCal_o1_v01_00.xml"/>
 
-    <include ref="BeamCal.xml"/>
+    <include ref="BeamCal_o1_v01_00.xml"/>
 
-    <include ref="BeamPipe.xml"/-->
+    <!--include ref="BeamPipe.xml"/-->
 
     <comment>Dead material and supports</comment>
     <comment>Vertex Detector Supports and Readout</comment>
