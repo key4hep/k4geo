@@ -1061,6 +1061,18 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
   vxd.setVisAttributes(lcdd,  "CyanVis" , SupportShellLogical ) ;
   
+
+  //====== create a material surface for the support shell ===================
+  
+  Vector3D osupshell( shell_inner_radious+shell_thickess/2. , 0. , 0.  ) ;
+  
+  VolCylinder surfSupShell( SupportShellLogical , SurfaceType(SurfaceType::Helper) , shell_thickess/2. , shell_thickess/2., osupshell ) ;
+  
+  volSurfaceList( suppDE )->push_back( surfSupShell ) ;
+  //============================================================
+
+
+
   pv = supp_assembly.placeVolume( SupportShellLogical ) ;
   //  pv = supp_assembly.placeVolume( SupportShellLogical, Transform3D( RotationZYX(), Position() ) ) ;
   
@@ -1156,7 +1168,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     Tube styBarrelSolid(  rSty, rSty + drSty, dzSty, sPhi, sPhi+dPhi);
     Volume styBarrelLog( "CryostatFoamBarrel", styBarrelSolid, styMaterial );
-    vxd.setVisAttributes(lcdd,  "WhiteVis", styBarrelLog ) ;
+    vxd.setVisAttributes(lcdd,  "LightGrayVis", styBarrelLog ) ;
     pv = supp_assembly.placeVolume( styBarrelLog ) ;
 
     //====== create a material surface for the cryostat barrel ===================
