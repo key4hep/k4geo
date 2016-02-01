@@ -346,6 +346,8 @@
       <!-- fixme:  white comes out as red !!!???? |  vis name="WhiteVis"         alpha="0.0" r="1.0" g="1.0"  b="1.0"   showDaughters="true"  visible="true"/ --> 
       <vis name="WhiteVis"         alpha="0.0" r=".96" g=".96"  b=".96"   showDaughters="true"  visible="true"/>
 
+      <vis name="LightGrayVis"         alpha="0.0" r=".75" g=".75"  b=".75"   showDaughters="true"  visible="true"/>
+
       <vis name="Invisible"         alpha="0.0" r="0" g="0"  b="0"   showDaughters="false"  visible="false"/>
       <vis name="SeeThrough"         alpha="0.0" r="0" g="0"  b="0"   showDaughters="true"  visible="false"/>
 
@@ -552,7 +554,7 @@
 	  <argument value="phi0=0"    />
 	  <argument value="symmetry=EcalEndcap_symmetry"/>
 	  <argument value="systemID=ILDDetID_ECAL_ENDCAP"/>
-	  <!-- <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> -->
+	  <!-- <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> --> 
 	</plugin>
 	<plugin name="DD4hep_CaloFaceBarrelSurfacePlugin">
           <argument value="EcalBarrel"/>
@@ -561,7 +563,7 @@
 	  <argument value="phi0=0"    />
 	  <argument value="symmetry=Ecal_symmetry"/>
 	  <argument value="systemID=ILDDetID_ECAL"/>
-	  <!-- <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> -->
+	  <!-- <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> --> 
 	</plugin>
 	<plugin name="InstallSurfaceManager"/>
       </plugins>
