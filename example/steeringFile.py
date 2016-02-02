@@ -35,6 +35,12 @@ SIM.filter.filters['edep3kev'] = dict(name="EnergyDepositMinimumCut/3keV", param
 SIM.physics.list = "FTFP_BERT"
 SIM.physics.rangecut = 1*mm
 
+## set the particle.tbl file to add extra particles to DDsim (B-Baryons)
+## use the power of python to get the file from DD4hep wherever it is
+import os
+if os.path.exists( os.path.join( os.environ.get("DD4hepINSTALL"), "examples/DDG4/examples/particle.tbl") ):
+  SIM.physics.pdgfile = os.path.join( os.environ.get("DD4hepINSTALL"), "examples/DDG4/examples/particle.tbl")
+
 ## Add parameters to the run header
 ## This will store the Parameter "MyNewParameter" in the runHeader of the slcio file
 ## all members are added to the runheader. Isn't Python beautiful?
