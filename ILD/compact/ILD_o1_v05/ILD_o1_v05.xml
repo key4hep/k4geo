@@ -495,7 +495,7 @@
 
 	<readout name="HcalBarrelRegCollection">
 	  <segmentation type="TiledLayerGridXY" grid_size_x="3" grid_size_y="3.03248"/>
-	  <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,y:-16</id>
+	  <id>system:5,module:3,stave:3,tower:5,layer:6,x:32:-16,y:-16</id>
 	</readout>
 
 	<readout name="HcalEndcapsCollection">
