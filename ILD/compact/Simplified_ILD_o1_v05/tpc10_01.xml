@@ -1,0 +1,67 @@
+<!-- 
+     TPC parameters for ILD_o1_v5  
+-->
+
+<detector name="TPC" type="TPC10" vis="TPCVis" id="ILDDetID_TPC" limits="Tracker_limits" readout="TPCCollection" insideTrackingVolume="true">
+
+
+  <envelope vis="ILD_TPCVis">
+    <shape type="Tube" rmin="TPC_inner_radius" rmax="TPC_outer_radius" 
+	   dz="TPC_half_length"  material = "Air" />
+  </envelope>
+  
+
+  <!-- database : tpc10_01 -->
+  <!-- SQL command: "SELECT * FROM `global`;"  -->
+  <global TPC_pad_height="6*mm" TPC_pad_width="1*mm"  TPC_max_step_length="5*mm" dr_InnerWall="25*mm" dr_InnerServiceArea="30*mm" dr_OuterServiceArea="30*mm"
+	  dr_OuterWall="60*mm" dz_Cathode="0.06*mm" dz_Readout="25*mm" dz_Endplate="100*mm"
+	  chamber_Gas="TDR_gas" sensitive_threshold_eV="32*eV"  />
+
+  <!-- SQL command: "SELECT * FROM `cathode`;"  -->
+  <cathode dz_Cathode_Insulator="0.0275*mm" dz_Cathode_Conductor="0.0025*mm" material_Cathode_Insulator="G4_KAPTON"
+	   material_Cathode_Conductor="G4_Cu" dr_Cathode_Grip="20*mm" dz_Cathode_Grip="15*mm" material_Cathode_Grip="SiC_foam"  />
+  
+  <!-- SQL command: "SELECT * FROM `innerWall`;"  -->
+  <innerWall>
+    <row dr="0.01*mm" material="G4_Al"  />
+    <row dr="0.05*mm" material="G4_KAPTON"  />
+    <row dr="0.3*mm" material="g10"  />
+    <row dr="24.22*mm" material="G4_AIR"  />
+    <row dr="0.3*mm" material="g10"  />
+    <row dr="0.05*mm" material="G4_KAPTON"  />
+    <row dr="0.07*mm" material="G4_Cu"  />
+  </innerWall>
+  <!-- SQL command: "SELECT * FROM `outerWall`;"  -->
+  <outerWall>
+    <row dr="0.07*mm" material="G4_Cu"  />
+    <row dr="0.05*mm" material="G4_KAPTON"  />
+    <row dr="0.3*mm" material="g10"  />
+    <row dr="59.22*mm" material="G4_AIR"  />
+    <row dr="0.3*mm" material="g10"  />
+    <row dr="0.05*mm" material="G4_KAPTON"  />
+    <row dr="0.01*mm" material="G4_Al"  />
+  </outerWall>
+  <!-- SQL command: "SELECT * FROM `readout`;"  -->
+  <readout>
+    <row dz="0.003*mm" material="G4_Cu" comment="gating"  />
+    <row dz="0.03*mm" material="G4_KAPTON" comment="gating"  />
+    <row dz="0.003*mm" material="G4_Cu" comment="gating"  />
+    <row dz="4.447*mm" material="TDR_gas" comment="gating"  />
+    <row dz="0.003*mm" material="G4_Cu" comment="mpgd"  />
+    <row dz="0.03*mm" material="G4_KAPTON" comment="mpgd"  />
+    <row dz="0.003*mm" material="G4_Cu" comment="mpgd"  />
+    <row dz="4.447*mm" material="TDR_gas" comment="mpgd"  />
+    <row dz="0.003*mm" material="G4_Cu" comment="mpgd"  />
+    <row dz="0.03*mm" material="G4_KAPTON" comment="mpgd"  />
+    <row dz="0.003*mm" material="G4_Cu" comment="mpgd"  />
+    <row dz="4.447*mm" material="TDR_gas" comment="mpgd"  />
+    <row dz="0.05*mm" material="G4_Cu" comment="pads"  />
+    <row dz="2*mm" material="g10" comment="structural"  />
+    <row dz="0.5*mm" material="G4_Si" comment="electronics"  />
+    <row dz="2*mm" material="epoxy" comment="structural"  />
+    <row dz="1*mm" material="G4_KAPTON" comment="structural"  />
+    <row dz="2*mm" material="G4_Al" comment="Cooling"  />
+    <row dz="1*mm" material="G4_KAPTON" comment="structural"  />
+    <row dz="3*mm" material="CarbonFiber" comment="structural"  />
+  </readout>
+</detector>
