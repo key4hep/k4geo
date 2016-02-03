@@ -224,7 +224,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  slice_vol.setAttributes(lcdd,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
 	  // slice PlacedVolume
 	  PlacedVolume slice_phv = layer_vol.placeVolume(slice_vol,Position(0,slice_pos_y,0));
-	  slice_phv.addPhysVolID("slice",slice_number);
+	  //slice_phv.addPhysVolID("slice",slice_number);
 	  
 	  slice.setPlacement(slice_phv);
 	  // Increment Z position for next slice.
@@ -258,7 +258,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 							   Position(0,layer_pos_y,0));
 	  // registry the ID of Layer, stave and module
 	  layer_phv.addPhysVolID("layer",layer_num);
-	  //layer_phv.addPhysVolID("tower",endcapID);
+
 	  // then setPlacement for it.
 	  layer.setPlacement(layer_phv);
 	  
@@ -337,7 +337,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  env_phv.addPhysVolID("stave",stave_num);   // y: up /down
 	  env_phv.addPhysVolID("module",module_id); // z: -/+ 0/6
 	  env_phv.addPhysVolID("system",det_id);
-	  //sdet.setPlacement(env_phv);
 
 	  DetElement sd = (module_num==0&&stave_num==0) ? stave_det : stave_det.clone(_toString(module_id,"module%d")+_toString(stave_num,"stave%d"));	  
 	  sd.setPlacement(env_phv);	  
