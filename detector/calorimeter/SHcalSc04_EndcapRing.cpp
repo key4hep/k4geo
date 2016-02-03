@@ -431,7 +431,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    // slice PlacedVolume
 	    PlacedVolume slice_phv = HcalEndCapRingStaveLogical.placeVolume(slice_vol,Position(0.,0.,slice_pos_z));
 	    if ( x_slice.isSensitive() ) {
-	      slice_phv.addPhysVolID("layer",layer_id).addPhysVolID("slice",slice_number);
+	      slice_phv.addPhysVolID("layer",layer_id);
 	      cout<<"  layer_id:  "<< layer_id<<"   slice_id:  "<< slice_number<<endl;
 	    }
 	    
@@ -463,7 +463,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  Transform3D tran3D(rot,l_new);
 	      
 	  PlacedVolume layer_phv = HcalEndCapRingLogical.placeVolume(HcalEndCapRingStaveLogical,tran3D);
-	  layer_phv.addPhysVolID("layer", layer_id);
 	  layer_phv.addPhysVolID("tower", EC_Number_of_towers);
 	  layer_phv.addPhysVolID("stave", stave_id);
 	  layer.setPlacement(layer_phv);
