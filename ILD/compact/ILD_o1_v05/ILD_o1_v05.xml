@@ -505,7 +505,7 @@
 
 	<readout name="HcalEndcapRingCollection">
 	  <segmentation type="CartesianGridXY" grid_size_x="Hcal_cells_size" grid_size_y="Hcal_cells_size"/>
-	  <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id>
+	  <id>system:5,module:3,stave:4,tower:3,layer:6,x:32:-16,y:-16</id>
 	</readout>
 
  	<readout name="YokeBarrelCollection">
