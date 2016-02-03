@@ -1,7 +1,7 @@
 //==========================================================================
 //  Surface installer plugin for generic sliced detector drivers
 //--------------------------------------------------------------------------
-//
+// DEPRECATED! TO BE REMOVED! USE THE DD4HEP IMPLEMENTATION INSTEAD!
 // Author     : N. Nikiforou, adapted from DD4hep/SiTrackerBarrel_surfaces.cpp
 //              by M. Frank
 //==========================================================================
@@ -50,7 +50,7 @@ namespace{
         data.ovector[0]=0.;
         data.ovector[1]=0.;
         data.ovector[2]=0.;
-        
+        std::cout<<"WARNING! The lcgeo implementation of the GenericSurfaceInstallerPlugin is DEPRECATED and will be removed! Use the DD4hep implementation instead (DD4hep_GenericSurfaceInstallerPlugin)."<<std::endl;
         for(int i=0; i<argc; ++i)  {
             double value = -1;
             char* ptr = ::strchr(argv[i],'=');
@@ -86,6 +86,8 @@ namespace{
     /// Install measurement surfaces
     template <typename UserData> 
     void Installer<UserData>::install(DetElement component, PlacedVolume pv)   {
+        
+        
         Volume comp_vol = pv.volume();
         if ( comp_vol.isSensitive() )  {  
             Volume mod_vol  = parentVolume(component);
