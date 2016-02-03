@@ -266,7 +266,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	PlacedVolume slice_phv = ChamberLogical.placeVolume(slice_vol,Position(0.,0.,slice_pos_z));
 	if ( x_slice.isSensitive() ) {
 	  int slice_id  = (layer_id > Hcal_nlayers)? 1:-1;
-	  slice_phv.addPhysVolID("layer",layer_id).addPhysVolID("slice",slice_id);
+	  slice_phv.addPhysVolID("layer",layer_id).addPhysVolID("tower",slice_id);
 	  cout<<"  layer_id:  "<< layer_id<<"   slice_id:  "<<slice_id <<endl;
 	}
 	
