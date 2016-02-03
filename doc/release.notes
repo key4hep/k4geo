@@ -1,3 +1,8 @@
+N.Nikiforou 03/02/2016
+----------------------
+  - Added deprecation warning for GenericSurfaceInstaller plugin which is now part of DD4hep. 
+  - Moved CLIC_o2_v04 to using DDhep_GenericSurfaceInstallerPlugin rather than the local lcgeo implementation which is deprecated
+
 N.Nikiforou 15/12/2015
 ----------------------
   - Switched CLIC_o2_v04 to using the GenericSurfaceInstaller. Changed therefore to using the following

@@ -155,7 +155,7 @@
     </detectors> 
     
     <plugins>
-        <plugin name="GenericSurfaceInstallerPlugin">
+        <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
             <argument value="VertexEndcap"/>
             <argument value="dimension=2"/>
             <argument value="u_x=-1."/>
