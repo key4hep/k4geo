@@ -324,13 +324,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  PlacedVolume  s_phv = ChamberLog.placeVolume(s_vol,s_pos);
 	  slice.setPlacement(s_phv);
 
-	  if ( x_slice.isSensitive() ) {
-	    s_phv.addPhysVolID("slice",s_num);
-	    double radius_sensitive = radius_low+0.5*l_thickness;
-	    cout << "  ...Barrel i, position: "<<i <<" "<<radius_sensitive<<endl;
-	  }
-
-	  slice.setPlacement(s_phv);
 	  // Increment x position for next slice.
 	  s_pos_y += s_thickness/2.;
 
