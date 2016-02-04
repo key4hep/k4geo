@@ -1089,8 +1089,31 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   double ZEndPlateShell = shell_half_z + shell_endplate_thickness/2.;// + (beryllium_ladder_block_length*2);
 
+
+  DetElement endplateFwdDE( suppDE , name+"_endplate_fwd" , x_det.id() )  ;
+  DetElement endplateBwdDE( suppDE , name+"_endplate_bwd" , x_det.id() )  ;
+
   pv = supp_assembly.placeVolume( EndPlateShellLogical, Transform3D( RotationZYX(), Position(0., 0.,  ZEndPlateShell ) ) ) ;
+  endplateFwdDE.setPlacement( pv ) ;
   pv = supp_assembly.placeVolume( EndPlateShellLogical, Transform3D( RotationZYX(), Position(0., 0., -ZEndPlateShell ) ) ) ;
+  endplateBwdDE.setPlacement( pv ) ;
+
+  // --- add a helper surface for the outer part of the endplate shell ---------------------------------
+
+  Vector3D up( 1. , 0. , 0. ) ;
+  Vector3D vp( 0. , 1. , 0. ) ;
+  Vector3D np( 0. , 0. , 1. ) ;
+
+  // need to set the origin of this helper plane to be inside the material ( otherwise it would pick up the vacuum at the origin)
+  Vector3D o_endplate( 0. ,   0.5 * (  support_endplate_inner_radious + shell_inner_radious+shell_thickess )    , 0. ) ;
+
+  VolPlane surfEndplate( EndPlateShellLogical , SurfaceType(SurfaceType::Helper) , support_endplate_half_z , support_endplate_half_z, up,vp,np, o_endplate ) ;
+  volSurfaceList( endplateFwdDE )->push_back( surfEndplate ) ;
+  volSurfaceList( endplateBwdDE )->push_back( surfEndplate ) ;
+
+  //-----------------------------------------------------------------------------------------------------
+    
+
 
   
   // ************support endplates for the layer 1************
@@ -1225,9 +1248,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     pv = supp_assembly.placeVolume( styEndcapOuterLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,  -styEndcapZ ) ) ) ;
 
     //====== create a material surface for the cryostat endcap ===================
-    Vector3D up( 1. , 0. , 0. ) ;
-    Vector3D vp( 0. , 1. , 0. ) ;
-    Vector3D np( 0. , 0. , 1. ) ;
+    // Vector3D up( 1. , 0. , 0. ) ;
+    // Vector3D vp( 0. , 1. , 0. ) ;
+    // Vector3D np( 0. , 0. , 1. ) ;
 
     // need to set the origin of this helper plane to be inside the material ( otherwise it would pick up the vacuum at the origin)
     double mid_r = 0.5 * ( cryostat_apperture - cryostat_apperture_radius +  rInner  ) ;
@@ -1243,6 +1266,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     VolPlane surfPo( aluEndcapOuterLog , SurfaceType(SurfaceType::Helper) , inner_thick , outer_thick, up,vp,np, op_o) ;
     volSurfaceList( suppFwdOutDE )->push_back( surfPo ) ;
     volSurfaceList( suppBwdOutDE )->push_back( surfPo ) ;
+
     //============================================================
 
   }
