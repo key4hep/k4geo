@@ -6,6 +6,7 @@
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/DD4hepUnits.h"
+#include "DD4hep/DetType.h"
 #include "LcgeoExceptions.h"
 #include "lcgeo.h"
 #include "DDRec/Surface.h"
@@ -61,6 +62,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   PlacedVolume pv;  
 
   sens.setType("tracker");
+
+  tpc.setTypeFlag( DetType::TRACKER |  DetType::BARREL  | DetType::GASEOUS  ) ;
 
 
 

@@ -7,6 +7,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/DD4hepUnits.h"
 #include "DD4hep/DetFactoryHelper.h"
+#include "DD4hep/DetType.h"
 #include "XMLHandlerDB.h"
 #include "XML/Utilities.h"
 
@@ -326,9 +327,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   PlacedVolume pv;
 
-  
-
   sens.setType("tracker");
+
+  ftd.setTypeFlag( DetType::TRACKER |  DetType::ENDCAP  | DetType::PIXEL | DetType::STRIP  ) ;
 
 
   // --- create assembly and DetElement for support and service volumes 

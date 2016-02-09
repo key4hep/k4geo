@@ -6,6 +6,7 @@
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/DD4hepUnits.h"
+#include "DD4hep/DetType.h"
 
 #include "DDRec/Surface.h"
 #include "DDRec/DetectorData.h"
@@ -56,6 +57,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
   sens.setType("tracker");
 
+  vxd.setTypeFlag( DetType::TRACKER |  DetType::BARREL  | DetType::VERTEX | DetType::PIXEL  ) ;
 
   // --- create assembly and DetElement for support and service volumes 
 
