@@ -321,6 +321,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   Volume envelope = XML::createPlacedEnvelope( lcdd,  e , ftd ) ;
   
+  ftd.setTypeFlag( DetType::TRACKER |  DetType::ENDCAP  | DetType::PIXEL | DetType::STRIP  ) ;
+
   if( lcdd.buildType() == BUILD_ENVELOPE ) return ftd ;
   
   //-----------------------------------------------------------------------------------
@@ -328,9 +330,6 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   PlacedVolume pv;
 
   sens.setType("tracker");
-
-  ftd.setTypeFlag( DetType::TRACKER |  DetType::ENDCAP  | DetType::PIXEL | DetType::STRIP  ) ;
-
 
   // --- create assembly and DetElement for support and service volumes 
 

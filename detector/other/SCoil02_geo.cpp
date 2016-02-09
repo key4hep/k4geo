@@ -6,6 +6,7 @@
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/DD4hepUnits.h"
+#include "DD4hep/DetType.h"
 #include "DDRec/Surface.h"
 #include "XMLHandlerDB.h"
 #include "XML/Utilities.h"
@@ -55,11 +56,14 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
 
   Volume envelope = XML::createPlacedEnvelope( lcdd,  element , coil ) ;
 
+  coil.setTypeFlag( DetType::SUPPORT | DetType::COIL ) ;
+
   if( lcdd.buildType() == BUILD_ENVELOPE ) return coil ;
 
   //-----------------------------------------------------------------------------------
 
   PlacedVolume pv;
+
 
 
   //######################################################################################################################################################################

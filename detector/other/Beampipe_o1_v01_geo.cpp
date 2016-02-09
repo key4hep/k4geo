@@ -10,6 +10,7 @@
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/DD4hepUnits.h"
+#include "DD4hep/DetType.h"
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
 #include "XML/Utilities.h"
@@ -133,9 +134,12 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
   
   Volume envelope = DD4hep::XML::createPlacedEnvelope( lcdd,  element , tube ) ;
   
+  tube.setTypeFlag( DetType::SUPPORT | DetType::BEAMPIPE ) ;
+
   if( lcdd.buildType() == DD4hep::BUILD_ENVELOPE ) return tube ;
   
   //-----------------------------------------------------------------------------------
+
 
   DD4hep::DDRec::ConicalSupportData* beampipeData = new DD4hep::DDRec::ConicalSupportData ;
 

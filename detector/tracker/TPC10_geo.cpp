@@ -55,6 +55,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
   Volume envelope = XML::createPlacedEnvelope( lcdd,  e , tpc ) ;
 
+  tpc.setTypeFlag( DetType::TRACKER |  DetType::BARREL  | DetType::GASEOUS  ) ;
+
   if( lcdd.buildType() == BUILD_ENVELOPE ) return tpc ;
 
   //-----------------------------------------------------------------------------------
@@ -62,10 +64,6 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   PlacedVolume pv;  
 
   sens.setType("tracker");
-
-  tpc.setTypeFlag( DetType::TRACKER |  DetType::BARREL  | DetType::GASEOUS  ) ;
-
-
 
   std::cout << " ** building TPC10_geo in lcgeo " << lcgeo::versionString() << std::endl ;
 

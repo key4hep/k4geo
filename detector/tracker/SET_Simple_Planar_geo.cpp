@@ -6,6 +6,7 @@
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/DD4hepUnits.h"
+#include "DD4hep/DetType.h"
 #include "DDRec/Surface.h"
 #include "DDRec/DetectorData.h"
 #include "XMLHandlerDB.h"
@@ -70,6 +71,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   Volume envelope = XML::createPlacedEnvelope( lcdd,  e , set ) ;
   
+  set.setTypeFlag( DetType::TRACKER |  DetType::BARREL  | DetType::STRIP  ) ;
+
   if( lcdd.buildType() == BUILD_ENVELOPE ) return set ;
   
   //-----------------------------------------------------------------------------------
@@ -80,6 +83,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   sens.setType("tracker");
 
+  
   DDRec::ZPlanarData*  zPlanarData = new ZPlanarData ;
 
   //######################################################################################################################################################################
