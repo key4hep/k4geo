@@ -26,6 +26,7 @@
 //
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
+#include "DD4hep/DetType.h"
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"
@@ -58,6 +59,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   Volume envelope = XML::createPlacedEnvelope( lcdd,  element , sdet ) ;
   
+  sdet.setTypeFlag( DetType::CALORIMETER |  DetType::ENDCAP  | DetType::HADRONIC ) ;
+
   if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
   //-----------------------------------------------------------------------------------
 

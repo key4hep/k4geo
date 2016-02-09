@@ -9,6 +9,7 @@
 //====================================================================
 
 #include "DD4hep/DetFactoryHelper.h"
+#include "DD4hep/DetType.h"
 #include "XML/Layering.h"
 #include "TGeoTrd2.h"
 
@@ -71,6 +72,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
  // --- create an envelope volume and position it into the world ---------------------
 
   Volume envelope = XML::createPlacedEnvelope( lcdd,  element , sdet ) ;
+
+  sdet.setTypeFlag( DetType::CALORIMETER |  DetType::BARREL  | DetType::ELECTROMAGNETIC ) ;
 
   if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
 

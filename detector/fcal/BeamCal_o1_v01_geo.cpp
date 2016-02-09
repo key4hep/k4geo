@@ -1,4 +1,5 @@
 #include <DD4hep/DetFactoryHelper.h>
+#include "DD4hep/DetType.h"
 #include <XML/Layering.h>
 #include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"
@@ -29,6 +30,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   
   DD4hep::Geometry::Volume envelope = DD4hep::XML::createPlacedEnvelope( lcdd,  element , sdet ) ;
   
+  sdet.setTypeFlag( DD4hep::DetType::CALORIMETER |  DD4hep::DetType::ENDCAP  | DD4hep::DetType::ELECTROMAGNETIC |  DD4hep::DetType::FORWARD ) ;
+
   if( lcdd.buildType() == DD4hep::BUILD_ENVELOPE ) return sdet ;
   
   //-----------------------------------------------------------------------------------
