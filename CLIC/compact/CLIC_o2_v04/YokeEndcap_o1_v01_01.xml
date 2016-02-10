@@ -15,8 +15,10 @@
         
         <detector name="YokeEndcap" type="GenericCalEndcap_o1_v01" id="DetID_Yoke_Endcap" readout="YokeEndcapCollection" vis="YOKEVis" >
             
-            <comment>EM Calorimeter Barrel</comment>
+            <comment>Encap Yoke</comment>
             
+            <type_flags type=" DetType_CALORIMETER + DetType_MUON + DetType_ENDCAP"/>
+
             <envelope vis="YOKEVis">
                 <shape type="BooleanShape" operation="Subtraction" material="Air">
                     <shape type="BooleanShape" operation="Subtraction">

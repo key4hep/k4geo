@@ -98,6 +98,8 @@
             </envelope>
             <comment>Silicon Inner Tracker Barrel</comment>
             
+            <type_flags type=" DetType_TRACKER + DetType_BARREL"/>
+
             <module name="InnerTrackerBarrelModule" vis="InnerTrackerModuleVis">
                 <module_envelope width="10*cm" length="10*cm"/>
                 
@@ -133,12 +135,14 @@
     </detectors>
     
     <detectors>
-        <detector id="DetID_IT_Endcap" name="InnerTrackerEndcap" type="TrackerEndcap_o1_v03" readout="InnerTrackerEndcapCollection" reflect="true">
+        <detector id="DetID_IT_Endcap" name="InnerTrackerEndcap" type="TrackerEndcap_o1_v04" readout="InnerTrackerEndcapCollection" reflect="true">
             <envelope vis="ITVis">
                 <shape type="Assembly"/>
             </envelope>
             <comment>Silicon Outer Tracker Endcaps</comment>
-            
+                        
+            <type_flags type=" DetType_TRACKER + DetType_ENDCAP"/>
+
             <module name="InnerTrackerEndcapModule_0" vis="InnerTrackerModuleVis">
                 <trd x1="18*mm" x2="22*mm" z="40/2*mm" />                              
                 <!-- Build slices top-down from innermost slice (closest to IP) to outer-most (away from IP)-->

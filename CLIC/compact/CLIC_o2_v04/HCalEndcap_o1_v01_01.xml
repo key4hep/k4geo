@@ -55,6 +55,8 @@
             
             <comment>Hadronic Calorimeter Endcap</comment>
             
+            <type_flags type=" DetType_CALORIMETER + DetType_HADRONIC + DetType_ENDCAP"/>
+
             <envelope vis="HCALVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -95,6 +97,8 @@
             
             <comment>Hadronic Calorimeter Endcap</comment>
             
+            <type_flags type=" DetType_CALORIMETER + DetType_HADRONIC + DetType_ENDCAP"/>
+
             <envelope vis="HCALVis">
                 <shape type="Assembly"/>
             </envelope>

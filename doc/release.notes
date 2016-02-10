@@ -1,3 +1,11 @@
+
+N.Nikiforou 10/02/2016
+----------------------
+  - Modified Tracker*_geo.cpp, Vertex*_geo.cpp, ZPlanarTracker_geo.cpp, GenericCal*_geo.cpp  to add setting detector type via xml tag
+  - Moved CLIC_o2_v04 to using TrackerEndcap_o1_v04 drivers that set ZPetalDisksData according to minimum/maximum R and average Z
+    of all rings in one endcap tracker disk (for DDMarlinPandora)
+  - Added "type_flags" tags to all CLIC_o2_v04 subdetector xml files and added include of detector_types.xml
+
 N.Nikiforou 03/02/2016
 ----------------------
   - Added deprecation warning for GenericSurfaceInstaller plugin which is now part of DD4hep. 

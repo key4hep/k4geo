@@ -33,6 +33,8 @@
     <detectors>
         <detector name="BeamCal" type="BeamCal_o1_v01" vis="SeeThrough" id="DetID_BeamCal" readout="BeamCalCollection" insideTrackingVolume="false" >
             
+            <!--             <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_ENDCAP + DetType_FORWARD"/> --> <!-- FLAGS ARE SET IN DRIVER FOR NOW -->
+
             <envelope vis="BCALVis">
                 <shape type="BooleanShape" operation="Union"  material="Air">
                     <shape type="BooleanShape" operation="Intersection">

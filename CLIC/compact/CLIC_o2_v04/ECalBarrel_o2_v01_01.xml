@@ -28,6 +28,8 @@
 
             <comment>EM Calorimeter Barrel</comment>
             
+            <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_BARREL"/>
+
             <envelope vis="ECALVis">
                 <shape type="PolyhedraRegular" numsides="ECalBarrel_symmetry"  rmin="ECalBarrel_inner_radius" rmax="ECalBarrel_outer_radius" dz="2.*ECalBarrel_half_length"  material="Air"/>
 		<!-- Radii definitions as in http://cern.ch/go/r9mZ -->

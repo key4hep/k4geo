@@ -9,6 +9,7 @@
 //
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
+#include "XML/Utilities.h"
 
 #include "DDRec/Surface.h"
 #include "DDRec/DetectorData.h"
@@ -35,6 +36,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   DDRec::ZPlanarData*  zPlanarData = new DDRec::ZPlanarData ;
 
+  XML::setDetectorTypeFlag( e, tracker ) ;
 
   double minRadius = 1e99 ;
   double minZhalf = 1e99 ;

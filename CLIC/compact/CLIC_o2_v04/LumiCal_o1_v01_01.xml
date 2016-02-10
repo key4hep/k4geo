@@ -18,6 +18,9 @@
     <detectors>
         <detector name="LumiCal" type="LumiCal_o1_v01" vis="SeeThrough" id="DetID_LumiCal" readout="LumiCalCollection" insideTrackingVolume="false" >
             
+            <!--             <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_ENDCAP + DetType_FORWARD"/> --> <!-- FLAGS ARE SET IN DRIVER FOR NOW -->
+
+            
             <envelope vis="LCALVis">
                 <shape type="BooleanShape" operation="union" material="Air">
                     <shape type="BooleanShape" operation="Intersection">

@@ -17,6 +17,8 @@
             
             <comment>Electromagnetic Calorimeter Endcap</comment>
             
+            <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_ENDCAP"/>
+
             <envelope vis="ECALVis">
                 <shape type="BooleanShape" operation="Subtraction" material="Air">
                         <shape type="PolyhedraRegular"  numsides="ECalEndcap_outer_symmetry" rmin="ECalEndcap_inner_radius-env_safety" rmax="ECalEndcap_outer_radius+ 10.0*env_safety" dz="2.0*ECalEndcap_max_z+2*env_safety"/>
