@@ -1,3 +1,8 @@
+N.Nikiforou 11/02/2016
+----------------------
+  - Fixed errors due to change of namespace of "_toDouble"
+  - Added using of "DetType_AUXILIARY" for CLIC_o2_v04  ECalPlug and HCalRing
+
 
 N.Nikiforou 10/02/2016
 ----------------------

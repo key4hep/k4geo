@@ -97,7 +97,7 @@
             
             <comment>Hadronic Calorimeter Endcap</comment>
             
-            <type_flags type=" DetType_CALORIMETER + DetType_HADRONIC + DetType_ENDCAP"/>
+            <type_flags type=" DetType_CALORIMETER + DetType_HADRONIC + DetType_ENDCAP + DetType_AUXILIARY"/>
 
             <envelope vis="HCALVis">
                 <shape type="Assembly"/>

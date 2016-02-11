@@ -29,7 +29,7 @@ namespace{
       char* ptr = ::strchr(argv[i],'=');
       if ( ptr )  {
         std::string name( argv[i] , ptr ) ;
-        value = DD4hep::Geometry::_toDouble(++ptr);
+        value = DD4hep::_toDouble(++ptr);
         if( name=="dimension" ) data.dimension = value ; 
         std::cout << "TrackerBarrelSurfacePlugin: argument[" << i << "] = " << name 
                   << " = " << value << std::endl;
