@@ -18,6 +18,9 @@
     <comment>Solenoid</comment>
     <detectors>
         <detector name="Solenoid" type="DD4hep_SubdetectorAssembly" vis="SOLVis">
+            <!--DDMarlinPandora expects a tube for a solenoid and the ILD solenoid implemented as such. Attach the flags here -->
+            <type_flags type=" DetType_COIL"/>
+
             <shape type="Tube" rmin="Solenoid_inner_radius-2*env_safety" rmax="Solenoid_outer_radius+2*env_safety" dz="Solenoid_half_length+2*env_safety" material="Vacuum"/>
             <composite name="SolenoidBarrel"/>
             <composite name="SolenoidEndcaps"/> 
@@ -29,7 +32,7 @@
     <detectors>
         
         <detector name="SolenoidBarrel" type="Solenoid_o1_v01" id="0" insideTrackingVolume="false" reflect="true">
-            <envelope vis="SOLVis">
+           <envelope vis="SOLVis">
                 <shape type="Assembly"/>
             </envelope>
             <layer id="1" inner_r="Solenoid_inner_radius" outer_z="Solenoid_half_length" vis="SolenoidBarrelLayerVis">
@@ -44,7 +47,7 @@
         </detector>
         
         <detector name="SolenoidEndcaps" type="DD4hep_DiskTracker" id="0" reflect="true" insideTrackingVolume="false" vis="SolenoidBarrelLayerVis">
-		  <layer id="1" inner_r="Solenoid_inner_radius+SolenoidVacuumTank_thickness" inner_z="Solenoid_half_length-SolenoidVacuumTank_thickness" outer_r="Solenoid_outer_radius-SolenoidVacuumTank_thickness" vis="SolenoidBarrelLayerVis">
+            <layer id="1" inner_r="Solenoid_inner_radius+SolenoidVacuumTank_thickness" inner_z="Solenoid_half_length-SolenoidVacuumTank_thickness" outer_r="Solenoid_outer_radius-SolenoidVacuumTank_thickness" vis="SolenoidBarrelLayerVis">
 	        <slice material="Steel235" thickness="SolenoidVacuumTank_thickness/2.0" />
           </layer>
 		</detector>
