@@ -134,7 +134,7 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
   
   Volume envelope = DD4hep::XML::createPlacedEnvelope( lcdd,  element , tube ) ;
   
-  tube.setTypeFlag( DetType::SUPPORT | DetType::BEAMPIPE ) ;
+  XML::setDetectorTypeFlag( element, tube ) ;
 
   if( lcdd.buildType() == DD4hep::BUILD_ENVELOPE ) return tube ;
   

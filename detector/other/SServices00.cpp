@@ -29,6 +29,7 @@
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/DD4hepUnits.h"
+#include "XML/Utilities.h"
 #include "DD4hep/DetType.h"
 #include "XMLHandlerDB.h"
 
@@ -54,8 +55,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, Ref_t)  {
   Assembly envelope_assembly( det_name + "assembly" ) ;
   PlacedVolume pv;
 
-
-  sdet.setTypeFlag( DetType::SUPPORT ) ;
+  XML::setDetectorTypeFlag( element, sdet ) ;
 
 //====================================================================
 // build all services

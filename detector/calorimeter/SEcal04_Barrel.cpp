@@ -70,7 +70,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   Volume envelope = XML::createPlacedEnvelope( lcdd,  element , sdet ) ;
 
-  sdet.setTypeFlag( DetType::CALORIMETER |  DetType::BARREL  | DetType::ELECTROMAGNETIC ) ;
+  XML::setDetectorTypeFlag( element, sdet ) ;
  
   if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
 

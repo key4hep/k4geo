@@ -8,6 +8,7 @@
     <shape type="Tube" rmin="SET_inner_radius" rmax="SET_outer_radius" dz="SET_half_length"  material = "Air" />
   </envelope>
   
+  <type_flags type="DetType_TRACKER +  DetType_BARREL + DetType_STRIP "/>
 
   <!-- database : set_simple_planar_sensors_01 -->
 

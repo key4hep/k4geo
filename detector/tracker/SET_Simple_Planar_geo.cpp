@@ -71,7 +71,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   Volume envelope = XML::createPlacedEnvelope( lcdd,  e , set ) ;
   
-  set.setTypeFlag( DetType::TRACKER |  DetType::BARREL  | DetType::STRIP  ) ;
+  XML::setDetectorTypeFlag( e, set ) ;
 
   if( lcdd.buildType() == BUILD_ENVELOPE ) return set ;
   

@@ -10,6 +10,7 @@
 	   dz="TPC_half_length"  material = "Air" />
   </envelope>
   
+  <type_flags type="DetType_TRACKER +  DetType_BARREL + DetType_GASEOUS "/>
 
   <!-- database : tpc10_01 -->
   <!-- SQL command: "SELECT * FROM `global`;"  -->

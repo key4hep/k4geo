@@ -20,6 +20,8 @@
       </shape>
     </envelope>
 
+    <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_MUON " />
+   
     <dimensions numsides="12" rmin="Yoke_barrel_inner_radius" z="Yoke_barrel_halfZ" />
     <material name="Iron"/> 
     <layer repeat="12" vis="SeeThrough">

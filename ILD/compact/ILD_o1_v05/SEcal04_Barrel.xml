@@ -8,6 +8,7 @@
       <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/Ecal_symmetry"/>
     </envelope>
     
+    <type_flags type=" DetType_CALORIMETER + DetType_BARREL + DetType_ELECTROMAGNETIC " />
 
 
     <dimensions numsides="Ecal_symmetry" rmin="Ecal_inner_radius" rmax="Ecal_outer_radius" z="Ecal_half_length" />

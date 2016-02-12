@@ -55,7 +55,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
   Volume envelope = XML::createPlacedEnvelope( lcdd,  e , tpc ) ;
 
-  tpc.setTypeFlag( DetType::TRACKER |  DetType::BARREL  | DetType::GASEOUS  ) ;
+  XML::setDetectorTypeFlag( e, tpc ) ;
 
   if( lcdd.buildType() == BUILD_ENVELOPE ) return tpc ;
 

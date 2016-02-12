@@ -5,7 +5,9 @@
 <detector name="Lcal" type="LumiCal_o1_v01" vis="SeeThrough" id="ILDDetID_LCAL"
 	  readout="LumiCalCollection" insideTrackingVolume="false" >
   
-  <!-- LumiCal envelope is rotated according to the ILC_Main_Crossing_Angle at +z and -z -->
+  <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_ELECTROMAGNETIC + DetType_FORWARD " />
+  
+ <!-- LumiCal envelope is rotated according to the ILC_Main_Crossing_Angle at +z and -z -->
   <envelope vis="ILD_FCALVis">
     <shape type="BooleanShape" operation="Intersection" material="Air">
       <shape type="Box" dx="LumiCal_outer_radius*2.0" dy="LumiCal_outer_radius*2.0" dz="LumiCal_max_z*2.0"/>

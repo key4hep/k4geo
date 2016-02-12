@@ -4,6 +4,7 @@
     <shape type="Assembly"/>
   </envelope>
   
+  <type_flags type="DetType_SUPPORT + DetType_BEAMPIPE "/>
 
   <parameter crossingangle="ILC_Main_Crossing_Angle" />
   

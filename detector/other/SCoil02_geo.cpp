@@ -56,7 +56,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
 
   Volume envelope = XML::createPlacedEnvelope( lcdd,  element , coil ) ;
 
-  coil.setTypeFlag( DetType::SUPPORT | DetType::COIL ) ;
+  XML::setDetectorTypeFlag( element, coil ) ;
 
   if( lcdd.buildType() == BUILD_ENVELOPE ) return coil ;
 

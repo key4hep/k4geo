@@ -54,7 +54,7 @@
 	<constant name="ILDDetID_barrel"    value="  0"/>
 	<constant name="ILDDetID_fwd"       value="  1"/>
 	
-	<include ref="detector_types.xml"/>
+	<include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
 
 	<!-- *****  global parameters from Mokka model ILD_o1_v05 **** -->
 

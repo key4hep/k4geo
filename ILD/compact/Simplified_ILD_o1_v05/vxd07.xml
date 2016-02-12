@@ -28,8 +28,10 @@
     </shape>
   </envelope>
 
-
-
+  <!-- set the detecor type flag - note: using the '+' operator here as the evaluator does not understand '|' 
+       -> be carefull not to add any flags twice !!!     -->
+  <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX "/>
+  
   <!-- database : TMP_DB10 -->
   <!-- SQL command: "select * from layers_common_parameters;"  -->
   <layers_common_parameters id="1" electronics_structure_thickness="0.1*mm" active_silicon_thickness="0.05*mm" support_structure_radial_thickness="0.49392*mm" end_electronics_half_z="5*mm" 
