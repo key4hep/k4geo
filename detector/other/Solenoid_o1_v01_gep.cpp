@@ -17,12 +17,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     int           det_id    = x_det.id();
     string        det_name  = x_det.nameStr();
     DetElement    sdet      (det_name,det_id);
-    //Below needed only for reco structure
-//     Layering layering(x_det);
-//     double totalThickness = layering.totalThickness();
-//     xml_dim_t dim = x_det.dimensions();
-//     double detZ = dim.z();
-//     double rmin = dim.rmin();
+
     
     // --- create an envelope volume and position it into the world ---------------------
     
@@ -33,18 +28,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     //-----------------------------------------------------------------------------------
     
-    //DISABLE FOR NOW, TRY USING ENVELOPE VOLUME IN RECO.
-    //TO ENABLE, UNCOMMENT LINE 93 AT THE END TOO
-//     //Create caloData object to extend driver with data required for reconstruction
-//     DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
-//     caloData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
-//     /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
-//     caloData->extent[0] = rmin ;
-//     caloData->extent[1] = rmin + totalThickness ;
-//     caloData->extent[2] = 0. ;
-//     caloData->extent[3] = detZ;
-    //No other information needed, e.g. no layers needed. This may change but for now pandora just needs dimensions
-    
+ 
     Material air = lcdd.air();
     PlacedVolume pv;
     int n = 0;
@@ -53,6 +37,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     DDRec::LayeredCalorimeterData* solenoidData = new DDRec::LayeredCalorimeterData;
     solenoidData->inner_symmetry = 0;
     solenoidData->outer_symmetry = 0;
+    solenoidData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
+
+    double inner_radius= std::numeric_limits<double>::max();
+    double outer_radius= 0;
+
+    double detZ= 0.;
 
     for(xml_coll_t i(x_det,_U(layer)); i; ++i, ++n)  {
         xml_comp_t x_layer = i;
@@ -65,12 +55,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         Volume  l_vol(l_name,l_tub,air);
         int m = 0;
         
+
         for(xml_coll_t j(x_layer,_U(slice)); j; ++j, ++m)  {
             xml_comp_t x_slice = j;
             Material mat = lcdd.material(x_slice.materialStr());
             string s_name= l_name+_toString(m,"_slice%d");
             double thickness = x_slice.thickness();
 
+            //NN: These probably need to be fixed and ced modified to read the extent, rather than the layer
             //added code by Thorben Quast for event display
             DDRec::LayeredCalorimeterData::Layer solenoidLayer;
             solenoidLayer.distance = r;
@@ -94,6 +86,16 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             pv.addPhysVolID("slice",m);
         }
         l_tub.setDimensions(rmin,r,z);
+        
+        if (rmin < inner_radius)
+            inner_radius = rmin;
+        
+        if (z>detZ)
+            detZ = z;
+        
+        if (r>outer_radius)
+            outer_radius = r;
+        
         //cout << l_name << " " << rmin << " " << r << " " << z << endl;
         l_vol.setVisAttributes(lcdd,x_layer.visStr());
         
@@ -105,7 +107,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         sdet.setCombineHits(x_det.combineHits(),sens);
     }
     
-//     sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
+    /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
+    solenoidData->extent[0] = inner_radius ;
+    solenoidData->extent[1] = outer_radius ;
+    solenoidData->extent[2] = 0. ;
+    solenoidData->extent[3] = detZ;
+    
     //added code by Thorben Quast for event display
     sdet.addExtension< DDRec::LayeredCalorimeterData >( solenoidData ) ;
 

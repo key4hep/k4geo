@@ -1,3 +1,8 @@
+N.Nikiforou 12/02/2016
+----------------------
+  - Changed Solenoid_o1_v01_geo.cpp and SCoil02_geo.cpp for proper filling of 
+    solenoid extent in the LayeredCalorimeterStructure for use by DDMarlinPandora
+
 N.Nikiforou 11/02/2016
 ----------------------
   - Fixed errors due to change of namespace of "_toDouble"

@@ -599,6 +599,18 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
   //the coil is modelled as a calorimeter layer to be consistent with the 
   //implementation of the solenoid (layers) of CLIC
   DDRec::LayeredCalorimeterData* coilData = new DDRec::LayeredCalorimeterData;
+
+  //NN: Adding the rest of the data  
+  coilData->inner_symmetry = 0;
+  coilData->outer_symmetry = 0;
+  coilData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
+  
+  coilData->extent[0] = inner_radius  ;
+  coilData->extent[1] = outer_radius;
+  coilData->extent[2] = 0. ;
+  coilData->extent[3] = half_z;
+  
+  //NN: These probably need to be fixed and ced modified to read the extent, rather than the layer
   DDRec::LayeredCalorimeterData::Layer coilLayer;
   coilLayer.distance = inner_radius;
   coilLayer.thickness = outer_radius - inner_radius;
