@@ -13,6 +13,8 @@
       <rotation x="0" y="0" z="0"/>
     </envelope>
 
+    <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_HADRONIC " />
+
     <material name="Steel235"/><!-- radiator and the thickness has been defined in the main xml file-->
 
     <dimensions numsides="16"><!-- the detail demensions list. there are 16 in this version. -->

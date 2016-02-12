@@ -3,9 +3,11 @@
 -->
 
 <detector name="SServices00" type="SServices00" id="ILDDetID_NOTUSED" vis="RedVis" insideTrackingVolume="false" sensitive="no">
-<!--
-   First test version!
--->
+  <!--
+      First test version!
+  -->
+  <type_flags type=" DetType_SUPPORT " />
+  
   <!-- SQL command: "select * from sit_layers;"  -->
   <TPC_Cooling number_of_rings="8"/>
   <ring ring_id="0" tpcEndplateServicesRing_R="450*mm"  tpcEndplateServicesRing_ro="1.555*mm"  />

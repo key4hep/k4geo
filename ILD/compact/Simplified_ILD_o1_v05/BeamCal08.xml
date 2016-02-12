@@ -5,7 +5,9 @@
 <detector name="BeamCal" type="BeamCal_o1_v01" vis="SeeThrough" id="ILDDetID_BCAL"
 	  readout="BeamCalCollection" insideTrackingVolume="false" >
 
-    <envelope vis="ILD_FCALVis">
+  <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_ELECTROMAGNETIC + DetType_FORWARD " />
+
+   <envelope vis="ILD_FCALVis">
       <shape type="BooleanShape" operation="Intersection" material="Air">
 	<shape type="Box" dx="BeamCal_outer_radius*2.0" dy="BeamCal_outer_radius*2.0" dz="BeamCal_max_z*2.0"/>
 

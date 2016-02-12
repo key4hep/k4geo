@@ -5,6 +5,8 @@
 <detector name="LHcal" type="LHCal" vis="SeeThrough" id="ILDDetID_LHCAL"
 	  readout="LHCalCollection" insideTrackingVolume="false" >
 
+  <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_HADRONIC + DetType_FORWARD " />
+ 
   <envelope vis="ILD_FCALVis">    
     <shape type="BooleanShape" operation="Subtraction" material="Air">
       <shape type="BooleanShape" operation="Subtraction" material="Air">

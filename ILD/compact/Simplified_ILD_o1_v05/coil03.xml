@@ -16,7 +16,8 @@
 	   dz="Coil_half_length" material="Air"/>
   </envelope>
 
-  
+  <type_flags type=" DetType_SUPPORT + DetType_COIL " />
+
   <!--fg: for now only a simple aluminum cylinder is created inside the envelope -->
   <tube rmin="Coil_inner_radius+env_safety" rmax="Coil_outer_radius-env_safety" 
 	dz="Coil_half_length-env_safety" material="G4_Al"/>

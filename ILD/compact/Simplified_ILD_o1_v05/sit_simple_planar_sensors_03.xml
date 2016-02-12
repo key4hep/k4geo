@@ -13,6 +13,7 @@
 
   </envelope>
   
+  <type_flags type="DetType_TRACKER + DetType_BARREL + DetType_STRIP "/>
 
   <!-- database : sit_simple_planar_sensors_03 -->
 

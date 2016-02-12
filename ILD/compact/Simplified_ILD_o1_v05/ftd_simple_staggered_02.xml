@@ -30,6 +30,7 @@
     </shape>
   </envelope>
   
+  <type_flags type="DetType_TRACKER +  DetType_ENDCAP  + DetType_PIXEL + DetType_STRIP "/>
 
   <!-- SQL command: "select * from common_parameters;"  --> 
   <common_parameters ftd1_vtx3_distance_z="95*mm" ftd7_ecal_distance_z="200*mm" ftd1_sit1_radial_diff="-1*mm" ftd2_sit1_radial_diff="-1*mm" ftd3_sit2_radial_diff="-1*mm" 

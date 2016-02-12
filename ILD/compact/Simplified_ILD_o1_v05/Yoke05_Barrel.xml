@@ -10,6 +10,8 @@
       </shape>
     </envelope>
 
+    <type_flags type=" DetType_CALORIMETER + DetType_BARREL + DetType_MUON " />
+
     <dimensions numsides="Yoke_symmetry" rmin="Yoke_inner_radius" rmax="Yoke_outer_radius" 
 		zhalf="Yoke_half_length"  material="Air"/>
     <position x="0*mm" y="0*mm" z="0*mm"/>

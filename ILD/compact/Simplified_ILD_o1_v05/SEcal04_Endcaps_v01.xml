@@ -15,7 +15,9 @@
     </shape>
     <rotation x="0*deg" y="0*deg" z="180*deg/EcalEndcap_symmetry"/>
   </envelope>
-  
+ 
+  <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_ELECTROMAGNETIC " />
+
   <staves  material = "TungstenDens24"  vis="BlueVis"/>
   
   <layer repeat="Ecal_nlayers1/2" vis="SeeThrough" > <!-- 10 double SD Layers, and 5 W palte after each double SD Layer -->
