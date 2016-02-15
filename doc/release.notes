@@ -53,7 +53,17 @@ S.Lu
     - Added 'Ecal_fiber_thickness' and 'Ecal_Slab_shielding' thickness to the layer placement position. 
     - Update the Ecal wafer placement position 'wafer_pos_z' with correct dimension parameter to work together with 
       'Ecal_guard_ring_size'
-  - ...
+
+  - Remove 'slice' from the following calorimeter drivers
+    - ./detector/calorimeter/Yoke05_Barrel.cpp
+    - ./detector/calorimeter/Yoke05_Endcaps.cpp
+    - ./detector/calorimeter/SHcalSc04_EndcapRing.cpp
+    - ./detector/calorimeter/SHcalSc04_Endcaps.cpp
+    - ./detector/calorimeter/SHcalSc04_Barrel_v02.cpp
+    - ./detector/calorimeter/SHcalSc04_Barrel_v01.cpp
+    - ./detector/calorimeter/SHcalSc04_Barrel.cpp
+
+
 
 
 A.Sailer 02/02/2016
