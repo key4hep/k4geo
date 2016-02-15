@@ -1,3 +1,10 @@
+A.Sailer 02/02/2016
+-------------------
+  - ddsim
+    * Add ExtraParticle tables
+    * Add flag to define distance for vertexIsNotEndpointOfParent
+
+
 N.Nikiforou 12/02/2016
 ----------------------
   - Changed Solenoid_o1_v01_geo.cpp and SCoil02_geo.cpp for proper filling of 
@@ -21,6 +28,12 @@ N.Nikiforou 03/02/2016
   - Added deprecation warning for GenericSurfaceInstaller plugin which is now part of DD4hep. 
   - Moved CLIC_o2_v04 to using DDhep_GenericSurfaceInstallerPlugin rather than the local lcgeo implementation which is deprecated
 
+A.Sailer 18/01/2016
+-------------------
+  - ddsim
+    * Add RangeCut parameter
+    * Add LargestAcceptableStep for magneticField (10*m)
+
 N.Nikiforou 15/12/2015
 ----------------------
   - Switched CLIC_o2_v04 to using the GenericSurfaceInstaller. Changed therefore to using the following
@@ -36,6 +49,11 @@ N.Nikiforou 15/12/2015
   - GenericSurfaceInstaller: by default all u,v,n,o vector components are now set to 0 which means 
     that the user has to define the non-zero components as arguments, otherwise the plugin fails
     
+A.Sailer 15/12/2016
+-------------------
+  - ddsim
+    * Add default filter with Edep > 0
+
 N.Nikiforou 10/12/2015
 ----------------------
   - Added GenericSurfaceInstaller in detector/other to install surfaces to a given
