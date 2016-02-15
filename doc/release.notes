@@ -1,3 +1,61 @@
+
+ --------
+| v00-06 | 
+ --------    
+
+F.Gaede
+ - added detector type flags to xml files for ILD_o1_v05 and Simplified_ILD_o1_v05
+ - updated (ILD) geometry constructors to call XML::setDetectorTypeFlag(e,det)
+ - fixed thicknesses for surfaces in FTD (FTD_Simple_Staggered_geo.cpp)
+ - added surface for Be endplate of VXD shell (VXD04_geo.cpp)
+ - added surface for support shell barrel  (VXD04_geo.cpp)
+ - fixed layer structure BeamCal08.xml: include graphite in first layer
+ - ILD_o1_v05.xml
+   - fixed length of B-field
+   - fixed z-position of EcalEndcap caloface surface
+   - changed calo face layers to be constructed by plugin now
+
+ - added example reconstruction steering file for SiD: ./example/run_sid_reco.xml
+ - fixed material for encap helper surfaces 
+   ( moved origin away from centerwhich is in the beam pipe)
+    -./other/TrackerEndcapSupport_o1_v01.cpp
+    -./tracker/TPC10_geo.cpp
+    -./tracker/VXD04_geo.cpp
+ - added lcgeo.h defining version macros and
+   method versionString()
+ - renamed DDSimExceptions.h to LcgeoExceptions.h
+ - added RunHeader to lcio file in lcio_particle_gun.py
+ - added first example implementation of SiDloi3:
+    - ./SiD/compact/sidloi3/sidloi3_v00.xml
+ - added connical surfaces to beam pipe:
+   ./detector/other/Beampipe_o1_v01_geo.cpp
+ - added sensitive action CaloPreShowerSDAction
+   - creates pre-shower collections for hits from first layer
+   - to be used for (ILD) Ecals
+ - protect usage of new member variables in LayeredCalorimeterData
+   by usage of #if DD4HEP_VERSION_GE( 0, 15 )
+   ( added workaround for this to work with ilcsoft v01-17-08/DD4hep v00-14 )
+    - ./detector/calorimeter/GenericCalBarrel_o1_v01_geo.cpp
+    - ./detector/calorimeter/GenericCalEndcap_o1_v01_geo.cpp
+    - ./detector/fcal/BeamCal_o1_v01_geo.cpp
+    - ./detector/fcal/LumiCal_o1_v01_geo.cpp
+
+S.Lu
+ - ILD_o1_v05.xml
+   - Remove unused 'slice' from ILD calorimeters
+
+  - Added two simplified SEcal drivers by removing detail Si wafer structure in the Si layer, which could 
+    improve the performance by saving 9.4 s/event in simulation. Todo: thinking about a sensitive driver (segmentation) 
+    for virtual cell and virtual gap from guard_ring and so on:
+     - ./detector/calorimeter/SEcal04_Barrel_v01.cpp
+     - ./detector/calorimeter/SEcal04_Endcaps_v01.cpp
+  - ./detector/calorimeter/SEcal04_Barrel.cpp:
+    - Added 'Ecal_fiber_thickness' and 'Ecal_Slab_shielding' thickness to the layer placement position. 
+    - Update the Ecal wafer placement position 'wafer_pos_z' with correct dimension parameter to work together with 
+      'Ecal_guard_ring_size'
+  - ...
+
+
 A.Sailer 02/02/2016
 -------------------
   - ddsim
