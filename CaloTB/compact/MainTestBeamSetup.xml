@@ -1,0 +1,65 @@
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+    
+    <info name="HBU"
+        title="HBUTB"
+        author="Shaojun Lu"
+        url="flc.desy.de"
+        status="development"
+        version="$Id$">
+        <comment>The compact File for the HBU TB Setup </comment>
+    </info>
+    
+    <includes>
+        <gdmlFile  ref="${DD4hepINSTALL}/DDDetectors/compact/elements.xml"/>
+        <gdmlFile  ref="${DD4hepINSTALL}/DDDetectors/compact/materials.xml"/>
+    </includes>
+    
+    <define>
+        <constant name="world_side" value="3000*mm"/>
+        <constant name="world_x" value="world_side"/>
+        <constant name="world_y" value="world_side"/>
+        <constant name="world_z" value="world_side"/>
+        
+	<!-- to limit the amount of MCParticles stored -->
+	<constant name="tracker_region_rmax" value="1*cm" />
+	<constant name="tracker_region_zmax" value="1*cm" />
+
+    </define>
+    
+    
+    <limits>
+        <limitset name="cal_limits">
+            <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
+        </limitset>
+        <limitset name="SiTrackerBarrelRegionLimitSet">
+            <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
+            <limit name="track_length_max" particles="*" value="5.0" unit="mm" />
+            <limit name="time_max" particles="*" value="5.0" unit="ns" />
+            <limit name="ekin_min" particles="*" value="0.01" unit="MeV" />
+            <limit name="range_min" particles="*" value="5.0" unit="mm" />
+        </limitset>
+    </limits>
+    <regions>
+        <region name="SiTrackerBarrelRegion" eunit="MeV" lunit="mm" cut="0.001" threshold="0.001">
+            <limitsetref name="SiTrackerBarrelRegionLimitSet"/>
+        </region>
+    </regions>
+    
+    
+    <comment>Common Generic visualization attributes</comment>
+    <display>
+        <vis name="InvisibleNoDaughters"      showDaughters="false" visible="false"/>
+        <vis name="InvisibleWithDaughters"    showDaughters="true" visible="false"/>
+        <vis name="GreenVis"   alpha="1" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
+        <vis name="RedVis"     alpha="1" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
+        <vis name="BlueVis"    alpha="1" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+    </display>
+    
+    <comment>Additional design specific material definitions</comment>
+    <include ref="Materials_v01.xml"/>
+    
+    <include ref="TestBeamSetup_HBU.xml"/>
+    
+</lccdd>

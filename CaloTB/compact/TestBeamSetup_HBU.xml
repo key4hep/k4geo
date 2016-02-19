@@ -1,0 +1,59 @@
+<!-- 
+     HBU parameters for testbeam
+-->
+
+
+<lccdd>
+  <define>
+    <constant name="env_safety" value="0.001*mm"/>
+    
+    <constant name="Calo_dim_x" value="375*mm"/>
+    <constant name="Calo_dim_y" value="375*mm"/>
+    <constant name="Calo_dim_z" value="474*mm"/>
+    
+    <constant name="Calo_Layer_ncell_x" value="12"/>
+    <constant name="Calo_Layer_ncell_y" value="12"/>
+  </define>
+
+  <readouts>
+    <readout name="HBUCollection">
+      <segmentation type="TiledLayerGridXY" grid_size_x="3" grid_size_y="3" offset_x="-Calo_dim_x/2.0" offset_y="-Calo_dim_y/2.0" identifier_x="I" identifier_y="J" identifier_layer="K"/>
+      <id>system:8,K:8,I:8,J:8</id>
+    </readout>
+  </readouts>
+
+
+  <display>
+    <vis name="HBUVis"       alpha="0.5"  r="0.7" g="0.7"  b="0.0" showDaughters="true"  visible="false"/>
+    <vis name="TungstenVis"  alpha="1.0"  r="1.0" g="0.0"  b="0.0" showDaughters="true"  visible="true"/>
+    <vis name="AirVis"       alpha="1.0"  r="0.0" g="1.0"  b="0.0" showDaughters="true"  visible="false"/>
+    <vis name="SciVis"       alpha="1.0"  r="0.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
+    <vis name="PCBVis"       alpha="1.0"  r="0.0" g="1.0"  b="0.0" showDaughters="true"  visible="true"/>
+  </display>
+
+  <detectors>
+
+    <detector name="HBUTestBeam" type="CaloPrototype_v01" vis="HBUVis" id="3" 
+              readout="HBUCollection" insideTrackingVolume="false" >
+
+      <type_flags type="1" />
+
+      <envelope vis="BlueVis">
+	<shape type="Box" dx="Calo_dim_x/2.0 + env_safety" dy="Calo_dim_y/2.0 + env_safety"  dz="Calo_dim_z/2.0 + 2.0*env_safety" material="Air" />
+	<rotation x="0" y="0" z="0"/>
+	<!--position x="0" y="0" z="0*mm"-->
+      </envelope>
+
+
+      <layer repeat="30" vis="HBUVis">
+        <slice material = "TungstenDens24" thickness = "10.0*mm"  vis="TungstenVis"                />
+        <slice material = "Air"            thickness = "1.0*mm"   vis="AirVis"                     />
+        <slice material = "Cu"             thickness = "0.1*mm"                                    />
+        <slice material = "PCB"            thickness = "0.7*mm"   vis="PCBVis"                     />
+        <slice material = "G4_POLYSTYRENE" thickness = "3.0*mm"   vis="SciVis" sensitive = "yes"   />
+        <slice material = "Air"            thickness = "1.0*mm"   vis="AirVis"                     />
+      </layer>
+
+    </detector>
+  </detectors>
+</lccdd>
