@@ -1,5 +1,16 @@
 
  --------
+| v00-07 | 
+ --------    
+  S.Lu
+   - added example for a test beam calorimeter:
+      - CaloTB/compact/MainTestBeamSetup.xml
+      - ./detector/CaloTB/CaloPrototype_v01.cpp
+   - run simulation with: 
+      ./CaloTB/run_sim/run_sim.sh
+ 
+
+ --------
 | v00-06 | 
  --------    
 
