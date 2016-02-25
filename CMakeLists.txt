@@ -38,7 +38,11 @@ option(BUILD_TESTING "Enable and build tests" ON)
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 find_package(DD4hep REQUIRED COMPONENTS DDSegmentation DDRec DDG4)
-find_package(ROOT REQUIRED COMPONENTS Geom Reflex GenVector)
+if ( ${ROOT_VERSION_MAJOR} GREATER 5 )
+  find_package(ROOT REQUIRED COMPONENTS Geom GenVector)
+else()
+  find_package(ROOT REQUIRED COMPONENTS Geom Reflex GenVector)
+endif()
 #find_package( ROOT REQUIRED COMPONENTS Geom Reflex)
 #set( ROOT_COMPONENT_LIBRARIES Geom Reflex)
 
