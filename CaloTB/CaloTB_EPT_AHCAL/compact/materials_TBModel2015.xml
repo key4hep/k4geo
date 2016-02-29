@@ -1,0 +1,100 @@
+<materials>
+
+  <!--The steel we are going to use in the Hcal: Material S235JR (old name St37)
+	  Numbers found under 
+	  http://n.ethz.ch/student/zwickers/ download/fs_pe_grundlagen_cyrill.pdf  -->
+  <material name="Steel235">
+    <D value="7.87" unit="g/cm3"/>
+    <fraction n="0.9843" ref="Fe"/>
+    <fraction n="0.0017" ref="C"/>
+    <fraction n="0.014" ref="Mn"/>
+  </material>
+
+  <!-- Tungsten is built with density 17.84*g/cm3 and it has 5.25% of nikel, 1.76% of copper and 92.99% of 19.3gr/cm3 tungsten -->
+  <material name="TungstenDens24">
+    <D value="17.84" unit="g/cm3"/>
+    <fraction n="0.9299" ref="W"/>
+    <fraction n="0.0525" ref="Ni"/>
+    <fraction n="0.0176" ref="Fe"/>
+  </material>
+
+  <!-- PCB (Printed Circuit Board) Material FR4
+       Composition and density found under 
+       http://pcba10.ba.infn.it/temp/ddd/ma/materials/list.html 
+    -->
+  <material name="PCB" state="solid">
+    <MEE unit="eV" value="88.255598548367"/>
+    <D unit="g/cm3" value="1.7"/>
+    <fraction n="0.180774" ref="Si"/>
+    <fraction n="0.405633" ref="O"/>
+    <fraction n="0.278042" ref="C"/>
+    <fraction n="0.0684428" ref="H"/>
+    <fraction n="0.0671091" ref="Br"/>
+  </material>
+
+  <!-- Scintillator -->
+  <!--material name="G4_POLYSTYRENE" state="solid">
+  <MEE unit="eV" value="68.7"/>
+  <D unit="g/cm3" value="1.06"/>
+  <fraction n="0.077418" ref="H"/>
+  <fraction n="0.922582" ref="C"/>
+  </material-->
+  <material name="polystyrene" state="solid">
+    <MEE unit="eV" value="68.7"/>
+    <D unit="g/cm3" value="1.032"/>
+    <fraction n="0.5246" ref="H"/>
+    <fraction n="0.4754" ref="C"/>
+  </material>
+
+  <!-- Numbers from http://www.elpac.de/Kunststoffkleinteile/Kleines_Kunststoff-Know-_How/PVC-P/pvc-p.html -->
+  <material name="PVC">
+    <D value="1.35" unit="g/cm3"/>
+    <fraction n="0.5" ref="H"/>
+    <fraction n="0.33" ref="C"/>
+    <fraction n="0.17" ref="Cl"/>
+  </material>
+
+  <!-- 3M foil / Numbers from http://de.wikipedia.org/wiki/Polystyrol
+       the structural formula for the Styrene Polymer is C6H5CH=CH2
+       The difference to Styropor definition in CGAGeometryManager
+       comes since we do not have the material in a foamed form -->
+  <material name="Polystyrole">
+    <D value="1.065" unit="g/cm3"/>
+    <fraction n="0.5" ref="H"/>
+    <fraction n="0.5" ref="C"/>
+  </material>
+
+  <!-- -->
+  <material name="Air">
+    <D value="0.00129" unit="g/cm3"/>
+    <fraction n="0.3" ref="O"/>
+    <fraction n="0.7" ref="N"/>
+  </material>
+
+  <!-- Now we define the material cf_mix
+       We assume the following:
+       a) a layer has a volume of V_total = 90x90x0.15 cm^3 = 1215 cm^3(last number is
+       longitudinal space reserved for cable fibre mix)
+       b) coax cable has diameter of 0.12 cm 
+       fibre has diameter of 0.5 cm
+       The cables are on average 45 cm long 
+       => V_coax = PI*(0.06 cm)^2*45 cm = 0.510 cm^3
+  => V_fibre = PI*(0.025 cm)^2*45 cm = 0.088 cm^3
+  ...The rest is occupied by air 
+  V_air = V_total - V_coax - V_fibre = 1214.402
+  There is one coax. cable and one fibre per tile
+  and we have on average 185 tiles per layer
+  => Total mass of coax cable (fibre), m = density*V
+  m_coax = (1.35*0.510)*185 = 127.37 g
+  m_fibre = (1.065*0.088)*185 = 17.33 g
+  ... and
+  m_air = 1214.402*1.29e-03 = 1.45 g
+  total density = (m_air + m_coax + m_fibre)/1215. = 0.120 g/cm^3 -->
+  <material name="CFM">
+    <D value="0.12" unit="g/cm3"/>
+    <fraction n="0.009" ref="Air"/>
+    <fraction n="0.872" ref="PVC"/>
+    <fraction n="0.119" ref="Polystyrole"/>
+  </material>
+  
+</materials>

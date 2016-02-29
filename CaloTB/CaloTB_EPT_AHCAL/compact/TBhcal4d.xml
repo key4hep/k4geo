@@ -1,0 +1,111 @@
+<!-- 
+   Calorimeter
+  -->
+
+<detector id="2" name="TBhcal4d" type="TBhcal4d" vis="GreenVis" readout="hcalSD" insideTrackingVolume="false">
+
+  <comment>AHCAL TB 2015 Model SSF</comment>
+
+  <envelope vis="HCALVis">
+    <shape type="Box" dx="HBU_BL_dim_x/2 + env_safety" dy="HBU_BL_dim_y/2 + env_safety"  dz="(HCAL_SSF_nlayers*Hcal_layer_thickness + HCAL_BL_nlayers*Hcal_layer_thickness)/2 + env_safety" material="Air" />
+    <rotation x="0" y="0" z="0"/>
+    <position x="0" y="0" z="ECAL_nlayers*Ecal_layer_thickness + (HCAL_SSF_nlayers*Hcal_layer_thickness + HCAL_BL_nlayers*Hcal_layer_thickness)/2"/>
+  </envelope>
+
+  <type_flags type="1" />
+
+  <!-- slot 3 to 10 -->
+  <layer repeat="HCAL_SSF_nlayers" vis="SeeThrough">
+    <slice material = "Steel235"       thickness = "Hcal_radiator_thickness"       vis="BlueVis"                          />
+    <slice material = "Air"            thickness = "airgap_thickness"              vis="Invisible"                        />
+    <slice material = "Steel235"       thickness = "cassette_thickness"            vis="Invisible"                        />
+    <slice material = "CFM"            thickness = "cable_mix_thickness"           vis="Invisible"                        />
+    <slice material = "PCB"            thickness = "pcb_thickness"                 vis="GreenVis"                        />
+    <slice material = "Polystyrole"    thickness = "foil_thickness"                vis="Invisible"                        />
+    <slice material = "polystyrene"    thickness = "Hcal_scintillator_thickness"   vis="CyanVis"    sensitive = "yes"     />
+    <slice material = "Polystyrole"    thickness = "foil_thickness"                vis="Invisible"                        />
+    <slice material = "Steel235"       thickness = "cassette_thickness"            vis="Invisible"                        />
+    <slice material = "Air"            thickness = "airgap_thickness"              vis="Invisible"                        />
+  </layer>
+
+  <!-- slot 11 -->
+  <layer repeat="1" vis="SeeThrough">
+    <slice material = "Steel235"       thickness = "Hcal_radiator_thickness"       vis="BlueVis"                          />
+    <slice material = "Air"            thickness = "airgap_thickness"              vis="Invisible"                        />
+    <slice material = "Steel235"       thickness = "cassette_thickness"            vis="Invisible"                        />
+    <slice material = "CFM"            thickness = "cable_mix_thickness"           vis="Invisible"                        />
+    <slice material = "PCB"            thickness = "pcb_thickness"                 vis="GreenVis"                        />
+    <slice material = "Polystyrole"    thickness = "foil_thickness"                vis="Invisible"                        />
+    <slice material = "polystyrene"    thickness = "Hcal_scintillator_thickness"   vis="CyanVis"    sensitive = "yes"     />
+    <slice material = "Polystyrole"    thickness = "foil_thickness"                vis="Invisible"                        />
+    <slice material = "Steel235"       thickness = "cassette_thickness"            vis="Invisible"                        />
+    <slice material = "Air"            thickness = "airgap_thickness"              vis="Invisible"                        />
+  </layer>
+
+  <!-- slot 12 -->
+  <layer repeat="1" vis="SeeThrough">
+    <slice material = "Steel235"       thickness = "Hcal_radiator_thickness"       vis="BlueVis"                          />
+    <slice material = "Air"            thickness = "airgap_thickness*2+cassette_thickness*2+cable_mix_thickness+pcb_thickness+foil_thickness*2+Hcal_scintillator_thickness"              vis="Invisible"                        />
+  </layer>
+
+  <!-- slot 13 -->
+  <layer repeat="1" vis="SeeThrough">
+    <slice material = "Steel235"       thickness = "Hcal_radiator_thickness"       vis="BlueVis"                          />
+    <slice material = "Air"            thickness = "airgap_thickness"              vis="Invisible"                        />
+    <slice material = "Steel235"       thickness = "cassette_thickness"            vis="Invisible"                        />
+    <slice material = "CFM"            thickness = "cable_mix_thickness"           vis="Invisible"                        />
+    <slice material = "PCB"            thickness = "pcb_thickness"                 vis="Invisible"                        />
+    <slice material = "Polystyrole"    thickness = "foil_thickness"                vis="Invisible"                        />
+    <slice material = "polystyrene"    thickness = "Hcal_scintillator_thickness"   vis="CyanVis"    sensitive = "yes"     />
+    <slice material = "Polystyrole"    thickness = "foil_thickness"                vis="Invisible"                        />
+    <slice material = "Steel235"       thickness = "cassette_thickness"            vis="Invisible"                        />
+    <slice material = "Air"            thickness = "airgap_thickness"              vis="Invisible"                        />
+  </layer>
+
+  <!-- slot 14 to 20 -->
+  <layer repeat="7" vis="SeeThrough">
+    <slice material = "Steel235"       thickness = "Hcal_radiator_thickness"       vis="BlueVis"                          />
+    <slice material = "Air"            thickness = "airgap_thickness*2+cassette_thickness*2+cable_mix_thickness+pcb_thickness+foil_thickness*2+Hcal_scintillator_thickness"              vis="Invisible"                        />
+  </layer>
+
+  <!-- slot 21 -->
+  <layer repeat="1" vis="SeeThrough">
+    <slice material = "Steel235"       thickness = "Hcal_radiator_thickness"       vis="BlueVis"                          />
+    <slice material = "Air"            thickness = "airgap_thickness"              vis="Invisible"                        />
+    <slice material = "Steel235"       thickness = "cassette_thickness"            vis="Invisible"                        />
+    <slice material = "CFM"            thickness = "cable_mix_thickness"           vis="Invisible"                        />
+    <slice material = "PCB"            thickness = "pcb_thickness"                 vis="Invisible"                        />
+    <slice material = "Polystyrole"    thickness = "foil_thickness"                vis="Invisible"                        />
+    <slice material = "polystyrene"    thickness = "Hcal_scintillator_thickness"   vis="CyanVis"    sensitive = "yes"     />
+    <slice material = "Polystyrole"    thickness = "foil_thickness"                vis="Invisible"                        />
+    <slice material = "Steel235"       thickness = "cassette_thickness"            vis="Invisible"                        />
+    <slice material = "Air"            thickness = "airgap_thickness"              vis="Invisible"                        />
+  </layer>
+
+  <!-- slot 22 to 30 -->
+  <layer repeat="9" vis="SeeThrough">
+    <slice material = "Steel235"       thickness = "Hcal_radiator_thickness"       vis="BlueVis"                          />
+    <slice material = "Air"            thickness = "airgap_thickness*2+cassette_thickness*2+cable_mix_thickness+pcb_thickness+foil_thickness*2+Hcal_scintillator_thickness"              vis="Invisible"                        />
+  </layer>
+
+  <!-- slot 31 -->
+  <layer repeat="1" vis="SeeThrough">
+    <slice material = "Steel235"       thickness = "Hcal_radiator_thickness"       vis="BlueVis"                          />
+    <slice material = "Air"            thickness = "airgap_thickness"              vis="Invisible"                        />
+    <slice material = "Steel235"       thickness = "cassette_thickness"            vis="Invisible"                        />
+    <slice material = "CFM"            thickness = "cable_mix_thickness"           vis="Invisible"                        />
+    <slice material = "PCB"            thickness = "pcb_thickness"                 vis="Invisible"                        />
+    <slice material = "Polystyrole"    thickness = "foil_thickness"                vis="Invisible"                        />
+    <slice material = "polystyrene"    thickness = "Hcal_scintillator_thickness"   vis="CyanVis"    sensitive = "yes"     />
+    <slice material = "Polystyrole"    thickness = "foil_thickness"                vis="Invisible"                        />
+    <slice material = "Steel235"       thickness = "cassette_thickness"            vis="Invisible"                        />
+    <slice material = "Air"            thickness = "airgap_thickness"              vis="Invisible"                        />
+  </layer>
+
+  <!-- slot 32 -->
+  <layer repeat="1" vis="SeeThrough">
+    <slice material = "Steel235"       thickness = "Hcal_radiator_thickness"       vis="BlueVis"                          />
+    <slice material = "Air"            thickness = "airgap_thickness*2+cassette_thickness*2+cable_mix_thickness+pcb_thickness+foil_thickness*2+Hcal_scintillator_thickness"              vis="Invisible"                        />
+  </layer>
+
+</detector>

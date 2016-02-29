@@ -1,0 +1,110 @@
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+       xmlns:xs="http://www.w3.org/2001/XMLSchema"
+       xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+  
+  <info name="TBhcal4d"
+        title="TBhcal4d"
+        author="Eldwan Brianne"
+        url="flc.desy.de"
+        status="development"
+        version="$Id$">
+    <comment>The compact File for the AHCAL TB 2015 Prototype</comment>
+  </info>
+  
+  <includes>
+    <gdmlFile  ref="${DD4hepINSTALL}/DDDetectors/compact/elements.xml"/>
+    <comment>Additional design specific material definitions</comment>
+    <gdmlFile  ref="materials_TBModel2015.xml"/>
+    <gdmlFile  ref="${DD4hepINSTALL}/DDDetectors/compact/materials.xml"/>
+  </includes>
+
+  <define>
+    <!-- world -->
+    <constant name="world_side" value="3000*mm"/>
+    <constant name="world_x" value="world_side"/>
+    <constant name="world_y" value="world_side"/>
+    <constant name="world_z" value="world_side"/>
+
+    <!-- Materials -->
+    <constant name="Hcal_radiator_thickness" value="20*mm"/>
+    <constant name="airgap_thickness" value="0.5*mm"/>
+    <constant name="cassette_thickness" value="0.5*mm"/>
+    <constant name="cable_mix_thickness" value="1.5*mm"/>
+    <constant name="pcb_thickness" value="0.7*mm"/>
+    <constant name="foil_thickness" value="0.115*mm"/>
+    <constant name="Hcal_scintillator_thickness" value="3*mm"/>
+
+    <constant name="Ecal_radiator_thickness" value="20*mm"/>
+    <constant name="Ecal_scintillator_thickness" value="2*mm"/>
+
+    <constant name="env_safety" value="0.01*mm"/>
+
+    <!-- ECAL -->
+    <constant name="ECAL_nlayers" value="2"/>
+    <constant name="Ecal_layer_thickness" value="Ecal_radiator_thickness+2*airgap_thickness+2*cassette_thickness+cable_mix_thickness+pcb_thickness+2*foil_thickness+Ecal_scintillator_thickness"/>
+    <constant name="EBU_dim_x" value="18*cm"/>
+    <constant name="EBU_dim_y" value="18*cm"/>
+    <constant name="ECAL_ncell_x" value="4"/>
+    <constant name="ECAL_ncell_y" value="18"/>
+    <constant name="Ecal_cell_size_x" value="45*mm"/>
+    <constant name="Ecal_cell_size_y" value="5*mm"/>
+
+    <!-- HCAL -->
+    <constant name="HCAL_SSF_nlayers" value="8"/>
+    <constant name="HCAL_BL_nlayers" value="22"/>
+    <constant name="Hcal_layer_thickness" value="Hcal_radiator_thickness+2*airgap_thickness+2*cassette_thickness+cable_mix_thickness+pcb_thickness+2*foil_thickness+Hcal_scintillator_thickness"/>
+    <constant name="HBU_SSF_dim_x" value="36*cm"/>
+    <constant name="HBU_SSF_dim_y" value="36*cm"/>
+    <constant name="HCAL_SSF_ncell_x" value="12"/>
+    <constant name="HCAL_SSF_ncell_y" value="12"/>
+    <constant name="HBU_BL_dim_x" value="72*cm"/>
+    <constant name="HBU_BL_dim_y" value="72*cm"/>
+    <constant name="HCAL_BL_ncell_x" value="24"/>
+    <constant name="HCAL_BL_ncell_y" value="24"/>
+    <constant name="Hcal_cell_size_x" value="30*mm"/>
+    <constant name="Hcal_cell_size_y" value="30*mm"/>
+  </define>
+  
+  
+  <limits>
+    <limitset name="cal_limits">
+      <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
+    </limitset>
+  </limits>
+  
+  <comment>Common Generic visualization attributes</comment>
+  <display>
+    <vis name="WhiteVis"         alpha="0.0" r=".96" g=".96"  b=".96"   showDaughters="true"  visible="true"/>
+    <vis name="LightGrayVis"     alpha="0.0" r=".75" g=".75"  b=".75"   showDaughters="true"  visible="true"/>
+    <vis name="Invisible"        alpha="0.0" r="0" g="0"  b="0"         showDaughters="false"  visible="false"/>
+    <vis name="SeeThrough"       alpha="0.0" r="0" g="0"  b="0"         showDaughters="true"  visible="false"/>
+    <vis name="RedVis"           alpha="1.0" r="1.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="GreenVis"         alpha="1.0" r="0.0" g="1.0"  b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="BlueVis"          alpha="1.0" r="0.0" g="0.0"  b="1.0"   showDaughters="true"  visible="true"/>
+    <vis name="CyanVis"          alpha="1.0" r="0.0" g="1.0"  b="1.0"   showDaughters="true"  visible="true"/>
+    <vis name="MagentaVis"       alpha="1.0" r="1.0" g="0.0"  b="1.0"   showDaughters="true"  visible="true"/>
+    <vis name="YellowVis"        alpha="1.0" r="1.0" g="1.0"  b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="BlackVis"         alpha="1.0" r="0.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="GrayVis"          alpha="1.0" r="0.5" g="0.5"  b="0.5"   showDaughters="true"  visible="true"/>
+    <vis name="ECALVis"          alpha="0.5" r="0.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
+    <vis name="HCALVis"       alpha="0.5" r="1.0" g="0.0"  b="0.0" showDaughters="true"  visible="true"/>
+  </display>
+  
+  <detectors>
+    <comment>Calorimeters</comment>
+    <include ref="TBecal4d.xml"/>
+    <include ref="TBhcal4d.xml"/>
+  </detectors>
+
+  <readouts>
+    <readout name="ecalSD">
+      <segmentation type="TiledLayerGridXY" grid_size_x="45*mm" grid_size_y="5*mm" offset_x="-EBU_dim_x/2-4.5/2*cm" offset_y="-EBU_dim_y/2-0.5/2*cm" identifier_x="I" identifier_y="J" identifier_layer="K"/>
+      <id>system:0,K:8,J:8,I:8</id>
+    </readout>
+    <readout name="hcalSD">
+      <segmentation type="TiledLayerGridXY" grid_size_x="3*cm" grid_size_y="3*cm" offset_x="-HBU_BL_dim_x/2-3/2*cm" offset_y="-HBU_BL_dim_y/2-3/2*cm" identifier_x="I" identifier_y="J" identifier_layer="K"/>
+      <id>system:0,K:8,J:8,I:8</id>
+    </readout>
+  </readouts>
+  
+</lccdd>

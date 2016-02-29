@@ -1,0 +1,30 @@
+<!-- 
+   Calorimeter
+  -->
+
+<detector id="1" name="TBecal4d" type="TBecal4d" vis="GreenVis" readout="ecalSD" insideTrackingVolume="false">
+
+  <comment>AHCAL TB 2015 Model ECAL</comment>
+
+  <envelope vis="ECALVis">
+    <shape type="Box" dx="EBU_dim_x*4/2 + env_safety" dy="EBU_dim_y*4/2 + env_safety"  dz="ECAL_nlayers*Ecal_layer_thickness/2 + env_safety" material="Air" />
+    <rotation x="0" y="0" z="0"/>
+    <position x="0" y="0" z="ECAL_nlayers*Ecal_layer_thickness/2"/>
+  </envelope>
+
+  <type_flags type="1" />
+
+  <layer repeat="ECAL_nlayers" vis="SeeThrough">
+    <slice material = "Steel235"       thickness = "Ecal_radiator_thickness"       vis="BlueVis"                          />
+    <slice material = "Air"            thickness = "airgap_thickness"              vis="Invisible"                        />
+    <slice material = "Steel235"       thickness = "cassette_thickness"            vis="Invisible"                        />
+    <slice material = "CFM"            thickness = "cable_mix_thickness"           vis="Invisible"                        />
+    <slice material = "PCB"            thickness = "pcb_thickness"                 vis="GreenVis"                        />
+    <slice material = "Polystyrole"    thickness = "foil_thickness"                vis="Invisible"                        />
+    <slice material = "polystyrene"    thickness = "Ecal_scintillator_thickness"   vis="CyanVis"    sensitive = "yes"     />
+    <slice material = "Polystyrole"    thickness = "foil_thickness"                vis="Invisible"                        />
+    <slice material = "Steel235"       thickness = "cassette_thickness"            vis="Invisible"                        />
+    <slice material = "Air"            thickness = "airgap_thickness"              vis="Invisible"                        />
+  </layer>
+
+</detector>
