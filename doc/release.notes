@@ -1,4 +1,10 @@
 
+A.Sailer 08/03/2016
+
+  - DDSim: Add enableG4Gun and enableG4GPS flags to enable the Geant4 Gun or GeneralParticleSource
+    see examples/gun.mac or examples/gps.mac
+    use with ddsim --enablgeG4Gun --macroFile gun.mac  --compactFile ...
+
  --------
 | v00-07 | 
  --------    

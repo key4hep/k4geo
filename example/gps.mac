@@ -1,0 +1,12 @@
+/gps/verbose 1
+/gps/particle e-
+/gps/direction 0 0 1
+/gps/pos/type Plane
+/gps/pos/shape Square
+/gps/pos/centre 0 0 0  cm
+/gps/pos/halfx 1 cm
+/gps/pos/halfy 1 cm
+/gps/ang/type planar
+/gps/ene/type Mono
+/gps/ene/mono 1 GeV
+/run/beamOn 2
