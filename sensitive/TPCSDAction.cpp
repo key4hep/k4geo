@@ -173,8 +173,8 @@ namespace DD4hep {
 	// placed on this surface at the last crossing point, and will be assinged the total energy 
 	// deposited in the whole pad-ring. This is a possible source of bias for the hit
   
-	G4TouchableHandle touchPost = step->GetPostStepPoint()->GetTouchableHandle(); 
-	G4TouchableHandle touchPre = step->GetPreStepPoint()->GetTouchableHandle(); 
+	// G4TouchableHandle touchPost = step->GetPostStepPoint()->GetTouchableHandle();
+	// G4TouchableHandle touchPre = step->GetPreStepPoint()->GetTouchableHandle();
   
   
 	if (fabs(step->GetTrack()->GetDefinition()->GetPDGCharge()) < 0.01) return true;
