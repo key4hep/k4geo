@@ -1151,9 +1151,25 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   vxd.setVisAttributes(lcdd,  "CyanVis" , SupportConeLogical ) ;
   
   double ZCone = ladder_length +  ((end_electronics_half_z*end_ladd_electronics_option) * 2) + shell_thickess + (beryllium_ladder_block_length*2) + support_cone_half_z;
+
+  // ================================== adding tracking surfaces for beryllium support cone ====================================
+  const double shell_theta = atan2( -1.*support_endplate_outer_radious_L1 + support_endplate_inner_radious, 2.*support_cone_half_z);  
+
+  Vector3D o_shellcon(0.5 * (support_endplate_outer_radious_L1 + shell_thickess + support_endplate_inner_radious) , 0., 0. ) ;
+  Vector3D shellcone_angle (  1. , 0. , shell_theta, Vector3D::spherical ) ;
+
+  VolCone suppShellCone( SupportConeLogical, SurfaceType( SurfaceType::Helper ) , 0.5*shell_thickess  , 0.5*shell_thickess , shellcone_angle, o_shellcon );
+  // ==============================================================================================================================
   
   pv = supp_assembly.placeVolume( SupportConeLogical, Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,  ZCone ) ) ) ;
+  DetElement suppShellConePosDE ( suppDE , "posShellCone" , x_det.id() )  ;
+  suppShellConePosDE.setPlacement( pv );
+  volSurfaceList( suppShellConePosDE )->push_back( suppShellCone );
+
   pv = supp_assembly.placeVolume( SupportConeLogical, Transform3D( RotationZYX( 0, 0, pi ), Position(0., 0., -ZCone ) ) ) ;
+  DetElement suppShellConeNegDE ( suppDE , "negShellCone" , x_det.id() )  ;
+  suppShellConeNegDE.setPlacement( pv );
+  volSurfaceList( suppShellConeNegDE )->push_back( suppShellCone );
 
   //*** beryllium support forward part **************************************************************************
   
