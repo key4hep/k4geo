@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.3 FATAL_ERROR)
 
-SET( CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic -Wno-long-long")
+#SET( CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic -Wno-long-long")
 
 #---------------------------
 set( PackageName lcgeo )
@@ -38,6 +38,15 @@ option(BUILD_TESTING "Enable and build tests" ON)
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 find_package(DD4hep REQUIRED COMPONENTS DDSegmentation DDRec DDG4)
+
+MESSAGE(" DD4HEP_USE_CXX11: " ${DD4HEP_USE_CXX11})
+if( ${DD4HEP_USE_CXX11})
+   SET( CMAKE_CXX_FLAGS "-Wall -std=c++11")
+else()
+   SET( CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic -Wno-long-long")
+endif()
+MESSAGE(" CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS})
+
 if ( ${ROOT_VERSION_MAJOR} GREATER 5 )
   find_package(ROOT REQUIRED COMPONENTS Geom GenVector)
 else()
