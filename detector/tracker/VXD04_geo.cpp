@@ -586,9 +586,22 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       
       double end_ladd_electronic_offset_phi = offset_phi +(side_band_electronics_option * side_band_electronics_width/2.);
       
+    //====== create the meassurement surface ===================
+    Vector3D u( 1. , 0. , 0. ) ;
+    Vector3D v( 0. , 1. , 0. ) ;
+    Vector3D n( 0. , 0. , 1. ) ;
+
+    double end_ladd_elec_thick = metal_traces_thickness + flex_cable_thickness + foam_spacer_thickness + electronics_structure_thickness;
+
+    VolPlane surfEndElec( ElectronicsEndLogical , SurfaceType(SurfaceType::Helper) , end_ladd_elec_thick/2. ,  end_ladd_elec_thick/2. , u,v,n ) ; //,o ) ;
+    //============================================================
+
       if (LayerId==1||LayerId==3||LayerId==5) {       
 	
 	for (double elec_loop=0; elec_loop<nb_ladder;elec_loop++) {
+
+	  std::string elecEndLadNameP =  _toString( LayerId , "ElectronicsEnd_%02d_posZ") + _toString( (int)elec_loop, "_%02d" ) ;
+	  std::string elecEndLadNameN =  _toString( LayerId , "ElectronicsEnd_%02d_negZ") + _toString( (int)elec_loop, "_%02d" ) ;
 	  
 	  phirot2 = phirot*elec_loop;
 	  RotationZYX rot( 0, phirot2 , (pi*0.5) ) ;    
@@ -599,15 +612,27 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 				     Transform3D( rot, Position((layer_radius+(electronics_structure_thickness/2.)+layer_gap)*sin(phirot2)+ end_ladd_electronic_offset_phi*cos(phirot2),
 								-(layer_radius+(electronics_structure_thickness/2.)+layer_gap)*cos(phirot2)+ end_ladd_electronic_offset_phi*sin(phirot2),
 								Z))  );
+
+	  DetElement  elecEndLadDEposZ( vxd ,  elecEndLadNameP , x_det.id() );
+	  elecEndLadDEposZ.setPlacement( pv ) ;
+	  volSurfaceList( elecEndLadDEposZ )->push_back( surfEndElec ) ;
+	  
 	  pv = layer_assembly.placeVolume( ElectronicsEndLogical, 
 				     Transform3D( rot, Position((layer_radius+(electronics_structure_thickness/2.)+layer_gap)*sin(phirot2)+ end_ladd_electronic_offset_phi*cos(phirot2),
 								-(layer_radius+(electronics_structure_thickness/2.)+layer_gap)*cos(phirot2)+ end_ladd_electronic_offset_phi*sin(phirot2),
 								-Z))  );
+
+	  DetElement  elecEndLadDEnegZ( vxd ,  elecEndLadNameN , x_det.id() );
+	  elecEndLadDEnegZ.setPlacement( pv ) ;
+	  volSurfaceList( elecEndLadDEnegZ )->push_back( surfEndElec ) ;
 	}
 	
       } else if (LayerId==0||LayerId==2||LayerId==4)  {       
 	
 	for (double elec_loop=0; elec_loop<nb_ladder;elec_loop++) {
+
+	  std::string elecEndLadNameP =  _toString( LayerId , "ElectronicsEnd_%02d_posZ") + _toString( (int)elec_loop, "_%02d" ) ;
+	  std::string elecEndLadNameN =  _toString( LayerId , "ElectronicsEnd_%02d_negZ") + _toString( (int)elec_loop, "_%02d" ) ;
 	  
 	  phirot2 = phirot*elec_loop;
 	  RotationZYX rot( 0, phirot2 , (pi*0.5) ) ;    
@@ -618,11 +643,20 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 				     Transform3D( rot, Position((layer_radius-(electronics_structure_thickness/2.))*sin(phirot2)+ end_ladd_electronic_offset_phi*cos(phirot2),
 								-(layer_radius-(electronics_structure_thickness/2.))*cos(phirot2)+ end_ladd_electronic_offset_phi*sin(phirot2),
 								Z))  );
+
+	  DetElement  elecEndLadDEposZ( vxd ,  elecEndLadNameP , x_det.id() );
+	  elecEndLadDEposZ.setPlacement( pv ) ;
+	  volSurfaceList( elecEndLadDEposZ )->push_back( surfEndElec ) ;
 	  
 	  pv = layer_assembly.placeVolume( ElectronicsEndLogical,
 				     Transform3D( rot, Position((layer_radius-(electronics_structure_thickness/2.))*sin(phirot2)+ end_ladd_electronic_offset_phi*cos(phirot2),
 								-(layer_radius-(electronics_structure_thickness/2.))*cos(phirot2)+ end_ladd_electronic_offset_phi*sin(phirot2),
 								-Z))  );
+
+	  DetElement  elecEndLadDEnegZ( vxd ,  elecEndLadNameN , x_det.id() );
+	  elecEndLadDEnegZ.setPlacement( pv ) ;
+	  volSurfaceList( elecEndLadDEnegZ )->push_back( surfEndElec ) ;
+
 	}
       }
     }
