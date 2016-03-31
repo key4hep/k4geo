@@ -506,6 +506,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     //     thisLayer.radLength = VXDSupportMaterial->GetMaterial()->getRadLength()/mm ;
     
     
+
+
     // ****************************************************************************************
     // **********************   Berylium annulus block *****************************************
     // ****************************************************************************************
@@ -519,8 +521,21 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       Volume BerylliumAnnulusBlockLogical( _toString(LayerId,"BerylliumAnnulusBlock_%02d"), BerylliumAnnulusBlockSolid, lcdd.material("G4_Be")) ; //"beryllium") ) ;
       
       vxd.setVisAttributes(lcdd,  "CyanVis" , BerylliumAnnulusBlockLogical) ;
+
+
+      //====== create the meassurement surface for Be annulus block ===================
+      Vector3D u( 1. , 0. , 0. ) ;
+      Vector3D v( 0. , 1. , 0. ) ;
+      Vector3D n( 0. , 0. , 1. ) ;
+      
+      VolPlane surfAnnBlock( BerylliumAnnulusBlockLogical , SurfaceType(SurfaceType::Helper) , beryllium_ladder_block_thickness/2. ,  beryllium_ladder_block_thickness/2. , u,v,n ) ; //,o ) ;
+      //============================================================
+
       
       for (double AnnulusBlock_loop=0;AnnulusBlock_loop<nb_ladder;AnnulusBlock_loop++) {
+
+	std::string annBlockNameP =  _toString( LayerId , "BerylliumAnnulusBlock_%02d_posZ") + _toString( (int)AnnulusBlock_loop, "_%02d" ) ;
+	std::string annBlockNameN =  _toString( LayerId , "BerylliumAnnulusBlock_%02d_negZ") + _toString( (int)AnnulusBlock_loop, "_%02d" ) ;
 	
 	phirot2 = phirot*AnnulusBlock_loop;
 
@@ -531,10 +546,16 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	pv = supp_assembly.placeVolume( BerylliumAnnulusBlockLogical,  Transform3D( rot, Position((layer_radius+beryllium_ladder_block_thickness+layer_gap)*sin(phirot2)+offset_phi*cos(phirot2),
 											     -(layer_radius+beryllium_ladder_block_thickness+layer_gap)*cos(phirot2)+offset_phi*sin(phirot2),
 											     ZAnnulusBlock))  ) ;
+	DetElement  annBlockPosZ( vxd , annBlockNameP  , x_det.id() );
+	annBlockPosZ.setPlacement( pv ) ;
+	volSurfaceList( annBlockPosZ )->push_back( surfAnnBlock ) ;
 	
 	pv = supp_assembly.placeVolume( BerylliumAnnulusBlockLogical,  Transform3D( rot, Position((layer_radius+beryllium_ladder_block_thickness+layer_gap)*sin(phirot2)+offset_phi*cos(phirot2),
 											     -(layer_radius+beryllium_ladder_block_thickness+layer_gap)*cos(phirot2)+offset_phi*sin(phirot2),
 											     -ZAnnulusBlock))  );
+	DetElement  annBlockNegZ( vxd , annBlockNameN  , x_det.id() );
+	annBlockNegZ.setPlacement( pv ) ;
+	volSurfaceList( annBlockNegZ )->push_back( surfAnnBlock ) ;
       }	
 
     } else if (LayerId==3||LayerId==5)  { 
@@ -550,6 +571,17 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	volName +=  _toString( int(AnnulusBlock_loop), "_%02d");
 
 	Volume BerylliumAnnulusBlockLogical( volName , BerylliumAnnulusBlockSolid, lcdd.material("G4_Be")) ; //"beryllium") ) ;
+
+	//====== create the meassurement surface for Be annulus block ===================
+	Vector3D u( 1. , 0. , 0. ) ;
+	Vector3D v( 0. , 1. , 0. ) ;
+	Vector3D n( 0. , 0. , 1. ) ;
+	
+	VolPlane surfAnnBlock( BerylliumAnnulusBlockLogical , SurfaceType(SurfaceType::Helper) , beryllium_ladder_block_thickness/2. ,  beryllium_ladder_block_thickness/2. , u,v,n ) ; //,o ) ;
+	//============================================================
+
+	std::string annBlockNameP =  _toString( LayerId , "BerylliumAnnulusBlock_%02d_posZ") + _toString( (int)AnnulusBlock_loop, "_%02d" ) ;
+	std::string annBlockNameN =  _toString( LayerId , "BerylliumAnnulusBlock_%02d_negZ") + _toString( (int)AnnulusBlock_loop, "_%02d" ) ;
 	
 	vxd.setVisAttributes(lcdd,  "CyanVis" , BerylliumAnnulusBlockLogical) ;
 	
@@ -562,12 +594,19 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	pv = supp_assembly.placeVolume( BerylliumAnnulusBlockLogical,  Transform3D( rot, Position((layer_radius+beryllium_ladder_block_thickness+layer_gap)*sin(phirot2)+offset_phi*cos(phirot2),
 											     -(layer_radius+beryllium_ladder_block_thickness+layer_gap)*cos(phirot2)+offset_phi*sin(phirot2),
 											     ZAnnulusBlock2))  );
+	DetElement  annBlockPosZ( vxd , annBlockNameP  , x_det.id() );
+	annBlockPosZ.setPlacement( pv ) ;
+	volSurfaceList( annBlockPosZ )->push_back( surfAnnBlock ) ;
 
 	pv = supp_assembly.placeVolume( BerylliumAnnulusBlockLogical,  Transform3D( rot, Position((layer_radius+beryllium_ladder_block_thickness+layer_gap)*sin(phirot2)+offset_phi*cos(phirot2),
 											     -(layer_radius+beryllium_ladder_block_thickness+layer_gap)*cos(phirot2)+offset_phi*sin(phirot2),
 											     -ZAnnulusBlock2)) ) ;
+	DetElement  annBlockNegZ( vxd , annBlockNameN  , x_det.id() );
+	annBlockNegZ.setPlacement( pv ) ;
+	volSurfaceList( annBlockNegZ )->push_back( surfAnnBlock ) ;
       }
     }
+    
     
     //****************************************************************************************
     // *********************************  Electronics   **********************************
@@ -615,7 +654,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
 	  DetElement  elecEndLadDEposZ( vxd ,  elecEndLadNameP , x_det.id() );
 	  elecEndLadDEposZ.setPlacement( pv ) ;
-	  volSurfaceList( elecEndLadDEposZ )->push_back( surfEndElec ) ;
+	  //volSurfaceList( elecEndLadDEposZ )->push_back( surfEndElec ) ;
 	  
 	  pv = layer_assembly.placeVolume( ElectronicsEndLogical, 
 				     Transform3D( rot, Position((layer_radius+(electronics_structure_thickness/2.)+layer_gap)*sin(phirot2)+ end_ladd_electronic_offset_phi*cos(phirot2),
@@ -624,7 +663,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
 	  DetElement  elecEndLadDEnegZ( vxd ,  elecEndLadNameN , x_det.id() );
 	  elecEndLadDEnegZ.setPlacement( pv ) ;
-	  volSurfaceList( elecEndLadDEnegZ )->push_back( surfEndElec ) ;
+	  //volSurfaceList( elecEndLadDEnegZ )->push_back( surfEndElec ) ;
 	}
 	
       } else if (LayerId==0||LayerId==2||LayerId==4)  {       
@@ -646,7 +685,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
 	  DetElement  elecEndLadDEposZ( vxd ,  elecEndLadNameP , x_det.id() );
 	  elecEndLadDEposZ.setPlacement( pv ) ;
-	  volSurfaceList( elecEndLadDEposZ )->push_back( surfEndElec ) ;
+	  //volSurfaceList( elecEndLadDEposZ )->push_back( surfEndElec ) ;
 	  
 	  pv = layer_assembly.placeVolume( ElectronicsEndLogical,
 				     Transform3D( rot, Position((layer_radius-(electronics_structure_thickness/2.))*sin(phirot2)+ end_ladd_electronic_offset_phi*cos(phirot2),
@@ -655,7 +694,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
 	  DetElement  elecEndLadDEnegZ( vxd ,  elecEndLadNameN , x_det.id() );
 	  elecEndLadDEnegZ.setPlacement( pv ) ;
-	  volSurfaceList( elecEndLadDEnegZ )->push_back( surfEndElec ) ;
+	  //volSurfaceList( elecEndLadDEnegZ )->push_back( surfEndElec ) ;
 
 	}
       }
@@ -970,7 +1009,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
 	DetElement   ladderDEposZ( vxd ,  ladderNameP , x_det.id() );
 	ladderDEposZ.setPlacement( pv ) ;
-	volSurfaceList( ladderDEposZ )->push_back( surf ) ;
+	//volSurfaceList( ladderDEposZ )->push_back( surf ) ;
 
 
 	pv = layer_assembly.placeVolume( SiActiveLayerLogical,  Transform3D( rot, Position((layer_radius+(active_silicon_thickness/2.)+layer_gap)*sin(phirot2)+active_offset_phi*cos(phirot2),
@@ -981,7 +1020,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
 	DetElement   ladderDEnegZ( vxd ,   ladderNameN , x_det.id() );
 	ladderDEnegZ.setPlacement( pv ) ;
-	volSurfaceList( ladderDEnegZ )->push_back( surf ) ;
+	//volSurfaceList( ladderDEnegZ )->push_back( surf ) ;
 	
 
       } else if (LayerId==0||LayerId==2||LayerId==4) { 
@@ -994,7 +1033,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	
 	DetElement   ladderDEposZ( vxd ,  ladderNameP , x_det.id() );
 	ladderDEposZ.setPlacement( pv ) ;
-	volSurfaceList( ladderDEposZ )->push_back( surf ) ;
+	//volSurfaceList( ladderDEposZ )->push_back( surf ) ;
 
 	
 	pv = layer_assembly.placeVolume( SiActiveLayerLogical,  Transform3D( rot, Position((layer_radius-(active_silicon_thickness/2.))*sin(phirot2)+active_offset_phi*cos(phirot2),
@@ -1002,7 +1041,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	 									     -Z)) );
 	DetElement   ladderDEnegZ( vxd ,  ladderNameN , x_det.id() );
 	ladderDEnegZ.setPlacement( pv ) ;
-	volSurfaceList( ladderDEnegZ )->push_back( surf ) ;
+	//volSurfaceList( ladderDEnegZ )->push_back( surf ) ;
 	
 	pv.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(active_loop)  ).addPhysVolID("sensor", 0 ).addPhysVolID("side", -1 )   ;
 	
@@ -1255,7 +1294,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
     VolCylinder surfC( aluBarrelLog , SurfaceType(SurfaceType::Helper) , inner_thick , outer_thick, oc ) ;
 
-    volSurfaceList( suppDE )->push_back( surfC ) ;
+    //volSurfaceList( suppDE )->push_back( surfC ) ;
     //============================================================
 
 
@@ -1308,15 +1347,15 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     Vector3D op_i( 0. , mid_r , 0. ) ;
 
     VolPlane surfPi( aluEndcapInnerLog , SurfaceType(SurfaceType::Helper) , inner_thick , outer_thick, up,vp,np, op_i ) ;
-    volSurfaceList( suppFwdInDE )->push_back( surfPi ) ;
-    volSurfaceList( suppBwdInDE )->push_back( surfPi ) ;
+    //volSurfaceList( suppFwdInDE )->push_back( surfPi ) ;
+    //volSurfaceList( suppBwdInDE )->push_back( surfPi ) ;
     
     mid_r = 0.5 * ( cryostat_apperture + cryostat_apperture_radius + rSty + drSty ) ;
     Vector3D op_o( 0. , mid_r , 0. ) ;
 
     VolPlane surfPo( aluEndcapOuterLog , SurfaceType(SurfaceType::Helper) , inner_thick , outer_thick, up,vp,np, op_o) ;
-    volSurfaceList( suppFwdOutDE )->push_back( surfPo ) ;
-    volSurfaceList( suppBwdOutDE )->push_back( surfPo ) ;
+    //volSurfaceList( suppFwdOutDE )->push_back( surfPo ) ;
+    //volSurfaceList( suppBwdOutDE )->push_back( surfPo ) ;
 
     //============================================================
 
