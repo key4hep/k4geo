@@ -115,6 +115,7 @@
       <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
     </limitset>
   </limits>
+
   <display>
     <vis name="BeampipeVis" r="0.7734375" g="0.8671875" b="0.99609375" />
 
@@ -142,163 +143,49 @@
 
   </display>
 
+  <!-- ####################### Individual sub-detectors ####################### -->
 
-  <!-- ########################################################################### -->
-  <detectors>
-    <comment>Trackers</comment> 
-    
-    <!--include ref="SiVertexBarrel_o1_v01_00.xml"/>
+  <comment>Trackers</comment> 
+  <include ref="SiVertexBarrel.xml"/>
+  <include ref="SiVertexEndcap.xml"/>
 
-    <include ref="SiVertexEndcap.xml"/>
+  <include ref="SiTrackerEndcap.xml"/>
+  <include ref="SiTrackerBarrel.xml"/>
+  <include ref="SiTrackerForward.xml"/>
+  
+  <comment>Calorimeters</comment>  
+  <include ref="EcalBarrel_o1_v01_00.xml"/>
+  <include ref="EcalEndcap_o1_v01_00.xml"/>
 
-    <include ref="SiTrackerEndcap.xml"/>
+  <include ref="HcalBarrel_o1_v01_00.xml"/>
+  <include ref="HcalEndcap_o1_v01_00.xml"/>
 
-    <include ref="SiTrackerBarrel.xml"/>
- 
-    <include ref="SiTrackerForward.xml"/-->
+  <include ref="MuonBarrel.xml"/>
+  <include ref="MuonEndcap.xml"/>
 
-    <comment>Calorimeters</comment>
+  <include ref="LumiCal_o1_v01_00.xml"/>
 
-    <include ref="EcalBarrel_o1_v01_00.xml"/>
+  <include ref="BeamCal_o1_v01_00.xml"/>
 
-    <include ref="EcalEndcap_o1_v01_00.xml"/>
+  <comment>Beam pipe</comment>
+  <include ref="BeamPipe.xml"/>
+  
+  <comment>Dead material and supports</comment>
+  <comment>Vertex Detector Supports and Readout</comment>  
+  <!--  FG: fixme: should be split up into more individual files  ... -->
+  <!-- <include ref="Support.xml"/> -->
 
-    <include ref="HcalBarrel_o1_v01_00.xml"/>
-
-    <include ref="HcalEndcap_o1_v01_00.xml"/>
-
-    <!--include ref="MuonBarrel.xml"/>
-    <include ref="MuonEndcap.xml"/-->
-
-    <include ref="LumiCal_o1_v01_00.xml"/>
-
-    <include ref="BeamCal_o1_v01_00.xml"/>
-
-    <!--include ref="BeamPipe.xml"/-->
-
-    <comment>Dead material and supports</comment>
-    <comment>Vertex Detector Supports and Readout</comment>
-
-    <!--  FG: fixme: should be split up into more individual files  ... -->
-    <!-- <include ref="Support.xml"/> -->
-
-  </detectors>
-
-  <!-- ########################################################################### -->
-
+  <!-- ############ Individual plugins are now in SUBDET.xml files ############# -->
   <plugins>
-    <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
-      <argument value="SiVertexBarrel"/>
-      <argument value="dimension=2"/>
-    </plugin>
-    <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
-      <argument value="SiVertexEndcap"/>
-      <argument value="dimension=2"/>
-    </plugin>
-    <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
-      <argument value="SiTrackerBarrel"/>
-      <argument value="dimension=1"/>
-    </plugin>
-    <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
-      <argument value="SiTrackerEndcap"/>
-      <argument value="dimension=2"/>
-    </plugin>
-    <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
-      <argument value="SiTrackerForward"/>
-      <argument value="dimension=2"/>
-    </plugin>
-
-    <plugin name="DD4hep_CaloFaceEndcapSurfacePlugin">
-      <argument value="EcalEndcap"/>
-      <argument value="zpos=EcalEndcap_zmin"    />
-      <argument value="radius=1765.0*2*mm"  />
-      <argument value="phi0=0"    />
-      <argument value="symmetry=12"/>
-      <argument value="systemID=6"/>
-      <!-- <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> -->
-    </plugin>
-    <plugin name="DD4hep_CaloFaceBarrelSurfacePlugin">
-      <argument value="EcalBarrel"/>
-      <argument value="length=1765.0*2*mm"    />
-      <argument value="radius=EcalBarrel_rmin"  />
-      <argument value="phi0=0"    />
-      <argument value="symmetry=12"/>
-      <argument value="systemID=20"/>
-      <!-- <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> -->
-    </plugin>
     <plugin name="InstallSurfaceManager"/>
-    
   </plugins>
 
+  <!-- ############ Individual readouts are now in SUBDET.xml files ############# -->
 
-
-  <!-- ########################################################################### -->
-
-
-  <readouts>
-    <readout name="SiTrackerEndcapHits">
-      <id>system:6,barrel:3,layer:4,module:16,sensor:1,side:32:-2,strip:20</id>
-    </readout>        
-    <readout name="SiTrackerBarrelHits">
-      <id>system:6,barrel:3,layer:4,module:12,sensor:1,side:32:-2,strip:20</id>
-    </readout>
-    <readout name="SiVertexBarrelHits">
-      <id>system:6,barrel:3,layer:4,module:12,sensor:1,side:32:-2,strip:24</id>
-    </readout>
-    <readout name="SiVertexEndcapHits">
-      <id>system:6,barrel:3,layer:4,wedge:6,module:6,sensor:1,side:32:-2,strip:24</id>
-    </readout>
-    <readout name="EcalBarrelHits">
-      <segmentation type="CartesianGridXY" grid_size_x="3.5*mm" grid_size_y="3.5*mm" />
-      <id>system:6,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id>
-    </readout>        
-    <readout name="EcalEndcapHits">
-      <segmentation type="CartesianGridXY" grid_size_x="3.5*mm" grid_size_y="3.5*mm" />
-      <!-- <segmentation type="GlobalGridXY" grid_size_x="3.5" grid_size_y="3.5" /> -->
-      <!-- <id>system:6,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id> -->
-      <id>system:5,side:2,module:8,stave:4,layer:9,submodule:4,x:32:-16,y:-16</id>
-    </readout>
-    <readout name="HcalBarrelHits">
-      <segmentation type="CartesianGridXY" grid_size_x="1.0*cm" grid_size_y="1.0*cm" />
-      <!-- <segmentation type="RegularNgonCartesianGridXY" gridSizeX="1.0*cm" gridSizeY="1.0*cm" /> -->
-      <id>system:5,side:2,module:8,stave:4,layer:9,submodule:4,x:32:-16,y:-16</id>
-      <!-- <id>system:6,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id> -->
-    </readout>
-    <readout name="HcalEndcapHits">
-      <segmentation type="CartesianGridXY" grid_size_x="1.0*cm" grid_size_y="1.0*cm" />
-      <!-- <segmentation type="GlobalGridXY" gridSizeX="1.0*cm" gridSizeY="1.0*cm" /> -->
-      <id>system:5,side:2,module:8,stave:4,layer:9,submodule:4,x:32:-16,y:-16</id>
-      <!-- <id>system:6,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id> -->
-    </readout>
-    <readout name="MuonBarrelHits">
-      <segmentation type="CartesianGridXY" grid_size_x="3.0*cm" grid_size_y="3.0*cm" />
-      <!-- <segmentation type="RegularNgonCartesianGridXY" gridSizeX="3.0*cm" gridSizeY="3.0*cm" /> -->
-      <id>system:8,barrel:3,module:4,layer:8,slice:4,x:32:-16,y:-16</id>
-    </readout>
-    <readout name="MuonEndcapHits">
-      <segmentation type="CartesianGridXY" grid_size_x="3.0*cm" grid_size_y="3.0*cm" />
-      <!-- <segmentation type="GlobalGridXY" gridSizeX="3.0*cm" gridSizeY="3.0*cm" /> -->
-      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
-    </readout>
-    <readout name="SiTrackerForwardHits">
-      <id>system:6,barrel:3,layer:4,wedge:6,module:6,sensor:1,side:32:-2,strip:24</id>
-    </readout>
-    <readout name="LumiCalHits">
-      <segmentation type="CartesianGridXY" grid_size_x="0.35*cm" grid_size_y="0.35*cm" />
-      <!-- <segmentation type="GridXYZ" gridSizeX="0.35*cm" gridSizeY="0.35*cm" /> -->
-      <!-- <id>system:8,layer:8,barrel:3,x:32:-16,y:-16</id> -->
-      <id>system:8,barrel:3,layer:8,slice:8,x:32:-16,y:-16</id>
-    </readout>
-    <readout name="BeamCalHits">
-      <segmentation type="CartesianGridXY" grid_size_x="0.35*cm" grid_size_y="0.35*cm" />
-      <!-- <segmentation type="GridXYZ" gridSizeX="0.35*cm" gridSizeY="0.35*cm" /> -->
-      <!-- <id>system:8,layer:8,barrel:3,x:32:-16,y:-16</id> -->
-      <id>system:8,barrel:3,layer:8,slice:5,x:32:16,y:16</id>
-    </readout>
-  </readouts>
   <fields>
     <field type="solenoid" name="GlobalSolenoid" inner_field="5.0*tesla"
            outer_field="-0.6*tesla" zmax="1000*mm"
            outer_radius="SolenoidalFieldRadius" />
   </fields>
+
 </lccdd>

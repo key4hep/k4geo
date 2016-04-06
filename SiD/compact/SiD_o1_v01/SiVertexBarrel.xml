@@ -1,4 +1,13 @@
-<detector id="1" name="SiVertexBarrel" type="DD4hep_SiTrackerBarrel" readout="SiVertexBarrelHits" insideTrackingVolume="true" vis="SiVertexBarrelVis">
+<lccdd>
+
+<readouts>
+    <readout name="SiVertexBarrelHits">
+      <id>system:6,barrel:3,layer:4,module:12,sensor:1,side:32:-2,strip:24</id>
+    </readout>
+</readouts>
+
+<detectors>
+ <detector id="1" name="SiVertexBarrel" type="DD4hep_SiTrackerBarrel" readout="SiVertexBarrelHits" insideTrackingVolume="true" vis="SiVertexBarrelVis">
   <comment>Vertex Detector Barrel</comment>
   <module name="VtxBarrelModuleInner">
     <module_envelope width="9.8*mm" length="63.0 * 2*mm" thickness="0.6*mm"/>
@@ -55,4 +64,14 @@
     <rphi_layout phi_tilt="0.0" nphi="30" phi0="0.0" rc="59.9*mm" dr="0.77*mm"/>
     <z_layout dr="0.0" z0="0.0" nz="1"/>
   </layer>
-</detector>
+ </detector>
+</detectors>
+
+<plugins>
+    <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
+      <argument value="SiVertexBarrel"/>
+      <argument value="dimension=2"/>
+    </plugin>
+</plugins>
+
+</lccdd>

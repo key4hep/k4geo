@@ -1,3 +1,13 @@
+<lccdd>
+
+<readouts>
+    <readout name="MuonEndcapHits">
+      <segmentation type="CartesianGridXY" grid_size_x="3.0*cm" grid_size_y="3.0*cm" />
+      <!-- <segmentation type="GlobalGridXY" gridSizeX="3.0*cm" gridSizeY="3.0*cm" /> -->
+      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
+    </readout>
+</readouts>
+
 <detector id="10" name="MuonEndcap" type="DD4hep_PolyhedraEndcapCalorimeter2" readout="MuonEndcapHits" reflect="true" vis="MuonEndcapVis" calorimeterType="MUON_ENDCAP">
   <comment>Muon Calorimeter Endcaps</comment>
   <dimensions numsides="8" zmin="3028.0*mm" rmin="200.0*mm" rmax="6498.7*mm" />
@@ -20,3 +30,5 @@
     <slice material="Air" thickness="1.0*cm" />
   </layer>
 </detector>
+
+</lccdd>

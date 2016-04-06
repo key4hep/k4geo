@@ -1,4 +1,14 @@
-<detector id="5" name="EcalBarrel" type="GenericCalBarrel_o1_v01" readout="EcalBarrelHits" vis="EcalBarrelVis" calorimeterType="EM_BARREL" gap="0.*cm">
+<lccdd>
+
+<readouts>
+    <readout name="EcalBarrelHits">
+      <segmentation type="CartesianGridXY" grid_size_x="3.5*mm" grid_size_y="3.5*mm" />
+      <id>system:6,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id>
+    </readout>
+</readouts>
+
+<detectors>
+ <detector id="5" name="EcalBarrel" type="GenericCalBarrel_o1_v01" readout="EcalBarrelHits" vis="EcalBarrelVis" calorimeterType="EM_BARREL" gap="0.*cm">
   <comment>EM Calorimeter Barrel</comment>
   <dimensions numsides="EcalBarrel_symmetry" rmin="EcalBarrel_rmin" z="2*EcalBarrel_half_length" />
 
@@ -31,4 +41,19 @@
     <slice material = "Kapton"  thickness = "0.030*cm" />
     <slice material = "Air"     thickness = "0.033*cm" />
   </layer>
-</detector>
+ </detector>
+</detectors>
+
+<plugins>
+    <plugin name="DD4hep_CaloFaceBarrelSurfacePlugin">
+      <argument value="EcalBarrel"/>
+      <argument value="length=1765.0*2*mm"    />
+      <argument value="radius=EcalBarrel_rmin"  />
+      <argument value="phi0=0"    />
+      <argument value="symmetry=12"/>
+      <argument value="systemID=20"/>
+      <!-- <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> -->
+    </plugin>
+</plugins>
+
+</lccdd>

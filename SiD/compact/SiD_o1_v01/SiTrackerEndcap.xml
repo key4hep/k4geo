@@ -1,4 +1,13 @@
-<detector id="4" name="SiTrackerEndcap" type="DD4hep_SiTrackerEndcap2" readout="SiTrackerEndcapHits" reflect="true" vis="SiTrackerEndcapVis">
+<lccdd>
+
+<readouts>
+    <readout name="SiTrackerEndcapHits">
+      <id>system:6,barrel:3,layer:4,module:16,sensor:1,side:32:-2,strip:20</id>
+    </readout>
+</readouts>
+
+<detectors>
+ <detector id="4" name="SiTrackerEndcap" type="DD4hep_SiTrackerEndcap2" readout="SiTrackerEndcapHits" reflect="true" vis="SiTrackerEndcapVis">
   <comment>Outer Tracker Endcaps</comment>
   <module name="Module1">
     <trd x1="36.112*mm" x2="46.635*mm" z="100.114/2*mm" />
@@ -69,4 +78,14 @@
     <ring r="1124.167*mm" zstart="(1562.916+1.75)*mm" nmodules="78" dz="1.75*mm" module="Module2" phi0="pi/78"/>
     <ring r="1206.937*mm" zstart="(1555.647+1.75)*mm" nmodules="84" dz="1.75*mm" module="Module2"/>
   </layer>
-</detector>
+ </detector>
+</detectors>
+
+<plugins>
+    <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
+      <argument value="SiTrackerEndcap"/>
+      <argument value="dimension=2"/>
+    </plugin>
+</plugins>
+
+</lccdd>

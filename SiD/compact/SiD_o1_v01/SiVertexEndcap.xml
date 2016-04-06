@@ -1,4 +1,13 @@
-<detector id="2" name="SiVertexEndcap" type="DD4hep_SiTrackerEndcap2" readout="SiVertexEndcapHits" reflect="true" vis="SiVertexEndcapVis">
+<lccdd>
+
+<readouts>
+  <readout name="SiVertexEndcapHits">
+      <id>system:6,barrel:3,layer:4,wedge:6,module:6,sensor:1,side:32:-2,strip:24</id>
+  </readout>
+</readouts>
+
+<detectors>
+ <detector id="2" name="SiVertexEndcap" type="DD4hep_SiTrackerEndcap2" readout="SiVertexEndcapHits" reflect="true" vis="SiVertexEndcapVis">
   <comment>Vertex Detector Endcaps</comment>
   <module name="SiVertexEndcapModule1">
     <trd x1="3.034*mm" x2="14.682*mm" z="29.280*mm" />
@@ -32,5 +41,15 @@
   <layer id="4">
     <ring r="48.0*mm" zstart="180*mm" nmodules="16" dz="0.011*mm" module="SiVertexEndcapModule2"/>
   </layer>
-</detector>
+ </detector>
+</detectors>
+
+<plugins>
+    <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
+      <argument value="SiVertexEndcap"/>
+      <argument value="dimension=2"/>
+    </plugin>
+</plugins>
+
+</lccdd>
 

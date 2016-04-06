@@ -1,4 +1,13 @@
-<detector id="3" name="SiTrackerBarrel" type="DD4hep_SiTrackerBarrel" readout="SiTrackerBarrelHits" vis="SiTrackerBarrelVis">
+<lccdd>
+
+<readouts>
+    <readout name="SiTrackerBarrelHits">
+      <id>system:6,barrel:3,layer:4,module:12,sensor:1,side:32:-2,strip:20</id>
+    </readout>
+</readouts>
+
+<detectors>
+ <detector id="3" name="SiTrackerBarrel" type="DD4hep_SiTrackerBarrel" readout="SiTrackerBarrelHits" vis="SiTrackerBarrelVis">
   <comment>Outer Tracker Barrel</comment>
 
   <module name="SiTrackerModule_Layer1">
@@ -177,4 +186,14 @@
     <rphi_layout phi_tilt="0.11467*rad" nphi="102" phi0="0.01745*rad" rc="1216.355*mm + 5.0*mm" dr="0.0"/>
     <z_layout dr="4.0*mm" z0="1476.497*mm" nz="35"/>
   </layer>
-</detector>
+ </detector>
+</detectors>
+
+<plugins>
+    <plugin name="DD4hep_SiTrackerBarrelSurfacePlugin">
+      <argument value="SiTrackerBarrel"/>
+      <argument value="dimension=1"/>
+    </plugin>
+</plugins>
+
+</lccdd>

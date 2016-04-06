@@ -1,3 +1,14 @@
+<lccdd>
+
+<readouts>
+    <readout name="LumiCalHits">
+      <segmentation type="CartesianGridXY" grid_size_x="0.35*cm" grid_size_y="0.35*cm" />
+      <!-- <segmentation type="GridXYZ" gridSizeX="0.35*cm" gridSizeY="0.35*cm" /> -->
+      <!-- <id>system:8,layer:8,barrel:3,x:32:-16,y:-16</id> -->
+      <id>system:8,barrel:3,layer:8,slice:8,x:32:-16,y:-16</id>
+    </readout>
+</readouts>
+
 <detector id="11" name="LumiCal" reflect="true" type="DD4hep_CylindricalEndcapCalorimeter" readout="LumiCalHits" vis="LumiCalVis" calorimeterType="LUMI">
   <comment>Luminosity Calorimeter</comment>
   <dimensions inner_r = "LumiCal_rmin" outer_r = "LumiCal_rmax" inner_z = "LumiCal_zmin"/>
@@ -22,3 +33,5 @@
     <slice material = "Air"     thickness = "0.033*cm" />
   </layer>
 </detector>
+
+</lccdd>

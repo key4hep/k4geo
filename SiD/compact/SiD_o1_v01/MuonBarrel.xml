@@ -1,4 +1,15 @@
-<detector id="9" name="MuonBarrel" type="DD4hep_PolyhedraBarrelCalorimeter2" readout="MuonBarrelHits" vis="MuonBarrelVis" calorimeterType="MUON_BARREL" gap="0.*cm" material="Steel235">
+<lccdd>
+
+<readouts>
+    <readout name="MuonBarrelHits">
+      <segmentation type="CartesianGridXY" grid_size_x="3.0*cm" grid_size_y="3.0*cm" />
+      <!-- <segmentation type="RegularNgonCartesianGridXY" gridSizeX="3.0*cm" gridSizeY="3.0*cm" /> -->
+      <id>system:8,barrel:3,module:4,layer:8,slice:4,x:32:-16,y:-16</id>
+    </readout>
+</readouts>
+
+<detectors>
+ <detector id="9" name="MuonBarrel" type="DD4hep_PolyhedraBarrelCalorimeter2" readout="MuonBarrelHits" vis="MuonBarrelVis" calorimeterType="MUON_BARREL" gap="0.*cm" material="Steel235">
   <comment>Muon Calorimeter Barrel</comment>
   <dimensions numsides="8" rmin="3464.0*mm" z="2983.0 * 2*mm"/>
   <staves />
@@ -20,4 +31,7 @@
     <slice material="Air" thickness="1.0*cm" />
     <slice material="Iron" thickness="20.0*cm" />
   </layer>
-</detector>
+ </detector>
+</detectors>
+
+</lccdd>

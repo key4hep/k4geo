@@ -1,4 +1,13 @@
-<detector id="15" name="SiTrackerForward" type="DD4hep_SiTrackerEndcap2" readout="SiTrackerForwardHits" reflect="true" vis="SiTrackerForwardVis">    
+<lccdd>
+
+<readouts>
+    <readout name="SiTrackerForwardHits">
+      <id>system:6,barrel:3,layer:4,wedge:6,module:6,sensor:1,side:32:-2,strip:24</id>
+    </readout>
+</readouts>
+
+<detectors>
+ <detector id="15" name="SiTrackerForward" type="DD4hep_SiTrackerEndcap2" readout="SiTrackerForwardHits" reflect="true" vis="SiTrackerForwardVis">    
   <comment>Forward Tracker inside Vertex Support Barrel</comment>
   <module name="SiTrackerForwardModule1">
     <trd x1="5.620*mm" x2="32.435*mm" z="67.405*mm" />
@@ -24,4 +33,14 @@
   <layer id="3">
     <ring r="142.0*mm" zstart="834*mm" nmodules="16" dz="0.011*mm" module="SiTrackerForwardModule3"/>
   </layer>
-</detector>
+ </detector>
+</detectors>
+
+<plugins>
+    <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
+      <argument value="SiTrackerForward"/>
+      <argument value="dimension=2"/>
+    </plugin>
+</plugins>
+
+</lccdd>
