@@ -71,11 +71,18 @@
             inner_z = "BeamCal_min_z"
             outer_r = "BeamCal_outer_radius" />
             
+            <!-- Avoid dummy layers without sensitive element which cannot be handled by  DDMarlinPandora -->
+            <!-- Instead, create another layer group with the extra absorber in the front -->
             <layer repeat="1" vis="SeeThrough">
                 <slice material = "C" thickness = "100*mm" vis="LayerVis1"      layerType="holeForIncomingBeampipe"/>
+                <slice material = "TungstenDens24" thickness = "3.5*mm" vis="BCLayerVis1"  layerType="holeForIncomingBeampipe" />
+                <slice material = "Silicon"        thickness = "0.3004*mm"      vis="BCLayerVis2"  sensitive = "yes"  />
+                <slice material = "Copper"         thickness = "0.0004*mm"      vis="BCLayerVis3"                     />
+                <slice material = "Kapton"         thickness = "0.15*mm"        vis="BCLayerVis4"                     />
+                <slice material = "Air"            thickness = "0.05*mm" />
             </layer>
             
-            <layer repeat="40" vis="SeeThrough">
+            <layer repeat="39" vis="SeeThrough">
                 <slice material = "TungstenDens24" thickness = "3.5*mm" vis="BCLayerVis1"  layerType="holeForIncomingBeampipe" />
                 <slice material = "Silicon"        thickness = "0.3004*mm"      vis="BCLayerVis2"  sensitive = "yes"  />
                 <slice material = "Copper"         thickness = "0.0004*mm"      vis="BCLayerVis3"                     />
