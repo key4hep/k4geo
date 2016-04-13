@@ -380,6 +380,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	fracPart = modf(temp, &intPart);
 	int noOfIntCells = int(temp);
 
+	tileSeg->setBoundaryLayerX(x_length);
+
  	if (fracPart == 0){ //divisible
 	  if ( noOfIntCells%2 ) {
 	    if( tileSeg !=0 ) tileSeg->setLayerOffsetX(0);
@@ -387,6 +389,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  else {
 	    if( tileSeg !=0 ) tileSeg->setLayerOffsetX(1);
 	  }
+	  tileSeg->setFractCellSizeXPerLayer(0);
 	}
 	else if (fracPart>0){
 	  if ( noOfIntCells%2 ) {
@@ -395,6 +398,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  else {
 	    if( tileSeg !=0 ) tileSeg->setLayerOffsetX(0);
 	  }
+	  tileSeg->setFractCellSizeXPerLayer( (fracPart+1.0)/2.0*cell_sizeX );
 	}
 
 	if ( (int)( (z_width*2.) / cell_sizeX)%2 ){
