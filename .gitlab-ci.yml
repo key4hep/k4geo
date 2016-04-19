@@ -1,0 +1,41 @@
+slc6-gcc48:
+  tags:
+    - docker
+  image: clicdp/slc6-base
+  script:
+    - source .gitlab-ci.d/init_x86_64-slc6-gcc48-opt.sh
+    - mkdir build 
+    - cd build
+    - cmake -DBoost_NO_BOOST_CMAKE=ON ..
+    - make -j4
+    - make install
+    - . ../bin/thisdd4hep.sh
+    - make test
+
+slc6-gcc49:
+  tags:
+    - docker
+  image: clicdp/slc6-base
+  script:
+    - source .gitlab-ci.d/init_x86_64-slc6-gcc49-opt.sh
+    - mkdir build 
+    - cd build
+    - cmake -DBoost_NO_BOOST_CMAKE=ON ..
+    - make -j4
+    - make install
+    - . ../bin/thisdd4hep.sh
+    - make test
+
+centos7-gcc49:
+  tags:
+    - docker
+  image: clicdp/cc7-base
+  script:
+    - source .gitlab-ci.d/init_x86_64-centos7-gcc49-opt.sh
+    - mkdir build 
+    - cd build
+    - cmake -DBoost_NO_BOOST_CMAKE=ON ..
+    - make -j4
+    - make install
+    - . ../bin/thisdd4hep.sh
+    - make test
