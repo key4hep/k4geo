@@ -95,8 +95,4 @@ export LD_LIBRARY_PATH="$XercesC_HOME/lib:$LD_LIBRARY_PATH"
 #--------------------------------------------------------------------------------
 #     DD4hep
 #--------------------------------------------------------------------------------
-export DD4HEP="/afs/cern.ch/eng/clic/software/DD4hep/x86_64-centos7-gcc49-opt"
-source $DD4HEP/bin/thisdd4hep.sh
-
-# --- source GEANT4 INIT script ---
-test -r ${G4ENV_INIT} && { cd $(dirname ${G4ENV_INIT}) ; . ./$(basename ${G4ENV_INIT}) ; cd $OLDPWD ; }
+source /afs/cern.ch/eng/clic/software/DD4hep/x86_64-centos7-gcc49-opt/bin/thisdd4hep.sh
