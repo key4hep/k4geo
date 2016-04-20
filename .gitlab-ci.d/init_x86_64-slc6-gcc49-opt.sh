@@ -91,8 +91,8 @@ export XercesC_HOME=$LCGRELEASES/XercesC/3.1.1p1/x86_64-slc6-gcc49-opt
 export PATH="$XercesC_HOME/bin:$PATH"
 export LD_LIBRARY_PATH="$XercesC_HOME/lib:$LD_LIBRARY_PATH"
 
-
 #--------------------------------------------------------------------------------
 #     DD4hep
 #--------------------------------------------------------------------------------
+
 source /afs/cern.ch/eng/clic/software/DD4hep/x86_64-slc6-gcc49-opt/bin/thisdd4hep.sh
