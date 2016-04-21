@@ -179,7 +179,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             thisLayer.zPosition= sumZ/ring_no; //calc average z
             thisLayer.distanceSensitive   = innerR ; 
             thisLayer.lengthSensitive   = outerR-innerR;
-            
+            thisLayer.petalNumber   = ring_no ; //Store the number of rings in petalNumber needed for tracking
             zDiskPetalsData->layers.push_back( thisLayer ) ;
     }
 
