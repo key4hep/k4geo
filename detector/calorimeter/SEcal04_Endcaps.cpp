@@ -40,6 +40,7 @@
 #include "DD4hep/Shapes.h"
 #include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"
+#include "DDSegmentation/WaferGridXY.h"
 
 using namespace std;
 using namespace DD4hep;
@@ -84,6 +85,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   Readout readout = sens.readout();
   Segmentation seg = readout.segmentation();
+
+  // check if we have a WaferGridXY segmentation :
+  DD4hep::DDSegmentation::WaferGridXY* waferSeg = 
+    dynamic_cast< DD4hep::DDSegmentation::WaferGridXY*>( seg.segmentation() ) ;
   
   std::vector<double> cellSizeVector = seg.segmentation()->cellDimensions(0); //Assume uniform cell sizes, provide dummy cellID
   double cell_sizeX      = cellSizeVector[0];
@@ -536,6 +541,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 										   wafer_pos_x,
 										   0));
 		    wafer_phv.addPhysVolID("wafer", wafer_num);
+
+		    // Normal squared wafers, this waferOffsetX is 0.0 
+		    waferSeg->setWaferOffsetX(myLayerNum, wafer_num, 0.0);
+
 		    wafer_pos_z +=
 		      wafer_dim_x +
 		      2 * Ecal_guard_ring_size;
@@ -567,6 +576,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 		  cell_dim_z;
 	  
 		Box MagicWaferSiSolid( wafer_dim_z/2,wafer_dim_x/2,slab_dim_y);
+
+		// Magic wafers, this waferOffsetX has to be taken care, 0.0 or half cell size in X.
+		double thisWaferOffsetX = 0.0;
+		if ( N_cells_x_remaining%2 ) thisWaferOffsetX = cell_dim_x/2.0;
+
 		wafer_pos_x =
 		  -slab_dim_z +
 		  n_wafers_x * real_wafer_size_x +
@@ -592,6 +606,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 											wafer_pos_x,
 											0));
 		    wafer_phv.addPhysVolID("wafer", wafer_num);
+
+		    // Magic wafers, set the waferOffsetX for this layer this wafer.
+		    waferSeg->setWaferOffsetX(myLayerNum, wafer_num, thisWaferOffsetX);
+
 		    wafer_pos_z +=
 		      wafer_dim_z +
 		      2 * Ecal_guard_ring_size;
