@@ -310,16 +310,17 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
     // calculate optimal offset, such that there is 0.1mm space between to the edge and the surface of two adjacent ladders.
     // in the case of ladders overlapped per superlayer
-    /*
+    
       double offset_phi=(1-cos(phirot))/sin(phirot)*layer_radius  
       -((ladder_width+(side_band_electronics_option*side_band_electronics_width/2.))
       +(ladder_clothest_approch+cos(phirot)*2*(foam_spacer_thickness+active_silicon_thickness+flex_cable_thickness+metal_traces_thickness))/sin(phirot));
-    */
+    
     // in the case of ladders overlapped per layer
+      /*
     double offset_phi=(1-cos(phirot))/sin(phirot)*layer_radius  
       -((ladder_width+(side_band_electronics_option*side_band_electronics_width/2.))
 	+(ladder_clothest_approch+cos(phirot)*2*(active_silicon_thickness+flex_cable_thickness+metal_traces_thickness))/sin(phirot));
-    
+      */
     if (LayerId==0||LayerId==2||LayerId==4)  {  //------------------------------------------------------------------------
        
       for (double ladder_loop=0;ladder_loop<nb_ladder;ladder_loop++) {

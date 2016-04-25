@@ -513,7 +513,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             exit(1);
 	  }
 	break;
-          
+	
       case 3:
 	// z defined relative to TPC half-length: to ensure positioning with SIT set these numbers to the same value in DB
 	_z_position = (_glEnv.TPC_Ecal_Hcal_barrel_halfZ * db->fetchDouble("z_position_ReltoTPCLength")) ;
@@ -539,7 +539,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             exit(1);
 	  }
 	break;
-          
+	
       case 4:
       case 5:
       case 6:
