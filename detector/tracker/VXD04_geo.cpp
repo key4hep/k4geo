@@ -787,6 +787,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     //************ the thickness varies linearly with z **************************************
     //****************************************************************************************
     
+
     double strip_line_start_z=0.;
     
     if (LayerId==0||LayerId==1) {
@@ -804,8 +805,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
     assert (strip_line_half_z>0);
 
+ 
     if (LayerId==0||LayerId==2||LayerId==4) {
-      
+ 
       //Here we define the solid and logical volumes of the kapton strip lines
       ConeSegment KaptonLinesSolid( strip_line_half_z, 
 				    layer_radius, // inside radius at  -fDz
@@ -837,47 +839,131 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       
       //here we place both the kapton and copper part of the strip lines
       double Z = strip_line_start_z + strip_line_half_z;
+
+      std::string striplineNameP =  _toString( LayerId , "KaptonLines_%02d_posZ") ;
+      std::string metallineNameP =  _toString( LayerId , "MetalLines_%02d_posZ") ;
+      std::string striplineNameN =  _toString( LayerId , "KaptonLines_%02d_negZ") ;
+      std::string metallineNameN =  _toString( LayerId , "MetalLines_%02d_negZ") ;
+
+     //****** YV ***************************************************************************
+      // add surface for tracking ....
+
+      std::cout << "  ***** place cabling for " << _toString( LayerId , "KaptonLines_%02d") << std::endl ;
+
+      if (LayerId==2 || LayerId==4){   
+	
+	//const double kapton_theta = atan2( -1.*(cryostat_apperture + LayerId*final_kapton_striplines_thickness + final_kapton_striplines_thickness) + layer_radius , 2.* strip_line_half_z ) ;
+	//const double metal_theta = atan2( -1.*(cryostat_apperture + LayerId*final_kapton_striplines_thickness + final_kapton_striplines_thickness + final_metal_striplines_thickness) + (layer_radius + initial_kapton_striplines_thickness), 2.* strip_line_half_z ) ;
+
+	const double kapton_theta = atan2( -1.*(cryostat_apperture + LayerId*final_kapton_striplines_thickness + final_kapton_striplines_thickness) + layer_radius , 2.* strip_line_half_z ) ;
+	const double metal_theta = atan2( -1.*(cryostat_apperture + LayerId*final_kapton_striplines_thickness + final_kapton_striplines_thickness + final_metal_striplines_thickness) + (layer_radius + initial_kapton_striplines_thickness), 2.* strip_line_half_z ) ;
+
+	double cabling_kapton_thickness =  (final_kapton_striplines_thickness + initial_kapton_striplines_thickness) / 2.;    
+	double cabling_metal_thickness =  (final_metal_striplines_thickness + initial_metal_striplines_thickness) / 2.;   
+
+	std::cout << " layer " << LayerId << " length of the cone " << 2.* strip_line_half_z << " opening angle " << kapton_theta << std::endl;
+	
+	Vector3D o_kaptoncon(0.5 * (layer_radius + cryostat_apperture + LayerId*final_kapton_striplines_thickness + final_kapton_striplines_thickness) , 0. , 0. );
+	Vector3D o_metalcon( 0.5 * (layer_radius + initial_kapton_striplines_thickness + cryostat_apperture + LayerId*final_kapton_striplines_thickness + final_kapton_striplines_thickness + final_metal_striplines_thickness), 0. , 0. );
+	
+	Vector3D metal_angle( 1. , 0. , metal_theta, Vector3D::spherical ) ;
+	Vector3D kapton_angle( 1. , 0. , kapton_theta, Vector3D::spherical ) ;
+	
+	VolCone conSurf1( KaptonLinesLogical , SurfaceType( SurfaceType::Helper ) , 0.5*cabling_kapton_thickness  , 0.5*cabling_kapton_thickness , kapton_angle, o_kaptoncon );
+	VolCone conSurf2( MetalLinesLogical , SurfaceType( SurfaceType::Helper ) , 0.5*cabling_metal_thickness  , 0.5*cabling_metal_thickness , metal_angle, o_metalcon );	
+	
+	pv = supp_assembly.placeVolume( KaptonLinesLogical,  Transform3D( RotationZYX() , Position(0., 0., Z) ) );
+
+	DetElement suppPosStriplinesDE ( suppDE , striplineNameP , x_det.id() )  ;
+	suppPosStriplinesDE.setPlacement( pv ) ;    
+	//volSurfaceList( suppPosStriplinesDE )->push_back( conSurf1 );
+
+	pv = supp_assembly.placeVolume( MetalLinesLogical,   Transform3D( RotationZYX() , Position(0., 0., Z) ) );
+
+	DetElement suppPosMetallinesDE ( suppDE , metallineNameP , x_det.id() )  ;
+	suppPosMetallinesDE.setPlacement( pv ) ;    
+	//volSurfaceList( suppPosMetallinesDE )->push_back( conSurf2 );
+
+	
+	RotationZYX rot( 0, 0 , pi ) ;   // the same but other side
+
+	pv = supp_assembly.placeVolume( KaptonLinesLogical,  Transform3D( rot , Position(0., 0., -Z) ) );
+
+	DetElement suppNegStriplinesDE ( suppDE , striplineNameN , x_det.id() )  ;
+	suppNegStriplinesDE.setPlacement( pv ) ;    
+	//volSurfaceList( suppNegStriplinesDE )->push_back( conSurf1 );
+
+	pv = supp_assembly.placeVolume( MetalLinesLogical,   Transform3D( rot , Position(0., 0., -Z) ) );
+	
+	DetElement suppNegMetallinesDE ( suppDE , metallineNameN , x_det.id() )  ;
+	suppNegMetallinesDE.setPlacement( pv ) ;    
+	//volSurfaceList( suppNegMetallinesDE )->push_back( conSurf2 );
+
+      }
+
+
       
-      pv = supp_assembly.placeVolume( KaptonLinesLogical,  Transform3D( RotationZYX() , Position(0., 0., Z) ) );
-      pv = supp_assembly.placeVolume( MetalLinesLogical,   Transform3D( RotationZYX() , Position(0., 0., Z) ) );
+      else {
+	const double kapton_theta = atan2( (cryostat_apperture + LayerId*final_kapton_striplines_thickness + final_kapton_striplines_thickness) - layer_radius , 2.* strip_line_half_z ) ;
+	const double metal_theta = atan2( (cryostat_apperture + LayerId*final_kapton_striplines_thickness + final_kapton_striplines_thickness + final_metal_striplines_thickness) - (layer_radius + initial_kapton_striplines_thickness), 2.* strip_line_half_z ) ;
+	
+	std::cout << " layer " << LayerId << " length of the cone " << 2.* strip_line_half_z << " opening angle " << kapton_theta << std::endl;
+	
+	double cabling_kapton_thickness =  (final_kapton_striplines_thickness + initial_kapton_striplines_thickness) / 2.;    
+	double cabling_metal_thickness =  (final_metal_striplines_thickness + initial_metal_striplines_thickness) / 2.;   
+	
+	Vector3D o_kaptoncon(0.5 * (layer_radius + cryostat_apperture + LayerId*final_kapton_striplines_thickness + final_kapton_striplines_thickness) , 0. , 0. );
+	Vector3D o_metalcon( 0.5 * (layer_radius + initial_kapton_striplines_thickness + cryostat_apperture + LayerId*final_kapton_striplines_thickness + final_kapton_striplines_thickness + final_metal_striplines_thickness), 0. , 0. );
+	
+	Vector3D metal_angle( 1. , 0. , metal_theta, Vector3D::spherical ) ;
+	Vector3D kapton_angle( 1. , 0. , kapton_theta, Vector3D::spherical ) ;
+
+	std::cout << " kapton:layer " << LayerId << " v phi " << kapton_angle.phi() << " o phi " << o_kaptoncon.phi() << std::endl ;
+	std::cout << " metal:layer " << LayerId << " v phi " << metal_angle.phi() << " o phi " << o_metalcon.phi() << std::endl ;
+	
+	VolCone conSurf1( KaptonLinesLogical , SurfaceType( SurfaceType::Helper ) , 0.5*cabling_kapton_thickness  , 0.5*cabling_kapton_thickness , kapton_angle, o_kaptoncon );
+	VolCone conSurf2( MetalLinesLogical , SurfaceType( SurfaceType::Helper ) , 0.5*cabling_metal_thickness  , 0.5*cabling_metal_thickness , metal_angle, o_metalcon );
+
+	pv = supp_assembly.placeVolume( KaptonLinesLogical,  Transform3D( RotationZYX() , Position(0., 0., Z) ) );
+	
+	DetElement suppPosStriplinesDE ( suppDE , striplineNameP , x_det.id() )  ;
+	suppPosStriplinesDE.setPlacement( pv ) ;    
+	volSurfaceList( suppPosStriplinesDE )->push_back( conSurf1 );
+	
+	pv = supp_assembly.placeVolume( MetalLinesLogical,   Transform3D( RotationZYX() , Position(0., 0., Z) ) );
+	
+	DetElement suppPosMetallinesDE ( suppDE , metallineNameP , x_det.id() )  ;
+	suppPosMetallinesDE.setPlacement( pv ) ;    
+	volSurfaceList( suppPosMetallinesDE )->push_back( conSurf2 );
+	
       
-      RotationZYX rot( 0, 0 , pi ) ;   // the same but other side
+	RotationZYX rot( 0, 0 , pi ) ;   // the same but other side
+	
+	pv = supp_assembly.placeVolume( KaptonLinesLogical,  Transform3D( rot , Position(0., 0., -Z) ) );
+
+	DetElement suppNegStriplinesDE ( suppDE , striplineNameN , x_det.id() )  ;
+	suppNegStriplinesDE.setPlacement( pv ) ;    
+	volSurfaceList( suppNegStriplinesDE )->push_back( conSurf1 );
+
+	pv = supp_assembly.placeVolume( MetalLinesLogical,   Transform3D( rot , Position(0., 0., -Z) ) );
+	
+	DetElement suppNegMetallinesDE ( suppDE , metallineNameN , x_det.id() )  ;
+	suppNegMetallinesDE.setPlacement( pv ) ;    
+	volSurfaceList( suppNegMetallinesDE )->push_back( conSurf2 );
+	
+      }
       
-      pv = supp_assembly.placeVolume( KaptonLinesLogical,  Transform3D( rot , Position(0., 0., -Z) ) );
-      pv = supp_assembly.placeVolume( MetalLinesLogical,   Transform3D( rot , Position(0., 0., -Z) ) );
+      //*****************************************************************************************
+
+
+
     }
 
-    //****************************************************************************************
-    //*** Here we place the cabling going outside the VXD ************************************
-    //****************************************************************************************
-    
-    double external_cable_length = (drAlu + drSty)/2.;
-    double ExternalCablesZ = dzSty + drSty/2. + drAlu/2. ;
-
-    //** G4Tubs( const G4String& pName, G4double pRMin, G4double pRMax, G4double pDz, G4double pSPhi,G4double pDPhi );
-    //** TGeoTubeSeg(Double_t rmin, Double_t rmax, Double_t dz, Double_t phi1, Double_t phi2)
-
-    //kapton part
-    Tube ExternalKaptonCablesSolid(cryostat_apperture, cryostat_apperture + 3*external_kapton_thickness/2.,  external_cable_length, sPhi, sPhi+dPhi);
-    //The reason for the factor three is that the thickness refer to the thickness of each single cable, and we have three cables in total, one per layer
-
-    Volume ExternalKaptonCablesLogical(_toString(LayerId,"ExternalKaptonCables_%02d"), ExternalKaptonCablesSolid, lcdd.material("G4_KAPTON") );
- 
-    vxd.setVisAttributes(lcdd,  "WhiteVis" , ExternalKaptonCablesLogical );
-
-    //metal part
-    Tube ExternalMetalCablesSolid(cryostat_apperture - 3*external_metal_thickness/2., cryostat_apperture, external_cable_length,  sPhi, sPhi+dPhi);
-
-    Volume ExternalMetalCablesLogical( _toString(LayerId,"ExternalMetalCables_%02d"), ExternalMetalCablesSolid ,  lcdd.material("G4_Cu") ) ;
- 
-    vxd.setVisAttributes(lcdd,  "GrayVis" , ExternalMetalCablesLogical );
 
 
-    pv = supp_assembly.placeVolume( ExternalKaptonCablesLogical,  Transform3D( RotationZYX() , Position(0., 0.,  ExternalCablesZ) ) );
-    pv = supp_assembly.placeVolume( ExternalKaptonCablesLogical,  Transform3D( RotationZYX() , Position(0., 0., -ExternalCablesZ) ) );
 
-    pv = supp_assembly.placeVolume( ExternalMetalCablesLogical,   Transform3D( RotationZYX() , Position(0., 0.,  ExternalCablesZ) ) );
-    pv = supp_assembly.placeVolume( ExternalMetalCablesLogical,   Transform3D( RotationZYX() , Position(0., 0., -ExternalCablesZ) ) );
+
+
 
     //****************************************************************************************
     //*******************************  Cooling Pipes (Titanium )  ********************************
@@ -1121,6 +1207,69 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
 
   } // --- end loop over layers ----------------------------------------------------------------------------------------
+
+
+    //****************************************************************************************
+    //*** Here we place the cabling going outside the VXD ************************************
+    //****************************************************************************************
+
+    DetElement suppExtKaptonCablesPos ( suppDE , name+"_ExtKaptonCab_pos" , x_det.id() )  ;
+    DetElement suppExtKaptonCablesNeg ( suppDE , name+"_ExtKaptonCab_neg" , x_det.id() )  ;
+    DetElement suppExtMetalCablesPos ( suppDE , name+"_ExtMetalCab_pos" , x_det.id() )  ;
+    DetElement suppExtMetalCablesNeg ( suppDE , name+"_ExtMetalCab_neg" , x_det.id() )  ;
+    
+    double external_cable_length = (drAlu + drSty)/2.;
+    double ExternalCablesZ = dzSty + drSty/2. + drAlu/2. ;
+
+    //** G4Tubs( const G4String& pName, G4double pRMin, G4double pRMax, G4double pDz, G4double pSPhi,G4double pDPhi );
+    //** TGeoTubeSeg(Double_t rmin, Double_t rmax, Double_t dz, Double_t phi1, Double_t phi2)
+
+    //kapton part
+    Tube ExternalKaptonCablesSolid(cryostat_apperture, cryostat_apperture + 3*external_kapton_thickness/2.,  external_cable_length, sPhi, sPhi+dPhi);
+    //The reason for the factor three is that the thickness refer to the thickness of each single cable, and we have three cables in total, one per layer
+
+    Volume ExternalKaptonCablesLogical("ExternalKaptonCables", ExternalKaptonCablesSolid, lcdd.material("G4_KAPTON") );
+ 
+    vxd.setVisAttributes(lcdd,  "WhiteVis" , ExternalKaptonCablesLogical );
+
+    //metal part
+    Tube ExternalMetalCablesSolid(cryostat_apperture - 3*external_metal_thickness/2., cryostat_apperture, external_cable_length,  sPhi, sPhi+dPhi);
+
+    Volume ExternalMetalCablesLogical("ExternalMetalCables", ExternalMetalCablesSolid ,  lcdd.material("G4_Cu") ) ;
+ 
+    vxd.setVisAttributes(lcdd,  "GrayVis" , ExternalMetalCablesLogical );
+
+    
+    //====== YV: create a material surface for the cabling outside the VXD  ===================
+    // ==================================== Kapton part ====================================
+    
+    Vector3D oextcable( cryostat_apperture + cryostat_apperture + 3*external_kapton_thickness/2. , 0. , 0.  ) ;    
+    VolCylinder surfKaptonExtCables( ExternalKaptonCablesLogical , SurfaceType(SurfaceType::Helper) , external_kapton_thickness/2. , external_kapton_thickness/2., oextcable ) ;
+    
+    //========================================== Metal part ==================================
+    
+    Vector3D oextmetalcable( cryostat_apperture - 3*external_metal_thickness/2. + cryostat_apperture , 0. , 0.  ) ;    
+    VolCylinder surfMetalExtCables( ExternalMetalCablesLogical , SurfaceType(SurfaceType::Helper) , external_metal_thickness/2. , external_metal_thickness/2., oextmetalcable ) ;
+
+    //==================================================================================
+
+    pv = supp_assembly.placeVolume( ExternalKaptonCablesLogical,  Transform3D( RotationZYX() , Position(0., 0.,  ExternalCablesZ) ) );
+    suppExtKaptonCablesPos.setPlacement( pv ) ;    
+    volSurfaceList( suppExtKaptonCablesPos )->push_back( surfKaptonExtCables ) ;
+
+    pv = supp_assembly.placeVolume( ExternalKaptonCablesLogical,  Transform3D( RotationZYX() , Position(0., 0., -ExternalCablesZ) ) );
+    suppExtKaptonCablesNeg.setPlacement( pv ) ;    
+    volSurfaceList( suppExtKaptonCablesNeg )->push_back( surfKaptonExtCables ) ;
+
+    pv = supp_assembly.placeVolume( ExternalMetalCablesLogical,   Transform3D( RotationZYX() , Position(0., 0.,  ExternalCablesZ) ) );
+    suppExtMetalCablesPos.setPlacement( pv ) ;    
+    volSurfaceList( suppExtMetalCablesPos )->push_back( surfMetalExtCables ) ;
+
+    pv = supp_assembly.placeVolume( ExternalMetalCablesLogical,   Transform3D( RotationZYX() , Position(0., 0., -ExternalCablesZ) ) );
+    suppExtMetalCablesNeg.setPlacement( pv ) ;    
+    volSurfaceList( suppExtMetalCablesNeg )->push_back( surfMetalExtCables ) ;
+
+
 
 
   
