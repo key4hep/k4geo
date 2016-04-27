@@ -543,7 +543,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 		    wafer_phv.addPhysVolID("wafer", wafer_num);
 
 		    // Normal squared wafers, this waferOffsetX is 0.0 
-		    waferSeg->setWaferOffsetX(myLayerNum, wafer_num, 0.0);
+		    if ((myLayerNum+increase_LayerID) == 1 ) 
+		      waferSeg->setWaferOffsetY(EC_Number_of_towers, wafer_num, 0.0);
 
 		    wafer_pos_z +=
 		      wafer_dim_x +
@@ -608,7 +609,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 		    wafer_phv.addPhysVolID("wafer", wafer_num);
 
 		    // Magic wafers, set the waferOffsetX for this layer this wafer.
-		    waferSeg->setWaferOffsetX(myLayerNum, wafer_num, thisWaferOffsetX);
+		    if ((myLayerNum+increase_LayerID) == 1 )
+		      waferSeg->setWaferOffsetY(EC_Number_of_towers, wafer_num, thisWaferOffsetX);
 
 		    wafer_pos_z +=
 		      wafer_dim_z +
