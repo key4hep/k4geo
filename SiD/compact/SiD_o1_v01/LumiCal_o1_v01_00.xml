@@ -9,6 +9,7 @@
     </readout>
 </readouts>
 
+<detectors>
 <detector id="11" name="LumiCal" reflect="true" type="DD4hep_CylindricalEndcapCalorimeter" readout="LumiCalHits" vis="LumiCalVis" calorimeterType="LUMI">
   <comment>Luminosity Calorimeter</comment>
   <dimensions inner_r = "LumiCal_rmin" outer_r = "LumiCal_rmax" inner_z = "LumiCal_zmin"/>
@@ -33,5 +34,6 @@
     <slice material = "Air"     thickness = "0.033*cm" />
   </layer>
 </detector>
+</detectors>
 
 </lccdd>

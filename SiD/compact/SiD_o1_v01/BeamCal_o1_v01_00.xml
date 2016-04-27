@@ -9,6 +9,7 @@
     </readout>
 </readouts>
 
+<detectors>
 <detector id="12" name="BeamCal" reflect="true" type="DD4hep_ForwardDetector" readout="BeamCalHits" vis="BeamCalVis" calorimeterType="BEAM">
   <comment>Beam Calorimeter</comment>
   <dimensions outer_r="BeamCal_rmax" inner_r="BeamCal_rmin" inner_z="BeamCal_zmin" outer_z="BeamCal_zmax" dz="BeamCal_dz"/>
@@ -27,5 +28,6 @@
     <slice material="Air" thickness="0.33*mm" />
   </layer>
 </detector>
+</detectors>
 
 </lccdd>
