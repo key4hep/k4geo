@@ -335,7 +335,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	
 	x_total = sqrt( ro_layer * ro_layer - y_layerID * y_layerID);
 	
-	x_length = x_total - Hcal_middle_stave_gaps - 2*Hcal_layer_air_gap;
+	x_length = x_total - Hcal_middle_stave_gaps;
 	
 	x_halfLength = x_length/2.;
 	
