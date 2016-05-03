@@ -40,11 +40,16 @@ option(BUILD_TESTING "Enable and build tests" ON)
 find_package(DD4hep REQUIRED COMPONENTS DDSegmentation DDRec DDG4)
 
 MESSAGE(" DD4HEP_USE_CXX11: " ${DD4HEP_USE_CXX11})
+MESSAGE(" DD4HEP_USE_CXX14: " ${DD4HEP_USE_CXX14})
+
 if( ${DD4HEP_USE_CXX11})
-   SET( CMAKE_CXX_FLAGS "-Wall -std=c++11")
+  set ( CMAKE_CXX_FLAGS "-std=c++11 -ftls-model=global-dynamic -Wall -Wextra -pedantic -Wshadow -Wformat-security -Wno-long-long -Wdeprecated")
+elseif( ${DD4HEP_USE_CXX14})
+  set ( CMAKE_CXX_FLAGS "-std=c++14 -ftls-model=global-dynamic -Wall -Wextra -pedantic -Wshadow -Wformat-security -Wno-long-long -Wdeprecated")
 else()
-   SET( CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic -Wno-long-long")
+   SET( CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic -Wshadow -Wformat-security -Wno-long-long -Wdeprecated")
 endif()
+
 MESSAGE(" CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS})
 
 if ( ${ROOT_VERSION_MAJOR} GREATER 5 )
@@ -59,6 +64,7 @@ find_package( Boost REQUIRED )
 include_directories( SYSTEM ${Boost_INCLUDE_DIRS} )
 
 find_package( Geant4 REQUIRED ) 
+include(${Geant4_USE_FILE})
 
 #find_package( LCIO REQUIRED)
 #find_package( GEAR REQUIRED)
@@ -67,7 +73,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/detector/include )
 include_directories( SYSTEM
   ${DD4hep_INCLUDE_DIRS}
   ${DD4hep_COMPONENTS_INCLUDE_DIRS}
-  ${Geant4_INCLUDE_DIRS}
   ${ROOT_INCLUDE_DIR}
  )
 #  ${LCIO_INCLUDE_DIRS}
