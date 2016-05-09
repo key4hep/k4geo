@@ -4,6 +4,7 @@ slc6-gcc48:
   image: clicdp/slc6-base
   script:
     - source .gitlab-ci.d/init_x86_64-slc6-gcc48-opt.sh
+    - export ROOT_INCLUDE_PATH=$DD4hepINSTALL/include
     - mkdir build 
     - cd build
     - cmake -DBoost_NO_BOOST_CMAKE=ON ..
@@ -18,6 +19,7 @@ slc6-gcc49:
   image: clicdp/slc6-base
   script:
     - source .gitlab-ci.d/init_x86_64-slc6-gcc49-opt.sh
+    - export ROOT_INCLUDE_PATH=$DD4hepINSTALL/include
     - mkdir build 
     - cd build
     - cmake -DBoost_NO_BOOST_CMAKE=ON ..
@@ -32,6 +34,7 @@ centos7-gcc49:
   image: clicdp/cc7-base
   script:
     - source .gitlab-ci.d/init_x86_64-centos7-gcc49-opt.sh
+    - export ROOT_INCLUDE_PATH=$DD4hepINSTALL/include
     - mkdir build 
     - cd build
     - cmake -DBoost_NO_BOOST_CMAKE=ON ..
