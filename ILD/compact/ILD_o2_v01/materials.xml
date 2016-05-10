@@ -511,4 +511,13 @@
       <D value="2.21" unit="g/cm3" />
       <fraction n="1.00" ref="C"/>
     </material>
+
+    <material name="Steel304L">
+      <D type="density" value="8.00" unit="g/cm3" />
+      <fraction n="0.695" ref="Fe" />
+      <fraction n="0.185" ref="Cr" />
+      <fraction n="0.100" ref="Ni" />
+      <fraction n="0.020" ref="Mn" />
+    </material>
+
   </materials>
