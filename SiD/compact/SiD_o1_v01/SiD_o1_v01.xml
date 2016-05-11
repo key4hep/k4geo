@@ -168,11 +168,11 @@
   <include ref="SiTrackerForward.xml"/-->
   
   <comment>Calorimeters</comment>  
-  <include ref="EcalBarrel_o1_v01_00.xml"/>
+  <!--include ref="EcalBarrel_o1_v01_00.xml"/>
   <include ref="EcalEndcap_o1_v01_00.xml"/>
 
   <include ref="HcalBarrel_o1_v01_00.xml"/>
-  <include ref="HcalEndcap_o1_v01_00.xml"/>
+  <include ref="HcalEndcap_o1_v01_00.xml"/-->
 
   <include ref="MuonBarrel_o1_v01_00.xml"/>
   <include ref="MuonEndcap_o1_v01_00.xml"/>
