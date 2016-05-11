@@ -119,7 +119,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
                 string slice_name = _toString(slice_number, "slice%d");
                 double slice_thickness = x_slice.thickness();
                 Material slice_material = lcdd.material(x_slice.materialStr());
-                
+                DetElement slice(layer, slice_name, slice_number);
+
                 slice_pos_z += slice_thickness / 2;
                 // Slice volume & box
                 Volume slice_vol(slice_name, Box(cal_hx, cal_hy, slice_thickness / 2), slice_material);
@@ -134,8 +135,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
                 // Set region, limitset, and vis.
                 slice_vol.setAttributes(lcdd, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
                 // slice PlacedVolume
-                layer_vol.placeVolume(slice_vol, Position(0, 0, slice_pos_z));
-                
+                PlacedVolume slice_phv = layer_vol.placeVolume(slice_vol, Position(0, 0, slice_pos_z));
+                slice_phv.addPhysVolID("slice", slice_number);
+                slice.setPlacement(slice_phv);
+
                 // Increment Z position for next slice.
                 slice_pos_z += slice_thickness / 2;
                 // Increment slice number.
