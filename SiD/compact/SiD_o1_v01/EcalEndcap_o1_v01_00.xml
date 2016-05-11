@@ -10,7 +10,7 @@
 </readouts>
 
 <detectors>
- <detector id="6" name="EcalEndcap" type="GenericCalEndcap_o1_v01" reflect="true" readout="EcalEndcapHits" vis="EcalEndcapVis" calorimeterType="EM_ENDCAP" gap="0.*cm">
+ <detector id="6" name="ECalEndcap" type="GenericCalEndcap_o1_v01" reflect="true" readout="EcalEndcapHits" vis="EcalEndcapVis" calorimeterType="EM_ENDCAP" gap="0.*cm">
   <comment>EM Calorimeter Endcaps</comment>
 
   <dimensions numsides="EcalEndcap_outer_symmetry" zmin="EcalEndcap_zmin" rmin="EcalEndcap_rmin" rmax="EcalEndcap_rmax"  nsides_inner="EcalEndcap_inner_symmetry" nsides_outer="EcalEndcap_outer_symmetry" />

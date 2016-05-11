@@ -10,7 +10,7 @@
 </readouts>
 
 <detectors>
- <detector id="7" name="HcalBarrel" type="GenericCalBarrel_o1_v01" readout="HcalBarrelHits" vis="HcalBarrelVis" calorimeterType="HAD_BARREL" gap="0.*cm" material="Steel235">
+ <detector id="7" name="HCalBarrel" type="GenericCalBarrel_o1_v01" readout="HcalBarrelHits" vis="HcalBarrelVis" calorimeterType="HAD_BARREL" gap="0.*cm" material="Steel235">
   <comment>Hadron Calorimeter Barrel</comment>
   <dimensions numsides="HcalBarrel_symmetry" rmin="HcalBarrel_rmin" z="2*HcalBarrel_half_length"/>
 

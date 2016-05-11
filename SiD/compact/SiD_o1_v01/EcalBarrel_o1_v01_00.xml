@@ -8,7 +8,7 @@
 </readouts>
 
 <detectors>
- <detector id="5" name="EcalBarrel" type="GenericCalBarrel_o1_v01" readout="EcalBarrelHits" vis="EcalBarrelVis" calorimeterType="EM_BARREL" gap="0.*cm">
+ <detector id="5" name="ECalBarrel" type="GenericCalBarrel_o1_v01" readout="EcalBarrelHits" vis="EcalBarrelVis" calorimeterType="EM_BARREL" gap="0.*cm">
   <comment>EM Calorimeter Barrel</comment>
   <dimensions numsides="EcalBarrel_symmetry" rmin="EcalBarrel_rmin" z="2*EcalBarrel_half_length" />
 
