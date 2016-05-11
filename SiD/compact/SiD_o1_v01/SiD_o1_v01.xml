@@ -67,17 +67,31 @@
     <constant name="HcalBarrel_rmax" value="2501.0*mm" />
     <constant name="HcalBarrel_symmetry" value="12" />
 
-    <constant name="HCalEndcap_zmin" value="1801.0*mm"/>
-    <constant name="HCalEndcap_zmax" value="3000.0*mm"/>
-    <constant name="HCalEndcap_rmin" value="216.0*mm"/>
-    <constant name="HCalEndcap_rmax" value="1403.0*mm"/>
-    <constant name="HCalEndcap_inner_symmetry" value="12"/>
-    <constant name="HCalEndcap_outer_symmetry" value="12"/>
+    <constant name="HCalEndcap_zmin" value="1801.0*mm" />
+    <constant name="HCalEndcap_zmax" value="3000.0*mm" />
+    <constant name="HCalEndcap_rmin" value="216.0*mm" />
+    <constant name="HCalEndcap_rmax" value="1403.0*mm" />
+    <constant name="HCalEndcap_inner_symmetry" value="12" />
+    <constant name="HCalEndcap_outer_symmetry" value="12" />
 
-    <constant name="BeamCal_rmin" value="0.0*mm"/>
-    <constant name="BeamCal_rmax" value="129.6*mm"/>
-    <constant name="BeamCal_zmin" value="3039.0*mm"/>
-    <constant name="BeamCal_zmax" value="3399.0*mm"/>
+    <constant name="MuonBarrel_half_length" value="2950.0*mm" />
+    <constant name="MuonBarrel_rmin" value="3454.0*mm" />
+    <constant name="MuonBarrel_rmax" value="6054.0*mm" />
+    <constant name="MuonBarrel_symmetry" value="12" />
+    <constant name="MuonBarrel_end_angle" value="30.*deg" />
+
+    <constant name="MuonEndcap_zmin" value="3000.0*mm" />
+    <constant name="MuonEndcap_zmax" value="5600.0*mm" />
+    <constant name="MuonEndcap_rmin"  value="366.0*mm" />
+    <constant name="MuonEndcap_rmax" value="6054.0*mm" />
+    <constant name="MuonEndcap_inner_symmetry" value="12" />
+    <constant name="MuonEndcap_outer_symmetry" value="12" />    
+    <constant name="MuonEndcap_end_angle" value="30.*deg" />
+
+    <constant name="BeamCal_rmin" value="0.0*mm" />
+    <constant name="BeamCal_rmax" value="129.6*mm" />
+    <constant name="BeamCal_zmin" value="3039.0*mm" />
+    <constant name="BeamCal_zmax" value="3399.0*mm" />
 
     <constant name="LumiCal_rmin" value="60.0*mm"/>
     <constant name="LumiCal_rmax" value="195.0*mm"/>
@@ -133,25 +147,25 @@
     <vis name="HcalBarrelVis" r="0.296875" g="0.48828125" b="0.4921875" />
     <vis name="HcalEndcapVis" r="0.296875" g="0.48828125" b="0.4921875" />
 
-    <vis name="SolenoidCoilVis" r="0.20703125" g="0.453125" b="0.77734375" />
+    <vis name="SOLVis" r="0.20703125" g="0.453125" b="0.77734375" />
 
     <vis name="MuonEndcapVis" r="0.28125" g="0.390625" b="0.625" />
     <vis name="MuonBarrelVis" r="0.28125" g="0.390625" b="0.625" />
 
     <vis name="LumiCalVis" r="0.5" g="0.5" b="0.5" />
-    <vis name="BeamCalVis" r="0.5" g="0.5" b="0.5" />
+    <vis name="BeamCalVis" r="0.8" g="0.3" b="0.5" />
 
   </display>
 
   <!-- ####################### Individual sub-detectors ####################### -->
 
   <comment>Trackers</comment> 
-  <include ref="SiVertexBarrel.xml"/>
+  <!--include ref="SiVertexBarrel.xml"/>
   <include ref="SiVertexEndcap.xml"/>
 
   <include ref="SiTrackerEndcap.xml"/>
   <include ref="SiTrackerBarrel.xml"/>
-  <include ref="SiTrackerForward.xml"/>
+  <include ref="SiTrackerForward.xml"/-->
   
   <comment>Calorimeters</comment>  
   <include ref="EcalBarrel_o1_v01_00.xml"/>
@@ -160,15 +174,16 @@
   <include ref="HcalBarrel_o1_v01_00.xml"/>
   <include ref="HcalEndcap_o1_v01_00.xml"/>
 
-  <include ref="MuonBarrel.xml"/>
-  <include ref="MuonEndcap.xml"/>
+  <include ref="MuonBarrel_o1_v01_00.xml"/>
+  <include ref="MuonEndcap_o1_v01_00.xml"/>
 
   <include ref="LumiCal_o1_v01_00.xml"/>
-
   <include ref="BeamCal_o1_v01_00.xml"/>
 
+  <include ref="Solenoid_o1_v01_00.xml"/>
+
   <comment>Beam pipe</comment>
-  <include ref="BeamPipe.xml"/>
+  <!--include ref="BeamPipe.xml"/-->
   
   <comment>Dead material and supports</comment>
   <comment>Vertex Detector Supports and Readout</comment>  
