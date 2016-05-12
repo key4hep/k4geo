@@ -50,31 +50,31 @@
       
     </comment>    
 
-    <constant name="EcalBarrel_half_length" value="1765.0*mm" />
-    <constant name="EcalBarrel_rmin" value="1265.0*mm" />
-    <constant name="EcalBarrel_rmax" value="1403.0*mm" />
-    <constant name="EcalBarrel_symmetry" value="12" />
+    <constant name="ECalBarrel_half_length" value="1765.0*mm" />
+    <constant name="ECalBarrel_rmin" value="1265.0*mm" />
+    <constant name="ECalBarrel_rmax" value="1403.0*mm" />
+    <constant name="ECalBarrel_symmetry" value="12" />
    
-    <constant name="EcalEndcap_zmin" value="1657.0*mm" />
-    <constant name="EcalEndcap_zmax" value="1800.0*mm" />
-    <constant name="EcalEndcap_rmin"  value="216.0*mm" />
-    <constant name="EcalEndcap_rmax" value="1250.0*mm" />
-    <constant name="EcalEndcap_inner_symmetry" value="12" />
-    <constant name="EcalEndcap_outer_symmetry" value="12" />
+    <constant name="ECalEndcap_zmin" value="1657.0*mm" />
+    <constant name="ECalEndcap_zmax" value="1800.0*mm" />
+    <constant name="ECalEndcap_rmin"  value="216.0*mm" />
+    <constant name="ECalEndcap_rmax" value="1250.0*mm" />
+    <constant name="ECalEndcap_inner_symmetry" value="12" />
+    <constant name="ECalEndcap_outer_symmetry" value="12" />
 
-    <constant name="HcalBarrel_half_length" value="2950.0*mm" />
-    <constant name="HcalBarrel_rmin" value="1409.0*mm" />
-    <constant name="HcalBarrel_rmax" value="2501.0*mm" />
-    <constant name="HcalBarrel_symmetry" value="12" />
+    <constant name="HCalBarrel_half_length" value="2950.0*mm" />
+    <constant name="HCalBarrel_rmin" value="1409.0*mm" />
+    <constant name="HCalBarrel_rmax" value="2501.0*mm" />
+    <constant name="HCalBarrel_symmetry" value="12" />
 
     <constant name="HCalEndcap_zmin" value="1801.0*mm" />
-    <constant name="HCalEndcap_zmax" value="3000.0*mm" />
+    <constant name="HCalEndcap_zmax" value="2990.0*mm" /><!-- 3000 on the tech. drawing -->
     <constant name="HCalEndcap_rmin" value="216.0*mm" />
     <constant name="HCalEndcap_rmax" value="1403.0*mm" />
     <constant name="HCalEndcap_inner_symmetry" value="12" />
     <constant name="HCalEndcap_outer_symmetry" value="12" />
 
-    <constant name="MuonBarrel_half_length" value="2950.0*mm" />
+    <constant name="MuonBarrel_half_length" value="3000.0*mm" />
     <constant name="MuonBarrel_rmin" value="3454.0*mm" />
     <constant name="MuonBarrel_rmax" value="6054.0*mm" />
     <constant name="MuonBarrel_symmetry" value="12" />
@@ -98,8 +98,8 @@
     <constant name="LumiCal_zmin" value="1557.0*mm"/>
     <constant name="LumiCal_zmax" value="1700.0*mm"/>
 
-    <constant name="tracking_region_radius" value="EcalBarrel_rmin - 10*env_safety"/>
-    <constant name="tracking_region_zmax" value="EcalEndcap_zmin - 10*env_safety"/>
+    <constant name="tracking_region_radius" value="ECalBarrel_rmin - 10*env_safety"/>
+    <constant name="tracking_region_zmax" value="ECalEndcap_zmin - 10*env_safety"/>
     
     <constant name="tracker_region_rmax" value="tracking_region_radius" />  
     <constant name="tracker_region_zmax" value="tracking_region_zmax" />  
@@ -107,21 +107,13 @@
     <constant name="VXD_CF_sensor" value="0.026*cm"/>
     <constant name="VXD_CF_support" value="0.05*cm"/>
     <constant name="bp_cone_slope" value="(8.96-1.20)/(185-6.25)"/>
-    <constant name="SolenoidBarrelInnerRadius" value="259.1*cm"/>
-    <constant name="SolenoidBarrelOuterZ" value="293.3*cm"/>
-    <constant name="SolenoidBarrelInnerCryostatThickness" value="3.0*cm"/>
-    <constant name="SolenoidBarrelInnerAirgapThickness" value="11.0*cm"/>
-    <constant name="SolenoidBarrelAlConductorThickness" value="38.4*cm"/>
-    <constant name="SolenoidBarrelQuenchbackThickness" value="5.0*cm"/>
-    <constant name="SolenoidBarrelOuterAirgapThickness" value="18.7*cm"/>
-    <constant name="SolenoidBarrelOuterCryostatThickness" value="4.0*cm"/>
+
+    <constant name="Solenoid_inner_radius" value="2604*mm"/>
+    <constant name="Solenoid_half_length" value="2950*mm"/>
     <constant name="SolenoidEndcapCryostatThickness" value="5.0*cm"/>
     <constant name="SolenoidEndcapAirgapThickness" value="19.0*cm"/>
-    <constant name="SolenoidBarrelConductorInnerRadius" value="SolenoidBarrelInnerRadius+SolenoidBarrelInnerCryostatThickness+SolenoidBarrelInnerAirgapThickness"/>
-    <constant name="SolenoidBarrelOuterCryostatInnerRadius" value="SolenoidBarrelConductorInnerRadius+SolenoidBarrelAlConductorThickness+SolenoidBarrelQuenchbackThickness"/>
-    <constant name="SolenoidBarrelOuterRadius" value="SolenoidBarrelOuterCryostatInnerRadius+SolenoidBarrelOuterAirgapThickness+SolenoidBarrelOuterCryostatThickness"/>
-    <constant name="SolenoidCoilOuterZ" value="SolenoidBarrelOuterZ-SolenoidEndcapCryostatThickness-SolenoidEndcapAirgapThickness"/>
-    <constant name="SolenoidalFieldRadius" value="(SolenoidBarrelConductorInnerRadius+SolenoidBarrelAlConductorThickness/2.)"/>
+    <constant name="Solenoid_Coil_half_length" value="Solenoid_half_length-SolenoidEndcapCryostatThickness-SolenoidEndcapAirgapThickness"/>
+    <constant name="Solenoid_outer_radius" value="3429*mm"/>
   </define>
 
   <limits>
@@ -141,11 +133,11 @@
     <vis name="SiTrackerBarrelVis" r="0.8" g="1.0" b="0.1" />
     <vis name="SiTrackerEndcapVis" r="0.8" g="1.0" b="0.1" />
 
-    <vis name="EcalBarrelVis" r="0.77" g="0.74" b="0.86" />
-    <vis name="EcalEndcapVis" r="0.77" g="0.74" b="0.86" />
+    <vis name="ECalBarrelVis" r="0.77" g="0.74" b="0.86" />
+    <vis name="ECalEndcapVis" r="0.77" g="0.74" b="0.86" />
 
-    <vis name="HcalBarrelVis" r="0.296875" g="0.48828125" b="0.4921875" />
-    <vis name="HcalEndcapVis" r="0.296875" g="0.48828125" b="0.4921875" />
+    <vis name="HCalBarrelVis" r="0.296875" g="0.48828125" b="0.4921875" />
+    <vis name="HCalEndcapVis" r="0.296875" g="0.48828125" b="0.4921875" />
 
     <vis name="SOLVis" r="0.20703125" g="0.453125" b="0.77734375" />
 
@@ -160,19 +152,19 @@
   <!-- ####################### Individual sub-detectors ####################### -->
 
   <comment>Trackers</comment> 
-  <!--include ref="SiVertexBarrel.xml"/>
+  <include ref="SiVertexBarrel.xml"/>
   <include ref="SiVertexEndcap.xml"/>
 
   <include ref="SiTrackerEndcap.xml"/>
   <include ref="SiTrackerBarrel.xml"/>
-  <include ref="SiTrackerForward.xml"/-->
+  <include ref="SiTrackerForward.xml"/>
   
   <comment>Calorimeters</comment>  
-  <!--include ref="EcalBarrel_o1_v01_00.xml"/>
-  <include ref="EcalEndcap_o1_v01_00.xml"/>
+  <include ref="ECalBarrel_o1_v01_00.xml"/>
+  <include ref="ECalEndcap_o1_v01_00.xml"/>
 
-  <include ref="HcalBarrel_o1_v01_00.xml"/>
-  <include ref="HcalEndcap_o1_v01_00.xml"/-->
+  <include ref="HCalBarrel_o1_v01_00.xml"/>
+  <include ref="HCalEndcap_o1_v01_00.xml"/>
 
   <include ref="MuonBarrel_o1_v01_00.xml"/>
   <include ref="MuonEndcap_o1_v01_00.xml"/>
@@ -199,8 +191,8 @@
 
   <fields>
     <field type="solenoid" name="GlobalSolenoid" inner_field="5.0*tesla"
-           outer_field="-0.6*tesla" zmax="1000*mm"
-           outer_radius="SolenoidalFieldRadius" />
+           outer_field="-0.6*tesla" zmax="2950*mm"
+           outer_radius="Solenoid_outer_radius" />
   </fields>
 
 </lccdd>

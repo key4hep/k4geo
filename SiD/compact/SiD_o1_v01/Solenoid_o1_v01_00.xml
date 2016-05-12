@@ -19,10 +19,9 @@
         </detector>
     </detectors>
     
-    <detectors>
-        
+    <detectors>        
         <detector name="SolenoidBarrel" type="Solenoid_o1_v01" id="0" insideTrackingVolume="false" reflect="true">
-            <type_flags type=" DetType_COIL"/>
+
             <envelope vis="SOLVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -45,6 +44,7 @@
           </layer>
         </detector>
     </detectors>
+
 </lccdd>
 
 

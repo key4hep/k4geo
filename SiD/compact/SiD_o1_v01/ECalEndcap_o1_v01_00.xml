@@ -1,24 +1,28 @@
 <lccdd>
 
 <readouts>
-    <readout name="EcalBarrelHits">
+    <readout name="ECalEndcapHits">
       <segmentation type="CartesianGridXY" grid_size_x="3.5*mm" grid_size_y="3.5*mm" />
-      <id>system:6,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id>
+      <!-- <segmentation type="GlobalGridXY" grid_size_x="3.5" grid_size_y="3.5" /> -->
+      <!-- <id>system:6,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id> -->
+      <id>system:5,side:2,module:8,stave:4,layer:9,submodule:4,x:32:-16,y:-16</id>
     </readout>
 </readouts>
 
 <detectors>
- <detector id="5" name="ECalBarrel" type="GenericCalBarrel_o1_v01" readout="EcalBarrelHits" vis="EcalBarrelVis" calorimeterType="EM_BARREL" gap="0.*cm">
-  <comment>EM Calorimeter Barrel</comment>
-  <dimensions numsides="EcalBarrel_symmetry" rmin="EcalBarrel_rmin" z="2*EcalBarrel_half_length" />
+ <detector id="6" name="ECalEndcap" type="GenericCalEndcap_o1_v01" reflect="true" readout="ECalEndcapHits" vis="ECalEndcapVis" calorimeterType="EM_ENDCAP" gap="0.0*cm">
+  <comment>EM Calorimeter Endcaps</comment>
 
-  <envelope vis="EcalBarrelVis">
-    <shape type="PolyhedraRegular" numsides="EcalBarrel_symmetry"  rmin="EcalBarrel_rmin - env_safety" rmax="EcalBarrel_rmax + 10*env_safety" dz="2*EcalBarrel_half_length + 2*env_safety"  material="Air"/>
-    <!-- Radii definitions as in http://cern.ch/go/r9mZ -->
-    <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/EcalBarrel_symmetry"/>
+  <dimensions numsides="ECalEndcap_outer_symmetry" zmin="ECalEndcap_zmin" rmin="ECalEndcap_rmin" rmax="ECalEndcap_rmax"  nsides_inner="ECalEndcap_inner_symmetry" nsides_outer="ECalEndcap_outer_symmetry" />
+
+  <envelope vis="ECalEndcapVis">
+    <shape type="BooleanShape" operation="Subtraction" material="Air">
+      <shape type="PolyhedraRegular"  numsides="ECalEndcap_outer_symmetry" rmin="ECalEndcap_rmin - env_safety" rmax="ECalEndcap_rmax + env_safety" dz="2*ECalEndcap_zmax + 2*env_safety" />
+      <shape type="PolyhedraRegular"  numsides="ECalEndcap_outer_symmetry" rmin="0" rmax="ECalEndcap_rmax + 2*env_safety" dz="2*ECalEndcap_zmin - 2*env_safety" />
+    </shape>
+    <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/ECalEndcap_outer_symmetry" />
   </envelope>
-
-  <staves />
+  
   <layer repeat="1">
     <slice material = "Silicon" thickness = "0.032*cm" sensitive = "yes" limits="cal_limits" />
     <slice material = "Copper"  thickness = "0.005*cm" />
@@ -45,13 +49,13 @@
 </detectors>
 
 <plugins>
-    <plugin name="DD4hep_CaloFaceBarrelSurfacePlugin">
-      <argument value="EcalBarrel"/>
-      <argument value="length=1765.0*2*mm"    />
-      <argument value="radius=EcalBarrel_rmin"  />
+    <plugin name="DD4hep_CaloFaceEndcapSurfacePlugin">
+      <argument value="ECalEndcap"/>
+      <argument value="zpos=ECalEndcap_zmin"    />
+      <argument value="radius=1765.0*2*mm"  />
       <argument value="phi0=0"    />
       <argument value="symmetry=12"/>
-      <argument value="systemID=20"/>
+      <argument value="systemID=6"/>
       <!-- <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> -->
     </plugin>
 </plugins>
