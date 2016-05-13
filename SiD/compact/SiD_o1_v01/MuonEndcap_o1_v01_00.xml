@@ -4,11 +4,12 @@
     <readout name="MuonEndcapHits">
       <segmentation type="CartesianGridXY" grid_size_x="3.0*cm" grid_size_y="3.0*cm" />
       <!-- <segmentation type="GlobalGridXY" gridSizeX="3.0*cm" gridSizeY="3.0*cm" /> -->
-      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
+      <id>system:8,side:2,module:4,layer:8,slice:6,x:32:-16,y:-16</id>
     </readout>
 </readouts>
 
 <detectors>
+ <!-- alternate drivers: GenericCalEndcap_o1_v01, DD4hep_PolyhedraEndcapCalorimeter2 -->
  <detector id="10" name="MuonEndcap" type="GenericCalEndcap_o1_v01" readout="MuonEndcapHits" reflect="true" vis="MuonEndcapVis" calorimeterType="MUON_ENDCAP" gap="0.0*cm">
   <comment>Muon Calorimeter Endcaps</comment>
   <dimensions numsides="MuonEndcap_outer_symmetry" nsides_inner="MuonEndcap_inner_symmetry" nsides_outer="MuonEndcap_outer_symmetry" zmin="MuonEndcap_zmin" rmin="MuonEndcap_rmin" rmax="MuonEndcap_rmax" />
@@ -21,6 +22,7 @@
     <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/MuonEndcap_outer_symmetry" />
   </envelope>
  
+  <staves />
   <layer repeat="11">
     <slice material="Iron" thickness="19.6*cm" />
     <slice material="Aluminum" thickness="0.1*cm" />

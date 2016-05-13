@@ -74,7 +74,7 @@
     <constant name="HCalEndcap_inner_symmetry" value="12" />
     <constant name="HCalEndcap_outer_symmetry" value="12" />
 
-    <constant name="MuonBarrel_half_length" value="3000.0*mm" />
+    <constant name="MuonBarrel_half_length" value="2995.0*mm" /><!-- 3000 on the tech. drawing -->
     <constant name="MuonBarrel_rmin" value="3454.0*mm" />
     <constant name="MuonBarrel_rmax" value="6054.0*mm" />
     <constant name="MuonBarrel_symmetry" value="12" />
