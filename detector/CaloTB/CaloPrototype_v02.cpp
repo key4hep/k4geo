@@ -72,6 +72,15 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double cell_sizeX      = cellSizeVector[0];
   double cell_sizeY      = cellSizeVector[1];
 
+  // check if we have a TiledLayerGridXY segmentation :
+  DD4hep::DDSegmentation::TiledLayerGridXY* tileSeg = 
+    dynamic_cast< DD4hep::DDSegmentation::TiledLayerGridXY*>( seg.segmentation() ) ;
+
+  //access the layer identifier via the segmentation.
+  //the layer identifier is defined in the compact xml file.
+  //and use it to set the volumeID layer value later here. 
+  string identifierLayer = tileSeg->fieldNameLayer(); // "K" or "layer" or "..."
+
 //====================================================================
 //
 // general calculated parameters
@@ -153,8 +162,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
             layer_pos_z += layer_thickness / 2;
             // Layer physical volume.
             PlacedVolume layer_phv = envelope.placeVolume(layer_vol, Position(0, 0, layer_pos_z));
-            //layer_phv.addPhysVolID("layer", layer_num);
-            layer_phv.addPhysVolID("K", layer_num);
+            layer_phv.addPhysVolID(identifierLayer, layer_num);
             layer.setPlacement(layer_phv);
             
             // Increment the layer Z position.
