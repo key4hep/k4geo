@@ -9,7 +9,7 @@
     <readout name="MuonBarrelHits">
       <segmentation type="CartesianGridXY" grid_size_x="MuonCal_cell_size" grid_size_y="MuonCal_cell_size" />
       <!-- <segmentation type="RegularNgonCartesianGridXY" gridSizeX="3.0*cm" gridSizeY="3.0*cm" /> -->
-      <id>system:8,barrel:3,module:4,layer:8,slice:6,x:32:-16,y:-16</id>
+      <id>system:5,module:4,stave:6,layer:4,slice:6,x:32:-16,y:-16</id>
     </readout>
 </readouts>
 
