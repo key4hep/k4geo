@@ -9,11 +9,11 @@
         <!--constant name="SiTracker_Endcap_groups_z_spacing" value="285.0*mm"/-->
 
         <constant name="SiTracker_Endcap_inner_radius" value="SiTracker_inner_radius"/>
-        <constant name="SiTracker_Endcap_outer_radius" value="SiTracker_outer_radius"/>
+        <constant name="SiTracker_Endcap_outer_radius" value="SiTracker_outer_radius - 5*mm"/>
 	
 	<constant name="SiTracker_Endcap_module1_height" value="100.114*mm"/>
 	<constant name="SiTracker_Endcap_module2_height" value="89.773*mm"/>
-	<constant name="SiTracker_Endcap_petal_overlap"  value="2.7*mm"/>
+	<constant name="SiTracker_Endcap_petal_overlap"  value="3.1*mm"/>
 
 	<!-- All the arithmetic operations could be done in the driver -->
         <constant name="SiTracker_Endcap_r1" value="SiTracker_Endcap_inner_radius + SiTracker_Endcap_module1_height/2"/>

@@ -50,6 +50,12 @@
       
     </comment>    
 
+    <constant name="SiTracker_outer_radius" value="1235.0*mm"/>
+    <constant name="SiTracker_inner_radius" value="206.00*mm"/>
+    <constant name="SiTracker_zmax" value="1637.0*mm"/><!-- half-length -->
+    <constant name="SiTracker_EndcapLayers" value="4"/>
+    <constant name="SiTracker_BarrelLayers" value="SiTracker_EndcapLayers + 1"/>
+
     <constant name="ECalBarrel_half_length" value="1765.0*mm" />
     <constant name="ECalBarrel_rmin" value="1265.0*mm" />
     <constant name="ECalBarrel_rmax" value="1403.0*mm" />
@@ -99,10 +105,7 @@
     <constant name="LumiCal_zmax" value="1700.0*mm"/>
 
     <constant name="tracking_region_radius" value="ECalBarrel_rmin - 10*env_safety"/>
-    <constant name="tracking_region_zmax" value="ECalEndcap_zmin - 10*env_safety"/>
-    
-    <constant name="tracker_region_rmax" value="tracking_region_radius" />  
-    <constant name="tracker_region_zmax" value="tracking_region_zmax" />  
+    <constant name="tracking_region_zmax" value="ECalEndcap_zmin - 10*env_safety"/>    
 
     <constant name="VXD_CF_sensor" value="0.026*cm"/>
     <constant name="VXD_CF_support" value="0.05*cm"/>
@@ -152,11 +155,11 @@
   <!-- ####################### Individual sub-detectors ####################### -->
 
   <comment>Trackers</comment> 
-  <include ref="SiVertexBarrel.xml"/>
-  <include ref="SiVertexEndcap.xml"/>
+  <!--include ref="SiVertexBarrel.xml"/>
+  <include ref="SiVertexEndcap.xml"/-->
 
-  <include ref="SiTrackerEndcap.xml"/>
   <include ref="SiTrackerBarrel.xml"/>
+  <include ref="SiTrackerEndcap.xml"/>
   <include ref="SiTrackerForward.xml"/>
   
   <comment>Calorimeters</comment>  

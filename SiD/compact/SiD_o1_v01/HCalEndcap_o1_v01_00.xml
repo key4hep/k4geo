@@ -12,7 +12,7 @@
 <detectors>
 <detector id="8" name="HCalEndcap" type="GenericCalEndcap_o1_v01" readout="HCalEndcapHits" vis="HCalEndcapVis" calorimeterType="HAD_ENDCAP" reflect="true">
   <comment>Hadron Calorimeter Endcaps</comment>
-  <dimensions numsides="HCalEndcap_outer_symmetry" zmin="HCalEndcap_zmin" rmin="HCalEndcap_rmin" rmax="HCalEndcap_rmax"  nsides_inner="HCalEndcap_inner_symmetry" nsides_outer="HCalEndcap_outer_symmetry" />
+  <dimensions numsides="HCalEndcap_outer_symmetry" zmin="HCalEndcap_zmin" zmax="HCalEndcap_zmax" rmin="HCalEndcap_rmin" rmax="HCalEndcap_rmax"  nsides_inner="HCalEndcap_inner_symmetry" nsides_outer="HCalEndcap_outer_symmetry" />
 
   <envelope vis="HCalEndcapVis">
     <shape type="BooleanShape" operation="Subtraction" material="Air">

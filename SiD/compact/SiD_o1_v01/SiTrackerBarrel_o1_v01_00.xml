@@ -7,21 +7,22 @@
   <constant name="SiTracker_inner_radius" value="206.00*mm"/>
   <constant name="SiTracker_zmax" value="1637.0*mm"/-->
 
-  <constant name="SiTracker_module_thickness" value="5.0*mm"/>  
+  <constant name="SiTracker_module_thickness" value="5.0*mm"/>
 
   <constant name="SiTracker_Barrel_zmin"  value="578.0*mm"/>
   <constant name="SiTracker_Barrel_zmax"  value="SiTracker_zmax"/>
   <constant name="SiTracker_Barrel_outer_radius" value="SiTracker_outer_radius - 34.925*mm"/>
   <constant name="SiTracker_Barrel_inner_radius" value="SiTracker_inner_radius +  9.075*mm"/>
 
+  <constant name="SiTracker_BarrelLayer_thickness" value="47.025*mm"/>
   <constant name="SiTracker_Layers_z_spacing" value="(SiTracker_Barrel_zmax - SiTracker_Barrel_zmin)/(SiTracker_BarrelLayers - 1)"/>
   <constant name="SiTracker_Barrel_r_spacing" value="(SiTracker_Barrel_outer_radius - SiTracker_Barrel_inner_radius)/(SiTracker_BarrelLayers - 1)"/><!-- 250*mm -->
-  <constant name="SiTracker_BarrelLayer_thickness" value="47.025*mm"/><!-- layer envelope thickness actually -->
+  
   <constant name="SiTracker_BarrelLayer_rc_offset" value="1.28*mm + 5.0*mm"/>
 
-  <constant name="SiTracker_Barrel_z1" value="SiTracker_zmax - 4*SiTracker_Layers_z_spacing - 3*2*SiTracker_module_thickness"/>
-  <constant name="SiTracker_Barrel_z2" value="SiTracker_zmax - 3*SiTracker_Layers_z_spacing - 6*2*SiTracker_module_thickness"/>
-  <constant name="SiTracker_Barrel_z3" value="SiTracker_zmax - 2*SiTracker_Layers_z_spacing - 9*2*SiTracker_module_thickness"/>
+  <constant name="SiTracker_Barrel_z1" value="SiTracker_zmax - 4*SiTracker_Layers_z_spacing"/>
+  <constant name="SiTracker_Barrel_z2" value="SiTracker_zmax - 3*SiTracker_Layers_z_spacing - 3*2*SiTracker_module_thickness"/>
+  <constant name="SiTracker_Barrel_z3" value="SiTracker_zmax - 2*SiTracker_Layers_z_spacing - 6*2*SiTracker_module_thickness"/>
   <constant name="SiTracker_Barrel_z4" value="SiTracker_zmax -   SiTracker_Layers_z_spacing - 9*2*SiTracker_module_thickness"/>
   <constant name="SiTracker_Barrel_z5" value="SiTracker_zmax -                               12*2*SiTracker_module_thickness"/>
 
@@ -30,6 +31,12 @@
   <constant name="SiTracker_Barrel_z3" value="1013.9*mm"/>
   <constant name="SiTracker_Barrel_z4" value="1272.3*mm"/>
   <constant name="SiTracker_Barrel_z5" value="1535.7*mm"/-->
+
+  <constant name="SiTracker_Barrel_r1" value="SiTracker_Barrel_inner_radius"/>
+  <constant name="SiTracker_Barrel_r2" value="SiTracker_Barrel_inner_radius + SiTracker_Barrel_r_spacing"/>
+  <constant name="SiTracker_Barrel_r3" value="SiTracker_Barrel_inner_radius + 2*SiTracker_Barrel_r_spacing"/>     
+  <constant name="SiTracker_Barrel_r4" value="SiTracker_Barrel_inner_radius + 3*SiTracker_Barrel_r_spacing"/>
+  <constant name="SiTracker_Barrel_r5" value="SiTracker_Barrel_inner_radius + 4*SiTracker_Barrel_r_spacing"/>
 
   <constant name="SiTrackerBarrel_module_width" value="97.97*mm"/>
   <constant name="SiTrackerBarrel_module_length" value="97.97*mm"/>
@@ -202,34 +209,34 @@
   </module>
 
   <layer module="SiTrackerModule_Layer1" id="1">
-    <barrel_envelope inner_r="SiTracker_Barrel_inner_radius" outer_r="SiTracker_Barrel_inner_radius + SiTracker_BarrelLayer_thickness" z_length="SiTracker_Barrel_z1*2"/>
-    <rphi_layout phi_tilt="0.17506*rad" nphi="20" phi0="0.*rad" rc="SiTracker_Barrel_inner_radius + SiTracker_BarrelLayer_rc_offset" dr="0.0"/>
-    <z_layout dr="4.0*mm" z0="512.128*mm" nz="13"/>
+    <barrel_envelope inner_r="SiTracker_Barrel_r1" outer_r="SiTracker_Barrel_r1 + SiTracker_BarrelLayer_thickness" z_length="SiTracker_Barrel_z1*2"/>
+    <rphi_layout phi_tilt="0.17506*rad" nphi="20" phi0="0.*rad" rc="SiTracker_Barrel_r1 + SiTracker_BarrelLayer_rc_offset" dr="0.0"/>
+    <z_layout dr="4.0*mm" z0="SiTracker_Barrel_z1 - 59.0*mm" nz="13"/>
   </layer>
 
   <layer module="SiTrackerModule_Layer2" id="2">
-    <barrel_envelope inner_r="SiTracker_Barrel_inner_radius + SiTracker_Barrel_r_spacing" outer_r="SiTracker_Barrel_inner_radius + SiTracker_Barrel_r_spacing + SiTracker_BarrelLayer_thickness" z_length="SiTracker_Barrel_z2*2"/>
-    <rphi_layout phi_tilt="0.12217*rad" nphi="38" phi0="0.087*rad" rc="SiTracker_Barrel_inner_radius + SiTracker_Barrel_r_spacing + SiTracker_BarrelLayer_rc_offset" dr="0.0"/>
-    <z_layout dr="4.0*mm" z0="690.605*mm" nz="17"/>
+    <barrel_envelope inner_r="SiTracker_Barrel_r2" outer_r="SiTracker_Barrel_r2 + SiTracker_BarrelLayer_thickness" z_length="SiTracker_Barrel_z2*2"/>
+    <rphi_layout phi_tilt="0.12217*rad" nphi="38" phi0="0.087*rad" rc="SiTracker_Barrel_r2 + SiTracker_BarrelLayer_rc_offset" dr="0.0"/>
+    <z_layout dr="4.0*mm" z0="SiTracker_Barrel_z2 - 59.0*mm" nz="17"/>
   </layer>
 
   <layer module="SiTrackerModule_Layer3" id="3">
-    <barrel_envelope inner_r="SiTracker_Barrel_inner_radius + 2*SiTracker_Barrel_r_spacing" outer_r="SiTracker_Barrel_inner_radius + 2*SiTracker_Barrel_r_spacing + SiTracker_BarrelLayer_thickness" z_length="SiTracker_Barrel_z3*2"/>
-    <rphi_layout phi_tilt="0.11493*rad" nphi="58" phi0="0.058*rad" rc="SiTracker_Barrel_inner_radius + 2*SiTracker_Barrel_r_spacing + SiTracker_BarrelLayer_rc_offset" dr="0.0"/>
-    <z_layout dr="4.0*mm" z0="954.625*mm" nz="23"/>
+    <barrel_envelope inner_r="SiTracker_Barrel_r3" outer_r="SiTracker_Barrel_r3 + SiTracker_BarrelLayer_thickness" z_length="SiTracker_Barrel_z3*2"/>
+    <rphi_layout phi_tilt="0.11493*rad" nphi="58" phi0="0.058*rad" rc="SiTracker_Barrel_r3 + SiTracker_BarrelLayer_rc_offset" dr="0.0"/>
+    <z_layout dr="4.0*mm" z0="SiTracker_Barrel_z3 - 59.0*mm" nz="23"/>
   </layer>
 
   <layer module="SiTrackerModule_Layer4" id="4">
-    <barrel_envelope inner_r="SiTracker_Barrel_inner_radius + 3*SiTracker_Barrel_r_spacing" outer_r="SiTracker_Barrel_inner_radius + 3*SiTracker_Barrel_r_spacing + SiTracker_BarrelLayer_thickness" z_length="SiTracker_Barrel_z4*2"/>
-    <rphi_layout phi_tilt="0.11502*rad" nphi="80" phi0="0.0436*rad" rc="SiTracker_Barrel_inner_radius + 3*SiTracker_Barrel_r_spacing + SiTracker_BarrelLayer_rc_offset" dr="0.0"/>
-    <z_layout dr="4.0*mm" z0="1213.073*mm" nz="29"/>
+    <barrel_envelope inner_r="SiTracker_Barrel_r4" outer_r="SiTracker_Barrel_r4 + SiTracker_BarrelLayer_thickness" z_length="SiTracker_Barrel_z4*2"/>
+    <rphi_layout phi_tilt="0.11502*rad" nphi="80" phi0="0.0436*rad" rc="SiTracker_Barrel_r4 + SiTracker_BarrelLayer_rc_offset" dr="0.0"/>
+    <z_layout dr="4.0*mm" z0="SiTracker_Barrel_z4 - 59.0*mm" nz="29"/>
   </layer>
 
   <!-- comment out this layer if SiTracker_BarrelLayers=4 for example -->
   <layer module="SiTrackerModule_Layer5" id="5">
-    <barrel_envelope inner_r="SiTracker_Barrel_inner_radius + 4*SiTracker_Barrel_r_spacing" outer_r="SiTracker_Barrel_inner_radius + 4*SiTracker_Barrel_r_spacing + SiTracker_BarrelLayer_thickness" z_length="SiTracker_Barrel_z5*2"/>
-    <rphi_layout phi_tilt="0.11467*rad" nphi="102" phi0="0.01745*rad" rc="SiTracker_Barrel_inner_radius + 4*SiTracker_Barrel_r_spacing + SiTracker_BarrelLayer_rc_offset" dr="0.0"/>
-    <z_layout dr="4.0*mm" z0="1476.497*mm" nz="35"/>
+    <barrel_envelope inner_r="SiTracker_Barrel_r5" outer_r="SiTracker_Barrel_r5 + SiTracker_BarrelLayer_thickness" z_length="SiTracker_Barrel_z5*2"/>
+    <rphi_layout phi_tilt="0.11467*rad" nphi="102" phi0="0.01745*rad" rc="SiTracker_Barrel_r5 + SiTracker_BarrelLayer_rc_offset" dr="0.0"/>
+    <z_layout dr="4.0*mm" z0="SiTracker_Barrel_z5 - 59.0*mm" nz="35"/>
   </layer>
 
  </detector>

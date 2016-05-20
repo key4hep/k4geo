@@ -9,13 +9,13 @@
     <readout name="MuonBarrelHits">
       <segmentation type="CartesianGridXY" grid_size_x="MuonCal_cell_size" grid_size_y="MuonCal_cell_size" />
       <!-- <segmentation type="RegularNgonCartesianGridXY" gridSizeX="3.0*cm" gridSizeY="3.0*cm" /> -->
-      <id>system:5,module:4,stave:6,layer:4,slice:6,x:32:-16,y:-16</id>
+      <id>system:5,barrel:2,module:4,stave:6,layer:4,slice:6,x:32:-16,y:-16</id>
     </readout>
 </readouts>
 
 <detectors>
   <!-- alternate drivers: GenericCalBarrel_o1_v01, DD4hep_PolyhedraBarrelCalorimeter2 -->
-  <detector id="9" name="MuonBarrel" type="GenericCalBarrel_o1_v01" readout="MuonBarrelHits" vis="MuonBarrelVis" calorimeterType="MUON_BARREL" gap="0.*cm" material="Steel235">
+  <detector id="9" name="MuonBarrel" type="DD4hep_PolyhedraBarrelCalorimeter2" readout="MuonBarrelHits" vis="MuonBarrelVis" calorimeterType="MUON_BARREL" gap="0.*cm" material="Steel235">
   <comment>Muon Calorimeter Barrel</comment>
 
   <dimensions numsides="MuonBarrel_symmetry" rmin="MuonBarrel_rmin" z="2*MuonBarrel_half_length"/>
