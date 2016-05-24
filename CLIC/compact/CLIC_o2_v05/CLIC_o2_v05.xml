@@ -105,16 +105,16 @@
         <constant name="ECalBarrel_symmetry" value="12"/>
         
         <constant name="ECalEndcap_inner_radius" value="410*mm"/>
-        <constant name="ECalEndcap_outer_radius" value="1700*mm"/>
+        <constant name="ECalEndcap_outer_radius" value="1727*mm"/>
         <constant name="ECalEndcap_min_z" value="2350*mm"/>
-        <constant name="ECalEndcap_max_z" value="2509*mm"/>
+        <constant name="ECalEndcap_max_z" value="2536*mm"/>
         <constant name="ECalEndcap_outer_symmetry" value="12"/>
         <constant name="ECalEndcap_inner_symmetry" value="12"/>
         
         <constant name="ECalPlug_inner_radius" value="260*mm"/>
         <constant name="ECalPlug_outer_radius" value="380*mm"/>
         <constant name="ECalPlug_min_z" value="2350*mm"/>
-        <constant name="ECalPlug_max_z" value="2509*mm"/>
+        <constant name="ECalPlug_max_z" value="2536*mm"/>
         <constant name="ECalPlug_outer_symmetry" value="12"/>
         <constant name="ECalPlug_inner_symmetry" value="12"/>
         
@@ -124,17 +124,17 @@
         <constant name="HCalBarrel_symmetry" value="12"/>
         
         <constant name="HCalEndcap_inner_radius" value="250*mm"/>
-        <constant name="HCalEndcap_outer_radius" value="3203*mm"/>
-        <constant name="HCalEndcap_min_z" value="2539*mm"/>
-        <constant name="HCalEndcap_max_z" value="4129*mm"/>
+        <constant name="HCalEndcap_outer_radius" value="3230*mm"/>
+        <constant name="HCalEndcap_min_z" value="2566*mm"/>
+        <constant name="HCalEndcap_max_z" value="4156*mm"/>
         <constant name="HCalEndcap_symmetry" value="12"/>
         <constant name="HCalEndcap_zcutout" value="200*mm"/>
         <constant name="HCalEndcap_rcutout" value="180*mm"/>
         
-        <constant name="HCalRing_inner_radius" value="1730*mm"/>
+        <constant name="HCalRing_inner_radius" value="1757*mm"/>
         <constant name="HCalRing_outer_radius" value="HCalEndcap_outer_radius"/>
-        <constant name="HCalRing_min_z" value="2400*mm"/>
-        <constant name="HCalRing_max_z" value="2539*mm"/>
+        <constant name="HCalRing_min_z" value="2373*mm"/>
+        <constant name="HCalRing_max_z" value="2566*mm"/>
         <constant name="HCalRing_symmetry" value="12"/>
         
         <constant name="Solenoid_inner_radius" value="3467*mm"/>
@@ -149,9 +149,9 @@
         <constant name="YokeBarrel_symmetry" value="12"/>
         
         <constant name="YokeEndcap_inner_radius" value="630*mm"/>
-        <constant name="YokeEndcap_outer_radius" value="7004*mm"/>
-        <constant name="YokeEndcap_min_z" value="4179*mm"/>
-        <constant name="YokeEndcap_max_z" value="5179*mm"/>
+        <constant name="YokeEndcap_outer_radius" value="7031*mm"/>
+        <constant name="YokeEndcap_min_z" value="4206*mm"/>
+        <constant name="YokeEndcap_max_z" value="5206*mm"/>
         <constant name="YokeEndcap_outer_symmetry" value="12"/>
         <constant name="YokeEndcap_inner_symmetry" value="0"/>
         
@@ -230,8 +230,8 @@
     <include ref="OuterTracker_o2_v03_02.xml"/>
     
     <include ref="ECalBarrel_o2_v01_02.xml"/>
-    <include ref="ECalEndcap_o2_v01_01.xml"/>
-    <include ref="ECalPlug_o1_v01_01.xml"/>
+    <include ref="ECalEndcap_o2_v01_02.xml"/>
+    <include ref="ECalPlug_o1_v01_02.xml"/>
     
     <include ref="HCalBarrel_o1_v01_01.xml"/>
     <include ref="HCalEndcap_o1_v01_01.xml"/>
