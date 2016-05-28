@@ -226,8 +226,8 @@
   
     <include ref="Vertex_o2_v04_02.xml"/>
  
-    <include ref="InnerTracker_o2_v03_02.xml"/> 
-    <include ref="OuterTracker_o2_v03_02.xml"/>
+    <include ref="InnerTracker_o2_v04_01.xml"/> 
+    <include ref="OuterTracker_o2_v04_01.xml"/>
     
     <include ref="ECalBarrel_o2_v01_02.xml"/>
     <include ref="ECalEndcap_o2_v01_02.xml"/>
