@@ -11,6 +11,10 @@ slc6-gcc48:
     - make install
     - . ../bin/thislcgeo.sh
     - make test
+    - cd ..
+    - rm -rf .git
+    - sshpass -p $CLICTEL_PASS rsync -arv -e ssh --delete . clictel@lxplus:/afs/cern.ch/eng/clic/software/lcgeo/x86_64-slc6-gcc48-opt
+
 
 slc6-gcc49:
   tags:
@@ -25,6 +29,10 @@ slc6-gcc49:
     - make install
     - . ../bin/thislcgeo.sh
     - make test
+    - cd ..
+    - rm -rf .git
+    - sshpass -p $CLICTEL_PASS rsync -arv -e ssh --delete . clictel@lxplus:/afs/cern.ch/eng/clic/software/lcgeo/x86_64-slc6-gcc49-opt
+
 
 centos7-gcc49:
   tags:
@@ -39,3 +47,6 @@ centos7-gcc49:
     - make install
     - . ../bin/thislcgeo.sh
     - make test
+    - cd ..
+    - rm -rf .git
+    - sshpass -p $CLICTEL_PASS rsync -arv -e ssh --delete . clictel@lxplus:/afs/cern.ch/eng/clic/software/lcgeo/x86_64-centos7-gcc49-opt
