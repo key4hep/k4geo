@@ -255,7 +255,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   SubtractionSolid ECRingSolid( CenterECBox, CenterECTub);
 
-  Volume EnvLogECRing("ECRing",ECRingSolid,air);
+  Volume EnvLogECRing("ECRing",ECRingSolid,lcdd.material("g10"));
  
 
 
