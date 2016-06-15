@@ -277,7 +277,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 		Ecal_Barrel_module_dim_z / 2,
 		module_thickness/2);
 
-  Volume mod_vol(det_name+"_module",trd,air);
+  Volume mod_vol(det_name+"_module",trd,lcdd.material("g10"));
 
 
 
