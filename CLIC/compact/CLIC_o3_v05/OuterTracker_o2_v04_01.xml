@@ -239,7 +239,7 @@
             <argument value="OuterTrackerEndcap"/>
             <argument value="dimension=2"/>
             <argument value="u_x=-1."/>
-            <argument value="v_n=1."/>
+            <argument value="v_y=1."/>
             <argument value="n_z=1."/>
         </plugin>
     </plugins>
