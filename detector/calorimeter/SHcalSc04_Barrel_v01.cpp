@@ -27,7 +27,7 @@ using namespace lcgeo ;
 
 // After reading in all the necessary parameters.
 // To check the radius range and the space for placing the total layers
-bool validateEnvelope(double rInner, double rOuter, double radiatorThickness, double layerThickness, int layerNumber){
+static bool validateEnvelope(double rInner, double rOuter, double radiatorThickness, double layerThickness, int layerNumber){
   
   bool Error = false;
   bool Warning = false;
@@ -230,13 +230,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   Tube solidCaloTube(0, Hcal_outer_radius, DHZ+boundarySafety);
   
-  RotationZYX rot(0,0,M_PI/2.);
+  RotationZYX mrot(0,0,M_PI/2.);
 
-  Rotation3D rot3D(rot);
-  Position xyzVec(0,0,(Hcal_inner_radius + Hcal_total_dim_y / 2.));
-  Transform3D tran3D(rot3D,xyzVec);
+  Rotation3D mrot3D(mrot);
+  Position mxyzVec(0,0,(Hcal_inner_radius + Hcal_total_dim_y / 2.));
+  Transform3D mtran3D(mrot3D,mxyzVec);
 
-  IntersectionSolid barrelModuleSolid(stave_shaper, solidCaloTube, tran3D);
+  IntersectionSolid barrelModuleSolid(stave_shaper, solidCaloTube, mtran3D);
 
   Volume  EnvLogHcalModuleBarrel(det_name+"_module",barrelModuleSolid,stavesMaterial);
 
@@ -258,7 +258,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   Tube solidCaloTube_LP(0, Hcal_outer_radius, DHZ_LP+boundarySafety);
 
-  IntersectionSolid Module_lateral_plate(stave_shaper_LP, solidCaloTube_LP, tran3D);
+  IntersectionSolid Module_lateral_plate(stave_shaper_LP, solidCaloTube_LP, mtran3D);
 
   Volume  EnvLogHcalModuleBarrel_LP(det_name+"_Module_lateral_plate",Module_lateral_plate,stavesMaterial);
 
@@ -578,23 +578,23 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       lateral_plate_z_offset = - (Hcal_lateral_plate_thickness + Hcal_modules_gap)/2.;
 
       double phirot = stave_phi_offset;
-      RotationZYX rot(0,phirot,M_PI*0.5);
-      Rotation3D rot3D(rot);
+      RotationZYX srot(0,phirot,M_PI*0.5);
+      Rotation3D srot3D(srot);
 
       for (int module_id = 1;
          module_id <=2;
          module_id++)
 	{
-	  Position xyzVec(-Y*sin(phirot), Y*cos(phirot), module_z_offset);
-	  Transform3D tran3D(rot3D,xyzVec);
+	  Position sxyzVec(-Y*sin(phirot), Y*cos(phirot), module_z_offset);
+	  Transform3D stran3D(srot3D,sxyzVec);
 	  
 	  // Place Hcal Barrel volume into the envelope volume
-	  pv = envelope.placeVolume(EnvLogHcalModuleBarrel,tran3D);
+	  pv = envelope.placeVolume(EnvLogHcalModuleBarrel,stran3D);
 	  pv.addPhysVolID("stave",stave_id);
 	  pv.addPhysVolID("module",module_id);
 
 	  Position xyzVec_LP(-Y*sin(phirot), Y*cos(phirot),lateral_plate_z_offset);
-	  Transform3D tran3D_LP(rot3D,xyzVec_LP);
+	  Transform3D tran3D_LP(srot3D,xyzVec_LP);
 	  pv = envelope.placeVolume(EnvLogHcalModuleBarrel_LP,tran3D_LP);
 
 	  module_z_offset = - module_z_offset;
