@@ -3,7 +3,9 @@ slc6-gcc48:
     - docker
   image: clicdp/slc6-base
   script:
-    - source .gitlab-ci.d/init_x86_64-slc6-gcc48-opt.sh
+    - export GCC_VERSION="4.8.5"
+    - export BUILD_TYPE="opt"
+    - source .gitlab-ci.d/init_x86_64.sh
     - mkdir build 
     - cd build
     - cmake -DBoost_NO_BOOST_CMAKE=ON ..
@@ -21,7 +23,9 @@ slc6-gcc49:
     - docker
   image: clicdp/slc6-base
   script:
-    - source .gitlab-ci.d/init_x86_64-slc6-gcc49-opt.sh
+    - export GCC_VERSION="4.9.3"
+    - export BUILD_TYPE="opt"
+    - source .gitlab-ci.d/init_x86_64.sh
     - mkdir build 
     - cd build
     - cmake -DBoost_NO_BOOST_CMAKE=ON ..
@@ -39,7 +43,9 @@ centos7-gcc49:
     - docker
   image: clicdp/cc7-base
   script:
-    - source .gitlab-ci.d/init_x86_64-centos7-gcc49-opt.sh
+    - export GCC_VERSION="4.9.3"
+    - export BUILD_TYPE="opt"
+    - source .gitlab-ci.d/init_x86_64.sh
     - mkdir build 
     - cd build
     - cmake -DBoost_NO_BOOST_CMAKE=ON ..

@@ -1,99 +1,108 @@
 #!/bin/bash
- 
+
+
+if [ "$( cat /etc/*-release | grep Scientific )" ]; then
+    OS=slc6
+elif [ "$( cat /etc/*-release | grep CentOS )" ]; then
+    OS=centos7
+else
+    echo "UNKNOWN OS"
+    exit 1
+fi
+
+
+if [ -z ${GCC_VERSION} ]; then
+    GCC_VERSION=4.9.3
+fi
+  
+if [ -z ${BUILD_TYPE} ]; then
+    BUILD_TYPE=opt
+fi
+
+GCC_VER=`echo ${GCC_VERSION} | sed -e 's/\.//g' | cut -c 1-2`
+
 # General variables
-export LCGRELEASES=/cvmfs/sft.cern.ch/lcg/releases/LCG_84
-
+CLICREPO=/cvmfs/clicdp.cern.ch
+BUILD_FLAVOUR=x86_64-${OS}-gcc${GCC_VER}-${BUILD_TYPE}
 #--------------------------------------------------------------------------------
-#     GCC 4.9.3
-#--------------------------------------------------------------------------------
-
-source $LCGRELEASES/gcc/4.9.3/x86_64-centos7/setup.sh
-
-#--------------------------------------------------------------------------------
-#     CMake 3.4.1
+#     GCC
 #--------------------------------------------------------------------------------
 
-export CMAKE_HOME=$LCGRELEASES/CMake/3.4.1/x86_64-centos7-gcc49-opt
+source ${CLICREPO}/compilers/gcc/${GCC_VERSION}/x86_64-${OS}/setup.sh
+
+#--------------------------------------------------------------------------------
+#     CMake
+#--------------------------------------------------------------------------------
+
+export CMAKE_HOME=${CLICREPO}/software/CMake/3.5.2/${BUILD_FLAVOUR}
 export PATH=${CMAKE_HOME}/bin:$PATH
 
 #--------------------------------------------------------------------------------
-#     Python 2.7.10
+#     Python
 #--------------------------------------------------------------------------------
 
-export PYTHONDIR=$LCGRELEASES/Python/2.7.10/x86_64-centos7-gcc49-opt
+export PYTHONDIR=${CLICREPO}/software/Python/2.7.11/${BUILD_FLAVOUR}
 export PATH=$PYTHONDIR/bin:$PATH
 export LD_LIBRARY_PATH=$PYTHONDIR/lib:$LD_LIBRARY_PATH
-
-#--------------------------------------------------------------------------------
-#     pytools 1.9
-#--------------------------------------------------------------------------------
-
-export PYTOOLSDIR=$LCGRELEASES/1.9_python2.7/x86_64-centos7-gcc49-opt
-export PYTHONPATH=$PYTOOLSDIR/lib/python2.7/site-packages:$PYTHONPATH
-export PATH=$PYTOOLSDIR/bin:$PATH
-
-#--------------------------------------------------------------------------------
-#     CLHEP
-#--------------------------------------------------------------------------------
-
-export CLHEP=$LCGRELEASES/clhep/2.3.1.1/x86_64-centos7-gcc49-opt
-export CLHEP_BASE_DIR="$CLHEP"
-export CLHEP_INCLUDE_DIR="$CLHEP/include"
-export PATH="$CLHEP_BASE_DIR/bin:$PATH"
-export LD_LIBRARY_PATH="$CLHEP_BASE_DIR/lib:$LD_LIBRARY_PATH"
 
 #--------------------------------------------------------------------------------
 #     ROOT
 #--------------------------------------------------------------------------------
 
-export ROOTSYS=$LCGRELEASES/ROOT/6.06.02/x86_64-centos7-gcc49-opt
+export ROOTSYS=${CLICREPO}/software/ROOT/6.06.04/${BUILD_FLAVOUR}
 export PYTHONPATH="$ROOTSYS/lib:$PYTHONPATH"
 export PATH="$ROOTSYS/bin:$PATH"
 export LD_LIBRARY_PATH="$ROOTSYS/lib:$LD_LIBRARY_PATH"
 
-#--------------------------------------------------------------------------------
-#     LCIO
-#--------------------------------------------------------------------------------
-
-export LCIO="/afs/cern.ch/eng/clic/software/lcio/v02-08/x86_64-centos7-gcc49-opt"
-export PYTHONPATH="$LCIO/src/python:$LCIO/examples/python:$PYTHONPATH"
-export PATH="$LCIO/tools:$LCIO/bin:$PATH"
-export LD_LIBRARY_PATH="$LCIO/lib:$LD_LIBRARY_PATH"
 
 #--------------------------------------------------------------------------------
-#     Geant4	
+#     CLHEP
 #--------------------------------------------------------------------------------
 
-export G4INSTALL=$LCGRELEASES/../Geant4/10.02-7c0e3/x86_64-centos7-gcc49-opt
-export G4ENV_INIT="$G4INSTALL/bin/geant4.sh"
-export G4SYSTEM="Linux-g++"
+export CLHEP=${CLICREPO}/software/CLHEP/2.2.0.4/${BUILD_FLAVOUR}
+export CLHEP_BASE_DIR="$CLHEP"
+export CLHEP_INCLUDE_DIR="$CLHEP/include"
+export PATH="$CLHEP_BASE_DIR/bin:$PATH"
+export LD_LIBRARY_PATH="$CLHEP_BASE_DIR/lib:$LD_LIBRARY_PATH"
 
-#--------------------------------------------------------------------------------
-#     QT
-#--------------------------------------------------------------------------------
-
-export QTDIR=$LCGRELEASES/qt/4.8.4/x86_64-centos7-gcc49-opt
-export QMAKESPEC="$QTDIR/mkspecs/linux-g++"
-export PATH="$QTDIR/bin:$PATH"
-export LD_LIBRARY_PATH="$QTDIR/lib:$LD_LIBRARY_PATH"
-
-#--------------------------------------------------------------------------------
-#     Boost
-#--------------------------------------------------------------------------------
-
-export BOOST_ROOT=$LCGRELEASES/Boost/1.59.0_python2.7/x86_64-centos7-gcc49-opt
 
 #--------------------------------------------------------------------------------
 #     XercesC
 #--------------------------------------------------------------------------------
 
-export XercesC_HOME=$LCGRELEASES/XercesC/3.1.1p1/x86_64-centos7-gcc49-opt
+export XercesC_HOME=${CLICREPO}/software/Xerces-C/3.1.3/${BUILD_FLAVOUR}
 export PATH="$XercesC_HOME/bin:$PATH"
 export LD_LIBRARY_PATH="$XercesC_HOME/lib:$LD_LIBRARY_PATH"
+
+
+#--------------------------------------------------------------------------------
+#     Geant4	
+#--------------------------------------------------------------------------------
+
+export G4INSTALL=${CLICREPO}/software/Geant4/10.01.p03/${BUILD_FLAVOUR}
+export G4ENV_INIT="$G4INSTALL/bin/geant4.sh"
+export G4SYSTEM="Linux-g++"
+
+
+#--------------------------------------------------------------------------------
+#     LCIO
+#--------------------------------------------------------------------------------
+export LCIO=${CLICREPO}/software/LCIO/2.7.1/${BUILD_FLAVOUR}
+# export PYTHONPATH="$LCIO/src/python:$LCIO/examples/python:$PYTHONPATH"
+export PATH="$LCIO/bin:$PATH"
+export LD_LIBRARY_PATH="$LCIO/lib:$LD_LIBRARY_PATH"
+
+
+#--------------------------------------------------------------------------------
+#     Boost
+#--------------------------------------------------------------------------------
+
+export BOOST_ROOT=${CLICREPO}/software/Boost/1.61.0/${BUILD_FLAVOUR}
+export LD_LIBRARY_PATH="${BOOST_ROOT}/lib:$LD_LIBRARY_PATH"
 
 #--------------------------------------------------------------------------------
 #     DD4hep
 #--------------------------------------------------------------------------------
 
-source /afs/cern.ch/eng/clic/software/DD4hep/x86_64-centos7-gcc49-opt/bin/thisdd4hep.sh
+source /afs/cern.ch/eng/clic/software/DD4hep/${BUILD_FLAVOUR}/bin/thisdd4hep.sh
 
