@@ -772,7 +772,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     for (int stave_id = 1; stave_id <= nsides ; stave_id++)
       for (int module_id = 1; module_id < 6; module_id++)
 	{
-	  double phirot =  (stave_id-1) * dphi - hphi;
+	  double phirot =  (stave_id-1) * dphi - hphi*3.0;
 	  double module_z_offset =  (2 * module_id-6) * Ecal_Barrel_module_dim_z/2.;
 	  
 	  // And the rotation in Mokka is right hand rule, and the rotation in DD4hep is clockwise rule
