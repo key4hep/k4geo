@@ -171,7 +171,7 @@
 	main parameters:
 	
     	DET_inner_radius    : inner radius of tube like envelope  ( inscribed cylinder ) 
-	DET_outer_radius    : outer radius of tube like envelope  ( circumscribed cylinder )
+	DET_outer_radius    : outer radius of tube like envelope  ( inscribed cylinder )
 	DET_half_length     : half length along z axis
 	DET_min_z           : smallest absolute value on z-axis
 	DET_max_z           : largest  absolute value on z-axis

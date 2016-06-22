@@ -1,5 +1,5 @@
 """ 
- python dictionary with parameters extracted from: ../../compact/ILD_o1_v05/ILD_o1_v05.xml
+ python dictionary with parameters extracted from: /data/ilcsoft/HEAD/lcgeo/HEAD/ILD/compact/ILD_o1_v05/ILD_o1_v05.xml
 """ 
 values={}
 values["VXD_inner_radius"] = 16.0
@@ -49,8 +49,8 @@ values["EcalEndcap_max_z"] = 2635.0
 values["EcalEndcap_symmetry"] = 8.0
 values["HcalEndcap_inner_radius"] = 350.0
 values["HcalEndcap_outer_radius"] = 3395.46
-values["HcalEndcap_min_z"] = 2670.7
-values["HcalEndcap_max_z"] = 3957.7
+values["HcalEndcap_min_z"] = 2650.0
+values["HcalEndcap_max_z"] = 3937.0
 values["HcalEndcapRing_inner_radius"] = 2138.8
 values["HcalEndcapRing_outer_radius"] = 3136.99599912
 values["HcalEndcapRing_min_z"] = 2450.0

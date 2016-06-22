@@ -203,15 +203,15 @@ values['0'] = 0
 #-----------------------------------------------
 def run():
 
-##    writeTexFile( 'VXD', '_rz_envelope' , getRZEnvCmds, 20 )
-##    writeTexFile( 'SIT', '_rz_envelope' , getRZEnvCmds, 20 )
-##    writeTexFile( 'FTD', '_rz_envelope' , getRZEnvCmds, 20 )
-##    writeTexFile( 'TPC', '_rz_envelope' , getRZEnvCmds, 20 )
-##    writeTexFile( 'SET', '_rz_envelope' , getRZEnvCmds, 20 )
+    writeTexFile( 'VXD', '_rz_envelope' , getRZEnvCmds, 20 )
+    writeTexFile( 'SIT', '_rz_envelope' , getRZEnvCmds, 20 )
+    writeTexFile( 'FTD', '_rz_envelope' , getRZEnvCmds, 20 )
+    writeTexFile( 'TPC', '_rz_envelope' , getRZEnvCmds, 20 )
+    writeTexFile( 'SET', '_rz_envelope' , getRZEnvCmds, 20 )
 
     writeTexFile( 'ILD', '_rz_quadrant' , getILDRZQuadrantCmds, 20 )
 
-##    writeILDEnvTable('ILD_enevelope_table.tex' )
+    writeILDEnvTable('ILD_enevelope_table.tex' )
 
 #-----------------------------------------------
 def writeILDEnvTable( file ):
@@ -458,7 +458,7 @@ def getRZEnvCmds( det, width ):
 
 
     xmaxOrg = -1e99
-    # ---- comput the scale such that  ymax == width
+    # ---- compute the scale such that  ymax == width
     for ep in envPoints:
         if( vals[ ep[0] ] > xmaxOrg):
             xmaxOrg =  vals[ ep[0] ]

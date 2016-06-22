@@ -195,6 +195,10 @@
       <D unit="g/cm3" value="0.00120479"/>
       <fraction n="1" ref="G4_AIR"/>
     </material>
+    <material name="ThinAir" state="gas">
+      <D unit="g/cm3" value="0.00120479*1e-2"/>
+      <fraction n="1" ref="G4_AIR"/>
+    </material>
     <isotope N="180" Z="74" name="W180">
       <atom unit="g/mole" value="179.947"/>
     </isotope>
