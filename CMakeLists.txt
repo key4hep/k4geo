@@ -50,6 +50,13 @@ else()
    SET( CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic -Wshadow -Wformat-security -Wno-long-long -Wdeprecated")
 endif()
 
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+  if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.9)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=always")
+  endif()
+endif()
+
+
 MESSAGE(" CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS})
 
 if ( ${ROOT_VERSION_MAJOR} GREATER 5 )
