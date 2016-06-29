@@ -4,7 +4,7 @@
 
 <readouts>
     <readout name="HCalBarrelHits">
-      <segmentation type="CartesianGridXY" grid_size_x="1.0*cm" grid_size_y="1.0*cm" />
+      <segmentation type="CartesianGridXY" grid_size_x="10.0*mm" grid_size_y="10.0*mm" />
       <!-- <segmentation type="RegularNgonCartesianGridXY" gridSizeX="1.0*cm" gridSizeY="1.0*cm" /> -->
       <id>system:5,side:2,module:8,stave:4,layer:9,submodule:4,x:32:-16,y:-16</id>
       <!-- <id>system:6,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id> -->
@@ -22,17 +22,20 @@
   </envelope>
 
   <staves />
-  <layer repeat="35">
-    <slice material = "Steel235" thickness = "16.7*mm" /><!-- absorber -->
+  <layer repeat="34">
+    <slice material = "Steel235JR" thickness = "16.7*mm" /><!-- absorber -->
     <slice material = "Air" thickness = "1.25*mm" /><!-- gap -->
     <slice material = "Steel235" thickness = "2.0*mm" /><!-- casette -->
-    <slice material = "Copper" thickness = "1.5*mm" /><!-- cable-fibre mix, should be other material than copper -->
+    <slice material = "CFmix" thickness = "1.5*mm" /><!-- cable-fibre mix -->
     <slice material = "PCB" thickness = "1.0*mm" />
-    <slice material = "Kapton" thickness = "0.115*mm" /><!-- 3M foil -->
+    <slice material = "Polystyrole" thickness = "0.115*mm" /><!-- 3M foil -->
     <slice material = "Polystyrene" thickness = "5.0*mm" sensitive = "yes" limits="cal_limits" /><!-- scintillator -->
-    <slice material = "Kapton" thickness = "0.115*mm" /><!-- 3M foil -->
+    <slice material = "Polystyrole" thickness = "0.115*mm" /><!-- 3M foil -->
     <slice material = "Steel235" thickness = "2.0*mm" /><!-- casette -->
     <slice material = "Air" thickness = "1.25*mm" /><!-- gap -->
+  </layer>
+  <layer repeat="1">
+    <slice material = "Steel235JR" thickness = "20.5*mm" /><!-- absorber -->
   </layer>
  </detector>
 </detectors>
