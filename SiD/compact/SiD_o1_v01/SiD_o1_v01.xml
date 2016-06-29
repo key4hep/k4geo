@@ -134,7 +134,7 @@
     <vis name="SiTrackerForwardVis" r="0.8" g="0.1" b="0.1" />
 
     <vis name="SiTrackerBarrelVis" r="0.8" g="1.0" b="0.1" />
-    <vis name="SiTrackerEndcapVis" r="0.8" g="1.0" b="0.1" />
+    <vis name="SiTrackerEndcapVis" r="0.0" g="0.25" b="0.53" />
 
     <vis name="ECalBarrelVis" r="0.77" g="0.74" b="0.86" />
     <vis name="ECalEndcapVis" r="0.77" g="0.74" b="0.86" />
@@ -155,10 +155,10 @@
   <!-- ####################### Individual sub-detectors ####################### -->
 
   <comment>Trackers</comment> 
-  <!--include ref="SiVertexBarrel.xml"/>
-  <include ref="SiVertexEndcap.xml"/-->
+  <include ref="SiVertexBarrel.xml"/>
+  <include ref="SiVertexEndcap.xml"/>
 
-  <include ref="SiTrackerBarrel.xml"/>
+  <include ref="SiTrackerBarrel_o1_v01_00.xml"/>
   <include ref="SiTrackerEndcap.xml"/>
   <include ref="SiTrackerForward.xml"/>
   
@@ -166,8 +166,8 @@
   <include ref="ECalBarrel_o1_v01_00.xml"/>
   <include ref="ECalEndcap_o1_v01_00.xml"/>
 
-  <include ref="HCalBarrel_o1_v01_00.xml"/>
-  <include ref="HCalEndcap_o1_v01_00.xml"/>
+  <include ref="HCalBarrel_o1_v02_00.xml"/>
+  <include ref="HCalEndcap_o1_v02_00.xml"/>
 
   <include ref="MuonBarrel_o1_v01_00.xml"/>
   <include ref="MuonEndcap_o1_v01_00.xml"/>
