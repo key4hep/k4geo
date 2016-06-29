@@ -243,11 +243,11 @@
 
     <include ref="LumiCal_o1_v01_01.xml"/>
 
-    <!--include ref="BeamCal_o1_v01_01.xml"/>
+    <include ref="BeamCal_o1_v01_01.xml"/>
 
     <plugins>
       <plugin name="InstallSurfaceManager"/>
-    </plugins-->
+    </plugins>
 
     <fields>
       <field name="GlobalSolenoid" type="solenoid"

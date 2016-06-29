@@ -90,6 +90,12 @@
         <fraction n="0.65" ref="C"/>
         <fraction n="0.35" ref="Epoxy"/>
     </material>
+
+    <material name="CarbonFiber_D">
+        <D type="density" value="1.9" unit="g/cm3"/>
+        <fraction n="0.65" ref="C"/>
+        <fraction n="0.35" ref="Epoxy"/>
+    </material>    
     
     <material name="CarbonFiber_50D">
         <D type="density" value="0.75" unit="g/cm3"/>

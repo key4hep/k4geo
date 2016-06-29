@@ -100,58 +100,36 @@
             <type_flags type=" DetType_TRACKER + DetType_BARREL"/>
 
             <module name="InnerTrackerBarrelModule_01" vis="InnerTrackerModuleVis">
-                <module_envelope width="30.4*mm" length="InnerTracker_Barrel_half_length_0*2"/>
+                <module_envelope width="30.1*mm" length="30.1*mm"/>
                 <!-- Build slices top-down from innermost slice (closest to IP) to outer-most (away from IP)-->
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
-                
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
-                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
-                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
-                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
-                <module_component thickness="0.12*mm"  material="CarbonFiber_50D" sensitive="false"/>
+                <module_component thickness="0.05*mm"  material="Aluminum"        sensitive="false"/>
                 <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                
-                <module_component thickness="0.07*mm"  material="Aluminum"        sensitive="false"/>
-            </module>
-
-
-            <module name="InnerTrackerBarrelModule_2" vis="InnerTrackerModuleVis">
-                <module_envelope width="30.4*mm" length="InnerTracker_Barrel_half_length_2*2"/>
-                <!-- Build slices top-down from innermost slice (closest to IP) to outer-most (away from IP)-->
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
-                
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
-                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
-                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
+                <module_component thickness="0.12*mm"  material="CarbonFiber_D"   sensitive="false"/>
                 <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
-                <module_component thickness="0.12*mm"  material="CarbonFiber_50D" sensitive="false"/>
-                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                
-                <module_component thickness="0.07*mm"  material="Aluminum"        sensitive="false"/>
-            </module>
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
 
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
+                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
+
+                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
+                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>       
+            </module>
  
             <layer module="InnerTrackerBarrelModule_01" id="0" vis="InnerTrackerLayerVis" type="4">
                 <rphi_layout phi_tilt="0*deg" nphi="14*2" phi0="0" rc="InnerTracker_Barrel_radius_0" dr="2.5*mm"/>
-                <z_layout dr="0" z0="0" nz="1"/>
+                <z_layout dr="0" z0="InnerTracker_Barrel_half_length_0-15.05*mm" nz="32"/>
             </layer>
             <layer module="InnerTrackerBarrelModule_01" id="1" vis="InnerTrackerLayerVis" type="4">
                 <rphi_layout phi_tilt="0*deg" nphi="38*2" phi0="0" rc="InnerTracker_Barrel_radius_1" dr="2.5*mm"/>
-                <z_layout dr="0" z0="0" nz="1"/>
+                <z_layout dr="0" z0="InnerTracker_Barrel_half_length_1-15.05*mm" nz="32"/>
             </layer>
-            <layer module="InnerTrackerBarrelModule_2" id="2" vis="InnerTrackerLayerVis" type="4">
+            <layer module="InnerTrackerBarrelModule_01" id="2" vis="InnerTrackerLayerVis" type="4">
                 <rphi_layout phi_tilt="0*deg" nphi="62*2" phi0="0" rc="InnerTracker_Barrel_radius_2" dr="2.5*mm"/>
-                <z_layout dr="0" z0="0" nz="1"/>
+                <z_layout dr="0" z0="InnerTracker_Barrel_half_length_2-15.05*mm" nz="46"/>
             </layer>
 
         </detector>
@@ -169,287 +147,287 @@
             <module name="InnerTrackerEndcapModule_2x2" vis="InnerTrackerModuleVis">
             <trd x="30.2*mm" y="30.2*mm"/>                              
                 <!-- Build slices top-down from innermost slice (closest to IP) to outer-most (away from IP)-->
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
-                
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
-                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
-                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
-                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
-                <module_component thickness="0.12*mm"  material="CarbonFiber_50D" sensitive="false"/>
+                <module_component thickness="0.05*mm"  material="Aluminum"        sensitive="false"/>
                 <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                
-                <module_component thickness="0.07*mm"  material="Aluminum"        sensitive="false"/>
+                <module_component thickness="0.12*mm"  material="CarbonFiber_D"   sensitive="false"/>
+                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
+
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
+                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
+
+                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
+                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>  
             </module> 
             <module name="InnerTrackerEndcapModule_3x2" vis="InnerTrackerModuleVis">
             <trd x="45.3*mm" y="30.2*mm"/>                              
                 <!-- Build slices top-down from innermost slice (closest to IP) to outer-most (away from IP)-->
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
-                
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
-                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
-                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
-                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
-                <module_component thickness="0.12*mm"  material="CarbonFiber_50D" sensitive="false"/>
+                <module_component thickness="0.05*mm"  material="Aluminum"        sensitive="false"/>
                 <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                
-                <module_component thickness="0.07*mm"  material="Aluminum"        sensitive="false"/>
+                <module_component thickness="0.12*mm"  material="CarbonFiber_D"   sensitive="false"/>
+                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
+
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
+                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
+
+                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
+                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>  
             </module> 
             <module name="InnerTrackerEndcapModule_3x4" vis="InnerTrackerModuleVis">
             <trd x="45.3*mm" y="60.4*mm"/>                              
                 <!-- Build slices top-down from innermost slice (closest to IP) to outer-most (away from IP)-->
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
-                
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
-                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
-                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
-                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
-                <module_component thickness="0.12*mm"  material="CarbonFiber_50D" sensitive="false"/>
+                <module_component thickness="0.05*mm"  material="Aluminum"        sensitive="false"/>
                 <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                
-                <module_component thickness="0.07*mm"  material="Aluminum"        sensitive="false"/>
+                <module_component thickness="0.12*mm"  material="CarbonFiber_D"   sensitive="false"/>
+                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
+
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
+                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
+
+                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
+                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>  
             </module> 
             <module name="InnerTrackerEndcapModule_5x2" vis="InnerTrackerModuleVis">
             <trd x="75.5*mm" y="30.2*mm"/>                              
                 <!-- Build slices top-down from innermost slice (closest to IP) to outer-most (away from IP)-->
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
-                
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
-                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
-                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
-                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
-                <module_component thickness="0.12*mm"  material="CarbonFiber_50D" sensitive="false"/>
+                <module_component thickness="0.05*mm"  material="Aluminum"        sensitive="false"/>
                 <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                
-                <module_component thickness="0.07*mm"  material="Aluminum"        sensitive="false"/>
+                <module_component thickness="0.12*mm"  material="CarbonFiber_D"   sensitive="false"/>
+                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
+
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
+                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
+
+                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
+                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>  
             </module> 
             <module name="InnerTrackerEndcapModule_5x4" vis="InnerTrackerModuleVis">
             <trd x="75.5*mm" y="60.4*mm"/>                              
                 <!-- Build slices top-down from innermost slice (closest to IP) to outer-most (away from IP)-->
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
-                
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
-                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
-                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
-                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
-                <module_component thickness="0.12*mm"  material="CarbonFiber_50D" sensitive="false"/>
+                <module_component thickness="0.05*mm"  material="Aluminum"        sensitive="false"/>
                 <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                
-                <module_component thickness="0.07*mm"  material="Aluminum"        sensitive="false"/>
+                <module_component thickness="0.12*mm"  material="CarbonFiber_D"   sensitive="false"/>
+                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
+
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
+                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
+
+                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
+                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>  
             </module> 
             <module name="InnerTrackerEndcapModule_5x6" vis="InnerTrackerModuleVis">
             <trd x="75.5*mm" y="90.6*mm"/>                              
                 <!-- Build slices top-down from innermost slice (closest to IP) to outer-most (away from IP)-->
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
-                
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
-                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
-                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
-                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
-                <module_component thickness="0.12*mm"  material="CarbonFiber_50D" sensitive="false"/>
+                <module_component thickness="0.05*mm"  material="Aluminum"        sensitive="false"/>
                 <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                
-                <module_component thickness="0.07*mm"  material="Aluminum"        sensitive="false"/>
+                <module_component thickness="0.12*mm"  material="CarbonFiber_D"   sensitive="false"/>
+                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
+
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
+                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
+
+                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
+                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>  
             </module>
             <module name="InnerTrackerEndcapModule_5x7" vis="InnerTrackerModuleVis">
             <trd x="75.5*mm" y="105.7*mm"/>                              
                 <!-- Build slices top-down from innermost slice (closest to IP) to outer-most (away from IP)-->
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
-                
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
-                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
-                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
-                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
-                <module_component thickness="0.12*mm"  material="CarbonFiber_50D" sensitive="false"/>
+                <module_component thickness="0.05*mm"  material="Aluminum"        sensitive="false"/>
                 <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                
-                <module_component thickness="0.07*mm"  material="Aluminum"        sensitive="false"/>
+                <module_component thickness="0.12*mm"  material="CarbonFiber_D"   sensitive="false"/>
+                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
+
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
+                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
+
+                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
+                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>  
             </module>
             <module name="InnerTrackerEndcapModule_5x8" vis="InnerTrackerModuleVis">
             <trd x="75.5*mm" y="120.8*mm"/>                              
                 <!-- Build slices top-down from innermost slice (closest to IP) to outer-most (away from IP)-->
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
-                
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
-                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
-                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
-                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
-                <module_component thickness="0.12*mm"  material="CarbonFiber_50D" sensitive="false"/>
+                <module_component thickness="0.05*mm"  material="Aluminum"        sensitive="false"/>
                 <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                
-                <module_component thickness="0.07*mm"  material="Aluminum"        sensitive="false"/>
+                <module_component thickness="0.12*mm"  material="CarbonFiber_D"   sensitive="false"/>
+                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
+
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
+                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
+
+                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
+                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>  
             </module>            
             <module name="InnerTrackerEndcapModule_7x8" vis="InnerTrackerModuleVis">
             <trd x="105.7*mm" y="120.8*mm"/>                              
                 <!-- Build slices top-down from innermost slice (closest to IP) to outer-most (away from IP)-->
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
-                
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
-                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
-                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
-                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
-                <module_component thickness="0.12*mm"  material="CarbonFiber_50D" sensitive="false"/>
+                <module_component thickness="0.05*mm"  material="Aluminum"        sensitive="false"/>
                 <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                
-                <module_component thickness="0.07*mm"  material="Aluminum"        sensitive="false"/>
+                <module_component thickness="0.12*mm"  material="CarbonFiber_D"   sensitive="false"/>
+                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
+
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
+                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
+
+                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
+                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>  
             </module>
             <module name="InnerTrackerEndcapModule_8x5" vis="InnerTrackerModuleVis">
             <trd x="120.8*mm" y="75.5*mm"/>                              
                 <!-- Build slices top-down from innermost slice (closest to IP) to outer-most (away from IP)-->
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
-                
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
-                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
-                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
-                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
-                <module_component thickness="0.12*mm"  material="CarbonFiber_50D" sensitive="false"/>
+                <module_component thickness="0.05*mm"  material="Aluminum"        sensitive="false"/>
                 <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                
-                <module_component thickness="0.07*mm"  material="Aluminum"        sensitive="false"/>
+                <module_component thickness="0.12*mm"  material="CarbonFiber_D"   sensitive="false"/>
+                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
+
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
+                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
+
+                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
+                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>  
             </module>
             <module name="InnerTrackerEndcapModule_8x7" vis="InnerTrackerModuleVis">
             <trd x="120.8*mm" y="105.7*mm"/>                              
                 <!-- Build slices top-down from innermost slice (closest to IP) to outer-most (away from IP)-->
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
-                
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
-                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
-                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
-                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
-                <module_component thickness="0.12*mm"  material="CarbonFiber_50D" sensitive="false"/>
+                <module_component thickness="0.05*mm"  material="Aluminum"        sensitive="false"/>
                 <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                
-                <module_component thickness="0.07*mm"  material="Aluminum"        sensitive="false"/>
+                <module_component thickness="0.12*mm"  material="CarbonFiber_D"   sensitive="false"/>
+                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
+
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
+                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
+
+                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
+                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>  
             </module>
             <module name="InnerTrackerEndcapModule_9x8" vis="InnerTrackerModuleVis">
             <trd x="135.9*mm" y="120.8*mm"/>                              
                 <!-- Build slices top-down from innermost slice (closest to IP) to outer-most (away from IP)-->
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
-                
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
-                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
-                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
-                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
-                <module_component thickness="0.12*mm"  material="CarbonFiber_50D" sensitive="false"/>
+                <module_component thickness="0.05*mm"  material="Aluminum"        sensitive="false"/>
                 <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                
-                <module_component thickness="0.07*mm"  material="Aluminum"        sensitive="false"/>
+                <module_component thickness="0.12*mm"  material="CarbonFiber_D"   sensitive="false"/>
+                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
+
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
+                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
+
+                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
+                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>  
             </module> 
             <module name="InnerTrackerEndcapModule_9x9" vis="InnerTrackerModuleVis">
             <trd x="135.9*mm" y="135.9*mm"/>                              
                 <!-- Build slices top-down from innermost slice (closest to IP) to outer-most (away from IP)-->
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
-                
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
-                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
-                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
-                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
-                <module_component thickness="0.12*mm"  material="CarbonFiber_50D" sensitive="false"/>
+                <module_component thickness="0.05*mm"  material="Aluminum"        sensitive="false"/>
                 <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                
-                <module_component thickness="0.07*mm"  material="Aluminum"        sensitive="false"/>
+                <module_component thickness="0.12*mm"  material="CarbonFiber_D"   sensitive="false"/>
+                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
+
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
+                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
+
+                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
+                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>  
             </module> 
             <module name="InnerTrackerEndcapModule_11x2" vis="InnerTrackerModuleVis">
             <trd x="166.1*mm" y="30.2*mm"/>                              
                 <!-- Build slices top-down from innermost slice (closest to IP) to outer-most (away from IP)-->
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
-                
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
-                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
-                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
-                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
-                <module_component thickness="0.12*mm"  material="CarbonFiber_50D" sensitive="false"/>
+                <module_component thickness="0.05*mm"  material="Aluminum"        sensitive="false"/>
                 <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                
-                <module_component thickness="0.07*mm"  material="Aluminum"        sensitive="false"/>
+                <module_component thickness="0.12*mm"  material="CarbonFiber_D"   sensitive="false"/>
+                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
+
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
+                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
+
+                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
+                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>  
             </module> 
             <module name="InnerTrackerEndcapModule_11x3" vis="InnerTrackerModuleVis">
             <trd x="166.1*mm" y="45.3*mm"/>                              
                 <!-- Build slices top-down from innermost slice (closest to IP) to outer-most (away from IP)-->
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
-                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
-                
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
-                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
-                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-                <module_component thickness="0.12*mm"  material="Graphite"        sensitive="false"/>                                                
-
-                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
-                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
-                <module_component thickness="0.12*mm"  material="CarbonFiber_50D" sensitive="false"/>
+                <module_component thickness="0.05*mm"  material="Aluminum"        sensitive="false"/>
                 <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                
-                <module_component thickness="0.07*mm"  material="Aluminum"        sensitive="false"/>
+                <module_component thickness="0.12*mm"  material="CarbonFiber_D"   sensitive="false"/>
+                <module_component thickness="0.3*mm"   material="Silicon"         sensitive="true"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/> 
+
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.11*mm"  material="Graphite"        sensitive="false"/>                                                
+                <module_component thickness="0.1*mm"   material="Kapton"          sensitive="false"/>                                                  
+                <module_component thickness="0.12*mm"  material="CarbonFiber"     sensitive="false"/> 
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>                
+
+                <module_component thickness="0.2*mm"   material="Aluminum"        sensitive="false"/>           
+                <module_component thickness="0.2*mm"   material="Kapton"          sensitive="false"/>
+                <module_component thickness="0.1*mm"   material="Epoxy"           sensitive="false"/>  
             </module>                      
               
                         
@@ -511,15 +489,19 @@
             <envelope>
                 <shape type="Assembly"/>
             </envelope>
-            <layer id="0" inner_r="InnerTracker_outer_radius-1*cm" outer_z="InnerTracker_half_length" vis="SupportVis">
-                <slice material="CarbonFiber" thickness="1.15/3.7*cm" />
-            </layer>
             <layer id="1" inner_r="InnerTracker_Barrel_radius_0+0.5*cm" outer_z="InnerTracker_Barrel_half_length_0" vis="SupportVis">
-                <slice material="CarbonFiber" thickness="0.54/3.7*cm" />
+                <slice material="CarbonFiber" thickness="0.08/3.5447*cm" />
             </layer>
-            <layer id="1" inner_r="InnerTracker_Barrel_radius_1+0.5*cm" outer_z="InnerTracker_Barrel_half_length_1" vis="SupportVis">
-                <slice material="CarbonFiber" thickness="0.54/3.7*cm" />
-            </layer>                     
+            <layer id="2" inner_r="InnerTracker_Barrel_radius_1+0.5*cm" outer_z="InnerTracker_Barrel_half_length_1" vis="SupportVis">
+                <slice material="CarbonFiber" thickness="0.08/3.5447*cm" />
+            </layer>
+            <layer id="3" inner_r="InnerTracker_Barrel_radius_2+0.5*cm" outer_z="InnerTracker_Barrel_half_length_2" vis="SupportVis">
+                <slice material="CarbonFiber" thickness="0.08/3.5447*cm" />
+            </layer>
+	    <layer id="4" inner_r="InnerTracker_outer_radius-1*cm" outer_z="InnerTracker_half_length" vis="SupportVis">
+		<slice material="CarbonFiber" thickness="1/3.5447*cm" />
+            </layer>
+	    
         </detector>
         
 
@@ -528,25 +510,25 @@
                 <shape type="Assembly"/>
            </envelope>
            <layer id="0" inner_r="InnerTracker_Endcap_radius_0" inner_z="InnerTracker_Endcap_z_0+1*cm" outer_r="405*mm" vis="SupportVis">
-	           <slice material="CarbonFiber" thickness="0.54/3.7*cm" />
+	           <slice material="CarbonFiber" thickness="0.235/3.5447*cm" />
            </layer>
            <layer id="1" inner_r="InnerTracker_Endcap_radius_1" inner_z="InnerTracker_Endcap_z_1+1*cm" outer_r="555*mm" vis="SupportVis">
-	           <slice material="CarbonFiber" thickness="1.04/3.7*cm" />
+	           <slice material="CarbonFiber" thickness="0.08/3.5447*cm" />
            </layer>
            <layer id="2" inner_r="InnerTracker_Endcap_radius_2" inner_z="InnerTracker_Endcap_z_2-1*cm" outer_r="555*mm" vis="SupportVis">
-	           <slice material="CarbonFiber" thickness="1.04/3.7*cm" />
+	           <slice material="CarbonFiber" thickness="0.08/3.5447*cm" />
            </layer>
            <layer id="3" inner_r="InnerTracker_Endcap_radius_3" inner_z="InnerTracker_Endcap_z_3+1*cm" outer_r="555*mm" vis="SupportVis">
-	           <slice material="CarbonFiber" thickness="1.04/3.7*cm" />
+	           <slice material="CarbonFiber" thickness="0.08/3.5447*cm" />
            </layer>
            <layer id="4" inner_r="InnerTracker_Endcap_radius_4" inner_z="InnerTracker_Endcap_z_4-1*cm" outer_r="555*mm" vis="SupportVis">
-	           <slice material="CarbonFiber" thickness="1.04/3.7*cm" />
+	           <slice material="CarbonFiber" thickness="0.08/3.5447*cm" />
            </layer>
            <layer id="5" inner_r="InnerTracker_Endcap_radius_5" inner_z="InnerTracker_Endcap_z_5+1*cm" outer_r="555*mm" vis="SupportVis">
-	           <slice material="CarbonFiber" thickness="1.04/3.7*cm" />
+	           <slice material="CarbonFiber" thickness="0.08/3.5447*cm" />
            </layer>   
            <layer id="6" inner_r="InnerTracker_Endcap_radius_6" inner_z="InnerTracker_Endcap_z_6-1*cm" outer_r="555*mm" vis="SupportVis">
-	           <slice material="CarbonFiber" thickness="1.04/3.7*cm" />
+	           <slice material="CarbonFiber" thickness="0.08/3.5447*cm" />
            </layer>           
         </detector>
         
