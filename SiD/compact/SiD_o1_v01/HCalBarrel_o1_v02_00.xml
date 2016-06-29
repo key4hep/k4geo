@@ -1,0 +1,40 @@
+<lccdd>
+
+<!-- Scintillator HCal option, see https://www.evernote.com/l/AJ1hbuAiYnVCAZYbyb7g41Y5EvDJ9-dEPrg -->
+
+<readouts>
+    <readout name="HCalBarrelHits">
+      <segmentation type="CartesianGridXY" grid_size_x="1.0*cm" grid_size_y="1.0*cm" />
+      <!-- <segmentation type="RegularNgonCartesianGridXY" gridSizeX="1.0*cm" gridSizeY="1.0*cm" /> -->
+      <id>system:5,side:2,module:8,stave:4,layer:9,submodule:4,x:32:-16,y:-16</id>
+      <!-- <id>system:6,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id> -->
+    </readout>
+</readouts>
+
+<detectors>
+ <detector id="7" name="HCalBarrel" type="GenericCalBarrel_o1_v01" readout="HCalBarrelHits" vis="HCalBarrelVis" calorimeterType="HAD_BARREL" gap="0.*cm" material="Steel235">
+  <comment>Hadron Calorimeter Barrel</comment>
+  <dimensions numsides="HCalBarrel_symmetry" rmin="HCalBarrel_rmin" z="2*HCalBarrel_half_length"/>
+
+  <envelope vis="HCalBarrelVis">
+    <shape type="PolyhedraRegular" numsides="HCalBarrel_symmetry"  rmin="HCalBarrel_rmin - env_safety" rmax="HCalBarrel_rmax + 10*env_safety" dz="2*HCalBarrel_half_length + 2*env_safety" material = "Air"/>
+    <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/HCalBarrel_symmetry"/>
+  </envelope>
+
+  <staves />
+  <layer repeat="35">
+    <slice material = "Steel235" thickness = "16.7*mm" /><!-- absorber -->
+    <slice material = "Air" thickness = "1.25*mm" /><!-- gap -->
+    <slice material = "Steel235" thickness = "2.0*mm" /><!-- casette -->
+    <slice material = "Copper" thickness = "1.5*mm" /><!-- cable-fibre mix, should be other material than copper -->
+    <slice material = "PCB" thickness = "1.0*mm" />
+    <slice material = "Kapton" thickness = "0.115*mm" /><!-- 3M foil -->
+    <slice material = "Polystyrene" thickness = "5.0*mm" sensitive = "yes" limits="cal_limits" /><!-- scintillator -->
+    <slice material = "Kapton" thickness = "0.115*mm" /><!-- 3M foil -->
+    <slice material = "Steel235" thickness = "2.0*mm" /><!-- casette -->
+    <slice material = "Air" thickness = "1.25*mm" /><!-- gap -->
+  </layer>
+ </detector>
+</detectors>
+
+</lccdd>
