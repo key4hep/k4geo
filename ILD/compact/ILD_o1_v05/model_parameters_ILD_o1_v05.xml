@@ -5,6 +5,8 @@
      at 15:07:20
 -->
 <define>
+  <constant name="Ecal_barrel_thickness" value="185.0*mm"/>
+  <constant name="Hcal_barrel_thickness" value="1337.5*mm"/>
   <constant name="BCal_PairMonitor" value="1"/>
   <!-- <constant name="BCal_SpanningPhi" value="320.*degree"/> -->
   <constant name="BCal_TubeIncomingRadius" value="15*mm"/>

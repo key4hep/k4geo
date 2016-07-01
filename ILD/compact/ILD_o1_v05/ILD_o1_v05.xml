@@ -232,14 +232,14 @@
 	<constant name="Ecal_Hcal_symmetry"   value="8"/>                             <!-- Fundamental -->
 
 	<constant name="Ecal_inner_radius"    value="TPC_outer_radius+Ecal_Tpc_gap"/> <!-- Derivative  -->
-	<constant name="Ecal_outer_radius"    value="2028.*mm"/>                      <!-- FixMe! Trap -->
+	<constant name="Ecal_outer_radius"    value="Ecal_inner_radius+Ecal_barrel_thickness"/> <!-- Derivative -->
 	<constant name="Ecal_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ"/>    <!-- Shared ILD  -->
 	<constant name="Ecal_symmetry"        value="Ecal_Hcal_symmetry"/>            <!-- Shared ILD  -->
         <constant name="EcalEndcap_outer_symmetry" value="Ecal_Hcal_symmetry"/>
         <constant name="EcalEndcap_inner_symmetry" value="4"/>
 
 	<constant name="Hcal_inner_radius"    value="Ecal_outer_radius+Hcal_Ecal_gap"/> <!-- Derivative  -->
-	<constant name="Hcal_outer_radius"    value="3395.46*mm"/>                      <!-- FixMe! Trap -->
+	<constant name="Hcal_outer_radius"    value="(Hcal_inner_radius+Hcal_barrel_thickness)/0.98078528105"/> <!-- Derivative -->
 	<constant name="Hcal_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ"/>      <!-- Shared ILD  -->
 	<constant name="Hcal_inner_symmetry"  value="Ecal_Hcal_symmetry"/>              <!-- Shared ILD  -->
 
