@@ -1,0 +1,50 @@
+<lccdd>
+
+<!-----------------------------------------------------------------------------------------------
+    Scintillator HCal Endcap based on the Barrel layer structure from HCalBarrel_o1_v03_00.xml
+    added by Dan Protopopescu (protopop@cern.ch) - July 1, 2016
+------------------------------------------------------------------------------------------------->
+
+
+<readouts>
+    <readout name="HCalEndcapHits">
+      <segmentation type="CartesianGridXY" grid_size_x="3.0*cm" grid_size_y="3.0*cm" />
+      <!-- <segmentation type="GlobalGridXY" gridSizeX="1.0*cm" gridSizeY="1.0*cm" /> -->
+      <id>system:5,side:2,module:8,stave:4,layer:9,submodule:4,x:32:-16,y:-16</id>
+      <!-- <id>system:6,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id> -->
+    </readout>
+</readouts>
+
+<detectors>
+<detector id="8" name="HCalEndcap" type="GenericCalEndcap_o1_v01" readout="HCalEndcapHits" vis="HCalEndcapVis" calorimeterType="HAD_ENDCAP" reflect="true">
+  <comment>Hadron Calorimeter Endcaps</comment>
+  <dimensions numsides="HCalEndcap_outer_symmetry" zmin="HCalEndcap_zmin" zmax="HCalEndcap_zmax" rmin="HCalEndcap_rmin" rmax="HCalEndcap_rmax"  nsides_inner="HCalEndcap_inner_symmetry" nsides_outer="HCalEndcap_outer_symmetry" />
+
+  <envelope vis="HCalEndcapVis">
+    <shape type="BooleanShape" operation="Subtraction" material="Air">
+      <shape type="PolyhedraRegular" numsides="HCalEndcap_outer_symmetry" rmin="HCalEndcap_rmin - env_safety" rmax="HCalEndcap_rmax + env_safety" dz="2*HCalEndcap_zmax + 2*env_safety" />
+      <shape type="PolyhedraRegular" numsides="HCalEndcap_outer_symmetry" rmin="0" rmax="HCalEndcap_rmax + 5*env_safety" dz="2*HCalEndcap_zmin - 2*env_safety"/>
+    </shape>
+    <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/HCalEndcap_outer_symmetry"/>
+  </envelope>
+
+  <layer repeat="45">
+        <slice material = "Steel235" thickness = "1.90*cm" />    <!-- Absorber -->
+        <slice material = "Air"      thickness = "0.20*cm" />
+        <slice material = "Steel235" thickness = "0.05*cm" />    <!-- Top plate -->
+        <slice material = "Kapton" thickness = "0.0115*cm" />    <!-- Polyimide foil -->
+        <slice material = "Copper" thickness = "0.0068*cm" />
+        <slice material = "PCB"    thickness = "0.1*cm" />       <!-- PCB made of FR4 -->
+        <slice material = "Polystyrole" thickness = "0.01*cm" /> <!-- Reflector foil -->
+        <slice material = "Polystyrene" thickness = "0.30*cm" sensitive="yes" limits="cal_limits" />
+        <slice material = "Polystyrole" thickness = "0.01*cm" /> <!-- Reflector foil -->
+        <slice material = "Steel235"    thickness = "0.05*cm" /> <!-- Bottom plate -->
+	<!--slice material = "Air"    thickness = "0.1*cm" /-->
+  </layer>
+  <!--layer repeat="1"-->
+        <!--slice material = "Steel235" thickness = "1.9*cm" /><!-- Terminator plate -->
+  <!--/layer-->
+</detector>
+</detectors>
+
+</lccdd>
