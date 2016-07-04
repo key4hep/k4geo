@@ -510,31 +510,31 @@
                 <shape type="Assembly"/>
            </envelope>
            <layer id="0" inner_r="InnerTracker_Endcap_radius_0" inner_z="InnerTracker_Endcap_z_0+1*cm" outer_r="405*mm" vis="SupportVis">
-	           <slice material="CarbonFiber" thickness="0.235/3.5447*cm" />
+	           <slice material="CarbonFiber" thickness="0.33/3.5447*cm" />
            </layer>
            <layer id="1" inner_r="InnerTracker_Endcap_radius_1" inner_z="InnerTracker_Endcap_z_1+1*cm" outer_r="555*mm" vis="SupportVis">
-	           <slice material="CarbonFiber" thickness="0.235/3.5447*cm" />
+	           <slice material="CarbonFiber" thickness="0.33/3.5447*cm" />
            </layer>
            <layer id="2" inner_r="InnerTracker_Endcap_radius_2" inner_z="InnerTracker_Endcap_z_2-1*cm" outer_r="555*mm" vis="SupportVis">
-	           <slice material="CarbonFiber" thickness="0.235/3.5447*cm" />
+	           <slice material="CarbonFiber" thickness="0.33/3.5447*cm" />
            </layer>
            <layer id="3" inner_r="InnerTracker_Endcap_radius_3" inner_z="InnerTracker_Endcap_z_3+1*cm" outer_r="555*mm" vis="SupportVis">
-	           <slice material="CarbonFiber" thickness="0.235/3.5447*cm" />
+	           <slice material="CarbonFiber" thickness="0.33/3.5447*cm" />
            </layer>
            <layer id="4" inner_r="InnerTracker_Endcap_radius_4" inner_z="InnerTracker_Endcap_z_4-1*cm" outer_r="555*mm" vis="SupportVis">
-	           <slice material="CarbonFiber" thickness="0.235/3.5447*cm" />
+	           <slice material="CarbonFiber" thickness="0.33/3.5447*cm" />
            </layer>
            <layer id="5" inner_r="InnerTracker_Endcap_radius_5" inner_z="InnerTracker_Endcap_z_5+1*cm" outer_r="555*mm" vis="SupportVis">
-	           <slice material="CarbonFiber" thickness="0.235/3.5447*cm" />
+	           <slice material="CarbonFiber" thickness="0.33/3.5447*cm" />
            </layer>   
            <layer id="6" inner_r="InnerTracker_Endcap_radius_6" inner_z="InnerTracker_Endcap_z_6-1*cm" outer_r="555*mm" vis="SupportVis">
-	           <slice material="CarbonFiber" thickness="0.235/3.5447*cm" />
+	           <slice material="CarbonFiber" thickness="0.33/3.5447*cm" />
            </layer>           
         </detector>
         
         
         <detector name="BeampipeShell" type="ConicalSupport_o1_v01" reflect="true" insideTrackingVolume="true">
-		  <envelope>
+        <envelope>
             <shape type="Assembly"/>
           </envelope>
             <section start="337*mm"  end="ConeBeamPipe_zmax"        rMin1="29.4*mm+5*mm"  rMin2="235.2*mm+5*mm" rMax1="33.4*mm+6*mm"           rMax2="ConeBeamPipe_rmax+6*mm" material="CarbonFiber" name="ConeSupport" vis="SupportVis"/>

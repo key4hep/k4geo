@@ -217,7 +217,7 @@
                 <shape type="Assembly"/>
             </envelope>
             <layer id="0" inner_r="OuterTracker_Barrel_radius_0+1*cm" outer_z="OuterTracker_Barrel_half_length" vis="SupportVis">
-                <slice material="CarbonFiber" thickness="0.182/3.5447*cm" />
+                <slice material="CarbonFiber" thickness="0.26/3.5447*cm" />
             </layer>
             <layer id="1" inner_r="OuterTracker_Barrel_radius_1+1*cm" outer_z="OuterTracker_Barrel_half_length" vis="SupportVis">
                 <slice material="CarbonFiber" thickness="0.125/3.5447*cm" />
@@ -233,16 +233,16 @@
                 <shape type="Assembly"/>
            </envelope>
            <layer id="0" inner_r="OuterTracker_inner_radius" inner_z="OuterTracker_Endcap_z_0+1*cm" outer_r="OuterTracker_Endcap_outer_radius" vis="SupportVis">
-	           <slice material="CarbonFiber" thickness="0.26/3.5447*cm" />
+	           <slice material="CarbonFiber" thickness="0.365/3.5447*cm" />
            </layer>
            <layer id="1" inner_r="OuterTracker_inner_radius" inner_z="OuterTracker_Endcap_z_1-1*cm" outer_r="OuterTracker_Endcap_outer_radius" vis="SupportVis">
-	           <slice material="CarbonFiber" thickness="0.26/3.5447*cm" />
+	           <slice material="CarbonFiber" thickness="0.365/3.5447*cm" />
            </layer>
            <layer id="2" inner_r="OuterTracker_inner_radius" inner_z="OuterTracker_Endcap_z_2+1*cm" outer_r="OuterTracker_Endcap_outer_radius" vis="SupportVis">
-	           <slice material="CarbonFiber" thickness="0.26/3.5447*cm" />
+	           <slice material="CarbonFiber" thickness="0.365/3.5447*cm" />
            </layer>
            <layer id="3" inner_r="OuterTracker_inner_radius" inner_z="OuterTracker_Endcap_z_3-1*cm" outer_r="OuterTracker_Endcap_outer_radius" vis="SupportVis">
-	           <slice material="CarbonFiber" thickness="0.26/3.5447*cm" />
+	           <slice material="CarbonFiber" thickness="0.365/3.5447*cm" />
            </layer>         
         </detector> 
         
