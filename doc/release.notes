@@ -1,4 +1,9 @@
 
+A.Sailer 05/07/2016
+
+  - DDSim: * If no random seed is defined we get a random random seed.
+           * new option random.enableEventSeed to calculate reproducible random seeds using the same method as the EventSeeder in Marlin
+
 A.Sailer 08/03/2016
 
   - DDSim: Add enableG4Gun and enableG4GPS flags to enable the Geant4 Gun or GeneralParticleSource
