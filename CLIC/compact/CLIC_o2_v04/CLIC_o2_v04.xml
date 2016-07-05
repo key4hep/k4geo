@@ -175,7 +175,7 @@
         <constant name="BPM_inner_radius" value="36*mm"/>
         <constant name="BPM_outer_radius" value="55*mm"/>
         <constant name="BPM_min_z" value="3790*mm"/>
-        <constant name="BPM_max_z" value="3880*mm"/>       
+        <constant name="BPM_max_z" value="3880*mm"/>        
         
         
         <constant name="tracker_region_zmax" value="OuterTracker_half_length"/>

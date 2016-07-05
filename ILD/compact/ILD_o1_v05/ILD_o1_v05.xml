@@ -413,10 +413,45 @@
     <detectors>
         <comment>Trackers</comment>
 
-
+	<include ref="Beampipe_o1_v01_01.xml"/>
+	
+	<include ref="ftd_simple_staggered_02.xml"/>
+	
+	<include ref="vxd07.xml"/>
+ 	
+	<include ref="sit_simple_planar_sensors_03.xml"/>
+	
+	<include ref="tpc10_01.xml"/>
+	
+	<include ref="set_simple_planar_sensors_01.xml"/>
+	
+        <comment>Calorimeters</comment>
 	
 	<include ref="SEcal04_Barrel.xml"/>
 
+	<include ref="SEcal04_Endcaps.xml"/>
+
+	<include ref="SEcal04_ECRing.xml"/>
+
+	<include ref="SHcalSc04_Barrel_v01.xml"/>
+
+	<include ref="SHcalSc04_Endcaps.xml"/>
+
+	<include ref="SHcalSc04_EndcapRing.xml"/>
+
+	<include ref="Yoke05_Barrel.xml"/>
+
+	<include ref="Yoke05_Endcaps.xml"/>
+
+	 <include ref="BeamCal08.xml"/>
+
+	<include ref="LumiCal.xml"/>
+
+	<include ref="LHCal.xml"/>
+
+	<include ref="coil03.xml"/>
+
+	<include ref="SServices00.xml"/>
 
       </detectors> 
 
@@ -484,10 +519,55 @@
  	 <id>system:5,module:3,stave:4,tower:3,layer:6,x:32:-16,y:-16</id>
  	</readout>
 
+	<readout name="BeamCalCollection">
+	  <!-- <segmentation type="CartesianGridXY" grid_size_x="BeamCal_cell_size" grid_size_y="BeamCal_cell_size"  grid_size_z="BeamCal_cell_size" /> -->
+	  
+	  <segmentation type="PolarGridRPhi2"
+			grid_r_values="20.00*mm 27.6565*mm 35.3029*mm 42.9494*mm 50.5959*mm 58.2424*mm 65.8888*mm 73.5353*mm 81.1818*mm 88.8282*mm 96.4747*mm 104.121*mm 111.768*mm 119.414*mm 127.061*mm 134.707*mm 142.354*mm 150.0*mm"
+			grid_phi_values="BCal_SpanningPhi/(3*8) BCal_SpanningPhi/(3*8) BCal_SpanningPhi/(4*8) BCal_SpanningPhi/(5*8) BCal_SpanningPhi/(5*8) BCal_SpanningPhi/(6*8) BCal_SpanningPhi/(7*8) BCal_SpanningPhi/(8*8) BCal_SpanningPhi/(8*8) BCal_SpanningPhi/(9*8) BCal_SpanningPhi/(10*8) BCal_SpanningPhi/(10*8) BCal_SpanningPhi/(11*8) BCal_SpanningPhi/(12*8) BCal_SpanningPhi/(12*8) BCal_SpanningPhi/(13*8) BCal_SpanningPhi/(14*8)"
+                        offset_phi="-180*degree+(360*degree-BCal_SpanningPhi)*0.5"
+	  		/>
+
+	  <id>system:8,barrel:3,layer:8,slice:5,r:32:16,phi:16</id>
+	</readout>
 	
+	<readout name="LumiCalCollection">
+	    <segmentation type="PolarGridRPhi"
+			  grid_size_r="(LumiCal_outer_radius-LumiCal_inner_radius)/64"
+			  grid_size_phi="360/48*degree"
+			  offset_r="LumiCal_inner_radius"
+			  />
+	    <id>system:8,barrel:3,layer:8,slice:8,r:32:-16,phi:-16</id>
+	</readout>
+
+	<readout name="LHCalCollection">
+	  <segmentation type="CartesianGridXY" grid_size_x="LHcal_cell_size" grid_size_y="LHcal_cell_size" offset_x="0*cm" />
+	  <id>system:8,barrel:3,layer:6,slice:5,x:-16,y:-16 </id>
+	</readout>
+
       </readouts>
 
-    
+      <plugins>
+	<plugin name="DD4hep_CaloFaceEndcapSurfacePlugin">
+          <argument value="EcalEndcap"/>
+	  <argument value="zpos=EcalEndcap_min_z"    />
+	  <argument value="radius=EcalEndcap_outer_radius"  />
+	  <argument value="phi0=0"    />
+	  <argument value="symmetry=EcalEndcap_symmetry"/>
+	  <argument value="systemID=ILDDetID_ECAL_ENDCAP"/>
+	  <!-- <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> --> 
+	</plugin>
+	<plugin name="DD4hep_CaloFaceBarrelSurfacePlugin">
+          <argument value="EcalBarrel"/>
+	  <argument value="length=2.*Ecal_half_length"    />
+	  <argument value="radius=Ecal_inner_radius"  />
+	  <argument value="phi0=0"    />
+	  <argument value="symmetry=Ecal_symmetry"/>
+	  <argument value="systemID=ILDDetID_ECAL"/>
+	  <!-- <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> --> 
+	</plugin>
+	<plugin name="InstallSurfaceManager"/>
+      </plugins>
 
 <fields>
   <field type="solenoid" name="GlobalSolenoid" inner_field="Field_nominal_value*tesla"
