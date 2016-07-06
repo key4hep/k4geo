@@ -256,7 +256,7 @@
 	<constant name="HcalEndcap_inner_radius"    value="Hcal_endcap_center_box_size/2.0"/>
 	<constant name="HcalEndcap_outer_radius"    value="Hcal_outer_radius"/>
 	<constant name="HcalEndcap_min_z"           value="Hcal_endcap_zmin"/>
-	<constant name="HcalEndcap_max_z"           value="HcalEndcap_min_z+1287.0*mm"/>
+	<constant name="HcalEndcap_max_z"           value="HcalEndcap_min_z+Hcal_endcap_thickness"/>
 	
 	<constant name="HcalEndcapRing_inner_radius"    value="EcalEndcap_outer_radius+Hcal_radial_ring_inner_gap"/>
 	<constant name="HcalEndcapRing_outer_radius"    value="Hcal_outer_radius*0.923879533"/>  <!-- cos(pi/8)   -->
