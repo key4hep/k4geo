@@ -227,21 +227,19 @@
 	<constant name="SET_outer_radius"    value="SET_inner_radius+ 0.99 * TPC_ECal_gap "/> 
 	<constant name="SET_half_length"     value="TPC_half_length"/> 
 
-	<!-- NOTE: All envelope parameters could be fundamental with value, when built alone.   -->
-	<!-- NOTE: The envelope parameters could be derivative or shared, when built together. -->
-	<constant name="Ecal_Hcal_symmetry"   value="8"/>                             <!-- Fundamental -->
+	<constant name="Ecal_Hcal_symmetry"   value="8"/>
 
-	<constant name="Ecal_inner_radius"    value="TPC_outer_radius+Ecal_Tpc_gap"/> <!-- Derivative  -->
-	<constant name="Ecal_outer_radius"    value="Ecal_inner_radius+Ecal_barrel_thickness"/> <!-- Derivative -->
-	<constant name="Ecal_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ"/>    <!-- Shared ILD  -->
-	<constant name="Ecal_symmetry"        value="Ecal_Hcal_symmetry"/>            <!-- Shared ILD  -->
+	<constant name="Ecal_inner_radius"    value="TPC_outer_radius+Ecal_Tpc_gap"/>
+	<constant name="Ecal_outer_radius"    value="Ecal_inner_radius+Ecal_barrel_thickness"/>
+	<constant name="Ecal_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ"/>
+	<constant name="Ecal_symmetry"        value="Ecal_Hcal_symmetry"/>
         <constant name="EcalEndcap_outer_symmetry" value="Ecal_Hcal_symmetry"/>
         <constant name="EcalEndcap_inner_symmetry" value="4"/>
 
-	<constant name="Hcal_inner_radius"    value="Ecal_outer_radius+Hcal_Ecal_gap"/> <!-- Derivative  -->
-	<constant name="Hcal_outer_radius"    value="(Hcal_inner_radius+Hcal_barrel_thickness)/0.98078528105"/> <!-- Derivative -->
-	<constant name="Hcal_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ"/>      <!-- Shared ILD  -->
-	<constant name="Hcal_inner_symmetry"  value="Ecal_Hcal_symmetry"/>              <!-- Shared ILD  -->
+	<constant name="Hcal_inner_radius"    value="Ecal_outer_radius+Hcal_Ecal_gap"/>
+	<constant name="Hcal_outer_radius"    value="(Hcal_inner_radius+Hcal_barrel_thickness)/0.98078528105"/> <!-- cos(pi/16)   -->
+	<constant name="Hcal_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ"/>
+	<constant name="Hcal_inner_symmetry"  value="Ecal_Hcal_symmetry"/>
 
 	<!-- Should we define every sub-detector envelope parameters explicity -->
 	<constant name="Yoke_inner_radius"    value="4424.0*mm"/>      <!-- explicity Fundamental -->
@@ -249,39 +247,39 @@
 	<constant name="Yoke_half_length"     value="4047.0*mm"/>      <!-- explicity Fundamental -->
 	<constant name="Yoke_symmetry"        value="12"/>             <!-- explicity Fundamental -->
 
-	<constant name="EcalEndcap_inner_radius"    value="Ecal_endcap_center_box_size/2.0"/> <!-- Fundamental -->
+	<constant name="EcalEndcap_inner_radius"    value="Ecal_endcap_center_box_size/2.0"/>
 	<constant name="EcalEndcap_outer_radius"    value="Ecal_outer_radius+Ecal_endcap_extra_size"/>
-	<constant name="EcalEndcap_min_z"           value="Ecal_endcap_zmin"/>            <!-- Shared ILD  -->
+	<constant name="EcalEndcap_min_z"           value="Ecal_endcap_zmin"/>
 	<constant name="EcalEndcap_max_z"           value="EcalEndcap_min_z+(Ecal_outer_radius-Ecal_inner_radius)"/>
-	<constant name="EcalEndcap_symmetry"        value="Ecal_Hcal_symmetry"/>          <!-- Shared ILD  -->
+	<constant name="EcalEndcap_symmetry"        value="Ecal_Hcal_symmetry"/>
 
-	<constant name="HcalEndcap_inner_radius"    value="Hcal_endcap_center_box_size/2.0"/><!-- Fundamental -->
-	<constant name="HcalEndcap_outer_radius"    value="Hcal_outer_radius"/>              <!-- Shared ILD  -->
-	<constant name="HcalEndcap_min_z"           value="Hcal_endcap_zmin"/>               <!-- Fundamental -->
-	<constant name="HcalEndcap_max_z"           value="HcalEndcap_min_z+1287.0*mm"/>     <!-- FixMe! Trap SHcalSc04_Endcaps.xml-->
+	<constant name="HcalEndcap_inner_radius"    value="Hcal_endcap_center_box_size/2.0"/>
+	<constant name="HcalEndcap_outer_radius"    value="Hcal_outer_radius"/>
+	<constant name="HcalEndcap_min_z"           value="Hcal_endcap_zmin"/>
+	<constant name="HcalEndcap_max_z"           value="HcalEndcap_min_z+1287.0*mm"/>
 	
 	<constant name="HcalEndcapRing_inner_radius"    value="EcalEndcap_outer_radius+Hcal_radial_ring_inner_gap"/>
 	<constant name="HcalEndcapRing_outer_radius"    value="Hcal_outer_radius*0.923879533"/>  <!-- cos(pi/8)   -->
-	<constant name="HcalEndcapRing_min_z"           value="EcalEndcap_min_z"/>               <!-- Shared ILD  -->
-	<constant name="HcalEndcapRing_max_z"           value="EcalEndcap_max_z"/>               <!-- Shared ILD  -->
-	<constant name="HcalEndcapRing_symmetry"        value="Ecal_Hcal_symmetry"/>             <!-- Shared ILD  -->
+	<constant name="HcalEndcapRing_min_z"           value="EcalEndcap_min_z"/>
+	<constant name="HcalEndcapRing_max_z"           value="EcalEndcap_max_z"/>
+	<constant name="HcalEndcapRing_symmetry"        value="Ecal_Hcal_symmetry"/>
 	
 	<!-- Yoke05_Endcaps geometry driver include Yoke endcap plug -->
-	<constant name="YokeEndcap_inner_radius"    value="Yoke_endcap_inner_radius"/>           <!-- Fundamental -->
-	<constant name="YokeEndcap_outer_radius"    value="Yoke_outer_radius"/>                  <!-- Shared ILD  -->
-	<constant name="YokeEndcap_min_z"           value="Yoke_Z_start_endcaps"/>               <!-- FixMe! Trap Coil -->
+	<constant name="YokeEndcap_inner_radius"    value="Yoke_endcap_inner_radius"/>
+	<constant name="YokeEndcap_outer_radius"    value="Yoke_outer_radius"/>
+	<constant name="YokeEndcap_min_z"           value="Yoke_Z_start_endcaps"/>
 	<constant name="YokeEndcap_max_z"           value="YokeEndcap_min_z+(Yoke_outer_radius-Yoke_inner_radius)"/>
-	<constant name="YokeEndcap_symmetry"        value="Yoke_symmetry"/>                      <!-- Shared ILD  -->
+	<constant name="YokeEndcap_symmetry"        value="Yoke_symmetry"/>
 	<constant name="YokeEndcapPlug_inner_radius"    value="YokeEndcap_inner_radius"/>
 	<constant name="YokeEndcapPlug_outer_radius"    value="Hcal_outer_radius"/>
 	<constant name="YokeEndcapPlug_min_z"           value="3981.5*mm"/> <!-- FixMe! Trap. and Mokka hardcode number -->
 	<constant name="YokeEndcapPlug_max_z"           value="YokeEndcap_min_z"/>
-	<constant name="YokeEndcapPlug_symmetry"        value="Yoke_symmetry"/>                  <!-- Shared ILD  -->
+	<constant name="YokeEndcapPlug_symmetry"        value="Yoke_symmetry"/>
 
 	<constant name="EcalEndcapRing_inner_radius"    value="Lcal_outer_radius + Ecal_Lcal_ring_gap"/>
 	<constant name="EcalEndcapRing_outer_radius"    value="Ecal_endcap_center_box_size/2.0-Ecal_EC_Ring_gap"/>
-	<constant name="EcalEndcapRing_min_z"           value="EcalEndcap_min_z"/>               <!-- Shared ILD  -->
-	<constant name="EcalEndcapRing_max_z"           value="EcalEndcap_max_z"/>               <!-- Shared ILD  -->
+	<constant name="EcalEndcapRing_min_z"           value="EcalEndcap_min_z"/>
+	<constant name="EcalEndcapRing_max_z"           value="EcalEndcap_max_z"/>
 
 	<!-- forward calorimeter -->
 	<constant name="COS_halfCrossingAngle"         value="0.999976"/>
