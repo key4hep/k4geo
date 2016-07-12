@@ -40,7 +40,7 @@
         <vis name="OuterTrackerLayerVis"   alpha="1.0" r="1.0" g="1.0" b="0.6" showDaughters="true" visible="true"/>
         <vis name="OuterTrackerModuleVis"  alpha="0.1" r="0.0" g="1.0" b="0.6" showDaughters="false" visible="true"/>
         <vis name="OuterTrackerForwardVis" alpha="1.0" r="0.8" g="0.1" b="0.1" showDaughters="false" visible="true"/>
-        <vis name="InterlinkVis" alpha="1.0" r="0.078" g="0.12" b="0.59" showDaughters="true" visible="true"/>        
+        <vis name="OuterTrackerInterlinkVis" alpha="1.0" r="0.078" g="0.12" b="0.59" showDaughters="true" visible="true"/>        
     </display>
     
     <!--  Definition of the readout segmentation/definition  -->
@@ -245,7 +245,7 @@
            <layer id="3" inner_r="OuterTracker_inner_radius" inner_z="OuterTracker_Endcap_z_3-1*cm" outer_r="OuterTracker_Endcap_outer_radius" vis="SupportVis">
 	           <slice material="CarbonFiber" thickness="0.365/3.5447*cm" />
            </layer>
-           <layer id="4" inner_r="OuterTracker_inner_radius" inner_z="OuterTracker_Barrel_half_length+2*cm" outer_r="OuterTracker_outer_radius" vis="InterlinkVis">
+           <layer id="4" inner_r="OuterTracker_inner_radius" inner_z="OuterTracker_Barrel_half_length+2*cm" outer_r="OuterTracker_outer_radius" vis="OuterTrackerInterlinkVis">
 	           <slice material="CarbonFiber" thickness="0.5/3.5447*cm" />
            </layer>                    
         </detector> 
