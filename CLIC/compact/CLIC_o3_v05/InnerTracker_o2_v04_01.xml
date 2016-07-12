@@ -64,7 +64,8 @@
             <composite name="InnerTrackerBarrel"/>
             <composite name="InnerTrackerEndcap"/>
             <composite name="InnerTrackerBarrelSupport"/>
-            <composite name="InnerTrackerEndcapSupport"/>            
+            <composite name="InnerTrackerEndcapSupport"/>       
+            <composite name="InnerTrackerInterlink"/>       
             <composite name="BeampipeShell"/>                        
         </detector>
     </detectors>
@@ -76,8 +77,7 @@
         <vis name="InnerTrackerForwardVis" alpha="1.0" r="0.8" g="0.1" b="0.1" showDaughters="false" visible="true"/>
         <vis name="RedVis" alpha="1.0" r="1" g="0" b="0" showDaughters="true" visible="true"/>
         <vis name="BlueVis" alpha="1.0" r="0" g="0" b="1" showDaughters="true" visible="true"/>
-
-        
+        <vis name="InterlinkVis" alpha="1.0" r="0.078" g="0.12" b="0.59" showDaughters="true" visible="true"/>
     </display>
     
     <!--  Definition of the readout segmentation/definition  -->
@@ -498,10 +498,9 @@
             <layer id="3" inner_r="InnerTracker_Barrel_radius_2+0.5*cm" outer_z="InnerTracker_Barrel_half_length_2" vis="SupportVis">
                 <slice material="CarbonFiber" thickness="0.17/3.5447*cm" />
             </layer>
-	    <layer id="4" inner_r="InnerTracker_outer_radius-1*cm" outer_z="InnerTracker_half_length" vis="SupportVis">
-		<slice material="CarbonFiber" thickness="1.15/3.5447*cm" />
+	        <layer id="4" inner_r="InnerTracker_outer_radius-1*cm" outer_z="InnerTracker_half_length" vis="SupportVis">
+				<slice material="CarbonFiber" thickness="1.15/3.5447*cm" />
             </layer>
-	    
         </detector>
         
 
@@ -529,12 +528,25 @@
            </layer>   
            <layer id="6" inner_r="InnerTracker_Endcap_radius_6" inner_z="InnerTracker_Endcap_z_6-1*cm" outer_r="555*mm" vis="SupportVis">
 	           <slice material="CarbonFiber" thickness="0.33/3.5447*cm" />
-           </layer>           
+           </layer>
+           <layer id="7" inner_r="InnerTracker_Barrel_radius_0" inner_z="InnerTracker_Barrel_half_length_1+2*cm" outer_r="InnerTracker_Barrel_radius_2-2*cm" vis="InterlinkVis">
+	           <slice material="CarbonFiber" thickness="0.3/3.5447*cm" />
+           </layer>
+           <layer id="8" inner_r="InnerTracker_Barrel_radius_2-2*cm+0.3/3.5447*cm" inner_z="InnerTracker_Barrel_half_length_2+2*cm" outer_r="InnerTracker_outer_radius-1*cm" vis="InterlinkVis">
+	           <slice material="CarbonFiber" thickness="0.3/3.5447*cm" />
+           </layer>                                           
         </detector>
+        
+        <detector name="InnerTrackerInterlink" type="ConicalSupport_o1_v01" reflect="true" insideTrackingVolume="true">
+          <envelope>
+            <shape type="Assembly"/>
+          </envelope>
+           <section start="InnerTracker_Barrel_half_length_1+2*cm"  end="InnerTracker_Barrel_half_length_2+2*cm"        rMin1="InnerTracker_Barrel_radius_2-2*cm"  rMin2="InnerTracker_Barrel_radius_2-2*cm" rMax1="InnerTracker_Barrel_radius_2-2*cm+0.3/3.5447*cm"           rMax2="InnerTracker_Barrel_radius_2-2*cm+0.3/3.5447*cm" material="CarbonFiber" name="ConeSupport" vis="InterlinkVis"/>
+        </detector>        
         
         
         <detector name="BeampipeShell" type="ConicalSupport_o1_v01" reflect="true" insideTrackingVolume="true">
-        <envelope>
+          <envelope>
             <shape type="Assembly"/>
           </envelope>
             <section start="337*mm"  end="ConeBeamPipe_zmax"        rMin1="29.4*mm+5*mm"  rMin2="235.2*mm+5*mm" rMax1="33.4*mm+6*mm"           rMax2="ConeBeamPipe_rmax+6*mm" material="CarbonFiber" name="ConeSupport" vis="SupportVis"/>
