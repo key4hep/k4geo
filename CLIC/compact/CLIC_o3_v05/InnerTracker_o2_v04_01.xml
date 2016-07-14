@@ -83,10 +83,10 @@
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
         <readout name="InnerTrackerBarrelCollection">
-            <id>system:5,side:-2,layer:9,module:8,sensor:8,barrel:3</id>
+            <id>system:5,side:-2,layer:6,module:8,sensor:8,barrel:3</id>
         </readout>
         <readout name="InnerTrackerEndcapCollection">
-            <id>system:5,side:-2,layer:9,module:8,sensor:8,barrel:3</id>
+            <id>system:5,side:-2,layer:6,module:8,sensor:8,barrel:3</id>
         </readout>
     </readouts>
     
@@ -498,7 +498,7 @@
             <layer id="3" inner_r="InnerTracker_Barrel_radius_2+0.5*cm" outer_z="InnerTracker_Barrel_half_length_2" vis="SupportVis">
                 <slice material="CarbonFiber" thickness="0.17/3.5447*cm" />
             </layer>
-	        <layer id="4" inner_r="InnerTracker_outer_radius-1*cm" outer_z="InnerTracker_half_length" vis="SupportVis">
+	        <layer id="4" inner_r="InnerTracker_outer_radius-1*cm" outer_z="InnerTracker_half_length" vis="InterlinkVis">
 				<slice material="CarbonFiber" thickness="1.15/3.5447*cm" />
             </layer>
         </detector>
