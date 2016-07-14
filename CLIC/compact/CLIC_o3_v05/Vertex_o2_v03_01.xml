@@ -65,10 +65,10 @@
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
         <readout name="VertexBarrelCollection">
-            <id>system:5,side:-2,layer:9,module:8,sensor:8,barrel:3</id>
+            <id>system:5,side:-2,layer:6,module:8,sensor:8,barrel:3</id>
         </readout>
         <readout name="VertexEndcapCollection">
-            <id>system:5,side:-2,layer:9,module:8,sensor:8,barrel:3</id>
+            <id>system:5,side:-2,layer:6,module:8,sensor:8,barrel:3</id>
         </readout>
     </readouts>
     
