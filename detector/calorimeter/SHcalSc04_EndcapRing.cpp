@@ -122,7 +122,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   double      Ecal_endcap_zmin                 = lcdd.constant<double>("Ecal_endcap_zmin");
   //double      Hcal_endcap_radiator_thickness   = lcdd.constant<double>("Hcal_endcap_radiator_thickness");
-  double      Hcal_radial_ring_inner_gap       = lcdd.constant<double>("Hcal_radial_ring_inner_gap");
+  //double      Hcal_radial_ring_inner_gap       = lcdd.constant<double>("Hcal_radial_ring_inner_gap");
   double      Hcal_endcap_cables_gap           = lcdd.constant<double>("Hcal_endcap_cables_gap");
   double      Hcal_endcap_ecal_gap             = lcdd.constant<double>("Hcal_endcap_ecal_gap");
 
@@ -135,7 +135,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   //TODO: thinking about how to pass the updated value at runtime from other inner drivers? 
   double      Ecal_endcap_zmax                 = 263.5; //cm //= lcdd.constant<double>("Ecal_endcap_zmax");
-  double      Ecal_endcap_outer_radius         = 208.88;//cm //= lcdd.constant<double>("Ecal_endcap_outer_radius");
+  double      HcalEndcapRing_inner_radius      = lcdd.constant<int>("HcalEndcapRing_inner_radius");
   //double      Hcal_cells_size                  = lcdd.constant<double>("Hcal_cells_size");
 
 //====================================================================
@@ -231,8 +231,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   pDz = (stop_z - start_z) / 2.;
 
-  pRMin = Ecal_endcap_outer_radius
-    + Hcal_radial_ring_inner_gap;
+  // Done in compact file
+  //pRMin = Ecal_endcap_outer_radius
+  //  + Hcal_radial_ring_inner_gap;
+
+  // now directly read from compact file
+  pRMin =HcalEndcapRing_inner_radius;
 
   //double zPlane[2];
   //zPlane[0]=-pDz;
