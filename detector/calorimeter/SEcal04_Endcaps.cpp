@@ -482,8 +482,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 		  std::cout<<" EcalEndcaps[1]==>caloLayer.inner_thickness + caloLayer.outer_thickness: "
 			   << caloLayer.inner_thickness + caloLayer.outer_thickness <<std::endl;
 #endif
-#endif
 		}
+#endif
 		nRadiationLengths   = 0. ;
 		nInteractionLengths = 0. ;
 		thickness_sum       = 0. ;	    

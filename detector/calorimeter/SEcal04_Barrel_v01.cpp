@@ -469,8 +469,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    std::cout<<" EcalBarrel[1]==>caloLayer.inner_thickness + caloLayer.outer_thickness: "
 		     << caloLayer.inner_thickness + caloLayer.outer_thickness <<std::endl;
 #endif
-#endif
 	    }
+#endif
 	    // Init for inner
 	    nRadiationLengths   = 0. ;
 	    nInteractionLengths = 0. ;
