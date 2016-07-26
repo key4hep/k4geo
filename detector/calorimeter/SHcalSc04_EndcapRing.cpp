@@ -31,6 +31,7 @@
    Shaojun Lu:  Ported from Mokka SHcalSc04 EndcapRing part. Read the constants from XML
                 instead of the DB. Then build the EndcapRing in the same way with DD4hep
 		construct.
+   Shaojun Lu:  Adapt to the DD4hep envelope.
  */
 
 #include "DD4hep/DetFactoryHelper.h"
@@ -64,7 +65,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   int           det_id    = x_det.id();
   xml_comp_t    x_staves  = x_det.staves();
   DetElement    sdet      (det_name,det_id);
-  Volume        motherVol = lcdd.pickMotherVolume(sdet);
 
 
   // --- create an envelope volume and position it into the world ---------------------
@@ -84,7 +84,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   Readout readout = sens.readout();
   Segmentation seg = readout.segmentation();
   
-  std::vector<double> cellSizeVector = seg.segmentation()->cellDimensions(0); //Assume uniform cell sizes, provide dummy cellID
+  std::vector<double> cellSizeVector = seg.segmentation()->cellDimensions(0);
   double cell_sizeX      = cellSizeVector[0];
   double cell_sizeY      = cellSizeVector[1];
 
@@ -103,41 +103,18 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   // The way to read constant from XML/LCDD file.
   double      Hcal_radiator_thickness          = lcdd.constant<double>("Hcal_radiator_thickness");
   double      Hcal_chamber_thickness           = lcdd.constant<double>("Hcal_chamber_thickness");
-  double      Hcal_inner_radius                = lcdd.constant<double>("Hcal_inner_radius");
   double      Hcal_back_plate_thickness        = lcdd.constant<double>("Hcal_back_plate_thickness");
   double      Hcal_lateral_plate_thickness     = lcdd.constant<double>("Hcal_lateral_structure_thickness");
   double      Hcal_stave_gaps                  = lcdd.constant<double>("Hcal_stave_gaps");
-  double      Hcal_modules_gap                 = lcdd.constant<double>("Hcal_modules_gap"); 
-  double      TPC_Ecal_Hcal_barrel_halfZ       = lcdd.constant<double>("TPC_Ecal_Hcal_barrel_halfZ"); 
-  //unused:  double      Hcal_middle_stave_gaps           = lcdd.constant<double>("Hcal_middle_stave_gaps");
-  //unused:  double      Hcal_layer_air_gap               = lcdd.constant<double>("Hcal_layer_air_gap");
-
-  double      Hcal_module_radius               = lcdd.constant<double>("Hcal_outer_radius");
 
   int         Hcal_nlayers                     = lcdd.constant<int>("Hcal_nlayers");
-
-  //double      Hcal_inner_radius                = lcdd.constant<double>("HcalBarrel_rmin");
-  //double      Hcal_outer_radius                = lcdd.constant<double>("Hcal_outer_radius");
-  //double      Hcal_Barrel_rotation             = lcdd.constant<double>("Hcal_Barrel_rotation");
-
-  double      Ecal_endcap_zmin                 = lcdd.constant<double>("Ecal_endcap_zmin");
-  //double      Hcal_endcap_radiator_thickness   = lcdd.constant<double>("Hcal_endcap_radiator_thickness");
-  //double      Hcal_radial_ring_inner_gap       = lcdd.constant<double>("Hcal_radial_ring_inner_gap");
-  double      Hcal_endcap_cables_gap           = lcdd.constant<double>("Hcal_endcap_cables_gap");
-  double      Hcal_endcap_ecal_gap             = lcdd.constant<double>("Hcal_endcap_ecal_gap");
-
-  //double      Hcal_Cu_thickness                = lcdd.constant<double>("Hcal_Cu_thickness");
-  //double      Hcal_PCB_thickness               = lcdd.constant<double>("Hcal_PCB_thickness");
-
   int         Hcal_endcap_nlayers              = lcdd.constant<int>("Hcal_endcap_nlayers");
 
-  //unused:  int         Hcal_ring                        = lcdd.constant<int>("Hcal_ring");
-
-  //TODO: thinking about how to pass the updated value at runtime from other inner drivers? 
-  double      Ecal_endcap_zmax                 = 263.5; //cm //= lcdd.constant<double>("Ecal_endcap_zmax");
-  double      HcalEndcapRing_inner_radius      = lcdd.constant<int>("HcalEndcapRing_inner_radius");
-  //double      Hcal_cells_size                  = lcdd.constant<double>("Hcal_cells_size");
-
+  double      HcalEndcapRing_inner_radius      = lcdd.constant<double>("HcalEndcapRing_inner_radius");
+  double      HcalEndcapRing_outer_radius      = lcdd.constant<double>("HcalEndcapRing_outer_radius");
+  double      HcalEndcapRing_min_z             = lcdd.constant<double>("HcalEndcapRing_min_z");
+  double      HcalEndcapRing_max_z             = lcdd.constant<double>("HcalEndcapRing_max_z");
+  int         HcalEndcapRing_symmetry          = lcdd.constant<int>("HcalEndcapRing_symmetry");
 //====================================================================
 //
 // general calculated parameters
@@ -146,54 +123,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   double Hcal_total_dim_y   = Hcal_nlayers * (Hcal_radiator_thickness + Hcal_chamber_thickness) 
                             + Hcal_back_plate_thickness;
-
-  
-  // Moved the calculation into ILD_o1_v05.xml
-  // double Hcal_module_radius = Hcal_inner_radius /  cos(M_PI/8.)
-  //   + ( Hcal_radiator_thickness + Hcal_chamber_thickness ) * Hcal_nlayers
-  //   + Hcal_back_plate_thickness;
-  // std::cout << " *********** hcal outer radius : " << Hcal_module_radius  << std::endl ;
-
-
-  double Hcal_y_dim1_for_x  = Hcal_module_radius*cos(M_PI/8.) - Hcal_inner_radius;
-  //unused:  double Hcal_bottom_dim_x  = 2.*Hcal_inner_radius*tan(M_PI/8.)- Hcal_stave_gaps;
-  double Hcal_normal_dim_z  = (2 * TPC_Ecal_Hcal_barrel_halfZ - Hcal_modules_gap)/2.;
-
- //only the middle has the steel plate.
-  //unused:  double Hcal_regular_chamber_dim_z = Hcal_normal_dim_z - Hcal_lateral_plate_thickness;
-
-
-  //double totalThickness_Hcal_Barrel       = (Hcal_radiator_thickness + Hcal_chamber_thickness) 
-  //                                                 * HcalBarrel_layers + Hcal_back_plate_thickness;
-  //double Hcal_module_radius               = Hcal_inner_radius + totalThickness_Hcal_Barrel;
-
-  //double Hcal_cell_dim_x            = Hcal_cells_size;
-  //double Hcal_cell_dim_z            = Hcal_regular_chamber_dim_z / floor (Hcal_regular_chamber_dim_z/Hcal_cell_dim_x);
-  //double Hcal_digi_cell_dim_x       = Hcal_digi_cells_size;
-  //double Hcal_digi_cell_dim_z       = Hcal_regular_chamber_dim_z / floor (Hcal_regular_chamber_dim_z/Hcal_digi_cell_dim_x);
-
- 
-
-  // just two modules per stave
-  //double Hcal_normal_dim_z = (2 * TPC_Ecal_Hcal_barrel_halfZ - Hcal_modules_gap)/2.;
-  double Hcal_start_z =  Hcal_normal_dim_z + Hcal_modules_gap / 2. + Hcal_endcap_cables_gap;
-
-  cout<<"    HCAL endcap rings: Hcal_start_z:  "<< Hcal_start_z <<endl<<endl;
-
-  // Hcal_start_z is the Hcal Endcap boundary coming from the IP
-  // Test Hcal_start_z against Ecal_endcap_zmax + Hcal_endcap_ecal_gap
-  // to avoid overlap problems with Ecal if scaled.
-  //
-  double Hcal_endcap_rmax   = Hcal_inner_radius + Hcal_y_dim1_for_x;
-
-  if( Hcal_start_z < Ecal_endcap_zmax + Hcal_endcap_ecal_gap )
-    Hcal_start_z = Ecal_endcap_zmax + Hcal_endcap_ecal_gap;
-
-  cout<<"    HCAL endcap rings: Hcal_start_z:  "<< Hcal_start_z <<endl<<endl;
-
-
-
-
 
 
 // ========= Create Hcal end cap ring   ====================================
@@ -206,23 +135,23 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 //~              EndcapRings                          ~
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  // old parameters from database
   double pRMax, pDz, pRMin;
-  pRMax = Hcal_endcap_rmax;
+  pRMax = HcalEndcapRing_outer_radius;
 
-  // The rings start from inner Ecal endcap boundary
-  // and finish at inner Hcal endcap one.
   double start_z, stop_z;
-  start_z = Ecal_endcap_zmin;
-  double SpaceForLayers = Hcal_start_z - Hcal_endcap_ecal_gap
-    - Ecal_endcap_zmin - Hcal_back_plate_thickness;
+  start_z = HcalEndcapRing_min_z;
+
+  double SpaceForLayers = HcalEndcapRing_max_z -HcalEndcapRing_min_z
+    - Hcal_back_plate_thickness;
 
   int MaxNumberOfLayers = (int) (SpaceForLayers /
-				     (Hcal_chamber_thickness + Hcal_radiator_thickness));
+				 (Hcal_chamber_thickness + Hcal_radiator_thickness));
 
 
-  cout<<"    HCAL endcap rings: Hcal_start_z:  "<< Hcal_start_z <<endl;
-  cout<<"    HCAL endcap rings: Hcal_endcap_rmax: "<< Hcal_endcap_rmax <<endl;
+  cout<<"    HCAL endcap rings: HcalEndcapRing_inner_radius: "<< HcalEndcapRing_inner_radius <<endl;
+  cout<<"    HCAL endcap rings: HcalEndcapRing_outer_radius: "<< HcalEndcapRing_outer_radius <<endl;
+  cout<<"    HCAL endcap rings: HcalEndcapRing_min_z:  "<< HcalEndcapRing_min_z <<endl;
+  cout<<"    HCAL endcap rings: HcalEndcapRing_max_z:  "<< HcalEndcapRing_max_z <<endl;
   cout<<"    HCAL endcap rings: SpaceForLayers:  "<< SpaceForLayers <<endl;
   cout<<"    HCAL endcap rings will have "<< MaxNumberOfLayers << " layers."<<endl;
 
@@ -231,26 +160,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   pDz = (stop_z - start_z) / 2.;
 
-  // Done in compact file
-  //pRMin = Ecal_endcap_outer_radius
-  //  + Hcal_radial_ring_inner_gap;
-
-  // now directly read from compact file
   pRMin =HcalEndcapRing_inner_radius;
-
-  //double zPlane[2];
-  //zPlane[0]=-pDz;
-  //zPlane[1]=-zPlane[0];
 
   double zlen = pDz*2.;
 
-  //double rInner[2],rOuter[2];
-  //rInner[0]=rInner[1]=pRMin;
-  //rOuter[0]=rOuter[1]=pRMax;
-
   double rmin = pRMin;
   double rmax = pRMax;
-  int numSide = 8;
+  int numSide = HcalEndcapRing_symmetry;
 
   PolyhedraRegular HcalEndCapRingSolid( numSide, M_PI/8., rmin, rmax,  zlen);
 
@@ -279,35 +195,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   double lpRMax, lpDz, lpRMin;
 
-  //lpRMax = rmax * cos(M_PI/numSide) - Hcal_lateral_plate_thickness;
   lpRMax = rmax - Hcal_lateral_plate_thickness;
 
   lpDz = Hcal_chamber_thickness / 2.;
 
-  //lpRMin = rmin * cos(M_PI/numSide) + Hcal_lateral_plate_thickness;
   lpRMin = rmin + Hcal_lateral_plate_thickness;
 
   // G4Polyhedra Envelope parameters
   double phiStart = M_PI/8.;
-  //double phiTotal = 2.*pi;
-  //int numSide     = motherPolyhedraParameters->numSide;
-  //int numZPlanes  = 2;
-
-  //double zPlane[2];
-  //zPlane[0] = - pDz;
-  //zPlane[1] = - zPlane[0];
-
-  //double rInner[2],rOuter[2];
-  //rInner[0] = rInner[1] = pRMin;
-  //rOuter[0] = rOuter[1] = pRMax;
-
-  /*
-#ifdef SHCALSC04_DEBUG
-  if(rings==true){
-    G4cout<<"    EndcapRingsSensitive: Rinner="<<pRMin<<"mm Router="<<pRMax<<G4endl<<G4endl;
-  }
-#endif
-  */
 
   double lzlen = lpDz*2.;
 
@@ -395,14 +290,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    
 	    // set up the translation and rotation for the intersection process 
 	    // this happens in the mother volume coordinate system, so a coordinate transformation is needed
-	    Position IntersectXYZtrans((pRMax + (Hcal_stave_gaps/2.)), 
-				       (pRMax + (Hcal_stave_gaps/2.)),
-				       (Hcal_total_dim_y/2.));
+	    Position sIntersectXYZtrans((pRMax + (Hcal_stave_gaps/2.)), 
+					(pRMax + (Hcal_stave_gaps/2.)),
+					(Hcal_total_dim_y/2.));
 	    
-	    RotationZYX rot(0.,0.,0.);
-	    Transform3D tran3D(rot,IntersectXYZtrans);
+	    RotationZYX srot(0.,0.,0.);
+	    Transform3D stran3D(srot,sIntersectXYZtrans);
 	    // intersect the octagonal layer with a square to get only one quadrant
-	    IntersectionSolid  slice_Solid( slicePolyhedraRegularSolid, sliceIntersectionStaveBox, tran3D); 
+	    IntersectionSolid  slice_Solid( slicePolyhedraRegularSolid, sliceIntersectionStaveBox, stran3D); 
 	    
 	    //Volume HcalEndCapRingStaveLogical("HcalEndCapRingStaveLogical",HcalEndCapRingStaveSolid, air);
 	    
@@ -463,13 +358,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  double angle_module = M_PI/2. * ( stave_id );
 	  
 	  Position l_pos(0., 0., Zoff);
-	  RotationZ rotz(angle_module);
-	  Position l_new = rotz*l_pos;  
+	  RotationZ lrotz(angle_module);
+	  Position l_new = lrotz*l_pos;  
 	  
-	  RotationZYX rot(angle_module,0,0);
-	  Transform3D tran3D(rot,l_new);
+	  RotationZYX lrot(angle_module,0,0);
+	  Transform3D ltran3D(lrot,l_new);
 	      
-	  PlacedVolume layer_phv = HcalEndCapRingLogical.placeVolume(HcalEndCapRingStaveLogical,tran3D);
+	  PlacedVolume layer_phv = HcalEndCapRingLogical.placeVolume(HcalEndCapRingStaveLogical,ltran3D);
 	  layer_phv.addPhysVolID("tower", EC_Number_of_towers);
 	  layer_phv.addPhysVolID("stave", stave_id);
 	  layer.setPlacement(layer_phv);
@@ -479,7 +374,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  if ( caloData->layers.size() < (unsigned int)number_of_chambers ) {
 
 	    // distance to the surface of the radiator.
-	    caloLayer.distance = Ecal_endcap_zmin + (layer_id - 1)* (layer_thickness + Hcal_radiator_thickness) ;
+	    caloLayer.distance = HcalEndcapRing_min_z + (layer_id - 1)* (layer_thickness + Hcal_radiator_thickness) ;
 	    caloLayer.thickness = caloLayer.inner_thickness +caloLayer.outer_thickness ;
 	    caloLayer.absorberThickness = Hcal_radiator_thickness ;
 	    
@@ -507,7 +402,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   // Place Hcal Endcap Ring module into the assembly envelope volume
   //====================================================================
   
-  double endcap_z_offset = Ecal_endcap_zmin + pDz;
+  double endcap_z_offset = HcalEndcapRing_min_z + pDz;
   
   for(int module_num=0;module_num<2;module_num++) {
 
@@ -515,12 +410,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     double this_module_z_offset = ( module_id == 0 ) ? -endcap_z_offset : endcap_z_offset; 
     double this_module_rotY = ( module_id == 0 ) ? 0:M_PI; 
   
-    Position xyzVec(0,0,this_module_z_offset);
-    RotationZYX rot(0,this_module_rotY,0);
-    Rotation3D rot3D(rot);
-    Transform3D tran3D(rot3D,xyzVec);
+    Position mxyzVec(0,0,this_module_z_offset);
+    RotationZYX mrot(0,this_module_rotY,0);
+    Rotation3D mrot3D(mrot);
+    Transform3D mtran3D(mrot3D,mxyzVec);
 
-    PlacedVolume pv = envelope.placeVolume(HcalEndCapRingLogical,tran3D);
+    PlacedVolume pv = envelope.placeVolume(HcalEndCapRingLogical,mtran3D);
     pv.addPhysVolID("module",module_id); // z: +/-
 
     DetElement sd = (module_num==0) ? module_det : module_det.clone(_toString(module_num,"module%d"));
