@@ -1,3 +1,60 @@
+ --------
+| v00-08 | 
+ -------- 
+
+S. Lu
+   - Adapted to Hcal endcap Ring to DD4hep envelope, and improve the code to read the envelope information clearly from compact file directly.
+   - Updated to read the 'HcalEndcapRing_inner_radius' directly from compact file, and derivative dependence on 'Ecal_endcap_outer_radius' implemented in compact file.
+   - added 'Hcal_endcap_thickness' the value came from 26.5*mm*48+15.0*mm. Fixed the 'Hcal_barrel_thickness' the value came from engineer, it is about 26.5*mm*48 and 0.3*mm of tolerance for the 'Hcal_outer_radius' maximum 3395.5*mm
+   - Added two parameters 'Ecal_Barrel_thickness', and 'Hcal_Barrel_thickness', and use them to increase the ILD calorimeters (ECAL, HCAL) radius automaticly.
+   - Update material for the Ecal ECRing module as Mokka used
+   - Change the thickness of the scintillator in the active layer.
+   - Updated 'detector/CaloTB/CaloPrototype_v02.cpp' and remove the hardcode layer/ identifier 'layer/K' in the testbeam geometry driver, get this string via segmentation, and use the defination in the compact xml file, whatever the user wanted, 'layer' or, 'K' ... .
+   - added ID 'slice' in the geometry driver, and to be used in the cellEncoding string in compact file.
+   - Updated SEcal04_Endcaps.cpp to set the Magic Wafer size in group tower, and set the group indentifier in the compact file for both Barrel (in layer group) and Endcaps (in tower group).
+   - Use WaferGridXY segmentation for the EcalEndcapsCollection digitization in the DD4hep ILD_o1_v05, to improve the Magic wafer part in each layer too, as EcalBarrelCollection
+
+D. Protopopescu
+   - AHCal Barrel implementation of the layout from 70th SiD Optimization Meeting presentation, from Ross Gordon McCoy (ross.mccoy@mavs.uta.edu),
+HCalEndcap with the same layer structure, and SiD_o1_v03 including the two new XMLs. Perhaps the Scintillator HCal should be o2 (option 2)?
+   - Added new materials, and terminator absorber layer to the Scintillator HCal		   
+   - Fix for SiD 'make test'
+   - Updated Muon endcap and barrel XMLs with latest dimensions, and using the Generic drivers (will have to change this!). Added envelope (Aidan).
+Modified Fe slice thicknesses (20->19.6cm) to fit within the new dimensions.
+   - Added test for SiD_o1_v1
+
+M. Petric
+   - Make the sum of readout bits 32 otherwise we have a problem with the encoding of the surfaces
+   - Fix problem with replication of color name
+   - Add interlink to tracker
+   - Change CI to new Geant4 10.2.2
+   - converged design for tracker
+   - Add diagnostic color to gcc 4.9 and move CI build to Ninja and add output on failure to tests
+   - New tracker layot as requested by the tracking group
+   - Addopt to 40 layers ECal in the endscaps 
+   - Add change ECal to 40 layes and move everything in barrel after ECal 27mm outwards
+   - Converted readme to markdown and added badge
+   - change dd4hep init
+   - Make lcgeo ROOT6 compatible. There is no Reflex in 6.
+
+N. Nikiforou
+   - Modified CLIC_o2_v04 BeamCal to avoid dummy layer
+
+F. Gaede
+   - updated enevelope parameters of ILD_o1_v05 simulation model
+   - updated tex file
+   - added picture for barrel enevelopes 
+
+K. Coterra
+   - Sc_Si_hybrid Ecal drivers for barrel and endcaps were created. So far, they dedicated for Sc-strip ECAL.
+   - parameter files for ILD_o3_v05 model, Sc_Si_hybridECAL with AHCAL, were created. So far, for only Sc strip ECal, not for Hybrid ECAL.
+
+Y. Voutsinas
+   - updates in VXD material/surface description
+   - external cabling and internal strip lines for the innermost VXD layer added
+   - adding surfaces for beryllium annulus blocks
+   - adding surfaces for the electronics at the end of the ladders
+   - adding surface for the beryllium shell cone 
 
 A.Sailer 05/07/2016
 
