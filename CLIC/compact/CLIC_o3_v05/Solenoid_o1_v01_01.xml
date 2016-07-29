@@ -28,7 +28,7 @@
     
     <detectors>
         
-        <detector name="SolenoidBarrel" type="Solenoid_o1_v01" id="0" insideTrackingVolume="false" reflect="true">
+        <detector name="SolenoidBarrel" type="Solenoid_o1_v01" id="0" reflect="true">
             <type_flags type=" DetType_COIL"/>
             <envelope vis="SOLVis">
                 <shape type="Assembly"/>
@@ -45,7 +45,7 @@
             </layer>
         </detector>
         
-        <detector name="SolenoidEndcaps" type="DD4hep_DiskTracker" id="0" reflect="true" insideTrackingVolume="false" vis="SolenoidBarrelLayerVis">
+        <detector name="SolenoidEndcaps" type="DD4hep_DiskTracker" id="0" reflect="true" vis="SolenoidBarrelLayerVis">
             <layer id="1" inner_r="Solenoid_inner_radius+SolenoidVacuumTank_thickness" inner_z="Solenoid_half_length-SolenoidVacuumTank_thickness" outer_r="Solenoid_outer_radius-SolenoidVacuumTank_thickness" vis="SolenoidBarrelLayerVis">
 	        <slice material="Steel235" thickness="SolenoidVacuumTank_thickness/2.0" />
           </layer>

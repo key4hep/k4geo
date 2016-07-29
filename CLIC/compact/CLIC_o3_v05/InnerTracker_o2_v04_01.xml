@@ -91,7 +91,7 @@
     </readouts>
     
     <detectors>
-        <detector id="DetID_IT_Barrel" name="InnerTrackerBarrel" type="TrackerBarrel_o1_v04" readout="InnerTrackerBarrelCollection" region="SiTrackerBarrelRegion" limits="SiTrackerBarrelRegionLimitSet">
+        <detector id="DetID_IT_Barrel" name="InnerTrackerBarrel" type="TrackerBarrel_o1_v04" readout="InnerTrackerBarrelCollection" region="InnerTrackerBarrelRegion">
             <envelope vis="ITVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -136,7 +136,7 @@
         
         
         
-        <detector id="DetID_IT_Endcap" name="InnerTrackerEndcap" type="TrackerEndcap_o2_v04" readout="InnerTrackerEndcapCollection" reflect="true">
+        <detector id="DetID_IT_Endcap" name="InnerTrackerEndcap" type="TrackerEndcap_o2_v04" readout="InnerTrackerEndcapCollection" reflect="true" region="InnerTrackerEndcapRegion">
             <envelope vis="OTVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -485,7 +485,7 @@
         </detector>
         
         
-        <detector name="InnerTrackerBarrelSupport" type="TrackerBarrelSupport_o1_v01" id="0" insideTrackingVolume="true" reflect="true" >
+        <detector name="InnerTrackerBarrelSupport" type="TrackerBarrelSupport_o1_v01" id="0"  reflect="true" region="InnerTrackerBarrelRegion">
             <envelope>
                 <shape type="Assembly"/>
             </envelope>
@@ -504,7 +504,7 @@
         </detector>
         
 
-        <detector name="InnerTrackerEndcapSupport" type="TrackerEndcapSupport_o1_v01" reflect="true" insideTrackingVolume="true">
+        <detector name="InnerTrackerEndcapSupport" type="TrackerEndcapSupport_o1_v01" reflect="true" region="InnerTrackerEndcapRegion">
 		   <envelope>
                 <shape type="Assembly"/>
            </envelope>
@@ -537,7 +537,7 @@
            </layer>                                           
         </detector>
         
-        <detector name="InnerTrackerInterlink" type="ConicalSupport_o1_v01" reflect="true" insideTrackingVolume="true">
+        <detector name="InnerTrackerInterlink" type="ConicalSupport_o1_v01" reflect="true" region="InnerTrackerEndcapRegion">
           <envelope>
             <shape type="Assembly"/>
           </envelope>
@@ -545,7 +545,7 @@
         </detector>        
         
         
-        <detector name="BeampipeShell" type="ConicalSupport_o1_v01" reflect="true" insideTrackingVolume="true">
+        <detector name="BeampipeShell" type="ConicalSupport_o1_v01" reflect="true" region="BeampipeRegion">
           <envelope>
             <shape type="Assembly"/>
           </envelope>

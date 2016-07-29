@@ -3,7 +3,7 @@
     <detectors>
         <comment>Beampipe Instrumentation</comment>
         
-        <detector name="Kicker" type="Mask_o1_v01" insideTrackingVolume="true" vis="KICKVis">
+        <detector name="Kicker" type="Mask_o1_v01" vis="KICKVis">
             <parameter crossingangle="CrossingAngle" />
             <envelope vis="KICKVis">
                 <shape type="Assembly"/>
@@ -13,7 +13,7 @@
         </detector>
         
         
-        <detector name="BPM" type="Mask_o1_v01" insideTrackingVolume="true" vis="BPMVis">
+        <detector name="BPM" type="Mask_o1_v01" vis="BPMVis">
             <parameter crossingangle="CrossingAngle" />
             <envelope vis="BPMVis">
                 <shape type="Assembly"/>

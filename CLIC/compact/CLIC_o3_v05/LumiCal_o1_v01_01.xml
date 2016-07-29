@@ -16,7 +16,7 @@
     </readouts>
     
     <detectors>
-        <detector name="LumiCal" type="LumiCal_o1_v01" vis="SeeThrough" id="DetID_LumiCal" readout="LumiCalCollection" insideTrackingVolume="false" >
+        <detector name="LumiCal" type="LumiCal_o1_v01" vis="SeeThrough" id="DetID_LumiCal" readout="LumiCalCollection" >
             
             <!--             <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_ENDCAP + DetType_FORWARD"/> --> <!-- FLAGS ARE SET IN DRIVER FOR NOW -->
 
