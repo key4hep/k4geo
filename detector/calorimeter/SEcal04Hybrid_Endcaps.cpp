@@ -48,7 +48,7 @@ using namespace DD4hep;
 using namespace DD4hep::Geometry;
 
 //#define VERBOSE 1
-#define VERBOSEcoterra 1
+//#define VERBOSEcoterra 1
 
 // workaround for DD4hep v00-14 (and older) 
 #ifndef DD4HEP_VERSION_GE
@@ -151,7 +151,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double      EcalEndcap_min_z                 = lcdd.constant<double>("EcalEndcap_min_z");
   double      EcalEndcap_max_z                 = lcdd.constant<double>("EcalEndcap_max_z");
 
-	// 2016/0710 for strip
+// 2016/0710 for strip
 	int 	 Ecal_Sc_N_strips_across_module     = lcdd.constant<int>("Ecal_Sc_N_strips_across_module");
 	int 	 Ecal_Sc_number_of_virtual_cells	  = lcdd.constant<int>("Ecal_Sc_number_of_virtual_cells");
 	// 20160710 for ScECAL
@@ -175,8 +175,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   std::cout << " Ecal_total_SiSlab_thickness = " << Ecal_total_SiSlab_thickness  << std::endl;
 #endif
   
-  
-
   double Ecal_total_ScSlab_thickness = 
     Ecal_Slab_shielding + 
     Ecal_Slab_copper_thickness + 
@@ -187,11 +185,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 #ifdef VERBOSE
   std::cout << " Ecal_total_ScSlab_thickness = " << Ecal_total_ScSlab_thickness  << std::endl;
 #endif
-  
 
     int Number_of_Si_Layers_in_Barrel = 0;
     int Number_of_Sc_Layers_in_Barrel = 0;
-
 
 #ifdef VERBOSE
   std::cout << " Ecal total number of Silicon layers = " << Number_of_Si_Layers_in_Barrel  << std::endl;
@@ -222,7 +218,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   int n_total_layers = Ecal_nlayers1 + Ecal_nlayers2 + Ecal_nlayers3;
   //TODO xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxNumber_of_Si_Layers_in_Barrel = n_total_layers+1;
   Number_of_Sc_Layers_in_Barrel = n_total_layers+1;
-
   //int total_number_of_layers = Ecal_nlayers1 + Ecal_nlayers2 + Ecal_nlayers3;
 
   double module_thickness = 
@@ -230,7 +225,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     Ecal_nlayers2 * Ecal_radiator_thickness2 +
     Ecal_nlayers3 * Ecal_radiator_thickness3 +
     
-    int(n_total_layers/2) * // fiber around W struct layers
+  int(n_total_layers/2) * // fiber around W struct layers
     (N_FIBERS_W_STRUCTURE * 2 *  Ecal_fiber_thickness) +
     
     Number_of_Si_Layers_in_Barrel * // Silicon slabs plus fiber around and inside
@@ -251,9 +246,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   //== For Wafer === 
 // for Sc
+// how many rows on a slab. 1 or 2. so far, only 1
 	Ecal_n_wafers_per_tower = EBUSeg->NMegaY(); 
 //////////////
-  double cell_dim_x = caloLayer.cellSize0;
+///  double cell_dim_x = caloLayer.cellSize0;
   double total_Si_dim_z = alveolus_dim_z;
 
   double util_SI_wafer_dim_z = 
@@ -261,13 +257,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 	int nStripX = EBUSeg->NStripsX();
 	int nStripY = EBUSeg->NStripsY();
+	//Number of minumun cell unit (~5mm) in an EBU.
   int Num_of_minCellUnitInEBU   = std::max( nStripX, nStripY );
+	//Number of minumun cell unit (~5mm) in a strip.
   int Num_of_minCellUnitInStrip = Num_of_minCellUnitInEBU / std::min( nStripX, nStripY );
+
 	double residualT_L =  (double)Num_of_minCellUnitInEBU / std::min( nStripX, nStripY) - Num_of_minCellUnitInStrip;
 	if ( residualT_L > 0 ) {
-
 		std::cout << "WARNING, strip length/strip width is not a integer" << std::endl;
-
 	}
 
 #ifdef VERBOSEcoterra
@@ -275,14 +272,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 #endif
 
   double cell_dim_z =  util_SI_wafer_dim_z/ Num_of_minCellUnitInEBU;
-// g710 coterra  double cell_dim_z =  util_SI_wafer_dim_z/ 
-//    floor(util_SI_wafer_dim_z/
-//	  cell_dim_x);
-//  int N_cells_in_Z = int(util_SI_wafer_dim_z/cell_dim_z);
-//  int N_cells_in_X = N_cells_in_Z;
-///////////////////////////////////////////////
-//
-  cell_dim_x = cell_dim_z;
+
+/////////////////////////////////
+  double cell_dim_x = cell_dim_z;  /// cell_dim_x/z is the granularitiy size. coterra
+/////////////////////////////////
   
 #ifdef VERBOSE
   std::cout << " module_thickness = " << module_thickness  << std::endl;
@@ -417,27 +410,26 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 // wafer_num should a global number for a Endcap module.
 // Henna Eigo kamo ... nanka imi wakatta?
 			int wafer_num = 0;
-      while ( ( y_floor + EC_alveolus_dim_y) < EC_y_top )
-	{
-	  alv_upper_y = y_floor + EC_alveolus_dim_y;
+      while ( ( y_floor + EC_alveolus_dim_y) < EC_y_top ) {
+				int InSlabWafer_num = 0;
+	  		alv_upper_y = y_floor + EC_alveolus_dim_y;
 	  
-	  EC_alveolus_dim_x = x_right- x_left;
+	  		EC_alveolus_dim_x = x_right- x_left;
 	  
-	  if( alv_upper_y <= y_middle )
-	    {
-	      EC_alveolus_dim_x = x_right- x_left; // coterra x_left has negative value.
-	    }
-	  else
-	    {
-	      EC_alveolus_x_left = 
-		(alv_upper_y - y_middle) * inc + x_left; // exseed from y_meddle x slope(=inc)
-	      EC_alveolus_dim_x = x_right
-		- EC_alveolus_x_left;
+	  		if( alv_upper_y <= y_middle ) {
+	      	EC_alveolus_dim_x = x_right- x_left; // coterra x_left has negative value.
+	    	}
+	 			else
+	    	{
+	      	EC_alveolus_x_left = 
+					(alv_upper_y - y_middle) * inc + x_left; // exseed from y_meddle x slope(=inc)
+	      	EC_alveolus_dim_x = x_right
+					- EC_alveolus_x_left;
 #if VERBOSEcoterra
 		cout << "y_floor = " << y_floor << ", EC_alveolus_dim_y = " << EC_alveolus_dim_y << ", EC_alveolus_dim_x = " << EC_alveolus_dim_x << endl; 
 		cout << "EC_alveolus_x_left = " << EC_alveolus_x_left << endl; 
 #endif
-	    }
+	    	}
 	  
 	  // We use the same method able to create the Barrel
 	  // Slabs, so we have to rotate it later when placing 
@@ -469,6 +461,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  // BuildEndcapAlveolus: BuildSiliconSlab:
 	  //--------------------------------------------------------------------------------
 
+		int sensLayer_num = 0;
 	  increase_LayerID = 0;
 	  for(xml_coll_t si(x_layer,_U(slice)); si; ++si)  {
 	    xml_comp_t x_slice = si;
@@ -479,7 +472,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    double slab_dim_x = alveolus_dim_z/2.-tolerance;  // short--slab x
 	    double slab_dim_y = s_thick/2.-tolerance;
 	    double slab_dim_z = EC_alveolus_dim_x/2.-tolerance; // long--slab z
-	    
+	   
+			//Note that 1st ax is short and "2nd is long", 3rd is thickness. 
 	    Box        s_box(slab_dim_x,slab_dim_z,slab_dim_y);
 	    Volume     s_vol(det_name+"_"+l_name+"_"+s_name,s_box,slice_material);
 	    DetElement slice(layer,s_name,det_id);
@@ -534,183 +528,162 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 
 	    if ( x_slice.isSensitive() ) {
+				sensLayer_num++; // start from  1 (2,3,4...)
 	      //s_vol.setSensitiveDetector(sens);
 
 	    // Normal squared wafers
-///// g710 coterra	    double wafer_dim_x = 
-/////	      N_cells_in_X * cell_dim_x;
+	    	double wafer_dim_z = alveolus_dim_z / Ecal_n_wafers_per_tower;//TODO move to more global place.
+				wafer_dim_z = wafer_dim_z - 2 * Ecal_guard_ring_size; // wafer_dim_x/y does not include guard rings.
 
-	    	double wafer_dim_x = alveolus_dim_z / Ecal_n_wafers_per_tower;//TODO move to more global place.
-				wafer_dim_x = wafer_dim_x - 2 * Ecal_guard_ring_size;
-
-	    	double wafer_dim_z = wafer_dim_x;
-//// g710 coterra	      N_cells_in_Z * cell_dim_z;
+	    	double wafer_dim_x = wafer_dim_z;
 
 				double  wafer_dim_x_half = wafer_dim_x / 2.;
 				double  wafer_dim_z_half = wafer_dim_z / 2.;
 
-	    	Box WaferSiSolid( wafer_dim_x_half, wafer_dim_z_half, slab_dim_y);
-
-	    double real_wafer_size_x =
-	      wafer_dim_z + 2 * Ecal_guard_ring_size;
+	    	//g802 coterra Box WaferSiSolid( wafer_dim_x_half, wafer_dim_z_half, slab_dim_y);
+	    	Box WaferSiSolid( wafer_dim_z_half, wafer_dim_x_half, slab_dim_y);
       
-			double stripLength = cell_dim_x * Num_of_minCellUnitInStrip; // cell_dim_x is square cell's dimension. 
+				double stripLength = cell_dim_x * Num_of_minCellUnitInStrip; // cell_dim_x is square cell's dimension. 
 
-	    int n_wafers_x =
-//// g710 coterra	      int(floor(slab_dim_z*2 / real_wafer_size_x));
-	      int(floor( (slab_dim_z*2 - stripLength) / real_wafer_size_x));
-			////// note that we use slab_dim_z not slab_dim_x
+				// we need regulating EBU size larger than one strip length at least. 
+				// Therefore, "stripLength" is subtracted from the total length of slab.
+		    int n_wafers_x = 
+	      int( floor( (slab_dim_z*2 - stripLength) 
+						 			/ ( wafer_dim_z + 2 * Ecal_guard_ring_size) ));
+				//note that we use slab_dim_z not slab_dim_x.
+				//This complicated definition of demension is a heritage from mokka.
 
+			// first position is the out of Slab
 	    double wafer_pos_x =
-	      -slab_dim_z + 	// not slab_dim_x ; slab_dim_z--> long
-	      Ecal_guard_ring_size +
-	      wafer_dim_z /2 ;  ///// note that start position is diff from barrel.
+	      - slab_dim_z + 	// not slab_dim_x ; slab_dim_z--> long
+	      - Ecal_guard_ring_size 
+	      - wafer_dim_x /2 ;  ///// note that start position is diff from barrel.
+
 	    int n_wafer_x;
-// g721 coterra move to upsteam for only Endcaps	    int wafer_num = 0;
-	    for (n_wafer_x = 1; n_wafer_x < n_wafers_x + 1; n_wafer_x++) { 
+	    for (n_wafer_x = 0; n_wafer_x < n_wafers_x ; n_wafer_x++) { 
 			// messssy!
 			// EC_dim_x parallel with global x, 
 			// slab_z parallel with global x,
 			// wafer x parallel with global x and wafer z parallel with global y,
+			// implement wafer position.
+				wafer_pos_x += wafer_dim_x + 2 * Ecal_guard_ring_size;
+
 				double wafer_pos_z =
 		  	-slab_dim_x + 
 		  	Ecal_guard_ring_size +
 		  	//wafer_dim_x /2;
 		  	wafer_dim_z /2;
 
-				for (int n_wafer_z = 1;
-			  n_wafer_z < Ecal_n_wafers_per_tower + 1; // coterra 3;
-		    n_wafer_z++) {
-		    	wafer_num++;
+				for (int n_wafer_z = 0; n_wafer_z < Ecal_n_wafers_per_tower; n_wafer_z++) {
+					InSlabWafer_num++;
+					wafer_num++;
 		    	string Wafer_name  =  _toString(wafer_num,"wafer%d");
 		    	Volume WaferSiLog(det_name+"_"+l_name+"_"+s_name+"_"+Wafer_name,WaferSiSolid,slice_material);
 		    	WaferSiLog.setSensitiveDetector(sens);
 		    	WaferSiLog.setVisAttributes(lcdd.visAttributes(x_slice.visStr()));
+					// Again, note that 1st ax is short and "2nd is long", 3rd is thickness. 
 		    	PlacedVolume wafer_phv = s_vol.placeVolume(WaferSiLog,Position(wafer_pos_z,
-		    	//PlacedVolume wafer_phv = s_vol.placeVolume(WaferSiLog,Position(wafer_pos_x,
 										   wafer_pos_x,
-										   //wafer_pos_z,
 										   0));
 		    	wafer_phv.addPhysVolID("wafer", wafer_num);
-					EBUSeg->setWaferOffsetY( myLayerNum+increase_LayerID, wafer_num, wafer_dim_x_half ); //////////////// coterra 
-					EBUSeg->setWaferOffsetX( myLayerNum+increase_LayerID, wafer_num, wafer_dim_z_half ); //////////////// coterra 
-					/// coterra EBUSeg->setTotalSizeX( myLayerNum, slab_dim_x * 2.0 );
-					EBUSeg->setTotalSizeX( myLayerNum+increase_LayerID, slab_dim_z * 2.0 );
+					EBUSeg->setIsRegulatingEBU( myLayerNum+increase_LayerID, wafer_num, false );
+					EBUSeg->setWaferOffsetX( myLayerNum+increase_LayerID, wafer_num, wafer_dim_x_half ); //////////////// coterra 
+					EBUSeg->setWaferOffsetY( myLayerNum+increase_LayerID, wafer_num, wafer_dim_z_half ); //////////////// coterra 
 					EBUSeg->setTotalSizeY( alveolus_dim_z );
 #if VERBOSEcoterra
 			cout << "Set EBUSeg parameters for normal EBU" << endl;
 			cout << " wafer_num <=" << wafer_num << endl;
 			cout << " setWaferOffsetX <= " << wafer_dim_x_half << endl;
 			cout << " setWaferOffsetY <= " << wafer_dim_z_half << endl;
-			cout << " setTotalSizeX <= " << slab_dim_z * 2.0 << endl;
 			cout << " setTotalSizeY <= " << alveolus_dim_z << endl;
 #endif
 
-		    	// Normal squared wafers, this waferOffsetX is 0.0 
-// coterra g710		    	if ((myLayerNum+increase_LayerID) == 1 ) { 
-//		      	waferSeg->setWaferOffsetY(EC_Number_of_towers, wafer_num, 0.0);
-//					}
 		    	wafer_pos_z +=
-		      	//wafer_dim_x +
 		      	wafer_dim_z +
 		      	2 * Ecal_guard_ring_size;
-		  }
-		wafer_pos_x += 
-		  //wafer_dim_z +
-		  wafer_dim_x +
-		  2 * Ecal_guard_ring_size;
-	      }
+		  	}
+	    }
       
 	    // Magic wafers to complete the slab...
 	    // (wafers with variable number of cells just
 	    // to complete the slab. in reality we think that
 	    // we'll have just a few models of special wafers
 	    // for that.
+	    //
+	    // slab_dim_z is longitudinal.
 	    double resting_dim_x =
 	      slab_dim_z*2 - 
-	      //(wafer_dim_z + 2 * Ecal_guard_ring_size) * 
 	      (wafer_dim_x + 2 * Ecal_guard_ring_size) * 
 	      n_wafers_x;
       
-			EBUSeg->setIsRegulatingEBU( myLayerNum+increase_LayerID, wafer_num, false );
-	    if(resting_dim_x >
-// coterra g710	       (cell_dim_z + 2 * Ecal_guard_ring_size))
-	       (cell_dim_z + 2 * Ecal_guard_ring_size + stripLength )) {
+#if VERBOSEcoterra
+			if ( 192 < wafer_num && wafer_num < 196 ) {
+				std::cout << " at regular: wafer_num = " << wafer_num 
+									<< ", resting_dim_x = " << resting_dim_x
+									<< ", 2 * Ecal_guard_ring_size + stripLength = " << 2 * Ecal_guard_ring_size + stripLength 
+									<< std::endl;
+			}
+#endif
+	    if(resting_dim_x > (2 * Ecal_guard_ring_size + stripLength )) {
 #if VERBOSEcoterra
 		cout << "resting_dim_x = " << resting_dim_x << endl;
 #endif
 				int N_cells_x_remaining = int(floor((resting_dim_x - 
 			     2 * Ecal_guard_ring_size)
-			    	/cell_dim_z));
+			    	/cell_dim_x));
 				//Here we need to make a Magic wafer!
-				double regulatingWafer_dim_x = N_cells_x_remaining * cell_dim_z;
+				double regulatingWafer_dim_x = N_cells_x_remaining * cell_dim_x;
 				double regulatingWafer_dim_x_half = regulatingWafer_dim_x / 2.0;
 
-//				wafer_dim_x =
-//			  N_cells_x_remaining *
-//		  	cell_dim_z;
-	  
-//// coterra g710		Box MagicWaferSiSolid( wafer_dim_z/2,wafer_dim_x/2,slab_dim_y);
-//				Box MagicWaferSiSolid( wafer_dim_z/2,
-//															 regulatingWafer_dim_x_half,
-//															 slab_dim_y);
-				Box MagicWaferSiSolid(  regulatingWafer_dim_x_half,
-																wafer_dim_z/2,
+				// in wafer, 1st ax longitudinal, 2nd ax transverse, 3rd ax thickness.
+//g802 coterra 				Box MagicWaferSiSolid(  regulatingWafer_dim_x_half,
+				Box MagicWaferSiSolid(  wafer_dim_z/2,
+//																wafer_dim_z/2,
+																regulatingWafer_dim_x_half,
 															 slab_dim_y);
 
-		// Magic wafers, this waferOffsetX has to be taken care, 0.0 or half cell size in X.
-				double thisWaferOffsetX = 0.0;
-//// coterra g710		if ( N_cells_x_remaining%2 ) thisWaferOffsetX = cell_dim_x/2.0;
+				wafer_pos_x += ( wafer_dim_x + regulatingWafer_dim_x )/2. 
+												+ 2 * Ecal_guard_ring_size;
 
-				wafer_pos_x =
-		  	- slab_dim_z 
-		  	+ n_wafers_x * real_wafer_size_x 
-				+ regulatingWafer_dim_x_half + Ecal_guard_ring_size;
-// coterra g711		  +	(wafer_dim_x + 2 * Ecal_guard_ring_size)/2;
-	  
-				real_wafer_size_x =
-		  	regulatingWafer_dim_x + 2 * Ecal_guard_ring_size;
-	  
-				double wafer_pos_z =
-		  	-slab_dim_x + 
-		  	Ecal_guard_ring_size +
-		  	wafer_dim_z /2;
-				for (int n_wafer_z = 1;
-		   //coterra  g710  n_wafer_z < 3;
-		     n_wafer_z < Ecal_n_wafers_per_tower + 1;
-		     n_wafer_z++) {
-		    	wafer_num++;
+				double wafer_pos_z = -slab_dim_x + Ecal_guard_ring_size + wafer_dim_z /2;
+				for (int n_wafer_z = 0; n_wafer_z < Ecal_n_wafers_per_tower; n_wafer_z++) {
+					InSlabWafer_num++;
+					wafer_num++;
+#if VERBOSEcoterra
+					if ( 192 < wafer_num && wafer_num < 196 ) {
+					std::cout << " at regulating: wafer_num = " << wafer_num 
+										<< ", resting_dim_x = " << resting_dim_x
+										<< ", 2 * Ecal_guard_ring_size + stripLength = " << 2 * Ecal_guard_ring_size + stripLength 
+										<< std::endl;
+					}
+#endif
 		    	string MagicWafer_name  =  _toString(wafer_num,"MagicWafer%d");
 		    	Volume MagicWaferSiLog(det_name+"_"+l_name+"_"+s_name+"_"+MagicWafer_name,MagicWaferSiSolid,slice_material);
 		    	MagicWaferSiLog.setSensitiveDetector(sens);
 		    	MagicWaferSiLog.setVisAttributes(lcdd.visAttributes(x_slice.visStr()));
+
+					// Again, again,  note that 1st ax is short and "2nd is long", 3rd is thickness. 
 		    	PlacedVolume wafer_phv = s_vol.placeVolume(MagicWaferSiLog,Position(wafer_pos_z,
-		    	//PlacedVolume wafer_phv = s_vol.placeVolume(MagicWaferSiLog,Position(wafer_pos_x,
 											wafer_pos_x,
-											//wafer_pos_z,
 											0));
 			    wafer_phv.addPhysVolID("wafer", wafer_num);
 					EBUSeg->setIsRegulatingEBU( myLayerNum+increase_LayerID, wafer_num, true );
-					EBUSeg->setWaferOffsetY( myLayerNum+increase_LayerID, wafer_num, regulatingWafer_dim_x_half ); //////////////// coterra 
-					EBUSeg->setWaferOffsetX( myLayerNum+increase_LayerID, wafer_num, wafer_dim_z_half ); //////////////// coterra 
-					EBUSeg->setTotalSizeX( myLayerNum+increase_LayerID, slab_dim_z * 2.0 );
+					EBUSeg->setWaferOffsetX( myLayerNum+increase_LayerID, wafer_num, regulatingWafer_dim_x_half ); //////////////// coterra 
+					EBUSeg->setWaferOffsetY( myLayerNum+increase_LayerID, wafer_num, wafer_dim_z_half ); //////////////// coterra 
 					EBUSeg->setTotalSizeY( alveolus_dim_z );
 #if VERBOSEcoterra
 			cout << "Set EBUSeg parameters for regulatingEBU" << endl;
 			cout << " wafer_num <=" << wafer_num << endl;
 			cout << " setWaferOffsetX <=" << regulatingWafer_dim_x_half << endl;
 			cout << " setWaferOffsetY <=" << wafer_dim_z_half << endl;
-			cout << " setTotalSizeX <=" << slab_dim_z * 2.0 << endl;
 			cout << " setTotalSizeY <=" << alveolus_dim_z << endl;
 #endif
-
 		    // Magic wafers, set the waferOffsetX for this layer this wafer.
-// coterra g710			    if ((myLayerNum+increase_LayerID) == 1 ) {
-//	      		waferSeg->setWaferOffsetY(EC_Number_of_towers, wafer_num, thisWaferOffsetX);
-//					}
-
-		    	//wafer_pos_z += wafer_dim_x + 2 * Ecal_guard_ring_size;
 		    	wafer_pos_z += wafer_dim_z + 2 * Ecal_guard_ring_size;
+
+					// Only in last iteration of the first sens layer in pair, we should do this.
+					if ( sensLayer_num%2 == 1 ) wafer_num -= InSlabWafer_num;
+
 		  	}
 	    } // The end of Magic Wafer
 	    
