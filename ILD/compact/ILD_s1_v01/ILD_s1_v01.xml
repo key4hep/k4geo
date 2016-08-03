@@ -56,19 +56,18 @@
 	
 	<include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
 
-	<!-- *****  global parameters from Mokka model ILD_o1_v05 **** -->
+	<!-- *****  global parameters of model ILD_s1_v01 **** -->
 
 	<include ref="model_parameters_ILD_s1_v01.xml"/>
 
-	<!-- ***** end global parameters from Mokka model ILD_o1_v05 **** -->
+	<!-- ***** end global parameters of model ILD_s1_v01 **** -->
 
 
 	<!-- #####################################################
 	     global parameters used in subdetector drivers 
-	     other the one they were created for
-             - these are often the ones modified by Mokka drivers at runtime ...
-             - moved here from model_parameters_ILD_o1_v05.xml
-               to make this more explicit                
+	     a copy of ILD_o1_v05 runtime
+             - updated TPC_outer_radius" value="1460*mm"
+               for ILD_s1_v01
 	-->
 
 	<constant name="Ecal_endcap_zmax" value="2635.*mm"/>

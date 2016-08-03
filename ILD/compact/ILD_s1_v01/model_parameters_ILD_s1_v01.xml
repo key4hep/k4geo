@@ -1,5 +1,6 @@
 <!-- 
-     global model parameters for model: ILD_o1_v05
+     global model parameters for model: ILD_s1_v01
+     a copy of ILD_o1_v05, updated Field_nominal_value to 4.0
      extracted from Mokka DB at pollin1.in2p3.fr - db: models03
      on 03/02/2014
      at 15:07:20

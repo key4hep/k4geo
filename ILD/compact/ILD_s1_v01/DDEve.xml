@@ -63,5 +63,5 @@
     <calodata name="VTX"/>
   </view>
 
-  <include ref="./ILD_o1_v05.xml"/>
+  <include ref="./ILD_s1_v01.xml"/>
 </ddeve>
