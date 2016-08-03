@@ -1,0 +1,105 @@
+<!-- ====================================================================== -->
+<!--                                                                        -->
+<!--    XML description of the CLIC NDM ECal Barrel detector                -->
+<!--                                                                        -->
+<!--    Contained are the required                                          -->
+<!--      ++ envelope definition                                            -->
+<!--      ++ global constants used uniquely by this module                  -->
+<!--      ++ visualization attributes                                       -->
+<!--      ++ the definition of the readout structure and the                -->
+<!--         readout segmentation (if necessary)                            -->
+<!--      ++ the include statements for the sensitive detectors and         -->
+<!--         the corresponding support structure(s)                         -->
+<!--                                                                        -->
+<!--                                                                        -->
+<!--   @author  D.Protopopescu                                              -->
+<!--   @date    06/05/2015                                                  -->
+<!--   Envelope-enabled version based on the CLIC_o1_v00 version            -->
+<!--                                                                        -->
+<!-- ====================================================================== -->
+
+<lccdd>
+
+    <!--  Definition of the readout segmentation  -->
+    <define>
+      <!-- Envelope moved into main compact file   -->
+      <!-- put all sub-detector envelope together. -->
+<!--
+        <constant name="ECalBarrel_inner_radius" value="1843*mm"/>
+        <constant name="ECalBarrel_outer_radius" value="2028*mm"/>
+        <constant name="ECalBarrel_half_length" value="2350*mm"/>
+        <constant name="ECalBarrel_symmetry" value="8"/>
+-->
+        <constant name="ECal_cell_size" value="5.1*mm"/>
+    </define>
+ 
+    <readouts>
+        <readout name="EcalBarrelCollection">
+            <segmentation type="CartesianGridXY" grid_size_x="ECal_cell_size" grid_size_y="ECal_cell_size" />
+            <id>system:5,side:2,module:8,stave:4,layer:9,submodule:4,x:32:-16,y:-16</id>
+            <!-- Marcus says 8 for ‘system’, Frank says 5 is enough -->  
+        </readout>
+    </readouts>
+    
+    <!--  Definitions of visualization attributes  -->
+    <display>
+        <vis name="EcalStaveVis"      alpha="1.0" r="0.0"  g="0.8"  b="1.0"  showDaughters="true"  visible="true"/>
+        <vis name="EcalLayerVis"      alpha="1.0" r="0.8"  g="0.8"  b="0.0"  showDaughters="true"  visible="true"/>
+        <vis name="EcalSensitiveVis"  alpha="1.0" r="0.7"  g="0.3"  b="0.0"  showDaughters="false" visible="true"/>
+        <vis name="EcalAbsorberVis"   alpha="1.0" r="0.4"  g="0.4"  b="0.0"  showDaughters="false" visible="true"/>
+        <vis name="EcalEndcapVis"     alpha="1.0" r="0.77" g="0.74" b="0.86" showDaughters="true"  visible="true"/>
+	<vis name="HiddenEnvelope"    alpha="0.0" r="1.0"  g="1.0"  b="1.0"  showDaughters="true"  visible="false"/>
+	<vis name="CompositeVis"      alpha="1.0" r="1.0"  g="0.0"  b="0.0"  showDaughters="true"  visible="true"/>
+    </display>
+
+    <detectors>        
+        <detector name="EcalBarrel" type="ECalBarrel_o1_v01" id="ILDDetID_ECAL" readout="EcalBarrelCollection" vis="BlueVis" >
+            
+            <comment>EM Calorimeter Barrel</comment>
+            
+            <envelope vis="ILD_ECALVis">
+                <shape type="PolyhedraRegular" numsides="Ecal_symmetry"  rmin="Ecal_inner_radius - env_safety" rmax="Ecal_outer_radius + env_safety" dz="2.*Ecal_half_length + env_safety"  material="Air"/>
+		<!-- Radii definitions as in http://cern.ch/go/r9mZ -->
+                <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/Ecal_symmetry"/>
+            </envelope>
+            
+            <parameter num_towers="5" TowersAirGap="2.4*mm" TowersFaceThickness="1.60*mm" AlveolusMaterial="CarbonFiber_25percent" supportBarCrossSection="106*106*mm*mm" ecal_barrel_tolerance="env_safety"/>
+
+            <dimensions numsides="Ecal_symmetry" rmin="Ecal_inner_radius" rmax="Ecal_outer_radius" z="Ecal_half_length*2" />
+            <staves vis="EcalStaveVis" />
+            <layer repeat="20" vis="EcalLayerVis">
+                <slice material = "TungstenDens24" thickness = "2.10*mm" radiator="yes" vis="EcalAbsorberVis"/>
+                <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
+                <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="EcalAbsorberVis"/>
+                <slice material = "Silicon"        thickness = "0.50*mm" sensitive="yes" limits="cal_limits" vis="EcalSensitiveVis"/>
+                <slice material = "Air"            thickness = "0.10*mm" vis="InvisibleNoDaughters"/><!-- glue -->
+                <slice material = "siPCBMix"       thickness = "0.80*mm" vis="EcalAbsorberVis"/>
+                <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/>
+            </layer>
+            <layer repeat="10" vis="EcalLayerVis">
+                <slice material = "TungstenDens24" thickness = "4.20*mm"  radiator="yes" vis="EcalAbsorberVis"/>
+                <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/><!-- fiber -->
+                <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="EcalAbsorberVis"/>
+                <slice material = "Silicon"        thickness = "0.50*mm" sensitive="yes" limits="cal_limits" vis="EcalSensitiveVis"/>
+                <slice material = "Air"            thickness = "0.10*mm" vis="InvisibleNoDaughters"/><!-- glue -->
+                <slice material = "siPCBMix"       thickness = "0.80*mm" vis="EcalAbsorberVis"/>
+                <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/>
+            </layer>
+            <layer repeat="1" vis="EcalLayerVis">
+                <slice material = "TungstenDens24" thickness = "2.40*mm"  radiator="yes" vis="EcalAbsorberVis"/>
+		<slice material = "CarbonFiber_25percent" thickness = "10.0*mm" vis="CompositeVis"/>
+            </layer>
+ 
+        </detector>
+        
+    </detectors>
+    
+    
+    
+    
+    
+    
+    
+</lccdd>
+
+
