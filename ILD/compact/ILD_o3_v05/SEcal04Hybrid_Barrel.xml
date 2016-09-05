@@ -24,9 +24,9 @@
         <slice material = "G4_POLYSTYRENE"    thickness = "Ecal_Sc_thickness" sensitive = "yes"     vis="RedVis"    />
         <slice material = "PET"    				 thickness = "Ecal_Sc_reflector_thickness" 				     vis="RedVis"    />
         <!--slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"              vis="Invisible" /-->
-        <slice material = "g10"         	 thickness = "Ecal_fiber_thickness"                    vis="Invisible" />
+        <slice material = "CarbonFiber"         	 thickness = "Ecal_fiber_thickness"                    vis="Invisible" />
         <slice material = "G4_W"   				 thickness = "Ecal_radiator_layers_set1_thickness"   vis="BlueVis"   radiator="yes"/>
-        <slice material = "g10"         	 thickness = "Ecal_fiber_thickness"                    vis="Invisible" />
+        <slice material = "CarbonFiber"         	 thickness = "Ecal_fiber_thickness"                    vis="Invisible" />
         <!--slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"              vis="Invisible" /-->
         <slice material = "PET"				     thickness = "Ecal_Sc_reflector_thickness"				     vis="RedVis"    />
         <!--slice material = "G4_POLYSTYRENE"    thickness = "Ecal_Sc_thickness" sensitive = "yes"     vis="RedVis"    /-->
@@ -47,9 +47,9 @@
         <slice material = "G4_POLYSTYRENE"    thickness = "Ecal_Sc_thickness" sensitive = "yes"     vis="RedVis"    />
         <slice material = "PET"    				 thickness = "Ecal_Sc_reflector_thickness" 				     vis="RedVis"    />
         <!--slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"              vis="Invisible" /-->
-        <slice material = "g10"         	 thickness = "Ecal_fiber_thickness"                    vis="Invisible" />
+        <slice material = "CarbonFiber"         	 thickness = "Ecal_fiber_thickness"                    vis="Invisible" />
         <slice material = "G4_W"   				 thickness = "Ecal_radiator_layers_set2_thickness"   vis="BlueVis"   radiator="yes"/>
-        <slice material = "g10"         	 thickness = "Ecal_fiber_thickness"                    vis="Invisible" />
+        <slice material = "CarbonFiber"         	 thickness = "Ecal_fiber_thickness"                    vis="Invisible" />
         <!--slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"              vis="Invisible" /-->
         <slice material = "PET"				     thickness = "Ecal_Sc_reflector_thickness"				     vis="RedVis"    />
         <!--slice material = "G4_POLYSTYRENE"    thickness = "Ecal_Sc_thickness" sensitive = "yes"     vis="RedVis"    /-->
