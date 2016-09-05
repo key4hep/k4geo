@@ -288,7 +288,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   Box  CenterECBox(Ecal_endcap_center_box_size/2.,Ecal_endcap_center_box_size/2.,module_thickness+0.0001);
   SubtractionSolid EndCapSolid( ECPolyHedra, CenterECBox);
 
-  Volume EnvLogEndCap("endcap",EndCapSolid,lcdd.material("g10"));
+  //  Volume EnvLogEndCap("endcap",EndCapSolid,lcdd.material("g10"));
+  Volume EnvLogEndCap("endcap",EndCapSolid,lcdd.material("CarbonFiber")); // DJeans 5-sep-2016
  
 
 

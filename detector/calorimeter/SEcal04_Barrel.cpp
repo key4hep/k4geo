@@ -277,9 +277,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 		Ecal_Barrel_module_dim_z / 2,
 		module_thickness/2);
 
-  Volume mod_vol(det_name+"_module",trd,lcdd.material("g10"));
-
-
+  //  Volume mod_vol(det_name+"_module",trd,lcdd.material("g10"));
+  Volume mod_vol(det_name+"_module",trd,lcdd.material("CarbonFiber")); // DJeans 5-sep-2016
 
   // We count the layers starting from IP and from 1,
   // so odd layers should be inside slabs and

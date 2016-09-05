@@ -255,9 +255,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   SubtractionSolid ECRingSolid( CenterECBox, CenterECTub);
 
-  Volume EnvLogECRing("ECRing",ECRingSolid,lcdd.material("g10"));
- 
-
+  //  Volume EnvLogECRing("ECRing",ECRingSolid,lcdd.material("g10"));
+  Volume EnvLogECRing("ECRing",ECRingSolid,lcdd.material("CarbonFiber")); // DJeans 5-sep-2016
 
   //==============================================================
   // build the layer and place into the ECRing
