@@ -99,6 +99,9 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   DD4hep::Geometry::Tube incomingBeamPipe (0.0, incomingBeamPipeRadius, bcalThickness);//we want this to be longer than the BeamCal
   DD4hep::Geometry::SubtractionSolid BeamCalModule (envelopeTube, incomingBeamPipe, incomingBPTransform);
   DD4hep::Geometry::Volume     envelopeVol(detName+"_module",BeamCalModule,air);
+  DD4hep::Geometry::DetElement beamCalDE_1(sdet,"Calorimeter1",1);
+  DD4hep::Geometry::DetElement beamCalDE_2(sdet,"Calorimeter2",2);
+
   envelopeVol.setVisAttributes(lcdd,xmlBeamCal.visStr());
   
   DD4hep::Geometry::Position incomingBeamPipeAtEndOfBeamCalPosition(-incomingBeamPipeRadius, incomingBeamPipeRadius, bcalInnerZ+bcalThickness);
@@ -154,7 +157,6 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
       int sliceID=1;
       double inThisLayerPosition = -layerThickness*0.5;
 
-      double radiator_thickness = 0.0;
 
       for(DD4hep::XML::Collection_t collSlice(xmlLayer,_U(slice)); collSlice; ++collSlice)  {
 	DD4hep::XML::Component compSlice = collSlice;
@@ -189,7 +191,6 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	  //The extra parenthesis are paramount! But.. there are none
 	  const DD4hep::Geometry::Transform3D thisBPTransform( incomingBeamPipeRotation, thisBPPosition );
 	  slice_subtracted = DD4hep::Geometry::SubtractionSolid(sliceBase, incomingBeamPipe, thisBPTransform);
-	  radiator_thickness = slice_thickness;
 	} else {
 	  //If we do not have the absorber structure then we create the slice with a wedge cutout, i.e, keyhole shape
 	  /// Is it better to join two pieces or subtract two pieces?
@@ -270,11 +271,11 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   DD4hep::Geometry::PlacedVolume pv =
     envelope.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcForwardRot, bcForwardPos ) );
   pv.addPhysVolID("barrel", 1);
-
-
+  beamCalDE_1.setPlacement(pv);
   DD4hep::Geometry::PlacedVolume pv2 =
     envelope.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcBackwardRot, bcBackwardPos ) );
   pv2.addPhysVolID("barrel", 2);
+  beamCalDE_2.setPlacement(pv2);
 
   sdet.addExtension< DD4hep::DDRec::LayeredCalorimeterData >( caloData ) ;
 
