@@ -173,15 +173,15 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
     Material sectionMat  = lcdd.material(xmlSection.materialStr());
     const std::string volName      = "tube_" + xmlSection.nameStr();
 
-    std::cout << std::setw(8) << zStart
-	      << std::setw(8) << zEnd
-	      << std::setw(8) << rInnerStart
-	      << std::setw(8) << rInnerEnd
-	      << std::setw(8) << rOuterStart
-	      << std::setw(8) << rOuterEnd
-	      << std::setw(8) << thickness
+    std::cout << std::setw(8) << zStart      /dd4hep::mm
+	      << std::setw(8) << zEnd	     /dd4hep::mm
+	      << std::setw(8) << rInnerStart /dd4hep::mm
+	      << std::setw(8) << rInnerEnd   /dd4hep::mm
+	      << std::setw(8) << rOuterStart /dd4hep::mm
+	      << std::setw(8) << rOuterEnd   /dd4hep::mm
+	      << std::setw(8) << thickness   /dd4hep::mm
 	      << std::setw(8) << crossType
-	      << std::setw(15) << volName
+	      << std::setw(35) << volName
 	      << std::setw(15) << sectionMat.name()  << std::endl;    
 
     if( crossType == ODH::kCenter ) { // store only the central sections !
