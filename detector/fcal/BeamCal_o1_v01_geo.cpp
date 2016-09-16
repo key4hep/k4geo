@@ -134,12 +134,12 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
     std::cout << "Total Length "    << bcalThickness/dd4hep::cm  << " cm" << std::endl;
     std::cout << "Layer Thickness " << layerThickness/dd4hep::cm << " cm" << std::endl;
     DD4hep::DDRec::LayeredCalorimeterData::Layer caloLayer ;
-    double nRadiationLengths=0.;
-    double nInteractionLengths=0.;
-    double thickness_sum=0;
             
     //Loop for repeat=NN
     for(int i=0, repeat=xmlLayer.repeat(); i<repeat; ++i)  {
+      double nRadiationLengths=0.;
+      double nInteractionLengths=0.;
+      double thickness_sum=0;
 
       std::string layer_name = detName + DD4hep::XML::_toString(thisLayerId,"_layer%d");
       DD4hep::Geometry::Tube layer_base(bcalInnerR,bcalOuterR,layerThickness*0.5);
