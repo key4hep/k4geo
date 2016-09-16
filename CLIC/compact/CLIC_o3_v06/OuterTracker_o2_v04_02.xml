@@ -1,18 +1,18 @@
 <lccdd>
     
     <define>
-        <constant name="OuterTracker_Barrel_radius_0" value="818.5*mm"/>
-        <constant name="OuterTracker_Barrel_radius_1" value="1152.5*mm"/>
-        <constant name="OuterTracker_Barrel_radius_2" value="1486.5*mm"/>
+        <constant name="OuterTracker_Barrel_radius_0" value="819*mm"/>
+        <constant name="OuterTracker_Barrel_radius_1" value="1153*mm"/>
+        <constant name="OuterTracker_Barrel_radius_2" value="1486*mm"/>
         
-        <constant name="OuterTracker_Barrel_half_length" value="1264.2*mm"/>
+        <constant name="OuterTracker_Barrel_half_length" value="1264*mm"/>
         
         <constant name="OuterTracker_Endcap_outer_radius" value="1430.2*mm"/>
         <constant name="OuterTracker_Endcap_inner_radius" value="617.5*mm"/>
         
-        <constant name="OuterTracker_Endcap_z_0" value="1310.2*mm"/>
-        <constant name="OuterTracker_Endcap_z_1" value="1616.8*mm"/>
-        <constant name="OuterTracker_Endcap_z_2" value="1883.4*mm"/>
+        <constant name="OuterTracker_Endcap_z_0" value="1310*mm"/>
+        <constant name="OuterTracker_Endcap_z_1" value="1617*mm"/>
+        <constant name="OuterTracker_Endcap_z_2" value="1883*mm"/>
         <constant name="OuterTracker_Endcap_z_3" value="2190*mm"/>
 
         <constant name="OuterTracker_Endcap_radius_0" value="617.5*mm"/>
@@ -53,7 +53,7 @@
         </readout>
     </readouts>
     
-    
+
     <detectors>
     
             <detector id="DetID_OT_Barrel" name="OuterTrackerBarrel" type="TrackerBarrel_o1_v04" readout="OuterTrackerBarrelCollection" region="OuterTrackerBarrelRegion">

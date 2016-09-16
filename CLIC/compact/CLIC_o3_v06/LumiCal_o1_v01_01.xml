@@ -53,7 +53,7 @@
             <layer repeat="40" vis="SeeThrough">
                 <slice material = "TungstenDens24" thickness = "3.5*mm" 		   vis="BCLayerVis1" />
                 <slice material = "Air"     thickness = "0.1*mm" />
-                <slice material = "Silicon" thickness = "0.355*mm" 	sensitive = "yes"  vis="BCLayerVis2"/>
+                <slice material = "Silicon" thickness = "0.32*mm" 	sensitive = "yes"  vis="BCLayerVis2"/>
                 <slice material = "Copper"  thickness = "0.4*mm"                    vis="BCLayerVis3"/>
             </layer>
             

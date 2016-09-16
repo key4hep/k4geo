@@ -1,30 +1,30 @@
 <lccdd>
     <define>
     
-        <constant name="InnerTracker_Barrel_radius_0" value="126.7*mm"/>
-        <constant name="InnerTracker_Barrel_radius_1" value="340.13*mm"/>        
-        <constant name="InnerTracker_Barrel_radius_2" value="553.5*mm"/>
+        <constant name="InnerTracker_Barrel_radius_0" value="127*mm"/>
+        <constant name="InnerTracker_Barrel_radius_1" value="340*mm"/>
+        <constant name="InnerTracker_Barrel_radius_2" value="554*mm"/>
                 
-        <constant name="InnerTracker_Barrel_half_length_0" value="481.6*mm"/>
-        <constant name="InnerTracker_Barrel_half_length_1" value="481.6*mm"/>
-        <constant name="InnerTracker_Barrel_half_length_2" value="692.3*mm"/>
+        <constant name="InnerTracker_Barrel_half_length_0" value="482*mm"/>
+        <constant name="InnerTracker_Barrel_half_length_1" value="482*mm"/>
+        <constant name="InnerTracker_Barrel_half_length_2" value="692*mm"/>
         
-        <constant name="InnerTracker_Endcap_z_0" value="523.6*mm"/>
-        <constant name="InnerTracker_Endcap_z_1" value="808.1*mm"/>
-        <constant name="InnerTracker_Endcap_z_2" value="1092.6*mm"/>
-        <constant name="InnerTracker_Endcap_z_3" value="1377.1*mm"/>
-        <constant name="InnerTracker_Endcap_z_4" value="1661.6*mm"/>
-        <constant name="InnerTracker_Endcap_z_5" value="1946.1*mm"/>
-        <constant name="InnerTracker_Endcap_z_6" value="2190.6*mm"/>
+        <constant name="InnerTracker_Endcap_z_0" value="524*mm"/>
+        <constant name="InnerTracker_Endcap_z_1" value="808*mm"/>
+        <constant name="InnerTracker_Endcap_z_2" value="1093*mm"/>
+        <constant name="InnerTracker_Endcap_z_3" value="1377*mm"/>
+        <constant name="InnerTracker_Endcap_z_4" value="1661*mm"/>
+        <constant name="InnerTracker_Endcap_z_5" value="1946*mm"/>
+        <constant name="InnerTracker_Endcap_z_6" value="2190*mm"/>
 
 
-        <constant name="InnerTracker_Endcap_radius_0" value="71.6*mm"/>
-        <constant name="InnerTracker_Endcap_radius_1" value="99.3*mm"/>        
-        <constant name="InnerTracker_Endcap_radius_2" value="132.1*mm"/>       
-        <constant name="InnerTracker_Endcap_radius_3" value="165.0*mm"/>
-        <constant name="InnerTracker_Endcap_radius_4" value="197.8*mm"/>        
-        <constant name="InnerTracker_Endcap_radius_5" value="230.6*mm"/>
-        <constant name="InnerTracker_Endcap_radius_6" value="250.0*mm"/>
+        <constant name="InnerTracker_Endcap_radius_0" value="72*mm"/>
+        <constant name="InnerTracker_Endcap_radius_1" value="99*mm"/>
+        <constant name="InnerTracker_Endcap_radius_2" value="132*mm"/>
+        <constant name="InnerTracker_Endcap_radius_3" value="164*mm"/>
+        <constant name="InnerTracker_Endcap_radius_4" value="197*mm"/>
+        <constant name="InnerTracker_Endcap_radius_5" value="231*mm"/>
+        <constant name="InnerTracker_Endcap_radius_6" value="250*mm"/>
         
         <constant name="ITM" value="15.1*mm"/>
                 
@@ -34,7 +34,7 @@
     <comment>Tracking detectors</comment>
     <detectors>
         <detector name="InnerTrackers" type="DD4hep_SubdetectorAssembly" vis="ITVis">
-            
+
             <shape type="BooleanShape" operation="Subtraction" material="Air" >
                 <shape type="BooleanShape" operation="Subtraction">
                     <shape type="BooleanShape" operation="Subtraction">
