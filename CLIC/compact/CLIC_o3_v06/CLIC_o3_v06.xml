@@ -51,7 +51,7 @@
         <constant name="CentralBeamPipe_rmax"   value="30.0*mm"/>
         <constant name="ConeBeamPipe_zmax"      value="2080*mm"/>
         <constant name="ConeBeamPipe_rmax"      value="240.0*mm"/>
-        <constant name="BigBeamPipe_zmax"       value="2509*mm"/>
+        <constant name="BigBeamPipe_zmax"       value="2528*mm"/>
         <constant name="BeamPipe_end"           value="12500*mm"/>
 
 
