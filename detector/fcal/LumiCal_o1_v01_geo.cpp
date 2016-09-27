@@ -35,7 +35,9 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
     // --- create an envelope volume and position it into the world ---------------------
     
     DD4hep::Geometry::Volume envelope = DD4hep::XML::createPlacedEnvelope( lcdd, element , sdet ) ;
-    
+    DD4hep::Geometry::DetElement lumiCalDE_1(sdet,"Calorimeter1",1);
+    DD4hep::Geometry::DetElement lumiCalDE_2(sdet,"Calorimeter2",2);
+
     sdet.setTypeFlag( DetType::CALORIMETER |  DetType::ENDCAP  | DetType::ELECTROMAGNETIC |  DetType::FORWARD ) ;
 
     if( lcdd.buildType() == DD4hep::BUILD_ENVELOPE ) return sdet ;
@@ -199,10 +201,12 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
     DD4hep::Geometry::PlacedVolume pv =
     envelope.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcForwardRot, bcForwardPos ) );
     pv.addPhysVolID("barrel", 1);
+    lumiCalDE_1.setPlacement(pv);
 
     DD4hep::Geometry::PlacedVolume pv2 =
     envelope.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcBackwardRot, bcBackwardPos ) );
     pv2.addPhysVolID("barrel", 2);
+    lumiCalDE_2.setPlacement(pv2);
     
     sdet.addExtension< DD4hep::DDRec::LayeredCalorimeterData >( caloData ) ;
     
