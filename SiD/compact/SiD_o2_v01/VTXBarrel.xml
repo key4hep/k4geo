@@ -1,0 +1,58 @@
+<detector id="1" name="SiVertexBarrel" type="DD4hep_SiTrackerBarrel" readout="SiVertexBarrelHits" insideTrackingVolume="true" vis="SiVertexBarrelVis">
+  <comment>Vertex Detector Barrel</comment>
+  <module name="VtxBarrelModuleInner">
+    <module_envelope width="9.8" length="63.0 * 2" thickness="0.6"/>
+    <module_component width="7.6" length="125.0" thickness="VXD_CF_sensor" material="CarbonFiber_25percent" sensitive="false">
+      <position z="-0.12"/>
+    </module_component>
+    <module_component width="7.6" length="125.0" thickness="0.05" material="Epoxy" sensitive="false">
+      <position z="0.075"/>
+    </module_component>
+    <module_component width="9.6" length="125.0" thickness="0.093" material="Silicon" sensitive="false">
+      <position z="0.150"/>
+    </module_component>
+    <module_component width="9.6" length="125.0" thickness="0.02" material="Silicon" sensitive="true">
+      <position z="0.225"/>
+    </module_component>
+  </module>
+  <module name="VtxBarrelModuleOuter">
+    <module_envelope width="14.0" length="126.0" thickness="0.6"/>
+    <module_component width="11.6" length="125.0" thickness="VXD_CF_sensor" material="CarbonFiber_25percent" sensitive="false">
+      <position z="-0.12"/>
+    </module_component>
+    <module_component width="11.6" length="125.0" thickness="0.05" material="Epoxy" sensitive="false">
+      <position z="0.075"/>
+    </module_component>
+    <module_component width="13.8" length="125.0" thickness="0.093" material="Silicon" sensitive="false">
+      <position z="0.150"/>
+    </module_component>
+    <module_component width="13.8" length="125.0" thickness="0.02" material="Silicon" sensitive="true">
+      <position z="0.210"/>
+    </module_component>
+  </module>
+  <layer module="VtxBarrelModuleInner" id="1" >
+    <barrel_envelope inner_r="13.0" outer_r="17.0" z_length="63 * 2"/>
+    <rphi_layout phi_tilt="0.0" nphi="12" phi0="0.2618" rc="15.05" dr="-1.15"/>
+    <z_layout dr="0.0" z0="0.0" nz="1"/>
+  </layer>
+  <layer module="VtxBarrelModuleOuter" id="2" >
+    <barrel_envelope inner_r="21.0" outer_r="25.0" z_length="63 * 2"/>
+    <rphi_layout phi_tilt="0.0" nphi="12" phi0="0.2618" rc="23.03" dr="-1.13"/>
+    <z_layout dr="0.0" z0="0.0" nz="1"/>
+  </layer>
+  <layer module="VtxBarrelModuleOuter" id="3" >
+    <barrel_envelope inner_r="34.0" outer_r="38.0" z_length="63 * 2"/>
+    <rphi_layout phi_tilt="0.0" nphi="18" phi0="0.0" rc="35.79" dr="-0.89"/>
+    <z_layout dr="0.0" z0="0.0" nz="1"/>
+  </layer>
+  <layer module="VtxBarrelModuleOuter" id="4" >
+    <barrel_envelope inner_r="46.6" outer_r="50.6" z_length="63 * 2"/>
+    <rphi_layout phi_tilt="0.0" nphi="24" phi0="0.1309" rc="47.5" dr="0.81"/>
+    <z_layout dr="0.0" z0="0.0" nz="1"/>
+  </layer>
+  <layer module="VtxBarrelModuleOuter" id="5" >
+    <barrel_envelope inner_r="59.0" outer_r="63.0" z_length="63 * 2"/>
+    <rphi_layout phi_tilt="0.0" nphi="30" phi0="0.0" rc="59.9" dr="0.77"/>
+    <z_layout dr="0.0" z0="0.0" nz="1"/>
+  </layer>
+</detector>

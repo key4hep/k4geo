@@ -1,0 +1,161 @@
+<lccdd>
+
+<!-- 
+  This implementation of the endcap does not allow adjusting the number of layers 
+  like in the barrel! ENL=BNL-1
+-->
+
+    <define>
+
+        <constant name="SiTracker_Endcap_zmax"  value="SiTracker_zmax"/>
+
+        <!-- Tracker Barrel XML must be included before these are calculated here -->
+	<constant name="SiTracker_Endcap_r_spacing" value="SiTracker_Barrel_r_spacing"/>
+        <!--constant name="SiTracker_Endcap_groups_z_spacing" value="285.0*mm"/-->
+
+        <constant name="SiTracker_Endcap_inner_radius" value="SiTracker_inner_radius"/>
+        <constant name="SiTracker_Endcap_outer_radius" value="SiTracker_outer_radius - 5*mm"/>
+	
+	<constant name="SiTracker_Endcap_module1_height" value="100.114*mm"/>
+	<constant name="SiTracker_Endcap_module2_height" value="89.773*mm"/>
+	<constant name="SiTracker_Endcap_petal_overlap"  value="3.1*mm"/>
+
+        <constant name="SiTracker_Endcap_r1" value="SiTracker_Endcap_inner_radius + SiTracker_Endcap_module1_height/2"/>
+        <constant name="SiTracker_Endcap_r2" value="SiTracker_Endcap_r1 + SiTracker_Endcap_module1_height - SiTracker_Endcap_petal_overlap"/>
+        <constant name="SiTracker_Endcap_r3" value="SiTracker_Endcap_r2 + SiTracker_Endcap_module1_height - SiTracker_Endcap_petal_overlap"/>
+        <constant name="SiTracker_Endcap_r4" value="SiTracker_Endcap_r3 + SiTracker_Endcap_module1_height/2 + SiTracker_Endcap_module2_height/2 - SiTracker_Endcap_petal_overlap"/>
+        <constant name="SiTracker_Endcap_r5" value="SiTracker_Endcap_r4 + SiTracker_Endcap_module2_height - SiTracker_Endcap_petal_overlap"/>
+        <constant name="SiTracker_Endcap_r6" value="SiTracker_Endcap_r5 + SiTracker_Endcap_module2_height - SiTracker_Endcap_petal_overlap"/>
+        <constant name="SiTracker_Endcap_r7" value="SiTracker_Endcap_r6 + SiTracker_Endcap_module2_height - SiTracker_Endcap_petal_overlap"/>
+        <constant name="SiTracker_Endcap_r8" value="SiTracker_Endcap_r7 + SiTracker_Endcap_module2_height - SiTracker_Endcap_petal_overlap"/>
+        <constant name="SiTracker_Endcap_r9" value="SiTracker_Endcap_r8 + SiTracker_Endcap_module2_height - SiTracker_Endcap_petal_overlap"/>
+        <constant name="SiTracker_Endcap_r10" value="SiTracker_Endcap_r9 + SiTracker_Endcap_module2_height - SiTracker_Endcap_petal_overlap"/>
+        <constant name="SiTracker_Endcap_r11" value="SiTracker_Endcap_r10 + SiTracker_Endcap_module2_height - SiTracker_Endcap_petal_overlap"/>
+        <constant name="SiTracker_Endcap_r12" value="SiTracker_Endcap_r11 + SiTracker_Endcap_module2_height - SiTracker_Endcap_petal_overlap"/>
+	<!--constant name="SiTracker_Endcap_r2" value="SiTracker_Endcap_r1 + 97.275*mm"/>
+	<constant name="SiTracker_Endcap_r3" value="SiTracker_Endcap_r1 + (97.275 + 95.189)*mm"/>
+	<constant name="SiTracker_Endcap_r4" value="SiTracker_Endcap_r1 + (97.275 + 95.189 + 89.340)*mm"/>
+	<constant name="SiTracker_Endcap_r5" value="SiTracker_Endcap_r1 + (97.275 + 95.189 + 89.340 + 87.134)*mm"/>
+	<constant name="SiTracker_Endcap_r6" value="SiTracker_Endcap_r1 + (97.275 + 95.189 + 89.340 + 87.134 + 78.012)*mm"/>
+	<constant name="SiTracker_Endcap_r7" value="SiTracker_Endcap_r1 + (97.275 + 95.189 + 89.340 + 87.134 + 78.012 + 89.782)*mm"/>
+        <constant name="SiTracker_Endcap_r8" value="SiTracker_Endcap_r1 + (97.275 + 95.189 + 89.340 + 87.134 + 78.012 + 89.782 + 80.791)*mm"/>
+        <constant name="SiTracker_Endcap_r9" value="SiTracker_Endcap_r1 + (97.275 + 95.189 + 89.340 + 87.134 + 78.012 + 89.782 + 80.791 + 84.125)*mm"/>
+	<constant name="SiTracker_Endcap_r10" value="SiTracker_Endcap_r1 + (97.275 + 95.189 + 89.340 + 87.134 + 78.012 + 89.782 + 80.791 + 84.125 + 82.206)*mm"/>
+        <constant name="SiTracker_Endcap_r11" value="SiTracker_Endcap_r1 + (97.275 + 95.189 + 89.340 + 87.134 + 78.012 + 89.782 + 80.791 + 84.125 + 82.206 + 83.197)*mm"/>
+        <constant name="SiTracker_Endcap_r12" value="SiTracker_Endcap_r1 + (97.275 + 95.189 + 89.340 + 87.134 + 78.012 + 89.782 + 80.791 + 84.125 + 82.206 + 83.197 + 82.770)*mm"/-->
+
+        <constant name="SiTracker_Endcap_dz" value="1.75*mm"/>
+	<constant name="SiTracker_Endcap_zstep" value="8.27*mm"/>
+
+        <constant name="SiTracker_Endcap_z1" value="SiTracker_zmax - 3*SiTracker_Layers_z_spacing"/>
+        <constant name="SiTracker_Endcap_z2" value="SiTracker_zmax - 2*SiTracker_Layers_z_spacing"/>
+        <constant name="SiTracker_Endcap_z3" value="SiTracker_zmax -   SiTracker_Layers_z_spacing"/>
+	<constant name="SiTracker_Endcap_z4" value="SiTracker_zmax"/>
+
+	<!--constant name="SiTracker_Endcap_z1" value="787.105*mm + SiTracker_Endcap_dz"/>
+        <constant name="SiTracker_Endcap_z2" value="SiTracker_Endcap_z1 + 286.188*mm"/>
+        <constant name="SiTracker_Endcap_z3" value="SiTracker_Endcap_z2 + 280.493*mm"/>
+        <constant name="SiTracker_Endcap_z4" value="SiTracker_Endcap_z3 + 285.378*mm"/-->
+
+    </define>
+
+<readouts>
+    <readout name="SiTrackerEndcapHits">
+      <id>system:6,barrel:3,layer:4,module:16,sensor:1,side:32:-2,strip:20</id>
+    </readout>
+</readouts>
+
+<detectors>
+ <!-- detector id="4" name="SiTrackerEndcap" type="SiTrackerEndcap_o1_v01" readout="SiTrackerEndcapHits" reflect="true" vis="SiTrackerEndcapVis"-->
+ <detector id="4" name="SiTrackerEndcap" type="DD4hep_SiTrackerEndcap2" readout="SiTrackerEndcapHits" reflect="true" vis="SiTrackerEndcapVis">
+  <comment>Silicon Tracker Endcaps</comment>
+  <type_flags type=" DetType_TRACKER + DetType_ENDCAP"/>
+ 
+  <envelope vis="SiTrackerEndcapVis">
+       <shape type="Assembly"/>
+  </envelope>
+
+  <module name="Module1">
+    <trd x1="36.112*mm" x2="46.635*mm" z="SiTracker_Endcap_module1_height/2" />
+    <module_component thickness="0.00052*cm"   material="Copper" />
+    <module_component thickness="0.0051*cm"   material="Kapton" />
+    <module_component thickness="0.00048*cm" material="Silicon" />
+    <module_component thickness="0.03*cm"   material="Silicon" sensitive="true" />
+    <module_component thickness="0.016*cm" material="CarbonFiber_50D" />
+    <module_component thickness="0.18*cm" material="Rohacell31_50D" />
+    <module_component thickness="0.016*cm" material="CarbonFiber_50D" />
+    <module_component thickness="0.0175*cm" material="Epoxy" />
+    <module_component thickness="0.03*cm"   material="Silicon" sensitive="true" />
+    <module_component thickness="0.00048*cm" material="Silicon" />
+    <module_component thickness="0.0051*cm"   material="Kapton" />
+    <module_component thickness="0.00052*cm"   material="Copper" />
+  </module>
+  <module name="Module2">
+    <trd x1="45.245*mm" x2="54.680*mm" z="SiTracker_Endcap_module2_height/2" />
+    <module_component thickness="0.00079*cm"   material="Copper" />
+    <module_component thickness="0.0078*cm"   material="Kapton" />
+    <module_component thickness="0.00048*cm" material="Silicon" />
+    <module_component thickness="0.03*cm"   material="Silicon" sensitive="true" />
+    <module_component thickness="0.016*cm" material="CarbonFiber_50D" />
+    <module_component thickness="0.18*cm" material="Rohacell31_50D" />
+    <module_component thickness="0.016*cm" material="CarbonFiber_50D" />
+    <module_component thickness="0.0175*cm" material="Epoxy" />
+    <module_component thickness="0.03*cm"   material="Silicon" sensitive="true" />
+    <module_component thickness="0.00048*cm" material="Silicon" />
+    <module_component thickness="0.0078*cm"   material="Kapton" />
+    <module_component thickness="0.00079*cm"   material="Copper" />
+  </module>
+  <layer id="1">
+    <ring r="SiTracker_Endcap_r1" zstart="SiTracker_Endcap_z1" nmodules="24" dz="SiTracker_Endcap_dz" module="Module1"/>
+    <ring r="SiTracker_Endcap_r2" zstart="SiTracker_Endcap_z1 - SiTracker_Endcap_zstep" nmodules="32" dz="SiTracker_Endcap_dz" module="Module1"/>
+    <ring r="SiTracker_Endcap_r3" zstart="SiTracker_Endcap_z1 - 2*SiTracker_Endcap_zstep" nmodules="40" dz="SiTracker_Endcap_dz" module="Module1"/>
+  </layer>
+  <layer id="2">
+    <ring r="SiTracker_Endcap_r1" zstart="SiTracker_Endcap_z2" nmodules="24" dz="SiTracker_Endcap_dz" module="Module1"/>
+    <ring r="SiTracker_Endcap_r2" zstart="SiTracker_Endcap_z2 - SiTracker_Endcap_zstep" nmodules="32" dz="SiTracker_Endcap_dz" module="Module1"/>
+    <ring r="SiTracker_Endcap_r3" zstart="SiTracker_Endcap_z2 - 2*SiTracker_Endcap_zstep" nmodules="40" dz="SiTracker_Endcap_dz" module="Module1"/>
+    <ring r="SiTracker_Endcap_r4" zstart="SiTracker_Endcap_z2 - 3*SiTracker_Endcap_zstep" nmodules="40" dz="SiTracker_Endcap_dz" module="Module2"/>
+    <ring r="SiTracker_Endcap_r5" zstart="SiTracker_Endcap_z2 - 4*SiTracker_Endcap_zstep" nmodules="48" dz="SiTracker_Endcap_dz" module="Module2"/>
+    <ring r="SiTracker_Endcap_r6" zstart="SiTracker_Endcap_z2 - 5*SiTracker_Endcap_zstep" nmodules="54" dz="SiTracker_Endcap_dz" module="Module2" phi0="pi/54"/>
+    <!--ring r="SiTracker_Endcap_r2" zstart="SiTracker_Endcap_z2 - 8.327*mm" nmodules="32" dz="SiTracker_Endcap_dz" module="Module1"/>
+    <ring r="SiTracker_Endcap_r3" zstart="SiTracker_Endcap_z2 - (8.327 + 8.232)*mm" nmodules="40" dz="SiTracker_Endcap_dz" module="Module1"/>
+    <ring r="SiTracker_Endcap_r4" zstart="SiTracker_Endcap_z2 - (8.327 + 8.232 + 8.268)*mm" nmodules="40" dz="SiTracker_Endcap_dz" module="Module2"/>
+    <ring r="SiTracker_Endcap_r5" zstart="SiTracker_Endcap_z2 - (8.327 + 8.232 + 8.268 + 7.399)*mm" nmodules="48" dz="SiTracker_Endcap_dz" module="Module2"/>
+    <ring r="SiTracker_Endcap_r6" zstart="SiTracker_Endcap_z2 - (8.327 + 8.232 + 8.268 + 7.399 + 7.342)*mm" nmodules="54" dz="SiTracker_Endcap_dz" module="Module2" phi0="pi/54"/-->
+  </layer>
+  <layer id="3">
+    <ring r="SiTracker_Endcap_r1" zstart="SiTracker_Endcap_z3" nmodules="24" dz="SiTracker_Endcap_dz" module="Module1"/>
+    <ring r="SiTracker_Endcap_r2" zstart="SiTracker_Endcap_z3 - SiTracker_Endcap_zstep" nmodules="32" dz="SiTracker_Endcap_dz" module="Module1"/>
+    <ring r="SiTracker_Endcap_r3" zstart="SiTracker_Endcap_z3 - 2*SiTracker_Endcap_zstep" nmodules="40" dz="SiTracker_Endcap_dz" module="Module1"/>
+    <ring r="SiTracker_Endcap_r4" zstart="SiTracker_Endcap_z3 - 3*SiTracker_Endcap_zstep" nmodules="40" dz="SiTracker_Endcap_dz" module="Module2"/>
+    <ring r="SiTracker_Endcap_r5" zstart="SiTracker_Endcap_z3 - 4*SiTracker_Endcap_zstep" nmodules="48" dz="SiTracker_Endcap_dz" module="Module2"/>
+    <ring r="SiTracker_Endcap_r6" zstart="SiTracker_Endcap_z3 - 5*SiTracker_Endcap_zstep" nmodules="54" dz="SiTracker_Endcap_dz" module="Module2" phi0="pi/54"/>
+    <ring r="SiTracker_Endcap_r7" zstart="SiTracker_Endcap_z3 - 5*SiTracker_Endcap_zstep" nmodules="58" dz="SiTracker_Endcap_dz" module="Module2" phi0="pi/58"/>
+    <ring r="SiTracker_Endcap_r8" zstart="SiTracker_Endcap_z3 - 6*SiTracker_Endcap_zstep" nmodules="64" dz="SiTracker_Endcap_dz" module="Module2"/>
+    <ring r="SiTracker_Endcap_r9" zstart="SiTracker_Endcap_z3 - 7*SiTracker_Endcap_zstep" nmodules="68" dz="SiTracker_Endcap_dz" module="Module2"/>
+  </layer>
+  <layer id="4">
+    <ring r="SiTracker_Endcap_r1" zstart="SiTracker_Endcap_z4" nmodules="24" dz="SiTracker_Endcap_dz" module="Module1"/>
+    <ring r="SiTracker_Endcap_r2" zstart="SiTracker_Endcap_z4 - SiTracker_Endcap_zstep" nmodules="32" dz="SiTracker_Endcap_dz" module="Module1"/>
+    <ring r="SiTracker_Endcap_r3" zstart="SiTracker_Endcap_z4 - 2*SiTracker_Endcap_zstep" nmodules="40" dz="SiTracker_Endcap_dz" module="Module1"/>
+    <ring r="SiTracker_Endcap_r4" zstart="SiTracker_Endcap_z4 - 3*SiTracker_Endcap_zstep" nmodules="40" dz="SiTracker_Endcap_dz" module="Module2"/>
+    <ring r="SiTracker_Endcap_r5" zstart="SiTracker_Endcap_z4 - 4*SiTracker_Endcap_zstep" nmodules="48" dz="SiTracker_Endcap_dz" module="Module2"/>
+    <ring r="SiTracker_Endcap_r6" zstart="SiTracker_Endcap_z4 - 5*SiTracker_Endcap_zstep" nmodules="54" dz="SiTracker_Endcap_dz" module="Module2" phi0="pi/54"/>
+    <ring r="SiTracker_Endcap_r7" zstart="SiTracker_Endcap_z4 - 6*SiTracker_Endcap_zstep" nmodules="58" dz="SiTracker_Endcap_dz" module="Module2" phi0="pi/58"/>
+    <ring r="SiTracker_Endcap_r8" zstart="SiTracker_Endcap_z4 - 7*SiTracker_Endcap_zstep" nmodules="64" dz="SiTracker_Endcap_dz" module="Module2"/>
+    <ring r="SiTracker_Endcap_r9" zstart="SiTracker_Endcap_z4 - 8*SiTracker_Endcap_zstep" nmodules="68" dz="SiTracker_Endcap_dz" module="Module2"/>
+    <ring r="SiTracker_Endcap_r10" zstart="SiTracker_Endcap_z4 - 9*SiTracker_Endcap_zstep" nmodules="72" dz="SiTracker_Endcap_dz" module="Module2"/>
+    <ring r="SiTracker_Endcap_r11" zstart="SiTracker_Endcap_z4 - 10*SiTracker_Endcap_zstep" nmodules="78" dz="SiTracker_Endcap_dz" module="Module2" phi0="pi/78"/>
+    <ring r="SiTracker_Endcap_r12" zstart="SiTracker_Endcap_z4 - 11*SiTracker_Endcap_zstep" nmodules="84" dz="SiTracker_Endcap_dz" module="Module2"/>
+  </layer>
+ </detector>
+</detectors>
+
+<plugins>
+    <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
+      <argument value="SiTrackerEndcap"/>
+      <argument value="dimension=2"/>
+    </plugin>
+</plugins>
+
+</lccdd>
