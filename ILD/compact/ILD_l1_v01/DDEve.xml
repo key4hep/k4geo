@@ -1,0 +1,67 @@
+<ddeve>
+  <display visLevel="7" loadLevel="1"/>
+
+  <calodata name="Ecal" hits="EcalBarrelCollection" towerH="100" emax="1000"
+	    n_eta="200" eta_min="-5" eta_max="5" 
+	    n_phi="200" phi_min="-pi" phi_max="pi" 
+	    alpha="0.5" rmin="Hcal_inner_radius-50*cm" dz="tracker_region_zmax" color="kRed"/>
+  <calodata name="EcalEndcap" use="Ecal" hits="EcalEndcapHits"/>
+
+  <calodata name="Hcal" hits="HcalBarrelCollection"  towerH="100" emax="1000"
+	    n_eta="200" eta_min="-5" eta_max="5" 
+	    n_phi="200" phi_min="-pi" phi_max="pi"
+	    alpha="0.5" rmin="Hcal_inner_radius" dz="tracker_region_zmax" color="kMagenta"/>
+  <calodata name="HcalEndcap" use="Hcal" hits="HcalEndcapHits"/>
+
+  <calodata name="VTX" hits="VXDCollection" towerH="20" emax="200"
+	    n_eta="200" eta_min="-5" eta_max="5" 
+	    n_phi="200" phi_min="-pi" phi_max="pi" 
+	    alpha="0.5" rmin="50*cm" dz="80*cm" color="kCyan"/>
+
+  <view name="3D Trackers R-Phi (Global)" type="RhoPhiProjection" structure="false" sensitive="true">
+    <detelement name="VTX"    load_geo="-1" show="4" alpha="0.5"/>
+    <detelement name="SET"    load_geo="-1" show="4" alpha="0.5"/>
+    <detelement name="FTD"    load_geo="-1" show="4" alpha="0.5"/>
+    <detelement name="SIT"    load_geo="-1" show="4" alpha="0.5"/>
+  </view>
+  <view name="3D Trackers" type="View3D" structure="false" sensitive="true">
+    <detelement name="VTX"  load_geo="2" show="2" alpha="0.5"/>
+    <detelement name="SET"  load_geo="2" show="2" alpha="0.5"/>
+    <detelement name="FTD"  load_geo="2" show="2" alpha="0.5"/>
+    <detelement name="SIT"  load_geo="2" show="2" alpha="0.5"/>
+    <detelement name="TPC"  load_geo="2" show="2" alpha="0.5"/>
+  </view>
+  <view name="3D Calorimeters" type="View3D" show="2" load_geo="2" structure="false" sensitive="true">
+    <detelement name="EcalBarrel" load_geo="2" show="0" alpha="0.5"/>
+    <detelement name="EcalEndcap" load_geo="2" show="0" alpha="0.5"/>
+    <detelement name="HcalBarrel" load_geo="2" show="0" alpha="0.5"/>
+    <detelement name="HcalEndcap" load_geo="2" show="0" alpha="0.5"/>
+  </view>
+  <view name="Calo 3D" type="Calo3DProjection" show="1" load_geo="1">
+    <calodata name="Ecal"/>
+    <calodata name="Hcal"/>
+    <calodata name="EcalEndcap"/>
+    <calodata name="HcalEndcap"/>
+    <detelement name="EcalBarrel" load_geo="-1" show="1" alpha="0.5"/>
+    <detelement name="EcalEndcap" load_geo="2" show="0" alpha="0.5"/>
+    <detelement name="HcalBarrel" load_geo="-1" show="1" alpha="0.5"/>
+    <detelement name="HcalEndcap" load_geo="2" show="0" alpha="0.5"/>
+  </view>
+  <view name="Calo Lego" type="CaloLego" show="1" load_geo="1">
+    <calodata name="Ecal"/>
+    <calodata name="Hcal"/>
+    <calodata name="EcalEndcap"/>
+    <calodata name="HcalEndcap"/>
+  </view>
+  <view name="Calo 2D" type="Calo2DProjection" show="1" load_geo="1">
+    <calodata name="Ecal"/>
+    <calodata name="Hcal"/>
+    <detelement name="EcalBarrel" load_geo="-1" show="1" alpha="0.5"/>
+    <detelement name="HcalBarrel" load_geo="-1" show="1" alpha="0.5"/>
+  </view>
+  <view name="VTX Deposits" type="Calo3DProjection" show="1" load_geo="1">
+    <calodata name="VTX"/>
+  </view>
+
+  <include ref="./ILD_l1_v01.xml"/>
+</ddeve>
