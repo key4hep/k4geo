@@ -158,12 +158,12 @@
   <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
 
   <comment>Trackers</comment> 
-  <include ref="SiVertexBarrel.xml"/>
-  <include ref="SiVertexEndcap.xml"/>
+  <!--include ref="SiVertexBarrel.xml"/>
+  <include ref="SiVertexEndcap.xml"/-->
 
   <include ref="SiTrackerBarrel_o2_v01_00.xml"/>
-  <include ref="SiTrackerEndcap.xml"/>
-  <include ref="SiTrackerForward.xml"/>
+  <!--include ref="SiTrackerEndcap.xml"/>
+  <include ref="SiTrackerForward.xml"/-->
   
   <comment>Calorimeters</comment>  
   <include ref="ECalBarrel_o2_v01_00.xml"/>
