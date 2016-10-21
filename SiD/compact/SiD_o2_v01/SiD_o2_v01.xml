@@ -8,7 +8,7 @@
         url="http://confluence.slac.stanford.edu/display/ilc/sidloi"
         status="development"
         version="$Id: compact.xml,v 1.13 2011/01/26 23:46:56 jeremy Exp $">
-    <comment>The compact format for the Silicon Detector as of July 2016.  Includes global XY segmentation in cal endcaps.</comment>        
+    <comment>The compact format for the Silicon Detector as of Oct 2016. Includes global XY segmentation in cal endcaps.</comment>        
   </info>
 
   <includes>
@@ -73,13 +73,13 @@
     <constant name="HCalBarrel_symmetry" value="12" />
 
     <constant name="HCalEndcap_zmin" value="1801.0*mm" />
-    <constant name="HCalEndcap_zmax" value="2990.0*mm" /><!-- 3000 on the tech. drawing -->
+    <constant name="HCalEndcap_zmax" value="2990.0*mm" /><!-- check! -->
     <constant name="HCalEndcap_rmin" value="216.0*mm" />
     <constant name="HCalEndcap_rmax" value="1403.0*mm" />
     <constant name="HCalEndcap_inner_symmetry" value="12" />
     <constant name="HCalEndcap_outer_symmetry" value="12" />
 
-    <constant name="MuonBarrel_half_length" value="2995.0*mm" /><!-- 3000 on the tech. drawing -->
+    <constant name="MuonBarrel_half_length" value="2995.0*mm" /><!-- check! -->
     <constant name="MuonBarrel_rmin" value="3454.0*mm" />
     <constant name="MuonBarrel_rmax" value="6054.0*mm" />
     <constant name="MuonBarrel_symmetry" value="12" />
@@ -144,6 +144,7 @@
     <vis name="HCalEndcapVis" r="0.296875" g="0.48828125" b="0.4921875" />
 
     <vis name="SOLVis" r="0.20703125" g="0.453125" b="0.77734375" />
+    <vis name="EnvelopeVis" alpha="1.0" r="0.8"  g="0.8"  b="0.4" showDaughters="true" visible="false"/>
 
     <vis name="MuonEndcapVis" r="0.28125" g="0.390625" b="0.625" />
     <vis name="MuonBarrelVis" r="0.28125" g="0.390625" b="0.625" />
@@ -158,12 +159,12 @@
   <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
 
   <comment>Trackers</comment> 
-  <!--include ref="SiVertexBarrel.xml"/>
-  <include ref="SiVertexEndcap.xml"/-->
+  <include ref="SiVertexBarrel.xml"/>
+  <include ref="SiVertexEndcap.xml"/>
 
   <include ref="SiTrackerBarrel_o2_v01_00.xml"/>
-  <!--include ref="SiTrackerEndcap.xml"/>
-  <include ref="SiTrackerForward.xml"/-->
+  <include ref="SiTrackerEndcap.xml"/>
+  <include ref="SiTrackerForward.xml"/>
   
   <comment>Calorimeters</comment>  
   <include ref="ECalBarrel_o2_v01_00.xml"/>
