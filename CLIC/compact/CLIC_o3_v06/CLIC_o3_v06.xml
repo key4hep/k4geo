@@ -90,7 +90,7 @@
 
         <constant name="InnerTracker_inner_radius"  value="61*mm"/>
         <constant name="InnerTracker_outer_radius"  value="580*mm"/>
-        <constant name="InnerTracker_half_length"   value="2345*mm"/>
+        <constant name="InnerTracker_half_length"   value="2306*mm"/>
 
         <constant name="OuterTracker_inner_radius"  value="580*mm"/>
         <constant name="OuterTracker_outer_radius"  value="1500*mm - 0.1*mm"/>  <!-- to avoid overlap with CaloFace-->
