@@ -26,7 +26,7 @@
                 <shape type="BooleanShape" operation="Subtraction" material="Air">
                     <shape type="BooleanShape" operation="Subtraction">
                         <shape type="PolyhedraRegular"  numsides="YokeEndcap_outer_symmetry" rmin="0" rmax="YokeEndcap_outer_radius+ 10.0*env_safety" dz="2.0*YokeEndcap_max_z+2*env_safety"/>
-                        <shape type="PolyhedraRegular"  numsides="YokeEndcap_outer_symmetry" rmin="0" rmax="YokeEndcap_outer_radius+ 100.0*env_safety" dz="2.0*YokeEndcap_min_z-2*env_safety"/>
+                        <shape type="PolyhedraRegular"  numsides="YokeEndcap_outer_symmetry" rmin="0" rmax="YokeEndcap_outer_radius+ 100.0*env_safety" dz="2.0*YokeEndcap_min_z"/>
                     </shape>
                     <shape type="Tube"  rmin="0" rmax="YokeEndcap_inner_radius-env_safety" dz="2.0*YokeEndcap_max_z+4*env_safety"/>
                 </shape>

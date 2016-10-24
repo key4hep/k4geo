@@ -34,7 +34,7 @@
 
             
             <envelope vis="YOKEVis">
-                <shape type="PolyhedraRegular" numsides="YokeBarrel_symmetry"  rmin="YokeBarrel_inner_radius-2*env_safety" rmax="YokeBarrel_outer_radius+2*env_safety" dz="2*YokeBarrel_half_length+4*env_safety"  material = "Air" />
+                <shape type="PolyhedraRegular" numsides="YokeBarrel_symmetry"  rmin="YokeBarrel_inner_radius-10*env_safety" rmax="YokeBarrel_outer_radius+10*env_safety" dz="2*YokeBarrel_half_length"  material = "Air" />
                 <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/YokeBarrel_symmetry"/>
             </envelope>
             
