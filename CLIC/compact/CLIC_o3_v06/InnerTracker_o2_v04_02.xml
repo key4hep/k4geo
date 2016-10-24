@@ -517,13 +517,13 @@
            <layer id="2" inner_r="InnerTracker_Endcap_radius_2" inner_z="InnerTracker_Endcap_z_2-1*cm" outer_r="555*mm" vis="SupportVis">
 	           <slice material="CarbonFiber" thickness="0.33/3.5447*cm" />
            </layer>
-           <layer id="3" inner_r="InnerTracker_Endcap_radius_3" inner_z="InnerTracker_Endcap_z_3+1*cm" outer_r="555*mm" vis="SupportVis">
+           <layer id="3" inner_r="InnerTracker_Endcap_radius_3+10*env_safety" inner_z="InnerTracker_Endcap_z_3+1*cm" outer_r="555*mm" vis="SupportVis">
 	           <slice material="CarbonFiber" thickness="0.33/3.5447*cm" />
            </layer>
            <layer id="4" inner_r="InnerTracker_Endcap_radius_4" inner_z="InnerTracker_Endcap_z_4-1*cm" outer_r="555*mm" vis="SupportVis">
 	           <slice material="CarbonFiber" thickness="0.33/3.5447*cm" />
            </layer>
-           <layer id="5" inner_r="InnerTracker_Endcap_radius_5" inner_z="InnerTracker_Endcap_z_5+1*cm" outer_r="555*mm" vis="SupportVis">
+           <layer id="5" inner_r="InnerTracker_Endcap_radius_5+10*env_safety" inner_z="InnerTracker_Endcap_z_5+1*cm" outer_r="555*mm" vis="SupportVis">
 	           <slice material="CarbonFiber" thickness="0.33/3.5447*cm" />
            </layer>   
            <layer id="6" inner_r="InnerTracker_Endcap_radius_6" inner_z="InnerTracker_Endcap_z_6-1*cm" outer_r="555*mm" vis="SupportVis">
