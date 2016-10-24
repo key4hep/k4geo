@@ -83,10 +83,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             double     c_thick = c.thickness();
             Material   c_mat   = lcdd.material(c.materialStr());
             string     c_name  = _toString(c_id,"component%d");
-            Volume     c_vol(c_name, Box(dx,dy,c_thick/2e0), c_mat);
+            Volume     c_vol(c_name, Box(dx,dy,c_thick/2.0), c_mat);
             
             c_vol.setVisAttributes(lcdd.visAttributes(c.visStr()));
-            pv = m_volume.placeVolume(c_vol,Position(0,posZ+c_thick/2,0));
+            pv = m_volume.placeVolume(c_vol,Position(0,0,posZ+c_thick/2.0));
             if ( c.isSensitive() ) {
 //                 sdet.check(n_sensor > 1,"TrackerEndcap:fromCompact: "+c_name+" Max of 1 sensitive elemets allowed!");
 //                 pv.addPhysVolID("sensor",n_sensor); //Not what we call sensor; see below
