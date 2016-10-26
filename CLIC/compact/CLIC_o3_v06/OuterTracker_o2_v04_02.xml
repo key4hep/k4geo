@@ -245,7 +245,7 @@
            <layer id="3" inner_r="OuterTracker_inner_radius" inner_z="OuterTracker_Endcap_z_3-1*cm" outer_r="OuterTracker_Endcap_outer_radius" vis="SupportVis">
 	           <slice material="CarbonFiber" thickness="0.365/3.5447*cm" />
            </layer>
-           <layer id="4" inner_r="OuterTracker_inner_radius" inner_z="OuterTracker_Barrel_half_length+2*cm" outer_r="OuterTracker_outer_radius" vis="OuterTrackerInterlinkVis">
+           <layer id="4" inner_r="OuterTracker_Barrel_radius_0-1*cm" inner_z="OuterTracker_Barrel_half_length+2*cm" outer_r="OuterTracker_outer_radius" vis="OuterTrackerInterlinkVis">
 	           <slice material="CarbonFiber" thickness="0.5/3.5447*cm" />
            </layer>                    
         </detector> 
