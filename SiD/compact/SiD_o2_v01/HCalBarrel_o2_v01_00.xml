@@ -2,7 +2,7 @@
 
 <!-----------------------------------------------------------------------------------------------
      AHCal Barrel implementation of the layout from 70th SiD Optimization Meeting presentation 
-     from Ross Gordon McCoy (ross.mccoy@mavs.uta.edu) - June 30, 2016 
+     from Ross Gordon McCoy (ross.mccoy@mavs.uta.edu) - June 30, 2016  
 ------------------------------------------------------------------------------------------------->
 
 <readouts>
@@ -11,6 +11,7 @@
       <!-- <segmentation type="RegularNgonCartesianGridXY" gridSizeX="1.0*cm" gridSizeY="1.0*cm" /> -->
       <!-- <id>system:6,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id> -->
       <id>system:5,side:2,module:8,stave:4,layer:9,submodule:4,x:32:-16,y:-16</id>
+      
     </readout>
 </readouts>
 
@@ -27,16 +28,16 @@
 
   <staves />
   <layer repeat="40">
-        <slice material = "Steel235" thickness = "1.90*cm" />    <!-- Absorber -->
-	<slice material = "Air"      thickness = "0.20*cm" />
-	<slice material = "Steel235" thickness = "0.05*cm" />    <!-- Top plate -->
-	<slice material = "Kapton" thickness = "0.0115*cm" />    <!-- Polyimide foil -->
-	<slice material = "Copper" thickness = "0.0068*cm" />
-	<slice material = "PCB"    thickness = "0.1*cm" />       <!-- PCB made of FR4 -->
-	<slice material = "Polystyrole" thickness = "0.01*cm" /> <!-- Reflector foil -->
-	<slice material = "Polystyrene" thickness = "0.30*cm" sensitive="yes" limits="cal_limits" />
-	<slice material = "Polystyrole" thickness = "0.01*cm" /> <!-- Reflector foil -->
-	<slice material = "Steel235"    thickness = "0.05*cm" /> <!-- Bottom plate -->
+        <slice material = "Steel235"   thickness = "19.0*mm" />    <!-- Absorber -->
+	<slice material = "Air"        thickness = "20.0*mm" />
+	<slice material = "Steel235"   thickness =  "0.5*mm" />    <!-- Top plate -->
+	<slice material = "Kapton"    thickness = "0.115*mm" />    <!-- Polyimide foil -->
+	<slice material = "Copper"    thickness = "0.068*mm" />
+	<slice material = "PCB"       thickness =   "1.0*mm" />    <!-- PCB made of FR4 -->
+	<slice material = "Polystyrole" thickness = "0.1*mm" /> <!-- Reflector foil -->
+	<slice material = "Polystyrene" thickness = "3.0*mm" sensitive="yes" limits="cal_limits" />
+	<slice material = "Polystyrole" thickness = "0.1*mm" /> <!-- Reflector foil -->
+	<slice material = "Steel235"    thickness = "0.5*mm" /> <!-- Bottom plate -->
 	<!--slice material = "Air"    thickness = "0.1*cm" /-->
   </layer>
   <!--layer repeat="1">
