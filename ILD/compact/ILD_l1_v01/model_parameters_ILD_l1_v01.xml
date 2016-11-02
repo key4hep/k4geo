@@ -1,5 +1,5 @@
 <!-- 
-     global model parameters for model: ILD_l1_v01
+     global model parameters for model: ILD_o1_v05
      extracted from Mokka DB at pollin1.in2p3.fr - db: models03
      on 03/02/2014
      at 15:07:20
@@ -180,7 +180,6 @@
   <constant name="Lcal_beam_pipe_clearance" value="0.5*mm"/>
   <constant name="Lcal_extra_size" value="26*mm"/>
   <constant name="Lcal_inner_radius" value="80.0*mm"/>
-  <constant name="Lcal_layer_gap" value="0.25*mm"/>
   <constant name="Lcal_n_layers" value="30"/>
   <constant name="Lcal_n_tiles" value="12"/>
   <constant name="Lcal_nstrips_phi" value="48"/>
@@ -188,13 +187,19 @@
   <constant name="Lcal_outer_radius" value="195.2*mm"/>
   <constant name="Lcal_phi_offset" value="0"/>
   <constant name="Lcal_sensor_phi_offset" value="3.75"/>
-  <constant name="Lcal_silicon_thickness" value="0.32*mm"/>
-  <constant name="Lcal_support_thickness" value="0.2*mm"/>
-  <constant name="Lcal_tile_gap" value="1.2*mm"/>
   <constant name="Lcal_tungsten_thickness" value="3.5*mm"/>
+  <constant name="Lcal_silicon_thickness" value="0.32*mm"/>
+  <!-- BP: this is in fact total thickness of electonic services fanouts and pad metalization, handled by LumiCal driver -->
+  <constant name="Lcal_support_thickness" value="0.22*mm"/>
+  <constant name="Lcal_layer_gap" value="0.25*mm"/>
+  <constant name="Lcal_tile_gap" value="1.2*mm"/>
   <!-- <constant name="Lcal_type" value="pad"/> -->
+  <!-- 9-Oct-2016 b.p: Make it consistent with other Lcal parameters -->  
+  <!--constant name="Lcal_z_thickness" value="135.6*mm"/-->
+  <constant name="Lcal_z_thickness" value="Lcal_n_layers*(Lcal_tungsten_thickness+Lcal_silicon_thickness+Lcal_support_thickness+Lcal_layer_gap)"/>
+  <!-- 9-Oct-2016 b.p: NOTE! It depends on Ecal_plugin_zmax and Lcal_z_thickness, use with caution for stand alone LumiCal -->  
   <constant name="Lcal_z_begin" value="2505.0*mm"/>
-  <constant name="Lcal_z_thickness" value="135.6*mm"/>
+  <!-- 9-Oct-2016 b.p: Do not use this value, cell sizes are set in LumiCal.xml, and LumiCal geo driver -->
   <constant name="LumiCal_cell_size" value="10*mm"/>
   <constant name="PCB_Thickness" value="0.8*mm"/>
   <constant name="PadSeparation" value="0.408*mm"/>

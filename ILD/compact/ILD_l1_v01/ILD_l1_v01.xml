@@ -72,6 +72,9 @@
 	-->
 
 	<constant name="Ecal_endcap_zmax" value="2635.*mm"/>
+<!-- bp : set it here as it depends on Ecal_endcap_zmax -->
+        <constant name="Lcal_z_begin" value="Ecal_endcap_zmax - Lcal_z_thickness"/>
+
 
 	<!--used in FTD -->
 
@@ -117,7 +120,6 @@
 	<constant name="Coil_extra_size" value="1522*mm"/>
 	<constant name="Coil_thickness" value="750.0*mm"/>
 
-	<constant name="LHcal_inner_radius" value="93*mm"/>
 
 	<comment>
 	 ...  these are the values we have in the gear_ILD_l1_v01.xml from Mokka ....
@@ -138,8 +140,8 @@
         <constant name="Hcal_R_max" type="string" value="3395.46" />
         <constant name="Hcal_endcap_zmin" value="2650*mm" />
         <constant name="LHcal_zend" value="3085*mm"/>
-        <constant name="Lcal_z_begin" type="string" value="2506.9" />
-        <constant name="Lcal_z_thickness" type="string" value="128.1" />
+        <!--constant name="Lcal_z_begin" type="string" value="2506.9" /-->
+        <!--constant name="Lcal_z_thickness" type="string" value="128.1" /-->
         <constant name="MokkaModel" type="string" value="ILD_l1_v01" />
         <constant name="MokkaVersion" type="string" value="trunk" />
         <constant name="SIT1_Half_Length_Z" type="string" value="368" />
@@ -281,8 +283,8 @@
 	<constant name="EcalEndcapRing_min_z"           value="EcalEndcap_min_z"/>
 	<constant name="EcalEndcapRing_max_z"           value="EcalEndcap_max_z"/>
 
-	<!-- forward calorimeter -->
-	<constant name="COS_halfCrossingAngle"         value="0.999976"/>
+	<!-- forward calorimeters -->
+	<constant name="COS_halfCrossingAngle"         value="cos(ILC_Main_Crossing_Angle/2. )" />
 
 	<!-- The values are copied from dimensions in LHCal.xml -->
 	<constant name="LHCal_thickness"               value="520.0*mm"/>
@@ -299,13 +301,7 @@
 	<constant name="BeamCal_max_z"                 value="BeamCal_min_z + BeamCal_thickness"/>
 	<constant name="BeamCal_tubeIncoming_radius"   value="15.0*mm"/>
 
-	<!-- The values are copied from dimensions in LumiCal.xml -->
-	<constant name="LumiCal_thickness"             value="130.65*mm"/>
-	<constant name="LumiCal_inner_radius"          value="80*mm"/>
-	<constant name="LumiCal_outer_radius"          value="195.2*mm"/>
-	<constant name="LumiCal_min_z"                 value="2500*mm"/>
-	<constant name="LumiCal_max_z"                 value="LumiCal_min_z+LumiCal_thickness"/>
-
+ 
 
 	<constant name="Coil_inner_radius"    value="Hcal_outer_radius+Hcal_Coil_additional_gap"/> 
 	<constant name="Coil_outer_radius"    value="Hcal_outer_radius+Hcal_Coil_additional_gap+Coil_thickness"/>
@@ -313,6 +309,19 @@
 
 	<!-- ########### END ENVELOPE PARAMETERS ############################################################## -->
 
+   <comment> Parameters for the LumiCal</comment>
+	<!-- The values are copied from dimensions in LumiCal.xml -->
+	<constant name="LumiCal_thickness"             value="128.7*mm"/> <!--"130.65*mm"/-->
+	<constant name="LumiCal_inner_radius"          value="80*mm"/>
+	<constant name="LumiCal_outer_radius"          value="202.086*mm"/> <!--"195.2*mm"/-->
+	<constant name="LumiCal_max_z"                 value="Ecal_endcap_zmax"/>
+	<constant name="LumiCal_min_z"                 value="LumiCal_max_z - LumiCal_thickness"/>
+	<constant name="COS_halfCrossingAngle"         value="cos( ILC_Main_Crossing_Angle/2. )"/>
+        <constant name="Lcal_z_begin" value="LumiCal_min_z" />
+	<!-- B.P: added for as LumiCal readout need this -->
+	<constant name="LcalHalfTilePhi"  value="180./Lcal_n_tiles*degree"/>
+	<constant name="CosHalfTilePhi"   value=" cos( LcalHalfTilePhi )"/>
+	<constant name="Lcal_sensor_rmin" value=" LumiCal_inner_radius*CosHalfTilePhi + Lcal_tile_gap"/>
 
 
 	<constant name="tracker_region_rmax" value="TPC_outer_radius" />  
@@ -344,12 +353,9 @@
     <display>
       <!-- fixme:  white comes out as red !!!???? |  vis name="WhiteVis"         alpha="0.0" r="1.0" g="1.0"  b="1.0"   showDaughters="true"  visible="true"/ --> 
       <vis name="WhiteVis"         alpha="0.0" r=".96" g=".96"  b=".96"   showDaughters="true"  visible="true"/>
-
       <vis name="LightGrayVis"         alpha="0.0" r=".75" g=".75"  b=".75"   showDaughters="true"  visible="true"/>
-
       <vis name="Invisible"         alpha="0.0" r="0" g="0"  b="0"   showDaughters="false"  visible="false"/>
       <vis name="SeeThrough"         alpha="0.0" r="0" g="0"  b="0"   showDaughters="true"  visible="false"/>
-
       <vis name="RedVis"           alpha="1.0" r="1.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
       <vis name="GreenVis"         alpha="1.0" r="0.0" g="1.0"  b="0.0"   showDaughters="true"  visible="true"/>
       <vis name="BlueVis"          alpha="1.0" r="0.0" g="0.0"  b="1.0"   showDaughters="true"  visible="true"/>
@@ -358,7 +364,6 @@
       <vis name="YellowVis"        alpha="1.0" r="1.0" g="1.0"  b="0.0"   showDaughters="true"  visible="true"/>
       <vis name="BlackVis"         alpha="1.0" r="0.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
       <vis name="GrayVis"          alpha="1.0" r="0.5" g="0.5"  b="0.5"   showDaughters="true"  visible="true"/>
-
 
       <vis name="TubeVis"   alpha="0.1" r="1.0" g="0.7"  b="0.5"   showDaughters="true"  visible="true"/>
       <!-- <vis name="TubeVis"           alpha="1.0" r="1.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/> -->
@@ -371,7 +376,6 @@
       <vis name="VXDVis"        alpha="0.1" r="0.1" g=".5"  b=".5"   showDaughters="true"  visible="true"/>
       <vis name="VXDLayerVis"   alpha="1.0" r="0.1" g=".5"  b=".5"   showDaughters="true"  visible="true"/>
       <vis name="VXDSupportVis" alpha="1.0" r="0.0" g="1.0" b="0.0"  showDaughters="true"  visible="true"/>
-
 
       <vis name="FTDVis"           alpha="1.0" r="0.0" g="0.1"  b="0.0"   showDaughters="true"  visible="false"/>
       <vis name="FTDSensitiveVis" alpha="1.0"  r="1.0"  g="1.0" b="0.45" showDaughters="true" visible="true"/>
@@ -394,7 +398,7 @@
       <vis name="ILD_HCALVis" alpha="1.0" r="0.76" g="0.76"  b="0.19" showDaughters="true"  visible="true"/>
       <vis name="ILD_YOKEVis" alpha="1.0" r="0.09" g="0.76"  b="0.76" showDaughters="true"  visible="true"/>
       <vis name="ILD_COILVis" alpha="1.0" r="0.28" g="0.28"  b="0.86" showDaughters="true"  visible="true"/>
-      <vis name="ILD_FTDVis"  alpha="1.0" r="0.39" g="0.1"  b="0.57" showDaughters="true"  visible="true"/>
+      <vis name="ILD_FTDVis"  alpha="1.0" r="0.39" g="0.1"   b="0.57" showDaughters="true"  visible="true"/>
       <vis name="ILD_FCALVis" alpha="1.0" r="0.67" g="0.66"  b="0.67" showDaughters="true"  visible="true"/>
 
     </display>
@@ -413,43 +417,44 @@
 
 	<include ref="Beampipe_o1_v01_01.xml"/>
 	
-	<include ref="ftd_simple_staggered_02.xml"/>
+	<include ref="ftd_simple_staggered_02.xml"/> 
 	
-	<include ref="vxd07.xml"/>
+	<include ref="vxd07.xml"/> 
  	
-	<include ref="sit_simple_planar_sensors_03.xml"/>
+	<include ref="sit_simple_planar_sensors_03.xml"/> 
 	
-	<include ref="tpc10_01.xml"/>
+	<include ref="tpc10_01.xml"/> 
 	
-	<include ref="set_simple_planar_sensors_01.xml"/>
+	<include ref="set_simple_planar_sensors_01.xml"/> 
 	
         <comment>Calorimeters</comment>
 	
-	<include ref="SEcal04_Barrel.xml"/>
+	<include ref="SEcal04_Barrel.xml"/> 
 
-	<include ref="SEcal04_Endcaps.xml"/>
+	<include ref="SEcal04_Endcaps.xml"/> 
 
-	<include ref="SEcal04_ECRing.xml"/>
+	<include ref="SEcal04_ECRing.xml"/> 
 
-	<include ref="SHcalSc04_Barrel_v01.xml"/>
+	<include ref="SHcalSc04_Barrel_v01.xml"/> 
 
-	<include ref="SHcalSc04_Endcaps.xml"/>
+	<include ref="SHcalSc04_Endcaps.xml"/> 
 
-	<include ref="SHcalSc04_EndcapRing.xml"/>
+	<include ref="SHcalSc04_EndcapRing.xml"/> 
 
-	<include ref="Yoke05_Barrel.xml"/>
+	<include ref="Yoke05_Barrel.xml"/> 
 
-	<include ref="Yoke05_Endcaps.xml"/>
+	<include ref="Yoke05_Endcaps.xml"/> 
 
-	 <include ref="BeamCal08.xml"/>
 
 	<include ref="LumiCal.xml"/>
 
 	<include ref="LHCal.xml"/>
 
-	<include ref="coil03.xml"/>
+        <include ref="BeamCal08.xml"/>
 
-	<include ref="SServices00.xml"/>
+	<include ref="coil03.xml"/> 
+
+   <!--<include ref="SServices00.xml"/--> 
 
       </detectors> 
 
@@ -458,10 +463,12 @@
 	  <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
             <id>system:5,side:2,layer:9,module:8,sensor:8</id>
         </readout>
+
         <readout name="SITCollection">
 	  <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
             <id>system:5,side:2,layer:9,module:8,sensor:8</id>
         </readout>
+
         <readout name="FTDCollection">
 	  <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
             <id>system:5,side:2,layer:9,module:8,sensor:8</id>
@@ -531,9 +538,9 @@
 	
 	<readout name="LumiCalCollection">
 	    <segmentation type="PolarGridRPhi"
-			  grid_size_r="(LumiCal_outer_radius-LumiCal_inner_radius)/64"
-			  grid_size_phi="360/48*degree"
-			  offset_r="LumiCal_inner_radius"
+			  grid_size_r="(LumiCal_outer_radius-Lcal_sensor_rmin)/Lcal_nstrips_theta"
+			  grid_size_phi="360/Lcal_nstrips_phi*degree"
+			  offset_r="Lcal_sensor_rmin"
 			  />
 	    <id>system:8,barrel:3,layer:8,slice:8,r:32:-16,phi:-16</id>
 	</readout>
