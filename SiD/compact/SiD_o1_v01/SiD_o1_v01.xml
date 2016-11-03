@@ -166,8 +166,8 @@
   <include ref="ECalBarrel_o1_v01_00.xml"/>
   <include ref="ECalEndcap_o1_v01_00.xml"/>
 
-  <include ref="HCalBarrel_o1_v02_00.xml"/>
-  <include ref="HCalEndcap_o1_v02_00.xml"/>
+  <include ref="HCalBarrel_o1_v03_00.xml"/>
+  <include ref="HCalEndcap_o1_v03_00.xml"/>
 
   <include ref="MuonBarrel_o1_v01_00.xml"/>
   <include ref="MuonEndcap_o1_v01_00.xml"/>

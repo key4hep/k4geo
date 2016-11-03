@@ -1,5 +1,10 @@
 <lccdd>
 
+<!-- 
+  This barrel implementation allows easy adjustment of the number of layers BNL,
+  between 3 and 5, with everything scaling accordingly. Default BNL=5 
+-->
+
 <define>
 
   <constant name="SiTracker_tanTheta" value="0.949"/><!-- Theta = 43.5*deg -->
@@ -13,8 +18,10 @@
   <constant name="SiTrackerBarrel_outer_z0" value="1476.497*mm"/><!-- z0_5 -->
 
   <constant name="SiTrackerBarrel_r_spacing" value="(SiTrackerBarrel_outer_rc - SiTrackerBarrel_inner_rc)/(SiTracker_BarrelLayers - 1)"/>
-  <!-- 5 Layers, the innermost slightly longer, r_spacing = 250*mm, the layers in between are calculated below 
-    All measurements are the old ones, to enable comparison with the hardcoded model. 
+
+  <!-- 
+    5 Layers, the innermost slightly longer, r_spacing = 250*mm, the layers in between are calculated below 
+    All measurements are from sidloi3, to enable comparison with the hardcoded model. 
     Measurements will be updated once all arithmetics is validated. 
   --> 
 

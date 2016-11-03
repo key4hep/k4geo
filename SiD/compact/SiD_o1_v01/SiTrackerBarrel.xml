@@ -161,6 +161,7 @@
     </module_component>
   </module>
 
+
   <layer module="SiTrackerModule_Layer1" id="1">
     <barrel_envelope inner_r="215.075*mm" outer_r="245.0*mm" z_length="578 * 2*mm"/>
     <rphi_layout phi_tilt="0.17506*rad" nphi="20" phi0="0.*rad" rc="216.355*mm + 5.0*mm" dr="0.0"/>

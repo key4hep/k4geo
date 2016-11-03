@@ -1,5 +1,10 @@
 <lccdd>
 
+<!-- 
+  This implementation of the endcap does not allow adjusting the number of layers 
+  like in the barrel! ENL=BNL-1
+-->
+
     <define>
 
         <constant name="SiTracker_Endcap_zmax"  value="SiTracker_zmax"/>
@@ -15,7 +20,6 @@
 	<constant name="SiTracker_Endcap_module2_height" value="89.773*mm"/>
 	<constant name="SiTracker_Endcap_petal_overlap"  value="3.1*mm"/>
 
-	<!-- All the arithmetic operations could be done in the driver -->
         <constant name="SiTracker_Endcap_r1" value="SiTracker_Endcap_inner_radius + SiTracker_Endcap_module1_height/2"/>
         <constant name="SiTracker_Endcap_r2" value="SiTracker_Endcap_r1 + SiTracker_Endcap_module1_height - SiTracker_Endcap_petal_overlap"/>
         <constant name="SiTracker_Endcap_r3" value="SiTracker_Endcap_r2 + SiTracker_Endcap_module1_height - SiTracker_Endcap_petal_overlap"/>
