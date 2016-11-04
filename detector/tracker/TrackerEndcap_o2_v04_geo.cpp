@@ -145,7 +145,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                 double y = -r*std::sin(phi);
                 DetElement module(sdet,m_base+"_pos",det_id);
                 pv = envelope.placeVolume(m_vol,Transform3D(RotationZ(phi+M_PI/2),Position(x,y,zstart+dz)));
-                pv.addPhysVolID("side",1).addPhysVolID("layer", l_id).addPhysVolID("module",mod_num).addPhysVolID("sensor",k);
+                pv.addPhysVolID("barrel",1).addPhysVolID("side",0).addPhysVolID("layer", l_id).addPhysVolID("module",mod_num).addPhysVolID("sensor",k);
                 module.setPlacement(pv);
                 for(size_t ic=0; ic<sensVols.size(); ++ic)  {
                     PlacedVolume sens_pv = sensVols[ic];
@@ -155,7 +155,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                 
                 if ( reflect ) {
                     pv = envelope.placeVolume(m_vol,Transform3D(RotationZ(phi+M_PI/2)*RotationX(M_PI),Position(x,y,-zstart-dz)));
-                    pv.addPhysVolID("side",-1).addPhysVolID("layer",l_id).addPhysVolID("module",mod_num).addPhysVolID("sensor",k);
+                    pv.addPhysVolID("barrel",2).addPhysVolID("side",1).addPhysVolID("layer",l_id).addPhysVolID("module",mod_num).addPhysVolID("sensor",k);
                     DetElement r_module(sdet,m_base+"_neg",det_id);
                     r_module.setPlacement(pv);
                     for(size_t ic=0; ic<sensVols.size(); ++ic)  {
@@ -189,4 +189,4 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     return sdet;
 }
 
-DECLARE_DETELEMENT(TrackerEndcap_o2_v05,create_detector)
+DECLARE_DETELEMENT(TrackerEndcap_o2_v04,create_detector)
