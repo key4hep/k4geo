@@ -136,7 +136,7 @@
         
         
         
-        <detector id="DetID_IT_Endcap" name="InnerTrackerEndcap" type="TrackerEndcap_o2_v04" readout="InnerTrackerEndcapCollection" reflect="true" region="InnerTrackerEndcapRegion">
+        <detector id="DetID_IT_Endcap" name="InnerTrackerEndcap" type="TrackerEndcap_o2_v05" readout="InnerTrackerEndcapCollection" reflect="true" region="InnerTrackerEndcapRegion">
             <envelope vis="OTVis">
                 <shape type="Assembly"/>
             </envelope>
