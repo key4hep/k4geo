@@ -34,6 +34,7 @@ ENDIF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 #---Options-------------------------------------------------------------------------
 
 option(BUILD_TESTING "Enable and build tests" ON)
+option(CMAKE_MACOSX_RPATH "Build with rpath on macos" ON)
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
