@@ -318,10 +318,11 @@
 	<constant name="LumiCal_min_z"                 value="LumiCal_max_z - LumiCal_thickness"/>
 	<constant name="COS_halfCrossingAngle"         value="cos( ILC_Main_Crossing_Angle/2. )"/>
         <constant name="Lcal_z_begin" value="LumiCal_min_z" />
-	<!-- B.P: added for as LumiCal readout need this -->
+	<!-- B.P: added  as LumiCal readout need this -->
 	<constant name="LcalHalfTilePhi"  value="180./Lcal_n_tiles*degree"/>
 	<constant name="CosHalfTilePhi"   value=" cos( LcalHalfTilePhi )"/>
 	<constant name="Lcal_sensor_rmin" value=" LumiCal_inner_radius*CosHalfTilePhi + Lcal_tile_gap"/>
+	<constant name="Lcal_sensor_rmax" value=" LumiCal_outer_radius*CosHalfTilePhi - Lcal_tile_gap"/>
 
 
 	<constant name="tracker_region_rmax" value="TPC_outer_radius" />  
@@ -538,7 +539,7 @@
 	
 	<readout name="LumiCalCollection">
 	    <segmentation type="PolarGridRPhi"
-			  grid_size_r="(LumiCal_outer_radius-Lcal_sensor_rmin)/Lcal_nstrips_theta"
+			  grid_size_r="(Lcal_sensor_r-Lcal_sensor_rmin)/Lcal_nstrips_theta"
 			  grid_size_phi="360/Lcal_nstrips_phi*degree"
 			  offset_r="Lcal_sensor_rmin"
 			  />

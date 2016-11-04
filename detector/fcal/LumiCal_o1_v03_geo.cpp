@@ -22,7 +22,6 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   std::cout << __PRETTY_FUNCTION__  << std::endl << std::endl;
   std::cout << " Here is my LumiCal_o1_v03 :"  << std::endl;
   std::cout << "----------------------------"  << std::endl;
-    //    std::cout << " and this is the sensitive detector: " << &sens  << std::endl;
   sens.setType("calorimeter");
   //Materials
   DD4hep::Geometry::Material air = lcdd.air();
@@ -69,7 +68,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
     const double lcalTileDphi  = (360./lcalModules)*dd4hep::deg;
     const double cellPhiSize   = lcalTileDphi/lcalSectors;
     // FIXME: staggerPhi must be somehow passed to DDrec
-    // How !?
+    // temporary it goes in place of obsolete layer thickness
     const double staggerPhi    = layerStagger*cellPhiSize;   
     const double lcalThickness = DD4hep::Layering(xmlLumiCal).totalThickness();
     const double lcalCentreZ   = lcalInnerZ+lcalThickness*0.5;
@@ -85,9 +84,9 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
     caloData->inner_symmetry = 0  ; // hardcoded tube
     caloData->outer_symmetry = 0  ; 
      
-    /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
-    caloData->extent[0] = lcalInnerR ;
-    caloData->extent[1] = lcalOuterR ;
+    /// extent of the calorimeter sensor in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
+    caloData->extent[0] = sensInnerR; //lcalInnerR ;
+    caloData->extent[1] = sensOuterR; //lcalOuterR ;
     caloData->extent[2] = lcalInnerZ ;
     caloData->extent[3] = lcalInnerZ + lcalThickness ;
     caloData->outer_phi0 = lcalPhi0;
@@ -97,8 +96,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
     std::cout << " The crossing angle is:  " << fullCrossingAngle << " radian"  << std::endl;
     std::cout << "     "<< detName << " z-begin : " << lcalInnerZ/dd4hep::mm << " mm" << std::endl;
-    std::cout << "           innerR : " << sensInnerR/dd4hep::mm << " mm" << std::endl;
-    std::cout << "           outerR : " << sensOuterR/dd4hep::mm << " mm" << std::endl;
+    std::cout << "     sensorInnerR : " << sensInnerR/dd4hep::mm << " mm" << std::endl;
+    std::cout << "     sensorouterR : " << sensOuterR/dd4hep::mm << " mm" << std::endl;
     std::cout << "        thickness : " << lcalThickness/dd4hep::mm << " mm" << std::endl;
     std::cout << "          cell_dR : " << cellRsize/dd4hep::mm <<  " mm" << std::endl;
     std::cout << "        cell_dPhi : " << cellPhiSize << "  radian" << std::endl;
@@ -237,7 +236,6 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 		  DD4hep::Geometry::Volume gapVol ("phiGap", gapEnv, slice_material );
 		  gapVol.setVisAttributes(lcdd,"PhiGapVis");
 		  double rotPhi = lcalPhi0 - cellPhiSize/2.;
-		  // every other sensor has gaps staggered 
 		  for( int gap=0; gap < nGaps; gap++ ) {
                     DD4hep::Geometry::RotationZ gapRot ( rotPhi );
 		    DD4hep::Geometry::Position gapPos ( gapPosX*cos( rotPhi ), gapPosX*sin( rotPhi ), 0.0 );
@@ -285,6 +283,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
             caloLayer.outer_nRadiationLengths = nRadiationLengths;
             caloLayer.outer_nInteractionLengths = nInteractionLengths;
             caloLayer.outer_thickness = thickness_sum;
+#pragma message("FIXME: Temporary layerStaggerPhi is put in place of obsolete 'thickness'")
+	    caloLayer.thickness = ( thisLayerId%2 == 1 )? staggerPhi : 0. ;
             if ( thisLayerId == 0 )
 	      std::cout<<"  Layer thickness : "
 		       << (caloLayer.inner_thickness+caloLayer.outer_thickness)/dd4hep::mm 
@@ -306,6 +306,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
             DD4hep::Geometry::Position  layerPos(0,0,referencePosition+0.5*layerThickness);
 	    DD4hep::Geometry::RotationZ layerRot( staggerPhi );
 	    DD4hep::Geometry::PlacedVolume pv;
+	    // every other layer has gaps staggered 
 	    if( thisLayerId%2 == 1 && layerStagger != 0. ) {
 	      pv = envelopeVol.placeVolume(layer_vol, DD4hep::Geometry::Transform3D( layerRot, layerPos ));
 	    }else{
