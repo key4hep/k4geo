@@ -2,7 +2,8 @@
 
 <readouts>
     <readout name="SiTrackerEndcapHits">
-       <id>system:5,side:-2,layer:3,module:14,sensor:8,barrel:3</id>
+       <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
+       <id>system:5,side:2,layer:6,module:8,sensor:8,slice:3</id>
     </readout>
 </readouts>
 
