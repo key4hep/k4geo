@@ -3,12 +3,13 @@
 <readouts>
     <readout name="SiTrackerEndcapHits">
        <!-- encoding used by CLIC and ILD system:5,side:-2,layer:9,module:8,sensor:8,barrel:3 -->
-       <id>system:5,side:2,layer:3,module:14,sensor:8,barrel:3</id>
+       <!-- this version has a modified encoding -->
+       <id>system:5,side:2,layer:3,module:14,sensor:8</id>
     </readout>
 </readouts>
 
 <detectors>
- <detector id="4" name="SiTrackerEndcap" type="DD4hep_SiTrackerEndcap2" readout="SiTrackerEndcapHits" reflect="true" vis="SiTrackerEndcapVis">
+ <detector id="4" name="SiTrackerEndcap" type="SiTrackerEndcap_o2_v01" readout="SiTrackerEndcapHits" reflect="true" vis="SiTrackerEndcapVis">
   <envelope vis="EnvelopeVis">
     <shape type="Assembly"/>
   </envelope>

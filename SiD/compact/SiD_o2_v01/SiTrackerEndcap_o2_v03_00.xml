@@ -3,6 +3,8 @@
 <readouts>
     <readout name="SiTrackerEndcapHits">
        <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
+       <!-- this will not work correctly for tracking, 
+	    as the layer bits are used to encode the ring numbers -->
        <id>system:5,side:2,layer:6,module:8,sensor:8</id>
     </readout>
 </readouts>
