@@ -160,10 +160,10 @@
 
   <comment>Trackers</comment> 
   <include ref="SiVertexBarrel.xml"/>
-  <include ref="SiVertexEndcap.xml"/>
+  <include ref="SiVertexEndcap_o2_v01.xml"/>
 
   <include ref="SiTrackerBarrel_o2_v01_00.xml"/>
-  <include ref="SiTrackerEndcap_o2_v03_00.xml"/>
+  <include ref="SiTrackerEndcap_o2_v01_00.xml"/>
   <include ref="SiTrackerForward.xml"/>
   
   <comment>Calorimeters</comment>  
