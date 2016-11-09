@@ -9,6 +9,9 @@
 
 <detectors>
  <detector id="1" name="SiVertexBarrel" type="DD4hep_SiTrackerBarrel" readout="SiVertexBarrelHits" insideTrackingVolume="true" vis="SiVertexBarrelVis">
+
+  <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_BARREL"/>
+
   <comment>Vertex Detector Barrel</comment>
   <module name="VtxBarrelModuleInner">
     <module_envelope width="9.8*mm" length="63.0 * 2*mm" thickness="0.6*mm"/>

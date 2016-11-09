@@ -11,6 +11,9 @@
 <detectors>
  <!-- the driver used here is a modified DD4hep_SiTrackerEndcap2, where 'side' is used instead of 'barrel' -->
  <detector id="2" name="SiVertexEndcap" type="SiTrackerEndcap_o2_v01" readout="SiVertexEndcapHits" reflect="true" vis="SiVertexEndcapVis">
+  
+  <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_ENDCAP"/>
+
   <comment>Vertex Detector Endcaps</comment>
   <module name="SiVertexEndcapModule1">
     <trd x1="3.034*mm" x2="14.682*mm" z="29.280*mm" />
