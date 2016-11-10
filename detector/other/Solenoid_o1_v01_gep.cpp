@@ -11,8 +11,6 @@ using namespace DD4hep;
 using namespace DD4hep::Geometry;
 
 static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
-    static double tolerance = 0e0;
-    
     xml_det_t     x_det     = e;
     int           det_id    = x_det.id();
     string        det_name  = x_det.nameStr();
@@ -66,7 +64,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             //added code by Thorben Quast for event display
             DDRec::LayeredCalorimeterData::Layer solenoidLayer;
             solenoidLayer.distance = r;
-            solenoidLayer.thickness = thickness;
+
+            solenoidLayer.inner_thickness = thickness/2.;
+	    solenoidLayer.outer_thickness = solenoidLayer.inner_thickness ;
+
             solenoidLayer.cellSize0 = 0;    //equivalent to 
             solenoidLayer.cellSize1 = z;    //half extension along z-axis
             solenoidData->layers.push_back(solenoidLayer);

@@ -196,7 +196,6 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 #endif
       //-----------------------------------------------------------------------------------------
       caloLayer.distance = lhcalCentreZ + referencePosition ; //+0.5*layerThickness ;
-      caloLayer.thickness = caloLayer.inner_thickness +caloLayer.outer_thickness ;
       caloLayer.absorberThickness = radiator_thickness ;
       
       caloData->layers.push_back( caloLayer ) ;

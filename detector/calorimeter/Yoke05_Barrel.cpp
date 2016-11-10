@@ -371,7 +371,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 
 	caloLayer.distance = radius_low - radiator_thickness ;
-	caloLayer.thickness = caloLayer.inner_thickness +caloLayer.outer_thickness ;
 	caloLayer.absorberThickness = radiator_thickness ;
 	
 	caloData->layers.push_back( caloLayer ) ;

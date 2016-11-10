@@ -613,7 +613,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
   //NN: These probably need to be fixed and ced modified to read the extent, rather than the layer
   DDRec::LayeredCalorimeterData::Layer coilLayer;
   coilLayer.distance = inner_radius;
-  coilLayer.thickness = outer_radius - inner_radius;
+  coilLayer.inner_thickness = ( outer_radius - inner_radius ) / 2. ;
+  coilLayer.outer_thickness = coilLayer.inner_thickness  ;
   coilLayer.cellSize0 = 0;        //equivalent to 
   coilLayer.cellSize1 = half_z;    //half extension along z-axis
   coilData->layers.push_back(coilLayer);

@@ -375,7 +375,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 	    // distance to the surface of the radiator.
 	    caloLayer.distance = HcalEndcapRing_min_z + (layer_id - 1)* (layer_thickness + Hcal_radiator_thickness) ;
-	    caloLayer.thickness = caloLayer.inner_thickness +caloLayer.outer_thickness ;
 	    caloLayer.absorberThickness = Hcal_radiator_thickness ;
 	    
 	    caloData->layers.push_back( caloLayer ) ;

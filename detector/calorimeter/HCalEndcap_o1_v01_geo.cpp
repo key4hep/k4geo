@@ -116,7 +116,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     double sliceZ = -l_thick/2;
     double totalAbsorberThickness=0.;
     double sens_pos= 0.;
-
+    
+    double th_i(0.), th_o(-1.) ;
     for(xml_coll_t s(x_layer,_U(slice)); s; ++s)  {
       xml_comp_t x_slice = s;
       string     s_name  = _toString(s_num,"slice%d");
@@ -132,7 +133,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         s_vol.setSensitiveDetector(sens);
         sensitives.push_back(s_phv);
         sens_pos = sliceZ;
-
+	th_i += s_thick / 2. ;
+	th_o  = s_thick / 2. ;
+      } else {
+	if( th_o < 0. ){
+	  th_i += s_thick;
+	} else {
+	  th_o += s_thick;
+	}
       }
       
       if( x_slice.isRadiator() ==true)
@@ -160,7 +168,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       ///FIXME: IS ORIENTATION RIGHT? WHICH SIDE DO WE NEED TO ADD TO STRUCTURE?
       DDRec::LayeredCalorimeterData::Layer caloLayer ;
       caloLayer.distance = zmin +  totalThickness/2 + layerZ+sens_pos ;
-      caloLayer.thickness = l_thick;
+      caloLayer.inner_thickness = th_i ;
+      caloLayer.outer_thickness = th_o ;
       caloLayer.absorberThickness = totalAbsorberThickness;
       caloLayer.cellSize0 = cell_sizeX;
       caloLayer.cellSize1 = cell_sizeY; 

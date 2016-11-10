@@ -188,8 +188,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	  // Loop over the slices for this layer
 	  int s_num = 1;
 	  double s_pos_z = -(l_thickness/2);
-    double totalAbsorberThickness=0.;
-    
+	  double totalAbsorberThickness=0.;
+	  
+	  double th_i(0.), th_o(-1.) ;
 	  for(xml_coll_t si(x_layer,_U(slice)); si; ++si)  {
 	    
 	    xml_comp_t x_slice = si;
@@ -204,7 +205,16 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	    
 	    if ( x_slice.isSensitive() ) {
 	      s_vol.setSensitiveDetector(sens);
+	      th_i += s_thick / 2. ;
+	      th_o  = s_thick / 2. ;
+	    } else {
+	      if( th_o < 0. ){
+		th_i += s_thick;
+	      } else {
+		th_o += s_thick;
+	      }
 	    }
+	    
 	    slice.setAttributes(lcdd, s_vol, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
 	    
       char val = x_slice.hasAttr(_U(radiator)) ? x_slice.attr < string > (_U(radiator))[0] : 'f';
@@ -242,11 +252,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	  layer_phv.addPhysVolID("layer", 100*m + l_num);
 	  layer.setPlacement(layer_phv);
     
-    caloLayer.distance = l_pos_z + l_thickness/2.;
-    caloLayer.thickness = l_thickness;
-    caloLayer.absorberThickness = totalAbsorberThickness;
-    caloLayer.cellSize0 = eCal_cell_size;
-    caloLayer.cellSize1 = eCal_cell_size;
+	  caloLayer.distance = l_pos_z + l_thickness/2.;
+	  caloLayer.inner_thickness = th_i ;
+	  caloLayer.outer_thickness = th_o ;
+	  caloLayer.absorberThickness = totalAbsorberThickness;
+	  caloLayer.cellSize0 = eCal_cell_size;
+	  caloLayer.cellSize1 = eCal_cell_size;
+
 	  // Increment to next layer Z position
 	  l_pos_z += l_thickness;
 	  // Increment layer number

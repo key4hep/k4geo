@@ -220,6 +220,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       // Create the slices (sublayers) within the Hcal Barrel Chamber.
       double slice_pos_z = -(layer_thickness/2.);
       int slice_number = 0;
+
+      double th_i(0.), th_o(-1.) ;
       for(xml_coll_t k(x_layer,_U(slice)); k; ++k)  {
 	xml_comp_t x_slice = k;
 	string   slice_name      = layer_name + _toString(slice_number,"_slice%d");
@@ -234,6 +236,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	
 	if ( x_slice.isSensitive() ) {
 	  slice_vol.setSensitiveDetector(sens);
+	  th_i += slice_thickness / 2. ;
+	  th_o  = slice_thickness / 2. ;
+	} else {
+	  if( th_o < 0. ){
+	    th_i += slice_thickness;
+	  } else {
+	    th_o += slice_thickness;
+	  }
 	}
 	// Set region, limitset, and vis.
 	slice_vol.setAttributes(lcdd,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
@@ -274,7 +284,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       DDRec::LayeredCalorimeterData::Layer caloLayer ;
       
       caloLayer.distance = Hcal_inner_radius + Hcal_total_dim_y/2.0 + chamber_y_offset ;
-      caloLayer.thickness = Hcal_chamber_thickness + Hcal_radiator_thickness ;
+      caloLayer.inner_thickness = th_i ;
+      caloLayer.outer_thickness = th_o ;
       caloLayer.absorberThickness = Hcal_radiator_thickness ;
       caloLayer.cellSize0 = Hcal_cell_dim_z ;
       caloLayer.cellSize1 = Hcal_cell_dim_x ;

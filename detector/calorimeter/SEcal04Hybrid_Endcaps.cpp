@@ -493,8 +493,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 		caloLayer.outer_nInteractionLengths = nInteractionLengths;
 		caloLayer.outer_thickness           = thickness_sum; 
 		
-		//Only fill the layers information into DDRec after first layer as Mokka Gear.
-		caloLayer.thickness = caloLayer.inner_thickness + caloLayer.outer_thickness ;
 		if (!isFirstSens){ caloData->layers.push_back( caloLayer ) ;
 #ifdef VERBOSE		  
 		  std::cout<<" caloLayer.distance: "<< caloLayer.distance <<std::endl;
@@ -842,8 +840,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	caloLayer.outer_thickness           = thickness_sum
 	  + (Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE)); 
 
-	//Only fill the layers information into DDRec after second layer as Mokka Gear.
-	caloLayer.thickness = caloLayer.inner_thickness + caloLayer.outer_thickness ;
 	if (!isFirstSens) caloData->layers.push_back( caloLayer ) ;
 #ifdef VERBOSE
 	std::cout<<" caloLayer.distance: "<< caloLayer.distance <<std::endl;

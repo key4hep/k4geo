@@ -308,7 +308,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       //DDRec::LayeredCalorimeterData::Layer caloLayer ;
       
       caloLayer.distance = Hcal_inner_radius + Hcal_total_dim_y/2.0 + chamber_y_offset ;
-      caloLayer.thickness = Hcal_chamber_thickness + Hcal_radiator_thickness ;
       caloLayer.absorberThickness = Hcal_radiator_thickness ;
       //caloLayer.cellSize0 = Hcal_cell_dim_z ;
       //caloLayer.cellSize1 = Hcal_cell_dim_x ;

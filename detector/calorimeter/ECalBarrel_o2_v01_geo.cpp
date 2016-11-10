@@ -162,6 +162,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)
 
       double totalAbsorberThickness = 0.;
 
+      double th_i(0.), th_o(-1.) ;
       for (xml_coll_t k(x_layer, _U(slice)); k; ++k) {
         xml_comp_t x_slice = k;
         string slice_name = _toString(slice_number, "slice%d");
@@ -181,7 +182,19 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)
         if (x_slice.isSensitive()) {
           sens.setType("calorimeter");
           slice_vol.setSensitiveDetector(sens);
-        }
+	  
+	  th_i += slice_thickness / 2. ;
+	  th_o  = slice_thickness / 2. ;
+
+	} else {
+	  if( th_o < 0. ){
+	    th_i += slice_thickness;
+	  } else {
+	    th_o += slice_thickness;
+	  }
+	}
+
+
         // Set region, limitset, and vis.
         slice_vol.setAttributes(lcdd, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
         // slice PlacedVolume
@@ -204,7 +217,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)
 
       ///FIXME! CHECK IF THEY ARE RIGHT. MIGHT BE OFF BY SOME TRIG FUNCTION OF SOME ANGLE
       caloLayer.distance = rmin + layer_pos_z + staveThickness / 2; //NEED TO START FROM ORIGIN
-      caloLayer.thickness = layer_thickness;
+      caloLayer.inner_thickness = th_i ;
+      caloLayer.outer_thickness = th_o ;
       caloLayer.absorberThickness = totalAbsorberThickness;
       caloLayer.cellSize0 = cell_sizeX;
       caloLayer.cellSize1 = cell_sizeY;
