@@ -284,7 +284,6 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
             caloLayer.outer_nInteractionLengths = nInteractionLengths;
             caloLayer.outer_thickness = thickness_sum;
 #pragma message("FIXME: Temporary layerStaggerPhi is put in place of obsolete 'thickness'")
-	    caloLayer.thickness = ( thisLayerId%2 == 1 )? staggerPhi : 0. ;
             if ( thisLayerId == 0 )
 	      std::cout<<"  Layer thickness : "
 		       << (caloLayer.inner_thickness+caloLayer.outer_thickness)/dd4hep::mm 
@@ -292,7 +291,6 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 		       << (caloLayer.outer_nRadiationLengths+ caloLayer.inner_nRadiationLengths)
 		       << " )" << std::endl;
 #else
-	    caloLayer.thickness = thickness_sum;
             if ( thisLayerId == 0 )
 	      std::cout<<"  Layer thickness : " <<  mtotalDepthZ/dd4hep::mm 
 		       << "   ( rad. length X0:  " <<  mtotalRadLen  << " )" << std::endl;
