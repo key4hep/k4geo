@@ -231,16 +231,17 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
                 thickness_sum += slice_thickness/2;
               
                 if ( compSlice.isSensitive() )  {
-		  // put gaps in sensor slice
-		  DD4hep::Geometry::Box gapEnv (gapDx, gapDy , slice_thickness/2. );
-		  DD4hep::Geometry::Volume gapVol ("phiGap", gapEnv, slice_material );
-		  gapVol.setVisAttributes(lcdd,"PhiGapVis");
-		  double rotPhi = lcalPhi0 - cellPhiSize/2.;
-		  for( int gap=0; gap < nGaps; gap++ ) {
-                    DD4hep::Geometry::RotationZ gapRot ( rotPhi );
-		    DD4hep::Geometry::Position gapPos ( gapPosX*cos( rotPhi ), gapPosX*sin( rotPhi ), 0.0 );
-		    slice_vol.placeVolume( gapVol,DD4hep::Geometry::Transform3D( gapRot, gapPos ));
-		    rotPhi += lcalTileDphi;
+		  if ( gapDy > 0. ) {      // put gaps in sensor slice
+		    DD4hep::Geometry::Box gapEnv (gapDx, gapDy , slice_thickness/2. );
+		    DD4hep::Geometry::Volume gapVol ("phiGap", gapEnv, slice_material );
+		    gapVol.setVisAttributes(lcdd,"PhiGapVis");
+		    double rotPhi = lcalPhi0 - cellPhiSize/2.;
+		    for( int gap=0; gap < nGaps; gap++ ) {
+		      DD4hep::Geometry::RotationZ gapRot ( rotPhi );
+		      DD4hep::Geometry::Position gapPos ( gapPosX*cos( rotPhi ), gapPosX*sin( rotPhi ), 0.0 );
+		      slice_vol.placeVolume( gapVol,DD4hep::Geometry::Transform3D( gapRot, gapPos ));
+		      rotPhi += lcalTileDphi;
+		    }
 		  }
 
 		   mtotalRadLen += nRadiationLengths; 
