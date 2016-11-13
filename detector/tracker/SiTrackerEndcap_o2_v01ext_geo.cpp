@@ -163,6 +163,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
   }
 
+  sdet.setAttributes(lcdd,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
   sdet.addExtension< DDRec::ZDiskPetalsData >( zDiskPetalsData ) ;
 
   return sdet;
