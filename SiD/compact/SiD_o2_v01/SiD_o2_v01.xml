@@ -163,7 +163,7 @@
   <include ref="SiVertexEndcap_o2_v01.xml"/>
 
   <include ref="SiTrackerBarrel_o2_v01_00.xml"/>
-  <include ref="SiTrackerEndcap_o2_v01_00.xml"/>
+  <include ref="SiTrackerEndcap_o2_v01_01.xml"/>
   <include ref="SiTrackerForward.xml"/>
   
   <comment>Calorimeters</comment>  
@@ -171,10 +171,10 @@
   <include ref="ECalEndcap_o2_v01_00.xml"/>
 
   <include ref="HCalBarrel_o2_v01_00.xml"/>
-  <include ref="HCalEndcap_o2_v01_00.xml"/>
+  <include ref="HCalEndcap_o2_v01_01.xml"/>
 
-  <include ref="MuonBarrel_o2_v01_00.xml"/>
-  <include ref="MuonEndcap_o2_v01_00.xml"/>
+  <include ref="MuonBarrel_o2_v01_01.xml"/>
+  <include ref="MuonEndcap_o2_v01_01.xml"/>
 
   <include ref="LumiCal_o2_v01_00.xml"/>
   <include ref="BeamCal_o2_v01_00.xml"/>
