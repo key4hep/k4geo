@@ -1,4 +1,24 @@
  --------
+| v00-09 | 
+ -------- 
+
+  - developers release wih many changes and updates to CLIC, ILD and SiD simulation models, e.g.:
+    - made compatible w/ DD4hep v00-18 ( removed LayeredCalorimterData::Layer::thickness )
+    - ILD:
+      - add models ILD_l1_v01 and ILD_s1_v01
+      - new LCal driver
+      - new Hcal barrel w/ staircase layout
+      - ...
+    - CLIC:
+      - new mdoels CLIC_o3_v06 and CLIC_o3_v07
+      - ...
+    - SiD:
+      - new model: SiD_o2_v01
+      - make compatible w/ reconstruction
+      -...
+
+
+ --------
 | v00-08 | 
  -------- 
 
