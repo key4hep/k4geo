@@ -56,7 +56,8 @@
       <argument value="radius=1765.0*2*mm"  />
       <argument value="phi0=0"    />
       <argument value="symmetry=12"/>
-      <argument value="systemID=6"/>
+      <argument value="systemID=29"/>
+      <!-- systemID is 29 for ECAL_ENDCAP to match UTIL::ILDDetID for MarlinTrk... -->
       <!-- <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> -->
     </plugin>
 </plugins>
