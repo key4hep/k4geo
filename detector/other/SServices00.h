@@ -84,7 +84,7 @@ public:
   void setZPlus_FirstInterrail_Cu_Thickness  (double Cu_Thickness_ZPF) {ZPlus_FirstInterrail_Cu_Thickness = Cu_Thickness_ZPF;};
   void setZPlus_SecondInterrail_Cu_Thickness (double Cu_Thickness_ZPS) {ZPlus_SecondInterrail_Cu_Thickness = Cu_Thickness_ZPS;};
 
-  void setOldRailSeparation (double RailSeparation) {OldRailSeparation = RailSeparation;};
+  void setOldRailSeparation (double ORailSeparation) {OldRailSeparation = ORailSeparation;};
 
   void setRailSeparationChanged(void) {RailSeparationChanged = false;};
 
