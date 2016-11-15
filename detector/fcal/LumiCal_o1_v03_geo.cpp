@@ -100,6 +100,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
     std::cout << "        thickness : " << lcalThickness/dd4hep::mm << " mm" << std::endl;
     std::cout << "          cell_dR : " << cellRsize/dd4hep::mm <<  " mm" << std::endl;
     std::cout << "        cell_dPhi : " << cellPhiSize << "  radian" << std::endl;
+    std::cout << "       offset Phi : " << lcalPhi0/dd4hep::deg   << " deg"  << std::endl;
     std::cout << "    stagger angle : " << staggerPhi/dd4hep::deg   << " deg"  << std::endl;
     std::cout << "    tile gap size : " << 2.*lcalRGap/dd4hep::mm << " mm" << std::endl;
     std::cout << "    tile span phi : " << lcalTileDphi/dd4hep::deg << " deg" << std::endl;
@@ -113,19 +114,19 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
     //
     // build services space containing support and electronics
     // simplified NOT layered for compactness
-    double bolt_radius = 0.4 *dd4hep::cm; 
-    double ear_hight = 10.*bolt_radius;
-    double ear_dx  = lcalOuterR + ear_hight;
-   if( ear_dx <= serviceRmax ){
+    double bolt_radius = 0.6 *dd4hep::cm; 
+    double ear_hight = lcalExtraS - 0.1*dd4hep::cm;
+    double ear_dy    = lcalOuterR + ear_hight;
+   if( lcalExtraS > 0. ){
       DD4hep::Geometry::Tube envelopeExtras (lcalOuterR, lcalOuterR + lcalExtraS-0.1, lcalThickness*0.5 );
       DD4hep::Geometry::Volume     ServicesVol(detName+"_Services",envelopeExtras,air);
       envelopeVol.placeVolume( ServicesVol );
       // mounting ears
       DD4hep::Geometry::Material earMaterial = lcdd.material("TungstenDens24");
       int n_ears = 3;  // ears come in pairs
-      double earsAng0 = 30.*dd4hep::deg;
+      double earsAng0 = 0.*dd4hep::deg;
       double ear_width = ear_hight;
-      double ear_dy    = ear_width*ear_dx/sqrt(ear_dx*ear_dx-lcalOuterR*lcalOuterR);
+      double ear_dx    = ear_width*ear_dy/sqrt(ear_dy*ear_dy-lcalOuterR*lcalOuterR);
       double ear_hdz   = lcalThickness*0.5;
       // anonymous volumes - support
       DD4hep::Geometry::EllipticalTube EarEllipse( ear_dx, ear_dy, ear_hdz );
@@ -140,8 +141,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
       // pair of ears
       DD4hep::Geometry::SubtractionSolid EarShape0( EarEllipse, earClip );
       // holes for bolts 
-      DD4hep::Geometry::Position boltPos1(  (lcalOuterR+3.*bolt_radius), 0., 0.);
-      DD4hep::Geometry::Position boltPos2( -(lcalOuterR+3.*bolt_radius), 0., 0.);
+      DD4hep::Geometry::Position boltPos1( 0.,  (lcalOuterR+3.*bolt_radius), 0.);
+      DD4hep::Geometry::Position boltPos2( 0., -(lcalOuterR+3.*bolt_radius), 0.);
       DD4hep::Geometry::SubtractionSolid EarShape1( EarShape0, boltHole, boltPos1);
       DD4hep::Geometry::SubtractionSolid EarShape2( EarShape1, boltHole, boltPos2);
       // final pair of ears
@@ -164,8 +165,9 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
       }
 
 
-    }
-    // needed to make  tile gaps  
+   }// end if (  lcalExtraS > 0. )
+  
+    // need this to make  tile gaps  
 	double gapDy = lcalPhiGap/2.;
 	double cs = sqrt( 1. - (gapDy/sensOuterR)*(gapDy/sensOuterR));
 	double gapDx   = ( sensOuterR*cs - sensInnerR )*0.5; // must not stick out , so a bit shorter
@@ -185,9 +187,6 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
     for(DD4hep::XML::Collection_t coll(xmlLumiCal,_U(layer)); coll; ++coll)  {
         DD4hep::XML::Component xmlLayer(coll); //we know this thing is a layer
         
-        
-        //This just calculates the total size of a single layer
-        //Why no convenience function for this?
         double layerThickness = 0;
         for(DD4hep::XML::Collection_t l(xmlLayer,_U(slice)); l; ++l) layerThickness += xml_comp_t(l).thickness();
         
@@ -195,11 +194,9 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
         for(int i=0, repeat=xmlLayer.repeat(); i<repeat; ++i)  {
             
             std::string layer_name = detName + DD4hep::XML::_toString(thisLayerId,"_layer%d");
-            DD4hep::Geometry::Tube layer_base(lcalInnerR,lcalOuterR,layerThickness*0.5, lcalPhi0, lcalPhi0+360.*dd4hep::deg);
-            
+            DD4hep::Geometry::Tube layer_base(lcalInnerR,lcalOuterR,layerThickness*0.5, lcalPhi0, lcalPhi0+360.*dd4hep::deg);            
             DD4hep::Geometry::Volume layer_vol(layer_name,layer_base,air);
-            
-            
+                       
             int sliceID=0;
             double inThisLayerPosition = -layerThickness*0.5;
             double nRadiationLengths=0.;
@@ -283,7 +280,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
             caloLayer.outer_nRadiationLengths = nRadiationLengths;
             caloLayer.outer_nInteractionLengths = nInteractionLengths;
             caloLayer.outer_thickness = thickness_sum;
-#pragma message("FIXME: Temporary layerStaggerPhi is put in place of obsolete 'thickness'")
+#pragma message("FIXME: Need to put layerStaggerPhi  in place of obsolete 'thickness'")
             if ( thisLayerId == 0 )
 	      std::cout<<"  Layer thickness : "
 		       << (caloLayer.inner_thickness+caloLayer.outer_thickness)/dd4hep::mm 
