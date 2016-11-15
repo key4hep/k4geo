@@ -55,14 +55,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   //
   //====================================================================
 
-  double HBU_SSF_half_x = lcdd.constant<double>("HBU_SSF_dim_x")/2.0;
-  double HBU_SSF_half_y = lcdd.constant<double>("HBU_SSF_dim_y")/2.0;
+  //unused: double HBU_SSF_half_x = lcdd.constant<double>("HBU_SSF_dim_x")/2.0;
+  //unused: double HBU_SSF_half_y = lcdd.constant<double>("HBU_SSF_dim_y")/2.0;
 
   int HCAL_SSF_ncell_x = lcdd.constant<int>("HCAL_SSF_ncell_x");
   int HCAL_SSF_ncell_y = lcdd.constant<int>("HCAL_SSF_ncell_y");
 
-  double HBU_BL_half_x = lcdd.constant<double>("HBU_BL_dim_x")/2.0;
-  double HBU_BL_half_y = lcdd.constant<double>("HBU_BL_dim_y")/2.0;
+  //unused: double HBU_BL_half_x = lcdd.constant<double>("HBU_BL_dim_x")/2.0;
+  //unused: double HBU_BL_half_y = lcdd.constant<double>("HBU_BL_dim_y")/2.0;
 
   int HCAL_BL_ncell_x = lcdd.constant<int>("HCAL_BL_ncell_x");
   int HCAL_BL_ncell_y = lcdd.constant<int>("HCAL_BL_ncell_y");

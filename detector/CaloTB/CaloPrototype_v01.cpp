@@ -82,7 +82,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   //calorimeter dimensions
   double cal_hx = (double) (Calo_Layer_ncell_x * cell_sizeX)/2.;
   double cal_hy = (double) (Calo_Layer_ncell_y * cell_sizeY)/2.;
-  double cal_hz = 0;
+  //unused: double cal_hz = 0;
 
 
 //====================================================================

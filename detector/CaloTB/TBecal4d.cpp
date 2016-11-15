@@ -55,8 +55,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   //
   //====================================================================
 
-  double EBU_half_x = lcdd.constant<double>("EBU_dim_x")/2.0;
-  double EBU_half_y = lcdd.constant<double>("EBU_dim_y")/2.0;
+  //unused: double EBU_half_x = lcdd.constant<double>("EBU_dim_x")/2.0;
+  //unused: double EBU_half_y = lcdd.constant<double>("EBU_dim_y")/2.0;
 
   int ECAL_ncell_x = lcdd.constant<int>("ECAL_ncell_x");
   int ECAL_ncell_y = lcdd.constant<int>("ECAL_ncell_y");

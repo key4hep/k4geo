@@ -68,9 +68,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   Readout  readout = sens.readout();
   Segmentation seg = readout.segmentation();
 
-  std::vector<double> cellSizeVector = seg.segmentation()->cellDimensions(0);
-  double cell_sizeX      = cellSizeVector[0];
-  double cell_sizeY      = cellSizeVector[1];
+  //unused: std::vector<double> cellSizeVector = seg.segmentation()->cellDimensions(0);
+  //unused: double cell_sizeX      = cellSizeVector[0];
+  //unused: double cell_sizeY      = cellSizeVector[1];
 
   // check if we have a TiledLayerGridXY segmentation :
   DD4hep::DDSegmentation::TiledLayerGridXY* tileSeg = 
