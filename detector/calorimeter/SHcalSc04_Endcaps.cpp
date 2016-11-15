@@ -53,7 +53,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   int           det_id    = x_det.id();
 
   DetElement   sdet(det_name,det_id);
-  Volume      motherVol = lcdd.pickMotherVolume(sdet); 
  
   // --- create an envelope volume and position it into the world ---------------------
 
@@ -145,11 +144,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       // Create Hcal Endcap Chamber without radiator
       // Place into the Hcal Encap module envelope, after each radiator 
       int layer_num = 1;
-      for(xml_coll_t c(x_det,_U(layer)); c; ++c)  {
-	xml_comp_t   x_layer = c;
+      for(xml_coll_t m(x_det,_U(layer)); m; ++m)  {
+	xml_comp_t   x_layer = m;
 	int          repeat = x_layer.repeat();          // Get number of layers.
-	//const Layer* lay    = layering.layer(layer_num); // Get the layer from the layering engine.
-	//	double layer_thickness = lay->thickness();
 
 	double layer_thickness = layering.layer(layer_num)->thickness();
 	string layer_name      = envelopeVol_name+"_layer";
