@@ -30,7 +30,6 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
     const std::string detName   = xmlLumiCal.nameStr();
     
     DD4hep::Geometry::DetElement sdet ( detName, xmlLumiCal.id() );
-    DD4hep::Geometry::Volume motherVol = lcdd.pickMotherVolume(sdet);
     
     // --- create an envelope volume and position it into the world ---------------------
     

@@ -25,7 +25,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     DetElement  sdet        (det_name,det_id);
     // Assembly    envelope    (det_name);
     //Volume      envelope    (det_name,Box(10000,10000,10000),vacuum);
-    Volume      motherVol = lcdd.pickMotherVolume(sdet);
+    //unused: Volume      motherVol = lcdd.pickMotherVolume(sdet);
     int         m_id=0, c_id=0, n_sensor=0;
     map<string,Volume> modules;
     map<string, Placements>  sensitives;
