@@ -55,7 +55,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   Layering      layering (element);
 
   Material      air       = lcdd.air();
-  Material      vacuum    = lcdd.vacuum();
+  //unused: Material      vacuum    = lcdd.vacuum();
 
   int           det_id    = x_det.id();
   xml_comp_t    x_staves  = x_det.staves();

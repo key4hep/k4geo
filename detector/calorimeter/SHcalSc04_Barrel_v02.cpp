@@ -139,9 +139,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   Tube solidCaloTube_LP(0, Hcal_outer_radius, DHZ_LP+boundarySafety);
 
-  RotationZYX rot(0,0, M_PI/Hcal_inner_symmetry);
+  RotationZYX mrot(0,0, M_PI/Hcal_inner_symmetry);
 
-  IntersectionSolid Module_lateral_plate(stave_shaper_LP, solidCaloTube_LP,rot);
+  IntersectionSolid Module_lateral_plate(stave_shaper_LP, solidCaloTube_LP,mrot);
 
   Volume  EnvLogHcalModuleBarrel_LP(det_name+"_Module_lateral_plate",Module_lateral_plate,stavesMaterial);
 

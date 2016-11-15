@@ -57,7 +57,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   Layering      layering (element);
 
   Material      air       = lcdd.air();
-  Material      vacuum    = lcdd.vacuum();
+  //unused: Material      vacuum    = lcdd.vacuum();
 
   int           det_id    = x_det.id();
   xml_comp_t    x_staves  = x_det.staves();
@@ -145,8 +145,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double Ecal_guard_ring_size               = lcdd.constant<double>("Ecal_guard_ring_size");
 
 	// 2016/0505 for strip
-	int 	 Ecal_Sc_N_strips_across_module     = lcdd.constant<int>("Ecal_Sc_N_strips_across_module");
-	int 	 Ecal_Sc_number_of_virtual_cells	  = lcdd.constant<int>("Ecal_Sc_number_of_virtual_cells");
+  //unused:	int 	 Ecal_Sc_N_strips_across_module     = lcdd.constant<int>("Ecal_Sc_N_strips_across_module");
+  //unused:	int 	 Ecal_Sc_number_of_virtual_cells	  = lcdd.constant<int>("Ecal_Sc_number_of_virtual_cells");
 	// 20160514 for ScECAL
 	int 	 Ecal_n_wafers_per_tower; //					  = lcdd.constant<int>("Ecal_n_wafers_per_tower");
 #ifdef VERBOSEcoterra
@@ -650,7 +650,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 						//Volume MagicWaferSiLog(det_name+"_"+l_name+"_"+s_name+"MagicWafer",MagicWaferSiSolid,slice_material);
 
 						// Magic wafers, this waferOffsetX has to be taken care, 0.0 or half cell size in X.
-						double thisWaferOffsetX = 0.0;
+						//unused: double thisWaferOffsetX = 0.0;
 ///////						if ( N_cells_x_remaining%2 ) thisWaferOffsetX = cell_dim_x/2.0;
 //						wafer_pos_x = -slab_dim_x + n_wafers_x * real_wafer_size_x +
 //													( regulatingWafer_dim_x + 2 * Ecal_guard_ring_size )/2;

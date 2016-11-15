@@ -57,13 +57,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   int           nsides    = x_dim.numsides();
 
   Material      air       = lcdd.air();
-  Material      vacuum    = lcdd.vacuum();
+  //unused: Material      vacuum    = lcdd.vacuum();
 
   Material      yokeMaterial  = lcdd.material(x_det.materialStr());;
 
   int           det_id    = x_det.id();
   DetElement    sdet      (det_name,det_id);
-  Volume        motherVol = lcdd.pickMotherVolume(sdet);
 
   // --- create an envelope volume and position it into the world ---------------------
   

@@ -58,12 +58,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   int           nsides    = x_dim.numsides();
 
   Material      air       = lcdd.air();
-  Material      vacuum    = lcdd.vacuum();
 
   xml_comp_t    x_staves  = x_det.staves();
   Material      yokeMaterial  = lcdd.material(x_staves.materialStr());
 
-  Material      env_mat     = lcdd.material(x_dim.materialStr());
+  //unused: Material      env_mat     = lcdd.material(x_dim.materialStr());
 
   xml_comp_t    env_pos     = x_det.position();
   xml_comp_t    env_rot     = x_det.rotation();
@@ -75,7 +74,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   int           det_id    = x_det.id();
   DetElement    sdet      (det_name,det_id);
-  Volume        motherVol = lcdd.pickMotherVolume(sdet);
 
   // --- create an envelope volume and position it into the world ---------------------
 
@@ -390,9 +388,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     {
       double module_z_offset =  (module_id-2) * Yoke_Barrel_module_dim_z;
       
-      Position pos(0,0,module_z_offset);
+      Position mpos(0,0,module_z_offset);
       
-      PlacedVolume m_phv = envelope.placeVolume(mod_vol,pos);
+      PlacedVolume m_phv = envelope.placeVolume(mod_vol,mpos);
       m_phv.addPhysVolID("module",module_id).addPhysVolID("system", det_id);
       m_phv.addPhysVolID("tower", 1);// Not used
       string m_name = _toString(module_id,"module%d");

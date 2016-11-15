@@ -68,7 +68,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   int           det_id    = x_det.id();
   xml_comp_t    x_staves  = x_det.staves();
   DetElement    sdet      (det_name,det_id);
-  Volume        motherVol = lcdd.pickMotherVolume(sdet);
 
   // --- create an envelope volume and position it into the world ---------------------
 
