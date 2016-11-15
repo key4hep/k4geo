@@ -55,9 +55,9 @@
 	      outer_r = "LumiCal_outer_radius"
 	      servicesRmax = "Ecal_endcap_plug_rmin"
 	      layerstagger = "0.5"
-	      outerPhi0    = "0.00*deg"
+	      outerPhi0    = "Lcal_offset_phi"
 	      modules = "Lcal_n_tiles"
-	      phi_sectors = "4"
+	      phi_sectors = "Lcal_nstrips_phi/Lcal_n_tiles"
 	      r_sectors = "Lcal_nstrips_theta"
 	      phi_gap = "2.*Lcal_tile_gap"
 	      r_gap = "Lcal_tile_gap" />

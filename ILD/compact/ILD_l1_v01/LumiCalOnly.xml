@@ -96,6 +96,7 @@
 	<constant name="CosHalfTilePhi"   value=" cos( LcalHalfTilePhi )"/>
 	<constant name="Lcal_sensor_rmin" value=" LumiCal_inner_radius/CosHalfTilePhi + Lcal_tile_gap"/>
 	<constant name="Lcal_sensor_rmax" value=" LumiCal_outer_radius*CosHalfTilePhi - Lcal_tile_gap"/>
+	<constant name="Lcal_offset_phi" value=" 360./Lcal_nstrips_phi/2.*degree"/>
 
 	<comment>Dummy Parameters for the LHcal  </comment>
 	<constant name="LHcal_inner_radius" value="93*mm"/>
@@ -192,6 +193,7 @@
 			  grid_size_r="(Lcal_sensor_rmax-Lcal_sensor_rmin)/Lcal_nstrips_theta"
 			  grid_size_phi="360/Lcal_nstrips_phi*degree"
 			  offset_r="Lcal_sensor_rmin"
+			  offset_phi="Lcal_offset_phi"
 			  />
 	    <id>system:8,barrel:3,layer:8,slice:8,r:32:-16,phi:-16</id>
 	</readout>
