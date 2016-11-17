@@ -27,22 +27,30 @@
   </envelope>
 
   <staves />
-  <layer repeat="40">
-        <slice material = "Steel235"   thickness = "19.0*mm" />    <!-- Absorber -->
-	<slice material = "Air"        thickness = "20.0*mm" />
+  <layer repeat="39">
+        <slice material = "Steel235"   thickness = "11.617*mm" />  <!-- Absorber -->
+	<slice material = "Air"        thickness =  "2.0*mm" />
 	<slice material = "Steel235"   thickness =  "0.5*mm" />    <!-- Top plate -->
 	<slice material = "Kapton"    thickness = "0.115*mm" />    <!-- Polyimide foil -->
 	<slice material = "Copper"    thickness = "0.068*mm" />
 	<slice material = "PCB"       thickness =   "1.0*mm" />    <!-- PCB made of FR4 -->
-	<slice material = "Polystyrole" thickness = "0.1*mm" /> <!-- Reflector foil -->
+	<slice material = "Polystyrole" thickness = "0.1*mm" />    <!-- Reflector foil -->
 	<slice material = "Polystyrene" thickness = "3.0*mm" sensitive="yes" limits="cal_limits" />
-	<slice material = "Polystyrole" thickness = "0.1*mm" /> <!-- Reflector foil -->
-	<slice material = "Steel235"    thickness = "0.5*mm" /> <!-- Bottom plate -->
-	<!--slice material = "Air"    thickness = "0.1*cm" /-->
+	<slice material = "Polystyrole" thickness = "0.1*mm" />    <!-- Reflector foil -->
+	<slice material = "Steel235"    thickness = "0.5*mm" />    <!-- Bottom plate -->
+	<slice material = "Air"         thickness = "8.0*mm" />
   </layer>
-  <!--layer repeat="1">
-	<!--slice material = "Steel235" thickness = "1.9*cm" /--><!-- Terminator plate -->
-  <!--/layer -->
+  <layer repeat="1">
+        <slice material = "Steel235"   thickness = "11.617*mm" />  <!-- Absorber -->
+        <slice material = "Air"        thickness =  "2.0*mm" />
+        <slice material = "Steel235"   thickness =  "0.5*mm" />    <!-- Top plate -->
+        <slice material = "Kapton"    thickness = "0.115*mm" />    <!-- Polyimide foil -->
+        <slice material = "Copper"    thickness = "0.068*mm" />
+        <slice material = "PCB"       thickness =   "1.0*mm" />    <!-- PCB made of FR4 -->
+        <slice material = "Polystyrole" thickness = "0.1*mm" />    <!-- Reflector foil -->
+        <slice material = "Polystyrene" thickness = "3.0*mm" sensitive="yes" limits="cal_limits" />
+        <slice material = "Polystyrole" thickness = "0.1*mm" />    <!-- Reflector foil -->
+ 	<slice material = "Steel235"   thickness = "19.0*mm" />    <!-- Terminator plate -->
  </detector>
 </detectors>
 
