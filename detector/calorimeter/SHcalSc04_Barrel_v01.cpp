@@ -593,6 +593,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  pv.addPhysVolID("stave",stave_id);
 	  pv.addPhysVolID("module",module_id);
 
+	  const int staveCounter = (stave_id-1)*2+module_id-1;
+	  DetElement stave(sdet, _toString(staveCounter,"stave%d"), staveCounter );
+	  stave.setPlacement(pv);
+
 	  Position xyzVec_LP(-Y*sin(phirot), Y*cos(phirot),lateral_plate_z_offset);
 	  Transform3D tran3D_LP(srot3D,xyzVec_LP);
 	  pv = envelope.placeVolume(EnvLogHcalModuleBarrel_LP,tran3D_LP);
