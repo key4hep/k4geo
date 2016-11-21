@@ -132,10 +132,10 @@
 	</comment>
 	 
         <!-- <detector name="MokkaParameters" geartype="GearParameters"> -->
-        <constant name="Ecal_endcap_outer_radius" type="string" value="2088.8" />
-        <constant name="Ecal_endcap_plug_rmin" type="string" value="250" />
-        <constant name="Ecal_endcap_zmax" type="string" value="2635" />
-        <constant name="Ecal_endcap_zmin" type="string" value="2450" />
+        <!-- constant name="Ecal_endcap_outer_radius" type="string" value="2088.8" / not used ? --> 
+        <!-- constant name="Ecal_endcap_plug_rmin" type="string" value="250" / not used ? -->
+        <!-- constant name="Ecal_endcap_zmax" type="string" value="2635" / already defined above   -->
+        <!-- constant name="Ecal_endcap_zmin" type="string" value="2450" / already defined above   -->
         <!-- <constant name="Ecal_outer_radius" type="string" value="2028" /> -->
         <constant name="Hcal_R_max" type="string" value="3395.46" />
         <constant name="Hcal_endcap_zmin" value="2650*mm" />
@@ -235,8 +235,8 @@
 	<constant name="Ecal_outer_radius"    value="Ecal_inner_radius+Ecal_barrel_thickness"/>
 	<constant name="Ecal_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ"/>
 	<constant name="Ecal_symmetry"        value="Ecal_Hcal_symmetry"/>
-        <constant name="EcalEndcap_outer_symmetry" value="Ecal_Hcal_symmetry"/>
-        <constant name="EcalEndcap_inner_symmetry" value="4"/>
+        <!-- constant name="EcalEndcap_outer_symmetry" value="Ecal_Hcal_symmetry"/ -->
+        <!-- constant name="EcalEndcap_inner_symmetry" value="4"/ -->
 
 	<constant name="Hcal_inner_radius"    value="Ecal_outer_radius+Hcal_Ecal_gap"/>
 	<constant name="Hcal_outer_radius"    value="(Hcal_inner_radius+Hcal_barrel_thickness)/0.98078528105"/> <!-- cos(pi/16)   -->
@@ -431,9 +431,9 @@
 	
         <comment>Calorimeters</comment>
 	
-	<include ref="SEcal04_Barrel.xml"/> 
+	<include ref="SEcal05_siw_Barrel.xml"/> 
 
-	<include ref="SEcal04_Endcaps.xml"/> 
+	<include ref="SEcal05_siw_Endcaps.xml"/> 
 
 	<include ref="SEcal04_ECRing.xml"/> 
 
@@ -446,7 +446,6 @@
 	<include ref="Yoke05_Barrel.xml"/> 
 
 	<include ref="Yoke05_Endcaps.xml"/> 
-
 
 	<include ref="LumiCal.xml"/>
 
@@ -485,16 +484,16 @@
         </readout>
 
 
-	<!-- use simple CartesianGridXY segmentation: -->
+	<!-- megatile-based segmentation for SEcal05 drivers-->
+        <readout name="EcalBarrelCollection">
+          <segmentation type="MegatileLayerGridXY"/>
+          <id>system:5,module:3,stave:4,tower:5,layer:6,wafer:6,cellX:32:-16,cellY:-16</id>
+        </readout>
 
-	<readout name="EcalBarrelCollection">
-	  <segmentation type="WaferGridXY" grid_size_x="Ecal_cells_size" grid_size_y="Ecal_cells_size" offset_x="Ecal_cells_size/2.0"  offset_y="Ecal_cells_size/2.0" identifier_groupMGWafer="layer"/>
-	  <id>system:5,module:3,stave:4,tower:3,layer:6,wafer:6,x:32:-16,y:-16</id>
-	</readout>
-	<readout name="EcalEndcapsCollection">
-	  <segmentation type="WaferGridXY" grid_size_x="Ecal_cells_size" grid_size_y="Ecal_cells_size" offset_x="Ecal_cells_size/2.0"  offset_y="Ecal_cells_size/2.0" identifier_groupMGWafer="tower"/>
-	  <id>system:5,module:3,stave:3,tower:5,layer:6,wafer:6,x:32:-16,y:-16</id>
-	</readout>
+        <readout name="EcalEndcapsCollection">
+          <segmentation type="MegatileLayerGridXY"/>
+          <id>system:5,module:3,stave:4,tower:5,layer:6,wafer:6,cellX:32:-16,cellY:-16</id>
+        </readout>
 
 	<readout name="EcalEndcapRingCollection">
 	  <segmentation type="CartesianGridXY" grid_size_x="Ecal_cells_size" grid_size_y="Ecal_cells_size"/>
@@ -540,7 +539,7 @@
 	
 	<readout name="LumiCalCollection">
 	    <segmentation type="PolarGridRPhi"
-			  grid_size_r="(Lcal_sensor_r-Lcal_sensor_rmin)/Lcal_nstrips_theta"
+			  grid_size_r="(Lcal_sensor_rmax-Lcal_sensor_rmin)/Lcal_nstrips_theta"
 			  grid_size_phi="360/Lcal_nstrips_phi*degree"
 			  offset_r="Lcal_sensor_rmin"
 			  offset_phi="Lcal_offset_phi"

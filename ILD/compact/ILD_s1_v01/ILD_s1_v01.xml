@@ -424,9 +424,9 @@
 	
         <comment>Calorimeters</comment>
 	
-	<include ref="SEcal04_Barrel.xml"/>
+	<include ref="SEcal05_siw_Barrel.xml"/>
 
-	<include ref="SEcal04_Endcaps.xml"/>
+	<include ref="SEcal05_siw_Endcaps.xml"/>
 
 	<include ref="SEcal04_ECRing.xml"/>
 
@@ -475,17 +475,19 @@
         </readout>
 
 
-	<!-- use simple CartesianGridXY segmentation: -->
 
-	<readout name="EcalBarrelCollection">
-	  <segmentation type="WaferGridXY" grid_size_x="Ecal_cells_size" grid_size_y="Ecal_cells_size" offset_x="Ecal_cells_size/2.0"  offset_y="Ecal_cells_size/2.0" identifier_groupMGWafer="layer"/>
-	  <id>system:5,module:3,stave:4,tower:3,layer:6,wafer:6,x:32:-16,y:-16</id>
-	</readout>
-	<readout name="EcalEndcapsCollection">
-	  <segmentation type="WaferGridXY" grid_size_x="Ecal_cells_size" grid_size_y="Ecal_cells_size" offset_x="Ecal_cells_size/2.0"  offset_y="Ecal_cells_size/2.0" identifier_groupMGWafer="tower"/>
-	  <id>system:5,module:3,stave:3,tower:5,layer:6,wafer:6,x:32:-16,y:-16</id>
-	</readout>
+        <!-- megatile-based segmentation for SEcal05 drivers-->
+        <readout name="EcalBarrelCollection">
+          <segmentation type="MegatileLayerGridXY"/>
+          <id>system:5,module:3,stave:4,tower:5,layer:6,wafer:6,cellX:32:-16,cellY:-16</id>
+        </readout>
 
+        <readout name="EcalEndcapsCollection">
+          <segmentation type="MegatileLayerGridXY"/>
+          <id>system:5,module:3,stave:4,tower:5,layer:6,wafer:6,cellX:32:-16,cellY:-16</id>
+        </readout>
+
+	<!-- use simple CartesianGridXY segmentation for endcap ring: -->
 	<readout name="EcalEndcapRingCollection">
 	  <segmentation type="CartesianGridXY" grid_size_x="Ecal_cells_size" grid_size_y="Ecal_cells_size"/>
 	  <id>system:5,module:3,stave:4,tower:3,layer:6,x:32:-16,y:-16</id>
