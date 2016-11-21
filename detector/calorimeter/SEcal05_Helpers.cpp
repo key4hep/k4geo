@@ -468,7 +468,7 @@ void SEcal05_Helpers::makeModule( DD4hep::Geometry::Volume & mod_vol,  // the vo
 
       // create the radiator volume
       if ( radiator_dim_Z>0 ) {       // only create the volume if we have radiator
-        std::vector < dimposXYStruct > absorbersheets = getAbsPlateXYDimensions( currentLayerBase_pos_Z + radiator_dim_Z );
+        std::vector < dimposXYStruct > absorbersheets = getAbsPlateXYDimensions( currentLayerBase_pos_Z + this_struct_CFthick_beforeAbs + radiator_dim_Z ); // add CF before abs. added djeans 21 nov 2016
         // create and place the absorber sheets
         for ( size_t ipl=0; ipl<absorbersheets.size(); ipl++) {
           dimposXYStruct plSize = absorbersheets[ipl];
