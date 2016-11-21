@@ -5,7 +5,6 @@
      at 15:07:20
 -->
 <define>
-  <constant name="Ecal_barrel_thickness" value="185.0*mm"/>
   <constant name="Hcal_barrel_thickness" value="1337.5*mm"/>
   <constant name="BCal_PairMonitor" value="1"/>
   <!-- <constant name="BCal_SpanningPhi" value="320.*degree"/> -->
@@ -28,6 +27,106 @@
   <!-- <constant name="Coil_thickness" value="750.0*mm"/> -->
 
   <constant name="DHcal_max_step" value="10.0*mm"/>
+
+
+
+  <!-- services -->
+  <constant name="EcalBarrelServices_RailDistanceToRight" value="166.5*mm"/>
+  <constant name="EcalBarrelServices_RailHeight" value="30.0*mm"/>
+  <constant name="EcalBarrelServices_RailSeparation" value="380.0*mm"/>
+  <constant name="EcalBarrelServices_RailWidth" value="103.25*mm"/>
+  <constant name="EcalBarrelServices_ZMinus_FirstInterrail_Cu_Thickness" value="1.8*mm"/>
+  <constant name="EcalBarrelServices_ZMinus_FirstInterrail_PE_Thickness" value="4.5*mm"/>
+  <constant name="EcalBarrelServices_ZMinus_SecondInterrail_Cu_Thickness" value="0.9*mm"/>
+  <constant name="EcalBarrelServices_ZPlus_FirstInterrail_Cu_Thickness" value="1.09*mm"/>
+  <constant name="EcalBarrelServices_ZPlus_FirstInterrail_PE_Thickness" value="2.67*mm"/>
+  <constant name="EcalBarrelServices_ZPlus_SecondInterrail_Cu_Thickness" value="0.61*mm"/>
+  <constant name="EcalBarrel_EndCapServices_ZMinus_Cu_Thickness" value="5.2*mm"/>
+  <constant name="EcalBarrel_EndCapServices_ZMinus_PE_Thickness" value="12.4*mm"/>
+  <constant name="EcalBarrel_EndCapServices_ZPlus_Cu_Thickness" value="3.5*mm"/>
+  <constant name="EcalBarrel_EndCapServices_ZPlus_PE_Thickness" value="8.3*mm"/>
+
+  <!-- unused ECAL parameters -->
+  <!-- constant name="EcalRotationAngle" value="0.0"/ --> 
+  <!-- constant name="EcalTranslateX" value="0.0*mm"/>
+  <constant name="EcalTranslateY" value="0.0*mm"/ -->
+  <!-- <constant name="Ecal_Barrel_halfZ" value="2350*mm"/> -->
+  <!-- constant name="Ecal_MPPC_size" value="0.91*mm"/ -->
+  <!-- constant name="Ecal_Sc_MPPC_breadth" value="2.5*mm"/ -->
+  <!-- constant name="Ecal_Sc_N_strips_across_module" value="4"/ -->
+  <!-- constant name="Ecal_Sc_Si_mix" value="000000000000000"/ -->
+  <!-- constant name="Ecal_Sc_number_of_virtual_cells" value="9"/ -->
+  <!-- constant name="Ecal_endcap_extra_size" value="60.8*mm"/ -->
+  <!-- constant name="Ecal_endcap_outer_radius" value="1926.1*mm"/ -->
+  <!-- <constant name="Ecal_endcap_zmax" value="2500.*mm"/> -->
+  <!-- <constant name="Ecal_endcap_zmin" value="2450.0*mm"/> -->
+  <!-- <constant name="Ecal_outer_radius" value="1910*mm"/> -->
+  <!-- <constant name="Ecal_radiator_material" value="tungsten"/> -->
+  <!-- <constant name="Ecal_sensitive_material" value="silicon_2.33gccm"/> -->
+  <!-- constant name="Ecal_slab_pattern" value="222222222222222222222222222222"/ -->
+  <!-- constant name="Ecal_total_alveolus_thickness" value="2.1*mm"/ -->
+
+
+  <!-- overall size, relation to other subdetectors-->
+  <constant name="Ecal_EC_Ring_gap" value="10*mm"/>
+  <constant name="Ecal_Lcal_ring_gap" value="54.8*mm"/>
+  <constant name="Ecal_Tpc_gap" value="35*mm"/>
+  <constant name="Ecal_cables_gap" value="100.*mm"/>
+  <constant name="Ecal_endcap_center_box_size" value="800.0*mm"/>
+  <constant name="Ecal_endcap_extra_size" value="26.38*mm"/>
+  <constant name="Ecal_endcap_plug_rmin" value="250.0*mm"/>
+  <constant name="Ecal_barrel_thickness" value="227.42*mm"/> <!-- this is a function of all the other parameters. It's value is checked in the driver -->
+
+  <!-- large-scale features-->
+  <constant name="Ecal_barrel_number_of_towers" value="5"/>
+  <constant name="Ecal_fiber_thickness" value=".15*mm"/>
+  <constant name="Ecal_front_face_thickness" value="2*mm"/>
+  <constant name="Ecal_lateral_face_thickness" value="2*mm"/>
+  <constant name="Ecal_nlayers1" value="20"/>
+  <constant name="Ecal_nlayers2" value="9"/>
+  <constant name="Ecal_nlayers3" value="0"/>
+  <constant name="Ecal_radiator_layers_set1_thickness" value="2.1*mm"/>
+  <constant name="Ecal_radiator_layers_set2_thickness" value="4.2*mm"/>
+  <constant name="Ecal_radiator_layers_set3_thickness" value="0*mm"/>
+  <constant name="Ecal_support_thickness" value="9.3*mm"/>
+
+
+  <!-- slab internals -->
+
+  <constant name="Ecal_Slab_PCB_thickness" value="0.8*mm"/>
+  <constant name="Ecal_Slab_glue_gap" value="0.1*mm"/>
+
+  <constant name="Ecal_Alveolus_Air_Gap" value="0.5*mm"/>
+  <constant name="Ecal_Si_thickness" value=".5*mm"/>
+  <constant name="Ecal_Slab_H_fiber_thickness" value="0.55*mm"/>
+  <constant name="Ecal_Slab_copper_thickness" value="0.4*mm"/>
+  <constant name="Ecal_Slab_ground_thickness" value="0.1*mm"/>
+  <constant name="Ecal_Slab_shielding" value="0.1*mm"/>
+  <constant name="Ecal_guard_ring_size" value="0.5*mm"/>
+  <constant name="Ecal_n_wafers_per_tower" value="1"/> <!-- actually the # megailes across each tower-->
+  <constant name="Ecal_Sc_reflector_thickness" value="0.057*mm"/>
+  <constant name="Ecal_Sc_thickness" value="2.0*mm"/>
+  <constant name="Ecal_Slab_Sc_PCB_thickness" value="0.8*mm"/>
+  <constant name="Ecal_cells_size" value="5.*mm"/>
+
+  <!-- new parameters needed for SEcal05 -->
+  <constant name="Ecal_barrel_z_modules" value="5"/>
+  <constant name="Ecal_Barrel_Preshower" value="1"/>
+  <constant name="Ecal_layer_pattern" value="12"/>
+  <constant name="Ecal_end_of_slab_strategy" value="1"/>
+  <constant name="Ecal_cells_across_megatile" value="1"/>
+  <constant name="Ecal_strips_across_megatile" value="36"/>
+  <constant name="Ecal_strips_along_megatile" value="4"/>
+  <constant name="Ecal_Endcap_Preshower" value="1"/>
+  <constant name="Ecal_endcap_number_of_towers" value="333"/>
+  <!-- end new ECAL parameters -->
+
+
+
+
+
+<!--
+  <constant name="Ecal_barrel_thickness" value="185.0*mm"/>
   <constant name="EcalBarrelServices_RailDistanceToRight" value="166.5*mm"/>
   <constant name="EcalBarrelServices_RailHeight" value="30.0*mm"/>
   <constant name="EcalBarrelServices_RailSeparation" value="380.0*mm"/>
@@ -46,7 +145,6 @@
   <constant name="EcalTranslateX" value="0.0*mm"/>
   <constant name="EcalTranslateY" value="0.0*mm"/>
   <constant name="Ecal_Alveolus_Air_Gap" value="0.5*mm"/>
-  <!-- <constant name="Ecal_Barrel_halfZ" value="2350*mm"/> -->
   <constant name="Ecal_EC_Ring_gap" value="10*mm"/>
   <constant name="Ecal_Lcal_ring_gap" value="54.8*mm"/>
   <constant name="Ecal_MPPC_size" value="0.91*mm"/>
@@ -54,13 +152,11 @@
   <constant name="Ecal_Sc_N_strips_across_module" value="4"/>
   <constant name="Ecal_Sc_Si_mix" value="000000000000000"/>
   <constant name="Ecal_Sc_number_of_virtual_cells" value="9"/>
-  <!--constant name="Ecal_Sc_reflector_thickness" value="0.057*mm"/-->
   <constant name="Ecal_Sc_reflector_thickness" value="0.050*mm"/>
   <constant name="Ecal_Sc_thickness" value="1.0*mm"/>
   <constant name="Ecal_Si_thickness" value=".5*mm"/>
   <constant name="Ecal_Slab_H_fiber_thickness" value="0.55*mm"/>
   <constant name="Ecal_Slab_PCB_thickness" value="0.8*mm"/>
-  <!--constant name="Ecal_Slab_Sc_PCB_thickness" value="0.8*mm"/-->
   <constant name="Ecal_Slab_Sc_PCB_thickness" value="0.7*mm"/>
   <constant name="Ecal_Slab_copper_thickness" value="0.1*mm"/>
   <constant name="Ecal_Slab_glue_gap" value="0.1*mm"/>
@@ -74,28 +170,23 @@
   <constant name="Ecal_endcap_extra_size" value="60.8*mm"/>
   <constant name="Ecal_endcap_outer_radius" value="1926.1*mm"/>
   <constant name="Ecal_endcap_plug_rmin" value="250.0*mm"/>
-  <!-- <constant name="Ecal_endcap_zmax" value="2500.*mm"/> -->
-  <!-- <constant name="Ecal_endcap_zmin" value="2450.0*mm"/> -->
   <constant name="Ecal_fiber_thickness" value=".15*mm"/>
   <constant name="Ecal_front_face_thickness" value="2*mm"/>
-  <!--constant name="Ecal_guard_ring_size" value="0.5*mm"/-->
-  <!-- ScECAL has no guard ring. We put a one micron tolerance instead of it. -->
   <constant name="Ecal_guard_ring_size" value="0.001*mm"/>
   <constant name="Ecal_lateral_face_thickness" value="2*mm"/>
-  <!--ScECAL has one EBU row in an alveolus   constant name="Ecal_n_wafers_per_tower" value="2"/-->
   <constant name="Ecal_n_wafers_per_tower" value="2"/>
   <constant name="Ecal_nlayers1" value="20"/>
   <constant name="Ecal_nlayers2" value="9"/>
   <constant name="Ecal_nlayers3" value="0"/>
-  <!-- <constant name="Ecal_outer_radius" value="1910*mm"/> -->
   <constant name="Ecal_radiator_layers_set1_thickness" value="2.1*mm"/>
   <constant name="Ecal_radiator_layers_set2_thickness" value="4.2*mm"/>
   <constant name="Ecal_radiator_layers_set3_thickness" value="0*mm"/>
-  <!-- <constant name="Ecal_radiator_material" value="tungsten"/> -->
-  <!-- <constant name="Ecal_sensitive_material" value="silicon_2.33gccm"/> -->
   <constant name="Ecal_slab_pattern" value="222222222222222222222222222222"/>
   <constant name="Ecal_support_thickness" value="9.3*mm"/>
   <constant name="Ecal_total_alveolus_thickness" value="2.1*mm"/>
+-->
+
+
   <constant name="EdgeWidth" value="1.0*mm"/>
   <constant name="FCH_thickness" value="0.30*mm"/>
   <constant name="FieldPropagator_LargestAcceptableStep" value="-1"/>

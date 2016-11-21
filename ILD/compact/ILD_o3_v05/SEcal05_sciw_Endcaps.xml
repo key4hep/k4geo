@@ -1,0 +1,61 @@
+<detector name="EcalEndcap" type="SEcal05_Endcaps" id="ILDDetID_ECAL_ENDCAP" readout="EcalEndcapsCollection" vis="BlueVis" >
+  <comment>EM Calorimeter Endcaps</comment>
+
+  <envelope vis="ILD_ECALVis">    
+    <shape type="BooleanShape" operation="Subtraction" material="Air">
+      <shape type="BooleanShape" operation="Subtraction" material="Air">
+	<shape type="PolyhedraRegular"  numsides="EcalEndcap_symmetry" rmin="0" 
+	       rmax="EcalEndcap_outer_radius + env_safety" dz="2.0*EcalEndcap_max_z + env_safety"/>   
+	<shape type="PolyhedraRegular"  numsides="EcalEndcap_symmetry" rmin="0" 
+	       rmax="EcalEndcap_outer_radius + 2.*env_safety" dz="2.0*EcalEndcap_min_z - env_safety"/> 
+      </shape>
+      <shape type="Box" dx="EcalEndcap_inner_radius - env_safety" 
+	     dy="EcalEndcap_inner_radius - env_safety" dz="(EcalEndcap_max_z + env_safety )"/>
+      <rotation x="0*deg" y="0*deg" z="-180*deg/EcalEndcap_symmetry"/>
+    </shape>
+    <rotation x="0*deg" y="0*deg" z="180*deg/EcalEndcap_symmetry"/>
+  </envelope>
+  
+  <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_ELECTROMAGNETIC " />
+
+  <staves  material = "G4_W"  vis="BlueVis"/>
+  
+  <layer repeat="Ecal_nlayers1/2" vis="SeeThrough" > <!-- 10 double SD Layers, and 5 W palte after each double SD Layer -->
+
+
+        <slice material = "G4_AIR"         thickness = "Ecal_Alveolus_Air_Gap/2."                vis="Invisible" />
+        <slice material = "siPCBMix"       thickness = "Ecal_Slab_Sc_PCB_thickness+Ecal_Slab_copper_thickness+Ecal_Slab_shielding" vis="Invisible" />
+        <slice material = "PET"		   thickness = "Ecal_Sc_reflector_thickness"				     vis="RedVis"    />
+        <slice material = "G4_POLYSTYRENE" thickness = "Ecal_Sc_thickness" sensitive = "yes"     vis="RedVis"    />
+        <slice material = "PET"    	   thickness = "Ecal_Sc_reflector_thickness" 				     vis="RedVis"    />
+        <slice material = "CarbonFiber"    thickness = "Ecal_fiber_thickness"                    vis="Invisible" />
+        <slice material = "G4_W"   	   thickness = "Ecal_radiator_layers_set1_thickness"   vis="BlueVis"   radiator="yes"/>
+        <slice material = "CarbonFiber"    thickness = "Ecal_fiber_thickness"                    vis="Invisible" />
+        <slice material = "PET"		   thickness = "Ecal_Sc_reflector_thickness"				     vis="RedVis"    />
+        <slice material = "G4_POLYSTYRENE" thickness = "Ecal_Sc_thickness" sensitive = "yes"     vis="RedVis"    />
+        <slice material = "PET"    	   thickness = "Ecal_Sc_reflector_thickness" 				     vis="RedVis"    />
+        <slice material = "siPCBMix"       thickness = "Ecal_Slab_Sc_PCB_thickness+Ecal_Slab_copper_thickness+Ecal_Slab_shielding" vis="Invisible" />
+        <slice material = "G4_AIR"         thickness = "Ecal_Alveolus_Air_Gap/2."                vis="Invisible" />
+
+
+  </layer>
+
+  <layer repeat="(Ecal_nlayers2+1)/2" vis="SeeThrough"> <!-- 5 double SD Layers, and 4 W palte after each double SD Layer, without the last W plate -->
+
+        <slice material = "G4_AIR"         thickness = "Ecal_Alveolus_Air_Gap/2."                vis="Invisible" />
+        <slice material = "siPCBMix"       thickness = "Ecal_Slab_Sc_PCB_thickness+Ecal_Slab_copper_thickness+Ecal_Slab_shielding" vis="Invisible" />
+        <slice material = "PET"		   thickness = "Ecal_Sc_reflector_thickness"				     vis="RedVis"    />
+        <slice material = "G4_POLYSTYRENE" thickness = "Ecal_Sc_thickness" sensitive = "yes"     vis="RedVis"    />
+        <slice material = "PET"    	   thickness = "Ecal_Sc_reflector_thickness" 				     vis="RedVis"    />
+        <slice material = "CarbonFiber"    thickness = "Ecal_fiber_thickness"                    vis="Invisible" />
+        <slice material = "G4_W"   	   thickness = "Ecal_radiator_layers_set2_thickness"   vis="BlueVis"   radiator="yes"/>
+        <slice material = "CarbonFiber"    thickness = "Ecal_fiber_thickness"                    vis="Invisible" />
+        <slice material = "PET"		   thickness = "Ecal_Sc_reflector_thickness"				     vis="RedVis"    />
+        <slice material = "G4_POLYSTYRENE" thickness = "Ecal_Sc_thickness" sensitive = "yes"     vis="RedVis"    />
+        <slice material = "PET"    	   thickness = "Ecal_Sc_reflector_thickness" 				     vis="RedVis"    />
+        <slice material = "siPCBMix"       thickness = "Ecal_Slab_Sc_PCB_thickness+Ecal_Slab_copper_thickness+Ecal_Slab_shielding" vis="Invisible" />
+        <slice material = "G4_AIR"         thickness = "Ecal_Alveolus_Air_Gap/2."                vis="Invisible" />
+
+  </layer>
+</detector>
+
