@@ -224,7 +224,7 @@ void SEcal05_Helpers::updateCaloLayers(double thickness,
     _caloLayer.outer_thickness           = _layer_thickness;
     _caloLayer.outer_nRadiationLengths   = _layer_nRadiationLengths;
     _caloLayer.outer_nInteractionLengths = _layer_nInteractionLengths;
-    _caloLayer.thickness                 = _caloLayer.inner_thickness + _caloLayer.outer_thickness ;
+    //_caloLayer.thickness                 = _caloLayer.inner_thickness + _caloLayer.outer_thickness ;
 
     // push it back
     _caloData->layers.push_back( _caloLayer ) ;
