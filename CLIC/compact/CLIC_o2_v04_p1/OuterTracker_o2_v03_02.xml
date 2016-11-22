@@ -52,10 +52,10 @@
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
         <readout name="OuterTrackerBarrelCollection">
-            <id>system:5,side:-2,layer:5,module:9,sensor:8,barrel:3</id>
+            <id>system:5,side:-2,layer:6,module:8,sensor:8</id>
         </readout>
         <readout name="OuterTrackerEndcapCollection">
-            <id>system:5,side:-2,layer:6,module:8,sensor:8,barrel:3</id>
+            <id>system:5,side:-2,layer:6,module:8,sensor:8</id>
         </readout>
     </readouts>
     
@@ -106,7 +106,7 @@
     
     
     <detectors>
-        <detector id="DetID_OT_Endcap" name="OuterTrackerEndcap" type="TrackerEndcap_o1_v04" readout="OuterTrackerEndcapCollection" reflect="true">
+        <detector id="DetID_OT_Endcap" name="OuterTrackerEndcap" type="TrackerEndcap_o1_v05" readout="OuterTrackerEndcapCollection" reflect="true">
             <envelope vis="OTVis">
                 <shape type="Assembly"/>
             </envelope>

@@ -84,10 +84,10 @@
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
         <readout name="InnerTrackerBarrelCollection">
-            <id>system:5,side:-2,layer:6,module:8,sensor:8,barrel:3</id>
+            <id>system:5,side:-2,layer:6,module:8,sensor:8</id>
         </readout>
         <readout name="InnerTrackerEndcapCollection">
-            <id>system:5,side:-2,layer:6,module:8,sensor:8,barrel:3</id>
+            <id>system:5,side:-2,layer:6,module:8,sensor:8</id>
         </readout>
     </readouts>
     
@@ -135,7 +135,7 @@
     </detectors>
     
     <detectors>
-        <detector id="DetID_IT_Endcap" name="InnerTrackerEndcap" type="TrackerEndcap_o1_v04" readout="InnerTrackerEndcapCollection" reflect="true">
+        <detector id="DetID_IT_Endcap" name="InnerTrackerEndcap" type="TrackerEndcap_o1_v05" readout="InnerTrackerEndcapCollection" reflect="true">
             <envelope vis="ITVis">
                 <shape type="Assembly"/>
             </envelope>
