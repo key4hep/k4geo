@@ -664,7 +664,7 @@ void SEcal05_Helpers::makeModule( DD4hep::Geometry::Volume & mod_vol,  // the vo
                   if ( megatileSeg ) { // define the special megatile
                     megatileSeg->setSpecialMegaTile( myLayerNumTemp, wafer_num,
                                                      megatile_sensitive_size_x, unit_sensitive_dim_Y,
-                                                     megatile_size_x/2., unit_sensitive_dim_Y/2., // the position
+                                                     -megatile_size_x/2., -unit_sensitive_dim_Y/2., // the offset
                                                      ncellsx, ncellsy ); // the segmentation
                   }
                 } else { // not magic
