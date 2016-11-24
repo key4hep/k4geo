@@ -280,7 +280,6 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
             caloLayer.outer_nRadiationLengths = nRadiationLengths;
             caloLayer.outer_nInteractionLengths = nInteractionLengths;
             caloLayer.outer_thickness = thickness_sum;
-#pragma message("FIXME: Need to put layerStaggerPhi  in place of obsolete 'thickness'")
             if ( thisLayerId == 0 )
 	      std::cout<<"  Layer thickness : "
 		       << (caloLayer.inner_thickness+caloLayer.outer_thickness)/dd4hep::mm 
@@ -294,20 +293,23 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 #endif            
             caloLayer.cellSize0 = cellRsize ;
             caloLayer.cellSize1 = cellPhiSize ;
-            
-            caloData->layers.push_back( caloLayer ) ;
-            layer_vol.setVisAttributes(lcdd,xmlLayer.visStr());
-             
+
             DD4hep::Geometry::Position  layerPos(0,0,referencePosition+0.5*layerThickness);
 	    DD4hep::Geometry::RotationZ layerRot( staggerPhi );
 	    DD4hep::Geometry::PlacedVolume pv;
 	    // every other layer has gaps staggered 
 	    if( thisLayerId%2 == 1 && layerStagger != 0. ) {
 	      pv = envelopeVol.placeVolume(layer_vol, DD4hep::Geometry::Transform3D( layerRot, layerPos ));
+	      caloLayer.phi0 = staggerPhi;
 	    }else{
 	      pv = envelopeVol.placeVolume(layer_vol,layerPos);
+	      caloLayer.phi0 = 0.;
 	    }
-            pv.addPhysVolID("layer",thisLayerId);
+	    pv.addPhysVolID("layer",thisLayerId);
+              
+            caloData->layers.push_back( caloLayer ) ;
+            layer_vol.setVisAttributes(lcdd,xmlLayer.visStr());
+             
             
             referencePosition += layerThickness;
             ++thisLayerId;
