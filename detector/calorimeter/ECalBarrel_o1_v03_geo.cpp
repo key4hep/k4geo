@@ -303,7 +303,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	    caloLayer.outer_nInteractionLengths = nInteractionLengths;
 	    caloLayer.outer_thickness           = thickness_sum;
 	    caloLayer.absorberThickness         = absorberThickness;
-	    caloLayer.thickness = caloLayer.inner_thickness + caloLayer.outer_thickness;
 	    caloLayer.cellSize0 = cell_sizeX;
 	    caloLayer.cellSize1 = cell_sizeY;
 
@@ -311,8 +310,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	    std::cout <<" caloLayer.outer_nRadiationLengths: "<< caloLayer.outer_nRadiationLengths << std::endl;
 	    std::cout <<" caloLayer.outer_nInteractionLengths: "<< caloLayer.outer_nInteractionLengths << std::endl;
 	    std::cout <<" caloLayer.outer_thickness: "<< caloLayer.outer_thickness << std::endl;
-	    std::cout <<" caloLayer.thickness: "<< caloLayer.thickness << std::endl;
 	    std::cout <<" caloLayer.absorberThickness: "<< caloLayer.absorberThickness << std::endl << std::endl;
+	    std::cout <<" caloLayer total thickness: "<< caloLayer.inner_thickness + caloLayer.outer_thickness << std::endl;
 #endif
 	    caloData->layers.push_back( caloLayer ) ;
 	    
