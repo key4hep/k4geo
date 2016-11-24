@@ -213,6 +213,7 @@
   <constant name="LHcal_radiator_thickness" value="10*mm"/>
   <!-- <constant name="LHcal_zend" value="3085*mm"/> -->
   <constant name="LHcal_zmin_displacement" value="30*mm"/>
+<!-- Lcal parameters  -->
   <constant name="Lcal_beam_pipe_clearance" value="0.5*mm"/>
   <constant name="Lcal_extra_size" value="26*mm"/>
   <constant name="Lcal_inner_radius" value="80.0*mm"/>
@@ -229,8 +230,10 @@
   <constant name="Lcal_tile_gap" value="1.2*mm"/>
   <constant name="Lcal_tungsten_thickness" value="3.5*mm"/>
   <!-- <constant name="Lcal_type" value="pad"/> -->
+  <!--constant name="Lcal_z_thickness" value="135.6*mm"/-->
+  <constant name="Lcal_z_thickness" value="Lcal_n_layers*(Lcal_tungsten_thickness+Lcal_silicon_thickness+Lcal_support_thickness+Lcal_layer_gap)"/>
+<!-- This value depends on Ecal_plugin_zmax ! Use only for stand alone LumiCal -->
   <constant name="Lcal_z_begin" value="2505.0*mm"/>
-  <constant name="Lcal_z_thickness" value="135.6*mm"/>
   <constant name="LumiCal_cell_size" value="10*mm"/>
   <constant name="PCB_Thickness" value="0.8*mm"/>
   <constant name="PadSeparation" value="0.408*mm"/>

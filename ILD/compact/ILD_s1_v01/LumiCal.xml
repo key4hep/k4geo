@@ -2,13 +2,13 @@
      LumiCal parameters for ILD 
 -->
 
-<detector name="Lcal" type="LumiCal_o1_v01" vis="SeeThrough" id="ILDDetID_LCAL"
+<detector name="Lcal" type="LumiCal_o1_v03" vis="SeeThrough" id="ILDDetID_LCAL"
 	  readout="LumiCalCollection" insideTrackingVolume="false" >
   
   <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_ELECTROMAGNETIC + DetType_FORWARD " />
   
  <!-- LumiCal envelope is rotated according to the ILC_Main_Crossing_Angle at +z and -z -->
-  <envelope vis="ILD_FCALVis">
+  <envelope vis="ILD_FCALVis"> 
     <shape type="BooleanShape" operation="Intersection" material="Air">
       <shape type="Box" dx="LumiCal_outer_radius*2.0" dy="LumiCal_outer_radius*2.0" dz="LumiCal_max_z*2.0"/>
       
@@ -33,7 +33,7 @@
 	  <position x="0" y="0" z="-LumiCal_thickness"/>
 	  </shape>
 	
-	<!-- Angel between -z and +z -->
+	<!-- Angle between -z and +z -->
 	<rotation x="0" y="ILC_Main_Crossing_Angle" z="0"/>
 	<position x="0" y="0" z="0"/>
       </shape>
@@ -44,6 +44,7 @@
     </shape>
   </envelope>  
   
+<!-- layerstaggerphi is in cellPhiSize units i.e. 0.5 means the stagger is 0.5*cellPhiSize -->
   <parameter crossingangle="ILC_Main_Crossing_Angle"
 	     cutoutspanningangle="40*deg"
 	     incomingbeampiperadius="BCal_TubeIncomingRadius"
@@ -52,18 +53,23 @@
   <dimensions inner_r = "LumiCal_inner_radius"
 	      inner_z = "LumiCal_min_z"
 	      outer_r = "LumiCal_outer_radius"
-	      modules = "12"
-	      phi_sectors = "4"
-	      r_sectors = "64"
-	      phi_gap = "2*mm"
-	      r_gap = "2*mm" />
+	      servicesRmax = "Ecal_endcap_plug_rmin"
+	      layerstagger = "0.5"
+	      outerPhi0    = "Lcal_offset_phi"
+	      modules = "Lcal_n_tiles"
+	      phi_sectors = "Lcal_nstrips_phi/Lcal_n_tiles"
+	      r_sectors = "Lcal_nstrips_theta"
+	      phi_gap = "2.*Lcal_tile_gap"
+	      r_gap = "Lcal_tile_gap" />
 
   
   <layer repeat="30" vis="SeeThrough">
-    <slice material = "TungstenDens24" thickness = "3.5*mm" 		   vis="BCLayerVis1" />
-    <slice material = "Air"     thickness = "0.1*mm" />
-    <slice material = "Silicon" thickness = "0.355*mm" 	sensitive = "yes"  vis="BCLayerVis2"/>
-    <slice material = "Copper"  thickness = "0.4*mm"                    vis="BCLayerVis3"/>
-  </layer>
+    <slice material = "TungstenDens24" thickness = "Lcal_tungsten_thickness" 		   vis="BCLayerVis1"/>
+    <slice material = "fanele1" thickness = "( Lcal_support_thickness - 0.02*mm) / 2."     vis="Invisible"/>
+    <slice material = "Silicon" thickness = "Lcal_silicon_thickness" 	sensitive = "yes"  vis="BCLayerVis2"/>
+    <slice material = "G4_Al"   thickness = "0.02*mm"                                      vis="BCLayerVis3"/>
+    <slice material = "fanele2" thickness = "( Lcal_support_thickness - 0.02*mm) / 2."      vis="Invisible"/>
+    <slice material = "Air"     thickness = "Lcal_layer_gap" />
+   </layer>
 
 </detector>
