@@ -53,6 +53,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     //-----------------------------------------------------------------------------------
     
     DDRec::ZDiskPetalsData*  zDiskPetalsData = new DDRec::ZDiskPetalsData ;
+    std::map< std::string, double > moduleSensThickness;
     
     
     envelope.setVisAttributes(lcdd.invisible());
@@ -92,6 +93,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 //                 pv.addPhysVolID("sensor",n_sensor); //Not what we call sensor; see below
                 c_vol.setSensitiveDetector(sens);
                 sensitives[m_nam].push_back(pv);
+                //Assuming one sensitive slice per module
+                moduleSensThickness[m_nam] = c_thick;
                 ++n_sensor;
             }
             posY += c_thick;
@@ -106,7 +109,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         int ring_no=0;
         //Cannot handle rings in ZDiskPetalsData, calculate approximate petal quantities
         double sumZ(0.), innerR(1e100),outerR(0.);
-        
+
+        double sensitiveThickness(0.0);
+
         for(xml_coll_t ri(x_layer,_U(ring)); ri; ++ri)  {
             xml_comp_t x_ring = ri;
             double r        = x_ring.r();
@@ -119,7 +124,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             double iphi     = 2*M_PI/nmodules;
             double phi      = phi0;
             Placements& sensVols = sensitives[m_nam];
-            
+            sensitiveThickness = moduleSensThickness[m_nam];
             
             DD4hep::Geometry::Trapezoid mod_shape(m_vol.solid());
             
@@ -179,6 +184,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             thisLayer.distanceSensitive   = innerR ; 
             thisLayer.lengthSensitive   = outerR-innerR;
             thisLayer.petalNumber   = ring_no ; //Store the number of rings in petalNumber needed for tracking
+
+            //this assumes there is a constant sensitive thickness even though
+            //the layer could have different modules with different thicknesses
+            thisLayer.thicknessSensitive = sensitiveThickness;
+
             zDiskPetalsData->layers.push_back( thisLayer ) ;
     }
 
