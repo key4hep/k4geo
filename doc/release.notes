@@ -1,3 +1,14 @@
+ -----------
+| v00-09-01 |
+ -----------
+ patch release
+ D.Jeans:
+   - bug fixes (character to int conversion; strip layer configuration)
+     in SEcal05_Barrel.cpp, SEcal05_Endcaps.cpp, SEcal05_Helpers.cpp
+     and ILD_l1_v01, ILD_s1_v01 and ILD_03_v05
+ A.Sailer
+   - Add sensitive thickness to DataStructs for TrackerEndcap_o1_v04(5)_geo.cpp
+
  --------
 | v00-09 | 
  -------- 
