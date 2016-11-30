@@ -24,6 +24,8 @@
 
 #include "SEcal05_Helpers.h"
 
+#include <sstream>
+
 #undef NDEBUG
 #include <assert.h>
 
@@ -249,11 +251,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   helper.setMagicMegatileStrategy ( Ecal_end_of_slab_strategy );
 
   // layer configuration
+  int ntemp;
+  stringstream stream(Ecal_layerConfig);
   std::vector < int > layerConfig;
-  for(std::string::size_type i = 0; i < Ecal_layerConfig.size(); ++i) {
-    char c = Ecal_layerConfig[i];
-    int itype = atoi( &c );
-    layerConfig.push_back( itype );
+  while ( stream >> ntemp ) {
+    assert (ntemp>=0 );
+    layerConfig.push_back( ntemp );
   }
   cout << "layer config: ";
   for (size_t i=0; i<layerConfig.size(); i++) cout << layerConfig[i] << " ";

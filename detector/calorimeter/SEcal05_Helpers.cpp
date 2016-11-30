@@ -522,7 +522,7 @@ void SEcal05_Helpers::makeModule( DD4hep::Geometry::Volume & mod_vol,  // the vo
             cell_size_y = waferSeg->cellDimensions(0)[1];
           } else if ( megatileSeg ) {
             // setup megatile
-            int laytype = myLayerNumTemp%_layerConfig.size();
+            int laytype = _layerConfig [ myLayerNumTemp%_layerConfig.size() ];
             if ( laytype==0 ) {
               megatileSeg->setMegaTileCellsXY( myLayerNumTemp, _cells_across_megatile , _cells_across_megatile );
             } else if  ( laytype==1 ) {

@@ -41,6 +41,7 @@
 #include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"
 #include "DDSegmentation/WaferGridXY.h"
+#include <sstream>
 
 using namespace std;
 using namespace DD4hep;
@@ -205,33 +206,29 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   helper.setMagicMegatileStrategy ( Ecal_end_of_slab_strategy );
 
 
-
+  int ntemp;
+  std::stringstream stream(Ecal_layerConfig);
   std::vector < int > layerConfig;
-  for(std::string::size_type i = 0; i < Ecal_layerConfig.size(); ++i) {
-    char c = Ecal_layerConfig[i];
-    int itype = atoi( &c );
-    layerConfig.push_back( itype );
+  while ( stream >> ntemp ) {
+    assert( ntemp>=0 );
+    layerConfig.push_back( ntemp );
   }
-  helper.setLayerConfig( layerConfig );
-
   cout << "layer config: ";
   for (size_t i=0; i<layerConfig.size(); i++) cout << layerConfig[i] << " ";
   cout << endl;
 
+  helper.setLayerConfig( layerConfig );
+
   // set the number of towers/modules
-
-
   std::vector < int > ntowers;
-  for(std::string::size_type i = 0; i < Ecal_endcap_number_of_towers.size(); ++i) {
-    char c = Ecal_endcap_number_of_towers[i];
-    int itype = atoi( &c );
-    ntowers.push_back( itype );
+  std::stringstream stream2( Ecal_endcap_number_of_towers );
+  while ( stream2 >> ntemp ) {
+    ntowers.push_back( ntemp );
   }
 
-  cout << "ECAL endcap tower configuration " << Ecal_endcap_number_of_towers << endl;
-  for (size_t i=0; i<ntowers.size(); i++) {
+  cout << "ECAL endcap tower configuration " << Ecal_endcap_number_of_towers << " : ";
+  for (size_t i=0; i<ntowers.size(); i++) 
     cout << ntowers[i] << " ";
-  }
   cout << endl;
 
   // check that resulting quadrant size is consistent with compact description
