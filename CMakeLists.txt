@@ -1,6 +1,4 @@
-cmake_minimum_required(VERSION 2.8.3 FATAL_ERROR)
-
-#SET( CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic -Wno-long-long")
+cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 
 #---------------------------
 set( PackageName lcgeo )
@@ -39,34 +37,11 @@ option(CMAKE_MACOSX_RPATH "Build with rpath on macos" ON)
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 find_package(DD4hep REQUIRED COMPONENTS DDSegmentation DDRec DDG4)
+dd4hep_set_compiler_flags()
 
-MESSAGE(" DD4HEP_USE_CXX11: " ${DD4HEP_USE_CXX11})
-MESSAGE(" DD4HEP_USE_CXX14: " ${DD4HEP_USE_CXX14})
-
-if( ${DD4HEP_USE_CXX11})
-  set ( CMAKE_CXX_FLAGS "-std=c++11 -ftls-model=global-dynamic -Wall -Wextra -pedantic -Wshadow -Wformat-security -Wno-long-long -Wdeprecated")
-elseif( ${DD4HEP_USE_CXX14})
-  set ( CMAKE_CXX_FLAGS "-std=c++14 -ftls-model=global-dynamic -Wall -Wextra -pedantic -Wshadow -Wformat-security -Wno-long-long -Wdeprecated")
-else()
-   SET( CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic -Wshadow -Wformat-security -Wno-long-long -Wdeprecated")
-endif()
-
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-  if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.9)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto")
-  endif()
-endif()
-
-
-MESSAGE(" CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS})
-
-if ( ${ROOT_VERSION_MAJOR} GREATER 5 )
-  find_package(ROOT REQUIRED COMPONENTS Geom GenVector)
-else()
-  find_package(ROOT REQUIRED COMPONENTS Geom Reflex GenVector)
-endif()
-#find_package( ROOT REQUIRED COMPONENTS Geom Reflex)
-#set( ROOT_COMPONENT_LIBRARIES Geom Reflex)
+find_package ( ROOT REQUIRED COMPONENTS Geom GenVector)
+include(${ROOT_USE_FILE})
+message ( STATUS "ROOT_VERSION: ${ROOT_VERSION}" )
 
 find_package( Boost REQUIRED ) 
 include_directories( SYSTEM ${Boost_INCLUDE_DIRS} )
