@@ -1,10 +1,10 @@
 <lccdd>
-    <info name="CLIC_o3_v07"
-          title="CLIC detector model option 3 version 07"
+    <info name="CLIC_o3_v08"
+          title="CLIC detector model option 3 version 08"
           author="Marko Petric"
           url="https://twiki.cern.ch/twiki/bin/view/CLIC/NewCLIC"
           status="development"
-          version="$Id: 2016-11-04 marko.petric@cern.ch $">
+          version="$Id: 2016-12-05 marko.petric@cern.ch $">
         <comment>The compact format for the CLIC Detector design</comment>
     </info>
 
