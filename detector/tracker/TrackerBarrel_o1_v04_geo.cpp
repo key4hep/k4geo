@@ -4,6 +4,9 @@
 //
 //  Author     : N. Nikiforou (forked from SiTrackerBarrel_geo.cpp
 //
+// Comment: Here each slice of the module has the same transversal
+//          dimensions (x,y). Suitable for Surfaces.
+//
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
