@@ -51,6 +51,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
     // -------- reconstruction parameters  ----------------
     DDRec::ZDiskPetalsData*  zDiskPetalsData = new DDRec::ZDiskPetalsData ;
+    std::map< std::string, double > moduleSensThickness;
 
     for(xml_coll_t mi(x_det,_U(module)); mi; ++mi, ++m_id)  {
         xml_comp_t x_mod   = mi;
@@ -86,6 +87,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 //                 pv.addPhysVolID("sensor",n_sensor); ///Not needed
                 c_vol.setSensitiveDetector(sens);
                 sensitives[m_nam].push_back(pv);
+                //Assuming one sensitive slice per module
+                moduleSensThickness[m_nam] = c_thick;
                 ++n_sensor;
             }
             posY += c_thick;
@@ -140,7 +143,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             thisLayer.lengthSupport   = 0 ;
             thisLayer.zOffsetSensitive    = 0 ;
             thisLayer.distanceSensitive   = r - mod_shape->GetDZ() ; 
-            thisLayer.thicknessSensitive  = 0;
+            thisLayer.thicknessSensitive  = moduleSensThickness[m_nam];
             thisLayer.widthInnerSensitive =  0 ;
             thisLayer.widthOuterSensitive = 0 ;
             thisLayer.lengthSensitive   = 2*mod_shape->GetDZ();
