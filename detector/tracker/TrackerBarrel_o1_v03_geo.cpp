@@ -13,6 +13,10 @@
 #include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"
 
+#include <UTIL/BitField64.h>
+#include <UTIL/BitSet32.h>
+#include <UTIL/ILDConf.h>
+
 using namespace std;
 using namespace DD4hep;
 using namespace DD4hep::Geometry;
@@ -29,6 +33,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     map<string, Placements>  sensitives;
     PlacedVolume pv;
     
+
+    // for encoding
+    std::string cellIDEncoding = sens.readout().idSpec().fieldDescription();
+    UTIL::BitField64 encoder( cellIDEncoding );
+    encoder.reset();
+    encoder[lcio::ILDCellID0::subdet] = det_id;
+    encoder[lcio::ILDCellID0::side] = lcio::ILDDetID::barrel;
+
     
     // --- create an envelope volume and position it into the world ---------------------
     
@@ -140,6 +152,52 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             
             for (int j = 0; j < nz; j++)          {
                 string sensor_name = _toString(sensor_idx,"sensor%d");
+
+		///////////////////
+
+		//get cellID and fill map< cellID of surface, vector of cellID of neighbouring surfaces >
+
+		//encoding
+
+		encoder[lcio::ILDCellID0::layer] = lay_id;
+		encoder[lcio::ILDCellID0::module] = module_idx;
+		encoder[lcio::ILDCellID0::sensor] = sensor_idx;
+
+		DD4hep::long64 cellID = encoder.lowWord(); // 32 bits
+
+		//compute neighbours 
+
+		int n_neighbours_module = 1; // 1 gives the adjacent modules (i do not think we would like to change this)
+		int n_neighbours_sensor = 1;
+
+		int newmodule=0, newsensor=0;
+
+		for(int imodule=-n_neighbours_module; imodule<=n_neighbours_module; imodule++){ // neighbouring modules
+		  for(int isensor=-n_neighbours_sensor; isensor<=n_neighbours_sensor; isensor++){ // neighbouring sensors
+		    
+		    if (imodule==0 && isensor==0) continue; // cellID we started with
+		    newmodule = module_idx + imodule;
+		    newsensor = sensor_idx + isensor;
+
+		    //compute special case at the boundary  
+		    //general computation to allow (if necessary) more then adjacent neighbours (ie: +-2)
+		    
+		    if (newmodule < 0) newmodule = nphi + newmodule;
+		    if (newmodule >= nphi) newmodule = newmodule - nphi;
+
+		    if (newsensor < 0 || newsensor >= nz) continue; //out of the stave
+
+		    //encoding
+		    encoder[lcio::ILDCellID0::module] = newmodule;
+		    encoder[lcio::ILDCellID0::sensor] = newsensor;
+		    
+		    zPlanarData->mapNeighbours[cellID].push_back(encoder.lowWord());
+
+		  }
+		}
+
+		///////////////////
+
                 
                 //FIXME
                 sensor_name = module_name + sensor_name;

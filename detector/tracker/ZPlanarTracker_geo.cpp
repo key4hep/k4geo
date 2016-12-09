@@ -15,6 +15,10 @@
 #include "DDRec/DetectorData.h"
 #include <exception>
 
+#include <UTIL/BitField64.h>
+#include <UTIL/BitSet32.h>
+#include <UTIL/ILDConf.h>
+
 using namespace DD4hep;
 using namespace DD4hep::Geometry;
 using namespace DD4hep::DDRec ;
@@ -34,6 +38,16 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
   PlacedVolume pv;
   
+
+  // for encoding
+  std::string cellIDEncoding = sens.readout().idSpec().fieldDescription();
+  UTIL::BitField64 encoder( cellIDEncoding );
+  encoder.reset();
+  encoder[lcio::ILDCellID0::subdet] = x_det.id();
+  encoder[lcio::ILDCellID0::side] = lcio::ILDDetID::barrel;
+
+
+
   DDRec::ZPlanarData*  zPlanarData = new DDRec::ZPlanarData ;
 
   XML::setDetectorTypeFlag( e, tracker ) ;
@@ -210,6 +224,47 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       ladderDE.setPlacement( pv ) ;
 
       volSurfaceList( ladderDE )->push_back( surf ) ;
+
+      ///////////////////
+
+      //get cellID and fill map< cellID of surface, vector of cellID of neighbouring surfaces >
+
+      //encoding
+
+      encoder[lcio::ILDCellID0::side] = lcio::ILDDetID::barrel;
+      encoder[lcio::ILDCellID0::layer] = layer_id;
+      encoder[lcio::ILDCellID0::module] = nLadders;
+      encoder[lcio::ILDCellID0::sensor] = 0; // there is no sensor defintion in VertexBarrel at the moment
+
+      DD4hep::long64 cellID = encoder.lowWord(); // 32 bits
+
+      //compute neighbours 
+
+      int n_neighbours_module = 1; // 1 gives the adjacent modules (i do not think we would like to change this)
+
+      int newmodule=0;
+
+      for(int imodule=-n_neighbours_module; imodule<=n_neighbours_module; imodule++){ // neighbouring modules
+		    
+	if (imodule==0) continue; // cellID we started with
+	newmodule = nLadders + imodule;
+		    
+	//compute special case at the boundary  
+	//general computation to allow (if necessary) more then adiacent neighbours (ie: +-2)
+	if (newmodule < 0) newmodule = nLadders + newmodule;
+	if (newmodule >= nLadders) newmodule = newmodule - nLadders;
+
+	//encoding
+	encoder[lcio::ILDCellID0::module] = newmodule;
+	encoder[lcio::ILDCellID0::sensor] = 0;
+
+	zPlanarData->mapNeighbours[cellID].push_back(encoder.lowWord());
+ 
+      }
+
+      ///////////////////
+      
+
 
     }
     
