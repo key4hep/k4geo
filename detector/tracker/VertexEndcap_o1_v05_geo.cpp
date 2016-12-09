@@ -19,6 +19,10 @@
 #include "DD4hep/Printout.h"
 #include "DDRec/DetectorData.h"
 
+#include <UTIL/BitField64.h>
+#include <UTIL/BitSet32.h>
+#include <UTIL/ILDConf.h>
+
 using namespace std;
 using namespace DD4hep;
 using namespace DD4hep::Geometry;
@@ -36,6 +40,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     map<string, Placements>  sensitives;
     PlacedVolume pv;
     
+
+    // for encoding
+    std::string cellIDEncoding = sens.readout().idSpec().fieldDescription();
+    UTIL::BitField64 encoder( cellIDEncoding );
+    encoder.reset();
+    encoder[lcio::ILDCellID0::subdet] = det_id;
+
+
     // --- create an envelope volume and position it into the world ---------------------
     
     Volume envelope = XML::createPlacedEnvelope( lcdd,  e , sdet ) ;
@@ -174,6 +186,68 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                         comp_elt.setPlacement(sens_pv);
                     }
                 }
+
+
+		///////////////////
+
+		//get cellID and fill map< cellID of surface, vector of cellID of neighbouring surfaces >
+
+		//encoding
+
+		DD4hep::long64 cellID_reflect;
+		if (reflect) {
+		  encoder[lcio::ILDCellID0::side] = lcio::ILDDetID::bwd;
+		  encoder[lcio::ILDCellID0::layer] = l_id;
+		  encoder[lcio::ILDCellID0::module] = 0; // only 1 ring so always 0 
+		  encoder[lcio::ILDCellID0::sensor] = k;
+
+		  cellID_reflect = encoder.lowWord(); // 32 bits
+		}
+
+		encoder[lcio::ILDCellID0::side] = lcio::ILDDetID::fwd;
+		encoder[lcio::ILDCellID0::layer] = l_id;
+		encoder[lcio::ILDCellID0::module] = 0; // only 1 ring so always 0 
+		encoder[lcio::ILDCellID0::sensor] = k;
+
+		DD4hep::long64 cellID = encoder.lowWord(); // 32 bits
+
+		//compute neighbours 
+
+		int n_neighbours_sensor = 1; // 1 gives the adjacent modules (i do not think we would like to change this)
+
+		int newsensor=0;
+
+		for(int isensor=-n_neighbours_sensor; isensor<=n_neighbours_sensor; isensor++){ // neighbouring sensors
+		    
+		  if (isensor==0) continue; // cellID we started with
+		  newsensor = k + isensor;
+		    
+		  //compute special case at the boundary  
+		  //general computation to allow (if necessary) more then adiacent neighbours (ie: +-2)
+		  if (newsensor < 0) newsensor = nmodules + newsensor;
+		  if (newsensor >= nmodules) newsensor = newsensor - nmodules;
+
+		  //encoding
+		  encoder[lcio::ILDCellID0::module] = 0;
+		  encoder[lcio::ILDCellID0::sensor] = newsensor;
+
+		  zDiskPetalsData->mapNeighbours[cellID].push_back(encoder.lowWord());
+
+		  if (reflect){
+		    encoder[lcio::ILDCellID0::side] = lcio::ILDDetID::bwd;
+		    encoder[lcio::ILDCellID0::layer] = l_id;
+		    encoder[lcio::ILDCellID0::module] = 0;
+		    encoder[lcio::ILDCellID0::sensor] = newsensor;
+
+		    zDiskPetalsData->mapNeighbours[cellID_reflect].push_back(encoder.lowWord());
+		  }
+ 
+		}
+
+		///////////////////
+
+		
+
                 //dz   = -dz; //NOTE: For "spiraling" endcaps this is not needed. Could add xml option to turn on
                 phi += iphi;
             }
