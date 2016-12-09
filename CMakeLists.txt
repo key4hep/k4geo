@@ -49,7 +49,7 @@ include_directories( SYSTEM ${Boost_INCLUDE_DIRS} )
 find_package( Geant4 REQUIRED ) 
 include(${Geant4_USE_FILE})
 
-#find_package( LCIO REQUIRED)
+find_package( LCIO REQUIRED)
 #find_package( GEAR REQUIRED)
 
 include_directories( ${CMAKE_SOURCE_DIR}/detector/include )
@@ -57,8 +57,8 @@ include_directories( SYSTEM
   ${DD4hep_INCLUDE_DIRS}
   ${DD4hep_COMPONENTS_INCLUDE_DIRS}
   ${ROOT_INCLUDE_DIR}
+  ${LCIO_INCLUDE_DIRS}
  )
-#  ${LCIO_INCLUDE_DIRS}
 #  ${GEAR_INCLUDE_DIRS}
 
 file(GLOB sources 
@@ -81,7 +81,7 @@ endif()
 
 #Create target, library, rootmap, install
 add_dd4hep_plugin(${PackageName} SHARED ${sources})
-target_link_libraries(${PackageName} ${DD4hep_LIBRARIES} ${DD4hep_COMPONENT_LIBRARIES} ${ROOT_LIBRARIES} ${Geant4_LIBRARIES} )
+target_link_libraries(${PackageName} ${DD4hep_LIBRARIES} ${DD4hep_COMPONENT_LIBRARIES} ${ROOT_LIBRARIES} ${Geant4_LIBRARIES} ${LCIO_LIBRARIES})
 
 #Create this_package.sh file, and install
 dd4hep_instantiate_package(${PackageName})

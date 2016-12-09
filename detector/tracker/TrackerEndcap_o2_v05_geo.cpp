@@ -25,6 +25,10 @@
 #include <map>
 #include "DDRec/DetectorData.h"
 
+#include <UTIL/BitField64.h>
+#include <UTIL/BitSet32.h>
+#include <UTIL/ILDConf.h>
+
 
 using namespace std;
 using namespace DD4hep;
@@ -43,6 +47,15 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     map<string, Placements>  sensitives;
     PlacedVolume pv;
     
+
+    // for encoding
+    std::string cellIDEncoding = sens.readout().idSpec().fieldDescription();
+    UTIL::BitField64 encoder( cellIDEncoding );
+    encoder.reset();
+    encoder[lcio::ILDCellID0::subdet] = det_id;
+
+
+
     // --- create an envelope volume and position it into the world ---------------------
     
     Volume envelope = XML::createPlacedEnvelope( lcdd,  e , sdet ) ;
@@ -110,6 +123,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         double sumZ(0.), innerR(1e100),outerR(0.);
         double sensitiveThickness(0.0);
 
+	//loop only to count the number of rings in a disk - it is then needed for looking for neighborous when you are in a "border" cell
+	int nrings = 0;
+	for(xml_coll_t ri(x_layer,_U(ring)); ri; ++ri) { 
+	  nrings++;
+	}
+
         for(xml_coll_t ri(x_layer,_U(ring)); ri; ++ri)  {
             xml_comp_t x_ring = ri;
             double r        = x_ring.r();
@@ -168,6 +187,73 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                         comp_elt.setPlacement(sens_pv);
                     }
                 }
+
+		///////////////////
+
+		//get cellID and fill map< cellID of surface, vector of cellID of neighbouring surfaces >
+
+		//encoding
+
+		DD4hep::long64 cellID_reflect;
+		if (reflect) {
+		  encoder[lcio::ILDCellID0::side] = lcio::ILDDetID::bwd;
+		  encoder[lcio::ILDCellID0::layer] = l_id;
+		  encoder[lcio::ILDCellID0::module] = mod_num;
+		  encoder[lcio::ILDCellID0::sensor] = k;
+
+		  cellID_reflect = encoder.lowWord(); // 32 bits
+		}
+
+		encoder[lcio::ILDCellID0::side] = lcio::ILDDetID::fwd;
+		encoder[lcio::ILDCellID0::layer] = l_id;
+		encoder[lcio::ILDCellID0::module] = mod_num;
+		encoder[lcio::ILDCellID0::sensor] = k;
+
+		DD4hep::long64 cellID = encoder.lowWord(); // 32 bits
+
+		//compute neighbours 
+
+		int n_neighbours_module = 1; // 1 gives the adjacent modules (i do not think we would like to change this)
+		int n_neighbours_sensor = 1;
+
+		int newmodule=0, newsensor=0;
+
+		for(int imodule=-n_neighbours_module; imodule<=n_neighbours_module; imodule++){ // neighbouring modules
+		  for(int isensor=-n_neighbours_sensor; isensor<=n_neighbours_sensor; isensor++){ // neighbouring sensors
+		    
+		    if (imodule==0 && isensor==0) continue; // cellID we started with
+		    newmodule = mod_num + imodule;
+		    newsensor = k + isensor;
+		    
+		    //compute special case at the boundary  
+		    //general computation to allow (if necessary) more then adiacent neighbours (ie: +-2)
+		    if (newsensor < 0) newsensor = nmodules + newsensor;
+		    if (newsensor >= nmodules) newsensor = newsensor - nmodules;
+
+		    if (newmodule < 0 || newmodule >= nrings) continue; //out of disk		
+
+		    //encoding
+		    encoder[lcio::ILDCellID0::module] = newmodule;
+		    encoder[lcio::ILDCellID0::sensor] = newsensor;
+
+		    zDiskPetalsData->mapNeighbours[cellID].push_back(encoder.lowWord());
+
+
+		    if (reflect){
+		      encoder[lcio::ILDCellID0::side] = lcio::ILDDetID::bwd;
+		      encoder[lcio::ILDCellID0::layer] = l_id;
+		      encoder[lcio::ILDCellID0::module] = newmodule;
+		      encoder[lcio::ILDCellID0::sensor] = newsensor;
+
+		      zDiskPetalsData->mapNeighbours[cellID_reflect].push_back(encoder.lowWord());
+		    }
+ 
+		  }
+		}
+
+		///////////////////
+
+
                 dz   = -dz;
                 phi += iphi;
             }
