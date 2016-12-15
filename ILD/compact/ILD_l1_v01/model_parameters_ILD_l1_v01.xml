@@ -187,7 +187,7 @@
   <constant name="Hcal_layer_pattern" value="11111111111111111111111111111111111111"/>
   <constant name="Hcal_layer_support_length" value="0*mm"/>
   <constant name="Hcal_middle_stave_gaps" value="10*mm"/>
-  <constant name="Hcal_modules_gap" value="0*mm"/>
+  <constant name="Hcal_modules_gap" value="0.001*mm"/>
   <constant name="Hcal_nlayers" value="48"/>
 
   <!-- <constant name="Hcal_outer_radius" value="3000.0*mm"/> -->
