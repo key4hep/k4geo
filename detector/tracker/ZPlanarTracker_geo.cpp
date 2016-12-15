@@ -49,6 +49,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
 
   DDRec::ZPlanarData*  zPlanarData = new DDRec::ZPlanarData ;
+  DDRec::NeighbourSurfacesData*  neighbourSurfacesData = new DDRec::NeighbourSurfacesData() ;
 
   XML::setDetectorTypeFlag( e, tracker ) ;
 
@@ -258,7 +259,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	encoder[lcio::ILDCellID0::module] = newmodule;
 	encoder[lcio::ILDCellID0::sensor] = 0;
 
-	zPlanarData->mapNeighbours[cellID].push_back(encoder.lowWord());
+	neighbourSurfacesData->sameLayer[cellID].push_back(encoder.lowWord());
  
       }
 
@@ -300,7 +301,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
 
   tracker.addExtension< DDRec::ZPlanarData >( zPlanarData ) ;
-  
+  tracker.addExtension< DDRec::NeighbourSurfacesData >( neighbourSurfacesData ) ;
+
+
   Volume mother =  lcdd.pickMotherVolume( tracker ) ;
 
   //set the vis Attribute (added by Thorben Quast)

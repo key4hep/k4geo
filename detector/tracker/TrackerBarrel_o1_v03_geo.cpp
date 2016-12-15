@@ -51,6 +51,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     //-----------------------------------------------------------------------------------
     DDRec::ZPlanarData*  zPlanarData = new DDRec::ZPlanarData() ;
+    DDRec::NeighbourSurfacesData*  neighbourSurfacesData = new DDRec::NeighbourSurfacesData() ;
     
     sens.setType("tracker");
     
@@ -191,7 +192,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 		    encoder[lcio::ILDCellID0::module] = newmodule;
 		    encoder[lcio::ILDCellID0::sensor] = newsensor;
 		    
-		    zPlanarData->mapNeighbours[cellID].push_back(encoder.lowWord());
+		    neighbourSurfacesData->sameLayer[cellID].push_back(encoder.lowWord());
 
 		  }
 		}
@@ -280,6 +281,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     }
     sdet.setAttributes(lcdd,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
     sdet.addExtension< DDRec::ZPlanarData >( zPlanarData ) ;
+    sdet.addExtension< DDRec::NeighbourSurfacesData >( neighbourSurfacesData ) ;
     
     //envelope.setVisAttributes(lcdd.invisible());
     /*pv = lcdd.pickMotherVolume(sdet).placeVolume(assembly);
