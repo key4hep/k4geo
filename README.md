@@ -1,17 +1,16 @@
 # lcgeo (Linear Collider Geometry)
 ![Build status](https://gitlab.cern.ch/CLICdp/lcgeo/badges/master/build.svg)
+[![Build Status](https://travis-ci.org/iLCSoft/lcgeo.svg?branch=master)](https://travis-ci.org/iLCSoft/lcgeo)
 
-Implentaion of Linear Collider detector models in DD4hep.
+Implementation of Linear Collider detector models in DD4hep.
 
 ## Requirements
 DD4hep built with Geant4 and LCIO
 ## Download and Installation
-### Downlaod
-  * `svn co https://svnsrv.desy.de/public/ddsim/lcgeo/trunk lcgeo`
-  
-  * (or if you have developers rights:   `svn co https://svnsrv.desy.de/basic/ddsim/lcgeo/trunk lcgeo`)
-  
-  * `cd trunk ; mkdir build ; cd build`
+### Download
+  * `git clone https://github.com/iLCSoft/lcgeo.git`
+
+  * `cd lcgeo ; mkdir build ; cd build`
 ### Initialize dependency
   
   * `source __path_to_DD4hep__/bin/thisdd4hep.sh`
@@ -34,17 +33,17 @@ an LCIO input file with single particles:
 There is also example input file with 10 singe muons: ./mcparticles.slcio
 
 ### Run the simulation:
-   * `python ddsim.py ../ILD/compact/ILD_o1_v05/ILD_o1_v05.xml`
+   * `ddsim --compactFile ../ILD/compact/ILD_o1_v05/ILD_o1_v05.xml --inputFiles mcparticles.slcio -N 10`
 
 This creates an lcio file simple_lcio.slcio with sim hits and MCParticles.
 
-You can look at it in the ususal way
+You can look at it in the usual way
 
    * `anajob simple_lcio.slcio`
 
    * `dumpevent simple_lcio.slcio 1`
 
-Modify ddsim.py as needed to read other input files.
+Change the ddsim command line parameters as needed to read other input files.
 
 ## Event displays:
 
