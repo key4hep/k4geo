@@ -65,6 +65,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     //-----------------------------------------------------------------------------------
     
     DDRec::ZDiskPetalsData*  zDiskPetalsData = new DDRec::ZDiskPetalsData ;
+    DDRec::NeighbourSurfacesData*  neighbourSurfacesData = new DDRec::NeighbourSurfacesData() ;
     std::map< std::string, double > moduleSensThickness;
     
     
@@ -236,7 +237,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 		    encoder[lcio::ILDCellID0::module] = newmodule;
 		    encoder[lcio::ILDCellID0::sensor] = newsensor;
 
-		    zDiskPetalsData->mapNeighbours[cellID].push_back(encoder.lowWord());
+		    neighbourSurfacesData->sameLayer[cellID].push_back(encoder.lowWord());
 
 
 		    if (reflect){
@@ -245,7 +246,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 		      encoder[lcio::ILDCellID0::module] = newmodule;
 		      encoder[lcio::ILDCellID0::sensor] = newsensor;
 
-		      zDiskPetalsData->mapNeighbours[cellID_reflect].push_back(encoder.lowWord());
+		      neighbourSurfacesData->sameLayer[cellID_reflect].push_back(encoder.lowWord());
 		    }
  
 		  }
@@ -279,7 +280,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     }
 
     sdet.addExtension< DDRec::ZDiskPetalsData >( zDiskPetalsData ) ;
-    
+    sdet.addExtension< DDRec::NeighbourSurfacesData >( neighbourSurfacesData ) ;
+
     
     return sdet;
 }

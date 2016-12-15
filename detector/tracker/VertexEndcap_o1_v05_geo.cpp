@@ -63,6 +63,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
     // -------- reconstruction parameters  ----------------
     DDRec::ZDiskPetalsData*  zDiskPetalsData = new DDRec::ZDiskPetalsData ;
+    DDRec::NeighbourSurfacesData*  neighbourSurfacesData = new DDRec::NeighbourSurfacesData() ;
     std::map< std::string, double > moduleSensThickness;
 
     for(xml_coll_t mi(x_det,_U(module)); mi; ++mi, ++m_id)  {
@@ -231,7 +232,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 		  encoder[lcio::ILDCellID0::module] = 0;
 		  encoder[lcio::ILDCellID0::sensor] = newsensor;
 
-		  zDiskPetalsData->mapNeighbours[cellID].push_back(encoder.lowWord());
+		  neighbourSurfacesData->sameLayer[cellID].push_back(encoder.lowWord());
 
 		  if (reflect){
 		    encoder[lcio::ILDCellID0::side] = lcio::ILDDetID::bwd;
@@ -239,7 +240,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 		    encoder[lcio::ILDCellID0::module] = 0;
 		    encoder[lcio::ILDCellID0::sensor] = newsensor;
 
-		    zDiskPetalsData->mapNeighbours[cellID_reflect].push_back(encoder.lowWord());
+		    neighbourSurfacesData->sameLayer[cellID_reflect].push_back(encoder.lowWord());
 		  }
  
 		}
@@ -261,7 +262,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     //attach data to detector
     sdet.addExtension< DDRec::ZDiskPetalsData >( zDiskPetalsData ) ;
-    
+    sdet.addExtension< DDRec::NeighbourSurfacesData >( neighbourSurfacesData ) ;
+
     std::cout<<"XXX Vertex endcap layers: "<<zDiskPetalsData->layers.size()<<std::endl;
 
     return sdet;
