@@ -156,7 +156,7 @@
         <constant name="TUBE_IPOuterTube_start_radius" type="string" value="25" />
         <constant name="TUBE_IPOuterTube_start_z" type="string" value="220" />
         <constant name="Yoke_Z_start_endcaps" type="string" value="4072" />
-        <constant name="Yoke_barrel_inner_radius" type="string" value="4424.9599609375" />
+        <!--constant name="Yoke_barrel_inner_radius" type="string" value="4424.9599609375" /-->
         <constant name="calorimeter_region_rmax" type="string" value="3395.46" />
         <constant name="calorimeter_region_zmax" type="string" value="3937" />
         <!-- <constant name="tracker_region_rmax" type="string" value="1842.9" /> -->
