@@ -635,4 +635,4 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
   
   return tube;
 }
-DECLARE_DETELEMENT(Beampipe_o1_v01,create_element)
+DECLARE_DEPRECATED_DETELEMENT(Beampipe_o1_v01,create_element)
