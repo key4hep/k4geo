@@ -72,7 +72,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double      Hcal_lateral_structure_thickness = lcdd.constant<double>("Hcal_lateral_structure_thickness");
   double      Hcal_endcap_layer_air_gap        = lcdd.constant<double>("Hcal_endcap_layer_air_gap");
   double      Hcal_layer_air_gap               = lcdd.constant<double>("Hcal_layer_air_gap");
-  double      Hcal_endcap_zmin                 = lcdd.constant<double>("Hcal_endcap_zmin");
 
   //double      Hcal_cells_size                  = lcdd.constant<double>("Hcal_cells_size");
   double      HcalEndcap_inner_radius          = lcdd.constant<double>("HcalEndcap_inner_radius");
@@ -266,7 +265,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  //-----------------------------------------------------------------------------------------
 	  if ( caloData->layers.size() < (unsigned int)repeat ) {
 
-	    caloLayer.distance = Hcal_endcap_zmin + box_half_y + layer_pos_y
+	    caloLayer.distance = HcalEndcap_min_z + box_half_y + layer_pos_y
 	      - caloLayer.inner_thickness ; // Will be added later at "DDMarlinPandora/DDGeometryCreator.cc:226" to get center of sensitive element
 	    caloLayer.absorberThickness = Hcal_radiator_thickness ;
 	    
@@ -305,7 +304,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	double EndcapModule_pos_z = 0;
 	double rot_EM = 0;
 
-	double EndcapModule_center_pos_z = Hcal_endcap_zmin + box_half_y;
+	double EndcapModule_center_pos_z = HcalEndcap_min_z + box_half_y;
 	
 	switch (stave_num)
 	  {
