@@ -151,7 +151,7 @@
   <constant name="Hcal_layer_pattern" value="11111111111111111111111111111111111111"/>
   <constant name="Hcal_layer_support_length" value="0*mm"/>
   <constant name="Hcal_middle_stave_gaps" value="10*mm"/>
-  <constant name="Hcal_modules_gap" value="0*mm"/>
+  <constant name="Hcal_modules_gap" value="0.001*mm"/>
   <constant name="Hcal_nlayers" value="48"/>
 
   <!-- <constant name="Hcal_outer_radius" value="3000.0*mm"/> -->
@@ -282,7 +282,7 @@
   <!-- <constant name="Yoke_Z_start_endcaps" value="6625*mm"/> -->
   <!-- has been updated by driver SCoil02 to the following value -->
   <constant name="Yoke_Z_start_endcaps" value="4072.0*mm"/>
-  <constant name="Yoke_barrel_inner_radius" value="4450.00*mm"/>
+  <!--constant name="Yoke_barrel_inner_radius" value="4450.00*mm"/-->
   <constant name="Yoke_endcap_inner_radius" value="300*mm"/>
   <constant name="Yoke_thickness" value="3300*mm"/>
   <constant name="Yoke_with_plug" value="1"/>

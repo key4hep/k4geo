@@ -22,7 +22,7 @@
 
     <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_MUON " />
    
-    <dimensions numsides="12" rmin="Yoke_barrel_inner_radius" z="Yoke_barrel_halfZ" />
+    <dimensions numsides="12" rmin="Yoke_inner_radius" z="Yoke_barrel_halfZ" />
     <material name="Iron"/> 
     <layer repeat="12" vis="SeeThrough">
         <slice material = "Air"            thickness = "15.0*mm"                    vis="YellowVis" />

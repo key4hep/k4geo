@@ -156,7 +156,7 @@
         <constant name="TUBE_IPOuterTube_start_radius" type="string" value="25" />
         <constant name="TUBE_IPOuterTube_start_z" type="string" value="220" />
         <constant name="Yoke_Z_start_endcaps" type="string" value="4072" />
-        <constant name="Yoke_barrel_inner_radius" type="string" value="4424.9599609375" />
+        <!--constant name="Yoke_barrel_inner_radius" type="string" value="4424.9599609375" /-->
         <constant name="calorimeter_region_rmax" type="string" value="3395.46" />
         <constant name="calorimeter_region_zmax" type="string" value="3937" />
         <!-- <constant name="tracker_region_rmax" type="string" value="1842.9" /> -->
@@ -243,12 +243,6 @@
 	<constant name="Hcal_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ"/>
 	<constant name="Hcal_inner_symmetry"  value="Ecal_Hcal_symmetry"/>
 
-	<!-- Should we define every sub-detector envelope parameters explicity -->
-	<constant name="Yoke_inner_radius"    value="4424.0*mm"/>      <!-- explicity Fundamental -->
-	<constant name="Yoke_outer_radius"    value="7725.0*mm"/>      <!-- explicity Fundamental -->
-	<constant name="Yoke_half_length"     value="4047.0*mm"/>      <!-- explicity Fundamental -->
-	<constant name="Yoke_symmetry"        value="12"/>             <!-- explicity Fundamental -->
-
 	<constant name="EcalEndcap_inner_radius"    value="Ecal_endcap_center_box_size/2.0"/>
 	<constant name="EcalEndcap_outer_radius"    value="Ecal_outer_radius+Ecal_endcap_extra_size"/>
 	<constant name="EcalEndcap_min_z"           value="Ecal_endcap_zmin"/>
@@ -266,6 +260,18 @@
 	<constant name="HcalEndcapRing_max_z"           value="EcalEndcap_max_z"/>
 	<constant name="HcalEndcapRing_symmetry"        value="Ecal_Hcal_symmetry"/>
 	
+	<constant name="Coil_inner_radius"            value="Hcal_outer_radius+Hcal_Coil_additional_gap"/> 
+	<constant name="Coil_outer_radius"            value="Hcal_outer_radius+Hcal_Coil_additional_gap+Coil_thickness"/>
+	<constant name="Coil_half_length"             value="TPC_Ecal_Hcal_barrel_halfZ+Coil_extra_size"/>      
+
+	<constant name="Coil_Yoke_gap"                value="249.0*mm"/>
+	<constant name="Yoke_barrel_inner_radius"     value="Coil_outer_radius+Coil_Yoke_gap"/>
+
+	<constant name="Yoke_inner_radius"            value="Yoke_barrel_inner_radius"/>
+	<constant name="Yoke_outer_radius"            value="Yoke_inner_radius+Yoke_thickness"/>
+	<constant name="Yoke_half_length"             value="4047.0*mm"/>
+	<constant name="Yoke_symmetry"                value="12"/>
+
 	<!-- Yoke05_Endcaps geometry driver include Yoke endcap plug -->
 	<constant name="YokeEndcap_inner_radius"    value="Yoke_endcap_inner_radius"/>
 	<constant name="YokeEndcap_outer_radius"    value="Yoke_outer_radius"/>
@@ -302,10 +308,6 @@
 	<constant name="BeamCal_tubeIncoming_radius"   value="15.0*mm"/>
 
  
-
-	<constant name="Coil_inner_radius"    value="Hcal_outer_radius+Hcal_Coil_additional_gap"/> 
-	<constant name="Coil_outer_radius"    value="Hcal_outer_radius+Hcal_Coil_additional_gap+Coil_thickness"/>
-	<constant name="Coil_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ+Coil_extra_size"/>      
 
 	<!-- ########### END ENVELOPE PARAMETERS ############################################################## -->
 
