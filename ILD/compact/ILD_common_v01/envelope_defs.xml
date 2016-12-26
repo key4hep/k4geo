@@ -96,9 +96,16 @@
   <constant name="HcalEndcapRing_max_z"           value="EcalEndcap_max_z"/>
   <constant name="HcalEndcapRing_symmetry"        value="Ecal_Hcal_symmetry"/>
 
+  <constant name="Coil_inner_radius"    value="Hcal_outer_radius+Hcal_Coil_additional_gap"/>
+  <constant name="Coil_outer_radius"    value="Hcal_outer_radius+Hcal_Coil_additional_gap+Coil_thickness"/>
+  <constant name="Coil_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ+Coil_extra_size"/>
+
   <!-- Yoke05_Endcaps geometry driver include Yoke endcap plug -->
-  <constant name="YokeEndcap_inner_radius"    value="Yoke_endcap_inner_radius"/>
-  <constant name="YokeEndcap_outer_radius"    value="Yoke_outer_radius"/>
+  <!--constant name="YokeEndcap_inner_radius"    value="Yoke_endcap_inner_radius"/>
+  <constant name="YokeEndcap_outer_radius"    value="Yoke_outer_radius"/ -->
+  <!-- updated to take size from HCAL -->
+  <constant name="YokeEndcap_inner_radius"    value="Coil_outer_radius+top_Hcal_Yoke_gap"/>
+  <constant name="YokeEndcap_outer_radius"    value="YokeEndcap_inner_radius+top_Yoke_thickness"/>
   <constant name="YokeEndcap_min_z"           value="Yoke_Z_start_endcaps"/>
   <constant name="YokeEndcap_max_z"           value="YokeEndcap_min_z+(Yoke_outer_radius-Yoke_inner_radius)"/>
   <constant name="YokeEndcap_symmetry"        value="Yoke_symmetry"/>
@@ -138,10 +145,6 @@
   <constant name="Lcal_inner_radius" value="top_Lcal_inner_radius"/>
   <constant name="Lcal_z_begin" value="top_Lcal_z_begin"/>
 
-
-  <constant name="Coil_inner_radius"    value="Hcal_outer_radius+Hcal_Coil_additional_gap"/>
-  <constant name="Coil_outer_radius"    value="Hcal_outer_radius+Hcal_Coil_additional_gap+Coil_thickness"/>
-  <constant name="Coil_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ+Coil_extra_size"/>
 
   <!-- ########### END ENVELOPE PARAMETERS ############################################################## -->
 
