@@ -70,8 +70,13 @@ subdetector-specific ones are in separate files
 
   <!-- Yoke -->
   <constant name="top_Yoke_symmetry"        value="12"/>
-  <constant name="top_Yoke_inner_radius"    value="4424.0*mm"/>
-  <constant name="top_Yoke_outer_radius"    value="7725.0*mm"/>
+  <!-- define relative to HCAL
+       <constant name="top_Yoke_inner_radius"    value="4424.0*mm"/>
+       <constant name="top_Yoke_outer_radius"    value="7725.0*mm"/>
+       -->
+  <constant name="top_Hcal_Yoke_gap"       value="300*mm"/>
+  <constant name="top_Yoke_thickness"      value="3301*mm"/>
+
   <constant name="top_Yoke_half_length"     value="4047.0*mm"/>
   <constant name="Yoke_Z_start_endcaps"     value="4072.0*mm"/>
   <constant name="Yoke_endcap_inner_radius" value="300*mm"/>
