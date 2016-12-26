@@ -1,0 +1,23 @@
+<define>
+
+  <constant name="Hcal_radiator_thickness" value="20.0*mm"/>
+  <constant name="Hcal_chamber_thickness" value="6.5*mm"/>
+  <constant name="Hcal_back_plate_thickness" value="15*mm"/>
+  <constant name="Hcal_lateral_structure_thickness" value="15*mm"/>
+  <constant name="Hcal_stave_gaps" value="10*mm"/>
+  <constant name="Hcal_modules_gap" value="0.001*mm"/>
+  <constant name="Hcal_layer_air_gap" value="2*mm"/>
+  <constant name="Hcal_middle_stave_gaps" value="10*mm"/>
+  <constant name="Hcal_nlayers" value="48"/>
+  <constant name="Hcal_fiber_gap" value="2.7*mm"/>
+  <constant name="Hcal_Cu_thickness" value="0.1*mm"/>
+  <constant name="Hcal_PCB_thickness" value="0.7*mm"/>
+  <constant name="Hcal_scintillator_thickness" value="3.0*mm"/>
+  <constant name="Hcal_cells_size" value="30*mm"/>
+  <constant name="Hcal_endcap_layer_air_gap" value="2.5*mm"/>
+  <constant name="Hcal_endcap_nlayers" value="48"/> <!-- needed for ring only? -->
+
+  <!-- translations -->
+  <constant name="Hcal_endcap_zmin" value="HcalEndcap_min_z"/>
+
+</define>
