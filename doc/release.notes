@@ -1,13 +1,144 @@
- -----------
-| v00-09-01 |
- -----------
- patch release
- D.Jeans:
-   - bug fixes (character to int conversion; strip layer configuration)
-     in SEcal05_Barrel.cpp, SEcal05_Endcaps.cpp, SEcal05_Helpers.cpp
-     and ILD_l1_v01, ILD_s1_v01 and ILD_03_v05
- A.Sailer
-   - Add sensitive thickness to DataStructs for TrackerEndcap_o1_v04(5)_geo.cpp
+ --------
+| v00-10 |
+ --------
+
+Daniel Jeans 2016-12-26 
+  - define yoke barrel size with respect to outer radius of coil
+  - tidy up ILD_?1_v01 compact description. Move all common definitions to ILD_common_v01. Keep only top-level steering file and mode-specific definitions in ILD_l1 and ILD_s1 directories. move unused files to extra_stuff directory.
+
+simoniel 2016-12-15 
+  - map cellid of surf <--> vector of cellid of neighbouring surf on the same layer (new NeighbourSurfacesStruct) filled in drivers currently used by CLIC
+
+simoniel 2016-12-09 
+  - fill of neighboring surfaces map done also for CLIC_o2_v04_p1 drivers and Vertex drivers in use
+  - Depence from LCIO re-introduced. Compute neighbours of every surface and fill map of cellID of surface <--> vector of cellID of neighbouring surfaces for zPlanar and zPetalDisk data struct.
+
+Shaojun Lu 2016-12-16 
+  -  Updated Yoke05 parameters in compact XML files.
+  -  Replaced old parameter 'Hcal_endcap_zmin' with the updated new naming convention parameter 'HcalEndcap_min_z'.
+
+Andre Sailer 2016-12-16 
+  - Declare Beampipe, Mask, and Solenoid driver deprecated, copied to DD4hep
+
+Andre Sailer 2016-12-15 
+  - Add badge to README, fix typos, modify readme for github
+  - Add Travis Configuration
+
+Frank Gaede 2016-12-15 
+  - link ${Geant4_LIBRARIES} to TestSensThickness
+
+Shaojun Lu 2016-12-15 
+  -  Added a new parameter Coil_Yoke_gap and value 249.0*mm, to scale 'Yoke_barrel_inner_radius' following 'Coil_outer_radius'.
+
+Frank Gaede 2016-12-13 
+  - link ROOT libraries to TestSensThickness
+
+Andre Sailer 2016-12-06 
+  - Add tests to check that sensitiveThickess is correctly set for the different drivers used in latest clic models
+  - set thicknessSensitive for VertexEndcap_o1_v[456] datastructs
+  - set thicknessSensitive for TrackerEndcap_o2 datastructs
+
+Marko Petric 2016-12-06 
+  - Add comment to TrackerBarrel_o1_v03 and TrackerBarrel_o1_v04 to explain the difference
+
+Daniel Jeans 2016-12-06 
+  - enabled service drivers in ILD_l1 and ILD_s1 models
+
+Marko Petric 2016-12-05 
+  - Add correct version number
+
+Marko Petric 2016-12-02 
+  - Revert the Vertex endcap geometry back to previous one and use new one in the new model
+  - Add new model for the updated material budget of the tracker
+  - Inherit compiler flags form DD4hep so that TLS is inherited and drop ROOT5
+
+Marko Petric 2016-11-30 
+  - Update design to use the new driver
+  - Updated vertex endcap design with corrected airflow
+
+Frank Gaede 2016-11-30 
+  -  - update release notes and version for v00-09-01
+
+Daniel Jeans 2016-11-30 
+  - bug fixes (character to int conversion; strip layer configuration)
+
+Andre Sailer 2016-11-28 
+  - Add sensitive thickness to DataStructs for TrackerEndcap drivers
+
+Bogdan Pawlik 2016-11-24 
+  -  updated LumiCal for ILD_s1_v01
+  -  store layer phi stagger in LayeredCalorimeterData
+
+Shaojun Lu 2016-11-24 
+  -  - follow the DD4hep update of DDRec::LayeredCalorimeterData::Layer  - remove usage of DDRec::LayeredCalorimeterData::Layer.thickness    - replace where needed with inner/outer_thickness
+
+Dan Protopopescu 2016-11-23 
+  - Files from Amanda
+  - Updates by Ross
+  - GitHub copy updated by Ross Gordon McCoy
+
+Shaojun Lu 2016-11-23 
+  -  Fix the missing 'EcalEndcapParameters', which is needed in Marlin reconstruction. And the 'layoutType' of 'DDRec::LayeredCalorimeterData' will be used by 'convertToGear' to create the correct layout type 'Endcap' for EcalEndcap.
+
+Marko Petric 2016-11-23 
+  - Unify ReadoutID with the same schema as in o2_v04_p1
+
+Marko Petric 2016-11-22 
+  - Make if forward compatible with CLIC_o3_v07
+  - The new pached CLIC_o2_v04 with patched readouts
+  - Add tracker version for patch
+  - Remove obsolete tracker models
+  - Make a patch to CLIC_o2_v04
+
+Daniel Jeans 2016-11-22 
+  - fix offset of magic megatiles to give consisent cell indices
+  - added forgotten xml files to svn...
+
+Andre Sailer 2016-11-21 
+  - SHcalSc04_Barrel_v01: add DetElements for staves, needed for reconstruction
+
+Daniel Jeans 2016-11-21 
+  - bug fix (identified by overlap check)
+
+Shaojun Lu 2016-11-21 
+  -  Fix the 'SEcal05_Helpers' to follow the update in  the 'DD4hep::DDRec::LayeredCalorimeterStruct::Layer' by removing thickness.
+  - remove ECAL preshower layer (barrel&endcap) from ILD_l1_v01 and ILD_s1_v01 models
+  - use SEcal05 model for ILD_o3_v05 (scECAL)
+  - update ILD_l1_v01 and ILD_s1_v01 to use new SEcal05 driver
+  - remove SEcal04Hybrid* (second try...)
+
+Daniel Jeans 2016-11-18 
+  - removed SEcal04Hybrid (not compatible with updated Megatile segmentation class); added new SEcal05* drivers
+
+Dan Protopopescu 2016-11-17 
+  - Included end plate, air gaps, and ajusted total layer thickness to 19mm
+
+Shaojun Lu 2016-11-17 
+  -  Updated 'CaloPrototype_v01.cpp' to be a more generic driver.
+
+Daniel Jeans 2016-11-17 
+  - remove new SEcal05 drivers until new segmentation class is available
+  - new SEcal05 drivers
+
+Bogdan Pawlik 2016-11-15 
+  -  printout modification
+  -  Set non-zero phi-offset to fix improper number of phi sectors reported by ddsim, 49 instead of 48
+
+Shaojun Lu 2016-11-15 
+  -  Clean up the unused variable ‘motherVol’. When DD4hep/lcgeo moved to 'mandatory envelope volume', each sub-detector has been placed into 'envelope' volume. The envelope has been implemented into 'DD4hep/DDCore/src/XML/Utilities.cpp', and placed into the 'mother' volume (world volume) there.
+  -  We do not need this user defined envelope shape. The envelope has been implemented into 'DD4hep/DDCore/src/XML/Utilities.cpp'
+  -  fix warning unused variable, and commented out the lines. If the users have further implementation with the unused variable, the lines could be used again.
+  -  fix warning: declaration of ‘RailSeparation’ shadows a member of 'this'.
+  -  fix many warning for shadowed declaration, and comment out or remove unused variable.
+  -  fix warning for shadowed declaration, and remove unused variable.
+
+Aidan Robson 2016-11-14 
+  - systemID must be 29 (defined by UTIL::ILDDetID) in CaloFaceEndcapSurfacePlugIn for MarlinTrk extrapolation to calo surface to work.  Not the same as detector id.
+
+Andre Sailer 2016-11-14 
+  - CLIC_o3_v07,  LumiCal: Correct segmentation to start first bin at phi=0, not have phi=0 be the center of the 'first' bin which causes problems at phi=+/-pi
+
+
 
  --------
 | v00-09 | 
