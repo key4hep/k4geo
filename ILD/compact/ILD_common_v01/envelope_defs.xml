@@ -74,11 +74,6 @@
   <constant name="Hcal_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ"/>
   <constant name="Hcal_inner_symmetry"  value="Ecal_Hcal_symmetry"/>
 
-  <constant name="Yoke_inner_radius"    value="top_Yoke_inner_radius"/>
-  <constant name="Yoke_outer_radius"    value="top_Yoke_outer_radius"/>
-  <constant name="Yoke_half_length"     value="top_Yoke_half_length"/>
-  <constant name="Yoke_symmetry"        value="top_Yoke_symmetry"/>
-
   <constant name="EcalEndcap_inner_radius"    value="Ecal_endcap_center_box_size/2.0"/>
   <constant name="EcalEndcap_outer_radius"    value="Ecal_outer_radius+Ecal_endcap_extra_size"/>
   <constant name="EcalEndcap_min_z"           value="Ecal_endcap_zmin"/>
@@ -100,12 +95,17 @@
   <constant name="Coil_outer_radius"    value="Hcal_outer_radius+Hcal_Coil_additional_gap+Coil_thickness"/>
   <constant name="Coil_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ+Coil_extra_size"/>
 
+  <constant name="Yoke_inner_radius"    value="Coil_outer_radius+top_Hcal_Yoke_gap"/>
+  <constant name="Yoke_outer_radius"    value="Yoke_inner_radius+top_Yoke_thickness"/>
+  <constant name="Yoke_half_length"     value="top_Yoke_half_length"/>
+  <constant name="Yoke_symmetry"        value="top_Yoke_symmetry"/>
+
   <!-- Yoke05_Endcaps geometry driver include Yoke endcap plug -->
   <!--constant name="YokeEndcap_inner_radius"    value="Yoke_endcap_inner_radius"/>
   <constant name="YokeEndcap_outer_radius"    value="Yoke_outer_radius"/ -->
   <!-- updated to take size from HCAL -->
-  <constant name="YokeEndcap_inner_radius"    value="Coil_outer_radius+top_Hcal_Yoke_gap"/>
-  <constant name="YokeEndcap_outer_radius"    value="YokeEndcap_inner_radius+top_Yoke_thickness"/>
+  <constant name="YokeEndcap_inner_radius"    value="Yoke_endcap_inner_radius"/>
+  <constant name="YokeEndcap_outer_radius"    value="Yoke_inner_radius+top_Yoke_thickness"/>
   <constant name="YokeEndcap_min_z"           value="Yoke_Z_start_endcaps"/>
   <constant name="YokeEndcap_max_z"           value="YokeEndcap_min_z+(Yoke_outer_radius-Yoke_inner_radius)"/>
   <constant name="YokeEndcap_symmetry"        value="Yoke_symmetry"/>
