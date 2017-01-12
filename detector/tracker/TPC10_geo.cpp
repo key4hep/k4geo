@@ -33,6 +33,7 @@ using namespace DDRec ;
  *   information both at entry and exit hits in the TPC ,
  *   more realistic central electrode and endplate             -- Predrag Krstonosic, 2006-07-12
  * - implemented new GEAR interface -- K. Harder, T. Pinto Jayawardena                2007-07-31
+ * - TPC10 implemented readout within the Gas volume and layered inner and outer wall -- SJA -- 2010-11-19
  *
  *  @author: F.Gaede, DESY, Nov 2013
  *
@@ -373,8 +374,8 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
   Volume cathodeInsulatorLog( "TPCcathodeInsulatorLog",cathodeInsulatorSolid, material_Cathode_Insulator);
   
   // place plus and minus z 
-  pv = tpc_motherLog.placeVolume( cathodeInsulatorLog , Position( 0.0, 0.0, + dz_Cathode_Insulator / 2.0) );
-  pv = tpc_motherLog.placeVolume( cathodeInsulatorLog , Position( 0.0, 0.0, - dz_Cathode_Insulator / 2.0) );
+  pv = cathodeLog.placeVolume( cathodeInsulatorLog , Position( 0.0, 0.0, + dz_Cathode_Insulator / 2.0) );
+  pv = cathodeLog.placeVolume( cathodeInsulatorLog , Position( 0.0, 0.0, - dz_Cathode_Insulator / 2.0) );
 
   tpc.setVisAttributes(lcdd,  "GrayVis" ,  outerWallLog );
 
@@ -387,8 +388,8 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
   Volume cathodeConductorLog("TPCCathodeConductorLog",cathodeConductorSolid, material_Cathode_Conductor );
   
   // place plus and minus z 
-  pv = tpc_motherLog.placeVolume( cathodeConductorLog , Position( 0.0, 0.0, +(dz_Cathode_Insulator + (dz_Cathode_Conductor / 2.0) ) ) );
-  pv = tpc_motherLog.placeVolume( cathodeConductorLog , Position( 0.0, 0.0, -(dz_Cathode_Insulator + (dz_Cathode_Conductor / 2.0) ) ) );
+  pv = cathodeLog.placeVolume( cathodeConductorLog , Position( 0.0, 0.0, +(dz_Cathode_Insulator + (dz_Cathode_Conductor / 2.0) ) ) );
+  pv = cathodeLog.placeVolume( cathodeConductorLog , Position( 0.0, 0.0, -(dz_Cathode_Insulator + (dz_Cathode_Conductor / 2.0) ) ) );
   //-----------------------------------------------------------------------------------------------//
 
 
