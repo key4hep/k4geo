@@ -29,6 +29,9 @@
     <include ref="../ILD_common_v01/hcal_defs.xml"/>
     <include ref="../ILD_common_v01/yoke_defs.xml"/>
     <include ref="../ILD_common_v01/services_defs.xml"/>
+    <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
+    <constant name="tracker_region_rmax" value="TPC_outer_radius" />  
+    <constant name="tracker_region_zmax" value="Ecal_endcap_zmin" />
 
   </define>
 
