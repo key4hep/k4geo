@@ -2,7 +2,7 @@
      LumiCal parameters for ILD 
 -->
 
-<detector name="Lcal" type="LumiCal_o1_v03" vis="SeeThrough" id="ILDDetID_LCAL"
+<detector name="Lcal" type="LumiCal_o1_v03" vis="BlueVis" id="ILDDetID_LCAL"
 	  readout="LumiCalCollection" insideTrackingVolume="false" >
   
   <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_ELECTROMAGNETIC + DetType_FORWARD " />
@@ -10,26 +10,21 @@
  <!-- LumiCal envelope is rotated according to the ILC_Main_Crossing_Angle at +z and -z -->
   <envelope vis="ILD_FCALVis"> 
     <shape type="BooleanShape" operation="Intersection" material="Air">
-      <shape type="Box" dx="LumiCal_outer_radius*2.0" dy="LumiCal_outer_radius*2.0" dz="LumiCal_max_z*2.0"/>
+      <!-- shape type="Box" dx="LumiCal_outer_radius*2.0" dy="LumiCal_outer_radius*2.0" dz="LumiCal_max_z*2.0"/ -->
+      <shape type="Box" dx="Lcal_services_rmax*2.0" dy="Lcal_services_rmax*2.0" dz="LumiCal_max_z*2.0"/>
       
       <shape type="BooleanShape" operation="Union" material="Air">
 	<!-- -z -->
 	<shape type="BooleanShape" operation="Subtraction" material="Air">
-	  <shape type="Tube" rmin="LumiCal_inner_radius - env_safety" 
-		 rmax="LumiCal_outer_radius + env_safety" 
-		 dz="LumiCal_max_z/COS_halfCrossingAngle + env_safety"/>
-	  <shape type="Tube" rmin="0.0" rmax="LumiCal_outer_radius + 1.5*env_safety" 
-		 dz="LumiCal_min_z/COS_halfCrossingAngle+LumiCal_thickness - env_safety"/>
+	  <shape type="Tube" rmin="LumiCal_inner_radius - env_safety" rmax="Lcal_services_rmax + env_safety" dz="LumiCal_max_z/COS_halfCrossingAngle + env_safety"/>
+	  <shape type="Tube" rmin="0.0" rmax="Lcal_services_rmax + 1.5*env_safety" dz="LumiCal_min_z/COS_halfCrossingAngle+LumiCal_thickness - env_safety"/>
 	  <position x="0" y="0" z="LumiCal_thickness"/>
 	</shape>
 	
 	<!-- +z -->
 	<shape type="BooleanShape" operation="Subtraction" material="Air">
-	  <shape type="Tube" rmin="LumiCal_inner_radius - env_safety" 
-		 rmax="LumiCal_outer_radius + env_safety" 
-		 dz="LumiCal_max_z/COS_halfCrossingAngle + env_safety"/>
-	  <shape type="Tube" rmin="0.0" rmax="LumiCal_outer_radius + 1.5*env_safety" 
-		 dz="LumiCal_min_z/COS_halfCrossingAngle+LumiCal_thickness - env_safety"/>
+	  <shape type="Tube" rmin="LumiCal_inner_radius - env_safety" rmax="Lcal_services_rmax + env_safety" dz="LumiCal_max_z/COS_halfCrossingAngle + env_safety"/>
+	  <shape type="Tube" rmin="0.0" rmax="Lcal_services_rmax + 1.5*env_safety" dz="LumiCal_min_z/COS_halfCrossingAngle+LumiCal_thickness - env_safety"/>
 	  <position x="0" y="0" z="-LumiCal_thickness"/>
 	  </shape>
 	
@@ -53,7 +48,7 @@
   <dimensions inner_r = "LumiCal_inner_radius"
 	      inner_z = "LumiCal_min_z"
 	      outer_r = "LumiCal_outer_radius"
-	      servicesRmax = "Ecal_endcap_plug_rmin"
+	      servicesRmax = "Lcal_services_rmax"
 	      layerstagger = "0.5"
 	      outerPhi0    = "Lcal_offset_phi"
 	      modules = "Lcal_n_tiles"

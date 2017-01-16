@@ -64,7 +64,7 @@
   <constant name="TUBE_lumiTube_zStart" value="TUBE_cupola_zEnd+TUBE_cupola_thickness"/>
   <constant name="TUBE_lumiTube_zEnd" value="BeamCal_min_z-5*mm"/>
   <constant name="TUBE_lumiTube_thickness" value="1*mm"/>
-  <constant name="TUBE_lumiTube_rInner" value="Lcal_inner_radius-0.5*mm"/>
+  <constant name="TUBE_lumiTube_rInner" value="Lcal_inner_radius-TUBE_lumiTube_thickness-1*mm"/>
 
   
 

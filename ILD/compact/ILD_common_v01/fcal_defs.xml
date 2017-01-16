@@ -17,6 +17,8 @@
 
   <constant name="Lcal_offset_phi" value=" 360./Lcal_nstrips_phi/2.*degree"/>
 
+  <constant name="Lcal_services_rmax" value="EcalEndcapRing_inner_radius-1.0*mm"/>
+
   <constant name="LumiCal_thickness"             value="128.7*mm"/> <!--"130.65*mm"/-->
   <constant name="LumiCal_max_z"                 value="Ecal_endcap_zmax"/>
   <constant name="LumiCal_min_z"                 value="LumiCal_max_z - LumiCal_thickness"/>
