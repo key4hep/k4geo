@@ -10,16 +10,22 @@ subdetector-specific ones are in separate files
   <constant name="ILC_Main_Crossing_Angle" value="14*mrad"/>
 
   <!-- the beam tube -->
+  <constant name="TUBE_IPInnerTube_end_z"         value="80*mm"/>
   <constant name="TUBE_central_inner_radius" value="14.*mm"/>
   <constant name="TUBE_central_thickness" value="0.5*mm"/>
-  <constant name="TUBE_IPInnerTube_end_z"         value="80*mm"/>
-  <constant name="TUBE_IPInnerBulge_end_radius"   value="24*mm"/>
-  <constant name="TUBE_IPInnerBulge_end_z"        value="150*mm"/>
-  <constant name="TUBE_IPOuterTube_start_radius"  value="24*mm"/>
-  <constant name="TUBE_IPOuterTube_start_z"       value="150*mm"/>
-  <constant name="TUBE_IPOuterTube_end_radius"    value="25*mm"/>
-  <constant name="TUBE_IPOuterTube_end_z"         value="230*mm"/>
 
+  <constant name="TUBE_IPInnerBulge_end_z"        value="150*mm"/>
+  <constant name="TUBE_IPInnerBulge_end_innerradius" value="24*mm"/>
+
+  <constant name="TUBE_IPOuterTube_start_z"       value="150*mm"/>
+  <constant name="TUBE_IPOuterTube_end_z"         value="230*mm"/>
+  <constant name="TUBE_IPOuterTube_start_radius"  value="TUBE_IPInnerBulge_end_innerradius"/>
+
+  <!-- external radii (for surrounding envelopes) -->
+  <constant name="TUBE_maxthick" value="1.5*mm"/>
+  <constant name="TUBE_IPInnerBulge_end_radius"   value="TUBE_IPInnerBulge_end_innerradius+TUBE_maxthick"/>
+  <constant name="TUBE_IPOuterTube_end_radius"    value="TUBE_IPInnerBulge_end_radius"/>
+  
   <!-- the field inside and outside the solenoid -->
   <constant name="outerField_nominal_value" value="-1.5*tesla"/>
 
@@ -28,6 +34,17 @@ subdetector-specific ones are in separate files
   <constant name="top_VXD_inner_radius"   value="15*mm "/>
   <constant name="top_VXD_outer_radius"   value="101*mm "/>
   <constant name="top_VXD_half_length"    value="177.6*mm "/>
+
+  <!-- FTD -->
+  <constant name="top_FTD1_vtx3_distance_z" value="95*mm"/>
+
+  <constant name="FTD_disk2_zPosRelToTpcLength" value="0.158004"/>
+  <constant name="FTD_disk3_zPosRelToTpcLength" value="0.274428"/>
+  <constant name="FTD_disk4_zPosRelToTpcLength" value="0.445156"/>
+  <constant name="FTD_disk5_zPosRelToTpcLength" value="0.615884"/>
+  <constant name="FTD_disk6_zPosRelToTpcLength" value="0.786611"/>
+
+  <constant name="top_FTD7_ecal_distance_z" value="200*mm"/>
 
 
   <!-- SIT -->
