@@ -2,6 +2,9 @@
 | v00-10 |
  --------
 
+Shaojun Lu 2017-01-16
+  - Added tube_defs.xml for ILD_s1_v01.
+
 Frank Gaede 2017-01-16 
   - activate TPC_endplate_mix that was used before
 

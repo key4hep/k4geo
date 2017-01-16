@@ -22,6 +22,7 @@
     <include ref="../ILD_common_v01/top_defs_common_v01.xml"/>
     <include ref="../ILD_common_v01/basic_defs.xml"/>
     <include ref="../ILD_common_v01/envelope_defs.xml"/>
+    <include ref="../ILD_common_v01/tube_defs.xml"/>
     <include ref="../ILD_common_v01/misc_defs.xml"/>
     <include ref="../ILD_common_v01/tracker_defs.xml"/>
     <include ref="../ILD_common_v01/fcal_defs.xml"/>
