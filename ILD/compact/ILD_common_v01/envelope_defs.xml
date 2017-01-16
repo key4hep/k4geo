@@ -35,7 +35,7 @@
   <constant name="VXD_half_length"    value="top_VXD_half_length"/>
   <constant name="VXD_cone_min_z"     value="TUBE_IPInnerTube_end_z "/>
   <constant name="VXD_cone_max_z"     value="TUBE_IPInnerBulge_end_z "/>
-  <constant name="VXD_inner_radius_1" value="TUBE_IPInnerBulge_end_radius + env_safety "/>
+  <constant name="VXD_inner_radius_1" value="TUBE_IPInnerBulge_end_envradius + env_safety "/>
 
 
   <constant name="SIT_inner_radius"    value="SIT1_Radius - env_safety"/>
@@ -48,7 +48,7 @@
   <constant name="TPC_outer_radius"    value="top_TPC_outer_radius"/>
   <constant name="TPC_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ"/>
 
-  <constant name="FTD_inner_radius"    value=" TUBE_IPOuterTube_end_radius + env_safety"/>
+  <constant name="FTD_inner_radius"    value=" TUBE_IPOuterTube_end_envradius + env_safety"/>
   <constant name="FTD_outer_radius_1"  value=" SIT_inner_radius   - env_safety"/>
   <constant name="FTD_outer_radius_2"  value=" SIT_outer_radius_1 - env_safety"/>
   <constant name="FTD_outer_radius"    value=" TPC_inner_radius - env_safety"/>
@@ -57,7 +57,7 @@
   <constant name="FTD_min_z_1"         value=" SIT_half_length_1 + env_safety"/>
   <constant name="FTD_min_z_2"         value=" SIT_half_length   + env_safety"/>
   <constant name="FTD_cone_min_z"      value=" TUBE_IPOuterTube_end_z "/>
-  <constant name="FTD_cone_radius"     value=" TUBE_IPOuterBulge_end_radius  + env_safety"/>
+  <constant name="FTD_cone_radius"     value=" TUBE_IPOuterBulge_end_envradius + env_safety"/>
 
 
   <constant name="SET_inner_radius"    value="TPC_outer_radius+ env_safety "/>
