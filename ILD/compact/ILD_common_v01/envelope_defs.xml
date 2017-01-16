@@ -30,6 +30,18 @@
 
   <constant name="env_safety" value="0.1*mm"/>
 
+
+
+  <!-- a few defined parameters needed for envelopes -->
+  <constant name="TUBE_IPOuterTube_start_radius"  value="TUBE_IPInnerBulge_end_innerradius"/>
+  <constant name="TUBE_IPOuterBulge_end_z"        value="top_Lcal_z_begin - TUBE_Lcal_clearance"/>
+  <constant name="TUBE_IPOuterBulge_end_radius"   value="Lcal_outer_radius-LumiCal_tubebulge_overshoot"/>
+  <constant name="TUBE_IPInnerBulge_end_envradius"   value="TUBE_IPInnerBulge_end_innerradius + TUBE_maxthick"/>
+  <constant name="TUBE_IPOuterTube_end_envradius"    value="TUBE_IPInnerBulge_end_envradius"/>
+  <constant name="TUBE_IPOuterBulge_end_envradius"   value="TUBE_IPOuterBulge_end_radius+TUBE_maxthick"/>
+
+
+
   <constant name="VXD_inner_radius"   value="top_VXD_inner_radius"/>
   <constant name="VXD_outer_radius"   value="top_VXD_outer_radius"/>
   <constant name="VXD_half_length"    value="top_VXD_half_length"/>

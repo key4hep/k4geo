@@ -112,17 +112,11 @@ subdetector-specific ones are in separate files
 
   <constant name="TUBE_IPOuterTube_start_z"       value="150*mm"/>
   <constant name="TUBE_IPOuterTube_end_z"         value="230*mm"/>
-  <constant name="TUBE_IPOuterTube_start_radius"  value="TUBE_IPInnerBulge_end_innerradius"/>
 
-  <!-- a few defined parameters needed for envelopes -->
-  <constant name="TUBE_IPOuterBulge_end_z"        value="top_Lcal_z_begin - 20*mm"/>
-  <constant name="TUBE_IPOuterBulge_end_radius"   value="Lcal_outer_radius-LumiCal_tubebulge_overshoot"/>
+  <constant name="TUBE_Lcal_clearance" value="20*mm"/>
 
-  <!-- external radii (for surrounding envelopes) -->
+  <!-- space left for envelopes (counting from inner beampipe surface) -->
   <constant name="TUBE_maxthick" value="1.5*mm"/>
-  <constant name="TUBE_IPInnerBulge_end_envradius"   value="TUBE_IPInnerBulge_end_innerradius + TUBE_maxthick"/>
-  <constant name="TUBE_IPOuterTube_end_envradius"    value="TUBE_IPInnerBulge_end_envradius"/>
-  <constant name="TUBE_IPOuterBulge_end_envradius"   value="TUBE_IPOuterBulge_end_radius+TUBE_maxthick"/>
 
 
 
