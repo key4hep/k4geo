@@ -9,23 +9,6 @@ subdetector-specific ones are in separate files
 
   <constant name="ILC_Main_Crossing_Angle" value="14*mrad"/>
 
-  <!-- the beam tube -->
-  <constant name="TUBE_IPInnerTube_end_z"         value="80*mm"/>
-  <constant name="TUBE_central_inner_radius" value="14.*mm"/>
-  <constant name="TUBE_central_thickness" value="0.5*mm"/>
-
-  <constant name="TUBE_IPInnerBulge_end_z"        value="150*mm"/>
-  <constant name="TUBE_IPInnerBulge_end_innerradius" value="24*mm"/>
-
-  <constant name="TUBE_IPOuterTube_start_z"       value="150*mm"/>
-  <constant name="TUBE_IPOuterTube_end_z"         value="230*mm"/>
-  <constant name="TUBE_IPOuterTube_start_radius"  value="TUBE_IPInnerBulge_end_innerradius"/>
-
-  <!-- external radii (for surrounding envelopes) -->
-  <constant name="TUBE_maxthick" value="1.5*mm"/>
-  <constant name="TUBE_IPInnerBulge_end_radius"   value="TUBE_IPInnerBulge_end_innerradius+TUBE_maxthick"/>
-  <constant name="TUBE_IPOuterTube_end_radius"    value="TUBE_IPInnerBulge_end_radius"/>
-  
   <!-- the field inside and outside the solenoid -->
   <constant name="outerField_nominal_value" value="-1.5*tesla"/>
 
@@ -118,8 +101,29 @@ subdetector-specific ones are in separate files
   <constant name="BCal_rInner" value="20*mm"/>
   <constant name="BCal_rOuter" value="150*mm"/>
 
+
+  <!-- the beam tube -->
+  <constant name="TUBE_IPInnerTube_end_z"         value="80*mm"/>
+  <constant name="TUBE_central_inner_radius" value="14.*mm"/>
+  <constant name="TUBE_central_thickness" value="0.5*mm"/>
+
+  <constant name="TUBE_IPInnerBulge_end_z"        value="150*mm"/>
+  <constant name="TUBE_IPInnerBulge_end_innerradius" value="24*mm"/>
+
+  <constant name="TUBE_IPOuterTube_start_z"       value="150*mm"/>
+  <constant name="TUBE_IPOuterTube_end_z"         value="230*mm"/>
+  <constant name="TUBE_IPOuterTube_start_radius"  value="TUBE_IPInnerBulge_end_innerradius"/>
+
   <!-- a few defined parameters needed for envelopes -->
-  <constant name="TUBE_IPOuterBulge_end_z"        value="TPC_Ecal_Hcal_barrel_halfZ"/>
+  <constant name="TUBE_IPOuterBulge_end_z"        value="top_Lcal_z_begin - 20*mm"/>
   <constant name="TUBE_IPOuterBulge_end_radius"   value="Lcal_outer_radius-LumiCal_tubebulge_overshoot"/>
+
+  <!-- external radii (for surrounding envelopes) -->
+  <constant name="TUBE_maxthick" value="1.5*mm"/>
+  <constant name="TUBE_IPInnerBulge_end_envradius"   value="TUBE_IPInnerBulge_end_innerradius + TUBE_maxthick"/>
+  <constant name="TUBE_IPOuterTube_end_envradius"    value="TUBE_IPInnerBulge_end_envradius"/>
+  <constant name="TUBE_IPOuterBulge_end_envradius"   value="TUBE_IPOuterBulge_end_radius+TUBE_maxthick"/>
+
+
 
 </define>
