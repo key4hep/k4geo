@@ -2,6 +2,28 @@
 | v00-10 |
  --------
 
+Frank Gaede 2017-01-16 
+  - activate TPC_endplate_mix that was used before
+
+Daniel Jeans 2017-01-16 
+  - tidy up for new beampipe changes
+  - fix lumical overlaps (internal + with beamtube)
+  - fix overlaps between rewritten beamipe and ftd
+  - fix vtx/beampipe overlaps
+  - update beam pipe description
+
+Frank Gaede 2017-01-12 
+  - fix TPC cathode volumes (include in cathodeLog)
+
+Shaojun Lu 2017-01-12 
+  -  Included 'detector_types.xml' and added missed parameters 'tracker_region_rmax' and 'tracker_region_zmax' for reconstruction.
+
+Shaojun Lu 2017-01-11 
+  -  define Yoke relative to Hcal and Coil.
+
+Frank Gaede 2017-01-05 
+  - update version and release notes for v00-10
+
 Daniel Jeans 2016-12-26 
   - define yoke barrel size with respect to outer radius of coil
   - tidy up ILD_?1_v01 compact description. Move all common definitions to ILD_common_v01. Keep only top-level steering file and mode-specific definitions in ILD_l1 and ILD_s1 directories. move unused files to extra_stuff directory.
