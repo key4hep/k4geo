@@ -384,14 +384,15 @@
       <fraction n="1" ref="Al27"/>
     </element>
 
-    <!-- this TPC mix was defined twice...keep this more elegant definition-->
+<!-- 
     <material name="TPC_endplate_mix">
-      <!--D value="1.7" unit="g/cm3"/-->
+      <! D value="1.7" unit="g/cm3"/    >
       <composite n="74" ref="G4_AIR"/>
       <composite n="12" ref="g10"/>
       <composite n="14" ref="G4_Al"/>
     </material>
-<!--
+-->
+ 
     <material name="TPC_endplate_mix" state="solid">
       <MEE unit="eV" value="97.0754229107761"/>
       <D unit="g/cm3" value="0.5827515446"/>
@@ -404,7 +405,6 @@
       <fraction n="0.0433592706" ref="Si"/>
       <fraction n="0.00232484085105981" ref="H"/>
     </material>
--->
     <material name="CarbonFiber" state="solid">
       <MEE unit="eV" value="70.7270877537631"/>
       <D unit="g/cm3" value="1.46666666666667"/>
