@@ -35,12 +35,14 @@
   <!-- database : TMP_DB10 -->
   <!-- SQL command: "select * from layers_common_parameters;"  -->
   <layers_common_parameters id="1" electronics_structure_thickness="0.1*mm" active_silicon_thickness="0.05*mm" support_structure_radial_thickness="0.49392*mm" end_electronics_half_z="5*mm" 
-			    strip_final_beampipe_radious="24.3*mm"	side_band_electronics_option="1" end_ladd_electronics_option="1" side_band_electronics_width="0.5*mm" 
+			    strip_final_beampipe_radious="VXD_inner_radius_1"	
+			    side_band_electronics_option="1" end_ladd_electronics_option="1" side_band_electronics_width="0.5*mm" 
 			    side_band_electronics_thickness="0.05*mm" active_side_band_electronics_option="0" layer_gap="2*mm" flex_cable_material="G4_KAPTON" flex_cable_thickness="0.05*mm"
 			    foam_spacer_material="SiC_foam" foam_spacer_thickness="0.94*mm" metal_traces_material="G4_Al" metal_traces_thickness="0.01*mm" cool_pipe_material="titanium" 
 			    cool_pipe_inner_radius="0.75*mm" cool_pipe_outer_radius="1*mm" external_kapton_thickness="0.05*mm" external_metal_thickness="0.009*mm"  />
   <!-- SQL command: "SELECT * FROM cryostat;"  -->
-  <cryostat id="1" alu_skin_inner_radious="100*mm" alu_skin_tickness="0.5*mm" foam_inner_radious="90*mm" foam_tickness="10*mm" foam_half_z="166.6*mm" endplate_inner_radious="24.2*mm" 
+  <cryostat id="1" alu_skin_inner_radious="100*mm" alu_skin_tickness="0.5*mm" foam_inner_radious="90*mm" foam_tickness="10*mm" foam_half_z="166.6*mm" 
+	    endplate_inner_radious="VXD_inner_radius_1" 
 	    cryostat_option="1" cryostat_apperture="30*mm" cryostat_apperture_radius="1.5*mm"  />
   <!-- SQL command: "select * from support_shell;"  -->
   <support_shell id="0" inner_radious="65*mm" half_z="145*mm" thickess="0.49392*mm" endplate_inner_radious="30*mm" endplate_inner_radius_L1="15.7*mm" endplate_outer_radius_L1="20*mm" 
