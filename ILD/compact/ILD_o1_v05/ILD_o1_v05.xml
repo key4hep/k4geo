@@ -575,21 +575,7 @@
   <!-- 	  inner_radius="Coil_inner_radius" -->
   <!-- 	  outer_radius="world_side" /> -->
 
-  <field name="DetectorMap" type="FieldBrBz"
-         filename="${lcgeo_DIR}/fieldmaps/ILDMap_KB_20150204_BRhoZ.root"
-         tree="fieldmap:rho:z:Brho:Bz"
-         rScale = "1.0"
-         zScale = "1.0"
-         bScale = "3.5/4.12841"
-         rhoMin = "5*mm"
-         zMin = "5*mm"
-         rhoMax = "7005*mm"
-         zMax = "7005*mm"
-         nRho = "701"
-         nZ = "701"
-         >
-  </field>
-  <field name="DetectorMap2" type="FieldBrBz"
+  <field name="DetectorMap" type="FieldXYZ"
          filename="${lcgeo_DIR}/fieldmaps/ILDMap_KB_20150204_BRhoZ.root"
          tree="fieldmap:rho:z:Brho:Bz"
          rScale = "1.0"
