@@ -64,7 +64,7 @@
   <constant name="FTD_outer_radius_1"  value=" SIT_inner_radius   - env_safety"/>
   <constant name="FTD_outer_radius_2"  value=" SIT_outer_radius_1 - env_safety"/>
   <constant name="FTD_outer_radius"    value=" TPC_inner_radius - env_safety"/>
-  <constant name="FTD_half_length"     value=" TUBE_IPOuterBulge_end_z"/>
+  <constant name="FTD_half_length"     value=" TPC_Ecal_Hcal_barrel_halfZ"/>
   <constant name="FTD_min_z_0"         value=" VXD_half_length   + env_safety"/>
   <constant name="FTD_min_z_1"         value=" SIT_half_length_1 + env_safety"/>
   <constant name="FTD_min_z_2"         value=" SIT_half_length   + env_safety"/>

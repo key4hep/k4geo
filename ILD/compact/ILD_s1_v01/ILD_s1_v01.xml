@@ -116,7 +116,7 @@
     <comment>Calorimeters</comment>
     <include ref="../ILD_common_v01/SEcal05_siw_Barrel.xml"/>
     <include ref="../ILD_common_v01/SEcal05_siw_Endcaps.xml"/>
-    <include ref="../ILD_common_v01/SEcal05_ECRing.xml"/>
+    <include ref="../ILD_common_v01/SEcal05_siw_ECRing.xml"/>
     <include ref="../ILD_common_v01/SHcalSc04_Barrel_v01.xml"/>
     <include ref="../ILD_common_v01/SHcalSc04_Endcaps.xml"/>
     <include ref="../ILD_common_v01/SHcalSc04_EndcapRing.xml"/>
