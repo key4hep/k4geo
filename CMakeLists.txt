@@ -63,9 +63,9 @@ include_directories( SYSTEM
 #  ${GEAR_INCLUDE_DIRS}
 
 file(GLOB sources 
-  ./sensitive/TPCSDAction.cpp 
-  ./sensitive/CaloPreShowerSDAction.cpp
-  ./sensitive/Geant4EventReaderGuineaPig.cpp 
+  ./plugins/TPCSDAction.cpp 
+  ./plugins/CaloPreShowerSDAction.cpp
+  ./plugins/Geant4EventReaderGuineaPig.cpp 
   ./detector/tracker/*.cpp 
   ./detector/calorimeter/*.cpp 
   ./detector/fcal/*.cpp 
