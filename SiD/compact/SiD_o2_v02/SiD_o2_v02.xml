@@ -2,7 +2,7 @@
 <lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0" 
        xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" 
        xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
-  <info name="SiD_o2_v01"
+  <info name="SiD_o2_v02"
         title="Silicon Detector 2016"
         author="Norman Graf, Jeremy McCormick, Dan Protopopescu"
         url="http://confluence.slac.stanford.edu/display/ilc/sidloi"
