@@ -1,0 +1,86 @@
+<comment>Beampipe</comment>
+
+<detectors>
+ <detector name="Beampipe" type="DD4hep_PolyconeSupport" insideTrackingVolume="true" vis="BeampipeVis">
+  <comment>Central Be Beampipe</comment>
+  <material name="Beryllium"/>
+  <zplane rmin="((37.5-6.25)*bp_cone_slope+1.2)*cm" rmax="((37.5-6.25)*bp_cone_slope+1.2875)*cm" z="-37.5*cm" />
+  <zplane rmin="1.2*cm" rmax="1.2875*cm"   z="-6.251*cm"/>
+  <zplane rmin="1.2*cm" rmax="1.240*cm" z="-6.25*cm"/>
+  <zplane rmin="1.2*cm" rmax="1.240*cm" z="6.25*cm" />
+  <zplane rmin="1.2*cm" rmax="1.2875*cm" z="6.251*cm" />
+  <zplane rmin="((37.5-6.25)*bp_cone_slope+1.2)*cm"
+	  rmax="((37.5-6.25)*bp_cone_slope+1.2875)*cm" z="37.5*cm" />
+ </detector>
+</detectors>
+
+<detectors>
+<comment>Steel beampipe cones</comment>
+<detector name="ForwardSupportTube" type="DD4hep_PolyconeSupport" insideTrackingVolume="false" vis="InvisibleNoDaughters">
+  <material name="Steel235"/>
+  <zplane rmin = "15.5*cm" rmax="19.5*cm" z="182.0*cm" />
+  <zplane rmin="15.5*cm" rmax="19.5*cm"  z="323.5*cm"/>
+</detector>
+<detector name="BackwardSupportTube" type="DD4hep_PolyconeSupport" insideTrackingVolume="false" vis="InvisibleNoDaughters">
+  <material name="Steel235"/>
+  <zplane rmin="15.5*cm" rmax="19.5*cm"  z="-323.5*cm"/>
+  <zplane rmin = "15.5*cm" rmax="19.5*cm" z="-182.0*cm" />
+</detector>
+<comment>Incoming and outgoing beampipes in far forward region</comment>
+<detector name="NorthIncomingBeampipe" type="DD4hep_TubeSegment" vis="InvisibleNoDaughters">
+  <material name="Iron" />
+  <tubs rmin="1.0*cm" rmax="1.04*cm" zhalf="9.27*cm" />
+  <position x="-2.13*cm" y="0" z="304.27*cm" />
+  <rotation x="0.0" y="0.0070" z="0.0" />
+</detector>
+<detector name="SouthIncomingBeampipe" type="DD4hep_TubeSegment" vis="InvisibleNoDaughters">
+  <material name="Iron" />
+  <tubs rmin="1.0*cm" rmax="1.04*cm" zhalf="9.27*cm" />
+  <position x="-2.13*cm" y="0" z="-304.27*cm" />
+  <rotation x="0.0" y="-0.0070" z="0.0" />
+</detector>
+<detector name="NorthOutgoingBeampipe" type="DD4hep_TubeSegment" vis="InvisibleNoDaughters">
+  <material name="Iron" />
+  <tubs rmin="1.50*cm" rmax="1.54*cm" zhalf="9.27*cm" />
+  <position x="2.13*cm" y="0" z="304.27*cm" />
+  <rotation x="0.0" y="-0.0070" z="0.0" />
+</detector>
+<detector name="SouthOutgoingBeampipe" type="DD4hep_TubeSegment" vis="InvisibleNoDaughters">
+  <material name="Iron" />
+  <tubs rmin="1.50*cm" rmax="1.54*cm" zhalf="9.27*cm" />
+  <position x="2.13*cm" y="0*cm" z="-304.27*cm" />
+  <rotation x="0.0" y="0.0070" z="0.0" />
+</detector>
+<detector name="BeamPipeLiner" type="DD4hep_PolyconeSupport" insideTrackingVolume="true" vis="InvisibleNoDaughters">
+  <comment>BeamPipe Liner to shield bremsstrahlung photons</comment>
+  <material name="Titanium"/>
+  <zplane rmin = "((tracking_region_zmax-6.25*cm)*bp_cone_slope+1.1925*cm)" rmax="((tracking_region_zmax-6.25*cm)*bp_cone_slope+1.2*cm)" z="-tracking_region_zmax" />
+  <zplane rmin="1.1925*cm"    rmax="1.2*cm"  z="-6.251*cm"/>
+  <zplane rmin="1.1975*cm" rmax="1.20*cm" z="-6.25*cm"  />
+  <zplane rmin="1.1975*cm" rmax="1.20*cm" z="6.25*cm" />
+  <zplane rmin="1.1925*cm" rmax="1.2*cm" z="6.251*cm" />
+  <zplane rmin = "((tracking_region_zmax-6.25*cm)*bp_cone_slope+1.1925*cm)" rmax="((tracking_region_zmax-6.25*cm)*bp_cone_slope+1.2*cm)" z="tracking_region_zmax" />
+</detector>
+<detector name="BeamPipeVacuum" type="DD4hep_PolyconeSupport" insideTrackingVolume="true" vis="InvisibleNoDaughters">
+  <comment>Vacuum inside beampipe</comment>
+  <material name="Vacuum"/>
+  <zplane rmin="0.*cm" rmax="((tracking_region_zmax-6.25*cm)*bp_cone_slope+1.1925*cm)" z="-tracking_region_zmax" />
+  <zplane rmin="0.*cm" rmax="1.1925*cm"  z="-6.251*cm"/>
+  <zplane rmin="0.*cm" rmax="1.1975*cm" z="-6.25*cm"  />
+  <zplane rmin="0.*cm" rmax="1.1975*cm" z="6.25*cm" />
+  <zplane rmin="0.*cm" rmax="1.1925*cm" z="6.251*cm" />
+  <zplane rmin = "0.*cm" rmax="((tracking_region_zmax-6.25*cm)*bp_cone_slope+1.1925*cm)"  z="tracking_region_zmax" />
+</detector>
+<!-- <detector name="ForwardVacuum" type="DD4hep_PolyconeSupport" insideTrackingVolume="false" vis="InvisibleNoDaughters"> -->
+<!--     <material name="Vacuum"/> -->
+<!--     <zplane rmin="0.*cm" rmax="6.0*cm"    z="tracking_region_zmax" /> -->
+<!--     <zplane rmin="0.*cm" rmax="6.0*cm"    z="182*cm" /> -->
+<!--     <zplane rmin="0.*cm" rmax="12.4*cm"  z="282*cm"/> -->
+<!-- </detector>  -->
+<!-- <detector name="BackwardVacuum" type="DD4hep_PolyconeSupport" insideTrackingVolume="false" vis="InvisibleNoDaughters"> -->
+<!--     <material name="Vacuum"/> -->
+<!--     <zplane rmin="0.*cm" rmax="12.4*cm"  z="-282*cm"/> -->
+<!--     <zplane rmin="0.*cm" rmax="6.0*cm"    z="-182*cm" /> -->
+<!--     <zplane rmin="0.*cm" rmax="6.0*cm"    z="-tracking_region_zmax" /> -->
+<!-- </detector>  -->
+</detectors>
