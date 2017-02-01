@@ -38,7 +38,7 @@
                 <slice material="Steel235" thickness="SolenoidVacuumTank_thickness"/>
             </layer>
             <layer id="2" inner_r="Solenoid_Coil_radius-SolenoidCoil_thickness/2.0" outer_z="Solenoid_Coil_half_length">
-                <slice material="Aluminum" thickness="SolenoidCoil_thickness" vis="SolenoidCoilEndsVis" />            
+                <slice material="Aluminium" thickness="SolenoidCoil_thickness" vis="SolenoidCoilEndsVis" />
             </layer>
             <layer id="3" inner_r="Solenoid_outer_radius-SolenoidVacuumTank_thickness" outer_z="Solenoid_half_length" vis="SolenoidBarrelLayerVis">
                 <slice material="Steel235" thickness="SolenoidVacuumTank_thickness"/>
