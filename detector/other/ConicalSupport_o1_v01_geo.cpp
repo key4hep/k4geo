@@ -65,9 +65,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)
     const double zPosition   = fabs(zEnd + zStart) * 0.5; // middle z position
 
     // solid for the tube (including vacuum and wall): a solid cone
-    ConeSegment tubeSolid1(zHalf, rInnerStart, rOuterStart, rInnerEnd, rOuterEnd , phi1, phi2);
-    ConeSegment tubeSolid2(zHalf * 1.01, 0. , rInnerStart, 0. , rInnerEnd , phi1, phi2);
-    Solid tubeSolid = SubtractionSolid(tubeSolid1, tubeSolid2);
+    ConeSegment tubeSolid(zHalf, rInnerStart, rOuterStart, rInnerEnd, rOuterEnd , phi1, phi2);
 
     Volume tubeVol(volName + "_pos", tubeSolid, sectionMat);
     tubeVol.setAttributes(lcdd, xmlSection.regionStr(), xmlSection.limitsStr(), xmlSection.visStr());
