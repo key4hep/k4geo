@@ -46,10 +46,10 @@
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
         <readout name="OuterTrackerBarrelCollection">
-            <id>system:5,side:-2,layer:6,module:11,sensor:8</id>
+            <id>${GlobalTrackerReadoutID}</id>
         </readout>
         <readout name="OuterTrackerEndcapCollection">
-            <id>system:5,side:-2,layer:6,module:11,sensor:8</id>
+            <id>${GlobalTrackerReadoutID}</id>
         </readout>
     </readouts>
     
