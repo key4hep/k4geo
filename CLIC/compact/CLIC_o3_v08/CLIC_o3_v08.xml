@@ -201,7 +201,7 @@
     <display>
         <vis name="VXDVis"      alpha="1.0" r="0.2"   g="0.2"     b="0.2"   showDaughters="true"  visible="false"/>
         <vis name="ITVis"       alpha="1.0" r="0.54"  g="0.43"    b="0.04"  showDaughters="true"  visible="false"/>
-        <vis name="OTVis"       alpha="1.0" r="0.8"   g="0.8"     b="0.4"   showDaughters="true"  visible="true"/>
+        <vis name="OTVis"       alpha="1.0" r="0.8"   g="0.8"     b="0.4"   showDaughters="true"  visible="false"/>
         <vis name="ECALVis"     alpha="1.0" r="0.2"   g="0.6"     b="0"     showDaughters="true"  visible="true"/>
         <vis name="HCALVis"     alpha="1.0" r="0.078" g="0.01176" b="0.588" showDaughters="true"  visible="true"/>
         <vis name="SOLVis"      alpha="1.0" r="0.4"   g="0.4"     b="0.4"   showDaughters="true"  visible="true"/>
@@ -221,7 +221,7 @@
     <include ref="Vertex_o2_v06_01.xml"/>
 
     <include ref="InnerTracker_o2_v06_01.xml"/>
-    <!--include ref="OuterTracker_o2_v05_02.xml"/>
+    <include ref="OuterTracker_o2_v06_01.xml"/>
 
     <include ref="ECalBarrel_o2_v01_02.xml"/>
     <include ref="ECalEndcap_o2_v01_02.xml"/>
@@ -237,7 +237,7 @@
 
     <include ref="LumiCal_o1_v01_01.xml"/>
 
-    <include ref="BeamCal_o1_v01_01.xml"/-->
+    <include ref="BeamCal_o1_v01_01.xml"/>
 
     <plugins>
         <plugin name="InstallSurfaceManager"/>
