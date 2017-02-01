@@ -3,12 +3,12 @@
        xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" 
        xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
   <info name="SiD_o2_v02"
-        title="Silicon Detector 2016"
+        title="Silicon Detector 2017"
         author="Norman Graf, Jeremy McCormick, Dan Protopopescu"
         url="http://confluence.slac.stanford.edu/display/ilc/sidloi"
         status="development"
-        version="$Id: compact.xml,v 1.13 2011/01/26 23:46:56 jeremy Exp $">
-    <comment>The compact format for the Silicon Detector as of Oct 2016. Includes global XY segmentation in Cal endcaps.</comment>        
+        version="o2_v02">
+    <comment>The compact format for the Silicon Detector as of Jan 2017.</comment>        
   </info>
 
   <includes>
@@ -160,26 +160,26 @@
 
   <comment>Trackers</comment> 
   <include ref="SiVertexBarrel.xml"/>
-  <include ref="SiVertexEndcap_o2_v01.xml"/>
+  <include ref="SiVertexEndcap_o2_v02.xml"/>
 
-  <include ref="SiTrackerBarrel_o2_v01_00.xml"/>
-  <include ref="SiTrackerEndcap_o2_v01_01.xml"/>
+  <include ref="SiTrackerBarrel_o2_v02_00.xml"/>
+  <include ref="SiTrackerEndcap_o2_v02_01.xml"/>
   <include ref="SiTrackerForward.xml"/>
   
   <comment>Calorimeters</comment>  
-  <include ref="ECalBarrel_o2_v01_00.xml"/>
-  <include ref="ECalEndcap_o2_v01_00.xml"/>
+  <include ref="ECalBarrel_o2_v02_00.xml"/>
+  <include ref="ECalEndcap_o2_v02_00.xml"/>
 
-  <include ref="HCalBarrel_o2_v01_00.xml"/>
-  <include ref="HCalEndcap_o2_v01_01.xml"/>
+  <include ref="HCalBarrel_o2_v02_00.xml"/>
+  <include ref="HCalEndcap_o2_v02_01.xml"/>
 
-  <include ref="MuonBarrel_o2_v01_01.xml"/>
-  <include ref="MuonEndcap_o2_v01_01.xml"/>
+  <include ref="MuonBarrel_o2_v02_01.xml"/>
+  <include ref="MuonEndcap_o2_v02_01.xml"/>
 
-  <include ref="LumiCal_o2_v01_00.xml"/>
-  <include ref="BeamCal_o2_v01_00.xml"/>
+  <include ref="LumiCal_o2_v02_00.xml"/>
+  <include ref="BeamCal_o2_v02_00.xml"/>
 
-  <include ref="Solenoid_o2_v01_00.xml"/>
+  <include ref="Solenoid_o2_v02_00.xml"/>
 
   <comment>Beam pipe</comment>
   <!--include ref="BeamPipe.xml"/-->
