@@ -7,6 +7,8 @@
 // Comment: Here each slice of the module has the same transversal
 //          dimensions (x,y). Suitable for Surfaces.
 //
+// Comment: You have to use <include ref=... to define a module stack
+//
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
@@ -303,4 +305,4 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     return sdet;
 }
 
-DECLARE_DETELEMENT(TrackerBarrel_o1_v04,create_detector)
+DECLARE_DETELEMENT(TrackerBarrel_o1_v05,create_detector)
