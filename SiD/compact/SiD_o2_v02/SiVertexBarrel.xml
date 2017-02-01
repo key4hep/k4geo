@@ -2,7 +2,7 @@
 
 <readouts>
     <readout name="SiVertexBarrelHits">
-      <id>system:5,side:-2,layer:9,module:8,sensor:8,barrel:3,x:32:-16,y:-16</id>
+      <id>system:5,side:-2,layer:9,module:8,sensor:8,barrel:3</id>
       <!-- old! id>system:6,barrel:3,layer:4,module:12,sensor:1,side:32:-2,strip:24</id -->
     </readout>
 </readouts>
