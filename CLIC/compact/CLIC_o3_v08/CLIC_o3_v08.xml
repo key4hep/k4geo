@@ -230,8 +230,10 @@
     <include ref="BeamCal_o1_v01_01.xml"/>
 
     <plugins>
+        <plugin name="DD4hepVolumeManager"/>
         <plugin name="InstallSurfaceManager"/>
     </plugins>
+
 
     <fields>
         <field name="GlobalSolenoid" type="solenoid"
