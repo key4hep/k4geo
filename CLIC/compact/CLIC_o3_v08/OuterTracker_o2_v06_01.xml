@@ -17,7 +17,7 @@
 
         <constant name="OuterTracker_Endcap_radius_0" value="617.5*mm"/>
         <constant name="OuterTracker_Endcap_radius_1" value="888.4*mm"/>        
-        <constant name="OuterTracker_Endcap_radius_2" value="1189.4*mm"/>             
+        <constant name="OuterTracker_Endcap_radius_2" value="1189.4*mm"/>
         
     </define>
     
@@ -56,7 +56,7 @@
 
     <detectors>
     
-        <detector id="DetID_OT_Barrel" name="OuterTrackerBarrel" type="TrackerBarrel_o1_v05" readout="OuterTrackerBarrelCollection" region="OuterTrackerBarrelRegion">
+        <detector id="DetID_OT_Barrel" name="OuterTrackerBarrel" type="TrackerBarrel_o1_v05" readout="OuterTrackerBarrelCollection">
             <envelope vis="OTVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -90,7 +90,7 @@
         </detector>
 
     
-        <detector id="DetID_OT_Endcap" name="OuterTrackerEndcap" type="TrackerEndcap_o2_v06" readout="OuterTrackerEndcapCollection" reflect="true" region="OuterTrackerEndcapRegion">
+        <detector id="DetID_OT_Endcap" name="OuterTrackerEndcap" type="TrackerEndcap_o2_v06" readout="OuterTrackerEndcapCollection" reflect="true">
             <envelope vis="OTVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -148,7 +148,7 @@
         </detector>
 
 
-        <detector name="OuterTrackerBarrelSupport" type="TrackerBarrelSupport_o1_v01" id="0" reflect="true" region="OuterTrackerBarrelRegion">
+        <detector name="OuterTrackerBarrelSupport" type="TrackerBarrelSupport_o1_v01" id="0" reflect="true">
             <envelope>
                 <shape type="Assembly"/>
             </envelope>
@@ -164,7 +164,7 @@
         </detector>
         
          
-        <detector name="OuterTrackerEndcapSupport" type="TrackerEndcapSupport_o1_v01" reflect="true" region="OuterTrackerEndcapRegion">
+        <detector name="OuterTrackerEndcapSupport" type="TrackerEndcapSupport_o1_v01" reflect="true">
 		   <envelope>
                 <shape type="Assembly"/>
            </envelope>
