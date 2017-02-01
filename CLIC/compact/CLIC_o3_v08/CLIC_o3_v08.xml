@@ -186,16 +186,6 @@
             <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
         </limitset>
     </limits>
-    <regions>
-        <region name="BeampipeRegion"           eunit="MeV" lunit="mm" cut="0.001" threshold="0.001"/>
-        <region name="VertexBarrelRegion"       eunit="MeV" lunit="mm" cut="0.001" threshold="0.001"/>
-        <region name="VertexEndcapRegion"       eunit="MeV" lunit="mm" cut="0.001" threshold="0.001"/>
-        <region name="InnerTrackerBarrelRegion" eunit="MeV" lunit="mm" cut="0.001" threshold="0.001"/>
-        <region name="OuterTrackerBarrelRegion" eunit="MeV" lunit="mm" cut="0.001" threshold="0.001"/>
-        <region name="InnerTrackerEndcapRegion" eunit="MeV" lunit="mm" cut="0.001" threshold="0.001"/>
-        <region name="OuterTrackerEndcapRegion" eunit="MeV" lunit="mm" cut="0.001" threshold="0.001"/>
-    </regions>
-
 
 
     <display>

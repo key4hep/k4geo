@@ -14,7 +14,7 @@
     <detectors>
         <comment>Beampipe</comment>
         
-        <detector name="Beampipe" type="Beampipe_o1_v01" vis="BeamPipeVis" region="BeampipeRegion">
+        <detector name="Beampipe" type="Beampipe_o1_v01" vis="BeamPipeVis">
             <parameter crossingangle="CrossingAngle" />
             <envelope vis="BlueVis">
                 <shape type="Assembly"/>
