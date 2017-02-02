@@ -102,7 +102,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   zPlanarData->lengthStrip = db->fetchDouble("strip_length") ;
   zPlanarData->pitchStrip  = db->fetchDouble("strip_pitch")  ;
   zPlanarData->angleStrip  = db->fetchDouble("strip_angle") ;
-  
+  double strip_angle = zPlanarData->angleStrip ;
   // *********************
   
   
@@ -306,24 +306,20 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     Vector3D u,v,n ;
     
     if( faces_IP == 0 ){
-      // will be rotated around z-axis later
-      u.fill(  0. ,  -1. , 0. ) ;
-      v.fill(  0. ,   0. , 1. ) ;
+
       n.fill( -1. ,   0. , 0. ) ;
 
-      // implement 7 deg stereo angle 
-      u.fill( 0. , -cos( 3.5 * dd4hep::deg  ) , -sin( 3.5 * dd4hep::deg  ) ) ;
-      v.fill( 0. , -sin( 3.5 * dd4hep::deg  ) ,  cos( 3.5 * dd4hep::deg  ) ) ;
+      // implement stereo angle 
+      u.fill( 0. , -cos( strip_angle  ) , -sin( strip_angle  ) ) ;
+      v.fill( 0. , -sin( strip_angle  ) ,  cos( strip_angle  ) ) ;
 
     } else {
 
-      u.fill( 0. , 1. , 0. ) ;
-      v.fill( 0. , 0. , 1. ) ;
       n.fill( 1. , 0. , 0. ) ;
 
-      // implement 7 deg stereo angle 
-      u.fill( 0. ,  cos( 3.5 * dd4hep::deg  ) ,  sin( 3.5 * dd4hep::deg  ) ) ;
-      v.fill( 0. , -sin( 3.5 * dd4hep::deg  ) ,  cos( 3.5 * dd4hep::deg  ) ) ;
+      // implement stereo angle 
+      u.fill( 0. ,  cos( strip_angle  ) ,  sin( strip_angle  ) ) ;
+      v.fill( 0. , -sin( strip_angle  ) ,  cos( strip_angle  ) ) ;
     }
 
     double inner_thick =  sensitive_thickness / 2.0 ;
