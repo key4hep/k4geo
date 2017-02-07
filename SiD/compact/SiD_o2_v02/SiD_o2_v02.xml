@@ -56,7 +56,7 @@
     <constant name="SiTracker_BarrelLayers" value="SiTracker_EndcapLayers + 1"/>
 
     <constant name="ECalBarrel_half_length" value="1765.0*mm" />
-    <constant name="ECalBarrel_rmin" value="1265.0*mm" />
+    <constant name="ECalBarrel_rmin" value="1264.0*mm" />
     <constant name="ECalBarrel_rmax" value="1403.0*mm" />
     <constant name="ECalBarrel_symmetry" value="12" />
    
