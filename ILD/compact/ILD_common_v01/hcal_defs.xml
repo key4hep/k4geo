@@ -17,6 +17,30 @@
   <constant name="Hcal_endcap_layer_air_gap" value="2.5*mm"/>
   <constant name="Hcal_endcap_nlayers" value="48"/> <!-- needed for ring only? -->
 
+  <!-- fg:
+      copy extra parameters for SDHcal from ILD_o2_v01 here
+      maybe they should all be renamed to SDHCal_ for clarity ? 
+  -->
+  <constant name="Hcal_MinNumCellsInTransvPlane" value="32"/>
+  <constant name="Hcal_barrel_number_modules" value="5"/>
+  <constant name="Hcal_graphite_cathode_thickness" value="0.1*mm"/>
+  <constant name="Hcal_graphite_anode_thickness" value="0.05*mm"/>
+  <constant name="Hcal_glass_cathode_thickness" value="1.1*mm"/>
+  <constant name="Hcal_glass_anode_thickness" value="0.7*mm"/>
+  <constant name="Hcal_g10_thickness" value="1.4*mm"/>
+  <constant name="Hcal_mylar_anode_thickness" value="0.05*mm"/>
+  <constant name="Hcal_mylar_cathode_thickness" value="0.175*mm"/>
+  <constant name="Hcal_mylar_thickness" value="0.2*mm"/>
+  <constant name="Hcal_spacer_separation" value="100*mm"/>
+  <constant name="Hcal_spacer_thickness" value="8*mm"/>
+  <constant name="Hcal_gasInlet_innerRadius" value="0.4*mm"/>
+  <constant name="Hcal_gasInlet_outerRadius" value="0.5*mm"/>
+  <constant name="Hcal_gasInlet_length" value="3.0*mm"/>
+  <constant name="Hcal_gas_gap" value="1.2*mm"/>
+  <constant name="SDHcal_PCB_thickness" value="0.8*mm"/>
+
+
+
   <!-- translations -->
   <constant name="Hcal_endcap_zmin" value="HcalEndcap_min_z"/>
 
