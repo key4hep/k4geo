@@ -72,8 +72,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     double        inner_r   = x_dim.rmin();                     // inscribed cylinder
     double        dphi      = (2.*M_PI/nsides);
     double        hphi      = dphi/2.;
-    //as    double        mod_z     = layering.totalThickness();
-    double        mod_z     = layering.totalThickness()-0.1;
+    double        mod_z     = layering.totalThickness();
+    //as double        mod_z     = layering.totalThickness()-0.1;
     double        r_max     = x_dim.rmax()/std::cos(hphi);      // circumscribed cylinder, see http://cern.ch/go/r9mZ
     double        ry        = sqrt(supportRailCS)/2;            // support rail thickness
     double        outer_r   = (inner_r + mod_z)/std::cos(hphi); // r_outer of actual module
@@ -202,7 +202,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	double l_pos_z  = -trd_z;
 	
 	// Loop over the sets of layer elements in the module
-	int l_num = 1;
+	//as int l_num = 1;
+	int l_num = 0;
 	for(xml_coll_t li(x_det,_U(layer)); li; ++li)  {
 	  
 	  xml_comp_t x_layer = li;
@@ -212,7 +213,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	  for (int j=0; j<repeat; j++) {
 	    
 	    string l_name = _toString(l_num, "layer%d");
-	    double l_thickness = layering.layer(l_num-1)->thickness(); // layer thickness          
+	    //as double l_thickness = layering.layer(l_num-1)->thickness(); // layer thickness  
+	    double l_thickness = layering.layer(l_num)->thickness(); // layer thickness      
 #if VERBOSE_LEVEL>1
 	    std::cout << l_name << " thickness: " << l_thickness << std::endl;
 #endif
