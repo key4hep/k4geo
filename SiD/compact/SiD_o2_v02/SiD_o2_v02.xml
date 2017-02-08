@@ -167,7 +167,7 @@
   <include ref="SiTrackerForward.xml"/>
   
   <comment>Calorimeters</comment>  
-  <include ref="ECalBarrel_o2_v02_00.xml"/>
+  <include ref="ECalBarrel_o2_v03_00.xml"/>
   <include ref="ECalEndcap_o2_v02_00.xml"/>
 
   <include ref="HCalBarrel_o2_v02_00.xml"/>
