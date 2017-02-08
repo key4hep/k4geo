@@ -72,8 +72,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     double        inner_r   = x_dim.rmin();                     // inscribed cylinder
     double        dphi      = (2.*M_PI/nsides);
     double        hphi      = dphi/2.;
-    //as    double        mod_z     = layering.totalThickness();
-    double        mod_z     = layering.totalThickness()-0.1;
+    double        mod_z     = layering.totalThickness();
     double        r_max     = x_dim.rmax()/std::cos(hphi);      // circumscribed cylinder, see http://cern.ch/go/r9mZ
     double        ry        = sqrt(supportRailCS)/2;            // support rail thickness
     double        outer_r   = (inner_r + mod_z)/std::cos(hphi); // r_outer of actual module
