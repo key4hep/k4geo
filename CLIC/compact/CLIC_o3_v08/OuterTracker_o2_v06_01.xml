@@ -56,7 +56,7 @@
 
     <detectors>
     
-        <detector id="DetID_OT_Barrel" name="OuterTrackerBarrel" type="TrackerBarrel_o1_v05" readout="OuterTrackerBarrelCollection">
+        <detector id="DetID_OT_Barrel" name="OuterTrackerBarrel" type="TrackerBarrel_o1_v05" readout="OuterTrackerBarrelCollection" region="OuterTrackerBarrelRegion">
             <envelope vis="OTVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -90,7 +90,7 @@
         </detector>
 
     
-        <detector id="DetID_OT_Endcap" name="OuterTrackerEndcap" type="TrackerEndcap_o2_v06" readout="OuterTrackerEndcapCollection" reflect="true">
+        <detector id="DetID_OT_Endcap" name="OuterTrackerEndcap" type="TrackerEndcap_o2_v06" readout="OuterTrackerEndcapCollection" reflect="true" region="OuterTrackerEndcapRegion">
             <envelope vis="OTVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -148,7 +148,7 @@
         </detector>
 
 
-        <detector name="OuterTrackerBarrelSupport" type="TrackerBarrelSupport_o1_v01" id="0" reflect="true">
+        <detector name="OuterTrackerBarrelSupport" type="TrackerBarrelSupport_o1_v01" id="0" reflect="true" region="OuterTrackerBarrelRegion">
             <envelope>
                 <shape type="Assembly"/>
             </envelope>
@@ -164,7 +164,7 @@
         </detector>
         
          
-        <detector name="OuterTrackerEndcapSupport" type="TrackerEndcapSupport_o1_v01" reflect="true">
+        <detector name="OuterTrackerEndcapSupport" type="TrackerEndcapSupport_o1_v01" reflect="true" region="OuterTrackerEndcapRegion">
 		   <envelope>
                 <shape type="Assembly"/>
            </envelope>
