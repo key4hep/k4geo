@@ -186,6 +186,15 @@
             <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
         </limitset>
     </limits>
+    <regions>
+        <region name="BeampipeRegion"            />
+        <region name="VertexBarrelRegion"        />
+        <region name="VertexEndcapRegion"        />
+        <region name="InnerTrackerBarrelRegion"  />
+        <region name="OuterTrackerBarrelRegion"  />
+        <region name="InnerTrackerEndcapRegion"  />
+        <region name="OuterTrackerEndcapRegion"  />
+    </regions>
 
 
     <display>
