@@ -312,16 +312,16 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       n.fill( -1. ,   0. , 0. ) ;
 
       // implement stereo angle 
-      u.fill( 0. ,  cos( strip_angle ) , -sin( strip_angle  ) ) ;
-      v.fill( 0. ,  sin( strip_angle ) ,  cos( strip_angle  ) ) ;
+      u.fill( 0. ,  -cos( strip_angle ) , -sin( strip_angle  ) ) ;
+      v.fill( 0. ,  -sin( strip_angle ) ,  cos( strip_angle  ) ) ;
 
     } else {
 
       n.fill( 1. , 0. , 0. ) ;
 
       // implement stereo angle 
-      u.fill( 0. , -cos( strip_angle  ) ,  sin( strip_angle  ) ) ;
-      v.fill( 0. ,  sin( strip_angle  ) ,  cos( strip_angle  ) ) ;
+      u.fill( 0. ,  cos( strip_angle  ) ,  sin( strip_angle  ) ) ;
+      v.fill( 0. , -sin( strip_angle  ) ,  cos( strip_angle  ) ) ;
     }
 
 

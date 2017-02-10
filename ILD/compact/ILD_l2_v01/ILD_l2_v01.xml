@@ -2,13 +2,18 @@
        xmlns:xs="http://www.w3.org/2001/XMLSchema"
        xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-  <info name="ILD_l1_v01"
-        title="ILD Mokka model used for the DBD - ported to DD4hep"
-        author="F. Gaede"
+  <info name="ILD_l2_v01"
+        title="ILD large model w/ SDHcal in Videau geometry"
+        author="F.Gaede, S.Lu"
         url="http://ilcsoft.desy.de"
         status="experimental"
-        version="$Id: ILD_l1_v01.xml 1037 2016-07-28 09:43:44Z shaojun $">
-    <comment>ILD Mokka model used for the DBD - ported to DD4hep </comment>
+	version="v01">
+    <comment>
+
+      copied SDHcal Barrel from ILD_o2_v01 using the rest from ILD_common_v01 ...
+      still needs testing and endcap ( and endcap ring )  for SDHcal 
+
+    </comment>
   </info>
 
   <includes>
@@ -18,7 +23,7 @@
 
   <define>
 
-    <include ref="top_defs_ILD_s1_v01.xml"/>
+    <include ref="top_defs_ILD_l2_v01.xml"/>
     <include ref="../ILD_common_v01/top_defs_common_v01.xml"/>
     <include ref="../ILD_common_v01/basic_defs.xml"/>
     <include ref="../ILD_common_v01/envelope_defs.xml"/>
@@ -105,6 +110,7 @@
   </materials>
 
   <detectors>
+
     <comment>Trackers</comment>
     <include ref="../ILD_common_v01/Beampipe_o1_v01_01.xml"/>
     <include ref="../ILD_common_v01/vxd07.xml"/>
@@ -117,8 +123,8 @@
     <include ref="../ILD_common_v01/SEcal05_siw_Barrel.xml"/>
     <include ref="../ILD_common_v01/SEcal05_siw_Endcaps.xml"/>
     <include ref="../ILD_common_v01/SEcal05_siw_ECRing.xml"/>
-    <include ref="../ILD_common_v01/SHcalSc04_Barrel_v01.xml"/>
-    <include ref="./SHcalSc04_Endcaps_sv01.xml"/>
+    <include ref="../ILD_common_v01/Hcal_Barrel_SD_v01.xml"/>
+    <include ref="../ILD_common_v01/SHcalSc04_Endcaps.xml"/>
     <include ref="../ILD_common_v01/SHcalSc04_EndcapRing.xml"/>
     <include ref="../ILD_common_v01/Yoke05_Barrel.xml"/>
     <include ref="../ILD_common_v01/Yoke05_Endcaps.xml"/>
@@ -172,8 +178,8 @@
     </readout>
 
     <readout name="HcalBarrelRegCollection">
-      <segmentation type="TiledLayerGridXY" grid_size_x="3" grid_size_y="3.03248"/>
-      <id>system:5,module:3,stave:4,tower:5,layer:6,x:32:-16,y:-16</id>
+      <segmentation type="CartesianGridXY" grid_size_x="Hcal_cells_size" grid_size_y="Hcal_cells_size"/>
+      <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,y:-16</id>
     </readout>
 
 

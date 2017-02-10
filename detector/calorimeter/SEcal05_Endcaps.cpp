@@ -317,6 +317,19 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     cout << "sensitive layer " << i << " : x,y = " << caloData->layers[i].cellSize0 << " " << caloData->layers[i].cellSize1 << endl;
   }
 
+  caloData->layoutType = DDRec::LayeredCalorimeterData::EndcapLayout ;
+  caloData->inner_symmetry = 4  ; // hard code cernter box hole
+  caloData->outer_symmetry = 8  ; // outer Octagun
+  caloData->phi0 = 0 ;
+
+  /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
+  caloData->extent[0] = EcalEndcap_inner_radius ;
+  caloData->extent[1] = EcalEndcap_outer_radius ;
+  caloData->extent[2] = EcalEndcap_min_z ;
+  caloData->extent[3] = EcalEndcap_max_z ;
+
+
+
   //====================================================================
   // Place Ecal Endcap modules into the assembly envelope volume
   //====================================================================

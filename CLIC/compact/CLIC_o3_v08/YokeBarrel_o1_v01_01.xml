@@ -43,20 +43,20 @@
             
         
             <layer repeat="(int) YokeBarrel_layers" vis="YokeLayerVis">
-                <slice material="Aluminum" thickness="0.1*cm" />
+                <slice material="Aluminium" thickness="0.1*cm" />
                 <slice material="Air" thickness="0.35*cm" />
                 <slice material="PyrexGlass" thickness="0.2*cm" />
                 <slice material="RPCGasDefault" thickness="0.2*cm" sensitive="yes" vis="YokeSensorVis"/>
                 <slice material="PyrexGlass" thickness="0.2*cm" />
                 <slice material="Air" thickness="0.35*cm" />
-                <slice material="Aluminum" thickness="0.1*cm" />
-                <slice material="Aluminum" thickness="0.1*cm" />
+                <slice material="Aluminium" thickness="0.1*cm" />
+                <slice material="Aluminium" thickness="0.1*cm" />
                 <slice material="Air" thickness="0.35*cm" />
                 <slice material="PyrexGlass" thickness="0.2*cm" />
                 <slice material="RPCGasDefault" thickness="0.2*cm" vis="YokeSensorVis"/>
                 <slice material="PyrexGlass" thickness="0.2*cm" />
                 <slice material="Air" thickness="0.35*cm" />
-                <slice material="Aluminum" thickness="0.1*cm" />
+                <slice material="Aluminium" thickness="0.1*cm" />
                 <slice material="Air" thickness="1.0*cm" />
                 <slice material="Iron" thickness="24.4*cm" vis="YokeAbsorberVis" radiator="yes"/>
             </layer>

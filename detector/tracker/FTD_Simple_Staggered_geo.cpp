@@ -1021,10 +1021,15 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
 
     //---- meassurement surface vectors 
-    Vector3D u0( 1. , 0. ,  0. ) ;
-    Vector3D v0( 0. , 1. ,  0. ) ;
-    Vector3D n0( 0. , 0. , -1. ) ;
-    Vector3D u1,v1,n1 ;
+
+    Vector3D u0( -1. , 0. ,  0. ) ;
+    Vector3D v0(  0. , 1. ,  0. ) ;
+    Vector3D n0(  0. , 0. , -1. ) ;
+
+    Vector3D u1( -1. , 0. ,  0. ) ;
+    Vector3D v1(  0. , 1. ,  0. ) ;
+    Vector3D n1(  0. , 0. , -1. ) ;
+
     
     double supp_thick = _dbParDisk.petal_cp_support_thickness ;
     double active_silicon_thickness =  _dbParDisk.disks_Si_thickness  ;
@@ -1039,14 +1044,12 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       // implement stereo angle 
       double strip_angle  = _dbParExReco.strip_angle  ;
       
-      // choose the rotation here such that is compatible with
-      // the old gear based system implementation:
-
-      u0.fill(  cos( strip_angle ) , -sin( strip_angle  ) , 0. ) ;
+      // choose the rotation here such that u x v = n
+      
+      u0.fill( -cos( strip_angle ) ,  sin( strip_angle  ) , 0. ) ;
       v0.fill(  sin( strip_angle ) ,  cos( strip_angle  ) , 0. ) ;
 
-      n1.fill(   0., 0., -1. ) ;
-      u1.fill(  cos( strip_angle ) ,  sin( strip_angle  ) , 0. ) ;
+      u1.fill( -cos( strip_angle ) , -sin( strip_angle  ) , 0. ) ;
       v1.fill( -sin( strip_angle ) ,  cos( strip_angle  ) , 0. ) ;
 
     }

@@ -85,8 +85,8 @@
         <constant name="env_safety"                 value="0.1*mm"/>
 
         <constant name="Vertex_inner_radius"        value="30*mm"/>
-        <constant name="Vertex_outer_radius"        value="111*mm"/>
-        <constant name="Vertex_half_length"         value="260*mm"/>
+        <constant name="Vertex_outer_radius"        value="116*mm"/>
+        <constant name="Vertex_half_length"         value="307*mm"/>
 
         <constant name="InnerTracker_inner_radius"  value="61*mm"/>
         <constant name="InnerTracker_outer_radius"  value="580*mm"/>
@@ -187,21 +187,20 @@
         </limitset>
     </limits>
     <regions>
-        <region name="BeampipeRegion"           eunit="MeV" lunit="mm" cut="0.001" threshold="0.001"/>
-        <region name="VertexBarrelRegion"       eunit="MeV" lunit="mm" cut="0.001" threshold="0.001"/>
-        <region name="VertexEndcapRegion"       eunit="MeV" lunit="mm" cut="0.001" threshold="0.001"/>
-        <region name="InnerTrackerBarrelRegion" eunit="MeV" lunit="mm" cut="0.001" threshold="0.001"/>
-        <region name="OuterTrackerBarrelRegion" eunit="MeV" lunit="mm" cut="0.001" threshold="0.001"/>
-        <region name="InnerTrackerEndcapRegion" eunit="MeV" lunit="mm" cut="0.001" threshold="0.001"/>
-        <region name="OuterTrackerEndcapRegion" eunit="MeV" lunit="mm" cut="0.001" threshold="0.001"/>
+        <region name="BeampipeRegion"            />
+        <region name="VertexBarrelRegion"        />
+        <region name="VertexEndcapRegion"        />
+        <region name="InnerTrackerBarrelRegion"  />
+        <region name="OuterTrackerBarrelRegion"  />
+        <region name="InnerTrackerEndcapRegion"  />
+        <region name="OuterTrackerEndcapRegion"  />
     </regions>
 
 
-
     <display>
-        <vis name="VXDVis"      alpha="1.0" r="0.2"   g="0.2"     b="0.2"   showDaughters="true"  visible="true"/>
-        <vis name="ITVis"       alpha="1.0" r="0.54"  g="0.43"    b="0.04"  showDaughters="true"  visible="true"/>
-        <vis name="OTVis"       alpha="1.0" r="0.8"   g="0.8"     b="0.4"   showDaughters="true"  visible="true"/>
+        <vis name="VXDVis"      alpha="1.0" r="0.2"   g="0.2"     b="0.2"   showDaughters="true"  visible="false"/>
+        <vis name="ITVis"       alpha="1.0" r="0.54"  g="0.43"    b="0.04"  showDaughters="true"  visible="false"/>
+        <vis name="OTVis"       alpha="1.0" r="0.8"   g="0.8"     b="0.4"   showDaughters="true"  visible="false"/>
         <vis name="ECALVis"     alpha="1.0" r="0.2"   g="0.6"     b="0"     showDaughters="true"  visible="true"/>
         <vis name="HCALVis"     alpha="1.0" r="0.078" g="0.01176" b="0.588" showDaughters="true"  visible="true"/>
         <vis name="SOLVis"      alpha="1.0" r="0.4"   g="0.4"     b="0.4"   showDaughters="true"  visible="true"/>
@@ -215,15 +214,13 @@
 
     <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
 
-    <include ref="Materials_v01.xml"/>
-
     <include ref="Beampipe_o1_v01_02.xml"/>
     <include ref="BeamInstrumentation_o1_v01_01.xml"/>
 
-    <include ref="Vertex_o2_v05_02.xml"/>
+    <include ref="Vertex_o2_v06_01.xml"/>
 
-    <include ref="InnerTracker_o2_v05_02.xml"/>
-    <include ref="OuterTracker_o2_v05_02.xml"/>
+    <include ref="InnerTracker_o2_v06_01.xml"/>
+    <include ref="OuterTracker_o2_v06_01.xml"/>
 
     <include ref="ECalBarrel_o2_v01_02.xml"/>
     <include ref="ECalEndcap_o2_v01_02.xml"/>
@@ -242,17 +239,21 @@
     <include ref="BeamCal_o1_v01_01.xml"/>
 
     <plugins>
+        <plugin name="DD4hepVolumeManager"/>
         <plugin name="InstallSurfaceManager"/>
     </plugins>
+
 
     <fields>
         <field name="GlobalSolenoid" type="solenoid"
                inner_field="4.0*tesla"
                outer_field="-1.5*tesla"
                zmax="Solenoid_Coil_half_length"
-               outer_radius="Solenoid_Coil_radius">
+               inner_radius="Solenoid_Coil_radius"
+               outer_radius="YokeBarrel_outer_radius">
         </field>
     </fields>
+
 
 </lccdd>
 

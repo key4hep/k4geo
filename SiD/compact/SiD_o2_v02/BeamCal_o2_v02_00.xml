@@ -1,0 +1,34 @@
+<lccdd>
+
+<readouts>
+    <readout name="BeamCalHits">
+      <segmentation type="CartesianGridXY" grid_size_x="0.35*cm" grid_size_y="0.35*cm" />
+      <!-- <segmentation type="GridXYZ" gridSizeX="0.35*cm" gridSizeY="0.35*cm" /> -->
+      <!-- <id>system:8,layer:8,barrel:3,x:32:-16,y:-16</id> -->
+      <id>system:8,barrel:3,layer:8,slice:5,x:32:16,y:16</id>
+    </readout>
+</readouts>
+
+<detectors>
+<detector id="12" name="BeamCal" reflect="true" type="DD4hep_ForwardDetector" readout="BeamCalHits" vis="BeamCalVis" calorimeterType="BEAM">
+  <comment>Beam Calorimeter</comment>
+  <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_ENDCAP + DetType_FORWARD + DetType_AUXILIARY "/>
+  <dimensions outer_r="BeamCal_rmax" inner_r="BeamCal_rmin" inner_z="BeamCal_zmin" outer_z="BeamCal_zmax" dz="BeamCal_dz"/>
+  <envelope vis="BeamCalVis">
+   <shape type="BooleanShape" operation="Subtraction" material="Air">
+     <shape type="Tube" rmin="BeamCal_rmin" rmax="BeamCal_rmax + env_safety" dz="2*BeamCal_zmax + 2*env_safety"/>
+     <shape type="Tube" rmin="BeamCal_rmin" rmax="BeamCal_rmax + env_safety" dz="2*BeamCal_zmin - 2*env_safety"/>
+   </shape>
+  </envelope>
+  <beampipe crossing_angle="0.014" outgoing_r="15.5*mm" incoming_r="10.5*mm" />
+  <layer repeat="50">
+    <slice material="TungstenDens24" thickness="2.71*mm" />
+    <slice material="Silicon" thickness="0.32*mm" sensitive="yes" />
+    <slice material="Copper" thickness="0.05*mm" />
+    <slice material="Kapton" thickness="0.30*mm" />
+    <slice material="Air" thickness="0.33*mm" />
+  </layer>
+</detector>
+</detectors>
+
+</lccdd>

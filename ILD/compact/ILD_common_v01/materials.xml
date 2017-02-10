@@ -471,4 +471,68 @@
       <composite n="5" ref="O" />
     </material>
 
+    <comment> materials for the SemiDigital Hadronic calorimeter</comment>
+    <material name="RPCGAS2" >
+    <!-- C2H2F4 (TFE) 0.93% + IsoButane 0.05% + SF6 0.02% -->
+    <!--  <D value="0.00421" unit="g/cm3" /> -->
+      <D value="0.00449" unit="g/cm3" />
+      <fraction n="0.70828" ref="F"/>
+      <fraction n="0.26054" ref="C"/>
+      <fraction n="0.01928" ref="H"/>
+      <fraction n="0.00439" ref="S"/>
+    </material>
+
+    <material name="FloatGlass" >
+<!--      <D value="2.44" unit="g/cm3" /> -->
+      <D value="2.49" unit="g/cm3" />
+      <fraction n="0.46645" ref="O"/>
+      <fraction n="0.34125" ref="Si"/>
+      <fraction n="0.06432" ref="Ca"/>
+      <fraction n="0.02412" ref="Mg"/>
+      <fraction n="0.10386" ref="Na"/>
+    </material>
+
+    <material name="mylar">
+      <D value="1.4" unit="g/cm3" />
+      <fraction n="0.333025" ref="O"/>
+      <fraction n="0.041959" ref="H"/>
+      <fraction n="0.625016" ref="C"/>
+    </material>
+
+    <material name="Nylon" >
+    <!-- Nylon-6-6 -->
+<!--      <MEE unit="eV" value="63.9"/> -->
+      <D value="1.14" unit="g/cm3" />
+      <fraction n="0.097976" ref="H"/>
+      <fraction n="0.636856" ref="C"/>
+      <fraction n="0.123779" ref="N"/>
+      <fraction n="0.141389" ref="O"/>
+    </material>
+
+    <material name="PEEK-GF30" >
+      <D value="1.51" unit="g/cm3" />
+      <fraction n="0.554056" ref="C"/>
+      <fraction n="0.116535" ref="O"/>
+      <fraction n="0.029408" ref="H"/>
+      <fraction n="0.333333" ref="Si"/>
+    </material>
+
+    <material name="g10-RPC">
+<!--      <MEE unit="eV" value="114.378463512112"/> -->
+      <D value="1.80" unit="g/cm3" />
+      <fraction n="0.07868" ref="C"/>
+      <fraction n="0.46056" ref="O"/>
+      <fraction n="0.02045" ref="H"/>
+      <fraction n="0.46056" ref="Si"/>
+      <fraction n="0.080"   ref="Cl"/>
+    </material>
+
+    <material name="Steel304L">
+      <D type="density" value="8.00" unit="g/cm3" />
+      <fraction n="0.695" ref="Fe" />
+      <fraction n="0.185" ref="Cr" />
+      <fraction n="0.100" ref="Ni" />
+      <fraction n="0.020" ref="Mn" />
+    </material>
+
   </materials>
