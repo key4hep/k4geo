@@ -404,14 +404,14 @@
         <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
             <argument value="InnerTrackerBarrel"/>
             <argument value="dimension=2"/>
-            <argument value="u_x=-1."/>
-            <argument value="v_y=-1."/>
+            <argument value="u_x=1."/>
+            <argument value="v_y=1."/>
             <argument value="n_z=1."/>
         </plugin>
         <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
             <argument value="InnerTrackerEndcap"/>
             <argument value="dimension=2"/>
-            <argument value="u_x=-1."/>
+            <argument value="u_x=1."/>
             <argument value="v_y=1."/>
             <argument value="n_z=1."/>
         </plugin>
