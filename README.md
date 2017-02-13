@@ -1,5 +1,4 @@
 # lcgeo (Linear Collider Geometry)
-![Build status](https://gitlab.cern.ch/CLICdp/lcgeo/badges/master/build.svg)
 [![Build Status](https://travis-ci.org/iLCSoft/lcgeo.svg?branch=master)](https://travis-ci.org/iLCSoft/lcgeo)
 
 Implementation of Linear Collider detector models in DD4hep.
