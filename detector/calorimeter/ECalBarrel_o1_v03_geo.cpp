@@ -189,143 +189,143 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       DetElement tower_det(stave_det, t_name, det_id);
 
       for (int m = 0; m < n_stacks; m++) { 
-	      double m_pos_y = (m - (n_stacks-1)/2)*(2*trd_y1 + faceThickness);
-	      string k_name = _toString(m+1, "submodule%d");
-	      Volume stack_vol(k_name, stk, Composite); // solid C composite
+	double m_pos_y = (m - (n_stacks-1)/2)*(2*trd_y1 + faceThickness);
+	string k_name = _toString(m+1, "submodule%d");
+	Volume stack_vol(k_name, stk, Composite); // solid C composite
         DetElement stack_det(tower_det, k_name, det_id);
 
         // Parameters for computing the layer X dimension:
-	      double l_dim_y  = trd_y1 - 2.*faceThickness;
-	      double l_dim_x  = trd_x1; // Starting X dimension for the layer
-	      double tan_beta = std::tan(dphi);
-	      double l_pos_z  = -trd_z;
+	double l_dim_y  = trd_y1 - 2.*faceThickness;
+	double l_dim_x  = trd_x1; // Starting X dimension for the layer
+	double tan_beta = std::tan(dphi);
+	double l_pos_z  = -trd_z;
 	
       	// Loop over the sets of layer elements in the module
-	      int l_num = 0;
-	      for(xml_coll_t li(x_det,_U(layer)); li; ++li)  {
+	int l_num = 0;
+	for(xml_coll_t li(x_det,_U(layer)); li; ++li)  {
 	  
-	        xml_comp_t x_layer = li;
-	        int repeat = x_layer.repeat();
+	  xml_comp_t x_layer = li;
+	  int repeat = x_layer.repeat();
 	  
-	        // Loop over number of repeats for this layer.
-	        for (int j=0; j<repeat; j++) {
+	  // Loop over number of repeats for this layer.
+	  for (int j=0; j<repeat; j++) {
 	    
-	          string l_name = _toString(l_num, "layer%d");
-	          //as double l_thickness = layering.layer(l_num-1)->thickness(); // layer thickness  
-	          double l_thickness = layering.layer(l_num)->thickness(); // layer thickness      
+	    string l_name = _toString(l_num, "layer%d");
+	    //as double l_thickness = layering.layer(l_num-1)->thickness(); // layer thickness  
+	    double l_thickness = layering.layer(l_num)->thickness(); // layer thickness      
 #if VERBOSE_LEVEL>1
-	          std::cout << l_name << " thickness: " << l_thickness << std::endl;
+	    std::cout << l_name << " thickness: " << l_thickness << std::endl;
 #endif
-	          l_dim_x -= l_thickness/tan_beta;                        // decreasing width 
+	    l_dim_x -= l_thickness/tan_beta;                        // decreasing width 
 	    
-	          Position   l_pos(0., 0., l_pos_z + l_thickness/2.);     // layer position 
-	          Box        l_box(l_dim_x - tolerance, l_dim_y - tolerance, l_thickness/2.);
-	          Volume     l_vol(l_name, l_box, air);
-	          DetElement layer(stack_det, l_name, det_id);
+	    Position   l_pos(0., 0., l_pos_z + l_thickness/2.);     // layer position 
+	    Box        l_box(l_dim_x - tolerance, l_dim_y - tolerance, l_thickness/2.);
+	    Volume     l_vol(l_name, l_box, air);
+	    DetElement layer(stack_det, l_name, det_id);
 
-	          DDRec::LayeredCalorimeterData::Layer caloLayer;
-	          double nRadiationLengths   = 0.;
-	          double nInteractionLengths = 0.;
-	          double thickness_sum       = 0.;
-	          double absorberThickness   = 0.;	    
+	    DDRec::LayeredCalorimeterData::Layer caloLayer;
+	    double nRadiationLengths   = 0.;
+	    double nInteractionLengths = 0.;
+	    double thickness_sum       = 0.;
+	    double absorberThickness   = 0.;	    
 	    
-	          // Loop over the sublayers or slices for this layer
-	          int s_num = 1;
-	          double s_pos_z = -(l_thickness/2);
-	          for(xml_coll_t si(x_layer,_U(slice)); si; ++si)  {
+	    // Loop over the sublayers or slices for this layer
+	    int s_num = 1;
+	    double s_pos_z = -(l_thickness/2);
+	    for(xml_coll_t si(x_layer,_U(slice)); si; ++si)  {
 	      
-	            xml_comp_t x_slice = si;
-	            string     s_name  = _toString(s_num, "slice%d");
-	            double     s_thick = x_slice.thickness();
+	      xml_comp_t x_slice = si;
+	      string     s_name  = _toString(s_num, "slice%d");
+	      double     s_thick = x_slice.thickness();
 #if VERBOSE_LEVEL>2
-	            std::cout << s_name << " thickness: " << s_thick << std::endl;
+	      std::cout << s_name << " thickness: " << s_thick << std::endl;
 #endif
-	            Box        s_box(l_dim_x - tolerance, l_dim_y - tolerance, s_thick/2.);
-	            Material   slice_material  = lcdd.material(x_slice.materialStr());
-	            Volume     s_vol(s_name, s_box, slice_material);
-	            DetElement slice(layer, s_name, det_id);
+	      Box        s_box(l_dim_x - tolerance, l_dim_y - tolerance, s_thick/2.);
+	      Material   slice_material  = lcdd.material(x_slice.materialStr());
+	      Volume     s_vol(s_name, s_box, slice_material);
+	      DetElement slice(layer, s_name, det_id);
 
-	            // For caloData (adding 1/2 here)
+	      // For caloData (adding 1/2 here)
               nRadiationLengths   += s_thick/2./slice_material.radLength();
               nInteractionLengths += s_thick/2./slice_material.intLength();
               thickness_sum       += s_thick/2.;
 	      
-	            if ( x_slice.isSensitive() ) { // only one per layer
-		            s_vol.setSensitiveDetector(sens);
-		            caloLayer.distance = s_pos_z + s_thick/.2 + l_pos_z + l_thickness/2. + mod_y_off - ry;
-		            caloLayer.sensitive_thickness       = s_thick ;
-		            caloLayer.inner_nRadiationLengths   = nRadiationLengths;
-		            caloLayer.inner_nInteractionLengths = nInteractionLengths;
-		            caloLayer.inner_thickness           = thickness_sum;
+	      if ( x_slice.isSensitive() ) { // only one per layer
+		s_vol.setSensitiveDetector(sens);
+		caloLayer.distance = s_pos_z + s_thick/.2 + l_pos_z + l_thickness/2. + mod_y_off - ry;
+		caloLayer.sensitive_thickness       = s_thick ;
+		caloLayer.inner_nRadiationLengths   = nRadiationLengths;
+		caloLayer.inner_nInteractionLengths = nInteractionLengths;
+		caloLayer.inner_thickness           = thickness_sum;
 
 #if VERBOSE_LEVEL>1
-		            std::cout << l_name << "." << s_name << ": is sensitive" << std::endl;
-		            std::cout <<" caloLayer.inner_nRadiationLengths: "<< caloLayer.inner_nRadiationLengths << std::endl;
-		            std::cout <<" caloLayer.inner_nInteractionLengths: "<< caloLayer.inner_nInteractionLengths << std::endl;
-		            std::cout <<" caloLayer.inner_thickness: "<< caloLayer.inner_thickness << std::endl;
-		            std::cout <<" caloLayer.sensitive_thickness: "<< caloLayer.sensitive_thickness << std::endl;
+		std::cout << l_name << "." << s_name << ": is sensitive" << std::endl;
+		std::cout <<" caloLayer.inner_nRadiationLengths: "<< caloLayer.inner_nRadiationLengths << std::endl;
+		std::cout <<" caloLayer.inner_nInteractionLengths: "<< caloLayer.inner_nInteractionLengths << std::endl;
+		std::cout <<" caloLayer.inner_thickness: "<< caloLayer.inner_thickness << std::endl;
+		std::cout <<" caloLayer.sensitive_thickness: "<< caloLayer.sensitive_thickness << std::endl;
 #endif
-		            // Inner quantities done, reset sums
-		            nRadiationLengths   = 0.;
-		            nInteractionLengths = 0.;
-		            thickness_sum       = 0.;
-	            }
-
-	            // For caloData (adding the other 1/2 here)
-              nRadiationLengths   += s_thick/2./slice_material.radLength();
-              nInteractionLengths += s_thick/2./slice_material.intLength();
-              thickness_sum       += s_thick/2.;
-	      
-	            if( x_slice.isRadiator() == true) {
-	      	      absorberThickness += s_thick;
-	            }
-	      
-	            slice.setAttributes(lcdd, s_vol, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
-	      
-	            // Slice placement
-	            PlacedVolume slice_pv = l_vol.placeVolume(s_vol, Position(0., 0., s_pos_z + s_thick/2.));
-	            slice.setPlacement(slice_pv);	  
-	            // Increment Z position of slice
-	            s_pos_z += s_thick;
-	      
-	            // Increment slice number
-	            ++s_num;
-	          }
-	    
-	          // Set region, limitset, and visibility of layer
-	          layer.setAttributes(lcdd, l_vol, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
-	    
-	          PlacedVolume layer_pv = stack_vol.placeVolume(l_vol, l_pos);
-	          layer_pv.addPhysVolID("layer", l_num);
-	          layer.setPlacement(layer_pv);
-	    
-	          caloLayer.outer_nRadiationLengths   = nRadiationLengths;
-	          caloLayer.outer_nInteractionLengths = nInteractionLengths;
-	          caloLayer.outer_thickness           = thickness_sum;
-	          caloLayer.absorberThickness         = absorberThickness;
-	          caloLayer.cellSize0 = cell_sizeX;
-	          caloLayer.cellSize1 = cell_sizeY;
-
-#if VERBOSE_LEVEL>1
-	          std::cout <<" caloLayer.outer_nRadiationLengths: "<< caloLayer.outer_nRadiationLengths << std::endl;
-	          std::cout <<" caloLayer.outer_nInteractionLengths: "<< caloLayer.outer_nInteractionLengths << std::endl;
-	          std::cout <<" caloLayer.outer_thickness: "<< caloLayer.outer_thickness << std::endl;
-	          std::cout <<" caloLayer.absorberThickness: "<< caloLayer.absorberThickness << std::endl << std::endl;
-	          std::cout <<" caloLayer total thickness: "<< caloLayer.inner_thickness + caloLayer.outer_thickness << std::endl;
-#endif
-	          caloData->layers.push_back( caloLayer ) ;
-	    
-	          // Increment to next layer Z position
-	          l_pos_z += l_thickness;
-	          ++l_num;
-	        }
+		// Inner quantities done, reset sums
+		nRadiationLengths   = 0.;
+		nInteractionLengths = 0.;
+		thickness_sum       = 0.;
 	      }
-	      //stack_det.setAttributes(lcdd, stack_vol, x_staves.regionStr(), x_staves.limitsStr(), x_staves.visStr());
-	      stack_vol.setVisAttributes(lcdd.visAttributes(x_staves.visStr())); // Fix this!
+
+	      // For caloData (adding the other 1/2 here)
+              nRadiationLengths   += s_thick/2./slice_material.radLength();
+              nInteractionLengths += s_thick/2./slice_material.intLength();
+              thickness_sum       += s_thick/2.;
+	      
+	      if( x_slice.isRadiator() == true) {
+	      	 absorberThickness += s_thick;
+	      }
+	      
+	      slice.setAttributes(lcdd, s_vol, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+	      
+	      // Slice placement
+	      PlacedVolume slice_pv = l_vol.placeVolume(s_vol, Position(0., 0., s_pos_z + s_thick/2.));
+	      slice.setPlacement(slice_pv);	  
+	      // Increment Z position of slice
+	      s_pos_z += s_thick;
+	      
+	      // Increment slice number
+	      ++s_num;
+	    }
+	    
+	    // Set region, limitset, and visibility of layer
+	    layer.setAttributes(lcdd, l_vol, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
+	    
+	    PlacedVolume layer_pv = stack_vol.placeVolume(l_vol, l_pos);
+	    layer_pv.addPhysVolID("layer", l_num);
+	    layer.setPlacement(layer_pv);
+	    
+	    caloLayer.outer_nRadiationLengths   = nRadiationLengths;
+	    caloLayer.outer_nInteractionLengths = nInteractionLengths;
+	    caloLayer.outer_thickness           = thickness_sum;
+	    caloLayer.absorberThickness         = absorberThickness;
+	    caloLayer.cellSize0 = cell_sizeX;
+	    caloLayer.cellSize1 = cell_sizeY;
+
+#if VERBOSE_LEVEL>1
+	    std::cout <<" caloLayer.outer_nRadiationLengths: "<< caloLayer.outer_nRadiationLengths << std::endl;
+	    std::cout <<" caloLayer.outer_nInteractionLengths: "<< caloLayer.outer_nInteractionLengths << std::endl;
+	    std::cout <<" caloLayer.outer_thickness: "<< caloLayer.outer_thickness << std::endl;
+	    std::cout <<" caloLayer.absorberThickness: "<< caloLayer.absorberThickness << std::endl << std::endl;
+	    std::cout <<" caloLayer total thickness: "<< caloLayer.inner_thickness + caloLayer.outer_thickness << std::endl;
+#endif
+	    caloData->layers.push_back( caloLayer ) ;
+	    
+	    // Increment to next layer Z position
+	    l_pos_z += l_thickness;
+	    ++l_num;
+	  }
+	}
+	//stack_det.setAttributes(lcdd, stack_vol, x_staves.regionStr(), x_staves.limitsStr(), x_staves.visStr());
+	stack_vol.setVisAttributes(lcdd.visAttributes(x_staves.visStr())); // Fix this!
 	
-	      PlacedVolume stack_pv = tower_vol.placeVolume(stack_vol, Position(0., m_pos_y, 0.));
-	      //as	stack_pv.addPhysVolID("submodule", m); 
-	      stack_det.setPlacement(stack_pv);
+	PlacedVolume stack_pv = tower_vol.placeVolume(stack_vol, Position(0., m_pos_y, 0.));
+	//as	stack_pv.addPhysVolID("submodule", m); 
+	stack_det.setPlacement(stack_pv);
       }
       //tower_det.setAttributes(lcdd, tower_vol, x_staves.regionStr(), x_staves.limitsStr(), x_staves.visStr());
       tower_vol.setVisAttributes(lcdd.visAttributes(x_staves.visStr())); // Fix this!
