@@ -200,8 +200,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	double tan_beta = std::tan(dphi);
 	double l_pos_z  = -trd_z;
 	
-	// Loop over the sets of layer elements in the module
-	int l_num = 1;
+      	// Loop over the sets of layer elements in the module
+	int l_num = 0;
 	for(xml_coll_t li(x_det,_U(layer)); li; ++li)  {
 	  
 	  xml_comp_t x_layer = li;
@@ -211,7 +211,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	  for (int j=0; j<repeat; j++) {
 	    
 	    string l_name = _toString(l_num, "layer%d");
-	    double l_thickness = layering.layer(l_num-1)->thickness(); // layer thickness          
+	    //as double l_thickness = layering.layer(l_num-1)->thickness(); // layer thickness  
+	    double l_thickness = layering.layer(l_num)->thickness(); // layer thickness      
 #if VERBOSE_LEVEL>1
 	    std::cout << l_name << " thickness: " << l_thickness << std::endl;
 #endif
@@ -276,7 +277,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
               thickness_sum       += s_thick/2.;
 	      
 	      if( x_slice.isRadiator() == true) {
-	      	absorberThickness += s_thick;
+	      	 absorberThickness += s_thick;
 	      }
 	      
 	      slice.setAttributes(lcdd, s_vol, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
