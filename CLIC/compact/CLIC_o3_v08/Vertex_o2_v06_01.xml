@@ -8,7 +8,6 @@
             <composite name="VertexBarrel"/>
             <composite name="VertexEndcap"/>
             <composite name="VertexVerticalCable"/>
-            <composite name="VertexHorizontalCable"/>
         </detector>
     </detectors>
     
@@ -163,17 +162,8 @@
             <layer id="1" inner_r="VertexBarrel_r1" inner_z="VertexBarrel_zmax+1*mm" outer_r="Vertex_outer_radius-5*env_safety" vis="SiVertexCableVis">
                 <slice material="Copper" thickness="0.02*mm" />
             </layer>
-            <layer id="2" inner_r="VertexBarrel_r1" inner_z="Vertex_half_length-1*mm" outer_r="Vertex_outer_radius-5*env_safety" vis="SiVertexCableVis">
-                <slice material="Copper" thickness="0.067*mm" />
-            </layer>
         </detector>
 
-        <detector name="VertexHorizontalCable" type="ConicalSupport_o1_v01" reflect="true" region="VertexBarrelRegion">
-            <envelope>
-                <shape type="Assembly"/>
-            </envelope>
-            <section start="VertexBarrel_zmax+1.1*mm"  end="Vertex_half_length-1.1*mm"   rMin1="Vertex_outer_radius-1*mm"  rMin2="Vertex_outer_radius-1*mm" rMax1="Vertex_outer_radius-1*mm+0.067*mm" rMax2="Vertex_outer_radius-1*mm+0.067*mm" material="Copper" name="ConeSupport" vis="SiVertexCableVis"/>
-        </detector>
     </detectors>
 
 
