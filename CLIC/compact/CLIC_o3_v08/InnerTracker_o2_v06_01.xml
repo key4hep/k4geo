@@ -372,6 +372,8 @@
             </envelope>
             <section start="500*mm"  end="ConeBeamPipe_zmax"        rMin1="52.7*mm+VertexCoolingGap"  rMin2="ConeBeamPipe_rmax+VertexCoolingGap" rMax1="52.7*mm+VertexCoolingGap+VertexCoolingShellThickness"           rMax2="ConeBeamPipe_rmax+VertexCoolingGap+VertexCoolingShellThickness" material="CarbonFiber" name="ConeSupport" vis="SupportVis"/>
             <section start="ConeBeamPipe_zmax" end="InnerTracker_half_length" rMin1="ConeBeamPipe_rmax+VertexCoolingGap" rMin2="ConeBeamPipe_rmax+VertexCoolingGap" rMax1="ConeBeamPipe_rmax+VertexCoolingGap+VertexCoolingShellThickness" rMax2="ConeBeamPipe_rmax+VertexCoolingGap+VertexCoolingShellThickness" material="CarbonFiber" name="TubeSupport" vis="SupportVis"/>
+            <comment> The next section is the cable for the vertex </comment>
+            <section start="13.1*cm" end="495*mm" rMin1="Vertex_outer_radius+0.5*mm" rMin2="Vertex_outer_radius+0.5*mm" rMax1="Vertex_outer_radius+0.5*mm+0.067*mm" rMax2="Vertex_outer_radius+0.5*mm+0.067*mm" material="Copper" name="ConeSupport" vis="SiVertexCableVis"/>
         </detector>
 
 
@@ -381,6 +383,10 @@
             </envelope>
             <layer id="0" inner_r="52.7*mm+VertexCoolingGap" inner_z="500*mm-2*VertexCoolingShellThickness" outer_r="Vertex_outer_radius+0.1*mm" vis="SupportVis">
                 <slice material="CarbonFiber" thickness="VertexCoolingShellThickness" />
+            </layer>
+            <comment> The next section is the cable for the vertex </comment>
+            <layer id="1" inner_r="52.7*mm+VertexCoolingGap" inner_z="495*mm" outer_r="Vertex_outer_radius" vis="SiVertexCableVis">
+                <slice material="Copper" thickness="0.067*mm" />
             </layer>
         </detector>
 
