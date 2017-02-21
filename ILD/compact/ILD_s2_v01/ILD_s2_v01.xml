@@ -117,14 +117,13 @@
     <include ref="../ILD_common_v01/sit_simple_planar_sensors_03.xml"/>
     <include ref="../ILD_common_v01/tpc10_01.xml"/>
     <include ref="../ILD_common_v01/set_simple_planar_sensors_01.xml"/>  
-
     <comment>Calorimeters</comment>
-    <include ref="../ILD_common_v01/SEcal05_siw_Barrel.xml"/>
     <include ref="../ILD_common_v01/SEcal05_siw_Endcaps.xml"/>
     <include ref="../ILD_common_v01/SEcal05_siw_ECRing.xml"/>
+    <include ref="../ILD_common_v01/SEcal05_siw_Barrel.xml"/>
+    <include ref="../ILD_common_v01/Hcal_Endcaps_SD_v01.xml"/>
+    <include ref="../ILD_common_v01/Hcal_EndcapRing_SD_v01.xml"/>
     <include ref="../ILD_common_v01/Hcal_Barrel_SD_v01.xml"/>
-    <include ref="../ILD_common_v01/SHcalSc04_Endcaps.xml"/>
-    <include ref="../ILD_common_v01/SHcalSc04_EndcapRing.xml"/>
     <include ref="../ILD_common_v01/Yoke05_Barrel.xml"/>
     <include ref="../ILD_common_v01/Yoke05_Endcaps.xml"/>
     <include ref="../ILD_common_v01/LumiCal.xml"/> 
@@ -132,7 +131,6 @@
     <include ref="../ILD_common_v01/BeamCal08.xml"/>
     <include ref="../ILD_common_v01/coil03.xml"/>
     <include ref="../ILD_common_v01/SServices00.xml"/>
-
   </detectors>
 
   <readouts>
@@ -177,12 +175,12 @@
     </readout>
 
     <readout name="HcalBarrelRegCollection">
-      <segmentation type="CartesianGridXY" grid_size_x="Hcal_cells_size" grid_size_y="Hcal_cells_size"/>
+      <segmentation type="CartesianGridXY" grid_size_x="HcalSD_cells_size" grid_size_y="HcalSD_cells_size"/>
       <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,y:-16</id>
     </readout>
 
     <readout name="HcalEndcapsCollection">
-      <segmentation type="CartesianGridXZ" grid_size_x="Hcal_cells_size" grid_size_z="Hcal_cells_size" offset_x="Hcal_cells_size/2.0" offset_z="Hcal_cells_size/2.0" />
+      <segmentation type="CartesianGridXY" grid_size_x="HcalSD_cells_size" grid_size_y="HcalSD_cells_size" offset_x="HcalSD_cells_size/2.0" offset_y="HcalSD_cells_size/2.0" />
       <id>system:5,module:3,stave:3,tower:5,layer:6,x:32:-16,z:-16</id>
     </readout>
 
