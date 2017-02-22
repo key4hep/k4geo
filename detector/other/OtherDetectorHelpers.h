@@ -37,7 +37,7 @@ namespace ODH {//OtherDetectorHelpers
 
 
 
-  static ECrossType getCrossType( std::string const & type) {
+  inline ECrossType getCrossType( std::string const & type) {
 
     std::map< std::string, ODH::ECrossType > CrossTypes;
     CrossTypes["Center"]                = ODH::kCenter               ;
@@ -66,7 +66,7 @@ namespace ODH {//OtherDetectorHelpers
     return ct->second;
   }
 
-  static bool checkForSensibleGeometry(double crossingAngle, ECrossType crossType) {
+  inline bool checkForSensibleGeometry(double crossingAngle, ECrossType crossType) {
     if (crossingAngle == 0 && crossType != kCenter) {
       std::cout << "Mask: You are trying to build a crossing geometry without a crossing angle.\n"
 	"This is probably not what you want - better check your geometry data!" << std::endl ;
@@ -76,7 +76,7 @@ namespace ODH {//OtherDetectorHelpers
   }
 
 
-  static double getCurrentAngle( double crossingAngle, ECrossType crossType ) {
+  inline double getCurrentAngle( double crossingAngle, ECrossType crossType ) {
     double tmpAngle;
     switch (crossType) {
     case kUpstream:
