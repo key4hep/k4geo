@@ -1088,14 +1088,14 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	std::stringstream sspz1 ;  sspz1 << "ftd_sensor_posZ_" << disk_number << "_"  << i << "_1"  ;
 	std::stringstream ssnz1 ;  ssnz1 << "ftd_sensor_negZ_" << disk_number << "_"  << i << "_1"  ;
 
-	DetElement sensorDEposZ( petVecposZ[i], sspz1.str() ,  x_det.id() );
-	DetElement sensorDEnegZ( petVecnegZ[i], ssnz1.str() ,  x_det.id() );
+	DetElement sensorDEposZ_2( petVecposZ[i], sspz1.str() ,  x_det.id() );
+	DetElement sensorDEnegZ_2( petVecnegZ[i], ssnz1.str() ,  x_det.id() );
 
-	sensorDEposZ.setPlacement( volV[1].second ) ;
-	sensorDEnegZ.setPlacement( volV[1].second ) ;
+	sensorDEposZ_2.setPlacement( volV[1].second ) ;
+	sensorDEnegZ_2.setPlacement( volV[1].second ) ;
 
-	volSurfaceList( sensorDEposZ )->push_back( surf1 ) ;
-	volSurfaceList( sensorDEnegZ )->push_back( surf1 ) ;
+	volSurfaceList( sensorDEposZ_2 )->push_back( surf1 ) ;
+	volSurfaceList( sensorDEnegZ_2 )->push_back( surf1 ) ;
       }
     }
 
@@ -1320,7 +1320,7 @@ void petalSupport( LCDD& lcdd, DetElement ftd,  std::map<std::string,double> val
 {
   double petal_cp_supp_half_dxMin = valuesDict["petal_cp_supp_half_dxMin"];
   double petal_cp_support_dy = valuesDict["petal_cp_support_dy"];
-  double _inner_radius = valuesDict["_inner_radius"];
+  double _inner_radius_petal = valuesDict["_inner_radius"];
 
   if( _dbParDisk.sensor_is_pixel == 1) {
 
@@ -1355,7 +1355,8 @@ void petalSupport( LCDD& lcdd, DetElement ftd,  std::map<std::string,double> val
     // 								    0);
     //   registerPV(Phys);
 
-    PlacedVolume pv = FTDPetalAirLogical.placeVolume( FTDPetalSupportLogical , Transform3D() ) ;
+    // PlacedVolume pv =
+    FTDPetalAirLogical.placeVolume( FTDPetalSupportLogical , Transform3D() ) ;
 
 
 
@@ -1485,7 +1486,8 @@ void petalSupport( LCDD& lcdd, DetElement ftd,  std::map<std::string,double> val
       // 								      0);
       // registerPV(Phys);
 
-      PlacedVolume pv = FTDPetalAirLogical.placeVolume( FTDPetalSupportLogical , Transform3D() ) ;
+      // PlacedVolume pv =
+	   FTDPetalAirLogical.placeVolume( FTDPetalSupportLogical , Transform3D() ) ;
 
     }
   //-END--------------------------- Central Part ----------------------------------END-/
@@ -1494,7 +1496,7 @@ void petalSupport( LCDD& lcdd, DetElement ftd,  std::map<std::string,double> val
 #ifdef DEBUG_VALUES
   cout << "===================================================================== " << "\n" <<
     "FTDPetalSupport:\n" << 
-    " Inner Radius= " << _inner_radius <<  "\n" <<
+    " Inner Radius= " << _inner_radius_petal <<  "\n" <<
     " Outer Radius= " << _outer_radius <<  "\n" <<
     " xMax = " << _dbParDisk.petal_cp_support_dxMax <<  "\n" <<
     " xMin = " << 2.0*petal_cp_supp_half_dxMin << "\n" <<
@@ -1511,7 +1513,7 @@ void petalSupport( LCDD& lcdd, DetElement ftd,  std::map<std::string,double> val
 
 
   // Gear Ladder 
-  _ftdparameters[gearpar::SUPPORTRINNER].push_back(_inner_radius);
+  _ftdparameters[gearpar::SUPPORTRINNER].push_back(_inner_radius_petal);
   _ftdparameters[gearpar::SUPPORTLENGTHMIN].push_back(2.0*petal_cp_supp_half_dxMin);
   _ftdparameters[gearpar::SUPPORTLENGTHMAX].push_back(_dbParDisk.petal_cp_support_dxMax);
   _ftdparameters[gearpar::SUPPORTWIDTH].push_back(petal_cp_support_dy);
@@ -1532,7 +1534,7 @@ VolVec petalSensor(  LCDD& lcdd, DetElement ftd, SensitiveDetector sens, std::ma
 
   double petal_half_dxMin = valuesDict["petal_cp_supp_half_dxMin"];
   double petal_dy = valuesDict["petal_cp_support_dy"];
-  double _inner_radius = valuesDict["_inner_radius"];
+  double _inner_radius_petalSensor = valuesDict["_inner_radius"];
   
   Trap FTDPetalSensitiveSolid( _dbParDisk.disks_Si_thickness/2.0, //thickness
 				0.0,
@@ -1585,7 +1587,7 @@ VolVec petalSensor(  LCDD& lcdd, DetElement ftd, SensitiveDetector sens, std::ma
 #ifdef DEBUG_VALUES
   cout << "===================================================================== " << "\n" <<
     "FTDPetalSensitive:\n" << 
-    " Inner Radius= " << _inner_radius <<  "\n" <<
+    " Inner Radius= " << _inner_radius_petalSensor <<  "\n" <<
     " Outer Radius= " << _outer_radius <<  "\n" <<
     " xMax = " <<  _dbParDisk.petal_cp_support_dxMax <<  "\n" <<
     " xMin = " << 2.0*petal_half_dxMin << "\n" <<
@@ -1623,7 +1625,7 @@ VolVec petalSensor(  LCDD& lcdd, DetElement ftd, SensitiveDetector sens, std::ma
 #ifdef DEBUG_VALUES
     cout << "===================================================================== " << "\n" <<
     "FTDPetalSensitive:\n" << 
-    " Inner Radius= " << _inner_radius <<  "\n" <<
+    " Inner Radius= " << _inner_radius_petalSensor <<  "\n" <<
     " Outer Radius= " << _outer_radius <<  "\n" <<
     " xMax = " <<  _dbParDisk.petal_cp_support_dxMax <<  "\n" <<
     " xMin = " << 2.0*petal_half_dxMin << "\n" <<
@@ -1755,7 +1757,7 @@ VolVec petalSensor(  LCDD& lcdd, DetElement ftd, SensitiveDetector sens, std::ma
   //        // Gear
   //	int howManyPixelsUp = (int)(_dbParDisk.petal_cp_support_dxMax/pixel_si_length);
 	
-  _ftdparameters[gearpar::SENSITIVERINNER].push_back(_inner_radius);
+  _ftdparameters[gearpar::SENSITIVERINNER].push_back(_inner_radius_petalSensor);
   _ftdparameters[gearpar::SENSITIVELENGTHMIN].push_back(2.0*petal_half_dxMin);
   _ftdparameters[gearpar::SENSITIVELENGTHMAX].push_back(_dbParDisk.petal_cp_support_dxMax);
   _ftdparameters[gearpar::SENSITIVEWIDTH].push_back(petal_dy);
