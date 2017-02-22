@@ -181,9 +181,9 @@ namespace DD4hep {
   
 	const G4ThreeVector PrePosition = step->GetPreStepPoint()->GetPosition();
 	const G4ThreeVector PostPosition = step->GetPostStepPoint()->GetPosition();
-	const G4ThreeVector Momentum = step->GetPostStepPoint()->GetMomentum();
+	const G4ThreeVector thisMomentum = step->GetPostStepPoint()->GetMomentum();
   
-	float ptSQRD = Momentum[0]*Momentum[0]+Momentum[1]*Momentum[1];
+	float ptSQRD = thisMomentum[0]*thisMomentum[0]+thisMomentum[1]*thisMomentum[1];
   
 	if( ptSQRD >= (Control.TPCLowPtCut*Control.TPCLowPtCut) ){
 	  // Step finishes at a geometric boundry
@@ -199,7 +199,7 @@ namespace DD4hep {
 	      //and return
         
 	      CrossingOfPadRingCentre = PostPosition;
-	      MomentumAtPadRingCentre = Momentum;  
+	      MomentumAtPadRingCentre = thisMomentum;
 	      dEInPadRow += step->GetTotalEnergyDeposit();
 	      globalTimeAtPadRingCentre = step->GetTrack()->GetGlobalTime();
 	      pathLengthInPadRow += step->GetStepLength();
@@ -300,16 +300,16 @@ namespace DD4hep {
 	    else {
         
         
-	      G4double position_x = PostPosition[0];
-	      G4double position_y = PostPosition[1];
-	      G4double position_z = PostPosition[2];
+	      // G4double position_x = PostPosition[0];
+	      // G4double position_y = PostPosition[1];
+	      // G4double position_z = PostPosition[2];
         
 	      G4ThreeVector PreMomentum = step->GetPreStepPoint()->GetMomentum();
 	      G4ThreeVector PostMomentum = step->GetPostStepPoint()->GetMomentum();
         
-	      G4double momentum_x = PostMomentum[0];
-	      G4double momentum_y = PostMomentum[1];
-	      G4double momentum_z = PostMomentum[2];
+	      // G4double momentum_x = PostMomentum[0];
+	      // G4double momentum_y = PostMomentum[1];
+	      // G4double momentum_z = PostMomentum[2];
         
         
 	      //	    G4cout << "step must have been stopped by the step limiter" << G4endl;
