@@ -191,17 +191,17 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     sensitive_inner_radius = sensitive_radius - 0.5 *sensitive_thickness;
     ladder_width = 2*(tan(ladder_dphi*0.5)*sensitive_inner_radius - ladder_clearance) ;
                     
-    double inner_most_radius = 0.0;
+    // double inner_most_radius = 0.0;
     
     if( faces_IP == 1 ){ // support is on the outside 
       support_radius = sensitive_radius + (0.5 *sensitive_thickness) ;
       ladder_width = 2*(tan(ladder_dphi*0.5)*sensitive_inner_radius - ladder_clearance) ;
-      inner_most_radius = sensitive_inner_radius;
+      // inner_most_radius = sensitive_inner_radius;
     }
     else{ // support is on the inside
       support_radius = sensitive_radius - (0.5 *sensitive_thickness) -support_thickness;
       ladder_width = 2*(tan(ladder_dphi*0.5)*support_radius - ladder_clearance) ;
-      inner_most_radius = support_radius;
+      // inner_most_radius = support_radius;
     }
     
     //FIXME: GEAR....

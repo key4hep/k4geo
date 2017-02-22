@@ -78,7 +78,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   //-----------------------------------------------------------------------------------
 
   
-  PlacedVolume pv;
+  //PlacedVolume pv;
   
   
   sens.setType("tracker");
@@ -90,7 +90,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   //  code ported from SET_Simple_Planar::construct() :
   //##################################
 
-  extended_reconstruction_parameters _e_r_p;
+  // extended_reconstruction_parameters _e_r_p;
   
   // *********************
   //  Read and Store the Extended Reconstruction Parameters which are passed directly through to gear. Note others may be added below
@@ -118,7 +118,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   // Sensor Length
   double sensor_length = db->fetchDouble("sensor_length") ;
   
-  _e_r_p.sensor_length_mm  =sensor_length;
+  // _e_r_p.sensor_length_mm  =sensor_length;
 
   Material air = lcdd.air()  ;
   Material sensitiveMat = lcdd.material(db->fetchString("sensitive_mat"));  

@@ -62,10 +62,10 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
   Assembly supp_assembly( name + "_support_assembly"  ) ;
 
-  PlacedVolume pv = envelope.placeVolume( supp_assembly ) ;
+  PlacedVolume pv_env = envelope.placeVolume( supp_assembly ) ;
 
   DetElement suppDE( vxd , name+"_support" , x_det.id() )  ;
-  suppDE.setPlacement( pv ) ;
+  suppDE.setPlacement( pv_env ) ;
   //--------------------------------
 
 
@@ -229,13 +229,12 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     double nb_ladder = db->fetchDouble("nb_ladder");
     
     double phirot = 0.;
-    double phirot2 = 0.;
     
     std::cout << " ############## layer : " << LayerId << " number of ladders : " << nb_ladder << std::endl ; 
 
 
     Assembly layer_assembly( _toString( LayerId , "layer_assembly_%d"  ) ) ;
-    PlacedVolume pv = envelope.placeVolume( layer_assembly ) ;
+    envelope.placeVolume( layer_assembly ) ;
 
 
     //replacing support ladder with flex cable (kapton+metal) & adding a foam spacer
@@ -332,7 +331,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	// rot->rotateY(phirot2);
 	RotationZYX rot( 0, phirot2 , (pi*0.5) ) ;
 	
-	pv = supp_assembly.placeVolume( FlexCableLogical,  
+	supp_assembly.placeVolume( FlexCableLogical,
 				   Transform3D( rot, Position(( layer_radius + metal_traces_thickness + (flex_cable_thickness/2.))*sin(phirot2)+offset_phi*cos(phirot2),
 							      -(layer_radius + metal_traces_thickness + (flex_cable_thickness/2.))*cos(phirot2)+offset_phi*sin(phirot2),
 							      0.))  );
@@ -347,12 +346,12 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	// 			false,
 	// 			0);
 	       
-	pv = supp_assembly.placeVolume( FoamSpacerLogical,  
+	supp_assembly.placeVolume( FoamSpacerLogical,
 				   Transform3D(  rot, Position((layer_radius + flex_cable_thickness + metal_traces_thickness + foam_spacer_thickness/2.)*sin(phirot2)+offset_phi*cos(phirot2),
 							       -(layer_radius + flex_cable_thickness + metal_traces_thickness +  foam_spacer_thickness/2.)*cos(phirot2)+offset_phi*sin(phirot2),
 							       0.))  );
 
-	pv = supp_assembly.placeVolume( MetalTracesLogical,  Transform3D( rot,Position((layer_radius + (metal_traces_thickness/2))*sin(phirot2)+offset_phi*cos(phirot2),
+	supp_assembly.placeVolume( MetalTracesLogical,  Transform3D( rot,Position((layer_radius + (metal_traces_thickness/2))*sin(phirot2)+offset_phi*cos(phirot2),
 										  -(layer_radius + (metal_traces_thickness/2.))*cos(phirot2)+offset_phi*sin(phirot2),
  										  0.))  );
       }
@@ -365,17 +364,17 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	
 	RotationZYX rot( 0, phirot2 , (pi*0.5) ) ;
 	
-	pv = supp_assembly.placeVolume( FlexCableLogical,
+	supp_assembly.placeVolume( FlexCableLogical,
 				   Transform3D( rot, Position((layer_radius-(metal_traces_thickness + flex_cable_thickness/2.)+layer_gap)*sin(phirot2)+offset_phi*cos(phirot2),
 							      -(layer_radius-(metal_traces_thickness + flex_cable_thickness/2.)+layer_gap)*cos(phirot2)+offset_phi*sin(phirot2),
 							      0.))  ) ;
 
-	pv = supp_assembly.placeVolume( FoamSpacerLogical, 
+	supp_assembly.placeVolume( FoamSpacerLogical,
 				   Transform3D( rot, Position((layer_radius + layer_gap - flex_cable_thickness -  metal_traces_thickness - foam_spacer_thickness/2.)*sin(phirot2)+offset_phi*cos(phirot2),
 							      -(layer_radius + layer_gap - flex_cable_thickness - metal_traces_thickness - foam_spacer_thickness/2.)*cos(phirot2)+offset_phi*sin(phirot2),
 							      0.))  );
 	
-	pv = supp_assembly.placeVolume( MetalTracesLogical,  Transform3D( rot,Position((layer_radius-(metal_traces_thickness/2)+layer_gap)*sin(phirot2)+offset_phi*cos(phirot2),
+	supp_assembly.placeVolume( MetalTracesLogical,  Transform3D( rot,Position((layer_radius-(metal_traces_thickness/2)+layer_gap)*sin(phirot2)+offset_phi*cos(phirot2),
 										  -(layer_radius-(metal_traces_thickness/2.)+layer_gap)*cos(phirot2)+offset_phi*sin(phirot2),
 										  0.))  );
       }
@@ -538,24 +537,24 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	std::string annBlockNameP =  _toString( LayerId , "BerylliumAnnulusBlock_%02d_posZ") + _toString( (int)AnnulusBlock_loop, "_%02d" ) ;
 	std::string annBlockNameN =  _toString( LayerId , "BerylliumAnnulusBlock_%02d_negZ") + _toString( (int)AnnulusBlock_loop, "_%02d" ) ;
 	
-	phirot2 = phirot*AnnulusBlock_loop;
+	double phirot2 = phirot*AnnulusBlock_loop;
 
 	RotationZYX rot( 0, phirot2 ,  pi*0.5 ) ;
 	
 	double ZAnnulusBlock = ladder_length + end_electronics_half_z + (beryllium_ladder_block_length*2.);
 	    
-	pv = supp_assembly.placeVolume( BerylliumAnnulusBlockLogical,  Transform3D( rot, Position((layer_radius+beryllium_ladder_block_thickness+layer_gap)*sin(phirot2)+offset_phi*cos(phirot2),
+	PlacedVolume pv_ann_pos = supp_assembly.placeVolume( BerylliumAnnulusBlockLogical,  Transform3D( rot, Position((layer_radius+beryllium_ladder_block_thickness+layer_gap)*sin(phirot2)+offset_phi*cos(phirot2),
 											     -(layer_radius+beryllium_ladder_block_thickness+layer_gap)*cos(phirot2)+offset_phi*sin(phirot2),
 											     ZAnnulusBlock))  ) ;
 	DetElement  annBlockPosZ( vxd , annBlockNameP  , x_det.id() );
-	annBlockPosZ.setPlacement( pv ) ;
+	annBlockPosZ.setPlacement( pv_ann_pos ) ;
 	volSurfaceList( annBlockPosZ )->push_back( surfAnnBlock ) ;
 	
-	pv = supp_assembly.placeVolume( BerylliumAnnulusBlockLogical,  Transform3D( rot, Position((layer_radius+beryllium_ladder_block_thickness+layer_gap)*sin(phirot2)+offset_phi*cos(phirot2),
+	PlacedVolume pv_ann_neg = supp_assembly.placeVolume( BerylliumAnnulusBlockLogical,  Transform3D( rot, Position((layer_radius+beryllium_ladder_block_thickness+layer_gap)*sin(phirot2)+offset_phi*cos(phirot2),
 											     -(layer_radius+beryllium_ladder_block_thickness+layer_gap)*cos(phirot2)+offset_phi*sin(phirot2),
 											     -ZAnnulusBlock))  );
 	DetElement  annBlockNegZ( vxd , annBlockNameN  , x_det.id() );
-	annBlockNegZ.setPlacement( pv ) ;
+	annBlockNegZ.setPlacement( pv_ann_neg ) ;
 	volSurfaceList( annBlockNegZ )->push_back( surfAnnBlock ) ;
       }	
 
@@ -586,24 +585,24 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	
 	vxd.setVisAttributes(lcdd,  "CyanVis" , BerylliumAnnulusBlockLogical) ;
 	
-	phirot2 = phirot*AnnulusBlock_loop;
+	double phirot2 = phirot*AnnulusBlock_loop;
 	
 	RotationZYX rot( 0, phirot2 , (pi*0.5) ) ;
 	
 	double ZAnnulusBlock2=shell_half_z -(beryllium_ladder_block_length2/2.);// - (shell_thickess/2.); 
 	
-	pv = supp_assembly.placeVolume( BerylliumAnnulusBlockLogical,  Transform3D( rot, Position((layer_radius+beryllium_ladder_block_thickness+layer_gap)*sin(phirot2)+offset_phi*cos(phirot2),
+	PlacedVolume pv_ann_pos = supp_assembly.placeVolume( BerylliumAnnulusBlockLogical,  Transform3D( rot, Position((layer_radius+beryllium_ladder_block_thickness+layer_gap)*sin(phirot2)+offset_phi*cos(phirot2),
 											     -(layer_radius+beryllium_ladder_block_thickness+layer_gap)*cos(phirot2)+offset_phi*sin(phirot2),
 											     ZAnnulusBlock2))  );
 	DetElement  annBlockPosZ( vxd , annBlockNameP  , x_det.id() );
-	annBlockPosZ.setPlacement( pv ) ;
+	annBlockPosZ.setPlacement( pv_ann_pos ) ;
 	volSurfaceList( annBlockPosZ )->push_back( surfAnnBlock ) ;
 
-	pv = supp_assembly.placeVolume( BerylliumAnnulusBlockLogical,  Transform3D( rot, Position((layer_radius+beryllium_ladder_block_thickness+layer_gap)*sin(phirot2)+offset_phi*cos(phirot2),
+	PlacedVolume pv_ann_neg = supp_assembly.placeVolume( BerylliumAnnulusBlockLogical,  Transform3D( rot, Position((layer_radius+beryllium_ladder_block_thickness+layer_gap)*sin(phirot2)+offset_phi*cos(phirot2),
 											     -(layer_radius+beryllium_ladder_block_thickness+layer_gap)*cos(phirot2)+offset_phi*sin(phirot2),
 											     -ZAnnulusBlock2)) ) ;
 	DetElement  annBlockNegZ( vxd , annBlockNameN  , x_det.id() );
-	annBlockNegZ.setPlacement( pv ) ;
+	annBlockNegZ.setPlacement( pv_ann_neg ) ;
 	volSurfaceList( annBlockNegZ )->push_back( surfAnnBlock ) ;
       }
     }
@@ -643,27 +642,27 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	  std::string elecEndLadNameP =  _toString( LayerId , "ElectronicsEnd_%02d_posZ") + _toString( (int)elec_loop, "_%02d" ) ;
 	  std::string elecEndLadNameN =  _toString( LayerId , "ElectronicsEnd_%02d_negZ") + _toString( (int)elec_loop, "_%02d" ) ;
 	  
-	  phirot2 = phirot*elec_loop;
+	  double phirot2 = phirot*elec_loop;
 	  RotationZYX rot( 0, phirot2 , (pi*0.5) ) ;    
 	  
 	  double Z = ladder_length +end_electronics_half_z + (ladder_gap/2.);
 	  
-	  pv = layer_assembly.placeVolume( ElectronicsEndLogical,  
+	  PlacedVolume pv_el_end_pos = layer_assembly.placeVolume( ElectronicsEndLogical,
 				     Transform3D( rot, Position((layer_radius+(electronics_structure_thickness/2.)+layer_gap)*sin(phirot2)+ end_ladd_electronic_offset_phi*cos(phirot2),
 								-(layer_radius+(electronics_structure_thickness/2.)+layer_gap)*cos(phirot2)+ end_ladd_electronic_offset_phi*sin(phirot2),
 								Z))  );
 
 	  DetElement  elecEndLadDEposZ( vxd ,  elecEndLadNameP , x_det.id() );
-	  elecEndLadDEposZ.setPlacement( pv ) ;
+	  elecEndLadDEposZ.setPlacement( pv_el_end_pos ) ;
 	  volSurfaceList( elecEndLadDEposZ )->push_back( surfEndElec ) ;
 	  
-	  pv = layer_assembly.placeVolume( ElectronicsEndLogical, 
+	  PlacedVolume pv_el_end_neg = layer_assembly.placeVolume( ElectronicsEndLogical,
 				     Transform3D( rot, Position((layer_radius+(electronics_structure_thickness/2.)+layer_gap)*sin(phirot2)+ end_ladd_electronic_offset_phi*cos(phirot2),
 								-(layer_radius+(electronics_structure_thickness/2.)+layer_gap)*cos(phirot2)+ end_ladd_electronic_offset_phi*sin(phirot2),
 								-Z))  );
 
 	  DetElement  elecEndLadDEnegZ( vxd ,  elecEndLadNameN , x_det.id() );
-	  elecEndLadDEnegZ.setPlacement( pv ) ;
+	  elecEndLadDEnegZ.setPlacement( pv_el_end_neg ) ;
 	  volSurfaceList( elecEndLadDEnegZ )->push_back( surfEndElec ) ;
 	}
 	
@@ -674,27 +673,27 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	  std::string elecEndLadNameP =  _toString( LayerId , "ElectronicsEnd_%02d_posZ") + _toString( (int)elec_loop, "_%02d" ) ;
 	  std::string elecEndLadNameN =  _toString( LayerId , "ElectronicsEnd_%02d_negZ") + _toString( (int)elec_loop, "_%02d" ) ;
 	  
-	  phirot2 = phirot*elec_loop;
+	  double phirot2 = phirot*elec_loop;
 	  RotationZYX rot( 0, phirot2 , (pi*0.5) ) ;    
 	  
 	  double Z = ladder_length +end_electronics_half_z + (ladder_gap/2.);
 	  
-	  pv = layer_assembly.placeVolume( ElectronicsEndLogical,  
+	  PlacedVolume pv_el_end_pos = layer_assembly.placeVolume( ElectronicsEndLogical,
 				     Transform3D( rot, Position((layer_radius-(electronics_structure_thickness/2.))*sin(phirot2)+ end_ladd_electronic_offset_phi*cos(phirot2),
 								-(layer_radius-(electronics_structure_thickness/2.))*cos(phirot2)+ end_ladd_electronic_offset_phi*sin(phirot2),
 								Z))  );
 
 	  DetElement  elecEndLadDEposZ( vxd ,  elecEndLadNameP , x_det.id() );
-	  elecEndLadDEposZ.setPlacement( pv ) ;
+	  elecEndLadDEposZ.setPlacement( pv_el_end_pos ) ;
 	  volSurfaceList( elecEndLadDEposZ )->push_back( surfEndElec ) ;
 	  
-	  pv = layer_assembly.placeVolume( ElectronicsEndLogical,
+	  PlacedVolume pv_el_end_neg = layer_assembly.placeVolume( ElectronicsEndLogical,
 				     Transform3D( rot, Position((layer_radius-(electronics_structure_thickness/2.))*sin(phirot2)+ end_ladd_electronic_offset_phi*cos(phirot2),
 								-(layer_radius-(electronics_structure_thickness/2.))*cos(phirot2)+ end_ladd_electronic_offset_phi*sin(phirot2),
 								-Z))  );
 
 	  DetElement  elecEndLadDEnegZ( vxd ,  elecEndLadNameN , x_det.id() );
-	  elecEndLadDEnegZ.setPlacement( pv ) ;
+	  elecEndLadDEnegZ.setPlacement( pv_el_end_neg ) ;
 	  volSurfaceList( elecEndLadDEnegZ )->push_back( surfEndElec ) ;
 
 	}
@@ -722,7 +721,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	
 	for (double elec_loop=0; elec_loop<nb_ladder;elec_loop++) {   
 	  
-	  phirot2 = phirot*elec_loop;
+	  double phirot2 = phirot*elec_loop;
 	  RotationZYX rot( 0, phirot2 , (pi*0.5) ) ;   
 	  
 	  double Z = (ladder_length* (1-side_band_electronics_option/2.)) + ladder_gap/2.;
@@ -731,22 +730,22 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	  // encoder[ILDCellID0::module] = elec_loop ;
 	  // cellID0 = encoder.lowWord() ;  
 	  
-	  pv = layer_assembly.placeVolume( ElectronicsBandLogical,
+	  PlacedVolume pv_el_band_pos = layer_assembly.placeVolume( ElectronicsBandLogical,
 				     Transform3D( rot, Position((layer_radius+(side_band_electronics_thickness/2.)+layer_gap)*sin(phirot2)+side_band_electronic_offset_phi*cos(phirot2),
 								-(layer_radius+(side_band_electronics_thickness/2.)+layer_gap)*cos(phirot2)+side_band_electronic_offset_phi*sin(phirot2),
 								Z))  ) ;
 	  
 	  //**fg: choose sensor 1 for sensitive electronics side band
 	  if(active_side_band_electronics_option==1)
-	    pv.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(elec_loop)  ).addPhysVolID("sensor", 1 ).addPhysVolID("side", 1 )   ;
+	    pv_el_band_pos.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(elec_loop)  ).addPhysVolID("sensor", 1 ).addPhysVolID("side", 1 )   ;
 
-	  pv = layer_assembly.placeVolume( ElectronicsBandLogical,
+	  PlacedVolume pv_el_band_neg = layer_assembly.placeVolume( ElectronicsBandLogical,
 				     Transform3D( rot, Position((layer_radius+(side_band_electronics_thickness/2.)+layer_gap)*sin(phirot2)+side_band_electronic_offset_phi*cos(phirot2),
 								-(layer_radius+(side_band_electronics_thickness/2.)+layer_gap)*cos(phirot2)+side_band_electronic_offset_phi*sin(phirot2),
 								-Z))  );
 
 	  if(active_side_band_electronics_option==1)
-	    pv.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(elec_loop)  ).addPhysVolID("sensor", 1 ).addPhysVolID("side", -1 )   ;
+	    pv_el_band_neg.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(elec_loop)  ).addPhysVolID("sensor", 1 ).addPhysVolID("side", -1 )   ;
 	  
 	}
 
@@ -754,7 +753,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	    
 	for (double elec_loop=0; elec_loop<nb_ladder;elec_loop++) { 
 	  
-	  phirot2 = phirot*elec_loop;
+	  double phirot2 = phirot*elec_loop;
 	  RotationZYX rot( 0, phirot2 , (pi*0.5) ) ;   
 
 	  double Z = (ladder_length* (1-side_band_electronics_option/2.)) + ladder_gap/2.;
@@ -763,20 +762,20 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	  // encoder[ILDCellID0::module] = elec_loop ;
 	  // cellID0 = encoder.lowWord() ;  
 
-	  pv = layer_assembly.placeVolume( ElectronicsBandLogical,
+	  PlacedVolume pv_el_band_pos = layer_assembly.placeVolume( ElectronicsBandLogical,
 				     Transform3D( rot, Position((layer_radius-(side_band_electronics_thickness/2.))*sin(phirot2)+side_band_electronic_offset_phi*cos(phirot2),
 								-(layer_radius-(side_band_electronics_thickness/2.))*cos(phirot2)+side_band_electronic_offset_phi*sin(phirot2),
 								Z))  );
 
 	  if(active_side_band_electronics_option==1)
-	    pv.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(elec_loop)  ).addPhysVolID("sensor", 1 ).addPhysVolID("side", 1 )   ;
+	    pv_el_band_pos.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(elec_loop)  ).addPhysVolID("sensor", 1 ).addPhysVolID("side", 1 )   ;
 
-	  pv = layer_assembly.placeVolume( ElectronicsBandLogical,
+	  PlacedVolume pv_el_band_neg = layer_assembly.placeVolume( ElectronicsBandLogical,
 				     Transform3D( rot, Position((layer_radius-(side_band_electronics_thickness/2.))*sin(phirot2)+side_band_electronic_offset_phi*cos(phirot2),
 								-(layer_radius-(side_band_electronics_thickness/2.))*cos(phirot2)+side_band_electronic_offset_phi*sin(phirot2),
 								-Z))  );
 	  if(active_side_band_electronics_option==1)
-	    pv.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(elec_loop)  ).addPhysVolID("sensor", 1 ).addPhysVolID("side", -1 )   ;
+	    pv_el_band_neg.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(elec_loop)  ).addPhysVolID("sensor", 1 ).addPhysVolID("side", -1 )   ;
 	}
       }      
     }
@@ -872,31 +871,31 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	VolCone conSurf1( KaptonLinesLogical , SurfaceType( SurfaceType::Helper ) , 0.5*cabling_kapton_thickness  , 0.5*cabling_kapton_thickness , kapton_angle, o_kaptoncon );
 	VolCone conSurf2( MetalLinesLogical , SurfaceType( SurfaceType::Helper ) , 0.5*cabling_metal_thickness  , 0.5*cabling_metal_thickness , metal_angle, o_metalcon );	
 	
-	pv = supp_assembly.placeVolume( KaptonLinesLogical,  Transform3D( RotationZYX() , Position(0., 0., Z) ) );
+	PlacedVolume pv_kap_pos = supp_assembly.placeVolume( KaptonLinesLogical,  Transform3D( RotationZYX() , Position(0., 0., Z) ) );
 
 	DetElement suppPosStriplinesDE ( suppDE , striplineNameP , x_det.id() )  ;
-	suppPosStriplinesDE.setPlacement( pv ) ;    
+	suppPosStriplinesDE.setPlacement( pv_kap_pos );
 	//volSurfaceList( suppPosStriplinesDE )->push_back( conSurf1 );
 
-	pv = supp_assembly.placeVolume( MetalLinesLogical,   Transform3D( RotationZYX() , Position(0., 0., Z) ) );
+	PlacedVolume pv_met_pos = supp_assembly.placeVolume( MetalLinesLogical,   Transform3D( RotationZYX() , Position(0., 0., Z) ) );
 
 	DetElement suppPosMetallinesDE ( suppDE , metallineNameP , x_det.id() )  ;
-	suppPosMetallinesDE.setPlacement( pv ) ;    
+	suppPosMetallinesDE.setPlacement( pv_met_pos );
 	//volSurfaceList( suppPosMetallinesDE )->push_back( conSurf2 );
 
 	
 	RotationZYX rot( 0, 0 , pi ) ;   // the same but other side
 
-	pv = supp_assembly.placeVolume( KaptonLinesLogical,  Transform3D( rot , Position(0., 0., -Z) ) );
+	PlacedVolume pv_kap_neg = supp_assembly.placeVolume( KaptonLinesLogical,  Transform3D( rot , Position(0., 0., -Z) ) );
 
 	DetElement suppNegStriplinesDE ( suppDE , striplineNameN , x_det.id() )  ;
-	suppNegStriplinesDE.setPlacement( pv ) ;    
+	suppNegStriplinesDE.setPlacement( pv_kap_neg );
 	//volSurfaceList( suppNegStriplinesDE )->push_back( conSurf1 );
 
-	pv = supp_assembly.placeVolume( MetalLinesLogical,   Transform3D( rot , Position(0., 0., -Z) ) );
+	PlacedVolume pv_met_neg = supp_assembly.placeVolume( MetalLinesLogical,   Transform3D( rot , Position(0., 0., -Z) ) );
 	
 	DetElement suppNegMetallinesDE ( suppDE , metallineNameN , x_det.id() )  ;
-	suppNegMetallinesDE.setPlacement( pv ) ;    
+	suppNegMetallinesDE.setPlacement( pv_met_neg );
 	//volSurfaceList( suppNegMetallinesDE )->push_back( conSurf2 );
 
       }
@@ -924,31 +923,31 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	VolCone conSurf1( KaptonLinesLogical , SurfaceType( SurfaceType::Helper ) , 0.5*cabling_kapton_thickness  , 0.5*cabling_kapton_thickness , kapton_angle, o_kaptoncon );
 	VolCone conSurf2( MetalLinesLogical , SurfaceType( SurfaceType::Helper ) , 0.5*cabling_metal_thickness  , 0.5*cabling_metal_thickness , metal_angle, o_metalcon );
 
-	pv = supp_assembly.placeVolume( KaptonLinesLogical,  Transform3D( RotationZYX() , Position(0., 0., Z) ) );
+	PlacedVolume pv_kap_pos = supp_assembly.placeVolume( KaptonLinesLogical,  Transform3D( RotationZYX() , Position(0., 0., Z) ) );
 	
 	DetElement suppPosStriplinesDE ( suppDE , striplineNameP , x_det.id() )  ;
-	suppPosStriplinesDE.setPlacement( pv ) ;    
+	suppPosStriplinesDE.setPlacement( pv_kap_pos );
 	volSurfaceList( suppPosStriplinesDE )->push_back( conSurf1 );
 	
-	pv = supp_assembly.placeVolume( MetalLinesLogical,   Transform3D( RotationZYX() , Position(0., 0., Z) ) );
+	PlacedVolume pv_met_pos = supp_assembly.placeVolume( MetalLinesLogical,   Transform3D( RotationZYX() , Position(0., 0., Z) ) );
 	
 	DetElement suppPosMetallinesDE ( suppDE , metallineNameP , x_det.id() )  ;
-	suppPosMetallinesDE.setPlacement( pv ) ;    
+	suppPosMetallinesDE.setPlacement( pv_met_pos );
 	volSurfaceList( suppPosMetallinesDE )->push_back( conSurf2 );
 	
       
 	RotationZYX rot( 0, 0 , pi ) ;   // the same but other side
 	
-	pv = supp_assembly.placeVolume( KaptonLinesLogical,  Transform3D( rot , Position(0., 0., -Z) ) );
+	PlacedVolume pv_kap_neg = supp_assembly.placeVolume( KaptonLinesLogical,  Transform3D( rot , Position(0., 0., -Z) ) );
 
 	DetElement suppNegStriplinesDE ( suppDE , striplineNameN , x_det.id() )  ;
-	suppNegStriplinesDE.setPlacement( pv ) ;    
+	suppNegStriplinesDE.setPlacement( pv_kap_neg );
 	volSurfaceList( suppNegStriplinesDE )->push_back( conSurf1 );
 
-	pv = supp_assembly.placeVolume( MetalLinesLogical,   Transform3D( rot , Position(0., 0., -Z) ) );
+	PlacedVolume pv_met_neg = supp_assembly.placeVolume( MetalLinesLogical,   Transform3D( rot , Position(0., 0., -Z) ) );
 	
 	DetElement suppNegMetallinesDE ( suppDE , metallineNameN , x_det.id() )  ;
-	suppNegMetallinesDE.setPlacement( pv ) ;    
+	suppNegMetallinesDE.setPlacement( pv_met_neg );
 	volSurfaceList( suppNegMetallinesDE )->push_back( conSurf2 );
 	
       }
@@ -989,13 +988,13 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
  
     if (LayerId==3 || LayerId==5) {
 
-      pv = supp_assembly.placeVolume( CoolPipeLogical, Transform3D( RotationZYX() , Position(0., 0.,   ZEndPlateCoolPipes+cool_pipe_outer_radius  )) ) ; 
-      pv = supp_assembly.placeVolume( CoolPipeLogical, Transform3D( RotationZYX() , Position(0., 0., -(ZEndPlateCoolPipes+cool_pipe_outer_radius) )) ) ; 
+      supp_assembly.placeVolume( CoolPipeLogical, Transform3D( RotationZYX() , Position(0., 0.,   ZEndPlateCoolPipes+cool_pipe_outer_radius  )) );
+      supp_assembly.placeVolume( CoolPipeLogical, Transform3D( RotationZYX() , Position(0., 0., -(ZEndPlateCoolPipes+cool_pipe_outer_radius) )) );
       
     } else if (LayerId==1)  { 
       
-      pv = supp_assembly.placeVolume( CoolPipeLogical, Transform3D( RotationZYX() , Position(0., 0.,   ZEndPlateCoolPipesL1 + cool_pipe_outer_radius + shell_thickess) )) ;
-      pv = supp_assembly.placeVolume( CoolPipeLogical, Transform3D( RotationZYX() , Position(0., 0., -(ZEndPlateCoolPipesL1 + cool_pipe_outer_radius + shell_thickess)) ));
+      supp_assembly.placeVolume( CoolPipeLogical, Transform3D( RotationZYX() , Position(0., 0.,   ZEndPlateCoolPipesL1 + cool_pipe_outer_radius + shell_thickess) ));
+      supp_assembly.placeVolume( CoolPipeLogical, Transform3D( RotationZYX() , Position(0., 0., -(ZEndPlateCoolPipesL1 + cool_pipe_outer_radius + shell_thickess)) ));
     }
 
     //***************************************************************************************************************
@@ -1020,19 +1019,19 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       RotationZYX rm( 0., 0., -thetaTube);
       RotationZYX rm2(0., 0.,  thetaTube);
       
-      pv = supp_assembly.placeVolume( CoolPipeTubeLogical, Transform3D( rm,  Position( 0., 
+      supp_assembly.placeVolume( CoolPipeTubeLogical, Transform3D( rm,  Position( 0.,
 										  (layer_radius + layer_gap + support_endplate_inner_radious)/2.,
 										  (ZEndPlateCoolPipesL1 + 3*cool_pipe_outer_radius + CoolPipeLength/2.)) )) ;
       
-      pv = supp_assembly.placeVolume( CoolPipeTubeLogical, Transform3D( rm2, Position( 0., 
+      supp_assembly.placeVolume( CoolPipeTubeLogical, Transform3D( rm2, Position( 0.,
 										  -(layer_radius + layer_gap + support_endplate_inner_radious)/2.,
 										  (ZEndPlateCoolPipesL1 + 3*cool_pipe_outer_radius + CoolPipeLength/2.)) )) ;
       
-      pv = supp_assembly.placeVolume( CoolPipeTubeLogical, Transform3D( rm2, Position( 0., 
+      supp_assembly.placeVolume( CoolPipeTubeLogical, Transform3D( rm2, Position( 0.,
 										  (layer_radius + layer_gap + support_endplate_inner_radious)/2.,
 										  -(ZEndPlateCoolPipesL1 + 3*cool_pipe_outer_radius + CoolPipeLength/2.)) )) ;
       
-      pv = supp_assembly.placeVolume( CoolPipeTubeLogical, Transform3D( rm,  Position( 0., 
+      supp_assembly.placeVolume( CoolPipeTubeLogical, Transform3D( rm,  Position( 0.,
 										  -(layer_radius + layer_gap + support_endplate_inner_radious)/2.,
 										  -(ZEndPlateCoolPipesL1 + 3*cool_pipe_outer_radius + CoolPipeLength/2.)) )) ;
       
@@ -1068,7 +1067,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       
     for (double active_loop=0;active_loop<nb_ladder;active_loop++){
 	
-      phirot2 =  phirot*active_loop;
+      double phirot2 =  phirot*active_loop;
       RotationZYX rot( 0. , phirot2, (pi*0.5) ) ;
 	
       double Z = ladder_length/2.+ ladder_gap;
@@ -1088,49 +1087,49 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
       if (LayerId==1||LayerId==3||LayerId==5) {
 	
-	pv = layer_assembly.placeVolume( SiActiveLayerLogical,  Transform3D( rot, Position((layer_radius+(active_silicon_thickness/2.)+layer_gap)*sin(phirot2)+active_offset_phi*cos(phirot2),
+	PlacedVolume pv_layer_pos = layer_assembly.placeVolume( SiActiveLayerLogical,  Transform3D( rot, Position((layer_radius+(active_silicon_thickness/2.)+layer_gap)*sin(phirot2)+active_offset_phi*cos(phirot2),
 										     -(layer_radius+(active_silicon_thickness/2.)+layer_gap)*cos(phirot2)+active_offset_phi*sin(phirot2),
 										     Z)) ) ;
 	
-	pv.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(active_loop)  ).addPhysVolID("sensor", 0 ).addPhysVolID("side", 1 )   ;
+	pv_layer_pos.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(active_loop)  ).addPhysVolID("sensor", 0 ).addPhysVolID("side", 1 )   ;
 
 	DetElement   ladderDEposZ( vxd ,  ladderNameP , x_det.id() );
-	ladderDEposZ.setPlacement( pv ) ;
+	ladderDEposZ.setPlacement( pv_layer_pos ) ;
 	volSurfaceList( ladderDEposZ )->push_back( surf ) ;
 
 
-	pv = layer_assembly.placeVolume( SiActiveLayerLogical,  Transform3D( rot, Position((layer_radius+(active_silicon_thickness/2.)+layer_gap)*sin(phirot2)+active_offset_phi*cos(phirot2),
+	PlacedVolume pv_layer_neg = layer_assembly.placeVolume( SiActiveLayerLogical,  Transform3D( rot, Position((layer_radius+(active_silicon_thickness/2.)+layer_gap)*sin(phirot2)+active_offset_phi*cos(phirot2),
 										     -(layer_radius+(active_silicon_thickness/2.)+layer_gap)*cos(phirot2)+active_offset_phi*sin(phirot2),
 										     -Z)) );
 	
-	pv.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(active_loop)  ).addPhysVolID("sensor", 0 ).addPhysVolID("side", -1 )   ;
+	pv_layer_neg.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(active_loop)  ).addPhysVolID("sensor", 0 ).addPhysVolID("side", -1 )   ;
 
 	DetElement   ladderDEnegZ( vxd ,   ladderNameN , x_det.id() );
-	ladderDEnegZ.setPlacement( pv ) ;
+	ladderDEnegZ.setPlacement( pv_layer_neg ) ;
 	volSurfaceList( ladderDEnegZ )->push_back( surf ) ;
 	
 
       } else if (LayerId==0||LayerId==2||LayerId==4) { 
 
-	pv = layer_assembly.placeVolume( SiActiveLayerLogical,  Transform3D( rot, Position((layer_radius-(active_silicon_thickness/2.))*sin(phirot2)+active_offset_phi*cos(phirot2),
+	PlacedVolume pv_layer_pos = layer_assembly.placeVolume( SiActiveLayerLogical,  Transform3D( rot, Position((layer_radius-(active_silicon_thickness/2.))*sin(phirot2)+active_offset_phi*cos(phirot2),
 										     -(layer_radius-(active_silicon_thickness/2.))*cos(phirot2)+active_offset_phi*sin(phirot2),
 										     Z)) ) ;
 	
-	pv.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(active_loop)  ).addPhysVolID("sensor", 0 ).addPhysVolID("side", 1 )   ;
+	pv_layer_pos.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(active_loop)  ).addPhysVolID("sensor", 0 ).addPhysVolID("side", 1 )   ;
 	
 	DetElement   ladderDEposZ( vxd ,  ladderNameP , x_det.id() );
-	ladderDEposZ.setPlacement( pv ) ;
+	ladderDEposZ.setPlacement( pv_layer_pos ) ;
 	volSurfaceList( ladderDEposZ )->push_back( surf ) ;
 
 	
-	pv = layer_assembly.placeVolume( SiActiveLayerLogical,  Transform3D( rot, Position((layer_radius-(active_silicon_thickness/2.))*sin(phirot2)+active_offset_phi*cos(phirot2),
+	PlacedVolume pv_layer_neg = layer_assembly.placeVolume( SiActiveLayerLogical,  Transform3D( rot, Position((layer_radius-(active_silicon_thickness/2.))*sin(phirot2)+active_offset_phi*cos(phirot2),
 	 									     -(layer_radius-(active_silicon_thickness/2.))*cos(phirot2)+active_offset_phi*sin(phirot2),
 	 									     -Z)) );
 	DetElement   ladderDEnegZ( vxd ,  ladderNameN , x_det.id() );
-	ladderDEnegZ.setPlacement( pv ) ;
+	ladderDEnegZ.setPlacement( pv_layer_neg ) ;
 	volSurfaceList( ladderDEnegZ )->push_back( surf ) ;
 	
-	pv.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(active_loop)  ).addPhysVolID("sensor", 0 ).addPhysVolID("side", -1 )   ;
+	pv_layer_neg.addPhysVolID("layer", LayerId ).addPhysVolID( "module" , int(active_loop)  ).addPhysVolID("sensor", 0 ).addPhysVolID("side", -1 )   ;
 	
       }		  
 
@@ -1253,20 +1252,20 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
     //==================================================================================
 
-    pv = supp_assembly.placeVolume( ExternalKaptonCablesLogical,  Transform3D( RotationZYX() , Position(0., 0.,  ExternalCablesZ) ) );
-    suppExtKaptonCablesPos.setPlacement( pv ) ;    
+    PlacedVolume pv_kap_pos = supp_assembly.placeVolume( ExternalKaptonCablesLogical,  Transform3D( RotationZYX() , Position(0., 0.,  ExternalCablesZ) ) );
+    suppExtKaptonCablesPos.setPlacement( pv_kap_pos );
     volSurfaceList( suppExtKaptonCablesPos )->push_back( surfKaptonExtCables ) ;
 
-    pv = supp_assembly.placeVolume( ExternalKaptonCablesLogical,  Transform3D( RotationZYX() , Position(0., 0., -ExternalCablesZ) ) );
-    suppExtKaptonCablesNeg.setPlacement( pv ) ;    
+    PlacedVolume pv_kap_neg = supp_assembly.placeVolume( ExternalKaptonCablesLogical,  Transform3D( RotationZYX() , Position(0., 0., -ExternalCablesZ) ) );
+    suppExtKaptonCablesNeg.setPlacement( pv_kap_neg );
     volSurfaceList( suppExtKaptonCablesNeg )->push_back( surfKaptonExtCables ) ;
 
-    pv = supp_assembly.placeVolume( ExternalMetalCablesLogical,   Transform3D( RotationZYX() , Position(0., 0.,  ExternalCablesZ) ) );
-    suppExtMetalCablesPos.setPlacement( pv ) ;    
+    PlacedVolume pv_met_pos = supp_assembly.placeVolume( ExternalMetalCablesLogical,   Transform3D( RotationZYX() , Position(0., 0.,  ExternalCablesZ) ) );
+    suppExtMetalCablesPos.setPlacement( pv_met_pos );
     volSurfaceList( suppExtMetalCablesPos )->push_back( surfMetalExtCables ) ;
 
-    pv = supp_assembly.placeVolume( ExternalMetalCablesLogical,   Transform3D( RotationZYX() , Position(0., 0., -ExternalCablesZ) ) );
-    suppExtMetalCablesNeg.setPlacement( pv ) ;    
+    PlacedVolume pv_met_neg = supp_assembly.placeVolume( ExternalMetalCablesLogical,   Transform3D( RotationZYX() , Position(0., 0., -ExternalCablesZ) ) );
+    suppExtMetalCablesNeg.setPlacement( pv_met_neg );
     volSurfaceList( suppExtMetalCablesNeg )->push_back( surfMetalExtCables ) ;
 
 
@@ -1297,7 +1296,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
 
 
-  pv = supp_assembly.placeVolume( SupportShellLogical ) ;
+  supp_assembly.placeVolume( SupportShellLogical ) ;
   //  pv = supp_assembly.placeVolume( SupportShellLogical, Transform3D( RotationZYX(), Position() ) ) ;
   
 
@@ -1317,10 +1316,10 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   DetElement endplateFwdDE( suppDE , name+"_endplate_fwd" , x_det.id() )  ;
   DetElement endplateBwdDE( suppDE , name+"_endplate_bwd" , x_det.id() )  ;
 
-  pv = supp_assembly.placeVolume( EndPlateShellLogical, Transform3D( RotationZYX(), Position(0., 0.,  ZEndPlateShell ) ) ) ;
-  endplateFwdDE.setPlacement( pv ) ;
-  pv = supp_assembly.placeVolume( EndPlateShellLogical, Transform3D( RotationZYX(), Position(0., 0., -ZEndPlateShell ) ) ) ;
-  endplateBwdDE.setPlacement( pv ) ;
+  PlacedVolume pv_end_pos = supp_assembly.placeVolume( EndPlateShellLogical, Transform3D( RotationZYX(), Position(0., 0.,  ZEndPlateShell ) ) ) ;
+  endplateFwdDE.setPlacement( pv_end_pos ) ;
+  PlacedVolume pv_end_neg = supp_assembly.placeVolume( EndPlateShellLogical, Transform3D( RotationZYX(), Position(0., 0., -ZEndPlateShell ) ) ) ;
+  endplateBwdDE.setPlacement( pv_end_neg ) ;
 
   // --- add a helper surface for the outer part of the endplate shell ---------------------------------
 
@@ -1353,8 +1352,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   double ZEndPlateShell2 = ladder_length +  ((end_electronics_half_z*end_ladd_electronics_option) * 2) + shell_thickess/2. + (beryllium_ladder_block_length*2) ;
   
-  pv = supp_assembly.placeVolume( EndPlateShellLogicalL1, Transform3D( RotationZYX(), Position(0., 0.,   ZEndPlateShell2 ) ) ) ;
-  pv = supp_assembly.placeVolume( EndPlateShellLogicalL1, Transform3D( RotationZYX(), Position(0., 0.,  -ZEndPlateShell2 ) ) ) ;
+  supp_assembly.placeVolume( EndPlateShellLogicalL1, Transform3D( RotationZYX(), Position(0., 0.,   ZEndPlateShell2 ) ) ) ;
+  supp_assembly.placeVolume( EndPlateShellLogicalL1, Transform3D( RotationZYX(), Position(0., 0.,  -ZEndPlateShell2 ) ) ) ;
   
   //**** beryllium support shell cone ************************************************
 
@@ -1384,14 +1383,14 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   VolCone suppShellCone( SupportConeLogical, SurfaceType( SurfaceType::Helper ) , 0.5*shell_thickess  , 0.5*shell_thickess , shellcone_angle, o_shellcon );
   // ==============================================================================================================================
   
-  pv = supp_assembly.placeVolume( SupportConeLogical, Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,  ZCone ) ) ) ;
+  PlacedVolume pv_supp_pos = supp_assembly.placeVolume( SupportConeLogical, Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,  ZCone ) ) ) ;
   DetElement suppShellConePosDE ( suppDE , "posShellCone" , x_det.id() )  ;
-  suppShellConePosDE.setPlacement( pv );
+  suppShellConePosDE.setPlacement( pv_supp_pos );
   volSurfaceList( suppShellConePosDE )->push_back( suppShellCone );
 
-  pv = supp_assembly.placeVolume( SupportConeLogical, Transform3D( RotationZYX( 0, 0, pi ), Position(0., 0., -ZCone ) ) ) ;
+  PlacedVolume pv_supp_neg = supp_assembly.placeVolume( SupportConeLogical, Transform3D( RotationZYX( 0, 0, pi ), Position(0., 0., -ZCone ) ) ) ;
   DetElement suppShellConeNegDE ( suppDE , "negShellCone" , x_det.id() )  ;
-  suppShellConeNegDE.setPlacement( pv );
+  suppShellConeNegDE.setPlacement( pv_supp_neg );
   volSurfaceList( suppShellConeNegDE )->push_back( suppShellCone );
 
   //*** beryllium support forward part **************************************************************************
@@ -1404,8 +1403,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
   vxd.setVisAttributes(lcdd,  "CyanVis" , SupportForLogical ) ;
 
-  pv = supp_assembly.placeVolume( SupportForLogical, Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,  supportForZ ) ) ) ;
-  pv = supp_assembly.placeVolume( SupportForLogical, Transform3D( RotationZYX( 0, 0, pi ), Position(0., 0., -supportForZ ) ) ) ;
+  supp_assembly.placeVolume( SupportForLogical, Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,  supportForZ ) ) ) ;
+  supp_assembly.placeVolume( SupportForLogical, Transform3D( RotationZYX( 0, 0, pi ), Position(0., 0., -supportForZ ) ) ) ;
 
   
   //*** Cryostat ***************************************************************
@@ -1427,12 +1426,12 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     Tube aluBarrelSolid( rAlu, rAlu + drAlu, aluHalfZ, sPhi, sPhi+dPhi);
     Volume aluBarrelLog( "CryostatAluSkinBarrel", aluBarrelSolid, aluMaterial );
     vxd.setVisAttributes(lcdd,  "GrayVis" , aluBarrelLog ) ;
-    pv = supp_assembly.placeVolume( aluBarrelLog ) ;
+    supp_assembly.placeVolume( aluBarrelLog ) ;
     
     Tube styBarrelSolid(  rSty, rSty + drSty, dzSty, sPhi, sPhi+dPhi);
     Volume styBarrelLog( "CryostatFoamBarrel", styBarrelSolid, styMaterial );
     vxd.setVisAttributes(lcdd,  "LightGrayVis", styBarrelLog ) ;
-    pv = supp_assembly.placeVolume( styBarrelLog ) ;
+    supp_assembly.placeVolume( styBarrelLog ) ;
 
     //====== create a material surface for the cryostat barrel ===================
 
@@ -1462,30 +1461,30 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     Tube aluEndcapSolidInner(  rInner, cryostat_apperture - cryostat_apperture_radius, drAlu / 2, sPhi, sPhi+dPhi);
     Volume aluEndcapInnerLog( "CryostatAluSkinEndPlateInner", aluEndcapSolidInner, aluMaterial );
     vxd.setVisAttributes(lcdd,  "GrayVis" , aluEndcapInnerLog ) ;
-    pv = supp_assembly.placeVolume( aluEndcapInnerLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,   aluEndcapZ ) ) ) ;
-    suppFwdInDE.setPlacement( pv ) ;
-    pv = supp_assembly.placeVolume( aluEndcapInnerLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,  -aluEndcapZ ) ) ) ;
-    suppBwdInDE.setPlacement( pv ) ;
+    PlacedVolume pv_alu_end_pos = supp_assembly.placeVolume( aluEndcapInnerLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,   aluEndcapZ ) ) ) ;
+    suppFwdInDE.setPlacement( pv_alu_end_pos ) ;
+    PlacedVolume pv_alu_end_neg = supp_assembly.placeVolume( aluEndcapInnerLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,  -aluEndcapZ ) ) ) ;
+    suppBwdInDE.setPlacement( pv_alu_end_neg ) ;
 
     Tube aluEndcapSolidOuter(   cryostat_apperture + cryostat_apperture_radius, rAlu + drAlu, drAlu / 2, sPhi, sPhi+dPhi);
     Volume aluEndcapOuterLog( "CryostatAluSkinEndPlateOuter", aluEndcapSolidOuter, aluMaterial );
     vxd.setVisAttributes(lcdd,  "GrayVis" , aluEndcapOuterLog ) ;
-    pv = supp_assembly.placeVolume( aluEndcapOuterLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,   aluEndcapZ ) ) ) ;
-    suppFwdOutDE.setPlacement( pv ) ;
-    pv = supp_assembly.placeVolume( aluEndcapOuterLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,  -aluEndcapZ ) ) ) ;
-    suppBwdOutDE.setPlacement( pv ) ;
+    PlacedVolume pv_alu_end_out_pos = supp_assembly.placeVolume( aluEndcapOuterLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,   aluEndcapZ ) ) ) ;
+    suppFwdOutDE.setPlacement( pv_alu_end_out_pos ) ;
+    PlacedVolume pv_alu_end_out_neg = supp_assembly.placeVolume( aluEndcapOuterLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,  -aluEndcapZ ) ) ) ;
+    suppBwdOutDE.setPlacement( pv_alu_end_out_neg ) ;
     
     Tube styEndcapSolidInner(  rInner, cryostat_apperture - cryostat_apperture_radius, drSty / 2, sPhi, sPhi+dPhi);
     Volume styEndcapInnerLog( "CryostatFoamEndPlateInner", styEndcapSolidInner, styMaterial );
     vxd.setVisAttributes(lcdd,  "WhiteVis" , styEndcapInnerLog ) ;
-    pv = supp_assembly.placeVolume( styEndcapInnerLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,   styEndcapZ ) ) ) ;
-    pv = supp_assembly.placeVolume( styEndcapInnerLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,  -styEndcapZ ) ) ) ;
+    supp_assembly.placeVolume( styEndcapInnerLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,   styEndcapZ ) ) ) ;
+    supp_assembly.placeVolume( styEndcapInnerLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,  -styEndcapZ ) ) ) ;
 
     Tube styEndcapSolidOuter(  cryostat_apperture + cryostat_apperture_radius, rSty + drSty, drSty / 2, sPhi, sPhi+dPhi);
     Volume styEndcapOuterLog( "CryostatFoamEndPlateOuter", styEndcapSolidOuter, styMaterial );
     vxd.setVisAttributes(lcdd,  "WhiteVis" , styEndcapOuterLog ) ;
-    pv = supp_assembly.placeVolume( styEndcapOuterLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,   styEndcapZ ) ) ) ;
-    pv = supp_assembly.placeVolume( styEndcapOuterLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,  -styEndcapZ ) ) ) ;
+    supp_assembly.placeVolume( styEndcapOuterLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,   styEndcapZ ) ) ) ;
+    supp_assembly.placeVolume( styEndcapOuterLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,  -styEndcapZ ) ) ) ;
 
     //====== create a material surface for the cryostat endcap ===================
     // Vector3D up( 1. , 0. , 0. ) ;
