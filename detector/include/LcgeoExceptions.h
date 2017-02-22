@@ -21,8 +21,7 @@ namespace lcgeo {
     GeometryException( std::string text ){
       message = "GeometryException: " + text ;
     }
-    virtual const char* what() const  throw() { return  message.c_str() ; } 
-    virtual ~GeometryException() throw() { /*no_op*/; } 
+    virtual const char* what() const noexcept { return  message.c_str() ; }
   }; 
 }
 #endif
