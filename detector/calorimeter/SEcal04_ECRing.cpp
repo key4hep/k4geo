@@ -551,7 +551,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       
       Position   bsl_pos(0,0,bsl_pos_z);
       Transform3D bsl_tran3D(rot,bsl_pos);
-      PlacedVolume  EndcapStructureLayer_phv = EnvLogECRing.placeVolume(EndcapStructureLayer_vol,bsl_tran3D);
+      // PlacedVolume  EndcapStructureLayer_phv =
+	EnvLogECRing.placeVolume(EndcapStructureLayer_vol,bsl_tran3D);
 	      
      
       // Increment to next layer Z position.

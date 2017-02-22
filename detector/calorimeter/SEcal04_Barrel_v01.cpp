@@ -613,7 +613,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	l_pos_z -= (Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE));
 
 	Position   bsl_pos(0,0,bsl_pos_z);      // Position of the layer.
-	PlacedVolume  barrelStructureLayer_phv = mod_vol.placeVolume(barrelStructureLayer_vol,bsl_pos);
+	// PlacedVolume  barrelStructureLayer_phv =
+	  mod_vol.placeVolume(barrelStructureLayer_vol,bsl_pos);
 
 	l_dim_x -=  (Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE));	
 	l_pos_z -= (radiator_dim_y + Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE));
