@@ -25,7 +25,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     map<string, Volume>    volumes;
     map<string, Placements>  sensitives;
     PlacedVolume pv;
-    double tempwidth = 0;
+    //double tempwidth = 0;
     
     
     // --- create an envelope volume and position it into the world ---------------------
@@ -46,7 +46,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         xml_comp_t m_env  = x_mod.child(_U(module_envelope));
         string     m_nam  = x_mod.nameStr();
         Volume     m_vol(m_nam,Box(m_env.width()/2,m_env.length()/2,m_env.thickness()/2),air);
-        tempwidth = m_env.width()/2;
+        //tempwidth = m_env.width()/2;
         int        ncomponents = 0; //unused:, wafer_number = 0;
         
         if ( volumes.find(m_nam) != volumes.end() )   {
@@ -172,7 +172,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                       
                       double sensitive_z_position  = trans[2];
                       
-                      double outer_thickness = half_module_thickness + sensitive_z_position;
+                      //double outer_thickness = half_module_thickness + sensitive_z_position;
                       double inner_thickness = half_module_thickness - sensitive_z_position;
                       
                       thisLayer.distanceSupport  = rc  ;
