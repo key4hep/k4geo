@@ -83,7 +83,7 @@ class SEcal05_Helpers {
   SEcal05_Helpers();
 
   ~SEcal05_Helpers() {
-    if ( _layering ) delete _layering; _layering=NULL;
+    delete _layering;
   }
 
   // SET THE PARAMETERS
@@ -212,7 +212,7 @@ class SEcal05_Helpers {
   };
 
   xml_det_t* _x_det;
-  Layering* _layering;
+  Layering* _layering=NULL;
   std::string _det_name;
 
   std::vector <dimposXYStruct> getAbsPlateXYDimensions( double ztop=-999 );
