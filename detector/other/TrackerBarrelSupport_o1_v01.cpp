@@ -29,9 +29,9 @@ using DD4hep::Geometry::Tube;
 using DD4hep::Geometry::PlacedVolume;
 using DD4hep::Geometry::Assembly;
 
-static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)
+static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector )
 {
-  static double tolerance = 0e0;
+  //static double tolerance = 0e0;
 
   xml_det_t     x_det     = e;
   int           det_id    = x_det.id();

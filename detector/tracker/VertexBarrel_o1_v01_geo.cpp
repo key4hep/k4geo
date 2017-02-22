@@ -156,7 +156,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                       
                       double sensitive_z_position  = trans[2];
                       
-                      double outer_thickness = half_module_thickness + sensitive_z_position;
+                      //double outer_thickness = half_module_thickness + sensitive_z_position;
                       double inner_thickness = half_module_thickness - sensitive_z_position;
                       
                       thisLayer.distanceSupport  = rc  ;
