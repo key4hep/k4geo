@@ -231,7 +231,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
       return 0 ;//false; // premature exit, Mokka will abort now
     }
 
-    register double tmpAngle;
+    double tmpAngle;
     switch (crossType) {
     case kUpstream:
     case kPunchedUpstream:
