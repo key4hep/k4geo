@@ -430,7 +430,7 @@ private:
   double ZPlus_PE_Thickness;
   double ZPlus_Cu_Thickness;
 
-  double OldRailSeparation;
+  // double OldRailSeparation;
 
   Material air;
   Material polyethylene;
