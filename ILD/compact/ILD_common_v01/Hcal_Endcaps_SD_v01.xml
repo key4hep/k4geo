@@ -22,6 +22,7 @@
     <material name="Steel304L"/><!-- radiator and the thickness has been defined in the main xml file-->
     <staves  material = "Steel235"  vis="SeeThrough"/>
 
+
       <!-- slice: from inner  to outer -->  
     <layer repeat="HcalEndcapSD_nlayers" vis="SeeThrough">  
         <slice material = "Steel304L"      thickness = "HcalSD_radiator_thickness"                    vis="BlueVis"   />   
