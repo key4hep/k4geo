@@ -16,7 +16,6 @@
  <!--   
             <shape type="Tube" rmin="0.0" rmax="HcalEndcap_outer_radius + env_safety" dz="HcalEndcap_max_z + env_safety"/>
             <shape type="Tube" rmin="0.0" rmax="HcalEndcap_outer_radius + 2.0*env_safety" dz="HcalEndcap_min_z - env_safety"/>
-         </shape>
 -->
  </envelope>
     <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_HADRONIC " />
