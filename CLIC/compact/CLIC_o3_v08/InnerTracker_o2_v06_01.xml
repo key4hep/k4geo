@@ -66,6 +66,7 @@
             <composite name="InnerTrackerBarrelSupport"/>
             <composite name="InnerTrackerEndcapSupport"/>
             <composite name="InnerTrackerInterlink"/>
+            <composite name="InnerTrackerVertexCable"/>
             <composite name="BeampipeShell"/>
             <composite name="BeampipeShell2"/>
             <composite name="BeampipeShell3"/>
@@ -358,11 +359,18 @@
         </detector>
 
 
-        <detector name="InnerTrackerInterlink" type="ConicalSupport_o1_v01" reflect="true" region="InnerTrackerEndcapRegion">
+        <detector name="InnerTrackerInterlink" type="TubeSupport_o1_v01" reflect="true" region="InnerTrackerEndcapRegion">
             <envelope>
                 <shape type="Assembly"/>
             </envelope>
-            <section start="InnerTracker_Barrel_half_length_1+2*cm"  end="InnerTracker_Barrel_half_length_2+2*cm"        rMin1="InnerTracker_Barrel_radius_2-2*cm"  rMin2="InnerTracker_Barrel_radius_2-2*cm" rMax1="InnerTracker_Barrel_radius_2-2*cm+0.6/3.5959*cm"           rMax2="InnerTracker_Barrel_radius_2-2*cm+0.3/3.5959*cm" material="CarbonFiber" name="ConeSupport" vis="InterlinkVis"/>
+            <section start="InnerTracker_Barrel_half_length_1+2*cm"  end="InnerTracker_Barrel_half_length_2+2*cm"        rMin="InnerTracker_Barrel_radius_2-2*cm"  rMax="InnerTracker_Barrel_radius_2-2*cm+0.6/3.5959*cm"  material="CarbonFiber" name="InterlinkTube" vis="InterlinkVis"/>
+        </detector>
+
+        <detector name="InnerTrackerVertexCable" type="TubeSupport_o1_v01" reflect="true" region="BeampipeRegion">
+            <envelope>
+                <shape type="Assembly"/>
+            </envelope>
+            <section start="13.1*cm" end="495*mm" rMin="Vertex_outer_radius+0.5*mm" rMax="Vertex_outer_radius+0.5*mm+0.067*mm" material="Copper" name="VertexCableTube" vis="SiVertexCableVis"/>
         </detector>
 
 
@@ -372,8 +380,6 @@
             </envelope>
             <section start="500*mm"  end="ConeBeamPipe_zmax"        rMin1="52.7*mm+VertexCoolingGap"  rMin2="ConeBeamPipe_rmax+VertexCoolingGap" rMax1="52.7*mm+VertexCoolingGap+VertexCoolingShellThickness"           rMax2="ConeBeamPipe_rmax+VertexCoolingGap+VertexCoolingShellThickness" material="CarbonFiber" name="ConeSupport" vis="SupportVis"/>
             <section start="ConeBeamPipe_zmax" end="InnerTracker_half_length" rMin1="ConeBeamPipe_rmax+VertexCoolingGap" rMin2="ConeBeamPipe_rmax+VertexCoolingGap" rMax1="ConeBeamPipe_rmax+VertexCoolingGap+VertexCoolingShellThickness" rMax2="ConeBeamPipe_rmax+VertexCoolingGap+VertexCoolingShellThickness" material="CarbonFiber" name="TubeSupport" vis="SupportVis"/>
-            <comment> The next section is the cable for the vertex </comment>
-            <section start="13.1*cm" end="495*mm" rMin1="Vertex_outer_radius+0.5*mm" rMin2="Vertex_outer_radius+0.5*mm" rMax1="Vertex_outer_radius+0.5*mm+0.067*mm" rMax2="Vertex_outer_radius+0.5*mm+0.067*mm" material="Copper" name="ConeSupport" vis="SiVertexCableVis"/>
         </detector>
 
 
