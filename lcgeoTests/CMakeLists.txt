@@ -89,8 +89,12 @@ ADD_EXECUTABLE( TestSensThickness src/TestSensThickness.cpp )
 Target_Link_Libraries( TestSensThickness ${DD4hep_LIBRARIES} ${DD4hep_COMPONENT_LIBRARIES} ${ROOT_LIBRARIES} ${Geant4_LIBRARIES} )
 INSTALL( TARGETS TestSensThickness DESTINATION bin )
 
-ADD_TEST( t_SensThickness_Clic_o2_v4 ${CMAKE_INSTALL_PREFIX}/bin/TestSensThickness ${CMAKE_SOURCE_DIR}/CLIC/compact/CLIC_o2_v04/CLIC_o2_v04.xml 300 50 )
-ADD_TEST( t_SensThickness_Clic_o2_v5 ${CMAKE_INSTALL_PREFIX}/bin/TestSensThickness ${CMAKE_SOURCE_DIR}/CLIC/compact/CLIC_o2_v05/CLIC_o2_v05.xml 300 50 )
-ADD_TEST( t_SensThickness_Clic_o3_v7 ${CMAKE_INSTALL_PREFIX}/bin/TestSensThickness ${CMAKE_SOURCE_DIR}/CLIC/compact/CLIC_o3_v07/CLIC_o3_v07.xml 300 50 )
-ADD_TEST( t_SensThickness_Clic_o3_v8 ${CMAKE_INSTALL_PREFIX}/bin/TestSensThickness ${CMAKE_SOURCE_DIR}/CLIC/compact/CLIC_o3_v08/CLIC_o3_v08.xml 100 50 )
+ADD_TEST( t_SensThickness_Clic_o2_v4 "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
+          ${CMAKE_INSTALL_PREFIX}/bin/TestSensThickness ${CMAKE_SOURCE_DIR}/CLIC/compact/CLIC_o2_v04/CLIC_o2_v04.xml 300 50 )
+ADD_TEST( t_SensThickness_Clic_o2_v5 "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
+          ${CMAKE_INSTALL_PREFIX}/bin/TestSensThickness ${CMAKE_SOURCE_DIR}/CLIC/compact/CLIC_o2_v05/CLIC_o2_v05.xml 300 50 )
+ADD_TEST( t_SensThickness_Clic_o3_v7 "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
+          ${CMAKE_INSTALL_PREFIX}/bin/TestSensThickness ${CMAKE_SOURCE_DIR}/CLIC/compact/CLIC_o3_v07/CLIC_o3_v07.xml 300 50 )
+ADD_TEST( t_SensThickness_Clic_o3_v8 "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
+          ${CMAKE_INSTALL_PREFIX}/bin/TestSensThickness ${CMAKE_SOURCE_DIR}/CLIC/compact/CLIC_o3_v08/CLIC_o3_v08.xml 100 50 )
 
