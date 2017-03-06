@@ -570,25 +570,48 @@
       </plugins>
 
 <fields>
-  <field type="solenoid" name="GlobalSolenoid" inner_field="Field_nominal_value*tesla"
-  	  outer_field="-1.5*tesla" zmax="Coil_half_length"
-  	  inner_radius="Coil_inner_radius"
-  	  outer_radius="world_side" />
+  <!--<field type="solenoid" name="GlobalSolenoid" inner_field="Field_nominal_value*tesla"-->
+  <!--  	  outer_field="-1.5*tesla" zmax="Coil_half_length"-->
+  <!--	  inner_radius="Coil_inner_radius"-->
+  <!--	  outer_radius="world_side" />-->
 
-  <!-- <field name="DetectorMap" type="FieldXYZ" -->
-  <!--        filename="${lcgeo_DIR}/fieldmaps/ILDMap_KB_20150204_BRhoZ.root" -->
-  <!--        tree="fieldmap:rho:z:Brho:Bz" -->
-  <!--        rScale = "1.0" -->
-  <!--        zScale = "1.0" -->
-  <!--        bScale = "3.5/4.12841" -->
-  <!--        rhoMin = "5*mm" -->
-  <!--        zMin = "5*mm" -->
-  <!--        rhoMax = "7005*mm" -->
-  <!--        zMax = "7005*mm" -->
-  <!--        nRho = "701" -->
-  <!--        nZ = "701" -->
-  <!--        > -->
-  <!-- </field> -->
+  <!-- Solenoidal Field from Br(r,z) and Bz(r,z) field map -->
+  <field name="DetectorMap" type="FieldBrBz"
+         filename="${lcgeo_DIR}/fieldmaps/ild_fieldMap_Solenoid3.5T_StandardYoke_10cm_v1_20170223.root"
+         tree="ntuple:rho:z:Brho:Bz"
+         rScale = "1.0"
+         zScale = "1.0"
+         bScale = "3.5/4.12841"
+         rhoMin = "5*mm"
+         zMin = "5*mm"
+         rhoMax = "7005*mm"
+         zMax = "7005*mm"
+         nRho = "701"
+         nZ = "701"
+         >
+  </field>
+  
+  <!-- anti-DID Field from Bx(x,y,z), By(x,y,z) and Bz(x,y,z) field map -->
+  <field name="DetectorMap" type="FieldXYZ"
+         filename="${lcgeo_DIR}/fieldmaps/ild_fieldMap_antiDID_10cm_v1_20170223.root"
+         tree="ntuple:x:y:z:Bx:By:Bz"
+         xScale = "1.0"
+         yScale = "1.0"
+         zScale = "1.0"
+         bScale = "1.0"
+         xMin   = "-200*cm"
+         xMax   = "+200*cm"
+         xStep  = "10*cm"
+         yMin   = "-200*cm"
+         yMax   = "+200*cm"
+         yStep  = "10*cm"
+         zMin   = "-400*cm"
+         zMax   = "+400*cm"
+         zStep  = "10*cm"
+         >
+  </field>
+  
+  
 
  </fields> 
 </lccdd>
