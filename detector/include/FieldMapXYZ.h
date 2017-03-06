@@ -10,24 +10,36 @@ class FieldMapXYZ: public DD4hep::Geometry::CartesianField::Object {
 public:
 
   struct FieldValues_t {
-    double Br;
+    double Bx;
+    double By;
     double Bz;
-    FieldValues_t(double _Br, double _Bz):
-      Br(_Br), Bz(_Bz) {}
+    FieldValues_t(double _Bx, double _By, double _Bz):
+      Bx(_Bx), By(_By), Bz(_Bz) {}
   };
 
-  int nRho, nZ;
-  double rhoMin, rhoMax, zMin, zMax, rScale, zScale, bScale;
+  int nX, nY, nZ;
+  
+  double xMin,xMax,xStep,xScale;
+  double yMin,yMax,yStep,yScale;
+  double zMin,zMax,zStep,zScale;
+  
+  double bScale;
+  
   std::vector< FieldValues_t > fieldMap;
 
 public:
   /// Initializing constructor
   FieldMapXYZ();
+  
   /// Call to access the field components at a given location
   virtual void fieldComponents(const double* pos, double* field);
+  
   /// Fiell the FieldMap from the the tree specified in the XML
   void fillFieldMapFromTree(const std::string& filename, const std::string& treename);
+  
+  int   GetGlobalIndex(double x, double y, double z);
+  
 };
 
 
-#endif // FieldMap_rzBrBz_h
+#endif // FieldMap_XYZ_h
