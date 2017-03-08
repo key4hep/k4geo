@@ -9,6 +9,7 @@
       </shape>
       <rotation x="0" y="0" z="90*deg-180*deg/Hcal_inner_symmetry"/> 
     </envelope>
+    <type_flags type=" DetType_CALORIMETER + DetType_BARREL + DetType_HADRONIC " />
 
     <staves  material = "Steel304L"  vis="BlueVis"/>
 
