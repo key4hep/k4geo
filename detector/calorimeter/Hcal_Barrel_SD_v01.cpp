@@ -33,6 +33,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   // --- create an envelope volume and position it into the world ---------------------
   
   Volume envelope = XML::createPlacedEnvelope( lcdd,  element , sdet ) ;
+
+  XML::setDetectorTypeFlag(element, sdet);
   
   if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
 
