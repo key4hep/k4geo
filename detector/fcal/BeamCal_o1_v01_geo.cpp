@@ -70,6 +70,9 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   const double fullCrossingAngle  = xmlParameter.attr< double >(_Unicode(crossingangle));
   std::cout << " The crossing angle is: " << fullCrossingAngle << " radian"  << std::endl;
 
+  const double graphiteOuterR = xmlParameter.attr< double >(_Unicode(rGraphite));
+//  const double graphiteOuterR = 12;
+
   //Create the section cutout for the sensor and readout volumes
   // The cutout sits on the negative x-axis, i.e. phi~=180degrees
   const double bcalCutOutSpan  = xmlParameter.attr< double >(_Unicode(cutoutspanningangle));
@@ -167,7 +170,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	bool isAbsorberStructure(false);
 	try {
 	  const std::string& sliceType = compSlice.attr< std::string >(_Unicode(layerType));
-	  if ( sliceType.compare("holeForIncomingBeampipe") == 0 ){
+	  if (   sliceType.compare("holeForIncomingBeampipe") == 0
+	      || sliceType.compare("graphiteShielding")    == 0 ){
 	    isAbsorberStructure=true;
 	  } // else {
 	  //   throw std::runtime_error("Unknown type of slice in BeamCal, use \"absorber\" or nothing");
@@ -177,7 +181,19 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	  //std::cout << e.what()  << std::endl;
 	}
 
-	DD4hep::Geometry::Tube sliceBase(bcalInnerR,bcalOuterR,slice_thickness/2);
+	double outerR = bcalOuterR;
+  try {
+    const std::string& sliceType = compSlice.attr< std::string >(_Unicode(layerType));
+    if ( sliceType.compare("graphiteShielding") == 0) {
+      outerR = graphiteOuterR;
+    }
+  } catch (std::runtime_error &e) {
+        //std::cout << "Catching " << e.what()  << std::endl;
+        //std::cout << e.what()  << std::endl;
+  }
+
+
+	DD4hep::Geometry::Tube sliceBase(bcalInnerR, outerR, slice_thickness/2);
 	DD4hep::Geometry::SubtractionSolid slice_subtracted;
 
 
