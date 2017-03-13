@@ -12,8 +12,8 @@
   </info>
   
   <includes>
-    <gdmlFile  ref="elements.xml"/>
-    <gdmlFile  ref="materials.xml"/>
+    <gdmlFile  ref="../ILD_common_v01/elements.xml"/>
+    <gdmlFile  ref="../ILD_common_v01/materials.xml"/>
     <!--pyBuilder ref="../drivers"/-->
   </includes>
   
@@ -47,7 +47,19 @@
     
 
     <!-- global parameters from Mokka model ILD_l1_v01 -->
-    <include ref="model_parameters_ILD_l1_v01.xml"/>
+    <!--include ref="model_parameters_ILD_l1_v01.xml"/-->
+    <include ref="../ILD_l1_v01/top_defs_ILD_l1_v01.xml"/>
+    <include ref="../ILD_common_v01/top_defs_common_v01.xml"/>
+    <include ref="../ILD_common_v01/basic_defs.xml"/>
+    <include ref="../ILD_common_v01/envelope_defs.xml"/>
+    <include ref="../ILD_common_v01/tube_defs.xml"/>
+    <include ref="../ILD_common_v01/misc_defs.xml"/>
+    <include ref="../ILD_common_v01/tracker_defs.xml"/>
+    <include ref="../ILD_common_v01/fcal_defs.xml"/>
+    <include ref="../ILD_common_v01/ecal_defs.xml"/>
+    <include ref="../ILD_common_v01/hcal_defs.xml"/>
+    <include ref="../ILD_common_v01/yoke_defs.xml"/>
+    <include ref="../ILD_common_v01/services_defs.xml"/>
 
     <!-- ######### parameters as computed in Ecal04 driver: ################  --> 
     <!-- <constant name="Ecal_Barrel_module_dim_z" value="2*Ecal_Barrel_halfZ/5." /> -->
@@ -81,6 +93,7 @@
     <constant name="BeamCal_rmin"  value="30*mm"/>
     <constant name="BeamCal_rmax"  value="15*cm"/>
     <constant name="BeamCal_zmin"  value="3.3*m"/>
+    <constant name="BCal_rGraphite"  value="10*cm"/>
     <!-- <constant name="CrossingAngle"  value="14*mrad"/> -->
 
   </define>
@@ -134,7 +147,7 @@
 
     <comment>Calorimeters</comment>
 
-    <include ref="BeamCal08.xml"/>
+    <include ref="../ILD_common_v01/BeamCal08.xml"/>
 
   </detectors> 
 
