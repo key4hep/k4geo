@@ -74,7 +74,7 @@
 
 
     <detector name="BeamCal" type="BeamCal" vis="MyBeamCalVis" id="1" readout="BeamCalHits" insideTrackingVolume="false">
-      <parameter crossingangle="20*mrad"  cutoutspanningangle="10*deg" incomingbeampiperadius="3.5*mm"/>
+      <parameter crossingangle="CrossingAngle"  cutoutspanningangle="10*deg" incomingbeampiperadius="IncomingBP_radius"/>
       <dimensions inner_r = "BeamCal_rmin" inner_z = "BeamCal_zmin" outer_r = "BeamCal_rmax" />
 
       <layer repeat="1" >
