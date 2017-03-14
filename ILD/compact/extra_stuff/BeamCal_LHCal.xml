@@ -141,7 +141,6 @@
 
     <include ref="../ILD_common_v01/BeamCal08.xml"/>
     <include ref="../ILD_common_v01/LHCal01.xml"/>
-
   </detectors> 
 
   <readouts>
