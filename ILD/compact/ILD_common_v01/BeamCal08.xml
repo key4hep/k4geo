@@ -62,7 +62,7 @@
 	     />
   
   <dimensions inner_r = "BCal_rInner"
-	      inner_z = "LHcal_zend + LHcal_BCal_clearance"
+	      inner_z = "LHcal_zend + LHcal_BCal_clearance - BCal_dGraphite"
 	      outer_r = "BCal_rOuter" />
   
   <!-- <layer repeat="1" vis="SeeThrough"> -->

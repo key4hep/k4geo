@@ -93,7 +93,7 @@ subdetector-specific ones are in separate files
   <constant name="top_LHCal_outer_radius"            value="315*mm"/>
   <constant name="top_LHCal_min_z"                   value="2680*mm"/>
   <constant name="LHcal_zend"           value="top_LHCal_min_z + top_LHCal_thickness"/>
-  <constant name="LHcal_BCal_clearance" value="390*mm"/>
+  <constant name="LHcal_BCal_clearance" value="20*mm"/>
 
   <!-- beamcal -->
   <constant name="top_BeamCal_thickness"             value="220.0024*mm"/>
