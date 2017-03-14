@@ -93,7 +93,6 @@
     <!--constant name="BeamCal_rmin"  value="20*mm"/ This is not used-->
     <constant name="BeamCal_rmax"  value="15*cm"/>
     <!--constant name="BeamCal_zmin"  value="3.3*m"/-->
-    <constant name="BCal_rGraphite"  value="LHCal_inner_radius-1.0*mm"/>
     <!-- <constant name="CrossingAngle"  value="14*mrad"/> -->
 
   </define>
