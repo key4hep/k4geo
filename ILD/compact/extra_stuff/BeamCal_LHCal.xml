@@ -90,7 +90,7 @@
 
 
     <comment>Dummy Parameters for the BeamCal</comment>
-    <constant name="BeamCal_rmin"  value="30*mm"/>
+    <!--constant name="BeamCal_rmin"  value="20*mm"/ This is not used-->
     <constant name="BeamCal_rmax"  value="15*cm"/>
     <!--constant name="BeamCal_zmin"  value="3.3*m"/-->
     <constant name="BCal_rGraphite"  value="LHCal_inner_radius-1.0*mm"/>
@@ -154,8 +154,12 @@
 
   <readouts>
     <readout name="BeamCalCollection">
-      <segmentation type="CartesianGridXY" grid_size_x="100*cm" grid_size_y="100*cm" offset_x="0*cm" />
-      <id>system:8,barrel:3,layer:6,slice:5,x:-16,y:-16 </id>
+      <segmentation type="PolarGridRPhi2"
+                    grid_r_values="20.00*mm 22.24*mm 24.73*mm 27.49*mm 30.57*mm 33.99*mm 37.79*mm 42.02*mm 46.72*mm 51.94*mm 57.76*mm 64.22*mm 71.40*mm 79.39*mm 88.27*mm 98.15*mm 109.13*mm 121.33*mm 134.91*mm 150.00*mm"
+                    grid_phi_values="5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree"
+                    offset_phi="-180*degree+(360*degree-BCal_SpanningPhi)*0.5"
+                    />
+      <id>system:8,barrel:3,layer:8,slice:5,r:32:16,phi:16</id>
     </readout>
     <readout name="LHCalCollection">
       <segmentation type="CartesianGridXY" grid_size_x="LHcal_cell_size" grid_size_y="LHcal_cell_size" offset_x="0*cm" />
