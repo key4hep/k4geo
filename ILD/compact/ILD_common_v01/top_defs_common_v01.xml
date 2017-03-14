@@ -88,11 +88,11 @@ subdetector-specific ones are in separate files
   <constant name="top_Lcal_z_begin"      value="2505.0*mm"/>
 
   <!-- lhcal -->
-  <constant name="top_LHCal_thickness"               value="520.0*mm"/>
-  <constant name="top_LHCal_inner_radius"            value="100*mm"/>
-  <constant name="top_LHCal_outer_radius"            value="325*mm"/>
+  <constant name="top_LHCal_thickness"               value="464.0*mm"/>
+  <constant name="top_LHCal_inner_radius"            value="150*mm"/>
+  <constant name="top_LHCal_outer_radius"            value="315*mm"/>
   <constant name="top_LHCal_min_z"                   value="2680*mm"/>
-  <constant name="LHcal_zend"           value="3085*mm"/>
+  <constant name="LHcal_zend"           value="top_LHCal_min_z + top_LHCal_thickness"/>
   <constant name="LHcal_BCal_clearance" value="390*mm"/>
 
   <!-- beamcal -->
