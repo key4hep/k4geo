@@ -93,7 +93,6 @@
     <constant name="BeamCal_rmin"  value="30*mm"/>
     <constant name="BeamCal_rmax"  value="15*cm"/>
     <constant name="BeamCal_zmin"  value="3.3*m"/>
-    <constant name="BCal_rGraphite"  value="10*cm"/>
     <!-- <constant name="CrossingAngle"  value="14*mrad"/> -->
 
   </define>
