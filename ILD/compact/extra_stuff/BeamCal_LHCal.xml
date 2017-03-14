@@ -88,7 +88,6 @@
     <constant name="tracker_region_zmax" value="Ecal_endcap_zmin" />  
     <!-- ######### end of parameters as computed in Ecal04 driver: ################  --> 
 
-
   </define>
 
   
@@ -169,7 +168,6 @@
       <segmentation type="CartesianGridXY" grid_size_x="LHcal_cell_size" grid_size_y="LHcal_cell_size" offset_x="0*cm" />
       <id>system:8,barrel:3,layer:6,slice:5,x:-16,y:-16 </id>
     </readout>
-
   </readouts>
 
   <!-- <fields> -->
