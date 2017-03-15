@@ -34,7 +34,8 @@
   <constant name="LHcal_cell_size" value="10*mm"/>
 
 
-  <constant name="BCal_SpanningPhi" value="320*degree"/>
+  <constant name="BCal_cutoutSpanning" value="45*degree"/>
+  <constant name="BCal_SpanningPhi" value="360*degree-BCal_cutoutSpanning"/>
   <constant name="BCal_TubeIncomingRadius" value="15*mm"/>
   <constant name="BCal_dAbsorber" value="3.5*mm"/>
   <constant name="BCal_dGraphite" value="top_BCal_dGraphite"/>
