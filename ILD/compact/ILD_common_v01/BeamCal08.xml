@@ -58,7 +58,6 @@
   <parameter crossingangle="ILC_Main_Crossing_Angle"
 	     cutoutspanningangle="40*deg"
 	     incomingbeampiperadius="BCal_TubeIncomingRadius"
-	     rGraphite="BCal_rGraphite"
 	     />
   
   <dimensions inner_r = "BCal_rInner"
@@ -70,7 +69,7 @@
   <!-- </layer> -->
   
   <layer repeat="1" vis="SeeThrough">
-    <slice material = "C"       thickness = "BCal_dGraphite" vis="LayerVis1"  layerType="graphiteShielding"/>
+    <slice material = "C"       thickness = "BCal_dGraphite" vis="LayerVis1" outer_radius = "BCal_rGraphite"  layerType="graphiteShielding"/>
     <slice material = "TungstenDens24" thickness = "BCal_dAbsorber"        vis="BCLayerVis1" layerType="holeForIncomingBeampipe" />
     <slice material = "Silicon" thickness = "0.3004*mm" sensitive = "yes"  vis="BCLayerVis2"/>
     <slice material = "Copper"  thickness = "0.0004*mm"                    vis="BCLayerVis3"/>
