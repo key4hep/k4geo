@@ -57,9 +57,15 @@ using namespace DD4hep::Geometry;
  *              along tower index
  *   F.Gaede: 03/2015:
  *            create the envelope volume with create_placed_envelope() using the xml
+ *
+ *  D. Jeans: 03/2015:
+ *             generalise to non-octagonal barrel shape
+ *             allow dead region between end of each slab and the module edge (e.g. for the slab fastening system)
  */
 
 /*
+
+
 
 
   y
@@ -121,11 +127,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   xml_comp_t    x_dim     = x_det.dimensions();
   int           nsides    = x_dim.numsides();
-
-  // this code assumes octagon in several places
-  //  would need work to make it general
-  //  assert( nsides==8 );
-
 
   double        dphi      = (2*M_PI/nsides);
   double        hphi      = dphi/2;
