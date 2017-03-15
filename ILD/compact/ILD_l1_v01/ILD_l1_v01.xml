@@ -200,7 +200,7 @@
 
     <readout name="BeamCalCollUniform">
       <segmentation type="PolarGridRPhi2"
-                    grid_r_values="20.00*mm 27.6565*mm 35.3029*mm 42.9494*mm 50.5959*mm 58.2424*mm 65.8888*mm 73.5353*mm 81.1818*mm 88.8282*mm 96.4747*mm 104.121*mm 111.768*mm 119.414*mm 127.061*mm 134.707*mm 142.354*mm 150.0*mm"
+                    grid_r_values="17.80*mm 27.6565*mm 35.3029*mm 42.9494*mm 50.5959*mm 58.2424*mm 65.8888*mm 73.5353*mm 81.1818*mm 88.8282*mm 96.4747*mm 104.121*mm 111.768*mm 119.414*mm 127.061*mm 134.707*mm 142.354*mm 150.0*mm"
                     grid_phi_values="BCal_SpanningPhi/(3*8) BCal_SpanningPhi/(3*8) BCal_SpanningPhi/(4*8) BCal_SpanningPhi/(5*8) BCal_SpanningPhi/(5*8) BCal_SpanningPhi/(6*8) BCal_SpanningPhi/(7*8) BCal_SpanningPhi/(8*8) BCal_SpanningPhi/(8*8) BCal_SpanningPhi/(9*8) BCal_SpanningPhi/(10*8) BCal_SpanningPhi/(10*8) BCal_SpanningPhi/(11*8) BCal_SpanningPhi/(12*8) BCal_SpanningPhi/(12*8) BCal_SpanningPhi/(13*8) BCal_SpanningPhi/(14*8)"
                     offset_phi="-180*degree+(360*degree-BCal_SpanningPhi)*0.5"
                     />
@@ -209,7 +209,7 @@
 
     <readout name="BeamCalCollection">
       <segmentation type="PolarGridRPhi2"
-                    grid_r_values="20.00*mm 22.24*mm 24.73*mm 27.49*mm 30.57*mm 33.99*mm 37.79*mm 42.02*mm 46.72*mm 51.94*mm 57.76*mm 64.22*mm 71.40*mm 79.39*mm 88.27*mm 98.15*mm 109.13*mm 121.33*mm 134.91*mm 150.00*mm"
+                    grid_r_values="17.80*mm 19.91*mm 22.28*mm 24.92*mm 27.88*mm 31.19*mm 34.89*mm 39.04*mm 43.67*mm 48.85*mm 54.65*mm 61.14*mm 68.40*mm 76.52*mm 85.60*mm 95.77*mm 107.14*mm 119.85*mm 134.08*mm 150.00*mm "
                     grid_phi_values="5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree"
                     offset_phi="-180*degree+(360*degree-BCal_SpanningPhi)*0.5"
                     />
