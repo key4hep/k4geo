@@ -88,13 +88,6 @@
     <constant name="tracker_region_zmax" value="Ecal_endcap_zmin" />  
     <!-- ######### end of parameters as computed in Ecal04 driver: ################  --> 
 
-
-    <comment>Dummy Parameters for the BeamCal</comment>
-    <constant name="BeamCal_rmin"  value="30*mm"/>
-    <constant name="BeamCal_rmax"  value="15*cm"/>
-    <constant name="BeamCal_zmin"  value="3.3*m"/>
-    <!-- <constant name="CrossingAngle"  value="14*mrad"/> -->
-
   </define>
 
   
@@ -135,10 +128,13 @@
     <vis name="FTDCablesVis"    alpha="1.0"  r="0.0"  g="0.9" b="0.0"  showDaughters="true" visible="true"/>
     
     <vis name="MyBeamCalVis"  alpha="0.5"  r="1.0" g="1.0"  b="1.0" showDaughters="true"  visible="false"/>
-    <vis name="BCLayerVis1"   alpha="1.0"  r="1.0" g="0.0"  b="0.0" showDaughters="true"  visible="true"/>
-    <vis name="BCLayerVis2"   alpha="1.0"  r="0.0" g="1.0"  b="0.0" showDaughters="true"  visible="true"/>
-    <vis name="BCLayerVis3"   alpha="1.0"  r="0.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
-    <vis name="BCLayerVis4"   alpha="1.0"  r="1.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
+    <vis name="LayerVis1"     alpha="0.1"  r="1.0" g="0.0"  b="0.0" showDaughters="true"  visible="true"/>
+    <vis name="BCLayerVis1"   alpha="0.1"  r="1.0" g="0.0"  b="0.0" showDaughters="true"  visible="true"/>
+    <vis name="BCLayerVis2"   alpha="0.1"  r="0.0" g="1.0"  b="0.0" showDaughters="true"  visible="true"/>
+    <vis name="BCLayerVis3"   alpha="0.1"  r="0.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
+    <vis name="BCLayerVis4"   alpha="0.1"  r="1.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
+
+    <vis name="ILD_FCALVis" alpha="1.0" r="0.67" g="0.66"  b="0.67" showDaughters="true"  visible="true"/>
 
   </display>
 
@@ -162,12 +158,11 @@
 
     <readout name="BeamCalCollection">
       <segmentation type="PolarGridRPhi2"
-                    grid_r_values="17.80*mm 19.91*mm 22.28*mm 24.92*mm 27.88*mm 31.19*mm 34.89*mm 39.04*mm 43.67*mm 48.85*mm 54.65*mm 61.14*mm 68.40*mm 76.52*mm 85.60*mm 95.77*mm 107.14*mm 119.85*mm 134.08*mm 150.00*mm "
+                    grid_r_values="17.80*mm 19.84*mm 22.12*mm 24.65*mm 27.48*mm 30.63*mm 34.14*mm 38.06*mm 42.42*mm 47.28*mm 52.70*mm 58.75*mm 65.48*mm 72.99*mm 81.36*mm 90.69*mm 101.09*mm 112.68*mm 125.60*mm 140.00*mm"
                     grid_phi_values="5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree"
                     offset_phi="-180*degree+(360*degree-BCal_SpanningPhi)*0.5"
                     />
       <id>system:8,barrel:3,layer:8,slice:5,r:32:16,phi:16</id>
-    </readout>
     </readout>
     
   </readouts>
