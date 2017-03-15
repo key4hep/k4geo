@@ -89,12 +89,6 @@
     <!-- ######### end of parameters as computed in Ecal04 driver: ################  --> 
 
 
-    <comment>Dummy Parameters for the BeamCal</comment>
-    <!--constant name="BeamCal_rmin"  value="20*mm"/ This is not used-->
-    <constant name="BeamCal_rmax"  value="15*cm"/>
-    <!--constant name="BeamCal_zmin"  value="3.3*m"/-->
-    <!-- <constant name="CrossingAngle"  value="14*mrad"/> -->
-
   </define>
 
   

@@ -32,7 +32,12 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   
   DD4hep::XML::setDetectorTypeFlag( element, sdet ) ;
   
-  if( lcdd.buildType() == DD4hep::BUILD_ENVELOPE ) return sdet ;
+  std::cout << "Build type: " << lcdd.buildType() << std::endl;
+
+  if( lcdd.buildType() == DD4hep::BUILD_ENVELOPE ) { std::cout << "Building envelope.\n"; return sdet ; }
+  else { std::cout << "Building all.\n"; }
+  if( lcdd.buildType() == DD4hep::BUILD_DISPLAY) { std::cout << "Building display.\n"; return sdet ; }
+  else { std::cout << "Building all.\n"; }
   
   //-----------------------------------------------------------------------------------
 
@@ -45,6 +50,10 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   const double bcalInnerR = dimensions.inner_r();
   const double bcalOuterR = dimensions.outer_r();
   const double bcalInnerZ = dimensions.inner_z();
+  if (bcalInnerZ/dd4hep::mm > 3200) {
+    std::cout << "WARNING: BeamCal is too far out in the z-direction. Z_inner = "
+        << bcalInnerZ/dd4hep::mm << " mm; Should be < 3200 mm.\n";
+  }
   const double bcalThickness = DD4hep::Layering(xmlBeamCal).totalThickness();
   const double bcalCentreZ = bcalInnerZ+bcalThickness*0.5;
 
