@@ -3,7 +3,7 @@
 -->
 
 <detector name="BeamCal" type="BeamCal_o1_v01" vis="SeeThrough" id="ILDDetID_BCAL"
-	  readout="BeamCalCollection" insideTrackingVolume="false" >
+	  readout="BeamCalCollection" insideTrackingVolume="false" buildType="BUILD_ENVELOPE" >
 
   <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_ELECTROMAGNETIC + DetType_FORWARD + DetType_AUXILIARY " />
 
