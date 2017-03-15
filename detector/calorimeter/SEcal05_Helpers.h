@@ -74,6 +74,11 @@ local position: 0,0 defined as -veX,Y,Z corner
 
 we start building from Z=0, the face nearest IP, moving in the +ve Z direction
 
+
+D.Jeans update: 03/2015
+dead space between slab end and module edge
+other than 8-fold symmetry for barrel
+
  */
 
 class SEcal05_Helpers {
