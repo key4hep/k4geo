@@ -183,65 +183,62 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
 
       for(DD4hep::XML::Collection_t collSlice(xmlLayer,_U(slice)); collSlice; ++collSlice)  {
-        DD4hep::XML::Component compSlice = collSlice;
-        const double      slice_thickness = compSlice.thickness();
-        const std::string sliceName = layer_name + DD4hep::XML::_toString(sliceID,"slice%d");
-        DD4hep::Geometry::Material   slice_material  = lcdd.material(compSlice.materialStr());
+	DD4hep::XML::Component compSlice = collSlice;
+	const double      slice_thickness = compSlice.thickness();
+	const std::string sliceName = layer_name + DD4hep::XML::_toString(sliceID,"slice%d");
+	DD4hep::Geometry::Material   slice_material  = lcdd.material(compSlice.materialStr());
 
-        bool isAbsorberStructure(false);
-        try {
-          const std::string& sliceType = compSlice.attr< std::string >(_Unicode(layerType));
-          if (   sliceType.compare("holeForIncomingBeampipe") == 0
-              || sliceType.compare("graphiteShielding")    == 0 ){
-            isAbsorberStructure=true;
-            // std::cout << "Absorber layer.\n";
-          } // else {
-          //   throw std::runtime_error("Unknown type of slice in BeamCal, use \"absorber\" or nothing");
-          // }//Do we want this to fail or not?
-        } catch (std::runtime_error &e) {
-          //std::cout << "Catching " << e.what()  << std::endl;
-          //std::cout << e.what()  << std::endl;
-        }
+	bool isAbsorberStructure(false);
+	try {
+	  const std::string& sliceType = compSlice.attr< std::string >(_Unicode(layerType));
+	  if (   sliceType.compare("holeForIncomingBeampipe") == 0
+	      || sliceType.compare("graphiteShielding")    == 0 ){
+	    isAbsorberStructure=true;
+	  } // else {
+	  //   throw std::runtime_error("Unknown type of slice in BeamCal, use \"absorber\" or nothing");
+	  // }//Do we want this to fail or not?
+	} catch (std::runtime_error &e) {
+	  //std::cout << "Catching " << e.what()  << std::endl;
+	  //std::cout << e.what()  << std::endl;
+	}
 
-        // Check if a separate outer_radius is declared.
-        double outerR = bcalOuterR;
-        try {
-          outerR = compSlice.outer_radius();
-        } catch (std::runtime_error &e) {
-              //std::cout << "Catching " << e.what()  << std::endl;
-              //std::cout << e.what()  << std::endl;
-        }
-
-        // std::cout << "Layer R_out = " << outerR << std::endl;
-
-        DD4hep::Geometry::Tube sliceBase(bcalInnerR, outerR, slice_thickness/2);
-        DD4hep::Geometry::SubtractionSolid slice_subtracted;
+	double outerR = bcalOuterR;
+  try {
+    const std::string& sliceType = compSlice.attr< std::string >(_Unicode(layerType));
+    if ( sliceType.compare("graphiteShielding") == 0) {
+      outerR = compSlice.outer_radius();
+    }
+  } catch (std::runtime_error &e) {
+        //std::cout << "Catching " << e.what()  << std::endl;
+        //std::cout << e.what()  << std::endl;
+  }
 
 
-        if(isAbsorberStructure) {
-          //If we have the absorber structure then we create the slice with a
-          //hole at the position of the outgoing beam pipe. In This case we have
-          //to know the global position of the slice, because the cutout depends
-          //on the outgoing beam pipe position
-          const double thisPositionZ = bcalCentreZ + referencePosition + 0.5*layerThickness + inThisLayerPosition + slice_thickness*0.5;
-          const DD4hep::Geometry::Position thisBPPosition( std::tan(-fullCrossingAngle) * thisPositionZ, 0.0, 0.0);
-          //The extra parenthesis are paramount! But.. there are none
-          const DD4hep::Geometry::Transform3D thisBPTransform( incomingBeamPipeRotation, thisBPPosition );
-          slice_subtracted = DD4hep::Geometry::SubtractionSolid(sliceBase, incomingBeamPipe, thisBPTransform);
-        } else {
-          //If we do not have the absorber structure then we create the slice with a wedge cutout, i.e, keyhole shape
-          /// Is it better to join two pieces or subtract two pieces?
-          slice_subtracted = DD4hep::Geometry::SubtractionSolid(sliceBase, cutOutTube, DD4hep::Geometry::Transform3D() );
-        }
+	DD4hep::Geometry::Tube sliceBase(bcalInnerR, outerR, slice_thickness/2);
+	DD4hep::Geometry::SubtractionSolid slice_subtracted;
 
-        DD4hep::Geometry::Volume slice_vol (sliceName,slice_subtracted,slice_material);
 
-              nRadiationLengths += slice_thickness/(2.*slice_material.radLength());
-              nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
-              thickness_sum += slice_thickness/2;
+	if(isAbsorberStructure) {
+	  //If we have the absorber structure then we create the slice with a
+	  //hole at the position of the outgoing beam pipe. In This case we have
+	  //to know the global position of the slice, because the cutout depends
+	  //on the outgoing beam pipe position
+	  const double thisPositionZ = bcalCentreZ + referencePosition + 0.5*layerThickness + inThisLayerPosition + slice_thickness*0.5;
+	  const DD4hep::Geometry::Position thisBPPosition( std::tan(-fullCrossingAngle) * thisPositionZ, 0.0, 0.0);
+	  //The extra parenthesis are paramount! But.. there are none
+	  const DD4hep::Geometry::Transform3D thisBPTransform( incomingBeamPipeRotation, thisBPPosition );
+	  slice_subtracted = DD4hep::Geometry::SubtractionSolid(sliceBase, incomingBeamPipe, thisBPTransform);
+	} else {
+	  //If we do not have the absorber structure then we create the slice with a wedge cutout, i.e, keyhole shape
+	  /// Is it better to join two pieces or subtract two pieces?
+	  slice_subtracted = DD4hep::Geometry::SubtractionSolid(sliceBase, cutOutTube, DD4hep::Geometry::Transform3D() );
+	}
 
-        if ( compSlice.isSensitive() )  {
-          slice_vol.setSensitiveDetector(sens);
+	DD4hep::Geometry::Volume slice_vol (sliceName,slice_subtracted,slice_material);
+
+        nRadiationLengths += slice_thickness/(2.*slice_material.radLength());
+        nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
+        thickness_sum += slice_thickness/2;
                 
       #if DD4HEP_VERSION_GE( 0, 15 )
                 //Store "inner" quantities
