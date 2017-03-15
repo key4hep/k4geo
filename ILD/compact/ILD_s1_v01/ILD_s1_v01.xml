@@ -208,9 +208,9 @@
 
     <readout name="BeamCalCollection">
       <segmentation type="PolarGridRPhi2"
-                    grid_r_values="17.80*mm 19.91*mm 22.28*mm 24.92*mm 27.88*mm 31.19*mm 34.89*mm 39.04*mm 43.67*mm 48.85*mm 54.65*mm 61.14*mm 68.40*mm 76.52*mm 85.60*mm 95.77*mm 107.14*mm 119.85*mm 134.08*mm 150.00*mm "
-                    grid_phi_values="5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree"
-                    offset_phi="-180*degree+(360*degree-BCal_SpanningPhi)*0.5"
+                    grid_r_values="17.80*mm 19.73*mm 21.88*mm 24.25*mm 26.89*mm 29.81*mm 33.05*mm 36.64*mm 40.62*mm 45.03*mm 49.92*mm 55.34*mm 61.35*mm 68.02*mm 75.41*mm 83.60*mm 92.68*mm 102.74*mm 113.91*mm 126.28*mm 140.00*mm"
+                    grid_phi_values="5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree"
+                    offset_phi="-180*degree"
                     />
       <id>system:8,barrel:3,layer:8,slice:5,r:32:16,phi:16</id>
     </readout>

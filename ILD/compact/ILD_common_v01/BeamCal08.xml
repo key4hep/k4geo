@@ -56,7 +56,7 @@
     </envelope>  
 
   <parameter crossingangle="ILC_Main_Crossing_Angle"
-	     cutoutspanningangle="40*deg"
+	     cutoutspanningangle="BCal_cutoutSpanning"
 	     incomingbeampiperadius="BCal_TubeIncomingRadius"
 	     />
   
