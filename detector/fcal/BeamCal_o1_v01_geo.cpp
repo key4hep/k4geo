@@ -87,8 +87,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   const double bcalCutOutEnd   = bcalCutOutStart + bcalCutOutSpan;
   const double incomingBeamPipeRadius = xmlParameter.attr< double >( _Unicode(incomingbeampiperadius) );
 
-  std::cout << "bcalCutOutSpan  "<< bcalCutOutSpan/dd4hep::mrad  << " Radian"<< std::endl;
-  std::cout << "bcalCutOutSpan  "<< bcalCutOutSpan/dd4hep::degree  << " DEGREE"<< std::endl;
+  std::cout << "bcalCutOutSpan  "<< bcalCutOutSpan/dd4hep::mrad  << " mrad"<< std::endl;
+  std::cout << "bcalCutOutSpan  "<< bcalCutOutSpan/dd4hep::degree  << " degree"<< std::endl;
   std::cout << "bcalCutOutStart "<< bcalCutOutStart << " Radian"<< std::endl;
   std::cout << "bcalCutOutEnd   "<< bcalCutOutEnd   << " Radian"<< std::endl;
   std::cout << "incommingBeamPipeRadius: "<< incomingBeamPipeRadius/dd4hep::cm << " cm"  << std::endl;
