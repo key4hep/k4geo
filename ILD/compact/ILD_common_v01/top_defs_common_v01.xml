@@ -98,7 +98,7 @@ subdetector-specific ones are in separate files
   <!-- beamcal -->
   <constant name="top_BeamCal_thickness"             value="220.0024*mm"/>
   <constant name="top_BeamCal_tubeIncoming_radius"   value="15.0*mm"/>
-  <constant name="BCal_rInner" value="20*mm"/>
+  <constant name="BCal_rInner" value="17.8*mm"/>
   <constant name="BCal_rOuter" value="150*mm"/>
 
 
