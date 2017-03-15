@@ -124,7 +124,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   // this code assumes octagon in several places
   //  would need work to make it general
-  assert( nsides==8 );
+  //  assert( nsides==8 );
 
 
   double        dphi      = (2*M_PI/nsides);
@@ -197,6 +197,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   int Ecal_strips_across_megatile           = lcdd.constant <int> ("Ecal_strips_across_megatile");
   int Ecal_strips_along_megatile            = lcdd.constant <int> ("Ecal_strips_along_megatile" );
 
+  //  float Ecal_plugLength                     = lcdd.constant<double>("Ecal_Slab_Plug_length");
+
+  float Ecal_plugLength = 0.;
+  try {
+    Ecal_plugLength = lcdd.constant<double>("Ecal_Slab_Plug_length"); 
+  } catch (std::runtime_error&e) {
+    cout << "SEcal05_Barrel: Ecal_plugLength not found, using " << Ecal_plugLength << endl;    
+  }
 
   //---------------------------------
 
@@ -208,13 +216,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   //   absorber layer structure
   helper.setPreshower( Ecal_Barrel_PreshowerLayer );
 
-  cout << "Preshower ? " << Ecal_Barrel_PreshowerLayer << endl;
+  cout << "SEcal05_Barrel: Preshower ? " << Ecal_Barrel_PreshowerLayer << endl;
 
   helper.setAbsLayers( Ecal_nlayers1, Ecal_radiator_thickness1,
                        Ecal_nlayers2, Ecal_radiator_thickness2,
                        Ecal_nlayers3, Ecal_radiator_thickness3 );
 
-  cout << "absorber layers " << 
+  cout << "SEcal05_Barrel: absorber layers " << 
     Ecal_nlayers1 << "*" << Ecal_radiator_thickness1/dd4hep::mm << " mm + " <<
     Ecal_nlayers2 << "*" << Ecal_radiator_thickness2/dd4hep::mm << " mm + " <<
     Ecal_nlayers3 << "*" << Ecal_radiator_thickness3/dd4hep::mm << " mm " << endl;
@@ -227,19 +235,23 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
                          Ecal_front_face_thickness,
                          Ecal_support_thickness);
 
+  helper.setPlugLength( Ecal_plugLength );
+
+
+
   if ( !Ecal_Barrel_PreshowerLayer && Ecal_front_face_thickness>0 ) {
-    cout << "WARNING, using front CF plate in a non-preshower setup: do you really want this?" << endl;
+    cout << "WARNING SEcal05_Barrel: using front CF plate in a non-preshower setup: do you really want this?" << endl;
   }
 
   // check resulting thickness is consistent with what's in compact description
   float module_thickness = helper.getTotalThickness();
   if ( fabs( Ecal_barrel_thickness - module_thickness ) > 0.01 ) {
-    cout << "ERROR : ECAL barrel thickness in comapct decription not consistent with what I calculate!" << endl;
+    cout << "ERROR SEcal05_Barrel : ECAL barrel thickness in comapct decription not consistent with what I calculate!" << endl;
     cout << "    calculated = " << module_thickness << "    compact description: " << Ecal_barrel_thickness << endl;
     assert( 0 ); // exit
   }
 
-  cout << "module thickness = " << module_thickness << endl;
+  cout << "SEcal05_Barrel : module thickness = " << module_thickness << endl;
 
   // set up the sensitive layer segmentation
 
@@ -258,7 +270,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     assert (ntemp>=0 );
     layerConfig.push_back( ntemp );
   }
-  cout << "layer config: ";
+  cout << "SEcal05_Barrel : layer config: ";
   for (size_t i=0; i<layerConfig.size(); i++) cout << layerConfig[i] << " ";
   cout << endl;
 
@@ -271,7 +283,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double Ecal_Barrel_module_dim_z = 2 * Ecal_Barrel_halfZ / Ecal_barrel_z_modules ;
   double alv_width = ( Ecal_Barrel_module_dim_z - 2.*Ecal_lateral_face_thickness ) / Ecal_barrel_number_of_towers;
 
-  cout << "width of module, alveolus = " << Ecal_Barrel_module_dim_z << " " << alv_width << endl;
+  cout << "SEcal05_Barrel : width of module, alveolus = " << Ecal_Barrel_module_dim_z << " " << alv_width << endl;
 
   std::vector < int > ntowers; ntowers.push_back(Ecal_barrel_number_of_towers);
 
@@ -286,8 +298,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   // to get alignment as in ECAL interface design doc fig10
   double module_thickness_noSupport = module_thickness - Ecal_support_thickness;
 
-  double max_dim_x    = 2. * tan(M_PI/8.) * Ecal_inner_radius + module_thickness_noSupport/sin(M_PI/4.); // longest side
-  double min_dim_x = max_dim_x - 2*module_thickness; // shorter one (assumes octagon)
+  //  double max_dim_x    = 2. * tan(M_PI/8.) * Ecal_inner_radius + module_thickness_noSupport/sin(M_PI/4.); // longest side assumes oct
+  //  double min_dim_x = max_dim_x - 2*module_thickness; // shorter one (assumes octagon)
+
+  double max_dim_x    = 2. * tan(M_PI/nsides) * Ecal_inner_radius + module_thickness_noSupport / tan( 2*M_PI/nsides );  // longest side 
+  double min_dim_x = max_dim_x - 2*module_thickness/tan( 2*M_PI/nsides ) ; // shorter one
+
   Trapezoid trd(max_dim_x / 2,
                 min_dim_x / 2,
                 Ecal_Barrel_module_dim_z / 2,
@@ -301,7 +317,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   helper.setModuleDimensions( 0, // int XYtype, // module shape in XY
                               1, // int XZtype, // module shape in XZ
-                              max_dim_x // double dX_max, // maximum extent in X
+                              max_dim_x, // double dX_max, // maximum extent in X
+			      -999, // dummy
+			      2.*M_PI/nsides
                               );
 
   // traslation to get layers within the envelope
@@ -317,10 +335,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     caloData->layers[i].distance += Ecal_inner_radius; // add IP->front face distance
   }
 
-  cout << "cell sizes: " << endl;
-  for (size_t i=0; i<caloData->layers.size(); i++) {
-    cout << "sensitive layer " << i << " : x,y = " << caloData->layers[i].cellSize0 << " " << caloData->layers[i].cellSize1 << endl;
-  }
+  //  cout << "SEcal05_Barrel : cell sizes: " << endl;
+  //  for (size_t i=0; i<caloData->layers.size(); i++) {
+  //    cout << "sensitive layer " << i << " : x,y = " << caloData->layers[i].cellSize0 << " " << caloData->layers[i].cellSize1 << endl;
+  //  }
 
   // ------------- create extension objects for reconstruction -----------------
 
@@ -364,9 +382,22 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   //   module = 1 is at -ve z
 
   for (int istave = 0; istave < nsides ; istave++) {
+    //for (int istave = 0; istave < 1 ; istave++) {
     int stave_id = istave+1;
-    double phirot =  (istave) * dphi + hphi ;    // magic rotations to get the modules in the correct orientation/position
-    double phirot2 =  (istave) * dphi + hphi - 2*dphi;
+
+    // dstave is the change in stave index from the top module to the one with smallest positive phi (which has istave=0)
+    int dstave = int( nsides/4. );
+
+
+    // rotations around the center to get the modules in the correct orientation
+    // top module (dstave) shits by hphi + pi/4
+    double phirot =  hphi + M_PI/2.; // 
+    phirot += (istave - dstave)*dphi;
+
+
+    // this angle is used to get the stave in the right position wrt the origin
+    double phirot2 =  (istave - dstave ) * dphi + hphi;
+
     for (int imodule = 0; imodule < Ecal_barrel_z_modules; imodule++) {
       int module_id = imodule+1;
       Transform3D tr( RotationZYX( 0 , phirot, M_PI/2.),  // magic rotation!

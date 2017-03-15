@@ -83,7 +83,7 @@ class SEcal05_Helpers {
   SEcal05_Helpers();
 
   ~SEcal05_Helpers() {
-    delete _layering;
+    if ( _layering ) delete _layering; _layering=NULL;
   }
 
   // SET THE PARAMETERS
@@ -180,6 +180,9 @@ class SEcal05_Helpers {
 		   DD4hep::Geometry::SensitiveDetector & sens
 		   );
 
+  void setPlugLength( float ll ) { _plugLength = ll; }
+
+
  private:
 
   void printSEcal05LayerInfo( DDRec::LayeredCalorimeterData::Layer & caloLayer);
@@ -212,7 +215,7 @@ class SEcal05_Helpers {
   };
 
   xml_det_t* _x_det;
-  Layering* _layering=NULL;
+  Layering* _layering;
   std::string _det_name;
 
   std::vector <dimposXYStruct> getAbsPlateXYDimensions( double ztop=-999 );
@@ -295,6 +298,10 @@ class SEcal05_Helpers {
   DD4hep::Geometry::Position _trans;
 
   std::vector <dimposXYStruct> _constantSlabXYDimensions;
+
+
+  float _plugLength;
+
 
 };
 
