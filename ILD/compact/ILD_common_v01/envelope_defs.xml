@@ -149,7 +149,7 @@
   <constant name="BeamCal_thickness"             value="top_BeamCal_thickness"/>
   <constant name="BeamCal_inner_radius"          value="BCal_rInner"/>
   <constant name="BeamCal_outer_radius"          value="BCal_rOuter"/>
-  <constant name="BeamCal_min_z"                 value="LHcal_zend + LHcal_BCal_clearance"/>
+  <constant name="BeamCal_min_z"                 value="LHcal_zend + LHcal_BCal_clearance - top_BCal_dGraphite"/>
   <constant name="BeamCal_max_z"                 value="BeamCal_min_z + BeamCal_thickness"/>
   <constant name="BeamCal_tubeIncoming_radius"   value="top_BeamCal_tubeIncoming_radius"/>
 
