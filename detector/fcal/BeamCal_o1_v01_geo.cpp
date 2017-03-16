@@ -32,8 +32,6 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   
   DD4hep::XML::setDetectorTypeFlag( element, sdet ) ;
   
-  std::cout << "Build type: " << lcdd.buildType() << std::endl;
-
   if( lcdd.buildType() == DD4hep::BUILD_ENVELOPE ) { std::cout << "Building envelope.\n"; return sdet ; }
   else { std::cout << "Building all.\n"; }
   
@@ -149,10 +147,10 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
       DD4hep::Geometry::Tube layer_base(bcalInnerR,bcalOuterR,layerThickness*0.5);
       DD4hep::Geometry::SubtractionSolid layer_subtracted;
       { // put this in extra block to limit scope
-        const double thisPositionZ = bcalCentreZ + referencePosition + layerThickness*0.5;
-        const DD4hep::Geometry::Position thisBPPosition( std::tan(-fullCrossingAngle) * thisPositionZ, 0.0, 0.0);
-        const DD4hep::Geometry::Transform3D thisBPTransform( incomingBeamPipeRotation, thisBPPosition );
-        layer_subtracted = DD4hep::Geometry::SubtractionSolid(layer_base, incomingBeamPipe, thisBPTransform);
+	const double thisPositionZ = bcalCentreZ + referencePosition + layerThickness*0.5;
+	const DD4hep::Geometry::Position thisBPPosition( std::tan(-fullCrossingAngle) * thisPositionZ, 0.0, 0.0);
+	const DD4hep::Geometry::Transform3D thisBPTransform( incomingBeamPipeRotation, thisBPPosition );
+	layer_subtracted = DD4hep::Geometry::SubtractionSolid(layer_base, incomingBeamPipe, thisBPTransform);
       }
 
       DD4hep::Geometry::Volume layer_vol(layer_name,layer_subtracted,air);
@@ -216,34 +214,34 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
         nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
         thickness_sum += slice_thickness/2;
                 
-        if ( compSlice.isSensitive() )  {
-          slice_vol.setSensitiveDetector(sens);
+	if ( compSlice.isSensitive() )  {
+	  slice_vol.setSensitiveDetector(sens);
+          
+#if DD4HEP_VERSION_GE( 0, 15 )
+          //Store "inner" quantities
+          caloLayer.inner_nRadiationLengths = nRadiationLengths;
+          caloLayer.inner_nInteractionLengths = nInteractionLengths;
+          caloLayer.inner_thickness = thickness_sum;
+          //Store scintillator thickness
+          caloLayer.sensitive_thickness = slice_thickness;
+#endif      
+          //Reset counters to measure "outside" quantitites
+          nRadiationLengths=0.;
+          nInteractionLengths=0.;
+          thickness_sum = 0.;
+	}
+	
+        nRadiationLengths += slice_thickness/(2.*slice_material.radLength());
+        nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
+        thickness_sum += slice_thickness/2;
+                	
 
-      #if DD4HEP_VERSION_GE( 0, 15 )
-                //Store "inner" quantities
-                caloLayer.inner_nRadiationLengths = nRadiationLengths;
-                caloLayer.inner_nInteractionLengths = nInteractionLengths;
-                caloLayer.inner_thickness = thickness_sum;
-                //Store scintillator thickness
-                caloLayer.sensitive_thickness = slice_thickness;
-      #endif
-                //Reset counters to measure "outside" quantitites
-                nRadiationLengths=0.;
-                nInteractionLengths=0.;
-                thickness_sum = 0.;
-        }
-
-              nRadiationLengths += slice_thickness/(2.*slice_material.radLength());
-              nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
-              thickness_sum += slice_thickness/2;
-
-
-        slice_vol.setAttributes(lcdd,compSlice.regionStr(),compSlice.limitsStr(),compSlice.visStr());
-        DD4hep::Geometry::PlacedVolume pv = layer_vol.placeVolume(slice_vol,
-                        DD4hep::Geometry::Position(0,0,inThisLayerPosition+slice_thickness*0.5));
-        pv.addPhysVolID("slice",sliceID);
-        inThisLayerPosition += slice_thickness;
-        ++sliceID;
+	slice_vol.setAttributes(lcdd,compSlice.regionStr(),compSlice.limitsStr(),compSlice.visStr());
+	DD4hep::Geometry::PlacedVolume pv = layer_vol.placeVolume(slice_vol,
+								  DD4hep::Geometry::Position(0,0,inThisLayerPosition+slice_thickness*0.5));
+	pv.addPhysVolID("slice",sliceID);
+	inThisLayerPosition += slice_thickness;
+	++sliceID;
       }//For all slices in this layer
 
       //-----------------------------------------------------------------------------------------
