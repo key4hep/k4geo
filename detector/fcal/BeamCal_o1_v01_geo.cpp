@@ -54,6 +54,9 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
     std::cout << "WARNING: BeamCal is too far out in the z-direction. Z_inner = "
         << bcalInnerZ/dd4hep::mm << " mm; Should be < 3200 mm.\n";
   }
+  else {
+    std::cout << "BeamCal Z_inner = " << bcalInnerZ/dd4hep::mm << std::endl;
+  }
   const double bcalThickness = DD4hep::Layering(xmlBeamCal).totalThickness();
   const double bcalCentreZ = bcalInnerZ+bcalThickness*0.5;
 
