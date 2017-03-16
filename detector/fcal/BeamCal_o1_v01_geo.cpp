@@ -187,7 +187,6 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	double outerR = bcalOuterR;
   try {
       outerR = compSlice.outer_radius();
-    }
   } catch (std::runtime_error &e) {
         //std::cout << "Catching " << e.what()  << std::endl;
         //std::cout << e.what()  << std::endl;
