@@ -35,7 +35,6 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   std::cout << "Build type: " << lcdd.buildType() << std::endl;
 
   if( lcdd.buildType() == DD4hep::BUILD_ENVELOPE ) { std::cout << "Building envelope.\n"; return sdet ; }
-  else if( lcdd.buildType() == DD4hep::BUILD_DISPLAY) { std::cout << "Building display.\n"; return sdet ; }
   else { std::cout << "Building all.\n"; }
   
   //-----------------------------------------------------------------------------------
@@ -192,10 +191,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
         //std::cout << e.what()  << std::endl;
   }
 
-
 	DD4hep::Geometry::Tube sliceBase(bcalInnerR, outerR, slice_thickness/2);
 	DD4hep::Geometry::SubtractionSolid slice_subtracted;
-
 
 	if(isAbsorberStructure) {
 	  //If we have the absorber structure then we create the slice with a
@@ -234,7 +231,6 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
                 nRadiationLengths=0.;
                 nInteractionLengths=0.;
                 thickness_sum = 0.;
-
         }
 
               nRadiationLengths += slice_thickness/(2.*slice_material.radLength());
