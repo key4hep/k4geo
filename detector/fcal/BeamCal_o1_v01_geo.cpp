@@ -49,27 +49,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   const double bcalInnerR = dimensions.inner_r();
   const double bcalOuterR = dimensions.outer_r();
   const double bcalInnerZ = dimensions.inner_z();
-  const std::string lcddname(lcdd.header().name());
   const double bcalThickness = DD4hep::Layering(xmlBeamCal).totalThickness();
   const double bcalCentreZ = bcalInnerZ+bcalThickness*0.5;
-  //  const double bcalOuterZ = dimensions.outer_z();
-  const double bcalOuterZ = bcalInnerZ+bcalThickness;
-  const std::string lcddcomment(lcdd.header().comment());
-
-  std::cout << "\nBeamCal Z_outer = " << bcalOuterZ/dd4hep::mm << " mm\n";
-  if ( lcddname.find("ILD") != std::string::npos && bcalOuterZ/dd4hep::mm > 3420 ) {
-
-    std::cout << "ERROR: BeamCal is too far out in the z-direction.\n";
-    std::cout << "ILD detector models should have BeamCal with Z_outer <= 3420 mm.\n";
-    if (lcddcomment.find("BCalFarBack") == std::string::npos) {
-      std::cout << "To force building with Z_outer > 3420 mm, add keyword BCalFarBack to the comment in the compact file header.\n";
-      exit(0);
-    }
-    else {
-      std::cout << "Found keyword BCalFarBack in the comment in the compact file header.\nForcing building with Z_outer > 3420 mm.\n\n";
-    }
-  }
-
 
   double BeamCal_cell_size      = lcdd.constant<double>("BeamCal_cell_size");
   //========== fill data for reconstruction ============================
@@ -194,7 +175,6 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	  if (   sliceType.compare("holeForIncomingBeampipe") == 0
 	      || sliceType.compare("graphiteShielding")    == 0 ){
 	    isAbsorberStructure=true;
-            // std::cout << "Absorber layer.\n";
 	  } // else {
 	  //   throw std::runtime_error("Unknown type of slice in BeamCal, use \"absorber\" or nothing");
 	  // }//Do we want this to fail or not?
