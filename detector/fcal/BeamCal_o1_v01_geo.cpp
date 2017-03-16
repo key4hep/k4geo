@@ -220,6 +220,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
         thickness_sum += slice_thickness/2;
                 
         if ( compSlice.isSensitive() )  {
+          slice_vol.setSensitiveDetector(sens);
+
       #if DD4HEP_VERSION_GE( 0, 15 )
                 //Store "inner" quantities
                 caloLayer.inner_nRadiationLengths = nRadiationLengths;
