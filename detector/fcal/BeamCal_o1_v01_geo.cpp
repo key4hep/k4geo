@@ -233,6 +233,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
                 nInteractionLengths=0.;
                 thickness_sum = 0.;
 
+        }
+
               nRadiationLengths += slice_thickness/(2.*slice_material.radLength());
               nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
               thickness_sum += slice_thickness/2;
