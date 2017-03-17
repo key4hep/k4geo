@@ -169,8 +169,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	bool isAbsorberStructure(false);
 	try {
 	  const std::string& sliceType = compSlice.attr< std::string >(_Unicode(layerType));
-	  if (   sliceType.compare("holeForIncomingBeampipe") == 0
-	      || sliceType.compare("graphiteShielding")    == 0 ){
+	  if ( sliceType.compare("holeForIncomingBeampipe") == 0 ){
 	    isAbsorberStructure=true;
 	  } // else {
 	  //   throw std::runtime_error("Unknown type of slice in BeamCal, use \"absorber\" or nothing");
@@ -180,8 +179,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	  //std::cout << e.what()  << std::endl;
 	}
 
-        // Check if a separate outer_radius is declared.
-	double outerR = bcalOuterR;
+  // Check if a separate outer_radius is declared.
+  double outerR = bcalOuterR;
   try {
       outerR = compSlice.outer_radius();
   } catch (std::runtime_error &e) {
