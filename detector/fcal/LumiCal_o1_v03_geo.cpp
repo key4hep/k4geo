@@ -71,6 +71,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
     const double staggerPhi    = layerStagger*cellPhiSize;   
     const double lcalThickness = DD4hep::Layering(xmlLumiCal).totalThickness();
     const double lcalCentreZ   = lcalInnerZ+lcalThickness*0.5;
+    const double lcalXoffset = lcalCentreZ * std::tan( fullCrossingAngle/2. );
 
     // inner/outer radii are not the sensor dims, these we have to compute
     const double sensInnerR = lcalInnerR/cos( lcalSectors*cellPhiSize/2. ) + lcalRGap;
@@ -95,6 +96,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
     std::cout << " The crossing angle is:  " << fullCrossingAngle << " radian"  << std::endl;
     std::cout << "     "<< detName << " z-begin : " << lcalInnerZ/dd4hep::mm << " mm" << std::endl;
+    std::cout << "     "<< detName << " z-end   : " << (lcalInnerZ+lcalThickness)/dd4hep::mm << " mm" << std::endl;
+    std::cout << "   (x,y,z)-center : " << "( " << lcalXoffset/dd4hep::mm << ",0 ,+- " << lcalCentreZ/dd4hep::mm << " ) mm" << std::endl;
     std::cout << "     sensorInnerR : " << sensInnerR/dd4hep::mm << " mm" << std::endl;
     std::cout << "     sensorouterR : " << sensOuterR/dd4hep::mm << " mm" << std::endl;
     std::cout << "        thickness : " << lcalThickness/dd4hep::mm << " mm" << std::endl;
@@ -321,8 +324,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	     << " ( rad. length X0: "<< mtotalRadLen << "   )"<<std::endl;
     std::cout << "-----------------------------------------------------------------"  << std::endl<<std::endl;;
     
-    const DD4hep::Geometry::Position bcForwardPos (std::tan(0.5*fullCrossingAngle)*lcalCentreZ,0.0, lcalCentreZ);
-    const DD4hep::Geometry::Position bcBackwardPos(std::tan(0.5*fullCrossingAngle)*lcalCentreZ,0.0,-lcalCentreZ);
+    const DD4hep::Geometry::Position bcForwardPos ( lcalXoffset,0.0, lcalCentreZ);
+    const DD4hep::Geometry::Position bcBackwardPos( lcalXoffset,0.0,-lcalCentreZ);
     const DD4hep::Geometry::RotationY bcForwardRot ( fullCrossingAngle*0.5  );
     const DD4hep::Geometry::RotationY bcBackwardRot( M_PI-fullCrossingAngle*0.5 );
     
