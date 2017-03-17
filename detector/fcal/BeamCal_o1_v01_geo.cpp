@@ -179,14 +179,13 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	  //std::cout << e.what()  << std::endl;
 	}
 
-  // Check if a separate outer_radius is declared.
-  double outerR = bcalOuterR;
-  try {
-      outerR = compSlice.outer_radius();
-  } catch (std::runtime_error &e) {
-        //std::cout << "Catching " << e.what()  << std::endl;
-        //std::cout << e.what()  << std::endl;
-  }
+	// Check if a separate outer_radius is declared.
+	double outerR = bcalOuterR;
+	try {
+	  outerR = compSlice.outer_radius();
+	} catch (std::runtime_error &e) {
+	  // Nothing to catch. Everything is fine.
+	}
 
 	DD4hep::Geometry::Tube sliceBase(bcalInnerR, outerR, slice_thickness/2);
 	DD4hep::Geometry::SubtractionSolid slice_subtracted;
