@@ -15,7 +15,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
   std::cout << __PRETTY_FUNCTION__  << std::endl;
   std::cout << "Here is my LHCal_v01"  << std::endl;
-  std::cout << " and this is the sensitive detector: " << &sens  << std::endl;
+  std::cout << " --------------------------------------------------------------------------" << std::endl;
+  //std::cout << " and this is the sensitive detector: " << &sens  << std::endl;
   sens.setType("calorimeter");
   //Materials
   DD4hep::Geometry::Material air = lcdd.air();
@@ -53,20 +54,12 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   //  const double lhcaloffset = dimensions.offset();
   const double lhcaloffset = std::tan( mradFullCrossingAngle/2. )*lhcalCentreZ;
 
-  std::cout << " Building detector: " << detName << std::endl;
-  std::cout << " - Main crossing angle: " << mradFullCrossingAngle << " radian"  << std::endl;
-  std::cout << " - LHCal begin Z         "    << lhcalInnerZ/dd4hep::cm  << " cm" << std::endl;
-  std::cout << " - LHCal center Z        "    << lhcalCentreZ/dd4hep::cm  << " cm" << std::endl;
-  std::cout << " - LHCal offset X        "    << lhcaloffset/dd4hep::cm  << " cm" << std::endl;
-  std::cout << " - LHCal inner R         "    << lhcalInnerR/dd4hep::cm  << " cm" << std::endl;
-  std::cout << " - LHCal thickness       "    << lhcalThickness/dd4hep::cm  << " cm" << std::endl;
-
   double LHcal_cell_size      = lcdd.constant<double>("LHcal_cell_size");
   double LHCal_outer_radius   = lcdd.constant<double>("LHCal_outer_radius");
   //========== fill data for reconstruction ============================
   DD4hep::DDRec::LayeredCalorimeterData* caloData = new DD4hep::DDRec::LayeredCalorimeterData ;
   caloData->layoutType = DD4hep::DDRec::LayeredCalorimeterData::EndcapLayout ;
-  caloData->inner_symmetry = 0  ; // hard code cernter pipe hole
+  caloData->inner_symmetry = 8  ; // hard code octagonal inner cutout
   caloData->outer_symmetry = 4  ; // outer box
   caloData->phi0 = 0 ;
 
@@ -75,6 +68,14 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   caloData->extent[1] = LHCal_outer_radius ;
   caloData->extent[2] = lhcalInnerZ ;
   caloData->extent[3] = lhcalInnerZ + lhcalThickness ;
+
+  std::cout << " Building detector: " << detName << std::endl;
+  std::cout << " - Main crossing angle: " << mradFullCrossingAngle << " radian"  << std::endl;
+  std::cout << " - LHCal begin Z         "    << lhcalInnerZ/dd4hep::mm  << " mm" << std::endl;
+  std::cout << " - LHCal end Z           "    << (lhcalInnerZ+lhcalThickness)/dd4hep::mm  << " mm" << std::endl;
+  std::cout << " - LHCal center (X,Y,Z)  "    << "( " << lhcaloffset/dd4hep::mm << ",0 ," << lhcalCentreZ/dd4hep::mm  << " ) mm" << std::endl;
+  std::cout << " - LHCal inner R         "    << lhcalInnerR/dd4hep::mm  << " mm" << std::endl;
+  std::cout << " - LHCal thickness       "    << lhcalThickness/dd4hep::mm  << " mm" << std::endl;
 
   // counter for the current layer to be placed
   int thisLayerId = 1;
@@ -86,8 +87,9 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   int nSides = 8;
   double phiStart = 22.5*dd4hep::deg;
   double rMax = lhcalInnerR/std::cos( phiStart );
+  const DD4hep::Geometry::Position   innerBorePosition( lhcaloffset, 0.0, 0.0);
   DD4hep::Geometry::PolyhedraRegular innerBore( nSides, phiStart, 0., rMax, lhcalThickness ); 
-  DD4hep::Geometry::SubtractionSolid LHCalModule (envelopeBox, innerBore );
+  DD4hep::Geometry::SubtractionSolid LHCalModule (envelopeBox, innerBore, innerBorePosition);
   
   DD4hep::Geometry::Volume     envelopeVol(detName+"_module",LHCalModule,air);
   envelopeVol.setVisAttributes(lcdd,xmlLHCal.visStr());
@@ -100,6 +102,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   //Loop over all the layer (repeat=NN) sections
   //This is the starting point to place all layers, we need this when we have more than one layer block
   double referencePosition = -lhcalThickness*0.5;
+  double totalThickness = 0.;
+  double totalInteractionLength = 0.;
   for(DD4hep::XML::Collection_t coll(xmlLHCal,_U(layer)); coll; ++coll)  {
     DD4hep::XML::Component xmlLayer(coll); //we know this thing is a layer
 
@@ -107,9 +111,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
     //This just calculates the total size of a single layer
     double layerThickness = 0.;
     for(DD4hep::XML::Collection_t l(xmlLayer,_U(slice)); l; ++l) layerThickness += xml_comp_t(l).thickness();
-
-    std::cout << " - Layer Thickness " << layerThickness/dd4hep::cm << " cm" << std::endl;
-    std::cout << " - Total Length "    << lhcalThickness/dd4hep::cm  << " cm" << std::endl;
+ 
+    std::cout << " - Layer Thickness " << layerThickness/dd4hep::mm << " mm" << std::endl;
 
     //Loop for repeat=NN
     for(int i=0, repeat=xmlLayer.repeat(); i<repeat; ++i)  {
@@ -117,7 +120,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
       std::string layer_name = detName + DD4hep::XML::_toString(thisLayerId,"_layer%d");
       DD4hep::Geometry::Box layer_base(lhcalwidth*0.5, lhcalheight*0.5,layerThickness*0.5);
       DD4hep::Geometry::SubtractionSolid layer_subtracted;
-     layer_subtracted = DD4hep::Geometry::SubtractionSolid(layer_base, innerBore );
+      layer_subtracted = DD4hep::Geometry::SubtractionSolid(layer_base, innerBore, innerBorePosition );
      
 
       DD4hep::Geometry::Volume layer_vol(layer_name,layer_subtracted,air);
@@ -165,6 +168,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	  caloLayer.inner_thickness           = thickness_sum;
 	  //Store scintillator thickness
 	  caloLayer.sensitive_thickness       = sliceThickness;
+	  totalThickness += thickness_sum;
+	  totalInteractionLength += nInteractionLengths;
 #endif
 	  //Reset counters to measure "outside" quantitites
 	  nRadiationLengths   = 0.;
@@ -191,6 +196,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
       caloLayer.outer_nRadiationLengths   = nRadiationLengths;
       caloLayer.outer_nInteractionLengths = nInteractionLengths;
       caloLayer.outer_thickness           = thickness_sum;
+      totalThickness += thickness_sum;
+      totalInteractionLength += nInteractionLengths;
 #endif
       //-----------------------------------------------------------------------------------------
       caloLayer.distance = lhcalCentreZ + referencePosition ; //+0.5*layerThickness ;
@@ -212,11 +219,14 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
   }// for all layer collections
 
- 
-  const DD4hep::Geometry::Position bcForwardPos (lhcaloffset,0.0, lhcalCentreZ);
-  const DD4hep::Geometry::Position bcBackwardPos(lhcaloffset,0.0,-lhcalCentreZ);
+     std::cout << " -            Total Length: "    << totalThickness/dd4hep::mm  << " mm" << std::endl;
+     std::cout << " - Total Interacion Length: "    << totalInteractionLength  << std::endl;
+     std::cout << " --------------------------------------------------------------------------" << std::endl;
+
+  const DD4hep::Geometry::Position bcForwardPos ( 0.0, 0.0, lhcalCentreZ );
+  const DD4hep::Geometry::Position bcBackwardPos( 0.0, 0.0,-lhcalCentreZ );
   const DD4hep::Geometry::RotationY bcForwardRot ( mradFullCrossingAngle/2. );
-  const DD4hep::Geometry::RotationY bcBackwardRot( M_PI - mradFullCrossingAngle/2. );
+  const DD4hep::Geometry::RotationZYX bcBackwardRot( M_PI, M_PI - mradFullCrossingAngle/2., 0.0 );
 
   DD4hep::Geometry::PlacedVolume pv =
     envelope.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcForwardRot, bcForwardPos ) );
