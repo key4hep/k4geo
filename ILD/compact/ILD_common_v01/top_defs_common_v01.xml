@@ -85,11 +85,11 @@ subdetector-specific ones are in separate files
   <constant name="top_Lcal_inner_radius" value="80.0*mm"/>
   <constant name="Lcal_outer_radius"     value="195.2*mm"/>
   <constant name="LumiCal_tubebulge_overshoot"   value="11.2*mm"/>
-  <constant name="top_Lcal_z_begin"      value="2505.0*mm"/>
+  <constant name="top_Lcal_z_begin"      value="Ecal_endcap_zmin" /> <!--"2505.0*mm"/-->
 
   <!-- lhcal -->
-  <constant name="top_LHCal_thickness"               value="464.0*mm"/>
-  <constant name="top_LHCal_inner_radius"            value="150*mm"/>
+  <constant name="top_LHCal_thickness"               value="480*mm"/> <!--464.0*mm"/-->
+  <constant name="top_LHCal_inner_radius"            value="130*mm"/>
   <constant name="top_LHCal_outer_radius"            value="315*mm"/>
   <constant name="top_LHCal_min_z"                   value="2680*mm"/>
   <constant name="LHcal_zend"           value="top_LHCal_min_z + top_LHCal_thickness"/>
