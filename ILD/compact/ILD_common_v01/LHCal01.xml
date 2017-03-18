@@ -13,8 +13,9 @@
 	<shape type="Box" dx="LHCal_outer_radius + env_safety" 
 	       dy="LHCal_outer_radius + env_safety" 
 	       dz="LHCal_max_z + env_safety"/>
-	<shape type="Tube" rmin="0.0" rmax="LHCal_inner_radius - env_safety" 
-	       dz="LHCal_max_z + 2.0*env_safety"/>
+	<shape type="PolyhedraRegular" numsides="8"
+	       phi_start="22.5*deg" rmin="0.0" rmax="LHCal_inner_radius - env_safety" dz="LHCal_max_z + 2.0*env_safety"/>
+        <position x="20*mm" y="0" z="0" />
       </shape>
       <shape type="Box" dx="LHCal_outer_radius + 1.5*env_safety"
 	     dy="LHCal_outer_radius + 1.5*env_safety"
