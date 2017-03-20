@@ -93,13 +93,14 @@ subdetector-specific ones are in separate files
   <constant name="top_LHCal_outer_radius"            value="315*mm"/>
   <constant name="top_LHCal_min_z"                   value="2680*mm"/>
   <constant name="LHcal_zend"           value="top_LHCal_min_z + top_LHCal_thickness"/>
-  <constant name="LHcal_BCal_clearance" value="390*mm"/>
+  <constant name="LHcal_BCal_clearance" value="35*mm"/>
 
   <!-- beamcal -->
   <constant name="top_BeamCal_thickness"             value="220.0024*mm"/>
   <constant name="top_BeamCal_tubeIncoming_radius"   value="15.0*mm"/>
-  <constant name="BCal_rInner" value="20*mm"/>
-  <constant name="BCal_rOuter" value="150*mm"/>
+  <constant name="BCal_rInner" value="17.8*mm"/>
+  <constant name="BCal_rOuter" value="140*mm"/>
+  <constant name="top_BCal_dGraphite" value="80*mm"/>
 
 
   <!-- the beam tube -->

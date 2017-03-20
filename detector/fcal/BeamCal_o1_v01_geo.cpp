@@ -32,7 +32,12 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   
   DD4hep::XML::setDetectorTypeFlag( element, sdet ) ;
   
-  if( lcdd.buildType() == DD4hep::BUILD_ENVELOPE ) return sdet ;
+  std::cout << "Build type: " << lcdd.buildType() << std::endl;
+
+  if( lcdd.buildType() == DD4hep::BUILD_ENVELOPE ) { std::cout << "Building envelope.\n"; return sdet ; }
+  else { std::cout << "Building all.\n"; }
+  if( lcdd.buildType() == DD4hep::BUILD_DISPLAY) { std::cout << "Building display.\n"; return sdet ; }
+  else { std::cout << "Building all.\n"; }
   
   //-----------------------------------------------------------------------------------
 
@@ -45,6 +50,10 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   const double bcalInnerR = dimensions.inner_r();
   const double bcalOuterR = dimensions.outer_r();
   const double bcalInnerZ = dimensions.inner_z();
+  if (bcalInnerZ/dd4hep::mm > 3200) {
+    std::cout << "WARNING: BeamCal is too far out in the z-direction. Z_inner = "
+        << bcalInnerZ/dd4hep::mm << " mm; Should be < 3200 mm.\n";
+  }
   const double bcalThickness = DD4hep::Layering(xmlBeamCal).totalThickness();
   const double bcalCentreZ = bcalInnerZ+bcalThickness*0.5;
 
@@ -70,6 +79,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   const double fullCrossingAngle  = xmlParameter.attr< double >(_Unicode(crossingangle));
   std::cout << " The crossing angle is: " << fullCrossingAngle << " radian"  << std::endl;
 
+
   //Create the section cutout for the sensor and readout volumes
   // The cutout sits on the negative x-axis, i.e. phi~=180degrees
   const double bcalCutOutSpan  = xmlParameter.attr< double >(_Unicode(cutoutspanningangle));
@@ -77,8 +87,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   const double bcalCutOutEnd   = bcalCutOutStart + bcalCutOutSpan;
   const double incomingBeamPipeRadius = xmlParameter.attr< double >( _Unicode(incomingbeampiperadius) );
 
-  std::cout << "bcalCutOutSpan  "<< bcalCutOutSpan/dd4hep::mrad  << " Radian"<< std::endl;
-  std::cout << "bcalCutOutSpan  "<< bcalCutOutSpan/dd4hep::degree  << " DEGREE"<< std::endl;
+  std::cout << "bcalCutOutSpan  "<< bcalCutOutSpan/dd4hep::mrad  << " mrad"<< std::endl;
+  std::cout << "bcalCutOutSpan  "<< bcalCutOutSpan/dd4hep::degree  << " degree"<< std::endl;
   std::cout << "bcalCutOutStart "<< bcalCutOutStart << " Radian"<< std::endl;
   std::cout << "bcalCutOutEnd   "<< bcalCutOutEnd   << " Radian"<< std::endl;
   std::cout << "incommingBeamPipeRadius: "<< incomingBeamPipeRadius/dd4hep::cm << " cm"  << std::endl;
@@ -145,10 +155,10 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
       DD4hep::Geometry::Tube layer_base(bcalInnerR,bcalOuterR,layerThickness*0.5);
       DD4hep::Geometry::SubtractionSolid layer_subtracted;
       { // put this in extra block to limit scope
-	const double thisPositionZ = bcalCentreZ + referencePosition + layerThickness*0.5;
-	const DD4hep::Geometry::Position thisBPPosition( std::tan(-fullCrossingAngle) * thisPositionZ, 0.0, 0.0);
-	const DD4hep::Geometry::Transform3D thisBPTransform( incomingBeamPipeRotation, thisBPPosition );
-	layer_subtracted = DD4hep::Geometry::SubtractionSolid(layer_base, incomingBeamPipe, thisBPTransform);
+        const double thisPositionZ = bcalCentreZ + referencePosition + layerThickness*0.5;
+        const DD4hep::Geometry::Position thisBPPosition( std::tan(-fullCrossingAngle) * thisPositionZ, 0.0, 0.0);
+        const DD4hep::Geometry::Transform3D thisBPTransform( incomingBeamPipeRotation, thisBPPosition );
+        layer_subtracted = DD4hep::Geometry::SubtractionSolid(layer_base, incomingBeamPipe, thisBPTransform);
       }
 
       DD4hep::Geometry::Volume layer_vol(layer_name,layer_subtracted,air);
@@ -159,78 +169,91 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
 
       for(DD4hep::XML::Collection_t collSlice(xmlLayer,_U(slice)); collSlice; ++collSlice)  {
-	DD4hep::XML::Component compSlice = collSlice;
-	const double      slice_thickness = compSlice.thickness();
-	const std::string sliceName = layer_name + DD4hep::XML::_toString(sliceID,"slice%d");
-	DD4hep::Geometry::Material   slice_material  = lcdd.material(compSlice.materialStr());
+        DD4hep::XML::Component compSlice = collSlice;
+        const double      slice_thickness = compSlice.thickness();
+        const std::string sliceName = layer_name + DD4hep::XML::_toString(sliceID,"slice%d");
+        DD4hep::Geometry::Material   slice_material  = lcdd.material(compSlice.materialStr());
 
-	bool isAbsorberStructure(false);
-	try {
-	  const std::string& sliceType = compSlice.attr< std::string >(_Unicode(layerType));
-	  if ( sliceType.compare("holeForIncomingBeampipe") == 0 ){
-	    isAbsorberStructure=true;
-	  } // else {
-	  //   throw std::runtime_error("Unknown type of slice in BeamCal, use \"absorber\" or nothing");
-	  // }//Do we want this to fail or not?
-	} catch (std::runtime_error &e) {
-	  //std::cout << "Catching " << e.what()  << std::endl;
-	  //std::cout << e.what()  << std::endl;
-	}
+        bool isAbsorberStructure(false);
+        try {
+          const std::string& sliceType = compSlice.attr< std::string >(_Unicode(layerType));
+          if (   sliceType.compare("holeForIncomingBeampipe") == 0
+              || sliceType.compare("graphiteShielding")    == 0 ){
+            isAbsorberStructure=true;
+          } // else {
+          //   throw std::runtime_error("Unknown type of slice in BeamCal, use \"absorber\" or nothing");
+          // }//Do we want this to fail or not?
+        } catch (std::runtime_error &e) {
+          //std::cout << "Catching " << e.what()  << std::endl;
+          //std::cout << e.what()  << std::endl;
+        }
 
-	DD4hep::Geometry::Tube sliceBase(bcalInnerR,bcalOuterR,slice_thickness/2);
-	DD4hep::Geometry::SubtractionSolid slice_subtracted;
+        double outerR = bcalOuterR;
+        try {
+          const std::string& sliceType = compSlice.attr< std::string >(_Unicode(layerType));
+          if ( sliceType.compare("graphiteShielding") == 0) {
+            outerR = compSlice.outer_radius();
+          }
+        } catch (std::runtime_error &e) {
+              //std::cout << "Catching " << e.what()  << std::endl;
+              //std::cout << e.what()  << std::endl;
+        }
 
 
-	if(isAbsorberStructure) {
-	  //If we have the absorber structure then we create the slice with a
-	  //hole at the position of the outgoing beam pipe. In This case we have
-	  //to know the global position of the slice, because the cutout depends
-	  //on the outgoing beam pipe position
-	  const double thisPositionZ = bcalCentreZ + referencePosition + 0.5*layerThickness + inThisLayerPosition + slice_thickness*0.5;
-	  const DD4hep::Geometry::Position thisBPPosition( std::tan(-fullCrossingAngle) * thisPositionZ, 0.0, 0.0);
-	  //The extra parenthesis are paramount! But.. there are none
-	  const DD4hep::Geometry::Transform3D thisBPTransform( incomingBeamPipeRotation, thisBPPosition );
-	  slice_subtracted = DD4hep::Geometry::SubtractionSolid(sliceBase, incomingBeamPipe, thisBPTransform);
-	} else {
-	  //If we do not have the absorber structure then we create the slice with a wedge cutout, i.e, keyhole shape
-	  /// Is it better to join two pieces or subtract two pieces?
-	  slice_subtracted = DD4hep::Geometry::SubtractionSolid(sliceBase, cutOutTube, DD4hep::Geometry::Transform3D() );
-	}
+        DD4hep::Geometry::Tube sliceBase(bcalInnerR, outerR, slice_thickness/2);
+        DD4hep::Geometry::SubtractionSolid slice_subtracted;
 
-	DD4hep::Geometry::Volume slice_vol (sliceName,slice_subtracted,slice_material);
 
-        nRadiationLengths += slice_thickness/(2.*slice_material.radLength());
-        nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
-        thickness_sum += slice_thickness/2;
+        if(isAbsorberStructure) {
+          //If we have the absorber structure then we create the slice with a
+          //hole at the position of the outgoing beam pipe. In This case we have
+          //to know the global position of the slice, because the cutout depends
+          //on the outgoing beam pipe position
+          const double thisPositionZ = bcalCentreZ + referencePosition + 0.5*layerThickness + inThisLayerPosition + slice_thickness*0.5;
+          const DD4hep::Geometry::Position thisBPPosition( std::tan(-fullCrossingAngle) * thisPositionZ, 0.0, 0.0);
+          //The extra parenthesis are paramount! But.. there are none
+          const DD4hep::Geometry::Transform3D thisBPTransform( incomingBeamPipeRotation, thisBPPosition );
+          slice_subtracted = DD4hep::Geometry::SubtractionSolid(sliceBase, incomingBeamPipe, thisBPTransform);
+        } else {
+          //If we do not have the absorber structure then we create the slice with a wedge cutout, i.e, keyhole shape
+          /// Is it better to join two pieces or subtract two pieces?
+          slice_subtracted = DD4hep::Geometry::SubtractionSolid(sliceBase, cutOutTube, DD4hep::Geometry::Transform3D() );
+        }
+
+        DD4hep::Geometry::Volume slice_vol (sliceName,slice_subtracted,slice_material);
+
+              nRadiationLengths += slice_thickness/(2.*slice_material.radLength());
+              nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
+              thickness_sum += slice_thickness/2;
+
+        if ( compSlice.isSensitive() )  {
+          slice_vol.setSensitiveDetector(sens);
                 
-	if ( compSlice.isSensitive() )  {
-	  slice_vol.setSensitiveDetector(sens);
-          
-#if DD4HEP_VERSION_GE( 0, 15 )
-          //Store "inner" quantities
-          caloLayer.inner_nRadiationLengths = nRadiationLengths;
-          caloLayer.inner_nInteractionLengths = nInteractionLengths;
-          caloLayer.inner_thickness = thickness_sum;
-          //Store scintillator thickness
-          caloLayer.sensitive_thickness = slice_thickness;
-#endif      
-          //Reset counters to measure "outside" quantitites
-          nRadiationLengths=0.;
-          nInteractionLengths=0.;
-          thickness_sum = 0.;
-	}
-	
-        nRadiationLengths += slice_thickness/(2.*slice_material.radLength());
-        nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
-        thickness_sum += slice_thickness/2;
-                	
+      #if DD4HEP_VERSION_GE( 0, 15 )
+                //Store "inner" quantities
+                caloLayer.inner_nRadiationLengths = nRadiationLengths;
+                caloLayer.inner_nInteractionLengths = nInteractionLengths;
+                caloLayer.inner_thickness = thickness_sum;
+                //Store scintillator thickness
+                caloLayer.sensitive_thickness = slice_thickness;
+      #endif
+                //Reset counters to measure "outside" quantitites
+                nRadiationLengths=0.;
+                nInteractionLengths=0.;
+                thickness_sum = 0.;
+        }
 
-	slice_vol.setAttributes(lcdd,compSlice.regionStr(),compSlice.limitsStr(),compSlice.visStr());
-	DD4hep::Geometry::PlacedVolume pv = layer_vol.placeVolume(slice_vol,
-								  DD4hep::Geometry::Position(0,0,inThisLayerPosition+slice_thickness*0.5));
-	pv.addPhysVolID("slice",sliceID);
-	inThisLayerPosition += slice_thickness;
-	++sliceID;
+              nRadiationLengths += slice_thickness/(2.*slice_material.radLength());
+              nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
+              thickness_sum += slice_thickness/2;
+
+
+        slice_vol.setAttributes(lcdd,compSlice.regionStr(),compSlice.limitsStr(),compSlice.visStr());
+        DD4hep::Geometry::PlacedVolume pv = layer_vol.placeVolume(slice_vol,
+                        DD4hep::Geometry::Position(0,0,inThisLayerPosition+slice_thickness*0.5));
+        pv.addPhysVolID("slice",sliceID);
+        inThisLayerPosition += slice_thickness;
+        ++sliceID;
       }//For all slices in this layer
 
       //-----------------------------------------------------------------------------------------

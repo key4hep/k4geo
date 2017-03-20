@@ -128,13 +128,10 @@
     <vis name="FTDCablesVis"    alpha="1.0"  r="0.0"  g="0.9" b="0.0"  showDaughters="true" visible="true"/>
     
     <vis name="MyBeamCalVis"  alpha="0.5"  r="1.0" g="1.0"  b="1.0" showDaughters="true"  visible="false"/>
-    <vis name="LayerVis1"     alpha="0.1"  r="1.0" g="0.0"  b="0.0" showDaughters="true"  visible="true"/>
-    <vis name="BCLayerVis1"   alpha="0.1"  r="1.0" g="0.0"  b="0.0" showDaughters="true"  visible="true"/>
-    <vis name="BCLayerVis2"   alpha="0.1"  r="0.0" g="1.0"  b="0.0" showDaughters="true"  visible="true"/>
-    <vis name="BCLayerVis3"   alpha="0.1"  r="0.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
-    <vis name="BCLayerVis4"   alpha="0.1"  r="1.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
-
-    <vis name="ILD_FCALVis" alpha="1.0" r="0.67" g="0.66"  b="0.67" showDaughters="true"  visible="true"/>
+    <vis name="BCLayerVis1"   alpha="1.0"  r="1.0" g="0.0"  b="0.0" showDaughters="true"  visible="true"/>
+    <vis name="BCLayerVis2"   alpha="1.0"  r="0.0" g="1.0"  b="0.0" showDaughters="true"  visible="true"/>
+    <vis name="BCLayerVis3"   alpha="1.0"  r="0.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
+    <vis name="BCLayerVis4"   alpha="1.0"  r="1.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
 
   </display>
 
@@ -143,10 +140,11 @@
     <comment>Calorimeters</comment>
 
     <include ref="../ILD_common_v01/BeamCal08.xml"/>
-
+    <include ref="../ILD_common_v01/LHCal01.xml"/>
   </detectors> 
 
   <readouts>
+
     <readout name="BeamCalCollUniform">
       <segmentation type="PolarGridRPhi2"
                     grid_r_values="17.80*mm 27.6565*mm 35.3029*mm 42.9494*mm 50.5959*mm 58.2424*mm 65.8888*mm 73.5353*mm 81.1818*mm 88.8282*mm 96.4747*mm 104.121*mm 111.768*mm 119.414*mm 127.061*mm 134.707*mm 142.354*mm 150.0*mm"
@@ -164,8 +162,13 @@
                     />
       <id>system:8,barrel:3,layer:8,slice:5,r:32:16,phi:16</id>
     </readout>
-    
+
+    <readout name="LHCalCollection">
+      <segmentation type="CartesianGridXY" grid_size_x="LHcal_cell_size" grid_size_y="LHcal_cell_size" offset_x="0*cm" />
+      <id>system:8,barrel:3,layer:6,slice:5,x:-16,y:-16 </id>
+    </readout>
   </readouts>
+
   <!-- <fields> -->
   <!--   <field type="solenoid" name="GlobalSolenoid" inner_field="Field_nominal_value*tesla" -->
   <!-- 	   outer_field="-1.5*tesla" zmax="TPC_Ecal_Hcal_barrel_halfZ" -->

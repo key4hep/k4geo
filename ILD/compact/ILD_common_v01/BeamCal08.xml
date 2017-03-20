@@ -3,7 +3,7 @@
 -->
 
 <detector name="BeamCal" type="BeamCal_o1_v01" vis="SeeThrough" id="ILDDetID_BCAL"
-	  readout="BeamCalCollection" insideTrackingVolume="false" >
+	  readout="BeamCalCollection" insideTrackingVolume="false" buildType="BUILD_ENVELOPE" >
 
   <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_ELECTROMAGNETIC + DetType_FORWARD + DetType_AUXILIARY " />
 
@@ -56,12 +56,12 @@
     </envelope>  
 
   <parameter crossingangle="ILC_Main_Crossing_Angle"
-	     cutoutspanningangle="40*deg"
+	     cutoutspanningangle="BCal_cutoutSpanning"
 	     incomingbeampiperadius="BCal_TubeIncomingRadius"
 	     />
   
   <dimensions inner_r = "BCal_rInner"
-	      inner_z = "LHcal_zend + LHcal_BCal_clearance"
+	      inner_z = "LHcal_zend + LHcal_BCal_clearance - BCal_dGraphite"
 	      outer_r = "BCal_rOuter" />
   
   <!-- <layer repeat="1" vis="SeeThrough"> -->
@@ -69,7 +69,7 @@
   <!-- </layer> -->
   
   <layer repeat="1" vis="SeeThrough">
-    <slice material = "C"       thickness = "BCal_dGraphite" vis="LayerVis1"      layerType="holeForIncomingBeampipe"/>
+    <slice material = "C"       thickness = "BCal_dGraphite" vis="LayerVis1" outer_radius = "BCal_rGraphite"  layerType="graphiteShielding"/>
     <slice material = "TungstenDens24" thickness = "BCal_dAbsorber"        vis="BCLayerVis1" layerType="holeForIncomingBeampipe" />
     <slice material = "Silicon" thickness = "0.3004*mm" sensitive = "yes"  vis="BCLayerVis2"/>
     <slice material = "Copper"  thickness = "0.0004*mm"                    vis="BCLayerVis3"/>
