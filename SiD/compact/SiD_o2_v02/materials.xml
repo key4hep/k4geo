@@ -14,7 +14,7 @@
   
   <!-- We model vacuum just as very thin air -->
   <material name="Vacuum">  
-    <D type="density" unit="g/cm3" value="0.0000000001" />
+    <D type="density" unit="g/cm3" value="0.0000000001"/>
     <fraction n="0.754" ref="N"/>
     <fraction n="0.234" ref="O"/>
     <fraction n="0.012" ref="Ar"/>
