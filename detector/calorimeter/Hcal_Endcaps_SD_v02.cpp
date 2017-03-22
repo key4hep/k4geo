@@ -235,7 +235,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 	nRadiationLengths   = Hcal_radiator_thickness/(stavesMaterial.radLength());
 	nInteractionLengths = Hcal_radiator_thickness/(stavesMaterial.intLength());
-	thickness_sum       = Hcal_radiator_thickness;
 
 	for(xml_coll_t k(x_layer,_U(slice)); k; ++k)  {
 	  xml_comp_t x_slice = k;
