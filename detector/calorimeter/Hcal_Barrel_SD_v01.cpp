@@ -198,6 +198,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   double xShift = 0.;
 
+  DDRec::LayeredCalorimeterData::Layer caloLayer ;
+  caloLayer.cellSize0 = cell_sizeX ;
+  caloLayer.cellSize1 = cell_sizeZ ;
 
   //-------------------- start loop over HCAL layers ----------------------
 //  double layer_thickness =  Hcal_radiator_thickness +Hcal_chamber_thickness + 1.*Hcal_airgap_thickness;
@@ -255,7 +258,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       nRadiationLengths   = Hcal_radiator_thickness/(stavesMaterial.radLength());
       nInteractionLengths = Hcal_radiator_thickness/(stavesMaterial.intLength());
   
-      DDRec::LayeredCalorimeterData::Layer caloLayer ;
 
       // Create the slices (sublayers) within the Hcal Barrel Chamber.
       double slice_pos_z = -(layer_thickness/2.);
@@ -347,8 +349,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       
       caloLayer.distance = Hcal_inner_radius + Hcal_total_dim_y/2.0 + chamber_y_offset ;
       caloLayer.absorberThickness = Hcal_radiator_thickness ;
-      caloLayer.cellSize0 = cell_sizeX ;
-      caloLayer.cellSize1 = cell_sizeZ ;
       
       caloData->layers.push_back( caloLayer ) ;
       //-----------------------------------------------------------------------------------------
