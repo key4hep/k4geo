@@ -31,6 +31,7 @@
 
 #include <UTIL/BitField64.h>
 #include <UTIL/BitSet32.h>
+#include "UTIL/LCTrackerConf.h"
 #include <UTIL/ILDConf.h>
 
 
@@ -56,7 +57,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     std::string cellIDEncoding = sens.readout().idSpec().fieldDescription();
     UTIL::BitField64 encoder( cellIDEncoding );
     encoder.reset();
-    encoder[lcio::ILDCellID0::subdet] = det_id;
+    encoder[lcio::LCTrackerCellID::subdet()] = det_id;
 
 
 
@@ -215,18 +216,18 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
 		DD4hep::long64 cellID_reflect;
 		if (reflect) {
-		  encoder[lcio::ILDCellID0::side] = lcio::ILDDetID::bwd;
-		  encoder[lcio::ILDCellID0::layer] = l_id;
-		  encoder[lcio::ILDCellID0::module] = mod_num;
-		  encoder[lcio::ILDCellID0::sensor] = k;
+		  encoder[lcio::LCTrackerCellID::side()] = lcio::ILDDetID::bwd;
+		  encoder[lcio::LCTrackerCellID::layer()] = l_id;
+		  encoder[lcio::LCTrackerCellID::module()] = mod_num;
+		  encoder[lcio::LCTrackerCellID::sensor()] = k;
 
 		  cellID_reflect = encoder.lowWord(); // 32 bits
 		}
 
-		encoder[lcio::ILDCellID0::side] = lcio::ILDDetID::fwd;
-		encoder[lcio::ILDCellID0::layer] = l_id;
-		encoder[lcio::ILDCellID0::module] = mod_num;
-		encoder[lcio::ILDCellID0::sensor] = k;
+		encoder[lcio::LCTrackerCellID::side()] = lcio::ILDDetID::fwd;
+		encoder[lcio::LCTrackerCellID::layer()] = l_id;
+		encoder[lcio::LCTrackerCellID::module()] = mod_num;
+		encoder[lcio::LCTrackerCellID::sensor()] = k;
 
 		DD4hep::long64 cellID = encoder.lowWord(); // 32 bits
 
@@ -252,17 +253,17 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 		    if (newmodule < 0 || newmodule >= nrings) continue; //out of disk		
 
 		    //encoding
-		    encoder[lcio::ILDCellID0::module] = newmodule;
-		    encoder[lcio::ILDCellID0::sensor] = newsensor;
+		    encoder[lcio::LCTrackerCellID::module()] = newmodule;
+		    encoder[lcio::LCTrackerCellID::sensor()] = newsensor;
 
 		    neighbourSurfacesData->sameLayer[cellID].push_back(encoder.lowWord());
 
 
 		    if (reflect){
-		      encoder[lcio::ILDCellID0::side] = lcio::ILDDetID::bwd;
-		      encoder[lcio::ILDCellID0::layer] = l_id;
-		      encoder[lcio::ILDCellID0::module] = newmodule;
-		      encoder[lcio::ILDCellID0::sensor] = newsensor;
+		      encoder[lcio::LCTrackerCellID::side()] = lcio::ILDDetID::bwd;
+		      encoder[lcio::LCTrackerCellID::layer()] = l_id;
+		      encoder[lcio::LCTrackerCellID::module()] = newmodule;
+		      encoder[lcio::LCTrackerCellID::sensor()] = newsensor;
 
 		      neighbourSurfacesData->sameLayer[cellID_reflect].push_back(encoder.lowWord());
 		    }
