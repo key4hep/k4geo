@@ -578,7 +578,7 @@
   <!-- Solenoidal Field from Br(r,z) and Bz(r,z) field map -->
   <field name="DetectorMap" type="FieldBrBz"
          filename="${lcgeo_DIR}/fieldmaps/ild_fieldMap_Solenoid3.5T_StandardYoke_10cm_v1_20170223.root"
-         tree="ntuple:rho:z:Brho:Bz"
+         tree="ntuple:rho_mm:z_mm:Brho:Bz"
          rScale = "1.0"
          zScale = "1.0"
          bScale = "3.5/4.12841"
@@ -586,15 +586,15 @@
          zMin = "5*mm"
          rhoMax = "7005*mm"
          zMax = "7005*mm"
-         nRho = "701"
-         nZ = "701"
+         nRho = "81"
+         nZ = "71"
          >
   </field>
   
   <!-- anti-DID Field from Bx(x,y,z), By(x,y,z) and Bz(x,y,z) field map -->
   <field name="DetectorMap" type="FieldXYZ"
          filename="${lcgeo_DIR}/fieldmaps/ild_fieldMap_antiDID_10cm_v1_20170223.root"
-         tree="ntuple:x:y:z:Bx:By:Bz"
+         tree="ntuple:x_mm:y_mm:z_mm:Bx:By:Bz"
          xScale = "1.0"
          yScale = "1.0"
          zScale = "1.0"
