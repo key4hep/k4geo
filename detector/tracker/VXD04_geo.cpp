@@ -170,13 +170,13 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
   //**fg: the encoder is no longer needed - replaced by physVolID() calls
   //   // setup the encoder 
-  //   UTIL::BitField64 encoder( ILDCellID0::encoder_string ) ; 
+  //   UTIL::BitField64 encoder( LCTrackerCellID::encoding_string() ) ; 
   //   encoder.reset() ;  // reset to 0
-  //   encoder[ILDCellID0::subdet] = ILDDetID::VXD ;
-  //   encoder[ILDCellID0::side] = 0 ;
-  //   encoder[ILDCellID0::layer]  = 0 ;
-  //   encoder[ILDCellID0::module] = 0 ;
-  //   encoder[ILDCellID0::sensor] = 0 ;
+  //   encoder[LCTrackerCellID::subdet()] = ILDDetID::VXD ;
+  //   encoder[LCTrackerCellID::side()] = 0 ;
+  //   encoder[LCTrackerCellID::layer()]  = 0 ;
+  //   encoder[LCTrackerCellID::module()] = 0 ;
+  //   encoder[LCTrackerCellID::sensor()] = 0 ;
   //   int cellID0 = encoder.lowWord() ;
 
   Material activeMaterial =  lcdd.material("G4_Si"); //silicon_2.33gccm"); 
@@ -726,8 +726,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	  
 	  double Z = (ladder_length* (1-side_band_electronics_option/2.)) + ladder_gap/2.;
 	  
-	  // encoder[ILDCellID0::layer]  =  LayerId -1;
-	  // encoder[ILDCellID0::module] = elec_loop ;
+	  // encoder[LCTrackerCellID::layer()]  =  LayerId -1;
+	  // encoder[LCTrackerCellID::module()] = elec_loop ;
 	  // cellID0 = encoder.lowWord() ;  
 	  
 	  PlacedVolume pv_el_band_pos = layer_assembly.placeVolume( ElectronicsBandLogical,
@@ -758,8 +758,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
 	  double Z = (ladder_length* (1-side_band_electronics_option/2.)) + ladder_gap/2.;
 	      
-	  // encoder[ILDCellID0::layer]  =  LayerId -1;
-	  // encoder[ILDCellID0::module] = elec_loop ;
+	  // encoder[LCTrackerCellID::layer()]  =  LayerId -1;
+	  // encoder[LCTrackerCellID::module()] = elec_loop ;
 	  // cellID0 = encoder.lowWord() ;  
 
 	  PlacedVolume pv_el_band_pos = layer_assembly.placeVolume( ElectronicsBandLogical,
@@ -1072,8 +1072,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	
       double Z = ladder_length/2.+ ladder_gap;
 	
-      // encoder[ILDCellID0::layer]  =  LayerId -1;
-      // encoder[ILDCellID0::module] = active_loop ;
+      // encoder[LCTrackerCellID::layer()]  =  LayerId -1;
+      // encoder[LCTrackerCellID::module()] = active_loop ;
       // cellID0 = encoder.lowWord() ;  
 
       std::string ladderNameP =  _toString( LayerId , "SiActiveLayer_%02d_posZ") + _toString( (int)active_loop, "_%02d" ) ;

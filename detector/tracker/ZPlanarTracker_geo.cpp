@@ -17,6 +17,7 @@
 
 #include <UTIL/BitField64.h>
 #include <UTIL/BitSet32.h>
+#include "UTIL/LCTrackerConf.h"
 #include <UTIL/ILDConf.h>
 
 using namespace DD4hep;
@@ -43,8 +44,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   std::string cellIDEncoding = sens.readout().idSpec().fieldDescription();
   UTIL::BitField64 encoder( cellIDEncoding );
   encoder.reset();
-  encoder[lcio::ILDCellID0::subdet] = x_det.id();
-  encoder[lcio::ILDCellID0::side] = lcio::ILDDetID::barrel;
+  encoder[lcio::LCTrackerCellID::subdet()] = x_det.id();
+  encoder[lcio::LCTrackerCellID::side()] = lcio::ILDDetID::barrel;
 
 
 
@@ -232,10 +233,10 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
       //encoding
 
-      encoder[lcio::ILDCellID0::side] = lcio::ILDDetID::barrel;
-      encoder[lcio::ILDCellID0::layer] = layer_id;
-      encoder[lcio::ILDCellID0::module] = nLadders;
-      encoder[lcio::ILDCellID0::sensor] = 0; // there is no sensor defintion in VertexBarrel at the moment
+      encoder[lcio::LCTrackerCellID::side()] = lcio::ILDDetID::barrel;
+      encoder[lcio::LCTrackerCellID::layer()] = layer_id;
+      encoder[lcio::LCTrackerCellID::module()] = nLadders;
+      encoder[lcio::LCTrackerCellID::sensor()] = 0; // there is no sensor defintion in VertexBarrel at the moment
 
       DD4hep::long64 cellID = encoder.lowWord(); // 32 bits
 
@@ -256,8 +257,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	if (newmodule >= nLadders) newmodule = newmodule - nLadders;
 
 	//encoding
-	encoder[lcio::ILDCellID0::module] = newmodule;
-	encoder[lcio::ILDCellID0::sensor] = 0;
+	encoder[lcio::LCTrackerCellID::module()] = newmodule;
+	encoder[lcio::LCTrackerCellID::sensor()] = 0;
 
 	neighbourSurfacesData->sameLayer[cellID].push_back(encoder.lowWord());
  
