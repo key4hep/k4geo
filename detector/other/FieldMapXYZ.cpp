@@ -154,10 +154,10 @@ void FieldMapXYZ::fillFieldMapFromTree(const std::string& filename, const std::s
     std::cout << "\"" << (*it).c_str() << "\"" << std::endl;
   }
 
-  if( strs.size() != 5 ) {
+  if( strs.size() != 7 ) {
     std::stringstream error;
     error << "FieldMap[ERROR]: the treeDescription " << treeString
-	  << " is not complete. For example 'fieldmap:rho:z:Brho:Bz'";
+	  << " is not complete. For example 'ntuple:x:y:z:Bx:By:Bz'";
     throw std::runtime_error( error.str() );
   }
 
