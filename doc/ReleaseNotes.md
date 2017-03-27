@@ -1,6 +1,4 @@
- --------
-| v00-10 |
- --------
+# v00-10
 
 Shaojun Lu 2017-01-16
   - Added tube_defs.xml for ILD_s1_v01.
@@ -165,9 +163,7 @@ Andre Sailer 2016-11-14
 
 
 
- --------
-| v00-09 | 
- -------- 
+# v00-09
 
   - developers release wih many changes and updates to CLIC, ILD and SiD simulation models, e.g.:
     - made compatible w/ DD4hep v00-18 ( removed LayeredCalorimterData::Layer::thickness )
@@ -185,9 +181,7 @@ Andre Sailer 2016-11-14
       -...
 
 
- --------
-| v00-08 | 
- -------- 
+# v00-08
 
 S. Lu
    - Adapted to Hcal endcap Ring to DD4hep envelope, and improve the code to read the envelope information clearly from compact file directly.
@@ -254,9 +248,8 @@ A.Sailer 08/03/2016
     see examples/gun.mac or examples/gps.mac
     use with ddsim --enablgeG4Gun --macroFile gun.mac  --compactFile ...
 
- --------
-| v00-07 | 
- --------    
+# v00-07
+
   S.Lu
    - added example for a test beam calorimeter:
       - CaloTB/compact/MainTestBeamSetup.xml
@@ -265,9 +258,7 @@ A.Sailer 08/03/2016
       ./CaloTB/run_sim/run_sim.sh
  
 
- --------
-| v00-06 | 
- --------    
+# v00-06
 
 F.Gaede
  - added detector type flags to xml files for ILD_o1_v05 and Simplified_ILD_o1_v05
@@ -476,9 +467,7 @@ N. Nikiforou 19/08/2015
      - Avoidance of cloning of element volumes in the barrel case
      - Start of counters (e.g. layer, module, stave, etc) from 0 rather than 1
 
- --------
-| v00-05 | 
- --------    
+# v00-05
 
    N. Nikiforou
    - Added TrackerEndcap_o1_v02_geo.cpp (svn cp'd from TrackerEndcap_o1_v01_geo.cpp) which supports 
@@ -553,9 +542,8 @@ N. Nikiforou 19/08/2015
      - added as EcalBarrelFace_v00.xml/EcalEndcapFace_v00.xml to ILD_o1_v05
 
 
- -----------
-| v00-04-01 |  - patch release   
- -----------    
+# v00-04-01: patch release
+
 
    F.Gaede
 
@@ -571,9 +559,7 @@ N. Nikiforou 19/08/2015
      - Changed CLIC calorimeters to use new isRadiator() helper function and 
        new extended LayeredCalorimeterStruct
 
- --------
-| v00-04 |   ****** renamed to lcgeo ******************
- --------    
+# v00-04:  ****** renamed to lcgeo ******************
 
      - many changes and developements:
 
@@ -589,15 +575,14 @@ N. Nikiforou 19/08/2015
      - ... 
 
 //======================================================================
- --------
-| v00-03 |   third beta release of DDSim
- --------    
+
+# v00-03: third beta release of DDSim
+
        - ...
 
 
- --------
-| v00-02 |   second beta release of DDSim
- --------    
+# v00-02: second beta release of DDSim
+
        M.Frank:  
        - add initial version of DDEve.xml
        - create header file with class XMLHandlerDB
@@ -613,9 +598,9 @@ N. Nikiforou 19/08/2015
        - fixes for BeamCal driver
 
 
- --------
-| v00-01 |   first beta release of DDSim
- --------    - ILD detector (ported from Mokka ILD_o1_v05) with :
+# v00-01: first beta release of DDSim
+
+	     - ILD detector (ported from Mokka ILD_o1_v05) with :
                  VXD, SIT, FTD, SET, TPC,
                  EcalBarrel, HcalBarrel, EcalEndcap, HcalEndcap, EcalRing, beamcal
              - sensitive detectors still experimental
