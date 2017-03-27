@@ -302,8 +302,15 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   //  double max_dim_x    = 2. * tan(M_PI/8.) * Ecal_inner_radius + module_thickness_noSupport/sin(M_PI/4.); // longest side assumes oct
   //  double min_dim_x = max_dim_x - 2*module_thickness; // shorter one (assumes octagon)
 
-  double max_dim_x    = 2. * tan(M_PI/nsides) * Ecal_inner_radius + module_thickness_noSupport / tan( 2*M_PI/nsides );  // longest side 
+  //  double max_dim_x    = 2. * tan(M_PI/nsides) * Ecal_inner_radius + module_thickness_noSupport / tan( 2*M_PI/nsides );  // longest side 
+  double max_dim_x    = 2. * tan(M_PI/nsides) * Ecal_inner_radius + module_thickness_noSupport / sin( 2*M_PI/nsides );  // longest side : fix DJeans 03/2017
   double min_dim_x = max_dim_x - 2*module_thickness/tan( 2*M_PI/nsides ) ; // shorter one
+
+  if ( min_dim_x<0 || max_dim_x<0 ) {
+    std::cout << "SEcal05_Barrel ERROR : requesting too many sides! barrel modules have max/min extent " << max_dim_x << " " << min_dim_x << std::endl;
+    std::cout << "exiting" << std::endl;
+    assert(0); // exit gracefully
+  }
 
   Trapezoid trd(max_dim_x / 2,
                 min_dim_x / 2,
@@ -349,7 +356,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   subDetExtension->setIsBarrel( true ) ;
   subDetExtension->setNSides( nsides ) ;
   subDetExtension->setRMin( Ecal_inner_radius ) ;
-  subDetExtension->setRMax( ( Ecal_inner_radius + module_thickness ) / cos( M_PI/8. ) ) ; // this is to the external corner
+  subDetExtension->setRMax( ( Ecal_inner_radius + module_thickness ) / cos( M_PI/nsides ) ) ; // this is to the external corner (fix djeans)
   subDetExtension->setZMin( 0. ) ;
   subDetExtension->setZMax( Ecal_Barrel_halfZ ) ;
 
@@ -374,7 +381,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   // altered to get alignment as in ECAL interface design doc fig10
   //   end of slabs aligned to inner face of support plate in next stave (not the outer surface)
   // double Y = (module_thickness/2.) / sin(M_PI/4.);
-  double Y = (module_thickness_noSupport/2.) / sin(M_PI/4.);
+  double Y = (module_thickness_noSupport/2.) / sin(2.*M_PI/nsides);
 
   // stave numbering from 1->8
   //   stave = 1 is in +ve x direction
