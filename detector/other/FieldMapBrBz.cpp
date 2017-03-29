@@ -67,7 +67,7 @@ void FieldMapBrBz::fieldComponents(const double* pos , double* globalField) {
   //field is supposed to be. Now we just assume it starts at 0/0/0, outside there is no field
   if (not ( 0.0 <= x && x <= rhoMax &&
 	    0.0 <= y && y <= zMax ) ) {
-    globalField[0] = globalField[1] = globalField[2];
+
     return;
   }
 
@@ -118,9 +118,9 @@ void FieldMapBrBz::fieldComponents(const double* pos , double* globalField) {
     fv2.Bz *    xlocal  * (1-ylocal)  +
     fv3.Bz *    xlocal  *    ylocal   ;
 
-  globalField[0] = field[0] * sin( phi ) ;
-  globalField[1] = field[0] * cos( phi ) ;
-  globalField[2] = field[1] ;
+  globalField[0] += field[0] * sin( phi ) ;
+  globalField[1] += field[0] * cos( phi ) ;
+  globalField[2] += field[1] ;
 
 
 }
