@@ -148,10 +148,10 @@ Bogdan Pawlik 2016-11-15
   -  Set non-zero phi-offset to fix improper number of phi sectors reported by ddsim, 49 instead of 48
 
 Shaojun Lu 2016-11-15 
-  -  Clean up the unused variable ‘motherVol’. When DD4hep/lcgeo moved to 'mandatory envelope volume', each sub-detector has been placed into 'envelope' volume. The envelope has been implemented into 'DD4hep/DDCore/src/XML/Utilities.cpp', and placed into the 'mother' volume (world volume) there.
+  -  Clean up the unused variable 'motherVol'. When DD4hep/lcgeo moved to 'mandatory envelope volume', each sub-detector has been placed into 'envelope' volume. The envelope has been implemented into 'DD4hep/DDCore/src/XML/Utilities.cpp', and placed into the 'mother' volume (world volume) there.
   -  We do not need this user defined envelope shape. The envelope has been implemented into 'DD4hep/DDCore/src/XML/Utilities.cpp'
   -  fix warning unused variable, and commented out the lines. If the users have further implementation with the unused variable, the lines could be used again.
-  -  fix warning: declaration of ‘RailSeparation’ shadows a member of 'this'.
+  -  fix warning: declaration of 'RailSeparation' shadows a member of 'this'.
   -  fix many warning for shadowed declaration, and comment out or remove unused variable.
   -  fix warning for shadowed declaration, and remove unused variable.
 
