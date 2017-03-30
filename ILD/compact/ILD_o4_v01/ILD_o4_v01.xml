@@ -1,0 +1,109 @@
+<lccdd>
+    <info name="ILD_o4_v01"
+          title="ILD detector model option 4 version 01"
+          author="S.Lu DESY"
+          url="https://agenda.linearcollider.org/event/7512/contributions/38394/attachments/31207/46879/TC_report.pdf"
+          status="experimental"
+          version="experimental">
+        <comment>The compact format for the ILD Detector design</comment>
+    </info>
+
+    <includes>
+        <gdmlFile  ref="../ILD_common_v01/elements.xml"/>
+        <gdmlFile  ref="../ILD_common_v01/materials.xml"/>
+    </includes>
+
+    <define>
+        <constant name="world_side"             value="30000*mm"/>
+        <constant name="world_x"                value="world_side"/>
+        <constant name="world_y"                value="world_side"/>
+        <constant name="world_z"                value="world_side"/>
+
+
+        <constant name="CrossingAngle"          value="14*mrad"/>
+
+
+        <constant name="DetID_NOTUSED"          value="0"/>
+
+
+        <constant name="DetID_HCAL_Barrel"      value="10"/>
+
+
+
+        <!-- ################### ENVELOPE PARAMETERS ######################################################## -->
+
+        <comment> suggested naming convention:
+
+            main parameters:
+
+            DET_inner_radius    : inner radius of tube like envelope  ( inscribed cylinder )
+            DET_outer_radius    : outer radius of tube like envelope  ( circumscribed cylinder )
+            DET_half_length     : half length along z axis
+            DET_min_z           : smallest absolute value on z-axis
+            DET_max_z           : largest  absolute value on z-axis
+            DET_inner_symmetry  : number of sides on the inside  ( 0 for tube )
+            DET_outer_symmetry  : number of sides on the inside  ( 0 for tube )
+            DET_inner_phi0      : optional rotation of the inner polygon ( in r-phi plane )
+            DET_outer_phi0      : optional rotation of the outer polygon ( in r-phi plane )
+
+            additional parameters for cutting away volumes/shapes use one of the above with a number
+            appended and/or an extra specifiaction such as cone ( for a cut away cone )
+
+            DET_inner_radius_1
+            DET_outer_radius_2
+            DET_cone_min_z
+            DET_cone_max_z
+
+        </comment>
+
+        <constant name="env_safety"                 value="0.1*mm"/>
+
+
+        <constant name="HCalBarrel_inner_radius"    value="2058*mm"/>
+        <constant name="HCalBarrel_outer_radius"    value="3349*mm"/>
+        <constant name="HCalBarrel_half_length"     value="2350*mm"/>
+        <constant name="HCalBarrel_symmetry"        value="8"/>
+
+
+
+        <constant name="Coil_inner_radius"          value="3425*mm"/>
+        <constant name="Coil_half_length"           value="3872*mm"/>
+
+        <constant name="YokeBarrel_outer_radius"    value="7725*mm"/>
+
+    </define>
+
+    <limits>
+        <limitset name="cal_limits">
+            <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
+        </limitset>
+    </limits>
+
+
+    <display>
+        <vis name="HCALVis"     alpha="1.0" r="0.078" g="0.01176" b="0.588" showDaughters="true"  visible="true"/>
+    </display>
+
+    <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
+
+    <include ref="HCalBarrel_o4_v01_01.xml"/>
+
+    <plugins>
+        <plugin name="DD4hepVolumeManager"/>
+        <plugin name="InstallSurfaceManager"/>
+    </plugins>
+
+
+    <fields>
+        <field name="GlobalSolenoid" type="solenoid"
+               inner_field="3.5*tesla"
+               outer_field="-1.5*tesla"
+               zmax="Coil_half_length"
+               inner_radius="Coil_inner_radius"
+               outer_radius="YokeBarrel_outer_radius">
+        </field>
+    </fields>
+
+
+</lccdd>
+
