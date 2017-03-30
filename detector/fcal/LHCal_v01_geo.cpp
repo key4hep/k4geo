@@ -148,7 +148,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	DD4hep::Geometry::Box sliceBase(lhcalwidth*0.5, lhcalheight*0.5,sliceThickness*0.5);
 	DD4hep::Geometry::SubtractionSolid slice_subtracted;
 
-	slice_subtracted = DD4hep::Geometry::SubtractionSolid(sliceBase, innerBore );
+	slice_subtracted = DD4hep::Geometry::SubtractionSolid(sliceBase, innerBore, innerBorePosition );
 
 	DD4hep::Geometry::Volume slice_vol (sliceName,slice_subtracted,slice_mat);
 
@@ -225,8 +225,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
   const DD4hep::Geometry::Position bcForwardPos ( 0.0, 0.0, lhcalCentreZ );
   const DD4hep::Geometry::Position bcBackwardPos( 0.0, 0.0,-lhcalCentreZ );
-  const DD4hep::Geometry::RotationY bcForwardRot ( mradFullCrossingAngle/2. );
-  const DD4hep::Geometry::RotationZYX bcBackwardRot( M_PI, M_PI - mradFullCrossingAngle/2., 0.0 );
+  const DD4hep::Geometry::RotationY bcForwardRot ( 0. );
+  const DD4hep::Geometry::RotationZYX bcBackwardRot( M_PI, M_PI, 0.0 );
 
   DD4hep::Geometry::PlacedVolume pv =
     envelope.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcForwardRot, bcForwardPos ) );
