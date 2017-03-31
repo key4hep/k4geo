@@ -75,7 +75,12 @@ SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Except
 
 SET( test_name "test_CLIC_o3_v08" )
 ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
-        ddsim --compactFile=${CMAKE_SOURCE_DIR}/CLIC/compact/CLIC_o3_v08/CLIC_o3_v08.xml --runType=batch -G -N=1 --outputFile=testCLIC_o3_v07.slcio )
+        ddsim --compactFile=${CMAKE_SOURCE_DIR}/CLIC/compact/CLIC_o3_v08/CLIC_o3_v08.xml --runType=batch -G -N=1 --outputFile=testCLIC_o3_v08.slcio )
+SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
+
+SET( test_name "test_CLIC_o3_v09" )
+ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
+        ddsim --compactFile=${CMAKE_SOURCE_DIR}/CLIC/compact/CLIC_o3_v09/CLIC_o3_v09.xml --runType=batch -G -N=1 --outputFile=testCLIC_o3_v09.slcio )
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
 SET( test_name "test_steeringFile" )
@@ -101,4 +106,6 @@ ADD_TEST( t_SensThickness_Clic_o3_v7 "${CMAKE_INSTALL_PREFIX}/bin/run_test_${Pac
           ${CMAKE_INSTALL_PREFIX}/bin/TestSensThickness ${CMAKE_SOURCE_DIR}/CLIC/compact/CLIC_o3_v07/CLIC_o3_v07.xml 300 50 )
 ADD_TEST( t_SensThickness_Clic_o3_v8 "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
           ${CMAKE_INSTALL_PREFIX}/bin/TestSensThickness ${CMAKE_SOURCE_DIR}/CLIC/compact/CLIC_o3_v08/CLIC_o3_v08.xml 100 50 )
+ADD_TEST( t_SensThickness_Clic_o3_v9 "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
+        ${CMAKE_INSTALL_PREFIX}/bin/TestSensThickness ${CMAKE_SOURCE_DIR}/CLIC/compact/CLIC_o3_v09/CLIC_o3_v09.xml 100 50 )
 
