@@ -122,6 +122,13 @@ void FieldMapBrBz::fieldComponents(const double* pos , double* globalField) {
   globalField[1] += field[0] * cos( phi ) ;
   globalField[2] += field[1] ;
 
+  /*
+  std::cout << std::endl;
+  std::cout << "FieldMapBrBz:: " << std::endl;
+  std::cout << "(x,y,z)     = (" << pos[0]/dd4hep::cm  << "," << pos[1]/dd4hep::cm  << "," << pos[2]/dd4hep::cm  << ") cm" << std::endl;
+  std::cout << "B(x,y,z)    = (" << globalField[0]/dd4hep::tesla << "," << globalField[1]/dd4hep::tesla << "," << globalField[2]/dd4hep::tesla << ") tesla" << std::endl;
+  std::cout << std::endl;
+  */
 
 }
 
