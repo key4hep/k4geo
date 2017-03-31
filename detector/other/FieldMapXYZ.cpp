@@ -124,6 +124,24 @@ void FieldMapXYZ::fieldComponents(const double* pos , double* globalField) {
   B    = (1.0 - zd)*B_0         + zd*B_1;
   globalField[2] += B;
   
+  /*
+  std::cout << std::endl;
+  std::cout << "FieldMapXYZ:: " << std::endl;
+  std::cout << "(x,y,z)     = (" << x/dd4hep::cm  << "," << y/dd4hep::cm  << "," << z/dd4hep::cm  << ") cm" << std::endl;
+  std::cout << "(x0,y0,z0)  = (" << x0/dd4hep::cm << "," << y0/dd4hep::cm << "," << z0/dd4hep::cm << ") cm" << std::endl;
+  std::cout << "(x1,y1,z1)  = (" << x1/dd4hep::cm << "," << y1/dd4hep::cm << "," << z1/dd4hep::cm << ") cm" << std::endl;
+  std::cout << "B(x0,y0,z0) = (" << B_x0y0z0.Bx/dd4hep::tesla << "," << B_x0y0z0.By/dd4hep::tesla << "," << B_x0y0z0.Bz/dd4hep::tesla << ") tesla" << std::endl;
+  std::cout << "B(x1,y0,z0) = (" << B_x1y0z0.Bx/dd4hep::tesla << "," << B_x1y0z0.By/dd4hep::tesla << "," << B_x1y0z0.Bz/dd4hep::tesla << ") tesla" << std::endl;
+  std::cout << "B(x0,y0,z1) = (" << B_x0y0z1.Bx/dd4hep::tesla << "," << B_x0y0z1.By/dd4hep::tesla << "," << B_x0y0z1.Bz/dd4hep::tesla << ") tesla" << std::endl;
+  std::cout << "B(x1,y0,z1) = (" << B_x1y0z1.Bx/dd4hep::tesla << "," << B_x1y0z1.By/dd4hep::tesla << "," << B_x1y0z1.Bz/dd4hep::tesla << ") tesla" << std::endl;
+  std::cout << "B(x0,y1,z0) = (" << B_x0y1z0.Bx/dd4hep::tesla << "," << B_x0y1z0.By/dd4hep::tesla << "," << B_x0y1z0.Bz/dd4hep::tesla << ") tesla" << std::endl;
+  std::cout << "B(x1,y1,z0) = (" << B_x1y1z0.Bx/dd4hep::tesla << "," << B_x1y1z0.By/dd4hep::tesla << "," << B_x1y1z0.Bz/dd4hep::tesla << ") tesla" << std::endl;
+  std::cout << "B(x0,y1,z1) = (" << B_x0y1z1.Bx/dd4hep::tesla << "," << B_x0y1z1.By/dd4hep::tesla << "," << B_x0y1z1.Bz/dd4hep::tesla << ") tesla" << std::endl;
+  std::cout << "B(x1,y1,z1) = (" << B_x1y1z1.Bx/dd4hep::tesla << "," << B_x1y1z1.By/dd4hep::tesla << "," << B_x1y1z1.Bz/dd4hep::tesla << ") tesla" << std::endl;
+  std::cout << "B(x,y,z)    = (" << globalField[0]/dd4hep::tesla << "," << globalField[1]/dd4hep::tesla << "," << globalField[2]/dd4hep::tesla << ") tesla" << std::endl;
+  std::cout << std::endl;
+  */
+ 
   return; 
  
 }
@@ -202,6 +220,12 @@ void FieldMapXYZ::fillFieldMapFromTree(const std::string& filename, const std::s
 
   for(int i = 0;i<treeEntries;++i) {
     tree->GetEntry(i);
+
+    //std::cout << "FieldMapXYZ:: fill-map:: position = (" << x << "," << y << "," << z << "), " 
+    //          << "bScale = " << bScale << ", "
+    //          << "field = (" << double(Bx)*bScale*dd4hep::tesla << "," << double(By)*bScale*dd4hep::tesla << "," << double(Bz)*bScale*dd4hep::tesla << ")"
+    //          << std::endl;
+
     fieldMap.push_back( FieldMapXYZ::FieldValues_t(double(Bx)*bScale*dd4hep::tesla,
                                                    double(By)*bScale*dd4hep::tesla,
 						   double(Bz)*bScale*dd4hep::tesla ) );
