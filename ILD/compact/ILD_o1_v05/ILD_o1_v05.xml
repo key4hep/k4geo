@@ -570,46 +570,46 @@
       </plugins>
 
 <fields>
-  <!--<field type="solenoid" name="GlobalSolenoid" inner_field="Field_nominal_value*tesla"-->
-  <!--  	  outer_field="-1.5*tesla" zmax="Coil_half_length"-->
-  <!--	  inner_radius="Coil_inner_radius"-->
-  <!--	  outer_radius="world_side" />-->
+  <field type="solenoid" name="GlobalSolenoid" inner_field="Field_nominal_value*tesla"
+   	 outer_field="-1.5*tesla" zmax="Coil_half_length"
+         inner_radius="Coil_inner_radius"
+  	 outer_radius="world_side" />
 
   <!-- Solenoidal Field from Br(r,z) and Bz(r,z) field map -->
-  <field name="DetectorMap_Solenoid" type="FieldBrBz"
-         filename="${lcgeo_DIR}/fieldmaps/ild_fieldMap_Solenoid3.5T_StandardYoke_10cm_v1_20170223.root"
-         tree="ntuple:rho_mm:z_mm:Brho:Bz"
-         rScale = "1.0"
-         zScale = "1.0"
-         bScale = "1.0"
-         rhoMin = "0*mm"
-         zMin = "0*mm"
-         rhoMax = "800*cm"
-         zMax = "700*cm"
-         nRho = "81"
-         nZ = "71"
-         >
-  </field>
+  <!-- <field name="DetectorMap_Solenoid" type="FieldBrBz" -->
+  <!--        filename="${lcgeo_DIR}/fieldmaps/ild_fieldMap_Solenoid3.5T_StandardYoke_10cm_v1_20170223.root" -->
+  <!--        tree="ntuple:rho_mm:z_mm:Brho:Bz" -->
+  <!--        rScale = "1.0" -->
+  <!--        zScale = "1.0" -->
+  <!--        bScale = "1.0" -->
+  <!--        rhoMin = "0*mm" -->
+  <!--        zMin = "0*mm" -->
+  <!--        rhoMax = "800*cm" -->
+  <!--        zMax = "700*cm" -->
+  <!--        nRho = "81" -->
+  <!--        nZ = "71" -->
+  <!--        > -->
+  <!--  </field> -->
   
   <!-- anti-DID Field from Bx(x,y,z), By(x,y,z) and Bz(x,y,z) field map -->
-  <field name="DetectorMap_antiDID" type="FieldXYZ"
-         filename="${lcgeo_DIR}/fieldmaps/ild_fieldMap_antiDID_10cm_v1_20170223.root"
-         tree="ntuple:x_mm:y_mm:z_mm:Bx:By:Bz"
-         xScale = "1.0"
-         yScale = "1.0"
-         zScale = "1.0"
-         bScale = "1.0"
-         xMin   = "-200*cm"
-         xMax   = "+200*cm"
-         xStep  = "10*cm"
-         yMin   = "-200*cm"
-         yMax   = "+200*cm"
-         yStep  = "10*cm"
-         zMin   = "-400*cm"
-         zMax   = "+400*cm"
-         zStep  = "10*cm"
-         >
-  </field>
+  <!-- <field name="DetectorMap_antiDID" type="FieldXYZ" -->
+  <!--        filename="${lcgeo_DIR}/fieldmaps/ild_fieldMap_antiDID_10cm_v1_20170223.root" -->
+  <!--        tree="ntuple:x_mm:y_mm:z_mm:Bx:By:Bz" -->
+  <!--        xScale = "1.0" -->
+  <!--        yScale = "1.0" -->
+  <!--        zScale = "1.0" -->
+  <!--        bScale = "1.0" -->
+  <!--        xMin   = "-200*cm" -->
+  <!--        xMax   = "+200*cm" -->
+  <!--        xStep  = "10*cm" -->
+  <!--        yMin   = "-200*cm" -->
+  <!--        yMax   = "+200*cm" -->
+  <!--        yStep  = "10*cm" -->
+  <!--        zMin   = "-400*cm" -->
+  <!--        zMax   = "+400*cm" -->
+  <!--        zStep  = "10*cm" -->
+  <!--        > -->
+  <!-- </field> -->
   
   
 
