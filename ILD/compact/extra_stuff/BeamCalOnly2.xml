@@ -127,12 +127,12 @@
     <vis name="FTDCylVis"       alpha="0.45" r="0.2"  g="0.9" b="0.98" showDaughters="true" visible="true"/>
     <vis name="FTDCablesVis"    alpha="1.0"  r="0.0"  g="0.9" b="0.0"  showDaughters="true" visible="true"/>
     
-    <vis name="MyBeamCalVis"  alpha="0.5"  r="1.0" g="1.0"  b="1.0" showDaughters="true"  visible="false"/>
-    <vis name="LayerVis1"     alpha="0.1"  r="1.0" g="0.0"  b="0.0" showDaughters="true"  visible="true"/>
-    <vis name="BCLayerVis1"   alpha="0.1"  r="1.0" g="0.0"  b="0.0" showDaughters="true"  visible="true"/>
-    <vis name="BCLayerVis2"   alpha="0.1"  r="0.0" g="1.0"  b="0.0" showDaughters="true"  visible="true"/>
-    <vis name="BCLayerVis3"   alpha="0.1"  r="0.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
-    <vis name="BCLayerVis4"   alpha="0.1"  r="1.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
+    <vis name="MyBeamCalVis"  alpha="1.0"  r="1.0" g="1.0"  b="1.0" showDaughters="true"  visible="false"/>
+    <vis name="LayerVis1"     alpha="0.9"  r="0.1" g="0.0"  b="0.0" showDaughters="true"  visible="true"/>
+    <vis name="BCLayerVis1"   alpha="1.0"  r="1.0" g="0.0"  b="0.0" showDaughters="true"  visible="true"/>
+    <vis name="BCLayerVis2"   alpha="1.0"  r="0.0" g="1.0"  b="0.0" showDaughters="true"  visible="true"/>
+    <vis name="BCLayerVis3"   alpha="1.0"  r="0.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
+    <vis name="BCLayerVis4"   alpha="1.0"  r="1.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
 
     <vis name="ILD_FCALVis" alpha="1.0" r="0.67" g="0.66"  b="0.67" showDaughters="true"  visible="true"/>
 
