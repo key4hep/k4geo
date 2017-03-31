@@ -208,4 +208,10 @@
         <composite n="381" ref="F"/>
     </material>
 
+    <material name="G4_POLYSTYRENE">
+        <D type="density" value="1.06" unit="g/cm3"/>
+        <fraction n="0.077418" ref="H"/>
+        <fraction n="0.922582" ref="C"/>
+    </material>
+
 </materials>
