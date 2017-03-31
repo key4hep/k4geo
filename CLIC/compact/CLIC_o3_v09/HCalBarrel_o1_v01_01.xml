@@ -45,7 +45,7 @@
             <layer repeat="(int) HCalBarrel_layers" vis="HCalLayerVis">
                 <slice material="Steel235" thickness="0.5*mm" vis="HCalAbsorberVis" radiator="yes"/>
                 <slice material="Steel235" thickness="19*mm" vis="HCalAbsorberVis" radiator="yes"/>
-                <slice material="Polystyrene" thickness="3*mm" sensitive="yes" limits="cal_limits" vis="HCalSensorVis"/>
+                <slice material="G4_POLYSTYRENE" thickness="3*mm" sensitive="yes" limits="cal_limits" vis="HCalSensorVis"/>
                 <slice material="Copper" thickness="0.1*mm" vis="HCalCopperVis"/>
                 <slice material="PCB" thickness="0.7*mm" vis="HCalPCBVis"/>
                 <slice material="Steel235" thickness="0.5*mm" vis="HCalAbsorberVis" radiator="yes"/>
