@@ -1,0 +1,100 @@
+<lccdd>
+    
+    <define>
+        <constant name="BeamCal_cell_size" value="1*mm"/>
+        <constant name="BeamCal_spanning_angle" value="350*degree"/>
+    </define>
+    
+    <readouts>
+        <readout name="BeamCalCollection">
+	    <segmentation type="PolarGridRPhi2"
+			  grid_r_values="3.200*cm 3.9876*cm 4.7742*cm 5.5608*cm 6.3474*cm 7.134*cm 7.9206*cm 8.7072*cm 9.4938*cm 10.2804*cm 11.067*cm 11.8536*cm 12.6402*cm 13.4268*cm 14.2134*cm 15.0*cm"
+			  grid_phi_values="350/(4*8)*degree
+					   350/(5*8)*degree
+					   350/(6*8)*degree
+					   350/(6*8)*degree
+					   350/(7*8)*degree
+					   350/(8*8)*degree
+					   350/(9*8)*degree
+					   350/(9*8)*degree
+					   350/(10*8)*degree
+					   350/(11*8)*degree
+					   350/(12*8)*degree
+					   350/(12*8)*degree
+					   350/(13*8)*degree
+					   350/(14*8)*degree
+					   350/(15*8)*degree"
+			  offset_phi="-180*degree+(360*degree-BeamCal_spanning_angle)*0.5"
+			  />
+	    <id>system:8,barrel:3,layer:8,slice:5,r:32:16,phi:16</id>
+        </readout>
+    </readouts>
+    
+    <detectors>
+        <detector name="BeamCal" type="BeamCal_o1_v01" vis="SeeThrough" id="DetID_BeamCal" readout="BeamCalCollection" >
+            
+          <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_ENDCAP + DetType_FORWARD + DetType_AUXILIARY "/>
+
+            <envelope vis="BCALVis">
+                <shape type="BooleanShape" operation="Union"  material="Air">
+                    <shape type="BooleanShape" operation="Intersection">
+                        <shape type="Box"  dx="world_side" dy="world_side" dz="world_side"/>
+                        <shape type="BooleanShape" operation="Subtraction">
+                            <shape type="Tube"  rmin="BeamCal_inner_radius" rmax="BeamCal_outer_radius+env_safety" dz="BeamCal_dz+env_safety"/>
+                            <shape type="Tube"  rmin="0" rmax="3.5*mm" dz="BeamCal_dz+10*env_safety"/>
+                            <position x="tan(-CrossingAngle)*(BeamCal_min_z+BeamCal_dz)" y="0" z="0"/>
+                            <rotation x="0" y="-CrossingAngle" z="0"/>
+                        </shape>
+                        <position x="tan(0.5*CrossingAngle)*(BeamCal_min_z+BeamCal_dz)" y="0" z="(BeamCal_min_z+BeamCal_dz)"/>
+                        <rotation x="0" y="0.5*CrossingAngle" z="0"/>
+                    </shape>
+                    <shape type="BooleanShape" operation="Intersection">
+                        <shape type="Box"  dx="world_side" dy="world_side" dz="world_side"/>
+                        <shape type="BooleanShape" operation="Subtraction">
+                            <shape type="Tube"  rmin="BeamCal_inner_radius" rmax="BeamCal_outer_radius+env_safety" dz="BeamCal_dz+env_safety"/>
+                            <shape type="Tube"  rmin="0" rmax="3.5*mm" dz="BeamCal_dz+10*env_safety"/>
+                            <position x="tan(-CrossingAngle)*(BeamCal_min_z+BeamCal_dz)" y="0" z="0"/>
+                            <rotation x="0" y="-CrossingAngle" z="0"/>
+                        </shape>
+                        <position x="tan(0.5*CrossingAngle)*(BeamCal_min_z+BeamCal_dz)" y="0" z="-(BeamCal_min_z+BeamCal_dz)"/>
+                        <rotation x="0" y="180*deg-CrossingAngle*0.5" z="180*deg"/>
+                    </shape>
+                </shape>
+            </envelope>
+            
+            <parameter crossingangle="CrossingAngle"
+            cutoutspanningangle="360*degree-BeamCal_spanning_angle"
+            incomingbeampiperadius="3.5*mm"
+            />
+            
+            <dimensions inner_r = "BeamCal_inner_radius"
+            inner_z = "BeamCal_min_z"
+            outer_r = "BeamCal_outer_radius" />
+            
+            <!-- Avoid dummy layers without sensitive element which cannot be handled by  DDMarlinPandora -->
+            <!-- Instead, create another layer group with the extra absorber in the front -->
+            <layer repeat="1" vis="SeeThrough">
+                <slice material = "C" thickness = "100*mm" vis="LayerVis1"      layerType="holeForIncomingBeampipe"/>
+                <slice material = "TungstenDens24" thickness = "3.5*mm" vis="BCLayerVis1"  layerType="holeForIncomingBeampipe" />
+                <slice material = "Silicon"        thickness = "0.3004*mm"      vis="BCLayerVis2"  sensitive = "yes"  />
+                <slice material = "Copper"         thickness = "0.0004*mm"      vis="BCLayerVis3"                     />
+                <slice material = "Kapton"         thickness = "0.15*mm"        vis="BCLayerVis4"                     />
+                <slice material = "Air"            thickness = "0.05*mm" />
+            </layer>
+            
+            <layer repeat="39" vis="SeeThrough">
+                <slice material = "TungstenDens24" thickness = "3.5*mm" vis="BCLayerVis1"  layerType="holeForIncomingBeampipe" />
+                <slice material = "Silicon"        thickness = "0.3004*mm"      vis="BCLayerVis2"  sensitive = "yes"  />
+                <slice material = "Copper"         thickness = "0.0004*mm"      vis="BCLayerVis3"                     />
+                <slice material = "Kapton"         thickness = "0.15*mm"        vis="BCLayerVis4"                     />
+                <slice material = "Air"            thickness = "0.05*mm" />
+            </layer>
+            
+            
+            
+        </detector>
+    </detectors>
+    
+</lccdd>
+
+
