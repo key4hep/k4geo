@@ -22,7 +22,7 @@
 		     rmax="BeamCal_outer_radius + env_safety" 
 		     dz="BeamCal_max_z/COS_halfCrossingAngle + env_safety"/>
 	      <!-- Incoming beampipe cutout -->
-	      <shape type="Tube" rmin="0.0" rmax="BeamCal_tubeIncoming_radius - env_safety" 
+	      <shape type="Tube" rmin="0.0" rmax="BCal_TubeIncomingRadius + BCal_TubeIncomingClearance - env_safety"
 		     dz="BeamCal_max_z*2.0 +env_safety"/>
 	      <rotation x="0" y="ILC_Main_Crossing_Angle" z="0"/>
 	      <position x="0" y="0" z="0"/>
@@ -51,7 +51,7 @@
 		     rmax="BeamCal_outer_radius + env_safety" 
 		     dz="BeamCal_max_z/COS_halfCrossingAngle + env_safety"/>
 	      <!-- Incoming beampipe cutout -->
-	      <shape type="Tube" rmin="0.0" rmax="BeamCal_tubeIncoming_radius - env_safety" 
+	      <shape type="Tube" rmin="0.0" rmax="BCal_TubeIncomingRadius + BCal_TubeIncomingClearance - env_safety"
 		     dz="BeamCal_max_z*2.0 + env_safety"/>
 	      <rotation x="0" y="-ILC_Main_Crossing_Angle" z="0"/>
 	      <position x="0" y="0" z="0"/>
@@ -83,7 +83,7 @@
 
   <parameter crossingangle="ILC_Main_Crossing_Angle"
 	     cutoutspanningangle="BCal_cutoutSpanning"
-	     incomingbeampiperadius="BCal_TubeIncomingRadius"
+	     incomingbeampiperadius="BCal_TubeIncomingRadius + BCal_TubeIncomingClearance"
 	     />
   
   <dimensions inner_r = "BCal_rInner"

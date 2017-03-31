@@ -36,7 +36,8 @@
 
   <constant name="BCal_cutoutSpanning" value="45*degree"/>
   <constant name="BCal_SpanningPhi" value="360*degree-BCal_cutoutSpanning"/>
-  <constant name="BCal_TubeIncomingRadius" value="15*mm"/>
+  <constant name="BCal_TubeIncomingRadius" value="top_BeamCal_tubeIncoming_radius"/>
+  <constant name="BCal_TubeIncomingClearance" value="top_BeamCal_tubeIncoming_clearance"/>
   <constant name="BCal_dAbsorber" value="3.5*mm"/>
   <constant name="BCal_dGraphite" value="top_BCal_dGraphite"/>
   <constant name="BCal_rGraphite" value="LHCal_inner_radius-10.0*mm"/>
