@@ -118,8 +118,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
     // build services space containing support and electronics
     // simplified NOT layered for compactness
     double bolt_radius = 0.6 *dd4hep::cm; 
-    double ear_hight = lcalExtraS - 0.1*dd4hep::cm;
-    double ear_dy    = lcalOuterR + ear_hight;
+    double ear_height = lcalExtraS - 0.1*dd4hep::cm;
+    double ear_dy    = lcalOuterR + ear_height;
    if( lcalExtraS > 0. ){
       DD4hep::Geometry::Tube envelopeExtras (lcalOuterR, lcalOuterR + lcalExtraS-0.1, lcalThickness*0.5 );
       DD4hep::Geometry::Volume     ServicesVol(detName+"_Services",envelopeExtras,air);
@@ -127,18 +127,18 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
       // mounting ears
       DD4hep::Geometry::Material earMaterial = lcdd.material("TungstenDens24");
       int n_ears = 3;  // ears come in pairs
-      double earsAng0 = 0.*dd4hep::deg;
-      double ear_width = ear_hight;
-      double ear_dx    = ear_width*ear_dy/sqrt(ear_dy*ear_dy-lcalOuterR*lcalOuterR);
+      double ear_width = ear_height/2.;
+      double ear_dx    = ear_width/sqrt(1. - ( lcalOuterR*lcalOuterR - ear_width*ear_width)/(ear_dy*ear_dy) );
       double ear_hdz   = lcalThickness*0.5;
+      double earsDPhi = 180./double( n_ears ) * dd4hep::deg;
       // anonymous volumes - support
       DD4hep::Geometry::EllipticalTube EarEllipse( ear_dx, ear_dy, ear_hdz );
       DD4hep::Geometry::Tube earClip ( 0., lcalOuterR,  (ear_hdz + 0.1*dd4hep::cm), 0., 360.*dd4hep::deg );
       DD4hep::Geometry::Tube boltHole( 0., bolt_radius, (ear_hdz + 0.1*dd4hep::cm) );
       // mixed elcetronics
-      double phiSpanFE = lcalTileDphi - atan( ear_width/lcalOuterR); 
+      double phiSpanFE = earsDPhi - 2.* atan( ear_width/sqrt(lcalOuterR*lcalOuterR-ear_width*ear_width) ); 
       DD4hep::Geometry::Material mixFEmat = lcdd.material("siPCBMix");
-      DD4hep::Geometry::Tube mixFE( lcalOuterR, lcalOuterR+lcalExtraS-0.2*dd4hep::cm, 0.5*lcalThickness, -phiSpanFE, phiSpanFE);
+      DD4hep::Geometry::Tube mixFE( lcalOuterR, lcalOuterR+lcalExtraS-0.2*dd4hep::cm, 0.5*lcalThickness, -phiSpanFE/2., phiSpanFE/2.);
       DD4hep::Geometry::Volume mixFEvol(detName+"FEmix", mixFE, mixFEmat );
       // clipping
       // pair of ears
@@ -152,13 +152,12 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
       DD4hep::Geometry::Volume EarsVolume(detName+"Ears", EarShape2, earMaterial);
       EarsVolume.setVisAttributes( lcdd,"GrayVis");
       // place mountings and electronics  in Services volume
-      double earsAng = earsAng0;
-      double earsDPhi = 180./double( n_ears ) * dd4hep::deg;
+      double earsAng = 0.;
       double feAng = 0.;
       for( int ie=0; ie<n_ears; ie++ ){
 	DD4hep::Geometry::RotationZ earsRotZ( earsAng );
 	DD4hep::Geometry::RotationZ feRotZ1( feAng );
-	DD4hep::Geometry::RotationZ feRotZ2( feAng + 180.*dd4hep::deg );
+	DD4hep::Geometry::RotationZ feRotZ2( feAng + M_PI );
 	DD4hep::Geometry::Position  earsPos( 0., 0., 0.);
 	ServicesVol.placeVolume( EarsVolume, DD4hep::Geometry::Transform3D( earsRotZ, earsPos ));
 	ServicesVol.placeVolume( mixFEvol, DD4hep::Geometry::Transform3D( feRotZ1, earsPos) );
