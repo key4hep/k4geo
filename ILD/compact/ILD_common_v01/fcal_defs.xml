@@ -40,7 +40,7 @@
   <constant name="BCal_dAbsorber" value="3.5*mm"/>
   <constant name="BCal_dGraphite" value="top_BCal_dGraphite"/>
   <constant name="BCal_rGraphite" value="LHCal_inner_radius-10.0*mm"/>
-  <constant name="BCal_nLayers" value="30"/>
+  <constant name="BCal_nLayers" value="top_BCal_nLayers"/>
   <constant name="BeamCal_cell_size" value="3.5*mm"/>
 
 
