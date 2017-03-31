@@ -101,6 +101,7 @@ subdetector-specific ones are in separate files
   <constant name="top_BCal_dGraphite"                value="80*mm"/>
   <constant name="top_BeamCal_thickness"             value="top_BCal_dGraphite + top_BCal_nLayers*top_BeamCal_layerThickness"/>
   <constant name="top_BeamCal_tubeIncoming_radius"   value="15.0*mm"/>
+  <constant name="top_BeamCal_tubeIncoming_clearance"   value="1.0*mm"/> <!-- Allow some clearance -->
   <constant name="BCal_rInner" value="17.8*mm"/>
   <constant name="BCal_rOuter" value="140*mm"/>
 
