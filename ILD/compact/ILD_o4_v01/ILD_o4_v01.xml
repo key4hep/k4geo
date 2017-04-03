@@ -58,6 +58,9 @@
 
         <constant name="env_safety"                 value="0.1*mm"/>
 
+	<constant name="TPC_outer_radius"           value="1808*mm"/>
+
+	<constant name="ECal_endcap_zmin"           value="2450*mm" />
 
         <constant name="HCalBarrel_inner_radius"    value="2058*mm"/>
         <constant name="HCalBarrel_outer_radius"    value="3349*mm"/>
@@ -70,6 +73,9 @@
         <constant name="Coil_half_length"           value="3872*mm"/>
 
         <constant name="YokeBarrel_outer_radius"    value="7725*mm"/>
+
+	<constant name="tracker_region_rmax" value="TPC_outer_radius" />
+	<constant name="tracker_region_zmax" value="ECal_endcap_zmin" />
 
     </define>
 
