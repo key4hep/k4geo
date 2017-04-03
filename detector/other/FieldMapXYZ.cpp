@@ -56,7 +56,6 @@ void FieldMapXYZ::fieldComponents(const double* pos , double* globalField) {
             y >= yMin && y <= yMax &&
             z >= zMin && z <= zMax )
      ) {
-    globalField[0] = globalField[1] = globalField[2] = 0.0;
     return;
   }
 
