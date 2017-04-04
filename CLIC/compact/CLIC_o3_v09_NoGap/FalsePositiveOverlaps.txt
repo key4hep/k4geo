@@ -1,0 +1,38 @@
+#########################################################################################################
+#########################################################################################################
+#########################################################################################################
+
+
+Checking overlaps for volume av_4_impr_2_OuterTrackerBarrelModule_In_pv_0 ...
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomVol1002
+      issued by : G4PVPlacement::CheckOverlaps()
+Overlap with volume already placed !
+          Overlap is detected for volume av_4_impr_2_OuterTrackerBarrelModule_In_pv_0
+          with av_4_impr_2_OuterTrackerBarrelModule_In_pv_1 volume's
+          local point (-0.019326,15.0452,-0.922273), overlapping by at least: 4.81928 um
+NOTE: Reached maximum fixed number -1- of overlaps reports for this volume !
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Checking overlaps for volume av_4_impr_4_OuterTrackerBarrelModule_Out_pv_0 ...
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomVol1002
+      issued by : G4PVPlacement::CheckOverlaps()
+Overlap with volume already placed !
+          Overlap is detected for volume av_4_impr_4_OuterTrackerBarrelModule_Out_pv_0
+          with av_4_impr_4_OuterTrackerBarrelModule_Out_pv_1 volume's
+          local point (9.32806,15.0452,-0.0394282), overlapping by at least: 4.81928 um
+NOTE: Reached maximum fixed number -1- of overlaps reports for this volume !
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+This two over due to tight placement of modules in Outer tracker barrel.
+If you place a large number of along z (e.g. 84) you get this.
+If you reduce the number along z this disappears
+
+
+#########################################################################################################
+#########################################################################################################
+#########################################################################################################
