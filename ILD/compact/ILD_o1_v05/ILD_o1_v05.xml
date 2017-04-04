@@ -482,15 +482,27 @@
 
 	<readout name="EcalBarrelCollection">
 	  <segmentation type="WaferGridXY" grid_size_x="Ecal_cells_size" grid_size_y="Ecal_cells_size" offset_x="Ecal_cells_size/2.0"  offset_y="Ecal_cells_size/2.0" identifier_groupMGWafer="layer"/>
+	  <hits_collections>
+            <hits_collection name="EcalBarrelCollection_preShower"  key="layer" key_value="0x0"/>
+            <hits_collection name="EcalBarrelCollection" key="layer" key_min="0x1"   key_max="0xFF"/>
+	  </hits_collections>
 	  <id>system:5,module:3,stave:4,tower:3,layer:6,wafer:6,x:32:-16,y:-16</id>
 	</readout>
 	<readout name="EcalEndcapsCollection">
 	  <segmentation type="WaferGridXY" grid_size_x="Ecal_cells_size" grid_size_y="Ecal_cells_size" offset_x="Ecal_cells_size/2.0"  offset_y="Ecal_cells_size/2.0" identifier_groupMGWafer="tower"/>
+	  <hits_collections>
+            <hits_collection name="EcalEndcapsCollection_preShower"  key="layer" key_value="0x0"/>
+            <hits_collection name="EcalEndcapsCollection" key="layer" key_min="0x1"   key_max="0xFF"/>
+	  </hits_collections>
 	  <id>system:5,module:3,stave:3,tower:5,layer:6,wafer:6,x:32:-16,y:-16</id>
 	</readout>
 
 	<readout name="EcalEndcapRingCollection">
 	  <segmentation type="CartesianGridXY" grid_size_x="Ecal_cells_size" grid_size_y="Ecal_cells_size"/>
+	  <hits_collections>
+            <hits_collection name="EcalEndcapRingCollection_preShower"  key="layer" key_value="0x0"/>
+            <hits_collection name="EcalEndcapRingCollection" key="layer" key_min="0x1"   key_max="0xFF"/>
+	  </hits_collections>
 	  <id>system:5,module:3,stave:4,tower:3,layer:6,x:32:-16,y:-16</id>
 	</readout>
 
