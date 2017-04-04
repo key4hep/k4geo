@@ -1,10 +1,10 @@
 <lccdd>
-    <info name="CLIC_o3_v09"
-          title="CLIC detector model option 3 version 09"
+    <info name="CLIC_o3_v09_NoGap"
+          title="CLIC detector model option 3 version 09 with no gaps in calorimeters"
           author="Marko Petric"
           url="https://twiki.cern.ch/twiki/bin/view/CLIC/NewCLIC"
           status="development"
-          version="$Id: 2017-03-31 marko.petric@cern.ch $">
+          version="$Id: 2017-04-04 marko.petric@cern.ch $">
         <comment>The compact format for the CLIC Detector design</comment>
     </info>
 
@@ -98,10 +98,10 @@
 
         <constant name="ECalBarrel_inner_radius"    value="1500*mm"/>
         <constant name="ECalBarrel_outer_radius"    value="1702*mm"/>
-        <constant name="ECalBarrel_half_length"     value="2210*mm"/>
+        <constant name="ECalBarrel_half_length"     value="2307*mm"/>
         <constant name="ECalBarrel_symmetry"        value="12"/>
 
-        <constant name="ECalEndcap_inner_radius"    value="410*mm"/>
+        <constant name="ECalEndcap_inner_radius"    value="10*mm"/>
         <constant name="ECalEndcap_outer_radius"    value="1700*mm"/>
         <constant name="ECalEndcap_min_z"           value="2307*mm"/>
         <constant name="ECalEndcap_max_z"           value="2509*mm"/>
@@ -117,10 +117,10 @@
 
         <constant name="HCalBarrel_inner_radius"    value="1740*mm"/>
         <constant name="HCalBarrel_outer_radius"    value="3330*mm"/>
-        <constant name="HCalBarrel_half_length"     value="2210*mm"/>
+        <constant name="HCalBarrel_half_length"     value="2353.5*mm"/>
         <constant name="HCalBarrel_symmetry"        value="12"/>
 
-        <constant name="HCalEndcap_inner_radius"    value="250*mm"/>
+        <constant name="HCalEndcap_inner_radius"    value="10*mm"/>
         <constant name="HCalEndcap_outer_radius"    value="3246*mm"/>
         <constant name="HCalEndcap_min_z"           value="2539*mm"/>
         <constant name="HCalEndcap_max_z"           value="4129*mm"/>
@@ -214,9 +214,6 @@
 
     <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
 
-    <include ref="Beampipe_o1_v01_02.xml"/>
-    <include ref="BeamInstrumentation_o1_v01_01.xml"/>
-
     <include ref="Vertex_o2_v06_01.xml"/>
 
     <include ref="InnerTracker_o2_v06_01.xml"/>
@@ -224,7 +221,6 @@
 
     <include ref="ECalBarrel_o2_v01_02.xml"/>
     <include ref="ECalEndcap_o2_v01_02.xml"/>
-    <include ref="ECalPlug_o1_v01_02.xml"/>
 
     <include ref="HCalBarrel_o1_v01_01.xml"/>
     <include ref="HCalEndcap_o1_v01_01.xml"/>
@@ -234,9 +230,6 @@
     <include ref="YokeBarrel_o1_v01_01.xml"/>
     <include ref="YokeEndcap_o1_v01_01.xml"/>
 
-    <include ref="LumiCal_o1_v01_01.xml"/>
-
-    <include ref="BeamCal_o1_v01_01.xml"/>
 
     <plugins>
         <plugin name="DD4hepVolumeManager"/>
