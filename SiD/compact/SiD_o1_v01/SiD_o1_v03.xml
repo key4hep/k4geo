@@ -105,7 +105,9 @@
     <constant name="LumiCal_zmax" value="1700.0*mm"/>
 
     <constant name="tracking_region_radius" value="ECalBarrel_rmin - 10*env_safety"/>
-    <constant name="tracking_region_zmax" value="ECalEndcap_zmin - 10*env_safety"/>    
+    <constant name="tracking_region_zmax" value="ECalEndcap_zmin - 10*env_safety"/>  
+    <constant name="tracker_region_rmax" value="tracking_region_radius"/>  
+    <constant name="tracker_region_zmax" value="tracking_region_zmax"/>    
 
     <constant name="VXD_CF_sensor" value="0.026*cm"/>
     <constant name="VXD_CF_support" value="0.05*cm"/>
