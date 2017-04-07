@@ -1,5 +1,6 @@
 # lcgeo (Linear Collider Geometry)
 [![Build Status](https://travis-ci.org/iLCSoft/lcgeo.svg?branch=master)](https://travis-ci.org/iLCSoft/lcgeo)
+[![Coverity Scan Build Status](https://scan.coverity.com/projects/12359/badge.svg)](https://scan.coverity.com/projects/ilcsoft-lcgeo)
 
 Implementation of Linear Collider detector models in DD4hep.
 
