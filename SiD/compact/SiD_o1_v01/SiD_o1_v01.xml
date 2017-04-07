@@ -120,8 +120,9 @@
     <constant name="Solenoid_Coil_half_length" value="Solenoid_half_length-SolenoidEndcapCryostatThickness-SolenoidEndcapAirgapThickness"/>
     <constant name="Solenoid_outer_radius" value="3429*mm"/>
 
-    <constant name="tracker_region_rmax" value="0.5*(SiTracker_outer_radius+ECalBarrel_rmin)" />  
-    <constant name="tracker_region_zmax" value="ECalBarrel_half_length" />
+    <!-- Frank's example: -->
+    <!-- constant name="tracker_region_rmax" value="0.5*(SiTracker_outer_radius+ECalBarrel_rmin)" /-->  
+    <!-- constant name="tracker_region_zmax" value="ECalBarrel_half_length" /-->
 
   </define>
 
