@@ -1,3 +1,286 @@
+# v00-11
+
+Andre Sailer 2017-03-17 
+  - delete NULL is a no-op, fix misleading indentation and useless setting of member variable in d'tor, initialise member pointer to NULL
+
+Andre Sailer 2017-02-28 
+  - Add Werror to CI setup
+
+TiborILD 2017-03-22 
+  - bug fixes
+
+Dan Protopopescu 2017-03-21 
+  - Unchanged from o2_v02
+
+Marko Petric 2017-03-21 
+  - Mention LICENCE in README
+  - Add LICENCE
+  - fix README
+  - Update README.md
+  - Create README.md
+
+StrahinjaLukic 2017-03-17 
+  - Adding test of the BeamCal z location for ILD detectors.
+  - Adjusting indentation to surrounding code
+  - Removing unneeded sliceType graphiteShielding, correcting indentation.
+
+StrahinjaLukic 2017-03-16 
+  - Minor edit in BeamCal08.xml for consistence
+  - Resolving incorrect whitespace by hand
+  - Correcting code.
+  - Restoring another lost line.
+  - Lost closing bracketwq
+  - Correcting a minor error in the code
+  - Removing hardcoded check of BeamCal z.
+  - Another minor error...
+  - Correcting a minor error in the code
+  - Removing hardcoded check of BeamCal z.
+  - Changes requested by Andre.
+
+StrahinjaLukic 2017-03-15 
+  - Implementing the optional outer_radius attribute for the BeamCal graphite shield as suggested by Andre
+  - Changes requested by Andre.
+  - Minor edit to the BeamCal driver
+
+StrahinjaLukic 2017-03-14 
+  - Adding BeamCal_LHCal.xml for testing relative position of BeamCal and LHCal. Moving BeamCal towards LHCal.
+  - Updated segmentation for BeamCal. BC sensor cutout 45 deg. BC phi spanning 360deg-cutout.
+  - Adding BeamCal_LHCal.xml for testing relative position of BeamCal and LHCal. Moving BeamCal towards LHCal.
+  - Minor fixes and debug messages.
+  - Defining top_BCal_dGraphite in top_defs_common and adjusting BeamCal envelope.
+  - Updating the BeamCal inner radius and adapting the segmentation.
+  - Implementing the optional outer_radius attribute for the BeamCal graphite shield as suggested by Andre
+  - BCal_rGraphite has 10mm clearance from LHCal bore. Defined in fcal_defs.xml, removed elsewhere.
+  - Proportional segmentation for BeamCal
+  - Adding BeamCal_LHCal.xml for testing relative position of BeamCal and LHCal. Moving BeamCal towards LHCal.
+
+StrahinjaLukic 2017-03-13 
+  - Adding new parameter BCal_rGraphite to allow graphite shielding to have different outer radius than BeamCal
+
+bogdan 2017-03-18 
+  - LHCal envelope correction
+
+bogdan 2017-03-17 
+  - asymetric inner cutout, placement fix -  no x-angle rotation
+  - info print modified
+  - top_Lcal_z_begin set to Ecal_endcap_zmin
+  -  LCal aligned with begin ECalPlug and LHCal tied to ECalPug end
+  - increased number of layer to 30
+
+Dan Protopopescu 2017-03-15 
+  - Update SiTrackerBarrel_o2_v02_00.xml
+  - Update SiTrackerEndcap_o2_v02_01.xml
+  - Update SiD_o2_v02.xml
+  - Added updated Forward Tracker
+
+Daniel Jeans 2017-03-15 
+  - add a couple of comments
+  - update ECAL: allow other polyhedral barrel shapes (endcaps still octagons); configurable dead region due to slab plug (default 0)
+
+bogdan 2017-03-14 
+  -  replace LHcal.xml with new LHCal01.xml in top XML
+  -  -update LHcal geometry according to info from yuno@univ.kiev.ua  -new LHCal driver centering detector at outgoing beam pipe   and building LHcal with octagonal inner bore  - new extra utility, FCAL_l1_v01.xml to build FCAL components only
+
+TiborILD 2017-03-08 
+  - detecor type flags added/corrected
+
+TiborILD 2017-03-02 
+  - correct the cell size for Hcal_EndcapRing_SD in ILD_s2_v01.xml
+
+Frank Gaede 2017-03-03 
+  - switch back to constant B-field for ILD_o1_v05
+
+Marko Petric 2017-03-02 
+  - Add sourcing of env in SensThickness tests
+
+Marko Petric 2017-03-01 
+  - Replace the tube shaped cones with actual tubes
+
+TiborILD 2017-02-28 
+  - Hcal_Endcaps_SD_v02 box geometry (as of SHalSc04)
+  - Hcal_Endcaps_SD_v02 box geometry (as of SHalSc04)
+
+TiborILD 2017-02-24 
+  - Hcal_Endcaps_SD_v01.xml : cleaning & typo correction
+  - some typo corrections & cleaning
+  - ILD_s2_v01.xml : typo correction for HcalEndcapsCollection
+  - ILD_l2_v01.xml : typo correction for HcalEndcapsCollection
+  - Hcal_Endcaps_SD_v01.xml: rot_z correction & cleaning
+
+Andre Sailer 2017-02-24 
+  - Add guineapig.particlesPerEvent option, including documentation
+  - Revert " add readerParameters to input readers"
+
+Frank Gaede 2017-03-01 
+  - mv Geant4EventReaderGuineaPig.cpp to DD4hep
+
+Marko Petric 2017-02-28 
+  - New driver for simple tube support
+  - Keep compilation going after error
+
+Frank Gaede 2017-02-24 
+  - implment skipping to event in  GuineaPig reader
+  - add parameter ParticlesPerEvent to GuineaPig reader
+  -  add readerParameters to input readers
+  - add component DDParsers (needed on macos)
+
+Andre Sailer 2017-02-23 
+  - TubeX01: drop register, clang warning, useless anyway
+  - SServices00: comment unsed private variable (clang warning)
+  - Add new/correct spelling for ROOT_INCLUDE_DIRS, root headers properly ignored now
+
+Andre Sailer 2017-02-22 
+  - LcgeoExceptions: Fix warning for llvm
+  - TPCSDAction: fix shadow and unused variable warnings
+  - VXD04: fix shadow and unused variable warnings
+  - ECal05, plug: comment unused (Placed)Volumes, variables
+  - SECal04_*: comment unsed placedvolume variable
+  - SECal05_helper: delete NULL is a no-op we don't have to test before deleting
+  - LumiCal_o1_v02: fix warnings for unused variables
+  - ODH: static --> inline to avoid unused-function warnings
+  - Fix warnings: set but not used and shadowing in detectors used by CLIC
+
+TiborILD 2017-02-21 
+  - added  Hcal_Endcaps_SD_v01.xml
+
+Tibor Kurca 2017-02-21 
+  - added  Hcal_Endcaps_SD_v01.cpp
+  - added  Hcal_EndcapRing_SD_v01.cpp
+  - Hcal_Barrel_SD_v01.cpp  5 modules & updates
+  - ILD_s2_v01.xml modified for SDHcal
+  - ILD_l2_v01.xml modified for SDHcal
+  - Hcal_EndcapRing_SD_v01.xml added
+  - graphite material added
+  - added absorber slice, swapped epoxy/PCB slices
+  - HcalSD_ extra parameters names for SDHcal
+
+Dan Protopopescu 2017-02-21 
+  - Rename detector/SiTrackerEndcap_o2_v02ext_geo.cpp to detector/tracker/SiTrackerEndcap_o2_v02ext_geo.cpp
+  - Delete SiTrackerEndcap_o2_v02ext_geo.cpp
+
+bogdanmishchenko 2017-02-17 
+  - Add files via upload
+
+bogdanmishchenko 2017-02-16 
+  - Add files via upload
+
+Dan Protopopescu 2017-02-14 
+  - Updated driver after closing previous pull request
+
+Marko Petric 2017-02-15 
+  - Add the copper cables to the shell of the ourter tracker
+  - Move airshell backwards
+  - Remove cable from vertex
+
+Marko Petric 2017-02-13 
+  - Remove obsolete gitlab CI badge
+  - Change surfaces to form a right handed system
+
+Frank Gaede 2017-02-14 
+  - split pair files into events in Geant4EventReaderGuineaPig
+
+Frank Gaede 2017-02-13 
+  - add vertex info in  Geant4EventReaderGuineaPig
+
+Dan Protopopescu 2017-02-08 
+  - Update ECalBarrel_o1_v03_geo.cpp
+  - Update SiD_o2_v02.xml
+
+Dan Protopopescu 2017-02-07 
+  - Update SiD_o2_v02.xml
+  - Update Solenoid_o2_v02_00.xml
+  - Create ECalBarrel_o2_v03_00.xml
+
+simoniel 2017-02-08 
+  - Added region definitions for G4 material scan.
+
+Frank Gaede 2017-02-08 
+  - add ILD_s2_v01 with SDHcal from ILD_o2_v01
+  - add ILD_l2_v01 with SDHcal from ILD_o2_v01
+
+Shaojun Lu 2017-02-08 
+  -  Following the update of small ILD, the HCAL radius has been reduced by ~34cm (HBU:36cm). Added one version 'SHcalSc04_Endcaps_sv01.xml' for the small AHCAL Endcaps, which has reduced one HUB at x and y, and 14 towers at x direction.(large ILD has 16 towers in endcaps from HBU.)
+
+Andre Sailer 2017-01-27 
+  - DDSim: Change default tracker action to Geant4TrackerWeightedAction
+
+Dan Protopopescu 2017-02-01 
+  - Delete SiTrackerEndcap_o2_v02_00.xml
+  - Rename SiTrackerEndcap_o2_v01_01.xml to SiTrackerEndcap_o2_v02_01.xml
+  - Add files via upload
+  - Update SiVertexBarrel.xml
+  - Rename Solenoid_o2_v01_00.xml to Solenoid_o2_v02_00.xml
+  - Rename MuonEndcap_o2_v01_01.xml to MuonEndcap_o2_v02_01.xml
+  - Rename MuonBarrel_o2_v01_01.xml to MuonBarrel_o2_v02_01.xml
+  - Rename LumiCal_o2_v01_00.xml to LumiCal_o2_v02_00.xml
+  - Rename HCalEndcap_o2_v01_01.xml to HCalEndcap_o2_v02_01.xml
+  - Rename HCalBarrel_o2_v01_00.xml to HCalBarrel_o2_v02_00.xml
+  - More files copied over from SiD_o2_v01_prelim
+  - Delete test
+  - Rename ECalEndcap_o2_v01_00.xml to ECalEndcap_o2_v02_00.xml
+  - Rename ECalBarrel_o2_v01_00.xml to ECalBarrel_o2_v02_00.xml
+  - Add files via upload
+  - Rename SiVertexEndcap_o2_v01.xml to SiVertexEndcap_o2_v02.xml
+  - Rename SiTrackerEndcap_o2_v01_00.xml to SiTrackerEndcap_o2_v02_00.xml
+  - Rename SiTrackerBarrel_o2_v01_00.xml to SiTrackerBarrel_o2_v02_00.xml
+  - Add files via upload
+  - Add files via upload
+  - Add files via upload
+  - Create BeamPipe.xml
+  - Create BeamCal_o2_v02_00.xml
+  - Create test
+  - Update SiD_o2_v02.xml
+  - Update SiD_o2_v02.xml
+  - Create SiD_o2_v02.xml
+
+Frank Gaede 2017-02-02 
+  - fix orientation of surface vectors in SIT, FTD
+
+Marko Petric 2017-02-01 
+  - Remove deprecated drivers to new ones
+  - Add test for CLIC_o3_v08
+  - Unify all tracker readout IDs with global parameter
+  - Add missing materials
+  - Add DD4hepVolumeManager
+  - Fix the possition of the ECal surface
+  - Remove regions since we do not need to go away from the global range cut
+  - Fix the problem with missing outer radius for solenoid
+  - The whole new tracker
+  - Remove warnings from ConicalSupport
+  - Fix conical support by removing a obsolete subtraction
+  - This is the update of the Inner tracker
+  - Update Vertex with cables and redefine materials
+  - Add new drivers that read includes inside module block
+
+Dan Protopopescu 2017-01-31 
+  - Create README.md
+  - Create README.md
+
+Daniel Jeans 2017-01-27 
+  - add rec geometry data to SEcal05_Endcaps.cpp driver
+
+Daniel Jeans 2017-01-24 
+  - remove SEcal04_ECRing.xml for previous driver
+  - SEcal05_siw_ECRing for s1 model; fix FTD envelope definition (go to end of TPC) to avoid overlap
+  - introduce SEcal05_ECRing driver: hole centered on outgoing beam; preshower status taken into account. Use this driver in ILD_(l,s)1_v01 models
+
+Frank Gaede 2017-01-24 
+  - mv sensitive  plugins; rm obsolete SDs
+
+luisaleperez 2017-01-20 
+  - Adding new guinea-pig event plugin
+  - Adding new guinea-pig event plugin
+
+luisaleperez 2017-01-19 
+  - Using new field-map XYZ
+  - Adding new field-map XYZ
+
+Luis Alejandro Perez Perez 2017-01-19 
+  - Adding new field-map XYZ
+
+Frank Gaede 2017-01-18 
+  - add example conversion:: guineapig_to_lcio.py
+
 # v00-10
 
 Shaojun Lu 2017-01-16
