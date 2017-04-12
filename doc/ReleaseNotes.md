@@ -1,5 +1,7 @@
 # v00-11
 
+# v00-11
+
 * 2017-04-07 Dan Protopopescu ([PR#85](https://github.com/ilcsoft/lcgeo/pull/85))
   - Added correct tracker region to SiD models as per #81
   - Added type flags in ECalBarrel_o2_v03_00.xml
