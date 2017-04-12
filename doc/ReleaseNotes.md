@@ -1,7 +1,92 @@
 # v00-11
 
+* 2017-04-07 Dan Protopopescu ([PR#85](https://github.com/ilcsoft/lcgeo/pull/85))
+  - Added correct tracker region to SiD models as per #81
+  - Added type flags in ECalBarrel_o2_v03_00.xml
+  - Updated model version for SiD test
 
-- below are release notes before PR script was introduced
+* 2017-04-07 Shaojun Lu ([PR#80](https://github.com/ilcsoft/lcgeo/pull/80))
+  - Use MutliCollections configuration to split SiEcal into preShower inside ILD_o1_v05.
+     - "CaloPreShowerSDAction" is not necessary in "ddsim_steer.py"
+     - The same  "ddsim_steer.py" in ILDConfig will work for all ILD modules.
+
+* 2017-04-07 Shaojun Lu ([PR#78](https://github.com/ilcsoft/lcgeo/pull/78))
+  - Added tracker region in "ILD_o4_v01.xml" to fix the MC Truth link in CED display.
+
+* 2017-04-04 Frank Gaede ([PR#79](https://github.com/ilcsoft/lcgeo/pull/79))
+  - enforce definition of tracker volume in ddsim - models need to define:
+          - tracker_region_zmax
+          - tracker_region_rmax
+  - this is needed to ensure that the MCTruth link for hits works correctly
+  - allow to enable additional DebugDumpActions with *enableDetailedHitsAndParticleInfo*
+
+* 2017-04-04 Dan Protopopescu ([PR#70](https://github.com/ilcsoft/lcgeo/pull/70))
+  * SiD: Updated to-do list
+
+* 2017-04-05 Marko Petric ([PR#82](https://github.com/ilcsoft/lcgeo/pull/82))
+  - CLIC_o3_v09_NoGaps model is same as CLIC_o3_v09 but has not gaps in calorimeters between barrel and endcap, the calorimeters endcaps have an inner radius of 1cm, therefore the beampipe and lumi and beam call are removed. Model only meant for calo efficiency study.
+
+* 2017-04-02 bogdan ([PR#72](https://github.com/ilcsoft/lcgeo/pull/72))
+  - corrections for LHCal01.xml and LHCal_o1_v01_geo.cpp fixing overlaps.
+   -  Inner cutout in LHCal envelope changed from octagon to tube, as for some reasons 
+      PolyhedraRegular is not subtracted - causing lack of inner cutout in envelope and overlaps 
+      with beam pipe.
+  -  Fix of bug in geo driver which caused  internal overlaps
+
+* 2017-04-03 luisaleperez ([PR#77](https://github.com/ilcsoft/lcgeo/pull/77))
+  - Removed line in FieldMapXYZ that set B-field to zero if point was outside field-map range.
+
+* 2017-04-03 StrahinjaLukic ([PR#75](https://github.com/ilcsoft/lcgeo/pull/75))
+  - Corrected BeamCal envelope for the new dimensions of the graphite absorber.
+  - Consolidated some BeamCal parameters. Removed a redundant parameter for the incoming beam pipe radius.
+  - Added clearance between BeamCal and the incoming beam pipe.
+
+* 2017-04-03 Marko Petric ([PR#74](https://github.com/ilcsoft/lcgeo/pull/74))
+  - New model of CLIC detector CLIC_o3_v09, the only change to CLIC_o3_v08 is the Polystyrene -> G4_POLYSTYRENE in the HCal barrel and endcap. This changes the density of the scintilator from 1.032 to 1.06 g/cm3.
+
+* 2017-03-27 Daniel Jeans ([PR#61](https://github.com/ilcsoft/lcgeo/pull/61))
+  - Fix bugs in barrel modules size introduced when generalising barrel symmetry
+  - Exit gracefully if too many sides requested for barrel
+
+* 2017-03-29 Frank Gaede ([PR#63](https://github.com/ilcsoft/lcgeo/pull/63))
+  - add info printout if sensitive action is changed from the default
+
+* 2017-04-08 Andre Sailer ([PR#86](https://github.com/ilcsoft/lcgeo/pull/86))
+  - DDSim: Added printout of execution time at the end of simulation
+
+* 2017-03-24 Emilia Leogrande ([PR#60](https://github.com/ilcsoft/lcgeo/pull/60))
+  - Replace ILDCellID0 with LCTrackerCellID
+
+* 2017-03-30 Shaojun Lu ([PR#69](https://github.com/ilcsoft/lcgeo/pull/69))
+  - Added one option to fill act list in case that we want to use MultiSegmentation and MultiCollection.
+
+* 2017-03-30 Shaojun Lu ([PR#68](https://github.com/ilcsoft/lcgeo/pull/68))
+  - Initialise a module "ILD_o4_v01" for a combined RPC/Scintillator HcalBarrel simulation. 
+     - Both RPC and Scintillator have 48 layers.
+     - MarlinProcessor may access RPC from slice:3 and access Scintillator from slice:6
+     - Assign different segmentations and output collections to the different sensitive type.
+
+* 2017-03-30 Frank Gaede ([PR#67](https://github.com/ilcsoft/lcgeo/pull/67))
+  - fix a bug in the field maps  FieldMapBrBz.cpp  and FieldMapXYZ.cpp  that prevented overlay
+  - (fixes https://github.com/iLCSoft/lcgeo/issues/65 )
+
+* 2017-03-31 luisaleperez ([PR#73](https://github.com/ilcsoft/lcgeo/pull/73))
+  - implemented FieldMapXYZ.cpp 
+       - a 3D field map defined on a grid in (x,y,z) 
+  - added field maps for the ILD solenoid and anti-DID
+       -  fieldmaps/ild_fieldMap_antiDID_10cm_v1_20170223.root 
+       -  fieldmaps/ild_fieldMap_Solenoid3.5T_StandardYoke_10cm_v1_20170223.root 
+  - added example configuration for using these maps to ILD_o1_v05
+
+
+* 2017-04-12 Daniel Jeans ([PR#87](https://github.com/ilcsoft/lcgeo/pull/87))
+  various updates to beampipe description:
+  - inner radius of central tube reduced from 14 to 13.5mm to match DBD
+  - tube thickness in conical regions corrected for the cone angle
+  - second cone: now made of Be-Cu mix, and given uniform thickness of 2.7mm. this is to simulate a 2mm-thick Be beampipe with 0.7mm of Cu cables around it.
+
+
+* below are release notes before PR script was introduced
 
 Andre Sailer 2017-03-17 
   - delete NULL is a no-op, fix misleading indentation and useless setting of member variable in d'tor, initialise member pointer to NULL
