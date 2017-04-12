@@ -108,7 +108,7 @@ subdetector-specific ones are in separate files
 
   <!-- the beam tube -->
   <constant name="TUBE_IPInnerTube_end_z"         value="80*mm"/>
-  <constant name="TUBE_central_inner_radius" value="14.*mm"/>
+  <constant name="TUBE_central_inner_radius" value="13.5*mm"/>
   <constant name="TUBE_central_thickness" value="0.5*mm"/>
 
   <constant name="TUBE_IPInnerBulge_end_z"        value="150*mm"/>
