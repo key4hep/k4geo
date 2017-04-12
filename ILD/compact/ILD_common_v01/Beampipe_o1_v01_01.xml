@@ -19,7 +19,7 @@
   <section type ="Center"
            start="TUBE_firstCone_zStart"                               end="TUBE_firstCone_zEnd"
            rMin1="TUBE_firstCone_rInnerStart"                          rMin2="TUBE_firstCone_rInnerEnd"
-           rMax1="TUBE_firstCone_rInnerStart+TUBE_firstCone_thickness" rMax2="TUBE_firstCone_rInnerEnd+TUBE_firstCone_thickness"
+           rMax1="TUBE_firstCone_rInnerStart+TUBE_firstCone_RadThickness" rMax2="TUBE_firstCone_rInnerEnd+TUBE_firstCone_RadThickness"
            material="G4_Be" name="IPInnerBulge" />
 
   <!-- second cylinder -->
@@ -33,25 +33,25 @@
   <section type ="Center" 
            start="TUBE_secondCone_part1_zStart"                                end="TUBE_secondCone_part1_zEnd"
            rMin1="TUBE_secondCone_part1_rInnerStart"                             rMin2="TUBE_secondCone_part1_rInnerEnd"
-           rMax1="TUBE_secondCone_part1_rInnerStart+TUBE_secondCone_part1_thickness"  rMax2="TUBE_secondCone_part1_rInnerEnd+TUBE_secondCone_part1_thickness"
+           rMax1="TUBE_secondCone_part1_rInnerStart+TUBE_secondCone_part1_RadThickness"  rMax2="TUBE_secondCone_part1_rInnerEnd+TUBE_secondCone_part1_RadThickness"
            material="G4_Be" name="IPOuterTube" />
 
   <section type ="Center" 
            start="TUBE_secondCone_part2_zStart"                                end="TUBE_secondCone_part2_zEnd"
            rMin1="TUBE_secondCone_part2_rInnerStart"                             rMin2="TUBE_secondCone_part2_rInnerEnd"
-           rMax1="TUBE_secondCone_part2_rInnerStart+TUBE_secondCone_part2_thickness"  rMax2="TUBE_secondCone_part2_rInnerEnd+TUBE_secondCone_part2_thickness"
+           rMax1="TUBE_secondCone_part2_rInnerStart+TUBE_secondCone_part2_RadThickness"  rMax2="TUBE_secondCone_part2_rInnerEnd+TUBE_secondCone_part2_RadThickness"
            material="G4_Be" name="IPOuterTube" />
 
   <section type ="Center" 
            start="TUBE_secondCone_part3_zStart"                                end="TUBE_secondCone_part3_zEnd"
            rMin1="TUBE_secondCone_part3_rInnerStart"                             rMin2="TUBE_secondCone_part3_rInnerEnd"
-           rMax1="TUBE_secondCone_part3_rInnerStart+TUBE_secondCone_part3_thickness"  rMax2="TUBE_secondCone_part3_rInnerEnd+TUBE_secondCone_part3_thickness"
+           rMax1="TUBE_secondCone_part3_rInnerStart+TUBE_secondCone_part3_RadThickness"  rMax2="TUBE_secondCone_part3_rInnerEnd+TUBE_secondCone_part3_RadThickness"
            material="G4_Be" name="IPOuterTube" />
 
   <section type ="Center" 
            start="TUBE_secondCone_part4_zStart"                                end="TUBE_secondCone_part4_zEnd"
            rMin1="TUBE_secondCone_part4_rInnerStart"                             rMin2="TUBE_secondCone_part4_rInnerEnd"
-           rMax1="TUBE_secondCone_part4_rInnerStart+TUBE_secondCone_part4_thickness"  rMax2="TUBE_secondCone_part4_rInnerEnd+TUBE_secondCone_part4_thickness"
+           rMax1="TUBE_secondCone_part4_rInnerStart+TUBE_secondCone_part4_RadThickness"  rMax2="TUBE_secondCone_part4_rInnerEnd+TUBE_secondCone_part4_RadThickness"
            material="G4_Be" name="IPOuterTube" />
 
 
