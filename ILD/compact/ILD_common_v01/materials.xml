@@ -541,4 +541,12 @@
       <fraction n="0.020" ref="Mn" />
     </material>
 
+    <!-- to model beampipe with 2mm Be + 0.7mm Cu cables (calc by DJeans) -->
+    <material name="BeampipeBeCableMix">
+      <D type="density" value="3.69" unit="g/cm3" />
+       <fraction n="0.806" ref="Be" />
+       <fraction n="0.194" ref="Cu" />
+    </material>
+
+
   </materials>

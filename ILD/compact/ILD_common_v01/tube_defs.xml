@@ -51,21 +51,22 @@
   <constant name="TUBE_secondCone_part1_zEnd" value="FTD_disk3_zPosRelToTpcLength*TPC_Ecal_Hcal_barrel_halfZ"/>
   <constant name="TUBE_secondCone_part1_rInnerStart" value="TUBE_secondCylinder_rInner"/>
   <constant name="TUBE_secondCone_part1_rInnerEnd" value="TUBE_secondCone_part1_rInnerStart + TUBE_secondCone_tanOpeningAngle*(TUBE_secondCone_part1_zEnd-TUBE_secondCone_part1_zStart)"/>
-  <constant name="TUBE_secondCone_part1_thickness" value="2.*mm"/>
+  <!-- include 0.7mm thickness for the cables -->
+  <constant name="TUBE_secondCone_part1_thickness" value="2.7*mm"/> 
   <constant name="TUBE_secondCone_part1_RadThickness" value="TUBE_secondCone_part1_thickness/TUBE_secondCone_cosOpeningAngle"/>
 
   <constant name="TUBE_secondCone_part2_zStart" value="TUBE_secondCone_part1_zEnd"/>
   <constant name="TUBE_secondCone_part2_zEnd" value="FTD_disk4_zPosRelToTpcLength*TPC_Ecal_Hcal_barrel_halfZ"/>
   <constant name="TUBE_secondCone_part2_rInnerStart" value="TUBE_secondCone_part1_rInnerEnd"/>
   <constant name="TUBE_secondCone_part2_rInnerEnd" value="TUBE_secondCone_part2_rInnerStart + TUBE_secondCone_tanOpeningAngle*(TUBE_secondCone_part2_zEnd-TUBE_secondCone_part2_zStart)"/>
-  <constant name="TUBE_secondCone_part2_thickness" value="2.*mm"/>
+  <constant name="TUBE_secondCone_part2_thickness" value="2.7*mm"/>
   <constant name="TUBE_secondCone_part2_RadThickness" value="TUBE_secondCone_part2_thickness/TUBE_secondCone_cosOpeningAngle"/>
 
   <constant name="TUBE_secondCone_part3_zStart" value="TUBE_secondCone_part2_zEnd"/>
   <constant name="TUBE_secondCone_part3_zEnd" value="FTD_disk5_zPosRelToTpcLength*TPC_Ecal_Hcal_barrel_halfZ"/>
   <constant name="TUBE_secondCone_part3_rInnerStart" value="TUBE_secondCone_part2_rInnerEnd"/>
   <constant name="TUBE_secondCone_part3_rInnerEnd" value="TUBE_secondCone_part3_rInnerStart + TUBE_secondCone_tanOpeningAngle*(TUBE_secondCone_part3_zEnd-TUBE_secondCone_part3_zStart)"/>
-  <constant name="TUBE_secondCone_part3_thickness" value="2.*mm"/>
+  <constant name="TUBE_secondCone_part3_thickness" value="2.7*mm"/>
   <constant name="TUBE_secondCone_part3_RadThickness" value="TUBE_secondCone_part3_thickness/TUBE_secondCone_cosOpeningAngle"/>
 
   <constant name="TUBE_secondCone_part4_zStart" value="TUBE_secondCone_part3_zEnd"/>
@@ -73,7 +74,7 @@
   <constant name="TUBE_secondCone_part4_zEnd" value="TUBE_cupola_zEnd"/>
   <constant name="TUBE_secondCone_part4_rInnerStart" value="TUBE_secondCone_part3_rInnerEnd"/>
   <constant name="TUBE_secondCone_part4_rInnerEnd" value="TUBE_secondCone_part4_rInnerStart + TUBE_secondCone_tanOpeningAngle*(TUBE_secondCone_part4_zEnd-TUBE_secondCone_part4_zStart)"/>
-  <constant name="TUBE_secondCone_part4_thickness" value="2.*mm"/>
+  <constant name="TUBE_secondCone_part4_thickness" value="2.7*mm"/>
   <constant name="TUBE_secondCone_part4_RadThickness" value="TUBE_secondCone_part4_thickness/TUBE_secondCone_cosOpeningAngle"/>
 
 
@@ -86,6 +87,5 @@
   <constant name="TUBE_lumiTube_thickness" value="1*mm"/>
   <constant name="TUBE_lumiTube_rInner" value="Lcal_inner_radius-TUBE_lumiTube_thickness-1*mm"/>
 
-  
 
 </define>
