@@ -1,0 +1,19 @@
+<detector id="ILDDetID_HCAL_RING" name="HCalRing" type="DD4hep_PolyhedraEndcapCalorimeter2" readout="HcalEndcapRingCollection" vis="GreenVis" calorimeterType="HAD_ENDCAP" insideTrackingVolume="false" >
+  
+  <comment>Hadron Calorimeter EndcapRing</comment>
+  
+  <type_flags type=" DetType_CALORIMETER + DetType_BARREL + DetType_HADRONIC + DetType_AUXILIARY " />  
+
+  <dimensions numsides="HcalEndcapRing_symmetry" zmin="HcalEndcapRing_min_z" rmin="HcalEndcapRing_inner_radius" rmax="HcalEndcapRing_outer_radius" />
+  <layer repeat="(int) 6">
+    <slice material="Steel235" thickness="19*mm" vis="HCalAbsorberVis" radiator="yes"/>
+    <slice material="FloatGlass" thickness="0.7*mm" vis="Invisible"/>
+    <slice material="RPCGAS2"    thickness="1.2*mm" sensitive="yes" limits="cal_limits" vis="HCalSensorRPCVis"/>
+    <slice material="FloatGlass" thickness="1.1*mm" vis="Invisible"/>
+    <slice material="Steel235" thickness="0.5*mm" vis="HCalAbsorberVis" radiator="yes"/>
+    <slice material="G4_POLYSTYRENE" thickness="3*mm" sensitive="yes" limits="cal_limits" vis="HCalSensorSciVis"/>
+    <slice material="Copper"   thickness="0.1*mm" vis="Invisible"/>
+    <slice material="PCB"      thickness="0.4*mm" vis="Invisible"/>
+    <slice material="Steel235" thickness="0.5*mm" vis="HCalAbsorberVis" radiator="yes"/>
+  </layer>
+</detector>
