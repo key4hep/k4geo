@@ -17,6 +17,23 @@
   - Replaced the ILD_o1_v05(obsolete model) with ILD_l1_v01(optimisation model) in lcgeoTests.
      - ILD will focus on  the optimisation models ILD_l1/s1, and maintain/support for optimisation studies.
 
+* 2017-04-13 Frank Gaede ([PR#93](https://github.com/iLCSoft/lcgeo/pull/93))
+  - update documentation for ILD detector models ( see ./ILD/compact/README.md )
+
+* 2017-04-13 Shaojun Lu ([PR#92](https://github.com/iLCSoft/lcgeo/pull/92))
+  - Remove this demonstration model, we have one complete ILD_l4_v01 now.
+
+* 2017-04-13 Shaojun Lu ([PR#91](https://github.com/iLCSoft/lcgeo/pull/91))
+  - Added ILD_l4_v01 as a multi-technology simulation model.
+     - It use the common part of the ILD_l1_v01, and replaced the HCAL by a generic HCAL.
+     - used multi-segmentation for RPCHits and SciHits.
+     - and saved into two collections: HCalBarrelRPCHits/HCalBarrelSciHits,  HCalEndcapRPCHits/HCalEndcapSciHits, HCalECRingRPCHits/HCalECRingSciHits.
+     - reconstruction should use them for their HCAL in this model.
+
+* 2017-04-13 Shaojun Lu ([PR#88](https://github.com/iLCSoft/lcgeo/pull/88))
+  - Replaced the ILD_o1_v05(obsolete model) with ILD_l1_v01(optimisation model) in lcgeoTests.
+     - ILD will focus on  the optimisation models ILD_l1/s1, and maintain/support for optimisation studies.
+
 # v00-11
 
 * 2017-04-07 Dan Protopopescu ([PR#85](https://github.com/ilcsoft/lcgeo/pull/85))
