@@ -14,9 +14,11 @@ INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/run_test_${PackageName}.sh
 #--------------------------------------------------
 #ADD_TEST( t_init source "${CMAKE_CURRENT_WORK_DIR}/thisdd4hep.sh" )
 
-SET( test_name "test_ILD_o1_v05" )
+#--------------------------------------------------
+# test(s) for ILD
+SET( test_name "test_ILD_l1_v01" )
 ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
-  ddsim --compactFile=${CMAKE_SOURCE_DIR}/ILD/compact/ILD_o1_v05/ILD_o1_v05.xml --runType=batch -G -N=1 --outputFile=testILD.slcio )
+  ddsim --compactFile=${CMAKE_SOURCE_DIR}/ILD/compact/ILD_l1_v01/ILD_l1_v01.xml --runType=batch -G -N=1 --outputFile=testILD.slcio )
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
 #--------------------------------------------------
