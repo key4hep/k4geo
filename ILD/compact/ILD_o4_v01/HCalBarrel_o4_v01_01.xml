@@ -2,10 +2,9 @@
     <!--  Definition of global dictionary constants          -->
     <define>
         <constant name="HCalBarrel_layers" value="(int) 48"/>
-        <constant name="HCalBarrel_layer_thickness" value="2.0*cm + 0.65*cm"/>
+        <!-- <constant name="HCalBarrel_layer_thickness" value="2.0*cm + 0.65*cm"/> -->
         <constant name="AHCal_cell_size" value="3.0*cm"/>
         <constant name="SDHCal_cell_size" value="1.0*cm"/>
-        
     </define>
     
     <!--  Definition of the used visualization attributes    -->
@@ -16,9 +15,6 @@
         <vis name="HCalSensorRPCVis" alpha="1" r="1.0"  g="0.0"  b="0.2" showDaughters="true" visible="true"/>
         <vis name="HCalSensorSciVis" alpha="1" r="0.0"  g="1.0"  b="0.0" showDaughters="true" visible="true"/>
         <vis name="HCalAbsorberVis"  alpha="1" r="0.4"  g="0.4"  b="0.6" showDaughters="true" visible="true"/>
-        
-        <vis name="HCalEndcapVis"          alpha="1" r="1"    g="1"    b="0.1" showDaughters="false" visible="true"/>
-        <vis name="HCalEndcapLayerVis"     alpha="1" r="1"    g="0"    b="0.5" showDaughters="false" visible="true"/>
     </display>
     
     <!--  Definition of the readout segmentation/definition  -->
@@ -42,16 +38,10 @@
             <comment>Hadron Calorimeter Barrel</comment>
             
             <type_flags type=" DetType_CALORIMETER + DetType_HADRONIC + DetType_BARREL"/>
-
-            <envelope vis="HCALVis">
-                <shape type="PolyhedraRegular" numsides="HCalBarrel_symmetry"  rmin="HCalBarrel_inner_radius-env_safety" rmax="HCalBarrel_outer_radius+env_safety" dz="HCalBarrel_half_length*2+2*env_safety" material = "Air"/>
-                <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/HCalBarrel_symmetry"/>
-            </envelope>
-            
             
             <dimensions numsides="HCalBarrel_symmetry" rmin="HCalBarrel_inner_radius" z="HCalBarrel_half_length*2"/>
             <staves vis="HCalStavesVis"/>
-            <layer repeat="(int) HCalBarrel_layers" vis="HCalLayerVis">
+            <layer repeat="HCalBarrel_layers" vis="HCalLayerVis">
                 <slice material="Steel235" thickness="19*mm" vis="HCalAbsorberVis" radiator="yes"/>
                 <slice material="FloatGlass" thickness="0.7*mm" vis="InvisibleNoDaughters"/>
                 <slice material="RPCGAS2"    thickness="1.2*mm" sensitive="yes" limits="cal_limits" vis="HCalSensorRPCVis"/>

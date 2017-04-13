@@ -27,6 +27,7 @@
 
 
         <constant name="DetID_HCAL_Barrel"      value="10"/>
+        <constant name="DetID_HCAL_Endcap"      value="11"/>
 
 
 
@@ -63,10 +64,15 @@
 	<constant name="ECal_endcap_zmin"           value="2450*mm" />
 
         <constant name="HCalBarrel_inner_radius"    value="2058*mm"/>
-        <constant name="HCalBarrel_outer_radius"    value="3349*mm"/>
+        <!--constant name="HCalBarrel_outer_radius"    value="3394*mm"/-->
         <constant name="HCalBarrel_half_length"     value="2350*mm"/>
         <constant name="HCalBarrel_symmetry"        value="8"/>
 
+        <constant name="HCalEndcap_inner_radius"    value="350*mm"/>
+        <constant name="HCalEndcap_outer_radius"    value="3595*mm"/>
+        <constant name="HCalEndcap_zmin"            value="2670*mm"/>
+        <constant name="HCalEndcap_zmax"            value="3957*mm"/>
+        <constant name="HCalEndcap_symmetry"        value="8"/>
 
 
         <constant name="Coil_inner_radius"          value="3425*mm"/>
@@ -88,11 +94,13 @@
 
     <display>
         <vis name="HCALVis"     alpha="1.0" r="0.078" g="0.01176" b="0.588" showDaughters="true"  visible="true"/>
+	<vis name="InvisibleNoDaughters"  alpha="0.0" r="0" g="0"  b="0"   showDaughters="false"  visible="false"/>
     </display>
 
     <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
 
     <include ref="HCalBarrel_o4_v01_01.xml"/>
+    <include ref="HCalEndcap_o4_v01_01.xml"/>
 
     <plugins>
         <plugin name="DD4hepVolumeManager"/>
