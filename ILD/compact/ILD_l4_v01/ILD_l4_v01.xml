@@ -198,7 +198,7 @@
 
     <readout name="HcalEndcapsReadout">
       <segmentation   type="MultiSegmentation"  key="slice">
-        <segmentation name="RPCgrid" type="CartesianGridXZ"    key_value="2"    grid_size_x="SDHCal_cell_size" grid_size_y="SDHCal_cell_size" />
+        <segmentation name="RPCgrid" type="CartesianGridXZ"    key_value="2"    grid_size_x="SDHCal_cell_size" grid_size_z="SDHCal_cell_size" />
 	<segmentation name="Scigrid"  type="CartesianGridXZ"  key_value="4"  grid_size_x="AHCal_cell_size" grid_size_z="AHCal_cell_size" offset_x="AHCal_cell_size/2.0" offset_z="AHCal_cell_size/2.0" />
       </segmentation>
       <hits_collections>
