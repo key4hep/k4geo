@@ -418,6 +418,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       //Vector newFractCellDim(fract_cell_dim_x, Hcal_chamber_thickness, Hcal_cell_dim_z);
       //theBarrilRegSD->SetFractCellDimPerLayer(layer_id, newFractCellDim);
 
+      encoder["layer"] = logical_layer_id ;
+      cellSizeVector = seg.segmentation()->cellDimensions( encoder.getValue() ); 
+      cell_sizeX      = cellSizeVector[0];
+      cell_sizeY      = cellSizeVector[1];
+
       DDRec::LayeredCalorimeterData::Layer caloLayer ;
       caloLayer.cellSize0 = cell_sizeX;
       caloLayer.cellSize1 = cell_sizeY;
