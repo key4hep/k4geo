@@ -117,7 +117,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   xml_det_t   x_det       = element;
   string      det_name    = x_det.nameStr();
-  DetElement  sdet( det_name,x_det.id() );
+  int           det_id    = x_det.id();
+  DetElement  sdet( det_name, det_id );
 
   // --- create an envelope volume and position it into the world ---------------------
   
@@ -548,7 +549,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	// slice PlacedVolume
 	PlacedVolume slice_phv = ChamberLogical.placeVolume(slice_vol,Position(0.,0.,slice_pos_z));
 
-	slice_phv.addPhysVolID("layer",logical_layer_id).addPhysVolID("slice", slice_number );
+	int slice_id  = (layer_id > Hcal_nlayers) ? slice_number : - slice_number ;
+
+	slice_phv.addPhysVolID("layer",logical_layer_id).addPhysVolID("slice", slice_id );
 
 	
 	// if ( x_slice.isSensitive() ) {
@@ -659,6 +662,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  pv = envelope.placeVolume(EnvLogHcalModuleBarrel,stran3D);
 	  pv.addPhysVolID("stave",stave_id);
 	  pv.addPhysVolID("module",module_id);
+	  pv.addPhysVolID("system",det_id);
 
 	  const int staveCounter = (stave_id-1)*2+module_id-1;
 	  DetElement stave(sdet, _toString(staveCounter,"stave%d"), staveCounter );

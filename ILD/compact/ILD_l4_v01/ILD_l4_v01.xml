@@ -116,30 +116,30 @@
   <detectors>
 
     <comment>Trackers</comment>
-    <!-- <include ref="../ILD_common_v01/Beampipe_o1_v01_01.xml"/> -->
-    <!-- <include ref="../ILD_common_v01/vxd07.xml"/> -->
-    <!-- <include ref="../ILD_common_v01/ftd_simple_staggered_02.xml"/> -->
-    <!-- <include ref="../ILD_common_v01/sit_simple_planar_sensors_03.xml"/> -->
-    <!-- <include ref="../ILD_common_v01/tpc10_01.xml"/> -->
-    <!-- <include ref="../ILD_common_v01/set_simple_planar_sensors_01.xml"/>   -->
+    <include ref="../ILD_common_v01/Beampipe_o1_v01_01.xml"/>
+    <include ref="../ILD_common_v01/vxd07.xml"/>
+    <include ref="../ILD_common_v01/ftd_simple_staggered_02.xml"/>
+    <include ref="../ILD_common_v01/sit_simple_planar_sensors_03.xml"/>
+    <include ref="../ILD_common_v01/tpc10_01.xml"/>
+    <include ref="../ILD_common_v01/set_simple_planar_sensors_01.xml"/>
 
-    <!-- <comment>Calorimeters</comment> -->
-    <!-- <include ref="../ILD_common_v01/SEcal05_siw_Barrel.xml"/> -->
-    <!-- <include ref="../ILD_common_v01/SEcal05_siw_Endcaps.xml"/> -->
-    <!-- <include ref="../ILD_common_v01/SEcal05_siw_ECRing.xml"/> -->
+    <comment>Calorimeters</comment>
+    <include ref="../ILD_common_v01/SEcal05_siw_Barrel.xml"/>
+    <include ref="../ILD_common_v01/SEcal05_siw_Endcaps.xml"/>
+    <include ref="../ILD_common_v01/SEcal05_siw_ECRing.xml"/>
 
     <!-- Multi-technology HCAL simulation generic shape model -->
     <include ref="./SHcalSc04_Barrel_v04.xml"/>
     <include ref="./SHcalSc04_Endcaps_v01.xml"/>
     <include ref="./SHcalSc04_EndcapRing_v01.xml"/>
 
-    <!-- <include ref="../ILD_common_v01/Yoke05_Barrel.xml"/> -->
-    <!-- <include ref="../ILD_common_v01/Yoke05_Endcaps.xml"/> -->g
-    <!-- <include ref="../ILD_common_v01/LumiCal.xml"/>  -->
-    <!-- <include ref="../ILD_common_v01/LHCal01.xml"/> -->
-    <!-- <include ref="../ILD_common_v01/BeamCal08.xml"/> -->
-    <!-- <include ref="../ILD_common_v01/coil03.xml"/> -->
-    <!-- <include ref="../ILD_common_v01/SServices00.xml"/> -->
+    <include ref="../ILD_common_v01/Yoke05_Barrel.xml"/>
+    <include ref="../ILD_common_v01/Yoke05_Endcaps.xml"/>g
+    <include ref="../ILD_common_v01/LumiCal.xml"/>
+    <include ref="../ILD_common_v01/LHCal01.xml"/>
+    <include ref="../ILD_common_v01/BeamCal08.xml"/>
+    <include ref="../ILD_common_v01/coil03.xml"/>
+    <include ref="../ILD_common_v01/SServices00.xml"/>
 
   </detectors>
 
@@ -187,25 +187,25 @@
     <readout name="HcalBarrelReadout">
       <segmentation   type="MultiSegmentation"  key="slice">
         <segmentation name="RPCgrid" type="CartesianGridXY"    key_value="2"    grid_size_x="SDHCal_cell_size" grid_size_y="SDHCal_cell_size" />
-        <segmentation name="Scigrid" type="CartesianGridXY"    key_value="4"    grid_size_x="AHCal_cell_size" grid_size_y="AHCal_cell_size" />
-      </segmentation>
+	<segmentation name="Scigrid"  type="TiledLayerGridXY"  key_value="4"  grid_size_x="3" grid_size_y="3.03248"/>
+       </segmentation>
       <hits_collections>
         <hits_collection name="HCalBarrelRPCHits"  key="slice" key_value="3"/>
         <hits_collection name="HcalBarrelRegCollection"  key="slice" key_value="6"/>
       </hits_collections>
-      <id>system:5,module:3,stave:4,slice:5,layer:6,x:32:-16,y:-16</id>
+      <id>system:5,module:3,stave:4,tower:5,layer:6,slice:4,x:32:-16,y:-16</id>
     </readout>
 
     <readout name="HcalEndcapsReadout">
       <segmentation   type="MultiSegmentation"  key="slice">
-        <segmentation name="RPCgrid" type="CartesianGridXY"    key_value="2"    grid_size_x="SDHCal_cell_size" grid_size_y="SDHCal_cell_size" />
-        <segmentation name="Scigrid" type="CartesianGridXY"    key_value="4"    grid_size_x="AHCal_cell_size" grid_size_y="AHCal_cell_size" />
+        <segmentation name="RPCgrid" type="CartesianGridXZ"    key_value="2"    grid_size_x="SDHCal_cell_size" grid_size_y="SDHCal_cell_size" />
+	<segmentation name="Scigrid"  type="CartesianGridXZ"  key_value="4"  grid_size_x="AHCal_cell_size" grid_size_z="AHCal_cell_size" offset_x="AHCal_cell_size/2.0" offset_z="AHCal_cell_size/2.0" />
       </segmentation>
       <hits_collections>
         <hits_collection name="HCalEndcapRPCHits"  key="slice" key_value="2"/>
         <hits_collection name="HcalEndcapsCollection"  key="slice" key_value="4"/>
       </hits_collections>
-      <id>system:5,module:3,stave:3,tower:3,layer:6,slice:4,x:32:-16,z:-16</id>
+      <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,z:-16</id>
     </readout>
 
     <readout name="HcalEndcapRingReadout">
@@ -267,24 +267,24 @@
   </readouts>
 
   <plugins>
-    <!-- <plugin name="DD4hep_CaloFaceEndcapSurfacePlugin"> -->
-    <!--   <argument value="EcalEndcap"/> -->
-    <!--   <argument value="zpos=EcalEndcap_min_z"    /> -->
-    <!--   <argument value="radius=EcalEndcap_outer_radius"  /> -->
-    <!--   <argument value="phi0=0"    /> -->
-    <!--   <argument value="symmetry=EcalEndcap_symmetry"/> -->
-    <!--   <argument value="systemID=ILDDetID_ECAL_ENDCAP"/> -->
-    <!--   <comment> <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> </comment> -->
-    <!-- </plugin> -->
-    <!-- <plugin name="DD4hep_CaloFaceBarrelSurfacePlugin"> -->
-    <!--   <argument value="EcalBarrel"/> -->
-    <!--   <argument value="length=2.*Ecal_half_length"    /> -->
-    <!--   <argument value="radius=Ecal_inner_radius"  /> -->
-    <!--   <argument value="phi0=0"    /> -->
-    <!--   <argument value="symmetry=Ecal_symmetry"/> -->
-    <!--   <argument value="systemID=ILDDetID_ECAL"/> -->
-    <!--   <comment> <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> </comment> -->
-    <!-- </plugin> -->
+    <plugin name="DD4hep_CaloFaceEndcapSurfacePlugin">
+      <argument value="EcalEndcap"/>
+      <argument value="zpos=EcalEndcap_min_z"    />
+      <argument value="radius=EcalEndcap_outer_radius"  />
+      <argument value="phi0=0"    />
+      <argument value="symmetry=EcalEndcap_symmetry"/>
+      <argument value="systemID=ILDDetID_ECAL_ENDCAP"/>
+      <comment> <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> </comment>
+    </plugin>
+    <plugin name="DD4hep_CaloFaceBarrelSurfacePlugin">
+      <argument value="EcalBarrel"/>
+      <argument value="length=2.*Ecal_half_length"    />
+      <argument value="radius=Ecal_inner_radius"  />
+      <argument value="phi0=0"    />
+      <argument value="symmetry=Ecal_symmetry"/>
+      <argument value="systemID=ILDDetID_ECAL"/>
+      <comment> <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> </comment>
+    </plugin>
     <plugin name="InstallSurfaceManager"/>
   </plugins>
 
