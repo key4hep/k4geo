@@ -130,8 +130,8 @@
 
     <!-- Multi-technology HCAL simulation generic shape model -->
     <include ref="./SHcalSc04_Barrel_v04.xml"/>
-    <!-- <include ref="./HCalEndcap_o4_v01_01.xml"/> -->
-    <!-- <include ref="./HCalECRing_o4_v01_01.xml"/> -->
+    <include ref="./SHcalSc04_Endcaps_v01.xml"/>
+    <include ref="./SHcalSc04_EndcapRing_v01.xml"/>
 
     <!-- <include ref="../ILD_common_v01/Yoke05_Barrel.xml"/> -->
     <!-- <include ref="../ILD_common_v01/Yoke05_Endcaps.xml"/> -->g
@@ -196,28 +196,28 @@
       <id>system:5,module:3,stave:4,slice:5,layer:6,x:32:-16,y:-16</id>
     </readout>
 
-    <readout name="HCalEndcapCollection">
+    <readout name="HcalEndcapsReadout">
       <segmentation   type="MultiSegmentation"  key="slice">
-        <segmentation name="RPCgrid" type="CartesianGridXY"    key_value="3"    grid_size_x="SDHCal_cell_size" grid_size_y="SDHCal_cell_size" />
-        <segmentation name="Scigrid" type="CartesianGridXY"    key_value="6"    grid_size_x="AHCal_cell_size" grid_size_y="AHCal_cell_size" />
+        <segmentation name="RPCgrid" type="CartesianGridXY"    key_value="2"    grid_size_x="SDHCal_cell_size" grid_size_y="SDHCal_cell_size" />
+        <segmentation name="Scigrid" type="CartesianGridXY"    key_value="4"    grid_size_x="AHCal_cell_size" grid_size_y="AHCal_cell_size" />
       </segmentation>
       <hits_collections>
-        <hits_collection name="HCalEndcapRPCHits"  key="slice" key_value="3"/>
-        <hits_collection name="HCalEndcapSciHits"  key="slice" key_value="6"/>
+        <hits_collection name="HCalEndcapRPCHits"  key="slice" key_value="2"/>
+        <hits_collection name="HcalEndcapsCollection"  key="slice" key_value="4"/>
       </hits_collections>
-      <id>system:5,barrel:2,module:4,stave:6,layer:6,slice:4,x:32:-16,y:-16</id>
+      <id>system:5,module:3,stave:3,tower:3,layer:6,slice:4,x:32:-16,z:-16</id>
     </readout>
 
-    <readout name="HcalEndcapRingCollection">
+    <readout name="HcalEndcapRingReadout">
       <segmentation   type="MultiSegmentation"  key="slice">
-        <segmentation name="RPCgrid" type="CartesianGridXY"    key_value="3"    grid_size_x="SDHCal_cell_size" grid_size_y="SDHCal_cell_size" />
-        <segmentation name="Scigrid" type="CartesianGridXY"    key_value="6"    grid_size_x="AHCal_cell_size" grid_size_y="AHCal_cell_size" />
+        <segmentation name="RPCgrid" type="CartesianGridXY"    key_value="2"    grid_size_x="SDHCal_cell_size" grid_size_y="SDHCal_cell_size" />
+        <segmentation name="Scigrid" type="CartesianGridXY"    key_value="4"    grid_size_x="AHCal_cell_size" grid_size_y="AHCal_cell_size" />
       </segmentation>
       <hits_collections>
-        <hits_collection name="HCalECRingRPCHits"  key="slice" key_value="3"/>
-        <hits_collection name="HCalECRingSciHits"  key="slice" key_value="6"/>
+        <hits_collection name="HCalECRingRPCHits"  key="slice" key_value="2"/>
+        <hits_collection name="HcalEndcapRingCollection"  key="slice" key_value="4"/>
       </hits_collections>
-      <id>system:5,barrel:2,module:4,stave:6,layer:6,slice:4,x:32:-16,y:-16</id>
+      <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id>
     </readout>
 
     <readout name="YokeBarrelCollection">

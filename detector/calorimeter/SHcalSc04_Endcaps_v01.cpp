@@ -4,6 +4,10 @@
 //--------------------------------------------------------------------
 //
 //  Author     : S.Lu
+//  F. Gaede, DESY :  v01 : prepare for multi segmentation
+//     18.04.2017            - copied from SHcalSc04_Barrel_v01.cpp
+//                           - add optional parameter <subsegmentation key="" value=""/>
+//                             defines the segmentation to be used in reconstruction
 //
 // Basic idea:
 // 1. Create the Hcal Endcap module envelope (16 modules).
@@ -24,10 +28,6 @@
 //
 // 5. Customer material FR4 and Steel235 defined in materials.xml
 //
-//  F. Gaede, DESY :  v01 : prepare for multi segmentation
-//     18.04.2017            - copied from SHcalSc04_Barrel_v01.cpp
-//                           - add optional parameter <subsegmentation key="" value=""/>
-//                             defines the segmentation to be used in reconstruction
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/DetType.h"
