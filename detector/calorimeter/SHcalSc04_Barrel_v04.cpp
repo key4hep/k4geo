@@ -549,16 +549,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	// slice PlacedVolume
 	PlacedVolume slice_phv = ChamberLogical.placeVolume(slice_vol,Position(0.,0.,slice_pos_z));
 
-	int slice_id  = (layer_id > Hcal_nlayers) ? slice_number : - slice_number ;
-
-	slice_phv.addPhysVolID("layer",logical_layer_id).addPhysVolID("slice", slice_id );
+	slice_phv.addPhysVolID("layer",logical_layer_id).addPhysVolID("slice", slice_number );
 
 	
-	// if ( x_slice.isSensitive() ) {
-	//   int slice_id  = (layer_id > Hcal_nlayers)? 1:-1;
-	//   slice_phv.addPhysVolID("layer",logical_layer_id).addPhysVolID("tower",slice_id);
-	//   printout( DD4hep::DEBUG,  "SHcalSc04_Barrel_v04", "  logical_layer_id:  %d  slice_id:  %d", logical_layer_id, slice_id  ) ;
-	// }
+	if ( x_slice.isSensitive() ) {
+	  int tower_id  = (layer_id > Hcal_nlayers)? 1:-1;
+	  slice_phv.addPhysVolID("tower",tower_id);
+	  printout( DD4hep::DEBUG,  "SHcalSc04_Barrel_v04", "  logical_layer_id:  %d  tower_id:  %d", logical_layer_id, tower_id  ) ;
+	}
 	
 	slice.setPlacement(slice_phv);
 	// Increment x position for next slice.
