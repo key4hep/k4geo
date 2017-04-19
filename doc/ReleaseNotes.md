@@ -1,5 +1,12 @@
 # v00-11
 
+* 2017-04-19 Frank Gaede ([PR#94](https://github.com/iLCSoft/lcgeo/pull/94))
+  - added versions of the ILD Hcal drivers (with Tesla geometry ) that allow to use multiple readout collections:
+        - SHcalSc04_Barrel_v04
+        - SHcalSc04_Endcaps_v01
+        - SHcalSc04_EndcapRing_v01
+  - use these drivers in ILD_l4_v01
+
 * 2017-04-13 Frank Gaede ([PR#93](https://github.com/iLCSoft/lcgeo/pull/93))
   - update documentation for ILD detector models ( see ./ILD/compact/README.md )
 
