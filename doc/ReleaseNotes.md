@@ -41,8 +41,6 @@
   - Replaced the ILD_o1_v05(obsolete model) with ILD_l1_v01(optimisation model) in lcgeoTests.
      - ILD will focus on  the optimisation models ILD_l1/s1, and maintain/support for optimisation studies.
 
-# v00-11
-
 * 2017-04-07 Dan Protopopescu ([PR#85](https://github.com/ilcsoft/lcgeo/pull/85))
   - Added correct tracker region to SiD models as per #81
   - Added type flags in ECalBarrel_o2_v03_00.xml
