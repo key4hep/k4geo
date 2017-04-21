@@ -97,20 +97,31 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   DD4hep::DDSegmentation::MultiSegmentation* multiSeg = 
     dynamic_cast< DD4hep::DDSegmentation::MultiSegmentation*>( seg.segmentation() ) ;
   
+  int sensitive_slice_number = -1 ;
+
   if( multiSeg ){
-    
+
     try{ 
       // check if we have an entry for the subsegmentation to be used 
       xml_comp_t segxml = x_det.child( _Unicode( subsegmentation ) ) ;
-      
-      encoder[ segxml.attr<std::string>( _Unicode(key) ) ] = segxml.attr<int>( _Unicode(value) )  ;
-      
+
+      std::string keyStr = segxml.attr<std::string>( _Unicode(key) ) ;
+      int keyVal = segxml.attr<int>( _Unicode(value) )  ;
+
+      encoder[ keyStr ] =  keyVal ;
+
+      // if we have a multisegmentation that uses the slice as key, we need to know for the
+      // computation of the layer parameters in LayeredCalorimeterData::Layer below
+      if( keyStr == "slice" ){
+	sensitive_slice_number = keyVal ;
+      }
+
     } catch( std::runtime_error) {
       throw lcgeo::GeometryException(  "SHcalSc04_Endcaps_v01: Error: MultiSegmentation specified but no "
 				       " <subsegmentation key="" value=""/> element defined for detector ! " ) ;
     }
   }
-
+ 
   //========== fill data for reconstruction ============================
   DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
   caloData->layoutType = DDRec::LayeredCalorimeterData::EndcapLayout ;
@@ -227,7 +238,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
 	  thickness_sum       += slice_thickness/2;
 
-	  if ( x_slice.isSensitive() ) {
+	  // if we have a multisegmentation based on slices, we need to use the correct slice here
+	  if ( ( sensitive_slice_number<0 && x_slice.isSensitive() ) || sensitive_slice_number == slice_number ) {
+
 	    sens.setType("calorimeter");
 	    slice_vol.setSensitiveDetector(sens);
 
