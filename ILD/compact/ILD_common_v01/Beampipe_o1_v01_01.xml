@@ -69,7 +69,7 @@
 
   <section type ="PunchedDnstream"       
 	   start="BeamCal_min_z-5*mm"            end="BeamCal_min_z-4*mm"         
-	   rMin1="14*mm"                         rMin2="17*mm"  
+	   rMin1="14*mm"                         rMin2="16*mm"
            rMax1 ="TUBE_lumiTube_rInner+TUBE_lumiTube_thickness"                      rMax2="TUBE_lumiTube_rInner+TUBE_lumiTube_thickness"       
            material="G4_Fe" name="BeamCalFront" />
 
@@ -95,14 +95,14 @@
 
   <section type ="Dnstream"              
 	   start="BeamCal_min_z-4*mm"            end="5999*mm"
-           rMin1="17*mm"                         rMin2="17*mm"
-           rMax1="18*mm"                        rMax2="18*mm"                                 
+           rMin1="16*mm"                         rMin2="16*mm"
+           rMax1="17*mm"                        rMax2="17*mm"
 	   material="G4_Fe" name="BeamCalLinkDnstream" />
 
   <section type ="Dnstream"
            start="5999*mm"                           end="6000*mm"                              
-	   rMin1="17*mm"                             rMin2="17*mm"
-           rMax1="20*mm"                             rMax2="20*mm"
+	   rMin1="16*mm"                             rMin2="16*mm"
+           rMax1="18*mm"                             rMax2="18*mm"
            material="G4_Fe" name="QDEX1AFront" />
 
   <section type ="Dnstream"              
