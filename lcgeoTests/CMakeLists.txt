@@ -115,6 +115,6 @@ ADD_TEST( t_SensThickness_Clic_o3_v8 "${CMAKE_INSTALL_PREFIX}/bin/run_test_${Pac
           ${CMAKE_INSTALL_PREFIX}/bin/TestSensThickness ${CMAKE_SOURCE_DIR}/CLIC/compact/CLIC_o3_v08/CLIC_o3_v08.xml 100 50 )
 ADD_TEST( t_SensThickness_Clic_o3_v9 "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
         ${CMAKE_INSTALL_PREFIX}/bin/TestSensThickness ${CMAKE_SOURCE_DIR}/CLIC/compact/CLIC_o3_v09/CLIC_o3_v09.xml 100 50 )
-ADD_TEST( t_SensThickness_Clic_o3_v9 "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
+ADD_TEST( t_SensThickness_Clic_o3_v10 "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
         ${CMAKE_INSTALL_PREFIX}/bin/TestSensThickness ${CMAKE_SOURCE_DIR}/CLIC/compact/CLIC_o3_v10/CLIC_o3_v10.xml 100 50 )
 
