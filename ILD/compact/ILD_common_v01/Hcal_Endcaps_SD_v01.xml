@@ -1,23 +1,19 @@
 <detector id="ILDDetID_HCAL_ENDCAP" name="HcalEndcap" type="Hcal_Endcaps_SD_v01" readout="HcalEndcapsCollection"  vis="SeeThrough" calorimeterType="HAD_ENDCAP">
  <comment>Hadron Calorimeter Endcap</comment>
- <envelope vis="ILD_HCALVis">
-       <shape type="BooleanShape" operation="Subtraction" material="Air">
-         <shape type="BooleanShape" operation="Subtraction" material="Air" >
-           <shape type="PolyhedraRegular"  numsides="HcalEndcap_symmetry" rmin="0"
-	         rmax="HcalEndcap_outer_radius + env_safety" dz="2.0*HcalEndcap_max_z + env_safety" material="Air"/>     
-           <shape type="PolyhedraRegular"  numsides="HcalEndcap_symmetry" rmin="0"
-	         rmax="HcalEndcap_outer_radius + env_safety" dz="2.0*HcalEndcap_max_z - env_safety" material="Air"/>     
-         </shape>
-         <shape type="Box" dx="HcalEndcap_inner_radius - env_safety" dy="HcalEndcap_inner_radius - env_safety"
-                dz="HcalEndcap_max_z + env_safety"/> 
-         <rotation x="0" y="0" z="0"/> 
-         </shape>
-         <rotation x="0" y="0" z="0"/> 
- <!--   
-            <shape type="Tube" rmin="0.0" rmax="HcalEndcap_outer_radius + env_safety" dz="HcalEndcap_max_z + env_safety"/>
-            <shape type="Tube" rmin="0.0" rmax="HcalEndcap_outer_radius + 2.0*env_safety" dz="HcalEndcap_min_z - env_safety"/>
--->
- </envelope>
+
+
+    <envelope vis="ILD_HCALVis">    
+      <shape type="BooleanShape" operation="Subtraction" material="Air"><!--2. create center box hole -->
+        <shape type="BooleanShape" operation="Subtraction" material="Air"><!--1. create Endcaps envelope -->
+          <shape type="Tube" rmin="0.0" rmax="HcalEndcap_outer_radius + env_safety" dz="HcalEndcap_max_z + env_safety"/>
+          <shape type="Tube" rmin="0.0" rmax="HcalEndcap_outer_radius + 2.0*env_safety" dz="HcalEndcap_min_z - env_safety"/>
+        </shape>
+        <shape type="Box" dx="HcalEndcap_inner_radius - env_safety" dy="HcalEndcap_inner_radius - env_safety" 
+               dz="HcalEndcap_max_z + 2.0*env_safety"/>
+      </shape>
+      <rotation x="0" y="0" z="0"/>
+    </envelope>
+
     <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_HADRONIC " />
     <material name="Steel304L"/><!-- radiator and the thickness has been defined in the main xml file-->
     <staves  material = "Steel235"  vis="SeeThrough"/>
