@@ -2,7 +2,7 @@
 
 <readouts>
     <readout name="SiVertexBarrelHits">
-      <id>system:5,side:-2,layer:9,module:8,sensor:8,barrel:3</id>
+      <id>system:5,side:-2,layer:3,module:14,sensor:8,barrel:3</id>
       <!-- old! id>system:6,barrel:3,layer:4,module:12,sensor:1,side:32:-2,strip:24</id -->
     </readout>
 </readouts>
@@ -10,6 +10,13 @@
 <detectors>
  <detector id="1" name="SiVertexBarrel" type="DD4hep_SiTrackerBarrel" readout="SiVertexBarrelHits" insideTrackingVolume="true" vis="SiVertexBarrelVis">
   <comment>Vertex Detector Barrel</comment>
+     
+  <type_flags type="DetType_TRACKER + DetType_BARREL"/>
+
+  <envelope vis="EnvelopeVis">
+    <shape type="Assembly"/>
+  </envelope>   
+     
   <module name="VtxBarrelModuleInner">
     <module_envelope width="9.8*mm" length="63.0 * 2*mm" thickness="0.6*mm"/>
     <module_component width="7.6*mm" length="125.0*mm" thickness="VXD_CF_sensor" material="CarbonFiber_25percent" sensitive="false">
