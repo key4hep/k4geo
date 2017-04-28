@@ -60,8 +60,8 @@ subdetector-specific ones are in separate files
   <constant name="Hcal_endcap_center_box_size" value="700.0*mm"/>
   <constant name="Hcal_endcap_zmin" value="2650*mm" />
   <constant name="Hcal_endcap_thickness" value="1287.0*mm"/>
-
   <constant name="Hcal_radial_ring_inner_gap" value="50*mm"/>
+  <constant name="Hcal_endcap_cryostat_gap" value="170*mm"/>
 
   <!-- coil -->
   <constant name="Coil_extra_size" value="1522*mm"/>
