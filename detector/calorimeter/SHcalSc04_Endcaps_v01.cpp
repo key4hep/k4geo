@@ -238,23 +238,26 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
 	  thickness_sum       += slice_thickness/2;
 
-	  // if we have a multisegmentation based on slices, we need to use the correct slice here
-	  if ( ( sensitive_slice_number<0 && x_slice.isSensitive() ) || sensitive_slice_number == slice_number ) {
 
-	    sens.setType("calorimeter");
+	  if ( x_slice.isSensitive() ) {
+
 	    slice_vol.setSensitiveDetector(sens);
 
-	    //Store "inner" quantities
-	    caloLayer.inner_nRadiationLengths = nRadiationLengths;
-	    caloLayer.inner_nInteractionLengths = nInteractionLengths;
-	    caloLayer.inner_thickness = thickness_sum;
-	    //Store scintillator thickness
-	    caloLayer.sensitive_thickness = slice_thickness;
+	    // if we have a multisegmentation based on slices, we need to use the correct slice here
+	    if ( sensitive_slice_number<0  || sensitive_slice_number == slice_number ) {
 
-	    //Reset counters to measure "outside" quantitites
-	    nRadiationLengths=0.;
-	    nInteractionLengths=0.;
-	    thickness_sum = 0.;
+	      //Store "inner" quantities
+	      caloLayer.inner_nRadiationLengths = nRadiationLengths;
+	      caloLayer.inner_nInteractionLengths = nInteractionLengths;
+	      caloLayer.inner_thickness = thickness_sum;
+	      //Store scintillator thickness
+	      caloLayer.sensitive_thickness = slice_thickness;
+	      
+	      //Reset counters to measure "outside" quantitites
+	      nRadiationLengths=0.;
+	      nInteractionLengths=0.;
+	      thickness_sum = 0.;
+	    }
 	  }
 
 	  nRadiationLengths += slice_thickness/(2.*slice_material.radLength());
