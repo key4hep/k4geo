@@ -22,7 +22,7 @@
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
         <readout name="HCalBarrelCollection">
-          <segmentation type="CartesianGridXY" grid_size_x="HCal_cell_size" grid_size_y="HCal_cell_size" />
+          <segmentation type="CartesianGridXY" grid_size_x="HCal_cell_size" grid_size_y="HCal_cell_size" offset_y="HCal_cell_size/2.0" />
           <id>${GlobalCalorimeterReadoutID}</id>
         </readout>
     </readouts>
