@@ -16,8 +16,11 @@ public:
       Br(_Br), Bz(_Bz) {}
   };
 
+  std::string CoorsOrder;
   int nRho, nZ;
-  double rhoMin, rhoMax, zMin, zMax, rScale, zScale, bScale;
+  double rhoMin, rhoMax, rhoStep, rScale;
+  double zMin,   zMax,   zStep,   zScale;
+  double bScale;
   std::vector< FieldValues_t > fieldMap;
 
 public:
@@ -25,8 +28,10 @@ public:
   FieldMapBrBz();
   /// Call to access the field components at a given location
   virtual void fieldComponents(const double* pos, double* field);
-  /// Fiell the FieldMap from the the tree specified in the XML
-  void fillFieldMapFromTree(const std::string& filename, const std::string& treename);
+  /// Fill the FieldMap from the the tree specified in the XML
+  void fillFieldMapFromTree(const std::string& filename, const std::string& treename, double coorUnits, double BfieldUnits);
+  /// Get global index in the Field map
+  int GetBlobalIndex(const double r, const double z);
 };
 
 

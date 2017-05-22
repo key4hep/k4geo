@@ -17,8 +17,8 @@ public:
       Bx(_Bx), By(_By), Bz(_Bz) {}
   };
 
-  int nX, nY, nZ;
-  
+  std::string CoorsOrder;
+  int nX, nY, nZ; 
   double xMin,xMax,xStep,xScale;
   double yMin,yMax,yStep,yScale;
   double zMin,zMax,zStep,zScale;
@@ -35,7 +35,7 @@ public:
   virtual void fieldComponents(const double* pos, double* field);
   
   /// Fiell the FieldMap from the the tree specified in the XML
-  void fillFieldMapFromTree(const std::string& filename, const std::string& treename);
+  void fillFieldMapFromTree(const std::string& filename, const std::string& treename, double coorUnits, double BfieldUnits);
   
   int   GetGlobalIndex(double x, double y, double z);
   
