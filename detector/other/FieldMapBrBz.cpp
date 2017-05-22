@@ -40,6 +40,26 @@ FieldMapBrBz::FieldMapBrBz() {
 
 
 
+int FieldMapBrBz::GetBlobalIndex(double r, double z)
+{
+
+  int rBin = int((r - rhoMin)/rhoStep);
+  int zBin = int((z - zMin  )/zStep);
+  
+  int GlobalIndex = -1;
+  if(CoorsOrder == std::string("RZ"))      GlobalIndex = rBin + zBin*nRho;
+  else if(CoorsOrder == std::string("ZR")) GlobalIndex = zBin + rBin*nZ;
+  
+  if(GlobalIndex < 0 || GlobalIndex > nRho*nZ-1) {
+    std::stringstream error;
+    error << "FieldMapBrBz[ERROR]: GlobalIndex = " << GlobalIndex << " is out of range (0," << nRho*nZ << ")";
+    throw std::runtime_error( error.str() );
+  }
+
+  return  GlobalIndex;
+
+}
+
 /**
     Use bileanar interpolation to calculate the field at the given position
     This uses large pieces from Mokka FieldX03
@@ -52,71 +72,54 @@ void FieldMapBrBz::fieldComponents(const double* pos , double* globalField) {
   const double posPhi = atan2(pos[1], pos[0]);
 
   //Mokka defines these things as x and y and phi
-  double x = posRho;
-  double y = posZ;
+  double r = posRho;
+  double z = posZ;
   double phi = posPhi;
 
   //Get positive values to do less checks when comparing
-  if( y < 0 ) {
-    y = -y ;
-    phi += M_PI ;
+  if( z < 0 ) {
+    z   *= -1;
+    phi += M_PI;
   }
+
+  if(r < rhoMin) r = rhoMin;
+  if(z < zMin  ) z = zMin;
 
   //APS: Note the mokka field map does not start at 0, so we have to assume that
   //this area is covered, or add some more parameters for the values where the
   //field is supposed to be. Now we just assume it starts at 0/0/0, outside there is no field
-  if (not ( 0.0 <= x && x <= rhoMax &&
-	    0.0 <= y && y <= zMax ) ) {
+  if (not ( rhoMin <= r && r <= rhoMax &&
+	    zMin   <= z && z <= zMax ) ) {
 
     return;
   }
 
-  if( x < rhoMin ) x = rhoMin;
-  if( y < zMin ) y = zMin ;
+  int rBin,zBin;
+  double r0,z0;
+  double r1,z1;
 
+  rBin = int((r - rhoMin)/rhoStep);
+  zBin = int((z - zMin)/zStep);
+  r0   = rhoMin + rBin*rhoStep;
+  z0   = zMin   + zBin*zStep;
 
-  // Position of given point within region, normalized to the range
-  // [0,1]
-  const double xfraction = ( x - rhoMin ) / ( rhoMax - rhoMin );
-  const double yfraction = ( y - zMin )   / ( zMax   - zMin   );
+  if(r0 > r) r0 -= rhoStep;
+  r1 = r0 + rhoStep;
+  if(z0 > z) z0 -= zStep;
+  z1 = z0 + zStep;
 
-  // Need addresses of these to pass to modf below.
-  // modf uses its second argument as an OUTPUT argument.
-  double xdindex, ydindex;
+  double rd = (r - r0)/(r1 - r0);
+  double zd = (z - z0)/(z1 - z0);
 
-  // Position of the point within the cuboid defined by the
-  // nearest surrounding tabulated points
-  const double xlocal = ( std::modf( xfraction * ( nRho - 1), &xdindex ) );
-  const double ylocal = ( std::modf( yfraction * ( nZ   - 1), &ydindex ) );
-
-  // The indices of the nearest tabulated point whose coordinates
-  // are all less than those of the given point
-  const int xindex = static_cast<int>(xdindex);
-  const int yindex = static_cast<int>(ydindex);
-
-  const int index0 =  xindex    * nZ + yindex   ;
-  const int index1 =  xindex    * nZ + yindex+1 ;
-  const int index2 = (xindex+1) * nZ + yindex   ;
-  const int index3 = (xindex+1) * nZ + yindex+1 ;
-
-  const FieldMapBrBz::FieldValues_t& fv0 = fieldMap[index0];
-  const FieldMapBrBz::FieldValues_t& fv1 = fieldMap[index1];
-  const FieldMapBrBz::FieldValues_t& fv2 = fieldMap[index2];
-  const FieldMapBrBz::FieldValues_t& fv3 = fieldMap[index3];
+  const FieldMapBrBz::FieldValues_t& B_r0z0 = fieldMap[GetBlobalIndex(r0,z0)];
+  const FieldMapBrBz::FieldValues_t& B_r1z0 = fieldMap[GetBlobalIndex(r1,z0)];
+  const FieldMapBrBz::FieldValues_t& B_r0z1 = fieldMap[GetBlobalIndex(r0,z1)];
+  const FieldMapBrBz::FieldValues_t& B_r1z1 = fieldMap[GetBlobalIndex(r1,z1)];
 
   double field[2] = {0.0, 0.0};
 
-  field[0] =
-    fv0.Br * (1-xlocal) * (1-ylocal)  +
-    fv1.Br * (1-xlocal) *    ylocal   +
-    fv2.Br *    xlocal  * (1-ylocal)  +
-    fv3.Br *    xlocal  *    ylocal   ;
-
-  field[1] =
-    fv0.Bz * (1-xlocal) * (1-ylocal)  +
-    fv1.Bz * (1-xlocal) *    ylocal   +
-    fv2.Bz *    xlocal  * (1-ylocal)  +
-    fv3.Bz *    xlocal  *    ylocal   ;
+  field[0] = (1.0 - rd)*(1.0 - zd)*B_r0z0.Br + rd*(1.0 - zd)*B_r1z0.Br + (1.0 - rd)*zd*B_r0z1.Br + rd*zd*B_r1z1.Br;
+  field[1] = (1.0 - rd)*(1.0 - zd)*B_r0z0.Bz + rd*(1.0 - zd)*B_r1z0.Bz + (1.0 - rd)*zd*B_r0z1.Bz + rd*zd*B_r1z1.Bz;
 
   globalField[0] += field[0] * sin( phi ) ;
   globalField[1] += field[0] * cos( phi ) ;
@@ -130,15 +133,19 @@ void FieldMapBrBz::fieldComponents(const double* pos , double* globalField) {
   std::cout << std::endl;
   */
 
+  return;
+
 }
 
 
-void FieldMapBrBz::fillFieldMapFromTree(const std::string& filename, const std::string& treeString){
+void FieldMapBrBz::fillFieldMapFromTree(const std::string& filename,
+                                        const std::string& treeString,
+                                        double coorUnits, double BfieldUnits) {
 
   TFile *file = TFile::Open( filename.c_str() );
   if (not file) {
     std::stringstream error;
-    error << "FieldMap[ERROR]: File not found: " << filename;
+    error << "FieldMapBrBz[ERROR]: File not found: " << filename;
     throw std::runtime_error( error.str() );
   }
 
@@ -150,43 +157,155 @@ void FieldMapBrBz::fillFieldMapFromTree(const std::string& filename, const std::
 
   if( strs.size() != 5 ) {
     std::stringstream error;
-    error << "FieldMap[ERROR]: the treeDescription " << treeString
+    error << "FieldMapBrBz[ERROR]: the treeDescription " << treeString
 	  << " is not complete. For example 'fieldmap:rho:z:Brho:Bz'";
     throw std::runtime_error( error.str() );
   }
 
+  //Getting the tree name and branch variables names
+  std::string  NtupleName("");
+  std::string  rhoVar("");
+  std::string  zVar("");
+  std::string  BrhoVar("");
+  std::string  BzVar("");
+  for(int i=0;i<int(strs.size());i++) {
+    if(strs[i].find(std::string("Brho")) != std::string::npos) {
+      BrhoVar = strs[i];
+    }
+    else if(strs[i].find(std::string("Bz")) != std::string::npos) {
+      BzVar   = strs[i];
+    }
+    else if(strs[i].find(std::string("rho")) != std::string::npos || strs[i].find(std::string("Rho")) != std::string::npos) {
+      rhoVar  = strs[i];
+    }
+    else if(strs[i].find(std::string("z")) != std::string::npos || strs[i].find(std::string("Z")) != std::string::npos) {
+      zVar    = strs[i];
+    }
+    else {
+      NtupleName = strs[i];
+    }
+  }
+
+  if(NtupleName == std::string("")) {
+    std::stringstream error;
+    error << "FieldMapBrBz[ERROR]: ntuple name not set!";
+    throw std::runtime_error( error.str() );
+  }
+  if(rhoVar == std::string("")) {
+    std::stringstream error;
+    error << "FieldMapBrBz[ERROR]: rho variable name not set!";
+    throw std::runtime_error( error.str() );
+  }
+  if(zVar == std::string("")) {
+    std::stringstream error;
+    error << "FieldMapBrBz[ERROR]: z variable name not set!";
+    throw std::runtime_error( error.str() );
+  }
+  if(BrhoVar == std::string("")) {
+    std::stringstream error;
+    error << "FieldMapBrBz[ERROR]: Brho variable name not set!";
+    throw std::runtime_error( error.str() );
+  }
+  if(BzVar == std::string("")) {
+    std::stringstream error;
+    error << "FieldMapBrBz[ERROR]: Bz variable name not set!";
+    throw std::runtime_error( error.str() );
+  }
+
+  std::cout << std::endl;
+  std::cout << "Ntuple name:   " << NtupleName << std::endl;
+  std::cout << "rho  Var name: " << rhoVar    << std::endl;
+  std::cout << "z    Var name: " << zVar      << std::endl;
+  std::cout << "Brho Var name: " << BrhoVar   << std::endl;
+  std::cout << "Bz   Var name: " << BzVar     << std::endl;
+  std::cout << std::endl;
+
   TTree *tree;
-  file->GetObject(strs[0].c_str(), tree);
+  file->GetObject(NtupleName.c_str(), tree);
   if (not tree) {
     std::stringstream error;
-    error << "FieldMap[ERROR]: Tree " << strs[0] << " not found in file: " << filename;
+    error << "FieldMapBrBz[ERROR]: Tree " << NtupleName << " not found in file: " << filename;
     throw std::runtime_error( error.str() );
   }
 
   float r, z, Br, Bz;
-  checkBranch( tree->SetBranchAddress(strs[1].c_str(), &r) );
-  checkBranch( tree->SetBranchAddress(strs[2].c_str(), &z) );
-  checkBranch( tree->SetBranchAddress(strs[3].c_str(), &Br) );
-  checkBranch( tree->SetBranchAddress(strs[4].c_str(), &Bz) );
+  checkBranch( tree->SetBranchAddress(rhoVar.c_str(),  &r) );
+  checkBranch( tree->SetBranchAddress(zVar.c_str(),    &z) );
+  checkBranch( tree->SetBranchAddress(BrhoVar.c_str(), &Br));
+  checkBranch( tree->SetBranchAddress(BzVar.c_str(),   &Bz));
 
-  const int elements = nRho*nZ;
+  zStep      = -1;
+  rhoStep    = -1;
+  CoorsOrder = std::string("");
   const int treeEntries = tree->GetEntries();
-  if ( elements != treeEntries ) {
+  fieldMap.reserve(treeEntries);
+  for(int i=0;i<treeEntries;i++) {
+    tree->GetEntry(i);
+
+    if(i == 0) {
+      rhoMin = r;
+      zMin   = z;
+    }
+    if(i == treeEntries-1) {
+      rhoMax = r;
+      zMax   = z;
+    }
+
+    if(r != rhoMin && rhoStep < 0.0) {
+      rhoStep     = TMath::Abs(rhoMin - r);
+      CoorsOrder += std::string("R");
+    }
+    if(z != zMin && zStep < 0.0) {
+      zStep         = TMath::Abs(zMin - z);
+      CoorsOrder += std::string("Z");
+    }
+
+    //fieldMap.push_back( FieldMapBrBz::FieldValues_t( double(Br)*bScale*dd4hep::tesla,
+	//					     double(Bz)*bScale*dd4hep::tesla ) );
+    fieldMap.push_back( FieldMapBrBz::FieldValues_t( double(Br)*bScale*BfieldUnits,
+                                                     double(Bz)*bScale*BfieldUnits ) );
+
+  }
+
+  if(rhoStep < 0) {
     std::stringstream error;
-    error << "FieldMap[ERROR]: Tree does not have the same size as described in the XML "
-	  << "nRho*nZ == "  << elements
-	  << "  tree entries == " << treeEntries;
+    error << "FieldMapBrBz[ERROR]: All rho coordinates in n-tuple have the same value!!!";
+    throw std::runtime_error( error.str() );
+  }
+  if(rhoMax <= rhoMin) {
+    std::stringstream error;
+    error << "FieldMapBrBz[ERROR]: rho coordinates in n-tuple are not ordered from lowest to highest!!!";
+    throw std::runtime_error( error.str() );
+  }
+  if(zStep < 0) { 
+    std::stringstream error;
+    error << "FieldMapBrBz[ERROR]: All z coordinates in n-tuple have the same value!!!";
+    throw std::runtime_error( error.str() );
+  }
+  if(zMax <= zMin) {
+    std::stringstream error;
+    error << "FieldMapBrBz[ERROR]: z coordinates in n-tuple are not ordered from lowest to highest!!!";
     throw std::runtime_error( error.str() );
   }
 
-  fieldMap.reserve(elements);
+  nRho = int((rhoMax - rhoMin)/rhoStep) + 1;
+  nZ   = int((zMax   - zMin  )/zStep)   + 1;
 
-  for (int i = 0; i < treeEntries ;++i) {
-    tree->GetEntry(i);
-    fieldMap.push_back( FieldMapBrBz::FieldValues_t( double(Br)*bScale*dd4hep::tesla,
-						     double(Bz)*bScale*dd4hep::tesla ) );
-
+  const int elements = nRho*nZ;
+  if ( elements != treeEntries ) {
+    std::stringstream error;
+    error << "FieldMapBrBz[ERROR]: Tree does not have the expected number of entries "
+          << "nRho*nZ == "  << elements
+          << "  tree entries == " << treeEntries;
+    throw std::runtime_error( error.str() );
   }
+
+  rhoMin  *= coorUnits;
+  rhoMax  *= coorUnits;
+  rhoStep *= coorUnits;
+  zMin    *= coorUnits;
+  zMax    *= coorUnits;
+  zStep   *= coorUnits;
 
   file->Close();
   delete file;
@@ -200,48 +319,61 @@ static DD4hep::Geometry::Ref_t create_FieldMap_rzBrBz(DD4hep::Geometry::LCDD& ,
 
   if (!hasFilename) {
     std::stringstream error;
-    error << "FieldMap[ERROR]: For a FieldMap field at least the filename xml attribute MUST be set.";
+    error << "FieldMapBrBz[ERROR]: For a FieldMap field at least the filename xml attribute MUST be set.";
     throw std::runtime_error(error.str());
   }
-  std::string filename = xmlParameter.attr< std::string >(_Unicode(filename));
+  std::string filename   = xmlParameter.attr< std::string >(_Unicode(filename));
   std::string treeString = xmlParameter.attr< std::string >(_Unicode(tree));
 
-  double rScale = xmlParameter.attr< double >(_Unicode(rScale));
-  double zScale = xmlParameter.attr< double >(_Unicode(zScale));
-  double bScale = xmlParameter.attr< double >(_Unicode(bScale));
-  double rhoMin = xmlParameter.attr< double >(_Unicode(rhoMin));
-  double rhoMax = xmlParameter.attr< double >(_Unicode(rhoMax));
-  double nRho   = xmlParameter.attr< int >   (_Unicode(nRho));
-  double zMin   = xmlParameter.attr< double >(_Unicode(zMin));
-  double zMax   = xmlParameter.attr< double >(_Unicode(zMax));
-  double nZ     = xmlParameter.attr< int >   (_Unicode(nZ));
+  double rScale      = xmlParameter.attr< double >(_Unicode(rScale));
+  double zScale      = xmlParameter.attr< double >(_Unicode(zScale));
+  double bScale      = xmlParameter.attr< double >(_Unicode(bScale));
+
+  double coorUnits   = xmlParameter.attr< double >(_Unicode(coorUnits));
+  double BfieldUnits = xmlParameter.attr< double >(_Unicode(BfieldUnits));
+
+  //double rhoMin = xmlParameter.attr< double >(_Unicode(rhoMin));
+  //double rhoMax = xmlParameter.attr< double >(_Unicode(rhoMax));
+  //double nRho   = xmlParameter.attr< int >   (_Unicode(nRho));
+  //double zMin   = xmlParameter.attr< double >(_Unicode(zMin));
+  //double zMax   = xmlParameter.attr< double >(_Unicode(zMax));
+  //double nZ     = xmlParameter.attr< int >   (_Unicode(nZ));
 
   DD4hep::Geometry::CartesianField obj;
   FieldMapBrBz* ptr = new FieldMapBrBz();
-  ptr->rScale = rScale;
-  ptr->zScale = zScale;
-  ptr->bScale = bScale;
-  ptr->rhoMin = rhoMin*rScale;
-  ptr->rhoMax = rhoMax*rScale;
-  ptr->nRho   = nRho  ;
-  ptr->zMin   = zMin  *zScale;
-  ptr->zMax   = zMax  *zScale;
-  ptr->nZ     = nZ    ;
-
-  std::cout << "rScale  " << std::setw(13) << rScale  << std::endl;
-  std::cout << "zScale  " << std::setw(13) << zScale  << std::endl;
-  std::cout << "bScale  " << std::setw(13) << bScale  << std::endl;
-  std::cout << "rhoMin  " << std::setw(13) << rhoMin  << std::endl;
-  std::cout << "rhoMax  " << std::setw(13) << rhoMax  << std::endl;
-  std::cout << "nRho    " << std::setw(13) << nRho    << std::endl;
-  std::cout << "zMin    " << std::setw(13) << zMin    << std::endl;
-  std::cout << "zMax    " << std::setw(13) << zMax    << std::endl;
-  std::cout << "nZ      " << std::setw(13) << nZ      << std::endl;
+  ptr->rScale  = rScale;
+  ptr->zScale  = zScale;
+  ptr->bScale  = bScale;
 
   //Read the entries form the file in this place
-  ptr->fillFieldMapFromTree(filename, treeString);
+  ptr->fillFieldMapFromTree(filename, treeString, coorUnits, BfieldUnits);
+
+  std::cout << "rScale      " << std::setw(13) << ptr->rScale                           << std::endl;
+  std::cout << "zScale      " << std::setw(13) << ptr->zScale                           << std::endl;
+  std::cout << "bScale      " << std::setw(13) << ptr->bScale                           << std::endl;
+  std::cout << "rhoMin      " << std::setw(13) << ptr->rhoMin/dd4hep::cm << " cm"       << std::endl;
+  std::cout << "rhoMax      " << std::setw(13) << ptr->rhoMax/dd4hep::cm << " cm"       << std::endl;
+  std::cout << "rhoStep     " << std::setw(13) << ptr->rhoStep/dd4hep::cm << " cm"      << std::endl;
+  std::cout << "nRho        " << std::setw(13) << ptr->nRho                             << std::endl;
+  std::cout << "zMin        " << std::setw(13) << ptr->zMin/dd4hep::cm << " cm"         << std::endl;
+  std::cout << "zMax        " << std::setw(13) << ptr->zMax/dd4hep::cm << " cm"         << std::endl;
+  std::cout << "zStep       " << std::setw(13) << ptr->zStep/dd4hep::cm << " cm"        << std::endl;
+  std::cout << "nZ          " << std::setw(13) << ptr->nZ                               << std::endl;
+  std::cout << "CoorsOrder  " << std::setw(13) << ptr->CoorsOrder.c_str()               << std::endl;
+  std::cout << "coorUnits   " << std::setw(13) << coorUnits/dd4hep::cm << " cm"         << std::endl;
+  std::cout << "BfieldUnits " << std::setw(13) << BfieldUnits/dd4hep::tesla << " tesla" << std::endl;
+
+  ptr->rhoMin  *= rScale;
+  ptr->rhoMax  *= rScale;
+  ptr->rhoStep *= rScale;
+  ptr->zMin    *= zScale;
+  ptr->zMax    *= zScale;
+  ptr->zStep   *= zScale;
 
   obj.assign(ptr, xmlParameter.nameStr(), xmlParameter.typeStr());
+
   return obj;
+
 }
 DECLARE_XMLELEMENT(FieldBrBz,create_FieldMap_rzBrBz)
+
