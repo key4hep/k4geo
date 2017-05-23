@@ -19,24 +19,29 @@
 
   <constant name="Lcal_services_rmax" value="EcalEndcapRing_inner_radius-1.0*mm"/>
 
-  <constant name="LumiCal_thickness"             value="128.7*mm"/> <!--"130.65*mm"/-->
-  <constant name="LumiCal_max_z"                 value="Ecal_endcap_zmax"/>
-  <constant name="LumiCal_min_z"                 value="LumiCal_max_z - LumiCal_thickness"/>
-
   <constant name="Lcal_tungsten_thickness" value="3.5*mm"/>
   <constant name="Lcal_silicon_thickness" value="0.32*mm"/>
   <constant name="Lcal_support_thickness" value="0.22*mm"/>
   <constant name="Lcal_layer_gap" value="0.25*mm"/>
 
+  <constant name="LumiCal_thickness"    value="128.7*mm"/> <!--"130.65*mm"/-->
+  <constant name="LumiCal_min_z"        value="top_Lcal_z_begin" /> <!--LumiCal_max_z - LumiCal_thickness"/-->
+  <constant name="LumiCal_max_z"        value="LumiCal_min_z + LumiCal_thickness" /> <!--Ecal_endcap_zmax"/-->
 
+
+  <constant name="ECal_LHcal_clearance" value="45*mm"/>
+  <constant name="LHcal_min_z" value="Ecal_endcap_zmax+ECal_LHcal_clearance"/>
   <constant name="LHcal_cell_size" value="10*mm"/>
 
 
-  <constant name="BCal_SpanningPhi" value="320*degree"/>
-  <constant name="BCal_TubeIncomingRadius" value="15*mm"/>
+  <constant name="BCal_cutoutSpanning" value="45*degree"/>
+  <constant name="BCal_SpanningPhi" value="360*degree-BCal_cutoutSpanning"/>
+  <constant name="BCal_TubeIncomingRadius" value="top_BeamCal_tubeIncoming_radius"/>
+  <constant name="BCal_TubeIncomingClearance" value="top_BeamCal_tubeIncoming_clearance"/>
   <constant name="BCal_dAbsorber" value="3.5*mm"/>
-  <constant name="BCal_dGraphite" value="100*mm"/>
-  <constant name="BCal_nLayers" value="30"/>
+  <constant name="BCal_dGraphite" value="top_BCal_dGraphite"/>
+  <constant name="BCal_rGraphite" value="LHCal_inner_radius-10.0*mm"/>
+  <constant name="BCal_nLayers" value="top_BCal_nLayers"/>
   <constant name="BeamCal_cell_size" value="3.5*mm"/>
 
 

@@ -8,7 +8,7 @@ project(${PackageName})
 
 # project version
 SET( ${PackageName}_VERSION_MAJOR 0 )
-SET( ${PackageName}_VERSION_MINOR 10 )
+SET( ${PackageName}_VERSION_MINOR 11 )
 SET( ${PackageName}_VERSION_PATCH 0 )
 
 SET( ${PackageName}_VERSION "${${PackageName}_VERSION_MAJOR}.${${PackageName}_VERSION_MINOR}" )
@@ -37,7 +37,7 @@ option(CMAKE_MACOSX_RPATH "Build with rpath on macos" ON)
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-find_package(DD4hep REQUIRED COMPONENTS DDSegmentation DDRec DDG4)
+find_package(DD4hep REQUIRED COMPONENTS DDSegmentation DDRec DDG4 DDParsers)
 dd4hep_set_compiler_flags()
 
 find_package ( ROOT REQUIRED COMPONENTS Geom GenVector)
@@ -58,6 +58,7 @@ include_directories( SYSTEM
   ${DD4hep_INCLUDE_DIRS}
   ${DD4hep_COMPONENTS_INCLUDE_DIRS}
   ${ROOT_INCLUDE_DIR}
+  ${ROOT_INCLUDE_DIRS}
   ${LCIO_INCLUDE_DIRS}
  )
 #  ${GEAR_INCLUDE_DIRS}

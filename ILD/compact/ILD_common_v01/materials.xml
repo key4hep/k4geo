@@ -527,6 +527,12 @@
       <fraction n="0.080"   ref="Cl"/>
     </material>
 
+    <material name="graphite">
+      <MEE unit="eV" value="78"/>
+      <D value="2.21" unit="g/cm3" />
+      <fraction n="1.00" ref="C"/>
+    </material>
+
     <material name="Steel304L">
       <D type="density" value="8.00" unit="g/cm3" />
       <fraction n="0.695" ref="Fe" />
@@ -534,5 +540,13 @@
       <fraction n="0.100" ref="Ni" />
       <fraction n="0.020" ref="Mn" />
     </material>
+
+    <!-- to model beampipe with 2mm Be + 0.7mm Cu cables (calc by DJeans) -->
+    <material name="BeampipeBeCableMix">
+      <D type="density" value="3.69" unit="g/cm3" />
+       <fraction n="0.806" ref="Be" />
+       <fraction n="0.194" ref="Cu" />
+    </material>
+
 
   </materials>

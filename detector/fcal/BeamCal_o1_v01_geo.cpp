@@ -32,7 +32,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   
   DD4hep::XML::setDetectorTypeFlag( element, sdet ) ;
   
-  if( lcdd.buildType() == DD4hep::BUILD_ENVELOPE ) return sdet ;
+  if( lcdd.buildType() == DD4hep::BUILD_ENVELOPE ) { std::cout << "Building envelope.\n"; return sdet ; }
+  else { std::cout << "Building all.\n"; }
   
   //-----------------------------------------------------------------------------------
 
@@ -70,6 +71,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   const double fullCrossingAngle  = xmlParameter.attr< double >(_Unicode(crossingangle));
   std::cout << " The crossing angle is: " << fullCrossingAngle << " radian"  << std::endl;
 
+
   //Create the section cutout for the sensor and readout volumes
   // The cutout sits on the negative x-axis, i.e. phi~=180degrees
   const double bcalCutOutSpan  = xmlParameter.attr< double >(_Unicode(cutoutspanningangle));
@@ -77,8 +79,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   const double bcalCutOutEnd   = bcalCutOutStart + bcalCutOutSpan;
   const double incomingBeamPipeRadius = xmlParameter.attr< double >( _Unicode(incomingbeampiperadius) );
 
-  std::cout << "bcalCutOutSpan  "<< bcalCutOutSpan/dd4hep::mrad  << " Radian"<< std::endl;
-  std::cout << "bcalCutOutSpan  "<< bcalCutOutSpan/dd4hep::degree  << " DEGREE"<< std::endl;
+  std::cout << "bcalCutOutSpan  "<< bcalCutOutSpan/dd4hep::mrad  << " mrad"<< std::endl;
+  std::cout << "bcalCutOutSpan  "<< bcalCutOutSpan/dd4hep::degree  << " degree"<< std::endl;
   std::cout << "bcalCutOutStart "<< bcalCutOutStart << " Radian"<< std::endl;
   std::cout << "bcalCutOutEnd   "<< bcalCutOutEnd   << " Radian"<< std::endl;
   std::cout << "incommingBeamPipeRadius: "<< incomingBeamPipeRadius/dd4hep::cm << " cm"  << std::endl;
@@ -177,9 +179,16 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	  //std::cout << e.what()  << std::endl;
 	}
 
-	DD4hep::Geometry::Tube sliceBase(bcalInnerR,bcalOuterR,slice_thickness/2);
-	DD4hep::Geometry::SubtractionSolid slice_subtracted;
+	// Check if a separate outer_radius is declared.
+	double outerR = bcalOuterR;
+	try {
+	  outerR = compSlice.outer_radius();
+	} catch (std::runtime_error &e) {
+	  // Nothing to catch. Everything is fine.
+	}
 
+	DD4hep::Geometry::Tube sliceBase(bcalInnerR, outerR, slice_thickness/2);
+	DD4hep::Geometry::SubtractionSolid slice_subtracted;
 
 	if(isAbsorberStructure) {
 	  //If we have the absorber structure then we create the slice with a

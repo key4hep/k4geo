@@ -1,0 +1,178 @@
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0" 
+       xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+       xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+  <info name="ILD_l1_v01"
+        title="ILD Mokka model used for the DBD - ported to DD4hep"
+        author="F. Gaede"
+        url="http://ilcsoft.desy.de"
+        status="experimantal"
+        version="$Id: BeamCalOnly2.xml 298 2015-02-25 15:09:08Z gaede $">
+    <comment>ILD Mokka model used for the DBD - ported to DD4hep </comment>        
+  </info>
+  
+  <includes>
+    <gdmlFile  ref="../ILD_common_v01/elements.xml"/>
+    <gdmlFile  ref="../ILD_common_v01/materials.xml"/>
+    <!--pyBuilder ref="../drivers"/-->
+  </includes>
+  
+  <define>
+    <constant name="world_side"             value="30*m"/>
+    <constant name="world_x"                value="world_side/2"/>
+    <constant name="world_y"                value="world_side/2"/>
+    <constant name="world_z"                value="world_side/2"/>        
+
+    <!--- constants defined in class UTIL::ILDConfig  -->
+    <!-- constant name="ILDCellID0_encoder_string"   value="subdet:5,side:-2,layer:9,module:8,sensor:8"/ -->
+
+    <constant name="ILDDetID_NOTUSED"   value="  0"/>
+    <constant name="ILDDetID_VXD"       value="  1"/>
+    <constant name="ILDDetID_SIT"       value="  2"/>
+    <constant name="ILDDetID_FTD"       value="  3"/>
+    <constant name="ILDDetID_TPC"       value="  4"/>
+    <constant name="ILDDetID_SET"       value="  5"/>
+    <constant name="ILDDetID_ETD"       value="  6"/>
+    <constant name="ILDDetID_ECAL"      value=" 20"/>
+    <constant name="ILDDetID_ECAL_PLUG" value=" 21"/>
+    <constant name="ILDDetID_HCAL"      value=" 22"/>
+    <constant name="ILDDetID_HCAL_RING" value=" 23"/>
+    <constant name="ILDDetID_LCAL"      value=" 24"/>
+    <constant name="ILDDetID_BCAL"      value=" 25"/>
+    <constant name="ILDDetID_LHCAL"     value=" 26"/>
+    <constant name="ILDDetID_YOKE"      value=" 27"/>
+    <constant name="ILDDetID_bwd"       value="- 1"/>
+    <constant name="ILDDetID_barrel"    value="  0"/>
+    <constant name="ILDDetID_fwd"       value="  1"/>
+    
+
+    <!-- global parameters from Mokka model ILD_l1_v01 -->
+    <!--include ref="model_parameters_ILD_l1_v01.xml"/-->
+    <include ref="../ILD_l1_v01/top_defs_ILD_l1_v01.xml"/>
+    <include ref="../ILD_common_v01/top_defs_common_v01.xml"/>
+    <include ref="../ILD_common_v01/basic_defs.xml"/>
+    <include ref="../ILD_common_v01/envelope_defs.xml"/>
+    <include ref="../ILD_common_v01/tube_defs.xml"/>
+    <include ref="../ILD_common_v01/misc_defs.xml"/>
+    <include ref="../ILD_common_v01/tracker_defs.xml"/>
+    <include ref="../ILD_common_v01/fcal_defs.xml"/>
+    <include ref="../ILD_common_v01/ecal_defs.xml"/>
+    <include ref="../ILD_common_v01/hcal_defs.xml"/>
+    <include ref="../ILD_common_v01/yoke_defs.xml"/>
+    <include ref="../ILD_common_v01/services_defs.xml"/>
+
+    <!-- ######### parameters as computed in Ecal04 driver: ################  --> 
+    <!-- <constant name="Ecal_Barrel_module_dim_z" value="2*Ecal_Barrel_halfZ/5." /> -->
+    <!-- <constant name="Ecal_module_thickness" value="Ecal_nlayers1 * Ecal_radiator_layers_set1_thickness + Ecal_nlayers2 * Ecal_radiator_layers_set2_thickness + Ecal_nlayers3 * Ecal_radiator_layers_set3_thickness" /> -->
+    <!-- <constant name="EC_module_z_offset" value="Ecal_Barrel_module_dim_z*2.5+Ecal_cables_gap+Ecal_module_thickness/2" /> -->
+    <!-- <constant name="Ecal_inner_radius" value=" TPC_outer_radius + Ecal_Tpc_gap " /> -->
+    <!-- <constant name="Ecal_outer_radius" value=" Ecal_inner_radius + Ecal_module_thickness " /> -->
+
+    <!-- FIXME: for now we set the Ecal_outer_radius to the right value  - the computation above is incomplete ..... -->
+    <constant name="Ecal_outer_radius" value="2028.*mm" /> 
+
+    <!-- <constant name="Ecal_endcap_zmax" value="  EC_module_z_offset + Ecal_module_thickness / 2" /> -->
+    <!-- <constant name="Ecal_endcap_zmin" value="  EC_module_z_offset - Ecal_module_thickness / 2" />   -->
+    <!-- <constant name="Lcal_z_begin" value="Ecal_endcap_zmin" />   -->
+    <!-- <constant name="Ecal_endcap_plug_rmin" value="Ecal_Lcal_ring_gap + Lcal_outer_radius" />   -->
+    <!-- <constant name="Ecal_endcap_rmax" value="Ecal_inner_radius + Ecal_module_thickness + Ecal_endcap_extra_size" /> -->
+    <!-- <constant name="Ecal_endcap_outer_radius" value="Ecal_endcap_rmax" />   -->
+
+    <constant name="Hcal_inner_radius" value="Ecal_outer_radius+Hcal_Ecal_gap" />  
+
+    <!-- new number from K.Gadow for ILD_l1_v01 -->
+    <constant name="Hcal_outer_radius" value="3395.46*mm"/> 
+
+
+    <constant name="tracker_region_rmax" value="TPC_outer_radius" />  
+    <constant name="tracker_region_zmax" value="Ecal_endcap_zmin" />  
+    <!-- ######### end of parameters as computed in Ecal04 driver: ################  --> 
+
+  </define>
+
+  
+
+  <display>
+    <!-- fixme:  white comes out as red !!!???? |  vis name="WhiteVis"         alpha="0.0" r="1.0" g="1.0"  b="1.0"   showDaughters="true"  visible="true"/ --> 
+    <vis name="WhiteVis"         alpha="0.0" r=".96" g=".96"  b=".96"   showDaughters="true"  visible="true"/>
+
+    <vis name="Invisible"         alpha="0.0" r="0" g="0"  b="0"   showDaughters="false"  visible="false"/>
+    <vis name="SeeThrough"         alpha="0.0" r="0" g="0"  b="0"   showDaughters="true"  visible="false"/>
+
+    <vis name="RedVis"           alpha="1.0" r="1.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="GreenVis"         alpha="1.0" r="0.0" g="1.0"  b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="BlueVis"          alpha="1.0" r="0.0" g="0.0"  b="1.0"   showDaughters="true"  visible="true"/>
+    <vis name="CyanVis"          alpha="1.0" r="0.0" g="1.0"  b="1.0"   showDaughters="true"  visible="true"/>
+    <vis name="MagentaVis"       alpha="1.0" r="1.0" g="0.0"  b="1.0"   showDaughters="true"  visible="true"/>
+    <vis name="YellowVis"        alpha="1.0" r="1.0" g="1.0"  b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="BlackVis"         alpha="1.0" r="0.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="GrayVis"          alpha="1.0" r="0.5" g="0.5"  b="0.5"   showDaughters="true"  visible="true"/>
+
+
+    <!-- <vis name="TubeVis"   alpha="0.1" r="1.0" g="0.7"  b="0.5"   showDaughters="true"  visible="true"/> -->
+    <vis name="TubeVis"           alpha="1.0" r="1.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
+
+    <vis name="TPCVis"        alpha="0.1" r="0" g="0"  b="0"         showDaughters="true"  visible="true"/>
+    <vis name="TPCMotherVis"  alpha="0.1" r="0.9" g="0.9"  b="0.9"   showDaughters="true"  visible="false"/>
+
+    <vis name="VXDVis"        alpha="0.1" r="0.1" g=".5"  b=".5"   showDaughters="true"  visible="true"/>
+    <vis name="VXDLayerVis"   alpha="1.0" r="0.1" g=".5"  b=".5"   showDaughters="true"  visible="true"/>
+    <vis name="VXDSupportVis" alpha="1.0" r="0.0" g="1.0" b="0.0"  showDaughters="true"  visible="true"/>
+
+
+    <vis name="FTDVis"           alpha="1.0" r="0.0" g="0.1"  b="0.0"   showDaughters="true"  visible="false"/>
+    <vis name="FTDSensitiveVis" alpha="1.0"  r="1.0"  g="1.0" b="0.45" showDaughters="true" visible="true"/>
+    <vis name="FTDSupportVis"   alpha="1.0"  r="1.0"  g="0.5" b="0.5"  showDaughters="true" visible="true"/>
+    <vis name="FTDHolePetalVis" alpha="1.0"  r="0.5"  g="0.5" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="FTDCylVis"       alpha="0.45" r="0.2"  g="0.9" b="0.98" showDaughters="true" visible="true"/>
+    <vis name="FTDCablesVis"    alpha="1.0"  r="0.0"  g="0.9" b="0.0"  showDaughters="true" visible="true"/>
+    
+    <vis name="MyBeamCalVis"  alpha="0.5"  r="1.0" g="1.0"  b="1.0" showDaughters="true"  visible="false"/>
+    <vis name="BCLayerVis1"   alpha="1.0"  r="1.0" g="0.0"  b="0.0" showDaughters="true"  visible="true"/>
+    <vis name="BCLayerVis2"   alpha="1.0"  r="0.0" g="1.0"  b="0.0" showDaughters="true"  visible="true"/>
+    <vis name="BCLayerVis3"   alpha="1.0"  r="0.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
+    <vis name="BCLayerVis4"   alpha="1.0"  r="1.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
+
+  </display>
+
+  <detectors>
+
+    <comment>Calorimeters</comment>
+
+    <include ref="../ILD_common_v01/BeamCal08.xml"/>
+    <include ref="../ILD_common_v01/LHCal01.xml"/>
+  </detectors> 
+
+  <readouts>
+
+    <readout name="BeamCalCollUniform">
+      <segmentation type="PolarGridRPhi2"
+                    grid_r_values="17.80*mm 27.6565*mm 35.3029*mm 42.9494*mm 50.5959*mm 58.2424*mm 65.8888*mm 73.5353*mm 81.1818*mm 88.8282*mm 96.4747*mm 104.121*mm 111.768*mm 119.414*mm 127.061*mm 134.707*mm 142.354*mm 150.0*mm"
+                    grid_phi_values="BCal_SpanningPhi/(3*8) BCal_SpanningPhi/(3*8) BCal_SpanningPhi/(4*8) BCal_SpanningPhi/(5*8) BCal_SpanningPhi/(5*8) BCal_SpanningPhi/(6*8) BCal_SpanningPhi/(7*8) BCal_SpanningPhi/(8*8) BCal_SpanningPhi/(8*8) BCal_SpanningPhi/(9*8) BCal_SpanningPhi/(10*8) BCal_SpanningPhi/(10*8) BCal_SpanningPhi/(11*8) BCal_SpanningPhi/(12*8) BCal_SpanningPhi/(12*8) BCal_SpanningPhi/(13*8) BCal_SpanningPhi/(14*8)"
+                    offset_phi="-180*degree+(360*degree-BCal_SpanningPhi)*0.5"
+                    />
+      <id>system:8,barrel:3,layer:8,slice:5,r:32:16,phi:16</id>
+    </readout>
+
+    <readout name="BeamCalCollection">
+      <segmentation type="PolarGridRPhi2"
+                    grid_r_values="17.80*mm 19.73*mm 21.88*mm 24.25*mm 26.89*mm 29.81*mm 33.05*mm 36.64*mm 40.62*mm 45.03*mm 49.92*mm 55.34*mm 61.35*mm 68.02*mm 75.41*mm 83.60*mm 92.68*mm 102.74*mm 113.91*mm 126.28*mm 140.00*mm"
+                    grid_phi_values="5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree"
+                    offset_phi="-180*degree"
+                    />
+      <id>system:8,barrel:3,layer:8,slice:5,r:32:16,phi:16</id>
+    </readout>
+
+    <readout name="LHCalCollection">
+      <segmentation type="CartesianGridXY" grid_size_x="LHcal_cell_size" grid_size_y="LHcal_cell_size" offset_x="0*cm" />
+      <id>system:8,barrel:3,layer:6,slice:5,x:-16,y:-16 </id>
+    </readout>
+  </readouts>
+
+  <!-- <fields> -->
+  <!--   <field type="solenoid" name="GlobalSolenoid" inner_field="Field_nominal_value*tesla" -->
+  <!-- 	   outer_field="-1.5*tesla" zmax="TPC_Ecal_Hcal_barrel_halfZ" -->
+  <!-- 	   inner_radius="TPC_outer_radius" -->
+  <!-- 	   outer_radius="world_side" /> -->
+  <!-- </fields>  -->
+</lccdd>

@@ -106,6 +106,8 @@
 
     <constant name="tracking_region_radius" value="ECalBarrel_rmin - 10*env_safety"/>
     <constant name="tracking_region_zmax" value="ECalEndcap_zmin - 10*env_safety"/>    
+    <constant name="tracker_region_rmax" value="tracking_region_radius"/>  
+    <constant name="tracker_region_zmax" value="tracking_region_zmax"/>  
 
     <constant name="VXD_CF_sensor" value="0.026*cm"/>
     <constant name="VXD_CF_support" value="0.05*cm"/>
@@ -117,6 +119,11 @@
     <constant name="SolenoidEndcapAirgapThickness" value="19.0*cm"/>
     <constant name="Solenoid_Coil_half_length" value="Solenoid_half_length-SolenoidEndcapCryostatThickness-SolenoidEndcapAirgapThickness"/>
     <constant name="Solenoid_outer_radius" value="3429*mm"/>
+
+    <!-- Frank's example: -->
+    <!-- constant name="tracker_region_rmax" value="0.5*(SiTracker_outer_radius+ECalBarrel_rmin)" /-->  
+    <!-- constant name="tracker_region_zmax" value="ECalBarrel_half_length" /-->
+
   </define>
 
   <limits>

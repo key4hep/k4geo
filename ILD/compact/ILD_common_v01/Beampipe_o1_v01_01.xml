@@ -19,7 +19,7 @@
   <section type ="Center"
            start="TUBE_firstCone_zStart"                               end="TUBE_firstCone_zEnd"
            rMin1="TUBE_firstCone_rInnerStart"                          rMin2="TUBE_firstCone_rInnerEnd"
-           rMax1="TUBE_firstCone_rInnerStart+TUBE_firstCone_thickness" rMax2="TUBE_firstCone_rInnerEnd+TUBE_firstCone_thickness"
+           rMax1="TUBE_firstCone_rInnerStart+TUBE_firstCone_RadThickness" rMax2="TUBE_firstCone_rInnerEnd+TUBE_firstCone_RadThickness"
            material="G4_Be" name="IPInnerBulge" />
 
   <!-- second cylinder -->
@@ -33,26 +33,26 @@
   <section type ="Center" 
            start="TUBE_secondCone_part1_zStart"                                end="TUBE_secondCone_part1_zEnd"
            rMin1="TUBE_secondCone_part1_rInnerStart"                             rMin2="TUBE_secondCone_part1_rInnerEnd"
-           rMax1="TUBE_secondCone_part1_rInnerStart+TUBE_secondCone_part1_thickness"  rMax2="TUBE_secondCone_part1_rInnerEnd+TUBE_secondCone_part1_thickness"
-           material="G4_Be" name="IPOuterTube" />
+           rMax1="TUBE_secondCone_part1_rInnerStart+TUBE_secondCone_part1_RadThickness"  rMax2="TUBE_secondCone_part1_rInnerEnd+TUBE_secondCone_part1_RadThickness"
+           material="BeampipeBeCableMix" name="IPOuterTube" />
 
   <section type ="Center" 
            start="TUBE_secondCone_part2_zStart"                                end="TUBE_secondCone_part2_zEnd"
            rMin1="TUBE_secondCone_part2_rInnerStart"                             rMin2="TUBE_secondCone_part2_rInnerEnd"
-           rMax1="TUBE_secondCone_part2_rInnerStart+TUBE_secondCone_part2_thickness"  rMax2="TUBE_secondCone_part2_rInnerEnd+TUBE_secondCone_part2_thickness"
-           material="G4_Be" name="IPOuterTube" />
+           rMax1="TUBE_secondCone_part2_rInnerStart+TUBE_secondCone_part2_RadThickness"  rMax2="TUBE_secondCone_part2_rInnerEnd+TUBE_secondCone_part2_RadThickness"
+           material="BeampipeBeCableMix" name="IPOuterTube" />
 
   <section type ="Center" 
            start="TUBE_secondCone_part3_zStart"                                end="TUBE_secondCone_part3_zEnd"
            rMin1="TUBE_secondCone_part3_rInnerStart"                             rMin2="TUBE_secondCone_part3_rInnerEnd"
-           rMax1="TUBE_secondCone_part3_rInnerStart+TUBE_secondCone_part3_thickness"  rMax2="TUBE_secondCone_part3_rInnerEnd+TUBE_secondCone_part3_thickness"
-           material="G4_Be" name="IPOuterTube" />
+           rMax1="TUBE_secondCone_part3_rInnerStart+TUBE_secondCone_part3_RadThickness"  rMax2="TUBE_secondCone_part3_rInnerEnd+TUBE_secondCone_part3_RadThickness"
+           material="BeampipeBeCableMix" name="IPOuterTube" />
 
   <section type ="Center" 
            start="TUBE_secondCone_part4_zStart"                                end="TUBE_secondCone_part4_zEnd"
            rMin1="TUBE_secondCone_part4_rInnerStart"                             rMin2="TUBE_secondCone_part4_rInnerEnd"
-           rMax1="TUBE_secondCone_part4_rInnerStart+TUBE_secondCone_part4_thickness"  rMax2="TUBE_secondCone_part4_rInnerEnd+TUBE_secondCone_part4_thickness"
-           material="G4_Be" name="IPOuterTube" />
+           rMax1="TUBE_secondCone_part4_rInnerStart+TUBE_secondCone_part4_RadThickness"  rMax2="TUBE_secondCone_part4_rInnerEnd+TUBE_secondCone_part4_RadThickness"
+           material="BeampipeBeCableMix" name="IPOuterTube" />
 
 
   <section type ="PunchedCenter"         
@@ -69,7 +69,7 @@
 
   <section type ="PunchedDnstream"       
 	   start="BeamCal_min_z-5*mm"            end="BeamCal_min_z-4*mm"         
-	   rMin1="14*mm"                         rMin2="17*mm"  
+	   rMin1="14*mm"                         rMin2="16*mm"
            rMax1 ="TUBE_lumiTube_rInner+TUBE_lumiTube_thickness"                      rMax2="TUBE_lumiTube_rInner+TUBE_lumiTube_thickness"       
            material="G4_Fe" name="BeamCalFront" />
 
@@ -95,14 +95,14 @@
 
   <section type ="Dnstream"              
 	   start="BeamCal_min_z-4*mm"            end="5999*mm"
-           rMin1="17*mm"                         rMin2="17*mm"
-           rMax1="18*mm"                        rMax2="18*mm"                                 
+           rMin1="16*mm"                         rMin2="16*mm"
+           rMax1="17*mm"                        rMax2="17*mm"
 	   material="G4_Fe" name="BeamCalLinkDnstream" />
 
   <section type ="Dnstream"
            start="5999*mm"                           end="6000*mm"                              
-	   rMin1="17*mm"                             rMin2="17*mm"
-           rMax1="20*mm"                             rMax2="20*mm"
+	   rMin1="16*mm"                             rMin2="16*mm"
+           rMax1="18*mm"                             rMax2="18*mm"
            material="G4_Fe" name="QDEX1AFront" />
 
   <section type ="Dnstream"              
@@ -137,3 +137,4 @@
 
 
 </detector>
+

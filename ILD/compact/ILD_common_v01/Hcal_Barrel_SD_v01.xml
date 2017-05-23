@@ -1,4 +1,3 @@
-<!-- comment>Calorimeters</comment -->
 <detector name="HcalBarrel" type="Hcal_Barrel_SD_v01" id="ILDDetID_HCAL" readout="HcalBarrelRegCollection" vis="GreenVis" insideTrackingVolume="false" >
     <comment>Hadron Calorimeter Barrel</comment>
 
@@ -10,24 +9,26 @@
       </shape>
       <rotation x="0" y="0" z="90*deg-180*deg/Hcal_inner_symmetry"/> 
     </envelope>
-<!--      <rotation x="0" y="0" z="180*deg/Hcal_inner_symmetry"/> -->
+    <type_flags type=" DetType_CALORIMETER + DetType_BARREL + DetType_HADRONIC " />
 
-
-    <staves  material = "Steel235"  vis="BlueVis"/>
+    <staves  material = "Steel304L"  vis="BlueVis"/>
 
     <!-- The layer structure reference in the following paper-->
     <!-- ???  -->
-    <layer repeat="Hcal_nlayers" vis="SeeThrough">
-<!--        <slice material = "Air"            thickness = "Hcal_fiber_gap"                                 vis="YellowVis" />   -->
-        <slice material = "Steel235"       thickness = "Hcal_radiator_thickness"                        vis="BlueVis"   />  
-        <slice material = "g10"            thickness = "Hcal_g10_thickness"                             vis="GreenVis" />
-        <slice material = "PCB"            thickness = "SDHcal_PCB_thickness"                             vis="CyanVis" />
-        <slice material = "mylar"          thickness = "Hcal_mylar_anode_thickness"                     vis="MagentaVis" /> 
-        <slice material = "G4_GRAPHITE"       thickness = "Hcal_graphite_anode_thickness"                  vis="Invisible" />
-        <slice material = "FloatGlass"     thickness = "Hcal_glass_anode_thickness"                     vis="RedVis" />
-        <slice material = "RPCGAS2"        thickness = "Hcal_gas_gap"           sensitive = "yes"       vis="YellowVis" />
-        <slice material = "FloatGlass"     thickness = "Hcal_glass_cathode_thickness"                   vis="RedVis" />
-        <slice material = "G4_GRAPHITE"       thickness = "Hcal_graphite_cathode_thickness"                vis="Invisible" />
-        <slice material = "mylar"          thickness = "Hcal_mylar_cathode_thickness"                   vis="MagentaVis" /> 
+    <layer repeat="HcalBarrelSD_nlayers" vis="SeeThrough">
+        <slice material = "Steel304L"      thickness = "HcalSD_radiator_thickness"                    vis="BlueVis"   />   
+        <slice material = "Air"            thickness = "HcalSD_airgap_thickness"                      vis="WhiteVis"   /> 
+        <slice material = "Steel304L"      thickness = "HcalSD_steel_casette_thickness"               vis="BlueVis"   />
+        <slice material = "epoxy"          thickness = "HcalSD_electronics_mask_thickness"            vis="GreenVis" />
+        <slice material = "PCB"            thickness = "HcalSD_PCB_thickness"                         vis="CyanVis" />
+        <slice material = "mylar"          thickness = "HcalSD_mylar_anode_thickness"                 vis="MagentaVis" /> 
+        <slice material = "graphite"       thickness = "HcalSD_graphite_anode_thickness"              vis="Invisible" />
+        <slice material = "FloatGlass"     thickness = "HcalSD_glass_anode_thickness"                 vis="RedVis" />
+        <slice material = "RPCGAS2"        thickness = "HcalSD_sensitive_gas_gap"   sensitive = "yes"   vis="YellowVis" />
+        <slice material = "FloatGlass"     thickness = "HcalSD_glass_cathode_thickness"               vis="RedVis" />
+        <slice material = "graphite"       thickness = "HcalSD_graphite_cathode_thickness"            vis="Invisible" />
+        <slice material = "mylar"          thickness = "HcalSD_mylar_cathode_thickness"               vis="MagentaVis" /> 
+        <slice material = "Steel304L"      thickness = "HcalSD_steel_casette_thickness"               vis="BlueVis"   />
+        <slice material = "Air"            thickness = "HcalSD_airgap_thickness"                      vis="WhiteVis"   /> 
     </layer>
 </detector>

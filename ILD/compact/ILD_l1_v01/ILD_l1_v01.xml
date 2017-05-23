@@ -124,7 +124,7 @@
     <include ref="../ILD_common_v01/Yoke05_Barrel.xml"/>
     <include ref="../ILD_common_v01/Yoke05_Endcaps.xml"/>
     <include ref="../ILD_common_v01/LumiCal.xml"/> 
-    <include ref="../ILD_common_v01/LHCal.xml"/>
+    <include ref="../ILD_common_v01/LHCal01.xml"/>
     <include ref="../ILD_common_v01/BeamCal08.xml"/>
     <include ref="../ILD_common_v01/coil03.xml"/>
     <include ref="../ILD_common_v01/SServices00.xml"/>
@@ -198,11 +198,20 @@
       <id>system:5,module:3,stave:4,tower:3,layer:6,x:32:-16,y:-16</id>
     </readout>
 
-    <readout name="BeamCalCollection">
+    <readout name="BeamCalCollUniform">
       <segmentation type="PolarGridRPhi2"
-                    grid_r_values="20.00*mm 27.6565*mm 35.3029*mm 42.9494*mm 50.5959*mm 58.2424*mm 65.8888*mm 73.5353*mm 81.1818*mm 88.8282*mm 96.4747*mm 104.121*mm 111.768*mm 119.414*mm 127.061*mm 134.707*mm 142.354*mm 150.0*mm"
+                    grid_r_values="17.80*mm 27.6565*mm 35.3029*mm 42.9494*mm 50.5959*mm 58.2424*mm 65.8888*mm 73.5353*mm 81.1818*mm 88.8282*mm 96.4747*mm 104.121*mm 111.768*mm 119.414*mm 127.061*mm 134.707*mm 142.354*mm 150.0*mm"
                     grid_phi_values="BCal_SpanningPhi/(3*8) BCal_SpanningPhi/(3*8) BCal_SpanningPhi/(4*8) BCal_SpanningPhi/(5*8) BCal_SpanningPhi/(5*8) BCal_SpanningPhi/(6*8) BCal_SpanningPhi/(7*8) BCal_SpanningPhi/(8*8) BCal_SpanningPhi/(8*8) BCal_SpanningPhi/(9*8) BCal_SpanningPhi/(10*8) BCal_SpanningPhi/(10*8) BCal_SpanningPhi/(11*8) BCal_SpanningPhi/(12*8) BCal_SpanningPhi/(12*8) BCal_SpanningPhi/(13*8) BCal_SpanningPhi/(14*8)"
                     offset_phi="-180*degree+(360*degree-BCal_SpanningPhi)*0.5"
+                    />
+      <id>system:8,barrel:3,layer:8,slice:5,r:32:16,phi:16</id>
+    </readout>
+
+    <readout name="BeamCalCollection">
+      <segmentation type="PolarGridRPhi2"
+                    grid_r_values="17.80*mm 19.73*mm 21.88*mm 24.25*mm 26.89*mm 29.81*mm 33.05*mm 36.64*mm 40.62*mm 45.03*mm 49.92*mm 55.34*mm 61.35*mm 68.02*mm 75.41*mm 83.60*mm 92.68*mm 102.74*mm 113.91*mm 126.28*mm 140.00*mm"
+                    grid_phi_values="5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree"
+                    offset_phi="-180*degree"
                     />
       <id>system:8,barrel:3,layer:8,slice:5,r:32:16,phi:16</id>
     </readout>

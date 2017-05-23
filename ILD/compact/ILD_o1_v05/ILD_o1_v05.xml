@@ -482,15 +482,27 @@
 
 	<readout name="EcalBarrelCollection">
 	  <segmentation type="WaferGridXY" grid_size_x="Ecal_cells_size" grid_size_y="Ecal_cells_size" offset_x="Ecal_cells_size/2.0"  offset_y="Ecal_cells_size/2.0" identifier_groupMGWafer="layer"/>
+	  <hits_collections>
+            <hits_collection name="EcalBarrelCollection_preShower"  key="layer" key_value="0x0"/>
+            <hits_collection name="EcalBarrelCollection" key="layer" key_min="0x1"   key_max="0xFF"/>
+	  </hits_collections>
 	  <id>system:5,module:3,stave:4,tower:3,layer:6,wafer:6,x:32:-16,y:-16</id>
 	</readout>
 	<readout name="EcalEndcapsCollection">
 	  <segmentation type="WaferGridXY" grid_size_x="Ecal_cells_size" grid_size_y="Ecal_cells_size" offset_x="Ecal_cells_size/2.0"  offset_y="Ecal_cells_size/2.0" identifier_groupMGWafer="tower"/>
+	  <hits_collections>
+            <hits_collection name="EcalEndcapsCollection_preShower"  key="layer" key_value="0x0"/>
+            <hits_collection name="EcalEndcapsCollection" key="layer" key_min="0x1"   key_max="0xFF"/>
+	  </hits_collections>
 	  <id>system:5,module:3,stave:3,tower:5,layer:6,wafer:6,x:32:-16,y:-16</id>
 	</readout>
 
 	<readout name="EcalEndcapRingCollection">
 	  <segmentation type="CartesianGridXY" grid_size_x="Ecal_cells_size" grid_size_y="Ecal_cells_size"/>
+	  <hits_collections>
+            <hits_collection name="EcalEndcapRingCollection_preShower"  key="layer" key_value="0x0"/>
+            <hits_collection name="EcalEndcapRingCollection" key="layer" key_min="0x1"   key_max="0xFF"/>
+	  </hits_collections>
 	  <id>system:5,module:3,stave:4,tower:3,layer:6,x:32:-16,y:-16</id>
 	</readout>
 
@@ -570,25 +582,48 @@
       </plugins>
 
 <fields>
-  <!-- <field type="solenoid" name="GlobalSolenoid" inner_field="Field_nominal_value*tesla" -->
-  <!-- 	  outer_field="-1.5*tesla" zmax="Coil_half_length" -->
-  <!-- 	  inner_radius="Coil_inner_radius" -->
-  <!-- 	  outer_radius="world_side" /> -->
+  <field type="solenoid" name="GlobalSolenoid" inner_field="Field_nominal_value*tesla"
+   	 outer_field="-1.5*tesla" zmax="Coil_half_length"
+         inner_radius="Coil_inner_radius"
+  	 outer_radius="world_side" />
 
-  <field name="DetectorMap" type="FieldXYZ"
-         filename="${lcgeo_DIR}/fieldmaps/ILDMap_KB_20150204_BRhoZ.root"
-         tree="fieldmap:rho:z:Brho:Bz"
-         rScale = "1.0"
-         zScale = "1.0"
-         bScale = "3.5/4.12841"
-         rhoMin = "5*mm"
-         zMin = "5*mm"
-         rhoMax = "7005*mm"
-         zMax = "7005*mm"
-         nRho = "701"
-         nZ = "701"
-         >
-  </field>
+  <!-- Solenoidal Field from Br(r,z) and Bz(r,z) field map -->
+  <!-- <field name="DetectorMap_Solenoid" type="FieldBrBz" -->
+  <!--        filename="${lcgeo_DIR}/fieldmaps/ild_fieldMap_Solenoid3.5T_StandardYoke_10cm_v1_20170223.root" -->
+  <!--        tree="ntuple:rho_mm:z_mm:Brho:Bz" -->
+  <!--        rScale = "1.0" -->
+  <!--        zScale = "1.0" -->
+  <!--        bScale = "1.0" -->
+  <!--        rhoMin = "0*mm" -->
+  <!--        zMin = "0*mm" -->
+  <!--        rhoMax = "800*cm" -->
+  <!--        zMax = "700*cm" -->
+  <!--        nRho = "81" -->
+  <!--        nZ = "71" -->
+  <!--        > -->
+  <!--  </field> -->
+  
+  <!-- anti-DID Field from Bx(x,y,z), By(x,y,z) and Bz(x,y,z) field map -->
+  <!-- <field name="DetectorMap_antiDID" type="FieldXYZ" -->
+  <!--        filename="${lcgeo_DIR}/fieldmaps/ild_fieldMap_antiDID_10cm_v1_20170223.root" -->
+  <!--        tree="ntuple:x_mm:y_mm:z_mm:Bx:By:Bz" -->
+  <!--        xScale = "1.0" -->
+  <!--        yScale = "1.0" -->
+  <!--        zScale = "1.0" -->
+  <!--        bScale = "1.0" -->
+  <!--        xMin   = "-200*cm" -->
+  <!--        xMax   = "+200*cm" -->
+  <!--        xStep  = "10*cm" -->
+  <!--        yMin   = "-200*cm" -->
+  <!--        yMax   = "+200*cm" -->
+  <!--        yStep  = "10*cm" -->
+  <!--        zMin   = "-400*cm" -->
+  <!--        zMax   = "+400*cm" -->
+  <!--        zStep  = "10*cm" -->
+  <!--        > -->
+  <!-- </field> -->
+  
+  
 
  </fields> 
 </lccdd>

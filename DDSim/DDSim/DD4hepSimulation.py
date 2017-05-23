@@ -42,6 +42,7 @@ from DDSim.Helper.Action import Action
 from DDSim.Helper.Random import Random
 from DDSim.Helper.Filter import Filter
 from DDSim.Helper.Physics import Physics
+from DDSim.Helper.GuineaPig import GuineaPig
 
 import os
 import sys
@@ -83,6 +84,7 @@ class DD4hepSimulation(object):
     self.part = ParticleHandler()
     self.field = MagneticField()
     self.action = Action()
+    self.guineapig = GuineaPig()
 
     self.filter = Filter()
     self.physics = Physics()
@@ -363,8 +365,9 @@ class DD4hepSimulation(object):
         gen = DDG4.GeneratorAction(kernel,"Geant4InputAction/hepmc%d" % index)
         gen.Input="Geant4EventReaderHepMC|"+inputFile
       elif inputFile.endswith(".pairs"):
-        gen = DDG4.GeneratorAction(kernel,"Geant4InputAction/HEPEvt%d" % index)
+        gen = DDG4.GeneratorAction(kernel,"Geant4InputAction/GuineaPig%d" % index)
         gen.Input="Geant4EventReaderGuineaPig|"+inputFile
+        gen.Parameters = self.guineapig.getParameters()
       else:
         ##this should never happen because we already check at the top, but in case of some LogicError...
         raise RuntimeError( "Unknown input file type: %s" % inputFile )
@@ -391,13 +394,32 @@ class DD4hepSimulation(object):
     part.MinDistToParentVertex= self.part.minDistToParentVertex
     part.OutputLevel = self.output.part
     part.enableUI()
+
+
+    if self.part.enableDetailedHitsAndParticleInfo:
+      self.part.setDumpDetailedParticleInfo( kernel, DDG4 )
+
+    #----------------------------------
+
+
+
+
     user = DDG4.Action(kernel,"Geant4TCUserParticleHandler/UserParticleHandler")
     try:
       user.TrackingVolume_Zmax = DDG4.tracker_region_zmax
       user.TrackingVolume_Rmax = DDG4.tracker_region_rmax
-    except AttributeError as e:
-      print "No Attribute: ", str(e)
 
+      print " *** definition of tracker region *** "
+      print "    tracker_region_zmax = " ,  user.TrackingVolume_Zmax
+      print "    tracker_region_rmax = " ,  user.TrackingVolume_Rmax
+      print " ************************************ "
+
+    except AttributeError as e:
+      print "ERROR - attribute of tracker region missing in detector model   ", str(e)
+      print "   make sure to specify the global constants tracker_region_zmax and tracker_region_rmax "
+      print "   this is needed for the MC-truth link of created sim-hits  !  "
+      exit(1)
+      
     #  user.enableUI()
     part.adopt(user)
 
@@ -458,6 +480,11 @@ class DD4hepSimulation(object):
 
     kernel.run()
     kernel.terminate()
+
+    userTime, sysTime,_cuTime, _csTime, _elapsedTime = os.times()
+    if self.printLevel <= 3:
+      print "DDSim            INFO  Execution Time: %3.2f s (User), %3.2f s (System)"% (userTime, sysTime)
+
 
   def __setMagneticFieldOptions(self, simple):
     """ create and configure the magnetic tracking setup """
@@ -608,12 +635,18 @@ class DD4hepSimulation(object):
       for pattern in self.action.mapActions:
         if pattern.lower() in det.lower():
           action = self.action.mapActions[pattern]
+          print  '       replace default action with : ' , action 
           break
       seq,act = setupFuction( det, type=action )
       self.filter.applyFilters( seq, det, defaultFilter )
+
       ##set detailed hit creation mode for this
       if self.enableDetailedShowerMode:
-        act.HitCreationMode = 2
+        if isinstance(act, list):
+          for a in act:
+            a.HitCreationMode = 2
+        else:
+          act.HitCreationMode = 2
 
   def __printSteeringFile( self, parser):
     """print the parameters formated as a steering file"""
@@ -635,6 +668,8 @@ SIM = DD4hepSimulation()
         steeringFileBase += "################################################################################\n"
         options = parameter.getOptions()
         for opt,valAndDoc in sorted( options.iteritems(), sortParameters ):
+          if opt.startswith("_"):
+            continue
           parValue, parDoc, _parOptions = valAndDoc
           if parDoc:
             steeringFileBase += "\n## %s\n" % "\n## ".join(parDoc.splitlines())

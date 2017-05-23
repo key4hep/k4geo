@@ -31,9 +31,9 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   //LumiCal Dimensions
   const double lcalInnerR = dimensions.inner_r();
   const double lcalOuterR = dimensions.outer_r();
-  const double lcalInnerZ = dimensions.inner_z();
+  // const double lcalInnerZ = dimensions.inner_z();
   const double lcalThickness = DD4hep::Layering(xmlLumiCal).totalThickness();
-  const double lcalCentreZ = lcalInnerZ+lcalThickness*0.5;
+  // const double lcalCentreZ = lcalInnerZ+lcalThickness*0.5;
   const double BoltR = 4.*dd4hep::mm ; 
   const double BoltEarThickenss = 2.*dd4hep::mm ; 
   const int NSectors = 12;
@@ -42,7 +42,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   const double lcalExtra = 20 * dd4hep::cm;
 
   // counter for the current layer to be placed
-  int thisLayerId = 1;
+  // int thisLayerId = 1;
 
   //Parameters we have to know about
   DD4hep::XML::Component xmlParameter = xmlLumiCal.child(_Unicode(parameter));
@@ -71,7 +71,8 @@ DD4hep::Geometry::Box envelopeTube (5*dd4hep::m, 5*dd4hep::m, 5*dd4hep::m );
   DD4hep::Geometry::Volume BoltEarVol (detName+"_BoltEar",BoltEarShape,air);
   BoltEarVol.setVisAttributes(lcdd,"BCLayerVis3");
 
-  DD4hep::Geometry::PlacedVolume pvt = BoltEarVol.placeVolume(BoltVol,DD4hep::Geometry::Position(BoltR+BoltEarThickenss, 0.0, 0.0));
+  // DD4hep::Geometry::PlacedVolume pvt =
+    BoltEarVol.placeVolume(BoltVol,DD4hep::Geometry::Position(BoltR+BoltEarThickenss, 0.0, 0.0));
 
 
 
@@ -83,7 +84,8 @@ DD4hep::Geometry::Box envelopeTube (5*dd4hep::m, 5*dd4hep::m, 5*dd4hep::m );
   		const DD4hep::Geometry::Position EarPos (lcalOuterR * cos (suppAng),-1.0*lcalOuterR * sin (suppAng),0);
   		const DD4hep::Geometry::RotationZ EarRot( -1.0*suppAng ) ;
 		if(ie!=0 && ie!=5 && ie!=6 && ie!=11)	// this line is terrible it has to be corrected	
-		DD4hep::Geometry::PlacedVolume pvear5 = envelopeVol.placeVolume(BoltEarVol, DD4hep::Geometry::Transform3D( EarRot, EarPos ) );
+		// DD4hep::Geometry::PlacedVolume pvear5 =
+		  envelopeVol.placeVolume(BoltEarVol, DD4hep::Geometry::Transform3D( EarRot, EarPos ) );
 
 		suppAng += dPhi;
 
@@ -132,21 +134,26 @@ std::cout<<lcalOuterR<<"\t"<<lcalOuterR+lcalExtra<<"\t"<<FEChip_hdz<<"\t"<<FE_ph
   FEChipLog.setVisAttributes(lcdd,"BCLayerVis1");
   FESectorLog.setVisAttributes(lcdd,"BCLayerVis3");
 
-    DD4hep::Geometry::PlacedVolume pvear6 = FESectorLog.placeVolume(FEChipLog, DD4hep::Geometry::Transform3D( FE1Rot, FE1Pos ) );
-    DD4hep::Geometry::PlacedVolume pvear7 = envelopeVol.placeVolume(FESectorLog);
+    // DD4hep::Geometry::PlacedVolume pvear6 =
+      FESectorLog.placeVolume(FEChipLog, DD4hep::Geometry::Transform3D( FE1Rot, FE1Pos ) );
+    // DD4hep::Geometry::PlacedVolume pvear7 =
+      envelopeVol.placeVolume(FESectorLog);
 
 
         double zpos = lcalThickness - FECool_hdz;
-        DD4hep::Geometry::PlacedVolume pvear8 = FEMothLog.placeVolume(FECoolLog, DD4hep::Geometry::Position( 0,0,zpos) );
+        // DD4hep::Geometry::PlacedVolume pvear8 =
+	  FEMothLog.placeVolume(FECoolLog, DD4hep::Geometry::Position( 0,0,zpos) );
   //      new G4PVPlacement ( 0, G4ThreeVector(0.,0.,zpos), FECoolLog, "LCalFECooling", FEMothLog, false, 1);
 	// PCB
 	zpos -= (FECool_hdz + FE_hth);
-        DD4hep::Geometry::PlacedVolume pvear9 = FEMothLog.placeVolume(FEBoardLog, DD4hep::Geometry::Position( 0,0,zpos) );
+        // DD4hep::Geometry::PlacedVolume pvear9 =
+	  FEMothLog.placeVolume(FEBoardLog, DD4hep::Geometry::Position( 0,0,zpos) );
         //new G4PVPlacement ( 0, G4ThreeVector(0.,0.,zpos), FEBoardLog, "LCalFEBoard", FEMothLog, false, 1);
 	// chips
 	zpos -= (FE_hth + FEChip_hdz);
         //new G4PVPlacement ( 0, G4ThreeVector(0.,0.,zpos), ChipMothLog, "LCalFEchip", FEMothLog, false, 1);
-        DD4hep::Geometry::PlacedVolume pvear10 = FEMothLog.placeVolume(ChipMothLog, DD4hep::Geometry::Position( 0,0,zpos) );
+        // DD4hep::Geometry::PlacedVolume pvear10 =
+	  FEMothLog.placeVolume(ChipMothLog, DD4hep::Geometry::Position( 0,0,zpos) );
 
 	// everything in support layer
         zpos = -0.1*dd4hep::mm/2.;
@@ -159,8 +166,10 @@ std::cout<<lcalOuterR<<"\t"<<lcalOuterR+lcalExtra<<"\t"<<FEChip_hdz<<"\t"<<FE_ph
   		const DD4hep::Geometry::Position SubPos2 (zpos * cos (phi_rot+M_PI),-1.0*zpos * sin (phi_rot+M_PI),0);
   		const DD4hep::Geometry::RotationZ SubRot2( phi_rot+M_PI ) ;
 
-        DD4hep::Geometry::PlacedVolume pvear11 = envelopeVol.placeVolume(FEMothLog, DD4hep::Geometry::Transform3D( SubRot1, SubPos1 ) );
-        DD4hep::Geometry::PlacedVolume pvear12 = envelopeVol.placeVolume(FEMothLog, DD4hep::Geometry::Transform3D( SubRot2, SubPos2 ) );
+        // DD4hep::Geometry::PlacedVolume pvear11 =
+	  envelopeVol.placeVolume(FEMothLog, DD4hep::Geometry::Transform3D( SubRot1, SubPos1 ) );
+        // DD4hep::Geometry::PlacedVolume pvear12 =
+	  envelopeVol.placeVolume(FEMothLog, DD4hep::Geometry::Transform3D( SubRot2, SubPos2 ) );
         	phi_rot += dPhi;
 	}
 
@@ -181,7 +190,7 @@ std::cout<<lcalOuterR<<"\t"<<lcalOuterR+lcalExtra<<"\t"<<FEChip_hdz<<"\t"<<FE_ph
   ////////////////////////////////////////////////////////////////////////////////
   // Create all the layers
   ////////////////////////////////////////////////////////////////////////////////
-/*
+
   //Loop over all the layer (repeat=NN) sections
   //This is the starting point to place all layers, we need this when we have more than one layer block
   double referencePosition = -lcalThickness*0.5;

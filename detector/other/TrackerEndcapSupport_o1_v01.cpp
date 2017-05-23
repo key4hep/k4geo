@@ -29,7 +29,7 @@ using DD4hep::Geometry::Tube;
 using DD4hep::Geometry::PlacedVolume;
 using DD4hep::Geometry::Assembly;
 
-static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)
+static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector)
 {
   xml_det_t     x_det     = e;
   int           det_id    = x_det.id();
@@ -85,11 +85,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)
       pv.addPhysVolID("sensor", s_num);
     }
 
-    DetElement layer(sdet, l_nam + "_pos", l_num);
+    DetElement layer_pos(sdet, l_nam + "_pos", l_num);
     pv = envelope.placeVolume(l_vol, Position(0, 0, zmin + layerWidth / 2.));
     pv.addPhysVolID("layer", l_num);
     pv.addPhysVolID("barrel", 1);
-    layer.setPlacement(pv);
+    layer_pos.setPlacement(pv);
     
     if (reflect)  {
 	  Tube    l_tub2(rmin, rmax, layerWidth, 2 * M_PI);
@@ -118,11 +118,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)
         pv.addPhysVolID("sensor", s_num);
       }
 
-    DetElement layer(sdet, l_nam + "_neg", l_num);
+    DetElement layer_neg(sdet, l_nam + "_neg", l_num);
     pv = envelope.placeVolume(l_vol2, Position(0, 0, -1.*(zmin + layerWidth / 2.)));
     pv.addPhysVolID("layer", l_num);
     pv.addPhysVolID("barrel", 2);
-    layer.setPlacement(pv);
+    layer_neg.setPlacement(pv);
     }
   }
 

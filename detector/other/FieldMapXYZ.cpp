@@ -38,8 +38,6 @@ FieldMapXYZ::FieldMapXYZ() {
   type = DD4hep::Geometry::CartesianField::MAGNETIC;
 } //ctor
 
-
-
 /**
     Use bileanar interpolation to calculate the field at the given position
     This uses large pieces from Mokka FieldX03
@@ -47,84 +45,116 @@ FieldMapXYZ::FieldMapXYZ() {
 void FieldMapXYZ::fieldComponents(const double* pos , double* globalField) {
 
   //get position coordinates in our system
-  const double posRho = sqrt(pos[0]*pos[0] + pos[1]*pos[1]);
-  const double posZ   = pos[2];
-  const double posPhi = atan2(pos[1], pos[0]);
-
-  //Mokka defines these things as x and y and phi
-  double x = posRho;
-  double y = posZ;
-  double phi = posPhi;
-
-  //Get positive values to do less checks when comparing
-  if( y < 0 ) {
-    y = -y ;
-    phi += M_PI ;
-  }
+  const double x = pos[0];
+  const double y = pos[1];
+  const double z = pos[2];
 
   //APS: Note the mokka field map does not start at 0, so we have to assume that
   //this area is covered, or add some more parameters for the values where the
   //field is supposed to be. Now we just assume it starts at 0/0/0, outside there is no field
-  if (not ( 0.0 <= x && x <= rhoMax &&
-	    0.0 <= y && y <= zMax ) ) {
-    globalField[0] = globalField[1] = globalField[2];
+  if (not ( x >= xMin && x <= xMax &&
+            y >= yMin && y <= yMax &&
+            z >= zMin && z <= zMax )
+     ) {
     return;
   }
 
-  if( x < rhoMin ) x = rhoMin;
-  if( y < zMin ) y = zMin ;
+  int xBin,yBin,zBin;
+  double x0,y0,z0;
+  double x1,y1,z1;
 
+  xBin = int((x - xMin)/xStep);
+  yBin = int((y - yMin)/yStep);
+  zBin = int((z - zMin)/zStep);
 
-  // Position of given point within region, normalized to the range
-  // [0,1]
-  const double xfraction = ( x - rhoMin ) / ( rhoMax - rhoMin );
-  const double yfraction = ( y - zMin )   / ( zMax   - zMin   );
+  x0   = xMin + xBin*xStep;
+  y0   = yMin + yBin*yStep;
+  z0   = zMin + zBin*zStep;
 
-  // Need addresses of these to pass to modf below.
-  // modf uses its second argument as an OUTPUT argument.
-  double xdindex, ydindex;
+  if(x0 >= x) x0 -= xStep;
+  x1 = x0 + xStep;
+  if(y0 >= y) y0 -= yStep;
+  y1 = y0 + yStep;
+  if(z0 >= z) z0 -= zStep;
+  z1 = z0 + zStep;
 
-  // Position of the point within the cuboid defined by the
-  // nearest surrounding tabulated points
-  const double xlocal = ( std::modf( xfraction * ( nRho - 1), &xdindex ) );
-  const double ylocal = ( std::modf( yfraction * ( nZ   - 1), &ydindex ) );
+  double xd = (x - x0)/(x1 - x0);
+  double yd = (y - y0)/(y1 - y0);
+  double zd = (z - z0)/(z1 - z0);
 
-  // The indices of the nearest tabulated point whose coordinates
-  // are all less than those of the given point
-  const int xindex = static_cast<int>(xdindex);
-  const int yindex = static_cast<int>(ydindex);
+  const FieldMapXYZ::FieldValues_t& B_x0y0z0 = fieldMap[GetGlobalIndex(x0,y0,z0)];
+  const FieldMapXYZ::FieldValues_t& B_x1y0z0 = fieldMap[GetGlobalIndex(x1,y0,z0)];
+  const FieldMapXYZ::FieldValues_t& B_x0y0z1 = fieldMap[GetGlobalIndex(x0,y0,z1)];
+  const FieldMapXYZ::FieldValues_t& B_x1y0z1 = fieldMap[GetGlobalIndex(x1,y0,z1)];
+  const FieldMapXYZ::FieldValues_t& B_x0y1z0 = fieldMap[GetGlobalIndex(x0,y1,z0)];
+  const FieldMapXYZ::FieldValues_t& B_x1y1z0 = fieldMap[GetGlobalIndex(x1,y1,z0)];
+  const FieldMapXYZ::FieldValues_t& B_x0y1z1 = fieldMap[GetGlobalIndex(x0,y1,z1)];
+  const FieldMapXYZ::FieldValues_t& B_x1y1z1 = fieldMap[GetGlobalIndex(x1,y1,z1)];
 
-  const int index0 =  xindex    * nZ + yindex   ;
-  const int index1 =  xindex    * nZ + yindex+1 ;
-  const int index2 = (xindex+1) * nZ + yindex   ;
-  const int index3 = (xindex+1) * nZ + yindex+1 ;
+  double B_00,B_01,B_10,B_11,B_0,B_1,B;
 
-  const FieldMapXYZ::FieldValues_t& fv0 = fieldMap[index0];
-  const FieldMapXYZ::FieldValues_t& fv1 = fieldMap[index1];
-  const FieldMapXYZ::FieldValues_t& fv2 = fieldMap[index2];
-  const FieldMapXYZ::FieldValues_t& fv3 = fieldMap[index3];
+  //X-component
+  B_00 = (1.0 - xd)*B_x0y0z0.Bx + xd*B_x1y0z0.Bx;
+  B_01 = (1.0 - xd)*B_x0y0z1.Bx + xd*B_x1y0z1.Bx;
+  B_10 = (1.0 - xd)*B_x0y1z0.Bx + xd*B_x1y1z0.Bx;
+  B_11 = (1.0 - xd)*B_x0y1z1.Bx + xd*B_x1y1z1.Bx;
+  B_0  = (1.0 - yd)*B_00        + yd*B_10;
+  B_1  = (1.0 - yd)*B_01        + yd*B_11;
+  B    = (1.0 - zd)*B_0         + zd*B_1;
+  globalField[0] += B;
 
-  double field[2] = {0.0, 0.0};
+  //Y-component
+  B_00 = (1.0 - xd)*B_x0y0z0.By + xd*B_x1y0z0.By;
+  B_01 = (1.0 - xd)*B_x0y0z1.By + xd*B_x1y0z1.By;
+  B_10 = (1.0 - xd)*B_x0y1z0.By + xd*B_x1y1z0.By;
+  B_11 = (1.0 - xd)*B_x0y1z1.By + xd*B_x1y1z1.By;
+  B_0  = (1.0 - yd)*B_00        + yd*B_10;
+  B_1  = (1.0 - yd)*B_01        + yd*B_11;
+  B    = (1.0 - zd)*B_0         + zd*B_1;
+  globalField[1] += B;
 
-  field[0] =
-    fv0.Br * (1-xlocal) * (1-ylocal)  +
-    fv1.Br * (1-xlocal) *    ylocal   +
-    fv2.Br *    xlocal  * (1-ylocal)  +
-    fv3.Br *    xlocal  *    ylocal   ;
-
-  field[1] =
-    fv0.Bz * (1-xlocal) * (1-ylocal)  +
-    fv1.Bz * (1-xlocal) *    ylocal   +
-    fv2.Bz *    xlocal  * (1-ylocal)  +
-    fv3.Bz *    xlocal  *    ylocal   ;
-
-  globalField[0] = field[0] * sin( phi ) ;
-  globalField[1] = field[0] * cos( phi ) ;
-  globalField[2] = field[1] ;
-
-
+  //Z-component
+  B_00 = (1.0 - xd)*B_x0y0z0.Bz + xd*B_x1y0z0.Bz;
+  B_01 = (1.0 - xd)*B_x0y0z1.Bz + xd*B_x1y0z1.Bz;
+  B_10 = (1.0 - xd)*B_x0y1z0.Bz + xd*B_x1y1z0.Bz;
+  B_11 = (1.0 - xd)*B_x0y1z1.Bz + xd*B_x1y1z1.Bz;
+  B_0  = (1.0 - yd)*B_00        + yd*B_10;
+  B_1  = (1.0 - yd)*B_01        + yd*B_11;
+  B    = (1.0 - zd)*B_0         + zd*B_1;
+  globalField[2] += B;
+  
+  /*
+  std::cout << std::endl;
+  std::cout << "FieldMapXYZ:: " << std::endl;
+  std::cout << "(x,y,z)     = (" << x/dd4hep::cm  << "," << y/dd4hep::cm  << "," << z/dd4hep::cm  << ") cm" << std::endl;
+  std::cout << "(x0,y0,z0)  = (" << x0/dd4hep::cm << "," << y0/dd4hep::cm << "," << z0/dd4hep::cm << ") cm" << std::endl;
+  std::cout << "(x1,y1,z1)  = (" << x1/dd4hep::cm << "," << y1/dd4hep::cm << "," << z1/dd4hep::cm << ") cm" << std::endl;
+  std::cout << "B(x0,y0,z0) = (" << B_x0y0z0.Bx/dd4hep::tesla << "," << B_x0y0z0.By/dd4hep::tesla << "," << B_x0y0z0.Bz/dd4hep::tesla << ") tesla" << std::endl;
+  std::cout << "B(x1,y0,z0) = (" << B_x1y0z0.Bx/dd4hep::tesla << "," << B_x1y0z0.By/dd4hep::tesla << "," << B_x1y0z0.Bz/dd4hep::tesla << ") tesla" << std::endl;
+  std::cout << "B(x0,y0,z1) = (" << B_x0y0z1.Bx/dd4hep::tesla << "," << B_x0y0z1.By/dd4hep::tesla << "," << B_x0y0z1.Bz/dd4hep::tesla << ") tesla" << std::endl;
+  std::cout << "B(x1,y0,z1) = (" << B_x1y0z1.Bx/dd4hep::tesla << "," << B_x1y0z1.By/dd4hep::tesla << "," << B_x1y0z1.Bz/dd4hep::tesla << ") tesla" << std::endl;
+  std::cout << "B(x0,y1,z0) = (" << B_x0y1z0.Bx/dd4hep::tesla << "," << B_x0y1z0.By/dd4hep::tesla << "," << B_x0y1z0.Bz/dd4hep::tesla << ") tesla" << std::endl;
+  std::cout << "B(x1,y1,z0) = (" << B_x1y1z0.Bx/dd4hep::tesla << "," << B_x1y1z0.By/dd4hep::tesla << "," << B_x1y1z0.Bz/dd4hep::tesla << ") tesla" << std::endl;
+  std::cout << "B(x0,y1,z1) = (" << B_x0y1z1.Bx/dd4hep::tesla << "," << B_x0y1z1.By/dd4hep::tesla << "," << B_x0y1z1.Bz/dd4hep::tesla << ") tesla" << std::endl;
+  std::cout << "B(x1,y1,z1) = (" << B_x1y1z1.Bx/dd4hep::tesla << "," << B_x1y1z1.By/dd4hep::tesla << "," << B_x1y1z1.Bz/dd4hep::tesla << ") tesla" << std::endl;
+  std::cout << "B(x,y,z)    = (" << globalField[0]/dd4hep::tesla << "," << globalField[1]/dd4hep::tesla << "," << globalField[2]/dd4hep::tesla << ") tesla" << std::endl;
+  std::cout << std::endl;
+  */
+ 
+  return; 
+ 
 }
 
+int FieldMapXYZ::GetGlobalIndex(double x, double y, double z)
+{
+
+  int xBin = int((x - xMin)/xStep);
+  int yBin = int((y - yMin)/yStep);
+  int zBin = int((z - zMin)/zStep);
+
+  return  xBin + yBin*nX + zBin*nX*nY;
+
+}
 
 void FieldMapXYZ::fillFieldMapFromTree(const std::string& filename, const std::string& treeString){
 
@@ -141,10 +171,10 @@ void FieldMapXYZ::fillFieldMapFromTree(const std::string& filename, const std::s
     std::cout << "\"" << (*it).c_str() << "\"" << std::endl;
   }
 
-  if( strs.size() != 5 ) {
+  if( strs.size() != 7 ) {
     std::stringstream error;
     error << "FieldMap[ERROR]: the treeDescription " << treeString
-	  << " is not complete. For example 'fieldmap:rho:z:Brho:Bz'";
+	  << " is not complete. For example 'ntuple:x:y:z:Bx:By:Bz'";
     throw std::runtime_error( error.str() );
   }
 
@@ -156,28 +186,48 @@ void FieldMapXYZ::fillFieldMapFromTree(const std::string& filename, const std::s
     throw std::runtime_error( error.str() );
   }
 
-  float r, z, Br, Bz;
-  checkBranch( tree->SetBranchAddress(strs[1].c_str(), &r) );
-  checkBranch( tree->SetBranchAddress(strs[2].c_str(), &z) );
-  checkBranch( tree->SetBranchAddress(strs[3].c_str(), &Br) );
-  checkBranch( tree->SetBranchAddress(strs[4].c_str(), &Bz) );
+  float x, y, z, Bx, By, Bz;
+  checkBranch( tree->SetBranchAddress(strs[1].c_str(), &x) );
+  checkBranch( tree->SetBranchAddress(strs[2].c_str(), &y) );
+  checkBranch( tree->SetBranchAddress(strs[3].c_str(), &z) );
+  checkBranch( tree->SetBranchAddress(strs[4].c_str(), &Bx) );
+  checkBranch( tree->SetBranchAddress(strs[5].c_str(), &By) );
+  checkBranch( tree->SetBranchAddress(strs[6].c_str(), &Bz) );
 
-  const int elements = nRho*nZ;
+  xMin -= 0.5*xStep;
+  xMax += 0.5*xStep;
+  yMin -= 0.5*yStep;
+  yMax += 0.5*yStep;
+  zMin -= 0.5*zStep;
+  zMax += 0.5*zStep;
+  
+  nX = ((xMax - xMin)/xStep);
+  nY = ((yMax - yMin)/yStep);
+  nZ = ((zMax - zMin)/zStep);
+
+  const int elements = nX*nY*nZ;
   const int treeEntries = tree->GetEntries();
   if ( elements != treeEntries ) {
     std::stringstream error;
     error << "FieldMap[ERROR]: Tree does not have the same size as described in the XML "
-	  << "nRho*nZ == "  << elements
+	  << "nX*nY*nZ == "  << elements
 	  << "  tree entries == " << treeEntries;
     throw std::runtime_error( error.str() );
   }
 
   fieldMap.reserve(elements);
 
-  for (int i = 0; i < treeEntries ;++i) {
+  for(int i = 0;i<treeEntries;++i) {
     tree->GetEntry(i);
-    fieldMap.push_back( FieldMapXYZ::FieldValues_t( double(Br)*bScale*dd4hep::tesla,
-						     double(Bz)*bScale*dd4hep::tesla ) );
+
+    //std::cout << "FieldMapXYZ:: fill-map:: position = (" << x << "," << y << "," << z << "), " 
+    //          << "bScale = " << bScale << ", "
+    //          << "field = (" << double(Bx)*bScale*dd4hep::tesla << "," << double(By)*bScale*dd4hep::tesla << "," << double(Bz)*bScale*dd4hep::tesla << ")"
+    //          << std::endl;
+
+    fieldMap.push_back( FieldMapXYZ::FieldValues_t(double(Bx)*bScale*dd4hep::tesla,
+                                                   double(By)*bScale*dd4hep::tesla,
+						   double(Bz)*bScale*dd4hep::tesla ) );
 
   }
 
@@ -196,40 +246,61 @@ static DD4hep::Geometry::Ref_t create_FieldMap_XYZ(DD4hep::Geometry::LCDD& ,
     error << "FieldMap[ERROR]: For a FieldMap field at least the filename xml attribute MUST be set.";
     throw std::runtime_error(error.str());
   }
-  std::string filename = xmlParameter.attr< std::string >(_Unicode(filename));
+  std::string filename   = xmlParameter.attr< std::string >(_Unicode(filename));
   std::string treeString = xmlParameter.attr< std::string >(_Unicode(tree));
 
-  double rScale = xmlParameter.attr< double >(_Unicode(rScale));
+  double xScale = xmlParameter.attr< double >(_Unicode(xScale));
+  double yScale = xmlParameter.attr< double >(_Unicode(yScale));
   double zScale = xmlParameter.attr< double >(_Unicode(zScale));
   double bScale = xmlParameter.attr< double >(_Unicode(bScale));
-  double rhoMin = xmlParameter.attr< double >(_Unicode(rhoMin));
-  double rhoMax = xmlParameter.attr< double >(_Unicode(rhoMax));
-  double nRho   = xmlParameter.attr< int >   (_Unicode(nRho));
+
+  double xMin   = xmlParameter.attr< double >(_Unicode(xMin));
+  double xMax   = xmlParameter.attr< double >(_Unicode(xMax));
+  double xStep  = xmlParameter.attr< double >(_Unicode(xStep));
+
+  double yMin   = xmlParameter.attr< double >(_Unicode(yMin));
+  double yMax   = xmlParameter.attr< double >(_Unicode(yMax));
+  double yStep  = xmlParameter.attr< double >(_Unicode(yStep));
+
   double zMin   = xmlParameter.attr< double >(_Unicode(zMin));
   double zMax   = xmlParameter.attr< double >(_Unicode(zMax));
-  double nZ     = xmlParameter.attr< int >   (_Unicode(nZ));
+  double zStep  = xmlParameter.attr< double >(_Unicode(zStep));
 
   DD4hep::Geometry::CartesianField obj;
   FieldMapXYZ* ptr = new FieldMapXYZ();
-  ptr->rScale = rScale;
+  ptr->xScale = xScale;
+  ptr->yScale = yScale;
   ptr->zScale = zScale;
   ptr->bScale = bScale;
-  ptr->rhoMin = rhoMin*rScale;
-  ptr->rhoMax = rhoMax*rScale;
-  ptr->nRho   = nRho  ;
-  ptr->zMin   = zMin  *zScale;
-  ptr->zMax   = zMax  *zScale;
-  ptr->nZ     = nZ    ;
 
-  std::cout << "rScale  " << std::setw(13) << rScale  << std::endl;
+  ptr->xMin   = xMin*xScale;
+  ptr->xMax   = xMax*xScale;
+  ptr->xStep  = xStep*xScale;
+
+  ptr->yMin   = yMin*yScale;
+  ptr->yMax   = yMax*yScale;
+  ptr->yStep  = yStep*yScale;
+
+  ptr->zMin   = zMin*zScale;
+  ptr->zMax   = zMax*zScale;
+  ptr->zStep  = zStep*zScale;
+
+  std::cout << "xScale  " << std::setw(13) << xScale  << std::endl;
+  std::cout << "yScale  " << std::setw(13) << yScale  << std::endl;
   std::cout << "zScale  " << std::setw(13) << zScale  << std::endl;
   std::cout << "bScale  " << std::setw(13) << bScale  << std::endl;
-  std::cout << "rhoMin  " << std::setw(13) << rhoMin  << std::endl;
-  std::cout << "rhoMax  " << std::setw(13) << rhoMax  << std::endl;
-  std::cout << "nRho    " << std::setw(13) << nRho    << std::endl;
+
+  std::cout << "xMin    " << std::setw(13) << xMin    << std::endl;
+  std::cout << "xMax    " << std::setw(13) << xMax    << std::endl;
+  std::cout << "xStep   " << std::setw(13) << xStep   << std::endl;
+
+  std::cout << "yMin    " << std::setw(13) << yMin    << std::endl;
+  std::cout << "yMax    " << std::setw(13) << yMax    << std::endl;
+  std::cout << "yStep   " << std::setw(13) << yStep   << std::endl;
+
   std::cout << "zMin    " << std::setw(13) << zMin    << std::endl;
   std::cout << "zMax    " << std::setw(13) << zMax    << std::endl;
-  std::cout << "nZ      " << std::setw(13) << nZ      << std::endl;
+  std::cout << "zStep   " << std::setw(13) << zStep   << std::endl;
 
   //Read the entries form the file in this place
   ptr->fillFieldMapFromTree(filename, treeString);

@@ -78,7 +78,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   //-----------------------------------------------------------------------------------
 
   
-  PlacedVolume pv;
+  //PlacedVolume pv;
   
   
   sens.setType("tracker");
@@ -90,7 +90,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   //  code ported from SET_Simple_Planar::construct() :
   //##################################
 
-  extended_reconstruction_parameters _e_r_p;
+  // extended_reconstruction_parameters _e_r_p;
   
   // *********************
   //  Read and Store the Extended Reconstruction Parameters which are passed directly through to gear. Note others may be added below
@@ -118,7 +118,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   // Sensor Length
   double sensor_length = db->fetchDouble("sensor_length") ;
   
-  _e_r_p.sensor_length_mm  =sensor_length;
+  // _e_r_p.sensor_length_mm  =sensor_length;
 
   Material air = lcdd.air()  ;
   Material sensitiveMat = lcdd.material(db->fetchString("sensitive_mat"));  
@@ -126,15 +126,15 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   
   // // // setup the encoder 
-  // // UTIL::BitField64 encoder( ILDCellID0::encoder_string ) ; 
+  // // UTIL::BitField64 encoder( LCTrackerCellID::encoding_string() ) ; 
   
   // // encoder.reset() ;  // reset to 0
   
-  // // encoder[ILDCellID0::subdet] = ILDDetID::NOTUSED ;
-  // // encoder[ILDCellID0::side] = 0 ;
-  // // encoder[ILDCellID0::layer]  = 0 ;
-  // // encoder[ILDCellID0::module] = 0 ;
-  // // encoder[ILDCellID0::sensor] = 0 ;
+  // // encoder[LCTrackerCellID::subdet()] = ILDDetID::NOTUSED ;
+  // // encoder[LCTrackerCellID::side()] = 0 ;
+  // // encoder[LCTrackerCellID::layer()]  = 0 ;
+  // // encoder[LCTrackerCellID::module()] = 0 ;
+  // // encoder[LCTrackerCellID::sensor()] = 0 ;
   // // int cellID0 = encoder.lowWord() ;
   
   //... The SET Sensitive detector
@@ -335,8 +335,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     for (int isensor=0; isensor < layer_geom.n_sensors_per_ladder ; ++isensor) {
       
       // encoder.reset() ;  // reset to 0
-      // encoder[ILDCellID0::subdet] = ILDDetID::NOTUSED ;
-      // encoder[ILDCellID0::sensor] =  isensor+1;
+      // encoder[LCTrackerCellID::subdet()] = ILDDetID::NOTUSED ;
+      // encoder[LCTrackerCellID::sensor()] =  isensor+1;
       // cellID0 = encoder.lowWord() ;
       
       double xpos = 0.0;
@@ -358,8 +358,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     
     // encoder.reset() ;  // reset to 0
-    // encoder[ILDCellID0::subdet] = ILDDetID::NOTUSED ;
-    // encoder[ILDCellID0::layer]  = layer_id ;
+    // encoder[LCTrackerCellID::subdet()] = ILDDetID::NOTUSED ;
+    // encoder[LCTrackerCellID::layer()]  = layer_id ;
     // cellID0 = encoder.lowWord() ;
         
 
@@ -410,9 +410,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       // // rotate by 180 degrees around z if facing away from the IP
       // if( faces_IP == 0 ) rot->rotateZ( 180 * deg );
       
-      // encoder[ILDCellID0::subdet] = ILDDetID::SET ;
-      // encoder[ILDCellID0::layer]  = layer_id ;
-      // encoder[ILDCellID0::module] = i + 1 ;
+      // encoder[LCTrackerCellID::subdet()] = ILDDetID::SET ;
+      // encoder[LCTrackerCellID::layer()]  = layer_id ;
+      // encoder[LCTrackerCellID::module()] = i + 1 ;
       // cellID0 = encoder.lowWord() ;  
       
       float dr = ( (sensitive_thickness +support_thickness ) / 2.0 ) - (sensitive_thickness / 2.0 ) ;

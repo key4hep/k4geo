@@ -124,15 +124,15 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   
   // // // setup the encoder 
-  // // UTIL::BitField64 encoder( ILDCellID0::encoder_string ) ; 
+  // // UTIL::BitField64 encoder( LCTrackerCellID::encoding_string() ) ; 
   
   // // encoder.reset() ;  // reset to 0
   
-  // // encoder[ILDCellID0::subdet] = ILDDetID::NOTUSED ;
-  // // encoder[ILDCellID0::side] = 0 ;
-  // // encoder[ILDCellID0::layer]  = 0 ;
-  // // encoder[ILDCellID0::module] = 0 ;
-  // // encoder[ILDCellID0::sensor] = 0 ;
+  // // encoder[LCTrackerCellID::subdet()] = ILDDetID::NOTUSED ;
+  // // encoder[LCTrackerCellID::side()] = 0 ;
+  // // encoder[LCTrackerCellID::layer()]  = 0 ;
+  // // encoder[LCTrackerCellID::module()] = 0 ;
+  // // encoder[LCTrackerCellID::sensor()] = 0 ;
   // // int cellID0 = encoder.lowWord() ;
   
   //... The SIT Sensitive detector
@@ -191,17 +191,17 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     sensitive_inner_radius = sensitive_radius - 0.5 *sensitive_thickness;
     ladder_width = 2*(tan(ladder_dphi*0.5)*sensitive_inner_radius - ladder_clearance) ;
                     
-    double inner_most_radius = 0.0;
+    // double inner_most_radius = 0.0;
     
     if( faces_IP == 1 ){ // support is on the outside 
       support_radius = sensitive_radius + (0.5 *sensitive_thickness) ;
       ladder_width = 2*(tan(ladder_dphi*0.5)*sensitive_inner_radius - ladder_clearance) ;
-      inner_most_radius = sensitive_inner_radius;
+      // inner_most_radius = sensitive_inner_radius;
     }
     else{ // support is on the inside
       support_radius = sensitive_radius - (0.5 *sensitive_thickness) -support_thickness;
       ladder_width = 2*(tan(ladder_dphi*0.5)*support_radius - ladder_clearance) ;
-      inner_most_radius = support_radius;
+      // inner_most_radius = support_radius;
     }
     
     //FIXME: GEAR....
@@ -346,8 +346,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     for (int isensor=0; isensor < layer_geom.n_sensors_per_ladder ; ++isensor) {
       
       // encoder.reset() ;  // reset to 0
-      // encoder[ILDCellID0::subdet] = ILDDetID::NOTUSED ;
-      // encoder[ILDCellID0::sensor] =  isensor+1;
+      // encoder[LCTrackerCellID::subdet()] = ILDDetID::NOTUSED ;
+      // encoder[LCTrackerCellID::sensor()] =  isensor+1;
       // cellID0 = encoder.lowWord() ;
       
       double xpos = 0.0;
@@ -369,8 +369,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     
     // encoder.reset() ;  // reset to 0
-    // encoder[ILDCellID0::subdet] = ILDDetID::NOTUSED ;
-    // encoder[ILDCellID0::layer]  = layer_id ;
+    // encoder[LCTrackerCellID::subdet()] = ILDDetID::NOTUSED ;
+    // encoder[LCTrackerCellID::layer()]  = layer_id ;
     // cellID0 = encoder.lowWord() ;
         
 
@@ -422,9 +422,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       // // rotate by 180 degrees around z if facing away from the IP
       // if( faces_IP == 0 ) rot->rotateZ( 180 * deg );
       
-      // encoder[ILDCellID0::subdet] = ILDDetID::SIT ;
-      // encoder[ILDCellID0::layer]  = layer_id ;
-      // encoder[ILDCellID0::module] = i + 1 ;
+      // encoder[LCTrackerCellID::subdet()] = ILDDetID::SIT ;
+      // encoder[LCTrackerCellID::layer()]  = layer_id ;
+      // encoder[LCTrackerCellID::module()] = i + 1 ;
       // cellID0 = encoder.lowWord() ;  
       
       float dr = ( (sensitive_thickness +support_thickness ) / 2.0 ) - (sensitive_thickness / 2.0 ) ;

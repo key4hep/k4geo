@@ -15,6 +15,7 @@
 
 #include <UTIL/BitField64.h>
 #include <UTIL/BitSet32.h>
+#include "UTIL/LCTrackerConf.h"
 #include <UTIL/ILDConf.h>
 
 using namespace std;
@@ -38,8 +39,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     std::string cellIDEncoding = sens.readout().idSpec().fieldDescription();
     UTIL::BitField64 encoder( cellIDEncoding );
     encoder.reset();
-    encoder[lcio::ILDCellID0::subdet] = det_id;
-    encoder[lcio::ILDCellID0::side] = lcio::ILDDetID::barrel;
+    encoder[lcio::LCTrackerCellID::subdet()] = det_id;
+    encoder[lcio::LCTrackerCellID::side()] = lcio::ILDDetID::barrel;
 
 
     // --- create an envelope volume and position it into the world ---------------------
@@ -161,9 +162,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
 		//encoding
 
-		encoder[lcio::ILDCellID0::layer] = lay_id;
-		encoder[lcio::ILDCellID0::module] = module_idx;
-		encoder[lcio::ILDCellID0::sensor] = sensor_idx;
+		encoder[lcio::LCTrackerCellID::layer()] = lay_id;
+		encoder[lcio::LCTrackerCellID::module()] = module_idx;
+		encoder[lcio::LCTrackerCellID::sensor()] = sensor_idx;
 
 		DD4hep::long64 cellID = encoder.lowWord(); // 32 bits
 
@@ -190,8 +191,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 		    if (newsensor < 0 || newsensor >= nz) continue; //out of the stave
 
 		    //encoding
-		    encoder[lcio::ILDCellID0::module] = newmodule;
-		    encoder[lcio::ILDCellID0::sensor] = newsensor;
+		    encoder[lcio::LCTrackerCellID::module()] = newmodule;
+		    encoder[lcio::LCTrackerCellID::sensor()] = newsensor;
 		    
 		    neighbourSurfacesData->sameLayer[cellID].push_back(encoder.lowWord());
 

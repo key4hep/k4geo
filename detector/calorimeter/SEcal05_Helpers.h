@@ -74,6 +74,11 @@ local position: 0,0 defined as -veX,Y,Z corner
 
 we start building from Z=0, the face nearest IP, moving in the +ve Z direction
 
+
+D.Jeans update: 03/2015
+dead space between slab end and module edge
+other than 8-fold symmetry for barrel
+
  */
 
 class SEcal05_Helpers {
@@ -83,7 +88,7 @@ class SEcal05_Helpers {
   SEcal05_Helpers();
 
   ~SEcal05_Helpers() {
-    if ( _layering ) delete _layering; _layering=NULL;
+    delete _layering;
   }
 
   // SET THE PARAMETERS
@@ -180,6 +185,9 @@ class SEcal05_Helpers {
 		   DD4hep::Geometry::SensitiveDetector & sens
 		   );
 
+  void setPlugLength( float ll ) { _plugLength = ll; }
+
+
  private:
 
   void printSEcal05LayerInfo( DDRec::LayeredCalorimeterData::Layer & caloLayer);
@@ -212,7 +220,7 @@ class SEcal05_Helpers {
   };
 
   xml_det_t* _x_det;
-  Layering* _layering;
+  Layering* _layering=NULL;
   std::string _det_name;
 
   std::vector <dimposXYStruct> getAbsPlateXYDimensions( double ztop=-999 );
@@ -295,6 +303,10 @@ class SEcal05_Helpers {
   DD4hep::Geometry::Position _trans;
 
   std::vector <dimposXYStruct> _constantSlabXYDimensions;
+
+
+  float _plugLength;
+
 
 };
 

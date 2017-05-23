@@ -93,15 +93,15 @@
   <constant name="EcalEndcap_symmetry"        value="Ecal_Hcal_symmetry"/>
 
   <constant name="HcalEndcap_inner_radius"    value="Hcal_endcap_center_box_size/2.0"/>
-  <constant name="HcalEndcap_outer_radius"    value="Hcal_outer_radius"/>
+  <constant name="HcalEndcap_outer_radius"    value="Hcal_outer_radius - Hcal_endcap_cryostat_gap"/>
   <constant name="HcalEndcap_min_z"           value="Hcal_endcap_zmin"/>
   <constant name="HcalEndcap_max_z"           value="HcalEndcap_min_z+Hcal_endcap_thickness"/>
 
+  <constant name="HcalEndcapRing_symmetry"        value="Ecal_Hcal_symmetry"/>
   <constant name="HcalEndcapRing_inner_radius"    value="EcalEndcap_outer_radius+Hcal_radial_ring_inner_gap"/>
-  <constant name="HcalEndcapRing_outer_radius"    value="Hcal_outer_radius*cos(pi/Ecal_Hcal_symmetry)"/>
+  <constant name="HcalEndcapRing_outer_radius"    value="HcalEndcap_outer_radius*cos(pi/HcalEndcapRing_symmetry)"/>
   <constant name="HcalEndcapRing_min_z"           value="EcalEndcap_min_z"/>
   <constant name="HcalEndcapRing_max_z"           value="EcalEndcap_max_z"/>
-  <constant name="HcalEndcapRing_symmetry"        value="Ecal_Hcal_symmetry"/>
 
   <constant name="Coil_inner_radius"    value="Hcal_outer_radius+Hcal_Coil_additional_gap"/>
   <constant name="Coil_outer_radius"    value="Hcal_outer_radius+Hcal_Coil_additional_gap+Coil_thickness"/>
@@ -149,9 +149,8 @@
   <constant name="BeamCal_thickness"             value="top_BeamCal_thickness"/>
   <constant name="BeamCal_inner_radius"          value="BCal_rInner"/>
   <constant name="BeamCal_outer_radius"          value="BCal_rOuter"/>
-  <constant name="BeamCal_min_z"                 value="LHcal_zend + LHcal_BCal_clearance"/>
+  <constant name="BeamCal_min_z"                 value="LHcal_zend + LHcal_BCal_clearance - top_BCal_dGraphite"/>
   <constant name="BeamCal_max_z"                 value="BeamCal_min_z + BeamCal_thickness"/>
-  <constant name="BeamCal_tubeIncoming_radius"   value="top_BeamCal_tubeIncoming_radius"/>
 
 
   <constant name="Lcal_inner_radius" value="top_Lcal_inner_radius"/>

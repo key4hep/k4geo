@@ -27,6 +27,8 @@ SEcal05_Helpers::SEcal05_Helpers() {
 
   _totThick=0;
 
+  _plugLength=0;
+
   _magicMegatileStrategy=-1;
 }
 
@@ -50,11 +52,11 @@ void SEcal05_Helpers::checkLayerConsistency() {
   // check that number of requested absober layers is consistent
   // if we want a preshower layer, total number of Absorber layers should be odd; otherwise even
   if ( _preshower==1 && n_total_abs_layers%2==0 ) {
-    std::cout << "ERROR: inconsistent ECAL model !! if you request a preshower layer, the number of absorber layers = _nlayers1 + _nlayers2 + _nlayers3 must be odd" << std::endl;
+    std::cout << "SEcal05_Helpers ERROR: inconsistent ECAL model !! if you request a preshower layer, the number of absorber layers = _nlayers1 + _nlayers2 + _nlayers3 must be odd" << std::endl;
     std::cout << " Ecal_PreshowerLayer = " << _preshower << " ; _nlayers1/2/3 = " << _nlayers1 << " " << _nlayers2 << " " << _nlayers3 << std::endl;
     assert(0);
   } else if ( _preshower==0 && n_total_abs_layers%2==1 ) {
-    std::cout << "ERROR: inconsistent ECAL model !! if you request no preshower layer, the number of absorber layers = _nlayers1 + _nlayers2 + _nlayers3 must be even" << std::endl;
+    std::cout << "SEcal05_Helpers ERROR: inconsistent ECAL model !! if you request no preshower layer, the number of absorber layers = _nlayers1 + _nlayers2 + _nlayers3 must be even" << std::endl;
     std::cout << " Ecal_PreshowerLayer = " << _preshower << " ; _nlayers1/2/3 = " << _nlayers1 << " " << _nlayers2 << " " << _nlayers3 << std::endl;
     assert(0);
   }
@@ -93,7 +95,7 @@ float SEcal05_Helpers::getTotalThickness() {
 }
 
 void SEcal05_Helpers::printSEcal05LayerInfo( DDRec::LayeredCalorimeterData::Layer & caloLayer) {
-  std::cout<<"=== CALOLAYER printout: "                 << std::endl;
+  std::cout<<"SEcal05_Helpers === CALOLAYER printout: "                 << std::endl;
   std::cout<<"    caloLayer.distance: "                 << caloLayer.distance <<std::endl;
   std::cout<<"    caloLayer.inner_nRadiationLengths: "  << caloLayer.inner_nRadiationLengths <<std::endl;
   std::cout<<"    caloLayer.inner_nInteractionLengths: "<< caloLayer.inner_nInteractionLengths <<std::endl;
@@ -134,7 +136,11 @@ std::vector <SEcal05_Helpers::dimposXYStruct> SEcal05_Helpers::getAbsPlateXYDime
       ss.sizeX = _module_dX_max;
       ss.posX = ss.sizeX/2.;
     } else {   // size varies by laer
-      ss.sizeX = _module_dX_max - 2.*ztop;
+
+      //      ss.sizeX = _module_dX_max - 2.*ztop; // this assumes octagon
+
+      ss.sizeX = _module_dX_max - 2.*ztop/tan(_module_angle); // for general shape
+
       ss.posX  = _module_dX_max/2.;   // keep it centered
     }
     ss.sizeY = _module_dY_total;
@@ -171,9 +177,18 @@ std::vector <SEcal05_Helpers::dimposXYStruct> SEcal05_Helpers::getSlabXYDimensio
             ss.sizeX = _module_dX_max;
             ss.posX = ss.sizeX/2.;
           } else {                     // layers vary in length : barrel module
-            ss.sizeX = _module_dX_max - 2.*ztop; // assumes octagon
+
+            // ss.sizeX = _module_dX_max - 2.*ztop; // assumes octagon
+
+	    ss.sizeX = _module_dX_max - 2.*ztop/tan(_module_angle); // for general shape
+
             ss.posX = _module_dX_max/2.;  // slabs all centred
           }
+
+	  ss.sizeX -= _plugLength; // DANIELHACK 
+	  ss.posX += _plugLength/2.;  // DANIELHACK 
+
+
 
         } else if ( _module_XYtype==1 ) { // slabs within layer have different lengths : this is for endcap
           // placing in Y
@@ -184,9 +199,14 @@ std::vector <SEcal05_Helpers::dimposXYStruct> SEcal05_Helpers::getSlabXYDimensio
 	  } else {            // sloping edge: take length at upperY, which is the shortest one
 	    ss.sizeX = _module_dX_max - ( upperY - _module_dY_kink );
 	  }
+
           ss.posX = ss.sizeX/2.; // this aligns the -X end of slab
+
+	  ss.sizeX -=  _plugLength;  // DANIELHACK
+	  ss.posX  +=  _plugLength/2.;  // DANIELHACK      
+
         } else {
-	  cout << " ERROR _module_XYtype = " << _module_XYtype << "!!!" << endl;
+	  cout << " SEcal05_Helpers ERROR _module_XYtype = " << _module_XYtype << "!!!" << endl;
 	  assert(0);
 	}
 	layerslabdims.push_back(ss);
@@ -343,6 +363,7 @@ SEcal05_Helpers::dxinfo SEcal05_Helpers::getNormalMagicUnitsInX( double dx_total
   if ( magicStrategy==2 ) {
     // check it fills exactly
     if ( fabs( dxInf.normal_nX*dxInf.magic1_unitDX + dxInf.magic1_unitDX + dxInf.magic2_unitDX - dx_total ) < 0.01*dd4hep::mm ) {
+      cout << " SEcal05_Helpers ERROR : " << endl;
       cout << dxInf.normal_nX*dxInf.magic1_unitDX << " " << dxInf.magic1_unitDX << " " << dxInf.magic2_unitDX << endl;
       cout << dxInf.normal_nX*dxInf.magic1_unitDX + dxInf.magic1_unitDX + dxInf.magic2_unitDX << " " << dx_total << endl;
       cout << dxInf.normal_nX*dxInf.magic1_unitDX + dxInf.magic1_unitDX + dxInf.magic2_unitDX - dx_total << endl;
@@ -450,7 +471,7 @@ void SEcal05_Helpers::makeModule( DD4hep::Geometry::Volume & mod_vol,  // the vo
           this_struct_CFthick_afterAbs = _CF_front + _CF_alvWall;
           radiator_dim_Z = 0;
         } else { // include W+CF wrapping; only one side of alveolus
-          cout << " -- no preshower, including absorber" << endl;
+          // cout << " -- no preshower, including absorber" << endl;
           this_struct_CFthick_beforeAbs = _CF_absWrap;
           this_struct_CFthick_afterAbs = _CF_absWrap + _CF_alvWall;
           radiator_dim_Z = getAbsThickness( absorber_index++ );
