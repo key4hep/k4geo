@@ -56,7 +56,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   Material    stavesMaterial    = lcdd.material(x_det.materialStr());
 
   int           det_id    = x_det.id();
-  xml_dim_t   dim         = x_det.dimensions();
   string      det_name    = x_det.nameStr();
   //unused: string      det_type    = x_det.typeStr();
 
