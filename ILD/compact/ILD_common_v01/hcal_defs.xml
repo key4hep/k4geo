@@ -41,11 +41,11 @@
   <constant name="HcalSD_back_plate_thickness" value="15*mm"/>
   <constant name="HcalSD_barrel_end_module_type" value="1"/>
   <constant name="HcalSD_stave_gaps" value="10*mm"/>
-  <constant name="HcalSD_lateral_structure_thickness" value="15*mm"/>
+  <constant name="HcalSD_lateral_structure_thickness" value="10*mm"/>
   <constant name="HcalSD_layer_air_gap" value="2*mm"/>
   <constant name="HcalSD_endcap_lateral_structure_thickness" value="5.0*mm"/>
 
-  <constant name="HcalSD_module_wall_thickness" value="10*mm"/>   <!-- ?????-->
+  <constant name="HcalSD_module_wall_thickness" value="10*mm"/>   
 
   <constant name="HcalBarrelSD_nlayers" value="48"/>
   <constant name="HcalSD_MinNumCellsInTransvPlane" value="1"/>
@@ -58,7 +58,6 @@
 
   <constant name="HcalSD_gasInlet_length" value="3.0*mm"/>
   <constant name="HcalSD_modules_gap" value="20*mm"/>
-  <constant name="HcalSD_module_wall_thickness" value="10*mm"/>
   <constant name="HcalSD_spacer_separation" value="100*mm"/>
   <constant name="HcalSD_spacer_thickness" value="8*mm"/>
   <constant name="HcalSD_gasInlet_innerRadius" value="0.4*mm"/>

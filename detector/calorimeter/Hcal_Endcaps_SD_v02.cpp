@@ -59,7 +59,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   xml_dim_t   dim         = x_det.dimensions();
   string      det_name    = x_det.nameStr();
   //unused: string      det_type    = x_det.typeStr();
-  int         nTowers    = dim.numsides();
 
 
   DetElement   sdet(det_name,det_id);
@@ -166,7 +165,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       double box_half_z= dim_z/2.0; // total thickness, all the same
       
 //      double x_offset = box_half_x*16-box_half_x*towerID*2.0-box_half_x;
-      double x_offset = dim_x*(nTowers - 0.5 - towerID);
+      double x_offset = dim_x*(0.5 + towerID);
 //      double y_offset = pos_y + Hcal_lateral_plate_thickness/2.0;
       double y_offset = pos_y + Hcal_stave_gaps/2.0;
   
@@ -351,7 +350,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       // Acording to the number of staves and modules,
       // Place the same Hcal Endcap module volume into the world volume
       // with the right position and rotation.
-      for(int stave_num=1;stave_num<=4;stave_num++){
+      for(int stave_num=0;stave_num<4;stave_num++){
 	
 	double EndcapModule_pos_x = 0;
 	double EndcapModule_pos_y = 0;
@@ -360,19 +359,19 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 //	double rot_EMZ = 0;
 
 	double EndcapModule_center_pos_z = HcalEndcap_min_z + box_half_z;
-          if(stave_num==1){ 
+          if(stave_num==0){ 
             EndcapModule_pos_x = -x_offset;
+	    EndcapModule_pos_y = y_offset;
+          }
+          if(stave_num==1){ 
+            EndcapModule_pos_x = x_offset;
 	    EndcapModule_pos_y = y_offset;
           }
           if(stave_num==2){ 
             EndcapModule_pos_x = x_offset;
-	    EndcapModule_pos_y = y_offset;
-          }
-          if(stave_num==3){ 
-            EndcapModule_pos_x = x_offset;
 	    EndcapModule_pos_y = -y_offset;
           }
-          if(stave_num==4){ 
+          if(stave_num==3){ 
             EndcapModule_pos_x = -x_offset;
 	    EndcapModule_pos_y = -y_offset;
           }
@@ -400,7 +399,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  env_phv.addPhysVolID("module",module_id); // z: -/+ 0/6
 	  env_phv.addPhysVolID("system",det_id);
 
-	  DetElement sd = (module_num==0&&stave_num==1) ? stave_det : stave_det.clone(_toString(module_id,"module%d")+_toString(stave_num,"stave%d"));	  
+	  DetElement sd = (module_num==0&&stave_num==0) ? stave_det : stave_det.clone(_toString(module_id,"module%d")+_toString(stave_num,"stave%d"));	  
 	  sd.setPlacement(env_phv);	  
 
 	}

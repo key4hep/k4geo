@@ -160,7 +160,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   cout<<"  layer_thickness (from slices) = "<<layer_thickness<<endl;
   cout<<"  Hcal_radiator_thickness: "<< Hcal_radiator_thickness <<endl;
   cout<<"  Hcal_back_plate_thickness: "<< Hcal_back_plate_thickness <<endl;
-  cout<<"  Available SpaceForLayers:  "<< SpaceForLayers <<" RequestedSpace: "<<Hcal_total_dim_z<<endl;
+  cout<<"  SpaceForLayers: Available "<< SpaceForLayers <<" Requested: "<<Hcal_total_dim_z<<endl;
   cout<<"  Possible / Requested #of layers= "<< MaxNumberOfLayers << "/"<<HcalEndcapRing_nlayers<<endl;
   cout<<"  Remaning Space (free):  "<<  SpaceForLayers - MaxNumberOfLayers * layer_thickness <<endl;
   cout<<"  HcalEndcapRing_min_z:  "<< HcalEndcapRing_min_z <<endl;
@@ -273,7 +273,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  caloLayer.cellSize1 = cell_sizeY;
 
 	  // Create the slices (sublayers) within the Hcal Barrel Chamber.
-	  double slice_pos_z = layer_thickness/2.;
+	  double slice_pos_z = -layer_thickness/2.;
 	  int slice_number = 0;
 
 	  double nRadiationLengths=0.;
@@ -288,11 +288,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    string   slice_name      = layer_name + _toString(slice_number,"_slice%d");
 	    double   slice_thickness = x_slice.thickness();
 	    Material slice_material  = lcdd.material(x_slice.materialStr());
-            if(stave_id==1 && layer_id==1)
-	      cout<<"  Layer_slice:  "<<  slice_name<<" slice_thickness:  "<< slice_thickness<< endl;
 	    DetElement slice(layer_name,_toString(slice_number,"slice%d"),x_det.id());
 	    
-	    slice_pos_z -= slice_thickness/2.;
+	    slice_pos_z += slice_thickness/2.;
+            if(stave_id==0 && layer_id==1)
+              cout<<"Layer_slice: "<<slice_name<<" slice_thickness: "<<slice_thickness<<" slice_position_z: "<<slice_pos_z<<endl;
 	    
 	    // Slice volume
 	    PolyhedraRegular slicePolyhedraRegularSolid( numSide, phiStart, lpRMin, lpRMax,  slice_thickness);
@@ -349,7 +349,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	    
 	    slice.setPlacement(slice_phv);
 	    // Increment x position for next slice.
-	    slice_pos_z -= slice_thickness/2.;
+	    slice_pos_z += slice_thickness/2.;
 	    // Increment slice number.
 	    ++slice_number;             
 	  }
@@ -365,7 +365,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  string stave_name = _toString(stave_id,"stave%d");
 	  DetElement layer(module_det, l_name+stave_name, det_id);
 	  
-	  double angle_module = M_PI/2. * ( stave_id );
+	  double angle_module = M_PI/2. *  stave_id ;
 	  
 	  Position l_pos(0., 0., Zoff);
 	  RotationZ lrotz(angle_module);

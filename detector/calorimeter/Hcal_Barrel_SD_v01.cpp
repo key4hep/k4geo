@@ -78,7 +78,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   double      Hcal_radiator_thickness          = lcdd.constant<double>("HcalSD_radiator_thickness");
   double      Hcal_module_wall_thickness        = lcdd.constant<double>("HcalSD_module_wall_thickness");
-  double      Hcal_lateral_plate_thickness     = lcdd.constant<double>("HcalSD_lateral_structure_thickness");
   double      Hcal_modules_gap                 = lcdd.constant<double>("HcalSD_modules_gap"); 
   double      Hcal_layer_air_gap               = lcdd.constant<double>("HcalSD_layer_air_gap");
   double      Hcal_airgap_thickness             = lcdd.constant<double>("HcalSD_airgap_thickness");
@@ -135,12 +134,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double Hcal_total_dim_y   = Hcal_nlayers*layer_thickness ;
 
   double Hcal_normal_dim_z  = 2 * Hcal_half_length/Hcal_barrel_number_modules;
-  double Hcal_regular_chamber_dim_z = Hcal_normal_dim_z - 2.*Hcal_lateral_plate_thickness;
+  double Hcal_regular_chamber_dim_z = Hcal_normal_dim_z - 2.*Hcal_module_wall_thickness;
 // each barrel (wheel) in a "box" with wall thickness of 10mm (in z-direction)
   
 //  double Hcal_cell_dim_x            = cell_sizeX + Hcal_pad_separation;
 //  double Hcal_cell_dim_z            = cell_sizeZ + Hcal_pad_separation;
 
+  std::cout<< "Hcal_Barrel number of z-modules: "<<Hcal_barrel_number_modules<<std::endl;
   std::cout<< " ==> Hcal_cell_dim_x  (z): "<<cell_sizeX << " " << cell_sizeZ <<std::endl;
   std::cout <<"Hcal_half_length:    "<< Hcal_half_length<< " Hcal_modules_gap: "<<Hcal_modules_gap << endl;
   std::cout <<"Hcal_barrel_thickness:"<< Hcal_barrel_thickness << " Hcal_requested_thickness: "<<Hcal_total_dim_y << endl;
@@ -158,7 +158,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 
 
-  double DHZ_LP  = Hcal_lateral_plate_thickness/2.0; 
+  double DHZ_LP  = Hcal_module_wall_thickness; 
 
   PolyhedraRegular stave_shaper_LP(Hcal_inner_symmetry, 
 				   Hcal_inner_radius, Hcal_outer_radius, DHZ_LP);
@@ -199,8 +199,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double xShift = 0.;
 
   DDRec::LayeredCalorimeterData::Layer caloLayer ;
-  caloLayer.cellSize0 = cell_sizeX ;
-  caloLayer.cellSize1 = cell_sizeZ ;
+  caloLayer.cellSize0 = cell_sizeX;
+  caloLayer.cellSize1 = cell_sizeZ;
 
   //-------------------- start loop over HCAL layers ----------------------
 //  double layer_thickness =  Hcal_radiator_thickness +Hcal_chamber_thickness + 1.*Hcal_airgap_thickness;
@@ -257,10 +257,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     
       nRadiationLengths   = Hcal_radiator_thickness/(stavesMaterial.radLength());
       nInteractionLengths = Hcal_radiator_thickness/(stavesMaterial.intLength());
-  
 
       // Create the slices (sublayers) within the Hcal Barrel Chamber.
-      double slice_pos_z = -(layer_thickness/2.);
+      double slice_pos_z = layer_thickness/2.;
       int slice_number = 0;
       for(xml_coll_t k(x_layer,_U(slice)); k; ++k)  {
 	xml_comp_t x_slice = k;
@@ -272,7 +271,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 	DetElement slice(layer_name,_toString(slice_number,"slice%d"),x_det.id());
 	
-	slice_pos_z += slice_thickness/2.;
+	slice_pos_z -= slice_thickness/2.;
         nRadiationLengths   += slice_thickness/(2.*slice_material.radLength());
         nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
         thickness_sum       += slice_thickness/2;
@@ -313,7 +312,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	
 	slice.setPlacement(slice_phv);
 	// Increment x position for next slice.
-	slice_pos_z += slice_thickness/2.;
+	slice_pos_z -= slice_thickness/2.;
 	// Increment slice number.
 	++slice_number;             
       }
@@ -377,7 +376,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
        stave_id <=Hcal_inner_symmetry;
        stave_id++)
     {
-      lateral_plate_z_offset = - Hcal_lateral_plate_thickness/2.;
+      lateral_plate_z_offset = - Hcal_module_wall_thickness/2.;
 
       double phirot = stave_phi_offset;
       RotationZYX rota(0,phirot,M_PI*0.5);
@@ -399,13 +398,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  pv.addPhysVolID("stave",stave_id);
 	  pv.addPhysVolID("module",module_id);
 
-          lateral_plate_z_offset = - Hcal_half_length + Hcal_lateral_plate_thickness/2. + (module_id-1)*Hcal_normal_dim_z;
+          lateral_plate_z_offset = - Hcal_half_length + Hcal_module_wall_thickness/2. + (module_id-1)*Hcal_normal_dim_z;
              
 	  if (stave_id == 1) { //place only once for the whole lateral_plate
 	    Position xyzVec_LP(0, 0,lateral_plate_z_offset);
 	    pv = envelope.placeVolume(EnvLogHcalModuleBarrel_LP,xyzVec_LP);
 //put the barrel wall also at the other end
-            lateral_plate_z_offset = lateral_plate_z_offset + Hcal_regular_chamber_dim_z + Hcal_lateral_plate_thickness;
+            lateral_plate_z_offset = lateral_plate_z_offset + Hcal_regular_chamber_dim_z + Hcal_module_wall_thickness;
 	    Position xyzVec_LP2(0, 0,lateral_plate_z_offset);
 	    pv = envelope.placeVolume(EnvLogHcalModuleBarrel_LP,xyzVec_LP2);
 //	    lateral_plate_z_offset = - lateral_plate_z_offset;

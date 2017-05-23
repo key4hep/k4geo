@@ -17,14 +17,15 @@
     <staves  material = "Steel235"  vis="SeeThrough"/>
 
       <dimensions numsides="8"><!-- the detail dimensions list. there are 8 in this version. -->
-      <dimensions id="1"  y_offset= "543.5*mm" dim_x="375.0*mm" dim_y="1087.0*mm" dim_z="1287.0*mm"/>
-      <dimensions id="2"  y_offset= "905.5*mm" dim_x="375.0*mm" dim_y="1811.0*mm" dim_z="1287.0*mm"/>
-      <dimensions id="3"  y_offset="1086.5*mm" dim_x="375.0*mm" dim_y="2173.0*mm" dim_z="1287.0*mm"/>
+      <!-- towers: from inner  to outer edge -->  
+      <dimensions id="1"  y_offset="1630.0*mm" dim_x="375.0*mm" dim_y="2536.0*mm" dim_z="1287.0*mm"/>
+      <dimensions id="2"  y_offset="1449.0*mm" dim_x="375.0*mm" dim_y="2898.0*mm" dim_z="1287.0*mm"/>
+      <dimensions id="3"  y_offset="1449.0*mm" dim_x="375.0*mm" dim_y="2898.0*mm" dim_z="1287.0*mm"/>
       <dimensions id="4"  y_offset="1268.0*mm" dim_x="375.0*mm" dim_y="2536.0*mm" dim_z="1287.0*mm"/>
       <dimensions id="5"  y_offset="1268.0*mm" dim_x="375.0*mm" dim_y="2536.0*mm" dim_z="1287.0*mm"/>
-      <dimensions id="6"  y_offset="1449.0*mm" dim_x="375.0*mm" dim_y="2898.0*mm" dim_z="1287.0*mm"/>
-      <dimensions id="7"  y_offset="1449.0*mm" dim_x="375.0*mm" dim_y="2898.0*mm" dim_z="1287.0*mm"/>
-      <dimensions id="8"  y_offset="1630.0*mm" dim_x="375.0*mm" dim_y="2536.0*mm" dim_z="1287.0*mm"/>
+      <dimensions id="6"  y_offset="1086.5*mm" dim_x="375.0*mm" dim_y="2173.0*mm" dim_z="1287.0*mm"/>
+      <dimensions id="7"  y_offset= "905.5*mm" dim_x="375.0*mm" dim_y="1811.0*mm" dim_z="1287.0*mm"/>
+      <dimensions id="8"  y_offset= "543.5*mm" dim_x="375.0*mm" dim_y="1087.0*mm" dim_z="1287.0*mm"/>
   </dimensions>
 
       <!-- slice: from inner  to outer -->  
