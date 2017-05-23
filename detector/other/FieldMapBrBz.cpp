@@ -81,14 +81,13 @@ void FieldMapBrBz::fieldComponents(const double* pos , double* globalField) {
     phi += M_PI;
   }
 
-  if(r < rhoMin) r = rhoMin;
-  if(z < zMin  ) z = zMin;
-
   //APS: Note the mokka field map does not start at 0, so we have to assume that
   //this area is covered, or add some more parameters for the values where the
   //field is supposed to be. Now we just assume it starts at 0/0/0, outside there is no field
-  if (not ( rhoMin <= r && r <= rhoMax &&
-	    zMin   <= z && z <= zMax ) ) {
+  if(r < rhoMin) r = rhoMin;
+  if(z < zMin  ) z = zMin;
+
+  if (not (r <= rhoMax && z <= zMax ) ) {
 
     return;
   }
