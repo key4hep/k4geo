@@ -16,7 +16,7 @@
       </shape>
     </envelope>
 
-    <type_flags type=" DetType_CALORIMETER + DetType_BARREL + DetType_HADRONIC + DetType_AUXILIARY " />
+    <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_HADRONIC + DetType_AUXILIARY " />
 
     <!-- absorber material-->
     <material name="Steel235"/>     
