@@ -40,15 +40,15 @@ FieldMapBrBz::FieldMapBrBz() {
 
 
 
-int FieldMapBrBz::GetBlobalIndex(double r, double z)
+int FieldMapBrBz::getGlobalIndex(double r, double z)
 {
 
   int rBin = int((r - rhoMin)/rhoStep);
   int zBin = int((z - zMin  )/zStep);
   
   int GlobalIndex = -1;
-  if(CoorsOrder == std::string("RZ"))      GlobalIndex = rBin + zBin*nRho;
-  else if(CoorsOrder == std::string("ZR")) GlobalIndex = zBin + rBin*nZ;
+  if(CoorsOrder == 1)      GlobalIndex = rBin + zBin*nRho;  //RZ coordinates ordering
+  else if(CoorsOrder == 2) GlobalIndex = zBin + rBin*nZ;    //ZR coordinates ordering
   
   if(GlobalIndex < 0 || GlobalIndex > nRho*nZ-1) {
     std::stringstream error;
@@ -71,9 +71,8 @@ void FieldMapBrBz::fieldComponents(const double* pos , double* globalField) {
   const double posZ   = pos[2];
   const double posPhi = atan2(pos[1], pos[0]);
 
-  //Mokka defines these things as x and y and phi
-  double r = posRho;
-  double z = posZ;
+  double r   = posRho;
+  double z   = posZ;
   double phi = posPhi;
 
   //Get positive values to do less checks when comparing
@@ -111,15 +110,22 @@ void FieldMapBrBz::fieldComponents(const double* pos , double* globalField) {
   double rd = (r - r0)/(r1 - r0);
   double zd = (z - z0)/(z1 - z0);
 
-  const FieldMapBrBz::FieldValues_t& B_r0z0 = fieldMap[GetBlobalIndex(r0,z0)];
-  const FieldMapBrBz::FieldValues_t& B_r1z0 = fieldMap[GetBlobalIndex(r1,z0)];
-  const FieldMapBrBz::FieldValues_t& B_r0z1 = fieldMap[GetBlobalIndex(r0,z1)];
-  const FieldMapBrBz::FieldValues_t& B_r1z1 = fieldMap[GetBlobalIndex(r1,z1)];
+  const FieldMapBrBz::FieldValues_t& B_r0z0 = fieldMap[getGlobalIndex(r0,z0)];
+  const FieldMapBrBz::FieldValues_t& B_r1z0 = fieldMap[getGlobalIndex(r1,z0)];
+  const FieldMapBrBz::FieldValues_t& B_r0z1 = fieldMap[getGlobalIndex(r0,z1)];
+  const FieldMapBrBz::FieldValues_t& B_r1z1 = fieldMap[getGlobalIndex(r1,z1)];
 
   double field[2] = {0.0, 0.0};
 
-  field[0] = (1.0 - rd)*(1.0 - zd)*B_r0z0.Br + rd*(1.0 - zd)*B_r1z0.Br + (1.0 - rd)*zd*B_r0z1.Br + rd*zd*B_r1z1.Br;
-  field[1] = (1.0 - rd)*(1.0 - zd)*B_r0z0.Bz + rd*(1.0 - zd)*B_r1z0.Bz + (1.0 - rd)*zd*B_r0z1.Bz + rd*zd*B_r1z1.Bz;
+  field[0] = (1.0 - rd)*(1.0 - zd)*B_r0z0.Br + 
+                     rd*(1.0 - zd)*B_r1z0.Br + 
+             (1.0 - rd)*        zd*B_r0z1.Br + 
+                     rd*        zd*B_r1z1.Br;
+
+  field[1] = (1.0 - rd)*(1.0 - zd)*B_r0z0.Bz + 
+                     rd*(1.0 - zd)*B_r1z0.Bz + 
+             (1.0 - rd)*        zd*B_r0z1.Bz + 
+                     rd*        zd*B_r1z1.Bz;
 
   globalField[0] += field[0] * sin( phi ) ;
   globalField[1] += field[0] * cos( phi ) ;
@@ -236,7 +242,7 @@ void FieldMapBrBz::fillFieldMapFromTree(const std::string& filename,
 
   zStep      = -1;
   rhoStep    = -1;
-  CoorsOrder = std::string("");
+  StrCoorsOrder = std::string("");
   const int treeEntries = tree->GetEntries();
   fieldMap.reserve(treeEntries);
   for(int i=0;i<treeEntries;i++) {
@@ -253,11 +259,11 @@ void FieldMapBrBz::fillFieldMapFromTree(const std::string& filename,
 
     if(r != rhoMin && rhoStep < 0.0) {
       rhoStep     = TMath::Abs(rhoMin - r);
-      CoorsOrder += std::string("R");
+      StrCoorsOrder += std::string("R");
     }
     if(z != zMin && zStep < 0.0) {
       zStep         = TMath::Abs(zMin - z);
-      CoorsOrder += std::string("Z");
+      StrCoorsOrder += std::string("Z");
     }
 
     //fieldMap.push_back( FieldMapBrBz::FieldValues_t( double(Br)*bScale*dd4hep::tesla,
@@ -266,6 +272,9 @@ void FieldMapBrBz::fillFieldMapFromTree(const std::string& filename,
                                                      double(Bz)*bScale*BfieldUnits ) );
 
   }
+
+  if(StrCoorsOrder == std::string("RZ"))      CoorsOrder = 1;
+  else if(StrCoorsOrder == std::string("ZR")) CoorsOrder = 2;
 
   if(rhoStep < 0) {
     std::stringstream error;
@@ -359,7 +368,7 @@ static DD4hep::Geometry::Ref_t create_FieldMap_rzBrBz(DD4hep::Geometry::LCDD& ,
   std::cout << "zMax        " << std::setw(13) << ptr->zMax/dd4hep::cm << " cm"         << std::endl;
   std::cout << "zStep       " << std::setw(13) << ptr->zStep/dd4hep::cm << " cm"        << std::endl;
   std::cout << "nZ          " << std::setw(13) << ptr->nZ                               << std::endl;
-  std::cout << "CoorsOrder  " << std::setw(13) << ptr->CoorsOrder.c_str()               << std::endl;
+  std::cout << "CoorsOrder  " << std::setw(13) << ptr->StrCoorsOrder.c_str()            << std::endl;
   std::cout << "coorUnits   " << std::setw(13) << coorUnits/dd4hep::cm << " cm"         << std::endl;
   std::cout << "BfieldUnits " << std::setw(13) << BfieldUnits/dd4hep::tesla << " tesla" << std::endl;
 

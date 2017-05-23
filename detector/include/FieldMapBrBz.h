@@ -16,7 +16,8 @@ public:
       Br(_Br), Bz(_Bz) {}
   };
 
-  std::string CoorsOrder;
+  int CoorsOrder;
+  std::string StrCoorsOrder;
   int nRho, nZ;
   double rhoMin, rhoMax, rhoStep, rScale;
   double zMin,   zMax,   zStep,   zScale;
@@ -31,7 +32,7 @@ public:
   /// Fill the FieldMap from the the tree specified in the XML
   void fillFieldMapFromTree(const std::string& filename, const std::string& treename, double coorUnits, double BfieldUnits);
   /// Get global index in the Field map
-  int GetBlobalIndex(const double r, const double z);
+  int getGlobalIndex(const double r, const double z);
 };
 
 
