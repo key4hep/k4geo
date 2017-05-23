@@ -17,7 +17,12 @@ public:
   };
 
   int CoorsOrder;
-  std::string StrCoorsOrder;
+  std::string  StrCoorsOrder;
+  std::string  NtupleName;
+  std::string  rhoVar;
+  std::string  zVar;
+  std::string  BrhoVar;
+  std::string  BzVar;
   int nRho, nZ;
   double rhoMin, rhoMax, rhoStep, rScale;
   double zMin,   zMax,   zStep,   zScale;
@@ -30,7 +35,7 @@ public:
   /// Call to access the field components at a given location
   virtual void fieldComponents(const double* pos, double* field);
   /// Fill the FieldMap from the the tree specified in the XML
-  void fillFieldMapFromTree(const std::string& filename, const std::string& treename, double coorUnits, double BfieldUnits);
+  void fillFieldMapFromTree(const std::string& filename, double coorUnits, double BfieldUnits);
   /// Get global index in the Field map
   int getGlobalIndex(const double r, const double z);
 };

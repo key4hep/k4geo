@@ -18,7 +18,14 @@ public:
   };
 
   int CoorsOrder;
-  std::string StrCoorsOrder;
+  std::string  StrCoorsOrder;
+  std::string  NtupleName;
+  std::string  xVar;
+  std::string  yVar;
+  std::string  zVar;
+  std::string  BxVar;
+  std::string  ByVar;
+  std::string  BzVar;
   int nX, nY, nZ; 
   double xMin,xMax,xStep,xScale;
   double yMin,yMax,yStep,yScale;
@@ -36,7 +43,7 @@ public:
   virtual void fieldComponents(const double* pos, double* field);
   
   /// Fiell the FieldMap from the the tree specified in the XML
-  void fillFieldMapFromTree(const std::string& filename, const std::string& treename, double coorUnits, double BfieldUnits);
+  void fillFieldMapFromTree(const std::string& filename, double coorUnits, double BfieldUnits);
   
   int   getGlobalIndex(double x, double y, double z);
   

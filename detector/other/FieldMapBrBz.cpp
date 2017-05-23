@@ -144,76 +144,12 @@ void FieldMapBrBz::fieldComponents(const double* pos , double* globalField) {
 
 
 void FieldMapBrBz::fillFieldMapFromTree(const std::string& filename,
-                                        const std::string& treeString,
                                         double coorUnits, double BfieldUnits) {
 
   TFile *file = TFile::Open( filename.c_str() );
   if (not file) {
     std::stringstream error;
     error << "FieldMapBrBz[ERROR]: File not found: " << filename;
-    throw std::runtime_error( error.str() );
-  }
-
-  std::vector<std::string> strs;
-  boost::split(strs, treeString, boost::is_any_of(": "));
-  for (std::vector<std::string>::iterator it = strs.begin(); it != strs.end(); ++it) {
-    std::cout << "\"" << (*it).c_str() << "\"" << std::endl;
-  }
-
-  if( strs.size() != 5 ) {
-    std::stringstream error;
-    error << "FieldMapBrBz[ERROR]: the treeDescription " << treeString
-	  << " is not complete. For example 'fieldmap:rho:z:Brho:Bz'";
-    throw std::runtime_error( error.str() );
-  }
-
-  //Getting the tree name and branch variables names
-  std::string  NtupleName("");
-  std::string  rhoVar("");
-  std::string  zVar("");
-  std::string  BrhoVar("");
-  std::string  BzVar("");
-  for(int i=0;i<int(strs.size());i++) {
-    if(strs[i].find(std::string("Brho")) != std::string::npos) {
-      BrhoVar = strs[i];
-    }
-    else if(strs[i].find(std::string("Bz")) != std::string::npos) {
-      BzVar   = strs[i];
-    }
-    else if(strs[i].find(std::string("rho")) != std::string::npos || strs[i].find(std::string("Rho")) != std::string::npos) {
-      rhoVar  = strs[i];
-    }
-    else if(strs[i].find(std::string("z")) != std::string::npos || strs[i].find(std::string("Z")) != std::string::npos) {
-      zVar    = strs[i];
-    }
-    else {
-      NtupleName = strs[i];
-    }
-  }
-
-  if(NtupleName == std::string("")) {
-    std::stringstream error;
-    error << "FieldMapBrBz[ERROR]: ntuple name not set!";
-    throw std::runtime_error( error.str() );
-  }
-  if(rhoVar == std::string("")) {
-    std::stringstream error;
-    error << "FieldMapBrBz[ERROR]: rho variable name not set!";
-    throw std::runtime_error( error.str() );
-  }
-  if(zVar == std::string("")) {
-    std::stringstream error;
-    error << "FieldMapBrBz[ERROR]: z variable name not set!";
-    throw std::runtime_error( error.str() );
-  }
-  if(BrhoVar == std::string("")) {
-    std::stringstream error;
-    error << "FieldMapBrBz[ERROR]: Brho variable name not set!";
-    throw std::runtime_error( error.str() );
-  }
-  if(BzVar == std::string("")) {
-    std::stringstream error;
-    error << "FieldMapBrBz[ERROR]: Bz variable name not set!";
     throw std::runtime_error( error.str() );
   }
 
@@ -330,8 +266,12 @@ static DD4hep::Geometry::Ref_t create_FieldMap_rzBrBz(DD4hep::Geometry::LCDD& ,
     error << "FieldMapBrBz[ERROR]: For a FieldMap field at least the filename xml attribute MUST be set.";
     throw std::runtime_error(error.str());
   }
-  std::string filename   = xmlParameter.attr< std::string >(_Unicode(filename));
-  std::string treeString = xmlParameter.attr< std::string >(_Unicode(tree));
+  std::string  filename   = xmlParameter.attr< std::string >(_Unicode(filename));
+  std::string  NtupleName = xmlParameter.attr< std::string >(_Unicode(treeName));
+  std::string  rhoVar     = xmlParameter.attr< std::string >(_Unicode(rhoVarName));
+  std::string  zVar       = xmlParameter.attr< std::string >(_Unicode(zVarName));
+  std::string  BrhoVar    = xmlParameter.attr< std::string >(_Unicode(BrhoVarName));
+  std::string  BzVar      = xmlParameter.attr< std::string >(_Unicode(BzVarName));
 
   double rScale      = xmlParameter.attr< double >(_Unicode(rScale));
   double zScale      = xmlParameter.attr< double >(_Unicode(zScale));
@@ -349,12 +289,17 @@ static DD4hep::Geometry::Ref_t create_FieldMap_rzBrBz(DD4hep::Geometry::LCDD& ,
 
   DD4hep::Geometry::CartesianField obj;
   FieldMapBrBz* ptr = new FieldMapBrBz();
-  ptr->rScale  = rScale;
-  ptr->zScale  = zScale;
-  ptr->bScale  = bScale;
+  ptr->rScale     = rScale;
+  ptr->zScale     = zScale;
+  ptr->bScale     = bScale;
+  ptr->NtupleName = NtupleName;
+  ptr->rhoVar     = rhoVar;
+  ptr->zVar       = zVar;
+  ptr->BrhoVar    = BrhoVar;
+  ptr->BzVar      = BzVar;
 
   //Read the entries form the file in this place
-  ptr->fillFieldMapFromTree(filename, treeString, coorUnits, BfieldUnits);
+  ptr->fillFieldMapFromTree(filename, coorUnits, BfieldUnits);
 
   std::cout << "rScale      " << std::setw(13) << ptr->rScale                           << std::endl;
   std::cout << "zScale      " << std::setw(13) << ptr->zScale                           << std::endl;
