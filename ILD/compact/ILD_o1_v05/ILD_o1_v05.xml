@@ -589,8 +589,12 @@
 
   <!-- Solenoidal Field from Br(r,z) and Bz(r,z) field map -->
   <!-- <field name="DetectorMap_Solenoid" type="FieldBrBz" -->
-  <!--        filename="${lcgeo_DIR}/fieldmaps/ild_fieldMap_Solenoid3.5T_StandardYoke_10cm_v1_20170223.root" -->
-  <!--        tree="ntuple:rho_mm:z_mm:Brho:Bz" -->
+  <!--        filename    = "${lcgeo_DIR}/fieldmaps/ild_fieldMap_Solenoid3.5T_StandardYoke_10cm_v1_20170223.root" -->
+  <!--        treeName    = "ntuple" -->
+  <!--        rhoVarName  = "rho_mm" -->
+  <!--        zVarName    = "z_mm" -->
+  <!--        BrhoVarName = "Brho" -->
+  <!--        BzVarName   = "Bz" -->
   <!--        rScale      = "1.0" -->
   <!--        zScale      = "1.0" -->
   <!--        bScale      = "1.0" -->
@@ -601,8 +605,14 @@
   
   <!-- anti-DID Field from Bx(x,y,z), By(x,y,z) and Bz(x,y,z) field map -->
   <!-- <field name="DetectorMap_antiDID" type="FieldXYZ" -->
-  <!--        filename="${lcgeo_DIR}/fieldmaps/ild_fieldMap_antiDID_10cm_v1_20170223.root" -->
-  <!--        tree="ntuple:x_mm:y_mm:z_mm:Bx:By:Bz" -->
+  <!--        filename    = "${lcgeo_DIR}/fieldmaps/ild_fieldMap_antiDID_10cm_v1_20170223.root" -->
+  <!--        treeName    = "ntuple" -->
+  <!--        xVarName    = "x_mm" -->
+  <!--        yVarName    = "y_mm" -->
+  <!--        zVarName    = "z_mm" -->
+  <!--        BxVarName   = "Bx" -->
+  <!--        ByVarName   = "By" -->
+  <!--        BzVarName   = "Bz" -->
   <!--        xScale      = "1.0" -->
   <!--        yScale      = "1.0" -->
   <!--        zScale      = "1.0" -->
@@ -611,8 +621,6 @@
   <!--        BfieldUnits = "tesla" -->
   <!--        > -->
   <!-- </field> -->
-  
-  
 
  </fields> 
 </lccdd>
