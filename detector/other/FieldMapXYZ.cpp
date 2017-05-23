@@ -38,27 +38,27 @@ FieldMapXYZ::FieldMapXYZ() {
   type = DD4hep::Geometry::CartesianField::MAGNETIC;
 } //ctor
 
-int FieldMapXYZ::getGlobalIndex(double x, double y, double z)
+
+int FieldMapXYZ::getGlobalIndex(const int xBin, const int yBin, const int zBin)
 {
 
-  int xBin = int((x - xMin)/xStep);
-  int yBin = int((y - yMin)/yStep);
-  int zBin = int((z - zMin)/zStep);
-  
-  int GlobalIndex = -1;
-  if(CoorsOrder == 1)       GlobalIndex = xBin + yBin*(nX) + zBin*(nX*nY); //XYZ coordinates ordering
-  else if(CoorsOrder == 2)  GlobalIndex = xBin + zBin*(nX) + yBin*(nX*nZ); //XZY coordinates ordering
-  else if(CoorsOrder == 3)  GlobalIndex = yBin + xBin*(nY) + zBin*(nY*nX); //YXZ coordinates ordering
-  else if(CoorsOrder == 4)  GlobalIndex = yBin + zBin*(nY) + xBin*(nY*nZ); //YZX coordinates ordering
-  else if(CoorsOrder == 5)  GlobalIndex = zBin + xBin*(nZ) + yBin*(nZ*nX); //ZXY coordinates ordering
-  else if(CoorsOrder == 6)  GlobalIndex = zBin + yBin*(nZ) + xBin*(nZ*nY); //ZYX coordinates ordering
-  
-  if(GlobalIndex < 0 || GlobalIndex > nX*nY*nZ-1) {
-    std::stringstream error;
-    error << "FieldMapXYZ[ERROR]: GlobalIndex = " << GlobalIndex << " is out of range (0," << nX*nY*nZ << ")";
-    throw std::runtime_error( error.str() );
-  }
+  //Global index in fieldmap array from x, y and z axes indexes
 
+  int MyxBin = xBin;
+  int MyyBin = yBin;
+  int MyzBin = zBin;
+  if(xOrdering == -1) MyxBin = nX - MyxBin - 1; // recalculate x-axis index in case of high-to-low ordering
+  if(yOrdering == -1) MyyBin = nY - MyyBin - 1; // recalculete y-axis index in case of high-to-low ordering
+  if(zOrdering == -1) MyzBin = nZ - MyzBin - 1; // recalculate z-axis index in case of high-to-low ordering
+
+  int GlobalIndex = -1;
+  if(CoorsOrder == 1)       GlobalIndex = MyxBin + MyyBin*(nX) + MyzBin*(nX*nY); //XYZ coordinates ordering
+  else if(CoorsOrder == 2)  GlobalIndex = MyxBin + MyzBin*(nX) + MyyBin*(nX*nZ); //XZY coordinates ordering
+  else if(CoorsOrder == 3)  GlobalIndex = MyyBin + MyxBin*(nY) + MyzBin*(nY*nX); //YXZ coordinates ordering
+  else if(CoorsOrder == 4)  GlobalIndex = MyyBin + MyzBin*(nY) + MyxBin*(nY*nZ); //YZX coordinates ordering
+  else if(CoorsOrder == 5)  GlobalIndex = MyzBin + MyxBin*(nZ) + MyyBin*(nZ*nX); //ZXY coordinates ordering
+  else if(CoorsOrder == 6)  GlobalIndex = MyzBin + MyyBin*(nZ) + MyxBin*(nZ*nY); //ZYX coordinates ordering
+  
   return  GlobalIndex;
 
 }
@@ -74,9 +74,7 @@ void FieldMapXYZ::fieldComponents(const double* pos , double* globalField) {
   const double y = pos[1];
   const double z = pos[2];
 
-  //APS: Note the mokka field map does not start at 0, so we have to assume that
-  //this area is covered, or add some more parameters for the values where the
-  //field is supposed to be. Now we just assume it starts at 0/0/0, outside there is no field
+  //Do nothing if rho and z point are outside fieldmap limits
   if (not ( x >= xMin && x <= xMax &&
             y >= yMin && y <= yMax &&
             z >= zMin && z <= zMax )
@@ -84,38 +82,56 @@ void FieldMapXYZ::fieldComponents(const double* pos , double* globalField) {
     return;
   }
 
+  //Calculate the bins on the x, y and z axis containing the (x,y,z) point
   int xBin,yBin,zBin;
   double x0,y0,z0;
-  double x1,y1,z1;
 
   xBin = int((x - xMin)/xStep);
   yBin = int((y - yMin)/yStep);
   zBin = int((z - zMin)/zStep);
-
   x0   = xMin + xBin*xStep;
   y0   = yMin + yBin*yStep;
   z0   = zMin + zBin*zStep;
 
-  if(x0 >= x) x0 -= xStep;
-  x1 = x0 + xStep;
-  if(y0 >= y) y0 -= yStep;
-  y1 = y0 + yStep;
-  if(z0 >= z) z0 -= zStep;
-  z1 = z0 + zStep;
+  if(x0 > x) {
+    x0   -= xStep;
+    xBin -= 1;
+  }
+  if(y0 > y) {
+    y0   -= yStep;
+    yBin -= 1;
+  }
+  if(z0 > z) {
+    z0   -= zStep;
+    zBin -= 1;
+  }
 
-  double xd = (x - x0)/(x1 - x0);
-  double yd = (y - y0)/(y1 - y0);
-  double zd = (z - z0)/(z1 - z0);
+  //Get normalized coordinate of (x,y,z) point in bin
+  double xd = (x - x0)/xStep;
+  double yd = (y - y0)/yStep;
+  double zd = (z - z0)/zStep;
 
-  const FieldMapXYZ::FieldValues_t& B_x0y0z0 = fieldMap[getGlobalIndex(x0,y0,z0)];
-  const FieldMapXYZ::FieldValues_t& B_x1y0z0 = fieldMap[getGlobalIndex(x1,y0,z0)];
-  const FieldMapXYZ::FieldValues_t& B_x0y0z1 = fieldMap[getGlobalIndex(x0,y0,z1)];
-  const FieldMapXYZ::FieldValues_t& B_x1y0z1 = fieldMap[getGlobalIndex(x1,y0,z1)];
-  const FieldMapXYZ::FieldValues_t& B_x0y1z0 = fieldMap[getGlobalIndex(x0,y1,z0)];
-  const FieldMapXYZ::FieldValues_t& B_x1y1z0 = fieldMap[getGlobalIndex(x1,y1,z0)];
-  const FieldMapXYZ::FieldValues_t& B_x0y1z1 = fieldMap[getGlobalIndex(x0,y1,z1)];
-  const FieldMapXYZ::FieldValues_t& B_x1y1z1 = fieldMap[getGlobalIndex(x1,y1,z1)];
+  //Get the field values at the eight corners of bin containing the (x,y,z) point
+  int xBin0 = xBin;
+  int xBin1 = xBin+1;
+  int yBin0 = yBin;
+  int yBin1 = yBin+1;
+  int zBin0 = zBin;
+  int zBin1 = zBin+1;
+  //Protection in case the sampled coordinate is exactly at maximum value of fieldmap
+  if(xBin1 > nX-1) xBin1 = nX-1;
+  if(yBin1 > nY-1) yBin1 = nY-1;
+  if(zBin1 > nZ-1) zBin1 = nZ-1;
+  const FieldMapXYZ::FieldValues_t& B_x0y0z0 = fieldMap[getGlobalIndex(xBin0,yBin0,zBin0)];
+  const FieldMapXYZ::FieldValues_t& B_x1y0z0 = fieldMap[getGlobalIndex(xBin1,yBin0,zBin0)];
+  const FieldMapXYZ::FieldValues_t& B_x0y0z1 = fieldMap[getGlobalIndex(xBin0,yBin0,zBin1)];
+  const FieldMapXYZ::FieldValues_t& B_x1y0z1 = fieldMap[getGlobalIndex(xBin1,yBin0,zBin1)];
+  const FieldMapXYZ::FieldValues_t& B_x0y1z0 = fieldMap[getGlobalIndex(xBin0,yBin1,zBin0)];
+  const FieldMapXYZ::FieldValues_t& B_x1y1z0 = fieldMap[getGlobalIndex(xBin1,yBin1,zBin0)];
+  const FieldMapXYZ::FieldValues_t& B_x0y1z1 = fieldMap[getGlobalIndex(xBin0,yBin1,zBin1)];
+  const FieldMapXYZ::FieldValues_t& B_x1y1z1 = fieldMap[getGlobalIndex(xBin1,yBin1,zBin1)];
 
+  //field at (x,y,z) point is linear interpolation of fielmap values at bin corners
   double B_00,B_01,B_10,B_11,B_0,B_1,B;
 
   //X-component
@@ -199,6 +215,7 @@ void FieldMapXYZ::fillFieldMapFromTree(const std::string& filename,
     throw std::runtime_error( error.str() );
   }
 
+  //Set branch adresses
   float x, y, z, Bx, By, Bz;
   checkBranch( tree->SetBranchAddress(xVar.c_str(), &x) );
   checkBranch( tree->SetBranchAddress(yVar.c_str(), &y) );
@@ -207,9 +224,15 @@ void FieldMapXYZ::fillFieldMapFromTree(const std::string& filename,
   checkBranch( tree->SetBranchAddress(ByVar.c_str(), &By) );
   checkBranch( tree->SetBranchAddress(BzVar.c_str(), &Bz) );
 
+  //Loop over the tree entries. In this loop get,
+  // - min, max and step-size values of fieldmap coordinates
+  // - coordinates ordering
   xStep      = -1;
   yStep      = -1;
   zStep      = -1;
+  xOrdering  =  1;
+  yOrdering  =  1;
+  zOrdering  =  1;
   StrCoorsOrder = std::string("");
   const int treeEntries = tree->GetEntries();
   fieldMap.reserve(treeEntries);
@@ -240,9 +263,6 @@ void FieldMapXYZ::fillFieldMapFromTree(const std::string& filename,
       StrCoorsOrder += std::string("Z");
     }
 
-    //fieldMap.push_back( FieldMapXYZ::FieldValues_t(double(Bx)*bScale*dd4hep::tesla,
-    //                                               double(By)*bScale*dd4hep::tesla,
-	//					   double(Bz)*bScale*dd4hep::tesla ) );
     fieldMap.push_back( FieldMapXYZ::FieldValues_t(double(Bx)*bScale*BfieldUnits,
                                                    double(By)*bScale*BfieldUnits,
                                                    double(Bz)*bScale*BfieldUnits ) );
@@ -260,32 +280,39 @@ void FieldMapXYZ::fillFieldMapFromTree(const std::string& filename,
     error << "FieldMapXYZ[ERROR]: All x coordinates in n-tuple have the same value!!!";
     throw std::runtime_error( error.str() );
   }
-  if(xMax <= xMin) {
-    std::stringstream error;
-    error << "FieldMapXYZ[ERROR]: x coordinates in n-tuple are not ordered from lowest to highest!!!";
-    throw std::runtime_error( error.str() );
+  if(xMax < xMin) {
+    //x variable is scanned from high-to-low
+    xOrdering = -1;
+    double aux = xMin;
+    xMin = xMax;
+    xMax = aux;
   }
   if(yStep < 0) {
     std::stringstream error;
     error << "FieldMapXYZ[ERROR]: All y coordinates in n-tuple have the same value!!!";
     throw std::runtime_error( error.str() );
   }
-  if(yMax <= yMin) {
-    std::stringstream error;
-    error << "FieldMapXYZ[ERROR]: y coordinates in n-tuple are not ordered from lowest to highest!!!";
-    throw std::runtime_error( error.str() );
+  if(yMax < yMin) {
+    //y variable is scanned from high-to-low
+    yOrdering = -1;
+    double aux = yMin;
+    yMin = yMax;
+    yMax = aux;
   }
   if(zStep < 0) {
     std::stringstream error;
     error << "FieldMapBrBz[ERROR]: All z coordinates in n-tuple have the same value!!!";
     throw std::runtime_error( error.str() );
   }
-  if(zMax <= zMin) {
-    std::stringstream error;
-    error << "FieldMapBrBz[ERROR]: z coordinates in n-tuple are not ordered from lowest to highest!!!";
-    throw std::runtime_error( error.str() );
+  if(zMax < zMin) {
+    //z variable is scanned from high-to-low
+    zOrdering = -1;
+    double aux = zMin;
+    zMin = zMax;
+    zMax = aux;
   }
 
+  //Calculate number of bins in fieldmap
   nX = int((xMax - xMin)/xStep) + 1;
   nY = int((yMax - yMin)/yStep) + 1;
   nZ = int((zMax - zMin)/zStep) + 1;
@@ -299,6 +326,7 @@ void FieldMapXYZ::fillFieldMapFromTree(const std::string& filename,
     throw std::runtime_error( error.str() );
   }
 
+  //Set coordinates parameters units
   xMin  *= coorUnits;
   xMax  *= coorUnits;
   xStep *= coorUnits;
@@ -324,6 +352,7 @@ static DD4hep::Geometry::Ref_t create_FieldMap_XYZ(DD4hep::Geometry::LCDD& ,
     error << "FieldMapXYZ[ERROR]: For a FieldMap field at least the filename xml attribute MUST be set.";
     throw std::runtime_error(error.str());
   }
+
   std::string  filename   = xmlParameter.attr< std::string >(_Unicode(filename));
   std::string  NtupleName = xmlParameter.attr< std::string >(_Unicode(treeName));
   std::string  xVar       = xmlParameter.attr< std::string >(_Unicode(xVarName));
@@ -341,18 +370,6 @@ static DD4hep::Geometry::Ref_t create_FieldMap_XYZ(DD4hep::Geometry::LCDD& ,
   double coorUnits   = xmlParameter.attr< double >(_Unicode(coorUnits));
   double BfieldUnits = xmlParameter.attr< double >(_Unicode(BfieldUnits));
 
-  //double xMin   = xmlParameter.attr< double >(_Unicode(xMin));
-  //double xMax   = xmlParameter.attr< double >(_Unicode(xMax));
-  //double xStep  = xmlParameter.attr< double >(_Unicode(xStep));
-
-  //double yMin   = xmlParameter.attr< double >(_Unicode(yMin));
-  //double yMax   = xmlParameter.attr< double >(_Unicode(yMax));
-  //double yStep  = xmlParameter.attr< double >(_Unicode(yStep));
-
-  //double zMin   = xmlParameter.attr< double >(_Unicode(zMin));
-  //double zMax   = xmlParameter.attr< double >(_Unicode(zMax));
-  //double zStep  = xmlParameter.attr< double >(_Unicode(zStep));
- 
   DD4hep::Geometry::CartesianField obj;
   FieldMapXYZ* ptr = new FieldMapXYZ();
   ptr->xScale     = xScale;
@@ -370,6 +387,13 @@ static DD4hep::Geometry::Ref_t create_FieldMap_XYZ(DD4hep::Geometry::LCDD& ,
   //Read the entries form the file in this place
   ptr->fillFieldMapFromTree(filename,coorUnits,BfieldUnits);
 
+  std::string StrXOrdering("low-to-high");
+  std::string StrYOrdering("low-to-high");
+  std::string StrZOrdering("low-to-high");
+  if(ptr->xOrdering == -1) StrYOrdering   = "high-to-low";
+  if(ptr->yOrdering == -1) StrYOrdering   = "high-to-low";
+  if(ptr->zOrdering == -1) StrZOrdering   = "high-to-low";
+
   std::cout << "xScale      " << std::setw(13) << ptr->xScale                           << std::endl;
   std::cout << "zScale      " << std::setw(13) << ptr->zScale                           << std::endl;
   std::cout << "zScale      " << std::setw(13) << ptr->zScale                           << std::endl;
@@ -378,14 +402,17 @@ static DD4hep::Geometry::Ref_t create_FieldMap_XYZ(DD4hep::Geometry::LCDD& ,
   std::cout << "xMax        " << std::setw(13) << ptr->xMax/dd4hep::cm << " cm"         << std::endl;
   std::cout << "xStep       " << std::setw(13) << ptr->xStep/dd4hep::cm << " cm"        << std::endl;
   std::cout << "nX          " << std::setw(13) << ptr->nX                               << std::endl;
+  std::cout << "xOrdering   " << std::setw(13) << StrXOrdering.c_str()                  << std::endl;
   std::cout << "yMin        " << std::setw(13) << ptr->yMin/dd4hep::cm << " cm"         << std::endl;
   std::cout << "yMax        " << std::setw(13) << ptr->yMax/dd4hep::cm << " cm"         << std::endl;
   std::cout << "yStep       " << std::setw(13) << ptr->yStep/dd4hep::cm << " cm"        << std::endl;
   std::cout << "nY          " << std::setw(13) << ptr->nY                               << std::endl;
+  std::cout << "yOrdering   " << std::setw(13) << StrYOrdering.c_str()                  << std::endl;
   std::cout << "zMin        " << std::setw(13) << ptr->zMin/dd4hep::cm << " cm"         << std::endl;
   std::cout << "zMax        " << std::setw(13) << ptr->zMax/dd4hep::cm << " cm"         << std::endl;
   std::cout << "zStep       " << std::setw(13) << ptr->zStep/dd4hep::cm << " cm"        << std::endl;
   std::cout << "nZ          " << std::setw(13) << ptr->nZ                               << std::endl;
+  std::cout << "zOrdering   " << std::setw(13) << StrZOrdering.c_str()                  << std::endl;
   std::cout << "CoorsOrder  " << std::setw(13) << ptr->StrCoorsOrder.c_str()            << std::endl;
   std::cout << "coorUnits   " << std::setw(13) << coorUnits/dd4hep::cm << " cm"         << std::endl;
   std::cout << "BfieldUnits " << std::setw(13) << BfieldUnits/dd4hep::tesla << " tesla" << std::endl;

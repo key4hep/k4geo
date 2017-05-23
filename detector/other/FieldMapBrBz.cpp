@@ -39,23 +39,20 @@ FieldMapBrBz::FieldMapBrBz() {
 } //ctor
 
 
-
-int FieldMapBrBz::getGlobalIndex(double r, double z)
+int FieldMapBrBz::getGlobalIndex(const int rBin, const int zBin)
 {
 
-  int rBin = int((r - rhoMin)/rhoStep);
-  int zBin = int((z - zMin  )/zStep);
-  
-  int GlobalIndex = -1;
-  if(CoorsOrder == 1)      GlobalIndex = rBin + zBin*nRho;  //RZ coordinates ordering
-  else if(CoorsOrder == 2) GlobalIndex = zBin + rBin*nZ;    //ZR coordinates ordering
-  
-  if(GlobalIndex < 0 || GlobalIndex > nRho*nZ-1) {
-    std::stringstream error;
-    error << "FieldMapBrBz[ERROR]: GlobalIndex = " << GlobalIndex << " is out of range (0," << nRho*nZ << ")";
-    throw std::runtime_error( error.str() );
-  }
+  //Global index in fieldmap array from rho and z axes indexes
 
+  int MyrBin = rBin;
+  int MyzBin = zBin;
+  if(rhoOrdering == -1) MyrBin = nRho - MyrBin - 1; // recalculate rho-axis index in case of high-to-low ordering
+  if(zOrdering   == -1) MyzBin = nZ   - MyzBin - 1; // recalculate z-axis   index in case of high-to-low ordering
+
+  int GlobalIndex = -1;
+  if(CoorsOrder == 1)       GlobalIndex = MyrBin + MyzBin*nRho;  //RZ coordinates ordering
+  else if(CoorsOrder == 2)  GlobalIndex = MyzBin + MyrBin*nZ;    //ZR coordinates ordering
+  
   return  GlobalIndex;
 
 }
@@ -71,6 +68,7 @@ void FieldMapBrBz::fieldComponents(const double* pos , double* globalField) {
   const double posZ   = pos[2];
   const double posPhi = atan2(pos[1], pos[0]);
 
+  //Get the rho, z and phi coordinates of the 3D point
   double r   = posRho;
   double z   = posZ;
   double phi = posPhi;
@@ -87,44 +85,56 @@ void FieldMapBrBz::fieldComponents(const double* pos , double* globalField) {
   if(r < rhoMin) r = rhoMin;
   if(z < zMin  ) z = zMin;
 
-  if (not (r <= rhoMax && z <= zMax ) ) {
+  //Do nothing if rho and z point are outside fieldmap limits
+  if (not (r <= rhoMax && z <= zMax ) ) return;
 
-    return;
-  }
-
+  //Calculate the bins on the rho and z axis containing the (r,z) point
   int rBin,zBin;
   double r0,z0;
-  double r1,z1;
 
   rBin = int((r - rhoMin)/rhoStep);
   zBin = int((z - zMin)/zStep);
   r0   = rhoMin + rBin*rhoStep;
   z0   = zMin   + zBin*zStep;
 
-  if(r0 > r) r0 -= rhoStep;
-  r1 = r0 + rhoStep;
-  if(z0 > z) z0 -= zStep;
-  z1 = z0 + zStep;
+  if(r0 > r) {
+    r0   -= rhoStep;
+    rBin -= 1;
+  }
+  if(z0 > z) {
+    z0   -= zStep;
+    zBin -= 1;
+  }
 
-  double rd = (r - r0)/(r1 - r0);
-  double zd = (z - z0)/(z1 - z0);
+  //Get normalized coordinate of (r,z) point in bin
+  double rd = (r - r0)/rhoStep;
+  double zd = (z - z0)/zStep;
 
-  const FieldMapBrBz::FieldValues_t& B_r0z0 = fieldMap[getGlobalIndex(r0,z0)];
-  const FieldMapBrBz::FieldValues_t& B_r1z0 = fieldMap[getGlobalIndex(r1,z0)];
-  const FieldMapBrBz::FieldValues_t& B_r0z1 = fieldMap[getGlobalIndex(r0,z1)];
-  const FieldMapBrBz::FieldValues_t& B_r1z1 = fieldMap[getGlobalIndex(r1,z1)];
+  //Get the field values at the four corners of bin containing the (r,z) point
+  int rBin0 = rBin;
+  int rBin1 = rBin+1;
+  int zBin0 = zBin;
+  int zBin1 = zBin+1;
+  //Protection in case the sampled coordinate is exactly at maximum value of fieldma
+  if(rBin1 > nRho-1) rBin1 = rBin0;
+  if(zBin1 > nZ  -1) zBin1 = zBin0;
+  const FieldMapBrBz::FieldValues_t& B_r0z0 = fieldMap[getGlobalIndex(rBin0,zBin0)];
+  const FieldMapBrBz::FieldValues_t& B_r1z0 = fieldMap[getGlobalIndex(rBin1,zBin0)];
+  const FieldMapBrBz::FieldValues_t& B_r0z1 = fieldMap[getGlobalIndex(rBin0,zBin1)];
+  const FieldMapBrBz::FieldValues_t& B_r1z1 = fieldMap[getGlobalIndex(rBin1,zBin1)];
 
+  //field at (r,z) point is linear interpolation of fielmap values at bin corners
   double field[2] = {0.0, 0.0};
 
-  field[0] = (1.0 - rd)*(1.0 - zd)*B_r0z0.Br + 
-                     rd*(1.0 - zd)*B_r1z0.Br + 
-             (1.0 - rd)*        zd*B_r0z1.Br + 
-                     rd*        zd*B_r1z1.Br;
+  field[0] = (1.0 - rd) * (1.0 - zd) * B_r0z0.Br + 
+                    rd  * (1.0 - zd) * B_r1z0.Br + 
+             (1.0 - rd) *        zd  * B_r0z1.Br + 
+                    rd  *        zd  * B_r1z1.Br;
 
-  field[1] = (1.0 - rd)*(1.0 - zd)*B_r0z0.Bz + 
-                     rd*(1.0 - zd)*B_r1z0.Bz + 
-             (1.0 - rd)*        zd*B_r0z1.Bz + 
-                     rd*        zd*B_r1z1.Bz;
+  field[1] = (1.0 - rd) * (1.0 - zd) * B_r0z0.Bz + 
+                    rd  * (1.0 - zd) * B_r1z0.Bz + 
+             (1.0 - rd) *        zd  * B_r0z1.Bz + 
+                    rd  *        zd  * B_r1z1.Bz;
 
   globalField[0] += field[0] * sin( phi ) ;
   globalField[1] += field[0] * cos( phi ) ;
@@ -169,14 +179,20 @@ void FieldMapBrBz::fillFieldMapFromTree(const std::string& filename,
     throw std::runtime_error( error.str() );
   }
 
+  //Set branch adresses
   float r, z, Br, Bz;
   checkBranch( tree->SetBranchAddress(rhoVar.c_str(),  &r) );
   checkBranch( tree->SetBranchAddress(zVar.c_str(),    &z) );
   checkBranch( tree->SetBranchAddress(BrhoVar.c_str(), &Br));
   checkBranch( tree->SetBranchAddress(BzVar.c_str(),   &Bz));
 
-  zStep      = -1;
-  rhoStep    = -1;
+  //Loop over the tree entries. In this loop get,
+  // - min, max and step-size values of fieldmap coordinates
+  // - coordinates ordering
+  zStep       = -1;
+  rhoStep     = -1;
+  rhoOrdering =  1;
+  zOrdering   =  1;
   StrCoorsOrder = std::string("");
   const int treeEntries = tree->GetEntries();
   fieldMap.reserve(treeEntries);
@@ -201,11 +217,8 @@ void FieldMapBrBz::fillFieldMapFromTree(const std::string& filename,
       StrCoorsOrder += std::string("Z");
     }
 
-    //fieldMap.push_back( FieldMapBrBz::FieldValues_t( double(Br)*bScale*dd4hep::tesla,
-	//					     double(Bz)*bScale*dd4hep::tesla ) );
     fieldMap.push_back( FieldMapBrBz::FieldValues_t( double(Br)*bScale*BfieldUnits,
                                                      double(Bz)*bScale*BfieldUnits ) );
-
   }
 
   if(StrCoorsOrder == std::string("RZ"))      CoorsOrder = 1;
@@ -216,22 +229,27 @@ void FieldMapBrBz::fillFieldMapFromTree(const std::string& filename,
     error << "FieldMapBrBz[ERROR]: All rho coordinates in n-tuple have the same value!!!";
     throw std::runtime_error( error.str() );
   }
-  if(rhoMax <= rhoMin) {
-    std::stringstream error;
-    error << "FieldMapBrBz[ERROR]: rho coordinates in n-tuple are not ordered from lowest to highest!!!";
-    throw std::runtime_error( error.str() );
+  if(rhoMax < rhoMin) {
+    //rho variable is scanned from high-to-low
+    rhoOrdering = -1;
+    double aux = rhoMax;
+    rhoMax = rhoMin;
+    rhoMin = aux;
   }
   if(zStep < 0) { 
     std::stringstream error;
     error << "FieldMapBrBz[ERROR]: All z coordinates in n-tuple have the same value!!!";
     throw std::runtime_error( error.str() );
   }
-  if(zMax <= zMin) {
-    std::stringstream error;
-    error << "FieldMapBrBz[ERROR]: z coordinates in n-tuple are not ordered from lowest to highest!!!";
-    throw std::runtime_error( error.str() );
+  if(zMax < zMin) {
+    //z variable is scanned from high-to-low
+    zOrdering = -1;
+    double aux = zMax;
+    zMax = zMin;
+    zMin = aux;
   }
 
+  //Calculate number of bins in fieldmap
   nRho = int((rhoMax - rhoMin)/rhoStep) + 1;
   nZ   = int((zMax   - zMin  )/zStep)   + 1;
 
@@ -244,6 +262,7 @@ void FieldMapBrBz::fillFieldMapFromTree(const std::string& filename,
     throw std::runtime_error( error.str() );
   }
 
+  //Set coordinates parameters units
   rhoMin  *= coorUnits;
   rhoMax  *= coorUnits;
   rhoStep *= coorUnits;
@@ -266,6 +285,7 @@ static DD4hep::Geometry::Ref_t create_FieldMap_rzBrBz(DD4hep::Geometry::LCDD& ,
     error << "FieldMapBrBz[ERROR]: For a FieldMap field at least the filename xml attribute MUST be set.";
     throw std::runtime_error(error.str());
   }
+
   std::string  filename   = xmlParameter.attr< std::string >(_Unicode(filename));
   std::string  NtupleName = xmlParameter.attr< std::string >(_Unicode(treeName));
   std::string  rhoVar     = xmlParameter.attr< std::string >(_Unicode(rhoVarName));
@@ -279,13 +299,6 @@ static DD4hep::Geometry::Ref_t create_FieldMap_rzBrBz(DD4hep::Geometry::LCDD& ,
 
   double coorUnits   = xmlParameter.attr< double >(_Unicode(coorUnits));
   double BfieldUnits = xmlParameter.attr< double >(_Unicode(BfieldUnits));
-
-  //double rhoMin = xmlParameter.attr< double >(_Unicode(rhoMin));
-  //double rhoMax = xmlParameter.attr< double >(_Unicode(rhoMax));
-  //double nRho   = xmlParameter.attr< int >   (_Unicode(nRho));
-  //double zMin   = xmlParameter.attr< double >(_Unicode(zMin));
-  //double zMax   = xmlParameter.attr< double >(_Unicode(zMax));
-  //double nZ     = xmlParameter.attr< int >   (_Unicode(nZ));
 
   DD4hep::Geometry::CartesianField obj;
   FieldMapBrBz* ptr = new FieldMapBrBz();
@@ -301,6 +314,11 @@ static DD4hep::Geometry::Ref_t create_FieldMap_rzBrBz(DD4hep::Geometry::LCDD& ,
   //Read the entries form the file in this place
   ptr->fillFieldMapFromTree(filename, coorUnits, BfieldUnits);
 
+  std::string StrRhoOrdering("low-to-high");
+  std::string StrZOrdering("low-to-high");
+  if(ptr->rhoOrdering == -1) StrRhoOrdering = "high-to-low";
+  if(ptr->zOrdering   == -1) StrZOrdering   = "high-to-low";
+
   std::cout << "rScale      " << std::setw(13) << ptr->rScale                           << std::endl;
   std::cout << "zScale      " << std::setw(13) << ptr->zScale                           << std::endl;
   std::cout << "bScale      " << std::setw(13) << ptr->bScale                           << std::endl;
@@ -308,10 +326,12 @@ static DD4hep::Geometry::Ref_t create_FieldMap_rzBrBz(DD4hep::Geometry::LCDD& ,
   std::cout << "rhoMax      " << std::setw(13) << ptr->rhoMax/dd4hep::cm << " cm"       << std::endl;
   std::cout << "rhoStep     " << std::setw(13) << ptr->rhoStep/dd4hep::cm << " cm"      << std::endl;
   std::cout << "nRho        " << std::setw(13) << ptr->nRho                             << std::endl;
+  std::cout << "rhoOrdering " << std::setw(13) << StrRhoOrdering.c_str()                << std::endl;
   std::cout << "zMin        " << std::setw(13) << ptr->zMin/dd4hep::cm << " cm"         << std::endl;
   std::cout << "zMax        " << std::setw(13) << ptr->zMax/dd4hep::cm << " cm"         << std::endl;
   std::cout << "zStep       " << std::setw(13) << ptr->zStep/dd4hep::cm << " cm"        << std::endl;
   std::cout << "nZ          " << std::setw(13) << ptr->nZ                               << std::endl;
+  std::cout << "zOrdering   " << std::setw(13) << StrZOrdering.c_str()                  << std::endl;
   std::cout << "CoorsOrder  " << std::setw(13) << ptr->StrCoorsOrder.c_str()            << std::endl;
   std::cout << "coorUnits   " << std::setw(13) << coorUnits/dd4hep::cm << " cm"         << std::endl;
   std::cout << "BfieldUnits " << std::setw(13) << BfieldUnits/dd4hep::tesla << " tesla" << std::endl;
