@@ -171,7 +171,6 @@ void FieldMapXYZ::fieldComponents(const double* pos , double* globalField) {
 }
 
 void FieldMapXYZ::fillFieldMapFromTree(const std::string& filename,
-                                       const std::string& treeString,
                                        double coorUnits, double BfieldUnits) {
 
 
@@ -179,87 +178,6 @@ void FieldMapXYZ::fillFieldMapFromTree(const std::string& filename,
   if (not file) {
     std::stringstream error;
     error << "FieldMapXYZ[ERROR]: File not found: " << filename;
-    throw std::runtime_error( error.str() );
-  }
-
-  std::vector<std::string> strs;
-  boost::split(strs, treeString, boost::is_any_of(": "));
-  for (std::vector<std::string>::iterator it = strs.begin(); it != strs.end(); ++it) {
-    std::cout << "\"" << (*it).c_str() << "\"" << std::endl;
-  }
-
-  if( strs.size() != 7 ) {
-    std::stringstream error;
-    error << "FieldMap[ERROR]: the treeDescription " << treeString
-	  << " is not complete. For example 'ntuple:x:y:z:Bx:By:Bz'";
-    throw std::runtime_error( error.str() );
-  }
-
-  //Getting the tree name and branch variables names
-  std::string  NtupleName("");
-  std::string  xVar("");
-  std::string  yVar("");
-  std::string  zVar("");
-  std::string  BxVar("");
-  std::string  ByVar("");
-  std::string  BzVar("");
-  for(int i=0;i<int(strs.size());i++) {
-    if(strs[i].find(std::string("Bx")) != std::string::npos) {
-      BxVar = strs[i];
-    }
-    else if(strs[i].find(std::string("By")) != std::string::npos) {
-      ByVar = strs[i];
-    }
-    else if(strs[i].find(std::string("Bz")) != std::string::npos) {
-      BzVar = strs[i];
-    }
-    else if(strs[i].find(std::string("x")) != std::string::npos || strs[i].find(std::string("X")) != std::string::npos) {
-      xVar = strs[i];
-    }
-    else if(strs[i].find(std::string("y")) != std::string::npos || strs[i].find(std::string("Y")) != std::string::npos) {
-      yVar = strs[i];
-    }
-    else if(strs[i].find(std::string("z")) != std::string::npos || strs[i].find(std::string("Z")) != std::string::npos) {
-      zVar = strs[i];
-    }
-    else {
-      NtupleName = strs[i];
-    }
-  }
-
-  if(NtupleName == std::string("")) {
-    std::stringstream error;
-    error << "FieldMapXYZ[ERROR]: ntuple name not set!";
-    throw std::runtime_error( error.str() );
-  }
-  if(xVar == std::string("")) {
-    std::stringstream error;
-    error << "FieldMapXYZ[ERROR]: x variable name not set!";
-    throw std::runtime_error( error.str() );
-  }
-  if(yVar == std::string("")) {
-    std::stringstream error;
-    error << "FieldMapXYZ[ERROR]: y variable name not set!";
-    throw std::runtime_error( error.str() );
-  }
-  if(zVar == std::string("")) {
-    std::stringstream error;
-    error << "FieldMapXYZ[ERROR]: z variable name not set!";
-    throw std::runtime_error( error.str() );
-  }
-  if(BxVar == std::string("")) {
-    std::stringstream error;
-    error << "FieldMapXYZ[ERROR]: Bx variable name not set!";
-    throw std::runtime_error( error.str() );
-  }
-  if(ByVar == std::string("")) {
-    std::stringstream error;
-    error << "FieldMapXYZ[ERROR]: By variable name not set!";
-    throw std::runtime_error( error.str() );
-  }
-  if(BzVar == std::string("")) {
-    std::stringstream error;
-    error << "FieldMapXYZ[ERROR]: Bz variable name not set!";
     throw std::runtime_error( error.str() );
   }
 
@@ -406,8 +324,14 @@ static DD4hep::Geometry::Ref_t create_FieldMap_XYZ(DD4hep::Geometry::LCDD& ,
     error << "FieldMapXYZ[ERROR]: For a FieldMap field at least the filename xml attribute MUST be set.";
     throw std::runtime_error(error.str());
   }
-  std::string filename   = xmlParameter.attr< std::string >(_Unicode(filename));
-  std::string treeString = xmlParameter.attr< std::string >(_Unicode(tree));
+  std::string  filename   = xmlParameter.attr< std::string >(_Unicode(filename));
+  std::string  NtupleName = xmlParameter.attr< std::string >(_Unicode(treeName));
+  std::string  xVar       = xmlParameter.attr< std::string >(_Unicode(xVarName));
+  std::string  yVar       = xmlParameter.attr< std::string >(_Unicode(yVarName));
+  std::string  zVar       = xmlParameter.attr< std::string >(_Unicode(zVarName));
+  std::string  BxVar      = xmlParameter.attr< std::string >(_Unicode(BxVarName));
+  std::string  ByVar      = xmlParameter.attr< std::string >(_Unicode(ByVarName));
+  std::string  BzVar      = xmlParameter.attr< std::string >(_Unicode(BzVarName));
 
   double xScale = xmlParameter.attr< double >(_Unicode(xScale));
   double yScale = xmlParameter.attr< double >(_Unicode(yScale));
@@ -431,13 +355,20 @@ static DD4hep::Geometry::Ref_t create_FieldMap_XYZ(DD4hep::Geometry::LCDD& ,
  
   DD4hep::Geometry::CartesianField obj;
   FieldMapXYZ* ptr = new FieldMapXYZ();
-  ptr->xScale = xScale;
-  ptr->yScale = yScale;
-  ptr->zScale = zScale;
-  ptr->bScale = bScale;
+  ptr->xScale     = xScale;
+  ptr->yScale     = yScale;
+  ptr->zScale     = zScale;
+  ptr->bScale     = bScale;
+  ptr->NtupleName = NtupleName;
+  ptr->xVar       = xVar;
+  ptr->yVar       = yVar;
+  ptr->zVar       = zVar;
+  ptr->BxVar      = BxVar;
+  ptr->ByVar      = ByVar;
+  ptr->BzVar      = BzVar;
 
   //Read the entries form the file in this place
-  ptr->fillFieldMapFromTree(filename, treeString,coorUnits,BfieldUnits);
+  ptr->fillFieldMapFromTree(filename,coorUnits,BfieldUnits);
 
   std::cout << "xScale      " << std::setw(13) << ptr->xScale                           << std::endl;
   std::cout << "zScale      " << std::setw(13) << ptr->zScale                           << std::endl;
