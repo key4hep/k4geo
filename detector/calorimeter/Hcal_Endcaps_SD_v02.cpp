@@ -57,7 +57,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   int           det_id    = x_det.id();
   string      det_name    = x_det.nameStr();
-  //unused: string      det_type    = x_det.typeStr();
 
 
   DetElement   sdet(det_name,det_id);
