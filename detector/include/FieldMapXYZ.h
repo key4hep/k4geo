@@ -17,9 +17,9 @@ public:
       Bx(_Bx), By(_By), Bz(_Bz) {}
   };
 
-  int CoorsOrder;             // integer with the order with which variables are scanned in the fieldmap, 1(2) for RZ(ZR) order
-  std::string  StrCoorsOrder; // string  with the order with which variables are scanned in the fieldmap, RZ or ZR order
-  std::string  NtupleName;    // tree name
+  int coorsOrder;             // integer with the order with which variables are scanned in the fieldmap, 1(2) for RZ(ZR) order
+  std::string  strCoorsOrder; // string  with the order with which variables are scanned in the fieldmap, RZ or ZR order
+  std::string  ntupleName;    // tree name
   std::string  xVar;          // x  coordinate name in tree
   std::string  yVar;          // y  coordinate name in tree
   std::string  zVar;          // z  coordinate name in tree

@@ -44,16 +44,16 @@ int FieldMapBrBz::getGlobalIndex(const int rBin, const int zBin)
 
   //Global index in fieldmap array from rho and z axes indexes
 
-  int MyrBin = rBin;
-  int MyzBin = zBin;
-  if(rhoOrdering == -1) MyrBin = nRho - MyrBin - 1; // recalculate rho-axis index in case of high-to-low ordering
-  if(zOrdering   == -1) MyzBin = nZ   - MyzBin - 1; // recalculate z-axis   index in case of high-to-low ordering
+  int myrBin = rBin;
+  int myzBin = zBin;
+  if(rhoOrdering == -1) myrBin = nRho - myrBin - 1; // recalculate rho-axis index in case of high-to-low ordering
+  if(zOrdering   == -1) myzBin = nZ   - myzBin - 1; // recalculate z-axis   index in case of high-to-low ordering
 
-  int GlobalIndex = -1;
-  if(CoorsOrder == 1)       GlobalIndex = MyrBin + MyzBin*nRho;  //RZ coordinates ordering
-  else if(CoorsOrder == 2)  GlobalIndex = MyzBin + MyrBin*nZ;    //ZR coordinates ordering
+  int globalIndex = -1;
+  if(coorsOrder == 1)       globalIndex = myrBin + myzBin*nRho;  //RZ coordinates ordering
+  else if(coorsOrder == 2)  globalIndex = myzBin + myrBin*nZ;    //ZR coordinates ordering
   
-  return  GlobalIndex;
+  return  globalIndex;
 
 }
 
@@ -118,10 +118,10 @@ void FieldMapBrBz::fieldComponents(const double* pos , double* globalField) {
   //Protection in case the sampled coordinate is exactly at maximum value of fieldma
   if(rBin1 > nRho-1) rBin1 = rBin0;
   if(zBin1 > nZ  -1) zBin1 = zBin0;
-  const FieldMapBrBz::FieldValues_t& B_r0z0 = fieldMap[getGlobalIndex(rBin0,zBin0)];
-  const FieldMapBrBz::FieldValues_t& B_r1z0 = fieldMap[getGlobalIndex(rBin1,zBin0)];
-  const FieldMapBrBz::FieldValues_t& B_r0z1 = fieldMap[getGlobalIndex(rBin0,zBin1)];
-  const FieldMapBrBz::FieldValues_t& B_r1z1 = fieldMap[getGlobalIndex(rBin1,zBin1)];
+  const FieldMapBrBz::FieldValues_t& B_r0z0 = fieldMap[rBin0 + zBin0*nRho];
+  const FieldMapBrBz::FieldValues_t& B_r1z0 = fieldMap[rBin1 + zBin0*nRho];
+  const FieldMapBrBz::FieldValues_t& B_r0z1 = fieldMap[rBin0 + zBin1*nRho];
+  const FieldMapBrBz::FieldValues_t& B_r1z1 = fieldMap[rBin1 + zBin1*nRho];
 
   //field at (r,z) point is linear interpolation of fielmap values at bin corners
   double field[2] = {0.0, 0.0};
@@ -164,7 +164,7 @@ void FieldMapBrBz::fillFieldMapFromTree(const std::string& filename,
   }
 
   std::cout << std::endl;
-  std::cout << "Ntuple name:   " << NtupleName << std::endl;
+  std::cout << "Ntuple name:   " << ntupleName << std::endl;
   std::cout << "rho  Var name: " << rhoVar    << std::endl;
   std::cout << "z    Var name: " << zVar      << std::endl;
   std::cout << "Brho Var name: " << BrhoVar   << std::endl;
@@ -172,10 +172,10 @@ void FieldMapBrBz::fillFieldMapFromTree(const std::string& filename,
   std::cout << std::endl;
 
   TTree *tree;
-  file->GetObject(NtupleName.c_str(), tree);
+  file->GetObject(ntupleName.c_str(), tree);
   if (not tree) {
     std::stringstream error;
-    error << "FieldMapBrBz[ERROR]: Tree " << NtupleName << " not found in file: " << filename;
+    error << "FieldMapBrBz[ERROR]: Tree " << ntupleName << " not found in file: " << filename;
     throw std::runtime_error( error.str() );
   }
 
@@ -193,7 +193,7 @@ void FieldMapBrBz::fillFieldMapFromTree(const std::string& filename,
   rhoStep     = -1;
   rhoOrdering =  1;
   zOrdering   =  1;
-  StrCoorsOrder = std::string("");
+  strCoorsOrder = std::string("");
   const int treeEntries = tree->GetEntries();
   fieldMap.reserve(treeEntries);
   for(int i=0;i<treeEntries;i++) {
@@ -210,19 +210,16 @@ void FieldMapBrBz::fillFieldMapFromTree(const std::string& filename,
 
     if(r != rhoMin && rhoStep < 0.0) {
       rhoStep     = TMath::Abs(rhoMin - r);
-      StrCoorsOrder += std::string("R");
+      strCoorsOrder += std::string("R");
     }
     if(z != zMin && zStep < 0.0) {
       zStep         = TMath::Abs(zMin - z);
-      StrCoorsOrder += std::string("Z");
+      strCoorsOrder += std::string("Z");
     }
-
-    fieldMap.push_back( FieldMapBrBz::FieldValues_t( double(Br)*bScale*BfieldUnits,
-                                                     double(Bz)*bScale*BfieldUnits ) );
   }
 
-  if(StrCoorsOrder == std::string("RZ"))      CoorsOrder = 1;
-  else if(StrCoorsOrder == std::string("ZR")) CoorsOrder = 2;
+  if(strCoorsOrder == std::string("RZ"))      coorsOrder = 1;
+  else if(strCoorsOrder == std::string("ZR")) coorsOrder = 2;
 
   if(rhoStep < 0) {
     std::stringstream error;
@@ -270,6 +267,15 @@ void FieldMapBrBz::fillFieldMapFromTree(const std::string& filename,
   zMax    *= coorUnits;
   zStep   *= coorUnits;
 
+  //Fill the array with the Bfield values in the RZ order
+  for(int iz=0;iz<nZ;iz++) {
+    for(int ir=0;ir<nRho;ir++) {
+      tree->GetEntry(getGlobalIndex(ir,iz));
+      fieldMap.push_back( FieldMapBrBz::FieldValues_t( double(Br)*bScale*BfieldUnits,
+                                                       double(Bz)*bScale*BfieldUnits ) );
+    }
+  }
+
   file->Close();
   delete file;
 
@@ -287,7 +293,7 @@ static DD4hep::Geometry::Ref_t create_FieldMap_rzBrBz(DD4hep::Geometry::LCDD& ,
   }
 
   std::string  filename   = xmlParameter.attr< std::string >(_Unicode(filename));
-  std::string  NtupleName = xmlParameter.attr< std::string >(_Unicode(treeName));
+  std::string  ntupleName = xmlParameter.attr< std::string >(_Unicode(treeName));
   std::string  rhoVar     = xmlParameter.attr< std::string >(_Unicode(rhoVarName));
   std::string  zVar       = xmlParameter.attr< std::string >(_Unicode(zVarName));
   std::string  BrhoVar    = xmlParameter.attr< std::string >(_Unicode(BrhoVarName));
@@ -305,7 +311,7 @@ static DD4hep::Geometry::Ref_t create_FieldMap_rzBrBz(DD4hep::Geometry::LCDD& ,
   ptr->rScale     = rScale;
   ptr->zScale     = zScale;
   ptr->bScale     = bScale;
-  ptr->NtupleName = NtupleName;
+  ptr->ntupleName = ntupleName;
   ptr->rhoVar     = rhoVar;
   ptr->zVar       = zVar;
   ptr->BrhoVar    = BrhoVar;
@@ -314,10 +320,10 @@ static DD4hep::Geometry::Ref_t create_FieldMap_rzBrBz(DD4hep::Geometry::LCDD& ,
   //Read the entries form the file in this place
   ptr->fillFieldMapFromTree(filename, coorUnits, BfieldUnits);
 
-  std::string StrRhoOrdering("low-to-high");
-  std::string StrZOrdering("low-to-high");
-  if(ptr->rhoOrdering == -1) StrRhoOrdering = "high-to-low";
-  if(ptr->zOrdering   == -1) StrZOrdering   = "high-to-low";
+  std::string strRhoOrdering("low-to-high");
+  std::string strZOrdering("low-to-high");
+  if(ptr->rhoOrdering == -1) strRhoOrdering = "high-to-low";
+  if(ptr->zOrdering   == -1) strZOrdering   = "high-to-low";
 
   std::cout << "rScale      " << std::setw(13) << ptr->rScale                           << std::endl;
   std::cout << "zScale      " << std::setw(13) << ptr->zScale                           << std::endl;
@@ -326,13 +332,13 @@ static DD4hep::Geometry::Ref_t create_FieldMap_rzBrBz(DD4hep::Geometry::LCDD& ,
   std::cout << "rhoMax      " << std::setw(13) << ptr->rhoMax/dd4hep::cm << " cm"       << std::endl;
   std::cout << "rhoStep     " << std::setw(13) << ptr->rhoStep/dd4hep::cm << " cm"      << std::endl;
   std::cout << "nRho        " << std::setw(13) << ptr->nRho                             << std::endl;
-  std::cout << "rhoOrdering " << std::setw(13) << StrRhoOrdering.c_str()                << std::endl;
+  std::cout << "rhoOrdering " << std::setw(13) << strRhoOrdering.c_str()                << std::endl;
   std::cout << "zMin        " << std::setw(13) << ptr->zMin/dd4hep::cm << " cm"         << std::endl;
   std::cout << "zMax        " << std::setw(13) << ptr->zMax/dd4hep::cm << " cm"         << std::endl;
   std::cout << "zStep       " << std::setw(13) << ptr->zStep/dd4hep::cm << " cm"        << std::endl;
   std::cout << "nZ          " << std::setw(13) << ptr->nZ                               << std::endl;
-  std::cout << "zOrdering   " << std::setw(13) << StrZOrdering.c_str()                  << std::endl;
-  std::cout << "CoorsOrder  " << std::setw(13) << ptr->StrCoorsOrder.c_str()            << std::endl;
+  std::cout << "zOrdering   " << std::setw(13) << strZOrdering.c_str()                  << std::endl;
+  std::cout << "CoorsOrder  " << std::setw(13) << ptr->strCoorsOrder.c_str()            << std::endl;
   std::cout << "coorUnits   " << std::setw(13) << coorUnits/dd4hep::cm << " cm"         << std::endl;
   std::cout << "BfieldUnits " << std::setw(13) << BfieldUnits/dd4hep::tesla << " tesla" << std::endl;
 

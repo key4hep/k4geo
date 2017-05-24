@@ -44,22 +44,22 @@ int FieldMapXYZ::getGlobalIndex(const int xBin, const int yBin, const int zBin)
 
   //Global index in fieldmap array from x, y and z axes indexes
 
-  int MyxBin = xBin;
-  int MyyBin = yBin;
-  int MyzBin = zBin;
-  if(xOrdering == -1) MyxBin = nX - MyxBin - 1; // recalculate x-axis index in case of high-to-low ordering
-  if(yOrdering == -1) MyyBin = nY - MyyBin - 1; // recalculete y-axis index in case of high-to-low ordering
-  if(zOrdering == -1) MyzBin = nZ - MyzBin - 1; // recalculate z-axis index in case of high-to-low ordering
+  int myxBin = xBin;
+  int myyBin = yBin;
+  int myzBin = zBin;
+  if(xOrdering == -1) myxBin = nX - myxBin - 1; // recalculate x-axis index in case of high-to-low ordering
+  if(yOrdering == -1) myyBin = nY - myyBin - 1; // recalculete y-axis index in case of high-to-low ordering
+  if(zOrdering == -1) myzBin = nZ - myzBin - 1; // recalculate z-axis index in case of high-to-low ordering
 
-  int GlobalIndex = -1;
-  if(CoorsOrder == 1)       GlobalIndex = MyxBin + MyyBin*(nX) + MyzBin*(nX*nY); //XYZ coordinates ordering
-  else if(CoorsOrder == 2)  GlobalIndex = MyxBin + MyzBin*(nX) + MyyBin*(nX*nZ); //XZY coordinates ordering
-  else if(CoorsOrder == 3)  GlobalIndex = MyyBin + MyxBin*(nY) + MyzBin*(nY*nX); //YXZ coordinates ordering
-  else if(CoorsOrder == 4)  GlobalIndex = MyyBin + MyzBin*(nY) + MyxBin*(nY*nZ); //YZX coordinates ordering
-  else if(CoorsOrder == 5)  GlobalIndex = MyzBin + MyxBin*(nZ) + MyyBin*(nZ*nX); //ZXY coordinates ordering
-  else if(CoorsOrder == 6)  GlobalIndex = MyzBin + MyyBin*(nZ) + MyxBin*(nZ*nY); //ZYX coordinates ordering
+  int globalIndex = -1;
+  if(coorsOrder == 1)       globalIndex = myxBin + myyBin*(nX) + myzBin*(nX*nY); //XYZ coordinates ordering
+  else if(coorsOrder == 2)  globalIndex = myxBin + myzBin*(nX) + myyBin*(nX*nZ); //XZY coordinates ordering
+  else if(coorsOrder == 3)  globalIndex = myyBin + myxBin*(nY) + myzBin*(nY*nX); //YXZ coordinates ordering
+  else if(coorsOrder == 4)  globalIndex = myyBin + myzBin*(nY) + myxBin*(nY*nZ); //YZX coordinates ordering
+  else if(coorsOrder == 5)  globalIndex = myzBin + myxBin*(nZ) + myyBin*(nZ*nX); //ZXY coordinates ordering
+  else if(coorsOrder == 6)  globalIndex = myzBin + myyBin*(nZ) + myxBin*(nZ*nY); //ZYX coordinates ordering
   
-  return  GlobalIndex;
+  return  globalIndex;
 
 }
 
@@ -122,14 +122,14 @@ void FieldMapXYZ::fieldComponents(const double* pos , double* globalField) {
   if(xBin1 > nX-1) xBin1 = nX-1;
   if(yBin1 > nY-1) yBin1 = nY-1;
   if(zBin1 > nZ-1) zBin1 = nZ-1;
-  const FieldMapXYZ::FieldValues_t& B_x0y0z0 = fieldMap[getGlobalIndex(xBin0,yBin0,zBin0)];
-  const FieldMapXYZ::FieldValues_t& B_x1y0z0 = fieldMap[getGlobalIndex(xBin1,yBin0,zBin0)];
-  const FieldMapXYZ::FieldValues_t& B_x0y0z1 = fieldMap[getGlobalIndex(xBin0,yBin0,zBin1)];
-  const FieldMapXYZ::FieldValues_t& B_x1y0z1 = fieldMap[getGlobalIndex(xBin1,yBin0,zBin1)];
-  const FieldMapXYZ::FieldValues_t& B_x0y1z0 = fieldMap[getGlobalIndex(xBin0,yBin1,zBin0)];
-  const FieldMapXYZ::FieldValues_t& B_x1y1z0 = fieldMap[getGlobalIndex(xBin1,yBin1,zBin0)];
-  const FieldMapXYZ::FieldValues_t& B_x0y1z1 = fieldMap[getGlobalIndex(xBin0,yBin1,zBin1)];
-  const FieldMapXYZ::FieldValues_t& B_x1y1z1 = fieldMap[getGlobalIndex(xBin1,yBin1,zBin1)];
+  const FieldMapXYZ::FieldValues_t& B_x0y0z0 = fieldMap[xBin0 + yBin0*(nX) + zBin0*(nX*nY)];
+  const FieldMapXYZ::FieldValues_t& B_x1y0z0 = fieldMap[xBin1 + yBin0*(nX) + zBin0*(nX*nY)];
+  const FieldMapXYZ::FieldValues_t& B_x0y0z1 = fieldMap[xBin0 + yBin0*(nX) + zBin1*(nX*nY)];
+  const FieldMapXYZ::FieldValues_t& B_x1y0z1 = fieldMap[xBin1 + yBin0*(nX) + zBin1*(nX*nY)];
+  const FieldMapXYZ::FieldValues_t& B_x0y1z0 = fieldMap[xBin0 + yBin1*(nX) + zBin0*(nX*nY)];
+  const FieldMapXYZ::FieldValues_t& B_x1y1z0 = fieldMap[xBin1 + yBin1*(nX) + zBin0*(nX*nY)];
+  const FieldMapXYZ::FieldValues_t& B_x0y1z1 = fieldMap[xBin0 + yBin1*(nX) + zBin1*(nX*nY)];
+  const FieldMapXYZ::FieldValues_t& B_x1y1z1 = fieldMap[xBin1 + yBin1*(nX) + zBin1*(nX*nY)];
 
   //field at (x,y,z) point is linear interpolation of fielmap values at bin corners
   double B_00,B_01,B_10,B_11,B_0,B_1,B;
@@ -198,7 +198,7 @@ void FieldMapXYZ::fillFieldMapFromTree(const std::string& filename,
   }
 
   std::cout << std::endl;
-  std::cout << "Ntuple name: " << NtupleName << std::endl;
+  std::cout << "Ntuple name: " << ntupleName << std::endl;
   std::cout << "x  Var name: " << xVar       << std::endl;
   std::cout << "y  Var name: " << yVar       << std::endl;
   std::cout << "z  Var name: " << zVar       << std::endl;
@@ -208,10 +208,10 @@ void FieldMapXYZ::fillFieldMapFromTree(const std::string& filename,
   std::cout << std::endl;
 
   TTree *tree;
-  file->GetObject(NtupleName.c_str(), tree);
+  file->GetObject(ntupleName.c_str(), tree);
   if (not tree) {
     std::stringstream error;
-    error << "FieldMapXYZ[ERROR]: Tree " << NtupleName << " not found in file: " << filename;
+    error << "FieldMapXYZ[ERROR]: Tree " << ntupleName << " not found in file: " << filename;
     throw std::runtime_error( error.str() );
   }
 
@@ -233,7 +233,7 @@ void FieldMapXYZ::fillFieldMapFromTree(const std::string& filename,
   xOrdering  =  1;
   yOrdering  =  1;
   zOrdering  =  1;
-  StrCoorsOrder = std::string("");
+  strCoorsOrder = std::string("");
   const int treeEntries = tree->GetEntries();
   fieldMap.reserve(treeEntries);
   for(int i=0;i<treeEntries;i++) {
@@ -252,28 +252,24 @@ void FieldMapXYZ::fillFieldMapFromTree(const std::string& filename,
     
     if(x != xMin && xStep < 0.0) {
       xStep       = TMath::Abs(xMin - x);
-      StrCoorsOrder += std::string("X");
+      strCoorsOrder += std::string("X");
     }
     if(y != yMin && yStep < 0.0) {
       yStep       = TMath::Abs(yMin - y);
-      StrCoorsOrder += std::string("Y");
+      strCoorsOrder += std::string("Y");
     }
     if(z != zMin && zStep < 0.0) {
       zStep       = TMath::Abs(zMin - z);
-      StrCoorsOrder += std::string("Z");
+      strCoorsOrder += std::string("Z");
     }
-
-    fieldMap.push_back( FieldMapXYZ::FieldValues_t(double(Bx)*bScale*BfieldUnits,
-                                                   double(By)*bScale*BfieldUnits,
-                                                   double(Bz)*bScale*BfieldUnits ) );
   }
 
-  if(StrCoorsOrder == TString("XYZ"))       CoorsOrder = 1;
-  else if(StrCoorsOrder == TString("XZY"))  CoorsOrder = 2;
-  else if(StrCoorsOrder == TString("YXZ"))  CoorsOrder = 3;
-  else if(StrCoorsOrder == TString("YZX"))  CoorsOrder = 4;
-  else if(StrCoorsOrder == TString("ZXY"))  CoorsOrder = 5;
-  else if(StrCoorsOrder == TString("ZYX"))  CoorsOrder = 6;
+  if(strCoorsOrder == TString("XYZ"))       coorsOrder = 1;
+  else if(strCoorsOrder == TString("XZY"))  coorsOrder = 2;
+  else if(strCoorsOrder == TString("YXZ"))  coorsOrder = 3;
+  else if(strCoorsOrder == TString("YZX"))  coorsOrder = 4;
+  else if(strCoorsOrder == TString("ZXY"))  coorsOrder = 5;
+  else if(strCoorsOrder == TString("ZYX"))  coorsOrder = 6;
 
   if(xStep < 0) {
     std::stringstream error;
@@ -337,6 +333,18 @@ void FieldMapXYZ::fillFieldMapFromTree(const std::string& filename,
   zMax  *= coorUnits;
   zStep *= coorUnits;
 
+  //Fill the array with the Bfield values in the XYZ order
+  for(int iz=0;iz<nZ;iz++) {
+    for(int iy=0;iy<nY;iy++) {
+      for(int ix=0;ix<nX;ix++) {
+        tree->GetEntry(getGlobalIndex(ix,iy,iz));
+        fieldMap.push_back( FieldMapXYZ::FieldValues_t(double(Bx)*bScale*BfieldUnits,
+                                                       double(By)*bScale*BfieldUnits,
+                                                       double(Bz)*bScale*BfieldUnits ) );
+      }
+    }
+  }
+
   file->Close();
   delete file;
 
@@ -354,7 +362,7 @@ static DD4hep::Geometry::Ref_t create_FieldMap_XYZ(DD4hep::Geometry::LCDD& ,
   }
 
   std::string  filename   = xmlParameter.attr< std::string >(_Unicode(filename));
-  std::string  NtupleName = xmlParameter.attr< std::string >(_Unicode(treeName));
+  std::string  ntupleName = xmlParameter.attr< std::string >(_Unicode(treeName));
   std::string  xVar       = xmlParameter.attr< std::string >(_Unicode(xVarName));
   std::string  yVar       = xmlParameter.attr< std::string >(_Unicode(yVarName));
   std::string  zVar       = xmlParameter.attr< std::string >(_Unicode(zVarName));
@@ -376,7 +384,7 @@ static DD4hep::Geometry::Ref_t create_FieldMap_XYZ(DD4hep::Geometry::LCDD& ,
   ptr->yScale     = yScale;
   ptr->zScale     = zScale;
   ptr->bScale     = bScale;
-  ptr->NtupleName = NtupleName;
+  ptr->ntupleName = ntupleName;
   ptr->xVar       = xVar;
   ptr->yVar       = yVar;
   ptr->zVar       = zVar;
@@ -387,12 +395,12 @@ static DD4hep::Geometry::Ref_t create_FieldMap_XYZ(DD4hep::Geometry::LCDD& ,
   //Read the entries form the file in this place
   ptr->fillFieldMapFromTree(filename,coorUnits,BfieldUnits);
 
-  std::string StrXOrdering("low-to-high");
-  std::string StrYOrdering("low-to-high");
-  std::string StrZOrdering("low-to-high");
-  if(ptr->xOrdering == -1) StrYOrdering   = "high-to-low";
-  if(ptr->yOrdering == -1) StrYOrdering   = "high-to-low";
-  if(ptr->zOrdering == -1) StrZOrdering   = "high-to-low";
+  std::string strXOrdering("low-to-high");
+  std::string strYOrdering("low-to-high");
+  std::string strZOrdering("low-to-high");
+  if(ptr->xOrdering == -1) strYOrdering   = "high-to-low";
+  if(ptr->yOrdering == -1) strYOrdering   = "high-to-low";
+  if(ptr->zOrdering == -1) strZOrdering   = "high-to-low";
 
   std::cout << "xScale      " << std::setw(13) << ptr->xScale                           << std::endl;
   std::cout << "zScale      " << std::setw(13) << ptr->zScale                           << std::endl;
@@ -402,18 +410,18 @@ static DD4hep::Geometry::Ref_t create_FieldMap_XYZ(DD4hep::Geometry::LCDD& ,
   std::cout << "xMax        " << std::setw(13) << ptr->xMax/dd4hep::cm << " cm"         << std::endl;
   std::cout << "xStep       " << std::setw(13) << ptr->xStep/dd4hep::cm << " cm"        << std::endl;
   std::cout << "nX          " << std::setw(13) << ptr->nX                               << std::endl;
-  std::cout << "xOrdering   " << std::setw(13) << StrXOrdering.c_str()                  << std::endl;
+  std::cout << "xOrdering   " << std::setw(13) << strXOrdering.c_str()                  << std::endl;
   std::cout << "yMin        " << std::setw(13) << ptr->yMin/dd4hep::cm << " cm"         << std::endl;
   std::cout << "yMax        " << std::setw(13) << ptr->yMax/dd4hep::cm << " cm"         << std::endl;
   std::cout << "yStep       " << std::setw(13) << ptr->yStep/dd4hep::cm << " cm"        << std::endl;
   std::cout << "nY          " << std::setw(13) << ptr->nY                               << std::endl;
-  std::cout << "yOrdering   " << std::setw(13) << StrYOrdering.c_str()                  << std::endl;
+  std::cout << "yOrdering   " << std::setw(13) << strYOrdering.c_str()                  << std::endl;
   std::cout << "zMin        " << std::setw(13) << ptr->zMin/dd4hep::cm << " cm"         << std::endl;
   std::cout << "zMax        " << std::setw(13) << ptr->zMax/dd4hep::cm << " cm"         << std::endl;
   std::cout << "zStep       " << std::setw(13) << ptr->zStep/dd4hep::cm << " cm"        << std::endl;
   std::cout << "nZ          " << std::setw(13) << ptr->nZ                               << std::endl;
-  std::cout << "zOrdering   " << std::setw(13) << StrZOrdering.c_str()                  << std::endl;
-  std::cout << "CoorsOrder  " << std::setw(13) << ptr->StrCoorsOrder.c_str()            << std::endl;
+  std::cout << "zOrdering   " << std::setw(13) << strZOrdering.c_str()                  << std::endl;
+  std::cout << "CoorsOrder  " << std::setw(13) << ptr->strCoorsOrder.c_str()            << std::endl;
   std::cout << "coorUnits   " << std::setw(13) << coorUnits/dd4hep::cm << " cm"         << std::endl;
   std::cout << "BfieldUnits " << std::setw(13) << BfieldUnits/dd4hep::tesla << " tesla" << std::endl;
 
