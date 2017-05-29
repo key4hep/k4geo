@@ -297,7 +297,7 @@ void FieldMapXYZ::fillFieldMapFromTree(const std::string& filename,
   }
   if(zStep < 0) {
     std::stringstream error;
-    error << "FieldMapBrBz[ERROR]: All z coordinates in n-tuple have the same value!!!";
+    error << "FieldMapXYZ[ERROR]: All z coordinates in n-tuple have the same value!!!";
     throw std::runtime_error( error.str() );
   }
   if(zMax < zMin) {
@@ -309,18 +309,9 @@ void FieldMapXYZ::fillFieldMapFromTree(const std::string& filename,
   }
 
   //Calculate number of bins in fieldmap
-  nX = int((xMax - xMin)/xStep) + 1;
-  nY = int((yMax - yMin)/yStep) + 1;
-  nZ = int((zMax - zMin)/zStep) + 1;
-
-  const int elements = nX*nY*nZ;
-  if ( elements != treeEntries ) {
-    std::stringstream error;
-    error << "FieldMapXYZ[ERROR]: Tree does not have the expected number of entries "
-          << "nX*nY*nZ == "  << elements
-          << "  tree entries == " << treeEntries;
-    throw std::runtime_error( error.str() );
-  }
+  nX = round(((xMax - xMin)/xStep) + 1);
+  nY = round(((yMax - yMin)/yStep) + 1);
+  nZ = round(((zMax - zMin)/zStep) + 1);
 
   //Set coordinates parameters units
   xMin  *= coorUnits;
@@ -332,6 +323,15 @@ void FieldMapXYZ::fillFieldMapFromTree(const std::string& filename,
   zMin  *= coorUnits;
   zMax  *= coorUnits;
   zStep *= coorUnits;
+
+  const int elements = nX*nY*nZ;
+  if ( elements != treeEntries ) {
+    std::stringstream error;
+    error << "FieldMapXYZ[ERROR]: Tree does not have the expected number of entries "
+          << "nX*nY*nZ (" << nX << "*" << nY << "*" << nZ << ") == "  << elements
+          << "  tree entries == " << treeEntries; 
+    throw std::runtime_error( error.str() );
+  }
 
   //Fill the array with the Bfield values in the XYZ order
   for(int iz=0;iz<nZ;iz++) {
