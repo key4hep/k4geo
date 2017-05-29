@@ -247,17 +247,8 @@ void FieldMapBrBz::fillFieldMapFromTree(const std::string& filename,
   }
 
   //Calculate number of bins in fieldmap
-  nRho = int((rhoMax - rhoMin)/rhoStep) + 1;
-  nZ   = int((zMax   - zMin  )/zStep)   + 1;
-
-  const int elements = nRho*nZ;
-  if ( elements != treeEntries ) {
-    std::stringstream error;
-    error << "FieldMapBrBz[ERROR]: Tree does not have the expected number of entries "
-          << "nRho*nZ == "  << elements
-          << "  tree entries == " << treeEntries;
-    throw std::runtime_error( error.str() );
-  }
+  nRho = round(((rhoMax - rhoMin)/rhoStep) + 1);
+  nZ   = round(((zMax   - zMin  )/zStep)   + 1);
 
   //Set coordinates parameters units
   rhoMin  *= coorUnits;
@@ -266,6 +257,15 @@ void FieldMapBrBz::fillFieldMapFromTree(const std::string& filename,
   zMin    *= coorUnits;
   zMax    *= coorUnits;
   zStep   *= coorUnits;
+
+  const int elements = nRho*nZ;
+  if ( elements != treeEntries ) {
+    std::stringstream error;
+    error << "FieldMapBrBz[ERROR]: Tree does not have the expected number of entries "
+          << "nRho*nZ (" << nRho << "*" << nZ << ") == "  << elements
+          << "  tree entries == " << treeEntries;
+    throw std::runtime_error( error.str() );
+  }
 
   //Fill the array with the Bfield values in the RZ order
   for(int iz=0;iz<nZ;iz++) {
