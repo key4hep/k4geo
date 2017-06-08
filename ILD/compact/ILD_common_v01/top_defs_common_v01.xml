@@ -120,7 +120,10 @@ subdetector-specific ones are in separate files
   <constant name="TUBE_Lcal_clearance" value="20*mm"/>
 
   <!-- space left for envelopes (counting from inner beampipe surface) -->
-  <constant name="TUBE_maxthick" value="1.5*mm"/>
+  <!-- for inner tube, inner cone, outer tube -->
+  <constant name="TUBE_inner_maxthick" value="1.0*mm"/> 
+  <!-- for outer bulge: include thickness for cables, and the angle effect (should be at least TUBE_secondCone_part4_thickness/TUBE_secondCone_cosOpeningAngle) -->
+  <constant name="TUBE_outer_maxthick" value="3.0*mm"/> 
 
 
 
