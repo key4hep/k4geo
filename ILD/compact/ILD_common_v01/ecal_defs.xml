@@ -11,7 +11,9 @@
   <constant name="Ecal_radiator_layers_set3_thickness" value="0*mm"/>
 
   <constant name="Ecal_barrel_number_of_towers" value="5"/>
-  <constant name="Ecal_fiber_thickness" value=".15*mm"/>
+  <constant name="Ecal_fiber_thickness_slabAbs" value="0.15*mm"/>
+  <constant name="Ecal_fiber_thickness_structure" value="2*0.15*mm"/>
+  <constant name="Ecal_fiber_thickness_alveolus" value="3*0.15*mm"/>
   <constant name="Ecal_front_face_thickness" value="0*mm"/>
   <constant name="Ecal_lateral_face_thickness" value="2*mm"/>
   <constant name="Ecal_support_thickness" value="8.6*mm"/>
