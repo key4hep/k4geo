@@ -115,8 +115,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 //
 //====================================================================
 
-  int N_FIBERS_W_STRUCTURE = 2; 
-  int N_FIBERS_ALVOULUS = 3;
+//  int N_FIBERS_W_STRUCTURE = 2; 
+//  int N_FIBERS_ALVOULUS = 3;
 
   //  read parametere from compact.xml file
   double Ecal_Alveolus_Air_Gap              = lcdd.constant<double>("Ecal_Alveolus_Air_Gap");
@@ -125,7 +125,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double Ecal_Slab_PCB_thickness            = lcdd.constant<double>("Ecal_Slab_PCB_thickness");
   double Ecal_Slab_glue_gap                 = lcdd.constant<double>("Ecal_Slab_glue_gap");
   double Ecal_Slab_ground_thickness         = lcdd.constant<double>("Ecal_Slab_ground_thickness");
-  double Ecal_fiber_thickness               = lcdd.constant<double>("Ecal_fiber_thickness");
+  double Ecal_fiber_thickness_alveolus      = lcdd.constant<double>("Ecal_fiber_thickness_alveolus");
+  double Ecal_fiber_thickness_structure     = lcdd.constant<double>("Ecal_fiber_thickness_structure");
+  double Ecal_fiber_thickness_slabAbs       = lcdd.constant<double>("Ecal_fiber_thickness_slabAbs");
   double Ecal_Si_thickness                  = lcdd.constant<double>("Ecal_Si_thickness");
   
   double Ecal_radiator_thickness1           = lcdd.constant<double>("Ecal_radiator_layers_set1_thickness");
@@ -239,15 +241,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     Ecal_nlayers3 * Ecal_radiator_thickness3 +
     
     int(n_total_layers/2) * // fiber around W struct layers
-    (N_FIBERS_W_STRUCTURE * 2 *  Ecal_fiber_thickness) +
+    2*Ecal_fiber_thickness_structure + // (N_FIBERS_W_STRUCTURE * 2 *  Ecal_fiber_thickness) +
     
     Number_of_Si_Layers_in_Barrel * // Silicon slabs plus fiber around and inside
-    (Ecal_total_SiSlab_thickness +
-     (N_FIBERS_ALVOULUS + 1 ) * Ecal_fiber_thickness) +
+    (Ecal_total_SiSlab_thickness + Ecal_fiber_thickness_alveolus + Ecal_fiber_thickness_slabAbs) + //  (Ecal_total_SiSlab_thickness + (N_FIBERS_ALVOULUS + 1 ) * Ecal_fiber_thickness) +
     
     Number_of_Sc_Layers_in_Barrel * // Scintillator slabs plus fiber around and inside
-    (Ecal_total_ScSlab_thickness +
-     (N_FIBERS_ALVOULUS + 1 ) * Ecal_fiber_thickness) +
+    (Ecal_total_ScSlab_thickness + Ecal_fiber_thickness_alveolus + Ecal_fiber_thickness_slabAbs) + //  (N_FIBERS_ALVOULUS + 1 ) * Ecal_fiber_thickness) +
     
     Ecal_support_thickness + Ecal_front_face_thickness;
   
@@ -315,7 +315,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double z_floor = 
     - module_thickness/2 +
     Ecal_front_face_thickness + 
-    N_FIBERS_ALVOULUS * Ecal_fiber_thickness;
+    Ecal_fiber_thickness_alveolus; //  N_FIBERS_ALVOULUS * Ecal_fiber_thickness;
 
   double l_pos_z = z_floor;
  
@@ -332,11 +332,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double thickness_sum=0;
 
   nRadiationLengths   = Ecal_radiator_thickness1/(stave_material.radLength())
-    +(Ecal_front_face_thickness + N_FIBERS_ALVOULUS * Ecal_fiber_thickness)/air.radLength();
+    +(Ecal_front_face_thickness + Ecal_fiber_thickness_alveolus)/air.radLength();
+  //    +(Ecal_front_face_thickness + N_FIBERS_ALVOULUS * Ecal_fiber_thickness)/air.radLength();
   nInteractionLengths = Ecal_radiator_thickness1/(stave_material.intLength())
-    +(Ecal_front_face_thickness + N_FIBERS_ALVOULUS * Ecal_fiber_thickness)/air.intLength();
+    +(Ecal_front_face_thickness + Ecal_fiber_thickness_alveolus)/air.intLength();
+  //    +(Ecal_front_face_thickness + N_FIBERS_ALVOULUS * Ecal_fiber_thickness)/air.intLength();
   thickness_sum       = Ecal_radiator_thickness1
-    +(Ecal_front_face_thickness + N_FIBERS_ALVOULUS * Ecal_fiber_thickness);
+    +(Ecal_front_face_thickness + Ecal_fiber_thickness_alveolus);
+  //    +(Ecal_front_face_thickness + N_FIBERS_ALVOULUS * Ecal_fiber_thickness);
 
   int l_num = 1;
   bool isFirstSens = true;
@@ -359,8 +362,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       //double rad_pos_Z(0);
       double this_struct_CFthick_beforeAbs(0);
       double this_struct_CFthick_afterAbs(0);
-      double _CF_absWrap = Ecal_fiber_thickness*N_FIBERS_W_STRUCTURE;
-      double _CF_alvWall = N_FIBERS_ALVOULUS*Ecal_fiber_thickness;
+      double _CF_absWrap = Ecal_fiber_thickness_structure;
+      double _CF_alvWall = Ecal_fiber_thickness_alveolus;
       if ( isFrontFace ) { // the first part of the module depends on whether we have preshwer or not
 	if ( Ecal_Barrel_PreshowerLayer==1 ) { // don't include W+CF wrapping; only one side of alveolus
 	  this_struct_CFthick_beforeAbs = 0;
@@ -630,11 +633,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 #if DD4HEP_VERSION_GE( 0, 15 )
       caloLayer.outer_nRadiationLengths   = nRadiationLengths
-	+ (Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE))/air.radLength();
+	+ (Ecal_fiber_thickness_alveolus + Ecal_fiber_thickness_structure )/air.radLength();
+      //	+ (Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE))/air.radLength();
       caloLayer.outer_nInteractionLengths = nInteractionLengths
-	+ (Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE))/air.intLength();
+	+ (Ecal_fiber_thickness_alveolus + Ecal_fiber_thickness_structure )/air.intLength();
+      //	+ (Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE))/air.intLength();
       caloLayer.outer_thickness           = thickness_sum
-	+ (Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE)); 
+	+ (Ecal_fiber_thickness_alveolus + Ecal_fiber_thickness_structure ); 
+      //	+ (Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE)); 
 
       if (!isFirstSens) caloData->layers.push_back( caloLayer ) ;
 #ifdef VERBOSE      
@@ -655,11 +661,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 #endif
       
       nRadiationLengths   = radiator_dim_y/(stave_material.radLength())
-	+ (Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE))/air.radLength();
+	+ (Ecal_fiber_thickness_alveolus + Ecal_fiber_thickness_structure )/air.radLength();
       nInteractionLengths = radiator_dim_y/(stave_material.intLength())
-	+ (Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE))/air.intLength();
+	+ (Ecal_fiber_thickness_alveolus + Ecal_fiber_thickness_structure )/air.intLength();
       thickness_sum       = radiator_dim_y
-	+ (Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE));  
+	+ (Ecal_fiber_thickness_alveolus + Ecal_fiber_thickness_structure );  
 
 
       if(radiator_dim_y <= 0) {

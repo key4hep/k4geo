@@ -96,13 +96,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   //
   //====================================================================
   
-  // hardcoded numbers....better to add to xmk description
-  const int N_FIBERS_W_STRUCTURE = 2; 
-  const int N_FIBERS_ALVEOLUS = 3;
-
   //  read parameters from compact.xml file
   double Ecal_Slab_shielding                = lcdd.constant<double>("Ecal_Slab_shielding");
-  double Ecal_fiber_thickness               = lcdd.constant<double>("Ecal_fiber_thickness");
+  double Ecal_fiber_thickness_structure = lcdd.constant<double>("Ecal_fiber_thickness_structure"); // absorber wrapping thickness
+  double Ecal_fiber_thickness_alveolus  = lcdd.constant<double>("Ecal_fiber_thickness_alveolus"); // alveolar wall thickness
   
   double EcalBarrel_inner_radius                  = lcdd.constant<double>("TPC_outer_radius") +lcdd.constant<double>("Ecal_Tpc_gap");
   int    Ecal_barrel_z_modules              = lcdd.constant<int>("Ecal_barrel_z_modules");
@@ -183,8 +180,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   helper.checkLayerConsistency();
 
   // set structural CF thicknesses
-  helper.setCFthickness( N_FIBERS_W_STRUCTURE*Ecal_fiber_thickness,
-                         N_FIBERS_ALVEOLUS*Ecal_fiber_thickness,
+  helper.setCFthickness( Ecal_fiber_thickness_structure,
+                         Ecal_fiber_thickness_alveolus,
                          Ecal_front_face_thickness,
                          Ecal_support_thickness);
 
@@ -255,7 +252,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 			 barrel_alv_width,
 			 Ecal_n_wafers_per_tower,
 			 Ecal_lateral_face_thickness,
-                         N_FIBERS_ALVEOLUS * Ecal_fiber_thickness + Ecal_Slab_H_fiber_thickness + Ecal_Slab_shielding,
+                         Ecal_fiber_thickness_alveolus + Ecal_Slab_H_fiber_thickness + Ecal_Slab_shielding,
 			 Ecal_guard_ring_size );
 
 
