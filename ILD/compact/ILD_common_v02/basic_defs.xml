@@ -1,0 +1,33 @@
+<define>
+
+  <constant name="world_side"             value="30*m"/>
+  <constant name="world_x"                value="world_side/2"/>
+  <constant name="world_y"                value="world_side/2"/>
+  <constant name="world_z"                value="world_side/2"/>
+
+  <constant name="ILDDetID_NOTUSED"      value="  0"/>
+  <constant name="ILDDetID_VXD"          value="  1"/>
+  <constant name="ILDDetID_SIT"          value="  2"/>
+  <constant name="ILDDetID_FTD"          value="  3"/>
+  <constant name="ILDDetID_TPC"          value="  4"/>
+  <constant name="ILDDetID_SET"          value="  5"/>
+  <constant name="ILDDetID_ETD"          value="  6"/>
+
+  <constant name="ILDDetID_ECAL"         value=" 20"/>
+  <constant name="ILDDetID_ECAL_PLUG"    value=" 21"/>
+  <constant name="ILDDetID_HCAL"         value=" 22"/>
+  <constant name="ILDDetID_HCAL_RING"    value=" 23"/>
+  <constant name="ILDDetID_LCAL"         value=" 24"/>
+  <constant name="ILDDetID_BCAL"         value=" 25"/>
+  <constant name="ILDDetID_LHCAL"        value=" 26"/>
+  <constant name="ILDDetID_YOKE"         value=" 27"/>
+  <constant name="ILDDetID_COIL"         value=" 28"/>
+  <constant name="ILDDetID_ECAL_ENDCAP"  value=" 29"/>
+  <constant name="ILDDetID_HCAL_ENDCAP"  value=" 30"/>
+  <constant name="ILDDetID_YOKE_ENDCAP"  value=" 31"/>
+
+  <constant name="ILDDetID_bwd"       value="- 1"/>
+  <constant name="ILDDetID_barrel"    value="  0"/>
+  <constant name="ILDDetID_fwd"       value="  1"/>
+
+</define>

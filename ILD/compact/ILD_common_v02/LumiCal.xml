@@ -1,0 +1,88 @@
+<!--
+   LumiCal parameters for ILD
+  -->
+
+<lccdd>
+  <detectors>
+
+    <detector name="Lcal" type="LumiCal_o1_v03" vis="BlueVis" id="ILDDetID_LCAL"
+              readout="LumiCalCollection" insideTrackingVolume="false" >
+
+      <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_ELECTROMAGNETIC + DetType_FORWARD " />
+
+      <!-- LumiCal envelope is rotated according to the ILC_Main_Crossing_Angle at +z and -z -->
+      <envelope vis="ILD_FCALVis">
+        <shape type="BooleanShape" operation="Intersection" material="Air">
+          <!-- shape type="Box" dx="LumiCal_outer_radius*2.0" dy="LumiCal_outer_radius*2.0" dz="LumiCal_max_z*2.0"/ -->
+          <shape type="Box" dx="Lcal_services_rmax*2.0" dy="Lcal_services_rmax*2.0" dz="LumiCal_max_z*2.0"/>
+
+          <shape type="BooleanShape" operation="Union" material="Air">
+            <!-- -z -->
+            <shape type="BooleanShape" operation="Subtraction" material="Air">
+              <shape type="Tube" rmin="LumiCal_inner_radius - env_safety" rmax="Lcal_services_rmax + env_safety" dz="LumiCal_max_z/COS_halfCrossingAngle + env_safety"/>
+              <shape type="Tube" rmin="0.0" rmax="Lcal_services_rmax + 1.5*env_safety" dz="LumiCal_min_z/COS_halfCrossingAngle+LumiCal_thickness - env_safety"/>
+              <position x="0" y="0" z="LumiCal_thickness"/>
+            </shape>
+
+            <!-- +z -->
+            <shape type="BooleanShape" operation="Subtraction" material="Air">
+              <shape type="Tube" rmin="LumiCal_inner_radius - env_safety" rmax="Lcal_services_rmax + env_safety" dz="LumiCal_max_z/COS_halfCrossingAngle + env_safety"/>
+              <shape type="Tube" rmin="0.0" rmax="Lcal_services_rmax + 1.5*env_safety" dz="LumiCal_min_z/COS_halfCrossingAngle+LumiCal_thickness - env_safety"/>
+              <position x="0" y="0" z="-LumiCal_thickness"/>
+            </shape>
+
+            <!-- Angle between -z and +z -->
+            <rotation x="0" y="ILC_Main_Crossing_Angle" z="0"/>
+            <position x="0" y="0" z="0"/>
+          </shape>
+
+          <!-- Use big box to define the global coordination -->
+          <rotation x="0" y="-ILC_Main_Crossing_Angle*0.5" z="0"/>
+          <position x="0" y="0" z="0"/>
+        </shape>
+      </envelope>
+
+      <!-- layerstaggerphi is in cellPhiSize units i.e. 0.5 means the stagger is 0.5*cellPhiSize -->
+      <parameter crossingangle="ILC_Main_Crossing_Angle"
+                 cutoutspanningangle="40*deg"
+                 incomingbeampiperadius="BCal_TubeIncomingRadius"
+                 />
+
+      <dimensions inner_r = "LumiCal_inner_radius"
+                  inner_z = "LumiCal_min_z"
+                  outer_r = "LumiCal_outer_radius"
+                  servicesRmax = "Lcal_services_rmax"
+                  layerstagger = "0.5"
+                  outerPhi0    = "Lcal_offset_phi"
+                  modules = "Lcal_n_tiles"
+                  phi_sectors = "Lcal_nstrips_phi/Lcal_n_tiles"
+                  r_sectors = "Lcal_nstrips_theta"
+                  phi_gap = "2.*Lcal_tile_gap"
+                  r_gap = "Lcal_tile_gap" />
+
+
+      <layer repeat="30" vis="SeeThrough">
+        <slice material = "TungstenDens24" thickness = "Lcal_tungsten_thickness"                   vis="BCLayerVis1"/>
+        <slice material = "fanele1" thickness = "( Lcal_support_thickness - 0.02*mm) / 2."     vis="Invisible"/>
+        <slice material = "Silicon" thickness = "Lcal_silicon_thickness"        sensitive = "yes"  vis="BCLayerVis2"/>
+        <slice material = "G4_Al"   thickness = "0.02*mm"                                      vis="BCLayerVis3"/>
+        <slice material = "fanele2" thickness = "( Lcal_support_thickness - 0.02*mm) / 2."      vis="Invisible"/>
+        <slice material = "Air"     thickness = "Lcal_layer_gap" />
+      </layer>
+
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="LumiCalCollection">
+      <segmentation type="PolarGridRPhi"
+                    grid_size_r="(Lcal_sensor_rmax-Lcal_sensor_rmin)/Lcal_nstrips_theta"
+                    grid_size_phi="360/Lcal_nstrips_phi*degree"
+                    offset_r="Lcal_sensor_rmin"
+                    offset_phi="Lcal_offset_phi"
+                    />
+      <id>system:8,barrel:3,layer:8,slice:8,r:32:-16,phi:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>

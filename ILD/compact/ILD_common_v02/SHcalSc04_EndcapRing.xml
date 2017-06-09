@@ -1,0 +1,49 @@
+<!-- comment>Calorimeters</comment -->
+
+<lccdd>
+  <detectors>
+    <detector name="HcalRing" type="SHcalSc04_EndcapRing" id="ILDDetID_HCAL_RING" readout="HcalEndcapRingCollection" vis="GreenVis" insideTrackingVolume="false" >
+      <comment>Hadron Calorimeter EndcapRing</comment>
+
+      <envelope vis="ILD_HCALVis">
+        <shape type="BooleanShape" operation="Subtraction" material="Air">
+          <shape type="BooleanShape" operation="Intersection" material="Air" >
+            <shape type="Box" dx="HcalEndcapRing_outer_radius + 2.0*env_safety" dy="HcalEndcapRing_outer_radius + 2.0*env_safety"
+                   dz="HcalEndcapRing_max_z + 2.0*env_safety"/> <!--Box defined the coordinate system-->
+            <shape type="PolyhedraRegular"  numsides="HcalEndcapRing_symmetry" rmin="HcalEndcapRing_inner_radius - env_safety"
+                   rmax="HcalEndcapRing_outer_radius + env_safety" dz="2.0*HcalEndcapRing_max_z + env_safety" material="Air"/>
+            <rotation x="0" y="0" z="90*deg-180*deg/HcalEndcapRing_symmetry"/>
+          </shape>
+          <shape type="Box" dx="HcalEndcapRing_outer_radius + 2.0*env_safety" dy="HcalEndcapRing_outer_radius + 2.0*env_safety"
+                 dz="HcalEndcapRing_min_z - env_safety"/>
+        </shape>
+      </envelope>
+
+      <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_HADRONIC + DetType_AUXILIARY " />
+
+      <!-- absorber material-->
+      <material name="Steel235"/>
+      <staves  material = "Steel235"  vis="GreenVis"/>
+
+      <!-- The layer structure reference on page 10 in the following paper-->
+      <!-- https://bib-pubdb1.desy.de/record/139781/files/LC-TOOL-2012-082.pdf -->
+      <layer>
+        <!-- slice: from inner -->
+        <slice material = "G4_POLYSTYRENE" thickness = "Hcal_scintillator_thickness" sensitive = "yes" vis="CyanVis"   />
+        <!-- <slice material = "FR4" thickness = "Hcal_PCB_thickness" /> -->
+        <slice material = "PCB" thickness = "Hcal_PCB_thickness"                                       vis="Invisible" />
+        <slice material = "Cu"  thickness = "Hcal_Cu_thickness"                                        vis="Invisible" />
+        <slice material = "Air" thickness = "Hcal_fiber_gap"                                           vis="YellowVis" />
+        <!-- slice: to outer -->
+      </layer>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="HcalEndcapRingCollection">
+      <segmentation type="CartesianGridXY" grid_size_x="Hcal_cells_size" grid_size_y="Hcal_cells_size"/>
+      <id>system:5,module:3,stave:4,tower:3,layer:6,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>

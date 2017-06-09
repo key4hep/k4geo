@@ -1,0 +1,45 @@
+<define>
+
+  <constant name="Lcal_nstrips_phi" value="48"/>
+  <constant name="Lcal_nstrips_theta" value="64"/>
+
+  <constant name="LumiCal_inner_radius"          value="80*mm"/>
+  <constant name="LumiCal_outer_radius"          value="202.086*mm"/>
+
+  <constant name="Lcal_n_tiles" value="12"/>
+  <constant name="Lcal_tile_gap" value="1.2*mm"/>
+
+  <constant name="LcalHalfTilePhi"  value="180./Lcal_n_tiles*degree"/>
+  <constant name="CosHalfTilePhi"   value=" cos( LcalHalfTilePhi )"/>
+
+  <constant name="Lcal_sensor_rmin" value=" LumiCal_inner_radius*CosHalfTilePhi + Lcal_tile_gap"/>
+  <constant name="Lcal_sensor_rmax" value=" LumiCal_outer_radius*CosHalfTilePhi - Lcal_tile_gap"/>
+
+  <constant name="Lcal_offset_phi" value=" 360./Lcal_nstrips_phi/2.*degree"/>
+
+  <constant name="Lcal_services_rmax" value="EcalEndcapRing_inner_radius-1.0*mm"/>
+
+  <constant name="Lcal_tungsten_thickness" value="3.5*mm"/>
+  <constant name="Lcal_silicon_thickness" value="0.32*mm"/>
+  <constant name="Lcal_support_thickness" value="0.22*mm"/>
+  <constant name="Lcal_layer_gap" value="0.25*mm"/>
+
+  <constant name="LumiCal_thickness"    value="128.7*mm"/>
+  <constant name="LumiCal_min_z"        value="top_Lcal_z_begin" />
+  <constant name="LumiCal_max_z"        value="LumiCal_min_z + LumiCal_thickness" />
+
+  <constant name="ECal_LHcal_clearance" value="45*mm"/>
+  <constant name="LHcal_min_z" value="Ecal_endcap_zmax+ECal_LHcal_clearance"/>
+  <constant name="LHcal_cell_size" value="10*mm"/>
+
+  <constant name="BCal_cutoutSpanning" value="45*degree"/>
+  <constant name="BCal_SpanningPhi" value="360*degree-BCal_cutoutSpanning"/>
+  <constant name="BCal_TubeIncomingRadius" value="top_BeamCal_tubeIncoming_radius"/>
+  <constant name="BCal_TubeIncomingClearance" value="top_BeamCal_tubeIncoming_clearance"/>
+  <constant name="BCal_dAbsorber" value="3.5*mm"/>
+  <constant name="BCal_dGraphite" value="top_BCal_dGraphite"/>
+  <constant name="BCal_rGraphite" value="LHCal_inner_radius-10.0*mm"/>
+  <constant name="BCal_nLayers" value="top_BCal_nLayers"/>
+  <constant name="BeamCal_cell_size" value="3.5*mm"/>
+
+</define>
