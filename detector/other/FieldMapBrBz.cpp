@@ -1,7 +1,7 @@
 #include "FieldMapBrBz.h"
 
 
-#include "DD4hep/Handle.inl"
+#include "DD4hep/detail/Handle.inl"
 #include <DD4hep/FieldTypes.h>
 
 
