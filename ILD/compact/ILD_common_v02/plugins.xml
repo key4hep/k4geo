@@ -1,0 +1,23 @@
+<!-- place for plugins -->
+
+  <plugins>
+    <plugin name="DD4hep_CaloFaceEndcapSurfacePlugin">
+      <argument value="EcalEndcap"/>
+      <argument value="zpos=EcalEndcap_min_z"    />
+      <argument value="radius=EcalEndcap_outer_radius"  />
+      <argument value="phi0=0"    />
+      <argument value="symmetry=EcalEndcap_symmetry"/>
+      <argument value="systemID=ILDDetID_ECAL_ENDCAP"/>
+      <comment> <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> </comment>
+    </plugin>
+    <plugin name="DD4hep_CaloFaceBarrelSurfacePlugin">
+      <argument value="EcalBarrel"/>
+      <argument value="length=2.*Ecal_half_length"    />
+      <argument value="radius=Ecal_inner_radius"  />
+      <argument value="phi0=0"    />
+      <argument value="symmetry=Ecal_symmetry"/>
+      <argument value="systemID=ILDDetID_ECAL"/>
+      <comment> <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> </comment>
+    </plugin>
+    <plugin name="InstallSurfaceManager"/>
+  </plugins>

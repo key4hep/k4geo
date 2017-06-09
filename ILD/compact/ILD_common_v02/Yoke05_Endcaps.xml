@@ -1,0 +1,44 @@
+<!-- comment>Calorimeters</comment -->
+<lccdd>
+  <detectors>
+    <detector name="YokeEndcap" type="Yoke05_Endcaps" id="ILDDetID_YOKE_ENDCAP" readout="YokeEndcapsCollection" vis="YellowVis" insideTrackingVolume="false" >
+
+      <envelope vis="ILD_YOKEVis">
+        <shape type="BooleanShape" operation="Subtraction" material="Air">
+          <shape type="BooleanShape" operation="Subtraction" material="Air">
+            <shape type="BooleanShape" operation="Intersection" material="Air">
+              <shape type="Box" dx="YokeEndcap_outer_radius + 1.5*env_safety" dy="YokeEndcap_outer_radius + 1.5*env_safety"
+                     dz="YokeEndcap_max_z + env_safety"/>
+              <shape type="PolyhedraRegular" numsides="YokeEndcap_symmetry"  rmin="YokeEndcap_inner_radius - env_safety"
+                     rmax="YokeEndcap_outer_radius + env_safety" dz="2.*YokeEndcap_max_z + env_safety" />
+              <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/YokeEndcap_symmetry"/>
+            </shape>
+            <shape type="Box" dx="YokeEndcap_outer_radius + 1.5*env_safety" dy="YokeEndcap_outer_radius + 1.5*env_safety"
+                   dz="YokeEndcapPlug_min_z - env_safety"/>
+          </shape>
+          <shape type="PolyhedraRegular" numsides="YokeEndcapPlug_symmetry"  rmin="YokeEndcapPlug_outer_radius + env_safety"
+                 rmax="YokeEndcap_outer_radius + 2.0*env_safety" dz="2.*YokeEndcap_min_z - env_safety" />
+          <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/YokeEndcapPlug_symmetry"/>
+        </shape>
+      </envelope>
+
+      <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_MUON " />
+
+      <dimensions numsides="12" rmin="Yoke_inner_radius" z="Yoke_barrel_halfZ" />
+      <material name="Iron"/>
+      <layer repeat="12" vis="SeeThrough">
+        <slice material = "Air"            thickness = "15.0*mm"                    vis="YellowVis" />
+        <slice material = "G4_POLYSTYRENE" thickness = "10.0*mm" sensitive = "yes"  vis="CyanVis"   />
+        <slice material = "Air"            thickness = "15.0*mm"                    vis="YellowVis" />
+      </layer>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="YokeEndcapsCollection">
+      <segmentation type="CartesianGridXY" grid_size_x="Yoke_cells_size" grid_size_y="Yoke_cells_size"/>
+      <id>system:5,module:3,stave:4,tower:3,layer:6,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>

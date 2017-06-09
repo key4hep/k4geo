@@ -1,0 +1,62 @@
+<!-- HCAL endcaps ("Tesla design") for large ILD models -->
+
+<lccdd>
+  <detectors>
+    <detector id="ILDDetID_HCAL_ENDCAP" name="HcalEndcap" type="SHcalSc04_Endcaps" readout="HcalEndcapsCollection"  vis="GreenVis" calorimeterType="HAD_ENDCAP">
+      <comment>Hadron Calorimeter Endcap</comment>
+
+      <envelope vis="ILD_HCALVis">
+        <shape type="BooleanShape" operation="Subtraction" material="Air"><!--2. create center box hole -->
+          <shape type="BooleanShape" operation="Subtraction" material="Air"><!--1. create Endcaps envelope -->
+            <shape type="Tube" rmin="0.0" rmax="HcalEndcap_outer_radius + env_safety" dz="HcalEndcap_max_z + env_safety"/>
+            <shape type="Tube" rmin="0.0" rmax="HcalEndcap_outer_radius + 2.0*env_safety" dz="HcalEndcap_min_z - env_safety"/>
+          </shape>
+          <shape type="Box" dx="HcalEndcap_inner_radius - env_safety" dy="HcalEndcap_inner_radius - env_safety"
+                 dz="HcalEndcap_max_z + 2.0*env_safety"/>
+        </shape>
+        <rotation x="0" y="0" z="0"/>
+      </envelope>
+
+      <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_HADRONIC " />
+
+      <material name="Steel235"/><!-- radiator and the thickness has been defined in the main xml file-->
+
+      <dimensions numsides="16"><!-- the detail demensions list. there are 16 in this version. -->
+        <dimensions id="1"  y_offset= "540.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="1080.0*mm"/>
+        <dimensions id="2"  y_offset= "900.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="1800.0*mm"/>
+        <dimensions id="3"  y_offset="1080.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="2160.0*mm"/>
+        <dimensions id="4"  y_offset="1260.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="2520.0*mm"/>
+        <dimensions id="5"  y_offset="1260.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="2520.0*mm"/>
+        <dimensions id="6"  y_offset="1440.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="2880.0*mm"/>
+        <dimensions id="7"  y_offset="1440.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="2880.0*mm"/>
+        <dimensions id="8"  y_offset="1622.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="2520.0*mm"/>
+        <dimensions id="9"  y_offset="1622.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="2520.0*mm"/>
+        <dimensions id="10" y_offset="1440.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="2880.0*mm"/>
+        <dimensions id="11" y_offset="1440.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="2880.0*mm"/>
+        <dimensions id="12" y_offset="1260.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="2520.0*mm"/>
+        <dimensions id="13" y_offset="1260.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="2520.0*mm"/>
+        <dimensions id="14" y_offset="1080.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="2160.0*mm"/>
+        <dimensions id="15" y_offset= "900.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="1800.0*mm"/>
+        <dimensions id="16" y_offset= "540.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="1080.0*mm"/>
+      </dimensions>
+
+      <layer repeat="48"><!-- dim_y="1287.0*mm" is for 48 layers of such chamber and radiator(20.0*mm) thickness -->
+        <!-- slice: from inner -->
+        <slice material = "G4_POLYSTYRENE" thickness = "Hcal_scintillator_thickness" sensitive = "yes" vis="CyanVis"   />
+        <!-- <slice material = "FR4" thickness = "Hcal_PCB_thickness" /> -->
+        <slice material = "PCB" thickness = "Hcal_PCB_thickness"                                       vis="Invisible" />
+        <slice material = "Cu"  thickness = "Hcal_Cu_thickness"                                        vis="Invisible" />
+        <slice material = "Air" thickness = "Hcal_fiber_gap"                                           vis="YellowVis" />
+        <!-- slice: to outer -->
+      </layer>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="HcalEndcapsCollection">
+      <segmentation type="CartesianGridXZ" grid_size_x="Hcal_cells_size" grid_size_z="Hcal_cells_size" offset_x="Hcal_cells_size/2.0" offset_z="Hcal_cells_size/2.0" />
+      <id>system:5,module:3,stave:3,tower:5,layer:6,x:32:-16,z:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>

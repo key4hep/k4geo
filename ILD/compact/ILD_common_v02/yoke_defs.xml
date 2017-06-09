@@ -1,0 +1,7 @@
+<define>
+  <constant name="Yoke_cells_size" value="30*mm"/>
+  <constant name="Yoke_barrel_inner_radius" value="Yoke_inner_radius"/>
+</define>
+
+
+

@@ -1,0 +1,10 @@
+<define>
+
+  <constant name="Ecal_endcap_zmax" value="EcalEndcap_max_z"/>
+  <constant name="Ecal_endcap_plug_rmin" value="EcalEndcapRing_inner_radius"/>
+
+  <constant name="TUBE_crossing_angle" value="ILC_Main_Crossing_Angle"/>
+
+</define>
+
+

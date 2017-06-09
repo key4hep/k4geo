@@ -1,0 +1,15 @@
+<detector name="EcalBarrelFace" type="PolyhedralBarrelSurfaces" id="ILDDetID_ECAL_BARREL_FACE" readout="EcalBarrelFaceReadout" vis="BlueVis" >
+
+    <comment>Surfaces at the face of the Ecal Barrel </comment>
+
+    <envelope vis="ILD_ECALVis">
+      <shape type="PolyhedraRegular" numsides="Ecal_symmetry"  rmin="Ecal_inner_radius - 3*env_safety" 
+	     rmax="Ecal_inner_radius - 2*env_safety" dz="2.*Ecal_half_length + env_safety"  material = "Air" />
+      <rotation x="0*deg" y="0*deg" z="-180*deg/Ecal_symmetry"/>
+    </envelope>
+    
+    <dimensions numsides="Ecal_symmetry" rmin="Ecal_inner_radius - 3*env_safety" 
+		rmax="Ecal_inner_radius - 2*env_safety" zhalf="Ecal_half_length"
+		phi0="-180*deg/Ecal_symmetry" material = "Air" />
+
+</detector>

@@ -1,0 +1,85 @@
+<!-- 
+     VXD parameters for ILD_o1_v5  
+-->
+
+<lccdd>
+<detectors>
+
+<detector name="VXD" type="VXD04" vis="VXDVis" id="ILDDetID_VXD" limits="Tracker_limits" readout="VXDCollection" insideTrackingVolume="true">
+  
+  <envelope vis="ILD_VXDVis">
+    <shape type="BooleanShape" operation="Subtraction" material="Air" >
+      <shape type="BooleanShape" operation="Subtraction" material="Air" >
+	<shape type="BooleanShape" operation="Subtraction" material="Air" >
+	  <shape type="BooleanShape" operation="Subtraction" material="Air" >
+	    <shape type="Tube" rmin="VXD_inner_radius" rmax="VXD_outer_radius" dz="VXD_half_length" />
+	    <shape type="Tube" rmin="0." rmax="VXD_inner_radius_1" dz="(VXD_half_length - VXD_cone_max_z)/2. + env_safety " />
+	    <position x="0" y="0" z="VXD_half_length-(VXD_half_length - VXD_cone_max_z)/2.+ env_safety"/> 
+	  </shape>
+	  <shape type="Tube" rmin="0." rmax="VXD_inner_radius_1" dz="(VXD_half_length - VXD_cone_max_z)/2. + env_safety " />
+	  <position x="0" y="0" z="- ( VXD_half_length-(VXD_half_length - VXD_cone_max_z)/2.+ env_safety ) "/> 
+	  <rotation x="0" y="180.*deg" z="0" />
+	</shape>
+	<shape type="Cone" rmin1="0" rmax1="VXD_inner_radius" rmin2="0" rmax2="VXD_inner_radius_1" 
+	       z="(VXD_cone_max_z-VXD_cone_min_z)/2. + env_safety "/>
+	<position x="0" y="0" z="VXD_cone_min_z+(VXD_cone_max_z-VXD_cone_min_z)/2."/> 
+      </shape>
+      <shape type="Cone" rmin1="0" rmax1="VXD_inner_radius" rmin2="0" rmax2="VXD_inner_radius_1" 
+	     z="(VXD_cone_max_z-VXD_cone_min_z)/2. + env_safety "/>
+      <position x="0" y="0" z="-(VXD_cone_min_z+(VXD_cone_max_z-VXD_cone_min_z)/2.)"/> 
+      <rotation x="0" y="180.*deg" z="0" />
+    </shape>
+  </envelope>
+
+  <!-- set the detecor type flag - note: using the '+' operator here as the evaluator does not understand '|' 
+       -> be carefull not to add any flags twice !!!     -->
+  <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX "/>
+  
+  <!-- database : TMP_DB10 -->
+  <!-- SQL command: "select * from layers_common_parameters;"  -->
+  <layers_common_parameters id="1" electronics_structure_thickness="0.1*mm" active_silicon_thickness="0.05*mm" support_structure_radial_thickness="0.49392*mm" end_electronics_half_z="5*mm" 
+			    strip_final_beampipe_radious="VXD_inner_radius_1"	
+			    side_band_electronics_option="1" end_ladd_electronics_option="1" side_band_electronics_width="0.5*mm" 
+			    side_band_electronics_thickness="0.05*mm" active_side_band_electronics_option="0" layer_gap="2*mm" flex_cable_material="G4_KAPTON" flex_cable_thickness="0.05*mm"
+			    foam_spacer_material="SiC_foam" foam_spacer_thickness="0.94*mm" metal_traces_material="G4_Al" metal_traces_thickness="0.01*mm" cool_pipe_material="titanium" 
+			    cool_pipe_inner_radius="0.75*mm" cool_pipe_outer_radius="1*mm" external_kapton_thickness="0.05*mm" external_metal_thickness="0.009*mm"  />
+  <!-- SQL command: "SELECT * FROM cryostat;"  -->
+  <cryostat id="1" alu_skin_inner_radious="100*mm" alu_skin_tickness="0.5*mm" foam_inner_radious="90*mm" foam_tickness="10*mm" foam_half_z="166.6*mm" 
+	    endplate_inner_radious="VXD_inner_radius_1" 
+	    cryostat_option="1" cryostat_apperture="30*mm" cryostat_apperture_radius="1.5*mm"  />
+  <!-- SQL command: "select * from support_shell;"  -->
+  <support_shell id="0" inner_radious="65*mm" half_z="145*mm" thickess="0.49392*mm" endplate_inner_radious="30*mm" endplate_inner_radius_L1="15.7*mm" endplate_outer_radius_L1="20*mm" 
+		 offset_ladder_block="0.28224*mm" beryllium_ladder_block_length="5*mm" beryllium_ladder_block_thickness="0.25*mm" shell_endplate_thickness="2*mm" forward_shell_half_z="6.5*mm"  />
+  <!-- SQL command: "select * from layer;"  -->
+  <layer id="0" layer_radius="VXD_radius_r1" ladder_length="VXD_length_r1" ladder_width="5.5*mm" nb_ladder="10" ladder_gap="0" strip_line_final_z="150*mm" end_electronics_width="5.5*mm" 
+	 initial_kapton_striplines_thickness="0.04566*mm" final_kapton_striplines_thickness="0.02435*mm" initial_metal_striplines_thickness="0.00806*mm" 
+	 final_metal_striplines_thickness="0.0043*mm" support_width="4.5*mm"  />
+  <layer id="1" layer_radius="VXD_radius_r1" ladder_length="VXD_length_r1" ladder_width="5.5*mm" nb_ladder="10" ladder_gap="0" strip_line_final_z="150*mm" end_electronics_width="5.5*mm" 
+	 initial_kapton_striplines_thickness="0.04566*mm" final_kapton_striplines_thickness="0.02435*mm" initial_metal_striplines_thickness="0.00806*mm" 
+	 final_metal_striplines_thickness="0.0043*mm" support_width="4.5*mm"  />
+  <layer id="2" layer_radius="VXD_radius_r3" ladder_length="VXD_length_r3" ladder_width="11*mm" nb_ladder="11" ladder_gap="0*mm" strip_line_final_z="150*mm" end_electronics_width="11*mm" 
+	 initial_kapton_striplines_thickness="0.04102*mm" final_kapton_striplines_thickness="0.05059*mm" initial_metal_striplines_thickness="0.00724*mm" 
+	 final_metal_striplines_thickness="0.00893*mm" support_width="10*mm"  />
+  <layer id="3" layer_radius="VXD_radius_r3" ladder_length="VXD_length_r3" ladder_width="11*mm" nb_ladder="11" ladder_gap="0*mm" strip_line_final_z="150*mm" end_electronics_width="11*mm" 
+	 initial_kapton_striplines_thickness="0.04102*mm" final_kapton_striplines_thickness="0.05059*mm" initial_metal_striplines_thickness="0.00724*mm" 
+	 final_metal_striplines_thickness="0.00893*mm" support_width="10*mm"  />
+  <layer id="4" layer_radius="VXD_radius_r5" ladder_length="VXD_length_r3" ladder_width="11*mm" nb_ladder="17" ladder_gap="0*mm" strip_line_final_z="150*mm" end_electronics_width="11*mm" 
+	 initial_kapton_striplines_thickness="0.04044*mm" final_kapton_striplines_thickness="0.07819*mm" initial_metal_striplines_thickness="0.00714*mm" 
+	 final_metal_striplines_thickness="0.0138*mm" support_width="10*mm"  />
+  <layer id="5" layer_radius="VXD_radius_r5" ladder_length="VXD_length_r3" ladder_width="11*mm" nb_ladder="17" ladder_gap="0*mm" strip_line_final_z="150*mm" end_electronics_width="11*mm" 
+	 initial_kapton_striplines_thickness="0.04044*mm" final_kapton_striplines_thickness="0.07819*mm" initial_metal_striplines_thickness="0.00714*mm" 
+	 final_metal_striplines_thickness="0.0138*mm" support_width="10*mm"  />
+</detector> <!--vxd-->
+
+</detectors>
+
+  <readouts>
+    <readout name="VXDCollection">
+      <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
+      <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+    </readout>
+  </readouts>
+
+
+
+</lccdd>
