@@ -29,16 +29,15 @@
   <!-- <constant name="Coil_thickness" value="750.0*mm"/> -->
 
   <constant name="DHcal_max_step" value="10.0*mm"/>
-  <constant name="EcalBarrelServices_RailDistanceToRight" value="166.5*mm"/>
+  <!-- constant name="EcalBarrelServices_RailDistanceToRight" value="166.5*mm"/ -->
   <constant name="EcalBarrelServices_RailHeight" value="30.0*mm"/>
-  <constant name="EcalBarrelServices_RailSeparation" value="380.0*mm"/>
+  <constant name="EcalBarrelServices_RailSeparation" value="880.0*mm"/>
   <constant name="EcalBarrelServices_RailWidth" value="103.25*mm"/>
-  <constant name="EcalBarrelServices_ZMinus_FirstInterrail_Cu_Thickness" value="1.8*mm"/>
+  <constant name="EcalBarrelServices_ZMinus_FirstInterrail_Cu_Thickness" value="(1.8*mm+0.9*mm)/2."/>
   <constant name="EcalBarrelServices_ZMinus_FirstInterrail_PE_Thickness" value="4.5*mm"/>
-  <constant name="EcalBarrelServices_ZMinus_SecondInterrail_Cu_Thickness" value="0.9*mm"/>
-  <constant name="EcalBarrelServices_ZPlus_FirstInterrail_Cu_Thickness" value="1.09*mm"/>
+  <constant name="EcalBarrelServices_ZPlus_FirstInterrail_Cu_Thickness" value="(1.09*mm+0.61*mm)/2."/>
   <constant name="EcalBarrelServices_ZPlus_FirstInterrail_PE_Thickness" value="2.67*mm"/>
-  <constant name="EcalBarrelServices_ZPlus_SecondInterrail_Cu_Thickness" value="0.61*mm"/>
+
   <constant name="EcalBarrel_EndCapServices_ZMinus_Cu_Thickness" value="5.2*mm"/>
   <constant name="EcalBarrel_EndCapServices_ZMinus_PE_Thickness" value="12.4*mm"/>
   <constant name="EcalBarrel_EndCapServices_ZPlus_Cu_Thickness" value="3.5*mm"/>
