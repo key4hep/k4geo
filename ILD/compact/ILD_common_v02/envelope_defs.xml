@@ -36,9 +36,11 @@
   <constant name="TUBE_IPOuterTube_start_radius"  value="TUBE_IPInnerBulge_end_innerradius"/>
   <constant name="TUBE_IPOuterBulge_end_z"        value="top_Lcal_z_begin - TUBE_Lcal_clearance"/>
   <constant name="TUBE_IPOuterBulge_end_radius"   value="Lcal_outer_radius-LumiCal_tubebulge_overshoot"/>
-  <constant name="TUBE_IPInnerBulge_end_envradius"   value="TUBE_IPInnerBulge_end_innerradius + TUBE_maxthick"/>
+  <constant name="TUBE_IPInnerBulge_end_envradius"   value="TUBE_IPInnerBulge_end_innerradius + TUBE_inner_maxthick"/>
   <constant name="TUBE_IPOuterTube_end_envradius"    value="TUBE_IPInnerBulge_end_envradius"/>
-  <constant name="TUBE_IPOuterBulge_end_envradius"   value="TUBE_IPOuterBulge_end_radius+TUBE_maxthick"/>
+
+  <constant name="TUBE_IPOuterBulge_start_envradius"   value="TUBE_IPInnerBulge_end_innerradius+TUBE_outer_maxthick"/>
+  <constant name="TUBE_IPOuterBulge_end_envradius"   value="TUBE_IPOuterBulge_end_radius+TUBE_outer_maxthick"/>
 
 
 
@@ -60,7 +62,7 @@
   <constant name="TPC_outer_radius"    value="top_TPC_outer_radius"/>
   <constant name="TPC_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ"/>
 
-  <constant name="FTD_inner_radius"    value=" TUBE_IPOuterTube_end_envradius + env_safety"/>
+  <constant name="FTD_inner_radius"    value=" TUBE_IPOuterBulge_start_envradius + env_safety"/>
   <constant name="FTD_outer_radius_1"  value=" SIT_inner_radius   - env_safety"/>
   <constant name="FTD_outer_radius_2"  value=" SIT_outer_radius_1 - env_safety"/>
   <constant name="FTD_outer_radius"    value=" TPC_inner_radius - env_safety"/>

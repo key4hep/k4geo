@@ -3,7 +3,7 @@
   <!-- services -->
   <constant name="EcalBarrelServices_RailDistanceToRight" value="166.5*mm"/>
   <constant name="EcalBarrelServices_RailHeight" value="30.0*mm"/>
-  <constant name="EcalBarrelServices_RailSeparation" value="380.0*mm"/>
+  <constant name="EcalBarrelServices_RailSeparation" value="600.0*mm"/>
   <constant name="EcalBarrelServices_RailWidth" value="103.25*mm"/>
   <constant name="EcalBarrelServices_ZMinus_FirstInterrail_Cu_Thickness" value="1.8*mm"/>
   <constant name="EcalBarrelServices_ZMinus_FirstInterrail_PE_Thickness" value="4.5*mm"/>
