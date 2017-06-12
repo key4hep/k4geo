@@ -130,29 +130,21 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, Ref_t)  {
       <<"\n" <<endl;
 
 
-  double RailDistanceToRight = lcdd.constant<double>("EcalBarrelServices_RailDistanceToRight");
   double RailSeparation = lcdd.constant<double>("EcalBarrelServices_RailSeparation");
   double RailWidth =  lcdd.constant<double>("EcalBarrelServices_RailWidth");
 
   double ZMinus_FirstInterrail_PE_Thickness = lcdd.constant<double>("EcalBarrelServices_ZMinus_FirstInterrail_PE_Thickness");
   double ZMinus_FirstInterrail_Cu_Thickness = lcdd.constant<double>("EcalBarrelServices_ZMinus_FirstInterrail_Cu_Thickness");
-  double ZMinus_SecondInterrail_Cu_Thickness = lcdd.constant<double>("EcalBarrelServices_ZMinus_SecondInterrail_Cu_Thickness");
 
   double ZPlus_FirstInterrail_PE_Thickness = lcdd.constant<double>("EcalBarrelServices_ZPlus_FirstInterrail_PE_Thickness");
   double ZPlus_FirstInterrail_Cu_Thickness = lcdd.constant<double>("EcalBarrelServices_ZPlus_FirstInterrail_Cu_Thickness");
-  double ZPlus_SecondInterrail_Cu_Thickness = lcdd.constant<double>("EcalBarrelServices_ZPlus_SecondInterrail_Cu_Thickness");
-
-  double OldRailSeparation = lcdd.constant<double>("EcalBarrelServices_RailSeparation");
 
   // start to build Ecal Barrel services with the class BuildEcalBarrelServices
   BuildEcalBarrelServices EcalBarrelServices;
 
   EcalBarrelServices.setMaterialAir(lcdd.air());
-  //EcalBarrelServices.setMaterialAluminium(lcdd.material("aluminium"));
   EcalBarrelServices.setMaterialAluminium(lcdd.material("Al"));
-  //EcalBarrelServices.setMaterialPolyethylene(lcdd.material("polyethylene"));
   EcalBarrelServices.setMaterialPolyethylene(lcdd.material("G4_POLYSTYRENE"));
-  //EcalBarrelServices.setMaterialCopper(lcdd.material("copper"));
   EcalBarrelServices.setMaterialCopper(lcdd.material("Cu"));
 
   EcalBarrelServices.sethalfZ(TPC_Ecal_Hcal_barrel_halfZ);
@@ -161,18 +153,14 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, Ref_t)  {
   EcalBarrelServices.setOutRadius(Ecal_outer_radius);
   EcalBarrelServices.setModuleThickness(module_thickness);
 
-  EcalBarrelServices.setRailDistanceToRight(RailDistanceToRight);
   EcalBarrelServices.setRailSeparation(RailSeparation);
   EcalBarrelServices.setRailWidth(RailWidth);
 
   EcalBarrelServices.setZMinus_FirstInterrail_PE_Thickness(ZMinus_FirstInterrail_PE_Thickness);
   EcalBarrelServices.setZMinus_FirstInterrail_Cu_Thicknesst(ZMinus_FirstInterrail_Cu_Thickness);
-  EcalBarrelServices.setZMinus_SecondInterrail_Cu_Thickness(ZMinus_SecondInterrail_Cu_Thickness);
 
   EcalBarrelServices.setZPlus_FirstInterrail_PE_Thickness(ZPlus_FirstInterrail_PE_Thickness);
   EcalBarrelServices.setZPlus_FirstInterrail_Cu_Thickness(ZPlus_FirstInterrail_Cu_Thickness);
-  EcalBarrelServices.setZPlus_SecondInterrail_Cu_Thickness(ZPlus_SecondInterrail_Cu_Thickness);
-  EcalBarrelServices.setOldRailSeparation(OldRailSeparation);
 
   EcalBarrelServices.DoBuildEcalBarrelServices(pv,envelope_assembly);
 

@@ -72,169 +72,85 @@ public:
   void setOutRadius (double outer_radius){Ecal_outer_radius = outer_radius ;};
   void setModuleThickness (double thickness){ module_thickness = thickness ;};
 
-  void setRailDistanceToRight (double distance) {RailDistanceToRight = distance;};
   void setRailSeparation (double separation) {RailSeparation = separation;};
   void setRailWidth (double width) {RailWidth = width;};
 
   void setZMinus_FirstInterrail_PE_Thickness  (double PE_Thickness_ZMF) {ZMinus_FirstInterrail_PE_Thickness = PE_Thickness_ZMF;};
   void setZMinus_FirstInterrail_Cu_Thicknesst  (double Cu_Thickness_ZMF) {ZMinus_FirstInterrail_Cu_Thickness = Cu_Thickness_ZMF;};
-  void setZMinus_SecondInterrail_Cu_Thickness (double Cu_Thickness_ZMS) {ZMinus_SecondInterrail_Cu_Thickness = Cu_Thickness_ZMS;};
 
   void setZPlus_FirstInterrail_PE_Thickness  (double PE_Thickness_ZPF) {ZPlus_FirstInterrail_PE_Thickness = PE_Thickness_ZPF;};
   void setZPlus_FirstInterrail_Cu_Thickness  (double Cu_Thickness_ZPF) {ZPlus_FirstInterrail_Cu_Thickness = Cu_Thickness_ZPF;};
-  void setZPlus_SecondInterrail_Cu_Thickness (double Cu_Thickness_ZPS) {ZPlus_SecondInterrail_Cu_Thickness = Cu_Thickness_ZPS;};
-
-  void setOldRailSeparation (double ORailSeparation) {OldRailSeparation = ORailSeparation;};
 
   void setRailSeparationChanged(void) {RailSeparationChanged = false;};
 
   // to fill the detail service layers into the container
   bool FillEcalBarrelServicesContainer(PlacedVolume &pVol, Volume &pContainerLogical){
 
-    if(fabs(
-	    top_dim_x/2. - (RailDistanceToRight + RailWidth*1.5 + RailSeparation)
-	    ) >= RailWidth*0.5)
-      {
-	RailSeparation = top_dim_x/2. - (RailDistanceToRight + RailWidth*1.5);
-  	if(RailSeparation <= 0.) return false;
-	  //DDSim::exception();
-	  //Control::Abort("EcalBarrel services:no room for rails, cables, etc...",
-	  //		 MOKKA_ERROR_BAD_DATABASE_PARAMETERS);
+    const int NRAILS=2;
+    if ( RailSeparation*(NRAILS-1) > top_dim_x - RailWidth ) {
+      cout << "WARNING, requested rail separation too large! " << endl;
+      cout << "Must be smaller than " << (top_dim_x - RailWidth)/(NRAILS-1) << " cm" << endl;
+      assert(0);
+    }
 
-        RailSeparationChanged = true;
-      }
+    float railPositions[NRAILS]; // positions wrt module centre: equally spaced, centered on module
+    for (int i=0; i<NRAILS; i++) {
+      railPositions[i] = i*RailSeparation - RailSeparation*(NRAILS-1)/2.;
+    }
    
     Box railSolid(RailWidth/2., RailHeight/2., Ecal_barrel_halfZ); 
 
     Volume railLogical("railLogical", railSolid, aluminium);
-    //railLogical.setVisAttributes("RedVis");
 
-    double railPosition = top_dim_x/2. - RailDistanceToRight - RailWidth/2.;
-
-    for(int i=1; i<=3; i++)
+    for(int i=0; i<NRAILS; i++)
       {
-	Position pos(railPosition,0,0);
-	
+	Position pos(railPositions[i],0,0);
 	pVol = pContainerLogical.placeVolume(railLogical,pos);
-	
-        railPosition -= (RailWidth + RailSeparation);
       }
     
-     
-  if(RailSeparationChanged)
-  {
-     double fraction = OldRailSeparation / RailSeparation;
-     ZMinus_FirstInterrail_PE_Thickness *= fraction;
-     ZMinus_FirstInterrail_Cu_Thickness *= fraction;
-     ZMinus_SecondInterrail_Cu_Thickness *= fraction;
-
-     ZPlus_FirstInterrail_PE_Thickness *= fraction;
-     ZPlus_FirstInterrail_Cu_Thickness *= fraction;
-     ZPlus_SecondInterrail_Cu_Thickness *= fraction;
-  }
-
   double moduleLength = Ecal_barrel_halfZ * 2. / 5.;
 
-  
- //First place ingredients at -Z:
-  for(int i=0; i<3; i++){
+  double internalZoneWidth = RailSeparation - RailWidth - 0.1; // space between rails (in x-dir) (minus a small gap)
 
-    double x_half_dim = (RailSeparation  * (3 - i) / 3.) / 2.;
+  // now fit fit service materials into the zone between rails
+
+  const int NMODULES_IN_Z=5;
+  for(int i=0; i<NMODULES_IN_Z; i++){ // these are the 5 modules in z
     
+    float pe_thick = ZMinus_FirstInterrail_PE_Thickness;
+    float cu_thick = ZMinus_FirstInterrail_Cu_Thickness;
+    if ( i>2 ) {
+      pe_thick = ZPlus_FirstInterrail_PE_Thickness;
+      cu_thick = ZPlus_FirstInterrail_Cu_Thickness;
+    }
+
     // polyethylene
-    Box PESolid(x_half_dim, ZMinus_FirstInterrail_PE_Thickness / 2., moduleLength / 2.); 
+    Box PESolid( internalZoneWidth/2. , pe_thick / 2., moduleLength / 2.); 
     
     string PELogical_name  = "PELogical"+_toString(i,"_%d");
     Volume PELogical(PELogical_name,PESolid,polyethylene);
     //PELogical.setVisAttributes("GreenVis");
 
-    Position posPE(top_dim_x/2.-RailDistanceToRight-RailWidth-RailSeparation+x_half_dim,
-		   -RailHeight/2. + ZMinus_FirstInterrail_PE_Thickness/2.,
-		   -Ecal_barrel_halfZ + moduleLength*(i+1/2.));
+    Position posPE( 0 , 
+		    -RailHeight/2. + pe_thick/2.,
+		    -Ecal_barrel_halfZ + moduleLength*(i+1/2.));
     
     pVol = pContainerLogical.placeVolume(PELogical,posPE);
     
-    
-    
     // Cu_1
-    Box Cu_1_Solid(x_half_dim, ZMinus_FirstInterrail_Cu_Thickness / 2., moduleLength / 2.); 
+    Box Cu_1_Solid( internalZoneWidth/2., cu_thick / 2., moduleLength / 2.); 
     
     string Cu_1_Logical_name  = "Cu_1_Logical"+_toString(i,"_%d");
     Volume Cu_1_Logical(Cu_1_Logical_name, Cu_1_Solid,copper);
     //Cu_1_Logical.setVisAttributes("BlueVis");
 
-    Position posCu1(top_dim_x/2.-RailDistanceToRight-RailWidth-RailSeparation+x_half_dim,
-		    -RailHeight/2. + ZMinus_FirstInterrail_PE_Thickness+ZMinus_FirstInterrail_Cu_Thickness/2.,
-		    -Ecal_barrel_halfZ + moduleLength*(i+1/2.));
+    Position posCu1( 0 , 
+		     -RailHeight/2. + pe_thick + cu_thick/2.,
+		     -Ecal_barrel_halfZ + moduleLength*(i+1/2.));
     
     pVol = pContainerLogical.placeVolume(Cu_1_Logical,posCu1);
-    
-    
-    
-    // Cu_2
-    Box Cu_2_Solid(x_half_dim, ZMinus_SecondInterrail_Cu_Thickness / 2., moduleLength / 2.); 
-    
-    string Cu_2_Logical_name  = "Cu_2_Logical"+_toString(i,"_%d");
-    Volume Cu_2_Logical(Cu_2_Logical_name,Cu_2_Solid,copper);
-    //Cu_2_Logical.setVisAttributes("YellowVis");
-
-    Position posCu2(top_dim_x/2.-RailDistanceToRight-2*RailWidth-2*RailSeparation+x_half_dim,
-		    -RailHeight/2. + ZMinus_SecondInterrail_Cu_Thickness/2.,
-		    -Ecal_barrel_halfZ + moduleLength*(i+1/2.));
-    
-    pVol = pContainerLogical.placeVolume(Cu_2_Logical,posCu2);
-  }
-
-
-
-
-
-  //Now place ingredients at +Z:
-  for(int i=0; i<2; i++){
-
-    double x_half_dim = (RailSeparation  * (2 - i) / 2.) / 2.;
-
-    // polyethylene
-    Box PESolid(x_half_dim, ZPlus_FirstInterrail_PE_Thickness / 2., moduleLength / 2.); 
-    
-    string PELogical_name  = "PELogical"+_toString(i,"_%d");
-    Volume PELogical(PELogical_name,PESolid,polyethylene);
-    
-    Position posPE(top_dim_x/2.-RailDistanceToRight-RailWidth-RailSeparation+x_half_dim,
-		   -RailHeight/2. + ZPlus_FirstInterrail_PE_Thickness/2.,
-		   Ecal_barrel_halfZ - moduleLength*(i+1/2.));
-    
-    pVol = pContainerLogical.placeVolume(PELogical,posPE);
-    
- 
-    // Cu_1
-    Box Cu_1_Solid(x_half_dim, ZPlus_FirstInterrail_Cu_Thickness / 2., moduleLength / 2.); 
-
-    string Cu_1_Logical_name  = "Cu_1_Logical"+_toString(i,"_%d");
-    Volume Cu_1_Logical(Cu_1_Logical_name,Cu_1_Solid,copper);
-
-    Position posCu1(top_dim_x/2.-RailDistanceToRight-RailWidth-RailSeparation+x_half_dim,
-		    -RailHeight/2. + ZPlus_FirstInterrail_PE_Thickness+ZPlus_FirstInterrail_Cu_Thickness/2.,
-		    Ecal_barrel_halfZ - moduleLength*(i+1/2.));
-
-    pVol = pContainerLogical.placeVolume(Cu_1_Logical,posCu1);
-    
-    
-    
-    // Cu_2
-    Box Cu_2_Solid(x_half_dim, ZPlus_SecondInterrail_Cu_Thickness / 2., moduleLength / 2.); 
-
-    string Cu_2_Logical_name  = "Cu_2_Logical"+_toString(i,"_%d");
-    Volume Cu_2_Logical(Cu_2_Logical_name,Cu_2_Solid,copper);
-
-    Position posCu2(top_dim_x/2.-RailDistanceToRight-2*RailWidth-2*RailSeparation+x_half_dim,
-		    -RailHeight/2. + ZPlus_SecondInterrail_Cu_Thickness/2.,
-		    Ecal_barrel_halfZ - moduleLength*(i+1/2.));
-
-    pVol = pContainerLogical.placeVolume(Cu_2_Logical,posCu2);
 
   }
-
 
     return true;
   };
@@ -255,8 +171,8 @@ public:
 	double phirot = (stave_id-1) * M_PI/4.;
 	RotationZYX rot(-phirot,0,0);
 	//Position  stavePosition(module_thickness * sin(M_PI/4.), Ecal_outer_radius + RailHeight/2., 0);
-	Position  stavePosition((Ecal_outer_radius + RailHeight/2.)*sin(phirot) + module_thickness * sin(M_PI/4.)*cos(-phirot), 
-				(Ecal_outer_radius + RailHeight/2.)*cos(phirot)+module_thickness * sin(M_PI/4.)*sin(-phirot), 
+	Position  stavePosition( (Ecal_outer_radius + RailHeight/2.)*sin(phirot) - module_thickness * sin(M_PI/4.)*cos(-phirot), 
+				 (Ecal_outer_radius + RailHeight/2.)*cos(phirot) - module_thickness * sin(M_PI/4.)*sin(-phirot), 
 				0 );
 	Transform3D tran3D(rot,stavePosition);
 	pVol = envelope.placeVolume(containerLogical,tran3D);
@@ -272,7 +188,7 @@ private:
   double Ecal_outer_radius;
   double module_thickness;
 
-  double RailDistanceToRight;
+  //  double RailDistanceToRight;
   double RailSeparation;
   double RailWidth;
   bool   RailSeparationChanged;
@@ -280,14 +196,10 @@ private:
 //-Z thicknesses
   double ZMinus_FirstInterrail_PE_Thickness;
   double ZMinus_FirstInterrail_Cu_Thickness;
-  double ZMinus_SecondInterrail_Cu_Thickness;
 
 //+Z thicknesses 
   double ZPlus_FirstInterrail_PE_Thickness;
   double ZPlus_FirstInterrail_Cu_Thickness;
-  double ZPlus_SecondInterrail_Cu_Thickness;
-
-  double OldRailSeparation;
 
   Material air;
   Material aluminium;
@@ -429,8 +341,6 @@ private:
 //+Z thicknesses 
   double ZPlus_PE_Thickness;
   double ZPlus_Cu_Thickness;
-
-  // double OldRailSeparation;
 
   Material air;
   Material polyethylene;
