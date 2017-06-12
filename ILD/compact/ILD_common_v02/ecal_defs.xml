@@ -10,13 +10,15 @@
   <constant name="Ecal_radiator_layers_set3_thickness" value="0*mm"/>
 
   <constant name="Ecal_barrel_number_of_towers" value="5"/>
-  <constant name="Ecal_fiber_thickness_structure" value="2*0.15*mm"/>
-  <constant name="Ecal_fiber_thickness_alveolus" value="3*0.15*mm"/>
+
+  <constant name="Ecal_fiber_thickness_structure" value="0.42*mm"/> <!-- 0.5*(3.82 - 2.1 - 2*0.44)=  -->
+  <constant name="Ecal_fiber_thickness_alveolus" value="0.44*mm"/> <!--  0.88 / 2 -->
   <constant name="Ecal_fiber_thickness_slabAbs" value="0.15*mm"/>
 
-  <constant name="Ecal_front_face_thickness" value="0*mm"/>
-  <constant name="Ecal_lateral_face_thickness" value="1.54*mm"/>
-  <constant name="Ecal_support_thickness" value="14.4*mm + 5.65*mm"/> <!-- DANIEL FUDGE FACTOR to get correct total thickness -->
+  <constant name="Ecal_front_face_thickness" value="0.66*mm"/> <!-- 4.04 - 2.1 - 0.44 - 2*0.42  = 0.66 -->
+  <constant name="Ecal_support_thickness" value="(14.0+2.09)*mm"/> <!-- 14.44 - 0.44 --> <!-- + FUDGE FACTOR -->
+
+  <constant name="Ecal_lateral_face_thickness" value="(1.10+0.5)*mm"/> <!-- 1.54 - 0.44  --> <!-- 0.5 for the tolerance -->
 
   <constant name="Ecal_Alveolus_Air_Gap" value="0.2*mm"/>
   <constant name="Ecal_Si_thickness" value=".525*mm"/>

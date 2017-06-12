@@ -1,8 +1,8 @@
 <define>
 
-  <comment>
-    all hardcoded overall dimensions which differ between large and small models
-  </comment>
+<comment> 
+all hardcoded overall dimensions which differ between large and small models
+</comment>
 
   <constant name="Field_nominal_value" value="3.5*tesla"/>
   <constant name="top_TPC_outer_radius"    value="1777.8*mm"/>

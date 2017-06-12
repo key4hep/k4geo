@@ -127,8 +127,7 @@
   <constant name="TUBE_Lcal_clearance" value="20*mm"/>
 
   <!-- space left for envelopes (counting from inner beampipe surface) -->
-  <constant name="TUBE_maxthick" value="1.5*mm"/>
-
-
+  <constant name="TUBE_inner_maxthick" value="1.0*mm"/> 
+  <constant name="TUBE_outer_maxthick" value="3.0*mm"/> 
 
 </define>
