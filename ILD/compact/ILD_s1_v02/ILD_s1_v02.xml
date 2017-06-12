@@ -66,10 +66,9 @@
   <include ref="../ILD_common_v02/LumiCal.xml"/> 
   <include ref="../ILD_common_v02/LHCal01.xml"/>
   <include ref="../ILD_common_v02/BeamCal08.xml"/>
-
   <include ref="../ILD_common_v02/coil03.xml"/>
   <include ref="../ILD_common_v02/SServices00.xml"/>
-
+  <include ref="../ILD_common_v02/plugins.xml"/>
 
   <fields>
     <field type="solenoid" name="GlobalSolenoid" inner_field="Field_nominal_value"
