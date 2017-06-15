@@ -22,8 +22,6 @@
 #include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"
 #include "DDSegmentation/Segmentation.h"
-#include "DDRec/Extensions/LayeringExtensionImpl.h"
-#include "DDRec/Extensions/SubdetectorExtensionImpl.h"
 
 using namespace std;
 using namespace DD4hep;
@@ -78,17 +76,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     double        outer_r   = (inner_r + mod_z)/std::cos(hphi); // r_outer of actual module
     
     // Create extension objects for reconstruction -----------------
-    DDRec::LayeringExtensionImpl* layeringExtension = new DDRec::LayeringExtensionImpl;
-    DDRec::SubdetectorExtensionImpl* subDetExtension = new DDRec::SubdetectorExtensionImpl(sdet);
-    Position layerNormal(0,0,1); // FG: defines direction of thickness in Box for layer slices
-
-    subDetExtension->setIsBarrel(true) ;
-    subDetExtension->setNSides( 12 ) ;
-    // subDetExtension->setPhi0( 0 ) ;
-    subDetExtension->setRMin( inner_r ) ;
-    subDetExtension->setRMax( outer_r ) ; // or r_max ?
-    subDetExtension->setZMin( 0. ) ;
-    subDetExtension->setZMax( x_dim.z()/2 ) ;
 
     // Create caloData object to extend driver with data required for reconstruction
     // See http://cern.ch/go/z8tp to learn how quantities are calculated
@@ -372,8 +359,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     envelope.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
     
     sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
-    sdet.addExtension< DDRec::LayeringExtension >( layeringExtension ) ;
-    sdet.addExtension< DDRec::SubdetectorExtension >( subDetExtension ) ;
         
     return sdet;
 }
