@@ -14,8 +14,6 @@
 #include "XML/Layering.h"
 #include "TGeoTrd2.h"
 
-#include "DDRec/Extensions/LayeringExtensionImpl.h"
-#include "DDRec/Extensions/SubdetectorExtensionImpl.h"
 #include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"
 
@@ -356,16 +354,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   // ------------- create extension objects for reconstruction -----------------
 
-  DDRec::LayeringExtensionImpl* layeringExtension = new DDRec::LayeringExtensionImpl ;
-  DDRec::SubdetectorExtensionImpl* subDetExtension = new DDRec::SubdetectorExtensionImpl( sdet )  ;
-  Position layerNormal(0,0,1); //fg: defines direction of thickness in Box for layer slices
-  subDetExtension->setIsBarrel( true ) ;
-  subDetExtension->setNSides( nsides ) ;
-  subDetExtension->setRMin( Ecal_inner_radius ) ;
-  subDetExtension->setRMax( ( Ecal_inner_radius + module_thickness ) / cos( M_PI/nsides ) ) ; // this is to the external corner (fix djeans)
-  subDetExtension->setZMin( 0. ) ;
-  subDetExtension->setZMax( Ecal_Barrel_halfZ ) ;
-
   caloData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
   caloData->inner_symmetry = nsides  ;
   caloData->outer_symmetry = nsides  ;
@@ -433,8 +421,6 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   // Set envelope volume attributes.
   envelope.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
 
-  sdet.addExtension< DDRec::LayeringExtension      >( layeringExtension ) ;
-  sdet.addExtension< DDRec::SubdetectorExtension   >( subDetExtension ) ;
   sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
 
   //  cout << "finished SEcal05_Barrel" << endl;
