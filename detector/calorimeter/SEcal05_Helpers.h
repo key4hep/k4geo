@@ -21,8 +21,6 @@
 #undef NDEBUG
 #include <assert.h>
 
-using namespace DD4hep;
-
 using std::cout;
 using std::endl;
 
@@ -95,7 +93,7 @@ class SEcal05_Helpers {
 
   void setDet( xml_det_t* x_det ) {
     _x_det = x_det;
-    _layering = new Layering(*x_det);
+    _layering = new dd4hep::Layering(*x_det);
     _det_name  = x_det->nameStr();
   }
 
@@ -105,11 +103,11 @@ class SEcal05_Helpers {
     _layerConfig=layerConfig;
   }
 
-  void setSegmentation(  DD4hep::Geometry::Segmentation & seg ) {
+  void setSegmentation(  dd4hep::Segmentation & seg ) {
     _geomseg = &seg;
   }
 
-  void setSegmentation(  DD4hep::Geometry::Segmentation * seg ) {
+  void setSegmentation(  dd4hep::Segmentation * seg ) {
     _geomseg = seg;
   }
 
@@ -175,14 +173,14 @@ class SEcal05_Helpers {
 
   float getTotalThickness();
 
-  void setTranslation( DD4hep::Geometry::Position trans ) {_trans = trans;}
+  void setTranslation( dd4hep::Position trans ) {_trans = trans;}
 
   // ---- this is the main workhorse
-  void makeModule( DD4hep::Geometry::Volume & mod_vol,  // the volume we'll fill
-		   DD4hep::Geometry::DetElement & stave_det, // the detector element
-		   DDRec::LayeredCalorimeterData & caloData, // the reco data we'll fill
-		   DD4hep::Geometry::LCDD & lcdd,
-		   DD4hep::Geometry::SensitiveDetector & sens
+  void makeModule( dd4hep::Volume & mod_vol,  // the volume we'll fill
+		   dd4hep::DetElement & stave_det, // the detector element
+		   dd4hep::rec::LayeredCalorimeterData & caloData, // the reco data we'll fill
+		   dd4hep::Detector & theDetector,
+		   dd4hep::SensitiveDetector & sens
 		   );
 
   void setPlugLength( float ll ) { _plugLength = ll; }
@@ -190,7 +188,7 @@ class SEcal05_Helpers {
 
  private:
 
-  void printSEcal05LayerInfo( DDRec::LayeredCalorimeterData::Layer & caloLayer);
+  void printSEcal05LayerInfo( dd4hep::rec::LayeredCalorimeterData::Layer & caloLayer);
 
   double getAbsThickness( unsigned int iAbsLay );
 
@@ -220,7 +218,7 @@ class SEcal05_Helpers {
   };
 
   xml_det_t* _x_det;
-  Layering* _layering=NULL;
+  dd4hep::Layering* _layering=NULL;
   std::string _det_name;
 
   std::vector <dimposXYStruct> getAbsPlateXYDimensions( double ztop=-999 );
@@ -228,15 +226,15 @@ class SEcal05_Helpers {
   std::vector <dimposXYStruct> getSlabXYDimensions( double ztop=-999 );
 
 
-  DD4hep::Geometry::Position  getTranslatedPosition(double x, double y, double z) {
-    return DD4hep::Geometry::Position ( x, y, z ) + _trans;
+  dd4hep::Position  getTranslatedPosition(double x, double y, double z) {
+    return dd4hep::Position ( x, y, z ) + _trans;
   }
 
   dxinfo getNormalMagicUnitsInX( double dx_total, double dx_unit, double dx_cell, double dx_dead ,
 				 int magicStrategy );
 
   void updateCaloLayers(double thickness,
-			DD4hep::Geometry::Material mat,
+			dd4hep::Material mat,
 			bool isAbsorber,
 			bool isSensitive,
 			double cell_size_x=0, double cell_size_y=0,
@@ -244,11 +242,11 @@ class SEcal05_Helpers {
 			);
 
 
-  DD4hep::Geometry::Segmentation* _geomseg;
+  dd4hep::Segmentation* _geomseg;
 
-  DD4hep::Geometry::Material _air_material;
-  DD4hep::Geometry::Material _carbon_fibre_material;
-  DD4hep::Geometry::Material _radiator_material;
+  dd4hep::Material _air_material;
+  dd4hep::Material _carbon_fibre_material;
+  dd4hep::Material _radiator_material;
 
   unsigned int _cells_across_megatile;
   unsigned int _strips_across_megatile;
@@ -286,8 +284,8 @@ class SEcal05_Helpers {
   int    _unitsPerTower;
   double _unitDeadEdge;
 
-  DDRec::LayeredCalorimeterData* _caloData;
-  DDRec::LayeredCalorimeterData::Layer _caloLayer ; // this is the output info which is passed to reconstruction
+  dd4hep::rec::LayeredCalorimeterData* _caloData;
+  dd4hep::rec::LayeredCalorimeterData::Layer _caloLayer ; // this is the output info which is passed to reconstruction
 
   double _layer_thickness;
   double _layer_nRadiationLengths;
@@ -300,7 +298,7 @@ class SEcal05_Helpers {
 
   int _magicMegatileStrategy;
 
-  DD4hep::Geometry::Position _trans;
+  dd4hep::Position _trans;
 
   std::vector <dimposXYStruct> _constantSlabXYDimensions;
 

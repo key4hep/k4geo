@@ -16,10 +16,25 @@
 //#include "GearWrapper.h"
 
 using namespace std;
-using namespace DD4hep;
-//using namespace dd4hep ;
-using namespace DD4hep::Geometry;
-using namespace DDRec ;
+
+using dd4hep::BUILD_ENVELOPE;
+using dd4hep::Box;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::PolyhedraRegular;
+using dd4hep::Position;
+using dd4hep::Ref_t;
+using dd4hep::RotationZYX;
+using dd4hep::SensitiveDetector;
+using dd4hep::Transform3D;
+using dd4hep::Tube;
+using dd4hep::Volume;
+
+using dd4hep::xml::_toString;
+
+using dd4hep::rec::LayeredCalorimeterData;
 
 
 /** Construction of the coil, ported from Mokka drivers SCoil02.cc and Coil01.cc
@@ -40,7 +55,7 @@ using namespace DDRec ;
  *  @author: F.Gaede, DESY, Aug 2014
  */
 
-static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*/)  {
+static Ref_t create_element(Detector& theDetector, xml_h element, SensitiveDetector /*sens*/)  {
 
   //------------------------------------------
   //  See comments starting with '//**' for
@@ -54,11 +69,11 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
 
  // --- create an envelope volume and position it into the world ---------------------
 
-  Volume envelope = XML::createPlacedEnvelope( lcdd,  element , coil ) ;
+  Volume envelope = dd4hep::xml::createPlacedEnvelope( theDetector,  element , coil ) ;
 
-  XML::setDetectorTypeFlag( element, coil ) ;
+  dd4hep::xml::setDetectorTypeFlag( element, coil ) ;
 
-  if( lcdd.buildType() == BUILD_ENVELOPE ) return coil ;
+  if( theDetector.buildType() == BUILD_ENVELOPE ) return coil ;
 
   //-----------------------------------------------------------------------------------
 
@@ -84,7 +99,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
        << endl;
   
 
-  Material coilMaterial = lcdd.material( x_tube.materialStr() ) ;
+  Material coilMaterial = theDetector.material( x_tube.materialStr() ) ;
 
 
   //FG: for now fall back to a simple tube filled with Al
@@ -98,7 +113,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
 
   Volume coil_vol( "coil_vol", coil_tube , coilMaterial );
   pv  =  envelope.placeVolume( coil_vol ) ;
-  coil.setVisAttributes( lcdd, "BlueVis" , coil_vol );
+  coil.setVisAttributes( theDetector, "BlueVis" , coil_vol );
 
   cout << " ... for the time being simply use a tube of aluminum ..." << endl ;
 
@@ -111,7 +126,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
 
   Volume CoilLogical_1( "CoilEnvelope_1", CoilEnvelopeSolid_1, coilMaterial ) ;
 
-  coil.setVisAttributes( lcdd, "BlueVis" , CoilLogical_1 );
+  coil.setVisAttributes( theDetector, "BlueVis" , CoilLogical_1 );
 
   pv  = envelope.placeVolume( CoilLogical_1 ) ;
 
@@ -120,7 +135,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
 
   Volume CoilLogical_2( "CoilEnvelope_2", CoilEnvelopeSolid_2, coilMaterial ) ;
 
-  coil.setVisAttributes( lcdd, "BlueVis" , CoilLogical_2 );
+  coil.setVisAttributes( theDetector, "BlueVis" , CoilLogical_2 );
 
   pv  = envelope.placeVolume( CoilLogical_2 ) ;
 
@@ -130,7 +145,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
     
   Volume CoilLogical_3( "CoilEnvelope_3", CoilEnvelopeSolid_3, coilMaterial ) ;
   
-  coil.setVisAttributes( lcdd, "BlueVis" , CoilLogical_3 );
+  coil.setVisAttributes( theDetector, "BlueVis" , CoilLogical_3 );
 
   pv  = envelope.placeVolume( CoilLogical_3 , Position( 0., 0., -25.*dd4hep::mm + half_z )  ) ;
 
@@ -138,7 +153,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
   //... side wall right
   // Tube CoilEnvelopeSolid_4( 40*dd4hep::mm + inner_radius, -30*dd4hep::mm + outer_radius, 25.* dd4hep::mm ) ;
   // Volume CoilLogical_4( "CoilEnvelope_4", CoilEnvelopeSolid_4, coilMaterial ) ;
-  // coil.setVisAttributes( lcdd, "BlueVis" , CoilLogical_4 );
+  // coil.setVisAttributes( theDetector, "BlueVis" , CoilLogical_4 );
   // pv  = envelope.placeVolume( CoilLogical_4 , Position( 0., 0., 25.*dd4hep::mm - half_z )  ) ;
   //simply place the same volume again
 
@@ -152,7 +167,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
 
   Volume CoilMainLogical_1( "CoilMain_1" , CoilMainSolid_1, coilMaterial ) ;
   
-  coil.setVisAttributes( lcdd, "GreyVis" , CoilMainLogical_1 );
+  coil.setVisAttributes( theDetector, "GreyVis" , CoilMainLogical_1 );
 
   pv  = envelope.placeVolume( CoilMainLogical_1 , Position( 0., 0., -1632.*dd4hep::mm ) ) ;
   pv  = envelope.placeVolume( CoilMainLogical_1 , Position( 0., 0.,     0.            ) ) ;
@@ -180,7 +195,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
   
   Volume *CoilCorrectLogical_1=
     new Volume(CoilCorrectSolid_1,
-			lcdd.material("aluminium"),
+			theDetector.material("aluminium"),
 			"CoilCorrect_1", 
 			0,
 			0,
@@ -189,7 +204,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
   VisAttributes * VisAtt_c1 = new VisAttributes(Colour(1.,0.5,0.5));
   VisAtt_c1->SetForceWireframe(true);
   //VisAtt_c1->SetForceSolid(true);
-  CoilCorrectLogical_1  coil.setVisAttributes( lcdd, "VisAtt_c1");
+  CoilCorrectLogical_1  coil.setVisAttributes( theDetector, "VisAtt_c1");
 
   .setPlacement(0,
 		    ThreeVector(0., 0., -1632.*dd4hep::mm*3/2-612.),
@@ -216,7 +231,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
   
   Volume *CoilMandrelLogical=
     new Volume(CoilMandrelSolid,
-			lcdd.material("aluminium"),
+			theDetector.material("aluminium"),
 			"CoilMandrel", 
 			0,
 			0,
@@ -225,7 +240,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
   VisAttributes * VisAtt_md = new VisAttributes(Colour(0.7,0.7,0.7));
   VisAtt_md->SetForceWireframe(true);
   //VisAtt_md->SetForceSolid(true);
-  CoilMandrelLogical  coil.setVisAttributes( lcdd, "VisAtt_md");
+  CoilMandrelLogical  coil.setVisAttributes( theDetector, "VisAtt_md");
 
   .setPlacement(0,
 		    ThreeVector(0., 0., 0.),
@@ -271,7 +286,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
  
   Volume *CoilScintLogical_1=
     new Volume(CoilScintSolid_1,
-			lcdd.material("polystyrene"),
+			theDetector.material("polystyrene"),
 			"CoilScint_1", 
 			0,
 			0,
@@ -280,7 +295,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
   VisAttributes * VisAtt_s1 = new VisAttributes(Colour(0.5,0.5,1.));
   VisAtt_s1->SetForceWireframe(true);
   //VisAtt_s1->SetForceSolid(true);
-  CoilScintLogical_1  coil.setVisAttributes( lcdd, "VisAtt_s1");
+  CoilScintLogical_1  coil.setVisAttributes( theDetector, "VisAtt_s1");
   CoilScintLogical_1->SetSensitiveDetector(theCoilSD);
 
   .setPlacement(0,
@@ -313,7 +328,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
  
   Volume *CoilScintLogical_2=
     new Volume(CoilScintSolid_2,
-			lcdd.material("polystyrene"),
+			theDetector.material("polystyrene"),
 			"CoilScint_2", 
 			0,
 			0,
@@ -322,7 +337,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
   VisAttributes * VisAtt_s2 = new VisAttributes(Colour(0.75,0.75,1.));
   VisAtt_s2->SetForceWireframe(true);
   //VisAtt_s2->SetForceSolid(true);
-  CoilScintLogical_2  coil.setVisAttributes( lcdd, "VisAtt_s2");
+  CoilScintLogical_2  coil.setVisAttributes( theDetector, "VisAtt_s2");
   CoilScintLogical_2->SetSensitiveDetector(theCoilSD);
 
   .setPlacement(0,
@@ -356,7 +371,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
  
   Volume *CoilScintLogical_3=
     new Volume(CoilScintSolid_3,
-			lcdd.material("polystyrene"),
+			theDetector.material("polystyrene"),
 			"CoilScint_3", 
 			0,
 			0,
@@ -365,7 +380,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
   VisAttributes * VisAtt_s3 = new VisAttributes(Colour(0.5,0.5,1.));
   VisAtt_s3->SetForceWireframe(true);
   //VisAtt_s3->SetForceSolid(true);
-  CoilScintLogical_3  coil.setVisAttributes( lcdd, "VisAtt_s3");
+  CoilScintLogical_3  coil.setVisAttributes( theDetector, "VisAtt_s3");
   CoilScintLogical_3->SetSensitiveDetector(theCoilSD);
 
   .setPlacement(0,
@@ -398,7 +413,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
  
   Volume *CoilScintLogical_4=
     new Volume(CoilScintSolid_4,
-			lcdd.material("polystyrene"),
+			theDetector.material("polystyrene"),
 			"CoilScint_4", 
 			0,
 			0,
@@ -407,7 +422,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
   VisAttributes * VisAtt_s4 = new VisAttributes(Colour(0.75,0.75,1.));
   VisAtt_s4->SetForceWireframe(true);
   //VisAtt_s4->SetForceSolid(true);
-  CoilScintLogical_4  coil.setVisAttributes( lcdd, "VisAtt_s4");
+  CoilScintLogical_4  coil.setVisAttributes( theDetector, "VisAtt_s4");
   CoilScintLogical_4->SetSensitiveDetector(theCoilSD);
 
   .setPlacement(0,
@@ -594,16 +609,16 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
   
   //--------------------------------------
   
-  //coil.setVisAttributes( lcdd, x_det.visStr(), envelope );
+  //coil.setVisAttributes( theDetector, x_det.visStr(), envelope );
   //added coded by Thorben Quast
   //the coil is modelled as a calorimeter layer to be consistent with the 
   //implementation of the solenoid (layers) of CLIC
-  DDRec::LayeredCalorimeterData* coilData = new DDRec::LayeredCalorimeterData;
+  LayeredCalorimeterData* coilData = new LayeredCalorimeterData;
 
   //NN: Adding the rest of the data  
   coilData->inner_symmetry = 0;
   coilData->outer_symmetry = 0;
-  coilData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
+  coilData->layoutType = LayeredCalorimeterData::BarrelLayout ;
   
   coilData->extent[0] = inner_radius  ;
   coilData->extent[1] = outer_radius;
@@ -611,14 +626,14 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector /*sens*
   coilData->extent[3] = half_z;
   
   //NN: These probably need to be fixed and ced modified to read the extent, rather than the layer
-  DDRec::LayeredCalorimeterData::Layer coilLayer;
+  LayeredCalorimeterData::Layer coilLayer;
   coilLayer.distance = inner_radius;
   coilLayer.inner_thickness = ( outer_radius - inner_radius ) / 2. ;
   coilLayer.outer_thickness = coilLayer.inner_thickness  ;
   coilLayer.cellSize0 = 0;        //equivalent to 
   coilLayer.cellSize1 = half_z;    //half extension along z-axis
   coilData->layers.push_back(coilLayer);
-  coil.addExtension< DDRec::LayeredCalorimeterData >( coilData ) ;
+  coil.addExtension< LayeredCalorimeterData >( coilData ) ;
   return coil;
 }
 DECLARE_DETELEMENT(SCoil02,create_element)

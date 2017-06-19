@@ -18,10 +18,15 @@
 #include "XML/Utilities.h"
 
 using namespace std;
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
 
-static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector )  {
+using dd4hep::BUILD_ENVELOPE;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::Ref_t;
+using dd4hep::SensitiveDetector;
+
+static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector ) {
+
     // static double tolerance = 0e0;
     
     xml_det_t     x_det     = e;
@@ -32,10 +37,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector )  {
     // --- create an envelope volume and position it into the world ---------------------
     
     // Volume envelope =
-    XML::createPlacedEnvelope( lcdd,  e , sdet ) ;
-    XML::setDetectorTypeFlag( e, sdet ) ;
+    dd4hep::xml::createPlacedEnvelope( theDetector,  e , sdet ) ;
+    dd4hep::xml::setDetectorTypeFlag( e, sdet ) ;
     
-    if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
+    if( theDetector.buildType() == BUILD_ENVELOPE ) return sdet ;
     
     //-----------------------------------------------------------------------------------
     

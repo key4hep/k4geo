@@ -36,12 +36,25 @@
 #include "SServices00.h"
  
 using namespace std;
-using namespace DD4hep;
-using namespace dd4hep;
-using namespace DD4hep::Geometry;
+
+using dd4hep::BUILD_ENVELOPE;
+using dd4hep::Assembly;
+using dd4hep::Box;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::PolyhedraRegular;
+using dd4hep::Position;
+using dd4hep::Ref_t;
+using dd4hep::RotationZYX;
+using dd4hep::SensitiveDetector;
+using dd4hep::Transform3D;
+using dd4hep::Tube;
+using dd4hep::Volume;
 
 
-static Ref_t create_element(LCDD& lcdd, xml_h element, Ref_t)  {
+static Ref_t create_element(Detector& theDetector, xml_h element, Ref_t)  {
 
   //unused:  static double tolerance = 0e0;
 
@@ -50,12 +63,12 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, Ref_t)  {
   
   int det_id = x_det.id();
   DetElement sdet (det_name,det_id);
-  Volume motherVol = lcdd.pickMotherVolume(sdet);
+  Volume motherVol = theDetector.pickMotherVolume(sdet);
   
   Assembly envelope_assembly( det_name + "assembly" ) ;
   PlacedVolume pv;
 
-  XML::setDetectorTypeFlag( element, sdet ) ;
+  dd4hep::xml::setDetectorTypeFlag( element, sdet ) ;
 
 //====================================================================
 // build all services
@@ -67,7 +80,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, Ref_t)  {
   //==================================================
   
   // start to prepare the Material and geometry as Mokka
-  double TPC_Ecal_Hcal_barrel_halfZ =lcdd.constant<double>("TPC_Ecal_Hcal_barrel_halfZ");
+  double TPC_Ecal_Hcal_barrel_halfZ =theDetector.constant<double>("TPC_Ecal_Hcal_barrel_halfZ");
 
   XMLHandlerDB db = XMLHandlerDB(  x_det.child( _Unicode( TPC_Cooling ) ) ) ;
 
@@ -93,8 +106,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, Ref_t)  {
  
   // start to build TPC cooling rings with the class BuildTPCEndplateServices
   BuildTPCEndplateServices TPCEndplateServices;
-  //TPCEndplateServices.setMaterial(lcdd.material("copper"));
-  TPCEndplateServices.setMaterial(lcdd.material("Cu"));
+  //TPCEndplateServices.setMaterial(theDetector.material("copper"));
+  TPCEndplateServices.setMaterial(theDetector.material("Cu"));
   TPCEndplateServices.sethalfZ(TPC_Ecal_Hcal_barrel_halfZ);
   for(int i=0;i<N_TPC_RINGS;i++)
     TPCEndplateServices.settpcEndplateServicesRing_R_ro(tpcEndplateServices_R[i],tpcEndplateServices_r[i]);
@@ -109,8 +122,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, Ref_t)  {
   //==================================================
 
   // start to prepare the Material and geometry as Mokka
-  double Ecal_outer_radius = lcdd.constant<double>("Ecal_outer_radius");
-  double Ecal_inner_radius                  = lcdd.constant<double>("TPC_outer_radius") +lcdd.constant<double>("Ecal_Tpc_gap");
+  double Ecal_outer_radius = theDetector.constant<double>("Ecal_outer_radius");
+  double Ecal_inner_radius                  = theDetector.constant<double>("TPC_outer_radius") +theDetector.constant<double>("Ecal_Tpc_gap");
   double module_thickness = Ecal_outer_radius - Ecal_inner_radius;
  
   // module barrel key parameters
@@ -119,7 +132,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, Ref_t)  {
   
   double top_dim_x = bottom_dim_x - 2 * module_thickness;
   
-  double RailHeight = lcdd.constant<double>("EcalBarrelServices_RailHeight");
+  double RailHeight = theDetector.constant<double>("EcalBarrelServices_RailHeight");
 
   cout<<"\n Ecal_inner_radius: " << Ecal_inner_radius
       <<"\n Ecal_outer_radius: " << Ecal_outer_radius
@@ -130,22 +143,22 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, Ref_t)  {
       <<"\n" <<endl;
 
 
-  double RailSeparation = lcdd.constant<double>("EcalBarrelServices_RailSeparation");
-  double RailWidth =  lcdd.constant<double>("EcalBarrelServices_RailWidth");
+  double RailSeparation = theDetector.constant<double>("EcalBarrelServices_RailSeparation");
+  double RailWidth =  theDetector.constant<double>("EcalBarrelServices_RailWidth");
 
-  double ZMinus_FirstInterrail_PE_Thickness = lcdd.constant<double>("EcalBarrelServices_ZMinus_FirstInterrail_PE_Thickness");
-  double ZMinus_FirstInterrail_Cu_Thickness = lcdd.constant<double>("EcalBarrelServices_ZMinus_FirstInterrail_Cu_Thickness");
+  double ZMinus_FirstInterrail_PE_Thickness = theDetector.constant<double>("EcalBarrelServices_ZMinus_FirstInterrail_PE_Thickness");
+  double ZMinus_FirstInterrail_Cu_Thickness = theDetector.constant<double>("EcalBarrelServices_ZMinus_FirstInterrail_Cu_Thickness");
 
-  double ZPlus_FirstInterrail_PE_Thickness = lcdd.constant<double>("EcalBarrelServices_ZPlus_FirstInterrail_PE_Thickness");
-  double ZPlus_FirstInterrail_Cu_Thickness = lcdd.constant<double>("EcalBarrelServices_ZPlus_FirstInterrail_Cu_Thickness");
+  double ZPlus_FirstInterrail_PE_Thickness = theDetector.constant<double>("EcalBarrelServices_ZPlus_FirstInterrail_PE_Thickness");
+  double ZPlus_FirstInterrail_Cu_Thickness = theDetector.constant<double>("EcalBarrelServices_ZPlus_FirstInterrail_Cu_Thickness");
 
   // start to build Ecal Barrel services with the class BuildEcalBarrelServices
   BuildEcalBarrelServices EcalBarrelServices;
 
-  EcalBarrelServices.setMaterialAir(lcdd.air());
-  EcalBarrelServices.setMaterialAluminium(lcdd.material("Al"));
-  EcalBarrelServices.setMaterialPolyethylene(lcdd.material("G4_POLYSTYRENE"));
-  EcalBarrelServices.setMaterialCopper(lcdd.material("Cu"));
+  EcalBarrelServices.setMaterialAir(theDetector.air());
+  EcalBarrelServices.setMaterialAluminium(theDetector.material("Al"));
+  EcalBarrelServices.setMaterialPolyethylene(theDetector.material("G4_POLYSTYRENE"));
+  EcalBarrelServices.setMaterialCopper(theDetector.material("Cu"));
 
   EcalBarrelServices.sethalfZ(TPC_Ecal_Hcal_barrel_halfZ);
   EcalBarrelServices.setTopDimX(top_dim_x);
@@ -172,17 +185,17 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, Ref_t)  {
   //==================================================
 
   // start to prepare the Material and geometry as Mokka
-  double ZMinus_PE_Thickness = lcdd.constant<double>("EcalBarrel_EndCapServices_ZMinus_PE_Thickness");
-  double ZMinus_Cu_Thickness = lcdd.constant<double>("EcalBarrel_EndCapServices_ZMinus_Cu_Thickness");
-  double ZPlus_PE_Thickness = lcdd.constant<double>("EcalBarrel_EndCapServices_ZPlus_PE_Thickness");
-  double ZPlus_Cu_Thickness = lcdd.constant<double>("EcalBarrel_EndCapServices_ZPlus_Cu_Thickness");
-  double Ecal_cables_gap = lcdd.constant<double>("Ecal_cables_gap");
-  double InnerServicesWidth = lcdd.constant<double>("HcalServicesModule_InnerServicesWidth");
+  double ZMinus_PE_Thickness = theDetector.constant<double>("EcalBarrel_EndCapServices_ZMinus_PE_Thickness");
+  double ZMinus_Cu_Thickness = theDetector.constant<double>("EcalBarrel_EndCapServices_ZMinus_Cu_Thickness");
+  double ZPlus_PE_Thickness = theDetector.constant<double>("EcalBarrel_EndCapServices_ZPlus_PE_Thickness");
+  double ZPlus_Cu_Thickness = theDetector.constant<double>("EcalBarrel_EndCapServices_ZPlus_Cu_Thickness");
+  double Ecal_cables_gap = theDetector.constant<double>("Ecal_cables_gap");
+  double InnerServicesWidth = theDetector.constant<double>("HcalServicesModule_InnerServicesWidth");
 
   BuildEcalBarrel_EndCapServices EcalBarrel_EndCapServices;
-  EcalBarrel_EndCapServices.setMaterialAir(lcdd.air());
-  EcalBarrel_EndCapServices.setMaterialPolyethylene(lcdd.material("G4_POLYSTYRENE"));
-  EcalBarrel_EndCapServices.setMaterialCopper(lcdd.material("Cu"));
+  EcalBarrel_EndCapServices.setMaterialAir(theDetector.air());
+  EcalBarrel_EndCapServices.setMaterialPolyethylene(theDetector.material("G4_POLYSTYRENE"));
+  EcalBarrel_EndCapServices.setMaterialCopper(theDetector.material("Cu"));
   EcalBarrel_EndCapServices.sethalfZ(TPC_Ecal_Hcal_barrel_halfZ);
   EcalBarrel_EndCapServices.setTopDimX(top_dim_x);
   EcalBarrel_EndCapServices.setOutRadius(Ecal_outer_radius);
@@ -212,7 +225,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, Ref_t)  {
 
   pv = motherVol.placeVolume(envelope_assembly);
   pv.addPhysVolID("system", det_id);
-  sdet.setVisAttributes( lcdd, x_det.visStr(),  envelope_assembly);
+  sdet.setVisAttributes( theDetector, x_det.visStr(),  envelope_assembly);
   sdet.setPlacement(pv);
 
   return sdet;

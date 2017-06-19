@@ -14,14 +14,28 @@
 #include "DDRec/DetectorData.h"
 #include "XML/Utilities.h"
 
+using dd4hep::BUILD_ENVELOPE;
+using dd4hep::Box;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::Position;
+using dd4hep::Ref_t;
+using dd4hep::RotationZYX;
+using dd4hep::SensitiveDetector;
+using dd4hep::Transform3D;
+using dd4hep::Volume;
 
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
-using namespace DD4hep::DDRec ;
-using namespace DDSurfaces ;
+using dd4hep::xml::_toString;
 
-static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector sens)  {
-  
+using dd4hep::rec::SurfaceType;
+using dd4hep::rec::Vector3D;
+using dd4hep::rec::VolPlane;
+using dd4hep::rec::volSurfaceList;
+
+static Ref_t create_element(Detector& theDetector, xml_h element, SensitiveDetector sens)  {
+
   xml_det_t    x_det = element;
   std::string  name  = x_det.nameStr();
   
@@ -32,9 +46,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector sens)  
 
   // --- create an envelope volume and position it into the world ---------------------
   
-  Volume envelope = XML::createPlacedEnvelope( lcdd,  element , sdet ) ;
+  Volume envelope = dd4hep::xml::createPlacedEnvelope( theDetector,  element , sdet ) ;
   
-  if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
+  if( theDetector.buildType() == BUILD_ENVELOPE ) return sdet ;
   
   //-----------------------------------------------------------------------------------
   
@@ -61,9 +75,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector sens)  
   sens.setType("tracker");
 
   // base vectors for surfaces:
-  DDSurfaces::Vector3D u(0,1,0) ;
-  DDSurfaces::Vector3D v(0,0,1) ;
-  DDSurfaces::Vector3D n(1,0,0) ;
+  Vector3D u(0,1,0) ;
+  Vector3D v(0,0,1) ;
+  Vector3D n(1,0,0) ;
   
   for(unsigned i=0 ; i < nsides ; ++i ){
 
@@ -79,9 +93,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector sens)  
 
     boxVol.setSensitiveDetector(sens);
 
-    DDRec::VolPlane surf( boxVol,DDSurfaces::SurfaceType(DDSurfaces::SurfaceType::Sensitive), thick/4., thick/4., u,v,n ) ;
+    VolPlane surf( boxVol,SurfaceType(SurfaceType::Sensitive), thick/4., thick/4., u,v,n ) ;
 	      
-    DDRec::volSurfaceList( moduleDE  )->push_back(  surf ) ;
+    volSurfaceList( moduleDE  )->push_back(  surf ) ;
 
     pv = envelope.placeVolume( boxVol , Transform3D( rot, Position( ( inner_r + thick/2. ) * cos( phi ) ,
 								    ( inner_r + thick/2. ) * sin( phi ) , 

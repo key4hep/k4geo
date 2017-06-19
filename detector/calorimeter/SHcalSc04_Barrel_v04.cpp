@@ -9,7 +9,6 @@
 //====================================================================
 #include "DD4hep/Printout.h"
 #include "DD4hep/DetFactoryHelper.h"
-#include "XML/Layering.h"
 #include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"
 #include "DDSegmentation/TiledLayerGridXY.h"
@@ -21,11 +20,28 @@
 #include <vector>
 
 using namespace std;
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
-using namespace lcgeo ;
 
+using dd4hep::BUILD_ENVELOPE;
+using dd4hep::Box;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::IntersectionSolid;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::Position;
+using dd4hep::Readout;
+using dd4hep::Ref_t;
+using dd4hep::Rotation3D;
+using dd4hep::RotationZ;
+using dd4hep::RotationZYX;
+using dd4hep::SensitiveDetector;
+using dd4hep::Transform3D;
+using dd4hep::Trapezoid;
+using dd4hep::Tube;
+using dd4hep::Volume;
+using dd4hep::_toString;
 
+using dd4hep::rec::LayeredCalorimeterData;
 
 // After reading in all the necessary parameters.
 // To check the radius range and the space for placing the total layers
@@ -42,17 +58,17 @@ static bool validateEnvelope(double rInner, double rOuter, double radiatorThickn
   
   if( spaceNeeded > spaceAllowed )
     {
-      printout( DD4hep::ERROR,  "SHcalSc04_Barrel_v01", " Layer number is more than it can be built! "  ) ;
+      printout( dd4hep::ERROR,  "SHcalSc04_Barrel_v01", " Layer number is more than it can be built! "  ) ;
       Error = true;
     }
   else if ( spaceToleranted < spaceAllowed )
     {
-      printout( DD4hep::WARNING,  "SHcalSc04_Barrel_v01", " Layer number is less than it is able to build!" ) ;
+      printout( dd4hep::WARNING,  "SHcalSc04_Barrel_v01", " Layer number is less than it is able to build!" ) ;
       Warning = true;
     }
   else
     {
-      printout( DD4hep::DEBUG,  "SHcalSc04_Barrel_v01"," has been validated and start to build it." ) ;
+      printout( dd4hep::DEBUG,  "SHcalSc04_Barrel_v01"," has been validated and start to build it." ) ;
       Error = false;
       Warning = false;
     }
@@ -80,7 +96,7 @@ static bool validateEnvelope(double rInner, double rOuter, double radiatorThickn
 	  <<" Do you think that you are looking for another type of HCAL driver? \n"
 	  <<" \n"
 	  <<endl; 
-       throw GeometryException(  "SHcalSc04_Barrel: Error: Layer number is more than it can be built!"   ) ;
+      throw lcgeo::GeometryException(  "SHcalSc04_Barrel: Error: Layer number is more than it can be built!"   ) ;
     } 
   else if( Warning )
     {
@@ -111,7 +127,7 @@ static bool validateEnvelope(double rInner, double rOuter, double radiatorThickn
 
 }
 
-static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens)  {
+static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDetector sens)  {
 
   double boundarySafety = 0.0001;
 
@@ -122,17 +138,17 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   // --- create an envelope volume and position it into the world ---------------------
   
-  Volume envelope = XML::createPlacedEnvelope( lcdd,  element , sdet ) ;
+  Volume envelope = dd4hep::xml::createPlacedEnvelope( theDetector,  element , sdet ) ;
   
-  XML::setDetectorTypeFlag( element, sdet ) ;
+  dd4hep::xml::setDetectorTypeFlag( element, sdet ) ;
   
-  if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
+  if( theDetector.buildType() == BUILD_ENVELOPE ) return sdet ;
 
   //-----------------------------------------------------------------------------------
 
   xml_comp_t    x_staves          = x_det.staves();
-  Material      stavesMaterial    = lcdd.material(x_staves.materialStr());
-  Material      air               = lcdd.air();
+  Material      stavesMaterial    = theDetector.material(x_staves.materialStr());
+  Material      air               = theDetector.air();
 
   PlacedVolume pv;
 
@@ -144,36 +160,36 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 // Use them to build HcalBarrel
 //
 //====================================================================
-  double      Hcal_inner_radius   = lcdd.constant<double>("Hcal_inner_radius");
-  double      Hcal_outer_radius   = lcdd.constant<double>("Hcal_outer_radius");
-  double      Hcal_half_length    = lcdd.constant<double>("Hcal_half_length");
-  int         Hcal_inner_symmetry = lcdd.constant<int>("Hcal_inner_symmetry");
+  double      Hcal_inner_radius   = theDetector.constant<double>("Hcal_inner_radius");
+  double      Hcal_outer_radius   = theDetector.constant<double>("Hcal_outer_radius");
+  double      Hcal_half_length    = theDetector.constant<double>("Hcal_half_length");
+  int         Hcal_inner_symmetry = theDetector.constant<int>("Hcal_inner_symmetry");
   int         Hcal_outer_symmetry = 0; // Fixed shape for Tube, and not allow to modify from compact xml.
 
-  double      Hcal_radiator_thickness          = lcdd.constant<double>("Hcal_radiator_thickness");
-  double      Hcal_chamber_thickness           = lcdd.constant<double>("Hcal_chamber_thickness");
-  double      Hcal_back_plate_thickness        = lcdd.constant<double>("Hcal_back_plate_thickness");
-  double      Hcal_lateral_plate_thickness     = lcdd.constant<double>("Hcal_lateral_structure_thickness");
-  double      Hcal_stave_gaps                  = lcdd.constant<double>("Hcal_stave_gaps");
-  double      Hcal_modules_gap                 = lcdd.constant<double>("Hcal_modules_gap"); 
-  double      Hcal_middle_stave_gaps           = lcdd.constant<double>("Hcal_middle_stave_gaps");
-  double      Hcal_layer_air_gap               = lcdd.constant<double>("Hcal_layer_air_gap");
-  //double      Hcal_cells_size                  = lcdd.constant<double>("Hcal_cells_size");
+  double      Hcal_radiator_thickness          = theDetector.constant<double>("Hcal_radiator_thickness");
+  double      Hcal_chamber_thickness           = theDetector.constant<double>("Hcal_chamber_thickness");
+  double      Hcal_back_plate_thickness        = theDetector.constant<double>("Hcal_back_plate_thickness");
+  double      Hcal_lateral_plate_thickness     = theDetector.constant<double>("Hcal_lateral_structure_thickness");
+  double      Hcal_stave_gaps                  = theDetector.constant<double>("Hcal_stave_gaps");
+  double      Hcal_modules_gap                 = theDetector.constant<double>("Hcal_modules_gap"); 
+  double      Hcal_middle_stave_gaps           = theDetector.constant<double>("Hcal_middle_stave_gaps");
+  double      Hcal_layer_air_gap               = theDetector.constant<double>("Hcal_layer_air_gap");
+  //double      Hcal_cells_size                  = theDetector.constant<double>("Hcal_cells_size");
 
-  int         Hcal_nlayers                     = lcdd.constant<int>("Hcal_nlayers");
+  int         Hcal_nlayers                     = theDetector.constant<int>("Hcal_nlayers");
 
-  double      TPC_outer_radius               = lcdd.constant<double>("TPC_outer_radius");
+  double      TPC_outer_radius               = theDetector.constant<double>("TPC_outer_radius");
 
-  double      Ecal_outer_radius               = lcdd.constant<double>("Ecal_outer_radius");
+  double      Ecal_outer_radius               = theDetector.constant<double>("Ecal_outer_radius");
 
-  printout( DD4hep::DEBUG,  "SHcalSc04_Barrel_v04", "TPC_outer_radius : %e   - Ecal_outer_radius: %e ", TPC_outer_radius , Ecal_outer_radius) ;
+  printout( dd4hep::DEBUG,  "SHcalSc04_Barrel_v04", "TPC_outer_radius : %e   - Ecal_outer_radius: %e ", TPC_outer_radius , Ecal_outer_radius) ;
 
   validateEnvelope(Hcal_inner_radius, Hcal_outer_radius, Hcal_radiator_thickness, Hcal_chamber_thickness, Hcal_nlayers);
 
   Readout readout = sens.readout();
-  Segmentation seg = readout.segmentation();
+  dd4hep::Segmentation seg = readout.segmentation();
   
-  BitField64& encoder = *seg.decoder() ;
+  dd4hep::DDSegmentation::BitField64& encoder = const_cast<dd4hep::DDSegmentation::BitField64&>(*seg.decoder());
   encoder.setValue(0) ;
   
 
@@ -187,10 +203,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   // check if we have a multi segmentation :
 
-  DD4hep::DDSegmentation::MultiSegmentation* multiSeg = 
-    dynamic_cast< DD4hep::DDSegmentation::MultiSegmentation*>( seg.segmentation() ) ;
+  dd4hep::DDSegmentation::MultiSegmentation* multiSeg = 
+    dynamic_cast< dd4hep::DDSegmentation::MultiSegmentation*>( seg.segmentation() ) ;
   
-  DD4hep::DDSegmentation::TiledLayerGridXY* tileSeg = 0 ;
+  dd4hep::DDSegmentation::TiledLayerGridXY* tileSeg = 0 ;
     
   int sensitive_slice_number = -1 ;
 
@@ -213,24 +229,24 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 
     } catch( std::runtime_error) {
-      throw GeometryException(  "SHcalSc04_Barrel: Error: MultiSegmentation specified but no "
-				" <subsegmentation key="" value=""/> element defined for detector ! " ) ;
+      throw lcgeo::GeometryException(  "SHcalSc04_Barrel: Error: MultiSegmentation specified but no "
+                                       " <subsegmentation key="" value=""/> element defined for detector ! " ) ;
     }
     
     // check if we have a TiledLayerGridXY segmentation :
-    const DD4hep::DDSegmentation::TiledLayerGridXY* ts0 =
-      dynamic_cast<const DD4hep::DDSegmentation::TiledLayerGridXY*>(  &multiSeg->subsegmentation( encoder.getValue() ) ) ;
+    const dd4hep::DDSegmentation::TiledLayerGridXY* ts0 =
+      dynamic_cast<const dd4hep::DDSegmentation::TiledLayerGridXY*>(  &multiSeg->subsegmentation( encoder.getValue() ) ) ;
     
-    tileSeg = const_cast<DD4hep::DDSegmentation::TiledLayerGridXY*>( ts0 ) ;
+    tileSeg = const_cast<dd4hep::DDSegmentation::TiledLayerGridXY*>( ts0 ) ;
     
     if( ! tileSeg ){ // if the current segmentation is not a tileSeg, we see if there is another one
       
       for( auto s : multiSeg->subSegmentations() ){
-	const DD4hep::DDSegmentation::TiledLayerGridXY* ts =
-	  dynamic_cast<const DD4hep::DDSegmentation::TiledLayerGridXY*>( s.segmentation ) ;
+	const dd4hep::DDSegmentation::TiledLayerGridXY* ts =
+	  dynamic_cast<const dd4hep::DDSegmentation::TiledLayerGridXY*>( s.segmentation ) ;
 	
 	if( ts ) {
-	  tileSeg = const_cast<DD4hep::DDSegmentation::TiledLayerGridXY*>( ts ) ;
+	  tileSeg = const_cast<dd4hep::DDSegmentation::TiledLayerGridXY*>( ts ) ;
 	  break ;
 	}
       }
@@ -239,7 +255,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   } else {
     
     tileSeg = 
-      dynamic_cast< DD4hep::DDSegmentation::TiledLayerGridXY*>( seg.segmentation() ) ;
+      dynamic_cast< dd4hep::DDSegmentation::TiledLayerGridXY*>( seg.segmentation() ) ;
   }
   
   
@@ -250,8 +266,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 
   //========== fill data for reconstruction ============================
-  DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
-  caloData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
+  LayeredCalorimeterData* caloData = new LayeredCalorimeterData ;
+  caloData->layoutType = LayeredCalorimeterData::BarrelLayout ;
   caloData->inner_symmetry = Hcal_inner_symmetry  ;
   caloData->outer_symmetry = Hcal_outer_symmetry  ;
   caloData->phi0 = 0 ; // fg: also hardcoded below 
@@ -309,7 +325,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   Volume  EnvLogHcalModuleBarrel(det_name+"_module",barrelModuleSolid,stavesMaterial);
 
-  EnvLogHcalModuleBarrel.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+  EnvLogHcalModuleBarrel.setAttributes(theDetector,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
 
 
 
@@ -331,7 +347,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   Volume  EnvLogHcalModuleBarrel_LP(det_name+"_Module_lateral_plate",Module_lateral_plate,stavesMaterial);
 
-  EnvLogHcalModuleBarrel_LP.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+  EnvLogHcalModuleBarrel_LP.setAttributes(theDetector,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
 
 
 
@@ -436,7 +452,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       cell_sizeX      = cellSizeVector[0];
       cell_sizeY      = cellSizeVector[1];
 
-      DDRec::LayeredCalorimeterData::Layer caloLayer ;
+      LayeredCalorimeterData::Layer caloLayer ;
       caloLayer.cellSize0 = cell_sizeX;
       caloLayer.cellSize1 = cell_sizeY;
 
@@ -444,8 +460,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       //--------------------------------------------------------------------------------
       //  build chamber box, with the calculated dimensions 
       //-------------------------------------------------------------------------------
-      printout( DD4hep::DEBUG,  "SHcalSc04_Barrel_v04", " \n Start to build layer chamber - layer_id: %d", layer_id ) ;
-      printout( DD4hep::DEBUG,  "SHcalSc04_Barrel_v04"," chamber x:y:z:  %e:%e:%e", x_length*2., z_width*2. , y_height*2. );
+      printout( dd4hep::DEBUG,  "SHcalSc04_Barrel_v04", " \n Start to build layer chamber - layer_id: %d", layer_id ) ;
+      printout( dd4hep::DEBUG,  "SHcalSc04_Barrel_v04"," chamber x:y:z:  %e:%e:%e", x_length*2., z_width*2. , y_height*2. );
 
       //check if x_length (scintillator length) is divisible with x_integerTileSize
       if( layer_id <= Hcal_nlayers) {
@@ -523,7 +539,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	xml_comp_t x_slice = k;
 	string   slice_name      = layer_name + _toString(slice_number,"_slice%d");
 	double   slice_thickness = x_slice.thickness();
-	Material slice_material  = lcdd.material(x_slice.materialStr());
+	Material slice_material  = theDetector.material(x_slice.materialStr());
 	DetElement slice(layer_name,_toString(slice_number,"slice%d"),x_det.id());
 	
 	slice_pos_z += slice_thickness/2.;
@@ -562,7 +578,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 
 	// Set region, limitset, and vis.
-	slice_vol.setAttributes(lcdd,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
+	slice_vol.setAttributes(theDetector,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
 	// slice PlacedVolume
 	PlacedVolume slice_phv = ChamberLogical.placeVolume(slice_vol,Position(0.,0.,slice_pos_z));
 
@@ -572,7 +588,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	if ( x_slice.isSensitive() ) {
 	  int tower_id  = (layer_id > Hcal_nlayers)? 1:-1;
 	  slice_phv.addPhysVolID("tower",tower_id);
-	  printout( DD4hep::DEBUG,  "SHcalSc04_Barrel_v04", "  logical_layer_id:  %d  tower_id:  %d", logical_layer_id, tower_id  ) ;
+	  printout( dd4hep::DEBUG,  "SHcalSc04_Barrel_v04", "  logical_layer_id:  %d  tower_id:  %d", logical_layer_id, tower_id  ) ;
 	}
 	
 	slice.setPlacement(slice_phv);
@@ -632,12 +648,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     sts <<" layerOffsetX(): ";
     for (std::vector<double>::const_iterator ix = LOX.begin(); ix != LOX.end(); ++ix)
       sts << *ix << ' ';
-    printout( DD4hep::DEBUG,  "SHcalSc04_Barrel_v04", "%s" , sts.str().c_str() ) ;
+    printout( dd4hep::DEBUG,  "SHcalSc04_Barrel_v04", "%s" , sts.str().c_str() ) ;
     sts.clear() ; sts.str("") ;
     sts <<" layerOffsetY(): ";
     for (std::vector<double>::const_iterator iy = LOY.begin(); iy != LOY.end(); ++iy)
       sts << *iy << ' ';
-    printout( DD4hep::DEBUG,  "SHcalSc04_Barrel_v04", "%s" , sts.str().c_str() ) ;
+    printout( dd4hep::DEBUG,  "SHcalSc04_Barrel_v04", "%s" , sts.str().c_str() ) ;
 
   }
 
@@ -696,7 +712,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     }  //-------- end loop over HCAL BARREL staves ----------------------------
 
 
-  sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
+  sdet.addExtension< LayeredCalorimeterData >( caloData ) ;
 
  
   return sdet;

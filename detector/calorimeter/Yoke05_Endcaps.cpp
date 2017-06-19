@@ -36,8 +36,27 @@
 #include "DDRec/DetectorData.h"
 
 using namespace std;
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
+
+using dd4hep::BUILD_ENVELOPE;
+using dd4hep::DetElement;
+using dd4hep::DetType;
+using dd4hep::Detector;
+using dd4hep::Layering;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::PolyhedraRegular;
+using dd4hep::Position;
+using dd4hep::Readout;
+using dd4hep::Ref_t;
+using dd4hep::Rotation3D;
+using dd4hep::RotationZYX;
+using dd4hep::Segmentation;
+using dd4hep::SensitiveDetector;
+using dd4hep::Transform3D;
+using dd4hep::Volume;
+using dd4hep::_toString;
+
+using dd4hep::rec::LayeredCalorimeterData;
 
 #define VERBOSE 1
 
@@ -46,7 +65,7 @@ using namespace DD4hep::Geometry;
 #define DD4HEP_VERSION_GE(a,b) 0 
 #endif
 
-static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens)  {
+static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDetector sens)  {
   static double tolerance = 0e0;
 
   xml_det_t     x_det     = element;
@@ -56,21 +75,21 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   xml_comp_t    x_dim     = x_det.dimensions();
   int           nsides    = x_dim.numsides();
 
-  Material      air       = lcdd.air();
-  //unused: Material      vacuum    = lcdd.vacuum();
+  Material      air       = theDetector.air();
+  //unused: Material      vacuum    = theDetector.vacuum();
 
-  Material      yokeMaterial  = lcdd.material(x_det.materialStr());;
+  Material      yokeMaterial  = theDetector.material(x_det.materialStr());;
 
   int           det_id    = x_det.id();
   DetElement    sdet      (det_name,det_id);
 
   // --- create an envelope volume and position it into the world ---------------------
   
-  Volume envelope = XML::createPlacedEnvelope( lcdd,  element , sdet ) ;
+  Volume envelope = dd4hep::xml::createPlacedEnvelope( theDetector,  element , sdet ) ;
   
-  XML::setDetectorTypeFlag( element, sdet ) ;
+  dd4hep::xml::setDetectorTypeFlag( element, sdet ) ;
 
-  if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
+  if( theDetector.buildType() == BUILD_ENVELOPE ) return sdet ;
 
   //-----------------------------------------------------------------------------------
 
@@ -83,13 +102,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 // Use them to build Yoke05Endcaps
 //
 //====================================================================
-  double Yoke_barrel_inner_radius           = lcdd.constant<double>("Yoke_barrel_inner_radius");
-  double Yoke_endcap_inner_radius           = lcdd.constant<double>("Yoke_endcap_inner_radius");
-  double Yoke_Z_start_endcaps               = lcdd.constant<double>("Yoke_Z_start_endcaps");
-  double HCAL_R_max                         = lcdd.constant<double>("Hcal_outer_radius");
-  //double Yoke_cells_size                    = lcdd.constant<double>("Yoke_cells_size");
+  double Yoke_barrel_inner_radius           = theDetector.constant<double>("Yoke_barrel_inner_radius");
+  double Yoke_endcap_inner_radius           = theDetector.constant<double>("Yoke_endcap_inner_radius");
+  double Yoke_Z_start_endcaps               = theDetector.constant<double>("Yoke_Z_start_endcaps");
+  double HCAL_R_max                         = theDetector.constant<double>("Hcal_outer_radius");
+  //double Yoke_cells_size                    = theDetector.constant<double>("Yoke_cells_size");
 
-  double yokeBarrelEndcapGap     = 2.5;// ?? lcdd.constant<double>("barrel_endcap_gap"); //25.0*mm
+  double yokeBarrelEndcapGap     = 2.5;// ?? theDetector.constant<double>("barrel_endcap_gap"); //25.0*mm
 
 
 //====================================================================
@@ -151,8 +170,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double cell_sizeY      = cellSizeVector[1];
   
   //========== fill data for reconstruction ============================
-  DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
-  caloData->layoutType = DDRec::LayeredCalorimeterData::EndcapLayout ;
+  LayeredCalorimeterData* caloData = new LayeredCalorimeterData ;
+  caloData->layoutType = LayeredCalorimeterData::EndcapLayout ;
   caloData->inner_symmetry = symmetry  ;
   caloData->outer_symmetry = symmetry  ;
   caloData->phi0 = 0 ; // hardcoded
@@ -169,7 +188,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   Volume mod_vol(det_name+"_module", YokeEndcapSolid, yokeMaterial);
 
-  mod_vol.setVisAttributes(lcdd.visAttributes(x_det.visStr()));
+  mod_vol.setVisAttributes(theDetector.visAttributes(x_det.visStr()));
      
 
 //====================================================================
@@ -196,7 +215,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	string l_name = _toString(l_num,"layer%d");
 	double l_thickness = layering.layer(i)->thickness();  // Layer's thickness.
 
-	DDRec::LayeredCalorimeterData::Layer caloLayer ;
+	LayeredCalorimeterData::Layer caloLayer ;
 	caloLayer.cellSize0 = cell_sizeX;
 	caloLayer.cellSize1 = cell_sizeY;
 	
@@ -204,7 +223,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	Volume     ChamberLog(det_name+"_"+l_name,ChamberSolid,air);
 	DetElement layer(l_name, det_id);
 
-	ChamberLog.setVisAttributes(lcdd.visAttributes(x_layer.visStr()));
+	ChamberLog.setVisAttributes(theDetector.visAttributes(x_layer.visStr()));
 
 	// Loop over the sublayers or slices for this layer.
 	int s_num = 1;
@@ -227,7 +246,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  xml_comp_t x_slice = si;
 	  string     s_name  =  _toString(s_num,"slice%d");
 	  double     s_thickness = x_slice.thickness();
-	  Material slice_material  = lcdd.material(x_slice.materialStr());
+	  Material slice_material  = theDetector.material(x_slice.materialStr());
 	  
 	  PolyhedraRegular sliceSolid( symmetry, M_PI/symmetry, rInnerEndcap + tolerance, rOuterEndcap - tolerance,  s_thickness);
 	  Volume     s_vol(det_name+"_"+l_name+"_"+s_name,sliceSolid,slice_material);
@@ -259,7 +278,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  thickness_sum       += s_thickness/2;
 	  
 	  // Set region, limitset, and vis.
-	  s_vol.setAttributes(lcdd,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
+	  s_vol.setAttributes(theDetector,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
 
 	  s_pos_z += s_thickness/2.;
 
@@ -376,7 +395,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     if(build_plug == true){
       PolyhedraRegular YokePlugSolid( symmetry, M_PI/symmetry, rInnerPlug, rOuterPlug,  Yoke_Plug_module_dim_z);
       Volume plug_vol(det_name+"_plug", YokePlugSolid, yokeMaterial);
-      plug_vol.setVisAttributes(lcdd.visAttributes(x_det.visStr()));
+      plug_vol.setVisAttributes(theDetector.visAttributes(x_det.visStr()));
 
       double this_plug_z_offset = ( module_id == 0 ) ? - zPlug : zPlug; 
       Position   plug_pos(0,0,this_plug_z_offset);
@@ -388,7 +407,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   }
 
-  sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
+  sdet.addExtension< LayeredCalorimeterData >( caloData ) ;
   
   return sdet;
 }

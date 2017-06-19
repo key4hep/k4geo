@@ -32,23 +32,6 @@
 #include <string>
 
 using namespace std;
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
-using namespace DD4hep::DDRec;
-using namespace DDSurfaces;
-
-using DD4hep::Geometry::Transform3D;
-using DD4hep::Geometry::Position;
-using DD4hep::Geometry::RotationY;
-using DD4hep::Geometry::RotateY;
-using DD4hep::Geometry::ConeSegment;
-using DD4hep::Geometry::SubtractionSolid;
-using DD4hep::Geometry::Material;
-using DD4hep::Geometry::Volume;
-using DD4hep::Geometry::Solid;
-using DD4hep::Geometry::Tube;
-using DD4hep::Geometry::PlacedVolume;
-using DD4hep::Geometry::Assembly;
 
 class SServices00_v01
 {
@@ -58,75 +41,75 @@ class SServices00_v01
   ~SServices00_v01();
 
    bool
-   BuildServices(PlacedVolume &pVol,
-		 Assembly &envelope,
-		 LCDD &lcdd);
+   BuildServices(dd4hep::PlacedVolume &pVol,
+		 dd4hep::Assembly &envelope,
+		 dd4hep::Detector &theDetector);
 private:
 
    bool
-   BuildTPCEndplateServices(PlacedVolume &pVol,
-			    Assembly &envelope,
-			    LCDD &lcdd);
+   BuildTPCEndplateServices(dd4hep::PlacedVolume &pVol,
+			    dd4hep::Assembly &envelope,
+			    dd4hep::Detector &theDetector);
    
    bool
-   BuildEcalBarrelServices(PlacedVolume &pVol,
-			   Assembly &envelope,
-			   LCDD &lcdd);
+   BuildEcalBarrelServices(dd4hep::PlacedVolume &pVol,
+			   dd4hep::Assembly &envelope,
+			   dd4hep::Detector &theDetector);
    
    bool
-   BuildEcalBarrel_EndCapServices(PlacedVolume &pVol,
-				  Assembly &envelope,
-				  LCDD &lcdd);
+   BuildEcalBarrel_EndCapServices(dd4hep::PlacedVolume &pVol,
+				  dd4hep::Assembly &envelope,
+				  dd4hep::Detector &theDetector);
 
    bool
-   BuildHcalBarrel_EndCapServices(PlacedVolume &pVol,
-				  Assembly &envelope,
-				  LCDD &lcdd);
+   BuildHcalBarrel_EndCapServices(dd4hep::PlacedVolume &pVol,
+				  dd4hep::Assembly &envelope,
+				  dd4hep::Detector &theDetector);
 
    bool
-   FillEcalBarrelServicesContainer(PlacedVolume &pVol,
-				   Volume &pContainerLogical,
-				   LCDD &lcdd);
+   FillEcalBarrelServicesContainer(dd4hep::PlacedVolume &pVol,
+				   dd4hep::Volume &pContainerLogical,
+				   dd4hep::Detector &theDetector);
    
    bool
-   FillHcalServicesModuleWithInnerServices(PlacedVolume &pVol,
-					   Volume &ModuleLogicalZMinus,
-					   Volume &ModuleLogicalZPlus,
-					   LCDD &lcdd);
+   FillHcalServicesModuleWithInnerServices(dd4hep::PlacedVolume &pVol,
+					   dd4hep::Volume &ModuleLogicalZMinus,
+					   dd4hep::Volume &ModuleLogicalZPlus,
+					   dd4hep::Detector &theDetector);
 
    
    bool
-   PlaceHcalInnerServicesLayer(PlacedVolume &pVol,Volume &,
-			       Material, double, Position &);
+   PlaceHcalInnerServicesLayer(dd4hep::PlacedVolume &pVol,dd4hep::Volume &,
+			       dd4hep::Material, double, dd4hep::Position &);
    
    bool
-   FillHcalServicesModuleWithHcalElectronicsInterface(PlacedVolume &pVol,
-						      Volume &ModuleLogicalZMinus,
-						      Volume &ModuleLogicalZPlus,
-						      LCDD &lcdd);
+   FillHcalServicesModuleWithHcalElectronicsInterface(dd4hep::PlacedVolume &pVol,
+						      dd4hep::Volume &ModuleLogicalZMinus,
+						      dd4hep::Volume &ModuleLogicalZPlus,
+						      dd4hep::Detector &theDetector);
 
    
 
    bool
-   FillHcalElectronicsInterfaceLayer(PlacedVolume &pVol,
-				     Volume &ModuleLogicalZMinus,
-				     Volume &ModuleLogicalZPlus,
+   FillHcalElectronicsInterfaceLayer(dd4hep::PlacedVolume &pVol,
+				     dd4hep::Volume &ModuleLogicalZMinus,
+				     dd4hep::Volume &ModuleLogicalZPlus,
 				     double, double,
-				     LCDD &lcdd);
+				     dd4hep::Detector &theDetector);
    
    bool
-   PlaceHcalElectronicsInterfaceComponent(PlacedVolume &pVol,
-					  Volume &ModuleLogicalZMinus,
-					  Volume &ModuleLogicalZPlus,
-					  Material layerMaterial,
+   PlaceHcalElectronicsInterfaceComponent(dd4hep::PlacedVolume &pVol,
+					  dd4hep::Volume &ModuleLogicalZMinus,
+					  dd4hep::Volume &ModuleLogicalZPlus,
+					  dd4hep::Material layerMaterial,
 					  double, double, double);
 
-   Solid CutLayer(Solid &, double);
+   dd4hep::Solid CutLayer(dd4hep::Solid &, double);
       
    void
-   BuildSitCables(PlacedVolume &pVol,
-		  Assembly &envelope,
-		  LCDD &lcdd);
+   BuildSitCables(dd4hep::PlacedVolume &pVol,
+		  dd4hep::Assembly &envelope,
+		  dd4hep::Detector &theDetector);
 
    string FTD_db_name;
    double TPC_inner_radius;

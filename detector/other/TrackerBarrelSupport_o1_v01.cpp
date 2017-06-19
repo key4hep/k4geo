@@ -11,26 +11,37 @@
 #include <string>
 
 using namespace std;
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
-using namespace DD4hep::DDRec ;
-using namespace DDSurfaces ;
 
-using DD4hep::Geometry::Transform3D;
-using DD4hep::Geometry::Position;
-using DD4hep::Geometry::RotationY;
-using DD4hep::Geometry::RotateY;
-using DD4hep::Geometry::ConeSegment;
-using DD4hep::Geometry::SubtractionSolid;
-using DD4hep::Geometry::Material;
-using DD4hep::Geometry::Volume;
-using DD4hep::Geometry::Solid;
-using DD4hep::Geometry::Tube;
-using DD4hep::Geometry::PlacedVolume;
-using DD4hep::Geometry::Assembly;
+using dd4hep::Assembly;
+using dd4hep::BUILD_ENVELOPE;
+using dd4hep::Box;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::IntersectionSolid;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::Polycone;
+using dd4hep::Position;
+using dd4hep::Ref_t;
+using dd4hep::RotationZYX;
+using dd4hep::SensitiveDetector;
+using dd4hep::Solid;
+using dd4hep::SubtractionSolid;
+using dd4hep::Torus;
+using dd4hep::Transform3D;
+using dd4hep::Trapezoid;
+using dd4hep::Tube;
+using dd4hep::UnionSolid;
+using dd4hep::Volume;
+using dd4hep::_toString;
 
-static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector )
-{
+using dd4hep::rec::LayeredCalorimeterData;
+using dd4hep::rec::Vector3D;
+using dd4hep::rec::VolCylinder;
+using dd4hep::rec::volSurfaceList;
+using dd4hep::rec::SurfaceType;
+
+static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector)  {
   //static double tolerance = 0e0;
 
   xml_det_t     x_det     = e;
@@ -38,11 +49,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector )
   string        det_name  = x_det.nameStr();
   DetElement    sdet(det_name, det_id);
 
-  Volume envelope = XML::createPlacedEnvelope(lcdd,  e , sdet) ;
+  Volume envelope = dd4hep::xml::createPlacedEnvelope(theDetector,  e , sdet) ;
 
-  if (lcdd.buildType() == BUILD_ENVELOPE) return sdet ;
+  if (theDetector.buildType() == BUILD_ENVELOPE) return sdet ;
 
-  Material air = lcdd.air();
+  Material air = theDetector.air();
   PlacedVolume pv;
   int n = 0;
 
@@ -59,7 +70,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector )
 
     for (xml_coll_t j(x_layer, _U(slice)); j; ++j, ++m)  {
       xml_comp_t x_slice = j;
-      Material mat = lcdd.material(x_slice.materialStr());
+      Material mat = theDetector.material(x_slice.materialStr());
       string s_name = l_name + _toString(m, "_slice%d");
       double thickness = x_slice.thickness();
 
@@ -77,14 +88,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector )
       r += thickness;
 
       // Set Attributes
-      s_vol.setAttributes(lcdd, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+      s_vol.setAttributes(theDetector, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
       pv = l_vol.placeVolume(s_vol);
       // Slices have no extra id. Take the ID of the layer!
       pv.addPhysVolID("slice", m);
     }
     l_tub.setDimensions(rmin, r, z);
     //cout << l_name << " " << rmin << " " << r << " " << z << endl;
-    l_vol.setVisAttributes(lcdd, x_layer.visStr());
+    l_vol.setVisAttributes(theDetector, x_layer.visStr());
 
     pv = envelope.placeVolume(l_vol);
     pv.addPhysVolID("layer", n);

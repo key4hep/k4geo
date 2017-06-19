@@ -11,28 +11,28 @@
 #define DD4HEP_VERSION_GE(a,b) 0 
 #endif
 
-static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
-					       DD4hep::XML::Handle_t element,
-					       DD4hep::Geometry::SensitiveDetector sens) {
+static dd4hep::Ref_t create_detector(dd4hep::Detector& theDetector,
+                                     dd4hep::xml::Handle_t element,
+                                     dd4hep::SensitiveDetector sens) {
 
   std::cout << "This is the BeamCal"  << std::endl;
   sens.setType("calorimeter");
   //Materials
-  DD4hep::Geometry::Material air = lcdd.air();
+  dd4hep::Material air = theDetector.air();
 
   //Access to the XML File
-  DD4hep::XML::DetElement xmlBeamCal  = element;
+  dd4hep::xml::DetElement xmlBeamCal  = element;
   std::string   detName     = xmlBeamCal.nameStr();
 
-  DD4hep::Geometry::DetElement sdet ( detName, xmlBeamCal.id() );
+  dd4hep::DetElement sdet ( detName, xmlBeamCal.id() );
 
   // --- create an envelope volume and position it into the world ---------------------
   
-  DD4hep::Geometry::Volume envelope = DD4hep::XML::createPlacedEnvelope( lcdd,  element , sdet ) ;
+  dd4hep::Volume envelope = dd4hep::xml::createPlacedEnvelope( theDetector,  element , sdet ) ;
   
-  DD4hep::XML::setDetectorTypeFlag( element, sdet ) ;
+  dd4hep::xml::setDetectorTypeFlag( element, sdet ) ;
   
-  if( lcdd.buildType() == DD4hep::BUILD_ENVELOPE ) { std::cout << "Building envelope.\n"; return sdet ; }
+  if( theDetector.buildType() == dd4hep::BUILD_ENVELOPE ) { std::cout << "Building envelope.\n"; return sdet ; }
   else { std::cout << "Building all.\n"; }
   
   //-----------------------------------------------------------------------------------
@@ -40,19 +40,19 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
 
 
-  DD4hep::XML::Dimension dimensions =  xmlBeamCal.dimensions();
+  dd4hep::xml::Dimension dimensions =  xmlBeamCal.dimensions();
 
   //BeamCal Dimensions
   const double bcalInnerR = dimensions.inner_r();
   const double bcalOuterR = dimensions.outer_r();
   const double bcalInnerZ = dimensions.inner_z();
-  const double bcalThickness = DD4hep::Layering(xmlBeamCal).totalThickness();
+  const double bcalThickness = dd4hep::Layering(xmlBeamCal).totalThickness();
   const double bcalCentreZ = bcalInnerZ+bcalThickness*0.5;
 
-  double BeamCal_cell_size      = lcdd.constant<double>("BeamCal_cell_size");
+  double BeamCal_cell_size      = theDetector.constant<double>("BeamCal_cell_size");
   //========== fill data for reconstruction ============================
-  DD4hep::DDRec::LayeredCalorimeterData* caloData = new DD4hep::DDRec::LayeredCalorimeterData ;
-  caloData->layoutType = DD4hep::DDRec::LayeredCalorimeterData::EndcapLayout ;
+  dd4hep::rec::LayeredCalorimeterData* caloData = new dd4hep::rec::LayeredCalorimeterData ;
+  caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::EndcapLayout ;
   caloData->inner_symmetry = 0  ; // hardcoded tube
   caloData->outer_symmetry = 0  ;
   caloData->phi0 = 0 ;
@@ -67,7 +67,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   int thisLayerId = 1;
 
   //Parameters we have to know about
-  DD4hep::XML::Component xmlParameter = xmlBeamCal.child(_Unicode(parameter));
+  dd4hep::xml::Component xmlParameter = xmlBeamCal.child(_Unicode(parameter));
   const double fullCrossingAngle  = xmlParameter.attr< double >(_Unicode(crossingangle));
   std::cout << " The crossing angle is: " << fullCrossingAngle << " radian"  << std::endl;
 
@@ -90,31 +90,31 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
   // this needs the full crossing angle, because the beamCal is centred on the
   // outgoing beampipe, and the incoming beampipe is a full crossing angle away
-  const DD4hep::Geometry::Position    incomingBeamPipePosition( std::tan(-fullCrossingAngle) * bcalCentreZ, 0.0, 0.0);
+  const dd4hep::Position    incomingBeamPipePosition( std::tan(-fullCrossingAngle) * bcalCentreZ, 0.0, 0.0);
   //The extra parenthesis are paramount!
-  const DD4hep::Geometry::Rotation3D  incomingBeamPipeRotation( ( DD4hep::Geometry::RotationY( -fullCrossingAngle ) ) );
-  const DD4hep::Geometry::Transform3D incomingBPTransform( incomingBeamPipeRotation, incomingBeamPipePosition );
+  const dd4hep::Rotation3D  incomingBeamPipeRotation( ( dd4hep::RotationY( -fullCrossingAngle ) ) );
+  const dd4hep::Transform3D incomingBPTransform( incomingBeamPipeRotation, incomingBeamPipePosition );
 
   //Envelope to place the layers in
   
-  DD4hep::Geometry::Tube envelopeTube (bcalInnerR, bcalOuterR, bcalThickness*0.5 );
-  DD4hep::Geometry::Tube incomingBeamPipe (0.0, incomingBeamPipeRadius, bcalThickness);//we want this to be longer than the BeamCal
-  DD4hep::Geometry::SubtractionSolid BeamCalModule (envelopeTube, incomingBeamPipe, incomingBPTransform);
-  DD4hep::Geometry::Volume     envelopeVol(detName+"_module",BeamCalModule,air);
-  DD4hep::Geometry::DetElement beamCalDE_1(sdet,"Calorimeter1",1);
-  DD4hep::Geometry::DetElement beamCalDE_2(sdet,"Calorimeter2",2);
+  dd4hep::Tube envelopeTube (bcalInnerR, bcalOuterR, bcalThickness*0.5 );
+  dd4hep::Tube incomingBeamPipe (0.0, incomingBeamPipeRadius, bcalThickness);//we want this to be longer than the BeamCal
+  dd4hep::SubtractionSolid BeamCalModule (envelopeTube, incomingBeamPipe, incomingBPTransform);
+  dd4hep::Volume     envelopeVol(detName+"_module",BeamCalModule,air);
+  dd4hep::DetElement beamCalDE_1(sdet,"Calorimeter1",1);
+  dd4hep::DetElement beamCalDE_2(sdet,"Calorimeter2",2);
 
-  envelopeVol.setVisAttributes(lcdd,xmlBeamCal.visStr());
+  envelopeVol.setVisAttributes(theDetector,xmlBeamCal.visStr());
   
-  DD4hep::Geometry::Position incomingBeamPipeAtEndOfBeamCalPosition(-incomingBeamPipeRadius, incomingBeamPipeRadius, bcalInnerZ+bcalThickness);
+  dd4hep::Position incomingBeamPipeAtEndOfBeamCalPosition(-incomingBeamPipeRadius, incomingBeamPipeRadius, bcalInnerZ+bcalThickness);
   //This Rotation needs to be the fullCrossing angle, because the incoming beampipe has that much to the outgoing beam pipe
   //And the BeamCal is centred on the outgoing beampipe
-  incomingBeamPipeAtEndOfBeamCalPosition = DD4hep::Geometry::RotationY(-fullCrossingAngle) * incomingBeamPipeAtEndOfBeamCalPosition;
+  incomingBeamPipeAtEndOfBeamCalPosition = dd4hep::RotationY(-fullCrossingAngle) * incomingBeamPipeAtEndOfBeamCalPosition;
   const double cutOutRadius = ( incomingBeamPipeAtEndOfBeamCalPosition.Rho() ) + 0.01*dd4hep::cm;
   std::cout << "cutOutRadius: " << cutOutRadius/dd4hep::cm << " cm " << std::endl;
 
   //we use bcalThickness on purpose to make the subtraction work properly
-  DD4hep::Geometry::Tube cutOutTube (0.0, cutOutRadius, bcalThickness, bcalCutOutStart, bcalCutOutEnd);
+  dd4hep::Tube cutOutTube (0.0, cutOutRadius, bcalThickness, bcalCutOutStart, bcalCutOutEnd);
 
   ////////////////////////////////////////////////////////////////////////////////
   // Create all the layers
@@ -123,19 +123,19 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
   //Loop over all the layer (repeat=NN) sections
   //This is the starting point to place all layers, we need this when we have more than one layer block
   double referencePosition = -bcalThickness*0.5;
-  for(DD4hep::XML::Collection_t coll(xmlBeamCal,_U(layer)); coll; ++coll)  {
-    DD4hep::XML::Component xmlLayer(coll); //we know this thing is a layer
+  for(dd4hep::xml::Collection_t coll(xmlBeamCal,_U(layer)); coll; ++coll)  {
+    dd4hep::xml::Component xmlLayer(coll); //we know this thing is a layer
 
 
     //This just calculates the total size of a single layer
     //Why no convenience function for this?
     double layerThickness = 0;
-    for(DD4hep::XML::Collection_t l(xmlLayer,_U(slice)); l; ++l)
+    for(dd4hep::xml::Collection_t l(xmlLayer,_U(slice)); l; ++l)
       layerThickness += xml_comp_t(l).thickness();
 
     std::cout << "Total Length "    << bcalThickness/dd4hep::cm  << " cm" << std::endl;
     std::cout << "Layer Thickness " << layerThickness/dd4hep::cm << " cm" << std::endl;
-    DD4hep::DDRec::LayeredCalorimeterData::Layer caloLayer ;
+    dd4hep::rec::LayeredCalorimeterData::Layer caloLayer ;
             
     //Loop for repeat=NN
     for(int i=0, repeat=xmlLayer.repeat(); i<repeat; ++i)  {
@@ -143,28 +143,28 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
       double nInteractionLengths=0.;
       double thickness_sum=0;
 
-      std::string layer_name = detName + DD4hep::XML::_toString(thisLayerId,"_layer%d");
-      DD4hep::Geometry::Tube layer_base(bcalInnerR,bcalOuterR,layerThickness*0.5);
-      DD4hep::Geometry::SubtractionSolid layer_subtracted;
+      std::string layer_name = detName + dd4hep::xml::_toString(thisLayerId,"_layer%d");
+      dd4hep::Tube layer_base(bcalInnerR,bcalOuterR,layerThickness*0.5);
+      dd4hep::SubtractionSolid layer_subtracted;
       { // put this in extra block to limit scope
 	const double thisPositionZ = bcalCentreZ + referencePosition + layerThickness*0.5;
-	const DD4hep::Geometry::Position thisBPPosition( std::tan(-fullCrossingAngle) * thisPositionZ, 0.0, 0.0);
-	const DD4hep::Geometry::Transform3D thisBPTransform( incomingBeamPipeRotation, thisBPPosition );
-	layer_subtracted = DD4hep::Geometry::SubtractionSolid(layer_base, incomingBeamPipe, thisBPTransform);
+	const dd4hep::Position thisBPPosition( std::tan(-fullCrossingAngle) * thisPositionZ, 0.0, 0.0);
+	const dd4hep::Transform3D thisBPTransform( incomingBeamPipeRotation, thisBPPosition );
+	layer_subtracted = dd4hep::SubtractionSolid(layer_base, incomingBeamPipe, thisBPTransform);
       }
 
-      DD4hep::Geometry::Volume layer_vol(layer_name,layer_subtracted,air);
+      dd4hep::Volume layer_vol(layer_name,layer_subtracted,air);
 
 
       int sliceID=1;
       double inThisLayerPosition = -layerThickness*0.5;
 
 
-      for(DD4hep::XML::Collection_t collSlice(xmlLayer,_U(slice)); collSlice; ++collSlice)  {
-	DD4hep::XML::Component compSlice = collSlice;
+      for(dd4hep::xml::Collection_t collSlice(xmlLayer,_U(slice)); collSlice; ++collSlice)  {
+	dd4hep::xml::Component compSlice = collSlice;
 	const double      slice_thickness = compSlice.thickness();
-	const std::string sliceName = layer_name + DD4hep::XML::_toString(sliceID,"slice%d");
-	DD4hep::Geometry::Material   slice_material  = lcdd.material(compSlice.materialStr());
+	const std::string sliceName = layer_name + dd4hep::xml::_toString(sliceID,"slice%d");
+	dd4hep::Material   slice_material  = theDetector.material(compSlice.materialStr());
 
 	bool isAbsorberStructure(false);
 	try {
@@ -187,8 +187,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	  // Nothing to catch. Everything is fine.
 	}
 
-	DD4hep::Geometry::Tube sliceBase(bcalInnerR, outerR, slice_thickness/2);
-	DD4hep::Geometry::SubtractionSolid slice_subtracted;
+	dd4hep::Tube sliceBase(bcalInnerR, outerR, slice_thickness/2);
+	dd4hep::SubtractionSolid slice_subtracted;
 
 	if(isAbsorberStructure) {
 	  //If we have the absorber structure then we create the slice with a
@@ -196,17 +196,17 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	  //to know the global position of the slice, because the cutout depends
 	  //on the outgoing beam pipe position
 	  const double thisPositionZ = bcalCentreZ + referencePosition + 0.5*layerThickness + inThisLayerPosition + slice_thickness*0.5;
-	  const DD4hep::Geometry::Position thisBPPosition( std::tan(-fullCrossingAngle) * thisPositionZ, 0.0, 0.0);
+	  const dd4hep::Position thisBPPosition( std::tan(-fullCrossingAngle) * thisPositionZ, 0.0, 0.0);
 	  //The extra parenthesis are paramount! But.. there are none
-	  const DD4hep::Geometry::Transform3D thisBPTransform( incomingBeamPipeRotation, thisBPPosition );
-	  slice_subtracted = DD4hep::Geometry::SubtractionSolid(sliceBase, incomingBeamPipe, thisBPTransform);
+	  const dd4hep::Transform3D thisBPTransform( incomingBeamPipeRotation, thisBPPosition );
+	  slice_subtracted = dd4hep::SubtractionSolid(sliceBase, incomingBeamPipe, thisBPTransform);
 	} else {
 	  //If we do not have the absorber structure then we create the slice with a wedge cutout, i.e, keyhole shape
 	  /// Is it better to join two pieces or subtract two pieces?
-	  slice_subtracted = DD4hep::Geometry::SubtractionSolid(sliceBase, cutOutTube, DD4hep::Geometry::Transform3D() );
+	  slice_subtracted = dd4hep::SubtractionSolid(sliceBase, cutOutTube, dd4hep::Transform3D() );
 	}
 
-	DD4hep::Geometry::Volume slice_vol (sliceName,slice_subtracted,slice_material);
+	dd4hep::Volume slice_vol (sliceName,slice_subtracted,slice_material);
 
         nRadiationLengths += slice_thickness/(2.*slice_material.radLength());
         nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
@@ -234,9 +234,9 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
         thickness_sum += slice_thickness/2;
                 	
 
-	slice_vol.setAttributes(lcdd,compSlice.regionStr(),compSlice.limitsStr(),compSlice.visStr());
-	DD4hep::Geometry::PlacedVolume pv = layer_vol.placeVolume(slice_vol,
-								  DD4hep::Geometry::Position(0,0,inThisLayerPosition+slice_thickness*0.5));
+	slice_vol.setAttributes(theDetector,compSlice.regionStr(),compSlice.limitsStr(),compSlice.visStr());
+	dd4hep::PlacedVolume pv = layer_vol.placeVolume(slice_vol,
+								  dd4hep::Position(0,0,inThisLayerPosition+slice_thickness*0.5));
 	pv.addPhysVolID("slice",sliceID);
 	inThisLayerPosition += slice_thickness;
 	++sliceID;
@@ -259,11 +259,11 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
       //Why are we doing this for each layer, this just needs to be done once and then placed multiple times
       //Do we need unique IDs for each piece?
-      layer_vol.setVisAttributes(lcdd,xmlLayer.visStr());
+      layer_vol.setVisAttributes(theDetector,xmlLayer.visStr());
 
-      DD4hep::Geometry::Position layer_pos(0,0,referencePosition+0.5*layerThickness);
+      dd4hep::Position layer_pos(0,0,referencePosition+0.5*layerThickness);
       referencePosition += layerThickness;
-      DD4hep::Geometry::PlacedVolume pv = envelopeVol.placeVolume(layer_vol,layer_pos);
+      dd4hep::PlacedVolume pv = envelopeVol.placeVolume(layer_vol,layer_pos);
       pv.addPhysVolID("layer",thisLayerId);
 
       ++thisLayerId;
@@ -272,21 +272,21 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 
   }// for all layer collections
 
-  const DD4hep::Geometry::Position bcForwardPos (std::tan(0.5*fullCrossingAngle)*bcalCentreZ,0.0, bcalCentreZ);
-  const DD4hep::Geometry::Position bcBackwardPos(std::tan(0.5*fullCrossingAngle)*bcalCentreZ,0.0,-bcalCentreZ);
-  const DD4hep::Geometry::Rotation3D bcForwardRot ( DD4hep::Geometry::RotationY(+fullCrossingAngle*0.5 ) );
-  const DD4hep::Geometry::Rotation3D bcBackwardRot( DD4hep::Geometry::RotationZYX ( (180*dd4hep::degree), (180*dd4hep::degree-fullCrossingAngle*0.5), (0.0)));
+  const dd4hep::Position bcForwardPos (std::tan(0.5*fullCrossingAngle)*bcalCentreZ,0.0, bcalCentreZ);
+  const dd4hep::Position bcBackwardPos(std::tan(0.5*fullCrossingAngle)*bcalCentreZ,0.0,-bcalCentreZ);
+  const dd4hep::Rotation3D bcForwardRot ( dd4hep::RotationY(+fullCrossingAngle*0.5 ) );
+  const dd4hep::Rotation3D bcBackwardRot( dd4hep::RotationZYX ( (180*dd4hep::degree), (180*dd4hep::degree-fullCrossingAngle*0.5), (0.0)));
   
-  DD4hep::Geometry::PlacedVolume pv =
-    envelope.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcForwardRot, bcForwardPos ) );
+  dd4hep::PlacedVolume pv =
+    envelope.placeVolume(envelopeVol, dd4hep::Transform3D( bcForwardRot, bcForwardPos ) );
   pv.addPhysVolID("barrel", 1);
   beamCalDE_1.setPlacement(pv);
-  DD4hep::Geometry::PlacedVolume pv2 =
-    envelope.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcBackwardRot, bcBackwardPos ) );
+  dd4hep::PlacedVolume pv2 =
+    envelope.placeVolume(envelopeVol, dd4hep::Transform3D( bcBackwardRot, bcBackwardPos ) );
   pv2.addPhysVolID("barrel", 2);
   beamCalDE_2.setPlacement(pv2);
 
-  sdet.addExtension< DD4hep::DDRec::LayeredCalorimeterData >( caloData ) ;
+  sdet.addExtension< dd4hep::rec::LayeredCalorimeterData >( caloData ) ;
 
   return sdet;
 }

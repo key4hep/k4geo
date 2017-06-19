@@ -9,25 +9,35 @@
 #include <string>
 
 using namespace std;
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
-using namespace DD4hep::DDRec ;
-using namespace DDSurfaces ;
 
-using DD4hep::Geometry::Transform3D;
-using DD4hep::Geometry::Position;
-using DD4hep::Geometry::RotationY;
-using DD4hep::Geometry::RotateY;
-using DD4hep::Geometry::ConeSegment;
-using DD4hep::Geometry::SubtractionSolid;
-using DD4hep::Geometry::Material;
-using DD4hep::Geometry::Volume;
-using DD4hep::Geometry::Solid;
-using DD4hep::Geometry::Tube;
-using DD4hep::Geometry::PlacedVolume;
-using DD4hep::Geometry::Assembly;
+using dd4hep::Assembly;
+using dd4hep::BUILD_ENVELOPE;
+using dd4hep::ConeSegment;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::Position;
+using dd4hep::Ref_t;
+using dd4hep::RotateY;
+using dd4hep::RotationY;
+using dd4hep::SensitiveDetector;
+using dd4hep::Solid;
+using dd4hep::SubtractionSolid;
+using dd4hep::Transform3D;
+using dd4hep::Tube;
+using dd4hep::Volume;
 
-static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)
+using dd4hep::rec::ConicalSupportData;
+using dd4hep::rec::SurfaceType;
+using dd4hep::rec::Vector3D;
+using dd4hep::rec::VolCone;
+using dd4hep::rec::VolCylinder;
+using dd4hep::rec::VolCylinderImpl;
+using dd4hep::rec::VolSurface;
+using dd4hep::rec::volSurfaceList;
+
+static Ref_t create_detector(Detector& lcdd, xml_h e, SensitiveDetector /*sens*/)
 {
 
   xml_det_t     x_det     = e;
@@ -36,7 +46,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)
   DetElement    sdet(det_name, det_id);
   bool          reflect   = x_det.reflect();
 
-  Volume envelope = XML::createPlacedEnvelope(lcdd,  e , sdet) ;
+  Volume envelope = dd4hep::xml::createPlacedEnvelope(lcdd,  e , sdet) ;
 
   if (lcdd.buildType() == BUILD_ENVELOPE) return sdet ;
 

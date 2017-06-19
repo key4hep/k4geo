@@ -44,8 +44,28 @@
 #include <sstream>
 
 using namespace std;
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
+
+using dd4hep::BUILD_ENVELOPE;
+using dd4hep::Box;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::IntersectionSolid;
+using dd4hep::Layering;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::PolyhedraRegular;
+using dd4hep::Position;
+using dd4hep::Readout;
+using dd4hep::Ref_t;
+using dd4hep::Rotation3D;
+using dd4hep::RotationZYX;
+using dd4hep::Segmentation;
+using dd4hep::SensitiveDetector;
+using dd4hep::Transform3D;
+using dd4hep::Volume;
+using dd4hep::_toString;
+
+using dd4hep::rec::LayeredCalorimeterData;
 
 #include "SEcal05_Helpers.h"
 
@@ -60,7 +80,7 @@ using namespace DD4hep::Geometry;
 #define DD4HEP_VERSION_GE(a,b) 0 
 #endif
 
-static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens)  {
+static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDetector sens)  {
 
   cout << "------------------------" << endl;
   cout << "creating SEcal05_Endcaps" << endl;
@@ -73,15 +93,15 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   int           det_id    = x_det.id();
   //  xml_comp_t    x_staves  = x_det.staves();
   DetElement    sdet      (det_name,det_id);
-  //  Volume        motherVol = lcdd.pickMotherVolume(sdet);
+  //  Volume        motherVol = theDetector.pickMotherVolume(sdet);
 
   // --- create an envelope volume and position it into the world ---------------------
 
-  Volume envelope = XML::createPlacedEnvelope( lcdd,  element , sdet ) ;
+  Volume envelope = dd4hep::xml::createPlacedEnvelope( theDetector,  element , sdet ) ;
 
-  XML::setDetectorTypeFlag( element, sdet ) ;
+  dd4hep::xml::setDetectorTypeFlag( element, sdet ) ;
 
-  if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
+  if( theDetector.buildType() == BUILD_ENVELOPE ) return sdet ;
   //-----------------------------------------------------------------------------------
 
   sens.setType("calorimeter");
@@ -97,56 +117,56 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   //====================================================================
   
   //  read parameters from compact.xml file
-  double Ecal_Slab_shielding                = lcdd.constant<double>("Ecal_Slab_shielding");
-  double Ecal_fiber_thickness_structure = lcdd.constant<double>("Ecal_fiber_thickness_structure"); // absorber wrapping thickness
-  double Ecal_fiber_thickness_alveolus  = lcdd.constant<double>("Ecal_fiber_thickness_alveolus"); // alveolar wall thickness
+  double Ecal_Slab_shielding                = theDetector.constant<double>("Ecal_Slab_shielding");
+  double Ecal_fiber_thickness_structure = theDetector.constant<double>("Ecal_fiber_thickness_structure"); // absorber wrapping thickness
+  double Ecal_fiber_thickness_alveolus  = theDetector.constant<double>("Ecal_fiber_thickness_alveolus"); // alveolar wall thickness
   
-  double EcalBarrel_inner_radius                  = lcdd.constant<double>("TPC_outer_radius") +lcdd.constant<double>("Ecal_Tpc_gap");
-  int    Ecal_barrel_z_modules              = lcdd.constant<int>("Ecal_barrel_z_modules");
+  double EcalBarrel_inner_radius                  = theDetector.constant<double>("TPC_outer_radius") +theDetector.constant<double>("Ecal_Tpc_gap");
+  int    Ecal_barrel_z_modules              = theDetector.constant<int>("Ecal_barrel_z_modules");
 
-  double Ecal_radiator_thickness1           = lcdd.constant<double>("Ecal_radiator_layers_set1_thickness");
-  double Ecal_radiator_thickness2           = lcdd.constant<double>("Ecal_radiator_layers_set2_thickness");
-  double Ecal_radiator_thickness3           = lcdd.constant<double>("Ecal_radiator_layers_set3_thickness");
-  double Ecal_Barrel_halfZ                  = lcdd.constant<double>("Ecal_Barrel_halfZ");
+  double Ecal_radiator_thickness1           = theDetector.constant<double>("Ecal_radiator_layers_set1_thickness");
+  double Ecal_radiator_thickness2           = theDetector.constant<double>("Ecal_radiator_layers_set2_thickness");
+  double Ecal_radiator_thickness3           = theDetector.constant<double>("Ecal_radiator_layers_set3_thickness");
+  double Ecal_Barrel_halfZ                  = theDetector.constant<double>("Ecal_Barrel_halfZ");
 
-  int    Ecal_barrel_number_of_towers       = lcdd.constant<int>("Ecal_barrel_number_of_towers");
+  int    Ecal_barrel_number_of_towers       = theDetector.constant<int>("Ecal_barrel_number_of_towers");
   
-  double Ecal_support_thickness             = lcdd.constant<double>("Ecal_support_thickness");
-  double Ecal_front_face_thickness          = lcdd.constant<double>("Ecal_front_face_thickness");
-  double Ecal_lateral_face_thickness        = lcdd.constant<double>("Ecal_lateral_face_thickness");
-  double Ecal_Slab_H_fiber_thickness        = lcdd.constant<double>("Ecal_Slab_H_fiber_thickness");
+  double Ecal_support_thickness             = theDetector.constant<double>("Ecal_support_thickness");
+  double Ecal_front_face_thickness          = theDetector.constant<double>("Ecal_front_face_thickness");
+  double Ecal_lateral_face_thickness        = theDetector.constant<double>("Ecal_lateral_face_thickness");
+  double Ecal_Slab_H_fiber_thickness        = theDetector.constant<double>("Ecal_Slab_H_fiber_thickness");
 
-  double Ecal_endcap_extra_size             = lcdd.constant<double>("Ecal_endcap_extra_size");
-  double Ecal_cables_gap                    = lcdd.constant<double>("Ecal_cables_gap");
+  double Ecal_endcap_extra_size             = theDetector.constant<double>("Ecal_endcap_extra_size");
+  double Ecal_cables_gap                    = theDetector.constant<double>("Ecal_cables_gap");
 
-  int    Ecal_nlayers1                      = lcdd.constant<int>("Ecal_nlayers1");
-  int    Ecal_nlayers2                      = lcdd.constant<int>("Ecal_nlayers2");
-  int    Ecal_nlayers3                      = lcdd.constant<int>("Ecal_nlayers3");
+  int    Ecal_nlayers1                      = theDetector.constant<int>("Ecal_nlayers1");
+  int    Ecal_nlayers2                      = theDetector.constant<int>("Ecal_nlayers2");
+  int    Ecal_nlayers3                      = theDetector.constant<int>("Ecal_nlayers3");
 
   // first layer is preshower?
-  bool   Ecal_Endcap_PreshowerLayer         = lcdd.constant<int>("Ecal_Endcap_Preshower") > 0;
+  bool   Ecal_Endcap_PreshowerLayer         = theDetector.constant<int>("Ecal_Endcap_Preshower") > 0;
 
-  std::string Ecal_endcap_number_of_towers       = lcdd.constant<string>("Ecal_endcap_number_of_towers");
+  std::string Ecal_endcap_number_of_towers       = theDetector.constant<string>("Ecal_endcap_number_of_towers");
 
-  int Ecal_end_of_slab_strategy             = lcdd.constant<int>("Ecal_end_of_slab_strategy");
+  int Ecal_end_of_slab_strategy             = theDetector.constant<int>("Ecal_end_of_slab_strategy");
 
 
-  int    Ecal_n_wafers_per_tower            = lcdd.constant<int>("Ecal_n_wafers_per_tower");
+  int    Ecal_n_wafers_per_tower            = theDetector.constant<int>("Ecal_n_wafers_per_tower");
   
-  double Ecal_guard_ring_size               = lcdd.constant<double>("Ecal_guard_ring_size");
+  double Ecal_guard_ring_size               = theDetector.constant<double>("Ecal_guard_ring_size");
 
-  double      EcalEndcap_inner_radius          = lcdd.constant<double>("EcalEndcap_inner_radius");
-  double      EcalEndcap_outer_radius          = lcdd.constant<double>("EcalEndcap_outer_radius");
-  double      EcalEndcap_min_z                 = lcdd.constant<double>("EcalEndcap_min_z");
-  double      EcalEndcap_max_z                 = lcdd.constant<double>("EcalEndcap_max_z");
+  double      EcalEndcap_inner_radius          = theDetector.constant<double>("EcalEndcap_inner_radius");
+  double      EcalEndcap_outer_radius          = theDetector.constant<double>("EcalEndcap_outer_radius");
+  double      EcalEndcap_min_z                 = theDetector.constant<double>("EcalEndcap_min_z");
+  double      EcalEndcap_max_z                 = theDetector.constant<double>("EcalEndcap_max_z");
 
-  std::string Ecal_layerConfig              = lcdd.constant<string>("Ecal_layer_pattern");
+  std::string Ecal_layerConfig              = theDetector.constant<string>("Ecal_layer_pattern");
 
-  int Ecal_cells_across_megatile = lcdd.constant <int> ("Ecal_cells_across_megatile" );
-  int Ecal_strips_across_megatile= lcdd.constant <int> ("Ecal_strips_across_megatile");
-  int Ecal_strips_along_megatile = lcdd.constant <int> ("Ecal_strips_along_megatile" );
+  int Ecal_cells_across_megatile = theDetector.constant <int> ("Ecal_cells_across_megatile" );
+  int Ecal_strips_across_megatile= theDetector.constant <int> ("Ecal_strips_across_megatile");
+  int Ecal_strips_along_megatile = theDetector.constant <int> ("Ecal_strips_along_megatile" );
 
-  double Ecal_barrel_thickness              = lcdd.constant<double>("Ecal_barrel_thickness"); // what's assumed in the compact description
+  double Ecal_barrel_thickness              = theDetector.constant<double>("Ecal_barrel_thickness"); // what's assumed in the compact description
  
 
   //====================================================================
@@ -278,7 +298,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 				 Position( quadr - EcalEndcap_inner_radius, 
 					   quadr + EcalEndcap_inner_radius, 0 ) );
 
-  Volume EnvLogEndCap("EcalEndcapQuadrant",EndCapSolid,lcdd.material("CarbonFiber"));
+  Volume EnvLogEndCap("EcalEndcapQuadrant",EndCapSolid,theDetector.material("CarbonFiber"));
 
   // kink position wrt bottom of quadrant (inside the lateral support)
   // Y==0 is defined as outer edge of lateral face of inner module of quadrant
@@ -290,19 +310,19 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 			     kink_y
 			     );
   
-  helper.setTranslation ( DD4hep::Geometry::Position ( -EcalEndcap_inner_radius , EcalEndcap_inner_radius, -module_thickness/2. ) );
+  helper.setTranslation ( Position ( -EcalEndcap_inner_radius , EcalEndcap_inner_radius, -module_thickness/2. ) );
 
   // make the module
 
-  DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
-  caloData->layoutType = DDRec::LayeredCalorimeterData::EndcapLayout ;
+  LayeredCalorimeterData* caloData = new LayeredCalorimeterData ;
+  caloData->layoutType = LayeredCalorimeterData::EndcapLayout ;
 
   DetElement mod_det ("quad0",det_id);
 
   helper.makeModule( EnvLogEndCap, 
 		     mod_det,
 		     *caloData,
-		     lcdd, 
+		     theDetector, 
 		     sens );
 
   for (size_t i=0; i<caloData->layers.size(); i++) {
@@ -314,7 +334,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     cout << "sensitive layer " << i << " : x,y = " << caloData->layers[i].cellSize0 << " " << caloData->layers[i].cellSize1 << endl;
   }
 
-  caloData->layoutType = DDRec::LayeredCalorimeterData::EndcapLayout ;
+  caloData->layoutType = LayeredCalorimeterData::EndcapLayout ;
   caloData->inner_symmetry = 4  ; // hard code cernter box hole
   caloData->outer_symmetry = 8  ; // outer Octagun
   caloData->phi0 = 0 ;
@@ -359,7 +379,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     }
   }
   
-  sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ; 
+  sdet.addExtension< LayeredCalorimeterData >( caloData ) ; 
 
   //  cout << "finished SEcal05_Endcaps" << endl;
 

@@ -3,7 +3,7 @@
 #include <DD4hep/DD4hepUnits.h>
 #include <DD4hep/DDTest.h>
 #include <DD4hep/Detector.h>
-#include <DD4hep/LCDD.h>
+#include <DD4hep/Detector.h>
 #include <DDRec/API/IDDecoder.h>
 #include <DDRec/DetectorData.h>
 
@@ -14,9 +14,9 @@
 #include <string>
 #include <vector>
 
-static DD4hep::DDTest test( "SensThickness" ) ;
+static dd4hep::DDTest test( "SensThickness" ) ;
 
-template<typename T> void checkExtensions( DD4hep::Geometry::LCDD& lcdd, std::vector<std::string> detectorNames, std::vector<double> sensThickness) {
+template<typename T> void checkExtensions( dd4hep::Detector& lcdd, std::vector<std::string> detectorNames, std::vector<double> sensThickness) {
 
   int counter = 0;
   for (auto const& detName : detectorNames ) {
@@ -47,7 +47,7 @@ int main (int argc, char **args) {
   const double trackerThick = atof(args[2]);
   const double vertexThick = atof(args[3]);
 
-  DD4hep::Geometry::LCDD& lcdd = DD4hep::Geometry::LCDD::getInstance();
+  dd4hep::Detector& lcdd = dd4hep::Detector::getInstance();
   lcdd.fromCompact( compactFile );
 
   std::vector<std::string> endcaps = { "InnerTrackerEndcap",
@@ -62,8 +62,8 @@ int main (int argc, char **args) {
 					trackerThick*dd4hep::micrometer,
 					vertexThick*dd4hep::micrometer };
 
-  checkExtensions<DD4hep::DDRec::ZDiskPetalsData>( lcdd, endcaps, sensThickness );
-  checkExtensions<DD4hep::DDRec::ZPlanarData>( lcdd, barrels, sensThickness );
+  checkExtensions<dd4hep::rec::ZDiskPetalsData>( lcdd, endcaps, sensThickness );
+  checkExtensions<dd4hep::rec::ZPlanarData>( lcdd, barrels, sensThickness );
 
 
 }

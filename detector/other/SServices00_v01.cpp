@@ -20,6 +20,25 @@
 
 #include "SServices00_v01.h"
 
+using dd4hep::Assembly;
+using dd4hep::Box;
+using dd4hep::Detector;
+using dd4hep::IntersectionSolid;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::Polycone;
+using dd4hep::Position;
+using dd4hep::RotationZYX;
+using dd4hep::Solid;
+using dd4hep::SubtractionSolid;
+using dd4hep::Torus;
+using dd4hep::Transform3D;
+using dd4hep::Trapezoid;
+using dd4hep::Tube;
+using dd4hep::UnionSolid;
+using dd4hep::Volume;
+
+
 SServices00_v01::SServices00_v01() 
 {
   std::cout<<"SServices00_v01 is being created "<<std::endl;
@@ -31,58 +50,58 @@ SServices00_v01::~SServices00_v01()
 
 bool SServices00_v01::BuildServices(PlacedVolume &pVol,
 				    Assembly &envelope,
-				    LCDD &lcdd) 
+				    Detector &theDetector) 
 {
 
   std::cout << "\nBuilding SServices00"<< std::endl;
 
   TPC_inner_radius =
-    lcdd.constant<double>("TPC_inner_radius");
+    theDetector.constant<double>("TPC_inner_radius");
 
   Sit_cables_cylinder_thickness =
-    lcdd.constant<double>("SIT12_cable_thickness");
+    theDetector.constant<double>("SIT12_cable_thickness");
 
   TUBE_IPOuterBulge_end_z  =
-    lcdd.constant<double>("TUBE_IPOuterBulge_end_z");
+    theDetector.constant<double>("TUBE_IPOuterBulge_end_z");
 
   TUBE_IPOuterBulge_end_radius  =
-    lcdd.constant<double>("TUBE_IPOuterBulge_end_radius");
+    theDetector.constant<double>("TUBE_IPOuterBulge_end_radius");
 
   Sit_cables_disk_thickness =((1+TUBE_IPOuterBulge_end_radius/TPC_inner_radius)*0.5*
-			      (lcdd.constant<double>("SServices_FTD7_cables_thickness")));
+			      (theDetector.constant<double>("SServices_FTD7_cables_thickness")));
 
-  SIT1_Radius = lcdd.constant<double>("SIT1_Radius");
-  SIT2_Radius = lcdd.constant<double>("SIT2_Radius");
+  SIT1_Radius = theDetector.constant<double>("SIT1_Radius");
+  SIT2_Radius = theDetector.constant<double>("SIT2_Radius");
 
   FTD2_cone_thickness =
-    lcdd.constant<double>("SServices_FTD2_cone_thickness");
+    theDetector.constant<double>("SServices_FTD2_cone_thickness");
 
   FTD3_cone_thickness =
-    lcdd.constant<double>("SServices_FTD3_cone_thickness");
+    theDetector.constant<double>("SServices_FTD3_cone_thickness");
 
   TPC_Ecal_Hcal_barrel_halfZ = 
-    lcdd.constant<double>("TPC_Ecal_Hcal_barrel_halfZ");
+    theDetector.constant<double>("TPC_Ecal_Hcal_barrel_halfZ");
 
   TPC_outer_radius = 
-    lcdd.constant<double>("TPC_outer_radius");
+    theDetector.constant<double>("TPC_outer_radius");
 
   Ecal_cables_gap =
-    lcdd.constant<double>("Ecal_cables_gap");
+    theDetector.constant<double>("Ecal_cables_gap");
 
   InnerServicesWidth = 
-    lcdd.constant<double>("HcalServicesModule_InnerServicesWidth");
+    theDetector.constant<double>("HcalServicesModule_InnerServicesWidth");
 
   RailHeight = 
-    lcdd.constant<double>("EcalBarrelServices_RailHeight");
+    theDetector.constant<double>("EcalBarrelServices_RailHeight");
 
-  if(RailHeight > lcdd.constant<double>("Hcal_Ecal_gap"))
+  if(RailHeight > theDetector.constant<double>("Hcal_Ecal_gap"))
 	throw std::runtime_error("EcalBarrel services: RailHeight exceeds Hcal_Ecal_gap");
 
   double Ecal_inner_radius = TPC_outer_radius +
-    lcdd.constant<double>("Ecal_Tpc_gap");
+    theDetector.constant<double>("Ecal_Tpc_gap");
 
   Ecal_outer_radius =
-    lcdd.constant<double>("Ecal_outer_radius");
+    theDetector.constant<double>("Ecal_outer_radius");
 
   module_thickness = Ecal_outer_radius - Ecal_inner_radius;
 
@@ -96,17 +115,17 @@ bool SServices00_v01::BuildServices(PlacedVolume &pVol,
   G4cout << "top_dim_x = " << top_dim_x << G4endl;
 #endif
 
-  if (!BuildTPCEndplateServices(pVol,envelope,lcdd))  return false;
+  if (!BuildTPCEndplateServices(pVol,envelope,theDetector))  return false;
 
-  if (!BuildEcalBarrelServices(pVol,envelope,lcdd))  return false;
+  if (!BuildEcalBarrelServices(pVol,envelope,theDetector))  return false;
 
-  if (!BuildEcalBarrel_EndCapServices(pVol,envelope,lcdd))  
+  if (!BuildEcalBarrel_EndCapServices(pVol,envelope,theDetector))  
   		return false;
 
-  if (!BuildHcalBarrel_EndCapServices(pVol,envelope,lcdd))  
+  if (!BuildHcalBarrel_EndCapServices(pVol,envelope,theDetector))  
   		return false;
 
-  BuildSitCables(pVol,envelope,lcdd);
+  BuildSitCables(pVol,envelope,theDetector);
 
   return true;
 
@@ -114,13 +133,13 @@ bool SServices00_v01::BuildServices(PlacedVolume &pVol,
 
 void SServices00_v01::BuildSitCables(PlacedVolume &pVol,
 				     Assembly &envelope,
-				     LCDD &lcdd) 
+				     Detector &theDetector) 
 {
 
 //First place the Cylinder
 
   double ftd4to7_tpc_radial_gap  = 
-        lcdd.constant<double>("ftd4to7_tpc_radial_gap");
+        theDetector.constant<double>("ftd4to7_tpc_radial_gap");
 
   if(ftd4to7_tpc_radial_gap < Sit_cables_cylinder_thickness)
 	throw std::runtime_error("SServices_02_v00: the ftd-tpc radial gap is less than Sit cable thickness");
@@ -129,12 +148,12 @@ void SServices00_v01::BuildSitCables(PlacedVolume &pVol,
 	ftd4to7_tpc_radial_gap/2.;
 
   double z_start_3 = TPC_Ecal_Hcal_barrel_halfZ * 
-	lcdd.constant<double>("z_position_ReltoTPCLength");
+	theDetector.constant<double>("z_position_ReltoTPCLength");
 
-  double petalairthickness_half = 0.5 * ( lcdd.constant<double>("petal_cp_support_thickness")
-                                             + 2.0*(lcdd.constant<double>("disk_si_thickness")));
+  double petalairthickness_half = 0.5 * ( theDetector.constant<double>("petal_cp_support_thickness")
+                                             + 2.0*(theDetector.constant<double>("disk_si_thickness")));
 
-  double max_half_thickness_disk_3 = lcdd.constant<double>("petal_support_zoffset") + petalairthickness_half ;
+  double max_half_thickness_disk_3 = theDetector.constant<double>("petal_support_zoffset") + petalairthickness_half ;
 
   double z_half_len = (TPC_Ecal_Hcal_barrel_halfZ -
 	z_start_3) / 2.;
@@ -145,7 +164,7 @@ void SServices00_v01::BuildSitCables(PlacedVolume &pVol,
 		     0., 2 * M_PI);
 
   Volume SitTubeLog("SitTubeLog",SitTubeSolid,
-	       lcdd.material("aluminium"));
+	       theDetector.material("aluminium"));
   
   Position Cylinder_pos1(0, 0, z_start_3 + z_half_len);
   pVol = envelope.placeVolume(SitTubeLog,Cylinder_pos1);
@@ -157,18 +176,18 @@ void SServices00_v01::BuildSitCables(PlacedVolume &pVol,
 //Then place the cone
 
   double z_start_2 = TPC_Ecal_Hcal_barrel_halfZ * 
-	lcdd.constant<double>("z_position_ReltoTPCLength");
+	theDetector.constant<double>("z_position_ReltoTPCLength");
 
-  petalairthickness_half = 0.5 * ( lcdd.constant<double>("petal_cp_support_thickness")
-                                             + 2.0*(lcdd.constant<double>("disk_si_thickness")));
+  petalairthickness_half = 0.5 * ( theDetector.constant<double>("petal_cp_support_thickness")
+                                             + 2.0*(theDetector.constant<double>("disk_si_thickness")));
 
-  double max_half_thickness_disk_2 = lcdd.constant<double>("petal_support_zoffset") + petalairthickness_half ;
+  double max_half_thickness_disk_2 = theDetector.constant<double>("petal_support_zoffset") + petalairthickness_half ;
 
   double FTD2_outer_radius = SIT1_Radius + 
-	lcdd.constant<double>("ftd2_sit1_radial_diff");
+	theDetector.constant<double>("ftd2_sit1_radial_diff");
 
   double FTD3_outer_radius = SIT2_Radius +
-	lcdd.constant<double>("ftd3_sit2_radial_diff");
+	theDetector.constant<double>("ftd3_sit2_radial_diff");
 
   double zPlane[2];
   zPlane[0] = z_start_2 + max_half_thickness_disk_2 + SurfaceTolerance;
@@ -195,7 +214,7 @@ void SServices00_v01::BuildSitCables(PlacedVolume &pVol,
   Polycone SitConeSolid (0., 2.0 * M_PI, rmin, rmax, z);
 		
   Volume SitConeLog("SitConeLog",SitConeSolid,
-		    lcdd.material("aluminium"));
+		    theDetector.material("aluminium"));
   
   Position cone_pos(0, 0, 0);
   pVol = envelope.placeVolume(SitConeLog,cone_pos);
@@ -213,7 +232,7 @@ void SServices00_v01::BuildSitCables(PlacedVolume &pVol,
 		    0., 2 * M_PI);
 
   Volume SitDiskLog("SitDiskLog",SitDiskSolid,
-		    lcdd.material("aluminium"));
+		    theDetector.material("aluminium"));
   
   Position disk_pos1(0, 0, TUBE_IPOuterBulge_end_z + Sit_cables_disk_thickness/2.);
   pVol = envelope.placeVolume(SitDiskLog,disk_pos1);
@@ -233,7 +252,7 @@ void SServices00_v01::BuildSitCables(PlacedVolume &pVol,
 	    <<"\n   - SServices_FTD3_cone_thickness = "
 	    <<FTD3_cone_thickness
 	    <<"\n   - SServices_FTD7_cables_thickness = "
-	    <<lcdd.constant<double>("SServices_FTD7_cables_thickness")
+	    <<theDetector.constant<double>("SServices_FTD7_cables_thickness")
 	    <<std::endl;
 
 }
@@ -242,50 +261,50 @@ bool
 SServices00_v01::
 BuildTPCEndplateServices(PlacedVolume &pVol,
 			 Assembly &envelope,
-			 LCDD &lcdd)
+			 Detector &theDetector)
 {
    double tpcEndplateServices_R[MAX_TPC_RINGS], 
 	tpcEndplateServices_r[MAX_TPC_RINGS];
 
    tpcEndplateServices_R[0] = 
-	lcdd.constant<double>("tpcEndplateServicesRing1_R");
+	theDetector.constant<double>("tpcEndplateServicesRing1_R");
    tpcEndplateServices_r[0] = 
-	lcdd.constant<double>("tpcEndplateServicesRing1_ro");
+	theDetector.constant<double>("tpcEndplateServicesRing1_ro");
 
    tpcEndplateServices_R[1] = 
-	lcdd.constant<double>("tpcEndplateServicesRing2_R");
+	theDetector.constant<double>("tpcEndplateServicesRing2_R");
    tpcEndplateServices_r[1] = 
-	lcdd.constant<double>("tpcEndplateServicesRing2_ro");
+	theDetector.constant<double>("tpcEndplateServicesRing2_ro");
 
    tpcEndplateServices_R[2] = 
-	lcdd.constant<double>("tpcEndplateServicesRing3_R");
+	theDetector.constant<double>("tpcEndplateServicesRing3_R");
    tpcEndplateServices_r[2] = 
-	lcdd.constant<double>("tpcEndplateServicesRing3_ro");
+	theDetector.constant<double>("tpcEndplateServicesRing3_ro");
 
    tpcEndplateServices_R[3] = 
-	lcdd.constant<double>("tpcEndplateServicesRing4_R");
+	theDetector.constant<double>("tpcEndplateServicesRing4_R");
    tpcEndplateServices_r[3] = 
-	lcdd.constant<double>("tpcEndplateServicesRing4_ro");
+	theDetector.constant<double>("tpcEndplateServicesRing4_ro");
 
    tpcEndplateServices_R[4] = 
-	lcdd.constant<double>("tpcEndplateServicesRing5_R");
+	theDetector.constant<double>("tpcEndplateServicesRing5_R");
    tpcEndplateServices_r[4] = 
-	lcdd.constant<double>("tpcEndplateServicesRing5_ro");
+	theDetector.constant<double>("tpcEndplateServicesRing5_ro");
 
    tpcEndplateServices_R[5] = 
-	lcdd.constant<double>("tpcEndplateServicesRing6_R");
+	theDetector.constant<double>("tpcEndplateServicesRing6_R");
    tpcEndplateServices_r[5] = 
-	lcdd.constant<double>("tpcEndplateServicesRing6_ro");
+	theDetector.constant<double>("tpcEndplateServicesRing6_ro");
 
    tpcEndplateServices_R[6] = 
-	lcdd.constant<double>("tpcEndplateServicesRing7_R");
+	theDetector.constant<double>("tpcEndplateServicesRing7_R");
    tpcEndplateServices_r[6] = 
-	lcdd.constant<double>("tpcEndplateServicesRing7_ro");
+	theDetector.constant<double>("tpcEndplateServicesRing7_ro");
 
    tpcEndplateServices_R[7] = 
-	lcdd.constant<double>("tpcEndplateServicesRing8_R");
+	theDetector.constant<double>("tpcEndplateServicesRing8_R");
    tpcEndplateServices_r[7] = 
-	lcdd.constant<double>("tpcEndplateServicesRing8_ro");
+	theDetector.constant<double>("tpcEndplateServicesRing8_ro");
 
    for(int i=0; i<MAX_TPC_RINGS; i++) {
 
@@ -301,7 +320,7 @@ BuildTPCEndplateServices(PlacedVolume &pVol,
 		      0, 2*M_PI);
 
       Volume ringLogical("ringLogical",ringSolid,
-			 lcdd.material("copper"));
+			 theDetector.material("copper"));
 
       double z_position = TPC_Ecal_Hcal_barrel_halfZ + 
 	                  tpcEndplateServices_r[i];
@@ -372,7 +391,7 @@ bool
 SServices00_v01::
 BuildEcalBarrelServices(PlacedVolume &pVol,
 			Assembly &envelope,
-			LCDD &lcdd)
+			Detector &theDetector)
 {
 
   Box ContainerSolid(top_dim_x/2.,
@@ -381,9 +400,9 @@ BuildEcalBarrelServices(PlacedVolume &pVol,
 
   Volume containerLogical("EcalBarrelServicesContainerLogical",
 			  ContainerSolid,
-			  lcdd.material("air"));
+			  theDetector.material("air"));
 
-  if(!FillEcalBarrelServicesContainer(pVol,containerLogical,lcdd))
+  if(!FillEcalBarrelServicesContainer(pVol,containerLogical,theDetector))
 	return false;
 
   for (int stave_id = 1; stave_id < 9 ; stave_id++)
@@ -405,13 +424,13 @@ bool
 SServices00_v01::
 FillEcalBarrelServicesContainer(PlacedVolume &pVol,
 				Volume &pContainerLogical,
-				LCDD &lcdd)
+				Detector &theDetector)
 {
-  double RailDistanceToRight = lcdd.constant<double>("EcalBarrelServices_RailDistanceToRight");
+  double RailDistanceToRight = theDetector.constant<double>("EcalBarrelServices_RailDistanceToRight");
 
-  double RailSeparation = lcdd.constant<double>("EcalBarrelServices_RailSeparation");
+  double RailSeparation = theDetector.constant<double>("EcalBarrelServices_RailSeparation");
 
-  double RailWidth = lcdd.constant<double>("EcalBarrelServices_RailWidth");
+  double RailWidth = theDetector.constant<double>("EcalBarrelServices_RailWidth");
 
   bool RailSeparationChanged = false;
   if(fabs(
@@ -430,7 +449,7 @@ FillEcalBarrelServicesContainer(PlacedVolume &pVol,
 		TPC_Ecal_Hcal_barrel_halfZ); 
 
   Volume railLogical("RailLogical",railSolid,
-		     lcdd.material("aluminium"));
+		     theDetector.material("aluminium"));
  
   double railPosition = top_dim_x/2. - RailDistanceToRight - RailWidth/2.;
 
@@ -445,22 +464,22 @@ FillEcalBarrelServicesContainer(PlacedVolume &pVol,
   }
 
 //-Z thicknesses 
-  double ZMinus_FirstInterrail_PE_Thickness = lcdd.constant<double>("EcalBarrelServices_ZMinus_FirstInterrail_PE_Thickness");
+  double ZMinus_FirstInterrail_PE_Thickness = theDetector.constant<double>("EcalBarrelServices_ZMinus_FirstInterrail_PE_Thickness");
 
-  double ZMinus_FirstInterrail_Cu_Thickness = lcdd.constant<double>("EcalBarrelServices_ZMinus_FirstInterrail_Cu_Thickness");
+  double ZMinus_FirstInterrail_Cu_Thickness = theDetector.constant<double>("EcalBarrelServices_ZMinus_FirstInterrail_Cu_Thickness");
 
-  double ZMinus_SecondInterrail_Cu_Thickness = lcdd.constant<double>("EcalBarrelServices_ZMinus_SecondInterrail_Cu_Thickness");
+  double ZMinus_SecondInterrail_Cu_Thickness = theDetector.constant<double>("EcalBarrelServices_ZMinus_SecondInterrail_Cu_Thickness");
 
 //+Z thicknesses 
-  double ZPlus_FirstInterrail_PE_Thickness = lcdd.constant<double>("EcalBarrelServices_ZPlus_FirstInterrail_PE_Thickness");
+  double ZPlus_FirstInterrail_PE_Thickness = theDetector.constant<double>("EcalBarrelServices_ZPlus_FirstInterrail_PE_Thickness");
 
-  double ZPlus_FirstInterrail_Cu_Thickness = lcdd.constant<double>("EcalBarrelServices_ZPlus_FirstInterrail_Cu_Thickness");
+  double ZPlus_FirstInterrail_Cu_Thickness = theDetector.constant<double>("EcalBarrelServices_ZPlus_FirstInterrail_Cu_Thickness");
 
-  double ZPlus_SecondInterrail_Cu_Thickness = lcdd.constant<double>("EcalBarrelServices_ZPlus_SecondInterrail_Cu_Thickness");
+  double ZPlus_SecondInterrail_Cu_Thickness = theDetector.constant<double>("EcalBarrelServices_ZPlus_SecondInterrail_Cu_Thickness");
 
   if(RailSeparationChanged)
   {
-     double OldRailSeparation = lcdd.constant<double>("EcalBarrelServices_RailSeparation");
+     double OldRailSeparation = theDetector.constant<double>("EcalBarrelServices_RailSeparation");
 
      double fraction = OldRailSeparation / RailSeparation;
      ZMinus_FirstInterrail_PE_Thickness *= fraction;
@@ -483,7 +502,7 @@ FillEcalBarrelServicesContainer(PlacedVolume &pVol,
 		 moduleLength / 2.); 
 
      Volume PELogical("PELogical",PESolid,
-		      lcdd.material("polyethylene"));
+		      theDetector.material("polyethylene"));
 
      Position posPE(top_dim_x/2.-RailDistanceToRight-RailWidth-RailSeparation+x_half_dim,
 		    -RailHeight/2. + ZMinus_FirstInterrail_PE_Thickness/2.,
@@ -496,7 +515,7 @@ FillEcalBarrelServicesContainer(PlacedVolume &pVol,
 		    moduleLength / 2.); 
 
      Volume Cu_1_Logical("Cu_1_Logical",Cu_1_Solid,
-                        lcdd.material("copper"));
+                        theDetector.material("copper"));
 
      Position posCu1(top_dim_x/2.-RailDistanceToRight-RailWidth-RailSeparation+x_half_dim,
 		     -RailHeight/2. + ZMinus_FirstInterrail_PE_Thickness+ZMinus_FirstInterrail_Cu_Thickness/2.,
@@ -509,7 +528,7 @@ FillEcalBarrelServicesContainer(PlacedVolume &pVol,
 		    moduleLength / 2.); 
 
      Volume Cu_2_Logical("Cu_2_Logical",Cu_2_Solid,
-                        lcdd.material("copper"));
+                        theDetector.material("copper"));
 
      Position posCu2(top_dim_x/2.-RailDistanceToRight-2*RailWidth-2*RailSeparation+x_half_dim,
 		     -RailHeight/2. + ZMinus_SecondInterrail_Cu_Thickness/2.,
@@ -527,7 +546,7 @@ FillEcalBarrelServicesContainer(PlacedVolume &pVol,
 		 moduleLength / 2.); 
 
      Volume PELogical("PELogical",PESolid,
-		      lcdd.material("polyethylene"));
+		      theDetector.material("polyethylene"));
 
      Position posPE(top_dim_x/2.-RailDistanceToRight-RailWidth-RailSeparation+x_half_dim,
 		    -RailHeight/2. + ZPlus_FirstInterrail_PE_Thickness/2.,
@@ -541,7 +560,7 @@ FillEcalBarrelServicesContainer(PlacedVolume &pVol,
 		    moduleLength / 2.); 
 
      Volume Cu_1_Logical("Cu_1_Logical",Cu_1_Solid,
-                        lcdd.material("copper"));
+                        theDetector.material("copper"));
 
      Position posCu1(top_dim_x/2.-RailDistanceToRight-RailWidth-RailSeparation+x_half_dim,
 		     -RailHeight/2. + ZPlus_FirstInterrail_PE_Thickness+ZPlus_FirstInterrail_Cu_Thickness/2.,
@@ -555,7 +574,7 @@ FillEcalBarrelServicesContainer(PlacedVolume &pVol,
 		    moduleLength / 2.); 
 
      Volume Cu_2_Logical("Cu_2_Logical",Cu_2_Solid,
-                        lcdd.material("copper"));
+                        theDetector.material("copper"));
 
      Position posCu2(top_dim_x/2.-RailDistanceToRight-2*RailWidth-2*RailSeparation+x_half_dim,
 		     -RailHeight/2. + ZPlus_SecondInterrail_Cu_Thickness/2.,
@@ -596,17 +615,17 @@ bool
 SServices00_v01::
 BuildEcalBarrel_EndCapServices(PlacedVolume &pVol,
 			       Assembly &envelope,
-			       LCDD &lcdd)
+			       Detector &theDetector)
 {
 //-Z thicknesses 
-  double ZMinus_PE_Thickness = lcdd.constant<double>("EcalBarrel_EndCapServices_ZMinus_PE_Thickness");
+  double ZMinus_PE_Thickness = theDetector.constant<double>("EcalBarrel_EndCapServices_ZMinus_PE_Thickness");
 
-  double ZMinus_Cu_Thickness = lcdd.constant<double>("EcalBarrel_EndCapServices_ZMinus_Cu_Thickness");
+  double ZMinus_Cu_Thickness = theDetector.constant<double>("EcalBarrel_EndCapServices_ZMinus_Cu_Thickness");
 
 //+Z thicknesses 
-  double ZPlus_PE_Thickness = lcdd.constant<double>("EcalBarrel_EndCapServices_ZPlus_PE_Thickness");
+  double ZPlus_PE_Thickness = theDetector.constant<double>("EcalBarrel_EndCapServices_ZPlus_PE_Thickness");
 
-  double ZPlus_Cu_Thickness = lcdd.constant<double>("EcalBarrel_EndCapServices_ZPlus_Cu_Thickness");
+  double ZPlus_Cu_Thickness = theDetector.constant<double>("EcalBarrel_EndCapServices_ZPlus_Cu_Thickness");
 
   double containerThickness = ZMinus_PE_Thickness + ZMinus_Cu_Thickness;
   double z_position = -TPC_Ecal_Hcal_barrel_halfZ -containerThickness/2.;
@@ -628,7 +647,7 @@ BuildEcalBarrel_EndCapServices(PlacedVolume &pVol,
 		       containerThickness/2.); 
 
     Volume containerLogical("EcalBarrel_EndCapServicesContainerLogical",ContainerSolid,
-			    lcdd.material("air"));
+			    theDetector.material("air"));
 
 
     Box PESolid(container_x_dim/2.,
@@ -636,7 +655,7 @@ BuildEcalBarrel_EndCapServices(PlacedVolume &pVol,
 		PE_Thickness/2.); 
 
     Volume PELogical("EcalBarrel_EndCap_PELogical",PESolid,
-		     lcdd.material("polyethylene"));
+		     theDetector.material("polyethylene"));
 
     Position  PosPE(0,0,containerThickness/2. - PE_Thickness/2.);
       
@@ -648,7 +667,7 @@ BuildEcalBarrel_EndCapServices(PlacedVolume &pVol,
 		 Cu_Thickness/2.); 
 
     Volume Cu_Logical("EcalBarrel_EndCap_Cu_Logical",Cu_Solid,
-		      lcdd.material("copper"));
+		      theDetector.material("copper"));
 
     Position  PosCu(0,0,-containerThickness/2. + Cu_Thickness/2.);
       
@@ -706,7 +725,7 @@ BuildEcalBarrel_EndCapServices(PlacedVolume &pVol,
 	    <<"\n   - EcalBarrel_EndCapServices_ZPlus_PE_Thickness = "
 	    <<ZPlus_PE_Thickness
 	    <<"\n   - Ecal_Tpc_gap = "
-	    <<lcdd.constant<double>("Ecal_Tpc_gap")
+	    <<theDetector.constant<double>("Ecal_Tpc_gap")
 	    <<"\n   - Ecal_cables_gap = "
 	    <<Ecal_cables_gap
 	    <<"\n   - Ecal_outer_radius = "
@@ -721,14 +740,14 @@ bool
 SServices00_v01::
 BuildHcalBarrel_EndCapServices(PlacedVolume &pVol,
 			       Assembly &envelope,
-			       LCDD &lcdd)
+			       Detector &theDetector)
 {
   double Hcal_stave_gaps = 
-	lcdd.constant<double>("Hcal_stave_gaps");
+	theDetector.constant<double>("Hcal_stave_gaps");
   double Hcal_inner_radius = Ecal_outer_radius + 
-	lcdd.constant<double>("Hcal_Ecal_gap");
+	theDetector.constant<double>("Hcal_Ecal_gap");
   double Hcal_R_max = 
-	lcdd.constant<double>("Hcal_R_max");
+	theDetector.constant<double>("Hcal_R_max");
 
   Hcal_total_dim_y = Hcal_R_max * cos(M_PI/16) - Hcal_inner_radius;
   double Hcal_module_radius = Hcal_inner_radius + Hcal_total_dim_y;
@@ -775,24 +794,24 @@ BuildHcalBarrel_EndCapServices(PlacedVolume &pVol,
 
 
   Volume ModuleLogicalZMinus("ServicesHcalModuleZMinus", ModuleSolid,
-			     lcdd.material("air"));
+			     theDetector.material("air"));
 
 
   Volume  ModuleLogicalZPlus("ServicesHcalModuleZPlus", ModuleSolid,
-			     lcdd.material("air"));
+			     theDetector.material("air"));
 
   //First place layer models of services coming from Ecal and TPC:
   if(!FillHcalServicesModuleWithInnerServices(pVol,
-		      ModuleLogicalZMinus,ModuleLogicalZPlus,lcdd))
+		      ModuleLogicalZMinus,ModuleLogicalZPlus,theDetector))
       return false;
 
   //Then place layer models of HCAL electronics interface:
   int BuildHcalElectronicsInterface = 
-    lcdd.constant<int>("BuildHcalElectronicsInterface");
+    theDetector.constant<int>("BuildHcalElectronicsInterface");
 
   if(!(BuildHcalElectronicsInterface == 0))
     if(!FillHcalServicesModuleWithHcalElectronicsInterface(pVol,
-		        ModuleLogicalZMinus,ModuleLogicalZPlus,lcdd))
+		        ModuleLogicalZMinus,ModuleLogicalZPlus,theDetector))
       return false;
 
   double Y = Hcal_inner_radius + YX1H;
@@ -834,21 +853,21 @@ SServices00_v01::
 FillHcalServicesModuleWithInnerServices(PlacedVolume &pVol,
 					Volume &ModuleLogicalZMinus,
 					Volume &ModuleLogicalZPlus,
-					LCDD &lcdd)
+					Detector &theDetector)
 {
 //-Z thicknesses 
-  double ZMinus_StainlessSteel_Thickness = lcdd.constant<double>("HcalServicesModule_ZMinus_StainlessSteel_Thickness");
+  double ZMinus_StainlessSteel_Thickness = theDetector.constant<double>("HcalServicesModule_ZMinus_StainlessSteel_Thickness");
 
-  double ZMinus_PE_Thickness = lcdd.constant<double>("HcalServicesModule_ZMinus_PE_Thickness");
+  double ZMinus_PE_Thickness = theDetector.constant<double>("HcalServicesModule_ZMinus_PE_Thickness");
 
-  double ZMinus_Cu_Thickness = lcdd.constant<double>("HcalServicesModule_ZMinus_Cu_Thickness");
+  double ZMinus_Cu_Thickness = theDetector.constant<double>("HcalServicesModule_ZMinus_Cu_Thickness");
 
 //+Z thicknesses 
-  double ZPlus_StainlessSteel_Thickness = lcdd.constant<double>("HcalServicesModule_ZPlus_StainlessSteel_Thickness");
+  double ZPlus_StainlessSteel_Thickness = theDetector.constant<double>("HcalServicesModule_ZPlus_StainlessSteel_Thickness");
 
-  double ZPlus_PE_Thickness = lcdd.constant<double>("HcalServicesModule_ZPlus_PE_Thickness");
+  double ZPlus_PE_Thickness = theDetector.constant<double>("HcalServicesModule_ZPlus_PE_Thickness");
 
-  double ZPlus_Cu_Thickness = lcdd.constant<double>("HcalServicesModule_ZPlus_Cu_Thickness");
+  double ZPlus_Cu_Thickness = theDetector.constant<double>("HcalServicesModule_ZPlus_Cu_Thickness");
 
   double StainlessSteel_Thickness = ZMinus_StainlessSteel_Thickness;
   double Cu_Thickness = ZMinus_Cu_Thickness;
@@ -864,7 +883,7 @@ FillHcalServicesModuleWithInnerServices(PlacedVolume &pVol,
 			   Ecal_cables_gap/2. - StainlessSteel_Thickness/2.);
 
     if(!PlaceHcalInnerServicesLayer(pVol,motherLogical,
-		lcdd.material("stainless_steel"),
+		theDetector.material("stainless_steel"),
 		StainlessSteel_Thickness, layerPositionSteel))
 
 	return false;
@@ -873,7 +892,7 @@ FillHcalServicesModuleWithInnerServices(PlacedVolume &pVol,
 			   Ecal_cables_gap/2. -StainlessSteel_Thickness - PE_Thickness/2.);
 
     if(!PlaceHcalInnerServicesLayer(pVol,motherLogical,
-		lcdd.material("polyethylene"),
+		theDetector.material("polyethylene"),
 		PE_Thickness, layerPositionPoly))
 
 	return false;
@@ -883,7 +902,7 @@ FillHcalServicesModuleWithInnerServices(PlacedVolume &pVol,
 		Cu_Thickness/2.);
 
     if(!PlaceHcalInnerServicesLayer(pVol,motherLogical,
-		lcdd.material("copper"),
+		theDetector.material("copper"),
 		Cu_Thickness, layerPositionCopper))
 
 	return false;
@@ -913,23 +932,23 @@ FillHcalServicesModuleWithInnerServices(PlacedVolume &pVol,
 	    <<"\n   - HcalServicesModule_ZPlus_StainlessSteel_Thickness = "
 	    <<ZPlus_StainlessSteel_Thickness
 	    <<"\n   - HcalServices_outer_Cu_thickness = "
-	    <<lcdd.constant<double>("HcalServices_outer_Cu_thickness")
+	    <<theDetector.constant<double>("HcalServices_outer_Cu_thickness")
 	    <<"\n   - HcalServices_outer_FR4_thickness = "
-	    <<lcdd.constant<double>("HcalServices_outer_FR4_thickness")
+	    <<theDetector.constant<double>("HcalServices_outer_FR4_thickness")
 	    <<"\n   - Hcal_Ecal_gap = "
-	    <<lcdd.constant<double>("Hcal_Ecal_gap")
+	    <<theDetector.constant<double>("Hcal_Ecal_gap")
 	    <<"\n   - Hcal_R_max = "
-	    <<lcdd.constant<double>("Hcal_R_max")
+	    <<theDetector.constant<double>("Hcal_R_max")
 	    <<"\n   - Hcal_back_plate_thickness = "
-	    <<lcdd.constant<double>("Hcal_back_plate_thickness")
+	    <<theDetector.constant<double>("Hcal_back_plate_thickness")
 	    <<"\n   - Hcal_nlayers = "
-	    <<lcdd.constant<int>("Hcal_nlayers")
+	    <<theDetector.constant<int>("Hcal_nlayers")
 	    <<"\n   - Hcal_radiator_thickness = "
-	    <<lcdd.constant<double>("Hcal_radiator_thickness")
+	    <<theDetector.constant<double>("Hcal_radiator_thickness")
 	    <<"\n   - Hcal_stave_gaps = "
-	    <<lcdd.constant<int>("Hcal_stave_gaps")
+	    <<theDetector.constant<int>("Hcal_stave_gaps")
 	    <<"\n   - Hcal_steel_cassette_thickness = "
-	    <<lcdd.constant<double>("Hcal_steel_cassette_thickness")
+	    <<theDetector.constant<double>("Hcal_steel_cassette_thickness")
 	    <<std::endl;
 
    return true;
@@ -940,15 +959,15 @@ SServices00_v01::
 FillHcalServicesModuleWithHcalElectronicsInterface(PlacedVolume &pVol,
 						   Volume &ModuleLogicalZMinus,
 						   Volume &ModuleLogicalZPlus,
-						   LCDD &lcdd)
+						   Detector &theDetector)
 {
    std::cout<<"   - BuildHcalElectronicsInterface = true " <<std::endl;
 
-   double Hcal_back_plate_thickness = lcdd.constant<double>("Hcal_back_plate_thickness");
+   double Hcal_back_plate_thickness = theDetector.constant<double>("Hcal_back_plate_thickness");
   
-   double Hcal_nlayers = lcdd.constant<int>("Hcal_nlayers");
+   double Hcal_nlayers = theDetector.constant<int>("Hcal_nlayers");
 
-   double Hcal_radiator_thickness = lcdd.constant<double>("Hcal_radiator_thickness");
+   double Hcal_radiator_thickness = theDetector.constant<double>("Hcal_radiator_thickness");
 
    double Hcal_layer_thickenss = 
 	(Hcal_total_dim_y - Hcal_back_plate_thickness) / Hcal_nlayers;
@@ -985,7 +1004,7 @@ G4cout << "Hcal Barrel-EndCap services: Hcal_chamber_thickness = " <<
 
 	if(!FillHcalElectronicsInterfaceLayer(pVol,
                 ModuleLogicalZMinus, ModuleLogicalZPlus,
-		layer_y_offset, layer_x_dim,lcdd))
+		layer_y_offset, layer_x_dim,theDetector))
 		
 		return false;
  
@@ -1000,10 +1019,10 @@ FillHcalElectronicsInterfaceLayer(PlacedVolume &pVol,
 				  Volume &ModuleLogicalZMinus,
 				  Volume &ModuleLogicalZPlus,
 				  double layer_y_offset, double layer_x_dim,
-				  LCDD &lcdd)
+				  Detector &theDetector)
 {
    double Hcal_y_dim1_for_x  = Hcal_total_dim_y - Hcal_y_dim2_for_x;
-   double Hcal_steel_cassette_thickness = lcdd.constant<double>("Hcal_steel_cassette_thickness");
+   double Hcal_steel_cassette_thickness = theDetector.constant<double>("Hcal_steel_cassette_thickness");
 
    double y_position = -Hcal_y_dim1_for_x/2. + layer_y_offset +
 		Hcal_steel_cassette_thickness/2.;
@@ -1011,12 +1030,12 @@ FillHcalElectronicsInterfaceLayer(PlacedVolume &pVol,
    if(!PlaceHcalElectronicsInterfaceComponent(pVol,
 					      ModuleLogicalZMinus,
 					      ModuleLogicalZPlus,
-					      lcdd.material("S235"),
+					      theDetector.material("S235"),
 					      Hcal_steel_cassette_thickness,y_position,layer_x_dim)
       )
 		return false;
 
-   double FR4_thickness = lcdd.constant<double>("HcalServices_outer_FR4_thickness");
+   double FR4_thickness = theDetector.constant<double>("HcalServices_outer_FR4_thickness");
 
    y_position += (Hcal_steel_cassette_thickness/2. +
 			FR4_thickness/2.);
@@ -1024,19 +1043,19 @@ FillHcalElectronicsInterfaceLayer(PlacedVolume &pVol,
    if(!PlaceHcalElectronicsInterfaceComponent(pVol,
 					      ModuleLogicalZMinus,
 					      ModuleLogicalZPlus,
-					      lcdd.material("PCB"),
+					      theDetector.material("PCB"),
 					      FR4_thickness,y_position,layer_x_dim)
       )
 		return false;
 
-   double Cu_thickness = lcdd.constant<double>("HcalServices_outer_Cu_thickness");
+   double Cu_thickness = theDetector.constant<double>("HcalServices_outer_Cu_thickness");
 
    y_position += (FR4_thickness/2. + Cu_thickness/2.);
 
    if(!PlaceHcalElectronicsInterfaceComponent(pVol,
 					      ModuleLogicalZMinus,
 					      ModuleLogicalZPlus,
-					      lcdd.material("copper"),
+					      theDetector.material("copper"),
 					      Cu_thickness,y_position,layer_x_dim)
       )
 		return false;

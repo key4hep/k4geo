@@ -23,10 +23,29 @@
 #include "DDSegmentation/Segmentation.h"
 
 using namespace std;
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
 
-static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
+using dd4hep::BUILD_ENVELOPE;
+using dd4hep::Box;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::Layering;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::Position;
+using dd4hep::Readout;
+using dd4hep::Ref_t;
+using dd4hep::RotationZYX;
+using dd4hep::Segmentation;
+using dd4hep::SensitiveDetector;
+using dd4hep::Transform3D;
+using dd4hep::Translation3D;
+using dd4hep::Trapezoid;
+using dd4hep::Volume;
+using dd4hep::_toString;
+
+using dd4hep::rec::LayeredCalorimeterData;
+
+static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens)  {
     
     xml_det_t     x_det     = e;
     int           det_id    = x_det.id();
@@ -35,13 +54,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     // --- create an envelope volume and position it into the world ---------------------
     
-    Volume envelope = XML::createPlacedEnvelope(lcdd, e, sdet);
+    Volume envelope = dd4hep::xml::createPlacedEnvelope(theDetector, e, sdet);
     
-    if(lcdd.buildType() == BUILD_ENVELOPE) return sdet;
+    if(theDetector.buildType() == BUILD_ENVELOPE) return sdet;
     
     //-----------------------------------------------------------------------------------
 
-    DD4hep::XML::Component xmlParameter = x_det.child(_Unicode(parameter));
+    dd4hep::xml::Component xmlParameter = x_det.child(_Unicode(parameter));
     const double tolerance = xmlParameter.attr<double>(_Unicode(ecal_barrel_tolerance));
     const int n_towers = (int) xmlParameter.attr<double>(_Unicode(num_towers));
     const int n_rails = (int) xmlParameter.attr<double>(_Unicode(num_rails));
@@ -49,8 +68,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     const double towersAirGap = xmlParameter.attr<double>(_Unicode(TowersAirGap));
     const double faceThickness = xmlParameter.attr<double>(_Unicode(TowersFaceThickness));
     const double supportRailCS = xmlParameter.attr<double>(_Unicode(supportRailCrossSection));
-    Material Composite = lcdd.material(xmlParameter.attr<string>(_Unicode(AlveolusMaterial)));
-    Material Steel = lcdd.material(xmlParameter.attr<string>(_Unicode(supportRailMaterial)));
+    Material Composite = theDetector.material(xmlParameter.attr<string>(_Unicode(AlveolusMaterial)));
+    Material Steel = theDetector.material(xmlParameter.attr<string>(_Unicode(supportRailMaterial)));
 
     Readout readout = sens.readout();
     Segmentation seg = readout.segmentation();
@@ -61,7 +80,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     double cell_sizeY      = cellSizeVector[1];
     
     Layering      layering (e);
-    Material      air       = lcdd.air();
+    Material      air       = theDetector.air();
     xml_comp_t    x_staves  = x_det.staves();
     xml_comp_t    x_dim     = x_det.dimensions();
     int           nsides    = x_dim.numsides();
@@ -76,8 +95,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
     // Create caloData object to extend driver with data required for reconstruction
     // See http://cern.ch/go/z8tp to learn how quantities are calculated
-    DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData;
-    caloData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout;
+    LayeredCalorimeterData* caloData = new LayeredCalorimeterData;
+    caloData->layoutType = LayeredCalorimeterData::BarrelLayout;
     caloData->inner_symmetry = nsides;
     caloData->outer_symmetry = nsides; 
     
@@ -204,7 +223,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	    Volume     l_vol(l_name, l_box, air);
 	    DetElement layer(stack_det, l_name, det_id);
 
-	    DDRec::LayeredCalorimeterData::Layer caloLayer;
+	    LayeredCalorimeterData::Layer caloLayer;
 	    double nRadiationLengths   = 0.;
 	    double nInteractionLengths = 0.;
 	    double thickness_sum       = 0.;
@@ -222,7 +241,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	      std::cout << s_name << " thickness: " << s_thick << std::endl;
 #endif
 	      Box        s_box(l_dim_x - tolerance, l_dim_y - tolerance, s_thick/2.);
-	      Material   slice_material  = lcdd.material(x_slice.materialStr());
+	      Material   slice_material  = theDetector.material(x_slice.materialStr());
 	      Volume     s_vol(s_name, s_box, slice_material);
 	      DetElement slice(layer, s_name, det_id);
 
@@ -261,7 +280,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	      	absorberThickness += s_thick;
 	      }
 	      
-	      slice.setAttributes(lcdd, s_vol, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+	      slice.setAttributes(theDetector, s_vol, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
 	      
 	      // Slice placement
 	      PlacedVolume slice_pv = l_vol.placeVolume(s_vol, Position(0., 0., s_pos_z + s_thick/2.));
@@ -274,7 +293,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	    }
 	    
 	    // Set region, limitset, and visibility of layer
-	    layer.setAttributes(lcdd, l_vol, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
+	    layer.setAttributes(theDetector, l_vol, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
 	    
 	    PlacedVolume layer_pv = stack_vol.placeVolume(l_vol, l_pos);
 	    layer_pv.addPhysVolID("layer", l_num);
@@ -300,15 +319,15 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	    ++l_num;
 	  }
 	}
-	//stack_det.setAttributes(lcdd, stack_vol, x_staves.regionStr(), x_staves.limitsStr(), x_staves.visStr());
-	stack_vol.setVisAttributes(lcdd.visAttributes(x_staves.visStr())); // Fix this!
+	//stack_det.setAttributes(theDetector, stack_vol, x_staves.regionStr(), x_staves.limitsStr(), x_staves.visStr());
+	stack_vol.setVisAttributes(theDetector.visAttributes(x_staves.visStr())); // Fix this!
 	
 	PlacedVolume stack_pv = tower_vol.placeVolume(stack_vol, Position(0., m_pos_y, 0.));
 	stack_pv.addPhysVolID("submodule", m); 
 	stack_det.setPlacement(stack_pv);
       }
-      //tower_det.setAttributes(lcdd, tower_vol, x_staves.regionStr(), x_staves.limitsStr(), x_staves.visStr());
-      tower_vol.setVisAttributes(lcdd.visAttributes(x_staves.visStr())); // Fix this!
+      //tower_det.setAttributes(theDetector, tower_vol, x_staves.regionStr(), x_staves.limitsStr(), x_staves.visStr());
+      tower_vol.setVisAttributes(theDetector.visAttributes(x_staves.visStr())); // Fix this!
       
       PlacedVolume tower_pv = stave_vol.placeVolume(tower_vol, Position(0., t_pos_y, -ry));
       tower_pv.addPhysVolID("module", t);  
@@ -324,13 +343,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       double r_pos_y = (r - (n_rails - 1)/2)*rail_spacing;
       //PlacedVolume rail_pv = stave_vol.placeVolume(rail_vol, Position(r_pos_y, t_pos_y, trd_z));//3x5
       PlacedVolume rail_pv = stave_vol.placeVolume(rail_vol, Position(r_pos_y, 0., trd_z));//3
-      //rail_vol.setVisAttributes(lcdd.visAttributes(x_staves.visStr())); // fix!
+      //rail_vol.setVisAttributes(theDetector.visAttributes(x_staves.visStr())); // fix!
       rail_support.setPlacement(rail_pv);
     }
     
     // Set visualization
     if ( x_staves ) {
-        stave_vol.setVisAttributes(lcdd.visAttributes(x_staves.visStr()));
+        stave_vol.setVisAttributes(theDetector.visAttributes(x_staves.visStr()));
     }
     
     // Place the staves
@@ -349,9 +368,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     }    
 
     // Set envelope volume attributes
-    envelope.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+    envelope.setAttributes(theDetector,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
     
-    sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
+    sdet.addExtension< LayeredCalorimeterData >( caloData ) ;
         
     return sdet;
 }

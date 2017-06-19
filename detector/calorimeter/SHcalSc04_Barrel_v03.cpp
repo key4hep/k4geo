@@ -6,7 +6,6 @@
 //====================================================================
 #include "DD4hep/Printout.h"
 #include "DD4hep/DetFactoryHelper.h"
-#include "XML/Layering.h"
 #include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"
 #include "DDSegmentation/TiledLayerGridXY.h"
@@ -16,16 +15,37 @@
 #include <vector>
 
 using namespace std;
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
-using namespace lcgeo ;
+
+using dd4hep::BUILD_ENVELOPE;
+using dd4hep::Box;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::IntersectionSolid;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::PolyhedraRegular;
+using dd4hep::Position;
+using dd4hep::Readout;
+using dd4hep::Ref_t;
+using dd4hep::Rotation3D;
+using dd4hep::RotationZYX;
+using dd4hep::Segmentation;
+using dd4hep::SensitiveDetector;
+using dd4hep::Transform3D;
+using dd4hep::Trapezoid;
+using dd4hep::Tube;
+using dd4hep::UnionSolid;
+using dd4hep::Volume;
+using dd4hep::_toString;
+
+using dd4hep::rec::LayeredCalorimeterData;
 
 // workaround for DD4hep v00-14 (and older) 
 #ifndef DD4HEP_VERSION_GE
 #define DD4HEP_VERSION_GE(a,b) 0 
 #endif
 
-static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens)  {
+static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDetector sens)  {
 
   double boundarySafety = 0.0001;
 
@@ -35,17 +55,17 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   // --- create an envelope volume and position it into the world ---------------------
   
-  Volume envelope = XML::createPlacedEnvelope( lcdd,  element , sdet ) ;
+  Volume envelope = dd4hep::xml::createPlacedEnvelope( theDetector,  element , sdet ) ;
   
-  XML::setDetectorTypeFlag( element, sdet ) ;
+  dd4hep::xml::setDetectorTypeFlag( element, sdet ) ;
   
-  if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
+  if( theDetector.buildType() == BUILD_ENVELOPE ) return sdet ;
 
   //-----------------------------------------------------------------------------------
 
   xml_comp_t    x_staves          = x_det.staves();
-  Material      stavesMaterial    = lcdd.material(x_staves.materialStr());
-  Material      air               = lcdd.air();
+  Material      stavesMaterial    = theDetector.material(x_staves.materialStr());
+  Material      air               = theDetector.air();
 
   PlacedVolume pv;
 
@@ -57,36 +77,36 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 // Use them to build HcalBarrel
 //
 //====================================================================
-  double      Hcal_inner_radius   = lcdd.constant<double>("Hcal_inner_radius");
-  double      Hcal_outer_radius   = lcdd.constant<double>("Hcal_outer_radius");
-  double      Hcal_half_length    = lcdd.constant<double>("Hcal_half_length");
-  int         Hcal_inner_symmetry = lcdd.constant<int>("Hcal_inner_symmetry");
+  double      Hcal_inner_radius   = theDetector.constant<double>("Hcal_inner_radius");
+  double      Hcal_outer_radius   = theDetector.constant<double>("Hcal_outer_radius");
+  double      Hcal_half_length    = theDetector.constant<double>("Hcal_half_length");
+  int         Hcal_inner_symmetry = theDetector.constant<int>("Hcal_inner_symmetry");
   int         Hcal_outer_symmetry = 0; // Fixed shape for Tube, and not allow to modify from compact xml.
 
-  double      Hcal_radiator_thickness          = lcdd.constant<double>("Hcal_radiator_thickness");
-  double      Hcal_chamber_thickness           = lcdd.constant<double>("Hcal_chamber_thickness");
-  double      Hcal_back_plate_thickness        = lcdd.constant<double>("Hcal_back_plate_thickness");
-  double      Hcal_lateral_plate_thickness     = lcdd.constant<double>("Hcal_lateral_structure_thickness");
-  double      Hcal_stave_gaps                  = lcdd.constant<double>("Hcal_stave_gaps");
-  double      Hcal_modules_gap                 = lcdd.constant<double>("Hcal_modules_gap"); 
-  double      Hcal_middle_stave_gaps           = lcdd.constant<double>("Hcal_middle_stave_gaps");
-  double      Hcal_layer_air_gap               = lcdd.constant<double>("Hcal_layer_air_gap");
+  double      Hcal_radiator_thickness          = theDetector.constant<double>("Hcal_radiator_thickness");
+  double      Hcal_chamber_thickness           = theDetector.constant<double>("Hcal_chamber_thickness");
+  double      Hcal_back_plate_thickness        = theDetector.constant<double>("Hcal_back_plate_thickness");
+  double      Hcal_lateral_plate_thickness     = theDetector.constant<double>("Hcal_lateral_structure_thickness");
+  double      Hcal_stave_gaps                  = theDetector.constant<double>("Hcal_stave_gaps");
+  double      Hcal_modules_gap                 = theDetector.constant<double>("Hcal_modules_gap"); 
+  double      Hcal_middle_stave_gaps           = theDetector.constant<double>("Hcal_middle_stave_gaps");
+  double      Hcal_layer_air_gap               = theDetector.constant<double>("Hcal_layer_air_gap");
 
-  int         Hcal_nlayers                     = lcdd.constant<int>("Hcal_nlayers");
-  int         Hcal_stair_ntiles                = lcdd.constant<int>("Hcal_stair_ntiles");
+  int         Hcal_nlayers                     = theDetector.constant<int>("Hcal_nlayers");
+  int         Hcal_stair_ntiles                = theDetector.constant<int>("Hcal_stair_ntiles");
 
-  double      TPC_outer_radius                = lcdd.constant<double>("TPC_outer_radius");
+  double      TPC_outer_radius                = theDetector.constant<double>("TPC_outer_radius");
 
-  double      Ecal_outer_radius               = lcdd.constant<double>("Ecal_outer_radius");
+  double      Ecal_outer_radius               = theDetector.constant<double>("Ecal_outer_radius");
 
-  printout( DD4hep::DEBUG,  "SHcalSc04_Barrel_v03", "TPC_outer_radius : %e   - Ecal_outer_radius: %e ", TPC_outer_radius , Ecal_outer_radius) ;
+  printout( dd4hep::DEBUG,  "SHcalSc04_Barrel_v03", "TPC_outer_radius : %e   - Ecal_outer_radius: %e ", TPC_outer_radius , Ecal_outer_radius) ;
 
   Readout readout = sens.readout();
   Segmentation seg = readout.segmentation();
   
   // check if we have a TiledLayerGridXY segmentation :
-  DD4hep::DDSegmentation::TiledLayerGridXY* tileSeg = 
-    dynamic_cast< DD4hep::DDSegmentation::TiledLayerGridXY*>( seg.segmentation() ) ;
+  dd4hep::DDSegmentation::TiledLayerGridXY* tileSeg = 
+    dynamic_cast< dd4hep::DDSegmentation::TiledLayerGridXY*>( seg.segmentation() ) ;
 
 
 
@@ -95,8 +115,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double cell_sizeY      = cellSizeVector[1];
 
   //========== fill data for reconstruction ============================
-  DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
-  caloData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
+  LayeredCalorimeterData* caloData = new LayeredCalorimeterData ;
+  caloData->layoutType = LayeredCalorimeterData::BarrelLayout ;
   caloData->inner_symmetry = Hcal_inner_symmetry  ;
   caloData->outer_symmetry = Hcal_outer_symmetry  ;
   caloData->phi0 = 0 ; // fg: also hardcoded below 
@@ -200,8 +220,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 				  barrelModule2Solid,
 				  stavesMaterial);
 
-  EnvLogHcalModule1Barrel.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
-  EnvLogHcalModule2Barrel.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+  EnvLogHcalModule1Barrel.setAttributes(theDetector,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+  EnvLogHcalModule2Barrel.setAttributes(theDetector,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
 
 
 
@@ -240,9 +260,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 					  Module_lateral_plate_bottom,
 					  stavesMaterial);
 
-  EnvLogHcalModuleBarrelTop_LP.setAttributes(lcdd,x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
-  EnvLogHcalModuleBarrelMiddle_LP.setAttributes(lcdd,x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
-  EnvLogHcalModuleBarrelBottom_LP.setAttributes(lcdd,x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
+  EnvLogHcalModuleBarrelTop_LP.setAttributes(theDetector,x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
+  EnvLogHcalModuleBarrelMiddle_LP.setAttributes(theDetector,x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
+  EnvLogHcalModuleBarrelBottom_LP.setAttributes(theDetector,x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
 
 
 
@@ -347,7 +367,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
       x_length = x_length/2.;
 
-      DDRec::LayeredCalorimeterData::Layer caloLayer ;
+      LayeredCalorimeterData::Layer caloLayer ;
       caloLayer.cellSize0 = cell_sizeX;
       caloLayer.cellSize1 = cell_sizeY;
 
@@ -355,9 +375,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
       //--------------------------------------------------------------------------------
       //  build chamber box, with the calculated dimensions 
       //-------------------------------------------------------------------------------
-      printout( DD4hep::DEBUG,  "SHcalSc04_Barrel_v03", " \n Start to build layer chamber - layer_id: %d", layer_id ) ;
-      printout( DD4hep::DEBUG,  "SHcalSc04_Barrel_v03"," m1 chamber x:y:z:  %e:%e:%e", x_length*2., m1_z_width*2. , y_height*2. );
-      printout( DD4hep::DEBUG,  "SHcalSc04_Barrel_v03"," m2 chamber x:y:z:  %e:%e:%e", x_length*2., m2_z_width*2. , y_height*2. );
+      printout( dd4hep::DEBUG,  "SHcalSc04_Barrel_v03", " \n Start to build layer chamber - layer_id: %d", layer_id ) ;
+      printout( dd4hep::DEBUG,  "SHcalSc04_Barrel_v03"," m1 chamber x:y:z:  %e:%e:%e", x_length*2., m1_z_width*2. , y_height*2. );
+      printout( dd4hep::DEBUG,  "SHcalSc04_Barrel_v03"," m2 chamber x:y:z:  %e:%e:%e", x_length*2., m2_z_width*2. , y_height*2. );
 
       //check if x_length (scintillator length) is divisible with x_integerTileSize
       if( layer_id <= Hcal_nlayers) {
@@ -438,7 +458,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	xml_comp_t x_slice = k;
 	string   slice_name      = layer_name + _toString(slice_number,"_slice%d");
 	double   slice_thickness = x_slice.thickness();
-	Material slice_material  = lcdd.material(x_slice.materialStr());
+	Material slice_material  = theDetector.material(x_slice.materialStr());
 	DetElement m1_slice(layer_name,_toString(slice_number,"m1_slice%d"),x_det.id());
 	DetElement m2_slice(layer_name,_toString(slice_number,"m2_slice%d"),x_det.id());
 	
@@ -476,8 +496,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
 
 	// Set region, limitset, and vis.
-	m1_slice_vol.setAttributes(lcdd,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
-	m2_slice_vol.setAttributes(lcdd,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
+	m1_slice_vol.setAttributes(theDetector,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
+	m2_slice_vol.setAttributes(theDetector,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
 	// slice PlacedVolume
 	PlacedVolume m1_slice_phv = m1ChamberLogical.placeVolume(m1_slice_vol,Position(0.,0.,slice_pos_z));
 	PlacedVolume m2_slice_phv = m2ChamberLogical.placeVolume(m2_slice_vol,Position(0.,0.,slice_pos_z));
@@ -485,7 +505,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 	  int slice_id  = (layer_id > Hcal_nlayers)? 1:-1;
 	  m1_slice_phv.addPhysVolID("layer",logical_layer_id).addPhysVolID("tower",slice_id);
 	  m2_slice_phv.addPhysVolID("layer",logical_layer_id).addPhysVolID("tower",slice_id);
-	  printout( DD4hep::DEBUG,  "SHcalSc04_Barrel_v03", "  logical_layer_id:  %d  slice_id:  %d", logical_layer_id, slice_id  ) ;
+	  printout( dd4hep::DEBUG,  "SHcalSc04_Barrel_v03", "  logical_layer_id:  %d  slice_id:  %d", logical_layer_id, slice_id  ) ;
 	}
 	
 	m1_slice.setPlacement(m1_slice_phv);
@@ -550,12 +570,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     sts <<" layerOffsetX(): ";
     for (std::vector<double>::const_iterator ix = LOX.begin(); ix != LOX.end(); ++ix)
       sts << *ix << ' ';
-    printout( DD4hep::DEBUG,  "SHcalSc04_Barrel_v03", "%s" , sts.str().c_str() ) ;
+    printout( dd4hep::DEBUG,  "SHcalSc04_Barrel_v03", "%s" , sts.str().c_str() ) ;
     sts.clear() ; sts.str("") ;
     sts <<" layerOffsetY(): ";
     for (std::vector<double>::const_iterator iy = LOY.begin(); iy != LOY.end(); ++iy)
       sts << *iy << ' ';
-    printout( DD4hep::DEBUG,  "SHcalSc04_Barrel_v03", "%s" , sts.str().c_str() ) ;
+    printout( dd4hep::DEBUG,  "SHcalSc04_Barrel_v03", "%s" , sts.str().c_str() ) ;
 
   }
 
@@ -624,7 +644,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
     lateral_plate_z_offset = (Hcal_lateral_plate_thickness + Hcal_modules_gap)/2.;
   }
 
-  sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
+  sdet.addExtension< LayeredCalorimeterData >( caloData ) ;
 
  
   return sdet;

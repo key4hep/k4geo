@@ -9,25 +9,31 @@
 #include <string>
 
 using namespace std;
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
-using namespace DD4hep::DDRec ;
-using namespace DDSurfaces ;
 
-using DD4hep::Geometry::Transform3D;
-using DD4hep::Geometry::Position;
-using DD4hep::Geometry::RotationY;
-using DD4hep::Geometry::RotateY;
-using DD4hep::Geometry::ConeSegment;
-using DD4hep::Geometry::SubtractionSolid;
-using DD4hep::Geometry::Material;
-using DD4hep::Geometry::Volume;
-using DD4hep::Geometry::Solid;
-using DD4hep::Geometry::Tube;
-using DD4hep::Geometry::PlacedVolume;
-using DD4hep::Geometry::Assembly;
+using dd4hep::Assembly;
+using dd4hep::ConeSegment;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::Position;
+using dd4hep::Ref_t;
+using dd4hep::RotateY;
+using dd4hep::RotationY;
+using dd4hep::SensitiveDetector;
+using dd4hep::Solid;
+using dd4hep::SubtractionSolid;
+using dd4hep::Transform3D;
+using dd4hep::Tube;
+using dd4hep::Volume;
+using dd4hep::BUILD_ENVELOPE;
 
-static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)
+using dd4hep::rec::Vector3D;
+using dd4hep::rec::VolCylinder;
+using dd4hep::rec::SurfaceType;
+using dd4hep::rec::volSurfaceList;
+
+static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector /*sens*/)
 {
 
   xml_det_t     x_det     = e;
@@ -36,9 +42,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)
   DetElement    sdet(det_name, det_id);
   bool          reflect   = x_det.reflect();
 
-  Volume envelope = XML::createPlacedEnvelope(lcdd,  e , sdet) ;
+  Volume envelope = dd4hep::xml::createPlacedEnvelope(theDetector,  e , sdet) ;
 
-  if (lcdd.buildType() == BUILD_ENVELOPE) return sdet ;
+  if (theDetector.buildType() == BUILD_ENVELOPE) return sdet ;
 
   for (xml_coll_t c(x_det, Unicode("section")); c; ++c) {
 
@@ -49,7 +55,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)
     const double rInner       = xmlSection.attr< double > (_Unicode(rMin));
     const double rOuter       = xmlSection.attr< double > (_Unicode(rMax));
     const double thickness    = rOuter - rInner;
-    Material sectionMat       = lcdd.material(xmlSection.materialStr());
+    Material sectionMat       = theDetector.material(xmlSection.materialStr());
     const std::string volName      = "section_" + xmlSection.nameStr();
 
     const double zHalf       = fabs(zEnd - zStart) * 0.5; // half z length of the cone
@@ -59,7 +65,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)
     Tube tubeSolid(rInner, rOuter, zHalf);
 
     Volume tubeVol(volName + "_pos", tubeSolid, sectionMat);
-    tubeVol.setAttributes(lcdd, xmlSection.regionStr(), xmlSection.limitsStr(), xmlSection.visStr());
+    tubeVol.setAttributes(theDetector, xmlSection.regionStr(), xmlSection.limitsStr(), xmlSection.visStr());
     envelope.placeVolume(tubeVol, Position(0, 0, zPosition));
 
     //Add surface to the support
@@ -71,7 +77,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)
     if (reflect) {
 
       Volume tubeVol2(volName + "_neg", tubeSolid, sectionMat);
-      tubeVol2.setAttributes(lcdd, xmlSection.regionStr(), xmlSection.limitsStr(), xmlSection.visStr());
+      tubeVol2.setAttributes(theDetector, xmlSection.regionStr(), xmlSection.limitsStr(), xmlSection.visStr());
       Transform3D Vol2Place(RotationY(-180.0 * dd4hep::degree), Position(0, 0, -1.*zPosition));
       envelope.placeVolume(tubeVol2, Vol2Place);
 

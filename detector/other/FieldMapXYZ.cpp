@@ -26,6 +26,10 @@
 #include <iostream>
 #include <iomanip>
 
+using dd4hep::CartesianField;
+using dd4hep::Detector;
+using dd4hep::Ref_t;
+
 DD4HEP_INSTANTIATE_HANDLE(FieldMapXYZ);
 
 namespace {
@@ -40,7 +44,7 @@ namespace {
 }
 
 FieldMapXYZ::FieldMapXYZ() {
-  type = DD4hep::Geometry::CartesianField::MAGNETIC;
+  type = CartesianField::MAGNETIC;
 } //ctor
 
 
@@ -355,9 +359,9 @@ void FieldMapXYZ::fillFieldMapFromTree(const std::string& filename,
 
 }
 
-static DD4hep::Geometry::Ref_t create_FieldMap_XYZ(DD4hep::Geometry::LCDD& ,
-						   DD4hep::XML::Handle_t handle ) {
-  DD4hep::XML::Component xmlParameter(handle);
+static Ref_t create_FieldMap_XYZ(Detector& ,
+                                 dd4hep::xml::Handle_t handle ) {
+  dd4hep::xml::Component xmlParameter(handle);
   bool hasFilename = xmlParameter.hasAttr(_Unicode(filename));
 
   if (!hasFilename) {
@@ -383,7 +387,7 @@ static DD4hep::Geometry::Ref_t create_FieldMap_XYZ(DD4hep::Geometry::LCDD& ,
   double coorUnits   = xmlParameter.attr< double >(_Unicode(coorUnits));
   double BfieldUnits = xmlParameter.attr< double >(_Unicode(BfieldUnits));
 
-  DD4hep::Geometry::CartesianField obj;
+  CartesianField obj;
   FieldMapXYZ* ptr = new FieldMapXYZ();
   ptr->xScale     = xScale;
   ptr->yScale     = yScale;
