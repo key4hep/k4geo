@@ -25,13 +25,28 @@
 #include <UTIL/ILDConf.h>
 
 using namespace std;
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
 
-static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
+using dd4hep::BUILD_ENVELOPE;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::ERROR;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::Position;
+using dd4hep::Ref_t;
+using dd4hep::RotationZYX;
+using dd4hep::SensitiveDetector;
+using dd4hep::Transform3D;
+using dd4hep::Trapezoid;
+using dd4hep::Volume;
+using dd4hep::_toString;
+using dd4hep::rec::ZDiskPetalsData;
+using dd4hep::rec::NeighbourSurfacesData;
+
+static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens)  {
     typedef vector<PlacedVolume> Placements;
     xml_det_t   x_det     = e;
-    Material    vacuum    = lcdd.vacuum();
+    Material    vacuum    = theDetector.vacuum();
     int         det_id    = x_det.id();
     string      det_name  = x_det.nameStr();
     bool        reflect   = x_det.reflect(false);
@@ -51,20 +66,20 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
     // --- create an envelope volume and position it into the world ---------------------
     
-    Volume envelope = XML::createPlacedEnvelope( lcdd,  e , sdet ) ;
-    XML::setDetectorTypeFlag( e, sdet ) ;
+    Volume envelope = dd4hep::xml::createPlacedEnvelope( theDetector,  e , sdet ) ;
+    dd4hep::xml::setDetectorTypeFlag( e, sdet ) ;
 
-    if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
+    if( theDetector.buildType() == BUILD_ENVELOPE ) return sdet ;
     
     //-----------------------------------------------------------------------------------
     
     
-    envelope.setVisAttributes(lcdd.invisible());
+    envelope.setVisAttributes(theDetector.invisible());
     sens.setType("tracker");
 
     // -------- reconstruction parameters  ----------------
-    DDRec::ZDiskPetalsData*  zDiskPetalsData = new DDRec::ZDiskPetalsData ;
-    DDRec::NeighbourSurfacesData*  neighbourSurfacesData = new DDRec::NeighbourSurfacesData() ;
+    ZDiskPetalsData*  zDiskPetalsData = new ZDiskPetalsData ;
+    NeighbourSurfacesData*  neighbourSurfacesData = new NeighbourSurfacesData() ;
     std::map< std::string, double > moduleSensThickness;
 
     for(xml_coll_t mi(x_det,_U(module)); mi; ++mi, ++m_id)  {
@@ -82,7 +97,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         
         y1 = y2 = total_thickness / 2;
         Volume  m_volume(m_nam, Trapezoid(x1, x2, y1, y2, z), vacuum);
-        m_volume.setVisAttributes(lcdd.visAttributes(x_mod.visStr()));
+        m_volume.setVisAttributes(theDetector.visAttributes(x_mod.visStr()));
         
         
         //Iterate through slices. The first slice (top in the xml) is placed at the "bottom" of the module
@@ -90,11 +105,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         for(ci.reset(), n_sensor=1, c_id=0, posY=-y1; ci; ++ci, ++c_id)  {
             xml_comp_t c       = ci;
             double     c_thick = c.thickness();
-            Material   c_mat   = lcdd.material(c.materialStr());
+            Material   c_mat   = theDetector.material(c.materialStr());
             string     c_name  = _toString(c_id,"component%d");
             Volume     c_vol(c_name, Trapezoid(x1,x2,c_thick/2e0,c_thick/2e0,z), c_mat);
             
-            c_vol.setVisAttributes(lcdd.visAttributes(c.visStr()));
+            c_vol.setVisAttributes(theDetector.visAttributes(c.visStr()));
             pv = m_volume.placeVolume(c_vol,Position(0,posY+c_thick/2,0));
             if ( c.isSensitive() ) {
                 sdet.check(n_sensor > 1,"VertexEndcap::fromCompact: "+c_name+" Max of 1 modules allowed!");
@@ -119,7 +134,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         //NOTE: Mostly Dummy information for event display/DDMarlinPandora
         //FIXME: have to see how to properly accommodate spirals and the fact that there's only
         //one ring
-        DDRec::ZDiskPetalsData::LayerLayout thisLayer ;
+        ZDiskPetalsData::LayerLayout thisLayer ;
         
         int numberOfRings=0; //check that only one ring is used
         for(xml_coll_t ri(x_layer,_U(ring)); ri; ++ri)  {
@@ -141,7 +156,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             double phi      = phi0;
             Placements& sensVols = sensitives[m_nam];
             
-            DD4hep::Geometry::Trapezoid mod_shape(m_vol.solid());
+            Trapezoid mod_shape(m_vol.solid());
 
             thisLayer.petalHalfAngle   = 0;
             thisLayer.alphaPetal    = 0. ;  // petals are othogonal to z-axis
@@ -196,7 +211,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
 		//encoding
 
-		DD4hep::long64 cellID_reflect;
+		dd4hep::long64 cellID_reflect;
 		if (reflect) {
 		  encoder[lcio::LCTrackerCellID::side()] = lcio::ILDDetID::bwd;
 		  encoder[lcio::LCTrackerCellID::layer()] = l_id;
@@ -211,7 +226,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 		encoder[lcio::LCTrackerCellID::module()] = 0; // only 1 ring so always 0 
 		encoder[lcio::LCTrackerCellID::sensor()] = k;
 
-		DD4hep::long64 cellID = encoder.lowWord(); // 32 bits
+		dd4hep::long64 cellID = encoder.lowWord(); // 32 bits
 
 		//compute neighbours 
 
@@ -262,8 +277,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     }
     
     //attach data to detector
-    sdet.addExtension< DDRec::ZDiskPetalsData >( zDiskPetalsData ) ;
-    sdet.addExtension< DDRec::NeighbourSurfacesData >( neighbourSurfacesData ) ;
+    sdet.addExtension< ZDiskPetalsData >( zDiskPetalsData ) ;
+    sdet.addExtension< NeighbourSurfacesData >( neighbourSurfacesData ) ;
 
     std::cout<<"XXX Vertex endcap layers: "<<zDiskPetalsData->layers.size()<<std::endl;
 

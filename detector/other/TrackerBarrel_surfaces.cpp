@@ -22,6 +22,11 @@ namespace {
 #define DD4HEP_USE_SURFACEINSTALL_HELPER TrackerBarrelSurfacePlugin
 #include "DD4hep/SurfaceInstaller.h"
 
+using dd4hep::DetElement;
+using dd4hep::PlacedVolume;
+using dd4hep::Volume;
+using dd4hep::Box;
+
 namespace{
   template <> void Installer<UserData>::handle_arguments(int argc, char** argv)   {
     for(int i=0; i<argc; ++i)  {
@@ -29,7 +34,7 @@ namespace{
       char* ptr = ::strchr(argv[i],'=');
       if ( ptr )  {
         std::string name( argv[i] , ptr ) ;
-        value = DD4hep::_toDouble(++ptr);
+        value = dd4hep::_toDouble(++ptr);
         if( name=="dimension" ) data.dimension = value ; 
         std::cout << "TrackerBarrelSurfacePlugin: argument[" << i << "] = " << name 
                   << " = " << value << std::endl;
@@ -43,7 +48,7 @@ namespace{
     Volume comp_vol = pv.volume();
     if ( comp_vol.isSensitive() )  {  
       Volume mod_vol  = parentVolume(component);
-      DD4hep::Geometry::Box mod_shape(mod_vol.solid()), comp_shape(comp_vol.solid());
+      Box mod_shape(mod_vol.solid()), comp_shape(comp_vol.solid());
       
       if ( !comp_shape.isValid() || !mod_shape.isValid() )   {
         invalidInstaller("Components and/or modules are not boxes -- invalid shapes");

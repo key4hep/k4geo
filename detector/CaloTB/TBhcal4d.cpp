@@ -16,9 +16,22 @@
 #include <vector>
 
 using namespace std;
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
-using namespace lcgeo ;
+
+using dd4hep::BUILD_ENVELOPE;
+using dd4hep::Box;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::Layer;
+using dd4hep::Layering;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::Position;
+using dd4hep::Readout;
+using dd4hep::Ref_t;
+using dd4hep::Segmentation;
+using dd4hep::SensitiveDetector;
+using dd4hep::Volume;
+using dd4hep::_toString;
 
 // workaround for DD4hep v00-14 (and older) 
 #ifndef DD4HEP_VERSION_GE
@@ -26,7 +39,7 @@ using namespace lcgeo ;
 #endif
 
 
-static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens)  {
+static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDetector sens)  {
 
   xml_det_t   x_det       = element;
   string      det_name    = x_det.nameStr();
@@ -36,15 +49,15 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   // --- create an envelope volume and position it into the world ---------------------
   
-  Volume envelope = XML::createPlacedEnvelope( lcdd,  element , sdet ) ;
+  Volume envelope = dd4hep::xml::createPlacedEnvelope( theDetector,  element , sdet ) ;
   
-  XML::setDetectorTypeFlag( element, sdet ) ;
+  dd4hep::xml::setDetectorTypeFlag( element, sdet ) ;
   
-  if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
+  if( theDetector.buildType() == BUILD_ENVELOPE ) return sdet ;
 
   //-----------------------------------------------------------------------------------
 
-  Material air = lcdd.air();
+  Material air = theDetector.air();
 
   sens.setType("calorimeter");
 
@@ -55,21 +68,21 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   //
   //====================================================================
 
-  //unused: double HBU_SSF_half_x = lcdd.constant<double>("HBU_SSF_dim_x")/2.0;
-  //unused: double HBU_SSF_half_y = lcdd.constant<double>("HBU_SSF_dim_y")/2.0;
+  //unused: double HBU_SSF_half_x = theDetector.constant<double>("HBU_SSF_dim_x")/2.0;
+  //unused: double HBU_SSF_half_y = theDetector.constant<double>("HBU_SSF_dim_y")/2.0;
 
-  int HCAL_SSF_ncell_x = lcdd.constant<int>("HCAL_SSF_ncell_x");
-  int HCAL_SSF_ncell_y = lcdd.constant<int>("HCAL_SSF_ncell_y");
+  int HCAL_SSF_ncell_x = theDetector.constant<int>("HCAL_SSF_ncell_x");
+  int HCAL_SSF_ncell_y = theDetector.constant<int>("HCAL_SSF_ncell_y");
 
-  //unused: double HBU_BL_half_x = lcdd.constant<double>("HBU_BL_dim_x")/2.0;
-  //unused: double HBU_BL_half_y = lcdd.constant<double>("HBU_BL_dim_y")/2.0;
+  //unused: double HBU_BL_half_x = theDetector.constant<double>("HBU_BL_dim_x")/2.0;
+  //unused: double HBU_BL_half_y = theDetector.constant<double>("HBU_BL_dim_y")/2.0;
 
-  int HCAL_BL_ncell_x = lcdd.constant<int>("HCAL_BL_ncell_x");
-  int HCAL_BL_ncell_y = lcdd.constant<int>("HCAL_BL_ncell_y");
+  int HCAL_BL_ncell_x = theDetector.constant<int>("HCAL_BL_ncell_x");
+  int HCAL_BL_ncell_y = theDetector.constant<int>("HCAL_BL_ncell_y");
 
-  int HCAL_SSF_nlayers = lcdd.constant<int>("HCAL_SSF_nlayers");
-  int HCAL_BL_nlayers = lcdd.constant<int>("HCAL_BL_nlayers");
-  double Hcal_layer_thickness = lcdd.constant<double>("Hcal_layer_thickness");
+  int HCAL_SSF_nlayers = theDetector.constant<int>("HCAL_SSF_nlayers");
+  int HCAL_BL_nlayers = theDetector.constant<int>("HCAL_BL_nlayers");
+  double Hcal_layer_thickness = theDetector.constant<double>("Hcal_layer_thickness");
 
   Readout  readout = sens.readout();
   Segmentation seg = readout.segmentation();
@@ -132,7 +145,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 		  xml_comp_t x_slice = k;
 		  string slice_name = _toString(slice_number, "slice%d");
 		  double slice_thickness = x_slice.thickness();
-		  Material slice_material = lcdd.material(x_slice.materialStr());
+		  Material slice_material = theDetector.material(x_slice.materialStr());
                 
 		  slice_SSF_pos_z += slice_thickness / 2;
 
@@ -143,7 +156,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 		      Volume slice_SSF_vol(slice_name, Box(cal_BL_hx, cal_BL_hy, slice_thickness / 2), slice_material);
 
 		      // Set region, limitset, and vis.
-		      slice_SSF_vol.setAttributes(lcdd, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+		      slice_SSF_vol.setAttributes(theDetector, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
 		      // slice PlacedVolume
 		      layer_SSF_vol.placeVolume(slice_SSF_vol, Position(0, 0, slice_SSF_pos_z));
 		    }
@@ -159,7 +172,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 			} 
 
 		      // Set region, limitset, and vis.
-		      slice_SSF_vol.setAttributes(lcdd, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+		      slice_SSF_vol.setAttributes(theDetector, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
 		      // slice PlacedVolume
 		      layer_SSF_vol.placeVolume(slice_SSF_vol, Position(0, 0, slice_SSF_pos_z));
 		    }
@@ -171,7 +184,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 		}
             
 	      // Set region, limitset, and vis.
-	      layer_SSF_vol.setAttributes(lcdd, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
+	      layer_SSF_vol.setAttributes(theDetector, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
            
 	      // Layer position in Z within the stave.
 	      layer_pos_z += layer_thickness / 2;
@@ -207,7 +220,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 		  xml_comp_t x_slice = k;
 		  string slice_name = _toString(slice_number, "slice%d");
 		  double slice_thickness = x_slice.thickness();
-		  Material slice_material = lcdd.material(x_slice.materialStr());
+		  Material slice_material = theDetector.material(x_slice.materialStr());
                 
 		  slice_BL_pos_z += slice_thickness / 2;
 
@@ -221,7 +234,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 		    } 
 
 		  // Set region, limitset, and vis.
-		  slice_BL_vol.setAttributes(lcdd, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+		  slice_BL_vol.setAttributes(theDetector, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
 		  // slice PlacedVolume
 		  layer_BL_vol.placeVolume(slice_BL_vol, Position(0, 0, slice_BL_pos_z));
 
@@ -232,7 +245,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 		}
             
 	      // Set region, limitset, and vis.
-	      layer_BL_vol.setAttributes(lcdd, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
+	      layer_BL_vol.setAttributes(theDetector, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
            
 	      // Layer position in Z within the stave.
 	      layer_pos_z += layer_thickness / 2;

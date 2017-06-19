@@ -5,10 +5,10 @@
 #include "G4VProcess.hh"
 
 /// Namespace for the AIDA detector description toolkit
-namespace DD4hep {
+namespace dd4hep {
   
   /// Namespace for the Geant4 based simulation part of the AIDA detector description toolkit
-  namespace Simulation   {
+  namespace sim   {
     
     /**
      *  Geant4SensitiveAction<CalorimeterWithPreShowerLayer> sensitive detector for the special
@@ -47,8 +47,8 @@ namespace DD4hep {
     template <> 
     Geant4SensitiveAction<CalorimeterWithPreShowerLayer>::Geant4SensitiveAction(Geant4Context* ctxt,
 										const std::string& nam,
-										Geometry::DetElement det,
-										Geometry::LCDD& lcdd_ref)
+										DetElement det,
+										Detector& lcdd_ref)
       : Geant4Sensitive(ctxt,nam,det,lcdd_ref), m_collectionID(0)
     {
       initialize();
@@ -60,7 +60,7 @@ namespace DD4hep {
     /// Method for generating hit(s) using the information of G4Step object.
     template <> bool Geant4SensitiveAction<CalorimeterWithPreShowerLayer>::process(G4Step* step,G4TouchableHistory*) {
       typedef CalorimeterWithPreShowerLayer::Hit Hit;
-      StepHandler h(step);
+      Geant4StepHandler h(step);
       HitContribution contrib = Hit::extractContribution(step);
 
       long long int cell;
@@ -85,12 +85,12 @@ namespace DD4hep {
       }
 
       // get the layer number by decoding the cellID
-      Geometry::IDDescriptor idspec = m_sensitive.readout().idSpec() ;
+      IDDescriptor idspec = m_sensitive.readout().idSpec() ;
       DDSegmentation::BitField64& bf = *idspec.decoder() ;
       bf.setValue( cell )  ;
       int layer = bf["layer"] ;
       
-      HitCollection*  coll = ( layer== m_userData._firstLayerNumber ?  collection( m_userData._preShowerCollectionID ) : collection(m_collectionID) ) ;
+      Geant4HitCollection*  coll = ( layer== m_userData._firstLayerNumber ?  collection( m_userData._preShowerCollectionID ) : collection(m_collectionID) ) ;
       
       Hit* hit = coll->find<Hit>(CellIDCompare<Hit>(cell));
       if ( h.totalEnergy() < std::numeric_limits<double>::epsilon() )  {
@@ -124,8 +124,6 @@ namespace DD4hep {
 } // namespace
 
 
-
-using namespace DD4hep::Simulation;
 
 #include "DDG4/Factories.h"
 DECLARE_GEANT4SENSITIVE( CaloPreShowerSDAction )

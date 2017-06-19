@@ -14,13 +14,28 @@
 #include "DDRec/DetectorData.h"
 #include "XML/Utilities.h"
 
+using dd4hep::BUILD_ENVELOPE;
+using dd4hep::Box;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::PolyhedraRegular;
+using dd4hep::Position;
+using dd4hep::Ref_t;
+using dd4hep::RotationZYX;
+using dd4hep::SensitiveDetector;
+using dd4hep::Transform3D;
+using dd4hep::Volume;
 
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
-using namespace DD4hep::DDRec ;
-using namespace DDSurfaces ;
+using dd4hep::xml::_toString;
 
-static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector sens)  {
+using dd4hep::rec::SurfaceType;
+using dd4hep::rec::Vector3D;
+using dd4hep::rec::VolPlane;
+using dd4hep::rec::volSurfaceList;
+
+static Ref_t create_element(Detector& theDetector, xml_h element, SensitiveDetector sens)  {
   
   xml_det_t    x_det = element;
   std::string  name  = x_det.nameStr();
@@ -32,9 +47,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector sens)  
 
   // --- create an envelope volume and position it into the world ---------------------
   
-  Volume envelope = XML::createPlacedEnvelope( lcdd,  element , sdet ) ;
+  Volume envelope = dd4hep::xml::createPlacedEnvelope( theDetector,  element , sdet ) ;
   
-  if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
+  if( theDetector.buildType() == BUILD_ENVELOPE ) return sdet ;
   
   //-----------------------------------------------------------------------------------
   
@@ -60,9 +75,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector sens)  
   sens.setType("tracker");
 
   // base vectors for surfaces:
-  DDSurfaces::Vector3D u(0,1,0) ;
-  DDSurfaces::Vector3D v(1,0,0) ;
-  DDSurfaces::Vector3D n(0,0,1) ;
+  Vector3D u(0,1,0) ;
+  Vector3D v(1,0,0) ;
+  Vector3D n(0,0,1) ;
   
   
   PolyhedraRegular phSolid ( nsides, inner_r, outer_r , 0.5*thick ) ;
@@ -77,11 +92,11 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector sens)  
   
   //fixme: the drawing of endcap surfaces in a polyhedral shape does not work right now 
   //       -> set surface to be invisible for now
-  DDRec::VolPlane surf( phVol,DDSurfaces::SurfaceType(DDSurfaces::SurfaceType::Sensitive, 
-						      DDSurfaces::SurfaceType::Invisible), 
-			thick/4., thick/4., u,v,n ) ;
+  VolPlane surf( phVol,SurfaceType(SurfaceType::Sensitive, 
+                                   SurfaceType::Invisible), 
+                 thick/4., thick/4., u,v,n ) ;
   
-  DDRec::volSurfaceList( fwdDE  )->push_back(  surf ) ;
+  volSurfaceList( fwdDE  )->push_back(  surf ) ;
 
   pv = envelope.placeVolume( phVol , Position( 0., 0., zpos ) ) ;
 
@@ -98,7 +113,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h element, SensitiveDetector sens)  
   phVol.setSensitiveDetector(sens);
   
   
-  DDRec::volSurfaceList( bwdDE  )->push_back(  surf ) ;
+  volSurfaceList( bwdDE  )->push_back(  surf ) ;
 
   pv = envelope.placeVolume( phVol , Position( 0., 0., -zpos ) ) ;
 

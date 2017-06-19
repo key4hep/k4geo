@@ -14,10 +14,25 @@
 typedef std::map<std::string, double> TReferenceMap;
  
 using namespace std;
-using namespace DD4hep;
-using namespace dd4hep ;
-using namespace DD4hep::Geometry;
 
+using dd4hep::Assembly;
+using dd4hep::ConeSegment;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::Position;
+using dd4hep::Ref_t;
+using dd4hep::RotateY;
+using dd4hep::RotationY;
+using dd4hep::SensitiveDetector;
+using dd4hep::Solid;
+using dd4hep::SubtractionSolid;
+using dd4hep::Transform3D;
+using dd4hep::Tube;
+using dd4hep::Volume;
+
+using dd4hep::rec::ConicalSupportData;
 
 namespace {
   typedef enum { // These constants are also used in the MySQL database:
@@ -57,7 +72,7 @@ namespace {
  *  @author: F.Gaede, DESY, Jan 2014
  *
  */
-static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
+static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector /*sens*/)  {
 
   //------------------------------------------
   //  See comments starting with '//**' for
@@ -76,7 +91,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
   
   DetElement   tube(  name, x_det.id()  ) ;
   
-  DDRec::ConicalSupportData* beampipeData = new DDRec::ConicalSupportData ;
+  ConicalSupportData* beampipeData = new ConicalSupportData ;
 
   //######################################################################################################################################################################
   //  code ported from TubeX01::construct() :
@@ -94,7 +109,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
   // G4VisAttributes *vacuumVisAttrib = new G4VisAttributes(G4Colour(0.0, 0.0, 0.5)); // dark blue
   // vacuumVisAttrib->SetVisibility(false); // there isn't anything, so what do you expect?
   
-  const double crossingAngle = lcdd.constant<double>("ILC_Main_Crossing_Angle") / 2 ; //  only half the angle
+  const double crossingAngle = theDetector.constant<double>("ILC_Main_Crossing_Angle") / 2 ; //  only half the angle
   
   // const String dbName = env.GetDBName() + "_" + env.GetParameterAsString("ILC_Main_Crossing_Angle");
   // Database *db = new Database(dbName.c_str());
@@ -110,7 +125,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
     const std::string globalName   = db->fetchString("globalName");
     const std::string localName    = db->fetchString("localName");
     const double assumedValue = db->fetchDouble("assumption") ;
-    const double currentValue = lcdd.constant<double>( globalName );
+    const double currentValue = theDetector.constant<double>( globalName );
     const double offsetValue  = currentValue - assumedValue;
     
     referenceOffsets[localName] = offsetValue;
@@ -118,8 +133,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
     if (offsetValue != 0) {
       cout
 	<< "TubeX01: Using " << globalName << " = "
-	<< currentValue / mm << " mm instead of "
-	<< assumedValue / mm << " mm" << endl;
+	<< currentValue / dd4hep::mm << " mm instead of "
+	<< assumedValue / dd4hep::mm << " mm" << endl;
       usingOffsets = true;
     }
   }
@@ -165,7 +180,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
 
     if( crossType == kCenter ) { // store only the central sections !
 
-      DDRec::ConicalSupportData::Section section ;
+      ConicalSupportData::Section section ;
       section.rInner = rInnerStart ;
       section.rOuter = rOuterStart ;
       section.zPos   = zStart ;
@@ -219,8 +234,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
     // things which can be calculated immediately
     double zHalf        = fabs(zEnd - zStart) / 2; // half z length of the cone
     const double zPosition    = fabs(zEnd + zStart) / 2; // middle z position
-    Material coreMaterial    = lcdd.material("beam"); // always the same
-    Material wallMaterial    = lcdd.material(materialName);
+    Material coreMaterial    = theDetector.material("beam"); // always the same
+    Material wallMaterial    = theDetector.material(materialName);
 
     // this could mess up your geometry, so better check it
     if (crossingAngle == 0 && crossType != kCenter) {
@@ -297,7 +312,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
 	// the wall consists of the material given in the database
 	Volume wallLog ( volName + "_wall", wallSolid, wallMaterial);
 	
-	tube.setVisAttributes(lcdd, "TubeVis"  , wallLog );
+	tube.setVisAttributes(theDetector, "TubeVis"  , wallLog );
 	
 	// placement as a daughter volume of the tube, will appear in both placements of the tube
 	pv = tubeLog.placeVolume( wallLog,  Transform3D() );
@@ -330,8 +345,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
       // tubeLog0->SetVisAttributes(vacuumVisAttrib);
       // tubeLog1->SetVisAttributes(vacuumVisAttrib);
       // //FIXME debug
-      // tube.setVisAttributes(lcdd, "TubeVis"  , tubeLog0 );
-      // tube.setVisAttributes(lcdd, "TubeVis"  , tubeLog1 );
+      // tube.setVisAttributes(theDetector, "TubeVis"  , tubeLog0 );
+      // tube.setVisAttributes(theDetector, "TubeVis"  , tubeLog1 );
         
       // placement of the tube in the world, both at +z and -z
       pv = envelope.placeVolume( tubeLog0, placementTransformer );
@@ -379,8 +394,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
       Volume wallLog0( volName + "_wall_0", wallSolid0, wallMaterial );
       Volume wallLog1( volName + "_wall_1", wallSolid1, wallMaterial );
       
-      tube.setVisAttributes(lcdd, "TubeVis"  , wallLog0);
-      tube.setVisAttributes(lcdd, "TubeVis"  , wallLog1);
+      tube.setVisAttributes(theDetector, "TubeVis"  , wallLog0);
+      tube.setVisAttributes(theDetector, "TubeVis"  , wallLog1);
       
       // placement as a daughter volumes of the tube
       pv = tubeLog0.placeVolume( wallLog0, Position() );
@@ -444,8 +459,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
       Volume wallLog0( volName + "_wall_0", wallSolid0, wallMaterial );
       Volume wallLog1( volName + "_wall_1", wallSolid1, wallMaterial );
       
-      tube.setVisAttributes(lcdd, "TubeVis"  , wallLog0 );
-      tube.setVisAttributes(lcdd, "TubeVis"  , wallLog1 );
+      tube.setVisAttributes(theDetector, "TubeVis"  , wallLog0 );
+      tube.setVisAttributes(theDetector, "TubeVis"  , wallLog1 );
       
       
       // placement as a daughter volumes of the tube
@@ -515,8 +530,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
           Volume wallLog0( volName + "_wall_0", wallSolid0, wallMaterial );
           Volume wallLog1( volName + "_wall_1", wallSolid1, wallMaterial );
 
-	  tube.setVisAttributes(lcdd, "TubeVis"  , wallLog0 );
-	  tube.setVisAttributes(lcdd, "TubeVis"  , wallLog1 );
+	  tube.setVisAttributes(theDetector, "TubeVis"  , wallLog0 );
+	  tube.setVisAttributes(theDetector, "TubeVis"  , wallLog1 );
         
           // placement as a daughter volumes of the tube
 	  pv = tubeLog0.placeVolume( wallLog0, Position() );
@@ -584,8 +599,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
 	Volume wallLog0( volName + "_wall_0", wallSolid0, wallMaterial );
 	Volume wallLog1( volName + "_wall_1", wallSolid1, wallMaterial );
 
-	tube.setVisAttributes(lcdd, "TubeVis"  , wallLog0 );
-	tube.setVisAttributes(lcdd, "TubeVis"  , wallLog1 );
+	tube.setVisAttributes(theDetector, "TubeVis"  , wallLog0 );
+	tube.setVisAttributes(theDetector, "TubeVis"  , wallLog1 );
         
 	// placement as a daughter volumes of the tube
 	pv = tubeLog0.placeVolume( wallLog0, Transform3D() );
@@ -660,8 +675,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
 	Volume wallLog0(volName + "_wall_0", wallSolid0, wallMaterial );
 	Volume wallLog1(volName + "_wall_1", wallSolid1, wallMaterial );
 
-	tube.setVisAttributes(lcdd, "TubeVis"  , wallLog0 );
-	tube.setVisAttributes(lcdd, "TubeVis"  , wallLog1 );
+	tube.setVisAttributes(theDetector, "TubeVis"  , wallLog0 );
+	tube.setVisAttributes(theDetector, "TubeVis"  , wallLog1 );
         
 	// placement as a daughter volumes of the tube
 	pv = tubeLog0.placeVolume( wallLog0, Transform3D() );
@@ -682,17 +697,17 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
   
   //######################################################################################################################################################################
   
-  tube.addExtension< DDRec::ConicalSupportData >( beampipeData ) ;
+  tube.addExtension< ConicalSupportData >( beampipeData ) ;
 
   //--------------------------------------
   
-  Volume mother =  lcdd.pickMotherVolume( tube ) ;
+  Volume mother =  theDetector.pickMotherVolume( tube ) ;
   
   pv = mother.placeVolume(envelope);
 
   pv.addPhysVolID( "system", x_det.id() ) ; //.addPhysVolID("side", 0 ) ;
   
-  tube.setVisAttributes( lcdd, x_det.visStr(), envelope );
+  tube.setVisAttributes( theDetector, x_det.visStr(), envelope );
   //  if( tube.isValid() ) 
   tube.setPlacement(pv);
   

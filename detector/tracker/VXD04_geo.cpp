@@ -19,13 +19,31 @@
 #include <cmath>
 
 using namespace std;
-using namespace DD4hep;
-using namespace dd4hep ;
-using namespace DD4hep::Geometry;
-using namespace DDRec;
 
-
-
+using dd4hep::Assembly;
+using dd4hep::BUILD_ENVELOPE;
+using dd4hep::Box;
+using dd4hep::ConeSegment;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::Position;
+using dd4hep::Ref_t;
+using dd4hep::RotationZYX;
+using dd4hep::SensitiveDetector;
+using dd4hep::Torus;
+using dd4hep::Transform3D;
+using dd4hep::Tube;
+using dd4hep::Volume;
+using dd4hep::_toString;
+using dd4hep::rec::SurfaceType;
+using dd4hep::rec::Vector3D;
+using dd4hep::rec::VolCone;
+using dd4hep::rec::VolPlane;
+using dd4hep::rec::VolCylinder;
+using dd4hep::rec::ZPlanarData;
+using dd4hep::rec::volSurfaceList;
 
 /** Construction of VTX detector, ported from Mokka driver VXD04.cc
  *
@@ -39,7 +57,7 @@ using namespace DDRec;
  *  @author: F.Gaede, DESY, Nov 2013
  *
  */
-static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
+static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector sens)  {
   
   xml_det_t    x_det = e;
   string       name  = x_det.nameStr();
@@ -48,11 +66,11 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   // --- create an envelope volume and position it into the world ---------------------
   
-  Volume envelope = XML::createPlacedEnvelope( lcdd,  e , vxd ) ;
+  Volume envelope = dd4hep::xml::createPlacedEnvelope( theDetector,  e , vxd ) ;
   
-  XML::setDetectorTypeFlag( e, vxd ) ;
+  dd4hep::xml::setDetectorTypeFlag( e, vxd ) ;
 
-  if( lcdd.buildType() == BUILD_ENVELOPE ) return vxd ;
+  if( theDetector.buildType() == BUILD_ENVELOPE ) return vxd ;
 
   //-----------------------------------------------------------------------------------
 
@@ -179,10 +197,10 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   //   encoder[LCTrackerCellID::sensor()] = 0 ;
   //   int cellID0 = encoder.lowWord() ;
 
-  Material activeMaterial =  lcdd.material("G4_Si"); //silicon_2.33gccm"); 
+  Material activeMaterial =  theDetector.material("G4_Si"); //silicon_2.33gccm"); 
   
 
-  DDRec::ZPlanarData*  zPlanarData = new ZPlanarData ;
+  ZPlanarData*  zPlanarData = new ZPlanarData ;
 
 // #ifdef MOKKA_GEAR
 //   // some variables for storing information for MOKKA_GEAR
@@ -242,7 +260,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     // **********************   flex  cable *****************************************
     // ****************************************************************************************
     
-    Material flexCableMaterial =  lcdd.material( flex_cable_material ); 
+    Material flexCableMaterial =  theDetector.material( flex_cable_material ); 
     
     Box FlexCableSolid( ladder_width+(side_band_electronics_option*side_band_electronics_width/2.),
 			ladder_length+(end_ladd_electronics_option*(2*end_electronics_half_z)) + beryllium_ladder_block_length*2.,
@@ -269,7 +287,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     //  			0,
     //  			0);
     
-    vxd.setVisAttributes(lcdd,  "RedVis" , FlexCableLogical);
+    vxd.setVisAttributes(theDetector,  "RedVis" , FlexCableLogical);
     //** ----- Original Mokke/Geant4 code: -----
     //    FlexCableLogical->SetVisAttributes(flex_cableVisAtt);
     
@@ -277,7 +295,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     // **********************   metal traces  *****************************************
     // ****************************************************************************************
     
-    Material metalTracesMaterial = lcdd.material( metal_traces_material); 
+    Material metalTracesMaterial = theDetector.material( metal_traces_material); 
     
     Box MetalTracesSolid( ladder_width+(side_band_electronics_option*side_band_electronics_width/2.),
 			  ladder_length+(end_ladd_electronics_option*(2*end_electronics_half_z)) + beryllium_ladder_block_length*2.,
@@ -285,13 +303,13 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     Volume MetalTracesLogical( _toString(LayerId,"MetalTraces_%02d") , MetalTracesSolid,metalTracesMaterial ) ;
     
-    vxd.setVisAttributes(lcdd,  "GrayVis" , MetalTracesLogical) ;
+    vxd.setVisAttributes(theDetector,  "GrayVis" , MetalTracesLogical) ;
     
     // ****************************************************************************************
     // **********************   foam spacer n support  *****************************************
     // ****************************************************************************************
     
-    Material foamSpacerMaterial = lcdd.material( foam_spacer_material);
+    Material foamSpacerMaterial = theDetector.material( foam_spacer_material);
     
     Box FoamSpacerSolid( support_width+(side_band_electronics_option*side_band_electronics_width/2.),
 			 ladder_length+(end_ladd_electronics_option*(2*end_electronics_half_z)) + beryllium_ladder_block_length*2. ,
@@ -299,11 +317,11 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     Volume FoamSpacerLogical( _toString(LayerId,"FoamSpacer_%02d"), FoamSpacerSolid, foamSpacerMaterial) ;
       
-    vxd.setVisAttributes(lcdd, "YellowVis", FoamSpacerLogical ) ;
+    vxd.setVisAttributes(theDetector, "YellowVis", FoamSpacerLogical ) ;
 
     //here we place the physical volumes of both the flex cable (kapton & metal traces) and the foam spacer
     
-    phirot = (2*pi)/nb_ladder;
+    phirot = (2*M_PI)/nb_ladder;
     
     double ladder_clothest_approch = beryllium_ladder_block_thickness*2 +0.1;
 
@@ -327,9 +345,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	double phirot2 = ladder_loop*phirot;
 
 	// RotationMatrix *rot = new RotationMatrix();
-	// rot->rotateX(pi*0.5);
+	// rot->rotateX(M_PI*0.5);
 	// rot->rotateY(phirot2);
-	RotationZYX rot( 0, phirot2 , (pi*0.5) ) ;
+	RotationZYX rot( 0, phirot2 , (M_PI*0.5) ) ;
 	
 	supp_assembly.placeVolume( FlexCableLogical,
 				   Transform3D( rot, Position(( layer_radius + metal_traces_thickness + (flex_cable_thickness/2.))*sin(phirot2)+offset_phi*cos(phirot2),
@@ -362,7 +380,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	
 	double phirot2 = ladder_loop*phirot;
 	
-	RotationZYX rot( 0, phirot2 , (pi*0.5) ) ;
+	RotationZYX rot( 0, phirot2 , (M_PI*0.5) ) ;
 	
 	supp_assembly.placeVolume( FlexCableLogical,
 				   Transform3D( rot, Position((layer_radius-(metal_traces_thickness + flex_cable_thickness/2.)+layer_gap)*sin(phirot2)+offset_phi*cos(phirot2),
@@ -488,7 +506,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
 // #endif
 
-    DDRec::ZPlanarData::LayerLayout thisLayer ;
+    ZPlanarData::LayerLayout thisLayer ;
     
     if (LayerId==1||LayerId==3||LayerId==5) { 
       
@@ -518,9 +536,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       
       Box BerylliumAnnulusBlockSolid( ladder_width, beryllium_ladder_block_length, beryllium_ladder_block_thickness);
       
-      Volume BerylliumAnnulusBlockLogical( _toString(LayerId,"BerylliumAnnulusBlock_%02d"), BerylliumAnnulusBlockSolid, lcdd.material("G4_Be")) ; //"beryllium") ) ;
+      Volume BerylliumAnnulusBlockLogical( _toString(LayerId,"BerylliumAnnulusBlock_%02d"), BerylliumAnnulusBlockSolid, theDetector.material("G4_Be")) ; //"beryllium") ) ;
       
-      vxd.setVisAttributes(lcdd,  "CyanVis" , BerylliumAnnulusBlockLogical) ;
+      vxd.setVisAttributes(theDetector,  "CyanVis" , BerylliumAnnulusBlockLogical) ;
 
 
       //====== create the meassurement surface for Be annulus block ===================
@@ -539,7 +557,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	
 	double phirot2 = phirot*AnnulusBlock_loop;
 
-	RotationZYX rot( 0, phirot2 ,  pi*0.5 ) ;
+	RotationZYX rot( 0, phirot2 ,  M_PI*0.5 ) ;
 	
 	double ZAnnulusBlock = ladder_length + end_electronics_half_z + (beryllium_ladder_block_length*2.);
 	    
@@ -570,7 +588,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	std::string volName = _toString(LayerId,"BerylliumAnnulusBlock_%02d") ;
 	volName +=  _toString( int(AnnulusBlock_loop), "_%02d");
 
-	Volume BerylliumAnnulusBlockLogical( volName , BerylliumAnnulusBlockSolid, lcdd.material("G4_Be")) ; //"beryllium") ) ;
+	Volume BerylliumAnnulusBlockLogical( volName , BerylliumAnnulusBlockSolid, theDetector.material("G4_Be")) ; //"beryllium") ) ;
 
 	//====== create the meassurement surface for Be annulus block ===================
 	Vector3D u( 1. , 0. , 0. ) ;
@@ -583,11 +601,11 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	std::string annBlockNameP =  _toString( LayerId , "BerylliumAnnulusBlock_%02d_posZ") + _toString( (int)AnnulusBlock_loop, "_%02d" ) ;
 	std::string annBlockNameN =  _toString( LayerId , "BerylliumAnnulusBlock_%02d_negZ") + _toString( (int)AnnulusBlock_loop, "_%02d" ) ;
 	
-	vxd.setVisAttributes(lcdd,  "CyanVis" , BerylliumAnnulusBlockLogical) ;
+	vxd.setVisAttributes(theDetector,  "CyanVis" , BerylliumAnnulusBlockLogical) ;
 	
 	double phirot2 = phirot*AnnulusBlock_loop;
 	
-	RotationZYX rot( 0, phirot2 , (pi*0.5) ) ;
+	RotationZYX rot( 0, phirot2 , (M_PI*0.5) ) ;
 	
 	double ZAnnulusBlock2=shell_half_z -(beryllium_ladder_block_length2/2.);// - (shell_thickess/2.); 
 	
@@ -621,7 +639,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       
       Volume ElectronicsEndLogical(_toString(LayerId,"ElectronicsEnd_%02d"),ElectronicsEndSolid, activeMaterial ); //("silicon_2.33gccm")
       
-      vxd.setVisAttributes(lcdd,  "GreenVis" , ElectronicsEndLogical );
+      vxd.setVisAttributes(theDetector,  "GreenVis" , ElectronicsEndLogical );
       
       double end_ladd_electronic_offset_phi = offset_phi +(side_band_electronics_option * side_band_electronics_width/2.);
       
@@ -643,7 +661,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	  std::string elecEndLadNameN =  _toString( LayerId , "ElectronicsEnd_%02d_negZ") + _toString( (int)elec_loop, "_%02d" ) ;
 	  
 	  double phirot2 = phirot*elec_loop;
-	  RotationZYX rot( 0, phirot2 , (pi*0.5) ) ;    
+	  RotationZYX rot( 0, phirot2 , (M_PI*0.5) ) ;    
 	  
 	  double Z = ladder_length +end_electronics_half_z + (ladder_gap/2.);
 	  
@@ -674,7 +692,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	  std::string elecEndLadNameN =  _toString( LayerId , "ElectronicsEnd_%02d_negZ") + _toString( (int)elec_loop, "_%02d" ) ;
 	  
 	  double phirot2 = phirot*elec_loop;
-	  RotationZYX rot( 0, phirot2 , (pi*0.5) ) ;    
+	  RotationZYX rot( 0, phirot2 , (M_PI*0.5) ) ;    
 	  
 	  double Z = ladder_length +end_electronics_half_z + (ladder_gap/2.);
 	  
@@ -707,7 +725,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       
       Volume ElectronicsBandLogical(_toString(LayerId,"ElectronicsBand_%02d"), ElectronicsBandSolid, activeMaterial ) ;
       
-      vxd.setVisAttributes(lcdd,  "GreenVis" , ElectronicsBandLogical ) ;
+      vxd.setVisAttributes(theDetector,  "GreenVis" , ElectronicsBandLogical ) ;
       
       //fixme: turn off sensitive sidebands for now - not sure they cause problems in the volume manager ....
       // active_side_band_electronics_option = 0 ;
@@ -722,7 +740,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	for (double elec_loop=0; elec_loop<nb_ladder;elec_loop++) {   
 	  
 	  double phirot2 = phirot*elec_loop;
-	  RotationZYX rot( 0, phirot2 , (pi*0.5) ) ;   
+	  RotationZYX rot( 0, phirot2 , (M_PI*0.5) ) ;   
 	  
 	  double Z = (ladder_length* (1-side_band_electronics_option/2.)) + ladder_gap/2.;
 	  
@@ -754,7 +772,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	for (double elec_loop=0; elec_loop<nb_ladder;elec_loop++) { 
 	  
 	  double phirot2 = phirot*elec_loop;
-	  RotationZYX rot( 0, phirot2 , (pi*0.5) ) ;   
+	  RotationZYX rot( 0, phirot2 , (M_PI*0.5) ) ;   
 
 	  double Z = (ladder_length* (1-side_band_electronics_option/2.)) + ladder_gap/2.;
 	      
@@ -822,7 +840,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       
       Volume KaptonLinesLogical( _toString(LayerId,"KaptonLines_%02d"), KaptonLinesSolid, flexCableMaterial ) ;
       
-      vxd.setVisAttributes(lcdd,  "WhiteVis" , KaptonLinesLogical );
+      vxd.setVisAttributes(theDetector,  "WhiteVis" , KaptonLinesLogical );
       
       //Here we define the solid and logical volumes of the metal traces of the strip lines
       ConeSegment MetalLinesSolid( strip_line_half_z,
@@ -834,7 +852,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       
       Volume MetalLinesLogical( _toString(LayerId,"MetalLines_%02d"), MetalLinesSolid, metalTracesMaterial );
       
-      vxd.setVisAttributes(lcdd,  "GrayVis" , MetalLinesLogical) ;
+      vxd.setVisAttributes(theDetector,  "GrayVis" , MetalLinesLogical) ;
       
       //here we place both the kapton and copper part of the strip lines
       double Z = strip_line_start_z + strip_line_half_z;
@@ -884,7 +902,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	//volSurfaceList( suppPosMetallinesDE )->push_back( conSurf2 );
 
 	
-	RotationZYX rot( 0, 0 , pi ) ;   // the same but other side
+	RotationZYX rot( 0, 0 , M_PI ) ;   // the same but other side
 
 	PlacedVolume pv_kap_neg = supp_assembly.placeVolume( KaptonLinesLogical,  Transform3D( rot , Position(0., 0., -Z) ) );
 
@@ -936,7 +954,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	volSurfaceList( suppPosMetallinesDE )->push_back( conSurf2 );
 	
       
-	RotationZYX rot( 0, 0 , pi ) ;   // the same but other side
+	RotationZYX rot( 0, 0 , M_PI ) ;   // the same but other side
 	
 	PlacedVolume pv_kap_neg = supp_assembly.placeVolume( KaptonLinesLogical,  Transform3D( rot , Position(0., 0., -Z) ) );
 
@@ -980,9 +998,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     Torus CoolPipeSolid(layer_radius + layer_gap + cool_pipe_outer_radius/2., cool_pipe_inner_radius,
 			cool_pipe_outer_radius, sPhi, dPhi);
     
-    Volume CoolPipeLogical(_toString(LayerId,"CoolPipe_%02d"), CoolPipeSolid, lcdd.material("G4_Ti")) ; //titanium") ) ;
+    Volume CoolPipeLogical(_toString(LayerId,"CoolPipe_%02d"), CoolPipeSolid, theDetector.material("G4_Ti")) ; //titanium") ) ;
     
-    vxd.setVisAttributes(lcdd,  "MagentaVis" , CoolPipeLogical );
+    vxd.setVisAttributes(theDetector,  "MagentaVis" , CoolPipeLogical );
 
     //one cooling pipe for each double layer
  
@@ -1011,9 +1029,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       
       Tube CoolPipeTubeSolid( cool_pipe_inner_radius, cool_pipe_outer_radius, CoolPipeLength/2., sPhi, sPhi+dPhi );
       
-      Volume CoolPipeTubeLogical( _toString(LayerId,"CoolPipeTube_%02d"), CoolPipeTubeSolid, lcdd.material("G4_Ti")) ; //titanium") ) ; 
+      Volume CoolPipeTubeLogical( _toString(LayerId,"CoolPipeTube_%02d"), CoolPipeTubeSolid, theDetector.material("G4_Ti")) ; //titanium") ) ; 
       
-      vxd.setVisAttributes(lcdd,  "MagentaVis" , CoolPipeTubeLogical );
+      vxd.setVisAttributes(theDetector,  "MagentaVis" , CoolPipeTubeLogical );
       
       //**fg: reversed sign compared to original VXD04.cc as this created obvious overlaps in TGeo (also in Mokka ???)
       RotationZYX rm( 0., 0., -thetaTube);
@@ -1045,7 +1063,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       
     Volume SiActiveLayerLogical( _toString( LayerId , "SiActiveLayer_%02d"),SiActiveLayerSolid, activeMaterial ) ;
 
-    vxd.setVisAttributes(lcdd,  "BlueVis" , SiActiveLayerLogical ) ;
+    vxd.setVisAttributes(theDetector,  "BlueVis" , SiActiveLayerLogical ) ;
 
     SiActiveLayerLogical.setSensitiveDetector(sens);
    
@@ -1068,7 +1086,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     for (double active_loop=0;active_loop<nb_ladder;active_loop++){
 	
       double phirot2 =  phirot*active_loop;
-      RotationZYX rot( 0. , phirot2, (pi*0.5) ) ;
+      RotationZYX rot( 0. , phirot2, (M_PI*0.5) ) ;
 	
       double Z = ladder_length/2.+ ladder_gap;
 	
@@ -1170,7 +1188,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     // #endif
 
 
-    //--- fill DDRec::ZPlanarData
+    //--- fill ZPlanarData
 
     if (LayerId==1||LayerId==3||LayerId==5)  { 
 
@@ -1196,7 +1214,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     }
 
     thisLayer.ladderNumber = (int) nb_ladder  ;
-    thisLayer.phi0 =  -pi/2.  ;
+    thisLayer.phi0 =  -M_PI/2.  ;
     
     zPlanarData->layers.push_back( thisLayer ) ;
 
@@ -1227,16 +1245,16 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     Tube ExternalKaptonCablesSolid(cryostat_apperture, cryostat_apperture + 3*external_kapton_thickness/2.,  external_cable_length, sPhi, sPhi+dPhi);
     //The reason for the factor three is that the thickness refer to the thickness of each single cable, and we have three cables in total, one per layer
 
-    Volume ExternalKaptonCablesLogical("ExternalKaptonCables", ExternalKaptonCablesSolid, lcdd.material("G4_KAPTON") );
+    Volume ExternalKaptonCablesLogical("ExternalKaptonCables", ExternalKaptonCablesSolid, theDetector.material("G4_KAPTON") );
  
-    vxd.setVisAttributes(lcdd,  "WhiteVis" , ExternalKaptonCablesLogical );
+    vxd.setVisAttributes(theDetector,  "WhiteVis" , ExternalKaptonCablesLogical );
 
     //metal part
     Tube ExternalMetalCablesSolid(cryostat_apperture - 3*external_metal_thickness/2., cryostat_apperture, external_cable_length,  sPhi, sPhi+dPhi);
 
-    Volume ExternalMetalCablesLogical("ExternalMetalCables", ExternalMetalCablesSolid ,  lcdd.material("G4_Cu") ) ;
+    Volume ExternalMetalCablesLogical("ExternalMetalCables", ExternalMetalCablesSolid ,  theDetector.material("G4_Cu") ) ;
  
-    vxd.setVisAttributes(lcdd,  "GrayVis" , ExternalMetalCablesLogical );
+    vxd.setVisAttributes(theDetector,  "GrayVis" , ExternalMetalCablesLogical );
 
     
     //====== YV: create a material surface for the cabling outside the VXD  ===================
@@ -1280,9 +1298,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   Tube SupportShellSolid( shell_inner_radious, shell_inner_radious+shell_thickess, shell_half_z, sPhi, sPhi+dPhi );
 
-  Volume SupportShellLogical("SupportShell", SupportShellSolid,  lcdd.material("G4_Be")) ; //"beryllium") ) ;
+  Volume SupportShellLogical("SupportShell", SupportShellSolid,  theDetector.material("G4_Be")) ; //"beryllium") ) ;
 
-  vxd.setVisAttributes(lcdd,  "CyanVis" , SupportShellLogical ) ;
+  vxd.setVisAttributes(theDetector,  "CyanVis" , SupportShellLogical ) ;
   
 
   //====== create a material surface for the support shell ===================
@@ -1306,9 +1324,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   Tube EndPlateShellSolid( support_endplate_inner_radious,  shell_inner_radious+shell_thickess, support_endplate_half_z, sPhi, sPhi+dPhi ) ;
 
-  Volume EndPlateShellLogical("EndPlateShell_outer", EndPlateShellSolid,  lcdd.material("G4_Be")) ; //"beryllium") ) ;
+  Volume EndPlateShellLogical("EndPlateShell_outer", EndPlateShellSolid,  theDetector.material("G4_Be")) ; //"beryllium") ) ;
 
-  vxd.setVisAttributes(lcdd,  "CyanVis" , EndPlateShellLogical ) ;
+  vxd.setVisAttributes(theDetector,  "CyanVis" , EndPlateShellLogical ) ;
   
   double ZEndPlateShell = shell_half_z + shell_endplate_thickness/2.;// + (beryllium_ladder_block_length*2);
 
@@ -1346,9 +1364,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   Tube EndPlateShellSolidL1( support_endplate_inner_radious_L1, support_endplate_outer_radious_L1, support_endplate_half_z_L1, sPhi, sPhi+dPhi ) ;
   
-  Volume EndPlateShellLogicalL1("EndPlateShell_inner", EndPlateShellSolidL1,  lcdd.material("G4_Be")) ; //"beryllium") ) ;
+  Volume EndPlateShellLogicalL1("EndPlateShell_inner", EndPlateShellSolidL1,  theDetector.material("G4_Be")) ; //"beryllium") ) ;
   
-  vxd.setVisAttributes(lcdd,  "CyanVis" , EndPlateShellLogicalL1 ) ;
+  vxd.setVisAttributes(theDetector,  "CyanVis" , EndPlateShellLogicalL1 ) ;
   
   double ZEndPlateShell2 = ladder_length +  ((end_electronics_half_z*end_ladd_electronics_option) * 2) + shell_thickess/2. + (beryllium_ladder_block_length*2) ;
   
@@ -1368,9 +1386,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   //**fg, NB:  TGeoConeSeg( dz,rmin0,rmax0,rmin1,rmax1, phi0, phi1 )  -  G4Cons( rmin0,rmin1,rmax0,rmax1, dz, phi0, delta_phi ) !!!!!!!!!!!!!!!!!!!!
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      
       
-  Volume SupportConeLogical("SupportCone", SupportShellCone,  lcdd.material("G4_Be")) ; //"beryllium") ) ;
+  Volume SupportConeLogical("SupportCone", SupportShellCone,  theDetector.material("G4_Be")) ; //"beryllium") ) ;
   
-  vxd.setVisAttributes(lcdd,  "CyanVis" , SupportConeLogical ) ;
+  vxd.setVisAttributes(theDetector,  "CyanVis" , SupportConeLogical ) ;
   
   double ZCone = ladder_length +  ((end_electronics_half_z*end_ladd_electronics_option) * 2) + shell_thickess + (beryllium_ladder_block_length*2) + support_cone_half_z;
 
@@ -1388,7 +1406,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   suppShellConePosDE.setPlacement( pv_supp_pos );
   volSurfaceList( suppShellConePosDE )->push_back( suppShellCone );
 
-  PlacedVolume pv_supp_neg = supp_assembly.placeVolume( SupportConeLogical, Transform3D( RotationZYX( 0, 0, pi ), Position(0., 0., -ZCone ) ) ) ;
+  PlacedVolume pv_supp_neg = supp_assembly.placeVolume( SupportConeLogical, Transform3D( RotationZYX( 0, 0, M_PI ), Position(0., 0., -ZCone ) ) ) ;
   DetElement suppShellConeNegDE ( suppDE , "negShellCone" , x_det.id() )  ;
   suppShellConeNegDE.setPlacement( pv_supp_neg );
   volSurfaceList( suppShellConeNegDE )->push_back( suppShellCone );
@@ -1399,12 +1417,12 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   Tube SupportForSolid( support_endplate_inner_radious, support_endplate_inner_radious + shell_endplate_thickness, forward_shell_half_z,  sPhi, sPhi+dPhi ) ;
 
-  Volume SupportForLogical("SupportFor", SupportForSolid,  lcdd.material("G4_Be")) ; //"beryllium") ) ;
+  Volume SupportForLogical("SupportFor", SupportForSolid,  theDetector.material("G4_Be")) ; //"beryllium") ) ;
 
-  vxd.setVisAttributes(lcdd,  "CyanVis" , SupportForLogical ) ;
+  vxd.setVisAttributes(theDetector,  "CyanVis" , SupportForLogical ) ;
 
   supp_assembly.placeVolume( SupportForLogical, Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,  supportForZ ) ) ) ;
-  supp_assembly.placeVolume( SupportForLogical, Transform3D( RotationZYX( 0, 0, pi ), Position(0., 0., -supportForZ ) ) ) ;
+  supp_assembly.placeVolume( SupportForLogical, Transform3D( RotationZYX( 0, 0, M_PI ), Position(0., 0., -supportForZ ) ) ) ;
 
   
   //*** Cryostat ***************************************************************
@@ -1416,21 +1434,21 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   double aluHalfZ = dzSty + drSty;
   
   if (useCryo) {
-    Material aluMaterial = lcdd.material( "G4_Al" ) ;
+    Material aluMaterial = theDetector.material( "G4_Al" ) ;
     //          VisAttributes *aluVisAttributes = new VisAttributes(Colour(0.5, 0.5, 0.5)); 
     
-    Material styMaterial = lcdd.material("styropor");
+    Material styMaterial = theDetector.material("styropor");
     
 
 
     Tube aluBarrelSolid( rAlu, rAlu + drAlu, aluHalfZ, sPhi, sPhi+dPhi);
     Volume aluBarrelLog( "CryostatAluSkinBarrel", aluBarrelSolid, aluMaterial );
-    vxd.setVisAttributes(lcdd,  "GrayVis" , aluBarrelLog ) ;
+    vxd.setVisAttributes(theDetector,  "GrayVis" , aluBarrelLog ) ;
     supp_assembly.placeVolume( aluBarrelLog ) ;
     
     Tube styBarrelSolid(  rSty, rSty + drSty, dzSty, sPhi, sPhi+dPhi);
     Volume styBarrelLog( "CryostatFoamBarrel", styBarrelSolid, styMaterial );
-    vxd.setVisAttributes(lcdd,  "LightGrayVis", styBarrelLog ) ;
+    vxd.setVisAttributes(theDetector,  "LightGrayVis", styBarrelLog ) ;
     supp_assembly.placeVolume( styBarrelLog ) ;
 
     //====== create a material surface for the cryostat barrel ===================
@@ -1460,7 +1478,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
     Tube aluEndcapSolidInner(  rInner, cryostat_apperture - cryostat_apperture_radius, drAlu / 2, sPhi, sPhi+dPhi);
     Volume aluEndcapInnerLog( "CryostatAluSkinEndPlateInner", aluEndcapSolidInner, aluMaterial );
-    vxd.setVisAttributes(lcdd,  "GrayVis" , aluEndcapInnerLog ) ;
+    vxd.setVisAttributes(theDetector,  "GrayVis" , aluEndcapInnerLog ) ;
     PlacedVolume pv_alu_end_pos = supp_assembly.placeVolume( aluEndcapInnerLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,   aluEndcapZ ) ) ) ;
     suppFwdInDE.setPlacement( pv_alu_end_pos ) ;
     PlacedVolume pv_alu_end_neg = supp_assembly.placeVolume( aluEndcapInnerLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,  -aluEndcapZ ) ) ) ;
@@ -1468,7 +1486,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
     Tube aluEndcapSolidOuter(   cryostat_apperture + cryostat_apperture_radius, rAlu + drAlu, drAlu / 2, sPhi, sPhi+dPhi);
     Volume aluEndcapOuterLog( "CryostatAluSkinEndPlateOuter", aluEndcapSolidOuter, aluMaterial );
-    vxd.setVisAttributes(lcdd,  "GrayVis" , aluEndcapOuterLog ) ;
+    vxd.setVisAttributes(theDetector,  "GrayVis" , aluEndcapOuterLog ) ;
     PlacedVolume pv_alu_end_out_pos = supp_assembly.placeVolume( aluEndcapOuterLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,   aluEndcapZ ) ) ) ;
     suppFwdOutDE.setPlacement( pv_alu_end_out_pos ) ;
     PlacedVolume pv_alu_end_out_neg = supp_assembly.placeVolume( aluEndcapOuterLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,  -aluEndcapZ ) ) ) ;
@@ -1476,13 +1494,13 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     Tube styEndcapSolidInner(  rInner, cryostat_apperture - cryostat_apperture_radius, drSty / 2, sPhi, sPhi+dPhi);
     Volume styEndcapInnerLog( "CryostatFoamEndPlateInner", styEndcapSolidInner, styMaterial );
-    vxd.setVisAttributes(lcdd,  "WhiteVis" , styEndcapInnerLog ) ;
+    vxd.setVisAttributes(theDetector,  "WhiteVis" , styEndcapInnerLog ) ;
     supp_assembly.placeVolume( styEndcapInnerLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,   styEndcapZ ) ) ) ;
     supp_assembly.placeVolume( styEndcapInnerLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,  -styEndcapZ ) ) ) ;
 
     Tube styEndcapSolidOuter(  cryostat_apperture + cryostat_apperture_radius, rSty + drSty, drSty / 2, sPhi, sPhi+dPhi);
     Volume styEndcapOuterLog( "CryostatFoamEndPlateOuter", styEndcapSolidOuter, styMaterial );
-    vxd.setVisAttributes(lcdd,  "WhiteVis" , styEndcapOuterLog ) ;
+    vxd.setVisAttributes(theDetector,  "WhiteVis" , styEndcapOuterLog ) ;
     supp_assembly.placeVolume( styEndcapOuterLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,   styEndcapZ ) ) ) ;
     supp_assembly.placeVolume( styEndcapOuterLog , Transform3D( RotationZYX( 0, 0, 0  ), Position(0., 0.,  -styEndcapZ ) ) ) ;
 
@@ -1559,7 +1577,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   //--------------------------------------
   
   
-  vxd.setVisAttributes( lcdd, x_det.visStr(), envelope );
+  vxd.setVisAttributes( theDetector, x_det.visStr(), envelope );
 
   return vxd;
 }

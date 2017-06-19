@@ -7,50 +7,83 @@
 
 #include <string>
 
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
+using dd4hep::Assembly;
+using dd4hep::BitField64;
+using dd4hep::BUILD_ENVELOPE;
+using dd4hep::Box;
+using dd4hep::Cone;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::DetType;
+using dd4hep::IntersectionSolid;
+using dd4hep::Layering;
+using dd4hep::Layer;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::PolyhedraRegular;
+using dd4hep::Position;
+using dd4hep::Readout;
+using dd4hep::Ref_t;
+using dd4hep::Rotation3D;
+using dd4hep::RotationY;
+using dd4hep::RotationZ;
+using dd4hep::RotationZYX;
+using dd4hep::SensitiveDetector;
+using dd4hep::SubtractionSolid;
+using dd4hep::Transform3D;
+using dd4hep::Translation3D;
+using dd4hep::Trapezoid;
+using dd4hep::Tube;
+using dd4hep::Volume;
+using dd4hep::_toString;
+using dd4hep::UnionSolid;
+using dd4hep::IntersectionSolid;
+using dd4hep::Segmentation;
+using dd4hep::EllipticalTube;
+
+using dd4hep::rec::LayeredCalorimeterData;
 
 // workaround for DD4hep v00-14 (and older) 
 #ifndef DD4HEP_VERSION_GE
 #define DD4HEP_VERSION_GE(a,b) 0 
 #endif
 
-static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
-                                               xml_h element,
-                                               DD4hep::Geometry::SensitiveDetector sens) {
+static Ref_t create_detector(Detector& theDetector,
+                             xml_h element,
+                             SensitiveDetector sens) {
     
   std::cout << __PRETTY_FUNCTION__  << std::endl << std::endl;
   std::cout << " Here is my LumiCal_o1_v03 :"  << std::endl;
   std::cout << "----------------------------"  << std::endl;
   sens.setType("calorimeter");
   //Materials
-  DD4hep::Geometry::Material air = lcdd.air();
+  Material air = theDetector.air();
     
     //Access to the XML File
     xml_det_t     xmlLumiCal    = element;
     const std::string detName   = xmlLumiCal.nameStr();
     
-    DD4hep::Geometry::DetElement sdet ( detName, xmlLumiCal.id() );
+    DetElement sdet ( detName, xmlLumiCal.id() );
     
     // --- create an envelope volume and position it into the world ---------------------
     
-    DD4hep::Geometry::Volume envelope = DD4hep::XML::createPlacedEnvelope( lcdd, element , sdet ) ;
-    DD4hep::Geometry::DetElement lumiCalDE_1(sdet,"Calorimeter1",1);
-    DD4hep::Geometry::DetElement lumiCalDE_2(sdet,"Calorimeter2",2);
+    Volume envelope = dd4hep::xml::createPlacedEnvelope( theDetector, element , sdet ) ;
+    DetElement lumiCalDE_1(sdet,"Calorimeter1",1);
+    DetElement lumiCalDE_2(sdet,"Calorimeter2",2);
 
     sdet.setTypeFlag( DetType::CALORIMETER |  DetType::ENDCAP  | DetType::ELECTROMAGNETIC |  DetType::FORWARD ) ;
 
-    if( lcdd.buildType() == DD4hep::BUILD_ENVELOPE ) return sdet ;
+    if( theDetector.buildType() == BUILD_ENVELOPE ) return sdet ;
     
     //-----------------------------------------------------------------------------------
     
     //Parameters we have to know about
-    DD4hep::XML::Component xmlParameter = xmlLumiCal.child(_Unicode(parameter));
+    dd4hep::xml::Component xmlParameter = xmlLumiCal.child(_Unicode(parameter));
     const double fullCrossingAngle  = xmlParameter.attr< double >(_Unicode(crossingangle));
 
     
     //LumiCal Dimensions
-    DD4hep::XML::Dimension dimensions =  xmlLumiCal.dimensions();
+    dd4hep::xml::Dimension dimensions =  xmlLumiCal.dimensions();
     const double lcalInnerR  = dimensions.inner_r();
     const double lcalOuterR  = dimensions.outer_r();
     const double lcalInnerZ  = dimensions.inner_z();
@@ -69,7 +102,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
     // FIXME: staggerPhi must be somehow passed to DDrec
     // temporary it goes in place of obsolete layer thickness
     const double staggerPhi    = layerStagger*cellPhiSize;   
-    const double lcalThickness = DD4hep::Layering(xmlLumiCal).totalThickness();
+    const double lcalThickness = Layering(xmlLumiCal).totalThickness();
     const double lcalCentreZ   = lcalInnerZ+lcalThickness*0.5;
     const double lcalXoffset = lcalCentreZ * std::tan( fullCrossingAngle/2. );
 
@@ -79,8 +112,8 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
     const double cellRsize  = (sensOuterR - sensInnerR )/lcalRSects;
 
     //========== fill data for reconstruction ============================
-    DD4hep::DDRec::LayeredCalorimeterData* caloData = new DD4hep::DDRec::LayeredCalorimeterData ;
-    caloData->layoutType = DD4hep::DDRec::LayeredCalorimeterData::EndcapLayout ;
+    LayeredCalorimeterData* caloData = new LayeredCalorimeterData ;
+    caloData->layoutType = LayeredCalorimeterData::EndcapLayout ;
     caloData->inner_symmetry = 0  ; // hardcoded tube
     caloData->outer_symmetry = 0  ; 
      
@@ -111,9 +144,9 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
     
     
     //Whole Lcal Envelope to place the layers in
-    DD4hep::Geometry::Tube envelopeTube (lcalInnerR, lcalOuterR + lcalExtraS, lcalThickness*0.5 );
-    DD4hep::Geometry::Volume     envelopeVol(detName+"_module",envelopeTube,air);
-    envelopeVol.setVisAttributes(lcdd,xmlLumiCal.visStr());
+    Tube envelopeTube (lcalInnerR, lcalOuterR + lcalExtraS, lcalThickness*0.5 );
+    Volume     envelopeVol(detName+"_module",envelopeTube,air);
+    envelopeVol.setVisAttributes(theDetector,xmlLumiCal.visStr());
     //
     // build services space containing support and electronics
     // simplified NOT layered for compactness
@@ -121,47 +154,47 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
     double ear_height = lcalExtraS - 0.1*dd4hep::cm;
     double ear_dy    = lcalOuterR + ear_height;
    if( lcalExtraS > 0. ){
-      DD4hep::Geometry::Tube envelopeExtras (lcalOuterR, lcalOuterR + lcalExtraS-0.1, lcalThickness*0.5 );
-      DD4hep::Geometry::Volume     ServicesVol(detName+"_Services",envelopeExtras,air);
+      Tube envelopeExtras (lcalOuterR, lcalOuterR + lcalExtraS-0.1, lcalThickness*0.5 );
+      Volume     ServicesVol(detName+"_Services",envelopeExtras,air);
       envelopeVol.placeVolume( ServicesVol );
       // mounting ears
-      DD4hep::Geometry::Material earMaterial = lcdd.material("TungstenDens24");
+      Material earMaterial = theDetector.material("TungstenDens24");
       int n_ears = 3;  // ears come in pairs
       double ear_width = ear_height/2.;
       double ear_dx    = ear_width/sqrt(1. - ( lcalOuterR*lcalOuterR - ear_width*ear_width)/(ear_dy*ear_dy) );
       double ear_hdz   = lcalThickness*0.5;
       double earsDPhi = 180./double( n_ears ) * dd4hep::deg;
       // anonymous volumes - support
-      DD4hep::Geometry::EllipticalTube EarEllipse( ear_dx, ear_dy, ear_hdz );
-      DD4hep::Geometry::Tube earClip ( 0., lcalOuterR,  (ear_hdz + 0.1*dd4hep::cm), 0., 360.*dd4hep::deg );
-      DD4hep::Geometry::Tube boltHole( 0., bolt_radius, (ear_hdz + 0.1*dd4hep::cm) );
+      EllipticalTube EarEllipse( ear_dx, ear_dy, ear_hdz );
+      Tube earClip ( 0., lcalOuterR,  (ear_hdz + 0.1*dd4hep::cm), 0., 360.*dd4hep::deg );
+      Tube boltHole( 0., bolt_radius, (ear_hdz + 0.1*dd4hep::cm) );
       // mixed elcetronics
       double phiSpanFE = earsDPhi - 2.* atan( ear_width/sqrt(lcalOuterR*lcalOuterR-ear_width*ear_width) ); 
-      DD4hep::Geometry::Material mixFEmat = lcdd.material("siPCBMix");
-      DD4hep::Geometry::Tube mixFE( lcalOuterR, lcalOuterR+lcalExtraS-0.2*dd4hep::cm, 0.5*lcalThickness, -phiSpanFE/2., phiSpanFE/2.);
-      DD4hep::Geometry::Volume mixFEvol(detName+"FEmix", mixFE, mixFEmat );
+      Material mixFEmat = theDetector.material("siPCBMix");
+      Tube mixFE( lcalOuterR, lcalOuterR+lcalExtraS-0.2*dd4hep::cm, 0.5*lcalThickness, -phiSpanFE/2., phiSpanFE/2.);
+      Volume mixFEvol(detName+"FEmix", mixFE, mixFEmat );
       // clipping
       // pair of ears
-      DD4hep::Geometry::SubtractionSolid EarShape0( EarEllipse, earClip );
+      SubtractionSolid EarShape0( EarEllipse, earClip );
       // holes for bolts 
-      DD4hep::Geometry::Position boltPos1( 0.,  (lcalOuterR+3.*bolt_radius), 0.);
-      DD4hep::Geometry::Position boltPos2( 0., -(lcalOuterR+3.*bolt_radius), 0.);
-      DD4hep::Geometry::SubtractionSolid EarShape1( EarShape0, boltHole, boltPos1);
-      DD4hep::Geometry::SubtractionSolid EarShape2( EarShape1, boltHole, boltPos2);
+      Position boltPos1( 0.,  (lcalOuterR+3.*bolt_radius), 0.);
+      Position boltPos2( 0., -(lcalOuterR+3.*bolt_radius), 0.);
+      SubtractionSolid EarShape1( EarShape0, boltHole, boltPos1);
+      SubtractionSolid EarShape2( EarShape1, boltHole, boltPos2);
       // final pair of ears
-      DD4hep::Geometry::Volume EarsVolume(detName+"Ears", EarShape2, earMaterial);
-      EarsVolume.setVisAttributes( lcdd,"GrayVis");
+      Volume EarsVolume(detName+"Ears", EarShape2, earMaterial);
+      EarsVolume.setVisAttributes( theDetector,"GrayVis");
       // place mountings and electronics  in Services volume
       double earsAng = 0.;
       double feAng = 0.;
       for( int ie=0; ie<n_ears; ie++ ){
-	DD4hep::Geometry::RotationZ earsRotZ( earsAng );
-	DD4hep::Geometry::RotationZ feRotZ1( feAng );
-	DD4hep::Geometry::RotationZ feRotZ2( feAng + M_PI );
-	DD4hep::Geometry::Position  earsPos( 0., 0., 0.);
-	ServicesVol.placeVolume( EarsVolume, DD4hep::Geometry::Transform3D( earsRotZ, earsPos ));
-	ServicesVol.placeVolume( mixFEvol, DD4hep::Geometry::Transform3D( feRotZ1, earsPos) );
-	ServicesVol.placeVolume( mixFEvol, DD4hep::Geometry::Transform3D( feRotZ2, earsPos) );
+	RotationZ earsRotZ( earsAng );
+	RotationZ feRotZ1( feAng );
+	RotationZ feRotZ2( feAng + M_PI );
+	Position  earsPos( 0., 0., 0.);
+	ServicesVol.placeVolume( EarsVolume, Transform3D( earsRotZ, earsPos ));
+	ServicesVol.placeVolume( mixFEvol, Transform3D( feRotZ1, earsPos) );
+	ServicesVol.placeVolume( mixFEvol, Transform3D( feRotZ2, earsPos) );
 	earsAng += earsDPhi;
 	feAng += earsDPhi;
       }
@@ -186,18 +219,18 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
     double mtotalDepthZ = 0.;
    //This is the starting point to place all layers, we need this when we have more than one layer block
     double referencePosition = -lcalThickness*0.5;
-    for(DD4hep::XML::Collection_t coll(xmlLumiCal,_U(layer)); coll; ++coll)  {
-        DD4hep::XML::Component xmlLayer(coll); //we know this thing is a layer
+    for(dd4hep::xml::Collection_t coll(xmlLumiCal,_U(layer)); coll; ++coll)  {
+        dd4hep::xml::Component xmlLayer(coll); //we know this thing is a layer
         
         double layerThickness = 0;
-        for(DD4hep::XML::Collection_t l(xmlLayer,_U(slice)); l; ++l) layerThickness += xml_comp_t(l).thickness();
+        for(dd4hep::xml::Collection_t l(xmlLayer,_U(slice)); l; ++l) layerThickness += xml_comp_t(l).thickness();
         
         //Loop for repeat=NN
         for(int i=0, repeat=xmlLayer.repeat(); i<repeat; ++i)  {
             
-            std::string layer_name = detName + DD4hep::XML::_toString(thisLayerId,"_layer%d");
-            DD4hep::Geometry::Tube layer_base(lcalInnerR,lcalOuterR,layerThickness*0.5, lcalPhi0, lcalPhi0+360.*dd4hep::deg);            
-            DD4hep::Geometry::Volume layer_vol(layer_name,layer_base,air);
+            std::string layer_name = detName + dd4hep::xml::_toString(thisLayerId,"_layer%d");
+            Tube layer_base(lcalInnerR,lcalOuterR,layerThickness*0.5, lcalPhi0, lcalPhi0+360.*dd4hep::deg);            
+            Volume layer_vol(layer_name,layer_base,air);
                        
             int sliceID=0;
             double inThisLayerPosition = -layerThickness*0.5;
@@ -205,10 +238,10 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
             double nInteractionLengths=0.;
             double thickness_sum=0;
             
-            DD4hep::DDRec::LayeredCalorimeterData::Layer caloLayer ;
+            LayeredCalorimeterData::Layer caloLayer ;
             
-            for( DD4hep::XML::Collection_t collSlice(xmlLayer,_U(slice)); collSlice; ++collSlice )  {
-	      DD4hep::XML::Component compSlice = collSlice;
+            for( dd4hep::xml::Collection_t collSlice(xmlLayer,_U(slice)); collSlice; ++collSlice )  {
+	      dd4hep::xml::Component compSlice = collSlice;
 	      double slice_thickness = compSlice.thickness();
 	      double slice_minR = lcalInnerR;
 	      double slice_maxR = lcalOuterR;
@@ -218,11 +251,11 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 		slice_maxR = sensOuterR;
 	      }
 
-	      std::string sliceName = layer_name + DD4hep::XML::_toString(sliceID,"slice%d");
-	      DD4hep::Geometry::Material   slice_material  = lcdd.material(compSlice.materialStr());
+	      std::string sliceName = layer_name + dd4hep::xml::_toString(sliceID,"slice%d");
+	      Material   slice_material  = theDetector.material(compSlice.materialStr());
                 
-	      DD4hep::Geometry::Tube sliceBase(slice_minR,slice_maxR,slice_thickness/2);                
-	      DD4hep::Geometry::Volume slice_vol (sliceName,sliceBase,slice_material);
+	      Tube sliceBase(slice_minR,slice_maxR,slice_thickness/2);                
+	      Volume slice_vol (sliceName,sliceBase,slice_material);
                 
                 nRadiationLengths += slice_thickness/(2.*slice_material.radLength());
                 nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
@@ -230,14 +263,14 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
               
                 if ( compSlice.isSensitive() )  {
 		  if ( gapDy > 0. ) {      // put gaps in sensor slice
-		    DD4hep::Geometry::Box gapEnv (gapDx, gapDy , slice_thickness/2. );
-		    DD4hep::Geometry::Volume gapVol ("phiGap", gapEnv, slice_material );
-		    gapVol.setVisAttributes(lcdd,"PhiGapVis");
+		    Box gapEnv (gapDx, gapDy , slice_thickness/2. );
+		    Volume gapVol ("phiGap", gapEnv, slice_material );
+		    gapVol.setVisAttributes(theDetector,"PhiGapVis");
 		    double rotPhi = lcalPhi0 - cellPhiSize/2.;
 		    for( int gap=0; gap < nGaps; gap++ ) {
-		      DD4hep::Geometry::RotationZ gapRot ( rotPhi );
-		      DD4hep::Geometry::Position gapPos ( gapPosX*cos( rotPhi ), gapPosX*sin( rotPhi ), 0.0 );
-		      slice_vol.placeVolume( gapVol,DD4hep::Geometry::Transform3D( gapRot, gapPos ));
+		      RotationZ gapRot ( rotPhi );
+		      Position gapPos ( gapPosX*cos( rotPhi ), gapPosX*sin( rotPhi ), 0.0 );
+		      slice_vol.placeVolume( gapVol,Transform3D( gapRot, gapPos ));
 		      rotPhi += lcalTileDphi;
 		    }
 		  }
@@ -263,9 +296,9 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
                 nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
                 thickness_sum += slice_thickness/2;
                 
-                slice_vol.setAttributes(lcdd,compSlice.regionStr(),compSlice.limitsStr(),compSlice.visStr());
+                slice_vol.setAttributes(theDetector,compSlice.regionStr(),compSlice.limitsStr(),compSlice.visStr());
 
-		DD4hep::Geometry::Position slicePos(0,0,inThisLayerPosition+slice_thickness*0.5);
+		Position slicePos(0,0,inThisLayerPosition+slice_thickness*0.5);
                 layer_vol.placeVolume(slice_vol, slicePos);
                     
                 inThisLayerPosition += slice_thickness;
@@ -296,12 +329,12 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
             caloLayer.cellSize0 = cellRsize ;
             caloLayer.cellSize1 = cellPhiSize ;
 
-            DD4hep::Geometry::Position  layerPos(0,0,referencePosition+0.5*layerThickness);
-	    DD4hep::Geometry::RotationZ layerRot( staggerPhi );
-	    DD4hep::Geometry::PlacedVolume pv;
+            Position  layerPos(0,0,referencePosition+0.5*layerThickness);
+	    RotationZ layerRot( staggerPhi );
+	    PlacedVolume pv;
 	    // every other layer has gaps staggered 
 	    if( thisLayerId%2 == 1 && layerStagger != 0. ) {
-	      pv = envelopeVol.placeVolume(layer_vol, DD4hep::Geometry::Transform3D( layerRot, layerPos ));
+	      pv = envelopeVol.placeVolume(layer_vol, Transform3D( layerRot, layerPos ));
 	      caloLayer.phi0 = staggerPhi;
 	    }else{
 	      pv = envelopeVol.placeVolume(layer_vol,layerPos);
@@ -310,7 +343,7 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	    pv.addPhysVolID("layer",thisLayerId);
               
             caloData->layers.push_back( caloLayer ) ;
-            layer_vol.setVisAttributes(lcdd,xmlLayer.visStr());
+            layer_vol.setVisAttributes(theDetector,xmlLayer.visStr());
              
             
             referencePosition += layerThickness;
@@ -323,22 +356,22 @@ static DD4hep::Geometry::Ref_t create_detector(DD4hep::Geometry::LCDD& lcdd,
 	     << " ( rad. length X0: "<< mtotalRadLen << "   )"<<std::endl;
     std::cout << "-----------------------------------------------------------------"  << std::endl<<std::endl;;
     
-    const DD4hep::Geometry::Position bcForwardPos ( lcalXoffset,0.0, lcalCentreZ);
-    const DD4hep::Geometry::Position bcBackwardPos( lcalXoffset,0.0,-lcalCentreZ);
-    const DD4hep::Geometry::RotationY bcForwardRot ( fullCrossingAngle*0.5  );
-    const DD4hep::Geometry::RotationY bcBackwardRot( M_PI-fullCrossingAngle*0.5 );
+    const Position bcForwardPos ( lcalXoffset,0.0, lcalCentreZ);
+    const Position bcBackwardPos( lcalXoffset,0.0,-lcalCentreZ);
+    const RotationY bcForwardRot ( fullCrossingAngle*0.5  );
+    const RotationY bcBackwardRot( M_PI-fullCrossingAngle*0.5 );
     
-    DD4hep::Geometry::PlacedVolume pv =
-    envelope.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcForwardRot, bcForwardPos ) );
+    PlacedVolume pv =
+    envelope.placeVolume(envelopeVol, Transform3D( bcForwardRot, bcForwardPos ) );
     pv.addPhysVolID("barrel", 1);
     lumiCalDE_1.setPlacement(pv);
 
-    DD4hep::Geometry::PlacedVolume pv2 =
-    envelope.placeVolume(envelopeVol, DD4hep::Geometry::Transform3D( bcBackwardRot, bcBackwardPos ) );
+    PlacedVolume pv2 =
+    envelope.placeVolume(envelopeVol, Transform3D( bcBackwardRot, bcBackwardPos ) );
     pv2.addPhysVolID("barrel", 2);
     lumiCalDE_2.setPlacement(pv2);
     
-    sdet.addExtension< DD4hep::DDRec::LayeredCalorimeterData >( caloData ) ;
+    sdet.addExtension< LayeredCalorimeterData >( caloData ) ;
     
     return sdet;
 }

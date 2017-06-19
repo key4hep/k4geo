@@ -19,40 +19,50 @@
 #include <map>
 #include <string>
 
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
-using namespace DD4hep::DDRec ;
-using namespace DDSurfaces ;
 
-using DD4hep::Geometry::Transform3D;
-using DD4hep::Geometry::Position;
-using DD4hep::Geometry::RotationY;
-using DD4hep::Geometry::RotateY;
-using DD4hep::Geometry::ConeSegment;
-using DD4hep::Geometry::SubtractionSolid;
-using DD4hep::Geometry::Material;
-using DD4hep::Geometry::Volume;
-using DD4hep::Geometry::Solid;
-using DD4hep::Geometry::Tube;
-using DD4hep::Geometry::PlacedVolume;
-using DD4hep::Geometry::Assembly;
+using dd4hep::Assembly;
+using dd4hep::BUILD_ENVELOPE;
+using dd4hep::ConeSegment;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::Position;
+using dd4hep::Ref_t;
+using dd4hep::RotateY;
+using dd4hep::RotationY;
+using dd4hep::SensitiveDetector;
+using dd4hep::Solid;
+using dd4hep::SubtractionSolid;
+using dd4hep::Transform3D;
+using dd4hep::Tube;
+using dd4hep::Volume;
+
+using dd4hep::rec::ConicalSupportData;
+using dd4hep::rec::SurfaceType;
+using dd4hep::rec::Vector3D;
+using dd4hep::rec::VolCone;
+using dd4hep::rec::VolCylinder;
+using dd4hep::rec::VolCylinderImpl;
+using dd4hep::rec::VolSurface;
+using dd4hep::rec::volSurfaceList;
 
 
 
 /// helper class for a simple cylinder surface parallel to z with a given length - used as IP layer
-class SimpleCylinderImpl : public  DD4hep::DDRec::VolCylinderImpl{
+class SimpleCylinderImpl : public  VolCylinderImpl{
   double _half_length ;
 public:
   /// standard c'tor with all necessary arguments - origin is (0,0,0) if not given.
-  SimpleCylinderImpl( DD4hep::Geometry::Volume vol, DDSurfaces::SurfaceType type, 
+  SimpleCylinderImpl( Volume vol, DDSurfaces::SurfaceType type, 
 		      double thickness_inner ,double thickness_outer,  DDSurfaces::Vector3D origin ) :
-    DD4hep::DDRec::VolCylinderImpl( vol,  type, thickness_inner, thickness_outer,   origin ),
+    VolCylinderImpl( vol,  type, thickness_inner, thickness_outer,   origin ),
     _half_length(0){
   }
   void setHalfLength( double half_length){
     _half_length = half_length ;
   }
-  void setID( DD4hep::long64 id ) { _id = id ; 
+  void setID( dd4hep::long64 id ) { _id = id ; 
   }
   // overwrite to include points inside the inner radius of the barrel 
   bool insideBounds(const DDSurfaces::Vector3D& point, double epsilon) const {
@@ -92,7 +102,7 @@ public:
   
 class SimpleCylinder : public VolSurface{
 public:
-  SimpleCylinder( Geometry::Volume vol, SurfaceType type, double thickness_inner ,
+  SimpleCylinder( Volume vol, SurfaceType type, double thickness_inner ,
 		  double thickness_outer,  Vector3D origin ) :
     VolSurface( new SimpleCylinderImpl( vol,  type,  thickness_inner , thickness_outer, origin ) ) {
   }
@@ -111,9 +121,9 @@ public:
  *  @author: F.Gaede, DESY, Jan 2014
  *
  */
-static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
-					      xml_h element,
-					      DD4hep::Geometry::SensitiveDetector /*sens*/) {
+static Ref_t create_element(Detector& theDetector,
+                            xml_h element,
+                            SensitiveDetector /*sens*/) {
 
 
   //------------------------------------------
@@ -128,20 +138,20 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
   const std::string name = xmlBeampipe.nameStr();
 
 
-  DD4hep::Geometry::DetElement tube(  name, xmlBeampipe.id()  ) ;
+  DetElement tube(  name, xmlBeampipe.id()  ) ;
 
   // --- create an envelope volume and position it into the world ---------------------
   
-  Volume envelope = DD4hep::XML::createPlacedEnvelope( lcdd,  element , tube ) ;
+  Volume envelope = dd4hep::xml::createPlacedEnvelope( theDetector,  element , tube ) ;
   
-  XML::setDetectorTypeFlag( element, tube ) ;
+  dd4hep::xml::setDetectorTypeFlag( element, tube ) ;
 
-  if( lcdd.buildType() == DD4hep::BUILD_ENVELOPE ) return tube ;
+  if( theDetector.buildType() == BUILD_ENVELOPE ) return tube ;
   
   //-----------------------------------------------------------------------------------
 
 
-  DD4hep::DDRec::ConicalSupportData* beampipeData = new DD4hep::DDRec::ConicalSupportData ;
+  ConicalSupportData* beampipeData = new ConicalSupportData ;
 
   //######################################################################################################################################################################
   //  code ported from TubeX01::construct() :
@@ -152,7 +162,7 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
   const double phi2 = 360.0*dd4hep::degree;
   
   //Parameters we have to know about
-  DD4hep::XML::Component xmlParameter = xmlBeampipe.child(_Unicode(parameter));
+  dd4hep::xml::Component xmlParameter = xmlBeampipe.child(_Unicode(parameter));
   const double crossingAngle  = xmlParameter.attr< double >(_Unicode(crossingangle))*0.5; //  only half the angle
 
 
@@ -170,7 +180,7 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
     const double rOuterStart  = xmlSection.attr< double > (_Unicode(rMax1));
     const double rOuterEnd    = xmlSection.attr< double > (_Unicode(rMax2));
     const double thickness    = rOuterStart - rInnerStart;
-    Material sectionMat  = lcdd.material(xmlSection.materialStr());
+    Material sectionMat  = theDetector.material(xmlSection.materialStr());
     const std::string volName      = "tube_" + xmlSection.nameStr();
 
     std::cout << std::setw(8) << zStart      /dd4hep::mm
@@ -185,7 +195,7 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
 	      << std::setw(15) << sectionMat.name()  << std::endl;    
 
     if( crossType == ODH::kCenter ) { // store only the central sections !
-      DD4hep::DDRec::ConicalSupportData::Section section ;
+      ConicalSupportData::Section section ;
       section.rInner = rInnerStart ;
       section.rOuter = rOuterStart ;
       section.zPos   = zStart ;
@@ -195,7 +205,7 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
     // things which can be calculated immediately
     const double zHalf       = fabs(zEnd - zStart) * 0.5; // half z length of the cone
     const double zPosition   = fabs(zEnd + zStart) * 0.5; // middle z position
-    Material coreMaterial    = lcdd.material("beam"); // always the same
+    Material coreMaterial    = theDetector.material("beam"); // always the same
     Material wallMaterial    = sectionMat;
 
     // this could mess up your geometry, so better check it
@@ -277,10 +287,10 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
 	  if( rOuterStart < min_radius ) min_radius = rOuterStart ;
 	}
 
-	wallLog.setVisAttributes(lcdd, "TubeVis");
-	wallLog2.setVisAttributes(lcdd, "TubeVis");
-	tubeLog.setVisAttributes(lcdd, "VacVis");
-	tubeLog2.setVisAttributes(lcdd, "VacVis");
+	wallLog.setVisAttributes(theDetector, "TubeVis");
+	wallLog2.setVisAttributes(theDetector, "TubeVis");
+	tubeLog.setVisAttributes(theDetector, "VacVis");
+	tubeLog2.setVisAttributes(theDetector, "VacVis");
 	
 	// placement as a daughter volume of the tube, will appear in both placements of the tube
 	tubeLog.placeVolume( wallLog,  Transform3D() );
@@ -346,10 +356,10 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
       Volume wallLog0( volName + "_wall_0", wallSolid0, wallMaterial );
       Volume wallLog1( volName + "_wall_1", wallSolid1, wallMaterial );
 
-      wallLog0.setVisAttributes(lcdd, "TubeVis");
-      wallLog1.setVisAttributes(lcdd, "TubeVis");
-      tubeLog0.setVisAttributes(lcdd, "VacVis");
-      tubeLog1.setVisAttributes(lcdd, "VacVis");
+      wallLog0.setVisAttributes(theDetector, "TubeVis");
+      wallLog1.setVisAttributes(theDetector, "TubeVis");
+      tubeLog0.setVisAttributes(theDetector, "VacVis");
+      tubeLog1.setVisAttributes(theDetector, "VacVis");
 
       // placement as a daughter volumes of the tube
       tubeLog0.placeVolume( wallLog0, Position() );
@@ -400,11 +410,11 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
       Volume wallLog0( volName + "_wall_0", wallSolid0, wallMaterial );
       Volume wallLog1( volName + "_wall_1", wallSolid1, wallMaterial );
       
-      wallLog0.setVisAttributes(lcdd, "TubeVis");
-      wallLog1.setVisAttributes(lcdd, "TubeVis");
+      wallLog0.setVisAttributes(theDetector, "TubeVis");
+      wallLog1.setVisAttributes(theDetector, "TubeVis");
 
-      tubeLog0.setVisAttributes(lcdd, "VacVis");
-      tubeLog1.setVisAttributes(lcdd, "VacVis");
+      tubeLog0.setVisAttributes(theDetector, "VacVis");
+      tubeLog1.setVisAttributes(theDetector, "VacVis");
       
       // placement as a daughter volumes of the tube
       tubeLog0.placeVolume( wallLog0 , Position() );
@@ -463,11 +473,11 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
 	Volume wallLog0( volName + "_wall_0", wallSolid0, wallMaterial );
 	Volume wallLog1( volName + "_wall_1", wallSolid1, wallMaterial );
 
-	wallLog0.setVisAttributes(lcdd, "TubeVis");
-	wallLog1.setVisAttributes(lcdd, "TubeVis");
+	wallLog0.setVisAttributes(theDetector, "TubeVis");
+	wallLog1.setVisAttributes(theDetector, "TubeVis");
 
-	tubeLog0.setVisAttributes(lcdd, "VacVis");
-	tubeLog1.setVisAttributes(lcdd, "VacVis");
+	tubeLog0.setVisAttributes(theDetector, "VacVis");
+	tubeLog1.setVisAttributes(theDetector, "VacVis");
 
 	// placement as a daughter volumes of the tube
 	tubeLog0.placeVolume( wallLog0, Position() );
@@ -525,11 +535,11 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
 	Volume wallLog0( volName + "_wall_0", wallSolid0, wallMaterial );
 	Volume wallLog1( volName + "_wall_1", wallSolid1, wallMaterial );
 
-	wallLog0.setVisAttributes(lcdd, "TubeVis");
-	wallLog1.setVisAttributes(lcdd, "TubeVis");
+	wallLog0.setVisAttributes(theDetector, "TubeVis");
+	wallLog1.setVisAttributes(theDetector, "TubeVis");
 
-	tubeLog0.setVisAttributes(lcdd, "VacVis");
-	tubeLog1.setVisAttributes(lcdd, "VacVis");
+	tubeLog0.setVisAttributes(theDetector, "VacVis");
+	tubeLog1.setVisAttributes(theDetector, "VacVis");
         
 	// placement as a daughter volumes of the tube
 	tubeLog0.placeVolume( wallLog0, Transform3D() );
@@ -594,11 +604,11 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
 	Volume wallLog0(volName + "_wall_0", wallSolid0, wallMaterial );
 	Volume wallLog1(volName + "_wall_1", wallSolid1, wallMaterial );
 
-	wallLog0.setVisAttributes(lcdd, "TubeVis");
-	wallLog1.setVisAttributes(lcdd, "TubeVis");
+	wallLog0.setVisAttributes(theDetector, "TubeVis");
+	wallLog1.setVisAttributes(theDetector, "TubeVis");
 
-	tubeLog0.setVisAttributes(lcdd, "VacVis");
-	tubeLog1.setVisAttributes(lcdd, "VacVis");
+	tubeLog0.setVisAttributes(theDetector, "VacVis");
+	tubeLog1.setVisAttributes(theDetector, "VacVis");
         
 	// placement as a daughter volumes of the tube
 	tubeLog0.placeVolume( wallLog0, Transform3D() );
@@ -625,11 +635,11 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
   ipCylSurf->setHalfLength(  100*dd4hep::cm ) ; 
   volSurfaceList( tube )->push_back( ipCylSurf ) ;
 
-  tube.addExtension< DD4hep::DDRec::ConicalSupportData >( beampipeData ) ;
+  tube.addExtension< ConicalSupportData >( beampipeData ) ;
 
   //--------------------------------------
   
-  tube.setVisAttributes( lcdd, xmlBeampipe.visStr(), envelope );
+  tube.setVisAttributes( theDetector, xmlBeampipe.visStr(), envelope );
 
   // // tube.setPlacement(pv);
   

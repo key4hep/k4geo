@@ -56,7 +56,7 @@ namespace{
             char* ptr = ::strchr(argv[i],'=');
             if ( ptr )  {
                 std::string name( argv[i] , ptr ) ;
-                value = DD4hep::_toDouble(++ptr);
+                value = dd4hep::_toDouble(++ptr);
                 std::cout << "GenericSurfaceInstallerPlugin: argument[" << i << "] = " << name 
                 << " = " << value << std::endl;
                 if( name=="dimension" ) data.dimension = value ; 
@@ -85,14 +85,14 @@ namespace{
     
     /// Install measurement surfaces
     template <typename UserData> 
-    void Installer<UserData>::install(DetElement component, PlacedVolume pv)   {
+      void Installer<UserData>::install(dd4hep::DetElement component, dd4hep::PlacedVolume pv)   {
         
         
-        Volume comp_vol = pv.volume();
+        dd4hep::Volume comp_vol = pv.volume();
         if ( comp_vol.isSensitive() )  {  
-            Volume mod_vol  = parentVolume(component);
+            dd4hep::Volume mod_vol  = parentVolume(component);
             //FIXME: WHAT IF TRAPEZOID? Should work if trapezoid since it will fit minimal box and dy1=dy2=dy
-            DD4hep::Geometry::Box mod_shape(mod_vol.solid()), comp_shape(comp_vol.solid());
+            dd4hep::Box mod_shape(mod_vol.solid()), comp_shape(comp_vol.solid());
             
             if ( !comp_shape.isValid() || !mod_shape.isValid() )   {
                 invalidInstaller("Components and/or modules are not boxes -- invalid shapes");

@@ -17,11 +17,15 @@
 #include <math.h>
 
 using namespace std;
-using namespace DD4hep;
-using namespace dd4hep ;
-using namespace DD4hep::Geometry;
-using namespace lcgeo ;
-using namespace DDRec ;
+using namespace dd4hep;
+using namespace lcgeo;
+
+using dd4hep::rec::Vector3D;
+using dd4hep::rec::VolCylinder;
+using dd4hep::rec::SurfaceType;
+using dd4hep::rec::volSurfaceList;
+using dd4hep::rec::VolPlane;
+using dd4hep::rec::FixedPadSizeTPCData;
 
 /** Construction of TPC detector, ported from Mokka driver TPC10.cc
  * Mokka History:
@@ -38,7 +42,7 @@ using namespace DDRec ;
  *  @author: F.Gaede, DESY, Nov 2013
  *
  */
-static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
+static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector sens)  {
 
   //------------------------------------------
   //  See comments starting with '//**' for
@@ -54,11 +58,11 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
  // --- create an envelope volume and position it into the world ---------------------
 
-  Volume envelope = XML::createPlacedEnvelope( lcdd,  e , tpc ) ;
+  Volume envelope = dd4hep::xml::createPlacedEnvelope( theDetector,  e , tpc ) ;
 
-  XML::setDetectorTypeFlag( e, tpc ) ;
+  dd4hep::xml::setDetectorTypeFlag( e, tpc ) ;
 
-  if( lcdd.buildType() == BUILD_ENVELOPE ) return tpc ;
+  if( theDetector.buildType() == BUILD_ENVELOPE ) return tpc ;
 
   //-----------------------------------------------------------------------------------
 
@@ -77,9 +81,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   const double phi1 =   0.0 ;
   const double phi2 =  2*M_PI ;
   //  
-  const double dzTotal           = lcdd.constant<double>("TPC_Ecal_Hcal_barrel_halfZ") * 2. ; 
-  const double rInner            = lcdd.constant<double>("TPC_inner_radius") ;
-  const double rOuter            = lcdd.constant<double>("TPC_outer_radius") ;
+  const double dzTotal           = theDetector.constant<double>("TPC_Ecal_Hcal_barrel_halfZ") * 2. ; 
+  const double rInner            = theDetector.constant<double>("TPC_inner_radius") ;
+  const double rOuter            = theDetector.constant<double>("TPC_outer_radius") ;
     
     
   // Geometry parameters from the geometry environment and from the database
@@ -98,7 +102,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   const double dz_Endplate         = db->fetchDouble("dz_Endplate") ;
 
   //    Material* const material_TPC_Gas = CGAGeometryManager::GetMaterial(db->fetchString("chamber_Gas"));
-  Material material_TPC_Gas =  lcdd.material(db->fetchString("chamber_Gas") ) ;
+  Material material_TPC_Gas =  theDetector.material(db->fetchString("chamber_Gas") ) ;
 
   // #ifdef MOKKA_GEAR
   //   _gear_gas_material = material_TPC_Gas; 
@@ -113,18 +117,18 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
   const double dz_Cathode_Insulator   = db->fetchDouble("dz_Cathode_Insulator") ;
   const double dz_Cathode_Conductor   = db->fetchDouble("dz_Cathode_Conductor") ;
-  Material material_Cathode_Insulator = lcdd.material(db->fetchString("material_Cathode_Insulator"));
-  Material material_Cathode_Conductor = lcdd.material(db->fetchString("material_Cathode_Conductor"));
+  Material material_Cathode_Insulator = theDetector.material(db->fetchString("material_Cathode_Insulator"));
+  Material material_Cathode_Conductor = theDetector.material(db->fetchString("material_Cathode_Conductor"));
     
   const double dr_Cathode_Grip = db->fetchDouble("dr_Cathode_Grip") ;
   const double dz_Cathode_Grip = db->fetchDouble("dz_Cathode_Grip") ;
-  Material material_Cathode_Grip = lcdd.material(db->fetchString("material_Cathode_Grip"));
+  Material material_Cathode_Grip = theDetector.material(db->fetchString("material_Cathode_Grip"));
     
   cout << " Cathode Grip Ring Material: " << material_Cathode_Grip->GetName() << " : Rad length = " << material_Cathode_Grip->GetMaterial()->GetRadLen() / mm << " mm." << std::endl;
     
   const double dz_Cathode = 2*(dz_Cathode_Insulator+dz_Cathode_Conductor);
     
-  double tracking_tpc_ecal_gap = lcdd.constant<double>("Ecal_Tpc_gap") ;;
+  double tracking_tpc_ecal_gap = theDetector.constant<double>("Ecal_Tpc_gap") ;;
   double tracking_region_rmax = rOuter + tracking_tpc_ecal_gap - 0.1*mm;  // give 100 micron clearance 
     
   std::stringstream tracking_region_rmax_as_string;
@@ -152,7 +156,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
 
   // Materials to be used
-  Material materialAir     = lcdd.material("G4_AIR");
+  Material materialAir     = theDetector.material("G4_AIR");
 
   // Material mixture for end of endplate zone 
   //  db->exec("SELECT * FROM `endplate_mixture`;");
@@ -166,7 +170,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   // // for(xml_coll_t c( x_det ,_U(endplate_mixture)); c; ++c)  {
   // //   xml_comp_t  x_row( c );
   // //   db = XMLHandlerDB( x_row )  ;
-  // //   Material material = lcdd.material(db->fetchString("material"));
+  // //   Material material = theDetector.material(db->fetchString("material"));
   // //   material_fractions[material]    = db->fetchDouble("percentage") * perCent; // fraction of material mix
   // //   endplate_mixture_total         += material_fractions[material];
   // //   densityTotal                   += material->GetDensity() * material_fractions[material]; 
@@ -182,7 +186,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   // //     endplate_MaterialMix->AddMaterial(it->first, it->second);
   // //   }
   
-Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
+Material endplate_MaterialMix = theDetector.material( "TPC_endplate_mix" ) ;
   
   cout << "Endplate material mix Density   = " << endplate_MaterialMix->GetMaterial()->GetDensity() / g * cm3 << " g/cm3" << endl;
   cout << "Endplate material mix Radlength = " << endplate_MaterialMix->GetMaterial()->GetRadLen() / mm << " mm" << endl;
@@ -218,7 +222,7 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
   Tube tpc_motherSolid(rInner ,rOuter ,dzTotal/2.0 , phi1 , phi1+phi2 ); 
   Volume tpc_motherLog(  "TPCLog", tpc_motherSolid, material_TPC_Gas );
   pv = envelope.placeVolume( tpc_motherLog ) ;
-  tpc.setVisAttributes(lcdd,  "TPCMotherVis" ,  tpc_motherLog ) ;
+  tpc.setVisAttributes(theDetector,  "TPCMotherVis" ,  tpc_motherLog ) ;
 
   // VisAttributes* motherVisAttributes = new VisAttributes(Colour(0.0, 0.5, 0.5)); // dull cyan
   // motherVisAttributes->SetVisibility(false);
@@ -236,7 +240,7 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
   Tube innerWallSolid(rInner ,rInner + dr_InnerWall ,dz_Wall / 2.0 , phi1 ,phi1+phi2 ); 
   Volume innerWallLog( "TPCInnerWallLog", innerWallSolid, materialAir ) ; 
   pv = tpc_motherLog.placeVolume( innerWallLog ) ;
-  tpc.setVisAttributes(lcdd,  "CyanVis" ,  innerWallLog ) ;
+  tpc.setVisAttributes(theDetector,  "CyanVis" ,  innerWallLog ) ;
 
 
   Vector3D ocyl(  rInner + 0.5*dr_InnerWall , 0. , 0. ) ;
@@ -258,7 +262,7 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
     db = XMLHandlerDB( x_row )  ;
 
     const double dr = db->fetchDouble("dr") ;
-    Material layerMaterial = lcdd.material(db->fetchString("material"));    
+    Material layerMaterial = theDetector.material(db->fetchString("material"));    
     Tube  layerSolid( rCursor, rCursor + dr , dz_Wall / 2.0, phi1, phi1+phi2);
     Volume layerLog( _toString( layerCounter ,"TPCInnerWallLayerLog_%02d") , layerSolid, layerMaterial );
     
@@ -297,7 +301,7 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
   Tube outerWallSolid( rOuter - dr_OuterWall ,rOuter ,dz_Wall / 2.0 ,phi1 , phi1+phi2) ;
   Volume outerWallLog( "TPCOuterWallLog" , outerWallSolid, materialAir);
   pv = tpc_motherLog.placeVolume( outerWallLog ) ;
-  tpc.setVisAttributes(lcdd,  "CyanVis" ,  outerWallLog );
+  tpc.setVisAttributes(theDetector,  "CyanVis" ,  outerWallLog );
 
   ocyl.fill(   rOuter - 0.5*dr_OuterWall  , 0., 0. ) ;
   VolCylinder surfO( outerWallLog , SurfaceType( SurfaceType::Helper ) ,0.5*dr_OuterWall  , 0.5*dr_OuterWall , ocyl ) ;
@@ -316,7 +320,7 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
     db = XMLHandlerDB( x_row )  ;
     
     const double dr = db->fetchDouble("dr") ;
-    Material layerMaterial = lcdd.material(db->fetchString("material"));    
+    Material layerMaterial = theDetector.material(db->fetchString("material"));    
     Tube  layerSolid( rCursor, rCursor + dr , dz_Wall / 2.0, phi1, phi1+phi2 );
     Volume layerLog(  _toString( layerCounter ,"TPCOuterWallLayerLog_%02d") , layerSolid, layerMaterial );
     //    layerLog->SetVisAttributes(VisAttributes::Invisible);
@@ -353,13 +357,13 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
   Tube cathodeInnerGripSolid( rMin_GasVolume , rMin_GasVolume + dr_Cathode_Grip, dz_Cathode_Grip / 2.0 , phi1, phi2);
   Volume cathodeInnerGripLog( "TPCCathodeInnerGripLog", cathodeInnerGripSolid, material_Cathode_Grip );
   pv = tpc_motherLog.placeVolume( cathodeInnerGripLog ) ;
-  tpc.setVisAttributes(lcdd,  "GrayVis" ,  cathodeInnerGripLog );
+  tpc.setVisAttributes(theDetector,  "GrayVis" ,  cathodeInnerGripLog );
   
   // outer grip ring
   Tube cathodeOuterGripSolid( rMax_GasVolume - dr_Cathode_Grip, rMax_GasVolume, dz_Cathode_Grip / 2.0 , phi1, phi2);
   Volume cathodeOuterGripLog("TPCCathodeOuterGripLog", cathodeOuterGripSolid, material_Cathode_Grip );
   pv = tpc_motherLog.placeVolume(cathodeOuterGripLog ) ;
-  tpc.setVisAttributes(lcdd,  "GrayVis" ,  cathodeOuterGripLog );
+  tpc.setVisAttributes(theDetector,  "GrayVis" ,  cathodeOuterGripLog );
 
   //-----------------------------------------------------------------------------------------------//  
 
@@ -367,7 +371,7 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
   Tube cathodeSolid(  rMin_Sensitive, rMax_Sensitive, dz_Cathode / 2.0, phi1, phi2);
   Volume cathodeLog( "TPCCathodeLog", cathodeSolid, materialAir ) ;
   pv = tpc_motherLog.placeVolume( cathodeLog );
-  tpc.setVisAttributes(lcdd,  "GrayVis" ,  cathodeLog );
+  tpc.setVisAttributes(theDetector,  "GrayVis" ,  cathodeLog );
 
   // insulator 
   Tube cathodeInsulatorSolid( rMin_Sensitive, rMax_Sensitive, (dz_Cathode_Insulator / 2.0)-0.00000001*mm, phi1, phi2);
@@ -377,7 +381,7 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
   pv = cathodeLog.placeVolume( cathodeInsulatorLog , Position( 0.0, 0.0, + dz_Cathode_Insulator / 2.0) );
   pv = cathodeLog.placeVolume( cathodeInsulatorLog , Position( 0.0, 0.0, - dz_Cathode_Insulator / 2.0) );
 
-  tpc.setVisAttributes(lcdd,  "GrayVis" ,  outerWallLog );
+  tpc.setVisAttributes(theDetector,  "GrayVis" ,  outerWallLog );
 
   cout << "Cathode dz = " <<  dz_Cathode_Insulator << endl; 
   cout << "Place cathode +z at " <<  dz_Cathode_Insulator / 2.0 << endl; 
@@ -424,8 +428,8 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
   sensGasDEbwd.setPlacement( pv ) ;
   
 
-  //debug:  tpc.setVisAttributes(lcdd,  "RedVis" ,  sensitiveGasLog) ;
-  tpc.setVisAttributes(lcdd,  "Invisible" ,  sensitiveGasLog) ;
+  //debug:  tpc.setVisAttributes(theDetector,  "RedVis" ,  sensitiveGasLog) ;
+  tpc.setVisAttributes(theDetector,  "Invisible" ,  sensitiveGasLog) ;
 
   //---------------------------------------------------- Pad row doublets -------------------------------------------------------------------------------//
 
@@ -447,8 +451,8 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
     Volume lowerlayerLog( _toString( layer ,"TPC_lowerlayer_log_%02d") ,lowerlayerSolid, material_TPC_Gas );
     Volume upperlayerLog( _toString( layer ,"TPC_upperlayer_log_%02d") ,upperlayerSolid, material_TPC_Gas );
 
-    tpc.setVisAttributes(lcdd,  "Invisible" ,  lowerlayerLog) ;
-    tpc.setVisAttributes(lcdd,  "Invisible" ,  upperlayerLog) ;
+    tpc.setVisAttributes(theDetector,  "Invisible" ,  lowerlayerLog) ;
+    tpc.setVisAttributes(theDetector,  "Invisible" ,  upperlayerLog) ;
     
 
     DetElement   layerDEfwd( sensGasDEfwd ,   _toString( layer, "tpc_row_fwd_%03d") , x_det.id() );
@@ -488,7 +492,7 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
 
     Volume layerLog( _toString( layer ,"TPC_layer_log_%02d") , layerSolid, material_TPC_Gas );
 
-    tpc.setVisAttributes(lcdd,  "Invisible" ,  layerLog) ;
+    tpc.setVisAttributes(theDetector,  "Invisible" ,  layerLog) ;
     
     DetElement   layerDEfwd( sensGasDEfwd ,   _toString( layer, "tpc_row_fwd_%03d") , x_det.id() );
     DetElement   layerDEbwd( sensGasDEbwd ,   _toString( layer, "tpc_row_bwd_%03d") , x_det.id() );
@@ -514,7 +518,7 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
   // Assembly of the TPC Readout
   Tube readoutSolid( rMin_GasVolume, rMax_GasVolume, dz_Readout / 2.0, phi1, phi2);
   Volume readoutLog( "TPCReadoutLog", readoutSolid, material_TPC_Gas );
-  tpc.setVisAttributes(lcdd,  "CyanVis" ,  readoutLog );
+  tpc.setVisAttributes(theDetector,  "CyanVis" ,  readoutLog );
 
 
   pv = tpc_motherLog.placeVolume( readoutLog , Transform3D( RotationY( 0.) , Position(0, 0, +( (dz_GasVolume - (dz_Readout/2.0) ) ))) ) ;
@@ -534,7 +538,7 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
     db = XMLHandlerDB( x_row )  ;
 
     const double dzPiece = db->fetchDouble("dz") ;
-    Material pieceMaterial = lcdd.material( db->fetchString("material") );
+    Material pieceMaterial = theDetector.material( db->fetchString("material") );
     
     Tube pieceSolid(  rMin_GasVolume, rMax_GasVolume, dzPiece / 2, phi1, phi2);
     //fixme namestring
@@ -558,7 +562,7 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
   
   Tube endplateSolid( rInner, rOuter, dz_Endplate / 2.0, phi1, phi2);
   Volume endplateLog( "TPCEndplateLog",endplateSolid, endplate_MaterialMix );
-  tpc.setVisAttributes(lcdd,  "CyanVis" ,  endplateLog );
+  tpc.setVisAttributes(theDetector,  "CyanVis" ,  endplateLog );
  
   // add a plane to the endcap volume 
   // note: u and v are exchanged: normal is along z ...      
@@ -628,11 +632,11 @@ Material endplate_MaterialMix = lcdd.material( "TPC_endplate_mix" ) ;
   
   //--------------------------------------
   
-  // Volume mother =  lcdd.pickMotherVolume( tpc ) ;
+  // Volume mother =  theDetector.pickMotherVolume( tpc ) ;
   // pv = mother.placeVolume(envelope);
   // pv.addPhysVolID( "system", x_det.id() ) ; //.addPhysVolID("side", 0 ) ;
   
-  tpc.setVisAttributes( lcdd, x_det.visStr(), envelope );
+  tpc.setVisAttributes( theDetector, x_det.visStr(), envelope );
   //  if( tpc.isValid() ) 
   // tpc.setPlacement(pv);
   

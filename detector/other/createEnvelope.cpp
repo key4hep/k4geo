@@ -9,10 +9,20 @@
 #include "DD4hep/DetFactoryHelper.h"
 
 using namespace std;
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
 
-static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
+using dd4hep::Box;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::Position;
+using dd4hep::Ref_t;
+using dd4hep::RotationZYX;
+using dd4hep::SensitiveDetector;
+using dd4hep::Transform3D;
+using dd4hep::Volume;
+
+static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector /*sens*/)  {
 
   xml_det_t     x_det     = e;
 
@@ -21,7 +31,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
 
   xml_comp_t    x_dim     = x_det.dimensions();
 
-  Material      env_mat   = lcdd.material(x_dim.materialStr());
+  Material      env_mat   = theDetector.material(x_dim.materialStr());
 
   xml_comp_t    env_pos     = x_det.position();
   xml_comp_t    env_rot     = x_det.rotation();
@@ -32,7 +42,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
   Transform3D   tr(rotZYX,pos);
 
   DetElement    sdet      (det_name,det_id);
-  Volume        motherVol = lcdd.pickMotherVolume(sdet);
+  Volume        motherVol = theDetector.pickMotherVolume(sdet);
 
   // https://root.cern.ch/root/html/TGeoShape.html
   // TNamed <- TGeoShape <- TGeoBBox <- TGeoCompositeShape
@@ -45,7 +55,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/)  {
   PlacedVolume  env_phv   =  motherVol.placeVolume(envelope,tr);
   sdet.setPlacement( env_phv ) ;
 
-  envelope.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+  envelope.setAttributes(theDetector,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
   return sdet;
 }
 

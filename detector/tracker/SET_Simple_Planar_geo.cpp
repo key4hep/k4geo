@@ -16,10 +16,7 @@
 //#include "GearWrapper.h"
 
 using namespace std;
-using namespace DD4hep;
-//using namespace dd4hep ;
-using namespace DD4hep::Geometry;
-using namespace DDRec ;
+using namespace dd4hep::rec;
 
 /** helper struct */
 struct SET_Layer {
@@ -54,7 +51,7 @@ struct extended_reconstruction_parameters {
  *
  *  @author: F.Gaede, DESY, Jan 2014
  */
-static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
+static dd4hep::Ref_t create_element(dd4hep::Detector& theDetector, xml_h e, dd4hep::SensitiveDetector sens)  {
 
   //------------------------------------------
   //  See comments starting with '//**' for
@@ -65,15 +62,15 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   xml_det_t    x_det = e;
   string       name  = x_det.nameStr();
 
-  DetElement   set(  name, x_det.id()  ) ;
+  dd4hep::DetElement   set(  name, x_det.id()  ) ;
   
   // --- create an envelope volume and position it into the world ---------------------
   
-  Volume envelope = XML::createPlacedEnvelope( lcdd,  e , set ) ;
+  dd4hep::Volume envelope = dd4hep::xml::createPlacedEnvelope( theDetector,  e , set ) ;
   
-  XML::setDetectorTypeFlag( e, set ) ;
+  dd4hep::xml::setDetectorTypeFlag( e, set ) ;
 
-  if( lcdd.buildType() == BUILD_ENVELOPE ) return set ;
+  if( theDetector.buildType() == dd4hep::BUILD_ENVELOPE ) return set ;
   
   //-----------------------------------------------------------------------------------
 
@@ -84,7 +81,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   sens.setType("tracker");
 
   
-  DDRec::ZPlanarData*  zPlanarData = new ZPlanarData ;
+  dd4hep::rec::ZPlanarData*  zPlanarData = new ZPlanarData ;
 
   //######################################################################################################################################################################
   //  code ported from SET_Simple_Planar::construct() :
@@ -120,9 +117,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   
   // _e_r_p.sensor_length_mm  =sensor_length;
 
-  Material air = lcdd.air()  ;
-  Material sensitiveMat = lcdd.material(db->fetchString("sensitive_mat"));  
-  Material supportMat   = lcdd.material(db->fetchString("support_mat"));  
+  dd4hep::Material air = theDetector.air()  ;
+  dd4hep::Material sensitiveMat = theDetector.material(db->fetchString("sensitive_mat"));  
+  dd4hep::Material supportMat   = theDetector.material(db->fetchString("support_mat"));  
   
   
   // // // setup the encoder 
@@ -150,8 +147,8 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   // // RegisterSensitiveDetector(_theSETSD);
   
 
-  const double TPC_outer_radius = lcdd.constant<double>("TPC_outer_radius");
-  const double TPC_Ecal_Hcal_barrel_halfZ = lcdd.constant<double>("TPC_Ecal_Hcal_barrel_halfZ");
+  const double TPC_outer_radius = theDetector.constant<double>("TPC_outer_radius");
+  const double TPC_Ecal_Hcal_barrel_halfZ = theDetector.constant<double>("TPC_Ecal_Hcal_barrel_halfZ");
 
   for(xml_coll_t c( x_det ,_U(layer)); c; ++c)  {
     
@@ -177,10 +174,10 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
         
     // create assembly and DetElement for the layer
-    std::string layerName = _toString( layer_id , "layer_%d"  );
-    Assembly layer_assembly( layerName ) ;
-    PlacedVolume pv = envelope.placeVolume( layer_assembly ) ;
-    DetElement layerDE( set , layerName  , x_det.id() );
+    std::string layerName = dd4hep::_toString( layer_id , "layer_%d" );
+    dd4hep::Assembly layer_assembly( layerName ) ;
+    dd4hep::PlacedVolume pv = envelope.placeVolume( layer_assembly ) ;
+    dd4hep::DetElement layerDE( set , layerName  , x_det.id() );
     layerDE.setPlacement( pv ) ;
 
 
@@ -216,7 +213,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     //   (*Control::globalModelParameters)["SET2_Half_Length_Z"] = osshalfz.str();
     // }
     
-    DDRec::ZPlanarData::LayerLayout thisLayer ;
+    dd4hep::rec::ZPlanarData::LayerLayout thisLayer ;
     thisLayer.sensorsPerLadder = number_of_sensors_per_half * 2.0 ;
     thisLayer.lengthSensor     = sensor_length ;
     
@@ -275,28 +272,29 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
     // create an enclosing ladder volume that will be placed in the world volume for every ladder
         
-    Box setLadderSolid( (sensitive_thickness +support_thickness ) / 2.0 ,
-			layer_geom.ladder_width / 2.0,
-			layer_geom.half_z);
+    dd4hep::Box setLadderSolid( (sensitive_thickness +support_thickness ) / 2.0 ,
+                                layer_geom.ladder_width / 2.0,
+                                layer_geom.half_z);
 
-    Volume setLadderLogical (_toString( layer_id,"SET_LadderLogical_%02d"), setLadderSolid, air ) ; 
+    dd4hep::Volume setLadderLogical (dd4hep::_toString( layer_id,"SET_LadderLogical_%02d"), setLadderSolid, air ) ; 
         
     // now create an envelope volume to represent the sensitive area, which will be divided up into individual sensors         
         
-    Box setSenEnvelopeSolid( (sensitive_thickness ) / 2.0 ,
-			     layer_geom.ladder_width  / 2.0,
-			     layer_geom.half_z);
+    dd4hep::Box setSenEnvelopeSolid( (sensitive_thickness ) / 2.0 ,
+                                     layer_geom.ladder_width  / 2.0,
+                                     layer_geom.half_z);
     
     //fixme: material ???    Volume setSenEnvelopeLogical( _toString( layer_id,"SET_SenEnvelopeLogical_%02d"), setSenEnvelopeSolid, sensitiveMat )  ;
-    Volume setSenEnvelopeLogical( _toString( layer_id,"SET_SenEnvelopeLogical_%02d"), setSenEnvelopeSolid, air )  ;
+    dd4hep::Volume setSenEnvelopeLogical( dd4hep::_toString( layer_id,"SET_SenEnvelopeLogical_%02d"),
+                                          setSenEnvelopeSolid, air )  ;
     
     // create the sensor volumes and place them in the senstive envelope volume 
     
-    Box setSenSolid( (sensitive_thickness ) / 2.0 ,
-		     layer_geom.ladder_width  / 2.0,
-		     (layer_geom.sensor_length / 2.0 ) - 1.e-06*dd4hep::mm ); // added tolerance to avoid false overlap detection
+    dd4hep::Box setSenSolid( (sensitive_thickness ) / 2.0 ,
+                             layer_geom.ladder_width  / 2.0,
+                             (layer_geom.sensor_length / 2.0 ) - 1.e-06*dd4hep::mm ); // added tolerance to avoid false overlap detection
     
-    Volume setSenLogical(  _toString( layer_id,"SET_SenLogical_%02d"), setSenSolid,sensitiveMat ) ; 
+    dd4hep::Volume setSenLogical( dd4hep:: _toString( layer_id,"SET_SenLogical_%02d"), setSenSolid,sensitiveMat ) ; 
     
     setSenLogical.setSensitiveDetector(sens);
     
@@ -328,7 +326,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     VolPlane surf( setSenLogical , SurfaceType(SurfaceType::Sensitive,SurfaceType::Measurement1D) ,inner_thick, outer_thick , u,v,n ) ; //,o ) ;
  
     // vector of sensor placements - needed for DetElements in ladder loop below
-    std::vector<PlacedVolume> pvV(  layer_geom.n_sensors_per_ladder ) ;
+    std::vector<dd4hep::PlacedVolume> pvV(  layer_geom.n_sensors_per_ladder ) ;
 
   //============================================================
 
@@ -343,7 +341,9 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       double ypos = 0.0;
       double zpos = -layer_geom.half_z + (0.5*layer_geom.sensor_length) + (isensor*layer_geom.sensor_length) ;
       
-      pv = setSenEnvelopeLogical.placeVolume( setSenLogical, Transform3D( RotationY(0.) , Position( xpos, ypos, zpos)  ) );
+      pv = setSenEnvelopeLogical.placeVolume( setSenLogical,
+                                              dd4hep::Transform3D( dd4hep::RotationY(0.) ,
+                                                                   dd4hep::Position( xpos, ypos, zpos)  ) );
       
       pv.addPhysVolID("sensor",  isensor ) ; 
       //fixme: what is the correct numbering convention ?
@@ -351,10 +351,10 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
       pvV[isensor] = pv ;
    }					      
     
-    set.setVisAttributes(lcdd, "SeeThrough",  setLadderLogical ) ;
-    set.setVisAttributes(lcdd, "SeeThrough",  setSenEnvelopeLogical ) ;
+    set.setVisAttributes(theDetector, "SeeThrough",  setLadderLogical ) ;
+    set.setVisAttributes(theDetector, "SeeThrough",  setSenEnvelopeLogical ) ;
 
-    set.setVisAttributes(lcdd, "BlueVis",       setSenLogical ) ;
+    set.setVisAttributes(theDetector, "BlueVis",       setSenLogical ) ;
     
     
     // encoder.reset() ;  // reset to 0
@@ -363,8 +363,10 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     // cellID0 = encoder.lowWord() ;
         
 
-    pv = setLadderLogical.placeVolume( setSenEnvelopeLogical , Transform3D( RotationY( 0.), 
-									   Position( (-(sensitive_thickness +support_thickness ) / 2.0 + ( sensitive_thickness / 2.0) ), 0.,0.) ) );
+    pv = setLadderLogical.placeVolume( setSenEnvelopeLogical ,
+                                       dd4hep::Transform3D( dd4hep::RotationY( 0.), 
+                                                            dd4hep::Position( (-(sensitive_thickness +support_thickness ) / 2.0
+                                                                               + ( sensitive_thickness / 2.0) ), 0.,0.) ) );
     // pv = setSenEnvelopeLogical.placeVolume( setLadderLogical, Transform3D( RotationY( 0.), 
     // 									   Position( (-(sensitive_thickness +support_thickness ) / 2.0 + ( sensitive_thickness / 2.0) ), 0.,0.) ) );
 
@@ -374,30 +376,32 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
     // create support volume which will be placed in the enclosing ladder volume together with the senstive envelope volume
     
-    Box setSupSolid( (support_thickness ) / 2.0 ,
-		     layer_geom.ladder_width / 2.0,
-		     layer_geom.half_z);
+    dd4hep::Box setSupSolid( (support_thickness ) / 2.0 ,
+                             layer_geom.ladder_width / 2.0,
+                             layer_geom.half_z);
     
-    Volume setSupLogical(   _toString( layer_id,"SET_SupLogical_%02d"),  setSupSolid, supportMat ) ;
-    
-    
-    set.setVisAttributes(lcdd, "RedVis",  setSupLogical ) ;
+    dd4hep::Volume setSupLogical( dd4hep::_toString( layer_id,"SET_SupLogical_%02d"),  setSupSolid, supportMat ) ;
     
     
-    pv = setLadderLogical.placeVolume( setSupLogical, Transform3D( RotationY( 0.), 
-								   Position( (-(sensitive_thickness +support_thickness ) / 2.0 +sensitive_thickness + ( support_thickness / 2.0)   ), 0.,0.) ) );
+    set.setVisAttributes(theDetector, "RedVis",  setSupLogical ) ;
+    
+    
+    pv = setLadderLogical.placeVolume( setSupLogical,
+                                       dd4hep::Transform3D( dd4hep::RotationY( 0.), 
+                                                            dd4hep::Position( (-(sensitive_thickness +support_thickness ) / 2.0
+                                                                               +sensitive_thickness + ( support_thickness / 2.0)   ), 0.,0.) ) );
     
     for( int i = 0 ; i < n_ladders ; ++i ){
       
       std::stringstream ladder_enum; ladder_enum << "set_ladder_" << layer_id << "_" << i;
       
-      DetElement   ladderDE( layerDE ,  ladder_enum.str() , x_det.id() );
+      dd4hep::DetElement ladderDE( layerDE ,  ladder_enum.str() , x_det.id() );
 
       for (int isensor=0; isensor < layer_geom.n_sensors_per_ladder ; ++isensor) {
 
 	std::stringstream sensor_ss ;  sensor_ss << ladder_enum.str() << "_" << isensor ;
 	
-	DetElement sensorDE( ladderDE, sensor_ss.str() ,  x_det.id() );
+	dd4hep::DetElement sensorDE( ladderDE, sensor_ss.str() ,  x_det.id() );
 	sensorDE.setPlacement( pvV[isensor] ) ;
 
 	volSurfaceList( sensorDE )->push_back(  surf ) ;
@@ -427,10 +431,11 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 	phi_rot += M_PI ;
       }
 
-      pv = layer_assembly.placeVolume( setLadderLogical, Transform3D( RotationZYX(  phi_rot, 0. , 0. ), 
-								Position( (sensitive_radius+dr) * cos(i * ladder_dphi), 
-									  (sensitive_radius+dr) * sin(i * ladder_dphi), 
-									  0. ) ) ) ;
+      pv = layer_assembly.placeVolume( setLadderLogical,
+                                       dd4hep::Transform3D( dd4hep::RotationZYX(  phi_rot, 0. , 0. ), 
+                                                            dd4hep::Position( (sensitive_radius+dr) * cos(i * ladder_dphi), 
+                                                                              (sensitive_radius+dr) * sin(i * ladder_dphi), 
+                                                                              0. ) ) ) ;
       
       pv.addPhysVolID("layer", layer_id ).addPhysVolID("module", i ) ; 
       //fixme: what is the correct numbering convention ?
@@ -450,7 +455,7 @@ static Ref_t create_element(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   //--------------------------------------
   
   
-  set.setVisAttributes( lcdd, x_det.visStr(), envelope );
+  set.setVisAttributes( theDetector, x_det.visStr(), envelope );
   
   return set;
 }

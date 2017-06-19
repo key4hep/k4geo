@@ -2,10 +2,22 @@
 
 
 using namespace std;
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
 
-static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/) {
+using dd4hep::Ref_t;
+using dd4hep::Detector;
+using dd4hep::SensitiveDetector;
+using dd4hep::PolyhedraRegular;
+using dd4hep::SubtractionSolid;
+using dd4hep::Tube;
+using dd4hep::Position;
+using dd4hep::RotationZYX;
+using dd4hep::DetElement;
+using dd4hep::Volume;
+using dd4hep::Material;
+using dd4hep::Transform3D;
+using dd4hep::PlacedVolume;
+
+static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector /*sens*/) {
     
     xml_det_t Detector = e;
     
@@ -25,7 +37,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/) {
     double phi_offset = Dimensions.phi0_offset();
 
     Volume envelope;
-    Material envelope_material = lcdd.material(Dimensions.materialStr());
+    Material envelope_material = theDetector.material(Dimensions.materialStr());
 
     if(nsides_inner!=0 && nsides_outer!=0){
         if( (nsides_outer-nsides_inner)==0 && phi_offset==0){
@@ -66,12 +78,12 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector /*sens*/) {
 
     
     DetElement sdet (DetectorName,DetectorID);
-    Volume motherVol = lcdd.pickMotherVolume(sdet);
+    Volume motherVol = theDetector.pickMotherVolume(sdet);
 
     PlacedVolume  env_phv = motherVol.placeVolume(envelope,tr);
     sdet.setPlacement( env_phv );
 
-    envelope.setAttributes(lcdd,Detector.regionStr(),Detector.limitsStr(),Detector.visStr());
+    envelope.setAttributes(theDetector,Detector.regionStr(),Detector.limitsStr(),Detector.visStr());
 
     return sdet;
 }

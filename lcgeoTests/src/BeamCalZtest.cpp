@@ -1,4 +1,4 @@
-#include <DD4hep/LCDD.h>
+#include <DD4hep/Detector.h>
 #include <DDRec/DetectorData.h>
 #include "DD4hep/DD4hepUnits.h"
 
@@ -13,12 +13,12 @@ int main (int argc, char **args) {
   }
   std::string compactFile = std::string(args[1]);
 
-  DD4hep::Geometry::LCDD& lcdd = DD4hep::Geometry::LCDD::getInstance();
-  lcdd.fromXML( compactFile );
+  dd4hep::Detector& theDetector = dd4hep::Detector::getInstance();
+  theDetector.fromXML( compactFile );
 
-  const std::string lcddname(lcdd.header().name());
+  const std::string detectorName(theDetector.header().name());
 
-  const std::vector< DD4hep::Geometry::DetElement > &detElements = lcdd.detectors("calorimeter", true);
+  const std::vector< dd4hep::DetElement > &detElements = theDetector.detectors("calorimeter", true);
 
   const std::string beamCalName("BeamCal");
 
@@ -29,7 +29,7 @@ int main (int argc, char **args) {
     std::string detName(detElements.at(i).name());
     if ( detName.compare(beamCalName) == 0 ) {
       foundBeamCal = true;
-      DD4hep::DDRec::LayeredCalorimeterData* bcData = detElements.at(i).extension<DD4hep::DDRec::LayeredCalorimeterData>() ;
+      dd4hep::rec::LayeredCalorimeterData* bcData = detElements.at(i).extension<dd4hep::rec::LayeredCalorimeterData>() ;
       bcalOuterZ = bcData->extent[3];
     }
   }
@@ -37,7 +37,7 @@ int main (int argc, char **args) {
 
   if (foundBeamCal) {
     std::cout << "\n" << beamCalName << " Z_outer = " << bcalOuterZ/dd4hep::mm << " mm\n\n";
-    if ( lcddname.find("ILD") != std::string::npos ) {
+    if ( detectorName.find("ILD") != std::string::npos ) {
 
       if (bcalOuterZ/dd4hep::mm > 3420) {
         std::cout << "ERROR: " << beamCalName << " is too far out in the z-direction.\n";
@@ -48,7 +48,7 @@ int main (int argc, char **args) {
       }
     }
     else {
-      std::cout << "No specific requirements are set on " << beamCalName << " z-position for " << lcddname << "\n\n";
+      std::cout << "No specific requirements are set on " << beamCalName << " z-position for " << detectorName << "\n\n";
     }
   }
   else {

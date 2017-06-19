@@ -14,25 +14,26 @@
 #include <cmath>
 #include <string>
 
-using DD4hep::Geometry::Transform3D;
-using DD4hep::Geometry::Position;
-using DD4hep::Geometry::RotationY;
-using DD4hep::Geometry::RotateY;
-using DD4hep::Geometry::ConeSegment;
-using DD4hep::Geometry::SubtractionSolid;
-using DD4hep::Geometry::Material;
-using DD4hep::Geometry::Volume;
-using DD4hep::Geometry::Solid;
-using DD4hep::Geometry::Tube;
-using DD4hep::Geometry::PlacedVolume;
-using DD4hep::Geometry::Assembly;
+using dd4hep::Assembly;
+using dd4hep::ConeSegment;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::Position;
+using dd4hep::Ref_t;
+using dd4hep::RotateY;
+using dd4hep::RotationY;
+using dd4hep::SensitiveDetector;
+using dd4hep::Solid;
+using dd4hep::SubtractionSolid;
+using dd4hep::Transform3D;
+using dd4hep::Tube;
+using dd4hep::Volume;
 
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
-
-static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
-					      xml_h xmlHandle,
-					      DD4hep::Geometry::SensitiveDetector /*sens*/) {
+static Ref_t create_element(Detector& theDetector,
+                            xml_h xmlHandle,
+                            SensitiveDetector /*sens*/) {
 
   //------------------------------------------
   //  See comments starting with '//**' for
@@ -49,13 +50,13 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
   Assembly envelope( name + "_assembly"  ) ;
   //--------------------------------
 
-  DD4hep::Geometry::DetElement tube(  name, xmlMask.id()  ) ;
+  DetElement tube(  name, xmlMask.id()  ) ;
 
   const double phi1 = 0 ;
   const double phi2 = 360.0*dd4hep::degree;
   
   //Parameters we have to know about
-  DD4hep::XML::Component xmlParameter = xmlMask.child(_Unicode(parameter));
+  dd4hep::xml::Component xmlParameter = xmlMask.child(_Unicode(parameter));
   const double crossingAngle  = xmlParameter.attr< double >(_Unicode(crossingangle))*0.5; //  only half the angle
 
   for(xml_coll_t c( xmlMask ,Unicode("section")); c; ++c) {
@@ -70,7 +71,7 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
     const double rOuterStart  = xmlSection.attr< double > (_Unicode(rMax1));
     const double rOuterEnd    = xmlSection.attr< double > (_Unicode(rMax2));
     const double thickness    = rOuterStart - rInnerStart;
-    Material sectionMat  = lcdd.material(xmlSection.materialStr());
+    Material sectionMat  = theDetector.material(xmlSection.materialStr());
     const std::string volName      = "tube_" + xmlSection.nameStr();
 
     std::cout << std::setw(8) << zStart
@@ -113,7 +114,7 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
         
       // tube consists of vacuum
       Volume tubeLog( volName, tubeSolid, material ) ;
-      tubeLog.setVisAttributes(lcdd, xmlMask.visStr() );
+      tubeLog.setVisAttributes(theDetector, xmlMask.visStr() );
 
       // placement of the tube in the world, both at +z and -z
       envelope.placeVolume( tubeLog,  transformer );
@@ -165,8 +166,8 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
       // tube consists of vacuum (will later have two different daughters)
       Volume tubeLog0( volName + "_0", finalSolid0, material );
       Volume tubeLog1( volName + "_1", finalSolid1, material );
-      tubeLog0.setVisAttributes(lcdd, xmlMask.visStr() );
-      tubeLog1.setVisAttributes(lcdd, xmlMask.visStr() );
+      tubeLog0.setVisAttributes(theDetector, xmlMask.visStr() );
+      tubeLog1.setVisAttributes(theDetector, xmlMask.visStr() );
 
       // placement of the tube in the world, both at +z and -z
       envelope.placeVolume( tubeLog0, placementTransformer );
@@ -204,8 +205,8 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
       // tube consists of vacuum (will later have two different daughters)
       Volume tubeLog0( volName + "_0", finalSolid0, material );
       Volume tubeLog1( volName + "_1", finalSolid1, material );
-      tubeLog0.setVisAttributes(lcdd, xmlMask.visStr() );
-      tubeLog1.setVisAttributes(lcdd, xmlMask.visStr() );
+      tubeLog0.setVisAttributes(theDetector, xmlMask.visStr() );
+      tubeLog1.setVisAttributes(theDetector, xmlMask.visStr() );
 
       // placement of the tube in the world, both at +z and -z
       envelope.placeVolume( tubeLog0, placementTransformer );
@@ -221,11 +222,11 @@ static DD4hep::Geometry::Ref_t create_element(DD4hep::Geometry::LCDD& lcdd,
   }//for all xmlSections
 
   //--------------------------------------
-  Volume mother =  lcdd.pickMotherVolume( tube ) ;
+  Volume mother =  theDetector.pickMotherVolume( tube ) ;
   PlacedVolume pv(mother.placeVolume(envelope));
   pv.addPhysVolID( "system", xmlMask.id() ) ; //.addPhysVolID("side", 0 ) ;
 
-  tube.setVisAttributes( lcdd, xmlMask.visStr(), envelope );
+  tube.setVisAttributes( theDetector, xmlMask.visStr(), envelope );
 
   tube.setPlacement(pv);
   

@@ -13,13 +13,32 @@
 
 
 using namespace std;
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
 
-static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
+using dd4hep::Assembly;
+using dd4hep::BUILD_ENVELOPE;
+using dd4hep::Box;
+using dd4hep::ConeSegment;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::Position;
+using dd4hep::Ref_t;
+using dd4hep::RotationZYX;
+using dd4hep::SensitiveDetector;
+using dd4hep::Torus;
+using dd4hep::Transform3D;
+using dd4hep::Tube;
+using dd4hep::Volume;
+using dd4hep::_toString;
+using dd4hep::ERROR;
+using dd4hep::rec::ZPlanarData;
+
+
+static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens)  {
     typedef vector<PlacedVolume> Placements;
     xml_det_t   x_det     = e;
-    Material    air       = lcdd.air();
+    Material    air       = theDetector.air();
     int         det_id    = x_det.id();
     string      det_name  = x_det.nameStr();
     DetElement  sdet       (det_name,det_id);
@@ -30,13 +49,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     // --- create an envelope volume and position it into the world ---------------------
     
-    Volume envelope = XML::createPlacedEnvelope( lcdd,  e , sdet ) ;
+    Volume envelope = dd4hep::xml::createPlacedEnvelope( theDetector,  e , sdet ) ;
     
-    if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
+    if( theDetector.buildType() == BUILD_ENVELOPE ) return sdet ;
     
     //-----------------------------------------------------------------------------------
     
-    DDRec::ZPlanarData*  zPlanarData = new DDRec::ZPlanarData() ;
+    ZPlanarData*  zPlanarData = new ZPlanarData() ;
     
     
     
@@ -53,14 +72,14 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             throw runtime_error("Logic error in building modules.");
         }
         volumes[m_nam] = m_vol;
-        m_vol.setVisAttributes(lcdd.visAttributes(x_mod.visStr()));
+        m_vol.setVisAttributes(theDetector.visAttributes(x_mod.visStr()));
         for(xml_coll_t ci(x_mod,_U(module_component)); ci; ++ci, ++ncomponents)  {
             xml_comp_t x_comp = ci;
             xml_comp_t x_pos  = x_comp.position(false);
             xml_comp_t x_rot  = x_comp.rotation(false);
             string     c_nam  = _toString(ncomponents,"component%d");
             Box        c_box(x_comp.width()/2,x_comp.length()/2,x_comp.thickness()/2);
-            Volume     c_vol(c_nam,c_box,lcdd.material(x_comp.materialStr()));
+            Volume     c_vol(c_nam,c_box,theDetector.material(x_comp.materialStr()));
             
             if ( x_pos && x_rot ) {
                 Position    c_pos(x_pos.x(0),x_pos.y(0),x_pos.z(0));
@@ -76,9 +95,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             else {
                 pv = m_vol.placeVolume(c_vol);
             }
-            c_vol.setRegion(lcdd, x_comp.regionStr());
-            c_vol.setLimitSet(lcdd, x_comp.limitsStr());
-            c_vol.setVisAttributes(lcdd, x_comp.visStr());
+            c_vol.setRegion(theDetector, x_comp.regionStr());
+            c_vol.setLimitSet(theDetector, x_comp.limitsStr());
+            c_vol.setVisAttributes(theDetector, x_comp.visStr());
             if ( x_comp.isSensitive() ) {
                 pv.addPhysVolID(_U(sensor),sensor_number++);
                 c_vol.setSensitiveDetector(sens);
@@ -118,7 +137,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         double module_z = -z0;
         int module = 1;
         
-        DDRec::ZPlanarData::LayerLayout thisLayer ;
+        ZPlanarData::LayerLayout thisLayer ;
         
         // Loop over the number of modules in phi.
         for (int ii = 0; ii < nphi; ii++)        {
@@ -148,7 +167,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                     ///NOTE WORKS ONLY FOR ONE WAFER
                     if (ii==0 && j==0 && ic==0){
                       
-                      DD4hep::Geometry::Box mod_shape(m_env.solid()), comp_shape(sens_pv.volume().solid());
+                      Box mod_shape(m_env.solid()), comp_shape(sens_pv.volume().solid());
                       
                       const double* trans = comp_elt.placement()->GetMatrix()->GetTranslation();
                       double half_module_thickness = mod_shape->GetDZ();
@@ -198,17 +217,17 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         // Create the PhysicalVolume for the layer.
         pv = envelope.placeVolume(lay_vol); // Place layer in mother
         pv.addPhysVolID("layer", lay_id);       // Set the layer ID.
-        lay_elt.setAttributes(lcdd,lay_vol,x_layer.regionStr(),x_layer.limitsStr(),x_layer.visStr());
+        lay_elt.setAttributes(theDetector,lay_vol,x_layer.regionStr(),x_layer.limitsStr(),x_layer.visStr());
         lay_elt.setPlacement(pv);
         
         zPlanarData->layers.push_back( thisLayer ) ;
         
     }
-    sdet.setAttributes(lcdd,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
-    sdet.addExtension< DDRec::ZPlanarData >( zPlanarData ) ;
+    sdet.setAttributes(theDetector,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+    sdet.addExtension< ZPlanarData >( zPlanarData ) ;
     
-    /*envelope.setVisAttributes(lcdd.invisible());
-     pv = lcdd.pickMotherVolume(sdet).placeVolume(envelope);
+    /*envelope.setVisAttributes(theDetector.invisible());
+     pv = theDetector.pickMotherVolume(sdet).placeVolume(envelope);
      pv.addPhysVolID("system", det_id);      // Set the subdetector system ID.
      pv.addPhysVolID("barrel", 0);           // Flag this as a barrel subdetector.
      sdet.setPlacement(pv);*/

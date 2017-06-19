@@ -1,4 +1,3 @@
-
 //====================================================================
 //  Modified Generic Endcap Driver for the CLIC detector
 //--------------------------------------------------------------------
@@ -16,15 +15,33 @@
 
 
 using namespace std;
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
+
+using dd4hep::BUILD_ENVELOPE;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::Layering;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::PolyhedraRegular;
+using dd4hep::Position;
+using dd4hep::Readout;
+using dd4hep::Ref_t;
+using dd4hep::RotationZYX;
+using dd4hep::Segmentation;
+using dd4hep::SensitiveDetector;
+using dd4hep::SubtractionSolid;
+using dd4hep::Transform3D;
+using dd4hep::Volume;
+using dd4hep::_toString;
+
+using dd4hep::rec::LayeredCalorimeterData;
 
 // workaround for DD4hep v00-14 (and older) 
 #ifndef DD4HEP_VERSION_GE
 #define DD4HEP_VERSION_GE(a,b) 0 
 #endif
 
-static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
+static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens)  {
     xml_det_t   x_det     = e;
     int         det_id    = x_det.id();
     string      det_name  = x_det.nameStr();
@@ -32,15 +49,15 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     // --- create an envelope volume and position it into the world ---------------------
     
-    Volume envelope = XML::createPlacedEnvelope( lcdd,  e , sdet ) ;
-    XML::setDetectorTypeFlag( e, sdet ) ;
+    Volume envelope = dd4hep::xml::createPlacedEnvelope( theDetector,  e , sdet ) ;
+    dd4hep::xml::setDetectorTypeFlag( e, sdet ) ;
     
-    if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
+    if( theDetector.buildType() == BUILD_ENVELOPE ) return sdet ;
     
     //-----------------------------------------------------------------------------------
     
     xml_dim_t   dim       = x_det.dimensions();
-    Material    air       = lcdd.air();
+    Material    air       = theDetector.air();
     int         nsides_inner = dim.nsides_inner();
     int         nsides_outer = dim.nsides_outer();
     double      rmin      = dim.rmin();
@@ -81,8 +98,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     double layerZ   = -totalThickness/2;
     
     //Create caloData object to extend driver with data required for reconstruction
-    DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
-    caloData->layoutType = DDRec::LayeredCalorimeterData::EndcapLayout ;
+    LayeredCalorimeterData* caloData = new LayeredCalorimeterData ;
+    caloData->layoutType = LayeredCalorimeterData::EndcapLayout ;
     caloData->inner_symmetry = nsides_inner;
     caloData->outer_symmetry = nsides_outer; 
     
@@ -106,7 +123,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     caloData->extent[2] = zmin ;
     caloData->extent[3] = zmin + totalThickness;
     
-    endcapVol.setAttributes(lcdd,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+    endcapVol.setAttributes(theDetector,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
     
     for(xml_coll_t c(x_det,_U(layer)); c; ++c)  {
         xml_comp_t       x_layer  = c;
@@ -123,7 +140,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         double sliceZ = -layer_thick/2;
         
         //Create a caloLayer struct for thiss layer type to store copies of in the parent struct
-        DDRec::LayeredCalorimeterData::Layer caloLayer ;
+        LayeredCalorimeterData::Layer caloLayer ;
         caloLayer.cellSize0 = cell_sizeX;
         caloLayer.cellSize1 = cell_sizeY; 
         
@@ -135,10 +152,10 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             xml_comp_t x_slice = s;
             string     slice_name  = _toString(slice_num,"slice%d");
             double     slice_thickness = x_slice.thickness();
-            Material   slice_material   = lcdd.material(x_slice.materialStr());
+            Material   slice_material   = theDetector.material(x_slice.materialStr());
             Volume     slice_vol(slice_name,PolyhedraRegular(nsides_outer,rmin+layer_rcutout,rmax,slice_thickness),slice_material);
             
-            slice_vol.setVisAttributes(lcdd.visAttributes(x_slice.visStr()));
+            slice_vol.setVisAttributes(theDetector.visAttributes(x_slice.visStr()));
             sliceZ += slice_thickness/2;
             layer_vol.placeVolume(slice_vol,Position(0,0,sliceZ));
             
@@ -178,7 +195,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         caloLayer.outer_nInteractionLengths = nInteractionLengths;
         caloLayer.outer_thickness = thickness_sum;
 #endif        
-        layer_vol.setVisAttributes(lcdd.visAttributes(x_layer.visStr()));
+        layer_vol.setVisAttributes(theDetector.visAttributes(x_layer.visStr()));
         
         
         if ( layer_repeat <= 0 ) throw std::runtime_error(x_det.nameStr()+"> Invalid repeat value");
@@ -227,7 +244,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     sdet.add(endcapB);
     
-    sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
+    sdet.addExtension< LayeredCalorimeterData >( caloData ) ;
     
     return sdet;
     

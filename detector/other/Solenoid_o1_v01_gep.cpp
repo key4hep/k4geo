@@ -7,10 +7,33 @@
 
 
 using namespace std;
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
 
-static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
+using dd4hep::Assembly;
+using dd4hep::BUILD_ENVELOPE;
+using dd4hep::Box;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::IntersectionSolid;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::Polycone;
+using dd4hep::Position;
+using dd4hep::Ref_t;
+using dd4hep::RotationZYX;
+using dd4hep::SensitiveDetector;
+using dd4hep::Solid;
+using dd4hep::SubtractionSolid;
+using dd4hep::Torus;
+using dd4hep::Transform3D;
+using dd4hep::Trapezoid;
+using dd4hep::Tube;
+using dd4hep::UnionSolid;
+using dd4hep::Volume;
+using dd4hep::_toString;
+
+using dd4hep::rec::LayeredCalorimeterData;
+
+static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens)  {
     xml_det_t     x_det     = e;
     int           det_id    = x_det.id();
     string        det_name  = x_det.nameStr();
@@ -19,23 +42,23 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     // --- create an envelope volume and position it into the world ---------------------
     
-    Volume envelope = XML::createPlacedEnvelope( lcdd,  e , sdet ) ;
-    XML::setDetectorTypeFlag( e, sdet ) ;
+    Volume envelope = dd4hep::xml::createPlacedEnvelope( theDetector,  e , sdet ) ;
+    dd4hep::xml::setDetectorTypeFlag( e, sdet ) ;
 
-    if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
+    if( theDetector.buildType() == BUILD_ENVELOPE ) return sdet ;
     
     //-----------------------------------------------------------------------------------
     
  
-    Material air = lcdd.air();
+    Material air = theDetector.air();
     PlacedVolume pv;
     int n = 0;
 
     //added code by Thorben Quast for event display
-    DDRec::LayeredCalorimeterData* solenoidData = new DDRec::LayeredCalorimeterData;
+    LayeredCalorimeterData* solenoidData = new LayeredCalorimeterData;
     solenoidData->inner_symmetry = 0;
     solenoidData->outer_symmetry = 0;
-    solenoidData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
+    solenoidData->layoutType = LayeredCalorimeterData::BarrelLayout ;
 
     double inner_radius= std::numeric_limits<double>::max();
     double outer_radius= 0;
@@ -56,13 +79,13 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
 
         for(xml_coll_t j(x_layer,_U(slice)); j; ++j, ++m)  {
             xml_comp_t x_slice = j;
-            Material mat = lcdd.material(x_slice.materialStr());
+            Material mat = theDetector.material(x_slice.materialStr());
             string s_name= l_name+_toString(m,"_slice%d");
             double thickness = x_slice.thickness();
 
             //NN: These probably need to be fixed and ced modified to read the extent, rather than the layer
             //added code by Thorben Quast for event display
-            DDRec::LayeredCalorimeterData::Layer solenoidLayer;
+            LayeredCalorimeterData::Layer solenoidLayer;
             solenoidLayer.distance = r;
 
             solenoidLayer.inner_thickness = thickness/2.;
@@ -81,7 +104,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
                 s_vol.setSensitiveDetector(sens);
             }
             // Set Attributes
-            s_vol.setAttributes(lcdd,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
+            s_vol.setAttributes(theDetector,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
             pv = l_vol.placeVolume(s_vol);
             // Slices have no extra id. Take the ID of the layer!
             pv.addPhysVolID("slice",m);
@@ -98,7 +121,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
             outer_radius = r;
         
         //cout << l_name << " " << rmin << " " << r << " " << z << endl;
-        l_vol.setVisAttributes(lcdd,x_layer.visStr());
+        l_vol.setVisAttributes(theDetector,x_layer.visStr());
         
         pv = envelope.placeVolume(l_vol);
         pv.addPhysVolID("layer",n);
@@ -115,7 +138,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     solenoidData->extent[3] = detZ;
     
     //added code by Thorben Quast for event display
-    sdet.addExtension< DDRec::LayeredCalorimeterData >( solenoidData ) ;
+    sdet.addExtension< LayeredCalorimeterData >( solenoidData ) ;
 
 
     return sdet;

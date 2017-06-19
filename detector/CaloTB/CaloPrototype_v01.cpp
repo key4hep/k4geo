@@ -15,9 +15,20 @@
 #include <vector>
 
 using namespace std;
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
-using namespace lcgeo ;
+
+using dd4hep::BUILD_ENVELOPE;
+using dd4hep::Box;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::Layer;
+using dd4hep::Layering;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::Position;
+using dd4hep::Ref_t;
+using dd4hep::SensitiveDetector;
+using dd4hep::Volume;
+using dd4hep::_toString;
 
 // workaround for DD4hep v00-14 (and older) 
 #ifndef DD4HEP_VERSION_GE
@@ -25,7 +36,7 @@ using namespace lcgeo ;
 #endif
 
 
-static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens)  {
+static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDetector sens)  {
 
   xml_det_t   x_det       = element;
   string      det_name    = x_det.nameStr();
@@ -36,15 +47,15 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
   // --- create an envelope volume and position it into the world ---------------------
   
-  Volume envelope = XML::createPlacedEnvelope( lcdd,  element , sdet ) ;
+  Volume envelope = dd4hep::xml::createPlacedEnvelope( theDetector,  element , sdet ) ;
   
-  XML::setDetectorTypeFlag( element, sdet ) ;
+  dd4hep::xml::setDetectorTypeFlag( element, sdet ) ;
   
-  if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
+  if( theDetector.buildType() == BUILD_ENVELOPE ) return sdet ;
 
   //-----------------------------------------------------------------------------------
 
-  Material      air               = lcdd.air();
+  Material      air               = theDetector.air();
 
   sens.setType("calorimeter");
 
@@ -59,7 +70,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
   double      Calo_dim_y          = dim.y();
   double      Calo_dim_z          = dim.z();
 
-  printout( DD4hep::DEBUG,  "building SamplingCaloBoxPrototype_v01",
+  printout( dd4hep::DEBUG,  "building SamplingCaloBoxPrototype_v01",
 	    "Calo_dim_x : %e    Calo_dim_y: %e    Calo_dim_z: %e ",
   	    Calo_dim_x, Calo_dim_y, Calo_dim_z) ;
 
@@ -110,7 +121,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
                 xml_comp_t x_slice = k;
                 string slice_name = _toString(slice_number, "slice%d");
                 double slice_thickness = x_slice.thickness();
-                Material slice_material = lcdd.material(x_slice.materialStr());
+                Material slice_material = theDetector.material(x_slice.materialStr());
                 DetElement slice(layer, slice_name, slice_number);
 
                 slice_pos_z += slice_thickness / 2;
@@ -125,7 +136,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
 
                 
                 // Set region, limitset, and vis.
-                slice_vol.setAttributes(lcdd, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+                slice_vol.setAttributes(theDetector, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
                 // slice PlacedVolume
                 PlacedVolume slice_phv = layer_vol.placeVolume(slice_vol, Position(0, 0, slice_pos_z));
                 slice_phv.addPhysVolID("slice", slice_number);
@@ -139,7 +150,7 @@ static Ref_t create_detector(LCDD& lcdd, xml_h element, SensitiveDetector sens) 
             
             
             // Set region, limitset, and vis.
-            layer_vol.setAttributes(lcdd, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
+            layer_vol.setAttributes(theDetector, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
            
             // Layer position in Z within the stave.
             layer_pos_z += layer_thickness / 2;

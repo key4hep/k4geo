@@ -5,10 +5,10 @@
 #include "G4VProcess.hh"
 
 /// Namespace for the AIDA detector description toolkit
-namespace DD4hep {
+namespace dd4hep {
   
   /// Namespace for the Geant4 based simulation part of the AIDA detector description toolkit
-  namespace Simulation   {
+  namespace sim   {
     
     /**
      *  Geant4SensitiveAction<TPCSdData> sensitive detector for the special case of 
@@ -116,7 +116,7 @@ namespace DD4hep {
 
 	Readout readout   = sensitive->sensitiveDetector().readout();
 
-	Geometry::Segmentation segmentation = readout.segmentation();
+	Segmentation segmentation = readout.segmentation();
 	
 	if ( segmentation.isValid() )  {
 
@@ -516,8 +516,6 @@ namespace DD4hep {
   }
 }
 
-
-using namespace DD4hep::Simulation;
 
 #include "DDG4/Factories.h"
 DECLARE_GEANT4SENSITIVE( TPCSDAction )

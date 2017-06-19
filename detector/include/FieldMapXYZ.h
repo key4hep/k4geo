@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-class FieldMapXYZ: public DD4hep::Geometry::CartesianField::Object {
+class FieldMapXYZ: public dd4hep::CartesianField::Object {
 public:
 
   struct FieldValues_t {

@@ -12,20 +12,36 @@
 #include "XML/Utilities.h"
 
 using namespace std;
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
 
-static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
+using dd4hep::Assembly;
+using dd4hep::BUILD_ENVELOPE;
+using dd4hep::Box;
+using dd4hep::ConeSegment;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::Position;
+using dd4hep::Ref_t;
+using dd4hep::RotationZYX;
+using dd4hep::SensitiveDetector;
+using dd4hep::Trapezoid;
+using dd4hep::Transform3D;
+using dd4hep::Tube;
+using dd4hep::Volume;
+using dd4hep::_toString;
+
+static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens)  {
     typedef vector<PlacedVolume> Placements;
     xml_det_t   x_det     = e;
-    Material    vacuum    = lcdd.vacuum();
+    Material    vacuum    = theDetector.vacuum();
     int         det_id    = x_det.id();
     string      det_name  = x_det.nameStr();
     bool        reflect   = x_det.reflect(false);
     DetElement  sdet        (det_name,det_id);
     // Assembly    envelope    (det_name);
     //Volume      envelope    (det_name,Box(10000,10000,10000),vacuum);
-    //unused: Volume      motherVol = lcdd.pickMotherVolume(sdet);
+    //unused: Volume      motherVol = theDetector.pickMotherVolume(sdet);
     int         m_id=0, c_id=0, n_sensor=0;
     map<string,Volume> modules;
     map<string, Placements>  sensitives;
@@ -33,15 +49,15 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
     
     // --- create an envelope volume and position it into the world ---------------------
     
-    Volume envelope = XML::createPlacedEnvelope( lcdd,  e , sdet ) ;
-    XML::setDetectorTypeFlag( e, sdet ) ;
+    Volume envelope = dd4hep::xml::createPlacedEnvelope( theDetector,  e , sdet ) ;
+    dd4hep::xml::setDetectorTypeFlag( e, sdet ) ;
   
-    if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
+    if( theDetector.buildType() == BUILD_ENVELOPE ) return sdet ;
     
     //-----------------------------------------------------------------------------------
     
     
-    envelope.setVisAttributes(lcdd.invisible());
+    envelope.setVisAttributes(theDetector.invisible());
     sens.setType("tracker");
     
     for(xml_coll_t mi(x_det,_U(module)); mi; ++mi, ++m_id)  {
@@ -59,16 +75,16 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
         
         y1 = y2 = total_thickness / 2;
         Volume  m_volume(m_nam, Trapezoid(x1, x2, y1, y2, z), vacuum);
-        m_volume.setVisAttributes(lcdd.visAttributes(x_mod.visStr()));
+        m_volume.setVisAttributes(theDetector.visAttributes(x_mod.visStr()));
         
         for(ci.reset(), n_sensor=1, c_id=0, posY=-y1; ci; ++ci, ++c_id)  {
             xml_comp_t c       = ci;
             double     c_thick = c.thickness();
-            Material   c_mat   = lcdd.material(c.materialStr());
+            Material   c_mat   = theDetector.material(c.materialStr());
             string     c_name  = _toString(c_id,"component%d");
             Volume     c_vol(c_name, Trapezoid(x1,x2,c_thick/2e0,c_thick/2e0,z), c_mat);
             
-            c_vol.setVisAttributes(lcdd.visAttributes(c.visStr()));
+            c_vol.setVisAttributes(theDetector.visAttributes(c.visStr()));
             pv = m_volume.placeVolume(c_vol,Position(0,posY+c_thick/2,0));
             if ( c.isSensitive() ) {
                 sdet.check(n_sensor > 2,"SiTrackerEndcap2::fromCompact: "+c_name+" Max of 2 modules allowed!");

@@ -13,8 +13,29 @@
 #include "DDSegmentation/Segmentation.h"
 
 using namespace std;
-using namespace DD4hep;
-using namespace DD4hep::Geometry;
+
+using dd4hep::BUILD_ENVELOPE;
+using dd4hep::Box;
+using dd4hep::DetElement;
+using dd4hep::Detector;
+using dd4hep::Layer;
+using dd4hep::Layering;
+using dd4hep::Material;
+using dd4hep::PlacedVolume;
+using dd4hep::PolyhedraRegular;
+using dd4hep::Position;
+using dd4hep::Readout;
+using dd4hep::Ref_t;
+using dd4hep::RotationZYX;
+using dd4hep::Segmentation;
+using dd4hep::SensitiveDetector;
+using dd4hep::Transform3D;
+using dd4hep::Translation3D;
+using dd4hep::Trapezoid;
+using dd4hep::Volume;
+using dd4hep::_toString;
+
+using dd4hep::rec::LayeredCalorimeterData;
 
 static void placeStaves(DetElement& parent, DetElement& stave, double rmin, int numsides, double total_thickness,
 			Volume envelopeVolume, double innerAngle, Volume sectVolume) {
@@ -40,14 +61,14 @@ static void placeStaves(DetElement& parent, DetElement& stave, double rmin, int 
   }
 }
 
-static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens) {
+static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens) {
   xml_det_t x_det = e;
   Layering layering(x_det);
   xml_comp_t staves = x_det.staves();
   xml_dim_t dim = x_det.dimensions();
   string det_name = x_det.nameStr();
   string det_type = x_det.typeStr();
-  Material air = lcdd.air();
+  Material air = theDetector.air();
   double totalThickness = layering.totalThickness();
   int totalRepeat = 0;
   int totalSlices = 0;
@@ -63,11 +84,11 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens) {
   std::vector<double> cellSizeVector = seg.segmentation()->cellDimensions(0); //Assume uniform cell sizes, provide dummy cellID
   double cell_sizeX      = cellSizeVector[0];
   double cell_sizeY      = cellSizeVector[1];  
-//  Volume motherVol = lcdd.pickMotherVolume(sdet);
+//  Volume motherVol = theDetector.pickMotherVolume(sdet);
 
   //Create caloData object to extend driver with data required for reconstruction
-  DDRec::LayeredCalorimeterData* caloData = new DDRec::LayeredCalorimeterData ;
-  caloData->layoutType = DDRec::LayeredCalorimeterData::BarrelLayout ;
+  LayeredCalorimeterData* caloData = new LayeredCalorimeterData ;
+  caloData->layoutType = LayeredCalorimeterData::BarrelLayout ;
   caloData->inner_symmetry = numSides;
   caloData->outer_symmetry = numSides; 
   caloData->phi0=0; //NOTE: DEPRECATED! USE INNER AND OUTER PHI0
@@ -87,9 +108,9 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens) {
 
  // --- create an envelope volume and position it into the world ---------------------
 
-  Volume envelopeVol = XML::createPlacedEnvelope( lcdd,  e , sdet ) ;
+  Volume envelopeVol = dd4hep::xml::createPlacedEnvelope( theDetector,  e , sdet ) ;
 
-  if( lcdd.buildType() == BUILD_ENVELOPE ) return sdet ;
+  if( theDetector.buildType() == BUILD_ENVELOPE ) return sdet ;
 
   //-----------------------------------------------------------------------------------
 
@@ -138,7 +159,7 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
       DetElement layer(stave, layer_name, layer_num);
       //### layeringExtension->setLayer(layer_num, layer, layerNormal);
 
-      DDRec::LayeredCalorimeterData::Layer caloLayer ;
+      LayeredCalorimeterData::Layer caloLayer ;
       
       // Layer position in Z within the stave.
       layer_pos_z += layer_thickness / 2;
@@ -154,7 +175,7 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
         xml_comp_t x_slice = k;
         string slice_name = _toString(slice_number, "slice%d");
         double slice_thickness = x_slice.thickness();
-        Material slice_material = lcdd.material(x_slice.materialStr());
+        Material slice_material = theDetector.material(x_slice.materialStr());
         DetElement slice(layer, slice_name, slice_number);
 
         slice_pos_z += slice_thickness / 2;
@@ -166,7 +187,7 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
         
 
         // Set region, limitset, and vis.
-        slice_vol.setAttributes(lcdd, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+        slice_vol.setAttributes(theDetector, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
         // slice PlacedVolume
         PlacedVolume slice_phv = layer_vol.placeVolume(slice_vol, Position(0, 0, slice_pos_z));
         slice.setPlacement(slice_phv);
@@ -185,7 +206,7 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
         ++slice_number;
       }
       // Set region, limitset, and vis.
-      layer_vol.setAttributes(lcdd, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
+      layer_vol.setAttributes(theDetector, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
 
       // Layer physical volume.
       PlacedVolume layer_phv = staveInnerVol.placeVolume(layer_vol, Position(0, 0, layer_pos_z));
@@ -215,17 +236,17 @@ std::cout<<"!!!!!!!!!!"<<std::setprecision(16)<<rmin + totalThickness<<std::endl
   staveOuterVol.placeVolume(staveInnerVol);
   if ( staves )  {
     // Set the vis attributes of the outer stave section.
-    stave.setVisAttributes(lcdd, staves.visStr(), staveInnerVol);
-    stave.setVisAttributes(lcdd, staves.visStr(), staveOuterVol);
+    stave.setVisAttributes(theDetector, staves.visStr(), staveInnerVol);
+    stave.setVisAttributes(theDetector, staves.visStr(), staveOuterVol);
   }
   // Place the staves.
   placeStaves(sdet, stave, rmin, numSides, totalThickness, envelopeVol, innerAngle, staveOuterVol);
   // Set envelope volume attributes.
-  envelopeVol.setAttributes(lcdd, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
+  envelopeVol.setAttributes(theDetector, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
 
 
 
-  sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
+  sdet.addExtension< LayeredCalorimeterData >( caloData ) ;
   
   
   return sdet;
