@@ -54,8 +54,8 @@ class SimpleCylinderImpl : public  VolCylinderImpl{
   double _half_length ;
 public:
   /// standard c'tor with all necessary arguments - origin is (0,0,0) if not given.
-  SimpleCylinderImpl( Volume vol, DDSurfaces::SurfaceType type, 
-		      double thickness_inner ,double thickness_outer,  DDSurfaces::Vector3D origin ) :
+  SimpleCylinderImpl( Volume vol, dd4hep::rec::SurfaceType type, 
+		      double thickness_inner ,double thickness_outer,  dd4hep::rec::Vector3D origin ) :
     VolCylinderImpl( vol,  type, thickness_inner, thickness_outer,   origin ),
     _half_length(0){
   }
@@ -65,13 +65,13 @@ public:
   void setID( dd4hep::long64 id ) { _id = id ; 
   }
   // overwrite to include points inside the inner radius of the barrel 
-  bool insideBounds(const DDSurfaces::Vector3D& point, double epsilon) const {
+  bool insideBounds(const dd4hep::rec::Vector3D& point, double epsilon) const {
     return ( std::abs( point.rho() - origin().rho() ) < epsilon && std::abs( point.z() ) < _half_length ) ; 
   }
   
-  virtual std::vector< std::pair<DDSurfaces::Vector3D, DDSurfaces::Vector3D> > getLines(unsigned nMax=100){
+  virtual std::vector< std::pair<dd4hep::rec::Vector3D, dd4hep::rec::Vector3D> > getLines(unsigned nMax=100){
     
-    std::vector< std::pair<DDSurfaces::Vector3D, DDSurfaces::Vector3D> >  lines ;
+    std::vector< std::pair<dd4hep::rec::Vector3D, dd4hep::rec::Vector3D> >  lines ;
     
     lines.reserve( nMax ) ;
     
