@@ -353,9 +353,9 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
     caloData->extent[3] = Ecal_Barrel_halfZ ;
 
     // // base vectors for surfaces:
-    // DDSurfaces::Vector3D u(1,0,0) ;
-    // DDSurfaces::Vector3D v(0,1,0) ;
-    // DDSurfaces::Vector3D n(0,0,1) ;
+    // dd4hep::rec::Vector3D u(1,0,0) ;
+    // dd4hep::rec::Vector3D v(0,1,0) ;
+    // dd4hep::rec::Vector3D n(0,0,1) ;
 
 
     //-------------------- start loop over ECAL layers ----------------------
