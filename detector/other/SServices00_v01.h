@@ -31,7 +31,6 @@
 #include <map>
 #include <string>
 
-using namespace std;
 
 class SServices00_v01
 {
@@ -111,7 +110,7 @@ private:
 		  dd4hep::Assembly &envelope,
 		  dd4hep::Detector &theDetector);
 
-   string FTD_db_name;
+   std::string FTD_db_name;
    double TPC_inner_radius;
    double Sit_cables_cylinder_thickness;
    double TUBE_IPOuterBulge_end_z;

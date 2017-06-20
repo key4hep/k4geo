@@ -202,9 +202,9 @@ void SServices00_v01::BuildSitCables(PlacedVolume &pVol,
   rOuter[0] = FTD2_outer_radius + FTD2_cone_thickness;
   rOuter[1] = FTD3_outer_radius + FTD3_cone_thickness;
 
-  vector<double> rmin;
-  vector<double> rmax;
-  vector<double> z;
+  std::vector<double> rmin;
+  std::vector<double> rmax;
+  std::vector<double> z;
   for(int i=0;i<=1;i++) {
     rmin.push_back(rInner[i]);
     rmax.push_back(rOuter[i]);

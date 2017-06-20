@@ -3,8 +3,7 @@
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/DD4hepUnits.h"
- 
-using namespace std;
+
 
 //=====================================
 // class for  BuildTPCEndplateServices
@@ -22,12 +21,12 @@ public:
   void setMaterial (dd4hep::Material copper4cooling) {cooling_Material = copper4cooling;};
   void sethalfZ (double TPC_Ecal_Hcal_barrel_halfZ){TPC_barrel_halfZ = TPC_Ecal_Hcal_barrel_halfZ ;};
   void settpcEndplateServicesRing_R_ro( double tpcEndplateServicesRing_R, double tpcEndplateServicesRing_ro) {
-    tpcEndplateServicesRing_R_ro.push_back(make_pair(tpcEndplateServicesRing_R,tpcEndplateServicesRing_ro));
+    tpcEndplateServicesRing_R_ro.push_back(std::make_pair(tpcEndplateServicesRing_R,tpcEndplateServicesRing_ro));
   };
 
   // to build TPC cooling rings into the service assembly 
   bool DoBuildTPCEndplateServices(dd4hep::PlacedVolume &pVol,dd4hep::Assembly &envelope){
-    for( vector< pair<double,double> >::const_iterator it = tpcEndplateServicesRing_R_ro.begin() ; 
+    for( std::vector< std::pair<double,double> >::const_iterator it = tpcEndplateServicesRing_R_ro.begin() ;
 	 it != tpcEndplateServicesRing_R_ro.end(); ++it){
       dd4hep::Torus solidTube(it->first, 0, it->second, 0, 2*M_PI);
       double z_position = TPC_barrel_halfZ + it->second;
@@ -44,7 +43,7 @@ public:
 private:
   dd4hep::Material cooling_Material;
   double TPC_barrel_halfZ;
-  vector< pair<double,double> > tpcEndplateServicesRing_R_ro;  
+  std::vector< std::pair<double,double> > tpcEndplateServicesRing_R_ro;
 };
 
 
@@ -85,8 +84,8 @@ public:
 
     const int NRAILS=2;
     if ( RailSeparation*(NRAILS-1) > top_dim_x - RailWidth ) {
-      cout << "WARNING, requested rail separation too large! " << endl;
-      cout << "Must be smaller than " << (top_dim_x - RailWidth)/(NRAILS-1) << " cm" << endl;
+      std::cout << "WARNING, requested rail separation too large! " << std::endl;
+      std::cout << "Must be smaller than " << (top_dim_x - RailWidth)/(NRAILS-1) << " cm" << std::endl;
       assert(0);
     }
 
@@ -124,7 +123,7 @@ public:
     // polyethylene
     dd4hep::Box PESolid( internalZoneWidth/2. , pe_thick / 2., moduleLength / 2.); 
     
-    string PELogical_name  = "PELogical"+dd4hep::_toString(i,"_%d");
+    std::string PELogical_name  = "PELogical"+dd4hep::_toString(i,"_%d");
     dd4hep::Volume PELogical(PELogical_name,PESolid,polyethylene);
     //PELogical.setVisAttributes("GreenVis");
 
@@ -137,7 +136,7 @@ public:
     // Cu_1
     dd4hep::Box Cu_1_Solid( internalZoneWidth/2., cu_thick / 2., moduleLength / 2.); 
     
-    string Cu_1_Logical_name  = "Cu_1_Logical"+dd4hep::_toString(i,"_%d");
+    std::string Cu_1_Logical_name  = "Cu_1_Logical"+dd4hep::_toString(i,"_%d");
     dd4hep::Volume Cu_1_Logical(Cu_1_Logical_name, Cu_1_Solid,copper);
     //Cu_1_Logical.setVisAttributes("BlueVis");
 
@@ -255,13 +254,13 @@ public:
 
       dd4hep::Box ContainerSolid(container_x_dim/2., module_thickness/2., containerThickness/2.); 
 
-      string containerLogical_name  = "containerLogical"+dd4hep::_toString(i,"_%d");
+      std::string containerLogical_name  = "containerLogical"+dd4hep::_toString(i,"_%d");
       dd4hep::Volume containerLogical(containerLogical_name,ContainerSolid,air);
 
 
       dd4hep::Box PESolid(container_x_dim/2., module_thickness/2., PE_Thickness/2.);
  
-      string PELogical_name  = "PELogical"+dd4hep::_toString(i,"_%d");
+      std::string PELogical_name  = "PELogical"+dd4hep::_toString(i,"_%d");
       dd4hep::Volume PELogical(PELogical_name,PESolid,polyethylene);
 
       dd4hep::Position  PosPE(0,0,containerThickness/2. - PE_Thickness/2.);
@@ -270,7 +269,7 @@ public:
       
       dd4hep::Box Cu_Solid(container_x_dim/2., module_thickness/2., Cu_Thickness/2.); 
       
-      string Cu_Logical_name  = "Cu_Logical"+dd4hep::_toString(i,"_%d");
+      std::string Cu_Logical_name  = "Cu_Logical"+dd4hep::_toString(i,"_%d");
       dd4hep::Volume Cu_Logical(Cu_Logical_name,Cu_Solid,copper);
       
       dd4hep::Position  PosCu(0,0,-containerThickness/2. + Cu_Thickness/2.);
