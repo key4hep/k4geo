@@ -25,10 +25,10 @@
       <layer repeat="Hcal_nlayers" vis="SeeThrough">
 
         <slice material="Air"      thickness="Hcal_chamber_thickness - ( HcalSD_glass_anode_thickness + HcalSD_sensitive_gas_gap + HcalSD_glass_cathode_thickness + Hcal_scintillator_thickness)" vis="Invisible" />
-        <slice material="FloatGlass" thickness="HcalSD_glass_anode_thickness" vis="Invisible"/>
+        <slice material="G4_POLYSTYRENE" thickness = "Hcal_scintillator_thickness" sensitive = "yes"   limits="cal_limi        <slice material="FloatGlass" thickness="HcalSD_glass_anode_thickness" vis="Invisible"/>
         <slice material="RPCGAS2"    thickness="HcalSD_sensitive_gas_gap" sensitive="yes" limits="cal_limits" vis="YellowVis"/>
         <slice material="FloatGlass" thickness="HcalSD_glass_cathode_thickness" vis="Invisible"/>
-        <slice material="G4_POLYSTYRENE" thickness = "Hcal_scintillator_thickness" sensitive = "yes"   limits="cal_limits"  vis="CyanVis"   />
+ts"  vis="CyanVis"   />
       </layer>
     </detector>
   </detectors>
@@ -36,12 +36,12 @@
   <readouts>
     <readout name="HcalBarrelReadout">
       <segmentation   type="MultiSegmentation"  key="slice">
-        <segmentation name="RPCgrid" type="CartesianGridXY"    key_value="2"    grid_size_x="SDHCal_cell_size" grid_size_y="SDHCal_cell_size" />
-        <segmentation name="Scigrid"  type="TiledLayerGridXY"  key_value="4"  grid_size_x="3" grid_size_y="3.03248"/>
+        <segmentation name="RPCgrid" type="CartesianGridXY"    key_value="3"    grid_size_x="SDHCal_cell_size" grid_size_y="SDHCal_cell_size" />
+        <segmentation name="Scigrid"  type="TiledLayerGridXY"  key_value="1"  grid_size_x="3" grid_size_y="3.03248"/>
       </segmentation>
       <hits_collections>
-        <hits_collection name="HCalBarrelRPCHits"  key="slice" key_value="2"/>
-        <hits_collection name="HcalBarrelRegCollection"  key="slice" key_value="4"/>
+        <hits_collection name="HCalBarrelRPCHits"  key="slice" key_value="3"/>
+        <hits_collection name="HcalBarrelRegCollection"  key="slice" key_value="1"/>
       </hits_collections>
       <id>system:5,module:3,stave:4,tower:5,layer:6,slice:4,x:32:-16,y:-16</id>
     </readout>
