@@ -37,8 +37,8 @@
     <constant name="AHCal_cell_size" value="3.0*cm"/>
     <constant name="SDHCal_cell_size" value="1.0*cm"/>
     <!-- barrel and endcvap constructors use the slices in reversed order ! -->
-    <constant name="Hcal_readout_segmentation_slice_barrel" value="4"/>
-    <constant name="Hcal_readout_segmentation_slice_endcap" value="0"/>
+    <constant name="Hcal_readout_segmentation_slice_barrel" value="1"/>
+    <constant name="Hcal_readout_segmentation_slice_endcap" value="3"/>
 
   </define>
 
@@ -188,36 +188,36 @@
 
     <readout name="HcalBarrelReadout">
       <segmentation   type="MultiSegmentation"  key="slice">
-        <segmentation name="RPCgrid" type="CartesianGridXY"    key_value="2"    grid_size_x="SDHCal_cell_size" grid_size_y="SDHCal_cell_size" />
-	<segmentation name="Scigrid"  type="TiledLayerGridXY"  key_value="4"  grid_size_x="3" grid_size_y="3.03248"/>
+        <segmentation name="RPCgrid" type="CartesianGridXY"    key_value="3"    grid_size_x="SDHCal_cell_size" grid_size_y="SDHCal_cell_size" />
+	<segmentation name="Scigrid"  type="TiledLayerGridXY"  key_value="1"  grid_size_x="3" grid_size_y="3.03248"/>
        </segmentation>
       <hits_collections>
-        <hits_collection name="HCalBarrelRPCHits"  key="slice" key_value="2"/>
-        <hits_collection name="HcalBarrelRegCollection"  key="slice" key_value="4"/>
+        <hits_collection name="HCalBarrelRPCHits"  key="slice" key_value="3"/>
+        <hits_collection name="HcalBarrelRegCollection"  key="slice" key_value="1"/>
       </hits_collections>
       <id>system:5,module:3,stave:4,tower:5,layer:6,slice:4,x:32:-16,y:-16</id>
     </readout>
 
     <readout name="HcalEndcapsReadout">
       <segmentation   type="MultiSegmentation"  key="slice">
-        <segmentation name="RPCgrid" type="CartesianGridXZ"    key_value="2"    grid_size_x="SDHCal_cell_size" grid_size_z="SDHCal_cell_size" />
-	<segmentation name="Scigrid"  type="CartesianGridXZ"  key_value="0"  grid_size_x="AHCal_cell_size" grid_size_z="AHCal_cell_size" offset_x="AHCal_cell_size/2.0" offset_z="AHCal_cell_size/2.0" />
+        <segmentation name="RPCgrid" type="CartesianGridXZ"    key_value="1"    grid_size_x="SDHCal_cell_size" grid_size_z="SDHCal_cell_size" />
+	<segmentation name="Scigrid"  type="CartesianGridXZ"  key_value="3"  grid_size_x="AHCal_cell_size" grid_size_z="AHCal_cell_size" offset_x="AHCal_cell_size/2.0" offset_z="AHCal_cell_size/2.0" />
       </segmentation>
       <hits_collections>
-        <hits_collection name="HCalEndcapRPCHits"  key="slice" key_value="2"/>
-        <hits_collection name="HcalEndcapsCollection"  key="slice" key_value="0"/>
+        <hits_collection name="HCalEndcapRPCHits"  key="slice" key_value="1"/>
+        <hits_collection name="HcalEndcapsCollection"  key="slice" key_value="3"/>
       </hits_collections>
       <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,z:-16</id>
     </readout>
 
     <readout name="HcalEndcapRingReadout">
       <segmentation   type="MultiSegmentation"  key="slice">
-        <segmentation name="RPCgrid" type="CartesianGridXY"    key_value="2"    grid_size_x="SDHCal_cell_size" grid_size_y="SDHCal_cell_size" />
-        <segmentation name="Scigrid" type="CartesianGridXY"    key_value="0"    grid_size_x="AHCal_cell_size" grid_size_y="AHCal_cell_size" />
+        <segmentation name="RPCgrid" type="CartesianGridXY"    key_value="1"    grid_size_x="SDHCal_cell_size" grid_size_y="SDHCal_cell_size" />
+        <segmentation name="Scigrid" type="CartesianGridXY"    key_value="3"    grid_size_x="AHCal_cell_size" grid_size_y="AHCal_cell_size" />
       </segmentation>
       <hits_collections>
-        <hits_collection name="HCalECRingRPCHits"  key="slice" key_value="2"/>
-        <hits_collection name="HcalEndcapRingCollection"  key="slice" key_value="0"/>
+        <hits_collection name="HCalECRingRPCHits"  key="slice" key_value="1"/>
+        <hits_collection name="HcalEndcapRingCollection"  key="slice" key_value="3"/>
       </hits_collections>
       <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id>
     </readout>
