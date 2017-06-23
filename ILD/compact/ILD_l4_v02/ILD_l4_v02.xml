@@ -32,8 +32,6 @@
     <include ref="../ILD_common_v02/services_defs.xml"/>
     <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
 
-    <constant name="tracker_region_rmax" value="TPC_outer_radius" />
-    <constant name="tracker_region_zmax" value="Ecal_endcap_zmin" />
     <!-- barrel and endcvap constructors use the slices in reversed order ! -->
     <constant name="Hcal_readout_segmentation_slice_barrel" value="1"/>
     <constant name="Hcal_readout_segmentation_slice_endcap" value="3"/>
