@@ -15,7 +15,7 @@
     	      <shape type="Tube" rmin="FTD_inner_radius"   rmax="FTD_outer_radius" dz="FTD_half_length"  />
     	      <shape type="Tube" rmin="0." rmax="FTD_outer_radius+env_safety" dz="FTD_min_z_0" />
     	    </shape>
-    	    <shape type="Tube" rmin="FTD_outer_radius_1" rmax="FTD_outer_radius+env_safety" dz="FTD_min_z_1" />
+           <shape type="Tube" rmin="FTD_outer_radius_1" rmax="FTD_outer_radius+env_safety" dz="FTD_min_z_2-2.0*mm" />
     	  </shape>
     	  <shape type="Tube" rmin="FTD_outer_radius_2" rmax="FTD_outer_radius+env_safety" dz="FTD_min_z_2" />
 	</shape>
