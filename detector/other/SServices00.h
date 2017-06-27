@@ -344,3 +344,176 @@ private:
 
 
 };
+
+//=====================================
+// class for BuildSitCables
+//=====================================
+class BuildSitCables {
+
+public:
+  BuildSitCables(){};
+  ~BuildSitCables(){};
+
+  void setMaterialAluminium (dd4hep::Material al) {aluminium = al;};
+  void setSit_cables_cylinder_thickness(double cables_cylinder_thickness){Sit_cables_cylinder_thickness = cables_cylinder_thickness ;};
+  void sethalfZ (double TPC_barrel_halfZ){TPC_Ecal_Hcal_barrel_halfZ = TPC_barrel_halfZ ;};
+  void setTPC_Inner_Radius (double TPCInnerRadius){TPC_inner_radius = TPCInnerRadius ;};
+  void setftd4to7_tpc_radial_gap (double gap){ftd4to7_tpc_radial_gap = gap ;};
+  void setz2_position_ReltoTPCLength (double z2_position){z2_position_ReltoTPCLength = z2_position ;};
+  void setz3_position_ReltoTPCLength (double z3_position){z3_position_ReltoTPCLength = z3_position ;};
+  void setpetal_cp_support_thickness (double support_thickness){petal_cp_support_thickness = support_thickness ;};
+  void setdisk_si_thickness (double si_thickness){disk_si_thickness = si_thickness ;};
+  void setpetal_support_zoffset (double support_zoffset){petal_support_zoffset = support_zoffset ;};
+  void setftd2_sit1_radial_diff (double ftd2_sit1_radial){ftd2_sit1_radial_diff = ftd2_sit1_radial ;};
+  void setftd3_sit2_radial_diff (double ftd3_sit2_radial){ftd3_sit2_radial_diff = ftd3_sit2_radial ;};
+  void setSIT1_Radius (double SIT1Radius){SIT1_Radius =  SIT1Radius;};
+  void setSIT2_Radius (double SIT2Radius){SIT2_Radius =  SIT2Radius;};
+  void setFTD2_cone_thickness (double FTD2_thickness){FTD2_cone_thickness =  FTD2_thickness;};
+  void setFTD3_cone_thickness (double FTD3_thickness){FTD3_cone_thickness = FTD3_thickness ;};
+  void setTUBE_IPOuterBulge_end_radius (double end_radius){TUBE_IPOuterBulge_end_radius = end_radius ;};
+  void setTUBE_IPOuterBulge_end_z (double end_z){TUBE_IPOuterBulge_end_z = end_z;};
+  void setSServices_FTD7_cables_thickness (double cable_thickness){SServices_FTD7_cables_thickness = cable_thickness;};
+
+  // to build Ecal Barrel service into the service assembly
+  bool DoBuildSitCables(dd4hep::PlacedVolume &pVol, dd4hep::Assembly &envelope){
+
+    //First place the Cylinder
+
+    if(ftd4to7_tpc_radial_gap < Sit_cables_cylinder_thickness)
+      throw std::runtime_error("SServices00: the ftd-tpc radial gap is less than Sit cable thickness");
+
+    double SitTube_inner_radius = TPC_inner_radius -
+      ftd4to7_tpc_radial_gap/2.;
+
+    double z_start_3 = TPC_Ecal_Hcal_barrel_halfZ * z3_position_ReltoTPCLength;
+
+    double petalairthickness_half = 0.5 * ( petal_cp_support_thickness + 2.0*disk_si_thickness);
+
+    double max_half_thickness_disk_3 = petal_support_zoffset + petalairthickness_half ;
+
+    double z_half_len = (TPC_Ecal_Hcal_barrel_halfZ -
+                        z_start_3) / 2.;
+
+    dd4hep::Tube SitTubeSolid (SitTube_inner_radius,
+			       SitTube_inner_radius + Sit_cables_cylinder_thickness,
+			       z_half_len,
+			       0., 2 * M_PI);
+
+    dd4hep::Volume SitTubeLog("SitTubeLog",SitTubeSolid, aluminium);
+
+    dd4hep::Position Cylinder_pos1(0, 0, z_start_3 + z_half_len);
+    pVol = envelope.placeVolume(SitTubeLog,Cylinder_pos1);
+
+    dd4hep::Position Cylinder_pos2(0, 0, -z_start_3 - z_half_len);
+    pVol = envelope.placeVolume(SitTubeLog,Cylinder_pos2);
+
+
+    //Then place the cone
+
+    double z_start_2 = TPC_Ecal_Hcal_barrel_halfZ * z2_position_ReltoTPCLength;
+
+    petalairthickness_half = 0.5 * ( petal_cp_support_thickness + 2.0*disk_si_thickness);
+
+    double max_half_thickness_disk_2 = petal_support_zoffset + petalairthickness_half ;
+
+    double FTD2_outer_radius = SIT1_Radius + ftd2_sit1_radial_diff;
+
+    double FTD3_outer_radius = SIT2_Radius + ftd3_sit2_radial_diff;
+
+    double zPlane[2];
+    zPlane[0] = z_start_2 + max_half_thickness_disk_2 + SurfaceTolerance;
+
+    zPlane[1] = z_start_3 - max_half_thickness_disk_3 - SurfaceTolerance;
+
+    double rInner[2];
+    rInner[0] = FTD2_outer_radius + SurfaceTolerance;
+    rInner[1] = FTD3_outer_radius + SurfaceTolerance;
+
+    double rOuter[2];
+    rOuter[0] = FTD2_outer_radius + FTD2_cone_thickness;
+    rOuter[1] = FTD3_outer_radius + FTD3_cone_thickness;
+
+    vector<double> rmin;
+    vector<double> rmax;
+    vector<double> z;
+    for(int i=0;i<=1;i++) {
+      rmin.push_back(rInner[i]);
+      rmax.push_back(rOuter[i]);
+      z.push_back(zPlane[i]);
+    }
+
+    dd4hep::Polycone SitConeSolid (0., 2.0 * M_PI, rmin, rmax, z);
+
+    dd4hep::Volume SitConeLog("SitConeLog", SitConeSolid, aluminium);
+
+    dd4hep::Position cone_pos(0, 0, 0);
+    pVol = envelope.placeVolume(SitConeLog,cone_pos);
+
+    dd4hep::RotationZYX rot(0,M_PI,0);
+    dd4hep::Transform3D tran3D(rot,cone_pos);
+    pVol = envelope.placeVolume(SitConeLog,tran3D);
+
+
+    //Then place the disk
+    double Sit_cables_disk_thickness =((1+TUBE_IPOuterBulge_end_radius/TPC_inner_radius)*0.5*
+                                      SServices_FTD7_cables_thickness );
+
+    dd4hep::Tube SitDiskSolid(TUBE_IPOuterBulge_end_radius + SurfaceTolerance,
+			      TPC_inner_radius,
+			      Sit_cables_disk_thickness/2. - SurfaceTolerance,
+			      0., 2 * M_PI);
+
+    dd4hep::Volume SitDiskLog("SitDiskLog", SitDiskSolid, aluminium);
+
+    dd4hep::Position disk_pos1(0, 0, TUBE_IPOuterBulge_end_z + Sit_cables_disk_thickness/2.);
+    pVol = envelope.placeVolume(SitDiskLog,disk_pos1);
+
+    dd4hep::Position disk_pos2(0, 0, -TUBE_IPOuterBulge_end_z - Sit_cables_disk_thickness/2.);
+    pVol = envelope.placeVolume(SitDiskLog,disk_pos2);
+
+    // Print out some parameters
+    std::cout <<"\n   - SIT12_cable_thickness = "
+	      <<Sit_cables_cylinder_thickness
+	      <<"\n   - SIT1_Radius = "
+	      <<SIT1_Radius
+	      <<"\n   - SIT2_Radius = "
+	      <<SIT2_Radius
+	      <<"\n   - SServices_FTD2_cone_thickness = "
+	      <<FTD2_cone_thickness
+	      <<"\n   - SServices_FTD3_cone_thickness = "
+	      <<FTD3_cone_thickness
+	      <<"\n   - TUBE_IPOuterBulge_end_z = "
+	      <<TUBE_IPOuterBulge_end_z
+	      <<"\n   - SServices_FTD7_cables_thickness = "
+	      <<SServices_FTD7_cables_thickness
+	      <<std::endl;
+
+
+    return true;
+  };
+
+private:
+  double Sit_cables_cylinder_thickness;
+  double TPC_inner_radius;
+  double TPC_Ecal_Hcal_barrel_halfZ;
+  double SIT1_Radius;
+  double SIT2_Radius;
+  double FTD2_cone_thickness;
+  double FTD3_cone_thickness;
+  double TUBE_IPOuterBulge_end_radius;
+  double SServices_FTD7_cables_thickness;
+  double TUBE_IPOuterBulge_end_z;
+  double z2_position_ReltoTPCLength;
+  double z3_position_ReltoTPCLength;
+  double petal_cp_support_thickness;
+  double disk_si_thickness;
+  double petal_support_zoffset;
+  double ftd2_sit1_radial_diff;
+  double ftd3_sit2_radial_diff;
+  double ftd4to7_tpc_radial_gap;
+
+  const double SurfaceTolerance = 0.0001*dd4hep::mm;
+
+  dd4hep::Material aluminium;
+
+};

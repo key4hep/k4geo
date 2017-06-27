@@ -216,7 +216,34 @@ static Ref_t create_element(Detector& theDetector, xml_h element, Ref_t)  {
 
   //BuildHcalBarrel_EndCapServices(pv,envelope_assembly);
 
-  //BuildSitCables(pv,envelope_assembly);
+  //==================================================
+  //          BuildSitCables
+  //==================================================
+
+  // start to prepare the Material and geometry as Mokka
+
+  BuildSitCables SitCables;
+  SitCables.setMaterialAluminium( theDetector.material("Al") );
+  SitCables.setSit_cables_cylinder_thickness( theDetector.constant<double>("SIT12_cable_thickness") );
+  SitCables.setftd4to7_tpc_radial_gap(  theDetector.constant<double>("ftd4to7_tpc_radial_gap") );
+  SitCables.sethalfZ( TPC_Ecal_Hcal_barrel_halfZ );
+  SitCables.setTPC_Inner_Radius( theDetector.constant<double>("TPC_inner_radius") );
+  SitCables.setz2_position_ReltoTPCLength( theDetector.constant<double>("FTD_disk2_zPosRelToTpcLength") );
+  SitCables.setz3_position_ReltoTPCLength( theDetector.constant<double>("FTD_disk3_zPosRelToTpcLength") );
+  SitCables.setpetal_cp_support_thickness( theDetector.constant<double>("petal_cp_support_thickness") );
+  SitCables.setdisk_si_thickness( theDetector.constant<double>("disk_si_thickness") );
+  SitCables.setpetal_support_zoffset( theDetector.constant<double>("petal_support_zoffset") );
+  SitCables.setftd2_sit1_radial_diff( theDetector.constant<double>("ftd2_sit1_radial_diff") );
+  SitCables.setftd3_sit2_radial_diff( theDetector.constant<double>("ftd3_sit2_radial_diff") );
+  SitCables.setSIT1_Radius( theDetector.constant<double>("SIT1_Radius") );
+  SitCables.setSIT2_Radius( theDetector.constant<double>("SIT2_Radius") );
+  SitCables.setFTD2_cone_thickness( theDetector.constant<double>("SServices_FTD2_cone_thickness") );
+  SitCables.setFTD3_cone_thickness( theDetector.constant<double>("SServices_FTD3_cone_thickness") );
+  SitCables.setTUBE_IPOuterBulge_end_radius( theDetector.constant<double>("TUBE_IPOuterBulge_end_radius") );
+  SitCables.setTUBE_IPOuterBulge_end_z( theDetector.constant<double>("TUBE_IPOuterBulge_end_z") );
+  SitCables.setSServices_FTD7_cables_thickness( theDetector.constant<double>("SServices_FTD7_cables_thickness") );
+
+  SitCables.DoBuildSitCables(pv,envelope_assembly);
 
 
 //====================================================================
