@@ -58,6 +58,8 @@
   <constant name="SIT_outer_radius"    value="SIT2_Radius / cos(pi/8) "/>
   <constant name="SIT_half_length"     value="SIT2_Half_Length_Z + env_safety "/>
 
+  <constant name="ftd4to7_tpc_radial_gap" value="20*mm"/>
+
   <constant name="TPC_inner_radius"    value="top_TPC_inner_radius"/>
   <constant name="TPC_outer_radius"    value="top_TPC_outer_radius"/>
   <constant name="TPC_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ"/>
@@ -65,7 +67,7 @@
   <constant name="FTD_inner_radius"    value=" TUBE_IPOuterBulge_start_envradius + env_safety"/>
   <constant name="FTD_outer_radius_1"  value=" SIT_inner_radius   - env_safety"/>
   <constant name="FTD_outer_radius_2"  value=" SIT_outer_radius_1 - env_safety"/>
-  <constant name="FTD_outer_radius"    value=" TPC_inner_radius - env_safety"/>
+  <constant name="FTD_outer_radius"    value=" TPC_inner_radius - ftd4to7_tpc_radial_gap"/>
   <constant name="FTD_half_length"     value=" TPC_Ecal_Hcal_barrel_halfZ"/>
   <constant name="FTD_min_z_0"         value=" VXD_half_length   + env_safety"/>
   <constant name="FTD_min_z_1"         value=" SIT_half_length_1 + env_safety"/>

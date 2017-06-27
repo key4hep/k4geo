@@ -19,4 +19,14 @@
 
   <constant name="HcalServicesModule_InnerServicesWidth" value="200.0*mm"/>
 
+  <constant name="SIT12_cable_thickness" value="0.063*mm"/>
+  <constant name="petal_cp_support_thickness" value="2.0*mm"/>
+  <constant name="disk_si_thickness" value="0.2*mm"/>
+  <constant name="petal_support_zoffset" value="1.5*mm"/>
+  <constant name="ftd2_sit1_radial_diff" value="0.0*mm"/>
+  <constant name="ftd3_sit2_radial_diff" value="-1.0*mm"/>
+  <constant name="SServices_FTD2_cone_thickness" value="0.040*mm"/>
+  <constant name="SServices_FTD3_cone_thickness" value="0.020*mm"/>
+  <constant name="SServices_FTD7_cables_thickness" value="0.85*mm"/>
+
 </define>
