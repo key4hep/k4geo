@@ -240,6 +240,7 @@ static Ref_t create_element(Detector& theDetector, xml_h element, Ref_t)  {
   SitCables.setFTD2_cone_thickness( theDetector.constant<double>("SServices_FTD2_cone_thickness") );
   SitCables.setFTD3_cone_thickness( theDetector.constant<double>("SServices_FTD3_cone_thickness") );
   SitCables.setTUBE_IPOuterBulge_end_radius( theDetector.constant<double>("TUBE_IPOuterBulge_end_radius") );
+  SitCables.setTUBE_IPOuterBulge_end_envradius( theDetector.constant<double>("TUBE_IPOuterBulge_end_envradius") );
   SitCables.setTUBE_IPOuterBulge_end_z( theDetector.constant<double>("TUBE_IPOuterBulge_end_z") );
   SitCables.setSServices_FTD7_cables_thickness( theDetector.constant<double>("SServices_FTD7_cables_thickness") );
 

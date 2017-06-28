@@ -371,6 +371,7 @@ public:
   void setFTD2_cone_thickness (double FTD2_thickness){FTD2_cone_thickness =  FTD2_thickness;};
   void setFTD3_cone_thickness (double FTD3_thickness){FTD3_cone_thickness = FTD3_thickness ;};
   void setTUBE_IPOuterBulge_end_radius (double end_radius){TUBE_IPOuterBulge_end_radius = end_radius ;};
+  void setTUBE_IPOuterBulge_end_envradius (double end_envradius){TUBE_IPOuterBulge_end_envradius = end_envradius ;};
   void setTUBE_IPOuterBulge_end_z (double end_z){TUBE_IPOuterBulge_end_z = end_z;};
   void setSServices_FTD7_cables_thickness (double cable_thickness){SServices_FTD7_cables_thickness = cable_thickness;};
 
@@ -458,7 +459,7 @@ public:
     double Sit_cables_disk_thickness =((1+TUBE_IPOuterBulge_end_radius/TPC_inner_radius)*0.5*
                                       SServices_FTD7_cables_thickness );
 
-    dd4hep::Tube SitDiskSolid(TUBE_IPOuterBulge_end_radius + SurfaceTolerance,
+    dd4hep::Tube SitDiskSolid(TUBE_IPOuterBulge_end_envradius + SurfaceTolerance,
 			      TPC_inner_radius,
 			      Sit_cables_disk_thickness/2. - SurfaceTolerance,
 			      0., 2 * M_PI);
@@ -501,6 +502,7 @@ private:
   double FTD2_cone_thickness;
   double FTD3_cone_thickness;
   double TUBE_IPOuterBulge_end_radius;
+  double TUBE_IPOuterBulge_end_envradius;
   double SServices_FTD7_cables_thickness;
   double TUBE_IPOuterBulge_end_z;
   double z2_position_ReltoTPCLength;
