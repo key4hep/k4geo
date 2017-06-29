@@ -519,3 +519,502 @@ private:
   dd4hep::Material aluminium;
 
 };
+
+
+
+//=====================================
+// class for BuildHcalBarrel_EndCapServices
+//=====================================
+class BuildHcalBarrel_EndCapServices {
+
+public:
+  BuildHcalBarrel_EndCapServices(){};
+  ~BuildHcalBarrel_EndCapServices(){};
+
+public:
+
+  void setMaterialAir (dd4hep::Material Air) {air = Air;};
+  void setMaterialPolyethylene (dd4hep::Material PE) {polyethylene = PE;};
+  void setMaterialCopper (dd4hep::Material Cu) {copper = Cu;};
+  void setMaterialstainless_steel (dd4hep::Material Fe) {stainless_steel = Fe;};
+  void setMaterialS235 (dd4hep::Material steel) {S235 = steel;};
+  void setMaterialPCB (dd4hep::Material pcb) {PCB = pcb;};
+
+  void setHcal_stave_gaps (double stave_gaps){Hcal_stave_gaps = stave_gaps ;};
+  void setHcal_inner_radius (double inner_radius){Hcal_inner_radius = inner_radius ;};
+  void setHcal_R_max (double R_max){Hcal_R_max = R_max ;};
+  void setBuildHcalElectronicsInterface (int build){BuildHcalElectronicsInterface = build ;};
+  void sethalfZ (double Hcal_barrel_halfZ){TPC_Ecal_Hcal_barrel_halfZ = Hcal_barrel_halfZ ;};
+  void setEcal_cables_gap(double gap){Ecal_cables_gap = gap;};
+
+//-Z thicknesses
+  void setZMinus_StainlessSteel_Thickness (double ZMinus_StainlessSteel){ZMinus_StainlessSteel_Thickness = ZMinus_StainlessSteel ;};
+  void setZMinus_PE_Thickness (double ZMinus_PE){ZMinus_PE_Thickness = ZMinus_PE ;};
+  void setZMinus_Cu_Thickness (double ZMinus_Cu){ZMinus_Cu_Thickness = ZMinus_Cu ;};
+//+Z thicknesses
+  void setZPlus_StainlessSteel_Thickness (double ZPlus_StainlessSteel){ZPlus_StainlessSteel_Thickness = ZPlus_StainlessSteel ;};
+  void setZPlus_PE_Thickness (double ZPlus_PE){ZPlus_PE_Thickness = ZPlus_PE ;};
+  void setZPlus_Cu_Thickness (double ZPlus_Cu){ZPlus_Cu_Thickness = ZPlus_Cu ;};
+
+  void setInnerServicesWidth (double ServicesWidth){InnerServicesWidth = ServicesWidth ;};
+  void setHcal_back_plate_thickness (double back_plate_thickness){Hcal_back_plate_thickness = back_plate_thickness ;};
+  void setHcal_nlayers (int nlayer){Hcal_nlayers = nlayer;};
+  void setHcal_radiator_thickness (double radiator_thickness){Hcal_radiator_thickness = radiator_thickness ;};
+
+  void setHcal_steel_cassette_thickness (double cassette_thickness){Hcal_steel_cassette_thickness = cassette_thickness;};
+  void setHcalServices_outer_FR4_thickness (double PCB_thickness){HcalServices_outer_FR4_thickness = PCB_thickness;};
+  void setHcalServices_outer_Cu_thickness (double copper_thickness){HcalServices_outer_Cu_thickness = copper_thickness;};
+
+
+
+  bool FillHcalServicesModuleWithInnerServices(dd4hep::PlacedVolume &pVol,
+					       dd4hep::Volume &ModuleLogicalZMinus,
+					       dd4hep::Volume &ModuleLogicalZPlus) {
+
+  double StainlessSteel_Thickness = ZMinus_StainlessSteel_Thickness;
+  double Cu_Thickness = ZMinus_Cu_Thickness;
+  double PE_Thickness = ZMinus_PE_Thickness;
+
+  dd4hep::Volume motherLogical = ModuleLogicalZMinus;
+
+  double yShift = Hcal_y_dim2_for_x/2.;
+
+  for(int i=0; i<=1; i++)
+  {
+    dd4hep::Position layerPositionSteel(0,
+					Ecal_cables_gap/2. - StainlessSteel_Thickness/2.,
+					yShift);
+
+    if(!PlaceHcalInnerServicesLayer(pVol,motherLogical,
+				    stainless_steel,
+				    StainlessSteel_Thickness, layerPositionSteel))
+
+      return false;
+
+    dd4hep::Position layerPositionPoly(0,
+				       Ecal_cables_gap/2. -StainlessSteel_Thickness - PE_Thickness/2.,
+				       yShift);
+
+    if(!PlaceHcalInnerServicesLayer(pVol,motherLogical,
+				    polyethylene,
+				    PE_Thickness, layerPositionPoly))
+
+      return false;
+
+    dd4hep::Position layerPositionCopper(0,
+					 Ecal_cables_gap/2.-StainlessSteel_Thickness-PE_Thickness - Cu_Thickness/2.,
+					 yShift);
+
+    if(!PlaceHcalInnerServicesLayer(pVol,motherLogical,
+				    copper,
+				    Cu_Thickness, layerPositionCopper))
+
+      return false;
+
+    StainlessSteel_Thickness = ZPlus_StainlessSteel_Thickness;
+    Cu_Thickness = ZPlus_Cu_Thickness;
+    PE_Thickness = ZPlus_PE_Thickness;
+
+
+    motherLogical = ModuleLogicalZPlus;
+  }
+
+  // Print out some parameters
+  std::cout <<"\n   - HcalServicesModule_InnerServicesWidth = "
+	    <<InnerServicesWidth
+	    <<"\n   - HcalServicesModule_ZMinus_Cu_Thickness = "
+	    <<ZMinus_Cu_Thickness
+	    <<"\n   - HcalServicesModule_ZMinus_PE_Thickness = "
+	    <<ZMinus_PE_Thickness
+	    <<"\n   - HcalServicesModule_ZMinus_StainlessSteel_Thickness = "
+	    <<ZMinus_StainlessSteel_Thickness
+	    <<"\n   - HcalServicesModule_ZPlus_Cu_Thickness = "
+	    <<ZPlus_Cu_Thickness
+	    <<"\n   - HcalServicesModule_ZPlus_PE_Thickness = "
+	    <<ZPlus_PE_Thickness
+	    <<"\n   - HcalServicesModule_ZPlus_StainlessSteel_Thickness = "
+	    <<ZPlus_StainlessSteel_Thickness
+	    <<"\n   - HcalServices_outer_Cu_thickness = "
+	    <<HcalServices_outer_Cu_thickness
+	    <<"\n   - HcalServices_outer_FR4_thickness = "
+	    <<HcalServices_outer_FR4_thickness
+	    <<"\n   - Hcal_R_max = "
+	    <<Hcal_R_max
+	    <<"\n   - Hcal_back_plate_thickness = "
+	    <<Hcal_back_plate_thickness
+	    <<"\n   - Hcal_nlayers = "
+	    <<Hcal_nlayers
+	    <<"\n   - Hcal_radiator_thickness = "
+	    <<Hcal_radiator_thickness
+	    <<"\n   - Hcal_stave_gaps = "
+	    <<Hcal_stave_gaps
+	    <<"\n   - Hcal_steel_cassette_thickness = "
+	    <<Hcal_steel_cassette_thickness
+	    <<std::endl;
+
+  return true;
+  };
+
+
+
+  bool PlaceHcalInnerServicesLayer(dd4hep::PlacedVolume &pVol,
+				   dd4hep::Volume &motherLogical,
+				   dd4hep::Material layerMaterial,
+				   double layerThickness,
+				   dd4hep::Position &layerPosition) {
+
+    dd4hep::RotationZYX rot(0,0,M_PI*0.5);
+
+    dd4hep::Box Center_Solid(InnerServicesWidth/2. - 2*(SurfaceTolerance),
+			     Hcal_total_dim_y/2. - 2*(SurfaceTolerance),
+			     layerThickness/2. - 2*(SurfaceTolerance));
+
+    dd4hep::Volume Center_Logical("HcalBarrel_EndCap_Center_Logical",Center_Solid,
+				  layerMaterial);
+
+    dd4hep::Transform3D tran3D(rot,layerPosition);
+    pVol = motherLogical.placeVolume(Center_Logical,tran3D);
+
+    dd4hep::Box Box_Side(InnerServicesWidth/2. - 2*(SurfaceTolerance),
+			 Hcal_total_dim_y*cos(M_PI/16)/2. - 4*(SurfaceTolerance),
+			 layerThickness/2. - 2*(SurfaceTolerance));
+
+    dd4hep::Solid Solid_Side(Box_Side);
+
+    dd4hep::Solid motherSolid = motherLogical.solid();
+
+    double xShift = (Hcal_bottom_dim_x + Hcal_total_dim_y * tan(M_PI/8.)) / 2.;
+
+    dd4hep::Position sideLayerPosition = layerPosition;
+    sideLayerPosition.SetX(xShift);
+
+    dd4hep::RotationZYX  rotRight(-M_PI/8.,0,M_PI*0.5);
+    dd4hep::Transform3D tran3DRight(rotRight,sideLayerPosition);
+
+    dd4hep::IntersectionSolid intersectionSolidRight(motherSolid,Solid_Side,tran3DRight);
+
+    dd4hep::Volume Logical_Right("HcalBarrel_EndCap_Logical_Right",intersectionSolidRight,
+				 layerMaterial);
+
+    dd4hep::Position pos(0,0,0);
+    pVol = motherLogical.placeVolume(Logical_Right,pos);
+
+    sideLayerPosition = layerPosition;
+    sideLayerPosition.SetX(-xShift);
+
+    dd4hep::RotationZYX  rotLeft(M_PI/8.,0,M_PI*0.5);
+    dd4hep::Transform3D tran3DLeft(rotLeft,sideLayerPosition);
+
+    dd4hep::IntersectionSolid intersectionSolidLeft(motherSolid,Solid_Side,tran3DLeft);
+
+    dd4hep::Volume Logical_Left("HcalBarrel_EndCap_Logical_Left",intersectionSolidLeft,
+				layerMaterial);
+
+    pVol = motherLogical.placeVolume(Logical_Left,pos);
+
+
+    return true;
+
+  };
+
+
+  bool FillHcalServicesModuleWithHcalElectronicsInterface(dd4hep::PlacedVolume &pVol,
+							  dd4hep::Volume &ModuleLogicalZMinus,
+							  dd4hep::Volume &ModuleLogicalZPlus) {
+
+    std::cout<<"   - BuildHcalElectronicsInterface = true " <<std::endl;
+
+    double Hcal_layer_thickenss =
+      (Hcal_total_dim_y - Hcal_back_plate_thickness) / Hcal_nlayers;
+
+    double Hcal_chamber_thickness =
+      Hcal_layer_thickenss - Hcal_radiator_thickness;
+
+    if(Hcal_chamber_thickness <= 0)
+      throw std::runtime_error("Hcal Barrel-EndCap services: Hcal chamber thicknesses  <= 0");
+
+#ifdef VERBOSE
+    std::cout << "Hcal Barrel-EndCap services: Hcal_chamber_thickness = " <<
+      Hcal_chamber_thickness << std::endl;
+#endif
+
+    double Hcal_y_dim1_for_x  = Hcal_total_dim_y - Hcal_y_dim2_for_x;
+
+    double layer_x_dim = 0;
+    double layer_y_offset = 0;
+
+    for(int layer_id=1; layer_id<=Hcal_nlayers; layer_id++) {
+
+      layer_y_offset = (layer_id - 1)*Hcal_layer_thickenss +
+	Hcal_radiator_thickness;
+
+      //---- bottom barrel----
+      if(layer_id * Hcal_layer_thickenss  < Hcal_y_dim1_for_x )
+	layer_x_dim = Hcal_bottom_dim_x + 2 *
+	  layer_y_offset * tan(M_PI/8.);
+      else   //----- top barrel ---
+	layer_x_dim = Hcal_midle_dim_x - 2*
+	  ( layer_y_offset + Hcal_chamber_thickness -
+	    Hcal_y_dim1_for_x ) / tan(M_PI/8.);
+
+      if(!FillHcalElectronicsInterfaceLayer(pVol,
+					    ModuleLogicalZMinus, ModuleLogicalZPlus,
+					    layer_y_offset, layer_x_dim))
+
+	return false;
+
+    }
+
+    return true;
+  };
+
+
+
+  bool FillHcalElectronicsInterfaceLayer(dd4hep::PlacedVolume &pVol,
+					 dd4hep::Volume &ModuleLogicalZMinus,
+					 dd4hep::Volume &ModuleLogicalZPlus,
+					 double layer_y_offset, double layer_x_dim) {
+
+    double Hcal_y_dim1_for_x  = Hcal_total_dim_y - Hcal_y_dim2_for_x;
+
+    double y_position = -Hcal_y_dim1_for_x/2. + layer_y_offset +
+      Hcal_steel_cassette_thickness/2.;
+
+    if(!PlaceHcalElectronicsInterfaceComponent(pVol,
+					       ModuleLogicalZMinus,
+					       ModuleLogicalZPlus,
+					       S235,
+					       Hcal_steel_cassette_thickness,y_position,layer_x_dim)
+       )
+      return false;
+
+    y_position += (Hcal_steel_cassette_thickness/2. +
+		   HcalServices_outer_FR4_thickness/2.);
+
+    if(!PlaceHcalElectronicsInterfaceComponent(pVol,
+					       ModuleLogicalZMinus,
+					       ModuleLogicalZPlus,
+					       PCB,
+					       HcalServices_outer_FR4_thickness,y_position,layer_x_dim)
+       )
+      return false;
+
+
+    y_position += (HcalServices_outer_FR4_thickness/2. + HcalServices_outer_Cu_thickness/2.);
+
+    if(!PlaceHcalElectronicsInterfaceComponent(pVol,
+					       ModuleLogicalZMinus,
+					       ModuleLogicalZPlus,
+					       copper,
+					       HcalServices_outer_Cu_thickness,y_position,layer_x_dim)
+       )
+      return false;
+
+    return true;
+  };
+
+
+
+  bool PlaceHcalElectronicsInterfaceComponent(dd4hep::PlacedVolume &pVol,
+					      dd4hep::Volume &ModuleLogicalZMinus,
+					      dd4hep::Volume &ModuleLogicalZPlus,
+					      dd4hep::Material layerMaterial,
+					      double layerThickness,
+					      double y_position, double layer_x_dim){
+
+    dd4hep::Box layerBox (layer_x_dim/2. - 4*(SurfaceTolerance),
+			  layerThickness/2. - 4*(SurfaceTolerance),
+			  Ecal_cables_gap/2. - 4*(SurfaceTolerance));
+
+    dd4hep::Solid layerSolid(layerBox);
+
+    dd4hep::Solid cutSolid = CutLayer(layerSolid,y_position);
+
+    dd4hep::Volume layerLogical("ElectronicsInterfaceLayerLogical",cutSolid,
+				layerMaterial);
+
+
+    dd4hep::RotationZYX rot(0,0,M_PI*0.5);
+    dd4hep::Position pos(0,0, y_position);
+    dd4hep::Transform3D tran3D(rot,pos);
+
+    pVol = ModuleLogicalZMinus.placeVolume(layerLogical,tran3D);
+
+    pVol = ModuleLogicalZPlus.placeVolume(layerLogical,tran3D);
+
+    return true;
+
+  };
+
+
+  dd4hep::Solid CutLayer(dd4hep::Solid &layerSolid, double y_position) {
+
+    double tolerance = 2 * dd4hep::mm;
+
+    dd4hep::Box Solid_Side(InnerServicesWidth/2. + tolerance,
+			   Hcal_total_dim_y + 8*(SurfaceTolerance),
+			   Ecal_cables_gap + 8*(SurfaceTolerance));
+
+    double xShift = (Hcal_bottom_dim_x + Hcal_total_dim_y * tan(M_PI/8.)) / 2.;
+    double yShift = Hcal_y_dim2_for_x/2. - y_position;
+
+    dd4hep::Position rightSideLayerPosition(xShift,yShift,0);
+
+    dd4hep::RotationZYX rightRotationSide(-M_PI/8.,0,0);
+    dd4hep::Transform3D tran3Dright(rightRotationSide,rightSideLayerPosition);
+
+    dd4hep::SubtractionSolid subtractionRight(layerSolid,Solid_Side,tran3Dright);
+
+    dd4hep::Position leftSideLayerPosition(-xShift,yShift,0);
+    dd4hep::RotationZYX leftRotationSide(+M_PI/8.,0,0);
+    dd4hep::Transform3D tran3Dleft(leftRotationSide,leftSideLayerPosition);
+
+    dd4hep::SubtractionSolid subtractionLeft(subtractionRight,Solid_Side,tran3Dleft);
+
+    dd4hep::Position centerLayerPosition(0,yShift,0);
+
+    dd4hep::SubtractionSolid theFinalCut(subtractionLeft,Solid_Side,centerLayerPosition);
+
+    return theFinalCut;
+
+  };
+
+
+  bool DoBuildHcalBarrel_EndCapServices(dd4hep::PlacedVolume &pVol,
+					dd4hep::Assembly &envelope) {
+
+    Hcal_total_dim_y = Hcal_R_max * cos(M_PI/16) - Hcal_inner_radius;
+    double Hcal_module_radius = Hcal_inner_radius + Hcal_total_dim_y;
+    Hcal_y_dim2_for_x  =
+      (Hcal_module_radius - Hcal_module_radius*cos(M_PI/8));
+    double Hcal_y_dim1_for_x  = Hcal_total_dim_y - Hcal_y_dim2_for_x;
+    Hcal_bottom_dim_x  =
+      2.*Hcal_inner_radius*tan(M_PI/8.)- Hcal_stave_gaps;
+    Hcal_midle_dim_x   =
+      Hcal_bottom_dim_x + 2* Hcal_y_dim1_for_x*tan(M_PI/8.);
+    Hcal_top_dim_x     =
+      Hcal_midle_dim_x - 2 * Hcal_y_dim2_for_x/tan(M_PI/8.);
+
+#ifdef VERBOSE
+    double Hcal_outer_radius = Hcal_inner_radius + Hcal_total_dim_y;
+
+    G4cout << "BuildHcalBarrel_EndCapServices information: "
+	   << "\n                       Hcal_outer_radius = "
+	   << Hcal_outer_radius
+	   << "\n                       module thickness = "
+	   << Hcal_total_dim_y
+	   << "\n                       Hcal_R_max = "
+	   << Hcal_R_max
+	   << "\n                       Hcal_bottom_dim_x = "
+	   << Hcal_bottom_dim_x
+	   << G4endl;
+#endif
+
+    double BHX  = Hcal_bottom_dim_x /2. - SurfaceTolerance;
+    double MHX  = Hcal_midle_dim_x / 2. - SurfaceTolerance;
+    double THX  = Hcal_top_dim_x / 2. - SurfaceTolerance;
+    double YX1H = Hcal_y_dim1_for_x / 2.;
+    double YX2H = Hcal_y_dim2_for_x / 2.;
+    double DHZ  = Ecal_cables_gap/ 2. - SurfaceTolerance;
+
+    // Attention: on bâtit le module dans la verticale
+    // à cause du G4Trd et on le tourne avant de le positioner
+    dd4hep::Trapezoid Bottom(BHX, MHX, DHZ, DHZ, YX1H);
+
+    dd4hep::Trapezoid Top(MHX, THX, DHZ, DHZ, YX2H);
+
+    dd4hep::Position pos(0, 0, YX1H + YX2H);
+    dd4hep::UnionSolid ModuleSolid( Bottom, Top, pos);
+
+
+    dd4hep::Volume ModuleLogicalZMinus("ServicesHcalModuleZMinus", ModuleSolid, air);
+
+    dd4hep::Volume  ModuleLogicalZPlus("ServicesHcalModuleZPlus", ModuleSolid, air);
+
+    //First place layer models of services coming from Ecal and TPC:
+    if(!FillHcalServicesModuleWithInnerServices(pVol,ModuleLogicalZMinus,ModuleLogicalZPlus))
+      return false;
+
+    //Then place layer models of HCAL electronics interface:
+    if(!(BuildHcalElectronicsInterface == 0))
+      if(!FillHcalServicesModuleWithHcalElectronicsInterface(pVol,
+							     ModuleLogicalZMinus,ModuleLogicalZPlus))
+	return false;
+
+    double Y = Hcal_inner_radius + YX1H;
+    double stave_phi_offset = 0;
+
+    for (int stave_id = 1;
+	 stave_id <= 8;
+	 stave_id++)
+      {
+	double module_z_offset =
+	  - TPC_Ecal_Hcal_barrel_halfZ - Ecal_cables_gap/2.;
+
+	double phirot = stave_phi_offset;
+
+	dd4hep::RotationZYX rot(0,phirot,-M_PI*0.5);
+	dd4hep::Position stave_pos1(Y*sin(phirot),
+				    Y*cos(phirot),
+				    module_z_offset);
+	dd4hep::Transform3D tran3D1(rot,stave_pos1);
+	pVol = envelope.placeVolume(ModuleLogicalZMinus,tran3D1);
+
+
+	module_z_offset = - module_z_offset;
+
+	dd4hep::Position stave_pos2(Y*sin(phirot),
+				    Y*cos(phirot),
+				    module_z_offset);
+	dd4hep::Transform3D tran3D2(rot,stave_pos2);
+	pVol = envelope.placeVolume(ModuleLogicalZPlus,tran3D2);
+
+	stave_phi_offset -=  M_PI/4;
+      }
+
+    return true;
+  };
+
+
+private:
+  double Hcal_stave_gaps;
+  double Hcal_inner_radius;
+  double Hcal_R_max;
+  double Ecal_cables_gap;
+  double TPC_Ecal_Hcal_barrel_halfZ;
+//-Z thicknesses
+  double ZMinus_StainlessSteel_Thickness;
+  double ZMinus_PE_Thickness;
+  double ZMinus_Cu_Thickness;
+//+Z thicknesses
+  double ZPlus_StainlessSteel_Thickness;
+  double ZPlus_PE_Thickness;
+  double ZPlus_Cu_Thickness;
+
+  double InnerServicesWidth;
+
+  double Hcal_total_dim_y;
+  double Hcal_y_dim2_for_x;
+  double Hcal_bottom_dim_x;
+  double Hcal_midle_dim_x;
+  double Hcal_top_dim_x;
+
+  double Hcal_back_plate_thickness;
+  double Hcal_radiator_thickness;
+  int Hcal_nlayers;
+
+  double Hcal_steel_cassette_thickness;
+  double HcalServices_outer_FR4_thickness;
+  double HcalServices_outer_Cu_thickness;
+
+  int BuildHcalElectronicsInterface;
+
+  const double SurfaceTolerance = 0.0001*dd4hep::mm;
+
+  dd4hep::Material air;
+  dd4hep::Material polyethylene;
+  dd4hep::Material copper;
+  dd4hep::Material stainless_steel;
+  dd4hep::Material S235;
+  dd4hep::Material PCB;
+};

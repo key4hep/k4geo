@@ -213,8 +213,49 @@ static Ref_t create_element(Detector& theDetector, xml_h element, Ref_t)  {
 
 
 
+  //==================================================
+  //         BuildHcalBarrel_EndCapServices
+  //==================================================
 
-  //BuildHcalBarrel_EndCapServices(pv,envelope_assembly);
+  // start to prepare the Material and geometry as Mokka
+  BuildHcalBarrel_EndCapServices HcalBarrel_EndCapServices;
+  HcalBarrel_EndCapServices.setMaterialAir( theDetector.air() );
+  HcalBarrel_EndCapServices.setMaterialPolyethylene(theDetector.material("G4_POLYSTYRENE"));
+  HcalBarrel_EndCapServices.setMaterialCopper(theDetector.material("Cu"));
+  HcalBarrel_EndCapServices.setMaterialstainless_steel(theDetector.material("stainless_steel"));
+  HcalBarrel_EndCapServices.setMaterialS235(theDetector.material("Steel235"));
+  HcalBarrel_EndCapServices.setMaterialPCB(theDetector.material("PCB"));
+
+  HcalBarrel_EndCapServices.setHcal_stave_gaps( theDetector.constant<double>("Hcal_stave_gaps") );
+  HcalBarrel_EndCapServices.setHcal_inner_radius( theDetector.constant<double>("Hcal_inner_radius") );
+  HcalBarrel_EndCapServices.setHcal_R_max( theDetector.constant<double>("Hcal_outer_radius") );
+  HcalBarrel_EndCapServices.setBuildHcalElectronicsInterface( theDetector.constant<int>("BuildHcalElectronicsInterface") );
+  HcalBarrel_EndCapServices.sethalfZ( theDetector.constant<double>("TPC_Ecal_Hcal_barrel_halfZ") );
+  HcalBarrel_EndCapServices.setEcal_cables_gap( theDetector.constant<double>("Ecal_cables_gap") );
+
+//-Z thicknesses
+  HcalBarrel_EndCapServices.setZMinus_StainlessSteel_Thickness( theDetector.constant<double>("HcalServicesModule_ZMinus_StainlessSteel_Thickness") );
+  HcalBarrel_EndCapServices.setZMinus_PE_Thickness( theDetector.constant<double>("HcalServicesModule_ZMinus_PE_Thickness") );
+  HcalBarrel_EndCapServices.setZMinus_Cu_Thickness( theDetector.constant<double>("HcalServicesModule_ZMinus_Cu_Thickness") );
+//+Z thicknesses
+  HcalBarrel_EndCapServices.setZPlus_StainlessSteel_Thickness( theDetector.constant<double>("HcalServicesModule_ZPlus_StainlessSteel_Thickness") );
+  HcalBarrel_EndCapServices.setZPlus_PE_Thickness( theDetector.constant<double>("HcalServicesModule_ZPlus_PE_Thickness") );
+  HcalBarrel_EndCapServices.setZPlus_Cu_Thickness( theDetector.constant<double>("HcalServicesModule_ZPlus_Cu_Thickness") );
+
+  HcalBarrel_EndCapServices.setInnerServicesWidth( theDetector.constant<double>("HcalServicesModule_InnerServicesWidth") );
+  HcalBarrel_EndCapServices.setHcal_back_plate_thickness( theDetector.constant<double>("Hcal_back_plate_thickness") );
+  HcalBarrel_EndCapServices.setHcal_nlayers( theDetector.constant<int>("Hcal_nlayers") );
+  HcalBarrel_EndCapServices.setHcal_radiator_thickness( theDetector.constant<double>("Hcal_radiator_thickness") );
+
+  HcalBarrel_EndCapServices.setHcal_steel_cassette_thickness( theDetector.constant<double>("Hcal_steel_cassette_thickness") );
+  HcalBarrel_EndCapServices.setHcalServices_outer_FR4_thickness( theDetector.constant<double>("HcalServices_outer_FR4_thickness") );
+  HcalBarrel_EndCapServices.setHcalServices_outer_Cu_thickness( theDetector.constant<double>("HcalServices_outer_Cu_thickness") );
+
+  HcalBarrel_EndCapServices.DoBuildHcalBarrel_EndCapServices(pv,envelope_assembly);
+
+
+
+
 
   //==================================================
   //          BuildSitCables
