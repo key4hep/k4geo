@@ -16,6 +16,16 @@
   <constant name="EcalBarrel_EndCapServices_ZPlus_PE_Thickness" value="8.3*mm"/>
 
   <constant name="HcalServicesModule_InnerServicesWidth" value="200.0*mm"/>
+  <constant name="BuildHcalElectronicsInterface" value="1"/>
+  <constant name="HcalServicesModule_ZMinus_StainlessSteel_Thickness" value="15.0*mm"/>
+  <constant name="HcalServicesModule_ZMinus_PE_Thickness" value="27.5*mm"/>
+  <constant name="HcalServicesModule_ZMinus_Cu_Thickness" value="8.2*mm"/>
+  <constant name="HcalServicesModule_ZPlus_StainlessSteel_Thickness" value="15.0*mm"/>
+  <constant name="HcalServicesModule_ZPlus_PE_Thickness" value="25.6*mm"/>
+  <constant name="HcalServicesModule_ZPlus_Cu_Thickness" value="7.4*mm"/>
+  <constant name="Hcal_steel_cassette_thickness" value="0.5*mm"/>
+  <constant name="HcalServices_outer_FR4_thickness" value="2.8*mm"/>
+  <constant name="HcalServices_outer_Cu_thickness" value="0.4*mm"/>
 
   <constant name="SIT12_cable_thickness" value="0.063*mm"/>
   <constant name="petal_cp_support_thickness" value="2.0*mm"/>
