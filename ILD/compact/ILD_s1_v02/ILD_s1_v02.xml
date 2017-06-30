@@ -68,8 +68,12 @@
   <include ref="../ILD_common_v02/BeamCal08.xml"/>
   <include ref="../ILD_common_v02/coil03.xml"/>
   <include ref="../ILD_common_v02/SServices00.xml"/>
-  <include ref="../ILD_common_v02/plugins.xml"/>
 
+  <plugins>
+    <plugin name="DD4hepVolumeManager"/>
+    <plugin name="InstallSurfaceManager"/>
+  </plugins>
+  
   <fields>
     <field type="solenoid" name="GlobalSolenoid" inner_field="Field_nominal_value"
            outer_field="outerField_nominal_value" zmax="Coil_half_length"
