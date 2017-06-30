@@ -1,3 +1,117 @@
+# v00-12
+
+* 2017-06-12 Daniel Jeans ([PR#110](https://github.com/iLCSoft/lcgeo/pull/110))
+  - First "development" set of ILD "v02" models, with thicker ECAL and reduced TPC outer radius: Large and Small models have been implemented in "1", "2", and "4" technology options.
+  - new dimensions not yet frozen, so will probably need some adjustment
+  - re-organisation of code for v2 models: readout definition moved together with detector definitions (previously defined in top-level ILD_*.xml).
+  - TPC services (all cooling pipes except one) removed for v02 models. Awaiting input from TPC experts on correct position/size of this pipe.
+  - some change to definition of ECAL rails: move to currently favoured 2-rail design. Some update/cleanup of SServices00 driver. This also affects v01 models.
+
+* 2017-06-28 Shaojun Lu ([PR#117](https://github.com/iLCSoft/lcgeo/pull/117))
+  - Implement SITCables services for ILD detector models
+  - Update the FTD envelope shape to get free space to place SITCables.
+  - Add SITCables services parameters into XML files for ILD_common_v01.
+  - Add SITCables services parameters into XML files for ILD_common_v02.
+
+* 2017-06-29 Andre Sailer ([PR#119](https://github.com/iLCSoft/lcgeo/pull/119))
+  - Split libraries into one without linking against Geant4 and one with Geant4 dependency. Avoid loading of Geant4 libraries in reconstruction
+
+* 2017-06-29 Shaojun Lu ([PR#118](https://github.com/iLCSoft/lcgeo/pull/118))
+  - Follow the TUBE update, and use the TUBE envelope radius to fix the services SitDisk overlaps. 
+  - Define the SitDisk Rmin with TUBE_IPOuterBulge_end_envradius instead of TUBE_IPOuterBulge_end_radius.
+  - Implement HcalBarrel_EndcapServices which also include the services coming from  Ecal and TPC.
+  - Implement HcalBarrel_EndcapServices parameters into both ILD_comon_v01 and ILD_common_v02.
+  - Add parameter 'TPC_cooling_nRings' in SServices00.xml to allow change wrt large and small ILD model for this moment.
+
+* 2017-06-08 Daniel Jeans ([PR#107](https://github.com/iLCSoft/lcgeo/pull/107))
+  - For ILD models: increase inner radius of FTD envelope, to avoid overlap with beampipe of finite thickness.
+
+* 2017-06-16 Frank Gaede ([PR#112](https://github.com/iLCSoft/lcgeo/pull/112))
+  - remove unused and deprecated (https://github.com/AIDASoft/DD4hep/pull/165 ) DDRec extensions LayeringExtension/SubdetectorExtensions from Ecal drivers
+
+* 2017-06-15 Shaojun Lu ([PR#111](https://github.com/iLCSoft/lcgeo/pull/111))
+  - Ported ILD Mokka class SServices00 line by line into a new class SServices00_v01 into lcgeo.
+  - Used in ILDSServices.cpp to create services geometry for ILD_o1_v05.
+
+* 2017-05-15 Marko Petric ([PR#102](https://github.com/iLCSoft/lcgeo/pull/102))
+  - Introduce new model CLIC_o3_v11 and shift segmentation in HCal for half cell size
+
+* 2017-05-15 Frank Gaede ([PR#101](https://github.com/iLCSoft/lcgeo/pull/101))
+  - fix the logic for assigning sensitive slices in ILD Hcal drivers
+
+* 2017-06-30 Frank Gaede ([PR#120](https://github.com/iLCSoft/lcgeo/pull/120))
+  - update the ILD_(ls)(124)_v02 models
+          - move the un-instrumented gaseaous volume in the TPC to the inner field cage 
+          - cleaned up the use of plugins:
+                 - CaloFace plugins are now in the SEcal04 drivers (in ILD_common_v02)
+                 - add DD4hepVolumeManager (for consistency) and InstallSurfaceManager
+                     to main compact files for all models
+
+* 2017-06-20 Frank Gaede ([PR#114](https://github.com/iLCSoft/lcgeo/pull/114))
+  -  replace DDSurfaces w/ dd4hep::rec
+
+* 2017-06-20 Andre Sailer ([PR#113](https://github.com/iLCSoft/lcgeo/pull/113))
+  - Adapt to changes in namespaces in DD4hep
+
+* 2017-06-21 Marko Petric ([PR#115](https://github.com/iLCSoft/lcgeo/pull/115))
+  - Remove using namespace from header
+
+* 2017-06-26 Frank Gaede ([PR#116](https://github.com/iLCSoft/lcgeo/pull/116))
+  - fix ILD_o4 models:
+  - ILD_l4_v01:  
+     - reverse order of RPC and scintillator  ( RPC first)
+  - ILD_l/s4_v02:
+     - reverse order of RPC and scintillator  ( RPC first)
+     - add parameters for tracking volume and reconstruction geometry
+     - add surface plugins for tracking
+
+* 2017-04-28 Daniel Jeans ([PR#100](https://github.com/iLCSoft/lcgeo/pull/100))
+  - Changes to HCAL endcap envelopes in ILD_l/s* models
+          - in all ILD_l/s* models, reduce radial size of hcal endcap envelopes to leave space for cables. cryo-hcal endcap gap is controlled by parameter Hcal_endcap_cryostat_gap, set to 170 mm.
+         - in ILD_?2 models, change SDHCAL endcap envelope shape to tube (same as other models)
+
+* 2017-05-29 TiborILD ([PR#106](https://github.com/iLCSoft/lcgeo/pull/106))
+  - updated ILD SDHcal drivers and geometry:
+      - reverse ordering of slices in Barrel, Endcaps_v01
+      - correction for z-cracks in Barrel
+      - towers numbering from inner to outer radius (Endcaps_v02)
+      - staves numbering 0-3 (Endcaps_v02)
+      - removed not used variable and commented line (Endcaps_v02)
+
+* 2017-05-30 luisaleperez ([PR#103](https://github.com/iLCSoft/lcgeo/pull/103))
+  - Updated Field maps readers, FieldMapBrBz and FieldMapXYZ, to automatically get from the root file the maps parameters
+    - Coordinates ranges, step size and ordering
+
+* 2017-04-22 StrahinjaLukic ([PR#96](https://github.com/iLCSoft/lcgeo/pull/96))
+  - Outgoing beam tube radius was reduced by 1 mm from "BeamCal_min_z-5*mm" to 5999*mm because the BeamCal inner radius was reduced as part of the adjustments to L*=4.1m
+  - The protruding outer radius of QDEX1AFront link between tube sections was reduced to the outer radius of the larger tube.
+  - The changes affect all ILD models that use ILD_common.
+
+* 2017-04-22 Frank Gaede ([PR#95](https://github.com/iLCSoft/lcgeo/pull/95))
+  - fix the creation of the DDRec::LayeredCalorimeterData data structures for the the 
+    multisegmentation readout model LD_l4_v01
+  - reverse the order of the slices in the HcalEndcaps and HCalEndcapRing for this model
+
+* 2017-05-24 Frank Gaede ([PR#104](https://github.com/iLCSoft/lcgeo/pull/104))
+  - set the correct DetType_ENDCAP for all ILD HcalEndcapRing models
+        - was DetType_BARREL
+
+* 2017-04-25 Marko Petric ([PR#97](https://github.com/iLCSoft/lcgeo/pull/97))
+  - Introduce new model CLIC_o3_v10
+  - Unify all encoding strings for ECal, HCal, Yoke with the introduction of GlobalCalorimeterReadoutID
+
+* 2017-04-26 Daniel Jeans ([PR#98](https://github.com/iLCSoft/lcgeo/pull/98))
+  - use correct LHCal01 detector setup in ILD_l1_v01
+
+* 2017-06-09 Marko Petric ([PR#109](https://github.com/iLCSoft/lcgeo/pull/109))
+  - Update the location of DD4hep Handle.inl include file to adapt to DD4hep v00.24
+
+* 2017-06-09 Daniel Jeans ([PR#108](https://github.com/iLCSoft/lcgeo/pull/108))
+  - improve SEcal05 drivers and compact description for ILD models
+       - remove hard-coded numbers of carbon fiber layers (in alveolii, around absorber plates) in SEcal05* drivers: more flexible.
+      - now parameterize in terms of total CF thickness, rather than thickness of one sheet multiplied by number of sheets: easier to understand, more flexible.
+      - associated changes required in compact descriptions
+
 # v00-11
 
 * 2017-04-19 Frank Gaede ([PR#94](https://github.com/iLCSoft/lcgeo/pull/94))
