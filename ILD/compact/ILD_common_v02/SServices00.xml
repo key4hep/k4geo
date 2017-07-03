@@ -1,36 +1,14 @@
 <!-- 
-     SService00 parameters for ILD_o1_v5  
+     SService00 parameters for ILD_*_v2
 -->
 <lccdd>
 <detectors>
 
 <detector name="SServices00" type="SServices00" id="ILDDetID_NOTUSED" vis="RedVis" insideTrackingVolume="false" sensitive="no">
-  <!--
-      First test version!
-  -->
   <type_flags type=" DetType_SUPPORT " />
   
-  <!-- SQL command: "select * from sit_layers;"  -->
-  <TPC_Cooling number_of_rings="1"/>
+  <TPC_Cooling number_of_rings="0"/> <!-- Daniel's understanding (via Dimitra) -->
 
-  <!-- 
-     Daniel removed all but one TPC rings... (my understanding from Dimitra, the rest are accounted for in the endplate)
-     this one is at a completely random position, with very large size
-     MUST BE REPLACED BY REALISTIC POSITION AND SIZE!!!
-    -->
-  <ring ring_id="0" tpcEndplateServicesRing_R="800*mm"  tpcEndplateServicesRing_ro="5.0*mm"  />
-
-  <!-- 
-     <TPC_Cooling number_of_rings="8"/>
-     <ring ring_id="0" tpcEndplateServicesRing_R="450*mm"  tpcEndplateServicesRing_ro="1.555*mm"  />
-     <ring ring_id="1" tpcEndplateServicesRing_R="650*mm"  tpcEndplateServicesRing_ro="1.555*mm"  />
-     <ring ring_id="2" tpcEndplateServicesRing_R="850*mm"  tpcEndplateServicesRing_ro="1.555*mm"  />
-     <ring ring_id="3" tpcEndplateServicesRing_R="1050*mm" tpcEndplateServicesRing_ro="1.555*mm"  />
-     <ring ring_id="4" tpcEndplateServicesRing_R="1250*mm" tpcEndplateServicesRing_ro="1.555*mm"  />
-     <ring ring_id="5" tpcEndplateServicesRing_R="1450*mm" tpcEndplateServicesRing_ro="1.555*mm"  />
-     <ring ring_id="6" tpcEndplateServicesRing_R="1650*mm" tpcEndplateServicesRing_ro="2.985*mm"  />
-     <ring ring_id="7" tpcEndplateServicesRing_R="1750*mm" tpcEndplateServicesRing_ro="2.453*mm"  />
-     -->
 
 </detector>
 </detectors>
