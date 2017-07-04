@@ -2,7 +2,7 @@
 
   <detectors>        
 
-<detector name="Tube" type="Beampipe_o1_v01" vis="BeamPipeVis" id="ILDDetID_NOTUSED">
+<detector name="Tube" type="DD4hep_Beampipe_o1_v01" vis="BeamPipeVis" id="ILDDetID_NOTUSED">
 
   <envelope vis="BlueVis">
     <shape type="Assembly"/>
