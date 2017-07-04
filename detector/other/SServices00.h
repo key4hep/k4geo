@@ -1018,3 +1018,106 @@ private:
   dd4hep::Material S235;
   dd4hep::Material PCB;
 };
+
+
+//=====================================
+// class for BuildVXDCables
+//=====================================
+class BuildVXDCables {
+
+public:
+  BuildVXDCables(){};
+  ~BuildVXDCables(){};
+
+  void setMaterialCopper (dd4hep::Material Cu) {copper = Cu;};
+  void setVXD_cable_cross_section_area(double cable_area){VXD_cable_cross_section_area = cable_area ;};
+  void setVXD_cable_z_start(double z_start){VXD_cable_z_start = z_start ;};
+  void setVXD_cable_z_end(double z_end){VXD_cable_z_end = z_end ;};
+  void setVXD_cable_inner1_radius(double r1_inner){VXD_cable_inner1_radius = r1_inner ;};
+  void setVXD_cable_inner2_radius(double r2_inner){VXD_cable_inner2_radius = r2_inner ;};
+
+  // to build VXD calbe cone into the service assembly
+  bool DoBuildVXDCables(dd4hep::PlacedVolume &pVol, dd4hep::Assembly &envelope){
+
+    double zPlane[2];
+    zPlane[0] = VXD_cable_z_start;
+
+    zPlane[1] = VXD_cable_z_end;
+
+    double rInner[2];
+    rInner[0] = VXD_cable_inner1_radius + SurfaceTolerance ;
+    rInner[1] = VXD_cable_inner2_radius + SurfaceTolerance ;
+
+    double rOuter[2];
+
+    VXD_cable_cone_middle_thickness = std::sqrt( VXD_cable_cross_section_area/M_PI
+						 + (VXD_cable_inner1_radius+VXD_cable_inner2_radius)/2.0
+						 * (VXD_cable_inner1_radius+VXD_cable_inner2_radius)/2.0 )
+      - (VXD_cable_inner1_radius+VXD_cable_inner2_radius)/2.0 ;
+
+    VXD_cable_outer1_radius = VXD_cable_inner1_radius + VXD_cable_cone_middle_thickness ;
+    VXD_cable_outer2_radius = VXD_cable_inner2_radius + VXD_cable_cone_middle_thickness ;
+
+    rOuter[0] = VXD_cable_outer1_radius ;
+    rOuter[1] = VXD_cable_outer2_radius ;
+
+    std::vector<double> rmin;
+    std::vector<double> rmax;
+    std::vector<double> z;
+    for(int i=0;i<=1;i++) {
+      rmin.push_back(rInner[i]);
+      rmax.push_back(rOuter[i]);
+      z.push_back(zPlane[i]);
+    }
+
+    dd4hep::Polycone VXDConeSolid (0., 2.0 * M_PI, rmin, rmax, z);
+
+    dd4hep::Volume VXDConeLog("VXDConeLog", VXDConeSolid, copper);
+
+    dd4hep::Position cone_pos(0, 0, 0);
+    pVol = envelope.placeVolume(VXDConeLog,cone_pos);
+
+    dd4hep::RotationZYX rot(0,M_PI,0);
+    dd4hep::Transform3D tran3D(rot,cone_pos);
+    pVol = envelope.placeVolume(VXDConeLog,tran3D);
+
+
+
+    // Print out some parameters
+    std::cout <<"\n   - VXD_cable_cross_section_area = "
+	      <<VXD_cable_cross_section_area/dd4hep::mm/dd4hep::mm  <<" mm^2"
+	      <<"\n   - VXD_cable_inner1_radius = "
+	      <<VXD_cable_inner1_radius/dd4hep::mm  <<" mm"
+	      <<"\n   - VXD_cable_inner2_radius = "
+	      <<VXD_cable_inner2_radius/dd4hep::mm  <<" mm"
+	      <<"\n   - VXD_cable_cone_middle_thickness = "
+	      <<VXD_cable_cone_middle_thickness/dd4hep::mm  <<" mm"
+	      <<"\n   - VXD_cable_outer1_radius = "
+	      <<VXD_cable_outer1_radius/dd4hep::mm  <<" mm"
+	      <<"\n   - VXD_cable_outer2_radius = "
+	      <<VXD_cable_outer2_radius/dd4hep::mm  <<" mm"
+	      <<"\n   - VXD_cable_z_start = "
+	      <<VXD_cable_z_start/dd4hep::mm  <<" mm"
+	      <<"\n   - VXD_cable_z_end = "
+	      <<VXD_cable_z_end/dd4hep::mm  <<" mm"
+	      <<std::endl;
+
+
+    return true;
+  };
+
+private:
+  double VXD_cable_cross_section_area;
+  double VXD_cable_inner1_radius;
+  double VXD_cable_inner2_radius;
+  double VXD_cable_cone_middle_thickness;
+  double VXD_cable_outer1_radius;
+  double VXD_cable_outer2_radius;
+  double VXD_cable_z_start;
+  double VXD_cable_z_end;
+
+  const double SurfaceTolerance = 0.0001*dd4hep::mm;
+
+  dd4hep::Material copper;
+
+};
