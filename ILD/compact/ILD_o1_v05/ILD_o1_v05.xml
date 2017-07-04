@@ -81,6 +81,7 @@
 	<constant name="TUBE_IPOuterTube_start_z"       value="150*mm"/>
 	<constant name="TUBE_IPOuterTube_end_radius"    value="25*mm"/>
 	<constant name="TUBE_IPOuterTube_end_z"         value="230*mm"/>
+	<constant name="TUBE_outer_maxthick" value="3.0*mm"/>
 
 	<!--fixme: from Mokka DB we have these values: -->
 	<!-- <constant name="TUBE_IPOuterBulge_end_radius"   value="184*mm"/> -->
@@ -163,6 +164,7 @@
 
 	<constant name="BCal_SpanningPhi" value="320*degree"/>
 	<constant name="ILC_Main_Crossing_Angle" value="14*mrad"/>
+	<constant name="TUBE_IPOuterBulge_end_envradius"   value="TUBE_IPOuterBulge_end_radius+TUBE_outer_maxthick"/>
 	  
 	<!-- ################### ENVELOPE PARAMETERS ######################################################## -->
 
@@ -211,10 +213,12 @@
 	<constant name="TPC_outer_radius"    value="1808*mm"/>
 	<constant name="TPC_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ"/> 
 
+	<constant name="ftd4to7_tpc_radial_gap" value="20*mm"/>
+
 	<constant name="FTD_inner_radius"    value=" TUBE_IPOuterTube_end_radius + env_safety"/> 
 	<constant name="FTD_outer_radius_1"  value=" SIT_inner_radius   - env_safety"/> 
 	<constant name="FTD_outer_radius_2"  value=" SIT_outer_radius_1 - env_safety"/> 
-	<constant name="FTD_outer_radius"    value=" TPC_inner_radius - env_safety"/> 
+	<constant name="FTD_outer_radius"    value=" TPC_inner_radius - ftd4to7_tpc_radial_gap"/>
 	<constant name="FTD_half_length"     value=" TUBE_IPOuterBulge_end_z"/> 
 	<constant name="FTD_min_z_0"         value=" VXD_half_length   + env_safety"/> 
 	<constant name="FTD_min_z_1"         value=" SIT_half_length_1 + env_safety"/> 

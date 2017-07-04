@@ -106,6 +106,7 @@
   <constant name="HCAL_layer_ncell_y" value="30"/>
   <constant name="HcalRotationAngle" value="0.0"/>
   <constant name="HcalServicesModule_InnerServicesWidth" value="200.0*mm"/>
+  <constant name="BuildHcalElectronicsInterface" value="1"/>
   <constant name="HcalServicesModule_ZMinus_Cu_Thickness" value="8.2*mm"/>
   <constant name="HcalServicesModule_ZMinus_PE_Thickness" value="27.5*mm"/>
   <constant name="HcalServicesModule_ZMinus_StainlessSteel_Thickness" value="15.0*mm"/>
@@ -198,6 +199,11 @@
   <constant name="PCB_Thickness" value="0.8*mm"/>
   <constant name="PadSeparation" value="0.408*mm"/>
   <constant name="SIT12_cable_thickness" value="0.063*mm"/>
+  <constant name="petal_cp_support_thickness" value="2.0*mm"/>
+  <constant name="disk_si_thickness" value="0.2*mm"/>
+  <constant name="petal_support_zoffset" value="1.5*mm"/>
+  <constant name="ftd2_sit1_radial_diff" value="0.0*mm"/>
+  <constant name="ftd3_sit2_radial_diff" value="-1.0*mm"/>
   <!-- <constant name="SIT1_Half_Length_Z" value="384.2*mm"/> -->
   <!-- <constant name="SIT1_Radius" value="179.232*mm"/> -->
   <!-- <constant name="SIT2_Half_Length_Z" value="672.35*mm"/> -->
@@ -418,4 +424,6 @@
   <constant name="tpcEndplateServicesRing8_ro" value="2.453*mm"/>
   <constant name="use_tracker" value="0"/>
   <constant name="z_end_tcmt" value="10000.0*mm"/>
+  <constant name="FTD_disk2_zPosRelToTpcLength" value="0.158004"/>
+  <constant name="FTD_disk3_zPosRelToTpcLength" value="0.274428"/>
 </define>
