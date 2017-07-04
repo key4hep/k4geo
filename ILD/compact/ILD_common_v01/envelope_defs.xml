@@ -63,8 +63,9 @@
   <constant name="TPC_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ"/>
 
   <constant name="ftd4to7_tpc_radial_gap" value="20*mm"/>
+  <constant name="FTD_TUBE_cable_clearance" value="10*mm"/>
 
-  <constant name="FTD_inner_radius"    value=" TUBE_IPOuterBulge_start_envradius + env_safety"/>
+  <constant name="FTD_inner_radius"    value=" TUBE_IPOuterBulge_start_envradius + FTD_TUBE_cable_clearance"/>
   <constant name="FTD_outer_radius_1"  value=" SIT_inner_radius   - env_safety"/>
   <constant name="FTD_outer_radius_2"  value=" SIT_outer_radius_1 - env_safety"/>
   <constant name="FTD_outer_radius"    value=" TPC_inner_radius - ftd4to7_tpc_radial_gap"/>
@@ -73,7 +74,7 @@
   <constant name="FTD_min_z_1"         value=" SIT_half_length_1 + env_safety"/>
   <constant name="FTD_min_z_2"         value=" SIT_half_length   + env_safety"/>
   <constant name="FTD_cone_min_z"      value=" TUBE_IPOuterTube_end_z "/>
-  <constant name="FTD_cone_radius"     value=" TUBE_IPOuterBulge_end_envradius + env_safety"/>
+  <constant name="FTD_cone_radius"     value=" TUBE_IPOuterBulge_end_envradius + FTD_TUBE_cable_clearance/2.0"/>
 
 
   <constant name="SET_inner_radius"    value="TPC_outer_radius+ env_safety "/>

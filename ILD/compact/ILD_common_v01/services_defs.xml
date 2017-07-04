@@ -37,4 +37,6 @@
   <constant name="SServices_FTD3_cone_thickness" value="0.020*mm"/>
   <constant name="SServices_FTD7_cables_thickness" value="0.85*mm"/>
 
+  <constant name="VXD_cable_cross_section_area" value="20.0*mm*mm"/>
+  <constant name="VXD_cable_inner1_radius" value="30.0*mm"/>
 </define>
