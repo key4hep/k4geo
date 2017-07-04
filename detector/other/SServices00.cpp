@@ -288,6 +288,21 @@ static Ref_t create_element(Detector& theDetector, xml_h element, Ref_t)  {
   SitCables.DoBuildSitCables(pv,envelope_assembly);
 
 
+  //==================================================
+  //          BuildVXDCables
+  //==================================================
+
+  BuildVXDCables VXDCables;
+  VXDCables.setMaterialCopper ( theDetector.material("Cu") );
+  VXDCables.setVXD_cable_cross_section_area( theDetector.constant<double>("VXD_cable_cross_section_area") );
+  VXDCables.setVXD_cable_z_start( theDetector.constant<double>("FTD_min_z_0") );
+  VXDCables.setVXD_cable_z_end( theDetector.constant<double>("TUBE_IPOuterTube_end_z") ) ;
+  VXDCables.setVXD_cable_inner1_radius( theDetector.constant<double>("VXD_cable_inner1_radius") );
+  VXDCables.setVXD_cable_inner2_radius( theDetector.constant<double>("TUBE_IPOuterBulge_start_envradius") );
+
+  VXDCables.DoBuildVXDCables(pv,envelope_assembly);
+
+
 //====================================================================
 // Place services into the world volume
 //====================================================================
