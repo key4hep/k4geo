@@ -28,6 +28,7 @@
   <constant name="Hcal_steel_cassette_thickness" value="0.5*mm"/>
   <constant name="HcalServices_outer_FR4_thickness" value="2.8*mm"/>
   <constant name="HcalServices_outer_Cu_thickness" value="0.4*mm"/>
+  <constant name="Hcal_endcap_services_module_width" value="100.0*mm"/>
 
   <constant name="SIT12_cable_thickness" value="0.063*mm"/>
   <constant name="petal_cp_support_thickness" value="2.0*mm"/>
