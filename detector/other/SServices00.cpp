@@ -159,7 +159,6 @@ static Ref_t create_element(Detector& theDetector, xml_h element, Ref_t)  {
   EcalBarrelServices.setMaterialAluminium(theDetector.material("Al"));
   EcalBarrelServices.setMaterialPolyethylene(theDetector.material("G4_POLYSTYRENE"));
   EcalBarrelServices.setMaterialCopper(theDetector.material("Cu"));
-  EcalBarrelServices.setenv_safety( theDetector.constant<double>("env_safety"));
 
   EcalBarrelServices.sethalfZ(TPC_Ecal_Hcal_barrel_halfZ);
   EcalBarrelServices.setTopDimX(top_dim_x);
@@ -175,6 +174,8 @@ static Ref_t create_element(Detector& theDetector, xml_h element, Ref_t)  {
 
   EcalBarrelServices.setZPlus_FirstInterrail_PE_Thickness(ZPlus_FirstInterrail_PE_Thickness);
   EcalBarrelServices.setZPlus_FirstInterrail_Cu_Thickness(ZPlus_FirstInterrail_Cu_Thickness);
+
+  EcalBarrelServices.setenv_safety( theDetector.constant<double>("env_safety"));
 
   EcalBarrelServices.DoBuildEcalBarrelServices(pv,envelope_assembly);
 
