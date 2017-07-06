@@ -22,7 +22,7 @@
       <!-- database : sit_simple_planar_sensors_03 -->
 
       <!-- SQL command: "select * from extended_reconstruction_parameters;"  -->
-      <reconstruction strip_width="0.0125*mm" strip_length="92*mm" strip_pitch="0.05*mm" strip_angle="7*deg"  />
+      <reconstruction strip_width="0." strip_length="92*mm" strip_pitch="0." strip_angle="0*deg"  />
 
       <!-- SQL command: "select * from global;"  -->
       <global sensitive_thickness="0.2*mm" support_thickness="1*mm" sensor_length="92*mm"
