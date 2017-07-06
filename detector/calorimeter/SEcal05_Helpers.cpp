@@ -70,6 +70,7 @@ float SEcal05_Helpers::getTotalThickness() {
   assert( (_preshower==0 || _preshower==1) && "_preshower not set" );
   assert( _CF_absWrap>=0. && _CF_alvWall>=0. && _CF_front>=0. && _CF_back>=0. && "CF thicknesses not set" );
   float totalThickness = _CF_front+_CF_back;// front and back supports
+
   // the absorber in the structure
   for (unsigned int i=0; i<_nlayers1+_nlayers2+_nlayers3; i++) {
     bool inStructure = _preshower ? i%2==1 : i%2==0 ;
@@ -472,7 +473,7 @@ void SEcal05_Helpers::makeModule( dd4hep::Volume & mod_vol,  // the volume we'll
           radiator_dim_Z = 0;
         } else { // include W+CF wrapping; only one side of alveolus
           // cout << " -- no preshower, including absorber" << endl;
-          this_struct_CFthick_beforeAbs = _CF_absWrap;
+          this_struct_CFthick_beforeAbs = _CF_front + _CF_absWrap; // allow for initial CF front plate also in no preshower case - djeans 6 july 2017
           this_struct_CFthick_afterAbs = _CF_absWrap + _CF_alvWall;
           radiator_dim_Z = getAbsThickness( absorber_index++ );
           rad_pos_Z = radiator_dim_Z/2. + this_struct_CFthick_beforeAbs; // distance from top surface of structure to centre of radiator

@@ -176,6 +176,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 
   // overall size
   double Ecal_inner_radius                  = theDetector.constant<double>("Ecal_inner_radius");
+
   double Ecal_Barrel_halfZ                  = theDetector.constant<double>("Ecal_Barrel_halfZ");
   int    Ecal_barrel_z_modules              = theDetector.constant<int>("Ecal_barrel_z_modules");
   int    Ecal_barrel_number_of_towers       = theDetector.constant<int>("Ecal_barrel_number_of_towers");
@@ -259,12 +260,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
                          Ecal_support_thickness);
 
   helper.setPlugLength( Ecal_plugLength );
-
-
-
-  if ( !Ecal_Barrel_PreshowerLayer && Ecal_front_face_thickness>0 ) {
-    cout << "WARNING SEcal05_Barrel: using front CF plate in a non-preshower setup: do you really want this?" << endl;
-  }
 
   // check resulting thickness is consistent with what's in compact description
   float module_thickness = helper.getTotalThickness();
