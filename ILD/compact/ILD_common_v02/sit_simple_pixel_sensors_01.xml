@@ -6,7 +6,7 @@
 
   <detectors>
 
-    <detector name="SIT" type="SIT_Simple_Planar" vis="ILD_SITVis" id="ILDDetID_SIT" readout="SITCollection" insideTrackingVolume="true">
+    <detector name="SIT" type="SIT_Simple_Pixel" vis="ILD_SITVis" id="ILDDetID_SIT" readout="SITCollection" insideTrackingVolume="true">
 
       <envelope vis="ILD_SITVis">
 
