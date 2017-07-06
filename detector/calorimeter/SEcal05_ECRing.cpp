@@ -391,7 +391,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	  radiator_dim_Z = 0;
 	} else { // include W+CF wrapping; only one side of alveolus
 	  cout << " -- no preshower, including absorber" << endl;
-	  this_struct_CFthick_beforeAbs = _CF_absWrap;
+	  this_struct_CFthick_beforeAbs = Ecal_front_face_thickness + _CF_absWrap;
 	  this_struct_CFthick_afterAbs = _CF_absWrap + _CF_alvWall;
 	  radiator_dim_Z = Ecal_radiator_thickness1; // this line implicitly assumes Ecal_nlayers1>0...
 	  //rad_pos_Z = radiator_dim_Z/2. + this_struct_CFthick_beforeAbs; // distance from top surface of structure to centre of radiator
@@ -417,10 +417,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
       }
       //-------------------------------
 
-
-      cout << "struct radiator thickness in layer " << l_num << " = " << radiator_dim_Z << endl;
-
-      
       radiator_dim_y = radiator_dim_Z; // ahh different axis conventions....
 
       l_pos_z += this_struct_CFthick_beforeAbs + radiator_dim_y/2;
@@ -462,7 +458,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
       // PlacedVolume  EndcapStructureLayer_phv =
 	EnvLogECRing.placeVolume(EndcapStructureLayer_vol,bsl_tran3D);
 	      
-      cout << "placed structural absorber layer at " << bsl_pos_z << endl;
+	//      cout << "placed structural absorber layer at " << bsl_pos_z << endl;
       
 
       }
@@ -478,14 +474,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 
       // now move to the alveolus and what's inside
 
-
-
-
-      
       double l_thickness = layering.layer(l_num-1)->thickness();  // Layer's thickness. this is the internal thickness of the alveolus
-
-
-      cout << "l_thickness " << l_thickness << endl;
 
       l_pos_z  += l_thickness/2.; // add in half the alveolus thickness
       
@@ -738,8 +727,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 //      l_pos_z +=   (l_thickness/2. +(radiator_dim_y/2. + Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE))*2.);
       
       l_pos_z +=   l_thickness/2.; // add in the other half of the alveolus
-
-      cout << "l_pos_z after alveolus = " << l_pos_z << endl;
 
       ++l_num;
  

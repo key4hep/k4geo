@@ -326,11 +326,11 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
     caloData->layers[i].distance += Ecal_Barrel_halfZ + Ecal_cables_gap; // add IP->front face distance
   }
 
-  cout << "cell sizes: " << endl;
-  for (size_t i=0; i<caloData->layers.size(); i++) {
-    cout << "sensitive layer " << i << " : x,y = " << caloData->layers[i].cellSize0 << " " << caloData->layers[i].cellSize1 << endl;
-  }
-
+  //  cout << "cell sizes: " << endl;
+  //  for (size_t i=0; i<caloData->layers.size(); i++) {
+  //    cout << "sensitive layer " << i << " : x,y = " << caloData->layers[i].cellSize0 << " " << caloData->layers[i].cellSize1 << endl;
+  //  }
+  
   caloData->layoutType = LayeredCalorimeterData::EndcapLayout ;
   caloData->inner_symmetry = 4  ; // hard code cernter box hole
   caloData->outer_symmetry = 8  ; // outer Octagun
