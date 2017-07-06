@@ -22,7 +22,7 @@
       <!--	ORIGINAL :     dr_InnerServiceArea="30*mm" dr_OuterServiceArea="30*mm"  DANIEL REDUCED TO FIT THICK ECAL -->
 
       <global TPC_pad_height="6*mm" TPC_pad_width="1*mm"  TPC_max_step_length="5*mm" dr_InnerWall="25*mm" 
-	      dr_InnerServiceArea="28.9*mm" dr_OuterServiceArea="0.9*mm"
+	      dr_InnerServiceArea="25.9*mm" dr_OuterServiceArea="0.9*mm"
               dr_OuterWall="55*mm" dz_Cathode="0.06*mm" dz_Readout="25*mm" dz_Endplate="100*mm"
               chamber_Gas="TDR_gas" sensitive_threshold_eV="32*eV"  />
 
