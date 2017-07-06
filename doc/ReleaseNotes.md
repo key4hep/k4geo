@@ -1,3 +1,13 @@
+# v00-13-01
+
+* 2017-07-06 Frank Gaede ([PR#131](https://github.com/iLCSoft/lcgeo/pull/131))
+  - fix the pixel SIT for ILD_*_v02 models
+        - add new driver SIT_Simple_Pixel_geo.cpp
+        - use sit_simple_pixel_sensors_01.xml
+
+* 2017-07-06 Shaojun Lu ([PR#130](https://github.com/iLCSoft/lcgeo/pull/130))
+  - Update ILD services driver to access the ILD compact file "env_safety", and apply it in the services driver to avoid services overlap with sub-detector envelope .
+
 # v00-13
 
 * 2017-07-06 Frank Gaede ([PR#129](https://github.com/iLCSoft/lcgeo/pull/129))
