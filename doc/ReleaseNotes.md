@@ -1,3 +1,50 @@
+# v00-13
+
+* 2017-07-06 Frank Gaede ([PR#129](https://github.com/iLCSoft/lcgeo/pull/129))
+  - ILD_*_v02 models: remove stereo angle in SIT ( move to pixel readout)
+
+* 2017-07-06 Daniel Jeans ([PR#128](https://github.com/iLCSoft/lcgeo/pull/128))
+  - many tweaks to ECAL dimensions in ILD_*_V02 models, referring to technical design document from H.Videau et al.
+  - a couple of small bug fixes to ECAL drivers (previously ignored request for extra CF thickness in front face, if no preshower was set)
+  - adjusted TPC dimensions and barrel-endcap gap to accommodate new ECAL
+
+* 2017-07-05 Shaojun Lu ([PR#127](https://github.com/iLCSoft/lcgeo/pull/127))
+  - Implement ILD HcalEndcap FrontEnd readout electronics.
+  - Implement it into both ILD_common_v01 and ILD_common_v02.
+  - ILD models l4/s4 will use the same services as l1/s1.
+
+* 2017-07-05 Shaojun Lu ([PR#126](https://github.com/iLCSoft/lcgeo/pull/126))
+  - Update for ILD services cables
+    - Implement VXD cable cone services.
+    - Implement the VXD cable services into ILD_common_v01 and ILD_common_v02.
+    - Comment out the services in ILD_o1_v05.
+    - Remove the ILD services reference code (not necessary).
+    - The SServices00 has been updated, and used by ILD.
+    - Update the ILD VXD cable configuration by expert.
+
+* 2017-07-05 Daniel Jeans ([PR#125](https://github.com/iLCSoft/lcgeo/pull/125))
+  - previously several ECAL sub-layers were combined into an averaged material to simplify simulation.
+  This requires to redefine this material every time thicknesses change (quite often at the moment), which was not done consistently. 
+  For the time being, separate the components to ensure correct material description. 
+  (Consider recombining when sub-layer thicknesses are fixed and stable.)
+
+* 2017-07-04 Daniel Jeans ([PR#124](https://github.com/iLCSoft/lcgeo/pull/124))
+  - now use DD4hep_Beampipe_o1_v01 driver (gets rid of "deprecated" warning when using Beampipe_o1_v01)
+
+* 2017-07-04 Shaojun Lu ([PR#123](https://github.com/iLCSoft/lcgeo/pull/123))
+  - Update ILD_o1_v05 compact files for the services.
+    - Change the FTD envelope shape to place SIT cable.
+    - Add missing service parameters.
+
+* 2017-07-04 Daniel Jeans ([PR#122](https://github.com/iLCSoft/lcgeo/pull/122))
+  - updates to TPC in ILD_*_v02 models from Dimitra Tsionou
+  - increased material in outer field cage
+  - increased material in cathode plane
+  - reduced thickness of outer field cage by 5mm (to accommodate thicker ECAL: final numbers to be confirmed)
+
+* 2017-07-03 Daniel Jeans ([PR#121](https://github.com/iLCSoft/lcgeo/pull/121))
+  - in ILD models, material of TPC cooling pipes is accounted for in TPC driver. They were also added in sservices00 driver, causing double counting. Solution: turn them off in SServices00.
+
 # v00-12
 
 * 2017-06-12 Daniel Jeans ([PR#110](https://github.com/iLCSoft/lcgeo/pull/110))
