@@ -45,13 +45,13 @@
   <constant name="Ecal_Hcal_symmetry"   value="8"/>
 
   <!-- constant name="Ecal_barrel_thickness" value="185.0*mm"/ -->
-  <constant name="Ecal_barrel_thickness" value="215.2*mm"/>
+  <constant name="Ecal_barrel_thickness" value="223.2*mm"/>
 
 
   <constant name="Hcal_Ecal_gap" value="30*mm"/>
 
   <!-- constant name="Ecal_endcap_zmin" value="2450.0*mm"/ -->
-  <constant name="Ecal_endcap_zmin" value="TPC_Ecal_Hcal_barrel_halfZ + 69.8*mm"/>
+  <constant name="Ecal_endcap_zmin" value="TPC_Ecal_Hcal_barrel_halfZ + 61.8*mm"/>
 
   <constant name="Ecal_endcap_center_box_size" value="800.0*mm"/>
 
