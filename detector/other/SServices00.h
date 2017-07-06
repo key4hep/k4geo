@@ -4,7 +4,6 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/DD4hepUnits.h"
 
-
 //=====================================
 // class for  BuildTPCEndplateServices
 //=====================================
@@ -78,6 +77,10 @@ public:
   void setZPlus_FirstInterrail_Cu_Thickness  (double Cu_Thickness_ZPF) {ZPlus_FirstInterrail_Cu_Thickness = Cu_Thickness_ZPF;};
 
   void setRailSeparationChanged(void) {RailSeparationChanged = false;};
+  void setenv_safety(double safety) {
+    env_safety = safety ;
+    RailHeight -= env_safety*4.0 ;
+  };
 
   // to fill the detail service layers into the container
   bool FillEcalBarrelServicesContainer(dd4hep::PlacedVolume &pVol, dd4hep::Volume &pContainerLogical){
@@ -155,23 +158,22 @@ public:
   bool DoBuildEcalBarrelServices(dd4hep::PlacedVolume &pVol,dd4hep::Assembly &envelope){
 
     dd4hep::Box ContainerSolid(top_dim_x/2., RailHeight/2., Ecal_barrel_halfZ); 
-    dd4hep::Volume containerLogical("EcalBarrelServicesContainerLogical",ContainerSolid,air);
+    dd4hep::Volume EBScontainerLogical("EcalBarrelServicesContainerLogical",ContainerSolid,air);
     //containerLogical.setVisAttributes("SeeThrough");
     //containerLogical.setVisAttributes("MagentaVis");
 
-    if(!FillEcalBarrelServicesContainer(pVol,containerLogical))
+    if(!FillEcalBarrelServicesContainer(pVol,EBScontainerLogical))
       return false;
 
     for (int stave_id = 1; stave_id < 9 ; stave_id++)
       {
 	double phirot = (stave_id-1) * M_PI/4.;
 	dd4hep::RotationZYX rot(-phirot,0,0);
-	//Position  stavePosition(module_thickness * sin(M_PI/4.), Ecal_outer_radius + RailHeight/2., 0);
-	dd4hep::Position stavePosition((Ecal_outer_radius + RailHeight/2.)*sin(phirot) - module_thickness * sin(M_PI/4.)*cos(-phirot), 
-                                       (Ecal_outer_radius + RailHeight/2.)*cos(phirot) - module_thickness * sin(M_PI/4.)*sin(-phirot), 
-				0 );
+	dd4hep::Position stavePosition((Ecal_outer_radius + env_safety*2.0 + RailHeight/2.)*sin(phirot) - module_thickness * sin(M_PI/4.)*cos(-phirot),
+                                       (Ecal_outer_radius + env_safety*2.0 + RailHeight/2.)*cos(phirot) - module_thickness * sin(M_PI/4.)*sin(-phirot),
+				       0 );
 	dd4hep::Transform3D tran3D(rot,stavePosition);
-	pVol = envelope.placeVolume(containerLogical,tran3D);
+	pVol = envelope.placeVolume(EBScontainerLogical,tran3D);
       }
     
     return true;
@@ -202,6 +204,7 @@ private:
   dd4hep::Material polyethylene;
   dd4hep::Material copper;
 
+  double env_safety;
 };
 
 
@@ -235,12 +238,16 @@ public:
   void setZPlus_PE_Thickness (double PE_Thickness_ZP) {ZPlus_PE_Thickness = PE_Thickness_ZP;};
   void setZPlus_Cu_Thickness (double Cu_Thickness_ZP) {ZPlus_Cu_Thickness = Cu_Thickness_ZP;};
 
+  void setenv_safety(double safety) {
+    env_safety = safety ;
+    Ecal_cables_gap -= env_safety*4.0 ;
+  };
 
   // to build Ecal Barrel service into the service assembly 
   bool DoBuildEcalBarrel_EndCapServices(dd4hep::PlacedVolume &pVol,dd4hep::Assembly &envelope){
 
     double containerThickness = ZMinus_PE_Thickness + ZMinus_Cu_Thickness;
-    double z_position = -Ecal_barrel_halfZ -containerThickness/2.;
+    double z_position = -Ecal_barrel_halfZ -containerThickness/2. - env_safety*2.0;
     double container_x_dim = top_dim_x/2. + module_thickness*sin(M_PI/4.) - InnerServicesWidth/2.;
     double Cu_Thickness = ZMinus_Cu_Thickness;
     double PE_Thickness = ZMinus_PE_Thickness;
@@ -310,7 +317,7 @@ public:
       }
       
       containerThickness = ZPlus_PE_Thickness + ZPlus_Cu_Thickness;
-      z_position = Ecal_barrel_halfZ + containerThickness/2.;
+      z_position = Ecal_barrel_halfZ + containerThickness/2. + env_safety*2.0;
       
       Cu_Thickness = ZPlus_Cu_Thickness;
       PE_Thickness = ZPlus_PE_Thickness;
@@ -342,7 +349,7 @@ private:
   dd4hep::Material polyethylene;
   dd4hep::Material copper;
 
-
+  double env_safety;
 };
 
 //=====================================
@@ -565,7 +572,10 @@ public:
   void setHcalServices_outer_FR4_thickness (double PCB_thickness){HcalServices_outer_FR4_thickness = PCB_thickness;};
   void setHcalServices_outer_Cu_thickness (double copper_thickness){HcalServices_outer_Cu_thickness = copper_thickness;};
 
-
+  void setenv_safety(double safety) {
+    env_safety = safety ;
+    Ecal_cables_gap -= env_safety*4.0 ;
+  };
 
   bool FillHcalServicesModuleWithInnerServices(dd4hep::PlacedVolume &pVol,
 					       dd4hep::Volume &ModuleLogicalZMinus,
@@ -949,7 +959,7 @@ public:
 	 stave_id++)
       {
 	double module_z_offset =
-	  - TPC_Ecal_Hcal_barrel_halfZ - Ecal_cables_gap/2.;
+	  - TPC_Ecal_Hcal_barrel_halfZ - Ecal_cables_gap/2. - env_safety*2.0;
 
 	double phirot = stave_phi_offset;
 
@@ -1010,6 +1020,7 @@ private:
   int BuildHcalElectronicsInterface;
 
   const double SurfaceTolerance = 0.0001*dd4hep::mm;
+  double env_safety;
 
   dd4hep::Material air;
   dd4hep::Material polyethylene;
