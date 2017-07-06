@@ -159,6 +159,7 @@ static Ref_t create_element(Detector& theDetector, xml_h element, Ref_t)  {
   EcalBarrelServices.setMaterialAluminium(theDetector.material("Al"));
   EcalBarrelServices.setMaterialPolyethylene(theDetector.material("G4_POLYSTYRENE"));
   EcalBarrelServices.setMaterialCopper(theDetector.material("Cu"));
+  EcalBarrelServices.setenv_safety( theDetector.constant<double>("env_safety"));
 
   EcalBarrelServices.sethalfZ(TPC_Ecal_Hcal_barrel_halfZ);
   EcalBarrelServices.setTopDimX(top_dim_x);
@@ -206,6 +207,7 @@ static Ref_t create_element(Detector& theDetector, xml_h element, Ref_t)  {
   EcalBarrel_EndCapServices.setZMinus_Cu_Thickness(ZMinus_Cu_Thickness);
   EcalBarrel_EndCapServices.setZPlus_PE_Thickness(ZPlus_PE_Thickness);
   EcalBarrel_EndCapServices.setZPlus_Cu_Thickness(ZPlus_Cu_Thickness);
+  EcalBarrel_EndCapServices.setenv_safety( theDetector.constant<double>("env_safety"));
 
   EcalBarrel_EndCapServices.DoBuildEcalBarrel_EndCapServices(pv,envelope_assembly);
 
@@ -250,6 +252,7 @@ static Ref_t create_element(Detector& theDetector, xml_h element, Ref_t)  {
   HcalBarrel_EndCapServices.setHcal_steel_cassette_thickness( theDetector.constant<double>("Hcal_steel_cassette_thickness") );
   HcalBarrel_EndCapServices.setHcalServices_outer_FR4_thickness( theDetector.constant<double>("HcalServices_outer_FR4_thickness") );
   HcalBarrel_EndCapServices.setHcalServices_outer_Cu_thickness( theDetector.constant<double>("HcalServices_outer_Cu_thickness") );
+  HcalBarrel_EndCapServices.setenv_safety( theDetector.constant<double>("env_safety"));
 
   HcalBarrel_EndCapServices.DoBuildHcalBarrel_EndCapServices(pv,envelope_assembly);
 
