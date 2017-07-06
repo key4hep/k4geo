@@ -181,9 +181,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 
   // layer configuration
   helper.setPreshower( Ecal_Endcap_PreshowerLayer );
-  if ( !Ecal_Endcap_PreshowerLayer && Ecal_front_face_thickness>0 ) {
-    cout << "WARNING, using front CF plate in a non-preshower setup: do you really want this?" << endl;
-  }
 
   cout << "Preshower ? " << Ecal_Endcap_PreshowerLayer << endl;
 
