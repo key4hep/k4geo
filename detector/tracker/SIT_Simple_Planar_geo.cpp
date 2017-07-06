@@ -341,8 +341,7 @@ static dd4hep::Ref_t create_element(dd4hep::Detector& theDetector, xml_h e, dd4h
 
 
     dd4hep::rec::VolPlane surf( sitSenLogical ,
-                                dd4hep::rec::SurfaceType(dd4hep::rec::SurfaceType::Sensitive,
-                                                         dd4hep::rec::SurfaceType::Measurement1D),
+                                dd4hep::rec::SurfaceType(dd4hep::rec::SurfaceType::Sensitive),
                                 inner_thick, outer_thick , u,v,n ) ; //,o ) ;
 
     // vector of sensor placements - needed for DetElements in ladder loop below
