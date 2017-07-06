@@ -2,8 +2,8 @@
 
   <constant name="Ecal_Barrel_halfZ" value="TPC_Ecal_Hcal_barrel_halfZ"/>
 
-  <constant name="Ecal_nlayers1" value="21"/>
-  <constant name="Ecal_nlayers2" value="9"/>
+  <constant name="Ecal_nlayers1" value="20"/>
+  <constant name="Ecal_nlayers2" value="10"/>
   <constant name="Ecal_nlayers3" value="0"/>
   <constant name="Ecal_radiator_layers_set1_thickness" value="2.1*mm"/>
   <constant name="Ecal_radiator_layers_set2_thickness" value="4.2*mm"/>
@@ -16,19 +16,20 @@
   <constant name="Ecal_fiber_thickness_slabAbs" value="0.15*mm"/>
 
   <constant name="Ecal_front_face_thickness" value="0.66*mm"/> <!-- 4.04 - 2.1 - 0.44 - 2*0.42  = 0.66 -->
-  <constant name="Ecal_support_thickness" value="(14.0+2.09)*mm"/> <!-- 14.44 - 0.44 --> <!-- + FUDGE FACTOR -->
+  <constant name="Ecal_support_thickness" value="14.49*mm"/> <!-- 14.93 - 0.44 -->
 
-  <constant name="Ecal_lateral_face_thickness" value="(1.10+0.5)*mm"/> <!-- 1.54 - 0.44  --> <!-- 0.5 for the tolerance -->
+  <constant name="Ecal_lateral_face_thickness" value="(1.10+0.5)*mm"/> <!-- 1.54 - 0.44  --> <!-- 0.5 for the 1mm tolerance between modules -->
 
   <constant name="Ecal_Alveolus_Air_Gap" value="0.2*mm"/>
   <constant name="Ecal_Si_thickness" value=".525*mm"/>
   <constant name="Ecal_Slab_H_fiber_thickness" value="0.55*mm"/>
   <constant name="Ecal_Slab_ASIC_thickness" value="0.7*mm"/>
   <constant name="Ecal_Slab_PCB_thickness" value="1.0*mm"/>
-  <constant name="Ecal_Slab_copper_thickness" value="0.35*mm"/>
+  <constant name="Ecal_Slab_copper_thickness" value="0.40*mm"/>
   <constant name="Ecal_Slab_glue_gap" value="0.1*mm"/>
   <constant name="Ecal_Slab_ground_thickness" value="0.1*mm"/>
-  <constant name="Ecal_Slab_shielding" value="0.0*mm"/>
+  <constant name="Ecal_Slab_shielding" value="0.1*mm"/>
+
   <constant name="Ecal_guard_ring_size" value="0.5*mm"/>
   <constant name="Ecal_n_wafers_per_tower" value="2"/>
 
