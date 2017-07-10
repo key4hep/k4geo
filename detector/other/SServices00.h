@@ -3,6 +3,7 @@
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/DD4hepUnits.h"
+#include "DD4hep/DetElement.h"
 
 //=====================================
 // class for  BuildTPCEndplateServices
@@ -172,7 +173,7 @@ private:
 class BuildSitCables {
 
 public:
-  BuildSitCables(){};
+  BuildSitCables(dd4hep::DetElement det) : detElt( det) { };
   ~BuildSitCables(){};
 
   void setMaterialAluminium (dd4hep::Material al) {aluminium = al;};
@@ -224,7 +225,7 @@ private:
   const double SurfaceTolerance = 0.0001*dd4hep::mm;
 
   dd4hep::Material aluminium;
-
+  dd4hep::DetElement detElt ;
 };
 
 
