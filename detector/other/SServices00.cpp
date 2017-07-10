@@ -31,6 +31,7 @@
 #include "DD4hep/DD4hepUnits.h"
 #include "XML/Utilities.h"
 #include "DD4hep/DetType.h"
+#include "DDRec/Surface.h"
 #include "XMLHandlerDB.h"
 
 #include "SServices00.h"
@@ -267,7 +268,7 @@ static Ref_t create_element(Detector& theDetector, xml_h element, Ref_t)  {
 
   // start to prepare the Material and geometry as Mokka
 
-  BuildSitCables SitCables;
+  BuildSitCables SitCables( sdet ) ;
   SitCables.setMaterialAluminium( theDetector.material("Al") );
   SitCables.setSit_cables_cylinder_thickness( theDetector.constant<double>("SIT12_cable_thickness") );
   SitCables.setftd4to7_tpc_radial_gap(  theDetector.constant<double>("ftd4to7_tpc_radial_gap") );
@@ -555,13 +556,27 @@ bool BuildSitCables::DoBuildSitCables(dd4hep::PlacedVolume &pVol, dd4hep::Assemb
 			     z_half_len,
 			     0., 2 * M_PI);
 
-  dd4hep::Volume SitTubeLog("SitTubeLog",SitTubeSolid, aluminium);
+  dd4hep::Volume SitTubeLog0("SitTubeLog0",SitTubeSolid, aluminium);
+  dd4hep::Volume SitTubeLog1("SitTubeLog1",SitTubeSolid, aluminium);
+
+  dd4hep::rec::Vector3D ocyl(  SitTube_inner_radius + Sit_cables_cylinder_thickness/2.  , 0. , 0. ) ;
+
+  dd4hep::rec::VolCylinder cylSurf0( SitTubeLog0 , dd4hep::rec::SurfaceType( dd4hep::rec::SurfaceType::Helper ) ,
+				     0.5*Sit_cables_cylinder_thickness  ,
+				     0.5*Sit_cables_cylinder_thickness , ocyl );
+
+  dd4hep::rec::VolCylinder cylSurf1( SitTubeLog1 , dd4hep::rec::SurfaceType( dd4hep::rec::SurfaceType::Helper ) ,
+				     0.5*Sit_cables_cylinder_thickness  ,
+				     0.5*Sit_cables_cylinder_thickness , ocyl );
+
+  dd4hep::rec::volSurfaceList( detElt )->push_back( cylSurf0 );
+  dd4hep::rec::volSurfaceList( detElt )->push_back( cylSurf1 );
 
   dd4hep::Position Cylinder_pos1(0, 0, z_start_3 + z_half_len);
-  pVol = envelope.placeVolume(SitTubeLog,Cylinder_pos1);
+  pVol = envelope.placeVolume(SitTubeLog0,Cylinder_pos1);
 
   dd4hep::Position Cylinder_pos2(0, 0, -z_start_3 - z_half_len);
-  pVol = envelope.placeVolume(SitTubeLog,Cylinder_pos2);
+  pVol = envelope.placeVolume(SitTubeLog1,Cylinder_pos2);
 
 
   //Then place the cone
@@ -598,16 +613,36 @@ bool BuildSitCables::DoBuildSitCables(dd4hep::PlacedVolume &pVol, dd4hep::Assemb
     z.push_back(zPlane[i]);
   }
 
-  dd4hep::Polycone SitConeSolid (0., 2.0 * M_PI, rmin, rmax, z);
+  dd4hep::ConeSegment SitConeSolid( (z[1]-z[0])/2., rmin[0], rmax[0], rmin[1], rmax[1],0, 2.0 * M_PI);
 
-  dd4hep::Volume SitConeLog("SitConeLog", SitConeSolid, aluminium);
+  dd4hep::Volume SitConeLog0("SitConeLog0", SitConeSolid, aluminium);
+  dd4hep::Volume SitConeLog1("SitConeLog1", SitConeSolid, aluminium);
 
-  dd4hep::Position cone_pos(0, 0, 0);
-  pVol = envelope.placeVolume(SitConeLog,cone_pos);
 
-  dd4hep::RotationZYX rot(0,M_PI,0);
-  dd4hep::Transform3D tran3D(rot,cone_pos);
-  pVol = envelope.placeVolume(SitConeLog,tran3D);
+  const double dr    = rmin[1] - rmin[0] ;
+  const double theta = atan2( dr , z[1] - z[0] ) ;
+
+  double coneThickness = ( ( rmax[0] - rmin[0] ) +  ( rmax[1] - rmin[1] ) )   / 2. ;
+
+  dd4hep::rec::Vector3D ocon( rmin[0] + 0.5 * ( dr + coneThickness ), 0. , 0. );
+
+  dd4hep::rec::Vector3D v( 1. , 0. , theta, dd4hep::rec::Vector3D::spherical ) ;
+
+  dd4hep::rec::VolCone conSurf0( SitConeLog0 , dd4hep::rec::SurfaceType( dd4hep::rec::SurfaceType::Helper ) ,
+				 0.5*coneThickness  , 0.5*coneThickness , v, ocon );
+
+  dd4hep::rec::VolCone conSurf1( SitConeLog1, dd4hep::rec::SurfaceType( dd4hep::rec::SurfaceType::Helper ) ,
+				 0.5*coneThickness  , 0.5*coneThickness , v, ocon );
+
+  dd4hep::rec::volSurfaceList( detElt )->push_back( conSurf0 );
+  dd4hep::rec::volSurfaceList( detElt )->push_back( conSurf1 );
+
+
+  double coneZPos = (z[1]+z[0]) /2. ;
+  pVol = envelope.placeVolume(SitConeLog0, Transform3D( RotationZYX() , Position(0., 0., coneZPos ) ) );
+
+  dd4hep::RotationZYX rot(0,0, M_PI);
+  pVol = envelope.placeVolume(SitConeLog1, Transform3D( rot , Position(0., 0., -coneZPos ) ));
 
 
   //Then place the disk
