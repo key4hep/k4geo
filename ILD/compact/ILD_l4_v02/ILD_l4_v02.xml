@@ -58,26 +58,26 @@
   <include ref="../ILD_common_v02/display.xml"/>
 
   <comment>Trackers</comment>
-  <include ref="../ILD_common_v02/Beampipe_o1_v01_01.xml"/>
-  <include ref="../ILD_common_v02/vxd07.xml"/>
-  <include ref="../ILD_common_v02/ftd_simple_staggered_02.xml"/>
-  <include ref="../ILD_common_v02/sit_simple_pixel_sensors_01.xml"/>
-  <include ref="../ILD_common_v02/tpc10_01.xml"/>
-  <include ref="../ILD_common_v02/set_simple_planar_sensors_01.xml"/>  
+  <!-- <include ref="../ILD_common_v02/Beampipe_o1_v01_01.xml"/> -->
+  <!-- <include ref="../ILD_common_v02/vxd07.xml"/> -->
+  <!-- <include ref="../ILD_common_v02/ftd_simple_staggered_02.xml"/> -->
+  <!-- <include ref="../ILD_common_v02/sit_simple_pixel_sensors_01.xml"/> -->
+  <!-- <include ref="../ILD_common_v02/tpc10_01.xml"/> -->
+  <!-- <include ref="../ILD_common_v02/set_simple_planar_sensors_01.xml"/>   -->
 
   <comment>Calorimeters</comment>
-  <include ref="../ILD_common_v02/SEcal05_siw_Barrel.xml"/>
-  <include ref="../ILD_common_v02/SEcal05_siw_Endcaps.xml"/>
-  <include ref="../ILD_common_v02/SEcal05_siw_ECRing.xml"/>
-  <include ref="../ILD_common_v02/SHcalSc04_Barrel_v04.xml"/>
-  <include ref="../ILD_common_v02/SHcalSc04_Endcaps_v01_LARGE.xml"/>
-  <include ref="../ILD_common_v02/SHcalSc04_EndcapRing_v01.xml"/>
-  <include ref="../ILD_common_v02/Yoke05_Barrel.xml"/>
-  <include ref="../ILD_common_v02/Yoke05_Endcaps.xml"/>
-  <include ref="../ILD_common_v02/LumiCal.xml"/> 
-  <include ref="../ILD_common_v02/LHCal01.xml"/>
-  <include ref="../ILD_common_v02/BeamCal08.xml"/>
-  <include ref="../ILD_common_v02/coil03.xml"/>
+  <!-- <include ref="../ILD_common_v02/SEcal05_siw_Barrel.xml"/> -->
+  <!-- <include ref="../ILD_common_v02/SEcal05_siw_Endcaps.xml"/> -->
+  <!-- <include ref="../ILD_common_v02/SEcal05_siw_ECRing.xml"/> -->
+  <!-- <include ref="../ILD_common_v02/SHcalSc04_Barrel_v04.xml"/> -->
+  <!-- <include ref="../ILD_common_v02/SHcalSc04_Endcaps_v01_LARGE.xml"/> -->
+  <!-- <include ref="../ILD_common_v02/SHcalSc04_EndcapRing_v01.xml"/> -->
+  <!-- <include ref="../ILD_common_v02/Yoke05_Barrel.xml"/> -->
+  <!-- <include ref="../ILD_common_v02/Yoke05_Endcaps.xml"/> -->
+  <!-- <include ref="../ILD_common_v02/LumiCal.xml"/>  -->
+  <!-- <include ref="../ILD_common_v02/LHCal01.xml"/> -->
+  <!-- <include ref="../ILD_common_v02/BeamCal08.xml"/> -->
+  <!-- <include ref="../ILD_common_v02/coil03.xml"/> -->
   <include ref="../ILD_common_v02/SServices00.xml"/>
 
   <plugins>
