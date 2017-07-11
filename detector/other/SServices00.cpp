@@ -297,7 +297,7 @@ static Ref_t create_element(Detector& theDetector, xml_h element, Ref_t)  {
   //          BuildVXDCables
   //==================================================
 
-  BuildVXDCables VXDCables;
+  BuildVXDCables VXDCables( sdet );
   VXDCables.setMaterialCopper ( theDetector.material("Cu") );
   VXDCables.setVXD_cable_cross_section_area( theDetector.constant<double>("VXD_cable_cross_section_area") );
   VXDCables.setVXD_cable_z_start( theDetector.constant<double>("FTD_min_z_0") );
@@ -629,10 +629,10 @@ bool BuildSitCables::DoBuildSitCables(dd4hep::PlacedVolume &pVol, dd4hep::Assemb
   dd4hep::rec::Vector3D v( 1. , 0. , theta, dd4hep::rec::Vector3D::spherical ) ;
 
   dd4hep::rec::VolCone conSurf0( SitConeLog0 , dd4hep::rec::SurfaceType( dd4hep::rec::SurfaceType::Helper ) ,
-				 0.5*coneThickness  , 0.5*coneThickness , v, ocon );
+                                 0.5*coneThickness  , 0.5*coneThickness , v, ocon );
 
   dd4hep::rec::VolCone conSurf1( SitConeLog1, dd4hep::rec::SurfaceType( dd4hep::rec::SurfaceType::Helper ) ,
-				 0.5*coneThickness  , 0.5*coneThickness , v, ocon );
+                                 0.5*coneThickness  , 0.5*coneThickness , v, ocon );
 
   dd4hep::rec::volSurfaceList( detElt )->push_back( conSurf0 );
   dd4hep::rec::volSurfaceList( detElt )->push_back( conSurf1 );
@@ -1095,16 +1095,77 @@ bool BuildVXDCables::DoBuildVXDCables(dd4hep::PlacedVolume &pVol, dd4hep::Assemb
     z.push_back(zPlane[i]);
   }
 
-  dd4hep::Polycone VXDConeSolid (0., 2.0 * M_PI, rmin, rmax, z);
+#if 0  // fixme: intersection with 'inverse' cones currently not working -> use a cylinder for now ....
 
-  dd4hep::Volume VXDConeLog("VXDConeLog", VXDConeSolid, copper);
+  dd4hep::ConeSegment VXDConeSolid( (z[1]-z[0])/2., rmin[0], rmax[0], rmin[1], rmax[1],0, 2.0 * M_PI);
 
-  dd4hep::Position cone_pos(0, 0, 0);
-  pVol = envelope.placeVolume(VXDConeLog,cone_pos);
+  dd4hep::Volume VXDConeLog0("VXDConeLog1", VXDConeSolid, copper);
+  dd4hep::Volume VXDConeLog1("VXDConeLog1", VXDConeSolid, copper);
 
-  dd4hep::RotationZYX rot(0,M_PI,0);
-  dd4hep::Transform3D tran3D(rot,cone_pos);
-  pVol = envelope.placeVolume(VXDConeLog,tran3D);
+  const double dr    = rmin[1] - rmin[0] ;
+  const double theta = atan2( dr , z[1] - z[0] ) ;
+
+  if( theta < 0 )   // reverse direction of v ...
+    theta += M_PI ;
+
+  double coneThickness = ( ( rmax[0] - rmin[0] ) +  ( rmax[1] - rmin[1] ) )   / 2. ;
+
+  dd4hep::rec::Vector3D ocon( rmin[0] + 0.5 * ( dr + coneThickness ) , 0. , 0. );
+
+  dd4hep::rec::Vector3D v( 1. , 0. , theta , dd4hep::rec::Vector3D::spherical ) ;
+
+  dd4hep::rec::VolCone conSurf0( VXDConeLog0 , dd4hep::rec::SurfaceType( dd4hep::rec::SurfaceType::Helper ) ,
+				 0.5*coneThickness  , 0.5*coneThickness , v, ocon );
+
+  dd4hep::rec::VolCone conSurf1( VXDConeLog1, dd4hep::rec::SurfaceType( dd4hep::rec::SurfaceType::Helper ) ,
+				 0.5*coneThickness  , 0.5*coneThickness , v, ocon );
+
+  dd4hep::rec::volSurfaceList( detElt )->push_back( conSurf0 );
+  dd4hep::rec::volSurfaceList( detElt )->push_back( conSurf1 );
+
+
+  double coneZPos = (z[1]+z[0]) /2. ;
+  pVol = envelope.placeVolume(VXDConeLog0, Transform3D( RotationZYX() , Position(0., 0., coneZPos ) ) );
+
+  dd4hep::RotationZYX rot(0,0, M_PI);
+  pVol = envelope.placeVolume(VXDConeLog1, Transform3D( rot , Position(0., 0., -coneZPos ) ));
+
+#else
+
+  double VXDTube_inner_radius = ( rmin[0]+rmin[1]) / 2. ;
+  double VXD_cables_cylinder_thickness = VXD_cable_cone_middle_thickness ;
+  double z_half_len = std::fabs( (z[1]-z[0])/2.) ;
+
+  dd4hep::Tube VXDTubeSolid (VXDTube_inner_radius,
+			     VXDTube_inner_radius + VXD_cables_cylinder_thickness,
+			     z_half_len,
+			     0., 2 * M_PI);
+
+  dd4hep::Volume VXDTubeLog0("VXDTubeLog0",VXDTubeSolid, copper);
+  dd4hep::Volume VXDTubeLog1("VXDTubeLog1",VXDTubeSolid, copper);
+
+  dd4hep::rec::Vector3D ocyl(  VXDTube_inner_radius + VXD_cables_cylinder_thickness/2.  , 0. , 0. ) ;
+
+  dd4hep::rec::VolCylinder cylSurf0( VXDTubeLog0 , dd4hep::rec::SurfaceType( dd4hep::rec::SurfaceType::Helper ) ,
+				     0.5*VXD_cables_cylinder_thickness  ,
+				     0.5*VXD_cables_cylinder_thickness , ocyl );
+
+  dd4hep::rec::VolCylinder cylSurf1( VXDTubeLog1 , dd4hep::rec::SurfaceType( dd4hep::rec::SurfaceType::Helper ) ,
+				     0.5*VXD_cables_cylinder_thickness  ,
+				     0.5*VXD_cables_cylinder_thickness , ocyl );
+
+  dd4hep::rec::volSurfaceList( detElt )->push_back( cylSurf0 );
+  dd4hep::rec::volSurfaceList( detElt )->push_back( cylSurf1 );
+
+  dd4hep::Position Cylinder_pos1(0, 0, z[0] + z_half_len);
+  pVol = envelope.placeVolume(VXDTubeLog0,Cylinder_pos1);
+
+  dd4hep::Position Cylinder_pos2(0, 0, -z[0] - z_half_len);
+  pVol = envelope.placeVolume(VXDTubeLog1,Cylinder_pos2);
+
+
+#endif
+
 
 
 
