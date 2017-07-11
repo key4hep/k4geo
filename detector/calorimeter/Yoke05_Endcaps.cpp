@@ -135,7 +135,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
     + 0.1; // the tolerance 1 mm
 
   double yokeEndcapThickness    =   number_of_layers*(iron_thickness  + gap_thickness)
-    + 2*(5.6*iron_thickness + gap_thickness);
+    + 2*(5.6*iron_thickness + gap_thickness) + gap_thickness;
 
   double rInnerEndcap           =    Yoke_endcap_inner_radius;
   double rOuterEndcap           =    rInnerBarrel + yokeBarrelThickness;
