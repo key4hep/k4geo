@@ -400,7 +400,7 @@ private:
 class BuildVXDCables {
 
 public:
-  BuildVXDCables(){};
+  BuildVXDCables(dd4hep::DetElement det) : detElt( det) { };
   ~BuildVXDCables(){};
 
   void setMaterialCopper (dd4hep::Material Cu) {copper = Cu;};
@@ -426,5 +426,5 @@ private:
   const double SurfaceTolerance = 0.0001*dd4hep::mm;
 
   dd4hep::Material copper;
-
+  dd4hep::DetElement detElt;
 };
