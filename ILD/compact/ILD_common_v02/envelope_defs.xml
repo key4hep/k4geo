@@ -129,7 +129,7 @@
 
   <constant name="YokeEndcapPlug_inner_radius"    value="YokeEndcap_inner_radius"/>
   <constant name="YokeEndcapPlug_outer_radius"    value="Hcal_outer_radius"/>
-  <constant name="YokeEndcapPlug_min_z"           value="HcalEndcap_max_z + env_safety"/> <!-- 3981.5*mm"/> FixMe! Trap. and Mokka hardcode number -->
+  <constant name="YokeEndcapPlug_min_z"           value="HcalEndcap_max_z + env_safety*2.0"/>
   <constant name="YokeEndcapPlug_max_z"           value="YokeEndcap_min_z"/>
   <constant name="YokeEndcapPlug_symmetry"        value="Yoke_symmetry"/>
 
