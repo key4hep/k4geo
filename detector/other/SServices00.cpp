@@ -339,7 +339,7 @@ bool BuildTPCEndplateServices::DoBuildTPCEndplateServices(dd4hep::PlacedVolume &
     pVol = envelope.placeVolume(EnvTube,pos2);
   } 
   return true;
-};
+}
 
 
 /// to fill the detail service layers into the container
@@ -413,7 +413,7 @@ bool BuildEcalBarrelServices::FillEcalBarrelServicesContainer(dd4hep::PlacedVolu
   }
 
   return true;
-};
+}
 
 
 // to build Ecal Barrel service into the service assembly 
@@ -439,7 +439,7 @@ bool BuildEcalBarrelServices::DoBuildEcalBarrelServices(dd4hep::PlacedVolume &pV
   }
   
   return true;
-};
+}
 
 
 // to build Ecal Barrel service into the service assembly 
@@ -526,7 +526,7 @@ bool BuildEcalBarrel_EndCapServices::DoBuildEcalBarrel_EndCapServices(dd4hep::Pl
 
 
   return true;
-};
+}
 
 
 
@@ -681,7 +681,7 @@ bool BuildSitCables::DoBuildSitCables(dd4hep::PlacedVolume &pVol, dd4hep::Assemb
 
 
   return true;
-};
+}
 
 
 bool BuildHcalBarrel_EndCapServices::FillHcalServicesModuleWithInnerServices(dd4hep::PlacedVolume &pVol,
@@ -770,7 +770,7 @@ bool BuildHcalBarrel_EndCapServices::FillHcalServicesModuleWithInnerServices(dd4
 	    <<std::endl;
 
   return true;
-};
+}
 
 
 
@@ -832,7 +832,7 @@ bool BuildHcalBarrel_EndCapServices::PlaceHcalInnerServicesLayer(dd4hep::PlacedV
 
   return true;
 
-};
+}
 
 
 bool BuildHcalBarrel_EndCapServices::FillHcalServicesModuleWithHcalElectronicsInterface(
@@ -884,7 +884,7 @@ bool BuildHcalBarrel_EndCapServices::FillHcalServicesModuleWithHcalElectronicsIn
   }
 
   return true;
-};
+}
 
 
 bool BuildHcalBarrel_EndCapServices::FillHcalElectronicsInterfaceLayer(dd4hep::PlacedVolume &pVol,
@@ -928,7 +928,7 @@ bool BuildHcalBarrel_EndCapServices::FillHcalElectronicsInterfaceLayer(dd4hep::P
     return false;
 
   return true;
-};
+}
 
 
 dd4hep::Solid BuildHcalBarrel_EndCapServices::CutLayer(dd4hep::Solid &layerSolid, double y_position) {
@@ -961,7 +961,7 @@ dd4hep::Solid BuildHcalBarrel_EndCapServices::CutLayer(dd4hep::Solid &layerSolid
 
   return theFinalCut;
 
-};
+}
 
 
 bool BuildHcalBarrel_EndCapServices::DoBuildHcalBarrel_EndCapServices(dd4hep::PlacedVolume &pVol,
@@ -1057,7 +1057,7 @@ bool BuildHcalBarrel_EndCapServices::DoBuildHcalBarrel_EndCapServices(dd4hep::Pl
   }
 
   return true;
-};
+}
 
 
 
@@ -1190,7 +1190,7 @@ bool BuildVXDCables::DoBuildVXDCables(dd4hep::PlacedVolume &pVol, dd4hep::Assemb
 
 
   return true;
-};
+}
 
 
 
