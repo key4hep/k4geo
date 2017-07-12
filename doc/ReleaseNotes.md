@@ -1,3 +1,39 @@
+# v00-13-02
+
+* 2017-07-11 Frank Gaede ([PR#132](https://github.com/iLCSoft/lcgeo/pull/132))
+  - add material surfaces for ILD _*_v02 models to SIT and VXD cables in (SService00)
+        - use a cylinder for VXD cables ( rather than outwards pointing cone)
+
+* 2017-07-12 Frank Gaede ([PR#136](https://github.com/iLCSoft/lcgeo/pull/136))
+  - fix beamcal overlaps for ILD_*_v02 models
+      - add new version BeamCal_o1_v02 that uses assemblies in first two levels 
+         of gemoetry hierarchy
+      - use this for all ILD_*_v02 models
+
+* 2017-07-12 Frank Gaede ([PR#135](https://github.com/iLCSoft/lcgeo/pull/135))
+  - fix overlap in ILD TPC w/ outer cathode grip ring
+      - reduce cathode grip ring height fromm 20mm to 18mm
+      - introduce symmetrical inner and outer service areas
+        of 18.1 mm
+      - results in 220(163) layers for ILD_l* (ILDs*) model
+
+* 2017-07-12 Daniel Jeans ([PR#134](https://github.com/iLCSoft/lcgeo/pull/134))
+  changes to SEcal05_ECRing.cpp:
+  - include first layer in LayeredCalorimeterData (if not preshower)
+  - take layering within slab from compact description to ensure correct treatment (removing some assumptions from driver): should now be identical layering to ecal endcaps from SEcal05_Endcaps
+
+* 2017-07-12 Daniel Jeans ([PR#134](https://github.com/iLCSoft/lcgeo/pull/134))
+  changes to SEcal05_ECRing.cpp: 
+  
+      * include first layer in LayeredCalorimeterData (if not preshower) 
+      * take layering within slab from compact description to ensure correct treatment (removing some assumptions from driver): should now be identical layering to ecal endcaps from SEcal05_Endcaps
+
+* 2017-07-12 Shaojun Lu ([PR#133](https://github.com/iLCSoft/lcgeo/pull/133))
+  - Fix ILD_*_v02 OverLap
+    - Add one more env_safety to avoid YokeEndcaps and HcalEndcaps overlap.
+    - To adjust the FTD envelope to fix the SIT cable cone overlap.
+    - Added one more gap_thickness to fix the YokeEndcap extruded by the last layer.
+
 # v00-13-01
 
 * 2017-07-06 Frank Gaede ([PR#131](https://github.com/iLCSoft/lcgeo/pull/131))
