@@ -22,13 +22,13 @@
       <!--	ORIGINAL :     dr_InnerServiceArea="30*mm" dr_OuterServiceArea="30*mm"  DANIEL REDUCED TO FIT THICK ECAL -->
 
       <global TPC_pad_height="6*mm" TPC_pad_width="1*mm"  TPC_max_step_length="5*mm" dr_InnerWall="25*mm" 
-	      dr_InnerServiceArea="25.9*mm" dr_OuterServiceArea="0.9*mm"
+	      dr_InnerServiceArea="18.1*mm" dr_OuterServiceArea="18.1*mm"
               dr_OuterWall="55*mm" dz_Cathode="0.06*mm" dz_Readout="25*mm" dz_Endplate="100*mm"
               chamber_Gas="TDR_gas" sensitive_threshold_eV="32*eV"  />
 
       <!-- updates from Dimitra 4/7/17 -->
       <cathode dz_Cathode_Insulator="0.046*mm" dz_Cathode_Conductor="0.004*mm" material_Cathode_Insulator="G4_KAPTON"
-               material_Cathode_Conductor="G4_Cu" dr_Cathode_Grip="20*mm" dz_Cathode_Grip="15*mm" material_Cathode_Grip="SiC_foam"  />
+               material_Cathode_Conductor="G4_Cu" dr_Cathode_Grip="18*mm" dz_Cathode_Grip="15*mm" material_Cathode_Grip="SiC_foam"  />
 
 
 
