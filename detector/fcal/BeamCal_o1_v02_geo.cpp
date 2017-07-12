@@ -17,8 +17,6 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector& theDetector,
 
   std::cout << "This is the BeamCal"  << std::endl;
   sens.setType("calorimeter");
-  //Materials
-  dd4hep::Material air = theDetector.air();
 
   //Access to the XML File
   dd4hep::xml::DetElement xmlBeamCal  = element;
