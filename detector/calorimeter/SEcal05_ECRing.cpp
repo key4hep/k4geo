@@ -51,6 +51,15 @@
   this is a hack of the 04 version, not a clean rewrite as was done for barrel and endcap, so it's not very clean & tidy....but I think it works
 
   DJeans jan 2017
+
+========
+
+
+  - fixed dd4hep::rec::LayeredCalorimeterData for case with no preshower
+  - small fixes to layer thicknesses (now take from compact description) to get exactly same structure as main endcaps
+
+DJeans July 2017
+
 */
 
 
@@ -94,12 +103,15 @@ using dd4hep::rec::LayeredCalorimeterData;
 static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDetector sens)  {
   static double tolerance = 0e0;
 
+  cout << "---------------------------------" << endl;
+  cout << " creating Ecal ECRing ( SEcal05_ECRing ) " << endl;
+  cout << "---------------------------------" << endl;
+
   xml_det_t     x_det     = element;
   string        det_name  = x_det.nameStr();
   Layering      layering (element);
 
   Material      air       = theDetector.air();
-  //unused: Material      vacuum    = theDetector.vacuum();
 
   int           det_id    = x_det.id();
   xml_comp_t    x_staves  = x_det.staves();
@@ -119,8 +131,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 
   Material stave_material  = theDetector.material(x_staves.materialStr());
 
-  //  DetElement    module_det("module0",det_id); // need 2 separate modules, move to a little later
-
   Readout readout = sens.readout();
   Segmentation seg = readout.segmentation();
   
@@ -134,9 +144,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 // Use them to build Ecal ECRing
 //
 //====================================================================
-
-//  int N_FIBERS_W_STRUCTURE = 2; 
-//  int N_FIBERS_ALVOULUS = 3;
 
   //  read parametere from compact.xml file
   double Ecal_Alveolus_Air_Gap              = theDetector.constant<double>("Ecal_Alveolus_Air_Gap");
@@ -174,8 +181,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   int    Ecal_nlayers2                      = theDetector.constant<int>("Ecal_nlayers2");
   int    Ecal_nlayers3                      = theDetector.constant<int>("Ecal_nlayers3");
   
-
-  //double      Ecal_cells_size               = theDetector.constant<double>("Ecal_cells_size");
   double      EcalEndcapRing_inner_radius   = theDetector.constant<double>("EcalEndcapRing_inner_radius");
   double      EcalEndcapRing_outer_radius   = theDetector.constant<double>("EcalEndcapRing_outer_radius");
   double      EcalEndcapRing_min_z          = theDetector.constant<double>("EcalEndcapRing_min_z");
@@ -185,7 +190,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   double      crossing_angle = theDetector.constant<double>("ILC_Main_Crossing_Angle");
   bool        Ecal_Barrel_PreshowerLayer         = theDetector.constant<int>("Ecal_Barrel_Preshower") > 0;
 
-
+  double      Ecal_barrel_thickness         = theDetector.constant<double>("Ecal_barrel_thickness");
 
   //========== fill data for reconstruction ============================
   dd4hep::rec::LayeredCalorimeterData* caloData = new dd4hep::rec::LayeredCalorimeterData ;
@@ -206,40 +211,11 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 // general calculated parameters
 //
 //====================================================================
-  
-  double Ecal_total_SiSlab_thickness = 
-    Ecal_Slab_shielding + 
-    Ecal_Slab_copper_thickness + 
-    Ecal_Slab_PCB_thickness +
-    Ecal_Slab_glue_gap + 
-    Ecal_Si_thickness + 
-    Ecal_Slab_ground_thickness +
-    Ecal_Alveolus_Air_Gap / 2;
-#ifdef VERBOSE
-  std::cout << " Ecal_total_SiSlab_thickness = " << Ecal_total_SiSlab_thickness  << std::endl;
-#endif
-  
-  
-
-  double Ecal_total_ScSlab_thickness = 
-    Ecal_Slab_shielding + 
-    Ecal_Slab_copper_thickness + 
-    Ecal_Slab_Sc_PCB_thickness +
-    Ecal_Sc_thickness + 
-    Ecal_Sc_reflector_thickness * 2 +
-    Ecal_Alveolus_Air_Gap / 2;
-#ifdef VERBOSE
-  std::cout << " Ecal_total_ScSlab_thickness = " << Ecal_total_ScSlab_thickness  << std::endl;
-#endif
-  
 
     int Number_of_Si_Layers_in_Barrel = 0;
-    int Number_of_Sc_Layers_in_Barrel = 0;
-
 
 #ifdef VERBOSE
   std::cout << " Ecal total number of Silicon layers = " << Number_of_Si_Layers_in_Barrel  << std::endl;
-  std::cout << " Ecal total number of Scintillator layers = " << Number_of_Sc_Layers_in_Barrel  << std::endl;
 #endif
   
   // In this release the number of modules is fixed to 5
@@ -252,24 +228,38 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   Number_of_Si_Layers_in_Barrel = n_total_layers; // take account of preshower on/off (djeans)
   if ( Ecal_Barrel_PreshowerLayer ) Number_of_Si_Layers_in_Barrel++; 
 
+  // calculate total thickness of ECAL
+  // updated to take info from xml description - djeans: 12 July 2017
+  double module_thickness = Ecal_support_thickness + Ecal_front_face_thickness;// front and back supports
 
-  //int total_number_of_layers = Ecal_nlayers1 + Ecal_nlayers2 + Ecal_nlayers3;
+  // the absorber in the structure
+  for (unsigned int i=0; i<Ecal_nlayers1+Ecal_nlayers2+Ecal_nlayers3; i++) {
+    bool inStructure = Ecal_Barrel_PreshowerLayer==1 ? i%2==1 : i%2==0 ;
+    if ( inStructure ) {
+      double thickness (Ecal_radiator_thickness1);
+      if ( i>=Ecal_nlayers1 ) thickness = Ecal_radiator_thickness2;
+      if ( i>=Ecal_nlayers1+Ecal_nlayers2 ) thickness = Ecal_radiator_thickness3;
+      module_thickness += thickness + 2*Ecal_fiber_thickness_structure; // the absorber and its wrapping
+    }
+  }
 
-  double module_thickness = 
-    Ecal_nlayers1 * Ecal_radiator_thickness1 +
-    Ecal_nlayers2 * Ecal_radiator_thickness2 +
-    Ecal_nlayers3 * Ecal_radiator_thickness3 +
-    
-    int(n_total_layers/2) * // fiber around W struct layers
-    2*Ecal_fiber_thickness_structure + // (N_FIBERS_W_STRUCTURE * 2 *  Ecal_fiber_thickness) +
-    
-    Number_of_Si_Layers_in_Barrel * // Silicon slabs plus fiber around and inside
-    (Ecal_total_SiSlab_thickness + Ecal_fiber_thickness_alveolus + Ecal_fiber_thickness_slabAbs) + //  (Ecal_total_SiSlab_thickness + (N_FIBERS_ALVOULUS + 1 ) * Ecal_fiber_thickness) +
-    
-    Number_of_Sc_Layers_in_Barrel * // Scintillator slabs plus fiber around and inside
-    (Ecal_total_ScSlab_thickness + Ecal_fiber_thickness_alveolus + Ecal_fiber_thickness_slabAbs) + //  (N_FIBERS_ALVOULUS + 1 ) * Ecal_fiber_thickness) +
-    
-    Ecal_support_thickness + Ecal_front_face_thickness;
+  // the slabs
+  int l_num2(0);
+  for(xml_coll_t li(x_det,_U(layer)); li; ++li)  { // types of layers (i.e. thin/thick absorber) or "stack"
+    xml_comp_t x_layer = li;
+    // Loop over number of repeats for this layer.
+    for (int j=0; j< x_layer.repeat(); j++)    {  // layers within this type (or "stack")
+      float thisthick = layering.layer(l_num2)->thickness();
+      module_thickness+=thisthick + 2*Ecal_fiber_thickness_alveolus; // slab thickness, and the alveolar wall around it
+      l_num2++;
+    }
+  }
+
+
+  if ( fabs( Ecal_barrel_thickness - module_thickness) > 0.1 ) {
+    cout << "ERROR EC ecal thickness inconsistency: calculated, nominal = " << module_thickness << " " << Ecal_barrel_thickness << endl;
+    assert(0);
+  }
   
 #ifdef VERBOSE
   std::cout << " module_thickness = " << module_thickness  << std::endl;
@@ -332,10 +322,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   //
 
 
-  double z_floor = 
-    - module_thickness/2 +
-    Ecal_front_face_thickness + 
-    Ecal_fiber_thickness_alveolus; //  N_FIBERS_ALVOULUS * Ecal_fiber_thickness;
+  double z_floor =  - module_thickness/2;
 
   double l_pos_z = z_floor;
  
@@ -354,9 +341,11 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   nRadiationLengths   = Ecal_radiator_thickness1/(stave_material.radLength())
     +(Ecal_front_face_thickness + Ecal_fiber_thickness_alveolus)/air.radLength();
   //    +(Ecal_front_face_thickness + N_FIBERS_ALVOULUS * Ecal_fiber_thickness)/air.radLength();
+
   nInteractionLengths = Ecal_radiator_thickness1/(stave_material.intLength())
     +(Ecal_front_face_thickness + Ecal_fiber_thickness_alveolus)/air.intLength();
   //    +(Ecal_front_face_thickness + N_FIBERS_ALVOULUS * Ecal_fiber_thickness)/air.intLength();
+
   thickness_sum       = Ecal_radiator_thickness1
     +(Ecal_front_face_thickness + Ecal_fiber_thickness_alveolus);
   //    +(Ecal_front_face_thickness + N_FIBERS_ALVOULUS * Ecal_fiber_thickness);
@@ -370,10 +359,9 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   for(xml_coll_t li(x_det,_U(layer)); li; ++li)  { // types of layer
     xml_comp_t x_layer = li;
     int repeat = x_layer.repeat();
+
     // Loop over number of repeats for this layer.
     for (int j=0; j<repeat; j++)    {
-
-
 
       // move structural layer to before the slabs - djeans      
 
@@ -390,7 +378,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	  this_struct_CFthick_afterAbs = Ecal_front_face_thickness + _CF_alvWall;
 	  radiator_dim_Z = 0;
 	} else { // include W+CF wrapping; only one side of alveolus
-	  cout << " -- no preshower, including absorber" << endl;
 	  this_struct_CFthick_beforeAbs = Ecal_front_face_thickness + _CF_absWrap;
 	  this_struct_CFthick_afterAbs = _CF_absWrap + _CF_alvWall;
 	  radiator_dim_Z = Ecal_radiator_thickness1; // this line implicitly assumes Ecal_nlayers1>0...
@@ -445,32 +432,16 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
       Volume     EndcapStructureLayer_vol(det_name+"_"+l_name+"_"+bs_name,EndcapStructureLayerSolid,theDetector.material(x_staves.materialStr()));
       EndcapStructureLayer_vol.setVisAttributes(theDetector.visAttributes( x_staves.visStr()));	
       
-  
-      // Without last W StructureLayer, the last part is Si SD even layer.
-      // the last number of  Ecal_nlayers1, Ecal_nlayers2 and  Ecal_nlayers3 is odd.
-      //int even_layer = l_num*2;
-      //if(even_layer > Ecal_nlayers1 + Ecal_nlayers2 + Ecal_nlayers3) continue;
-
       // this is where we place the tungsten into the envelope
       double bsl_pos_z = l_pos_z; // l_pos_z + l_thickness/2. + (radiator_dim_y/2. + Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE));
       Position   bsl_pos(0,0,bsl_pos_z);
       Transform3D bsl_tran3D(rot,bsl_pos);
       // PlacedVolume  EndcapStructureLayer_phv =
 	EnvLogECRing.placeVolume(EndcapStructureLayer_vol,bsl_tran3D);
-	      
-	//      cout << "placed structural absorber layer at " << bsl_pos_z << endl;
-      
-
       }
 
-     
       // Increment to next layer Z position.
       l_pos_z += radiator_dim_y/2 + this_struct_CFthick_afterAbs; //  (l_thickness/2. +(radiator_dim_y/2. + Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE))*2.);
-
-
-
-
-
 
       // now move to the alveolus and what's inside
 
@@ -497,14 +468,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 
       
       // build the ECRing layer, a box with hole in the middle 
-      /*      
-      Tube CenterECTubForSi(0.,
-			    Lcal_outer_radius + Ecal_Lcal_ring_gap + 0.001, // + tolerance,
-			    module_thickness,
-			    0.,
-			    2 * M_PI);
-
-      */ 
       Box  ECRingSiBox( ECRingSiplateSize/ 2. - tolerance, ECRingSiplateSize/ 2. - tolerance, l_thickness/2.0-tolerance);
 
       SubtractionSolid ECRingSiSolid( ECRingSiBox, CenterECTubForSi, hole_position);
@@ -558,7 +521,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	  caloLayer.outer_nInteractionLengths = nInteractionLengths;
 	  caloLayer.outer_thickness           = thickness_sum; 
 	  
-	  if (!isFirstSens){ caloData->layers.push_back( caloLayer ) ;
+	  // if (!isFirstSens){ caloData->layers.push_back( caloLayer ) ; // don't add preshower layer
+	  if (Ecal_Barrel_PreshowerLayer==0 || !isFirstSens){ caloData->layers.push_back( caloLayer ) ;
 #ifdef VERBOSE	    
 	    std::cout<<" caloLayer.distance: "<< caloLayer.distance <<std::endl;
 	    
@@ -629,7 +593,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	
 	if ( x_slice.isSensitive() ) {
 	  slice_phv.addPhysVolID("layer", myLayerNum++);
-	  //	  slice_phv.addPhysVolID("slice",s_num);
 	}
 
 	slice.setPlacement(slice_phv);
@@ -643,15 +606,15 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 #if DD4HEP_VERSION_GE( 0, 15 )
       caloLayer.outer_nRadiationLengths   = nRadiationLengths
 	+ (Ecal_fiber_thickness_alveolus + Ecal_fiber_thickness_structure )/air.radLength();
-      //	+ (Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE))/air.radLength();
+
       caloLayer.outer_nInteractionLengths = nInteractionLengths
 	+ (Ecal_fiber_thickness_alveolus + Ecal_fiber_thickness_structure )/air.intLength();
-      //	+ (Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE))/air.intLength();
+
       caloLayer.outer_thickness           = thickness_sum
 	+ (Ecal_fiber_thickness_alveolus + Ecal_fiber_thickness_structure ); 
-      //	+ (Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE)); 
 
-      if (!isFirstSens) caloData->layers.push_back( caloLayer ) ;
+
+      if (Ecal_Barrel_PreshowerLayer==0 || !isFirstSens) caloData->layers.push_back( caloLayer ) ;
 #ifdef VERBOSE      
       std::cout<<" caloLayer.distance: "<< caloLayer.distance <<std::endl;
       
@@ -695,36 +658,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
       layer_phv.addPhysVolID("tower", i_tower);
       layer_phv.addPhysVolID("stave", i_stave);
       layer.setPlacement(layer_phv);
-	      
-      
-
-
-//      // #########################
-//      // BuildECRingStructureLayer
-//      // #########################
-//      	  
-//      string bs_name="bs";
-//      //Box        EndcapStructureLayer_box(radiator_dim_x/2.,radiator_dim_z/2.,radiator_dim_y/2.);
-//      Box        EndcapStructureLayer_box(ECRingSiplateSize/ 2. - tolerance, ECRingSiplateSize/ 2. - tolerance, radiator_dim_y/2.);
-//      SubtractionSolid  EndcapStructureLayerSolid( EndcapStructureLayer_box, CenterECTubForSi, hole_position);
-//      Volume     EndcapStructureLayer_vol(det_name+"_"+l_name+"_"+bs_name,EndcapStructureLayerSolid,theDetector.material(x_staves.materialStr()));
-//      EndcapStructureLayer_vol.setVisAttributes(theDetector.visAttributes(x_layer.visStr()));	
-//      
-//  
-//      // Without last W StructureLayer, the last part is Si SD even layer.
-//      // the last number of  Ecal_nlayers1, Ecal_nlayers2 and  Ecal_nlayers3 is odd.
-//      int even_layer = l_num*2;
-//      if(even_layer > Ecal_nlayers1 + Ecal_nlayers2 + Ecal_nlayers3) continue;
-//      
-//      // this is where we place the tungsten into the envelope
-//      double bsl_pos_z = l_pos_z + l_thickness/2. + (radiator_dim_y/2. + Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE));
-//      Position   bsl_pos(0,0,bsl_pos_z);
-//      Transform3D bsl_tran3D(rot,bsl_pos);
-//      PlacedVolume  EndcapStructureLayer_phv = EnvLogECRing.placeVolume(EndcapStructureLayer_vol,bsl_tran3D);
-//	      
-//     
-//      // Increment to next layer Z position.
-//      l_pos_z +=   (l_thickness/2. +(radiator_dim_y/2. + Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE))*2.);
       
       l_pos_z +=   l_thickness/2.; // add in the other half of the alveolus
 
@@ -745,8 +678,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   //====================================================================
   
 
-  double EC_module_z_offset = Ecal_Barrel_module_dim_z * 2.5 + Ecal_cables_gap + module_thickness /2;
-  
+  double EC_module_z_offset = (EcalEndcapRing_min_z + EcalEndcapRing_max_z)/2.;
 
     int module_id = ( module_num == 0 ) ? 0:6;
     double this_module_z_offset = ( module_id == 0 ) ? - EC_module_z_offset : EC_module_z_offset; 
