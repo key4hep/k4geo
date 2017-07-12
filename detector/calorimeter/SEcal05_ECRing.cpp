@@ -146,16 +146,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 //====================================================================
 
   //  read parametere from compact.xml file
-  double Ecal_Alveolus_Air_Gap              = theDetector.constant<double>("Ecal_Alveolus_Air_Gap");
-  double Ecal_Slab_shielding                = theDetector.constant<double>("Ecal_Slab_shielding");
-  double Ecal_Slab_copper_thickness         = theDetector.constant<double>("Ecal_Slab_copper_thickness");
-  double Ecal_Slab_PCB_thickness            = theDetector.constant<double>("Ecal_Slab_PCB_thickness");
-  double Ecal_Slab_glue_gap                 = theDetector.constant<double>("Ecal_Slab_glue_gap");
-  double Ecal_Slab_ground_thickness         = theDetector.constant<double>("Ecal_Slab_ground_thickness");
   double Ecal_fiber_thickness_alveolus      = theDetector.constant<double>("Ecal_fiber_thickness_alveolus");
   double Ecal_fiber_thickness_structure     = theDetector.constant<double>("Ecal_fiber_thickness_structure");
-  double Ecal_fiber_thickness_slabAbs       = theDetector.constant<double>("Ecal_fiber_thickness_slabAbs");
-  double Ecal_Si_thickness                  = theDetector.constant<double>("Ecal_Si_thickness");
   
   double Ecal_radiator_thickness1           = theDetector.constant<double>("Ecal_radiator_layers_set1_thickness");
   double Ecal_radiator_thickness2           = theDetector.constant<double>("Ecal_radiator_layers_set2_thickness");
@@ -166,10 +158,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   double Ecal_front_face_thickness          = theDetector.constant<double>("Ecal_front_face_thickness");
   double Ecal_lateral_face_thickness        = theDetector.constant<double>("Ecal_lateral_face_thickness");
  
-  double Ecal_Slab_Sc_PCB_thickness         = theDetector.constant<double>("Ecal_Slab_Sc_PCB_thickness");
-  double Ecal_Sc_thickness                  = theDetector.constant<double>("Ecal_Sc_thickness");
-  double Ecal_Sc_reflector_thickness        = theDetector.constant<double>("Ecal_Sc_reflector_thickness");
-
   double Ecal_EC_Ring_gap                   = theDetector.constant<double>("Ecal_EC_Ring_gap");
 
   double Ecal_cables_gap                    = theDetector.constant<double>("Ecal_cables_gap");
@@ -233,7 +221,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   double module_thickness = Ecal_support_thickness + Ecal_front_face_thickness;// front and back supports
 
   // the absorber in the structure
-  for (unsigned int i=0; i<Ecal_nlayers1+Ecal_nlayers2+Ecal_nlayers3; i++) {
+  for (int i=0; i<Ecal_nlayers1+Ecal_nlayers2+Ecal_nlayers3; i++) {
     bool inStructure = Ecal_Barrel_PreshowerLayer==1 ? i%2==1 : i%2==0 ;
     if ( inStructure ) {
       double thickness (Ecal_radiator_thickness1);
