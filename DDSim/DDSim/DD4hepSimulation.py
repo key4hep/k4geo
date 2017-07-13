@@ -89,6 +89,8 @@ class DD4hepSimulation(object):
     self.filter = Filter()
     self.physics = Physics()
 
+    self._argv = None
+
     ### use TCSH geant UI instead of QT
     os.environ['G4UI_USE_TCSH'] = "1"
 
@@ -108,8 +110,12 @@ class DD4hepSimulation(object):
         self.__dict__ = obj.__dict__
     self.steeringFile = os.path.abspath(sFileTemp)
 
-  def parseOptions(self):
+  def parseOptions(self, argv=None):
     """parse the command line options"""
+
+    if argv is None :
+        self._argv = list(sys.argv)
+
     parser = argparse.ArgumentParser("Running DD4hep Simulations:",
                                      formatter_class=argparse.RawTextHelpFormatter)
 
@@ -117,7 +123,7 @@ class DD4hepSimulation(object):
                         help="Steering file to change default behaviour")
 
     #first we parse just the steering file, but only if we don't want to see the help message
-    if not any( opt in sys.argv for opt in ('-h','--help')):
+    if not any( opt in self._argv for opt in ('-h','--help')):
       parsed, _unknown = parser.parse_known_args()
       self.steeringFile = parsed.steeringFile
       self.readSteeringFile()
@@ -419,7 +425,7 @@ class DD4hepSimulation(object):
       print "   make sure to specify the global constants tracker_region_zmax and tracker_region_rmax "
       print "   this is needed for the MC-truth link of created sim-hits  !  "
       exit(1)
-      
+
     #  user.enableUI()
     part.adopt(user)
 
@@ -603,8 +609,8 @@ class DD4hepSimulation(object):
         runHeader["MacroFileContent"] = mFile.read()
 
     ### add command line
-    if sys.argv:
-      runHeader["CommandLine"] = " ".join(sys.argv)
+    if self._argv:
+      runHeader["CommandLine"] = " ".join(self._argv)
 
     ### add current working directory (where we call from)
     runHeader["WorkingDirectory"] = os.getcwd()
@@ -635,7 +641,7 @@ class DD4hepSimulation(object):
       for pattern in self.action.mapActions:
         if pattern.lower() in det.lower():
           action = self.action.mapActions[pattern]
-          print  '       replace default action with : ' , action 
+          print  '       replace default action with : ' , action
           break
       seq,act = setupFuction( det, type=action )
       self.filter.applyFilters( seq, det, defaultFilter )
