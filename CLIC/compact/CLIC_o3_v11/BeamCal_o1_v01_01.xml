@@ -41,7 +41,7 @@
                         <shape type="Box"  dx="world_side" dy="world_side" dz="world_side"/>
                         <shape type="BooleanShape" operation="Subtraction">
                             <shape type="Tube"  rmin="BeamCal_inner_radius" rmax="BeamCal_outer_radius+env_safety" dz="BeamCal_dz+env_safety"/>
-                            <shape type="Tube"  rmin="0" rmax="3.5*mm" dz="BeamCal_dz+10*env_safety"/>
+                            <shape type="Tube"  rmin="0" rmax="BeamPipe_UpstreamBeamCal" dz="BeamCal_dz+10*env_safety"/>
                             <position x="tan(-CrossingAngle)*(BeamCal_min_z+BeamCal_dz)" y="0" z="0"/>
                             <rotation x="0" y="-CrossingAngle" z="0"/>
                         </shape>
@@ -52,7 +52,7 @@
                         <shape type="Box"  dx="world_side" dy="world_side" dz="world_side"/>
                         <shape type="BooleanShape" operation="Subtraction">
                             <shape type="Tube"  rmin="BeamCal_inner_radius" rmax="BeamCal_outer_radius+env_safety" dz="BeamCal_dz+env_safety"/>
-                            <shape type="Tube"  rmin="0" rmax="3.5*mm" dz="BeamCal_dz+10*env_safety"/>
+                            <shape type="Tube"  rmin="0" rmax="BeamPipe_UpstreamBeamCal" dz="BeamCal_dz+10*env_safety"/>
                             <position x="tan(-CrossingAngle)*(BeamCal_min_z+BeamCal_dz)" y="0" z="0"/>
                             <rotation x="0" y="-CrossingAngle" z="0"/>
                         </shape>
@@ -64,7 +64,7 @@
             
             <parameter crossingangle="CrossingAngle"
             cutoutspanningangle="360*degree-BeamCal_spanning_angle"
-            incomingbeampiperadius="3.5*mm"
+            incomingbeampiperadius="BeamPipe_UpstreamBeamCal"
             />
             
             <dimensions inner_r = "BeamCal_inner_radius"
