@@ -3,7 +3,6 @@
     <define>
         <constant name="HCalBarrel_layers" value="(int) 60"/>
         <constant name="HCalBarrel_layer_thickness" value="2.0*cm + 0.65*cm"/>
-        <constant name="HCal_cell_size" value="3.0*cm"/>
         
     </define>
     
