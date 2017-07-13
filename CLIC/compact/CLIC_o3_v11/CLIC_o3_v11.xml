@@ -53,6 +53,7 @@
         <constant name="ConeBeamPipe_rmax"      value="240.0*mm"/>
         <constant name="BigBeamPipe_zmax"       value="2528*mm"/>
         <constant name="BeamPipe_end"           value="12500*mm"/>
+        <constant name="BeamPipe_UpstreamBeamCal" value="3.7*mm"/>
 
 
 
