@@ -89,6 +89,8 @@ class DD4hepSimulation(object):
     self.filter = Filter()
     self.physics = Physics()
 
+    self.argv = None
+
     ### use TCSH geant UI instead of QT
     os.environ['G4UI_USE_TCSH'] = "1"
 
@@ -110,6 +112,8 @@ class DD4hepSimulation(object):
 
   def parseOptions(self, argv=sys.argv):
     """parse the command line options"""
+    self.argv = argv
+
     parser = argparse.ArgumentParser("Running DD4hep Simulations:",
                                      formatter_class=argparse.RawTextHelpFormatter)
 
@@ -117,7 +121,7 @@ class DD4hepSimulation(object):
                         help="Steering file to change default behaviour")
 
     #first we parse just the steering file, but only if we don't want to see the help message
-    if not any( opt in argv for opt in ('-h','--help')):
+    if not any( opt in self.argv for opt in ('-h','--help')):
       parsed, _unknown = parser.parse_known_args()
       self.steeringFile = parsed.steeringFile
       self.readSteeringFile()
@@ -603,8 +607,8 @@ class DD4hepSimulation(object):
         runHeader["MacroFileContent"] = mFile.read()
 
     ### add command line
-    if argv:
-      runHeader["CommandLine"] = " ".join(argv)
+    if self.argv:
+      runHeader["CommandLine"] = " ".join(self.argv)
 
     ### add current working directory (where we call from)
     runHeader["WorkingDirectory"] = os.getcwd()
