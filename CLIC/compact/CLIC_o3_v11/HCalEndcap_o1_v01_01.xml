@@ -2,7 +2,6 @@
     <define>
         <constant name="HCalEndcap_layers" value="60"/>
         <constant name="HCalEndcap_layer_thickness" value="2.0*cm + 0.65*cm"/>
-        <constant name="HCal_cell_size" value="3.0*cm"/>
         <constant name="HCalEndcap_cutout_layers" value="- floor( -HCalEndcap_zcutout / HCalEndcap_layer_thickness)"/>
         <constant name="HCalRing_layers" value=" floor( (HCalEndcap_min_z - HCalRing_min_z) / HCalEndcap_layer_thickness + 0.5)"/>
     </define>
