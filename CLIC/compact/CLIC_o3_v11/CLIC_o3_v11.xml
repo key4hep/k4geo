@@ -164,7 +164,7 @@
         <constant name="BeamCal_inner_radius"       value="32*mm"/>
         <constant name="BeamCal_outer_radius"       value="150*mm"/>
         <constant name="BeamCal_min_z"              value="3181*mm"/>
-        <constant name="BeamCal_max_z"              value="3441*mm"/>
+        <constant name="BeamCal_max_z"              value="3441.032*mm"/>
         <constant name="BeamCal_dz"                 value="(BeamCal_max_z-BeamCal_min_z)/2.0"/>
 
         <constant name="Kicker_inner_radius"        value="4*mm"/>
