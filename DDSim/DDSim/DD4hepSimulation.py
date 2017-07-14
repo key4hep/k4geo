@@ -89,7 +89,7 @@ class DD4hepSimulation(object):
     self.filter = Filter()
     self.physics = Physics()
 
-    self.argv = None
+    self._argv = None
 
     ### use TCSH geant UI instead of QT
     os.environ['G4UI_USE_TCSH'] = "1"
@@ -110,9 +110,11 @@ class DD4hepSimulation(object):
         self.__dict__ = obj.__dict__
     self.steeringFile = os.path.abspath(sFileTemp)
 
-  def parseOptions(self, argv=sys.argv):
+  def parseOptions(self, argv=None):
     """parse the command line options"""
-    self.argv = argv
+
+    if argv is None :
+        self._argv = list(sys.argv)
 
     parser = argparse.ArgumentParser("Running DD4hep Simulations:",
                                      formatter_class=argparse.RawTextHelpFormatter)
@@ -639,7 +641,7 @@ class DD4hepSimulation(object):
       for pattern in self.action.mapActions:
         if pattern.lower() in det.lower():
           action = self.action.mapActions[pattern]
-          print  '       replace default action with : ' , action
+          print  '       replace default action with : ' , action 
           break
       seq,act = setupFuction( det, type=action )
       self.filter.applyFilters( seq, det, defaultFilter )
