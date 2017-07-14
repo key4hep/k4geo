@@ -123,7 +123,7 @@ class DD4hepSimulation(object):
                         help="Steering file to change default behaviour")
 
     #first we parse just the steering file, but only if we don't want to see the help message
-    if not any( opt in self.argv for opt in ('-h','--help')):
+    if not any( opt in self._argv for opt in ('-h','--help')):
       parsed, _unknown = parser.parse_known_args()
       self.steeringFile = parsed.steeringFile
       self.readSteeringFile()
@@ -609,8 +609,8 @@ class DD4hepSimulation(object):
         runHeader["MacroFileContent"] = mFile.read()
 
     ### add command line
-    if self.argv:
-      runHeader["CommandLine"] = " ".join(self.argv)
+    if self._argv:
+      runHeader["CommandLine"] = " ".join(self._argv)
 
     ### add current working directory (where we call from)
     runHeader["WorkingDirectory"] = os.getcwd()
@@ -641,7 +641,7 @@ class DD4hepSimulation(object):
       for pattern in self.action.mapActions:
         if pattern.lower() in det.lower():
           action = self.action.mapActions[pattern]
-          print  '       replace default action with : ' , action 
+          print  '       replace default action with : ' , action
           break
       seq,act = setupFuction( det, type=action )
       self.filter.applyFilters( seq, det, defaultFilter )
