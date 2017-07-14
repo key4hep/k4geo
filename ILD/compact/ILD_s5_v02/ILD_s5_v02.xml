@@ -18,7 +18,7 @@
 
   <define>
 
-    <include ref="top_defs_ILD_s4_v02.xml"/>
+    <include ref="top_defs_ILD_s5_v02.xml"/>
     <include ref="../ILD_common_v02/top_defs_common_v02.xml"/>
     <include ref="../ILD_common_v02/basic_defs.xml"/>
     <include ref="../ILD_common_v02/envelope_defs.xml"/>
