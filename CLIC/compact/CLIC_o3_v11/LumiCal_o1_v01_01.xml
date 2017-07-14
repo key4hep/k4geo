@@ -1,9 +1,5 @@
 <lccdd>
     
-    <define>
-            <constant name="LumiCal_cell_size" value="1*mm"/>
-    </define>
-    
     <readouts>
         <readout name="LumiCalCollection">
 	    <segmentation type="PolarGridRPhi"

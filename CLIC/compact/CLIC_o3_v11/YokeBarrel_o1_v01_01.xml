@@ -3,8 +3,6 @@
     <define>
         <constant name="YokeBarrel_layers" value="7"/>
         <constant name="YokeBarrel_layer_thickness" value="10.0*cm + 4.0*cm"/>
-        <constant name="Yoke_cell_size" value="3.0*cm"/>
-        
     </define>
     
     <!--  Definition of the used visualization attributes    -->
