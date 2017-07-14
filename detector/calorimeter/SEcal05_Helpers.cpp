@@ -1,4 +1,6 @@
 #include "SEcal05_Helpers.h"
+#include "LcgeoExceptions.h"
+#include <sstream>
 
 SEcal05_Helpers::SEcal05_Helpers() {
   // constructor, initialise internal variables
@@ -230,6 +232,8 @@ void SEcal05_Helpers::updateCaloLayers(double thickness,
                                        bool isFinal
                                        ) {
 
+  //  cout << "updating calo layers ! absorber, sensitive, final " << isAbsorber << " " << isSensitive << " " << isFinal << endl;
+
   if ( isFinal ) { // add material before saving layer
     _layer_thickness           += (thickness);
     _layer_nRadiationLengths   += (thickness)/mat.radLength() ;
@@ -377,6 +381,25 @@ SEcal05_Helpers::dxinfo SEcal05_Helpers::getNormalMagicUnitsInX( double dx_total
 }
 
 
+const dd4hep::DDSegmentation::Segmentation* SEcal05_Helpers::getSliceSegmentation( dd4hep::DDSegmentation::MultiSegmentation* multiSeg , int slice_number ) {
+  // from a multi-segmentation, get the segmentation for a given slice number
+  assert ( multiSeg && "error from SEcal05_Helpers::getSliceSegmentation : null MultiSegmentation" );
+  const dd4hep::DDSegmentation::Segmentation* megatileSeg = NULL;
+  // get appropriate segmentation for this slice                                                                                                                                                                   
+  const dd4hep::DDSegmentation::MultiSegmentation::Segmentations segs = multiSeg->subSegmentations();
+  for (size_t k=0; k<segs.size(); k++) {
+    dd4hep::DDSegmentation::MultiSegmentation::Entry entr = segs[k];
+    if ( slice_number >= entr.key_min && slice_number<= entr.key_max ) {
+      //      cout << " got the multiseg for slice " << slice_number << endl;
+      megatileSeg =  entr.segmentation;
+    }
+  }
+  assert ( megatileSeg && "cannot find segmentation for this slice!!" );
+  return megatileSeg;
+}
+
+
+
 void SEcal05_Helpers::makeModule( dd4hep::Volume & mod_vol,  // the volume we'll fill
 				  dd4hep::DetElement & stave_det, // the detector element
 				  dd4hep::rec::LayeredCalorimeterData & caloData, // the reco data we'll fill
@@ -413,14 +436,66 @@ void SEcal05_Helpers::makeModule( dd4hep::Volume & mod_vol,  // the volume we'll
   // get segmentation stuff
   assert (_geomseg && "segmentation not set");
 
+
   dd4hep::DDSegmentation::WaferGridXY* waferSeg = dynamic_cast< dd4hep::DDSegmentation::WaferGridXY* > ( _geomseg->segmentation() ) ;
 
-
   dd4hep::DDSegmentation::MegatileLayerGridXY* megatileSeg = dynamic_cast< dd4hep::DDSegmentation::MegatileLayerGridXY* > ( _geomseg->segmentation() ) ;
-  assert( (waferSeg || megatileSeg) && "no segmentation found" );
+
+  dd4hep::DDSegmentation::MultiSegmentation* multiSeg = dynamic_cast< dd4hep::DDSegmentation::MultiSegmentation*>(  _geomseg->segmentation() ) ;
+
+  assert( (multiSeg || waferSeg || megatileSeg) && "no segmentation found" );
+
+
+
+  // for the multilayerseg
+  dd4hep::DDSegmentation::BitField64& encoder = const_cast<dd4hep::DDSegmentation::BitField64&>(* _geomseg->decoder());
+  encoder.setValue(0) ;
+
+  // this is to store the "reference" sensitive layers in a multi-readou scenario
+  // these are the slice numbers within a layer which are considered sensitive as far as the calodata is concerned
+  std::vector < int > multi_refSlices;
+
+  if ( multiSeg ) {
+
+    try{ 
+      // check if we have an entry for the subsegmentation to be used 
+      xml_comp_t segxml = _x_det->child( _Unicode( subsegmentation ) ) ;
+      std::string keyStr = segxml.attr<std::string>( _Unicode(key) ) ;
+      std::string keyVal = segxml.attr<std::string>( _Unicode(value) )  ;
+      int ntemp;
+      std::stringstream stream(keyVal);
+      while ( stream >> ntemp ) {
+	assert (ntemp>=0 && "error getting subsegmentation information! " );
+	multi_refSlices.push_back( ntemp );
+      }
+
+      assert( multi_refSlices.size()>0 && "no subsegmentation info found in multireadout??" );
+      
+    } catch( std::runtime_error) {
+      throw lcgeo::GeometryException(  "SEcal05_Helper: Error: MultiSegmentation specified but no "
+                                       " <subsegmentation key="" value=""/> element defined for detector ! " ) ;
+    }
+
+
+    // check if we have a megatile segmentation :
+    const dd4hep::DDSegmentation::MultiSegmentation::Segmentations segs = multiSeg->subSegmentations();
+    for (size_t k=0; k<segs.size(); k++) {
+      dd4hep::DDSegmentation::MultiSegmentation::Entry entr = segs[k];
+
+      const dd4hep::DDSegmentation::MegatileLayerGridXY* ts = dynamic_cast<const dd4hep::DDSegmentation::MegatileLayerGridXY*> ( entr.segmentation ) ;
+      dd4hep::DDSegmentation::MegatileLayerGridXY* mtl = const_cast<dd4hep::DDSegmentation::MegatileLayerGridXY*> (ts);
+      if ( mtl ) {
+	mtl->setMegaTileSizeXY( unit_sensitive_dim_Y, unit_sensitive_dim_Y );
+	mtl->setMegaTileOffsetXY( -unit_sensitive_dim_Y/2., -unit_sensitive_dim_Y/2. );
+      } else {
+	cout << "hmm, weird??? multiple segmentation, but not a megatile? this probably won;t work, bailing out!" << endl;
+	assert(0);
+      }
+
+    }
 
   // set up the standard megatile size and offset
-  if ( megatileSeg ) {
+  } else if ( megatileSeg ) {
     megatileSeg->setMegaTileSizeXY( unit_sensitive_dim_Y, unit_sensitive_dim_Y );
     megatileSeg->setMegaTileOffsetXY( -unit_sensitive_dim_Y/2., -unit_sensitive_dim_Y/2. );
   }
@@ -506,7 +581,6 @@ void SEcal05_Helpers::makeModule( dd4hep::Volume & mod_vol,  // the volume we'll
           // Position the layer.
           dd4hep::Position      bsl_pos = getTranslatedPosition(plSize.posX, plSize.posY, currentLayerBase_pos_Z + rad_pos_Z );
 
-	  //          dd4hep::PlacedVolume  barrelStructureLayer_phv = 
 	  mod_vol.placeVolume(barrelStructureLayer_vol, bsl_pos);
 
         } // loop over sheets
@@ -528,40 +602,69 @@ void SEcal05_Helpers::makeModule( dd4hep::Volume & mod_vol,  // the volume we'll
       // first sum the various materials for the caloData/caloLayer
       //-------------------------------
       int myLayerNumTemp = myLayerNum;
+
+      int slice_number(0);
+
       for(xml_coll_t si(x_layer,_U(slice)); si; ++si)  {
         xml_comp_t  x_slice = si;
         double      s_thick = x_slice.thickness();
         dd4hep::Material slice_material  = theDetector.material( x_slice.materialStr() );
+
         if (x_slice.materialStr().compare(x_staves.materialStr()) == 0){
           // this is absorber material
           //  check it's consistent with what we expect from the detector parameters
           assert ( fabs( s_thick - getAbsThickness( absorber_index++ ) ) < 1e-5 && "inconsistent radiator thickness" );
           updateCaloLayers( s_thick, slice_material, true, false ); // absorber
         } else if ( x_slice.isSensitive() ) {
-          double cell_size_x(0), cell_size_y(0);
-          if ( waferSeg ) {
-            cell_size_x = waferSeg->cellDimensions(0)[0];
-            cell_size_y = waferSeg->cellDimensions(0)[1];
-          } else if ( megatileSeg ) {
-            // setup megatile
-            int laytype = _layerConfig [ myLayerNumTemp%_layerConfig.size() ];
-            if ( laytype==0 ) {
-              megatileSeg->setMegaTileCellsXY( myLayerNumTemp, _cells_across_megatile , _cells_across_megatile );
-            } else if  ( laytype==1 ) {
-              megatileSeg->setMegaTileCellsXY( myLayerNumTemp, _strips_across_megatile , _strips_along_megatile ); // strips in one orientation
-            } else if  ( laytype==2 ) {
-              megatileSeg->setMegaTileCellsXY( myLayerNumTemp, _strips_along_megatile , _strips_across_megatile ); // and in the other
-            } else {
-              assert(0 && "unknown layer type");
-            }
-            cell_size_x = megatileSeg->cellDimensions(myLayerNumTemp, 0)[0]; // dummy wafer
-            cell_size_y = megatileSeg->cellDimensions(myLayerNumTemp, 0)[1];
+	  // whether to define this as sensitive for the calolayers (yes if single segmentation, but if multisegmentation, not necessarily)
+	  bool referenceSensitiveLayer = true;
+
+	  if ( multiSeg ) {
+	    const dd4hep::DDSegmentation::Segmentation* thisSeg = getSliceSegmentation( multiSeg , slice_number );
+	    assert ( thisSeg && "error getting slice seg" );
+	    const dd4hep::DDSegmentation::MegatileLayerGridXY* ts = dynamic_cast<const dd4hep::DDSegmentation::MegatileLayerGridXY*> ( thisSeg );
+	    assert ( ts && "error: multi is not megatile?" );
+	    megatileSeg = const_cast<dd4hep::DDSegmentation::MegatileLayerGridXY*> ( ts );
+	    referenceSensitiveLayer = find ( multi_refSlices.begin(), multi_refSlices.end(), slice_number ) != multi_refSlices.end();
+	  }
+
+	  double cell_size_x(0), cell_size_y(0);
+	  if ( waferSeg ) {
+	    cell_size_x = waferSeg->cellDimensions(0)[0];
+	    cell_size_y = waferSeg->cellDimensions(0)[1];
+	  } else if ( megatileSeg ) {
+	    // setup megatile
+	    // a bit messy: we can define a uniform segmentation via the compact xml
+	    // it we want something more fancy, have to do it through the driver
+	    // the compact xml takes precendence, if something is specified
+	    if ( megatileSeg->getUnifNCellsX()==0 || megatileSeg->getUnifNCellsY()==0 ) { // not set via talk-to, use parameters passed to helper
+	      int laytype = _layerConfig [ myLayerNumTemp%_layerConfig.size() ];
+	      if ( laytype==0 ) {
+		megatileSeg->setMegaTileCellsXY( myLayerNumTemp, _cells_across_megatile , _cells_across_megatile );
+	      } else if  ( laytype==1 ) {
+		megatileSeg->setMegaTileCellsXY( myLayerNumTemp, _strips_across_megatile , _strips_along_megatile ); // strips in one orientation
+	      } else if  ( laytype==2 ) {
+		megatileSeg->setMegaTileCellsXY( myLayerNumTemp, _strips_along_megatile , _strips_across_megatile ); // and in the other
+	      } else {
+		assert(0 && "unknown layer type");
+	      }
+	    }
+
+	    cell_size_x = megatileSeg->cellDimensions(myLayerNumTemp, 0)[0]; // dummy wafer
+	    cell_size_y = megatileSeg->cellDimensions(myLayerNumTemp, 0)[1];
           }
-          updateCaloLayers( s_thick, slice_material, false, true, cell_size_x, cell_size_y ); // sensitive
+
+	  updateCaloLayers( s_thick, slice_material, false, referenceSensitiveLayer, cell_size_x, cell_size_y ); // sensitive
+
           myLayerNumTemp++;
         } else {
-          updateCaloLayers( s_thick, slice_material, false, false );
+          updateCaloLayers( s_thick, slice_material, false, false ); // not absorber, not sensitive
         }
+
+
+	slice_number++;
+
+
       }
 
       //------------------------------------
@@ -617,10 +720,9 @@ void SEcal05_Helpers::makeModule( dd4hep::Volume & mod_vol,  // the volume we'll
 
             // Normal squared wafers - this is just the sensitive part
             // square piece of silicon, not including guard ring. guard ring material is not included
-
             dd4hep::Box WaferSiSolid( unit_sensitive_dim_Y/2., unit_sensitive_dim_Y/2., s_thick/2.);
 
-	    // get the standard cell size in X for this layer
+ 	    // get the standard cell size in X for this layer
 	    double cell_size_x = waferSeg ? waferSeg->cellDimensions(0)[0] : megatileSeg->cellDimensions(myLayerNumTemp, 0)[0];
 	    double cell_size_y = waferSeg ? waferSeg->cellDimensions(0)[1] : megatileSeg->cellDimensions(myLayerNumTemp, 0)[1];
 
@@ -653,11 +755,7 @@ void SEcal05_Helpers::makeModule( dd4hep::Volume & mod_vol,  // the volume we'll
 		ncellsx = 1;
 	      }
 
-	      // cout << "ismagic " << isMagic << " wafer " << n_wafer_x << " / " << n_wafers_x << " : sizex " << megatile_size_x << " nx " << ncellsx << endl;
-
 	      if ( megatile_size_x<=0 ) continue;
-
-	      // cout << " PASSED" << endl;
 
               double megatile_sensitive_size_x = megatile_size_x - 2*_unitDeadEdge;
 
@@ -681,6 +779,8 @@ void SEcal05_Helpers::makeModule( dd4hep::Volume & mod_vol,  // the volume we'll
                 dd4hep::PlacedVolume wafer_phv = l_vol.placeVolume(WaferSiLog, w_pos );
                 wafer_phv.addPhysVolID("wafer", wafer_num);
 		wafer_phv.addPhysVolID("layer", myLayerNumTemp );
+
+		if ( multiSeg ) wafer_phv.addPhysVolID("slice", s_num ); // need to keep slice id in case of multireadout
 
                 if ( isMagic ) {
                   if ( megatileSeg ) { // define the special megatile
