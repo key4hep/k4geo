@@ -1,7 +1,6 @@
 <lccdd>
     
     <define>
-        <constant name="BeamCal_cell_size" value="1*mm"/>
         <constant name="BeamCal_spanning_angle" value="350*degree"/>
     </define>
     

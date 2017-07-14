@@ -1,10 +1,5 @@
 <lccdd>
 
-    <!--  Definition of the readout segmentation  -->
-    <define>
-        <constant name="ECal_cell_size" value="5.1*mm"/>
-    </define>
- 
     <readouts>
         <readout name="ECalBarrelCollection">
             <segmentation type="CartesianGridXY" grid_size_x="ECal_cell_size" grid_size_y="ECal_cell_size" />
