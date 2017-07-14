@@ -73,8 +73,8 @@
   <constant name="AHCal_cell_size" value="3.0*cm"/>
   <constant name="SDHCal_cell_size" value="1.0*cm"/>
   <!-- barrel and endcvap constructors use the slices in reversed order ! -->
-  <constant name="Hcal_readout_segmentation_slice_barrel" value="4"/>
-  <constant name="Hcal_readout_segmentation_slice_endcap" value="0"/>
+  <constant name="Hcal_readout_segmentation_slice_barrel" value="1"/>
+  <constant name="Hcal_readout_segmentation_slice_endcap" value="3"/>
 
 
 </define>
