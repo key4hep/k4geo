@@ -15,6 +15,7 @@
 #include "DDSegmentation/MegatileLayerGridXY.h"
 
 #include "DDSegmentation/WaferGridXY.h"
+#include "DDSegmentation/MultiSegmentation.h"
 
 #include <iostream>
 
@@ -241,6 +242,7 @@ class SEcal05_Helpers {
 			bool isFinal=false
 			);
 
+  const dd4hep::DDSegmentation::Segmentation* getSliceSegmentation( dd4hep::DDSegmentation::MultiSegmentation* multiSeg , int slice_number );
 
   dd4hep::Segmentation* _geomseg;
 
