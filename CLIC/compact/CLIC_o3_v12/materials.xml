@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<materials>
+
+    <!--
+     Air by weight from
+     
+     http://www.engineeringtoolbox.com/air-composition-24_212.html
+     -->
+    <material name="Air">
+        <D type="density" unit="g/cm3" value="0.0012"/>
+        <fraction n="0.754" ref="N"/>
+        <fraction n="0.234" ref="O"/>
+        <fraction n="0.012" ref="Ar"/>
+    </material>
+
+    <material name="Vacuum">
+        <D type="density" unit="g/cm3" value="0.0000000001" />
+        <fraction n="0.754" ref="N"/>
+        <fraction n="0.234" ref="O"/>
+        <fraction n="0.012" ref="Ar"/>
+    </material>
+
+    <material formula="Be" name="Beryllium" state="solid" >
+        <D type="density" unit="g/cm3" value="1.848" />
+        <composite n="1" ref="Be" />
+    </material>
+
+    <material name="beam" state="gas">
+        <D unit="g/cm3" value="1.7e-14"/>
+        <fraction n="0.363" ref="H"/>
+        <fraction n="0.363" ref="N"/>
+        <fraction n="0.117" ref="C"/>
+        <fraction n="0.157" ref="O"/>
+    </material>
+
+    <material formula="Fe" name="Iron" state="solid" >
+        <D type="density" unit="g/cm3" value="7.874" />
+        <composite n="1" ref="Fe" />
+    </material>
+
+    <material formula="Si" name="Silicon" state="solid" >
+        <D type="density" unit="g/cm3" value="2.329" />
+        <composite n="1" ref="Si" />
+    </material>
+
+    <material formula="Cu" name="Copper" state="solid" >
+        <D type="density" unit="g/cm3" value="8.960" />
+        <composite n="1" ref="Cu" />
+    </material>
+
+
+    <material formula="C" name="Carbon" state="solid" >
+        <D type="density" unit="g/cm3" value="2" />
+        <composite n="1" ref="C" />
+    </material>
+
+    <material formula="Al" name="Aluminium" state="solid" >
+        <D type="density" unit="g/cm3" value="2.699" />
+        <composite n="1" ref="Al" />
+    </material>
+
+
+
+
+    <material name="Epoxy">
+        <D type="density" value="1.3" unit="g/cm3"/>
+        <composite n="44" ref="H"/>
+        <composite n="15" ref="C"/>
+        <composite n="7" ref="O"/>
+    </material>
+
+    <material name="CarbonFiber">
+        <D type="density" value="1.5" unit="g/cm3"/>
+        <fraction n="0.60" ref="C"/>
+        <fraction n="0.40" ref="Epoxy"/>
+    </material>
+
+    <material name="CarbonFiber_25D">
+        <D type="density" value="0.375" unit="g/cm3"/>
+        <fraction n="0.60" ref="C"/>
+        <fraction n="0.40" ref="Epoxy"/>
+    </material>
+
+    <material name="Kapton">
+        <D value="1.43" unit="g/cm3" />
+        <composite n="22" ref="C"/>
+        <composite n="10" ref="H" />
+        <composite n="2" ref="N" />
+        <composite n="5" ref="O" />
+    </material>
+
+    <material name="Water">
+        <D value="1" unit="g/cm3" />
+        <composite n="2" ref="H" />
+        <composite n="1" ref="O" />
+    </material>
+
+    <material name="Rohacell_IG51">
+        <D type="density" value="0.051" unit="g/cm3"/>
+        <composite n="9" ref="C"/>
+        <composite n="13" ref="H"/>
+        <composite n="2" ref="O"/>
+        <composite n="1" ref="N"/>
+    </material>
+
+    <material name="Allcomp_K9">
+        <D type="density" value="0.22" unit="g/cm3"/>
+        <fraction n="0.60" ref="C"/>
+        <fraction n="0.40" ref="Epoxy"/>
+    </material>
+
+    <material name="TungstenDens24">
+        <D value="17.8" unit="g/cm3"/>
+        <fraction n="0.93" ref="W"/>
+        <fraction n="0.061" ref="Ni"/>
+        <fraction n="0.009" ref="Fe"/>
+    </material>
+
+    <material name="Quartz">
+        <D type="density" value="2.2" unit="g/cm3"/>
+        <composite n="1" ref="Si"/>
+        <composite n="2" ref="O"/>
+    </material>
+
+    <material name="G10">
+        <D type="density" value="1.7" unit="g/cm3"/>
+        <fraction n="0.08" ref="Cl"/>
+        <fraction n="0.773" ref="Quartz"/>
+        <fraction n="0.147" ref="Epoxy"/>
+    </material>
+
+    <material name="GroundOrHVMix" state="solid">
+        <D unit="g/cm3" value="5.19"/>
+        <fraction n="0.003" ref="H"/>
+        <fraction n="0.094" ref="C"/>
+        <fraction n="0.010" ref="N"/>
+        <fraction n="0.028" ref="O"/>
+        <fraction n="0.863" ref="Cu"/>
+    </material>
+
+    <material name="siPCBMix" state="solid">
+        <D unit="g/cm3" value="5.05"/>
+        <fraction n="0.014" ref="Cl"/>
+        <fraction n="0.083" ref="O"/>
+        <fraction n="0.065" ref="Si"/>
+        <fraction n="0.003" ref="H"/>
+        <fraction n="0.014" ref="C"/>
+        <fraction n="0.818" ref="Cu"/>
+    </material>
+
+    <material name="Steel235">
+        <D value="7.85" unit="g/cm3"/>
+        <fraction n="0.998" ref="Fe"/>
+        <fraction n="0.002" ref="C"/>
+    </material>
+
+    <material name="PCB" state="solid">
+        <D unit="g/cm3" value="1.7"/>
+        <fraction n="0.180" ref="Si"/>
+        <fraction n="0.405" ref="O"/>
+        <fraction n="0.278" ref="C"/>
+        <fraction n="0.068" ref="H"/>
+        <fraction n="0.067" ref="Br"/>
+    </material>
+
+    <material name="SiliconOxide">
+        <D type="density" value="2.65" unit="g/cm3"/>
+        <composite n="1" ref="Si"/>
+        <composite n="2" ref="O"/>
+    </material>
+
+    <material name="BoronOxide">
+        <D type="density" value="2.46" unit="g/cm3"/>
+        <composite n="2" ref="B"/>
+        <composite n="3" ref="O"/>
+    </material>
+
+    <material name="SodiumOxide">
+        <D type="density" value="2.65" unit="g/cm3"/>
+        <composite n="2" ref="Na"/>
+        <composite n="1" ref="O"/>
+    </material>
+
+    <material name="AluminiumOxide">
+        <D type="density" value="3.89" unit="g/cm3"/>
+        <composite n="2" ref="Al"/>
+        <composite n="3" ref="O"/>
+    </material>
+
+    <material name="PyrexGlass">
+        <D type="density" value="2.23" unit="g/cm3"/>
+        <fraction n="0.806" ref="SiliconOxide"/>
+        <fraction n="0.130" ref="BoronOxide"/>
+        <fraction n="0.040" ref="SodiumOxide"/>
+        <fraction n="0.023" ref="AluminiumOxide"/>
+    </material>
+
+    <material name="RPCGasDefault" state="gas">
+        <D type="density" value="0.0037" unit="g/cm3"/>
+        <composite n="209" ref="C"/>
+        <composite n="239" ref="H"/>
+        <composite n="381" ref="F"/>
+    </material>
+
+    <material name="G4_POLYSTYRENE">
+        <D type="density" value="1.06" unit="g/cm3"/>
+        <fraction n="0.077418" ref="H"/>
+        <fraction n="0.922582" ref="C"/>
+    </material>
+
+</materials>
