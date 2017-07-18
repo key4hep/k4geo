@@ -32,15 +32,6 @@
     <include ref="../ILD_common_v02/services_defs.xml"/>
     <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
 
-    <!--
-	define the sensitive readout used for the reconstruction:
-	scint hcal: ( barrel==1 && encap==3)
-	sd hcal   : ( barrel==3 && encap==1)
-	( barrel and endcap constructors use the slices in reversed order ! )
-    -->
-    <constant name="Hcal_readout_segmentation_slice_barrel" value="1"/>
-    <constant name="Hcal_readout_segmentation_slice_endcap" value="3"/>
-
   </define>
 
   <limits>
