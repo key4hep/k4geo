@@ -336,7 +336,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
       
     double offset_phi=(1-cos(phirot))/sin(phirot)*layer_radius  
       -((ladder_width+(side_band_electronics_option*side_band_electronics_width/2.))
-	+(ladder_clothest_approch+cos(phirot)*2*(active_silicon_thickness+flex_cable_thickness+metal_traces_thickness))/sin(phirot));
+	+(ladder_clothest_approch+cos(phirot)*2*(active_silicon_thickness+flex_cable_thickness+metal_traces_thickness-foam_spacer_thickness/2.0))/sin(phirot));
       
     if (LayerId==0||LayerId==2||LayerId==4)  {  //------------------------------------------------------------------------
        
