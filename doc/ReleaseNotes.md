@@ -1,3 +1,25 @@
+# v00-13-03
+
+* 2017-07-19 Daniel Jeans ([PR#143](https://github.com/iLCSoft/lcgeo/pull/143))
+  - introduce SEcal06 drivers, which can deal with multi-readout (requires at least DD4hep v01-01-01 for updated MegatileLayerGridXY class). Should be completely back-compatible with SEcal05 drivers.
+  - defined hybrid ECAL, with both silicon and scintillator readout in each layer
+  - defined large and small ILD models using such a hybrid ECAL: ILD_l5_v02 and ILD_s5_v02
+
+* 2017-07-19 Daniel Jeans ([PR#142](https://github.com/iLCSoft/lcgeo/pull/142))
+  - Hcal_readout_segmentation_slice_barrel/endcap paramters were specified in both the ILD_?v_v02.xml and hcal_defs.xml files, to inconsistent values. the values in ILD_?v_v02.xml were correct, and were used. The values in hcal_defs.xml were wrong, but were not used. 
+  I have corrected values in hcal_defs.xml, removed duplicate definitions in ILD_?v_v02.xml.
+
+* 2017-07-19 Marko Petric ([PR#141](https://github.com/iLCSoft/lcgeo/pull/141))
+  - New model CLIC_o3_v12 that fixes an overlap that was considered a false positive in outer tracker barrel due to shift in z0
+  - In file `OuterTracker_o2_v06_01.xml` L6 value of `OuterTracker_Barrel_half_length` change from 1264mm -> 1264.2mm
+
+* 2017-07-19 Remi Ete ([PR#140](https://github.com/iLCSoft/lcgeo/pull/140))
+  * Modified DD4hepSimulation.parseOptions() to receive argv argument, allowing user scripts to pass custom command line arguments
+
+* 2017-07-14 Remi Ete ([PR#139](https://github.com/iLCSoft/lcgeo/pull/139))
+  - CLIC_o3_v11: move HCal_cell_size constant to main file to avoid duplicate definition
+  - CLIC_o3_v11: BeamCal: set correct size of incoming beampipe, only changes of absorber shape, reduce Beampipe wall thickness in beamcal by 0.02 mm to avoid overlaps
+
 # v00-13-02
 
 * 2017-07-11 Frank Gaede ([PR#132](https://github.com/iLCSoft/lcgeo/pull/132))
