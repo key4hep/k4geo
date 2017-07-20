@@ -5,9 +5,9 @@
         <constant name="InnerTracker_Barrel_radius_1" value="340*mm"/>
         <constant name="InnerTracker_Barrel_radius_2" value="554*mm"/>
 
-        <constant name="InnerTracker_Barrel_half_length_0" value="482*mm"/>
-        <constant name="InnerTracker_Barrel_half_length_1" value="482*mm"/>
-        <constant name="InnerTracker_Barrel_half_length_2" value="692*mm"/>
+        <constant name="InnerTracker_Barrel_half_length_0" value="481.6*mm"/>
+        <constant name="InnerTracker_Barrel_half_length_1" value="481.6*mm"/>
+        <constant name="InnerTracker_Barrel_half_length_2" value="692.3*mm"/>
 
         <constant name="InnerTracker_Endcap_z_0" value="524*mm"/>
         <constant name="InnerTracker_Endcap_z_1" value="808*mm"/>
