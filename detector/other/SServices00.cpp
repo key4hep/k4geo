@@ -594,7 +594,7 @@ bool BuildSitCables::DoBuildSitCables(dd4hep::PlacedVolume &pVol, dd4hep::Assemb
   double zPlane[2];
   zPlane[0] = z_start_2 + max_half_thickness_disk_2 + SurfaceTolerance;
 
-  zPlane[1] = z_start_3 - max_half_thickness_disk_3 - SurfaceTolerance;
+  zPlane[1] = z_start_3 - 2.0*max_half_thickness_disk_3 - SurfaceTolerance;
 
   double rInner[2];
   rInner[0] = FTD2_outer_radius + SurfaceTolerance;
@@ -618,6 +618,21 @@ bool BuildSitCables::DoBuildSitCables(dd4hep::PlacedVolume &pVol, dd4hep::Assemb
   dd4hep::Volume SitConeLog0("SitConeLog0", SitConeSolid, aluminium);
   dd4hep::Volume SitConeLog1("SitConeLog1", SitConeSolid, aluminium);
 
+  // Print out some parameters
+  std::cout <<"\n   - SIT Cone Cable services: "
+           <<"\n   - zPlane[0] = "
+           <<zPlane[0]
+           <<"\n   - zPlane[1] = "
+           <<zPlane[1]
+           <<"\n   - rInner[0] = "
+           << rInner[0]
+           <<"\n   - rInner[1] = "
+           << rInner[1]
+           <<"\n   - rOuter[0] = "
+           <<rOuter[0]
+           <<"\n   - rOuter[1] = "
+           <<rOuter[1]
+           <<std::endl;
 
   const double dr    = rmin[1] - rmin[0] ;
   const double theta = atan2( dr , z[1] - z[0] ) ;
