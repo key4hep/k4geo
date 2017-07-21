@@ -1,3 +1,19 @@
+# v00-13-04
+
+* 2017-07-21 Shaojun Lu ([PR#147](https://github.com/iLCSoft/lcgeo/pull/147))
+  - Fine tuning FTD envelope and SIT Cone cables to fix overlap that was not detected on Z-axis for ILD_l4_v02.
+
+* 2017-07-21 Shaojun Lu ([PR#145](https://github.com/iLCSoft/lcgeo/pull/145))
+  - Update lcgeoTests for ILD.
+    - ILD_l4/s4_v02 are the current optimisation models.
+    - Remove test of ILD_l1_v01, and added tests for ILD_l4/s4_v02.
+
+* 2017-07-21 Shaojun Lu ([PR#144](https://github.com/iLCSoft/lcgeo/pull/144))
+  - Fix VXD04 overlap by changing offset_phi - used in all ILD models
+
+* 2017-07-20 Marko Petric ([PR#146](https://github.com/iLCSoft/lcgeo/pull/146))
+  - Change starting position of inner tracker barrel to remove gaps and overlaps in CLIC_o3_v12
+
 # v00-13-03
 
 * 2017-07-19 Daniel Jeans ([PR#143](https://github.com/iLCSoft/lcgeo/pull/143))
