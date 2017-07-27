@@ -45,7 +45,7 @@ def run():
     exit(1)
 
   kernel.loadGeometry("file:"+ compactFile )
-  lcdd = kernel.lcdd() 
+  lcdd = kernel.detectorDescription()
   DDG4.importConstants( lcdd ) 
 
   #--------
