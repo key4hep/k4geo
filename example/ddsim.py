@@ -39,17 +39,19 @@ numberOfEvents = 10
 # input file: either .slcio or .stdhep
 # --------------------------------------
 
-lcioInputFile  = 'mcparticles.slcio'
+lcioInputFile  = 'mcparticles-1k_p60_phi00_th00-0-180.slcio'
+#lcioInputFile  = 'mcparticles.slcio'
 #lcioInputFile  = 'bbudsc_3evt.stdhep'
 #lcioInputFile  = 'bbudsc_3evt_dd4hep.slcio'
 #lcioInputFile  = 'mcparticles_single_muon_5GeV_10deg.slcio'
 #lcioInputFile  = 'mcparticles_single_muon_5GeV_7deg.slcio'
 #lcioInputFile  = 'mcparticles_single_muon_5GeV_85deg.slcio'
 
+lcioOutputFile = 'muons_ILD_l2_v02_lcio.slcio'
 #lcioOutputFile  = 'bbudsc_3evt_dd4hep_sim.slcio'
 #lcioOutputFile = 'simpleCLIC_single_muon_5GeV_85deg.slcio'
 #lcioOutputFile = 'simpleILD_single_muon_5GeV_85deg.slcio'
-lcioOutputFile = 'simple_lcio.slcio'
+#lcioOutputFile = 'simple_lcio.slcio'
 #lcioOutputFile = lcioInputFile[:len(lcioInputFile)-len('.slcio')]+'_SIM.slcio'
 
 physicsList    = 'FTFP_BERT'  # 'QGSP_BERT'
