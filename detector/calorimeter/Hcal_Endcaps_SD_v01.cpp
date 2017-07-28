@@ -54,6 +54,7 @@ using dd4hep::BUILD_ENVELOPE;
 using dd4hep::Box;
 using dd4hep::DetElement;
 using dd4hep::Detector;
+using dd4hep::SubtractionSolid;
 using dd4hep::IntersectionSolid;
 using dd4hep::Layering;
 using dd4hep::Material;
@@ -195,7 +196,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   //double phiStart = M_PI/numSide;
   double phiStart = 0.0;
 
-  PolyhedraRegular HcalEndCapSolid( numSide, phiStart, rmin, rmax,  zlen);
+  PolyhedraRegular HcalEndCapSolidP( numSide, phiStart, rmin, rmax,  zlen);
+  Box CenterHcalBox(rmin, rmin, zlen);
+
+  SubtractionSolid HcalEndCapSolid(HcalEndCapSolidP, CenterHcalBox);
 
   Volume  HcalEndCapLogical("HcalEndCapLogical",HcalEndCapSolid, stavesMaterial);
 
@@ -233,8 +237,9 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 
   double lzlen = lpDz*2.;
 
-  PolyhedraRegular HcalEndCapChamberSolid( numSide, phiStart, lpRMin, lpRMax,  lzlen);
-
+  PolyhedraRegular HcalEndCapChamberSolidC( numSide, phiStart, lpRMin, lpRMax,  lzlen);
+  
+  SubtractionSolid HcalEndCapChamberSolid(HcalEndCapChamberSolidC, CenterHcalBox);
   Box IntersectionStaveBox( lpRMax, lpRMax, zlen);
 
   // set up the translation and rotation for the intersection process 
@@ -306,7 +311,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	    slice_pos_z += slice_thickness/2.;
 	    
 	    // Slice volume
-	    PolyhedraRegular slicePolyhedraRegularSolid( numSide, phiStart, lpRMin, lpRMax,  slice_thickness);
+	    PolyhedraRegular slicePolyhedraRegularSolidS( numSide, phiStart, lpRMin, lpRMax,  slice_thickness);
+            SubtractionSolid slicePolyhedraRegularSolid(slicePolyhedraRegularSolidS, CenterHcalBox);
 	    
 	    Box sliceIntersectionStaveBox( lpRMax, lpRMax, zlen);
 	    
