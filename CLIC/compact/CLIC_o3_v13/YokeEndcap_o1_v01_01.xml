@@ -3,7 +3,7 @@
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
         <readout name="YokeEndcapCollection">
-            <segmentation type="CartesianGridXY" grid_size_x="3.5" grid_size_y="3.5" />
+            <segmentation type="CartesianGridXY" grid_size_x="Yoke_cell_size" grid_size_y="Yoke_cell_size" />
             <id>${GlobalCalorimeterReadoutID}</id>
         </readout>
     </readouts>
