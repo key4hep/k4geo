@@ -513,7 +513,7 @@ void SEcal06_Helpers::makeModule( dd4hep::Volume & mod_vol,  // the volume we'll
 
   // to deal with initial layers
   bool isFrontFace = true;
-  int myLayerNum = 0 ; // this is the sensitive layer number (one per sensitive)
+  int myLayerNum = -1 ; // this is the sensitive layer number (one per sensitive): changed to deal with multi-readout
   unsigned int absorber_index(0); // keep track of which absorber layer we're in
 
   // keep track of thickness within a layer
@@ -589,6 +589,7 @@ void SEcal06_Helpers::makeModule( dd4hep::Volume & mod_vol,  // the volume we'll
 	  mod_vol.placeVolume(barrelStructureLayer_vol, bsl_pos);
 
         } // loop over sheets
+	if ( myLayerNum>=0 ) myLayerNum++; // increment sensitive layer number in case we have crossed an absorber which is not before any sensitive material
       }
 
       // update layer thickness until front face of absorber
@@ -620,9 +621,18 @@ void SEcal06_Helpers::makeModule( dd4hep::Volume & mod_vol,  // the volume we'll
           //  check it's consistent with what we expect from the detector parameters
           assert ( fabs( s_thick - getAbsThickness( absorber_index++ ) ) < 1e-5 && "inconsistent radiator thickness" );
           updateCaloLayers( s_thick, slice_material, true, false ); // absorber
+
+	  // increment layer number when we cross an absorber layer
+	  // be careful for first sens layer, which may or may not be preceeded by absorber
+	  if ( myLayerNumTemp>=0 ) {
+	    myLayerNumTemp++;
+	  }
+
         } else if ( x_slice.isSensitive() ) {
 	  // whether to define this as sensitive for the calolayers (yes if single segmentation, but if multisegmentation, not necessarily)
 	  bool referenceSensitiveLayer = true;
+
+	  if ( myLayerNumTemp<0 ) myLayerNumTemp=0; //  be careful for first sens layer, which may or may not be preceeded by absorber
 
 	  if ( multiSeg ) {
 	    const dd4hep::DDSegmentation::Segmentation* thisSeg = getSliceSegmentation( multiSeg , slice_number );
@@ -663,7 +673,6 @@ void SEcal06_Helpers::makeModule( dd4hep::Volume & mod_vol,  // the volume we'll
 
 	  updateCaloLayers( s_thick, slice_material, false, referenceSensitiveLayer, cell_size_x, cell_size_y ); // sensitive
 
-          myLayerNumTemp++;
         } else {
           updateCaloLayers( s_thick, slice_material, false, false ); // not absorber, not sensitive
         }
@@ -720,7 +729,20 @@ void SEcal06_Helpers::makeModule( dd4hep::Volume & mod_vol,  // the volume we'll
 	    //	    dd4hep::PlacedVolume slice_phv = 
 	    l_vol.placeVolume(s_vol, s_pos );
 
+
+	    if (x_slice.materialStr().compare(x_staves.materialStr()) == 0){
+	      // this is absorber material
+	      // increment layer number when we cross an absorber layer
+	      // be careful for first sens layer, which may or may not be preceeded by absorber
+	      if ( myLayerNumTemp>=0 ) {
+		myLayerNumTemp++;
+	      }
+	    }
+
+
 	  } else { // sensitive slice
+
+	    if ( myLayerNumTemp<0 ) myLayerNumTemp=0; // be careful for first sens layer, which may or may not be preceeded by absorber
 
             // Normal squared wafers - this is just the sensitive part
             // square piece of silicon, not including guard ring. guard ring material is not included
@@ -803,7 +825,6 @@ void SEcal06_Helpers::makeModule( dd4hep::Volume & mod_vol,  // the volume we'll
 	      wafer_pos_X += megatile_size_x;
 
             } // x-wafers
-            myLayerNumTemp++;
           } // end sensitive slice
 
           // Increment Z position of slice.
