@@ -43,9 +43,9 @@
       <subsegmentation key="slice" value="Hcal_readout_segmentation_slice_endcap"/>
 
       <layer repeat="Hcal_nlayers" vis="SeeThrough">
-        <slice material="FloatGlass" thickness="HcalSD_glass_cathode_thickness" vis="Invisible"/>
-        <slice material="RPCGAS2"    thickness="HcalSD_sensitive_gas_gap" sensitive="yes" limits="cal_limits" vis="YellowVis"/>
         <slice material="FloatGlass" thickness="HcalSD_glass_anode_thickness" vis="Invisible"/>
+        <slice material="RPCGAS2"    thickness="HcalSD_sensitive_gas_gap" sensitive="yes" limits="cal_limits" vis="YellowVis"/>
+        <slice material="FloatGlass" thickness="HcalSD_glass_cathode_thickness" vis="Invisible"/>
         <slice material="G4_POLYSTYRENE" thickness = "Hcal_scintillator_thickness" sensitive = "yes"   limits="cal_limits"  vis="CyanVis"   />
         <slice material="Air"      thickness="Hcal_chamber_thickness - ( HcalSD_glass_anode_thickness + HcalSD_sensitive_gas_gap + HcalSD_glass_cathode_thickness + Hcal_scintillator_thickness)" vis="Invisible" />
       </layer>
