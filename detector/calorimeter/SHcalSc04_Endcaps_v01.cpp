@@ -211,17 +211,17 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
       
       
       double FEE_half_x = box_half_x-Hcal_endcap_services_module_width/2.0;
-      double FEE_half_Y = Hcal_endcap_services_module_width/2.0;
+      double FEE_half_y = Hcal_endcap_services_module_width/2.0;
       double FEE_half_z = box_half_z;
 
-      Box    FEEBox(FEE_half_x,FEE_half_Y,FEE_half_z);
+      Box    FEEBox(FEE_half_x,FEE_half_y,FEE_half_z);
       Volume FEEModule("Hcal_endcap_FEE",FEEBox,air);
 
       double FEELayer_thickness = Hcal_steel_cassette_thickness + HcalServices_outer_FR4_thickness + HcalServices_outer_Cu_thickness;
-      Box    FEELayerBox(FEE_half_x,FEELayer_thickness/2.0,FEE_half_Y);
+      Box    FEELayerBox(FEE_half_x,FEELayer_thickness/2.0,FEE_half_y);
       Volume FEELayer("FEELayer",FEELayerBox,air);
 
-      Box    FEELayerSteelBox(FEE_half_x,FEE_half_Y,FEELayer_thickness/2.0);
+      Box    FEELayerSteelBox(FEE_half_x,FEE_half_y,FEELayer_thickness/2.0);
       Volume FEELayerSteel("FEELayerSteel",FEELayerSteelBox,stainless_steel);
       pVol = FEELayer.placeVolume(FEELayerSteel,
 				  Position(0,
@@ -229,7 +229,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 					    +Hcal_steel_cassette_thickness/2.0),
                                            0));
 
-      Box    FEELayerFR4Box(FEE_half_x,FEE_half_Y,HcalServices_outer_FR4_thickness/2.0);
+      Box    FEELayerFR4Box(FEE_half_x,FEE_half_y,HcalServices_outer_FR4_thickness/2.0);
       Volume FEELayerFR4("FEELayerFR4",FEELayerFR4Box,PCB);
       pVol = FEELayer.placeVolume(FEELayerFR4,
 				  Position(0,
@@ -237,7 +237,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 					    +HcalServices_outer_FR4_thickness/2.0),
                                             0));
 
-      Box    FEELayerCuBox(FEE_half_x,FEE_half_Y,HcalServices_outer_Cu_thickness/2.0);
+      Box    FEELayerCuBox(FEE_half_x,FEE_half_y,HcalServices_outer_Cu_thickness/2.0);
       Volume FEELayerCu("FEELayerCu",FEELayerCuBox,copper);
       pVol = FEELayer.placeVolume(FEELayerCu,
 				  Position(0,
