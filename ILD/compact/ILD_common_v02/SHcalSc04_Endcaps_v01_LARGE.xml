@@ -21,22 +21,22 @@
       <material name="Steel235"/><!-- radiator and the thickness has been defined in the main xml file-->
 
       <dimensions numsides="16"><!-- the detail demensions list. there are 16 in this version. -->
-        <dimensions id="1"  y_offset= "540.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="1080.0*mm"/>
-        <dimensions id="2"  y_offset= "900.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="1800.0*mm"/>
-        <dimensions id="3"  y_offset="1080.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="2160.0*mm"/>
-        <dimensions id="4"  y_offset="1260.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="2520.0*mm"/>
-        <dimensions id="5"  y_offset="1260.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="2520.0*mm"/>
-        <dimensions id="6"  y_offset="1440.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="2880.0*mm"/>
-        <dimensions id="7"  y_offset="1440.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="2880.0*mm"/>
-        <dimensions id="8"  y_offset="1622.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="2520.0*mm"/>
-        <dimensions id="9"  y_offset="1622.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="2520.0*mm"/>
-        <dimensions id="10" y_offset="1440.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="2880.0*mm"/>
-        <dimensions id="11" y_offset="1440.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="2880.0*mm"/>
-        <dimensions id="12" y_offset="1260.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="2520.0*mm"/>
-        <dimensions id="13" y_offset="1260.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="2520.0*mm"/>
-        <dimensions id="14" y_offset="1080.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="2160.0*mm"/>
-        <dimensions id="15" y_offset= "900.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="1800.0*mm"/>
-        <dimensions id="16" y_offset= "540.0*mm" dim_x="375.0*mm" dim_y="1287.0*mm" dim_z="1080.0*mm"/>
+        <dimensions id="1"  y_offset= "540.0*mm" dim_x="375.0*mm" dim_z="1287.0*mm" dim_y="1080.0*mm"/>
+        <dimensions id="2"  y_offset= "900.0*mm" dim_x="375.0*mm" dim_z="1287.0*mm" dim_y="1800.0*mm"/>
+        <dimensions id="3"  y_offset="1080.0*mm" dim_x="375.0*mm" dim_z="1287.0*mm" dim_y="2160.0*mm"/>
+        <dimensions id="4"  y_offset="1260.0*mm" dim_x="375.0*mm" dim_z="1287.0*mm" dim_y="2520.0*mm"/>
+        <dimensions id="5"  y_offset="1260.0*mm" dim_x="375.0*mm" dim_z="1287.0*mm" dim_y="2520.0*mm"/>
+        <dimensions id="6"  y_offset="1440.0*mm" dim_x="375.0*mm" dim_z="1287.0*mm" dim_y="2880.0*mm"/>
+        <dimensions id="7"  y_offset="1440.0*mm" dim_x="375.0*mm" dim_z="1287.0*mm" dim_y="2880.0*mm"/>
+        <dimensions id="8"  y_offset="1622.0*mm" dim_x="375.0*mm" dim_z="1287.0*mm" dim_y="2520.0*mm"/>
+        <dimensions id="9"  y_offset="1622.0*mm" dim_x="375.0*mm" dim_z="1287.0*mm" dim_y="2520.0*mm"/>
+        <dimensions id="10" y_offset="1440.0*mm" dim_x="375.0*mm" dim_z="1287.0*mm" dim_y="2880.0*mm"/>
+        <dimensions id="11" y_offset="1440.0*mm" dim_x="375.0*mm" dim_z="1287.0*mm" dim_y="2880.0*mm"/>
+        <dimensions id="12" y_offset="1260.0*mm" dim_x="375.0*mm" dim_z="1287.0*mm" dim_y="2520.0*mm"/>
+        <dimensions id="13" y_offset="1260.0*mm" dim_x="375.0*mm" dim_z="1287.0*mm" dim_y="2520.0*mm"/>
+        <dimensions id="14" y_offset="1080.0*mm" dim_x="375.0*mm" dim_z="1287.0*mm" dim_y="2160.0*mm"/>
+        <dimensions id="15" y_offset= "900.0*mm" dim_x="375.0*mm" dim_z="1287.0*mm" dim_y="1800.0*mm"/>
+        <dimensions id="16" y_offset= "540.0*mm" dim_x="375.0*mm" dim_z="1287.0*mm" dim_y="1080.0*mm"/>
       </dimensions>
 
       <!--  select which subsegmentation will be used to fill the DDRec:LayeredCalorimeterData cell dimensions -->
@@ -55,14 +55,14 @@
   <readouts>
     <readout name="HcalEndcapsReadout">
       <segmentation   type="MultiSegmentation"  key="slice">
-        <segmentation name="RPCgrid" type="CartesianGridXZ"    key_value="1"    grid_size_x="SDHCal_cell_size" grid_size_z="SDHCal_cell_size" />
-        <segmentation name="Scigrid"  type="CartesianGridXZ"  key_value="3"  grid_size_x="AHCal_cell_size" grid_size_z="AHCal_cell_size" offset_x="AHCal_cell_size/2.0" offset_z="AHCal_cell_size/2.0" />
+        <segmentation name="RPCgrid" type="CartesianGridXY"    key_value="1"    grid_size_x="SDHCal_cell_size" grid_size_y="SDHCal_cell_size" />
+        <segmentation name="Scigrid"  type="CartesianGridXY"  key_value="3"  grid_size_x="AHCal_cell_size" grid_size_y="AHCal_cell_size" offset_x="AHCal_cell_size/2.0" offset_y="AHCal_cell_size/2.0" />
       </segmentation>
       <hits_collections>
         <hits_collection name="HCalEndcapRPCHits"  key="slice" key_value="1"/>
         <hits_collection name="HcalEndcapsCollection"  key="slice" key_value="3"/>
       </hits_collections>
-      <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,z:-16</id>
+      <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,y:-16</id>
     </readout>
   </readouts>
 
