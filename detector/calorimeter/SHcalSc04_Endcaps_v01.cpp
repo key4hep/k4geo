@@ -68,7 +68,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   Layering    layering(x_det);
   xml_dim_t   dim         = x_det.dimensions();
   string      det_name    = x_det.nameStr();
-  //unused: string      det_type    = x_det.typeStr();
+
   Material    air         = theDetector.air();
   Material    stavesMaterial    = theDetector.material(x_det.materialStr());
   int         numSides    = dim.numsides();
@@ -196,6 +196,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
       double y_offset = pos_y;
       
       Box    EndcapModule(box_half_x,box_half_y,box_half_z);
+      cout << "Hcal_Endcaps: endcapID, dim_x, dim_y, dim_z = "<<endcapID<<" "<<dim_x<<" "<<dim_y<<" "<<dim_z <<endl;
+      cout << "Offsets: x_offset, y_offset =" << x_offset<<" "<<y_offset<<endl;
+      cout<<"SHcalSC04_Endcaps: box_half_x,y,z"<<box_half_x<<" "<<box_half_y<<" "<<box_half_z<<endl;
+
       
       // define the name of each endcap Module
       string envelopeVol_name   = det_name+_toString(endcapID,"_EndcapModule%d");
@@ -207,39 +211,38 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
       
       
       double FEE_half_x = box_half_x-Hcal_endcap_services_module_width/2.0;
-      double FEE_half_y = box_half_y;
-      double FEE_half_Z = Hcal_endcap_services_module_width/2.0;
+      double FEE_half_Y = Hcal_endcap_services_module_width/2.0;
+      double FEE_half_z = box_half_z;
 
-      Box    FEEBox(FEE_half_x,FEE_half_y,FEE_half_Z);
+      Box    FEEBox(FEE_half_x,FEE_half_Y,FEE_half_z);
       Volume FEEModule("Hcal_endcap_FEE",FEEBox,air);
 
       double FEELayer_thickness = Hcal_steel_cassette_thickness + HcalServices_outer_FR4_thickness + HcalServices_outer_Cu_thickness;
-      Box    FEELayerBox(FEE_half_x,FEELayer_thickness/2.0,FEE_half_Z);
+      Box    FEELayerBox(FEE_half_x,FEELayer_thickness/2.0,FEE_half_Y);
       Volume FEELayer("FEELayer",FEELayerBox,air);
 
-      Box    FEELayerSteelBox(FEE_half_x,Hcal_steel_cassette_thickness/2.0,FEE_half_Z);
+      Box    FEELayerSteelBox(FEE_half_x,FEE_half_Y,FEELayer_thickness/2.0);
       Volume FEELayerSteel("FEELayerSteel",FEELayerSteelBox,stainless_steel);
       pVol = FEELayer.placeVolume(FEELayerSteel,
 				  Position(0,
 					   (-FEELayer_thickness/2.0
 					    +Hcal_steel_cassette_thickness/2.0),
-					   0));
+                                           0));
 
-      Box    FEELayerFR4Box(FEE_half_x,HcalServices_outer_FR4_thickness/2.0,FEE_half_Z);
+      Box    FEELayerFR4Box(FEE_half_x,FEE_half_Y,HcalServices_outer_FR4_thickness/2.0);
       Volume FEELayerFR4("FEELayerFR4",FEELayerFR4Box,PCB);
       pVol = FEELayer.placeVolume(FEELayerFR4,
 				  Position(0,
 					   (-FEELayer_thickness/2.0+Hcal_steel_cassette_thickness
 					    +HcalServices_outer_FR4_thickness/2.0),
-					   0));
+                                            0));
 
-      Box    FEELayerCuBox(FEE_half_x,HcalServices_outer_Cu_thickness/2.0,FEE_half_Z);
+      Box    FEELayerCuBox(FEE_half_x,FEE_half_Y,HcalServices_outer_Cu_thickness/2.0);
       Volume FEELayerCu("FEELayerCu",FEELayerCuBox,copper);
       pVol = FEELayer.placeVolume(FEELayerCu,
 				  Position(0,
-					   (-FEELayer_thickness/2.0+Hcal_steel_cassette_thickness+HcalServices_outer_FR4_thickness
-					    +HcalServices_outer_Cu_thickness/2.0),
-					   0));
+					   (-FEELayer_thickness/2.0+Hcal_steel_cassette_thickness+HcalServices_outer_FR4_thickness +HcalServices_outer_Cu_thickness/2.0),
+                                           0));
 
 
       // ========= Create Hcal Chamber (i.e. Layers) ==============================
@@ -251,7 +254,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
       // place the Layer into the Hcal Endcap Modules envelope (stavesMaterial).
       
       // First Hcal Chamber position, start after first radiator
-      double layer_pos_y     = - box_half_y + Hcal_radiator_thickness;                      
+      double layer_pos_z     = - box_half_z + Hcal_radiator_thickness;                      
       
       // Create Hcal Endcap Chamber without radiator
       // Place into the Hcal Encap module envelope, after each radiator 
@@ -266,8 +269,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	
 	// Active Layer box & volume
 	double active_layer_dim_x = box_half_x - Hcal_lateral_structure_thickness - Hcal_endcap_layer_air_gap;
-	double active_layer_dim_y = layer_thickness/2.0;
-	double active_layer_dim_z = box_half_z;// - Hcal_lateral_structure_thickness - Hcal_endcap_layer_air_gap;
+	double active_layer_dim_y = box_half_y;// - Hcal_lateral_structure_thickness - Hcal_endcap_layer_air_gap;
+	double active_layer_dim_z = layer_thickness/2.0;
 	
 	// Build chamber including air gap
 	// The Layer will be filled with slices, 
@@ -288,7 +291,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	// ==========================================================================
 	
 	// Create the slices (sublayers) within the Hcal Chamber.
-	double slice_pos_y = -(layer_thickness / 2.0);
+	double slice_pos_z = -(layer_thickness / 2.0);
 	int slice_number = 0;
 
 	double nRadiationLengths=0.;
@@ -306,10 +309,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	  Material slice_material  = theDetector.material(x_slice.materialStr());
 	  DetElement slice(layer,_toString(slice_number,"slice%d"),det_id);
 	  
-	  slice_pos_y += slice_thickness / 2.0;
+	  slice_pos_z += slice_thickness / 2.0;
 	  
 	  // Slice volume & box
-	  Volume slice_vol(slice_name,Box(active_layer_dim_x,slice_thickness/2.0,active_layer_dim_z),slice_material);
+	  Volume slice_vol(slice_name,Box(active_layer_dim_x,active_layer_dim_y,slice_thickness/2.0),slice_material);
 	  
 	  nRadiationLengths   += slice_thickness/(2.*slice_material.radLength());
 	  nInteractionLengths += slice_thickness/(2.*slice_material.intLength());
@@ -344,12 +347,12 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	  // Set region, limitset, and vis.
 	  slice_vol.setAttributes(theDetector,x_slice.regionStr(),x_slice.limitsStr(),x_slice.visStr());
 	  // slice PlacedVolume
-	  PlacedVolume slice_phv = layer_vol.placeVolume(slice_vol,Position(0,slice_pos_y,0));
+	  PlacedVolume slice_phv = layer_vol.placeVolume(slice_vol,Position(0,0,slice_pos_z));
 	  slice_phv.addPhysVolID("slice",slice_number);
 	  
 	  slice.setPlacement(slice_phv);
 	  // Increment Z position for next slice.
-	  slice_pos_y += slice_thickness / 2.0;
+	  slice_pos_z += slice_thickness / 2.0;
 	  // Increment slice number.
 	  ++slice_number;             
 	}
@@ -372,10 +375,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	for (int j = 0; j < repeat; j++)    {
 	  
 	  // Layer position in y within the Endcap Modules.
-	  layer_pos_y += layer_thickness / 2.0;
+	  layer_pos_z += layer_thickness / 2.0;
 	  
 	  PlacedVolume layer_phv = envelopeVol.placeVolume(layer_vol,
-							   Position(0,layer_pos_y,0));
+							   Position(0,0,layer_pos_z));
 	  // registry the ID of Layer, stave and module
 	  layer_phv.addPhysVolID("layer",layer_num);
 
@@ -383,11 +386,11 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	  layer.setPlacement(layer_phv);
 
 	  pVol = FEEModule.placeVolume(FEELayer,
-				       Position(0,layer_pos_y,0));
+				       Position(0,0,layer_pos_z));
 	  //-----------------------------------------------------------------------------------------
 	  if ( caloData->layers.size() < (unsigned int)repeat ) {
 
-	    caloLayer.distance = HcalEndcap_min_z + box_half_y + layer_pos_y
+	    caloLayer.distance = HcalEndcap_min_z + box_half_z + layer_pos_z
 	      - caloLayer.inner_thickness ; // Will be added later at "DDMarlinPandora/DDGeometryCreator.cc:226" to get center of sensitive element
 	    caloLayer.absorberThickness = Hcal_radiator_thickness ;
 	    
@@ -402,8 +405,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	  
 	  // Increment the layer_pos_y
 	  // Place Hcal Chamber after each radiator 
-	  layer_pos_y += layer_thickness / 2.0;
-	  layer_pos_y += Hcal_radiator_thickness;
+	  layer_pos_z += layer_thickness / 2.0;
+	  layer_pos_z += Hcal_radiator_thickness;
 	  ++layer_num;         
 	}
 	
@@ -426,12 +429,12 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	double EndcapModule_pos_z = 0;
 	double rot_EM = 0;
 
-	double EndcapModule_center_pos_z = HcalEndcap_min_z + box_half_y;
+	double EndcapModule_center_pos_z = HcalEndcap_min_z + box_half_z;
 	
 	double FEEModule_pos_x = 0;
 	double FEEModule_pos_y = 0;
 	double FEEModule_pos_z = 0;
-	double FEEModule_center_pos_z = HcalEndcap_min_z + box_half_y;
+	double FEEModule_center_pos_z = HcalEndcap_min_z + box_half_z;
 
 	switch (stave_num)
 	  {
@@ -439,13 +442,13 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	    EndcapModule_pos_x = x_offset;
 	    EndcapModule_pos_y = y_offset;
 	    FEEModule_pos_x = x_offset;
-	    FEEModule_pos_y = y_offset + box_half_z + Hcal_endcap_services_module_width/2.0;
+	    FEEModule_pos_y = y_offset + box_half_y + Hcal_endcap_services_module_width/2.0;
 	    break;
 	  case 1 : 
 	    EndcapModule_pos_x = -x_offset;
 	    EndcapModule_pos_y = -y_offset;
 	    FEEModule_pos_x = -x_offset;
-	    FEEModule_pos_y = -y_offset - box_half_z - Hcal_endcap_services_module_width/2.0;
+	    FEEModule_pos_y = -y_offset - box_half_y - Hcal_endcap_services_module_width/2.0;
 	    break;
 	  }
 	
@@ -453,7 +456,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 
 	  int module_id = (module_num==0)? 0:6;
 	  
-	  rot_EM = (module_id==0)?(-M_PI/2.0):(M_PI/2.0);
+	  rot_EM = (module_id==0)?M_PI:0;
 	  
 	  EndcapModule_pos_z = (module_id==0)? -EndcapModule_center_pos_z:EndcapModule_center_pos_z;
 
