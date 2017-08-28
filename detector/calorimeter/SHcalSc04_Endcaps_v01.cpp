@@ -196,10 +196,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
       double y_offset = pos_y;
       
       Box    EndcapModule(box_half_x,box_half_y,box_half_z);
-      cout << "Hcal_Endcaps: endcapID, dim_x, dim_y, dim_z = "<<endcapID<<" "<<dim_x<<" "<<dim_y<<" "<<dim_z <<endl;
-      cout << "Offsets: x_offset, y_offset =" << x_offset<<" "<<y_offset<<endl;
-      cout<<"SHcalSC04_Endcaps: box_half_x,y,z"<<box_half_x<<" "<<box_half_y<<" "<<box_half_z<<endl;
-
       
       // define the name of each endcap Module
       string envelopeVol_name   = det_name+_toString(endcapID,"_EndcapModule%d");
