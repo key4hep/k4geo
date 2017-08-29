@@ -189,8 +189,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
     
       // Hcal Endcap module shape
       double box_half_x= dim_x/2.0; // module width, all are same
-      double box_half_y= dim_y/2.0; // total thickness, all are same
-      double box_half_z= dim_z/2.0; // module length, changed, 
+      double box_half_y= dim_y/2.0; // module length, changing 
+      double box_half_z= dim_z/2.0; // total thickness, all are same
       
       double x_offset = box_half_x*numSides-box_half_x*endcapID*2.0-box_half_x;
       double y_offset = pos_y;
@@ -214,31 +214,31 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
       Volume FEEModule("Hcal_endcap_FEE",FEEBox,air);
 
       double FEELayer_thickness = Hcal_steel_cassette_thickness + HcalServices_outer_FR4_thickness + HcalServices_outer_Cu_thickness;
-      Box    FEELayerBox(FEE_half_x,FEELayer_thickness/2.0,FEE_half_y);
+      Box    FEELayerBox(FEE_half_x,FEE_half_y,FEELayer_thickness/2.0);
       Volume FEELayer("FEELayer",FEELayerBox,air);
 
-      Box    FEELayerSteelBox(FEE_half_x,FEE_half_y,FEELayer_thickness/2.0);
+      Box    FEELayerSteelBox(FEE_half_x,FEE_half_y,Hcal_steel_cassette_thickness/2.0);
       Volume FEELayerSteel("FEELayerSteel",FEELayerSteelBox,stainless_steel);
       pVol = FEELayer.placeVolume(FEELayerSteel,
 				  Position(0,
+                                           0,
 					   (-FEELayer_thickness/2.0
-					    +Hcal_steel_cassette_thickness/2.0),
-                                           0));
+					    +Hcal_steel_cassette_thickness/2.0)));
 
       Box    FEELayerFR4Box(FEE_half_x,FEE_half_y,HcalServices_outer_FR4_thickness/2.0);
       Volume FEELayerFR4("FEELayerFR4",FEELayerFR4Box,PCB);
       pVol = FEELayer.placeVolume(FEELayerFR4,
 				  Position(0,
+                                           0,
 					   (-FEELayer_thickness/2.0+Hcal_steel_cassette_thickness
-					    +HcalServices_outer_FR4_thickness/2.0),
-                                            0));
+					    +HcalServices_outer_FR4_thickness/2.0)));
 
       Box    FEELayerCuBox(FEE_half_x,FEE_half_y,HcalServices_outer_Cu_thickness/2.0);
       Volume FEELayerCu("FEELayerCu",FEELayerCuBox,copper);
       pVol = FEELayer.placeVolume(FEELayerCu,
 				  Position(0,
-					   (-FEELayer_thickness/2.0+Hcal_steel_cassette_thickness+HcalServices_outer_FR4_thickness +HcalServices_outer_Cu_thickness/2.0),
-                                           0));
+                                           0,
+					   (-FEELayer_thickness/2.0+Hcal_steel_cassette_thickness+HcalServices_outer_FR4_thickness +HcalServices_outer_Cu_thickness/2.0)));
 
 
       // ========= Create Hcal Chamber (i.e. Layers) ==============================
