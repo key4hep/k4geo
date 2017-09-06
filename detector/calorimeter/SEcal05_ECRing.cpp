@@ -510,7 +510,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	  caloLayer.outer_thickness           = thickness_sum; 
 	  
 	  // if (!isFirstSens){ caloData->layers.push_back( caloLayer ) ; // don't add preshower layer
-	  if (Ecal_Barrel_PreshowerLayer==0 || !isFirstSens){ caloData->layers.push_back( caloLayer ) ;
+	  if (Ecal_Barrel_PreshowerLayer==0 || !isFirstSens){
+	    if ( module_num==0 ) caloData->layers.push_back( caloLayer ) ; //Fill once for both side ECRings
 #ifdef VERBOSE	    
 	    std::cout<<" caloLayer.distance: "<< caloLayer.distance <<std::endl;
 	    
@@ -602,7 +603,9 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	+ (Ecal_fiber_thickness_alveolus + Ecal_fiber_thickness_structure ); 
 
 
-      if (Ecal_Barrel_PreshowerLayer==0 || !isFirstSens) caloData->layers.push_back( caloLayer ) ;
+      if (Ecal_Barrel_PreshowerLayer==0 || !isFirstSens) {
+	if ( module_num==0 ) caloData->layers.push_back( caloLayer ) ; //Fill once for both side ECRings
+      }
 #ifdef VERBOSE      
       std::cout<<" caloLayer.distance: "<< caloLayer.distance <<std::endl;
       
