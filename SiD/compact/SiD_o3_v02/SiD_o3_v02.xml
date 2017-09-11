@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0" 
+       xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" 
+       xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+  <info name="SiD_o2_v02"
+        title="Silicon Detector 2017"
+        author="Norman Graf, Jeremy McCormick, Dan Protopopescu"
+        url="http://confluence.slac.stanford.edu/display/ilc/sidloi"
+        status="development"
+        version="o2_v02">
+    <comment>The compact format for the Silicon Detector as of Jan 2017.</comment>        
+  </info>
+
+  <includes>
+    <gdmlFile  ref="elements.xml"/>
+    <gdmlFile  ref="materials.xml"/>
+  </includes>
+
+  <define>
+    <constant name="world_side" value="30000*mm"/>
+    <constant name="world_x" value="world_side"/>
+    <constant name="world_y" value="world_side"/>
+    <constant name="world_z" value="world_side"/>
+
+    <constant name="env_safety" value="0.1*mm"/>
+
+    <comment> suggested naming convention:
+
+      main parameters (see definitions in http://cern.ch/go/r9mZ):
+      
+      DET_rmin            : inner radius of tube like envelope  ( inscribed cylinder )
+      DET_rmax            : outer radius of tube like envelope  ( inscribed cylinder )
+      DET_half_length     : half length along z axis
+      DET_zmin            : smallest absolute value on z-axis
+      DET_zmax            : largest  absolute value on z-axis
+      DET_inner_symmetry  : number of sides on the inside  ( 0 for tube )
+      DET_outer_symmetry  : number of sides on the outside ( 0 for tube )
+      DET_symmetry        : number of sides if the same in- and outside
+      DET_inner_phi0      : optional rotation of the inner polygon ( in r-phi plane )
+      DET_outer_phi0      : optional rotation of the outer polygon ( in r-phi plane )
+      
+      additional parameters for cutting away volumes/shapes use one of the above with a number
+      appended and/or an extra specifiaction such as cone ( for a cut away cone )
+      
+      DET_rmin_1
+      DET_rmin_2
+      DET_cone_zmin
+      DET_cone_zmax
+      
+    </comment>    
+
+    <constant name="SiTracker_outer_radius" value="1235.0*mm"/>
+    <constant name="SiTracker_inner_radius" value="206.00*mm"/>
+    <constant name="SiTracker_zmax" value="1637.0*mm"/><!-- half-length -->
+    <constant name="SiTracker_EndcapLayers" value="4"/>
+    <constant name="SiTracker_BarrelLayers" value="SiTracker_EndcapLayers + 1"/>
+
+    <constant name="ECalBarrel_half_length" value="1765.0*mm" />
+    <constant name="ECalBarrel_rmin" value="1264.0*mm" />
+    <constant name="ECalBarrel_rmax" value="1403.0*mm" />
+    <constant name="ECalBarrel_symmetry" value="12" />
+   
+    <constant name="ECalEndcap_zmin" value="1657.0*mm" />
+    <constant name="ECalEndcap_zmax" value="1800.0*mm" />
+    <constant name="ECalEndcap_rmin"  value="216.0*mm" />
+    <constant name="ECalEndcap_rmax" value="1250.0*mm" />
+    <constant name="ECalEndcap_inner_symmetry" value="12" />
+    <constant name="ECalEndcap_outer_symmetry" value="12" />
+
+    <constant name="HCalBarrel_half_length" value="2950.0*mm" />
+    <constant name="HCalBarrel_rmin" value="1403.0*mm" />
+    <constant name="HCalBarrel_rmax" value="2568.0*mm" />
+    <constant name="HCalBarrel_symmetry" value="12" />
+
+    <constant name="HCalEndcap_zmin" value="1801.0*mm" />
+    <constant name="HCalEndcap_zmax" value="3000.0*mm" />
+    <constant name="HCalEndcap_rmin" value="216.0*mm" />
+    <constant name="HCalEndcap_rmax" value="1403.0*mm" />
+    <constant name="HCalEndcap_inner_symmetry" value="12" />
+    <constant name="HCalEndcap_outer_symmetry" value="12" />
+
+    <constant name="MuonBarrel_half_length" value="2950.0*mm" />
+    <constant name="MuonBarrel_rmin" value="3454.0*mm" />
+    <constant name="MuonBarrel_rmax" value="6054.0*mm" />
+    <constant name="MuonBarrel_symmetry" value="12" />
+    <constant name="MuonBarrel_end_angle" value="30.*deg" />
+
+    <constant name="MuonEndcap_zmin" value="3000.0*mm" />
+    <constant name="MuonEndcap_zmax" value="5600.0*mm" />
+    <constant name="MuonEndcap_rmin"  value="366.0*mm" />
+    <constant name="MuonEndcap_rmax" value="6054.0*mm" />
+    <constant name="MuonEndcap_inner_symmetry" value="12" />
+    <constant name="MuonEndcap_outer_symmetry" value="12" />    
+    <constant name="MuonEndcap_end_angle" value="30.*deg" />
+
+    <constant name="BeamCal_rmin" value="0.0*mm" />
+    <constant name="BeamCal_rmax" value="129.6*mm" />
+    <constant name="BeamCal_zmin" value="3039.0*mm" />
+    <constant name="BeamCal_zmax" value="3399.0*mm" />
+
+    <constant name="LumiCal_rmin" value="60.0*mm"/>
+    <constant name="LumiCal_rmax" value="195.0*mm"/>
+    <constant name="LumiCal_zmin" value="1557.0*mm"/>
+    <constant name="LumiCal_zmax" value="1700.0*mm"/>
+
+    <constant name="tracking_region_radius" value="ECalBarrel_rmin - 10*env_safety"/>
+    <constant name="tracking_region_zmax" value="ECalEndcap_zmin - 10*env_safety"/>    
+    <constant name="tracker_region_rmax" value="tracking_region_radius"/>  
+    <constant name="tracker_region_zmax" value="tracking_region_zmax"/> 
+
+    <constant name="VXD_CF_sensor" value="0.026*cm"/>
+    <constant name="VXD_CF_support" value="0.05*cm"/>
+    <constant name="bp_cone_slope" value="(8.96-1.20)/(185-6.25)"/>
+
+    <constant name="Solenoid_inner_radius" value="2604*mm"/>
+    <constant name="Solenoid_half_length" value="2950*mm"/>
+    <constant name="SolenoidEndcapCryostatThickness" value="5.0*cm"/>
+    <constant name="SolenoidEndcapAirgapThickness" value="19.0*cm"/>
+    <constant name="Solenoid_Coil_half_length" value="Solenoid_half_length-SolenoidEndcapCryostatThickness-SolenoidEndcapAirgapThickness"/>
+    <constant name="Solenoid_outer_radius" value="3429*mm"/>
+  </define>
+
+  <limits>
+    <limitset name="cal_limits">
+      <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
+    </limitset>
+  </limits>
+
+  <display>
+    <vis name="BeampipeVis" r="0.7734375" g="0.8671875" b="0.99609375" />
+
+    <vis name="SiVertexBarrelVis" r="0.5" g="0.7" b="0.4" />
+    <vis name="SiVertexEndcapVis" r="0.5" g="0.7" b="0.4" />
+
+    <vis name="SiTrackerForwardVis" r="0.8" g="0.1" b="0.1" />
+
+    <vis name="SiTrackerBarrelVis" r="0.8" g="1.0" b="0.1" />
+    <vis name="SiTrackerEndcapVis" r="0.0" g="0.25" b="0.53" />
+
+    <vis name="ECalBarrelVis" r="0.77" g="0.74" b="0.86" />
+    <vis name="ECalEndcapVis" r="0.77" g="0.74" b="0.86" />
+
+    <vis name="HCalBarrelVis" r="0.296875" g="0.48828125" b="0.4921875" />
+    <vis name="HCalEndcapVis" r="0.296875" g="0.48828125" b="0.4921875" />
+
+    <vis name="SOLVis" r="0.20703125" g="0.453125" b="0.77734375" />
+    <vis name="EnvelopeVis" alpha="1.0" r="0.8"  g="0.8"  b="0.4" visible="false"/>
+
+    <vis name="MuonEndcapVis" r="0.28125" g="0.390625" b="0.625" />
+    <vis name="MuonBarrelVis" r="0.28125" g="0.390625" b="0.625" />
+
+    <vis name="LumiCalVis" r="0.5" g="0.5" b="0.5" />
+    <vis name="BeamCalVis" r="0.8" g="0.3" b="0.5" />
+
+  </display>
+
+  <!-- ####################### Individual sub-detectors ####################### -->
+
+  <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
+
+  <comment>Trackers</comment> 
+  <include ref="SiVertexBarrel.xml"/>
+  <include ref="SiVertexEndcap_o2_v02.xml"/>
+
+  <include ref="SiTrackerBarrel_o2_v02_00.xml"/>
+  <include ref="SiTrackerEndcap_o2_v02_01.xml"/>
+  <include ref="SiTrackerForward_o2_v02_00.xml"/>
+  
+  <comment>Calorimeters</comment>  
+  <include ref="ECalBarrel_o2_v03_00.xml"/>
+  <include ref="ECalEndcap_o2_v02_00.xml"/>
+
+  <include ref="HCalBarrel_o3_v02_00.xml"/>
+  <include ref="HCalEndcap_o3_v02_00.xml"/>
+
+  <include ref="MuonBarrel_o2_v02_01.xml"/>
+  <include ref="MuonEndcap_o2_v02_01.xml"/>
+
+  <include ref="LumiCal_o2_v02_00.xml"/>
+  <include ref="BeamCal_o2_v02_00.xml"/>
+
+  <include ref="Solenoid_o2_v02_00.xml"/>
+
+  <comment>Beam pipe</comment>
+  <!--include ref="BeamPipe.xml"/-->
+  
+  <comment>Dead material and supports</comment>
+  <comment>Vertex Detector Supports and Readout</comment>  
+  <!--  FG: fixme: should be split up into more individual files  ... -->
+  <!-- <include ref="Support.xml"/> -->
+
+  <!-- ############ Individual plugins are now in SUBDET.xml files ############# -->
+  <plugins>
+    <plugin name="InstallSurfaceManager"/>
+  </plugins>
+
+  <!-- ############ Individual readouts are now in SUBDET.xml files ############# -->
+
+  <fields>
+    <field type="solenoid" name="GlobalSolenoid" inner_field="5.0*tesla"
+           outer_field="-0.6*tesla" zmax="2950*mm"
+           outer_radius="Solenoid_outer_radius" />
+  </fields>
+
+</lccdd>

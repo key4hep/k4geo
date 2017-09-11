@@ -1,0 +1,46 @@
+<lccdd>
+
+<!-----------------------------------------------------------------------------------------------
+     AHCal Barrel based on SiD_o2_v02, and updated by protopop@cern.ch on Aug 5, 2017
+------------------------------------------------------------------------------------------------->
+
+<readouts>
+    <readout name="HCalBarrelHits">
+      <segmentation type="CartesianGridXY" grid_size_x="3.0*cm" grid_size_y="3.0*cm" />
+      <id>system:5,side:2,layer:9,module:8,sensor:8,x:32:-16,y:-16</id>
+      
+    </readout>
+</readouts>
+
+<detectors>
+ <detector id="7" name="HCalBarrel" type="GenericCalBarrel_o1_v01" readout="HCalBarrelHits" vis="HCalBarrelVis" calorimeterType="HAD_BARREL" gap="0.*cm" material="Steel235">
+  <comment>Hadron Calorimeter Barrel</comment>
+  <type_flags type=" DetType_CALORIMETER + DetType_HADRONIC + DetType_BARREL"/>
+  <dimensions numsides="HCalBarrel_symmetry" rmin="HCalBarrel_rmin" z="2*HCalBarrel_half_length"/>
+
+  <envelope vis="HCalBarrelVis">
+    <shape type="PolyhedraRegular" numsides="HCalBarrel_symmetry"  rmin="HCalBarrel_rmin - env_safety" rmax="HCalBarrel_rmax + 10*env_safety" dz="2*HCalBarrel_half_length + 2*env_safety" material="Air"/>
+    <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/HCalBarrel_symmetry"/>
+  </envelope>
+
+  <staves />
+  <layer repeat="40">
+        <slice material = "Copper"    thickness = "17.55*mm" />    <!-- Absorber -->
+	<slice material = "Air"        thickness =  "2.0*mm" />
+	<slice material = "Steel235"   thickness =  "0.5*mm" />    <!-- Top plate -->
+	<slice material = "Kapton"    thickness = "0.115*mm" />    <!-- Polyimide foil -->
+	<slice material = "Copper"    thickness = "0.068*mm" />
+	<slice material = "PCB"       thickness =   "1.0*mm" />    <!-- PCB made of FR4 -->
+	<slice material = "Polystyrole" thickness = "0.1*mm" />    <!-- Reflector foil -->
+	<slice material = "Polystyrene" thickness = "3.0*mm" sensitive="yes" limits="cal_limits" />
+	<slice material = "Polystyrole" thickness = "0.1*mm" />    <!-- Reflector foil -->
+	<slice material = "Steel235"    thickness = "0.5*mm" />    <!-- Bottom plate -->
+	<slice material = "Air"       thickness = "0.617*mm" />    <!-- Clearance gap between active layer and next absorber -->
+  </layer>
+  <!--layer repeat="1"-->
+	<!--slice material = "Steel235"   thickness = "17.55*mm" /--><!-- Terminator plate -->
+  <!--/layer-->
+ </detector>
+</detectors>
+
+</lccdd>

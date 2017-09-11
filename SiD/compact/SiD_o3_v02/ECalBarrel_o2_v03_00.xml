@@ -1,0 +1,63 @@
+<lccdd>
+
+<readouts>
+    <readout name="ECalBarrelHits">
+      <segmentation type="CartesianGridXY" grid_size_x="3.5*mm" grid_size_y="3.5*mm" />
+      <id>system:6,barrel:3,module:4,layer:6,slice:5,x:32:-16,y:-16</id>
+    </readout>
+</readouts>
+
+<detectors>
+ <detector id="5" name="ECalBarrel" type="ECalBarrel_o1_v03" readout="ECalBarrelHits" vis="ECalBarrelVis" calorimeterType="EM_BARREL" gap="0.*cm">
+  <comment>EM Calorimeter Barrel</comment>
+  <dimensions numsides="ECalBarrel_symmetry" rmin="ECalBarrel_rmin" rmax="ECalBarrel_rmax" z="2*ECalBarrel_half_length" />
+
+  <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_BARREL" />
+
+  <envelope vis="ECalBarrelVis">
+    <shape type="PolyhedraRegular" numsides="ECalBarrel_symmetry"  rmin="ECalBarrel_rmin - env_safety" rmax="ECalBarrel_rmax + 10*env_safety" dz="2*ECalBarrel_half_length + 2*env_safety"  material="Air"/>
+    <!-- Radii definitions as in http://cern.ch/go/r9mZ -->
+    <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/ECalBarrel_symmetry"/>
+  </envelope>
+
+  <parameter ecal_barrel_tolerance="env_safety" num_towers="1" num_rails="0" stacks_per_tower="1" TowersAirGap="0.0*mm" TowersFaceThickness="0.0*mm" supportRailCrossSection="0*0*mm*mm" AlveolusMaterial="CarbonFiber_25percent" supportRailMaterial="Steel235"/>
+
+  <staves />
+  <layer repeat="1">
+    <slice material = "Silicon" thickness = "0.032*cm" sensitive = "yes" limits="cal_limits" />
+    <slice material = "Copper"  thickness = "0.005*cm" />
+    <slice material = "Kapton"  thickness = "0.030*cm" />
+    <slice material = "Air"     thickness = "0.033*cm" />
+  </layer>
+  <layer repeat="20">
+    <slice material = "TungstenDens24" thickness = "0.25*cm" />
+    <slice material = "Air"     thickness = "0.025*cm" />
+    <slice material = "Silicon" thickness = "0.032*cm" sensitive = "yes" limits="cal_limits" />
+    <slice material = "Copper"  thickness = "0.005*cm" />
+    <slice material = "Kapton"  thickness = "0.030*cm" />
+    <slice material = "Air"     thickness = "0.033*cm" />
+  </layer>
+  <layer repeat="10">
+    <slice material = "TungstenDens24" thickness = "0.5*cm" />
+    <slice material = "Air"     thickness = "0.025*cm" />
+    <slice material = "Silicon" thickness = "0.032*cm" sensitive = "yes" limits="cal_limits" />
+    <slice material = "Copper"  thickness = "0.005*cm" />
+    <slice material = "Kapton"  thickness = "0.030*cm" />
+    <slice material = "Air"     thickness = "0.033*cm" />
+  </layer>
+ </detector>
+</detectors>
+
+<plugins>
+    <plugin name="DD4hep_CaloFaceBarrelSurfacePlugin">
+      <argument value="ECalBarrel"/>
+      <argument value="length=1765.0*2*mm"    />
+      <argument value="radius=ECalBarrel_rmin"  />
+      <argument value="phi0=0"    />
+      <argument value="symmetry=12"/>
+      <argument value="systemID=20"/>
+      <!-- <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> -->
+    </plugin>
+</plugins>
+
+</lccdd>
