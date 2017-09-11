@@ -463,7 +463,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
       string layer_name      = det_name+_toString(layer_id,"_layer%d");
       
       // Create the slices (sublayers) within the Hcal Barrel Chamber.
-      double slice_pos_z = -(layer_thickness/2.);
+      double slice_pos_z = layer_thickness/2. ;
       int slice_number = 0;
 
       for(xml_coll_t k(x_layer,_U(slice)); k; ++k)  {
@@ -473,7 +473,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	Material slice_material  = theDetector.material(x_slice.materialStr());
 	DetElement slice(layer_name,_toString(slice_number,"slice%d"),x_det.id());
 	
-	slice_pos_z += slice_thickness/2.;
+	slice_pos_z -= slice_thickness/2.;
 	
 	// Slice volume & box
 	Volume slice_vol(slice_name,Box(x_length,z_width,slice_thickness/2.),slice_material);
@@ -516,7 +516,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	
 	slice.setPlacement(slice_phv);
 	// Increment x position for next slice.
-	slice_pos_z += slice_thickness/2.;
+	slice_pos_z -= slice_thickness/2.;
 	// Increment slice number.
 	++slice_number;             
       }
