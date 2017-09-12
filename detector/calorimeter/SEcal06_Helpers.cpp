@@ -30,6 +30,7 @@ SEcal06_Helpers::SEcal06_Helpers() {
 
   _caloLayer.absorberThickness = -999;
   _caloLayer.sensitive_thickness = -999;
+  _caloLayer.distance = 0;
 
   _totThick=0;
 
@@ -281,8 +282,6 @@ void SEcal06_Helpers::updateCaloLayers(double thickness,
       _caloLayer.inner_nInteractionLengths = _layer_nInteractionLengths ;
       _caloLayer.inner_thickness           = _layer_thickness ;
 
-      _caloLayer.distance  = _totThick + thickness/2.; // distance from front face
-
       // reset layer thicknesses
       _layer_thickness=0;
       _layer_nRadiationLengths=0;
@@ -293,6 +292,12 @@ void SEcal06_Helpers::updateCaloLayers(double thickness,
     _layer_thickness           += (thickness/2.);
     _layer_nRadiationLengths   += (thickness/2.)/mat.radLength() ;
     _layer_nInteractionLengths += (thickness/2.)/mat.intLength() ;
+
+
+    // update the calolayer.distance ( DJeans 12 sep 2017)
+    // here this is distance from ECAL start to the layer start; the Barrel and Endcap drivers add the distance from IP
+    _caloLayer.distance += _caloLayer.inner_thickness+_caloLayer.outer_thickness;
+
   }
 
   _totThick+=thickness;
