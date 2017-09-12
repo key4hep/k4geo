@@ -112,6 +112,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   Layering      layering (element);
 
   Material      air       = theDetector.air();
+  Material      CF        = theDetector.material("CarbonFiber");
 
   int           det_id    = x_det.id();
   xml_comp_t    x_staves  = x_det.staves();
@@ -310,6 +311,9 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   //
 
 
+  double distance_ip_to_front_face = Ecal_Barrel_halfZ + Ecal_cables_gap;
+  double dist_from_front_face_tally(0);
+
   double z_floor =  - module_thickness/2;
 
   double l_pos_z = z_floor;
@@ -325,18 +329,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   double nRadiationLengths=0.;
   double nInteractionLengths=0.;
   double thickness_sum=0;
-
-  nRadiationLengths   = Ecal_radiator_thickness1/(stave_material.radLength())
-    +(Ecal_front_face_thickness + Ecal_fiber_thickness_alveolus)/air.radLength();
-  //    +(Ecal_front_face_thickness + N_FIBERS_ALVOULUS * Ecal_fiber_thickness)/air.radLength();
-
-  nInteractionLengths = Ecal_radiator_thickness1/(stave_material.intLength())
-    +(Ecal_front_face_thickness + Ecal_fiber_thickness_alveolus)/air.intLength();
-  //    +(Ecal_front_face_thickness + N_FIBERS_ALVOULUS * Ecal_fiber_thickness)/air.intLength();
-
-  thickness_sum       = Ecal_radiator_thickness1
-    +(Ecal_front_face_thickness + Ecal_fiber_thickness_alveolus);
-  //    +(Ecal_front_face_thickness + N_FIBERS_ALVOULUS * Ecal_fiber_thickness);
 
   int l_num = 1;
   bool isFirstSens = true;
@@ -372,6 +364,15 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	  //rad_pos_Z = radiator_dim_Z/2. + this_struct_CFthick_beforeAbs; // distance from top surface of structure to centre of radiator
 	  absorber_index++;
 	}
+
+        thickness_sum       += radiator_dim_Z;
+        nRadiationLengths   += radiator_dim_Z/stave_material.radLength();
+        nInteractionLengths += radiator_dim_Z/stave_material.intLength();
+
+        thickness_sum       += ( this_struct_CFthick_beforeAbs + this_struct_CFthick_afterAbs );
+        nRadiationLengths   += ( this_struct_CFthick_beforeAbs + this_struct_CFthick_afterAbs ) / CF.radLength();
+        nInteractionLengths += ( this_struct_CFthick_beforeAbs + this_struct_CFthick_afterAbs ) / CF.intLength();
+
 	isFrontFace=false;
       } else { // internal layer: include W+CF wrapping; both sides of alveolus
 	this_struct_CFthick_beforeAbs = _CF_alvWall+_CF_absWrap;
@@ -502,38 +503,40 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 
 	  absorber_index++;
 
-	// W StructureLayer has the same thickness as W radiator layer in the Alveolus layer
-
 #if DD4HEP_VERSION_GE( 0, 15 )
-	  caloLayer.outer_nRadiationLengths   = nRadiationLengths;
-	  caloLayer.outer_nInteractionLengths = nInteractionLengths;
-	  caloLayer.outer_thickness           = thickness_sum; 
-	  
-	  // if (!isFirstSens){ caloData->layers.push_back( caloLayer ) ; // don't add preshower layer
-	  if (Ecal_Barrel_PreshowerLayer==0 || !isFirstSens){
-	    if ( module_num==0 ) caloData->layers.push_back( caloLayer ) ; //Fill once for both side ECRings
-#ifdef VERBOSE	    
-	    std::cout<<" caloLayer.distance: "<< caloLayer.distance <<std::endl;
-	    
-	    std::cout<<" caloLayer.inner_nRadiationLengths: "<< caloLayer.inner_nRadiationLengths <<std::endl;
-	    std::cout<<" caloLayer.inner_nInteractionLengths: "<< caloLayer.inner_nInteractionLengths <<std::endl;
-	    std::cout<<" caloLayer.inner_thickness: "<< caloLayer.inner_thickness <<std::endl;
-	    std::cout<<" caloLayer.sensitive_thickness: "<< caloLayer.sensitive_thickness <<std::endl;
-	    
-	    std::cout<<" caloLayer.outer_nRadiationLengths: "<< caloLayer.outer_nRadiationLengths <<std::endl;
-	    std::cout<<" caloLayer.outer_nInteractionLengths: "<< caloLayer.outer_nInteractionLengths <<std::endl;
-	    std::cout<<" caloLayer.outer_thickness: "<< caloLayer.outer_thickness <<std::endl;
-	    
-	    std::cout<<" EcalECRing[1]==>caloLayer.inner_thickness + caloLayer.outer_thickness: "
-		     << caloLayer.inner_thickness + caloLayer.outer_thickness <<std::endl;
+          caloLayer.outer_nRadiationLengths   = nRadiationLengths;
+          caloLayer.outer_nInteractionLengths = nInteractionLengths;
+          caloLayer.outer_thickness           = thickness_sum;
+          caloLayer.distance                  = dist_from_front_face_tally;
 #endif
-	  }   
+          if (Ecal_Barrel_PreshowerLayer==0 || !isFirstSens ){ // add this layer to the caloData (unless its the first absorber layer of a no-preshower calo)
+            if ( module_num==0 ) {
+              cout << "pushing back (A)" << endl;
+              caloData->layers.push_back( caloLayer ) ;
+#ifdef VERBOSE
+#if DD4HEP_VERSION_GE( 0, 15 )
+	      std::cout<<" caloLayer.distance: "<< caloLayer.distance <<std::endl;
+	      std::cout<<" caloLayer.inner_nRadiationLengths: "<< caloLayer.inner_nRadiationLengths <<std::endl;
+	      std::cout<<" caloLayer.inner_nInteractionLengths: "<< caloLayer.inner_nInteractionLengths <<std::endl;
+	      std::cout<<" caloLayer.inner_thickness: "<< caloLayer.inner_thickness <<std::endl;
+	      std::cout<<" caloLayer.sensitive_thickness: "<< caloLayer.sensitive_thickness <<std::endl;
+	      std::cout<<" caloLayer.cellSize0, 1: "             << caloLayer.cellSize0 << " " << caloLayer.cellSize1 << std::endl;
+	      std::cout<<" caloLayer.outer_nRadiationLengths: "<< caloLayer.outer_nRadiationLengths <<std::endl;
+	      std::cout<<" caloLayer.outer_nInteractionLengths: "<< caloLayer.outer_nInteractionLengths <<std::endl;
+	      std::cout<<" caloLayer.outer_thickness: "<< caloLayer.outer_thickness <<std::endl;
+	      std::cout<<" EcalECRing[1]==>caloLayer.inner_thickness + caloLayer.outer_thickness: "
+                       << caloLayer.inner_thickness + caloLayer.outer_thickness <<std::endl;
 #endif
+#endif
+              dist_from_front_face_tally += caloLayer.inner_thickness+caloLayer.outer_thickness;
+            }
+          }
+
 	  nRadiationLengths   = 0. ;
 	  nInteractionLengths = 0. ;
 	  thickness_sum       = 0. ;	    
 	  isFirstSens         = false;
-	}
+	} // if radiator
 	
 	nRadiationLengths   += s_thick/(2.*slice_material.radLength());
 	nInteractionLengths += s_thick/(2.*slice_material.intLength());
@@ -559,18 +562,13 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	  std::cout<<" s_thick: "<< s_thick <<std::endl;
 	  std::cout<<" radiator_dim_y: "<< radiator_dim_y <<std::endl;
 #endif
-	  //-----------------------------------------------------------------------------------------
-	  caloLayer.distance = Ecal_Barrel_module_dim_z * 2.5 + Ecal_cables_gap + module_thickness/2.0 
-	    + l_pos_z + (s_pos_z+s_thick/2.0) - caloLayer.inner_thickness ;
 	  caloLayer.absorberThickness = radiator_dim_y ;
-      
-	  //-----------------------------------------------------------------------------------------
 #endif
 	  nRadiationLengths   = 0. ;
 	  nInteractionLengths = 0. ;
 	  thickness_sum       = 0. ;
-	}
-			 
+	} // if sensitive
+
 	nRadiationLengths   += s_thick/(2.*slice_material.radLength());
 	nInteractionLengths += s_thick/(2.*slice_material.intLength());
 	thickness_sum       += s_thick/2;
@@ -592,52 +590,55 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	++s_num;
       }        
 
+      // add material between the "slabs"
+
+      // we need to use correct thickness here! especially at the interface between stacks.
+      if      ( absorber_index < Ecal_nlayers1 ) radiator_dim_y=Ecal_radiator_thickness1;
+      else if ( absorber_index < Ecal_nlayers1+Ecal_nlayers2 ) radiator_dim_y=Ecal_radiator_thickness2;
+      else if ( absorber_index < Ecal_nlayers1+Ecal_nlayers2+Ecal_nlayers3 ) radiator_dim_y=Ecal_radiator_thickness3;
+      else {
+        radiator_dim_y=0;
+      }
+
+      // del with final support plate
+      float cf_thick = Ecal_fiber_thickness_alveolus;
+      if ( absorber_index<Ecal_nlayers1+Ecal_nlayers2+Ecal_nlayers3 ) {
+        cf_thick += Ecal_fiber_thickness_structure;
+      } else {
+        cf_thick += Ecal_support_thickness;
+      }
+
+      if ( module_num==0 ) {
 #if DD4HEP_VERSION_GE( 0, 15 )
-      caloLayer.outer_nRadiationLengths   = nRadiationLengths
-	+ (Ecal_fiber_thickness_alveolus + Ecal_fiber_thickness_structure )/air.radLength();
+        caloLayer.distance = dist_from_front_face_tally;
+        caloLayer.outer_nRadiationLengths   = nRadiationLengths + cf_thick/CF.radLength();
+        caloLayer.outer_nInteractionLengths = nInteractionLengths + cf_thick/CF.intLength();
+        caloLayer.outer_thickness           = thickness_sum + cf_thick;
+#endif
+        caloData->layers.push_back( caloLayer ) ;
 
-      caloLayer.outer_nInteractionLengths = nInteractionLengths
-	+ (Ecal_fiber_thickness_alveolus + Ecal_fiber_thickness_structure )/air.intLength();
+#ifdef VERBOSE
+#if DD4HEP_VERSION_GE( 0, 15 )
+	std::cout<<" caloLayer.distance: "<< caloLayer.distance <<std::endl;
+	std::cout<<" caloLayer.inner_nRadiationLengths: "<< caloLayer.inner_nRadiationLengths <<std::endl;
+	std::cout<<" caloLayer.inner_nInteractionLengths: "<< caloLayer.inner_nInteractionLengths <<std::endl;
+	std::cout<<" caloLayer.inner_thickness: "<< caloLayer.inner_thickness <<std::endl;
+	std::cout<<" caloLayer.sensitive_thickness: "<< caloLayer.sensitive_thickness <<std::endl;
+	std::cout<<" caloLayer.cellSize0, 1: "             << caloLayer.cellSize0 << " " << caloLayer.cellSize1 << std::endl;
+	std::cout<<" caloLayer.outer_nRadiationLengths: "<< caloLayer.outer_nRadiationLengths <<std::endl;
+	std::cout<<" caloLayer.outer_nInteractionLengths: "<< caloLayer.outer_nInteractionLengths <<std::endl;
+	std::cout<<" caloLayer.outer_thickness: "<< caloLayer.outer_thickness <<std::endl;
 
-      caloLayer.outer_thickness           = thickness_sum
-	+ (Ecal_fiber_thickness_alveolus + Ecal_fiber_thickness_structure ); 
-
-
-      if (Ecal_Barrel_PreshowerLayer==0 || !isFirstSens) {
-	if ( module_num==0 ) caloData->layers.push_back( caloLayer ) ; //Fill once for both side ECRings
-      }
-#ifdef VERBOSE      
-      std::cout<<" caloLayer.distance: "<< caloLayer.distance <<std::endl;
-      
-      std::cout<<" caloLayer.inner_nRadiationLengths: "<< caloLayer.inner_nRadiationLengths <<std::endl;
-      std::cout<<" caloLayer.inner_nInteractionLengths: "<< caloLayer.inner_nInteractionLengths <<std::endl;
-      std::cout<<" caloLayer.inner_thickness: "<< caloLayer.inner_thickness <<std::endl;
-      std::cout<<" caloLayer.sensitive_thickness: "<< caloLayer.sensitive_thickness <<std::endl;
-
-      std::cout<<" caloLayer.outer_nRadiationLengths: "<< caloLayer.outer_nRadiationLengths <<std::endl;
-      std::cout<<" caloLayer.outer_nInteractionLengths: "<< caloLayer.outer_nInteractionLengths <<std::endl;
-      std::cout<<" caloLayer.outer_thickness: "<< caloLayer.outer_thickness <<std::endl;
-      
-      std::cout<<" EcalECRing[2]==>caloLayer.inner_thickness + caloLayer.outer_thickness: "
-	       << caloLayer.inner_thickness + caloLayer.outer_thickness <<std::endl;
+	std::cout<<" EcalECRing[2]==>caloLayer.inner_thickness + caloLayer.outer_thickness: "
+                 << caloLayer.inner_thickness + caloLayer.outer_thickness <<std::endl;
 #endif
 #endif
-      
-      nRadiationLengths   = radiator_dim_y/(stave_material.radLength())
-	+ (Ecal_fiber_thickness_alveolus + Ecal_fiber_thickness_structure )/air.radLength();
-      nInteractionLengths = radiator_dim_y/(stave_material.intLength())
-	+ (Ecal_fiber_thickness_alveolus + Ecal_fiber_thickness_structure )/air.intLength();
-      thickness_sum       = radiator_dim_y
-	+ (Ecal_fiber_thickness_alveolus + Ecal_fiber_thickness_structure );  
-
-
-      if(radiator_dim_y <= 0) {
-	stringstream err;
-	err << " \n ERROR: The subdetector " << x_det.nameStr() << " geometry parameter -- radiator_dim_y = " << radiator_dim_y ;
-	err << " \n Please check the radiator material name in the subdetector xml file";
-	throw runtime_error(err.str());
+        dist_from_front_face_tally += caloLayer.inner_thickness+caloLayer.outer_thickness;
       }
-      
+
+      nRadiationLengths   = radiator_dim_y/stave_material.radLength() + cf_thick/CF.radLength();
+      nInteractionLengths = radiator_dim_y/stave_material.intLength() + cf_thick/CF.intLength();
+      thickness_sum       = radiator_dim_y + cf_thick;
 
       // this is where we place the slab (l_vol) into the envelope
       int i_stave = 1;
