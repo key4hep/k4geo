@@ -43,7 +43,7 @@
   <constant name="Ecal_cells_across_megatile" value="18"/>
 
   <constant name="Ecal_strips_across_megatile" value="18"/>
-  <constant name="Ecal_strips_along_megatile" value="4"/>
+  <constant name="Ecal_strips_along_megatile" value="2"/>
 
   <constant name="Ecal_Endcap_Preshower" value="0"/>
 

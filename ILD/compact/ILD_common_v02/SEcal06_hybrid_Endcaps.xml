@@ -68,11 +68,11 @@
 <readouts>
   <readout name="EcalEndcapsCollection">
     <segmentation   type="MultiSegmentation"  key="slice">
-      <segmentation name="SiGrid_even" type="MegatileLayerGridXY"    key_value="4" common_nCellsX="16" common_nCellsY="16"/>
-      <segmentation name="SiGrid_odd"  type="MegatileLayerGridXY"    key_value="10" common_nCellsX="16" common_nCellsY="16" />
+      <segmentation name="SiGrid_even" type="MegatileLayerGridXY"    key_value="4" common_nCellsX="Ecal_cells_across_megatile" common_nCellsY="Ecal_cells_across_megatile"/>
+      <segmentation name="SiGrid_odd"  type="MegatileLayerGridXY"    key_value="10" common_nCellsX="Ecal_cells_across_megatile" common_nCellsY="Ecal_cells_across_megatile" />
 
-      <segmentation name="ScGrid_even" type="MegatileLayerGridXY"    key_value="3"  common_nCellsX="2" common_nCellsY="16" />
-      <segmentation name="ScGrid_odd"  type="MegatileLayerGridXY"    key_value="11" common_nCellsX="16" common_nCellsY="2" />
+      <segmentation name="ScGrid_even" type="MegatileLayerGridXY"    key_value="3"  common_nCellsX="Ecal_strips_along_megatile" common_nCellsY="Ecal_strips_across_megatile" />
+      <segmentation name="ScGrid_odd"  type="MegatileLayerGridXY"    key_value="11" common_nCellsX="Ecal_strips_across_megatile" common_nCellsY="Ecal_strips_along_megatile" />
     </segmentation>
 
     <hits_collections>
