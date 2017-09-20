@@ -25,9 +25,12 @@
   <constant name="Ecal_Slab_H_fiber_thickness" value="0.55*mm"/>
   <constant name="Ecal_Slab_ASIC_thickness" value="0.7*mm"/>
   <constant name="Ecal_Slab_PCB_thickness" value="1.0*mm"/>
-  <constant name="Ecal_Slab_copper_thickness" value="0.40*mm"/>
+
+  <constant name="Ecal_Slab_copper_thickness" value="0.4*mm"/>
+
   <constant name="Ecal_Slab_glue_gap" value="0.1*mm"/>
   <constant name="Ecal_Slab_ground_thickness" value="0.1*mm"/>
+
   <constant name="Ecal_Slab_shielding" value="0.1*mm"/>
 
   <constant name="Ecal_guard_ring_size" value="0.5*mm"/>
@@ -54,8 +57,9 @@
   <constant name="Ecal_Sc_reflector_thickness" value="0.057*mm"/>
   <constant name="Ecal_Slab_Sc_PCB_thickness" value="0.8*mm"/>
 
-  <!-- for hybrid, replace asic + pcb + air gaps with sc -->
-  <constant name="Ecal_Sc_thickness" value="Ecal_Slab_ASIC_thickness+Ecal_Slab_PCB_thickness+2*Ecal_Slab_glue_gap+Ecal_Alveolus_Air_Gap/2."/>
+  <!-- for hybrid, replace asic + pcb + air gaps with sc+air : adjust air to give exactly same thickness as si-only model -->
+  <constant name="Ecal_Sc_thickness" value="1.5*mm"/>
+  <constant name="Ecal_HybridExtraGap_thickness" value="Ecal_Slab_ASIC_thickness+Ecal_Slab_PCB_thickness+2*Ecal_Slab_glue_gap+Ecal_Alveolus_Air_Gap/2.-Ecal_Sc_thickness"/>
 
 </define>
 
