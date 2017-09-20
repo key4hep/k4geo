@@ -24,11 +24,12 @@
       <staves  material = "G4_W"  vis="BlueVis"/>
 
       <!--  select which subsegmentation will be used to fill the DDRec:LayeredCalorimeterData cell dimensions -->
-      <subsegmentation key="slice" value="3 9"/>
+      <subsegmentation key="slice" value="4 10"/>
 
       <layer repeat="Ecal_nlayers1/2" vis="SeeThrough" >
 	<slice material = "G4_Al"          thickness = "Ecal_Slab_shielding"                 vis="Invisible" />
 	<slice material = "G4_Cu"          thickness = "Ecal_Slab_copper_thickness"          vis="Invisible" />
+	<slice material = "G4_AIR"         thickness = "Ecal_HybridExtraGap_thickness"       vis="Invisible" />
         <slice material = "G4_POLYSTYRENE" thickness = "Ecal_Sc_thickness" sensitive = "yes" vis="CyanVis"   />
         <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes" vis="Invisible" />
         <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"          vis="Invisible" />
@@ -38,6 +39,7 @@
         <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"          vis="Invisible" />
         <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes" vis="Invisible" />
         <slice material = "G4_POLYSTYRENE" thickness = "Ecal_Sc_thickness" sensitive = "yes" vis="CyanVis"   />
+	<slice material = "G4_AIR"         thickness = "Ecal_HybridExtraGap_thickness"       vis="Invisible" />
 	<slice material = "G4_Cu"          thickness = "Ecal_Slab_copper_thickness"          vis="Invisible" />
 	<slice material = "G4_Al"          thickness = "Ecal_Slab_shielding"                 vis="Invisible" />
       </layer>
@@ -45,6 +47,7 @@
       <layer repeat="(Ecal_nlayers2+1)/2" vis="SeeThrough">
 	<slice material = "G4_Al"          thickness = "Ecal_Slab_shielding"                 vis="Invisible" />
 	<slice material = "G4_Cu"          thickness = "Ecal_Slab_copper_thickness"          vis="Invisible" />
+	<slice material = "G4_AIR"         thickness = "Ecal_HybridExtraGap_thickness"       vis="Invisible" />
         <slice material = "G4_POLYSTYRENE" thickness = "Ecal_Sc_thickness" sensitive = "yes" vis="CyanVis"   />
         <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes" vis="Invisible" />
         <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"          vis="Invisible" />
@@ -54,6 +57,7 @@
         <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"          vis="Invisible" />
         <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes" vis="Invisible" />
         <slice material = "G4_POLYSTYRENE" thickness = "Ecal_Sc_thickness" sensitive = "yes" vis="CyanVis"   />
+	<slice material = "G4_AIR"         thickness = "Ecal_HybridExtraGap_thickness"       vis="Invisible" />
 	<slice material = "G4_Cu"          thickness = "Ecal_Slab_copper_thickness"          vis="Invisible" />
 	<slice material = "G4_Al"          thickness = "Ecal_Slab_shielding"                 vis="Invisible" />
       </layer>
@@ -64,19 +68,19 @@
 <readouts>
   <readout name="EcalEndcapsCollection">
     <segmentation   type="MultiSegmentation"  key="slice">
-      <segmentation name="SiGrid_even" type="MegatileLayerGridXY"    key_value="3" common_nCellsX="16" common_nCellsY="16"/>
-      <segmentation name="SiGrid_odd"  type="MegatileLayerGridXY"    key_value="9" common_nCellsX="16" common_nCellsY="16" />
+      <segmentation name="SiGrid_even" type="MegatileLayerGridXY"    key_value="4" common_nCellsX="16" common_nCellsY="16"/>
+      <segmentation name="SiGrid_odd"  type="MegatileLayerGridXY"    key_value="10" common_nCellsX="16" common_nCellsY="16" />
 
-      <segmentation name="ScGrid_even" type="MegatileLayerGridXY"    key_value="2"  common_nCellsX="2" common_nCellsY="16" />
-      <segmentation name="ScGrid_odd"  type="MegatileLayerGridXY"    key_value="10" common_nCellsX="16" common_nCellsY="2" />
+      <segmentation name="ScGrid_even" type="MegatileLayerGridXY"    key_value="3"  common_nCellsX="2" common_nCellsY="16" />
+      <segmentation name="ScGrid_odd"  type="MegatileLayerGridXY"    key_value="11" common_nCellsX="16" common_nCellsY="2" />
     </segmentation>
 
     <hits_collections>
-      <hits_collection name="ECalEndcapSiHitsEven" key="slice" key_value="3" />
-      <hits_collection name="ECalEndcapSiHitsOdd"  key="slice" key_value="9" />
+      <hits_collection name="ECalEndcapSiHitsEven" key="slice" key_value="4" />
+      <hits_collection name="ECalEndcapSiHitsOdd"  key="slice" key_value="10" />
 
-      <hits_collection name="ECalEndcapScHitsEven" key="slice" key_value="2" />
-      <hits_collection name="ECalEndcapScHitsOdd"  key="slice" key_value="10" />
+      <hits_collection name="ECalEndcapScHitsEven" key="slice" key_value="3" />
+      <hits_collection name="ECalEndcapScHitsOdd"  key="slice" key_value="11" />
 
     </hits_collections>
 
