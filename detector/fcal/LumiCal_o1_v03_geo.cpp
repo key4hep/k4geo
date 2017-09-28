@@ -8,7 +8,6 @@
 #include <string>
 
 using dd4hep::Assembly;
-using dd4hep::BitField64;
 using dd4hep::BUILD_ENVELOPE;
 using dd4hep::Box;
 using dd4hep::Cone;

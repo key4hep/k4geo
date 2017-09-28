@@ -86,9 +86,8 @@ namespace dd4hep {
 
       // get the layer number by decoding the cellID
       IDDescriptor idspec = m_sensitive.readout().idSpec() ;
-      DDSegmentation::BitField64& bf = *idspec.decoder() ;
-      bf.setValue( cell )  ;
-      int layer = bf["layer"] ;
+      const DDSegmentation::BitFieldCoder& bc = *idspec.decoder() ;
+      int layer = bc.get(cell, "layer") ;
       
       Geant4HitCollection*  coll = ( layer== m_userData._firstLayerNumber ?  collection( m_userData._preShowerCollectionID ) : collection(m_collectionID) ) ;
       

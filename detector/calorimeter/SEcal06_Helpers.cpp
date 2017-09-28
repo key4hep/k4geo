@@ -456,10 +456,6 @@ void SEcal06_Helpers::makeModule( dd4hep::Volume & mod_vol,  // the volume we'll
 
 
 
-  // for the multilayerseg
-  dd4hep::DDSegmentation::BitField64& encoder = const_cast<dd4hep::DDSegmentation::BitField64&>(* _geomseg->decoder());
-  encoder.setValue(0) ;
-
   // this is to store the "reference" sensitive layers in a multi-readou scenario
   // these are the slice numbers within a layer which are considered sensitive as far as the calodata is concerned
   std::vector < int > multi_refSlices;

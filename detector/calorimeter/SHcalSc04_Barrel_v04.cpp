@@ -11,6 +11,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"
+#include "DDSegmentation/BitField64.h"
 #include "DDSegmentation/TiledLayerGridXY.h"
 #include "DDSegmentation/Segmentation.h"
 #include "DDSegmentation/MultiSegmentation.h"
@@ -189,7 +190,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   Readout readout = sens.readout();
   dd4hep::Segmentation seg = readout.segmentation();
   
-  dd4hep::DDSegmentation::BitField64& encoder = const_cast<dd4hep::DDSegmentation::BitField64&>(*seg.decoder());
+  dd4hep::DDSegmentation::BitField64 encoder = seg.decoder();
   encoder.setValue(0) ;
   
 
