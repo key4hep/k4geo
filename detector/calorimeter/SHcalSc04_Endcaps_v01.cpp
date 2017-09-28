@@ -34,6 +34,7 @@
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"
+#include "DDSegmentation/BitField64.h"
 #include "DDSegmentation/Segmentation.h"
 #include "DDSegmentation/MultiSegmentation.h"
 #include "LcgeoExceptions.h"
@@ -127,7 +128,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   Segmentation seg = readout.segmentation();
   
 
-  BitField64& encoder = const_cast<BitField64&>(*seg.decoder());
+  BitField64 encoder = seg.decoder();
   encoder.setValue(0) ;
   
   //    we first have to check whether a multi segmentation is used and then, if so, we
