@@ -24,7 +24,7 @@
       <staves  material = "G4_W"  vis="BlueVis"/>
 
       <!--  select which subsegmentation will be used to fill the DDRec:LayeredCalorimeterData cell dimensions -->
-      <subsegmentation key="slice" value="4 10"/>
+      <subsegmentation key="slice" value="Ecal_readout_segmentation_slice"/>
 
       <layer repeat="Ecal_nlayers1/2" vis="SeeThrough" >
 	<slice material = "G4_Al"          thickness = "Ecal_Slab_shielding"                 vis="Invisible" />
