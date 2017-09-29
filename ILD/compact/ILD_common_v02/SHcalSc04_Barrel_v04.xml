@@ -20,7 +20,7 @@
 
 
       <!--  select which subsegmentation will be used to fill the DDRec:LayeredCalorimeterData cell dimensions -->
-      <subsegmentation key="slice" value="Hcal_readout_segmentation_slice_barrel"/>
+      <subsegmentation key="slice" value="Hcal_readout_segmentation_slice"/>
 
       <layer repeat="Hcal_nlayers" vis="SeeThrough">
         <slice material="FloatGlass" thickness="HcalSD_glass_anode_thickness" vis="Invisible"/>

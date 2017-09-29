@@ -72,9 +72,13 @@
   <!-- used for "hybrid" readout segmentation -->
   <constant name="AHCal_cell_size" value="3.0*cm"/>
   <constant name="SDHCal_cell_size" value="1.0*cm"/>
+  
+  <!-- TODO move these two element at the correct place -->
+  <!-- TODO create the additional detectors for the different options for l/s4 and l/s5 -->
+  <!-- TODO merge the two variables to only one for both barrel and endcap -->
   <!-- barrel and endcvap constructors use the slices in reversed order ! -->
-  <constant name="Hcal_readout_segmentation_slice_barrel" value="3"/>
-  <constant name="Hcal_readout_segmentation_slice_endcap" value="3"/>
+  <!-- <constant name="Hcal_readout_segmentation_slice_barrel" value="3"/> -->
+  <!-- <constant name="Hcal_readout_segmentation_slice_endcap" value="3"/> -->
 
 
 </define>

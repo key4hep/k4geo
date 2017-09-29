@@ -32,6 +32,9 @@
     <include ref="../ILD_common_v02/services_defs.xml"/>
     <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
 
+    <!-- Readout slice in hcal for reconstruction -->
+    <constant name="Hcal_readout_segmentation_slice" value="3"/>
+
   </define>
 
   <limits>

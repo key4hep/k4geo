@@ -26,7 +26,7 @@
       <staves  material = "Steel235"  vis="GreenVis"/>
 
       <!--  select which subsegmentation will be used to fill the DDRec:LayeredCalorimeterData cell dimensions -->
-      <subsegmentation key="slice" value="Hcal_readout_segmentation_slice_endcap"/>
+      <subsegmentation key="slice" value="Hcal_readout_segmentation_slice"/>
 
       <layer vis="SeeThrough">
         <slice material="FloatGlass" thickness="HcalSD_glass_anode_thickness" vis="Invisible"/>
