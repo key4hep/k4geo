@@ -2,7 +2,7 @@
        xmlns:xs="http://www.w3.org/2001/XMLSchema"
        xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-  <info name="ILD_l4_v02"
+  <info name="ILD_l4_o1_v02"
         title="ILD multi-technology model used for the optimisation"
         author="F. Gaede, S.Lu, D.Jeans"
         url="http://ilcsoft.desy.de"
