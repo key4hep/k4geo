@@ -623,6 +623,7 @@ Material endplate_MaterialMix = theDetector.material( "TPC_endplate_mix" ) ;
   tpcData->padHeight = padHeight;
   tpcData->padWidth = padWidth;
   tpcData->driftLength = dz_Sensitive + dz_Cathode/2.0; // SJA: cathode has to be added as the sensitive region does not start at 0.00    
+  tpcData->zMinReadout = dz_Cathode/2.0; 
   //  tpcData.z_anode = dzTotal - dz_Endplate; // the edge of the readout terminating the drift volume
   
   tpc.addExtension< FixedPadSizeTPCData >( tpcData )   ; 
