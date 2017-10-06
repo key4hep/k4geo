@@ -4,8 +4,6 @@
 #include "DD4hep/DetFactoryHelper.h"
 
 #include "DDRec/DetectorData.h"
-#include "DDRec/Extensions/LayeringExtensionImpl.h"
-#include "DDRec/Extensions/SubdetectorExtensionImpl.h"
 
 #include "XML/Layering.h"
 #include "XML/Utilities.h"

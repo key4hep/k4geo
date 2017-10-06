@@ -4,7 +4,6 @@
 #include <DD4hep/DDTest.h>
 #include <DD4hep/Detector.h>
 #include <DD4hep/Detector.h>
-#include <DDRec/API/IDDecoder.h>
 #include <DDRec/DetectorData.h>
 
 #include <exception>
