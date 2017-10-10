@@ -33,7 +33,8 @@
     <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
 
     <!-- Readout slice in ecal for reconstruction (ScEcal) -->
-    <constant name="Ecal_readout_segmentation_slice" value="3 11"/>
+    <constant name="Ecal_readout_segmentation_slice0" value="3"/>
+    <constant name="Ecal_readout_segmentation_slice1" value="11"/>
     <!-- Readout slice in hcal for reconstruction (SDHCAL) -->
     <constant name="Hcal_readout_segmentation_slice" value="1"/>
 

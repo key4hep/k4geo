@@ -19,7 +19,7 @@
 
 
       <!--  select which subsegmentation will be used to fill the DDRec:LayeredCalorimeterData cell dimensions -->
-      <subsegmentation key="slice" value="Ecal_readout_segmentation_slice"/>
+      <subsegmentation key="slice" value0="Ecal_readout_segmentation_slice0" value1="Ecal_readout_segmentation_slice1"/>
 
       <layer repeat="Ecal_nlayers1/2" vis="SeeThrough" >
 	<slice material = "G4_Al"          thickness = "Ecal_Slab_shielding"                 vis="Invisible" />
