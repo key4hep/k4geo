@@ -466,19 +466,14 @@ void SEcal06_Helpers::makeModule( dd4hep::Volume & mod_vol,  // the volume we'll
       // check if we have an entry for the subsegmentation to be used 
       xml_comp_t segxml = _x_det->child( _Unicode( subsegmentation ) ) ;
       std::string keyStr = segxml.attr<std::string>( _Unicode(key) ) ;
-      std::string keyVal = segxml.attr<std::string>( _Unicode(value) )  ;
-      int ntemp;
-      std::stringstream stream(keyVal);
-      while ( stream >> ntemp ) {
-	assert (ntemp>=0 && "error getting subsegmentation information! " );
-	multi_refSlices.push_back( ntemp );
-      }
-
-      assert( multi_refSlices.size()>0 && "no subsegmentation info found in multireadout??" );
+      int keyVal0 = segxml.attr<int>( _Unicode(value0) )  ;
+      int keyVal1 = segxml.attr<int>( _Unicode(value1) )  ;
+	    multi_refSlices.push_back( keyVal0 );
+      multi_refSlices.push_back( keyVal1 );
       
     } catch( std::runtime_error) {
       throw lcgeo::GeometryException(  "SEcal06_Helper: Error: MultiSegmentation specified but no "
-                                       " <subsegmentation key="" value=""/> element defined for detector ! " ) ;
+                                       " <subsegmentation key="" value0="" value1=""/> element defined for detector ! " ) ;
     }
 
 
