@@ -459,20 +459,15 @@ Material endplate_MaterialMix = theDetector.material( "TPC_endplate_mix" ) ;
     DetElement   layerDEbwd( sensGasDEbwd ,   _toString( layer, "tpc_row_bwd_%03d") , x_det.id() );
  
     Vector3D o(  inner_upperlayer_radius + 1e-10  , 0. , 0. ) ;
-    VolCylinder surf( upperlayerLog , SurfaceType(SurfaceType::Sensitive, SurfaceType::Invisible ) ,  (padHeight/2.0) ,  (padHeight/2.0) ,o ) ;
-
-    // Vector3D o(  outer_lowerlayer_radius - 1e-10  , 0. , 0. ) ;
-    // VolCylinder surf( lowerlayerLog , SurfaceType(SurfaceType::Sensitive, SurfaceType::Invisible ) ,  (padHeight/2.0) ,  (padHeight/2.0) ,o ) ;
-
+    // create an unbounded surface (i.e. an infinite cylinder) and assign it to the forward gaseous volume only
+    VolCylinder surf( upperlayerLog , SurfaceType(SurfaceType::Sensitive, SurfaceType::Invisible, SurfaceType::Unbounded ) ,  (padHeight/2.0) ,  (padHeight/2.0) ,o ) ;
 
     volSurfaceList( layerDEfwd )->push_back( surf ) ;
-    volSurfaceList( layerDEbwd )->push_back( surf ) ;
+//    volSurfaceList( layerDEbwd )->push_back( surf ) ;
 
 
     pv = sensitiveGasLog.placeVolume( lowerlayerLog ) ;
     pv.addPhysVolID("layer", layer ).addPhysVolID( "module", 0 ).addPhysVolID("sensor", 1 ) ;
-    // layerDEfwd.setPlacement( pv ) ;
-    // layerDEbwd.setPlacement( pv ) ;
 
     pv = sensitiveGasLog.placeVolume( upperlayerLog ) ;
     pv.addPhysVolID("layer", layer ).addPhysVolID( "module", 0 ).addPhysVolID("sensor", 0 ) ;
