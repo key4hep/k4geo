@@ -1,3 +1,125 @@
+# v00-14
+
+* 2017-08-09 Marko Petric ([PR#152](https://github.com/iLCSoft/lcgeo/pull/152))
+  - New detector model CLIC_o3_v13
+  - CLIC_o3_v13: Set the cell size in HCalEndcap, HCalRing and YokeEndcap to be read from main compact file
+  - CLIC_o3_v13: Extend the support in the vertex of layer 4 to the edge of the sensitive
+
+* 2017-10-10 Ete Remi ([PR#172](https://github.com/iLCSoft/lcgeo/pull/172))
+  - Split ILD ecal segmentation selection into two values: value0 and value1 while parsing geometry for ILD_l/s5_* models. 
+  - Changed both drivers and compact xml files.
+
+* 2017-10-12 Frank Gaede ([PR#173](https://github.com/iLCSoft/lcgeo/pull/173))
+  - use unbounded surfaces in the ILD TPC
+      - assign surfaces only to the forward half of the TPC
+      - as they are unbounded they will also be 'visible' in the backward half
+
+* 2017-08-25 Shaojun Lu ([PR#156](https://github.com/iLCSoft/lcgeo/pull/156))
+  - Fix the ILD_l4/s4_v02 Hybird Hcal RPC Anode and Cathode FloatGlass place order.
+    - For the Hybird Hcal Endcaps and EndcapRing, they have been fixed inside compact file.
+      - "SHcalSc04_EndcapRing_v01.xml" for both ILD_l4_v02 and ILD_s4_v02
+      - "SHcalSc04_Endcaps_v01_LARGE.xml" for ILD_l4_v02
+      - "SHcalSc04_Endcaps_v01_SMALL.xml" for ILD_s4_v02
+    - For the Hybird Hcal Barrel, they have been fixed in both the driver and compact file
+      - "SHcalSc04_Barrel_v04.xml" for both ILD_l4_v02 and ILD_s4_v02.
+      - "SHcalSc04_Barrel_v04.cpp" the slices place order has been fixed to start from IP.
+   - All the compact files are inside the "ILD_common_v02" folder, which are used by ILD_l5/s5_v02, too.
+      - So both ILD_l5_v02 and ILD_s5_v02 have the updeted Hybird Hcal, too.
+
+* 2017-07-28 TiborILD ([PR#150](https://github.com/iLCSoft/lcgeo/pull/150))
+  - added inner box cut off for Hcal_Endcaps_SD_v01
+  - added SDHCAL Barrel module with TESLA geometry
+
+* 2017-08-30 TiborILD ([PR#157](https://github.com/iLCSoft/lcgeo/pull/157))
+  - update of ILD Hcal endcap readout segmentation
+          - in order to unify the readouts for all Hcal detectors  the CartesianGridXZ readout of SHCalsc04_Endcaps_v01 was changed to CartesianGridXY readout 
+         - affects models ILD_l/s4_v02 and ILD_l/s5_v02
+
+* 2017-08-30 Jan Strube ([PR#153](https://github.com/iLCSoft/lcgeo/pull/153))
+  - allow to change the name of the MCParticle input collection in ddsim
+          - using parameter 'mcParticleCollectionName'
+
+* 2017-08-30 Jan Strube ([PR#153](https://github.com/iLCSoft/lcgeo/pull/153))
+  /
+
+* 2017-08-02 TiborILD ([PR#151](https://github.com/iLCSoft/lcgeo/pull/151))
+  - modifications to comply with a new xml scheme in ILD_common_v02
+
+* 2017-09-26 Daniel Jeans ([PR#167](https://github.com/iLCSoft/lcgeo/pull/167))
+  - adjust parameters of hybrid ECAL model: reduce scintillator 2 -> 1.5 mm, add 0.5mm air gap
+  - take hybrid ECAL segmentation from parameters (not hard-coded numbers)
+
+* 2017-08-14 Andre Sailer ([PR#154](https://github.com/iLCSoft/lcgeo/pull/154))
+  - The CommandLine information was no longer filled in the lcio runheader, it is now filled again
+
+* 2017-09-29 Ete Remi ([PR#169](https://github.com/iLCSoft/lcgeo/pull/169))
+  - Ecal (Hcal) segmentation selection variable moved from ecal(hcal)_defs.xml files to top level detector xml file
+  - Added 12 new detectors for different reconstruction combination : 
+    - ILD_l/s4_o1_v02 : SiWEcal + AHcal (as for standard ILD_l/s4_v02)
+    - ILD_l/s4_o2_v02 : SiWEcal + SDHCAL
+    - ILD_l/s5_o1_v02 : SiWEcal + AHcal (as for standard ILD_l/s5_v02)
+    - ILD_l/s5_o2_v02 : SiWEcal + SDHCAL
+    - ILD_l/s5_o3_v02 : ScEcal + AHcal
+    - ILD_l/s5_o4_v02 : ScEcal + SDHCAL
+  - One can use simulated files from i.e ILD_l4_v02 and reconstruct them with ILD_l4_o1_v02 or ILD_l4_o2_v02 models
+
+* 2017-09-29 Frank Gaede ([PR#168](https://github.com/iLCSoft/lcgeo/pull/168))
+  - adapt to changes in dd4hep::BitField64 in https://github.com/AIDASoft/DD4hep/pull/238
+
+* 2017-07-27 Shaojun Lu ([PR#148](https://github.com/iLCSoft/lcgeo/pull/148))
+  - Update ILD Documentation tools for ILD_l4/s4_v02.
+        - Following the DDG4 development, and update ILD Documentation tool "extractParameters.py"
+        - Following the ILD_l4/s4_v02 setup, and clean unused parameter in "ILD_envelope_parameters.txt" for the envelope parameters list.
+
+* 2017-08-23 Daniel Jeans ([PR#155](https://github.com/iLCSoft/lcgeo/pull/155))
+  - In case of multi-readout setup, give the two (or more) sensitive layers within a single calorimeter layer the same layer index
+
+* 2017-09-14 Shaojun Lu ([PR#166](https://github.com/iLCSoft/lcgeo/pull/166))
+  - Fix ILD_l4_v02 Hybird model collections key_value.
+      - follow the update of the slice placement and correct the collections key_value.
+      - the segmentation and collection should use the same key_value for both SDHCAL and  AHcal.
+
+* 2017-09-06 Shaojun Lu ([PR#160](https://github.com/iLCSoft/lcgeo/pull/160))
+  - Fix ILD SEcal05_ECRing for filling dd4hep::rec::LayeredCalorimeterData.
+    - For the reconstruction, we fill the LayeredCalorimeterData at runtime.
+    - Both side ECRings have identical layer structure, fill the one from module_num==0, and used for both.
+
+* 2017-09-06 Shaojun Lu ([PR#159](https://github.com/iLCSoft/lcgeo/pull/159))
+  - Fix ILD_l4_v02 target readout slice number for AHCAL.
+    - after re-order the Hybird HCAL layers, we should also update Hcal_readout_segmentation_slice_barrel to "3" as "Hcal_readout_segmentation_slice_endcap" now.
+
+* 2017-09-12 Daniel Jeans ([PR#165](https://github.com/iLCSoft/lcgeo/pull/165))
+  Fix the filling of dd4hep::rec::LayeredCalorimeterData::Layer data for SEcal05, SEcal06 models:
+  - layer.distance now defined as the distance to the *start* of a calo layer (at the start of the absorber, except in the case of the 1st layer, in which it's the start of the ECAL).
+  Some additional fixes to SEcal05_ECRing: 
+  - use correct absorber thickness in stack transitions (previously not guaranteed to be correct)
+  - use CarbonFibre when calculating material properties for LayeredCalorimeterData (previously using air for structural material)
+  - cosmetic changes: indentations, commented-out code, ...
+
+* 2017-09-12 Shaojun Lu ([PR#164](https://github.com/iLCSoft/lcgeo/pull/164))
+  - For backward consistency, update all ILD AHCAL Barrel slice placement.
+      - update all ILD AHCAL Barrel drivers to place slice in the same consistent way.
+      - update the slice order in all the ILD AHCAL Barrel compact files too.
+
+* 2017-09-12 Dan Protopopescu ([PR#163](https://github.com/iLCSoft/lcgeo/pull/163))
+  - Option 3 of the SiD model, with Cu absorber plates in the HCal, instead of Steel235
+
+* 2017-09-12 Shaojun Lu ([PR#162](https://github.com/iLCSoft/lcgeo/pull/162))
+  -  Fix ILD_l4_v02 Barrel MultiSegmentation slice number for different technology.
+     - After change the order of slice, the segmentation slice should be updated too.
+     - ILD_s4_v02 use the same compact file, should be fine.
+
+* 2017-10-06 Andre Sailer ([PR#171](https://github.com/iLCSoft/lcgeo/pull/171))
+  - Drop unused and no longer existing header includes AidaSoft/DD4hep#241
+
+* 2017-10-05 Frank Gaede ([PR#170](https://github.com/iLCSoft/lcgeo/pull/170))
+  - fill `tpcData->zMinReadout` in `TPC10_geo.cpp`
+    - describing the cathode thickness
+
+* 2017-09-11 Frank Gaede ([PR#161](https://github.com/iLCSoft/lcgeo/pull/161))
+  - fix spelling of ddsim parameter:
+       - rename mcParticleCollectionName to MCParticleCollectionName
+
 # v00-13-04
 
 * 2017-07-21 Shaojun Lu ([PR#147](https://github.com/iLCSoft/lcgeo/pull/147))
