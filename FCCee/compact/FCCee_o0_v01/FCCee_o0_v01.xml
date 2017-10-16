@@ -5,13 +5,10 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
     
-    <info name="CLIC_o2_v04"
-        title="CLIC detector model option 2 version 04"
-        author="Marko Petric"
-        url="https://twiki.cern.ch/twiki/bin/view/CLIC/NewCLIC"
+    <info name="FCCee_o0_v01"
+        title="FCCee detector model option 0 version 01"
         status="development"
-        version="$Id: 2015-1-4 marko.petric@cern.ch $">
-        <comment>The compact format for the CLIC Detector design</comment>
+        <comment>The compact format for the FCCee Detector design</comment>
     </info>
     
     <includes>
