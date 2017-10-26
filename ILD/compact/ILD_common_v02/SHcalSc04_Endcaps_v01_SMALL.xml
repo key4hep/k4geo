@@ -53,7 +53,7 @@
   <readouts>
     <readout name="HcalEndcapsReadout">
       <segmentation   type="MultiSegmentation"  key="slice">
-        <segmentation name="RPCgrid" type="CartesianGridXY"    key_value="1"    grid_size_x="SDHCal_cell_size" grid_size_y="SDHCal_cell_size" />
+        <segmentation name="RPCgrid" type="CartesianGridXY"    key_value="1"    grid_size_x="SDHCal_cell_size" grid_size_y="SDHCal_cell_size" offset_x="SDHCal_cell_size/2.0" offset_y="SDHCal_cell_size/2.0" />
         <segmentation name="Scigrid"  type="CartesianGridXY"  key_value="3"  grid_size_x="AHCal_cell_size" grid_size_y="AHCal_cell_size" offset_x="AHCal_cell_size/2.0" offset_y="AHCal_cell_size/2.0" />
       </segmentation>
       <hits_collections>
