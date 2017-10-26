@@ -97,7 +97,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   double      Hcal_radiator_thickness          = theDetector.constant<double>("Hcal_radiator_thickness");
   double      Hcal_lateral_structure_thickness = theDetector.constant<double>("Hcal_lateral_structure_thickness");
   double      Hcal_endcap_layer_air_gap        = theDetector.constant<double>("Hcal_endcap_layer_air_gap");
-  double      Hcal_layer_air_gap               = theDetector.constant<double>("Hcal_layer_air_gap");
 
   //double      Hcal_cells_size                  = theDetector.constant<double>("Hcal_cells_size");
   double      HcalEndcap_inner_radius          = theDetector.constant<double>("HcalEndcap_inner_radius");
@@ -265,13 +264,13 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	DetElement  layer(stave_det,layer_name,det_id);
 	
 	// Active Layer box & volume
-	double active_layer_dim_x = box_half_x - Hcal_lateral_structure_thickness - Hcal_endcap_layer_air_gap;
-	double active_layer_dim_y = box_half_y;// - Hcal_lateral_structure_thickness - Hcal_endcap_layer_air_gap;
+	double active_layer_dim_x = box_half_x - Hcal_lateral_structure_thickness/2.0 - Hcal_endcap_layer_air_gap/2.0;
+	double active_layer_dim_y = box_half_y;
 	double active_layer_dim_z = layer_thickness/2.0;
 	
 	// Build chamber including air gap
 	// The Layer will be filled with slices, 
-	Volume layer_vol(layer_name, Box((active_layer_dim_x + Hcal_layer_air_gap),
+	Volume layer_vol(layer_name, Box((active_layer_dim_x + Hcal_endcap_layer_air_gap/2.0),
 					 active_layer_dim_y,active_layer_dim_z), air);
 
 
