@@ -14,6 +14,7 @@
   <constant name="Hcal_PCB_thickness" value="0.7*mm"/>
   <constant name="Hcal_scintillator_thickness" value="3.0*mm"/>
   <constant name="Hcal_cells_size" value="30*mm"/>
+  <constant name="Hcal_endcap_lateral_structure_thickness" value="5.0*mm"/>
   <constant name="Hcal_endcap_layer_air_gap" value="2.5*mm"/>
   <constant name="Hcal_endcap_nlayers" value="48"/> <!-- needed for ring only? -->
 
