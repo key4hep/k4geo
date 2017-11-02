@@ -1,3 +1,26 @@
+# v00-15
+
+* 2017-11-02 Shaojun Lu ([PR#177](https://github.com/ilcsoft/lcgeo/pull/177))
+  - Added one independent parameter "Hcal_endcap_lateral_structure_thickness"
+      - to make Hcal endcap more flexible.
+      - tower: |5mm|2.5mm|360mm|2.5mm|5mm|
+      - tower: |LateralStructure|AirGap|Active(HBU)|AirGap|LateralStructure|
+      - user may update them from compact file.
+
+* 2017-11-02 Shaojun Lu ([PR#176](https://github.com/ilcsoft/lcgeo/pull/176))
+  - Fix ILD SDHCal endcaps segmentation offset.
+      - use half of SDHCal_cell_size offset to make sure that cells equally distributed in the sensitive area from the center to the left, to the right, to the top and to the bottom.
+      - to avoid the cell to be placed at (0,0) in xy-plane, then generate the fragmentation cell at the boundary.
+
+* 2017-10-17 Oleksandr Viazlo ([PR#174](https://github.com/ilcsoft/lcgeo/pull/174))
+  - add new FCCee_o1_v01 detector model (based only on DD4hep and lcgeo drivers)
+  - add test for this model
+
+* 2017-10-27 Shaojun Lu ([PR#175](https://github.com/ilcsoft/lcgeo/pull/175))
+  - Fix ILD HCAL endcaps drivers to use half of Hcal_lateral_structure_thickness for each side.
+      - and half of Hcal_endcap_layer_air_gap size for each side too.
+      - these two parameters could be modified inside the compact files "hcal_defs.xml"
+
 # v00-14
 
 * 2017-08-09 Marko Petric ([PR#152](https://github.com/iLCSoft/lcgeo/pull/152))
