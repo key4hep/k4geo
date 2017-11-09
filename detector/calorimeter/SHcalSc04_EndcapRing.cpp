@@ -265,7 +265,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	{
 	  double Zoff = zlen/2.
 	    - (layer_id-1) *(Hcal_chamber_thickness + Hcal_radiator_thickness)
-	    - Hcal_radiator_thickness + Hcal_chamber_thickness/2.0;
+	    - (Hcal_radiator_thickness + Hcal_chamber_thickness/2.0);
 
 	  double layer_thickness = lzlen;
 	  
@@ -422,7 +422,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   // Place Hcal Endcap Ring module into the assembly envelope volume
   //====================================================================
   
-  double endcap_z_offset = HcalEndcapRing_min_z + pDz;
+  double endcap_z_offset = HcalEndcapRing_max_z - pDz;
   
   for(int module_num=0;module_num<2;module_num++) {
 
