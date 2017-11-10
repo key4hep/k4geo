@@ -1,3 +1,10 @@
+# v00-15-01
+
+* 2017-11-10 Shaojun Lu ([PR#179](https://github.com/iLCSoft/lcgeo/pull/179))
+  - update HcalEndcapRing in ILD models
+       - Fix HcalEndcapRing first layer placement Z offset.
+       - Update HcalEndcapRing alignment to the back of the envelope.
+
 # v00-15
 
 * 2017-11-02 Shaojun Lu ([PR#177](https://github.com/ilcsoft/lcgeo/pull/177))
