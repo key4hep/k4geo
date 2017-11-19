@@ -189,8 +189,13 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   cout<<"  HcalEndcapRing_inner_radius: "<< HcalEndcapRing_inner_radius <<endl;
   cout<<"  HcalEndcapRing_outer_radius: "<< HcalEndcapRing_outer_radius <<endl;
 
+  double Dzfree = SpaceForLayers - MaxNumberOfLayers*layer_thickness;
+ 
+// remaining free space "Dzfree" is put at the start of the detector, before the 1st layer
+// --> prefer the space filled by air than by steel
+  HcalEndcapRing_min_z = HcalEndcapRing_min_z + Dzfree ;
 
-  pDz = ( HcalEndcapRing_max_z -  HcalEndcapRing_min_z) / 2.;
+  pDz = (MaxNumberOfLayers*layer_thickness + Hcal_back_plate_thickness)/2.;
 
   pRMin =HcalEndcapRing_inner_radius;
 
@@ -248,7 +253,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   Position IntersectXYZtrans((pRMax + (Hcal_stave_gaps/2.)), 
 			     (pRMax + (Hcal_stave_gaps/2.)),
 			     (zlen/2.));
-//??			     (Hcal_total_dim_z/2.));
 
   RotationZYX rot(0.,0.,0.);
   Transform3D tran3D(rot,IntersectXYZtrans);
@@ -272,15 +276,11 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	   layer_id <= number_of_chambers;
 	   layer_id++)
 	{
-	  double Zoff =  (layer_id - (number_of_chambers+1)/2.0) *layer_thickness ;
-//	  double Zoff = SpaceForLayers/2.
-//	    - (number_of_chambers-layer_id) *layer_thickness + layer_thickness/2.0;
-//	    - (layer_id-1) *(Hcal_chamber_thickness + Hcal_radiator_thickness)
-//	    - Hcal_radiator_thickness + Hcal_chamber_thickness/2.0;
+// Insert layers from zmin -> zmax  BUT! be sure to end the detector with  "last_layer + back_plate"  ... and no free space
+	  double Zoff = -zlen/2.0 + (layer_id - 0.5) *layer_thickness ;
           if(stave_id==0)
             cout<<"Ring:layerID, Zoff, staveID= "<<layer_id<<" "<<Zoff<<" "<<stave_id<<endl;
           
-	  
 	  //====================================================================
 	  // Create Hcal EndcapRing Chamber without radiator
 	  // Place into the Hcal EndcapRing logical, after each radiator 

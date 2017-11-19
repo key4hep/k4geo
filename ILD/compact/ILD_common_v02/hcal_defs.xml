@@ -40,7 +40,7 @@
   <constant name="HcalSD_electronics_mask_thickness" value="1.6*mm"/>
   <constant name="HcalSD_steel_casette_thickness" value="2.5*mm"/>
   <constant name="HcalSD_airgap_thickness" value="0.5*mm"/>
-  <constant name="HcalSD_back_plate_thickness" value="15*mm"/>
+  <constant name="HcalSD_back_plate_thickness" value="10*mm"/>
   <constant name="HcalSD_barrel_end_module_type" value="1"/>
   <constant name="HcalSD_stave_gaps" value="10*mm"/>
   <constant name="HcalSD_lateral_structure_thickness" value="10*mm"/>

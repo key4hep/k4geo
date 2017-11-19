@@ -148,6 +148,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   cout<<"  HcalEndcap_outer_radius: "<< HcalEndcap_outer_radius <<endl;
   cout<<"  HcalEndcap_min_z:  "<< HcalEndcap_min_z <<endl;
   cout<<"  HcalEndcap_max_z:  "<< HcalEndcap_max_z <<endl;
+  cout<<"  Hcal_stave_gaps:  "<< Hcal_stave_gaps <<endl;
 
 // First get the layer (chamber) thickness caluculated from the Hcal_Endcaps_SD_v0x.xml file
 // not from the fixed, defined value "Hcal_chamber_thickness" 
@@ -274,7 +275,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	   layer_id <= number_of_chambers;
 	   layer_id++)
 	{
-	  double Zoff = (layer_id- (number_of_chambers+1)/2.0)* layer_thickness; 
+	  double Zoff = -zlen/2.0 + (layer_id - 0.5)* layer_thickness ; 
 	  
 	  //====================================================================
 	  // Create Hcal Endcap Chamber without radiator ...!! TK  with radiator defined as slice in xml 
