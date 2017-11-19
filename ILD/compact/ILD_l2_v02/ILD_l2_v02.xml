@@ -62,7 +62,7 @@
   <include ref="../ILD_common_v02/SEcal05_siw_ECRing.xml"/>
   <include ref="../ILD_common_v02/Hcal_Endcaps_SD_v01.xml"/>
   <include ref="../ILD_common_v02/Hcal_EndcapRing_SD_v01.xml"/>
-  <include ref="../ILD_common_v02/Hcal_Barrel_SD_v02.xml"/>
+  <include ref="../ILD_common_v02/Hcal_Barrel_SD_v01.xml"/>
   <include ref="../ILD_common_v02/Yoke05_Barrel.xml"/>
   <include ref="../ILD_common_v02/Yoke05_Endcaps.xml"/>
   <include ref="../ILD_common_v02/LumiCal.xml"/> 

@@ -107,8 +107,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   double      HcalEndcap_min_z                 = theDetector.constant<double>("HcalEndcap_min_z");
   double      HcalEndcap_max_z                 = theDetector.constant<double>("HcalEndcap_max_z");
 
-  double      Hcal_layer_air_gap               = theDetector.constant<double>("HcalSD_layer_air_gap");
-//  int         Hcal_outer_symmetry              = theDetector.constant<int>("Hcal_outer_symmetry");
   double      Hcal_endcap_layer_air_gap        = theDetector.constant<double>("Hcal_endcap_layer_air_gap");
 // Some verbose output
   cout << " \n\n\n CREATE DETECTOR: Hcal_Endcaps_SD_v02" << endl;
@@ -230,7 +228,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	
 	// Build chamber including air gap
 	// The Layer will be filled with slices, 
-	Volume layer_vol(layer_name, Box((active_layer_dim_x + Hcal_layer_air_gap),
+	Volume layer_vol(layer_name, Box((active_layer_dim_x + Hcal_endcap_layer_air_gap),
 					 active_layer_dim_y,active_layer_dim_z), air);
 
 	LayeredCalorimeterData::Layer caloLayer ;
