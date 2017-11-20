@@ -264,6 +264,11 @@ void SEcal06_Helpers::updateCaloLayers(double thickness,
     _layer_thickness=0;
     _layer_nRadiationLengths=0;
     _layer_nInteractionLengths=0;
+
+    // update the calolayer.distance ( DJeans 12 sep 2017)
+    // here this is distance from ECAL start to the layer start; the Barrel and Endcap drivers add the distance from IP
+    _caloLayer.distance += _caloLayer.inner_thickness+_caloLayer.outer_thickness;
+
   }
 
   if (!isFinal) {
@@ -292,11 +297,6 @@ void SEcal06_Helpers::updateCaloLayers(double thickness,
     _layer_thickness           += (thickness/2.);
     _layer_nRadiationLengths   += (thickness/2.)/mat.radLength() ;
     _layer_nInteractionLengths += (thickness/2.)/mat.intLength() ;
-
-
-    // update the calolayer.distance ( DJeans 12 sep 2017)
-    // here this is distance from ECAL start to the layer start; the Barrel and Endcap drivers add the distance from IP
-    _caloLayer.distance += _caloLayer.inner_thickness+_caloLayer.outer_thickness;
 
   }
 
