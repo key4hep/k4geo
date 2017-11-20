@@ -1,3 +1,9 @@
+# v00-15-02
+
+* 2017-11-20 Daniel Jeans ([PR#181](https://github.com/ilcsoft/lcgeo/pull/181))
+  - bug fix for ILD_l/s5 models
+     - fix calculation of layer positions in dd4hep::rec::LayeredCalorimeterData in SEcal06_Helpers
+
 # v00-15-01
 
 * 2017-11-10 Shaojun Lu ([PR#179](https://github.com/iLCSoft/lcgeo/pull/179))
