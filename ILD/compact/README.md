@@ -31,6 +31,8 @@ The following ILD detector models are available in lcgeo ( current production mo
 | ILD_s1_v02    | small model                | sci    | Si      | Tesla    |  under validation |
 | ILD_l2_v02    | large model                | RPC    | Si      | Videau   |  under validation |
 | ILD_s2_v02    | small model                | RPC    | Si      | Videau   |  under validation |
+| ILD_l6_v02    | large model                | RPC    | Si      | Tesla    |  under validation |
+| ILD_s6_v02    | small model                | RPC    | Si      | Tesla    |  under validation |
 | ILD_o1_v05    | DBD model (Mokka)          | sci    | Si      | Tesla    |  historic         |
 | ------------- | ---------------------------|--------|---------|----------|-------------------|
 
@@ -116,6 +118,18 @@ The following ILD detector models are available in lcgeo ( current production mo
  - with SiWEcal and Videau SDHcal
  - TPC_outer_radius = 1460*mm
  - compact file: [./ILD_s2_v02/ILD_s2_v02.xml](./ILD_s2_v02/ILD_s2_v02.xml)
+
+### ILD_l6_v02
+ - optimisation large ILD model
+ - with SiWEcal and Tesla SDHcal
+ - TPC_outer_radius = 1808*mm
+ - compact file: [./ILD_l6_v02/ILD_l6_v02.xml](./ILD_l6_v02/ILD_l6_v02.xml)
+
+### ILD_s6_v02
+ - optimisation small ILD model
+ - with SiWEcal and Tesla SDHcal
+ - TPC_outer_radius = 1460*mm
+ - compact file: [./ILD_s6_v02/ILD_s6_v02.xml](./ILD_s6_v02/ILD_s6_v02.xml)
 
 
 
