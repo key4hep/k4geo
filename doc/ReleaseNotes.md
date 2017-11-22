@@ -1,3 +1,18 @@
+# v00-15-03
+
+* 2017-11-22 Frank Gaede ([PR#182](https://github.com/ilcsoft/lcgeo/pull/182))
+  - update the documentation for the ILD detector models in `./ILD/compact/Readme.md`
+
+* 2017-11-22 TiborILD ([PR#180](https://github.com/ilcsoft/lcgeo/pull/180))
+  - Bug fixing and modifications in ILD_l2_v02 model 
+      - Removed 1st comment line from Hcal_EndcapRing_SD_v01.xml  preventing to appear this detector in the geometry
+      -  alligned Hcal_EndcapRing_SD to the back envelope and replaced the material of the remaining free space at the start of this detector by air
+      - reduced the thickness of HcalSD_back_plate  from 15->10 mm; gain of additional layer in Endcaps; now at (47/48)
+      - ILD_l2_v02  stands for SDHCAL technology in VIDEAU geometry
+      - some modifications in Hcal_Endcaps_SD_v01, Hcal_Endcaps_SD_v02
+  - Added  ILD_l6_v02 for  SDHCAL technology in TESLA geometry
+  - Added  ILD_s6_v02 a small version w/SDHCAL in TESLA geomtry
+
 # v00-15-02
 
 * 2017-11-20 Daniel Jeans ([PR#181](https://github.com/ilcsoft/lcgeo/pull/181))
