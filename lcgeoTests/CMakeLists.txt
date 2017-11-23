@@ -16,14 +16,14 @@ INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/run_test_${PackageName}.sh
 
 #--------------------------------------------------
 # test(s) for ILD
-SET( test_name "test_ILD_l4_v02" )
+SET( test_name "test_ILD_l5_v02" )
 ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
-  ddsim --compactFile=${CMAKE_SOURCE_DIR}/ILD/compact/ILD_l4_v02/ILD_l4_v02.xml --runType=batch -G -N=1 --outputFile=testILD_l4_v02.slcio )
+  ddsim --compactFile=${CMAKE_SOURCE_DIR}/ILD/compact/ILD_l5_v02/ILD_l5_v02.xml --runType=batch -G -N=1 --outputFile=testILD_l5_v02.slcio )
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
-SET( test_name "test_ILD_s4_v02" )
+SET( test_name "test_ILD_s5_v02" )
 ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
-  ddsim --compactFile=${CMAKE_SOURCE_DIR}/ILD/compact/ILD_s4_v02/ILD_s4_v02.xml --runType=batch -G -N=1 --outputFile=testILD_s4_v02.slcio )
+  ddsim --compactFile=${CMAKE_SOURCE_DIR}/ILD/compact/ILD_s5_v02/ILD_s5_v02.xml --runType=batch -G -N=1 --outputFile=testILD_s5_v02.slcio )
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
 #--------------------------------------------------
