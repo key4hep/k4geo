@@ -2,7 +2,7 @@
 
 <detectors>
 
-<detector id="ILDDetID_HCAL_ENDCAP" name="HcalEndcap" type="Hcal_Endcaps_SD_v02" readout="HcalEndcapsCollection"  vis="SeeThrough" calorimeterType="HAD_ENDCAP">
+<detector id="ILDDetID_HCAL_ENDCAP" name="HcalEndcap" type="Hcal_Endcaps_SD_v02" readout="HCalEndcapRPCHits"  vis="SeeThrough" calorimeterType="HAD_ENDCAP">
  <comment>Hadron Calorimeter Endcap</comment>
  <envelope vis="ILD_HCALVis">
        <shape type="BooleanShape" operation="Subtraction" material="Air">
@@ -54,7 +54,7 @@
 </detectors>
 
 <readouts>
-  <readout name="HcalEndcapsCollection">
+  <readout name="HCalEndcapRPCHits">
     <segmentation type="CartesianGridXY" grid_size_x="HcalSD_cells_size" grid_size_y="HcalSD_cells_size" offset_x="HcalSD_cells_size/2.0" offset_y="HcalSD_cells_size/2.0" />
     <id>system:5,module:3,stave:3,tower:5,layer:6,x:32:-16,y:-16</id>
   </readout>
