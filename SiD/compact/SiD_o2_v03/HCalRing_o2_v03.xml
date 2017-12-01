@@ -1,0 +1,47 @@
+<lccdd>
+	
+<!-----------------------------------------------------------------------------------------------
+   Added by Aidan, originally included in the HCalEndcap XML
+   o2_v03 update by protopop@cern.ch - Oct 18, 2017
+   Question: is this still nedded?
+------------------------------------------------------------------------------------------------->
+
+<define>
+        <constant name="HCalRing_rmin" value="HCalEndcap_rmin" />	
+	<constant name="HCalRing_rmax" value="HCalEndcap_rmax" />
+	<constant name="HCalRing_zmin" value="HCalEndcap_zmax + 2*env_safety" />
+	<constant name="HCalRing_zmax" value="HCalRing_zmin + env_safety" />
+</define>
+
+<readouts>
+    <readout name="HCalRingHits">
+      <segmentation type="CartesianGridXY" grid_size_x="HCal_cell_size" grid_size_y="HCal_cell_size" />
+      <id>${GlobalCalorimeterReadoutID}</id>
+    </readout>
+</readouts>
+
+<detectors>  
+  <detector name="HCalRingDummy" type="GenericCalEndcap_o1_v01" id="DetID_HCAL_Ring" readout="HCalRingHits" vis="HCALVis" >
+    
+    <comment>SiD HCal Ring Dummy hack to keep Pandora DDCaloHitCreator muons happy</comment>
+    
+    <type_flags type=" DetType_CALORIMETER + DetType_HADRONIC + DetType_ENDCAP + DetType_AUXILIARY"/>
+    
+    <dimensions numsides="HCalEndcap_outer_symmetry" zmin="HCalRing_zmin" zmax="HCalEndcap_zmax" rmin="HCalRing_rmin" rmax="HCalRing_rmax" nsides_inner="HCalEndcap_inner_symmetry" nsides_outer="HCalEndcap_outer_symmetry" />
+
+    <envelope vis="HCalEndcapVis">
+      <shape type="BooleanShape" operation="Subtraction" material="Air">
+	<shape type="PolyhedraRegular" numsides="HCalEndcap_outer_symmetry" rmin="HCalRing_rmin - env_safety" rmax="HCalRing_rmax + env_safety" dz="2*HCalRing_zmax + 2*env_safety" />
+	<shape type="PolyhedraRegular" numsides="HCalEndcap_outer_symmetry" rmin="0" rmax="HCalRing_rmax + 5*env_safety" dz="2*HCalRing_zmin - 2*env_safety"/>
+      </shape>
+      <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/HCalEndcap_outer_symmetry"/>
+    </envelope>
+
+    <layer repeat="1">
+      <slice material="Air" thickness="0.0001*mm" vis="InvisibleNoDaughters"/>
+    </layer>
+    
+  </detector>
+</detectors>
+
+</lccdd>

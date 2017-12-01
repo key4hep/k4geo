@@ -1,0 +1,57 @@
+<lccdd>
+
+<!-----------------------------------------------------------
+   This version uses Scintillators instead of Gas RPCs
+   by protopop@cern.ch - Nov 20, 2017
+------------------------------------------------------------->
+
+<readouts>
+    <readout name="MuonEndcapHits">
+      <segmentation type="CartesianGridXY" grid_size_x="MuonCal_cell_size" grid_size_y="MuonCal_cell_size" />
+      <id>${GlobalCalorimeterReadoutID}</id>
+    </readout>
+</readouts>
+
+<detectors>
+  <!-- alternate drivers: GenericCalEndcap_o1_v01, DD4hep_PolyhedraEndcapCalorimeter2 -->
+  <!-- Note generic version needed currently for pandora extensions, and can't handle two sensitive slices per layer  -->
+  <detector id="DetID_Muon_Endcap" name="MuonEndcap" type="SteppedMuonEndcap_o2_v02" readout="MuonEndcapHits" reflect="true" vis="MuonEndcapVis" calorimeterType="MUON_ENDCAP" gap="0.0*cm">
+    
+    <comment>Muon Calorimeter Endcaps</comment>
+    
+    <type_flags type=" DetType_CALORIMETER + DetType_MUON + DetType_ENDCAP"/>
+    
+    <dimensions numsides="MuonEndcap_outer_symmetry" nsides_inner="MuonEndcap_inner_symmetry" nsides_outer="MuonEndcap_outer_symmetry" zmin="MuonEndcap_zmin" rmin="MuonEndcap_rmin" rmax="MuonEndcap_rmax" />
+    
+    <envelope vis="MuonEndcapVis">
+      <shape type="Assembly"/>
+    </envelope>
+    
+    <layer repeat="11" vis="BlueVis">
+      <!-- 2 x (7.383mm active stack + 7.5mm air) + 10mm air + 196mm iron -->
+      <slice material="Air"         thickness="7.5*mm" />
+      <slice material="Steel235"    thickness="0.5*mm" />    <!-- Top plate -->
+      <slice material="Kapton"      thickness="0.115*mm" />  <!-- Polyimide foil -->
+      <slice material="Copper"      thickness="0.068*mm" />
+      <slice material="PCB"         thickness="1.0*mm" />    <!-- PCB made of FR4 -->
+      <slice material="Polystyrole" thickness="0.1*mm" />    <!-- Reflector foil -->
+      <slice material="Polystyrene" thickness="3.0*mm" sensitive="yes" limits="cal_limits" />
+      <slice material="Polystyrole" thickness="0.1*mm" />    <!-- Reflector foil -->
+      <slice material="Steel235"    thickness="0.5*mm" />    <!-- Bottom plate -->
+      <slice material="Air"         thickness="10.0*mm" />   <!-- Clearance gap between active layers -->
+      <!-- repeats -->
+      <slice material="Steel235"    thickness="0.5*mm" />    <!-- Top plate -->
+      <slice material="Kapton"      thickness="0.115*mm" />  <!-- Polyimide foil -->
+      <slice material="Copper"      thickness="0.068*mm" />
+      <slice material="PCB"         thickness="1.0*mm" />    <!-- PCB made of FR4 -->
+      <slice material="Polystyrole" thickness="0.1*mm" />    <!-- Reflector foil -->
+      <slice material="Polystyrene" thickness="3.0*mm" sensitive="yes" limits="cal_limits" />
+      <slice material="Polystyrole" thickness="0.1*mm" />    <!-- Reflector foil -->
+      <slice material="Steel235"    thickness="0.5*mm" />    <!-- Bottom plate -->
+      <slice material="Air"         thickness="7.5*mm" />    <!-- Clearance gap between active layer and next iron layer -->
+      <slice material="Iron"        thickness="196.0*mm" />
+    </layer>
+  </detector>
+</detectors>
+
+</lccdd>

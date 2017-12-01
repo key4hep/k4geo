@@ -14,7 +14,7 @@
   
   <!-- We model vacuum just as very thin air -->
   <material name="Vacuum">  
-    <D type="density" unit="g/cm3" value="0.0000000001" />
+    <D type="density" unit="g/cm3" value="0.0000000001"/>
     <fraction n="0.754" ref="N"/>
     <fraction n="0.234" ref="O"/>
     <fraction n="0.012" ref="Ar"/>
@@ -59,10 +59,26 @@
     <fraction n="0.167" ref="Cl"/>
   </material>
 
+  <material name="Steel">
+    <D type="density" value="7.87" unit="g/cm3"/>
+    <fraction n="0.988" ref="Fe"/>
+    <fraction n="0.002" ref="C"/>
+  </material>
+
+  <!-- from https://arxiv.org/pdf/1003.2662.pdf -->
   <material name="Steel235">
-    <D type="density" value="7.85" unit="g/cm3"/>
-    <fraction n="0.998" ref="Fe"/>
-    <fraction n=".002" ref="C"/>
+    <D type="density" value="7.87" unit="g/cm3"/>
+    <fraction n="0.9834" ref="Fe"/>
+    <fraction n="0.0017" ref="C"/>
+    <fraction n="0.0140" ref="Mn"/>
+    <fraction n="0.00045" ref="S"/>
+    <fraction n="0.00045" ref="P"/>
+  </material>
+
+  <material name="Brass">
+    <D type="density" value="8.520" unit="g/cm3"/>
+    <fraction n="0.60" ref="Cu"/>
+    <fraction n="0.40" ref="Zn"/>
   </material>
 
   <material name="Steel235JR">

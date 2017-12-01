@@ -1,0 +1,49 @@
+<lccdd>
+	
+<!-----------------------------------------------------------------------------------------------
+     AHCal EndCap implementation updated by Ross, Nov 20, 2016
+     o2_v03 by protopop@cern.ch - Oct 18, 2017
+------------------------------------------------------------------------------------------------->
+	
+<readouts>
+    <readout name="HCalEndcapHits">
+      <segmentation type="CartesianGridXY" grid_size_x="HCal_cell_size" grid_size_y="HCal_cell_size" />
+      <id>${GlobalCalorimeterReadoutID}</id>
+    </readout>
+</readouts>
+
+<detectors>
+  <detector id="DetID_HCAL_Endcap" name="HCalEndcap" type="GenericCalEndcap_o1_v01" readout="HCalEndcapHits" vis="HCalEndcapVis" calorimeterType="HAD_ENDCAP" reflect="true">
+    
+    <comment>SiD Hadron Calorimeter Endcaps</comment>
+    
+    <type_flags type=" DetType_CALORIMETER + DetType_HADRONIC + DetType_ENDCAP"/>
+    
+    <dimensions numsides="HCalEndcap_outer_symmetry" zmin="HCalEndcap_zmin" zmax="HCalEndcap_zmax" rmin="HCalEndcap_rmin" rmax="HCalEndcap_rmax" nsides_inner="HCalEndcap_inner_symmetry" nsides_outer="HCalEndcap_outer_symmetry" />
+    
+    <envelope vis="HCalEndcapVis">
+      <shape type="BooleanShape" operation="Subtraction" material="Air">
+	<shape type="PolyhedraRegular" numsides="HCalEndcap_outer_symmetry" rmin="HCalEndcap_rmin - env_safety" rmax="HCalEndcap_rmax + env_safety" dz="2*HCalEndcap_zmax + 2*env_safety" />
+	<shape type="PolyhedraRegular" numsides="HCalEndcap_outer_symmetry" rmin="0" rmax="HCalEndcap_rmax + 5*env_safety" dz="2*HCalEndcap_zmin - 2*env_safety"/>
+      </shape>
+      <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/HCalEndcap_outer_symmetry"/>
+    </envelope>
+    
+    <layer repeat="44"><!-- no room for 45 layers -->
+      <slice material = "Steel235"   thickness = "19.0*mm" />    <!-- Absorber -->
+      <slice material = "Air"        thickness =  "2.0*mm" />
+      <slice material = "Steel235"   thickness =  "0.5*mm" />    <!-- Top plate -->
+      <slice material = "Kapton"    thickness = "0.115*mm" />    <!-- Polyimide foil -->
+      <slice material = "Copper"    thickness = "0.068*mm" />
+      <slice material = "PCB"       thickness =   "1.0*mm" />    <!-- PCB made of FR4 -->
+      <slice material = "Polystyrole" thickness = "0.1*mm" />    <!-- Reflector foil -->
+      <slice material = "Polystyrene" thickness = "3.0*mm" sensitive="yes" limits="cal_limits" />
+      <slice material = "Polystyrole" thickness = "0.1*mm" />    <!-- Reflector foil -->
+      <slice material = "Steel235"    thickness = "0.5*mm" />    <!-- Bottom plate -->
+      <slice material = "Air"       thickness = "0.617*mm" />    <!-- Clearance gap between active layer and next absorber -->	  
+    </layer>
+    
+  </detector>
+</detectors>
+
+</lccdd>
