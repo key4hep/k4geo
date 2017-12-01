@@ -1,0 +1,40 @@
+<lccdd>
+  
+  <readouts>
+    <readout name="BeamCalHits">
+      <segmentation type="CartesianGridXY" grid_size_x="BeamCal_cell_size" grid_size_y="BeamCal_cell_size" />
+      <id>${GlobalCalorimeterReadoutID}</id>
+    </readout>
+  </readouts>
+  
+  <detectors>
+    <detector id="DetID_BeamCal" name="BeamCal" reflect="true" type="CylCalEndcap_o1_v01" readout="BeamCalHits" vis="BeamCalVis" calorimeterType="BEAM">
+      
+      <comment>SiD Beam Calorimeter</comment>
+      
+      <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_ENDCAP + DetType_FORWARD + DetType_AUXILIARY "/>
+      
+      <dimensions outer_r="BeamCal_rmax" inner_r="BeamCal_rmin" inner_z="BeamCal_zmin" outer_z="BeamCal_zmax" dz="BeamCal_dz"/>
+      
+      <!-- default envelope created by driver has no relation to this definition, needs update! -->
+      <envelope vis="BeamCalVis">
+	<shape type="BooleanShape" operation="Subtraction" material="Air">
+	  <shape type="Tube" rmin="BeamCal_rmin - env_safety" rmax="BeamCal_rmax + env_safety" dz="2*BeamCal_zmax + 2*env_safety"/>
+	  <shape type="Tube" rmin="0" rmax="BeamCal_rmax + env_safety" dz="2*BeamCal_zmin - 2*env_safety"/>
+	</shape>
+      </envelope>
+      
+      <beampipe crossing_angle="0.014" outgoing_r="15.5*mm" incoming_r="10.5*mm" />
+      
+      <layer repeat="50">
+	<slice material="TungstenDens24" thickness="2.71*mm" />
+	<slice material="Silicon" thickness="0.32*mm" sensitive="yes" />
+	<slice material="Copper" thickness="0.05*mm" />
+	<slice material="Kapton" thickness="0.30*mm" />
+	<slice material="Air" thickness="0.33*mm" />
+      </layer>
+      
+    </detector>
+  </detectors>
+  
+</lccdd>

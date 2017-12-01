@@ -1,0 +1,38 @@
+<lccdd>
+
+<!---------------------------------------------------------------
+   This version uses a common envelope for the barrel and encaps
+   by protopop@cern.ch - Nov 30, 2017
+----------------------------------------------------------------->
+
+<define>
+  <constant name="SteppedMuon_symmetry" value="MuonBarrel_symmetry"/>
+  <constant name="SteppedMuon_rmax"     value="MuonBarrel_rmax"/>
+  <constant name="SteppedMuon_cavity_r" value="MuonBarrel_rmin"/>
+  <constant name="SteppedMuon_cavity_z" value="MuonEndcap_zmin"/>
+  <constant name="SteppedMuon_rmin"     value="MuonEndcap_rmin"/>
+  <constant name="SteppedMuon_zmax"     value="MuonEndcap_zmax"/>
+</define>
+
+<comment>SiD Stepped Muon Calorimeter</comment>
+<detectors>
+  <detector name="MuonCalorimeters" type="DD4hep_SubdetectorAssembly" vis="SteppedMuonVis">
+    <shape name="SteppedMuonEnvelope" type="BooleanShape" operation="Subtraction" material="Air">
+      <shape type="PolyhedraRegular"  numsides="SteppedMuon_symmetry" rmin="SteppedMuon_rmin - env_safety" rmax="SteppedMuon_rmax + env_safety" 
+	     dz="2*MuonEndcap_zmax + 2*env_safety" />
+      <shape type="PolyhedraRegular"  numsides="SteppedMuon_symmetry" rmin="0" rmax="SteppedMuon_cavity_r - env_safety" 
+	     dz="2*SteppedMuon_cavity_z - 2*env_safety" />
+    </shape>
+    <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/SteppedMuon_symmetry"/>
+
+    <comment>Stepped Muon Assembly</comment>
+    <composite name="MuonBarrel"/>
+    <composite name="MuonEndcap"/>
+
+  </detector>
+</detectors>
+
+<include ref="MuonBarrel_o2_v03.xml"/>
+<include ref="MuonEndcap_o2_v03.xml"/>
+
+</lccdd>
