@@ -18,7 +18,7 @@
 
   <type_flags type=" DetType_TRACKER + DetType_ENDCAP"/>
 
-  <module name="Module1">
+  <module name="Module1" vis="GrayVis">
     <trd x1="36.112*mm" x2="46.635*mm" z="100.114/2*mm" />
     <module_component thickness="0.00052*cm"   material="Copper" />
     <module_component thickness="0.0051*cm"   material="Kapton" />
@@ -34,7 +34,7 @@
     <module_component thickness="0.00052*cm"   material="Copper" />
   </module>
 
-  <module name="Module2">
+  <module name="Module2" vis="GreenVis">
     <trd x1="45.245*mm" x2="54.680*mm" z="89.773/2*mm" />
     <module_component thickness="0.00079*cm"   material="Copper" />
     <module_component thickness="0.0078*cm"   material="Kapton" />

@@ -210,8 +210,11 @@
   <include ref="SiVertexBarrel_o2_v03.xml"/>
   <include ref="SiVertexEndcap_o2_v03.xml"/>
 
+  <include ref="SiTrackers_o2_v03.xml"/>
+  <!-- the above includes now these two:
   <include ref="SiTrackerBarrel_o2_v03.xml"/>
-  <include ref="SiTrackerEndcap_o2_v03.xml"/>
+  <include ref="SiTrackerEndcap_o2_v03.xml"/-->
+
   <include ref="SiTrackerForward_o2_v03.xml"/>
 
   <comment>Calorimeters</comment>  
@@ -225,8 +228,7 @@
 
   <include ref="SteppedMuon_o2_v03.xml"/>
 
-<!-- these two need proper envelopes -->
-
+  <!-- check envelopes for these two -->
   <include ref="LumiCal_o2_v03.xml"/>
   <include ref="BeamCal_o2_v03.xml"/>
 

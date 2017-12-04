@@ -71,7 +71,7 @@
 
   <type_flags type=" DetType_TRACKER + DetType_BARREL"/>
 
-  <module name="SiTrackerModule_Layer1">
+  <module name="SiTrackerModule_Layer1" vis="GrayVis">
     <module_envelope width="97.97*mm" length="97.97*mm" thickness="0.3*cm"/>
     <module_component width="97.97*mm" length="97.97*mm" thickness="0.02*cm" material="PEEK" sensitive="false">
       <position z="-0.14*cm" />
@@ -102,7 +102,7 @@
     </module_component>
   </module>
 
-  <module name="SiTrackerModule_Layer2">
+  <module name="SiTrackerModule_Layer2" vis="RedVis">
     <module_envelope width="97.97*mm" length="97.97*mm" thickness="0.3*cm"/>
     <module_component width="97.97*mm" length="97.97*mm" thickness="0.02*cm" material="PEEK" sensitive="false">
       <position z="-0.14*cm" />
@@ -133,7 +133,7 @@
     </module_component>
   </module>
 
-  <module name="SiTrackerModule_Layer3">
+  <module name="SiTrackerModule_Layer3" vis="GrayVis">
     <module_envelope width="97.97*mm" length="97.97*mm" thickness="0.3*cm"/>
     <module_component width="97.97*mm" length="97.97*mm" thickness="0.02*cm" material="PEEK" sensitive="false">
       <position z="-0.14*cm" />
@@ -164,7 +164,7 @@
     </module_component>
   </module>
 
-  <module name="SiTrackerModule_Layer4">
+  <module name="SiTrackerModule_Layer4" vis="RedVis">
     <module_envelope width="97.97*mm" length="97.97*mm" thickness="0.3*cm"/>
     <module_component width="97.97*mm" length="97.97*mm" thickness="0.02*cm" material="PEEK" sensitive="false">
       <position z="-0.14*cm" />
@@ -195,7 +195,7 @@
     </module_component>
   </module>
 
-  <module name="SiTrackerModule_Layer5">
+  <module name="SiTrackerModule_Layer5" vis="GrayVis">
     <module_envelope width="97.97*mm" length="97.97*mm" thickness="0.3*cm"/>
     <module_component width="97.97*mm" length="97.97*mm" thickness="0.02*cm" material="PEEK" sensitive="false">
       <position z="-0.14*cm" />
