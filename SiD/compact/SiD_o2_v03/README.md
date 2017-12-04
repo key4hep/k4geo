@@ -1,9 +1,16 @@
-Version #3 of the SiD option #2 model, with corresponding drivers making use of the new TrackingCellIDEncoding string.
+Version 3 of the SiD option 2 model. Main changes and updates:
 
-To do:
-- clean up all XMLs
-- make sure encoding is the the same across all Tracking + Vertex detectors
-- add type_flags where missing
-- add envelopes where missing
-- create common barrel+endcap envelopes 
-- update or rewrite the corresponding barrel and endcap drivers (and allow 2 sensitive slices)
+- cleaned up all XMLs
+- using DetIDs
+- unified segmentation and cell ID encoding
+- added type_flags where missing
+- updated plugins
+- added envelopes where missing
+- stepped design Muon calorimeters use now scintillator instead of RPCs
+- merged barrel+endcap envelopes for the Muon calorimeter and outer trackers
+- ECal barrel driver fixes
+- custom drivers
+- checked volume overlaps
+
+A detailed table of changes is available in
+https://www.evernote.com/l/AJ2Q2yTuLwRGVqYpSNB8HRKx-iBxYQ6Ry0s
