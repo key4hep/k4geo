@@ -1,0 +1,30 @@
+<lccdd>
+
+<!------------------------------------------------------------------
+   This XML implements a common envelope for the barrel and encaps
+   by protopop@cern.ch - Dec 4, 2017
+-------------------------------------------------------------------->
+
+<define>
+  <!-- Added some mm to the 2016 technical drawing values 
+       only in order to accomodate the common envelope -->
+  <constant name="SiTracker_rmax"  value="1260.0*mm"/>
+  <constant name="SiTracker_rmin"  value="206.00*mm"/>
+  <constant name="SiTrackers_zmax" value="1645.0*mm"/>
+</define>
+
+<comment>SiD Silicon Outer Trackers</comment>
+<detectors>
+  <detector name="SiTrackers" type="DD4hep_SubdetectorAssembly" vis="YellowVis">
+    <shape type="Tube" rmin="SiTracker_rmin - env_safety" rmax="SiTracker_rmax + env_safety" 
+	     dz="SiTrackers_zmax + env_safety" material="Air" />
+    <comment>Si Outer Trackers Assembly</comment>
+    <composite name="SiTrackerBarrel"/>
+    <composite name="SiTrackerEndcap"/>
+  </detector>
+</detectors>
+
+<include ref="SiTrackerBarrel_o2_v03.xml"/>
+<include ref="SiTrackerEndcap_o2_v03.xml"/>
+
+</lccdd>

@@ -18,19 +18,19 @@
 
   <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
 
-  <module name="SiTrackerForwardModule1">
+  <module name="SiTrackerForwardModule1" vis="MagentaVis">
     <trd x1="5.620*mm" x2="32.435*mm" z="67.405*mm" />
     <module_component thickness="0.002*cm" material="Silicon" sensitive="true" />
     <module_component thickness="0.008*cm"   material="Silicon" />
   </module>
 
-  <module name="SiTrackerForwardModule2">
+  <module name="SiTrackerForwardModule2" vis="MagentaVis">
     <trd x1="15.167*mm" x2="32.435*mm" z="43.405*mm" />
     <module_component thickness="0.002*cm" material="Silicon" sensitive="true" />
     <module_component thickness="0.008*cm"   material="Silicon" />
   </module>
 
-  <module name="SiTrackerForwardModule3">
+  <module name="SiTrackerForwardModule3" vis="MagentaVis">
     <trd x1="23.522*mm" x2="32.435*mm" z="22.405*mm" />
     <module_component thickness="0.002*cm" material="Silicon" sensitive="true" />
     <module_component thickness="0.008*cm"   material="Silicon" />
