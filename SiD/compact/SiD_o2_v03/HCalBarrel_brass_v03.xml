@@ -1,0 +1,51 @@
+<lccdd>
+
+<!-------------------------------------------------------------------------------------------------
+    AHCal Barrel implementation of the layout from 70th SiD Optimization Meeting presentation 
+    from Ross Gordon McCoy (ross.mccoy@mavs.uta.edu) - June 30, 2016, updated Nov 20, 2016
+    Brass absorber version of o2_v03 included here for convenience - protopop@cern.ch - Dec 6, 2017
+    See https://www.evernote.com/l/AJ2HhEFs29NFZKbSV49f8xhNVTv-RsNqejc
+  ------------------------------------------------------------------------------------------------->
+
+<readouts>
+  <readout name="HCalBarrelHits">
+    <segmentation type="CartesianGridXY" grid_size_x="HCal_cell_size" grid_size_y="HCal_cell_size" />
+    <id>${GlobalCalorimeterReadoutID}</id>
+  </readout>
+</readouts>
+
+<detectors>
+  <detector id="DetID_HCAL_Barrel" name="HCalBarrel" type="GenericCalBarrel_o1_v01" readout="HCalBarrelHits" vis="HCalBarrelVis" calorimeterType="HAD_BARREL" gap="0.*cm" material="Steel235">
+    
+    <comment>Cu SiD Hadron Calorimeter Barrel</comment>
+    
+    <type_flags type=" DetType_CALORIMETER + DetType_HADRONIC + DetType_BARREL"/>
+    
+    <dimensions numsides="HCalBarrel_symmetry" rmin="HCalBarrel_rmin" z="2*HCalBarrel_half_length"/>
+    
+    <envelope vis="HCalBarrelVis">
+      <shape type="PolyhedraRegular" numsides="HCalBarrel_symmetry"  rmin="HCalBarrel_rmin - env_safety" rmax="HCalBarrel_rmax + 5*env_safety" dz="2*HCalBarrel_half_length + 2*env_safety" material="Air"/>
+      <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/HCalBarrel_symmetry"/>
+    </envelope>
+    
+    <staves />
+    <layer repeat="40">
+      <slice material = "C26000"     thickness = "18.6*mm" />    <!-- Brass absorber -->
+      <slice material = "Air"        thickness =  "2.0*mm" />
+      <slice material = "Steel235"   thickness =  "0.5*mm" />    <!-- Top plate -->
+      <slice material = "Kapton"    thickness = "0.115*mm" />    <!-- Polyimide foil -->
+      <slice material = "Copper"    thickness = "0.068*mm" />
+      <slice material = "PCB"       thickness =   "1.0*mm" />    <!-- PCB made of FR4 -->
+      <slice material = "Polystyrole" thickness = "0.1*mm" />    <!-- Reflector foil -->
+      <slice material = "Polystyrene" thickness = "3.0*mm" sensitive="yes" limits="cal_limits" />
+      <slice material = "Polystyrole" thickness = "0.1*mm" />    <!-- Reflector foil -->
+      <slice material = "Steel235"    thickness = "0.5*mm" />    <!-- Bottom plate -->
+      <slice material = "Air"       thickness = "0.617*mm" />    <!-- Clearance gap between active layer and next absorber -->
+    </layer>
+    <!--layer repeat="1"-->
+      <!--slice material = "Steel235"   thickness = "19.0*mm" /--><!-- Terminator plate (if needed) -->
+    <!--/layer-->
+  </detector>
+</detectors>
+
+</lccdd>
