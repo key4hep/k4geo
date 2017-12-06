@@ -27,10 +27,15 @@ ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
 #--------------------------------------------------
-# test(s) for SiD
+# tests for SiD
 SET( test_name "test_SiD_o2_v02" )
 ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
   ddsim --compactFile=${CMAKE_SOURCE_DIR}/SiD/compact/SiD_o2_v02/SiD_o2_v02.xml --runType=batch -G -N=1 --outputFile=testSiD_o2_v02.slcio )
+SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
+
+SET( test_name "test_SiD_o2_v03" )
+ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
+  ddsim --compactFile=${CMAKE_SOURCE_DIR}/SiD/compact/SiD_o2_v03/SiD_o2_v03.xml --runType=batch -G -N=1 --outputFile=testSiD_o2_v03.slcio )
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
 #--------------------------------------------------
