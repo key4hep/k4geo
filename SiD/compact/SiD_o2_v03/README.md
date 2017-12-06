@@ -11,6 +11,7 @@ Version 3 of the SiD option 2 model. Main changes and updates:
 - ECal barrel driver fixes
 - custom drivers
 - checked volume overlaps
+- includes Cu and brass HCal versions
 
 A detailed table of changes is available in
 https://www.evernote.com/l/AJ2Q2yTuLwRGVqYpSNB8HRKx-iBxYQ6Ry0s
