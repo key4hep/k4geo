@@ -81,6 +81,13 @@
     <fraction n="0.40" ref="Zn"/>
   </material>
 
+  <!-- Cartridge Brass -->
+  <material name="C26000">
+    <D type="density" value="8.83" unit="g/cm3"/>
+    <fraction n="0.70" ref="Cu"/>
+    <fraction n="0.30" ref="Zn"/>
+  </material>
+  
   <material name="Steel235JR">
     <D type="density" value="7.87" unit="g/cm3"/>
     <fraction n="0.9843" ref="Fe"/>
