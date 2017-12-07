@@ -2,7 +2,7 @@
 
 <lccdd>
   <detectors>
-    <detector name="HcalBarrel" type="SHcalSc04_Barrel_v01" id="ILDDetID_HCAL" readout="HcalBarrelRegCollection" vis="GreenVis" insideTrackingVolume="false" >
+    <detector name="HcalBarrel" type="SHcalSc04_Barrel_v01" id="ILDDetID_HCAL" readout="HCalBarrelScHits" vis="GreenVis" insideTrackingVolume="false" >
       <comment>Hadron Calorimeter Barrel</comment>
 
       <envelope vis="ILD_HCALVis">
@@ -30,7 +30,7 @@
   </detectors>
 
   <readouts>
-    <readout name="HcalBarrelRegCollection">
+    <readout name="HCalBarrelScHits">
       <segmentation type="TiledLayerGridXY" grid_size_x="3" grid_size_y="3.03248"/>
       <id>system:5,module:3,stave:4,tower:5,layer:6,x:32:-16,y:-16</id>
     </readout>

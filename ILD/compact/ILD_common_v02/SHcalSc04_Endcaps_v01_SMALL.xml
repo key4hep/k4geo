@@ -58,9 +58,9 @@
       </segmentation>
       <hits_collections>
         <hits_collection name="HCalEndcapRPCHits"  key="slice" key_value="1"/>
-        <hits_collection name="HcalEndcapsCollection"  key="slice" key_value="3"/>
+        <hits_collection name="HCalEndcapScHits"  key="slice" key_value="3"/>
       </hits_collections>
-      <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,y:-16</id>
+      <id>system:5,module:3,stave:4,tower:5,layer:6,slice:4,x:32:-16,y:-16</id>
     </readout>
   </readouts>
 
