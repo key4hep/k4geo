@@ -2,7 +2,7 @@
 
 <lccdd>
   <detectors>
-    <detector name="HcalRing" type="SHcalSc04_EndcapRing" id="ILDDetID_HCAL_RING" readout="HcalEndcapRingCollection" vis="GreenVis" insideTrackingVolume="false" >
+    <detector name="HcalRing" type="SHcalSc04_EndcapRing" id="ILDDetID_HCAL_RING" readout="HCalECRingScHits" vis="GreenVis" insideTrackingVolume="false" >
       <comment>Hadron Calorimeter EndcapRing</comment>
 
       <envelope vis="ILD_HCALVis">
@@ -40,9 +40,9 @@
   </detectors>
 
   <readouts>
-    <readout name="HcalEndcapRingCollection">
+    <readout name="HCalECRingScHits">
       <segmentation type="CartesianGridXY" grid_size_x="Hcal_cells_size" grid_size_y="Hcal_cells_size"/>
-      <id>system:5,module:3,stave:4,tower:3,layer:6,x:32:-16,y:-16</id>
+      <id>system:5,module:3,stave:4,tower:5,layer:6,x:32:-16,y:-16</id>
     </readout>
   </readouts>
 

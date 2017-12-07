@@ -2,7 +2,7 @@
 
 <lccdd>
   <detectors>
-    <detector id="ILDDetID_HCAL_ENDCAP" name="HcalEndcap" type="SHcalSc04_Endcaps" readout="HcalEndcapsCollection"  vis="GreenVis" calorimeterType="HAD_ENDCAP">
+    <detector id="ILDDetID_HCAL_ENDCAP" name="HcalEndcap" type="SHcalSc04_Endcaps" readout="HCalEndcapScHits"  vis="GreenVis" calorimeterType="HAD_ENDCAP">
       <comment>Hadron Calorimeter Endcap</comment>
 
       <envelope vis="ILD_HCALVis">
@@ -52,9 +52,9 @@
   </detectors>
 
   <readouts>
-    <readout name="HcalEndcapsCollection">
+    <readout name="HCalEndcapScHits">
       <segmentation type="CartesianGridXZ" grid_size_x="Hcal_cells_size" grid_size_z="Hcal_cells_size" offset_x="Hcal_cells_size/2.0" offset_z="Hcal_cells_size/2.0" />
-      <id>system:5,module:3,stave:3,tower:5,layer:6,x:32:-16,z:-16</id>
+      <id>system:5,module:3,stave:4,tower:5,layer:6,x:32:-16,z:-16</id>
     </readout>
   </readouts>
 

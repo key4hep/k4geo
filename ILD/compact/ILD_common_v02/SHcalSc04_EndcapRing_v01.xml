@@ -47,9 +47,9 @@
       </segmentation>
       <hits_collections>
         <hits_collection name="HCalECRingRPCHits"  key="slice" key_value="1"/>
-        <hits_collection name="HcalEndcapRingCollection"  key="slice" key_value="3"/>
+        <hits_collection name="HCalECRingScHits"  key="slice" key_value="3"/>
       </hits_collections>
-      <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id>
+      <id>system:5,module:3,stave:4,tower:5,layer:6,slice:4,x:32:-16,y:-16</id>
     </readout>
   </readouts>
 
