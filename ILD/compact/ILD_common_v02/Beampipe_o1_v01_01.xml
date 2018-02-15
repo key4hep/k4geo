@@ -78,19 +78,79 @@
            material="G4_Fe" name="BeamCalFront" />
 
   <section type ="UpstreamSlicedFront"   
-	   start="BeamCal_min_z-4*mm"                end="4049*mm"  
+	   start="BeamCal_min_z-4*mm"                end="4050*mm"  
            rMin1="14*mm"                             rMin2="14*mm"   
            rMax1 ="15*mm"                            rMax2="15*mm"  
            material="G4_Fe" name="BeamCalLinkUpstream" />
 
-  <section type ="Upstream"    
+  <!-- section type ="Upstream"    
            start="4049*mm"                           end="4050*mm"
            rMin1="9*mm"                              rMin2="9*mm"
            rMax1 ="15*mm"                            rMax2="15*mm"
-           material="G4_Fe" name="QD0Front" />
+           material="G4_Fe" name="QD0Front" / -->
+
+  <!-- section type ="Upstream"
+           start="4050*mm"                           end="12500*mm"
+           rMin1="9*mm"                              rMin2="9*mm"
+           rMax1 ="10*mm"                            rMax2="10*mm"
+           material="G4_Fe" name="MainUpstream" / -->
 
   <section type ="Upstream"
-           start="4050*mm"                           end="12500*mm"
+           start="4050*mm"                           end="6250*mm"
+           rMin1="9*mm"                              rMin2="9*mm"
+           rMax1 ="30*mm"                            rMax2="30*mm"
+           material="G4_Fe" name="QD0" />
+
+  <section type ="Upstream"
+           start="6250*mm"                           end="6300*mm"
+           rMin1="9*mm"                              rMin2="9*mm"
+           rMax1 ="10*mm"                            rMax2="10*mm"
+           material="G4_Fe" name="QD0toOC0" />
+
+  <section type ="Upstream"
+           start="6300*mm"                           end="7000*mm"
+           rMin1="9*mm"                              rMin2="9*mm"
+           rMax1 ="30*mm"                            rMax2="30*mm"
+           material="G4_Fe" name="OC0andSD0" />
+
+  <section type ="Upstream"
+           start="7000*mm"                           end="8350*mm"
+           rMin1="9*mm"                              rMin2="9*mm"
+           rMax1 ="10*mm"                            rMax2="10*mm"
+           material="G4_Fe" name="SD0toQF1" />
+
+  <section type ="Upstream"
+           start="8350*mm"                           end="10350*mm"
+           rMin1="9*mm"                              rMin2="9*mm"
+           rMax1 ="30*mm"                            rMax2="30*mm"
+           material="G4_Fe" name="QF1" />
+
+  <section type ="Upstream"
+           start="10350*mm"                           end="10500*mm"
+           rMin1="9*mm"                              rMin2="9*mm"
+           rMax1 ="10*mm"                            rMax2="10*mm"
+           material="G4_Fe" name="QF1toSF1" />
+
+  <section type ="Upstream"
+           start="10500*mm"                           end="10800*mm"
+           rMin1="9*mm"                              rMin2="9*mm"
+           rMax1 ="30*mm"                            rMax2="30*mm"
+           material="G4_Fe" name="SF1" />
+
+  <section type ="Upstream"
+           start="10800*mm"                           end="11100*mm"
+           rMin1="9*mm"                              rMin2="9*mm"
+           rMax1 ="10*mm"                            rMax2="10*mm"
+           material="G4_Fe" name="SF1toOC1" />
+
+  <section type ="Upstream"
+           start="11100*mm"                           end="11400*mm"
+           rMin1="9*mm"                              rMin2="9*mm"
+           rMax1 ="30*mm"                            rMax2="30*mm"
+           material="G4_Fe" name="OC1" />
+
+  <section type ="Upstream"
+           start="11400*mm"                           end="12500*mm"
            rMin1="9*mm"                              rMin2="9*mm"
            rMax1 ="10*mm"                            rMax2="10*mm"
            material="G4_Fe" name="MainUpstream" />
@@ -109,23 +169,48 @@
            rMax1="18*mm"                             rMax2="18*mm"
            material="G4_Fe" name="QDEX1AFront" />
 
-  <section type ="Dnstream"              
+  <!-- section type ="Dnstream"              
 	   start="6000*mm"                              end="7741*mm"
            rMin1="17*mm"                                rMin2="17*mm" 
            rMax1="18*mm"                                rMax2="18*mm"
-           material="G4_Fe" name="QDEX1AInner" />
+           material="G4_Fe" name="QDEX1AInner" / -->
 
   <section type ="Dnstream"              
-	   start="7741*mm"                              end="7839*mm"
+	   start="6000*mm"                              end="7640*mm"
+           rMin1="17*mm"                                rMin2="17*mm" 
+           rMax1="40*mm"                                rMax2="40*mm"
+           material="G4_Fe" name="QDEX1A" />
+
+  <section type ="Dnstream"              
+	   start="7640*mm"                              end="7741*mm"
+           rMin1="17*mm"                                rMin2="17*mm" 
+           rMax1="18*mm"                                rMax2="18*mm"
+           material="G4_Fe" name="QDEX1AtoLink" />
+
+  <section type ="Dnstream"              
+	   start="7741*mm"                              end="7840*mm"
            rMin1="17*mm"                                rMin2="23*mm"
            rMax1="18*mm"                                rMax2="24*mm"
            material="G4_Fe" name="QDEX1ALink" />
 
-  <section type ="Dnstream"
+  <!-- section type ="Dnstream"
            start="7839*mm"                              end="9681*mm"
            rMin1="23*mm"                                rMin2="23*mm"
            rMax1="24*mm"                                rMax2="24*mm"
-           material="G4_Fe" name="QDEX1BInner" />
+           material="G4_Fe" name="QDEX1BInner" / -->
+
+  <section type ="Dnstream"
+           start="7840*mm"                              end="9580*mm"
+           rMin1="23*mm"                                rMin2="23*mm"
+           rMax1="50*mm"                                rMax2="50*mm"
+           material="G4_Fe" name="QDEX1B" />
+
+  <section type ="Dnstream"
+           start="9580*mm"                              end="9681*mm"
+           rMin1="23*mm"                                rMin2="23*mm"
+           rMax1="24*mm"                                rMax2="24*mm"
+           material="G4_Fe" name="QDEX1BtoLink" />
+
 
   <section type ="Dnstream"              
 	   start="9681*mm"                              end="9779*mm"
@@ -133,11 +218,28 @@
            rMax1="24*mm"                                rMax2="30*mm"
            material="G4_Fe" name="QDEX1BLink" />
 
-  <section type ="Dnstream"
+  <!--section type ="Dnstream"
            start="9779*mm"                           end="12500*mm"
            rMin1="29*mm"                             rMin2="29*mm"
            rMax1="30*mm"                             rMax2="30*mm"
-           material="G4_Fe" name="QFEX2AInner" />
+           material="G4_Fe" name="QFEX2AInner" /-->
+  <section type ="Dnstream"
+           start="9779*mm"                           end="9880*mm"
+           rMin1="29*mm"                             rMin2="29*mm"
+           rMax1="30*mm"                             rMax2="30*mm"
+           material="G4_Fe" name="LinkToQFEX2A" />
+
+  <section type ="Dnstream"
+           start="9880*mm"                           end="11500*mm"
+           rMin1="29*mm"                             rMin2="29*mm"
+           rMax1="60*mm"                             rMax2="60*mm"
+           material="G4_Fe" name="QFEX2A" />
+
+  <section type ="Dnstream"
+           start="11500*mm"                           end="12500*mm"
+           rMin1="29*mm"                             rMin2="29*mm"
+           rMax1="30*mm"                             rMax2="30*mm"
+           material="G4_Fe" name="MainDownstream" />
 
 
 </detector>
