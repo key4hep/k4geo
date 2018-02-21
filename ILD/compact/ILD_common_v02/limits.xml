@@ -1,0 +1,11 @@
+<define>
+  <constant name="cal_steplimit_val" value="5.0"/>
+  <constant name="cal_steplimit_unit" value="mm"/>
+
+  <constant name="tpc_steplimit_val" value="10.0"/>
+  <constant name="tpc_steplimit_unit" value="mm"/>
+
+  <constant name="tracker_steplimit_val" value="5.0"/>
+  <constant name="tracker_steplimit_unit" value="mm"/>
+</define>
+
