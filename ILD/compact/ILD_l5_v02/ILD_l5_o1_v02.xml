@@ -31,6 +31,7 @@
     <include ref="../ILD_common_v02/yoke_defs.xml"/>
     <include ref="../ILD_common_v02/services_defs.xml"/>
     <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
+    <include ref="../ILD_common_v02/limits.xml"/>
 
     <!-- Readout slice in ecal for reconstruction (SiWEcal) -->
     <constant name="Ecal_readout_segmentation_slice0" value="4"/>
@@ -38,18 +39,17 @@
     <!-- Readout slice in hcal for reconstruction (AHcal) -->
     <constant name="Hcal_readout_segmentation_slice" value="3"/>
 
-
   </define>
 
   <limits>
     <limitset name="cal_limits">
-      <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
+      <limit name="step_length_max" particles="*" value="cal_steplimit_val" unit="cal_steplimit_unit" />
     </limitset>
     <limitset name="TPC_limits">
-      <limit name="step_length_max" particles="*" value="10.0" unit="mm" />
+      <limit name="step_length_max" particles="*" value="tpc_steplimit_val" unit="tpc_steplimit_unit" />
     </limitset>
     <limitset name="Tracker_limits">
-      <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
+      <limit name="step_length_max" particles="*" value="tracker_steplimit_val" unit="tracker_steplimit_unit" />
     </limitset>
   </limits>
 
