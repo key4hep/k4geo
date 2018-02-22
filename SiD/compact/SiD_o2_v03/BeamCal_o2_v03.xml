@@ -14,7 +14,7 @@
       
       <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_ENDCAP + DetType_FORWARD + DetType_AUXILIARY "/>
       
-      <dimensions outer_r="BeamCal_rmax" inner_r="BeamCal_rmin" inner_z="BeamCal_zmin" outer_z="BeamCal_zmax" dz="BeamCal_dz"/>
+      <dimensions inner_r="BeamCal_rmin" outer_r="BeamCal_rmax" inner_z="BeamCal_zmin" outer_z="BeamCal_zmax"/>
       
       <!-- default envelope created by driver has no relation to this definition, needs update! -->
       <envelope vis="BeamCalVis">
