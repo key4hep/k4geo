@@ -124,7 +124,7 @@
     <constant name="MuonEndcap_end_angle" value="30.*deg" />
 
     <constant name="BeamCal_cell_size" value="3.5*mm"/>
-    <constant name="BeamCal_rmin" value="0.0*mm" />
+    <constant name="BeamCal_rmin" value="15.5*mm" />
     <constant name="BeamCal_rmax" value="129.6*mm" />
     <constant name="BeamCal_zmin" value="3039.0*mm" />
     <constant name="BeamCal_zmax" value="3399.0*mm" />
