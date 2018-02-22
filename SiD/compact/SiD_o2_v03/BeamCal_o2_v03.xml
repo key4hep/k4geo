@@ -12,7 +12,7 @@
       
       <comment>SiD Beam Calorimeter</comment>
       
-      <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_ENDCAP + DetType_FORWARD + DetType_AUXILIARY "/>
+      <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_ENDCAP + DetType_FORWARD "/>
       
       <dimensions outer_r="BeamCal_rmax" inner_r="BeamCal_rmin" inner_z="BeamCal_zmin" outer_z="BeamCal_zmax" dz="BeamCal_dz"/>
       
@@ -24,6 +24,7 @@
 	</shape>
       </envelope>
       
+      <!-- this is not used with the above driver -->	    
       <beampipe crossing_angle="0.014" outgoing_r="15.5*mm" incoming_r="10.5*mm" />
       
       <layer repeat="50">
