@@ -2,7 +2,7 @@
   
   <readouts>
     <readout name="LumiCalHits">
-      <segmentation type="CartesianGridXY" grid_size_x="ECal_cell_size" grid_size_y="ECal_cell_size" />
+      <segmentation type="CartesianGridXY" grid_size_x="LumiCal_cell_size" grid_size_y="LumiCal_cell_size" />
       <id>${GlobalCalorimeterReadoutID}</id>
     </readout>
   </readouts>
