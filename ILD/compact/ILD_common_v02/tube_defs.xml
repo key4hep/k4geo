@@ -83,4 +83,27 @@
   <constant name="TUBE_lumiTube_thickness" value="1*mm"/>
   <constant name="TUBE_lumiTube_rInner" value="Lcal_inner_radius-TUBE_lumiTube_thickness-1*mm"/>
 
+  <!-- final focus magnets: numbers from Okugi-san (2018, subject to change) -->
+  <constant name="TUBE_QD0_PipeInnerRadius" value="10*mm"/>
+  <constant name="TUBE_QD0_PipeOuterRadius" value="TUBE_QD0_PipeInnerRadius+1*mm"/>
+
+  <constant name="TUBE_QD0_Lstar" value="4100*mm"/>
+  <constant name="TUBE_QD0_length" value="2200*mm"/>
+  <constant name="TUBE_QD0_gap_SD0" value="150*mm"/>
+  <constant name="TUBE_SD0_length" value="600*mm"/>
+
+  <constant name="TUBE_QF1_Lstar" value="9500*mm"/>
+  <constant name="TUBE_QF1_length" value="600*mm"/>
+  <constant name="TUBE_QF1_gap_SF1" value="150*mm"/>
+  <constant name="TUBE_SF1_length" value="300*mm"/>
+
+  <!-- extraction magnets: guestimates by DJeans, no recent official design available -->
+   <constant name="TUBE_QDEX1A_PipeInnerRadius" value="13*mm"/>
+   <constant name="TUBE_QDEX1A_PipeOuterRadius" value="TUBE_QDEX1A_PipeInnerRadius+1*mm"/>
+
+  <constant name="TUBE_QDEX1A_Lstar" value="TUBE_QD0_Lstar+0.75*TUBE_QD0_length"/>
+  <constant name="TUBE_QDEX1A_length" value="TUBE_QD0_Lstar+TUBE_QD0_length+TUBE_QD0_gap_SD0+TUBE_SD0_length-TUBE_QDEX1A_Lstar"/>
+  <constant name="TUBE_QDEX1B_Lstar" value="TUBE_QF1_Lstar"/>
+  <constant name="TUBE_QDEX1B_length" value="TUBE_QF1_length+TUBE_QF1_gap_SF1+TUBE_SF1_length"/>
+
 </define>

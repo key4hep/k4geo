@@ -2,6 +2,7 @@
 
   <detectors>        
 
+
 <detector name="Tube" type="DD4hep_Beampipe_o1_v01" vis="BeamPipeVis" id="ILDDetID_NOTUSED">
 
   <envelope vis="BlueVis">
@@ -83,162 +84,87 @@
            rMax1 ="15*mm"                            rMax2="15*mm"  
            material="G4_Fe" name="BeamCalLinkUpstream" />
 
-  <!-- section type ="Upstream"    
-           start="4049*mm"                           end="4050*mm"
-           rMin1="9*mm"                              rMin2="9*mm"
-           rMax1 ="15*mm"                            rMax2="15*mm"
-           material="G4_Fe" name="QD0Front" / -->
-
-  <!-- section type ="Upstream"
-           start="4050*mm"                           end="12500*mm"
-           rMin1="9*mm"                              rMin2="9*mm"
-           rMax1 ="10*mm"                            rMax2="10*mm"
-           material="G4_Fe" name="MainUpstream" / -->
-
   <section type ="Upstream"
-           start="4050*mm"                           end="6250*mm"
-           rMin1="9*mm"                              rMin2="9*mm"
-           rMax1 ="30*mm"                            rMax2="30*mm"
+           start="TUBE_QD0_Lstar"                    end="TUBE_QD0_Lstar+TUBE_QD0_length"
+           rMin1="TUBE_QD0_PipeInnerRadius"          rMin2="TUBE_QD0_PipeInnerRadius"
+           rMax1="30*mm"                            rMax2="30*mm"
            material="G4_Fe" name="QD0" />
 
   <section type ="Upstream"
-           start="6250*mm"                           end="6300*mm"
-           rMin1="9*mm"                              rMin2="9*mm"
-           rMax1 ="10*mm"                            rMax2="10*mm"
-           material="G4_Fe" name="QD0toOC0" />
+           start="TUBE_QD0_Lstar+TUBE_QD0_length"    end="TUBE_QD0_Lstar+TUBE_QD0_length+TUBE_QD0_gap_SD0"
+           rMin1="TUBE_QD0_PipeInnerRadius"                            rMin2="TUBE_QD0_PipeInnerRadius"
+           rMax1="TUBE_QD0_PipeOuterRadius"                            rMax2="TUBE_QD0_PipeOuterRadius"
+           material="G4_Fe" name="QD0toSD0" />
 
   <section type ="Upstream"
-           start="6300*mm"                           end="7000*mm"
-           rMin1="9*mm"                              rMin2="9*mm"
-           rMax1 ="30*mm"                            rMax2="30*mm"
+           start="TUBE_QD0_Lstar+TUBE_QD0_length+TUBE_QD0_gap_SD0"
+           end="TUBE_QD0_Lstar+TUBE_QD0_length+TUBE_QD0_gap_SD0+TUBE_SD0_length"
+           rMin1="TUBE_QD0_PipeInnerRadius"                             rMin2="TUBE_QD0_PipeInnerRadius"
+           rMax1="30*mm"                            rMax2="30*mm"
            material="G4_Fe" name="OC0andSD0" />
 
   <section type ="Upstream"
-           start="7000*mm"                           end="8350*mm"
-           rMin1="9*mm"                              rMin2="9*mm"
-           rMax1 ="10*mm"                            rMax2="10*mm"
+           start="TUBE_QD0_Lstar+TUBE_QD0_length+TUBE_QD0_gap_SD0+TUBE_SD0_length"
+           end="TUBE_QF1_Lstar"
+           rMin1="TUBE_QD0_PipeInnerRadius"                            rMin2="TUBE_QD0_PipeInnerRadius"
+           rMax1="TUBE_QD0_PipeOuterRadius"                            rMax2="TUBE_QD0_PipeOuterRadius"
            material="G4_Fe" name="SD0toQF1" />
 
   <section type ="Upstream"
-           start="8350*mm"                           end="10350*mm"
-           rMin1="9*mm"                              rMin2="9*mm"
-           rMax1 ="30*mm"                            rMax2="30*mm"
+           start="TUBE_QF1_Lstar"                    end="TUBE_QF1_Lstar+TUBE_QF1_length"
+           rMin1="TUBE_QD0_PipeInnerRadius"                              rMin2="TUBE_QD0_PipeInnerRadius"
+           rMax1="30*mm"                            rMax2="30*mm"
            material="G4_Fe" name="QF1" />
 
   <section type ="Upstream"
-           start="10350*mm"                           end="10500*mm"
-           rMin1="9*mm"                              rMin2="9*mm"
-           rMax1 ="10*mm"                            rMax2="10*mm"
+           start="TUBE_QF1_Lstar+TUBE_QF1_length"
+           end="TUBE_QF1_Lstar+TUBE_QF1_length+TUBE_QF1_gap_SF1"
+           rMin1="TUBE_QD0_PipeInnerRadius"                            rMin2="TUBE_QD0_PipeInnerRadius"
+           rMax1="TUBE_QD0_PipeOuterRadius"                            rMax2="TUBE_QD0_PipeOuterRadius"
            material="G4_Fe" name="QF1toSF1" />
 
   <section type ="Upstream"
-           start="10500*mm"                           end="10800*mm"
-           rMin1="9*mm"                              rMin2="9*mm"
-           rMax1 ="30*mm"                            rMax2="30*mm"
+           start="TUBE_QF1_Lstar+TUBE_QF1_length+TUBE_QF1_gap_SF1"
+           end="TUBE_QF1_Lstar+TUBE_QF1_length+TUBE_QF1_gap_SF1+TUBE_SF1_length"
+           rMin1="TUBE_QD0_PipeInnerRadius"                            rMin2="TUBE_QD0_PipeInnerRadius"
+           rMax1="30*mm"                            rMax2="30*mm"
            material="G4_Fe" name="SF1" />
 
   <section type ="Upstream"
-           start="10800*mm"                           end="11100*mm"
-           rMin1="9*mm"                              rMin2="9*mm"
-           rMax1 ="10*mm"                            rMax2="10*mm"
-           material="G4_Fe" name="SF1toOC1" />
-
-  <section type ="Upstream"
-           start="11100*mm"                           end="11400*mm"
-           rMin1="9*mm"                              rMin2="9*mm"
-           rMax1 ="30*mm"                            rMax2="30*mm"
-           material="G4_Fe" name="OC1" />
-
-  <section type ="Upstream"
-           start="11400*mm"                           end="12500*mm"
-           rMin1="9*mm"                              rMin2="9*mm"
-           rMax1 ="10*mm"                            rMax2="10*mm"
+           start="TUBE_QF1_Lstar+TUBE_QF1_length+TUBE_QF1_gap_SF1+TUBE_SF1_length"
+           end="12500*mm"
+           rMin1="TUBE_QD0_PipeInnerRadius"                            rMin2="TUBE_QD0_PipeInnerRadius"
+           rMax1="TUBE_QD0_PipeOuterRadius"                            rMax2="TUBE_QD0_PipeOuterRadius"
            material="G4_Fe" name="MainUpstream" />
 
-
-
   <section type ="Dnstream"              
-	   start="BeamCal_min_z-4*mm"            end="5999*mm"
-           rMin1="16*mm"                         rMin2="16*mm"
-           rMax1="17*mm"                        rMax2="17*mm"
+	   start="BeamCal_min_z-4*mm"                     end="TUBE_QDEX1A_Lstar"
+           rMin1="TUBE_QDEX1A_PipeInnerRadius"            rMin2="TUBE_QDEX1A_PipeInnerRadius"
+           rMax1="TUBE_QDEX1A_PipeOuterRadius"            rMax2="TUBE_QDEX1A_PipeOuterRadius"
 	   material="G4_Fe" name="BeamCalLinkDnstream" />
 
-  <section type ="Dnstream"
-           start="5999*mm"                           end="6000*mm"                              
-	   rMin1="16*mm"                             rMin2="16*mm"
-           rMax1="18*mm"                             rMax2="18*mm"
-           material="G4_Fe" name="QDEX1AFront" />
-
-  <!-- section type ="Dnstream"              
-	   start="6000*mm"                              end="7741*mm"
-           rMin1="17*mm"                                rMin2="17*mm" 
-           rMax1="18*mm"                                rMax2="18*mm"
-           material="G4_Fe" name="QDEX1AInner" / -->
-
   <section type ="Dnstream"              
-	   start="6000*mm"                              end="7640*mm"
-           rMin1="17*mm"                                rMin2="17*mm" 
+	   start="TUBE_QDEX1A_Lstar"                    end="TUBE_QDEX1A_Lstar+TUBE_QDEX1A_length"
+           rMin1="TUBE_QDEX1A_PipeInnerRadius"          rMin2="TUBE_QDEX1A_PipeInnerRadius" 
            rMax1="40*mm"                                rMax2="40*mm"
            material="G4_Fe" name="QDEX1A" />
 
   <section type ="Dnstream"              
-	   start="7640*mm"                              end="7741*mm"
-           rMin1="17*mm"                                rMin2="17*mm" 
-           rMax1="18*mm"                                rMax2="18*mm"
+	   start="TUBE_QDEX1A_Lstar+TUBE_QDEX1A_length" end="TUBE_QDEX1B_Lstar"
+           rMin1="TUBE_QDEX1A_PipeInnerRadius"          rMin2="TUBE_QDEX1A_PipeInnerRadius" 
+           rMax1="TUBE_QDEX1A_PipeOuterRadius"          rMax2="TUBE_QDEX1A_PipeOuterRadius"
            material="G4_Fe" name="QDEX1AtoLink" />
 
   <section type ="Dnstream"              
-	   start="7741*mm"                              end="7840*mm"
-           rMin1="17*mm"                                rMin2="23*mm"
-           rMax1="18*mm"                                rMax2="24*mm"
-           material="G4_Fe" name="QDEX1ALink" />
-
-  <!-- section type ="Dnstream"
-           start="7839*mm"                              end="9681*mm"
-           rMin1="23*mm"                                rMin2="23*mm"
-           rMax1="24*mm"                                rMax2="24*mm"
-           material="G4_Fe" name="QDEX1BInner" / -->
-
-  <section type ="Dnstream"
-           start="7840*mm"                              end="9580*mm"
-           rMin1="23*mm"                                rMin2="23*mm"
+	   start="TUBE_QDEX1B_Lstar"                    end="TUBE_QDEX1B_Lstar+TUBE_QDEX1B_length"
+           rMin1="TUBE_QDEX1A_PipeInnerRadius"          rMin2="TUBE_QDEX1A_PipeInnerRadius"
            rMax1="50*mm"                                rMax2="50*mm"
            material="G4_Fe" name="QDEX1B" />
 
   <section type ="Dnstream"
-           start="9580*mm"                              end="9681*mm"
-           rMin1="23*mm"                                rMin2="23*mm"
-           rMax1="24*mm"                                rMax2="24*mm"
-           material="G4_Fe" name="QDEX1BtoLink" />
-
-
-  <section type ="Dnstream"              
-	   start="9681*mm"                              end="9779*mm"
-           rMin1="23*mm"                                rMin2="29*mm"
-           rMax1="24*mm"                                rMax2="30*mm"
-           material="G4_Fe" name="QDEX1BLink" />
-
-  <!--section type ="Dnstream"
-           start="9779*mm"                           end="12500*mm"
-           rMin1="29*mm"                             rMin2="29*mm"
-           rMax1="30*mm"                             rMax2="30*mm"
-           material="G4_Fe" name="QFEX2AInner" /-->
-  <section type ="Dnstream"
-           start="9779*mm"                           end="9880*mm"
-           rMin1="29*mm"                             rMin2="29*mm"
-           rMax1="30*mm"                             rMax2="30*mm"
-           material="G4_Fe" name="LinkToQFEX2A" />
-
-  <section type ="Dnstream"
-           start="9880*mm"                           end="11500*mm"
-           rMin1="29*mm"                             rMin2="29*mm"
-           rMax1="60*mm"                             rMax2="60*mm"
-           material="G4_Fe" name="QFEX2A" />
-
-  <section type ="Dnstream"
-           start="11500*mm"                           end="12500*mm"
-           rMin1="29*mm"                             rMin2="29*mm"
-           rMax1="30*mm"                             rMax2="30*mm"
+           start="TUBE_QDEX1B_Lstar+TUBE_QDEX1B_length"    end="12500*mm"
+           rMin1="TUBE_QDEX1A_PipeInnerRadius"             rMin2="TUBE_QDEX1A_PipeInnerRadius"
+           rMax1="TUBE_QDEX1A_PipeOuterRadius"             rMax2="TUBE_QDEX1A_PipeOuterRadius"
            material="G4_Fe" name="MainDownstream" />
 
 
