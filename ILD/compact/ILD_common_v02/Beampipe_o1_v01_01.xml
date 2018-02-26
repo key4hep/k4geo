@@ -79,7 +79,7 @@
            material="G4_Fe" name="BeamCalFront" />
 
   <section type ="UpstreamSlicedFront"   
-	   start="BeamCal_min_z-4*mm"                end="4050*mm"  
+	   start="BeamCal_min_z-4*mm"                end="TUBE_QD0_Lstar"
            rMin1="14*mm"                             rMin2="14*mm"   
            rMax1 ="15*mm"                            rMax2="15*mm"  
            material="G4_Fe" name="BeamCalLinkUpstream" />
