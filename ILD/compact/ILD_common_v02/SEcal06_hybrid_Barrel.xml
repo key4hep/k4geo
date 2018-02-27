@@ -25,15 +25,15 @@
 	<slice material = "G4_Al"          thickness = "Ecal_Slab_shielding"                 vis="Invisible" />
 	<slice material = "G4_Cu"          thickness = "Ecal_Slab_copper_thickness"          vis="Invisible" />
 	<slice material = "G4_AIR"         thickness = "Ecal_HybridExtraGap_thickness"       vis="Invisible" />
-        <slice material = "G4_POLYSTYRENE" thickness = "Ecal_Sc_thickness" sensitive = "yes" vis="CyanVis"   />
-        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes" vis="Invisible" />
+        <slice material = "G4_POLYSTYRENE" thickness = "Ecal_Sc_thickness" sensitive = "yes" limits="cal_limits" vis="CyanVis"   />
+        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes" limits="cal_limits" vis="Invisible" />
         <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"          vis="Invisible" />
         <slice material = "CarbonFiber"    thickness = "Ecal_fiber_thickness_slabAbs"        vis="Invisible" />
         <slice material = "G4_W"           thickness = "Ecal_radiator_layers_set1_thickness" vis="BlueVis"   radiator="yes"/>
         <slice material = "CarbonFiber"    thickness = "Ecal_fiber_thickness_slabAbs"        vis="Invisible" />
         <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"          vis="Invisible" />
-        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes" vis="Invisible" />
-        <slice material = "G4_POLYSTYRENE" thickness = "Ecal_Sc_thickness" sensitive = "yes" vis="CyanVis"   />
+        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes" limits="cal_limits" vis="Invisible" />
+        <slice material = "G4_POLYSTYRENE" thickness = "Ecal_Sc_thickness" sensitive = "yes" limits="cal_limits" vis="CyanVis"   />
 	<slice material = "G4_AIR"         thickness = "Ecal_HybridExtraGap_thickness"       vis="Invisible" />
 	<slice material = "G4_Cu"          thickness = "Ecal_Slab_copper_thickness"          vis="Invisible" />
 	<slice material = "G4_Al"          thickness = "Ecal_Slab_shielding"                 vis="Invisible" />
@@ -43,15 +43,15 @@
 	<slice material = "G4_Al"          thickness = "Ecal_Slab_shielding"                 vis="Invisible" />
 	<slice material = "G4_Cu"          thickness = "Ecal_Slab_copper_thickness"          vis="Invisible" />
 	<slice material = "G4_AIR"         thickness = "Ecal_HybridExtraGap_thickness"       vis="Invisible" />
-        <slice material = "G4_POLYSTYRENE" thickness = "Ecal_Sc_thickness" sensitive = "yes" vis="CyanVis"   />
-        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes" vis="Invisible" />
+        <slice material = "G4_POLYSTYRENE" thickness = "Ecal_Sc_thickness" sensitive = "yes" limits="cal_limits" vis="CyanVis"   />
+        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes" limits="cal_limits" vis="Invisible" />
         <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"          vis="Invisible" />
         <slice material = "CarbonFiber"    thickness = "Ecal_fiber_thickness_slabAbs"        vis="Invisible" />
         <slice material = "G4_W"           thickness = "Ecal_radiator_layers_set2_thickness" vis="BlueVis"   radiator="yes"/>
         <slice material = "CarbonFiber"    thickness = "Ecal_fiber_thickness_slabAbs"        vis="Invisible" />
         <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"          vis="Invisible" />
-        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes" vis="Invisible" />
-        <slice material = "G4_POLYSTYRENE" thickness = "Ecal_Sc_thickness" sensitive = "yes" vis="CyanVis"   />
+        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes" limits="cal_limits" vis="Invisible" />
+        <slice material = "G4_POLYSTYRENE" thickness = "Ecal_Sc_thickness" sensitive = "yes" limits="cal_limits" vis="CyanVis"   />
 	<slice material = "G4_AIR"         thickness = "Ecal_HybridExtraGap_thickness"       vis="Invisible" />
 	<slice material = "G4_Cu"          thickness = "Ecal_Slab_copper_thickness"          vis="Invisible" />
 	<slice material = "G4_Al"          thickness = "Ecal_Slab_shielding"                 vis="Invisible" />
