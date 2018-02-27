@@ -31,7 +31,7 @@
 	<slice material = "G4_AIR"         thickness = "Ecal_Slab_ASIC_thickness"   vis="Invisible"/>
 	<slice material = "PCB"            thickness = "Ecal_Slab_PCB_thickness"    vis="Invisible"/>
         <slice material = "G4_AIR"         thickness = "Ecal_Slab_glue_gap"                      vis="Invisible" />
-        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes"     vis="RedVis"    />
+        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes"     limits="cal_limits" vis="RedVis"    />
         <slice material = "G4_AIR"         thickness = "Ecal_Slab_glue_gap"                      vis="Invisible" />
         <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"              vis="Invisible" />
         <slice material = "CarbonFiber"         thickness = "Ecal_fiber_thickness_slabAbs"                    vis="Invisible" />
@@ -39,7 +39,7 @@
         <slice material = "CarbonFiber"         thickness = "Ecal_fiber_thickness_slabAbs"                    vis="Invisible" />
         <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"              vis="Invisible" />
         <slice material = "G4_AIR"         thickness = "Ecal_Slab_glue_gap"                      vis="Invisible" />
-        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes"     vis="RedVis"    />
+        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes"     limits="cal_limits" vis="RedVis"    />
         <slice material = "G4_AIR"         thickness = "Ecal_Slab_glue_gap"                      vis="Invisible" />
 	<slice material = "PCB"            thickness = "Ecal_Slab_PCB_thickness"    vis="Invisible"/>
 	<slice material = "G4_AIR"         thickness = "Ecal_Slab_ASIC_thickness"   vis="Invisible"/>
@@ -54,7 +54,7 @@
 	<slice material = "G4_AIR"         thickness = "Ecal_Slab_ASIC_thickness"   vis="Invisible"/>
 	<slice material = "PCB"            thickness = "Ecal_Slab_PCB_thickness"    vis="Invisible"/>
         <slice material = "G4_AIR"         thickness = "Ecal_Slab_glue_gap"                      vis="Invisible" />
-        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes"     vis="RedVis"    />
+        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes"     limits="cal_limits" vis="RedVis"    />
         <slice material = "G4_AIR"         thickness = "Ecal_Slab_glue_gap"                      vis="Invisible" />
         <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"              vis="Invisible" />
         <slice material = "CarbonFiber"         thickness = "Ecal_fiber_thickness_slabAbs"                    vis="Invisible" />
@@ -62,7 +62,7 @@
         <slice material = "CarbonFiber"         thickness = "Ecal_fiber_thickness_slabAbs"                    vis="Invisible" />
         <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"              vis="Invisible" />
         <slice material = "G4_AIR"         thickness = "Ecal_Slab_glue_gap"                      vis="Invisible" />
-        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes"     vis="RedVis"    />
+        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes"     limits="cal_limits" vis="RedVis"    />
         <slice material = "G4_AIR"         thickness = "Ecal_Slab_glue_gap"                      vis="Invisible" />
 	<slice material = "PCB"            thickness = "Ecal_Slab_PCB_thickness"    vis="Invisible"/>
 	<slice material = "G4_AIR"         thickness = "Ecal_Slab_ASIC_thickness"   vis="Invisible"/>

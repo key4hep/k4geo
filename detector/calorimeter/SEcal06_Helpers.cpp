@@ -794,7 +794,8 @@ void SEcal06_Helpers::makeModule( dd4hep::Volume & mod_vol,  // the volume we'll
 
 		std::string wafer_vis_str = isMagic ? "YellowVis" : vis_str;
 		
-		WaferSiLog.setVisAttributes(theDetector.visAttributes( wafer_vis_str ));	  
+		// Set region, limitset, and vis. 
+		WaferSiLog.setAttributes(theDetector,x_slice.regionStr(),x_slice.limitsStr(),wafer_vis_str);
                 WaferSiLog.setSensitiveDetector(sens);
 
                 dd4hep::Position w_pos(wafer_pos_X + megatile_size_x/2., wafer_pos_Y, s_pos_Z + s_thick/2. );
