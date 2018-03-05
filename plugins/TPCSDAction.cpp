@@ -26,9 +26,7 @@ namespace dd4hep {
       struct {
 	double TPCLowPtCut ;
 	bool   TPCLowPtStepLimit ;
-	bool   TrackingPhysicsListELossOn ;
         double TPCLowPtMaxHitSeparation ;
-	bool   TPCLowPtStoreMCPForHits ;
       } Control ;
 
       typedef Geant4HitCollection HitCollection;
@@ -72,15 +70,9 @@ namespace dd4hep {
 	CurrentTrackID(-1) {
 
 
-	Control.TPCLowPtCut = 0.01 ; //FIXME: steering value 
-	Control.TPCLowPtStepLimit = true ; //FIXME: value ?
-	Control.TrackingPhysicsListELossOn = true ; 
-	Control.TPCLowPtMaxHitSeparation = 0.1 ; // value ?
-	Control.TPCLowPtStoreMCPForHits = false ;
-
-        G4cout << "TPCSDAction: Threshold for Energy Deposit = " << fThresholdEnergyDeposit / CLHEP::eV << " eV" << G4endl;
-	G4cout << "TPCSDAction: TPCLowPtCut = " << Control.TPCLowPtCut / CLHEP::MeV << " MeV "<< G4endl;
-	G4cout << "TPCSDAction: TPCLowPt Max hit separation "<< Control.TPCLowPtMaxHitSeparation / CLHEP::mm << " mm" << G4endl;
+	Control.TPCLowPtCut = 0.01 ;
+	Control.TPCLowPtStepLimit = true ;
+	Control.TPCLowPtMaxHitSeparation = 0.1 ;
 
       }
 
@@ -230,7 +222,7 @@ namespace dd4hep {
         
 	      G4double dE = step->GetTotalEnergyDeposit()+dEInPadRow;
         
-	      if ( dE > fThresholdEnergyDeposit || Control.TrackingPhysicsListELossOn == false ) {
+	      if ( dE > fThresholdEnergyDeposit ) {
           
 
 //xx		fHitCollection->
@@ -295,7 +287,9 @@ namespace dd4hep {
 	    }
 	    else {
         
-        
+
+	      std::cout << " *************** step != fGeomBoundary, length  = " << step->GetStepLength() << " StepLimiter !! "  << std::endl ;
+
 	      //	    G4cout << "step must have been stopped by the step limiter" << G4endl;
 	      //	    G4cout << "write out hit at " 
 	      //		   << sqrt( position_x*position_x
@@ -345,6 +339,8 @@ namespace dd4hep {
       
 	    // This step does not continue the previous path. Deposit the energy and begin a new Pt hit.
       
+	    std::cout << " *************** step TPCLowPtStepLimit, length  = " << step->GetStepLength() << " CumulativeEnergyDeposit: " <<  CumulativeEnergyDeposit << std::endl ;
+
 	    if (CumulativeEnergyDeposit > fThresholdEnergyDeposit) {
 	      DepositLowPtHit();
 	    }
@@ -434,6 +430,8 @@ namespace dd4hep {
 
       void DepositLowPtHit()
       {
+	std::cout << " *************** step TPCLowPtStepLimit - called DepositLowPtHit() " << std::endl ;
+
 //xx	fLowPtHitCollection->
 //xx	  insert(new TRKHit(CurrentCopyNumber, 
 //xx			    CumulativeMeanPosition[0], CumulativeMeanPosition[1], CumulativeMeanPosition[2],
@@ -482,8 +480,19 @@ namespace dd4hep {
     /// Initialization overload for specialization
     template <> void Geant4SensitiveAction<TPCSDData>::initialize() {
       eventAction().callAtEnd(&m_userData,&TPCSDData::endEvent);
+
+      declareProperty("TPCLowPtCut",              m_userData.Control.TPCLowPtCut ); 
+      declareProperty("TPCLowPtStepLimit",        m_userData.Control.TPCLowPtStepLimit );
+      declareProperty("TPCLowPtMaxHitSeparation", m_userData.Control.TPCLowPtMaxHitSeparation );
+
       m_userData.fThresholdEnergyDeposit = m_sensitive.energyCutoff();
       m_userData.sensitive = this;
+
+      G4cout << "TPCSDAction: Threshold for Energy Deposit = " <<  m_userData.fThresholdEnergyDeposit / CLHEP::eV << " eV" << G4endl;
+      G4cout << "TPCSDAction: TPCLowPtCut = "                  <<  m_userData.Control.TPCLowPtCut / CLHEP::MeV << " MeV "<< G4endl;
+      G4cout << "TPCSDAction: TPCLowPtStepLimmit = "           <<  m_userData.Control.TPCLowPtStepLimit / CLHEP::MeV << " MeV "<< G4endl;
+      G4cout << "TPCSDAction: TPCLowPt Max hit separation "    <<  m_userData.Control.TPCLowPtMaxHitSeparation / CLHEP::mm << " mm" << G4endl;
+
     }
 
     /// Define collections created by this sensitivie action object
