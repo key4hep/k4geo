@@ -474,6 +474,11 @@ class DD4hepSimulation(object):
     # Now build the physics list:
     _phys = self.physics.setupPhysics( kernel, name=self.physicsList )
 
+    # Activate G4StepLimiterPhysics
+    ph = DDG4.PhysicsList(kernel,'Geant4PhysicsList/Myphysics')
+    ph.addPhysicsConstructor('G4StepLimiterPhysics')
+    _phys.add(ph)
+
     #fg: do we need these really ?
     #fg:  ph = DDG4.PhysicsList(kernel,'Geant4PhysicsList/Myphysics')
     #fg:  ph.addParticleConstructor('G4BosonConstructor')
