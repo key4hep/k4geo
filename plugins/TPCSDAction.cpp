@@ -233,10 +233,6 @@ namespace dd4hep {
 	      if ( dE > fThresholdEnergyDeposit || Control.TrackingPhysicsListELossOn == false ) {
           
 
-		// needed for delta electrons: all particles causing hits have to be saved in the LCIO file
-//xx		UserTrackInformation *info = (UserTrackInformation*)(step->GetTrack()->GetUserInformation());
-//xx		if (info) info->GetTheTrackSummary()->SetToBeSaved();
-
 //xx		fHitCollection->
 //xx		  insert(new TRKHit(touchPre->GetCopyNumber(), 
 //xx				    CrossingOfPadRingCentre[0],CrossingOfPadRingCentre[1],CrossingOfPadRingCentre[2],
@@ -300,18 +296,6 @@ namespace dd4hep {
 	    else {
         
         
-	      // G4double position_x = PostPosition[0];
-	      // G4double position_y = PostPosition[1];
-	      // G4double position_z = PostPosition[2];
-        
-	      G4ThreeVector PreMomentum = step->GetPreStepPoint()->GetMomentum();
-	      G4ThreeVector PostMomentum = step->GetPostStepPoint()->GetMomentum();
-        
-	      // G4double momentum_x = PostMomentum[0];
-	      // G4double momentum_y = PostMomentum[1];
-	      // G4double momentum_z = PostMomentum[2];
-        
-        
 	      //	    G4cout << "step must have been stopped by the step limiter" << G4endl;
 	      //	    G4cout << "write out hit at " 
 	      //		   << sqrt( position_x*position_x
@@ -323,10 +307,6 @@ namespace dd4hep {
 	      // write out step limited hit 
 	      // these are just space point hits so do not save the dE, which is set to ZERO
 	      //	    if ( step->GetTotalEnergyDeposit() > fThresholdEnergyDeposit ) 
-
-	      // needed for delta electrons: all particles causing hits have to be saved in the LCIO file
-//xx	      UserTrackInformation *info = (UserTrackInformation*)(step->GetTrack()->GetUserInformation());
-//xx	      if (info) info->GetTheTrackSummary()->SetToBeSaved();
         
 //xx	      fSpaceHitCollection->
 //xx		insert(new TRKHit(touchPre->GetCopyNumber(), 
@@ -338,14 +318,27 @@ namespace dd4hep {
 //xx				  step->GetTrack()->GetGlobalTime(),
 //xx				  step->GetStepLength()));
 
-	      // add dE and pathlegth and return
+	      Geant4Tracker::Hit* hit = new Geant4Tracker::Hit(step->GetTrack()->GetTrackID(),
+							       step->GetTrack()->GetDefinition()->GetPDGEncoding(),
+							       0.0, globalTimeAtPadRingCentre);  // dE set to ZERO
+
+	      hit->position = 0.5*( PrePosition + PostPosition );
+	      hit->momentum = thisMomentum ;
+	      hit->length   = step->GetStepLength();
+	      hit->cellID   = sensitive->cellID( step ) ;
+
+	      fSpaceHitCollection->add(hit);
+
+
+
+              // add dE and pathlegth and return
 	      dEInPadRow += step->GetTotalEnergyDeposit();
 	      pathLengthInPadRow += step->GetStepLength();
 	      return true;
 	    }
 	  }
+
 	}
-  
 	else if (Control.TPCLowPtStepLimit) { // low pt tracks will be treated differently as their step length is limited by the special low pt steplimiter
     
 	  if ( ( PreviousPostStepPosition - step->GetPreStepPoint()->GetPosition() ).mag() > 1.0e-6 * CLHEP::mm ) {
@@ -451,6 +444,16 @@ namespace dd4hep {
 //xx			    CurrentGlobalTime,
 //xx			    CumulativePathLength));
   
+	Geant4Tracker::Hit* hit = new Geant4Tracker::Hit(CurrentTrackID, CurrentPDGEncoding,
+							 CumulativeEnergyDeposit, globalTimeAtPadRingCentre);
+
+	hit->position = CumulativeMeanPosition ;
+	hit->momentum = CumulativeMeanMomentum ;
+	hit->length   = CumulativePathLength ;
+	hit->cellID   = CurrentCopyNumber ;
+
+	fLowPtHitCollection->add(hit);
+
 	// reset the cumulative variables after positioning the hit
 	ResetCumulativeVariables();
       }
@@ -471,16 +474,6 @@ namespace dd4hep {
 	CurrentGlobalTime = step->GetTrack()->GetGlobalTime();
 	CurrentCopyNumber = step->GetPreStepPoint()->GetTouchableHandle()->GetCopyNumber();
 	
-	// needed for delta electrons: all particles causing hits have to be saved in the LCIO file 
-	if ( CumulativeEnergyDeposit > fThresholdEnergyDeposit ) {
-	  // This low Pt hit will eventually be saved, so set the flag to store the particle
-	  
-	  // writing the MC Particles can be turned on or off for the lowPt particles
-	  if(Control.TPCLowPtStoreMCPForHits) {
-	    //xx	    UserTrackInformation *info = (UserTrackInformation*)(step->GetTrack()->GetUserInformation());
-//xx	    if (info) info->GetTheTrackSummary()->SetToBeSaved();
-	  }
-	}
       }
       
     };
