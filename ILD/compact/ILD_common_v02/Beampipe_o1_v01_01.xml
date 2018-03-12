@@ -70,105 +70,145 @@
 	   start="TUBE_secondCone_part4_zEnd+TUBE_cupola_thickness"    end="BeamCal_min_z-5*mm"
            rMin1="TUBE_lumiTube_rInner" rMin2="TUBE_lumiTube_rInner"
 	   rMax1 ="TUBE_lumiTube_rInner+TUBE_lumiTube_thickness"    rMax2="TUBE_lumiTube_rInner+TUBE_lumiTube_thickness" 
-	   material="G4_Fe" name="LumiCalInner" />
+	   material="stainless_steel" name="LumiCalInner" />
 
   <section type ="PunchedDnstream"       
 	   start="BeamCal_min_z-5*mm"            end="BeamCal_min_z-4*mm"         
 	   rMin1="14*mm"                         rMin2="16*mm"
            rMax1 ="TUBE_lumiTube_rInner+TUBE_lumiTube_thickness"                      rMax2="TUBE_lumiTube_rInner+TUBE_lumiTube_thickness"       
-           material="G4_Fe" name="BeamCalFront" />
+           material="stainless_steel" name="BeamCalFront" />
 
+  <!-- inside beamcal -->
   <section type ="UpstreamSlicedFront"   
-	   start="BeamCal_min_z-4*mm"                end="TUBE_QD0_Lstar"
-           rMin1="14*mm"                             rMin2="14*mm"   
-           rMax1 ="15*mm"                            rMax2="15*mm"  
-           material="G4_Fe" name="BeamCalLinkUpstream" />
+	   start="BeamCal_min_z-4*mm"                end="BeamCal_min_z + top_BeamCal_thickness"
+           rMin1="TUBE_incoming_inBeamcal_InnerRadius"  rMin2="TUBE_incoming_inBeamcal_InnerRadius"
+           rMax1="TUBE_incoming_inBeamcal_OuterRadius"  rMax2="TUBE_incoming_inBeamcal_OuterRadius"
+           material="stainless_steel" name="BeamCalLinkUpstream" />
+
+  <section type ="Upstream"
+           start="BeamCal_min_z + top_BeamCal_thickness"   end="BeamCal_min_z + top_BeamCal_thickness+TUBE_transition_length"
+	   rMin1="TUBE_incoming_inBeamcal_InnerRadius" rMin2="TUBE_incoming_beamcalToQD0_InnerRadius"
+	   rMax1="TUBE_incoming_inBeamcal_OuterRadius"  rMax2="TUBE_incoming_beamcalToQD0_InnerRadius+TUBE_upstream_thickness"
+           material="stainless_steel" name="BeamCalLinkUpstreamTrans" />
+
+  <section type ="Upstream"
+           start="BeamCal_min_z + top_BeamCal_thickness+TUBE_transition_length"   end="TUBE_QD0_Lstar-TUBE_transition_length"
+           rMin1="TUBE_incoming_beamcalToQD0_InnerRadius"  rMin2="TUBE_incoming_beamcalToQD0_InnerRadius"
+           rMax1="TUBE_incoming_beamcalToQD0_InnerRadius+TUBE_upstream_thickness"  rMax2="TUBE_incoming_beamcalToQD0_InnerRadius+TUBE_upstream_thickness"
+           material="stainless_steel" name="BeamCalToQD0Upstream" />
+
+  <section type ="Upstream"
+           start="TUBE_QD0_Lstar-TUBE_transition_length"   end="TUBE_QD0_Lstar"
+           rMin1="TUBE_incoming_beamcalToQD0_InnerRadius"  rMin2="TUBE_incoming_QD0andBeyond_InnerRadius"
+           rMax1="TUBE_incoming_beamcalToQD0_InnerRadius+TUBE_upstream_thickness"  rMax2="TUBE_incoming_QD0andBeyond_InnerRadius+TUBE_upstream_thickness"
+           material="stainless_steel" name="BeamCalToQD0UpstreamTrans" />
 
   <section type ="Upstream"
            start="TUBE_QD0_Lstar"                    end="TUBE_QD0_Lstar+TUBE_QD0_length"
-           rMin1="TUBE_QD0_PipeInnerRadius"          rMin2="TUBE_QD0_PipeInnerRadius"
-           rMax1="30*mm"                            rMax2="30*mm"
-           material="G4_Fe" name="QD0" />
+           rMin1="TUBE_incoming_QD0andBeyond_InnerRadius"          rMin2="TUBE_incoming_QD0andBeyond_InnerRadius"
+           rMax1="TUBE_incoming_QD0andBeyond_InnerRadius+20*mm"    rMax2="TUBE_incoming_QD0andBeyond_InnerRadius+20*mm"
+           material="stainless_steel" name="QD0CryoUpstream" />
 
   <section type ="Upstream"
-           start="TUBE_QD0_Lstar+TUBE_QD0_length"    end="TUBE_QD0_Lstar+TUBE_QD0_length+TUBE_QD0_gap_SD0"
-           rMin1="TUBE_QD0_PipeInnerRadius"                            rMin2="TUBE_QD0_PipeInnerRadius"
-           rMax1="TUBE_QD0_PipeOuterRadius"                            rMax2="TUBE_QD0_PipeOuterRadius"
-           material="G4_Fe" name="QD0toSD0" />
+           start="TUBE_QD0_Lstar+TUBE_QD0_length"    end="TUBE_QD0_Lstar+TUBE_QD0_length+4600*mm"
+           rMin1="TUBE_incoming_QD0andBeyond_InnerRadius"          rMin2="TUBE_incoming_QD0andBeyond_InnerRadius"
+           rMax1="TUBE_incoming_QD0andBeyond_InnerRadius+TUBE_upstream_thickness"    rMax2="TUBE_incoming_QD0andBeyond_InnerRadius+TUBE_upstream_thickness"
+           material="stainless_steel" name="BeyondQD0Upstream" />
 
-  <section type ="Upstream"
-           start="TUBE_QD0_Lstar+TUBE_QD0_length+TUBE_QD0_gap_SD0"
-           end="TUBE_QD0_Lstar+TUBE_QD0_length+TUBE_QD0_gap_SD0+TUBE_SD0_length"
-           rMin1="TUBE_QD0_PipeInnerRadius"                             rMin2="TUBE_QD0_PipeInnerRadius"
-           rMax1="30*mm"                            rMax2="30*mm"
-           material="G4_Fe" name="OC0andSD0" />
 
-  <section type ="Upstream"
-           start="TUBE_QD0_Lstar+TUBE_QD0_length+TUBE_QD0_gap_SD0+TUBE_SD0_length"
-           end="TUBE_QF1_Lstar"
-           rMin1="TUBE_QD0_PipeInnerRadius"                            rMin2="TUBE_QD0_PipeInnerRadius"
-           rMax1="TUBE_QD0_PipeOuterRadius"                            rMax2="TUBE_QD0_PipeOuterRadius"
-           material="G4_Fe" name="SD0toQF1" />
 
-  <section type ="Upstream"
-           start="TUBE_QF1_Lstar"                    end="TUBE_QF1_Lstar+TUBE_QF1_length"
-           rMin1="TUBE_QD0_PipeInnerRadius"                              rMin2="TUBE_QD0_PipeInnerRadius"
-           rMax1="30*mm"                            rMax2="30*mm"
-           material="G4_Fe" name="QF1" />
-
-  <section type ="Upstream"
-           start="TUBE_QF1_Lstar+TUBE_QF1_length"
-           end="TUBE_QF1_Lstar+TUBE_QF1_length+TUBE_QF1_gap_SF1"
-           rMin1="TUBE_QD0_PipeInnerRadius"                            rMin2="TUBE_QD0_PipeInnerRadius"
-           rMax1="TUBE_QD0_PipeOuterRadius"                            rMax2="TUBE_QD0_PipeOuterRadius"
-           material="G4_Fe" name="QF1toSF1" />
-
-  <section type ="Upstream"
-           start="TUBE_QF1_Lstar+TUBE_QF1_length+TUBE_QF1_gap_SF1"
-           end="TUBE_QF1_Lstar+TUBE_QF1_length+TUBE_QF1_gap_SF1+TUBE_SF1_length"
-           rMin1="TUBE_QD0_PipeInnerRadius"                            rMin2="TUBE_QD0_PipeInnerRadius"
-           rMax1="30*mm"                            rMax2="30*mm"
-           material="G4_Fe" name="SF1" />
-
-  <section type ="Upstream"
-           start="TUBE_QF1_Lstar+TUBE_QF1_length+TUBE_QF1_gap_SF1+TUBE_SF1_length"
-           end="12500*mm"
-           rMin1="TUBE_QD0_PipeInnerRadius"                            rMin2="TUBE_QD0_PipeInnerRadius"
-           rMax1="TUBE_QD0_PipeOuterRadius"                            rMax2="TUBE_QD0_PipeOuterRadius"
-           material="G4_Fe" name="MainUpstream" />
+  <!-- inside beamcal -->
+  <section type ="Dnstream"              
+	   start="BeamCal_min_z-4*mm"                     end="BeamCal_min_z + top_BeamCal_thickness"
+           rMin1="TUBE_outgoing_inBeamcal_InnerRadius"  rMin2="TUBE_outgoing_inBeamcal_InnerRadius"
+           rMax1="TUBE_outgoing_inBeamcal_OuterRadius"  rMax2="TUBE_outgoing_inBeamcal_OuterRadius"
+	   material="stainless_steel" name="BeamCalLinkDnstream" />
 
   <section type ="Dnstream"              
-	   start="BeamCal_min_z-4*mm"                     end="TUBE_QDEX1A_Lstar"
-           rMin1="TUBE_QDEX1A_PipeInnerRadius"            rMin2="TUBE_QDEX1A_PipeInnerRadius"
-           rMax1="TUBE_QDEX1A_PipeOuterRadius"            rMax2="TUBE_QDEX1A_PipeOuterRadius"
-	   material="G4_Fe" name="BeamCalLinkDnstream" />
+	   start="BeamCal_min_z + top_BeamCal_thickness" end="BeamCal_min_z + top_BeamCal_thickness+TUBE_transition_length"
+           rMin1="TUBE_outgoing_inBeamcal_InnerRadius"  rMin2="TUBE_outgoing_beamcalToQD0_InnerRadius"
+           rMax1="TUBE_outgoing_inBeamcal_OuterRadius"  rMax2="TUBE_outgoing_beamcalToQD0_InnerRadius+TUBE_upstream_thickness"
+	   material="stainless_steel" name="BeamCalLinkDnstreamTrans" />
 
-  <section type ="Dnstream"              
-	   start="TUBE_QDEX1A_Lstar"                    end="TUBE_QDEX1A_Lstar+TUBE_QDEX1A_length"
-           rMin1="TUBE_QDEX1A_PipeInnerRadius"          rMin2="TUBE_QDEX1A_PipeInnerRadius" 
-           rMax1="40*mm"                                rMax2="40*mm"
-           material="G4_Fe" name="QDEX1A" />
-
-  <section type ="Dnstream"              
-	   start="TUBE_QDEX1A_Lstar+TUBE_QDEX1A_length" end="TUBE_QDEX1B_Lstar"
-           rMin1="TUBE_QDEX1A_PipeInnerRadius"          rMin2="TUBE_QDEX1A_PipeInnerRadius" 
-           rMax1="TUBE_QDEX1A_PipeOuterRadius"          rMax2="TUBE_QDEX1A_PipeOuterRadius"
-           material="G4_Fe" name="QDEX1AtoLink" />
-
-  <section type ="Dnstream"              
-	   start="TUBE_QDEX1B_Lstar"                    end="TUBE_QDEX1B_Lstar+TUBE_QDEX1B_length"
-           rMin1="TUBE_QDEX1A_PipeInnerRadius"          rMin2="TUBE_QDEX1A_PipeInnerRadius"
-           rMax1="50*mm"                                rMax2="50*mm"
-           material="G4_Fe" name="QDEX1B" />
 
   <section type ="Dnstream"
-           start="TUBE_QDEX1B_Lstar+TUBE_QDEX1B_length"    end="12500*mm"
-           rMin1="TUBE_QDEX1A_PipeInnerRadius"             rMin2="TUBE_QDEX1A_PipeInnerRadius"
-           rMax1="TUBE_QDEX1A_PipeOuterRadius"             rMax2="TUBE_QDEX1A_PipeOuterRadius"
-           material="G4_Fe" name="MainDownstream" />
+           start="BeamCal_min_z + top_BeamCal_thickness+TUBE_transition_length"   end="TUBE_QDEX1A_Lstar"
+           rMin1="TUBE_outgoing_beamcalToQD0_InnerRadius"  rMin2="TUBE_outgoing_beamcalToQD0_InnerRadius"
+           rMax1="TUBE_outgoing_beamcalToQD0_InnerRadius+TUBE_upstream_thickness"  rMax2="TUBE_outgoing_beamcalToQD0_InnerRadius+TUBE_upstream_thickness"
+           material="stainless_steel" name="BeamCalToQD0Upstream" />
+
+  <section type ="Dnstream"
+           start="TUBE_QDEX1A_Lstar"                    end="TUBE_QD0_Lstar+TUBE_QD0_length"
+           rMin1="TUBE_outgoing_QD0andBeyond_InnerRadius"          rMin2="TUBE_outgoing_QD0andBeyond_InnerRadius"
+           rMax1="TUBE_outgoing_QD0andBeyond_InnerRadius+20*mm"    rMax2="TUBE_outgoing_QD0andBeyond_InnerRadius+20*mm"
+           material="stainless_steel" name="QD0CryoUpstream" />
+
+  <section type ="Dnstream"
+           start="TUBE_QD0_Lstar+TUBE_QD0_length"    end="TUBE_QD0_Lstar+TUBE_QD0_length+4600*mm"
+           rMin1="TUBE_outgoing_QD0andBeyond_InnerRadius"          rMin2="TUBE_outgoing_QD0andBeyond_InnerRadius"
+           rMax1="TUBE_outgoing_QD0andBeyond_InnerRadius+TUBE_upstream_thickness"    rMax2="TUBE_outgoing_QD0andBeyond_InnerRadius+TUBE_upstream_thickness"
+           material="stainless_steel" name="BeyondQD0Upstream" />
+
+</detector>
+
+<detector name="QD0_cryostat" type="TubeSupport_o1_v01" vis="BeamPipeVis" id="ILDDetID_NOTUSED" reflect="true">
+
+  <envelope vis="BlueVis">
+    <shape type="Assembly"/>
+  </envelope>
+
+  <type_flags type="DetType_SUPPORT + DetType_BEAMPIPE "/>
+
+  <section start="TUBE_QD0_Lstar-20*mm" end="TUBE_QD0_Lstar+TUBE_QD0_length"
+	   rMin="235.*mm" rMax="250.*mm"
+	   material="stainless_steel"
+	   name="qd0_cryostat"/>
+
+  <section start="TUBE_QD0_Lstar-20*mm" end="TUBE_QD0_Lstar+TUBE_QD0_length"
+	   rMin="235.*mm" rMax="250.*mm"
+	   material="stainless_steel"
+	   name="qd0_cryostat_wall"/>
+
+  <!-- some attempt to model other materials in cryostat -->
+  <section start="TUBE_QD0_Lstar-20*mm" end="TUBE_QD0_Lstar+TUBE_QD0_length"
+	   rMin="110.*mm" rMax="160.*mm"
+	   material="stainless_steel"
+	   name="qd0_cryostat_interiorMaterialPlaceholder"/>
+
+  <section start="TUBE_QD0_Lstar-35*mm" end="TUBE_QD0_Lstar-20*mm"
+	   rMin="TUBE_QD0_Lstar*tan(ILC_Main_Crossing_Angle/2.)+TUBE_outgoing_QD0andBeyond_InnerRadius+TUBE_upstream_thickness+1*mm" rMax="250*mm"
+	   material="stainless_steel"
+	   name="qd0_cryostat_frontface"/>
 
 
 </detector>
+
+<detector name="QD0_support" type="BoxSupport_o1_v01" vis="BeamPipeVis" id="ILDDetID_NOTUSED" reflect="true">
+
+  <envelope vis="BlueVis">
+    <shape type="Assembly"/>
+  </envelope>
+
+  <type_flags type="DetType_SUPPORT + DetType_BEAMPIPE "/>
+
+  <section start="TUBE_QD0_Lstar+20*mm" end="TUBE_QD0_Lstar+TUBE_QD0_length"
+	   rMin="275.*mm" rMax="300*mm"
+	   material="stainless_steel"
+	   name="qd0_support"/>
+
+  <section start="Ecal_endcap_zmin" end="Ecal_endcap_zmin+Ecal_barrel_thickness"
+	   rMin="390.001*mm" rMax="400*mm-0.001*mm"
+	   material="stainless_steel"
+	   name="forward_support_tube"/>
+
+  <section start="top_LHCal_min_z + top_LHCal_thickness+10*mm" end="BeamCal_min_z + top_BeamCal_thickness+4600*mm"
+	   rMin="305*mm" rMax="325*mm"
+	   material="stainless_steel"
+	   name="forward_support_tube"/>
+
+</detector>
+
+
 
   </detectors>        
 
