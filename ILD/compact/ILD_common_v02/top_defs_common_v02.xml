@@ -85,7 +85,7 @@
 
   <constant name="top_Yoke_half_length"     value="4047.0*mm"/>
   <constant name="Yoke_Z_start_endcaps"     value="4072.0*mm"/>
-  <constant name="Yoke_endcap_inner_radius" value="300*mm"/>
+  <constant name="Yoke_endcap_inner_radius" value="350*mm"/>
 
   <!-- lumical -->
   <constant name="top_Lcal_inner_radius" value="80.0*mm"/>
