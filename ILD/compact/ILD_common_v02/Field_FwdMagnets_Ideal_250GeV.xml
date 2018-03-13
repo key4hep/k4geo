@@ -4,7 +4,8 @@
 
   <define>
     <constant name="QD0_fieldStrength_250" value="124.23*tesla/meter"/>
-    <constant name="QDEX1A_fieldStrength_250" value="200*tesla/meter"/>
+    <!-- in SLAC-PUB-11591, at 1 TeV uses 83 T/m, assume scales with energy -->
+    <constant name="QDEX1A_fieldStrength_250" value="20*tesla/meter"/>
   </define>
 
   <fields>
