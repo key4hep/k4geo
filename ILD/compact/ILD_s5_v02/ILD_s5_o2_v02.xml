@@ -82,7 +82,7 @@
     <plugin name="InstallSurfaceManager"/>
   </plugins>
 
-  <include ref="../ILD_common_v02/Field_Solenoid_Ideal_noAntiDID.xml"/>
+  <include ref="../ILD_common_v02/Field_Solenoid_Ideal.xml"/>
   <include ref="../ILD_common_v02/Field_FwdMagnets_Ideal_250GeV.xml"/>
 
 </lccdd>
