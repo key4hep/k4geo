@@ -82,26 +82,7 @@
     <plugin name="InstallSurfaceManager"/>
   </plugins>
 
-  <fields>
-    <field type="solenoid" name="GlobalSolenoid" inner_field="Field_nominal_value"
-           outer_field="outerField_nominal_value" zmax="Coil_half_length"
-           inner_radius="Coil_inner_radius"
-           outer_radius="world_side" />
+  <include ref="../ILD_common_v02/Field_Solenoid_Ideal_noAntiDID.xml"/>
+  <include ref="../ILD_common_v02/Field_FwdMagnets_Ideal_250GeV.xml"/>
 
-    <!-- <field name="DetectorMap" type="FieldBrBz" -->
-         <!--        filename="${lcgeo_DIR}/fieldmaps/ILDMap_KB_20150204_BRhoZ.root" -->
-         <!--        tree="fieldmap:rho:z:Brho:Bz" -->
-         <!--        rScale = "1.0" -->
-         <!--        zScale = "1.0" -->
-         <!--        bScale = "3.5/4.12841" -->
-         <!--        rhoMin = "5*mm" -->
-         <!--        zMin = "5*mm" -->
-         <!--        rhoMax = "7005*mm" -->
-         <!--        zMax = "7005*mm" -->
-         <!--        nRho = "701" -->
-         <!--        nZ = "701" -->
-         <!--        > -->
-         <!-- </field> -->
-
-  </fields>
 </lccdd>
