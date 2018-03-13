@@ -1,0 +1,9 @@
+<lccdd>
+  <fields>
+    <field type="solenoid" name="GlobalSolenoid" inner_field="Field_nominal_value"
+           outer_field="outerField_nominal_value" zmax="Coil_half_length"
+           inner_radius="Coil_inner_radius"
+           outer_radius="world_side" />
+  </fields>
+</lccdd>
+ 
