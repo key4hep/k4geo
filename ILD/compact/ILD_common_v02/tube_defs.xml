@@ -97,8 +97,10 @@
   <constant name="TUBE_QD0_gap_SD0" value="150*mm"/>
   <constant name="TUBE_SD0_length" value="600*mm"/>
 
+  <constant name="TUBE_QD0_cryostat_length" value="TUBE_QD0_length+TUBE_QD0_gap_SD0+TUBE_SD0_length"/>
+
   <!-- extraction magnets: guestimates by DJeans, no recent official design available -->
   <constant name="TUBE_QDEX1A_Lstar" value="5500*mm"/>
-  <constant name="TUBE_QDEX1A_length" value="TUBE_QD0_Lstar+TUBE_QD0_length+TUBE_QD0_gap_SD0+TUBE_SD0_length-TUBE_QDEX1A_Lstar"/>
+  <constant name="TUBE_QDEX1A_length" value="TUBE_QD0_Lstar+TUBE_QD0_cryostat_length-TUBE_QDEX1A_Lstar"/>
 
 </define>
