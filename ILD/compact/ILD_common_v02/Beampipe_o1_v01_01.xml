@@ -197,7 +197,7 @@
 	   name="qd0_support"/>
 
   <section start="Ecal_endcap_zmin" end="Ecal_endcap_zmin+Ecal_barrel_thickness"
-	   rMin="390.001*mm" rMax="400*mm-0.001*mm"
+	   rMin="EcalEndcapRing_outer_radius + 2*env_safety" rMax="EcalEndcap_inner_radius - 2*env_safety"
 	   material="stainless_steel"
 	   name="forward_support_tube"/>
 
