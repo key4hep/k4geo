@@ -1,20 +1,20 @@
 <lccdd>
   <fields>
-
-<!--	   treeName="fieldmap:rho:z:Brho:Bz" -->
-
-    <field name="DetectorMap" type="FieldBrBz"
-	   filename="${lcgeo_DIR}/fieldmaps/ILDMap_KB_20150204_BRhoZ.root"
-	   treeName="fieldmap"
-	   rhoVarName="rho"
-	   zVarName="z"
-	   BrhoVarName="Brho"
+    <field name="DetectorMap" type="FieldXYZ"
+	   filename="${lcgeo_DIR}/fieldmaps/ild_fieldMap_antiDID_10cm_v1_20170223.root"
+	   treeName="ntuple"
+	   xVarName="x_mm"
+	   yVarName="y_mm"
+	   zVarName="z_mm"
+	   BxVarName="Bx"
+	   ByVarName="By"
 	   BzVarName="Bz"
+	   xScale="1"
+	   yScale="1"
+	   zScale="1"
+	   bScale="1"
 	   coorUnits="mm"
 	   BfieldUnits="tesla"
-           rScale = "1.0"
-           zScale = "1.0"
-           bScale = "3.5/4.12841"
 	   >
     </field>
   </fields>
