@@ -1,6 +1,6 @@
 <lccdd>
   <fields>
-    <field name="DetectorMap" type="FieldXYZ"
+    <field name="AntiDIDMap" type="FieldXYZ"
 	   filename="${lcgeo_DIR}/fieldmaps/ild_fieldMap_antiDID_10cm_v1_20170223.root"
 	   treeName="ntuple"
 	   xVarName="x_mm"
