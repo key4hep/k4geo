@@ -61,7 +61,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector /
     const double zHalf       = fabs(zEnd - zStart) * 0.5; // half z length of the cone
     const double zPosition   = fabs(zEnd + zStart) * 0.5; // middle z position
 
-    // solid for the tube (including vacuum and wall): a solid cone
+    // solid for the tube: the difference between two boxes
     Box outerBox(rOuter, rOuter, zHalf);
     Box innerBox(rInner, rInner, zHalf);
     SubtractionSolid squareTubeSolid( outerBox, innerBox, Position(0, 0, 0) );
@@ -70,27 +70,12 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector /
     tubeVol.setAttributes(theDetector, xmlSection.regionStr(), xmlSection.limitsStr(), xmlSection.visStr());
     envelope.placeVolume(tubeVol, Position(0, 0, zPosition));
 
-    // DJ: do I need to implement this???
-    // //Add surface to the support
-    // Vector3D ocyl(  rInner + thickness/2.  , 0. , 0. );
-    // VolCylinder cylSurf1( tubeVol , SurfaceType( SurfaceType::Helper ) , 0.5*thickness  , 0.5*thickness , ocyl );
-    // volSurfaceList( sdet )->push_back( cylSurf1 );
-
-
     if (reflect) {
-
       Volume tubeVol2(volName + "_neg", squareTubeSolid, sectionMat);
       tubeVol2.setAttributes(theDetector, xmlSection.regionStr(), xmlSection.limitsStr(), xmlSection.visStr());
       Transform3D Vol2Place(RotationY(-180.0 * dd4hep::degree), Position(0, 0, -1.*zPosition));
       envelope.placeVolume(tubeVol2, Vol2Place);
-
-      // DJ: do I need to implement this???
-      //      VolCylinder cylSurf2( tubeVol2 , SurfaceType( SurfaceType::Helper ) , 0.5*thickness  , 0.5*thickness , ocyl );
-      //      volSurfaceList( sdet )->push_back( cylSurf2 );
-
-
     }
-
 
   }
 
