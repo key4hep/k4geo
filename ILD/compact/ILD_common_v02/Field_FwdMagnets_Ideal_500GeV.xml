@@ -37,7 +37,7 @@
 		z="(TUBE_QDEX1A_Lstar+TUBE_QDEX1A_length/2.0)*cos(ILC_Main_Crossing_Angle/2.0)"/>
       <rotation x="0" y="ILC_Main_Crossing_Angle/2.0" z="0.0"/>
       <coefficient coefficient="0.0" skew="0.0"/>
-      <coefficient coefficient="QDEX1A_fieldStrength_250" skew="0.0"/>
+      <coefficient coefficient="QDEX1A_fieldStrength_500" skew="0.0"/>
       <shape type="Tube" rmin="0.0" rmax="TUBE_outgoing_QD0andBeyond_InnerRadius"
              dz="TUBE_QDEX1A_length/2.0"/>
     </field>
@@ -49,7 +49,7 @@
 		z="-(TUBE_QDEX1A_Lstar+TUBE_QDEX1A_length/2.0)*cos(ILC_Main_Crossing_Angle/2.0)"/>
       <rotation x="0" y="-ILC_Main_Crossing_Angle/2.0" z="0.0"/>
       <coefficient coefficient="0.0" skew="0.0"/>
-      <coefficient coefficient="QDEX1A_fieldStrength_250" skew="0.0"/>
+      <coefficient coefficient="QDEX1A_fieldStrength_500" skew="0.0"/>
       <shape type="Tube" rmin="0.0" rmax="TUBE_outgoing_QD0andBeyond_InnerRadius"
          dz="TUBE_QDEX1A_length/2.0"/>
     </field>
