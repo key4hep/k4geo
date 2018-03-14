@@ -31,7 +31,7 @@ namespace dd4hep {
 
       typedef Geant4HitCollection HitCollection;
       Geant4Sensitive*  sensitive;
-
+      const BitFieldElement* layerField ;
 
       G4double fThresholdEnergyDeposit;
       Geant4HitCollection *fHitCollection;
@@ -93,9 +93,8 @@ namespace dd4hep {
       int getCopyNumber(G4Step* s, bool usePostPos ){
 
 	int cellID = this->cellID( s , usePostPos) ;
-	//<id>system:5,side:2,layer:9,module:8,sensor:8</id>
-	//fixme: properly access "layer" part of cellID ....
-	return (  (cellID >>  7 ) &  0x01ff ) ;
+
+	return this->layerField->value( cellID ) ;
       }
 
       /// Returns the cellID(volumeID+local coordinate encoding) of the sensitive volume corresponding to the step
@@ -165,9 +164,6 @@ namespace dd4hep {
 	// placed on this surface at the last crossing point, and will be assinged the total energy 
 	// deposited in the whole pad-ring. This is a possible source of bias for the hit
   
-	// G4TouchableHandle touchPost = step->GetPostStepPoint()->GetTouchableHandle();
-	// G4TouchableHandle touchPre = step->GetPreStepPoint()->GetTouchableHandle();
-  
   
 	if (fabs(step->GetTrack()->GetDefinition()->GetPDGCharge()) < 0.01) return true;
   
@@ -176,16 +172,19 @@ namespace dd4hep {
 	const G4ThreeVector thisMomentum = step->GetPostStepPoint()->GetMomentum();
   
 	float ptSQRD = thisMomentum[0]*thisMomentum[0]+thisMomentum[1]*thisMomentum[1];
-  
-	if( ptSQRD >= (Control.TPCLowPtCut*Control.TPCLowPtCut) ){
-	  // Step finishes at a geometric boundry
 
+
+	//=========================================================================================================
+
+	if( ptSQRD >= (Control.TPCLowPtCut*Control.TPCLowPtCut) ){
+
+	  // Step finishes at a geometric boundry
 	  if(step->GetPostStepPoint()->GetStepStatus() == fGeomBoundary) {
+
+
 	    // step within the same pair of upper and lower pad ring halves
-    
-	    //if(touchPre->GetCopyNumber()==touchPost->GetCopyNumber()) {
 	    if( getCopyNumber( step, false ) == getCopyNumber( step, true ) ){
- 
+
 	      //this step must have ended on the boundry between these two pad ring halfs 
 	      //record the tracks coordinates at this position 
 	      //and return
@@ -203,6 +202,7 @@ namespace dd4hep {
 	      //		   << G4endl;
         
 	      return true;
+
 	    }
 	    else if(!(CrossingOfPadRingCentre[0]==0.0 && CrossingOfPadRingCentre[1]==0.0 && CrossingOfPadRingCentre[2]==0.0)) {
 	      // the above IF statment is to catch the case where the particle "appears" in this pad-row half volume and 
@@ -287,9 +287,6 @@ namespace dd4hep {
 	    }
 	    else {
         
-
-	      std::cout << " *************** step != fGeomBoundary, length  = " << step->GetStepLength() << " StepLimiter !! "  << std::endl ;
-
 	      //	    G4cout << "step must have been stopped by the step limiter" << G4endl;
 	      //	    G4cout << "write out hit at " 
 	      //		   << sqrt( position_x*position_x
@@ -339,8 +336,6 @@ namespace dd4hep {
       
 	    // This step does not continue the previous path. Deposit the energy and begin a new Pt hit.
       
-	    std::cout << " *************** step TPCLowPtStepLimit, length  = " << step->GetStepLength() << " CumulativeEnergyDeposit: " <<  CumulativeEnergyDeposit << std::endl ;
-
 	    if (CumulativeEnergyDeposit > fThresholdEnergyDeposit) {
 	      DepositLowPtHit();
 	    }
@@ -430,7 +425,6 @@ namespace dd4hep {
 
       void DepositLowPtHit()
       {
-	std::cout << " *************** step TPCLowPtStepLimit - called DepositLowPtHit() " << std::endl ;
 
 //xx	fLowPtHitCollection->
 //xx	  insert(new TRKHit(CurrentCopyNumber, 
@@ -488,10 +482,8 @@ namespace dd4hep {
       m_userData.fThresholdEnergyDeposit = m_sensitive.energyCutoff();
       m_userData.sensitive = this;
 
-      G4cout << "TPCSDAction: Threshold for Energy Deposit = " <<  m_userData.fThresholdEnergyDeposit / CLHEP::eV << " eV" << G4endl;
-      G4cout << "TPCSDAction: TPCLowPtCut = "                  <<  m_userData.Control.TPCLowPtCut / CLHEP::MeV << " MeV "<< G4endl;
-      G4cout << "TPCSDAction: TPCLowPtStepLimmit = "           <<  m_userData.Control.TPCLowPtStepLimit / CLHEP::MeV << " MeV "<< G4endl;
-      G4cout << "TPCSDAction: TPCLowPt Max hit separation "    <<  m_userData.Control.TPCLowPtMaxHitSeparation / CLHEP::mm << " mm" << G4endl;
+      IDDescriptor dsc = m_sensitive.idSpec() ;
+      m_userData.layerField = dsc.field( "layer" ) ;
 
     }
 
