@@ -24,39 +24,39 @@ namespace dd4hep {
 
       // helper struct with Mokka controls ...
       struct {
-	double TPCLowPtCut ;
-	bool   TPCLowPtStepLimit ;
-        double TPCLowPtMaxHitSeparation ;
-      } Control ;
+	double TPCLowPtCut {};
+	bool   TPCLowPtStepLimit {};
+        double TPCLowPtMaxHitSeparation {};
+      } Control {};
 
       typedef Geant4HitCollection HitCollection;
-      Geant4Sensitive*  sensitive;
-      const BitFieldElement* layerField ;
+      Geant4Sensitive*  sensitive{};
+      const BitFieldElement* layerField {};
 
-      G4double fThresholdEnergyDeposit;
-      Geant4HitCollection *fHitCollection;
-      Geant4HitCollection *fSpaceHitCollection;
-      Geant4HitCollection *fLowPtHitCollection;
-      G4int fHCID;
-      G4int fSpaceHitCollectionID;
-      G4int fLowPtHitCollectionID;
+      G4double fThresholdEnergyDeposit{};
+      Geant4HitCollection *fHitCollection{};
+      Geant4HitCollection *fSpaceHitCollection{};
+      Geant4HitCollection *fLowPtHitCollection{};
+      G4int fHCID{};
+      G4int fSpaceHitCollectionID{};
+      G4int fLowPtHitCollectionID{};
       
-      G4ThreeVector CrossingOfPadRingCentre;
-      G4ThreeVector MomentumAtPadRingCentre;
-      G4double dEInPadRow;
-      G4double globalTimeAtPadRingCentre;
-      G4double pathLengthInPadRow;
-      G4double CumulativePathLength;
-      G4double CumulativeEnergyDeposit;
-      G4ThreeVector CumulativeMeanPosition; 
-      G4ThreeVector CumulativeMeanMomentum; 
-      G4int CumulativeNumSteps;
+      G4ThreeVector CrossingOfPadRingCentre{};
+      G4ThreeVector MomentumAtPadRingCentre{};
+      G4double dEInPadRow{};
+      G4double globalTimeAtPadRingCentre{};
+      G4double pathLengthInPadRow{};
+      G4double CumulativePathLength{};
+      G4double CumulativeEnergyDeposit{};
+      G4ThreeVector CumulativeMeanPosition{};
+      G4ThreeVector CumulativeMeanMomentum{};
+      G4int CumulativeNumSteps{};
       
-      G4ThreeVector PreviousPostStepPosition; //< the end point of the previous step
-      G4int CurrentPDGEncoding; //< the PDG encoding of the particle causing the cumulative energy deposit
-      G4int CurrentTrackID; //< the TrackID of the particle causing the cumulative energy deposit
-      G4double CurrentGlobalTime; ///< the global time of the track causing the cumulative energy deposit
-      G4int CurrentCopyNumber; ///< copy number of the preStepPoint's TouchableHandle for the cumulative energy deposit
+      G4ThreeVector PreviousPostStepPosition{}; //< the end point of the previous step
+      G4int CurrentPDGEncoding{}; //< the PDG encoding of the particle causing the cumulative energy deposit
+      G4int CurrentTrackID{}; //< the TrackID of the particle causing the cumulative energy deposit
+      G4double CurrentGlobalTime{}; ///< the global time of the track causing the cumulative energy deposit
+      G4int CurrentCopyNumber{}; ///< copy number of the preStepPoint's TouchableHandle for the cumulative energy deposit
       
 
       TPCSDData() : 
@@ -70,61 +70,37 @@ namespace dd4hep {
 	CurrentTrackID(-1) {
 
 
-	Control.TPCLowPtCut = 0.01 ;
-	Control.TPCLowPtStepLimit = true ;
-	Control.TPCLowPtMaxHitSeparation = 0.1 ;
+	Control.TPCLowPtCut = CLHEP::MeV ;
+	Control.TPCLowPtStepLimit = false ;
+	Control.TPCLowPtMaxHitSeparation = 5. * CLHEP::mm ;
 
       }
-
 
 
      /// Clear collected information and restart for new hit
       void clear()  {
-        // mean_pos.SetXYZ(0,0,0);
-        // mean_time = 0;
-        // post.clear();
-        // pre.clear();
-        // current = -1;
-        // combined = 0;
-        // cell = 0;
+	// nothing to clear
       }
 
 
+      /// return the layer number of the volume (either pre or post-position )
       int getCopyNumber(G4Step* s, bool usePostPos ){
 
-	int cellID = this->cellID( s , usePostPos) ;
+	int cellID = this->volID( s , usePostPos) ;
 
 	return this->layerField->value( cellID ) ;
       }
 
-      /// Returns the cellID(volumeID+local coordinate encoding) of the sensitive volume corresponding to the step
-      long long int cellID( G4Step* s, bool usePostPos=false ) {
+
+      /// Returns the volumeID of sensitive volume corresponding to the step (either pre or post-position )
+      long long int volID( G4Step* s, bool usePostPos=false ) {
+
 	Geant4StepHandler h(s);
 
 	Geant4VolumeManager volMgr = Geant4Mapping::instance().volumeManager();
 
 	VolumeID volID = ( usePostPos ?  volMgr.volumeID(h.postTouchable()) : volMgr.volumeID(h.preTouchable()) );
 
-	Readout readout   = sensitive->sensitiveDetector().readout();
-
-	Segmentation segmentation = readout.segmentation();
-	
-	if ( segmentation.isValid() )  {
-
-	  // G4ThreeVector global = 0.5 * ( h.prePosG4()+h.postPosG4());
-	  // G4ThreeVector local  = h.preTouchable()->GetHistory()->GetTopTransform().TransformPoint(global);
-	  // Position loc(local.x()*MM_2_CM, local.y()*MM_2_CM, local.z()*MM_2_CM);
-	  // Position glob(global.x()*MM_2_CM, global.y()*MM_2_CM, global.z()*MM_2_CM);
-	  // VolumeID cID = segmentation.cellID(loc,glob,volID);
-
-	  const Position& global = (   usePostPos ? h.postPos() : h.prePos()  ) ;
-
-	  Position glob( global.x()*MM_2_CM, global.y()*MM_2_CM, global.z()*MM_2_CM);
-
-	  VolumeID cID = segmentation.cellID( Position() , glob , volID   );
-
-	  return cID;
-	}
 	return volID;
       }
 
@@ -139,8 +115,15 @@ namespace dd4hep {
 		  << " preVolume " << h.volName( s->GetPreStepPoint() ) 
 		  << " postVolume " << h.volName( s->GetPostStepPoint() ) 
 		  << " CurrentCopyNumbers " <<  getCopyNumber( s, false )
-		  << " -  " <<  getCopyNumber( s, true ) << std::endl;
-     }
+		  << " -  " <<  getCopyNumber( s, true )
+		  << std::endl
+		  << "     momentum : "  << std::scientific
+		  <<  s->GetPreStepPoint()->GetMomentum()[0] << ", " <<  s->GetPreStepPoint()->GetMomentum()[1]<< ", " <<  s->GetPreStepPoint()->GetMomentum()[2]
+		  << " / "
+		  << s->GetPostStepPoint()->GetMomentum()[0] << ", " <<  s->GetPostStepPoint()->GetMomentum()[1]<< ", " <<  s->GetPostStepPoint()->GetMomentum()[2]
+		  << ", PDG: " << s->GetTrack()->GetDefinition()->GetPDGEncoding()
+		  << std::endl ;
+      }
 
 
 
@@ -178,9 +161,10 @@ namespace dd4hep {
 
 	if( ptSQRD >= (Control.TPCLowPtCut*Control.TPCLowPtCut) ){
 
+	  //=========================================================================================================
 	  // Step finishes at a geometric boundry
-	  if(step->GetPostStepPoint()->GetStepStatus() == fGeomBoundary) {
 
+	  if(step->GetPostStepPoint()->GetStepStatus() == fGeomBoundary) {
 
 	    // step within the same pair of upper and lower pad ring halves
 	    if( getCopyNumber( step, false ) == getCopyNumber( step, true ) ){
@@ -208,10 +192,9 @@ namespace dd4hep {
 	      // the above IF statment is to catch the case where the particle "appears" in this pad-row half volume and 
 	      // leaves with out crossing the pad-ring centre, as mentioned above
         
-	      //it is leaving the pad ring couplet
-	      //write out a hit
-	      //make sure particle is added to MC list
-	      //and return
+	      // it is leaving the pad ring couplet
+	      // write out a hit
+
 	      //	    G4cout << "step must be leaving the pad ring couplet" << G4endl;
 	      //	    G4cout << "write out hit at " 
 	      //		   << sqrt( CrossingOfPadRingCentre[0]*CrossingOfPadRingCentre[0]
@@ -266,16 +249,23 @@ namespace dd4hep {
 	      MomentumAtPadRingCentre[2]=0.0;
 	      return true;
 	    }
+
+
+
 	  }
     
-	  //case for which the step remains within geometric volume
+	  //=========================================================================================================
+	  // case for which the step remains within geometric volume
+
 	  //FIXME: need and another IF case to catch particles which Stop within the padring
-	  else if(step->GetPostStepPoint()->GetStepStatus() != fGeomBoundary) {
-	    //the step is not limited by the step length 
-      
-	    if(step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()!="StepLimiter"){
-	      // if(particle not stoped){ 	    
-	      //add the dEdx and return 
+
+	  else {    // else if(step->GetPostStepPoint()->GetStepStatus() != fGeomBoundary) {
+
+	    // the step is not limited by the step length
+	    if( step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName() != "StepLimiter"){
+
+	      // if(particle not stoped){
+	      // add the dEdx and return
 	      //	    G4cout << "Step ended by Physics Process: Add dEdx and carry on" << G4endl;
 	      dEInPadRow += step->GetTotalEnergyDeposit();
 	      pathLengthInPadRow += step->GetStepLength();
@@ -284,8 +274,9 @@ namespace dd4hep {
 	      //else{
 	      //  write out the hit and clear counters
 	      //}
-	    }
-	    else {
+
+
+	    } else {  // GetProcessName() == "StepLimiter"
         
 	      //	    G4cout << "step must have been stopped by the step limiter" << G4endl;
 	      //	    G4cout << "write out hit at " 
@@ -329,7 +320,12 @@ namespace dd4hep {
 	    }
 	  }
 
+
+
 	}
+        //=========================================================================================================
+	//   ptSQRD < (Control.TPCLowPtCut*Control.TPCLowPtCut)
+
 	else if (Control.TPCLowPtStepLimit) { // low pt tracks will be treated differently as their step length is limited by the special low pt steplimiter
     
 	  if ( ( PreviousPostStepPosition - step->GetPreStepPoint()->GetPosition() ).mag() > 1.0e-6 * CLHEP::mm ) {
@@ -337,6 +333,7 @@ namespace dd4hep {
 	    // This step does not continue the previous path. Deposit the energy and begin a new Pt hit.
       
 	    if (CumulativeEnergyDeposit > fThresholdEnergyDeposit) {
+	      //dumpStep( h , step ) ;
 	      DepositLowPtHit();
 	    }
       
@@ -364,6 +361,7 @@ namespace dd4hep {
 	    // to ionize
       
 	    if ( CumulativeEnergyDeposit > fThresholdEnergyDeposit) {
+	      //dumpStep( h , step ) ;
 	      DepositLowPtHit();
 	    }
 	    //else {
@@ -374,10 +372,12 @@ namespace dd4hep {
 	    // be deposited because the particle track ends
 
 	    if ( step->GetPostStepPoint()->GetKineticEnergy() == 0 ) {
-        
-	      // only deposit the hit if the energy is high enough
+
+
+              // only deposit the hit if the energy is high enough
 	      if (CumulativeEnergyDeposit > fThresholdEnergyDeposit) {
           
+	        //dumpStep( h , step ) ;
 		DepositLowPtHit();
 	      }
         
