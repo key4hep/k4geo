@@ -122,78 +122,76 @@ def writeTopCompactXml( outfile, version='99', name="ILD", Large=True, Option=0,
 
     outfile.write('</lccdd>\n')
 
-def getVersionNumber(SolenoidMap, AntiDID, Energy):
-    version='99'
-    if not SolenoidMap:
-        if not AntiDID:
-            version='02'
-        else:
-            print 'ERROR; no model defined with ideal solnoid + antiDID!!'
-            return
-    else: # solenoid map
-        if not AntiDID:
-            if Energy==250:
-                version='03'
-            elif Energy==500:
-                version='04'
-            else:
-                print 'ERROR; no model defined for energy', Energy
-                return
-        else:
-            if Energy==250:
-                version='05'
-            elif Energy==500:
-                version='06'
-            else:
-                print 'ERROR; no model defined for energy', Energy
-                return
-    return version
+#-----------------------------------------------------
 
+def getVersionParameters(version):
+    vparams={}
+    if version==2:
+        vparams['SolenoidMap']=False
+        vparams['AntiDID']=False
+        vparams['FwdFields']=0
+    elif version==3:
+        vparams['SolenoidMap']=True
+        vparams['AntiDID']=False
+        vparams['FwdFields']=250
+    elif version==4:
+        vparams['SolenoidMap']=True
+        vparams['AntiDID']=False
+        vparams['FwdFields']=500
+    elif version==5:
+        vparams['SolenoidMap']=True
+        vparams['AntiDID']=True
+        vparams['FwdFields']=250
+    elif version==6:
+        vparams['SolenoidMap']=True
+        vparams['AntiDID']=True
+        vparams['FwdFields']=500
+    else:
+        print 'ERROR: unknown version requested:',version,'!!'
+        return vparams
+
+    if version<10:
+        vparams['vString']='0'+str(version)
+    else:
+        vparams['vString']=str(version)
+
+    return vparams
 
 
 #-----------------------------------------------------
 
 import os
 
-prename='ILD' # ILD for final
+# prename='ILD' # for real one
+prename='test' # for testing
 topdir='../'
-mainoutdirname=prename+'_sl5_v02/'
+mainoutdirname=prename+'_sl5_v02'
 mainoutdir=topdir+mainoutdirname
 
 if not os.path.exists(mainoutdir):
     os.makedirs(mainoutdir)
 
 for Large in (True, False):
-    for Option in (0,1,2,3,4):
-        for SolenoidMap in (True, False):
-            FwdFields=SolenoidMap # always use fwd fields if using solenoid map, don't if not
+    for Option in range(0,5):
+        for version in range(2, 7):
+            vparams=getVersionParameters(version)
 
-            ens=[250]
-            if FwdFields:
-                ens.append(500)
+            modelname=prename+'_'
+            if Large:
+                modelname=modelname+'l'
+            else:
+                modelname=modelname+'s'
+            modelname=modelname+'5_'
 
-            antis=[False]
-            if SolenoidMap:
-                antis.append(True)
+            if Option>0:
+                modelname=modelname+'o'+str(Option)+'_'
 
-            for Energy in ens:
-                for AntiDID in antis:
-                    modelname=prename+'_'
-                    if Large:
-                        modelname=modelname+'l'
-                    else:
-                        modelname=modelname+'s'
-                    modelname=modelname+'5_'
-                    if Option>0:
-                        modelname=modelname+'o'+str(Option)+'_'
-
-                    version=getVersionNumber(SolenoidMap, AntiDID, Energy)
-                    modelname=modelname+'v'+version
+            modelname=modelname+'v'+vparams['vString']
                     
-                    outfile=open(mainoutdir+modelname+'.xml','w')
-                    writeTopCompactXml( outfile, version=version, name=modelname, Large=Large, Option=Option, SolenoidMap=SolenoidMap, AntiDID=AntiDID, FwdFields=FwdFields, Energy=Energy )
-                    outfile.close()
-
-                    if not os.path.exists( topdir+modelname ):
-                        print mainoutdirname, modelname
-                        os.symlink( mainoutdirname, topdir+modelname )
+            outfile=open(mainoutdir+'/'+modelname+'.xml','w')
+            writeTopCompactXml( outfile, version=vparams['vString'], name=modelname, Large=Large, Option=Option, SolenoidMap=vparams['SolenoidMap'], AntiDID=vparams['AntiDID'], FwdFields=vparams['FwdFields'] )
+            outfile.close()
+            
+            if not os.path.exists( topdir+modelname ):
+                print mainoutdirname, modelname
+                os.symlink( mainoutdirname, topdir+modelname )
