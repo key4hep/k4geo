@@ -71,5 +71,5 @@
   </plugins>
   <include ref="../ILD_common_v02/Field_Solenoid_Map_s_4.0T.xml"/>
   <include ref="../ILD_common_v02/Field_AntiDID_Map_s.xml"/>
-  <include ref="../ILD_common_v02/Field_FwdMagnets_Ideal_250GeV.xml"/>
+  <include ref="../ILD_common_v02/Field_FwdMagnets_Ideal_500GeV.xml"/>
 </lccdd>
