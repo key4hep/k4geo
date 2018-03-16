@@ -40,6 +40,18 @@ The following ILD detector models are available in lcgeo ( current production mo
 
 ## Details
 
+### ILD_(l/s)5_v06
+same detector geometry as v02 models + realistic solenoid magnetic field map, anti-DID field map and magnetic fields in forward focussing magnets (for 500 GeV)
+
+### ILD_(l/s)5_v05
+same detector geometry as v02 models + realistic solenoid magnetic field map, anti-DID field map and magnetic fields in forward focussing magnets (for 250 GeV)
+
+### ILD_(l/s)5_v04
+same detector geometry as v02 models + realistic solenoid magnetic field map, and magnetic fields in forward focussing magnets (for 500 GeV)
+
+### ILD_(l/s)5_v03
+same detector geometry as v02 models + realistic solenoid magnetic field map, and magnetic fields in forward focussing magnets (for 250 GeV)
+
 ### ILD_l5_v02
  - large ILD model
  - Ecal 
