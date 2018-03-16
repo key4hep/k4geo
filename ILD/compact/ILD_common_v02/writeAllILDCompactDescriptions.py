@@ -1,4 +1,4 @@
-def writeTopCompactXml( outfile, version='99', name="ILD", Large=True, Option=0, SolenoidMap=False, AntiDID=False, FwdFields=False, Energy=500 ):
+def writeTopCompactXml( outfile, version, name, Large, Option, SolenoidMap, AntiDID, FwdFields ):
 
     # defaults for option 0, 1
     # si ecal
@@ -15,12 +15,8 @@ def writeTopCompactXml( outfile, version='99', name="ILD", Large=True, Option=0,
         print 'ERROR: do not know about Option', Option
         return
 
-    if Energy==250:
-        enString='250GeV'
-    elif Energy==500:
-        enString='500GeV'
-    else:
-        print 'ERROR: do not know about Energy', Energy
+    if FwdFields!=250 and FwdFields!=500 and FwdFields!=0:
+        print 'ERROR: do not know about FwdFields at energy', FwdFields
         return
 
     outfile.write('<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"\n')
@@ -117,8 +113,8 @@ def writeTopCompactXml( outfile, version='99', name="ILD", Large=True, Option=0,
         else:
             outfile.write('  <include ref="../ILD_common_v02/Field_AntiDID_Map_s.xml"/>\n')
 
-    if FwdFields:
-        outfile.write('  <include ref="../ILD_common_v02/Field_FwdMagnets_Ideal_'+enString+'.xml"/>\n')
+    if FwdFields>0:
+        outfile.write('  <include ref="../ILD_common_v02/Field_FwdMagnets_Ideal_'+str(FwdFields)+'GeV.xml"/>\n')
 
     outfile.write('</lccdd>\n')
 
@@ -162,8 +158,9 @@ def getVersionParameters(version):
 
 import os
 
-# prename='ILD' # for real one
-prename='test' # for testing
+prename='ILD' # for the real thing
+# prename='test' # for testing
+
 topdir='../'
 mainoutdirname=prename+'_sl5_v02'
 mainoutdir=topdir+mainoutdirname
@@ -171,10 +168,10 @@ mainoutdir=topdir+mainoutdirname
 if not os.path.exists(mainoutdir):
     os.makedirs(mainoutdir)
 
-for Large in (True, False):
-    for Option in range(0,5):
-        for version in range(2, 7):
-            vparams=getVersionParameters(version)
+for version in range(2, 7):
+    vparams=getVersionParameters(version)
+    for Large in (True, False):
+        for Option in range(0,5):
 
             modelname=prename+'_'
             if Large:
@@ -193,5 +190,4 @@ for Large in (True, False):
             outfile.close()
             
             if not os.path.exists( topdir+modelname ):
-                print mainoutdirname, modelname
                 os.symlink( mainoutdirname, topdir+modelname )
