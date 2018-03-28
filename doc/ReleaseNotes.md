@@ -1,3 +1,136 @@
+# v00-16
+
+* 2018-02-22 Dan Protopopescu ([PR#201](https://github.com/iLCSoft/lcgeo/pull/201))
+  - Removed some unused parameters
+
+* 2018-02-22 Daniel Jeans ([PR#200](https://github.com/iLCSoft/lcgeo/pull/200))
+  - to ensure that consistent maximum step lengths are used in all models, moved their definition to common directory
+
+* 2018-02-27 Daniel Jeans ([PR#199](https://github.com/iLCSoft/lcgeo/pull/199))
+  - implement downstream magnets in ILD models:
+      - thickened beampipe in regions of final focus magnets
+      - should reproduce the Mokka models
+      - currently verifying positions with accel. experts, so details may still change
+
+* 2018-02-26 Andre Sailer ([PR#203](https://github.com/iLCSoft/lcgeo/pull/203))
+  - DDSim: allow passing arbitrary arguments to add_argument, needed for #196 , purely behind the scenes
+
+* 2018-02-28 Daniel Jeans ([PR#204](https://github.com/iLCSoft/lcgeo/pull/204))
+  - implement step limits in SEcal06 driver (SEcal06_Helpers.cpp)
+  - apply cal_limits to ECAL descriptions (barrel, endcap, ECring) in ILD_common_v02
+
+* 2018-02-28 Ete Remi ([PR#196](https://github.com/iLCSoft/lcgeo/pull/196))
+  - Added new command line parameters to ddsim
+      - --eventParameters (list) to write event parameters to every output lcio events
+      - --runNumberOffset (int) to offset the run number counter in lcio output file
+      - --eventNumberOffset (int) to offset the event number counter in lcio output file
+
+* 2018-02-13 Andre Sailer ([PR#197](https://github.com/iLCSoft/lcgeo/pull/197))
+  - DDSim: Print the startUp and event processing time separately in addition to total runtime
+
+* 2017-12-01 TiborILD ([PR#186](https://github.com/iLCSoft/lcgeo/pull/186))
+  - update ILD models w/ SDHcal:
+         - change the names of original SimCalorimeterHit collections of SDHCAL to the same ones as introduced in hybrid models, i.e. HCalBarrelRPCHits, HCalEndcapRPCHits,HCalECRingRPCHits
+
+* 2017-11-23 Dan Protopopescu ([PR#185](https://github.com/iLCSoft/lcgeo/pull/185))
+  * SiD_o2_v02: Fix BeamCal segmentation (thanks to @shaojunlu), Fixes #184
+
+* 2017-11-23 Shaojun Lu ([PR#183](https://github.com/iLCSoft/lcgeo/pull/183))
+  - Update lcgeoTests for ILD to ILD_l5_v02 and ILD_s5_v02.
+      - the current models for optimisation studies, will be tested during the build.
+
+* 2018-03-16 Frank Gaede ([PR#210](https://github.com/iLCSoft/lcgeo/pull/210))
+  - improve TPCSDAction
+     - enable writing of TPCSpacePoint and TPCLowPtCollections
+     - TPCLowPtCollections is only written if `TPCLowPtStepLimit==true`
+     - add steering properties to TPCSDAction 
+     - use  in ddsim:
+             `SIM.action.mapActions['tpc'] = ('TPCSDAction', {'TPCLowPtCut': 10*MeV , 'TPCLowPtStepLimit' : True })`
+     - use Mokka default values:
+  ```
+  	Control.TPCLowPtCut = CLHEP::MeV ;
+  	Control.TPCLowPtStepLimit = false ;
+  	Control.TPCLowPtMaxHitSeparation = 5. * CLHEP::mm ;
+  ```
+    -  properly access layerID through IDDescriptor
+
+* 2018-03-14 Daniel Jeans ([PR#209](https://github.com/iLCSoft/lcgeo/pull/209))
+  - new driver for tube of square cross-section (BoxSupport_o1_v01_geo.cpp)
+  - new driver for yoke endcaps with square central hole (Yoke06_Endcaps.cpp)
+  - adjust description of QD0 and first extraction quad, and add its cryostat
+  - remove more upstream magnets
+  - include forward region support tubes: around QD0, outer tube froum outside -> LHCAL, and between ecal endcap and ring
+  - update yoke design to fit with this support structure
+  - implement the above in the ILD_?5_v02 models
+
+* 2017-12-12 Dan Protopopescu ([PR#188](https://github.com/iLCSoft/lcgeo/pull/188))
+  Version 3 of the SiD option 2 model (not final though). Main changes and updates:
+  - cleaned up all XMLs
+  - using DetIDs
+  - unified segmentation and cell ID encoding
+  - added type_flags where missing
+  - updated plugins
+  - added envelopes where missing
+  - stepped design Muon calorimeters use now scintillator instead of RPCs
+  - merged barrel+endcap envelopes for the Muon calorimeter
+  - added or updated certain drivers
+  - included alternate brass HCal 
+  - added common tracker barrel+endcap envelope
+  - implemented some ECal barrel driver fixes
+  - checked: no overlaps
+  - added test_SiD_o2_v03
+  
+  To check:
+  - Muon caloData definitions
+  - ECal towers visibility attributes
+  - LumiCal and BeamCal envelopes
+  
+  A detailed table of changes is available in
+  https://www.evernote.com/l/AJ2Q2yTuLwRGVqYpSNB8HRKx-iBxYQ6Ry0s
+
+* 2018-03-05 Frank Gaede ([PR#207](https://github.com/iLCSoft/lcgeo/pull/207))
+  -  activate G4StepLimiterPhysics in DDSim by default
+      - needed to limit the steps in detector volumes and regions
+
+* 2018-03-05 Dan Protopopescu ([PR#202](https://github.com/iLCSoft/lcgeo/pull/202))
+  Minor corrections to SiD_o2_v03:
+  - Corrected LumiCal grid size parameters
+  - Added hole in the BeamCal (beam pipe parameters not used with the current driver)
+  - Removed DetType_AUXILIARY flag from BeamCal
+  - Removed some unused parameters
+
+* 2018-03-28 Frank Gaede ([PR#214](https://github.com/iLCSoft/lcgeo/pull/214))
+  - Fix for the removal of DDSurfaces which have been merged into DDRec 
+    -  includes from `DDSurfaces` -> `DDRec`
+    - namespace `DDSurfaces` -> `dd4hep::rec`
+
+* 2017-12-11 Oleksandr Viazlo ([PR#193](https://github.com/iLCSoft/lcgeo/pull/193))
+  - new FCCee_o1_v02 detector model
+  - Material budget of VTX was increased for 50%
+  - change of LumiCal_cell_size from 1.0 to 1.81 mm, change of LumiCall offset
+  - add test for FCCee_o1_v02 model, remove test for FCCee_o1_v01
+
+* 2017-12-04 Andre Sailer ([PR#189](https://github.com/iLCSoft/lcgeo/pull/189))
+  - Add CLIC_o3_v14 with fixed LumiCal segmentation
+
+* 2017-12-04 Frank Gaede ([PR#187](https://github.com/iLCSoft/lcgeo/pull/187))
+  - Set DDSim defaults to Geant4 defaults and retain `largest_step = 10 * m` as recommended in the Geant4 manual (~ detector size). This improves simulation time for single muons approximately a factor 2 and for single pi+ for 25%
+
+* 2018-03-27 Ete Remi ([PR#213](https://github.com/iLCSoft/lcgeo/pull/213))
+  - DD4hepSimulation:
+     - Fixed division by zero when no event has been processed, Fixes #208
+
+* 2018-03-22 Oleksandr Viazlo ([PR#211](https://github.com/iLCSoft/lcgeo/pull/211))
+  - create FCCee_dev detector model (extended ECAL endcap, shrinked HCAL ring, reduced magnetic field in yoke from 1.5 T to 1.0 T)
+  - add test for the model
+
+* 2018-03-23 Daniel Jeans ([PR#212](https://github.com/iLCSoft/lcgeo/pull/212))
+  - writeAllILDCompactDescriptions.py: python script to create compact detector descriptions with different variations: large/small, ideal/realistic fields at 250/500 GeV, with or without anti-DID fields, different reconstruction options
+  - compact descriptions all kept in one directory ILD_sl5_v02
+  - each model is linked individually
+  - some models are not yet functional: in particular small models with realistic fields, for which no field maps are yet available. [ ie ILD_s5_v03, v04, v05, v06 ]
+  - ILD_?5_v02 models and their options should be completely unchanged
+
 # v00-15-03
 
 * 2017-11-22 Frank Gaede ([PR#182](https://github.com/ilcsoft/lcgeo/pull/182))
