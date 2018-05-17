@@ -34,7 +34,7 @@
     <constant name="DetID_Tracker_Forward"  value="15"/>
     
     <constant name="DetID_ECal_Barrel"      value="5"/>
-    <constant name="DetID_ECal_Endcap"      value="6"/><!-- was 29! (?) -->
+    <constant name="DetID_ECal_Endcap"      value="29"/><!-- 6 or 29! (?) -->
     
     <constant name="DetID_HCAL_Barrel"      value="7"/>
     <constant name="DetID_HCAL_Endcap"      value="8"/>
@@ -153,6 +153,7 @@
 
     <constant name="GlobalTrackerReadoutID"     type="string" value="system:5,side:-2,layer:6,module:11,sensor:8"/>
     <constant name="GlobalCalorimeterReadoutID" type="string" value="system:5,side:-2,module:8,stave:4,layer:9,submodule:4,x:32:-16,y:-16"/>
+    <constant name="GlobalForwardCaloReadoutID" type="string" value="system:8,barrel:3,layer:8,slice:8,x:32:-16,y:-16"/>
 
   </define>
 
