@@ -61,7 +61,7 @@
       <argument value="radius=ECalBarrel_rmin" />
       <argument value="phi0=0" />
       <argument value="symmetry=ECalBarrel_symmetry" />
-      <argument value="systemID=DetID_Tracker_Barrel" />
+      <argument value="systemID=20" />
     </plugin>
   </plugins>
   
