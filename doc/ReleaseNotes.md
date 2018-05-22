@@ -1,3 +1,19 @@
+# v00-16-01
+
+* 2018-05-22 Frank Gaede ([PR#218](https://github.com/ilcsoft/lcgeo/pull/218))
+  - ILD:  add 4T solenoid field map for ILD_s5_o?_v03 models
+
+* 2018-05-18 Emilia Leogrande ([PR#217](https://github.com/ilcsoft/lcgeo/pull/217))
+  - Vertex_o4_v05.xml: doubled support material in the vertex (barrel and endcap)
+  - This model is made for testing purposes only
+
+* 2018-04-26 Oleksandr Viazlo ([PR#215](https://github.com/ilcsoft/lcgeo/pull/215))
+  - new FCCee_o1_v03 detector model:
+    - extend ECAL endcap
+    - shrink HCAL ring
+    - reduce magnetic field in barrel yoke from 1.5 T to 1.0 T
+    - fix in HCAL layer layout (swap steel absorber with steel wall of cassette)
+
 # v00-16
 
 * 2018-02-22 Dan Protopopescu ([PR#201](https://github.com/iLCSoft/lcgeo/pull/201))
