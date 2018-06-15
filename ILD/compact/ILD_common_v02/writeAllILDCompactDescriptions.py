@@ -15,7 +15,7 @@ def writeTopCompactXml( outfile, version, name, Large, Option, SolenoidMap, Anti
         print 'ERROR: do not know about Option', Option
         return
 
-    if FwdFields!=250 and FwdFields!=500 and FwdFields!=0:
+    if FwdFields!=250 and FwdFields!=500 and FwdFields!=1000 and FwdFields!=0:
         print 'ERROR: do not know about FwdFields at energy', FwdFields
         return
 
@@ -142,6 +142,14 @@ def getVersionParameters(version):
         vparams['SolenoidMap']=True
         vparams['AntiDID']=True
         vparams['FwdFields']=500
+    elif version==7:
+        vparams['SolenoidMap']=True
+        vparams['AntiDID']=False
+        vparams['FwdFields']=1000
+    elif version==8:
+        vparams['SolenoidMap']=True
+        vparams['AntiDID']=True
+        vparams['FwdFields']=1000
     else:
         print 'ERROR: unknown version requested:',version,'!!'
         return vparams
@@ -168,7 +176,7 @@ mainoutdir=topdir+mainoutdirname
 if not os.path.exists(mainoutdir):
     os.makedirs(mainoutdir)
 
-for version in range(2, 7):
+for version in range(2, 9):
     vparams=getVersionParameters(version)
     for Large in (True, False):
         for Option in range(0,5):

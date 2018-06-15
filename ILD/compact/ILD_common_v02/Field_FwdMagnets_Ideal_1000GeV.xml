@@ -1,0 +1,60 @@
+<lccdd>
+
+  <define>
+    <constant name="QD0_fieldStrength_1000" value="249.32*tesla/meter"/>
+    <!-- in SLAC-PUB-11591, at 1 TeV uses 83 T/m, assume scales with energy -->
+    <constant name="QDEX1A_fieldStrength_1000" value="83*tesla/meter"/>
+  </define>
+
+  <fields>
+    <!-- for qd0 z+ @ 1000 GeV -->
+    <field name="QD0_ZPlus_GlobalMultipole" type="MultipoleMagnet" Z="0.0*tesla">
+      <position x="-(TUBE_QD0_Lstar+TUBE_QD0_length/2.0)*sin(ILC_Main_Crossing_Angle/2.0)" 
+		y="0"
+		z="(TUBE_QD0_Lstar+TUBE_QD0_length/2.0)*cos(ILC_Main_Crossing_Angle/2.0)"/>
+      <rotation x="0" y="-ILC_Main_Crossing_Angle/2.0" z="0.0"/>
+      <coefficient coefficient="0.0" skew="0.0"/>
+      <coefficient coefficient="QD0_fieldStrength_1000" skew="0.0"/>
+      <shape type="Tube" rmin="0.0" rmax="TUBE_incoming_QD0andBeyond_InnerRadius"
+         dz="TUBE_QD0_length/2.0"/>
+    </field>
+
+    <!-- for qd0 z- @ 1000 GeV -->
+    <field name="QD0_ZMinus_GlobalMultipole" type="MultipoleMagnet" Z="0.0*tesla">
+      <position x="-(TUBE_QD0_Lstar+TUBE_QD0_length/2.0)*sin(ILC_Main_Crossing_Angle/2.0)" 
+		y="0"
+		z="-(TUBE_QD0_Lstar+TUBE_QD0_length/2.0)*cos(ILC_Main_Crossing_Angle/2.0)"/>
+      <rotation x="0" y="ILC_Main_Crossing_Angle/2.0" z="0.0"/>
+      <coefficient coefficient="0.0" skew="0.0"/>
+      <coefficient coefficient="QD0_fieldStrength_1000" skew="0.0"/>
+      <shape type="Tube" rmin="0.0" rmax="TUBE_incoming_QD0andBeyond_InnerRadius"
+         dz="TUBE_QD0_length/2.0"/>
+    </field>
+
+    <!-- for qdex1a z+ @ 1000 GeV -->
+    <field name="QDEX1A_ZPlus_GlobalMultipole" type="MultipoleMagnet" Z="0.0*tesla">
+      <position x="(TUBE_QDEX1A_Lstar+TUBE_QDEX1A_length/2.0)*sin(ILC_Main_Crossing_Angle/2.0)" 
+		y="0"
+		z="(TUBE_QDEX1A_Lstar+TUBE_QDEX1A_length/2.0)*cos(ILC_Main_Crossing_Angle/2.0)"/>
+      <rotation x="0" y="ILC_Main_Crossing_Angle/2.0" z="0.0"/>
+      <coefficient coefficient="0.0" skew="0.0"/>
+      <coefficient coefficient="QDEX1A_fieldStrength_1000" skew="0.0"/>
+      <shape type="Tube" rmin="0.0" rmax="TUBE_outgoing_QD0andBeyond_InnerRadius"
+             dz="TUBE_QDEX1A_length/2.0"/>
+    </field>
+
+    <!-- for qdex1a z- @ 1000 GeV -->
+    <field name="QDEX1A_ZMinus_GlobalMultipole" type="MultipoleMagnet" Z="0.0*tesla">
+      <position x="(TUBE_QDEX1A_Lstar+TUBE_QDEX1A_length/2.0)*sin(ILC_Main_Crossing_Angle/2.0)" 
+		y="0"
+		z="-(TUBE_QDEX1A_Lstar+TUBE_QDEX1A_length/2.0)*cos(ILC_Main_Crossing_Angle/2.0)"/>
+      <rotation x="0" y="-ILC_Main_Crossing_Angle/2.0" z="0.0"/>
+      <coefficient coefficient="0.0" skew="0.0"/>
+      <coefficient coefficient="QDEX1A_fieldStrength_1000" skew="0.0"/>
+      <shape type="Tube" rmin="0.0" rmax="TUBE_outgoing_QD0andBeyond_InnerRadius"
+         dz="TUBE_QDEX1A_length/2.0"/>
+    </field>
+
+
+  </fields>
+</lccdd>
