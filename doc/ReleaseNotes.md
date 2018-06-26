@@ -1,3 +1,11 @@
+# v00-16-03
+
+* 2018-06-26 Frank Gaede ([PR#224](https://github.com/iLCSoft/lcgeo/pull/224)
+  - make lcgeo (v00-16-03 and higher) compatible w/ DD4hep v01-17-0X releases
+  -  revert https://github.com/iLCSoft/lcgeo/pull/219
+       - use DD4hep rather than dd4hep in ddsim python
+
+
 # v00-16-02
 
 * 2018-06-25 Frank Gaede ([PR#223](https://github.com/ilcsoft/lcgeo/pull/223))
