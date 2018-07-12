@@ -49,9 +49,9 @@ ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh
         ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o3_v14/CLIC_o3_v14.xml --runType=batch -G -N=1 --outputFile=testCLIC_o3_v14.slcio )
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
-SET( test_name "test_FCCee_o1_v03" )
+SET( test_name "test_FCCee_o1_v04" )
 ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
-	ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/compact/FCCee_o1_v03/FCCee_o1_v03.xml --runType=batch -G -N=1 --outputFile=testFCCee_o1_v03.slcio )
+	ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/compact/FCCee_o1_v04/FCCee_o1_v04.xml --runType=batch -G -N=1 --outputFile=testFCCee_o1_v04.slcio )
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
 SET( test_name "test_FCCee_dev" )
