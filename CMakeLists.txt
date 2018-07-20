@@ -118,12 +118,3 @@ FILE(GLOB hfiles "ILD/include/*.h")
 INSTALL(FILES ${hfiles} 
   DESTINATION include/${PackageName} 
   )
-
-INSTALL(DIRECTORY DDSim/DDSim
-  DESTINATION lib/python
-  FILES_MATCHING PATTERN *.py
-  )
-
-INSTALL(PROGRAMS DDSim/bin/ddsim
-  DESTINATION bin
-  )
