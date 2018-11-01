@@ -193,7 +193,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     zDiskPetalsData->angleStrip  = 0;
     
     
-    
+    sdet.setAttributes(theDetector,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
     sdet.addExtension< ZDiskPetalsData >( zDiskPetalsData ) ;
     
     
