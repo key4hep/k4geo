@@ -203,7 +203,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     sdet.addExtension< ZDiskPetalsData >( zDiskPetalsData ) ;
     
     std::cout<<"XXX Vertex endcap layers: "<<zDiskPetalsData->layers.size()<<std::endl;
-
+    sdet.setAttributes(theDetector,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
     return sdet;
 }
 
