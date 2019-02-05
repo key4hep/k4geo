@@ -22,13 +22,21 @@
   </info>
 
   <define>
+
+    <constant name="CommonCryoThicknessFront" value="50*mm"/>
+    <constant name="CommonCryoThicknessBack" value="100*mm"/>
+    <constant name="CommonCryoThicknessSide" value="100*mm"/>
+    <constant name="CryoThicknessFront" value="CommonCryoThicknessFront"/>
+    <constant name="CryoThicknessBack" value="CommonCryoThicknessBack"/>
+    <constant name="CryoThicknessSide" value="CommonCryoThicknessSide"/>
+
     <constant name="LArBathThicknessFront" value="90*mm"/>
     <constant name="LArBathThicknessBack" value="50*mm"/>
     <!-- overall calorimeter volume (cryostat) -->
     <!-- 3 cm air margin -->
-    <constant name="BarCryoECal_rmin" value="BarECal_rmin+3*cm"/>
-    <constant name="BarCryoECal_rmax" value="BarECal_rmax-3*cm"/>
-    <constant name="BarCryoECal_dz" value="BarECal_dz"/>
+    <constant name="BarCryoECal_rmin" value="ECalBarrel_inner_radius+3*cm"/>
+    <constant name="BarCryoECal_rmax" value="ECalBarrel_outer_radius-3*cm"/>
+    <constant name="BarCryoECal_dz" value="ECalBarrel_half_length"/>
     <!-- calorimeter active volume -->
     <constant name="EMBarrel_rmin" value="BarCryoECal_rmin+CommonCryoThicknessFront+LArBathThicknessFront"/>
     <constant name="EMBarrel_rmax" value="BarCryoECal_rmax-CommonCryoThicknessBack-LArBathThicknessBack"/>
@@ -52,7 +60,7 @@
   <readouts>
     <!-- readout for the simulation -->
     <!-- offset in eta is the max eta for barrel - half cell size ( = centre of first cell) -->
-    <readout name="ECalBarrelEta">
+    <readout name="ECalBarrelCollection">
       <segmentation type="GridEta" grid_size_eta="0.01" offset_eta="-1.68024"/>
       <id>system:4,cryo:1,type:3,subtype:3,layer:8,module:11,eta:9</id>
     </readout>
@@ -65,8 +73,11 @@
   </readouts>
 
   <detectors>
-    <detector id="BarECal_id" name="ECalBarrel" type="EmCaloBarrelInclined" readout="ECalBarrelEta">
-      <sensitive type="SimpleCalorimeterSD"/>
+    <detector id="DetID_ECal_Barrel" name="ECalBarrel" type="ECalLArInclinedBarrel_o2_v1"
+    readout="ECalBarrelCollection">
+        <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_BARREL"/>
+
+      <sensitive type="calorimeter"/>
       <dimensions rmin="BarCryoECal_rmin" rmax="BarCryoECal_rmax" dz="BarCryoECal_dz" vis="ecal_envelope"/>
       <cryostat name="ECAL_Cryo">
         <material name="Aluminum"/>
@@ -76,7 +87,8 @@
 	      <back sensitive="false"/> <!-- outer wall of the cryostat -->
       </cryostat>
       <calorimeter name="EM_barrel">
-	      <dimensions rmin="EMBarrel_rmin" rmax="EMBarrel_rmax" dz="EMBarrel_dz" offset="-50/180*pi"/>
+	      <dimensions rmin="ECalBarrel_inner_radius" rmax="ECalBarrel_outer_radius"
+        dz="ECalBarrel_half_length" offset="-50/180*pi"/>
 	      <active thickness="LAr_thickness">
           <material name="LAr"/>
           <overlap offset="0.5"/>

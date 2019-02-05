@@ -526,4 +526,4 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
   return caloDetElem;
 }
 
-DECLARE_DETELEMENT(FCCECalBarrelInclined_v01, createECalBarrelInclined)
+DECLARE_DETELEMENT(ECalLArInclinedBarrel_o2_v1, createECalBarrelInclined)
