@@ -70,6 +70,9 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector)
     Tube    l_tub(rmin, rmax, layerWidth, 2 * M_PI);
     Volume  l_vol(l_nam, l_tub, air);
     l_vol.setVisAttributes(theDetector, x_layer.visStr());
+
+    DetElement layer_pos(sdet, l_nam + "_pos", l_num);
+
     for (xml_coll_t j(x_layer, _U(slice)); j; ++j, ++s_num)  {
       xml_comp_t x_slice = j;
       double thick = x_slice.thickness();
@@ -83,9 +86,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector)
       Vector3D ocyl(  0., mid_r ,  0. );
       Vector3D u(1.,0.,0.), v(0.,1.,0.), n(0.,0.,1.);      
 
-	  VolSurfaceHandle<VolPlaneImpl> cylSurf1( s_vol , SurfaceType( SurfaceType::Helper ) , 0.5*thick  , 0.5*thick , u, v, n, ocyl );
-
-	  volSurfaceList( sdet )->push_back( cylSurf1 );
+      VolSurfaceHandle<VolPlaneImpl> cylSurf1( s_vol , SurfaceType( SurfaceType::Helper ) , 0.5*thick  , 0.5*thick , u, v, n, ocyl );
+      volSurfaceList( layer_pos )->push_back( cylSurf1 );
 	   
 
       s_vol.setAttributes(theDetector, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
@@ -93,14 +95,14 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector)
       pv.addPhysVolID("sensor", s_num);
     }
 
-    DetElement layer_pos(sdet, l_nam + "_pos", l_num);
     pv = envelope.placeVolume(l_vol, Position(0, 0, zmin + layerWidth / 2.));
     pv.addPhysVolID("layer", l_num);
     pv.addPhysVolID("barrel", 1);
     layer_pos.setPlacement(pv);
-    
+
     if (reflect)  {
-	  Tube    l_tub2(rmin, rmax, layerWidth, 2 * M_PI);
+      DetElement layer_neg(sdet, l_nam + "_neg", l_num);
+      Tube    l_tub2(rmin, rmax, layerWidth, 2 * M_PI);
       Volume  l_vol2(l_nam, l_tub2, air);
       l_vol2.setVisAttributes(theDetector, x_layer.visStr());
       for (xml_coll_t j(x_layer, _U(slice)); j; ++j, ++s_num)  {
@@ -116,21 +118,18 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector)
         Vector3D ocyl(  0., mid_r , 0. );
         Vector3D u(1.,0.,0.), v(0.,1.,0.), n(0.,0.,1.);      
 
-	    VolSurfaceHandle<VolPlaneImpl> cylSurf2( s_vol2 , SurfaceType( SurfaceType::Helper ) , 0.5*thick  , 0.5*thick , u, v, -1.*n, -1.*ocyl );
-
-	    volSurfaceList( sdet )->push_back( cylSurf2 );
-	   
+        VolSurfaceHandle<VolPlaneImpl> cylSurf2( s_vol2 , SurfaceType( SurfaceType::Helper ) , 0.5*thick  , 0.5*thick , u, v, -1.*n, -1.*ocyl );
+        volSurfaceList( layer_neg )->push_back( cylSurf2 );
 
         s_vol2.setAttributes(theDetector, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
         pv = l_vol2.placeVolume(s_vol2, Position(0, 0, -1.*(z - zmin - layerWidth / 2 + thick / 2)));
         pv.addPhysVolID("sensor", s_num);
       }
+      pv = envelope.placeVolume(l_vol2, Position(0, 0, -1.*(zmin + layerWidth / 2.)));
+      pv.addPhysVolID("layer", l_num);
+      pv.addPhysVolID("barrel", 2);
+      layer_neg.setPlacement(pv);
 
-    DetElement layer_neg(sdet, l_nam + "_neg", l_num);
-    pv = envelope.placeVolume(l_vol2, Position(0, 0, -1.*(zmin + layerWidth / 2.)));
-    pv.addPhysVolID("layer", l_num);
-    pv.addPhysVolID("barrel", 2);
-    layer_neg.setPlacement(pv);
     }
   }
 
