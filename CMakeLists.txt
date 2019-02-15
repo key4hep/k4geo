@@ -74,6 +74,7 @@ file(GLOB sources
   ./detector/other/*.cpp 
   ./detector/CaloTB/*.cpp 
   ./FCalTB/setup/*.cpp
+  ./plugins/LinearSortingPolicy.cpp
   )
 
 file(GLOB G4sources
