@@ -249,6 +249,29 @@
     <plugins>
         <plugin name="DD4hepVolumeManager"/>
         <plugin name="InstallSurfaceManager"/>
+        <plugin name="lcgeo_LinearSortingPolicy">
+          <argument value="/InnerTrackerEndcapSupport" />
+          <argument value="InnerTracker_Barrel_half_length_0" />
+          <argument value="InnerTracker_Barrel_radius_1" />
+          <argument value="(InnerTracker_outer_radius-InnerTracker_Barrel_radius_1)/(InnerTracker_half_length-InnerTracker_Barrel_half_length_0)" />
+
+          <argument value="/InnerTrackerEndcap/" />
+          <argument value="InnerTracker_Barrel_half_length_0" />
+          <argument value="InnerTracker_Barrel_radius_1" />
+          <argument value="(InnerTracker_outer_radius-InnerTracker_Barrel_radius_1)/(InnerTracker_half_length-InnerTracker_Barrel_half_length_0)" />
+
+          <argument value="/OuterTrackerEndcap/" />
+          <argument value="OuterTracker_Barrel_half_length" />
+          <argument value="OuterTracker_Barrel_radius_1" />
+          <argument value="(OuterTracker_Endcap_radius_2-OuterTracker_Barrel_radius_1)/(OuterTracker_half_length-OuterTracker_Barrel_half_length)" />
+
+          <argument value="/OuterTrackerEndcapSupport" />
+          <argument value="OuterTracker_Barrel_half_length" />
+          <argument value="OuterTracker_Barrel_radius_1" />
+          <argument value="(OuterTracker_Endcap_radius_2-OuterTracker_Barrel_radius_1)/(OuterTracker_half_length-OuterTracker_Barrel_half_length)" />
+
+        </plugin>
+
     </plugins>
 
 
