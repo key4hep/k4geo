@@ -291,6 +291,15 @@
           <argument value="OuterTracker_Barrel_radius_1+3*cm" />
           <argument value="(OuterTracker_Endcap_radius_2-OuterTracker_Barrel_radius_1)/(OuterTracker_half_length-OuterTracker_Barrel_half_length)" />
 
+          <argument value="/VertexEndcap/" />
+          <argument value="VertexEndcap_zmin" />
+          <argument value="VertexBarrel_r3+1*cm" />
+          <argument value="(VertexEndcap_rmax-VertexBarrel_r3+1*cm)/(VertexEndcap_zmax-VertexEndcap_zmin)" />
+
+          <argument value="/VertexVerticalCable" />
+          <argument value="0" />
+          <argument value="VertexBarrel_r3+0.5*cm" />
+          <argument value="0" />
         </plugin>
 
     </plugins>
