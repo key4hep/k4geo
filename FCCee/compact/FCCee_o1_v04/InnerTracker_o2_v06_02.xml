@@ -490,37 +490,40 @@
 
 
 	<detector name="InnerTrackerEndcapSupport" type="TrackerEndcapSupport_o1_v01" reflect="true" region="InnerTrackerEndcapRegion">
-	    <envelope>
-		<shape type="Assembly"/>
-	    </envelope>
-	    <layer id="0" inner_r="InnerTracker_Endcap_radius_0" inner_z="InnerTracker_Endcap_z_0-1*cm" outer_r="456*mm" vis="SupportVis">
-		<slice material="CarbonFiber" thickness="0.330/3.5959*cm" />
-	    </layer>
-	    <layer id="1" inner_r="InnerTracker_Endcap_radius_1" inner_z="InnerTracker_Endcap_z_1+1*cm" outer_r="InnerTracker_Barrel_radius_2+1*mm" vis="SupportVis">
-		<slice material="CarbonFiber" thickness="0.308/3.5959*cm" />
-	    </layer>
-	    <layer id="2" inner_r="InnerTracker_Endcap_radius_2" inner_z="InnerTracker_Endcap_z_2-1*cm" outer_r="InnerTracker_Barrel_radius_2+1*mm" vis="SupportVis">
-		<slice material="CarbonFiber" thickness="0.308/3.5959*cm" />
-	    </layer>
-	    <layer id="3" inner_r="InnerTracker_Endcap_radius_3+20*env_safety" inner_z="InnerTracker_Endcap_z_3+1*cm" outer_r="InnerTracker_Barrel_radius_2+1*mm" vis="SupportVis">
-		<slice material="CarbonFiber" thickness="0.343/3.5959*cm" />
-	    </layer>
-	    <layer id="4" inner_r="InnerTracker_Endcap_radius_4" inner_z="InnerTracker_Endcap_z_4-1*cm" outer_r="InnerTracker_Barrel_radius_2+1*mm" vis="SupportVis">
-		<slice material="CarbonFiber" thickness="0.343/3.5959*cm" />
-	    </layer>
-	    <layer id="5" inner_r="InnerTracker_Endcap_radius_5+20*env_safety" inner_z="InnerTracker_Endcap_z_5+1*cm" outer_r="InnerTracker_Barrel_radius_2+1*mm" vis="SupportVis">
-		<slice material="CarbonFiber" thickness="0.369/3.5959*cm" />
-	    </layer>
-	    <layer id="6" inner_r="InnerTracker_Endcap_radius_6" inner_z="InnerTracker_Endcap_z_6-1*cm" outer_r="InnerTracker_Barrel_radius_2+1*mm" vis="SupportVis">
-		<slice material="CarbonFiber" thickness="0.369/3.5959*cm" />
-	    </layer>
-	    <layer id="7" inner_r="InnerTracker_Barrel_radius_0" inner_z="InnerTracker_Barrel_half_length_1+2*cm" outer_r="InnerTracker_Barrel_radius_2-2*cm" vis="InterlinkVis">
-		<slice material="CarbonFiber" thickness="0.6/3.5959*cm" />
-	    </layer>
-	    <layer id="8" inner_r="InnerTracker_Barrel_radius_2-2*cm+0.6/3.5959*cm" inner_z="InnerTracker_Barrel_half_length_2+2*cm" outer_r="InnerTracker_outer_radius-1*cm" vis="InterlinkVis">
-		<slice material="CarbonFiber" thickness="0.6/3.5959*cm" />
-	    </layer>
-	</detector>
+	  <envelope>
+	    <shape type="Assembly"/>
+	  </envelope>
+	  <layer id="0" inner_r="InnerTracker_Endcap_radius_0" inner_z="InnerTracker_Endcap_z_0-1*cm" outer_r="456*mm" vis="SupportVis">
+	    <slice material="CarbonFiber" thickness="0.330/3.5959*cm" />
+	  </layer>
+	  <layer id="1" inner_r="InnerTracker_Endcap_radius_1" inner_z="InnerTracker_Endcap_z_1+1*cm" outer_r="InnerTracker_Barrel_radius_2+1*mm" vis="SupportVis">
+	    <slice material="CarbonFiber" thickness="0.308/3.5959*cm" />
+	  </layer>
+	  <layer id="2" inner_r="InnerTracker_Endcap_radius_2" inner_z="InnerTracker_Endcap_z_2-1*cm" outer_r="InnerTracker_Barrel_radius_2+1*mm" vis="SupportVis">
+	    <slice material="CarbonFiber" thickness="0.308/3.5959*cm" />
+	  </layer>
+	  <layer id="3" inner_r="InnerTracker_Endcap_radius_3+20*env_safety" inner_z="InnerTracker_Endcap_z_3+1*cm" outer_r="InnerTracker_Barrel_radius_2+1*mm" vis="SupportVis">
+	    <slice material="CarbonFiber" thickness="0.343/3.5959*cm" />
+	  </layer>
+	  <layer id="4" inner_r="InnerTracker_Endcap_radius_4" inner_z="InnerTracker_Endcap_z_4-1*cm" outer_r="InnerTracker_Barrel_radius_2+1*mm" vis="SupportVis">
+	    <slice material="CarbonFiber" thickness="0.343/3.5959*cm" />
+	  </layer>
+	  <layer id="5" inner_r="InnerTracker_Endcap_radius_5+20*env_safety" inner_z="InnerTracker_Endcap_z_5+1*cm" outer_r="InnerTracker_Barrel_radius_2+1*mm" vis="SupportVis">
+	    <slice material="CarbonFiber" thickness="0.369/3.5959*cm" />
+	  </layer>
+	  <layer id="6" inner_r="InnerTracker_Endcap_radius_6" inner_z="InnerTracker_Endcap_z_6-1*cm" outer_r="InnerTracker_Barrel_radius_2+1*mm" vis="SupportVis">
+	    <slice material="CarbonFiber" thickness="0.369/3.5959*cm" />
+	  </layer>
+	  <layer id="7" inner_r="InnerTracker_Barrel_radius_2-2*cm+0.6/3.5959*cm" inner_z="InnerTracker_Barrel_half_length_2+2*cm" outer_r="InnerTracker_outer_radius-1*cm" vis="InterlinkVis">
+	    <slice material="CarbonFiber" thickness="0.6/3.5959*cm" />
+	  </layer>
+	  <layer id="8" inner_r="InnerTracker_Barrel_radius_0" inner_z="InnerTracker_Barrel_half_length_1+2*cm" outer_r="InnerTracker_Barrel_radius_1" vis="InterlinkVis">
+            <slice material="CarbonFiber" thickness="0.6/3.5959*cm" />
+          </layer>
+          <layer id="9" inner_r="InnerTracker_Barrel_radius_1" inner_z="InnerTracker_Barrel_half_length_1+2*cm" outer_r="InnerTracker_Barrel_radius_2-2*cm" vis="InterlinkVis">
+	    <slice material="CarbonFiber" thickness="0.6/3.5959*cm" />
+          </layer>
+    </detector>
 
 
 	<detector name="InnerTrackerInterlink" type="TubeSupport_o1_v01" reflect="true" region="InnerTrackerEndcapRegion">
