@@ -1,0 +1,182 @@
+<lccdd>
+    
+    <comment>Tracking detectors</comment>
+    <detectors>
+        <detector name="Vertex" type="DD4hep_SubdetectorAssembly" vis="VXDVis">
+            <shape type="Tube" rmin="Vertex_inner_radius+env_safety" rmax="Vertex_outer_radius" dz="Vertex_half_length" material="Air"/>
+            <comment>Outer Tracker Assembly</comment>
+            <composite name="VertexBarrel"/>
+            <composite name="VertexEndcap"/>
+            <composite name="VertexVerticalCable"/>
+        </detector>
+    </detectors>
+    
+    
+    <display>
+        <vis name="SiVertexModuleVis"    alpha="1.0" r="1" g="1"    b="0.6"     showDaughters="true"  visible="false"/>
+        <vis name="SiVertexSensitiveVis" alpha="1.0" r="1" g="0.2"  b="0.2"     showDaughters="true"  visible="true"/>
+        <vis name="SiVertexPassiveVis"   alpha="1.0" r="0.274" g="0.274"  b="0.274"       showDaughters="true"  visible="true"/>
+        <vis name="SiVertexCableVis"     alpha="1.0" r="0.85" g="0.53"    b="0.4"       showDaughters="true"  visible="true"/>
+        <vis name="SiVertexAir"          alpha="1.0" r="0" g="0"    b="0"       showDaughters="false"  visible="false"/>
+    </display>
+    
+    <define>
+        <constant name="VertexBarrel_zmax" value="13.0*cm"/>
+        <constant name="VertexBarrel_r1" value="3.1*cm"/>
+        <constant name="VertexBarrel_r2" value="4.4*cm"/>
+        <constant name="VertexBarrel_r3" value="5.8*cm"/>
+        
+        <constant name="VertexBarrel_Sensitive_Thickness"   value="5.000000000e-02*mm"/>
+        <constant name="VertexBarrel_Support_Thickness"     value="14.000000000e-02*mm"/>
+        <constant name="VertexBarrel_DoubleLayer_Gap"       value="2.0*mm"/>
+        
+        <constant name="VertexBarrel_Layer1_width" value="13*mm"/>
+        <constant name="VertexBarrel_Layer2_width" value="24*mm"/>
+        <constant name="VertexBarrel_Layer3_width" value="23.5*mm"/>
+        
+        <constant name="VertexBarrel_Layer1_offset" value="2*mm"/>
+        <constant name="VertexBarrel_Layer2_offset" value="1*mm"/>
+        <constant name="VertexBarrel_Layer3_offset" value="1*mm"/>
+        
+        <constant name="VertexBarrel_Layer1_Staves" value="16"/>
+        <constant name="VertexBarrel_Layer2_Staves" value="12"/>
+        <constant name="VertexBarrel_Layer3_Staves" value="16"/>
+        
+        <constant name="VertexEndcap_rmax"   value="102*mm"/>
+        <constant name="VertexEndcap_zmin"   value="160*mm"/>
+        <constant name="VertexEndcapModules" value="8"/>
+        <constant name="VertexEndcapLayers"  value="3"/>
+        <constant name="VertexEndcap_zmax"   value="VertexEndcap_zmin+136*mm"/>
+        <constant name="VertexEndcap_dz"     value="(VertexEndcap_zmax-VertexEndcap_zmin)/(VertexEndcapModules*VertexEndcapLayers-1)"/>
+        <constant name="VertexEndcap_offset" value="0.3*cm"/>
+        <constant name="VertexEndcap_rmin1"  value="CentralBeamPipe_rmax + VertexEndcap_offset"/>
+        <constant name="VertexEndcap_rmin2"  value="CentralBeamPipe_rmax + VertexEndcap_offset"/>
+        <constant name="VertexEndcap_rmin3"  value="CentralBeamPipe_rmax + VertexEndcap_offset"/>
+        <constant name="VertexEndcap_rmin4"  value="CentralBeamPipe_rmax + VertexEndcap_offset"/>
+        <constant name="VertexEndcapModuleThickness" value="1.22*mm"/>
+        <constant name="VertexEndcapOverlap" value="1*mm"/>
+    </define>
+    
+    
+    
+    <!--  Definition of the readout segmentation/definition  -->
+    <readouts>
+        <readout name="VertexBarrelCollection">
+            <id>${GlobalTrackerReadoutID}</id>
+        </readout>
+        <readout name="VertexEndcapCollection">
+            <id>${GlobalTrackerReadoutID}</id>
+        </readout>
+    </readouts>
+    
+
+    <detectors>
+        <detector name="VertexBarrel" type="ZPlanarTracker" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelCollection"  region="VertexBarrelRegion">
+
+            <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_BARREL"/>
+
+            <layer nLadders="VertexBarrel_Layer1_Staves" phi0="0" id="0">
+                <ladder    distance="VertexBarrel_r1" thickness="VertexBarrel_Support_Thickness" width="VertexBarrel_Layer1_width" length="VertexBarrel_zmax" offset="VertexBarrel_Layer1_offset"    material="Silicon"  vis="SiVertexPassiveVis"/>
+                <sensitive distance="VertexBarrel_r1+VertexBarrel_Support_Thickness" thickness="VertexBarrel_Sensitive_Thickness" width="VertexBarrel_Layer1_width" length="VertexBarrel_zmax" offset="VertexBarrel_Layer1_offset" material="Silicon" vis="SiVertexSensitiveVis" />
+            </layer>
+            <layer nLadders="VertexBarrel_Layer1_Staves" phi0="0" id="1">
+                <sensitive distance="VertexBarrel_r1+VertexBarrel_Support_Thickness+VertexBarrel_Sensitive_Thickness+VertexBarrel_DoubleLayer_Gap" thickness="VertexBarrel_Sensitive_Thickness" width="VertexBarrel_Layer1_width" length="VertexBarrel_zmax" offset="VertexBarrel_Layer1_offset" material="Silicon" vis="SiVertexSensitiveVis" />
+                <ladder    distance="VertexBarrel_r1+VertexBarrel_Support_Thickness+VertexBarrel_Sensitive_Thickness+VertexBarrel_DoubleLayer_Gap+VertexBarrel_Sensitive_Thickness" thickness="VertexBarrel_Support_Thickness" width="VertexBarrel_Layer1_width" length="VertexBarrel_zmax" offset="VertexBarrel_Layer1_offset"    material="Silicon"  vis="SiVertexPassiveVis" />
+            </layer>
+
+
+            <layer nLadders="VertexBarrel_Layer2_Staves" phi0="0" id="2">
+                <ladder    distance="VertexBarrel_r2" thickness="VertexBarrel_Support_Thickness" width="VertexBarrel_Layer2_width" length="VertexBarrel_zmax" offset="VertexBarrel_Layer2_offset"    material="Silicon" vis="SiVertexPassiveVis" />
+                <sensitive distance="VertexBarrel_r2+VertexBarrel_Support_Thickness" thickness="VertexBarrel_Sensitive_Thickness" width="VertexBarrel_Layer2_width" length="VertexBarrel_zmax" offset="VertexBarrel_Layer2_offset" material="Silicon" vis="SiVertexSensitiveVis"/>
+            </layer>
+            <layer nLadders="VertexBarrel_Layer2_Staves" phi0="0" id="3">
+                <sensitive distance="VertexBarrel_r2+VertexBarrel_Support_Thickness+VertexBarrel_Sensitive_Thickness+VertexBarrel_DoubleLayer_Gap" thickness="VertexBarrel_Sensitive_Thickness" width="VertexBarrel_Layer2_width" length="VertexBarrel_zmax" offset="VertexBarrel_Layer2_offset" material="Silicon" vis="SiVertexSensitiveVis"/>
+                <ladder    distance="VertexBarrel_r2+VertexBarrel_Support_Thickness+VertexBarrel_Sensitive_Thickness+VertexBarrel_DoubleLayer_Gap+VertexBarrel_Sensitive_Thickness" thickness="VertexBarrel_Support_Thickness" width="VertexBarrel_Layer2_width" length="VertexBarrel_zmax" offset="VertexBarrel_Layer2_offset"    material="Silicon" vis="SiVertexPassiveVis" />
+            </layer>
+            
+            
+            <layer nLadders="VertexBarrel_Layer3_Staves" phi0="0" id="4">
+                <ladder    distance="VertexBarrel_r3" thickness="VertexBarrel_Support_Thickness" width="VertexBarrel_Layer3_width" length="VertexBarrel_zmax" offset="VertexBarrel_Layer3_offset"    material="Silicon" vis="SiVertexPassiveVis" />
+                <sensitive distance="VertexBarrel_r3+VertexBarrel_Support_Thickness" thickness="VertexBarrel_Sensitive_Thickness" width="VertexBarrel_Layer3_width" length="VertexBarrel_zmax" offset="VertexBarrel_Layer3_offset" material="Silicon" vis="SiVertexSensitiveVis"/>
+            </layer>
+            <layer nLadders="VertexBarrel_Layer3_Staves" phi0="0" id="5">
+                <sensitive distance="VertexBarrel_r3+VertexBarrel_Support_Thickness+VertexBarrel_Sensitive_Thickness+VertexBarrel_DoubleLayer_Gap" thickness="VertexBarrel_Sensitive_Thickness" width="VertexBarrel_Layer3_width" length="VertexBarrel_zmax" offset="VertexBarrel_Layer3_offset" material="Silicon" vis="SiVertexSensitiveVis"/>
+                <ladder    distance="VertexBarrel_r3+VertexBarrel_Support_Thickness+VertexBarrel_Sensitive_Thickness+VertexBarrel_DoubleLayer_Gap+VertexBarrel_Sensitive_Thickness" thickness="VertexBarrel_Support_Thickness" width="VertexBarrel_Layer3_width" length="VertexBarrel_zmax" offset="VertexBarrel_Layer3_offset"    material="Silicon" vis="SiVertexPassiveVis"/>
+            </layer>
+            
+        </detector>
+        
+        
+    </detectors>
+ 
+    <detectors>
+        <detector id="DetID_VXD_Endcap" name="VertexEndcap" type="VertexEndcap_o1_v06" readout="VertexEndcapCollection" reflect="true" region="VertexEndcapRegion">
+            <envelope vis="VXDVis">
+                <shape type="Assembly"/>
+            </envelope>
+            <comment>Vertex Detector Endcaps</comment>
+
+            <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_ENDCAP"/>
+
+            <module name="SiVertexEndcapModule1" vis="SiVertexModuleVis">
+                <trd x1="VertexEndcap_rmin1 * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" x2="VertexEndcap_rmax * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" z="(VertexEndcap_rmax - VertexEndcap_rmin1) / 2" />
+                <!-- Build slices top-down from innermost slice (closest to IP) to outer-most (away from IP)-->
+                <module_component thickness="0.17*mm"  material="Silicon" vis="SiVertexPassiveVis"/>
+                <module_component thickness="0.05*mm"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
+                <module_component thickness="1.00*mm"  material="Air" vis="SiVertexAir" />
+            </module>
+
+            <module name="SiVertexEndcapModule2" vis="SiVertexModuleVis">
+                <trd x1="VertexEndcap_rmin1 * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" x2="VertexEndcap_rmax * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" z="(VertexEndcap_rmax - VertexEndcap_rmin1) / 2" />
+                <!-- Build slices top-down from innermost slice (closest to IP) to outer-most (away from IP)-->
+                <module_component thickness="1.00*mm"  material="Air" vis="SiVertexAir" />
+                <module_component thickness="0.05*mm"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
+                <module_component thickness="0.17*mm"  material="Silicon" vis="SiVertexPassiveVis"/>
+
+            </module>
+
+            <layer id="0"  vis="SiVertexLayerVis">
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin1) / 2" zstart="VertexEndcap_zmin-VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="VertexEndcap_dz" phi0="pi/(VertexEndcapModules)" module="SiVertexEndcapModule1"/>
+            </layer>
+            <layer id="1"  vis="SiVertexLayerVis">
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin1) / 2" zstart="VertexEndcap_zmin+VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="VertexEndcap_dz" phi0="pi/(VertexEndcapModules)" module="SiVertexEndcapModule2"/>
+            </layer>
+            <layer id="2"  vis="SiVertexLayerVis">
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin2) / 2" zstart="VertexEndcap_zmin+VertexEndcapModules*VertexEndcap_dz-VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="VertexEndcap_dz" phi0="pi/(VertexEndcapModules)" module="SiVertexEndcapModule1"/>
+            </layer>
+            <layer id="3"  vis="SiVertexLayerVis">
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin2) / 2" zstart="VertexEndcap_zmin+VertexEndcapModules*VertexEndcap_dz+VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="VertexEndcap_dz" phi0="pi/(VertexEndcapModules)" module="SiVertexEndcapModule2"/>
+            </layer>
+            <layer id="4"  vis="SiVertexLayerVis">
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin3) / 2" zstart="VertexEndcap_zmin+2*VertexEndcapModules*VertexEndcap_dz-VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="VertexEndcap_dz" phi0="pi/(VertexEndcapModules)" module="SiVertexEndcapModule1"/>
+            </layer>
+            <layer id="5"  vis="SiVertexLayerVis">
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin3) / 2" zstart="VertexEndcap_zmin+2*VertexEndcapModules*VertexEndcap_dz+VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="VertexEndcap_dz" phi0="pi/(VertexEndcapModules)" module="SiVertexEndcapModule2"/>
+            </layer>
+        </detector>
+
+        <detector name="VertexVerticalCable" type="TrackerEndcapSupport_o1_v01" reflect="true"  region="VertexEndcapRegion">
+            <envelope>
+                <shape type="Assembly"/>
+            </envelope>
+            <layer id="1" inner_r="VertexBarrel_r1" inner_z="VertexBarrel_zmax+1*mm" outer_r="Vertex_outer_radius-5*env_safety" vis="SiVertexCableVis">
+                <slice material="Copper" thickness="0.02*mm" />
+            </layer>
+        </detector>
+
+    </detectors>
+
+
+    <plugins>
+        <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
+            <argument value="VertexEndcap"/>
+            <argument value="dimension=2"/>
+            <argument value="u_x=-1."/>
+            <argument value="v_z=1."/>
+            <argument value="n_y=1."/>
+        </plugin>
+    </plugins>
+    
+    
+    
+</lccdd>
