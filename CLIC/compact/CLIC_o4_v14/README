@@ -1,0 +1,23 @@
+***************************
+Simple DECAL example
+Based on CLIC_03_v14
+R.R. Bosley  (robert.ross.bosley@cern.ch)
+N.K. Watson  (nigel.watson@cern.ch)
+***************************
+
+Setup:
+source init_ilcsoft.sh
+
+Simulation:
+ddsim --compactFile=DECAL_CLIC_o3_v14/CLIC_o3_v14.xml --inputFile example.slcio -N 5 --outputFile=output.slcio --steeringFile=clic_steer.py
+
+Reconstruction:
+**Set up for specific example processor**
+cd Marlin/build
+source setup.sh
+
+**Run reconstruction using Marlin**
+Marlin --global.LCIOInputFiles==../../output.slcio --MyHist.HistogramDump==Histograms.root --MyHist.MCEnergy==10 mysteer.xml
+
+Check Histograms (NHits, Position, etc.)
+root -l Histograms.root

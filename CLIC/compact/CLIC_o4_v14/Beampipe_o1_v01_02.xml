@@ -1,0 +1,40 @@
+<lccdd>
+    <!--  Definition of global dictionary constants          -->
+    <define>
+    </define>
+    
+    <!--  Definition of the used visualization attributes    -->
+    <display>
+        <vis name="BeamPipeVis" alpha="0.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="false"/>
+        <vis name="TubeVis"  alpha="1.0" r="1.0" g="0.7"  b="0.5"   showDaughters="true"  visible="true"/>
+        <vis name="VacVis"   alpha="1.0" r="1.0" g="1.0"  b="1.0"   showDaughters="true"  visible="false"/>
+    </display>
+    
+    
+    <detectors>
+        <comment>Beampipe</comment>
+        
+        <detector name="Beampipe" type="DD4hep_Beampipe_o1_v01" vis="BeamPipeVis" region="BeampipeRegion">
+            <parameter crossingangle="CrossingAngle" />
+            <envelope vis="BlueVis">
+                <shape type="Assembly"/>
+            </envelope>
+
+            <!--             &A                       Z1                  Z2                    RIn1                RIn2                                 ROut1                        ROut2                                              Material -->
+            <section type="Center"               start="0*mm"    end="CentralBeamPipe_zmax" rMin1="29.4*mm"  rMin2="29.4*mm"                             rMax1="CentralBeamPipe_rmax"  rMax2="CentralBeamPipe_rmax"                       material="Beryllium" name="VertexInner"/>
+            <section type="Center" start="CentralBeamPipe_zmax"  end="337*mm"               rMin1="29.4*mm"  rMin2="29.4*mm"                             rMax1="30.0*mm"               rMax2="33.4*mm"                                    material="Iron"      name="ConeConnector"/>
+            <section type="Center"               start="337*mm"  end="ConeBeamPipe_zmax"    rMin1="29.4*mm"  rMin2="235.2*mm"                            rMax1="33.4*mm"               rMax2="ConeBeamPipe_rmax"                          material="Iron"      name="BigCone"/>
+            <section type="Center"               start="2080*mm" end="BigBeamPipe_zmax"     rMin1="235.2*mm" rMin2="235.2*mm"                            rMax1="ConeBeamPipe_rmax"     rMax2="ConeBeamPipe_rmax"                          material="Iron"      name="LumiCalConnector"/>
+            <section type="PunchedCenter"        start="BigBeamPipe_zmax" end="BigBeamPipe_zmax+3*mm"              rMin1="0.0*mm"   rMin2="98.0*mm"                             rMax1="240.0*mm"              rMax2="240.0*mm"                                   material="Iron"      name="LumiCalFront"/>
+            <section type="DnstreamClippedFront" start="BigBeamPipe_zmax+3*mm" end="3170*mm"              rMin1="98.0*mm"  rMin2="98.0*mm"                             rMax1="99.0*mm"               rMax2="99.0*mm"                                    material="Iron"      name="BeamCalConnector"/>
+            <section type="PunchedDnstream"      start="3170*mm" end="3173*mm"              rMin1="2.7*mm"   rMin2="31.0*mm"                             rMax1="99.0*mm"               rMax2="99.0*mm"                                    material="Iron"      name="BeamCalFront"/>
+            <section type="Dnstream"             start="3173*mm" end="3500*mm"              rMin1="31.0*mm"  rMin2="31.0*mm"                             rMax1="32.0*mm-0.1*env_safety" rMax2="32.0*mm-0.1*env_safety"                    material="Iron"      name="BeamCalInnerDownstream"/>
+            <section type="UpstreamSlicedFront"  start="3173*mm" end="3281*mm"              rMin1="2.7*mm"   rMin2="2.7*mm"              rMax1="BeamPipe_UpstreamBeamCal-0.1*env_safety"  rMax2="BeamPipe_UpstreamBeamCal-0.1*env_safety" material="Iron"      name="BeamCalInnerUpstream"/>
+            <section type="Upstream"             start="3281*mm" end="3835*mm"              rMin1="2.7*mm"   rMin2="2.7*mm"                              rMax1="BeamPipe_UpstreamBeamCal" rMax2="BeamPipe_UpstreamBeamCal"                material="Iron"      name="UpstreamSmall"/>
+            <section type="Upstream"             start="3835*mm" end="3835*mm+10*mm"        rMin1="2.7*mm"   rMin2="12*mm"                               rMax1="BeamPipe_UpstreamBeamCal" rMax2="13.5*mm"                                 material="Iron"      name="UpstreamCone"/>
+            <section type="Upstream"             start="3835*mm+10*mm" end="BeamPipe_end"   rMin1="12*mm"    rMin2="12*mm"                               rMax1="13.5*mm"               rMax2="13.5*mm"                                    material="Iron"      name="UpstreamLarge"/>
+            <section type="Dnstream"             start="3500*mm" end="BeamPipe_end"         rMin1="31.0*mm"  rMin2="BeamPipe_end*tan(CrossingAngle*0.5)" rMax1="32.0*mm"               rMax2="BeamPipe_end*tan(CrossingAngle*0.5)+2.0*mm" material="Iron"      name="DownstreamCone"/>
+            
+        </detector>
+    </detectors>
+</lccdd>
