@@ -350,10 +350,15 @@
             <layer id="6" inner_r="InnerTracker_Endcap_radius_6" inner_z="InnerTracker_Endcap_z_6-1*cm" outer_r="555*mm" vis="SupportVis">
                 <slice material="CarbonFiber" thickness="0.369/3.5959*cm" />
             </layer>
-            <layer id="7" inner_r="InnerTracker_Barrel_radius_0" inner_z="InnerTracker_Barrel_half_length_1+2*cm" outer_r="InnerTracker_Barrel_radius_2-2*cm" vis="InterlinkVis">
+            <layer id="7" inner_r="InnerTracker_Barrel_radius_2-2*cm+0.6/3.5959*cm" inner_z="InnerTracker_Barrel_half_length_2+2*cm" outer_r="InnerTracker_outer_radius-1*cm" vis="InterlinkVis">
                 <slice material="CarbonFiber" thickness="0.6/3.5959*cm" />
             </layer>
-            <layer id="8" inner_r="InnerTracker_Barrel_radius_2-2*cm+0.6/3.5959*cm" inner_z="InnerTracker_Barrel_half_length_2+2*cm" outer_r="InnerTracker_outer_radius-1*cm" vis="InterlinkVis">
+
+            <!-- the material between inner tracker barrel and inner tracker endcaps -->
+            <layer id="8" inner_r="InnerTracker_Barrel_radius_0" inner_z="InnerTracker_Barrel_half_length_1+2*cm" outer_r="InnerTracker_Barrel_radius_1" vis="InterlinkVis">
+                <slice material="CarbonFiber" thickness="0.6/3.5959*cm" />
+            </layer>
+            <layer id="9" inner_r="InnerTracker_Barrel_radius_1" inner_z="InnerTracker_Barrel_half_length_1+2*cm" outer_r="InnerTracker_Barrel_radius_2-2*cm" vis="InterlinkVis">
                 <slice material="CarbonFiber" thickness="0.6/3.5959*cm" />
             </layer>
         </detector>
