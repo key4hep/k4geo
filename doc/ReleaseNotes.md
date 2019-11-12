@@ -1,3 +1,37 @@
+# v00-16-04
+
+* 2019-09-11 Andre Sailer ([PR#237](https://github.com/iLCSoft/lcgeo/pull/237))
+  - CLIC_o4_v14: New CLIC detector model with DECal, based on CLIC_o3_v14. Ported from https://github.com/robbie-bosley/CLIC_DECAL
+
+* 2019-05-23 Emilia Leogrande ([PR#236](https://github.com/iLCSoft/lcgeo/pull/236))
+  - FCCee_o2_v01: new detector model with smaller beampipe radius (10 mm instead of 15 mm) and closer vertex subdetector
+
+* 2019-02-20 Emilia Leogrande ([PR#235](https://github.com/iLCSoft/lcgeo/pull/235))
+  - FCCee_o1_v04: Implemented changes the new sorting policy
+     - Analogous of #234
+
+* 2019-02-19 Andre Sailer ([PR#234](https://github.com/iLCSoft/lcgeo/pull/234))
+  - Plugin: lcgeo_LinearSortingPolicy : new plugin to set the sorting policy for surfaces identified by placement path based on their z position and a linear function, requires AIDASoft/DD4hep#486
+  - CLIC_o3_v14: add use of lcgeo_LinearSortingPolicy for TrackerEndcaps
+  - TrackerEndcapSupport_o1_v01: attach support volumes to different DetElements so we can attach different extensions to them
+
+* 2018-11-07 Marko Petric ([PR#232](https://github.com/iLCSoft/lcgeo/pull/232))
+  - Add vis attribute for better visualisation of VertexEndcap_o1_v06
+
+* 2018-11-01 Marko Petric ([PR#231](https://github.com/iLCSoft/lcgeo/pull/231))
+  - Add vis attribute for better visualisation of `TrackerEndcap_o1_v02`
+
+* 2018-08-23 Oleksandr Viazlo ([PR#229](https://github.com/iLCSoft/lcgeo/pull/229))
+  - new FCCee_o1_v04 detector model: 
+    - update on MDI and shielding from Anna
+    - merge Materials_v01.xml and materials.xml into one file and remove unused items
+
+* 2018-08-09 Andre Sailer ([PR#228](https://github.com/iLCSoft/lcgeo/pull/228))
+  - ddsim program moved to DD4hep, AIDAsoft/DD4hep#420
+
+* 2018-07-05 Andre Sailer ([PR#225](https://github.com/iLCSoft/lcgeo/pull/225))
+  - Tests: Using other cmake variables to be able to pick up the lcgeo tests from outside of lcgeo
+
 # v00-16-02
 
 * 2018-06-25 Frank Gaede ([PR#223](https://github.com/ilcsoft/lcgeo/pull/223))
