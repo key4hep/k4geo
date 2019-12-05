@@ -109,6 +109,7 @@ void SEcal06_Helpers::printSEcal06LayerInfo( dd4hep::rec::LayeredCalorimeterData
   std::cout<<"    caloLayer.inner_nInteractionLengths: "<< caloLayer.inner_nInteractionLengths <<std::endl;
   std::cout<<"    caloLayer.inner_thickness: "          << caloLayer.inner_thickness <<std::endl;
   std::cout<<"    caloLayer.sensitive_thickness: "      << caloLayer.sensitive_thickness <<std::endl;
+  std::cout<<"    caloLayer.absorberThickness: "        << caloLayer.absorberThickness  <<std::endl;
   std::cout<<"    caloLayer.cellSize0, 1: "             << caloLayer.cellSize0 << " " << caloLayer.cellSize1 << std::endl;
   std::cout<<"    caloLayer.outer_nRadiationLengths: "  << caloLayer.outer_nRadiationLengths <<std::endl;
   std::cout<<"    caloLayer.outer_nInteractionLengths: "<< caloLayer.outer_nInteractionLengths <<std::endl;
@@ -244,6 +245,8 @@ void SEcal06_Helpers::updateCaloLayers(double thickness,
     _layer_nRadiationLengths   += (thickness)/mat.radLength() ;
     _layer_nInteractionLengths += (thickness)/mat.intLength() ;
   }
+
+  if ( isAbsorber )  _caloLayer.absorberThickness = _layer_thickness;
 
   // should we finish off the current layer?
   if ( isFinal ||  // last slice of calo
