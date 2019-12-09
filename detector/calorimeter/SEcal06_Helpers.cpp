@@ -245,7 +245,6 @@ void SEcal06_Helpers::updateCaloLayers(double thickness,
     _layer_nRadiationLengths   += (thickness)/mat.radLength() ;
     _layer_nInteractionLengths += (thickness)/mat.intLength() ;
   }
-
   if ( isAbsorber )  _caloLayer.absorberThickness = _layer_thickness;
 
   // should we finish off the current layer?
