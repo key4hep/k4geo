@@ -1,3 +1,11 @@
+# v00-16-05
+
+* 2019-12-11 Ete Remi ([PR#240](https://github.com/iLCSoft/lcgeo/pull/240))
+  - Fixed steering file for unit test. Get units from g4units.
+
+* 2019-12-11 Daniel Jeans ([PR#239](https://github.com/iLCSoft/lcgeo/pull/239))
+  - SEcal06 driver: add absorber layer thickness to layer information (this had been missing)
+
 # v00-16-04
 
 * 2019-09-11 Andre Sailer ([PR#237](https://github.com/iLCSoft/lcgeo/pull/237))
