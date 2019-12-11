@@ -1,5 +1,5 @@
 from DDSim.DD4hepSimulation import DD4hepSimulation
-from SystemOfUnits import mm, GeV, MeV, keV
+from g4units import mm, GeV, MeV, keV
 
 SIM = DD4hepSimulation()
 SIM.compactFile = "/data/sailer/software/LCGeo_Auth/ILD/compact/ILD_o1_v05/ILD_o1_v05.xml"
