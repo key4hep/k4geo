@@ -346,7 +346,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	  s_pos_y += s_thickness/2.;
 
 	  Position   s_pos(0,s_pos_y,0);      // Position of the layer.
-	  PlacedVolume  s_phv = ChamberLog.placeVolume(s_vol,s_pos);
+	  // PlacedVolume  s_phv = 
+    ChamberLog.placeVolume(s_vol,s_pos);
 	  // slice.setPlacement(s_phv);
 
 	  // Increment x position for next slice.
