@@ -385,6 +385,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	    // DetElement stave(stave_layer_name,det_id);;
 	    // stave.setPlacement(layer_phv);
 	    // sdet.add(stave);
+      plvec.push_back({stave_layer_name,layer_phv});
 	    phirot -= M_PI/symmetry*2.0;
 
 	  }
@@ -419,9 +420,15 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
       m_phv.addPhysVolID("tower", 1);// Not used
       string m_name = _toString(module_id,"module%d");
       DetElement sd (m_name,det_id);
+      
+      for( auto deelts : plvec ) {
+      	std::string deteltname = deelts.first +_toString(module_id,"module%d");
+      	DetElement layerDet (sd, deteltname, det_id);
+      	layerDet.setPlacement( deelts.second ) ;
+      }
+      
       sd.setPlacement(m_phv);
       sdet.add(sd);
-      
     }
 
   sdet.addExtension< LayeredCalorimeterData >( caloData ) ;
