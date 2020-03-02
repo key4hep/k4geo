@@ -313,7 +313,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 
 	  Box        s_box(slab_dim_x,slab_dim_y,slab_dim_z);
 	  Volume     s_vol(det_name+"_"+l_name+"_"+s_name,s_box,slice_material);
-          // DetElement slice(layer,s_name,det_id);
 
 	  nRadiationLengths   += s_thickness/(2.*slice_material.radLength());
 	  nInteractionLengths += s_thickness/(2.*slice_material.intLength());
@@ -346,9 +345,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	  s_pos_y += s_thickness/2.;
 
 	  Position   s_pos(0,s_pos_y,0);      // Position of the layer.
-	  // PlacedVolume  s_phv = 
-    ChamberLog.placeVolume(s_vol,s_pos);
-	  // slice.setPlacement(s_phv);
+        ChamberLog.placeVolume(s_vol,s_pos);
 
 	  // Increment x position for next slice.
 	  s_pos_y += s_thickness/2.;
@@ -383,10 +380,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	    layer_phv.addPhysVolID("layer", l_num).addPhysVolID("stave",j+1);
 	    string     stave_name  =  _toString(j+1,"stave%d");
 	    string stave_layer_name = stave_name+_toString(l_num,"layer%d");
-	    // DetElement stave(stave_layer_name,det_id);;
-	    // stave.setPlacement(layer_phv);
-	    // sdet.add(stave);
-      plvec.push_back({stave_layer_name,layer_phv});
+          plvec.push_back({stave_layer_name,layer_phv});
 	    phirot -= M_PI/symmetry*2.0;
 
 	  }
