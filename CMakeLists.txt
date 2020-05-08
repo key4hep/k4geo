@@ -33,6 +33,7 @@ ENDIF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
 option(BUILD_TESTING "Enable and build tests" ON)
 option(CMAKE_MACOSX_RPATH "Build with rpath on macos" ON)
+option(INSTALL_COMPACT_FILES "Copy compact files to install area" OFF)
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -119,3 +120,9 @@ FILE(GLOB hfiles "ILD/include/*.h")
 INSTALL(FILES ${hfiles} 
   DESTINATION include/${PackageName} 
   )
+
+#--- install compact files------------------------------
+if(INSTALL_COMPACT_FILES)
+INSTALL(DIRECTORY CaloTB CLIC FCalTB FCCee ILD fieldmaps SiD DESTINATION compact/ )
+
+endif()
