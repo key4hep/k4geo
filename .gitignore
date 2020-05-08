@@ -1,0 +1,48 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+*.pyc
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Build and install directories
+bin/
+lib/
+/include
+/python/
+build/
+
+# CMake config files
+*Config.cmake
+*ConfigVersion.cmake
+Version.h
+
+# emacs backup files
+*~
+
+*.DS_Store
+
