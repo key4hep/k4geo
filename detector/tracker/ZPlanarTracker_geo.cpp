@@ -79,7 +79,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
   try {
     isStripDetector = x_det.attr<bool>( _Unicode(isStripDetector) ) ;
 
-  } catch(std::runtime_error ){}
+  } catch(std::runtime_error& ){}
 
   //=========  loop over layer elements in xml  ======================================
 
@@ -130,7 +130,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     int    sens_nmodules  = 1;
     try {
       sens_nmodules = x_sensitive.nmodules();
-    } catch (const std::exception& e) {
+    } catch (const std::exception& error) {
       sens_nmodules = 1;
     }
     double sens_modlength = sens_zhalf*2.0 / sens_nmodules;
@@ -188,6 +188,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     Vector3D u( 0. , 1. , 0. ) ;
     Vector3D v( 0. , 0. , 1. ) ;
     Vector3D n( 1. , 0. , 0. ) ;
+
     //    Vector3D o( 0. , 0. , 0. ) ;
 
     // compute the inner and outer thicknesses that need to be assigned to the tracking surface
