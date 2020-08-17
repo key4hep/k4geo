@@ -28,7 +28,7 @@ wrt = IOIMPL.LCFactory.getInstance().createLCWriter( )
 
 wrt.open( outfile , EVENT.LCIO.WRITE_NEW ) 
 
-print " opened outfile: " , outfile
+print( " opened outfile: " , outfile )
 
 random.seed()
 
