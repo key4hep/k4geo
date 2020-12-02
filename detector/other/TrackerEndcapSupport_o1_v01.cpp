@@ -84,11 +84,11 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector)
       double mid_r = 0.5 * ( rmin + rmax ) ;
       //      Vector3D ocyl(  0., mid_r , z - zmin - layerWidth / 2 + thick / 2 );
       Vector3D ocyl(  0., mid_r ,  0. );
-      Vector3D u(1.,0.,0.), v(0.,1.,0.), n(0.,0.,1.);      
+      Vector3D u(1.,0.,0.), v(0.,1.,0.), n(0.,0.,1.);
 
       VolSurfaceHandle<VolPlaneImpl> cylSurf1( s_vol , SurfaceType( SurfaceType::Helper ) , 0.5*thick  , 0.5*thick , u, v, n, ocyl );
       volSurfaceList( layer_pos )->push_back( cylSurf1 );
-	   
+
 
       s_vol.setAttributes(theDetector, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
       pv = l_vol.placeVolume(s_vol, Position(0, 0, z - zmin - layerWidth / 2 + thick / 2));
@@ -110,13 +110,13 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector)
         double thick = x_slice.thickness();
         Material mat = theDetector.material(x_slice.materialStr());
         string s_nam = l_nam + _toString(s_num, "_slice%d");
-        Volume s_vol2(s_nam, Tube(rmin, rmax, thick), mat);
+        Volume s_vol2(s_nam, Tube(rmin, rmax, thick/2.), mat);
 
         //Add surface to the support
 	double mid_r = 0.5 * ( rmin + rmax ) ;
 	//        Vector3D ocyl(  0., mid_r , z - zmin - layerWidth / 2 + thick / 2 );
         Vector3D ocyl(  0., mid_r , 0. );
-        Vector3D u(1.,0.,0.), v(0.,1.,0.), n(0.,0.,1.);      
+        Vector3D u(1.,0.,0.), v(0.,1.,0.), n(0.,0.,1.);
 
         VolSurfaceHandle<VolPlaneImpl> cylSurf2( s_vol2 , SurfaceType( SurfaceType::Helper ) , 0.5*thick  , 0.5*thick , u, v, -1.*n, -1.*ocyl );
         volSurfaceList( layer_neg )->push_back( cylSurf2 );
