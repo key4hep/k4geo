@@ -43,6 +43,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector)
   int           det_id    = x_det.id();
   string        det_name  = x_det.nameStr();
   DetElement    sdet(det_name, det_id);
+  string side_name[2] = {"_pos", "_neg"};
+  double side_sign[2] = {+1., -1.};
 
   Volume envelope = dd4hep::xml::createPlacedEnvelope(theDetector,  e , sdet) ;
 
@@ -71,65 +73,38 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector)
     Volume  l_vol(l_nam, l_tub, air);
     l_vol.setVisAttributes(theDetector, x_layer.visStr());
 
-    DetElement layer_pos(sdet, l_nam + "_pos", l_num);
+    // Creating the original and reflected sides in a loop
+    for (size_t side=0; side < 2; ++side) {
+      // Stopping after the original if reflection is disabled
+      if (side > 0 && !reflect) break;
 
-    for (xml_coll_t j(x_layer, _U(slice)); j; ++j, ++s_num)  {
-      xml_comp_t x_slice = j;
-      double thick = x_slice.thickness();
-      Material mat = theDetector.material(x_slice.materialStr());
-      string s_nam = l_nam + _toString(s_num, "_slice%d");
-      Volume s_vol(s_nam, Tube(rmin, rmax, thick/2.), mat); //NN: Tube is a MyConeSeg, takes half thickness
+      DetElement layer(sdet, l_nam + side_name[side], l_num);
 
-      //Add surface to the support
-      double mid_r = 0.5 * ( rmin + rmax ) ;
-      //      Vector3D ocyl(  0., mid_r , z - zmin - layerWidth / 2 + thick / 2 );
-      Vector3D ocyl(  0., mid_r ,  0. );
-      Vector3D u(1.,0.,0.), v(0.,1.,0.), n(0.,0.,1.);      
-
-      VolSurfaceHandle<VolPlaneImpl> cylSurf1( s_vol , SurfaceType( SurfaceType::Helper ) , 0.5*thick  , 0.5*thick , u, v, n, ocyl );
-      volSurfaceList( layer_pos )->push_back( cylSurf1 );
-	   
-
-      s_vol.setAttributes(theDetector, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
-      pv = l_vol.placeVolume(s_vol, Position(0, 0, z - zmin - layerWidth / 2 + thick / 2));
-      pv.addPhysVolID("sensor", s_num);
-    }
-
-    pv = envelope.placeVolume(l_vol, Position(0, 0, zmin + layerWidth / 2.));
-    pv.addPhysVolID("layer", l_num);
-    pv.addPhysVolID("barrel", 1);
-    layer_pos.setPlacement(pv);
-
-    if (reflect)  {
-      DetElement layer_neg(sdet, l_nam + "_neg", l_num);
-      Tube    l_tub2(rmin, rmax, layerWidth, 2 * M_PI);
-      Volume  l_vol2(l_nam, l_tub2, air);
-      l_vol2.setVisAttributes(theDetector, x_layer.visStr());
       for (xml_coll_t j(x_layer, _U(slice)); j; ++j, ++s_num)  {
         xml_comp_t x_slice = j;
         double thick = x_slice.thickness();
         Material mat = theDetector.material(x_slice.materialStr());
         string s_nam = l_nam + _toString(s_num, "_slice%d");
-        Volume s_vol2(s_nam, Tube(rmin, rmax, thick), mat);
+        Volume s_vol(s_nam, Tube(rmin, rmax, thick/2.), mat); //NN: Tube is a MyConeSeg, takes half thickness
 
         //Add surface to the support
-	double mid_r = 0.5 * ( rmin + rmax ) ;
-	//        Vector3D ocyl(  0., mid_r , z - zmin - layerWidth / 2 + thick / 2 );
-        Vector3D ocyl(  0., mid_r , 0. );
-        Vector3D u(1.,0.,0.), v(0.,1.,0.), n(0.,0.,1.);      
+        double mid_r = 0.5 * ( rmin + rmax ) ;
+        Vector3D ocyl(  0., mid_r ,  0. );
+        Vector3D u(1.,0.,0.), v(0.,1.,0.), n(0.,0.,1.);
 
-        VolSurfaceHandle<VolPlaneImpl> cylSurf2( s_vol2 , SurfaceType( SurfaceType::Helper ) , 0.5*thick  , 0.5*thick , u, v, -1.*n, -1.*ocyl );
-        volSurfaceList( layer_neg )->push_back( cylSurf2 );
+        VolSurfaceHandle<VolPlaneImpl> cylSurf( s_vol , SurfaceType( SurfaceType::Helper ) , 0.5*thick  , 0.5*thick , u, v, side_sign[side]*n, side_sign[side]*ocyl );
+        volSurfaceList( layer )->push_back( cylSurf );
 
-        s_vol2.setAttributes(theDetector, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
-        pv = l_vol2.placeVolume(s_vol2, Position(0, 0, -1.*(z - zmin - layerWidth / 2 + thick / 2)));
+
+        s_vol.setAttributes(theDetector, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+        pv = l_vol.placeVolume(s_vol, Position(0, 0, side_sign[side]*(z - zmin - layerWidth / 2 + thick / 2)));
         pv.addPhysVolID("sensor", s_num);
       }
-      pv = envelope.placeVolume(l_vol2, Position(0, 0, -1.*(zmin + layerWidth / 2.)));
-      pv.addPhysVolID("layer", l_num);
-      pv.addPhysVolID("barrel", 2);
-      layer_neg.setPlacement(pv);
 
+      pv = envelope.placeVolume(l_vol, Position(0, 0, side_sign[side]*(zmin + layerWidth / 2.)));
+      pv.addPhysVolID("layer", l_num);
+      pv.addPhysVolID("barrel", side+1);
+      layer.setPlacement(pv);
     }
   }
 
