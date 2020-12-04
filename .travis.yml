@@ -13,7 +13,7 @@ env:
 
 
 before_install:
-  - wget --no-check-certificate https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest_all.deb
+  - wget https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest_all.deb
   - sudo dpkg -i cvmfs-release-latest_all.deb
   - sudo apt-get update
   - sudo apt-get install cvmfs cvmfs-config-default
@@ -24,8 +24,14 @@ before_install:
   - sudo /etc/init.d/autofs stop
   - sudo cvmfs_config setup
   - sudo mkdir -p /cvmfs/clicdp.cern.ch
+  - sudo mkdir -p /cvmfs/geant4.cern.ch
+  - sudo mkdir -p /cvmfs/sft.cern.ch
   - sudo mount -t cvmfs clicdp.cern.ch /cvmfs/clicdp.cern.ch
+  - sudo mount -t cvmfs geant4.cern.ch /cvmfs/geant4.cern.ch
+  - sudo mount -t cvmfs sft.cern.ch /cvmfs/sft.cern.ch
   - ls /cvmfs/clicdp.cern.ch
+  - ls /cvmfs/geant4.cern.ch
+  - ls /cvmfs/sft.cern.ch/lcg
 
 # command to install dependencies
 install:
@@ -42,7 +48,7 @@ install:
 
 # command to run tests
 script:
-  - docker run -it --name CI_container -v $PKGDIR:/Package -e COMPILER=$COMPILER -v /cvmfs/clicdp.cern.ch:/cvmfs/clicdp.cern.ch -d clicdp/slc6-build /bin/bash
+  - docker run -it --name CI_container -v $PKGDIR:/Package -e COMPILER=$COMPILER -v /cvmfs:/cvmfs -d clicdp/cc7-lcg /bin/bash
   - if [[ "${TRAVIS_EVENT_TYPE}" == "cron" && "${COMPILER}" == "gcc"  ]];
     then docker exec -it CI_container /bin/bash -c "./Package/.travis-ci.d/coverity_scan.sh";
     elif [[ "${TRAVIS_EVENT_TYPE}" == "cron" && "${COMPILER}" == "llvm"  ]];

@@ -140,7 +140,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
       }
 
       
-    } catch( std::runtime_error) {
+    } catch(const std::runtime_error &) {
       throw lcgeo::GeometryException(  "SHcalSc04_Endcaps_v01: Error: MultiSegmentation specified but no "
 				       " <subsegmentation key="" value=""/> element defined for detector ! " ) ;
     }

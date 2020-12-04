@@ -473,7 +473,7 @@ void SEcal06_Helpers::makeModule( dd4hep::Volume & mod_vol,  // the volume we'll
 	    multi_refSlices.push_back( keyVal0 );
       multi_refSlices.push_back( keyVal1 );
       
-    } catch( std::runtime_error) {
+    } catch(const std::runtime_error &) {
       throw lcgeo::GeometryException(  "SEcal06_Helper: Error: MultiSegmentation specified but no "
                                        " <subsegmentation key="" value0="" value1=""/> element defined for detector ! " ) ;
     }

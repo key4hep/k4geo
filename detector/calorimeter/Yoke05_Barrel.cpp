@@ -230,6 +230,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   double nRadiationLengths=0.;
   double nInteractionLengths=0.;
   double thickness_sum=0;
+  
+  // Placements of individual layers. 
+  // Key is the prefix of the detector elements name created after this nested loop (see below)
+  std::vector<std::pair<std::string,dd4hep::PlacedVolume>> plvec {} ;
 
     int l_num = 1;
     for(xml_coll_t li(x_det,_U(layer)); li; ++li)  {
@@ -309,7 +313,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 
 	  Box        s_box(slab_dim_x,slab_dim_y,slab_dim_z);
 	  Volume     s_vol(det_name+"_"+l_name+"_"+s_name,s_box,slice_material);
-          DetElement slice(layer,s_name,det_id);
 
 	  nRadiationLengths   += s_thickness/(2.*slice_material.radLength());
 	  nInteractionLengths += s_thickness/(2.*slice_material.intLength());
@@ -342,8 +345,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	  s_pos_y += s_thickness/2.;
 
 	  Position   s_pos(0,s_pos_y,0);      // Position of the layer.
-	  PlacedVolume  s_phv = ChamberLog.placeVolume(s_vol,s_pos);
-	  slice.setPlacement(s_phv);
+        ChamberLog.placeVolume(s_vol,s_pos);
 
 	  // Increment x position for next slice.
 	  s_pos_y += s_thickness/2.;
@@ -378,9 +380,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 	    layer_phv.addPhysVolID("layer", l_num).addPhysVolID("stave",j+1);
 	    string     stave_name  =  _toString(j+1,"stave%d");
 	    string stave_layer_name = stave_name+_toString(l_num,"layer%d");
-	    DetElement stave(stave_layer_name,det_id);;
-	    stave.setPlacement(layer_phv);
-	    sdet.add(stave);
+          plvec.push_back({stave_layer_name,layer_phv});
 	    phirot -= M_PI/symmetry*2.0;
 
 	  }
@@ -415,9 +415,15 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
       m_phv.addPhysVolID("tower", 1);// Not used
       string m_name = _toString(module_id,"module%d");
       DetElement sd (m_name,det_id);
+      
+      for( auto deelts : plvec ) {
+      	std::string deteltname = deelts.first +_toString(module_id,"module%d");
+      	DetElement layerDet (sd, deteltname, det_id);
+      	layerDet.setPlacement( deelts.second ) ;
+      }
+      
       sd.setPlacement(m_phv);
       sdet.add(sd);
-      
     }
 
   sdet.addExtension< LayeredCalorimeterData >( caloData ) ;

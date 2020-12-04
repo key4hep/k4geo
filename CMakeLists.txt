@@ -9,7 +9,7 @@ project(${PackageName})
 # project version
 SET( ${PackageName}_VERSION_MAJOR 0 )
 SET( ${PackageName}_VERSION_MINOR 16 )
-SET( ${PackageName}_VERSION_PATCH 5 )
+SET( ${PackageName}_VERSION_PATCH 6 )
 
 SET( ${PackageName}_VERSION "${${PackageName}_VERSION_MAJOR}.${${PackageName}_VERSION_MINOR}" )
 SET( ${PackageName}_SOVERSION "${${PackageName}_VERSION_MAJOR}.${${PackageName}_VERSION_MINOR}" )
@@ -33,6 +33,7 @@ ENDIF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
 option(BUILD_TESTING "Enable and build tests" ON)
 option(CMAKE_MACOSX_RPATH "Build with rpath on macos" ON)
+option(INSTALL_COMPACT_FILES "Copy compact files to install area" OFF)
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -119,3 +120,8 @@ FILE(GLOB hfiles "ILD/include/*.h")
 INSTALL(FILES ${hfiles} 
   DESTINATION include/${PackageName} 
   )
+
+#--- install compact files------------------------------
+if(INSTALL_COMPACT_FILES)
+  INSTALL(DIRECTORY CaloTB CLIC FCalTB FCCee ILD fieldmaps SiD DESTINATION share/lcgeo/compact/ )
+endif()

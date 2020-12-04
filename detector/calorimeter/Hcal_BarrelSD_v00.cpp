@@ -49,8 +49,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 
   //-----------------------------------------------------------------------------------
 
-  PlacedVolume pv;
-
   sens.setType("calorimeter");
 
 
