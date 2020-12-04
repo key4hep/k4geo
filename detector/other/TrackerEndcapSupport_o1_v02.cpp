@@ -112,4 +112,4 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector)
   return sdet;
 }
 
-DECLARE_DETELEMENT(TrackerEndcapSupport_o1_v01, create_detector)
+DECLARE_DETELEMENT(TrackerEndcapSupport_o1_v02, create_detector)
