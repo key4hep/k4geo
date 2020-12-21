@@ -69,14 +69,15 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector)
       double thickness = xml_comp_t(j).thickness();
       layerWidth += thickness;
     }
-    Tube    l_tub(rmin, rmax, layerWidth, 2 * M_PI);
-    Volume  l_vol(l_nam, l_tub, air);
-    l_vol.setVisAttributes(theDetector, x_layer.visStr());
 
     // Creating the original and reflected sides in a loop
     for (size_t side=0; side < 2; ++side) {
       // Stopping after the original if reflection is disabled
       if (side > 0 && !reflect) break;
+
+      Tube    l_tub(rmin, rmax, layerWidth, 2 * M_PI);
+      Volume  l_vol(l_nam, l_tub, air);
+      l_vol.setVisAttributes(theDetector, x_layer.visStr());
 
       DetElement layer(sdet, l_nam + side_name[side], l_num);
 
