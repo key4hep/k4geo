@@ -1,9 +1,9 @@
 <lccdd>
 
-<!-----------------------------------------------------------
+<!--
    This version uses Scintillators instead of Gas RPCs
    by protopop@cern.ch - Nov 20, 2017
-------------------------------------------------------------->
+-->
 
 <readouts>
     <readout name="MuonEndcapHits">
