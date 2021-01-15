@@ -1,9 +1,9 @@
 <lccdd>
 
-<!------------------------------------------------------------------
+<!--
    This XML implements a common envelope for the barrel and encaps
    by protopop@cern.ch - Dec 4, 2017
--------------------------------------------------------------------->
+-->
 
 <define>
   <!-- Added some mm to the 2016 technical drawing values 

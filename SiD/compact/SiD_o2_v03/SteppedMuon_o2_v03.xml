@@ -1,9 +1,9 @@
 <lccdd>
 
-<!---------------------------------------------------------------
+<!--
    This version uses a common envelope for the barrel and encaps
    by protopop@cern.ch - Nov 30, 2017
------------------------------------------------------------------>
+-->
 
 <define>
   <constant name="SteppedMuon_symmetry" value="MuonBarrel_symmetry"/>

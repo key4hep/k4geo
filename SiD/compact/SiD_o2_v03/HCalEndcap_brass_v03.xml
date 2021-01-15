@@ -1,10 +1,10 @@
 <lccdd>
 	
-<!-------------------------------------------------------------------------------------------------
+<!--
     AHCal EndCap implementation updated by Ross, Nov 20, 2016
     Brass absorber version of o2_v03 included here for convenience - protopop@cern.ch - Dec 6, 2017
     See https://www.evernote.com/l/AJ2HhEFs29NFZKbSV49f8xhNVTv-RsNqejc
---------------------------------------------------------------------------------------------------->
+-->
 	
 <readouts>
     <readout name="HCalEndcapHits">

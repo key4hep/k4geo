@@ -1,11 +1,11 @@
 <lccdd>
 
-<!-------------------------------------------------------------------------------------------------
+<!--
     AHCal Barrel implementation of the layout from 70th SiD Optimization Meeting presentation 
     from Ross Gordon McCoy (ross.mccoy@mavs.uta.edu) - June 30, 2016, updated Nov 20, 2016
     Brass absorber version of o2_v03 included here for convenience - protopop@cern.ch - Dec 6, 2017
     See https://www.evernote.com/l/AJ2HhEFs29NFZKbSV49f8xhNVTv-RsNqejc
-  ------------------------------------------------------------------------------------------------->
+  -->
 
 <readouts>
   <readout name="HCalBarrelHits">

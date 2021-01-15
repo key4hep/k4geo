@@ -1,10 +1,10 @@
 <lccdd>
 	
-<!-----------------------------------------------------------------------------------------------
+<!--
    Added by Aidan, originally included in the HCalEndcap XML
    o2_v03 update by protopop@cern.ch - Oct 18, 2017
    Question: is this still nedded?
-------------------------------------------------------------------------------------------------->
+-->
 
 <define>
         <constant name="HCalRing_rmin" value="HCalEndcap_rmin" />	
