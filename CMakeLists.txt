@@ -41,32 +41,14 @@ option(INSTALL_COMPACT_FILES "Copy compact files to install area" OFF)
 find_package(DD4hep REQUIRED COMPONENTS DDRec DDG4 DDParsers)
 dd4hep_set_compiler_flags()
 
-SET( DD4hep_REDUCED_COMPONENT ${DD4hep_COMPONENT_LIBRARIES} )
-## Drop DDG4 from components for normal geometry plugins
-LIST( REMOVE_AT DD4hep_REDUCED_COMPONENT -2 )
-
 find_package ( ROOT REQUIRED COMPONENTS Geom GenVector)
-include(${ROOT_USE_FILE})
 message ( STATUS "ROOT_VERSION: ${ROOT_VERSION}" )
 
 find_package( Boost REQUIRED ) 
-include_directories( SYSTEM ${Boost_INCLUDE_DIRS} )
-
 find_package( Geant4 REQUIRED ) 
-include(${Geant4_USE_FILE})
-
 find_package( LCIO REQUIRED)
-#find_package( GEAR REQUIRED)
 
 include_directories( ${CMAKE_SOURCE_DIR}/detector/include )
-include_directories( SYSTEM
-  ${DD4hep_INCLUDE_DIRS}
-  ${DD4hep_COMPONENTS_INCLUDE_DIRS}
-  ${ROOT_INCLUDE_DIR}
-  ${ROOT_INCLUDE_DIRS}
-  ${LCIO_INCLUDE_DIRS}
- )
-#  ${GEAR_INCLUDE_DIRS}
 
 file(GLOB sources 
   ./detector/tracker/*.cpp 
@@ -83,24 +65,24 @@ file(GLOB G4sources
   ./plugins/CaloPreShowerSDAction.cpp
 )
 
-
-#file(GLOB headers ./ILD/include/*.h)
-
 if(DD4HEP_USE_PYROOT)
   ROOT_GENERATE_DICTIONARY(G__ILDEx ${headers} LINKDEF include/ROOT/LinkDef.h)
   list(APPEND sources G__ILDEx.cxx)
 endif()
 
-#Create target, library, rootmap, install
-
 add_dd4hep_plugin(${PackageName} SHARED ${sources})
-
 add_dd4hep_plugin(${PackageName}G4 SHARED ${G4sources})
+target_link_libraries(${PackageName}   DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers ${ROOT_LIBRARIES} ${LCIO_LIBRARIES})
+target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ${ROOT_LIBRARIES} ${Geant4_LIBRARIES} ${LCIO_LIBRARIES})
 
-target_link_libraries(${PackageName} ${DD4hep_LIBRARIES} ${DD4hep_REDUCED_COMPONENT} ${ROOT_LIBRARIES} ${LCIO_LIBRARIES})
+#make sure DD4hep comes before any other includes, fix problems with using DD4hep not from LCG view, doesn't matter
+#otherwise
+include_directories(BEFORE SYSTEM $<TARGET_PROPERTY:DD4hep::DDCore,INCLUDE_DIRECTORIES>)
 
-target_link_libraries(${PackageName}G4 ${DD4hep_LIBRARIES} ${DD4hep_COMPONENT_LIBRARIES} ${ROOT_LIBRARIES} ${Geant4_LIBRARIES} ${LCIO_LIBRARIES})
-
+include_directories( SYSTEM
+  ${LCIO_INCLUDE_DIRS}
+  Boost::boost
+ )
 
 #Create this_package.sh file, and install
 dd4hep_instantiate_package(${PackageName})
