@@ -1,0 +1,21 @@
+name: coverity
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  run-coverity:
+    runs-on: ubuntu-latest
+    if: github.repository == 'iLCSoft/Lcgeo'
+    steps:
+    - uses: actions/checkout@v2
+    - uses: cvmfs-contrib/github-action-cvmfs@v2
+    - uses: aidasoft/run-lcg-view@v3
+      with:
+        coverity-cmake-command: 'cmake -C $ILCSOFT/ILCSoft.cmake ..'
+        coverity-project: 'iLCSoft%2FLcgeo'
+        coverity-project-token: ${{ secrets.LCGEO_COVERITY_TOKEN }}
+        github-pat: ${{ secrets.READ_COVERITY_IMAGE }}
+        view-path: "/cvmfs/clicdp.cern.ch/iLCSoft/lcg/100/nightly/x86_64-centos7-gcc10-opt"
+        setup-script: "init_ilcsoft.sh"
