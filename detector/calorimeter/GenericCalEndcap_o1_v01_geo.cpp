@@ -69,6 +69,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     
     Layering    layering(x_det);
     double      totalThickness = layering.totalThickness();
+    sens.setType("calorimeter");
     Readout readout = sens.readout();
     Segmentation seg = readout.segmentation();
     
@@ -164,7 +165,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             thickness_sum += slice_thickness/2;
             
             if ( x_slice.isSensitive() )  {
-                sens.setType("calorimeter");
                 slice_vol.setSensitiveDetector(sens);
                 
 #if DD4HEP_VERSION_GE( 0, 15 )
