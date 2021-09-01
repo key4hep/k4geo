@@ -44,11 +44,9 @@ dd4hep_set_compiler_flags()
 find_package ( ROOT REQUIRED COMPONENTS Geom GenVector)
 message ( STATUS "ROOT_VERSION: ${ROOT_VERSION}" )
 
-find_package( Boost REQUIRED ) 
 find_package( Geant4 REQUIRED ) 
 find_package( LCIO REQUIRED)
 
-include_directories( ${CMAKE_SOURCE_DIR}/detector/include )
 
 file(GLOB sources 
   ./detector/tracker/*.cpp 
@@ -72,17 +70,15 @@ endif()
 
 add_dd4hep_plugin(${PackageName} SHARED ${sources})
 add_dd4hep_plugin(${PackageName}G4 SHARED ${G4sources})
+
+target_include_directories(${PackageName}   PRIVATE ${CMAKE_SOURCE_DIR}/detector/include )
+target_include_directories(${PackageName}G4 PRIVATE ${CMAKE_SOURCE_DIR}/detector/include )
+
+target_include_directories(${PackageName}   SYSTEM PUBLIC ${LCIO_INCLUDE_DIRS})
+target_include_directories(${PackageName}G4 SYSTEM PUBLIC ${LCIO_INCLUDE_DIRS})
+
 target_link_libraries(${PackageName}   DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers ${ROOT_LIBRARIES} ${LCIO_LIBRARIES})
 target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ${ROOT_LIBRARIES} ${Geant4_LIBRARIES} ${LCIO_LIBRARIES})
-
-#make sure DD4hep comes before any other includes, fix problems with using DD4hep not from LCG view, doesn't matter
-#otherwise
-include_directories(BEFORE SYSTEM $<TARGET_PROPERTY:DD4hep::DDCore,INCLUDE_DIRECTORIES>)
-
-include_directories( SYSTEM
-  ${LCIO_INCLUDE_DIRS}
-  Boost::boost
- )
 
 #Create this_package.sh file, and install
 dd4hep_instantiate_package(${PackageName})

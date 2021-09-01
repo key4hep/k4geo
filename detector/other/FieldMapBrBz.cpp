@@ -13,10 +13,6 @@
 #include <DD4hep/DetFactoryHelper.h>
 #include <XML/Utilities.h>
 
-//Thanks stackoverflow
-#include <boost/algorithm/string.hpp>
-
-
 #include <TFile.h>
 #include <TTree.h>
 
