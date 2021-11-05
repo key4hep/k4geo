@@ -1,3 +1,23 @@
+# v00-16-07
+
+* 2021-11-05 scott snyder ([PR#246](https://github.com/iLCSoft/lcgeo/pull/246))
+  - Fixed XML comment syntax in SiD_o2_v03 XML files.
+
+* 2021-09-01 Andre Sailer ([PR#247](https://github.com/iLCSoft/lcgeo/pull/247))
+  - CI: Run against LCG_100, clang10, gcc10 and LCG_99python2 gcc8
+  - CMake: restructure main CMake file, more use of targets
+  - Remove requirement for Boost, wasn't actually used for some time (still needed by DD4hep)
+  - GenericEndcapCalo: move setting of sensitive type because of error in SID simulation with newer ddsim
+
+* 2020-09-21 Valentin Volkl ([PR#242](https://github.com/iLCSoft/lcgeo/pull/242))
+  - Add standard cpp/dd4hep .gitignore
+
+* 2020-09-18 vvolkl ([PR#244](https://github.com/iLCSoft/lcgeo/pull/244))
+  - Fix print statement for python3 compatibiltiy
+
+* 2020-05-25 Valentin Volkl ([PR#243](https://github.com/iLCSoft/lcgeo/pull/243))
+  - Add INSTALL_COMPACT_FILES option (default: OFF) to copy compact files to install area
+
 # v00-16-06
 
 * 2020-03-02 Remi Ete ([PR#241](https://github.com/iLCSoft/lcgeo/pull/241))
