@@ -1,8 +1,8 @@
-# lcgeo (Linear Collider Geometry)
+# lcgeo (Lepton Collider Geometry)
 [![Build Status](https://travis-ci.org/iLCSoft/lcgeo.svg?branch=master)](https://travis-ci.org/iLCSoft/lcgeo)
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/12359/badge.svg)](https://scan.coverity.com/projects/ilcsoft-lcgeo)
 
-Implementation of Linear Collider detector models in DD4hep.
+Implementation of Lepton Collider detector models in DD4hep.
 
 lcgeo is distributed under the [GPLv3 License](http://www.gnu.org/licenses/gpl-3.0.en.html)
 
