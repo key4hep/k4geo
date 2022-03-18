@@ -1,9 +1,9 @@
 <lccdd>
 
-<!-----------------------------------------------------------------------------------------------
+<!--
     Scintillator HCal Endcap based on the Barrel layer structure from HCalBarrel_o1_v03_00.xml
     added by Dan Protopopescu (protopop@cern.ch) - July 1, 2016
-------------------------------------------------------------------------------------------------->
+-->
 
 
 <readouts>
