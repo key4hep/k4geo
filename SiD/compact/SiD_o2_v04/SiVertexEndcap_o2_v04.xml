@@ -1,0 +1,64 @@
+<lccdd>
+
+<readouts>
+  <readout name="SiVertexEndcapHits">
+      <id>${GlobalTrackerReadoutID}</id>
+  </readout>
+</readouts>
+
+<detectors>
+ <!-- the driver used here is a modified DD4hep_SiTrackerEndcap2, where 'side' is used instead of 'barrel' -->
+ <detector id="DetID_Vertex_Endcap" name="SiVertexEndcap" type="SiTrackerEndcap_o2_v01" readout="SiVertexEndcapHits" reflect="true" vis="SiVertexEndcapVis">
+
+  <comment>SiD Vertex Detector Endcaps</comment>
+
+  <type_flags type=" DetType_TRACKER + DetType_VERTEX + DetType_ENDCAP"/>
+
+  <module name="SiVertexEndcapModule1">
+    <trd x1="3.034*mm" x2="14.682*mm" z="29.280*mm" />
+    <module_component thickness="0.002*cm" material="Silicon" sensitive="true" />
+    <module_component thickness="0.008*cm"   material="Silicon" />
+  </module>
+
+  <module name="SiVertexEndcapModule2">
+    <trd x1="3.233*mm" x2="14.682*mm" z="28.780*mm" />
+    <module_component thickness="0.002*cm" material="Silicon" sensitive="true" />
+    <module_component thickness="0.008*cm"   material="Silicon" />
+  </module>
+
+  <module name="SiVertexEndcapModule3">
+    <trd x1="3.630*mm" x2="14.682*mm" z="27.780*mm" />
+    <module_component thickness="0.002*cm" material="Silicon" sensitive="true" />
+    <module_component thickness="0.008*cm"   material="Silicon" />
+  </module>
+
+  <module name="SiVertexEndcapModule4">
+    <trd x1="4.227*mm" x2="14.682*mm" z="26.280*mm" />
+    <module_component thickness="0.002*cm" material="Silicon" sensitive="true" />
+    <module_component thickness="0.008*cm"   material="Silicon" />
+  </module>
+
+  <layer id="1">
+    <ring r="45.0*mm" zstart="76*mm" nmodules="16" dz="0.011*mm" module="SiVertexEndcapModule1"/>
+  </layer>
+  <layer id="2">
+    <ring r="45.5*mm" zstart="95*mm" nmodules="16" dz="0.011*mm" module="SiVertexEndcapModule2"/>
+  </layer>
+  <layer id="3">
+    <ring r="46.5*mm" zstart="125*mm" nmodules="16" dz="0.011*mm" module="SiVertexEndcapModule2"/>
+  </layer>
+  <layer id="4">
+    <ring r="48.0*mm" zstart="180*mm" nmodules="16" dz="0.011*mm" module="SiVertexEndcapModule2"/>
+  </layer>
+ </detector>
+</detectors>
+
+<plugins>
+    <plugin name="DD4hep_SiTrackerEndcapSurfacePlugin">
+      <argument value="SiVertexEndcap"/>
+      <argument value="dimension=2"/>
+    </plugin>
+</plugins>
+
+</lccdd>
+
