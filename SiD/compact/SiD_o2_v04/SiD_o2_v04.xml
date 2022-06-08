@@ -236,11 +236,11 @@
   <include ref="Solenoid_o2_v04.xml"/>
 
   <comment>Beam pipe</comment>
-  <include ref="BeamPipe_o2_v04.xml">
+  <include ref="BeamPipe_o2_v04.xml"/>
   
   <comment>Dead material and supports</comment>
   <comment>Vertex Detector Supports and Readout</comment>  
-  <!--  FG: fixme: should be split up into more individual files  ... -->
+  <!-- FG: fixme: should be split up into more individual files  ... -->
   <!-- <include ref="Support.xml"/> -->
 
   <!-- ############ Individual plugins are now in SUBDET.xml files ############# -->
