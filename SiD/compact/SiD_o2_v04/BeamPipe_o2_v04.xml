@@ -3,9 +3,6 @@
 
 <comment>Parameters from ILC TDR V4 7.4.2. (CP)</comment>
 <!-- (defined in main xml) constant name="bp_cone_slope" value="0.0570643"/ -->
-<constant name="bp_cone_dr" value="(20.50-6.25)*bp_cone_slope*cm"/>
-<constant name="steel_cone_slope" value="0.0932777"/>
-<constant name="steel_cone_dr" value="(120.0-20.5)*steel_cone_slope*cm"/>
 
 <detectors>
  <comment>Be Beampipe and Be Cones</comment>
