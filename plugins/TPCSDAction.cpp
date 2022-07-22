@@ -84,7 +84,7 @@ namespace dd4hep {
 
 
       /// return the layer number of the volume (either pre or post-position )
-      int getCopyNumber(G4Step* s, bool usePostPos ){
+      int getCopyNumber(const G4Step* s, bool usePostPos ){
 
 	int cellID = this->volID( s , usePostPos) ;
 
@@ -93,7 +93,7 @@ namespace dd4hep {
 
 
       /// Returns the volumeID of sensitive volume corresponding to the step (either pre or post-position )
-      long long int volID( G4Step* s, bool usePostPos=false ) {
+      long long int volID(const G4Step* s, bool usePostPos=false ) {
 
 	Geant4StepHandler h(s);
 
@@ -129,7 +129,7 @@ namespace dd4hep {
 
 
       /// Method for generating hit(s) using the information of G4Step object.
-      G4bool process(G4Step* step, G4TouchableHistory* ) {
+      G4bool process(const G4Step* step, G4TouchableHistory* ) {
 
 
 	fHitCollection = sensitive->collection(0) ;
@@ -450,7 +450,7 @@ namespace dd4hep {
 	ResetCumulativeVariables();
       }
       
-      void CumulateLowPtStep(G4Step *step)
+      void CumulateLowPtStep(const G4Step *step)
       {
 	
 	const G4ThreeVector meanPosition = (step->GetPreStepPoint()->GetPosition() + step->GetPostStepPoint()->GetPosition()) / 2;
@@ -501,7 +501,7 @@ namespace dd4hep {
 
     /// Method for generating hit(s) using the information of G4Step object.
     template <> G4bool
-    Geant4SensitiveAction<TPCSDData>::process(G4Step* step, G4TouchableHistory* history) {
+    Geant4SensitiveAction<TPCSDData>::process(const G4Step* step, G4TouchableHistory* history) {
       return m_userData.process(step, history);
     }
 

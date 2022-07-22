@@ -58,7 +58,7 @@ namespace dd4hep {
     }
 
     /// Method for generating hit(s) using the information of G4Step object.
-    template <> bool Geant4SensitiveAction<CalorimeterWithPreShowerLayer>::process(G4Step* step,G4TouchableHistory*) {
+    template <> bool Geant4SensitiveAction<CalorimeterWithPreShowerLayer>::process(const G4Step* step,G4TouchableHistory*) {
       typedef CalorimeterWithPreShowerLayer::Hit Hit;
       Geant4StepHandler h(step);
       HitContribution contrib = Hit::extractContribution(step);
