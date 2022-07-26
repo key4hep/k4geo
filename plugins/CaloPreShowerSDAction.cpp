@@ -1,8 +1,15 @@
+#include "DD4hep/Version.h"
 #include "DDG4/Geant4SensDetAction.inl"
 #include "DDG4/Geant4EventAction.h"
 #include "DDG4/Geant4Mapping.h"
 #include "G4OpticalPhoton.hh"
 #include "G4VProcess.hh"
+
+#if DD4HEP_VERSION_GE(1, 21)
+#define GEANT4_CONST_STEP const
+#else
+#define GEANT4_CONST_STEP
+#endif
 
 /// Namespace for the AIDA detector description toolkit
 namespace dd4hep {
@@ -58,7 +65,7 @@ namespace dd4hep {
     }
 
     /// Method for generating hit(s) using the information of G4Step object.
-    template <> bool Geant4SensitiveAction<CalorimeterWithPreShowerLayer>::process(G4Step* step,G4TouchableHistory*) {
+    template <> bool Geant4SensitiveAction<CalorimeterWithPreShowerLayer>::process(G4Step GEANT4_CONST_STEP * step,G4TouchableHistory*) {
       typedef CalorimeterWithPreShowerLayer::Hit Hit;
       Geant4StepHandler h(step);
       HitContribution contrib = Hit::extractContribution(step);
