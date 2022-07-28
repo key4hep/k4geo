@@ -109,7 +109,7 @@ namespace {
       }// for all paths
     }
 
-    return 0;
+    return 1;
   }
 
 
