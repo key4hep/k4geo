@@ -1,6 +1,8 @@
 // Silicon Tracker Endcap Support Structure
 //
-// With respect to v01 this fixes an issue that reflected volumes had double thickness
+// With respect to v01 this fixes
+// * an issue that reflected volumes had double thickness
+// * an issue that the whole layer volume was twice as thick as it needed to be
 
 #include "OtherDetectorHelpers.h"
 
@@ -79,7 +81,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector)
       // Stopping after the original if reflection is disabled
       if (side > 0 && !reflect) break;
 
-      Tube    l_tub(rmin, rmax, layerWidth, 2 * M_PI);
+      Tube    l_tub(rmin, rmax, layerWidth / 2.0, 2 * M_PI);
       Volume  l_vol(l_nam, l_tub, air);
       l_vol.setVisAttributes(theDetector, x_layer.visStr());
 
