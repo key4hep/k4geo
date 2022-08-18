@@ -1,3 +1,7 @@
+// Silicon Tracker Endcap Support Structure
+//
+// With respect to v01 this fixes an issue that reflected volumes had double thickness
+
 #include "OtherDetectorHelpers.h"
 
 #include "DD4hep/DetFactoryHelper.h"
