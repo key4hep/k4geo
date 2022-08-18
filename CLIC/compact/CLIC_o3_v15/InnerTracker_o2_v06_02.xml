@@ -325,7 +325,7 @@
         </detector>
 
 
-        <detector name="InnerTrackerEndcapSupport" type="TrackerEndcapSupport_o1_v01" reflect="true" region="InnerTrackerEndcapRegion">
+        <detector name="InnerTrackerEndcapSupport" type="TrackerEndcapSupport_o1_v02" reflect="true" region="InnerTrackerEndcapRegion">
             <envelope>
                 <shape type="Assembly"/>
             </envelope>
@@ -388,7 +388,7 @@
         </detector>
 
 
-        <detector name="BeampipeShell2" type="TrackerEndcapSupport_o1_v01" reflect="true" region="BeampipeRegion">
+        <detector name="BeampipeShell2" type="TrackerEndcapSupport_o1_v02" reflect="true" region="BeampipeRegion">
             <envelope>
                 <shape type="Assembly"/>
             </envelope>
