@@ -1,5 +1,5 @@
 # lcgeo (Lepton Collider Geometry)
-[![Build Status](https://travis-ci.org/iLCSoft/lcgeo.svg?branch=master)](https://travis-ci.org/iLCSoft/lcgeo)
+[![Build](https://github.com/iLCSoft/lcgeo/actions/workflows/linux.yml/badge.svg)](https://github.com/iLCSoft/lcgeo/actions/workflows/linux.yml)
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/12359/badge.svg)](https://scan.coverity.com/projects/ilcsoft-lcgeo)
 
 Implementation of Lepton Collider detector models in DD4hep.
