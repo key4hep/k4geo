@@ -199,7 +199,7 @@
             </layer>
 
     </detector>
-        <detector name="VertexVerticalCable" type="TrackerEndcapSupport_o1_v01" reflect="true"  region="VertexEndcapRegion">
+        <detector name="VertexVerticalCable" type="TrackerEndcapSupport_o1_v02" reflect="true"  region="VertexEndcapRegion">
 	    <envelope>
 		    <shape type="Assembly"/>
 	    </envelope>

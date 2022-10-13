@@ -179,7 +179,7 @@
         </detector>
 
 
-	<detector name="OuterTrackerEndcapSupport" type="TrackerEndcapSupport_o1_v01" reflect="true" region="OuterTrackerEndcapRegion">
+	<detector name="OuterTrackerEndcapSupport" type="TrackerEndcapSupport_o1_v02" reflect="true" region="OuterTrackerEndcapRegion">
 	  <envelope>
 	    <shape type="Assembly"/>
 	  </envelope>
