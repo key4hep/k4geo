@@ -9,9 +9,6 @@ jobs:
       matrix:
         COMPILER: [gcc10, clang11]
         LCG: [100]
-        include:
-          - COMPILER: gcc8
-            LCG: 99python2
 
     steps:
     - uses: actions/checkout@v2
