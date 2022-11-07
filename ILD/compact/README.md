@@ -40,6 +40,9 @@ The following ILD detector models are available in lcgeo ( current production mo
 
 ## Details
 
+### ILD_l5_[o?_]v09
+same detector geometry as ILD_l5_[o?_]v02 models, but with CLIC-inspired silicon outer tracker in place of TPC+SET
+
 ### ILD_(l/s)5_v06
 same detector geometry as v02 models + realistic solenoid magnetic field map, anti-DID field map and magnetic fields in forward focussing magnets (for 500 GeV)
 

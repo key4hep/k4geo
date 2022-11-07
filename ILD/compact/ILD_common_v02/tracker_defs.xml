@@ -10,4 +10,9 @@
   <constant name="tracker_region_rmax" value="TPC_outer_radius" />
   <constant name="tracker_region_zmax" value="Ecal_endcap_zmin" />
 
+  <!-- for all-silicon outer tracker -->
+  <constant name="OuterTracker_inner_radius"  value="TPC_inner_radius"/>
+  <constant name="OuterTracker_outer_radius"  value="TPC_outer_radius+Ecal_Tpc_gap-1*mm"/>
+  <constant name="OuterTracker_half_length"   value="TPC_Ecal_Hcal_barrel_halfZ"/>
+
 </define>
