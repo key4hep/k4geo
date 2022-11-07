@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository == 'iLCSoft/Lcgeo'
     steps:
-    - uses: actions/checkout@v2
-    - uses: cvmfs-contrib/github-action-cvmfs@v2
-    - uses: aidasoft/run-lcg-view@v3
+    - uses: actions/checkout@v3
+    - uses: cvmfs-contrib/github-action-cvmfs@v3
+    - uses: aidasoft/run-lcg-view@v4
       with:
         coverity-cmake-command: 'cmake -C $ILCSOFT/ILCSoft.cmake ..'
         coverity-project: 'iLCSoft%2FLcgeo'
