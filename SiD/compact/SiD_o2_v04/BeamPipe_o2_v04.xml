@@ -1,0 +1,23 @@
+
+<detectors>
+ <comment>Beampipe by Chris Potter (UOregon)</comment>
+ <!-- See talk on 23-04-2022 https://agenda.linearcollider.org/event/9586/ -->
+ <comment>Be Beampipe and Be Cones</comment>
+ <detector name="Beampipe" type="DD4hep_PolyconeSupport" insideTrackingVolume="true" vis="BeampipeVis">
+  <material name="Beryllium"/>
+  <zplane rmin="bp_cone_dr+1.20*cm" rmax="bp_cone_dr+(1.20+0.07*1.0016)*cm" z="-20.50*cm"/>
+  <zplane rmin="1.20*cm" rmax="(1.20+0.04)*cm" z="-6.25*cm"/>
+  <zplane rmin="1.20*cm" rmax="(1.20+0.04)*cm" z="6.25*cm"/>
+  <zplane rmin="bp_cone_dr+1.20*cm" rmax="bp_cone_dr+(1.20+0.07*1.0016)*cm" z="20.50*cm"/>
+ </detector>
+<comment>Steel Beampipe Cones</comment>
+<detector name="ForwardSupportTube" type="DD4hep_PolyconeSupport" insideTrackingVolume="true" vis="BeampipeVis">
+  <material name="Steel235"/>
+  <zplane rmin="steel_cone_dr+bp_cone_dr+1.20*cm" rmax="steel_cone_dr+bp_cone_dr+(1.20+0.15*1.0043)*cm" z="-120.0*cm"/>
+  <zplane rmin="bp_cone_dr+1.20*cm" rmax="bp_cone_dr+(1.20+0.107*1.0043)*cm" z="-20.50*cm"/>
+  <zplane rmin="bp_cone_dr+1.20*cm" rmax="bp_cone_dr+(1.20+0.107*1.0043)*cm" z="20.50*cm"/>
+  <zplane rmin="steel_cone_dr+bp_cone_dr+1.20*cm" rmax="steel_cone_dr+bp_cone_dr+(1.20+0.15*1.0043)*cm" z="120.0*cm"/>
+</detector>
+</detectors>
+
+

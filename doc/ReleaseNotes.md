@@ -1,3 +1,40 @@
+# v00-17
+
+* 2022-10-13 Andre Sailer ([PR#259](https://github.com/ilcsoft/lcgeo/pull/259))
+  - CLIC_o3_v15: New detector model with corrected TrackerEndcapSupport with the same thicknesses in forward and backward directions
+  - FCCee_o1_v05: New detector model with corrected TrackerEndcapSupport, with the same thicknesses in forward and backward directions
+  - FCCee_o2_v02: New detector model with corrected TrackerEndcapSupport, with the same thicknesses in forward and backward directions
+
+* 2022-08-19 Andre Sailer ([PR#258](https://github.com/ilcsoft/lcgeo/pull/258))
+  - TrackerEndcapSupport_o1_v02: Fix the thickness of the whole layer volume, was twice as thick as needed to be
+
+* 2022-08-18 Nazar Bartosik ([PR#257](https://github.com/ilcsoft/lcgeo/pull/257))
+  - Add TrackerEndcapSupport_o1_v02, contributed by @bartosik-hep. Fixes an issue that the reflected sides in TrackerEndcapSupport_o1_v01 were twice as thick as the non-reflected sides.
+
+* 2022-07-28 Andre Sailer ([PR#256](https://github.com/ilcsoft/lcgeo/pull/256))
+  - LinearSortingPolicy: change return value to 1 for success, adapt to recent changes in DD4hep that took the actual return value from the plugin, (https://github.com/AIDASoft/DD4hep/pull/936)
+
+* 2022-07-27 Andre Sailer ([PR#255](https://github.com/ilcsoft/lcgeo/pull/255))
+  - TPCSDAction: adapt to new const G4step interface in dd4hep 1.21
+  - CaloPreShowerSDAction: adapt to new const G4step interface in dd4hep 1.21
+
+# v00-16-08
+
+* 2022-06-14 Valentin Volkl ([PR#253](https://github.com/iLCSoft/lcgeo/pull/253))
+  - Move SiD_o2_v04 beampipe constants to global list to fix an error in key4hep builds
+
+* 2022-06-09 Dan Protopopescu ([PR#252](https://github.com/iLCSoft/lcgeo/pull/252))
+  - Added SiD_o2_v04, which is an updated version of o2_v03, containing a few fixes, among which
+      - correct size and position of ECal layer 0 via new driver ECalBarrel_o2_v04_geo.cpp
+      - new beam pipe by Chris Potter
+      - removed brass HCal option
+
+* 2022-03-19 Valentin Volkl ([PR#251](https://github.com/iLCSoft/lcgeo/pull/251))
+  - Fix more hyphens in xml comments
+
+* 2022-03-09 Andre Sailer ([PR#249](https://github.com/iLCSoft/lcgeo/pull/249))
+  - Rebrand LCGEO as Lepton Collider GEOmetry, Fix #248
+
 # v00-16-07
 
 * 2021-11-05 scott snyder ([PR#246](https://github.com/iLCSoft/lcgeo/pull/246))

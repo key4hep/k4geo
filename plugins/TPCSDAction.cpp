@@ -1,8 +1,15 @@
+#include "DD4hep/Version.h"
 #include "DDG4/Geant4SensDetAction.inl"
 #include "DDG4/Geant4EventAction.h"
 #include "DDG4/Geant4Mapping.h"
 #include "G4OpticalPhoton.hh"
 #include "G4VProcess.hh"
+
+#if DD4HEP_VERSION_GE(1, 21)
+#define GEANT4_CONST_STEP const
+#else
+#define GEANT4_CONST_STEP
+#endif
 
 /// Namespace for the AIDA detector description toolkit
 namespace dd4hep {
@@ -84,18 +91,18 @@ namespace dd4hep {
 
 
       /// return the layer number of the volume (either pre or post-position )
-      int getCopyNumber(G4Step* s, bool usePostPos ){
+      int getCopyNumber(G4Step GEANT4_CONST_STEP * step, bool usePostPos ){
 
-	int cellID = this->volID( s , usePostPos) ;
+	int cellID = this->volID( step , usePostPos) ;
 
 	return this->layerField->value( cellID ) ;
       }
 
 
       /// Returns the volumeID of sensitive volume corresponding to the step (either pre or post-position )
-      long long int volID( G4Step* s, bool usePostPos=false ) {
+      long long int volID( G4Step GEANT4_CONST_STEP * step, bool usePostPos=false ) {
 
-	Geant4StepHandler h(s);
+	Geant4StepHandler h(step);
 
 	Geant4VolumeManager volMgr = Geant4Mapping::instance().volumeManager();
 
@@ -129,7 +136,7 @@ namespace dd4hep {
 
 
       /// Method for generating hit(s) using the information of G4Step object.
-      G4bool process(G4Step* step, G4TouchableHistory* ) {
+      G4bool process(G4Step GEANT4_CONST_STEP * step, G4TouchableHistory* ) {
 
 
 	fHitCollection = sensitive->collection(0) ;
@@ -450,7 +457,7 @@ namespace dd4hep {
 	ResetCumulativeVariables();
       }
       
-      void CumulateLowPtStep(G4Step *step)
+      void CumulateLowPtStep(G4Step GEANT4_CONST_STEP * step)
       {
 	
 	const G4ThreeVector meanPosition = (step->GetPreStepPoint()->GetPosition() + step->GetPostStepPoint()->GetPosition()) / 2;
@@ -501,7 +508,7 @@ namespace dd4hep {
 
     /// Method for generating hit(s) using the information of G4Step object.
     template <> G4bool
-    Geant4SensitiveAction<TPCSDData>::process(G4Step* step, G4TouchableHistory* history) {
+    Geant4SensitiveAction<TPCSDData>::process(G4Step GEANT4_CONST_STEP * step, G4TouchableHistory* history) {
       return m_userData.process(step, history);
     }
 
