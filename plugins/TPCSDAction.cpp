@@ -48,7 +48,7 @@ namespace dd4hep {
       G4int fSpaceHitCollectionID{};
       G4int fLowPtHitCollectionID{};
       
-      G4Step* GEANT4_CONST_STEP StepAtEntranceToPadRing{};
+      G4Step* StepAtEntranceToPadRing{};
       G4ThreeVector CrossingOfPadRingCentre{};
       G4ThreeVector MomentumAtPadRingCentre{};
       G4double dEInPadRow{};
@@ -62,7 +62,7 @@ namespace dd4hep {
       G4ThreeVector CumulativeMeanMomentum{};
       G4int CumulativeNumSteps{};
 
-      G4Step* GEANT4_CONST_STEP previousStep{};
+      G4Step* previousStep{};
       std::map < int, G4double > padRowCentralRadii{};
 
       TPCSDData() : 
