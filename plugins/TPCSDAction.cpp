@@ -55,32 +55,21 @@ namespace dd4hep {
       G4double globalTimeAtPadRingCentre{};
       G4double pathLengthInPadRow{};
 
-      // DJ comment: these are for lowpt hits
       G4double CumulativePathLength{};
       G4double CumulativeEnergyDeposit{};
       G4double CumulativeMeanTime{};
       G4ThreeVector CumulativeMeanPosition{};
       G4ThreeVector CumulativeMeanMomentum{};
       G4int CumulativeNumSteps{};
-      
-      // G4ThreeVector PreviousPostStepPosition{}; //< the end point of the previous step
-      // G4int CurrentPDGEncoding{}; //< the PDG encoding of the particle causing the cumulative energy deposit
-      // G4int CurrentTrackID{}; //< the TrackID of the particle causing the cumulative energy deposit
-      // G4double CurrentGlobalTime{}; ///< the global time of the track causing the cumulative energy deposit
-      // G4int CurrentCopyNumber{}; ///< copy number of the preStepPoint's TouchableHandle for the cumulative energy deposit
 
       G4Step* GEANT4_CONST_STEP previousStep{};
       std::map < int, G4double > padRowCentralRadii{};
 
       TPCSDData() : 
 	fThresholdEnergyDeposit(0),
-	// fHitCollection(0),
-	// fSpaceHitCollection(0),
-	// fLowPtHitCollection(0),
 	fHCID(-1),
 	fSpaceHitCollectionID(-1),
-	fLowPtHitCollectionID(-1) //,
-	//CurrentTrackID(-1) 
+	fLowPtHitCollectionID(-1)
       {
 
 
@@ -154,10 +143,7 @@ namespace dd4hep {
 	//	dumpStep( h , step ) ;
 
 	// FIXME: 
-	// (i) in the following algorithm if a particle "appears" within a pad-ring half and 
-	// leaves without passing through the middle of the pad-ring it will not create a hit in 
-	// this ring <-- now fixed (DJ)
-	// (ii) a particle that crosses the boundry between two pad-ring halves will have the hit 
+	// a particle that crosses the boundry between two pad-ring halves will have the hit 
 	// placed on this surface at the last crossing point, and will be assinged the total energy 
 	// deposited in the whole pad-ring. This is a possible source of bias for the hit
   
@@ -267,16 +253,11 @@ namespace dd4hep {
 	      // reset the cumulative variables if the hit has not been deposited.
 	      // The previous track has ended and the cumulated energy left at the end 
 	      // was not enough to ionize
-	      //G4cout << "reset due to new track , discarding " << CumulativeEnergyDeposit / eV << " eV" << std::endl;
 	      ResetCumulativeVariables();
 	    }
 
 	  }
 
-	  else {
-	    //G4cout << "continuing track" << endl;
-	  }
-    
 	  CumulateLowPtStep(step);  
 
     
@@ -300,9 +281,6 @@ namespace dd4hep {
 	      //dumpStep( h , step ) ;
 	      DepositLowPtHit( step );
 	    }
-	    //else {
-	    //G4cout << "not deposited, energy is " << CumulativeEnergyDeposit/eV << " eV" << std::endl;
-	    //}
 	  }
 
 	}
@@ -318,15 +296,6 @@ namespace dd4hep {
 
       /// Post-event action callback
       void endEvent(const G4Event* /* event */)   {
-	// // We need to add the possibly last added hit to the collection here.
-	// // otherwise the last hit would be assigned to the next event and the
-	// // MC truth would be screwed.
-	// //
-	// // Alternatively the 'update' method would become rather CPU consuming,
-	// // beacuse the extract action would have to be recalculated over and over.
-	// if ( current > 0 )   {
-	//   Geant4HitCollection* coll = sensitive->collection(0);
-	//   extractHit(coll);
 
         ResetPadrowVariables();
 
@@ -409,17 +378,6 @@ namespace dd4hep {
       void DepositLowPtHit( G4Step GEANT4_CONST_STEP * step )
       {
 
-//xx	fLowPtHitCollection->
-//xx	  insert(new TRKHit(CurrentCopyNumber, 
-//xx			    CumulativeMeanPosition[0], CumulativeMeanPosition[1], CumulativeMeanPosition[2],
-//xx			    CumulativeMeanMomentum[0], CumulativeMeanMomentum[1], CumulativeMeanMomentum[2],
-//xx			    CurrentTrackID, 
-//xx			    CurrentPDGEncoding,
-//xx			    CumulativeEnergyDeposit, 
-//xx			    CurrentGlobalTime,
-//xx			    CumulativePathLength));
-  
-
 	Geant4Tracker::Hit* hit = new Geant4Tracker::Hit( step->GetTrack()->GetTrackID(),
                                                           step->GetTrack()->GetDefinition()->GetPDGEncoding(),
                                                           CumulativeEnergyDeposit,
@@ -428,7 +386,6 @@ namespace dd4hep {
 	hit->position = CumulativeMeanPosition/CumulativeNumSteps ;
 	hit->momentum = CumulativeMeanMomentum/CumulativeNumSteps ;
 	hit->length   = CumulativePathLength ;
-	// hit->cellID   = CurrentCopyNumber ;
         hit->cellID   = sensitive->cellID(step) ;
 
 
@@ -445,18 +402,10 @@ namespace dd4hep {
 	const G4ThreeVector meanMomentum = (step->GetPreStepPoint()->GetMomentum() + step->GetPostStepPoint()->GetMomentum()) / 2;
 	
 	++CumulativeNumSteps;    
-	//CumulativeMeanPosition = ( (CumulativeMeanPosition*(CumulativeNumSteps-1)) + meanPosition ) / CumulativeNumSteps;
-	//CumulativeMeanMomentum = ( (CumulativeMeanMomentum*(CumulativeNumSteps-1)) + meanMomentum ) / CumulativeNumSteps;
-	// DJ:  more efficient to take average when depositing hit
         CumulativeMeanPosition += (step->GetPreStepPoint()->GetPosition() + step->GetPostStepPoint()->GetPosition()) / 2;
         CumulativeMeanMomentum += (step->GetPreStepPoint()->GetMomentum() + step->GetPostStepPoint()->GetMomentum()) / 2;
 	CumulativeEnergyDeposit += step->GetTotalEnergyDeposit();
 	CumulativePathLength += step->GetStepLength();
-	// CurrentPDGEncoding = step->GetTrack()->GetDefinition()->GetPDGEncoding();
-	// CurrentTrackID = step->GetTrack()->GetTrackID();
-	// CurrentGlobalTime = step->GetTrack()->GetGlobalTime();
-	// CurrentCopyNumber = step->GetPreStepPoint()->GetTouchableHandle()->GetCopyNumber();
-	
       }
       
     };
