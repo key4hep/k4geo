@@ -48,7 +48,7 @@ namespace dd4hep {
       G4int fSpaceHitCollectionID{};
       G4int fLowPtHitCollectionID{};
       
-      G4Step* StepAtEntranceToPadRing{};
+      G4Step GEANT4_CONST_STEP * StepAtEntranceToPadRing{};
       G4ThreeVector CrossingOfPadRingCentre{};
       G4ThreeVector MomentumAtPadRingCentre{};
       G4double dEInPadRow{};
@@ -62,7 +62,7 @@ namespace dd4hep {
       G4ThreeVector CumulativeMeanMomentum{};
       G4int CumulativeNumSteps{};
 
-      G4Step* previousStep{};
+      G4Step GEANT4_CONST_STEP * previousStep{};
       std::map < int, G4double > padRowCentralRadii{};
 
       TPCSDData() : 
@@ -133,7 +133,6 @@ namespace dd4hep {
 
       /// Method for generating hit(s) using the information of G4Step object.
       G4bool process(G4Step GEANT4_CONST_STEP * step, G4TouchableHistory* ) {
-
 
 	fHitCollection = sensitive->collection(0) ;
 	fSpaceHitCollection = sensitive->collection(1) ;
