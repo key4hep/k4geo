@@ -48,33 +48,29 @@ namespace dd4hep {
       G4int fSpaceHitCollectionID{};
       G4int fLowPtHitCollectionID{};
       
+      G4Step GEANT4_CONST_STEP * StepAtEntranceToPadRing{};
       G4ThreeVector CrossingOfPadRingCentre{};
       G4ThreeVector MomentumAtPadRingCentre{};
       G4double dEInPadRow{};
       G4double globalTimeAtPadRingCentre{};
       G4double pathLengthInPadRow{};
+
       G4double CumulativePathLength{};
       G4double CumulativeEnergyDeposit{};
+      G4double CumulativeMeanTime{};
       G4ThreeVector CumulativeMeanPosition{};
       G4ThreeVector CumulativeMeanMomentum{};
       G4int CumulativeNumSteps{};
-      
-      G4ThreeVector PreviousPostStepPosition{}; //< the end point of the previous step
-      G4int CurrentPDGEncoding{}; //< the PDG encoding of the particle causing the cumulative energy deposit
-      G4int CurrentTrackID{}; //< the TrackID of the particle causing the cumulative energy deposit
-      G4double CurrentGlobalTime{}; ///< the global time of the track causing the cumulative energy deposit
-      G4int CurrentCopyNumber{}; ///< copy number of the preStepPoint's TouchableHandle for the cumulative energy deposit
-      
+
+      G4Step GEANT4_CONST_STEP * previousStep{};
+      std::map < int, G4double > padRowCentralRadii{};
 
       TPCSDData() : 
 	fThresholdEnergyDeposit(0),
-	// fHitCollection(0),
-	// fSpaceHitCollection(0),
-	// fLowPtHitCollection(0),
 	fHCID(-1),
 	fSpaceHitCollectionID(-1),
-	fLowPtHitCollectionID(-1),
-	CurrentTrackID(-1) {
+	fLowPtHitCollectionID(-1)
+      {
 
 
 	Control.TPCLowPtCut = CLHEP::MeV ;
@@ -112,7 +108,7 @@ namespace dd4hep {
       }
 
 
-      void dumpStep( Geant4StepHandler h, G4Step* s){
+      void dumpStep( Geant4StepHandler h, G4Step GEANT4_CONST_STEP * s){
 
 	std::cout << " ----- step in detector " << h.sdName( s->GetPreStepPoint() ) 
 		  << " prePos  " << h.prePos() 
@@ -138,7 +134,6 @@ namespace dd4hep {
       /// Method for generating hit(s) using the information of G4Step object.
       G4bool process(G4Step GEANT4_CONST_STEP * step, G4TouchableHistory* ) {
 
-
 	fHitCollection = sensitive->collection(0) ;
 	fSpaceHitCollection = sensitive->collection(1) ;
 	fLowPtHitCollection = sensitive->collection(2) ;
@@ -147,10 +142,7 @@ namespace dd4hep {
 	//	dumpStep( h , step ) ;
 
 	// FIXME: 
-	// (i) in the following algorithm if a particle "appears" within a pad-ring half and 
-	// leaves without passing through the middle of the pad-ring it will not create a hit in 
-	// this ring
-	// (ii) a particle that crosses the boundry between two pad-ring halves will have the hit 
+	// a particle that crosses the boundry between two pad-ring halves will have the hit 
 	// placed on this surface at the last crossing point, and will be assinged the total energy 
 	// deposited in the whole pad-ring. This is a possible source of bias for the hit
   
@@ -168,163 +160,66 @@ namespace dd4hep {
 
 	if( ptSQRD >= (Control.TPCLowPtCut*Control.TPCLowPtCut) ){
 
-	  //=========================================================================================================
-	  // Step finishes at a geometric boundry
+	  // ===================== first check we have no left-over low-pt stuff
+          // This step does not continue the previous path. Deposit the energy up to the previous step
+          if (CumulativeEnergyDeposit > fThresholdEnergyDeposit) {
+            DepositLowPtHit( previousStep );
+          } else {
+            ResetCumulativeVariables(); // set low pt cumulation to zero
+          }
+          //=== end of low pt cleaning-up
 
+	  //=========================================================================================================
+
+	  if ( !StepAtEntranceToPadRing ) { // first step in this padrow
+            StepAtEntranceToPadRing=step;
+          }
+
+	  // Step finishes at a geometric boundry
 	  if(step->GetPostStepPoint()->GetStepStatus() == fGeomBoundary) {
 
-	    // step within the same pair of upper and lower pad ring halves
-	    if( getCopyNumber( step, false ) == getCopyNumber( step, true ) ){
-
-	      //this step must have ended on the boundry between these two pad ring halfs 
-	      //record the tracks coordinates at this position 
-	      //and return
-        
-	      CrossingOfPadRingCentre = PostPosition;
-	      MomentumAtPadRingCentre = thisMomentum;
-	      dEInPadRow += step->GetTotalEnergyDeposit();
-	      globalTimeAtPadRingCentre = step->GetTrack()->GetGlobalTime();
-	      pathLengthInPadRow += step->GetStepLength();
-        
-	      //	    G4cout << "step must have ended on the boundry between these two pad ring halfs" << G4endl;
-	      //	    G4cout << "CrossingOfPadRingCentre = "   
-	      //		   << sqrt( CrossingOfPadRingCentre[0]*CrossingOfPadRingCentre[0]
-	      //			    +CrossingOfPadRingCentre[1]*CrossingOfPadRingCentre[1] )
-	      //		   << G4endl;
-        
-	      return true;
-
-	    }
-	    else if(!(CrossingOfPadRingCentre[0]==0.0 && CrossingOfPadRingCentre[1]==0.0 && CrossingOfPadRingCentre[2]==0.0)) {
-	      // the above IF statment is to catch the case where the particle "appears" in this pad-row half volume and 
-	      // leaves with out crossing the pad-ring centre, as mentioned above
-        
-	      // it is leaving the pad ring couplet
-	      // write out a hit
-
-	      //	    G4cout << "step must be leaving the pad ring couplet" << G4endl;
-	      //	    G4cout << "write out hit at " 
-	      //		   << sqrt( CrossingOfPadRingCentre[0]*CrossingOfPadRingCentre[0]
-	      //			    +CrossingOfPadRingCentre[1]*CrossingOfPadRingCentre[1] )
-	      //		   << " " << "dEdx = " << step->GetTotalEnergyDeposit()+dEInPadRow 
-	      //		   << " " << "step length = " << step->GetStepLength()+pathLengthInPadRow  
-	      //		   << G4endl;
-        
-	      G4double dE = step->GetTotalEnergyDeposit()+dEInPadRow;
-        
-	      if ( dE > fThresholdEnergyDeposit ) {
-          
-
-//xx		fHitCollection->
-//xx		  insert(new TRKHit(touchPre->GetCopyNumber(), 
-//xx				    CrossingOfPadRingCentre[0],CrossingOfPadRingCentre[1],CrossingOfPadRingCentre[2],
-//xx				    MomentumAtPadRingCentre[0],
-//xx				    MomentumAtPadRingCentre[1],
-//xx				    MomentumAtPadRingCentre[2],
-//xx				    info->GetTheTrackSummary()->GetTrackID(),
-//xx				    step->GetTrack()->GetDefinition()->GetPDGEncoding(),
-//xx				    dE, 
-//xx				    globalTimeAtPadRingCentre,
-//xx				    step->GetStepLength()+pathLengthInPadRow));
-//xx
-		Geant4Tracker::Hit* hit = new Geant4Tracker::Hit(step->GetTrack()->GetTrackID(),
-								 step->GetTrack()->GetDefinition()->GetPDGEncoding(),
-								 dE, globalTimeAtPadRingCentre);
-		hit->position = CrossingOfPadRingCentre ;
-		hit->momentum = MomentumAtPadRingCentre;
-		hit->length   = step->GetStepLength();
-		hit->cellID   = sensitive->cellID( step ) ;
-
-		fHitCollection->add(hit);
-
-		sensitive->printM2("+++ TrackID:%6d [%s] CREATE TPC hit at pad row crossing :"
-				   " %e MeV  Pos:%8.2f %8.2f %8.2f",
-				   step->GetTrack()->GetTrackID(),sensitive->c_name(), dE,
-				   hit->position.X()/CLHEP::mm,hit->position.Y()/CLHEP::mm,hit->position.Z()/CLHEP::mm);
-          
-	      }
-        
-	      // zero cumulative variables 
-	      dEInPadRow = 0.0;
-	      globalTimeAtPadRingCentre=0.0;
-	      pathLengthInPadRow=0.0;
-	      CrossingOfPadRingCentre[0]=0.0;
-	      CrossingOfPadRingCentre[1]=0.0;
-	      CrossingOfPadRingCentre[2]=0.0;
-	      MomentumAtPadRingCentre[0]=0.0;
-	      MomentumAtPadRingCentre[1]=0.0;
-	      MomentumAtPadRingCentre[2]=0.0;
-	      return true;
-	    }
+	    // accumulate step in current pad row
+            dEInPadRow += step->GetTotalEnergyDeposit();
+            pathLengthInPadRow += step->GetStepLength();
+            int innercopy = getCopyNumber( step, false );
+	    if ( innercopy == getCopyNumber( step, true ) ){ // pre == post; step within the same pair of upper and lower pad ring halves
+	      //this step must have ended on the boundry between these two pad ring halfves
+              //record the tracks coordinates at this position
+              CrossingOfPadRingCentre = PostPosition;
+              MomentumAtPadRingCentre = thisMomentum;
+              globalTimeAtPadRingCentre = step->GetTrack()->GetGlobalTime();
 
 
+	      // here we memorise the padrow positions, we need them in some special cases
+              if ( padRowCentralRadii.find( innercopy ) == padRowCentralRadii.end() ) {
+                padRowCentralRadii[ innercopy ] = sqrt( pow( CrossingOfPadRingCentre.x(), 2 ) + pow( CrossingOfPadRingCentre.y(), 2 ) );
+              }
 
-	  }
-    
-	  //=========================================================================================================
-	  // case for which the step remains within geometric volume
+	    } else { // has crossed into new padrow, consider making hit
+              DepositHiPtHit( step );
+            }
 
-	  //FIXME: need and another IF case to catch particles which Stop within the padring
+	  } else {  // case for which the step remains within geometric volume
 
-	  else {    // else if(step->GetPostStepPoint()->GetStepStatus() != fGeomBoundary) {
+	    // accumulate
+	    dEInPadRow += step->GetTotalEnergyDeposit();
+            pathLengthInPadRow += step->GetStepLength();
 
-	    // the step is not limited by the step length
-	    if( step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName() != "StepLimiter"){
-
-	      // if(particle not stoped){
-	      // add the dEdx and return
-	      //	    G4cout << "Step ended by Physics Process: Add dEdx and carry on" << G4endl;
-	      dEInPadRow += step->GetTotalEnergyDeposit();
-	      pathLengthInPadRow += step->GetStepLength();
-	      return true;
-	      //}
-	      //else{
-	      //  write out the hit and clear counters
-	      //}
-
-
-	    } else {  // GetProcessName() == "StepLimiter"
-        
-	      //	    G4cout << "step must have been stopped by the step limiter" << G4endl;
-	      //	    G4cout << "write out hit at " 
-	      //		   << sqrt( position_x*position_x
-	      //			    +position_y*position_y )
-	      //		   << " " << "dEdx = " << step->GetTotalEnergyDeposit() 
-	      //		   << " " << "step length = " << step->GetStepLength()  
-	      //		   << G4endl;
-        
-	      // write out step limited hit 
-	      // these are just space point hits so do not save the dE, which is set to ZERO
-	      //	    if ( step->GetTotalEnergyDeposit() > fThresholdEnergyDeposit ) 
-        
-//xx	      fSpaceHitCollection->
-//xx		insert(new TRKHit(touchPre->GetCopyNumber(), 
-//xx				  position_x,position_y,position_z,
-//xx				  momentum_x,momentum_y,momentum_z,
-//xx				  info->GetTheTrackSummary()->GetTrackID(), 
-//xx				  step->GetTrack()->GetDefinition()->GetPDGEncoding(),
-//xx				  0.0, // dE set to ZERO 
-//xx				  step->GetTrack()->GetGlobalTime(),
-//xx				  step->GetStepLength()));
-
+            if ( step->GetPostStepPoint()->GetKineticEnergy() == 0 ) { // particle stopped in padring
+	      DepositHiPtHit( step );
+	    } else if ( step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName() == "StepLimiter"){ // step limited by distance
+	      // write out a zero energy hit in the spacehitcollection
 	      Geant4Tracker::Hit* hit = new Geant4Tracker::Hit(step->GetTrack()->GetTrackID(),
 							       step->GetTrack()->GetDefinition()->GetPDGEncoding(),
-							       0.0, globalTimeAtPadRingCentre);  // dE set to ZERO
-
+							       0.0,                          // dE set to ZERO
+							       globalTimeAtPadRingCentre);  // this time may or may not be defined already
 	      hit->position = 0.5*( PrePosition + PostPosition );
 	      hit->momentum = thisMomentum ;
 	      hit->length   = step->GetStepLength();
 	      hit->cellID   = sensitive->cellID( step ) ;
-
 	      fSpaceHitCollection->add(hit);
-
-
-
-              // add dE and pathlegth and return
-	      dEInPadRow += step->GetTotalEnergyDeposit();
-	      pathLengthInPadRow += step->GetStepLength();
-	      return true;
 	    }
+
 	  }
 
 
@@ -335,33 +230,47 @@ namespace dd4hep {
 
 	else if (Control.TPCLowPtStepLimit) { // low pt tracks will be treated differently as their step length is limited by the special low pt steplimiter
     
-	  if ( ( PreviousPostStepPosition - step->GetPreStepPoint()->GetPosition() ).mag() > 1.0e-6 * CLHEP::mm ) {
+	  //--------------------------------
+          // first check if there is padrow stuff left over to deposit
+          if ( dEInPadRow > 0 ) {
+            G4cout << " WARNING left over padrow stuff (from high pt tracks) deposit hipt" << std::endl;
+            DepositHiPtHit( previousStep ); // use stored previous step
+          }
+          //--------------------------------
+
+
+	  if ( (  previousStep->GetPostStepPoint()->GetPosition() - step->GetPreStepPoint()->GetPosition() ).mag() > 1.0e-6 * CLHEP::mm ) {
       
 	    // This step does not continue the previous path. Deposit the energy and begin a new Pt hit.
       
 	    if (CumulativeEnergyDeposit > fThresholdEnergyDeposit) {
 	      //dumpStep( h , step ) ;
-	      DepositLowPtHit();
+	      DepositLowPtHit( previousStep );
 	    }
       
 	    else {
 	      // reset the cumulative variables if the hit has not been deposited.
 	      // The previous track has ended and the cumulated energy left at the end 
 	      // was not enough to ionize
-	      //G4cout << "reset due to new track , discarding " << CumulativeEnergyDeposit / eV << " eV" << std::endl;
 	      ResetCumulativeVariables();
 	    }
 
 	  }
 
-	  else {
-	    //G4cout << "continuing track" << endl;
-	  }
-    
 	  CumulateLowPtStep(step);  
 
     
 	  // check whether to deposit the hit
+          if ( step->GetPostStepPoint()->GetKineticEnergy() == 0 ) { // particle stopped
+            if ( CumulativeEnergyDeposit > fThresholdEnergyDeposit ) { // enough energy
+              DepositLowPtHit( step ); // make hit ending with this step
+            } else {
+              ResetCumulativeVariables(); // not enough energy: reset/ignore it
+            }
+          }
+
+
+
 	  if( ( CumulativePathLength > Control.TPCLowPtMaxHitSeparation )  ) {
       
 	    // hit is deposited because the step limit is reached and there is enough energy
@@ -369,87 +278,115 @@ namespace dd4hep {
       
 	    if ( CumulativeEnergyDeposit > fThresholdEnergyDeposit) {
 	      //dumpStep( h , step ) ;
-	      DepositLowPtHit();
-	    }
-	    //else {
-	    //G4cout << "not deposited, energy is " << CumulativeEnergyDeposit/eV << " eV" << std::endl;
-	    //}
-	  }
-	  else { // even if the step lenth has not been reached the hit might
-	    // be deposited because the particle track ends
-
-	    if ( step->GetPostStepPoint()->GetKineticEnergy() == 0 ) {
-
-
-              // only deposit the hit if the energy is high enough
-	      if (CumulativeEnergyDeposit > fThresholdEnergyDeposit) {
-          
-	        //dumpStep( h , step ) ;
-		DepositLowPtHit();
-	      }
-        
-	      else { // energy is not enoug to ionize.
-		// However, the track has ended and the energy is discarded and not added to the next step
-		//G4cout << "reset due to end of track, discarding " << CumulativeEnergyDeposit/eV << " eV" << std::endl;
-		ResetCumulativeVariables();
-	      }
+	      DepositLowPtHit( step );
 	    }
 	  }
-    
-	  PreviousPostStepPosition = step->GetPostStepPoint()->GetPosition();    
-    
-	  return true;
-    
+
 	}
 
-	return true;
+	// keep track of previous step
+        previousStep = step;
 
+	return true;
+	
 
       }
 
 
       /// Post-event action callback
       void endEvent(const G4Event* /* event */)   {
-	// // We need to add the possibly last added hit to the collection here.
-	// // otherwise the last hit would be assigned to the next event and the
-	// // MC truth would be screwed.
-	// //
-	// // Alternatively the 'update' method would become rather CPU consuming,
-	// // beacuse the extract action would have to be recalculated over and over.
-	// if ( current > 0 )   {
-	//   Geant4HitCollection* coll = sensitive->collection(0);
-	//   extractHit(coll);
+
+        ResetPadrowVariables();
+
+	// ===================== finally check we have no left-over low-pt stuff
+        if (CumulativeEnergyDeposit > fThresholdEnergyDeposit) {
+          DepositLowPtHit( previousStep );        // Deposit the energy
+        }
+        ResetCumulativeVariables();
+
       }
   
+      void ResetPadrowVariables () // DJ added
+      {
+        dEInPadRow = 0.0;
+        globalTimeAtPadRingCentre=0.0;
+        pathLengthInPadRow=0.0;
+        CrossingOfPadRingCentre[0]=0.0;
+        CrossingOfPadRingCentre[1]=0.0;
+        CrossingOfPadRingCentre[2]=0.0;
+        MomentumAtPadRingCentre[0]=0.0;
+        MomentumAtPadRingCentre[1]=0.0;
+        MomentumAtPadRingCentre[2]=0.0;
+        StepAtEntranceToPadRing=0;
+      }
+
+      void DepositHiPtHit(G4Step GEANT4_CONST_STEP * step) // DJ extracted to separate fn
+      {
+        if ( dEInPadRow > fThresholdEnergyDeposit ) {
+
+          bool rareError=false;
+
+          if( CrossingOfPadRingCentre[0]<0.1 && CrossingOfPadRingCentre[1]<0.1 && CrossingOfPadRingCentre[2]<0.1 ) {
+            // series of steps did not cross the centre of pad row; make reasonable estimate
+            int innercopy = getCopyNumber( step, false );
+            if ( padRowCentralRadii.find( innercopy ) != padRowCentralRadii.end() ) { // we know radius of this pad row
+              // average of first and last points of this series of steps
+              const G4ThreeVector AvePos = 0.5*( StepAtEntranceToPadRing->GetPreStepPoint()->GetPosition() + step->GetPostStepPoint()->GetPosition() );
+              G4double radius = sqrt( pow(AvePos.x(), 2)+pow(AvePos.y(), 2) );
+              CrossingOfPadRingCentre = AvePos*( padRowCentralRadii[innercopy]/radius ); // move radially to centre of pad row
+              // time and momentum: average of intial and final
+              globalTimeAtPadRingCentre = 0.5*(StepAtEntranceToPadRing->GetTrack()->GetGlobalTime() + step->GetTrack()->GetGlobalTime() );
+              MomentumAtPadRingCentre = 0.5*(StepAtEntranceToPadRing->GetPreStepPoint()->GetMomentum() + step->GetPostStepPoint()->GetMomentum() );
+            } else { // have not yet seen this pad row in this job
+              // in principle we can get this from geometry information, but don't want to add extra dependencies...
+              G4cout << " WARNING: dont yet know radius of this pad row...ignoring this energy deposit (should be v rare: eg possibly in first track(s) of first event)" << std::endl;
+              rareError=true;
+            }
+          }
+
+          if ( !rareError ) {
+	    Geant4Tracker::Hit* hit = new Geant4Tracker::Hit(step->GetTrack()->GetTrackID(),
+                                                             step->GetTrack()->GetDefinition()->GetPDGEncoding(),
+                                                             dEInPadRow, globalTimeAtPadRingCentre);
+            hit->position = CrossingOfPadRingCentre;
+            hit->momentum = MomentumAtPadRingCentre;
+            hit->length   = pathLengthInPadRow;
+            hit->cellID   = sensitive->cellID( step ) ;
+            fHitCollection->add(hit);
+            sensitive->printM2("+++ TrackID:%6d [%s] CREATE TPC hit at pad row crossing :"
+                               " %e MeV  Pos:%8.2f %8.2f %8.2f",
+                               step->GetTrack()->GetTrackID(),sensitive->c_name(), dEInPadRow,
+                               hit->position.X()/CLHEP::mm,hit->position.Y()/CLHEP::mm,hit->position.Z()/CLHEP::mm);
+          }
+        } // en threshold
+        ResetPadrowVariables();
+      }
+
+
+
       void ResetCumulativeVariables()
       {
 	CumulativeMeanPosition.set(0.0,0.0,0.0);
 	CumulativeMeanMomentum.set(0.0,0.0,0.0);
+        CumulativeMeanTime=0;
 	CumulativeNumSteps = 0;
 	CumulativeEnergyDeposit = 0;
 	CumulativePathLength = 0;
       }
 
-      void DepositLowPtHit()
+      void DepositLowPtHit( G4Step GEANT4_CONST_STEP * step )
       {
 
-//xx	fLowPtHitCollection->
-//xx	  insert(new TRKHit(CurrentCopyNumber, 
-//xx			    CumulativeMeanPosition[0], CumulativeMeanPosition[1], CumulativeMeanPosition[2],
-//xx			    CumulativeMeanMomentum[0], CumulativeMeanMomentum[1], CumulativeMeanMomentum[2],
-//xx			    CurrentTrackID, 
-//xx			    CurrentPDGEncoding,
-//xx			    CumulativeEnergyDeposit, 
-//xx			    CurrentGlobalTime,
-//xx			    CumulativePathLength));
+	Geant4Tracker::Hit* hit = new Geant4Tracker::Hit( step->GetTrack()->GetTrackID(),
+                                                          step->GetTrack()->GetDefinition()->GetPDGEncoding(),
+                                                          CumulativeEnergyDeposit,
+                                                          CumulativeMeanTime/CumulativeNumSteps ); // DJ : simple average of all steps' time
   
-	Geant4Tracker::Hit* hit = new Geant4Tracker::Hit(CurrentTrackID, CurrentPDGEncoding,
-							 CumulativeEnergyDeposit, globalTimeAtPadRingCentre);
-
-	hit->position = CumulativeMeanPosition ;
-	hit->momentum = CumulativeMeanMomentum ;
+	hit->position = CumulativeMeanPosition/CumulativeNumSteps ;
+	hit->momentum = CumulativeMeanMomentum/CumulativeNumSteps ;
 	hit->length   = CumulativePathLength ;
-	hit->cellID   = CurrentCopyNumber ;
+        hit->cellID   = sensitive->cellID(step) ;
+
 
 	fLowPtHitCollection->add(hit);
 
@@ -464,15 +401,10 @@ namespace dd4hep {
 	const G4ThreeVector meanMomentum = (step->GetPreStepPoint()->GetMomentum() + step->GetPostStepPoint()->GetMomentum()) / 2;
 	
 	++CumulativeNumSteps;    
-	CumulativeMeanPosition = ( (CumulativeMeanPosition*(CumulativeNumSteps-1)) + meanPosition ) / CumulativeNumSteps;
-	CumulativeMeanMomentum = ( (CumulativeMeanMomentum*(CumulativeNumSteps-1)) + meanMomentum ) / CumulativeNumSteps;
+        CumulativeMeanPosition += (step->GetPreStepPoint()->GetPosition() + step->GetPostStepPoint()->GetPosition()) / 2;
+        CumulativeMeanMomentum += (step->GetPreStepPoint()->GetMomentum() + step->GetPostStepPoint()->GetMomentum()) / 2;
 	CumulativeEnergyDeposit += step->GetTotalEnergyDeposit();
 	CumulativePathLength += step->GetStepLength();
-	CurrentPDGEncoding = step->GetTrack()->GetDefinition()->GetPDGEncoding();
-	CurrentTrackID = step->GetTrack()->GetTrackID();
-	CurrentGlobalTime = step->GetTrack()->GetGlobalTime();
-	CurrentCopyNumber = step->GetPreStepPoint()->GetTouchableHandle()->GetCopyNumber();
-	
       }
       
     };
