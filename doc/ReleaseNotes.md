@@ -1,3 +1,18 @@
+# v00-18
+
+* 2022-12-02 Daniel Jeans ([PR#261](https://github.com/ilcsoft/lcgeo/pull/261))
+  - bug fix: no longer carry over energy to next event (sometimes affected lowpt hits)
+  - address one FIXME: create highpt hits even if steps have not passed the padrow centre
+  - some slight code cleanup and reorganisation to hopefully make it clearer to read
+
+* 2022-11-07 Thomas Madlener ([PR#260](https://github.com/ilcsoft/lcgeo/pull/260))
+  - Remove gcc8 based workflow because the underlying nightly builds are no longer available
+  - Update github actions to latest available versions.
+
+* 2022-11-07 Daniel Jeans ([PR#250](https://github.com/ilcsoft/lcgeo/pull/250))
+  - ILD_l5[_o1,2,3,4]_v09 models with CLIC-inspired all silicon outer tracker in place of TPC+SET
+  - otherwise identical to ILD_l5_v02 model
+
 # v00-17
 
 * 2022-10-13 Andre Sailer ([PR#259](https://github.com/ilcsoft/lcgeo/pull/259))
