@@ -406,6 +406,7 @@ namespace dd4hep {
         CumulativeMeanMomentum += (step->GetPreStepPoint()->GetMomentum() + step->GetPostStepPoint()->GetMomentum()) / 2;
 	CumulativeEnergyDeposit += step->GetTotalEnergyDeposit();
 	CumulativePathLength += step->GetStepLength();
+	CumulativeMeanTime += step->GetTrack()->GetGlobalTime();
       }
       
     };
