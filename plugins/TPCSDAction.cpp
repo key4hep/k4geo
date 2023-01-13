@@ -239,7 +239,8 @@ namespace dd4hep {
           //--------------------------------
 
 
-	  if ( (  previousStep->GetPostStepPoint()->GetPosition() - step->GetPreStepPoint()->GetPosition() ).mag() > 1.0e-6 * CLHEP::mm ) {
+	  if ( previousStep && 
+	       (  previousStep->GetPostStepPoint()->GetPosition() - step->GetPreStepPoint()->GetPosition() ).mag() > 1.0e-6 * CLHEP::mm ) {
       
 	    // This step does not continue the previous path. Deposit the energy and begin a new Pt hit.
       
