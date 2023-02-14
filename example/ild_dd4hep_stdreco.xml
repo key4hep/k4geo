@@ -445,7 +445,7 @@
     <!--Smooth All Mesurement Sites in Fit-->
     <parameter name="SmoothOn" type="bool">false </parameter>
     <!--Name of the tpc hit input collections-->
-    <parameter name="TPCHitCollection" type="string" lcioInType="TrackerHit">TPCTrackerHits </parameter>
+    <parameter name="RawTimeSeriesCollection" type="string" lcioInType="TrackerHit">TPCTrackerHits </parameter>
     
    <!--maximum radial distance [mm] from outer field cage of last hit, such that the track is considered to end at the end -->
    <parameter name="TrackEndsOuterCentralDist" type="float">25 </parameter>
@@ -682,7 +682,7 @@
  <!--Smooth All Mesurement Sites in Fit-->
   <parameter name="SmoothOn" type="bool">true </parameter>
   <!--TPC Hit Collection Name-->
-  <parameter name="TPCHitCollection" type="string" lcioInType="TrackerHit">TPCTrackerHits </parameter>
+  <parameter name="RawTimeSeriesCollection" type="string" lcioInType="TrackerHit">TPCTrackerHits </parameter>
   <!--Cut on distance between track and TPC hits-->
   <parameter name="TPCHitToTrackDistance" type="float">15 </parameter>
   <!--TPC Track Collection-->
