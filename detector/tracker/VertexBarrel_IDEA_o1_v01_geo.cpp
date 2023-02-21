@@ -2,10 +2,11 @@
 //====================================================================
 //  Based on ZPlanarTracker module from F. Gaede
 
-//  Add description!!!
-//  Simple tracking detector made from planar sensors that are parallel
-//  to the z-axis. There are two materials per ladder: one sensitive
-//  and one support.
+//  Tracking detector to describe the FCC-ee IDEA vertex detector barrel.
+//  The vertex detector is assembled of stave structures which feature 
+//  support and readout (flex) elements. Each stave features multiple 
+//  individual sensors, where each sensor features a sensitive and periphery
+//  region.
 //--------------------------------------------------------------------
 //
 //  Author     : Armin Ilg
@@ -108,7 +109,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
     // --- create an assembly and DetElement for the layer
 
-    Assembly layer_assembly( "layer_assembly" +_toString(layer_id,"_%d") );
+    Assembly layer_assembly( name + "_layer_" +_toString(layer_id,"_%d") );
    
     DetElement layerDE( tracker , _toString(layer_id,"layer_%d"), x_det.id() );
    
@@ -233,6 +234,9 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
       std::vector<double> distances{supp_distance, sens_distance, readout_distance}; 
       double min_distance = std::distance(distances.begin(), std::min_element(distances.begin(), distances.end()));
 
+      Assembly ladder_assembly(laddername);
+      pv = layer_assembly.placeVolume(ladder_assembly);
+      
       // --- place support elements that are along whole stave -----
       int c_id, m_id = 0;
       double c_distance = supp_distance;
@@ -251,11 +255,11 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
           Volume c_vol(layername+c_name, Box(c_thick/2.0,c_width/2.0, supp_zhalf), c_mat);
           c_vol.setAttributes( theDetector, x_det.regionStr(), x_det.limitsStr(), comp.visStr() );
 
-          pv = layer_assembly.placeVolume(c_vol, Transform3D( rot, Position( ( c_distance + c_thick/2. ) * cos(phi)  - c_offset * sin( phi ) ,
+          pv = ladder_assembly.placeVolume(c_vol, Transform3D( rot, Position( ( c_distance + c_thick/2. ) * cos(phi)  - c_offset * sin( phi ) ,
                                                                              ( c_distance + c_thick/2. ) * sin(phi)  + c_offset * cos( phi ) ,
                                                                                                                                         0. ) ) 
                                                  * Transform3D( rot2, Position( sin(phi_tilt)*(c_distance+c_offset*sin(phi)-min_distance), (c_distance-c_offset*cos(phi)-min_distance)*(cos(phi_tilt)-1) , 0.) )) ;
-          std::cout << "Placing support for ladder " << std::to_string(j) << ": Thickness: " << std::to_string(c_thick) << ", width: " << std::to_string(c_width) << ", distance: " << std::to_string(c_distance) << ", material: " << comp.materialStr() << ", name: " << c_name << std::endl;
+          //std::cout << "Placing support for ladder " << std::to_string(j) << ": Thickness: " << std::to_string(c_thick) << ", width: " << std::to_string(c_width) << ", distance: " << std::to_string(c_distance) << ", material: " << comp.materialStr() << ", name: " << c_name << std::endl;
           c_distance += c_thick;          
         }
       }
@@ -275,10 +279,10 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
           std::string c_name  = _toString(c_id,"_readout%d");
           Volume c_vol(layername+c_name, Box(c_thick/2.0,c_width/2.0, readout_zhalf), c_mat);
           c_vol.setAttributes( theDetector, x_det.regionStr(), x_det.limitsStr(), comp.visStr() );
-          pv = layer_assembly.placeVolume(c_vol, Transform3D( rot, Position( ( c_distance + c_thick/2. ) * cos(phi)  - c_offset * sin( phi ) ,
+          pv = ladder_assembly.placeVolume(c_vol, Transform3D( rot, Position( ( c_distance + c_thick/2. ) * cos(phi)  - c_offset * sin( phi ) ,
                                                                                                        ( c_distance + c_thick/2. ) * sin(phi)  + c_offset * cos( phi ) ,
                                                                                                                                                                                                                                                0. ) ) * Transform3D( rot2, Position( sin(phi_tilt)*(c_distance+c_offset*sin(phi)-min_distance), (c_distance-c_offset*cos(phi)-min_distance)*(cos(phi_tilt)-1), 0.) ) );
-          std::cout << "Placing readout for ladder " << std::to_string(j) << ": Thickness: " << std::to_string(c_thick) << ", width: " << std::to_string(c_width) << ", distance: " << std::to_string(c_distance) << ", material: " << comp.materialStr() << ", name: " << c_name << std::endl;
+          //std::cout << "Placing readout for ladder " << std::to_string(j) << ": Thickness: " << std::to_string(c_thick) << ", width: " << std::to_string(c_width) << ", distance: " << std::to_string(c_distance) << ", material: " << comp.materialStr() << ", name: " << c_name << std::endl;
           c_distance += c_thick;          
         }
       }
@@ -312,7 +316,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 //          }
 
         // Module
-        pv = layer_assembly.placeVolume( sens_vol,Transform3D(rot, Position((c_distance + c_thick/2.0)*cos(phi) - c_offset*sin(phi),
+        pv = ladder_assembly.placeVolume( sens_vol,Transform3D(rot, Position((c_distance + c_thick/2.0)*cos(phi) - c_offset*sin(phi),
                                                                             (c_distance + c_thick/2.0)*sin(phi) + c_offset*cos(phi),
                                                                             z_pos))
                                                  *Transform3D( rot2, Position( sin(phi_tilt)*(c_distance-c_offset*sin(phi)-min_distance), (c_distance+c_offset*cos(phi)-min_distance)*(cos(phi_tilt)-1), 0.) ) );
@@ -320,15 +324,15 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         // Periphery
         if(peri_type != 0){
             if(peri_length>0){
-                std::cout << "Putting z sensor periphery in" << std::endl;
-                layer_assembly.placeVolume( peri_vol_z,Transform3D(rot, Position((c_distance + c_thick/2.0)*cos(phi) - c_offset*sin(phi),
+                //std::cout << "Putting z sensor periphery in" << std::endl;
+                ladder_assembly.placeVolume( peri_vol_z,Transform3D(rot, Position((c_distance + c_thick/2.0)*cos(phi) - c_offset*sin(phi),
                                                                             (c_distance + c_thick/2.0)*sin(phi) + c_offset*cos(phi),
                                                                             z_pos - (sens_length/2.0 + peri_length/2.0)*peri_type) )
                                                  *Transform3D( rot2, Position( sin(phi_tilt)*(c_distance-c_offset*sin(phi)-min_distance), (c_distance+c_offset*cos(phi)-min_distance)*(cos(phi_tilt)-1), 0.) ) );
             }
             if(peri_width>0){
-                std::cout << "Putting r-phi sensor periphery in" << std::endl;                
-                layer_assembly.placeVolume( peri_vol_rphi,Transform3D(rot, Position((c_distance + c_thick/2.0)*cos(phi) - c_offset*sin(phi) - (sens_width/2.0 + peri_width/2.0)*peri_type*sin(phi),
+                //std::cout << "Putting r-phi sensor periphery in" << std::endl;                
+                ladder_assembly.placeVolume( peri_vol_rphi,Transform3D(rot, Position((c_distance + c_thick/2.0)*cos(phi) - c_offset*sin(phi) - (sens_width/2.0 + peri_width/2.0)*peri_type*sin(phi),
                                                                             (c_distance + c_thick/2.0)*sin(phi) + c_offset*cos(phi) + (sens_width/2.0 + peri_width/2.0)*peri_type*cos(phi),
                                                                             z_pos) )
                                                  *Transform3D( rot2, Position( sin(phi_tilt)*(c_distance - c_offset*sin(phi) - (sens_width/2.0 + peri_width/2.0)*peri_type*sin(phi) -min_distance), (c_distance + c_offset*cos(phi) + (sens_width/2.0 + peri_width/2.0)*peri_type*cos(phi) -min_distance)*(cos(phi_tilt)-1), 0.) ) );
@@ -343,7 +347,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
 
         volSurfaceList( ladderDE )->push_back( surf ) ;
-        std::cout << "Making sensor " << iMod << " of stave " << j << " with z position of " << std::to_string(z_pos) << std::endl;
+        //std::cout << "Making sensor " << iMod << " of stave " << j << " with z position of " << std::to_string(z_pos) << std::endl;
 
         z_pos += sens_z_displace + sens_length; // Move by sens_length+sens_z_displace from module to module
       }
