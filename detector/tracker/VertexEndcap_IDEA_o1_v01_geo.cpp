@@ -50,7 +50,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     string      det_name  = x_det.nameStr();
     bool        reflect   = x_det.reflect(false);
     DetElement  sdet        (det_name,det_id);
-    int         m_id=0, c_id=0, n_sensor=0;
+    int         m_id=0, c_id=0;
     map<string,Volume> modules;
     map<string, Placements>  sensitives;
     PlacedVolume pv;
@@ -171,9 +171,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     for(auto & side : sides){
         string side_name = det_name + _toString(side,"_side%d");
         Assembly side_assembly(side_name);
-        DetElement sideDE( sdet , side_name, x_det.id() );
         pv = envelope.placeVolume(side_assembly);
-        sideDE.setPlacement( pv ) ;
 
         for(xml_coll_t li(x_det,_U(layer)); li; ++li)  {
             xml_comp_t  x_layer(li);
@@ -186,7 +184,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             double phi0_layer   = x_layer.phi0();
 
             int mod_num = 0;
-            int iModuleTot = 0;
             
             // -------- reconstruction parameters  ----------------
             //NOTE: Mostly Dummy information for event display/DDMarlinPandora
@@ -198,18 +195,14 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             
             string layer_name = side_name + _toString(layer_id,"_layer%d");
             Assembly layer_assembly(layer_name);
-            DetElement layerDE( sdet , layer_name, x_det.id() );
             pv = side_assembly.placeVolume(layer_assembly);
-            layerDE.setPlacement( pv ) ;
 
             for(int iPetal=0; iPetal<nPetals; iPetal++){
                 double z_alternate_petal = (iPetal%2 == 0) ? 0.0 : layer_dz;
 
                 string petal_name = layer_name + _toString(iPetal,"_petal%d");
                 Assembly petal_assembly(petal_name);
-                DetElement petalDE( sdet , petal_name, x_det.id() );
                 pv = layer_assembly.placeVolume(petal_assembly);
-                petalDE.setPlacement( pv ) ;
 
                 int iStave = 0;
                 int nStaves = 0;
@@ -243,9 +236,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
                     string stave_name = petal_name + _toString(iStave,"_stave%d");
                     Assembly stave_assembly(stave_name);
-                    DetElement staveDE( sdet , stave_name, x_det.id() );
                     pv = petal_assembly.placeVolume(stave_assembly);
-                    staveDE.setPlacement( pv ) ;
                     
                     // Place all components
                     RotationZYX rot( phi , 0, 0  );
@@ -267,7 +258,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                         ele_vol.setVisAttributes(theDetector.visAttributes(m.support_viss[i]));
 
                         pv = stave_assembly.placeVolume(ele_vol, Transform3D(rot, pos) );
-                        staveDE.setPlacement(pv);
                         // pv.addPhysVolID("side", side ).addPhysVolID("layer", layer_id ).addPhysVolID("stave", iStave+iPetal*nStaves );  
                     }
 
@@ -283,17 +273,18 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                         Volume ele_vol = Volume( _toString(i, "readout_%d"), ele_box, m.readout_materials[i]);                    
                         ele_vol.setVisAttributes(theDetector.visAttributes(m.readout_viss[i]));
                         pv = stave_assembly.placeVolume(ele_vol, Transform3D(rot, pos) );
-                        staveDE.setPlacement(pv);
                         // pv.addPhysVolID("side", side ).addPhysVolID("layer", layer_id ).addPhysVolID("stave", iStave+iPetal*nStaves );  
                     }
 
                     // Place sensors
                     for(int iModule=0; iModule<nmodules; iModule++){
+                        int iSensor=0;
                         string module_name = stave_name + _toString(iModule,"_module%d");
                         Assembly module_assembly(module_name);
                         DetElement moduleDE( sdet , module_name, x_det.id() );
                         pv = stave_assembly.placeVolume(module_assembly);
-                        moduleDE.setPlacement( pv ) ;
+                        pv.addPhysVolID("side",side).addPhysVolID("layer", layer_id ).addPhysVolID("module", iModule);  
+                        moduleDE.setPlacement(pv);
 
                         for(int i=0; i<m.sensor_volumes.size(); i++){
                             double z_alternate_module = (iModule%2 == 0) ? 0.0 : stave_dz;
@@ -304,19 +295,21 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                             Position pos(x_pos, y_pos, z_pos);
                             m.sensor_volumes[i].setVisAttributes(theDetector.visAttributes(m.sensor_viss[i]));
                             pv = module_assembly.placeVolume(m.sensor_volumes[i], Transform3D(rot, pos) );
-                            pv.addPhysVolID("side",side).addPhysVolID("layer", layer_id ).addPhysVolID("module", iModuleTot );  
-                            moduleDE.setPlacement(pv);
                             if(m.sensor_sensitives[i]){
-                                pv.addPhysVolID("sensor",n_sensor); ///Not needed ?
-                                n_sensor++;
+                                pv.addPhysVolID("sensor",iSensor); ///Not needed ?
 
                                 m.sensor_volumes[i].setSensitiveDetector(sens);
                                 sensitives[m.name].push_back(pv);
                                 moduleSensThickness[m.name] = m.sensor_thickness; //Assuming one sensitive slice per module
                                 modules[m.name] = m.sensor_volumes[i];
+
+                                string sensor_name = module_name + _toString(iSensor,"_sensor%d");
+
+                                DetElement comp_elt(moduleDE, sensor_name, iSensor);
+                                comp_elt.setPlacement(pv);
+                                iSensor++;
                             }
                         }
-                        iModuleTot++;
                     }
                     iStave++;
                 }
