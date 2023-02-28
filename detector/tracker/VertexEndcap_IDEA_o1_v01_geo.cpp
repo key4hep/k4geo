@@ -283,7 +283,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                         Volume ele_vol = Volume( _toString(i, "support_%d"), ele_box, m.support_materials[i]);                    
                         ele_vol.setVisAttributes(theDetector.visAttributes(m.support_viss[i]));
 
-                        pv = stave_assembly.placeVolume(ele_vol, Transform3D(rot, pos) );
+                        pv = envelope.placeVolume(ele_vol, Transform3D(rot, pos) );
                     }
 
                     // Place readout
@@ -297,7 +297,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                         Box ele_box = Box( m.readout_widths[i]/2., stave_length/2., m.readout_thicknesses[i]/2.);
                         Volume ele_vol = Volume( _toString(i, "readout_%d"), ele_box, m.readout_materials[i]);                    
                         ele_vol.setVisAttributes(theDetector.visAttributes(m.readout_viss[i]));
-                        pv = stave_assembly.placeVolume(ele_vol, Transform3D(rot, pos) );
+                        pv = envelope.placeVolume(ele_vol, Transform3D(rot, pos) );
                     }
 
                     for(int iModule=0; iModule<nmodules; iModule++){
