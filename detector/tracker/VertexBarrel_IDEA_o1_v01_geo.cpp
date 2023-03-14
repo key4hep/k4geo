@@ -52,8 +52,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
   xml_det_t    x_det = e;
   std::string  name  = x_det.nameStr();
 
-  Material    vacuum    = theDetector.vacuum();
-
   // put the whole detector into an assembly
   //  - should be replaced by an envelope volume ...
   
@@ -439,4 +437,4 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
   return tracker;
 }
 
-DECLARE_DETELEMENT(VertexBarrel_o1_v01,create_element)
+DECLARE_DETELEMENT(VertexBarrel_IDEA_o1_v01,create_element)
