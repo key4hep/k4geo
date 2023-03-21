@@ -25,6 +25,8 @@
 #include "UTIL/LCTrackerConf.h"
 #include <UTIL/ILDConf.h>
 
+using namespace std;
+
 using dd4hep::Assembly;
 using dd4hep::Box;
 using dd4hep::BUILD_ENVELOPE;
@@ -50,17 +52,15 @@ using dd4hep::rec::volSurfaceList;
 static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector sens)  {
   
   xml_det_t    x_det = e;
-  std::string  name  = x_det.nameStr();
+  std::string  det_name  = x_det.nameStr();
 
   // put the whole detector into an assembly
   //  - should be replaced by an envelope volume ...
   
-  Assembly assembly( name+"_assembly" );
-  
-  DetElement tracker( name, x_det.id()  ) ;
-
+  Assembly assembly( det_name+"_assembly" );
+  DetElement tracker( det_name, x_det.id()  ) ;
   PlacedVolume pv;
-  
+
 
   // for encoding
   std::string cellIDEncoding = sens.readout().idSpec().fieldDescription();
@@ -88,6 +88,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
   //=========  loop over layer elements in xml  ======================================
 
+  cout << "Building vertex barrel detector " << det_name << "..." << endl;
   for(xml_coll_t c(e, _U(layer) ); c; ++c)  {
     
     xml_comp_t x_layer( c );
@@ -102,12 +103,12 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
     double dphi = 2.*M_PI / double(nLadders);
 
-    std::string layername = name+_toString(layer_id,"_layer%d");
+    std::string layername = det_name+_toString(layer_id,"_layer%d");
     
 
     // --- create an assembly and DetElement for the layer
 
-    Assembly layer_assembly( name + "_layer_" +_toString(layer_id,"_%d") );
+    Assembly layer_assembly( det_name + "_layer_" +_toString(layer_id,"_%d") );
     DetElement layerDE( tracker , _toString(layer_id,"layer_%d"), x_det.id() );
     pv = assembly.placeVolume(  layer_assembly );
     pv.addPhysVolID("layer", layer_id );  
@@ -150,11 +151,12 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     double phi0             = x_layer.phi0();
     double phi_tilt         = x_layer.phi_tilt();
 
-
     if( sens_distance < minRadius ) minRadius = sens_distance ;
     if( supp_distance < minRadius ) minRadius = supp_distance ;
     if( sens_zhalf < minZhalf ) minZhalf = sens_zhalf ;
     if( supp_zhalf < minZhalf ) minZhalf = supp_zhalf ;
+
+    cout << "    Layer: " << to_string(layer_id) << ", zhalf: " << to_string(sens_zhalf) << ", minimum radius: " << to_string(minRadius) << endl;
 
     Material sens_mat     = theDetector.material( sens_matS ) ;
 
@@ -208,7 +210,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
 
       RotationZYX rot( phi , 0, 0  ) ;
-      RotationZYX rot2( phi_tilt , 0, 0  ) ;
+      RotationZYX rot2( phi_tilt , 0, 0  ) ; // Tilt not working yet
       std::vector<double> distances{supp_distance, sens_distance, readout_distance}; 
       double min_distance = std::distance(distances.begin(), std::min_element(distances.begin(), distances.end()));
 
@@ -238,7 +240,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                                                                              ( c_distance + c_thick/2. ) * sin(phi)  + c_offset * cos( phi ) ,
                                                                                                                                         0. ) ) 
                                                  * Transform3D( rot2, Position( sin(phi_tilt)*(c_distance+c_offset*sin(phi)-min_distance), (c_distance-c_offset*cos(phi)-min_distance)*(cos(phi_tilt)-1) , 0.) )) ;
-          //std::cout << "Placing support for ladder " << std::to_string(j) << ": Thickness: " << std::to_string(c_thick) << ", width: " << std::to_string(c_width) << ", distance: " << std::to_string(c_distance) << ", material: " << comp.materialStr() << ", name: " << c_name << std::endl;
           c_distance += c_thick;          
         }
       }
@@ -261,7 +262,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
           pv = layer_assembly.placeVolume(c_vol, Transform3D( rot, Position( ( c_distance + c_thick/2. ) * cos(phi)  - c_offset * sin( phi ) ,
                                                                                                        ( c_distance + c_thick/2. ) * sin(phi)  + c_offset * cos( phi ) ,
                                                                                                                                                                                                                                                0. ) ) * Transform3D( rot2, Position( sin(phi_tilt)*(c_distance+c_offset*sin(phi)-min_distance), (c_distance-c_offset*cos(phi)-min_distance)*(cos(phi_tilt)-1), 0.) ) );
-          //std::cout << "Placing readout for ladder " << std::to_string(j) << ": Thickness: " << std::to_string(c_thick) << ", width: " << std::to_string(c_width) << ", distance: " << std::to_string(c_distance) << ", material: " << comp.materialStr() << ", name: " << c_name << std::endl;
           c_distance += c_thick;          
         }
       }
@@ -296,14 +296,12 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         // Periphery
         if(peri_type != 0){
             if(peri_length>0){
-                //std::cout << "Putting z sensor periphery in" << std::endl;
                 layer_assembly.placeVolume( peri_vol_z,Transform3D(rot, Position((c_distance + c_thick/2.0)*cos(phi) - c_offset*sin(phi),
                                                                             (c_distance + c_thick/2.0)*sin(phi) + c_offset*cos(phi),
                                                                             z_pos - (sens_length/2.0 + peri_length/2.0)*peri_type) )
                                                  *Transform3D( rot2, Position( sin(phi_tilt)*(c_distance-c_offset*sin(phi)-min_distance), (c_distance+c_offset*cos(phi)-min_distance)*(cos(phi_tilt)-1), 0.) ) );
             }
             if(peri_width>0){
-                //std::cout << "Putting r-phi sensor periphery in" << std::endl;                
                 layer_assembly.placeVolume( peri_vol_rphi,Transform3D(rot, Position((c_distance + c_thick/2.0)*cos(phi) - c_offset*sin(phi) - (sens_width/2.0 + peri_width/2.0)*peri_type*sin(phi),
                                                                             (c_distance + c_thick/2.0)*sin(phi) + c_offset*cos(phi) + (sens_width/2.0 + peri_width/2.0)*peri_type*cos(phi),
                                                                             z_pos) )
@@ -403,7 +401,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
   double z_half     =  minZhalf ; 
   
   Tube   tubeSolid (inner_r, outer_r, z_half ) ;
-  Volume tube_vol( name+"_inner_cylinder_air", tubeSolid ,  theDetector.material("Air") ) ;
+  Volume tube_vol( det_name+"_inner_cylinder_air", tubeSolid ,  theDetector.material("Air") ) ;
   
   assembly.placeVolume( tube_vol , Transform3D() ) ;
   
