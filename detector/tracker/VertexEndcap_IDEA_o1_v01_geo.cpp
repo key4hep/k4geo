@@ -39,7 +39,7 @@ using dd4hep::Transform3D;
 using dd4hep::Trapezoid;
 using dd4hep::Volume;
 using dd4hep::_toString;
-using dd4hep::rec::ZDiskPetalsData;
+//using dd4hep::rec::ZDiskPetalsData;
 using dd4hep::Box;
 
 static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens)  {
@@ -65,11 +65,22 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     envelope.setVisAttributes(theDetector.invisible()); sens.setType("tracker");
 
     // -------- reconstruction parameters  ----------------
-    ZDiskPetalsData*  zDiskPetalsData = new ZDiskPetalsData ;
+ //   ZDiskPetalsData*  zDiskPetalsData = new ZDiskPetalsData ;
     std::map< std::string, double > moduleSensThickness;
 
     // Struct to support multiple readouts
     struct readoutStruct{
+        double z_offset;
+        vector<double> thicknesses;
+        vector<double> widths;
+        vector<double> offsets; 
+        vector<double> z_offsets; 
+        vector<Material> materials;
+        vector<string> viss;
+    };
+
+    // Struct to support multiple multi-layer supports
+    struct supportStruct{
         double z_offset;
         vector<double> thicknesses;
         vector<double> widths;
@@ -101,13 +112,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         vector<PlacedVolume> sensitives;
         vector<Volume> sensitiveMotherVolumes;
 
-        double support_z_offset;
-        vector<double> support_thicknesses;
-        vector<double> support_offsets;
-        vector<double> support_z_offsets;
-        vector<double> support_widths;
-        vector<Material> support_materials;
-        vector<string> support_viss;
+        vector<supportStruct> supports;
     };
     list<module_information> module_information_list;
 
@@ -119,27 +124,47 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         m.name = x_mod.nameStr();
 
         // Readout
-        readoutStruct readout;
         xml_coll_t c_readout(x_mod,_U(readout));
-        readout.z_offset = xml_comp_t(c_readout).z_offset();
-        xml_coll_t c_component(c_readout,_U(component));
-        for(c_component.reset(); c_component; ++c_component){
-            xml_comp_t component = c_component;
-            readout.thicknesses.push_back(component.thickness());
-            readout.widths.push_back(component.width());
-            readout.offsets.push_back(component.offset());
-            readout.z_offsets.push_back(component.z_offset());
-            readout.materials.push_back(theDetector.material(component.materialStr()));
-            readout.viss.push_back(component.visStr());
+        for(c_readout.reset(); c_readout; ++c_readout){
+            readoutStruct readout;
+            readout.z_offset = xml_comp_t(c_readout).z_offset();
+            xml_coll_t c_component(c_readout,_U(component));
+            for(c_component.reset(); c_component; ++c_component){
+                xml_comp_t component = c_component;
+                readout.thicknesses.push_back(component.thickness());
+                readout.widths.push_back(component.width());
+                readout.offsets.push_back(component.offset());
+                readout.z_offsets.push_back(component.z_offset());
+                readout.materials.push_back(theDetector.material(component.materialStr()));
+                readout.viss.push_back(component.visStr());
+            }
+            m.readouts.push_back(readout);
         }
-        m.readouts.push_back(readout);
+
+        // Support
+        xml_coll_t c_support(x_mod,_U(support));
+        for(c_support.reset(); c_support; ++c_support){
+            supportStruct support;    
+            support.z_offset = xml_comp_t(c_support).z_offset();
+            xml_coll_t c_component = xml_coll_t(c_support,_U(component));
+            for(c_component.reset(); c_component; ++c_component){
+                xml_comp_t component = c_component;
+                support.thicknesses.push_back(component.thickness());
+                support.widths.push_back(component.width());
+                support.offsets.push_back(component.offset());
+                support.z_offsets.push_back(component.z_offset());
+                support.materials.push_back(theDetector.material(component.materialStr()));
+                support.viss.push_back(component.visStr());
+            }
+            m.supports.push_back(support);
+        }
 
         // Sensor
         xml_coll_t c_sensor(x_mod,_U(sensor));
         m.sensor_z_offset = xml_comp_t(c_sensor).z_offset();
         m.sensor_thickness = xml_comp_t(c_sensor).thickness();
         m.sensor_material = theDetector.material(xml_comp_t(c_sensor).materialStr());
-        c_component = xml_coll_t(c_sensor,_U(component));
+        xml_coll_t c_component = xml_coll_t(c_sensor,_U(component));
 
         int iComponent=0;
         for(c_component.reset(); c_component; ++c_component){
@@ -194,19 +219,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         m.passiveVolume = passiveVolume;
         moduleSensThickness[m.name] = m.sensor_thickness;
 
-        // Support
-        xml_coll_t c_support(x_mod,_U(support));
-        m.support_z_offset = xml_comp_t(c_support).z_offset();
-        c_component = xml_coll_t(c_support,_U(component));
-        for(c_component.reset(); c_component; ++c_component){
-            xml_comp_t component = c_component;
-            m.support_thicknesses.push_back(component.thickness());
-            m.support_offsets.push_back(component.offset());
-            m.support_z_offsets.push_back(component.z_offset());
-            m.support_widths.push_back(component.width());
-            m.support_materials.push_back(theDetector.material(component.materialStr()));
-            m.support_viss.push_back(component.visStr());
-        }
         module_information_list.push_back(m);
     }
    
@@ -229,7 +241,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             double dr           = x_layer.dr();
             double z            = x_layer.z();
             double layer_dz     = x_layer.dz();
-            int nPetals         = x_layer.nPetals();
+            int nPetals         = x_layer.nphi();
             double phi0_layer   = x_layer.phi0();
             int mod_num = 0;
 
@@ -238,7 +250,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             //NOTE: Mostly Dummy information for event display/DDMarlinPandora
             //FIXME: have to see how to properly accommodate spirals and the fact that there's only
             //one ring
-            ZDiskPetalsData::LayerLayout thisLayer ;
+            //ZDiskPetalsData::LayerLayout thisLayer ;
 
             int numberOfRings=0; //check that only one ring is used
             
@@ -264,10 +276,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                     nStaves+=1;
         
                 for(xml_coll_t ri(x_layer,_U(stave)); ri; ++ri)  {
-                    if(numberOfRings>0){
-                        printout(ERROR,"VertexEndcap","Driver (and ZDiskPetalsData structure) does not support more than one ring per layer!");
-                        throw runtime_error("More than one ring per layer not supported by driver.");
-                    }
+//                    if(numberOfRings>0){
+//                        printout(ERROR,"VertexEndcap","Driver (and ZDiskPetalsData structure) does not support more than one ring per layer!");
+//                        throw runtime_error("More than one ring per layer not supported by driver.");
+//                    }
                         
                     xml_comp_t x_stave = ri;
 
@@ -301,18 +313,22 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
                     
                     // Place support
-                    for(int i=0; i<int(m.support_thicknesses.size()); i++){
-                        double x_pos = (r + m.support_offsets[i])*cos(phi);
-                        double y_pos = r*sin(phi);
-                        double z_pos = z + z_alternate_petal + z_offset + m.support_z_offset + m.support_z_offsets[i] + m.support_thicknesses[i]/2.; 
-                        if(side == -1){z_pos = -z_pos;}
-                        Position pos(x_pos, y_pos, z_pos);
+                    int iSupport = 0;
+                    for(auto& support : m.supports){
+                        for(int i=0; i<int(support.thicknesses.size()); i++){
+                            double x_pos = (r + support.offsets[i])*cos(phi);
+                            double y_pos = r*sin(phi);
+                            double z_pos = z + z_alternate_petal + z_offset + support.z_offset + support.z_offsets[i] + support.thicknesses[i]/2.; 
+                            if(side == -1){z_pos = -z_pos;}
+                            Position pos(x_pos, y_pos, z_pos);
 
-                        Box ele_box = Box( m.support_widths[i]/2., stave_length/2., m.support_thicknesses[i]/2.);
-                        Volume ele_vol = Volume( _toString(i, "support_%d"), ele_box, m.support_materials[i]);                    
-                        ele_vol.setVisAttributes(theDetector.visAttributes(m.support_viss[i]));
+                            Box ele_box = Box( support.widths[i]/2., stave_length/2., support.thicknesses[i]/2.);
+                            Volume ele_vol = Volume(_toString(int(support.thicknesses.size())*iSupport + i, "suport_%d"), ele_box, support.materials[i]);                    
+                            ele_vol.setVisAttributes(theDetector.visAttributes(support.viss[i]));
 
-                        pv = layer_assembly.placeVolume(ele_vol, Transform3D(rot, pos) );
+                            pv = layer_assembly.placeVolume(ele_vol, Transform3D(rot, pos) );
+                        }
+                        iSupport++;
                     }
 
                     // Place readout
@@ -355,7 +371,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                             pv = layer_assembly.placeVolume(m.sensitiveMotherVolumes[i],Transform3D(rot, pos));
                             // pv = layer_assembly.placeVolume(m.passiveVolume,Transform3D(rot, pos));
                             
-                            pv.addPhysVolID("module",mod_num).addPhysVolID("sensor", 0);
+                            pv.addPhysVolID("module",mod_num).addPhysVolID("sensor", iSensor);
                             module.setPlacement(pv);
                             
                             string comp_name = module_name + _toString(i,"_sensor%d");
@@ -398,7 +414,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         
     }
     //attach data to detector
-    sdet.addExtension< ZDiskPetalsData >( zDiskPetalsData ) ;
+    // sdet.addExtension< ZDiskPetalsData >( zDiskPetalsData ) ;
     
     cout<<"Built vertex endcap detector: " << std::endl;
     sdet.setAttributes(theDetector,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
