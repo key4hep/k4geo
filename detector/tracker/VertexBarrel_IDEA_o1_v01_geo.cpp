@@ -42,7 +42,7 @@ using dd4hep::Transform3D;
 using dd4hep::Trapezoid;
 using dd4hep::Volume;
 using dd4hep::_toString;
-using dd4hep::rec::ZPlanarData;
+//using dd4hep::rec::ZPlanarData;
 using dd4hep::rec::NeighbourSurfacesData;
 using dd4hep::rec::Vector3D;
 using dd4hep::rec::SurfaceType;
@@ -71,7 +71,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
 
 
-  ZPlanarData*  zPlanarData = new ZPlanarData ;
+  // ZPlanarData*  zPlanarData = new ZPlanarData ;
   NeighbourSurfacesData*  neighbourSurfacesData = new NeighbourSurfacesData() ;
 
   dd4hep::xml::setDetectorTypeFlag( e, tracker ) ;
@@ -361,35 +361,35 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     // is this needed ??
     layer_assembly->GetShape()->ComputeBBox() ;
 
-    //-----------------------------------
-    //  store the data in an extension to be used for reconstruction
-    ZPlanarData::LayerLayout thisLayer ;
+    // //-----------------------------------
+    // //  store the data in an extension to be used for reconstruction
+    // ZPlanarData::LayerLayout thisLayer ;
 
-    thisLayer.sensorsPerLadder = sens_perLadder ;
-    thisLayer.sensorsZDisplace = sens_z_displace ;
-    thisLayer.lengthSensor     = sens_length ;
+    // thisLayer.sensorsPerLadder = sens_perLadder ;
+    // // thisLayer.sensorsZDisplace = sens_z_displace ;
+    // thisLayer.lengthSensor     = sens_length ;
 
-    thisLayer.distanceSupport  = supp_distance ;
-    thisLayer.offsetSupport    = supp_offset ;
-    thisLayer.thicknessSupport = supp_total_thickness ;
-    thisLayer.zHalfSupport     = supp_zhalf ;
-    thisLayer.widthSupport     = supp_width ;
+    // thisLayer.distanceSupport  = supp_distance ;
+    // thisLayer.offsetSupport    = supp_offset ;
+    // thisLayer.thicknessSupport = supp_total_thickness ;
+    // thisLayer.zHalfSupport     = supp_zhalf ;
+    // thisLayer.widthSupport     = supp_width ;
 
-    thisLayer.distanceSensitive  = sens_distance ;
-    thisLayer.offsetSensitive    = sens_offset ;
-    thisLayer.thicknessSensitive = sens_thickness ;
-    thisLayer.zHalfSensitive     = sens_zhalf ;
-    thisLayer.widthSensitive     = sens_width ;
+    // thisLayer.distanceSensitive  = sens_distance ;
+    // thisLayer.offsetSensitive    = sens_offset ;
+    // thisLayer.thicknessSensitive = sens_thickness ;
+    // thisLayer.zHalfSensitive     = sens_zhalf ;
+    // thisLayer.widthSensitive     = sens_width ;
 
-    thisLayer.ladderNumber =  nLadders ;
-    thisLayer.phi0         =  phi0 ;
+    // thisLayer.ladderNumber =  nLadders ;
+    // thisLayer.phi0         =  phi0 ;
 
-    thisLayer.periWidth    = peri_width ;
-    thisLayer.periLength   = peri_length ;
-    thisLayer.periType     = peri_type ;
+    // // thisLayer.periWidth    = peri_width ;
+    // // thisLayer.periLength   = peri_length ;
+    // // thisLayer.periType     = peri_type ;
 
-    zPlanarData->layers.push_back( thisLayer ) ;
-    //-----------------------------------
+    // zPlanarData->layers.push_back( thisLayer ) ;
+    // //-----------------------------------
   }
 
 #if 0  //-------- add an inscribing cylinder of air for tracking purposes -----------------
@@ -415,7 +415,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
 
 
-  tracker.addExtension< ZPlanarData >( zPlanarData ) ;
+  // tracker.addExtension< ZPlanarData >( zPlanarData ) ;
   tracker.addExtension< NeighbourSurfacesData >( neighbourSurfacesData ) ;
 
 
