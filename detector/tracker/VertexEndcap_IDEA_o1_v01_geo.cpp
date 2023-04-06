@@ -326,7 +326,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                             Volume ele_vol = Volume(_toString(int(support.thicknesses.size())*iSupport + i, "suport_%d"), ele_box, support.materials[i]);                    
                             ele_vol.setVisAttributes(theDetector.visAttributes(support.viss[i]));
 
-                            pv = layer_assembly.placeVolume(ele_vol, Transform3D(rot, pos) );
+                            pv = envelope.placeVolume(ele_vol, Transform3D(rot, pos) );
                         }
                         iSupport++;
                     }
@@ -344,7 +344,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                             Box ele_box = Box( readout.widths[i]/2., stave_length/2., readout.thicknesses[i]/2.);
                             Volume ele_vol = Volume( _toString(int(readout.thicknesses.size())*iReadout + i, "readout_%d"), ele_box, readout.materials[i]);                    
                             ele_vol.setVisAttributes(theDetector.visAttributes(readout.viss[i]));
-                            pv = layer_assembly.placeVolume(ele_vol, Transform3D(rot, pos) );
+                            pv = envelope.placeVolume(ele_vol, Transform3D(rot, pos) );
                         }
                         iReadout++;
                     }
@@ -359,52 +359,33 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                         Position pos(x_pos, y_pos, z_pos);
 
                         int iSensor=0;
-                        string module_name = stave_name + _toString(iModule,"_module%d");
-                        //                         string module_name = stave_name + _toString(iPetal*nStaves + iStave*nmodules + iModule,"_module%d");
+                        // string module_name = stave_name + _toString(iModule,"_module%d");
+                        string module_name = stave_name + _toString(mod_num,"_module%d");
 
                         // Place active sensor parts
 
                         for(int i=0; i<int(m.sensitives.size()); i++)  {
                             string sensor_name = module_name + _toString(i,"_sensorMotherVolume%d");
                             
-                            DetElement module(layerDE,sensor_name,x_det.id());
-                            pv = layer_assembly.placeVolume(m.sensitiveMotherVolumes[i],Transform3D(rot, pos));
+                            DetElement module(sdet,sensor_name,x_det.id());
+                            pv = envelope.placeVolume(m.sensitiveMotherVolumes[i],Transform3D(rot, pos));
                             // pv = layer_assembly.placeVolume(m.passiveVolume,Transform3D(rot, pos));
                             
-                            pv.addPhysVolID("module",mod_num).addPhysVolID("sensor", iSensor);
+                            pv.addPhysVolID("side", side ).addPhysVolID("layer", layer_id ).addPhysVolID("module",mod_num).addPhysVolID("sensor", iSensor);
+                            cout << "side: " << _toString(side) << "layer: " << _toString(layer_id) << "module: " << _toString(mod_num) << "sensor: " << _toString(iSensor) << endl; 
                             module.setPlacement(pv);
                             
                             string comp_name = module_name + _toString(i,"_sensor%d");
 
                             PlacedVolume sens_pv = m.sensitives[i];
-                            DetElement comp_elt(module,m.sensitives[i].volume().name(), mod_num);
+                            DetElement comp_elt(module,comp_name, mod_num);
                             comp_elt.setPlacement(sens_pv);
                             iSensor++;
-                            mod_num++;
                         }         
-
-
-                        // for(int i=0; i<int(m.sensitives.size()); i++)  {
-                        //     string sensor_name = module_name + _toString(i,"_sensorMotherVolume%d");
-                            
-                        //     DetElement module(layerDE,sensor_name,x_det.id());
-                        //     // pv = layer_assembly.placeVolume(m.sensitiveMotherVolumes[i],Transform3D(rot, pos));
-                        //     pv = layer_assembly.placeVolume(m.passiveVolume,Transform3D(rot, pos));
-                            
-                        //     pv.addPhysVolID("module",mod_num).addPhysVolID("sensor", 0);
-                        //     module.setPlacement(pv);
-                            
-                        //     string comp_name = module_name + _toString(i,"_sensor%d");
-
-                        //     PlacedVolume sens_pv = m.sensitives[i];
-                        //     DetElement comp_elt(module,m.sensitives[i].volume().name(), mod_num);
-                        //     comp_elt.setPlacement(sens_pv);
-                        //     iSensor++;
-                        //     mod_num++;
-                        // }       
+                        mod_num++;
 
                         // Place passive sensor parts
-                        pv = layer_assembly.placeVolume(m.passiveVolume, Transform3D(rot, pos));
+                        pv = envelope.placeVolume(m.passiveVolume, Transform3D(rot, pos));
                     }
                     iStave++;
                 }
