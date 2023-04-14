@@ -7,7 +7,7 @@ Current baseline version: **`MuColl_v1.1`**
 | `MuColl_v0`               | 1st version with `MuColl` name, based on `CLIC` detector, adapted to MDI designed by MAP |
 | `MuColl_v1`               | Copy of `MuColl_v0` with fixed asymmetry in thickness of Tracker Endcap Support structures (frozen for SnowMass 2021 studies) |
 | `MuColl_v1.0.1`           | Copy of `MuColl_v1` with Crilin design of ECAL |
-| `MuColl_v1.0.2`           | Copy of `MuColl_v1` with Crilin design of ECAL |
+| `MuColl_v1.0.2`           | Copy of `MuColl_v1` with MPGD material in Yoke |
 | `MuColl_v1.1` <           | Cleaned-up version of `MuColl_v1` with resolved overlaps and better code layout |
 | `MuColl_v1.1.1`           | Copy of `MuColl_v1.1` with 500um of Si added to passive material thickness in VTX detector |
 | `MuColl_v1.1.2`           | Copy of `MuColl_v1.1` with a stronger magnetic field: 5.0 T |
