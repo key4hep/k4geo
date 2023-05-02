@@ -199,20 +199,11 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             Position pos(x_pos, y_pos, z_pos);
 
             if(m.sensor_sensitives[i]) {
-                // Would like to have this mother volume one level higher, having multiple sensitive sensors (of a module) in the same mother volume, but that's not supported
-                // Volume  sensitiveMotherVolume(m.name + _toString(iSensitive, "_sensitive%d"), m.sensor_boxes[i], vacuum);
-                // sensitiveMotherVolume.setVisAttributes(theDetector.visAttributes(m.sensor_viss[0]));
+                Volume sensitive_vol(m.name + _toString(iSensitive, "sensor_%d"), m.sensor_boxes[i], m.sensor_material);
+                sensitive_vol.setVisAttributes(theDetector.visAttributes(m.sensor_viss[0]));
+                sensitive_vol.setSensitiveDetector(sens); 
 
-                Volume sensitiveVolume(_toString(iSensitive, "sensor_%d"), m.sensor_boxes[i], m.sensor_material);
-
-                sensitiveVolume.setVisAttributes(theDetector.visAttributes(m.sensor_viss[0]));
-                // pv = sensitiveMotherVolume.placeVolume(sensitiveVolume, pos);
-                sensitiveVolume.setSensitiveDetector(sens);
-                // m.sensitives.push_back(pv);
- 
-                // m.sensitiveMotherVolumes.push_back(sensitiveMotherVolume);
-
-                m.sensitive_vol.push_back(sensitiveVolume);
+                m.sensitive_vol.push_back(sensitive_vol);
                 m.sensitive_pos.push_back(pos);
                 iSensitive++;
             }
@@ -382,12 +373,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                             pv.addPhysVolID("side", side ).addPhysVolID("layer", layer_id ).addPhysVolID("module",mod_num).addPhysVolID("sensor", iSensor);
                             cout << "side: " << _toString(side) << "layer: " << _toString(layer_id) << "module: " << _toString(mod_num) << "sensor: " << _toString(iSensor) << endl; 
                             module.setPlacement(pv);
-                            
-                            // string comp_name = module_name + _toString(i,"_sensor%d");
-
-                            // PlacedVolume sens_pv = pv;
-                            // DetElement comp_elt(module,comp_name, mod_num);
-                            // comp_elt.setPlacement(PlacedVolume());
                             iSensor++;
                         }         
                         mod_num++;
