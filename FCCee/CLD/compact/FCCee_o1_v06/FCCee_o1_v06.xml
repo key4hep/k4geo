@@ -1,13 +1,13 @@
-<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+m<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-    <info name="FCCee_o1_v04"
-        title="FCCee detector model option 1 version 04 (update on MDI region)"
-	author="Yorgos Voutsinas, Anna Maria Kolano, Oleksandr Viazlo"
+    <info name="FCCee_o1_v06"
+        title="FCCee detector model option 1 version 06 (fixed overlaps)"
+	author="Andre Sailer"
         url="http://ilcsoft.desy.de"
         status="development"
-        version="$Id: 2018-08-21 oviazlo@cern.ch $">
+        version="2023-05-23">
         <comment>The compact format for the FCCee Detector design</comment>
     </info>
 
