@@ -280,7 +280,7 @@ m<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
 
     <include ref="LumiCal_o3_v02_03.xml"/>
 
-    <include ref="Vertex_o4_v05.xml"/>
+    <include ref="Vertex_o4_v06.xml"/>
     <include ref="InnerTracker_o2_v06_02.xml"/>
     <include ref="OuterTracker_o2_v06_02.xml"/>
 
