@@ -74,6 +74,15 @@ ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh
   ddsim --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/steeringFile.py --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o2_v04/CLIC_o2_v04.xml --runType=batch -G -N=1 --outputFile=testCLIC_o2_v04.slcio )
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
+
+#--------------------------------------------------
+# test for ARC v0
+SET( test_name "test_ARC_v0" )
+ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
+  materialScan --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/compact/CLD_ARC/arc_full_v0.xml 0 0 0 -1000 0 0 )
+SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
+
+
 #--------------------------------------------------
 
 ADD_EXECUTABLE( TestSensThickness src/TestSensThickness.cpp )

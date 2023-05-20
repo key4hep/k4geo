@@ -56,6 +56,7 @@ file(GLOB sources
   ./detector/CaloTB/*.cpp 
   ./FCalTB/setup/*.cpp
   ./plugins/LinearSortingPolicy.cpp
+  ./detector/PID/ARC_geo_v0.cpp
   )
 
 file(GLOB G4sources
