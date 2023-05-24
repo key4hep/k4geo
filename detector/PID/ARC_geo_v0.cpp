@@ -504,7 +504,7 @@ static Ref_t create_arc_endcap_cell(Detector &desc, xml::Handle_t handle, Sensit
 
   return det;
 }
-DECLARE_DETELEMENT(ARCENDCAP_T, create_arc_endcap_cell)
+DECLARE_DETELEMENT(ARCENDCAP_o1_v1_T, create_arc_endcap_cell)
 
 
 /// Function to build ARC barrel
@@ -868,4 +868,4 @@ static Ref_t create_arc_barrel_cell(Detector &desc, xml::Handle_t handle, Sensit
     return det;
 }
 
-DECLARE_DETELEMENT(ARCBARREL_T, create_arc_barrel_cell)
+DECLARE_DETELEMENT(ARCBARREL_o1_v1_T, create_arc_barrel_cell)

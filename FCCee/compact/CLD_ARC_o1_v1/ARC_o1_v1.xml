@@ -77,7 +77,7 @@
   <detector
     id="1"
     name="ARCBARREL"
-    type="ARCBARREL_T"
+    type="ARCBARREL_o1_v1_T"
     readout="ARC_HITS"
     >
   <!-- /detectors/detector/vessel -->
@@ -113,7 +113,7 @@
   <detector
     id="2"
     name="ARCENDCAP"
-    type="ARCENDCAP_T"
+    type="ARCENDCAP_o1_v1_T"
     readout="ARC_HITS"
     zpos = "ARC_ENDCAP_ZPOS"
     >
