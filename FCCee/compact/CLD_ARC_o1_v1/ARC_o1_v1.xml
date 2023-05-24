@@ -12,7 +12,7 @@
 <includes>
   <gdmlFile ref="elements.xml"/>
   <gdmlFile ref="materials_arc.xml"/>
-  <gdmlFile ref="RadiatorCell_FinalOptimisation.xml"/>
+  <gdmlFile ref="RadiatorCell_FinalOptimisation_o1_v1.xml"/>
 </includes>
 
 <display>
