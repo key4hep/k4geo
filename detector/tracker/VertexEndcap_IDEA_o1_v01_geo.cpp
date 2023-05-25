@@ -386,7 +386,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                 }
 
             }
+            layer_assembly->GetShape()->ComputeBBox() ;
+
         }
+        side_assembly->GetShape()->ComputeBBox() ;
         
     }
     //attach data to detector
