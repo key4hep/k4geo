@@ -68,7 +68,7 @@
   <constant name="MIRROR_RADIUS"          value="36.9*cm"   />
   <constant name="COOLING_THICKNESS"      value="0.5*cm"    />
   <constant name="AEROGEL_THICKNESS"      value="1.0*cm"    />
-  <constant name="ARC_ENDCAP_ZPOS"        value="220*cm"    />
+  <constant name="ARC_ENDCAP_ZPOS"        value="235*cm"    />
 </define>
 
 
