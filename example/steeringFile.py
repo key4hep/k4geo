@@ -6,7 +6,7 @@ SIM.compactFile = "/data/sailer/software/LCGeo_Auth/ILD/compact/ILD_o1_v05/ILD_o
 SIM.runType = "batch"
 SIM.numberOfEvents = 2
 
-SIM.field.eps_min = 1*mm
+SIM.field.eps_min = .001*mm
 
 SIM.gun.multiplicity = 1
 SIM.gun.energy = 40*GeV
