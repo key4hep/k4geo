@@ -36,7 +36,7 @@
   <include ref="../../../DetFCCeeCommon/compact/BeamInstrumentation.xml"/>
   <include ref="../../../DetFCCeeCommon/compact/LumiCal.xml"/>
 
-  <include ref="Vertex.xml"/> 
+  <include ref="Vertex_o4_v05_NOT_smallBP.xml"/>
   <include ref="InnerTracker.xml"/>
   <include ref="OuterTracker.xml"/>
 
