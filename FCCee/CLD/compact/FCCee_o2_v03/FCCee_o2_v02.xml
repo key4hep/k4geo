@@ -43,7 +43,7 @@
   <include ref="ECalBarrel.xml"/>
   <include ref="ECalEndcap.xml"/>
 
-    <include ref="HCalBarrel.xml"/>
+    <include ref="HCalBarrel_o1_v01_01.xml"/>
     <include ref="HCalEndcap.xml"/>
     <include ref="Solenoid.xml"/>
 
