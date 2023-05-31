@@ -1,14 +1,4 @@
 <lccdd>
-
-    <info name="FCCee"
-        title="FCCee CLD Inner Tracker: taken corresponding to : InnerTracker_o2_v06_02.xml"
-        author="from ILCSOFT/lcgeo/FCCee/compact/FCCee_o1_v04"
-        url="no"
-        status="development"
-        version="1.0">
-    <comment>CLD Inner Tracker for FCCee</comment>
-  </info>
-
     <define>
 
         <constant name="InnerTracker_Barrel_radius_0" value="127*mm"/>
@@ -18,7 +8,7 @@
         <constant name="InnerTracker_Barrel_half_length_0" value="481.6*mm"/>
         <constant name="InnerTracker_Barrel_half_length_1" value="481.6*mm"/>
         <constant name="InnerTracker_Barrel_half_length_2" value="692.3*mm"/>
-             
+
         <constant name="InnerTracker_Endcap_z_0" value="524*mm"/>
         <constant name="InnerTracker_Endcap_z_1" value="808*mm"/>
         <constant name="InnerTracker_Endcap_z_2" value="1093*mm"/>
@@ -104,16 +94,15 @@
 
     <detectors>
 
-        <detector id="DetID_IT_Barrel" name="InnerTrackerBarrel" type="TrackerBarrel_o1_v05" readout="InnerTrackerBarrelCollection" region="InnerTrackerBarrelRegion" >
+        <detector id="DetID_IT_Barrel" name="InnerTrackerBarrel" type="TrackerBarrel_o1_v05" readout="InnerTrackerBarrelCollection" region="InnerTrackerBarrelRegion">
             <envelope vis="ITVis">
                 <shape type="Assembly"/>
             </envelope>
             <comment>Silicon Inner Tracker Barrel</comment>
-            <!-- <sensitive type="SimpleTrackerSD"/>   -->   <!-- hardcoded in the driver -->
 
             <type_flags type=" DetType_TRACKER + DetType_BARREL"/>
 
-            <module name="InnerTrackerBarrelModule_01" vis="InnerTrackerModuleVis" >
+            <module name="InnerTrackerBarrelModule_01" vis="InnerTrackerModuleVis">
                 <module_envelope width="30.1*mm" length="30.1*mm"/>
                 <include ref="InnerTrackerBarrelModuleDown.xml"/>
             </module>
@@ -122,11 +111,11 @@
                 <rphi_layout phi_tilt="0*deg" nphi="14*2" phi0="0" rc="InnerTracker_Barrel_radius_0" dr="2.5*mm"/>
                 <z_layout dr="0" z0="InnerTracker_Barrel_half_length_0-15.05*mm" nz="32"/>
             </layer>
-            <layer module="InnerTrackerBarrelModule_01" id="1"  >
+            <layer module="InnerTrackerBarrelModule_01" id="1" >
                 <rphi_layout phi_tilt="0*deg" nphi="43*2" phi0="0" rc="InnerTracker_Barrel_radius_1" dr="2.5*mm"/>
                 <z_layout dr="0" z0="InnerTracker_Barrel_half_length_1-15.05*mm" nz="32"/>
             </layer>
-            <layer module="InnerTrackerBarrelModule_01" id="2"  >
+            <layer module="InnerTrackerBarrelModule_01" id="2" >
                 <rphi_layout phi_tilt="0*deg" nphi="71*2" phi0="0" rc="InnerTracker_Barrel_radius_2" dr="2.5*mm"/>
                 <z_layout dr="0" z0="InnerTracker_Barrel_half_length_2-15.05*mm" nz="46"/>
             </layer>
@@ -139,7 +128,6 @@
                 <shape type="Assembly"/>
             </envelope>
             <comment>Silicon Inner Tracker Endcaps</comment>
-            <sensitive type="SimpleTrackerSD"/>
 
             <type_flags type=" DetType_TRACKER + DetType_ENDCAP"/>
 
@@ -481,7 +469,6 @@
 
         </detector>
 
-
 	<detector name="InnerTrackerBarrelSupport" type="TrackerBarrelSupport_o1_v01" id="0"  reflect="true" region="InnerTrackerBarrelRegion">
 	    <envelope>
 		<shape type="Assembly"/>
@@ -502,7 +489,7 @@
 	</detector>
 
 
-	<detector name="InnerTrackerEndcapSupport" type="TrackerEndcapSupport_o1_v01" reflect="true" region="InnerTrackerEndcapRegion">
+	<detector name="InnerTrackerEndcapSupport" type="TrackerEndcapSupport_o1_v02" reflect="true" region="InnerTrackerEndcapRegion">
 	  <envelope>
 	    <shape type="Assembly"/>
 	  </envelope>
@@ -554,7 +541,6 @@
 	</detector>
 
 
-
 	<!-- <detector name="BeampipeShell" type="ConicalSupport_o1_v01" reflect="true" region="BeampipeRegion"> -->
 	<!--     <envelope> -->
 	<!--         <shape type="Assembly"/> -->
@@ -564,8 +550,7 @@
 	<!-- </detector> -->
 
 
-<!--
-	<detector name="BeampipeShell2" type="TrackerEndcapSupport_o1_v01" reflect="true" region="BeampipeRegion">
+	<detector name="BeampipeShell2" type="TrackerEndcapSupport_o1_v02" reflect="true" region="BeampipeRegion">
 	    <envelope>
 		<shape type="Assembly"/>
 	    </envelope>
@@ -587,8 +572,6 @@
 		<slice material="CarbonFiber" thickness="VertexCoolingShellThickness" />
 	    </layer>
 	</detector>
--->
-
     </detectors>
 
     <plugins>
