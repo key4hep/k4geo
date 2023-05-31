@@ -35,21 +35,21 @@
 <!--  <include ref="../../../DetFCCeeCommon/compact/Beampipe_noShield.xml"/> -->
 <include ref="../../../DetFCCeeCommon/compact/SRshielding.xml"/>
   <include ref="../../../DetFCCeeCommon/compact/BeamInstrumentation.xml"/>
-  <include ref="../../../DetFCCeeCommon/compact/LumiCal.xml"/>
+  <include ref="LumiCal_o3_v02_03.xml"/>
 
-  <include ref="Vertex.xml"/>  
-  <include ref="InnerTracker.xml"/> 
-  <include ref="OuterTracker.xml"/> 
+  <include ref="Vertex_o4_v05_smallBP.xml"/>
+  <include ref="InnerTracker_o2_v06_02.xml"/>
+  <include ref="OuterTracker_o2_v06_02.xml"/>
 
-  <include ref="ECalBarrel.xml"/>
-  <include ref="ECalEndcap.xml"/>
+  <include ref="ECalBarrel_o2_v01_03.xml"/>
+  <include ref="ECalEndcap_o2_v01_03.xml"/>
 
-    <include ref="HCalBarrel.xml"/> 
-    <include ref="HCalEndcap.xml"/> 
-    <include ref="Solenoid.xml"/>
+  <include ref="HCalBarrel_o1_v01_01.xml"/>
+  <include ref="HCalEndcap_o1_v01_01.xml"/>
+  <include ref="Solenoid_o1_v01_02.xml"/>
 
-    <include ref="YokeBarrel.xml"/>
-    <include ref="YokeEndcap.xml"/>
+  <include ref="YokeBarrel_o1_v01_02.xml"/>
+  <include ref="YokeEndcap_o1_v01_02.xml"/>
     
   <include ref="../../../DetFCCeeCommon/compact/FFQuads_sens.xml"/>
     <!--<include ref="../../../DetFCCeeCommon/compact/FFQuads.xml"/> -->
