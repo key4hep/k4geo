@@ -1,14 +1,5 @@
 <lccdd>
 
-    <info name="FCCee"
-        title="FCCee CLD Endcap Yoke : taken corresponding to : YokeEndcap_o1_v01_02.xml"
-        author="from ILCSOFT/lcgeo/FCCee/compact/FCCee_o1_v04"
-        url="no"
-        status="development"
-        version="1.0">
-    <comment>CLD Endcap  Yoke for FCCee</comment>
-  </info>
-
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
         <readout name="YokeEndcapCollection">
@@ -24,14 +15,12 @@
 
     <!--  Includes for sensitives and support                -->
     <detectors>
-        
-        <detector name="YokeEndcap" type="CLD_GenericCalEndcap_o1_v01" id="DetID_Yoke_Endcap" readout="YokeEndcapCollection" vis="YOKEVis" >
-            
-            <comment>Encap Yoke</comment>
-            
-            <type_flags type=" DetType_CALORIMETER + DetType_MUON + DetType_ENDCAP"/>
 
-            <sensitive type="SimpleCalorimeterSD"/>
+        <detector name="YokeEndcap" type="GenericCalEndcap_o1_v01" id="DetID_Yoke_Endcap" readout="YokeEndcapCollection" vis="YOKEVis" >
+
+            <comment>Encap Yoke</comment>
+
+            <type_flags type=" DetType_CALORIMETER + DetType_MUON + DetType_ENDCAP"/>
 
             <envelope vis="YOKEVis">
                 <shape type="BooleanShape" operation="Subtraction" material="Air">
@@ -43,7 +32,7 @@
                 </shape>
                 <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/YokeEndcap_outer_symmetry"/>
             </envelope>
-            
+
             <dimensions nsides_inner="YokeEndcap_outer_symmetry" nsides_outer="YokeEndcap_outer_symmetry" zmin="YokeEndcap_min_z" rmin="YokeEndcap_inner_radius" rmax="YokeEndcap_outer_radius"/>
             <layer repeat="6" vis="YokeEndcapLayerVis">
                 <slice material="Iron" thickness="21*cm"  vis="YokeAbsorberVis" radiator="yes"/>
@@ -66,15 +55,13 @@
                 <slice material="Iron" thickness="10.5*cm"  vis="YokeAbsorberVis" radiator="yes"/>
             </layer>
         </detector>
-        
+
     </detectors>
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
 </lccdd>
-
-
