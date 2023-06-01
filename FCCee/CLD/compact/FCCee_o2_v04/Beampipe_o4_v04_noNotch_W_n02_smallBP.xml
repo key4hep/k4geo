@@ -120,58 +120,52 @@
         </detector>
 <comment>Asymmetric Tungsten Shield no Rotation</comment>
 
-<detector name="BeamPipeShield_noRot" type="Mask_o1_v01_noRot" insideTrackingVolume="true" vis="TantalumVis"  >
-        <parameter crossingangle="CrossingAngle" />
+<detector name="BeamPipeShield_noRot" type="DD4hep_Mask_o1_v01" insideTrackingVolume="true" vis="TantalumVis"  >
+        <parameter crossingangle="CrossingAngle" rotationX="true"/>
 
-        <section type="Center"        
-        start="500*mm" end="LumiCal_max_z + 4.9*mm" 
-        rMin1="CentralBeamPipe_rmax + (500.0*mm-CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm"  
-        rMin2="CentralBeamPipe_rmax + (LumiCal_max_z + 4.9*mm-CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm"           
-        rMax1="CentralBeamPipe_rmax + (500.0*mm-CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm + TopFillerShieldWidth"  
+        <section type="Center"
+        start="500*mm" end="LumiCal_max_z + 4.9*mm"
+        rMin1="CentralBeamPipe_rmax + (500.0*mm-CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm"
+        rMin2="CentralBeamPipe_rmax + (LumiCal_max_z + 4.9*mm-CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm"
+        rMax1="CentralBeamPipe_rmax + (500.0*mm-CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm + TopFillerShieldWidth"
         rMax2="CentralBeamPipe_rmax + (LumiCal_max_z + 4.9*mm-CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm + BeamPipeTantalShieldWidth"
-        Phi1="326*degree"
-        Phi2="34*degree"      
-      
+        phi1="326*degree"
+        phi2="34*degree"
         material="Tungsten" name="TaShieldTopPart" />
 
 	<comment>was 370</comment>
-        <section type="Center"        
-        start="330*mm" end="500*mm" 
-        rMin1="CentralBeamPipe_rmax + (330*mm - CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm"  
-        rMin2="CentralBeamPipe_rmax + (500*mm - CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm"           
-        rMax1="CentralBeamPipe_rmax + (330*mm - CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm"  
+        <section type="Center"
+        start="330*mm" end="500*mm"
+        rMin1="CentralBeamPipe_rmax + (330*mm - CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm"
+        rMin2="CentralBeamPipe_rmax + (500*mm - CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm"
+        rMax1="CentralBeamPipe_rmax + (330*mm - CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm"
         rMax2="CentralBeamPipe_rmax + (500*mm - CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm + TopFillerShieldWidth"
-        Phi1="326*degree"
-        Phi2="34*degree"      
-      
+        phi1="326*degree"
+        phi2="34*degree"
         material="Tungsten" name="TaShieldTopPart2" />
 
-
 	<comment>one degree less, to fit lumical window</comment>
-        <section type="Center"        
-        start="600*mm" end="LumiCal_max_z + 4.9*mm" 
-        rMin1="CentralBeamPipe_rmax + (600*mm - CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm"  
-        rMin2="CentralBeamPipe_rmax + (LumiCal_max_z + 4.9*mm - CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm"           
-        rMax1="CentralBeamPipe_rmax + (600*mm - CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm + SideFillerShieldWidth"  
+        <section type="Center"
+        start="600*mm" end="LumiCal_max_z + 4.9*mm"
+        rMin1="CentralBeamPipe_rmax + (600*mm - CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm"
+        rMin2="CentralBeamPipe_rmax + (LumiCal_max_z + 4.9*mm - CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm"
+        rMax1="CentralBeamPipe_rmax + (600*mm - CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm + SideFillerShieldWidth"
         rMax2="CentralBeamPipe_rmax + (LumiCal_max_z + 4.9*mm - CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm + BeamPipeTantalShieldWidth"
-        Phi1="34*degree"
-        Phi2="70*degree"      
-      
+        phi1="34*degree"
+        phi2="70*degree"
         material="Tungsten" name="TaShieldFiller1" />
 
-        <section type="Center"        
-        start="600*mm" end="LumiCal_max_z + 4.9*mm" 
-        rMin1="CentralBeamPipe_rmax + (600*mm - CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm"  
-        rMin2="CentralBeamPipe_rmax + (LumiCal_max_z + 4.9*mm - CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm"           
-        rMax1="CentralBeamPipe_rmax + (600*mm - CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm + SideFillerShieldWidth"  
+        <section type="Center"
+        start="600*mm" end="LumiCal_max_z + 4.9*mm"
+        rMin1="CentralBeamPipe_rmax + (600*mm - CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm"
+        rMin2="CentralBeamPipe_rmax + (LumiCal_max_z + 4.9*mm - CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm"
+        rMax1="CentralBeamPipe_rmax + (600*mm - CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm + SideFillerShieldWidth"
         rMax2="CentralBeamPipe_rmax + (LumiCal_max_z + 4.9*mm - CentralBeamPipe_zmax)*0.017 + BeamPipeWidthFirstCone + 0.1*mm + BeamPipeTantalShieldWidth"
-        Phi1="291*degree"
-        Phi2="326*degree" 
-
-      
+        phi1="291*degree"
+        phi2="326*degree"
         material="Tungsten" name="TaShieldFiller2" />
 
 
-</detector>
+      </detector>
     </detectors>
 </lccdd>
