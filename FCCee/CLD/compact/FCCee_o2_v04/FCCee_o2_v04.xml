@@ -31,7 +31,7 @@
 
   <include ref="./FCCee_DectDimensions.xml" />
 
-<include ref="../../../DetFCCeeCommon/compact/Beampipe_with_notch_noShield.xml"/>
+  <include ref="Beampipe_o4_v05_noNotch_W_n02_smallBP.xml"/>
 <!--  <include ref="../../../DetFCCeeCommon/compact/Beampipe_noShield.xml"/> -->
 <include ref="../../../DetFCCeeCommon/compact/SRshielding.xml"/>
   <include ref="../../../DetFCCeeCommon/compact/BeamInstrumentation.xml"/>
