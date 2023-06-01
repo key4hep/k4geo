@@ -85,7 +85,7 @@
 <!-- 2020.04.08 : Synch Radiation mask (symmetyric in phi for the while) -->
 
 <comment>Synch Radiation mask inside the beam-pipe, at z = 2.1 m </comment>
-<detector name="SynchRadMask" type="Mask_o1_v01" insideTrackingVolume="true" vis="TantalumVis" >
+<detector name="SynchRadMask" type="DD4hep_Mask_o1_v01" insideTrackingVolume="true" vis="TantalumVis" >
         <parameter crossingangle="CrossingAngle" />
 
            <section type="Upstream" start="MiddleOfSRMask_z -3*cm" end="MiddleOfSRMask_z -1*cm" rMin1="SeparatedBeamPipe_rmax +1*mm + mask_epsilon" rMax1="SeparatedBeamPipe_rmax+1*mm +2*mask_epsilon" rMin2="SeparatedBeamPipe_rmax +0.01*mm -SynchRadMaskSize + mask_epsilon" rMax2="SeparatedBeamPipe_rmax+1*mm +2* mask_epsilon" material="Tungsten"      name="UpStreamBeamPipe_SRmask_1" />
@@ -95,11 +95,8 @@
            <section type="Upstream" start="MiddleOfSRMask_z +1*cm" end="MiddleOfSRMask_z +3*cm" rMin1="SeparatedBeamPipe_rmax +0.01*mm -SynchRadMaskSize +mask_epsilon" rMax1="SeparatedBeamPipe_rmax+1*mm + 2*mask_epsilon" rMin2="SeparatedBeamPipe_rmax +1*mm + mask_epsilon" rMax2="SeparatedBeamPipe_rmax+1*mm +2*mask_epsilon" material="Tungsten"      name="UpStreamBeamPipe_SRmask_3" />
 
 </detector>
-
-
-<!--
 <comment>Full Cone Tungsten Shield</comment>
-<detector name="BeamPipeShield" type="Mask_o1_v01" insideTrackingVolume="true" vis="TantalumVis" >
+<detector name="BeamPipeShield" type="DD4hep_Mask_o1_v01" insideTrackingVolume="true" vis="TantalumVis" >
         <parameter crossingangle="CrossingAngle" />
 
         <comment>Before HOM space</comment>
@@ -149,6 +146,7 @@
       
         material="Tungsten" name="TaShieldTopPart2" />
 
+
 	<comment>one degree less, to fit lumical window</comment>
         <section type="Center"        
         start="600*mm" end="LumiCal_max_z + 4.9*mm" 
@@ -174,7 +172,6 @@
         material="Tungsten" name="TaShieldFiller2" />
 
 
-      </detector>
--->
+</detector>
     </detectors>
 </lccdd>
