@@ -59,27 +59,18 @@
 
             <section type="Center" start="BePartEnd_z"  end="SeparatedBeamPipe_z" rMin1="CentralBeamPipe_rmax+(BePartEnd_z-CentralBeamPipe_zmax)*0.017" rMin2="SeparatedBeamPipe_rmax+0.015*SeparatedBeamPipe_z" rMax1="CentralBeamPipe_rmax+BeamPipeWidthFirstCone+(BePartEnd_z-CentralBeamPipe_zmax)*0.017" rMax2="SeparatedBeamPipe_rmax+BeamPipeWidthFirstCone+0.015*SeparatedBeamPipe_z" material="Copper" name="CopperCone" />
 
-<!--rMin2="CentralBeamPipe_rmax+(BePartEnd_z-CentralBeamPipe_zmax)*0.017+(SeparatedBeamPipe_z-BePartEnd_z)*0.017"
-    rMax2="CentralBeamPipe_rmax+BeamPipeWidthFirstCone+(BePartEnd_z-CentralBeamPipe_zmax)*0.017+(SeparatedBeamPipe_z-BePartEnd_z)*0.017"-->
+<!-- PunchedCenter = un volume qui s'etend jusqu'a rMax1 (a z=start) et rMax2 (a end) et avec deux cylindres extrudes le long
+        des directions up / down (depend du xing angle), de rayon rMin1 et rMin2  -->
 
 
-<!-- Fix 2020.04.08 : -->
-            <section type="PunchedCenter"        start="SeparatedBeamPipe_z" end="SeparatedBeamPipe_z+3*mm" rMin1="SeparatedBeamPipe_rmax"      rMin2="SeparatedBeamPipe_rmax" rMax1="SeparatedBeamPipe_rmax+0.015*(SeparatedBeamPipe_z+3*mm)" rMax2="SeparatedBeamPipe_rmax+BeamPipeWidthFirstCone+0.015*(SeparatedBeamPipe_z+3*mm)" material="Copper"     name="SplitVacChambers"/>
+	    <section type="PunchedCenter"        start="SeparatedBeamPipe_z" end="SeparatedBeamPipe_z+3*mm" rMin1="SeparatedBeamPipe_rmax"      rMin2="SeparatedBeamPipe_rmax" rMax1="SeparatedBeamPipe_rmax+0.015*(SeparatedBeamPipe_z+3*mm)" rMax2="SeparatedBeamPipe_rmax+BeamPipeWidthFirstCone+0.015*(SeparatedBeamPipe_z+3*mm)" material="Copper"     name="SplitVacChambers"/>
 
-<!-- rMax1="CentralBeamPipe_rmax+BeamPipeWidthFirstCone+(BePartEnd_z-CentralBeamPipe_zmax)*0.017+(SeparatedBeamPipe_z-BePartEnd_z)*0.017"
-     rMax2="CentralBeamPipe_rmax+BeamPipeWidthFirstCone+(BePartEnd_z-CentralBeamPipe_zmax)*0.017+(SeparatedBeamPipe_z-BePartEnd_z)*0.017 + 3*mm*0.017" -->
+	<!-- Downstream pipe : first part : radius = 1.5 cm -->
 
              <section type="DnstreamClippedFront" start="SeparatedBeamPipe_z+3.01*mm" end="6000*mm"  rMin1="SeparatedBeamPipe_rmax"  rMin2="SeparatedBeamPipe_rmax" rMax1="SeparatedBeamPipe_rmax+1*mm"  rMax2="SeparatedBeamPipe_rmax+1*mm"  material="Copper"      name="DownStreamBeamPipe_1"/>
 
-          
-<!-- upstream beam-pipe, without the mask : -->
-<!--
-	   <section type="UpstreamClippedFront"  start="SeparatedBeamPipe_z+3.01*mm" end="6000*mm"  rMin1="SeparatedBeamPipe_rmax"  rMin2="SeparatedBeamPipe_rmax" rMax1="SeparatedBeamPipe_rmax+1*mm"  rMax2="SeparatedBeamPipe_rmax+1*mm"  material="Copper"      name="UpStreamBeamPipe_1"/>
--->
 
-
-<!-- 2020.04.08 : reduce the BP radius in order to add the mask : -->
-           <section type="UpstreamClippedFront"  start="SeparatedBeamPipe_z+3.01*mm" end="MiddleOfSRMask_z -3*cm" rMin1="SeparatedBeamPipe_rmax"  rMin2="SeparatedBeamPipe_rmax" rMax1="SeparatedBeamPipe_rmax+1*mm"  rMax2="SeparatedBeamPipe_rmax+1*mm"  material="Copper"      name="UpStreamBeamPipe_1"/>
+	   <section type="UpstreamClippedFront"  start="SeparatedBeamPipe_z+3.01*mm" end="MiddleOfSRMask_z -3*cm" rMin1="SeparatedBeamPipe_rmax"  rMin2="SeparatedBeamPipe_rmax" rMax1="SeparatedBeamPipe_rmax+1*mm"  rMax2="SeparatedBeamPipe_rmax+1*mm"  material="Copper"      name="UpStreamBeamPipe_1"/>
 
            <section type="Upstream" start="MiddleOfSRMask_z -3*cm" end="MiddleOfSRMask_z -1*cm" rMin1="SeparatedBeamPipe_rmax" rMax1="SeparatedBeamPipe_rmax+1*mm" rMin2="SeparatedBeamPipe_rmax-SynchRadMaskSize" rMax2="SeparatedBeamPipe_rmax+0.01*mm - SynchRadMaskSize" material="Copper"      name="UpStreamBeamPipe_2" />
 
