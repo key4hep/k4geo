@@ -1,3 +1,17 @@
+# v00-18-01
+
+* 2023-05-26 jmcarcell ([PR#274](https://github.com/key4hep/k4geo/pull/274))
+  - Change eps_min to .001 in the example steering file
+
+* 2023-04-10 Frank Gaede ([PR#266](https://github.com/key4hep/k4geo/pull/266))
+  -  add definitions of regions to the SEcal06_hybrid barrel and endcap models of ILD:
+       - `EcalBarrelRegion` and `EcalEndcapRegion`
+       - these can be used for fast simulation (ML generation)
+
+* 2023-01-13 Daniel Jeans ([PR#263](https://github.com/key4hep/k4geo/pull/263))
+  - deal with case when previousStep is not yet defined (could cause crash)
+  - add timing information to the lowPt hits
+
 # v00-18
 
 * 2022-12-02 Daniel Jeans ([PR#261](https://github.com/ilcsoft/lcgeo/pull/261))
