@@ -255,7 +255,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
       encoder[lcio::LCTrackerCellID::module()] = nLadders;
       encoder[lcio::LCTrackerCellID::sensor()] = 0; // there is no sensor defintion in VertexBarrel at the moment
 
-      dd4hep::long64 cellID = encoder.lowWord(); // 32 bits
+      const dd4hep::CellID cellID = encoder.lowWord(); // 32 bits
 
       //compute neighbours 
 
