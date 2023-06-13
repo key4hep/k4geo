@@ -185,7 +185,7 @@ static Ref_t create_detector(Detector& theDetector,xml_h e,SensitiveDetector sen
 	
 	//modified on  comparison with  TrackerEndcap_o2_v06_geo.cpp
 	//get cellID and fill map< cellID of surface, vector of cellID of neighbouring surfaces >
-	dd4hep::long64 cellID_reflect;
+	dd4hep::CellID cellID_reflect;
 	if(reflect){
 	  encoder[lcio::LCTrackerCellID::side()]=lcio::ILDDetID::bwd;
 	  encoder[lcio::LCTrackerCellID::layer()]=l_id;
@@ -200,7 +200,7 @@ static Ref_t create_detector(Detector& theDetector,xml_h e,SensitiveDetector sen
 	encoder[lcio::LCTrackerCellID::module()]=mod_num;
 	encoder[lcio::LCTrackerCellID::sensor()]=k;
 	
-	dd4hep::long64 cellID = encoder.lowWord(); // 32 bits
+	const dd4hep::CellID cellID = encoder.lowWord(); // 32 bits
 	
 	//compute neighbours 
 	
