@@ -19,7 +19,7 @@
 
 The purpose of this documentation is to introduce the Geant4 simulations and reconstructions of the noble liquid barrel calorimeter. The emphasis is given on the implementation of the calorimeter geometry in FCCSW and the steps to be followed for the optimisation of the calorimeter.
 
-The full simulations and reconstruction in the FCCSW are described in [this tutorial](https://hep-fcc.github.io/fcc-tutorials/full-detector-simulations/README.html).
+The full simulations and reconstruction in the FCCSW are described in [this tutorial](https://hep-fcc.github.io/fcc-tutorials/master/full-detector-simulations/FccCaloPerformance/CaloFullSimExercise.html).
 
 The design of the calorimeter and the studies for the FCChh calorimetry system are documented on [arXiv](https://arxiv.org/abs/1912.09962).
 
@@ -34,23 +34,23 @@ Special layers
 - second layer (**strip layer**): The granularity in pseudorapidity is 4x higher compared to the rest of the layers. This layer is important for the pi0/gamma identification.
 
 ### Geometry description in FCCSW
-- Source code in [Detector/DetFCChhECalInclined/src/](../DetFCChhECalInclined/src)
+- Source code in [detector/calorimeter/ECalBarrel_NobleLiquid_InclinedTrapezoids_*_geo.cpp](../../../detector/calorimeter/)
 - Configuration files
-  - FCCee: [Detector/DetFCCeeECalInclined/compact/](../DetFCCeeECalInclined/compact)
-  - FCChh: [Detector/DetFCChhECalInclined/compact/](../DetFCChhECalInclined/compact)
+  - [FCCee](https://github.com/HEP-FCC/FCCDetectors/blob/main/Detector/DetFCCeeECalInclined/compact/FCCee_ECalBarrel.xml)
+  - [FCChh](https://github.com/HEP-FCC/FCCDetectors/tree/main/Detector/DetFCChhECalInclined/compact)
   
 Please note that all tunable parameters are in the configuration xml files. You're not expected to touch the geometry source code unless you are 100\% sure what you're doing.
 
-Examples from the configuration file [Detector/DetFCCeeECalInclined/compact/FCCee_ECalBarrel.xml](../DetFCCeeECalInclined/compact/FCCee_ECalBarrel.xml):
+Examples from the configuration file [FCCee](https://github.com/HEP-FCC/FCCDetectors/blob/main/Detector/DetFCCeeECalInclined/compact/FCCee_ECalBarrel.xml):
 - Settings of the inclination angle and the size of the LAr gap
-~~{.xml}
+~~~{.xml}
     <!-- Inclination angle of the plates -->
     <constant name="InclinationAngle" value="50*degree"/>
     <!-- thickness of active volume between two absorber plates at barrel Rmin, measured perpendicular to the readout plate -->
     <constant name="LArGapThickness" value="1.806*mm"/>
-~~
+~~~
 - Readout defines the segmentation of the calorimeter. Please note there are **two readouts defined - one for simulation and one for reconstruction**. The only difference between the readouts is the *phi* segmentation and *module* ID. For the simulations we use the physical volumes of the modules to obtain the *module* ID. In the next step we merge hits belonging to the virtual cells defined by module, *eta* and longitudinal *layer*. We calculate positions in *xyz* of these cells. These positions are used for the final cell creation - the cell defined by *phi*, *eta* and longitudinal *layer*. For that the *phi* ID has to be calculated. **Please make sure that all fields except of module and phi are consistent among these two readouts.** To learn more about readouts in DD4HEP have a look [here](DD4hepInFCCSW.md).
-~~{.xml}
+~~~{.xml}
   <readouts>
     <!-- readout for the simulation -->
     <!-- offset in eta is eta max value including cryostat -->
@@ -65,7 +65,7 @@ Examples from the configuration file [Detector/DetFCCeeECalInclined/compact/FCCe
       <id>system:4,cryo:1,type:3,subtype:3,layer:8,eta:9,phi:10</id>
     </readout>
   </readouts>
-~~
+~~~
 
 ## Full simulations with noble liquid calorimeter
 
@@ -83,20 +83,20 @@ You can find more details about the implemented algorithms [here](https://github
  - Calibration of deposited energy to electromagnetic scale (application of the sampling fraction) (*)
  - Gaussian noise is not added at this point to reduce the size of the output file
  - Output: truth particles & vertices, calorimeter cells
- - Example script [Reconstruction/RecFCCeeCalorimeter/options/runCaloSim.py](../../Reconstruction/RecFCCeeCalorimeter/options/runCaloSim.py)
+ - [Example script](https://github.com/HEP-FCC/k4RecCalorimeter/blob/main/RecFCCeeCalorimeter/tests/options/runCaloSim.py)
 
 (*) It could be a bit a surprising that we apply the sampling fraction correction even before adding noise to cells. By doing this you can immediately see that the energy corresponds to what is expected right after the simulation is finished. The noise values added during the reconstruction step are expected to be calibrated to the EM scale. On the other hand, this is just an example script, you can just switch on and off the calibration, noise etc. as you like. This is very flexible and up to you.
 
 You can run the example script with the following command
-~~[.sh]
-fccrun Reconstruction/RecFCCeeCalorimeter/options/runCaloSim.py  \
+~~~[.sh]
+fccrun k4RecCalorimeter/RecFCCeeCalorimeter/tests/options/runCaloSim.py  \
        --filename fccee_LAr_idea_pgun.root \
        -n 10
-~~
-The name of the output file is fccee_idea_LAr_pgun.root. The ROOT file contains the information about MC particles and cells with energy deposits of 10 single particle events (100 GeV e-) in the FCC event data model.
+~~~
+The name of the output file is `output_fullCalo_SimAndDigi.root`. The ROOT file contains the information about MC particles and cells with energy deposits together with clusters described later.
 
-Configuration of create cells algorithm in [Reconstruction/RecFCCeeCalorimeter/options/runCaloSim.py](../../Reconstruction/RecFCCeeCalorimeter/options/runCaloSim.py) 
-~~[.py]
+Configuration of the algorithm creating the cells
+~~~[.py]
 from Configurables import CreateCaloCells
 createEcalBarrelCellsStep1 = CreateCaloCells("CreateECalBarrelCellsStep1",
                    doCellCalibration=True,    
@@ -105,7 +105,7 @@ createEcalBarrelCellsStep1 = CreateCaloCells("CreateECalBarrelCellsStep1",
                                OutputLevel=INFO,
                                hits="ECalBarrelHits",
                                cells="ECalBarrelCellsStep1")
-~~
+~~~
 - *doCellCalibration* - calibration to electromagnetic scale
 - *calibTool* - different sampling fractions per layer (CalibrateInLayersTool) or a single sampling fraction factor (CalibrateCaloHitsTool)
 - *addCellNoise* - add noise to cells (including cells without signal; set to True during the reconstruction step - see below)
@@ -126,18 +126,10 @@ createEcalBarrelCellsStep1 = CreateCaloCells("CreateECalBarrelCellsStep1",
    - Topoclustering algorithm for hadrons/jets.
    - Details are described [here](https://github.com/HEP-FCC/k4RecCalorimeter/blob/main/doc/RecCalorimeter.md).
  - Output: calorimeter clusters
- - Example script [Reconstruction/RecFCCeeCalorimeter/options/runFullCaloSystem_ReconstructionSW_noiseFromFile.py](../../Reconstruction/RecFCCeeCalorimeter/options/runFullCaloSystem_ReconstructionSW_noiseFromFile.py)
+ - [Example script](https://github.com/HEP-FCC/k4RecCalorimeter/blob/main/RecFCCeeCalorimeter/tests/options/runCaloSim.py)
 
-You can run the example script with the following command
-~~[.sh]
-fccrun Reconstruction/RecFCCeeCalorimeter/options/runFullCaloSystem_ReconstructionSW_noiseFromFile.py  \
-       --input fccee_idea_LAr_pgun.root  \
-       --filename output_allCalo_reco_noise.root
-~~
-It takes the input file with calorimeter cells `fccee_idea_LAr_pgun.root`, adds noise to cells and runs the sliding window clustering algorithm. The output file `output_allCalo_reco_noise.root` contains the information about calorimeter cells and the reconstructed clusters.
- 
 Configuration of the sliding window algorithm in the example script. You have to build calorimeter towers (merge cells across the radius) first and create the clusters afterwards.
-~~[.py]
+~~~[.py]
 from Configurables import CaloTowerTool
 towers = CaloTowerTool("towers",
                                deltaEtaTower = 0.01, deltaPhiTower = 2*pi/704.,
@@ -166,7 +158,7 @@ createClusters = CreateCaloClustersSlidingWindow("CreateClusters",
                                                  nEtaFinal = finE, nPhiFinal = finP,
                                                  energyThreshold = threshold)
 createClusters.clusters.Path = "CaloClusters"
-~~
+~~~
 - Building of the towers
   - *deltaEtaTower* and *deltaPhiTower* describes the size of the tower in the *eta* and *phi*
   - the algorithm requires inputs from all calorimeter system as implemented for FCChh. However, the endcaps and forward calorimeters are not implemented for the FCCee
@@ -201,7 +193,7 @@ Once you change the parameters in the geometry description (xml file), you need 
 The definition of the cell sizes is done in the configuration xml files. The division in longitudinal *layers* and in *eta* is virtual as there are no physical volumes corresponding to the division in *R* and *eta*. The size of the cell in *phi* should correspond to a multiple of the angle between two absorbers. The segmentation in *phi* is calculated from the position of the centre of the elementary cell defined by *layer*, *eta* and *module* IDs. The segmentation in *eta* is set using the field *grid_size_eta* (for simulation and reconstruction readouts). To change the cell size in *phi*, change the fields *phi_bins* and *offset_phi* (reconstruction readout).
 
 Definition of readout
-~~{.xml}
+~~~{.xml}
   <readouts>
     <!-- readout for the simulation -->
     <!-- offset in eta is eta max value including cryostat -->
@@ -216,75 +208,72 @@ Definition of readout
       <id>system:4,cryo:1,type:3,subtype:3,layer:8,eta:9,phi:10</id>
     </readout>
   </readouts>
-~~
+~~~
 
 Definition of the thickness of the longitudinal layers is done using field *layer*
-~~{.xml}
+~~~{.xml}
 <layers>
      <layer thickness="2*cm" repeat="1"/>
      <layer thickness="6.15*cm" repeat="7"/>
 </layers>
-~~
+~~~
 The thickness is defined in the radial direction (NOT along the inclined plates!). It allows to define layers of different thickness easily. There is a first layer with thickness of 2 cm and 7 layers of 6.15 cm in this example.
 
-While optimising the layer thickness, you can set the thickness of all layers to a small value (e.g. 0.5 cm). Run the simulations with many layers and merge the layers into cells in the next step. This will give flexibility for the optimisation studies without the need to re-run the simulations over and over. There is a tool which merges layers [MergeLayers](../../Reconstruction/RecCalorimeter/src/components/MergeLayers.h):
-~~[.py]
-from Configurables import MergeLayers
-mergelayers = MergeLayers("MyMergeLayers",
-                   # take the bitfield description from the geometry service
-                   readout = ecalReadoutName,
-                   # cells in which field should be merged
-                   identifier = "layer",
-                   volumeName = "layer",
-                   # how many cells to merge
-                   merge =  [7]*5+[8],
-                   OutputLevel = INFO)
-mergelayers.inhits.Path = "ECalCells"
-mergelayers.outhits.Path = "mergedECalCells"
-~~
-In this example 6 layers are created from 43 layers (7*5+8).
+While optimising the layer thickness, you can set the thickness of all layers to a small value (e.g. 0.5 cm). Run the simulations with many layers and merge the layers into cells in the next step. This will give flexibility for the optimisation studies without the need to re-run the simulations over and over. There is a tool which merges layers [RedoSegmentation](https://github.com/HEP-FCC/k4SimGeant4/blob/main/Detector/DetComponents/src/RedoSegmentation.h):
+~~~[.py]
+## Use Phi-Theta segmentation in ECal barrel
+from Configurables import RedoSegmentation
+resegmentEcalBarrel = RedoSegmentation("ReSegmentationEcal")
+# old bitfield (readout)
+resegmentEcalBarrel.oldReadoutName = "ECalBarrelEta"
+# specify which fields are going to be altered (deleted/rewritten)
+resegmentEcalBarrel.oldSegmentationIds = ["module"]
+# new bitfield (readout), with new segmentation
+resegmentEcalBarrel.newReadoutName = "ECalBarrelPhiEta"
+resegmentEcalBarrel.inhits = "ECalBarrelCellsStep1"
+resegmentEcalBarrel.outhits = "ECalBarrelCellsStep2"
+ApplicationMgr().TopAlg += [resegmentEcalBarrel]
+~~~
 
 ## HOWTOs
 
 ### How to calculate sampling fraction values
 
-Details about the algorithm and usage are given [here](DetectorStudies.md).
+Details about the algorithm and usage are given [here](https://github.com/HEP-FCC/FCCDetectors/blob/main/doc/DetectorStudies.md).
 
-Use [fcc_ee_samplingFraction_inclinedEcal.py](../DetStudies/tests/options/fcc_ee_samplingFraction_inclinedEcal.py) with [FCCee_ECalBarrel_calibration.xml](../DetFCCeeECalInclined/compact/FCCee_ECalBarrel_calibration.xml) configuration file for FCCee. Change the configuration file to match the geometry you are interested in. The output file *histSF_fccee_inclined.root* contains histograms with the sampling fraction values per layer (*ecal_sf_layerN*).
+Use [fcc_ee_samplingFraction_inclinedEcal.py](https://github.com/BrieucF/LAr_scripts/blob/main/FCCSW_ecal/fcc_ee_samplingFraction_inclinedEcal.py) with [FCCee_ECalBarrel_calibration.xml](https://github.com/HEP-FCC/FCCDetectors/blob/main/Detector/DetFCCeeECalInclined/compact/FCCee_ECalBarrel_calibration.xml) configuration file for FCCee. Change the configuration file to match the geometry you are interested in. The output file *histSF_fccee_inclined.root* contains histograms with the sampling fraction values per layer (*ecal_sf_layerN*).
 
 Important: It is recommended to run the simulations for the sampling fraction calculation at different energies and take the average values as the sampling fractions.
 
-Once you derive the new sampling fraction values, you can apply them by changing the field name *samplingFraction* in the CalibrateInLayersTool, e.g. in [Reconstruction/RecFCCeeCalorimeter/options/runCaloSim.py](../../Reconstruction/RecFCCeeCalorimeter/options/runCaloSim.py) l. 106.
+Once you derive the new sampling fraction values, you can apply them by changing the field name *samplingFraction* in the CalibrateInLayersTool.
 
 ### How to calculate upstream correction
 
-The energy losses in the upstream material are investigated using the algorithm [UpstreamMaterial](../DetStudies/src/components/UpstreamMaterial.h). The details about the algorithm are given [here](DetectorStudies.md).
+The energy losses in the upstream material are investigated using the algorithm [EnergyInCaloLayers](https://github.com/HEP-FCC/k4SimGeant4/blob/main/Detector/DetStudies/src/components/EnergyInCaloLayers.h). The details about the algorithm are given [here](https://github.com/HEP-FCC/FCCDetectors/blob/main/doc/DetectorStudies.md).
 
-Use [fcc_ee_upstreamMaterial_inclinedEcal.py](../DetStudies/tests/options/fcc_ee_upstreamMaterial_inclinedEcal.py) with [FCCee_ECalBarrel_upstream.xml](../DetFCCeeECalInclined/compact/FCCee_ECalBarrel_upstream.xml) cofiguration file for FCCee studies. Change the configuration file to match the geometry you are interested in. 
-
-The upstream correction depends on the thickness of the cryostat in front of the calorimeter and on the geometry of the first layer of the calorimeter. There is a linear correlation between the energy detected in the first layer and the energy deposited in the upstream material. Moreover, the constants of the linear dependence changes with energy and pseudorapidity of the incoming particle. More details about the upstream correction can be found in Section 4.1.1.1 of [this paper](https://arxiv.org/abs/1912.09962).
-
-The application of the upstream correction is missing in the FCCSW, it is on our todo list. The correction is applied on the reconstructed objects - clusters from sliding window algorithm. An example can be found [here](https://github.com/faltovaj/FCC_calo_analysis_cpp/blob/master/scripts/plot_recoMonitor.py#L13).
+Use [fcc_ee_upstream_inclinedEcal.py](https://github.com/BrieucF/LAr_scripts/blob/main/FCCSW_ecal/fcc_ee_upstream_inclinedEcal.py) with [FCCee_ECalBarrel_upstream.xml](https://github.com/HEP-FCC/FCCDetectors/blob/main/Detector/DetFCCeeECalInclined/compact/FCCee_ECalBarrel_upstream.xml) cofiguration file for FCCee studies. Change the configuration file to match the geometry you are interested in. 
 
 The upstream correction depends on the thickness of the cryostat in front of the calorimeter and on the geometry of the first layer of the calorimeter. There is a linear correlation between the energy detected in the first layer and the energy deposited in the upstream material. Moreover, the constants of the linear dependence changes with energy and pseudorapidity of the incoming particle. More details about the upstream correction can be found in Section 4.1.1.1 of [this paper](https://arxiv.org/abs/1912.09962).
 
-The application of the upstream correction is missing in the FCCSW, it is on our todo list. The correction is applied on the reconstructed objects - clusters from sliding window algorithm. An example can be found [here](https://github.com/faltovaj/FCC_calo_analysis_cpp/blob/master/scripts/plot_recoMonitor.py#L13).
+An example of how to apply the correction can be found [here](https://github.com/BrieucF/LAr_scripts/blob/main/FCCSW_ecal/runSlidingWindowAndCaloSim.py#L315).
 
 ### How to change noise values
 
-The Gaussian noise to each calorimeter cell is added using [NoiseCaloCellsFromFileTool](../../Reconstruction/RecCalorimeter/src/components/NoiseCaloCellsFromFileTool.h). It uses Root file with histograms showing noise values per cell in individual layers as a function of |*eta*|. An example Root file with electronic noise estimate for LAr calorimeter can be downloaded from [here](http://fccsw.web.cern.ch/fccsw/testsamples/elecNoise_ecalBarrelFCCee_50Ohm_traces1_4shieldWidth.root).
+The Gaussian noise to each calorimeter cell is added using [NoiseCaloCellsFromFileTool](https://github.com/HEP-FCC/k4RecCalorimeter/blob/main/RecCalorimeter/src/components/NoiseCaloCellsFromFileTool.h). It uses Root file with histograms showing noise values per cell in individual layers as a function of |*eta*|. An example Root file with electronic noise estimate for LAr calorimeter can be downloaded from [here](https://github.com/BrieucF/LAr_scripts/blob/main/data/elecNoise_ecalBarrelFCCee.root).
 
-Example of the configuration of the noise tool in the script [Reconstruction/RecFCCeeCalorimeter/options/runFullCaloSystem_ReconstructionSW_noiseFromFile.py](../../Reconstruction/RecFCCeeCalorimeter/options/runFullCaloSystem_ReconstructionSW_noiseFromFile.py)
-~~[.py]
+Example of the configuration of the noise tool in this [script](https://github.com/BrieucF/LAr_scripts/blob/main/FCCSW_ecal/runTopoAndSlidingWindowAndCaloSim.py#L204).
+~~~[.py]
 from Configurables import NoiseCaloCellsFromFileTool
 noiseBarrel = NoiseCaloCellsFromFileTool("NoiseBarrel",
-                                         readoutName = ecalBarrelReadoutName,
+                                         readoutName = ecalBarrelReadoutNamePhiEta,
                                          noiseFileName = ecalBarrelNoisePath,
                                          elecNoiseHistoName = ecalBarrelNoiseHistName,
                                          activeFieldName = "layer",
                                          addPileup = False,
-                                         numRadialLayers = 8)
-~~
+                                         filterNoiseThreshold = 0,
+                                         scaleFactor = 1/1000.,
+                                         numRadialLayers = 12)
+~~~
 - *readoutName* is the name of the readout of the calorimeter
 - *noiseFileName* is the path to the Root file with histograms with the noise values per cell in individual layers as a function of |*eta*|
 - *elecNoiseHistoName* is the name of the histograms in the Root file. The names are expected in the form of *elecNoiseHistoName*+str(indexOfLayer). *indexOfLayer* goes from 1 to *numRadialLayers*
@@ -300,10 +289,10 @@ If you want to change the noise values
 
 ### How to limit number of layers in cluster reconstruction
 
-If you would like to run the sliding window algorithm with only subset of longitudinal layers, you can use [LayeredCaloTowerTool](../../Reconstruction/RecCalorimeter/src/components/LayeredCaloTowerTool.h) tool to build towers. This tool creates towers from a single cell collection only (from one calorimeter). It will only consider cells within the defined layers of the calorimeter, if the layers are defined by 'layer' bitfield.
+If you would like to run the sliding window algorithm with only subset of longitudinal layers, you can use [LayeredCaloTowerTool](https://github.com/HEP-FCC/k4RecCalorimeter/blob/main/RecCalorimeter/src/components/LayeredCaloTowerTool.h) tool to build towers. This tool creates towers from a single cell collection only (from one calorimeter). It will only consider cells within the defined layers of the calorimeter, if the layers are defined by 'layer' bitfield.
 
 Example configuration of the LayeredCaloTowerTool
-~~[.py]
+~~~[.py]
 from Configurables import LayeredCaloTowerTool
 towers = LayeredCaloTowerTool("towers",
                                deltaEtaTower = 0.01, deltaPhiTower = 2*pi/704.,
@@ -313,7 +302,7 @@ towers = LayeredCaloTowerTool("towers",
                    maximumLayer = 4,
                                OutputLevel = INFO)
 towers.cells.Path = ecalBarrelCellsName + "Noise"
-~~
+~~~
 - *deltaEtaTower* and *deltaPhiTower* describes the size of the tower in the *eta* and *phi*
 - *addLayerRestriction* use only a subset of layers or not
 - *minimumLayer* and *maximumLayer* are the minimum and maximum layer ID of cells to be added in the towers
