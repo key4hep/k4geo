@@ -377,6 +377,15 @@
       <composite n="2"   ref="C"/>
       <composite n="13"  ref="H"/>
     </material>
+
+    <material name="Aerogel_vessel_foam">
+      <D type="density" value="0.110" unit="g/cm3"/>
+      <comment> Filling of the ARC walls, made of aerogel as template material </comment>
+      <comment> n_air = [dens(Si02)-dens(aerogel)] / [dens(Si02)-dens(Air) ] </comment>
+      <fraction n="    (2.32-0.11) / (2.32-0.0012)" ref="Air"/>
+      <fraction n="1 - (2.32-0.11) / (2.32-0.0012)" ref="SiliconDioxide"/>
+    </material>
+
   </materials>
 
   <surfaces>
@@ -392,7 +401,7 @@
         7*eV  0
         "/>
     </opticalsurface>
-        <opticalsurface name="MirrorSurface" model="glisur" finish="polished" type="dielectric_metal">
+        <opticalsurface name="ARC_MirrorSurface" model="glisur" finish="polished" type="dielectric_metal">
       <property name="REFLECTIVITY" coldim="2" values="
         1*eV  1
         4*eV  1

@@ -16,36 +16,36 @@
 </includes>
 
 <display>
-  <vis name="vessel_vis"  r="236/256" g="237/256" b="232/256" alpha="0.9"  showDaughters="true" visible="false" />
-  <vis name="gas_vis"     r="227/256" g="239/256" b="217/256" alpha="1.0"  showDaughters="true" visible="false" />
-  <vis name="aerogel_vis" r="244/256" g="177/256" b="132/256" alpha="0.5"  showDaughters="true" visible="true" />
-  <vis name="cooling_vis" r="254/256" g="230/256" b="151/256" alpha="0.5"  showDaughters="true" visible="true" />
-  <vis name="sensor_vis"  r="255/256" g="0/256"   b="0/256"   alpha="1.0"  showDaughters="true" visible="true" />
-  <vis name="filter_vis"  r="0/256"   g="96/256"  b="156/256" alpha="1.0"  showDaughters="true" visible="true" />
-  <vis name="mirror_vis"  r="255/256" g="230/256" b="153/256" alpha="1.0"  showDaughters="true" visible="true" />
-  <vis name="mirror_vis1"  r="128/256" g="230/256" b="153/256" alpha="1.0"  showDaughters="true" visible="true" />
-  <vis name="mirror_vis2"  r="128/256" g="128/256" b="153/256" alpha="1.0"  showDaughters="true" visible="true" />
-  <vis name="mirror_vis3"  r="128/256" g="128/256" b="256/256" alpha="1.0"  showDaughters="true" visible="true" />
-  <vis name="mirror_vis4"  r="000/256" g="128/256" b="256/256" alpha="1.0"  showDaughters="true" visible="true" />
-  <vis name="mirror_vis5"  r="000/256" g="000/256" b="256/256" alpha="1.0"  showDaughters="true" visible="true" />
-  <vis name="mirror_vis6"  r="256/256" g="000/256" b="256/256" alpha="1.0"  showDaughters="true" visible="true" />
-  <vis name="mirror_vis7"  r="256/256" g="128/256" b="256/256" alpha="1.0"  showDaughters="true" visible="true" />
-  <vis name="mirror_vis8"  r="256/256" g="128/256" b="128/256" alpha="1.0"  showDaughters="true" visible="true" />
-  <vis name="mirror_vis9"  r="256/256" g="128/256" b="000/256" alpha="1.0"  showDaughters="true" visible="true" />
-  <vis name="mirror_vis10" r="128/256" g="256/256" b="128/256" alpha="1.0"  showDaughters="true" visible="true" />
-  <vis name="mirror_vis11" r="128/256" g="256/256" b="000/256" alpha="1.0"  showDaughters="true" visible="true" />
-  <vis name="mirror_vis12" r="000/256" g="256/256" b="000/256" alpha="1.0"  showDaughters="true" visible="true" />
-  <vis name="mirror_vis13" r="000/256" g="256/256" b="128/256" alpha="1.0"  showDaughters="true" visible="true" />
-  <vis name="mirror_vis14" r="000/256" g="128/256" b="128/256" alpha="1.0"  showDaughters="true" visible="true" />
-  <vis name="mirror_vis15" r="000/256" g="128/256" b="128/256" alpha="1.0"  showDaughters="true" visible="true" />
-  <vis name="mirror_vis16" r="000/256" g="128/256" b="055/256" alpha="1.0"  showDaughters="true" visible="true" />
-  <vis name="mirror_vis17" r="000/256" g="128/256" b="128/256" alpha="1.0"  showDaughters="true" visible="true" />
-  <vis name="mirror_vis18" r="055/256" g="128/256" b="128/256" alpha="1.0"  showDaughters="true" visible="true" />
-  <vis name="mirror_vis19" r="055/256" g="128/256" b="128/256" alpha="1.0"  showDaughters="true" visible="true" />
-  <vis name="mirror_vis20" r="055/256" g="128/256" b="128/256" alpha="1.0"  showDaughters="true" visible="true" />
-  <vis name="mirror_vis21" r="055/256" g="128/256" b="128/256" alpha="1.0"  showDaughters="true" visible="true" />
-  <vis name="no_vis" showDaughters="true" visible="false" />
-  <vis name="envelope_vis"  r="0/256"   g="96/256"  b="156/256" alpha="0.1"  showDaughters="true" visible="false" />
+  <vis name="arc_vessel_vis"  r="236/256" g="237/256" b="232/256" alpha="1.00"  showDaughters="true" visible="false" />
+  <vis name="arc_gas_vis"     r="227/256" g="239/256" b="217/256" alpha="0.3"  showDaughters="true" visible="true" />
+  <vis name="arc_aerogel_vis" r="244/256" g="177/256" b="132/256" alpha="0.5"  showDaughters="true" visible="true" />
+  <vis name="arc_cooling_vis" r="254/256" g="230/256" b="151/256" alpha="0.5"  showDaughters="true" visible="true" />
+  <vis name="arc_sensor_vis"  r="255/256" g="0/256"   b="0/256"   alpha="1.0"  showDaughters="true" visible="true" />
+  <vis name="arc_mirror_vis"  r="255/256" g="230/256" b="153/256" alpha="1.0"  showDaughters="true" visible="true" />
+  <vis name="arc_mirror_vis1"  r="128/256" g="230/256" b="153/256" alpha="1.0"  showDaughters="true" visible="true" />
+  <vis name="arc_mirror_vis2"  r="128/256" g="128/256" b="153/256" alpha="1.0"  showDaughters="true" visible="true" />
+  <vis name="arc_mirror_vis3"  r="128/256" g="128/256" b="256/256" alpha="1.0"  showDaughters="true" visible="true" />
+  <vis name="arc_mirror_vis4"  r="000/256" g="128/256" b="256/256" alpha="1.0"  showDaughters="true" visible="true" />
+  <vis name="arc_mirror_vis5"  r="000/256" g="000/256" b="256/256" alpha="1.0"  showDaughters="true" visible="true" />
+  <vis name="arc_mirror_vis6"  r="256/256" g="000/256" b="256/256" alpha="1.0"  showDaughters="true" visible="true" />
+  <vis name="arc_mirror_vis7"  r="256/256" g="128/256" b="256/256" alpha="1.0"  showDaughters="true" visible="true" />
+  <vis name="arc_mirror_vis8"  r="256/256" g="128/256" b="128/256" alpha="1.0"  showDaughters="true" visible="true" />
+  <vis name="arc_mirror_vis9"  r="256/256" g="128/256" b="000/256" alpha="1.0"  showDaughters="true" visible="true" />
+  <vis name="arc_mirror_vis10" r="128/256" g="256/256" b="128/256" alpha="1.0"  showDaughters="true" visible="true" />
+  <vis name="arc_mirror_vis11" r="128/256" g="256/256" b="000/256" alpha="1.0"  showDaughters="true" visible="true" />
+  <vis name="arc_mirror_vis12" r="000/256" g="256/256" b="000/256" alpha="1.0"  showDaughters="true" visible="true" />
+  <vis name="arc_mirror_vis13" r="000/256" g="256/256" b="128/256" alpha="1.0"  showDaughters="true" visible="true" />
+  <vis name="arc_mirror_vis14" r="000/256" g="128/256" b="128/256" alpha="1.0"  showDaughters="true" visible="true" />
+  <vis name="arc_mirror_vis15" r="000/256" g="128/256" b="128/256" alpha="1.0"  showDaughters="true" visible="true" />
+  <vis name="arc_mirror_vis16" r="000/256" g="128/256" b="055/256" alpha="1.0"  showDaughters="true" visible="true" />
+  <vis name="arc_mirror_vis17" r="000/256" g="128/256" b="128/256" alpha="1.0"  showDaughters="true" visible="true" />
+  <vis name="arc_mirror_vis18" r="055/256" g="128/256" b="128/256" alpha="1.0"  showDaughters="true" visible="true" />
+  <vis name="arc_mirror_vis19" r="055/256" g="128/256" b="128/256" alpha="1.0"  showDaughters="true" visible="true" />
+  <vis name="arc_mirror_vis20" r="055/256" g="128/256" b="128/256" alpha="1.0"  showDaughters="true" visible="true" />
+  <vis name="arc_mirror_vis21" r="055/256" g="128/256" b="128/256" alpha="1.0"  showDaughters="true" visible="true" />
+  <vis name="arc_no_vis" showDaughters="true" visible="false" />
+  <vis name="arc_envelope_vis"  r="0/256"   g="96/256"  b="156/256" alpha="0.3"  showDaughters="true" visible="true" />
+  <vis name="arc_vessel_bulk_vis"  r="236/256" g="000/256" b="000/256" alpha="1.00"  showDaughters="true" visible="false" />
 </display>
 
 <define>
@@ -53,27 +53,44 @@
   <constant name="world_x"                value="world_side"/>
   <constant name="world_y"                value="world_side"/>
   <constant name="world_z"                value="world_side"/>
-  <constant name="CELL_X"                 value="27*cm"     />
-  <constant name="CELL_Y"                 value="27*cm"     />
-  <constant name="CELL_Z"                 value="20*cm"     />
-  <constant name="VESSEL_WALL_THICKNESS"  value="1.0*cm"    />
-  <constant name="SENSOR_THICKNESS"       value="0.2*cm"    />
-  <constant name="SENSOR_X"               value="8.0*cm"    />
-  <constant name="SENSOR_Y"               value="8.0*cm"    />
-  <constant name="SENSOR_NStripsX"        value="100"       />
-  <constant name="SENSOR_NStripsY"        value="100"       />
-  <constant name="SENSOR_pitchX"          value="0.08*cm" />
-  <constant name="SENSOR_pitchY"          value="0.08*cm" />
-  <constant name="MIRROR_THICKNESS"       value="0.2*cm"    />
-  <constant name="MIRROR_RADIUS"          value="36.9*cm"   />
-  <constant name="COOLING_THICKNESS"      value="0.5*cm"    />
-  <constant name="AEROGEL_THICKNESS"      value="1.0*cm"    />
+
+  <!-- ARC properties -->
+  <constant name="ARC_VESSEL_WALL_THICKNESS"  value="1.0*cm"    />
+  <constant name="ARC_MIRROR_THICKNESS"       value="0.2*cm"    />
+  <constant name="ARC_COOLING_THICKNESS"      value="0.2*cm"    />
+  <constant name="ARC_AEROGEL_THICKNESS"      value="1.0*cm"    />
+  <!-- ARC sensor properties -->
+  <constant name="ARC_SENSOR_THICKNESS"       value="0.2*cm"    />
+  <constant name="ARC_SENSOR_X"               value="8.0*cm"    />
+  <constant name="ARC_SENSOR_Y"               value="8.0*cm"    />
+  <constant name="ARC_SENSOR_NStripsX"        value="100"       />
+  <constant name="ARC_SENSOR_NStripsY"        value="100"       />
+  <constant name="ARC_SENSOR_pitchX"          value="0.08*cm"   />
+  <constant name="ARC_SENSOR_pitchY"          value="0.08*cm"   />
+  <!--
+      WARNING:
+       The following variables named as ARC_* are fixed by design.
+       If changed, reoptimization of sensor/mirror geometry is needed
+  -->
+  <!-- ARC ENDCAP SIZE -->
+  <constant name="ARC_ENDCAP_R_INNER"     value=" 25 * cm"    />
+  <constant name="ARC_ENDCAP_R_OUTER"     value="210 * cm"    />
+  <constant name="ARC_ENDCAP_LENGTH"      value=" 20 * cm"    />
+
+  <!-- ARC BARREL SIZE -->
+  <constant name="ARC_BARREL_R_INNER"     value="190 * cm"    />
+  <constant name="ARC_BARREL_R_OUTER"     value="210 * cm"    />
+  <constant name="ARC_BARREL_LENGTH"      value="440 * cm"    />
+  <!--
+      WARNING:
+       if ARC_ENDCAP_ZPOS < (ARC_BARREL_LENGTH+ARC_ENDCAP_LENGTH)/2 + VESSEL_WALL_THICKNESS
+       The endcap will overlap with the barrel.
+  -->
   <constant name="ARC_ENDCAP_ZPOS"        value="235*cm"    />
+
 </define>
 
-
 <detectors>
-
   <detector
     id="1"
     name="ARCBARREL"
@@ -82,34 +99,36 @@
     >
   <!-- /detectors/detector/vessel -->
   <vessel
-      material="Aluminum"
-      vis="vessel_vis"
+      skinMaterial="CarbonFibStr"
+      skin_vis="arc_vessel_vis"
+      bulk_material="Aerogel_vessel_foam"
+      bulk_vis="arc_vessel_bulk_vis"
+      bulk_skin_ratio = "0.8"
     >
   </vessel>
   <!-- /detectors/detector/radiatorgas -->
   <radiatorgas
       material="C4F10_PFRICH"
-      vis="gas_vis"
+      vis="arc_gas_vis"
     >
   </radiatorgas>
   <!-- /detectors/detector/sensors -->
   <sensors
       material="SiliconOptical"
-      vis="sensor_vis"
-      sensor_side_Z="SENSOR_Y"
-      sensor_side_Phi="SENSOR_X"
-      thickness="SENSOR_THICKNESS"
+      vis="arc_sensor_vis"
+      sensor_side_Z="ARC_SENSOR_Y"
+      sensor_side_Phi="ARC_SENSOR_X"
+      thickness="ARC_SENSOR_THICKNESS"
       >
   </sensors>
   <!-- /detectors/detector/mirror -->
   <mirror
-      material="Aluminum"
-      thickness="MIRROR_THICKNESS"
-      surface="MirrorSurface"
+      material="CarbonFibStr"
+      thickness="ARC_MIRROR_THICKNESS"
+      surface="ARC_MirrorSurface"
       >
   </mirror>
   </detector>
-
   <detector
     id="2"
     name="ARCENDCAP"
@@ -119,45 +138,47 @@
     >
   <!-- /detectors/detector/vessel -->
   <vessel
-      material="Aluminum"
-      vis="vessel_vis"
+      skinMaterial="CarbonFibStr"
+      skin_vis="arc_vessel_vis"
+      bulk_material="Aerogel_vessel_foam"
+      bulk_vis="arc_vessel_bulk_vis"
+      bulk_skin_ratio = "0.8"
     >
   </vessel>
   <!-- /detectors/detector/radiatorgas -->
   <radiatorgas
       material="C4F10_PFRICH"
-      vis="gas_vis"
+      vis="arc_gas_vis"
     >
   </radiatorgas>
 
   <!-- /detectors/detector/sensors -->
   <sensors
       material="SiliconOptical"
-      vis="sensor_vis"
-      sensor_side_Y="SENSOR_Y"
-      sensor_side_X="SENSOR_X"
-      thickness="SENSOR_THICKNESS"
+      vis="arc_sensor_vis"
+      sensor_side_Y="ARC_SENSOR_Y"
+      sensor_side_X="ARC_SENSOR_X"
+      thickness="ARC_SENSOR_THICKNESS"
       >
   </sensors>
   <!-- /detectors/detector/mirror -->
   <mirror
-      material="Aluminum"
-      thickness="MIRROR_THICKNESS"
-      surface="MirrorSurface"
+      material="CarbonFibStr"
+      thickness="ARC_MIRROR_THICKNESS"
+      surface="ARC_MirrorSurface"
       >
   </mirror>
   </detector>
 </detectors>
 
-
 <readouts>
   <readout name="ARC_HITS">
     <segmentation
       type="CartesianGridXY"
-      grid_size_x="SENSOR_pitchX"
-      grid_size_y="SENSOR_pitchY"
-      offset_x="-0.5*(SENSOR_NStripsX-1)*SENSOR_pitchX"
-      offset_y="-0.5*(SENSOR_NStripsY-1)*SENSOR_pitchY"
+      grid_size_x="ARC_SENSOR_pitchX"
+      grid_size_y="ARC_SENSOR_pitchY"
+      offset_x="-0.5*(ARC_SENSOR_NStripsX-1)*ARC_SENSOR_pitchX"
+      offset_y="-0.5*(ARC_SENSOR_NStripsY-1)*ARC_SENSOR_pitchY"
       />
       <id>system:5,barrel:3,cellnumber:24,x:32:-16,y:-16</id>
   </readout>
