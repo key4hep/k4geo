@@ -211,7 +211,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
 		//encoding
 
-		dd4hep::long64 cellID_reflect;
+		dd4hep::CellID cellID_reflect;
 		if (reflect) {
 		  encoder[lcio::LCTrackerCellID::side()] = lcio::ILDDetID::bwd;
 		  encoder[lcio::LCTrackerCellID::layer()] = l_id;
@@ -226,7 +226,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 		encoder[lcio::LCTrackerCellID::module()] = 0; // only 1 ring so always 0 
 		encoder[lcio::LCTrackerCellID::sensor()] = k;
 
-		dd4hep::long64 cellID = encoder.lowWord(); // 32 bits
+		const dd4hep::CellID cellID = encoder.lowWord(); // 32 bits
 
 		//compute neighbours 
 

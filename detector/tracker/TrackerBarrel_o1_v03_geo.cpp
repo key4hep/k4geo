@@ -182,7 +182,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 		encoder[lcio::LCTrackerCellID::module()] = module_idx;
 		encoder[lcio::LCTrackerCellID::sensor()] = sensor_idx;
 
-		dd4hep::long64 cellID = encoder.lowWord(); // 32 bits
+		const dd4hep::CellID cellID = encoder.lowWord(); // 32 bits
 
 		//compute neighbours 
 
