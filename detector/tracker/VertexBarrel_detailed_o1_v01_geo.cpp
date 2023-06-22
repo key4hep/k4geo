@@ -432,4 +432,4 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
   return tracker;
 }
 
-DECLARE_DETELEMENT(VertexBarrel_complex_o1_v01,create_element)
+DECLARE_DETELEMENT(VertexBarrel_detailed_o1_v01,create_element)

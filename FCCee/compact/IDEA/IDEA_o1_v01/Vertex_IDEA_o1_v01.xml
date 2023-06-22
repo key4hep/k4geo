@@ -204,7 +204,7 @@
 
     <!-- Vertex inner barrel -->
     <detectors>
-        <detector name="VertexBarrel" type="VertexBarrel_complex_o1_v01" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelCollection"  region="VertexBarrelRegion">
+        <detector name="VertexBarrel" type="VertexBarrel_detailed_o1_v01" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelCollection"  region="VertexBarrelRegion">
 
             <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_BARREL"/>
 
@@ -312,7 +312,7 @@
 
     <!-- Vertex outer barrel -->
     <detectors>
-        <detector name="OuterTrackerBarrel" type="VertexBarrel_complex_o1_v01" vis="VXDVis" id="DetID_VXD_OuterBarrel" readout="OuterTrackerBarrelCollection"  region="OuterTrackerBarrelRegion">
+        <detector name="OuterTrackerBarrel" type="VertexBarrel_detailed_o1_v01" vis="VXDVis" id="DetID_VXD_OuterBarrel" readout="OuterTrackerBarrelCollection"  region="OuterTrackerBarrelRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -371,7 +371,7 @@
     
     <!-- Vertex endcap -->
     <detectors>
-        <detector id="DetID_VXD_Endcap" name="OuterTrackerEndcap" type="VertexEndcap_complex_o1_v01" readout="OuterTrackerEndcapCollection" reflect="true" region="OuterTrackerEndcapRegion">
+        <detector id="DetID_VXD_Endcap" name="OuterTrackerEndcap" type="VertexEndcap_detailed_o1_v01" readout="OuterTrackerEndcapCollection" reflect="true" region="OuterTrackerEndcapRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>

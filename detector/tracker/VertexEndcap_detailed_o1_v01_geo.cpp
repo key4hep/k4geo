@@ -401,4 +401,4 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     return sdet;
 }
 
-DECLARE_DETELEMENT(VertexEndcap_complex_o1_v01,create_detector)
+DECLARE_DETELEMENT(VertexEndcap_detailed_o1_v01,create_detector)
