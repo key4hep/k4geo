@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+<!-- #==========================================================================
+     #  AIDA Detector description implementation 
+     #==========================================================================
+     # Copyright (C) Organisation europeenne pour la Recherche nucleaire (CERN)
+     # All rights reserved.
+     #
+     # For the licensing terms see $DD4hepINSTALL/LICENSE.
+     # For the list of contributors see $DD4hepINSTALL/doc/CREDITS.
+     #
+     #==========================================================================
+-->
+  
+  <info name=   "ShapeCheck"
+	title=  "Checking individual shapes in D4hep by comparing the mesh vertices"
+	author= "Markus Frank"
+	url=    "http://www.cern.ch/lhcb"
+	status= "development"
+	version="1.0">
+    <comment>Shape tester</comment>        
+  </info>
+  <geometry open="false" close="false"/>
+
+  <includes>
+    <gdmlFile  ref="${DD4hepINSTALL}/DDDetectors/compact/elements.xml"/>
+    <gdmlFile  ref="${DD4hepINSTALL}/DDDetectors/compact/materials.xml"/>
+  </includes>
+  
+  <materials>
+    <material name="DefaultMaterial">
+      <D value="7.85" unit="g/cm3"/>
+      <fraction n="0.998" ref="Fe"/>
+      <fraction n=".002"  ref="C"/>
+    </material>
+    <material name="Material01">
+      <D value="7.85" unit="g/cm3"/>
+      <fraction n="1.0" ref="Fe"/>
+    </material>
+  </materials>
+
+  
+  <define>
+    <constant name="world_side" value="300*cm"/>
+    <constant name="world_x" value="world_side"/>
+    <constant name="world_y" value="world_side"/>
+    <constant name="world_z" value="world_side"/>
+    <constant name="unit_length" value="1*10"/>
+    <constant name="unit_pos"    value="unit_length/10"/>
+    <constant name="CheckShape_create" value="0"/>
+  </define>
+
+  <display>
+    <vis name="InvisibleNoDaughters"      showDaughters="false" visible="false"/>
+    <vis name="InvisibleWithDaughters"    showDaughters="true"  visible="false"/>
+    <vis name="Shape1_vis_20"    alpha="0.2" r="0.9" g="0.8" b="0.8" showDaughters="true" visible="true"/>
+    <vis name="ShapeGray_vis_50" alpha="0.5" r="0.9" g="0.8" b="0.8" showDaughters="true" visible="true"/>
+    <vis name="Shape0_vis"       alpha="1.0" r="0"   g="1"   b="1"   showDaughters="true" visible="true"/>
+    <vis name="Shape1_vis"       alpha="1.0" r="1"   g="0"   b="0"   showDaughters="true" visible="true"/>
+    <vis name="Shape2_vis"       alpha="1.0" r="0"   g="1"   b="0"   showDaughters="true" visible="true"/>
+    <vis name="Shape3_vis"       alpha="1.0" r="0"   g="0"   b="1"   showDaughters="true" visible="true"/>
+    <vis name="Shape4_vis"       alpha="1.0" r="1"   g="1"   b="0"   showDaughters="true" visible="true"/>
+    <vis name="Shape5_vis"       alpha="1.0" r="1"   g="0"   b="1"   showDaughters="true" visible="true"/>
+    <vis name="Shape6_vis"       alpha="1.0" r="0.5" g="0.5" b="0"   showDaughters="true" visible="true"/>
+    <vis name="Shape7_vis"       alpha="1.0" r="0"   g="0.5" b="0.5" showDaughters="true" visible="true"/>
+    <vis name="Shape8_vis"       alpha="0.5" r="0.0" g="0.4" b="0.4" showDaughters="true" visible="true"/>
+    <vis name="Shape_grey"       alpha="0.5" r="0.0" g="0.4" b="0.4" showDaughters="true" visible="true"/>
+  </display>
+
+  <readouts>
+    <readout name="CheckHits">
+      <id>system:8,check:24</id> 
+    </readout>
+  </readouts>
+
+</lccdd>
