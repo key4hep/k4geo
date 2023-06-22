@@ -1,12 +1,13 @@
-CLD_ARC_o1_v1 Detector
+CLD_o3_v1 Detector
 ======================
 
+This option (o3) of CLD includes the Array of RICH Cells (ARC) subdetector. The ARC is placed after the tracker and before the calorimeters. 
 
 # PID assisted by ARC
 
 Array of RICH Cells (ARC) is a novel RICH detector concept. Detailed description of it can be found in [this dedicated README file](../../../detector/PID/README.md).
 
-The identification of the particle crossing the ARC detector is based on the Cerenkov light produced by two components: a radiator gas, and a layer of aerogel.
+The identification of the particle crossing the ARC detector is based on the Cherenkov light produced by two components: a radiator gas, and a layer of aerogel.
 
 Similar systems have been used in the past, eg at the LHCb experiment. Details of the setup and analysis of the data can be found [here](https://s3.cern.ch/inspire-prod-files-9/92927eb16166b155de56b61339f05521).
 
