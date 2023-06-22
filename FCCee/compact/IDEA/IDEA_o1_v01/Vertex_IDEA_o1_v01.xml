@@ -1,0 +1,526 @@
+<!-- Changes :
+   o4_v04 : scaled version of the CLIC VTX Barrel (CLIC_04_v11); distance between sensitive layers in double layers are set to 1*mm and is similar in all 3 layers
+-->
+
+<lccdd>
+
+    <info name="FCCee"
+        title="FCCee Vertex detector: taken correspoding to CLD: Vertex_o4_v05.xml, but adapted to IDEA vertex detector"
+        author="nalipour taken from lcgeo (CLD version), adapted by Armin Ilg (IDEA version)"
+        url="no"
+        status="development"
+        version="1.1">
+    <comment>A Vertex Detector for FCCee IDEA detector concept</comment>
+  </info>
+
+    <comment>Tracking detectors</comment>
+    <detectors>
+        <detector name="Vertex" type="DD4hep_SubdetectorAssembly" vis="VXDVis">
+            <shape type="BooleanShape" operation="Subtraction" material="Air">
+                <shape type="BooleanShape" operation="Subtraction">
+                    <shape type="Tube" rmin="Inner_Vertex_inner_radius-Inner_Vertex_inner_radius_clearance" rmax="Outer_Vertex_outer_radius" dz="Outer_Vertex_half_length"/>
+                    <shape type="Cone" rmin1="0" rmax1="VertexClearanceTheta*Outer_Vertex_half_length-env_safety" rmin2="0" rmax2="Inner_Vertex_inner_radius-Inner_Vertex_inner_radius_clearance" z="((Outer_Vertex_half_length-CentralBeamPipe_zmax)/2+env_safety)"/>
+                    <position x="0" y="0" z="-(CentralBeamPipe_zmax+(Outer_Vertex_half_length-CentralBeamPipe_zmax)/2+env_safety)" />
+                </shape>
+                
+                <shape type="Cone" rmin1="0" rmax1="Inner_Vertex_inner_radius-Inner_Vertex_inner_radius_clearance" rmin2="0" rmax2="VertexClearanceTheta*Outer_Vertex_half_length-env_safety" z="(Outer_Vertex_half_length-CentralBeamPipe_zmax)/2+env_safety"/>
+                <position x="0" y="0" z="CentralBeamPipe_zmax+(Outer_Vertex_half_length-CentralBeamPipe_zmax)/2+env_safety" />
+            </shape>
+            <comment>Vertex Assembly</comment>
+            <composite name="VertexBarrel"/>
+            <composite name="OuterTrackerBarrel"/>
+            <composite name="OuterTrackerEndcap"/>
+            <!-- <composite name="VertexVerticalCable"/> -->
+            <composite name="Shape_STL"/>
+        </detector>
+    </detectors>
+    
+    <display>
+        <vis name="SiVertexSensitiveVis" alpha="1.0" r="0.5" g="0.5"  b="0"     showDaughters="true"  visible="true"/>
+        <vis name="SiVertexPeripheryVis" alpha="1.0" r="0.6" g="0.5"  b="0"     showDaughters="true"  visible="true"/>
+        <vis name="SiVertexCableVis"     alpha="1.0" r="0.85" g="0.53"    b="0.4"       showDaughters="true"  visible="true"/>
+        <vis name="CarbonFiberVis"       alpha="1.0" r="0.5" g="0.5"    b="0.5"       showDaughters="true"  visible="true"/>
+        <vis name="SiVertexAir"          alpha="1.0" r="0" g="0"    b="0"       showDaughters="false"  visible="false"/>
+        <vis name="SiOuterTrackerEndcapSensitiveVis" alpha="1.0" r="0.5" g="0.5"  b="0"     showDaughters="true"  visible="true"/>
+        <vis name="SiOuterTrackerEndcapPeripheryVis" alpha="1.0" r="0.6" g="0.5"  b="0"     showDaughters="true"  visible="true"/>
+    </display>
+     
+    <define>
+
+        <!-- Sensor characteristics -->
+
+        <!-- Inner barrel -->
+            <!-- Let's take the ARCADIA chip! -->
+            <constant name="inner_z" value="1.6*cm"/> <!-- Chip length, use modified ARCADIA with length of 1.6cm instead of 2.56cm-->       
+            <constant name="inner_rphi_sensitive" value="6.4*mm"/> <!-- Chip length: Sensitive-->
+            <constant name="inner_rphi_periphery" value="2*mm"/> <!-- Chip length: Periphery-->
+            <constant name="inner_rphi" value="inner_rphi_sensitive+inner_rphi_periphery"/> <!-- Chip length: Sensitive-->
+    
+            <!-- Module with two ARCADIA chips -->
+            <constant name="inner_mod_z" value="inner_z*2"/> 
+            <constant name="inner_mod_rphi_sensitive" value="inner_rphi_sensitive"/> 
+            <constant name="inner_mod_rphi_periphery" value="inner_rphi_periphery"/>
+            <constant name="inner_mod_rphi" value="inner_rphi"/>
+
+        <!-- Outer barrel -->
+            <!-- Outer vertex sensor (ATLASPix3-like) -->
+            <constant name="outer_z_sensitive" value="19.8*mm"/> <!-- Chip length in z: Sensitive -->
+            <constant name="outer_z_periphery" value="0.4*mm"/> <!-- Chip length in z: Periphery -->
+            <constant name="outer_z" value="outer_z_sensitive+outer_z_periphery"/> <!-- Chip length in z: Total -->
+            <constant name="outer_rphi_sensitive" value="18.6*mm"/> <!-- Chip length in r-phi: Sensitive-->
+            <constant name="outer_rphi_periphery" value="2.4*mm"/> <!-- Chip length in r-phi: Periphery-->
+            <constant name="outer_rphi" value="outer_rphi_sensitive+outer_rphi_periphery"/> <!-- Chip length in r-phi: Total -->
+            <constant name="outer_rphi_sens_spacing" value="2*mm"/> <!-- Distance between individual readout chips in rphi -->
+            <constant name="outer_z_sens_spacing" value="2*mm"/> <!-- Distance between individual readout chips in rphi -->
+
+    
+            <!-- Module with four ATLASPix3-like chips -->
+            <constant name="outer_mod_z_sensitive" value="outer_z_sensitive*2"/>
+            <constant name="outer_mod_z_periphery" value="outer_z_periphery*2"/>
+            <constant name="outer_mod_z" value="outer_mod_z_sensitive+outer_mod_z_periphery"/>
+    
+            <constant name="outer_mod_rphi_sensitive" value="outer_rphi_sensitive*2"/>
+            <constant name="outer_mod_rphi_periphery" value="outer_rphi_periphery*2"/>
+            <constant name="outer_mod_rphi" value="outer_mod_rphi_sensitive+outer_mod_rphi_periphery"/>
+        
+
+        <!-- Vertex inner barrel -->
+            <constant name="VertexBarrel_Layer1_Staves" value="15"/>
+            <constant name="VertexBarrel_Layer2_Staves" value="24"/>
+            <constant name="VertexBarrel_Layer3_Staves" value="18"/>
+            
+            <constant name="VertexBarrel_Layer1_nModules" value="6"/>
+            <constant name="VertexBarrel_Layer2_nModules" value="10"/>
+            <constant name="VertexBarrel_Layer3_nModules" value="16"/>
+    
+            <constant name="VertexBarrel_mod_z_spacing" value="0.2*mm"/>
+    
+            <constant name="VertexBarrel_z1" value="(VertexBarrel_Layer1_nModules*inner_mod_z+(VertexBarrel_Layer1_nModules-1)*VertexBarrel_mod_z_spacing)/2."/>
+            <constant name="VertexBarrel_z2" value="(VertexBarrel_Layer2_nModules*inner_mod_z+(VertexBarrel_Layer2_nModules-1)*VertexBarrel_mod_z_spacing)/2."/>
+            <constant name="VertexBarrel_z3" value="(VertexBarrel_Layer3_nModules*inner_mod_z+(VertexBarrel_Layer3_nModules-1)*VertexBarrel_mod_z_spacing)/2."/>        
+            <constant name="VertexBarrel_r1" value="Inner_Vertex_inner_radius"/> 
+            <constant name="VertexBarrel_r2" value="2.27*cm"/>
+
+            <constant name="VertexBarrel_r3_lowR_1" value="3.305*cm"/> <!-- Closer double-stave, stave at lower r -->
+            <constant name="VertexBarrel_r3_lowR_2" value="VertexBarrel_r3_lowR_1+0.950*mm"/> <!-- Closer double-stave, stave at higher r -->
+            <constant name="VertexBarrel_r3_highR_1" value="3.460*cm"/> <!-- Farther double-stave, stave at lower r -->
+            <constant name="VertexBarrel_r3_highR_2" value="VertexBarrel_r3_highR_1+0.8*mm"/> <!-- Farther double-stave, stave at higher r -->
+
+            <constant name="VertexBarrel_Sensitive_Thickness"   value="50e-03*mm"/>
+            <constant name="VertexBarrel_Support_Thickness"     value="200e-03*mm"/> <!-- +50% more material budget as in CLIC VTX -->
+    
+            <constant name="VertexBarrel_Layer3_overlap" value="0.4*mm"/>        
+            
+            <constant name="VertexBarrel_Layer1_offset" value="3.751*mm"/>
+            <constant name="VertexBarrel_Layer2_offset" value="-3.255*mm"/>
+            <constant name="VertexBarrel_Layer3_offset" value="2*mm"/>
+
+        <!-- Flex for vertex readout, assume 100 µm total thickness, with two 18 µm Aluminium layers and the rest kapton-->
+            <constant name="InnerFlex_width" value="1.8*mm"/>
+            <constant name="InnerFlex_offset" value="inner_rphi/2.-InnerFlex_width/2.-0.25*mm"/>
+            <constant name="InnerFlex_Aluminium_thickness" value="0.050*mm"/>
+            <constant name="InnerFlex_Kapton_thickness" value="0.200*mm"/>
+
+        <!-- Outer tracker endcap -->
+            <constant name="OuterTrackerEndcap_rmax1" value="247.644*mm"/>
+            <constant name="OuterTrackerEndcap_rmax2" value="289.595*mm"/>
+            <constant name="OuterTrackerEndcap_rmax3" value="289.595*mm"/>
+            <constant name="OuterTrackerEndcap_rmax" value="OuterTrackerEndcap_rmax3"/>        
+            <constant name="OuterTrackerEndcap_z1" value="285*mm"/>
+            <constant name="OuterTrackerEndcap_z2" value="620*mm"/>
+            <constant name="OuterTrackerEndcap_z3" value="930*mm"/>
+            <constant name="OuterTrackerEndcap_rmin1" value="35.64*mm"/>
+            <constant name="OuterTrackerEndcap_rmin2" value="76.995*mm"/>
+            <constant name="OuterTrackerEndcap_rmin3" value="105.895*mm"/>
+            <constant name="OuterTrackerEndcap_dr1" value="0.92*mm"/>  <!-- Alternating difference in radius from one petal to the next -->
+            <constant name="OuterTrackerEndcap_dr2" value="(153.99*mm-152.30*mm)/2."/>
+            <constant name="OuterTrackerEndcap_dr3" value="0.0*mm"/>  <!-- Alternating difference in radius from one petal to the next -->
+            <constant name="OuterTrackerEndcap_phi1A" value="0.0*rad"/>
+            <constant name="OuterTrackerEndcap_phi1B" value="0.7853981634*rad"/> <!-- face B of first disk is offset by 45 degrees-->
+            <constant name="OuterTrackerEndcap_zoffset_stave" value="6.020*mm"/>
+            <constant name="OuterTrackerEndcap_zoffset_face" value="19.1412*mm"/> <!-- face B has different position in z than face A-->
+            <constant name="OuterTrackerEndcap_stave_dz" value="5.0*mm"/> <!-- Distance between front and back of stave (inner empty space) -->
+
+            <constant name="OuterTrackerEndcapModuleThickness" value="1.22*mm"/>
+            <constant name="OuterTrackerEndcapModOverlap" value="-13.0*mm"/>
+            <constant name="OuterTrackerEndcap_rModOverlap" value="-6.5*mm"/>
+
+            <constant name="OuterTrackerEndcap_Sensitive_Thickness"   value="5.000000000e-02*mm"/>
+
+        <!-- Outer tracker barrel -->
+            <constant name="OuterTrackerBarrel_Staves1" value="23"/>
+            <constant name="OuterTrackerBarrel_Staves2" value="51"/>
+            <constant name="OuterTrackerBarrel_nModules1" value="8"/>
+            <constant name="OuterTrackerBarrel_nModules2" value="16"/>
+            <constant name="OuterTrackerBarrel_mod_z_spacing" value="0.2*mm"/>
+            <constant name="OuterTrackerBarrel_mod_rphi_spacing" value="0.2*mm"/>
+    
+            <constant name="OuterTrackerBarrel_z1" value="(OuterTrackerBarrel_nModules1*outer_mod_z+(OuterTrackerBarrel_nModules1-1)*OuterTrackerBarrel_mod_z_spacing)/2."/>
+            <constant name="OuterTrackerBarrel_z2" value="(OuterTrackerBarrel_nModules2*outer_mod_z+(OuterTrackerBarrel_nModules2-1)*OuterTrackerBarrel_mod_z_spacing)/2."/>
+            <constant name="OuterTrackerBarrel_r1" value="140*mm"/>
+            <constant name="OuterTrackerBarrel_r2" value="315*mm"/>
+<!--            <constant name="OuterTrackerBarrel_tilt" value="0.06754*rad"/>   3.87 deg in rad -->
+            <constant name="OuterTrackerBarrel_tilt" value="0.0*rad"/>   <!-- 3.87 deg in rad -->
+
+            <!--            <constant name="OuterTrackerBarrel_tilt" value="0.0*rad"/>  -->
+            <constant name="OuterTrackerBarrel_Sensitive_Thickness"              value="5e-02*mm"/>
+            <constant name="Tracker_support_Fleece_thickness"         value="20e-03*mm"/>
+            <constant name="Tracker_support_CarbonFiber_thickness"    value="120e-03*mm"/>
+            <constant name="Tracker_support_PaperGraphite_thickness"  value="25e-03*mm"/>
+            <constant name="TrackerBarrel_Support_thickness"          value="2.0*Tracker_support_Fleece_thickness+Tracker_support_CarbonFiber_thickness+Tracker_support_PaperGraphite_thickness"/>
+            <constant name="TrackerEndcap_Support_thickness"          value="Tracker_support_Fleece_thickness+Tracker_support_CarbonFiber_thickness+Tracker_support_PaperGraphite_thickness"/>
+
+            <constant name="OuterTrackerBarrel_rphi_sensitive" value="outer_mod_rphi_sensitive"/>
+    
+            <constant name="OuterTrackerBarrel_rphi_periphery" value="outer_mod_rphi_periphery"/>
+    
+            <constant name="OuterTrackerBarrel_rphi" value="OuterTrackerBarrel_rphi_sensitive+OuterTrackerBarrel_rphi_periphery"/>
+    
+            <constant name="OuterTrackerBarrel_offset1" value="10.0*mm"/>
+            <constant name="OuterTrackerBarrel_offset2" value="20.0*mm"/>
+
+
+        <!-- Flex for outer tracker: 2 layers of 50 µm Aluminum, 2 layers of 150 µm kapton and 100 µm glue -->
+            <constant name="OuterFlex_width" value="16.2*mm"/>
+            <constant name="OuterFlex_Aluminium_thickness" value="0.100*mm"/>
+            <constant name="OuterFlex_Kapton_thickness" value="0.300*mm"/>
+            <constant name="OuterFlex_Glue_thickness" value="0.100*mm"/>
+            <constant name="OuterFlex_thickness" value="OuterFlex_Aluminium_thickness+OuterFlex_Kapton_thickness+OuterFlex_Glue_thickness"/>
+    </define>        
+
+
+    <!--  Definition of the readout segmentation/definition  -->
+    <readouts>
+        <readout name="VertexBarrelCollection">
+            <id>${GlobalTrackerReadoutID}</id>
+        </readout>
+        <readout name="OuterTrackerBarrelCollection">
+            <id>${GlobalTrackerReadoutID}</id>
+        </readout>       
+        <readout name="OuterTrackerEndcapCollection">
+            <id>${GlobalTrackerReadoutID}</id>
+        </readout>
+    </readouts>
+
+    <!-- Vertex inner barrel -->
+    <detectors>
+        <detector name="VertexBarrel" type="VertexBarrel_complex_o1_v01" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelCollection"  region="VertexBarrelRegion">
+
+            <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_BARREL"/>
+
+            <layer nLadders="VertexBarrel_Layer1_Staves" phi0="4./360.*2*pi*rad" phi_tilt="0.0" id="0">
+                <sensitive distance="VertexBarrel_r1" thickness="VertexBarrel_Sensitive_Thickness" width="inner_mod_rphi_sensitive" length="VertexBarrel_z1" offset="VertexBarrel_Layer1_offset-inner_mod_rphi_periphery/2." material="Silicon" vis="SiVertexSensitiveVis" nModules="VertexBarrel_Layer1_nModules" dz="VertexBarrel_mod_z_spacing" z_length="inner_mod_z"/>
+
+                <ladder distance="VertexBarrel_r1+VertexBarrel_Sensitive_Thickness" width="inner_mod_rphi" length="VertexBarrel_z1" offset="VertexBarrel_Layer1_offset" material="CarbonFiber"  vis="CarbonFiberVis">
+                    <support thickness="VertexBarrel_Support_Thickness" width="inner_mod_rphi" length="VertexBarrel_z1" offset="0.0*mm" material="CarbonFiber" vis="CarbonFiberVis" distance="0*mm"/>
+                </ladder>
+                <module_envelope width="inner_mod_rphi_periphery" length="0.0*mm" type="1" vis="SiVertexPeripheryVis"/>
+
+                <readout width="InnerFlex_width" length="VertexBarrel_z1" distance="VertexBarrel_r1+VertexBarrel_Support_Thickness+VertexBarrel_Sensitive_Thickness" offset="VertexBarrel_Layer1_offset" vis="SiVertexCableVis">
+                    <component thickness="InnerFlex_Kapton_thickness"       width="InnerFlex_width" length="VertexBarrel_z1" distance="0.0*mm" offset="InnerFlex_offset" material="Kapton" vis="SiVertexCableVis"/>
+                    <component thickness="InnerFlex_Aluminium_thickness"    width="InnerFlex_width" length="VertexBarrel_z1" distance="InnerFlex_Kapton_thickness" offset="InnerFlex_offset" material="Al" vis="SiVertexCableVis"/>
+                    <component thickness="InnerFlex_Kapton_thickness"       width="InnerFlex_width" length="VertexBarrel_z1" distance="0.0*mm" offset="-InnerFlex_offset" material="Kapton" vis="SiVertexCableVis"/>
+                    <component thickness="InnerFlex_Aluminium_thickness"    width="InnerFlex_width" length="VertexBarrel_z1" distance="InnerFlex_Kapton_thickness" offset="-InnerFlex_offset" material="Al" vis="SiVertexCableVis"/>
+                </readout>
+            </layer>
+
+            <layer nLadders="VertexBarrel_Layer2_Staves" phi0="0" phi_tilt="0.0" id="1">
+                <sensitive distance="VertexBarrel_r2" thickness="VertexBarrel_Sensitive_Thickness" width="inner_mod_rphi_sensitive" length="VertexBarrel_z2" offset="VertexBarrel_Layer2_offset-inner_mod_rphi_periphery/2.0" material="Silicon" vis="SiVertexSensitiveVis" nModules="VertexBarrel_Layer2_nModules" dz="VertexBarrel_mod_z_spacing" z_length="inner_mod_z"/>
+                <module_envelope width="inner_mod_rphi_periphery" length="0.0*mm" type="1" vis="SiVertexPeripheryVis"/>
+
+                <ladder distance="VertexBarrel_r2+VertexBarrel_Sensitive_Thickness" width="inner_mod_rphi" length="VertexBarrel_z2" offset="VertexBarrel_Layer2_offset"    material="CarbonFiber"  vis="CarbonFiberVis">
+                    <support thickness="VertexBarrel_Support_Thickness" width="inner_mod_rphi" length="VertexBarrel_z2" offset="0.0*mm" material="CarbonFiber" vis="CarbonFiberVis" distance="0*mm"/>
+                </ladder>
+
+                <readout width="InnerFlex_width" length="VertexBarrel_z2" distance="VertexBarrel_r2+VertexBarrel_Support_Thickness+VertexBarrel_Sensitive_Thickness" offset="VertexBarrel_Layer2_offset" vis="SiVertexCableVis">
+                    <component thickness="InnerFlex_Kapton_thickness"       width="InnerFlex_width" length="VertexBarrel_z2" distance="0.0*mm" offset="InnerFlex_offset" material="Kapton" vis="SiVertexCableVis"/>
+                    <component thickness="InnerFlex_Aluminium_thickness"    width="InnerFlex_width" length="VertexBarrel_z2" distance="InnerFlex_Kapton_thickness" offset="InnerFlex_offset" material="Al" vis="SiVertexCableVis"/>
+                    <component thickness="InnerFlex_Kapton_thickness"       width="InnerFlex_width" length="VertexBarrel_z2" distance="0.0*mm" offset="-InnerFlex_offset" material="Kapton" vis="SiVertexCableVis"/>
+                    <component thickness="InnerFlex_Aluminium_thickness"    width="InnerFlex_width" length="VertexBarrel_z2" distance="InnerFlex_Kapton_thickness" offset="-InnerFlex_offset" material="Al" vis="SiVertexCableVis"/>
+                </readout>
+            </layer>
+
+            <!-- Closer double-stave, stave at lower r -->
+            <layer nLadders="VertexBarrel_Layer3_Staves/2." phi0="0" phi_tilt="0.0" id="2">
+                <sensitive distance="VertexBarrel_r3_lowR_1" thickness="VertexBarrel_Sensitive_Thickness" width="inner_mod_rphi_sensitive" length="VertexBarrel_z3" offset="VertexBarrel_Layer3_offset+inner_mod_rphi_sensitive/2.0" material="Silicon" vis="SiVertexSensitiveVis" nModules="VertexBarrel_Layer3_nModules" dz="VertexBarrel_mod_z_spacing" z_length="inner_mod_z"/>
+                <module_envelope width="inner_mod_rphi_periphery" length="0.0*mm" type="1" vis="SiVertexPeripheryVis"/>
+
+                <ladder distance="VertexBarrel_r3_lowR_1+VertexBarrel_Sensitive_Thickness" width="inner_mod_rphi" length="VertexBarrel_z3" offset="VertexBarrel_Layer3_offset+inner_mod_rphi/2"    material="CarbonFiber"  vis="CarbonFiberVis">
+                    <support thickness="VertexBarrel_Support_Thickness" width="inner_mod_rphi" length="VertexBarrel_z3" offset="0.0*mm" material="CarbonFiber" vis="CarbonFiberVis" distance="0*mm"/>
+                </ladder>
+
+                <readout width="InnerFlex_width" length="VertexBarrel_z3" distance="VertexBarrel_r3_lowR_1+VertexBarrel_Support_Thickness+VertexBarrel_Sensitive_Thickness" offset="VertexBarrel_Layer3_offset+inner_mod_rphi/2" vis="SiVertexCableVis">
+                    <component thickness="InnerFlex_Kapton_thickness"       width="InnerFlex_width" length="VertexBarrel_z3" distance="0.0*mm" offset="InnerFlex_offset" material="Kapton" vis="SiVertexCableVis"/>
+                    <component thickness="InnerFlex_Aluminium_thickness"    width="InnerFlex_width" length="VertexBarrel_z3" distance="InnerFlex_Kapton_thickness" offset="InnerFlex_offset" material="Al" vis="SiVertexCableVis"/>
+                    <component thickness="InnerFlex_Kapton_thickness"       width="InnerFlex_width" length="VertexBarrel_z3" distance="0.0*mm" offset="-InnerFlex_offset" material="Kapton" vis="SiVertexCableVis"/>
+                    <component thickness="InnerFlex_Aluminium_thickness"    width="InnerFlex_width" length="VertexBarrel_z3" distance="InnerFlex_Kapton_thickness" offset="-InnerFlex_offset" material="Al" vis="SiVertexCableVis"/>
+                </readout>
+            </layer>
+
+            <!-- Closer double-stave, stave at higher r -->
+            <layer nLadders="VertexBarrel_Layer3_Staves/2." phi0="0" phi_tilt="0.0" id="3">
+                <sensitive distance="VertexBarrel_r3_lowR_2" thickness="VertexBarrel_Sensitive_Thickness" width="inner_mod_rphi_sensitive" length="VertexBarrel_z3" offset="VertexBarrel_Layer3_offset+VertexBarrel_Layer3_overlap-inner_mod_rphi_sensitive/2.0" material="Silicon" vis="SiVertexSensitiveVis" nModules="VertexBarrel_Layer3_nModules" dz="VertexBarrel_mod_z_spacing" z_length="inner_mod_z"/> <!-- Inverted direction-->
+                <module_envelope width="inner_mod_rphi_periphery" length="0.0*mm" type="-1" vis="SiVertexPeripheryVis"/>
+
+                <ladder    distance="VertexBarrel_r3_lowR_2+VertexBarrel_Sensitive_Thickness" thickness="VertexBarrel_Support_Thickness" width="inner_mod_rphi" length="VertexBarrel_z3" offset="VertexBarrel_Layer3_offset+VertexBarrel_Layer3_overlap-inner_mod_rphi/2.0"    material="CarbonFiber"  vis="CarbonFiberVis">
+                    <support thickness="VertexBarrel_Support_Thickness" width="inner_mod_rphi" length="VertexBarrel_z3" offset="0.0*mm" material="CarbonFiber" vis="CarbonFiberVis" distance="0*mm"/>
+                </ladder>
+
+                <readout width="InnerFlex_width" length="VertexBarrel_z3" distance="VertexBarrel_r3_lowR_2+VertexBarrel_Support_Thickness+VertexBarrel_Sensitive_Thickness" offset="VertexBarrel_Layer3_offset+VertexBarrel_Layer3_overlap-inner_mod_rphi/2" vis="SiVertexCableVis">
+                    <component thickness="InnerFlex_Kapton_thickness"       width="InnerFlex_width" length="VertexBarrel_z3" distance="0.0*mm" offset="InnerFlex_offset" material="Kapton" vis="SiVertexCableVis"/>
+                    <component thickness="InnerFlex_Aluminium_thickness"    width="InnerFlex_width" length="VertexBarrel_z3" distance="InnerFlex_Kapton_thickness" offset="InnerFlex_offset" material="Al" vis="SiVertexCableVis"/>
+                    <component thickness="InnerFlex_Kapton_thickness"       width="InnerFlex_width" length="VertexBarrel_z3" distance="0.0*mm" offset="-InnerFlex_offset" material="Kapton" vis="SiVertexCableVis"/>
+                    <component thickness="InnerFlex_Aluminium_thickness"    width="InnerFlex_width" length="VertexBarrel_z3" distance="InnerFlex_Kapton_thickness" offset="-InnerFlex_offset" material="Al" vis="SiVertexCableVis"/>
+                </readout>
+            </layer>
+
+            <!-- Farther double-stave, stave at lower r -->
+            <layer nLadders="VertexBarrel_Layer3_Staves/2." phi0="2*pi/VertexBarrel_Layer3_Staves*rad" phi_tilt="0.0" id="4">
+                <sensitive distance="VertexBarrel_r3_highR_1" thickness="VertexBarrel_Sensitive_Thickness" width="inner_mod_rphi_sensitive" length="VertexBarrel_z3" offset="VertexBarrel_Layer3_offset+inner_mod_rphi_sensitive/2.0" material="Silicon" vis="SiVertexSensitiveVis" nModules="VertexBarrel_Layer3_nModules" dz="VertexBarrel_mod_z_spacing" z_length="inner_mod_z"/>
+                <module_envelope width="inner_mod_rphi_periphery" length="0.0*mm" type="1" vis="SiVertexPeripheryVis"/>
+
+                <ladder distance="VertexBarrel_r3_highR_1+VertexBarrel_Sensitive_Thickness" thickness="VertexBarrel_Support_Thickness" width="inner_mod_rphi" length="VertexBarrel_z3" offset="VertexBarrel_Layer3_offset+inner_mod_rphi/2"    material="CarbonFiber"  vis="CarbonFiberVis">
+                    <support thickness="VertexBarrel_Support_Thickness" width="inner_mod_rphi" length="VertexBarrel_z3" offset="0.0*mm" material="CarbonFiber" vis="CarbonFiberVis" distance="0*mm"/>
+                </ladder>
+
+                <readout width="InnerFlex_width" length="VertexBarrel_z3" distance="VertexBarrel_r3_highR_1+VertexBarrel_Support_Thickness+VertexBarrel_Sensitive_Thickness" offset="VertexBarrel_Layer3_offset+inner_mod_rphi/2" vis="SiVertexCableVis">
+                    <component thickness="InnerFlex_Kapton_thickness"       width="InnerFlex_width" length="VertexBarrel_z3" distance="0.0*mm" offset="InnerFlex_offset" material="Kapton" vis="SiVertexCableVis"/>
+                    <component thickness="InnerFlex_Aluminium_thickness"    width="InnerFlex_width" length="VertexBarrel_z3" distance="InnerFlex_Kapton_thickness" offset="InnerFlex_offset" material="Al" vis="SiVertexCableVis"/>
+                    <component thickness="InnerFlex_Kapton_thickness"       width="InnerFlex_width" length="VertexBarrel_z3" distance="0.0*mm" offset="-InnerFlex_offset" material="Kapton" vis="SiVertexCableVis"/>
+                    <component thickness="InnerFlex_Aluminium_thickness"    width="InnerFlex_width" length="VertexBarrel_z3" distance="InnerFlex_Kapton_thickness" offset="-InnerFlex_offset" material="Al" vis="SiVertexCableVis"/>
+                </readout>
+            </layer>
+
+            <!-- Farther double-stave, stave at higher r -->
+            <layer nLadders="VertexBarrel_Layer3_Staves/2." phi0="2*pi/VertexBarrel_Layer3_Staves*rad" phi_tilt="0.0" id="5">
+                <sensitive distance="VertexBarrel_r3_highR_2" thickness="VertexBarrel_Sensitive_Thickness" width="inner_mod_rphi_sensitive" length="VertexBarrel_z3" offset="VertexBarrel_Layer3_offset+VertexBarrel_Layer3_overlap-inner_mod_rphi_sensitive/2.0" material="Silicon" vis="SiVertexSensitiveVis" nModules="VertexBarrel_Layer3_nModules" dz="VertexBarrel_mod_z_spacing" z_length="inner_mod_z"/> <!-- Inverted direction-->
+                <module_envelope width="inner_mod_rphi_periphery" length="0.0*mm" type="-1" vis="SiVertexPeripheryVis"/>
+
+                <ladder    distance="VertexBarrel_r3_highR_2+VertexBarrel_Sensitive_Thickness" thickness="VertexBarrel_Support_Thickness" width="inner_mod_rphi" length="VertexBarrel_z3" offset="VertexBarrel_Layer3_offset+VertexBarrel_Layer3_overlap-inner_mod_rphi/2.0"    material="CarbonFiber"  vis="CarbonFiberVis">
+                    <support thickness="VertexBarrel_Support_Thickness" width="inner_mod_rphi" length="VertexBarrel_z3" offset="0.0*mm" material="CarbonFiber" vis="CarbonFiberVis" distance="0*mm"/>
+                </ladder>
+
+                <readout width="InnerFlex_width" length="VertexBarrel_z3" distance="VertexBarrel_r3_highR_2+VertexBarrel_Support_Thickness+VertexBarrel_Sensitive_Thickness" offset="VertexBarrel_Layer3_offset+VertexBarrel_Layer3_overlap-inner_mod_rphi/2" vis="SiVertexCableVis">
+                    <component thickness="InnerFlex_Kapton_thickness"       width="InnerFlex_width" length="VertexBarrel_z3" distance="0.0*mm" offset="InnerFlex_offset" material="Kapton" vis="SiVertexCableVis"/>
+                    <component thickness="InnerFlex_Aluminium_thickness"    width="InnerFlex_width" length="VertexBarrel_z3" distance="InnerFlex_Kapton_thickness" offset="InnerFlex_offset" material="Al" vis="SiVertexCableVis"/>
+                    <component thickness="InnerFlex_Kapton_thickness"       width="InnerFlex_width" length="VertexBarrel_z3" distance="0.0*mm" offset="-InnerFlex_offset" material="Kapton" vis="SiVertexCableVis"/>
+                    <component thickness="InnerFlex_Aluminium_thickness"    width="InnerFlex_width" length="VertexBarrel_z3" distance="InnerFlex_Kapton_thickness" offset="-InnerFlex_offset" material="Al" vis="SiVertexCableVis"/>
+                </readout>
+            </layer>
+        </detector>
+    </detectors>
+
+    <!-- Vertex outer barrel -->
+    <detectors>
+        <detector name="OuterTrackerBarrel" type="VertexBarrel_complex_o1_v01" vis="VXDVis" id="DetID_VXD_OuterBarrel" readout="OuterTrackerBarrelCollection"  region="OuterTrackerBarrelRegion">
+            <envelope vis="VXDVis">
+                <shape type="Assembly"/>
+            </envelope>
+            <comment>Vertex Detector Outer Barrel</comment>
+            <sensitive type="SimpleTrackerSD"/>
+
+            <!-- Order of layers: 688 um power-bus stave flex, 50 um silicon sensor, 20 um carbon fleece grafite, 120 um carbon fiber, 25 um carbon paper-grafite, 20 um carbon fleece grafite -->
+            <!-- Module width: 42.2 mm -->
+            <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_BARREL"/>
+
+            <layer nLadders="OuterTrackerBarrel_Staves1" phi0="0" phi_tilt="OuterTrackerBarrel_tilt" id="0">
+                <!-- Readout: Flex along the stave -->
+                <readout width="OuterFlex_width" length="OuterTrackerBarrel_z1" distance="OuterTrackerBarrel_r1" offset="OuterTrackerBarrel_offset1" vis="SiVertexCableVis">
+                    <component thickness="OuterFlex_Aluminium_thickness"    width="OuterFlex_width" length="OuterTrackerBarrel_z1" distance="0.0*mm" offset="0.0*mm" material="Al" vis="SiVertexCableVis"/>
+                    <component thickness="OuterFlex_Kapton_thickness"       width="OuterFlex_width" length="OuterTrackerBarrel_z1" distance="OuterFlex_Aluminium_thickness" offset="0.0*mm" material="Kapton" vis="SiVertexCableVis"/>
+                    <component thickness="OuterFlex_Glue_thickness"         width="OuterFlex_width" length="OuterTrackerBarrel_z1" distance="OuterFlex_Aluminium_thickness+OuterFlex_Kapton_thickness" offset="0.0*mm" material="Glue" vis="SiVertexCableVis"/> <!-- NEED TO USE CORRECT GLUE DESCRIPTION!-->
+                </readout>
+
+                <!-- Then the sensor, not implemented separate passive periphery -->
+                <sensitive distance="OuterTrackerBarrel_r1+OuterFlex_thickness" thickness="OuterTrackerBarrel_Sensitive_Thickness" width="OuterTrackerBarrel_rphi_sensitive" length="OuterTrackerBarrel_z1" offset="OuterTrackerBarrel_offset1-OuterTrackerBarrel_rphi_periphery/2." material="Silicon" vis="SiVertexSensitiveVis" nModules="OuterTrackerBarrel_nModules1" dz="OuterTrackerBarrel_mod_z_spacing" z_length="outer_mod_z"/>
+                <!-- with its passive periphery -->
+                <module_envelope width="OuterTrackerBarrel_rphi_periphery" length="0.0*mm" type="1" vis="SiVertexPeripheryVis"/>
+
+                <!-- Support structure -->
+                <ladder distance="OuterTrackerBarrel_r1+OuterFlex_thickness+OuterTrackerBarrel_Sensitive_Thickness" width="OuterTrackerBarrel_rphi" length="OuterTrackerBarrel_z1" offset="OuterTrackerBarrel_offset1" material="CarbonFiber" vis="CarbonFiberVis">
+                    <support thickness="Tracker_support_Fleece_thickness"         width="OuterTrackerBarrel_rphi" length="OuterTrackerBarrel_z1" offset="0.0*mm" material="CarbonFiber" vis="CarbonFiberVis" distance="0*mm"/> <!-- should be material="CarbonFleeceGraphite", not implemented yet! -->
+                    <support thickness="Tracker_support_PaperGraphite_thickness"  width="OuterTrackerBarrel_rphi" length="OuterTrackerBarrel_z1" offset="0.0*mm" material="CarbonFiber" vis="CarbonFiberVis" distance="Tracker_support_Fleece_thickness"/> <!-- should be material="CarbonPaperGraphite", not implemented yet! -->
+                    <support thickness="Tracker_support_CarbonFiber_thickness"    width="OuterTrackerBarrel_rphi" length="OuterTrackerBarrel_z1" offset="0.0*mm" material="CarbonFiber" vis="CarbonFiberVis" distance="Tracker_support_Fleece_thickness+Tracker_support_PaperGraphite_thickness"/>
+                    <support thickness="Tracker_support_Fleece_thickness"         width="OuterTrackerBarrel_rphi" length="OuterTrackerBarrel_z1" offset="0.0*mm" material="CarbonFiber" vis="CarbonFiberVis" distance="Tracker_support_Fleece_thickness+Tracker_support_PaperGraphite_thickness+Tracker_support_CarbonFiber_thickness"/> <!-- should be material="CarbonFleeceGraphite", not implemented yet! -->
+                </ladder>
+            </layer>
+
+            <layer nLadders="OuterTrackerBarrel_Staves2" phi0="0" phi_tilt="OuterTrackerBarrel_tilt" id="1">
+                <!-- First comes the support structure -->
+                <ladder distance="OuterTrackerBarrel_r2" width="OuterTrackerBarrel_rphi" length="OuterTrackerBarrel_z2" offset="OuterTrackerBarrel_offset2"    material="CarbonFiber"  vis="CarbonFiberVis">
+                    <support thickness="Tracker_support_Fleece_thickness"         width="OuterTrackerBarrel_rphi" length="OuterTrackerBarrel_z2" offset="0.0*mm" material="CarbonFiber" vis="CarbonFiberVis" distance="0*mm"/> <!-- should be material="CarbonFleeceGraphite", not implemented yet! -->
+                    <support thickness="Tracker_support_PaperGraphite_thickness"  width="OuterTrackerBarrel_rphi" length="OuterTrackerBarrel_z2" offset="0.0*mm" material="CarbonFiber" vis="CarbonFiberVis" distance="Tracker_support_Fleece_thickness"/> <!-- should be material="CarbonPaperGraphite", not implemented yet! -->
+                    <support thickness="Tracker_support_CarbonFiber_thickness"    width="OuterTrackerBarrel_rphi" length="OuterTrackerBarrel_z2" offset="0.0*mm" material="CarbonFiber" vis="CarbonFiberVis" distance="Tracker_support_Fleece_thickness+Tracker_support_PaperGraphite_thickness"/>
+                    <support thickness="Tracker_support_Fleece_thickness"         width="OuterTrackerBarrel_rphi" length="OuterTrackerBarrel_z2" offset="0.0*mm" material="CarbonFiber" vis="CarbonFiberVis" distance="Tracker_support_Fleece_thickness+Tracker_support_PaperGraphite_thickness+Tracker_support_CarbonFiber_thickness"/> <!-- should be material="CarbonFleeceGraphite", not implemented yet! -->
+                </ladder>
+
+                <!-- Then the sensor, not implemented separate passive periphery -->
+                <sensitive distance="OuterTrackerBarrel_r2+TrackerBarrel_Support_thickness" thickness="OuterTrackerBarrel_Sensitive_Thickness" width="OuterTrackerBarrel_rphi_sensitive" length="OuterTrackerBarrel_z2" offset="OuterTrackerBarrel_offset2-OuterTrackerBarrel_rphi_periphery/2." material="Silicon" vis="SiVertexSensitiveVis" nModules="OuterTrackerBarrel_nModules2" dz="OuterTrackerBarrel_mod_z_spacing" z_length="outer_mod_z"/>
+                <!-- with its passive periphery -->
+                <module_envelope width="OuterTrackerBarrel_rphi_periphery" length="0.0*mm" type="1" vis="SiVertexPeripheryVis"/>
+
+                <!-- Readout: Flex along the stave -->
+                <readout width="OuterFlex_width" length="OuterTrackerBarrel_z2" distance="OuterTrackerBarrel_r2+TrackerBarrel_Support_thickness+OuterTrackerBarrel_Sensitive_Thickness" offset="OuterTrackerBarrel_offset2" vis="SiVertexCableVis">
+                    <component thickness="OuterFlex_Aluminium_thickness"    width="OuterFlex_width" length="OuterTrackerBarrel_z1" distance="0.0*mm" offset="0.0*mm" material="Al" vis="SiVertexCableVis"/>
+                    <component thickness="OuterFlex_Kapton_thickness"       width="OuterFlex_width" length="OuterTrackerBarrel_z1" distance="OuterFlex_Aluminium_thickness" offset="0.0*mm" material="Kapton" vis="SiVertexCableVis"/>
+                    <component thickness="OuterFlex_Glue_thickness"         width="OuterFlex_width" length="OuterTrackerBarrel_z1" distance="OuterFlex_Aluminium_thickness+OuterFlex_Kapton_thickness" offset="0.0*mm" material="Glue" vis="SiVertexCableVis"/> <!-- NEED TO USE CORRECT GLUE DESCRIPTION!-->
+                </readout>
+            </layer>
+        </detector>
+    </detectors>
+    
+    <!-- Vertex endcap -->
+    <detectors>
+        <detector id="DetID_VXD_Endcap" name="OuterTrackerEndcap" type="VertexEndcap_complex_o1_v01" readout="OuterTrackerEndcapCollection" reflect="true" region="OuterTrackerEndcapRegion">
+            <envelope vis="VXDVis">
+                <shape type="Assembly"/>
+            </envelope>
+            <comment>Vertex Detector Endcaps</comment>
+            <sensitive type="SimpleTrackerSD"/>
+
+            <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_ENDCAP"/>
+            <module name="SiOuterTrackerEndcapModule">
+                <!-- Order of layers: 688 um power-bus stave flex, 50 um silicon sensor, 20 um carbon fleece grafite, 120 um carbon fiber, 25 um carbon paper-grafite -->
+
+                <!-- Flex at low-z -->
+                <readout z_offset="0.0*mm">
+                    <component thickness="OuterFlex_Aluminium_thickness"    width="OuterFlex_width" offset="0.0*mm" z_offset="0.0*mm" material="Al" vis="SiVertexCableVis"/>
+                    <component thickness="OuterFlex_Kapton_thickness"       width="OuterFlex_width" offset="0.0*mm" z_offset="OuterFlex_Aluminium_thickness" material="Kapton" vis="SiVertexCableVis"/>
+                    <component thickness="OuterFlex_Glue_thickness"         width="OuterFlex_width" offset="0.0*mm" z_offset="OuterFlex_Aluminium_thickness+OuterFlex_Kapton_thickness" material="Glue" vis="SiVertexCableVis"/> <!-- NEED TO USE CORRECT GLUE DESCRIPTION!-->
+                </readout>
+
+                <!-- Sensor -->
+                <sensor z_offset="OuterFlex_thickness" thickness="OuterTrackerBarrel_Sensitive_Thickness" material="Silicon">
+                    <component sensitive="False" xmin="-(outer_z_sensitive+outer_z_periphery+outer_z_sens_spacing/2.0)" xmax="-(outer_z_sensitive+outer_z_sens_spacing/2.0)"                ymin="-(outer_rphi_sensitive+outer_rphi_periphery+outer_rphi_sens_spacing/2.0)" ymax="outer_rphi_sensitive+outer_rphi_periphery+outer_rphi_sens_spacing/2.0"    vis="SiOuterTrackerEndcapPeripheryVis"/> <!-- top Quad periphery-->
+                    <component sensitive="False" xmin="outer_z_sensitive+outer_z_sens_spacing/2.0"                      xmax="outer_z_sensitive+outer_z_periphery+outer_z_sens_spacing/2.0" ymin="-(outer_rphi_sensitive+outer_rphi_periphery+outer_rphi_sens_spacing/2.0)" ymax="outer_rphi_sensitive+outer_rphi_periphery+outer_rphi_sens_spacing/2.0"    vis="SiOuterTrackerEndcapPeripheryVis"/> <!-- bottom Quad periphery-->   
+                    <component sensitive="False" xmin="-(outer_z_sensitive+outer_z_sens_spacing/2.0)"                   xmax="outer_z_sensitive+outer_z_sens_spacing/2.0"                   ymin="-(outer_rphi_sensitive+outer_rphi_periphery+outer_rphi_sens_spacing/2.0)" ymax="-(outer_rphi_sensitive+outer_rphi_sens_spacing/2.0)"                      vis="SiOuterTrackerEndcapPeripheryVis"/> <!-- left Quad periphery-->   
+                    <component sensitive="False" xmin="-(outer_z_sensitive+outer_z_sens_spacing/2.0)"                   xmax="outer_z_sensitive+outer_z_sens_spacing/2.0"                   ymin="outer_rphi_sensitive+outer_rphi_sens_spacing/2.0"                         ymax="outer_rphi_sensitive+outer_rphi_periphery+outer_rphi_sens_spacing/2.0"    vis="SiOuterTrackerEndcapPeripheryVis"/> <!-- right Quad periphery-->   
+
+                    <component sensitive="False" xmin="outer_z_sens_spacing/2.0"                        xmax="outer_z_sensitive+outer_z_sens_spacing/2.0"   ymin="-outer_rphi_sens_spacing/2.0"                         ymax="outer_rphi_sens_spacing/2.0"                          vis="SiOuterTrackerEndcapPeripheryVis"/> <!-- Middle cross: right -->
+                    <component sensitive="False" xmin="-(outer_z_sensitive+outer_z_sens_spacing/2.0)"   xmax="-outer_z_sens_spacing/2.0"                    ymin="-outer_rphi_sens_spacing/2.0"                         ymax="outer_rphi_sens_spacing/2.0"                          vis="SiOuterTrackerEndcapPeripheryVis"/> <!-- Middle cross: left -->
+                    <component sensitive="False" xmin="-outer_z_sens_spacing/2.0"                       xmax="outer_z_sens_spacing/2.0"                     ymin="outer_rphi_sens_spacing/2.0"                          ymax="outer_rphi_sens_spacing/2.0+outer_rphi_sensitive"     vis="SiOuterTrackerEndcapPeripheryVis"/> <!-- Middle cross: top -->
+                    <component sensitive="False" xmin="-outer_z_sens_spacing/2.0"                       xmax="outer_z_sens_spacing/2.0"                     ymin="-(outer_rphi_sens_spacing/2.0+outer_rphi_sensitive)"  ymax="-outer_rphi_sens_spacing/2.0"                         vis="SiOuterTrackerEndcapPeripheryVis"/> <!-- Middle cross: bottom -->
+                    <component sensitive="False" xmin="-outer_z_sens_spacing/2.0"                       xmax="outer_z_sens_spacing/2.0"                     ymin="-outer_rphi_sens_spacing/2.0"                         ymax="outer_rphi_sens_spacing/2.0"                          vis="SiOuterTrackerEndcapPeripheryVis"/> <!-- Middle cross: centre -->
+                    
+                    <component sensitive="True" xmin="-outer_z_sensitive-outer_z_sens_spacing/2.0"  xmax="-outer_z_sens_spacing/2.0"                    ymin="outer_rphi_sens_spacing/2.0"                          ymax="outer_rphi_sens_spacing/2.0+outer_rphi_sensitive" vis="SiOuterTrackerEndcapSensitiveVis"/> <!-- top left sensitive-->
+                    <component sensitive="True" xmin="outer_z_sens_spacing/2.0"                     xmax="outer_z_sensitive+outer_z_sens_spacing/2.0"   ymin="outer_rphi_sens_spacing/2.0"                          ymax="outer_rphi_sens_spacing/2.0+outer_rphi_sensitive" vis="SiOuterTrackerEndcapSensitiveVis"/> <!-- top right sensitive-->                    
+                    <component sensitive="True" xmin="-outer_z_sensitive-outer_z_sens_spacing/2.0"  xmax="-outer_z_sens_spacing/2.0"                    ymin="-outer_rphi_sens_spacing/2.0-outer_rphi_sensitive"    ymax="-outer_rphi_sens_spacing/2.0"                     vis="SiOuterTrackerEndcapSensitiveVis"/> <!-- bottom left sensitive-->                    
+                    <component sensitive="True" xmin="outer_z_sens_spacing/2.0"                     xmax="outer_z_sensitive+outer_z_sens_spacing/2.0"   ymin="-outer_rphi_sens_spacing/2.0-outer_rphi_sensitive"    ymax="-outer_rphi_sens_spacing/2.0"                     vis="SiOuterTrackerEndcapSensitiveVis"/> <!-- bottom right sensitive--> 
+                </sensor>
+
+                <!-- low-z support -->
+                <support z_offset="OuterFlex_thickness+OuterTrackerBarrel_Sensitive_Thickness">
+                    <component thickness="Tracker_support_Fleece_thickness"         width="outer_mod_z" offset="0.0*mm" z_offset="0.0*mm" material="CarbonFiber" vis="CarbonFiberVis"/> <!-- should be material="CarbonFleeceGraphite", not implemented yet! -->
+                    <component thickness="Tracker_support_CarbonFiber_thickness"    width="outer_mod_z" offset="0.0*mm" z_offset="Tracker_support_Fleece_thickness" material="CarbonFiber" vis="CarbonFiberVis"/>
+                    <component thickness="Tracker_support_PaperGraphite_thickness"  width="outer_mod_z" offset="0.0*mm" z_offset="Tracker_support_Fleece_thickness+Tracker_support_CarbonFiber_thickness" material="CarbonFiber" vis="CarbonFiberVis"/> <!-- should be material="CarbonPaperGraphite", not implemented yet! -->
+                </support>
+
+                <!-- high-z support -->
+                <support z_offset="OuterFlex_thickness+OuterTrackerBarrel_Sensitive_Thickness+OuterTrackerEndcap_stave_dz">
+                    <component thickness="Tracker_support_PaperGraphite_thickness"  width="outer_mod_z" offset="0.0*mm" z_offset="0.0*mm" material="CarbonFiber" vis="CarbonFiberVis"/> <!-- should be material="CarbonPaperGraphite", not implemented yet! -->
+                    <component thickness="Tracker_support_CarbonFiber_thickness"    width="outer_mod_z" offset="0.0*mm" z_offset="Tracker_support_PaperGraphite_thickness" material="CarbonFiber" vis="CarbonFiberVis"/>
+                    <component thickness="Tracker_support_Fleece_thickness"         width="outer_mod_z" offset="0.0*mm" z_offset="Tracker_support_PaperGraphite_thickness+Tracker_support_CarbonFiber_thickness" material="CarbonFiber" vis="CarbonFiberVis"/> <!-- should be material="CarbonFleeceGraphite", not implemented yet! -->
+                </support>
+
+                <!-- Flex at high-z -->
+                <readout z_offset="OuterFlex_thickness+2.0*(OuterTrackerBarrel_Sensitive_Thickness+TrackerEndcap_Support_thickness)+OuterTrackerEndcap_stave_dz">
+                    <component thickness="OuterFlex_Glue_thickness"         width="OuterFlex_width" offset="0.0*mm" z_offset="0.0*mm" material="Glue" vis="SiVertexCableVis"/> <!-- NEED TO USE CORRECT GLUE DESCRIPTION!-->
+                    <component thickness="OuterFlex_Kapton_thickness"       width="OuterFlex_width" offset="0.0*mm" z_offset="OuterFlex_Glue_thickness" material="Kapton" vis="SiVertexCableVis"/>
+                    <component thickness="OuterFlex_Aluminium_thickness"    width="OuterFlex_width" offset="0.0*mm" z_offset="OuterFlex_Glue_thickness+OuterFlex_Kapton_thickness" material="Al" vis="SiVertexCableVis"/>
+                </readout>
+            </module>
+
+            <layer id="0" z="OuterTrackerEndcap_z1" nphi="4" dz="0.0*mm" rmin="OuterTrackerEndcap_rmin1" dr="OuterTrackerEndcap_dr1" phi0="0.0">
+                <stave nmodules="2" z_offset="0.0*mm" dz="TrackerEndcap_Support_thickness+OuterTrackerEndcap_stave_dz+TrackerEndcap_Support_thickness" r="0.0*mm" step="OuterTrackerEndcapModOverlap" phi0="OuterTrackerEndcap_phi1A" module="SiOuterTrackerEndcapModule"/>
+                <stave nmodules="3" z_offset="OuterTrackerEndcap_zoffset_stave" dz="TrackerEndcap_Support_thickness+OuterTrackerEndcap_stave_dz+TrackerEndcap_Support_thickness" r="1.*(outer_mod_z+OuterTrackerEndcap_rModOverlap)" step="OuterTrackerEndcapModOverlap" phi0="OuterTrackerEndcap_phi1A" module="SiOuterTrackerEndcapModule"/>
+                <stave nmodules="4" z_offset="0.0*mm" dz="TrackerEndcap_Support_thickness+OuterTrackerEndcap_stave_dz+TrackerEndcap_Support_thickness" r="2.*(outer_mod_z+OuterTrackerEndcap_rModOverlap)" step="OuterTrackerEndcapModOverlap" phi0="OuterTrackerEndcap_phi1A" module="SiOuterTrackerEndcapModule"/>
+                <stave nmodules="4" z_offset="OuterTrackerEndcap_zoffset_stave" dz="TrackerEndcap_Support_thickness+OuterTrackerEndcap_stave_dz+TrackerEndcap_Support_thickness" r="3.*(outer_mod_z+OuterTrackerEndcap_rModOverlap)" step="OuterTrackerEndcapModOverlap" phi0="OuterTrackerEndcap_phi1A" module="SiOuterTrackerEndcapModule"/>
+                <stave nmodules="5" z_offset="0.0*mm" dz="TrackerEndcap_Support_thickness+OuterTrackerEndcap_stave_dz+TrackerEndcap_Support_thickness" r="4.*(outer_mod_z+OuterTrackerEndcap_rModOverlap)" step="OuterTrackerEndcapModOverlap" phi0="OuterTrackerEndcap_phi1A" module="SiOuterTrackerEndcapModule"/>
+                <stave nmodules="6" z_offset="OuterTrackerEndcap_zoffset_stave" dz="TrackerEndcap_Support_thickness+OuterTrackerEndcap_stave_dz+TrackerEndcap_Support_thickness" r="5.*(outer_mod_z+OuterTrackerEndcap_rModOverlap)" step="OuterTrackerEndcapModOverlap" phi0="OuterTrackerEndcap_phi1A" module="SiOuterTrackerEndcapModule"/>
+
+                <stave nmodules="2" z_offset="OuterTrackerEndcap_zoffset_face" dz="TrackerEndcap_Support_thickness+OuterTrackerEndcap_stave_dz+TrackerEndcap_Support_thickness" r="0.0*mm" step="OuterTrackerEndcapModOverlap" phi0="OuterTrackerEndcap_phi1B" module="SiOuterTrackerEndcapModule"/>
+                <stave nmodules="3" z_offset="OuterTrackerEndcap_zoffset_face+OuterTrackerEndcap_zoffset_stave" dz="TrackerEndcap_Support_thickness+OuterTrackerEndcap_stave_dz+TrackerEndcap_Support_thickness" r="1.*(outer_mod_z+OuterTrackerEndcap_rModOverlap)" step="OuterTrackerEndcapModOverlap" phi0="OuterTrackerEndcap_phi1B" module="SiOuterTrackerEndcapModule"/>
+                <stave nmodules="4" z_offset="OuterTrackerEndcap_zoffset_face" dz="TrackerEndcap_Support_thickness+OuterTrackerEndcap_stave_dz+TrackerEndcap_Support_thickness" r="2.*(outer_mod_z+OuterTrackerEndcap_rModOverlap)" step="OuterTrackerEndcapModOverlap" phi0="OuterTrackerEndcap_phi1B" module="SiOuterTrackerEndcapModule"/>
+                <stave nmodules="5" z_offset="OuterTrackerEndcap_zoffset_face+OuterTrackerEndcap_zoffset_stave" dz="TrackerEndcap_Support_thickness+OuterTrackerEndcap_stave_dz+TrackerEndcap_Support_thickness" r="3.*(outer_mod_z+OuterTrackerEndcap_rModOverlap)" step="OuterTrackerEndcapModOverlap" phi0="OuterTrackerEndcap_phi1B" module="SiOuterTrackerEndcapModule"/>
+                <stave nmodules="5" z_offset="OuterTrackerEndcap_zoffset_face" dz="TrackerEndcap_Support_thickness+OuterTrackerEndcap_stave_dz+TrackerEndcap_Support_thickness" r="4.*(outer_mod_z+OuterTrackerEndcap_rModOverlap)" step="OuterTrackerEndcapModOverlap" phi0="OuterTrackerEndcap_phi1B" module="SiOuterTrackerEndcapModule"/>
+                <stave nmodules="6" z_offset="OuterTrackerEndcap_zoffset_face+OuterTrackerEndcap_zoffset_stave" dz="TrackerEndcap_Support_thickness+OuterTrackerEndcap_stave_dz+TrackerEndcap_Support_thickness" r="5.*(outer_mod_z+OuterTrackerEndcap_rModOverlap)" step="OuterTrackerEndcapModOverlap" phi0="OuterTrackerEndcap_phi1B" module="SiOuterTrackerEndcapModule"/>
+            </layer>
+
+            <layer id="1" z="OuterTrackerEndcap_z2" nphi="8" dz="OuterTrackerEndcap_zoffset_face" rmin="OuterTrackerEndcap_rmin2" dr="OuterTrackerEndcap_dr2" phi0="0.0">
+                <stave nmodules="3" z_offset="0.0*mm" dz="TrackerEndcap_Support_thickness+OuterTrackerEndcap_stave_dz+TrackerEndcap_Support_thickness" r="0.0*mm" dr="OuterTrackerEndcap_dr2" step="OuterTrackerEndcapModOverlap" phi0="OuterTrackerEndcap_phi1A" module="SiOuterTrackerEndcapModule"/>
+                <stave nmodules="4" z_offset="OuterTrackerEndcap_zoffset_stave" dz="TrackerEndcap_Support_thickness+OuterTrackerEndcap_stave_dz+TrackerEndcap_Support_thickness" r="1.*(outer_mod_z+OuterTrackerEndcap_rModOverlap)" dr="OuterTrackerEndcap_dr2" step="OuterTrackerEndcapModOverlap" phi0="OuterTrackerEndcap_phi1A" module="SiOuterTrackerEndcapModule"/>
+                <stave nmodules="5" z_offset="0.0*mm" dz="TrackerEndcap_Support_thickness+OuterTrackerEndcap_stave_dz+TrackerEndcap_Support_thickness" r="2.*(outer_mod_z+OuterTrackerEndcap_rModOverlap)" dr="OuterTrackerEndcap_dr2" step="OuterTrackerEndcapModOverlap" phi0="OuterTrackerEndcap_phi1A" module="SiOuterTrackerEndcapModule"/>
+                <stave nmodules="6" z_offset="OuterTrackerEndcap_zoffset_stave" dz="TrackerEndcap_Support_thickness+OuterTrackerEndcap_stave_dz+TrackerEndcap_Support_thickness" r="3.*(outer_mod_z+OuterTrackerEndcap_rModOverlap)" dr="OuterTrackerEndcap_dr2" step="OuterTrackerEndcapModOverlap" phi0="OuterTrackerEndcap_phi1A" module="SiOuterTrackerEndcapModule"/>
+                <stave nmodules="7" z_offset="0.0*mm" dz="TrackerEndcap_Support_thickness+OuterTrackerEndcap_stave_dz+TrackerEndcap_Support_thickness" r="4.*(outer_mod_z+OuterTrackerEndcap_rModOverlap)" dr="OuterTrackerEndcap_dr2" step="OuterTrackerEndcapModOverlap" phi0="OuterTrackerEndcap_phi1A" module="SiOuterTrackerEndcapModule"/>
+                <stave nmodules="8" z_offset="OuterTrackerEndcap_zoffset_stave" dz="TrackerEndcap_Support_thickness+OuterTrackerEndcap_stave_dz+TrackerEndcap_Support_thickness" r="5.*(outer_mod_z+OuterTrackerEndcap_rModOverlap)" dr="OuterTrackerEndcap_dr2" step="OuterTrackerEndcapModOverlap" phi0="OuterTrackerEndcap_phi1A" module="SiOuterTrackerEndcapModule"/>
+            </layer>        
+
+            <layer id="2" z="OuterTrackerEndcap_z3" nphi="8" dz="OuterTrackerEndcap_zoffset_face" rmin="OuterTrackerEndcap_rmin3" dr="OuterTrackerEndcap_dr3" phi0="0.0">
+                <stave nmodules="4" z_offset="0.0*mm" dz="TrackerEndcap_Support_thickness+OuterTrackerEndcap_stave_dz+TrackerEndcap_Support_thickness" r="0.0*mm" dr="OuterTrackerEndcap_dr3" step="OuterTrackerEndcapModOverlap" phi0="OuterTrackerEndcap_phi1A" module="SiOuterTrackerEndcapModule"/>
+                <stave nmodules="5" z_offset="OuterTrackerEndcap_zoffset_stave" dz="TrackerEndcap_Support_thickness+OuterTrackerEndcap_stave_dz+TrackerEndcap_Support_thickness" r="1.*(outer_mod_z+OuterTrackerEndcap_rModOverlap)" dr="OuterTrackerEndcap_dr3" step="OuterTrackerEndcapModOverlap" phi0="OuterTrackerEndcap_phi1A" module="SiOuterTrackerEndcapModule"/>
+                <stave nmodules="5" z_offset="0.0*mm" dz="TrackerEndcap_Support_thickness+OuterTrackerEndcap_stave_dz+TrackerEndcap_Support_thickness" r="2.*(outer_mod_z+OuterTrackerEndcap_rModOverlap)" dr="OuterTrackerEndcap_dr3" step="OuterTrackerEndcapModOverlap" phi0="OuterTrackerEndcap_phi1A" module="SiOuterTrackerEndcapModule"/>
+                <stave nmodules="6" z_offset="OuterTrackerEndcap_zoffset_stave" dz="TrackerEndcap_Support_thickness+OuterTrackerEndcap_stave_dz+TrackerEndcap_Support_thickness" r="3.*(outer_mod_z+OuterTrackerEndcap_rModOverlap)" dr="OuterTrackerEndcap_dr3" step="OuterTrackerEndcapModOverlap" phi0="OuterTrackerEndcap_phi1A" module="SiOuterTrackerEndcapModule"/>
+                <stave nmodules="7" z_offset="0.0*mm" dz="TrackerEndcap_Support_thickness+OuterTrackerEndcap_stave_dz+TrackerEndcap_Support_thickness" r="4.*(outer_mod_z+OuterTrackerEndcap_rModOverlap)" dr="OuterTrackerEndcap_dr3" step="OuterTrackerEndcapModOverlap" phi0="OuterTrackerEndcap_phi1A" module="SiOuterTrackerEndcapModule"/>
+            </layer>
+        </detector>
+    </detectors>
+<!--        
+        <detector>
+            <detector name="VertexVerticalCable" type="TrackerEndcapSupport_o1_v01" reflect="true"  region="OuterTrackerEndcapRegion">
+            <envelope>
+                <shape type="Assembly"/>
+            </envelope>
+            <layer id="1" inner_r="VertexBarrel_r1" inner_z="VertexBarrel_zmax+1*mm" outer_r="Vertex_outer_radius-5*env_safety" vis="SiVertexCableVis">
+                <slice material="Copper" thickness="0.02*mm" />
+            </layer>
+        </detector>
+-->
+
+
+    <plugins>
+        <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
+            <argument value="OuterTrackerEndcap"/> 
+            <argument value="dimension=2"/>
+            <argument value="u_x=-1."/>
+            <argument value="v_y=1."/>
+            <argument value="n_z=-1."/>
+        </plugin>
+    </plugins>
+
+  <!-- vertex barrel support structure --> 
+    <!-- If you supply materials and visualisation attributes to the shape:
+         1) The material attribute in the <shape/> element will be applied 
+            to all sub-volumes without an explicit material attribute in the 
+            <volume/> element.
+         2) dto. the material cchild in the <shape/> element.
+         3) The material attribute in the <volume/> element applies 
+            ONLY to the volume specified. This allows to specify a separate 
+                material for each sub-volume in multi-volume CADs.
+             4) The vis attribute in the  <volume/> element applies 
+            ONLY to the volume specified. The name identifies a dd4hep vis object.
+        -->
+    <detectors>
+        <detector id="0" name="Shape_STL" type="DD4hep_SingleShape" vis="CarbonFiberVis">
+                <material name="CarbonFiberConicalSupport"/>
+                <box x="10*cm" y="10*cm" z="22*cm" vis="VXDVis"/>
+                <shape type="CAD_Shape" ref="Assieme_supporti_carbonio.stl" unit="cm">
+                    <position x="104.3837*cm"  y="-1.7417*cm"        z="-33.7602*cm"/>
+                </shape>
+                <position x="0*cm" y="0*cm" z="0*cm"/>
+                <rotation phi="0*rad" theta="-pi/2*rad"   psi="0*rad"/>                    
+       </detector>
+    </detectors>
+
+    <!-- test DDCAD feature with other STL shape -->
+    <!-- <detectors>
+        <detector id="0" name="Shape_STL" type="DD4hep_SingleShape" vis="CarbonFiberVis">
+                <material name="CarbonFiberConicalSupport"/>
+                <box x="10*cm" y="10*cm" z="22*cm" vis="VXDVis"/>
+                <shape type="CAD_Shape" ref="IR_assy_all_colour.stl" unit="cm">
+                    <position x="0.0*cm"  y="0.0*cm"        z="0.0*cm"/>
+                </shape>
+                <position x="0*cm" y="0*cm" z="0*cm"/>
+                <rotation phi="0*rad" theta="0*rad"   psi="0*rad"/>                    
+       </detector>
+    </detectors> -->
+</lccdd>
