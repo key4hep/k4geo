@@ -19,7 +19,7 @@ There are 4 compact `.xml` files that are needed for building the detector.
 
 1. `RadiatorCell_FinalOptimisation_o1_v1.xml`. Contains the parameters that determine the position of mirrors and sensors inside the cells. See the *REMINDER* below.
 
-2. `materials_arc_o1_v1.xml`. Contains the description of the different materials needed in the ARC, including their optical properties if needed and the optical surfaces.
+2. `materials_arc_o1_v01.xml`. Contains the description of the different materials needed in the ARC, including their optical properties if needed and the optical surfaces.
 
 3. `elements.xml`. Contains the whole periodic table of the elements. This file is a copy of the one provided by DD4hep.
 

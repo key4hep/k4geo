@@ -1,7 +1,7 @@
 ARC detector o1 v1
 =======================
 
-Array of RICH Cells (ARC) is a novel RICH detector concept. The ARC detector is made up by two `Detector Elements`, a barrel and two endcaps. Both C++ constructors are declared in the same file `ARC_geo_o1_v1.cpp`. 
+Array of RICH Cells (ARC) is a novel RICH detector concept. The ARC detector is made up by two `Detector Elements`, a barrel and two endcaps. Both C++ constructors are declared in the same file `ARC_geo_o1_v01.cpp`. 
 
 The barrel consist in the repetition of 16 unique cells, 27 times around phi, and mirrored over z axis. Each endcap consist in the repetition of 6 times of a sector. One sector is made of 21 unique cells, some of the reflected within the sector. Further details and figures can be found in [Martin Tat talk](https://indico.cern.ch/event/1231098/contributions/5179993/attachments/2568014/4427756/ARC_Presentation_DD4HEPIntro_15th_December_2022.pdf). The original design included few more cells, 2 more on the edge of the barrel, and some more in the endcap. These cells are not included in the current design because they require some extra work to be properly implemented without causing overlaps.
 
