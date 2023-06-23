@@ -1,4 +1,4 @@
-CLD_o3_v1 Detector
+CLD_o3_v01 Detector
 ======================
 
 This option (o3) of CLD includes the Array of RICH Cells (ARC) subdetector. The ARC is placed after the tracker and before the calorimeters. 
