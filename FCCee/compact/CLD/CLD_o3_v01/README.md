@@ -23,7 +23,7 @@ There are 4 compact `.xml` files that are needed for building the detector.
 
 3. `elements.xml`. Contains the whole periodic table of the elements. This file is a copy of the one provided by DD4hep.
 
-4. `ARC_o1_v1.xml`. Contains the detector section which builds the detector elements `ARCENDCAP_o1_v1_T` and `ARCBARREL_o1_v1_T`, visualization attributes, the segmentation and readout of the sensors, and specifications to build the detector:
+4. `ARC_o1_v01.xml`. Contains the detector section which builds the detector elements `ARCENDCAP_o1_v1_T` and `ARCBARREL_o1_v1_T`, visualization attributes, the segmentation and readout of the sensors, and specifications to build the detector:
 
 * Material of each component: vessel, radiator gas, light sensor, aerogel layer, cooling plate
 
