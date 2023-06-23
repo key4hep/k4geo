@@ -1,10 +1,10 @@
 """
-DD4hep simulation with some argument parsing
-Based on M. Frank and F. Gaede runSim.py
-   @author  A.Sailer
-   @version 0.1
-
-Modified with settings for RICH simulation
+Test of ARC detector
+The lines 27-95 setup the simulation using DD4hep
+The lines 99-127 run the simulation and produce some plots
+An exception is thrown in case the simulation failed or the output file is too small. 
+	Last modification 2023-Jun-23
+	Author: Alvaro Tolosa-Delgado
 """
 from __future__ import absolute_import, unicode_literals
 import logging
