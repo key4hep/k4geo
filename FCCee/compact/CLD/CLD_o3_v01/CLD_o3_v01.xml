@@ -11,8 +11,8 @@
 
 <includes>
   <gdmlFile ref="elements.xml"/>
+  <gdmlFile ref="materials.xml"/>
 </includes>
-
 
 <define>
   <constant name="world_side"             value="10*m"      />
