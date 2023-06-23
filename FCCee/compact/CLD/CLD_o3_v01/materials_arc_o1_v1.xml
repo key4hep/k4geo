@@ -296,12 +296,6 @@
   </properties>
 
   <materials>
-    <material name="Air">
-      <D type="density" unit="g/cm3" value="0.0012"/>
-      <fraction n="0.754" ref="N"/>
-      <fraction n="0.234" ref="O"/>
-      <fraction n="0.012" ref="Ar"/>
-    </material>
     <material name="AirOptical">
       <D type="density" unit="g/cm3" value="0.0012"/>
       <fraction n="0.754" ref="N"/>
@@ -315,12 +309,6 @@
       <fraction n="1.0" ref="Si"/>
       <property name="RINDEX"    ref="RINDEX__C4F10_PFRICH"/>
       <property name="ABSLENGTH" coldim="2" values="1*eV  0.1*mm  5*eV  0.1*mm"/>
-    </material>
-    <material name="Vacuum">
-      <D type="density" unit="g/cm3" value="0.0000000001"/>
-      <fraction n="0.754" ref="N"/>
-      <fraction n="0.234" ref="O"/>
-      <fraction n="0.012" ref="Ar"/>
     </material>
     <material name="VacuumOptical">
       <D type="density" unit="g/cm3" value="0.0000000001"/>
