@@ -39,6 +39,9 @@ option(INSTALL_COMPACT_FILES "Copy compact files to install area" OFF)
 
 
 find_package(DD4hep REQUIRED COMPONENTS DDRec DDG4 DDParsers)
+# dd4hep_set_compiler_flags() expects DD4hep_SET_RPATH to be set to ON
+# otherwise it will not set the rpath when installing
+set(DD4HEP_SET_RPATH ON)
 dd4hep_set_compiler_flags()
 
 find_package ( ROOT REQUIRED COMPONENTS Geom GenVector)
