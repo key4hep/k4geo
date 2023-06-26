@@ -17,13 +17,13 @@ Similar systems have been used in the past, eg at the LHCb experiment. Details o
 
 There are 4 compact `.xml` files that are needed for building the detector.
 
-1. `RadiatorCell_FinalOptimisation_o1_v1.xml`. Contains the parameters that determine the position of mirrors and sensors inside the cells. See the *REMINDER* below.
+1. `RadiatorCell_FinalOptimisation_o1_v01.xml`. Contains the parameters that determine the position of mirrors and sensors inside the cells. See the *REMINDER* below.
 
 2. `materials_arc_o1_v01.xml`. Contains the description of the different materials needed in the ARC, including their optical properties if needed and the optical surfaces.
 
 3. `elements.xml`. Contains the whole periodic table of the elements. This file is a copy of the one provided by DD4hep.
 
-4. `ARC_o1_v01.xml`. Contains the detector section which builds the detector elements `ARCENDCAP_o1_v1_T` and `ARCBARREL_o1_v1_T`, visualization attributes, the segmentation and readout of the sensors, and specifications to build the detector:
+4. `ARC_o1_v01.xml`. Contains the detector section which builds the detector elements `ARCENDCAP_o1_v01_T` and `ARCBARREL_o1_v01_T`, visualization attributes, the segmentation and readout of the sensors, and specifications to build the detector:
 
 * Material of each component: vessel, radiator gas, light sensor, aerogel layer, cooling plate
 
