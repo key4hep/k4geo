@@ -1,4 +1,4 @@
-ARC detector o1 v1
+ARC detector o1 v01
 =======================
 
 Array of RICH Cells (ARC) is a novel RICH detector concept. The ARC detector is made up by two `Detector Elements`, a barrel and two endcaps. Both C++ constructors are declared in the same file `ARC_geo_o1_v01.cpp`. 
