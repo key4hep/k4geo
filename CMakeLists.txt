@@ -32,13 +32,15 @@ ENDIF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 #---Options-------------------------------------------------------------------------
 
 option(BUILD_TESTING "Enable and build tests" ON)
-option(CMAKE_MACOSX_RPATH "Build with rpath on macos" ON)
 option(INSTALL_COMPACT_FILES "Copy compact files to install area" OFF)
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 find_package(DD4hep REQUIRED COMPONENTS DDRec DDG4 DDParsers)
+# dd4hep_set_compiler_flags() expects DD4hep_SET_RPATH to be set to ON
+# otherwise it will not set the rpath when installing
+set(DD4HEP_SET_RPATH ON)
 dd4hep_set_compiler_flags()
 
 find_package ( ROOT REQUIRED COMPONENTS Geom GenVector)
@@ -86,12 +88,9 @@ dd4hep_instantiate_package(${PackageName})
 
 #---Testing-------------------------------------------------------------------------
 if(BUILD_TESTING)
-
   include(CTest)
-  enable_testing()
   add_subdirectory(lcgeoTests)
   set(BUILDNAME "${CMAKE_SYSTEM}-${CMAKE_CXX_COMPILER}-${CMAKE_BUILD_TYPE}" CACHE STRING "set build string for cdash")
-
 endif(BUILD_TESTING)
 
 #--- install remaining targets--------------------------
