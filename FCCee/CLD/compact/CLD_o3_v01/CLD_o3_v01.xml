@@ -1,0 +1,50 @@
+<lccdd >
+
+  <info name="CLD"
+        title="CLD"
+        author="A. Tolosa Delgado, Martin Tat, Roger Forty, Guy Wilkinson"
+        url="https://indico.cern.ch/event/1231098/"
+        status="development"
+        version="o3, v01">
+	<comment>The compact format of the CLD+ARC detector</comment>
+  </info>
+
+<includes>
+  <gdmlFile ref="elements.xml"/>
+  <gdmlFile ref="materials.xml"/>
+</includes>
+
+<define>
+  <constant name="world_side"             value="10*m"      />
+  <constant name="world_x"                value="world_side"/>
+  <constant name="world_y"                value="world_side"/>
+  <constant name="world_z"                value="world_side"/>
+
+  <!--
+      WARNING:
+       The following variables named as ARC_* are fixed by design.
+       If changed, reoptimization of sensor/mirror geometry is needed
+  -->
+  <!-- ARC ENDCAP SIZE -->
+  <constant name="ARC_ENDCAP_R_INNER"     value=" 25 * cm"    />
+  <constant name="ARC_ENDCAP_R_OUTER"     value="210 * cm"    />
+  <constant name="ARC_ENDCAP_LENGTH"      value=" 20 * cm"    />
+
+  <!-- ARC BARREL SIZE -->
+  <constant name="ARC_BARREL_R_INNER"     value="190 * cm"    />
+  <constant name="ARC_BARREL_R_OUTER"     value="210 * cm"    />
+  <constant name="ARC_BARREL_LENGTH"      value="440 * cm"    />
+  <!-- ARC_ENDCAP_ZPOS is the middle of the endcap 
+       the endcap spans over ARC_ENDCAP_ZPOS +- ARC_ENDCAP_LENGTH/2
+      WARNING:
+       if ARC_ENDCAP_ZPOS < (ARC_BARREL_LENGTH+ARC_ENDCAP_LENGTH)/2 + VESSEL_WALL_THICKNESS
+       The endcap will overlap with the barrel.
+  -->
+  <constant name="ARC_ENDCAP_ZPOS"        value="235*cm"    />
+</define>
+
+
+<include ref="ARC_o1_v01.xml"/>
+
+
+</lccdd>
