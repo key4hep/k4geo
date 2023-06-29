@@ -53,6 +53,5 @@
     
   <include ref="../../../DetFCCeeCommon/compact/FFQuads_sens.xml"/>
     <!--<include ref="../../../DetFCCeeCommon/compact/FFQuads.xml"/> -->
-    <!--<include ref="../../../DetFCCeeCommon/compact/HOMAbsorber.xml"/>-->
 
 </lccdd>
