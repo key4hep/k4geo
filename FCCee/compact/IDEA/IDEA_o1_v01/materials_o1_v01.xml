@@ -105,8 +105,8 @@
     <fraction n="0.35" ref="Epoxy"/>
   </material>
 
-  <!-- Just to see vertex support material -->
-  <material name="CarbonFiberConicalSupport">
+  <!-- Just to see vertex support material individually -->
+  <material name="ConicalSupport">
     <D type="density" value="1.5" unit="g/cm3"/>
     <fraction n="0.65" ref="C"/>
     <fraction n="0.35" ref="Epoxy"/>
@@ -114,6 +114,12 @@
 
   <material name="CarbonFiber_50D">
     <D type="density" value="0.75" unit="g/cm3"/>
+    <fraction n="0.65" ref="C"/>
+    <fraction n="0.35" ref="Epoxy"/>
+  </material>  
+
+  <material name="CarbonFiber_20D">
+    <D type="density" value="0.3" unit="g/cm3"/>
     <fraction n="0.65" ref="C"/>
     <fraction n="0.35" ref="Epoxy"/>
   </material>  
@@ -148,6 +154,12 @@
 
   <material name="PE">
     <D type="density" value="0.95" unit="g/cm3"/>
+    <fraction n="0.6666666" ref="H"/>
+    <fraction n="0.3333333" ref="C"/>
+  </material>
+
+  <material name="PE_20D">
+    <D type="density" value="0.19" unit="g/cm3"/>
     <fraction n="0.6666666" ref="H"/>
     <fraction n="0.3333333" ref="C"/>
   </material>
