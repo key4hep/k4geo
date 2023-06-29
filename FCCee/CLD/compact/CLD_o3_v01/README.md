@@ -9,7 +9,7 @@ Array of RICH Cells (ARC) is a novel RICH detector concept. Detailed description
 
 The identification of the particle crossing the ARC detector is based on the Cherenkov light produced by two components: a radiator gas, and a layer of aerogel.
 
-Similar systems have been used in the past, eg at the LHCb experiment. Details of the setup and analysis of the data can be found [here](https://s3.cern.ch/inspire-prod-files-9/92927eb16166b155de56b61339f05521).
+Similar systems have been used in the past, e.g. at the LHCb experiment. Details of the setup and analysis of the data can be found [here](https://s3.cern.ch/inspire-prod-files-9/92927eb16166b155de56b61339f05521).
 
 
 
@@ -31,8 +31,8 @@ There are 4 compact `.xml` files that are needed for building the detector.
 
 * Thickness of mirror and sensor
 
-* Z position of endcap
+* Z position of endcapThe variable `ARC_ENDCAP_ZPOS` defines the middle point of the endcap along the Z axis. Therefore, the endcap spans over `ARC_ENDCAP_ZPOS +- ARC_ENDCAP_LENGTH/2` along Z axis.
 
 * Readout and segmentation of the light sensors. The readout includes the definition of the Volume ID bit-field. Barrel field corresponds to barrel (0) or endcaps (+/-1), cellnumber fields correspond to a number which is given consecutively as the cells are placed.
 
-*REMINDER*: the cell parameters defined in the file `RadiatorCell_FinalOptimization.xml` were optimized by a dedicated raytracing dedicated software for the initial geometry of the ARC detector (radial depth of 20 cm, outer radius of 2.1 m and a length of 4.4 m). If geometry of the ARC changes, these cell parameters should be optimized again.
+*REMINDER*: the cell parameters defined in the file `RadiatorCell_FinalOptimization.xml` were optimized by a dedicated ray-tracing dedicated software for the initial geometry of the ARC detector (radial depth of 20 cm, outer radius of 2.1 m and a length of 4.4 m). If geometry of the ARC changes, these cell parameters should be optimized again.
