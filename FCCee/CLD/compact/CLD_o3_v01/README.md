@@ -31,7 +31,7 @@ There are 4 compact `.xml` files that are needed for building the detector.
 
 * Thickness of mirror and sensor
 
-* Z position of endcapThe variable `ARC_ENDCAP_ZPOS` defines the middle point of the endcap along the Z axis. Therefore, the endcap spans over `ARC_ENDCAP_ZPOS +- ARC_ENDCAP_LENGTH/2` along Z axis.
+* Z position of endcap: The variable `ARC_ENDCAP_ZPOS` defines the middle point of the endcap along the Z axis. Therefore, the endcap spans over `ARC_ENDCAP_ZPOS +- ARC_ENDCAP_LENGTH/2` along the Z axis.
 
 * Readout and segmentation of the light sensors. The readout includes the definition of the Volume ID bit-field. Barrel field corresponds to barrel (0) or endcaps (+/-1), cellnumber fields correspond to a number which is given consecutively as the cells are placed.
 
