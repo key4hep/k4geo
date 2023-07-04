@@ -56,17 +56,17 @@ SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Except
 
 SET( test_name "test_FCCee_o1_v05" )
 ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
-	ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/compact/FCCee_o1_v05/FCCee_o1_v05.xml --runType=batch -G -N=1 --outputFile=testFCCee_o1_v05.slcio )
+	ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/FCCee_o1_v05/FCCee_o1_v05.xml --runType=batch -G -N=1 --outputFile=testFCCee_o1_v05.slcio )
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
 SET( test_name "test_FCCee_dev" )
 ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
-	ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/compact/FCCee_dev/FCCee_dev.xml --runType=batch -G -N=1 --outputFile=testFCCee_dev.slcio )
+	ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/FCCee_dev/FCCee_dev.xml --runType=batch -G -N=1 --outputFile=testFCCee_dev.slcio )
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
 SET( test_name "test_FCCee_o2_v02" )
 ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
-	ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/compact/FCCee_o2_v02/FCCee_o2_v02.xml --runType=batch -G -N=1 --outputFile=testFCCee_o2_v02.slcio )
+	ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/FCCee_o2_v02/FCCee_o2_v02.xml --runType=batch -G -N=1 --outputFile=testFCCee_o2_v02.slcio )
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
 SET( test_name "test_steeringFile" )
