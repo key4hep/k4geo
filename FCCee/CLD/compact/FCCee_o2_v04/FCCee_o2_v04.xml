@@ -49,7 +49,6 @@
   <include ref="YokeBarrel_o1_v01_02.xml"/>
   <include ref="YokeEndcap_o1_v01_02.xml"/>
     
-  <include ref="../../../DetFCCeeCommon/compact/FFQuads_sens.xml"/>
-    <!--<include ref="../../../DetFCCeeCommon/compact/FFQuads.xml"/> -->
+  <include ref="FFQuad_sens_o1_v01.xml"/>
 
 </lccdd>
