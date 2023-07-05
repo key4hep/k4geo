@@ -6,15 +6,17 @@
 
     <comment>Tracking detectors</comment>
     <detectors>
+       <!-- The envelope consists of a tube generally surrounding the vertex barrel and endcap disks, subtracted by a
+            cone describing the upper acceptance of the LumiCal, about 105 mrad in this version of the detector -->
         <detector name="Vertex" type="DD4hep_SubdetectorAssembly" vis="VXDVis">
 		<shape type="BooleanShape" operation="Subtraction" material="Air">
 		    <shape type="BooleanShape" operation="Subtraction">
 			<shape type="Tube" rmin="Vertex_inner_radius" rmax="Vertex_outer_radius" dz="Vertex_half_length"/>
-		        <shape type="Cone" rmin1="0" rmax1="0.150*Vertex_half_length-env_safety" rmin2="0" rmax2="Vertex_inner_radius" z="((Vertex_half_length-CentralBeamPipe_zmax)/2+env_safety)"/>
-		        <position x="0" y="0" z="-(CentralBeamPipe_zmax+(Vertex_half_length-CentralBeamPipe_zmax)/2+env_safety)" />
+		        <shape type="Cone" rmin1="0" rmax1="0.105*Vertex_half_length" rmin2="0" rmax2="0.105*CentralBeamPipe_zmax" z="((Vertex_half_length-CentralBeamPipe_zmax)/2+env_safety)"/>
+		        <position x="0" y="0" z="-(CentralBeamPipe_zmax+(Vertex_half_length-CentralBeamPipe_zmax)/2.0)" />
 		    </shape>
-		    <shape type="Cone" rmin1="0" rmax1="Vertex_inner_radius" rmin2="0" rmax2="0.150*Vertex_half_length-env_safety" z="(Vertex_half_length-CentralBeamPipe_zmax)/2+env_safety"/>
-		    <position x="0" y="0" z="CentralBeamPipe_zmax+(Vertex_half_length-CentralBeamPipe_zmax)/2+env_safety" />
+		    <shape type="Cone" rmin1="0" rmax1="0.105*CentralBeamPipe_zmax" rmin2="0" rmax2="0.105*Vertex_half_length" z="(Vertex_half_length-CentralBeamPipe_zmax)/2+env_safety"/>
+		    <position x="0" y="0" z="CentralBeamPipe_zmax+(Vertex_half_length-CentralBeamPipe_zmax)/2.0" />
 		</shape>
             <comment>Vertex Assembly</comment>
             <composite name="VertexBarrel"/>
@@ -32,7 +34,7 @@
     </display>
 
     <define>
-        <constant name="VertexBarrel_zmax" value="12.5*cm"/>
+        <constant name="VertexBarrel_zmax" value="109*mm"/>
 <!--
 	<constant name="VertexBarrel_r1" value="1.75*cm"/>
         <constant name="VertexBarrel_r2" value="3.7*cm"/>
@@ -124,10 +126,6 @@
         </detector>
 
 
-    </detectors>
-
-
-    <detectors>
         <detector id="DetID_VXD_Endcap" name="VertexEndcap" type="VertexEndcap_o1_v06" readout="VertexEndcapCollection" reflect="true" region="VertexEndcapRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
