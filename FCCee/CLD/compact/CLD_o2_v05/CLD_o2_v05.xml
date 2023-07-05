@@ -78,6 +78,11 @@
         <constant name="TopFillerShieldWidth"  value="8*mm"/>
         <constant name="BeamPipe_end" value="12500*mm"/>
 
+        <!-- Mike Sullivan's Synch Rad mask -->
+        <constant name="MiddleOfSRMask_z" value="2.1*m" />
+        <constant name="SynchRadMaskSize" value="5*mm" /> <!-- mask tip is at 10 mm from the beamline -->
+        <constant name="mask_epsilon" value="0.001*mm" />
+
 
         <constant name="size_x" value="60*mm"/>
         <constant name="size_y" value="12*mm"/>
