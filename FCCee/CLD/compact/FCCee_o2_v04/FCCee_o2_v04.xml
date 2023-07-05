@@ -31,11 +31,11 @@
 
   <include ref="./FCCee_DectDimensions.xml" />
 
-  <include ref="Beampipe_o4_v05_noNotch_W_n02_smallBP.xml"/>
+  <include ref="Beampipe_o4_v06_noNotch_W_n02_smallBP.xml"/>
   <include ref="BeamInstrumentation_o3_v02_fitShield.xml"/>
   <include ref="LumiCal_o3_v02_03.xml"/>
 
-  <include ref="Vertex_o4_v05_smallBP.xml"/>
+  <include ref="Vertex_o4_v06_smallBP.xml"/>
   <include ref="InnerTracker_o2_v06_02.xml"/>
   <include ref="OuterTracker_o2_v06_02.xml"/>
 

@@ -1,12 +1,8 @@
-<!-- Changes :
-   o4_v04 : scaled version of the CLIC VTX Barrel (CLIC_04_v11); distance between sensitive layers in double layers are set to 1*mm and is similar in all 3 layers
--->
-
 <lccdd>
 
     <info name="FCCee"
         title="FCCee Vertex detector: taken correspoding to CLD: Vertex_o4_v05.xml"
-        author="from ILCSOFT/lcgeo/FCCee/compact/FCCee_o1_v04"
+        author="from FCCDetectors/FCCee_o2_v03"
         url="no"
         status="development"
         version="1.0">

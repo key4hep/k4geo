@@ -1,8 +1,8 @@
 <lccdd>
 
   <info name="FCCee"
-        title="FCCee Beam pipe: taken corresponding to CLD: Beampipe_o4_v04_noNotch_W_n02.xml"
-        author="nalipour taken from lcgeo"
+        title="FCCee Beam pipe: added Synchrotron radiation absorber insert, modified dimensions"
+        author="Andrea Ciarma in FCCDetectors"
         url="no"
         status="development"
         version="1.0">
