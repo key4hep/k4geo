@@ -1,4 +1,14 @@
 <lccdd>
+
+  <info name="FCCee"
+        title="FCCee low impedance Beam pipe with small radius"
+        author="Andre Sailer"
+        url="no"
+        status="development"
+        version="1.0">
+    <comment>A beampipe for FCCee detector based on CLD</comment>
+  </info>
+    
     <!--  Definition of global dictionary constants          -->
     <define>
     <!--  Definition of global dictionary constants          -->
@@ -24,9 +34,9 @@
                 <shape type="Assembly"/>
             </envelope>
 
-            <section type="Center"               start="0*mm"    end="CentralBeamPipe_zmax" rMin1="CentralBeamPipe_rmax"  rMin2="CentralBeamPipe_rmax"    rMax1="CentralBeamPipe_rmax+BeamPipeWidth"  rMax2="CentralBeamPipe_rmax+BeamPipeWidth"                material="Beryllium" name="VertexInnerBe" />
+            <section type="Center"               start="0*mm"    end="CentralBeamPipe_zmax" rMin1="CentralBeamPipe_rmax"  rMin2="CentralBeamPipe_rmax"    rMax1="CentralBeamPipe_rmax+BeamPipeWidth"  rMax2="CentralBeamPipe_rmax+BeamPipeWidth"                material="Beryllium" name="VertexInnerBe" /> <!-- FIXME: Material is Albemet + Parafin -->
 
-            <section type="Center" start="CentralBeamPipe_zmax"  end="BePartEnd_z"  rMin1="CentralBeamPipe_rmax"  rMin2="CentralBeamPipe_rmax+(BePartEnd_z-CentralBeamPipe_zmax)*0.023451613"      rMax1="CentralBeamPipe_rmax+BeamPipeWidthFirstCone"  rMax2="CentralBeamPipe_rmax+BeamPipeWidthFirstCone+(BePartEnd_z-CentralBeamPipe_zmax)*0.023451613" material="Beryllium" name="FirstConeBe" />
+            <section type="Center" start="CentralBeamPipe_zmax"  end="SeparatedBeamPipe_z"  rMin1="CentralBeamPipe_rmax"  rMin2="ConeBeamPipe_Rmax"    rMax1="ConeBeamPipe_Rmax"  rMax2="ConeBeamPipe_Rmax+BeamPipeWidthFirstCone" material="Beryllium" name="ConicalChamber" /> <!-- FIXME: Material is Albemet -->
 
         </detector>
 
@@ -43,25 +53,38 @@
 
             <section type="Center"               start="0*mm"    end="CentralBeamPipe_zmax" rMin1="CentralBeamPipe_rmax-(beampipegoldwidth+beampipegoldtolerance)"  rMin2="CentralBeamPipe_rmax-(beampipegoldwidth+beampipegoldtolerance)"    rMax1="CentralBeamPipe_rmax-beampipegoldtolerance"  rMax2="CentralBeamPipe_rmax-beampipegoldtolerance"                material="Gold" name="VertexInnerGold"  />
 
-            <section type="Center" start="CentralBeamPipe_zmax"  end="BePartEnd_z"  rMin1="CentralBeamPipe_rmax-(beampipegoldwidth+beampipegoldtolerance)"  rMin2="CentralBeamPipe_rmax-(beampipegoldwidth+beampipegoldtolerance)+(BePartEnd_z-CentralBeamPipe_zmax)*0.023451613"      rMax1="CentralBeamPipe_rmax-beampipegoldtolerance"  rMax2="CentralBeamPipe_rmax-beampipegoldtolerance+(BePartEnd_z-CentralBeamPipe_zmax)*0.023451613" material="Gold" name="FirstConeGold" />
+            <section type="Center" start="CentralBeamPipe_zmax"  end="SeparatedBeamPipe_z"  rMin1="CentralBeamPipe_rmax-(beampipegoldwidth+beampipegoldtolerance)"  rMin2="ConeBeamPipe_Rmax-(beampipegoldwidth+beampipegoldtolerance)"      rMax1="ConeBeamPipe_Rmax-beampipegoldtolerance"  rMax2="ConeBeamPipe_Rmax-beampipegoldtolerance" material="Gold" name="ConicalChamberGold" />
 
-        <comment>Part of beampipe made of Copper</comment>
-
-            <section type="Center" start="BePartEnd_z"  end="SeparatedBeamPipe_z"  rMin1="CentralBeamPipe_rmax+(BePartEnd_z-CentralBeamPipe_zmax)*0.023451613"  rMin2="CentralBeamPipe_rmax+(BePartEnd_z-CentralBeamPipe_zmax)*0.023451613+(SeparatedBeamPipe_z-BePartEnd_z)*0.017"      rMax1="CentralBeamPipe_rmax+BeamPipeWidthFirstCone+(BePartEnd_z-CentralBeamPipe_zmax)*0.023451613"  rMax2="CentralBeamPipe_rmax+BeamPipeWidthFirstCone+(BePartEnd_z-CentralBeamPipe_zmax)*0.023451613+(SeparatedBeamPipe_z-BePartEnd_z)*0.017" material="Copper" name="CopperCone" />
-
-
-<!-- PunchedCenter = un volume qui s'etend jusqu'a rMax1 (a z=start) et rMax2 (a end) et avec deux cylindres extrudes le long
-        des directions up / down (depend du xing angle), de rayon rMin1 et rMin2  -->
-
-
-	    <section type="PunchedCenter"        start="SeparatedBeamPipe_z" end="SeparatedBeamPipe_z+3*mm"    rMin1="SeparatedBeamPipe_rmax"      rMin2="SeparatedBeamPipe_rmax"       rMax1="CentralBeamPipe_rmax+BeamPipeWidthFirstCone+(BePartEnd_z-CentralBeamPipe_zmax)*0.015+(SeparatedBeamPipe_z-BePartEnd_z)*0.015"     rMax2="CentralBeamPipe_rmax+BeamPipeWidthFirstCone+(BePartEnd_z-CentralBeamPipe_zmax)*0.023451613+(SeparatedBeamPipe_z-BePartEnd_z)*0.017 + 3*mm*0.023451613" material="Copper"     name="SplitVacChambers"/>
+	    <section type="PunchedCenter"        start="SeparatedBeamPipe_z" end="SeparatedBeamPipe_z+3*mm" rMin1="SeparatedBeamPipe_rmax"      rMin2="SeparatedBeamPipe_rmax" rMax1="ConeBeamPipe_Rmax+BeamPipeWidthFirstCone" rMax2="ConeBeamPipe_Rmax+BeamPipeWidthFirstCone" material="Copper"     name="SplitVacChambers"/>
 
 	<!-- Downstream pipe : first part : radius = 1.5 cm -->
 
-             <section type="DnstreamClippedFront" start="SeparatedBeamPipe_z+3.01*mm" end="6000*mm"  rMin1="SeparatedBeamPipe_rmax"  rMin2="SeparatedBeamPipe_rmax" rMax1="SeparatedBeamPipe_rmax+1*mm"  rMax2="SeparatedBeamPipe_rmax+1*mm"  material="Copper"      name="DownStreamBeamPipe_1"/>
+             <section type="DnstreamClippedFront" start="SeparatedBeamPipe_z+3.0*mm" end="6000*mm"  rMin1="SeparatedBeamPipe_rmax"  rMin2="SeparatedBeamPipe_rmax" rMax1="SeparatedBeamPipe_rmax+1*mm"  rMax2="SeparatedBeamPipe_rmax+1*mm"  material="Copper"      name="DownStreamBeamPipe_1"/>
 
 
-	   <section type="UpstreamClippedFront"  start="SeparatedBeamPipe_z+3.01*mm" end="6000*mm"  rMin1="SeparatedBeamPipe_rmax"  rMin2="SeparatedBeamPipe_rmax" rMax1="SeparatedBeamPipe_rmax+1*mm"  rMax2="SeparatedBeamPipe_rmax+1*mm"  material="Copper"      name="UpStreamBeamPipe_1"/>
+	   <section type="UpstreamClippedFront"  start="SeparatedBeamPipe_z+3.0*mm" end="MiddleOfSRMask_z -3*cm" rMin1="SeparatedBeamPipe_rmax"  rMin2="SeparatedBeamPipe_rmax" rMax1="SeparatedBeamPipe_rmax+1*mm"  rMax2="SeparatedBeamPipe_rmax+1*mm"  material="Copper"      name="UpStreamBeamPipe_1"/>
+
+           <section type="Upstream" start="MiddleOfSRMask_z -3*cm" end="MiddleOfSRMask_z -1*cm" rMin1="SeparatedBeamPipe_rmax" rMax1="SeparatedBeamPipe_rmax+1*mm" rMin2="SeparatedBeamPipe_rmax-SynchRadMaskSize" rMax2="SeparatedBeamPipe_rmax+0.01*mm - SynchRadMaskSize" material="Copper"      name="UpStreamBeamPipe_2" />
+
+           <section type="Upstream" start="MiddleOfSRMask_z -1*cm" end="MiddleOfSRMask_z +1*cm" rMin1="SeparatedBeamPipe_rmax-SynchRadMaskSize" rMax1="SeparatedBeamPipe_rmax+0.01*mm - SynchRadMaskSize" rMin2="SeparatedBeamPipe_rmax-SynchRadMaskSize" rMax2="SeparatedBeamPipe_rmax+0.01*mm - SynchRadMaskSize" material="Copper"      name="UpStreamBeamPipe_3" />
+
+           <section type="Upstream" start="MiddleOfSRMask_z +1*cm" end="MiddleOfSRMask_z +3*cm" rMin1="SeparatedBeamPipe_rmax-SynchRadMaskSize" rMax1="SeparatedBeamPipe_rmax+0.01*mm - SynchRadMaskSize" rMin2="SeparatedBeamPipe_rmax" rMax2="SeparatedBeamPipe_rmax+1*mm" material="Copper"      name="UpStreamBeamPipe_4" />
+
+           <section type="Upstream" start="MiddleOfSRMask_z +3*cm" end="6000*mm"  rMin1="SeparatedBeamPipe_rmax"  rMin2="SeparatedBeamPipe_rmax" rMax1="SeparatedBeamPipe_rmax+1*mm"  rMax2="SeparatedBeamPipe_rmax+1*mm"  material="Copper"      name="UpStreamBeamPipe_5" />
+
+</detector>
+
+<!-- 2020.04.08 : Synch Radiation mask (symmetyric in phi for the while) -->
+
+<comment>Synch Radiation mask inside the beam-pipe, at z = 2.1 m </comment>
+<detector name="SynchRadMask" type="DD4hep_Mask_o1_v01" insideTrackingVolume="true" vis="TantalumVis" >
+        <parameter crossingangle="CrossingAngle" />
+
+           <section type="Upstream" start="MiddleOfSRMask_z -3*cm" end="MiddleOfSRMask_z -1*cm" rMin1="SeparatedBeamPipe_rmax +1*mm + mask_epsilon" rMax1="SeparatedBeamPipe_rmax+1*mm +2*mask_epsilon" rMin2="SeparatedBeamPipe_rmax +0.01*mm -SynchRadMaskSize + mask_epsilon" rMax2="SeparatedBeamPipe_rmax+1*mm +2* mask_epsilon" material="Tungsten"      name="UpStreamBeamPipe_SRmask_1" />
+
+           <section type="Upstream" start="MiddleOfSRMask_z -1*cm" end="MiddleOfSRMask_z +1*cm" rMin1="SeparatedBeamPipe_rmax +0.01*mm -SynchRadMaskSize + mask_epsilon" rMax1="SeparatedBeamPipe_rmax+1*mm +2*mask_epsilon " rMin2="SeparatedBeamPipe_rmax +0.01*mm -SynchRadMaskSize + mask_epsilon" rMax2="SeparatedBeamPipe_rmax+1*mm + 2*mask_epsilon" material="Tungsten"    name="UpStreamBeamPipe_SRmask_2" />
+
+           <section type="Upstream" start="MiddleOfSRMask_z +1*cm" end="MiddleOfSRMask_z +3*cm" rMin1="SeparatedBeamPipe_rmax +0.01*mm -SynchRadMaskSize +mask_epsilon" rMax1="SeparatedBeamPipe_rmax+1*mm + 2*mask_epsilon" rMin2="SeparatedBeamPipe_rmax +1*mm + mask_epsilon" rMax2="SeparatedBeamPipe_rmax+1*mm +2*mask_epsilon" material="Tungsten"      name="UpStreamBeamPipe_SRmask_3" />
 
 </detector>
 <comment>Full Cone Tungsten Shield</comment>
