@@ -276,7 +276,6 @@
 
     <include ref="Beampipe_o4_v04_noNotch_W_n02_smallBP.xml"/>
 
-    <include ref="HOMAbsorber_v00.xml"/>
     <include ref="BeamInstrumentation_o3_v02_fitShield.xml"/>
 
     <include ref="LumiCal_o3_v02_03.xml"/>
