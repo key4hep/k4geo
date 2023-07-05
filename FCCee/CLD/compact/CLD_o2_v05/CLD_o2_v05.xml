@@ -2,12 +2,12 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-    <info name="FCCee_o2_v02"
-        title="FCCee detector model option 2 version 02 (update on MDI region)"
+    <info name="CLD_o2_v05"
+        title="FCCee detector model option 2 version 05 (updated Beampipe and VXD)"
 	author="Andre Sailer"
         url="http://ilcsoft.desy.de"
         status="development"
-        version="2">
+        version="5">
         <comment>The compact format for the FCCee Detector design</comment>
     </info>
 
