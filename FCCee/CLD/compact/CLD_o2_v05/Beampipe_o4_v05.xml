@@ -36,7 +36,7 @@
 
             <section type="Center"               start="0*mm"    end="CentralBeamPipe_zmax" rMin1="CentralBeamPipe_rmax"  rMin2="CentralBeamPipe_rmax"    rMax1="CentralBeamPipe_rmax+BeamPipeWidth"  rMax2="CentralBeamPipe_rmax+BeamPipeWidth"                material="Beryllium" name="VertexInnerBe" /> <!-- FIXME: Material is Albemet + Parafin -->
 
-            <section type="Center" start="CentralBeamPipe_zmax"  end="SeparatedBeamPipe_z"  rMin1="CentralBeamPipe_rmax"  rMin2="ConeBeamPipe_Rmax"    rMax1="ConeBeamPipe_Rmax"  rMax2="ConeBeamPipe_Rmax+BeamPipeWidthFirstCone" material="Beryllium" name="ConicalChamber" /> <!-- FIXME: Material is Albemet -->
+            <section type="Center" start="CentralBeamPipe_zmax"  end="SeparatedBeamPipe_z"  rMin1="CentralBeamPipe_rmax"  rMin2="ConeBeamPipe_Rmax"    rMax1="CentralBeamPipe_rmax+BeamPipeWidthFirstCone"  rMax2="ConeBeamPipe_Rmax+BeamPipeWidthFirstCone" material="Beryllium" name="ConicalChamber" /> <!-- FIXME: Material is Albemet -->
 
         </detector>
 
@@ -48,16 +48,13 @@
 
             <!--             &A                       Z1                  Z2                    RIn1                RIn2                                 ROut1                        ROut2                                              Material -->
 
-
             <comment>Golden foil in the inner part of the Be beampipe</comment>
 
             <section type="Center"               start="0*mm"    end="CentralBeamPipe_zmax" rMin1="CentralBeamPipe_rmax-(beampipegoldwidth+beampipegoldtolerance)"  rMin2="CentralBeamPipe_rmax-(beampipegoldwidth+beampipegoldtolerance)"    rMax1="CentralBeamPipe_rmax-beampipegoldtolerance"  rMax2="CentralBeamPipe_rmax-beampipegoldtolerance"                material="Gold" name="VertexInnerGold"  />
 
-            <section type="Center" start="CentralBeamPipe_zmax"  end="SeparatedBeamPipe_z"  rMin1="CentralBeamPipe_rmax-(beampipegoldwidth+beampipegoldtolerance)"  rMin2="ConeBeamPipe_Rmax-(beampipegoldwidth+beampipegoldtolerance)"      rMax1="ConeBeamPipe_Rmax-beampipegoldtolerance"  rMax2="ConeBeamPipe_Rmax-beampipegoldtolerance" material="Gold" name="ConicalChamberGold" />
+            <section type="Center" start="CentralBeamPipe_zmax"  end="SeparatedBeamPipe_z"  rMin1="CentralBeamPipe_rmax-(beampipegoldwidth+beampipegoldtolerance)"  rMin2="ConeBeamPipe_Rmax-(beampipegoldwidth+beampipegoldtolerance)"      rMax1="CentralBeamPipe_rmax-beampipegoldtolerance"  rMax2="ConeBeamPipe_Rmax-beampipegoldtolerance" material="Gold" name="ConicalChamberGold" />
 
 	    <section type="PunchedCenter"        start="SeparatedBeamPipe_z" end="SeparatedBeamPipe_z+3*mm" rMin1="SeparatedBeamPipe_rmax"      rMin2="SeparatedBeamPipe_rmax" rMax1="ConeBeamPipe_Rmax+BeamPipeWidthFirstCone" rMax2="ConeBeamPipe_Rmax+BeamPipeWidthFirstCone" material="Copper"     name="SplitVacChambers"/>
-
-	<!-- Downstream pipe : first part : radius = 1.5 cm -->
 
              <section type="DnstreamClippedFront" start="SeparatedBeamPipe_z+3.0*mm" end="6000*mm"  rMin1="SeparatedBeamPipe_rmax"  rMin2="SeparatedBeamPipe_rmax" rMax1="SeparatedBeamPipe_rmax+1*mm"  rMax2="SeparatedBeamPipe_rmax+1*mm"  material="Copper"      name="DownStreamBeamPipe_1"/>
 
