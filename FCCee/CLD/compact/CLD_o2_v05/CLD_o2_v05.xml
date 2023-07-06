@@ -65,6 +65,7 @@
         <constant name="CentralBeamPipe_rmax" value="10.0*mm"/>
 	<constant name="BeamPipeGoldWidth" value="0.005*mm" />
 	<constant name="BeamPipeGoldTolerance" value="0.001*mm" />  <!-- dummy tolerance, some small non zero value -->
+	<constant name="BeamPipeConeHalfAngle" value="(ConeBeamPipe_Rmax + BeamPipeWidthFirstCone - CentralBeamPipe_rmax ) / (SeparatedBeamPipe_z - CentralBeamPipe_zmax)" />
 
         <constant name="InnerTracker_half_length" value="2300*mm" />
 
