@@ -29,7 +29,7 @@
       <!-- ;radius calculator lisp
       (+ 12.0 (* (/ (- 28.9 12.0) (- 1190.0 90.0)) (- 110.0 90.0) ) )
       -->
-        <comment>Part of beampipe made of Beryllium</comment>
+        <comment>Part of beampipe made of AlBeMet162 and Paraffin flow</comment>
 
         <detector name="BeBeampipe" type="DD4hep_Beampipe_o1_v01" insideTrackingVolume="true" nocore="true" vis="BeamPipeVis">
             <parameter crossingangle="CrossingAngle" />
@@ -37,9 +37,9 @@
                 <shape type="Assembly"/>
             </envelope>
 
-            <section type="Center"               start="0*mm"    end="CentralBeamPipe_zmax" rMin1="CentralBeamPipe_rmax"  rMin2="CentralBeamPipe_rmax"    rMax1="CentralBeamPipe_rmax+BeamPipeWidth"  rMax2="CentralBeamPipe_rmax+BeamPipeWidth"                material="Beryllium" name="VertexInnerBe" /> <!-- FIXME: Material is Albemet + Parafin -->
+            <section type="Center"               start="0*mm"    end="CentralBeamPipe_zmax" rMin1="CentralBeamPipe_rmax"  rMin2="CentralBeamPipe_rmax"    rMax1="CentralBeamPipe_rmax+BeamPipeWidth"  rMax2="CentralBeamPipe_rmax+BeamPipeWidth"                material="CentralBeamPipeMaterial" name="VertexInnerBe" />
 
-            <section type="Center" start="CentralBeamPipe_zmax"  end="SeparatedBeamPipe_z"  rMin1="CentralBeamPipe_rmax"  rMin2="ConeBeamPipe_Rmax"    rMax1="CentralBeamPipe_rmax+BeamPipeWidthFirstCone"  rMax2="ConeBeamPipe_Rmax+BeamPipeWidthFirstCone" material="Beryllium" name="ConicalChamber" /> <!-- FIXME: Material is Albemet -->
+            <section type="Center" start="CentralBeamPipe_zmax"  end="SeparatedBeamPipe_z"  rMin1="CentralBeamPipe_rmax"  rMin2="ConeBeamPipe_Rmax"    rMax1="CentralBeamPipe_rmax+BeamPipeWidthFirstCone"  rMax2="ConeBeamPipe_Rmax+BeamPipeWidthFirstCone" material="Beryllium" name="AlBeMet162" />
 
         </detector>
 

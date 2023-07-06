@@ -205,6 +205,28 @@
       <fraction n="0.084" ref="Nb"/>
     </material>
 
+    <material name="AlBeMet162">
+      <D value="2.1" unit="g/cm3"/>
+      <fraction n="0.38" ref="Al"/>
+      <fraction n="0.62" ref="Be"/>
+    </material>
+
+    <!-- this is most likely not it -->
+    <material name="LiquidParaffin">
+      <D value="0.825" unit="g/cm3"/>
+      <composite n="25" ref="C" />
+      <composite n="52" ref="H" />
+    </material>
+
+    <!--  this is only for the central beampipe with current geometry!
+          SUM_i V_i D_i / SUM_i V_i
+         (/ (+ (* 0.7 2.1) (* 1.0 0.825)) (+ 0.7 1.0)) -->
+    <material name="CentralBeamPipeMaterial">
+      <D value="1.35" unit="g/cm3"/>
+      <fraction n="0.412" ref="AlBeMet162"/>
+      <fraction n="0.588" ref="LiquidParaffin"/>
+    </material>
+
     <material name="beam" state="gas">
       <P unit="pascal" value="6.25e-06"/>
       <MEE unit="eV" value="38.5760755714278"/>
