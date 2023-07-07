@@ -29,36 +29,22 @@
         <constant name="VertexCoolingShellThickness" value="1*mm"/>
 
         <constant name="ITM" value="15.1*mm"/>
-
+        <constant name="ITEnvelopeClearanceConeHalfAngle" value="149*mrad" />
     </define>
 
 
     <comment>Tracking detectors</comment>
     <detectors>
         <detector name="InnerTrackers" type="DD4hep_SubdetectorAssembly" vis="ITVis">
-            <shape type="BooleanShape" operation="Subtraction" material="Air">
-                <shape type="BooleanShape" operation="Subtraction">
-                    <shape type="BooleanShape" operation="Subtraction">
-                        <shape type="BooleanShape" operation="Subtraction">
 
-                            <shape type="BooleanShape" operation="Subtraction"  >
-                                <shape type="Tube" rmin="CentralBeamPipe_rmax" rmax="InnerTracker_outer_radius" dz="InnerTracker_half_length+env_safety"/>
-				<shape type="Cone" rmin1="0" rmax1="0.150*CentralBeamPipe_zmax" rmin2="0" rmax2="0.150*(ConeBeamPipe_zmax)" z="(ConeBeamPipe_zmax-CentralBeamPipe_zmax)/2.0"/>
-                                <position x="0" y="0" z="(ConeBeamPipe_zmax-CentralBeamPipe_zmax)/2.0 + CentralBeamPipe_zmax" />
-                            </shape>
-
-                            <shape type="Cone" rmin2="0" rmax2="0.150*CentralBeamPipe_zmax" rmin1="0" rmax1="0.150*(ConeBeamPipe_zmax)" z="(ConeBeamPipe_zmax-CentralBeamPipe_zmax)/2.0"/>
-                            <position x="0" y="0" z="-(ConeBeamPipe_zmax-CentralBeamPipe_zmax)/2.0 - CentralBeamPipe_zmax" />
-                        </shape>
-                        <shape type="Tube" rmin="0" rmax="ConeBeamPipe_rmax_1" dz="(InnerTracker_half_length-ConeBeamPipe_zmax)/2.0+10*env_safety"/>
-                        <position x="0" y="0" z="(InnerTracker_half_length-ConeBeamPipe_zmax)/2.0+ConeBeamPipe_zmax+10*env_safety" />
-                    </shape>
-                    <shape type="Tube" rmin="0" rmax="ConeBeamPipe_rmax_1" dz="(InnerTracker_half_length-ConeBeamPipe_zmax)/2.0+10*env_safety"/>
-                    <position x="0" y="0" z="-(InnerTracker_half_length-ConeBeamPipe_zmax)/2.0-ConeBeamPipe_zmax-10*env_safety" />
-                </shape>
-                <shape type="Tube" rmin="0" rmax="Vertex_outer_radius" dz="Vertex_half_length+0.5*cm"/>
-            </shape>
-
+            <shape type="Polycone" material="Air">
+              <zplane z="-InnerTracker_half_length"       rmin="ITEnvelopeClearanceConeHalfAngle * ConeBeamPipe_zmax"             rmax="InnerTracker_outer_radius" />
+              <zplane z="-(Vertex_half_length + 5 * mm)"  rmin="ITEnvelopeClearanceConeHalfAngle * (Vertex_half_length + 5 * mm)" rmax="InnerTracker_outer_radius" />
+              <zplane z="-(Vertex_half_length)"           rmin="Vertex_outer_radius"                                              rmax="InnerTracker_outer_radius" />
+              <zplane z="+(Vertex_half_length)"           rmin="Vertex_outer_radius"                                              rmax="InnerTracker_outer_radius" />
+              <zplane z="+(Vertex_half_length + 5 * mm)"  rmin="ITEnvelopeClearanceConeHalfAngle * (Vertex_half_length + 5 * mm)" rmax="InnerTracker_outer_radius" />
+              <zplane z="+InnerTracker_half_length"       rmin="ITEnvelopeClearanceConeHalfAngle * ConeBeamPipe_zmax"             rmax="InnerTracker_outer_radius" />
+	    </shape>
 
             <comment>Inner Tracker Assembly</comment>
             <composite name="InnerTrackerBarrel"/>
