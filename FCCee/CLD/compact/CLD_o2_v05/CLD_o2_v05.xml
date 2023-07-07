@@ -289,7 +289,7 @@
 
     <include ref="LumiCal_o3_v02_03.xml"/>
 
-    <include ref="Vertex_o4_v06_smallBP.xml"/>
+    <include ref="Vertex_o4_v07_smallBP.xml"/>
 
     <include ref="InnerTracker_o2_v07.xml"/>
     <include ref="OuterTracker_o2_v07.xml"/>
