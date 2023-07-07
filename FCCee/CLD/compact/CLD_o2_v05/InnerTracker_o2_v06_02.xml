@@ -407,7 +407,7 @@
                 <ring r="InnerTracker_Endcap_radius_1+11*ITM" zstart="InnerTracker_Endcap_z_1" nmodules="24" dz="3*mm" module="InnerTrackerEndcapModule_8x8_In"  phi0="0"/>
                 <ring r="InnerTracker_Endcap_radius_1+19*ITM" zstart="InnerTracker_Endcap_z_1" nmodules="24" dz="3*mm" module="InnerTrackerEndcapModule_9x8_In"  phi0="0"/>
                 <ring r="InnerTracker_Endcap_radius_1+27*ITM" zstart="InnerTracker_Endcap_z_1" nmodules="24" dz="3*mm" module="InnerTrackerEndcapModule_11x3_In" phi0="0"/>
-		<ring r="InnerTracker_Endcap_radius_1+30*ITM" zstart="InnerTracker_Endcap_z_1" nmodules="36" dz="3*mm" module="InnerTrackerEndcapModule_8x5_In"  phi0="0"/>
+		<ring r="InnerTracker_Endcap_radius_1+30*ITM" zstart="InnerTracker_Endcap_z_1" nmodules="24" dz="3*mm" module="InnerTrackerEndcapModule_12x5_In"  phi0="0"/>
             </layer>
 
 
