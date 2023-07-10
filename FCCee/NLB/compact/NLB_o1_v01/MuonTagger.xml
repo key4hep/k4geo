@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+  <info name="FCCeeMuonTagger"
+        title="Muon Tagger for IDEA-LAr"
+        author="M.Aleksa,J.Faltova"
+        url="no"
+        status="development"
+        version="1.0">
+    <comment>
+      Simple muon tagger - barrel and endcaps
+    </comment>
+  </info>
+
+  <display>
+    <vis name="muon_vis" r="1.0" g="0.1" b="0.1" showDaughters="true" visible="true" />
+  </display> 
+  
+  <readouts>
+    <readout name="MuonTaggerPhiEta">
+      <segmentation type="FCCSWGridPhiEta" phi_bins="704" offset_phi="-pi+(pi/704.)" grid_size_eta="0.01" offset_eta="-2.91"/>
+      <id>system:4,subsystem:1,type:3,subtype:3,layer:8,sublayer:8,eta:10,phi:10</id>
+    </readout>
+  </readouts>
+
+  <detectors>
+    <!-- positive side: cryostat -->
+    <detector id="DetID_Muon_Barrel" name="MuonTaggerBarrel" type="SimpleCylinder" sensitive="true" vis="muon_vis" readout="MuonTaggerPhiEta">
+      <sensitive type="SimpleTrackerSD"/>
+      <dimensions rmin="MuonTagger_inner_radius" rmax="MuonTagger_outer_radius"
+                  dz="MuonTagger_half_length" z_offset = "0" material="Polystyrene" phi0="0" deltaphi="360*deg" vis="muon_vis"/>
+    </detector>
+
+    <detector id="DetID_Muon_Endcap_1" name="MuonTaggerEndcap_positive" type="SimpleCylinder" sensitive="true" vis="muon_vis" readout="MuonTaggerPhiEta">
+      <sensitive type="SimpleTrackerSD"/>
+      <dimensions rmin="MuonTaggerEndcap_inner_radius" rmax="MuonTaggerEndcap_outer_radius"
+                  dz="(MuonTaggerEndcap_max_z - MuonTaggerEndcap_min_z)*0.5" z_offset = "MuonTaggerEndcap_min_z + (MuonTaggerEndcap_max_z - MuonTaggerEndcap_min_z)*0.5" material="Polystyrene" phi0="0" deltaphi="360*deg" vis="muon_vis"/>
+    </detector>
+    
+    <detector id="DetID_Muon_Endcap_2" name="MuonTaggerEndcap_negative" type="SimpleCylinder" sensitive="true" vis="muon_vis" readout="MuonTaggerPhiEta">
+      <sensitive type="SimpleTrackerSD"/>
+      <dimensions rmin="MuonTaggerEndcap_inner_radius" rmax="MuonTaggerEndcap_outer_radius"
+                  dz="(MuonTaggerEndcap_max_z - MuonTaggerEndcap_min_z)*0.5" z_offset = "-MuonTaggerEndcap_max_z + (MuonTaggerEndcap_max_z - MuonTaggerEndcap_min_z)*0.5" material="Polystyrene" phi0="0" deltaphi="360*deg" vis="muon_vis"/>
+    </detector>
+    
+  </detectors>
+
+</lccdd>
