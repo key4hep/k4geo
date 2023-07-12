@@ -50,13 +50,15 @@ find_package( Geant4 REQUIRED )
 find_package( LCIO REQUIRED)
 
 add_subdirectory(./detector/DetSegmentation)
+add_subdirectory(./detector/DetCommon)
+add_subdirectory(./detector/DetSensitive)
 
 file(GLOB sources 
   ./detector/tracker/*.cpp 
   ./detector/calorimeter/*.cpp 
-  ./detector/fcal/*.cpp 
-  ./detector/other/*.cpp 
-  ./detector/CaloTB/*.cpp 
+  ./detector/fcal/*.cpp
+  ./detector/other/*.cpp
+  ./detector/CaloTB/*.cpp
   ./FCalTB/setup/*.cpp
   ./plugins/LinearSortingPolicy.cpp
   ./detector/PID/ARC_geo_o1_v01.cpp
