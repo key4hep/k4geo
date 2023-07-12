@@ -54,8 +54,8 @@ add_subdirectory(./detector/DetCommon)
 add_subdirectory(./detector/DetSensitive)
 
 file(GLOB sources 
-  ./detector/tracker/*.cpp 
-  ./detector/calorimeter/*.cpp 
+  ./detector/tracker/*.cpp
+  ./detector/calorimeter/*.cpp
   ./detector/fcal/*.cpp
   ./detector/other/*.cpp
   ./detector/CaloTB/*.cpp
