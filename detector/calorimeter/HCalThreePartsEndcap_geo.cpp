@@ -471,4 +471,4 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
 }
 }  // namespace hcal
 
-DECLARE_DETELEMENT(CaloThreePartsEndcap, det::createHCalEC)
+DECLARE_DETELEMENT(CaloThreePartsEndcap_o1_v01, det::createHCalEC)

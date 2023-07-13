@@ -235,4 +235,4 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
 }
 }  // namespace hcal
 
-DECLARE_DETELEMENT(HCalTileBarrel, det::createHCal)
+DECLARE_DETELEMENT(HCalTileBarrel_o1_v01, det::createHCal)
