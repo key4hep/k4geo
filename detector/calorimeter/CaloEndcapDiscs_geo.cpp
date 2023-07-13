@@ -319,4 +319,4 @@ createCaloDiscs(dd4hep::Detector& aLcdd, dd4hep::xml::Handle_t aXmlElement, dd4h
 }
 }  // namespace det
 
-DECLARE_DETELEMENT(CaloDiscs, det::createCaloDiscs)
+DECLARE_DETELEMENT(CaloDiscs_o1_v01, det::createCaloDiscs)

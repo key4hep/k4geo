@@ -568,4 +568,4 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
 }
 }  // namespace det
 
-DECLARE_DETELEMENT(EmCaloBarrelInclined, det::createECalBarrelInclined)
+DECLARE_DETELEMENT(EmCaloBarrelInclined_o1_v01, det::createECalBarrelInclined)

@@ -103,4 +103,4 @@ static dd4hep::Ref_t createParamSimplifiedDriftChamber(dd4hep::Detector& theDete
 }
 }
 
-DECLARE_DETELEMENT(parametrised_SimplifiedDriftChamber, det::createParamSimplifiedDriftChamber)
+DECLARE_DETELEMENT(parametrised_SimplifiedDriftChamber_o1_v01, det::createParamSimplifiedDriftChamber)

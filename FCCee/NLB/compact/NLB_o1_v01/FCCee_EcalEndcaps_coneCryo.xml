@@ -102,7 +102,7 @@
                   z_offset="CryoEndcap_z1+CryoEMECThicknessFront+(CryoEndcap_z2-CryoEndcap_z1-CryoEMECThicknessFront-CryoEMECThicknessBack)/2." material="LAr" phi0="0" deltaphi="360*deg"/>
     </detector>
     <!-- electromagnetic calorimeter -->
-    <detector name="EMEC" type="CaloDiscs" id="DetID_ECAL_Endcap" readout="ECalEndcapPhiEta" vis="emec_envelope_vis">
+    <detector name="EMEC" type="CaloDiscs_o1_v01" id="DetID_ECAL_Endcap" readout="ECalEndcapPhiEta" vis="emec_envelope_vis">
       <sensitive type="SimpleCalorimeterSD"/>
       <dimensions rmin1="EMEC_rmin1"  rmin2="EMEC_rmin2" rmax="EMEC_rmax" dz="(EMEC_z2-EMEC_z1)/2." z_offset="EMEC_z1+(EMEC_z2-EMEC_z1)/2."/>
       <layers> 

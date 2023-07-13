@@ -59,7 +59,7 @@
   </readouts>
 
   <detectors>
-    <detector id="DetID_HCAL_Endcap" name="HCalThreePartsEndcap" type="CaloThreePartsEndcap" readout="HCalEndcapReadout" >
+    <detector id="DetID_HCAL_Endcap" name="HCalThreePartsEndcap" type="CaloThreePartsEndcap_o1_v01" readout="HCalEndcapReadout" >
       <!-- vis="endcapHcal_envelope"> -->
       <sensitive type="BirksLawCalorimeterSD"/>
       <dimensions rmin1="HCalEndcap_inner_radius1" rmin2="HCalEndcap_inner_radius2" rmin="HCalEndcap_inner_radius3"
