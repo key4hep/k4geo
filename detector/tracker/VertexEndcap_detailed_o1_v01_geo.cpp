@@ -9,7 +9,7 @@
 //
 //  This code allows to build a tracker/vertex endcap made out of staves
 //  as it is used in the IDEA vertex detector design by F. Palla and 
-//  F. Bosi as of early-2023.
+//  F. Bosi as of mid-2023.
 //  The staves are arranged in petals, and can feature any number of modules.
 //  The modules can be built by smaller rectangular structures to represent
 //  both sensitive and insensitive (periphery) parts so that e.g Quad
@@ -280,11 +280,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                     nStaves+=1;
         
                 for(xml_coll_t ri(x_layer,_U(stave)); ri; ++ri)  {
-//                    if(numberOfRings>0){
-//                        printout(ERROR,"VertexEndcap","Driver (and ZDiskPetalsData structure) does not support more than one ring per layer!");
-//                        throw runtime_error("More than one ring per layer not supported by driver.");
-//                    }
-                        
                     xml_comp_t x_stave = ri;
 
                     int    nmodules     = x_stave.nmodules();
@@ -294,9 +289,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                     double step         = x_stave.step();   // Spacing of modules
                     string moduleStr    = x_stave.moduleStr();
                     double phi0_stave   = x_stave.phi0();
-    //                string m_nam    = x_ring.moduleStr();
-    //                Volume m_vol    = modules[m_nam];
-
                     double phi     = 2*M_PI/nPetals*iPetal + phi0_layer + phi0_stave;
 
                     // Use the correct module
@@ -407,10 +399,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     //attach data to detector
     // sdet.addExtension< ZDiskPetalsData >( zDiskPetalsData ) ;
     
-    cout<<"Built vertex endcap detector: " << std::endl;
+    cout<<"Built vertex disks detector: " << std::endl;
     sdet.setAttributes(theDetector,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
 
     return sdet;
 }
 
-DECLARE_DETELEMENT(VertexEndcap_detailed_o1_v01,create_detector)
+DECLARE_DETELEMENT(VertexDisks_detailed_o1_v01,create_detector)

@@ -216,7 +216,7 @@
 
     <!-- Vertex inner barrel -->
     <detectors>
-        <detector name="VTXIB" type="VertexBarrel_detailed_o1_v01_temp" vis="VXDVis" id="DetID_VXD_IB" readout="VTXIBCollection"  region="VTXIBRegion">
+        <detector name="VTXIB" type="VertexBarrel_detailed_o1_v01" vis="VXDVis" id="DetID_VXD_IB" readout="VTXIBCollection"  region="VTXIBRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -334,7 +334,7 @@
 
     <!-- Vertex outer barrel  -->
     <detectors>
-        <detector name="VTXOB" type="VertexBarrel_detailed_o1_v01_temp" vis="VXDVis" id="DetID_VXD_OB" readout="VTXOBCollection"  region="VTXOBRegion">
+        <detector name="VTXOB" type="VertexBarrel_detailed_o1_v01" vis="VXDVis" id="DetID_VXD_OB" readout="VTXOBCollection"  region="VTXOBRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -439,11 +439,11 @@
 
     <!-- Vertex disks -->
     <detectors>
-        <detector id="DetID_VXD_Disks" name="VTXD" type="VertexEndcap_detailed_o1_v01" readout="VTXDCollection" reflect="true" region="VTXDRegion">
+        <detector id="DetID_VXD_Disks" name="VTXD" type="VertexDisks_detailed_o1_v01" readout="VTXDCollection" reflect="true" region="VTXDRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>
-            <comment>Vertex Detector Endcaps</comment>
+            <comment>Vertex Detector Disks</comment>
             <sensitive type="SimpleTrackerSD"/>
 
             <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_ENDCAP"/>
