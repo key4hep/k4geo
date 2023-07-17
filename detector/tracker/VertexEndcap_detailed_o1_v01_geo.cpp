@@ -202,7 +202,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         m.sensor_width  = *max_element(m.sensor_xmax.begin(), m.sensor_xmax.end()) - *min_element(m.sensor_xmin.begin(), m.sensor_xmin.end());
         m.sensor_length = *max_element(m.sensor_ymax.begin(), m.sensor_ymax.end()) - *min_element(m.sensor_ymin.begin(), m.sensor_ymin.end());
         cout << "Module: " << m.name << ", sensor width: " << to_string(m.sensor_width)  << ", sensor length: " << to_string(m.sensor_length) << endl;
-        
+
         module_information_list.push_back(m);
     }
    
@@ -281,6 +281,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                             double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
                             double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
                             double z_pos = z + z_alternate_petal + z_offset + component.z_offset + component.z_offsets[i] + component.thicknesses[i]/2.; 
+
                             if(side == -1){z_pos = -z_pos;}
                             Position pos(x_pos, y_pos, z_pos);
 
@@ -303,6 +304,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                             double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
                             double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
                             double z_pos = z + z_alternate_petal + z_offset + endOfStave.z_offset + endOfStave.z_offsets[i] + endOfStave.thicknesses[i]/2.; 
+
                             if(side == -1){z_pos = -z_pos;}
                             Position pos(x_pos, y_pos, z_pos);
 

@@ -5,14 +5,14 @@
 
 
 
-  <info name="FCCDectMaster"
+  <info name="FCCee_IDEA_o1_v01"
     title="FCCee IDEA detector geometry master file"
-    author="Niloufar Alipour Tehrani"
+    author="Niloufar Alipour Tehrani, vertex detector by Armin Ilg"
     url="no"
     status="development"
-    version="1.0">
+    version="o1_v01">
     <comment> 
-      One stop shop for a baseline / the latest developments of the FCCee Detector concept.
+      Version o1_v01 of the IDEA detector, starting with the vertex detector
     </comment>
   </info>
 
@@ -34,10 +34,11 @@
   <include ref="DectDimensions_IDEA_o1_v01.xml"/>
 
   <!-- Import accelerator components -->
-  <!-- <include ref="Beampipe_o1_v01.xml"/> -->
-  <!-- <include ref="BeamInstrumentation_o1_v01.xml"/>
+  <include ref="Beampipe_o1_v01.xml"/>
+  <include ref="BeamInstrumentation_o1_v01.xml"/>
+
   <include ref="HOMAbsorber_o1_v01.xml"/>
-  <include ref="LumiCal_o1_v01.xml"/> -->
+  <include ref="LumiCal_o1_v01.xml"/>
 
   <!-- Import vertex -->
   <include ref="Vertex_IDEA_o1_v01.xml"/>
@@ -46,4 +47,5 @@
     <plugin name="DD4hepVolumeManager"/>
     <plugin name="InstallSurfaceManager"/>
   </plugins>
+
 </lccdd>

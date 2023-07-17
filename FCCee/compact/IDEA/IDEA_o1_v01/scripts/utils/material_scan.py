@@ -16,6 +16,7 @@ geoservice.detectors = [
 geoservice.OutputLevel = INFO 
 ApplicationMgr().ExtSvc += [geoservice]
 
+# Using material scan from k4SimGeant4: https://github.com/HEP-FCC/k4SimGeant4/tree/main/Detector/DetComponents/src
 from Configurables import MaterialScan
 # Material scan is done from the interaction point to the end of world volume.
 # In order to use other end boundary, please provide the name of a thin, e.g. cylindrical volume.
@@ -23,11 +24,11 @@ from Configurables import MaterialScan
 # BoundaryPostCalorimetry is defined in Detector/DetFCChhECalInclined/compact/envelopePreCalo.xml
 materialservice = MaterialScan("GeoDump")
 materialservice.filename = "out_material_scan.root"
-materialservice.etaBinning = 0.05
-materialservice.etaMax = 3
+materialservice.angleBinning = 0.05
+materialservice.angleMin = -3.0
+materialservice.angleMax = 3.0
 materialservice.nPhiTrials = 100
-# materialservice.useCosTheta = True
-# materialservice.cosThetaBinning = 0.02
+materialservice.angleDef = "eta" # eta or cosTheta or theta or thetaRad
 ApplicationMgr().ExtSvc += [materialservice]
 
 
