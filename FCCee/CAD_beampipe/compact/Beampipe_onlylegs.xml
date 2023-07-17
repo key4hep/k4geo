@@ -1,0 +1,42 @@
+<lccdd>
+
+  <info name="FCCee"
+        title="FCCee Beam pipe: taken corresponding to CLD: Beampipe_o4_v04_noNotch_W_n02.xml"
+        author="from ILCSOFT/lcgeo/FCCee/compact/FCCee_o1_v04"
+        url="no"
+        status="development"
+        version="1.0">
+    <comment>A beampipe for FCCee</comment>
+  </info>
+
+    <define>
+      <constant name="beampipegoldwidth" value="BeamPipeGoldWidth"/>
+      <constant name="beampipegoldtolerance" value="BeamPipeGoldTolerance"/>
+    </define>
+    
+    <display>
+        <vis name="BeamPipeVis" alpha="0.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="false"/>
+        <vis name="GoldCoatingVis" alpha="0.0" r="0.0" g="1.0" b="1.0" showDaughters="true" visible="true"/>
+        <vis name="TubeVis"  alpha="1.0" r="1.0" g="0.7"  b="0.5"   showDaughters="true"  visible="true"/>
+        <vis name="VacVis"   alpha="1.0" r="1.0" g="1.0"  b="1.0"   showDaughters="true"  visible="false"/>
+    </display>
+    
+    <detectors>
+
+    
+
+	<detector name="BeamPipe" type="DD4hep_Beampipe_o1_v01" insideTrackingVolume="true" vis="BeamPipeVis" >
+            <envelope vis="BlueVis">
+                <shape type="Assembly"/>
+            </envelope>
+            <parameter crossingangle="CrossingAngle" />
+
+             <section type="DnstreamClippedFront" start="2500.01*mm" end="6000*mm"  rMin1="SeparatedBeamPipe_rmax"  rMin2="SeparatedBeamPipe_rmax" rMax1="SeparatedBeamPipe_rmax+1*mm"  rMax2="SeparatedBeamPipe_rmax+1*mm"  material="AlBeMet162"      name="DownStreamBeamPipe_1"/>
+
+          
+	        <section type="UpstreamClippedFront"  start="2501*mm" end="6000*mm"  rMin1="SeparatedBeamPipe_rmax"  rMin2="SeparatedBeamPipe_rmax" rMax1="SeparatedBeamPipe_rmax+1*mm"  rMax2="SeparatedBeamPipe_rmax+1*mm"  material="AlBeMet162"      name="UpStreamBeamPipe_1"/>
+
+	</detector>
+
+</detectors>
+</lccdd>
