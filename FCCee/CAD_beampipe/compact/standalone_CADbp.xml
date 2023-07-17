@@ -42,11 +42,12 @@
 <display>
     <vis name="AlBeMet_vis"       alpha="1.0" r="1" g="1" b="1"   showDaughters="true" visible="true"/>
     <vis name="CopperCooling_vis" alpha="1.0" r="1" g="0.5" b="0"   showDaughters="true" visible="true"/>
+    <vis name="Gold_vis"          alpha="2.5" r="1" g="1.5" b="1"   showDaughters="true" visible="true"/>
 </display>
 
 
 <include ref="FCCee_DectDimensions.xml" />
-<include ref="Beampipe_onlylegs.xml"/>
+<!--<include ref="Beampipe_onlylegs.xml"/>-->
 <include ref="Beampipe_CADimport.xml"/>
 
 

@@ -19,8 +19,8 @@
       </check>
     </detector>
 
-
-    <detector id="2" name="Cooling_STL" type="DD4hep_TestShape_Creator">
+<!--
+    <detector id="1" name="Cooling_STL" type="DD4hep_TestShape_Creator">
     <check>
       <shape type="CAD_MultiVolume" ref="../CAD_beampipe/Copper_17032023.stl" unit="mm" material="Copper">
         <volume id="0" name="s1" vis="CopperCooling_vis" material="Cu">
@@ -30,7 +30,20 @@
       </shape>
     </check>
   </detector>
+-->
 
+
+
+<detector id="2" name="Gold_STL" type="DD4hep_TestShape_Creator">
+      <check>
+        <shape type="CAD_MultiVolume" ref="../CAD_beampipe/Gold_17032023.stl" unit="mm" material="Gold">
+          <volume id="0" name="s1" vis="Gold_vis" material="Au">
+            <position x="0*cm"  y="0*cm"  z="0*cm"/>
+            <rotation x="0*rad" y="pi/2.*rad" z="0*rad"/>
+          </volume>
+        </shape>
+      </check>
+    </detector>
 
   </detectors>
 
