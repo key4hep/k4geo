@@ -37,7 +37,6 @@
   <include ref="Beampipe_o1_v01.xml"/>
   <include ref="BeamInstrumentation_o1_v01.xml"/>
 
-  <include ref="HOMAbsorber_o1_v01.xml"/>
   <include ref="LumiCal_o1_v01.xml"/>
 
   <!-- Import vertex -->
