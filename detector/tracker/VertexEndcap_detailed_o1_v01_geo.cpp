@@ -72,6 +72,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     // Struct to support multiple readouts
     struct readoutStruct{
         double z_offset;
+        double offset;
         vector<double> thicknesses;
         vector<double> widths;
         vector<double> offsets; 
@@ -83,6 +84,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     // Struct to support multiple multi-layer supports
     struct supportStruct{
         double z_offset;
+        double offset;
         vector<double> thicknesses;
         vector<double> widths;
         vector<double> offsets; 
@@ -98,6 +100,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         vector<readoutStruct> readouts;
 
         double sensor_z_offset;
+        double sensor_offset;
         double sensor_thickness;
         Material sensor_material;
         vector<bool> sensor_sensitives;
@@ -134,6 +137,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         for(c_readout.reset(); c_readout; ++c_readout){
             readoutStruct readout;
             readout.z_offset = xml_comp_t(c_readout).z_offset();
+            readout.offset = xml_comp_t(c_readout).offset();
             xml_coll_t c_component(c_readout,_U(component));
             for(c_component.reset(); c_component; ++c_component){
                 xml_comp_t component = c_component;
@@ -152,6 +156,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         for(c_support.reset(); c_support; ++c_support){
             supportStruct support;    
             support.z_offset = xml_comp_t(c_support).z_offset();
+            support.offset = xml_comp_t(c_support).offset();
             xml_coll_t c_component = xml_coll_t(c_support,_U(component));
             for(c_component.reset(); c_component; ++c_component){
                 xml_comp_t component = c_component;
@@ -168,6 +173,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         // Sensor
         xml_coll_t c_sensor(x_mod,_U(sensor));
         m.sensor_z_offset = xml_comp_t(c_sensor).z_offset();
+        m.sensor_offset = xml_comp_t(c_sensor).offset();
         m.sensor_thickness = xml_comp_t(c_sensor).thickness();
         m.sensor_material = theDetector.material(xml_comp_t(c_sensor).materialStr());
         xml_coll_t c_component = xml_coll_t(c_sensor,_U(component));
@@ -200,7 +206,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
             if(m.sensor_sensitives[i]) {
                 Volume sensitive_vol(m.name + _toString(iSensitive, "sensor_%d"), m.sensor_boxes[i], m.sensor_material);
-                sensitive_vol.setVisAttributes(theDetector.visAttributes(m.sensor_viss[0]));
+                sensitive_vol.setVisAttributes(theDetector.visAttributes(m.sensor_viss[i]));
                 sensitive_vol.setSensitiveDetector(sens); 
 
                 m.sensitive_vol.push_back(sensitive_vol);
@@ -209,7 +215,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             }
             else{
                 Volume passive_vol = Volume(m.name + _toString(iPassive, "_passive%d"), m.sensor_boxes[i], m.sensor_material);                    
-                passive_vol.setVisAttributes(theDetector.visAttributes(m.sensor_viss[0]));
+                passive_vol.setVisAttributes(theDetector.visAttributes(m.sensor_viss[i]));
                 m.passive_vol.push_back(passive_vol);
                 m.passive_pos.push_back(pos);
                 iPassive++;
@@ -314,8 +320,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                     int iSupport = 0;
                     for(auto& support : m.supports){
                         for(int i=0; i<int(support.thicknesses.size()); i++){
-                            double x_pos = (r + support.offsets[i])*cos(phi);
-                            double y_pos = r*sin(phi);
+                            double r_component = r + support.offset + support.offsets[i];
+                            double r_offset_component = 0.0;
+                            double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
+                            double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
                             double z_pos = z + z_alternate_petal + z_offset + support.z_offset + support.z_offsets[i] + support.thicknesses[i]/2.; 
                             if(side == -1){z_pos = -z_pos;}
                             Position pos(x_pos, y_pos, z_pos);
@@ -333,8 +341,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                     int iReadout = 0;
                     for(auto& readout : m.readouts){
                         for(int i=0; i<int(readout.thicknesses.size()); i++){
-                            double x_pos = (r + readout.offsets[i])*cos(phi);
-                            double y_pos = r*sin(phi);
+                            double r_component = r + readout.offset + readout.offsets[i];
+                            double r_offset_component = 0.0;
+                            double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
+                            double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
                             double z_pos = z + z_alternate_petal + z_offset + readout.z_offset + readout.z_offsets[i] + readout.thicknesses[i]/2.;
                             if(side == -1){z_pos = -z_pos;}
                             Position pos(x_pos, y_pos, z_pos);
@@ -350,8 +360,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                     // Place sensor
                     for(int iModule=0; iModule<nmodules; iModule++){
                         double z_alternate_module = (iModule%2 == 0) ? 0.0 : stave_dz;
-                        double x_pos = r*cos(phi) - (-(nmodules-1)/2.*(m.sensor_length) - (nmodules-1)/2.*step + iModule*m.sensor_length + iModule*step)*sin(phi);
-                        double y_pos = r*sin(phi) + (-(nmodules-1)/2.*(m.sensor_length) - (nmodules-1)/2.*step + iModule*m.sensor_length + iModule*step)*cos(phi);
+                        double r_component = r + m.sensor_offset;
+                        double r_offset_component = -(nmodules-1)/2.*(m.sensor_length) - (nmodules-1)/2.*step + iModule*m.sensor_length + iModule*step;
+                        double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
+                        double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
                         double z_pos = z + z_alternate_petal + z_offset + m.sensor_z_offset + z_alternate_module + m.sensor_thickness/2.; 
                         if(side == -1){z_pos = -z_pos;}
                         Position pos(x_pos, y_pos, z_pos);

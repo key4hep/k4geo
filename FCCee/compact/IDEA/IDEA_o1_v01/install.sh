@@ -1,3 +1,8 @@
+### Source script to install k4geo 
+
+# using the nightly release
+source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh                                                                                                                                                                                                                                                                                                              
+
 cd ../../../../
 mkdir build
 cd build
