@@ -30,3 +30,6 @@ What to improve:
 - better automation in the C++ to rely less on user defined parameters from the xml
 - better variable naming (started already but could still be improved)
 - make sense out of the many layer radiuses defined
+
+Both the barrel and the disks are made up of staves, that can feature an arbitrary number of cuboid layers to describe the support, readout and sensor structures. The sensors can be described by individual sensitive and insensitive pieces to form large, complex structures such as quad modules, that have an insensitive periphery.
+More details can be found in the talks at the [FCC week 2023](https://indico.cern.ch/event/1202105/timetable/#356-idea-vertex-detector-in-ke) with an update the the [MDI meeting of the 10th of July 2023](https://indico.cern.ch/event/1292318/#5-vxd-implementation-in-full-s). Once public, the constructor and the resulting IDEA vertex detector are described in the MDI note for the mid-term review.
