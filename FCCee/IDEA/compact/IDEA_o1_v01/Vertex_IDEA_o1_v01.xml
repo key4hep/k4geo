@@ -454,7 +454,6 @@
                 <shape type="Assembly"/>
             </envelope>
             <comment>Vertex Detector Disks</comment>
-            <sensitive type="SimpleTrackerSD"/>
 
             <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_ENDCAP"/>
 
