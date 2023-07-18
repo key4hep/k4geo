@@ -59,11 +59,13 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     dd4hep::xml::setDetectorTypeFlag( e, sdet ) ;
 
     if( theDetector.buildType() == BUILD_ENVELOPE ) return sdet ;
-    
+
+    envelope.setVisAttributes(theDetector, x_det.visStr());
+    sens.setType("tracker");
+
     //-----------------------------------------------------------------------------------
     
     
-    envelope.setVisAttributes(theDetector.invisible()); sens.setType("tracker");
 
     // -------- reconstruction parameters  ----------------
  //   ZDiskPetalsData*  zDiskPetalsData = new ZDiskPetalsData ;
@@ -269,10 +271,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                 double z_alternate_petal = (iPetal%2 == 0) ? 0.0 : layer_dz;
 
                 string petal_name = layer_name + _toString(iPetal,"_petal%d");
-                // Assembly petal_assembly(petal_name);
-                // DetElement petalDE( layerDE , petal_name, iPetal );
-                // pv = layer_assembly.placeVolume(petal_assembly);
-                // petalDE.setPlacement(pv);
+                Assembly petal_assembly(petal_name);
+                DetElement petalDE( layerDE , petal_name, iPetal );
+                pv = layer_assembly.placeVolume(petal_assembly);
+                petalDE.setPlacement(pv);
 
                 int iStave = 0;
                 int nStaves = 0;
@@ -297,10 +299,29 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                     });
             
                     string stave_name = petal_name + _toString(iStave,"_stave%d");
-                    // Assembly stave_assembly(stave_name);
-                    // DetElement staveDE()
-                    // pv = layer_assembly.placeVolume(stave_assembly);
-                    
+                    Assembly stave_assembly(stave_name);
+                    DetElement staveDE( petalDE, stave_name, iStave);
+                    pv = petal_assembly.placeVolume(stave_assembly);
+                    staveDE.setPlacement(pv);
+
+                    string support_name = stave_name + "_support";
+                    Assembly support_assembly(support_name);
+                    DetElement supportDE(sdet, support_name, x_det.id());
+                    pv = stave_assembly.placeVolume(support_assembly);
+                    supportDE.setPlacement(pv);
+
+                    string readout_name = stave_name + "_readout";
+                    Assembly readout_assembly(readout_name);
+                    DetElement readoutDE(sdet, readout_name, x_det.id());
+                    pv = stave_assembly.placeVolume(readout_assembly);
+                    readoutDE.setPlacement(pv);
+
+                    string sensors_name = stave_name + "_sensors";
+                    Assembly sensors_assembly(sensors_name);
+                    DetElement sensorsDE(sdet, sensors_name, x_det.id());
+                    pv = stave_assembly.placeVolume(sensors_assembly);
+                    sensorsDE.setPlacement(pv);
+                                        
                     // Place all components
                     RotationZYX rot( phi , 0, 0  );
 
@@ -321,10 +342,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                             Position pos(x_pos, y_pos, z_pos);
 
                             Box ele_box = Box( support.widths[i]/2., stave_length/2., support.thicknesses[i]/2.);
-                            Volume ele_vol = Volume(_toString(int(support.thicknesses.size())*iSupport + i, "suport_%d"), ele_box, support.materials[i]);                    
+                            Volume ele_vol = Volume(_toString(int(support.thicknesses.size())*iSupport + i, "support_%d"), ele_box, support.materials[i]);                    
                             ele_vol.setVisAttributes(theDetector.visAttributes(support.viss[i]));
 
-                            pv = envelope.placeVolume(ele_vol, Transform3D(rot, pos) );
+                            pv = support_assembly.placeVolume(ele_vol, Transform3D(rot, pos) );
                         }
                         iSupport++;
                     }
@@ -344,7 +365,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                             Box ele_box = Box( readout.widths[i]/2., stave_length/2., readout.thicknesses[i]/2.);
                             Volume ele_vol = Volume( _toString(int(readout.thicknesses.size())*iReadout + i, "readout_%d"), ele_box, readout.materials[i]);                    
                             ele_vol.setVisAttributes(theDetector.visAttributes(readout.viss[i]));
-                            pv = envelope.placeVolume(ele_vol, Transform3D(rot, pos) );
+                            pv = readout_assembly.placeVolume(ele_vol, Transform3D(rot, pos) );
                         }
                         iReadout++;
                     }
@@ -361,8 +382,11 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                         Position pos(x_pos, y_pos, z_pos);
 
                         int iSensor=0;
-                        // string module_name = stave_name + _toString(iModule,"_module%d");
-                        string module_name = stave_name + _toString(mod_num,"_module%d");
+                        string module_name = sensors_name + _toString(mod_num,"_module%d");
+                        Assembly module_assembly(module_name);
+                        DetElement moduleDE(sdet, module_name, x_det.id());
+                        pv = sensors_assembly.placeVolume(module_assembly);
+                        moduleDE.setPlacement(pv);
 
                         // Place active sensor parts
 
@@ -370,7 +394,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                             string sensor_name = module_name + _toString(i,"_sensorMotherVolume%d");
                             
                             DetElement module(sdet,sensor_name,x_det.id());
-                            pv = envelope.placeVolume(m.sensitive_vol[i], Transform3D(rot, pos)*Translation3D(m.sensitive_pos[i]));
+                            pv = module_assembly.placeVolume(m.sensitive_vol[i], Transform3D(rot, pos)*Translation3D(m.sensitive_pos[i]));
                             m.sensitive_vol[i].setSensitiveDetector(sens);
 
 
@@ -383,7 +407,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
                         // Place passive sensor parts
                         for(int i=0; i<int(m.passive_vol.size()); i++)  {
-                            pv = envelope.placeVolume(m.passive_vol[i], Transform3D(rot, pos)*Translation3D(m.passive_pos[i]));
+                            pv = module_assembly.placeVolume(m.passive_vol[i], Transform3D(rot, pos)*Translation3D(m.passive_pos[i]));
                         }
                     }
                     iStave++;
@@ -400,7 +424,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     // sdet.addExtension< ZDiskPetalsData >( zDiskPetalsData ) ;
     
     cout<<"Built vertex disks detector: " << std::endl;
-    sdet.setAttributes(theDetector,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+    // pv.addPhysVolID( "system", x_det.id() );
+
+    // sdet.setAttributes(theDetector,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+    // sdet.setPlacement(pv);
 
     return sdet;
 }
