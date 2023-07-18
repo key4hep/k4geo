@@ -368,7 +368,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     }
     
     cout<<"Built vertex disks detector: " << std::endl;
-    sdet.setAttributes(theDetector,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+    // pv.addPhysVolID( "system", x_det.id() );
+
+    // sdet.setAttributes(theDetector,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+    // sdet.setPlacement(pv);
 
     return sdet;
 }
