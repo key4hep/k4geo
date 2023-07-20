@@ -6,7 +6,6 @@ from plotstyle import FCCStyle
 import ROOT
 
 def main():
-    print("blub")
     parser = argparse.ArgumentParser(description='Material Plotter')
     parser.add_argument('--fname', "-f", dest='fname', type=str, help="name of file to read")
     parser.add_argument('--angleMin', dest='angleMin', default=-6, type=float, help="minimum eta/theta/cosTheta")
