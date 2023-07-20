@@ -4,7 +4,7 @@
 xml=$1
 
 if [[ -n "$xml" ]]; then # test to see if not empty
-    ddsim --compactFile ${xml} \                                                                                                                                                                                                                                                                                                                                 
+    ddsim --compactFile ${xml} \
       --enableGun \
       --gun.distribution uniform \
       --gun.energy "10*GeV" \
