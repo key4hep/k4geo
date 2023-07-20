@@ -258,7 +258,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                 Assembly petal_assembly(petal_name);
                 DetElement petalDE( diskDE , petal_name, iPetal );
                 pv = disk_assembly.placeVolume(petal_assembly);
-                pv.addPhysVolID("module", iPetal);
                 petalDE.setPlacement(pv);
 
                 int iStave = 0;
@@ -286,7 +285,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                     string stave_name = petal_name + _toString(iStave,"_stave%d");
                     Assembly stave_assembly(stave_name);
                     pv = petal_assembly.placeVolume(stave_assembly);
-                    pv.addPhysVolID("module", iStave);
          
                     // Place all components
                     RotationZYX rot( phi , 0, 0  );
@@ -356,7 +354,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                             m.sensitive_vol[i].setSensitiveDetector(sens);
 
 
-                            pv.addPhysVolID("side", side ).addPhysVolID("layer", layer_id ).addPhysVolID("module",iStave).addPhysVolID("sensor", iSensor);
+                            pv.addPhysVolID("side", side ).addPhysVolID("layer", layer_id ).addPhysVolID("module",mod_num).addPhysVolID("sensor", iSensor);
                             // cout << "side: " << _toString(side) << "layer: " << _toString(layer_id) << "module: " << _toString(mod_num) << "sensor: " << _toString(iSensor) << endl; 
                             sensorDE.setPlacement(pv);
                             iSensor++;
