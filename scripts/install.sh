@@ -3,7 +3,7 @@
 # using the nightly release
 source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh                                                                                                                                                                                                                                                                                                              
 
-cd ../../../
+cd ${k4geo_DIR}
 mkdir build
 cd build
 source $DD4hep_DIR/bin/thisdd4hep.sh
@@ -14,3 +14,5 @@ cd ../InstallArea
 source bin/thislcgeo.sh
 
 export PYTHONPATH=${LCIO}/src/python:${ROOTSYS}/lib:$PYTHONPATH
+cd ..
+export k4geo_DIR=$(pwd)

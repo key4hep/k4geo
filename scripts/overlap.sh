@@ -5,7 +5,7 @@
 
 xml=$1
     if [[ -n "$xml" ]]; then # test to see if not empty
-    nohup ddsim --compactFile ${xml} --runType run --macroFile ../../../utils/overlap.mac &> overlap.log &
+    nohup ddsim --compactFile ${xml} --runType run --macroFile ${k4geo_DIR}/utils/overlap.mac &> overlap.log &
 else
     echo "argument error, please provide an xml file as input argument!"
 fi
