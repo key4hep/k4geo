@@ -101,5 +101,5 @@ INSTALL(FILES ${hfiles}
 
 #--- install compact files------------------------------
 if(INSTALL_COMPACT_FILES)
-  INSTALL(DIRECTORY CaloTB CLIC FCalTB FCCee ILD fieldmaps SiD DESTINATION share/lcgeo/compact/ )
+  INSTALL(DIRECTORY CaloTB CLIC FCalTB FCCee ILD fieldmaps SiD DESTINATION share/k4geo )
 endif()
