@@ -3,7 +3,7 @@
 # using the nightly release
 source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh                                                                                                                                                                                                                                                                                                              
 
-cd ${k4geo_DIR}
+cd ..
 mkdir build
 cd build
 source $DD4hep_DIR/bin/thisdd4hep.sh
