@@ -1,7 +1,7 @@
 xml=$1
 
 if [[ -n "$xml" ]]; then # test to see if not empty
-    outputFolder=IDEA_vertex_beampipe
+    outputFolder=IDEA_vertex
 
     # General settings
     etaBinning=0.01
