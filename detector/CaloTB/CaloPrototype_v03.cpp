@@ -10,17 +10,11 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
-#include "DDRec/DetectorData.h"
-#include "DDSegmentation/TiledLayerGridXY.h"
-#include "DDSegmentation/MultiSegmentation.h"
 #include "LcgeoExceptions.h"
 
-#include <iostream>
-#include <vector>
-#include <cassert>
+#include <string>
 
-using namespace std;
-
+using std::string;
 using dd4hep::BUILD_ENVELOPE;
 using dd4hep::Box;
 using dd4hep::DetElement;
@@ -30,9 +24,7 @@ using dd4hep::Layering;
 using dd4hep::Material;
 using dd4hep::PlacedVolume;
 using dd4hep::Position;
-using dd4hep::Readout;
 using dd4hep::Ref_t;
-using dd4hep::Segmentation;
 using dd4hep::SensitiveDetector;
 using dd4hep::Volume;
 using dd4hep::_toString;
@@ -42,7 +34,6 @@ using dd4hep::_toString;
 #define DD4HEP_VERSION_GE(a,b) 0 
 #endif
 
-
 static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDetector sens)  {
 
   xml_det_t   x_det       = element;
@@ -51,6 +42,9 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 
   Layering    layering(x_det);
   xml_dim_t dim = x_det.dimensions();
+
+  //access the layer identifier from the compact xml file.
+  string identifierLayer = dd4hep::getAttrOrDefault(x_det, _Unicode(identifier_layer), std::string("K") );
 
   // --- create an envelope volume and position it into the world ---------------------
   
@@ -80,27 +74,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   printout( dd4hep::DEBUG,  "building SamplingCaloBoxPrototype_v03",
 	    "Calo_dim_x : %e    Calo_dim_y: %e    Calo_dim_z: %e ",
   	    Calo_dim_x, Calo_dim_y, Calo_dim_z) ;
-
-  Readout  readout = sens.readout();
-  Segmentation seg = readout.segmentation();
-
-  dd4hep::DDSegmentation::MultiSegmentation* multiSeg = dynamic_cast< dd4hep::DDSegmentation::MultiSegmentation*>(  seg.segmentation() ) ;
-  const dd4hep::DDSegmentation::MultiSegmentation::Segmentations segs = multiSeg->subSegmentations();
-  dd4hep::DDSegmentation::TiledLayerGridXY* layersubSeg;
-  std::map< int , dd4hep::DDSegmentation::TiledLayerGridXY* > layersubSegs;
-
-  for (size_t k=0; k<segs.size(); k++) {
-    dd4hep::DDSegmentation::MultiSegmentation::Entry entr = segs[k];
-    layersubSeg =   dynamic_cast< dd4hep::DDSegmentation::TiledLayerGridXY*>( entr.segmentation );
-
-    // this probably implicitly assumes that key_min and key_max are the same
-    layersubSegs[ entr.key_min ] = layersubSeg;
-  }
-
-  //access the layer identifier via the segmentation.
-  //the layer identifier is defined in the compact xml file.
-  //and use it to set the volumeID layer value later here. 
-  string identifierLayer = layersubSeg->fieldNameLayer(); // "K" or "layer" or "..."
 
 //====================================================================
 //
