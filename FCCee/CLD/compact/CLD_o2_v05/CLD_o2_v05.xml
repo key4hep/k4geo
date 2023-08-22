@@ -119,7 +119,7 @@
 
 
 
-        <constant name="Vertex_inner_radius" value="12*mm"/>
+        <constant name="Vertex_inner_radius" value="12.5*mm"/>
         <constant name="Vertex_outer_radius" value="111*mm"/>
         <constant name="Vertex_half_length" value="302*mm"/>
         <!-- cone to describe the upper acceptance of the LumiCal -->
