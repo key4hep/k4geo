@@ -39,7 +39,7 @@
         <constant name="VertexBarrel_r2" value="3.7*cm"/>
         <constant name="VertexBarrel_r3" value="5.7*cm"/>
 -->
-	<constant name="VertexBarrel_r1" value="1.25*cm"/>
+	<constant name="VertexBarrel_r1" value="1.3*cm"/>
         <constant name="VertexBarrel_r2" value="3.5*cm"/>
         <constant name="VertexBarrel_r3" value="5.7*cm"/>
 
