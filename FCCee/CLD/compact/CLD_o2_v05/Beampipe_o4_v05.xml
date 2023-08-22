@@ -37,9 +37,10 @@
                 <shape type="Assembly"/>
             </envelope>
 
-            <section type="Center"               start="0*mm"    end="CentralBeamPipe_zmax" rMin1="CentralBeamPipe_rmax"  rMin2="CentralBeamPipe_rmax"    rMax1="CentralBeamPipe_rmax+BeamPipeWidth"  rMax2="CentralBeamPipe_rmax+BeamPipeWidth"                material="CentralBeamPipeMaterial" name="VertexInnerBe" />
-
-            <section type="Center" start="CentralBeamPipe_zmax"  end="SeparatedBeamPipe_z"  rMin1="CentralBeamPipe_rmax"  rMin2="ConeBeamPipe_Rmax"    rMax1="CentralBeamPipe_rmax+BeamPipeWidthFirstCone"  rMax2="ConeBeamPipe_Rmax+BeamPipeWidthFirstCone" material="Beryllium" name="AlBeMet162" />
+            <section type="Center" start="0*mm"                  end="CentralBeamPipe_zmax" rMin1="CentralBeamPipe_rmax"          rMin2="CentralBeamPipe_rmax"         rMax1="CentralBeamPipe_rmax+0.35*mm"                rMax2="CentralBeamPipe_rmax+0.35*mm"             material="AlBeMet162"    name="VertexInnerAlb" />
+            <section type="Center" start="0*mm"                  end="CentralBeamPipe_zmax" rMin1="CentralBeamPipe_rmax+0.35*mm"  rMin2="CentralBeamPipe_rmax+0.35*mm" rMax1="CentralBeamPipe_rmax+1.35*mm"                rMax2="CentralBeamPipe_rmax+1.35*mm"             material="LiquidNDecane" name="VertexParaffin" />
+            <section type="Center" start="0*mm"                  end="CentralBeamPipe_zmax" rMin1="CentralBeamPipe_rmax+1.35*mm"  rMin2="CentralBeamPipe_rmax+1.35*mm" rMax1="CentralBeamPipe_rmax+1.70*mm"                rMax2="CentralBeamPipe_rmax+1.70*mm"             material="AlBeMet162"    name="VertexOuterAlb" />
+            <section type="Center" start="CentralBeamPipe_zmax"  end="SeparatedBeamPipe_z"  rMin1="CentralBeamPipe_rmax"          rMin2="ConeBeamPipe_Rmax"            rMax1="CentralBeamPipe_rmax+BeamPipeWidthFirstCone" rMax2="ConeBeamPipe_Rmax+BeamPipeWidthFirstCone" material="Beryllium"     name="AlBeMet162" />
 
         </detector>
 
