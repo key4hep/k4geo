@@ -88,6 +88,8 @@ if __name__ == "__main__":
 
     # Output file (assuming CWD)
     SIM.outputFile = "arcsim.root"
+    if hasattr(SIM, "outputConfig") and hasattr(SIM.outputConfig, "forceDD4HEP"):
+        SIM.outputConfig.forceDD4HEP = True  # use DD4hep root format, not EDM4HEP
     #SIM.outputFile = "arcsim_edm4hep.root"
 
     # Override with user options
