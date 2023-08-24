@@ -2,8 +2,8 @@
 
     <define>
         <constant name="OuterTracker_Barrel_radius_0" value="1000*mm"/>
-        <constant name="OuterTracker_Barrel_radius_1" value="1568*mm"/>
-        <constant name="OuterTracker_Barrel_radius_2" value="2136*mm"/>
+        <constant name="OuterTracker_Barrel_radius_1" value="1446.7506*mm"/>
+        <constant name="OuterTracker_Barrel_radius_2" value="1849.1580*mm"/>
 
         <constant name="OuterTracker_Barrel_half_length" value="1264.2*mm"/>
 
@@ -81,11 +81,11 @@
                 <z_layout dr="0" z0="OuterTracker_Barrel_half_length-15.05*mm" nz="84"/>
             </layer>
             <layer module="OuterTrackerBarrelModule_In" id="1" vis="OuterTrackerLayerVis" type="4">
-                <rphi_layout phi_tilt="0*deg" nphi="83*4" phi0="0" rc="OuterTracker_Barrel_radius_1" dr="5.5*mm"/>
+                <rphi_layout phi_tilt="0*deg" nphi="302" phi0="0" rc="OuterTracker_Barrel_radius_1" dr="5.5*mm"/>
                 <z_layout dr="0" z0="OuterTracker_Barrel_half_length-15.05*mm" nz="84"/>
             </layer>
             <layer module="OuterTrackerBarrelModule_Out" id="2" vis="OuterTrackerLayerVis" type="4">
-                <rphi_layout phi_tilt="0*deg" nphi="113*4" phi0="0" rc="OuterTracker_Barrel_radius_2" dr="5.5*mm"/>
+                <rphi_layout phi_tilt="0*deg" nphi="386" phi0="0" rc="OuterTracker_Barrel_radius_2" dr="5.5*mm"/>
                 <z_layout dr="0" z0="OuterTracker_Barrel_half_length-15.05*mm" nz="84"/>
             </layer>
 
