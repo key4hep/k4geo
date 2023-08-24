@@ -356,17 +356,44 @@
 
     <include ref="OuterTracker_o2_v07.xml" />
 
-    <!-- <include ref="ECalBarrel_o2_v01_03.xml" />
+    <include ref="ECalBarrel_o2_v01_03.xml" />
     <include ref="ECalEndcap_o2_v01_03.xml" />
 
-    <include ref="HCalBarrel_o1_v01_01.xml" />
+    <!-- <include ref="HCalBarrel_o1_v01_01.xml" />
     <include ref="HCalEndcap_o1_v01_01.xml" />
 
     <include ref="Solenoid_o1_v01_02.xml" />
 
     <include ref="YokeBarrel_o1_v01_02.xml" />
-    <include ref="YokeEndcap_o1_v01_02.xml" /> -->
+    <include ref="YokeEndcap_o1_v01_02.xml" />  -->
+    <define>
 
+      
+        <!--
+            WARNING:
+             The following variables named as ARC_* are fixed by design.
+             If changed, reoptimization of sensor/mirror geometry is needed
+        -->
+        <!-- ARC ENDCAP SIZE -->
+        <constant name="ARC_ENDCAP_R_INNER"     value=" 28 * cm"    />
+        <constant name="ARC_ENDCAP_R_OUTER"     value="190 * cm"    />
+        <constant name="ARC_ENDCAP_LENGTH"      value=" 20 * cm"    />
+      
+        <!-- ARC BARREL SIZE -->
+        <constant name="ARC_BARREL_R_INNER"     value="190 * cm"    />
+        <constant name="ARC_BARREL_R_OUTER"     value="210 * cm"    />
+        <constant name="ARC_BARREL_LENGTH"      value="440 * cm"    />
+        <!-- ARC_ENDCAP_ZPOS is the middle of the endcap 
+             the endcap spans over ARC_ENDCAP_ZPOS +- ARC_ENDCAP_LENGTH/2
+            WARNING:
+             if ARC_ENDCAP_ZPOS < (ARC_BARREL_LENGTH+ARC_ENDCAP_LENGTH)/2 + VESSEL_WALL_THICKNESS
+             The endcap will overlap with the barrel.
+        -->
+        <constant name="ARC_ENDCAP_ZPOS"        value="210*cm"    />
+      </define>
+      
+      
+      <include ref="ARC_o1_v01.xml"/>
     <plugins>
         <plugin name="DD4hepVolumeManager" />
         <plugin name="InstallSurfaceManager" />
