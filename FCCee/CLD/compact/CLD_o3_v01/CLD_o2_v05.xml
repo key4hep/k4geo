@@ -73,7 +73,7 @@
         <constant name="BeamPipeConeHalfAngle"
             value="(ConeBeamPipe_Rmax + BeamPipeWidthFirstCone - CentralBeamPipe_rmax ) / (SeparatedBeamPipe_z - CentralBeamPipe_zmax)" />
 
-        <constant name="InnerTracker_half_length" value="2300*mm" />
+        <constant name="InnerTracker_half_length" value="2000*mm" />
 
         <!-- used in the tracker detector -->
         <constant name="ConeBeamPipe_zmax" value="InnerTracker_half_length" />
@@ -308,42 +308,9 @@
 
     <include ref="LumiCal_o3_v02_03.xml" />
 
-    <include ref="Vertex_o4_v07_smallBP.xml" />
+    <include ref="Vertex_o4_v07_smallBP.xml" /> -->
 
-    <include ref="InnerTracker_o2_v07.xml" /> -->
-
-    <define>
-
-        <constant name="InnerTracker_Barrel_radius_0" value="127*mm"/>
-        <constant name="InnerTracker_Barrel_radius_1" value="400*mm"/>
-        <constant name="InnerTracker_Barrel_radius_2" value="670*mm"/>
-
-        <constant name="InnerTracker_Barrel_half_length_0" value="481.6*mm"/>
-        <constant name="InnerTracker_Barrel_half_length_1" value="481.6*mm"/>
-        <constant name="InnerTracker_Barrel_half_length_2" value="692.3*mm"/>
-
-        <constant name="InnerTracker_Endcap_z_0" value="524*mm"/>
-        <constant name="InnerTracker_Endcap_z_1" value="808*mm"/>
-        <constant name="InnerTracker_Endcap_z_2" value="1093*mm"/>
-        <constant name="InnerTracker_Endcap_z_3" value="1377*mm"/>
-        <constant name="InnerTracker_Endcap_z_4" value="1661*mm"/>
-        <constant name="InnerTracker_Endcap_z_5" value="1946*mm"/>
-        <constant name="InnerTracker_Endcap_z_6" value="2190*mm"/>
-
-        <constant name="InnerTracker_Endcap_radius_0" value="79.5*mm"/>
-        <constant name="InnerTracker_Endcap_radius_1" value="123.5*mm"/>
-        <constant name="InnerTracker_Endcap_radius_2" value="165*mm"/>
-        <constant name="InnerTracker_Endcap_radius_3" value="207.5*mm"/>
-        <constant name="InnerTracker_Endcap_radius_4" value="249.5*mm"/>
-        <constant name="InnerTracker_Endcap_radius_5" value="293*mm"/>
-        <constant name="InnerTracker_Endcap_radius_6" value="330*mm"/>
-
-        <constant name="VertexCoolingGap"            value="5*mm"/>
-        <constant name="VertexCoolingShellThickness" value="1*mm"/>
-
-        <constant name="ITM" value="15.1*mm"/>
-        <constant name="ITEnvelopeClearanceConeHalfAngle" value="149*mrad" />
-    </define>
+    <include ref="InnerTracker_o2_v07.xml" /> 
     <define>
         <constant name="VertexBarrel_zmax" value="109*mm"/>
 <!--
