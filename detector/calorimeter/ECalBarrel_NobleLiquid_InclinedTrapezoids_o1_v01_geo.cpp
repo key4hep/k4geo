@@ -1,6 +1,8 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Handle.h"
 #include "XML/Utilities.h"
+#include "DDRec/MaterialManager.h"
+#include "DDRec/Vector3D.h"
 
 #include <DDRec/DetectorData.h>
 
@@ -563,9 +565,52 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
   caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::BarrelLayout;
   caloDetElem.addExtension<dd4hep::rec::LayeredCalorimeterData>(caloData);
 
+  caloData->extent[0] = Rmin;
+  caloData->extent[1] = Rmax; // or r_max ?
+  caloData->extent[2] = 0.;      // NN: for barrel detectors this is 0
+  caloData->extent[3] = caloDim.dz()/2;
+
   // Set type flags
   dd4hep::xml::setDetectorTypeFlag(xmlDetElem, caloDetElem);
+  dd4hep::rec::MaterialManager matMgr(envelopeVol);
+  dd4hep::rec::LayeredCalorimeterData::Layer caloLayer;
+  double nRadiationLengths   = 0.;
+  double nInteractionLengths = 0.;
+  double thickness_sum       = 0.;
+  double absorberThickness   = 0.;	  
+  
+  double rad_first = Rmin;
+  double rad_last = 0;
+  for (auto il = 0; il < layerHeight.size(); il++){
+    rad_last = rad_first + layerHeight[il];
+    dd4hep::rec::Vector3D ivr1 = dd4hep::rec::Vector3D(0.,rad_first,0);
+    dd4hep::rec::Vector3D ivr2 = dd4hep::rec::Vector3D(0.,rad_last,0);
+    
+    const dd4hep::rec::MaterialVec& materials = matMgr.materialsBetween(ivr1, ivr2);   
+    auto mat = matMgr.createAveragedMaterial( materials) ;
+    nRadiationLengths = mat.radiationLength();
+    nInteractionLengths = mat.interactionLength();
+    double difference_bet_r1r2 = (ivr1-ivr2).r();
+    double value_of_x0 = layerHeight[il] / nRadiationLengths;
+    double value_of_lambda = layerHeight[il] / nInteractionLengths;
+    rad_first = rad_last;
+    std::cout<<"The radiation length is "<<value_of_x0<<" and the interaction length is "<<value_of_lambda<<std::endl;
+    caloLayer.distance = 10;
+		caloLayer.sensitive_thickness       = 30 ;
+		caloLayer.inner_nRadiationLengths   = value_of_x0;
+		caloLayer.inner_nInteractionLengths = value_of_lambda;
+		caloLayer.inner_thickness           = 2.1;
 
+      caloLayer.outer_nRadiationLengths   = value_of_x0;
+	    caloLayer.outer_nInteractionLengths = value_of_lambda;
+	    caloLayer.outer_thickness           = 0.55;
+	    caloLayer.absorberThickness         = 2;
+	    caloLayer.cellSize0 = 2;
+	    caloLayer.cellSize1 = 2;
+  
+  }
+
+  
   return caloDetElem;
 }
 }  // namespace det
