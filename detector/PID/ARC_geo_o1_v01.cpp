@@ -179,7 +179,7 @@ static Ref_t create_arc_endcap_cell(Detector &desc, xml::Handle_t handle, Sensit
   /// Distance in phi angle between complete sectors
   double phistep = 60 * deg;
   /// number of repetition of sectors
-  int phinmax = 1; // 6;
+  int phinmax = 6; // 6;
 
 
   // // // // // // // // // // // // // // // // // // // // // // // // // //
