@@ -119,11 +119,11 @@ static Ref_t create_arc_endcap_cell(Detector &desc, xml::Handle_t handle, Sensit
 //                        /     \       /     \    .
 //    7             _____/  21   \_____/  18   \   .
 //                 /     \       /     \       /   .
-//    7           /  20   \_____/  17   \_____/    .
-//                \       /     \       /     \    .
-//    6            \_____/  16   \_____/  14   \   .
-//                 /     \       /     \       /   .
-//    6           /  15   \_____/  13   \_____/    .
+//    7      _____/  20   \_____/  17   \_____/    .
+//          /     \       /     \       /     \    .
+//    6    /  19   \_____/  16   \_____/  14   \   .
+//         \       /     \       /     \       /   .
+//    6     \_____/  15   \_____/  13   \_____/    .
 //                \       /     \       /     \    .
 //    5            \_____/  12   \_____/  10   \   .
 //                 /     \       /     \       /   .
@@ -158,7 +158,7 @@ static Ref_t create_arc_endcap_cell(Detector &desc, xml::Handle_t handle, Sensit
     mycell_v[2] = {1, 4, 7, 0, 8 * hx_u};
     mycell_v[3] = {1, 5, 10, 0, 10 * hx_u};
     mycell_v[4] = {1, 6, 14, 0, 12 * hx_u};
-    mycell_v[5] = {1, 7, 18, 0, 14 * hx_u};
+    // mycell_v[5] = {1, 7, 18, 0, 14 * hx_u};
     mycell_v[6] = {2, 2, 1, -1.5 * hx_x, 3 * hx_u};
     mycell_v[7] = {2, 3, 3, -1.5 * hx_x, 5 * hx_u, true};
     mycell_v[8] = {2, 4, 6, -1.5 * hx_x, 7 * hx_u, true};
@@ -169,17 +169,17 @@ static Ref_t create_arc_endcap_cell(Detector &desc, xml::Handle_t handle, Sensit
     mycell_v[13] = {3, 4, 8, -3.0 * hx_x, 8 * hx_u, true};
     mycell_v[14] = {3, 5, 12, -3.0 * hx_x, 10 * hx_u, true};
     mycell_v[15] = {3, 6, 16, -3.0 * hx_x, 12 * hx_u, true};
-    mycell_v[16] = {3, 7, 21, -3.0 * hx_x, 14 * hx_u, true};
+    // mycell_v[16] = {3, 7, 21, -3.0 * hx_x, 14 * hx_u, true};
     mycell_v[17] = {4, 5, 11, -4.5 * hx_x, 9 * hx_u};
     mycell_v[18] = {4, 6, 15, -4.5 * hx_x, 11 * hx_u, true};
-    mycell_v[19] = {4, 7, 20, -4.5 * hx_x, 13 * hx_u, true};
-    mycell_v[20] = {5, 6, 19, -6.0 * hx_x, 12 * hx_u};
+    // mycell_v[19] = {4, 7, 20, -4.5 * hx_x, 13 * hx_u, true};
+    // mycell_v[20] = {5, 6, 19, -6.0 * hx_x, 12 * hx_u};
   }
 
   /// Distance in phi angle between complete sectors
   double phistep = 60 * deg;
   /// number of repetition of sectors
-  int phinmax = 6; // 6;
+  int phinmax = 1; // 6;
 
 
   // // // // // // // // // // // // // // // // // // // // // // // // // //

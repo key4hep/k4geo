@@ -26,8 +26,8 @@
        If changed, reoptimization of sensor/mirror geometry is needed
   -->
   <!-- ARC ENDCAP SIZE -->
-  <constant name="ARC_ENDCAP_R_INNER"     value=" 25 * cm"    />
-  <constant name="ARC_ENDCAP_R_OUTER"     value="210 * cm"    />
+  <constant name="ARC_ENDCAP_R_INNER"     value=" 28 * cm"    />
+  <constant name="ARC_ENDCAP_R_OUTER"     value="190 * cm"    />
   <constant name="ARC_ENDCAP_LENGTH"      value=" 20 * cm"    />
 
   <!-- ARC BARREL SIZE -->
@@ -40,7 +40,7 @@
        if ARC_ENDCAP_ZPOS < (ARC_BARREL_LENGTH+ARC_ENDCAP_LENGTH)/2 + VESSEL_WALL_THICKNESS
        The endcap will overlap with the barrel.
   -->
-  <constant name="ARC_ENDCAP_ZPOS"        value="235*cm"    />
+  <constant name="ARC_ENDCAP_ZPOS"        value="210*cm"    />
 </define>
 
 
