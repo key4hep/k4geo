@@ -7,7 +7,7 @@
 
         <constant name="OuterTracker_Barrel_half_length" value="1264.2*mm"/>
 
-        <constant name="OuterTracker_Endcap_outer_radius" value="2080*mm"/>
+        <constant name="OuterTracker_Endcap_outer_radius" value="1900*mm"/>
         <constant name="OuterTracker_Endcap_inner_radius" value="718*mm"/>
 
         <constant name="OuterTracker_Endcap_z_0" value="1310*mm"/>
@@ -113,7 +113,7 @@
                 <include ref="TrackerDiskModuleIn.xml"/>
             </module>
             <module name="OuterTrackerEndcapModule_3_In" vis="OuterTrackerModuleVis">
-                <trd x="300*mm" y="549.4*mm"/>
+                <trd x="300*mm" y="349.4*mm"/>
                 <include ref="TrackerDiskModuleIn.xml"/>
             </module>
 
@@ -130,7 +130,7 @@
                 <include ref="TrackerDiskModuleOut.xml"/>
             </module>
             <module name="OuterTrackerEndcapModule_3_Out" vis="OuterTrackerModuleVis">
-                <trd x="300*mm" y="549.4*mm"/>
+                <trd x="300*mm" y="349.4*mm"/>
                 <include ref="TrackerDiskModuleOut.xml"/>
             </module>
 
