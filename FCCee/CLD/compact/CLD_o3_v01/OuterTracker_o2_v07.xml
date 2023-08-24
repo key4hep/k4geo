@@ -11,10 +11,10 @@
         <constant name="OuterTracker_Endcap_inner_radius" value="718*mm"/>
 
         <constant name="OuterTracker_Endcap_z_0" value="1310*mm"/>
-        <constant name="OuterTracker_Endcap_z_1" value="1617*mm"/>
-        <constant name="OuterTracker_Endcap_z_2" value="1883*mm"/>
-        <constant name="OuterTracker_Endcap_z_3" value="2190*mm"/>
-
+        <constant name="OuterTracker_Endcap_z_1" value="1547*mm"/>
+        <constant name="OuterTracker_Endcap_z_2" value="1752*mm"/>
+        <constant name="OuterTracker_Endcap_z_3" value="1990*mm"/>
+        
         <constant name="OuterTracker_Endcap_radius_0" value="718*mm"/>
         <constant name="OuterTracker_Endcap_radius_1" value="988.9*mm"/>
         <constant name="OuterTracker_Endcap_radius_2" value="1289.9*mm"/>
