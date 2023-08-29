@@ -275,7 +275,7 @@ static Ref_t create_arc_endcap_cell(Detector &desc, xml::Handle_t handle, Sensit
     // // //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++// // //
 
   // Use regular polyhedra for endcaps cells
-  PolyhedraRegular cellS(6, 0, 0., hexagon_apothem, vessel_length);
+  PolyhedraRegular cellS(6, 0, 0., hexagon_apothem, vessel_length - 2*vessel_wall_thickness);
 
   // Build sensor shape
   Box sensorSol(sensor_sidex / 2, sensor_sidey / 2, sensor_thickness / 2);
@@ -369,11 +369,11 @@ static Ref_t create_arc_endcap_cell(Detector &desc, xml::Handle_t handle, Sensit
 
         angle_of_sensor = desc.constantAsDouble(MartinCellName + "_DetTilt");
 
-        std::string ZOffsetSensorParName = MartinCellName + "_DetZOffset";
+        std::string ZOffsetSensorParName = MartinCellName + "_DetPositionZ";
 
 
-        if( desc.constants().count(MartinCellName + "_DetPositionZ") )
-            zoffset_of_sensor = desc.constantAsDouble(MartinCellName + "_DetPositionZ");
+        if( desc.constants().count( ZOffsetSensorParName ) )
+            zoffset_of_sensor = desc.constantAsDouble( ZOffsetSensorParName );
         else
           dd4hep::printout(dd4hep::WARNING,"ARCENDCAP_T", "+++ Constant %s is missing in xml file, default is 0",ZOffsetSensorParName.c_str());
 
@@ -458,7 +458,7 @@ static Ref_t create_arc_endcap_cell(Detector &desc, xml::Handle_t handle, Sensit
       cellPV.addPhysVolID("cellnumber", createPhysVolID() );//6*cellCounter + 0);
       cellDE.setPlacement( cellPV );
 
-      if ( ncell.isReflected)
+      if ( ncell.isReflected )
       {
         std::string cellRefName = create_part_name_ff("cell_ref");
         Volume cellV_reflected(cellRefName, cellS, gasvolMat);
@@ -478,7 +478,7 @@ static Ref_t create_arc_endcap_cell(Detector &desc, xml::Handle_t handle, Sensit
         mirror_ref_Skin.isValid();
 
         auto sensorTr_reflected = RotationZYX(-alpha + 90 * deg, 0 /*90*deg-angle_of_sensor*/, angle_of_sensor)*
-                                       Translation3D(0, center_of_sensor_x, sensor_z_origin_Martin);
+                                       Translation3D(0, center_of_sensor_x, sensor_z_pos);
         PlacedVolume sensor_ref_PV = cellV_reflected.placeVolume(sensorVol, sensorTr_reflected);
 //         sensor_ref_PV.addPhysVolID("cellnumber", 6 * cellCounter+5);
         DetElement sensor_ref_DE(cell_reflected_DE, create_part_name_ff("sensor") + "_ref_DE", 6 * cellCounter+5 );
