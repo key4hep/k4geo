@@ -222,15 +222,15 @@ static Ref_t create_arc_endcap_cell(Detector &desc, xml::Handle_t handle, Sensit
     // // //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++// // //
 
     // Build cylinder for gas, and the vessel for the gas
-    Tube gasenvelopeS(  vessel_inner_r + vessel_wall_thickness,
-                        vessel_outer_r - vessel_wall_thickness,
-                        vessel_length/2.);
+    Tube gasenvelopeS(  vessel_inner_r   + vessel_wall_thickness,
+                        vessel_outer_r   - vessel_wall_thickness,
+                        vessel_length/2. - vessel_wall_thickness);
     Volume endcap_cells_gas_envelope (detName+"_gasEnvelope", gasenvelopeS, gasvolMat );
     endcap_cells_gas_envelope.setVisAttributes( desc.visAttributes("arc_envelope_vis") );
 
     Tube vesselEnvelopeSolid(  vessel_inner_r,
                                vessel_outer_r,
-                               vessel_length/2. + vessel_wall_thickness);
+                               vessel_length/2. );
     Volume endcap_cells_vessel_envelope (detName+"_vesselEnvelope", vesselEnvelopeSolid, vesselSkinMat );
     endcap_cells_vessel_envelope.setVisAttributes( vesselSkinVis );
 
@@ -243,7 +243,7 @@ static Ref_t create_arc_endcap_cell(Detector &desc, xml::Handle_t handle, Sensit
 
       Tube vesselInnerBulkSolid( vessel_bulk_inner_r_ini,
                             vessel_bulk_inner_r_fin,
-                            vessel_length/2. + vessel_wall_thickness - (1-bulk_skin_ratio)*0.5*vessel_wall_thickness);
+                            vessel_length/2. - (1-bulk_skin_ratio)*0.5*vessel_wall_thickness);
       Volume vessel_innerbulk_vol (detName+"_vesselInnerBulk", vesselInnerBulkSolid, vesselBulkMat );
       vessel_innerbulk_vol.setVisAttributes( vesselBulkVis );
       endcap_cells_vessel_envelope.placeVolume(vessel_innerbulk_vol);
@@ -254,7 +254,7 @@ static Ref_t create_arc_endcap_cell(Detector &desc, xml::Handle_t handle, Sensit
 
       Tube vesselOuterBulkSolid( vessel_bulk_outer_r_ini,
                                 vessel_bulk_outer_r_fin,
-                                vessel_length/2. + vessel_wall_thickness -  (1-bulk_skin_ratio)*0.5*vessel_wall_thickness);
+                                vessel_length/2. -  (1-bulk_skin_ratio)*0.5*vessel_wall_thickness);
       Volume vessel_outerbulk_vol (detName+"_vesselOuterBulk", vesselOuterBulkSolid, vesselBulkMat );
       vessel_outerbulk_vol.setVisAttributes( vesselBulkVis );
       endcap_cells_vessel_envelope.placeVolume(vessel_outerbulk_vol);
@@ -264,10 +264,10 @@ static Ref_t create_arc_endcap_cell(Detector &desc, xml::Handle_t handle, Sensit
                                 bulk_skin_ratio*0.5*vessel_wall_thickness);
       Volume vessel_base_bulk_vol (detName+"_vesselBaseBulk", vesselBaseBulkSolid, vesselBulkMat );
       vessel_base_bulk_vol.setVisAttributes( vesselBulkVis );
-      auto posZPositive = Position(0, 0, vessel_length/2. + 0.5*vessel_wall_thickness);
+      auto posZPositive = Position(0, 0, vessel_length/2. - 0.5*vessel_wall_thickness);
       endcap_cells_vessel_envelope.placeVolume(vessel_base_bulk_vol,posZPositive);
 
-      auto posZNegative = Position(0, 0, -vessel_length/2. - 0.5*vessel_wall_thickness);
+      auto posZNegative = Position(0, 0, -vessel_length/2. + 0.5*vessel_wall_thickness);
       endcap_cells_vessel_envelope.placeVolume(vessel_base_bulk_vol,posZNegative);
     }
 
