@@ -13,4 +13,5 @@ if [[ -n "$xml" ]]; then # test to see if not empty
       --outputFile Step1_edm4hep.root
 else
     echo "argument error, please provide an xml file as input argument!"
+    exit 1
 fi
