@@ -15,10 +15,9 @@ def main():
                         required=True, type=str, nargs='+')
     parser.add_argument('-o', '--out', help='Converted file path',
                         default='detector.root', type=str)
-    args = vars(parser.parse_args())
-
-    convert(args['compact'], args['out'])
-
+    args = parser.parse_args()
+    
+    convert(args.compact, args.out)
 
 def convert(compact_files, out_path):
     print('INFO: Converting following compact file(s):')
