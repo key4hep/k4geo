@@ -76,12 +76,21 @@ static Ref_t create_element(Detector& theDetector, xml_h element, Ref_t)  {
 //====================================================================
   cout << "\nBuilding SServices00"<< endl;
 
+  bool build_tpc_cooling  = dd4hep::getAttrOrDefault(x_det, _Unicode(build_tpc_cooling),   bool(true) );
+  bool build_ecal_services= dd4hep::getAttrOrDefault(x_det, _Unicode(build_ecal_services), bool(true) );
+  bool build_hcal_services= dd4hep::getAttrOrDefault(x_det, _Unicode(build_hcal_services), bool(true) );
+  bool build_sit_cables   = dd4hep::getAttrOrDefault(x_det, _Unicode(build_sit_cables),    bool(true) );
+  bool build_vxd_cables   = dd4hep::getAttrOrDefault(x_det, _Unicode(build_vxd_cables),    bool(true) );
+
+  double TPC_Ecal_Hcal_barrel_halfZ =theDetector.constant<double>("TPC_Ecal_Hcal_barrel_halfZ");
+
+  if ( build_tpc_cooling ) {
+
   //==================================================
   //           BuildTPCEndplateServices
   //==================================================
   
   // start to prepare the Material and geometry as Mokka
-  double TPC_Ecal_Hcal_barrel_halfZ =theDetector.constant<double>("TPC_Ecal_Hcal_barrel_halfZ");
 
   XMLHandlerDB db = XMLHandlerDB(  x_det.child( _Unicode( TPC_Cooling ) ) ) ;
 
@@ -115,9 +124,10 @@ static Ref_t create_element(Detector& theDetector, xml_h element, Ref_t)  {
   
   TPCEndplateServices.DoBuildTPCEndplateServices(pv,envelope_assembly);
  
+  }
 
+  if ( build_ecal_services ) {
 
- 
   //==================================================
   //           BuildEcalBarrelServices
   //==================================================
@@ -213,9 +223,9 @@ static Ref_t create_element(Detector& theDetector, xml_h element, Ref_t)  {
 
   EcalBarrel_EndCapServices.DoBuildEcalBarrel_EndCapServices(pv,envelope_assembly);
 
+  }
 
-
-
+  if ( build_hcal_services ) {
 
   //==================================================
   //         BuildHcalBarrel_EndCapServices
@@ -258,9 +268,10 @@ static Ref_t create_element(Detector& theDetector, xml_h element, Ref_t)  {
 
   HcalBarrel_EndCapServices.DoBuildHcalBarrel_EndCapServices(pv,envelope_assembly);
 
+  }
 
 
-
+  if ( build_sit_cables ) {
 
   //==================================================
   //          BuildSitCables
@@ -293,6 +304,11 @@ static Ref_t create_element(Detector& theDetector, xml_h element, Ref_t)  {
   SitCables.DoBuildSitCables(pv,envelope_assembly);
 
 
+  }
+
+
+  if ( build_vxd_cables ) {
+
   //==================================================
   //          BuildVXDCables
   //==================================================
@@ -307,6 +323,7 @@ static Ref_t create_element(Detector& theDetector, xml_h element, Ref_t)  {
 
   VXDCables.DoBuildVXDCables(pv,envelope_assembly);
 
+  }
 
 //====================================================================
 // Place services into the world volume
