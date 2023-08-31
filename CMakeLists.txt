@@ -49,9 +49,9 @@ message ( STATUS "ROOT_VERSION: ${ROOT_VERSION}" )
 find_package( Geant4 REQUIRED ) 
 find_package( LCIO REQUIRED)
 
-add_subdirectory(./detector/DetSegmentation)
+add_subdirectory(detectorSegmentations)
 add_subdirectory(./detector/DetCommon)
-add_subdirectory(./detector/DetSensitive)
+add_subdirectory(sensitiveDetectors)
 
 file(GLOB sources 
   ./detector/tracker/*.cpp
