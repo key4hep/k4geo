@@ -2,19 +2,19 @@
 #define DETSEGMENTATION_GRIDPHIETA_H
 
 // FCCSW
-#include "detectorSegmentations/GridEta.h"
+#include "detectorSegmentations/GridEta_k4geo.h"
 
 /** FCCSWGridPhiEta Detector/detectorSegmentations/detectorSegmentations/FCCSWGridPhiEta.h FCCSWGridPhiEta.h
  *
  *  Segmentation in eta and phi.
- *  Based on GridEta, addition of azimuthal angle coordinate.
+ *  Based on GridEta_k4geo, addition of azimuthal angle coordinate.
  *
  *  @author    Anna Zaborowska
  */
 
 namespace dd4hep {
 namespace DDSegmentation {
-class FCCSWGridPhiEta : public GridEta {
+class FCCSWGridPhiEta : public GridEta_k4geo {
 public:
   /// default constructor using an arbitrary type
   FCCSWGridPhiEta(const std::string& aCellEncoding);

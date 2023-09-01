@@ -82,7 +82,7 @@
     <!-- offset in eta is eta max value including cryostat -->
     <readout name="ECalBarrelEta">
         <!-- segmentation type="GridTheta" grid_size_theta="0.5625" offset_theta="-0.83"/ -->
-        <segmentation type="GridEta" grid_size_eta="0.01" offset_eta="-1.2"/>
+        <segmentation type="GridEta_k4geo" grid_size_eta="0.01" offset_eta="-1.2"/>
       <id>system:4,cryo:1,type:3,subtype:3,layer:8,module:11,eta:9</id>
     </readout>
     <!-- readout for the reconstruction -->
