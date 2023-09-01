@@ -7,7 +7,7 @@
 #include "TVector3.h"
 #include <cmath>
 
-/** GridTheta Detector/DetSegmentation/DetSegmentation/GridTheta.h GridTheta.h
+/** GridTheta Detector/detectorSegmentations/detectorSegmentations/GridTheta.h GridTheta.h
  *
  *  Segmentation in theta.
  *

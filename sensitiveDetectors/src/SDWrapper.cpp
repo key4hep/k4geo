@@ -1,13 +1,13 @@
 #include "DD4hep/Detector.h"
 #include "DDG4/Factories.h"
 
-#include "DetSensitive/AggregateCalorimeterSD.h"
-#include "DetSensitive/BirksLawCalorimeterSD.h"
-#include "DetSensitive/FullParticleAbsorptionSD.h"
-#include "DetSensitive/GflashCalorimeterSD.h"
-#include "DetSensitive/SimpleCalorimeterSD.h"
-#include "DetSensitive/SimpleTrackerSD.h"
-#include "DetSensitive/SimpleDriftChamber.h"
+#include "sensitiveDetectors/AggregateCalorimeterSD.h"
+#include "sensitiveDetectors/BirksLawCalorimeterSD.h"
+#include "sensitiveDetectors/FullParticleAbsorptionSD.h"
+#include "sensitiveDetectors/GflashCalorimeterSD.h"
+#include "sensitiveDetectors/SimpleCalorimeterSD.h"
+#include "sensitiveDetectors/SimpleTrackerSD.h"
+#include "sensitiveDetectors/SimpleDriftChamber.h"
 
 namespace dd4hep {
 namespace sim {

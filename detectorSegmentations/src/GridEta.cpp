@@ -1,4 +1,4 @@
-#include "DetSegmentation/GridEta.h"
+#include "detectorSegmentations/GridEta.h"
 #include "DD4hep/Factories.h"
 
 namespace dd4hep {

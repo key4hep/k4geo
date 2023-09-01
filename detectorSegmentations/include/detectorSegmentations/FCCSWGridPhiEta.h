@@ -2,9 +2,9 @@
 #define DETSEGMENTATION_GRIDPHIETA_H
 
 // FCCSW
-#include "DetSegmentation/GridEta.h"
+#include "detectorSegmentations/GridEta.h"
 
-/** FCCSWGridPhiEta Detector/DetSegmentation/DetSegmentation/FCCSWGridPhiEta.h FCCSWGridPhiEta.h
+/** FCCSWGridPhiEta Detector/detectorSegmentations/detectorSegmentations/FCCSWGridPhiEta.h FCCSWGridPhiEta.h
  *
  *  Segmentation in eta and phi.
  *  Based on GridEta, addition of azimuthal angle coordinate.

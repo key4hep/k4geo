@@ -2,8 +2,8 @@
 #define DETCOMMON_DETUTILS_H
 
 // FCCSW
-#include "DetSegmentation/FCCSWGridPhiEta.h"
-#include "DetSegmentation/FCCSWGridPhiTheta.h"
+#include "detectorSegmentations/FCCSWGridPhiEta.h"
+#include "detectorSegmentations/FCCSWGridPhiTheta.h"
 
 
 // DD4hep

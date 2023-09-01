@@ -16,7 +16,7 @@ namespace k4 {
 class Geant4CaloHit;
 }
 
-/** AggregateCalorimeterSD DetectorDescription/DetSensitive/src/AggregateCalorimeterSD.h AggregateCalorimeterSD.h
+/** AggregateCalorimeterSD DetectorDescription/sensitiveDetectors/src/AggregateCalorimeterSD.h AggregateCalorimeterSD.h
  *
  *  Sensitive detector for calorimeter (aggregates energy deposits within each cell).
  *  It is based on dd4hep::sim::Geant4GenericSD<Calorimeter> (but it is not identical).

@@ -1,4 +1,4 @@
-#include "DetSegmentation/FCCSWGridPhiEta.h"
+#include "detectorSegmentations/FCCSWGridPhiEta.h"
 
 namespace dd4hep {
 namespace DDSegmentation {

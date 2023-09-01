@@ -2,7 +2,7 @@
 #define DD4HEP_DDCORE_GRIDTHETA_H 1
 
 // FCCSW
-#include "DetSegmentation/GridTheta.h"
+#include "detectorSegmentations/GridTheta.h"
 
 // DD4hep
 #include "DD4hep/Segmentations.h"

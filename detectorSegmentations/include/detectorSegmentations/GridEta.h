@@ -7,7 +7,7 @@
 #include "TVector3.h"
 #include <cmath>
 
-/** GridEta Detector/DetSegmentation/DetSegmentation/GridEta.h GridEta.h
+/** GridEta Detector/detectorSegmentations/detectorSegmentations/GridEta.h GridEta.h
  *
  *  Segmentation in eta.
  *

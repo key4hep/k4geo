@@ -9,7 +9,7 @@
 #include "G4THitsCollection.hh"
 #include "G4VSensitiveDetector.hh"
 
-/** FullParticleAbsD DetectorDescription/DetSensitive/src/FullParticleAbsSD.h FullParticleAbsSD.h
+/** FullParticleAbsD DetectorDescription/sensitiveDetectors/src/FullParticleAbsSD.h FullParticleAbsSD.h
  *
  *  Sensitive detector to fully stop the incoming particles.
  *  The position of the hit is set to G4Step::GetPreStepPoint() position.

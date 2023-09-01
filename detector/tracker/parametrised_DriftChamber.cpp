@@ -1,7 +1,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
 #include "DDSegmentation/Segmentation.h"
-#include "DetSegmentation/GridSimplifiedDriftChamber.h"
+#include "detectorSegmentations/GridSimplifiedDriftChamber.h"
 #include "XML/Utilities.h"
 #include "XML/XMLElements.h"
 

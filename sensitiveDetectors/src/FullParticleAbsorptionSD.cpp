@@ -1,4 +1,4 @@
-#include "DetSensitive/FullParticleAbsorptionSD.h"
+#include "sensitiveDetectors/FullParticleAbsorptionSD.h"
 
 // FCCSW
 #include "DetCommon/DetUtils.h"

@@ -6,7 +6,7 @@ file(GLOB sources src/*.cpp)
 
 add_library(DetCommon SHARED ${sources})
 dd4hep_generate_rootmap(DetCommon)
-target_link_libraries(DetCommon DD4hep::DDCore DD4hep::DDG4 DetSegmentation)
+target_link_libraries(DetCommon DD4hep::DDCore DD4hep::DDG4 detectorSegmentations)
 target_include_directories(DetCommon
     PUBLIC
         $<INSTALL_INTERFACE:include>

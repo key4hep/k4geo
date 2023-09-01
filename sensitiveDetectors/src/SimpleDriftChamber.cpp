@@ -1,4 +1,4 @@
-#include "DetSensitive/SimpleDriftChamber.h"
+#include "sensitiveDetectors/SimpleDriftChamber.h"
 
 // FCCSW
 #include "DetCommon/DetUtils.h"

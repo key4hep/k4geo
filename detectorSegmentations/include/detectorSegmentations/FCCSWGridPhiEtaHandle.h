@@ -1,8 +1,8 @@
-#ifndef DD4HEP_DDCORE_GRIDETA_H
-#define DD4HEP_DDCORE_GRIDETA_H 1
+#ifndef DD4HEP_DDCORE_GRIDPHIETA_H
+#define DD4HEP_DDCORE_GRIDPHIETA_H 1
 
 // FCCSW
-#include "DetSegmentation/GridEta.h"
+#include "detectorSegmentations/FCCSWGridPhiEta.h"
 
 // DD4hep
 #include "DD4hep/Segmentations.h"
@@ -20,7 +20,7 @@ template <typename T>
 class SegmentationWrapper;
 
 /// We need some abbreviation to make the code more readable.
-typedef Handle<SegmentationWrapper<DDSegmentation::GridEta>> GridEtaHandle;
+typedef Handle<SegmentationWrapper<DDSegmentation::FCCSWGridPhiEta>> FCCSWGridPhiEtaHandle;
 
 /// Implementation class for the grid phi-eta segmentation.
 /**
@@ -42,27 +42,27 @@ typedef Handle<SegmentationWrapper<DDSegmentation::GridEta>> GridEtaHandle;
  *  \author  A. Zaborowska
  *  \version 1.0
  */
-class GridEta : public GridEtaHandle {
+class FCCSWGridPhiEta : public FCCSWGridPhiEtaHandle {
 public:
   /// Defintiion of the basic handled object
-  typedef GridEtaHandle::Object Object;
+  typedef FCCSWGridPhiEtaHandle::Object Object;
 
 public:
   /// Default constructor
-  GridEta() = default;
+  FCCSWGridPhiEta() = default;
   /// Copy constructor
-  GridEta(const GridEta& e) = default;
+  FCCSWGridPhiEta(const FCCSWGridPhiEta& e) = default;
   /// Copy Constructor from segmentation base object
-  GridEta(const Segmentation& e) : Handle<Object>(e) {}
+  FCCSWGridPhiEta(const Segmentation& e) : Handle<Object>(e) {}
   /// Copy constructor from handle
-  GridEta(const Handle<Object>& e) : Handle<Object>(e) {}
+  FCCSWGridPhiEta(const Handle<Object>& e) : Handle<Object>(e) {}
   /// Copy constructor from other polymorph/equivalent handle
   template <typename Q>
-  GridEta(const Handle<Q>& e) : Handle<Object>(e) {}
+  FCCSWGridPhiEta(const Handle<Q>& e) : Handle<Object>(e) {}
   /// Assignment operator
-  GridEta& operator=(const GridEta& seg) = default;
+  FCCSWGridPhiEta& operator=(const FCCSWGridPhiEta& seg) = default;
   /// Equality operator
-  bool operator==(const GridEta& seg) const { return m_element == seg.m_element; }
+  bool operator==(const FCCSWGridPhiEta& seg) const { return m_element == seg.m_element; }
   /// determine the position based on the cell ID
   inline Position position(const CellID& id) const { return Position(access()->implementation->position(id)); }
 
@@ -74,30 +74,46 @@ public:
   /// access the grid size in eta
   inline double gridSizeEta() const { return access()->implementation->gridSizeEta(); }
 
+  /// access the grid size in Phi
+  inline int phiBins() const { return access()->implementation->phiBins(); }
+
   /// access the coordinate offset in eta
   inline double offsetEta() const { return access()->implementation->offsetEta(); }
+
+  /// access the coordinate offset in Phi
+  inline double offsetPhi() const { return access()->implementation->offsetPhi(); }
 
   /// set the coordinate offset in eta
   inline void setOffsetEta(double offset) const { access()->implementation->setOffsetEta(offset); }
 
+  /// set the coordinate offset in Phi
+  inline void setOffsetPhi(double offset) const { access()->implementation->setOffsetPhi(offset); }
+
   /// set the grid size in eta
   inline void setGridSizeEta(double cellSize) const { access()->implementation->setGridSizeEta(cellSize); }
+
+  /// set the grid size in Phi
+  inline void setPhiBins(int cellSize) const { access()->implementation->setPhiBins(cellSize); }
 
   /// access the field name used for eta
   inline const std::string& fieldNameEta() const { return access()->implementation->fieldNameEta(); }
 
+  /// access the field name used for Phi
+  inline const std::string& fieldNamePhi() const { return access()->implementation->fieldNamePhi(); }
+
   /** \brief Returns a std::vector<double> of the cellDimensions of the given cell ID
-      in natural order of dimensions (dEta)
+      in natural order of dimensions (dPhi, dEta)
 
       Returns a std::vector of the cellDimensions of the given cell ID
       \param cellID is ignored as all cells have the same dimension
-      \return std::vector<double> size 1:
+      \return std::vector<double> size 2:
+      -# size in phi
       -# size in eta
   */
   inline std::vector<double> cellDimensions(const CellID& /*id*/) const {
-    return {access()->implementation->gridSizeEta()};
+    return {access()->implementation->gridSizePhi(), access()->implementation->gridSizeEta()};
   }
 };
 
 } /* End namespace dd4hep                */
-#endif  // DD4HEP_DDCORE_GRIDETA_H
+#endif  // DD4HEP_DDCORE_GRIDPHIETA_H

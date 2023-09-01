@@ -1,8 +1,8 @@
-#ifndef DD4HEP_DDCORE_GRIDRPHIETA_H
-#define DD4HEP_DDCORE_GRIDRPHIETA_H 1
+#ifndef DD4HEP_DDCORE_GRIDPHITHETA_H
+#define DD4HEP_DDCORE_GRIDPHITHETA_H 1
 
 // FCCSW
-#include "DetSegmentation/GridRPhiEta.h"
+#include "detectorSegmentations/FCCSWGridPhiTheta.h"
 
 // DD4hep
 #include "DD4hep/Segmentations.h"
@@ -20,9 +20,9 @@ template <typename T>
 class SegmentationWrapper;
 
 /// We need some abbreviation to make the code more readable.
-typedef Handle<SegmentationWrapper<DDSegmentation::GridRPhiEta>> GridRPhiEtaHandle;
+typedef Handle<SegmentationWrapper<DDSegmentation::FCCSWGridPhiTheta>> FCCSWGridPhiThetaHandle;
 
-/// Implementation class for the grid phi-eta segmentation.
+/// Implementation class for the grid phi-theta segmentation.
 /**
  *  Concrete user handle to serve specific needs of client code
  *  which requires access to the base functionality not served
@@ -39,30 +39,28 @@ typedef Handle<SegmentationWrapper<DDSegmentation::GridRPhiEta>> GridRPhiEtaHand
  *  The handle base corrsponding to this object in for
  *  conveniance reasons instantiated in DD4hep/src/Segmentations.cpp.
  *
- *  \author  A. Zaborowska
- *  \version 1.0
  */
-class GridRPhiEta : public GridRPhiEtaHandle {
+class FCCSWGridPhiTheta : public FCCSWGridPhiThetaHandle {
 public:
   /// Defintiion of the basic handled object
-  typedef GridRPhiEtaHandle::Object Object;
+  typedef FCCSWGridPhiThetaHandle::Object Object;
 
 public:
   /// Default constructor
-  GridRPhiEta() = default;
+  FCCSWGridPhiTheta() = default;
   /// Copy constructor
-  GridRPhiEta(const GridRPhiEta& e) = default;
+  FCCSWGridPhiTheta(const FCCSWGridPhiTheta& e) = default;
   /// Copy Constructor from segmentation base object
-  GridRPhiEta(const Segmentation& e) : Handle<Object>(e) {}
+  FCCSWGridPhiTheta(const Segmentation& e) : Handle<Object>(e) {}
   /// Copy constructor from handle
-  GridRPhiEta(const Handle<Object>& e) : Handle<Object>(e) {}
+  FCCSWGridPhiTheta(const Handle<Object>& e) : Handle<Object>(e) {}
   /// Copy constructor from other polymorph/equivalent handle
   template <typename Q>
-  GridRPhiEta(const Handle<Q>& e) : Handle<Object>(e) {}
+  FCCSWGridPhiTheta(const Handle<Q>& e) : Handle<Object>(e) {}
   /// Assignment operator
-  GridRPhiEta& operator=(const GridRPhiEta& seg) = default;
+  FCCSWGridPhiTheta& operator=(const FCCSWGridPhiTheta& seg) = default;
   /// Equality operator
-  bool operator==(const GridRPhiEta& seg) const { return m_element == seg.m_element; }
+  bool operator==(const FCCSWGridPhiTheta& seg) const { return m_element == seg.m_element; }
   /// determine the position based on the cell ID
   inline Position position(const CellID& id) const { return Position(access()->implementation->position(id)); }
 
@@ -71,65 +69,49 @@ public:
     return access()->implementation->cellID(local, global, volID);
   }
 
-  /// access the grid size in eta
-  inline double gridSizeEta() const { return access()->implementation->gridSizeEta(); }
+  /// access the grid size in theta
+  inline double gridSizeTheta() const { return access()->implementation->gridSizeTheta(); }
 
   /// access the grid size in Phi
   inline int phiBins() const { return access()->implementation->phiBins(); }
 
-  /// access the grid size in R
-  inline double gridSizeR() const { return access()->implementation->gridSizeR(); }
-
-  /// access the coordinate offset in eta
-  inline double offsetEta() const { return access()->implementation->offsetEta(); }
+  /// access the coordinate offset in theta
+  inline double offsetTheta() const { return access()->implementation->offsetTheta(); }
 
   /// access the coordinate offset in Phi
   inline double offsetPhi() const { return access()->implementation->offsetPhi(); }
 
-  /// access the coordinate offset in R
-  inline double offsetR() const { return access()->implementation->offsetR(); }
-
-  /// set the coordinate offset in eta
-  inline void setOffsetEta(double offset) const { access()->implementation->setOffsetEta(offset); }
+  /// set the coordinate offset in theta
+  inline void setOffsetTheta(double offset) const { access()->implementation->setOffsetTheta(offset); }
 
   /// set the coordinate offset in Phi
   inline void setOffsetPhi(double offset) const { access()->implementation->setOffsetPhi(offset); }
 
-  /// set the coordinate offset in R
-  inline void setOffsetR(double offset) const { access()->implementation->setOffsetR(offset); }
-
-  /// set the grid size in eta
-  inline void setGridSizeEta(double cellSize) const { access()->implementation->setGridSizeEta(cellSize); }
+  /// set the grid size in theta
+  inline void setGridSizeTheta(double cellSize) const { access()->implementation->setGridSizeTheta(cellSize); }
 
   /// set the grid size in Phi
   inline void setPhiBins(int cellSize) const { access()->implementation->setPhiBins(cellSize); }
 
-  /// set the grid size in R
-  inline void setGridSizeR(double cellSize) const { access()->implementation->setGridSizeR(cellSize); }
-
-  /// access the field name used for eta
-  inline const std::string& fieldNameEta() const { return access()->implementation->fieldNameEta(); }
+  /// access the field name used for theta
+  inline const std::string& fieldNameTheta() const { return access()->implementation->fieldNameTheta(); }
 
   /// access the field name used for Phi
   inline const std::string& fieldNamePhi() const { return access()->implementation->fieldNamePhi(); }
 
-  /// access the field name used for R
-  inline const std::string& fieldNameR() const { return access()->implementation->fieldNameR(); }
-
   /** \brief Returns a std::vector<double> of the cellDimensions of the given cell ID
-      in natural order of dimensions (dR, dPhi, dEta)
+      in natural order of dimensions (dPhi, dTheta)
+
       Returns a std::vector of the cellDimensions of the given cell ID
       \param cellID is ignored as all cells have the same dimension
-      \return std::vector<double> size 3:
-      -# size in r
+      \return std::vector<double> size 2:
       -# size in phi
-      -# size in eta
+      -# size in theta
   */
   inline std::vector<double> cellDimensions(const CellID& /*id*/) const {
-    return {access()->implementation->gridSizeR(), access()->implementation->gridSizePhi(),
-            access()->implementation->gridSizeEta()};
+    return {access()->implementation->gridSizePhi(), access()->implementation->gridSizeTheta()};
   }
 };
 
 } /* End namespace dd4hep                */
-#endif  // DD4HEP_DDCORE_GRIDRPHIETA_H
+#endif  // DD4HEP_DDCORE_GRIDPHITHETA_H

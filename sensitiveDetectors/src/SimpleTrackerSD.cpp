@@ -1,4 +1,4 @@
-#include "DetSensitive/SimpleTrackerSD.h"
+#include "sensitiveDetectors/SimpleTrackerSD.h"
 
 // FCCSW
 #include "DetCommon/DetUtils.h"

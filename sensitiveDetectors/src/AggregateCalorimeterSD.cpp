@@ -1,4 +1,4 @@
-#include "DetSensitive/AggregateCalorimeterSD.h"
+#include "sensitiveDetectors/AggregateCalorimeterSD.h"
 
 
 // FCCSW

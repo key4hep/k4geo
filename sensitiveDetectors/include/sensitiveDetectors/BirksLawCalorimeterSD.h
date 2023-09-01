@@ -12,7 +12,7 @@ namespace k4 {
 class Geant4CaloHit;
 }
 
-/** BirksLawCalorimeterSD DetectorDescription/DetSensitive/src/BirksLawCalorimeterSD.h BirksLawCalorimeterSD.h
+/** BirksLawCalorimeterSD DetectorDescription/sensitiveDetectors/src/BirksLawCalorimeterSD.h BirksLawCalorimeterSD.h
  *
  *  Sensitive detector for calorimeters, using Polystyrene.
  *  It is based on dd4hep::sim::Geant4GenericSD<Calorimeter> (but it is not identical).

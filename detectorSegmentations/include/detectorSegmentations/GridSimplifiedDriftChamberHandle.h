@@ -2,7 +2,7 @@
 #define DD4HEP_DDCORE_GRIDSIMPLIFIEDDRIFTCHAMBER_H 1
 
 // FCCSW
-#include "DetSegmentation/GridSimplifiedDriftChamber.h"
+#include "detectorSegmentations/GridSimplifiedDriftChamber.h"
 
 // DD4hep
 #include "DD4hep/Segmentations.h"

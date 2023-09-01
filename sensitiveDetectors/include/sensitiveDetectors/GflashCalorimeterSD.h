@@ -14,7 +14,7 @@ namespace k4 {
 class Geant4CaloHit;
 }
 
-/** GflashCalorimeterSD DetectorDescription/DetSensitive/src/GflashCalorimeterSD.h GflashCalorimeterSD.h
+/** GflashCalorimeterSD DetectorDescription/sensitiveDetectors/src/GflashCalorimeterSD.h GflashCalorimeterSD.h
  *
  *  Sensitive detector for calorimeters that use GFlash parametrisation.
  *  If no parametrisation is invoked, hits are processed as in det::SimpleCalorimeterSD.
