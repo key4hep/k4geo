@@ -2,9 +2,9 @@
 #define DETSEGMENTATION_GRIDRPHIETA_H
 
 // FCCSW
-#include "DetSegmentation/FCCSWGridPhiEta.h"
+#include "detectorSegmentations/FCCSWGridPhiEta.h"
 
-/** GridRPhiEta Detector/DetSegmentation/DetSegmentation/GridRPhiEta.h GridRPhiEta.h
+/** GridRPhiEta Detector/detectorSegmentations/detectorSegmentations/GridRPhiEta.h GridRPhiEta.h
  *
  *  Segmentation in R, eta and phi.
  *  Based on FCCSWGridPhiEta, addition of radial coordinate.

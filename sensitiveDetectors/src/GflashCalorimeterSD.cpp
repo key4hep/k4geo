@@ -1,4 +1,4 @@
-#include "DetSensitive/GflashCalorimeterSD.h"
+#include "sensitiveDetectors/GflashCalorimeterSD.h"
 
 // FCCSW
 #include "DetCommon/DetUtils.h"

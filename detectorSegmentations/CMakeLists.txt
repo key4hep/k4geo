@@ -1,25 +1,25 @@
 #################################################################################
-##Package : DetSegmentation
+##Package : detectorSegmentations
 #################################################################################
 
 file(GLOB sources src/*.cpp)
 
-add_library(DetSegmentation SHARED ${sources})
-dd4hep_generate_rootmap(DetSegmentationPlugin)
-target_link_libraries(DetSegmentation DD4hep::DDCore)
-target_include_directories(DetSegmentation
+add_library(detectorSegmentations SHARED ${sources} )
+dd4hep_generate_rootmap(detectorSegmentationsPlugin)
+target_link_libraries(detectorSegmentations DD4hep::DDCore)
+target_include_directories(detectorSegmentations
     PUBLIC
         $<INSTALL_INTERFACE:include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
 
-file(GLOB headers include/DetSegmentation/*.h)
-set_target_properties(DetSegmentation PROPERTIES PUBLIC_HEADER "${headers}")
+file(GLOB headers include/detectorSegmentations/*.h)
+set_target_properties(detectorSegmentations PROPERTIES PUBLIC_HEADER "${headers}")
 
 file(GLOB pluginsources src/plugins/*.cpp)
-add_library(DetSegmentationPlugin SHARED ${pluginsources})
-target_link_libraries(DetSegmentationPlugin DetSegmentation DD4hep::DDCore)
-target_include_directories(DetSegmentationPlugin
+add_library(detectorSegmentationsPlugin SHARED ${pluginsources})
+target_link_libraries(detectorSegmentationsPlugin detectorSegmentations DD4hep::DDCore)
+target_include_directories(detectorSegmentationsPlugin
     PUBLIC
         $<INSTALL_INTERFACE:include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -28,11 +28,11 @@ target_include_directories(DetSegmentationPlugin
 
 
 # Destination directories are hardcoded because GNUdirectories are not included
-install(TARGETS DetSegmentation DetSegmentationPlugin
+install(TARGETS detectorSegmentations detectorSegmentationsPlugin
   EXPORT ${PROJECT_NAME}Targets
   RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" COMPONENT bin
   LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" COMPONENT shlib
-  PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_PREFIX}/include/DetSegmentation"
+  PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_PREFIX}/include/detectorSegmentations"
   COMPONENT dev)
 
 #

@@ -1,4 +1,4 @@
-#include "DetSegmentation/GridRPhiEta.h"
+#include "detectorSegmentations/GridRPhiEta.h"
 
 namespace dd4hep {
 namespace DDSegmentation {

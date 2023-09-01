@@ -1,4 +1,4 @@
-#include "DetSegmentation/GridSimplifiedDriftChamber.h"
+#include "detectorSegmentations/GridSimplifiedDriftChamber.h"
 #include "DD4hep/Factories.h"
 
 namespace dd4hep {

@@ -7,7 +7,7 @@
 #include <cmath>
 #include <iostream>
 
-/** GridSimplifiedDriftChamber Detector/DetSegmentation/DetSegmentation/GridSimplifiedDriftChamber.h GridSimplifiedDriftChamber.h
+/** GridSimplifiedDriftChamber Detector/detectorSegmentations/detectorSegmentations/GridSimplifiedDriftChamber.h GridSimplifiedDriftChamber.h
  *
  *  Segmentation for the simplified IDEA drift chamber.
  *

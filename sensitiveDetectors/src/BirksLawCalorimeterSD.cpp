@@ -1,4 +1,4 @@
-#include "DetSensitive/BirksLawCalorimeterSD.h"
+#include "sensitiveDetectors/BirksLawCalorimeterSD.h"
 
 // FCCSW
 #include "DetCommon/DetUtils.h"

@@ -1,4 +1,4 @@
-#include "DetSegmentation/GridTheta.h"
+#include "detectorSegmentations/GridTheta.h"
 
 namespace dd4hep {
 namespace DDSegmentation {

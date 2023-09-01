@@ -13,7 +13,7 @@ class Geant4CaloHit;
 
 }
 
-/** SimpleCalorimeterSD DetectorDescription/DetSensitive/src/SimpleCalorimeterSD.h SimpleCalorimeterSD.h
+/** SimpleCalorimeterSD DetectorDescription/sensitiveDetectors/src/SimpleCalorimeterSD.h SimpleCalorimeterSD.h
  *
  *  Simple sensitive detector for calorimeter.
  *  It is based on dd4hep::sim::Geant4GenericSD<Calorimeter> (but it is not identical).

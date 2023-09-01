@@ -1,4 +1,4 @@
-#include "DetSensitive/SimpleCalorimeterSD.h"
+#include "sensitiveDetectors/SimpleCalorimeterSD.h"
 
 // FCCSW
 #include "DetCommon/DetUtils.h"

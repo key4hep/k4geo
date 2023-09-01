@@ -13,7 +13,7 @@ namespace k4 {
 class Geant4PreDigiTrackHit;
 }
 
-/** SimpleTrackerSD DetectorDescription/DetSensitive/src/SimpleTrackerSD.h SimpleTrackerSD.h
+/** SimpleTrackerSD DetectorDescription/sensitiveDetectors/src/SimpleTrackerSD.h SimpleTrackerSD.h
  *
  *  Simple sensitive detector for tracker.
  *  The position of the hit is set to the position from G4Step::GetPreStepPoint() to ensure that the volume ID
