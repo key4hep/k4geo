@@ -55,7 +55,7 @@ Examples from the configuration file [FCCee](https://github.com/HEP-FCC/FCCDetec
     <!-- readout for the simulation -->
     <!-- offset in eta is eta max value including cryostat -->
     <readout name="ECalBarrelEta">
-      <segmentation type="GridEta" grid_size_eta="0.01" offset_eta="-1.0"/>
+      <segmentation type="GridEta_k4geo" grid_size_eta="0.01" offset_eta="-1.0"/>
       <id>system:4,cryo:1,type:3,subtype:3,layer:8,module:11,eta:9</id>
     </readout>
     <!-- readout for the reconstruction -->
@@ -198,7 +198,7 @@ Definition of readout
     <!-- readout for the simulation -->
     <!-- offset in eta is eta max value including cryostat -->
     <readout name="ECalBarrelEta">
-      <segmentation type="GridEta" grid_size_eta="0.01" offset_eta="-1.0"/>
+      <segmentation type="GridEta_k4geo" grid_size_eta="0.01" offset_eta="-1.0"/>
       <id>system:4,cryo:1,type:3,subtype:3,layer:8,module:11,eta:9</id>
     </readout>
     <!-- readout for the reconstruction -->

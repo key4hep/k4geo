@@ -2,7 +2,7 @@
 #define DD4HEP_DDCORE_GRIDETA_H 1
 
 // FCCSW
-#include "detectorSegmentations/GridEta.h"
+#include "detectorSegmentations/GridEta_k4geo.h"
 
 // DD4hep
 #include "DD4hep/Segmentations.h"
@@ -20,7 +20,7 @@ template <typename T>
 class SegmentationWrapper;
 
 /// We need some abbreviation to make the code more readable.
-typedef Handle<SegmentationWrapper<DDSegmentation::GridEta>> GridEtaHandle;
+typedef Handle<SegmentationWrapper<DDSegmentation::GridEta_k4geo>> GridEtaHandle;
 
 /// Implementation class for the grid phi-eta segmentation.
 /**
@@ -42,27 +42,27 @@ typedef Handle<SegmentationWrapper<DDSegmentation::GridEta>> GridEtaHandle;
  *  \author  A. Zaborowska
  *  \version 1.0
  */
-class GridEta : public GridEtaHandle {
+class GridEta_k4geo : public GridEtaHandle {
 public:
   /// Defintiion of the basic handled object
   typedef GridEtaHandle::Object Object;
 
 public:
   /// Default constructor
-  GridEta() = default;
+  GridEta_k4geo() = default;
   /// Copy constructor
-  GridEta(const GridEta& e) = default;
+  GridEta_k4geo(const GridEta_k4geo& e) = default;
   /// Copy Constructor from segmentation base object
-  GridEta(const Segmentation& e) : Handle<Object>(e) {}
+  GridEta_k4geo(const Segmentation& e) : Handle<Object>(e) {}
   /// Copy constructor from handle
-  GridEta(const Handle<Object>& e) : Handle<Object>(e) {}
+  GridEta_k4geo(const Handle<Object>& e) : Handle<Object>(e) {}
   /// Copy constructor from other polymorph/equivalent handle
   template <typename Q>
-  GridEta(const Handle<Q>& e) : Handle<Object>(e) {}
+  GridEta_k4geo(const Handle<Q>& e) : Handle<Object>(e) {}
   /// Assignment operator
-  GridEta& operator=(const GridEta& seg) = default;
+  GridEta_k4geo& operator=(const GridEta_k4geo& seg) = default;
   /// Equality operator
-  bool operator==(const GridEta& seg) const { return m_element == seg.m_element; }
+  bool operator==(const GridEta_k4geo& seg) const { return m_element == seg.m_element; }
   /// determine the position based on the cell ID
   inline Position position(const CellID& id) const { return Position(access()->implementation->position(id)); }
 

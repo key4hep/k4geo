@@ -4,23 +4,23 @@ namespace dd4hep {
 namespace DDSegmentation {
 
 /// default constructor using an encoding string
-FCCSWGridPhiEta::FCCSWGridPhiEta(const std::string& cellEncoding) : GridEta(cellEncoding) {
+FCCSWGridPhiEta::FCCSWGridPhiEta(const std::string& cellEncoding) : GridEta_k4geo(cellEncoding) {
   // define type and description
   _type = "FCCSWGridPhiEta";
   _description = "Phi-eta segmentation in the global coordinates";
 
-  // register all necessary parameters (additional to those registered in GridEta)
+  // register all necessary parameters (additional to those registered in GridEta_k4geo)
   registerParameter("phi_bins", "Number of bins phi", m_phiBins, 1);
   registerParameter("offset_phi", "Angular offset in phi", m_offsetPhi, 0., SegmentationParameter::AngleUnit, true);
   registerIdentifier("identifier_phi", "Cell ID identifier for phi", m_phiID, "phi");
 }
 
-FCCSWGridPhiEta::FCCSWGridPhiEta(const BitFieldCoder* decoder) : GridEta(decoder) {
+FCCSWGridPhiEta::FCCSWGridPhiEta(const BitFieldCoder* decoder) : GridEta_k4geo(decoder) {
   // define type and description
   _type = "FCCSWGridPhiEta";
   _description = "Phi-eta segmentation in the global coordinates";
 
-  // register all necessary parameters (additional to those registered in GridEta)
+  // register all necessary parameters (additional to those registered in GridEta_k4geo)
   registerParameter("phi_bins", "Number of bins phi", m_phiBins, 1);
   registerParameter("offset_phi", "Angular offset in phi", m_offsetPhi, 0., SegmentationParameter::AngleUnit, true);
   registerIdentifier("identifier_phi", "Cell ID identifier for phi", m_phiID, "phi");

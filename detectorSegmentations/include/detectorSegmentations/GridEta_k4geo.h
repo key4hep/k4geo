@@ -7,7 +7,7 @@
 #include "TVector3.h"
 #include <cmath>
 
-/** GridEta Detector/detectorSegmentations/detectorSegmentations/GridEta.h GridEta.h
+/** GridEta_k4geo Detector/detectorSegmentations/detectorSegmentations/GridEta_k4geo.h GridEta_k4geo.h
  *
  *  Segmentation in eta.
  *
@@ -16,14 +16,14 @@
 
 namespace dd4hep {
 namespace DDSegmentation {
-class GridEta : public Segmentation {
+class GridEta_k4geo : public Segmentation {
 public:
   /// default constructor using an arbitrary type
-  GridEta(const std::string& aCellEncoding);
+  GridEta_k4geo(const std::string& aCellEncoding);
   /// Default constructor used by derived classes passing an existing decoder
-  GridEta(const BitFieldCoder* decoder);
+  GridEta_k4geo(const BitFieldCoder* decoder);
   /// destructor
-  virtual ~GridEta() = default;
+  virtual ~GridEta_k4geo() = default;
 
   /**  Determine the global position based on the cell ID.
    *   @warning This segmentation has no knowledge of radius, so radius = 1 is taken into calculations.
