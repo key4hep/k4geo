@@ -49,7 +49,7 @@ message ( STATUS "ROOT_VERSION: ${ROOT_VERSION}" )
 find_package( Geant4 REQUIRED ) 
 find_package( LCIO REQUIRED)
 
-add_subdirectory(detectorSegmentations SYSTEM )
+add_subdirectory(detectorSegmentations )
 add_subdirectory(./detector/DetCommon)
 add_subdirectory(sensitiveDetectors)
 
