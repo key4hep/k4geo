@@ -56,7 +56,7 @@
 
 <detectors>
   <detector
-    id="1"
+    id="DetID_ARCBARREL"
     name="ARCBARREL"
     type="ARCBARREL_o1_v01_T"
     readout="ARC_HITS"
@@ -94,7 +94,7 @@
   </mirror>
   </detector>
   <detector
-    id="2"
+    id="DetID_ARCENDCAP"
     name="ARCENDCAP"
     type="ARCENDCAP_o1_v01_T"
     readout="ARC_HITS"
