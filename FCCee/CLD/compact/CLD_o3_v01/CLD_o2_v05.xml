@@ -136,7 +136,7 @@
         <constant name="OuterTracker_inner_radius" value="696*mm" />
         <constant name="OuterTracker_outer_radius" value="1900*mm" />  <!-- to avoid overlap with
         CaloFace, but it has to be large enough to accommodate OT-->
-        <constant name="OuterTracker_half_length" value="2300*mm" />
+        <constant name="OuterTracker_half_length" value="2000*mm" />
 
         <constant name="ECalBarrel_inner_radius" value="2150*mm" />
         <constant name="ECalBarrel_outer_radius" value="2352*mm" />
