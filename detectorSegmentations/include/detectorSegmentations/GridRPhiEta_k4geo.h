@@ -4,7 +4,7 @@
 // FCCSW
 #include "detectorSegmentations/FCCSWGridPhiEta_k4geo.h"
 
-/** GridRPhiEta Detector/detectorSegmentations/detectorSegmentations/GridRPhiEta.h GridRPhiEta.h
+/** GridRPhiEta_k4geo Detector/detectorSegmentations/detectorSegmentations/GridRPhiEta_k4geo.h GridRPhiEta_k4geo.h
  *
  *  Segmentation in R, eta and phi.
  *  Based on FCCSWGridPhiEta_k4geo, addition of radial coordinate.
@@ -15,14 +15,14 @@
 
 namespace dd4hep {
 namespace DDSegmentation {
-class GridRPhiEta : public FCCSWGridPhiEta_k4geo {
+class GridRPhiEta_k4geo : public FCCSWGridPhiEta_k4geo {
 public:
   /// default constructor using an arbitrary type
-  GridRPhiEta(const std::string& aCellEncoding);
+  GridRPhiEta_k4geo(const std::string& aCellEncoding);
   /// Default constructor used by derived classes passing an existing decoder
-  GridRPhiEta(const BitFieldCoder* decoder);
+  GridRPhiEta_k4geo(const BitFieldCoder* decoder);
   /// destructor
-  virtual ~GridRPhiEta() = default;
+  virtual ~GridRPhiEta_k4geo() = default;
 
   /**  Determine the global position based on the cell ID.
    *   @param[in] aCellId ID of a cell.
