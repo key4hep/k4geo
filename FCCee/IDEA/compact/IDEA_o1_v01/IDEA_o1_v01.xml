@@ -5,22 +5,22 @@
 
 
 
-  <info name="FCCDectMaster"
+  <info name="FCCee_IDEA_o1_v01"
     title="FCCee IDEA detector geometry master file"
-    author="Niloufar Alipour Tehrani"
+    author="Niloufar Alipour Tehrani, vertex detector by Armin Ilg"
     url="no"
     status="development"
-    version="1.0">
-    <comment>
-      One stop shop for a baseline / the latest developments of the FCCee Detector concept.
+    version="o1_v01">
+    <comment> 
+      Version o1_v01 of the IDEA detector, starting with the vertex detector
     </comment>
   </info>
 
+  <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml" />
+
   <includes>
-    <gdmlFile  ref="elements.xml"/>
-    <gdmlFile  ref="materials.xml"/>
-    <gdmlFile  ref="DriftChamber_materials.xml"/>
-    <gdmlFile  ref="DriftChamber_parameters.xml"/>
+    <gdmlFile  ref="elements_o1_v01.xml"/>
+    <gdmlFile  ref="materials_o1_v01.xml"/>
   </includes>
 
   <define>
@@ -30,15 +30,21 @@
     <constant name="world_z" value="world_size"/>
   </define>
 
-  <include ref="./FCCee_DectDimensions.xml" />
+  <!-- Import dimensions -->
+  <include ref="DectDimensions_IDEA_o1_v01.xml"/>
 
-  <include ref="Beampipe.xml"/>
-  <include ref="BeamInstrumentation.xml"/>
-  <include ref="LumiCal.xml"/>
-  <include ref="HOMAbsorber.xml"/>
-  <!-- Vertex.xml comes from FCCee_o2_v02 /-->
-  <include ref="Vertex.xml"/>
-  <include ref="SimplifiedDriftChamber.xml"/>
-  <include ref="Calorimeter.xml"/>
+  <!-- Import accelerator components -->
+  <include ref="Beampipe_o1_v01.xml"/>
+  <include ref="BeamInstrumentation_o1_v01.xml"/>
+
+  <include ref="LumiCal_o1_v01.xml"/>
+
+  <!-- Import vertex -->
+  <include ref="Vertex_IDEA_o1_v01.xml"/>
+
+  <plugins>
+    <plugin name="DD4hepVolumeManager"/>
+    <plugin name="InstallSurfaceManager"/>
+  </plugins>
 
 </lccdd>
