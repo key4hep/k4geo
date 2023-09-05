@@ -47,24 +47,31 @@
     <constant name="DetID_HOMAbsorber"          value=" 19"/>
     <constant name="DetID_LumiCalNoseShield"          value=" 22"/>
     
-    <constant name="BeamPipeWidth"   	value="1.7*mm" />           <!-- Updated thickness as well -->
-    <constant name="BeamPipeWidthFirstCone"   	value="1.0*mm" />   <!-- reduced beam pipe radius! -->
+        <!-- BPW: Beam Pipe Width -->
+    <constant name="BPWWall"       value="0.35*mm" />
+    <constant name="BPWCool"       value="1.0*mm" />
+    <constant name="BeamPipeWidth" value="2.0*BPWWall + BPWCool"/>
+
+    <constant name="BeamPipeWidthFirstCone" value="2.0*mm" />
     <constant name="CentralBeamPipe_zmax" value="9.0*cm"/>          <!-- Shorter central beam pipe -->
-    <constant name="BePartEnd_z" value="90.0*cm"/>
-    <constant name="SeparatedBeamPipe_z" value="1159.97*mm"/>
+    <constant name="SeparatedBeamPipe_z" value="1190.0*mm"/> <!-- was 1159.97*mm in FCCDetectors/> -->
     <constant name="CentralBeamPipe_rmax" value="10.0*mm"/>
+    <constant name="ConeBeamPipe_Rmax" value="28.9*mm" />
     <constant name="BeamPipeGoldWidth" value="0.005*mm" /> 
     <constant name="BeamPipeGoldTolerance" value="0.001*mm" />  <!-- dummy tolerance, some small non zero value -->
-    
-    <constant name="BigBeamPipe_zmax" value="1120*mm"/>
+    <constant name="BeamPipeConeHalfAngle" value="(ConeBeamPipe_Rmax + BeamPipeWidthFirstCone - CentralBeamPipe_rmax ) / (SeparatedBeamPipe_z - CentralBeamPipe_zmax)" />
+
     <constant name="SeparatedBeamPipe_rmax"  value="15*mm"/>
     <constant name="BeamPipeTantalShieldWidth"  value="15*mm"/>
     <constant name="SideFillerShieldWidth"  value="7*mm"/>
     <constant name="TopFillerShieldWidth"  value="8*mm"/>
     <constant name="BeamPipe_end" value="12500*mm"/>
-    
-    <constant name="env_safety" value="0.1*mm"/>
 
+    <!-- Mike Sullivan's Synch Rad mask -->
+    <constant name="MiddleOfSRMask_z" value="2.1*m" />
+    <constant name="SynchRadMaskSize" value="5*mm" /> <!-- mask tip is at 10 mm from the beamline -->
+    <constant name="mask_epsilon" value="0.001*mm" />
+        
     <constant name="VertexClearanceTheta" value="0.110"/>                  <!-- Clearance of vertex detector in mrad-->
     <constant name="VTXIB_r_clearance" value="1*mm"/> <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
     <constant name="VTXIB_r_min" value="13.7*mm"/>          <!-- Start of inner vertex detector layers. To keep distance of 1.3 mm from outer beam pipe end (10+0.35+1+0.35 mm = 11.7 mm). This changes to 13.7 mm due to cooling issues (see https://indico.cern.ch/event/1176398/contributions/5207171/attachments/2581129/4451907/Krakow%202023_v23_final.pdf) -->
