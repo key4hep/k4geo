@@ -2,18 +2,18 @@
 #define DETSEGMENTATION_GRIDPHITHETA_H
 
 // FCCSW
-#include "detectorSegmentations/GridTheta.h"
+#include "detectorSegmentations/GridTheta_k4geo.h"
 
 /** FCCSWGridPhiTheta Detector/detectorSegmentations/detectorSegmentations/FCCSWGridPhiTheta.h FCCSWGridPhiTheta.h
  *
  *  Segmentation in theta and phi.
- *  Based on GridTheta, addition of azimuthal angle coordinate.
+ *  Based on GridTheta_k4geo, addition of azimuthal angle coordinate.
  *
  */
 
 namespace dd4hep {
 namespace DDSegmentation {
-class FCCSWGridPhiTheta : public GridTheta {
+class FCCSWGridPhiTheta : public GridTheta_k4geo {
 public:
   /// default constructor using an arbitrary type
   FCCSWGridPhiTheta(const std::string& aCellEncoding);

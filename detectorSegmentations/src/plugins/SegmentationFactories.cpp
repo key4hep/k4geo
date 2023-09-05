@@ -11,8 +11,8 @@ dd4hep::SegmentationObject* create_segmentation(const dd4hep::BitFieldCoder* dec
 #include "detectorSegmentations/GridEta_k4geo.h"
 DECLARE_SEGMENTATION(GridEta_k4geo, create_segmentation<dd4hep::DDSegmentation::GridEta_k4geo>)
 
-#include "detectorSegmentations/GridTheta.h"
-DECLARE_SEGMENTATION(GridTheta, create_segmentation<dd4hep::DDSegmentation::GridTheta>)
+#include "detectorSegmentations/GridTheta_k4geo.h"
+DECLARE_SEGMENTATION(GridTheta_k4geo, create_segmentation<dd4hep::DDSegmentation::GridTheta_k4geo>)
 
 #include "detectorSegmentations/FCCSWGridPhiTheta.h"
 DECLARE_SEGMENTATION(FCCSWGridPhiTheta, create_segmentation<dd4hep::DDSegmentation::FCCSWGridPhiTheta>)
