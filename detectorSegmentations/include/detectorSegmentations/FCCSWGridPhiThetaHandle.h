@@ -2,7 +2,7 @@
 #define DD4HEP_DDCORE_GRIDPHITHETA_H 1
 
 // FCCSW
-#include "detectorSegmentations/FCCSWGridPhiTheta.h"
+#include "detectorSegmentations/FCCSWGridPhiTheta_k4geo.h"
 
 // DD4hep
 #include "DD4hep/Segmentations.h"
@@ -20,7 +20,7 @@ template <typename T>
 class SegmentationWrapper;
 
 /// We need some abbreviation to make the code more readable.
-typedef Handle<SegmentationWrapper<DDSegmentation::FCCSWGridPhiTheta>> FCCSWGridPhiThetaHandle;
+typedef Handle<SegmentationWrapper<DDSegmentation::FCCSWGridPhiTheta_k4geo>> FCCSWGridPhiThetaHandle;
 
 /// Implementation class for the grid phi-theta segmentation.
 /**
@@ -40,27 +40,27 @@ typedef Handle<SegmentationWrapper<DDSegmentation::FCCSWGridPhiTheta>> FCCSWGrid
  *  conveniance reasons instantiated in DD4hep/src/Segmentations.cpp.
  *
  */
-class FCCSWGridPhiTheta : public FCCSWGridPhiThetaHandle {
+class FCCSWGridPhiTheta_k4geo : public FCCSWGridPhiThetaHandle {
 public:
   /// Defintiion of the basic handled object
   typedef FCCSWGridPhiThetaHandle::Object Object;
 
 public:
   /// Default constructor
-  FCCSWGridPhiTheta() = default;
+  FCCSWGridPhiTheta_k4geo() = default;
   /// Copy constructor
-  FCCSWGridPhiTheta(const FCCSWGridPhiTheta& e) = default;
+  FCCSWGridPhiTheta_k4geo(const FCCSWGridPhiTheta_k4geo& e) = default;
   /// Copy Constructor from segmentation base object
-  FCCSWGridPhiTheta(const Segmentation& e) : Handle<Object>(e) {}
+  FCCSWGridPhiTheta_k4geo(const Segmentation& e) : Handle<Object>(e) {}
   /// Copy constructor from handle
-  FCCSWGridPhiTheta(const Handle<Object>& e) : Handle<Object>(e) {}
+  FCCSWGridPhiTheta_k4geo(const Handle<Object>& e) : Handle<Object>(e) {}
   /// Copy constructor from other polymorph/equivalent handle
   template <typename Q>
-  FCCSWGridPhiTheta(const Handle<Q>& e) : Handle<Object>(e) {}
+  FCCSWGridPhiTheta_k4geo(const Handle<Q>& e) : Handle<Object>(e) {}
   /// Assignment operator
-  FCCSWGridPhiTheta& operator=(const FCCSWGridPhiTheta& seg) = default;
+  FCCSWGridPhiTheta_k4geo& operator=(const FCCSWGridPhiTheta_k4geo& seg) = default;
   /// Equality operator
-  bool operator==(const FCCSWGridPhiTheta& seg) const { return m_element == seg.m_element; }
+  bool operator==(const FCCSWGridPhiTheta_k4geo& seg) const { return m_element == seg.m_element; }
   /// determine the position based on the cell ID
   inline Position position(const CellID& id) const { return Position(access()->implementation->position(id)); }
 
