@@ -1,9 +1,13 @@
 from __future__ import print_function
 import argparse
-
-from plotstyle import FCCStyle
 import math
+
+import sys,os
+print(os.path.dirname(os.path.abspath(__file__)) + "/../../FCCSW/Examples/scripts")
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../../FCCSW/Examples/scripts")    # FCC Style from https://github.com/HEP-FCC/FCCSW/blob/master/Examples/scripts/plotstyle.py
+from plotstyle import FCCStyle
 import ROOT
+
 
 def main():
     parser = argparse.ArgumentParser(description='Material Plotter')
