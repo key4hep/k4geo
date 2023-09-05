@@ -9,8 +9,7 @@ xml=$1 # Give xml detector file as input argument!
 echo "Running on xml file $xml"
 
 if [[ -n "$xml" ]]; then # test to see if not empty
-    chmod u+x ${script_folder}/../utils/dd4hep2root
-    ${script_folder}/../utils/dd4hep2root -c ${xml} -o detector_dd4hep2root.root
+    python ${script_folder}/../utils/dd4hep2root.py -c ${xml} -o detector_dd4hep2root.root
 else
     echo "argument error, please provide an xml file as input argument!"
 fi
