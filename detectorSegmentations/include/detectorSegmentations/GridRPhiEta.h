@@ -2,12 +2,12 @@
 #define DETSEGMENTATION_GRIDRPHIETA_H
 
 // FCCSW
-#include "detectorSegmentations/FCCSWGridPhiEta.h"
+#include "detectorSegmentations/FCCSWGridPhiEta_k4geo.h"
 
 /** GridRPhiEta Detector/detectorSegmentations/detectorSegmentations/GridRPhiEta.h GridRPhiEta.h
  *
  *  Segmentation in R, eta and phi.
- *  Based on FCCSWGridPhiEta, addition of radial coordinate.
+ *  Based on FCCSWGridPhiEta_k4geo, addition of radial coordinate.
  *  This segmentation returns global position of the cell based on the cellID.
  *
  *  @author    Anna Zaborowska
@@ -15,7 +15,7 @@
 
 namespace dd4hep {
 namespace DDSegmentation {
-class GridRPhiEta : public FCCSWGridPhiEta {
+class GridRPhiEta : public FCCSWGridPhiEta_k4geo {
 public:
   /// default constructor using an arbitrary type
   GridRPhiEta(const std::string& aCellEncoding);
