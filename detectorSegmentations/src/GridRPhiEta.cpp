@@ -4,24 +4,24 @@ namespace dd4hep {
 namespace DDSegmentation {
 
 /// default constructor using an encoding string
-GridRPhiEta::GridRPhiEta(const std::string& cellEncoding) : FCCSWGridPhiEta(cellEncoding) {
+GridRPhiEta::GridRPhiEta(const std::string& cellEncoding) : FCCSWGridPhiEta_k4geo(cellEncoding) {
   // define type and description
   _type = "GridRPhiEta";
   _description = "R-phi-eta segmentation in the global coordinates";
 
-  // register all necessary parameters (additional to those registered in FCCSWGridPhiEta)
+  // register all necessary parameters (additional to those registered in FCCSWGridPhiEta_k4geo)
   registerParameter("grid_size_r", "Cell size in radial distance", m_gridSizeR, 1., SegmentationParameter::LengthUnit);
   registerParameter("offset_r", "Angular offset in radial distance", m_offsetR, 0., SegmentationParameter::LengthUnit,
                     true);
   registerIdentifier("identifier_r", "Cell ID identifier for R", m_rID, "r");
 }
 
-GridRPhiEta::GridRPhiEta(const BitFieldCoder* decoder) : FCCSWGridPhiEta(decoder) {
+GridRPhiEta::GridRPhiEta(const BitFieldCoder* decoder) : FCCSWGridPhiEta_k4geo(decoder) {
   // define type and description
   _type = "GridRPhiEta";
   _description = "R-phi-eta segmentation in the global coordinates";
 
-  // register all necessary parameters (additional to those registered in FCCSWGridPhiEta)
+  // register all necessary parameters (additional to those registered in FCCSWGridPhiEta_k4geo)
   registerParameter("grid_size_r", "Cell size in radial distance", m_gridSizeR, 1., SegmentationParameter::LengthUnit);
   registerParameter("offset_r", "Angular offset in radial distance", m_offsetR, 0., SegmentationParameter::LengthUnit,
                     true);
