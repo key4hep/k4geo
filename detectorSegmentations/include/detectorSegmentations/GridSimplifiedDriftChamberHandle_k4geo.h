@@ -23,12 +23,12 @@ template <typename T>
 class SegmentationWrapper;
 
 /// We need some abbreviation to make the code more readable.
-typedef Handle<SegmentationWrapper<DDSegmentation::GridSimplifiedDriftChamber>> GridSimplifiedDriftChamberHandle;
+typedef Handle<SegmentationWrapper<DDSegmentation::GridSimplifiedDriftChamber>> GridSimplifiedDriftChamberHandle_k4geo;
 
-class GridSimplifiedDriftChamber : public GridSimplifiedDriftChamberHandle {
+class GridSimplifiedDriftChamber : public GridSimplifiedDriftChamberHandle_k4geo {
 public:
   /// Defintiion of the basic handled object
-  typedef GridSimplifiedDriftChamberHandle::Object object;
+  typedef GridSimplifiedDriftChamberHandle_k4geo::Object object;
 
 public:
   /// Default constructor
