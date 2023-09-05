@@ -20,7 +20,7 @@ template <typename T>
 class SegmentationWrapper;
 
 /// We need some abbreviation to make the code more readable.
-typedef Handle<SegmentationWrapper<DDSegmentation::GridEta_k4geo>> GridEtaHandle;
+typedef Handle<SegmentationWrapper<DDSegmentation::GridEta_k4geo>> GridEtaHandle_k4geo;
 
 /// Implementation class for the grid phi-eta segmentation.
 /**
@@ -42,10 +42,10 @@ typedef Handle<SegmentationWrapper<DDSegmentation::GridEta_k4geo>> GridEtaHandle
  *  \author  A. Zaborowska
  *  \version 1.0
  */
-class GridEta_k4geo : public GridEtaHandle {
+class GridEta_k4geo : public GridEtaHandle_k4geo {
 public:
   /// Defintiion of the basic handled object
-  typedef GridEtaHandle::Object Object;
+  typedef GridEtaHandle_k4geo::Object Object;
 
 public:
   /// Default constructor
