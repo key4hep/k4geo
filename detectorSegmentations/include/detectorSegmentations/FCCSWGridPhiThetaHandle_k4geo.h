@@ -20,7 +20,7 @@ template <typename T>
 class SegmentationWrapper;
 
 /// We need some abbreviation to make the code more readable.
-typedef Handle<SegmentationWrapper<DDSegmentation::FCCSWGridPhiTheta_k4geo>> FCCSWGridPhiThetaHandle;
+typedef Handle<SegmentationWrapper<DDSegmentation::FCCSWGridPhiTheta_k4geo>> FCCSWGridPhiThetaHandle_k4geo;
 
 /// Implementation class for the grid phi-theta segmentation.
 /**
@@ -40,10 +40,10 @@ typedef Handle<SegmentationWrapper<DDSegmentation::FCCSWGridPhiTheta_k4geo>> FCC
  *  conveniance reasons instantiated in DD4hep/src/Segmentations.cpp.
  *
  */
-class FCCSWGridPhiTheta_k4geo : public FCCSWGridPhiThetaHandle {
+class FCCSWGridPhiTheta_k4geo : public FCCSWGridPhiThetaHandle_k4geo {
 public:
   /// Defintiion of the basic handled object
-  typedef FCCSWGridPhiThetaHandle::Object Object;
+  typedef FCCSWGridPhiThetaHandle_k4geo::Object Object;
 
 public:
   /// Default constructor
