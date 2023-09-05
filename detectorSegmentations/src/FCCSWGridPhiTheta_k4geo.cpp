@@ -1,12 +1,12 @@
-#include "detectorSegmentations/FCCSWGridPhiTheta.h"
+#include "detectorSegmentations/FCCSWGridPhiTheta_k4geo.h"
 
 namespace dd4hep {
 namespace DDSegmentation {
 
 /// default constructor using an encoding string
-FCCSWGridPhiTheta::FCCSWGridPhiTheta(const std::string& cellEncoding) : GridTheta_k4geo(cellEncoding) {
+FCCSWGridPhiTheta_k4geo::FCCSWGridPhiTheta_k4geo(const std::string& cellEncoding) : GridTheta_k4geo(cellEncoding) {
   // define type and description
-  _type = "FCCSWGridPhiTheta";
+  _type = "FCCSWGridPhiTheta_k4geo";
   _description = "Phi-theta segmentation in the global coordinates";
 
   // register all necessary parameters (additional to those registered in GridTheta_k4geo)
@@ -15,9 +15,9 @@ FCCSWGridPhiTheta::FCCSWGridPhiTheta(const std::string& cellEncoding) : GridThet
   registerIdentifier("identifier_phi", "Cell ID identifier for phi", m_phiID, "phi");
 }
 
-FCCSWGridPhiTheta::FCCSWGridPhiTheta(const BitFieldCoder* decoder) : GridTheta_k4geo(decoder) {
+FCCSWGridPhiTheta_k4geo::FCCSWGridPhiTheta_k4geo(const BitFieldCoder* decoder) : GridTheta_k4geo(decoder) {
   // define type and description
-  _type = "FCCSWGridPhiTheta";
+  _type = "FCCSWGridPhiTheta_k4geo";
   _description = "Phi-theta segmentation in the global coordinates";
 
   // register all necessary parameters (additional to those registered in GridTheta_k4geo)
@@ -27,12 +27,12 @@ FCCSWGridPhiTheta::FCCSWGridPhiTheta(const BitFieldCoder* decoder) : GridTheta_k
 }
 
 /// determine the local based on the cell ID
-Vector3D FCCSWGridPhiTheta::position(const CellID& cID) const {
+Vector3D FCCSWGridPhiTheta_k4geo::position(const CellID& cID) const {
   return positionFromRThetaPhi(1.0, theta(cID), phi(cID));
 }
 
 /// determine the cell ID based on the position
-CellID FCCSWGridPhiTheta::cellID(const Vector3D& /* localPosition */, const Vector3D& globalPosition,
+CellID FCCSWGridPhiTheta_k4geo::cellID(const Vector3D& /* localPosition */, const Vector3D& globalPosition,
                           const VolumeID& vID) const {
   CellID cID = vID;
   double lTheta = thetaFromXYZ(globalPosition);
@@ -43,13 +43,13 @@ CellID FCCSWGridPhiTheta::cellID(const Vector3D& /* localPosition */, const Vect
 }
 
 /// determine the azimuthal angle phi based on the current cell ID
-//double FCCSWGridPhiTheta::phi() const {
+//double FCCSWGridPhiTheta_k4geo::phi() const {
 //  CellID phiValue = (*_decoder)[m_phiID].value();
 //  return binToPosition(phiValue, 2. * M_PI / (double)m_phiBins, m_offsetPhi);
 //}
 
 /// determine the azimuthal angle phi based on the cell ID
-double FCCSWGridPhiTheta::phi(const CellID& cID) const {
+double FCCSWGridPhiTheta_k4geo::phi(const CellID& cID) const {
   CellID phiValue = _decoder->get(cID, m_phiID);
   return binToPosition(phiValue, 2. * M_PI / (double)m_phiBins, m_offsetPhi);
 }

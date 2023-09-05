@@ -14,8 +14,8 @@ DECLARE_SEGMENTATION(GridEta_k4geo, create_segmentation<dd4hep::DDSegmentation::
 #include "detectorSegmentations/GridTheta_k4geo.h"
 DECLARE_SEGMENTATION(GridTheta_k4geo, create_segmentation<dd4hep::DDSegmentation::GridTheta_k4geo>)
 
-#include "detectorSegmentations/FCCSWGridPhiTheta.h"
-DECLARE_SEGMENTATION(FCCSWGridPhiTheta, create_segmentation<dd4hep::DDSegmentation::FCCSWGridPhiTheta>)
+#include "detectorSegmentations/FCCSWGridPhiTheta_k4geo.h"
+DECLARE_SEGMENTATION(FCCSWGridPhiTheta_k4geo, create_segmentation<dd4hep::DDSegmentation::FCCSWGridPhiTheta_k4geo>)
 
 #include "detectorSegmentations/FCCSWGridPhiEta_k4geo.h"
 DECLARE_SEGMENTATION(FCCSWGridPhiEta_k4geo, create_segmentation<dd4hep::DDSegmentation::FCCSWGridPhiEta_k4geo>)

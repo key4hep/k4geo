@@ -4,7 +4,7 @@
 // FCCSW
 #include "detectorSegmentations/GridTheta_k4geo.h"
 
-/** FCCSWGridPhiTheta Detector/detectorSegmentations/detectorSegmentations/FCCSWGridPhiTheta.h FCCSWGridPhiTheta.h
+/** FCCSWGridPhiTheta_k4geo Detector/detectorSegmentations/detectorSegmentations/FCCSWGridPhiTheta_k4geo.h FCCSWGridPhiTheta_k4geo.h
  *
  *  Segmentation in theta and phi.
  *  Based on GridTheta_k4geo, addition of azimuthal angle coordinate.
@@ -13,15 +13,15 @@
 
 namespace dd4hep {
 namespace DDSegmentation {
-class FCCSWGridPhiTheta : public GridTheta_k4geo {
+class FCCSWGridPhiTheta_k4geo : public GridTheta_k4geo {
 public:
   /// default constructor using an arbitrary type
-  FCCSWGridPhiTheta(const std::string& aCellEncoding);
+  FCCSWGridPhiTheta_k4geo(const std::string& aCellEncoding);
   /// Default constructor used by derived classes passing an existing decoder
-  FCCSWGridPhiTheta(const BitFieldCoder* decoder);
+  FCCSWGridPhiTheta_k4geo(const BitFieldCoder* decoder);
 
   /// destructor
-  virtual ~FCCSWGridPhiTheta() = default;
+  virtual ~FCCSWGridPhiTheta_k4geo() = default;
 
   /**  Determine the global position based on the cell ID.
    *   @warning This segmentation has no knowledge of radius, so radius = 1 is taken into calculations.
