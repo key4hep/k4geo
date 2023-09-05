@@ -1,7 +1,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
 #include "DDSegmentation/Segmentation.h"
-#include "detectorSegmentations/GridSimplifiedDriftChamber.h"
+#include "detectorSegmentations/GridSimplifiedDriftChamber_k4geo.h"
 #include "XML/Utilities.h"
 #include "XML/XMLElements.h"
 
@@ -40,7 +40,7 @@ static dd4hep::Ref_t createParamSimplifiedDriftChamber(dd4hep::Detector& theDete
   dd4hep::Segmentation geomseg = readout.segmentation();
   dd4hep::Segmentation* _geoSeg = &geomseg;
 
-  auto DCHseg = dynamic_cast<dd4hep::DDSegmentation::GridSimplifiedDriftChamber*>(_geoSeg->segmentation());
+  auto DCHseg = dynamic_cast<dd4hep::DDSegmentation::GridSimplifiedDriftChamber_k4geo*>(_geoSeg->segmentation());
 
   dd4hep::Tube envelopeVol(detectorDim.rmin(), detectorDim.rmax(), detectorDim.dz());
   dd4hep::Volume envelopeVolume;
