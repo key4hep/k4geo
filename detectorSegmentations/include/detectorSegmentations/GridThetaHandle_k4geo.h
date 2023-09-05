@@ -20,7 +20,7 @@ template <typename T>
 class SegmentationWrapper;
 
 /// We need some abbreviation to make the code more readable.
-typedef Handle<SegmentationWrapper<DDSegmentation::GridTheta_k4geo>> GridThetaHandle;
+typedef Handle<SegmentationWrapper<DDSegmentation::GridTheta_k4geo>> GridThetaHandle_k4geo;
 
 /// Implementation class for the grid phi-theta segmentation.
 /**
@@ -42,10 +42,10 @@ typedef Handle<SegmentationWrapper<DDSegmentation::GridTheta_k4geo>> GridThetaHa
  *  \author  A. Zaborowska
  *  \version 1.0
  */
-class GridTheta_k4geo : public GridThetaHandle {
+class GridTheta_k4geo : public GridThetaHandle_k4geo {
 public:
   /// Defintiion of the basic handled object
-  typedef GridThetaHandle::Object Object;
+  typedef GridThetaHandle_k4geo::Object Object;
 
 public:
   /// Default constructor
