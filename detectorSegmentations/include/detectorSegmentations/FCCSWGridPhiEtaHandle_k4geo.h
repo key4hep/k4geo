@@ -20,7 +20,7 @@ template <typename T>
 class SegmentationWrapper;
 
 /// We need some abbreviation to make the code more readable.
-typedef Handle<SegmentationWrapper<DDSegmentation::FCCSWGridPhiEta_k4geo>> FCCSWGridPhiEtaHandle;
+typedef Handle<SegmentationWrapper<DDSegmentation::FCCSWGridPhiEta_k4geo>> FCCSWGridPhiEtaHandle_k4geo;
 
 /// Implementation class for the grid phi-eta segmentation.
 /**
@@ -42,10 +42,10 @@ typedef Handle<SegmentationWrapper<DDSegmentation::FCCSWGridPhiEta_k4geo>> FCCSW
  *  \author  A. Zaborowska
  *  \version 1.0
  */
-class FCCSWGridPhiEta_k4geo : public FCCSWGridPhiEtaHandle {
+class FCCSWGridPhiEta_k4geo : public FCCSWGridPhiEtaHandle_k4geo {
 public:
   /// Defintiion of the basic handled object
-  typedef FCCSWGridPhiEtaHandle::Object Object;
+  typedef FCCSWGridPhiEtaHandle_k4geo::Object Object;
 
 public:
   /// Default constructor
