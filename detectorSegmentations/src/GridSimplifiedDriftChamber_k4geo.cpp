@@ -1,13 +1,13 @@
-#include "detectorSegmentations/GridSimplifiedDriftChamber.h"
+#include "detectorSegmentations/GridSimplifiedDriftChamber_k4geo.h"
 #include "DD4hep/Factories.h"
 
 namespace dd4hep {
 namespace DDSegmentation {
 
 /// default constructor using an encoding string
-GridSimplifiedDriftChamber::GridSimplifiedDriftChamber(const std::string& cellEncoding) : Segmentation(cellEncoding) {
+GridSimplifiedDriftChamber_k4geo::GridSimplifiedDriftChamber_k4geo(const std::string& cellEncoding) : Segmentation(cellEncoding) {
   // define type and description
-  _type = "GridSimplifiedDriftChamber";
+  _type = "GridSimplifiedDriftChamber_k4geo";
   _description = "Drift chamber segmentation in the global coordinates";
 
   registerParameter("inner_radius", "Inner radius of the detector", m_innerRadius, 0.,
@@ -18,9 +18,9 @@ GridSimplifiedDriftChamber::GridSimplifiedDriftChamber(const std::string& cellEn
   registerIdentifier("identifier_phi", "Cell ID identifier for phi", m_phiID, "phi");
 }
 
-GridSimplifiedDriftChamber::GridSimplifiedDriftChamber(const BitFieldCoder* decoder) : Segmentation(decoder) {
+GridSimplifiedDriftChamber_k4geo::GridSimplifiedDriftChamber_k4geo(const BitFieldCoder* decoder) : Segmentation(decoder) {
   // define type and description
-  _type = "GridSimplifiedDriftChamber";
+  _type = "GridSimplifiedDriftChamber_k4geo";
   _description = "Drift chamber segmentation in the global coordinates";
 
   registerParameter("inner_radius", "Inner radius of the detector", m_innerRadius, 1.,
@@ -32,12 +32,12 @@ GridSimplifiedDriftChamber::GridSimplifiedDriftChamber(const BitFieldCoder* deco
   registerIdentifier("identifier_phi", "Cell ID identifier for phi", m_phiID, "phi");
 }
 
-Vector3D GridSimplifiedDriftChamber::position(const CellID& /*cID*/) const {  //// ???? TODO
+Vector3D GridSimplifiedDriftChamber_k4geo::position(const CellID& /*cID*/) const {  //// ???? TODO
   Vector3D cellPosition = {0, 0, 0};
   return cellPosition;
 }
 
-CellID GridSimplifiedDriftChamber::cellID(const Vector3D& /*localPosition*/, const Vector3D& globalPosition,
+CellID GridSimplifiedDriftChamber_k4geo::cellID(const Vector3D& /*localPosition*/, const Vector3D& globalPosition,
                                 const VolumeID& vID) const {
 
   CellID cID = vID;
@@ -57,13 +57,13 @@ CellID GridSimplifiedDriftChamber::cellID(const Vector3D& /*localPosition*/, con
   return cID;
 }
 
-double GridSimplifiedDriftChamber::phi(const CellID& cID) const {
+double GridSimplifiedDriftChamber_k4geo::phi(const CellID& cID) const {
   CellID phiValue = _decoder->get(cID, m_phiID);
   return binToPosition(phiValue, _currentGridSizePhi, m_offsetPhi);
 }
 
 // Distance between a particle track and a wire
-double GridSimplifiedDriftChamber::distanceTrackWire(const CellID& cID, const TVector3& hit_start,
+double GridSimplifiedDriftChamber_k4geo::distanceTrackWire(const CellID& cID, const TVector3& hit_start,
                                            const TVector3& hit_end) const {
   auto layerIndex = _decoder->get(cID, "layer");
   updateParams(layerIndex);
@@ -92,7 +92,7 @@ double GridSimplifiedDriftChamber::distanceTrackWire(const CellID& cID, const TV
   return DCA;
 }
 
-TVector3 GridSimplifiedDriftChamber::Line_TrackWire(const CellID& cID, const TVector3& hit_start, const TVector3& hit_end) const {
+TVector3 GridSimplifiedDriftChamber_k4geo::Line_TrackWire(const CellID& cID, const TVector3& hit_start, const TVector3& hit_end) const {
   // The line connecting a particle track to the closest wire
   // Returns the vector connecting the both
   auto layerIndex = _decoder->get(cID, "layer");
@@ -113,7 +113,7 @@ TVector3 GridSimplifiedDriftChamber::Line_TrackWire(const CellID& cID, const TVe
   return intersect;
 }
 
-TVector3 GridSimplifiedDriftChamber::distanceClosestApproach(const CellID& cID, const TVector3& hitPos) const {
+TVector3 GridSimplifiedDriftChamber_k4geo::distanceClosestApproach(const CellID& cID, const TVector3& hitPos) const {
   // Distance of the closest approach between a single hit (point) and the closest wire
 
   auto layerIndex = _decoder->get(cID, "layer");
@@ -140,7 +140,7 @@ TVector3 GridSimplifiedDriftChamber::distanceClosestApproach(const CellID& cID, 
 }
 
 // Get the wire position for a z
-TVector3 GridSimplifiedDriftChamber::wirePos_vs_z(const CellID& cID, const double& zpos) const {
+TVector3 GridSimplifiedDriftChamber_k4geo::wirePos_vs_z(const CellID& cID, const double& zpos) const {
   auto layerIndex = _decoder->get(cID, "layer");
   updateParams(layerIndex);
 
@@ -158,7 +158,7 @@ TVector3 GridSimplifiedDriftChamber::wirePos_vs_z(const CellID& cID, const doubl
   return wireCoord;
 }
 
-TVector3 GridSimplifiedDriftChamber::IntersectionTrackWire(const CellID& cID, const TVector3& hit_start, const TVector3& hit_end) const {
+TVector3 GridSimplifiedDriftChamber_k4geo::IntersectionTrackWire(const CellID& cID, const TVector3& hit_start, const TVector3& hit_end) const {
   // Intersection between the particle track and the wire assuming that the track between hit_start and hit_end is linear
   auto layerIndex = _decoder->get(cID, "layer");
   updateParams(layerIndex);

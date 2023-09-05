@@ -7,7 +7,7 @@
 #include <cmath>
 #include <iostream>
 
-/** GridSimplifiedDriftChamber Detector/detectorSegmentations/detectorSegmentations/GridSimplifiedDriftChamber.h GridSimplifiedDriftChamber.h
+/** GridSimplifiedDriftChamber_k4geo Detector/detectorSegmentations/detectorSegmentations/GridSimplifiedDriftChamber_k4geo.h GridSimplifiedDriftChamber_k4geo.h
  *
  *  Segmentation for the simplified IDEA drift chamber.
  *
@@ -16,14 +16,14 @@
 
 namespace dd4hep {
 namespace DDSegmentation {
-class GridSimplifiedDriftChamber : public Segmentation {
+class GridSimplifiedDriftChamber_k4geo : public Segmentation {
 public:
   /// default constructor using an arbitrary type
-  GridSimplifiedDriftChamber(const std::string& aCellEncoding);
+  GridSimplifiedDriftChamber_k4geo(const std::string& aCellEncoding);
   /// Default constructor used by derived classes passing an existing decoder
-  GridSimplifiedDriftChamber(const BitFieldCoder* decoder);
+  GridSimplifiedDriftChamber_k4geo(const BitFieldCoder* decoder);
   /// destructor
-  virtual ~GridSimplifiedDriftChamber() = default;
+  virtual ~GridSimplifiedDriftChamber_k4geo() = default;
 
   virtual Vector3D position(const CellID& aCellID) const;
   virtual CellID cellID(const Vector3D& aLocalPosition, const Vector3D& aGlobalPosition,

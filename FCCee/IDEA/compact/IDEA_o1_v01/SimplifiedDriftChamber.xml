@@ -38,7 +38,7 @@
   <!--  Definition of the readout segmentation/definition  -->
   <readouts>
     <readout name="SimplifiedDriftChamberCollection">
-      <segmentation type="GridSimplifiedDriftChamber" inner_radius="innerRadius" cell_size="12*mm" detector_length="detectorLength" offset_phi="0" identifier_phi="phi"/>
+      <segmentation type="GridSimplifiedDriftChamber_k4geo" inner_radius="innerRadius" cell_size="12*mm" detector_length="detectorLength" offset_phi="0" identifier_phi="phi"/>
       <id>${GlobalTrackerReadoutID_DCH}</id>
     </readout>
   </readouts>

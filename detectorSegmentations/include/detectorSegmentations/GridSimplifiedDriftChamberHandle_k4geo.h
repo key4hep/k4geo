@@ -2,7 +2,7 @@
 #define DD4HEP_DDCORE_GRIDSIMPLIFIEDDRIFTCHAMBER_H 1
 
 // FCCSW
-#include "detectorSegmentations/GridSimplifiedDriftChamber.h"
+#include "detectorSegmentations/GridSimplifiedDriftChamber_k4geo.h"
 
 // DD4hep
 #include "DD4hep/Segmentations.h"
@@ -23,29 +23,29 @@ template <typename T>
 class SegmentationWrapper;
 
 /// We need some abbreviation to make the code more readable.
-typedef Handle<SegmentationWrapper<DDSegmentation::GridSimplifiedDriftChamber>> GridSimplifiedDriftChamberHandle_k4geo;
+typedef Handle<SegmentationWrapper<DDSegmentation::GridSimplifiedDriftChamber_k4geo>> GridSimplifiedDriftChamberHandle_k4geo;
 
-class GridSimplifiedDriftChamber : public GridSimplifiedDriftChamberHandle_k4geo {
+class GridSimplifiedDriftChamber_k4geo : public GridSimplifiedDriftChamberHandle_k4geo {
 public:
   /// Defintiion of the basic handled object
   typedef GridSimplifiedDriftChamberHandle_k4geo::Object object;
 
 public:
   /// Default constructor
-  GridSimplifiedDriftChamber() = default;
+  GridSimplifiedDriftChamber_k4geo() = default;
   /// Copy constructor
-  GridSimplifiedDriftChamber(const GridSimplifiedDriftChamber& e) = default;
+  GridSimplifiedDriftChamber_k4geo(const GridSimplifiedDriftChamber_k4geo& e) = default;
   /// Copy Constructor from segmentation base object
-  GridSimplifiedDriftChamber(const Segmentation& e) : Handle<Object>(e) {}
+  GridSimplifiedDriftChamber_k4geo(const Segmentation& e) : Handle<Object>(e) {}
   /// Copy constructor from handle
-  GridSimplifiedDriftChamber(const Handle<Object>& e) : Handle<Object>(e) {}
+  GridSimplifiedDriftChamber_k4geo(const Handle<Object>& e) : Handle<Object>(e) {}
   /// Copy constructor from other polymorph/equivalent handle
   template <typename Q>
-  GridSimplifiedDriftChamber(const Handle<Q>& e) : Handle<Object>(e) {}
+  GridSimplifiedDriftChamber_k4geo(const Handle<Q>& e) : Handle<Object>(e) {}
   /// Assignment operator
-  GridSimplifiedDriftChamber& operator=(const GridSimplifiedDriftChamber& seg) = default;
+  GridSimplifiedDriftChamber_k4geo& operator=(const GridSimplifiedDriftChamber_k4geo& seg) = default;
   /// Equality operator
-  bool operator==(const GridSimplifiedDriftChamber& seg) const { return m_element == seg.m_element; }
+  bool operator==(const GridSimplifiedDriftChamber_k4geo& seg) const { return m_element == seg.m_element; }
   /// determine the position based on the cell ID
   inline Position position(const CellID& id) const { return Position(access()->implementation->position(id)); }
 
