@@ -7,7 +7,7 @@
 #include "TVector3.h"
 #include <cmath>
 
-/** GridTheta Detector/detectorSegmentations/detectorSegmentations/GridTheta.h GridTheta.h
+/** GridTheta_k4geo Detector/detectorSegmentations/detectorSegmentations/GridTheta_k4geo.h GridTheta_k4geo.h
  *
  *  Segmentation in theta.
  *
@@ -15,14 +15,14 @@
 
 namespace dd4hep {
 namespace DDSegmentation {
-class GridTheta : public Segmentation {
+class GridTheta_k4geo : public Segmentation {
 public:
   /// default constructor using an arbitrary type
-  GridTheta(const std::string& aCellEncoding);
+  GridTheta_k4geo(const std::string& aCellEncoding);
   /// Default constructor used by derived classes passing an existing decoder
-  GridTheta(const BitFieldCoder* decoder);
+  GridTheta_k4geo(const BitFieldCoder* decoder);
   /// destructor
-  virtual ~GridTheta() = default;
+  virtual ~GridTheta_k4geo() = default;
 
   /**  Determine the global position based on the cell ID.
    *   @warning This segmentation has no knowledge of radius, so radius = 1 is taken into calculations.

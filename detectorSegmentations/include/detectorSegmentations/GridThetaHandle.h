@@ -2,7 +2,7 @@
 #define DD4HEP_DDCORE_GRIDTHETA_H 1
 
 // FCCSW
-#include "detectorSegmentations/GridTheta.h"
+#include "detectorSegmentations/GridTheta_k4geo.h"
 
 // DD4hep
 #include "DD4hep/Segmentations.h"
@@ -20,7 +20,7 @@ template <typename T>
 class SegmentationWrapper;
 
 /// We need some abbreviation to make the code more readable.
-typedef Handle<SegmentationWrapper<DDSegmentation::GridTheta>> GridThetaHandle;
+typedef Handle<SegmentationWrapper<DDSegmentation::GridTheta_k4geo>> GridThetaHandle;
 
 /// Implementation class for the grid phi-theta segmentation.
 /**
@@ -42,27 +42,27 @@ typedef Handle<SegmentationWrapper<DDSegmentation::GridTheta>> GridThetaHandle;
  *  \author  A. Zaborowska
  *  \version 1.0
  */
-class GridTheta : public GridThetaHandle {
+class GridTheta_k4geo : public GridThetaHandle {
 public:
   /// Defintiion of the basic handled object
   typedef GridThetaHandle::Object Object;
 
 public:
   /// Default constructor
-  GridTheta() = default;
+  GridTheta_k4geo() = default;
   /// Copy constructor
-  GridTheta(const GridTheta& e) = default;
+  GridTheta_k4geo(const GridTheta_k4geo& e) = default;
   /// Copy Constructor from segmentation base object
-  GridTheta(const Segmentation& e) : Handle<Object>(e) {}
+  GridTheta_k4geo(const Segmentation& e) : Handle<Object>(e) {}
   /// Copy constructor from handle
-  GridTheta(const Handle<Object>& e) : Handle<Object>(e) {}
+  GridTheta_k4geo(const Handle<Object>& e) : Handle<Object>(e) {}
   /// Copy constructor from other polymorph/equivalent handle
   template <typename Q>
-  GridTheta(const Handle<Q>& e) : Handle<Object>(e) {}
+  GridTheta_k4geo(const Handle<Q>& e) : Handle<Object>(e) {}
   /// Assignment operator
-  GridTheta& operator=(const GridTheta& seg) = default;
+  GridTheta_k4geo& operator=(const GridTheta_k4geo& seg) = default;
   /// Equality operator
-  bool operator==(const GridTheta& seg) const { return m_element == seg.m_element; }
+  bool operator==(const GridTheta_k4geo& seg) const { return m_element == seg.m_element; }
   /// determine the position based on the cell ID
   inline Position position(const CellID& id) const { return Position(access()->implementation->position(id)); }
 
