@@ -1,12 +1,12 @@
-#include "detectorSegmentations/GridRPhiEta.h"
+#include "detectorSegmentations/GridRPhiEta_k4geo.h"
 
 namespace dd4hep {
 namespace DDSegmentation {
 
 /// default constructor using an encoding string
-GridRPhiEta::GridRPhiEta(const std::string& cellEncoding) : FCCSWGridPhiEta_k4geo(cellEncoding) {
+GridRPhiEta_k4geo::GridRPhiEta_k4geo(const std::string& cellEncoding) : FCCSWGridPhiEta_k4geo(cellEncoding) {
   // define type and description
-  _type = "GridRPhiEta";
+  _type = "GridRPhiEta_k4geo";
   _description = "R-phi-eta segmentation in the global coordinates";
 
   // register all necessary parameters (additional to those registered in FCCSWGridPhiEta_k4geo)
@@ -16,9 +16,9 @@ GridRPhiEta::GridRPhiEta(const std::string& cellEncoding) : FCCSWGridPhiEta_k4ge
   registerIdentifier("identifier_r", "Cell ID identifier for R", m_rID, "r");
 }
 
-GridRPhiEta::GridRPhiEta(const BitFieldCoder* decoder) : FCCSWGridPhiEta_k4geo(decoder) {
+GridRPhiEta_k4geo::GridRPhiEta_k4geo(const BitFieldCoder* decoder) : FCCSWGridPhiEta_k4geo(decoder) {
   // define type and description
-  _type = "GridRPhiEta";
+  _type = "GridRPhiEta_k4geo";
   _description = "R-phi-eta segmentation in the global coordinates";
 
   // register all necessary parameters (additional to those registered in FCCSWGridPhiEta_k4geo)
@@ -29,12 +29,12 @@ GridRPhiEta::GridRPhiEta(const BitFieldCoder* decoder) : FCCSWGridPhiEta_k4geo(d
 }
 
 /// determine the local based on the cell ID
-Vector3D GridRPhiEta::position(const CellID& cID) const {
+Vector3D GridRPhiEta_k4geo::position(const CellID& cID) const {
   return positionFromREtaPhi(r(cID), eta(cID), phi(cID));
 }
 
 /// determine the cell ID based on the position
-CellID GridRPhiEta::cellID(const Vector3D& /* localPosition */, const Vector3D& globalPosition,
+CellID GridRPhiEta_k4geo::cellID(const Vector3D& /* localPosition */, const Vector3D& globalPosition,
                            const VolumeID& vID) const {
   CellID cID = vID;
   double lRadius = radiusFromXYZ(globalPosition);
@@ -47,13 +47,13 @@ CellID GridRPhiEta::cellID(const Vector3D& /* localPosition */, const Vector3D& 
 }
 
 /// determine the radial distance R based on the current cell ID
-//double GridRPhiEta::r() const {
+//double GridRPhiEta_k4geo::r() const {
 //  CellID rValue = (*_decoder)[m_rID].value();
 //  return binToPosition(rValue, m_gridSizeR, m_offsetR);
 //}
 
 /// determine the radial distance R based on the cell ID
-double GridRPhiEta::r(const CellID& cID) const {
+double GridRPhiEta_k4geo::r(const CellID& cID) const {
   CellID rValue = _decoder->get(cID, m_rID);
   return binToPosition(rValue, m_gridSizeR, m_offsetR);
 }

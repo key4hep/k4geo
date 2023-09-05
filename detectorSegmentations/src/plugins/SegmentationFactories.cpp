@@ -20,8 +20,8 @@ DECLARE_SEGMENTATION(FCCSWGridPhiTheta_k4geo, create_segmentation<dd4hep::DDSegm
 #include "detectorSegmentations/FCCSWGridPhiEta_k4geo.h"
 DECLARE_SEGMENTATION(FCCSWGridPhiEta_k4geo, create_segmentation<dd4hep::DDSegmentation::FCCSWGridPhiEta_k4geo>)
 
-#include "detectorSegmentations/GridRPhiEta.h"
-DECLARE_SEGMENTATION(GridRPhiEta, create_segmentation<dd4hep::DDSegmentation::GridRPhiEta>)
+#include "detectorSegmentations/GridRPhiEta_k4geo.h"
+DECLARE_SEGMENTATION(GridRPhiEta_k4geo, create_segmentation<dd4hep::DDSegmentation::GridRPhiEta_k4geo>)
 
 #include "detectorSegmentations/GridSimplifiedDriftChamber.h"
 DECLARE_SEGMENTATION(GridSimplifiedDriftChamber, create_segmentation<dd4hep::DDSegmentation::GridSimplifiedDriftChamber>)

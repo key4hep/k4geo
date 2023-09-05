@@ -2,7 +2,7 @@
 #define DD4HEP_DDCORE_GRIDRPHIETA_H 1
 
 // FCCSW
-#include "detectorSegmentations/GridRPhiEta.h"
+#include "detectorSegmentations/GridRPhiEta_k4geo.h"
 
 // DD4hep
 #include "DD4hep/Segmentations.h"
@@ -20,7 +20,7 @@ template <typename T>
 class SegmentationWrapper;
 
 /// We need some abbreviation to make the code more readable.
-typedef Handle<SegmentationWrapper<DDSegmentation::GridRPhiEta>> GridRPhiEtaHandle;
+typedef Handle<SegmentationWrapper<DDSegmentation::GridRPhiEta_k4geo>> GridRPhiEtaHandle;
 
 /// Implementation class for the grid phi-eta segmentation.
 /**
@@ -42,27 +42,27 @@ typedef Handle<SegmentationWrapper<DDSegmentation::GridRPhiEta>> GridRPhiEtaHand
  *  \author  A. Zaborowska
  *  \version 1.0
  */
-class GridRPhiEta : public GridRPhiEtaHandle {
+class GridRPhiEta_k4geo : public GridRPhiEtaHandle {
 public:
   /// Defintiion of the basic handled object
   typedef GridRPhiEtaHandle::Object Object;
 
 public:
   /// Default constructor
-  GridRPhiEta() = default;
+  GridRPhiEta_k4geo() = default;
   /// Copy constructor
-  GridRPhiEta(const GridRPhiEta& e) = default;
+  GridRPhiEta_k4geo(const GridRPhiEta_k4geo& e) = default;
   /// Copy Constructor from segmentation base object
-  GridRPhiEta(const Segmentation& e) : Handle<Object>(e) {}
+  GridRPhiEta_k4geo(const Segmentation& e) : Handle<Object>(e) {}
   /// Copy constructor from handle
-  GridRPhiEta(const Handle<Object>& e) : Handle<Object>(e) {}
+  GridRPhiEta_k4geo(const Handle<Object>& e) : Handle<Object>(e) {}
   /// Copy constructor from other polymorph/equivalent handle
   template <typename Q>
-  GridRPhiEta(const Handle<Q>& e) : Handle<Object>(e) {}
+  GridRPhiEta_k4geo(const Handle<Q>& e) : Handle<Object>(e) {}
   /// Assignment operator
-  GridRPhiEta& operator=(const GridRPhiEta& seg) = default;
+  GridRPhiEta_k4geo& operator=(const GridRPhiEta_k4geo& seg) = default;
   /// Equality operator
-  bool operator==(const GridRPhiEta& seg) const { return m_element == seg.m_element; }
+  bool operator==(const GridRPhiEta_k4geo& seg) const { return m_element == seg.m_element; }
   /// determine the position based on the cell ID
   inline Position position(const CellID& id) const { return Position(access()->implementation->position(id)); }
 
