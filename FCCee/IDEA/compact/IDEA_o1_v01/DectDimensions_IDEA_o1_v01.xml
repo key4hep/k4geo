@@ -145,6 +145,8 @@
     
     <constant name="CompSol_min_z" value="1230*mm"/>
 
+    <constant name="env_safety" value="0.1*mm"/>
+
     <constant name="LumiCal_max_z" value="1186.5*mm" />
     <constant name="LumiCal_min_z" value="1074*mm"/>
     
