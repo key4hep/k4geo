@@ -75,7 +75,7 @@ SET( test_name "test_IDEA_o1_v01" )
 ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
     ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o1_v01/FCCee_IDEA_o1_v01.xml --runType=batch -G -N=1 --outputFile=testIDEA_o1_v01.slcio )
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error")
-SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES)
+SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES TIMEOUT 240)
 
 #--------------------------------------------------
 # test for ARC o1 v01
