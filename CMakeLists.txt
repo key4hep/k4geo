@@ -18,6 +18,8 @@ set(CMAKE_MODULE_PATH  ${CMAKE_MODULE_PATH}  ${PROJECT_SOURCE_DIR}/cmake )
 set(LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
+cmake_policy(SET CMP0144 NEW)
+
 #------------- set the default installation directory to be the source directory
 
 IF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
