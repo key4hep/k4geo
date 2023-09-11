@@ -17,13 +17,15 @@
         <constant name="InnerTracker_Endcap_z_5" value="1775*mm" />
         <constant name="InnerTracker_Endcap_z_6" value="1990*mm" />
 
+        <!-- Along with the z position change we would need to adapt the inner radius accordingly
+             to stay close to the 150 mrad coverage -->
         <constant name="InnerTracker_Endcap_radius_0" value="79.5*mm" />
-        <constant name="InnerTracker_Endcap_radius_1" value="123.5*mm" />
-        <constant name="InnerTracker_Endcap_radius_2" value="165*mm" />
-        <constant name="InnerTracker_Endcap_radius_3" value="207.5*mm" />
-        <constant name="InnerTracker_Endcap_radius_4" value="249.5*mm" />
-        <constant name="InnerTracker_Endcap_radius_5" value="293*mm" />
-        <constant name="InnerTracker_Endcap_radius_6" value="330*mm" />
+        <constant name="InnerTracker_Endcap_radius_1" value="117*mm" />
+        <constant name="InnerTracker_Endcap_radius_2" value="154.6*mm" />
+        <constant name="InnerTracker_Endcap_radius_3" value="192.4*mm" />
+        <constant name="InnerTracker_Endcap_radius_4" value="230.1*mm" />
+        <constant name="InnerTracker_Endcap_radius_5" value="268*mm" />
+        <constant name="InnerTracker_Endcap_radius_6" value="300.5*mm" />
 
         <constant name="VertexCoolingGap" value="5*mm" />
         <constant name="VertexCoolingShellThickness" value="1*mm" />
