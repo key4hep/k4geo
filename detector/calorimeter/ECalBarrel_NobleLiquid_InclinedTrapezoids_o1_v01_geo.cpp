@@ -601,7 +601,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
 		caloLayer.inner_nInteractionLengths = value_of_lambda/2.0;
 		caloLayer.inner_thickness           = difference_bet_r1r2/2.0;
 
-      caloLayer.outer_nRadiationLengths   = value_of_x0;
+      caloLayer.outer_nRadiationLengths   = value_of_x0/2.0;
 	    caloLayer.outer_nInteractionLengths = value_of_lambda;
 	    caloLayer.outer_thickness           = difference_bet_r1r2/2;
 	    caloLayer.absorberThickness         = 2;
