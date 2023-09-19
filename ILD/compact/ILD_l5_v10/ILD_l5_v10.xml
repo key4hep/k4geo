@@ -69,9 +69,9 @@
   <include ref="../ILD_common_v02/LHCal01.xml"/>
   <include ref="../ILD_common_v02/BeamCal08.xml"/>
 
-  <include ref="Vertex_o4_v05.xml"/>
+  <include ref="VertexILD_o1_v00.xml"/>
 
-  <include ref="InnerTracker_o2_v06_02.xml"/>  
+  <include ref="InnerTrackerILD_o2_v01_00.xml"/>  
 
   <include ref="../ILD_common_v02/tpc10_01.xml"/>
 
