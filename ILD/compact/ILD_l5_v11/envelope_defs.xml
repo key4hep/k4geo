@@ -145,22 +145,26 @@
   <!-- following not needed since we remove FCAL for FCC model -->
 
   <!-- forward calorimeters -->
+<!--
   <constant name="COS_halfCrossingAngle"         value="cos(ILC_Main_Crossing_Angle/2. )" />
+-->
 
   <!-- The values are copied from dimensions in LHCal.xml -->
+<!--
   <constant name="LHCal_thickness"               value="top_LHCal_thickness"/>
   <constant name="LHCal_inner_radius"            value="top_LHCal_inner_radius"/>
   <constant name="LHCal_outer_radius"            value="top_LHCal_outer_radius"/>
   <constant name="LHCal_min_z"                   value="top_LHCal_min_z"/>
   <constant name="LHCal_max_z"                   value="LHCal_min_z+LHCal_thickness"/>
-
+-->
   <!-- BeamCal envelope is rotated according to the ILC_Main_Crossing_Angle -->
+<!--
   <constant name="BeamCal_thickness"             value="top_BeamCal_thickness"/>
   <constant name="BeamCal_inner_radius"          value="BCal_rInner"/>
   <constant name="BeamCal_outer_radius"          value="BCal_rOuter"/>
   <constant name="BeamCal_min_z"                 value="LHcal_zend + LHcal_BCal_clearance - top_BCal_dGraphite"/>
   <constant name="BeamCal_max_z"                 value="BeamCal_min_z + BeamCal_thickness"/>
-
+-->
 
   <constant name="Lcal_inner_radius" value="top_Lcal_inner_radius"/>
   <constant name="Lcal_z_begin" value="top_Lcal_z_begin"/>

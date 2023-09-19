@@ -26,5 +26,16 @@
       <fraction n="0.40" ref="Epoxy"/>
     </material>
 
+    <material name="AlBeMet162">
+      <D value="2.1" unit="g/cm3"/>
+      <fraction n="0.38" ref="Al"/>
+      <fraction n="0.62" ref="Be"/>
+    </material>
+
+    <material name="LiquidNDecane">
+      <D value="0.73" unit="g/cm3"/>
+      <composite n="10" ref="C" />
+      <composite n="22" ref="H" />
+    </material>
 
 </materials>

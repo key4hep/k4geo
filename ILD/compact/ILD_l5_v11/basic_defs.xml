@@ -21,8 +21,9 @@
   <constant name="DetID_LumiCalInstrumentation"  value="16"/>
   <constant name="DetID_LumiCalCooling"          value="17"/>
   <constant name="DetID_LumiCalBackShield"       value="18"/>
+<!-- no longer used
   <constant name="DetID_HOMAbsorber"             value="19"/>
-
+-->
 
   <constant name="ILDDetID_ECAL"         value=" 20"/>
   <constant name="ILDDetID_ECAL_PLUG"    value=" 21"/>
