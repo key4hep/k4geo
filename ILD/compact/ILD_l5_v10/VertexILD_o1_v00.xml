@@ -1,5 +1,6 @@
 <!-- Changes :
-   o4_v04 : scaled version of the CLIC VTX Barrel (CLIC_04_v11); distance between sensitive layers in double layers are set to 1*mm and is similar in all 3 layers
+     VertexILD_o1_v00: taken from Vertex_o4_v05.xml from the model FCCee_o2_v01 , adapted for MDI at ILC/ILD -  DJeans 2023/9/19
+     o4_v04 : scaled version of the CLIC VTX Barrel (CLIC_04_v11); distance between sensitive layers in double layers are set to 1*mm and is similar in all 3 layers
 -->
 
 <lccdd>
