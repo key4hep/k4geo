@@ -595,19 +595,20 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     double value_of_lambda = layerHeight[il] / nInteractionLengths;
     rad_first = rad_last;
     std::cout<<"The radiation length is "<<value_of_x0<<" and the interaction length is "<<value_of_lambda<<std::endl;
-    caloLayer.distance = 10;
-		caloLayer.sensitive_thickness       = 30 ;
-		caloLayer.inner_nRadiationLengths   = value_of_x0/2.0;
-		caloLayer.inner_nInteractionLengths = value_of_lambda/2.0;
-		caloLayer.inner_thickness           = difference_bet_r1r2/2.0;
+    caloLayer.distance = rad_first;
+    caloLayer.sensitive_thickness       = 30 ;
+    caloLayer.inner_nRadiationLengths   = value_of_x0/2.0;
+    caloLayer.inner_nInteractionLengths = value_of_lambda/2.0;
+    caloLayer.inner_thickness           = difference_bet_r1r2/2.0;
 
-      caloLayer.outer_nRadiationLengths   = value_of_x0/2.0;
-	    caloLayer.outer_nInteractionLengths = value_of_lambda;
-	    caloLayer.outer_thickness           = difference_bet_r1r2/2;
-	    caloLayer.absorberThickness         = 2;
-	    caloLayer.cellSize0 = 2;
-	    caloLayer.cellSize1 = 2;
+    caloLayer.outer_nRadiationLengths   = value_of_x0/2.0;
+    caloLayer.outer_nInteractionLengths = value_of_lambda;
+    caloLayer.outer_thickness           = difference_bet_r1r2/2;
+    caloLayer.absorberThickness         = 2;
+    caloLayer.cellSize0 = 2;
+    caloLayer.cellSize1 = 2;
   
+    caloData->layers.push_back(caloLayer);
   }
 
   
