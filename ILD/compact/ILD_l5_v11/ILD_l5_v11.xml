@@ -12,7 +12,6 @@
   <includes>
     <gdmlFile  ref="../ILD_common_v02/elements.xml"/>
     <gdmlFile  ref="../ILD_common_v02/materials.xml"/>
-    <gdmlFile  ref="FCCmats.xml"/>
   </includes>
 
   <define>
@@ -75,7 +74,7 @@
   <include ref="../ILD_common_v02/Yoke05_Barrel.xml"/>
   <include ref="../ILD_common_v02/Yoke06_Endcaps.xml"/>
   <include ref="../ILD_common_v02/coil03.xml"/>
-  <include ref="SServices00.xml"/>
+  <include ref="../ILD_common_v02/SServices01.xml"/>
 
   <plugins>
     <plugin name="DD4hepVolumeManager"/>
