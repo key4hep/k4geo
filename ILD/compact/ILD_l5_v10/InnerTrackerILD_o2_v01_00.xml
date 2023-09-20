@@ -206,7 +206,7 @@ adapted by DJeans to fit into ILD model at ILC
 
             <module name="InnerTrackerBarrelModule_01" vis="InnerTrackerModuleVis">
                 <module_envelope width="30.1*mm" length="30.1*mm"/>
-                <include ref="InnerTrackerBarrelModuleDown.xml"/>
+                <include ref="../ILD_common_v02/InnerTrackerBarrelModuleDown.xml"/>
             </module>
 
             <layer module="InnerTrackerBarrelModule_01" id="0" type="1" >
@@ -239,320 +239,320 @@ adapted by DJeans to fit into ILD model at ILC
 
             <module name="InnerTrackerEndcapModule_2x2_Out" vis="InnerTrackerModuleVis">
                 <trd x="30.2*mm" y="30.2*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_2x3_Out" vis="InnerTrackerModuleVis">
                 <trd x="30.2*mm" y="45.3*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_3x2_Out" vis="InnerTrackerModuleVis">
                 <trd x="45.3*mm" y="30.2*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_3x3_Out" vis="InnerTrackerModuleVis">
                 <trd x="45.3*mm" y="45.3*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_3x4_Out" vis="InnerTrackerModuleVis">
                 <trd x="45.3*mm" y="60.4*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_4x1_Out" vis="InnerTrackerModuleVis">
                 <trd x="60.4*mm" y="15.1*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_4x2_Out" vis="InnerTrackerModuleVis">
                 <trd x="60.4*mm" y="30.2*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_4x3_Out" vis="InnerTrackerModuleVis">
                 <trd x="60.4*mm" y="45.5*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_4x4_Out" vis="InnerTrackerModuleVis">
                 <trd x="60.4*mm" y="60.4*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x2_Out" vis="InnerTrackerModuleVis">
                 <trd x="75.5*mm" y="30.2*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x3_Out" vis="InnerTrackerModuleVis">
                 <trd x="75.5*mm" y="45.3*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x4_Out" vis="InnerTrackerModuleVis">
                 <trd x="75.5*mm" y="60.4*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x5_Out" vis="InnerTrackerModuleVis">
                 <trd x="75.5*mm" y="75.5*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_6x1_Out" vis="InnerTrackerModuleVis">
                 <trd x="90.6*mm" y="15.1*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_6x4_Out" vis="InnerTrackerModuleVis">
                 <trd x="90.6*mm" y="60.4*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x6_Out" vis="InnerTrackerModuleVis">
                 <trd x="75.5*mm" y="90.6*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x7_Out" vis="InnerTrackerModuleVis">
                 <trd x="75.5*mm" y="105.7*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x8_Out" vis="InnerTrackerModuleVis">
                 <trd x="75.5*mm" y="120.8*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_6x7_Out" vis="InnerTrackerModuleVis">
                 <trd x="90.6*mm" y="105.7*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_6x8_Out" vis="InnerTrackerModuleVis">
                 <trd x="90.6*mm" y="120.8*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_7x5_Out" vis="InnerTrackerModuleVis">
                 <trd x="105.7*mm" y="75.5*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_7x8_Out" vis="InnerTrackerModuleVis">
                 <trd x="105.7*mm" y="120.8*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_8x4_Out" vis="InnerTrackerModuleVis">
                 <trd x="120.8*mm" y="60.4*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_8x5_Out" vis="InnerTrackerModuleVis">
                 <trd x="120.8*mm" y="75.5*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_8x7_Out" vis="InnerTrackerModuleVis">
                 <trd x="120.8*mm" y="105.7*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_8x8_Out" vis="InnerTrackerModuleVis">
                 <trd x="120.8*mm" y="120.8*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_9x3_Out" vis="InnerTrackerModuleVis">
                 <trd x="135.9*mm" y="45.3*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_9x5_Out" vis="InnerTrackerModuleVis">
                 <trd x="135.9*mm" y="75.5*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_9x8_Out" vis="InnerTrackerModuleVis">
                 <trd x="135.9*mm" y="120.8*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_9x9_Out" vis="InnerTrackerModuleVis">
                 <trd x="135.9*mm" y="135.9*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_10x4_Out" vis="InnerTrackerModuleVis">
               <trd x="151*mm" y="60.4*mm"/>
-              <include ref="TrackerDiskModuleOut.xml"/>
+              <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_10x8_Out" vis="InnerTrackerModuleVis">
               <trd x="151*mm" y="120.8*mm"/>
-              <include ref="TrackerDiskModuleOut.xml"/>
+              <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_10x9_Out" vis="InnerTrackerModuleVis">
               <trd x="151*mm" y="135.9*mm"/>
-              <include ref="TrackerDiskModuleOut.xml"/>
+              <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_11x2_Out" vis="InnerTrackerModuleVis">
                 <trd x="166.1*mm" y="30.2*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_11x3_Out" vis="InnerTrackerModuleVis">
                 <trd x="166.1*mm" y="45.3*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_11x5_Out" vis="InnerTrackerModuleVis">
                 <trd x="166.1*mm" y="75.5*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_11x6_Out" vis="InnerTrackerModuleVis">
                 <trd x="166.1*mm" y="90.6*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_12x3_Out" vis="InnerTrackerModuleVis">
                 <trd x="181.2*mm" y="45.3*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_12x5_Out" vis="InnerTrackerModuleVis">
                 <trd x="181.2*mm" y="75.5*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_12x8_Out" vis="InnerTrackerModuleVis">
                 <trd x="181.2*mm" y="120.8*mm"/>
-                <include ref="TrackerDiskModuleOut.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleOut.xml"/>
             </module>
 
             <module name="InnerTrackerEndcapModule_2x2_In" vis="InnerTrackerModuleVis">
                 <trd x="30.2*mm" y="30.2*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_3x2_In" vis="InnerTrackerModuleVis">
                 <trd x="45.3*mm" y="30.2*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_3x3_In" vis="InnerTrackerModuleVis">
                 <trd x="45.3*mm" y="45.3*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_3x4_In" vis="InnerTrackerModuleVis">
                 <trd x="45.3*mm" y="60.4*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_4x1_In" vis="InnerTrackerModuleVis">
                 <trd x="60.4*mm" y="15.1*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_4x2_In" vis="InnerTrackerModuleVis">
                 <trd x="60.4*mm" y="30.2*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_4x3_In" vis="InnerTrackerModuleVis">
                 <trd x="60.4*mm" y="45.3*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_4x4_In" vis="InnerTrackerModuleVis">
                 <trd x="60.4*mm" y="60.4*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x2_In" vis="InnerTrackerModuleVis">
                 <trd x="75.5*mm" y="30.2*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x3_In" vis="InnerTrackerModuleVis">
                 <trd x="75.5*mm" y="45.3*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x4_In" vis="InnerTrackerModuleVis">
                 <trd x="75.5*mm" y="60.4*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x5_In" vis="InnerTrackerModuleVis">
                 <trd x="75.5*mm" y="75.5*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x6_In" vis="InnerTrackerModuleVis">
                 <trd x="75.5*mm" y="90.6*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x7_In" vis="InnerTrackerModuleVis">
                 <trd x="75.5*mm" y="105.7*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_5x8_In" vis="InnerTrackerModuleVis">
                 <trd x="75.5*mm" y="120.8*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_6x1_In" vis="InnerTrackerModuleVis">
                 <trd x="90.6*mm" y="15.1*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_6x4_In" vis="InnerTrackerModuleVis">
                 <trd x="90.6*mm" y="60.4*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_6x7_In" vis="InnerTrackerModuleVis">
                 <trd x="90.6*mm" y="105.7*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_6x8_In" vis="InnerTrackerModuleVis">
                 <trd x="90.6*mm" y="120.8*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_7x5_In" vis="InnerTrackerModuleVis">
                 <trd x="105.7*mm" y="75.5*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_7x8_In" vis="InnerTrackerModuleVis">
                 <trd x="105.7*mm" y="120.8*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_8x4_In" vis="InnerTrackerModuleVis">
                 <trd x="120.8*mm" y="60.4*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_8x5_In" vis="InnerTrackerModuleVis">
                 <trd x="120.8*mm" y="75.5*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_8x7_In" vis="InnerTrackerModuleVis">
                 <trd x="120.8*mm" y="105.7*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_8x8_In" vis="InnerTrackerModuleVis">
                 <trd x="120.8*mm" y="120.8*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_9x3_In" vis="InnerTrackerModuleVis">
                 <trd x="135.9*mm" y="45.3*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_9x5_In" vis="InnerTrackerModuleVis">
                 <trd x="135.9*mm" y="75.5*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_9x8_In" vis="InnerTrackerModuleVis">
                 <trd x="135.9*mm" y="120.8*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_9x9_In" vis="InnerTrackerModuleVis">
                 <trd x="135.9*mm" y="135.9*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_10x4_In" vis="InnerTrackerModuleVis">
               <trd x="151*mm" y="60.4*mm"/>
-              <include ref="TrackerDiskModuleIn.xml"/>
+              <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_10x8_In" vis="InnerTrackerModuleVis">
               <trd x="151*mm" y="120.8*mm"/>
-              <include ref="TrackerDiskModuleIn.xml"/>
+              <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_10x9_In" vis="InnerTrackerModuleVis">
               <trd x="151*mm" y="135.9*mm"/>
-              <include ref="TrackerDiskModuleIn.xml"/>
+              <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_11x2_In" vis="InnerTrackerModuleVis">
                 <trd x="166.1*mm" y="30.2*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_11x3_In" vis="InnerTrackerModuleVis">
                 <trd x="166.1*mm" y="45.3*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_11x5_In" vis="InnerTrackerModuleVis">
                 <trd x="166.1*mm" y="75.5*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_11x6_In" vis="InnerTrackerModuleVis">
                 <trd x="166.1*mm" y="90.6*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_12x3_In" vis="InnerTrackerModuleVis">
                 <trd x="181.2*mm" y="45.3*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_12x5_In" vis="InnerTrackerModuleVis">
                 <trd x="181.2*mm" y="75.5*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
             <module name="InnerTrackerEndcapModule_12x8_In" vis="InnerTrackerModuleVis">
                 <trd x="181.2*mm" y="120.8*mm"/>
-                <include ref="TrackerDiskModuleIn.xml"/>
+                <include ref="../ILD_common_v02/TrackerDiskModuleIn.xml"/>
             </module>
 
            <layer id="0">

@@ -26,6 +26,12 @@
   <D type="density" unit="g/cm3" value="2.699" />
   <composite n="1" ref="Al" />
  </material>
+ <material formula="Al" name="Aluminium" state="solid" >
+  <RL type="X0" unit="cm" value="8.89632" />
+  <NIL type="lambda" unit="cm" value="38.8766" />
+  <D type="density" unit="g/cm3" value="2.699" />
+  <composite n="1" ref="Al" />
+ </material>
  <element Z="95" formula="Am" name="Am" >
   <atom type="A" unit="g/mol" value="243.061" />
  </element>
