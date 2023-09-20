@@ -162,7 +162,6 @@
             <constant name="VTXOB_z2" value="(VTXOB_nModules2*VTXO_mod_z+(VTXOB_nModules2-1)*VTXOB_mod_z_spacing)/2.0"/>
             <constant name="VTXOB_r1" value="140*mm"/>
             <constant name="VTXOB_r2" value="315*mm"/>
-            <constant name="VTXOB_tilt" value="0.0*rad"/>  
 
             <constant name="VTXOB_support_thickness"                value="2.0*VTXO_support_Fleece_thickness+VTXO_support_CarbonFiber_thickness+VTXO_support_PaperGraphite_thickness"/>
             <constant name="VTXOB_Pipe_offset"                      value="21.18*mm/2.0"/>
@@ -207,10 +206,10 @@
             <id>${GlobalTrackerReadoutID}</id>
         </readout>
         <readout name="VTXOBCollection">
-            <id>${GlobalTrackerReadoutID}</id>
+            <id>${GlobalTrackerReadoutID_OB}</id>
         </readout>       
         <readout name="VTXDCollection">
-            <id>${GlobalTrackerReadoutID}</id>
+            <id>${GlobalTrackerReadoutID_Disk}</id>
         </readout>
     </readouts>
 
@@ -322,12 +321,12 @@
             </stave>
 
             <!-- Here we construct the barrel -->
-            <layer nLadders="VTXIB_L1_Staves" phi0="0.0" phi_tilt="0.0" r="VTXIB_r1" offset="VTXIB_L1_offset" id="0" nmodules="VTXIB_L1_nModules" name="SiVTXIBStave1" step="VTXIB_mod_z_spacing"/>
-            <layer nLadders="VTXIB_L2_Staves" phi0="0.0" phi_tilt="0.0" r="VTXIB_r2" offset="VTXIB_L2_offset" id="1" nmodules="VTXIB_L2_nModules" name="SiVTXIBStave2" step="VTXIB_mod_z_spacing"/>
-            <layer nLadders="VTXIB_L3_Staves/2.0" phi0="0.0" phi_tilt="0.0" r="VTXIB_r3_lowR_1" offset="VTXIB_L3_offset+VTXIB_mod_rphi/2.0"                                    id="2" nmodules="VTXIB_L3_nModules" name="SiVTXIBStave3_1" step="VTXIB_mod_z_spacing"/>
-            <layer nLadders="VTXIB_L3_Staves/2.0" phi0="0.0" phi_tilt="0.0" r="VTXIB_r3_lowR_2" offset="VTXIB_L3_offset+VTXIB_L3_overlap-VTXIB_mod_rphi/2.0" id="3" nmodules="VTXIB_L3_nModules" name="SiVTXIBStave3_2" step="VTXIB_mod_z_spacing"/>
-            <layer nLadders="VTXIB_L3_Staves/2.0" phi0="2*pi/VTXIB_L3_Staves*rad" phi_tilt="0.0" r="VTXIB_r3_highR_2" offset="VTXIB_L3_offset+VTXIB_mod_rphi/2.0"                                    id="4" nmodules="VTXIB_L3_nModules" name="SiVTXIBStave3_1" step="VTXIB_mod_z_spacing"/>
-            <layer nLadders="VTXIB_L3_Staves/2.0" phi0="2*pi/VTXIB_L3_Staves*rad" phi_tilt="0.0" r="VTXIB_r3_highR_1" offset="VTXIB_L3_offset+VTXIB_L3_overlap-VTXIB_mod_rphi/2.0" id="5" nmodules="VTXIB_L3_nModules" name="SiVTXIBStave3_2" step="VTXIB_mod_z_spacing"/>
+            <layer nLadders="VTXIB_L1_Staves" phi0="0.0" r="VTXIB_r1" offset="VTXIB_L1_offset" id="0" nmodules="VTXIB_L1_nModules" name="SiVTXIBStave1" step="VTXIB_mod_z_spacing"/>
+            <layer nLadders="VTXIB_L2_Staves" phi0="0.0" r="VTXIB_r2" offset="VTXIB_L2_offset" id="1" nmodules="VTXIB_L2_nModules" name="SiVTXIBStave2" step="VTXIB_mod_z_spacing"/>
+            <layer nLadders="VTXIB_L3_Staves/2.0" phi0="0.0" r="VTXIB_r3_lowR_1" offset="VTXIB_L3_offset+VTXIB_mod_rphi/2.0"                                    id="2" nmodules="VTXIB_L3_nModules" name="SiVTXIBStave3_1" step="VTXIB_mod_z_spacing"/>
+            <layer nLadders="VTXIB_L3_Staves/2.0" phi0="0.0" r="VTXIB_r3_lowR_2" offset="VTXIB_L3_offset+VTXIB_L3_overlap-VTXIB_mod_rphi/2.0" id="3" nmodules="VTXIB_L3_nModules" name="SiVTXIBStave3_2" step="VTXIB_mod_z_spacing"/>
+            <layer nLadders="VTXIB_L3_Staves/2.0" phi0="2*pi/VTXIB_L3_Staves*rad" r="VTXIB_r3_highR_2" offset="VTXIB_L3_offset+VTXIB_mod_rphi/2.0"                                    id="4" nmodules="VTXIB_L3_nModules" name="SiVTXIBStave3_1" step="VTXIB_mod_z_spacing"/>
+            <layer nLadders="VTXIB_L3_Staves/2.0" phi0="2*pi/VTXIB_L3_Staves*rad" r="VTXIB_r3_highR_1" offset="VTXIB_L3_offset+VTXIB_L3_overlap-VTXIB_mod_rphi/2.0" id="5" nmodules="VTXIB_L3_nModules" name="SiVTXIBStave3_2" step="VTXIB_mod_z_spacing"/>
         </detector>
     </detectors>
 
@@ -441,8 +440,8 @@
             </stave>
 
             <!-- Here we construct the barrel -->
-            <layer nLadders="VTXOB_Staves1" phi0="0.0" phi_tilt="VTXOB_tilt" r="VTXOB_r1" offset="VTXOB_offset1" id="0" nmodules="VTXOB_nModules1" name="SiVTXOBStave1" step="VTXOB_mod_z_spacing"/>
-            <layer nLadders="VTXOB_Staves2" phi0="0.0" phi_tilt="VTXOB_tilt" r="VTXOB_r2" offset="VTXOB_offset2" id="1" nmodules="VTXOB_nModules2" name="SiVTXOBStave2" step="VTXOB_mod_z_spacing"/>
+            <layer nLadders="VTXOB_Staves1" phi0="0.0" r="VTXOB_r1" offset="VTXOB_offset1" id="0" nmodules="VTXOB_nModules1" name="SiVTXOBStave1" step="VTXOB_mod_z_spacing"/>
+            <layer nLadders="VTXOB_Staves2" phi0="0.0" r="VTXOB_r2" offset="VTXOB_offset2" id="1" nmodules="VTXOB_nModules2" name="SiVTXOBStave2" step="VTXOB_mod_z_spacing"/>
         </detector>
     </detectors>
 
@@ -521,7 +520,7 @@
             </module>
 
             <!-- Here we construct the disks, all disks use the same base stave (SiVTXDStave) with different numbers of modules and other properties -->
-           <layer id="1" z="VTXD_z1" nphi="4" dz="0.0*mm" rmin="VTXD_rmin1" dr="VTXD_dr1" phi0="0.0">
+           <layer id="0" z="VTXD_z1" nphi="4" dz="0.0*mm" rmin="VTXD_rmin1" dr="VTXD_dr1" phi0="0.0">
                 <stave nmodules="2" z_offset="0.0*mm" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="0.0*mm" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
                 <stave nmodules="3" z_offset="VTXD_zoffset_stave" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="1.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
                 <stave nmodules="4" z_offset="0.0*mm" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="2.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
@@ -537,7 +536,7 @@
                 <stave nmodules="6" z_offset="VTXD_zoffset_face+VTXD_zoffset_stave" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="5.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
             </layer>
 
-             <layer id="2" z="VTXD_z2" nphi="8" dz="VTXD_zoffset_face" rmin="VTXD_rmin2" dr="VTXD_dr2" phi0="0.0">
+             <layer id="1" z="VTXD_z2" nphi="8" dz="VTXD_zoffset_face" rmin="VTXD_rmin2" dr="VTXD_dr2" phi0="0.0">
                 <stave nmodules="3" z_offset="0.0*mm" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="0.0*mm" dr="VTXD_dr2" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
                 <stave nmodules="4" z_offset="VTXD_zoffset_stave" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="1.*(VTXO_mod_z+VTXD_rModOverlap)" dr="VTXD_dr2" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
                 <stave nmodules="5" z_offset="0.0*mm" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="2.*(VTXO_mod_z+VTXD_rModOverlap)" dr="VTXD_dr2" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
@@ -546,7 +545,7 @@
                 <stave nmodules="8" z_offset="VTXD_zoffset_stave" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="5.*(VTXO_mod_z+VTXD_rModOverlap)" dr="VTXD_dr2" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
             </layer>         
 
-             <layer id="3" z="VTXD_z3" nphi="8" dz="VTXD_zoffset_face" rmin="VTXD_rmin3" dr="VTXD_dr3" phi0="0.0">
+             <layer id="2" z="VTXD_z3" nphi="8" dz="VTXD_zoffset_face" rmin="VTXD_rmin3" dr="VTXD_dr3" phi0="0.0">
                 <stave nmodules="4" z_offset="0.0*mm" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="0.0*mm" dr="VTXD_dr3" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
                 <stave nmodules="5" z_offset="VTXD_zoffset_stave" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="1.*(VTXO_mod_z+VTXD_rModOverlap)" dr="VTXD_dr3" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
                 <stave nmodules="5" z_offset="0.0*mm" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="2.*(VTXO_mod_z+VTXD_rModOverlap)" dr="VTXD_dr3" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
@@ -564,6 +563,22 @@
             <argument value="u_x=-1."/>
             <argument value="v_y=1."/>
             <argument value="n_z=-1."/>
+        </plugin>
+
+        <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
+            <argument value="VTXIB"/> 
+            <argument value="dimension=2"/>
+            <argument value="u_x=1."/>
+            <argument value="v_y=1."/>
+            <argument value="n_z=1."/>
+        </plugin>
+
+        <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
+            <argument value="VTXOB"/> 
+            <argument value="dimension=2"/>
+            <argument value="u_x=1."/>
+            <argument value="v_y=1."/>
+            <argument value="n_z=1."/>
         </plugin>
     </plugins>
 

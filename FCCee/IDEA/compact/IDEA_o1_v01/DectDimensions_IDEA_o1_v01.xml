@@ -19,9 +19,10 @@
     <constant name="CrossingAngle" value="0.030*rad"/>  
 
     <constant name="GlobalTrackerReadoutID_DCH" type="string" value="system:1,layer:16,phi:16"/>
-    <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:6,module:11,sensor:8"/>
+    <constant name="GlobalTrackerReadoutID" type="string" value="system:5,layer:3,stave:6,module:5,sensor:2"/>
+    <constant name="GlobalTrackerReadoutID_OB" type="string" value="system:5,layer:1,stave:6,module:4,sensor:2"/>
+    <constant name="GlobalTrackerReadoutID_Disk" type="string" value="system:5,side:-2,layer:3,petal:3,stave:6,module:10,sensor:2"/>
     <constant name="SolenoidField" value="2*tesla"/>
-    
     
     <constant name="DetID_NOTUSED"          value=" 0"/>
     
