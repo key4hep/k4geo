@@ -328,8 +328,8 @@
 
     <include ref="Vertex_o4_v07_smallBP.xml" />
 
-    <include ref="InnerTracker_o2_v07.xml" /> 
-    <include ref="OuterTracker_o2_v07.xml" />
+    <include ref="InnerTracker_o3_v08.xml" /> 
+    <include ref="OuterTracker_o3_v08.xml" />
 
     <include ref="ARC_o1_v01.xml"/>
 
