@@ -175,6 +175,27 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
             m.endOfStaves.push_back(endOfStave);
         }
 
+        // End of stave structures
+        xml_coll_t c_endOfStave(x_stave,_U(end_z));
+        for(c_endOfStave.reset(); c_endOfStave; ++c_endOfStave){
+            endOfStaveStruct endOfStave;    
+            endOfStave.dr = xml_comp_t(c_endOfStave).dr();
+            endOfStave.offset = xml_comp_t(c_endOfStave).offset();
+            xml_coll_t c_component = xml_coll_t(c_endOfStave,_U(component));
+            for(c_component.reset(); c_component; ++c_component){
+                xml_comp_t component = c_component;
+                endOfStave.thicknesses.push_back(component.thickness());
+                endOfStave.widths.push_back(component.width());
+                endOfStave.lengths.push_back(component.length());
+                endOfStave.dzs.push_back(component.dz());
+                endOfStave.offsets.push_back(component.offset());
+                endOfStave.drs.push_back(component.dr());
+                endOfStave.materials.push_back(theDetector.material(component.materialStr()));
+                endOfStave.viss.push_back(component.visStr());
+            }
+            m.endOfStaves.push_back(endOfStave);
+        }
+
         // Sensor
         xml_coll_t c_sensor(x_stave,_U(sensor));
         m.sensor_dr = xml_comp_t(c_sensor).dr();
