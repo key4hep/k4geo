@@ -69,7 +69,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     sens.setType("tracker");
 
     // Struct to support multiple readout or support layers (both using this struct)
-    struct staveMatStruct{
+    struct componentsStruct{
+        string name;
         double dr;
         double offset;
         vector<double> thicknesses;
@@ -81,6 +82,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     };
 
     struct endOfStaveStruct{
+        string name;
         double dr;
         double offset;
         vector<double> thicknesses;
@@ -97,8 +99,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     struct stave_information{
         string name;
 
-        vector<staveMatStruct> readouts;
-        vector<staveMatStruct> supports;
+        vector<componentsStruct> components_vec;
         vector<endOfStaveStruct> endOfStaves;
         double sensor_dr;
         double sensor_offset;
@@ -123,42 +124,24 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         stave_information m;
         m.name = x_stave.nameStr();
 
-        // Readout
-        xml_coll_t c_readout(x_stave,_U(readout));
-        for(c_readout.reset(); c_readout; ++c_readout){
-            staveMatStruct readout;
-            readout.dr = xml_comp_t(c_readout).dr();
-            readout.offset = xml_comp_t(c_readout).offset();
-            xml_coll_t c_component(c_readout,_U(component));
+        // Components
+        xml_coll_t c_components(x_stave,_U(components));
+        for(c_components.reset(); c_components; ++c_components){
+            componentsStruct components;
+            components.name = xml_comp_t(c_components).nameStr();
+            components.dr = xml_comp_t(c_components).dr();
+            components.offset = xml_comp_t(c_components).offset();
+            xml_coll_t c_component(c_components,_U(component));
             for(c_component.reset(); c_component; ++c_component){
                 xml_comp_t component = c_component;
-                readout.thicknesses.push_back(component.thickness());
-                readout.widths.push_back(component.width());
-                readout.offsets.push_back(component.offset());
-                readout.drs.push_back(component.dr());
-                readout.materials.push_back(theDetector.material(component.materialStr()));
-                readout.viss.push_back(component.visStr());
+                components.thicknesses.push_back(component.thickness());
+                components.widths.push_back(component.width());
+                components.offsets.push_back(component.offset());
+                components.drs.push_back(component.dr());
+                components.materials.push_back(theDetector.material(component.materialStr()));
+                components.viss.push_back(component.visStr());
             }
-            m.readouts.push_back(readout);
-        }
-
-        // Support
-        xml_coll_t c_support(x_stave,_U(support));
-        for(c_support.reset(); c_support; ++c_support){
-            staveMatStruct support;    
-            support.dr = xml_comp_t(c_support).dr();
-            support.offset = xml_comp_t(c_support).offset();
-            xml_coll_t c_component = xml_coll_t(c_support,_U(component));
-            for(c_component.reset(); c_component; ++c_component){
-                xml_comp_t component = c_component;
-                support.thicknesses.push_back(component.thickness());
-                support.widths.push_back(component.width());
-                support.offsets.push_back(component.offset());
-                support.drs.push_back(component.dr());
-                support.materials.push_back(theDetector.material(component.materialStr()));
-                support.viss.push_back(component.visStr());
-            }
-            m.supports.push_back(support);
+            m.components_vec.push_back(components);
         }
 
         // End of stave structures
@@ -267,44 +250,34 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
             pv.addPhysVolID("stave", iStave);
             staveDE.setPlacement(pv);
 
-            string support_name = stave_name + "_support";
-            Assembly support_assembly(support_name);
-            // DetElement supportDE(staveDE, support_name, 0);
-            pv = stave_assembly.placeVolume(support_assembly);
-            // supportDE.setPlacement(pv);
-
-            string readout_name = stave_name + "_readout";
-            Assembly readout_assembly(readout_name);
-            // DetElement readoutDE(staveDE, readout_name, 0);
-            pv = stave_assembly.placeVolume(readout_assembly);
-            // readoutDE.setPlacement(pv);
-
             // Place all components
             double stave_length = nmodules*m.sensor_length + (nmodules-1)*step;
             
-            // Place support
-            int iSupport = 0;
-            for(auto& support : m.supports){
-                for(int i=0; i<int(support.thicknesses.size()); i++){
-                    double r_component = layer_r + support.dr + support.drs[i] + support.thicknesses[i]/2.;
-                    double r_offset_component = layer_offset + support.offset + support.offsets[i];
+            // Place components
+            for(auto& component : m.components_vec){
+                Assembly component_assembly(stave_name + "_" + component.name);
+                pv = stave_assembly.placeVolume(component_assembly);
+                for(int i=0; i<int(component.thicknesses.size()); i++){
+                    double r_component = layer_r + component.dr + component.drs[i] + component.thicknesses[i]/2.;
+                    double r_offset_component = layer_offset + component.offset + component.offsets[i];
                     double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
                     double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
                     double z_pos = 0.0; 
                     Position pos(x_pos, y_pos, z_pos);
 
-                    Box ele_box = Box(support.thicknesses[i]/2., support.widths[i]/2., stave_length/2.);
-                    Volume ele_vol = Volume(_toString(int(support.thicknesses.size())*iSupport + i, "support_%d"), ele_box, support.materials[i]);                    
-                    ele_vol.setVisAttributes(theDetector.visAttributes(support.viss[i]));
+                    Box ele_box = Box(component.thicknesses[i]/2., component.widths[i]/2., stave_length/2.);
+                    Volume ele_vol = Volume(component.name + _toString(i, "_%d"), ele_box, component.materials[i]);                    
+                    ele_vol.setVisAttributes(theDetector.visAttributes(component.viss[i]));
 
-                    pv = support_assembly.placeVolume(ele_vol, Transform3D(rot, pos) );
+                    pv = component_assembly.placeVolume(ele_vol, Transform3D(rot, pos) );
                 }
-                iSupport++;
             }
 
             // Place end of stave structures
             int iEndOfStave = 0;
             for(auto& endOfStave : m.endOfStaves){
+                Assembly endOfStave_assembly(stave_name + "_endOfStave");
+                pv = stave_assembly.placeVolume(endOfStave_assembly);
                 for(int i=0; i<int(endOfStave.thicknesses.size()); i++){
                     double r_component = layer_r + endOfStave.dr + endOfStave.drs[i] + endOfStave.thicknesses[i]/2.;
                     double r_offset_component = layer_offset + endOfStave.offset + endOfStave.offsets[i];
@@ -319,29 +292,10 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                         Volume ele_vol = Volume(_toString(int(endOfStave.thicknesses.size())*iEndOfStave + i, "endOfStave_%d"), ele_box, endOfStave.materials[i]);                    
                         ele_vol.setVisAttributes(theDetector.visAttributes(endOfStave.viss[i]));
 
-                        pv = support_assembly.placeVolume(ele_vol, Transform3D(rot, pos) );
+                        pv = endOfStave_assembly.placeVolume(ele_vol, Transform3D(rot, pos) );
                     }
                 }
                 iEndOfStave++;
-            }
-
-            // Place readout
-            int iReadout = 0;
-            for(auto& readout : m.readouts){
-                for(int i=0; i<int(readout.thicknesses.size()); i++){
-                    double r_component = layer_r + readout.dr + readout.drs[i] + readout.thicknesses[i]/2.;
-                    double r_offset_component = layer_offset + readout.offset + readout.offsets[i];
-                    double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
-                    double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
-                    double z_pos = 0.0; 
-                    Position pos(x_pos, y_pos, z_pos);
-
-                    Box ele_box = Box(readout.thicknesses[i]/2., readout.widths[i]/2., stave_length/2.);
-                    Volume ele_vol = Volume( _toString(int(readout.thicknesses.size())*iReadout + i, "readout_%d"), ele_box, readout.materials[i]);                    
-                    ele_vol.setVisAttributes(theDetector.visAttributes(readout.viss[i]));
-                    pv = readout_assembly.placeVolume(ele_vol, Transform3D(rot, pos) );
-                }
-                iReadout++;
             }
 
             // Place sensor
