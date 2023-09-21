@@ -32,3 +32,12 @@ This sub-detector makes calorimeter barrel. It is used in ALLEGRO detector conce
 
 ### o1_v01
 Original version taken from [FCCDetectors](https://github.com/HEP-FCC/FCCDetectors/blob/70a989a6fc333610e3b1b979c3596da9c41543d8/Detector/DetFCChhHCalTile/src/HCalBarrel_geo.cpp). It is made up by 13 layers, each one is a sandwich of Iron (5 cm) and Air (5 cm). It spans over a radial distance between 280 and 450 cm, and it has a half length of 280 cm.
+
+## HCalThreePartsEndcap
+This sub-detector makes calorimeter endcaps. Each endcap is made up by three cylindrical pieces with different thickness and inner radius, but same outer radius. It is used in ALLEGRO detector concept.
+
+### o1_v01
+Original version taken from [FCCDetectors](https://github.com/HEP-FCC/FCCDetectors/blob/70a989a6fc333610e3b1b979c3596da9c41543d8/Detector/DetFCCeeHCalTile/src/HCalThreePartsEndcap_geo.cpp#L4). 
+
+
+
