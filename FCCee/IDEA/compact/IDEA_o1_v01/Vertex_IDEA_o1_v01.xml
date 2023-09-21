@@ -184,8 +184,8 @@
             <constant name="VTXOB_TerminalPart_width2"        value="34.436*mm"/>
             <constant name="VTXOB_TerminalPart_length2"        value="VTXOB_TerminalPart_length1"/>
 
-            <constant name="VTXOB_TerminalPart_thickness3"        value="26.545*mm"/>   <!-- 7645.062 mm^3 volume of PEEK, let's take area of 8 mm * 36.0 mm -> Proxy PEEK thickness of 26.545 mm (PEEK: 35.863 cm X0)  -->
-            <constant name="VTXOB_TerminalPart_width3"        value="36.0*mm"/>
+            <constant name="VTXOB_TerminalPart_thickness3"        value="28.107*mm"/>   <!-- 7645.062 mm^3 volume of PEEK, let's take area of 8 mm * 34.0 mm -> Proxy PEEK thickness of 28.107 mm (PEEK: 35.863 cm X0)  -->
+            <constant name="VTXOB_TerminalPart_width3"        value="34.0*mm"/>         <!-- Should be 36 mm, but then we'd have an overlap since it's only proxy shapes -->
             <constant name="VTXOB_TerminalPart_length3"        value="VTXOB_TerminalPart_length1"/>
 
 
