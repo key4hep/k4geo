@@ -10,6 +10,5 @@ More details can be found in the talks at the [FCC week 2023](https://indico.cer
 This sub-detector implements a simplied drift chamber. It is used in ALLEGRO detector concept.
 
 ### o1_v01 
-Original version taken from [FCCDetectors](https://github.com/HEP-FCC/FCCDetectors/blob/70a989a6fc333610e3b1b979c3596da9c41543d8/Detector/DetFCChhCalDiscs/src/CaloEndcapDiscs_geo.cpp).
-The shape of the volume is an hyperboloid, with inner radius of 35 cm, outer radius of 175 cm and half length of 285 cm. The material GasHe_90Isob_10 fills the main volume.
+Original version taken from [FCCDetectors](https://github.com/HEP-FCC/FCCDetectors/blob/70a989a6fc333610e3b1b979c3596da9c41543d8/Detector/DetFCChhCalDiscs/src/CaloEndcapDiscs_geo.cpp). 
 
