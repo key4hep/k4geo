@@ -33,20 +33,16 @@
     </detectors>
     
     <display>
-        <vis name="VTXIBSensitiveVis"   alpha="1.0" r="0.5"     g="0.5"  b="0"      showDaughters="true"  visible="true"/>
-        <vis name="VTXIBPeripheryVis"   alpha="1.0" r="0.6"     g="0.5"  b="0"      showDaughters="true"  visible="true"/>
-        <vis name="VertexCableVis"      alpha="1.0" r="0.85"    g="0.53" b="0.4"    showDaughters="true"  visible="true"/>
-        <vis name="HybridVis"           alpha="1.0" r="0.75"    g="0.3"  b="0.4"    showDaughters="true"  visible="true"/>
-        <vis name="CarbonFiberVis"      alpha="1.0" r="0.5"     g="0.5"  b="0.5"    showDaughters="true"  visible="true"/>
+        <vis name="VTXSensitiveVis"     alpha="1.0" r="1.0"     g="1.0"  b="0.0"      showDaughters="true"  visible="true"/>
+        <vis name="VTXPeripheryVis"     alpha="1.0" r="1.0"     g="0.9"  b="0.0"      showDaughters="true"  visible="true"/>
+        <vis name="VertexCableVis"      alpha="1.0" r="1.0"     g="0.5"  b="0.4"    showDaughters="true"  visible="true"/>
+        <vis name="HybridVis"           alpha="1.0" r="0.0"     g="1.0"  b="0.0"    showDaughters="true"  visible="true"/>
+        <vis name="TerminalPartVis"     alpha="1.0" r="1.0"     g="0.65" b="0.0"    showDaughters="true"  visible="true"/>
+        <vis name="CarbonFiberVis"      alpha="1.0" r="0.9"     g="0.95"  b="1.0"    showDaughters="true"  visible="true"/>
         <vis name="TrussStructureVis"   alpha="0.3" r="0.5"     g="0.5"  b="0.5"    showDaughters="true"  visible="true"/>
         <vis name="PipingVis"           alpha="1.0" r="1.0"     g="1.0"  b="1.0"    showDaughters="true"  visible="true"/>
         <vis name="WaterVis"            alpha="1.0" r="0.0"     g="0.0"  b="1.0"    showDaughters="true"  visible="true"/>
-        <vis name="VTXDSensitiveVis"    alpha="1.0" r="0.5"     g="0.5"  b="0"      showDaughters="true"  visible="true"/>
-        <vis name="VTXDPeripheryVis"    alpha="1.0" r="0.6"     g="0.5"  b="0"      showDaughters="true"  visible="true"/>
-        <vis name="VTXOBSensitiveVis"   alpha="1.0" r="0.5"     g="0.5"  b="0"      showDaughters="true"  visible="true"/>
-        <vis name="VTXOBPeripheryVis"   alpha="1.0" r="0.6"     g="0.5"  b="0"      showDaughters="true"  visible="true"/>
         <vis name="RohacellVis"         alpha="1.0" r="1.0"     g="1.0"  b="1.0"    showDaughters="true"  visible="true"/>
-        <vis name="VTXIBSupportVis"     alpha="1.0" r="0.5"     g="0.5"  b="0.5"    showDaughters="true"  visible="true"/>
     </display>
      
 
@@ -178,6 +174,21 @@
             <constant name="VTXOB_offset1" value="10.0*mm"/>
             <constant name="VTXOB_offset2" value="20.0*mm"/>
 
+            <constant name="VTXO_hybrid_thickness" value="0.4*mm"/>
+            <constant name="VTXO_hybrid_length" value="12.1*mm"/>
+            <constant name="VTXOB_TerminalPart_thickness1"        value="4.037*mm"/>
+            <constant name="VTXOB_TerminalPart_width1"        value="30.788*mm"/>
+            <constant name="VTXOB_TerminalPart_length1"        value="8.0*mm"/>
+
+            <constant name="VTXOB_TerminalPart_thickness2"        value="19.922*mm"/>   <!-- 5488.272 mm^3 volume of PEEK, let's take area of 8 mm * 34.436 mm -> Proxy PEEK thickness of 19.922 mm (PEEK: 35.863 cm X0)  -->
+            <constant name="VTXOB_TerminalPart_width2"        value="34.436*mm"/>
+            <constant name="VTXOB_TerminalPart_length2"        value="VTXOB_TerminalPart_length1"/>
+
+            <constant name="VTXOB_TerminalPart_thickness3"        value="26.545*mm"/>   <!-- 7645.062 mm^3 volume of PEEK, let's take area of 8 mm * 36.0 mm -> Proxy PEEK thickness of 26.545 mm (PEEK: 35.863 cm X0)  -->
+            <constant name="VTXOB_TerminalPart_width3"        value="36.0*mm"/>
+            <constant name="VTXOB_TerminalPart_length3"        value="VTXOB_TerminalPart_length1"/>
+
+
         <!-- Vertex disks parameters -->
             <constant name="VTXD_support_thickness" value="VTXO_support_Fleece_thickness+VTXO_support_CarbonFiber_thickness+VTXO_support_PaperGraphite_thickness"/>
             <constant name="VTXD_rmax1" value="247.644*mm"/>
@@ -231,8 +242,8 @@
             <stave name="SiVTXIBStave1">
                 <!-- Sensor -->
                 <sensor dr="0.0*mm" offset="0.0*mm" thickness="VTXIB_Sensitive_Thickness" material="Silicon">
-                    <component sensitive="False"    xmin="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_sensitive" xmax="VTXIB_mod_rphi/2.0"                                       ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXIBPeripheryVis"/>
-                    <component sensitive="True"     xmin="-VTXIB_mod_rphi/2.0"                                      xmax="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_sensitive" ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXIBSensitiveVis"/>
+                    <component sensitive="False"    xmin="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_sensitive" xmax="VTXIB_mod_rphi/2.0"                                       ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXPeripheryVis"/>
+                    <component sensitive="True"     xmin="-VTXIB_mod_rphi/2.0"                                      xmax="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_sensitive" ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXSensitiveVis"/>
                 </sensor>
 
                 <!-- Support -->
@@ -254,7 +265,7 @@
                 <!-- End of stave structures -->
                 <end_z dr="0.0*mm" offset="0.0*mm">
                     <!-- Hybrid -->
-                    <component thickness="VTXIB_endOfStave_Thickness" width="VTXIB_mod_rphi" length="VTXIB_hybrid_z" dz="VTXIB_mod_z_spacing" offset="0.0*mm" dr="0.0*mm" material="PE" vis="HybridVis"/>
+                    <component thickness="VTXIB_endOfStave_Thickness" width="VTXIB_mod_rphi" length="VTXIB_hybrid_z" dz="VTXIB_mod_z_spacing" offset="0.0*mm" dr="0.0*mm" material="PCB" vis="HybridVis"/>
 
                     <!-- Rest of flexes -->
                     <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" length="7.0*mm" dz="0.0*mm" dr="VTXIB_mod_z_spacing+0.0*mm" offset="VTXIB_flex_offset" material="KaptonVtx" vis="VertexCableVis"/>
@@ -273,8 +284,8 @@
             <stave name="SiVTXIBStave2">
                 <!-- Sensor -->
                 <sensor dr="0.0*mm" offset="0.0*mm" thickness="VTXIB_Sensitive_Thickness" material="Silicon">
-                    <component sensitive="False"    xmin="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_sensitive" xmax="VTXIB_mod_rphi/2.0"                                       ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXIBPeripheryVis"/>
-                    <component sensitive="True"     xmin="-VTXIB_mod_rphi/2.0"                                      xmax="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_sensitive" ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXIBSensitiveVis"/>
+                    <component sensitive="False"    xmin="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_sensitive" xmax="VTXIB_mod_rphi/2.0"                                       ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXPeripheryVis"/>
+                    <component sensitive="True"     xmin="-VTXIB_mod_rphi/2.0"                                      xmax="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_sensitive" ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXSensitiveVis"/>
                 </sensor>
 
                 <!-- Support -->
@@ -296,7 +307,7 @@
                 <!-- End of stave structures -->
                 <end_z dr="0.0*mm" offset="0.0*mm">
                     <!-- Hybrid -->
-                    <component thickness="VTXIB_endOfStave_Thickness" width="VTXIB_mod_rphi" length="VTXIB_hybrid_z" dz="VTXIB_mod_z_spacing" offset="0.0*mm" dr="0.0*mm" material="PE" vis="HybridVis"/>
+                    <component thickness="VTXIB_endOfStave_Thickness" width="VTXIB_mod_rphi" length="VTXIB_hybrid_z" dz="VTXIB_mod_z_spacing" offset="0.0*mm" dr="0.0*mm" material="PCB" vis="HybridVis"/>
 
                     <!-- Rest of flexes -->
                     <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" length="7.0*mm" dz="0.0*mm" dr="VTXIB_mod_z_spacing+0.0*mm"                       offset="VTXIB_flex_offset"  material="KaptonVtx"    vis="VertexCableVis"/>
@@ -315,8 +326,8 @@
             <stave name="SiVTXIBStave3_1">
                 <!-- Sensor -->
                 <sensor dr="0.0*mm" offset="0.0*mm" thickness="VTXIB_Sensitive_Thickness" material="Silicon">
-                    <component sensitive="False"    xmin="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_sensitive" xmax="VTXIB_mod_rphi/2.0"                                       ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXIBPeripheryVis"/>
-                    <component sensitive="True"     xmin="-VTXIB_mod_rphi/2.0"                                      xmax="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_sensitive" ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXIBSensitiveVis"/>
+                    <component sensitive="False"    xmin="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_sensitive" xmax="VTXIB_mod_rphi/2.0"                                       ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXPeripheryVis"/>
+                    <component sensitive="True"     xmin="-VTXIB_mod_rphi/2.0"                                      xmax="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_sensitive" ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXSensitiveVis"/>
                 </sensor>
 
                 <!-- Support -->
@@ -338,7 +349,7 @@
                 <!-- End of stave structures -->
                 <end_z dr="0.0*mm" offset="0.0*mm">
                     <!-- Hybrid -->
-                    <component thickness="VTXIB_endOfStave_Thickness" width="VTXIB_mod_rphi" length="VTXIB_hybrid_z" dz="VTXIB_mod_z_spacing" offset="0.0*mm" dr="0.0*mm" material="PE" vis="HybridVis"/>
+                    <component thickness="VTXIB_endOfStave_Thickness" width="VTXIB_mod_rphi" length="VTXIB_hybrid_z" dz="VTXIB_mod_z_spacing" offset="0.0*mm" dr="0.0*mm" material="PCB" vis="HybridVis"/>
 
                     <!-- Rest of flexes -->
                     <component thickness="VTXIB_flex_Kapton_thickness"      width="VTXIB_flex_width" length="7.0*mm" dz="0.0*mm" dr="VTXIB_mod_z_spacing+0.0*mm"                       offset="VTXIB_flex_offset"  material="KaptonVtx"    vis="VertexCableVis"/>
@@ -356,8 +367,8 @@
             <stave name="SiVTXIBStave3_2">
                 <!-- Sensor -->
                 <sensor dr="0.0*mm" offset="0.0*mm" thickness="VTXIB_Sensitive_Thickness" material="Silicon">
-                    <component sensitive="False"    xmin="-VTXIB_mod_rphi/2.0" xmax="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_periphery" ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXIBPeripheryVis"/>
-                    <component sensitive="True"     xmin="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_periphery" xmax="VTXIB_mod_rphi_sensitive/2.0" ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXIBSensitiveVis"/>
+                    <component sensitive="False"    xmin="-VTXIB_mod_rphi/2.0" xmax="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_periphery" ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXPeripheryVis"/>
+                    <component sensitive="True"     xmin="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_periphery" xmax="VTXIB_mod_rphi_sensitive/2.0" ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXSensitiveVis"/>
                 </sensor>
 
                 <!-- Support -->
@@ -379,7 +390,7 @@
                 <!-- End of stave structures -->
                 <end_z dr="0.0*mm" offset="0.0*mm">
                     <!-- Hybrid -->
-                    <component thickness="VTXIB_endOfStave_Thickness" width="VTXIB_mod_rphi" length="VTXIB_hybrid_z" dz="VTXIB_mod_z_spacing" offset="0.0*mm" dr="0.0*mm" material="PE" vis="HybridVis"/>
+                    <component thickness="VTXIB_endOfStave_Thickness" width="VTXIB_mod_rphi" length="VTXIB_hybrid_z" dz="VTXIB_mod_z_spacing" offset="0.0*mm" dr="0.0*mm" material="PCB" vis="HybridVis"/>
 
                     <!-- Rest of flexes -->
                     <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" length="7.0*mm" dz="0.0*mm" dr="VTXIB_mod_z_spacing+0.0*mm"                       offset="VTXIB_flex_offset"  material="KaptonVtx"    vis="VertexCableVis"/>
@@ -424,21 +435,21 @@
 
                  <!-- Sensor  -->
                 <sensor dr="VTXO_flex_thickness" offset="0.0*mm" thickness="VTXO_Sensitive_Thickness" material="Silicon">
-                    <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_periphery+VTXO_sens_z_sens_spacing/2.0)" ymax="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"                    xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0"    vis="VTXDPeripheryVis"/> <!-- top Quad periphery-->
-                    <component sensitive="False" ymin="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"                          ymax="VTXO_sens_z_sensitive+VTXO_sens_z_periphery+VTXO_sens_z_sens_spacing/2.0" xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0"    vis="VTXDPeripheryVis"/> <!-- bottom Quad periphery-->   
-                    <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"                       ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"                       xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_sens_spacing/2.0)"                          vis="VTXDPeripheryVis"/> <!-- left Quad periphery-->   
-                    <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"                       ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"                       xmin="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_sens_spacing/2.0"                             xmax="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0"    vis="VTXDPeripheryVis"/> <!-- right Quad periphery-->   
+                    <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_periphery+VTXO_sens_z_sens_spacing/2.0)" ymax="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"                    xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0"    vis="VTXPeripheryVis"/> <!-- top Quad periphery-->
+                    <component sensitive="False" ymin="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"                          ymax="VTXO_sens_z_sensitive+VTXO_sens_z_periphery+VTXO_sens_z_sens_spacing/2.0" xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0"    vis="VTXPeripheryVis"/> <!-- bottom Quad periphery-->   
+                    <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"                       ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"                       xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_sens_spacing/2.0)"                          vis="VTXPeripheryVis"/> <!-- left Quad periphery-->   
+                    <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"                       ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"                       xmin="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_sens_spacing/2.0"                             xmax="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0"    vis="VTXPeripheryVis"/> <!-- right Quad periphery-->   
 
-                    <component sensitive="False" ymin="VTXO_sens_z_sens_spacing/2.0"                            ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"   xmin="-VTXO_sens_rphi_sens_spacing/2.0"                             xmax="VTXO_sens_rphi_sens_spacing/2.0"                          vis="VTXOBPeripheryVis"/> <!-- Middle cross: right -->
-                    <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"   ymax="-VTXO_sens_z_sens_spacing/2.0"                        xmin="-VTXO_sens_rphi_sens_spacing/2.0"                             xmax="VTXO_sens_rphi_sens_spacing/2.0"                          vis="VTXOBPeripheryVis"/> <!-- Middle cross: left -->
-                    <component sensitive="False" ymin="-VTXO_sens_z_sens_spacing/2.0"                           ymax="VTXO_sens_z_sens_spacing/2.0"                         xmin="VTXO_sens_rphi_sens_spacing/2.0"                              xmax="VTXO_sens_rphi_sens_spacing/2.0+VTXO_sens_rphi_sensitive" vis="VTXOBPeripheryVis"/> <!-- Middle cross: top -->
-                    <component sensitive="False" ymin="-VTXO_sens_z_sens_spacing/2.0"                           ymax="VTXO_sens_z_sens_spacing/2.0"                         xmin="-(VTXO_sens_rphi_sens_spacing/2.0+VTXO_sens_rphi_sensitive)"  xmax="-VTXO_sens_rphi_sens_spacing/2.0"                         vis="VTXOBPeripheryVis"/> <!-- Middle cross: bottom -->
-                    <component sensitive="False" ymin="-VTXO_sens_z_sens_spacing/2.0"                           ymax="VTXO_sens_z_sens_spacing/2.0"                         xmin="-VTXO_sens_rphi_sens_spacing/2.0"                             xmax="VTXO_sens_rphi_sens_spacing/2.0"                          vis="VTXOBPeripheryVis"/> <!-- Middle cross: centre -->
+                    <component sensitive="False" ymin="VTXO_sens_z_sens_spacing/2.0"                            ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"   xmin="-VTXO_sens_rphi_sens_spacing/2.0"                             xmax="VTXO_sens_rphi_sens_spacing/2.0"                          vis="VTXPeripheryVis"/> <!-- Middle cross: right -->
+                    <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"   ymax="-VTXO_sens_z_sens_spacing/2.0"                        xmin="-VTXO_sens_rphi_sens_spacing/2.0"                             xmax="VTXO_sens_rphi_sens_spacing/2.0"                          vis="VTXPeripheryVis"/> <!-- Middle cross: left -->
+                    <component sensitive="False" ymin="-VTXO_sens_z_sens_spacing/2.0"                           ymax="VTXO_sens_z_sens_spacing/2.0"                         xmin="VTXO_sens_rphi_sens_spacing/2.0"                              xmax="VTXO_sens_rphi_sens_spacing/2.0+VTXO_sens_rphi_sensitive" vis="VTXPeripheryVis"/> <!-- Middle cross: top -->
+                    <component sensitive="False" ymin="-VTXO_sens_z_sens_spacing/2.0"                           ymax="VTXO_sens_z_sens_spacing/2.0"                         xmin="-(VTXO_sens_rphi_sens_spacing/2.0+VTXO_sens_rphi_sensitive)"  xmax="-VTXO_sens_rphi_sens_spacing/2.0"                         vis="VTXPeripheryVis"/> <!-- Middle cross: bottom -->
+                    <component sensitive="False" ymin="-VTXO_sens_z_sens_spacing/2.0"                           ymax="VTXO_sens_z_sens_spacing/2.0"                         xmin="-VTXO_sens_rphi_sens_spacing/2.0"                             xmax="VTXO_sens_rphi_sens_spacing/2.0"                          vis="VTXPeripheryVis"/> <!-- Middle cross: centre -->
                     
-                    <component sensitive="True" ymin="-VTXO_sens_z_sensitive-VTXO_sens_z_sens_spacing/2.0"  ymax="-VTXO_sens_z_sens_spacing/2.0"                        xmin="VTXO_sens_rphi_sens_spacing/2.0"                              xmax="VTXO_sens_rphi_sens_spacing/2.0+VTXO_sens_rphi_sensitive" vis="VTXOBSensitiveVis"/> <!-- top left sensitive -->
-                    <component sensitive="True" ymin="VTXO_sens_z_sens_spacing/2.0"                         ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"   xmin="VTXO_sens_rphi_sens_spacing/2.0"                              xmax="VTXO_sens_rphi_sens_spacing/2.0+VTXO_sens_rphi_sensitive" vis="VTXOBSensitiveVis"/> <!-- top right sensitive -->               
-                    <component sensitive="True" ymin="-VTXO_sens_z_sensitive-VTXO_sens_z_sens_spacing/2.0"  ymax="-VTXO_sens_z_sens_spacing/2.0"                        xmin="-VTXO_sens_rphi_sens_spacing/2.0-VTXO_sens_rphi_sensitive"    xmax="-VTXO_sens_rphi_sens_spacing/2.0"                         vis="VTXOBSensitiveVis"/> <!-- bottom left sensitive -->
-                    <component sensitive="True" ymin="VTXO_sens_z_sens_spacing/2.0"                         ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"   xmin="-VTXO_sens_rphi_sens_spacing/2.0-VTXO_sens_rphi_sensitive"    xmax="-VTXO_sens_rphi_sens_spacing/2.0"                         vis="VTXOBSensitiveVis"/> <!-- bottom right sensitive -->
+                    <component sensitive="True" ymin="-VTXO_sens_z_sensitive-VTXO_sens_z_sens_spacing/2.0"  ymax="-VTXO_sens_z_sens_spacing/2.0"                        xmin="VTXO_sens_rphi_sens_spacing/2.0"                              xmax="VTXO_sens_rphi_sens_spacing/2.0+VTXO_sens_rphi_sensitive" vis="VTXSensitiveVis"/> <!-- top left sensitive -->
+                    <component sensitive="True" ymin="VTXO_sens_z_sens_spacing/2.0"                         ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"   xmin="VTXO_sens_rphi_sens_spacing/2.0"                              xmax="VTXO_sens_rphi_sens_spacing/2.0+VTXO_sens_rphi_sensitive" vis="VTXSensitiveVis"/> <!-- top right sensitive -->               
+                    <component sensitive="True" ymin="-VTXO_sens_z_sensitive-VTXO_sens_z_sens_spacing/2.0"  ymax="-VTXO_sens_z_sens_spacing/2.0"                        xmin="-VTXO_sens_rphi_sens_spacing/2.0-VTXO_sens_rphi_sensitive"    xmax="-VTXO_sens_rphi_sens_spacing/2.0"                         vis="VTXSensitiveVis"/> <!-- bottom left sensitive -->
+                    <component sensitive="True" ymin="VTXO_sens_z_sens_spacing/2.0"                         ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"   xmin="-VTXO_sens_rphi_sens_spacing/2.0-VTXO_sens_rphi_sensitive"    xmax="-VTXO_sens_rphi_sens_spacing/2.0"                         vis="VTXSensitiveVis"/> <!-- bottom right sensitive -->
                 </sensor>
 
                  <!-- Support  -->
@@ -461,6 +472,16 @@
                     <component thickness="VTXO_Water_thickness" width="VTXO_Pipe_rphi" offset="-VTXOB_Pipe_offset" dr="VTXO_Pipe_thickness" material="Water" vis="WaterVis"/>
                     <component thickness="VTXO_Pipe_thickness"  width="VTXO_Pipe_rphi" offset="-VTXOB_Pipe_offset" dr="VTXO_Pipe_thickness+VTXO_Water_thickness" material="KaptonVtx" vis="PipingVis"/>
                 </support>
+
+                <!-- End of stave structures -->
+                <end_z dr="0.0*mm" offset="0.0*mm">
+                    <!-- Hybrid -->
+                    <component thickness="VTXO_hybrid_thickness" width="VTXO_mod_rphi" length="VTXO_hybrid_length" dz="VTXOB_mod_z_spacing" dr="VTXO_flex_thickness-VTXO_hybrid_thickness" offset="0.0*mm" material="PCB" vis="HybridVis"/>
+
+                    <!-- Terminal part -->
+                    <component thickness="VTXOB_TerminalPart_thickness1" width="VTXOB_TerminalPart_width1" length="VTXOB_TerminalPart_length1" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length" dr="0.0*mm"                          offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
+                    <component thickness="VTXOB_TerminalPart_thickness2" width="VTXOB_TerminalPart_width2" length="VTXOB_TerminalPart_length2" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length" dr="VTXOB_TerminalPart_thickness1"   offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
+                </end_z>
             </stave>
 
             <!-- Definition of our "stave" object that is used to build the barrel, here for the outer layer -->
@@ -488,21 +509,21 @@
 
                  <!-- Sensor  -->
                 <sensor dr="VTXOB_support_thickness" offset="0.0*mm" thickness="VTXO_Sensitive_Thickness" material="Silicon">
-                    <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_periphery+VTXO_sens_z_sens_spacing/2.0)" ymax="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"                    xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0"    vis="VTXDPeripheryVis"/> <!-- top Quad periphery-->
-                    <component sensitive="False" ymin="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"                          ymax="VTXO_sens_z_sensitive+VTXO_sens_z_periphery+VTXO_sens_z_sens_spacing/2.0" xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0"    vis="VTXDPeripheryVis"/> <!-- bottom Quad periphery-->   
-                    <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"                       ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"                       xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_sens_spacing/2.0)"                          vis="VTXDPeripheryVis"/> <!-- left Quad periphery-->   
-                    <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"                       ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"                       xmin="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_sens_spacing/2.0"                             xmax="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0"    vis="VTXDPeripheryVis"/> <!-- right Quad periphery-->   
+                    <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_periphery+VTXO_sens_z_sens_spacing/2.0)" ymax="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"                    xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0"    vis="VTXPeripheryVis"/> <!-- top Quad periphery-->
+                    <component sensitive="False" ymin="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"                          ymax="VTXO_sens_z_sensitive+VTXO_sens_z_periphery+VTXO_sens_z_sens_spacing/2.0" xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0"    vis="VTXPeripheryVis"/> <!-- bottom Quad periphery-->   
+                    <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"                       ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"                       xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_sens_spacing/2.0)"                          vis="VTXPeripheryVis"/> <!-- left Quad periphery-->   
+                    <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"                       ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"                       xmin="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_sens_spacing/2.0"                             xmax="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0"    vis="VTXPeripheryVis"/> <!-- right Quad periphery-->   
 
-                    <component sensitive="False" ymin="VTXO_sens_z_sens_spacing/2.0"                            ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"   xmin="-VTXO_sens_rphi_sens_spacing/2.0"                             xmax="VTXO_sens_rphi_sens_spacing/2.0"                          vis="VTXOBPeripheryVis"/> <!-- Middle cross: right -->
-                    <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"   ymax="-VTXO_sens_z_sens_spacing/2.0"                        xmin="-VTXO_sens_rphi_sens_spacing/2.0"                             xmax="VTXO_sens_rphi_sens_spacing/2.0"                          vis="VTXOBPeripheryVis"/> <!-- Middle cross: left -->
-                    <component sensitive="False" ymin="-VTXO_sens_z_sens_spacing/2.0"                           ymax="VTXO_sens_z_sens_spacing/2.0"                         xmin="VTXO_sens_rphi_sens_spacing/2.0"                              xmax="VTXO_sens_rphi_sens_spacing/2.0+VTXO_sens_rphi_sensitive" vis="VTXOBPeripheryVis"/> <!-- Middle cross: top -->
-                    <component sensitive="False" ymin="-VTXO_sens_z_sens_spacing/2.0"                           ymax="VTXO_sens_z_sens_spacing/2.0"                         xmin="-(VTXO_sens_rphi_sens_spacing/2.0+VTXO_sens_rphi_sensitive)"  xmax="-VTXO_sens_rphi_sens_spacing/2.0"                         vis="VTXOBPeripheryVis"/> <!-- Middle cross: bottom -->
-                    <component sensitive="False" ymin="-VTXO_sens_z_sens_spacing/2.0"                           ymax="VTXO_sens_z_sens_spacing/2.0"                         xmin="-VTXO_sens_rphi_sens_spacing/2.0"                             xmax="VTXO_sens_rphi_sens_spacing/2.0"                          vis="VTXOBPeripheryVis"/> <!-- Middle cross: centre -->
+                    <component sensitive="False" ymin="VTXO_sens_z_sens_spacing/2.0"                            ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"   xmin="-VTXO_sens_rphi_sens_spacing/2.0"                             xmax="VTXO_sens_rphi_sens_spacing/2.0"                          vis="VTXPeripheryVis"/> <!-- Middle cross: right -->
+                    <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"   ymax="-VTXO_sens_z_sens_spacing/2.0"                        xmin="-VTXO_sens_rphi_sens_spacing/2.0"                             xmax="VTXO_sens_rphi_sens_spacing/2.0"                          vis="VTXPeripheryVis"/> <!-- Middle cross: left -->
+                    <component sensitive="False" ymin="-VTXO_sens_z_sens_spacing/2.0"                           ymax="VTXO_sens_z_sens_spacing/2.0"                         xmin="VTXO_sens_rphi_sens_spacing/2.0"                              xmax="VTXO_sens_rphi_sens_spacing/2.0+VTXO_sens_rphi_sensitive" vis="VTXPeripheryVis"/> <!-- Middle cross: top -->
+                    <component sensitive="False" ymin="-VTXO_sens_z_sens_spacing/2.0"                           ymax="VTXO_sens_z_sens_spacing/2.0"                         xmin="-(VTXO_sens_rphi_sens_spacing/2.0+VTXO_sens_rphi_sensitive)"  xmax="-VTXO_sens_rphi_sens_spacing/2.0"                         vis="VTXPeripheryVis"/> <!-- Middle cross: bottom -->
+                    <component sensitive="False" ymin="-VTXO_sens_z_sens_spacing/2.0"                           ymax="VTXO_sens_z_sens_spacing/2.0"                         xmin="-VTXO_sens_rphi_sens_spacing/2.0"                             xmax="VTXO_sens_rphi_sens_spacing/2.0"                          vis="VTXPeripheryVis"/> <!-- Middle cross: centre -->
                     
-                    <component sensitive="True" ymin="-VTXO_sens_z_sensitive-VTXO_sens_z_sens_spacing/2.0"  ymax="-VTXO_sens_z_sens_spacing/2.0"                        xmin="VTXO_sens_rphi_sens_spacing/2.0"                              xmax="VTXO_sens_rphi_sens_spacing/2.0+VTXO_sens_rphi_sensitive" vis="VTXOBSensitiveVis"/> <!-- top left sensitive -->
-                    <component sensitive="True" ymin="VTXO_sens_z_sens_spacing/2.0"                         ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"   xmin="VTXO_sens_rphi_sens_spacing/2.0"                              xmax="VTXO_sens_rphi_sens_spacing/2.0+VTXO_sens_rphi_sensitive" vis="VTXOBSensitiveVis"/> <!-- top right sensitive -->               
-                    <component sensitive="True" ymin="-VTXO_sens_z_sensitive-VTXO_sens_z_sens_spacing/2.0"  ymax="-VTXO_sens_z_sens_spacing/2.0"                        xmin="-VTXO_sens_rphi_sens_spacing/2.0-VTXO_sens_rphi_sensitive"    xmax="-VTXO_sens_rphi_sens_spacing/2.0"                         vis="VTXOBSensitiveVis"/> <!-- bottom left sensitive -->
-                    <component sensitive="True" ymin="VTXO_sens_z_sens_spacing/2.0"                         ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"   xmin="-VTXO_sens_rphi_sens_spacing/2.0-VTXO_sens_rphi_sensitive"    xmax="-VTXO_sens_rphi_sens_spacing/2.0"                         vis="VTXOBSensitiveVis"/> <!-- bottom right sensitive -->
+                    <component sensitive="True" ymin="-VTXO_sens_z_sensitive-VTXO_sens_z_sens_spacing/2.0"  ymax="-VTXO_sens_z_sens_spacing/2.0"                        xmin="VTXO_sens_rphi_sens_spacing/2.0"                              xmax="VTXO_sens_rphi_sens_spacing/2.0+VTXO_sens_rphi_sensitive" vis="VTXSensitiveVis"/> <!-- top left sensitive -->
+                    <component sensitive="True" ymin="VTXO_sens_z_sens_spacing/2.0"                         ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"   xmin="VTXO_sens_rphi_sens_spacing/2.0"                              xmax="VTXO_sens_rphi_sens_spacing/2.0+VTXO_sens_rphi_sensitive" vis="VTXSensitiveVis"/> <!-- top right sensitive -->               
+                    <component sensitive="True" ymin="-VTXO_sens_z_sensitive-VTXO_sens_z_sens_spacing/2.0"  ymax="-VTXO_sens_z_sens_spacing/2.0"                        xmin="-VTXO_sens_rphi_sens_spacing/2.0-VTXO_sens_rphi_sensitive"    xmax="-VTXO_sens_rphi_sens_spacing/2.0"                         vis="VTXSensitiveVis"/> <!-- bottom left sensitive -->
+                    <component sensitive="True" ymin="VTXO_sens_z_sens_spacing/2.0"                         ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"   xmin="-VTXO_sens_rphi_sens_spacing/2.0-VTXO_sens_rphi_sensitive"    xmax="-VTXO_sens_rphi_sens_spacing/2.0"                         vis="VTXSensitiveVis"/> <!-- bottom right sensitive -->
                 </sensor>
 
                  <!-- Flex  -->
@@ -511,6 +532,16 @@
                     <component thickness="VTXO_flex_Kapton_thickness"    width="VTXO_flex_width" dr="VTXO_flex_Aluminium_thickness"                                    offset="0.0*mm" material="KaptonVtx" vis="VertexCableVis"/>
                     <component thickness="VTXO_flex_Glue_thickness"      width="VTXO_flex_width" dr="VTXO_flex_Aluminium_thickness+VTXO_flex_Kapton_thickness"  offset="0.0*mm" material="GlueEcobond45" vis="VertexCableVis"/>
                 </readout>
+
+                <!-- End of stave structures -->
+                <end_z dr="VTXOB_support_thickness+VTXO_Sensitive_Thickness" offset="0.0*mm">
+                    <!-- Hybrid -->
+                    <component thickness="VTXO_hybrid_thickness" width="VTXO_mod_rphi" length="VTXO_hybrid_length" dz="VTXOB_mod_z_spacing" dr="0.0*mm" offset="0.0*mm" material="PCB" vis="HybridVis"/>
+
+                    <!-- Terminal part -->
+                    <component thickness="VTXOB_TerminalPart_thickness1" width="VTXOB_TerminalPart_width1" length="VTXOB_TerminalPart_length1" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length" dr="-2.839*mm"                                                               offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
+                    <component thickness="VTXOB_TerminalPart_thickness3" width="VTXOB_TerminalPart_width3" length="VTXOB_TerminalPart_length3" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length" dr="-2.839*mm-VTXOB_TerminalPart_thickness3"   offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
+                </end_z>
             </stave>
 
             <!-- Here we construct the barrel -->
@@ -541,21 +572,21 @@
 
                 <!-- Sensor -->
                 <sensor z_offset="VTXO_flex_thickness" thickness="VTXO_Sensitive_Thickness" material="Silicon" offset="0.0*mm">
-                    <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_periphery+VTXO_sens_z_sens_spacing/2.0)" ymax="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"                    xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0"    vis="VTXDPeripheryVis"/> <!-- top Quad periphery-->
-                    <component sensitive="False" ymin="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"                          ymax="VTXO_sens_z_sensitive+VTXO_sens_z_periphery+VTXO_sens_z_sens_spacing/2.0" xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0"    vis="VTXDPeripheryVis"/> <!-- bottom Quad periphery-->   
-                    <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"                       ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"                       xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_sens_spacing/2.0)"                          vis="VTXDPeripheryVis"/> <!-- left Quad periphery-->   
-                    <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"                       ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"                       xmin="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_sens_spacing/2.0"                             xmax="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0"    vis="VTXDPeripheryVis"/> <!-- right Quad periphery-->   
+                    <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_periphery+VTXO_sens_z_sens_spacing/2.0)" ymax="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"                    xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0"    vis="VTXPeripheryVis"/> <!-- top Quad periphery-->
+                    <component sensitive="False" ymin="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"                          ymax="VTXO_sens_z_sensitive+VTXO_sens_z_periphery+VTXO_sens_z_sens_spacing/2.0" xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0"    vis="VTXPeripheryVis"/> <!-- bottom Quad periphery-->   
+                    <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"                       ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"                       xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_sens_spacing/2.0)"                          vis="VTXPeripheryVis"/> <!-- left Quad periphery-->   
+                    <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"                       ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"                       xmin="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_sens_spacing/2.0"                             xmax="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0"    vis="VTXPeripheryVis"/> <!-- right Quad periphery-->   
 
-                    <component sensitive="False" ymin="VTXO_sens_z_sens_spacing/2.0"                            ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"   xmin="-VTXO_sens_rphi_sens_spacing/2.0"                             xmax="VTXO_sens_rphi_sens_spacing/2.0"                          vis="VTXOBPeripheryVis"/> <!-- Middle cross: right -->
-                    <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"   ymax="-VTXO_sens_z_sens_spacing/2.0"                        xmin="-VTXO_sens_rphi_sens_spacing/2.0"                             xmax="VTXO_sens_rphi_sens_spacing/2.0"                          vis="VTXOBPeripheryVis"/> <!-- Middle cross: left -->
-                    <component sensitive="False" ymin="-VTXO_sens_z_sens_spacing/2.0"                           ymax="VTXO_sens_z_sens_spacing/2.0"                         xmin="VTXO_sens_rphi_sens_spacing/2.0"                              xmax="VTXO_sens_rphi_sens_spacing/2.0+VTXO_sens_rphi_sensitive" vis="VTXOBPeripheryVis"/> <!-- Middle cross: top -->
-                    <component sensitive="False" ymin="-VTXO_sens_z_sens_spacing/2.0"                           ymax="VTXO_sens_z_sens_spacing/2.0"                         xmin="-(VTXO_sens_rphi_sens_spacing/2.0+VTXO_sens_rphi_sensitive)"  xmax="-VTXO_sens_rphi_sens_spacing/2.0"                         vis="VTXOBPeripheryVis"/> <!-- Middle cross: bottom -->
-                    <component sensitive="False" ymin="-VTXO_sens_z_sens_spacing/2.0"                           ymax="VTXO_sens_z_sens_spacing/2.0"                         xmin="-VTXO_sens_rphi_sens_spacing/2.0"                             xmax="VTXO_sens_rphi_sens_spacing/2.0"                          vis="VTXOBPeripheryVis"/> <!-- Middle cross: centre -->
+                    <component sensitive="False" ymin="VTXO_sens_z_sens_spacing/2.0"                            ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"   xmin="-VTXO_sens_rphi_sens_spacing/2.0"                             xmax="VTXO_sens_rphi_sens_spacing/2.0"                          vis="VTXPeripheryVis"/> <!-- Middle cross: right -->
+                    <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"   ymax="-VTXO_sens_z_sens_spacing/2.0"                        xmin="-VTXO_sens_rphi_sens_spacing/2.0"                             xmax="VTXO_sens_rphi_sens_spacing/2.0"                          vis="VTXPeripheryVis"/> <!-- Middle cross: left -->
+                    <component sensitive="False" ymin="-VTXO_sens_z_sens_spacing/2.0"                           ymax="VTXO_sens_z_sens_spacing/2.0"                         xmin="VTXO_sens_rphi_sens_spacing/2.0"                              xmax="VTXO_sens_rphi_sens_spacing/2.0+VTXO_sens_rphi_sensitive" vis="VTXPeripheryVis"/> <!-- Middle cross: top -->
+                    <component sensitive="False" ymin="-VTXO_sens_z_sens_spacing/2.0"                           ymax="VTXO_sens_z_sens_spacing/2.0"                         xmin="-(VTXO_sens_rphi_sens_spacing/2.0+VTXO_sens_rphi_sensitive)"  xmax="-VTXO_sens_rphi_sens_spacing/2.0"                         vis="VTXPeripheryVis"/> <!-- Middle cross: bottom -->
+                    <component sensitive="False" ymin="-VTXO_sens_z_sens_spacing/2.0"                           ymax="VTXO_sens_z_sens_spacing/2.0"                         xmin="-VTXO_sens_rphi_sens_spacing/2.0"                             xmax="VTXO_sens_rphi_sens_spacing/2.0"                          vis="VTXPeripheryVis"/> <!-- Middle cross: centre -->
                     
-                    <component sensitive="True" ymin="-VTXO_sens_z_sensitive-VTXO_sens_z_sens_spacing/2.0"  ymax="-VTXO_sens_z_sens_spacing/2.0"                        xmin="VTXO_sens_rphi_sens_spacing/2.0"                              xmax="VTXO_sens_rphi_sens_spacing/2.0+VTXO_sens_rphi_sensitive" vis="VTXOBSensitiveVis"/> <!-- top left sensitive -->
-                    <component sensitive="True" ymin="VTXO_sens_z_sens_spacing/2.0"                         ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"   xmin="VTXO_sens_rphi_sens_spacing/2.0"                              xmax="VTXO_sens_rphi_sens_spacing/2.0+VTXO_sens_rphi_sensitive" vis="VTXOBSensitiveVis"/> <!-- top right sensitive -->               
-                    <component sensitive="True" ymin="-VTXO_sens_z_sensitive-VTXO_sens_z_sens_spacing/2.0"  ymax="-VTXO_sens_z_sens_spacing/2.0"                        xmin="-VTXO_sens_rphi_sens_spacing/2.0-VTXO_sens_rphi_sensitive"    xmax="-VTXO_sens_rphi_sens_spacing/2.0"                         vis="VTXOBSensitiveVis"/> <!-- bottom left sensitive -->
-                    <component sensitive="True" ymin="VTXO_sens_z_sens_spacing/2.0"                         ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"   xmin="-VTXO_sens_rphi_sens_spacing/2.0-VTXO_sens_rphi_sensitive"    xmax="-VTXO_sens_rphi_sens_spacing/2.0"                         vis="VTXOBSensitiveVis"/> <!-- bottom right sensitive -->
+                    <component sensitive="True" ymin="-VTXO_sens_z_sensitive-VTXO_sens_z_sens_spacing/2.0"  ymax="-VTXO_sens_z_sens_spacing/2.0"                        xmin="VTXO_sens_rphi_sens_spacing/2.0"                              xmax="VTXO_sens_rphi_sens_spacing/2.0+VTXO_sens_rphi_sensitive" vis="VTXSensitiveVis"/> <!-- top left sensitive -->
+                    <component sensitive="True" ymin="VTXO_sens_z_sens_spacing/2.0"                         ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"   xmin="VTXO_sens_rphi_sens_spacing/2.0"                              xmax="VTXO_sens_rphi_sens_spacing/2.0+VTXO_sens_rphi_sensitive" vis="VTXSensitiveVis"/> <!-- top right sensitive -->               
+                    <component sensitive="True" ymin="-VTXO_sens_z_sensitive-VTXO_sens_z_sens_spacing/2.0"  ymax="-VTXO_sens_z_sens_spacing/2.0"                        xmin="-VTXO_sens_rphi_sens_spacing/2.0-VTXO_sens_rphi_sensitive"    xmax="-VTXO_sens_rphi_sens_spacing/2.0"                         vis="VTXSensitiveVis"/> <!-- bottom left sensitive -->
+                    <component sensitive="True" ymin="VTXO_sens_z_sens_spacing/2.0"                         ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"   xmin="-VTXO_sens_rphi_sens_spacing/2.0-VTXO_sens_rphi_sensitive"    xmax="-VTXO_sens_rphi_sens_spacing/2.0"                         vis="VTXSensitiveVis"/> <!-- bottom right sensitive -->
                 </sensor>
 
                 <!-- low-z support -->
