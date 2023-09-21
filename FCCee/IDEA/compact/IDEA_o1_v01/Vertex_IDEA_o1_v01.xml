@@ -246,21 +246,19 @@
                     <component sensitive="True"     xmin="-VTXIB_mod_rphi/2.0"                                      xmax="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_sensitive" ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXSensitiveVis"/>
                 </sensor>
 
-                <!-- Support -->
-                <support dr="VTXIB_Sensitive_Thickness" offset="0.0*mm">
+                <components name="support" dr="VTXIB_Sensitive_Thickness" offset="0.0*mm">
                     <component thickness="VTXIB_Support_Thickness" width="VTXIB_Support_width" offset="0.0*mm" dr="0.0*mm" material="CarbonFiberVtx" vis="CarbonFiberVis"/>
                     <component thickness="VTXIB_L1_Holder_Thickness"  width="VTXIB_L1_Holder_Rohacell_rphi" offset="0.0*mm" dr="VTXIB_Support_Thickness" material="RohacellVtx66D" vis="RohacellVis"/> <!-- Holder structure -->
                     <component thickness="VTXIB_L1_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="-VTXIB_L1_Holder_Rohacell_rphi/2.0-VTXIB_Holder_CarbonFiber_rphi/2.0" dr="VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="CarbonFiberVis"/> <!-- Holder structure -->
                     <component thickness="VTXIB_L1_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="VTXIB_L1_Holder_Rohacell_rphi/2.0+VTXIB_Holder_CarbonFiber_rphi/2.0"  dr="VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="CarbonFiberVis"/> <!-- Holder structure -->
-                </support>
+                </components>
 
-                <!-- Flex -->
-                <readout dr="VTXIB_Sensitive_Thickness" offset="0.0*mm">
+                <components name="flexes" dr="VTXIB_Sensitive_Thickness" offset="0.0*mm">
                     <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" dr="0.0*mm" offset="VTXIB_flex_offset" material="KaptonVtx" vis="VertexCableVis"/>
                     <component thickness="VTXIB_flex_Aluminium_thickness"    width="VTXIB_flex_width" dr="VTXIB_flex_Kapton_thickness" offset="VTXIB_flex_offset" material="Al" vis="VertexCableVis"/>
                     <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" dr="0.0*mm" offset="-VTXIB_flex_offset" material="KaptonVtx" vis="VertexCableVis"/>
                     <component thickness="VTXIB_flex_Aluminium_thickness"    width="VTXIB_flex_width" dr="VTXIB_flex_Kapton_thickness" offset="-VTXIB_flex_offset" material="Al" vis="VertexCableVis"/>
-                </readout>
+                </components>
 
                 <!-- End of stave structures -->
                 <end_z dr="0.0*mm" offset="0.0*mm">
@@ -284,25 +282,24 @@
             <stave name="SiVTXIBStave2">
                 <!-- Sensor -->
                 <sensor dr="0.0*mm" offset="0.0*mm" thickness="VTXIB_Sensitive_Thickness" material="Silicon">
-                    <component sensitive="False"    xmin="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_sensitive" xmax="VTXIB_mod_rphi/2.0"                                       ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="-VTXIB_mod_rphi/2.0"                                      xmax="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_sensitive" ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXSensitiveVis"/>
+                    <component sensitive="False"    xmin="-VTXIB_mod_rphi/2.0"                          xmax="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_periphery" ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXPeripheryVis"/>
+                    <component sensitive="True"     xmin="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_periphery" xmax="VTXIB_mod_rphi/2.0"                           ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXSensitiveVis"/>
+
                 </sensor>
 
-                <!-- Support -->
-                <support dr="VTXIB_Sensitive_Thickness" offset="0.0*mm">
+                <components name="support" dr="VTXIB_Sensitive_Thickness" offset="0.0*mm">
                     <component thickness="VTXIB_Support_Thickness" width="VTXIB_Support_width" offset="0.0*mm" dr="0.0*mm" material="CarbonFiberVtx" vis="CarbonFiberVis"/>
                     <component thickness="VTXIB_L2_Holder_Thickness"  width="VTXIB_L2_Holder_Rohacell_rphi" offset="0.0*mm" dr="VTXIB_Support_Thickness" material="RohacellVtx66D" vis="RohacellVis"/> <!-- Holder structure -->
                     <component thickness="VTXIB_L2_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="-VTXIB_L2_Holder_Rohacell_rphi/2.0-VTXIB_Holder_CarbonFiber_rphi/2.0" dr="VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="CarbonFiberVis"/> <!-- Holder structure -->
                     <component thickness="VTXIB_L2_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="VTXIB_L2_Holder_Rohacell_rphi/2.0+VTXIB_Holder_CarbonFiber_rphi/2.0"  dr="VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="CarbonFiberVis"/> <!-- Holder structure -->
-                </support>
+                </components>
 
-                <!-- Flex -->
-                <readout dr="VTXIB_Sensitive_Thickness" offset="0.0*mm">
+                <components name="flexes" dr="VTXIB_Sensitive_Thickness" offset="0.0*mm">
                     <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" dr="0.0*mm" offset="VTXIB_flex_offset" material="KaptonVtx" vis="VertexCableVis"/>
                     <component thickness="VTXIB_flex_Aluminium_thickness"    width="VTXIB_flex_width" dr="VTXIB_flex_Kapton_thickness" offset="VTXIB_flex_offset" material="Al" vis="VertexCableVis"/>
                     <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" dr="0.0*mm" offset="-VTXIB_flex_offset" material="KaptonVtx" vis="VertexCableVis"/>
                     <component thickness="VTXIB_flex_Aluminium_thickness"    width="VTXIB_flex_width" dr="VTXIB_flex_Kapton_thickness" offset="-VTXIB_flex_offset" material="Al" vis="VertexCableVis"/>
-                </readout>
+                </components>
 
                 <!-- End of stave structures -->
                 <end_z dr="0.0*mm" offset="0.0*mm">
@@ -330,21 +327,19 @@
                     <component sensitive="True"     xmin="-VTXIB_mod_rphi/2.0"                                      xmax="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_sensitive" ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXSensitiveVis"/>
                 </sensor>
 
-                <!-- Support -->
-                <support dr="VTXIB_Sensitive_Thickness" offset="0.0*mm">
+                <components name="support" dr="VTXIB_Sensitive_Thickness" offset="0.0*mm">
                     <component thickness="VTXIB_Support_Thickness" width="VTXIB_Support_width" offset="0.0*mm" dr="0.0*mm" material="CarbonFiberVtx" vis="CarbonFiberVis"/> 
                     <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_L3_Holder_Rohacell_rphi" offset="VTXIB_L3_Holder_offset" dr="VTXIB_Support_Thickness" material="RohacellVtx66D" vis="RohacellVis"/> <!-- Holder structure -->
                     <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="VTXIB_L3_Holder_offset-VTXIB_L3_Holder_Rohacell_rphi/2.0-VTXIB_Holder_CarbonFiber_rphi/2.0" dr="VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="CarbonFiberVis"/> <!-- Holder structure -->
                     <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="VTXIB_L3_Holder_offset+VTXIB_L3_Holder_Rohacell_rphi/2.0+VTXIB_Holder_CarbonFiber_rphi/2.0"  dr="VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="CarbonFiberVis"/> <!-- Holder structure -->
-                </support>
+                </components>
 
-                <!-- Flex -->
-                <readout dr="VTXIB_Sensitive_Thickness" offset="0.0*mm">
+                <components name="flexes" dr="VTXIB_Sensitive_Thickness" offset="0.0*mm">
                     <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" dr="0.0*mm" offset="VTXIB_flex_offset" material="KaptonVtx" vis="VertexCableVis"/>
                     <component thickness="VTXIB_flex_Aluminium_thickness"    width="VTXIB_flex_width" dr="VTXIB_flex_Kapton_thickness" offset="VTXIB_flex_offset" material="Al" vis="VertexCableVis"/>
                     <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" dr="0.0*mm" offset="-VTXIB_flex_offset" material="KaptonVtx" vis="VertexCableVis"/>
                     <component thickness="VTXIB_flex_Aluminium_thickness"    width="VTXIB_flex_width" dr="VTXIB_flex_Kapton_thickness" offset="-VTXIB_flex_offset" material="Al" vis="VertexCableVis"/>
-                </readout>
+                </components>
 
                 <!-- End of stave structures -->
                 <end_z dr="0.0*mm" offset="0.0*mm">
@@ -368,24 +363,22 @@
                 <!-- Sensor -->
                 <sensor dr="0.0*mm" offset="0.0*mm" thickness="VTXIB_Sensitive_Thickness" material="Silicon">
                     <component sensitive="False"    xmin="-VTXIB_mod_rphi/2.0" xmax="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_periphery" ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_periphery" xmax="VTXIB_mod_rphi_sensitive/2.0" ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXSensitiveVis"/>
+                    <component sensitive="True"     xmin="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_periphery" xmax="VTXIB_mod_rphi/2.0" ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXSensitiveVis"/>
                 </sensor>
 
-                <!-- Support -->
-                <support dr="VTXIB_Sensitive_Thickness" offset="0.0*mm">
+                <components name="support" dr="VTXIB_Sensitive_Thickness" offset="0.0*mm">
                     <component thickness="VTXIB_Support_Thickness" width="VTXIB_Support_width" offset="0.0*mm" dr="0.0*mm" material="CarbonFiberVtx" vis="CarbonFiberVis"/>
                     <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_L3_Holder_Rohacell_rphi" offset="-VTXIB_L3_Holder_offset" dr="VTXIB_Support_Thickness" material="RohacellVtx66D" vis="RohacellVis"/> <!-- Holder structure -->
                     <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="-VTXIB_L3_Holder_offset-VTXIB_L3_Holder_Rohacell_rphi/2.0-VTXIB_Holder_CarbonFiber_rphi/2.0" dr="VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="CarbonFiberVis"/> <!-- Holder structure -->
                     <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="-VTXIB_L3_Holder_offset+VTXIB_L3_Holder_Rohacell_rphi/2.0+VTXIB_Holder_CarbonFiber_rphi/2.0"  dr="VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="CarbonFiberVis"/> <!-- Holder structure -->
-                </support>
+                </components>
 
-                <!-- Flex -->
-                <readout dr="VTXIB_Sensitive_Thickness" offset="0.0*mm">
+                <components name="flexes" dr="VTXIB_Sensitive_Thickness" offset="0.0*mm">
                     <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" dr="0.0*mm" offset="VTXIB_flex_offset" material="KaptonVtx" vis="VertexCableVis"/>
                     <component thickness="VTXIB_flex_Aluminium_thickness"    width="VTXIB_flex_width" dr="VTXIB_flex_Kapton_thickness" offset="VTXIB_flex_offset" material="Al" vis="VertexCableVis"/>
                     <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" dr="0.0*mm" offset="-VTXIB_flex_offset" material="KaptonVtx" vis="VertexCableVis"/>
                     <component thickness="VTXIB_flex_Aluminium_thickness"    width="VTXIB_flex_width" dr="VTXIB_flex_Kapton_thickness" offset="-VTXIB_flex_offset" material="Al" vis="VertexCableVis"/>
-                </readout>
+                </components>
 
                 <!-- End of stave structures -->
                 <end_z dr="0.0*mm" offset="0.0*mm">
@@ -426,14 +419,13 @@
             
             <!-- Definition of our "stave" object that is used to build the barrel, here for the middle layer -->
             <stave name="SiVTXOBStave1">
-                 <!-- Flex  -->
-                <readout dr="0.0*mm" offset="0.0*mm">
+                <components name="flexes" dr="0.0*mm" offset="0.0*mm">
                     <component thickness="VTXO_flex_Aluminium_thickness" width="VTXO_flex_width" dr="0.0*mm"                                                                  offset="0.0*mm" material="Al" vis="VertexCableVis"/>
                     <component thickness="VTXO_flex_Kapton_thickness"    width="VTXO_flex_width" dr="VTXO_flex_Aluminium_thickness"                                    offset="0.0*mm" material="KaptonVtx" vis="VertexCableVis"/>
                     <component thickness="VTXO_flex_Glue_thickness"      width="VTXO_flex_width" dr="VTXO_flex_Aluminium_thickness+VTXO_flex_Kapton_thickness"  offset="0.0*mm" material="GlueEcobond45" vis="VertexCableVis"/>
-                </readout>
+                </components>
 
-                 <!-- Sensor  -->
+                <!-- Sensor  -->
                 <sensor dr="VTXO_flex_thickness" offset="0.0*mm" thickness="VTXO_Sensitive_Thickness" material="Silicon">
                     <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_periphery+VTXO_sens_z_sens_spacing/2.0)" ymax="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"                    xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0"    vis="VTXPeripheryVis"/> <!-- top Quad periphery-->
                     <component sensitive="False" ymin="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"                          ymax="VTXO_sens_z_sensitive+VTXO_sens_z_periphery+VTXO_sens_z_sens_spacing/2.0" xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0"    vis="VTXPeripheryVis"/> <!-- bottom Quad periphery-->   
@@ -452,18 +444,16 @@
                     <component sensitive="True" ymin="VTXO_sens_z_sens_spacing/2.0"                         ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"   xmin="-VTXO_sens_rphi_sens_spacing/2.0-VTXO_sens_rphi_sensitive"    xmax="-VTXO_sens_rphi_sens_spacing/2.0"                         vis="VTXSensitiveVis"/> <!-- bottom right sensitive -->
                 </sensor>
 
-                 <!-- Support  -->
-                <support dr="VTXO_flex_thickness+VTXO_Sensitive_Thickness" offset="0.0*mm">
+                <components name="support" dr="VTXO_flex_thickness+VTXO_Sensitive_Thickness" offset="0.0*mm">
                     <component thickness="VTXO_support_Fleece_thickness"         width="VTXO_mod_rphi" offset="0.0*mm" dr="0.0*mm" material="CarbonFleece" vis="CarbonFiberVis"/> <!-- Thin stave holder: should be material="CarbonFleeceGraphite", not implemented yet! -->
                     <component thickness="VTXO_support_PaperGraphite_thickness"  width="VTXO_mod_rphi" offset="0.0*mm" dr="VTXO_support_Fleece_thickness" material="CarbonFiberVtx" vis="CarbonFiberVis"/> <!-- Thin stave holder: should be material="PaperGraphite", not implemented yet, but only marginal difference in X0 -->
                     <component thickness="VTXO_support_CarbonFiber_thickness"    width="VTXO_mod_rphi" offset="0.0*mm" dr="VTXO_support_Fleece_thickness+VTXO_support_PaperGraphite_thickness" material="CarbonFiberVtx" vis="CarbonFiberVis"/> <!-- Thin stave holder: should be material="K13D2U", but not implemented yet, but only marginal difference in X0 -->
                     <component thickness="VTXO_support_Fleece_thickness"         width="VTXO_mod_rphi" offset="0.0*mm" dr="VTXO_support_Fleece_thickness+VTXO_support_PaperGraphite_thickness+VTXO_support_CarbonFiber_thickness" material="CarbonFleece" vis="CarbonFiberVis"/> <!-- Thin stave holder: should be material="CarbonFleeceGraphite", not implemented yet! -->
 
                     <component thickness="VTXOB_TrussStructure_thickness1" width="VTXO_mod_rphi"     offset="0.0*mm" dr="VTXOB_support_thickness+VTXOB_TrussStructure_distance" material="CarbonFiberVtx" vis="TrussStructureVis"/> <!-- Proxy for the lightweight truss structure -->
-                </support>
+                </components>
 
-                 <!-- Cooling pipes  -->
-                <support dr="VTXO_flex_thickness+VTXO_Sensitive_Thickness+VTXOB_support_thickness" offset="0.0*mm">
+                <components name="coolingPipes" dr="VTXO_flex_thickness+VTXO_Sensitive_Thickness+VTXOB_support_thickness" offset="0.0*mm">
                     <component thickness="VTXO_Pipe_thickness"  width="VTXO_Pipe_rphi" offset="VTXOB_Pipe_offset" dr="0.0*mm" material="KaptonVtx" vis="PipingVis"/> 
                     <component thickness="VTXO_Water_thickness" width="VTXO_Pipe_rphi" offset="VTXOB_Pipe_offset" dr="VTXO_Pipe_thickness" material="Water" vis="WaterVis"/>
                     <component thickness="VTXO_Pipe_thickness"  width="VTXO_Pipe_rphi" offset="VTXOB_Pipe_offset" dr="VTXO_Pipe_thickness+VTXO_Water_thickness" material="KaptonVtx" vis="PipingVis"/>
@@ -471,7 +461,7 @@
                     <component thickness="VTXO_Pipe_thickness"  width="VTXO_Pipe_rphi" offset="-VTXOB_Pipe_offset" dr="0.0*mm" material="KaptonVtx" vis="PipingVis"/> 
                     <component thickness="VTXO_Water_thickness" width="VTXO_Pipe_rphi" offset="-VTXOB_Pipe_offset" dr="VTXO_Pipe_thickness" material="Water" vis="WaterVis"/>
                     <component thickness="VTXO_Pipe_thickness"  width="VTXO_Pipe_rphi" offset="-VTXOB_Pipe_offset" dr="VTXO_Pipe_thickness+VTXO_Water_thickness" material="KaptonVtx" vis="PipingVis"/>
-                </support>
+                </components>
 
                 <!-- End of stave structures -->
                 <end_z dr="0.0*mm" offset="0.0*mm">
@@ -486,18 +476,16 @@
 
             <!-- Definition of our "stave" object that is used to build the barrel, here for the outer layer -->
             <stave name="SiVTXOBStave2">
-                 <!-- Support  -->
-                <support dr="0.0*mm" offset="0.0*mm">
+                <components name="support" dr="0.0*mm" offset="0.0*mm">
                     <component thickness="VTXOB_TrussStructure_thickness2" width="VTXO_mod_rphi"     offset="0.0*mm" dr="-VTXOB_TrussStructure_distance" material="CarbonFiberVtx" vis="TrussStructureVis"/>   <!--Proxy for the lightweight truss structure -->
 
                     <component thickness="VTXO_support_Fleece_thickness"         width="VTXO_mod_rphi" offset="0.0*mm" dr="0.0*mm" material="CarbonFiberVtx" vis="CarbonFiberVis"/>  <!--Thin stave holder: should be material="CarbonFleeceGraphite", not implemented yet! -->
                     <component thickness="VTXO_support_PaperGraphite_thickness"  width="VTXO_mod_rphi" offset="0.0*mm" dr="VTXO_support_Fleece_thickness" material="CarbonFiberVtx" vis="CarbonFiberVis"/>   <!--Thin stave holder: should be material="PaperGraphite", not implemented yet! -->
                     <component thickness="VTXO_support_CarbonFiber_thickness"    width="VTXO_mod_rphi" offset="0.0*mm" dr="VTXO_support_Fleece_thickness+VTXO_support_PaperGraphite_thickness" material="CarbonFiberVtx" vis="CarbonFiberVis"/>
                     <component thickness="VTXO_support_Fleece_thickness"         width="VTXO_mod_rphi" offset="0.0*mm" dr="VTXO_support_Fleece_thickness+VTXO_support_PaperGraphite_thickness+VTXO_support_CarbonFiber_thickness" material="CarbonFiberVtx" vis="CarbonFiberVis"/> <!-- Thin stave holder: should be material="CarbonFleeceGraphite", not implemented yet! -->
-                </support>
+                </components>
 
-                 <!-- Cooling pipes  -->
-                <support dr="-VTXO_Pipe_thickness" offset="0.0*mm">
+                <components name="coolingPipes" dr="-VTXO_Pipe_thickness" offset="0.0*mm">
                     <component thickness="VTXO_Pipe_thickness"  width="VTXO_Pipe_rphi" offset="VTXOB_Pipe_offset" dr="0.0*mm" material="KaptonVtx" vis="PipingVis"/> 
                     <component thickness="VTXO_Water_thickness" width="VTXO_Pipe_rphi" offset="VTXOB_Pipe_offset" dr="-VTXO_Water_thickness" material="Water" vis="WaterVis"/>
                     <component thickness="VTXO_Pipe_thickness"  width="VTXO_Pipe_rphi" offset="VTXOB_Pipe_offset" dr="-VTXO_Water_thickness-VTXO_Pipe_thickness" material="KaptonVtx" vis="PipingVis"/>
@@ -505,7 +493,7 @@
                     <component thickness="VTXO_Pipe_thickness"  width="VTXO_Pipe_rphi" offset="-VTXOB_Pipe_offset" dr="0.0*mm" material="KaptonVtx" vis="PipingVis"/> 
                     <component thickness="VTXO_Water_thickness" width="VTXO_Pipe_rphi" offset="-VTXOB_Pipe_offset" dr="-VTXO_Water_thickness" material="Water" vis="WaterVis"/>
                     <component thickness="VTXO_Pipe_thickness"  width="VTXO_Pipe_rphi" offset="-VTXOB_Pipe_offset" dr="-VTXO_Water_thickness-VTXO_Pipe_thickness" material="KaptonVtx" vis="PipingVis"/>
-                </support>
+                </components>
 
                  <!-- Sensor  -->
                 <sensor dr="VTXOB_support_thickness" offset="0.0*mm" thickness="VTXO_Sensitive_Thickness" material="Silicon">
@@ -526,12 +514,11 @@
                     <component sensitive="True" ymin="VTXO_sens_z_sens_spacing/2.0"                         ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"   xmin="-VTXO_sens_rphi_sens_spacing/2.0-VTXO_sens_rphi_sensitive"    xmax="-VTXO_sens_rphi_sens_spacing/2.0"                         vis="VTXSensitiveVis"/> <!-- bottom right sensitive -->
                 </sensor>
 
-                 <!-- Flex  -->
-                <readout dr="VTXOB_support_thickness+VTXO_Sensitive_Thickness" offset="0.0*mm">
+                <components name="flexes" dr="VTXOB_support_thickness+VTXO_Sensitive_Thickness" offset="0.0*mm">
                     <component thickness="VTXO_flex_Aluminium_thickness" width="VTXO_flex_width" dr="0.0*mm"                                                                  offset="0.0*mm" material="Al" vis="VertexCableVis"/>
                     <component thickness="VTXO_flex_Kapton_thickness"    width="VTXO_flex_width" dr="VTXO_flex_Aluminium_thickness"                                    offset="0.0*mm" material="KaptonVtx" vis="VertexCableVis"/>
                     <component thickness="VTXO_flex_Glue_thickness"      width="VTXO_flex_width" dr="VTXO_flex_Aluminium_thickness+VTXO_flex_Kapton_thickness"  offset="0.0*mm" material="GlueEcobond45" vis="VertexCableVis"/>
-                </readout>
+                </components>
 
                 <!-- End of stave structures -->
                 <end_z dr="VTXOB_support_thickness+VTXO_Sensitive_Thickness" offset="0.0*mm">
