@@ -231,7 +231,7 @@ static Ref_t create_arc_endcap_cell(Detector &desc, xml::Handle_t handle, Sensit
     Tube vesselEnvelopeSolid(  vessel_inner_r,
                                vessel_outer_r,
                                vessel_length/2. );
-    Volume endcap_cells_vessel_envelope (detName+"_vesselEnvelope", vesselEnvelopeSolid, vesselSkinMat );
+    Volume endcap_cells_vessel_envelope (detName+"_vessel", vesselEnvelopeSolid, vesselSkinMat );
     endcap_cells_vessel_envelope.setVisAttributes( vesselSkinVis );
 
     // if 0==bulk_skin_ratio do not create bulk at all
@@ -512,13 +512,13 @@ static Ref_t create_arc_endcap_cell(Detector &desc, xml::Handle_t handle, Sensit
 
 
 
-  Assembly endcaps_assemblyV("endcaps_assemblyV");
+  Assembly endcaps_assemblyV("ArcEndcaps");
 
   Transform3D endcapZPos_Tr(RotationZYX(0,0,0), Translation3D(0, 0, zpos_endcap));
   PlacedVolume endcapZPos_PV = endcaps_assemblyV.placeVolume(endcap_cells_vessel_envelope, endcapZPos_Tr);
   endcapZPos_PV.addPhysVolID("barrel", 1);
 
-  DetElement endcapZPos_DE(det, "endcapZPos_DE", 0 );
+  DetElement endcapZPos_DE(det, "ArcEndcapZPos_DE", 0 );
   endcapZPos_DE.setPlacement(endcapZPos_PV);
 
 
@@ -526,7 +526,7 @@ static Ref_t create_arc_endcap_cell(Detector &desc, xml::Handle_t handle, Sensit
   PlacedVolume endcapZNeg_PV = endcaps_assemblyV.placeVolume(endcap_cells_vessel_envelope, envelope_zreflected_Tr);
   endcapZNeg_PV.addPhysVolID("barrel", 2);
 
-  DetElement endcapZNeg_DE(det, "endcapZNeg_DE", 2 );
+  DetElement endcapZNeg_DE(det, "ArcEndcapZNeg_DE", 2 );
   endcapZNeg_DE.setPlacement(endcapZNeg_PV);
 
 
@@ -674,7 +674,7 @@ static Ref_t create_arc_barrel_cell(Detector &desc, xml::Handle_t handle, Sensit
     Tube vesselEnvelopeSolid(  vessel_inner_r,
                                vessel_outer_r,
                                vessel_length/2. + vessel_wall_thickness);
-    Volume barrel_cells_vessel_envelope (detName+"_vesselSkin", vesselEnvelopeSolid, vesselSkinMat );
+    Volume barrel_cells_vessel_envelope ("ArcBarrel_vessel", vesselEnvelopeSolid, vesselSkinMat );
     barrel_cells_vessel_envelope.setVisAttributes( vesselSkinVis );
 
     // if 0==bulk_skin_ratio do not create bulk at all
