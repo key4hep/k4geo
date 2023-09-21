@@ -70,33 +70,33 @@
 
   <detectors>
     <!-- positive side: cryostat -->
-    <detector name="CalEndcapCryoFront_positive" type="SimpleCylinder" vis="emec_cryo_vis">
+    <detector name="CalEndcapCryoFront_positive" type="SimpleCylinder_o1_v01" vis="emec_cryo_vis">
       <dimensions rmin="CryoEndcap_front_rmin" rmax="CryoEndcap_rmax"
                   dz="CryoEMECThicknessFront/2." z_offset="CryoEndcap_z1+CryoEMECThicknessFront/2." material="Aluminum" phi0="0" deltaphi="360*deg"/>
     </detector>
-    <detector name="CalEndcapCryoBack_positive" type="SimpleCylinder" vis="emec_cryo_vis">
+    <detector name="CalEndcapCryoBack_positive" type="SimpleCylinder_o1_v01" vis="emec_cryo_vis">
       <dimensions rmin="CryoEndcap_back_rmin" rmax="CryoEndcap_rmax"
                   dz="CryoEMECThicknessBack/2." z_offset="CryoEndcap_z2-CryoEMECThicknessBack/2." material="Aluminum" phi0="0" deltaphi="360*deg"/>
     </detector>
-    <detector name="CalEndcapCryoOuter_positive" type="SimpleCylinder" vis="emec_cryo_vis">
+    <detector name="CalEndcapCryoOuter_positive" type="SimpleCylinder_o1_v01" vis="emec_cryo_vis">
       <dimensions rmin="CryoEndcap_rmax-CryoEMECThicknessOuter" rmax="CryoEndcap_rmax"
                   dz="(CryoEndcap_z2-CryoEndcap_z1-CryoEMECThicknessFront-CryoEMECThicknessBack)/2."
                   z_offset="CryoEndcap_z1+CryoEMECThicknessFront+(CryoEndcap_z2-CryoEndcap_z1-CryoEMECThicknessFront-CryoEMECThicknessBack)/2." material="Aluminum" phi0="0" deltaphi="360*deg"/>
     </detector>
-    <detector name="CalEndcapCryoInner_positive" type="SimpleCylinder" vis="emec_cryo_vis">
+    <detector name="CalEndcapCryoInner_positive" type="SimpleCylinder_o1_v01" vis="emec_cryo_vis">
       <dimensions rmin="CryoEndcap_front_rmin" rmax="CryoEndcap_front_rmin+CryoEMECThicknessInner"
                   dz="(CryoEndcap_z2-CryoEndcap_z1-CryoEMECThicknessFront-CryoEMECThicknessBack)/2."
                   z_offset="CryoEndcap_z1+CryoEMECThicknessFront+(CryoEndcap_z2-CryoEndcap_z1-CryoEMECThicknessFront-CryoEMECThicknessBack)/2." material="Aluminum" phi0="0" deltaphi="360*deg"/>
     </detector>
-    <detector name="CalEndcapBathFront_positive" type="SimpleCylinder" vis="emec_bath_vis">
+    <detector name="CalEndcapBathFront_positive" type="SimpleCylinder_o1_v01" vis="emec_bath_vis">
       <dimensions rmin="CryoEndcap_front_rmin+CryoEMECThicknessInner" rmax="EMEC_rmax"
                   dz="BathThicknessFront/2." z_offset="EMEC_z1-BathThicknessFront/2." material="LAr" phi0="0" deltaphi="360*deg"/>
     </detector>
-    <detector name="CalEndcapBathBack_positive" type="SimpleCylinder" vis="emec_bath_vis">
+    <detector name="CalEndcapBathBack_positive" type="SimpleCylinder_o1_v01" vis="emec_bath_vis">
       <dimensions rmin="EMEC_rmin1" rmax="EMEC_rmax"
                   dz="BathThicknessBack/2." z_offset="EMEC_z2+BathThicknessBack/2." material="LAr" phi0="0" deltaphi="360*deg"/>
     </detector>
-    <detector name="CalEndcapBathOuter_positive" type="SimpleCylinder" vis="emec_bath_vis">
+    <detector name="CalEndcapBathOuter_positive" type="SimpleCylinder_o1_v01" vis="emec_bath_vis">
       <dimensions rmin="CryoEndcap_rmax-CryoEMECThicknessOuter-BathThicknessOuter" rmax="CryoEndcap_rmax-CryoEMECThicknessOuter"
                   dz="(CryoEndcap_z2-CryoEndcap_z1-CryoEMECThicknessFront-CryoEMECThicknessBack)/2."
                   z_offset="CryoEndcap_z1+CryoEMECThicknessFront+(CryoEndcap_z2-CryoEndcap_z1-CryoEMECThicknessFront-CryoEMECThicknessBack)/2." material="LAr" phi0="0" deltaphi="360*deg"/>
@@ -131,33 +131,33 @@
       </readout>
     </detector>
     <!-- negative side: cryostat -->
-    <detector name="CalEndcapCryoFront_negative" type="SimpleCylinder" vis="emec_cryo_vis">
+    <detector name="CalEndcapCryoFront_negative" type="SimpleCylinder_o1_v01" vis="emec_cryo_vis">
       <dimensions rmin="CryoEndcap_front_rmin" rmax="CryoEndcap_rmax"
                   dz="CryoEMECThicknessFront/2." z_offset="-(CryoEndcap_z1+CryoEMECThicknessFront/2.)" material="Aluminum" phi0="0" deltaphi="360*deg"/>
     </detector>
-    <detector name="CalEndcapCryoBack_negative" type="SimpleCylinder" vis="emec_cryo_vis">
+    <detector name="CalEndcapCryoBack_negative" type="SimpleCylinder_o1_v01" vis="emec_cryo_vis">
       <dimensions rmin="CryoEndcap_back_rmin" rmax="CryoEndcap_rmax"
                   dz="CryoEMECThicknessBack/2." z_offset="-(CryoEndcap_z2-CryoEMECThicknessBack/2.)" material="Aluminum" phi0="0" deltaphi="360*deg"/>
     </detector>
-    <detector name="CalEndcapCryoOuter_negative" type="SimpleCylinder" vis="emec_cryo_vis">
+    <detector name="CalEndcapCryoOuter_negative" type="SimpleCylinder_o1_v01" vis="emec_cryo_vis">
       <dimensions rmin="CryoEndcap_rmax-CryoEMECThicknessOuter" rmax="CryoEndcap_rmax"
                   dz="(CryoEndcap_z2-CryoEndcap_z1-CryoEMECThicknessFront-CryoEMECThicknessBack)/2."
                   z_offset="-(CryoEndcap_z1+CryoEMECThicknessFront+(CryoEndcap_z2-CryoEndcap_z1-CryoEMECThicknessFront-CryoEMECThicknessBack)/2.)" material="Aluminum" phi0="0" deltaphi="360*deg"/>
     </detector>
-    <detector name="CalEndcapCryoInner_negative" type="SimpleCylinder" vis="emec_cryo_vis">
+    <detector name="CalEndcapCryoInner_negative" type="SimpleCylinder_o1_v01" vis="emec_cryo_vis">
       <dimensions rmin="CryoEndcap_front_rmin" rmax="CryoEndcap_front_rmin+CryoEMECThicknessInner"
                   dz="(CryoEndcap_z2-CryoEndcap_z1-CryoEMECThicknessFront-CryoEMECThicknessBack)/2."
                   z_offset="-(CryoEndcap_z1+CryoEMECThicknessFront+(CryoEndcap_z2-CryoEndcap_z1-CryoEMECThicknessFront-CryoEMECThicknessBack)/2.)" material="Aluminum" phi0="0" deltaphi="360*deg"/>
     </detector>
-    <detector name="CalEndcapBathFront_negative" type="SimpleCylinder" vis="emec_bath_vis">
+    <detector name="CalEndcapBathFront_negative" type="SimpleCylinder_o1_v01" vis="emec_bath_vis">
       <dimensions rmin="CryoEndcap_front_rmin+CryoEMECThicknessInner" rmax="EMEC_rmax"
                   dz="BathThicknessFront/2." z_offset="-(EMEC_z1-BathThicknessFront/2.)" material="LAr" phi0="0" deltaphi="360*deg"/>
     </detector>
-    <detector name="CalEndcapBathBack_negative" type="SimpleCylinder" vis="emec_bath_vis">
+    <detector name="CalEndcapBathBack_negative" type="SimpleCylinder_o1_v01" vis="emec_bath_vis">
       <dimensions rmin="EMEC_rmin1" rmax="EMEC_rmax"
                   dz="BathThicknessBack/2." z_offset="-(EMEC_z2+BathThicknessBack/2.)" material="LAr" phi0="0" deltaphi="360*deg"/>
     </detector>
-    <detector name="CalEndcapBathOuter_negative" type="SimpleCylinder" vis="emec_bath_vis">
+    <detector name="CalEndcapBathOuter_negative" type="SimpleCylinder_o1_v01" vis="emec_bath_vis">
       <dimensions rmin="CryoEndcap_rmax-CryoEMECThicknessOuter-BathThicknessOuter" rmax="CryoEndcap_rmax-CryoEMECThicknessOuter"
                   dz="(CryoEndcap_z2-CryoEndcap_z1-CryoEMECThicknessFront-CryoEMECThicknessBack)/2."
                   z_offset="-(CryoEndcap_z1+CryoEMECThicknessFront+(CryoEndcap_z2-CryoEndcap_z1-CryoEMECThicknessFront-CryoEMECThicknessBack)/2.)" material="LAr" phi0="0" deltaphi="360*deg"/>
