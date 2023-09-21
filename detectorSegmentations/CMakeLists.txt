@@ -15,7 +15,7 @@ target_include_directories(detectorSegmentations
 
 file(GLOB headers include/detectorSegmentations/*.h)
 set_target_properties(detectorSegmentations PROPERTIES PUBLIC_HEADER "${headers}")
-set_property(TARGET detectorSegmentations PROPERTY GLOBAL)
+
 file(GLOB pluginsources src/plugins/*.cpp)
 add_library(detectorSegmentationsPlugin SHARED ${pluginsources})
 target_link_libraries(detectorSegmentationsPlugin detectorSegmentations DD4hep::DDCore)
