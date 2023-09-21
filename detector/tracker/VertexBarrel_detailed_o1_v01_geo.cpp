@@ -68,8 +68,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     envelope.setVisAttributes(theDetector, x_det.visStr());
     sens.setType("tracker");
 
-    // Struct to support multiple readouts
-    struct readoutStruct{
+    // Struct to support multiple readout or support layers (both using this struct)
+    struct staveMatStruct{
         double dr;
         double offset;
         vector<double> thicknesses;
@@ -80,12 +80,13 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         vector<string> viss;
     };
 
-    // Struct to support multiple multi-layer supports
-    struct supportStruct{
+    struct endOfStaveStruct{
         double dr;
         double offset;
         vector<double> thicknesses;
         vector<double> widths;
+        vector<double> lengths;
+        vector<double> dzs;
         vector<double> offsets; 
         vector<double> drs; 
         vector<Material> materials;
@@ -96,8 +97,9 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     struct stave_information{
         string name;
 
-        vector<readoutStruct> readouts;
-
+        vector<staveMatStruct> readouts;
+        vector<staveMatStruct> supports;
+        vector<endOfStaveStruct> endOfStaves;
         double sensor_dr;
         double sensor_offset;
         double sensor_thickness;
@@ -111,7 +113,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         double sensor_length;
         vector<string> sensor_viss;
         vector<Box> sensor_boxes;
-        vector<supportStruct> supports;
     };
     list<stave_information> stave_information_list;
 
@@ -125,7 +126,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         // Readout
         xml_coll_t c_readout(x_stave,_U(readout));
         for(c_readout.reset(); c_readout; ++c_readout){
-            readoutStruct readout;
+            staveMatStruct readout;
             readout.dr = xml_comp_t(c_readout).dr();
             readout.offset = xml_comp_t(c_readout).offset();
             xml_coll_t c_component(c_readout,_U(component));
@@ -144,7 +145,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         // Support
         xml_coll_t c_support(x_stave,_U(support));
         for(c_support.reset(); c_support; ++c_support){
-            supportStruct support;    
+            staveMatStruct support;    
             support.dr = xml_comp_t(c_support).dr();
             support.offset = xml_comp_t(c_support).offset();
             xml_coll_t c_component = xml_coll_t(c_support,_U(component));
@@ -158,6 +159,27 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 support.viss.push_back(component.visStr());
             }
             m.supports.push_back(support);
+        }
+
+        // End of stave structures
+        xml_coll_t c_endOfStave(x_stave,_U(end_z));
+        for(c_endOfStave.reset(); c_endOfStave; ++c_endOfStave){
+            endOfStaveStruct endOfStave;    
+            endOfStave.dr = xml_comp_t(c_endOfStave).dr();
+            endOfStave.offset = xml_comp_t(c_endOfStave).offset();
+            xml_coll_t c_component = xml_coll_t(c_endOfStave,_U(component));
+            for(c_component.reset(); c_component; ++c_component){
+                xml_comp_t component = c_component;
+                endOfStave.thicknesses.push_back(component.thickness());
+                endOfStave.widths.push_back(component.width());
+                endOfStave.lengths.push_back(component.length());
+                endOfStave.dzs.push_back(component.dz());
+                endOfStave.offsets.push_back(component.offset());
+                endOfStave.drs.push_back(component.dr());
+                endOfStave.materials.push_back(theDetector.material(component.materialStr()));
+                endOfStave.viss.push_back(component.visStr());
+            }
+            m.endOfStaves.push_back(endOfStave);
         }
 
         // Sensor
@@ -278,6 +300,29 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                     pv = support_assembly.placeVolume(ele_vol, Transform3D(rot, pos) );
                 }
                 iSupport++;
+            }
+
+            // Place end of stave structures
+            int iEndOfStave = 0;
+            for(auto& endOfStave : m.endOfStaves){
+                for(int i=0; i<int(endOfStave.thicknesses.size()); i++){
+                    double r_component = layer_r + endOfStave.dr + endOfStave.drs[i] + endOfStave.thicknesses[i]/2.;
+                    double r_offset_component = layer_offset + endOfStave.offset + endOfStave.offsets[i];
+                    double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
+                    double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
+                    double z_pos = stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dzs[i]; 
+
+                    // Place it on both sides of the stave
+                    vector<Position> positions = {Position(x_pos, y_pos, z_pos), Position(x_pos, y_pos, -z_pos)};
+                    for(auto & pos : positions){                    
+                        Box ele_box = Box(endOfStave.thicknesses[i]/2., endOfStave.widths[i]/2., endOfStave.lengths[i]/2.);
+                        Volume ele_vol = Volume(_toString(int(endOfStave.thicknesses.size())*iEndOfStave + i, "endOfStave_%d"), ele_box, endOfStave.materials[i]);                    
+                        ele_vol.setVisAttributes(theDetector.visAttributes(endOfStave.viss[i]));
+
+                        pv = support_assembly.placeVolume(ele_vol, Transform3D(rot, pos) );
+                    }
+                }
+                iEndOfStave++;
             }
 
             // Place readout
