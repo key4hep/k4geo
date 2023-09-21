@@ -10,3 +10,18 @@ The documentation about its usage is [here](../../doc/detector/calorimeter/ECalB
 
 ### o1_v01
 Original version taken from [FCCDetectors](https://github.com/HEP-FCC/FCCDetectors/blob/main/Detector/DetFCChhECalInclined/src/ECalBarrelInclined_geo.cpp).
+
+## CaloDisks
+This sub-detector makes calorimeter endcaps (original and reflected). Each endcap spans over z = 320 cm and z = 385 cm, and consist in 134 layers. Each layer is a sandwich of the following material and thickness (in cm):
+* LAr, 0.2
+* PCB, 0.12
+* LAr, 0.2
+* lArCaloSteel, 0.014
+* lArCaloGlue, 0.009
+* Lead, 0.104
+* lArCaloGlue, 0.009
+* lArCaloSteel, 0.014
+
+### o1_v01 
+Original version taken from [FCCDetectors](https://github.com/HEP-FCC/FCCDetectors/blob/70a989a6fc333610e3b1b979c3596da9c41543d8/Detector/DetFCChhCalDiscs/src/CaloEndcapDiscs_geo.cpp)
+
