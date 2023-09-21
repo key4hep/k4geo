@@ -59,7 +59,7 @@
     id="DetID_ARCBARREL"
     name="ARCBARREL"
     type="ARCBARREL_o1_v01_T"
-    readout="ARC_HITS"
+    readout="ArcCollection"
     >
   <!-- /detectors/detector/vessel -->
   <vessel
@@ -97,8 +97,8 @@
     id="DetID_ARCENDCAP"
     name="ARCENDCAP"
     type="ARCENDCAP_o1_v01_T"
-    readout="ARC_HITS"
-    zpos = "ARC_ENDCAP_ZPOS"
+    readout="ArcCollection"
+    zpos = "ArcEndcap_position_z"
     >
   <!-- /detectors/detector/vessel -->
   <vessel
@@ -136,7 +136,7 @@
 </detectors>
 
 <readouts>
-  <readout name="ARC_HITS">
+  <readout name="ArcCollection">
     <segmentation
       type="CartesianGridXY"
       grid_size_x="ARC_SENSOR_pitchX"

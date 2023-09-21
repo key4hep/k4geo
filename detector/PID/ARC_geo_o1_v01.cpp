@@ -60,9 +60,9 @@ static Ref_t create_arc_endcap_cell(Detector &desc, xml::Handle_t handle, Sensit
   // // // // // // // // // // // // // // // // // // // // // // // // // //
   // // // // // // // //          VESSEL PARAMETERS          // // // // // //
   // // // // // // // // // // // // // // // // // // // // // // // // // //
-  double vessel_outer_r = desc.constantAsDouble("ARC_ENDCAP_R_OUTER");
-  double vessel_inner_r = desc.constantAsDouble("ARC_ENDCAP_R_INNER");
-  double vessel_length = desc.constantAsDouble("ARC_ENDCAP_LENGTH");
+  double vessel_outer_r = desc.constantAsDouble("ArcEndcap_outer_radius");
+  double vessel_inner_r = desc.constantAsDouble("ArcEndcap_inner_radius");
+  double vessel_length = desc.constantAsDouble("ArcEndcap_total_length");
   double vessel_wall_thickness = desc.constantAsDouble("ARC_VESSEL_WALL_THICKNESS");
   if (vessel_outer_r <= vessel_inner_r)
     throw std::runtime_error("Ilegal parameters: vessel_outer_r <= vessel_inner_r");
@@ -579,9 +579,9 @@ static Ref_t create_arc_barrel_cell(Detector &desc, xml::Handle_t handle, Sensit
     // // // // // // // // // // // // // // // // // // // // // // // // // //
     // // // // // // // //          VESSEL PARAMETERS          // // // // // //
     // // // // // // // // // // // // // // // // // // // // // // // // // //
-    double vessel_outer_r = desc.constantAsDouble("ARC_BARREL_R_OUTER");
-    double vessel_inner_r = desc.constantAsDouble("ARC_BARREL_R_INNER");
-    double vessel_length = desc.constantAsDouble("ARC_BARREL_LENGTH");
+    double vessel_outer_r = desc.constantAsDouble("ArcBarrel_outer_radius");
+    double vessel_inner_r = desc.constantAsDouble("ArcBarrel_inner_radius");
+    double vessel_length = desc.constantAsDouble("ArcBarrel_total_length");
     double vessel_wall_thickness = desc.constantAsDouble("ARC_VESSEL_WALL_THICKNESS");
     if (vessel_outer_r <= vessel_inner_r)
         throw std::runtime_error("Ilegal parameters: vessel_outer_r <= vessel_inner_r");
