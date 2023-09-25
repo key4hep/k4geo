@@ -32,10 +32,6 @@ void ddDRcalo::DRconstructor::construct() {
   // set vis on/off
   fVis = fDescription->visAttributes(fX_det.visStr()).showDaughters();
 
-  // For debug
-  std::cout << "DRC construct start" << std::endl;
-  // end debug
-
   implementTowers(fX_barrel, fParamBarrel);
   implementTowers(fX_endcap, fParamEndcap);
 }
@@ -45,10 +41,6 @@ void ddDRcalo::DRconstructor::implementTowers(xml_comp_t& x_theta, dd4hep::DDSeg
   int towerNo = x_theta.start();
   for (xml_coll_t x_dThetaColl(x_theta,_U(deltatheta)); x_dThetaColl; ++x_dThetaColl, ++towerNo ) {
     xml_comp_t x_deltaTheta = x_dThetaColl;
-
-    // For debug
-    std::cout << "Constructing tower num : " << towerNo << std::endl;
-    // end debug
 
     // always use RHS for the reference
     param->SetIsRHS(true);
