@@ -27,21 +27,22 @@
             <comment>Vertex Assembly</comment>
             <composite name="VTXIB"/>
             <composite name="VTXOB"/>
-            <composite name="VTXD"/>
-            <composite name="VTXIBSupport"/>
+             <composite name="VTXD"/> 
+             <composite name="VTXIBSupport"/> 
         </detector>
     </detectors>
     
     <display>
         <vis name="VTXSensitiveVis"     alpha="1.0" r="1.0"     g="1.0"  b="0.0"      showDaughters="true"  visible="true"/>
-        <vis name="VTXPeripheryVis"     alpha="1.0" r="1.0"     g="0.9"  b="0.0"      showDaughters="true"  visible="true"/>
-        <vis name="VertexCableVis"      alpha="1.0" r="1.0"     g="0.5"  b="0.4"    showDaughters="true"  visible="true"/>
+        <vis name="VTXPeripheryVis"     alpha="1.0" r="1.0"     g="0.9"  b="0.1"      showDaughters="true"  visible="true"/>
+        <vis name="VertexCableVis"      alpha="1.0" r="0.0"     g="1.0"  b="0.4"    showDaughters="true"  visible="true"/>
         <vis name="HybridVis"           alpha="1.0" r="0.0"     g="1.0"  b="0.0"    showDaughters="true"  visible="true"/>
         <vis name="TerminalPartVis"     alpha="1.0" r="1.0"     g="0.65" b="0.0"    showDaughters="true"  visible="true"/>
         <vis name="CarbonFiberVis"      alpha="1.0" r="0.9"     g="0.95"  b="1.0"    showDaughters="true"  visible="true"/>
         <vis name="TrussStructureVis"   alpha="0.3" r="0.5"     g="0.5"  b="0.5"    showDaughters="true"  visible="true"/>
         <vis name="PipingVis"           alpha="1.0" r="1.0"     g="1.0"  b="1.0"    showDaughters="true"  visible="true"/>
         <vis name="WaterVis"            alpha="1.0" r="0.0"     g="0.0"  b="1.0"    showDaughters="true"  visible="true"/>
+        <vis name="GlueVis"             alpha="1.0" r="1.0"     g="0.75" b="0.79"    showDaughters="true"  visible="true"/>
         <vis name="RohacellVis"         alpha="1.0" r="1.0"     g="1.0"  b="1.0"    showDaughters="true"  visible="true"/>
     </display>
      
@@ -105,6 +106,7 @@
 
             <constant name="VTXIB_Sensitive_Thickness"   value="50e-03*mm"/>
             <constant name="VTXIB_Support_Thickness"     value="200e-03*mm"/>
+            <constant name="VTXIB_Glue_Thickness"     value="70e-03*mm"/>
             <constant name="VTXIB_Support_width"     value="4.4*mm"/>
     
             <constant name="VTXIB_L3_overlap" value="0.4*mm"/>        
@@ -137,8 +139,8 @@
         <!-- Vertex outer barrel and disks joint parameters -->
             <!-- Stave-long support -->
             <constant name="VTXO_support_Fleece_thickness"          value="20e-03*mm"/>
-            <constant name="VTXO_support_CarbonFiber_thickness"     value="120e-03*mm"/>
             <constant name="VTXO_support_PaperGraphite_thickness"   value="25e-03*mm"/>
+            <constant name="VTXO_support_CarbonFiber_thickness"     value="120e-03*mm"/>
 
             <!-- Cooling pipes -->
             <constant name="VTXO_Pipe_thickness"                    value="0.0955*mm"/>
@@ -152,6 +154,9 @@
             <constant name="VTXO_flex_Glue_thickness" value="0.100*mm"/>
             <constant name="VTXO_flex_thickness" value="VTXO_flex_Aluminium_thickness+VTXO_flex_Kapton_thickness+VTXO_flex_Glue_thickness"/>
 
+            <!-- Hybrid at the end of the stave -->
+            <constant name="VTXO_hybrid_thickness" value="0.4*mm"/>
+            <constant name="VTXO_hybrid_length" value="12.1*mm"/>
 
         <!-- Vertex outer barrel parameters -->
             <constant name="VTXOB_Staves1" value="23"/>
@@ -174,19 +179,39 @@
             <constant name="VTXOB_offset1" value="10.0*mm"/>
             <constant name="VTXOB_offset2" value="20.0*mm"/>
 
-            <constant name="VTXO_hybrid_thickness" value="0.4*mm"/>
-            <constant name="VTXO_hybrid_length" value="12.1*mm"/>
-            <constant name="VTXOB_TerminalPart_thickness1"        value="4.037*mm"/>
-            <constant name="VTXOB_TerminalPart_width1"        value="30.788*mm"/>
-            <constant name="VTXOB_TerminalPart_length1"        value="8.0*mm"/>
+            <!-- Proxy for terminal part in VTXOB made out of PEEK, used in middle tracker barrel-->
+            <constant name="VTXOB_TerminalPart_L1_width1"        value="30.788*mm"/>
+            <constant name="VTXOB_TerminalPart_L1_length1"        value="8.0*mm"/>
+            <constant name="VTXOB_TerminalPart_L1_thickness1"        value="837.993*mm*mm*mm/VTXOB_TerminalPart_L1_width1/VTXOB_TerminalPart_L1_length1"/>
+            
+            <constant name="VTXOB_TerminalPart_L1_width2"        value="34.436*mm"/>
+            <constant name="VTXOB_TerminalPart_L1_length2"        value="VTXOB_TerminalPart_L1_length1"/>
+            <constant name="VTXOB_TerminalPart_L1_thickness2"        value="3216.73*mm*mm*mm/VTXOB_TerminalPart_L1_width2/VTXOB_TerminalPart_L1_length2"/>   <!-- 4152.429 mm^3 volume of PEEK -->
 
-            <constant name="VTXOB_TerminalPart_thickness2"        value="19.922*mm"/>   <!-- 5488.272 mm^3 volume of PEEK, let's take area of 8 mm * 34.436 mm -> Proxy PEEK thickness of 19.922 mm (PEEK: 35.863 cm X0)  -->
-            <constant name="VTXOB_TerminalPart_width2"        value="34.436*mm"/>
-            <constant name="VTXOB_TerminalPart_length2"        value="VTXOB_TerminalPart_length1"/>
+            <constant name="VTXOB_TerminalPart_L1_width3"        value="34.436*mm"/>
+            <constant name="VTXOB_TerminalPart_L1_length3"        value="VTXOB_TerminalPart_L1_length1"/>
+            <constant name="VTXOB_TerminalPart_L1_thickness3"        value="1335.812*mm*mm*mm/VTXOB_TerminalPart_L1_width3/VTXOB_TerminalPart_L1_length3"/>   <!-- 1335.812 mm^3 volume of PEEK-->
 
-            <constant name="VTXOB_TerminalPart_thickness3"        value="28.107*mm"/>   <!-- 7645.062 mm^3 volume of PEEK, let's take area of 8 mm * 34.0 mm -> Proxy PEEK thickness of 28.107 mm (PEEK: 35.863 cm X0)  -->
-            <constant name="VTXOB_TerminalPart_width3"        value="34.0*mm"/>         <!-- Should be 36 mm, but then we'd have an overlap since it's only proxy shapes -->
-            <constant name="VTXOB_TerminalPart_length3"        value="VTXOB_TerminalPart_length1"/>
+            <constant name="VTXOB_TerminalPart_L1_width4"        value="33.195*mm"/>
+            <constant name="VTXOB_TerminalPart_L1_length4"        value="2.5*mm"/>
+            <constant name="VTXOB_TerminalPart_L1_thickness4"        value="935.698*mm*mm*mm/VTXOB_TerminalPart_L1_width4/VTXOB_TerminalPart_L1_length4"/>
+
+            <!-- Proxy for terminal part in VTXOB made out of PEEK, used in outer tracker barrel -->
+            <constant name="VTXOB_TerminalPart_L2_width1"        value="VTXOB_TerminalPart_L1_width1"/>         <!-- Should be 36 mm, but then we'd have an overlap since it's only proxy shapes -->
+            <constant name="VTXOB_TerminalPart_L2_length1"        value="VTXOB_TerminalPart_L1_length1"/>
+            <constant name="VTXOB_TerminalPart_L2_thickness1"        value="724.981*mm*mm*mm/VTXOB_TerminalPart_L2_width1/VTXOB_TerminalPart_L2_length1"/>   <!-- 712.27 mm^3 -> use thickness of XX to reach this volume given width and length, 8.0*30.778*3.888 = 837.993 mm^3-->
+
+            <constant name="VTXOB_TerminalPart_L2_width2"        value="34.0*mm"/>         <!-- Should be 36 mm, but then we'd have an overlap since it's only proxy shapes -->
+            <constant name="VTXOB_TerminalPart_L2_length2"        value="VTXOB_TerminalPart_L1_length1"/>
+            <constant name="VTXOB_TerminalPart_L2_thickness2"        value="5119.594*mm*mm*mm/VTXOB_TerminalPart_L2_width2/VTXOB_TerminalPart_L2_length2"/>  
+
+            <constant name="VTXOB_TerminalPart_L2_width3"        value="34.0*mm"/>         <!-- Should be 36 mm, but then we'd have an overlap since it's only proxy shapes -->
+            <constant name="VTXOB_TerminalPart_L2_length3"        value="VTXOB_TerminalPart_L1_length1"/>
+            <constant name="VTXOB_TerminalPart_L2_thickness3"        value="1170.03*mm*mm*mm/VTXOB_TerminalPart_L2_width3/VTXOB_TerminalPart_L2_length3"/>
+
+            <constant name="VTXOB_TerminalPart_L2_width4"        value="34.241*mm"/>   
+            <constant name="VTXOB_TerminalPart_L2_length4"        value="2.5*mm"/>
+            <constant name="VTXOB_TerminalPart_L2_thickness4"        value="1355.438*mm*mm*mm/VTXOB_TerminalPart_L2_width3/VTXOB_TerminalPart_L2_length3"/>
 
 
         <!-- Vertex disks parameters -->
@@ -198,6 +223,9 @@
             <constant name="VTXD_z1" value="285*mm"/>
             <constant name="VTXD_z2" value="620*mm"/>
             <constant name="VTXD_z3" value="930*mm"/>
+            <constant name="VTXD_dz1" value="8.5*mm"/>
+            <constant name="VTXD_dz2" value="0.0*mm"/>
+            <constant name="VTXD_dz3" value="0.0*mm"/>
             <constant name="VTXD_rmin1" value="35.64*mm"/>
             <constant name="VTXD_rmin2" value="76.995*mm"/>
             <constant name="VTXD_rmin3" value="105.895*mm"/>
@@ -213,7 +241,11 @@
             <constant name="VTXDModOverlap" value="-13.0*mm"/>
             <constant name="VTXD_rModOverlap" value="-6.5*mm"/>
 
-            <constant name="VTXD_Pipe_offset" value="5.42*mm/2.0"/>            
+            <constant name="VTXD_Pipe_offset" value="5.42*mm/2.0"/> 
+
+            <!-- Terminal part of VTXD, volume: Is between ~1700 and 4000 mm^3, depending on where on the stave. Let's assume 2500 mm^3. This is modelled by one volumes with thickness of 6.84 mm and length of 9 mm so that 6.84*9*40.6=2500 mm^3. In principle some of this material should be between the front and back of the stave, but in this simplified description it is just on the sides of the stave -->
+            <constant name="VTXD_TerminalPart_length" value="9.0*mm"/> 
+            <constant name="VTXD_Terminal_thickness" value="5.84*mm"/> 
     </define>        
 
 
@@ -247,10 +279,11 @@
                 </sensor>
 
                 <components name="support" dr="VTXIB_Sensitive_Thickness" offset="0.0*mm">
-                    <component thickness="VTXIB_Support_Thickness" width="VTXIB_Support_width" offset="0.0*mm" dr="0.0*mm" material="CarbonFiberVtx" vis="CarbonFiberVis"/>
-                    <component thickness="VTXIB_L1_Holder_Thickness"  width="VTXIB_L1_Holder_Rohacell_rphi" offset="0.0*mm" dr="VTXIB_Support_Thickness" material="RohacellVtx66D" vis="RohacellVis"/> <!-- Holder structure -->
-                    <component thickness="VTXIB_L1_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="-VTXIB_L1_Holder_Rohacell_rphi/2.0-VTXIB_Holder_CarbonFiber_rphi/2.0" dr="VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="CarbonFiberVis"/> <!-- Holder structure -->
-                    <component thickness="VTXIB_L1_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="VTXIB_L1_Holder_Rohacell_rphi/2.0+VTXIB_Holder_CarbonFiber_rphi/2.0"  dr="VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="CarbonFiberVis"/> <!-- Holder structure -->
+                    <component thickness="VTXIB_Glue_Thickness" width="VTXIB_mod_rphi" offset="0.0*mm" dr="0.0*mm" material="GlueEcobond45" vis="CarbonFiberVis"/>
+                    <component thickness="VTXIB_Support_Thickness" width="VTXIB_Support_width" offset="0.0*mm" dr="VTXIB_Glue_Thickness" material="CarbonFiberVtx" vis="GlueVis"/>
+                    <component thickness="VTXIB_L1_Holder_Thickness"  width="VTXIB_L1_Holder_Rohacell_rphi" offset="0.0*mm" dr="VTXIB_Glue_Thickness+VTXIB_Support_Thickness" material="RohacellVtx66D" vis="RohacellVis"/> <!-- Holder structure -->
+                    <component thickness="VTXIB_L1_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="-VTXIB_L1_Holder_Rohacell_rphi/2.0-VTXIB_Holder_CarbonFiber_rphi/2.0" dr="VTXIB_Glue_Thickness+VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="CarbonFiberVis"/> <!-- Holder structure -->
+                    <component thickness="VTXIB_L1_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="VTXIB_L1_Holder_Rohacell_rphi/2.0+VTXIB_Holder_CarbonFiber_rphi/2.0"  dr="VTXIB_Glue_Thickness+VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="CarbonFiberVis"/> <!-- Holder structure -->
                 </components>
 
                 <components name="flexes" dr="VTXIB_Sensitive_Thickness" offset="0.0*mm">
@@ -288,10 +321,11 @@
                 </sensor>
 
                 <components name="support" dr="VTXIB_Sensitive_Thickness" offset="0.0*mm">
-                    <component thickness="VTXIB_Support_Thickness" width="VTXIB_Support_width" offset="0.0*mm" dr="0.0*mm" material="CarbonFiberVtx" vis="CarbonFiberVis"/>
-                    <component thickness="VTXIB_L2_Holder_Thickness"  width="VTXIB_L2_Holder_Rohacell_rphi" offset="0.0*mm" dr="VTXIB_Support_Thickness" material="RohacellVtx66D" vis="RohacellVis"/> <!-- Holder structure -->
-                    <component thickness="VTXIB_L2_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="-VTXIB_L2_Holder_Rohacell_rphi/2.0-VTXIB_Holder_CarbonFiber_rphi/2.0" dr="VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="CarbonFiberVis"/> <!-- Holder structure -->
-                    <component thickness="VTXIB_L2_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="VTXIB_L2_Holder_Rohacell_rphi/2.0+VTXIB_Holder_CarbonFiber_rphi/2.0"  dr="VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="CarbonFiberVis"/> <!-- Holder structure -->
+                    <component thickness="VTXIB_Glue_Thickness" width="VTXIB_mod_rphi" offset="0.0*mm" dr="0.0*mm" material="GlueEcobond45" vis="CarbonFiberVis"/>
+                    <component thickness="VTXIB_Support_Thickness" width="VTXIB_Support_width" offset="0.0*mm" dr="VTXIB_Glue_Thickness" material="CarbonFiberVtx" vis="CarbonFiberVis"/>
+                    <component thickness="VTXIB_L2_Holder_Thickness"  width="VTXIB_L2_Holder_Rohacell_rphi" offset="0.0*mm" dr="VTXIB_Glue_Thickness+VTXIB_Support_Thickness" material="RohacellVtx66D" vis="RohacellVis"/> <!-- Holder structure -->
+                    <component thickness="VTXIB_L2_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="-VTXIB_L2_Holder_Rohacell_rphi/2.0-VTXIB_Holder_CarbonFiber_rphi/2.0" dr="VTXIB_Glue_Thickness+VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="CarbonFiberVis"/> <!-- Holder structure -->
+                    <component thickness="VTXIB_L2_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="VTXIB_L2_Holder_Rohacell_rphi/2.0+VTXIB_Holder_CarbonFiber_rphi/2.0"  dr="VTXIB_Glue_Thickness+VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="CarbonFiberVis"/> <!-- Holder structure -->
                 </components>
 
                 <components name="flexes" dr="VTXIB_Sensitive_Thickness" offset="0.0*mm">
@@ -328,10 +362,11 @@
                 </sensor>
 
                 <components name="support" dr="VTXIB_Sensitive_Thickness" offset="0.0*mm">
-                    <component thickness="VTXIB_Support_Thickness" width="VTXIB_Support_width" offset="0.0*mm" dr="0.0*mm" material="CarbonFiberVtx" vis="CarbonFiberVis"/> 
-                    <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_L3_Holder_Rohacell_rphi" offset="VTXIB_L3_Holder_offset" dr="VTXIB_Support_Thickness" material="RohacellVtx66D" vis="RohacellVis"/> <!-- Holder structure -->
-                    <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="VTXIB_L3_Holder_offset-VTXIB_L3_Holder_Rohacell_rphi/2.0-VTXIB_Holder_CarbonFiber_rphi/2.0" dr="VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="CarbonFiberVis"/> <!-- Holder structure -->
-                    <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="VTXIB_L3_Holder_offset+VTXIB_L3_Holder_Rohacell_rphi/2.0+VTXIB_Holder_CarbonFiber_rphi/2.0"  dr="VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="CarbonFiberVis"/> <!-- Holder structure -->
+                    <component thickness="VTXIB_Glue_Thickness" width="VTXIB_mod_rphi" offset="0.0*mm" dr="0.0*mm" material="GlueEcobond45" vis="CarbonFiberVis"/>
+                    <component thickness="VTXIB_Support_Thickness" width="VTXIB_Support_width" offset="0.0*mm" dr="VTXIB_Glue_Thickness" material="CarbonFiberVtx" vis="CarbonFiberVis"/> 
+                    <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_L3_Holder_Rohacell_rphi" offset="VTXIB_L3_Holder_offset" dr="VTXIB_Glue_Thickness+VTXIB_Support_Thickness" material="RohacellVtx66D" vis="RohacellVis"/> <!-- Holder structure -->
+                    <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="VTXIB_L3_Holder_offset-VTXIB_L3_Holder_Rohacell_rphi/2.0-VTXIB_Holder_CarbonFiber_rphi/2.0" dr="VTXIB_Glue_Thickness+VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="CarbonFiberVis"/> <!-- Holder structure -->
+                    <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="VTXIB_L3_Holder_offset+VTXIB_L3_Holder_Rohacell_rphi/2.0+VTXIB_Holder_CarbonFiber_rphi/2.0"  dr="VTXIB_Glue_Thickness+VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="CarbonFiberVis"/> <!-- Holder structure -->
                 </components>
 
                 <components name="flexes" dr="VTXIB_Sensitive_Thickness" offset="0.0*mm">
@@ -367,10 +402,11 @@
                 </sensor>
 
                 <components name="support" dr="VTXIB_Sensitive_Thickness" offset="0.0*mm">
-                    <component thickness="VTXIB_Support_Thickness" width="VTXIB_Support_width" offset="0.0*mm" dr="0.0*mm" material="CarbonFiberVtx" vis="CarbonFiberVis"/>
-                    <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_L3_Holder_Rohacell_rphi" offset="-VTXIB_L3_Holder_offset" dr="VTXIB_Support_Thickness" material="RohacellVtx66D" vis="RohacellVis"/> <!-- Holder structure -->
-                    <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="-VTXIB_L3_Holder_offset-VTXIB_L3_Holder_Rohacell_rphi/2.0-VTXIB_Holder_CarbonFiber_rphi/2.0" dr="VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="CarbonFiberVis"/> <!-- Holder structure -->
-                    <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="-VTXIB_L3_Holder_offset+VTXIB_L3_Holder_Rohacell_rphi/2.0+VTXIB_Holder_CarbonFiber_rphi/2.0"  dr="VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="CarbonFiberVis"/> <!-- Holder structure -->
+                    <component thickness="VTXIB_Glue_Thickness" width="VTXIB_mod_rphi" offset="0.0*mm" dr="0.0*mm" material="GlueEcobond45" vis="CarbonFiberVis"/>
+                    <component thickness="VTXIB_Support_Thickness" width="VTXIB_Support_width" offset="0.0*mm" dr="VTXIB_Glue_Thickness" material="CarbonFiberVtx" vis="CarbonFiberVis"/>
+                    <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_L3_Holder_Rohacell_rphi" offset="-VTXIB_L3_Holder_offset" dr="VTXIB_Glue_Thickness+VTXIB_Support_Thickness" material="RohacellVtx66D" vis="RohacellVis"/> <!-- Holder structure -->
+                    <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="-VTXIB_L3_Holder_offset-VTXIB_L3_Holder_Rohacell_rphi/2.0-VTXIB_Holder_CarbonFiber_rphi/2.0" dr="VTXIB_Glue_Thickness+VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="CarbonFiberVis"/> <!-- Holder structure -->
+                    <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="-VTXIB_L3_Holder_offset+VTXIB_L3_Holder_Rohacell_rphi/2.0+VTXIB_Holder_CarbonFiber_rphi/2.0" dr="VTXIB_Glue_Thickness+VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="CarbonFiberVis"/> <!-- Holder structure -->
                 </components>
 
                 <components name="flexes" dr="VTXIB_Sensitive_Thickness" offset="0.0*mm">
@@ -469,8 +505,10 @@
                     <component thickness="VTXO_hybrid_thickness" width="VTXO_mod_rphi" length="VTXO_hybrid_length" dz="VTXOB_mod_z_spacing" dr="VTXO_flex_thickness-VTXO_hybrid_thickness" offset="0.0*mm" material="PCB" vis="HybridVis"/>
 
                     <!-- Terminal part -->
-                    <component thickness="VTXOB_TerminalPart_thickness1" width="VTXOB_TerminalPart_width1" length="VTXOB_TerminalPart_length1" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length" dr="0.0*mm"                          offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
-                    <component thickness="VTXOB_TerminalPart_thickness2" width="VTXOB_TerminalPart_width2" length="VTXOB_TerminalPart_length2" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length" dr="VTXOB_TerminalPart_thickness1"   offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
+                    <component thickness="VTXOB_TerminalPart_L1_thickness1" width="VTXOB_TerminalPart_L1_width1" length="VTXOB_TerminalPart_L1_length1" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length" dr="0.0*mm"                          offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
+                    <component thickness="VTXOB_TerminalPart_L1_thickness2" width="VTXOB_TerminalPart_L1_width2" length="VTXOB_TerminalPart_L1_length2" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length" dr="VTXOB_TerminalPart_L1_thickness1"   offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
+                    <component thickness="VTXOB_TerminalPart_L1_thickness3" width="VTXOB_TerminalPart_L1_width3" length="VTXOB_TerminalPart_L1_length3" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length+VTXOB_TerminalPart_L1_length2" dr="10.5*mm"   offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
+                    <component thickness="VTXOB_TerminalPart_L1_thickness4" width="VTXOB_TerminalPart_L1_width4" length="VTXOB_TerminalPart_L1_length4" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length-VTXOB_TerminalPart_L1_length4" dr="0.5*mm"   offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
                 </end_z>
             </stave>
 
@@ -526,8 +564,10 @@
                     <component thickness="VTXO_hybrid_thickness" width="VTXO_mod_rphi" length="VTXO_hybrid_length" dz="VTXOB_mod_z_spacing" dr="0.0*mm" offset="0.0*mm" material="PCB" vis="HybridVis"/>
 
                     <!-- Terminal part -->
-                    <component thickness="VTXOB_TerminalPart_thickness1" width="VTXOB_TerminalPart_width1" length="VTXOB_TerminalPart_length1" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length" dr="-2.839*mm"                                                               offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
-                    <component thickness="VTXOB_TerminalPart_thickness3" width="VTXOB_TerminalPart_width3" length="VTXOB_TerminalPart_length3" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length" dr="-2.839*mm-VTXOB_TerminalPart_thickness3"   offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
+                    <component thickness="VTXOB_TerminalPart_L2_thickness1" width="VTXOB_TerminalPart_L2_width1" length="VTXOB_TerminalPart_L2_length1" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length" dr="-2.839*mm"                                 offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
+                    <component thickness="VTXOB_TerminalPart_L2_thickness2" width="VTXOB_TerminalPart_L2_width2" length="VTXOB_TerminalPart_L2_length2" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length" dr="-2.839*mm-VTXOB_TerminalPart_L2_thickness2"   offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
+                    <component thickness="VTXOB_TerminalPart_L2_thickness3" width="VTXOB_TerminalPart_L2_width3" length="VTXOB_TerminalPart_L2_length3" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length+VTXOB_TerminalPart_L2_length2" dr="-16.309*mm"   offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
+                    <component thickness="VTXOB_TerminalPart_L2_thickness4" width="VTXOB_TerminalPart_L2_width4" length="VTXOB_TerminalPart_L2_length4" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length-VTXOB_TerminalPart_L2_length4" dr="-5.0*mm"   offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
                 </end_z>
             </stave>
 
@@ -550,12 +590,11 @@
 
             <!-- Definition of our stave that is used to build the disks -->
             <module name="SiVTXDStave">
-                <!-- Flex at low-z -->
-                <readout z_offset="0.0*mm" offset="0.0*mm">
+                <components name="flex_low_z" z_offset="0.0*mm" offset="0.0*mm">
                     <component thickness="VTXO_flex_Aluminium_thickness"    width="VTXO_flex_width" offset="0.0*mm" z_offset="0.0*mm" material="Al" vis="VertexCableVis"/>
                     <component thickness="VTXO_flex_Kapton_thickness"       width="VTXO_flex_width" offset="0.0*mm" z_offset="VTXO_flex_Aluminium_thickness" material="KaptonVtx" vis="VertexCableVis"/>
                     <component thickness="VTXO_flex_Glue_thickness"         width="VTXO_flex_width" offset="0.0*mm" z_offset="VTXO_flex_Aluminium_thickness+VTXO_flex_Kapton_thickness" material="GlueEcobond45" vis="VertexCableVis"/> <!-- NEED TO USE CORRECT GLUE DESCRIPTION!-->
-                </readout>
+                </components>
 
                 <!-- Sensor -->
                 <sensor z_offset="VTXO_flex_thickness" thickness="VTXO_Sensitive_Thickness" material="Silicon" offset="0.0*mm">
@@ -576,16 +615,14 @@
                     <component sensitive="True" ymin="VTXO_sens_z_sens_spacing/2.0"                         ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"   xmin="-VTXO_sens_rphi_sens_spacing/2.0-VTXO_sens_rphi_sensitive"    xmax="-VTXO_sens_rphi_sens_spacing/2.0"                         vis="VTXSensitiveVis"/> <!-- bottom right sensitive -->
                 </sensor>
 
-                <!-- low-z support -->
-                <support z_offset="VTXO_flex_thickness+VTXO_Sensitive_Thickness" offset="0.0*mm">
+                <components name="support_low_z" z_offset="VTXO_flex_thickness+VTXO_Sensitive_Thickness" offset="0.0*mm">
                     <component thickness="VTXO_support_Fleece_thickness"         width="VTXO_mod_z" offset="0.0*mm" z_offset="0.0*mm" material="CarbonFiberVtx" vis="CarbonFiberVis"/> <!-- should be material="CarbonFleeceGraphite", not implemented yet! -->
                     <component thickness="VTXO_support_CarbonFiber_thickness"    width="VTXO_mod_z" offset="0.0*mm" z_offset="VTXO_support_Fleece_thickness" material="CarbonFiberVtx" vis="CarbonFiberVis"/>
                     <component thickness="VTXO_support_PaperGraphite_thickness"  width="VTXO_mod_z" offset="0.0*mm" z_offset="VTXO_support_Fleece_thickness+VTXO_support_CarbonFiber_thickness" material="CarbonFiberVtx" vis="CarbonFiberVis"/> <!-- should be material="CarbonPaperGraphite", not implemented yet! -->
                     <component thickness="VTXO_support_Fleece_thickness"         width="VTXO_mod_z" offset="0.0*mm" z_offset="VTXO_support_Fleece_thickness+VTXO_support_CarbonFiber_thickness+VTXO_support_PaperGraphite_thickness" material="CarbonFiberVtx" vis="CarbonFiberVis"/> <!-- should be material="CarbonFleeceGraphite", not implemented yet! -->
-                </support>
+                </components>
 
-                <!-- Cooling pipes -->
-                <support z_offset="VTXO_flex_thickness+VTXO_Sensitive_Thickness+VTXD_stave_dz/2.0-VTXO_Pipe_thickness-VTXO_Water_thickness/2.0" offset="0.0*mm">
+                <components name="cooling_pipes" z_offset="VTXO_flex_thickness+VTXO_Sensitive_Thickness+VTXD_stave_dz/2.0-VTXO_Pipe_thickness-VTXO_Water_thickness/2.0" offset="0.0*mm">
                     <component thickness="VTXO_Pipe_thickness"  width="VTXO_Pipe_rphi" offset="-VTXD_Pipe_offset" z_offset="0.0*mm" material="KaptonVtx" vis="PipingVis"/> 
                     <component thickness="VTXO_Water_thickness" width="VTXO_Pipe_rphi" offset="-VTXD_Pipe_offset" z_offset="VTXO_Pipe_thickness" material="Water" vis="WaterVis"/>
                     <component thickness="VTXO_Pipe_thickness"  width="VTXO_Pipe_rphi" offset="-VTXD_Pipe_offset" z_offset="VTXO_Pipe_thickness+VTXO_Water_thickness" material="KaptonVtx" vis="PipingVis"/>
@@ -593,26 +630,44 @@
                     <component thickness="VTXO_Pipe_thickness"  width="VTXO_Pipe_rphi" offset="VTXD_Pipe_offset" z_offset="0.0*mm" material="KaptonVtx" vis="PipingVis"/> 
                     <component thickness="VTXO_Water_thickness" width="VTXO_Pipe_rphi" offset="VTXD_Pipe_offset" z_offset="VTXO_Pipe_thickness" material="Water" vis="WaterVis"/>
                     <component thickness="VTXO_Pipe_thickness"  width="VTXO_Pipe_rphi" offset="VTXD_Pipe_offset" z_offset="VTXO_Pipe_thickness+VTXO_Water_thickness" material="KaptonVtx" vis="PipingVis"/>
-                </support>
+                </components>
 
-                <!-- high-z support -->
-                <support z_offset="VTXO_flex_thickness+VTXO_Sensitive_Thickness+VTXD_stave_dz" offset="0.0*mm">
+                <components name="support_high_z" z_offset="VTXO_flex_thickness+VTXO_Sensitive_Thickness+VTXD_stave_dz" offset="0.0*mm">
                     <component thickness="VTXO_support_Fleece_thickness"         width="VTXO_mod_z" offset="0.0*mm" z_offset="0.0*mm" material="CarbonFiberVtx" vis="CarbonFiberVis"/> <!-- should be material="CarbonFleeceGraphite", not implemented yet! -->
                     <component thickness="VTXO_support_PaperGraphite_thickness"  width="VTXO_mod_z" offset="0.0*mm" z_offset="VTXO_support_Fleece_thickness" material="CarbonFiberVtx" vis="CarbonFiberVis"/> <!-- should be material="CarbonPaperGraphite", not implemented yet! -->
                     <component thickness="VTXO_support_CarbonFiber_thickness"    width="VTXO_mod_z" offset="0.0*mm" z_offset="VTXO_support_Fleece_thickness+VTXO_support_PaperGraphite_thickness" material="CarbonFiberVtx" vis="CarbonFiberVis"/>
                     <component thickness="VTXO_support_Fleece_thickness"         width="VTXO_mod_z" offset="0.0*mm" z_offset="VTXO_support_Fleece_thickness+VTXO_support_PaperGraphite_thickness+VTXO_support_CarbonFiber_thickness" material="CarbonFiberVtx" vis="CarbonFiberVis"/> <!-- should be material="CarbonFleeceGraphite", not implemented yet! -->
-                </support>
+                </components>
 
-                <!-- Flex at high-z -->
-                <readout z_offset="VTXO_flex_thickness+2.0*(VTXO_Sensitive_Thickness+VTXD_support_thickness)+VTXD_stave_dz" offset="0.0*mm">
+                <components name="flex_high_z" z_offset="VTXO_flex_thickness+2.0*(VTXO_Sensitive_Thickness+VTXD_support_thickness)+VTXD_stave_dz" offset="0.0*mm">
                     <component thickness="VTXO_flex_Glue_thickness"         width="VTXO_flex_width" offset="0.0*mm" z_offset="0.0*mm" material="GlueEcobond45" vis="VertexCableVis"/> <!-- NEED TO USE CORRECT GLUE DESCRIPTION!-->
                     <component thickness="VTXO_flex_Kapton_thickness"       width="VTXO_flex_width" offset="0.0*mm" z_offset="VTXO_flex_Glue_thickness" material="KaptonVtx" vis="VertexCableVis"/>
                     <component thickness="VTXO_flex_Aluminium_thickness"    width="VTXO_flex_width" offset="0.0*mm" z_offset="VTXO_flex_Glue_thickness+VTXO_flex_Kapton_thickness" material="Al" vis="VertexCableVis"/>
-                </readout>
+                </components>
+
+
+                <!-- End of stave structures -->
+                <end_z name="hybrids" z_offset="0.0*mm" offset="0.0*mm">
+                    <!-- Hybrid in front, only on one side (x>0) -->
+                    <component thickness="VTXO_hybrid_thickness" width="VTXO_mod_rphi" length="VTXO_hybrid_length" dx="0.1*mm" x="0.001*mm" offset="0.0*mm" z_offset="0.0*mm" material="PCB" vis="HybridVis"/>   <!-- dx>0 puts the structure onto the one stave side, dx<0 on the other side-->
+
+                    <!-- Hybrid in back, only on one side (x>0) -->
+                    <component thickness="VTXO_hybrid_thickness" width="VTXO_mod_rphi" length="VTXO_hybrid_length" dx="0.1*mm" x="0.001*mm" offset="0.0*mm" z_offset="VTXO_flex_thickness+2.0*(VTXO_Sensitive_Thickness+VTXD_support_thickness)+VTXD_stave_dz" material="PCB" vis="HybridVis"/>
+
+                </end_z>
+
+                <!-- Terminal parts -->
+                <end_z name="terminal_parts" z_offset="VTXO_flex_thickness+VTXO_Sensitive_Thickness+VTXO_flex_thickness" offset="0.0*mm">
+                    <!-- Terminal part left (x>0) -->
+                    <component thickness="VTXD_TerminalPart_length" width="VTXO_mod_rphi" length="VTXD_TerminalPart_length" dx="0.0*mm+VTXO_hybrid_length" x="0.001*mm" offset="0.0*mm" z_offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>   <!-- dx>0 puts the structure onto the one stave side, dx<0 on the other side-->
+
+                    <!-- Terminal part right (x<0) -->
+                    <component thickness="VTXD_TerminalPart_length" width="VTXO_mod_rphi" length="VTXD_TerminalPart_length" dx="0.0*mm" x="-0.001*mm" offset="0.0*mm" z_offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
+                </end_z>
             </module>
 
             <!-- Here we construct the disks, all disks use the same base stave (SiVTXDStave) with different numbers of modules and other properties -->
-           <layer id="0" z="VTXD_z1" nphi="4" dz="0.0*mm" rmin="VTXD_rmin1" dr="VTXD_dr1" phi0="0.0">
+           <layer id="0" z="VTXD_z1" nphi="4" dz="VTXD_dz1" rmin="VTXD_rmin1" dr="VTXD_dr1" phi0="0.0">
                 <stave nmodules="2" z_offset="0.0*mm" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="0.0*mm" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
                 <stave nmodules="3" z_offset="VTXD_zoffset_stave" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="1.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
                 <stave nmodules="4" z_offset="0.0*mm" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="2.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
@@ -675,7 +730,7 @@
     </plugins>
 
     <!-- Vertex inner barrel support structure imported via DDCAD, material budget evaluation with g4MaterialScan is working, but not with the k4SimGeant4 methods -->
-    <!-- <detectors>
+    <detectors>
         <detector id="0" name="VTXIBSupport" type="DD4hep_TestShape_Creator">
             <check>
                 <shape type="CAD_MultiVolume" ref="${K4GEO}/share/k4geo/FCCee/IDEA/compact/IDEA_o1_v01/VertexSupport_o1_v01.obj" unit="mm"/>
@@ -683,5 +738,5 @@
                 <rotation x="0*pi/8*rad" y="-4*pi/8*rad" z="0*rad"/>  
             </check>
         </detector>
-    </detectors>    -->
+    </detectors>   
 </lccdd>

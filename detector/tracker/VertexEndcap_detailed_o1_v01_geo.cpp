@@ -280,7 +280,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                             double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
                             double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
                             double z_pos = z + z_alternate_petal + z_offset + component.z_offset + component.z_offsets[i] + component.thicknesses[i]/2.; 
-
                             if(side == -1){z_pos = -z_pos;}
                             Position pos(x_pos, y_pos, z_pos);
 
