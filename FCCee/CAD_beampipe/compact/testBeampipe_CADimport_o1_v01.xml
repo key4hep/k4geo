@@ -18,7 +18,7 @@
   </includes>
 
   <define>
-    <constant name="world_size" value="5*m"/>
+    <constant name="world_size" value="10*m"/>
     <constant name="world_x" value="world_size"/>
     <constant name="world_y" value="world_size"/>
     <constant name="world_z" value="world_size"/>
@@ -48,7 +48,7 @@
 </display>
 
 
-<include ref="Beampipe_CADimport.xml"/>
+<include ref="Beampipe_CADimport_o1_v01.xml"/>
 
 
 </lccdd>

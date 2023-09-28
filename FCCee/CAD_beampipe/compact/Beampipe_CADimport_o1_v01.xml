@@ -25,7 +25,7 @@
 
   <detectors>
 
-    <detector id="1" name="Beampipe_STL" type="DD4hep_TestShape_Creator">
+    <detector name="Beampipe_STL" type="DD4hep_TestShape_Creator">
       <check>
         <shape type="CAD_MultiVolume" ref="../CAD_beampipe/Pipe_230830/AlBeMet162_30082023.stl"
 	       unit="mm" material="AlBeMet162">
@@ -37,7 +37,7 @@
       </check>
     </detector>
 
-    <detector id="12" name="Beampipe_crotch_STL" type="DD4hep_TestShape_Creator">
+    <detector name="Beampipe_crotch_STL" type="DD4hep_TestShape_Creator">
       <check>
         <shape type="CAD_MultiVolume" ref="../CAD_beampipe/Pipe_230830/Copper_pipe_28092023.stl"
                unit="mm" material="Copper">
@@ -49,7 +49,7 @@
       </check>
     </detector>
       
-    <detector id="2" name="Cooling_trap_STL" type="DD4hep_TestShape_Creator">
+    <detector name="Cooling_trap_STL" type="DD4hep_TestShape_Creator">
       <check>
 	<shape type="CAD_MultiVolume" ref="../CAD_beampipe/Pipe_230830/Copper_cooling_30082023.stl"
 	       unit="mm" material="Copper">
@@ -62,7 +62,7 @@
     </detector>
     
     
-    <detector id="3" name="Gold_STL" type="DD4hep_TestShape_Creator">
+    <detector name="Gold_STL" type="DD4hep_TestShape_Creator">
       <check>
 	<shape type="CAD_MultiVolume" ref="../CAD_beampipe/Pipe_230830/Gold_29082022.stl"
 	       unit="mm" material="Gold">
@@ -75,7 +75,7 @@
     </detector>
 
     
-    <detector id="4" name="Paraffin_STL" type="DD4hep_TestShape_Creator">
+    <detector name="Paraffin_STL" type="DD4hep_TestShape_Creator">
       <check>
         <shape type="CAD_MultiVolume" ref="../CAD_beampipe/Pipe_230830/Paraffine_30082023.stl"
 	       unit="mm" material="LiquidNDecane">
@@ -87,7 +87,7 @@
       </check>
     </detector>
 
-    <detector id="5" name="Water_STL" type="DD4hep_TestShape_Creator">
+    <detector name="Water_STL" type="DD4hep_TestShape_Creator">
       <check>
         <shape type="CAD_MultiVolume" ref="../CAD_beampipe/Pipe_230830/Water_21082023.stl"
                unit="mm" material="Water">

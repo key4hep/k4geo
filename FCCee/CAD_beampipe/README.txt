@@ -7,10 +7,10 @@ Remote vacuum connection not already designed, for now a sharp transition betwee
 
 
 To display the beampipe:
-geoDisplay standalone_CADbp.xml
+geoDisplay testBeampipe_CADimport_o1_v01.xml
 
 To use in simulation, include in the main xml file:
-<include ref="PATH.TO.K4GEO/FCCee/CAD_beampipe/compact/Beampipe_CADimport.xml"/>
+<include ref="PATH.TO.K4GEO/FCCee/CAD_beampipe/compact/Beampipe_CADimport_o1_v01.xml"/>
 
 
 STL files stored in:
