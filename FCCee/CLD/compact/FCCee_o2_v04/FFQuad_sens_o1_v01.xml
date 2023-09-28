@@ -1,0 +1,59 @@
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+
+<lccdd>
+
+  <!-- #==========================================================================
+       #  AIDA Detector description implementation
+       #==========================================================================
+       # Copyright (C) Organisation europeenne pour la Recherche nucleaire (CERN)
+       # All rights reserved.
+       #
+       # For the licensing terms see $DD4hepINSTALL/LICENSE.
+       # For the list of contributors see $DD4hepINSTALL/doc/CREDITS.
+       #
+       #==========================================================================
+  -->
+  <info name="FFQs"
+        title="Final Focusing Quadrupoles"
+        author="Andrea Ciarma"
+        url="no"
+        status="development"
+        version="1">
+    <comment>Final Focusing Quadrupoles simplified model - Started from MaskTrafos.xml by A. Sailer</comment>
+  </info>
+
+  <define>
+    <constant name="QC1_rmin" value="42/2*mm"/>
+    <constant name="QC1_rmax" value="64/2*mm"/>
+    <constant name="QC1L1_len" value="700*mm"/>
+    <constant name="QC1L2_len" value="1250*mm"/>
+    <constant name="QC1L3_len" value="1250*mm"/>
+    <constant name="QC1L1_start" value="2200*mm"/>
+    <constant name="QC1L2_start" value="QC1L1_start+QC1L1_len+8*cm"/>
+    <constant name="QC1L3_start" value="QC1L2_start+QC1L2_len+8*cm"/>
+
+  </define>
+
+  <readouts>
+    <readout name="FFQ_Readout">
+      <id>${GlobalTrackerReadoutID}</id>-->
+    </readout>
+  </readouts>
+
+<detectors>
+    <detector name="QC1" type="DD4hep_Mask_o1_v01" vis="KICKVis" id="DetID_FFQs" readout="FFQ_Readout">
+      <parameter crossingangle="CrossingAngle" />
+      <envelope vis="KICKVis">
+        <shape type="Assembly"/>
+      </envelope>
+            <!--             &A                                Z1                  Z2                    RIn1                       RIn2               ROut1                        ROut2              Material          phi1        phi2       -->
+           <section type="Upstream"               start="QC1L1_start"    end="QC1L1_start+QC1L1_len" rMin1="QC1_rmin"          rMin2="QC1_rmin"  rMax1="QC1_rmax"   rMax2="QC1_rmax"  material="FFQMaterial" name="QC1L1u" sensitive="tracker"/>
+           <section type="Dnstream"               start="QC1L1_start"    end="QC1L1_start+QC1L1_len" rMin1="QC1_rmin"          rMin2="QC1_rmin"  rMax1="QC1_rmax"   rMax2="QC1_rmax"  material="FFQMaterial" name="QC1L1d" sensitive="tracker"/>
+           <section type="Upstream"               start="QC1L2_start"    end="QC1L2_start+QC1L2_len" rMin1="QC1_rmin"          rMin2="QC1_rmin"  rMax1="QC1_rmax"   rMax2="QC1_rmax"  material="FFQMaterial" name="QC1L2u" sensitive="tracker"/>
+            <section type="Dnstream"               start="QC1L2_start"    end="QC1L2_start+QC1L2_len" rMin1="QC1_rmin"          rMin2="QC1_rmin"  rMax1="QC1_rmax"   rMax2="QC1_rmax"  material="FFQMaterial" name="QC1L2d" sensitive="tracker"/>
+            <section type="Upstream"               start="QC1L3_start"    end="QC1L3_start+QC1L3_len" rMin1="QC1_rmin"          rMin2="QC1_rmin"  rMax1="QC1_rmax"   rMax2="QC1_rmax"  material="FFQMaterial" name="QC1L3u" sensitive="tracker"/>
+            <section type="Dnstream"               start="QC1L3_start"    end="QC1L3_start+QC1L3_len" rMin1="QC1_rmin"          rMin2="QC1_rmin"  rMax1="QC1_rmax"   rMax2="QC1_rmax"  material="FFQMaterial" name="QC1L3d" sensitive="tracker"/>
+        </detector>   
+</detectors>
+
+</lccdd>
