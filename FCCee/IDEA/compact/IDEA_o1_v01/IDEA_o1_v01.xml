@@ -38,8 +38,7 @@
   <include ref="HOMAbsorber.xml"/>
   <!-- Vertex.xml comes from FCCee_o2_v02 /-->
   <include ref="Vertex.xml"/>
-  <!--TODO WAIT UNTIL READY -->
-  <!--<include ref="DriftChamber.xml"/> -->
-  <!--include ref="Calorimeter.xml"/-->
+  <include ref="SimplifiedDriftChamber.xml"/>
+  <include ref="Calorimeter.xml">
 
 </lccdd>
