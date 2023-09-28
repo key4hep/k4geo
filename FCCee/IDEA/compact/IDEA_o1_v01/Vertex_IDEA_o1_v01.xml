@@ -180,39 +180,32 @@
             <constant name="VTXOB_offset2" value="20.0*mm"/>
 
             <!-- Proxy for terminal part in VTXOB made out of PEEK, used in middle tracker barrel-->
-            <constant name="VTXOB_TerminalPart_L1_width1"        value="30.788*mm"/>
-            <constant name="VTXOB_TerminalPart_L1_length1"        value="8.0*mm"/>
-            <constant name="VTXOB_TerminalPart_L1_thickness1"        value="837.993*mm*mm*mm/VTXOB_TerminalPart_L1_width1/VTXOB_TerminalPart_L1_length1"/>
+            <constant name="VTXOB_TerminalPart_L1_width1"        value="(34.436*mm+25.604*mm)/2."/>
+            <constant name="VTXOB_TerminalPart_L1_length1"        value="7.0*mm"/>
+            <constant name="VTXOB_TerminalPart_L1_thickness1"        value="744.577*mm*mm*mm/VTXOB_TerminalPart_L1_width1/VTXOB_TerminalPart_L1_length1"/>
+
+            <constant name="VTXOB_TerminalPart_L1_width2"        value="(25.604*mm+18.244*mm)/2."/>
+            <constant name="VTXOB_TerminalPart_L1_length2"        value="7.0*mm"/>
+            <constant name="VTXOB_TerminalPart_L1_thickness2"        value="542.961*mm*mm*mm/VTXOB_TerminalPart_L1_width2/VTXOB_TerminalPart_L1_length2"/>
+                     
+            <constant name="VTXOB_TerminalPart_L1_width3"        value="8.0*mm"/>
+            <constant name="VTXOB_TerminalPart_L1_length3"        value="8.0*mm"/>
+            <constant name="VTXOB_TerminalPart_L1_thickness3"        value="231.848*mm*mm*mm/VTXOB_TerminalPart_L1_width3/VTXOB_TerminalPart_L1_length3"/>
+                
             
-            <constant name="VTXOB_TerminalPart_L1_width2"        value="34.436*mm"/>
-            <constant name="VTXOB_TerminalPart_L1_length2"        value="VTXOB_TerminalPart_L1_length1"/>
-            <constant name="VTXOB_TerminalPart_L1_thickness2"        value="3216.73*mm*mm*mm/VTXOB_TerminalPart_L1_width2/VTXOB_TerminalPart_L1_length2"/>   <!-- 4152.429 mm^3 volume of PEEK -->
-
-            <constant name="VTXOB_TerminalPart_L1_width3"        value="34.436*mm"/>
-            <constant name="VTXOB_TerminalPart_L1_length3"        value="VTXOB_TerminalPart_L1_length1"/>
-            <constant name="VTXOB_TerminalPart_L1_thickness3"        value="1335.812*mm*mm*mm/VTXOB_TerminalPart_L1_width3/VTXOB_TerminalPart_L1_length3"/>   <!-- 1335.812 mm^3 volume of PEEK-->
-
-            <constant name="VTXOB_TerminalPart_L1_width4"        value="33.195*mm"/>
-            <constant name="VTXOB_TerminalPart_L1_length4"        value="2.5*mm"/>
-            <constant name="VTXOB_TerminalPart_L1_thickness4"        value="935.698*mm*mm*mm/VTXOB_TerminalPart_L1_width4/VTXOB_TerminalPart_L1_length4"/>
-
             <!-- Proxy for terminal part in VTXOB made out of PEEK, used in outer tracker barrel -->
-            <constant name="VTXOB_TerminalPart_L2_width1"        value="VTXOB_TerminalPart_L1_width1"/>         <!-- Should be 36 mm, but then we'd have an overlap since it's only proxy shapes -->
-            <constant name="VTXOB_TerminalPart_L2_length1"        value="VTXOB_TerminalPart_L1_length1"/>
-            <constant name="VTXOB_TerminalPart_L2_thickness1"        value="724.981*mm*mm*mm/VTXOB_TerminalPart_L2_width1/VTXOB_TerminalPart_L2_length1"/>   <!-- 712.27 mm^3 -> use thickness of XX to reach this volume given width and length, 8.0*30.778*3.888 = 837.993 mm^3-->
+            <constant name="VTXOB_TerminalPart_L2_width1"        value="(36.0*mm+23.787*mm)/2."/>
+            <constant name="VTXOB_TerminalPart_L2_length1"        value="7.0*mm"/>
+            <constant name="VTXOB_TerminalPart_L2_thickness1"        value="1162.157*mm*mm*mm/VTXOB_TerminalPart_L2_width1/VTXOB_TerminalPart_L2_length1"/>
 
-            <constant name="VTXOB_TerminalPart_L2_width2"        value="34.0*mm"/>         <!-- Should be 36 mm, but then we'd have an overlap since it's only proxy shapes -->
-            <constant name="VTXOB_TerminalPart_L2_length2"        value="VTXOB_TerminalPart_L1_length1"/>
-            <constant name="VTXOB_TerminalPart_L2_thickness2"        value="5119.594*mm*mm*mm/VTXOB_TerminalPart_L2_width2/VTXOB_TerminalPart_L2_length2"/>  
-
-            <constant name="VTXOB_TerminalPart_L2_width3"        value="34.0*mm"/>         <!-- Should be 36 mm, but then we'd have an overlap since it's only proxy shapes -->
-            <constant name="VTXOB_TerminalPart_L2_length3"        value="VTXOB_TerminalPart_L1_length1"/>
-            <constant name="VTXOB_TerminalPart_L2_thickness3"        value="1170.03*mm*mm*mm/VTXOB_TerminalPart_L2_width3/VTXOB_TerminalPart_L2_length3"/>
-
-            <constant name="VTXOB_TerminalPart_L2_width4"        value="34.241*mm"/>   
-            <constant name="VTXOB_TerminalPart_L2_length4"        value="2.5*mm"/>
-            <constant name="VTXOB_TerminalPart_L2_thickness4"        value="1355.438*mm*mm*mm/VTXOB_TerminalPart_L2_width3/VTXOB_TerminalPart_L2_length3"/>
-
+            <constant name="VTXOB_TerminalPart_L2_width2"        value="(23.787*mm+18.381*mm)/2."/>
+            <constant name="VTXOB_TerminalPart_L2_length2"        value="7.0*mm"/>
+            <constant name="VTXOB_TerminalPart_L2_thickness2"        value="569.724*mm*mm*mm/VTXOB_TerminalPart_L2_width2/VTXOB_TerminalPart_L2_length2"/>
+                     
+            <constant name="VTXOB_TerminalPart_L2_width3"        value="8.5*mm"/>
+            <constant name="VTXOB_TerminalPart_L2_length3"        value="9.25*mm"/>
+            <constant name="VTXOB_TerminalPart_L2_thickness3"        value="304.345*mm*mm*mm/VTXOB_TerminalPart_L2_width3/VTXOB_TerminalPart_L2_length3"/>
+        
 
         <!-- Vertex disks parameters -->
             <constant name="VTXD_support_thickness" value="VTXO_support_Fleece_thickness+VTXO_support_CarbonFiber_thickness+VTXO_support_PaperGraphite_thickness"/>
@@ -506,9 +499,8 @@
 
                     <!-- Terminal part -->
                     <component thickness="VTXOB_TerminalPart_L1_thickness1" width="VTXOB_TerminalPart_L1_width1" length="VTXOB_TerminalPart_L1_length1" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length" dr="0.0*mm"                          offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
-                    <component thickness="VTXOB_TerminalPart_L1_thickness2" width="VTXOB_TerminalPart_L1_width2" length="VTXOB_TerminalPart_L1_length2" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length" dr="VTXOB_TerminalPart_L1_thickness1"   offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
-                    <component thickness="VTXOB_TerminalPart_L1_thickness3" width="VTXOB_TerminalPart_L1_width3" length="VTXOB_TerminalPart_L1_length3" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length+VTXOB_TerminalPart_L1_length2" dr="10.5*mm"   offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
-                    <component thickness="VTXOB_TerminalPart_L1_thickness4" width="VTXOB_TerminalPart_L1_width4" length="VTXOB_TerminalPart_L1_length4" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length-VTXOB_TerminalPart_L1_length4" dr="0.5*mm"   offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
+                    <component thickness="VTXOB_TerminalPart_L1_thickness2" width="VTXOB_TerminalPart_L1_width2" length="VTXOB_TerminalPart_L1_length2" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length" dr="6.5*mm"   offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
+                    <component thickness="VTXOB_TerminalPart_L1_thickness3" width="VTXOB_TerminalPart_L1_width3" length="VTXOB_TerminalPart_L1_length3" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length+VTXOB_TerminalPart_L1_length2" dr="6.5*mm"   offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
                 </end_z>
             </stave>
 
@@ -564,10 +556,9 @@
                     <component thickness="VTXO_hybrid_thickness" width="VTXO_mod_rphi" length="VTXO_hybrid_length" dz="VTXOB_mod_z_spacing" dr="0.0*mm" offset="0.0*mm" material="PCB" vis="HybridVis"/>
 
                     <!-- Terminal part -->
-                    <component thickness="VTXOB_TerminalPart_L2_thickness1" width="VTXOB_TerminalPart_L2_width1" length="VTXOB_TerminalPart_L2_length1" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length" dr="-2.839*mm"                                 offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
-                    <component thickness="VTXOB_TerminalPart_L2_thickness2" width="VTXOB_TerminalPart_L2_width2" length="VTXOB_TerminalPart_L2_length2" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length" dr="-2.839*mm-VTXOB_TerminalPart_L2_thickness2"   offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
-                    <component thickness="VTXOB_TerminalPart_L2_thickness3" width="VTXOB_TerminalPart_L2_width3" length="VTXOB_TerminalPart_L2_length3" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length+VTXOB_TerminalPart_L2_length2" dr="-16.309*mm"   offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
-                    <component thickness="VTXOB_TerminalPart_L2_thickness4" width="VTXOB_TerminalPart_L2_width4" length="VTXOB_TerminalPart_L2_length4" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length-VTXOB_TerminalPart_L2_length4" dr="-5.0*mm"   offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
+                    <component thickness="VTXOB_TerminalPart_L2_thickness1" width="VTXOB_TerminalPart_L2_width1" length="VTXOB_TerminalPart_L2_length1" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length" dr="-VTXOB_TerminalPart_L2_thickness1"                                 offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
+                    <component thickness="VTXOB_TerminalPart_L2_thickness2" width="VTXOB_TerminalPart_L2_width2" length="VTXOB_TerminalPart_L2_length2" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length" dr="-VTXOB_TerminalPart_L2_thickness1-12.771*mm"   offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
+                    <component thickness="VTXOB_TerminalPart_L2_thickness3" width="VTXOB_TerminalPart_L2_width3" length="VTXOB_TerminalPart_L2_length3" dz="VTXOB_mod_z_spacing+VTXO_hybrid_length+VTXOB_TerminalPart_L2_length2" dr="-VTXOB_TerminalPart_L2_thickness1-12.771*mm"   offset="0.0*mm" material="PEEK" vis="TerminalPartVis"/>
                 </end_z>
             </stave>
 
