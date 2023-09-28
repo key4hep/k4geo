@@ -198,16 +198,16 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
     }
 
     // second z loop (place sequences in layer)
-    std::vector<dd4hep::PlacedVolume> sequences; 
+    std::vector<dd4hep::PlacedVolume> sq_vector; 
 
     for (uint numSeq=0; numSeq < numSequencesZ; numSeq++){
       double zOffset = - dzDetector + (2 * numSeq + 1) * (dzSequence * 0.5);
       dd4hep::Position tileSequencePosition(0, 0, zOffset);
       dd4hep::PlacedVolume placedTileSequenceVolume = layerVolume.placeVolume(tileSequenceVolume, tileSequencePosition);
       placedTileSequenceVolume.addPhysVolID("row", numSeq);
-      sequences.push_back(placedTileSequenceVolume);
+      sq_vector.push_back(placedTileSequenceVolume);
     }
-    seqInLayers.push_back(sequences);
+    seqInLayers.push_back(sq_vector);
 
   }
 
