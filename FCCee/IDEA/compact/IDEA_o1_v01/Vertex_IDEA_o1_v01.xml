@@ -721,7 +721,7 @@
     </plugins>
 
     <!-- Vertex inner barrel support structure imported via DDCAD, material budget evaluation with g4MaterialScan is working, but not with the k4SimGeant4 methods -->
-    <detectors>
+    <!-- <detectors>
         <detector id="0" name="VTXIBSupport" type="DD4hep_TestShape_Creator">
             <check>
                 <shape type="CAD_MultiVolume" ref="${K4GEO}/share/k4geo/FCCee/IDEA/compact/IDEA_o1_v01/VertexSupport_o1_v01.obj" unit="mm"/>
@@ -729,5 +729,5 @@
                 <rotation x="0*pi/8*rad" y="-4*pi/8*rad" z="0*rad"/>  
             </check>
         </detector>
-    </detectors>   
+    </detectors>    -->
 </lccdd>
