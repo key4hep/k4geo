@@ -70,10 +70,10 @@ ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
 #--------------------------------------------------
-# test for IDEA o1 v01
-SET( test_name "test_IDEA_o1_v01" )
+# test for IDEA o1 v02
+SET( test_name "test_IDEA_o1_v02" )
 ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
-    ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o1_v01/IDEA_o1_v01.xml --runType=batch -G -N=1 --outputFile=testIDEA_o1_v01.slcio )
+    ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o1_v02/IDEA_o1_v02.xml --runType=batch -G -N=1 --outputFile=testIDEA_o1_v02.slcio )
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" TIMEOUT 240)
 
 #--------------------------------------------------

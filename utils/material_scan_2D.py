@@ -11,7 +11,7 @@ from Configurables import GeoSvc
 ## parse the given xml file
 geoservice = GeoSvc("GeoSvc")
 geoservice.detectors = [
-                        'FCCee_IDEA_o1_v01.xml'
+                        'IDEA_o1_v02.xml'
                        ]
 geoservice.OutputLevel = INFO 
 ApplicationMgr().ExtSvc += [geoservice]

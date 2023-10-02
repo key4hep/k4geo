@@ -22,6 +22,8 @@
     <constant name="GlobalTrackerReadoutID" type="string" value="system:5,layer:3,stave:6,module:5,sensor:2"/>
     <constant name="GlobalTrackerReadoutID_OB" type="string" value="system:5,layer:1,stave:6,module:4,sensor:2"/>
     <constant name="GlobalTrackerReadoutID_Disk" type="string" value="system:5,side:-2,layer:3,petal:3,stave:6,module:10,sensor:2"/>
+    <constant name="GlobalTrackerReadoutID_SiWrapperB" type="string" value="system:5,layer:1,stave:9,module:6,sensor:1"/>
+    <constant name="GlobalTrackerReadoutID_SiWrapperD" type="string" value="system:5,side:1,layer:1,module:6,sensor:1"/>
     <constant name="SolenoidField" value="2*tesla"/>
     
     <constant name="DetID_NOTUSED"          value=" 0"/>
@@ -48,6 +50,9 @@
     <constant name="DetID_HOMAbsorber"          value=" 19"/>
     <constant name="DetID_LumiCalNoseShield"          value=" 22"/>
     
+    <constant name="DetID_SiWrapper_Barrel"       value=" 23"/>
+    <constant name="DetID_SiWrapper_Disks"       value=" 24"/>
+
         <!-- BPW: Beam Pipe Width -->
     <constant name="BPWWall"       value="0.35*mm" />
     <constant name="BPWCool"       value="1.0*mm" />
@@ -214,6 +219,9 @@
     <region name="VTXIBRegion"/>
     <region name="VTXOBRegion"/>
     <region name="VTXDRegion"/>
+
+    <region name="SiWrapperBRegion"/>
+    <region name="SiWrapperDRegion"/>
   </regions>
 
 
@@ -221,25 +229,31 @@
     <vis name="VXDVis"        alpha="0.2" r="0.1" 	g=".5"      b=".5"    showDaughters="true"  visible="false"/>
     <vis name="VXDLayerVis"   alpha="1.0" r="0.1" 	g=".5"      b=".5"    showDaughters="true"  visible="true"/>
     <vis name="VXDSupportVis" alpha="1.0" r="0.0" 	g="1.0"     b="0.0"   showDaughters="true"  visible="true"/>
-    <vis name="ITVis"       	alpha="1.0" r="0.54"  	g="0.43"    b="0.04"  showDaughters="true"  visible="true"/>
-    <vis name="OTVis"       	alpha="1.0" r="0.8"   	g="0.8"     b="0.4"   showDaughters="true"  visible="false"/>
+    <vis name="SiWrapperVis"  alpha="0.2" r="0.54"  	g="0.43"    b="0.04"  showDaughters="true"  visible="true"/>
     <vis name="ECALVis"     	alpha="1.0" r="0.2"   	g="0.6"     b="0"     showDaughters="true"  visible="true"/>
     <vis name="HCALVis"     	alpha="1.0" r="0.078" 	g="0.01176" b="0.588" showDaughters="true"  visible="true"/>
     <vis name="SOLVis"      	alpha="1.0" r="0.4"   	g="0.4"     b="0.4"   showDaughters="true"  visible="true"/>
     <vis name="YOKEVis"     	alpha="1.0" r="0.6"   	g="0.0"     b="0.0"   showDaughters="true"  visible="true"/>
     <vis name="LCALInstrVis"  alpha="1.0" r="0.35"  	g="0.0"     b="0.47"  showDaughters="true"  visible="true"/>
     <vis name="LCALVis"    	alpha="1.0" r="0.25"  	g="0.88"    b="0.81"  showDaughters="true"  visible="true"/>
-    <vis name="LCALCoolVis"   alpha="1.0" r="0.2"   	g="0.6"     b="0"     showDaughters="true"  visible="true"/>
-    <vis name="BCALVis"     	alpha="1.0" r="0.0"   	g="0.4"     b="0.4"   showDaughters="true"  visible="true"/>
-    <vis name="KICKVis"     	alpha="1.0" r="1.0"   	g="0.498"   b="0.0"   showDaughters="true"  visible="true"/>
-    <vis name="QD0CoilIVis"   alpha="1.0" r="1.0"   	g="0.498"   b="0.0"   showDaughters="true"  visible="true"/>
-    <vis name="QD0CoilOVis"   alpha="1.0" r="1.0"   	g="0.25"    b="0.0"   showDaughters="true"  visible="true"/>
-    <vis name="CompSolVis"    alpha="1.0" r="0.5"   	g="0.5"     b="0.0"   showDaughters="true"  visible="true"/>
-    <vis name="ScreenSolVis"  alpha="1.0" r="1"   	g="1"       b="0"     showDaughters="true"  visible="true"/>
-    <vis name="ColliVis"      alpha="1.0" r="0.7"   	g="0.5"     b="1"     showDaughters="true"  visible="true"/>
-    <vis name="TantalumVis"   alpha="1.0" r="1"   	g="0.5"     b="0.5"   showDaughters="true"  visible="true"/>
-    <vis name="BPMVis"      	alpha="1.0" r="0.25"  	g="0.88"    b="0.81"  showDaughters="true"  visible="true"/>
-    <vis name="SupportVis"  	alpha="1"   r="0.2"   	g="0.2"     b="0.2"   showDaughters="true" visible="true"/>
+    <vis name="LCALCoolVis"   alpha="1.0" r="0.2"   	g="0.6"   b="0"     showDaughters="true"  visible="true"/>
+    <vis name="BCALVis"     	alpha="1.0" r="0.0"   	g="0.4"   b="0.4"   showDaughters="true"  visible="true"/>
+    <vis name="KICKVis"     	alpha="1.0" r="1.0"   	g="0.498" b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="QD0CoilIVis"   alpha="1.0" r="1.0"   	g="0.498" b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="QD0CoilOVis"   alpha="1.0" r="1.0"   	g="0.25"  b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="CompSolVis"    alpha="1.0" r="0.5"   	g="0.5"   b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="ScreenSolVis"  alpha="1.0" r="1"   	  g="1"     b="0"     showDaughters="true"  visible="true"/>
+    <vis name="ColliVis"      alpha="1.0" r="0.7"   	g="0.5"   b="1"     showDaughters="true"  visible="true"/>
+    <vis name="TantalumVis"   alpha="1.0" r="1"   	  g="0.5"   b="0.5"   showDaughters="true"  visible="true"/>
+    <vis name="BPMVis"      	alpha="1.0" r="0.25"  	g="0.88"  b="0.81"  showDaughters="true"  visible="true"/>
+    <vis name="SupportVis"  	alpha="1"   r="0.2"   	g="0.2"   b="0.2"   showDaughters="true"  visible="true"/> <!-- maybe use r="0.9"     g="0.95"  b="1.0" -->
+    <vis name="CableVis"      alpha="1.0" r="0.0"     g="1.0"   b="0.4"   showDaughters="true"  visible="true"/>
+    <vis name="HybridVis"     alpha="1.0" r="0.0"     g="1.0"   b="0.1"   showDaughters="true"  visible="true"/>
+    <vis name="PipingVis"     alpha="1.0" r="1.0"     g="1.0"   b="1.0"   showDaughters="true"  visible="true"/>
+    <vis name="WaterVis"      alpha="1.0" r="0.0"     g="0.0"   b="1.0"   showDaughters="true"  visible="true"/>
+    <vis name="GlueVis"       alpha="1.0" r="1.0"     g="0.75"  b="0.79"  showDaughters="true"  visible="true"/>
+    <vis name="RohacellVis"   alpha="1.0" r="1.0"     g="1.0"   b="1.0"   showDaughters="true"  visible="true"/>
+    <vis name="AirVis"        alpha="0.1" r="0.1"     g="0.1"   b="1.0"   showDaughters="false" visible="true"/>
   </display>
 
 </lccdd>

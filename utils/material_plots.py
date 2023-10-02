@@ -35,6 +35,9 @@ def main():
             material = material.replace("Vtx","")
 
             if material == "Air": continue
+            if material == "Tungsten": continue
+            if material == "Copper": continue
+            if material == "beam": continue
             if material not in histDict.keys():
                 histDict[material] = {
                     "x0": ROOT.TH1F("", "", (int)((args.angleMax-args.angleMin) / args.angleBinning), args.angleMin, args.angleMax),
