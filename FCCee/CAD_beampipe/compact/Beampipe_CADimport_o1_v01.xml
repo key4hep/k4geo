@@ -10,24 +10,16 @@
         url="no"
         status="development"
         version="1.0">
-    <comment>A beampipe for FCCee coming from F. Fransesini CAD drawings. 
-             CAD model -2.5m/+2.5m from the IP, after simple DD4hep tubes. </comment>
+    <comment>A beampipe for FCCee coming from F. Fransesini CAD drawings. </comment>
   </info>
 
-
-  <display>
-    <vis name="BeamPipeVis" alpha="0.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="false"/>
-    <vis name="GoldCoatingVis" alpha="0.0" r="0.0" g="1.0" b="1.0" showDaughters="true" visible="true"/>
-    <vis name="TubeVis"  alpha="1.0" r="1.0" g="0.7"  b="0.5"   showDaughters="true"  visible="true"/>
-    <vis name="VacVis"   alpha="1.0" r="1.0" g="1.0"  b="1.0"   showDaughters="true"  visible="false"/>
-  </display>
 
 
   <detectors>
 
     <detector name="Beampipe_STL" type="DD4hep_TestShape_Creator">
       <check>
-        <shape type="CAD_MultiVolume" ref="../CAD_beampipe/Pipe_230830/AlBeMet162_30082023.stl"
+        <shape type="CAD_MultiVolume" ref="../CAD_beampipe/Pipe_231002/AlBeMet162_30082023.stl"
 	       unit="mm" material="AlBeMet162">
 	  <volume id="0" name="s1" vis="AlBeMet_vis" material="AlBeMet162"> 
 	    <position x="0*cm"  y="0*cm"  z="0*cm"/>
@@ -39,7 +31,7 @@
 
     <detector name="Beampipe_crotch_STL" type="DD4hep_TestShape_Creator">
       <check>
-        <shape type="CAD_MultiVolume" ref="../CAD_beampipe/Pipe_230830/Copper_pipe_28092023.stl"
+        <shape type="CAD_MultiVolume" ref="../CAD_beampipe/Pipe_231002/Copper_pipe_02102023.stl"
                unit="mm" material="Copper">
           <volume id="0" name="s1" vis="CopperCooling_vis" material="Cu">
             <position x="0*cm"  y="0*cm"  z="0*cm"/>
@@ -48,10 +40,10 @@
         </shape>
       </check>
     </detector>
-      
+    
     <detector name="Cooling_trap_STL" type="DD4hep_TestShape_Creator">
       <check>
-	<shape type="CAD_MultiVolume" ref="../CAD_beampipe/Pipe_230830/Copper_cooling_30082023.stl"
+	<shape type="CAD_MultiVolume" ref="../CAD_beampipe/Pipe_231002/Copper_cooling_30082023.stl"
 	       unit="mm" material="Copper">
           <volume id="0" name="s1" vis="CopperCooling_vis" material="Cu">
             <position x="0*cm"  y="0*cm"  z="0*cm"/>
@@ -64,7 +56,7 @@
     
     <detector name="Gold_STL" type="DD4hep_TestShape_Creator">
       <check>
-	<shape type="CAD_MultiVolume" ref="../CAD_beampipe/Pipe_230830/Gold_29082022.stl"
+	<shape type="CAD_MultiVolume" ref="../CAD_beampipe/Pipe_231002/Gold_29082022.stl"
 	       unit="mm" material="Gold">
           <volume id="0" name="s1" vis="Gold_vis" material="Au">
             <position x="0*cm"  y="0*cm"  z="0*cm"/>
@@ -77,7 +69,7 @@
     
     <detector name="Paraffin_STL" type="DD4hep_TestShape_Creator">
       <check>
-        <shape type="CAD_MultiVolume" ref="../CAD_beampipe/Pipe_230830/Paraffine_30082023.stl"
+        <shape type="CAD_MultiVolume" ref="../CAD_beampipe/Pipe_231002/Paraffine_30082023.stl"
 	       unit="mm" material="LiquidNDecane">
           <volume id="0" name="s1" vis="Paraffin_vis" material="LiquidNDecane">
             <position x="0*cm"  y="0*cm"  z="0*cm"/>
@@ -89,11 +81,23 @@
 
     <detector name="Water_STL" type="DD4hep_TestShape_Creator">
       <check>
-        <shape type="CAD_MultiVolume" ref="../CAD_beampipe/Pipe_230830/Water_21082023.stl"
+        <shape type="CAD_MultiVolume" ref="../CAD_beampipe/Pipe_231002/Water_21082023.stl"
                unit="mm" material="Water">
           <volume id="0" name="s1" vis="Water_vis" material="Water">
             <position x="0*cm"  y="0*cm"  z="0*cm"/>
             <rotation x="0*rad" y="0*rad" z="pi/2.*rad"/>
+          </volume>
+        </shape>
+      </check>
+    </detector>
+
+    <detector name="Tungsten_STL" type="DD4hep_TestShape_Creator">
+      <check>
+        <shape type="CAD_MultiVolume" ref="../CAD_beampipe/Pipe_231002/Tungsten_mask_02102023.stl"
+               unit="mm" material="Tungsten">
+          <volume id="0" name="s1" vis="Tungsten_vis" material="W">
+            <position x="0*cm"  y="0*cm"  z="0*cm"/>
+            <rotation x="0*rad" y="pi/2.*rad" z="0*rad"/>
           </volume>
         </shape>
       </check>

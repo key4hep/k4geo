@@ -44,7 +44,8 @@
     <vis name="CopperCooling_vis" alpha="1.0" r="1.0" g="0.5" b="0.0"   showDaughters="true" visible="true"/>
     <vis name="Gold_vis"          alpha="1.0" r="2.5" g="1.0" b="1.5"   showDaughters="true" visible="true"/>
     <vis name="Paraffin_vis"      alpha="1.0" r="0.0" g="0.0" b="1.0"   showDaughters="true" visible="true"/>
-    <vis name="Water_vis"         alpha="0.8" r="0.0" g="0.2" b="1.0"   showDaughters="true" visible="true"/>
+    <vis name="Water_vis"         alpha="0.8" r="0.0" g="0.5" b="1.0"   showDaughters="true" visible="true"/>
+    <vis name="Tungsten_vis"      alpha="1.0" r="1.0" g="0.2" b="0.0"   showDaughters="true" visible="true"/>
 </display>
 
 
