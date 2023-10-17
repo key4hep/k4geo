@@ -1,0 +1,262 @@
+<!-- Changes :
+   o1_v01 : First version of silicon wrapper for IDEA
+-->
+
+<lccdd>
+    <info name="SiliconWrapper_IDEA_o1_v01"
+        title="IDEA silicon wrapper detector"
+        author="Armin Ilg"
+        url="no"
+        status="development"
+        version="o1_v01"> 
+        <comment>A Silicon Wrapper layer for the FCC-ee IDEA detector concept with timing to enable excellent PID together with drift chamber. </comment>
+    </info>
+    <comment>Silicon wrapper</comment>
+    <detectors>
+        <detector name="SiWrapper" type="DD4hep_SubdetectorAssembly" vis="SiWrapperVis">
+            <shape type="Tube" rmin="DCH_outer_radius" rmax="DCH_outer_radius+5.0*cm" dz="DCH_half_length+20.0*cm" material="Air"/>
+            <comment>Silicon Wrapper Assembly</comment>
+            <composite name="SiWrapperB"/>
+            <composite name="SiWrapperD"/> 
+        </detector>
+    </detectors>
+    
+    <display>
+        <vis name="SiWrapperSensitiveVis"     alpha="1.0" r="1.0"     g="1.0"  b="0.0"      showDaughters="true"  visible="true"/>
+        <vis name="SiWrapperPeripheryVis"     alpha="1.0" r="1.0"     g="0.9"  b="0.1"      showDaughters="true"  visible="true"/>
+    </display>
+     
+
+    <define>
+
+        <!-- Silicon wrapper barrel and disks sensor: Assume 42 mm sensor size, fully sensitive -->
+<!--            <constant name="SiWrapperB_sens_z_sensitive" value="42.0*mm"/> <!~~ Chip length in z: Sensitive ~~>
+            <constant name="SiWrapperB_sens_z_periphery" value="0.4*mm"/> <!~~ Chip length in z: Periphery ~~>
+            <constant name="SiWrapperB_sens_z" value="SiWrapperB_sens_z_sensitive+SiWrapperB_sens_z_periphery"/> <!~~ Chip length in z: Total ~~>
+            <constant name="SiWrapperB_sens_rphi_sensitive" value="42.0*mm"/> <!~~ Chip length in r-phi: Sensitive~~>
+            <constant name="SiWrapperB_sens_rphi_periphery" value="2.4*mm"/> <!~~ Chip length in r-phi: Periphery~~>
+            <constant name="SiWrapperB_sens_rphi" value="SiWrapperB_sens_rphi_sensitive+SiWrapperB_sens_rphi_periphery"/> <!~~ Chip length in r-phi: Total ~~>
+            <constant name="SiWrapperB_sens_rphi_sens_spacing" value="0.2*mm"/> <!~~ Distance between individual readout chips in rphi ~~>
+            <constant name="SiWrapperB_sens_z_sens_spacing" value="0.2*mm"/> <!~~ Distance between individual readout chips in rphi ~~>
+-->    
+
+<!--            <constant name="SiWrapperB_mod_z_sensitive" value="56*42.0*mm+55*0.2*mm"/> <!~~ Simplification to check design ~~>-->
+            <constant name="SiWrapperB_mod_z_sensitive" value="42.0*mm"/>
+            <constant name="SiWrapperB_mod_z_periphery" value="0.0*mm"/>
+            <constant name="SiWrapperB_mod_z" value="SiWrapperB_mod_z_sensitive+SiWrapperB_mod_z_periphery"/>
+
+            <constant name="SiWrapperB_mod_rphi_sensitive" value="42.0*mm"/>
+            <constant name="SiWrapperB_mod_rphi_periphery" value="0.0*mm"/>
+            <constant name="SiWrapperB_mod_rphi" value="SiWrapperB_mod_rphi_sensitive+SiWrapperB_mod_rphi_periphery"/>
+        
+            <constant name="SiWrapperB_Sensitive_Thickness" value="0.1*mm"/> <!-- 100 µm of silicon for the sensor -->
+
+
+        <!-- Silicon wrapper barrel parameters -->
+            <!-- Stave-long support -->
+            <constant name="SiWrapperB_support_CarbonFiber_thickness"     value="400e-03*mm"/>
+
+            <!-- Cooling pipes -->
+            <constant name="SiWrapperB_Pipe_thickness"                    value="0.0955*mm"/>
+            <constant name="SiWrapperB_Pipe_rphi"                         value="2.0*mm"/>
+            <constant name="SiWrapperB_Water_thickness"                   value="2.0*mm"/>
+
+            <!-- Flex: 2 layers of 50 µm Aluminum, 2 layers of 150 µm kapton and 100 µm glue -->
+            <constant name="SiWrapperB_flex_width" value="16.2*mm"/>
+            <constant name="SiWrapperB_flex_Aluminium_thickness" value="0.100*mm"/>
+            <constant name="SiWrapperB_flex_Kapton_thickness" value="0.300*mm"/>
+            <constant name="SiWrapperB_flex_Glue_thickness" value="0.100*mm"/>
+            <constant name="SiWrapperB_flex_thickness" value="SiWrapperB_flex_Aluminium_thickness+SiWrapperB_flex_Kapton_thickness+SiWrapperB_flex_Glue_thickness"/>
+
+            <!-- Hybrid at the end of the stave -->
+            <!-- <constant name="SiWrapperB_hybrid_thickness" value="0.4*mm"/>
+            <constant name="SiWrapperB_hybrid_length" value="12.1*mm"/> -->
+
+            <constant name="SiWrapperB_r1" value="DCH_outer_radius"/>
+            <constant name="SiWrapperB_r2" value="SiWrapperB_r1 + 2.0*cm"/>
+
+            <constant name="SiWrapperB_Staves1" value="320"/> <!-- DCH_outer_radius of 2100*mm -> circumference of 13194*mm -> ~314 staves -->
+            <constant name="SiWrapperB_Staves2" value="320"/>
+
+            <constant name="SiWrapperB_nModules1" value="56"/> <!-- Length of 2400*mm (?) -> Let's take 56 modules with 55 SiWrapperB_mod_z_spacing gaps -> 2363 mm length in z -->
+            <constant name="SiWrapperB_nModules2" value="56"/>
+<!--            <constant name="SiWrapperB_nModules1" value="1"/> <!~~ Simplification to check design ~~>
+            <constant name="SiWrapperB_nModules2" value="1"/> <!~~ Simplification to check design ~~>
+-->        
+            <constant name="SiWrapperB_mod_z_spacing" value="0.2*mm"/> <!-- Must be done for disks as well! Currently not done -->
+
+            <constant name="SiWrapperB_z1" value="(SiWrapperB_nModules1*SiWrapperB_mod_z+(SiWrapperB_nModules1-1)*SiWrapperB_mod_z_spacing)/2.0"/>
+            <constant name="SiWrapperB_z2" value="(SiWrapperB_nModules2*SiWrapperB_mod_z+(SiWrapperB_nModules2-1)*SiWrapperB_mod_z_spacing)/2.0"/>
+
+
+            <constant name="SiWrapperB_Pipe_offset"                      value="21.18*mm/2.0"/>
+<!--            <constant name="SiWrapperB_TrussStructure_thickness"        value="0.500*mm"/> <!~~ 0.500 mm of proxy carbon fiber thickness for light-weight truss structure ~~>
+            <constant name="SiWrapperB_TrussStructure_distance"          value="3.3*mm"/>
+-->
+            <constant name="SiWrapperB_support_thickness"                value="SiWrapperB_support_CarbonFiber_thickness"/>
+
+            <constant name="SiWrapperB_offset1" value="30.0*mm"/>
+            <constant name="SiWrapperB_offset2" value="30.0*mm"/>
+
+            <!-- Proxy for terminal part in SiWrapperB made out of PEEK, used in middle tracker barrel-->
+            <!-- <constant name="SiWrapperB_TerminalPart_L1_width1"        value="(34.436*mm+25.604*mm)/2."/>
+            <constant name="SiWrapperB_TerminalPart_L1_length1"        value="7.0*mm"/>
+            <constant name="SiWrapperB_TerminalPart_L1_thickness1"        value="744.577*mm*mm*mm/SiWrapperB_TerminalPart_L1_width1/SiWrapperB_TerminalPart_L1_length1"/>
+
+            <constant name="SiWrapperB_TerminalPart_L1_width2"        value="(25.604*mm+18.244*mm)/2."/>
+            <constant name="SiWrapperB_TerminalPart_L1_length2"        value="7.0*mm"/>
+            <constant name="SiWrapperB_TerminalPart_L1_thickness2"        value="542.961*mm*mm*mm/SiWrapperB_TerminalPart_L1_width2/SiWrapperB_TerminalPart_L1_length2"/>
+                     
+            <constant name="SiWrapperB_TerminalPart_L1_width3"        value="8.0*mm"/>
+            <constant name="SiWrapperB_TerminalPart_L1_length3"        value="8.0*mm"/>
+            <constant name="SiWrapperB_TerminalPart_L1_thickness3"        value="231.848*mm*mm*mm/SiWrapperB_TerminalPart_L1_width3/SiWrapperB_TerminalPart_L1_length3"/>
+                 -->
+            
+            <!-- Proxy for terminal part in SiWrapperB made out of PEEK, used in outer tracker barrel -->
+            <!-- <constant name="SiWrapperB_TerminalPart_L2_width1"        value="(36.0*mm+23.787*mm)/2."/>
+            <constant name="SiWrapperB_TerminalPart_L2_length1"        value="7.0*mm"/>
+            <constant name="SiWrapperB_TerminalPart_L2_thickness1"        value="1162.157*mm*mm*mm/SiWrapperB_TerminalPart_L2_width1/SiWrapperB_TerminalPart_L2_length1"/>
+
+            <constant name="SiWrapperB_TerminalPart_L2_width2"        value="(23.787*mm+18.381*mm)/2."/>
+            <constant name="SiWrapperB_TerminalPart_L2_length2"        value="7.0*mm"/>
+            <constant name="SiWrapperB_TerminalPart_L2_thickness2"        value="569.724*mm*mm*mm/SiWrapperB_TerminalPart_L2_width2/SiWrapperB_TerminalPart_L2_length2"/>
+                     
+            <constant name="SiWrapperB_TerminalPart_L2_width3"        value="8.5*mm"/>
+            <constant name="SiWrapperB_TerminalPart_L2_length3"        value="9.25*mm"/>
+            <constant name="SiWrapperB_TerminalPart_L2_thickness3"        value="304.345*mm*mm*mm/SiWrapperB_TerminalPart_L2_width3/SiWrapperB_TerminalPart_L2_length3"/> -->
+        
+
+        <!-- Silicon wrapper disks parameters -->
+            <constant name="SiWrapperD_z1" value="DCH_half_length + 130.0*mm"/>
+            <constant name="SiWrapperD_z_gap" value="20.0*mm"/>
+            <constant name="SiWrapperD_z2" value="SiWrapperD_z1 + SiWrapperD_z_gap"/>
+            <constant name="SiWrapperD_nModules" value="48"/>
+            <constant name="SiWrapperD_rmin1" value="240.0*mm"/>
+            <constant name="SiWrapperD_rmin2" value="242.0*mm"/>
+            <constant name="SiWrapperD_rmax" value="2080.0*mm"/>
+
+            <constant name="SiWrapperD_Sensitive_Thickness" value="0.1*mm"/> <!-- 100 µm of silicon for the sensor -->
+            <constant name="SiWrapperD_support_CarbonFiber_thickness" value="1.25*mm"/> <!-- 0.01 cm/9.370 cm (100 µm Si) + 0.125 cm/31.4 cm (1.25 mm CarbonFibre) = 0.0050 = 0.5% X/X0 -->
+            <constant name="SiWrapperD_support_thickness" value="SiWrapperD_support_CarbonFiber_thickness"/>
+    </define>        
+
+
+    <!--  Definition of the readout segmentation/definition  -->
+    <readouts>
+        <readout name="SiWrapperBCollection">
+            <id>${GlobalTrackerReadoutID_SiWrapperB}</id>
+        </readout>       
+        <readout name="SiWrapperDCollection">
+            <id>${GlobalTrackerReadoutID_SiWrapperD}</id>
+        </readout>
+    </readouts>
+
+
+    <!-- Silicon wrapper barrel  -->
+    <detectors>
+        <detector name="SiWrapperB" type="VertexBarrel_detailed_o1_v01" vis="SiWrapperVis" id="DetID_SiWrapper_Barrel" readout="SiWrapperBCollection"  region="SiWrapperBRegion">
+            <envelope vis="SiWrapperVis">
+                <shape type="Assembly"/>
+            </envelope>
+            <type_flags type=" DetType_TRACKER + DetType_STRIP + DetType_BARREL"/>
+            
+            <!-- Definition of our "stave" object that is used to build the barrel. -->
+            <stave name="SiSiWrapperBStave1">
+                <components name="flexes" dr="0.0*mm" offset="0.0*mm" length="SiWrapperB_z1">
+                    <component thickness="SiWrapperB_flex_Aluminium_thickness" width="SiWrapperB_flex_width" dr="0.0*mm"                                                                  offset="0.0*mm" material="Al" vis="CableVis"/>
+                    <component thickness="SiWrapperB_flex_Kapton_thickness"    width="SiWrapperB_flex_width" dr="SiWrapperB_flex_Aluminium_thickness"                                    offset="0.0*mm" material="KaptonVtx" vis="CableVis"/>
+                    <component thickness="SiWrapperB_flex_Glue_thickness"      width="SiWrapperB_flex_width" dr="SiWrapperB_flex_Aluminium_thickness+SiWrapperB_flex_Kapton_thickness"  offset="0.0*mm" material="GlueEcobond45" vis="CableVis"/>
+                </components>
+
+                <sensor dr="SiWrapperB_flex_thickness" offset="0.0*mm" thickness="SiWrapperB_Sensitive_Thickness" material="Silicon">
+                    <component sensitive="True" ymin="-SiWrapperB_mod_z/2.0" ymax="SiWrapperB_mod_z/2.0"   xmin="-SiWrapperB_mod_rphi/2.0"    xmax="SiWrapperB_mod_rphi/2.0" vis="SiWrapperSensitiveVis"/>
+                </sensor>
+
+                <components name="support" dr="SiWrapperB_flex_thickness+SiWrapperB_Sensitive_Thickness" offset="0.0*mm" length="SiWrapperB_z1">
+                    <component thickness="SiWrapperB_support_CarbonFiber_thickness"    width="SiWrapperB_mod_rphi" offset="0.0*mm" dr="0.0*mm" material="CarbonFiberVtx" vis="SupportVis"/> <!-- Thin stave holder: should be material="K13D2U", but not implemented yet, but only marginal difference in X0 -->
+                </components>
+
+                <components name="coolingPipes" dr="SiWrapperB_flex_thickness+SiWrapperB_Sensitive_Thickness+SiWrapperB_support_thickness" offset="0.0*mm" length="SiWrapperB_z1">
+                    <component thickness="SiWrapperB_Pipe_thickness"  width="SiWrapperB_Pipe_rphi" offset="SiWrapperB_Pipe_offset" dr="0.0*mm" material="KaptonVtx" vis="PipingVis"/> 
+                    <component thickness="SiWrapperB_Water_thickness" width="SiWrapperB_Pipe_rphi" offset="SiWrapperB_Pipe_offset" dr="SiWrapperB_Pipe_thickness" material="Water" vis="WaterVis"/>
+                    <component thickness="SiWrapperB_Pipe_thickness"  width="SiWrapperB_Pipe_rphi" offset="SiWrapperB_Pipe_offset" dr="SiWrapperB_Pipe_thickness+SiWrapperB_Water_thickness" material="KaptonVtx" vis="PipingVis"/>
+
+                    <component thickness="SiWrapperB_Pipe_thickness"  width="SiWrapperB_Pipe_rphi" offset="-SiWrapperB_Pipe_offset" dr="0.0*mm" material="KaptonVtx" vis="PipingVis"/> 
+                    <component thickness="SiWrapperB_Water_thickness" width="SiWrapperB_Pipe_rphi" offset="-SiWrapperB_Pipe_offset" dr="SiWrapperB_Pipe_thickness" material="Water" vis="WaterVis"/>
+                    <component thickness="SiWrapperB_Pipe_thickness"  width="SiWrapperB_Pipe_rphi" offset="-SiWrapperB_Pipe_offset" dr="SiWrapperB_Pipe_thickness+SiWrapperB_Water_thickness" material="KaptonVtx" vis="PipingVis"/>
+                </components>
+            </stave>
+
+            <!-- Definition of our "stave" object that is used to build the barrel. -->
+            <stave name="SiSiWrapperBStave2">
+                <components name="support" dr="0.0*mm" offset="0.0*mm" length="SiWrapperB_z2">
+                    <component thickness="SiWrapperB_support_CarbonFiber_thickness"    width="SiWrapperB_mod_rphi" offset="0.0*mm" dr="0.0*mm" material="CarbonFiberVtx" vis="SupportVis"/>
+                </components>
+
+                <sensor dr="SiWrapperB_support_thickness" offset="0.0*mm" thickness="SiWrapperB_Sensitive_Thickness" material="Silicon">
+                    <component sensitive="True" ymin="-SiWrapperB_mod_z/2.0" ymax="SiWrapperB_mod_z/2.0"   xmin="-SiWrapperB_mod_rphi/2.0"    xmax="SiWrapperB_mod_rphi/2.0" vis="SiWrapperSensitiveVis"/>
+                </sensor>
+
+                <components name="flexes" dr="SiWrapperB_support_thickness+SiWrapperB_Sensitive_Thickness" offset="0.0*mm" length="SiWrapperB_z2">
+                    <component thickness="SiWrapperB_flex_Aluminium_thickness" width="SiWrapperB_flex_width" dr="0.0*mm"                                                                  offset="0.0*mm" material="Al" vis="CableVis"/>
+                    <component thickness="SiWrapperB_flex_Kapton_thickness"    width="SiWrapperB_flex_width" dr="SiWrapperB_flex_Aluminium_thickness"                                    offset="0.0*mm" material="KaptonVtx" vis="CableVis"/>
+                    <component thickness="SiWrapperB_flex_Glue_thickness"      width="SiWrapperB_flex_width" dr="SiWrapperB_flex_Aluminium_thickness+SiWrapperB_flex_Kapton_thickness"  offset="0.0*mm" material="GlueEcobond45" vis="CableVis"/>
+                </components>
+            </stave>
+
+            <!-- Here we construct the barrel -->
+            <layer nLadders="SiWrapperB_Staves1" phi0="0.0" r="SiWrapperB_r1" offset="SiWrapperB_offset1" id="0" nmodules="SiWrapperB_nModules1" name="SiSiWrapperBStave1" step="SiWrapperB_mod_z_spacing"/>
+            <layer nLadders="SiWrapperB_Staves2" phi0="0.0" r="SiWrapperB_r2" offset="SiWrapperB_offset2" id="1" nmodules="SiWrapperB_nModules2" name="SiSiWrapperBStave2" step="SiWrapperB_mod_z_spacing"/>
+        </detector>
+    </detectors>
+
+    <detectors>
+        <detector id="DetID_SiWrapper_Disks" name="SiWrapperD" type="VertexEndcap_o1_v06" readout="SiWrapperDCollection" reflect="true" region="SiWrapperDRegion">
+            <envelope vis="SiWrapperVis">
+                <shape type="Assembly"/>
+            </envelope>
+            <comment>Silicon wrapper disks</comment>
+
+            <type_flags type=" DetType_TRACKER + DetType_STRIP + DetType_ENDCAP"/>
+
+            <module name="SiWrapperDiskModule1" vis="SiWrapperSensitiveVis">
+                <trd x1="SiWrapperD_rmin1 * tan(pi/(SiWrapperD_nModules))" x2="SiWrapperD_rmax * tan(pi/(SiWrapperD_nModules))" z="(SiWrapperD_rmax - SiWrapperD_rmin1) / 2" />
+                <module_component thickness="SiWrapperD_Sensitive_Thickness"    material="Silicon"      vis="SiWrapperSensitiveVis" sensitive="true"/>
+                <module_component thickness="SiWrapperD_support_thickness"      material="CarbonFiber"  vis="CarbonFiberVis"/>
+                <!-- <module_component thickness="SiWrapperD_z_gap-SiWrapperD_support_thickness-SiWrapperD_Sensitive_Thickness"  material="Air" vis="AirVis" /> -->
+            </module>
+
+            <module name="SiWrapperDiskModule2" vis="SiWrapperSensitiveVis">
+                <trd x1="SiWrapperD_rmin2 * tan(pi/(SiWrapperD_nModules))" x2="SiWrapperD_rmax * tan(pi/(SiWrapperD_nModules))" z="(SiWrapperD_rmax - SiWrapperD_rmin2) / 2" />
+                <module_component thickness="SiWrapperD_support_thickness"      material="CarbonFiber"  vis="CarbonFiberVis"/>
+                <module_component thickness="SiWrapperD_Sensitive_Thickness"    material="Silicon"      vis="SiWrapperSensitiveVis" sensitive="true"/>
+            </module>
+
+            <layer id="0" vis="SiVertexLayerVis">
+                <ring r="(SiWrapperD_rmax + SiWrapperD_rmin1) / 2" zstart="SiWrapperD_z1" nmodules="(int) SiWrapperD_nModules" dz="0*cm" phi0="pi/(SiWrapperD_nModules)" module="SiWrapperDiskModule1"/>
+            </layer>
+            <layer id="1" vis="SiVertexLayerVis">
+                <ring r="(SiWrapperD_rmax + SiWrapperD_rmin2) / 2" zstart="SiWrapperD_z2" nmodules="(int) SiWrapperD_nModules" dz="0*cm" phi0="pi/(SiWrapperD_nModules)" module="SiWrapperDiskModule2"/>
+            </layer>
+        </detector>
+    </detectors>
+
+    <!-- Plugin needed for the surfaces-->
+    <plugins>
+        <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
+            <argument value="SiWrapperD"/> 
+            <argument value="dimension=2"/>
+            <argument value="u_x=-1."/>
+            <argument value="v_y=1."/>
+            <argument value="n_z=-1."/>
+        </plugin>
+
+        <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
+            <argument value="SiWrapperB"/> 
+            <argument value="dimension=2"/>
+            <argument value="u_x=1."/>
+            <argument value="v_y=1."/>
+            <argument value="n_z=1."/>
+        </plugin>
+    </plugins>
+</lccdd>
