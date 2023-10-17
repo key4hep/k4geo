@@ -45,7 +45,7 @@
   <include ref="DriftChamber_o1_v01.xml"/>
 
   <!-- Import silicon wrapper -->
-  <!-- <include ref="SiliconWrapper_o1_v01.xml"/> -->
+  <include ref="SiliconWrapper_o1_v01.xml"/>
 
   <plugins>
     <plugin name="DD4hepVolumeManager"/>

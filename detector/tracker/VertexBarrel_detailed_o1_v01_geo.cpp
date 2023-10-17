@@ -110,7 +110,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         vector<double> sensor_ymax;
         double sensor_width;
         double sensor_length;
-        vector<string> sensor_viss;
         vector<Volume> sensor_volumes;
     };
     list<stave_information> stave_information_list;
@@ -140,7 +139,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
                 Box ele_box = Box(component.thickness()/2., component.width()/2., components.length);
                 Volume ele_vol = Volume(components.name + _toString(iComponent, "_%d"), ele_box, theDetector.material(component.materialStr()));                    
-                ele_vol.setVisAttributes(component.visStr());
+                ele_vol.setVisAttributes(theDetector.visAttributes(component.visStr()));
 
                 components.volumes.push_back(ele_vol);
             }
@@ -167,7 +166,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
                 Box ele_box = Box(component.thickness()/2., component.width()/2., component.length()/2.);
                 Volume ele_vol = Volume(endOfStave.name + _toString(iEndOfStave, "_%d"), ele_box, theDetector.material(component.materialStr()));                    
-                ele_vol.setVisAttributes(component.visStr());
+                ele_vol.setVisAttributes(theDetector.visAttributes(component.visStr()));
 
                 endOfStave.volumes.push_back(ele_vol);
                 iEndOfStave++;
@@ -217,7 +216,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
             m.sensor_xmax.push_back(component.xmax());
             m.sensor_ymin.push_back(component.ymin());
             m.sensor_ymax.push_back(component.ymax());
-            m.sensor_viss.push_back(component.visStr());
 
             // Already create volumes for all sensor components as this is independent of number of sensors per layer
             Box ele_box = Box(m.sensor_thickness/2., abs(component.xmax()-component.xmin())/2., abs(component.ymax()-component.ymin())/2.);

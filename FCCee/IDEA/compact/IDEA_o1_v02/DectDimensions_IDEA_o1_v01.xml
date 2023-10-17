@@ -23,7 +23,7 @@
     <constant name="GlobalTrackerReadoutID_OB" type="string" value="system:5,layer:1,stave:6,module:4,sensor:2"/>
     <constant name="GlobalTrackerReadoutID_Disk" type="string" value="system:5,side:-2,layer:3,petal:3,stave:6,module:10,sensor:2"/>
     <constant name="GlobalTrackerReadoutID_SiWrapperB" type="string" value="system:5,layer:1,stave:9,module:6,sensor:1"/>
-    <constant name="GlobalTrackerReadoutID_SiWrapperD" type="string" value="system:5,side:1,layer:1,module:6,sensor:1"/>
+    <constant name="GlobalTrackerReadoutID_SiWrapperD" type="string" value="system:5,side:-2,layer:1,module:1,sensor:7"/>
     <constant name="SolenoidField" value="2*tesla"/>
     
     <constant name="DetID_NOTUSED"          value=" 0"/>

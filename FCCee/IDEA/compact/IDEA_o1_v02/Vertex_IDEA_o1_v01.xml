@@ -28,13 +28,13 @@
             <composite name="VTXIB"/>
             <composite name="VTXOB"/>
              <composite name="VTXD"/> 
-             <!-- <composite name="VTXIBSupport"/>  -->
+             <composite name="VTXIBSupport"/> 
         </detector>
     </detectors>
     
     <display>
-        <vis name="VTXSensitiveVis"     alpha="1.0" r="1.0"     g="1.0"  b="0.0"      showDaughters="true"  visible="true"/>
-        <vis name="VTXPeripheryVis"     alpha="1.0" r="1.0"     g="0.9"  b="0.1"      showDaughters="true"  visible="true"/>
+        <vis name="VTXSensitiveVis"     alpha="1.0" r="1.0"     g="1.0"  b="0.0"    showDaughters="true"  visible="true"/>
+        <vis name="VTXPeripheryVis"     alpha="1.0" r="1.0"     g="1.0"  b="0.45"   showDaughters="true"  visible="true"/>
         <vis name="TerminalPartVis"     alpha="1.0" r="1.0"     g="0.65" b="0.0"    showDaughters="true"  visible="true"/>
         <vis name="TrussStructureVis"   alpha="0.3" r="0.5"     g="0.5"  b="0.5"    showDaughters="true"  visible="true"/>
     </display>
@@ -667,7 +667,7 @@
                 <stave nmodules="6" z_offset="VTXD_zoffset_face+VTXD_zoffset_stave" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="5.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
             </layer>
 
-             <layer id="1" z="VTXD_z2" nphi="8" dz="VTXD_zoffset_face" rmin="VTXD_rmin2" dr="VTXD_dr2" phi0="0.0">
+            <layer id="1" z="VTXD_z2" nphi="8" dz="VTXD_zoffset_face" rmin="VTXD_rmin2" dr="VTXD_dr2" phi0="0.0">
                 <stave nmodules="3" z_offset="0.0*mm" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="0.0*mm" dr="VTXD_dr2" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
                 <stave nmodules="4" z_offset="VTXD_zoffset_stave" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="1.*(VTXO_mod_z+VTXD_rModOverlap)" dr="VTXD_dr2" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
                 <stave nmodules="5" z_offset="0.0*mm" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="2.*(VTXO_mod_z+VTXD_rModOverlap)" dr="VTXD_dr2" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
@@ -682,7 +682,7 @@
                 <stave nmodules="5" z_offset="0.0*mm" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="2.*(VTXO_mod_z+VTXD_rModOverlap)" dr="VTXD_dr3" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
                 <stave nmodules="6" z_offset="VTXD_zoffset_stave" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="3.*(VTXO_mod_z+VTXD_rModOverlap)" dr="VTXD_dr3" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
                 <stave nmodules="7" z_offset="0.0*mm" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="4.*(VTXO_mod_z+VTXD_rModOverlap)" dr="VTXD_dr3" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
-            </layer> 
+            </layer>  
         </detector>
     </detectors>   
    
@@ -714,13 +714,13 @@
     </plugins>
 
     <!-- Vertex inner barrel support structure imported via DDCAD, material budget evaluation with g4MaterialScan is working, but not with the k4SimGeant4 methods -->
-    <!-- <detectors>
+    <detectors>
         <detector id="0" name="VTXIBSupport" type="DD4hep_TestShape_Creator">
             <check>
-                <shape type="CAD_MultiVolume" ref="${K4GEO}/share/k4geo/FCCee/IDEA/compact/IDEA_o1_v02/VertexSupport_o1_v01.obj" unit="mm"/>
+                <shape type="CAD_MultiVolume" ref="${K4GEO}/FCCee/IDEA/compact/IDEA_o1_v02/VertexSupport_o1_v01.obj" unit="mm"/>
                 <position x="104.3837*cm"  y="-1.7417*cm"        z="-33.7602*cm"/>
                 <rotation x="0*pi/8*rad" y="-4*pi/8*rad" z="0*rad"/>  
             </check>
         </detector>
-    </detectors>    -->
+    </detectors>   
 </lccdd>

@@ -156,7 +156,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
                 Box ele_box = Box(component.width()/2., component.length()/2., component.thickness()/2.);
                 Volume ele_vol = Volume( endOfStave.name + _toString(iEndOfStave, "_%d"), ele_box, theDetector.material(component.materialStr()));                    
-                ele_vol.setVisAttributes(component.visStr());
+                ele_vol.setVisAttributes(theDetector.visAttributes(component.visStr()));
 
                 endOfStave.volumes.push_back(ele_vol);
                 iEndOfStave++;
@@ -193,7 +193,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             }
 
             Volume sensor_volume(sensor_name, ele_box, theDetector.material(xml_comp_t(c_sensor).materialStr()));
-            sensor_volume.setVisAttributes(component.visStr());
+            sensor_volume.setVisAttributes(theDetector.visAttributes(component.visStr()));
             
             if(component.isSensitive()){sensor_volume.setSensitiveDetector(sens);}   
 
