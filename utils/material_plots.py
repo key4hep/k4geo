@@ -105,6 +105,8 @@ def main():
                     fillcolor = FCCStyle.fillcolors[6] 
                 case "Water":
                     fillcolor = FCCStyle.fillcolors[5] 
+                case "PCB":
+                    fillcolor = ROOT.kGreen
 
             histDict_ordered[material][plot].SetLineColor(linecolor)
             histDict_ordered[material][plot].SetFillColor(fillcolor)
