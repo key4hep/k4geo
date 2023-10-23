@@ -717,7 +717,7 @@
     <detectors>
         <detector id="0" name="VTXIBSupport" type="DD4hep_TestShape_Creator">
             <check>
-                <shape type="CAD_MultiVolume" ref="${K4GEO}/FCCee/IDEA/compact/IDEA_o1_v02/VertexSupport_o1_v01.obj" unit="mm"/>
+                <shape type="CAD_MultiVolume" ref="VertexSupport_o1_v01.obj" unit="mm"/>
                 <position x="104.3837*cm"  y="-1.7417*cm"        z="-33.7602*cm"/>
                 <rotation x="0*pi/8*rad" y="-4*pi/8*rad" z="0*rad"/>  
             </check>
