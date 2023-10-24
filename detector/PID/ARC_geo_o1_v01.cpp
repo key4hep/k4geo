@@ -23,7 +23,7 @@ using namespace dd4hep;
 // #define DUMP_SENSOR_POSITIONS
 
 /// Function to build ARC endcaps
-static Ref_t create_arc_endcap_cell(Detector &desc, xml::Handle_t handle, SensitiveDetector sens)
+static Ref_t create_ARC_endcaps(Detector &desc, xml::Handle_t handle, SensitiveDetector sens)
 {
   xml::DetElement detElem = handle;
   std::string detName = detElem.nameStr();
@@ -536,8 +536,118 @@ static Ref_t create_arc_endcap_cell(Detector &desc, xml::Handle_t handle, Sensit
 
   return det;
 }
-DECLARE_DETELEMENT(ARCENDCAP_o1_v01_T, create_arc_endcap_cell)
+DECLARE_DETELEMENT(ARCENDCAP_o1_v01_T, create_ARC_endcaps)
 
+
+TessellatedSolid create_ARC_barrel_shape ( double r_in  = 191 * cm  /*inner radius*/ , 
+						double r_out = 208 * cm  /*outer radius*/ , 
+						double d     = 148.15*mm /*hexagon side length*/ )
+{
+
+    // flat-to-flat distance (=2*apothem)
+    auto h = 2*d*cos ( 30*deg );
+
+    // resize the outer radius to not protrude the cylindrical mother volume
+    r_out /= sqrt(1+pow(d/r_in,2));
+
+    // calculate factor of stretching
+    auto s_r  = r_out/r_in;
+
+    struct point2d
+    {
+      double x = {0.0};
+      double y = {0.0};
+
+    };
+
+    struct face
+    {
+      point2d A;
+      point2d B;
+      point2d C;
+      point2d D;
+      point2d E;
+      point2d F;
+      point2d O;
+      double z;
+
+    };
+    face f_in;
+    f_in.z = r_in;
+    f_in.A = {0   ,    d};
+    f_in.B = {h/2 ,  d/2};
+    f_in.C = {h/2 , -d/2};
+    f_in.D = {0  ,    -d};
+    f_in.E = {-h/2, -d/2};
+    f_in.F = {-h/2,  d/2};
+
+    face f_out;
+    f_out.z = r_out;
+    f_out.A = {0   ,    s_r*d};
+    f_out.B = {h/2 ,  s_r*d/2};
+    f_out.C = {h/2 , -s_r*d/2};
+    f_out.D = {0  ,    -s_r*d};
+    f_out.E = {-h/2, -s_r*d/2};
+    f_out.F = {-h/2,  s_r*d/2};
+
+
+    using Vertex = TessellatedSolid::Vertex;
+    std::vector<Vertex> vertices;
+
+    // preallocate space for 2*(6 vertices + central vertex)
+    vertices.reserve ( 14 );
+
+    vertices.emplace_back ( Vertex ( f_in.A.x, f_in.A.y, f_in.z ) );
+    vertices.emplace_back ( Vertex ( f_out.A.x, f_out.A.y, f_out.z ) );
+    vertices.emplace_back ( Vertex ( f_in.B.x, f_in.B.y, f_in.z ) );
+    vertices.emplace_back ( Vertex ( f_out.B.x, f_out.B.y, f_out.z ) );
+    vertices.emplace_back ( Vertex ( f_in.C.x, f_in.C.y, f_in.z ) );
+    vertices.emplace_back ( Vertex ( f_out.C.x, f_out.C.y, f_out.z ) );
+    vertices.emplace_back ( Vertex ( f_in.D.x, f_in.D.y, f_in.z ) );
+    vertices.emplace_back ( Vertex ( f_out.D.x, f_out.D.y, f_out.z ) );
+    vertices.emplace_back ( Vertex ( f_in.E.x, f_in.E.y, f_in.z ) );
+    vertices.emplace_back ( Vertex ( f_out.E.x, f_out.E.y, f_out.z ) );
+    vertices.emplace_back ( Vertex ( f_in.F.x, f_in.F.y, f_in.z ) );
+    vertices.emplace_back ( Vertex ( f_out.F.x, f_out.F.y, f_out.z ) );
+
+    vertices.emplace_back ( Vertex ( f_in.O.x, f_in.O.y, f_in.z ) );
+    vertices.emplace_back ( Vertex ( f_out.O.x, f_out.O.y, f_out.z ) );
+
+
+    TessellatedSolid shape ( "kk", vertices );
+
+    // upper face
+    shape->AddFacet(13,1,11);
+    shape->AddFacet(13,3, 1 );
+    shape->AddFacet(13,5, 3 );
+    shape->AddFacet(13,7,5 );
+    shape->AddFacet(13,9,7 );
+    shape->AddFacet(13,11,9);
+
+    // sides of the pyramid
+    shape->AddFacet(6,7,9);
+    shape->AddFacet(6,9,8);
+    shape->AddFacet(8,9,11,10);
+    shape->AddFacet(0,10,11);
+    shape->AddFacet(0,11,1);
+    shape->AddFacet(0,1,3);
+    shape->AddFacet(0,3,2);
+    shape->AddFacet(2,3,5,4);
+    shape->AddFacet(6,4,5);
+    shape->AddFacet(6,5,7);
+
+
+    // bottom face, watch out, the anticlockwise list of vertices must point outwards
+    shape->AddFacet(12,0,2);
+    shape->AddFacet(12,10,0);
+    shape->AddFacet(12,8,10);
+    shape->AddFacet(12,6,8);
+    shape->AddFacet(12,4,6);
+    shape->AddFacet(12,2,4);
+
+    shape->CloseShape ( true, false, true );
+    return shape;
+}
 
 /// Function to build ARC barrel
 /**
@@ -547,7 +657,7 @@ DECLARE_DETELEMENT(ARCENDCAP_o1_v01_T, create_arc_endcap_cell)
  *                 -> gas envelope (gas)-> gas cell 2 (gas) -> elements (mirror, sensor, aeogel, cooling)
  *                 -> gas envelope (gas)-> gas cell ...
  */
-static Ref_t create_arc_barrel_cell(Detector &desc, xml::Handle_t handle, SensitiveDetector sens)
+static Ref_t create_ARC_barrel(Detector &desc, xml::Handle_t handle, SensitiveDetector sens)
 {
     xml::DetElement detElem = handle;
     std::string detName = detElem.nameStr();
@@ -716,15 +826,10 @@ static Ref_t create_arc_barrel_cell(Detector &desc, xml::Handle_t handle, Sensit
     // // //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++// // //
 
     // Define the cell shape and volume
-    // while developping, I used Polyhedra
-    // TODO: use regular Polyhedra instead?
-    double angle_hex = 2*asin( hex_apothem_length / vessel_outer_r );
-    std::vector<double> zplanes = { vessel_inner_r + vessel_wall_thickness,
-                                    (vessel_outer_r - vessel_wall_thickness)*cos(angle_hex)
-                                  };
-    std::vector<double> rs = { hex_apothem_length -1*mm, hex_apothem_length-1*mm };
-    /// Hexagonal truncated pyramid
-    Polyhedra cell_shape("cellShape", 6, 30 * deg, 360 * deg, zplanes, rs);
+    auto cell_shape = create_ARC_barrel_shape( vessel_inner_r + vessel_wall_thickness , 
+    						    vessel_outer_r - vessel_wall_thickness ,
+    						    hexagon_side_length
+    						    );
     /// rotation of 90deg around Y axis, to align Z axis of pyramid with X axis of cylinder
     Transform3D pyramidTr(RotationZYX(0, -90. * deg, 0. * deg), Translation3D(0, 0, 0));
 
@@ -961,4 +1066,4 @@ static Ref_t create_arc_barrel_cell(Detector &desc, xml::Handle_t handle, Sensit
 }
 
 
-DECLARE_DETELEMENT(ARCBARREL_o1_v01_T, create_arc_barrel_cell)
+DECLARE_DETELEMENT(ARCBARREL_o1_v01_T, create_ARC_barrel)
