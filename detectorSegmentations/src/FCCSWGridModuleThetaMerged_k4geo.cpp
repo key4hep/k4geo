@@ -1,4 +1,4 @@
-#include "detectorSegmentations/FCCSWGridModuleThetaMerged.h"
+#include "detectorSegmentations/FCCSWGridModuleThetaMerged_k4geo.h"
 
 #include <iostream>
 #include "DD4hep/Detector.h"
@@ -7,9 +7,9 @@ namespace dd4hep {
 namespace DDSegmentation {
 
 /// default constructor using an encoding string
-FCCSWGridModuleThetaMerged::FCCSWGridModuleThetaMerged(const std::string& cellEncoding) : GridTheta_k4geo(cellEncoding) {
+FCCSWGridModuleThetaMerged_k4geo::FCCSWGridModuleThetaMerged_k4geo(const std::string& cellEncoding) : GridTheta_k4geo(cellEncoding) {
   // define type and description
-  _type = "FCCSWGridModuleThetaMerged";
+  _type = "FCCSWGridModuleThetaMerged_k4geo";
   _description = "Module-theta segmentation with per-layer merging along theta and/or module";
 
   // register all necessary parameters (additional to those registered in GridTheta_k4geo)
@@ -21,9 +21,9 @@ FCCSWGridModuleThetaMerged::FCCSWGridModuleThetaMerged(const std::string& cellEn
   GetNLayersFromGeom();
 }
 
-FCCSWGridModuleThetaMerged::FCCSWGridModuleThetaMerged(const BitFieldCoder* decoder) : GridTheta_k4geo(decoder) {
+FCCSWGridModuleThetaMerged_k4geo::FCCSWGridModuleThetaMerged_k4geo(const BitFieldCoder* decoder) : GridTheta_k4geo(decoder) {
   // define type and description
-  _type = "FCCSWGridModuleThetaMerged";
+  _type = "FCCSWGridModuleThetaMerged_k4geo";
   _description = "Module-theta segmentation with per-layer merging along theta and/or module";
 
   // register all necessary parameters (additional to those registered in GridTheta_k4geo)
@@ -35,7 +35,7 @@ FCCSWGridModuleThetaMerged::FCCSWGridModuleThetaMerged(const BitFieldCoder* deco
   GetNLayersFromGeom();
 }
 
-void FCCSWGridModuleThetaMerged::GetNModulesFromGeom() {
+void FCCSWGridModuleThetaMerged_k4geo::GetNModulesFromGeom() {
   dd4hep::Detector* dd4hepgeo = &(dd4hep::Detector::getInstance());
   try {
     m_nModules = dd4hepgeo->constant<int>("ECalBarrelNumPlanes");
@@ -47,7 +47,7 @@ void FCCSWGridModuleThetaMerged::GetNModulesFromGeom() {
   std::cout << "Number of modules read from detector metadata and used in readout class: " << m_nModules << std::endl;
 }
 
-void FCCSWGridModuleThetaMerged::GetNLayersFromGeom() {
+void FCCSWGridModuleThetaMerged_k4geo::GetNLayersFromGeom() {
   dd4hep::Detector* dd4hepgeo = &(dd4hep::Detector::getInstance());
   try {
     m_nLayers = dd4hepgeo->constant<int>("ECalBarrelNumLayers");
@@ -60,7 +60,7 @@ void FCCSWGridModuleThetaMerged::GetNLayersFromGeom() {
 }
 
 /// determine the local position based on the cell ID
-Vector3D FCCSWGridModuleThetaMerged::position(const CellID& cID) const {
+Vector3D FCCSWGridModuleThetaMerged_k4geo::position(const CellID& cID) const {
 
   // debug
   // std::cout << "cellID: " << cID << std::endl;
@@ -70,7 +70,7 @@ Vector3D FCCSWGridModuleThetaMerged::position(const CellID& cID) const {
 }
 
 /// determine the cell ID based on the global position
-CellID FCCSWGridModuleThetaMerged::cellID(const Vector3D& /* localPosition */, const Vector3D& globalPosition,
+CellID FCCSWGridModuleThetaMerged_k4geo::cellID(const Vector3D& /* localPosition */, const Vector3D& globalPosition,
                           const VolumeID& vID) const {
   CellID cID = vID;
 
@@ -109,7 +109,7 @@ CellID FCCSWGridModuleThetaMerged::cellID(const Vector3D& /* localPosition */, c
 /// merged ones - which will be then added on top of
 /// the phi of the volume containing the first cell
 /// by the positioning tool
-double FCCSWGridModuleThetaMerged::phi(const CellID& cID) const {
+double FCCSWGridModuleThetaMerged_k4geo::phi(const CellID& cID) const {
 
   // retrieve layer
   int layer = _decoder->get(cID, m_layerID);
@@ -128,7 +128,7 @@ double FCCSWGridModuleThetaMerged::phi(const CellID& cID) const {
 
 /// determine the polar angle based on the cell ID and the
 /// number of merged theta cells
-double FCCSWGridModuleThetaMerged::theta(const CellID& cID) const {
+double FCCSWGridModuleThetaMerged_k4geo::theta(const CellID& cID) const {
 
   // retrieve layer
   int layer = _decoder->get(cID, m_layerID);

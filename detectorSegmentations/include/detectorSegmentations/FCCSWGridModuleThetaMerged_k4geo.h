@@ -1,11 +1,11 @@
-#ifndef DETSEGMENTATION_FCCSWGRIDMODULETHETAMERGED_H
-#define DETSEGMENTATION_FCCSWGRIDMODULETHETAMERGED_H
+#ifndef DETSEGMENTATION_FCCSWGridModuleThetaMerged_k4geo_H
+#define DETSEGMENTATION_FCCSWGridModuleThetaMerged_k4geo_H
 
 // FCCSW
 #include "detectorSegmentations/GridTheta_k4geo.h"
 #include "DD4hep/VolumeManager.h"
 
-/** FCCSWGridModuleThetaMerged Detector/DetSegmentation/DetSegmentation/FCCSWGridModuleThetaMerged.h FCCSWGridModuleThetaMerged.h
+/** FCCSWGridModuleThetaMerged_k4geo Detector/DetSegmentation/DetSegmentation/FCCSWGridModuleThetaMerged_k4geo.h FCCSWGridModuleThetaMerged_k4geo.h
  *
  *  Segmentation in theta and module.
  *  Based on GridTheta, merges modules and theta cells based on layer number
@@ -14,15 +14,15 @@
 
 namespace dd4hep {
 namespace DDSegmentation {
-class FCCSWGridModuleThetaMerged : public GridTheta_k4geo {
+class FCCSWGridModuleThetaMerged_k4geo : public GridTheta_k4geo {
 public:
   /// default constructor using an arbitrary type
-  FCCSWGridModuleThetaMerged(const std::string& aCellEncoding);
+  FCCSWGridModuleThetaMerged_k4geo(const std::string& aCellEncoding);
   /// Default constructor used by derived classes passing an existing decoder
-  FCCSWGridModuleThetaMerged(const BitFieldCoder* decoder);
+  FCCSWGridModuleThetaMerged_k4geo(const BitFieldCoder* decoder);
 
   /// destructor
-  virtual ~FCCSWGridModuleThetaMerged() = default;
+  virtual ~FCCSWGridModuleThetaMerged_k4geo() = default;
 
   /// read n(modules) from detector metadata
   void GetNModulesFromGeom();
@@ -114,4 +114,4 @@ protected:
 };
 }
 }
-#endif /* DETSEGMENTATION_FCCSWGRIDMODULETHETAMERGED_H */
+#endif /* DETSEGMENTATION_FCCSWGridModuleThetaMerged_k4geo_H */

@@ -2,7 +2,7 @@
 #define DD4HEP_DDCORE_GRIDMODULETHETAMERGED_H 1
 
 // FCCSW
-#include "detectorSegmentations/FCCSWGridModuleThetaMerged.h"
+#include "detectorSegmentations/FCCSWGridModuleThetaMerged_k4geo.h"
 
 // DD4hep
 #include "DD4hep/Segmentations.h"
@@ -20,7 +20,7 @@ template <typename T>
 class SegmentationWrapper;
 
 /// We need some abbreviation to make the code more readable.
-typedef Handle<SegmentationWrapper<DDSegmentation::FCCSWGridModuleThetaMerged>> FCCSWGridModuleThetaMergedHandle;
+typedef Handle<SegmentationWrapper<DDSegmentation::FCCSWGridModuleThetaMerged_k4geo>> FCCSWGridModuleThetaMergedHandle_k4geo;
 
 /// Implementation class for the module-theta (with per-layer merging) segmentation.
 /**
@@ -40,27 +40,27 @@ typedef Handle<SegmentationWrapper<DDSegmentation::FCCSWGridModuleThetaMerged>> 
  *  conveniance reasons instantiated in DD4hep/src/Segmentations.cpp.
  *
  */
-class FCCSWGridModuleThetaMerged : public FCCSWGridModuleThetaMergedHandle {
+class FCCSWGridModuleThetaMerged_k4geo : public FCCSWGridModuleThetaMergedHandle_k4geo {
 public:
   /// Definition of the basic handled object
-  typedef FCCSWGridModuleThetaMergedHandle::Object Object;
+  typedef FCCSWGridModuleThetaMergedHandle_k4geo::Object Object;
 
 public:
   /// Default constructor
-  FCCSWGridModuleThetaMerged() = default;
+  FCCSWGridModuleThetaMerged_k4geo() = default;
   /// Copy constructor
-  FCCSWGridModuleThetaMerged(const FCCSWGridModuleThetaMerged& e) = default;
+  FCCSWGridModuleThetaMerged_k4geo(const FCCSWGridModuleThetaMerged_k4geo& e) = default;
   /// Copy Constructor from segmentation base object
-  FCCSWGridModuleThetaMerged(const Segmentation& e) : Handle<Object>(e) {}
+  FCCSWGridModuleThetaMerged_k4geo(const Segmentation& e) : Handle<Object>(e) {}
   /// Copy constructor from handle
-  FCCSWGridModuleThetaMerged(const Handle<Object>& e) : Handle<Object>(e) {}
+  FCCSWGridModuleThetaMerged_k4geo(const Handle<Object>& e) : Handle<Object>(e) {}
   /// Copy constructor from other polymorph/equivalent handle
   template <typename Q>
-  FCCSWGridModuleThetaMerged(const Handle<Q>& e) : Handle<Object>(e) {}
+  FCCSWGridModuleThetaMerged_k4geo(const Handle<Q>& e) : Handle<Object>(e) {}
   /// Assignment operator
-  FCCSWGridModuleThetaMerged& operator=(const FCCSWGridModuleThetaMerged& seg) = default;
+  FCCSWGridModuleThetaMerged_k4geo& operator=(const FCCSWGridModuleThetaMerged_k4geo& seg) = default;
   /// Equality operator
-  bool operator==(const FCCSWGridModuleThetaMerged& seg) const { return m_element == seg.m_element; }
+  bool operator==(const FCCSWGridModuleThetaMerged_k4geo& seg) const { return m_element == seg.m_element; }
 
   /// determine the position based on the cell ID
   inline Position position(const CellID& id) const { return Position(access()->implementation->position(id)); }
