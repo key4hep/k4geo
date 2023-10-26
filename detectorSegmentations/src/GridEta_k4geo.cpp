@@ -11,7 +11,7 @@ GridEta_k4geo::GridEta_k4geo(const std::string& cellEncoding) : Segmentation(cel
   _description = "Eeta segmentation in the global coordinates";
 
   // register all necessary parameters
-  registerParameter("grid_size_eta", "Cell size in Eta", m_gridSizeEta, 1., SegmentationParameter::LengthUnit);
+  registerParameter("grid_size_eta", "Cell size in eta", m_gridSizeEta, 1., SegmentationParameter::LengthUnit);
   registerParameter("offset_eta", "Angular offset in eta", m_offsetEta, 0., SegmentationParameter::AngleUnit, true);
   registerIdentifier("identifier_eta", "Cell ID identifier for eta", m_etaID, "eta");
 }
@@ -19,10 +19,10 @@ GridEta_k4geo::GridEta_k4geo(const std::string& cellEncoding) : Segmentation(cel
 GridEta_k4geo::GridEta_k4geo(const BitFieldCoder* decoder) : Segmentation(decoder) {
   // define type and description
   _type = "GridEta_k4geo";
-  _description = "Eeta segmentation in the global coordinates";
+  _description = "Eta segmentation in the global coordinates";
 
   // register all necessary parameters
-  registerParameter("grid_size_eta", "Cell size in Eta", m_gridSizeEta, 1., SegmentationParameter::LengthUnit);
+  registerParameter("grid_size_eta", "Cell size in eta", m_gridSizeEta, 1., SegmentationParameter::LengthUnit);
   registerParameter("offset_eta", "Angular offset in eta", m_offsetEta, 0., SegmentationParameter::AngleUnit, true);
   registerIdentifier("identifier_eta", "Cell ID identifier for eta", m_etaID, "eta");
 }
@@ -46,7 +46,7 @@ CellID GridEta_k4geo::cellID(const Vector3D& /* localPosition */, const Vector3D
 //  return binToPosition(etaValue, m_gridSizeEta, m_offsetEta);
 //}
 
-/// determine the polar angle theta based on the cell ID
+/// determine the seudorapidity based on the cell ID
 double GridEta_k4geo::eta(const CellID& cID) const {
   CellID etaValue = _decoder->get(cID, m_etaID);
   return binToPosition(etaValue, m_gridSizeEta, m_offsetEta);

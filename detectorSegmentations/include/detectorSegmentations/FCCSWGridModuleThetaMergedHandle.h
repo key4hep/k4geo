@@ -2,7 +2,7 @@
 #define DD4HEP_DDCORE_GRIDMODULETHETAMERGED_H 1
 
 // FCCSW
-#include "DetSegmentation/FCCSWGridModuleThetaMerged.h"
+#include "detectorSegmentations/FCCSWGridModuleThetaMerged.h"
 
 // DD4hep
 #include "DD4hep/Segmentations.h"

@@ -1,4 +1,4 @@
-#include "DetSegmentation/FCCSWGridModuleThetaMerged.h"
+#include "detectorSegmentations/FCCSWGridModuleThetaMerged.h"
 
 #include <iostream>
 #include "DD4hep/Detector.h"

@@ -2,7 +2,7 @@
 #define DETSEGMENTATION_FCCSWGRIDMODULETHETAMERGED_H
 
 // FCCSW
-#include "DetSegmentation/GridTheta.h"
+#include "detectorSegmentations/GridTheta.h"
 #include "DD4hep/VolumeManager.h"
 
 /** FCCSWGridModuleThetaMerged Detector/DetSegmentation/DetSegmentation/FCCSWGridModuleThetaMerged.h FCCSWGridModuleThetaMerged.h
