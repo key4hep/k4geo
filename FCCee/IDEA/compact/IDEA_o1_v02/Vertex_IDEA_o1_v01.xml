@@ -16,7 +16,7 @@
         <detector name="Vertex" type="DD4hep_SubdetectorAssembly" vis="VXDVis">
             <shape type="BooleanShape" operation="Subtraction" material="Air"> <!-- These definitions have to be checked again! -->
                 <shape type="BooleanShape" operation="Subtraction">
-                    <shape type="Tube" rmin="VTXIB_r_min-VTXIB_r_clearance" rmax="VTXOB_r_min" dz="Outer_Vertex_half_length"/>
+                    <shape type="Tube" rmin="VTXIB_r_min-VTXIB_r_clearance" rmax="VTXOB_r_max" dz="Outer_Vertex_half_length"/>
                     <shape type="Cone" rmin1="0" rmax1="VertexClearanceTheta*Outer_Vertex_half_length-env_safety" rmin2="0" rmax2="VTXIB_r_min-VTXIB_r_clearance" z="((Outer_Vertex_half_length-CentralBeamPipe_zmax)/2+env_safety)"/>
                     <position x="0" y="0" z="-(CentralBeamPipe_zmax+(Outer_Vertex_half_length-CentralBeamPipe_zmax)/2+env_safety)" />
                 </shape>
@@ -161,7 +161,7 @@
             <constant name="VTXOB_z1" value="(VTXOB_nModules1*VTXO_mod_z+(VTXOB_nModules1-1)*VTXOB_mod_z_spacing)/2.0"/>
             <constant name="VTXOB_z2" value="(VTXOB_nModules2*VTXO_mod_z+(VTXOB_nModules2-1)*VTXOB_mod_z_spacing)/2.0"/>
             <constant name="VTXOB_r1" value="140*mm"/>
-            <constant name="VTXOB_r2" value="315*mm"/>
+            <constant name="VTXOB_r2" value="VTXOB_r_max_layer"/>
 
             <constant name="VTXOB_support_thickness"                value="2.0*VTXO_support_Fleece_thickness+VTXO_support_CarbonFiber_thickness+VTXO_support_PaperGraphite_thickness"/>
             <constant name="VTXOB_Pipe_offset"                      value="21.18*mm/2.0"/>
