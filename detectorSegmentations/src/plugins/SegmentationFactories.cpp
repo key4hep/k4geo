@@ -8,21 +8,24 @@ dd4hep::SegmentationObject* create_segmentation(const dd4hep::BitFieldCoder* dec
 }
 }
 
-#include "detectorSegmentations/GridEta_k4geo.h"
-DECLARE_SEGMENTATION(GridEta_k4geo, create_segmentation<dd4hep::DDSegmentation::GridEta_k4geo>)
+#include "DetSegmentation/GridEta.h"
+DECLARE_SEGMENTATION(GridEta, create_segmentation<dd4hep::DDSegmentation::GridEta>)
 
-#include "detectorSegmentations/GridTheta_k4geo.h"
-DECLARE_SEGMENTATION(GridTheta_k4geo, create_segmentation<dd4hep::DDSegmentation::GridTheta_k4geo>)
+#include "DetSegmentation/GridTheta.h"
+DECLARE_SEGMENTATION(GridTheta, create_segmentation<dd4hep::DDSegmentation::GridTheta>)
 
-#include "detectorSegmentations/FCCSWGridPhiTheta_k4geo.h"
-DECLARE_SEGMENTATION(FCCSWGridPhiTheta_k4geo, create_segmentation<dd4hep::DDSegmentation::FCCSWGridPhiTheta_k4geo>)
+#include "DetSegmentation/FCCSWGridPhiTheta.h"
+DECLARE_SEGMENTATION(FCCSWGridPhiTheta, create_segmentation<dd4hep::DDSegmentation::FCCSWGridPhiTheta>)
 
-#include "detectorSegmentations/FCCSWGridPhiEta_k4geo.h"
-DECLARE_SEGMENTATION(FCCSWGridPhiEta_k4geo, create_segmentation<dd4hep::DDSegmentation::FCCSWGridPhiEta_k4geo>)
+#include "DetSegmentation/FCCSWGridModuleThetaMerged.h"
+DECLARE_SEGMENTATION(FCCSWGridModuleThetaMerged, create_segmentation<dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged>)
 
-#include "detectorSegmentations/GridRPhiEta_k4geo.h"
-DECLARE_SEGMENTATION(GridRPhiEta_k4geo, create_segmentation<dd4hep::DDSegmentation::GridRPhiEta_k4geo>)
+#include "DetSegmentation/FCCSWGridPhiEta.h"
+DECLARE_SEGMENTATION(FCCSWGridPhiEta, create_segmentation<dd4hep::DDSegmentation::FCCSWGridPhiEta>)
 
-#include "detectorSegmentations/GridSimplifiedDriftChamber_k4geo.h"
-DECLARE_SEGMENTATION(GridSimplifiedDriftChamber_k4geo, create_segmentation<dd4hep::DDSegmentation::GridSimplifiedDriftChamber_k4geo>)
+#include "DetSegmentation/GridRPhiEta.h"
+DECLARE_SEGMENTATION(GridRPhiEta, create_segmentation<dd4hep::DDSegmentation::GridRPhiEta>)
+
+#include "DetSegmentation/GridSimplifiedDriftChamber.h"
+DECLARE_SEGMENTATION(GridSimplifiedDriftChamber, create_segmentation<dd4hep::DDSegmentation::GridSimplifiedDriftChamber>)
 
