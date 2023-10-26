@@ -2,7 +2,7 @@
 #define DETSEGMENTATION_FCCSWGRIDMODULETHETAMERGED_H
 
 // FCCSW
-#include "detectorSegmentations/GridTheta.h"
+#include "detectorSegmentations/GridTheta_k4geo.h"
 #include "DD4hep/VolumeManager.h"
 
 /** FCCSWGridModuleThetaMerged Detector/DetSegmentation/DetSegmentation/FCCSWGridModuleThetaMerged.h FCCSWGridModuleThetaMerged.h
@@ -14,7 +14,7 @@
 
 namespace dd4hep {
 namespace DDSegmentation {
-class FCCSWGridModuleThetaMerged : public GridTheta {
+class FCCSWGridModuleThetaMerged : public GridTheta_k4geo {
 public:
   /// default constructor using an arbitrary type
   FCCSWGridModuleThetaMerged(const std::string& aCellEncoding);

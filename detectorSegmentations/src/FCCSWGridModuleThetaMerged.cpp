@@ -7,12 +7,12 @@ namespace dd4hep {
 namespace DDSegmentation {
 
 /// default constructor using an encoding string
-FCCSWGridModuleThetaMerged::FCCSWGridModuleThetaMerged(const std::string& cellEncoding) : GridTheta(cellEncoding) {
+FCCSWGridModuleThetaMerged::FCCSWGridModuleThetaMerged(const std::string& cellEncoding) : GridTheta_k4geo(cellEncoding) {
   // define type and description
   _type = "FCCSWGridModuleThetaMerged";
   _description = "Module-theta segmentation with per-layer merging along theta and/or module";
 
-  // register all necessary parameters (additional to those registered in GridTheta)
+  // register all necessary parameters (additional to those registered in GridTheta_k4geo)
   registerIdentifier("identifier_layer", "Cell ID identifier for layer", m_layerID, "layer");
   registerIdentifier("identifier_module", "Cell ID identifier for readout module", m_moduleID, "module");
   registerParameter("mergedCells_Theta", "Numbers of merged cells in theta per layer", m_mergedCellsTheta, std::vector<int>());
@@ -21,12 +21,12 @@ FCCSWGridModuleThetaMerged::FCCSWGridModuleThetaMerged(const std::string& cellEn
   GetNLayersFromGeom();
 }
 
-FCCSWGridModuleThetaMerged::FCCSWGridModuleThetaMerged(const BitFieldCoder* decoder) : GridTheta(decoder) {
+FCCSWGridModuleThetaMerged::FCCSWGridModuleThetaMerged(const BitFieldCoder* decoder) : GridTheta_k4geo(decoder) {
   // define type and description
   _type = "FCCSWGridModuleThetaMerged";
   _description = "Module-theta segmentation with per-layer merging along theta and/or module";
 
-  // register all necessary parameters (additional to those registered in GridTheta)
+  // register all necessary parameters (additional to those registered in GridTheta_k4geo)
   registerIdentifier("identifier_layer", "Cell ID identifier for layer", m_layerID, "layer");
   registerIdentifier("identifier_module", "Cell ID identifier for module", m_moduleID, "module");
   registerParameter("mergedCells_Theta", "Numbers of merged cells in theta per layer", m_mergedCellsTheta, std::vector<int>());
