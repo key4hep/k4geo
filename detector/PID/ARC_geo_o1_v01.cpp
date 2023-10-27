@@ -22,6 +22,27 @@ using namespace dd4hep;
 
 // #define DUMP_SENSOR_POSITIONS
 
+/* GetVariableFromXML function look for global variable in XML, if value is not present, returns default value
+ * optionally a range for the input value can be provided
+ * default value can be outside that range
+ */
+double GetVariableFromXML(Detector &desc, std::string varName, double defaultValue, double lowlimit=0., double upperlimit=0.)
+{
+  double value = defaultValue;
+  if( desc.constants().count( varName.c_str() ) )
+  {
+    value = desc.constantAsDouble( varName.c_str() );
+    // check if aceptable limits are provided
+    if( lowlimit != upperlimit && upperlimit > lowlimit)
+    {
+      // check if input value is within the limits
+      if( lowlimit > value || upperlimit < value)
+        value = defaultValue;
+    }
+  }
+  return value;
+}
+
 /// Function to build ARC endcaps
 static Ref_t create_ARC_endcaps(Detector &desc, xml::Handle_t handle, SensitiveDetector sens)
 {
@@ -158,7 +179,8 @@ static Ref_t create_ARC_endcaps(Detector &desc, xml::Handle_t handle, SensitiveD
     mycell_v[2] = {1, 4, 7, 0, 8 * hx_u};
     mycell_v[3] = {1, 5, 10, 0, 10 * hx_u};
     mycell_v[4] = {1, 6, 14, 0, 12 * hx_u};
-    mycell_v[5] = {1, 7, 18, 0, 14 * hx_u};
+    // Cells 18 overlaps with endcap envelope, not included at the moment
+    // mycell_v[5] = {1, 7, 18, 0, 14 * hx_u};
     mycell_v[6] = {2, 2, 1, -1.5 * hx_x, 3 * hx_u};
     mycell_v[7] = {2, 3, 3, -1.5 * hx_x, 5 * hx_u, true};
     mycell_v[8] = {2, 4, 6, -1.5 * hx_x, 7 * hx_u, true};
@@ -169,11 +191,16 @@ static Ref_t create_ARC_endcaps(Detector &desc, xml::Handle_t handle, SensitiveD
     mycell_v[13] = {3, 4, 8, -3.0 * hx_x, 8 * hx_u, true};
     mycell_v[14] = {3, 5, 12, -3.0 * hx_x, 10 * hx_u, true};
     mycell_v[15] = {3, 6, 16, -3.0 * hx_x, 12 * hx_u, true};
-    mycell_v[16] = {3, 7, 21, -3.0 * hx_x, 14 * hx_u, true};
+    // Cell 21 is pathological for 2 reasons
+    // - overlap with endcap envelope
+    // - mirror is so tilted that overlaps with aerogel
+    // Not included for the moment
+    // mycell_v[16] = {3, 7, 21, -3.0 * hx_x, 14 * hx_u, true};
     mycell_v[17] = {4, 5, 11, -4.5 * hx_x, 9 * hx_u};
     mycell_v[18] = {4, 6, 15, -4.5 * hx_x, 11 * hx_u, true};
-    mycell_v[19] = {4, 7, 20, -4.5 * hx_x, 13 * hx_u, true};
-    mycell_v[20] = {5, 6, 19, -6.0 * hx_x, 12 * hx_u};
+    // Cells 20,19 overlap with endcap envelope, not included at the moment
+    // mycell_v[19] = {4, 7, 20, -4.5 * hx_x, 13 * hx_u, true};
+    // mycell_v[20] = {5, 6, 19, -6.0 * hx_x, 12 * hx_u};
   }
 
   /// Distance in phi angle between complete sectors
@@ -196,12 +223,17 @@ static Ref_t create_ARC_endcaps(Detector &desc, xml::Handle_t handle, SensitiveD
     // // // // // // // // // // // // // // // // // // // // // // // // // //
     // // // // // //          LIGHT SENSOR PARAMETERS          // // // // // //
     // // // // // // // // // // // // // // // // // // // // // // // // // //
-    //default values
+    //default values  8cm x 8cm x 0.2 cm, read from detector later
     double sensor_sidex     = 8 * cm;
     double sensor_sidey     = 8 * cm;
     double sensor_thickness = 0.2 * cm;
-    // empirical distance to keep the sensor inside the cell volume
-    double sensor_z_origin_Martin = -vessel_length / 2. + vessel_wall_thickness + 0.5 * cooling_thickness;
+
+    double radiator_thickness = vessel_outer_r-vessel_inner_r-2*vessel_wall_thickness;
+    double safety_distance = 0*mm;
+    // default 0.5cm assumed by original optimization by Martin
+    double sensor_z_offset_Martin = GetVariableFromXML( desc, "SENSOR_Z_OFFSET", 0.5*cm, 0., radiator_thickness);
+    double sensor_z_origin_Martin = -vessel_length / 2. + vessel_wall_thickness + safety_distance + sensor_z_offset_Martin;
+
     auto sensorMat = desc.material("SiliconOptical");
     auto sensorVis = desc.visAttributes("no_vis");
 
@@ -284,11 +316,11 @@ static Ref_t create_ARC_endcaps(Detector &desc, xml::Handle_t handle, SensitiveD
   sensorVol.setVisAttributes( sensorVis );
 
   // Build cooling plate
-  double cooling_z_offset =   sensor_thickness  + cooling_thickness + 0.5*mm;
+  double cooling_z_offset =   0.5*sensor_thickness+cooling_thickness;
   Tube coolingSol_tube(0, 1.5*hexagon_side_length, cooling_thickness);
 
   // Build aerogel plate
-  double aerogel_z_offset =   sensor_thickness  + aerogel_thickness + 0.5*mm;
+  double aerogel_z_offset =   0.5*sensor_thickness  + aerogel_thickness;
   Tube aerogelSol_tube(0, 1.5*hexagon_side_length, aerogel_thickness);
 
   // Build cells of a sector
@@ -346,7 +378,7 @@ static Ref_t create_ARC_endcaps(Detector &desc, xml::Handle_t handle, SensitiveD
 
       double center_of_sensor_x(-999.);
       double angle_of_sensor(-999.);
-      double zoffset_of_sensor(0);
+      // double zoffset_of_sensor(0);
 
 
       // retrieve cell parameters
@@ -372,16 +404,27 @@ static Ref_t create_ARC_endcaps(Detector &desc, xml::Handle_t handle, SensitiveD
         std::string ZOffsetSensorParName = MartinCellName + "_DetZOffset";
 
 
-        if( desc.constants().count(MartinCellName + "_DetPositionZ") )
-            zoffset_of_sensor = desc.constantAsDouble(MartinCellName + "_DetPositionZ");
-        else
-          dd4hep::printout(dd4hep::WARNING,"ARCENDCAP_T", "+++ Constant %s is missing in xml file, default is 0",ZOffsetSensorParName.c_str());
+        // if( desc.constants().count(MartinCellName + "_DetPositionZ") )
+        //     zoffset_of_sensor = desc.constantAsDouble(MartinCellName + "_DetPositionZ");
+        // else
+        //   dd4hep::printout(dd4hep::WARNING,"ARCENDCAP_T", "+++ Constant %s is missing in xml file, default is 0",ZOffsetSensorParName.c_str());
 
         if (radius_of_sphere <= mirrorThickness)
           throw std::runtime_error(Form("Ilegal parameters cell %d: %g <= %g", ncell.RID, radius_of_sphere, mirrorThickness));
 
       }
-      double sensor_z_pos = zoffset_of_sensor + sensor_z_origin_Martin;
+
+      // formula used by Martin in his stand-alone program
+      double sensor_z_pos = sensor_z_origin_Martin;
+      {
+        const double AbsAngle = TMath::Abs(angle_of_sensor);
+        const double DetectorSizeXOver2 = sensor_sidex*0.5;
+        if(AbsAngle > TMath::ASin(sensor_z_offset_Martin/DetectorSizeXOver2))
+        {
+          sensor_z_pos += TMath::Sin(AbsAngle)*DetectorSizeXOver2;
+          sensor_z_pos -= sensor_z_offset_Martin;
+        }
+      }
 
       // create the semi-sphere that will result in the mirror
       Sphere mirrorShapeFull(radius_of_sphere - mirrorThickness,
@@ -478,7 +521,7 @@ static Ref_t create_ARC_endcaps(Detector &desc, xml::Handle_t handle, SensitiveD
         mirror_ref_Skin.isValid();
 
         auto sensorTr_reflected = RotationZYX(-alpha + 90 * deg, 0 /*90*deg-angle_of_sensor*/, angle_of_sensor)*
-                                       Translation3D(0, center_of_sensor_x, sensor_z_origin_Martin);
+                                       Translation3D(0, center_of_sensor_x, sensor_z_pos);
         PlacedVolume sensor_ref_PV = cellV_reflected.placeVolume(sensorVol, sensorTr_reflected);
 //         sensor_ref_PV.addPhysVolID("cellnumber", 6 * cellCounter+5);
         DetElement sensor_ref_DE(cell_reflected_DE, create_part_name_ff("sensor") + "_ref_DE", 6 * cellCounter+5 );
