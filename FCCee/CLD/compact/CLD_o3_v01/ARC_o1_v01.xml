@@ -65,7 +65,7 @@
   <vessel
       skinMaterial="CarbonFibStr"
       skin_vis="arc_vessel_vis"
-      bulk_material="Aerogel_vessel_foam"
+      bulk_material="Rohacell300WP"
       bulk_vis="arc_vessel_bulk_vis"
       bulk_skin_ratio = "0.8"
     >
@@ -104,7 +104,7 @@
   <vessel
       skinMaterial="CarbonFibStr"
       skin_vis="arc_vessel_vis"
-      bulk_material="Aerogel_vessel_foam"
+      bulk_material="Rohacell300WP"
       bulk_vis="arc_vessel_bulk_vis"
       bulk_skin_ratio = "0.8"
     >

@@ -366,6 +366,15 @@
       <composite n="13"  ref="H"/>
     </material>
 
+    <material name="Rohacell300WP">
+      <D type="density" value="0.3" unit="g/cm3"/>
+      <comment> Rohacell 300 WP, polymethacrylimide (PMI), https://performance-foams.evonik.com/en/products-and-solutions/rohacell </comment>
+      <composite n="4" ref="C"/>
+      <composite n="7" ref="H"/>
+      <composite n="1" ref="N"/>
+      <composite n="1" ref="O"/>
+    </material>
+
     <material name="Aerogel_vessel_foam">
       <D type="density" value="0.110" unit="g/cm3"/>
       <comment> Filling of the ARC walls, made of aerogel as template material </comment>
