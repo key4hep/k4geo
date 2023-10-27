@@ -228,11 +228,10 @@ static Ref_t create_ARC_endcaps(Detector &desc, xml::Handle_t handle, SensitiveD
     double sensor_sidey     = 8 * cm;
     double sensor_thickness = 0.2 * cm;
 
-    double radiator_thickness = vessel_outer_r-vessel_inner_r-2*vessel_wall_thickness;
-    double safety_distance = 0*mm;
+    double radiator_thickness = vessel_length-2*vessel_wall_thickness;
     // default 0.5cm assumed by original optimization by Martin
     double sensor_z_offset_Martin = GetVariableFromXML( desc, "SENSOR_Z_OFFSET", 0.5*cm, 0., radiator_thickness);
-    double sensor_z_origin_Martin = -vessel_length / 2. + vessel_wall_thickness + safety_distance + sensor_z_offset_Martin;
+    double sensor_z_origin_Martin = -vessel_length / 2. + vessel_wall_thickness + sensor_z_offset_Martin;
 
     auto sensorMat = desc.material("SiliconOptical");
     auto sensorVis = desc.visAttributes("no_vis");
@@ -581,9 +580,14 @@ static Ref_t create_ARC_endcaps(Detector &desc, xml::Handle_t handle, SensitiveD
 }
 DECLARE_DETELEMENT(ARCENDCAP_o1_v01_T, create_ARC_endcaps)
 
-
+/* Compact unitary barrel cell, following Roger description
+ * Because 4 out of 6 lateral sides are not flat,
+ * there is a small volume between cells which is filled
+ * by mother material, which is the same as unitary cell
+ * (the material is the gas radiator)
+ */
 TessellatedSolid create_ARC_barrel_shape ( double r_in  = 191 * cm  /*inner radius*/ , 
-						double r_out = 208 * cm  /*outer radius*/ , 
+						double r_out = 209 * cm  /*outer radius*/ ,
 						double d     = 148.15*mm /*hexagon side length*/ )
 {
 
@@ -794,7 +798,10 @@ static Ref_t create_ARC_barrel(Detector &desc, xml::Handle_t handle, SensitiveDe
     double sensor_sidex     = 8 * cm;
     double sensor_sidey     = 8 * cm;
     double sensor_thickness = 0.2 * cm;
-    double sensor_z_origin_Martin = vessel_inner_r + vessel_wall_thickness + 5*mm;
+    double radiator_thickness = vessel_outer_r-vessel_inner_r-2*vessel_wall_thickness;
+    // default 0.5cm assumed by original optimization by Martin
+    double sensor_z_offset_Martin = GetVariableFromXML( desc, "SENSOR_Z_OFFSET", 0.5*cm, 0., radiator_thickness);
+    double sensor_z_origin_Martin = vessel_inner_r + vessel_wall_thickness + sensor_z_offset_Martin ;
     auto sensorMat = desc.material("SiliconOptical");
     auto sensorVis = desc.visAttributes("arc_no_vis");
     // auto sensorSurf = surfMgr.opticalSurface(sensorElem.attr<std::string>(_Unicode(surface)));
@@ -962,7 +969,6 @@ static Ref_t create_ARC_barrel(Detector &desc, xml::Handle_t handle, SensitiveDe
             double radius_of_sphere(-999.);
 
             double center_of_sensor_x(-999.);
-            double center_of_sensor_z_offset(0);
             double angle_of_sensor(-999.);
 
             // convert Roger nomenclature (one cell number) to Martin nomenclature (row and col numbers)
@@ -982,9 +988,6 @@ static Ref_t create_ARC_barrel(Detector &desc, xml::Handle_t handle, SensitiveDe
                 double zposition = desc.constantAsDouble(MartinCellName + "_ZPosition");
 
                 center_of_sensor_x = desc.constantAsDouble(MartinCellName + "_DetPosition");
-
-                if( desc.constants().count(MartinCellName + "_DetPositionZ") )
-                    center_of_sensor_z_offset = desc.constantAsDouble(MartinCellName + "_DetPositionZ");
 
                 angle_of_sensor = desc.constantAsDouble(MartinCellName + "_DetTilt");
 
@@ -1034,9 +1037,19 @@ static Ref_t create_ARC_barrel(Detector &desc, xml::Handle_t handle, SensitiveDe
             sensorVol.setVisAttributes( sensorVis );
             sensorVol.setSensitiveDetector(sens);
 
-            double center_of_sensor_z = center_of_sensor_z_offset + sensor_z_origin_Martin;
+            // formula used by Martin in his stand-alone program
+            double sensor_z_pos = sensor_z_origin_Martin;
+            {
+              const double AbsAngle = TMath::Abs(angle_of_sensor);
+              const double DetectorSizeXOver2 = sensor_sidex*0.5;
+              if(AbsAngle > TMath::ASin(sensor_z_offset_Martin/DetectorSizeXOver2))
+              {
+                sensor_z_pos += TMath::Sin(AbsAngle)*DetectorSizeXOver2;
+                sensor_z_pos -= sensor_z_offset_Martin;
+              }
+            }
 
-            Transform3D sensorTr(RotationZYX(0, 90 * deg - angle_of_sensor, 0), Translation3D(-center_of_sensor_z, 0, center_of_sensor_x));
+            Transform3D sensorTr(RotationZYX(0, 90 * deg - angle_of_sensor, 0), Translation3D(-sensor_z_pos, 0, center_of_sensor_x));
             PlacedVolume sensorPV = cellVol.placeVolume(sensorVol, RotationZYX(0, 90. * deg, 0. * deg)*sensorTr);
             sensorPV.addPhysVolID("cellnumber", 3 * cellCounter+2);
             DetElement sensorDE(cellDE, sensorName + "DE", 3 * cellCounter+2 );
@@ -1052,7 +1065,7 @@ static Ref_t create_ARC_barrel(Detector &desc, xml::Handle_t handle, SensitiveDe
             {
                 double cooling_z_offset =   sensor_thickness  + cooling_radial_thickness/2 + safe_distance_from_sensor;
                 Tube coolingSol_tube(0, 1.5*hexagon_side_length, cooling_radial_thickness);
-                Transform3D coolingTr(RotationZYX(0, 90 * deg - angle_of_sensor, 0), Translation3D(-center_of_sensor_z+cooling_z_offset, 0, center_of_sensor_x));
+                Transform3D coolingTr(RotationZYX(0, 90 * deg - angle_of_sensor, 0), Translation3D(-sensor_z_pos+cooling_z_offset, 0, center_of_sensor_x));
                 auto coolingTrCell = RotationZYX(0, 90. * deg, 0. * deg)*coolingTr;
                 Solid coolingSol = IntersectionSolid(cell_shape, coolingSol_tube, coolingTrCell);
                 std::string coolingName = create_part_name_ff("cooling");
@@ -1068,7 +1081,7 @@ static Ref_t create_ARC_barrel(Detector &desc, xml::Handle_t handle, SensitiveDe
             // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ //
             double aerogel_z_offset =   sensor_thickness - aerogel_radial_thickness/2 - safe_distance_from_sensor;
             Tube aerogelSol_tube(0, 1.5*hexagon_side_length, cooling_radial_thickness);
-            Transform3D aerogelTr(RotationZYX(0, 90 * deg - angle_of_sensor, 0), Translation3D(-center_of_sensor_z + aerogel_z_offset, 0, center_of_sensor_x));
+            Transform3D aerogelTr(RotationZYX(0, 90 * deg - angle_of_sensor, 0), Translation3D(-sensor_z_pos + aerogel_z_offset, 0, center_of_sensor_x));
             auto aerogelTrCell = RotationZYX(0, 90. * deg, 0. * deg)*aerogelTr;
             Solid aerogelSol = IntersectionSolid(cell_shape, aerogelSol_tube, aerogelTrCell);
             std::string aerogelName = create_part_name_ff("aerogel");
