@@ -46,7 +46,7 @@ CellID GridEta_k4geo::cellID(const Vector3D& /* localPosition */, const Vector3D
 //  return binToPosition(etaValue, m_gridSizeEta, m_offsetEta);
 //}
 
-/// determine the seudorapidity based on the cell ID
+/// determine the pseudorapidity based on the cell ID
 double GridEta_k4geo::eta(const CellID& cID) const {
   CellID etaValue = _decoder->get(cID, m_etaID);
   return binToPosition(etaValue, m_gridSizeEta, m_offsetEta);
