@@ -93,8 +93,11 @@ static Ref_t create_ARC_endcaps(Detector &desc, xml::Handle_t handle, SensitiveD
   // // // // // // // // // // // // // // // // // // // // // // // // // //
   // // // // // // // //         AEROGEL PARAMETERS          // // // // // //
   // // // // // // // // // // // // // // // // // // // // // // // // // //
+
+  auto aerogelElem = detElem.child(_Unicode(radiatoraerogel));
+  auto aerogelMat  = desc.material(aerogelElem.attr<std::string>(_Unicode(material)));
+  auto aerogelVis  = desc.visAttributes(aerogelElem.attr<std::string>(_Unicode(vis)));
   double aerogel_thickness = desc.constantAsDouble("ARC_AEROGEL_THICKNESS");
-  auto aerogelMat = desc.material("Aerogel_PFRICH");
   // // //-------------------------------------------------------------// // //
 
   // // // // // // // // // // // // // // // // // // // // // // // // // //
@@ -475,7 +478,7 @@ static Ref_t create_ARC_endcaps(Detector &desc, xml::Handle_t handle, SensitiveD
       Solid aerogelSol = IntersectionSolid(cellS, aerogelSol_tube, aerogelTrCell);
       std::string aerogelName = create_part_name_ff("aerogel");
       Volume aerogelVol( aerogelName , aerogelSol, aerogelMat );
-      aerogelVol.setVisAttributes( desc.visAttributes("arc_aerogel_vis") );
+      aerogelVol.setVisAttributes( aerogelVis );
       cellV.placeVolume(aerogelVol);
 
       auto sensorTr = RotationZYX(alpha - 90 * deg, 0 , angle_of_sensor )*
@@ -748,8 +751,10 @@ static Ref_t create_ARC_barrel(Detector &desc, xml::Handle_t handle, SensitiveDe
     // // // // // // // // // // // // // // // // // // // // // // // // // //
     // // // // // // // //         AEROGEL PARAMETERS          // // // // // //
     // // // // // // // // // // // // // // // // // // // // // // // // // //
+    auto aerogelElem = detElem.child(_Unicode(radiatoraerogel));
+    auto aerogelMat  = desc.material(aerogelElem.attr<std::string>(_Unicode(material)));
+    auto aerogelVis  = desc.visAttributes(aerogelElem.attr<std::string>(_Unicode(vis)));
     double aerogel_radial_thickness = desc.constantAsDouble("ARC_AEROGEL_THICKNESS");
-    auto aerogelMat = desc.material("Aerogel_PFRICH");
 
     // // //-------------------------------------------------------------// // //
 
@@ -1087,7 +1092,7 @@ static Ref_t create_ARC_barrel(Detector &desc, xml::Handle_t handle, SensitiveDe
             std::string aerogelName = create_part_name_ff("aerogel");
             /// TODO: change material
             Volume aerogelVol( aerogelName, aerogelSol, aerogelMat );
-            aerogelVol.setVisAttributes( desc.visAttributes("arc_aerogel_vis") );
+            aerogelVol.setVisAttributes( aerogelVis );
             cellVol.placeVolume(aerogelVol );
             // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ //
 

@@ -76,6 +76,12 @@
       vis="arc_gas_vis"
     >
   </radiatorgas>
+  <!-- /detectors/detector/radiatoraerogel -->
+  <radiatoraerogel
+      material="Aerogel_PFRICH"
+      vis="arc_aerogel_vis"
+    >
+  </radiatoraerogel>
   <!-- /detectors/detector/sensors -->
   <sensors
       material="SiliconOptical"
@@ -115,7 +121,12 @@
       vis="arc_gas_vis"
     >
   </radiatorgas>
-
+  <!-- /detectors/detector/radiatoraerogel -->
+  <radiatoraerogel
+      material="Aerogel_PFRICH"
+      vis="arc_aerogel_vis"
+    >
+  </radiatoraerogel>
   <!-- /detectors/detector/sensors -->
   <sensors
       material="SiliconOptical"
