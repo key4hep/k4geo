@@ -85,7 +85,8 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     lLog << MSG::ERROR << "Incorrect number of layers (ECalBarrelNumLayers) in xml file!" << endmsg;
     // todo: incidentSvc->fireIncident(Incident("ECalConstruction", "GeometryFailure"));
     // make the code crash (incidentSvc does not work)
-     assert(nLayers == int(numLayers));
+    // Andre, Alvaro, assert replaced by exception
+    throw std::runtime_error("Incorrect number of layers (ECalBarrelNumLayers) in xml file!"); 
   }
 
   dd4hep::xml::DetElement readout = calo.child(_Unicode(readout));
@@ -232,7 +233,8 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     lLog << MSG::ERROR << "Incorrect number of planes (ECalBarrelNumPlanes) in xml file!" << endmsg;
     // todo: incidentSvc->fireIncident(Incident("ECalConstruction", "GeometryFailure"));
     // make the code crash (incidentSvc does not work)
-     assert(nModules == int(numPlanes));
+    // Andre, Alvaro, assert replaced by exception
+    throw std::runtime_error("Incorrect number of planes (ECalBarrelNumPlanes) in xml file!"); 
   }
   // Readout is in the middle between two passive planes
   double offsetPassivePhi = caloDim.offset() + dPhi / 2.;
