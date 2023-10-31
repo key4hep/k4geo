@@ -319,11 +319,11 @@ static Ref_t create_ARC_endcaps(Detector &desc, xml::Handle_t handle, SensitiveD
 
   // Build cooling plate
   double cooling_z_offset =   0.5*sensor_thickness+cooling_thickness;
-  Tube coolingSol_tube(0, 1.5*hexagon_side_length, cooling_thickness);
+  Tube coolingSol_tube(0, 1.5*hexagon_side_length, cooling_thickness/2.);
 
   // Build aerogel plate
-  double aerogel_z_offset =   0.5*sensor_thickness  + aerogel_thickness;
-  Tube aerogelSol_tube(0, 1.5*hexagon_side_length, aerogel_thickness);
+  double aerogel_z_offset =   0.5*sensor_thickness  + aerogel_thickness/2.;
+  Tube aerogelSol_tube(0, 1.5*hexagon_side_length, aerogel_thickness/2.);
 
   // Build cells of a sector
 //   mycell_v = {mycell_v[16], mycell_v[19]};
@@ -1061,15 +1061,12 @@ static Ref_t create_ARC_barrel(Detector &desc, xml::Handle_t handle, SensitiveDe
             sensorDE.setType("tracker");
             sensorDE.setPlacement(sensorPV);
 
-            // this is an empirical parameter in order to pass the overlaps
-            double safe_distance_from_sensor = 262*um;
-
             // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ //
             // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  COOLING PLATE  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ //
             // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ //
             {
-                double cooling_z_offset =   sensor_thickness  + cooling_radial_thickness/2 + safe_distance_from_sensor;
-                Tube coolingSol_tube(0, 1.5*hexagon_side_length, cooling_radial_thickness);
+                double cooling_z_offset =   sensor_thickness  + cooling_radial_thickness/2;
+                Tube coolingSol_tube(0, 1.5*hexagon_side_length, cooling_radial_thickness/2.0);
                 Transform3D coolingTr(RotationZYX(0, 90 * deg - angle_of_sensor, 0), Translation3D(-sensor_z_pos+cooling_z_offset, 0, center_of_sensor_x));
                 auto coolingTrCell = RotationZYX(0, 90. * deg, 0. * deg)*coolingTr;
                 Solid coolingSol = IntersectionSolid(cell_shape, coolingSol_tube, coolingTrCell);
@@ -1084,8 +1081,9 @@ static Ref_t create_ARC_barrel(Detector &desc, xml::Handle_t handle, SensitiveDe
             // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ //
             // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  AEROGEL PLATE  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ //
             // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ //
-            double aerogel_z_offset =   sensor_thickness - aerogel_radial_thickness/2 - safe_distance_from_sensor;
-            Tube aerogelSol_tube(0, 1.5*hexagon_side_length, cooling_radial_thickness);
+              // Build aerogel plate
+            double aerogel_z_offset =   -0.5*sensor_thickness - aerogel_radial_thickness;
+            Tube aerogelSol_tube(0, 1.5*hexagon_side_length, aerogel_radial_thickness/2.);
             Transform3D aerogelTr(RotationZYX(0, 90 * deg - angle_of_sensor, 0), Translation3D(-sensor_z_pos + aerogel_z_offset, 0, center_of_sensor_x));
             auto aerogelTrCell = RotationZYX(0, 90. * deg, 0. * deg)*aerogelTr;
             Solid aerogelSol = IntersectionSolid(cell_shape, aerogelSol_tube, aerogelTrCell);
