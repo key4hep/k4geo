@@ -116,6 +116,8 @@ public:
   inline std::vector<double> cellDimensions(const CellID& /*id*/) const {
     //return {access()->implementation->gridSizePhi(), access()->implementation->gridSizeTheta()};
     // not implemented
+    throw std::runtime_error( Form("Function %s not implemented", __PRETTY_FUNCTION__) );
+
     return {0., 0.};
   }
 };
