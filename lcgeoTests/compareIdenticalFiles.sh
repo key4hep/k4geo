@@ -7,7 +7,7 @@
 
 search_dir="$1"
 
-files_to_ignore="README.md materials.xml elements.xml"
+files_to_ignore="README.md materials.xml elements.xml CMakeLists.txt"
 
 # Create an associative array to store file paths with the same names
 declare -A file_names
