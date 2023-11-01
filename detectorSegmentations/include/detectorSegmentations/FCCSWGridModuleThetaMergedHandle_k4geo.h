@@ -105,13 +105,14 @@ public:
 
 
   /** \brief Returns a std::vector<double> of the cellDimensions of the given cell ID
-      in natural order of dimensions (nModules, dTheta)
+      in natural order of dimensions (nModules, dTheta). Not implemented yet.
 
       Returns a std::vector of the cellDimensions of the given cell ID
       \param cellID
       \return std::vector<double> size 2:
       -# size in module
       -# size in theta
+      Not implemented yet.
   */
   inline std::vector<double> cellDimensions(const CellID& /*id*/) const {
     //return {access()->implementation->gridSizePhi(), access()->implementation->gridSizeTheta()};
