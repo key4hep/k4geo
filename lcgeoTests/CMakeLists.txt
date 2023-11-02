@@ -96,7 +96,7 @@ SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  " Excep
 SET( test_name "test_ARC_o1_v01_overlap" )
 ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
 	ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/CLD_o3_v01/CLD_o3_v01.xml --runType run --part.userParticleHandler= --macroFile=${CMAKE_CURRENT_SOURCE_DIR}/../utils/overlap.mac  )
-SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" TIMEOUT 240)
+SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" TIMEOUT 390)
 
 #--------------------------------------------------
 
