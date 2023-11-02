@@ -12,7 +12,7 @@ The documentation about its usage is [here](../../doc/detector/calorimeter/ECalB
 Original version taken from [FCCDetectors](https://github.com/HEP-FCC/FCCDetectors/blob/main/Detector/DetFCChhECalInclined/src/ECalBarrelInclined_geo.cpp).
 
 ### o1_v02
-New version adapted to the theta segmentation with the possibility to have different number of cell merged per layer. The main difference is that now one has to set ECalBarrelNumLayers in the xml while before it was just dynamically computed based on other xml parameters (also, to avoid silent mistakes, the number from the xml and the one computed dynamically must match).
+New version adapted to the theta segmentation with the possibility to have different number of cell merged per layer. The main difference is that now one has to set `ECalBarrelNumLayers` and `ECalBarrelNumPlanes` in the xml while before it was just dynamically computed based on other xml parameters (also, to avoid silent mistakes, the number from the xml and the one computed dynamically must match).
 
 ## CaloDisks
 This sub-detector makes calorimeter endcaps (original and reflected). It is used in ALLEGRO detector concept.
