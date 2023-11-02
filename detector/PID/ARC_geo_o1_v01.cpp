@@ -433,7 +433,7 @@ static Ref_t create_ARC_endcaps(Detector &desc, xml::Handle_t handle, SensitiveD
       Sphere mirrorShapeFull(radius_of_sphere - mirrorThickness,
                              radius_of_sphere,
                              0.,
-                             3.14 / 3.2);
+                             3.14 / 3.5);
       /// alpha: angle of position vector of first sector n-cell with respect to x-axis
       double alpha = atan(ncell.y / ncell.x) * rad;
       if (0 > alpha)
