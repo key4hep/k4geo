@@ -319,7 +319,7 @@ static Ref_t create_ARC_endcaps(Detector &desc, xml::Handle_t handle, SensitiveD
 
   // Build cooling plate
   double cooling_z_offset =   0.5*sensor_thickness+cooling_thickness;
-  Tube coolingSol_tube(0, 1.5*hexagon_side_length, cooling_thickness/2.);
+  Box coolingSol_box(sensor_sidex / 2, sensor_sidey / 2, cooling_thickness/2.);
 
   // Build aerogel plate
   double aerogel_z_offset =   0.5*sensor_thickness  + aerogel_thickness/2.;
@@ -426,13 +426,14 @@ static Ref_t create_ARC_endcaps(Detector &desc, xml::Handle_t handle, SensitiveD
           sensor_z_pos += TMath::Sin(AbsAngle)*DetectorSizeXOver2;
           sensor_z_pos -= sensor_z_offset_Martin;
         }
+        aerogel_z_offset = TMath::Sin(AbsAngle)*sensor_sidex + aerogel_thickness + sensor_thickness;
       }
 
       // create the semi-sphere that will result in the mirror
       Sphere mirrorShapeFull(radius_of_sphere - mirrorThickness,
                              radius_of_sphere,
                              0.,
-                             3.14 / 3);
+                             3.14 / 3.2);
       /// alpha: angle of position vector of first sector n-cell with respect to x-axis
       double alpha = atan(ncell.y / ncell.x) * rad;
       if (0 > alpha)
@@ -459,10 +460,10 @@ static Ref_t create_ARC_endcaps(Detector &desc, xml::Handle_t handle, SensitiveD
       // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ //
       // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  COOLING PLATE  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ //
       // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ //
-      auto coolingTrCell = RotationZYX(0, 0, angle_of_sensor ) *
+      auto coolingTrCell = RotationZ(alpha - 90 * deg) * RotationX(angle_of_sensor )*
                            Translation3D(0, center_of_sensor_x, sensor_z_pos-cooling_z_offset);
 
-      Solid coolingSol = IntersectionSolid(cellS, coolingSol_tube, coolingTrCell);
+      Solid coolingSol = IntersectionSolid(cellS, coolingSol_box, coolingTrCell);
       std::string coolingName = create_part_name_ff("cooling");
       /// TODO: change material
       Volume coolingVol( coolingName , coolingSol, mirrorMat );
@@ -472,8 +473,8 @@ static Ref_t create_ARC_endcaps(Detector &desc, xml::Handle_t handle, SensitiveD
       // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ //
       // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  AEROGEL PLATE  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ //
       // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ //
-      auto aerogelTrCell = RotationZYX(0, 0, angle_of_sensor ) *
-                           Translation3D(0, center_of_sensor_x, sensor_z_pos+aerogel_z_offset);
+      auto aerogelTrCell = RotationZYX(0, 0, 0 ) *
+                           Translation3D(0, 0, sensor_z_origin_Martin + aerogel_z_offset);
 
       Solid aerogelSol = IntersectionSolid(cellS, aerogelSol_tube, aerogelTrCell);
       std::string aerogelName = create_part_name_ff("aerogel");
@@ -481,7 +482,7 @@ static Ref_t create_ARC_endcaps(Detector &desc, xml::Handle_t handle, SensitiveD
       aerogelVol.setVisAttributes( aerogelVis );
       cellV.placeVolume(aerogelVol);
 
-      auto sensorTr = RotationZYX(alpha - 90 * deg, 0 , angle_of_sensor )*
+      auto sensorTr = RotationZ(alpha - 90 * deg) * RotationX(angle_of_sensor )*
                            Translation3D(0, center_of_sensor_x, sensor_z_pos );
 
 
@@ -498,6 +499,9 @@ static Ref_t create_ARC_endcaps(Detector &desc, xml::Handle_t handle, SensitiveD
       DetElement sensorDE(cellDE, create_part_name_ff("sensor") + "DE", 6 * cellCounter+2 );
       sensorDE.setType("tracker");
       sensorDE.setPlacement(sensorPV);
+
+
+      //-------------------------
 
       PlacedVolume cellPV = endcap_cells_gas_envelope.placeVolume(cellV, RotationZ(phistep * phin) * Translation3D(ncell.x, ncell.y, 0));
       cellPV.addPhysVolID("cellnumber", createPhysVolID() );//6*cellCounter + 0);
@@ -522,7 +526,7 @@ static Ref_t create_ARC_endcaps(Detector &desc, xml::Handle_t handle, SensitiveD
         SkinSurface mirror_ref_Skin(desc, mirror_ref_DE, Form("mirror_ref_optical_surface%d", cellCounter), mirrorSurf, mirrorVol_reflected); // FIXME: 3rd arg needs `imod`?
         mirror_ref_Skin.isValid();
 
-        auto sensorTr_reflected = RotationZYX(-alpha + 90 * deg, 0 /*90*deg-angle_of_sensor*/, angle_of_sensor)*
+        auto sensorTr_reflected = RotationZ(-alpha + 90 * deg)*RotationX( angle_of_sensor)*
                                        Translation3D(0, center_of_sensor_x, sensor_z_pos);
         PlacedVolume sensor_ref_PV = cellV_reflected.placeVolume(sensorVol, sensorTr_reflected);
 //         sensor_ref_PV.addPhysVolID("cellnumber", 6 * cellCounter+5);
@@ -542,8 +546,18 @@ static Ref_t create_ARC_endcaps(Detector &desc, xml::Handle_t handle, SensitiveD
         // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  COOLING PLATE  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ //
         // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  AEROGEL PLATE  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ //
         // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ //
-          cellV_reflected.placeVolume(coolingVol);
+          // by symmetry, aerogel volume works for reflected cells as well
           cellV_reflected.placeVolume(aerogelVol);
+          // but cooling plate must be rotated...
+          auto coolingTrCell_reflected = RotationZ(-alpha + 90 * deg)*RotationX( angle_of_sensor)*
+                      Translation3D(0, center_of_sensor_x, sensor_z_pos-cooling_z_offset);
+          Solid coolingSol_reflected = IntersectionSolid(cellS, coolingSol_box, coolingTrCell_reflected);
+          std::string coolingName_reflected = create_part_name_ff("cooling");
+          /// TODO: change material
+          Volume coolingVol_reflected( coolingName_reflected , coolingSol_reflected, mirrorMat );
+          coolingVol_reflected.setVisAttributes( desc.visAttributes("arc_cooling_vis") );
+          cellV_reflected.placeVolume(coolingVol_reflected);
+
 
 
         PlacedVolume cell_ref_PV = endcap_cells_gas_envelope.placeVolume(cellV_reflected, RotationZ(phistep * phin) * Translation3D(-ncell.x, ncell.y, 0));
