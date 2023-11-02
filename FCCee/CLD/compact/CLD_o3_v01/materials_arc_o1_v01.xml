@@ -4,6 +4,7 @@
     <!--quantum efficiency of the SiPMs from Martin; outside range, 0 is considered-->
     <!--https://github.com/MartinDuyTat/ARC_Simulation_Reconstruction/blob/main/include/SiPM.h#L134 -->
     <!--Original paper: https://www.mdpi.com/1424-8220/19/2/308-->
+    <!--On top, add 5% additional loss of photons caused by surface scattering coefficient-->
     <matrix name="ARC_SiPM_QuantumEfficiency" coldim="2" values="
       4.9*eV	0.0
       4.7*eV	0.0
