@@ -921,8 +921,8 @@ static Ref_t create_ARC_barrel(Detector &desc, xml::Handle_t handle, SensitiveDe
     int cellCounter(0);
 
     // WARNING for developping purposes
-//     ncell_vector = {16,17};
-//     phinmax = 1;
+    // ncell_vector = {16};
+    // phinmax = 1;
 
     // // // ~> ~> ~> ~> ~> ~> ~> ~> ~> ~> ~> ~> ~> ~> ~> ~> ~> ~> ~> // // //
     // // // loop to build each cell, repeated 27 times around phi    // // //
@@ -1030,7 +1030,7 @@ static Ref_t create_ARC_barrel(Detector &desc, xml::Handle_t handle, SensitiveDe
             Sphere mirrorShapeFull(radius_of_sphere - mirrorThickness,
                                    radius_of_sphere,
                                    0.,
-                                   3.14 / 2);
+                                   3.14 / 3.5);
             /// 3D transformation of mirrorVolFull in order to place it inside the gas volume
             Transform3D mirrorTr(RotationZYX(0, 0, 0), Translation3D(center_of_sphere_x, 0, center_of_sphere_z - mirror_z_safe_shrink));
 
@@ -1058,6 +1058,7 @@ static Ref_t create_ARC_barrel(Detector &desc, xml::Handle_t handle, SensitiveDe
 
             // formula used by Martin in his stand-alone program
             double sensor_z_pos = sensor_z_origin_Martin;
+            double aerogel_z_offset = 0;
             {
               const double AbsAngle = TMath::Abs(angle_of_sensor);
               const double DetectorSizeXOver2 = sensor_sidex*0.5;
@@ -1066,6 +1067,7 @@ static Ref_t create_ARC_barrel(Detector &desc, xml::Handle_t handle, SensitiveDe
                 sensor_z_pos += TMath::Sin(AbsAngle)*DetectorSizeXOver2;
                 sensor_z_pos -= sensor_z_offset_Martin;
               }
+              aerogel_z_offset = TMath::Sin(AbsAngle)*sensor_sidex + aerogel_radial_thickness + sensor_thickness;
             }
 
             Transform3D sensorTr(RotationZYX(0, 90 * deg - angle_of_sensor, 0), Translation3D(-sensor_z_pos, 0, center_of_sensor_x));
@@ -1080,10 +1082,10 @@ static Ref_t create_ARC_barrel(Detector &desc, xml::Handle_t handle, SensitiveDe
             // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ //
             {
                 double cooling_z_offset =   sensor_thickness  + cooling_radial_thickness/2;
-                Tube coolingSol_tube(0, 1.5*hexagon_side_length, cooling_radial_thickness/2.0);
+                Box coolingSol_box(sensor_sidex / 2, sensor_sidey / 2,  cooling_radial_thickness/2.0);
                 Transform3D coolingTr(RotationZYX(0, 90 * deg - angle_of_sensor, 0), Translation3D(-sensor_z_pos+cooling_z_offset, 0, center_of_sensor_x));
                 auto coolingTrCell = RotationZYX(0, 90. * deg, 0. * deg)*coolingTr;
-                Solid coolingSol = IntersectionSolid(cell_shape, coolingSol_tube, coolingTrCell);
+                Solid coolingSol = IntersectionSolid(cell_shape, coolingSol_box, coolingTrCell);
                 std::string coolingName = create_part_name_ff("cooling");
                 /// TODO: change material
                 Volume coolingVol( coolingName, coolingSol, mirrorMat );
@@ -1096,9 +1098,9 @@ static Ref_t create_ARC_barrel(Detector &desc, xml::Handle_t handle, SensitiveDe
             // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  AEROGEL PLATE  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ //
             // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ //
               // Build aerogel plate
-            double aerogel_z_offset =   -0.5*sensor_thickness - aerogel_radial_thickness;
+            // double aerogel_z_offset =   -0.5*sensor_thickness - aerogel_radial_thickness;
             Tube aerogelSol_tube(0, 1.5*hexagon_side_length, aerogel_radial_thickness/2.);
-            Transform3D aerogelTr(RotationZYX(0, 90 * deg - angle_of_sensor, 0), Translation3D(-sensor_z_pos + aerogel_z_offset, 0, center_of_sensor_x));
+            Transform3D aerogelTr(RotationZYX(0, 90*deg, 0), Translation3D(-sensor_z_pos - aerogel_z_offset, 0, 0));
             auto aerogelTrCell = RotationZYX(0, 90. * deg, 0. * deg)*aerogelTr;
             Solid aerogelSol = IntersectionSolid(cell_shape, aerogelSol_tube, aerogelTrCell);
             std::string aerogelName = create_part_name_ff("aerogel");
