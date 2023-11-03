@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 
 #---------------------------
-set( PackageName lcgeo )
+#set( PackageName lcgeo )
+set( PackageName k4geo )
 #---------------------------
 
 project(${PackageName})
@@ -17,6 +18,8 @@ SET( ${PackageName}_SOVERSION "${${PackageName}_VERSION_MAJOR}.${${PackageName}_
 set(CMAKE_MODULE_PATH  ${CMAKE_MODULE_PATH}  ${PROJECT_SOURCE_DIR}/cmake )
 set(LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+
+include(GNUInstallDirs)
 
 #------------- set the default installation directory to be the source directory
 
@@ -50,6 +53,7 @@ find_package( Geant4 REQUIRED )
 find_package( LCIO REQUIRED)
 
 add_subdirectory(detectorSegmentations)
+add_subdirectory(detectorCommon)
 
 file(GLOB sources 
   ./detector/tracker/*.cpp
@@ -81,7 +85,7 @@ target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detect
 target_include_directories(${PackageName}   SYSTEM PUBLIC ${LCIO_INCLUDE_DIRS})
 target_include_directories(${PackageName}G4 SYSTEM PUBLIC ${LCIO_INCLUDE_DIRS})
 
-target_link_libraries(${PackageName}   DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers ${ROOT_LIBRARIES} ${LCIO_LIBRARIES} detectorSegmentations)
+target_link_libraries(${PackageName}   detectorCommon DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers ${ROOT_LIBRARIES} ${LCIO_LIBRARIES} detectorSegmentations)
 target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ${ROOT_LIBRARIES} ${Geant4_LIBRARIES} ${LCIO_LIBRARIES})
 
 #Create this_package.sh file, and install
@@ -104,3 +108,16 @@ INSTALL(FILES ${hfiles}
 if(INSTALL_COMPACT_FILES)
   INSTALL(DIRECTORY CaloTB CLIC FCalTB FCCee ILD fieldmaps SiD DESTINATION share/k4geo )
 endif()
+
+
+# Installation and export --------------------------------------
+install(FILES
+  "${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake"
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
+  )
+
+install(EXPORT ${PROJECT_NAME}Targets
+  NAMESPACE ${PROJECT_NAME}::
+  FILE "${PROJECT_NAME}Targets.cmake"
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/"
+  )

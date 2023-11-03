@@ -101,11 +101,11 @@ SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Except
 #--------------------------------------------------
 
 ADD_EXECUTABLE( TestSensThickness src/TestSensThickness.cpp )
-Target_Link_Libraries( TestSensThickness lcgeo )
+Target_Link_Libraries( TestSensThickness k4geo )
 INSTALL( TARGETS TestSensThickness DESTINATION bin )
 
 ADD_EXECUTABLE( BeamCalZtest src/BeamCalZtest.cpp )
-Target_Link_Libraries( BeamCalZtest lcgeo )
+Target_Link_Libraries( BeamCalZtest k4geo )
 INSTALL( TARGETS BeamCalZtest DESTINATION bin )
 
 ADD_TEST( t_SensThickness_Clic_o2_v4 "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
