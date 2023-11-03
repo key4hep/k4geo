@@ -820,7 +820,8 @@ static Ref_t create_ARC_barrel(Detector &desc, xml::Handle_t handle, SensitiveDe
     double radiator_thickness = vessel_outer_r-vessel_inner_r-2*vessel_wall_thickness;
     // default 0.5cm assumed by original optimization by Martin
     double sensor_z_offset_Martin = GetVariableFromXML( desc, "SENSOR_Z_OFFSET", 0.5*cm, 0., radiator_thickness);
-    double sensor_z_origin_Martin = vessel_inner_r + vessel_wall_thickness + sensor_z_offset_Martin ;
+    double extra_offset_to_avoid_overlap_when_using_ROOT_units = 1*mm;
+    double sensor_z_origin_Martin = vessel_inner_r + vessel_wall_thickness + sensor_z_offset_Martin + extra_offset_to_avoid_overlap_when_using_ROOT_units;
     auto sensorMat = desc.material("SiliconOptical");
     auto sensorVis = desc.visAttributes("arc_no_vis");
     // auto sensorSurf = surfMgr.opticalSurface(sensorElem.attr<std::string>(_Unicode(surface)));
