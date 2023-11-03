@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+  <info name="FCChh_HCalExtendedBarrel_TileCal"
+    title="Extended Barrel Calorimeter"
+    author="C. Neubueser, J. Faltova"
+    url="no"
+    status="development"
+    version="1.0">
+    <comment>HCal layout based on ATLAS HCal, with realistic longitudinal segmentation and steel support</comment>
+  </info>
+  <define>
+    <!-- dimensions in R / rho of actual detector modules (face-plate is placed inside)-->
+    <!-- tile dimensions -->
+    <constant name="EndcapHCal_n_phi_modules" value="256"/>
+    <constant name="EndcapHCAL_module_spacing_phi" value="1*mm"/>
+    <!-- component dimensions -->
+    <constant name="EndcapHCal_master_plate_thickness" value="5*mm" />
+    <constant name="EndcapHCal_spacer_plate_thickness" value="4*mm" />
+    <constant name="EndcapHCal_air_space_thickness" value="0.5*mm" />
+    <constant name="EndcapHCal_scintillator_thickness" value="3*mm" />
+    <!-- face and end-plate dimensions -->
+    <constant name="EndcapHCal_steel_support_thickness" value="212*mm" />
+    <constant name="EndcapHCal_end_plate_thickness" value="5*mm" />
+    <constant name="EndcapHCal_face_plate_thickness" value="10*mm" />
+    <constant name="EndcapHCal_plate_space" value="0.5*mm" />
+  </define>
+
+  <display>
+    <vis name="endcapHcal_steel_vis" r="0.5" g="0.5" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="endcapHcal_master_vis" r="0.6" g="0.6" b="0.6" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="endcapHcal_support_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="endcapHcal_face_plate_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="endcapHcal_end_plate_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="endcapHcal_polystyrene_vis" r="0.0" g="0.6" b="0.3" alpha="0.8" showDaughters="true" visible="true" />
+    <vis name="endcapHcal_envelope" r="0.6" g="0.8" b="0.6" alpha="1" showDaughers="true" visible="true" />
+    <vis name="endcapHcal_barrel_seq1_vis" r="0.1" g="0.8" b="0.6" alpha="1" showDaughers="true" visible="true" />
+    <vis name="endcapHcal_barrel_seq2_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughers="true" visible="true" />
+    <vis name="endcapHcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughers="true" visible="true" />
+    <vis name="endcapHhcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughers="true" visible="true" />
+  </display>
+
+  <readouts>
+    <!-- Default readout of DetailedWedge geometry -->
+    <readout name="HCalEndcapReadout">
+      <segmentation type="FCCSWGridPhiEta_k4geo" grid_size_eta="0.025" phi_bins="EndcapHCal_n_phi_modules" offset_eta="-3.5" offset_phi="-pi+(pi/EndcapHCal_n_phi_modules)"/>
+      <id>system:4,type:2,layer:5,row:9,eta:11,phi:10</id>
+    </readout>
+   <readout name="HCalEndcapReadout_phieta">
+     <segmentation type="FCCSWGridPhiEta_k4geo" grid_size_eta="0.025" offset_eta="-3.5" phi_bins="256" offset_phi="-pi+pi/256."/>
+     <id>system:4,type:2,layer:4,eta:11,phi:10</id>
+    </readout>
+   <readout name="HCalEndcapReadout_phi">
+     <!-- the eta segmentation here is a dummy - the whole hcal is contained in one bin. the z position is stored in the "row" field. -->
+     <segmentation type="FCCSWGridPhiEta_k4geo" grid_size_eta="4." phi_bins="EndcapHCal_n_phi_modules" offset_eta="-3.5" offset_phi="-pi+(pi/EndcapHCal_n_phi_modules)"/>
+     <id>system:4,type:2,layer:5,row:9,eta:10,phi:10</id>
+    </readout>
+  </readouts>
+
+  <detectors>
+    <detector id="DetID_HCAL_Endcap" name="HCalThreePartsEndcap" type="CaloThreePartsEndcap_o1_v01" readout="HCalEndcapReadout" >
+      <!-- vis="endcapHcal_envelope"> -->
+      <sensitive type="BirksLawCalorimeterSD"/>
+      <dimensions rmin1="HCalEndcap_inner_radius1" rmin2="HCalEndcap_inner_radius2" rmin="HCalEndcap_inner_radius3"
+		  rmax1="HCalEndcap_outer_radius1" rmax2="HCalEndcap_outer_radius2" rmax="HCalEndcap_outer_radius3"
+		  width="(HCalEndcap_max_z1 - HCalEndcap_min_z1)*0.5"  dz="(HCalEndcap_max_z2 - HCalEndcap_min_z2)*0.5" z_length="(HCalEndcap_max_z3 - HCalEndcap_min_z3)*0.5"
+		  offset="HCalEndcap_min_z1 + (HCalEndcap_max_z1 - HCalEndcap_min_z1)*0.5"  z_offset="HCalEndcap_min_z2 + (HCalEndcap_max_z2 - HCalEndcap_min_z2)*0.5" v_offset="HCalEndcap_min_z3 + (HCalEndcap_max_z3 - HCalEndcap_min_z3)*0.5"/>
+      <layers>
+	<layer id="0" name="type_1" material="Air" vis="endcaphcal_barrel_layer_vis">
+          <dimensions
+              dr="100*mm"
+	      nmodules="4"
+	      nModules="4"
+	      nPads="4"
+             />
+	</layer>
+	<layer id="1" name="type_2" material="Air" vis="endcaphcal_barrel_layer_vis">
+	  <dimensions
+              dr="150*mm"
+	      nmodules="2"
+              nModules="3"
+              nPads="10"
+             />
+	</layer>
+	<layer id="2" name="type_3" material="Air" vis="endcaphcal_barrel_layer_vis">
+	  <dimensions
+              dr="250*mm"
+	      nmodules="0"
+              nModules="2"
+              nPads="8"
+             />
+	</layer>
+      </layers>
+      
+      <sequence_a id="3" name="sequence_1" material="Air" vis="endcaphcal_barrel_seq1_vis">
+	<dimensions
+	   dz="2*EndcapHCal_master_plate_thickness + EndcapHCal_spacer_plate_thickness + EndcapHCal_scintillator_thickness + 2*EndcapHCal_air_space_thickness"
+	   phiBins="EndcapHCal_n_phi_modules"
+	   x="EndcapHCAL_module_spacing_phi"
+	   />
+	<!-- Master plate -->
+	<module_component thickness="EndcapHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="endcapHcal_steel_master_vis" />
+	<!-- Spacer plate -->
+	<module_component thickness="EndcapHCal_spacer_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="endcapHcal_steel_vis" />
+	<!-- Master plate -->
+	<module_component thickness="EndcapHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="endcapHcal_steel_master_vis" />
+	<!-- Air -->
+	<module_component thickness="EndcapHCal_air_space_thickness"    y_offset="0" material="Air" sensitive="false" vis="endcapHcal_air_vis" />
+	<!-- Scintillator plate -->
+	<module_component thickness="EndcapHCal_scintillator_thickness" y_offset="0" material="Polystyrene" sensitive="true" vis="endcapHcal_polystyrene_vis" />
+	<!-- Air -->
+	<module_component thickness="EndcapHCal_air_space_thickness"    y_offset="0" material="Air" sensitive="false" vis="endcapHcal_air_vis" />
+      </sequence_a>
+      <sequence_b id="4" name="sequence_2" material="Air" vis="endcapHcal_barrel_seq2_vis">
+        <dimensions
+	   dz="2*EndcapHCal_master_plate_thickness + EndcapHCal_spacer_plate_thickness + EndcapHCal_scintillator_thickness + 2*EndcapHCal_air_space_thickness"
+	   phiBins="EndcapHCal_n_phi_modules"
+	   x="EndcapHCAL_module_spacing_phi"
+	   />
+	<!-- Master plate -->
+	<module_component thickness="EndcapHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="endcapHcal_steel_master_vis" />
+	<!-- Air -->
+	<module_component thickness="EndcapHCal_air_space_thickness"    y_offset="0" material="Air" sensitive="false" vis="endcapHcal_air_vis" />
+	<!-- Scintillator plate -->
+	<module_component thickness="EndcapHCal_scintillator_thickness" y_offset="0" material="Polystyrene" sensitive="true" vis="endcapHcal_polystyrene_vis" />
+	<!-- Air -->
+	<module_component thickness="EndcapHCal_air_space_thickness"    y_offset="0" material="Air" sensitive="false" vis="endcapHcal_air_vis" />
+	<!-- Master plate -->
+	<module_component thickness="EndcapHCal_master_plate_thickness" y_offset="0" material="Fe" sensitive="false" vis="endcapHcal_steel_master_vis" />
+	<!-- Spacer plate -->
+	<module_component thickness="EndcapHCal_spacer_plate_thickness" y_offset="0"  material="Fe" sensitive="false" vis="endcapHcal_steel_vis" />
+      </sequence_b>
+      <end_plate name="end_plate" thickness="EndcapHCal_end_plate_thickness" material="Fe" sensitive="false" vis="endcapHcal_end_plate_vis" />
+      <face_plate name="face_plate" thickness="EndcapHCal_face_plate_thickness" material="Fe" sensitive="false" vis="endcapHcal_face_plate_vis" />
+      <plate_space name="plate_space" thickness="EndcapHCal_plate_space" material="Air" sensitive="false" vis="endcapHcal_air_vis" />
+      <steel_support name="steel_support" thickness="EndcapHCal_steel_support_thickness" material="Steel235" sensitive="false" vis="endcapHcal_steel_support_vis" />
+    </detector>
+  </detectors>
+  
+</lccdd>
