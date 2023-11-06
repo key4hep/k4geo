@@ -273,6 +273,11 @@
                 <trd x="181.2*mm" y="120.8*mm" />
                 <include ref="TrackerDiskModuleOut.xml" />
             </module>
+            <module name="InnerTrackerEndcapModule_12x10_Out" vis="InnerTrackerModuleVis">
+                <trd x="181.2*mm" y="151.0*mm" />
+                <include ref="TrackerDiskModuleOut.xml" />
+            </module>
+
 
             <module name="InnerTrackerEndcapModule_2x2_In" vis="InnerTrackerModuleVis">
                 <trd x="30.2*mm" y="30.2*mm" />
@@ -410,6 +415,10 @@
                 <trd x="181.2*mm" y="120.8*mm" />
                 <include ref="TrackerDiskModuleIn.xml" />
             </module>
+            <module name="InnerTrackerEndcapModule_12x9_In" vis="InnerTrackerModuleVis">
+                <trd x="181.2*mm" y="135.9*mm" />
+                <include ref="TrackerDiskModuleIn.xml" />
+            </module>
 
             <layer id="0">
                 <ring r="InnerTracker_Endcap_radius_0" zstart="InnerTracker_Endcap_z_0"
@@ -468,7 +477,7 @@
                 <ring r="InnerTracker_Endcap_radius_3+13*ITM" zstart="InnerTracker_Endcap_z_3"
                     nmodules="24" dz="3*mm" module="InnerTrackerEndcapModule_10x9_In" phi0="0" />
                 <ring r="InnerTracker_Endcap_radius_3+22*ITM" zstart="InnerTracker_Endcap_z_3"
-                    nmodules="24" dz="3*mm" module="InnerTrackerEndcapModule_12x8_In" phi0="0" />
+                    nmodules="24" dz="3*mm" module="InnerTrackerEndcapModule_12x9_In" phi0="0" />
             </layer>
 
 
@@ -507,7 +516,7 @@
                 <ring r="InnerTracker_Endcap_radius_6+8*ITM" zstart="InnerTracker_Endcap_z_6"
                     nmodules="24" dz="3*mm" module="InnerTrackerEndcapModule_9x5_Out" phi0="0" />
                 <ring r="InnerTracker_Endcap_radius_6+13*ITM" zstart="InnerTracker_Endcap_z_6"
-                    nmodules="24" dz="3*mm" module="InnerTrackerEndcapModule_12x8_Out" phi0="0" />
+                    nmodules="24" dz="3*mm" module="InnerTrackerEndcapModule_12x10_Out" phi0="0" />
             </layer>
 
         </detector>
