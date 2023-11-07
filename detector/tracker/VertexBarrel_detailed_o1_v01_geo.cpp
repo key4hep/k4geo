@@ -71,25 +71,25 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     // Struct to support multiple readout or support layers (both using this struct)
     struct componentsStruct{
         string name;
-        double dr;
+        double r;
         double offset;
         double length;
         vector<double> thicknesses;
         vector<double> offsets; 
-        vector<double> drs; 
+        vector<double> rs; 
         vector<Volume> volumes;
     };
 
     // Struct to support end-of-stave structures
     struct endOfStaveStruct{
         string name;
-        double dr;
+        double r;
         double offset;
         vector<double> thicknesses;
         vector<double> lengths;
         vector<double> dzs;
         vector<double> offsets; 
-        vector<double> drs; 
+        vector<double> rs; 
         vector<Volume> volumes;
     };
 
@@ -99,7 +99,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
         vector<componentsStruct> components_vec;
         vector<endOfStaveStruct> endOfStaves;
-        double sensor_dr;
+        double sensor_r;
         double sensor_offset;
         double sensor_thickness;
         Material sensor_material;
@@ -126,7 +126,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         for(c_components.reset(); c_components; ++c_components){
             componentsStruct components;
             components.name = xml_comp_t(c_components).nameStr();
-            components.dr = xml_comp_t(c_components).dr();
+            components.r = xml_comp_t(c_components).r();
             components.length = xml_comp_t(c_components).length();
             components.offset = xml_comp_t(c_components).offset();
             xml_coll_t c_component(c_components,_U(component));
@@ -135,7 +135,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 xml_comp_t component = c_component;
                 components.thicknesses.push_back(component.thickness());
                 components.offsets.push_back(component.offset());
-                components.drs.push_back(component.dr());
+                components.rs.push_back(component.r());
 
                 Box ele_box = Box(component.thickness()/2., component.width()/2., components.length);
                 Volume ele_vol = Volume(components.name + _toString(iComponent, "_%d"), ele_box, theDetector.material(component.materialStr()));                    
@@ -151,7 +151,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         int iEndOfStave = 0;
         for(c_endOfStave.reset(); c_endOfStave; ++c_endOfStave){
             endOfStaveStruct endOfStave;    
-            endOfStave.dr = xml_comp_t(c_endOfStave).dr();
+            endOfStave.r = xml_comp_t(c_endOfStave).r();
             endOfStave.offset = xml_comp_t(c_endOfStave).offset();
             endOfStave.name = xml_comp_t(c_endOfStave).nameStr();
 
@@ -162,7 +162,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 endOfStave.dzs.push_back(component.dz());
                 endOfStave.offsets.push_back(component.offset());
                 endOfStave.lengths.push_back(component.length());
-                endOfStave.drs.push_back(component.dr());
+                endOfStave.rs.push_back(component.r());
 
                 Box ele_box = Box(component.thickness()/2., component.width()/2., component.length()/2.);
                 Volume ele_vol = Volume(endOfStave.name + _toString(iEndOfStave, "_%d"), ele_box, theDetector.material(component.materialStr()));                    
@@ -203,7 +203,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
         // Sensor
         xml_coll_t c_sensor(x_stave,_U(sensor));
-        m.sensor_dr = xml_comp_t(c_sensor).dr();
+        m.sensor_r = xml_comp_t(c_sensor).r();
         m.sensor_offset = xml_comp_t(c_sensor).offset();
         m.sensor_thickness = xml_comp_t(c_sensor).thickness();
         xml_coll_t c_component = xml_coll_t(c_sensor,_U(component));
@@ -257,12 +257,13 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         // child elements: ladder, sensitive and periphery
         int layer_id = x_layer.id();
         int nLadders = x_layer.attr<double>(  _Unicode(nLadders) ) ;
-        double layer_r = x_layer.r();
+
+        double dr           = x_layer.dr();     // Spacing in r for every second stave. 
         double layer_offset = x_layer.offset();
 
         double dphi = 2.*M_PI / double(nLadders);
         double phi0             = x_layer.phi0();
-        string nameStr        = x_layer.nameStr();
+        string nameStr          = x_layer.nameStr();
         int    nmodules         = x_layer.nmodules();
         double step             = x_layer.step();   // Spacing of modules
 
@@ -290,6 +291,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         //--------- loop over ladders ---------------------------
         for(int iStave=0; iStave<nLadders; ++iStave) {
             double phi = phi0 + iStave * dphi  ;
+            double layer_r = x_layer.r() + ((iStave%2 == 0) ? 0.0 : dr);  // Offset every second stave in r
 
             RotationZYX rot( phi , 0, 0  ) ;
 
@@ -307,7 +309,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 Assembly component_assembly(stave_name + "_" + component.name);
                 stave_assembly.placeVolume(component_assembly);
                 for(int i=0; i<int(component.thicknesses.size()); i++){
-                    double r_component = layer_r + component.dr + component.drs[i] + component.thicknesses[i]/2.;
+                    double r_component = layer_r + component.r + component.rs[i] + component.thicknesses[i]/2.;
                     double r_offset_component = layer_offset + component.offset + component.offsets[i];
                     double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
                     double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
@@ -323,7 +325,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 Assembly endOfStave_assembly(stave_name + "_endOfStave");
                 stave_assembly.placeVolume(endOfStave_assembly);
                 for(int i=0; i<int(endOfStave.thicknesses.size()); i++){
-                    double r_component = layer_r + endOfStave.dr + endOfStave.drs[i] + endOfStave.thicknesses[i]/2.;
+                    double r_component = layer_r + endOfStave.r + endOfStave.rs[i] + endOfStave.thicknesses[i]/2.;
                     double r_offset_component = layer_offset + endOfStave.offset + endOfStave.offsets[i];
                     double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
                     double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
@@ -339,7 +341,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
             // Place sensor
             for(int iModule=0; iModule<nmodules; iModule++){
-                double r_component = layer_r + m.sensor_dr + m.sensor_thickness/2.;
+                double r_component = layer_r + m.sensor_r + m.sensor_thickness/2.;
                 double r_offset_component = layer_offset + m.sensor_offset;
                 double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
                 double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
