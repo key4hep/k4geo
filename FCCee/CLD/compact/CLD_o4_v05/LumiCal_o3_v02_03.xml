@@ -11,7 +11,7 @@
 			  grid_size_phi="360/32*degree"
 			  offset_r="LumiCal_inner_radius + (LumiCal_outer_radius-LumiCal_inner_radius)/64"
 			  />
-	    <id>system:8,barrel:3,layer:8,slice:8,r:32:-16,phi:-16</id>
+	    <id>system:5,barrel:3,layer:8,slice:8,r:32:-16,phi:-16</id>
         </readout>
     </readouts>
 
