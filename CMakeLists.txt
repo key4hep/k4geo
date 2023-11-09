@@ -18,6 +18,10 @@ set(CMAKE_MODULE_PATH  ${CMAKE_MODULE_PATH}  ${PROJECT_SOURCE_DIR}/cmake )
 set(LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
+include(GNUInstallDirs)
+set(CMAKE_INSTALL_LIBDIR lib)
+set(CMAKE_INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+
 #------------- set the default installation directory to be the source directory
 
 IF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
@@ -106,3 +110,25 @@ INSTALL(FILES ${hfiles}
 if(INSTALL_COMPACT_FILES)
   INSTALL(DIRECTORY CaloTB CLIC FCalTB FCCee ILD fieldmaps SiD DESTINATION share/k4geo )
 endif()
+
+# create k4geoConfig and friends
+
+INSTALL(EXPORT ${PROJECT_NAME}Targets
+  NAMESPACE ${PROJECT_NAME}::
+  DESTINATION ${CMAKE_INSTALL_CMAKEDIR}
+  FILE k4geoConfig-targets.cmake)
+
+include(CMakePackageConfigHelpers)
+
+configure_package_config_file(cmake/k4geoConfig.cmake.in ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_CMAKEDIR}/k4geoConfig.cmake
+  PATH_VARS CMAKE_INSTALL_CMAKEDIR
+  INSTALL_DESTINATION ${CMAKE_INSTALL_CMAKEDIR} )
+
+write_basic_package_version_file(
+  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_CMAKEDIR}/k4geoConfigVersion.cmake
+  VERSION ${${PackageName}_VERSION}
+  COMPATIBILITY SameMajorVersion )
+
+install(FILES ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_CMAKEDIR}/k4geoConfig.cmake
+              ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_CMAKEDIR}/k4geoConfigVersion.cmake
+        DESTINATION ${CMAKE_INSTALL_CMAKEDIR} )
