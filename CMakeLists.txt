@@ -87,8 +87,8 @@ target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detect
 target_include_directories(${PackageName}   SYSTEM PUBLIC ${LCIO_INCLUDE_DIRS})
 target_include_directories(${PackageName}G4 SYSTEM PUBLIC ${LCIO_INCLUDE_DIRS})
 
-target_link_libraries(${PackageName}   DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers ${ROOT_LIBRARIES} ${LCIO_LIBRARIES} detectorSegmentations)
-target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ${ROOT_LIBRARIES} ${Geant4_LIBRARIES} ${LCIO_LIBRARIES})
+target_link_libraries(${PackageName}   DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers ROOT::Core ${LCIO_LIBRARIES} detectorSegmentations)
+target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ROOT::Core ${Geant4_LIBRARIES} ${LCIO_LIBRARIES})
 
 #Create this_package.sh file, and install
 dd4hep_instantiate_package(${PackageName})
