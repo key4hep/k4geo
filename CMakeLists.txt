@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 
 #---------------------------
-set( PackageName lcgeo )
+set( PackageName k4geo )
 #---------------------------
 
 project(${PackageName})
@@ -74,6 +74,8 @@ endif()
 
 add_dd4hep_plugin(${PackageName} SHARED ${sources})
 add_dd4hep_plugin(${PackageName}G4 SHARED ${G4sources})
+
+add_library(lcgeo ALIAS k4geo)
 
 target_include_directories(${PackageName}   PRIVATE ${PROJECT_SOURCE_DIR}/detector/include )
 target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detector/include )
