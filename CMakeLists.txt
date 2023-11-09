@@ -93,6 +93,12 @@ target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDPa
 #Create this_package.sh file, and install
 dd4hep_instantiate_package(${PackageName})
 
+# Destination directories are hardcoded because GNUdirectories are not included
+install(TARGETS ${PackageName}  ${PackageName}G4
+  EXPORT ${PROJECT_NAME}Targets
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT shlib
+)
+
 #---Testing-------------------------------------------------------------------------
 if(BUILD_TESTING)
   include(CTest)
