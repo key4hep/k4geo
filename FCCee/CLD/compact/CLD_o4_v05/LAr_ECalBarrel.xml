@@ -91,7 +91,7 @@
     <readout name="ECalBarrelPhiEta">
         <!-- segmentation type="FCCSWGridPhiTheta" grid_size_theta="0.5625" phi_bins="768" offset_theta="-0.83" offset_phi="-pi+(pi/768.)"/ -->
         <segmentation type="FCCSWGridPhiEta" grid_size_eta="0.01" phi_bins="768" offset_eta="-1.2" offset_phi="-pi+(pi/768.)"/>
-      <id>system:4,cryo:1,type:3,subtype:3,layer:8,eta:9,phi:10</id>
+      <id>system:5,cryo:1,type:3,subtype:3,layer:8,eta:9,phi:10</id>
     </readout>
   </readouts>
 
