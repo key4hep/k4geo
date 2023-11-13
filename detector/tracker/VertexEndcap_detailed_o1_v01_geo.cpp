@@ -105,7 +105,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         double sensor_width;
         double sensor_length;
         vector<string> sensor_viss;
-        vector<Volume> sensor_volumes;
+        vector<Box> sensor_boxes;
+        Material sensor_material;
     };
     list<module_information> module_information_list;
 
@@ -169,35 +170,20 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         m.sensor_z_offset = xml_comp_t(c_sensor).z_offset();
         m.sensor_offset = xml_comp_t(c_sensor).offset();
         m.sensor_thickness = xml_comp_t(c_sensor).thickness();
+        m.sensor_material = theDetector.material(xml_comp_t(c_sensor).materialStr());
         xml_coll_t c_component = xml_coll_t(c_sensor,_U(component));
 
-        int iSensitive, iPassive = 0;
         for(c_component.reset(); c_component; ++c_component){
             xml_comp_t component = c_component;
             m.sensor_sensitives.push_back(component.isSensitive());
+            m.sensor_viss.push_back(component.visStr());
             m.sensor_xmin.push_back(component.xmin());
             m.sensor_xmax.push_back(component.xmax());
             m.sensor_ymin.push_back(component.ymin());
             m.sensor_ymax.push_back(component.ymax());
 
             Box ele_box = Box( abs(component.xmax()-component.xmin())/2., abs(component.ymax()-component.ymin())/2., m.sensor_thickness/2.);
-
-            string sensor_name;
-            if(component.isSensitive()){
-                sensor_name = _toString(iSensitive,"_sensor%d");
-                iSensitive++;
-            }
-            else{
-                sensor_name = _toString(iPassive,"_passive%d");                
-                iPassive++;
-            }
-
-            Volume sensor_volume(sensor_name, ele_box, theDetector.material(xml_comp_t(c_sensor).materialStr()));
-            sensor_volume.setVisAttributes(theDetector.visAttributes(component.visStr()));
-            
-            if(component.isSensitive()){sensor_volume.setSensitiveDetector(sens);}   
-
-            m.sensor_volumes.push_back(sensor_volume);
+            m.sensor_boxes.push_back(ele_box);
         }
         m.sensor_width  = *max_element(m.sensor_xmax.begin(), m.sensor_xmax.end()) - *min_element(m.sensor_xmin.begin(), m.sensor_xmin.end());
         m.sensor_length = *max_element(m.sensor_ymax.begin(), m.sensor_ymax.end()) - *min_element(m.sensor_ymin.begin(), m.sensor_ymin.end());
@@ -211,6 +197,12 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     for(auto & side : sides){
         string side_name = det_name + _toString(side,"_side%d");
 
+        Assembly side_assembly(side_name);
+        // DetElement sideDE( sdet , side_name, side );
+        pv = envelope.placeVolume(side_assembly);
+        pv.addPhysVolID("system", x_det.id()).addPhysVolID("side", side);  
+        // sideDE.setPlacement( pv ) ;
+
         for(xml_coll_t li(x_det,_U(layer)); li; ++li)  {
             xml_comp_t  x_layer(li);
             int layer_id            = x_layer.id();
@@ -223,20 +215,19 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             
             string disk_name = side_name + _toString(layer_id,"_layer%d");
             Assembly disk_assembly(disk_name);
-            DetElement diskDE( sdet , disk_name, layer_id*side );
-            pv = envelope.placeVolume(disk_assembly);
-            pv.addPhysVolID("side", side).addPhysVolID("layer", layer_id);  
-            diskDE.setPlacement( pv ) ;
+            // DetElement diskDE( sideDE , disk_name, layer_id);
+            pv = side_assembly.placeVolume(disk_assembly);
+            pv.addPhysVolID("layer", layer_id);  
+            // diskDE.setPlacement( pv ) ;
+
+            int iModule_tot = 0;
 
             for(int iPetal=0; iPetal<nPetals; iPetal++){
                 double z_alternate_petal = (iPetal%2 == 0) ? 0.0 : layer_dz;
 
                 string petal_name = disk_name + _toString(iPetal,"_petal%d");
                 Assembly petal_assembly(petal_name);
-                DetElement petalDE( diskDE , petal_name, iPetal );
                 pv = disk_assembly.placeVolume(petal_assembly);
-                pv.addPhysVolID("petal", iPetal);
-                petalDE.setPlacement(pv);
 
                 int iStave = 0;
                 int nStaves = 0;
@@ -263,7 +254,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                     string stave_name = petal_name + _toString(iStave,"_stave%d");
                     Assembly stave_assembly(stave_name);
                     pv = petal_assembly.placeVolume(stave_assembly);
-                    pv.addPhysVolID("stave", iStave);
+                    // pv.addPhysVolID("stave", iStave);
          
                     // Place all components
                     RotationZYX rot( phi , 0, 0  );
@@ -313,7 +304,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
 
                     // Place sensor
-                    string sensors_name = stave_name + "_sensors";
                     for(int iModule=0; iModule<nmodules; iModule++){
                         double z_alternate_module = (iModule%2 == 0) ? 0.0 : stave_dz;
                         double r_component = r + m.sensor_offset;
@@ -326,13 +316,11 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
                         string module_name = stave_name + _toString(iModule,"_module%d");
                         Assembly module_assembly(module_name);
-                        DetElement moduleDE( petalDE , module_name, iModule );
                         pv = stave_assembly.placeVolume(module_assembly);
-                        pv.addPhysVolID("module", iModule);
-                        moduleDE.setPlacement(pv);
+                        pv.addPhysVolID("module", iModule_tot);
 
-                        int iSensitive = 0;
-                        for(int i=0; i<int(m.sensor_volumes.size()); i++){
+                        int iSensitive, iPassive = 0;
+                        for(int i=0; i<int(m.sensor_sensitives.size()); i++){
                             x_pos = m.sensor_xmin[i]+abs(m.sensor_xmax[i]-m.sensor_xmin[i])/2.;
                             y_pos = m.sensor_ymin[i]+abs(m.sensor_ymax[i]-m.sensor_ymin[i])/2.;
                             z_pos = 0;
@@ -340,10 +328,13 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
                             // Place active sensor parts
                             if(m.sensor_sensitives[i]) {
-                                string sensor_name = sensors_name + _toString(iModule,"_module%d") + _toString(iSensitive,"_sensor%d");
-                                
+                                string sensor_name = stave_name + _toString(iModule,"_module%d") + _toString(iSensitive,"_sensor%d");
+                                Volume sensor_volume(sensor_name, m.sensor_boxes[i], m.sensor_material);
+                                sensor_volume.setVisAttributes(theDetector.visAttributes(m.sensor_viss[i]));
+                                sensor_volume.setSensitiveDetector(sens);
+
                                 DetElement sensorDE(sdet,sensor_name,x_det.id());
-                                pv = module_assembly.placeVolume(m.sensor_volumes[i], Transform3D(rot, pos)*Translation3D(pos_i));
+                                pv = module_assembly.placeVolume(sensor_volume, Transform3D(rot, pos)*Translation3D(pos_i));
 
                                 pv.addPhysVolID("sensor", iSensitive);
                                 sensorDE.setPlacement(pv);
@@ -352,9 +343,14 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                             }
                             // Place passive sensor parts
                             else{
-                                pv = stave_assembly.placeVolume(m.sensor_volumes[i], Transform3D(rot, pos)*Translation3D(pos_i));
+                                string sensor_name = stave_name + _toString(iModule,"_module%d") + _toString(iPassive,"_passive%d");
+                                Volume sensor_volume(sensor_name, m.sensor_boxes[i], m.sensor_material);
+                                sensor_volume.setVisAttributes(theDetector.visAttributes(m.sensor_viss[i]));
+                                pv = module_assembly.placeVolume(sensor_volume, Transform3D(rot, pos)*Translation3D(pos_i));
+                                iPassive++;
                             }
                         }
+                        iModule_tot++;
                     }
                     iStave++;
                     stave_assembly->GetShape()->ComputeBBox() ;

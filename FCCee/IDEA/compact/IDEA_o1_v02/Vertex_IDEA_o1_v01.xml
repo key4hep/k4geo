@@ -27,14 +27,14 @@
             <comment>Vertex Assembly</comment>
             <composite name="VTXIB"/>
             <composite name="VTXOB"/>
-             <composite name="VTXD"/> 
-             <composite name="VTXIBSupport"/> 
+            <composite name="VTXD"/>
+            <composite name="VTXIBSupport"/>
         </detector>
     </detectors>
     
     <display>
         <vis name="VTXSensitiveVis"     alpha="1.0" r="1.0"     g="1.0"  b="0.0"    showDaughters="true"  visible="true"/>
-        <vis name="VTXPeripheryVis"     alpha="1.0" r="1.0"     g="1.0"  b="0.45"   showDaughters="true"  visible="true"/>
+        <vis name="VTXPeripheryVis"     alpha="0.8" r="1.0"     g="1.0"  b="0.0"    showDaughters="true"  visible="true"/>
         <vis name="TerminalPartVis"     alpha="1.0" r="1.0"     g="0.65" b="0.0"    showDaughters="true"  visible="true"/>
         <vis name="TrussStructureVis"   alpha="0.3" r="0.5"     g="0.5"  b="0.5"    showDaughters="true"  visible="true"/>
     </display>
@@ -202,16 +202,16 @@
         <!-- Vertex disks parameters -->
             <constant name="VTXD_support_thickness" value="VTXO_support_Fleece_thickness+VTXO_support_CarbonFiber_thickness+VTXO_support_PaperGraphite_thickness"/>
             <constant name="VTXD_rmax1" value="247.644*mm"/>
-            <constant name="VTXD_rmax2" value="289.595*mm"/>
-            <constant name="VTXD_rmax3" value="289.595*mm"/>
+            <constant name="VTXD_rmax2" value="VTXD_r_max"/>
+            <constant name="VTXD_rmax3" value="VTXD_r_max"/>
             <constant name="VTXD_rmax" value="VTXD_rmax3"/>        
-            <constant name="VTXD_z1" value="285*mm"/>
+            <constant name="VTXD_z1" value="VTXD_z_min"/>
             <constant name="VTXD_z2" value="620*mm"/>
-            <constant name="VTXD_z3" value="930*mm"/>
+            <constant name="VTXD_z3" value="VTXD_z_max"/>
             <constant name="VTXD_dz1" value="8.5*mm"/>
             <constant name="VTXD_dz2" value="0.0*mm"/>
             <constant name="VTXD_dz3" value="0.0*mm"/>
-            <constant name="VTXD_rmin1" value="35.64*mm"/>
+            <constant name="VTXD_rmin1" value="VTXD_r_min"/>
             <constant name="VTXD_rmin2" value="76.995*mm"/>
             <constant name="VTXD_rmin3" value="105.895*mm"/>
             <constant name="VTXD_dr1" value="0.92*mm"/>  <!-- Alternating difference in radius from one petal to the next -->
@@ -240,10 +240,10 @@
             <id>${GlobalTrackerReadoutID}</id>
         </readout>
         <readout name="VTXOBCollection">
-            <id>${GlobalTrackerReadoutID_OB}</id>
+            <id>${GlobalTrackerReadoutID}</id>
         </readout>       
         <readout name="VTXDCollection">
-            <id>${GlobalTrackerReadoutID_Disk}</id>
+            <id>${GlobalTrackerReadoutID}</id>
         </readout>
     </readouts>
 
@@ -641,8 +641,24 @@
         </detector>
     </detectors>   
    
-    <!-- Plugin needed for the disks-->
+    <!-- Plugin to define the sensitive surfaces -->
     <plugins>
+        <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
+            <argument value="VTXIB"/> 
+            <argument value="dimension=2"/>
+            <argument value="u_y=1."/>
+            <argument value="v_z=1."/>
+            <argument value="n_x=1."/>
+        </plugin>
+
+        <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
+            <argument value="VTXOB"/> 
+            <argument value="dimension=2"/>
+            <argument value="u_y=1."/>
+            <argument value="v_z=1."/>
+            <argument value="n_x=1."/>
+        </plugin>
+
         <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
             <argument value="VTXD"/> 
             <argument value="dimension=2"/>
@@ -651,21 +667,6 @@
             <argument value="n_z=-1."/>
         </plugin>
 
-        <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
-            <argument value="VTXIB"/> 
-            <argument value="dimension=2"/>
-            <argument value="u_x=1."/>
-            <argument value="v_y=1."/>
-            <argument value="n_z=1."/>
-        </plugin>
-
-        <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
-            <argument value="VTXOB"/> 
-            <argument value="dimension=2"/>
-            <argument value="u_x=1."/>
-            <argument value="v_y=1."/>
-            <argument value="n_z=1."/>
-        </plugin>
     </plugins>
 
     <!-- Vertex inner barrel support structure imported via DDCAD, material budget evaluation with g4MaterialScan is working, but not with the k4SimGeant4 methods -->

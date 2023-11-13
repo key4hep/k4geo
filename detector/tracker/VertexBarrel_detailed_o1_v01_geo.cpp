@@ -40,13 +40,9 @@ using dd4hep::RotationZYX;
 using dd4hep::SensitiveDetector;
 using dd4hep::Transform3D;
 using dd4hep::Translation3D;
-using dd4hep::Trapezoid;
 using dd4hep::Volume;
 using dd4hep::_toString;
 using dd4hep::rec::Vector3D;
-using dd4hep::rec::SurfaceType;
-using dd4hep::rec::VolPlane;
-using dd4hep::rec::volSurfaceList;
 
 static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector sens)  {
 
@@ -56,9 +52,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
     DetElement sdet( det_name, x_det.id()  ) ;
     PlacedVolume pv;
-
-    // put the whole detector into an assembly
-    //  - should be replaced by an envelope volume ...
 
     Volume envelope = dd4hep::xml::createPlacedEnvelope( theDetector,  e , sdet ) ;
     dd4hep::xml::setDetectorTypeFlag( e, sdet ) ;
@@ -110,7 +103,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         vector<double> sensor_ymax;
         double sensor_width;
         double sensor_length;
-        vector<Volume> sensor_volumes;
+        vector<Box> sensor_boxes;
+        vector<std::string> sensor_visibilities;
     };
     list<stave_information> stave_information_list;
 
@@ -206,36 +200,22 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         m.sensor_r = xml_comp_t(c_sensor).r();
         m.sensor_offset = xml_comp_t(c_sensor).offset();
         m.sensor_thickness = xml_comp_t(c_sensor).thickness();
+        m.sensor_material = theDetector.material(xml_comp_t(c_sensor).materialStr());
         xml_coll_t c_component = xml_coll_t(c_sensor,_U(component));
 
         int iSensitive, iPassive = 0;
         for(c_component.reset(); c_component; ++c_component){
             xml_comp_t component = c_component;
             m.sensor_sensitives.push_back(component.isSensitive());
+            m.sensor_visibilities.push_back(component.visStr());
             m.sensor_xmin.push_back(component.xmin());
             m.sensor_xmax.push_back(component.xmax());
             m.sensor_ymin.push_back(component.ymin());
             m.sensor_ymax.push_back(component.ymax());
 
             // Already create volumes for all sensor components as this is independent of number of sensors per layer
-            Box ele_box = Box(m.sensor_thickness/2., abs(component.xmax()-component.xmin())/2., abs(component.ymax()-component.ymin())/2.);
-
-            string sensor_name;
-            if(component.isSensitive()){
-                sensor_name = _toString(iSensitive,"_sensor%d");
-                iSensitive++;
-            }
-            else{
-                sensor_name = _toString(iPassive,"_passive%d");                
-                iPassive++;
-            }
-
-            Volume sensor_volume(sensor_name, ele_box, theDetector.material(xml_comp_t(c_sensor).materialStr()));
-            sensor_volume.setVisAttributes(theDetector.visAttributes(component.visStr()));
-
-            if(component.isSensitive()){sensor_volume.setSensitiveDetector(sens);}   
-            
-            m.sensor_volumes.push_back(sensor_volume);
+            Box ele_box = Box(m.sensor_thickness/2., abs(component.xmax()-component.xmin())/2., abs(component.ymax()-component.ymin())/2.);            
+            m.sensor_boxes.push_back(ele_box);
         }
         m.sensor_width  = *max_element(m.sensor_xmax.begin(), m.sensor_xmax.end()) - *min_element(m.sensor_xmin.begin(), m.sensor_xmin.end());
         m.sensor_length = *max_element(m.sensor_ymax.begin(), m.sensor_ymax.end()) - *min_element(m.sensor_ymin.begin(), m.sensor_ymin.end());
@@ -277,16 +257,9 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         std::string layer_name = det_name+_toString(layer_id,"_layer%d");
         Assembly layer_assembly(layer_name);
         DetElement layerDE( sdet , _toString(layer_id,"layer_%d"), layer_id );
-        PlacedVolume pv_layer = envelope.placeVolume(  layer_assembly );
-        pv_layer.addPhysVolID("layer", layer_id);  
-        layerDE.setPlacement( pv_layer ) ;
-
-
-        // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
-        // Vector3D u( 0. , 1. , 0. ) ;
-        // Vector3D v( 0. , 0. , 1. ) ;
-        // Vector3D n( 1. , 0. , 0. ) ;
-        // Vector3D o( 0. , 0. , 0. ) ;
+        pv = envelope.placeVolume(  layer_assembly );
+        pv.addPhysVolID("system", x_det.id()).addPhysVolID("side",0).addPhysVolID("layer", layer_id);  
+        layerDE.setPlacement( pv ) ;
 
         //--------- loop over ladders ---------------------------
         for(int iStave=0; iStave<nLadders; ++iStave) {
@@ -297,11 +270,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
             string stave_name = layer_name + _toString(iStave,"_stave%d");
             Assembly stave_assembly(stave_name);
-            DetElement staveDE(layerDE, stave_name, iStave);
-            PlacedVolume pv_stave = layer_assembly.placeVolume(stave_assembly);
-            pv_stave.addPhysVolID("stave", iStave);
-            staveDE.setPlacement(pv_stave);
-
+            pv = layer_assembly.placeVolume(stave_assembly);
             double stave_length = nmodules*m.sensor_length + (nmodules-1)*step;
             
             // Place components
@@ -350,26 +319,12 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                     
                 string module_name = stave_name + _toString(iModule,"_module%d");
                 Assembly module_assembly(module_name);
-                DetElement moduleDE(staveDE, module_name, iModule);
-                PlacedVolume pv_module = stave_assembly.placeVolume(module_assembly);
-                pv_module.addPhysVolID("module", iModule);
-                moduleDE.setPlacement(pv_module);
-
-                string sensors_name = module_name + "_sensors";
-                // Assembly sensors_assembly(sensors_name);
-                // DetElement sensorsDE(moduleDE, sensors_name, x_det.id());
-                // pv = module_assembly.placeVolume(sensors_assembly);
-                // sensorsDE.setPlacement(pv);
-
-                // string passives_name = module_name + "_passives";
-                // Assembly passives_assembly(passives_name);
-                // DetElement passivesDE(moduleDE, passives_name, x_det.id());
-                // pv = module_assembly.placeVolume(passives_assembly);
-                // passivesDE.setPlacement(pv);
+                pv = stave_assembly.placeVolume(module_assembly);
+                pv.addPhysVolID("module", iStave*nmodules + iModule);
 
                 // Place all sensor parts
                 int iSensitive = 0, iPassive = 0;
-                for(int i=0; i<int(m.sensor_volumes.size()); i++){
+                for(int i=0; i<int(m.sensor_boxes.size()); i++){
                     x_pos = 0.0;
                     y_pos = m.sensor_xmin[i]+abs(m.sensor_xmax[i]-m.sensor_xmin[i])/2.;
                     z_pos = m.sensor_ymin[i]+abs(m.sensor_ymax[i]-m.sensor_ymin[i])/2.;
@@ -377,24 +332,27 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
                     // Place active sensor parts
                     if(m.sensor_sensitives[i]) {
-                        string sensor_name = sensors_name + _toString(iSensitive,"_sensor%d");
+                        string sensor_name = module_name + _toString(iSensitive,"_sensor%d");
 
-                        // double inner_thickness = -m.sensor_thickness/2.;
-                        // double outer_thickness = m.sensor_thickness/2.;
-                        // VolPlane surf( sensitive_vol , SurfaceType(SurfaceType::Sensitive) , inner_thickness, outer_thickness, u,v,n);
+                        Volume sensor_volume(sensor_name, m.sensor_boxes[i], m.sensor_material);
+                        sensor_volume.setVisAttributes(theDetector.visAttributes(m.sensor_visibilities[i]));
+                        sensor_volume.setSensitiveDetector(sens); 
 
-                        DetElement sensorDE(sdet,sensor_name,x_det.id());
-                        PlacedVolume pv_sensor = module_assembly.placeVolume(m.sensor_volumes[i], Transform3D(rot, pos)*Translation3D(pos2));
+                        DetElement sensorDE(layerDE,sensor_name,x_det.id());
+                        pv = module_assembly.placeVolume(sensor_volume, Transform3D(rot, pos)*Translation3D(pos2));
 
-                        pv_sensor.addPhysVolID("sensor", iSensitive);
-                        sensorDE.setPlacement(pv_sensor);
-
-                        // volSurfaceList( sensorDE )->push_back( surf ) ;
+                        pv.addPhysVolID("sensor", iSensitive);
+                        sensorDE.setPlacement(pv);
                         iSensitive++;
                     }
                     // Place passive sensor parts
                     else{
-                        stave_assembly.placeVolume(m.sensor_volumes[i], Transform3D(rot, pos)*Translation3D(pos2));
+                        string sensor_name = module_name + _toString(iSensitive,"_passive%d");
+
+                        Volume sensor_volume(sensor_name, m.sensor_boxes[i], m.sensor_material);
+                        sensor_volume.setVisAttributes(theDetector.visAttributes(m.sensor_visibilities[i]));
+
+                        module_assembly.placeVolume(sensor_volume, Transform3D(rot, pos)*Translation3D(pos2));
                         iPassive++;
                     }
                 }

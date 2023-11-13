@@ -19,22 +19,18 @@
     <constant name="CrossingAngle" value="0.030*rad"/>  
 
     <constant name="GlobalTrackerReadoutID_DCH" type="string" value="system:1,layer:16,phi:16"/>
-    <constant name="GlobalTrackerReadoutID" type="string" value="system:5,layer:3,stave:6,module:5,sensor:2"/>
-    <constant name="GlobalTrackerReadoutID_OB" type="string" value="system:5,layer:1,stave:6,module:4,sensor:2"/>
-    <constant name="GlobalTrackerReadoutID_Disk" type="string" value="system:5,side:-2,layer:3,petal:3,stave:6,module:10,sensor:2"/>
-    <constant name="GlobalTrackerReadoutID_SiWrapperB" type="string" value="system:5,layer:1,stave:9,module:6,sensor:1"/>
-    <constant name="GlobalTrackerReadoutID_SiWrapperD" type="string" value="system:5,side:-2,layer:1,module:1,sensor:7"/>
+    <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:3,module:19,sensor:3"/>
     <constant name="SolenoidField" value="2*tesla"/>
     
     <constant name="DetID_NOTUSED"          value=" 0"/>
     
-    <constant name="DetID_VXD_IB"       value=" 1"/>
-    <constant name="DetID_VXD_Disks"       value=" 2"/>
-    <constant name="DetID_DCH"              value=" 3"/>
-    <constant name="DetID_Calo_Barrel"      value=" 4"/>
-    <constant name="DetID_Calo_Endcap"      value=" 5"/>
-    <constant name="DetID_Calo_Endcap_2"    value=" 6"/>
-    <constant name="DetID_VXD_OB"  value=" 20"/>
+    <constant name="DetID_VXD_IB"         value=" 1"/>
+    <constant name="DetID_VXD_Disks"      value=" 2"/>
+    <constant name="DetID_DCH"            value=" 3"/>
+    <constant name="DetID_Calo_Barrel"    value=" 4"/>
+    <constant name="DetID_Calo_Endcap"    value=" 5"/>
+    <constant name="DetID_Calo_Endcap_2"  value=" 6"/>
+    <constant name="DetID_VXD_OB"         value=" 20"/>
 
     <constant name="DetID_HCAL_Barrel"      value=" 10"/>
     <constant name="DetID_HCAL_Endcap"      value=" 11"/>
@@ -86,6 +82,11 @@
     <constant name="VTXOB_r_max_layer"  value="315*mm"/>    <!-- R of the outermost layer of the outer vertex -->
     <constant name="VTXOB_r_clearance"  value="25.0*mm"/>   <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
     <constant name="VTXOB_r_max"        value="VTXOB_r_max_layer+VTXOB_r_clearance"/>    <!-- r where the vertex subdetector assembly ends -->
+
+    <constant name="VTXD_z_min" value="285*mm"/>            <!-- Start of VTX disks in z -->
+    <constant name="VTXD_z_max" value="930*mm"/>            <!-- End of VTX disks in z -->
+    <constant name="VTXD_r_min" value="35.64*mm"/>          <!-- Start of VTX disks in r -->
+    <constant name="VTXD_r_max" value="289.595*mm"/>        <!-- End of VTX disks in r -->
 
     <constant name="Inner_Vertex_half_length" value="257.5*mm"/>
     <constant name="Outer_Vertex_half_length" value="1050*mm"/>
