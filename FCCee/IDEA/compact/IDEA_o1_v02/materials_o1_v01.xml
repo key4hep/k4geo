@@ -299,14 +299,6 @@
     <fraction n="0.0925" ref="Ni" />
   </material>
 
-  <!-- FCCeeIDEA: material for the drift chamber -->
-  <material name="GasHe_90Isob_10">
-    <D value="0.0003983999999999999" unit="g/cm3" />
-    <fraction n="0.3826351004462046" ref="He"/>
-    <fraction n="0.011371937371285891"   ref="H" />
-    <fraction n="0.6059929621825095" ref="C" />
-  </material>
-
   <material name="beam" state="gas">
     <P unit="pascal" value="6.25e-06"/>
     <MEE unit="eV" value="38.5760755714278"/>
@@ -354,4 +346,117 @@
       <composite n="10" ref="C" />
       <composite n="22" ref="H" />
     </material>
+
+  <!-- FCCeeIDEA: material for the drift chamber -->
+  <material name="CarbonFiber_50D">
+    <D type="density" value="0.75" unit="g/cm3"/>
+    <fraction n="0.65" ref="C"/>
+    <fraction n="0.35" ref="Epoxy"/>
+  </material>
+
+  <material name="GasHe_90Isob_10" state="gas">
+    <T unit="K" value="293.15"/>
+    <MEE unit="eV" value="48.8432249317198"/>
+    <D unit="g/cm3" value="0.0003984"/>
+    <fraction n="0.382635100446205" ref="He"/>
+    <fraction n="0.107061807167701" ref="H"/>
+    <fraction n="0.510303092386095" ref="C"/>
+  </material>
+
+  <isotope N="63" Z="29" name="Cu63">
+    <atom unit="g/mole" value="62.9296"/>
+  </isotope>
+
+  <isotope N="65" Z="29" name="Cu65">
+    <atom unit="g/mole" value="64.9278"/>
+  </isotope>
+
+  <element name="CuMixture">
+    <fraction n="0.6917" ref="Cu63"/>
+    <fraction n="0.3083" ref="Cu65"/>
+  </element>
+
+  <material name="G4_Cu" state="solid">
+    <T unit="K" value="293.15"/>
+    <MEE unit="eV" value="322"/>
+    <D unit="g/cm3" value="8.96"/>
+    <fraction n="1" ref="CuMixture"/>
+  </material>
+
+  <isotope N="27" Z="13" name="Al270x5633439c2d40">
+    <atom unit="g/mole" value="26.9815"/>
+  </isotope>
+
+  <element name="Al0x5633439c3890">
+    <fraction n="1" ref="Al270x5633439c2d40"/>
+  </element>
+
+  <material Z="13" name="G4_Al" state="solid">
+    <T unit="K" value="293.15"/>
+    <MEE unit="eV" value="166"/>
+    <D unit="g/cm3" value="2.699"/>
+    <atom unit="g/mole" value="26.9815"/>
+    <fraction n="1.0" ref="Al0x5633439c3890"/>
+  </material>
+
+  <isotope N="19" Z="9" name="F190x5633439c8850">
+    <atom unit="g/mole" value="18.9984"/>
+  </isotope>
+
+  <element name="F0x5633439c8db0">
+    <fraction n="1" ref="F190x5633439c8850"/>
+  </element>
+
+  <material name="G4_TEFLON0x563350e6e050" state="solid">
+    <T unit="K" value="293.15"/>
+    <MEE unit="eV" value="99.1"/>
+    <D unit="g/cm3" value="2.2"/>
+    <fraction n="0.240178526067194" ref="C"/>
+    <fraction n="0.759821473932806" ref="F0x5633439c8db0"/>
+  </material>
+
+ <isotope N="180" Z="74" name="W1800x563354403a30">
+    <atom unit="g/mole" value="179.947"/>
+  </isotope>
+
+  <isotope N="182" Z="74" name="W1820x563354404080">
+    <atom unit="g/mole" value="181.948"/>
+  </isotope>
+
+  <isotope N="183" Z="74" name="W1830x5633544040f0">
+    <atom unit="g/mole" value="182.95"/>
+  </isotope>
+
+  <isotope N="184" Z="74" name="W1840x563354404140">
+    <atom unit="g/mole" value="183.951"/>
+  </isotope>
+
+  <isotope N="186" Z="74" name="W1860x563354404190">
+    <atom unit="g/mole" value="185.954"/>
+  </isotope>
+
+  <element name="W0x563354404230">
+    <fraction n="0.0012" ref="W1800x563354403a30"/>
+    <fraction n="0.265" ref="W1820x563354404080"/>
+    <fraction n="0.1431" ref="W1830x5633544040f0"/>
+    <fraction n="0.3064" ref="W1840x563354404140"/>
+    <fraction n="0.2843" ref="W1860x563354404190"/>
+  </element>
+
+  <material name="G4_W" state="solid">
+    <T unit="K" value="293.15"/>
+    <MEE unit="eV" value="727"/>
+    <D unit="g/cm3" value="19.3"/>
+    <fraction n="1" ref="W0x563354404230"/>
+  </material>
+
+  <material Z="79" name="G4_Au" state="solid">
+    <T unit="K" value="293.15"/>
+    <MEE unit="eV" value="790"/>
+    <D unit="g/cm3" value="19.32"/>
+    <atom unit="g/mole" value="196.967"/>
+    <fraction n="1.0" ref="Au"/>
+  </material>
+  <!-- FCCeeIDEA: end of material for the drift chamber -->
+
 </materials>
