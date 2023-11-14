@@ -701,7 +701,8 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
         dd4hep::Volume cellID_volume = dd4hep::Volume(cellID_volume_name, cellID_tube_segment, description.material("GasHe_90Isob_10"));
         cellID_volume.setSensitiveDetector(sens_det);
         // phi rotation
-        dd4hep::RotationZ rot_phi_sense_wire(sense_wires.phioffset + sense_wires.phi * phi_index);
+        double phi_angle_sense_wire_rotation = sense_wires.phioffset + sense_wires.phi * phi_index;
+        dd4hep::RotationZ rot_phi_sense_wire(phi_angle_sense_wire_rotation);
         dd4hep::PlacedVolume cellID_placedvolume = whole_layer_hyperboloid_volume.placeVolume(cellID_volume, dd4hep::Transform3D(rot_phi_sense_wire * rot_stereo_sense_wire));
         cellID_placedvolume.addPhysVolID("phi", phi_index).addPhysVolID("hitorigin", 0).addPhysVolID("stereo", sense_wires.stereo > 0 ? 0 : 1).addPhysVolID("layerInCell", 0);
         dd4hep::DetElement cellID_detElement(whole_layer_hyperboloid_detElement, "superLayer_" + dd4hep::_toString(SL) + "_layer_" + dd4hep::_toString(ilayer) + "_phi_" + dd4hep::_toString(phi_index) + "_cellID", phi_index);
@@ -714,24 +715,30 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
         dd4hep::DetElement senseWire_detElement(cellID_detElement, "superLayer_" + dd4hep::_toString(SL) + "_layer_" + dd4hep::_toString(ilayer) + "_phi_" + dd4hep::_toString(phi_index) + "_wire", phi_index);
         senseWire_detElement.setPlacement(sense_wire_placedvolume);
 
-        // FIXME the field wires are placed for now in the layer hyoperboloid envelope (with some overlap with the sensitive cell volume), should be improved when a better cell sensitive volume defnition is available
+        // field wires: the cellID volume has the stereo angle rotation of the sense wires which is different than the top/bototm wires --> Rotations are defined on top of the already applied cellID volume rotation
         // bottom field wires
         for(int sub_phi_index = phi_index * middle_to_bottom_num_wire_ratio; sub_phi_index < (phi_index * middle_to_bottom_num_wire_ratio) + middle_to_bottom_num_wire_ratio; sub_phi_index++){
-          dd4hep::PlacedVolume field_wire_bottom_placedvolume = whole_layer_hyperboloid_volume.placeVolume(field_wires_bottom.volume, dd4hep::Transform3D(dd4hep::RotationZ(field_wires_bottom.phioffset + field_wires_bottom.phi * sub_phi_index) * dd4hep::Translation3D(field_wires_bottom.radius, 0., 0.) *dd4hep::RotationX(field_wires_bottom.stereo)));
+          // phi rotation
+          dd4hep::RotationZ rot_phi_bottom_wire((field_wires_bottom.phioffset + field_wires_bottom.phi * sub_phi_index) - phi_angle_sense_wire_rotation);
+          dd4hep::PlacedVolume field_wire_bottom_placedvolume = cellID_volume.placeVolume(field_wires_bottom.volume, dd4hep::Transform3D(rot_phi_bottom_wire * dd4hep::Translation3D(field_wires_bottom.radius, 0., 0.) * dd4hep::RotationX(field_wires_bottom.stereo - sense_wires.stereo)));
           //if(setWireSensitive)
           //  field_wire_bottom_placedvolume.addPhysVolID("phi", sub_phi_index).addPhysVolID("hitorigin", 2).addPhysVolID("stereo", field_wires_center.stereo > 0 ? 0 : 1).addPhysVolID("layerInCell", 1);
         }
 
         // central field wires
         for(int sub_phi_index = phi_index * middle_to_middle_num_wire_ratio; sub_phi_index < (phi_index * middle_to_middle_num_wire_ratio) + middle_to_middle_num_wire_ratio; sub_phi_index++){
-          dd4hep::PlacedVolume field_wire_center_placedvolume = whole_layer_hyperboloid_volume.placeVolume(field_wires_center.volume, dd4hep::Transform3D(dd4hep::RotationZ(field_wires_center.phioffset + field_wires_center.phi * sub_phi_index) * dd4hep::Translation3D(field_wires_center.radius, 0., 0.) *dd4hep::RotationX(field_wires_center.stereo)));
+          // phi rotation
+          dd4hep::RotationZ rot_phi_center_wire((field_wires_center.phioffset + field_wires_center.phi * sub_phi_index) - phi_angle_sense_wire_rotation);
+          dd4hep::PlacedVolume field_wire_center_placedvolume = cellID_volume.placeVolume(field_wires_center.volume, dd4hep::Transform3D(rot_phi_center_wire * dd4hep::Translation3D(field_wires_center.radius, 0., 0.) * dd4hep::RotationX(field_wires_center.stereo - sense_wires.stereo)));
           //if(setWireSensitive)
           //  field_wire_center_placedvolume.addPhysVolID("phi", sub_phi_index).addPhysVolID("hitorigin", 2).addPhysVolID("stereo", field_wires_center.stereo > 0 ? 0 : 1).addPhysVolID("layerInCell", 2);
         }
 
         // top field wires
         for(int sub_phi_index = phi_index * middle_to_top_num_wire_ratio; sub_phi_index < (phi_index * middle_to_top_num_wire_ratio) + middle_to_top_num_wire_ratio; sub_phi_index++){
-          dd4hep::PlacedVolume field_wire_top_placedvolume = whole_layer_hyperboloid_volume.placeVolume(field_wires_top.volume, dd4hep::Transform3D(dd4hep::RotationZ(field_wires_top.phioffset + field_wires_top.phi * sub_phi_index) * dd4hep::Translation3D(field_wires_top.radius, 0., 0.) *dd4hep::RotationX(field_wires_top.stereo)));
+          // phi rotation
+          dd4hep::RotationZ rot_phi_top_wire((field_wires_top.phioffset + field_wires_top.phi * sub_phi_index) - phi_angle_sense_wire_rotation);
+          dd4hep::PlacedVolume field_wire_top_placedvolume = cellID_volume.placeVolume(field_wires_top.volume, dd4hep::Transform3D(rot_phi_top_wire * dd4hep::Translation3D(field_wires_top.radius, 0., 0.) * dd4hep::RotationX(field_wires_top.stereo - sense_wires.stereo)));
           //if(setWireSensitive)
           //  field_wire_top_placedvolume.addPhysVolID("phi", sub_phi_index).addPhysVolID("hitorigin", 2).addPhysVolID("stereo", field_wires_center.stereo > 0 ? 0 : 1).addPhysVolID("layerInCell", 3);
         }
