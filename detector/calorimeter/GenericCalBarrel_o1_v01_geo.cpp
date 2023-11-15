@@ -74,8 +74,9 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     string det_type = x_det.typeStr();
     Material air = theDetector.air();
     double totalThickness = layering.totalThickness();
-    int totalRepeat = 0;
-    int totalSlices = 0;
+    // These are used later but clang complains
+    int totalRepeat [[maybe_unused]] = 0;
+    int totalSlices [[maybe_unused]] = 0;
     double gap = xml_dim_t(x_det).gap();
     int nsides = dim.numsides();
     

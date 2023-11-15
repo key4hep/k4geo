@@ -22,7 +22,7 @@ using dd4hep::Layer;
 using dd4hep::Layering;
 using dd4hep::Material;
 using dd4hep::PlacedVolume;
-using dd4hep::PolyhedraRegular;
+// using dd4hep::PolyhedraRegular;
 using dd4hep::Position;
 using dd4hep::Readout;
 using dd4hep::Ref_t;
@@ -70,8 +70,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   string det_type = x_det.typeStr();
   Material air = theDetector.air();
   double totalThickness = layering.totalThickness();
-  int totalRepeat = 0;
-  int totalSlices = 0;
+  int totalRepeat [[maybe_unused]] = 0;
+  int totalSlices [[maybe_unused]] = 0;
   double gap = xml_dim_t(x_det).gap();
   int nsides = dim.numsides();
 

@@ -216,7 +216,7 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
   
     layerVolume.setVisAttributes(aLcdd.invisible());
     unsigned int idxSubMod = 0;
-    unsigned int idxActMod = 0;    
+    unsigned int idxActMod [[maybe_unused]] = 0;    
 
     dd4hep::Position moduleOffset1 (0,0,sign * extBarrelOffset1);
 
@@ -290,7 +290,7 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
 
     layerVolume.setVisAttributes(aLcdd.invisible());
     unsigned int idxSubMod = 0;
-    unsigned int idxActMod = 0;
+    unsigned int idxActMod [[maybe_unused]] = 0;
 
     double tileZOffset = - 0.5* dzSequence;
 
@@ -361,7 +361,7 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
 
     layerVolume.setVisAttributes(aLcdd.invisible());
     unsigned int idxSubMod = 0;
-    unsigned int idxActMod = 0;
+    unsigned int idxActMod [[maybe_unused]] = 0;
 
     double tileZOffset = - 0.5* dzSequence;
 

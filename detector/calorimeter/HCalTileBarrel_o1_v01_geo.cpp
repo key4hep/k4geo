@@ -168,7 +168,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
     
     layerVolume.setVisAttributes(lcdd.invisible());
     unsigned int idxSubMod = 0;
-    unsigned int idxActMod = 0;
+    unsigned int idxActMod [[maybe_unused]] = 0;
     
 
     dd4hep::PlacedVolume placedLayerVolume = envelopeVolume.placeVolume(layerVolume);
