@@ -1,0 +1,28 @@
+<define>
+
+  <constant name="CrossingAngle" value="0.030*rad"/>
+
+  <constant name="CentralBeamPipe_zmax" value="12.5*cm"/>
+  <constant name="CentralBeamPipe_rmax" value="15.0*mm"/>
+
+  <constant name="InnerTracker_half_length" value="2300*mm" />
+
+  <constant name="ConeBeamPipe_zmax" value="InnerTracker_half_length" />
+  <constant name="ConeBeamPipe_rmax_1"  value="InnerTracker_half_length * 0.1 + 1*mm" />
+
+  <constant name="BigBeamPipe_zmax" value="1120*mm"/>
+  <constant name="SeparatedBeamPipe_rmax"  value="15*mm"/>
+  <constant name="BeamPipeTantalShieldWidth"  value="15*mm"/>
+  <constant name="SideFillerShieldWidth"  value="7*mm"/>
+  <constant name="TopFillerShieldWidth"  value="8*mm"/>
+  <constant name="BeamPipe_end" value="12500*mm"/>
+
+  <constant name="Vertex_inner_radius" value="12*mm"/>
+  <constant name="Vertex_outer_radius" value="111*mm"/>
+  <constant name="Vertex_half_length" value="302*mm"/>
+
+  <constant name="InnerTracker_outer_radius" value="top_TPC_inner_radius-5*mm" />
+
+  <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:6,module:11,sensor:8"/>
+
+</define>

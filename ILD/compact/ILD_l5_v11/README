@@ -1,0 +1,15 @@
+taken (alomst) directly from CLD_o2_v05
+---------------------------------------
+BeamInstrumentation_o3_v02_fitShield.xml
+Beampipe_o4_v05.xml
+InnerTrackerBarrelModuleDown.xml
+InnerTrackerBarrelModuleUp.xml
+LumiCal_o3_v02_03.xml
+TrackerDiskModuleIn.xml
+TrackerDiskModuleOut.xml
+Vertex_o4_v07_smallBP.xml
+
+adapted from FCCee_o2_v02
+-------------------------
+InnerTrackerILD_o1_v01_00.xml (from InnerTracker_o2_v06_02.xml)
+
