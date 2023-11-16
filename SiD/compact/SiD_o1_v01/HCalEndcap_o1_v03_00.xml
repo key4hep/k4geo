@@ -42,7 +42,8 @@
 	<!--slice material = "Air"    thickness = "0.1*cm" /-->
   </layer>
   <!--layer repeat="1"-->
-        <!--slice material = "Steel235" thickness = "1.9*cm" /><!-- Terminator plate -->
+        <!-- Terminator plate -->
+        <!--slice material = "Steel235" thickness = "1.9*cm" /-->
   <!--/layer-->
 </detector>
 </detectors>

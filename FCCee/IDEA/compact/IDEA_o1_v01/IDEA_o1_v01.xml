@@ -11,7 +11,7 @@
     url="no"
     status="development"
     version="1.0">
-    <comment> 
+    <comment>
       One stop shop for a baseline / the latest developments of the FCCee Detector concept.
     </comment>
   </info>
@@ -39,6 +39,6 @@
   <!-- Vertex.xml comes from FCCee_o2_v02 /-->
   <include ref="Vertex.xml"/>
   <include ref="SimplifiedDriftChamber.xml"/>
-  <include ref="Calorimeter.xml">
+  <include ref="Calorimeter.xml"/>
 
 </lccdd>

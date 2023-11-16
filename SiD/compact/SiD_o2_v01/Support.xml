@@ -1,3 +1,4 @@
+<lccdd>
 <!--  FG: fixme: should be split up into more individual files  ...v-->
 <detector name="VertexBarrelSupports" type="DD4hep_MultiLayerTracker" vis="InvisibleNoDaughters">
   <comment>Double-walled Carbon Fiber support tube</comment>
@@ -368,3 +369,4 @@
 <!--         <slice material="Steel235" thickness="SolenoidEndcapCryostatThickness" /> -->
 <!--     </layer> -->
 <!-- </detector> -->
+</lccdd>
