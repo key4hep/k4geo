@@ -10,15 +10,17 @@ const std::string DEBUG = " Debug: ";
 const std::string INFO  = " Info: ";
 }
 
-
 namespace det {
 
   void buildSubCylinder(dd4hep::Detector& aLcdd,
+			dd4hep::SensitiveDetector& aSensDet,
 			dd4hep::Volume& aEnvelope,
 			dd4hep::xml::Handle_t& aXmlElement,
 			float ri, float ro,
 			std::vector<float> &plateAngle_list,
-			std::vector<int> &nPlates_list) {
+			std::vector<int> &nPlates_list,
+			unsigned &iModule,
+			int sign) {
 
     dd4hep::xml::DetElement genericBladeElem = aXmlElement.child(_Unicode(turbineBlade));
     dd4hep::xml::DetElement absBladeElem = genericBladeElem.child(_Unicode(absorberBlade));
@@ -83,9 +85,11 @@ namespace det {
 
     dd4hep::Trd2 absPlate(AbsThicki/2., AbsThicko/2., xRange/2., xRange/2., (ro-ri)/2. );
     dd4hep::Volume absPlateVol("absPlate", absPlate, aLcdd.material("Lead"));
-    dd4hep::Trd2 electrodePlate(ElectrodeThick/2., ElectrodeThick/2., xRange/2., xRange/2., (ro-ri)/2. );
-    dd4hep::Volume electrodePlateVol("electrodePlate", electrodePlate, aLcdd.material("G10"));
+    dd4hep::Trd2 electrodePlate(ElectrodeThick/2.+LArgapi, ElectrodeThick/2.+LArgapi, xRange/2., xRange/2., (ro-ri)/2. );
+    dd4hep::Volume electrodePlateVol("electrodePlate", electrodePlate, aLcdd.material("Air"));
     
+    electrodePlateVol.setSensitiveDetector(aSensDet);
+
     for (int iStep = 0; iStep < nSubSteps; iStep++) {
       Float_t z = 0;
       
@@ -106,16 +110,23 @@ namespace det {
       dd4hep::Volume bVol("bar", b, aLcdd.material("Lead"));
       dd4hep::Transform3D tr1(dd4hep::RotationZYX(0.,0.,0), dd4hep::Translation3D(0, xVals[2*iStep+1], (yVals[2*iStep+1]+ yVals[2*iStep])/2.-(ro+ri)/2.));
       dd4hep::PlacedVolume b_pv = absPlateVol.placeVolume(bVol, tr1);
-      b_pv.addPhysVolID("b", iStep);
+      //      b_pv.addPhysVolID("b", iStep);
 
       dd4hep::Trd2 b2(ElectrodeThick/2., ElectrodeThick/2., xStep/2., xStep/2., (yVals[2*iStep+1]- yVals[2*iStep])/2.);
-      dd4hep::Volume b2Vol("bar2", b, aLcdd.material("G10"));     
+      dd4hep::Volume b2Vol("bar2", b2, aLcdd.material("PCB"));     
       dd4hep::PlacedVolume b2_pv = electrodePlateVol.placeVolume(b2Vol, tr1);
-      b2_pv.addPhysVolID("b2", iStep); 
+      // b2_pv.addPhysVolID("b2", iStep); 
+
+      dd4hep::Trd2 b3(ElectrodeThick/2.+LArgapi, ElectrodeThick/2.+LArgapi, xStep/2., xStep/2., (yVals[2*iStep+1]- yVals[2*iStep])/2.);
+      dd4hep::SubtractionSolid b4(b3, b2);
+      dd4hep::Volume b4Vol("bar4", b4, aLcdd.material("LAr"));     
+      dd4hep::PlacedVolume b4_pv = electrodePlateVol.placeVolume(b4Vol, tr1);
+
     }
 
     int    nPlatesToDraw = nPlates;
     //    nPlatesToDraw = 1;
+
     for (int iPlate = 0; iPlate < nPlatesToDraw; iPlate++) {
       //    pl->SetInvisible();
       float phi = iPlate*2*TMath::Pi()/nPlates;
@@ -147,7 +158,8 @@ namespace det {
       //      dd4hep::Transform3D com(dd4hep::RotationZYX(PlateAngle, TMath::Pi()/2.,  -phi), dd4hep::Translation3D(x,y,z));
       dd4hep::Transform3D com(r3d, dd4hep::Translation3D(x,y,z));
       dd4hep::PlacedVolume absPlateVol_pv = aEnvelope.placeVolume(absPlateVol, com);
-      absPlateVol_pv.addPhysVolID("absPlate", iPlate);
+      absPlateVol_pv.addPhysVolID("module", iModule);
+      absPlateVol_pv.addPhysVolID("type", 1);
 
       tgr.Clear();
       tgr.RotateZ(PlateAngle*180/TMath::Pi());
@@ -167,7 +179,18 @@ namespace det {
 
       dd4hep::Transform3D com2(r3d, dd4hep::Translation3D(x,y,z));
       dd4hep::PlacedVolume electrodePlateVol_pv = aEnvelope.placeVolume(electrodePlateVol, com2);
-      electrodePlateVol_pv.addPhysVolID("electrodePlate", iPlate);
+      //      electrodePlateVol_pv.addPhysVolID("electrodePlate", iPlate);
+      electrodePlateVol_pv.addPhysVolID("module", iModule);
+      electrodePlateVol_pv.addPhysVolID("layer", 0);
+      if (sign > 0) {
+	electrodePlateVol_pv.addPhysVolID("cryo", 1);
+      } else {
+	electrodePlateVol_pv.addPhysVolID("cryo", 0);
+      }
+      electrodePlateVol_pv.addPhysVolID("type", 2);
+
+      iModule++;
+
     }
 
     return;
@@ -223,19 +246,22 @@ namespace det {
   std::vector<float> plateAngle_list;
   std::vector<int> nPlates_list;
 
+  unsigned iModule = 0;
   while (ri < rmax) {
     dd4hep::Tube supportTube(ro, ro+supportTubeThickness, dim.dz() );
   
     dd4hep::Volume supportTubeVol("supportTube", supportTube, aLcdd.material("Steel235"));
     dd4hep::PlacedVolume supportTube_pv = aEnvelope.placeVolume(supportTubeVol, dd4hep::Position(0,0,zOffsetEnvelope + sign * (dim.dz() )));
     supportTube_pv.addPhysVolID("supportTube", iSupportTube);
-    buildSubCylinder(aLcdd, aEnvelope, aXmlElement, ri, ro, 
-		     plateAngle_list, nPlates_list);
+    buildSubCylinder(aLcdd, aSensDet, aEnvelope, aXmlElement, ri, ro, 
+		     plateAngle_list, nPlates_list, iModule, sign);
     ri = ro;
     ro *= radiusRatio;
     if (ro > rmax) ro = rmax;
     iSupportTube++;
   }
+
+  std::cout << "Total number of modules: " << iModule << std::endl;
 
   return;
 }
@@ -250,7 +276,10 @@ createECalEndcapTurbine(dd4hep::Detector& aLcdd, dd4hep::xml::Handle_t aXmlEleme
   int idDet = xmlDetElem.id();
   dd4hep::xml::Dimension dim(xmlDetElem.dimensions());
   dd4hep::DetElement caloDetElem(nameDet, idDet);
-
+  dd4hep::xml::Dimension sdType = xmlDetElem.child(_U(sensitive));
+  aSensDet.setType(sdType.typeStr());
+  
+ 
   // Create air envelope for the whole endcap
   dd4hep::Cone envelopePositive(dim.dz(), dim.rmin1(), dim.rmax(), dim.rmin2(), dim.rmax());
   dd4hep::Cone envelopeNegative(dim.dz(), dim.rmin2(), dim.rmax(), dim.rmin1(), dim.rmax());
@@ -262,6 +291,12 @@ createECalEndcapTurbine(dd4hep::Detector& aLcdd, dd4hep::xml::Handle_t aXmlEleme
   dd4hep::DetElement caloPositiveDetElem(caloDetElem, "positive", 0);
   dd4hep::DetElement caloNegativeDetElem(caloDetElem, "negative", 0);
 
+  //  xml_det_t x_det = aXmlElement;
+  // if (x_det.isSensitive()) {
+  //  std::cout << "Yes I'm sensitive " << std::endl;
+  //  envelopePositiveVol.setSensitiveDetector(aSensDet);
+  //}
+
   lLog << MSG::DEBUG << "Placing dector on the positive side: (cm) " << dim.z_offset() << " with min, max radii " << dim.rmin1() << " " << dim.rmax() << endmsg;
   buildOneSide_Turbine(aLcdd, aSensDet, envelopePositiveVol, caloPositiveDetElem, aXmlElement, 1);
   lLog << MSG::DEBUG << "Placing dector on the negative side: (cm) " << -dim.z_offset()  << " with min, max radii " << dim.rmin1() << " " << dim.rmax() << endmsg;
@@ -269,11 +304,11 @@ createECalEndcapTurbine(dd4hep::Detector& aLcdd, dd4hep::xml::Handle_t aXmlEleme
 
   // Place the envelope
   dd4hep::PlacedVolume envelopePositivePhysVol = envelopeVol.placeVolume(envelopePositiveVol);
-  envelopePositivePhysVol.addPhysVolID("subsystem", 0);
+  //  envelopePositivePhysVol.addPhysVolID("subsystem", 0);
   caloPositiveDetElem.setPlacement(envelopePositivePhysVol);
   dd4hep::PlacedVolume envelopeNegativePhysVol =
       envelopeVol.placeVolume(envelopeNegativeVol, dd4hep::Position(0, 0, -2 * dim.z_offset()));
-  envelopeNegativePhysVol.addPhysVolID("subsystem", 1);
+  //  envelopeNegativePhysVol.addPhysVolID("subsystem", 1);
 
   caloNegativeDetElem.setPlacement(envelopeNegativePhysVol);
 

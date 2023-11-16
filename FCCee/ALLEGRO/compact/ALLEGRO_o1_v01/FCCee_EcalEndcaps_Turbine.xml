@@ -45,6 +45,8 @@
     <constant name="EMEC_steel_thickness" value="0.4*mm*1.5/2.16"/>
     <constant name="EMEC_glue_thickness" value="0.26*mm*1.5/2.16"/>
     <constant name="EMEC_readout_thickness" value="1.2*mm"/>
+    <constant name="ECalEndcapNumPlanes" value="1604"/>
+    <constant name="ECalEndcapNumLayers" value="1"/>
   </define>
 
   <display>
@@ -59,13 +61,13 @@
 
 
   <readouts>
-    <readout name="ECalEndcapPhiEta">
-      <segmentation type="FCCSWGridPhiEta_k4geo" phi_bins="704" offset_phi="-pi+(pi/704.)" grid_size_eta="0.05" offset_eta="-2.91"/>
-      <id>system:4,subsystem:1,type:3,subtype:3,layer:8,sublayer:8,eta:10,phi:10</id>
+    <readout name="ECalEndcapPhiTheta">
+      <segmentation type="FCCSWGridModuleThetaMerged_k4geo" mergedCells_Theta="41" mergedModules="1" phi_bins="704" offset_phi="-pi+(pi/704.)" grid_size_theta="0.05" offset_theta="-pi"/>
+      <id>system:4,cryo:1,type:3,subtype:3,layer:8,module:11,theta:10,phi:10</id>
     </readout>
     <readout name="ECalEndcapPhiEtaReco">
       <segmentation type="FCCSWGridPhiEta_k4geo" phi_bins="704" offset_phi="-pi+(pi/704.)" grid_size_eta="0.05" offset_eta="-2.91"/>
-      <id>system:4,subsystem:1,type:3,subtype:3,layer:8,eta:10,phi:10</id>
+      <id>system:4,cryo:1,type:3,subtype:3,layer:8,eta:10,phi:10</id>
     </readout>
   </readouts>
 
@@ -103,7 +105,8 @@
                   z_offset="CryoEndcap_z1+CryoEMECThicknessFront+(CryoEndcap_z2-CryoEndcap_z1-CryoEMECThicknessFront-CryoEMECThicknessBack)/2." material="LAr" phi0="0" deltaphi="360*deg"/>
     </detector>
     <!-- electromagnetic calorimeter -->
-    <detector name="EMEC_turbine" type="ECalEndcap_Turbine_o1_v01" id="DetID_ECAL_Endcap" readout="ECalEndcapPhiEta" vis="emec_envelope_vis">
+    <detector id="EndcapECal_id" name="EMEC_turbine" type="ECalEndcap_Turbine_o1_v01" readout="ECalEndcapPhiTheta" vis="emec_envelope_vis" sensitive="true">
+      <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_ENDCAP"/>
       <sensitive type="SimpleCalorimeterSD"/>
       <dimensions rmin1="EMEC_rmin1"  rmin2="EMEC_rmin2" rmax="EMEC_rmax" dz="(EMEC_z2-EMEC_z1)/2." z_offset="EMEC_z1+(EMEC_z2-EMEC_z1)/2."/>
       <layers> 
@@ -129,6 +132,7 @@
       </passive>
       <readout thickness="EMEC_readout_thickness" sensitive="false" vis="emec_readout_vis">
         <material name="PCB"/>
+	
       </readout>
       <supportTube name="supportTube" radiusRatio="1.89" thickness="1.0*cm" > 
 
