@@ -30,10 +30,10 @@ target_include_directories(detectorSegmentationsPlugin
 # Destination directories are hardcoded because GNUdirectories are not included
 install(TARGETS detectorSegmentations detectorSegmentationsPlugin
   EXPORT ${PROJECT_NAME}Targets
-  RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" COMPONENT bin
-  LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" COMPONENT shlib
-  PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_PREFIX}/include/detectorSegmentations"
-  COMPONENT dev)
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT bin
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIDIR} COMPONENT shlib
+  PUBLIC_HEADER DESTINATION include/detectorSegmentations COMPONENT dev
+)
 
 #
 #include(CTest)
