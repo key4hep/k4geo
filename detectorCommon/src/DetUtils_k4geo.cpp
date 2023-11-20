@@ -532,13 +532,18 @@ std::array<uint, 3> numberOfCells(uint64_t aVolumeId, const dd4hep::DDSegmentati
 std::array<uint, 3> numberOfCells(uint64_t aVolumeId, const dd4hep::DDSegmentation::FCCSWGridPhiTheta_k4geo& aSeg) {
   uint phiCellNumber = aSeg.phiBins();
   double thetaCellSize = aSeg.gridSizeTheta();
+  double thetaOffset = aSeg.offsetTheta();
   auto etaExtremes = volumeEtaExtremes(aVolumeId);
   double thetaMin = 2.*atan(exp(-etaExtremes[1]));
   double thetaMax = 2.*atan(exp(-etaExtremes[0]));
-
-  uint cellsTheta = ceil(( thetaMax - thetaMin - thetaCellSize ) / 2 / thetaCellSize) * 2 + 1;
-  uint minThetaID = int(floor((thetaMin + 0.5 * thetaCellSize - aSeg.offsetTheta()) / thetaCellSize));
-  return {phiCellNumber, cellsTheta, minThetaID};
+  // debug
+  std::cout << "volumeID = " << aVolumeId << std::endl;
+  std::cout << "thetaMin, thetaMax = " << thetaMin << " " << thetaMax << std::endl;
+  //
+  uint minThetaID = int(floor((thetaMin + 0.5 * thetaCellSize - thetaOffset) / thetaCellSize));
+  uint maxThetaID = int(floor((thetaMax + 0.5 * thetaCellSize - thetaOffset) / thetaCellSize));
+  uint nThetaCells = 1 + maxThetaID - minThetaID;
+  return {phiCellNumber, nThetaCells, minThetaID};
 }
 
 std::array<uint, 3> numberOfCells(uint64_t aVolumeId, const dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo& aSeg) {
