@@ -12,13 +12,43 @@ const std::string INFO  = " Info: ";
 
 namespace det {
 
+  double tForArcLength(double s, double plateangle, double delZ, double r) {
+
+    // some intermediate constants
+    double zpos = delZ/2.;
+    double zp = zpos/TMath::Tan(plateangle);
+    double b = zp/(TMath::Sqrt(r*r-zp*zp));
+    double c = (TMath::Tan(s/r) +b)/(1.-b*TMath::Tan(s/r));
+    // double A = (1-c*c)/(TMath::Sin(plateangle)*TMath::Sin(plateangle));
+    //double B = 2*zp*(1-c*c)/TMath::Sin(plateangle);
+    //double C = zp*zp-c*c*r*r;
+    double D = c*c*r*r/(1+c*c);
+    return (TMath::Sqrt(D)-zp)*TMath::Sin(plateangle);
+
+  }
+
+  dd4hep::Solid buildOneBlade(double thickness_inner,
+			      double thickness_outer,
+			      double width,
+			      double ro, double ri,
+			      double plateangle,
+			      double delZ) 
+  {
+
+    dd4hep::Trd2 tmp1(thickness_inner/2., thickness_outer/2., width/2., width/2., ro/2. );
+    dd4hep::Tube outerTube(ro, ro*100, delZ);
+    dd4hep::Tube innerTube(0., ri, delZ); 
+    dd4hep::SubtractionSolid tmp2(tmp1, outerTube, dd4hep::Transform3D(dd4hep::RotationZYX( 0, TMath::Pi()/2.-plateangle, TMath::Pi()/2.),dd4hep::Position(0, 0, ro/2.)));
+    //    dd4hep::SubtractionSolid electrodePlate(electrodePlateOuterTrimmed, innerTube, dd4hep::RotationZYX(PlateAngle, 0., 0.));
+    return dd4hep::SubtractionSolid(tmp2, innerTube, dd4hep::Transform3D(dd4hep::RotationZYX( 0 , TMath::Pi()/2.-plateangle, TMath::Pi()/2.),dd4hep::Position(0, 0, ro/2.)));
+
+  }
+			      
   void buildSubCylinder(dd4hep::Detector& aLcdd,
 			dd4hep::SensitiveDetector& aSensDet,
 			dd4hep::Volume& aEnvelope,
 			dd4hep::xml::Handle_t& aXmlElement,
 			float ri, float ro,
-			std::vector<float> &plateAngle_list,
-			std::vector<int> &nPlates_list,
 			unsigned &iModule,
 			int sign) {
 
@@ -45,23 +75,25 @@ namespace det {
       return;
     }
 
-    int nSubSteps = genericBladeElem.attr<int>(_Unicode(nSubSteps));;
-    Float_t xInit = -delZ/(2*TMath::Sin(PlateAngle));
     Float_t xRange = delZ/(TMath::Sin(PlateAngle));
-    Float_t xStep = delZ/(TMath::Sin(PlateAngle))/nSubSteps;
-    std::vector<Float_t> xVals, yVals, zVals;
-    xVals.reserve(2*nSubSteps+8);
-    yVals.reserve(2*nSubSteps+8);
-    zVals.reserve(2*nSubSteps+8);
 
     int nPlates;
-    double delrPhi;
+    double delrPhi, delrPhiNoGap;
     
     float AbsThicki = absBladeElem.attr<float>(_Unicode(thickness));
     float ElectrodeThick = electrodeBladeElem.attr<float>(_Unicode(thickness));
     float LArgapi = nobleLiquidElem.attr<float>(_Unicode(gap));
     
     bool sameNplates = genericBladeElem.attr<bool>(_Unicode(sameNplates));;
+
+    bool scalePlateThickness = absBladeElem.attr<bool>(_Unicode(scaleThickness));
+    float AbsThicko;
+    if (scalePlateThickness) {
+      AbsThicko = AbsThicki*(ro/ri);
+    } else {
+      AbsThicko = AbsThicki;
+    }
+
     if (sameNplates) {
       nPlates = 2*TMath::Pi()*grmin/(2*LArgapi+AbsThicki+ElectrodeThick)*TMath::Sin(PlateAngle);
     } else {
@@ -73,69 +105,61 @@ namespace det {
       double rPhi2 = ri*TMath::ATan(x2/y2);
       delrPhi = TMath::Abs(rPhi1-rPhi2);
       nPlates = 2*TMath::Pi()*ri/delrPhi;
+
     }
 
-    bool scalePlateThickness = absBladeElem.attr<bool>(_Unicode(scaleThickness));
-    float AbsThicko;
-    if (scalePlateThickness) {
-      AbsThicko = AbsThicki*(ro/ri);
-    } else {
-      AbsThicko = AbsThicki;
-    }
+    // adjust gap thickness at inner layer
+    double circ = 2*TMath::Pi()*ri;
+    double x1 = delZ/2./TMath::Tan(PlateAngle);
+    double x2 = delZ/2./TMath::Tan(PlateAngle)+(AbsThicki+ElectrodeThick)/TMath::Sin(PlateAngle);
+    double y1 = TMath::Sqrt(ri*ri-x1*x1);
+    double y2 = TMath::Sqrt(ri*ri-x2*x2);
+    double rPhi1 = ri*TMath::ATan(x1/y1);
+    double rPhi2 = ri*TMath::ATan(x2/y2);    
+    delrPhiNoGap = TMath::Abs(rPhi1-rPhi2);
+    double leftoverS = (circ - nPlates*delrPhiNoGap);
+    double delrPhiGapOnly = leftoverS/(2*nPlates);
+    std::cout << "LAr gap was " << LArgapi ;
+    LArgapi = tForArcLength(delrPhiGapOnly, PlateAngle, delZ, ri);
+    std::cout << " but is now " << LArgapi << " since s = " << delrPhiGapOnly << " s for full unit cell is " << delrPhi << std::endl;
 
-    dd4hep::Trd2 absPlate(AbsThicki/2., AbsThicko/2., xRange/2., xRange/2., (ro-ri)/2. );
-    dd4hep::Volume absPlateVol("absPlate", absPlate, aLcdd.material("Lead"));
-    dd4hep::Trd2 electrodePlate(ElectrodeThick/2.+LArgapi, ElectrodeThick/2.+LArgapi, xRange/2., xRange/2., (ro-ri)/2. );
-    dd4hep::Volume electrodePlateVol("electrodePlate", electrodePlate, aLcdd.material("Air"));
+    // now find gap at outer layer
+    circ = 2*TMath::Pi()*ro;
+    x1 = delZ/2./TMath::Tan(PlateAngle);
+    x2 = delZ/2./TMath::Tan(PlateAngle)+(AbsThicko+ElectrodeThick)/TMath::Sin(PlateAngle);
+    y1 = TMath::Sqrt(ro*ro-x1*x1);
+    y2 = TMath::Sqrt(ro*ro-x2*x2);
+    rPhi1 = ro*TMath::ATan(x1/y1);
+    rPhi2 = ro*TMath::ATan(x2/y2);    
+    delrPhiNoGap = TMath::Abs(rPhi1-rPhi2);
+    leftoverS = (circ - nPlates*delrPhiNoGap);
+    delrPhiGapOnly = leftoverS/(2*nPlates);   
+    double LArgapo = tForArcLength(delrPhiGapOnly, PlateAngle, delZ, ro);
+    std::cout << "Outer LAr gap is " << LArgapo << std::endl ;
     
-    electrodePlateVol.setSensitiveDetector(aSensDet);
+    dd4hep::Solid  absPlate = buildOneBlade(AbsThicki, AbsThicko, xRange, ro, ri, PlateAngle, delZ );
+    dd4hep::Volume absPlateVol("absPlate", absPlate, aLcdd.material("Lead"));
+    dd4hep::Solid electrodePlateAndGap = buildOneBlade(ElectrodeThick+LArgapo*2, ElectrodeThick+LArgapi*2, xRange, ro, ri, PlateAngle, delZ);
+    dd4hep::Volume electrodePlateAndGapVol("electrodePlateAndGap", electrodePlateAndGap, aLcdd.material("Air"));
+     dd4hep::Solid electrodePlate = buildOneBlade(ElectrodeThick, ElectrodeThick, xRange, ro, ri, PlateAngle, delZ);
+    dd4hep::Volume electrodePlateVol("electrodePlate", electrodePlate, aLcdd.material("PCB"));
+    dd4hep::SubtractionSolid LArShape(electrodePlateAndGap, electrodePlate);
+    dd4hep::Volume LArVol("nobleLiquid", LArShape, aLcdd.material("LAr"));
+    LArVol.setSensitiveDetector(aSensDet);
 
-    for (int iStep = 0; iStep < nSubSteps; iStep++) {
-      Float_t z = 0;
-      
-      // convert to cartesian
-      xVals[2*iStep] = xInit+iStep*xStep;
-      yVals[2*iStep] = TMath::Sqrt(ri*ri-xVals[2*iStep]*xVals[2*iStep]*TMath::Cos(PlateAngle)*TMath::Cos(PlateAngle));
-      zVals[2*iStep] = 0.;
-      //    xVals[2*iStep+1] = ro*TMath::Cos(phi_o);
-      //    yVals[2*iStep+1] = ro*TMath::Sin(phi_o);
-      xVals[2*iStep+1] =  xVals[2*iStep];
-      yVals[2*iStep+1] = TMath::Sqrt(ro*ro-xVals[2*iStep]*xVals[2*iStep]*TMath::Cos(PlateAngle)*TMath::Cos(PlateAngle));
-      zVals[2*iStep+1] = 0.;
-
-      char name[10];
-      sprintf(name, "b%d", iStep);
-      
-      dd4hep::Trd2 b(AbsThicki/2., AbsThicko/2., xStep/2., xStep/2., (yVals[2*iStep+1]- yVals[2*iStep])/2.);
-      dd4hep::Volume bVol("bar", b, aLcdd.material("Lead"));
-      dd4hep::Transform3D tr1(dd4hep::RotationZYX(0.,0.,0), dd4hep::Translation3D(0, xVals[2*iStep+1], (yVals[2*iStep+1]+ yVals[2*iStep])/2.-(ro+ri)/2.));
-      dd4hep::PlacedVolume b_pv = absPlateVol.placeVolume(bVol, tr1);
-      //      b_pv.addPhysVolID("b", iStep);
-
-      dd4hep::Trd2 b2(ElectrodeThick/2., ElectrodeThick/2., xStep/2., xStep/2., (yVals[2*iStep+1]- yVals[2*iStep])/2.);
-      dd4hep::Volume b2Vol("bar2", b2, aLcdd.material("PCB"));     
-      dd4hep::PlacedVolume b2_pv = electrodePlateVol.placeVolume(b2Vol, tr1);
-      // b2_pv.addPhysVolID("b2", iStep); 
-
-      dd4hep::Trd2 b3(ElectrodeThick/2.+LArgapi, ElectrodeThick/2.+LArgapi, xStep/2., xStep/2., (yVals[2*iStep+1]- yVals[2*iStep])/2.);
-      dd4hep::SubtractionSolid b4(b3, b2);
-      dd4hep::Volume b4Vol("bar4", b4, aLcdd.material("LAr"));     
-      dd4hep::PlacedVolume b4_pv = electrodePlateVol.placeVolume(b4Vol, tr1);
-
-    }
-
+    //    electrodePlateVol.setSensitiveDetector(aSensDet);
+    
     int    nPlatesToDraw = nPlates;
-    //    nPlatesToDraw = 1;
+    // nPlatesToDraw = 1;
 
     for (int iPlate = 0; iPlate < nPlatesToDraw; iPlate++) {
       //    pl->SetInvisible();
       float phi = iPlate*2*TMath::Pi()/nPlates;
       float delPhi = 2*TMath::Pi()/nPlates;
       
-      float x = (ri+(ro-ri)/2.)*TMath::Cos(phi);
-      float y = (ri+(ro-ri)/2.)*TMath::Sin(phi); //ri*TMath::Sin(phi)/6.;
-      float z = xStep/2.; //ri*TMath::Cos(phi)/6.;
-      z = 0.;
+      float x = (-ro/2.)*TMath::Cos(phi);
+      float y = (-ro/2.)*TMath::Sin(phi); //ri*TMath::Sin(phi)/6.;
+      float z =  0.;
       
       //      x = (ri+(ro-ri)/2.)*TMath::Cos(phi+delPhi);
       // y = (ri+(ro-ri)/2.)*TMath::Sin(phi+delPhi);
@@ -157,9 +181,9 @@ namespace det {
 
       //      dd4hep::Transform3D com(dd4hep::RotationZYX(PlateAngle, TMath::Pi()/2.,  -phi), dd4hep::Translation3D(x,y,z));
       dd4hep::Transform3D com(r3d, dd4hep::Translation3D(x,y,z));
-      dd4hep::PlacedVolume absPlateVol_pv = aEnvelope.placeVolume(absPlateVol, com);
-      absPlateVol_pv.addPhysVolID("module", iModule);
-      absPlateVol_pv.addPhysVolID("type", 1);
+      //      dd4hep::PlacedVolume absPlateVol_pv = aEnvelope.placeVolume(absPlateVol, com);
+      //      absPlateVol_pv.addPhysVolID("module", iModule);
+      //absPlateVol_pv.addPhysVolID("type", 1);
 
       tgr.Clear();
       tgr.RotateZ(PlateAngle*180/TMath::Pi());
@@ -173,21 +197,23 @@ namespace det {
 			rotMat2(1,0), rotMat2(1,1), rotMat2(1,2),
 			rotMat2(2,0), rotMat2(2,1), rotMat2(2,2));
 
-      x = (ri+(ro-ri)/2.)*TMath::Cos(phi+delPhi/2.);
-      y = (ri+(ro-ri)/2.)*TMath::Sin(phi+delPhi/2.);
-      
+      //  x = (ri+(ro-ri)/2.)*TMath::Cos(phi+delPhi/2.);
+      // y = (ri+(ro-ri)/2.)*TMath::Sin(phi+delPhi/2.);
+      x = (-ro/2.)*TMath::Cos(phi+delPhi/2.);
+      y = (-ro/2.)*TMath::Sin(phi+delPhi/2.);
 
       dd4hep::Transform3D com2(r3d, dd4hep::Translation3D(x,y,z));
-      dd4hep::PlacedVolume electrodePlateVol_pv = aEnvelope.placeVolume(electrodePlateVol, com2);
-      //      electrodePlateVol_pv.addPhysVolID("electrodePlate", iPlate);
-      electrodePlateVol_pv.addPhysVolID("module", iModule);
-      electrodePlateVol_pv.addPhysVolID("layer", 0);
+      //      dd4hep::PlacedVolume electrodePlateVol_pv = aEnvelope.placeVolume(electrodePlateVol, com2);
+      dd4hep::PlacedVolume LArVol_pv = aEnvelope.placeVolume(LArVol, com2);
+      LArVol_pv.addPhysVolID("layer", 0);
+      LArVol_pv.addPhysVolID("module", iModule);
+      //      electrodePlateVol_pv.addPhysVolID("layer", 0);
       if (sign > 0) {
-	electrodePlateVol_pv.addPhysVolID("cryo", 1);
+	LArVol_pv.addPhysVolID("cryo", 1);
       } else {
-	electrodePlateVol_pv.addPhysVolID("cryo", 0);
+	LArVol_pv.addPhysVolID("cryo", 0);
       }
-      electrodePlateVol_pv.addPhysVolID("type", 2);
+      LArVol_pv.addPhysVolID("type", 2);
 
       iModule++;
 
@@ -205,11 +231,11 @@ namespace det {
 
   dd4hep::xml::DetElement active = aXmlElement.child(_Unicode(active));
   std::string activeMaterial = active.materialStr();
-  double activeThickness = active.thickness();
+  // double activeThickness = active.thickness();
 
   dd4hep::xml::DetElement readout = aXmlElement.child(_Unicode(readout));
   std::string readoutMaterial = readout.materialStr();
-  double readoutThickness = readout.thickness();
+  //  double readoutThickness = readout.thickness();
 
   dd4hep::xml::DetElement passive = aXmlElement.child(_Unicode(passive));
   dd4hep::xml::DetElement passiveInner = passive.child(_Unicode(inner));
@@ -238,13 +264,14 @@ namespace det {
   float radiusRatio = supportTubeElem.attr<float>(_Unicode(radiusRatio));  
   double rmin = dim.rmin1();
   double rmax = dim.rmax();
+  std::cout << "Min, max radii are " << rmin << " " << rmax << std::endl;
   double ro = rmin*radiusRatio;
   double ri = rmin;
 
   float supportTubeThickness=supportTubeElem.thickness();
   unsigned iSupportTube = 0;
-  std::vector<float> plateAngle_list;
-  std::vector<int> nPlates_list;
+  // std::vector<float> plateAngle_list;
+  //std::vector<int> nPlates_list;
 
   unsigned iModule = 0;
   while (ri < rmax) {
@@ -253,8 +280,8 @@ namespace det {
     dd4hep::Volume supportTubeVol("supportTube", supportTube, aLcdd.material("Steel235"));
     dd4hep::PlacedVolume supportTube_pv = aEnvelope.placeVolume(supportTubeVol, dd4hep::Position(0,0,zOffsetEnvelope + sign * (dim.dz() )));
     supportTube_pv.addPhysVolID("supportTube", iSupportTube);
-    buildSubCylinder(aLcdd, aSensDet, aEnvelope, aXmlElement, ri, ro, 
-		     plateAngle_list, nPlates_list, iModule, sign);
+    buildSubCylinder(aLcdd, aSensDet, aEnvelope, aXmlElement, ri+supportTubeThickness, ro, 
+		     iModule, sign);
     ri = ro;
     ro *= radiusRatio;
     if (ro > rmax) ro = rmax;
