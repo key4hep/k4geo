@@ -1,5 +1,5 @@
-#ifndef DETSEGMENTATION_FCCSWGridModuleThetaMerged_k4geo_H
-#define DETSEGMENTATION_FCCSWGridModuleThetaMerged_k4geo_H
+#ifndef DETECTORSEGMENTATIONS_FCCSWGridModuleThetaMerged_k4geo_H
+#define DETECTORSEGMENTATIONS_FCCSWGridModuleThetaMerged_k4geo_H
 
 // FCCSW
 #include "detectorSegmentations/GridTheta_k4geo.h"
