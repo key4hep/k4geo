@@ -3,14 +3,14 @@
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-  <info name="FCCee-IDEA-LAr Master"
-    title="FCCee-IDEA-LAr Master"
+  <info name="ALLEGRO_o1_v02 Master"
+    title="ALLEGRO_o1_v02 Master"
     author="Valentin Volkl"
     url="no"
     status="development"
     version="1.0">
     <comment>
-      Master compact file describing the latest developments of the FCCee IDEA detector concept with a LAr calorimeter.
+      Master compact file describing the latest developments of the FCCee ALLEGRO detector concept.
     </comment>
   </info>
 
