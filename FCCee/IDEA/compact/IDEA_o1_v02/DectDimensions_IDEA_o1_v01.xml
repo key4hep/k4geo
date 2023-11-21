@@ -89,7 +89,7 @@
     <constant name="Outer_Vertex_half_length" value="1050*mm"/>
 
     <constant name="DCH_inner_radius" value="345*mm"/>
-    <constant name="DCH_outer_radius" value="2000*mm"/>
+    <constant name="DCH_outer_radius" value="2000*mm"/> <!-- Contact the drift chamber experts if you need to change the DC radiuses (just changing the radius is not enough, the DC has been optimized for those values, the detector geometry is constrained by many construction/mechanical/electronics/etc considerations -->
     <constant name="DCH_half_length" value="2250*mm"/> <!-- this includes the services -->
     
     <constant name="ECalBarrel_inner_radius" value="2150*mm"/>
