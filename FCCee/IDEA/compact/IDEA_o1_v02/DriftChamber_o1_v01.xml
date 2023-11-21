@@ -7,24 +7,28 @@
 
   <!-- %%%%%%             Central Drift Chamber Basic Parameters                 %%%%%% -->
   <define>
-    <constant name = "CDCH:r0"                     value = "DCH_inner_radius"/>
-    <constant name = "CDCH:rOut"                   value = "DCH_outer_radius"/>
+    <!-- Radius of the beginning of the carbon fiber cylinder walls --> 
+    <constant name = "CDCH:inner_radius"            value = "DCH_inner_radius"/>
+    <!-- Radius of the end of the carbon fiber cylinder walls, mind that changing this value does not propagate to the sensitive volume layout --> 
+    <constant name = "CDCH:outer_radius"            value = "DCH_outer_radius"/>
+    <!-- Half z extent of the envelope (includes services) -->
     <constant name = "CDCH:zHalfExtentWithServices" value = "DCH_half_length"/>
     <!-- Angle for the rotation of phi sectors leading to the stereo angle of the wires (the way the chamber will be built)
     alpha = angle between the line (0,0,-zHalfLength) - (wireX,wireY,-zHalfLength) and the line (0,0,+zHalfLength) - (wireX,wireY,+zHalfLength) projected on the -zHalfLength plane perpandicular to z
     It is used to determine the radius of the hyperboloid in +- zHalfLength-->
     <constant name = "CDCH:alpha"                  value = "30*degree"/>
-    <constant name = "CDCH:geomType"               value = "50"/>
-    <constant name = "CDCH:nSWire"                 value = "192"/>
-    <constant name = "CDCH:nInGWire"               value = "192"/>
-    <constant name = "CDCH:nOutGWire"              value = "816"/>
+    <!-- Number of sense wires (i.e. sensitive cells) in the first super-layer -->
+    <constant name = "CDCH:nSWireFirstLayer"                 value = "192"/>
+    <!-- Radial extent of the cell in the first layer, used to define the radial step between layers -->
     <constant name = "CDCH:cellDimension"          value = "11.846*mm"/>
-    <constant name = "CDCH:nSuperLayer"            value = "14"/> <!-- All layers within a super layer have the same number of cell (or sense wire)-->
+    <!-- Number of super layer. All layers within a super layer have the same number of cell (or sense wire)-->
+    <constant name = "CDCH:nSuperLayer"            value = "14"/>
+    <!-- Number of layer in a super-layer -->
     <constant name = "CDCH:nLayer"                  value = "8"/>
-    <constant name = "CDCH:nSDeltaWire"            value = "48"/> <!-- Number of sense wire to add when jumping from a super layer to another to keep reasonably constant cell sizes w.r.t. cell radius. -->
-    <!--<constant name = "CDCH:nSuperLayer"            value = "14"/>
-    <constant name = "CDCH:nLayer"                  value = "8"/>
-    <constant name = "CDCH:nSuperLayer"            value = "4"/> use these to run faster, for debugging
+    <!-- Number of sense wire to add when jumping from a super layer to another to keep reasonably constant cell sizes w.r.t. cell radius. -->
+    <constant name = "CDCH:nSDeltaWire"            value = "48"/>
+    <!-- For development, you can lower the number of (super-)layer to run faster 
+    <constant name = "CDCH:nSuperLayer"            value = "4"/>
     <constant name = "CDCH:nLayer"                  value = "2"/>-->
     <constant name = "CDCH:nVerticalFWire"         value = "1"/>
     <constant name = "CDCH:nStoFWireRatio"         value = "5"/>
