@@ -1,0 +1,47 @@
+<lccdd >
+
+  <info name="ARC standalone"
+        title="ARC subdetector"
+        author="A. Tolosa Delgado, Martin Tat, Roger Forty, Guy Wilkinson"
+        url="https://indico.cern.ch/event/1231098/"
+        status="development"
+        version="o1, v01">
+	<comment>The compact format of the CLD+ARC detector</comment>
+  </info>
+
+<includes>
+  <gdmlFile ref="../../FCCee/CLD/compact/CLD_o3_v01/elements.xml"/>
+  <gdmlFile ref="../../FCCee/CLD/compact/CLD_o3_v01/materials.xml"/>
+</includes>
+
+<define>
+  <constant name="world_side"             value="10*m"      />
+  <constant name="world_x"                value="world_side"/>
+  <constant name="world_y"                value="world_side"/>
+  <constant name="world_z"                value="world_side"/>
+  <constant name="DetID_ARCBARREL"        value="1"/>
+  <constant name="DetID_ARCENDCAP"        value="2"/>
+  
+
+  <!--
+      WARNING:
+      The following variables named as ARC_* are fixed by design.
+      If changed, reoptimization of sensor/mirror geometry is needed
+  -->
+  <constant name="ArcEndcap_inner_radius"     value=" 28 * cm"    />
+  <constant name="ArcEndcap_outer_radius"     value="190 * cm"    />
+  <constant name="ArcEndcap_total_length"      value=" 20 * cm"    />
+  <constant name="ArcBarrel_inner_radius"     value="190 * cm"    />
+  <constant name="ArcBarrel_outer_radius"     value="210 * cm"    />
+  <constant name="ArcBarrel_total_length"      value="440 * cm"    />
+  <!-- ArcEndcap_position_z is the middle of the endcap
+       the endcap spans over ArcEndcap_position_z +- ArcEndcap_total_length/2
+  -->
+  <constant name="ArcEndcap_position_z"        value="210*cm"    />
+</define>
+
+
+<include ref="../../FCCee/CLD/compact/CLD_o3_v01/ARC_o1_v01.xml"/>
+
+
+</lccdd>

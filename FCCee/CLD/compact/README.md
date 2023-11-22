@@ -37,4 +37,4 @@ Overlaps in the Inner and Outer Tracker.
 CLD_o3_v01
 ----------
 
-CLD option 3 includes ARC detector for PID. The detector concept evolves from CLD_o2_v05. The tracker has been shrunk by 20 cm radially and along Z to make space for the ARC detector. 
+This model is based on CLD_o2_v05. The tracker size is reduced to accomodate the ARC detector for PID.
