@@ -523,7 +523,7 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
       field_wires_center.name = dd4hep::_toString(SL, "Wire_SL%d") + dd4hep::_toString(ilayer, "_layer%d") + string("_type") + field_wires_center.type + dd4hep::_toString(field_wires_center.stereo, "_stereo%f_center");
       apply_wire_coating(field_wires_center, centerFWireShellThickOut, halflength);
 
-      // derive a phi offset to englobe the wires inside the sensitive volume (center field wires are the thickest)
+      // derive a phi offset to englobe the 'left' (clockwise) wires inside the sensitive volume (center field wires are the thickest)
       double phi_offset_to_englobe_wires = atan((field_wires_center.thickness + 0.5 * centerFWireShellThickOut) / field_wires_center.radius);
 
       //------------------------------------------------------------------------
@@ -540,7 +540,9 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
 
       // Create hyperboloid volume of the whole layer for the cell sensitive volume definition, not needed per se but helps having a well balanced volume tree (having too many volumes inside one mother volume harms performance)
       wholeHyperboloidVolumeName = dd4hep::_toString(SL, "hyperboloid_SL_%d") + dd4hep::_toString(ilayer, "_layer_%d");
-      dd4hep::Hyperboloid whole_layer_hyperboloid = dd4hep::Hyperboloid(radius_layerIn_whole_cell, epsilonIn_whole_cell, radius_layerOut_0, epsilonOut, zlength);
+      double radial_inner_offset_to_englobe_wires = field_wires_bottom.thickness + 0.5 * FWireShellThickOut;
+      double radial_outer_offset_to_englobe_wires = field_wires_top.thickness + 0.5 * FWireShellThickOut;
+      dd4hep::Hyperboloid whole_layer_hyperboloid = dd4hep::Hyperboloid(radius_layerIn_whole_cell - radial_inner_offset_to_englobe_wires, epsilonIn_whole_cell, radius_layerOut_0 + radial_outer_offset_to_englobe_wires, epsilonOut, zlength);
       dd4hep::Volume whole_layer_hyperboloid_volume = dd4hep::Volume(wholeHyperboloidVolumeName, whole_layer_hyperboloid, description.material("GasHe_90Isob_10"));
       whole_layer_hyperboloid_volume.setVisAttributes(description, gascol);
       //registerVolume(wholeHyperboloidVolumeName, whole_layer_hyperboloid_volume);
