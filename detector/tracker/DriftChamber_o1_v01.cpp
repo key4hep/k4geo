@@ -524,7 +524,7 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
       apply_wire_coating(field_wires_center, centerFWireShellThickOut, halflength);
 
       // derive a phi offset to englobe the wires inside the sensitive volume (center field wires are the thickest)
-      //double phi_offset_to_englobe_wires = atan((field_wires_center.thickness + 0.5 * centerFWireShellThickOut) / field_wires_center.radius);
+      double phi_offset_to_englobe_wires = atan((field_wires_center.thickness + 0.5 * centerFWireShellThickOut) / field_wires_center.radius);
 
       //------------------------------------------------------------------------
       // Next, fill the geometry parameters of the upper layer.
@@ -585,8 +585,7 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
       // FIXME: this leads to some volume extrusion (corner of the tube going outside of the hyperboloid mother volume)
       // Using the intersection with the hyperboloid mother volume solves it but severely impacts the perfomance (memory and CPU) of the geometry building
       // Other paths to investigate are twisted tubes (caveat: no TGeo shape equivalent), extruded volumes or tessalated solids
-      //dd4hep::Tube cellID_tube_segment(radius_layerIn_whole_cell, radius_layerOut_0, halflength, (- sense_wires.delta_phi / 2.0) - phi_offset_to_englobe_wires, (sense_wires.delta_phi / 2.0) - phi_offset_to_englobe_wires);
-      dd4hep::Tube cellID_tube_segment(radius_layerIn_whole_cell, radius_layerOut_0, halflength, - sense_wires.delta_phi / 2.0, sense_wires.delta_phi / 2.0);
+      dd4hep::Tube cellID_tube_segment(radius_layerIn_whole_cell, radius_layerOut_0, halflength, (- sense_wires.delta_phi / 2.0) - phi_offset_to_englobe_wires, (sense_wires.delta_phi / 2.0) - phi_offset_to_englobe_wires);
       
       // Radial translation 
       dd4hep::Translation3D radial_translation_sense_wire(sense_wires.radius, 0., 0.);
