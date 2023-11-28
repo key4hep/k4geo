@@ -8,6 +8,13 @@ INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/run_test_${PackageName}.sh
 #--------------------------------------------------
 #ADD_TEST( t_init source "${CMAKE_CURRENT_WORK_DIR}/thisdd4hep.sh" )
 
+SET( test_name "test_FCCee_CAD_beampipe" )
+ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
+        ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CAD_beampipe/compact/testBeampipe_CADimport_o1_v01.xml --runType=batch -G -N=1 --outputFile=testBeampipe_CADimport_o1_v01.slcio )
+SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
+
+
+
 #--------------------------------------------------
 # test(s) for ILD
 SET( test_name "test_ILD_l5_v02" )
@@ -89,8 +96,8 @@ set_tests_properties( t_${test_name} PROPERTIES TIMEOUT 240)
 
 SET( test_name "test_FCCee_CAD_beampipe" )
 ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
-	ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CAD_beampipe/compact/testBeampipe_CADimport_o1_v01.xml --runType=batch -G -N=1 --outputFile=testBeampipe_CADimport_o1_v01.slcio )
-SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
+	ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CAD_beampipe/compact/testBeampipe_CADimport_o1_v01.xml --runType=batch -G -N=1 --outputFile=testBeampipe_CADimport_o1_v01.slcio --part.userParticleHandler=  )
+SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "ERROR;Error" )
 
 
 #--------------------------------------------------
