@@ -48,6 +48,7 @@ namespace det {
 			dd4hep::SensitiveDetector& aSensDet,
 			dd4hep::Volume& aEnvelope,
 			dd4hep::xml::Handle_t& aXmlElement,
+			dd4hep::DetElement& bathDetElem,
 			float ri, float ro,
 			unsigned &iModule,
 			int sign) {
@@ -143,14 +144,26 @@ namespace det {
     dd4hep::Volume electrodePlateAndGapVol("electrodePlateAndGap", electrodePlateAndGap, aLcdd.material("Air"));
      dd4hep::Solid electrodePlate = buildOneBlade(ElectrodeThick, ElectrodeThick, xRange, ro, ri, PlateAngle, delZ);
     dd4hep::Volume electrodePlateVol("electrodePlate", electrodePlate, aLcdd.material("PCB"));
-    dd4hep::SubtractionSolid LArShape(electrodePlateAndGap, electrodePlate);
-    dd4hep::Volume LArVol("nobleLiquid", LArShape, aLcdd.material("LAr"));
-    LArVol.setSensitiveDetector(aSensDet);
+    dd4hep::SubtractionSolid LArShapeTotal(electrodePlateAndGap, electrodePlate);
+    unsigned nLayers = 4;
+    std::vector<dd4hep::Volume> LArVolLayers;
+    double xRangePerLayer = xRange/nLayers;
+    dd4hep::Trd2 bigDumbBlock(ElectrodeThick/2.+LArgapo, ElectrodeThick/2.+LArgapo, xRange/2, xRange/2., ro/2. );
+    for (unsigned iLayer = 0; iLayer < nLayers; iLayer++) {
+      // make a layer by subtracting off the unwanted bits
+      dd4hep::SubtractionSolid tmp1(LArShapeTotal, bigDumbBlock, dd4hep::Position( 0., -xRange+xRangePerLayer*iLayer, 0.));
+      dd4hep::SubtractionSolid tmp2(tmp1, bigDumbBlock,  dd4hep::Position(0., xRangePerLayer*(1+iLayer), 0.));
+      dd4hep::Volume LArVolThisLayer("nobleLiquidLayer", tmp2, aLcdd.material("LAr"));
+      LArVolThisLayer.setSensitiveDetector(aSensDet);
+      LArVolLayers.push_back(LArVolThisLayer);
+    }
+    //    dd4hep::Volume LArVol("nobleLiquid", LArShape, aLcdd.material("LAr"));
+    // LArVol.setSensitiveDetector(aSensDet);
 
     //    electrodePlateVol.setSensitiveDetector(aSensDet);
     
     int    nPlatesToDraw = nPlates;
-    // nPlatesToDraw = 1;
+    //    nPlatesToDraw = 1;
 
     for (int iPlate = 0; iPlate < nPlatesToDraw; iPlate++) {
       //    pl->SetInvisible();
@@ -181,9 +194,12 @@ namespace det {
 
       //      dd4hep::Transform3D com(dd4hep::RotationZYX(PlateAngle, TMath::Pi()/2.,  -phi), dd4hep::Translation3D(x,y,z));
       dd4hep::Transform3D com(r3d, dd4hep::Translation3D(x,y,z));
-      //      dd4hep::PlacedVolume absPlateVol_pv = aEnvelope.placeVolume(absPlateVol, com);
-      //      absPlateVol_pv.addPhysVolID("module", iModule);
-      //absPlateVol_pv.addPhysVolID("type", 1);
+      dd4hep::PlacedVolume absPlateVol_pv = aEnvelope.placeVolume(absPlateVol, com);
+      
+      absPlateVol_pv.addPhysVolID("module", iModule);
+      absPlateVol_pv.addPhysVolID("type", 1);  // 0 = active, 1 = passive, 2 = readout
+      dd4hep::DetElement absPlateDetElem(bathDetElem, "absorber"+std::to_string(iModule), iModule);
+      absPlateDetElem.setPlacement(absPlateVol_pv);
 
       tgr.Clear();
       tgr.RotateZ(PlateAngle*180/TMath::Pi());
@@ -203,18 +219,28 @@ namespace det {
       y = (-ro/2.)*TMath::Sin(phi+delPhi/2.);
 
       dd4hep::Transform3D com2(r3d, dd4hep::Translation3D(x,y,z));
-      //      dd4hep::PlacedVolume electrodePlateVol_pv = aEnvelope.placeVolume(electrodePlateVol, com2);
-      dd4hep::PlacedVolume LArVol_pv = aEnvelope.placeVolume(LArVol, com2);
-      LArVol_pv.addPhysVolID("layer", 0);
-      LArVol_pv.addPhysVolID("module", iModule);
-      //      electrodePlateVol_pv.addPhysVolID("layer", 0);
-      if (sign > 0) {
-	LArVol_pv.addPhysVolID("cryo", 1);
-      } else {
-	LArVol_pv.addPhysVolID("cryo", 0);
-      }
-      LArVol_pv.addPhysVolID("type", 2);
+      dd4hep::PlacedVolume electrodePlateVol_pv = aEnvelope.placeVolume(electrodePlateVol, com2);
+      electrodePlateVol_pv.addPhysVolID("module", iModule);
+      electrodePlateVol_pv.addPhysVolID("type", 2);  // 0 = active, 1 = passive, 2 = readout
+      dd4hep::DetElement electrodePlateDetElem(bathDetElem, "electrode"+std::to_string(iModule), iModule);
+      electrodePlateDetElem.setPlacement(electrodePlateVol_pv);
 
+      for (unsigned iLayer = 0; iLayer<nLayers; iLayer++) {
+	dd4hep::PlacedVolume LArVol_pv = aEnvelope.placeVolume(LArVolLayers[iLayer], com2);
+	LArVol_pv.addPhysVolID("layer", iLayer);
+	LArVol_pv.addPhysVolID("module", iModule);
+	LArVol_pv.addPhysVolID("type", 0);  // 0 = active, 1 = passive, 2 = readout
+	dd4hep::DetElement LArDetElem(bathDetElem, "active"+std::to_string(iModule)+"layer"+std::to_string(iLayer), iModule<<8+iLayer);
+	LArDetElem.setPlacement(LArVol_pv);
+
+	//      electrodePlateVol_pv.addPhysVolID("layer", 0);
+	//	if (sign > 0) {
+	//  LArVol_pv.addPhysVolID("cryo", 1);
+	//} else {
+	//  LArVol_pv.addPhysVolID("cryo", 0);
+	//}
+	//	LArVol_pv.addPhysVolID("type", 2);
+      }
       iModule++;
 
     }
@@ -225,9 +251,17 @@ namespace det {
 
   void buildOneSide_Turbine(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet,
                   dd4hep::Volume& aEnvelope, dd4hep::DetElement& aEnvelopeDetElem, dd4hep::xml::Handle_t& aXmlElement,
-                  int sign) {
+			    int sign,
+			    unsigned& iModule) {
 
-  dd4hep::xml::Dimension dim(aXmlElement.child(_Unicode(dimensions)));
+    dd4hep::xml::DetElement xmlDetElem = aXmlElement;
+    std::string nameDet = xmlDetElem.nameStr();
+    dd4hep::DetElement caloDetElem(nameDet, xmlDetElem.id());
+
+    dd4hep::xml::Dimension dim(aXmlElement.child(_Unicode(dimensions)));
+
+  dd4hep::xml::DetElement calo = aXmlElement.child(_Unicode(calorimeter));
+  dd4hep::xml::Dimension caloDim(calo.dimensions());
 
   dd4hep::xml::DetElement active = aXmlElement.child(_Unicode(active));
   std::string activeMaterial = active.materialStr();
@@ -254,7 +288,77 @@ namespace det {
   } else {
     passiveMaterial = passiveInnerMaterial;
   }
-  
+ 
+
+  //build cryostat
+// Retrieve cryostat data
+  dd4hep::xml::DetElement cryostat = aXmlElement.child(_Unicode(cryostat));
+  dd4hep::xml::Dimension cryoDim(cryostat.dimensions());
+  double cryoThicknessFront = cryoDim.rmin2() - cryoDim.rmin1();
+
+  dd4hep::xml::DetElement cryoFront = cryostat.child(_Unicode(front));
+  dd4hep::xml::DetElement cryoBack = cryostat.child(_Unicode(back));
+  dd4hep::xml::DetElement cryoSide = cryostat.child(_Unicode(side));
+  bool cryoFrontSensitive = cryoFront.isSensitive();
+  bool cryoBackSensitive = cryoBack.isSensitive();
+  bool cryoSideSensitive = cryoSide.isSensitive();
+
+  double bathRmin = caloDim.rmin(); // - margin for inclination
+  double bathRmax = caloDim.rmax(); // + margin for inclination
+  dd4hep::Tube bathOuterShape(bathRmin, bathRmax, caloDim.dz()); // make it 4 volumes + 5th for detector envelope
+  dd4hep::Tube bathAndServicesOuterShape(cryoDim.rmin2(), cryoDim.rmax1(), caloDim.dz()); // make it 4 volumes + 5th for detector envelope
+
+  lLog << MSG::INFO << "Cryostat front thickness is " <<  cryoDim.rmin2() << endmsg;
+  if (cryoThicknessFront > 0) {
+    // 1. Create cryostat
+    dd4hep::Tube cryoFrontShape(cryoDim.rmin1(), cryoDim.rmin2(), cryoDim.dz());
+    dd4hep::Tube cryoBackShape(cryoDim.rmax1(), cryoDim.rmax2(), cryoDim.dz());
+    dd4hep::Tube cryoSideOuterShape(cryoDim.rmin2(), cryoDim.rmax1(), cryoDim.dz());
+    dd4hep::SubtractionSolid cryoSideShape(cryoSideOuterShape, bathAndServicesOuterShape);
+    lLog << MSG::INFO << "ECAL endcap cryostat: front: rmin (cm) = " << cryoDim.rmin1() << " rmax (cm) = " << cryoDim.rmin2() << " dz (cm) = " << cryoDim.dz()  << endmsg;
+    lLog << MSG::INFO << "ECAL encdap cryostat: back: rmin (cm) = " << cryoDim.rmax1() << " rmax (cm) = " << cryoDim.rmax2() << " dz (cm) = " << cryoDim.dz() << endmsg;
+    lLog << MSG::INFO << "ECAL endcap cryostat: side: rmin (cm) = " << cryoDim.rmin2() << " rmax (cm) = " << cryoDim.rmax1() << " dz (cm) = " << cryoDim.dz() - caloDim.dz()  << endmsg;
+    dd4hep::Volume cryoFrontVol(cryostat.nameStr()+"_front", cryoFrontShape, aLcdd.material(cryostat.materialStr()));
+    dd4hep::Volume cryoBackVol(cryostat.nameStr()+"_back", cryoBackShape, aLcdd.material(cryostat.materialStr()));
+    dd4hep::Volume cryoSideVol(cryostat.nameStr()+"_side", cryoSideShape, aLcdd.material(cryostat.materialStr()));
+    dd4hep::PlacedVolume cryoFrontPhysVol = aEnvelope.placeVolume(cryoFrontVol);
+    dd4hep::PlacedVolume cryoBackPhysVol = aEnvelope.placeVolume(cryoBackVol);
+    dd4hep::PlacedVolume cryoSidePhysVol = aEnvelope.placeVolume(cryoSideVol);
+    unsigned sidetype = sign > 0 ? 0x4 : 0x0; 
+    if (cryoFrontSensitive) {
+      cryoFrontVol.setSensitiveDetector(aSensDet);
+      cryoFrontPhysVol.addPhysVolID("cryo", 1);
+      cryoFrontPhysVol.addPhysVolID("type", sidetype+1);
+      lLog << MSG::INFO << "Cryostat front volume set as sensitive" << endmsg;
+    }
+    if (cryoBackSensitive) {
+      cryoBackVol.setSensitiveDetector(aSensDet);
+      cryoBackPhysVol.addPhysVolID("cryo", 1);
+      cryoBackPhysVol.addPhysVolID("type", sidetype+2);
+      lLog << MSG::INFO << "Cryostat back volume set as sensitive" << endmsg;
+    }
+    if (cryoSideSensitive) {
+      cryoSideVol.setSensitiveDetector(aSensDet);
+      cryoSidePhysVol.addPhysVolID("cryo", 1);
+      cryoSidePhysVol.addPhysVolID("type", sidetype+3);
+      lLog << MSG::INFO << "Cryostat front volume set as sensitive" << endmsg;
+    }
+    dd4hep::DetElement cryoFrontDetElem(caloDetElem, "cryo_front", 0);
+    cryoFrontDetElem.setPlacement(cryoFrontPhysVol);
+    dd4hep::DetElement cryoBackDetElem(caloDetElem, "cryo_back", 0);
+    cryoBackDetElem.setPlacement(cryoBackPhysVol);
+    dd4hep::DetElement cryoSideDetElem(caloDetElem, "cryo_side", 0);
+    cryoSideDetElem.setPlacement(cryoSidePhysVol);
+  }
+ 
+  // 2. Create noble liquid bath
+   dd4hep::Volume bathVol(activeMaterial + "_bath", bathOuterShape, aLcdd.material(activeMaterial));
+  lLog << MSG::INFO << "ECAL endcap bath: material = " << activeMaterial << " rmin (cm) =  " << bathRmin
+       << " rmax (cm) = " << bathRmax << " thickness in front of ECal (cm) = " << caloDim.rmin() - cryoDim.rmin2()
+       << " thickness behind ECal (cm) = " << cryoDim.rmax1() - caloDim.rmax() << endmsg;
+  dd4hep::DetElement bathDetElem(caloDetElem, "bath", 1);
+
+  // 3. Create detector structure
   double length = dim.dz() * 2.;
   double zOffsetEnvelope = length / 2. * -sign;
  
@@ -273,20 +377,23 @@ namespace det {
   // std::vector<float> plateAngle_list;
   //std::vector<int> nPlates_list;
 
-  unsigned iModule = 0;
   while (ri < rmax) {
     dd4hep::Tube supportTube(ro, ro+supportTubeThickness, dim.dz() );
   
     dd4hep::Volume supportTubeVol("supportTube", supportTube, aLcdd.material("Steel235"));
-    dd4hep::PlacedVolume supportTube_pv = aEnvelope.placeVolume(supportTubeVol, dd4hep::Position(0,0,zOffsetEnvelope + sign * (dim.dz() )));
+    dd4hep::PlacedVolume supportTube_pv = bathVol.placeVolume(supportTubeVol, dd4hep::Position(0,0,zOffsetEnvelope + sign * (dim.dz() )));
     supportTube_pv.addPhysVolID("supportTube", iSupportTube);
-    buildSubCylinder(aLcdd, aSensDet, aEnvelope, aXmlElement, ri+supportTubeThickness, ro, 
+    buildSubCylinder(aLcdd, aSensDet, bathVol, aXmlElement, bathDetElem, ri+supportTubeThickness, ro, 
 		     iModule, sign);
     ri = ro;
     ro *= radiusRatio;
     if (ro > rmax) ro = rmax;
     iSupportTube++;
   }
+
+
+  dd4hep::PlacedVolume bathPhysVol = aEnvelope.placeVolume(bathVol);
+  bathDetElem.setPlacement(bathPhysVol);
 
   std::cout << "Total number of modules: " << iModule << std::endl;
 
@@ -325,9 +432,10 @@ createECalEndcapTurbine(dd4hep::Detector& aLcdd, dd4hep::xml::Handle_t aXmlEleme
   //}
 
   lLog << MSG::DEBUG << "Placing dector on the positive side: (cm) " << dim.z_offset() << " with min, max radii " << dim.rmin1() << " " << dim.rmax() << endmsg;
-  buildOneSide_Turbine(aLcdd, aSensDet, envelopePositiveVol, caloPositiveDetElem, aXmlElement, 1);
+  unsigned iModule = 0;
+  buildOneSide_Turbine(aLcdd, aSensDet, envelopePositiveVol, caloPositiveDetElem, aXmlElement, 1, iModule);
   lLog << MSG::DEBUG << "Placing dector on the negative side: (cm) " << -dim.z_offset()  << " with min, max radii " << dim.rmin1() << " " << dim.rmax() << endmsg;
-  buildOneSide_Turbine(aLcdd, aSensDet, envelopeNegativeVol, caloNegativeDetElem, aXmlElement, -1);
+  buildOneSide_Turbine(aLcdd, aSensDet, envelopeNegativeVol, caloNegativeDetElem, aXmlElement, -1, iModule);
 
   // Place the envelope
   dd4hep::PlacedVolume envelopePositivePhysVol = envelopeVol.placeVolume(envelopePositiveVol);
