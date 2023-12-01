@@ -3,7 +3,7 @@
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-  <info name="FCChh_CaloEndcap_Discs"
+  <info name="FCCee_ECalEndcaps_Turbine"
         title="Calorimeter endcaps"
         author="E.Varnes, J.Rutherfoord, R.Walker"
         url="no"
@@ -40,13 +40,14 @@
     <constant name="EMEC_rmin2" value="EMEC_rmin1"/>
     <constant name="EMEC_rmax" value="ECalEndcap_outer_radius - CryoEMECThicknessOuter - BathThicknessOuter"/>
     <!-- LAr thickness: double gap size -->
-    <constant name="EMEC_lAr_thickness" value="4.*mm"/>
-    <constant name="EMEC_Pb_thickness" value="1.5*mm*1.5/2.16"/>
-    <constant name="EMEC_steel_thickness" value="0.4*mm*1.5/2.16"/>
-    <constant name="EMEC_glue_thickness" value="0.26*mm*1.5/2.16"/>
-    <constant name="EMEC_readout_thickness" value="1.2*mm"/>
-    <constant name="ECalEndcapNumPlanes" value="1604"/>
-    <constant name="ECalEndcapNumLayers" value="10"/>
+    <constant name="ECalEndcapNumBlades" value="1604"/>
+    <constant name="ECalEndcapNumLayers" value="1"/>
+    <constant name="SubCylinderRadiusRatio" value="1.89" />
+    <constant name="BladeAngle" value="55*deg" />
+    <constant name="NobleLiquidGap" value="2.0*mm" />
+    <constant name="AbsorberBladeThickness" value="3.0*mm" />
+    <constant name="ElectrodeBladeThickness" value="1.3*mm" />
+ 
   </define>
 
   <display>
@@ -87,31 +88,20 @@
       <calorimeter name="EM_endcap">
 	<dimensions rmin="EMEC_rmin1" rmax="EMEC_rmax" dz="(EMEC_z2-EMEC_z1)/2." z_offset="EMEC_z1+(EMEC_z2-EMEC_z1)/2."/>
       </calorimeter>	
-      <active thickness="EMEC_lAr_thickness" vis="emec_lar_vis">
-        <material name="LAr"/>
-      </active>
-      <passive sensitive="false">
-        <inner thickness="EMEC_Pb_thickness" vis="emec_pb_vis">
-          <material name="Lead"/>
-        </inner>
-        <glue thickness="EMEC_glue_thickness">
-          <material name="lArCaloGlue"/>
-        </glue>
-        <outer thickness="EMEC_steel_thickness">
-          <material name="lArCaloSteel"/>
-        </outer>
-      </passive>
-      <readout thickness="EMEC_readout_thickness" sensitive="false" vis="emec_readout_vis">
-        <material name="PCB"/>
-	
-      </readout>
-      <supportTube name="supportTube" radiusRatio="1.89" thickness="1.0*cm" > 
-
+      <supportTube name="supportTube" radiusRatio="SubCylinderRadiusRatio" thickness="1.0*cm" > 
+	<material name="Steel235" />
       </supportTube>
-      <turbineBlade name="turbineBlade" angle="55*deg" decreaseAnglePerSubCylinder="false"  sameNplates="false">
-	<absorberBlade name="absorberBlade" thickness="3.0*mm" scaleThickness="false"></absorberBlade>
-	<electrodeBlade name="electrodeBlade" thickness="1.3*mm"></electrodeBlade>
-	<nobleLiquidGap name="nobleLiquidGap" gap="2.0*mm"></nobleLiquidGap>
+      <turbineBlade name="turbineBlade" angle="BladeAngle" decreaseAnglePerSubCylinder="false"  sameNblades="false">
+	<absorberBlade name="absorberBlade" thickness="AbsorberBladeThickness" scaleThickness="false">
+	  <material name="Lead" />
+	</absorberBlade>
+	
+	<electrodeBlade name="electrodeBlade" thickness="ElectrodeBladeThickness">
+	   <material name="PCB" />
+	</electrodeBlade>
+	<nobleLiquidGap name="nobleLiquidGap" gap="NobleLiquidGap">
+	  <material name="LAr" />
+	</nobleLiquidGap>
       </turbineBlade>
     </detector>
  
