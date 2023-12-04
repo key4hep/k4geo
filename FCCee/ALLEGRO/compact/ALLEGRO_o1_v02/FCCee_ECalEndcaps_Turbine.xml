@@ -41,7 +41,7 @@
     <constant name="EMEC_rmax" value="ECalEndcap_outer_radius - CryoEMECThicknessOuter - BathThicknessOuter"/>
     <!-- LAr thickness: double gap size -->
     <constant name="ECalEndcapNumBlades" value="1604"/>
-    <constant name="ECalEndcapNumLayers" value="1"/>
+    <constant name="ECalEndcapNumLayers" value="2"/>
     <constant name="SubCylinderRadiusRatio" value="1.89" />
     <constant name="BladeAngle" value="55*deg" />
     <constant name="NobleLiquidGap" value="2.0*mm" />
