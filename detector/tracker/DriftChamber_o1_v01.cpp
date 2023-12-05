@@ -161,7 +161,7 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
   double dropFactor = 0.0;
   double epsilonFactor = 0.0;
   double delta_radius_layer = cellDimension;
-  double senseWireRing_radius_0 = 0.0;
+  double sense_wire_radius_at_z_0 = 0.0;
   double iradius = 0.0;
   double idelta_radius = 0.0;
 
@@ -169,32 +169,27 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
   double envelop_Outer_thickness = Carbon1OuterWallThick + Carbon2OuterWallThick + CopperOuterWallThick + FoamOuterWallThick;
   double FWireDiameter = FWireShellThickIn + FWireShellThickOut;
   double FWradii = 0.5 * FWireDiameter;
-  //double SWireDiameter = SWireShellThickIn + SWireShellThickOut;
-  //double SWradii = 0.5 * SWireDiameter;
   double inGWireDiameter = InGWireShellThickIn + InGWireShellThickOut;
   double inGWradii = 0.5 * inGWireDiameter;
   double fakeLayerInIWthick = -0.0001 + GasInnerWallThick;
-  double inner_radius_0 = inner_radius + envelop_Inner_thickness - fakeLayerInIWthick;
+  double guard_layer_inner_radius_at_z_0 = inner_radius + envelop_Inner_thickness - fakeLayerInIWthick;
 
   double radius_layer_0 = inner_radius + envelop_Inner_thickness + FWradii + secure + capGasLayer;
-  double radius_layerOut_0 = radius_layer_0 - FWradii - secure;
+  double layer_outer_radius_at_z_0 = radius_layer_0 - FWradii - secure;
 
   double drop = 0.0;
   double radius_layer = 0.0;
-  double radius_layerIn_0 = 0.0;
-  double radius_layerIn = 0.0;
-  double radius_layerOut = 0.0;
+  double layer_inner_radius_at_z_0 = 0.0;
+  double layer_inner_radius_at_z_end = 0.0;
+  double layer_outer_radius_at_z_end = 0.0;
   double epsilonIn = 0.0;
   double epsilonOut = 0.0;
   double phi_offset_cell_start = 0.0;
-  //double cellBase = 0.0;
-  double inscribedRadius = 0.0;
-  //double circumscribedRadius = 0.0;
   double zlength = 0.0;
   double cellStaggering = 0.0;
   double epsilonInGwRing = 0.0;
   double epsilonOutGwRing = 0.0;
-  double radius_layerIn_whole_cell = 0.0;
+  double layer_inner_radius_at_z_end_whole_cell = 0.0;
   double epsilonIn_whole_cell = 0.0;
 
   //------------------------------------------------------------------------
@@ -275,7 +270,7 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
     if (ceilf(nFWireTopOrBottom) != nFWireTopOrBottom)
       throw std::runtime_error("Error: Failed to build CDCH. Please make sure that '(nFtoSWireRatio - nCenterFWirePerCell) * (nSWireFirstLayer + SuperLayerIndex * nSDeltaWire)' is always an even number");
     delta_phi_top_bottom = 2.0 * phi_offset;
-    scaleFactor = (1.0 + TMath::Pi() / nSWire) / (1.0 - TMath::Pi() / nSWire);
+    scaleFactor = (1.0 + TMath::Pi() / nSWire) / (1.0 - TMath::Pi() / nSWire); // used to scale the radial extent of each layer which grows towards outer radius
     dropFactor = (1.0 / cos(halfalpha) - 1.0); // used to determine the radius of the hyperboloid in z = +- halflength with r_out = r_min + r_min * dropFactor
     epsilonFactor = sin(halfalpha) / halflength;
     phi_offset_cell_start = -0.5 * sense_wire_delta_phi;
@@ -298,7 +293,7 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
     if (SL == 0) {// SL = 0 is special due to the guard wires and the first field wires that lie outside of the sensitive volume
       double stereoOut0 = atan(sqrt(diff_of_squares((inGuardRad - inGWradii) + (inGuardRad - inGWradii) * dropFactor, inGuardRad - inGWradii)) / halflength);
 
-      dd4hep::Hyperboloid HypeLayer0(inner_radius_0, 0.0, radius_layerOut_0 - secure, stereoOut0, halflength);
+      dd4hep::Hyperboloid HypeLayer0(guard_layer_inner_radius_at_z_0, 0.0, layer_outer_radius_at_z_0 - secure, stereoOut0, halflength);
       lvLayerVol.push_back(dd4hep::Volume("hyperboloid_inner_guard_layer", HypeLayer0, description.material("GasHe_90Isob_10")));
       lvLayerVol.back().setVisAttributes(description, "vCDCH:Pb");
 
@@ -335,30 +330,31 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
       drop = radius_layer_0 * dropFactor;
       radius_layer = radius_layer_0 + drop;
       epsilon = atan(radius_layer * epsilonFactor);
-      radius_layerIn_0 = radius_layer_0 - FWradii - 2.0 * secure;
-      radius_layerIn = radius_layerIn_0 + drop;
-      radius_layerOut_0 = radius_layer_0 + FWradii;
-      radius_layerOut = radius_layerOut_0 + drop;
-      epsilonIn = atan(sqrt(pow(radius_layerIn, 2) - pow(radius_layerIn_0, 2)) / halflength);
-      epsilonOut = atan(sqrt(pow(radius_layerOut, 2) - pow(radius_layerOut_0, 2)) / halflength);
+      layer_inner_radius_at_z_0 = radius_layer_0 - FWradii - 2.0 * secure;
+      layer_inner_radius_at_z_end = layer_inner_radius_at_z_0 + drop;
+      layer_outer_radius_at_z_0 = radius_layer_0 + FWradii;
+      layer_outer_radius_at_z_end = layer_outer_radius_at_z_0 + drop;
+      epsilonIn = atan(sqrt(pow(layer_inner_radius_at_z_end, 2) - pow(layer_inner_radius_at_z_0, 2)) / halflength);
+      epsilonOut = atan(sqrt(pow(layer_outer_radius_at_z_end, 2) - pow(layer_outer_radius_at_z_0, 2)) / halflength);
 
-      dd4hep::Hyperboloid HypeLayer1(radius_layerIn_0, epsilonIn, radius_layerOut_0, epsilonOut, halflength);
-      lvLayerVol.push_back(dd4hep::Volume("hyperboloid_first_field_wire_ring", HypeLayer1, description.material("GasHe_90Isob_10")));
-      lvLayerVol.back().setVisAttributes(description, "vCDCH:Plastic");
 
       zlength = halflength;
       zlength -= sin(epsilon) * FWradii;
       zlength /= cos(epsilon);
 
-      field_wires_top.mother_volume = lvLayerVol.back();
       field_wires_top.type = "F";
       field_wires_top.num = nFWireTopOrBottom;
-      field_wires_top.radius = radius_layerIn_0 - FWradii - extShiftFW;
+      field_wires_top.radius = layer_inner_radius_at_z_0 - FWradii - extShiftFW;
       field_wires_top.delta_phi = 2. * TMath::Pi() /field_wires_top.num;;
       field_wires_top.phioffset = phi_offset_cell_start + cellStaggering - phi_offset;
       field_wires_top.stereo = sign_epsilon * epsilon;
       field_wires_top.thickness = 0.5 * FWireShellThickIn * enlarge;
       field_wires_top.halflength = zlength;
+
+      dd4hep::Hyperboloid HypeLayer1(layer_inner_radius_at_z_0, epsilonIn, layer_outer_radius_at_z_0 + field_wires_top.thickness + 0.5 * FWireShellThickOut, epsilonOut, halflength);
+      lvLayerVol.push_back(dd4hep::Volume("hyperboloid_first_field_wire_ring", HypeLayer1, description.material("GasHe_90Isob_10")));
+      lvLayerVol.back().setVisAttributes(description, "vCDCH:Plastic");
+      field_wires_top.mother_volume = lvLayerVol.back();
 
       lvFwireName = dd4hep::_toString(SL, "lvFwire_%d_init");
       field_wires_top.name = string(lvFwireName);
@@ -373,7 +369,7 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
       radius_layer_0 += FWradii;
 
     } else {
-      delta_radius_layer = 2. * TMath::Pi() * radius_layerOut_0 / (nSWire - TMath::Pi());
+      delta_radius_layer = 2. * TMath::Pi() * layer_outer_radius_at_z_0 / (nSWire - TMath::Pi());
     }
 
     //------------------------------------------------------------------------
@@ -386,23 +382,21 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
       // on top of the following one, so new layerIn = old layerOut
       //------------------------------------------------------------------------
 
-      inscribedRadius = 0.5 * delta_radius_layer;
-      //circumscribedRadius = inscribedRadius * sqrt(2.0);
-      senseWireRing_radius_0 = radius_layer_0 + inscribedRadius;
+      sense_wire_radius_at_z_0 = radius_layer_0 + 0.5 * delta_radius_layer;
       sign_epsilon *= -1;
 
-      radius_layerIn_0 = radius_layerOut_0;
-      radius_layerIn = radius_layerOut;
+      layer_inner_radius_at_z_0 = layer_outer_radius_at_z_0;
+      layer_inner_radius_at_z_end = layer_outer_radius_at_z_end;
       epsilonIn = epsilonOut;
 
-      radius_layerOut_0 = radius_layerIn_0 + FWireDiameter + 2.0 * secure;
-      radius_layerOut = radius_layerOut_0 + drop;
-      epsilonOut = atan(sqrt(diff_of_squares(radius_layerOut, radius_layerOut_0)) / halflength);
+      layer_outer_radius_at_z_0 = layer_inner_radius_at_z_0 + FWireDiameter + 2.0 * secure;
+      layer_outer_radius_at_z_end = layer_outer_radius_at_z_0 + drop;
+      epsilonOut = atan(sqrt(diff_of_squares(layer_outer_radius_at_z_end, layer_outer_radius_at_z_0)) / halflength);
 
       zlength = halflength;
 
       // save bottom layer inner radius and epsilon before they are modified to build the whole layer hyperboloid volume 
-      radius_layerIn_whole_cell = radius_layerIn_0;
+      layer_inner_radius_at_z_end_whole_cell = layer_inner_radius_at_z_0;
       epsilonIn_whole_cell = epsilonIn;
 
       //------------------------------------------------------------------------
@@ -424,7 +418,7 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
 
       field_wires_bottom.type = "F";
       field_wires_bottom.num = nFWireTopOrBottom;
-      field_wires_bottom.radius = radius_layerIn_0 + FWradii + extShiftFW;
+      field_wires_bottom.radius = layer_inner_radius_at_z_0 + FWradii + extShiftFW;
       field_wires_bottom.delta_phi = delta_phi_top_bottom;
       field_wires_bottom.phioffset = phi_offset_cell_start + cellStaggering;
       field_wires_bottom.stereo = sign_epsilon * epsilon;
@@ -457,12 +451,12 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
       radius_layer_0 += delta_radius_layer;
       drop = radius_layer_0 * dropFactor;
 
-      radius_layerIn_0 = radius_layerOut_0;
-      radius_layerIn = radius_layerOut;
+      layer_inner_radius_at_z_0 = layer_outer_radius_at_z_0;
+      layer_inner_radius_at_z_end = layer_outer_radius_at_z_end;
       epsilonIn = epsilonOut;
-      radius_layerOut_0 = radius_layer_0 - FWireDiameter - 2.0 * secure;
-      radius_layerOut = radius_layerOut_0 + drop;
-      epsilonOut = atan(sqrt(diff_of_squares(radius_layerOut, radius_layerOut_0)) / halflength);
+      layer_outer_radius_at_z_0 = radius_layer_0 - FWireDiameter - 2.0 * secure;
+      layer_outer_radius_at_z_end = layer_outer_radius_at_z_0 + drop;
+      epsilonOut = atan(sqrt(diff_of_squares(layer_outer_radius_at_z_end, layer_outer_radius_at_z_0)) / halflength);
       zlength = halflength;
 
       //------------------------------------------------------------------------
@@ -487,7 +481,7 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
 
       sense_wires.type = "S";
       sense_wires.num = nSWire;
-      sense_wires.radius = senseWireRing_radius_0;
+      sense_wires.radius = sense_wire_radius_at_z_0;
       sense_wires.delta_phi = sense_wire_delta_phi;
       sense_wires.phioffset = cellStaggering;
       sense_wires.stereo = sign_epsilon * epsilon;
@@ -513,7 +507,7 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
 
       field_wires_center.type = "F";
       field_wires_center.num = nSWire * nCenterFWirePerCell;
-      field_wires_center.radius = senseWireRing_radius_0; //iradius;
+      field_wires_center.radius = sense_wire_radius_at_z_0; //iradius;
       field_wires_center.delta_phi = 2. * TMath::Pi() / field_wires_center.num;
       field_wires_center.phioffset = phi_offset_cell_start + cellStaggering;
       field_wires_center.stereo = sign_epsilon * epsilon;
@@ -530,19 +524,19 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
       // Next, fill the geometry parameters of the upper layer.
       //------------------------------------------------------------------------
 
-      radius_layerIn_0 = radius_layerOut_0;
-      radius_layerIn = radius_layerOut;
+      layer_inner_radius_at_z_0 = layer_outer_radius_at_z_0;
+      layer_inner_radius_at_z_end = layer_outer_radius_at_z_end;
       epsilonIn = epsilonOut;
-      radius_layerOut_0 = radius_layerIn_0 + FWireDiameter + 2.0 * secure;
-      radius_layerOut = radius_layerOut_0 + drop;
-      epsilonOut = atan(sqrt(diff_of_squares(radius_layerOut, radius_layerOut_0)) / halflength);
+      layer_outer_radius_at_z_0 = layer_inner_radius_at_z_0 + FWireDiameter + 2.0 * secure;
+      layer_outer_radius_at_z_end = layer_outer_radius_at_z_0 + drop;
+      epsilonOut = atan(sqrt(diff_of_squares(layer_outer_radius_at_z_end, layer_outer_radius_at_z_0)) / halflength);
       zlength = halflength;
 
       // Create hyperboloid volume of the whole layer for the cell sensitive volume definition, not needed per se but helps having a well balanced volume tree (having too many volumes inside one mother volume harms performance)
       wholeHyperboloidVolumeName = dd4hep::_toString(SL, "hyperboloid_SL_%d") + dd4hep::_toString(ilayer, "_layer_%d");
       double radial_inner_offset_to_englobe_wires = field_wires_bottom.thickness + 0.5 * FWireShellThickOut;
       double radial_outer_offset_to_englobe_wires = field_wires_top.thickness + 0.5 * FWireShellThickOut;
-      dd4hep::Hyperboloid whole_layer_hyperboloid = dd4hep::Hyperboloid(radius_layerIn_whole_cell - radial_inner_offset_to_englobe_wires, epsilonIn_whole_cell, radius_layerOut_0 + radial_outer_offset_to_englobe_wires, epsilonOut, zlength);
+      dd4hep::Hyperboloid whole_layer_hyperboloid = dd4hep::Hyperboloid(layer_inner_radius_at_z_end_whole_cell - radial_inner_offset_to_englobe_wires, epsilonIn_whole_cell, layer_outer_radius_at_z_0 + radial_outer_offset_to_englobe_wires, epsilonOut, zlength);
       dd4hep::Volume whole_layer_hyperboloid_volume = dd4hep::Volume(wholeHyperboloidVolumeName, whole_layer_hyperboloid, description.material("GasHe_90Isob_10"));
       whole_layer_hyperboloid_volume.setVisAttributes(description, gascol);
       //registerVolume(wholeHyperboloidVolumeName, whole_layer_hyperboloid_volume);
@@ -566,7 +560,7 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
 
       field_wires_top.type = "F";
       field_wires_top.num = nFWireTopOrBottom;
-      field_wires_top.radius = radius_layerIn_0 - FWradii - extShiftFW;
+      field_wires_top.radius = layer_inner_radius_at_z_0 - FWradii - extShiftFW;
       field_wires_top.delta_phi = delta_phi_top_bottom;
       field_wires_top.phioffset = phi_offset_cell_start + cellStaggering;
       field_wires_top.stereo = sign_epsilon * epsilon;
@@ -587,7 +581,7 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
       // FIXME: this leads to some volume extrusion (corner of the tube going outside of the hyperboloid mother volume)
       // Using the intersection with the hyperboloid mother volume solves it but severely impacts the perfomance (memory and CPU) of the geometry building
       // Other paths to investigate are twisted tubes (caveat: no TGeo shape equivalent), extruded volumes or tessalated solids
-      dd4hep::Tube cellID_tube_segment(radius_layerIn_whole_cell, radius_layerOut_0, halflength, (- sense_wires.delta_phi / 2.0) - phi_offset_to_englobe_wires, (sense_wires.delta_phi / 2.0) - phi_offset_to_englobe_wires);
+      dd4hep::Tube cellID_tube_segment(layer_inner_radius_at_z_end_whole_cell - radial_inner_offset_to_englobe_wires, layer_outer_radius_at_z_0 + radial_outer_offset_to_englobe_wires, halflength, (- sense_wires.delta_phi / 2.0) - phi_offset_to_englobe_wires, (sense_wires.delta_phi / 2.0) - phi_offset_to_englobe_wires);
       
       // Radial translation 
       dd4hep::Translation3D radial_translation_sense_wire(sense_wires.radius, 0., 0.);
@@ -664,14 +658,14 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
     if (SL == (nSuperLayer - 1)) {// the last super layer is special since we need to add the field wires outside of the sensitive volume and the guard wires
 
       // Take care of the field wires outside of the sensitive volume
-      radius_layerIn_0 = radius_layerOut_0;
-      radius_layerIn = radius_layerOut;
+      layer_inner_radius_at_z_0 = layer_outer_radius_at_z_0;
+      layer_inner_radius_at_z_end = layer_outer_radius_at_z_end;
       epsilonIn = epsilonOut;
-      radius_layerOut_0 = radius_layer_0 + FWireDiameter + 2.0 * secure;
-      radius_layerOut = radius_layerOut_0 + drop;
-      epsilonOut = atan(sqrt(diff_of_squares(radius_layerOut, radius_layerOut_0)) / halflength);
+      layer_outer_radius_at_z_0 = radius_layer_0 + FWireDiameter + 2.0 * secure;
+      layer_outer_radius_at_z_end = layer_outer_radius_at_z_0 + drop;
+      epsilonOut = atan(sqrt(diff_of_squares(layer_outer_radius_at_z_end, layer_outer_radius_at_z_0)) / halflength);
 
-      dd4hep::Hyperboloid HypeLayerOut(radius_layerIn_0, epsilonIn, radius_layerOut_0, epsilonOut, halflength);
+      dd4hep::Hyperboloid HypeLayerOut(layer_inner_radius_at_z_0, epsilonIn, layer_outer_radius_at_z_0, epsilonOut, halflength);
       lvLayerVol.push_back(dd4hep::Volume("hyperboloid_last_field_wire_ring", HypeLayerOut, description.material("GasHe_90Isob_10")));
       lvLayerVol.back().setVisAttributes(description, "vCDCH:Plastic");
 
@@ -682,7 +676,7 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
       field_wires_bottom.mother_volume = lvLayerVol.back();
       field_wires_bottom.type = "F";
       field_wires_bottom.num = nFWireTopOrBottom;
-      field_wires_bottom.radius = radius_layerIn_0 + FWradii + extShiftFW;
+      field_wires_bottom.radius = layer_inner_radius_at_z_0 + FWradii + extShiftFW;
       field_wires_bottom.delta_phi = 2. * TMath::Pi() / field_wires_bottom.num;
       field_wires_bottom.phioffset = phi_offset_cell_start + cellStaggering + phi_offset;
       field_wires_bottom.stereo = -1. * sign_epsilon * epsilon;
@@ -703,14 +697,14 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
       // Start placing the outer layer of guard wires (#guard wires == # field wires)
       //------------------------------------------------------------------------
 
-      radius_layerIn_0 = radius_layerOut_0;
-      radius_layerIn = radius_layerOut;
+      layer_inner_radius_at_z_0 = layer_outer_radius_at_z_0;
+      layer_inner_radius_at_z_end = layer_outer_radius_at_z_end;
       epsilonIn = epsilonOut;
-      radius_layerOut_0 = radius_layer_0 + FWireDiameter + 2.0 * secure;
-      radius_layerOut = radius_layerOut_0 + drop;
-      epsilonOut = atan(sqrt(diff_of_squares(radius_layerOut, radius_layerOut_0)) / halflength);
+      layer_outer_radius_at_z_0 = radius_layer_0 + FWireDiameter + 2.0 * secure;
+      layer_outer_radius_at_z_end = layer_outer_radius_at_z_0 + drop;
+      epsilonOut = atan(sqrt(diff_of_squares(layer_outer_radius_at_z_end, layer_outer_radius_at_z_0)) / halflength);
 
-      dd4hep::Hyperboloid HypeLayerOutG(radius_layerIn_0, epsilonOut, outer_radius - envelop_Outer_thickness - 0.0001,
+      dd4hep::Hyperboloid HypeLayerOutG(layer_inner_radius_at_z_0, epsilonOut, outer_radius - envelop_Outer_thickness - 0.0001,
                                         0.0, halflength);
       lvLayerVol.push_back(dd4hep::Volume("hyperboloid_outer_guard_layer", HypeLayerOutG, description.material("GasHe_90Isob_10")));
       lvLayerVol.back().setVisAttributes(description, "vCDCH:Pb");
@@ -834,4 +828,3 @@ static dd4hep::Ref_t create_element(dd4hep::Detector& description, xml_h e, dd4h
 }
 
 DECLARE_DETELEMENT(DriftChamber_o1_v01, create_element)
-
