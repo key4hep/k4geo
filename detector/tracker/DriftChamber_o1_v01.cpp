@@ -178,8 +178,8 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
   double fakeLayerInIWthick = -0.0001 + GasInnerWallThick;
   double guard_layer_inner_radius_at_z_0 = inner_radius + envelop_Inner_thickness - fakeLayerInIWthick;
 
-  double radius_layer_0 = inner_radius + envelop_Inner_thickness + FWradii + secure + capGasLayer;
-  double layer_outer_radius_at_z_0 = radius_layer_0 - FWradii - secure;
+  double layer_inner_radius_at_z_0 = inner_radius + envelop_Inner_thickness + FWradii + secure + capGasLayer;
+  double layer_outer_radius_at_z_0 = layer_inner_radius_at_z_0 - FWradii - secure;
 
   double drop = 0.0;
   double radius_layer = 0.0;
@@ -325,12 +325,12 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
       guard_wires.name = string("Gwire_inner_stereominus");
       CDCHBuild::PlaceGuardWires(guard_wires, FWireShellThickOut, halflength, SL, -1);
 
-      drop = radius_layer_0 * dropFactor;
-      radius_layer = radius_layer_0 + drop;
+      drop = layer_inner_radius_at_z_0 * dropFactor;
+      radius_layer = layer_inner_radius_at_z_0 + drop;
       epsilon = atan(radius_layer * epsilonFactor);
-      layer_inner_radius_at_z_0 = radius_layer_0 - FWradii - 2.0 * secure;
+      layer_inner_radius_at_z_0 = layer_inner_radius_at_z_0 - FWradii - 2.0 * secure;
       layer_inner_radius_at_z_end = layer_inner_radius_at_z_0 + drop;
-      layer_outer_radius_at_z_0 = radius_layer_0 + FWradii;
+      layer_outer_radius_at_z_0 = layer_inner_radius_at_z_0 + FWradii;
       layer_outer_radius_at_z_end = layer_outer_radius_at_z_0 + drop;
       epsilonIn = atan(sqrt(pow(layer_inner_radius_at_z_end, 2) - pow(layer_inner_radius_at_z_0, 2)) / halflength);
       epsilonOut = atan(sqrt(pow(layer_outer_radius_at_z_end, 2) - pow(layer_outer_radius_at_z_0, 2)) / halflength);
@@ -364,7 +364,7 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
       field_wires_top.volume = lvFwireVol.back();
       CDCHBuild::PlaceGuardWires(field_wires_top, FWireShellThickOut, halflength, SL, -1);
 
-      radius_layer_0 += FWradii;
+      layer_inner_radius_at_z_0 += FWradii;
 
     } else {
       delta_radius_layer = 2. * TMath::Pi() * layer_outer_radius_at_z_0 / (nSWire - TMath::Pi());
@@ -380,7 +380,7 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
       // on top of the following one, so new layerIn = old layerOut
       //------------------------------------------------------------------------
 
-      sense_wire_radius_at_z_0 = radius_layer_0 + 0.5 * delta_radius_layer;
+      sense_wire_radius_at_z_0 = layer_inner_radius_at_z_0 + 0.5 * delta_radius_layer;
       sign_epsilon *= -1;
 
       layer_inner_radius_at_z_0 = layer_outer_radius_at_z_0;
@@ -445,14 +445,14 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
       // Next, fill the geometry parameters of the central layer.
       //------------------------------------------------------------------------
 
-      iradius = radius_layer_0;
-      radius_layer_0 += delta_radius_layer;
-      drop = radius_layer_0 * dropFactor;
+      iradius = layer_inner_radius_at_z_0;
+      layer_inner_radius_at_z_0 += delta_radius_layer;
+      drop = layer_inner_radius_at_z_0 * dropFactor;
 
       layer_inner_radius_at_z_0 = layer_outer_radius_at_z_0;
       layer_inner_radius_at_z_end = layer_outer_radius_at_z_end;
       epsilonIn = epsilonOut;
-      layer_outer_radius_at_z_0 = radius_layer_0 - FWireDiameter - 2.0 * secure;
+      layer_outer_radius_at_z_0 = layer_inner_radius_at_z_0 - FWireDiameter - 2.0 * secure;
       layer_outer_radius_at_z_end = layer_outer_radius_at_z_0 + drop;
       epsilonOut = atan(sqrt(diff_of_squares(layer_outer_radius_at_z_end, layer_outer_radius_at_z_0)) / halflength);
       zlength = halflength;
@@ -659,7 +659,7 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
       layer_inner_radius_at_z_0 = layer_outer_radius_at_z_0;
       layer_inner_radius_at_z_end = layer_outer_radius_at_z_end;
       epsilonIn = epsilonOut;
-      layer_outer_radius_at_z_0 = radius_layer_0 + FWireDiameter + 2.0 * secure;
+      layer_outer_radius_at_z_0 = layer_inner_radius_at_z_0 + FWireDiameter + 2.0 * secure;
       layer_outer_radius_at_z_end = layer_outer_radius_at_z_0 + drop;
       epsilonOut = atan(sqrt(diff_of_squares(layer_outer_radius_at_z_end, layer_outer_radius_at_z_0)) / halflength);
 
@@ -698,7 +698,7 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
       layer_inner_radius_at_z_0 = layer_outer_radius_at_z_0;
       layer_inner_radius_at_z_end = layer_outer_radius_at_z_end;
       epsilonIn = epsilonOut;
-      layer_outer_radius_at_z_0 = radius_layer_0 + FWireDiameter + 2.0 * secure;
+      layer_outer_radius_at_z_0 = layer_inner_radius_at_z_0 + FWireDiameter + 2.0 * secure;
       layer_outer_radius_at_z_end = layer_outer_radius_at_z_0 + drop;
       epsilonOut = atan(sqrt(diff_of_squares(layer_outer_radius_at_z_end, layer_outer_radius_at_z_0)) / halflength);
 
