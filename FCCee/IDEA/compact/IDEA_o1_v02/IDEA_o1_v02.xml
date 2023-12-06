@@ -33,13 +33,13 @@
   <!-- Import dimensions -->
   <include ref="DectDimensions_IDEA_o1_v01.xml"/>
 
-  <!-- Import accelerator components 
+  <!-- Import accelerator components -->
   <include ref="Beampipe_o4_v05.xml"/>
   <include ref="BeamInstrumentation_o1_v01.xml"/>
   <include ref="LumiCal_o1_v01.xml"/>
 
-   Import vertex 
-  <include ref="Vertex_IDEA_o1_v01.xml"/>-->
+  <!-- Import vertex -->
+  <include ref="Vertex_IDEA_o1_v01.xml"/>
 
   <!-- Import drift chamber -->
   <include ref="DriftChamber_o1_v01.xml"/>
