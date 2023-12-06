@@ -180,12 +180,11 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
 
   double layer_inner_radius_at_z_0 = inner_radius + envelop_Inner_thickness + FWradii + secure + capGasLayer;
   double layer_outer_radius_at_z_0 = layer_inner_radius_at_z_0 - FWradii - secure;
+  double layer_inner_radius_at_z_end = 0.0;
+  double layer_outer_radius_at_z_end = 0.0;
 
   double drop = 0.0;
   double radius_layer = 0.0;
-  double layer_inner_radius_at_z_0 = 0.0;
-  double layer_inner_radius_at_z_end = 0.0;
-  double layer_outer_radius_at_z_end = 0.0;
   double epsilonIn = 0.0;
   double epsilonOut = 0.0;
   double phi_offset_cell_start = 0.0;
