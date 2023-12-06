@@ -19,9 +19,9 @@
     <constant name = "CDCH:alpha"                  value = "30*degree"/>
     <!-- Radial extent of the cell in the first layer, used to define the radial step between layers -->
     <constant name = "CDCH:cellDimension"          value = "11.846*mm"/>
-    <!-- Number of super layer. All layers within a super layer have the same number of cell (or sense wire)-->
+    <!-- Number of super layer (baseline = 14). All layers within a super layer have the same number of cell (or sense wire)-->
     <constant name = "CDCH:nSuperLayer"            value = "14"/>
-    <!-- Number of layer in a super-layer -->
+    <!-- Number of layer in a super-layer (baseline = 8) -->
     <constant name = "CDCH:nLayer"                  value = "8"/>
     <!-- For development, you can lower the number of (super-)layer to run faster
     <constant name = "CDCH:nSuperLayer"            value = "4"/>
@@ -46,6 +46,9 @@
     <constant name = "CDCH:InGWireShellThickOut"   value = "0.0006*mm"/>
     <constant name = "CDCH:OutGWireShellThickIn"   value = "0.050*mm"/>
     <constant name = "CDCH:OutGWireShellThickOut"  value = "0.0006*mm"/>
+    <!-- Factor applied to enlarge the wire thickness (baseline = 1.0). Use it only to visualize the wires which are otherwise too small-->
+    <!-- NB: not propagated to the envelope volumes, you will have volume extrusions if != 1 -->
+    <constant name = "CDCH:wireThicknessDilution"  value = "1.0"/>
     <!-- Thicknesses of the carbon fiber support structure, the endcap including services should sum up to 5% of X0 -->
     <constant name = "CDCH:CarbonInnerWallThick"   value = "0.2*mm"/>
     <constant name = "CDCH:CopperInnerWallThick"   value = "0.001*mm"/>
@@ -90,9 +93,9 @@
     <vis name="vCDCH:Sc"            alpha="0.6" r="0.8" g="0.8" b="0.0" showDaughters="true" visible="true"/>
     <vis name="vCDCH:Plastic"       alpha="1.0" r="1.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
     <vis name="vCDCH:Steel"         alpha="0.0" showDaughters="true" visible="false"/>
-    <vis name="vCDCH:Gas1"          alpha="1.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="false"/>
-    <vis name="vCDCH:Gas2"    alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false"/>
-    <vis name="vCDCH:Gas3"        alpha="1.0" r="1.0" g="0.0" b="1.0" showDaughters="true" visible="false"/>
+    <vis name="vCDCH:Gas1"          alpha="1.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="vCDCH:Gas2"    alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="vCDCH:Gas3"        alpha="1.0" r="1.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
     <vis name="vCDCH:Wire1"         alpha="1.0"  r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
     <vis name="vCDCH:Wire2"         alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
     <vis name="vCDCH:Wire3"         alpha="1.0" r="1.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
