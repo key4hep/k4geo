@@ -212,8 +212,7 @@ void ddDRcalo::DRconstructor::implementFibers(xml_comp_t& x_theta, dd4hep::Volum
         float centerZ = towerHeight/2. - fiberLen/2.;
 
         // final check
-        checkContained(rootTrap,pos,towerHeight/2.-fiberLen,true);
-
+        if ( checkContained(rootTrap,pos,towerHeight/2.-fiberLen) ) {
         dd4hep::Position centerPos( pos.x(),pos.y(),centerZ );
 
         dd4hep::Tube shortFiberEnv = dd4hep::Tube(0.,fX_cladC.rmax(),fiberLen/2.);
@@ -223,6 +222,7 @@ void ddDRcalo::DRconstructor::implementFibers(xml_comp_t& x_theta, dd4hep::Volum
 
         implementFiber(towerVol, trap, centerPos, column, row, shortFiberEnv, shortFiber, shortFiberC, shortFiberS, capC, capS);
         fFiberCoords.push_back( std::make_pair(column,row) );
+        }
       }
     }
   }
@@ -381,7 +381,7 @@ void ddDRcalo::DRconstructor::getNormals(TGeoTrap* rootTrap, int numxBl2, double
 dd4hep::Box ddDRcalo::DRconstructor::calculateFullBox(TGeoTrap* rootTrap, int& rmin, int& rmax, int& cmin, int& cmax, double dz) {
   float gridSize = fX_dim.distance();
   double zmin = -rootTrap->GetDz() + TGeoShape::Tolerance();
-  float xmin = 0., ymin = 0., ymax = 0.;
+  float xmin = 0., xmax = 0., ymin = 0., ymax = 0.;
 
   for (int row = 0; row < fNumy; row++) { // bottom-up
     auto localPosition = dd4hep::Position( fSegmentation->localPosition(fNumx,fNumy,fNumx/2,row) );
@@ -413,13 +413,15 @@ dd4hep::Box ddDRcalo::DRconstructor::calculateFullBox(TGeoTrap* rootTrap, int& r
     }
   }
 
-  // assume phi symmetry
-  float xmax = -xmin;
-  cmax = fNumx-1 - cmin;
-
-  // verify assumptions
-  if ( std::abs(ymax+ymin) > TGeoShape::Tolerance() )
-    throw std::runtime_error("Envelop of full length fibers (fullBox) is not located at the centre of the tower!");
+  for (int col = fNumx-1; col!=0; col--) { // right-left
+    auto localPosition = dd4hep::Position( fSegmentation->localPosition(fNumx,fNumy,col,rmin) );
+    auto pos = localPosition + dd4hep::Position(gridSize/2.,-gridSize/2.,0.);
+    if ( checkContained(rootTrap,pos,zmin) ) {
+      xmax = pos.x();
+      cmax = col;
+      break;
+    }
+  }
 
   return dd4hep::Box( (xmax-xmin)/2., (ymax-ymin)/2., dz );
 }
