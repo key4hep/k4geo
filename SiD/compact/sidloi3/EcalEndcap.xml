@@ -1,4 +1,4 @@
-<detector id="6" name="EcalEndcap" type="GenericCalEndcap_o1_v01" reflect="true" readout="EcalEndcapHits" vis="EcalEndcapVis" calorimeterType="EM_ENDCAP"gap="0.*cm">
+<detector id="6" name="EcalEndcap" type="GenericCalEndcap_o1_v01" reflect="true" readout="EcalEndcapHits" vis="EcalEndcapVis" calorimeterType="EM_ENDCAP" gap="0.*cm">
   <comment>EM Calorimeter Endcaps</comment>
 
 
@@ -11,7 +11,7 @@
     </shape>
     <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/12"/>
   </envelope>
-  
+
 
 
   <layer repeat="1">

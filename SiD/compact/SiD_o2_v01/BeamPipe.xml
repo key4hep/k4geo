@@ -1,3 +1,4 @@
+<lccdd>
 <comment>Beampipe</comment>
 
 <detectors>
@@ -84,5 +85,4 @@
 <!--     <zplane rmin="0.*cm" rmax="6.0*cm"    z="-tracking_region_zmax" /> -->
 <!-- </detector>  -->
 </detectors>
-
-
+</lccdd>

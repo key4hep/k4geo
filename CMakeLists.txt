@@ -1,15 +1,15 @@
 cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 
 #---------------------------
-set( PackageName lcgeo )
+set( PackageName k4geo )
 #---------------------------
 
 project(${PackageName})
 
 # project version
 SET( ${PackageName}_VERSION_MAJOR 0 )
-SET( ${PackageName}_VERSION_MINOR 18 )
-SET( ${PackageName}_VERSION_PATCH 1 )
+SET( ${PackageName}_VERSION_MINOR 19 )
+SET( ${PackageName}_VERSION_PATCH 0 )
 
 SET( ${PackageName}_VERSION "${${PackageName}_VERSION_MAJOR}.${${PackageName}_VERSION_MINOR}" )
 SET( ${PackageName}_SOVERSION "${${PackageName}_VERSION_MAJOR}.${${PackageName}_VERSION_MINOR}" )
@@ -17,6 +17,10 @@ SET( ${PackageName}_SOVERSION "${${PackageName}_VERSION_MAJOR}.${${PackageName}_
 set(CMAKE_MODULE_PATH  ${CMAKE_MODULE_PATH}  ${PROJECT_SOURCE_DIR}/cmake )
 set(LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+
+include(GNUInstallDirs)
+set(CMAKE_INSTALL_LIBDIR lib)
+set(CMAKE_INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 
 #------------- set the default installation directory to be the source directory
 
@@ -49,13 +53,15 @@ message ( STATUS "ROOT_VERSION: ${ROOT_VERSION}" )
 find_package( Geant4 REQUIRED ) 
 find_package( LCIO REQUIRED)
 
+add_subdirectory(detectorSegmentations)
 
 file(GLOB sources 
-  ./detector/tracker/*.cpp 
-  ./detector/calorimeter/*.cpp 
-  ./detector/fcal/*.cpp 
-  ./detector/other/*.cpp 
-  ./detector/CaloTB/*.cpp 
+  ./detector/tracker/*.cpp
+  ./detector/calorimeter/*.cpp
+  ./detector/calorimeter/dual-readout/src/*.cpp
+  ./detector/fcal/*.cpp
+  ./detector/other/*.cpp
+  ./detector/CaloTB/*.cpp
   ./FCalTB/setup/*.cpp
   ./plugins/LinearSortingPolicy.cpp
   ./detector/PID/ARC_geo_o1_v01.cpp
@@ -74,17 +80,25 @@ endif()
 add_dd4hep_plugin(${PackageName} SHARED ${sources})
 add_dd4hep_plugin(${PackageName}G4 SHARED ${G4sources})
 
+add_library(lcgeo ALIAS k4geo)
+
 target_include_directories(${PackageName}   PRIVATE ${PROJECT_SOURCE_DIR}/detector/include )
 target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detector/include )
 
-target_include_directories(${PackageName}   SYSTEM PUBLIC ${LCIO_INCLUDE_DIRS})
-target_include_directories(${PackageName}G4 SYSTEM PUBLIC ${LCIO_INCLUDE_DIRS})
+target_include_directories(${PackageName}   PRIVATE ${PROJECT_SOURCE_DIR}/detector/calorimeter/dual-readout/include )
+target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detector/calorimeter/dual-readout/include )
 
-target_link_libraries(${PackageName}   DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers ${ROOT_LIBRARIES} ${LCIO_LIBRARIES})
-target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ${ROOT_LIBRARIES} ${Geant4_LIBRARIES} ${LCIO_LIBRARIES})
+target_link_libraries(${PackageName}   DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers ROOT::Core LCIO::LCIO detectorSegmentations)
+target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ROOT::Core ${Geant4_LIBRARIES} LCIO::LCIO)
 
 #Create this_package.sh file, and install
 dd4hep_instantiate_package(${PackageName})
+
+# Destination directories are hardcoded because GNUdirectories are not included
+install(TARGETS ${PackageName}  ${PackageName}G4
+  EXPORT ${PROJECT_NAME}Targets
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT shlib
+)
 
 #---Testing-------------------------------------------------------------------------
 if(BUILD_TESTING)
@@ -104,4 +118,24 @@ if(INSTALL_COMPACT_FILES)
   INSTALL(DIRECTORY CaloTB CLIC FCalTB FCCee ILD fieldmaps SiD IDEA DESTINATION share/k4geo )
 endif()
 
-add_subdirectory(detector/IDEA)
+# create k4geoConfig and friends
+
+INSTALL(EXPORT ${PROJECT_NAME}Targets
+  NAMESPACE ${PROJECT_NAME}::
+  DESTINATION ${CMAKE_INSTALL_CMAKEDIR}
+  FILE k4geoConfig-targets.cmake)
+
+include(CMakePackageConfigHelpers)
+
+configure_package_config_file(cmake/k4geoConfig.cmake.in ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_CMAKEDIR}/k4geoConfig.cmake
+  PATH_VARS CMAKE_INSTALL_CMAKEDIR
+  INSTALL_DESTINATION ${CMAKE_INSTALL_CMAKEDIR} )
+
+write_basic_package_version_file(
+  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_CMAKEDIR}/k4geoConfigVersion.cmake
+  VERSION ${${PackageName}_VERSION}
+  COMPATIBILITY SameMajorVersion )
+
+install(FILES ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_CMAKEDIR}/k4geoConfig.cmake
+              ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_CMAKEDIR}/k4geoConfigVersion.cmake
+        DESTINATION ${CMAKE_INSTALL_CMAKEDIR} )

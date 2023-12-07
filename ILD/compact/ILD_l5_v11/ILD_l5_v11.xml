@@ -1,0 +1,166 @@
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+       xmlns:xs="http://www.w3.org/2001/XMLSchema"
+       xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+  <info name="ILD_l5_v02"
+        title="ILD multi-technology model used for the optimisation"
+        author="F. Gaede, S.Lu, D.Jeans"
+        url="http://ilcsoft.desy.de"
+        status="experimental"
+        version="v02">
+    <comment>ILD simulation models used for detector optimisation </comment>
+  </info>
+  <includes>
+    <gdmlFile  ref="../ILD_common_v02/elements.xml"/>
+    <gdmlFile  ref="../ILD_common_v02/materials.xml"/>
+  </includes>
+
+  <define>
+    <include ref="top_defs_ILD_l5_v11.xml"/>
+    <include ref="../ILD_common_v02/top_defs_common_v02.xml"/>
+    <include ref="basic_defs.xml"/>
+    <include ref="envelope_defs.xml"/>
+    <include ref="../ILD_common_v02/misc_defs.xml"/>
+    <include ref="../ILD_common_v02/tracker_defs.xml"/>
+    <include ref="../ILD_common_v02/ecal_hybrid_defs.xml"/>
+    <include ref="../ILD_common_v02/hcal_defs.xml"/>
+    <include ref="../ILD_common_v02/yoke_defs.xml"/>
+    <include ref="../ILD_common_v02/services_defs.xml"/>
+    <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
+    <include ref="../ILD_common_v02/limits.xml"/>
+
+    <include ref="FCCdefs.xml"/>
+
+    <!-- Readout slice in ecal for reconstruction -->
+    <constant name="Ecal_readout_segmentation_slice0" value="4"/>
+    <constant name="Ecal_readout_segmentation_slice1" value="10"/>
+    <!-- Readout slice in hcal for reconstruction -->
+    <constant name="Hcal_readout_segmentation_slice" value="3"/>
+  </define>
+
+  <limits>
+    <limitset name="cal_limits">
+      <limit name="step_length_max" particles="*" value="cal_steplimit_val" unit="cal_steplimit_unit" />
+    </limitset>
+    <limitset name="TPC_limits">
+      <limit name="step_length_max" particles="*" value="tpc_steplimit_val" unit="tpc_steplimit_unit" />
+    </limitset>
+    <limitset name="Tracker_limits">
+      <limit name="step_length_max" particles="*" value="tracker_steplimit_val" unit="tracker_steplimit_unit" />
+    </limitset>
+  </limits>
+
+  <regions>
+    <region name="VertexBarrelRegion"  />
+    <region name="VertexEndcapRegion"  />
+    <region name="InnerTrackerBarrelRegion"  />
+    <region name="InnerTrackerEndcapRegion"  />
+    <region name="BeampipeRegion"  />
+  </regions>
+
+  <include ref="../ILD_common_v02/display.xml"/>
+
+  <include ref="Beampipe_o4_v05.xml"/>
+  <include ref="BeamInstrumentation_o3_v02_fitShield.xml"/>
+  <include ref="LumiCal_o3_v02_03.xml"/>
+  <include ref="Vertex_o4_v07_smallBP.xml"/>
+  <include ref="InnerTrackerILD_o1_v01_00.xml"/>  
+  <include ref="../ILD_common_v02/tpc10_01.xml"/>
+  <include ref="../ILD_common_v02/set_simple_planar_sensors_01.xml"/>
+  <include ref="../ILD_common_v02/SEcal06_hybrid_Barrel.xml"/>
+  <include ref="../ILD_common_v02/SEcal06_hybrid_Endcaps.xml"/>
+  <include ref="../ILD_common_v02/SHcalSc04_Barrel_v04.xml"/>
+  <include ref="../ILD_common_v02/SHcalSc04_Endcaps_v01_LARGE.xml"/>
+  <include ref="../ILD_common_v02/SHcalSc04_EndcapRing_v01.xml"/>
+  <include ref="../ILD_common_v02/Yoke05_Barrel.xml"/>
+  <include ref="../ILD_common_v02/Yoke06_Endcaps.xml"/>
+  <include ref="../ILD_common_v02/coil03.xml"/>
+  <include ref="../ILD_common_v02/SServices01.xml"/>
+
+  <plugins>
+    <plugin name="DD4hepVolumeManager"/>
+    <plugin name="InstallSurfaceManager"/>
+  </plugins>
+
+  <fields>
+
+<!-- the simplest description, a la ILD -->
+    <field type="solenoid" name="GlobalSolenoid" inner_field="SolenoidField"
+           outer_field="-1.0*tesla" 
+	   zmax="Coil_half_length"
+           inner_radius="Coil_inner_radius"
+           outer_radius="world_side" />
+
+<!-- with compensating soleoids, a la CLD -->
+<!-- DJeans thinks this may not be quite correct; check before using... -->
+<!-- 
+    <field name="GlobalSolenoid" type="solenoid"
+           inner_field="SolenoidField"
+           outer_field="-1.0*tesla"
+           zmax="Solenoid_Coil_half_length"
+           outer_radius="Solenoid_Coil_radius">
+    </field>
+
+    <field name="CompensatingSolenoidZplus" type="solenoid"
+           inner_field="-SolenoidField -SolenoidField * QD0_min_z / ( QD0_min_z - CompSol_min_z)"
+           outer_field="0*tesla"
+           zmax="QD0_min_z"
+           zmin="CompSol_min_z"
+           outer_radius="20*cm">
+    </field>
+
+    <field name="CompensatingSolenoidZminus" type="solenoid"
+           inner_field="-SolenoidField -SolenoidField * QD0_min_z / ( QD0_min_z - CompSol_min_z)"
+           outer_field="0*tesla"
+           zmin="-QD0_min_z"
+           zmax="-CompSol_min_z"
+           outer_radius="20*cm">
+    </field>
+-->
+<!-- to check with the visualisation that this works... :
+      <field name="GlobalSolenoid" type="solenoid"
+             inner_field="SolenoidField"
+             outer_field="-1.5*tesla"
+             zmax="1*m"
+             outer_radius="Solenoid_Coil_radius">
+      </field>
+      <field name="CompensatingSolenoid" type="solenoid"
+             inner_field="-SolenoidField"
+             outer_field="0*tesla"
+             zmax="3*m"
+             zmin="1*m"
+             outer_radius="Solenoid_Coil_radius">
+      </field>
+-->
+
+
+<!-- Detailed field map; this should be superimposed on a 2T field -->
+<!--
+    <field name="TestField" type="FieldXYZ"
+       filename    = "fieldMapXYZ_120218.root"
+       treeName    = "ntuple"
+       xVarName    = "X"
+       yVarName    = "Y"
+       zVarName    = "Z"
+       BxVarName   = "Bx"
+       ByVarName   = "By"
+       BzVarName   = "Bz"
+       xScale      = "1.0"
+       yScale      = "1.0"
+       zScale      = "1.0"
+       bScale      = "1.0"
+       inner_radius="0*mm"
+       outer_radius="500*mm"
+       zmax="3000*mm"
+       coorUnits   = "mm"
+       BfieldUnits = "tesla">
+       </field>
+-->
+
+
+  </fields>
+
+
+
+
+
+</lccdd>

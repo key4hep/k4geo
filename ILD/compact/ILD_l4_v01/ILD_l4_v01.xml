@@ -4,7 +4,7 @@
 
   <info name="ILD_l4_v01"
         title="ILD multi-technology model used for the optimisation"
-        author="F. Gaede & S. Lu"
+        author="F. Gaede and S. Lu"
         url="http://ilcsoft.desy.de"
         status="experimental"
         version="experimental">

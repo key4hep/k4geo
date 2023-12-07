@@ -1,3 +1,95 @@
+# v00-19-00
+
+* 2023-11-22 alvarotd ([PR#289](https://github.com/key4hep/k4geo/pull/289))
+  * CLD_o3_v05 is created. This option evolves from option 2 version 05. The main characteristics with respect the mother version are:
+  	- ARC subdetectors included between the trackers and the ECal. 
+  	- Trackers are shrunk by 20 cm in radial and Z direction to accommodate the ARC. The space between layers is reduced proportionally, and the angular coverage is preserved.
+
+* 2023-11-16 Leonhard Reichenbach ([PR#300](https://github.com/key4hep/k4geo/pull/300))
+  - Add pre-commit check-xml test to validate compact files
+
+* 2023-11-16 Daniel Jeans ([PR#299](https://github.com/key4hep/k4geo/pull/299))
+  - fix the xml issues relating to ILD models from https://github.com/key4hep/k4geo/pull/297#issuecomment-1803985971
+
+* 2023-11-16 Andre Sailer ([PR#298](https://github.com/key4hep/k4geo/pull/298))
+  - CMake: The lcgeo project is renamed to k4geo, this also changes library names
+  - CMake: add the creation of a k4geoConfig.cmake file
+
+* 2023-11-15 SwathiSasikumar ([PR#286](https://github.com/key4hep/k4geo/pull/286))
+  ECalBarrelInclined_geo: Implemented filling of the LayeredCalorimeterData extension, which now allows reconstruction of clusters by PandoraPFA. The detector geometry compact files used for the reconstruction are added in```CLD_o4_v05```.
+
+* 2023-11-08 Leonhard Reichenbach ([PR#297](https://github.com/key4hep/k4geo/pull/297))
+  - Thank you for writing the text to appear in the release notes. It will show up
+    exactly as it appears between the two bold lines
+  - ...
+
+* 2023-11-03 Alvaro Tolosa Delgado ([PR#293](https://github.com/key4hep/k4geo/pull/293))
+  - This PR is the equivalent to [PR56](https://github.com/HEP-FCC/FCCDetectors/pull/56/) in FCCDetectors
+    - New segmentation imported from FCCDetectors, refactored as `FCCSWGridModuleThetaMerged_k4geo`
+    - New version of ALLEGRO_o1_v02, evolving the ECAL barrel  to include the new segmentation
+
+* 2023-10-04 Daniel Jeans ([PR#288](https://github.com/key4hep/k4geo/pull/288))
+  - Update to SServices00 to allow individual components to be included/excluded
+  -- default behaviour unchanged
+  
+  - add new model ILD_l5_v10 : ILD model for ILC
+  -- inner silicon (VTX, SIT, FTD) replaced by FCCee_o2_v02-inspired design
+  
+  - add new model ILD_l5_v11 : ILD model for FCCee
+  -- inner silicon replaced by FCCee_o2_v02-inspired design
+  -- beampipe, MDI from FCCee_o2_v02
+
+* 2023-10-04 Alvaro Tolosa Delgado ([PR#282](https://github.com/key4hep/k4geo/pull/282))
+  * Migration of IDEA and ALLEGRO detectors from FCCDetectors repository, becoming each one the option 1 version 01 of the corresponding detector
+  	- The compact files and detector constructors files, and the detector name therein, are renamed to avoid collision with FCCDetector components by appending the suffix `_o1_v01`
+  	- IDEA compact files are copied into `./FCCee/IDEA/compact/IDEA_o1_v01`
+  	- ALLEGRO compact files are copied into `./FCCee/ALLEGRO/compact/ALLEGRO_o1_v01`
+  	- The detector constructors are placed in the corresponding directory inside `./detector`, and therein in the appropriate sub-directory;
+  		- `calorimeter`: CaloEndcapDiscs_o1_v01_geo.cpp, HCalThreePartsEndcap_o1_v01_geo.cpp, HCalTileBarrel_o1_v01_geo.cpp
+  		- `other`: SimpleCylinder_geo_o1_v01.cpp
+  		- `tracker`: parametrised_DriftChamber_o1_v01.cpp
+  	- DD4hep segmentations from FCCDetectors were also migrated into the directory `detectorSegmentations`, and renamed by appending the suffix `_k4geo`
+
+* 2023-10-03 Andre Sailer ([PR#291](https://github.com/key4hep/k4geo/pull/291))
+  * CLD_o2_v05: Beampipe_o4_v05: correct the material for the ConicalChamber from Beryllium to Albemet162
+
+* 2023-10-03 Armin Fehr ([PR#273](https://github.com/key4hep/k4geo/pull/273))
+  - Adding the IDEA_o1_v02 detector in key4hep, for the start just the vertex detector (vertex barrel + outer barrel) and the machine components, some place holder detectors otherwise.
+
+* 2023-08-25 Daniel Jeans ([PR#285](https://github.com/key4hep/k4geo/pull/285))
+  - Add a simple calorimeter stack, based on CaloPrototype_v02, which uses MultiSegmentation
+     - e.g. can be used for a stack with alternating sensitive layer types
+
+* 2023-08-23 Andre Sailer ([PR#287](https://github.com/key4hep/k4geo/pull/287))
+  - Examples: make arcsim example always create DD4hep ROOT output
+
+* 2023-08-23 Andre Sailer ([PR#284](https://github.com/key4hep/k4geo/pull/284))
+  - CMake: Install detector XML files in share/k4geo instead of additional compact
+
+* 2023-08-23 Andre Sailer ([PR#280](https://github.com/key4hep/k4geo/pull/280))
+  - FCCee_o2_v03: Copy of FCCDetectors FCC_o2_v03, and renaming of XML files to make diff with existing models easier, this model is obsolete
+  - FCCee_o2_v04: Copy of FCCDetectors FCC_o2_v04, and renaming of XML files to make diff easier
+  
+  - CLD_o2_v05: New implementation of the CLD detector with small beampipe design according to latest standard design; modified vertex detector to fit into the beampipe constraints (reduced length of all barrel layers, based on FCCee_o2_v02 from k4Geo); fixed overlaps in Inner and Outer Tracker
+
+* 2023-07-14 jmcarcell ([PR#281](https://github.com/key4hep/k4geo/pull/281))
+  - Rename `CMAKE_{SOURCE,BIN}_DIR` to `PROJECT_{SOURCE,BIN}_DIR`
+
+* 2023-07-05 Andre Sailer ([PR#279](https://github.com/key4hep/k4geo/pull/279))
+  - CLD Detector models moved from FCCee to FCCee/CLD, for #267
+
+* 2023-06-27 jmcarcell ([PR#278](https://github.com/key4hep/k4geo/pull/278))
+  - Remove a couple of unneeded lines in CMakeLists.txt
+
+* 2023-06-27 jmcarcell ([PR#277](https://github.com/key4hep/k4geo/pull/277))
+  - Fix setting RPATH for the installed binaries
+
+* 2023-06-20 BrieucF ([PR#276](https://github.com/key4hep/k4geo/pull/276))
+  - Migrate the noble liquid ECAL barrel C++ builder from [FCCDetectors](https://github.com/HEP-FCC/FCCDetectors/blob/main/Detector/DetFCChhECalInclined/src/ECalBarrelInclined_geo.cpp) together with its documentation
+
+* 2023-06-13 tmadlener ([PR#275](https://github.com/key4hep/k4geo/pull/275))
+  - Move to `dd4hep::CellID` for cellIDs, after [AIDASoft/DD4hep#1125](https://github.com/AIDASoft/DD4hep/pull/1125)
+
 # v00-18-01
 
 * 2023-05-26 jmcarcell ([PR#274](https://github.com/key4hep/k4geo/pull/274))

@@ -3,23 +3,23 @@
 
 
 
-  <!-- Kernel parameters  
-     UI="UI" is default, 
-  
+  <!-- Kernel parameters
+     UI="UI" is default,
+
      Note:
      NumEvents is ignored in interactive sessions, but  used
      in batch mode without ui nor vis.
-  
+
      To run batch: set UI=""
   -->
-  <!--kernel UI="UI" NumEvents="1"/-->  
+  <!--kernel UI="UI" NumEvents="1"/-->
 
-  <kernel UI="" NumEvents="9" />  
+  <kernel UI="" NumEvents="9" />
 
 
-  <!-- List of globally known actions. These actions will be registered with the Geant4Kernel 
+  <!-- List of globally known actions. These actions will be registered with the Geant4Kernel
      object and may be retrieved by there using the action name.
-  
+
      Note: registered actions MUST be unique.
      However, not all actions need to registered....
      Only register those, you later need to retrieve by name.
@@ -60,7 +60,7 @@
      which are explained in the documentation.
      These are typically the "standard" moments: BeginRun, EndRun, BeginEvent, etc.
      and the calls after processing the hits of each sensitive detector.
-  
+
   -->
   <phases>
     <phase type="RunAction/begin">
@@ -84,7 +84,7 @@
      may be shared between many sensitive detectors. Alternatively filters
      may be directly attached to the sensitive detector in question.
      Attributes are directly passed as properties to the filter action.
-  
+
      Note: registered global filters MUST be unique.
      However, not all filters need to registered....
   -->
@@ -114,7 +114,7 @@
      Note: Action sequences exist for each of the various geant4 callback,
      which are explained in the documentation, such as EventAction, RunAction, etc
      and the calls after processing the hits of each sensitive detector.
-  
+
   -->
   <sequences>
     <sequence name="Geant4EventActionSequence/EventAction">
@@ -162,13 +162,13 @@
       <filter name="EnergyDepositMinimumCut/SiTracker"/>
       <action name="TRKSiSD00/FTDCollection"/>
     </sequence>
-    
+
     <sequence sd="SIT" type="Geant4SensDetActionSequence">
       <filter name="GeantinoRejector"/>
       <filter name="EnergyDepositMinimumCut/SiTracker"/>
       <action name="TRKSiSD00/SITCollection"/>
     </sequence>
-    
+
     <sequence sd="TPC" type="Geant4SensDetActionSequence">
       <filter name="GeantinoRejector"/>
       <filter name="EnergyDepositMinimumCut/TPC"/>
@@ -180,7 +180,7 @@
       <filter name="EnergyDepositMinimumCut/SiTracker" />
       <action name="TRKSiSD00/SETCollection"/>
     </sequence>
-    
+
 
 
     <!-- use simple SD for the calorimeters as well until we have -->
@@ -189,8 +189,8 @@
     <!-- SDs with simple segmentations: -->
     <!-- <sequence sd="EcalBarrel" type="Geant4SensDetActionSequence">     <action name="SDCaloLCIO/EcalBarrelCollection">     </action> </sequence> -->
     <!-- <sequence sd="EcalEndcap" type="Geant4SensDetActionSequence">     <action name="SDCaloLCIO/EcalEndcapsCollection">    </action> </sequence> -->
-    <!-- <\!-- <sequence sd="EcalEndcapRing" type="Geant4SensDetActionSequence"> <action name="SDCaloLCIO/EcalEndcapRingCollection"> </action> </sequence> -\-> -->
-    
+    <!-- <sequence sd="EcalEndcapRing" type="Geant4SensDetActionSequence"> <action name="SDCaloLCIO/EcalEndcapRingCollection"> </action> </sequence> -->
+
     <!-- <sequence sd="HcalBarrel"     type="Geant4SensDetActionSequence"> <action name="SDCaloLCIO/HcalBarrelCollection">     </action> </sequence> -->
     <!-- <sequence sd="HcalEndcap"     type="Geant4SensDetActionSequence"> <action name="SDCaloLCIO/HcalEndcapsCollection">    </action> </sequence> -->
     <!-- <sequence sd="HcalEndcapRing" type="Geant4SensDetActionSequence"> <action name="SDCaloLCIO/HcalEndcapRingCollection"> </action> </sequence> -->
@@ -210,12 +210,12 @@
       </action>
     </sequence>
 
-   <sequence sd="EcalECRing" type="Geant4SensDetActionSequence"> 
-      <action name="SDHcalBarrel/EcalEndcapRingCollection"> 
-      <properties cellSize="{1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0 }" 
-                  applyBirksLawFlag="false"/> 
-      </action> 
-    </sequence> 
+   <sequence sd="EcalECRing" type="Geant4SensDetActionSequence">
+      <action name="SDHcalBarrel/EcalEndcapRingCollection">
+      <properties cellSize="{1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0 }"
+                  applyBirksLawFlag="false"/>
+      </action>
+    </sequence>
 
     <sequence sd="HcalBarrel" type="Geant4SensDetActionSequence">
       <action name="SDHcalBarrel/HcalBarrelRegCollection">
@@ -251,6 +251,6 @@
                   applyBirksLawFlag="false"/>
       </action>
     </sequence>
-        
+
   </sequences>
 </geant4_setup>

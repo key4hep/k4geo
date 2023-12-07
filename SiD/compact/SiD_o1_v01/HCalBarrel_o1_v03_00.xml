@@ -1,8 +1,8 @@
 <lccdd>
 
 <!--
-     AHCal Barrel implementation of the layout from 70th SiD Optimization Meeting presentation 
-     from Ross Gordon McCoy (ross.mccoy@mavs.uta.edu) - June 30, 2016 
+     AHCal Barrel implementation of the layout from 70th SiD Optimization Meeting presentation
+     from Ross Gordon McCoy (ross.mccoy@mavs.uta.edu) - June 30, 2016
 -->
 
 <readouts>
@@ -38,8 +38,9 @@
 	<slice material = "Steel235"    thickness = "0.05*cm" /> <!-- Bottom plate -->
 	<!--slice material = "Air"    thickness = "0.1*cm" /-->
   </layer>
-  <!--layer repeat="1">
-	<!--slice material = "Steel235" thickness = "1.9*cm" /--><!-- Terminator plate -->
+  <!--layer repeat="1" -->
+  <!-- Terminator plate -->
+	<!--slice material = "Steel235" thickness = "1.9*cm" /-->
   <!--/layer -->
  </detector>
 </detectors>

@@ -7,8 +7,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        COMPILER: [gcc10, clang11]
-        LCG: [100]
+        COMPILER: [gcc11]
+        LCG: [104]
 
     steps:
     - uses: actions/checkout@v3
