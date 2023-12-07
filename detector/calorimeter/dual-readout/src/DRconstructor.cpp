@@ -42,10 +42,6 @@ void ddDRcalo::DRconstructor::implementTowers(xml_comp_t& x_theta, dd4hep::DDSeg
   for (xml_coll_t x_dThetaColl(x_theta,_U(deltatheta)); x_dThetaColl; ++x_dThetaColl, ++towerNo ) {
     xml_comp_t x_deltaTheta = x_dThetaColl;
 
-    //-----debug-----//
-    std::cout << "Tower num : " << towerNo << std::endl;
-    //---------------//
-
     // always use RHS for the reference
     param->SetIsRHS(true);
     param->SetDeltaTheta(x_deltaTheta.deltatheta());
