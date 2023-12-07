@@ -58,6 +58,7 @@ add_subdirectory(detectorSegmentations)
 file(GLOB sources 
   ./detector/tracker/*.cpp
   ./detector/calorimeter/*.cpp
+  ./detector/calorimeter/dual-readout/src/*.cpp
   ./detector/fcal/*.cpp
   ./detector/other/*.cpp
   ./detector/CaloTB/*.cpp
@@ -83,6 +84,9 @@ add_library(lcgeo ALIAS k4geo)
 
 target_include_directories(${PackageName}   PRIVATE ${PROJECT_SOURCE_DIR}/detector/include )
 target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detector/include )
+
+target_include_directories(${PackageName}   PRIVATE ${PROJECT_SOURCE_DIR}/detector/calorimeter/dual-readout/include )
+target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detector/calorimeter/dual-readout/include )
 
 target_link_libraries(${PackageName}   DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers ROOT::Core LCIO::LCIO detectorSegmentations)
 target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ROOT::Core ${Geant4_LIBRARIES} LCIO::LCIO)
