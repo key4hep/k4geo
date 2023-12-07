@@ -13,250 +13,798 @@
     </info>
     <comment>Silicon wrapper</comment>
     <detectors>
-        <detector name="SiWrapper" type="DD4hep_SubdetectorAssembly" vis="SiWrapperVis">
-            <shape type="Tube" rmin="DCH_outer_radius" rmax="DCH_outer_radius+5.0*cm" dz="DCH_half_length+20.0*cm" material="Air"/>
+        <detector name="SiliconWrapper" type="DD4hep_SubdetectorAssembly" vis="SiWrVis">
+             <shape type="BooleanShape" operation="Subtraction" material="Air"> <!-- These definitions have to be checked again! -->
+                <shape type="BooleanShape" operation="Subtraction">
+                    <shape type="Tube" rmin="0.0*mm" rmax="SiWrB_inner_radius+5.0*cm" dz="SiWr_half_length+20.0*cm"/>
+                    <shape type="Tube" rmin="0.0*mm" rmax="SiWrD_inner_radius" dz="SiWr_half_length"/>
+                </shape>
+            </shape>
+            
             <comment>Silicon Wrapper Assembly</comment>
-            <composite name="SiWrapperB"/>
-            <composite name="SiWrapperD"/> 
+            <composite name="SiWrB"/>
+            <composite name="SiWrD"/> 
         </detector>
     </detectors>
     
+
     <display>
-        <vis name="SiWrapperSensitiveVis"     alpha="1.0" r="1.0"     g="1.0"  b="0.0"      showDaughters="true"  visible="true"/>
-        <vis name="SiWrapperPeripheryVis"     alpha="1.0" r="1.0"     g="0.9"  b="0.1"      showDaughters="true"  visible="true"/>
+        <vis name="SiWrSensitiveVis"     alpha="1.0" r="1.0"     g="1.0"  b="0.0"      showDaughters="true"  visible="true"/>
+        <vis name="SiWrPeripheryVis"     alpha="1.0" r="1.0"     g="0.9"  b="0.0"      showDaughters="true"  visible="true"/>
     </display>
      
 
     <define>
+        <!-- ATLASPix3 properties -->
+            <constant name="SiWr_sens_rphi_sensitive"       value="19.8*mm"/> 
+            <constant name="SiWr_sens_rphi_periphery"       value="0.4*mm"/> 
+            <constant name="SiWr_sens_rphi_sens_spacing"    value="0.2*mm"/>
 
-        <!-- Silicon wrapper barrel and disks sensor: Assume 42 mm sensor size, fully sensitive -->
-<!--            <constant name="SiWrapperB_sens_z_sensitive" value="42.0*mm"/> <!~~ Chip length in z: Sensitive ~~>
-            <constant name="SiWrapperB_sens_z_periphery" value="0.4*mm"/> <!~~ Chip length in z: Periphery ~~>
-            <constant name="SiWrapperB_sens_z" value="SiWrapperB_sens_z_sensitive+SiWrapperB_sens_z_periphery"/> <!~~ Chip length in z: Total ~~>
-            <constant name="SiWrapperB_sens_rphi_sensitive" value="42.0*mm"/> <!~~ Chip length in r-phi: Sensitive~~>
-            <constant name="SiWrapperB_sens_rphi_periphery" value="2.4*mm"/> <!~~ Chip length in r-phi: Periphery~~>
-            <constant name="SiWrapperB_sens_rphi" value="SiWrapperB_sens_rphi_sensitive+SiWrapperB_sens_rphi_periphery"/> <!~~ Chip length in r-phi: Total ~~>
-            <constant name="SiWrapperB_sens_rphi_sens_spacing" value="0.2*mm"/> <!~~ Distance between individual readout chips in rphi ~~>
-            <constant name="SiWrapperB_sens_z_sens_spacing" value="0.2*mm"/> <!~~ Distance between individual readout chips in rphi ~~>
--->    
+            <constant name="SiWr_sens_z_sensitive"      value="18.6*mm"/>
+            <constant name="SiWr_sens_z_periphery"      value="2.4*mm"/>
+            <constant name="SiWr_sens_z_sens_spacing"   value="0.2*mm"/>
+    
+        <!-- Use module of two stitched quads (size of ATLASPix3) one next to another for Silicon Wrapper, multiple of these to form a tile/stave-->
+        <!-- Assuming stitching or other method to extend sensitive sensor region to full quad. Periphery in z only -->
 
-<!--            <constant name="SiWrapperB_mod_z_sensitive" value="56*42.0*mm+55*0.2*mm"/> <!~~ Simplification to check design ~~>-->
-            <constant name="SiWrapperB_mod_z_sensitive" value="42.0*mm"/>
-            <constant name="SiWrapperB_mod_z_periphery" value="0.0*mm"/>
-            <constant name="SiWrapperB_mod_z" value="SiWrapperB_mod_z_sensitive+SiWrapperB_mod_z_periphery"/>
+            <constant name="SiWr_mod_z_sensitive"   value="2.0*SiWr_sens_z_sensitive"/> <!-- 37.2 mm -->
+            <constant name="SiWr_mod_z_periphery"   value="2.0*SiWr_sens_z_periphery+SiWr_sens_z_sens_spacing"/> <!-- 5.0 mm -->
+            <constant name="SiWr_mod_z"             value="SiWr_mod_z_sensitive+SiWr_mod_z_periphery"/> <!-- 42.2 mm -->
 
-            <constant name="SiWrapperB_mod_rphi_sensitive" value="42.0*mm"/>
-            <constant name="SiWrapperB_mod_rphi_periphery" value="0.0*mm"/>
-            <constant name="SiWrapperB_mod_rphi" value="SiWrapperB_mod_rphi_sensitive+SiWrapperB_mod_rphi_periphery"/>
+            <constant name="SiWr_mod_quad_spacing"      value="0.2*mm"/>   <!-- Distance between quads in r-phi-->
+            <constant name="SiWr_mod_rphi_sensitive"    value="4.0*SiWr_sens_rphi_sensitive+2*SiWr_sens_rphi_sens_spacing+2*SiWr_sens_rphi_periphery"/> <!-- 80.4 mm --> 
+            <constant name="SiWr_mod_rphi_periphery"    value="SiWr_mod_quad_spacing"/> <!-- Insensitive region between sensors. 0.2 mm -->
+            <constant name="SiWr_mod_rphi"              value="SiWr_mod_rphi_sensitive+SiWr_mod_rphi_periphery"/> <!-- = 80.6 mm mm -->
         
-            <constant name="SiWrapperB_Sensitive_Thickness" value="0.1*mm"/> <!-- 100 µm of silicon for the sensor -->
+            <constant name="SiWr_Sensitive_Thickness"   value="5e-02*mm"/>
+            <constant name="SiWr_mod_overlap"           value="-(SiWr_mod_z_periphery+0.2*mm)"/> <!-- Overlap of quad modules on two sides of tile/stave along tile/stave to cover quad periphery. 0.2 mm of additional overlap -->
 
-
-        <!-- Silicon wrapper barrel parameters -->
+        <!-- Passive material properties -->
             <!-- Stave-long support -->
-            <constant name="SiWrapperB_support_CarbonFiber_thickness"     value="400e-03*mm"/>
+            <constant name="SiWr_support_CarbonFiber_thickness" value="1.4*mm"/> <!-- Use 1.4 mm of carbon fiber support thickness. Together with 50 µm of Silicon this yields 0.499 % X/X0 (1.4 mm/314 mm + 0.05 mm/93.70 mm = 0.00499) -->
 
             <!-- Cooling pipes -->
-            <constant name="SiWrapperB_Pipe_thickness"                    value="0.0955*mm"/>
-            <constant name="SiWrapperB_Pipe_rphi"                         value="2.0*mm"/>
-            <constant name="SiWrapperB_Water_thickness"                   value="2.0*mm"/>
+            <constant name="SiWr_Pipe_thickness"    value="0.0955*mm"/>
+            <constant name="SiWr_Pipe_rphi"         value="2.0*mm"/>
+            <constant name="SiWr_Pipe_offset"       value="21.18*mm/2.0"/>
+            <constant name="SiWr_Water_thickness"   value="2.0*mm"/>
+            <constant name="SiWr_Cooling_thickness" value="2.0*SiWr_Pipe_thickness+SiWr_Water_thickness"/>
+
 
             <!-- Flex: 2 layers of 50 µm Aluminum, 2 layers of 150 µm kapton and 100 µm glue -->
-            <constant name="SiWrapperB_flex_width" value="16.2*mm"/>
-            <constant name="SiWrapperB_flex_Aluminium_thickness" value="0.100*mm"/>
-            <constant name="SiWrapperB_flex_Kapton_thickness" value="0.300*mm"/>
-            <constant name="SiWrapperB_flex_Glue_thickness" value="0.100*mm"/>
-            <constant name="SiWrapperB_flex_thickness" value="SiWrapperB_flex_Aluminium_thickness+SiWrapperB_flex_Kapton_thickness+SiWrapperB_flex_Glue_thickness"/>
+            <constant name="SiWr_flex_width" value="16.2*mm"/>
+            <constant name="SiWr_flex_Aluminium_thickness" value="0.100*mm"/>
+            <constant name="SiWr_flex_Kapton_thickness" value="0.300*mm"/>
+            <constant name="SiWr_flex_Glue_thickness" value="0.100*mm"/>
+            <constant name="SiWr_flex_thickness" value="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness+SiWr_flex_Glue_thickness"/>
 
-            <!-- Hybrid at the end of the stave -->
-            <!-- <constant name="SiWrapperB_hybrid_thickness" value="0.4*mm"/>
-            <constant name="SiWrapperB_hybrid_length" value="12.1*mm"/> -->
+            <constant name="SiWr_distance_two_sides"    value="SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness"/>    <!-- Distance between sensor modules along thickness when having alternating modules in front and in the back -->
 
-            <constant name="SiWrapperB_r1" value="DCH_outer_radius"/>
-            <constant name="SiWrapperB_r2" value="SiWrapperB_r1 + 2.0*cm"/>
+        <!-- Silicon wrapper barrel parameters -->
+            <constant name="SiWrB_r1" value="DCH_outer_radius"/>
+            <constant name="SiWrB_r2" value="SiWrB_r1 + 2.0*cm"/>
 
-            <constant name="SiWrapperB_Staves1" value="320"/> <!-- DCH_outer_radius of 2100*mm -> circumference of 13194*mm -> ~314 staves -->
-            <constant name="SiWrapperB_Staves2" value="320"/>
+            <constant name="SiWrB_Distance_between_staves" value="3.8*mm"/>
+            <constant name="SiWrB_Staves1" value="floor(2.*pi*SiWrB_inner_radius/(SiWr_mod_rphi+SiWrB_Distance_between_staves))"/> <!-- Circumference of 2*pi*SiWrB_inner_radius divided by width of stave and space between. Floor to get to integer number -->
+            <constant name="SiWrB_Staves2" value="SiWrB_Staves1"/> <!-- Use same number of staves for second layer -->
 
-            <constant name="SiWrapperB_nModules1" value="56"/> <!-- Length of 2400*mm (?) -> Let's take 56 modules with 55 SiWrapperB_mod_z_spacing gaps -> 2363 mm length in z -->
-            <constant name="SiWrapperB_nModules2" value="56"/>
-<!--            <constant name="SiWrapperB_nModules1" value="1"/> <!~~ Simplification to check design ~~>
-            <constant name="SiWrapperB_nModules2" value="1"/> <!~~ Simplification to check design ~~>
--->        
-            <constant name="SiWrapperB_mod_z_spacing" value="0.2*mm"/> <!-- Must be done for disks as well! Currently not done -->
-
-            <constant name="SiWrapperB_z1" value="(SiWrapperB_nModules1*SiWrapperB_mod_z+(SiWrapperB_nModules1-1)*SiWrapperB_mod_z_spacing)/2.0"/>
-            <constant name="SiWrapperB_z2" value="(SiWrapperB_nModules2*SiWrapperB_mod_z+(SiWrapperB_nModules2-1)*SiWrapperB_mod_z_spacing)/2.0"/>
-
-
-            <constant name="SiWrapperB_Pipe_offset"                      value="21.18*mm/2.0"/>
-<!--            <constant name="SiWrapperB_TrussStructure_thickness"        value="0.500*mm"/> <!~~ 0.500 mm of proxy carbon fiber thickness for light-weight truss structure ~~>
-            <constant name="SiWrapperB_TrussStructure_distance"          value="3.3*mm"/>
--->
-            <constant name="SiWrapperB_support_thickness"                value="SiWrapperB_support_CarbonFiber_thickness"/>
-
-            <constant name="SiWrapperB_offset1" value="30.0*mm"/>
-            <constant name="SiWrapperB_offset2" value="30.0*mm"/>
-
-            <!-- Proxy for terminal part in SiWrapperB made out of PEEK, used in middle tracker barrel-->
-            <!-- <constant name="SiWrapperB_TerminalPart_L1_width1"        value="(34.436*mm+25.604*mm)/2."/>
-            <constant name="SiWrapperB_TerminalPart_L1_length1"        value="7.0*mm"/>
-            <constant name="SiWrapperB_TerminalPart_L1_thickness1"        value="744.577*mm*mm*mm/SiWrapperB_TerminalPart_L1_width1/SiWrapperB_TerminalPart_L1_length1"/>
-
-            <constant name="SiWrapperB_TerminalPart_L1_width2"        value="(25.604*mm+18.244*mm)/2."/>
-            <constant name="SiWrapperB_TerminalPart_L1_length2"        value="7.0*mm"/>
-            <constant name="SiWrapperB_TerminalPart_L1_thickness2"        value="542.961*mm*mm*mm/SiWrapperB_TerminalPart_L1_width2/SiWrapperB_TerminalPart_L1_length2"/>
-                     
-            <constant name="SiWrapperB_TerminalPart_L1_width3"        value="8.0*mm"/>
-            <constant name="SiWrapperB_TerminalPart_L1_length3"        value="8.0*mm"/>
-            <constant name="SiWrapperB_TerminalPart_L1_thickness3"        value="231.848*mm*mm*mm/SiWrapperB_TerminalPart_L1_width3/SiWrapperB_TerminalPart_L1_length3"/>
-                 -->
-            
-            <!-- Proxy for terminal part in SiWrapperB made out of PEEK, used in outer tracker barrel -->
-            <!-- <constant name="SiWrapperB_TerminalPart_L2_width1"        value="(36.0*mm+23.787*mm)/2."/>
-            <constant name="SiWrapperB_TerminalPart_L2_length1"        value="7.0*mm"/>
-            <constant name="SiWrapperB_TerminalPart_L2_thickness1"        value="1162.157*mm*mm*mm/SiWrapperB_TerminalPart_L2_width1/SiWrapperB_TerminalPart_L2_length1"/>
-
-            <constant name="SiWrapperB_TerminalPart_L2_width2"        value="(23.787*mm+18.381*mm)/2."/>
-            <constant name="SiWrapperB_TerminalPart_L2_length2"        value="7.0*mm"/>
-            <constant name="SiWrapperB_TerminalPart_L2_thickness2"        value="569.724*mm*mm*mm/SiWrapperB_TerminalPart_L2_width2/SiWrapperB_TerminalPart_L2_length2"/>
-                     
-            <constant name="SiWrapperB_TerminalPart_L2_width3"        value="8.5*mm"/>
-            <constant name="SiWrapperB_TerminalPart_L2_length3"        value="9.25*mm"/>
-            <constant name="SiWrapperB_TerminalPart_L2_thickness3"        value="304.345*mm*mm*mm/SiWrapperB_TerminalPart_L2_width3/SiWrapperB_TerminalPart_L2_length3"/> -->
+            <constant name="SiWrB_nModules1" value="floor((2*SiWr_half_length - SiWr_mod_overlap)/(SiWr_mod_z + SiWr_mod_overlap))"/> <!-- Length of SiWr_half_length = 2400 mm -> Let's take 131 modules with 130 SiWr_mod_overlap gaps (131*42.2+130*-5.4 = 4826.2 mm)-->
+            <constant name="SiWrB_nModules2" value="SiWrB_nModules1"/> <!-- Same number of modules so that gaps in r-phi in layer 1 can be filled by layer 2-->
+            <constant name="SiWrB_phiOffset2" value="2*pi/SiWrB_nModules2/2."/> <!-- Same number of modules so that gaps in r-phi in layer 1 can be filled by layer 2, offset of half a tile width -->
         
+            <constant name="SiWrB_z1" value="(SiWrB_nModules1*SiWr_mod_z+(SiWrB_nModules1-1)*SiWr_mod_overlap)/2.0"/>
+
+            <constant name="SiWrB_offset1" value="0.0*mm"/>
+            <constant name="SiWrB_offset2" value="0.0*mm"/>
 
         <!-- Silicon wrapper disks parameters -->
-            <constant name="SiWrapperD_z1" value="DCH_half_length + 130.0*mm"/>
-            <constant name="SiWrapperD_z_gap" value="20.0*mm"/>
-            <constant name="SiWrapperD_z2" value="SiWrapperD_z1 + SiWrapperD_z_gap"/>
-            <constant name="SiWrapperD_nModules" value="48"/>
-            <constant name="SiWrapperD_rmin1" value="240.0*mm"/>
-            <constant name="SiWrapperD_rmin2" value="242.0*mm"/>
-            <constant name="SiWrapperD_rmax" value="2080.0*mm"/>
+            <constant name="SiWrD_tile_length"          value="6*SiWr_mod_z+5*SiWr_mod_overlap"/>          <!-- Six modules. Tile length = 6*42.2-5*5.2 = 227.2 mm -->
+            <constant name="SiWrD_double_tile_length"   value="12*SiWr_mod_z+11*SiWr_mod_overlap"/> <!-- Double tile with 12 modules. Tile length = 12*42.2-11*5.2 = 454.4 -->
 
-            <constant name="SiWrapperD_Sensitive_Thickness" value="0.1*mm"/> <!-- 100 µm of silicon for the sensor -->
-            <constant name="SiWrapperD_support_CarbonFiber_thickness" value="1.25*mm"/> <!-- 0.01 cm/9.370 cm (100 µm Si) + 0.125 cm/31.4 cm (1.25 mm CarbonFibre) = 0.0050 = 0.5% X/X0 -->
-            <constant name="SiWrapperD_support_thickness" value="SiWrapperD_support_CarbonFiber_thickness"/>
+            <constant name="SiWrD_tile_spacing_row"     value="1.0*mm"/>
+            <constant name="SiWrD_tile_spacing_column"  value="1.0*mm"/>
+
+            <constant name="SiWrD_z1" value="SiWr_half_length"/>
+            <constant name="SiWrD_z_gap" value="20.0*mm"/>
+            <constant name="SiWrD_z2" value="SiWrD_z1 + SiWrD_z_gap"/>
+
+            <constant name="SiWrD_rmin1" value="3.0*SiWr_mod_rphi+3.5*SiWrD_tile_spacing_column"/> <!-- tile width: SiWr_mod_rphi=80.6 mm. So three modules can fit within SiWrD_inner_radius=240 mm, but the first layer can only start at 3*SiWr_mod_rphi-SiWrD_inner_radius = 1.8 mm -->
+            <constant name="SiWrD_rmin2" value="SiWrD_rmin1+SiWr_mod_rphi/2.+1.0*SiWrD_tile_spacing_column"/>    <!-- Offset between disk 1 and 2 to cover holes in coverage -->
+
+            <constant name="SiWrD_layer1_offset" value="2.0*mm"/>   <!-- Offset in direction of tile width for all rows in layer 1. An offset here spreads the two innermost rows so that there is an overlap between the first and second disk everywhere--> 
+            <constant name="SiWrD_layer2_offset" value="0.0*mm"/>   <!-- Offset in direction of tile width for all rows in layer 2. --> 
+            
+            <constant name="SiWrD_offset1" value="176.4*mm"/>       <!-- Offsets in direction of tile width for the three innermost rows to form the hole in the coverage in the forward region  -->
+            <constant name="SiWrD_offset2" value="226.4*mm"/>
+            <constant name="SiWrD_offset3" value="SiWrD_rmin1"/>
     </define>        
 
 
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
-        <readout name="SiWrapperBCollection">
-            <id>${GlobalTrackerReadoutID_SiWrapperB}</id>
+        <readout name="SiWrBCollection">
+            <id>${GlobalTrackerReadoutID}</id>
         </readout>       
-        <readout name="SiWrapperDCollection">
-            <id>${GlobalTrackerReadoutID_SiWrapperD}</id>
+        <readout name="SiWrDCollection">
+            <id>${GlobalTrackerReadoutID}</id>
         </readout>
     </readouts>
 
 
     <!-- Silicon wrapper barrel  -->
     <detectors>
-        <detector name="SiWrapperB" type="VertexBarrel_detailed_o1_v01" vis="SiWrapperVis" id="DetID_SiWrapper_Barrel" readout="SiWrapperBCollection"  region="SiWrapperBRegion">
-            <envelope vis="SiWrapperVis">
+        <detector name="SiWrB" type="VertexBarrel_detailed_o1_v01" vis="SiWrVis" id="DetID_SiWr_Barrel" readout="SiWrBCollection" region="SiWrBRegion">
+            <envelope vis="SiWrVis">
                 <shape type="Assembly"/>
             </envelope>
-            <type_flags type=" DetType_TRACKER + DetType_STRIP + DetType_BARREL"/>
+            <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_BARREL"/>
             
             <!-- Definition of our "stave" object that is used to build the barrel. -->
-            <stave name="SiSiWrapperBStave1">
-                <components name="flexes" dr="0.0*mm" offset="0.0*mm" length="SiWrapperB_z1">
-                    <component thickness="SiWrapperB_flex_Aluminium_thickness" width="SiWrapperB_flex_width" dr="0.0*mm"                                                                  offset="0.0*mm" material="Al" vis="CableVis"/>
-                    <component thickness="SiWrapperB_flex_Kapton_thickness"    width="SiWrapperB_flex_width" dr="SiWrapperB_flex_Aluminium_thickness"                                    offset="0.0*mm" material="KaptonVtx" vis="CableVis"/>
-                    <component thickness="SiWrapperB_flex_Glue_thickness"      width="SiWrapperB_flex_width" dr="SiWrapperB_flex_Aluminium_thickness+SiWrapperB_flex_Kapton_thickness"  offset="0.0*mm" material="GlueEcobond45" vis="CableVis"/>
+            <stave name="SiWrStave" dr="SiWr_distance_two_sides">
+                <!-- Front flexes. Same flexes as in IDEA vertex -->
+                <components name="flex_leftQuads" r="0.0*mm" length="SiWrB_z1">
+                    <component thickness="SiWr_flex_Aluminium_thickness" width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." r="0.0*mm"                                                       material="Al" vis="CableVis"/>
+                    <component thickness="SiWr_flex_Kapton_thickness"    width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." r="SiWr_flex_Aluminium_thickness"                               material="KaptonVtx" vis="CableVis"/>
+                    <component thickness="SiWr_flex_Glue_thickness"      width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." r="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness"   material="GlueEcobond45" vis="CableVis"/>
                 </components>
 
-                <sensor dr="SiWrapperB_flex_thickness" offset="0.0*mm" thickness="SiWrapperB_Sensitive_Thickness" material="Silicon">
-                    <component sensitive="True" ymin="-SiWrapperB_mod_z/2.0" ymax="SiWrapperB_mod_z/2.0"   xmin="-SiWrapperB_mod_rphi/2.0"    xmax="SiWrapperB_mod_rphi/2.0" vis="SiWrapperSensitiveVis"/>
+                <components name="flex_rightQuads" r="0.0*mm" length="SiWrB_z1">
+                    <component thickness="SiWr_flex_Aluminium_thickness" width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="0.0*mm"                                                       material="Al" vis="CableVis"/>
+                    <component thickness="SiWr_flex_Kapton_thickness"    width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="SiWr_flex_Aluminium_thickness"                               material="KaptonVtx" vis="CableVis"/>
+                    <component thickness="SiWr_flex_Glue_thickness"      width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness"   material="GlueEcobond45" vis="CableVis"/>
+                </components>
+                
+                <!-- Two ATLASPix3-sized sensors, but with only one periphery region each -->
+                <sensor r="SiWr_flex_thickness" thickness="SiWr_Sensitive_Thickness" material="Silicon">
+                    <component sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="-SiWr_mod_rphi/2." xmax="-SiWr_mod_quad_spacing/2." vis="SiWrSensitiveVis"/> <!-- Left quad -->
+                    <component sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="SiWr_mod_quad_spacing/2." xmax="SiWr_mod_rphi/2." vis="SiWrSensitiveVis"/> <!-- Right quad -->
+
+                    <component sensitive="False" ymin="-SiWr_mod_z/2." ymax="SiWr_mod_z/2." xmin="-SiWr_mod_quad_spacing/2." xmax="SiWr_mod_quad_spacing/2." vis="SiWrPeripheryVis"/> <!-- Space between quads -->          
+                    <component sensitive="False" ymin="-SiWr_mod_z/2." ymax="-SiWr_mod_z/2.+SiWr_mod_z_periphery" xmin="-SiWr_mod_rphi/2." xmax="SiWr_mod_rphi/2." vis="SiWrPeripheryVis"/> <!-- Periphery -->          
                 </sensor>
 
-                <components name="support" dr="SiWrapperB_flex_thickness+SiWrapperB_Sensitive_Thickness" offset="0.0*mm" length="SiWrapperB_z1">
-                    <component thickness="SiWrapperB_support_CarbonFiber_thickness"    width="SiWrapperB_mod_rphi" offset="0.0*mm" dr="0.0*mm" material="CarbonFiberVtx" vis="SupportVis"/> <!-- Thin stave holder: should be material="K13D2U", but not implemented yet, but only marginal difference in X0 -->
+                <components name="support" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness" length="SiWrB_z1">
+                    <component thickness="SiWr_support_CarbonFiber_thickness/2."    width="SiWr_mod_rphi" r="0.0*mm" material="CarbonFiberVtx" vis="SupportVis"/>
                 </components>
 
-                <components name="coolingPipes" dr="SiWrapperB_flex_thickness+SiWrapperB_Sensitive_Thickness+SiWrapperB_support_thickness" offset="0.0*mm" length="SiWrapperB_z1">
-                    <component thickness="SiWrapperB_Pipe_thickness"  width="SiWrapperB_Pipe_rphi" offset="SiWrapperB_Pipe_offset" dr="0.0*mm" material="KaptonVtx" vis="PipingVis"/> 
-                    <component thickness="SiWrapperB_Water_thickness" width="SiWrapperB_Pipe_rphi" offset="SiWrapperB_Pipe_offset" dr="SiWrapperB_Pipe_thickness" material="Water" vis="WaterVis"/>
-                    <component thickness="SiWrapperB_Pipe_thickness"  width="SiWrapperB_Pipe_rphi" offset="SiWrapperB_Pipe_offset" dr="SiWrapperB_Pipe_thickness+SiWrapperB_Water_thickness" material="KaptonVtx" vis="PipingVis"/>
+                <!-- Cooling pipes in-between supports -->
+                <components name="coolingPipes" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness/2." length="SiWrB_z1">
+                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" r="0.0*mm" material="KaptonVtx" vis="PipingVis"/> 
+                    <component thickness="SiWr_Water_thickness" width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" r="SiWr_Pipe_thickness" material="Water" vis="WaterVis"/>
+                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" r="SiWr_Pipe_thickness+SiWr_Water_thickness" material="KaptonVtx" vis="PipingVis"/>
 
-                    <component thickness="SiWrapperB_Pipe_thickness"  width="SiWrapperB_Pipe_rphi" offset="-SiWrapperB_Pipe_offset" dr="0.0*mm" material="KaptonVtx" vis="PipingVis"/> 
-                    <component thickness="SiWrapperB_Water_thickness" width="SiWrapperB_Pipe_rphi" offset="-SiWrapperB_Pipe_offset" dr="SiWrapperB_Pipe_thickness" material="Water" vis="WaterVis"/>
-                    <component thickness="SiWrapperB_Pipe_thickness"  width="SiWrapperB_Pipe_rphi" offset="-SiWrapperB_Pipe_offset" dr="SiWrapperB_Pipe_thickness+SiWrapperB_Water_thickness" material="KaptonVtx" vis="PipingVis"/>
-                </components>
-            </stave>
+                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="-SiWr_Pipe_offset" r="0.0*mm" material="KaptonVtx" vis="PipingVis"/> 
+                    <component thickness="SiWr_Water_thickness" width="SiWr_Pipe_rphi" offset="-SiWr_Pipe_offset" r="SiWr_Pipe_thickness" material="Water" vis="WaterVis"/>
+                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="-SiWr_Pipe_offset" r="SiWr_Pipe_thickness+SiWr_Water_thickness" material="KaptonVtx" vis="PipingVis"/>
+                </components> 
 
-            <!-- Definition of our "stave" object that is used to build the barrel. -->
-            <stave name="SiSiWrapperBStave2">
-                <components name="support" dr="0.0*mm" offset="0.0*mm" length="SiWrapperB_z2">
-                    <component thickness="SiWrapperB_support_CarbonFiber_thickness"    width="SiWrapperB_mod_rphi" offset="0.0*mm" dr="0.0*mm" material="CarbonFiberVtx" vis="SupportVis"/>
+                <components name="support" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness/2.+SiWr_Cooling_thickness" length="SiWrB_z1">
+                    <component thickness="SiWr_support_CarbonFiber_thickness/2."    width="SiWr_mod_rphi" r="0.0*mm" material="CarbonFiberVtx" vis="SupportVis"/>
                 </components>
 
-                <sensor dr="SiWrapperB_support_thickness" offset="0.0*mm" thickness="SiWrapperB_Sensitive_Thickness" material="Silicon">
-                    <component sensitive="True" ymin="-SiWrapperB_mod_z/2.0" ymax="SiWrapperB_mod_z/2.0"   xmin="-SiWrapperB_mod_rphi/2.0"    xmax="SiWrapperB_mod_rphi/2.0" vis="SiWrapperSensitiveVis"/>
-                </sensor>
+                <!-- Second layer of sensor (inserted automatically)-->
 
-                <components name="flexes" dr="SiWrapperB_support_thickness+SiWrapperB_Sensitive_Thickness" offset="0.0*mm" length="SiWrapperB_z2">
-                    <component thickness="SiWrapperB_flex_Aluminium_thickness" width="SiWrapperB_flex_width" dr="0.0*mm"                                                                  offset="0.0*mm" material="Al" vis="CableVis"/>
-                    <component thickness="SiWrapperB_flex_Kapton_thickness"    width="SiWrapperB_flex_width" dr="SiWrapperB_flex_Aluminium_thickness"                                    offset="0.0*mm" material="KaptonVtx" vis="CableVis"/>
-                    <component thickness="SiWrapperB_flex_Glue_thickness"      width="SiWrapperB_flex_width" dr="SiWrapperB_flex_Aluminium_thickness+SiWrapperB_flex_Kapton_thickness"  offset="0.0*mm" material="GlueEcobond45" vis="CableVis"/>
+
+                <!-- Back flexes. Same flexes as in IDEA vertex -->
+                <components name="flex_leftQuads" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness+SiWr_Sensitive_Thickness" length="SiWrB_z1">
+                    <component thickness="SiWr_flex_Aluminium_thickness" width="SiWr_flex_width" offset="-SiWr_flex_width/2.-SiWr_mod_quad_spacing/2." r="0.0*mm"                                                       material="Al" vis="CableVis"/>
+                    <component thickness="SiWr_flex_Kapton_thickness"    width="SiWr_flex_width" offset="-SiWr_flex_width/2.-SiWr_mod_quad_spacing/2." r="SiWr_flex_Aluminium_thickness"                               material="KaptonVtx" vis="CableVis"/>
+                    <component thickness="SiWr_flex_Glue_thickness"      width="SiWr_flex_width" offset="-SiWr_flex_width/2.-SiWr_mod_quad_spacing/2." r="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness"   material="GlueEcobond45" vis="CableVis"/>
+                </components>
+                <components name="flex_rightQuads" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness+SiWr_Sensitive_Thickness" length="SiWrB_z1">
+                    <component thickness="SiWr_flex_Aluminium_thickness" width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." r="0.0*mm"                                                       material="Al" vis="CableVis"/>
+                    <component thickness="SiWr_flex_Kapton_thickness"    width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." r="SiWr_flex_Aluminium_thickness"                               material="KaptonVtx" vis="CableVis"/>
+                    <component thickness="SiWr_flex_Glue_thickness"      width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." r="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness"   material="GlueEcobond45" vis="CableVis"/>
                 </components>
             </stave>
 
             <!-- Here we construct the barrel -->
-            <layer nLadders="SiWrapperB_Staves1" phi0="0.0" r="SiWrapperB_r1" offset="SiWrapperB_offset1" id="0" nmodules="SiWrapperB_nModules1" name="SiSiWrapperBStave1" step="SiWrapperB_mod_z_spacing"/>
-            <layer nLadders="SiWrapperB_Staves2" phi0="0.0" r="SiWrapperB_r2" offset="SiWrapperB_offset2" id="1" nmodules="SiWrapperB_nModules2" name="SiSiWrapperBStave2" step="SiWrapperB_mod_z_spacing"/>
+            <layer nLadders="SiWrB_Staves1" r="SiWrB_r1" offset="SiWrB_offset1" id="0" nmodules="SiWrB_nModules1" name="SiWrStave" step="SiWr_mod_overlap" phi0="0.0*rad"/>
+            <layer nLadders="SiWrB_Staves1" r="SiWrB_r2" offset="SiWrB_offset2" id="1" nmodules="SiWrB_nModules1" name="SiWrStave" step="SiWr_mod_overlap" phi0="SiWrB_phiOffset2"/>
         </detector>
     </detectors>
 
+    <!-- Detailed endcap using tile of 12 ATLASPix3 modules -->
+    <!-- Vertex disks -->
     <detectors>
-        <detector id="DetID_SiWrapper_Disks" name="SiWrapperD" type="VertexEndcap_o1_v06" readout="SiWrapperDCollection" reflect="true" region="SiWrapperDRegion">
-            <envelope vis="SiWrapperVis">
+        <detector id="DetID_SiWr_Disks" name="SiWrD" vis="SiWrVis" type="VertexDisks_detailed_o1_v01" readout="SiWrDCollection" reflect="true" region="SiWrDRegion">
+            <envelope vis="SiWrVis">
                 <shape type="Assembly"/>
             </envelope>
             <comment>Silicon wrapper disks</comment>
 
-            <type_flags type=" DetType_TRACKER + DetType_STRIP + DetType_ENDCAP"/>
+            <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_ENDCAP"/>
 
-            <module name="SiWrapperDiskModule1" vis="SiWrapperSensitiveVis">
-                <trd x1="SiWrapperD_rmin1 * tan(pi/(SiWrapperD_nModules))" x2="SiWrapperD_rmax * tan(pi/(SiWrapperD_nModules))" z="(SiWrapperD_rmax - SiWrapperD_rmin1) / 2" />
-                <module_component thickness="SiWrapperD_Sensitive_Thickness"    material="Silicon"      vis="SiWrapperSensitiveVis" sensitive="true"/>
-                <module_component thickness="SiWrapperD_support_thickness"      material="CarbonFiber"  vis="CarbonFiberVis"/>
-                <!-- <module_component thickness="SiWrapperD_z_gap-SiWrapperD_support_thickness-SiWrapperD_Sensitive_Thickness"  material="Air" vis="AirVis" /> -->
+
+            <!-- Definition of our staves that is used to build the disks -->
+            <module name="SiWrDStave" dz="SiWr_distance_two_sides">
+                <!-- Front side flexes -->
+                <components z_offset="0.0*mm" name="flexes">
+                    <component thickness="SiWr_flex_Aluminium_thickness"    width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." z_offset="0.0*mm" material="Al" vis="CableVis"/>
+                    <component thickness="SiWr_flex_Kapton_thickness"       width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." z_offset="SiWr_flex_Aluminium_thickness" material="KaptonVtx" vis="CableVis"/>
+                    <component thickness="SiWr_flex_Glue_thickness"         width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." z_offset="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness" material="GlueEcobond45" vis="CableVis"/> <!-- NEED TO USE CORRECT GLUE DESCRIPTION!-->
+
+                    <component thickness="SiWr_flex_Aluminium_thickness"    width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." z_offset="0.0*mm" material="Al" vis="CableVis"/>
+                    <component thickness="SiWr_flex_Kapton_thickness"       width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." z_offset="SiWr_flex_Aluminium_thickness" material="KaptonVtx" vis="CableVis"/>
+                    <component thickness="SiWr_flex_Glue_thickness"         width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." z_offset="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness" material="GlueEcobond45" vis="CableVis"/> <!-- NEED TO USE CORRECT GLUE DESCRIPTION!-->
+                </components>
+
+                <!-- Sensor -->
+                <sensor z_offset="SiWr_flex_thickness" thickness="SiWr_Sensitive_Thickness" material="Silicon">
+                    <component sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="-SiWr_mod_rphi/2." xmax="-SiWr_mod_quad_spacing/2." vis="SiWrSensitiveVis"/> <!-- Left quad -->
+                    <component sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="SiWr_mod_quad_spacing/2." xmax="SiWr_mod_rphi/2." vis="SiWrSensitiveVis"/> <!-- Right quad -->
+
+                    <component sensitive="False" ymin="-SiWr_mod_z/2." ymax="SiWr_mod_z/2." xmin="-SiWr_mod_quad_spacing/2." xmax="SiWr_mod_quad_spacing/2." vis="SiWrPeripheryVis"/> <!-- Space between quads -->          
+                    <component sensitive="False" ymin="-SiWr_mod_z/2." ymax="-SiWr_mod_z/2.+SiWr_mod_z_periphery" xmin="-SiWr_mod_rphi/2." xmax="SiWr_mod_rphi/2." vis="SiWrPeripheryVis"/> <!-- Periphery -->          
+                </sensor>
+
+                <components name="support_low_z" z_offset="SiWr_flex_thickness+SiWr_Sensitive_Thickness">
+                    <component thickness="SiWr_support_CarbonFiber_thickness/2." width="SiWr_mod_rphi" material="CarbonFiberVtx" vis="SupportVis"/>
+                </components>
+
+                <!-- Cooling pipes in-between supports -->
+                <components name="cooling_pipes" z_offset="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness/2.">
+                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="-SiWr_Pipe_offset" z_offset="0.0*mm" material="KaptonVtx" vis="PipingVis"/> 
+                    <component thickness="SiWr_Water_thickness" width="SiWr_Pipe_rphi" offset="-SiWr_Pipe_offset" z_offset="SiWr_Pipe_thickness" material="Water" vis="WaterVis"/>
+                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="-SiWr_Pipe_offset" z_offset="SiWr_Pipe_thickness+SiWr_Water_thickness" material="KaptonVtx" vis="PipingVis"/>
+
+                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" z_offset="0.0*mm" material="KaptonVtx" vis="PipingVis"/> 
+                    <component thickness="SiWr_Water_thickness" width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" z_offset="SiWr_Pipe_thickness" material="Water" vis="WaterVis"/>
+                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" z_offset="SiWr_Pipe_thickness+SiWr_Water_thickness" material="KaptonVtx" vis="PipingVis"/>
+                </components>
+
+                <components name="support_low_z" z_offset="SiWr_flex_thickness+SiWr_Sensitive_Thickness">
+                    <component thickness="SiWr_support_CarbonFiber_thickness/2." width="SiWr_mod_rphi" material="CarbonFiberVtx" vis="SupportVis"/>
+                </components>
+
+                <!-- Second layer of sensor (inserted automatically)-->
+
+                <!-- Back side flexes -->
+                <components z_offset="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness+SiWr_Sensitive_Thickness" name="flexes">
+                    <component thickness="SiWr_flex_Aluminium_thickness"    width="SiWr_flex_width" offset="-SiWr_flex_width/2.-SiWr_mod_quad_spacing/2." z_offset="0.0*mm" material="Al" vis="CableVis"/>
+                    <component thickness="SiWr_flex_Kapton_thickness"       width="SiWr_flex_width" offset="-SiWr_flex_width/2.-SiWr_mod_quad_spacing/2." z_offset="SiWr_flex_Aluminium_thickness" material="KaptonVtx" vis="CableVis"/>
+                    <component thickness="SiWr_flex_Glue_thickness"         width="SiWr_flex_width" offset="-SiWr_flex_width/2.-SiWr_mod_quad_spacing/2." z_offset="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness" material="GlueEcobond45" vis="CableVis"/> <!-- NEED TO USE CORRECT GLUE DESCRIPTION!-->
+
+                    <component thickness="SiWr_flex_Aluminium_thickness"    width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." z_offset="0.0*mm" material="Al" vis="CableVis"/>
+                    <component thickness="SiWr_flex_Kapton_thickness"       width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." z_offset="SiWr_flex_Aluminium_thickness" material="KaptonVtx" vis="CableVis"/>
+                    <component thickness="SiWr_flex_Glue_thickness"         width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." z_offset="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness" material="GlueEcobond45" vis="CableVis"/> <!-- NEED TO USE CORRECT GLUE DESCRIPTION!-->
+                </components>
             </module>
 
-            <module name="SiWrapperDiskModule2" vis="SiWrapperSensitiveVis">
-                <trd x1="SiWrapperD_rmin2 * tan(pi/(SiWrapperD_nModules))" x2="SiWrapperD_rmax * tan(pi/(SiWrapperD_nModules))" z="(SiWrapperD_rmax - SiWrapperD_rmin2) / 2" />
-                <module_component thickness="SiWrapperD_support_thickness"      material="CarbonFiber"  vis="CarbonFiberVis"/>
-                <module_component thickness="SiWrapperD_Sensitive_Thickness"    material="Silicon"      vis="SiWrapperSensitiveVis" sensitive="true"/>
-            </module>
+            <!-- Here we construct the disks, all disks use the same base stave (SiWrDStave) with different numbers of modules and other properties -->
+           <layer id="0" z="SiWrD_z1" nphi="2" dz="0.0*mm" rmin="SiWrD_rmin1" dr="0.0*mm">
+                <!-- Column 0 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="0.0*mm" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="0" module="SiWrDStave"/> <!-- first tile -->
 
-            <layer id="0" vis="SiVertexLayerVis">
-                <ring r="(SiWrapperD_rmax + SiWrapperD_rmin1) / 2" zstart="SiWrapperD_z1" nmodules="(int) SiWrapperD_nModules" dz="0*cm" phi0="pi/(SiWrapperD_nModules)" module="SiWrapperDiskModule1"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="0.0*mm" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="0" module="SiWrDStave"/> <!-- Other tiles of column0 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="0.0*mm" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="0" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="0.0*mm" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="0" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="0.0*mm" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="0" module="SiWrDStave"/>
+
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="0.0*mm" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="0" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="0.0*mm" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="0" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="0.0*mm" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="0" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="0.0*mm" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="0" module="SiWrDStave"/>
+
+                <!-- Column -1 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+SiWrD_offset1+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+SiWrD_offset1+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+SiWrD_offset1+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+SiWrD_offset1+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(SiWrD_offset1+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length)" id="-1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(SiWrD_offset1+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length)" id="-1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(SiWrD_offset1+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length)" id="-1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(SiWrD_offset1+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length)" id="-1" module="SiWrDStave"/>
+
+                <!-- Column -2 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+SiWrD_offset2+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+SiWrD_offset2+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+SiWrD_offset2+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+SiWrD_offset2+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-2" module="SiWrDStave"/>
+
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(SiWrD_offset2+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length)" id="-2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(SiWrD_offset2+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length)" id="-2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(SiWrD_offset2+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length)" id="-2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(SiWrD_offset2+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length)" id="-2" module="SiWrDStave"/>
+
+                <!-- Column -3 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+SiWrD_offset3+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+SiWrD_offset3+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+SiWrD_offset3+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+SiWrD_offset3+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-3" module="SiWrDStave"/>
+
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(SiWrD_offset3+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length)" id="-3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(SiWrD_offset3+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length)" id="-3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(SiWrD_offset3+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length)" id="-3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(SiWrD_offset3+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length)" id="-3" module="SiWrDStave"/>
+
+                <!-- Column 1 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="1" module="SiWrDStave"/>
+
+
+                <!-- Column 2 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="2" module="SiWrDStave"/>
+
+
+                <!-- Column 3 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="3" module="SiWrDStave"/>
+
+                <!-- Column 4 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+4.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="4" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+4.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="4" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+4.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="4" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+4.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="4" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+4.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="4" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+4.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="4" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+4.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="4" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+4.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="4" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+4.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="4" module="SiWrDStave"/>
+
+                <!-- Column 5 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+5.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="5" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+5.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="5" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+5.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="5" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+5.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="5" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+5.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="5" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+5.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="5" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+5.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="5" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+5.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="5" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+5.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="5" module="SiWrDStave"/>
+
+                <!-- Column 6 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+6.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="6" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+6.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="6" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+6.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="6" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+6.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="6" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+6.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row)" id="6" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+6.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="6" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+6.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="6" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+6.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="6" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+6.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row))" id="6" module="SiWrDStave"/>
+
+
+                <!-- Column 7 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+7.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="7" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+7.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="7" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+7.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="7" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+7.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="7" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+7.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row)" id="7" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+7.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="7" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+7.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="7" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+7.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="7" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+7.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row))" id="7" module="SiWrDStave"/>
+
+
+                <!-- Column 8 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+8.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="8" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+8.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="8" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+8.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="8" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+8.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="8" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+8.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row)" id="8" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+8.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="8" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+8.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="8" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+8.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="8" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+8.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row))" id="8" module="SiWrDStave"/>
+
+
+                <!-- Column 9 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+9.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="9" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+9.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="9" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+9.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="9" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+9.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="9" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+9.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row)" id="9" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+9.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="9" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+9.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="9" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+9.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="9" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+9.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row))" id="9" module="SiWrDStave"/>
+
+                <!-- Column 10 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+10.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="10" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+10.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="10" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+10.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="10" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+10.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="10" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+10.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row)" id="10" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+10.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="10" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+10.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="10" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+10.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="10" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+10.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row))" id="10" module="SiWrDStave"/>
+
+
+                <!-- Column 11 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+11.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="11" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+11.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="11" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+11.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="11" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+11.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="11" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+11.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row)" id="11" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+11.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="11" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+11.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="11" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+11.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="11" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+11.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row))" id="11" module="SiWrDStave"/>
+
+
+                <!-- Column 12 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+12.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="12" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+12.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="12" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+12.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="12" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+12.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="12" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+12.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="12" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+12.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="12" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+12.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="12" module="SiWrDStave"/>
+
+                <!-- Column 13 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+13.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="13" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+13.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="13" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+13.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="13" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+13.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="13" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+13.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="13" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+13.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="13" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+13.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="13" module="SiWrDStave"/>
+
+                <!-- Column 14 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+14.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="14" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+14.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="14" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+14.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="14" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+14.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="14" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+14.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="14" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+14.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="14" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+14.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="14" module="SiWrDStave"/>
+
+
+                <!-- Column 15 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+15.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="15" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+15.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="15" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+15.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="15" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+15.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row)" id="15" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+15.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="15" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+15.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="15" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+15.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row))" id="15" module="SiWrDStave"/>
+
+                <!-- Column 16 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+16.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="16" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+16.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="16" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+16.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="16" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+16.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row)" id="16" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+16.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="16" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+16.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="16" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+16.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row))" id="16" module="SiWrDStave"/>
+
+
+                <!-- Column 17 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+17.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="17" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+17.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="17" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+17.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="17" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+17.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="17" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+17.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="17" module="SiWrDStave"/>
+
+
+                <!-- Column 18 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+18.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="18" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+18.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="18" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+18.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="18" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+18.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="18" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+18.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="18" module="SiWrDStave"/>
+
+
+                <!-- Column 19 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+19.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="19" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+19.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="19" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+19.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row)" id="19" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+19.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="19" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+19.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row))" id="19" module="SiWrDStave"/>
+
+                <!-- Column 20 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+20.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="20" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+20.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="20" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+20.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row)" id="20" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+20.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="20" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+20.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row))" id="20" module="SiWrDStave"/>
+
+                <!-- Column 21 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+21.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)"  id="21" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+21.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="21" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+21.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="21" module="SiWrDStave"/>
+
+                <!-- Column 22 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+22.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="22" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+22.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row)" id="22" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+22.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row))" id="22" module="SiWrDStave"/>
             </layer>
-            <layer id="1" vis="SiVertexLayerVis">
-                <ring r="(SiWrapperD_rmax + SiWrapperD_rmin2) / 2" zstart="SiWrapperD_z2" nmodules="(int) SiWrapperD_nModules" dz="0*cm" phi0="pi/(SiWrapperD_nModules)" module="SiWrapperDiskModule2"/>
+
+            <layer id="1" z="SiWrD_z2" nphi="2" dz="0.0*mm" rmin="SiWrD_rmin2" dr="0.0*mm">
+                <!-- Column 0 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="0.0*mm" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="0" module="SiWrDStave"/> <!-- first tile -->
+
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="0.0*mm" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="0" module="SiWrDStave"/> <!-- Other tiles of column0 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="0.0*mm" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="0" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="0.0*mm" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="0" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="0.0*mm" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="0" module="SiWrDStave"/>
+
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="0.0*mm" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="0" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="0.0*mm" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="0" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="0.0*mm" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="0" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="0.0*mm" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="0" module="SiWrDStave"/>
+
+                <!-- Column -1 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+SiWrD_offset1+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+SiWrD_offset1+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+SiWrD_offset1+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+SiWrD_offset1+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(SiWrD_offset1+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length)" id="-1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(SiWrD_offset1+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length)" id="-1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(SiWrD_offset1+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length)" id="-1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(SiWrD_offset1+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length)" id="-1" module="SiWrDStave"/>
+
+                <!-- Column -2 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+SiWrD_offset2+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+SiWrD_offset2+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+SiWrD_offset2+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+SiWrD_offset2+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-2" module="SiWrDStave"/>
+
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(SiWrD_offset2+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length)" id="-2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(SiWrD_offset2+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length)" id="-2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(SiWrD_offset2+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length)" id="-2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(SiWrD_offset2+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length)" id="-2" module="SiWrDStave"/>
+
+                <!-- Column -3 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+SiWrD_offset3+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+SiWrD_offset3+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+SiWrD_offset3+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+SiWrD_offset3+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-3" module="SiWrDStave"/>
+
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(SiWrD_offset3+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length)" id="-3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(SiWrD_offset3+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length)" id="-3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(SiWrD_offset3+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length)" id="-3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(SiWrD_offset3+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length)" id="-3" module="SiWrDStave"/>
+
+                <!-- Column -4 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-4.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+SiWrD_offset3+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-4" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-4.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+SiWrD_offset3+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-4" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-4.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+SiWrD_offset3+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-4" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="-4.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+SiWrD_offset3+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)+0.5*SiWrD_double_tile_length" id="-4" module="SiWrDStave"/>
+
+                <!-- Column 1 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="1" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+1.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="1" module="SiWrDStave"/>
+
+
+                <!-- Column 2 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="2" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+2.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="2" module="SiWrDStave"/>
+
+
+                <!-- Column 3 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="3" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+3.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="3" module="SiWrDStave"/>
+
+                <!-- Column 4 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+4.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="4" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+4.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="4" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+4.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="4" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+4.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="4" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+4.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="4" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+4.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="4" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+4.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="4" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+4.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="4" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+4.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="4" module="SiWrDStave"/>
+
+                <!-- Column 5 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+5.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="5" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+5.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="5" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+5.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="5" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+5.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="5" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+5.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row)" id="5" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+5.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="5" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+5.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="5" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+5.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="5" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+5.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row))" id="5" module="SiWrDStave"/>
+
+                <!-- Column 6 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+6.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="6" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+6.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="6" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+6.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="6" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+6.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="6" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+6.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row)" id="6" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+6.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="6" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+6.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="6" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+6.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="6" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+6.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row))" id="6" module="SiWrDStave"/>
+
+
+                <!-- Column 7 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+7.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="7" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+7.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="7" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+7.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="7" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+7.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="7" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+7.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row)" id="7" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+7.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="7" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+7.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="7" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+7.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="7" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+7.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row))" id="7" module="SiWrDStave"/>
+
+
+                <!-- Column 8 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+8.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="8" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+8.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="8" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+8.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="8" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+8.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="8" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+8.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row)" id="8" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+8.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="8" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+8.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="8" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+8.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="8" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+8.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row))" id="8" module="SiWrDStave"/>
+
+
+                <!-- Column 9 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+9.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="9" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+9.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="9" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+9.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="9" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+9.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="9" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+9.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row)" id="9" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+9.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="9" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+9.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="9" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+9.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="9" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+9.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(4.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row))" id="9" module="SiWrDStave"/>
+
+                <!-- Column 10 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+10.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="10" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+10.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="10" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+10.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="10" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+10.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="10" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+10.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="10" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+10.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="10" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+10.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="10" module="SiWrDStave"/>
+
+                <!-- Column 11 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+11.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="11" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+11.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="11" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+11.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="11" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+11.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="11" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+11.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="11" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+11.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="11" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+11.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="11" module="SiWrDStave"/>
+
+                <!-- Column 12 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+12.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="12" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+12.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="12" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+12.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="12" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+12.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="12" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+12.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="12" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+12.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="12" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+12.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="12" module="SiWrDStave"/>
+
+                <!-- Column 13 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+13.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="13" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+13.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="13" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+13.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="13" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+13.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="13" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+13.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="13" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+13.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="13" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+13.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="13" module="SiWrDStave"/>
+
+                <!-- Column 14 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+14.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="14" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+14.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="14" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+14.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="14" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+14.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row)" id="14" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+14.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="14" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+14.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="14" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+14.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row))" id="14" module="SiWrDStave"/>
+
+
+                <!-- Column 15 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+15.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="15" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+15.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="15" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+15.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="15" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+15.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row)" id="15" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+15.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="15" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+15.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="15" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+15.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(3.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row))" id="15" module="SiWrDStave"/>
+
+                <!-- Column 16 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+16.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="16" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+16.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="16" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+16.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="16" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+16.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="16" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+16.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="16" module="SiWrDStave"/>
+
+
+                <!-- Column 17 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+17.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="17" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+17.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="17" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+17.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="17" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+17.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="17" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+17.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="17" module="SiWrDStave"/>
+
+
+                <!-- Column 18 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+18.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="18" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+18.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="18" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+18.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row)" id="18" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+18.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="18" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+18.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row))" id="18" module="SiWrDStave"/>
+
+
+                <!-- Column 19 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+19.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="19" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+19.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="19" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+19.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row)" id="19" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+19.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="19" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+19.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row))" id="19" module="SiWrDStave"/>
+
+                <!-- Column 20 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+20.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="20" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+20.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="20" module="SiWrDStave"/>
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+20.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="20" module="SiWrDStave"/>
+
+                <!-- Column 21 -->
+                <stave nmodules="12" dz="SiWr_distance_two_sides" r="+21.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)"  id="21" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+21.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row)" id="21" module="SiWrDStave"/>
+                <stave nmodules="6" dz="SiWr_distance_two_sides" r="+21.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*(SiWrD_tile_length+SiWrD_tile_spacing_row))" id="21" module="SiWrDStave"/>
             </layer>
         </detector>
-    </detectors>
+    </detectors>   
 
     <!-- Plugin needed for the surfaces-->
     <plugins>
+       <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
+            <argument value="SiWrB"/> 
+            <argument value="dimension=2"/>
+            <argument value="u_y=1."/>
+            <argument value="v_z=1."/>
+            <argument value="n_x=1."/>
+        </plugin>
+
         <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
-            <argument value="SiWrapperD"/> 
+            <argument value="SiWrD"/> 
             <argument value="dimension=2"/>
             <argument value="u_x=-1."/>
             <argument value="v_y=1."/>
             <argument value="n_z=-1."/>
-        </plugin>
-
-        <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
-            <argument value="SiWrapperB"/> 
-            <argument value="dimension=2"/>
-            <argument value="u_x=1."/>
-            <argument value="v_y=1."/>
-            <argument value="n_z=1."/>
         </plugin>
     </plugins>
 </lccdd>

@@ -46,8 +46,8 @@
     <constant name="DetID_HOMAbsorber"          value=" 19"/>
     <constant name="DetID_LumiCalNoseShield"          value=" 22"/>
     
-    <constant name="DetID_SiWrapper_Barrel"       value=" 23"/>
-    <constant name="DetID_SiWrapper_Disks"       value=" 24"/>
+    <constant name="DetID_SiWr_Barrel"       value=" 23"/>
+    <constant name="DetID_SiWr_Disks"       value=" 24"/>
 
         <!-- BPW: Beam Pipe Width -->
     <constant name="BPWWall"       value="0.35*mm" />
@@ -92,9 +92,14 @@
     <constant name="Outer_Vertex_half_length" value="1050*mm"/>
 
     <constant name="DCH_inner_radius" value="345*mm"/>
-    <constant name="DCH_outer_radius" value="2000*mm"/> <!-- Contact the drift chamber experts if you need to change the DC radiuses (just changing the radius is not enough, the DC has been optimized for those values, the detector geometry is constrained by many construction/mechanical/electronics/etc considerations -->
-    <constant name="DCH_half_length" value="2250*mm"/> <!-- this includes the services -->
-    
+    <constant name="DCH_outer_radius" value="2100*mm"/>
+    <constant name="DCH_half_length" value="2250*mm"/>
+
+    <constant name="SiWrB_inner_radius" value="2100*mm"/>   <!-- Start of silicon wrapper -->
+    <constant name="SiWr_half_length" value="2400*mm"/>   <!-- Start of silicon wrapper -->
+    <constant name="SiWrD_inner_radius" value="240.0*mm"/>   <!-- Start of silicon wrapper -->
+    <constant name="SiWrD_outer_radius" value="2080.0*mm"/>   <!-- Start of silicon wrapper -->
+
     <constant name="ECalBarrel_inner_radius" value="2150*mm"/>
     <constant name="ECalBarrel_outer_radius" value="2352*mm"/>
     <constant name="ECalBarrel_half_length" value="2210*mm"/>
@@ -219,20 +224,21 @@
   </limits>
   <regions>
     <region name="BeampipeRegion"/>
+    
     <region name="VTXIBRegion"/>
     <region name="VTXOBRegion"/>
     <region name="VTXDRegion"/>
 
-    <region name="SiWrapperBRegion"/>
-    <region name="SiWrapperDRegion"/>
+    <region name="SiWrBRegion"/>
+    <region name="SiWrDRegion"/>
   </regions>
 
 
   <display>
-    <vis name="VXDVis"        alpha="0.2" r="0.1" 	g=".5"      b=".5"    showDaughters="true"  visible="false"/>
+    <vis name="VXDVis"        alpha="0.2" r="0.1" 	g=".5"      b=".5"    showDaughters="true"  visible="true"/>
     <vis name="VXDLayerVis"   alpha="1.0" r="0.1" 	g=".5"      b=".5"    showDaughters="true"  visible="true"/>
     <vis name="VXDSupportVis" alpha="1.0" r="0.0" 	g="1.0"     b="0.0"   showDaughters="true"  visible="true"/>
-    <vis name="SiWrapperVis"  alpha="0.2" r="0.54"  	g="0.43"    b="0.04"  showDaughters="true"  visible="true"/>
+    <vis name="SiWrVis"       alpha="0.2" r="0.54"  	g="0.43"    b="0.04"  showDaughters="true"  visible="true"/>
     <vis name="ECALVis"     	alpha="1.0" r="0.2"   	g="0.6"     b="0"     showDaughters="true"  visible="true"/>
     <vis name="HCALVis"     	alpha="1.0" r="0.078" 	g="0.01176" b="0.588" showDaughters="true"  visible="true"/>
     <vis name="SOLVis"      	alpha="1.0" r="0.4"   	g="0.4"     b="0.4"   showDaughters="true"  visible="true"/>
