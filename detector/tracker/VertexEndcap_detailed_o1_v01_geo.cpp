@@ -202,10 +202,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         string side_name = det_name + _toString(side,"_side%d");
 
         Assembly side_assembly(side_name);
-        DetElement sideDE( sdet , side_name, side );
         pv = envelope.placeVolume(side_assembly);
         pv.addPhysVolID("side", side);  
-        sideDE.setPlacement( pv ) ;
 
         for(xml_coll_t li(x_det,_U(layer)); li; ++li)  {
             xml_comp_t  x_layer(li);
@@ -219,7 +217,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             
             string disk_name = side_name + _toString(layer_id,"_layer%d");
             Assembly disk_assembly(disk_name);
-            DetElement diskDE( sideDE , disk_name, layer_id);
+            DetElement diskDE( sdet , disk_name, layer_id);
             pv = side_assembly.placeVolume(disk_assembly);
             pv.addPhysVolID("layer", layer_id);  
             diskDE.setPlacement( pv ) ;
