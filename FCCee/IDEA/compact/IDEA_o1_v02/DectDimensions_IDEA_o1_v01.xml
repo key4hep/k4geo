@@ -91,14 +91,15 @@
     <constant name="Inner_Vertex_half_length" value="257.5*mm"/>
     <constant name="Outer_Vertex_half_length" value="1050*mm"/>
 
-    <constant name="DCH_inner_radius" value="345*mm"/>
-    <constant name="DCH_outer_radius" value="2100*mm"/>
+    <constant name="DCH_inner_radius" value="350*mm"/>
+    <constant name="DCH_outer_radius" value="2000*mm"/>
     <constant name="DCH_half_length" value="2250*mm"/>
 
-    <constant name="SiWrB_inner_radius" value="2100*mm"/>   <!-- Start of silicon wrapper -->
-    <constant name="SiWr_half_length" value="2400*mm"/>   <!-- Start of silicon wrapper -->
-    <constant name="SiWrD_inner_radius" value="240.0*mm"/>   <!-- Start of silicon wrapper -->
-    <constant name="SiWrD_outer_radius" value="2080.0*mm"/>   <!-- Start of silicon wrapper -->
+    <constant name="SiWrB_inner_radius" value="2040*mm"/>   
+    <constant name="SiWrB_half_length"  value="2400*mm"/>
+    <constant name="SiWrD_inner_radius" value="350.0*mm"/>
+    <constant name="SiWrD_outer_radius" value="2020.0*mm"/>
+    <constant name="SiWrD_zmin"         value="2300.0*mm"/>
 
     <constant name="ECalBarrel_inner_radius" value="2150*mm"/>
     <constant name="ECalBarrel_outer_radius" value="2352*mm"/>
