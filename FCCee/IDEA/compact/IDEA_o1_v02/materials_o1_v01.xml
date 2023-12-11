@@ -354,7 +354,7 @@
     <fraction n="0.35" ref="Epoxy"/>
   </material>
 
-  <material name="GasHe_90Isob_10" state="gas">
+  <material name="GasHe_90Isob_10" state="gas"> <!-- TODO: cross-check material definition with experts -->
     <T unit="K" value="293.15"/>
     <MEE unit="eV" value="48.8432249317198"/>
     <D unit="g/cm3" value="0.0003984"/>
