@@ -22,7 +22,7 @@ A detailed description of the detector it tries to model can be found [here](htt
 ### o1_v01
 Very first version of the detailed drift chamber with wires, walls, etc. Taken from an early prototype available in FCCDetectors ([link](https://github.com/HEP-FCC/FCCDetectors/blob/main/Detector/DetFCCeeIDEA/src/DriftChamber.cpp)) and started to debug it, clean it and add the sensitive volume definition.
 It is clearly not finished but made available to enable further technical developments on the digitization, tracking, particle flow, ...
-This version do not rely on any external segmentation, all volumes are defined in the detector builder.
+This version does not rely on any external segmentation, all volumes are defined in the detector builder.
 The sensitive cell volume is a rotated (to get the stereo angle and phi position) tube segment that are put inside a hyperboloid for each layer.
 The hyperboloid is needed for performance, it helps having a well balanced volume tree.
 What to improve:
