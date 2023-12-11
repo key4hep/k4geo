@@ -12,3 +12,6 @@ find_dependency(ROOT REQUIRED COMPONENTS Geom GenVector)
 find_dependency(LCIO REQUIRED)
 
 include(${k4geo_CMAKE_DIR}/k4geoConfig-targets.cmake)
+
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(k4geo DEFAULT_MSG CMAKE_CURRENT_LIST_FILE)
