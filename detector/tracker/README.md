@@ -26,7 +26,7 @@ This version does not rely on any external segmentation, all volumes are defined
 The sensitive cell volume is a rotated (to get the stereo angle and phi position) tube segment that are put inside a hyperboloid for each layer.
 The hyperboloid is needed for performance, it helps having a well balanced volume tree.
 What to improve:
-- sensitive volume definition: fix volume extrusion/overlaps/wholes which can be partially solved by using "intersection solids" but this in turn makes the geometry building very slow and memory demanding (~10GB RAM). Other shapes like twisted tubes (caveat: no TGeo shape equivalent), tessalated solids or extruded volumes should be investigated for the next iteration.
+- sensitive volume definition: fix volume extrusion/overlaps/wholes which can be partially solved by using "intersection solids" but this in turn makes the geometry building very slow and memory demanding (~10GB RAM). Other shapes like twisted tubes (caveat: no TGeo shape equivalent), tessellated solids or extruded volumes should be investigated for the next iteration.
 - better automation in the C++ to rely less on user defined parameters from the xml
 - better variable naming (started already but could still be improved)
 - make sense out of the many layer radiuses defined
