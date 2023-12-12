@@ -209,11 +209,12 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             xml_comp_t  x_layer(li);
             int layer_id        = x_layer.id();
             double rmin         = x_layer.rmin();
-            double dr           = x_layer.dr();
+            double dr           = x_layer.dr(0);
             double z            = x_layer.z();
-            double layer_dz     = x_layer.dz();
+            double layer_dz     = x_layer.dz(0);
             int nPetals         = x_layer.nphi();
             double phi0_layer   = x_layer.phi0(0);
+            double reflect_rot  = x_layer.attr<double>(_Unicode(reflect_rot),0.0);
             
             string disk_name = side_name + _toString(layer_id,"_layer%d");
             Assembly disk_assembly(disk_name);
@@ -257,7 +258,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                     string moduleStr    = x_stave.moduleStr();
                     double phi0_stave   = x_stave.phi0(0);
                     double stave_offset = x_stave.offset(0); // Offset of stave in r-phi
-                    double phi     = 2*M_PI/nPetals*iPetal + phi0_layer + phi0_stave;
+                    double phi     = 2*M_PI/nPetals*iPetal + phi0_layer + phi0_stave + (side == -1 ? reflect_rot : 0.0);
 
                     // Use the correct module
                     auto m = *find_if(module_information_list.cbegin(), module_information_list.cend(), [&moduleStr] (const module_information& module) {

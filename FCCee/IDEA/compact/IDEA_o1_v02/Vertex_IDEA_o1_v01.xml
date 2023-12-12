@@ -66,7 +66,7 @@
             <!-- Module with four ATLASPix3-like chips -->
             <constant name="VTXO_mod_z_sensitive" value="VTXO_sens_z_sensitive*2"/>
             <constant name="VTXO_mod_z_periphery" value="VTXO_sens_z_periphery*2+VTXO_sens_z_sens_spacing"/>
-            <constant name="VTXO_mod_z" value="VTXO_mod_z_sensitive+VTXO_mod_z_periphery"/>
+            <constant name="VTXO_mod_z" value="VTXO_mod_z_sensitive+VTXO_mod_z_periphery"/> <!-- 40.6*mm -->
     
             <constant name="VTXO_mod_rphi_sensitive" value="VTXO_sens_rphi_sensitive*2"/>
             <constant name="VTXO_mod_rphi_periphery" value="VTXO_sens_rphi_periphery*2+VTXO_sens_rphi_sens_spacing"/>
@@ -200,31 +200,113 @@
         
 
         <!-- Vertex disks parameters -->
-            <constant name="VTXD_support_thickness" value="VTXO_support_Fleece_thickness+VTXO_support_CarbonFiber_thickness+VTXO_support_PaperGraphite_thickness"/>
-            <constant name="VTXD_rmax1" value="247.644*mm"/>
-            <constant name="VTXD_rmax2" value="VTXD_r_max"/>
-            <constant name="VTXD_rmax3" value="VTXD_r_max"/>
-            <constant name="VTXD_rmax" value="VTXD_rmax3"/>        
+            <constant name="VTXD_support_thickness" value="VTXO_support_Fleece_thickness+VTXO_support_CarbonFiber_thickness+VTXO_support_PaperGraphite_thickness"/>      
             <constant name="VTXD_z1" value="VTXD_z_min"/>
-            <constant name="VTXD_z2" value="620*mm"/>
+            <constant name="VTXD_z2" value="609.086*mm"/>
             <constant name="VTXD_z3" value="VTXD_z_max"/>
-            <constant name="VTXD_dz1" value="8.5*mm"/>
+            <constant name="VTXD_dz1" value="0.0*mm"/> <!-- This is not correct, but needed to increase it to avoid clashes of end-of-stave volumes as they are only approximated! -->
             <constant name="VTXD_dz2" value="0.0*mm"/>
             <constant name="VTXD_dz3" value="0.0*mm"/>
             <constant name="VTXD_rmin1" value="VTXD_r_min"/>
-            <constant name="VTXD_rmin2" value="76.995*mm"/>
-            <constant name="VTXD_rmin3" value="105.895*mm"/>
-            <constant name="VTXD_dr1" value="0.92*mm"/>  <!-- Alternating difference in radius from one petal to the next -->
-            <constant name="VTXD_dr2" value="(153.99*mm-152.30*mm)/2.0"/>
-            <constant name="VTXD_dr3" value="0.0*mm"/>  <!-- Alternating difference in radius from one petal to the next -->
+            <constant name="VTXD_rmin2" value="140.0/2.0*mm"/>
+            <constant name="VTXD_rmin3" value="210.0/2.0*mm"/>
             <constant name="VTXD_phi1A" value="0.0*rad"/>
-            <constant name="VTXD_phi1B" value="0.7853981634*rad"/> <!-- face B of first disk is offset by 45 degrees-->
+            <constant name="VTXD_phi1B" value="2.0*pi/8.0*rad"/> <!-- face B of first disk is offset by 45 degrees-->
             <constant name="VTXD_zoffset_stave" value="6.020*mm"/>
-            <constant name="VTXD_zoffset_face" value="19.1412*mm"/> <!-- face B has different position in z than face A-->
+            <constant name="VTXD_zoffset_face1" value="32.621*mm"/> <!-- face B has different position in z than face A-->
+            <constant name="VTXD_zoffset_face2" value="15.121*mm"/> <!-- face B has different position in z than face A-->
+            <constant name="VTXD_zoffset_face3" value="15.871*mm"/> <!-- face B has different position in z than face A-->
             <constant name="VTXD_stave_dz" value="5.0*mm"/> <!-- Distance between front and back of stave (inner empty space) -->
 
             <constant name="VTXDModOverlap" value="-13.0*mm"/>
             <constant name="VTXD_rModOverlap" value="-6.5*mm"/>
+
+            <constant name="VTXD_disk1_roffset_stave1A" value="0.0*mm"/>
+            <constant name="VTXD_disk1_roffset_stave2A" value="VTXD_disk1_roffset_stave1A+VTXO_mod_z-4.739*mm"/>
+            <constant name="VTXD_disk1_roffset_stave3A" value="VTXD_disk1_roffset_stave2A+VTXO_mod_z-6.2*mm"/>
+            <constant name="VTXD_disk1_roffset_stave4A" value="VTXD_disk1_roffset_stave3A+VTXO_mod_z-6.2*mm"/>
+            <constant name="VTXD_disk1_roffset_stave5A" value="VTXD_disk1_roffset_stave4A+VTXO_mod_z-6.5*mm"/>
+            <constant name="VTXD_disk1_roffset_stave6A" value="VTXD_disk1_roffset_stave5A+VTXO_mod_z-9.305*mm"/>
+            <constant name="VTXD_disk1_roffset_stave7A" value="VTXD_disk1_roffset_stave6A+VTXO_mod_z-12.757*mm"/>
+
+            <constant name="VTXD_disk1_roffset_stave1B" value="0.0*mm"/>
+            <constant name="VTXD_disk1_roffset_stave2B" value="VTXD_disk1_roffset_stave1B+VTXO_mod_z-5.898*mm"/>
+            <constant name="VTXD_disk1_roffset_stave3B" value="VTXD_disk1_roffset_stave2B+VTXO_mod_z-6.448*mm"/>
+            <constant name="VTXD_disk1_roffset_stave4B" value="VTXD_disk1_roffset_stave3B+VTXO_mod_z-5.788*mm"/>
+            <constant name="VTXD_disk1_roffset_stave5B" value="VTXD_disk1_roffset_stave4B+VTXO_mod_z-6.5*mm"/>
+            <constant name="VTXD_disk1_roffset_stave6B" value="VTXD_disk1_roffset_stave5B+VTXO_mod_z-8.49*mm"/>
+            <constant name="VTXD_disk1_roffset_stave7B" value="VTXD_disk1_roffset_stave6B+VTXO_mod_z-12.375*mm"/>
+
+            <constant name="VTXD_disk2_roffset_stave1" value="0.0*mm"/>
+            <constant name="VTXD_disk2_roffset_stave2" value="VTXD_disk2_roffset_stave1+VTXO_mod_z-4.0*mm"/>
+            <constant name="VTXD_disk2_roffset_stave3" value="VTXD_disk2_roffset_stave2+VTXO_mod_z-4.0*mm"/>
+            <constant name="VTXD_disk2_roffset_stave4" value="VTXD_disk2_roffset_stave3+VTXO_mod_z-4.508*mm"/>
+            <constant name="VTXD_disk2_roffset_stave5" value="VTXD_disk2_roffset_stave4+VTXO_mod_z-5.0*mm"/>
+            <constant name="VTXD_disk2_roffset_stave6" value="VTXD_disk2_roffset_stave5+VTXO_mod_z-11.095*mm"/>
+
+            <constant name="VTXD_disk3_roffset_stave1A" value="0.0*mm"/>
+            <constant name="VTXD_disk3_roffset_stave2A" value="VTXD_disk3_roffset_stave1A+VTXO_mod_z-5.5*mm"/>
+            <constant name="VTXD_disk3_roffset_stave3A" value="VTXD_disk3_roffset_stave2A+VTXO_mod_z-5.5*mm"/>
+            <constant name="VTXD_disk3_roffset_stave4A" value="VTXD_disk3_roffset_stave3A+VTXO_mod_z-6.0*mm"/>
+            <constant name="VTXD_disk3_roffset_stave5A" value="VTXD_disk3_roffset_stave4A+VTXO_mod_z-6.0*mm"/>
+
+            <constant name="VTXD_disk3_roffset_stave1B" value="0.0*mm"/>
+            <constant name="VTXD_disk3_roffset_stave2B" value="VTXD_disk3_roffset_stave1B+VTXO_mod_z-6.0*mm"/>
+            <constant name="VTXD_disk3_roffset_stave3B" value="VTXD_disk3_roffset_stave2B+VTXO_mod_z-6.0*mm"/>
+            <constant name="VTXD_disk3_roffset_stave4B" value="VTXD_disk3_roffset_stave3B+VTXO_mod_z-6.0*mm"/>
+            <constant name="VTXD_disk3_roffset_stave5B" value="VTXD_disk3_roffset_stave4B+VTXO_mod_z-5.0*mm"/>
+
+            <constant name="VTXD_disk1_zoffset_stave1A_1" value="0.0*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave2A_1" value="7.0*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave3A_1" value="14.0*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave4A_1" value="7.0*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave5A_1" value="13.5*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave6A_1" value="7.5*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave7A_1" value="-5.0*mm"/>
+
+            <constant name="VTXD_disk1_zoffset_stave1A_2" value="0.0*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave2A_2" value="-6.48*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave3A_2" value="0.5*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave4A_2" value="-6.5*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave5A_2" value="0.0*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave6A_2" value="-6.0*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave7A_2" value="-18.5*mm"/>
+
+
+            <constant name="VTXD_disk1_zoffset_stave1B_1" value="0.0*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave2B_1" value="6.02*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave3B_1" value="-0.5*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave4B_1" value="6.5*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave5B_1" value="-0.5*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave6B_1" value="-6.0*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave7B_1" value="-12.5*mm"/>
+
+            <constant name="VTXD_disk1_zoffset_stave1B_2" value="0.0*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave2B_2" value="14.52*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave3B_2" value="8.0*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave4B_2" value="15.0*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave5B_2" value="8.0*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave6B_2" value="2.5*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave7B_2" value="-4.0*mm"/>
+
+            <constant name="VTXD_disk2_zoffset_stave1" value="0.0*mm"/>
+            <constant name="VTXD_disk2_zoffset_stave2" value="-7.52*mm"/>
+            <constant name="VTXD_disk2_zoffset_stave3" value="1.02*mm"/>
+            <constant name="VTXD_disk2_zoffset_stave4" value="-7.52*mm"/>
+            <constant name="VTXD_disk2_zoffset_stave5" value="1.02*mm"/>
+            <constant name="VTXD_disk2_zoffset_stave6" value="-7.02*mm"/>
+
+            <constant name="VTXD_disk3_zoffset_stave1A" value="0.0*mm"/>
+            <constant name="VTXD_disk3_zoffset_stave2A" value="-11.904*mm"/>
+            <constant name="VTXD_disk3_zoffset_stave3A" value="0.5*mm"/>
+            <constant name="VTXD_disk3_zoffset_stave4A" value="-7.0*mm"/>
+            <constant name="VTXD_disk3_zoffset_stave5A" value="0.0*mm"/>
+
+            <constant name="VTXD_disk3_zoffset_stave1B" value="0.0*mm"/>
+            <constant name="VTXD_disk3_zoffset_stave2B" value="7.25*mm"/>
+            <constant name="VTXD_disk3_zoffset_stave3B" value="0.75*mm"/>
+            <constant name="VTXD_disk3_zoffset_stave4B" value="7.25*mm"/>
+            <constant name="VTXD_disk3_zoffset_stave5B" value="0.25*mm"/>
 
             <constant name="VTXD_Pipe_offset" value="5.42*mm/2.0"/> 
 
@@ -271,7 +353,7 @@
                     <component thickness="VTXIB_L1_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="VTXIB_L1_Holder_Rohacell_rphi/2.0+VTXIB_Holder_CarbonFiber_rphi/2.0"  r="VTXIB_Glue_Thickness+VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="SupportVis"/> <!-- Holder structure -->
                 </components>
 
-                <components name="flexes" r="VTXIB_Sensitive_Thickness" length="VTXIB_z1">
+                <components name="flexes" r="VTXIB_Sensitive_Thickness+VTXIB_Glue_Thickness+VTXIB_Support_Thickness" length="VTXIB_z1">
                     <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" r="0.0*mm" offset="VTXIB_flex_offset" material="KaptonVtx" vis="CableVis"/>
                     <component thickness="VTXIB_flex_Aluminium_thickness"    width="VTXIB_flex_width" r="VTXIB_flex_Kapton_thickness" offset="VTXIB_flex_offset" material="Al" vis="CableVis"/>
                     <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" r="0.0*mm" offset="-VTXIB_flex_offset" material="KaptonVtx" vis="CableVis"/>
@@ -312,7 +394,7 @@
                     <component thickness="VTXIB_L2_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="VTXIB_L2_Holder_Rohacell_rphi/2.0+VTXIB_Holder_CarbonFiber_rphi/2.0"  r="VTXIB_Glue_Thickness+VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="SupportVis"/> <!-- Holder structure -->
                 </components>
 
-                <components name="flexes" r="VTXIB_Sensitive_Thickness" length="VTXIB_z2">
+                <components name="flexes" r="VTXIB_Sensitive_Thickness+VTXIB_Glue_Thickness+VTXIB_Support_Thickness" length="VTXIB_z2">
                     <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" r="0.0*mm" offset="VTXIB_flex_offset" material="KaptonVtx" vis="CableVis"/>
                     <component thickness="VTXIB_flex_Aluminium_thickness"    width="VTXIB_flex_width" r="VTXIB_flex_Kapton_thickness" offset="VTXIB_flex_offset" material="Al" vis="CableVis"/>
                     <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" r="0.0*mm" offset="-VTXIB_flex_offset" material="KaptonVtx" vis="CableVis"/>
@@ -353,7 +435,7 @@
                     <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" offset="VTXIB_L3_Holder_Rohacell_rphi/2.0+VTXIB_Holder_CarbonFiber_rphi/2.0"  r="VTXIB_Glue_Thickness+VTXIB_Support_Thickness" material="CarbonFiberVtx66D" vis="SupportVis"/> <!-- Holder structure -->
                 </components>
 
-                <components name="flexes" r="VTXIB_Sensitive_Thickness" length="VTXIB_z3">
+                <components name="flexes" r="VTXIB_Sensitive_Thickness+VTXIB_Glue_Thickness+VTXIB_Support_Thickness" length="VTXIB_z3">
                     <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" r="0.0*mm" offset="VTXIB_flex_offset" material="KaptonVtx" vis="CableVis"/>
                     <component thickness="VTXIB_flex_Aluminium_thickness"    width="VTXIB_flex_width" r="VTXIB_flex_Kapton_thickness" offset="VTXIB_flex_offset" material="Al" vis="CableVis"/>
                     <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" r="0.0*mm" offset="-VTXIB_flex_offset" material="KaptonVtx" vis="CableVis"/>
@@ -380,8 +462,8 @@
 
             <!-- Here we construct the barrel -->
             <layer nLadders="VTXIB_L1_Staves" phi0="0.0" r="VTXIB_r1" offset="VTXIB_L1_offset" id="0" nmodules="VTXIB_L1_nModules" name="SiVTXIBStave1" step="VTXIB_mod_z_spacing" dr="VTXIB_dr1"/>
-            <layer nLadders="VTXIB_L2_Staves" phi0="0.0" r="VTXIB_r2" offset="VTXIB_L2_offset" id="1" nmodules="VTXIB_L2_nModules" name="SiVTXIBStave2" step="VTXIB_mod_z_spacing" dr="VTXIB_dr2"/>
-            <layer nLadders="VTXIB_L3_Staves" phi0="0.0" r="VTXIB_r3" offset="VTXIB_L3_offset" id="2" nmodules="VTXIB_L3_nModules" name="SiVTXIBStave3" step="VTXIB_mod_z_spacing" dr="VTXIB_dr3"/>
+            <!-- <layer nLadders="VTXIB_L2_Staves" phi0="0.0" r="VTXIB_r2" offset="VTXIB_L2_offset" id="1" nmodules="VTXIB_L2_nModules" name="SiVTXIBStave2" step="VTXIB_mod_z_spacing" dr="VTXIB_dr2"/>
+            <layer nLadders="VTXIB_L3_Staves" phi0="0.0" r="VTXIB_r3" offset="VTXIB_L3_offset" id="2" nmodules="VTXIB_L3_nModules" name="SiVTXIBStave3" step="VTXIB_mod_z_spacing" dr="VTXIB_dr3"/> -->
         </detector>
     </detectors>
 
@@ -596,37 +678,77 @@
             </module>
 
             <!-- Here we construct the disks, all disks use the same base stave (SiVTXDStave) with different numbers of modules and other properties -->
-           <layer id="0" z="VTXD_z1" nphi="4" dz="VTXD_dz1" rmin="VTXD_rmin1" dr="VTXD_dr1" phi0="0.0">
-                <stave nmodules="2" z_offset="0.0*mm" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="0.0*mm" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
-                <stave nmodules="3" z_offset="VTXD_zoffset_stave" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="1.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
-                <stave nmodules="4" z_offset="0.0*mm" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="2.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
-                <stave nmodules="4" z_offset="VTXD_zoffset_stave" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="3.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
-                <stave nmodules="5" z_offset="0.0*mm" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="4.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
-                <stave nmodules="6" z_offset="VTXD_zoffset_stave" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="5.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
+           <layer id="0" z="VTXD_z1" nphi="2" dz="VTXD_dz1" rmin="VTXD_rmin1" reflect_rot="pi/4.0">
+                <!-- Face B, one half -->
+                <stave nmodules="2" z_offset="VTXD_disk1_zoffset_stave1B_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave1B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
+                <stave nmodules="3" z_offset="VTXD_disk1_zoffset_stave2B_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave2B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
+                <stave nmodules="4" z_offset="VTXD_disk1_zoffset_stave3B_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave3B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
+                <stave nmodules="4" z_offset="VTXD_disk1_zoffset_stave4B_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave4B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
+                <stave nmodules="5" z_offset="VTXD_disk1_zoffset_stave5B_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave5B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
+                <stave nmodules="6" z_offset="VTXD_disk1_zoffset_stave6B_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave6B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
+                <stave nmodules="6" z_offset="VTXD_disk1_zoffset_stave7B_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave7B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
 
-                <stave nmodules="2" z_offset="VTXD_zoffset_face" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="0.0*mm" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
-                <stave nmodules="3" z_offset="VTXD_zoffset_face+VTXD_zoffset_stave" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="1.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
-                <stave nmodules="4" z_offset="VTXD_zoffset_face" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="2.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
-                <stave nmodules="5" z_offset="VTXD_zoffset_face+VTXD_zoffset_stave" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="3.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
-                <stave nmodules="5" z_offset="VTXD_zoffset_face" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="4.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
-                <stave nmodules="6" z_offset="VTXD_zoffset_face+VTXD_zoffset_stave" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="5.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
+                <!-- Face B, other half -->
+                <stave nmodules="2" z_offset="8.5*mm+VTXD_disk1_zoffset_stave1B_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave1B" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1B" module="SiVTXDStave"/>
+                <stave nmodules="3" z_offset="8.5*mm+VTXD_disk1_zoffset_stave2B_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave2B" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1B" module="SiVTXDStave"/>
+                <stave nmodules="4" z_offset="8.5*mm+VTXD_disk1_zoffset_stave3B_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave3B" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1B" module="SiVTXDStave"/>
+                <stave nmodules="4" z_offset="8.5*mm+VTXD_disk1_zoffset_stave4B_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave4B" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1B" module="SiVTXDStave"/>
+                <stave nmodules="5" z_offset="8.5*mm+VTXD_disk1_zoffset_stave5B_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave5B" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1B" module="SiVTXDStave"/>
+                <stave nmodules="6" z_offset="8.5*mm+VTXD_disk1_zoffset_stave6B_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave6B" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1B" module="SiVTXDStave"/>
+                <stave nmodules="6" z_offset="8.5*mm+VTXD_disk1_zoffset_stave7B_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave7B" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1B" module="SiVTXDStave"/>
+
+                <!-- Face A, one half -->
+                <stave nmodules="2" z_offset="VTXD_zoffset_face1+VTXD_disk1_zoffset_stave1A_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave1A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
+                <stave nmodules="3" z_offset="VTXD_zoffset_face1+VTXD_disk1_zoffset_stave2A_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave2A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
+                <stave nmodules="4" z_offset="VTXD_zoffset_face1+VTXD_disk1_zoffset_stave3A_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave3A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
+                <stave nmodules="5" z_offset="VTXD_zoffset_face1+VTXD_disk1_zoffset_stave4A_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave4A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
+                <stave nmodules="5" z_offset="VTXD_zoffset_face1+VTXD_disk1_zoffset_stave5A_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave5A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
+                <stave nmodules="6" z_offset="VTXD_zoffset_face1+VTXD_disk1_zoffset_stave6A_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave6A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
+                <stave nmodules="6" z_offset="VTXD_zoffset_face1+VTXD_disk1_zoffset_stave7A_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave7A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
+
+                <!-- Face A, other half -->
+                <stave nmodules="2" z_offset="VTXD_zoffset_face1+13.5*mm+VTXD_disk1_zoffset_stave1A_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave1A" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1A" module="SiVTXDStave"/>
+                <stave nmodules="3" z_offset="VTXD_zoffset_face1+13.5*mm+VTXD_disk1_zoffset_stave2A_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave2A" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1A" module="SiVTXDStave"/>
+                <stave nmodules="4" z_offset="VTXD_zoffset_face1+13.5*mm+VTXD_disk1_zoffset_stave3A_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave3A" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1A" module="SiVTXDStave"/>
+                <stave nmodules="5" z_offset="VTXD_zoffset_face1+13.5*mm+VTXD_disk1_zoffset_stave4A_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave4A" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1A" module="SiVTXDStave"/>
+                <stave nmodules="5" z_offset="VTXD_zoffset_face1+13.5*mm+VTXD_disk1_zoffset_stave5A_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave5A" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1A" module="SiVTXDStave"/>
+                <stave nmodules="6" z_offset="VTXD_zoffset_face1+13.5*mm+VTXD_disk1_zoffset_stave6A_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave6A" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1A" module="SiVTXDStave"/>
+                <stave nmodules="6" z_offset="VTXD_zoffset_face1+13.5*mm+VTXD_disk1_zoffset_stave7A_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave7A" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1A" module="SiVTXDStave"/>
             </layer>
 
-            <layer id="1" z="VTXD_z2" nphi="8" dz="VTXD_zoffset_face" rmin="VTXD_rmin2" dr="VTXD_dr2" phi0="0.0">
-                <stave nmodules="3" z_offset="0.0*mm" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="0.0*mm" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
-                <stave nmodules="4" z_offset="VTXD_zoffset_stave" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="1.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
-                <stave nmodules="5" z_offset="0.0*mm" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="2.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
-                <stave nmodules="6" z_offset="VTXD_zoffset_stave" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="3.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
-                <stave nmodules="7" z_offset="0.0*mm" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="4.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
-                <stave nmodules="8" z_offset="VTXD_zoffset_stave" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="5.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
+            <layer id="1" z="VTXD_z2" nphi="4" dz="VTXD_dz2" rmin="VTXD_rmin2">
+                <!-- Face A -->
+                <stave nmodules="3" z_offset="VTXD_disk2_zoffset_stave1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave1" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
+                <stave nmodules="4" z_offset="VTXD_disk2_zoffset_stave2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave2" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
+                <stave nmodules="5" z_offset="VTXD_disk2_zoffset_stave3" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave3" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
+                <stave nmodules="6" z_offset="VTXD_disk2_zoffset_stave4" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave4" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
+                <stave nmodules="6" z_offset="VTXD_disk2_zoffset_stave5" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave5" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
+                <stave nmodules="7" z_offset="VTXD_disk2_zoffset_stave6" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave6" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
+
+                <!-- Face B -->
+                <stave nmodules="3" z_offset="VTXD_zoffset_face2-VTXD_disk2_zoffset_stave1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave1" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
+                <stave nmodules="4" z_offset="VTXD_zoffset_face2-VTXD_disk2_zoffset_stave2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave2" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
+                <stave nmodules="5" z_offset="VTXD_zoffset_face2-VTXD_disk2_zoffset_stave3" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave3" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
+                <stave nmodules="6" z_offset="VTXD_zoffset_face2-VTXD_disk2_zoffset_stave4" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave4" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
+                <stave nmodules="6" z_offset="VTXD_zoffset_face2-VTXD_disk2_zoffset_stave5" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave5" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
+                <stave nmodules="7" z_offset="VTXD_zoffset_face2-VTXD_disk2_zoffset_stave6" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave6" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
+
             </layer>         
 
-             <layer id="2" z="VTXD_z3" nphi="8" dz="VTXD_zoffset_face" rmin="VTXD_rmin3" dr="VTXD_dr3" phi0="0.0">
-                <stave nmodules="4" z_offset="0.0*mm" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="0.0*mm" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
-                <stave nmodules="5" z_offset="VTXD_zoffset_stave" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="1.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
-                <stave nmodules="5" z_offset="0.0*mm" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="2.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
-                <stave nmodules="6" z_offset="VTXD_zoffset_stave" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="3.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
-                <stave nmodules="7" z_offset="0.0*mm" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="4.*(VTXO_mod_z+VTXD_rModOverlap)" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
+             <layer id="2" z="VTXD_z3" nphi="4" dz="VTXD_dz3" rmin="VTXD_rmin3" reflect_rot="pi/4.0">
+                <!-- Face A -->
+                <stave nmodules="4" z_offset="VTXD_disk3_zoffset_stave1A" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave1A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
+                <stave nmodules="5" z_offset="VTXD_disk3_zoffset_stave2A" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave2A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
+                <stave nmodules="5" z_offset="VTXD_disk3_zoffset_stave3A" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave3A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
+                <stave nmodules="6" z_offset="VTXD_disk3_zoffset_stave4A" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave4A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
+                <stave nmodules="7" z_offset="VTXD_disk3_zoffset_stave5A" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave5A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
+
+                <!-- Face B -->
+                <stave nmodules="4" z_offset="VTXD_zoffset_face3+VTXD_disk3_zoffset_stave1B" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave1B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
+                <stave nmodules="5" z_offset="VTXD_zoffset_face3+VTXD_disk3_zoffset_stave2B" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave2B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
+                <stave nmodules="5" z_offset="VTXD_zoffset_face3+VTXD_disk3_zoffset_stave3B" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave3B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
+                <stave nmodules="6" z_offset="VTXD_zoffset_face3+VTXD_disk3_zoffset_stave4B" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave4B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
+                <stave nmodules="7" z_offset="VTXD_zoffset_face3+VTXD_disk3_zoffset_stave5B" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave5B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
             </layer>  
         </detector>
     </detectors>   
