@@ -193,7 +193,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
       // Loop over the sets of layer elements in the detector
       double check_thick = 0.0;
       int l_num = 1;
-      int l_set = 0;
       for(xml_coll_t li(x_det,_U(layer)); li; ++li)  {
 	
 	xml_comp_t x_layer = li;
