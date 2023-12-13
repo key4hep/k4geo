@@ -288,7 +288,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 	  // Increment layer number
 	  ++l_num;
 	}
-	l_set++;
       }
 
       std::cout << "Total slice thickness check " << check_thick << " cm" << std::endl;
