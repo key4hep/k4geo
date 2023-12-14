@@ -14,15 +14,15 @@
     <comment>Vertex detector</comment>
     <detectors>
         <detector name="Vertex" type="DD4hep_SubdetectorAssembly" vis="VXDVis">
-            <shape type="BooleanShape" operation="Subtraction" material="Air"> <!-- These definitions have to be checked again! -->
+            <shape type="BooleanShape" operation="Subtraction" material="Air">
                 <shape type="BooleanShape" operation="Subtraction">
-                    <shape type="Tube" rmin="VTXIB_r_min-VTXIB_r_clearance" rmax="VTXOB_r_max" dz="Outer_Vertex_half_length"/>
-                    <shape type="Cone" rmin1="0" rmax1="VertexClearanceTheta*Outer_Vertex_half_length-env_safety" rmin2="0" rmax2="VTXIB_r_min-VTXIB_r_clearance" z="((Outer_Vertex_half_length-CentralBeamPipe_zmax)/2+env_safety)"/>
-                    <position x="0" y="0" z="-(CentralBeamPipe_zmax+(Outer_Vertex_half_length-CentralBeamPipe_zmax)/2+env_safety)" />
+                    <shape type="Tube" rmin="VTXIB_r_min_layer-VTXIB_r_clearance" rmax="VTXOB_r_max" dz="VTXOB_half_length"/>
+                    <shape type="Cone" rmin1="0" rmax1="tan(VertexClearanceTheta)*VTXOB_half_length" rmin2="0" rmax2="0" z="VTXOB_half_length/2."/>
+                    <position x="0" y="0" z="-VTXOB_half_length/2." />
                 </shape>
                 
-                <shape type="Cone" rmin1="0" rmax1="VTXIB_r_min-VTXIB_r_clearance" rmin2="0" rmax2="VertexClearanceTheta*Outer_Vertex_half_length-env_safety" z="(Outer_Vertex_half_length-CentralBeamPipe_zmax)/2+env_safety"/>
-                <position x="0" y="0" z="CentralBeamPipe_zmax+(Outer_Vertex_half_length-CentralBeamPipe_zmax)/2+env_safety" />
+                <shape type="Cone" rmin1="0" rmax1="0" rmin2="0" rmax2="tan(VertexClearanceTheta)*VTXOB_half_length" z="VTXOB_half_length/2."/>
+                <position x="0" y="0" z="VTXOB_half_length/2." />
             </shape>
             <comment>Vertex Assembly</comment>
             <composite name="VTXIB"/>
@@ -86,10 +86,10 @@
     
             <constant name="VTXIB_mod_z_spacing" value="0.2*mm"/>
     
-            <constant name="VTXIB_z1" value="(VTXIB_L1_nModules*VTXIB_mod_z+(VTXIB_L1_nModules-1)*VTXIB_mod_z_spacing)/2.0"/>
-            <constant name="VTXIB_z2" value="(VTXIB_L2_nModules*VTXIB_mod_z+(VTXIB_L2_nModules-1)*VTXIB_mod_z_spacing)/2.0"/>
-            <constant name="VTXIB_z3" value="(VTXIB_L3_nModules*VTXIB_mod_z+(VTXIB_L3_nModules-1)*VTXIB_mod_z_spacing)/2.0"/>        
-            <constant name="VTXIB_r1" value="VTXIB_r_min"/> 
+            <constant name="VTXIB_z1" value="(VTXIB_L1_nModules*VTXIB_mod_z+(VTXIB_L1_nModules-1)*VTXIB_mod_z_spacing)/2.0"/> <!-- 96.5*mm -->
+            <constant name="VTXIB_z2" value="(VTXIB_L2_nModules*VTXIB_mod_z+(VTXIB_L2_nModules-1)*VTXIB_mod_z_spacing)/2.0"/> <!-- 160.9*mm -->
+            <constant name="VTXIB_z3" value="(VTXIB_L3_nModules*VTXIB_mod_z+(VTXIB_L3_nModules-1)*VTXIB_mod_z_spacing)/2.0"/> <!-- 257.5*mm -->
+            <constant name="VTXIB_r1" value="VTXIB_r_min_layer"/> 
             <constant name="VTXIB_r2" value="22.7*mm"/>
             <constant name="VTXIB_r3"  value="34.00*mm"/>
 
@@ -104,8 +104,8 @@
     
             <constant name="VTXIB_L3_overlap" value="0.4*mm"/>        
             
-            <constant name="VTXIB_L1_offset" value="3.751*mm"/>
-            <constant name="VTXIB_L2_offset" value="-3.255*mm"/>
+            <constant name="VTXIB_L1_offset" value="-3.751*mm"/>
+            <constant name="VTXIB_L2_offset" value="3.255*mm"/>
             <constant name="VTXIB_L3_offset" value="0*mm"/>
 
             <constant name="VTXIB_hybrid_z" value="12.0*mm"/>
@@ -149,6 +149,7 @@
             <!-- Hybrid at the end of the stave -->
             <constant name="VTXO_hybrid_thickness" value="0.4*mm"/>
             <constant name="VTXO_hybrid_length" value="12.1*mm"/>
+            <constant name="VTXO_hybrid_dx" value="0.1*mm"/>
 
         <!-- Vertex outer barrel parameters -->
             <constant name="VTXOB_Staves1" value="23"/>
@@ -277,7 +278,7 @@
             <constant name="VTXD_disk1_zoffset_stave2B_1" value="6.02*mm"/>
             <constant name="VTXD_disk1_zoffset_stave3B_1" value="-0.5*mm"/>
             <constant name="VTXD_disk1_zoffset_stave4B_1" value="6.5*mm"/>
-            <constant name="VTXD_disk1_zoffset_stave5B_1" value="-0.5*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave5B_1" value="0.5*mm"/>
             <constant name="VTXD_disk1_zoffset_stave6B_1" value="-6.0*mm"/>
             <constant name="VTXD_disk1_zoffset_stave7B_1" value="-12.5*mm"/>
 
@@ -286,7 +287,7 @@
             <constant name="VTXD_disk1_zoffset_stave3B_2" value="8.0*mm"/>
             <constant name="VTXD_disk1_zoffset_stave4B_2" value="15.0*mm"/>
             <constant name="VTXD_disk1_zoffset_stave5B_2" value="8.0*mm"/>
-            <constant name="VTXD_disk1_zoffset_stave6B_2" value="2.5*mm"/>
+            <constant name="VTXD_disk1_zoffset_stave6B_2" value="2.0*mm"/>
             <constant name="VTXD_disk1_zoffset_stave7B_2" value="-4.0*mm"/>
 
             <constant name="VTXD_disk2_zoffset_stave1" value="0.0*mm"/>
@@ -366,10 +367,10 @@
                     <component thickness="VTXIB_endOfStave_Thickness" width="VTXIB_mod_rphi" length="VTXIB_hybrid_z" dz="VTXIB_mod_z_spacing" r="0.0*mm" material="PCB" vis="HybridVis"/>
 
                     <!-- Rest of flexes -->
-                    <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" length="7.0*mm" r="VTXIB_mod_z_spacing+0.0*mm" offset="VTXIB_flex_offset" material="KaptonVtx" vis="CableVis"/>
-                    <component thickness="VTXIB_flex_Aluminium_thickness"    width="VTXIB_flex_width" length="7.0*mm" r="VTXIB_mod_z_spacing+VTXIB_flex_Kapton_thickness" offset="VTXIB_flex_offset" material="Al" vis="CableVis"/>
-                    <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" length="7.0*mm" r="VTXIB_mod_z_spacing+0.0*mm" offset="-VTXIB_flex_offset" material="KaptonVtx" vis="CableVis"/>
-                    <component thickness="VTXIB_flex_Aluminium_thickness"    width="VTXIB_flex_width" length="7.0*mm" r="VTXIB_mod_z_spacing+VTXIB_flex_Kapton_thickness" offset="-VTXIB_flex_offset" material="Al" vis="CableVis"/>
+                    <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" length="7.0*mm" r="VTXIB_endOfStave_Thickness+0.0*mm" offset="VTXIB_flex_offset" material="KaptonVtx" vis="CableVis"/>
+                    <component thickness="VTXIB_flex_Aluminium_thickness"    width="VTXIB_flex_width" length="7.0*mm" r="VTXIB_endOfStave_Thickness+VTXIB_flex_Kapton_thickness" offset="VTXIB_flex_offset" material="Al" vis="CableVis"/>
+                    <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" length="7.0*mm" r="VTXIB_endOfStave_Thickness+0.0*mm" offset="-VTXIB_flex_offset" material="KaptonVtx" vis="CableVis"/>
+                    <component thickness="VTXIB_flex_Aluminium_thickness"    width="VTXIB_flex_width" length="7.0*mm" r="VTXIB_endOfStave_Thickness+VTXIB_flex_Kapton_thickness" offset="-VTXIB_flex_offset" material="Al" vis="CableVis"/>
 
                     <!-- Rest of holder -->
                     <component thickness="VTXIB_L1_Holder_Thickness"  width="VTXIB_L1_Holder_Rohacell_rphi" length="VTXIB_hybrid_z+VTXIB_mod_z_spacing" offset="0.0*mm"                                                                 r="VTXIB_endOfStave_Thickness" material="RohacellVtx66D"       vis="RohacellVis"/> <!-- Holder structure -->
@@ -407,10 +408,10 @@
                     <component thickness="VTXIB_endOfStave_Thickness" width="VTXIB_mod_rphi" length="VTXIB_hybrid_z" dz="VTXIB_mod_z_spacing" r="0.0*mm" material="PCB" vis="HybridVis"/>
 
                     <!-- Rest of flexes -->
-                    <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" length="7.0*mm" r="VTXIB_mod_z_spacing+0.0*mm"                       offset="VTXIB_flex_offset"  material="KaptonVtx"    vis="CableVis"/>
-                    <component thickness="VTXIB_flex_Aluminium_thickness"    width="VTXIB_flex_width" length="7.0*mm" r="VTXIB_mod_z_spacing+VTXIB_flex_Kapton_thickness"  offset="VTXIB_flex_offset"  material="Al"           vis="CableVis"/>
-                    <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" length="7.0*mm" r="VTXIB_mod_z_spacing+0.0*mm"                       offset="-VTXIB_flex_offset" material="KaptonVtx"    vis="CableVis"/>
-                    <component thickness="VTXIB_flex_Aluminium_thickness"    width="VTXIB_flex_width" length="7.0*mm" r="VTXIB_mod_z_spacing+VTXIB_flex_Kapton_thickness"  offset="-VTXIB_flex_offset" material="Al"           vis="CableVis"/>
+                    <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" length="7.0*mm" r="VTXIB_endOfStave_Thickness+0.0*mm"                       offset="VTXIB_flex_offset"  material="KaptonVtx"    vis="CableVis"/>
+                    <component thickness="VTXIB_flex_Aluminium_thickness"    width="VTXIB_flex_width" length="7.0*mm" r="VTXIB_endOfStave_Thickness+VTXIB_flex_Kapton_thickness"  offset="VTXIB_flex_offset"  material="Al"           vis="CableVis"/>
+                    <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" length="7.0*mm" r="VTXIB_endOfStave_Thickness+0.0*mm"                       offset="-VTXIB_flex_offset" material="KaptonVtx"    vis="CableVis"/>
+                    <component thickness="VTXIB_flex_Aluminium_thickness"    width="VTXIB_flex_width" length="7.0*mm" r="VTXIB_endOfStave_Thickness+VTXIB_flex_Kapton_thickness"  offset="-VTXIB_flex_offset" material="Al"           vis="CableVis"/>
 
                     <!-- Rest of holder -->
                     <component thickness="VTXIB_L2_Holder_Thickness"  width="VTXIB_L2_Holder_Rohacell_rphi" length="VTXIB_hybrid_z+VTXIB_mod_z_spacing" offset="0.0*mm"                                                                 r="VTXIB_endOfStave_Thickness" material="RohacellVtx66D"       vis="RohacellVis"/> <!-- Holder structure -->
@@ -448,28 +449,25 @@
                     <component thickness="VTXIB_endOfStave_Thickness" width="VTXIB_mod_rphi" length="VTXIB_hybrid_z" dz="VTXIB_mod_z_spacing" r="0.0*mm" material="PCB" vis="HybridVis"/>
 
                     <!-- Rest of flexes -->
-                    <component thickness="VTXIB_flex_Kapton_thickness"      width="VTXIB_flex_width" length="7.0*mm" r="VTXIB_mod_z_spacing+0.0*mm"                       offset="VTXIB_flex_offset"  material="KaptonVtx"    vis="CableVis"/>
-                    <component thickness="VTXIB_flex_Aluminium_thickness"   width="VTXIB_flex_width" length="7.0*mm" r="VTXIB_mod_z_spacing+VTXIB_flex_Kapton_thickness"  offset="VTXIB_flex_offset"  material="Al"           vis="CableVis"/>
-                    <component thickness="VTXIB_flex_Kapton_thickness"      width="VTXIB_flex_width" length="7.0*mm" r="VTXIB_mod_z_spacing+0.0*mm"                       offset="-VTXIB_flex_offset" material="KaptonVtx"    vis="CableVis"/>
-                    <component thickness="VTXIB_flex_Aluminium_thickness"   width="VTXIB_flex_width" length="7.0*mm" r="VTXIB_mod_z_spacing+VTXIB_flex_Kapton_thickness"  offset="-VTXIB_flex_offset" material="Al"           vis="CableVis"/>
+                    <component thickness="VTXIB_flex_Kapton_thickness"      width="VTXIB_flex_width" length="7.0*mm" r="VTXIB_endOfStave_Thickness+0.0*mm"                       offset="VTXIB_flex_offset"  material="KaptonVtx"    vis="CableVis"/>
+                    <component thickness="VTXIB_flex_Aluminium_thickness"   width="VTXIB_flex_width" length="7.0*mm" r="VTXIB_endOfStave_Thickness+VTXIB_flex_Kapton_thickness"  offset="VTXIB_flex_offset"  material="Al"           vis="CableVis"/>
+                    <component thickness="VTXIB_flex_Kapton_thickness"      width="VTXIB_flex_width" length="7.0*mm" r="VTXIB_endOfStave_Thickness+0.0*mm"                       offset="-VTXIB_flex_offset" material="KaptonVtx"    vis="CableVis"/>
+                    <component thickness="VTXIB_flex_Aluminium_thickness"   width="VTXIB_flex_width" length="7.0*mm" r="VTXIB_endOfStave_Thickness+VTXIB_flex_Kapton_thickness"  offset="-VTXIB_flex_offset" material="Al"           vis="CableVis"/>
 
                     <!-- Rest of holder -->
-                    <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_L3_Holder_Rohacell_rphi" length="VTXIB_hybrid_z+VTXIB_mod_z_spacing" offset="0.0*mm"                                                                     r="VTXIB_endOfStave_Thickness" material="RohacellVtx66D"       vis="RohacellVis"/> <!-- Holder structure -->
-                    <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" length="VTXIB_hybrid_z+VTXIB_mod_z_spacing" offset="-VTXIB_L3_Holder_Rohacell_rphi/2.0-VTXIB_Holder_CarbonFiber_rphi/2.0" r="VTXIB_endOfStave_Thickness" material="CarbonFiberVtx66D"    vis="SupportVis"/> <!-- Holder structure -->
-                    <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" length="VTXIB_hybrid_z+VTXIB_mod_z_spacing" offset="VTXIB_L3_Holder_Rohacell_rphi/2.0+VTXIB_Holder_CarbonFiber_rphi/2.0" r="VTXIB_endOfStave_Thickness" material="CarbonFiberVtx66D"    vis="SupportVis"/> <!-- Holder structure -->
+                    <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_L3_Holder_Rohacell_rphi" length="VTXIB_hybrid_z+VTXIB_mod_z_spacing" offset="0.0*mm"                                                                 r="VTXIB_endOfStave_Thickness" material="RohacellVtx66D"       vis="RohacellVis"/> <!-- Holder structure -->
+                    <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" length="VTXIB_hybrid_z+VTXIB_mod_z_spacing" offset="-VTXIB_L3_Holder_Rohacell_rphi/2.0-VTXIB_Holder_CarbonFiber_rphi/2.0"   r="VTXIB_endOfStave_Thickness" material="CarbonFiberVtx66D"    vis="SupportVis"/> <!-- Holder structure -->
+                    <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" length="VTXIB_hybrid_z+VTXIB_mod_z_spacing" offset="VTXIB_L3_Holder_Rohacell_rphi/2.0+VTXIB_Holder_CarbonFiber_rphi/2.0"    r="VTXIB_endOfStave_Thickness" material="CarbonFiberVtx66D"    vis="SupportVis"/> <!-- Holder structure -->
                 </end_z>
             </stave>
 
             <!-- Here we construct the barrel -->
             <layer nLadders="VTXIB_L1_Staves" phi0="0.0" r="VTXIB_r1" offset="VTXIB_L1_offset" id="0" nmodules="VTXIB_L1_nModules" name="SiVTXIBStave1" step="VTXIB_mod_z_spacing" dr="VTXIB_dr1"/>
-            <!-- <layer nLadders="VTXIB_L2_Staves" phi0="0.0" r="VTXIB_r2" offset="VTXIB_L2_offset" id="1" nmodules="VTXIB_L2_nModules" name="SiVTXIBStave2" step="VTXIB_mod_z_spacing" dr="VTXIB_dr2"/>
-            <layer nLadders="VTXIB_L3_Staves" phi0="0.0" r="VTXIB_r3" offset="VTXIB_L3_offset" id="2" nmodules="VTXIB_L3_nModules" name="SiVTXIBStave3" step="VTXIB_mod_z_spacing" dr="VTXIB_dr3"/> -->
+            <layer nLadders="VTXIB_L2_Staves" phi0="0.0" r="VTXIB_r2" offset="VTXIB_L2_offset" id="1" nmodules="VTXIB_L2_nModules" name="SiVTXIBStave2" step="VTXIB_mod_z_spacing" dr="VTXIB_dr2"/>
+            <layer nLadders="VTXIB_L3_Staves" phi0="0.0" r="VTXIB_r3" offset="VTXIB_L3_offset" id="2" nmodules="VTXIB_L3_nModules" name="SiVTXIBStave3" step="VTXIB_mod_z_spacing" dr="VTXIB_dr3"/>
         </detector>
-    </detectors>
-
-
-    <!-- Vertex outer barrel  -->
-    <detectors>
+ 
+       <!-- Vertex outer barrel  -->
         <detector name="VTXOB" type="VertexBarrel_detailed_o1_v01" vis="VXDVis" id="DetID_VXD_OB" readout="VTXOBCollection"  region="VTXOBRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
@@ -596,11 +594,9 @@
             <layer nLadders="VTXOB_Staves1" phi0="0.0" r="VTXOB_r1" offset="VTXOB_offset1" id="0" nmodules="VTXOB_nModules1" name="SiVTXOBStave1" step="VTXOB_mod_z_spacing"/>
             <layer nLadders="VTXOB_Staves2" phi0="0.0" r="VTXOB_r2" offset="VTXOB_offset2" id="1" nmodules="VTXOB_nModules2" name="SiVTXOBStave2" step="VTXOB_mod_z_spacing"/>
         </detector>
-    </detectors>
 
 
-    <!-- Vertex disks -->
-    <detectors>
+        <!-- Vertex disks -->
         <detector id="DetID_VXD_Disks" name="VTXD" vis="VXDVis" type="VertexDisks_detailed_o1_v01" readout="VTXDCollection" reflect="true" region="VTXDRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
@@ -666,14 +662,14 @@
                 </components>
 
 
-                <end_z name="hybrids" z_offset="0.0*mm">
-                    <component thickness="VTXO_hybrid_thickness" width="VTXO_mod_rphi" length="VTXO_hybrid_length" dx="0.1*mm" x="0.001*mm" z_offset="0.0*mm" material="PCB" vis="HybridVis"/> <!-- Hybrid in front, only on one side (x>0) -->
-                    <component thickness="VTXO_hybrid_thickness" width="VTXO_mod_rphi" length="VTXO_hybrid_length" dx="0.1*mm" x="0.001*mm" z_offset="VTXO_flex_thickness+2.0*(VTXO_Sensitive_Thickness+VTXD_support_thickness)+VTXD_stave_dz" material="PCB" vis="HybridVis"/> <!-- Hybrid in back, only on one side (x>0) -->
+                <end_z name="hybrids" z_offset="VTXO_flex_thickness+VTXO_Sensitive_Thickness">
+                    <component thickness="VTXO_hybrid_thickness" width="VTXO_mod_rphi" length="VTXO_hybrid_length" dx="VTXO_hybrid_dx" x="0.001*mm" z_offset="0.0*mm" material="PCB" vis="HybridVis"/> <!-- Hybrid in front, only on one side (x>0) -->
+                    <component thickness="VTXO_hybrid_thickness" width="VTXO_mod_rphi" length="VTXO_hybrid_length" dx="VTXO_hybrid_dx" x="0.001*mm" z_offset="VTXO_hybrid_thickness+VTXD_stave_dz-VTXO_hybrid_thickness" material="PCB" vis="HybridVis"/> <!-- Hybrid in back, only on one side (x>0) -->
                 </end_z>
 
-                <end_z name="terminal_parts" z_offset="VTXO_flex_thickness+VTXO_Sensitive_Thickness+VTXO_flex_thickness">
-                    <component thickness="VTXD_TerminalPart_length" width="VTXO_mod_rphi" length="VTXD_TerminalPart_length" dx="0.0*mm+VTXO_hybrid_length" x="0.001*mm"  material="PEEK" vis="TerminalPartVis"/>   <!-- Terminal part left (x>0) -->
-                    <component thickness="VTXD_TerminalPart_length" width="VTXO_mod_rphi" length="VTXD_TerminalPart_length" dx="0.0*mm" x="-0.001*mm"  material="PEEK" vis="TerminalPartVis"/> <!-- Terminal part right (x<0) -->
+                <end_z name="terminal_parts" z_offset="VTXO_flex_thickness+VTXO_Sensitive_Thickness+VTXD_stave_dz/2.0-VTXD_Terminal_thickness/2.">
+                    <component thickness="VTXD_Terminal_thickness" width="VTXO_mod_rphi" length="VTXD_TerminalPart_length" dx="VTXO_hybrid_length+VTXO_hybrid_dx" x="0.001*mm"  material="PEEK" vis="TerminalPartVis"/>   <!-- Terminal part left (x>0) -->
+                    <component thickness="VTXD_Terminal_thickness" width="VTXO_mod_rphi" length="VTXD_TerminalPart_length" dx="0.0*mm" x="-0.001*mm"  material="PEEK" vis="TerminalPartVis"/> <!-- Terminal part right (x<0) -->
                 </end_z>
             </module>
 
@@ -780,13 +776,15 @@
         </plugin>
     </plugins>
 
-    <!-- Vertex inner barrel support structure imported via DDCAD, material budget evaluation with g4MaterialScan is working, but not with the k4SimGeant4 methods -->
+    <!-- Vertex inner barrel support structure imported via DDCAD, material budget evaluation with g4MaterialScan is working, but not with the k4SimGeant4 methods. Should be furthermore rotated by 90 degrees around z, but feature not working currently -->
     <detectors>
         <detector id="0" name="VTXIBSupport" type="DD4hep_TestShape_Creator">
+            <envelope vis="VXDVis">
+                <shape type="Assembly"/>
+            </envelope>
             <check>
                 <shape type="CAD_MultiVolume" ref="VertexSupport_o1_v01.obj" unit="mm"/>
-                <position x="104.3837*cm"  y="-1.7417*cm"        z="-33.7602*cm"/>
-                <rotation x="0*pi/8*rad" y="-4*pi/8*rad" z="0*rad"/>  
+                <rotation x="0" y="0" z="0"/>
             </check>
         </detector>
     </detectors>   
