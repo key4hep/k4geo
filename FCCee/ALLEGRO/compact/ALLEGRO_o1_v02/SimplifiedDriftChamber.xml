@@ -45,7 +45,7 @@
 
   <detectors>
     <detector id="DetID_DCH" name="CDCH" type="parametrised_SimplifiedDriftChamber_o1_v01" vis="GasVis" readout="SimplifiedDriftChamberCollection" sensitive="true" limits="SimplifiedDriftChamber_limits" region="SimplifiedDriftChamberRegion">
-      <sensitive type="SimpleDriftChamber"/>
+      <sensitive type="tracker"/>
 
       <comment> Dimensions for the drift chamber </comment>
 

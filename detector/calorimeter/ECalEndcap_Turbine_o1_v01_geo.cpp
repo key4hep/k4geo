@@ -122,6 +122,7 @@ namespace det {
 
     }
 
+    std::cout << "nBlades: " << nBlades << std::endl;
     // adjust gap thickness at inner layer
     double circ = 2*TMath::Pi()*ri;
     double x1 = delZ/2./TMath::Tan(BladeAngle);
@@ -134,6 +135,7 @@ namespace det {
     double leftoverS = (circ - nBlades*delrPhiNoGap);
     double delrPhiGapOnly = leftoverS/(2*nBlades);
     std::cout << "LAr gap was " << LArgapi ;
+    std::cout << "fixed s is " << delrPhiNoGap << std::endl;
     LArgapi = tForArcLength(delrPhiGapOnly, BladeAngle, delZ, ri);
     std::cout << " but is now " << LArgapi << " since s = " << delrPhiGapOnly << " s for full unit cell is " << delrPhi << std::endl;
 
@@ -177,7 +179,7 @@ namespace det {
   //build cryostat
 // Retrieve cryostat data
     int    nBladesToDraw = nBlades;
-    //    nBladesToDraw = 2;
+    //    nBladesToDraw = 1;
 
     for (int iBlade = 0; iBlade < nBladesToDraw; iBlade++) {
       //    pl->SetInvisible();
@@ -355,7 +357,6 @@ namespace det {
   
     dd4hep::Volume supportTubeVol("supportTube", supportTube, aLcdd.material(supportTubeElem.materialStr()));
     dd4hep::PlacedVolume supportTube_pv = bathVol.placeVolume(supportTubeVol, dd4hep::Position(0,0,zOffsetEnvelope + sign * (dim.dz() )));
-    supportTube_pv.addPhysVolID("supportTube", iSupportTube);
     buildSubCylinder(aLcdd, aSensDet, bathVol, aXmlElement, bathDetElem, ri+supportTubeThickness, ro, iModule);
     ri = ro;
     ro *= radiusRatio;
