@@ -93,9 +93,9 @@
     <constant name="VTX_r_max" value="VTXOB_r_max"/>
     <constant name="VTX_z_max" value="VTXOB_half_length"/> 
 
-    <constant name="DCH_inner_radius" value="350*mm"/>
-    <constant name="DCH_outer_radius" value="2000*mm"/>
-    <constant name="DCH_half_length" value="2250*mm"/>
+    <constant name="DCH_inner_radius" value="345*mm"/>
+    <constant name="DCH_outer_radius" value="2000*mm"/> <!-- Contact the drift chamber experts if you need to change the DC radiuses (just changing the radius is not enough, the DC has been optimized for those values, the detector geometry is constrained by many construction/mechanical/electronics/etc considerations -->
+    <constant name="DCH_half_length" value="2250*mm"/> <!-- this includes the services -->
 
     <constant name="SiWrB_inner_radius" value="2040*mm"/>
     <constant name="SiWrB_outer_radius" value="2080*mm"/>   
