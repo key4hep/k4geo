@@ -1,0 +1,83 @@
+<lccdd>
+<!--
+    (c) Copyright 2021 CERN for the benefit of the LHCb Collaboration
+
+    This software is distributed under the terms of the GNU General Public
+    Licence version 3 (GPL Version 3), copied verbatim in the file "COPYING".
+
+    In applying this licence, CERN does not waive the privileges and immunities
+    granted to it by virtue of its status as an Intergovernmental Organization
+    or submit itself to any jurisdiction.
+-->
+ <define>
+
+
+
+<!-- %%%%%%                      Central Drift Chamber Basic Parameters                 %%%%%% -->
+
+  <constant name = "CDCH:r0"                     value = "345.0*mm"/>
+  <constant name = "CDCH:z0"                     value = "0.0*mm"/>
+  <constant name = "CDCH:zHalfLength"            value = "2250.24*mm"/>
+  <constant name = "CDCH:rOut"                   value = "2000.00*mm"/>
+  <constant name = "CDCH:alpha"                  value = "30*degree"/>
+  <constant name = "CDCH:geomType"               value = "50"/>
+  <constant name = "CDCH:nSWire"                 value = "192"/>
+  <constant name = "CDCH:nInGWire"               value = "192"/>
+  <constant name = "CDCH:nOutGWire"              value = "816"/>
+  <constant name = "CDCH:cellDimension"          value = "11.846*mm"/>
+  <constant name = "CDCH:nSDeltaWire"            value = "48"/>
+  <constant name = "CDCH:nSuperLayer"            value = "14"/>
+  <constant name = "CDCH:nRing"                  value = "8"/>
+  <constant name = "CDCH:nVerticalFWire"         value = "1"/>
+  <constant name = "CDCH:nStoFWireRatio"         value = "5"/>
+  <constant name = "CDCH:nFieldWireShells"       value = "2"/>
+  <constant name = "CDCH:FWireShellThickIn"      value = "0.0197*mm"/>
+  <constant name = "CDCH:FWireShellThickOut"     value = "0.0003*mm"/>
+  <constant name = "CDCH:CntFWireShellThickIn"   value = "0.0247*mm"/>
+  <constant name = "CDCH:CntFWireShellThickOut"  value = "0.0003*mm"/>
+  <constant name = "CDCH:SWireShellThickIn"      value = "0.0097*mm"/>
+  <constant name = "CDCH:SWireShellThickOut"     value = "0.0003*mm"/>
+  <constant name = "CDCH:InGWireShellThickIn"    value = "0.0197*mm"/>
+  <constant name = "CDCH:InGWireShellThickOut"   value = "0.0003*mm"/>
+  <constant name = "CDCH:OutGWireShellThickIn"   value = "0.0197*mm"/>
+  <constant name = "CDCH:OutGWireShellThickOut"  value = "0.0003*mm"/>
+  <constant name = "CDCH:CarbonInnerWallThick"   value = "0.2*mm"/>
+  <constant name = "CDCH:CopperInnerWallThick"   value = "0.001*mm"/>
+  <constant name = "CDCH:GasInnerWallThick"      value = "10.825*mm"/>
+  <constant name = "CDCH:Carbon1OuterWallThick"  value = "2.5*mm"/>
+  <constant name = "CDCH:Carbon2OuterWallThick"  value = "2.5*mm"/>
+  <constant name = "CDCH:CopperOuterWallThick"   value = "0.018*mm"/>
+  <constant name = "CDCH:FoamOuterWallThick"     value = "10.000*mm"/>
+  <constant name = "CDCH:GasEndcapWallThick"	 value = "249.98750*mm"/>
+  <constant name = "CDCH:CopperEndcapWallThick"  value = "0.0005*mm"/>
+  <constant name = "CDCH:KaptonEndcapWallThick"  value = "0.012*mm"/>
+  <constant name = "CDCH:CarbonEndcapWallThick"  value = "0.240*mm"/>
+  <constant name = "CDCH:secure"                 value = "1.0e-2*mm"/>
+  <constant name = "CDCH:capGasLayer"            value = "1.0e-3*mm"/>
+  <constant name = "CDCH:extShiftFW"             value = "1.55e-3*mm"/>
+  <constant name = "CDCH:inGuardRad"             value = "354.0*mm"/>
+  <constant name = "CDCH:outGuardRad"            value = "1927.0*mm"/>
+
+</define>
+
+<display>
+  <vis name="vCDCH:Pb"            alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+  <vis name="vCDCH:Sc"            alpha="0.6" r="0.8" g="0.8" b="0.0" showDaughters="true" visible="true"/>
+  <vis name="vCDCH:Plastic"       alpha="1.0" r="1.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
+  <vis name="vCDCH:Steel"         alpha="0.0" showDaughters="true" visible="false"/>
+  <vis name="vCDCH:Gas1"          alpha="1.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="false"/>
+  <vis name="vCDCH:Gas2"	  alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false"/>
+  <vis name="vCDCH:Gas3"    	  alpha="1.0" r="1.0" g="0.0" b="1.0" showDaughters="true" visible="false"/>
+  <vis name="vCDCH:Wire1"         alpha="1.0"  r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
+  <vis name="vCDCH:Wire2"         alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
+  <vis name="vCDCH:Wire3"         alpha="1.0" r="1.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+  <vis name="vCDCH:Fwire"         alpha="1.0" r="1.0" g="1.0" b="1.0" showDaughters="true" visible="true"/>
+  <vis name="vCDCH:Stack"         showDaughters="true" visible="false"/>
+  <vis name="vCDCH:Fiber"         alpha="1.0" r="0.8" g="0.8" b="0.0" showDaughters="true" visible="true"/>
+  <vis name="vCDCH:ReadOutBox"    alpha="1.0" r="0.8" g="0.5" b="0.0" showDaughters="true" visible="true"/>
+  <vis name="vCDCH:ROSteel"       alpha="1.0" r="0.8" g="0.5" b="0.0" showDaughters="true" visible="true"/>
+  <vis name="vCDCH:Air"           showDaughters="true" visible="false"/>
+
+</display>
+
+</lccdd>
