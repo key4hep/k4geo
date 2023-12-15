@@ -144,48 +144,19 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
         // End of stave structures
         xml_coll_t c_endOfStave(x_stave,_U(end_z));
-        int iEndOfStave = 0;
         for(c_endOfStave.reset(); c_endOfStave; ++c_endOfStave){
             endOfStaveStruct endOfStave;    
-            endOfStave.r = xml_comp_t(c_endOfStave).r();
-            endOfStave.offset = xml_comp_t(c_endOfStave).offset(0);
-            endOfStave.name = xml_comp_t(c_endOfStave).nameStr();
-
-            xml_coll_t c_component = xml_coll_t(c_endOfStave,_U(component));
-            for(c_component.reset(); c_component; ++c_component){
-                xml_comp_t component = c_component;
-                endOfStave.thicknesses.push_back(component.thickness());
-                endOfStave.dzs.push_back(component.dz(0));
-                endOfStave.offsets.push_back(component.offset(0));
-                endOfStave.lengths.push_back(component.length());
-                endOfStave.rs.push_back(component.r());
-
-                Box ele_box = Box(component.thickness()/2., component.width()/2., component.length()/2.);
-                Volume ele_vol = Volume(endOfStave.name + _toString(iEndOfStave, "_%d"), ele_box, theDetector.material(component.materialStr()));                    
-                ele_vol.setVisAttributes(theDetector.visAttributes(component.visStr()));
-
-                endOfStave.volumes.push_back(ele_vol);
-                iEndOfStave++;
-            }
-            m.endOfStaves.push_back(endOfStave);
-        }
-
-        // End of stave structures
-        xml_coll_t c_endOfStave(x_stave,_U(end_z));
-        for(c_endOfStave.reset(); c_endOfStave; ++c_endOfStave){
-            endOfStaveStruct endOfStave;    
-            endOfStave.dr = xml_comp_t(c_endOfStave).dr();
             endOfStave.offset = xml_comp_t(c_endOfStave).offset();
             endOfStave.name = xml_comp_t(c_endOfStave).nameStr();
 
             xml_coll_t c_component = xml_coll_t(c_endOfStave,_U(component));
+            int iEndOfStave = 0;
             for(c_component.reset(); c_component; ++c_component){
                 xml_comp_t component = c_component;
                 endOfStave.thicknesses.push_back(component.thickness());
                 endOfStave.dzs.push_back(component.dz());
                 endOfStave.offsets.push_back(component.offset());
                 endOfStave.lengths.push_back(component.length());
-                endOfStave.drs.push_back(component.dr());
 
                 Box ele_box = Box(component.thickness()/2., component.width()/2., component.length()/2.);
                 Volume ele_vol = Volume(endOfStave.name + _toString(iEndOfStave, "_%d"), ele_box, theDetector.material(component.materialStr()));                    
