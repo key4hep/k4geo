@@ -146,7 +146,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         xml_coll_t c_endOfStave(x_stave,_U(end_z));
         for(c_endOfStave.reset(); c_endOfStave; ++c_endOfStave){
             endOfStaveStruct endOfStave;    
-            endOfStave.offset = xml_comp_t(c_endOfStave).offset();
+            endOfStave.offset = xml_comp_t(c_endOfStave).offset(0);
             endOfStave.name = xml_comp_t(c_endOfStave).nameStr();
 
             xml_coll_t c_component = xml_coll_t(c_endOfStave,_U(component));
@@ -155,7 +155,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 xml_comp_t component = c_component;
                 endOfStave.thicknesses.push_back(component.thickness());
                 endOfStave.dzs.push_back(component.dz());
-                endOfStave.offsets.push_back(component.offset());
+                endOfStave.offsets.push_back(component.offset(0));
                 endOfStave.lengths.push_back(component.length());
 
                 Box ele_box = Box(component.thickness()/2., component.width()/2., component.length()/2.);
