@@ -154,7 +154,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
             for(c_component.reset(); c_component; ++c_component){
                 xml_comp_t component = c_component;
                 endOfStave.thicknesses.push_back(component.thickness());
-                endOfStave.dzs.push_back(component.dz());
+                endOfStave.dzs.push_back(component.dz(0));
                 endOfStave.offsets.push_back(component.offset(0));
                 endOfStave.lengths.push_back(component.length());
 
