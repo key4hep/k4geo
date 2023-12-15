@@ -521,8 +521,8 @@
                 <stave nmodules="12" dz="SiWr_distance_two_sides" r="+17.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+(0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="17" module="SiWrDStave"/>
                 <stave nmodules="12" dz="SiWr_distance_two_sides" r="+17.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="17" module="SiWrDStave"/>
                 <stave nmodules="12" dz="SiWr_distance_two_sides" r="+17.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(1.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row))" id="17" module="SiWrDStave"/>
-                <stave nmodules="6"  dz="SiWr_distance_two_sides" r="+17.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*SiWrD_double_tile_length+0.5*SiWrD_half_tile_length)" id="17" module="SiWrDStave"/>
-                <stave nmodules="6"  dz="SiWr_distance_two_sides" r="+17.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*SiWrD_double_tile_length+0.5*SiWrD_half_tile_length)" id="17" module="SiWrDStave"/>
+                <stave nmodules="6"  dz="SiWr_distance_two_sides" r="+17.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*SiWrD_double_tile_length+0.5*SiWrD_tile_length)" id="17" module="SiWrDStave"/>
+                <stave nmodules="6"  dz="SiWr_distance_two_sides" r="+17.0*(SiWr_mod_rphi+SiWrD_tile_spacing_column)" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset-(2.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)-0.5*SiWrD_double_tile_length+0.5*SiWrD_tile_length)" id="17" module="SiWrDStave"/>
 
 
                 <!-- Column 18 -->
