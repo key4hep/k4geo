@@ -777,7 +777,7 @@
     </plugins>
 
     <!-- Vertex inner barrel support structure imported via DDCAD, material budget evaluation with g4MaterialScan is working, but not with the k4SimGeant4 methods. Should be furthermore rotated by 90 degrees around z, but feature not working currently -->
-    <detectors>
+    <!-- <detectors>
         <detector id="0" name="VTXIBSupport" type="DD4hep_TestShape_Creator">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
@@ -787,5 +787,5 @@
                 <rotation x="0" y="0" z="0"/>
             </check>
         </detector>
-    </detectors>   
+    </detectors>    -->
 </lccdd>
