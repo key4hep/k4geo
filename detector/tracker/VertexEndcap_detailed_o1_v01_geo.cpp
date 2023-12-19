@@ -17,10 +17,8 @@
 //====================================================================
 
 #include "DD4hep/DetFactoryHelper.h"
-#include <map>
 #include "XML/Utilities.h"
 #include "DD4hep/Printout.h"
-#include "DDRec/DetectorData.h"
 
 using namespace std;
 
@@ -37,10 +35,8 @@ using dd4hep::RotationZYX;
 using dd4hep::SensitiveDetector;
 using dd4hep::Transform3D;
 using dd4hep::Translation3D;
-using dd4hep::Trapezoid;
 using dd4hep::Volume;
 using dd4hep::_toString;
-//using dd4hep::rec::ZDiskPetalsData;
 using dd4hep::Box;
 
 static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens)  {

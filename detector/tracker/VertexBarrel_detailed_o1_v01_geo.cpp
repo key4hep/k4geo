@@ -15,15 +15,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "XML/Utilities.h"
 #include "XMLHandlerDB.h"
-
-#include "DDRec/Surface.h"
-#include "DDRec/DetectorData.h"
 #include <exception>
-
-#include <UTIL/BitField64.h>
-#include <UTIL/BitSet32.h>
-#include "UTIL/LCTrackerConf.h"
-#include <UTIL/ILDConf.h>
 
 using namespace std;
 
@@ -42,7 +34,6 @@ using dd4hep::Transform3D;
 using dd4hep::Translation3D;
 using dd4hep::Volume;
 using dd4hep::_toString;
-using dd4hep::rec::Vector3D;
 
 static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector sens)  {
 
@@ -147,7 +138,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         for(c_endOfStave.reset(); c_endOfStave; ++c_endOfStave){
             endOfStaveStruct endOfStave;    
             endOfStave.offset = xml_comp_t(c_endOfStave).offset(0);
-            endOfStave.name = xml_comp_t(c_endOfStave).nameStr();
+            endOfStave.r =      xml_comp_t(c_endOfStave).r();
+            endOfStave.name =   xml_comp_t(c_endOfStave).nameStr();
 
             xml_coll_t c_component = xml_coll_t(c_endOfStave,_U(component));
             int iEndOfStave = 0;
@@ -157,6 +149,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 endOfStave.dzs.push_back(component.dz(0));
                 endOfStave.offsets.push_back(component.offset(0));
                 endOfStave.lengths.push_back(component.length());
+                endOfStave.rs.push_back(component.r());
 
                 Box ele_box = Box(component.thickness()/2., component.width()/2., component.length()/2.);
                 Volume ele_vol = Volume(endOfStave.name + _toString(iEndOfStave, "_%d"), ele_box, theDetector.material(component.materialStr()));                    
