@@ -626,8 +626,8 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     caloLayer.outer_thickness           = difference_bet_r1r2 / 2;
 
     caloLayer.absorberThickness         = absorberThickness;
-    caloLayer.cellSize0 = 2;
-    caloLayer.cellSize1 = 2;
+    caloLayer.cellSize0 = 2 * dd4hep::mm;
+    caloLayer.cellSize1 = 2 * dd4hep::mm;
   
     caloData->layers.push_back(caloLayer);
   }

@@ -54,6 +54,7 @@ find_package( Geant4 REQUIRED )
 find_package( LCIO REQUIRED)
 
 add_subdirectory(detectorSegmentations)
+add_subdirectory(detectorCommon)
 
 file(GLOB sources 
   ./detector/tracker/*.cpp
