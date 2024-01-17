@@ -19,6 +19,10 @@
 
   <define>
 
+    <!-- use constant to chose between "pixel" or "pad" readout -->
+    <constant name="TPC_readoutType" type="string" value="pixel" /> <!-- option can be "pixel", anything else is pad readout-->
+    <constant name="TPC_simulationMode" type="string" value="regular" /> <!--option "fast" for pixel readout, anything else is default -->
+
     <include ref="top_defs_ILD_l6_v02.xml"/>
     <include ref="../ILD_common_v02/top_defs_common_v02.xml"/>
     <include ref="../ILD_common_v02/basic_defs.xml"/>

@@ -18,6 +18,10 @@
 
   <define>
 
+    <!-- use constant to chose between "pixel" or "pad" readout -->
+    <constant name="TPC_readoutType" type="string" value="pad" /> <!-- option can be "pixel", anything else is pad readout-->
+    <constant name="TPC_simulationMode" type="string" value="regular" /> <!--option "fast" for pixel readout, anything else is default -->
+
     <include ref="top_defs_ILD_l1_v01.xml"/>
     <include ref="../ILD_common_v01/top_defs_common_v01.xml"/>
     <include ref="../ILD_common_v01/basic_defs.xml"/>
@@ -148,7 +152,7 @@
     </readout>
     <readout name="TPCCollection">
       <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
-      <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+      <id>system:5,side:2,layer:17,module:20,sensor:8</id> <!-- extended for pixelTPC -->
     </readout>
     <readout name="SETCollection">
       <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->

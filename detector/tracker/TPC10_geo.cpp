@@ -84,6 +84,11 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
   const double dzTotal           = theDetector.constant<double>("TPC_Ecal_Hcal_barrel_halfZ") * 2. ; 
   const double rInner            = theDetector.constant<double>("TPC_inner_radius") ;
   const double rOuter            = theDetector.constant<double>("TPC_outer_radius") ;
+  
+    //chose between pixel and pad readout
+  const std::string TPCReadoutType= theDetector.constantAsString("TPC_readoutType");
+  const bool pixelTPC = (TPCReadoutType=="pixel") ;
+  
     
     
   // Geometry parameters from the geometry environment and from the database
@@ -108,8 +113,10 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
   //   _gear_gas_material = material_TPC_Gas; 
   // #endif
     
-  //unused:  const double sensitive_threshold_eV  = db->fetchDouble("sensitive_threshold_eV") ;
-    
+  if(pixelTPC) {
+	  const double sensitive_threshold_eV  = db->fetchDouble("sensitive_threshold_eV") ;
+	  sens.setEnergyCutoff(sensitive_threshold_eV);
+  }
 
   //   db->exec("SELECT * FROM `cathode`;");
   //   db->getTuple();
@@ -435,7 +442,7 @@ Material endplate_MaterialMix = theDetector.material( "TPC_endplate_mix" ) ;
 
   for (int layer = 0; layer < numberPadRows; layer++) {
     
-#if 1
+   if(!pixelTPC) {//padTPC
     // create twice the number of rings as there are pads, producing an lower and upper part of the pad with the boundry between them the pad-ring centre
     
     const double inner_lowerlayer_radius = rMin_Sensitive + (layer * (padHeight));
@@ -477,7 +484,7 @@ Material endplate_MaterialMix = theDetector.material( "TPC_endplate_mix" ) ;
     lowerlayerLog.setSensitiveDetector(sens);
     upperlayerLog.setSensitiveDetector(sens);
 
-#else
+   } else if (pixelTPC) {
     // create just one volume per pad ring
     
     const double inner_radius = rMin_Sensitive + (layer * (padHeight) );
@@ -507,7 +514,7 @@ Material endplate_MaterialMix = theDetector.material( "TPC_endplate_mix" ) ;
 
     layerLog.setSensitiveDetector(sens);
 
-#endif
+   }
   }
 
   // Assembly of the TPC Readout

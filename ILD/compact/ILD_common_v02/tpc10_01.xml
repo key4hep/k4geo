@@ -85,7 +85,7 @@
  <readouts>
     <readout name="TPCCollection">
       <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
-      <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+      <id>system:5,side:-2,layer:9,module:8,sensor:8</id>
     </readout>
  </readouts>
 
