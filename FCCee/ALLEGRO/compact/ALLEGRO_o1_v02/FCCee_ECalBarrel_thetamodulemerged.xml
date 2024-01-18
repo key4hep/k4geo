@@ -27,7 +27,7 @@
     <constant name="LArGapThickness" value="1.256*2*mm"/>
 
     <!-- Air margin, thicknesses of cryostat and LAr bath -->
-    <constant name="AirMarginThickness" value="54*mm"/>    <!-- Space holder for air gap between cryostat vessels --> 
+    <constant name="AirMarginThickness" value="49*mm"/>    <!-- Space holder for air gap between cryostat vessels --> 
 
     <constant name="CryoBarrelFrontWarm" value="10*mm"/>   <!-- Al solid corresponding to 0.11 X0 -->
     <constant name="CryoBarrelFrontCold" value="3.8*mm"/>  <!-- Al solid equivalent of 0.043 X0 sandwich CFRP -->
@@ -42,7 +42,7 @@
     <constant name="CryoBarrelSideCold" value="3.8*mm"/>
     <constant name="CryoBarrelSide" value="CryoBarrelSideWarm+CryoBarrelSideCold"/>
 
-    <constant name="LArBathThicknessFront" value="5*mm"/>
+    <constant name="LArBathThicknessFront" value="10*mm"/>
     <constant name="LArBathThicknessBack" value="40*mm"/>
 
     <!-- air margin around calorimeter -->
@@ -53,6 +53,11 @@
     <constant name="EMBarrel_rmin" value="BarCryoECal_rmin+CryoBarrelFront+LArBathThicknessFront"/>
     <constant name="EMBarrel_rmax" value="BarCryoECal_rmax-CryoBarrelBack-LArBathThicknessBack"/>
     <constant name="EMBarrel_dz" value="BarECal_dz-CryoBarrelSide"/>
+    <!-- Bath with margin for safe inclination -->
+    <constant name="safeMargin" value="3*mm"/>
+    <constant name="Bath_rmin" value="EMBarrel_rmin - safeMargin"/>
+    <constant name="Bath_rmax" value="EMBarrel_rmax + safeMargin"/>
+
     <!-- thickness of active volume between two absorber plates at EMBarrel_rmin, measuring perpendicular to the readout plate -->
     <constant name="LAr_thickness" value="LArGapThickness"/>
     <!-- passive layer consists of lead in the middle and steel on the outside, glued -->
@@ -107,6 +112,10 @@
         <side sensitive="false"/> <!-- both sides of the cryostat -->
         <back sensitive="false"/> <!-- outer wall of the cryostat -->
       </cryostat>
+      <bath name="ECAL_bath">
+        <material name="LAr"/>
+        <dimensions rmin="Bath_rmin" rmax="Bath_rmax" dz="EMBarrel_dz"/>
+      </bath>
       <calorimeter name="EM_barrel">
         <!-- offset defines the numbering of the modules: module==0 for phi=0 direction -->
         <dimensions rmin="EMBarrel_rmin" rmax="EMBarrel_rmax" dz="EMBarrel_dz" offset="-InclinationAngle"/>

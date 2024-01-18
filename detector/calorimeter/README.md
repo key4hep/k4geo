@@ -14,6 +14,8 @@ Original version taken from [FCCDetectors](https://github.com/HEP-FCC/FCCDetecto
 ### o1_v02
 New version, with module-theta based segmentation. In each layer adjacent cells along theta or module directions can be grouped together, with possibly different merging per layer. This is specified with the `mergedCells_Theta` and `mergedModules` vectors in the `segmentation` tag of the xml file. The baseline grouping in theta is by four in all layers except L1 (the strip layer). The baseline grouping in module direction is by two in all layers. The LAr gap has also been slightly adjusted to bring back the number of modules to 1536 (it was 1545 before). The segmentation class needs to know the number of modules, which is passed via the `nModules` parameter of the `segmentation` tag. To ensure that number of modules and layers (length of the mergedXXX vectors) are consistent with number of modules and layers of the detector, the xml defines `ECalBarrelNumLayers` and `ECalBarrelNumPlanes`, and the c++ file doing the detector construction checks that the number of planes and layers calculated dynamically from other parameters matches that in the xml (if not, the code will crash).
 
+Overlaps in the LAr bath volume fixed.
+
 ## CaloDisks
 This sub-detector makes calorimeter endcaps (original and reflected). It is used in ALLEGRO detector concept.
 
