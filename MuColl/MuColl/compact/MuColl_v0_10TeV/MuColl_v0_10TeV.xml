@@ -125,11 +125,11 @@
         <constant name="HCalBarrel_symmetry"        value="12"/>
 
         <constant name="HCalEndcap_inner_steps"     value="5"/>
-        <constant name="HCalEndcap_inner_radius"    value="307*mm"/>
-        <constant name="HCalEndcap_inner_radius2"   value="445*mm"/>
+        <constant name="HCalEndcap_inner_radius"    value="320*mm"/>
+        <constant name="HCalEndcap_inner_radius2"   value="499*mm"/>
         <constant name="HCalEndcap_outer_radius"    value="4756*mm"/>
-        <constant name="HCalEndcap_min_z"           value="2539*mm"/>
-        <constant name="HCalEndcap_max_z"           value="4394*mm"/>
+        <constant name="HCalEndcap_min_z"           value="2579*mm"/>
+        <constant name="HCalEndcap_max_z"           value="4434*mm"/>
         <constant name="HCalEndcap_symmetry"        value="12"/>
         <constant name="HCalEndcap_zcutout"         value="200*mm"/>
         <constant name="HCalEndcap_rcutout"         value="128*mm"/>
@@ -147,13 +147,13 @@
         <constant name="Solenoid_Coil_radius"       value="2393*mm"/>
 
         <constant name="YokeBarrel_inner_radius"    value="4806*mm"/>
-        <constant name="YokeBarrel_outer_radius"    value="6753*mm"/>
+        <constant name="YokeBarrel_outer_radius"    value="6800*mm"/>
         <constant name="YokeBarrel_half_length"     value="4444*mm"/>
         <constant name="YokeBarrel_symmetry"        value="12"/>
 
-        <constant name="YokeEndcap_inner_radius"    value="446*mm"/>
-        <constant name="YokeEndcap_inner_radius2"   value="575*mm"/>
-        <constant name="YokeEndcap_outer_radius"    value="6753*mm"/>
+        <constant name="YokeEndcap_inner_radius"    value="493*mm"/>
+        <constant name="YokeEndcap_inner_radius2"   value="622*mm"/>
+        <constant name="YokeEndcap_outer_radius"    value="6800*mm"/>
         <constant name="YokeEndcap_min_z"           value="4444*mm"/>
         <constant name="YokeEndcap_max_z"           value="5903*mm"/>
         <constant name="YokeEndcap_outer_symmetry"  value="12"/>
