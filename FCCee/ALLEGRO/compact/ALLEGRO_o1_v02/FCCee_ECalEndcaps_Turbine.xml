@@ -41,8 +41,8 @@
     <constant name="EMEC_rmax" value="ECalEndcap_outer_radius - CryoEMECThicknessOuter - BathThicknessOuter"/>
     <!-- LAr thickness: double gap size -->
     <constant name="ECalEndcapNumBlades" value="1604"/>
-    <constant name="ECalEndcapNumLayers" value="2"/>
-    <constant name="SubCylinderRadiusRatio" value="1.89" />
+    <constant name="ECalEndcapNumLayers" value="10"/>
+    <constant name="nSubcylinders" value="1" />
     <constant name="BladeAngle" value="55*deg" />
     <constant name="NobleLiquidGap" value="2.0*mm" />
     <constant name="AbsorberBladeThickness" value="3.0*mm" />
@@ -62,19 +62,25 @@
 
 
   <readouts>
+   <readout name="ECalEndcapTurbine">
+      <segmentation type="FCCSWEndcapTurbine_k4geo" offset_rho="137.5" offset_z="348.5" offset_phi="0.0" grid_size_rho="1.0" grid_size_z="1.0" /> 
+      <id>system:4,cryo:1,type:3,subtype:3,side:-2,subcyl:3,layer:5,module:14,rho:-14,z:-14</id>
+    </readout>
+<!--
     <readout name="ECalEndcapPhiTheta">
       <segmentation type="FCCSWGridModuleThetaMerged_k4geo" mergedCells_Theta="1 1 1 1 " mergedModules="1 1 1 1" grid_size_theta="0.005" offset_theta="-3.14"/>
-      <id>system:4,cryo:1,type:3,subtype:3,layer:8,module:14,theta:16,phi:10</id>
+      <id>system:4,cryo:1,type:3,subtype:3,side:1,subcyl:3,layer:5,module:14,theta:10</id>
     </readout>
     <readout name="ECalEndcapPhiEtaReco">
       <segmentation type="FCCSWGridPhiEta_k4geo" phi_bins="704" offset_phi="-pi+(pi/704.)" grid_size_eta="0.05" offset_eta="-2.91"/>
       <id>system:4,cryo:1,type:3,subtype:3,layer:8,eta:10,phi:10</id>
     </readout>
+-->
   </readouts>
 
   <detectors>
      <!-- electromagnetic calorimeter -->
-    <detector id="EndcapECal_id" name="EMEC_turbine" type="ECalEndcap_Turbine_o1_v01" readout="ECalEndcapPhiTheta" vis="emec_envelope_vis" sensitive="true">
+    <detector id="EndcapECal_id" name="EMEC_turbine" type="ECalEndcap_Turbine_o1_v01" readout="ECalEndcapTurbine" vis="emec_envelope_vis" sensitive="true">
       <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_ENDCAP"/>
       <sensitive type="SimpleCalorimeterSD"/>
       <dimensions rmin1="EMEC_rmin1"  rmin2="EMEC_rmin2" rmax="EMEC_rmax" dz="(EMEC_z2-EMEC_z1)/2." z_offset="EMEC_z1+(EMEC_z2-EMEC_z1)/2."/>
@@ -88,15 +94,15 @@
       <calorimeter name="EM_endcap">
 	<dimensions rmin="EMEC_rmin1" rmax="EMEC_rmax" dz="(EMEC_z2-EMEC_z1)/2." z_offset="EMEC_z1+(EMEC_z2-EMEC_z1)/2."/>
       </calorimeter>	
-      <supportTube name="supportTube" radiusRatio="SubCylinderRadiusRatio" thickness="1.0*cm" > 
+      <supportTube name="supportTube" nSubcylinders="nSubcylinders" thickness="1.0*cm" sensitive="true"> 
 	<material name="Steel235" />
       </supportTube>
       <turbineBlade name="turbineBlade" angle="BladeAngle" decreaseAnglePerSubCylinder="false"  sameNblades="false">
-	<absorberBlade name="absorberBlade" thickness="AbsorberBladeThickness" scaleThickness="false">
+	<absorberBlade name="absorberBlade" thickness="AbsorberBladeThickness" scaleThickness="false" sensitive="true">
 	  <material name="Lead" />
 	</absorberBlade>
 	
-	<electrodeBlade name="electrodeBlade" thickness="ElectrodeBladeThickness">
+	<electrodeBlade name="electrodeBlade" thickness="ElectrodeBladeThickness" sensitive="true">
 	   <material name="PCB" />
 	</electrodeBlade>
 	<nobleLiquidGap name="nobleLiquidGap" gap="NobleLiquidGap">

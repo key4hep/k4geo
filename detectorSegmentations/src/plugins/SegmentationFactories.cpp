@@ -29,4 +29,6 @@ DECLARE_SEGMENTATION(GridRPhiEta_k4geo, create_segmentation<dd4hep::DDSegmentati
 #include "detectorSegmentations/GridSimplifiedDriftChamber_k4geo.h"
 DECLARE_SEGMENTATION(GridSimplifiedDriftChamber_k4geo, create_segmentation<dd4hep::DDSegmentation::GridSimplifiedDriftChamber_k4geo>)
 
+#include "detectorSegmentations/FCCSWEndcapTurbine_k4geo.h"
+DECLARE_SEGMENTATION(FCCSWEndcapTurbine_k4geo, create_segmentation<dd4hep::DDSegmentation::FCCSWEndcapTurbine_k4geo>)
 

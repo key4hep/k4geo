@@ -12,6 +12,10 @@ const std::string INFO  = " Info: ";
 
 namespace det {
 
+  unsigned ECalEndCapElementCounter = 0;
+
+  unsigned ECalEndcapNumLayers;
+  
   double tForArcLength(double s, double bladeangle, double delZ, double r) {
 
     // some intermediate constants
@@ -40,12 +44,12 @@ namespace det {
       r0 = (thickness_outer*ri-thickness_inner*ro)/(thickness_outer-thickness_inner);
       t0 = 0.;
       dd4hep::Trd2 tmp1(t0/2.+0.01, thickness_outer/2., width/2., width/2., (ro-r0)/2. );
-      dd4hep::Trd2 tmp2(thickness_inner/2., thickness_inner/2., width/2., width/2., ro/2. );
+      dd4hep::Trd2 tmp2(thickness_inner/2., thickness_inner/2., width/2., width/2., ro );
       dd4hep::UnionSolid tmp3(tmp2, tmp1, dd4hep::Transform3D(dd4hep::RotationZYX( 0, 0, 0),dd4hep::Position(0, 0, r0)));
       shapeBeforeSubtraction = tmp3;
       lLog << MSG::INFO << "extrapolated thickness is " << t0 <<  " and r0 is " << r0 << endmsg;
     } else {
-      dd4hep::Trd2 tmp1(t0/2., thickness_outer/2., width/2., width/2., ro/2. );
+      dd4hep::Trd2 tmp1(t0/2., thickness_outer/2., width/2., width/2., ro );
       shapeBeforeSubtraction = tmp1;
     }
 
@@ -63,17 +67,20 @@ namespace det {
 			dd4hep::xml::Handle_t& aXmlElement,
 			dd4hep::DetElement& bathDetElem,
 			float ri, float ro,
-			unsigned &iModule) {
+			int sign,
+			unsigned iSubcyl,
+			Double_t &absMass,
+			Double_t &electrodeMass) {
 
 
     dd4hep::xml::DetElement genericBladeElem = aXmlElement.child(_Unicode(turbineBlade));
     dd4hep::xml::DetElement absBladeElem = genericBladeElem.child(_Unicode(absorberBlade));
     dd4hep::xml::DetElement electrodeBladeElem = genericBladeElem.child(_Unicode(electrodeBlade));
     dd4hep::xml::DetElement nobleLiquidElem = genericBladeElem.child(_Unicode(nobleLiquidGap));
-    
 
     float BladeAngle = genericBladeElem.attr<float>(_Unicode(angle));
     bool decreaseAnglePerSubCylinder = genericBladeElem.attr<bool>(_Unicode(decreaseAnglePerSubCylinder));
+    std::cout << "Making subcylinder with inner, outer radii " << ri << ", " << ro << std:: endl;
     std::cout << "Blade angle is " << BladeAngle << "; decrease angle per subcylinder? " << decreaseAnglePerSubCylinder << std::endl;
     dd4hep::xml::Dimension dim(aXmlElement.child(_Unicode(dimensions)));
     double grmin = dim.rmin1();
@@ -139,33 +146,68 @@ namespace det {
     LArgapi = tForArcLength(delrPhiGapOnly, BladeAngle, delZ, ri);
     std::cout << " but is now " << LArgapi << " since s = " << delrPhiGapOnly << " s for full unit cell is " << delrPhi << std::endl;
 
-    // now find gap at outer layer
-    circ = 2*TMath::Pi()*ro;
-    x1 = delZ/2./TMath::Tan(BladeAngle);
-    x2 = delZ/2./TMath::Tan(BladeAngle)+(AbsThicko+ElectrodeThick)/TMath::Sin(BladeAngle);
-    y1 = TMath::Sqrt(ro*ro-x1*x1);
-    y2 = TMath::Sqrt(ro*ro-x2*x2);
-    rPhi1 = ro*TMath::ATan(x1/y1);
-    rPhi2 = ro*TMath::ATan(x2/y2);    
-    delrPhiNoGap = TMath::Abs(rPhi1-rPhi2);
-    leftoverS = (circ - nBlades*delrPhiNoGap);
-    delrPhiGapOnly = leftoverS/(2*nBlades);   
-    double LArgapo = tForArcLength(delrPhiGapOnly, BladeAngle, delZ, ro);
-    std::cout << "Outer LAr gap is " << LArgapo << std::endl ;
-    
-    dd4hep::Solid  absBlade = buildOneBlade(AbsThicki, AbsThicko, xRange, ro, ri, BladeAngle, delZ );
-    dd4hep::Volume absBladeVol("absBlade", absBlade, aLcdd.material(absBladeElem.materialStr()));
-    lLog << MSG::INFO << "Inner and outer thicknesses of noble liquid volume " << ElectrodeThick+LArgapi*2 <<  " " <<  ElectrodeThick+LArgapo*2 << endmsg;
-    dd4hep::Solid electrodeBladeAndGap = buildOneBlade(ElectrodeThick+LArgapi*2, ElectrodeThick+LArgapo*2, xRange, ro, ri, BladeAngle, delZ);
-    dd4hep::Volume electrodeBladeAndGapVol("electrodeBladeAndGap", electrodeBladeAndGap, aLcdd.material("Air"));
-     dd4hep::Solid electrodeBlade = buildOneBlade(ElectrodeThick, ElectrodeThick, xRange, ro, ri, BladeAngle, delZ);
-     dd4hep::Volume electrodeBladeVol("electrodeBlade", electrodeBlade, aLcdd.material(electrodeBladeElem.materialStr()));
-    dd4hep::SubtractionSolid LArShapeTotal(electrodeBladeAndGap, electrodeBlade);
-    unsigned nLayers = aLcdd.constant<unsigned>("ECalEndcapNumLayers");
+  
 
-    std::vector<dd4hep::Volume> LArVolLayers;
-    double xRangePerLayer = xRange/nLayers;
-    dd4hep::Trd2 bigDumbBlock(ElectrodeThick/2.+LArgapo, ElectrodeThick/2.+LArgapo, xRange/2, xRange/2., ro/2. );
+    dd4hep::Solid absBlade;
+    float riLayer = ri;
+    float delr = (ro-ri)/ECalEndcapNumLayers;
+
+    std::vector<dd4hep::Volume> absBladeLayerVols;
+    std::vector<dd4hep::Volume> LArTotalLayerVols;
+    std::vector<dd4hep::Volume> electrodeBladeLayerVols;
+
+    for (unsigned iLayer = 0; iLayer < ECalEndcapNumLayers; iLayer++) {
+      float roLayer = riLayer + delr;
+      dd4hep::Solid  absBladeLayer = buildOneBlade(AbsThicki, AbsThicko, xRange, roLayer, riLayer, BladeAngle, delZ );
+      dd4hep::Volume absBladeLayerVol("absBladeLayer", absBladeLayer, aLcdd.material(absBladeElem.materialStr()));
+      if (absBladeElem.isSensitive()) {
+	absBladeLayerVol.setSensitiveDetector(aSensDet);
+      }
+      absBladeLayerVols.push_back(absBladeLayerVol);
+      
+    //    dd4hep::Volume absBladeVol("absBlade", absBlade, aLcdd.material(absBladeElem.materialStr()));
+    //    Double_t absBladeMass = absBladeVol->Weight();
+
+      // now find gap at outer layer
+      circ = 2*TMath::Pi()*roLayer;
+      x1 = delZ/2./TMath::Tan(BladeAngle);
+      x2 = delZ/2./TMath::Tan(BladeAngle)+(AbsThicko+ElectrodeThick)/TMath::Sin(BladeAngle);
+      y1 = TMath::Sqrt(roLayer*roLayer-x1*x1);
+      y2 = TMath::Sqrt(roLayer*roLayer-x2*x2);
+      rPhi1 = roLayer*TMath::ATan(x1/y1);
+      rPhi2 = roLayer*TMath::ATan(x2/y2);    
+      delrPhiNoGap = TMath::Abs(rPhi1-rPhi2);
+      leftoverS = (circ - nBlades*delrPhiNoGap);
+      delrPhiGapOnly = leftoverS/(2*nBlades);   
+      double LArgapo = tForArcLength(delrPhiGapOnly, BladeAngle, delZ, roLayer);
+      std::cout << "Outer LAr gap is " << LArgapo << std::endl ;
+      lLog << MSG::INFO << "Inner and outer thicknesses of noble liquid volume " << ElectrodeThick+LArgapi*2 <<  " " <<  ElectrodeThick+LArgapo*2 << endmsg;
+    
+    
+      dd4hep::Solid electrodeBladeAndGapLayer = buildOneBlade(ElectrodeThick+LArgapi*2, ElectrodeThick+LArgapo*2, xRange, roLayer, riLayer, BladeAngle, delZ);
+      dd4hep::Volume electrodeBladeAndGapLayerVol("electrodeBladeAndGapLayer", electrodeBladeAndGapLayer, aLcdd.material("Air"));
+      dd4hep::Solid electrodeBladeLayer = buildOneBlade(ElectrodeThick, ElectrodeThick, xRange, roLayer, riLayer, BladeAngle, delZ);
+      dd4hep::Volume electrodeBladeLayerVol("electrodeBladeLayer", electrodeBladeLayer, aLcdd.material(electrodeBladeElem.materialStr()));
+      if (electrodeBladeElem.isSensitive()) {
+	electrodeBladeLayerVol.setSensitiveDetector(aSensDet); 
+      }
+      electrodeBladeLayerVols.push_back(electrodeBladeLayerVol);
+
+     //     Double_t electrodeBladeMass = electrodeBladeVol->Weight();
+
+      dd4hep::SubtractionSolid LArShapeTotalLayer(electrodeBladeAndGapLayer, electrodeBladeLayer);
+      dd4hep::Volume LArTotalLayerVol("LArTotalLayerVol", LArShapeTotalLayer,  aLcdd.material(nobleLiquidElem.materialStr()));
+
+      if ( nobleLiquidElem.isSensitive() ) {
+	LArTotalLayerVol.setSensitiveDetector(aSensDet);
+      }
+      LArTotalLayerVols.push_back(LArTotalLayerVol);
+
+    //    unsigned nLayers = aLcdd.constant<unsigned>("ECalEndcapNumLayers");
+
+    //    std::vector<dd4hep::Volume> LArVolLayers;
+    //double xRangePerLayer = xRange/nLayers;
+    /*    dd4hep::Trd2 bigDumbBlock(ElectrodeThick/2.+LArgapo, ElectrodeThick/2.+LArgapo, xRange/2, xRange/2., ro/2. );
     for (unsigned iLayer = 0; iLayer < nLayers; iLayer++) {
       // make a layer by subtracting off the unwanted bits
       dd4hep::SubtractionSolid tmp1(LArShapeTotal, bigDumbBlock, dd4hep::Position( 0., -xRange+xRangePerLayer*iLayer, 0.));
@@ -174,15 +216,21 @@ namespace det {
       LArVolThisLayer.setSensitiveDetector(aSensDet);
       LArVolLayers.push_back(LArVolThisLayer);
     }
-
+    */
+      riLayer = roLayer;
+      LArgapi = LArgapo;
+    }
     lLog << MSG::INFO << "ECal endcap materials:  nobleLiquid: " << nobleLiquidElem.materialStr() << " absorber: " << absBladeElem.materialStr() << " electrode: " << electrodeBladeElem.materialStr() << endmsg; 
   //build cryostat
 // Retrieve cryostat data
     int    nBladesToDraw = nBlades;
-    //    nBladesToDraw = 1;
-
+    // nBladesToDraw = 3;
+   
     for (int iBlade = 0; iBlade < nBladesToDraw; iBlade++) {
       //    pl->SetInvisible();
+      //      absMass += absBladeMass;
+      // electrodeMass += electrodeBladeMass;
+
       float phi = iBlade*2*TMath::Pi()/nBlades;
       float delPhi = 2*TMath::Pi()/nBlades;
       
@@ -204,47 +252,99 @@ namespace det {
 			rotMat(1,0), rotMat(1,1), rotMat(1,2),
 			rotMat(2,0), rotMat(2,1), rotMat(2,2));
 
-      dd4hep::Transform3D com(r3d, dd4hep::Translation3D(x,y,z));
-      dd4hep::PlacedVolume absBladeVol_pv = aEnvelope.placeVolume(absBladeVol, com);
-      
-      absBladeVol_pv.addPhysVolID("module", iModule);
-      absBladeVol_pv.addPhysVolID("type", 1);  // 0 = active, 1 = passive, 2 = readout
-      dd4hep::DetElement absBladeDetElem(bathDetElem, "absorber"+std::to_string(iModule), iModule);
-      absBladeDetElem.setPlacement(absBladeVol_pv);
-
       tgr.Clear();
       tgr.RotateZ(BladeAngle*180/TMath::Pi());
       tgr.RotateX(-(phi+delPhi/2.)*180/TMath::Pi());   
       tgr.RotateY(90);
-
+      
       rotMatPtr = tgr.GetRotationMatrix();
       TMatrixT<Double_t> rotMat2(3,3, rotMatPtr);
-
-      r3d.SetComponents(rotMat2(0,0), rotMat2(0,1), rotMat2(0,2),
+      dd4hep::Rotation3D r3d2; 
+      r3d2.SetComponents(rotMat2(0,0), rotMat2(0,1), rotMat2(0,2),
 			rotMat2(1,0), rotMat2(1,1), rotMat2(1,2),
 			rotMat2(2,0), rotMat2(2,1), rotMat2(2,2));
 
-      x = (ro/2.)*TMath::Cos(phi+delPhi/2.);
-      y = (ro/2.)*TMath::Sin(phi+delPhi/2.);
+      unsigned iLayer = 0;
+      riLayer = ri;
 
-      dd4hep::Transform3D com2(r3d, dd4hep::Translation3D(x,y,z));
-      dd4hep::PlacedVolume electrodeBladeVol_pv = aEnvelope.placeVolume(electrodeBladeVol, com2);
-      electrodeBladeVol_pv.addPhysVolID("module", iModule);
-      electrodeBladeVol_pv.addPhysVolID("type", 2);  // 0 = active, 1 = passive, 2 = readout
-      dd4hep::DetElement electrodeBladeDetElem(bathDetElem, "electrode"+std::to_string(iModule), iModule);
-      electrodeBladeDetElem.setPlacement(electrodeBladeVol_pv);
+      for (auto absBladeLayerVol: absBladeLayerVols) {
+	
+	float roLayer = riLayer+delr;
+	float xLayer = (roLayer/2.)*TMath::Cos(phi);
+	float yLayer = (roLayer/2.)*TMath::Sin(phi); //ri*TMath::Sin(phi)/6.;
+	float zLayer =  0.;
+	riLayer = roLayer;
 
-      for (unsigned iLayer = 0; iLayer<nLayers; iLayer++) {
-	dd4hep::PlacedVolume LArVol_pv = aEnvelope.placeVolume(LArVolLayers[iLayer], com2);
-	LArVol_pv.addPhysVolID("layer", iLayer);
-	LArVol_pv.addPhysVolID("module", iModule);
+	dd4hep::Transform3D comLayer(r3d, dd4hep::Translation3D(xLayer,yLayer,zLayer));	
+	dd4hep::PlacedVolume absBladeVol_pv = aEnvelope.placeVolume(absBladeLayerVol, comLayer);
+	
+	
+	absBladeVol_pv.addPhysVolID("side",sign); 
+	absBladeVol_pv.addPhysVolID("subcyl", iSubcyl);
+	absBladeVol_pv.addPhysVolID("module", iBlade);
+	absBladeVol_pv.addPhysVolID("type", 1);  // 0 = active, 1 = passive, 2 = readout
+	absBladeVol_pv.addPhysVolID("layer", iLayer);
+	dd4hep::DetElement absBladeDetElem(bathDetElem, "absorber"+std::to_string(sign)+"_"+std::to_string(iSubcyl)+"_"+std::to_string(iBlade)+"_"+std::to_string(iLayer), ECalEndCapElementCounter++);
+	absBladeDetElem.setPlacement(absBladeVol_pv);
+	riLayer = roLayer;
+	iLayer++;
+      }
+
+      riLayer = ri;
+      iLayer =0;
+
+      for (auto electrodeBladeLayerVol: electrodeBladeLayerVols) {
+	
+	float roLayer = riLayer+delr;
+
+	float xLayer = (roLayer/2.)*TMath::Cos(phi+delPhi/2.);
+	float yLayer = (roLayer/2.)*TMath::Sin(phi+delPhi/2.);
+	float zLayer = 0;
+	dd4hep::Transform3D com2(r3d2, dd4hep::Translation3D(xLayer,yLayer,zLayer));
+	dd4hep::PlacedVolume electrodeBladeVol_pv = aEnvelope.placeVolume(electrodeBladeLayerVol, com2);
+	electrodeBladeVol_pv.addPhysVolID("side",sign); 
+	electrodeBladeVol_pv.addPhysVolID("subcyl", iSubcyl);
+	electrodeBladeVol_pv.addPhysVolID("module", iBlade);
+	electrodeBladeVol_pv.addPhysVolID("type", 2);  // 0 = active, 1 = passive, 2 = readout
+	electrodeBladeVol_pv.addPhysVolID("layer", iLayer);
+	dd4hep::DetElement electrodeBladeDetElem(bathDetElem, "electrode"+std::to_string(sign)+"_"+std::to_string(iSubcyl)+"_"+std::to_string(iBlade)+"_"+std::to_string(iLayer), ECalEndCapElementCounter++);
+	electrodeBladeDetElem.setPlacement(electrodeBladeVol_pv);
+	riLayer = roLayer;
+	iLayer++;
+      }
+
+      riLayer = ri;
+      iLayer = 0;
+
+      for (auto LArTotalLayerVol: LArTotalLayerVols) {
+	
+	float roLayer = riLayer+delr;
+
+	float xLayer = (roLayer/2.)*TMath::Cos(phi+delPhi/2.);
+	float yLayer = (roLayer/2.)*TMath::Sin(phi+delPhi/2.);
+	float zLayer = 0;
+	dd4hep::Transform3D com2(r3d2, dd4hep::Translation3D(xLayer,yLayer,zLayer));
+	dd4hep::PlacedVolume LArVol_pv(aEnvelope.placeVolume(LArTotalLayerVol, com2));
+	LArVol_pv.addPhysVolID("side",sign); 
+	LArVol_pv.addPhysVolID("subcyl", iSubcyl);
+	LArVol_pv.addPhysVolID("module", iBlade);
 	LArVol_pv.addPhysVolID("type", 0);  // 0 = active, 1 = passive, 2 = readout
-	dd4hep::DetElement LArDetElem(bathDetElem, "active"+std::to_string(iModule)+"layer"+std::to_string(iLayer), (iModule<<8)+iLayer);
+	LArVol_pv.addPhysVolID("layer", iLayer);
+
+	dd4hep::DetElement LArDetElem(bathDetElem, "LAr"+std::to_string(sign)+"_"+std::to_string(iSubcyl)+"_"+std::to_string(iBlade)+"_"+std::to_string(iLayer), ECalEndCapElementCounter++);
 	LArDetElem.setPlacement(LArVol_pv);
+	riLayer = roLayer;
+	iLayer++;
+      }
+      /*      for (unsigned iLayer = 0; iLayer<nLayers; iLayer++) {
+	dd4hep::PlacedVolume LArLayerVol_pv = LArTotalVol.placeVolume(LArVolLayers[iLayer], 0);
+	//	LArLayerVol_pv.addPhysVolID("module", iModule);
+	LArLayerVol_pv.addPhysVolID("layer", iLayer);
+	dd4hep::DetElement LArLayerDetElem(LArDetElem, "layer"+std::to_string(sign)+"_"+std::to_string(iSubcyl)+"_"+std::to_string(iBlade)+std::to_string(iLayer),iLayer);
+	LArLayerDetElem.setPlacement(LArLayerVol_pv);
 
       }
-      iModule++;
-
+      */
     }
 
     return;
@@ -254,7 +354,10 @@ namespace det {
   void buildOneSide_Turbine(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet,
                   dd4hep::Volume& aEnvelope, dd4hep::xml::Handle_t& aXmlElement,
 			    int sign,
-			    unsigned& iModule) {
+			    unsigned& iModule,
+			    Double_t &absMass,
+			    Double_t &electrodeMass,
+			    Double_t &supportTubeMass) {
 
     dd4hep::xml::DetElement calo = aXmlElement.child(_Unicode(calorimeter));
     dd4hep::xml::Dimension caloDim(calo.dimensions());
@@ -341,23 +444,38 @@ namespace det {
   double length = dim.dz() * 2.;
   double zOffsetEnvelope = length / 2. * -sign;
  
+  std::cout << "looking for supportTube in xml" << std::endl;
+
   dd4hep::xml::DetElement supportTubeElem = aXmlElement.child(_Unicode(supportTube));
-  float radiusRatio = supportTubeElem.attr<float>(_Unicode(radiusRatio));  
+  unsigned nSubcyls = supportTubeElem.attr<unsigned>(_Unicode(nSubcylinders));
+  std:: cout << "Will build " << nSubcyls << " subcylinders" << std::endl;
   double rmin = dim.rmin1();
   double rmax = dim.rmax();
+  float radiusRatio = pow(rmax/rmin, 1./nSubcyls);
   std::cout << "Min, max radii are " << rmin << " " << rmax << std::endl;
+  std::cout << "radiusRatio is " << radiusRatio << std::endl;
   double ro = rmin*radiusRatio;
   double ri = rmin;
 
   float supportTubeThickness=supportTubeElem.thickness();
   unsigned iSupportTube = 0;
 
-  while (ri < rmax) {
+  for (unsigned iSubcyl = 0; iSubcyl < nSubcyls; iSubcyl++) {
+   
     dd4hep::Tube supportTube(ro, ro+supportTubeThickness, dim.dz() );
   
     dd4hep::Volume supportTubeVol("supportTube", supportTube, aLcdd.material(supportTubeElem.materialStr()));
+    //    supportTubeMass += supportTubeVol->Weight();
+    if (supportTubeElem.isSensitive()) {
+      supportTubeVol.setSensitiveDetector(aSensDet);
+    }
     dd4hep::PlacedVolume supportTube_pv = bathVol.placeVolume(supportTubeVol, dd4hep::Position(0,0,zOffsetEnvelope + sign * (dim.dz() )));
-    buildSubCylinder(aLcdd, aSensDet, bathVol, aXmlElement, bathDetElem, ri+supportTubeThickness, ro, iModule);
+    supportTube_pv.addPhysVolID("cryo", 1);
+    supportTube_pv.addPhysVolID("side",sign);
+    supportTube_pv.addPhysVolID("subcyl", iSubcyl);
+
+
+    buildSubCylinder(aLcdd, aSensDet, bathVol, aXmlElement, bathDetElem, ri+supportTubeThickness, ro, sign, iSubcyl, absMass, electrodeMass);
     ri = ro;
     ro *= radiusRatio;
     if (ro > rmax) ro = rmax;
@@ -385,13 +503,17 @@ createECalEndcapTurbine(dd4hep::Detector& aLcdd, dd4hep::xml::Handle_t aXmlEleme
   dd4hep::DetElement caloDetElem(nameDet, idDet);
   dd4hep::xml::Dimension sdType = xmlDetElem.child(_U(sensitive));
   aSensDet.setType(sdType.typeStr());
-  
  
+  ECalEndcapNumLayers = aLcdd.constant<int>("ECalEndcapNumLayers");
+ 
+  Double_t absMass = 0., electrodeMass = 0., supportTubeMass = 0.;
+
   // Create air envelope for the whole endcap
   dd4hep::Cone envelopePositive(dim.dz(), dim.rmin1(), dim.rmax(), dim.rmin2(), dim.rmax());
   dd4hep::Cone envelopeNegative(dim.dz(), dim.rmin2(), dim.rmax(), dim.rmin1(), dim.rmax());
   dd4hep::UnionSolid envelopeShape(envelopePositive, envelopeNegative, dd4hep::Position(0, 0, -2 * dim.z_offset()));
   dd4hep::Volume envelopeVol(nameDet + "_vol", envelopeShape, aLcdd.material("Air"));
+  
   dd4hep::Volume envelopePositiveVol(nameDet + "_positive_vol", envelopePositive, aLcdd.material("Air"));
   dd4hep::Volume envelopeNegativeVol(nameDet + "_negative_vol", envelopeNegative, aLcdd.material("Air"));
 
@@ -400,9 +522,14 @@ createECalEndcapTurbine(dd4hep::Detector& aLcdd, dd4hep::xml::Handle_t aXmlEleme
 
   lLog << MSG::DEBUG << "Placing dector on the positive side: (cm) " << dim.z_offset() << " with min, max radii " << dim.rmin1() << " " << dim.rmax() << endmsg;
   unsigned iModule = 0;
-  buildOneSide_Turbine(aLcdd, aSensDet, envelopePositiveVol,  aXmlElement, 1, iModule);
+  buildOneSide_Turbine(aLcdd, aSensDet, envelopePositiveVol,  aXmlElement, 1, iModule, absMass, electrodeMass, supportTubeMass);
   lLog << MSG::DEBUG << "Placing dector on the negative side: (cm) " << -dim.z_offset()  << " with min, max radii " << dim.rmin1() << " " << dim.rmax() << endmsg;
-  buildOneSide_Turbine(aLcdd, aSensDet, envelopeNegativeVol, aXmlElement, -1, iModule);
+  buildOneSide_Turbine(aLcdd, aSensDet, envelopeNegativeVol, aXmlElement, -1, iModule, absMass, electrodeMass, supportTubeMass);
+
+  std::cout << "EWV Hello" << std::endl;
+  lLog << MSG::DEBUG << "Total absorber mass: " << absMass << " kg" << endmsg;
+  lLog << MSG::DEBUG << "Total electrode mass: " << electrodeMass << " kg" << endmsg;
+  lLog << MSG::DEBUG << "Total supportTube mass: " << supportTubeMass << " kg" << endmsg; 
 
   // Place the envelope
   dd4hep::PlacedVolume envelopePositivePhysVol = envelopeVol.placeVolume(envelopePositiveVol);
@@ -412,7 +539,7 @@ createECalEndcapTurbine(dd4hep::Detector& aLcdd, dd4hep::xml::Handle_t aXmlEleme
       envelopeVol.placeVolume(envelopeNegativeVol, dd4hep::Position(0, 0, -2 * dim.z_offset()));
 
   caloNegativeDetElem.setPlacement(envelopeNegativePhysVol);
-
+  
   dd4hep::Volume motherVol = aLcdd.pickMotherVolume(caloDetElem);
   dd4hep::PlacedVolume envelopePhysVol = motherVol.placeVolume(envelopeVol, dd4hep::Position(0., 0., dim.z_offset()));
   caloDetElem.setPlacement(envelopePhysVol);

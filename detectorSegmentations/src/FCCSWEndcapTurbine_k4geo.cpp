@@ -73,8 +73,9 @@ namespace DDSegmentation {
 Vector3D FCCSWEndcapTurbine_k4geo::position(const CellID& cID) const {
   //  Vector3D localPos = PositionRhoZPhi(rho(cID), z(cID), phi(cID));
   //  std::cout << "Local position is " << localPos.x() << " " << localPos.y() << " " << localPos.z() << std::endl;
-  Vector3D dummyPos(z(cID),0,rho(cID));
-  //Vector3D dummyPos(0,0,0);
+  //Vector3D dummyPos(z(cID),0,rho(cID));
+  // Vector3D dummyPos(x(cID),0,z(cID));  /* this one seemed close when G4 elements were entire blades */
+  Vector3D dummyPos(0, 0, 0);
   return dummyPos;
   // return PositionRhoZPhi(rho(cID), z(cID), phi(cID));
   // return PositionRhoZPhi(0, rho(cID), z(cID)/rho(cID));

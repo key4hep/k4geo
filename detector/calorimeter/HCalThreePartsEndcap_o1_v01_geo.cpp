@@ -207,7 +207,7 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
     dd4hep::Tube tileSequenceShape(rminLayer, rmaxLayer, 0.5*dzSequence);
     Volume tileSequenceVolume("HCalECTileSequenceVol1", tileSequenceShape, aLcdd.air());
 
-    lLog << MSG::DEBUG << "layer radii:  " << rminLayer << " - " << rmaxLayer << " [cm]" << endmsg;
+    lLog << MSG::DEBUG << "EWV 1 layer radii:  " << rminLayer << " - " << rmaxLayer << " [cm]" << endmsg;
     
 
     dd4hep::Tube layerShape(rminLayer, rmaxLayer, dzDetector1 );
@@ -282,7 +282,7 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
     dd4hep::Tube tileSequenceShape(rminLayer, rmaxLayer, 0.5*dzSequence);
     Volume tileSequenceVolume("HCalECTileSequenceVol2", tileSequenceShape, aLcdd.air());
 
-    lLog << MSG::DEBUG << "layer radii:  " << rminLayer << " - " << rmaxLayer << " [cm]" << endmsg;
+    lLog << MSG::DEBUG << "EWV 2 layer radii:  " << rminLayer << " - " << rmaxLayer << " [cm]" << endmsg;
 
 
     dd4hep::Tube layerShape(rminLayer, rmaxLayer, dzDetector2);
@@ -354,7 +354,7 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
     dd4hep::Tube tileSequenceShape(rminLayer, rmaxLayer, 0.5*dzSequence);
     Volume tileSequenceVolume("HCalECTileSequenceVol3", tileSequenceShape, aLcdd.air());
 
-    lLog << MSG::DEBUG << "layer radii:  " << rminLayer << " - " << rmaxLayer << " [cm]" << endmsg;
+    lLog << MSG::DEBUG << "EWV 3 layer radii:  " << rminLayer << " - " << rmaxLayer << " [cm]" << endmsg;
 
     dd4hep::Tube layerShape(rminLayer, rmaxLayer, dzDetector3);
     Volume layerVolume("HCalECLayerVol3", layerShape, aLcdd.air());
