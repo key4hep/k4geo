@@ -3,14 +3,14 @@
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-  <info name="FCCee-IDEA-LAr Master"
-    title="FCCee-IDEA-LAr Master"
+  <info name="ALLEGRO_o1_v02 Master"
+    title="ALLEGRO_o1_v02 Master"
     author="Valentin Volkl"
     url="no"
     status="development"
     version="1.0">
     <comment>
-      Master compact file describing the latest developments of the FCCee IDEA detector concept with a LAr calorimeter.
+      Master compact file describing the latest developments of the FCCee ALLEGRO detector concept.
     </comment>
   </info>
 
@@ -28,7 +28,7 @@
     <constant name="world_z" value="world_size"/>
   </define>
 
-  <include ref="./FCCee_DectDimensions.xml" />
+  <include ref="./DectDimensions.xml" />
 
   <include ref="Beampipe.xml"/>
   <include ref="BeamInstrumentation.xml"/>
@@ -36,11 +36,11 @@
   <include ref="HOMAbsorber.xml"/> 
   <!--taken from DetFCCeeCLD/compact/FCCee_o2_v02  -->
   <include ref="Vertex.xml"/>
-  <include ref="SimplifiedDriftChamber.xml"/>
-  <include ref="FCCee_ECalBarrel_thetamodulemerged.xml"/>
-  <include ref="FCCee_HCalBarrel_TileCal.xml"/>
-  <include ref="FCCee_EcalEndcaps_coneCryo.xml"/>
-  <include ref="FCCee_HCalEndcaps_ThreeParts_TileCal.xml"/>
+  <include ref="DriftChamber.xml"/>
+  <include ref="ECalBarrel_thetamodulemerged.xml"/>
+  <include ref="HCalBarrel_TileCal.xml"/>
+  <include ref="ECalEndcaps_coneCryo.xml"/>
+  <include ref="HCalEndcaps_ThreeParts_TileCal.xml"/>
   <include ref="MuonTagger.xml"/>
 
 </lccdd>
