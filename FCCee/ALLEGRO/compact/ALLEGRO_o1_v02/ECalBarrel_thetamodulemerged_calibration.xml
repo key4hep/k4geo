@@ -102,6 +102,10 @@
         <side sensitive="false"/> <!-- both sides of the cryostat -->
         <back sensitive="false"/> <!-- outer wall of the cryostat -->
       </cryostat>
+      <bath name="ECAL_bath">
+        <material name="LAr"/>
+        <dimensions rmin="Bath_rmin" rmax="Bath_rmax" dz="EMBarrel_dz"/>
+      </bath>
       <calorimeter name="EM_barrel">
         <!-- offset defines the numbering of the modules: module==0 for phi=0 direction -->
         <dimensions rmin="EMBarrel_rmin" rmax="EMBarrel_rmax" dz="EMBarrel_dz" offset="-InclinationAngle"/>
