@@ -25,7 +25,7 @@
     <constant name="CryoBarrelFrontCold" value="3.8*mm"/>  <!-- Al solid equivalent of 0.043 X0 sandwich CFRP -->
     <constant name="CryoBarrelFront" value="CryoBarrelFrontWarm+CryoBarrelFrontCold"/>
 
-    <constant name="CryoBarrelBackCold" value="1100*mm"/>   <!-- Al solid corresponding to 1.25 X0 -->
+    <constant name="CryoBarrelBackCold" value="1100*mm"/>   <!-- Al solid corresponding to 12.5 X0 -->
     <constant name="CryoBarrelBackWarm" value="2.7*mm"/>  <!-- Al solid equivalent of 0.03 X0 sandwich CFRP -->
     <constant name="SolenoidBarrel" value="70*mm"/>    <!-- Al solenoid with thickness of 0.8 X0 -->
     <constant name="CryoBarrelBack" value="CryoBarrelBackWarm+SolenoidBarrel+CryoBarrelBackCold"/>
