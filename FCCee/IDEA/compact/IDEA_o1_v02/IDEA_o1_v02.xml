@@ -47,6 +47,9 @@
   <!-- Import silicon wrapper -->
   <!-- <include ref="SiliconWrapper_o1_v01.xml"/> -->
 
+  <!-- Import muon system -->
+  <include ref="detailedMuonSystem_v00.xml"/>
+
   <plugins>
     <plugin name="DD4hepVolumeManager"/>
     <plugin name="InstallSurfaceManager"/>
