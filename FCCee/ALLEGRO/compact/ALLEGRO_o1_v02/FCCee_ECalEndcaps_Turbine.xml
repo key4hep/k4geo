@@ -105,7 +105,7 @@
 	<electrodeBlade name="electrodeBlade" thickness="ElectrodeBladeThickness" sensitive="true">
 	   <material name="PCB" />
 	</electrodeBlade>
-	<nobleLiquidGap name="nobleLiquidGap" gap="NobleLiquidGap">
+	<nobleLiquidGap name="nobleLiquidGap" gap="NobleLiquidGap" sensitive="true">
 	  <material name="LAr" />
 	</nobleLiquidGap>
       </turbineBlade>
