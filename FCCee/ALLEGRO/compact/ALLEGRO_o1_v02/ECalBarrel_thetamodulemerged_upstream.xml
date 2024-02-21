@@ -25,7 +25,7 @@
     <constant name="CryoBarrelFrontCold" value="3.8*mm"/>  <!-- Al solid equivalent of 0.043 X0 sandwich CFRP -->
     <constant name="CryoBarrelFront" value="CryoBarrelFrontWarm+CryoBarrelFrontCold"/>
 
-    <constant name="CryoBarrelBackCold" value="30*mm"/>   <!-- Al solid corresponding to 0.34 X0 -->
+    <constant name="CryoBarrelBackCold" value="1100*mm"/>   <!-- Al solid corresponding to 12.5 X0 -->
     <constant name="CryoBarrelBackWarm" value="2.7*mm"/>  <!-- Al solid equivalent of 0.03 X0 sandwich CFRP -->
     <constant name="SolenoidBarrel" value="70*mm"/>    <!-- Al solenoid with thickness of 0.8 X0 -->
     <constant name="CryoBarrelBack" value="CryoBarrelBackWarm+SolenoidBarrel+CryoBarrelBackCold"/>
@@ -78,7 +78,7 @@
   <readouts>
     <!-- readout for the simulation, with the baseline merging: 2x along the module direction in each layer; 4x along theta in each layer except layer 1 -->
     <!-- the lists mergedCells_Theta and mergedModules define the number of cells to group together in the theta and module direction as a function of the layer -->
-    <readout name="ECalBarrelModuleThetaMerged2">
+    <readout name="ECalBarrelModuleThetaMerged">
       <segmentation type="FCCSWGridModuleThetaMerged_k4geo" nModules="1536" mergedCells_Theta="4 1 4 4 4 4 4 4 4 4 4 4" mergedModules="2 2 2 2 2 2 2 2 2 2 2 2" grid_size_theta="0.009817477/4" offset_theta="0.5902785"/>
         <id>system:4,cryo:1,type:3,subtype:3,layer:8,module:11,theta:10</id>
     </readout>
@@ -102,6 +102,10 @@
         <side sensitive="true"/> <!-- both sides of the cryostat -->
         <back sensitive="true"/> <!-- outer wall of the cryostat -->
       </cryostat>
+      <bath name="ECAL_bath">
+        <material name="LAr"/>
+        <dimensions rmin="Bath_rmin" rmax="Bath_rmax" dz="EMBarrel_dz"/>
+      </bath>
       <calorimeter name="EM_barrel">
         <!-- offset defines the numbering of the modules: module==0 for phi=0 direction -->
         <dimensions rmin="EMBarrel_rmin" rmax="EMBarrel_rmax" dz="EMBarrel_dz" offset="-InclinationAngle"/>
