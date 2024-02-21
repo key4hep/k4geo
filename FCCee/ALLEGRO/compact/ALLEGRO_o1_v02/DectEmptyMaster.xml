@@ -6,8 +6,8 @@
   <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml" />
 
   <includes>
-    <gdmlFile  ref="../../DetCommon/compact/elements.xml"/>
-    <gdmlFile  ref="../../DetCommon/compact/materials.xml"/>
+    <gdmlFile  ref="./elements.xml"/>
+    <gdmlFile  ref="./materials.xml"/>
   </includes>
 
   <info name="FCCDectMaster"
@@ -25,6 +25,6 @@
     <constant name="world_z" value="world_size"/>
   </define>
 
-  <include ref="./FCCee_DectDimensions.xml" />
+  <include ref="./DectDimensions.xml" />
 
 </lccdd>
