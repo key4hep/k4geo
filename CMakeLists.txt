@@ -52,6 +52,15 @@ message ( STATUS "ROOT_VERSION: ${ROOT_VERSION}" )
 
 find_package( Geant4 REQUIRED ) 
 find_package( LCIO REQUIRED)
+# Shim for older LCIO versions
+if(NOT TARGET LCIO::lcio)
+  add_library(LCIO::lcio INTERFACE IMPORTED GLOBAL)
+  set_target_properties(LCIO::lcio
+    PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${LCIO_INCLUDE_DIRS}"
+    INTERFACE_LINK_LIBRARIES "${LCIO_LIBRARIES}"
+  )
+endif()
 
 add_subdirectory(detectorSegmentations)
 add_subdirectory(detectorCommon)
