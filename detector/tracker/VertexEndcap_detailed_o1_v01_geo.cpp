@@ -28,7 +28,6 @@ using dd4hep::Assembly;
 using dd4hep::BUILD_ENVELOPE;
 using dd4hep::DetElement;
 using dd4hep::Detector;
-using dd4hep::ERROR;
 using dd4hep::Material;
 using dd4hep::PlacedVolume;
 using dd4hep::Position;
@@ -171,7 +170,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         m.sensor_thickness = xml_comp_t(c_sensor).thickness();
         xml_coll_t c_component = xml_coll_t(c_sensor,_U(component));
 
-        int iSensitive, iPassive = 0;
+        // Is iSensitive being used with this default value below in a call to _toString?
+        int iSensitive = 0, iPassive = 0;
         for(c_component.reset(); c_component; ++c_component){
             xml_comp_t component = c_component;
             m.sensor_sensitives.push_back(component.isSensitive());
@@ -240,9 +240,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                 petalDE.setPlacement(pv);
 
                 int iStave = 0;
-                int nStaves = 0;
-                for(xml_coll_t ri(x_layer,_U(stave)); ri; ++ri)  
-                    nStaves+=1;
         
                 for(xml_coll_t ri(x_layer,_U(stave)); ri; ++ri)  {
                     xml_comp_t x_stave = ri;
