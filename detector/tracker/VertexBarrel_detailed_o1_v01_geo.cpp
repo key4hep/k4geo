@@ -342,7 +342,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 // passivesDE.setPlacement(pv);
 
                 // Place all sensor parts
-                int iSensitive = 0, iPassive [[maybe_unused]] = 0;
+                int iSensitive = 0;
                 for(int i=0; i<int(m.sensor_volumes.size()); i++){
                     x_pos = 0.0;
                     y_pos = m.sensor_xmin[i]+abs(m.sensor_xmax[i]-m.sensor_xmin[i])/2.;
@@ -369,7 +369,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                     // Place passive sensor parts
                     else{
                         stave_assembly.placeVolume(m.sensor_volumes[i], Transform3D(rot, pos)*Translation3D(pos2));
-                        iPassive++;
                     }
                 }
             }

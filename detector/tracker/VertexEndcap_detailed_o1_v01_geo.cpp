@@ -240,9 +240,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                 petalDE.setPlacement(pv);
 
                 int iStave = 0;
-                int nStaves [[maybe_unused]] = 0;
-                for(xml_coll_t ri(x_layer,_U(stave)); ri; ++ri)  
-                    nStaves+=1;
         
                 for(xml_coll_t ri(x_layer,_U(stave)); ri; ++ri)  {
                     xml_comp_t x_stave = ri;
