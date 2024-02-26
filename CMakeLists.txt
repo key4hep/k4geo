@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 
 #---------------------------
 set( PackageName k4geo )
@@ -26,7 +26,7 @@ set(CMAKE_INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 
 IF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   SET( CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR} CACHE PATH
-    "install prefix path  - overwrite with -D CMAKE_INSTALL_PREFIX = ..." 
+    "install prefix path  - overwrite with -D CMAKE_INSTALL_PREFIX = ..."
     FORCE )
   MESSAGE(STATUS "CMAKE_INSTALL_PREFIX is ${CMAKE_INSTALL_PREFIX} - overwrite with -D CMAKE_INSTALL_PREFIX" )
 ENDIF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
@@ -50,7 +50,7 @@ dd4hep_set_compiler_flags()
 find_package ( ROOT REQUIRED COMPONENTS Geom GenVector)
 message ( STATUS "ROOT_VERSION: ${ROOT_VERSION}" )
 
-find_package( Geant4 REQUIRED ) 
+find_package( Geant4 REQUIRED )
 find_package( LCIO REQUIRED)
 # Shim for older LCIO versions
 if(NOT TARGET LCIO::lcio)
@@ -65,7 +65,7 @@ endif()
 add_subdirectory(detectorSegmentations)
 add_subdirectory(detectorCommon)
 
-file(GLOB sources 
+file(GLOB sources
   ./detector/tracker/*.cpp
   ./detector/calorimeter/*.cpp
   ./detector/fcal/*.cpp
@@ -115,8 +115,8 @@ endif(BUILD_TESTING)
 
 #--- install remaining targets--------------------------
 FILE(GLOB hfiles "ILD/include/*.h")
-INSTALL(FILES ${hfiles} 
-  DESTINATION include/${PackageName} 
+INSTALL(FILES ${hfiles}
+  DESTINATION include/${PackageName}
   )
 
 #--- install compact files------------------------------
