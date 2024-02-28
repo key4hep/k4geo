@@ -158,6 +158,7 @@ namespace det {
 
     for (unsigned iLayer = 0; iLayer < ECalEndcapNumLayers; iLayer++) {
       float roLayer = riLayer + delr;
+      std::cout << "Making layer in inner, outer radii " << riLayer << " " << roLayer << std::endl;
       dd4hep::Solid  absBladeLayer = buildOneBlade(AbsThicki, AbsThicko, xRange, roLayer, riLayer, BladeAngle, delZ );
       dd4hep::Volume absBladeLayerVol("absBladeLayer", absBladeLayer, aLcdd.material(absBladeElem.materialStr()));
       if (absBladeElem.isSensitive()) {
@@ -185,7 +186,7 @@ namespace det {
     
     
       dd4hep::Solid electrodeBladeAndGapLayer = buildOneBlade(ElectrodeThick+LArgapi*2, ElectrodeThick+LArgapo*2, xRange, roLayer, riLayer, BladeAngle, delZ);
-      dd4hep::Volume electrodeBladeAndGapLayerVol("electrodeBladeAndGapLayer", electrodeBladeAndGapLayer, aLcdd.material("Air"));
+      //  dd4hep::Volume electrodeBladeAndGapLayerVol("electrodeBladeAndGapLayer", electrodeBladeAndGapLayer, aLcdd.material("Air"));
       dd4hep::Solid electrodeBladeLayer = buildOneBlade(ElectrodeThick, ElectrodeThick, xRange, roLayer, riLayer, BladeAngle, delZ);
       dd4hep::Volume electrodeBladeLayerVol("electrodeBladeLayer", electrodeBladeLayer, aLcdd.material(electrodeBladeElem.materialStr()));
       if (electrodeBladeElem.isSensitive()) {
@@ -283,8 +284,9 @@ namespace det {
 	absBladeVol_pv.addPhysVolID("subcyl", iSubcyl);
 	absBladeVol_pv.addPhysVolID("module", iBlade);
 	absBladeVol_pv.addPhysVolID("type", 1);  // 0 = active, 1 = passive, 2 = readout
-	absBladeVol_pv.addPhysVolID("layer", iLayer);
-	dd4hep::DetElement absBladeDetElem(bathDetElem, "absorber"+std::to_string(sign)+"_"+std::to_string(iSubcyl)+"_"+std::to_string(iBlade)+"_"+std::to_string(iLayer), ECalEndCapElementCounter++);
+	if (iLayer > 10) std::cout << "Abs layer > 10? " << iLayer << std::endl;
+	absBladeVol_pv.addPhysVolID("layer", iSubcyl*ECalEndcapNumLayers+iLayer);
+	dd4hep::DetElement absBladeDetElem(bathDetElem, "absorber"+std::to_string(sign)+"_"+std::to_string(iSubcyl)+"_"+std::to_string(iBlade)+"_"+std::to_string(iSubcyl*ECalEndcapNumLayers+iLayer), ECalEndCapElementCounter++);
 	absBladeDetElem.setPlacement(absBladeVol_pv);
 	riLayer = roLayer;
 	iLayer++;
@@ -306,8 +308,9 @@ namespace det {
 	electrodeBladeVol_pv.addPhysVolID("subcyl", iSubcyl);
 	electrodeBladeVol_pv.addPhysVolID("module", iBlade);
 	electrodeBladeVol_pv.addPhysVolID("type", 2);  // 0 = active, 1 = passive, 2 = readout
-	electrodeBladeVol_pv.addPhysVolID("layer", iLayer);
-	dd4hep::DetElement electrodeBladeDetElem(bathDetElem, "electrode"+std::to_string(sign)+"_"+std::to_string(iSubcyl)+"_"+std::to_string(iBlade)+"_"+std::to_string(iLayer), ECalEndCapElementCounter++);
+	if (iLayer > 10) std::cout << "Electrode layer > 10? " << iLayer << std::endl;
+	electrodeBladeVol_pv.addPhysVolID("layer", iSubcyl*ECalEndcapNumLayers+iLayer);
+	dd4hep::DetElement electrodeBladeDetElem(bathDetElem, "electrode"+std::to_string(sign)+"_"+std::to_string(iSubcyl)+"_"+std::to_string(iBlade)+"_"+std::to_string(iSubcyl*ECalEndcapNumLayers+iLayer), ECalEndCapElementCounter++);
 	electrodeBladeDetElem.setPlacement(electrodeBladeVol_pv);
 	riLayer = roLayer;
 	iLayer++;
@@ -315,6 +318,8 @@ namespace det {
 
       riLayer = ri;
       iLayer = 0;
+
+      std::cout << "LArTotalLayerVols.size = " << LArTotalLayerVols.size() << std::endl;
 
       for (auto LArTotalLayerVol: LArTotalLayerVols) {
 	
@@ -329,9 +334,10 @@ namespace det {
 	LArVol_pv.addPhysVolID("subcyl", iSubcyl);
 	LArVol_pv.addPhysVolID("module", iBlade);
 	LArVol_pv.addPhysVolID("type", 0);  // 0 = active, 1 = passive, 2 = readout
-	LArVol_pv.addPhysVolID("layer", iLayer);
+        std::cout << "LAr layer: " << iLayer << std::endl;
+	LArVol_pv.addPhysVolID("layer", iSubcyl*ECalEndcapNumLayers+iLayer);
 
-	dd4hep::DetElement LArDetElem(bathDetElem, "LAr"+std::to_string(sign)+"_"+std::to_string(iSubcyl)+"_"+std::to_string(iBlade)+"_"+std::to_string(iLayer), ECalEndCapElementCounter++);
+	dd4hep::DetElement LArDetElem(bathDetElem, "LAr"+std::to_string(sign)+"_"+std::to_string(iSubcyl)+"_"+std::to_string(iBlade)+"_"+std::to_string(iSubcyl*ECalEndcapNumLayers+iLayer), ECalEndCapElementCounter++);
 	LArDetElem.setPlacement(LArVol_pv);
 	riLayer = roLayer;
 	iLayer++;
@@ -473,6 +479,8 @@ namespace det {
     supportTube_pv.addPhysVolID("cryo", 1);
     supportTube_pv.addPhysVolID("side",sign);
     supportTube_pv.addPhysVolID("subcyl", iSubcyl);
+    dd4hep::DetElement supportTubeDetElem(bathDetElem, "supportTube_"+std::to_string(iSubcyl), 0);
+    supportTubeDetElem.setPlacement(supportTube_pv);
 
 
     buildSubCylinder(aLcdd, aSensDet, bathVol, aXmlElement, bathDetElem, ri+supportTubeThickness, ro, sign, iSubcyl, absMass, electrodeMass);

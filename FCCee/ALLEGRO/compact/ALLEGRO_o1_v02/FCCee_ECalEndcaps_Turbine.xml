@@ -42,7 +42,7 @@
     <!-- LAr thickness: double gap size -->
     <constant name="ECalEndcapNumBlades" value="1604"/>
     <constant name="ECalEndcapNumLayers" value="10"/>
-    <constant name="nSubcylinders" value="1" />
+    <constant name="nSubcylinders" value="3" />
     <constant name="BladeAngle" value="55*deg" />
     <constant name="NobleLiquidGap" value="2.0*mm" />
     <constant name="AbsorberBladeThickness" value="3.0*mm" />
@@ -63,8 +63,9 @@
 
   <readouts>
    <readout name="ECalEndcapTurbine">
-      <segmentation type="FCCSWEndcapTurbine_k4geo" offset_rho="137.5" offset_z="348.5" offset_phi="0.0" grid_size_rho="1.0" grid_size_z="1.0" /> 
-      <id>system:4,cryo:1,type:3,subtype:3,side:-2,subcyl:3,layer:5,module:14,rho:-14,z:-14</id>
+      <segmentation type="FCCSWEndcapTurbine_k4geo" offset_rho="137.5" offset_z="348.5" offset_phi="0.0" grid_size_rho="1.0" grid_size_z="1.0" />
+      <id>system:4,cryo:1,type:3,subtype:3,side:-2,subcyl:3,layer:10,module:14,rho:-10,z:-10</id> 
+<!--      <id>system:4,cryo:1,type:3,subtype:3,side:-2,subcyl:3,layer:9,module:14,rho:-10,z:-14</id> -->
     </readout>
 <!--
     <readout name="ECalEndcapPhiTheta">
