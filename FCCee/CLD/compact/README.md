@@ -36,7 +36,7 @@ Overlaps in the Inner and Outer Tracker.
 CLD_o2_v06
 ----------
 
-This model is based on `CLD_o2_v05` with the following changes: LumiCal outer radius from 112 mm to 115 mm, define its z extent in the beampipe reference frame.
+This model is based on `CLD_o2_v05` with the following changes: LumiCal outer radius from 112 mm to 115 mm, remove its nose shield, define its z extent in the beampipe reference frame.
 
 CLD_o3_v01
 ----------
