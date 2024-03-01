@@ -50,6 +50,9 @@
   <!-- Import solenoid -->
   <include ref="Solenoid_o1_v01.xml"/>
 
+  <!-- Import Endcap plate absorber -->
+  <include ref="EndPlateAbsorber_o1_v01.xml"/>
+
   <plugins>
     <plugin name="DD4hepVolumeManager"/>
     <plugin name="InstallSurfaceManager"/>
