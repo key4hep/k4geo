@@ -1,6 +1,6 @@
 <lccdd>
-    <info name="MuColl_v0_10TeV"
-          title="Muon Collider geometry: Christmas version"
+    <info name="MuColl_v1_10TeV"
+          title="Muon Collider geometry: 10 TeV version with bigger tracker"
           author="Davide Zuliani"
           url="https://confluence.infn.it/display/muoncollider/Muon+Collider+Home"
           status="development"
