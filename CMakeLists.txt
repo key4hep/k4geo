@@ -54,18 +54,16 @@ find_package( Geant4 REQUIRED )
 OPTION(K4GEO_USE_LCIO "Enable or disable the use of LCIO, which is needed for some detector constructors and plugins" ON)
 if(K4GEO_USE_LCIO)
   find_package(LCIO REQUIRED)
-# Shim for older LCIO versions
-if(NOT TARGET LCIO::lcio)
-  add_library(LCIO::lcio INTERFACE IMPORTED GLOBAL)
-  set_target_properties(LCIO::lcio
-    PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${LCIO_INCLUDE_DIRS}"
-    INTERFACE_LINK_LIBRARIES "${LCIO_LIBRARIES}"
-  )
+  # Shim for older LCIO versions
+  if(NOT TARGET LCIO::lcio)
+    add_library(LCIO::lcio INTERFACE IMPORTED GLOBAL)
+    set_target_properties(LCIO::lcio
+      PROPERTIES
+      INTERFACE_INCLUDE_DIRECTORIES "${LCIO_INCLUDE_DIRS}"
+      INTERFACE_LINK_LIBRARIES "${LCIO_LIBRARIES}"
+    )
+  endif()
 endif()
-
-add_subdirectory(detectorSegmentations)
-add_subdirectory(detectorCommon)
 
 file(GLOB sources 
   ./detector/tracker/*.cpp
@@ -78,21 +76,23 @@ file(GLOB sources
   ./detector/PID/ARC_geo_o1_v01.cpp
   )
 
-else() # K4GEO_USE_LCIO is OFF
-  set(lcio_sources
-    ./detector/tracker/TrackerEndcap_o2_v05_geo.cpp
-    ./detector/tracker/SiTrackerEndcap_o2_v02ext_geo.cpp
-    ./detector/tracker/TrackerBarrel_o1_v03_geo.cpp
-    ./detector/tracker/TrackerBarrel_o1_v04_geo.cpp
-    ./detector/tracker/TrackerBarrel_o1_v05_geo.cpp
-    ./detector/tracker/TrackerEndcap_o1_v05_geo.cpp
-    ./detector/tracker/TrackerEndcap_o2_v06_geo.cpp
-    ./detector/tracker/VertexBarrel_detailed_o1_v01_geo.cpp
-    ./detector/tracker/VertexEndcap_o1_v05_geo.cpp
-    ./detector/tracker/ZPlanarTracker_geo.cpp
+if(NOT K4GEO_USE_LCIO)
+  set(lcio_sources # in ./detector/tracker
+    TrackerEndcap_o2_v05_geo.cpp
+    SiTrackerEndcap_o2_v02ext_geo.cpp
+    TrackerBarrel_o1_v03_geo.cpp
+    TrackerBarrel_o1_v04_geo.cpp
+    TrackerBarrel_o1_v05_geo.cpp
+    TrackerEndcap_o1_v05_geo.cpp
+    TrackerEndcap_o2_v06_geo.cpp
+    VertexBarrel_detailed_o1_v01_geo.cpp
+    VertexEndcap_o1_v05_geo.cpp
+    ZPlanarTracker_geo.cpp
     )
-  list(REMOVE_ITEM sources ${lcio_sources})
-  message( STATUS "Use of LCIO is DISABLED, some detectors that depend on LCIO will not be built: ${lcio_sources}")
+  foreach(lcio_source ${lcio_sources})
+    list(FILTER sources EXCLUDE REGEX "${lcio_source}")
+  endforeach()
+  message(STATUS "Use of LCIO is DISABLED, some detectors that depend on LCIO will not be built: ${lcio_sources}")
 endif()
 
 file(GLOB G4sources
@@ -123,6 +123,9 @@ endif()
 
 #Create this_package.sh file, and install
 dd4hep_instantiate_package(${PackageName})
+
+add_subdirectory(detectorSegmentations)
+add_subdirectory(detectorCommon)
 
 # Destination directories are hardcoded because GNUdirectories are not included
 install(TARGETS ${PackageName}  ${PackageName}G4
