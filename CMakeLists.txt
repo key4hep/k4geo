@@ -51,7 +51,9 @@ find_package ( ROOT REQUIRED COMPONENTS Geom GenVector)
 message ( STATUS "ROOT_VERSION: ${ROOT_VERSION}" )
 
 find_package( Geant4 REQUIRED ) 
-find_package( LCIO QUIET)
+OPTION(K4GEO_USE_LCIO "Enable or disable the use of LCIO, which is needed for some detector constructors and plugins" ON)
+if(K4GEO_USE_LCIO)
+  find_package(LCIO REQUIRED)
 # Shim for older LCIO versions
 if(NOT TARGET LCIO::lcio)
   add_library(LCIO::lcio INTERFACE IMPORTED GLOBAL)
@@ -76,8 +78,8 @@ file(GLOB sources
   ./detector/PID/ARC_geo_o1_v01.cpp
   )
 
-if(NOT LCIO_FOUND)
-  file(GLOB lcio_sources
+else() # K4GEO_USE_LCIO is OFF
+  set(lcio_sources
     ./detector/tracker/TrackerEndcap_o2_v05_geo.cpp
     ./detector/tracker/SiTrackerEndcap_o2_v02ext_geo.cpp
     ./detector/tracker/TrackerBarrel_o1_v03_geo.cpp
@@ -90,7 +92,7 @@ if(NOT LCIO_FOUND)
     ./detector/tracker/ZPlanarTracker_geo.cpp
     )
   list(REMOVE_ITEM sources ${lcio_sources})
-  message( STATUS "LCIO has NOT been found, some detectors that depend on LCIO will not be built: ${lcio_sources}")
+  message( STATUS "Use of LCIO is DISABLED, some detectors that depend on LCIO will not be built: ${lcio_sources}")
 endif()
 
 file(GLOB G4sources
@@ -114,7 +116,7 @@ target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detect
 target_link_libraries(${PackageName}   DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers ROOT::Core detectorSegmentations)
 target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ROOT::Core ${Geant4_LIBRARIES})
 
-if(LCIO_FOUND)
+if(K4GEO_USE_LCIO)
   target_link_libraries(${PackageName}   LCIO::lcio)
   target_link_libraries(${PackageName}G4 LCIO::lcio)
 endif()
