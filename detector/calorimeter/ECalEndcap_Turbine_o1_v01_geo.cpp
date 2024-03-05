@@ -225,8 +225,11 @@ namespace det {
   //build cryostat
 // Retrieve cryostat data
     int    nBladesToDraw = nBlades;
+    nBladesToDraw = nBlades/10;
     // nBladesToDraw = 3;
    
+    lLog << MSG::INFO << "Number of blades "<< nBlades << endmsg;
+
     for (int iBlade = 0; iBlade < nBladesToDraw; iBlade++) {
       //    pl->SetInvisible();
       //      absMass += absBladeMass;
@@ -268,6 +271,7 @@ namespace det {
       unsigned iLayer = 0;
       riLayer = ri;
 
+      
       for (auto absBladeLayerVol: absBladeLayerVols) {
 	
 	float roLayer = riLayer+delr;
@@ -294,7 +298,7 @@ namespace det {
 
       riLayer = ri;
       iLayer =0;
-
+      
       for (auto electrodeBladeLayerVol: electrodeBladeLayerVols) {
 	
 	float roLayer = riLayer+delr;
@@ -319,6 +323,7 @@ namespace det {
       riLayer = ri;
       iLayer = 0;
 
+    
       std::cout << "LArTotalLayerVols.size = " << LArTotalLayerVols.size() << std::endl;
 
       for (auto LArTotalLayerVol: LArTotalLayerVols) {
@@ -339,9 +344,14 @@ namespace det {
 
 	dd4hep::DetElement LArDetElem(bathDetElem, "LAr"+std::to_string(sign)+"_"+std::to_string(iSubcyl)+"_"+std::to_string(iBlade)+"_"+std::to_string(iSubcyl*ECalEndcapNumLayers+iLayer), ECalEndCapElementCounter++);
 	LArDetElem.setPlacement(LArVol_pv);
+	lLog << MSG::INFO << "How big is a LArTotalLayerVol: " << sizeof(LArTotalLayerVol) << endmsg;
+	lLog << MSG::INFO << "How big is a LAVol_pv: " << sizeof(LArVol_pv) << endmsg; 
+	lLog << MSG::INFO << "How big is a LArDetElem: " << sizeof(LArDetElem) << endmsg;
+ 
 	riLayer = roLayer;
 	iLayer++;
       }
+      
       /*      for (unsigned iLayer = 0; iLayer<nLayers; iLayer++) {
 	dd4hep::PlacedVolume LArLayerVol_pv = LArTotalVol.placeVolume(LArVolLayers[iLayer], 0);
 	//	LArLayerVol_pv.addPhysVolID("module", iModule);
@@ -482,7 +492,7 @@ namespace det {
     dd4hep::DetElement supportTubeDetElem(bathDetElem, "supportTube_"+std::to_string(iSubcyl), 0);
     supportTubeDetElem.setPlacement(supportTube_pv);
 
-
+   
     buildSubCylinder(aLcdd, aSensDet, bathVol, aXmlElement, bathDetElem, ri+supportTubeThickness, ro, sign, iSubcyl, absMass, electrodeMass);
     ri = ro;
     ro *= radiusRatio;
