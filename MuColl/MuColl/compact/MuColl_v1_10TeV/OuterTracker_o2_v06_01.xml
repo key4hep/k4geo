@@ -18,6 +18,7 @@
         <constant name="OuterTracker_Endcap_radius_0" value="617.5*mm"/>
         <constant name="OuterTracker_Endcap_radius_1" value="888.4*mm"/>
         <constant name="OuterTracker_Endcap_radius_2" value="1189.4*mm"/>
+        <constant name="OuterTracker_Endcap_radius_3" value="1389.4*mm"/>
 
     </define>
 
@@ -84,7 +85,7 @@
                 <z_layout dr="0" z0="OuterTracker_Barrel_half_length-15.05*mm" nz="84"/>
             </layer>
             <layer module="OuterTrackerBarrelModule_Out" id="2" vis="OuterTrackerLayerVis" type="4">
-                <rphi_layout phi_tilt="0*deg" nphi="82*4" phi0="0" rc="OuterTracker_Barrel_radius_2" dr="5.5*mm"/>
+                <rphi_layout phi_tilt="0*deg" nphi="94*4" phi0="0" rc="OuterTracker_Barrel_radius_2" dr="5.5*mm"/>
                 <z_layout dr="0" z0="OuterTracker_Barrel_half_length-15.05*mm" nz="84"/>
             </layer>
         </detector>
@@ -110,6 +111,10 @@
                 <trd x="240.7*mm" y="240.7*mm"/>
                 <include ref="TrackerDiskModuleIn.xml"/>
             </module>
+            <module name="OuterTrackerEndcapModule_3_In" vis="OuterTrackerModuleVis">
+                <trd x="240.7*mm" y="199.8*mm"/>
+                <include ref="TrackerDiskModuleIn.xml"/>
+            </module>
 
             <module name="OuterTrackerEndcapModule_0_Out" vis="OuterTrackerModuleVis">
                 <trd x="120.3*mm" y="270.9*mm"/>
@@ -123,27 +128,35 @@
                 <trd x="240.7*mm" y="240.7*mm"/>
                 <include ref="TrackerDiskModuleOut.xml"/>
             </module>
+            <module name="OuterTrackerEndcapModule_3_Out" vis="OuterTrackerModuleVis">
+                <trd x="240.7*mm" y="199.8*mm"/>
+                <include ref="TrackerDiskModuleOut.xml"/>
+            </module>
 
 
             <layer id="0">
                 <ring r="OuterTracker_Endcap_radius_0" zstart="OuterTracker_Endcap_z_0" nmodules="48" dz="3*mm" module="OuterTrackerEndcapModule_0_In" phi0="0"/>
                 <ring r="OuterTracker_Endcap_radius_1" zstart="OuterTracker_Endcap_z_0" nmodules="48" dz="3*mm" module="OuterTrackerEndcapModule_1_In" phi0="0"/>
                 <ring r="OuterTracker_Endcap_radius_2" zstart="OuterTracker_Endcap_z_0" nmodules="48" dz="3*mm" module="OuterTrackerEndcapModule_2_In" phi0="0"/>
+                <ring r="OuterTracker_Endcap_radius_3" zstart="OuterTracker_Endcap_z_0" nmodules="48" dz="3*mm" module="OuterTrackerEndcapModule_3_In" phi0="0"/>
             </layer>
             <layer id="1">
                 <ring r="OuterTracker_Endcap_radius_0" zstart="OuterTracker_Endcap_z_1" nmodules="48" dz="3*mm" module="OuterTrackerEndcapModule_0_Out" phi0="0"/>
                 <ring r="OuterTracker_Endcap_radius_1" zstart="OuterTracker_Endcap_z_1" nmodules="48" dz="3*mm" module="OuterTrackerEndcapModule_1_Out" phi0="0"/>
                 <ring r="OuterTracker_Endcap_radius_2" zstart="OuterTracker_Endcap_z_1" nmodules="48" dz="3*mm" module="OuterTrackerEndcapModule_2_Out" phi0="0"/>
+                <ring r="OuterTracker_Endcap_radius_3" zstart="OuterTracker_Endcap_z_1" nmodules="48" dz="3*mm" module="OuterTrackerEndcapModule_3_Out" phi0="0"/>
             </layer>
             <layer id="2">
                 <ring r="OuterTracker_Endcap_radius_0" zstart="OuterTracker_Endcap_z_2" nmodules="48" dz="3*mm" module="OuterTrackerEndcapModule_0_In" phi0="0"/>
                 <ring r="OuterTracker_Endcap_radius_1" zstart="OuterTracker_Endcap_z_2" nmodules="48" dz="3*mm" module="OuterTrackerEndcapModule_1_In" phi0="0"/>
                 <ring r="OuterTracker_Endcap_radius_2" zstart="OuterTracker_Endcap_z_2" nmodules="48" dz="3*mm" module="OuterTrackerEndcapModule_2_In" phi0="0"/>
+                <ring r="OuterTracker_Endcap_radius_3" zstart="OuterTracker_Endcap_z_2" nmodules="48" dz="3*mm" module="OuterTrackerEndcapModule_3_In" phi0="0"/>
             </layer>
             <layer id="3">
                 <ring r="OuterTracker_Endcap_radius_0" zstart="OuterTracker_Endcap_z_3" nmodules="48" dz="3*mm" module="OuterTrackerEndcapModule_0_Out" phi0="0"/>
                 <ring r="OuterTracker_Endcap_radius_1" zstart="OuterTracker_Endcap_z_3" nmodules="48" dz="3*mm" module="OuterTrackerEndcapModule_1_Out" phi0="0"/>
                 <ring r="OuterTracker_Endcap_radius_2" zstart="OuterTracker_Endcap_z_3" nmodules="48" dz="3*mm" module="OuterTrackerEndcapModule_2_Out" phi0="0"/>
+                <ring r="OuterTracker_Endcap_radius_3" zstart="OuterTracker_Endcap_z_3" nmodules="48" dz="3*mm" module="OuterTrackerEndcapModule_3_Out" phi0="0"/>
             </layer>
         </detector>
 
