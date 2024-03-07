@@ -1,6 +1,14 @@
-<?xml version="1.0" ?><lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+       xmlns:xs="http://www.w3.org/2001/XMLSchema"
+       xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-  <info name="FCCee_ECalBarrel" title="Settings for FCCee Inclined ECal Barrel Calorimeter" author="M.Aleksa,J.Faltova,A.Zaborowska, V. Volkl" url="no" status="development" version="1.0">
+  <info name="FCCee_ECalBarrel"
+        title="Settings for FCCee Inclined ECal Barrel Calorimeter"
+        author="M.Aleksa,J.Faltova,A.Zaborowska, V. Volkl"
+        url="no"
+        status="development"
+        version="1.0">
     <comment>
       Settings for the inclined EM calorimeter.
       The barrel is filled with liquid argon. Passive material includes lead in the middle and steal on the outside, glued together.
@@ -15,11 +23,11 @@
     <!-- Inclination angle of the lead plates -->
     <constant name="InclinationAngle" value="50*degree"/>
     <!-- thickness of active volume between two absorber plates at barrel Rmin, measured perpendicular to the readout plate -->
-    <!--constant name="LArGapThickness" value="1.239749*2*mm"/-->
-    <constant name="LArGapThickness" value="1.256*2*mm"/>
+    <!--constant name="Sensitive_thickness" value="1.239749*2*mm"/-->
+    <constant name="Sensitive_thickness" value="1.256*2*mm"/>
 
     <!-- Air margin, thicknesses of cryostat and LAr bath -->
-    <constant name="AirMarginThickness" value="54*mm"/>    <!-- Space holder for air gap between cryostat vessels --> 
+    <constant name="AirMarginThickness" value="49*mm"/>    <!-- Space holder for air gap between cryostat vessels --> 
 
     <constant name="CryoBarrelFrontWarm" value="10*mm"/>   <!-- Al solid corresponding to 0.11 X0 -->
     <constant name="CryoBarrelFrontCold" value="3.8*mm"/>  <!-- Al solid equivalent of 0.043 X0 sandwich CFRP -->
@@ -34,19 +42,22 @@
     <constant name="CryoBarrelSideCold" value="3.8*mm"/>
     <constant name="CryoBarrelSide" value="CryoBarrelSideWarm+CryoBarrelSideCold"/>
 
-    <constant name="LArBathThicknessFront" value="5*mm"/>
-    <constant name="LArBathThicknessBack" value="40*mm"/>
+    <constant name="NLiqBathThicknessFront" value="10*mm"/>
+    <constant name="NLiqBathThicknessBack" value="40*mm"/>
 
     <!-- air margin around calorimeter -->
     <constant name="BarCryoECal_rmin" value="BarECal_rmin+AirMarginThickness"/>
     <constant name="BarCryoECal_rmax" value="BarECal_rmax-AirMarginThickness"/>
     <constant name="BarCryoECal_dz" value="BarECal_dz"/>
     <!-- calorimeter active volume -->
-    <constant name="EMBarrel_rmin" value="BarCryoECal_rmin+CryoBarrelFront+LArBathThicknessFront"/>
-    <constant name="EMBarrel_rmax" value="BarCryoECal_rmax-CryoBarrelBack-LArBathThicknessBack"/>
+    <constant name="EMBarrel_rmin" value="BarCryoECal_rmin+CryoBarrelFront+NLiqBathThicknessFront"/>
+    <constant name="EMBarrel_rmax" value="BarCryoECal_rmax-CryoBarrelBack-NLiqBathThicknessBack"/>
     <constant name="EMBarrel_dz" value="BarECal_dz-CryoBarrelSide"/>
-    <!-- thickness of active volume between two absorber plates at EMBarrel_rmin, measuring perpendicular to the readout plate -->
-    <constant name="LAr_thickness" value="LArGapThickness"/>
+    <!-- Bath with margin for safe inclination -->
+    <constant name="safeMargin" value="3*mm"/>
+    <constant name="Bath_rmin" value="EMBarrel_rmin - safeMargin"/>
+    <constant name="Bath_rmax" value="EMBarrel_rmax + safeMargin"/>
+
     <!-- passive layer consists of lead in the middle and steel on the outside, glued -->
     <!-- When employing trapezoidal planes Pb_thickness corresponds to the minimum thickness, i.e at the front of the calo -->
     <constant name="Pb_thickness" value="1.80*mm"/>
@@ -99,10 +110,14 @@
         <side sensitive="false"/> <!-- both sides of the cryostat -->
         <back sensitive="false"/> <!-- outer wall of the cryostat -->
       </cryostat>
+      <bath name="ECAL_bath">
+        <material name="LAr"/>
+        <dimensions rmin="Bath_rmin" rmax="Bath_rmax" dz="EMBarrel_dz"/>
+      </bath>
       <calorimeter name="EM_barrel">
         <!-- offset defines the numbering of the modules: module==0 for phi=0 direction -->
         <dimensions rmin="EMBarrel_rmin" rmax="EMBarrel_rmax" dz="EMBarrel_dz" offset="-InclinationAngle"/>
-        <active thickness="LAr_thickness">
+        <active thickness="Sensitive_thickness">
           <material name="LAr"/>
           <!-- overlap offset is a specific feature of the construction; do not change! -->
           <!-- one volume for a gap on both side of the readout) --> 
@@ -110,20 +125,20 @@
         </active>
         <passive>
           <rotation angle="InclinationAngle"/>  <!-- inclination angle -->
-          <inner thickness="Pb_thickness" sensitive="true">
+          <inner thickness="Pb_thickness" sensitive="false">
             <material name="Lead"/>
           </inner>
-          <innerMax thickness="Pb_thickness_max" sensitive="true">
+          <innerMax thickness="Pb_thickness_max" sensitive="false">
             <material name="Lead"/>
           </innerMax>
-          <glue thickness="Glue_thickness" sensitive="true">
+          <glue thickness="Glue_thickness" sensitive="false">
             <material name="lArCaloGlue"/>
           </glue>
-          <outer thickness="Steel_thickness" sensitive="true">
+          <outer thickness="Steel_thickness" sensitive="false">
             <material name="lArCaloSteel"/>
           </outer>
         </passive>
-        <readout thickness="readout_thickness" sensitive="true">
+        <readout thickness="readout_thickness" sensitive="false">
           <material name="PCB"/>
         </readout>
         <layers> <!-- pcb electrode segmentation in the radial direction -->

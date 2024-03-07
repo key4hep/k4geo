@@ -568,21 +568,19 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
   caloData->extent[0] = Rmin;
   caloData->extent[1] = Rmax; // or r_max ?
   caloData->extent[2] = 0.;      // NN: for barrel detectors this is 0
-  caloData->extent[3] = caloDim.dz()/2;
+  caloData->extent[3] = caloDim.dz();
 
   // Set type flags
   dd4hep::xml::setDetectorTypeFlag(xmlDetElem, caloDetElem);
   dd4hep::rec::MaterialManager matMgr(envelopeVol);
   dd4hep::rec::LayeredCalorimeterData::Layer caloLayer;
-  double nRadiationLengths   = 0.;
-  double nInteractionLengths = 0.;
   
   double rad_first = Rmin;
   double rad_last = 0;
   double scale_fact = dR / (-Rmin * cos(angle) + sqrt(pow(Rmax, 2) - pow(Rmin * sin(angle), 2)));
   // since the layer height is given along the electrode and not along the radius it needs to be scaled to get the values of layer height radially
   std::cout << "Scaling factor " << scale_fact << std::endl;
-  for (auto il = 0; il < layerHeight.size(); il++) {
+  for (size_t il = 0; il < layerHeight.size(); il++) {
     double thickness_sen = 0.;
     double absorberThickness = 0.;
 
@@ -600,7 +598,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     const double value_of_lambda = layerHeight[il] / nInteractionLengths;
     std::string str1("LAr");
 
-    for (auto imat = 0; imat < materials.size(); imat++) {
+    for (size_t imat = 0; imat < materials.size(); imat++) {
 
       std::string str2(materials.at(imat).first.name());
       if (str1.compare(str2) == 0){
