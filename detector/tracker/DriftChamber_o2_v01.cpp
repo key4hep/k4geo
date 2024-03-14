@@ -45,6 +45,7 @@ namespace DCH_o2{
     struct DCH_info{
 
         // global variables of DCH
+        // inline before static allow initialization at this point
         inline static MyLength_t dch_Lhalf = {0};
         inline static MyLength_t dch_rin_z0 = {0};
         inline static MyLength_t dch_rin_z0_guard = {0};
@@ -104,17 +105,6 @@ namespace DCH_o2{
         static void Show_DCH_info_database();
 
     };
-
-    // legacy, initialization of static before C++17
-    // since C++17, initialization with inline keyword
-    // MyLength_t DCH_info::dch_Lhalf = 0.0;
-    // MyAngle_t DCH_info::dch_twist_angle = 0.0;
-    // std::map<DCH_layer, DCH_info> DCH_info::database = std::map<DCH_layer, DCH_info>();
-
-
-
-
-
 
     /// Function to build ARC endcaps
     static Ref_t create_DCH_o2_v01(Detector &desc, xml::Handle_t handle, SensitiveDetector sens)
