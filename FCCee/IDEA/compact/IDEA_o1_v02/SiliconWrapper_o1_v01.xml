@@ -29,13 +29,6 @@
             <composite name="SiWrD"/> 
         </detector>
     </detectors>
-    
-
-    <display>
-        <vis name="SiWrSensitiveVis"     alpha="1.0" r="1.0"     g="1.0"  b="0.0"      showDaughters="true"  visible="true"/>
-        <vis name="SiWrPeripheryVis"     alpha="1.0" r="1.0"     g="0.9"  b="0.0"      showDaughters="true"  visible="true"/>
-    </display>
-     
 
     <define>
         <!-- ATLASPix3 properties -->
@@ -88,7 +81,7 @@
             <constant name="SiWrB_r2" value="SiWrB_r1 + 2.0*cm"/>
 
             <constant name="SiWrB_Distance_between_staves" value="3.8*mm"/>
-            <constant name="SiWrB_Staves1" value="floor(2.*pi*SiWrB_inner_radius/(SiWr_mod_rphi+SiWrB_Distance_between_staves))"/> <!-- Circumference of 2*pi*SiWrB_inner_radius divided by width of stave and space between. Floor to get to integer number -->
+            <constant name="SiWrB_Staves1" value="floor(2.*pi*SiWrB_inner_radius/(SiWr_mod_rphi+SiWrB_Distance_between_staves))"/> <!-- Circumference of 2*pi*SiWrB_inner_radius divided by width of stave and space between. Floor to get to integer number, 151 -->
             <constant name="SiWrB_Staves2" value="SiWrB_Staves1"/> <!-- Use same number of staves for second layer -->
 
             <constant name="SiWrB_nModules1" value="floor((2*SiWrB_half_length - SiWr_mod_overlap)/(SiWr_mod_z + SiWr_mod_overlap))"/> <!-- Length of SiWr_half_length = 2400 mm -> Let's take 131 modules with 130 SiWr_mod_overlap gaps (131*42.2+130*-5.4 = 4826.2 mm)-->
@@ -129,10 +122,12 @@
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
         <readout name="SiWrBCollection">
-            <id>${GlobalTrackerReadoutID}</id>
+            <segmentation type="CartesianGridYZ" grid_size_y="0.050*mm" grid_size_z="1.0*mm"/>  <!-- Pixels of 50x1000 µm-->
+            <id>${GlobalTrackerReadoutID},y:32:-16,z:-16</id>
         </readout>       
         <readout name="SiWrDCollection">
-            <id>${GlobalTrackerReadoutID}</id>
+            <segmentation type="CartesianGridXY" grid_size_x="0.050*mm" grid_size_y="1.0*mm"/>  <!-- Pixels of 50x1000 µm, NEED TO THINK WHETHER THIS MAKES SENSE AS SILICON WRAPPER DISKS DON'T FEATURE PETAL STRUCTURE, SQUARE PIXELS WOULD MAKE MORE SENSE! -->
+            <id>${GlobalTrackerReadoutID},x:32:-16,y:-16</id>
         </readout>
     </readouts>
 
@@ -162,11 +157,11 @@
                 
                 <!-- Two ATLASPix3-sized sensors, but with only one periphery region each -->
                 <sensor r="SiWr_flex_thickness" thickness="SiWr_Sensitive_Thickness" material="Silicon">
-                    <component sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="-SiWr_mod_rphi/2." xmax="-SiWr_mod_quad_spacing/2." vis="SiWrSensitiveVis"/> <!-- Left quad -->
-                    <component sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="SiWr_mod_quad_spacing/2." xmax="SiWr_mod_rphi/2." vis="SiWrSensitiveVis"/> <!-- Right quad -->
+                    <component sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="-SiWr_mod_rphi/2." xmax="-SiWr_mod_quad_spacing/2." vis="SiSensitiveVis"/> <!-- Left quad -->
+                    <component sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="SiWr_mod_quad_spacing/2." xmax="SiWr_mod_rphi/2." vis="SiSensitiveVis"/> <!-- Right quad -->
 
-                    <component sensitive="False" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="-SiWr_mod_quad_spacing/2." xmax="SiWr_mod_quad_spacing/2." vis="SiWrPeripheryVis"/> <!-- Space between quads -->          
-                    <component sensitive="False" ymin="-SiWr_mod_z/2." ymax="-SiWr_mod_z/2.+SiWr_mod_z_periphery" xmin="-SiWr_mod_rphi/2." xmax="SiWr_mod_rphi/2." vis="SiWrPeripheryVis"/> <!-- Periphery -->   
+                    <component sensitive="False" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="-SiWr_mod_quad_spacing/2." xmax="SiWr_mod_quad_spacing/2." vis="SiPeripheryVis"/> <!-- Space between quads -->          
+                    <component sensitive="False" ymin="-SiWr_mod_z/2." ymax="-SiWr_mod_z/2.+SiWr_mod_z_periphery" xmin="-SiWr_mod_rphi/2." xmax="SiWr_mod_rphi/2." vis="SiPeripheryVis"/> <!-- Periphery -->   
                 </sensor>
 
                 <components name="support" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness" length="SiWrB_z1">
@@ -237,11 +232,11 @@
 
                 <!-- Sensor -->
                 <sensor z_offset="SiWr_flex_thickness" thickness="SiWr_Sensitive_Thickness" material="Silicon">
-                    <component sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="-SiWr_mod_rphi/2." xmax="-SiWr_mod_quad_spacing/2." vis="SiWrSensitiveVis"/> <!-- Left quad -->
-                    <component sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="SiWr_mod_quad_spacing/2." xmax="SiWr_mod_rphi/2." vis="SiWrSensitiveVis"/> <!-- Right quad -->
+                    <component sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="-SiWr_mod_rphi/2." xmax="-SiWr_mod_quad_spacing/2." vis="SiSensitiveVis"/> <!-- Left quad -->
+                    <component sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="SiWr_mod_quad_spacing/2." xmax="SiWr_mod_rphi/2." vis="SiSensitiveVis"/> <!-- Right quad -->
 
-                    <component sensitive="False" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="-SiWr_mod_quad_spacing/2." xmax="SiWr_mod_quad_spacing/2." vis="SiWrPeripheryVis"/> <!-- Space between quads -->          
-                    <component sensitive="False" ymin="-SiWr_mod_z/2." ymax="-SiWr_mod_z/2.+SiWr_mod_z_periphery" xmin="-SiWr_mod_rphi/2." xmax="SiWr_mod_rphi/2." vis="SiWrPeripheryVis"/> <!-- Periphery -->          
+                    <component sensitive="False" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="-SiWr_mod_quad_spacing/2." xmax="SiWr_mod_quad_spacing/2." vis="SiPeripheryVis"/> <!-- Space between quads -->          
+                    <component sensitive="False" ymin="-SiWr_mod_z/2." ymax="-SiWr_mod_z/2.+SiWr_mod_z_periphery" xmin="-SiWr_mod_rphi/2." xmax="SiWr_mod_rphi/2." vis="SiPeripheryVis"/> <!-- Periphery -->          
                 </sensor>
 
                 <components name="support_low_z" z_offset="SiWr_flex_thickness+SiWr_Sensitive_Thickness">

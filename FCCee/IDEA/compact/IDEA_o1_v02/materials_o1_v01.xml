@@ -143,6 +143,11 @@
     <fraction n="0.35" ref="Epoxy"/>
   </material>  
 
+    <material name="CarbonFoam">
+    <D type="density" value="0.06" unit="g/cm3"/>
+    <fraction n="1" ref="C"/>
+  </material>  
+
   <material name="Rohacell31">
     <D type="density" value="0.032" unit="g/cm3"/>
     <composite n="9" ref="C"/>

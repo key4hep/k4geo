@@ -152,7 +152,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
                 Box ele_box = Box(component.width()/2., component.length()/2., component.thickness()/2.);
                 Volume ele_vol = Volume( endOfStave.name + _toString(iEndOfStave, "_%d"), ele_box, theDetector.material(component.materialStr()));                    
-                ele_vol.setVisAttributes(theDetector.visAttributes(component.visStr()));
+                ele_vol.setAttributes(theDetector, x_det.regionStr(), x_det.limitsStr(), component.visStr());
 
                 endOfStave.volumes.push_back(ele_vol);
             }
@@ -178,7 +178,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
             Box ele_box = Box( abs(component.xmax()-component.xmin())/2., abs(component.ymax()-component.ymin())/2., m.sensor_thickness/2.);
             Volume ele_vol = Volume( "sensor" + _toString(iSensor, "_%d"), ele_box, m.sensor_material);                    
-            ele_vol.setVisAttributes(theDetector.visAttributes(component.visStr()));
+            ele_vol.setAttributes(theDetector, x_det.regionStr(), x_det.limitsStr(), component.visStr());
 
             if(m.sensor_sensitives.back())
                 ele_vol.setSensitiveDetector(sens);
@@ -290,7 +290,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                             // Volumes for stave elements cannot be defined for all staves together as they can have different lengths
                             Box ele_box = Box(component.widths[i]/2., stave_length/2., component.thicknesses[i]/2.);
                             Volume ele_vol = Volume(component.name + _toString(i, "_%d"), ele_box, component.materials[i]);                    
-                            ele_vol.setVisAttributes(theDetector.visAttributes(component.viss[i]));
+                            ele_vol.setAttributes(theDetector, x_det.regionStr(), x_det.limitsStr(), component.viss[i]);
 
                             pv = component_assembly.placeVolume(ele_vol, Transform3D(rot, pos) );
                         }
@@ -335,7 +335,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                         moduleDE.setPlacement(pv);
 
                         int iSensitive = 0;
-                        for(int i=0; i<int(m.sensor_volumes.size()); i++,iSensitive++){
+                        for(int i=0; i<int(m.sensor_volumes.size()); i++){
                             x_pos = m.sensor_xmin[i]+abs(m.sensor_xmax[i]-m.sensor_xmin[i])/2.;
                             y_pos = m.sensor_ymin[i]+abs(m.sensor_ymax[i]-m.sensor_ymin[i])/2.;
                             z_pos = 0;
@@ -349,6 +349,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                                 pv.addPhysVolID("sensor", iSensitive);
                                 DetElement sensorDE(moduleDE,sensor_name,x_det.id());
                                 sensorDE.setPlacement(pv);
+                                iSensitive++;;
                             }
                             // Place passive sensor parts
                             else{
@@ -364,7 +365,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         }        
     }
     
-    cout<<"Built vertex disks detector." << std::endl;
+    cout << "Built vertex disks detector." << endl;
     sdet.setAttributes(theDetector,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
     pv.addPhysVolID("system", x_det.id());
 

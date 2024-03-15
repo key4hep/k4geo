@@ -125,8 +125,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 components.rs.push_back(component.r());
 
                 Box ele_box = Box(component.thickness()/2., component.width()/2., components.length);
-                Volume ele_vol = Volume(components.name + _toString(iComponent, "_%d"), ele_box, theDetector.material(component.materialStr()));                    
-                ele_vol.setVisAttributes(theDetector.visAttributes(component.visStr()));
+                Volume ele_vol = Volume(components.name + _toString(iComponent, "_%d"), ele_box, theDetector.material(component.materialStr()));               
+                ele_vol.setAttributes(theDetector, x_det.regionStr(), x_det.limitsStr(), component.visStr());
 
                 components.volumes.push_back(ele_vol);
             }
@@ -152,8 +152,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 endOfStave.rs.push_back(component.r());
 
                 Box ele_box = Box(component.thickness()/2., component.width()/2., component.length()/2.);
-                Volume ele_vol = Volume(endOfStave.name + _toString(iEndOfStave, "_%d"), ele_box, theDetector.material(component.materialStr()));                    
-                ele_vol.setVisAttributes(component.visStr());
+                Volume ele_vol = Volume(endOfStave.name + _toString(iEndOfStave, "_%d"), ele_box, theDetector.material(component.materialStr()));            
+                ele_vol.setAttributes(theDetector, x_det.regionStr(), x_det.limitsStr(), component.visStr());
 
                 endOfStave.volumes.push_back(ele_vol);
                 iEndOfStave++;
@@ -181,7 +181,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
             // Already create volumes for all sensor components as this is independent of number of sensors per layer
             Box ele_box = Box(m.sensor_thickness/2., abs(component.xmax()-component.xmin())/2., abs(component.ymax()-component.ymin())/2.);            
             Volume ele_vol = Volume("sensor" +  _toString(iSensor, "_%d"), ele_box, m.sensor_material);                    
-            ele_vol.setVisAttributes(theDetector.visAttributes(component.visStr()));
+            ele_vol.setAttributes(theDetector, x_det.regionStr(), x_det.limitsStr(), component.visStr());  
 
             if(m.sensor_sensitives.back())
                 ele_vol.setSensitiveDetector(sens);
@@ -196,6 +196,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         cout << "Read stave information of stave " << m.name << endl;
     }
 
+    int iModule_tot = 0;
 
 
     //=========  loop over layer elements in xml  ======================================
@@ -242,8 +243,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         Assembly quadrant_assembly3(layer_name + "_quadrant3");
         pv = layer_assembly.placeVolume(quadrant_assembly3);
     
-        int iModule_tot = 0;
-
         //--------- loop over ladders ---------------------------
         for(int iStave=0; iStave<nLadders; ++iStave) {
             double phi = phi0 + iStave * dphi  ;
