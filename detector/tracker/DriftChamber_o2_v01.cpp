@@ -298,4 +298,4 @@ namespace DCH_o2{
 
 
 }; // end DCH_o2 namespace
-DECLARE_DETELEMENT(DriftChamber_o2_v01, DCH_o2::create_DCH_o2_v01)
+DECLARE_DETELEMENT(DriftChamber_o2_v01_T, DCH_o2::create_DCH_o2_v01)
