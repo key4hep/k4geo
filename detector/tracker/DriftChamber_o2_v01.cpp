@@ -140,6 +140,8 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
 
     auto gasvol_material = desc.material("GasHe_90Isob_10");
 
+    MyLength_t dch_SWire_thickness = desc.constantAsDouble("dch_SWire_thickness");
+
     /* Geometry tree:
      * Wall (tube) -> Gas (tube) -> Layer_1 (hyp) -> Sector_1 (twisted tube) -> cell_1 (twisted tube)
      *                                                                       -> cell_... (twisted tube)
@@ -231,8 +233,10 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
         // unitary cell (Twisted tube) is repeated for each layer l.nwires/2 times
         // Twisted tube parameters
         MyAngle_t cell_twistangle    = l.StereoSign() * DCH_info::dch_twist_angle;
-        MyLength_t cell_rin_zLhalf   = l.Radius_zLhalf(l.radius_fdw_z0 + 2*safety_r_interspace);
-        MyLength_t cell_rout_zLhalf  = l.Radius_zLhalf(l.radius_fuw_z0 - 2*safety_r_interspace);
+        MyLength_t cell_rin_z0       = l.radius_fdw_z0 + 2*safety_r_interspace;
+        MyLength_t cell_rout_z0      = l.radius_fuw_z0 - 2*safety_r_interspace;
+        MyLength_t cell_rin_zLhalf   = l.Radius_zLhalf(cell_rin_z0);
+        MyLength_t cell_rout_zLhalf  = l.Radius_zLhalf(cell_rout_z0);
         MyLength_t cell_dz           = DCH_info::dch_Lhalf;
         MyAngle_t cell_phi_width     = phi_step - safety_phi_interspace;
         dd4hep::TwistedTube cell_s( cell_twistangle, cell_rin_zLhalf, cell_rout_zLhalf, cell_dz, 1, cell_phi_width);
@@ -243,6 +247,20 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
         cell_v.setSensitiveDetector(sens);
         cell_v.setVisAttributes( desc.visAttributes( Form("dch_layer_vis%d", ilayer%22) ) );
 
+        // // // // // // // // // // // // // // // // // // // //
+        // // // // // // POSITIONING OF SENSE WIRES // // // // //
+        // // // // // // // // // // // // // // // // // // // //
+        {
+            // average radius to position sense wire
+            MyLength_t cell_rave_z0 = 0.5*(cell_rin_z0+cell_rout_z0);
+            MyLength_t swlength = 0.5*l.WireLength(cell_rave_z0) - dch_SWire_thickness*cos(l.stereoangle_z0(cell_rave_z0)) - safety_z_interspace;
+            dd4hep::Tube swire_s(0., dch_SWire_thickness, swlength);
+            dd4hep::Volume swire_v(cell_name+"_swire", swire_s, desc.material("W"));
+            // Change sign of stereo angle to place properly the wire inside the twisted tube
+            dd4hep::RotationX stereoTr( (-1.)*l.StereoSign()*l.stereoangle_z0(cell_rave_z0) );
+            dd4hep::Transform3D swireTr ( stereoTr * dd4hep::Translation3D(cell_rave_z0,0.,0.) );
+            cell_v.placeVolume(swire_v,swireTr);
+        }
         for(int nphi = 0; nphi < ncells; ++nphi)
         {
             // conversion of RotationZ into Transform3D using constructor
