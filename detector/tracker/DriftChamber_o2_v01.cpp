@@ -149,8 +149,8 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
      * Sectors represent a segmentation in phi
      */
 
-    MyLength_t safety_r_interspace = 1*dd4hep::um;
-    MyLength_t safety_z_interspace = 1*dd4hep::um;
+    MyLength_t safety_r_interspace = 1*dd4hep::nm;
+    MyLength_t safety_z_interspace = 1*dd4hep::nm;
 
 
     MyLength_t vessel_thickness = desc.constantAsDouble("dch_vessel_thickness");
