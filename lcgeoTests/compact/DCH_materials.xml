@@ -1,0 +1,16 @@
+<lccdd>
+
+<materials>
+  <!-- Gas mixture for Drift chamber active volume     -->
+  <material name="GasHe_90Isob_10" state="gas">
+    <T unit="K" value="293.15"/>
+    <MEE unit="eV" value="48.8432249317198"/>
+    <D unit="g/cm3" value="0.0003984"/>
+    <fraction n="0.382635100446205" ref="He"/>
+    <fraction n="0.107061807167701" ref="H"/>
+    <fraction n="0.510303092386095" ref="C"/>
+  </material>
+
+</materials>
+
+</lccdd>
