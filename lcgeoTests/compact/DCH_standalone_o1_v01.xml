@@ -41,6 +41,13 @@
   <constant name="dch_nlayersPerSuperlayer" value=" 8 "    />
   <constant name="dch_ncell_per_sector"     value=" 24 "   />
 
+  <!-- sense wire thickness (total)   -->
+  <constant name="dch_SWire_thickness"           value="0.0206*mm"   />
+  <!-- sense wire thickness (core), ignored at the moment   -->
+  <constant name = "CDCH:SWireShellThickIn"      value = "0.020*mm"/>
+  <!-- sense wire thickness (coating), to be added to core, ignored at the moment   -->
+  <constant name = "CDCH:SWireShellThickOut"     value = "0.0006*mm"/>
+
   <!-- Alfa = twistangle/2   -->
   <constant name="dch_alpha"                value=" 15*deg "    />
 
