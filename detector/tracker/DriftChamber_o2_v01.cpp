@@ -228,10 +228,10 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
 
         // unitary cell (Twisted tube) is repeated for each layer l.nwires/2 times
         // Twisted tube parameters
-        MyAngle_t cell_twistangle    = DCH_info::dch_twist_angle;
+        MyAngle_t cell_twistangle    = l.StereoSign() * DCH_info::dch_twist_angle;
         MyLength_t cell_rin_zLhalf   = l.Radius_zLhalf(l.radius_fdw_z0 + 2*safety_r_interspace);
         MyLength_t cell_rout_zLhalf  = l.Radius_zLhalf(l.radius_fuw_z0 - 2*safety_r_interspace);
-        MyLength_t cell_dz           =  DCH_info::dch_Lhalf;
+        MyLength_t cell_dz           = DCH_info::dch_Lhalf;
         MyAngle_t cell_phi_width     = phi_step - safety_phi_interspace;
         dd4hep::TwistedTube cell_s( cell_twistangle, cell_rin_zLhalf, cell_rout_zLhalf, cell_dz, 1, cell_phi_width);
 
@@ -247,6 +247,7 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
             dd4hep::Transform3D cellTr ( dd4hep::RotationZ(phi_step * nphi) );
             auto cell_pv = layer_v.placeVolume(cell_v, cellTr);
             cell_pv.addPhysVolID("nphi", nphi);
+            cell_pv.addPhysVolID("stereosign", l.StereoSign() );
 
             dd4hep::DetElement cell_DE(layer_DE,cell_name+std::to_string(nphi)+"DE", nphi);
             cell_DE.setPlacement(cell_pv);
