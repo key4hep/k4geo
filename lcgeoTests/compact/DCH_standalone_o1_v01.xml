@@ -12,6 +12,7 @@
 <includes>
   <gdmlFile ref="../../FCCee/CLD/compact/CLD_o3_v01/elements.xml"/>
   <gdmlFile ref="../../FCCee/CLD/compact/CLD_o3_v01/materials.xml"/>
+  <gdmlFile ref="DCH_materials.xml"/>
 </includes>
 
 <define>

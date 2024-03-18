@@ -138,6 +138,8 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
         throw std::runtime_error("Empty database");
     DCH_info::Show_DCH_info_database();
 
+    auto gasvol_material = desc.material("GasHe_90Isob_10");
+
     /* Geometry tree:
      * Wall (tube) -> Gas (tube) -> Layer_1 (hyp) -> Sector_1 (twisted tube) -> cell_1 (twisted tube)
      *                                                                       -> cell_... (twisted tube)
@@ -165,7 +167,7 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
     dd4hep::Tube gas_s( DCH_info::dch_rin_z0,
                         DCH_info::dch_rout_z0,
                         DCH_info::dch_Lhalf + 2*safety_z_interspace );
-    dd4hep::Volume gas_v (detName+"_gas", gas_s, desc.material("Air") );
+    dd4hep::Volume gas_v (detName+"_gas", gas_s, gasvol_material );
     gas_v.setVisAttributes( desc.visAttributes("dch_no_vis") );
     vessel_v.placeVolume(gas_v);
 //     dd4hep::Assembly vessel_v("vessel_v");
@@ -206,7 +208,7 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
 
 
         std::string layer_name = detName+"_layer"+std::to_string(ilayer);
-        dd4hep::Volume layer_v ( layer_name , layer_s, desc.material("Air") );
+        dd4hep::Volume layer_v ( layer_name , layer_s, gasvol_material );
         //layer_v.setVisAttributes( desc.visAttributes( Form("dch_layer_vis%d", ilayer%22) ) );
         layer_v.setVisAttributes( desc.visAttributes( "dch_no_vis") );
         auto layer_pv = gas_v.placeVolume(layer_v);
@@ -237,7 +239,7 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
 
         // initialize cell volume
         std::string cell_name = detName+"_layer"+std::to_string(ilayer)+"_cell";
-        dd4hep::Volume cell_v (cell_name, cell_s, desc.material("Air") );
+        dd4hep::Volume cell_v (cell_name, cell_s, gasvol_material );
         cell_v.setSensitiveDetector(sens);
         cell_v.setVisAttributes( desc.visAttributes( Form("dch_layer_vis%d", ilayer%22) ) );
 
