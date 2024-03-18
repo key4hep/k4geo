@@ -167,22 +167,38 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
     dd4hep::Volume gas_v (detName+"_gas", gas_s, desc.material("Air") );
     gas_v.setVisAttributes( desc.visAttributes("dch_no_vis") );
     vessel_v.placeVolume(gas_v);
+//     dd4hep::Assembly vessel_v("vessel_v");
 
     for(const auto& [ilayer, l]  : DCH_info::database )
     {
 
-//             if(ilayer>4)break;
+//             if(ilayer>1)break;
 
-        MyLength_t rmin = l.Radius_zLhalf(l.radius_fdw_z0+safety_r_interspace);
-        MyLength_t rmax = l.Radius_zLhalf(l.radius_fuw_z0-safety_r_interspace);
-        MyLength_t dz = DCH_info::dch_Lhalf;
-        dd4hep::TwistedTube layer_s( DCH_info::dch_twist_angle,
-                                     rmin,
-                                     rmax,
-                                     dz,
-                                     1,
-                                     PI*dd4hep::rad
-                                   );
+//         MyLength_t rmin = l.Radius_zLhalf(l.radius_fdw_z0+safety_r_interspace);
+//         MyLength_t rmax = l.Radius_zLhalf(l.radius_fuw_z0-safety_r_interspace);
+//         MyLength_t dz = DCH_info::dch_Lhalf;
+//         dd4hep::TwistedTube layer_s( DCH_info::dch_twist_angle,
+//                                      rmin,
+//                                      rmax,
+//                                      dz,
+//                                      1,
+//                                      PI*dd4hep::rad
+//                                    );
+//         dd4hep::Hyperboloid layer_s(0.,0., 1*dd4hep::m, 30*dd4hep::deg, 1*dd4hep::m);
+
+        // Hyperboloid parameters:
+        /// inner radius at z=0
+        MyLength_t rin   = l.radius_fdw_z0+safety_r_interspace;
+        /// inner stereoangle, calculated from rin(z=0)
+        MyAngle_t  stin  = l.stereoangle_z0(rin);
+        /// outer radius at z=0
+        MyLength_t rout  = l.radius_fuw_z0-safety_r_interspace;
+        /// outer stereoangle, calculated from rout(z=0)
+        MyAngle_t  stout = l.stereoangle_z0(rout);
+        /// half-length
+        MyLength_t dz    = DCH_info::dch_Lhalf;
+
+        dd4hep::Hyperboloid layer_s(rin, stin, rout, stout, dz);
 
 
         dd4hep::Volume layer_v (detName+"_layer"+std::to_string(ilayer), layer_s, desc.material("Air") );
