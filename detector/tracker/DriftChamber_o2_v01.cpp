@@ -61,7 +61,7 @@ public:
     // each member corresopnds to a column in the excel table
     /// layer number
     DCH_layer layer = {0};
-    /// number of wires in that layer
+    /// 2x number of wires in that layer
     int nwires = {0};
     /// cell parameter
     double height_z0 = {0.};
@@ -149,8 +149,9 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
      * Sectors represent a segmentation in phi
      */
 
-    MyLength_t safety_r_interspace = 1*dd4hep::nm;
-    MyLength_t safety_z_interspace = 1*dd4hep::nm;
+    MyLength_t safety_r_interspace   = 1    * dd4hep::nm;
+    MyLength_t safety_z_interspace   = 1    * dd4hep::nm;
+    MyLength_t safety_phi_interspace = 1e-6 * dd4hep::rad;
 
 
     MyLength_t vessel_thickness = desc.constantAsDouble("dch_vessel_thickness");
@@ -163,7 +164,7 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
 
     dd4hep::Tube gas_s( DCH_info::dch_rin_z0,
                         DCH_info::dch_rout_z0,
-                        DCH_info::dch_Lhalf + safety_z_interspace );
+                        DCH_info::dch_Lhalf + 2*safety_z_interspace );
     dd4hep::Volume gas_v (detName+"_gas", gas_s, desc.material("Air") );
     gas_v.setVisAttributes( desc.visAttributes("dch_no_vis") );
     vessel_v.placeVolume(gas_v);
@@ -186,6 +187,9 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
 //                                    );
 //         dd4hep::Hyperboloid layer_s(0.,0., 1*dd4hep::m, 30*dd4hep::deg, 1*dd4hep::m);
 
+        // // // // // // // // // // // // // // // // // // // // /
+        // // // // // INITIALIZATION OF THE LAYER // // // // // //
+        // // // // // // // // // // // // // // // // // // // //
         // Hyperboloid parameters:
         /// inner radius at z=0
         MyLength_t rin   = l.radius_fdw_z0+safety_r_interspace;
@@ -196,14 +200,59 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
         /// outer stereoangle, calculated from rout(z=0)
         MyAngle_t  stout = l.stereoangle_z0(rout);
         /// half-length
-        MyLength_t dz    = DCH_info::dch_Lhalf;
+        MyLength_t dz    = DCH_info::dch_Lhalf + safety_z_interspace;
 
         dd4hep::Hyperboloid layer_s(rin, stin, rout, stout, dz);
 
 
-        dd4hep::Volume layer_v (detName+"_layer"+std::to_string(ilayer), layer_s, desc.material("Air") );
-        layer_v.setVisAttributes( desc.visAttributes( Form("dch_layer_vis%d", ilayer%22) ) );
-        gas_v.placeVolume(layer_v);
+        std::string layer_name = detName+"_layer"+std::to_string(ilayer);
+        dd4hep::Volume layer_v ( layer_name , layer_s, desc.material("Air") );
+        //layer_v.setVisAttributes( desc.visAttributes( Form("dch_layer_vis%d", ilayer%22) ) );
+        layer_v.setVisAttributes( desc.visAttributes( "dch_no_vis") );
+        auto layer_pv = gas_v.placeVolume(layer_v);
+        layer_pv.addPhysVolID("layer", ilayer);
+
+        dd4hep::DetElement layer_DE(det,layer_name+"DE", ilayer);
+        layer_DE.setPlacement(layer_pv);
+        // Assign the system ID to our mother volume
+
+
+        // // // // // // // // // // // // // // // // // // // //
+        // // // // // SEGMENTATION OF THE LAYER  // // // // // //
+        // // // // // INTO CELLS (TWISTED TUBES) // // // // // //
+        // // // // // // // // // // // // // // // // // // // //
+
+        // ncells in this layer = 2x number of wires
+        int ncells = l.nwires/2;
+        MyAngle_t phi_step = (TWOPI/ncells)*dd4hep::rad;
+
+        // unitary cell (Twisted tube) is repeated for each layer l.nwires/2 times
+        // Twisted tube parameters
+        MyAngle_t cell_twistangle    = DCH_info::dch_twist_angle;
+        MyLength_t cell_rin_zLhalf   = l.Radius_zLhalf(l.radius_fdw_z0 + 2*safety_r_interspace);
+        MyLength_t cell_rout_zLhalf  = l.Radius_zLhalf(l.radius_fuw_z0 - 2*safety_r_interspace);
+        MyLength_t cell_dz           =  DCH_info::dch_Lhalf;
+        MyAngle_t cell_phi_width     = phi_step - safety_phi_interspace;
+        dd4hep::TwistedTube cell_s( cell_twistangle, cell_rin_zLhalf, cell_rout_zLhalf, cell_dz, 1, cell_phi_width);
+
+        // initialize cell volume
+        std::string cell_name = detName+"_layer"+std::to_string(ilayer)+"_cell";
+        dd4hep::Volume cell_v (cell_name, cell_s, desc.material("Air") );
+        cell_v.setSensitiveDetector(sens);
+        cell_v.setVisAttributes( desc.visAttributes( Form("dch_layer_vis%d", ilayer%22) ) );
+
+        for(int nphi = 0; nphi < ncells; ++nphi)
+        {
+            // conversion of RotationZ into Transform3D using constructor
+            dd4hep::Transform3D cellTr ( dd4hep::RotationZ(phi_step * nphi) );
+            auto cell_pv = layer_v.placeVolume(cell_v, cellTr);
+            cell_pv.addPhysVolID("nphi", nphi);
+
+            dd4hep::DetElement cell_DE(layer_DE,cell_name+std::to_string(nphi)+"DE", nphi);
+            cell_DE.setPlacement(cell_pv);
+        }
+
+
     }
 
 
