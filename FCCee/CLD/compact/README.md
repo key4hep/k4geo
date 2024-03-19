@@ -38,3 +38,8 @@ CLD_o3_v01
 ----------
 
 This model is based on CLD_o2_v05. The tracker size is reduced to accomodate the ARC detector for PID.
+
+CLD_o4_v05
+----------
+
+This model is based on CLD_o2_v05. The ECAL barrel is replaced by the Noble Liquid calorimeter from ALLEGRO to enable PandoraPFA technical developments. To accomodate the thicker ALLEGRO calorimeter, the CLD detectors after ECAL were pushed towards higher radius. 
