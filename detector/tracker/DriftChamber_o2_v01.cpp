@@ -409,11 +409,11 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
                 cell_v.placeVolume(fwire_v,fwireTr);
             }
         }/// end building wires
-        for(int nphi = 0; nphi < 3 /*ncells*/; ++nphi)
+        for(int nphi = 0; nphi < ncells; ++nphi)
         {
-            // TODO: check if staggering is just + 0.5*cell_phi_width*(ilayer%2);
+            // TODO: check if staggering is just + 0.25*cell_phi_width*(ilayer%2);
             // phi positioning, adding offset for odd ilayers
-            MyAngle_t cell_phi_angle = phi_step * nphi + 0.5*cell_phi_width*(ilayer%2);
+            MyAngle_t cell_phi_angle = phi_step * nphi + 0.25*cell_phi_width*(ilayer%2);
             // conversion of RotationZ into Transform3D using constructor)
             dd4hep::Transform3D cellTr { dd4hep::RotationZ(cell_phi_angle) };
             auto cell_pv = layer_v.placeVolume(cell_v, cellTr);
