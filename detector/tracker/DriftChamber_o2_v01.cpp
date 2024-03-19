@@ -145,12 +145,12 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
     MyLength_t dch_FCentralWire_thickness = desc.constantAsDouble("dch_FCentralWire_thickness");
 
     /* Geometry tree:
-     * Wall (tube) -> Gas (tube) -> Layer_1 (hyp) -> Sector_1 (twisted tube) -> cell_1 (twisted tube)
-     *                                                                       -> cell_... (twisted tube)
+     * Wall (tube) -> Gas (tube) -> Layer_1 (hyp) -> cell_1 (twisted tube)
+     *                                            -> cell_... (twisted tube)
      *
-     *                                            -> Sector_... (twisted tube) -> cell_1 (twisted tube)
-     *                                                                         -> cell_... (twisted tube)
-     *                           -> Layer_... (hyp) -> Sector_1 (twisted tube) -> cell_1 (twisted tube)
+     *                          -> Layer_... (hyp) -> cell_1 (twisted tube)
+     *                                             -> cell_... (twisted tube)
+     *
      * Layers represent a segmentation in radius
      * Sectors represent a segmentation in phi
      */
@@ -338,6 +338,7 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
         }/// end building wires
         for(int nphi = 0; nphi < 1 /*ncells*/; ++nphi)
         {
+            // TODO: check if staggering is just + 0.5*cell_phi_width*(ilayer%2);
             // phi positioning, adding offset for odd ilayers
             MyAngle_t cell_phi_angle = phi_step * nphi + 0.5*cell_phi_width*(ilayer%2);
             // conversion of RotationZ into Transform3D using constructor)
