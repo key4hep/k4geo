@@ -169,6 +169,7 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
      *
      * Layers represent a segmentation in radius
      * Sectors represent a segmentation in phi
+     * Each cell corresponds to a Detector Element
      */
 
     MyLength_t safety_r_interspace   = 1    * dd4hep::nm;
@@ -440,9 +441,6 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
 
     }
 
-
-
-
     // Place our mother volume in the world
     dd4hep::Volume wVol = desc.pickMotherVolume(det);
     dd4hep::PlacedVolume vessel_pv = wVol.placeVolume(vessel_v);
@@ -450,72 +448,6 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
     det.setPlacement(vessel_pv);
     // Assign the system ID to our mother volume
     vessel_pv.addPhysVolID("system", detID);
-
-
-
-    // Box wall_sh( DCH_info::dch_rin_z0  - wall_thickness ,
-    //               DCH_info::dch_rout_z0 + wall_thickness,
-    //               DCH_info::dch_Lhalf   + wall_thickness
-    //              );
-    // Volume wall_v( "DCH_wall", wall_sh, desc.material("Air"));
-    // wall_v.setSensitiveDetector(sens);
-    // wall_v.setVisAttributes(desc.visAttributes("cooling_vis"));
-    /*
-     *        Tube gas_sh( DCH_info::dch_rin_z0  ,
-     *                     DCH_info::dch_rout_z0 ,
-     *                     DCH_info::dch_Lhalf
-     *                     );
-     *        Volume gas_v( "DCH_wall", gas_sh, desc.material("Air"));*/
-
-    // // Place our mother volume in the world
-    // Volume wVol = desc.pickMotherVolume(det);
-    // PlacedVolume wall_pv = wVol.placeVolume(wall_sh);
-    //
-    // // Assign the system ID to our mother volume
-    // wall_pv.addPhysVolID("system", detID);
-    //
-    // // Associate the silicon Placed Volume to the detector element.
-    // det.setPlacement(wall_sh);
-
-    // // Create the mother Detector element to be returned at the end
-    // double twist_angle = 45*dd4hep::degree;
-    // double rmin = 1*dd4hep::cm;
-    // double rmax = 5*dd4hep::cm;
-    // double dz = 5*dd4hep::cm;
-    // double dphi = 90*dd4hep::deg;
-    // int nsegments = 1;
-    // TwistedTube myshape( twist_angle,  rmin,  rmax, -dz, dz, dphi);
-    // // Define volume (shape+material)
-    // Volume siVol(detName +"_sensor", myshape, desc.material("Silicon"));
-    // siVol.setVisAttributes(desc.visAttributes("sensor_vis"));
-    // siVol.setSensitiveDetector(sens);
-    //
-    // double wireR = 0.5*rmin + 0.5*rmax; //0.5*(rmax+rmin);
-    // double wirePhi = 0.3*dphi;
-    // double stereoangle = atan( wireR/dz*sin(twist_angle/2/rad) );
-    //
-    // double wireThickness = 0.1*rmin;
-    // Tube ancshape( 0., wireThickness, dz/cos(stereoangle/rad) - wireThickness*tan(stereoangle/rad) );
-    // Volume ancVol(detName +"ancshape", ancshape, desc.material("Silicon"));
-    // ancVol.setVisAttributes(desc.visAttributes("cooling_vis"));
-    //
-    // auto ancshapeTrp = RotationZ(0.3*dphi)*Translation3D( wireR,0,0) * RotationX(-stereoangle/rad);
-    // auto ancshapeTr0 = RotationZ(  0     )*Translation3D( wireR,0,0) * RotationX(-stereoangle/rad);
-    // auto ancshapeTrm = RotationZ(-0.3*dphi)*Translation3D( wireR,0,0) * RotationX(-stereoangle/rad);
-    //
-    // // Place our mother volume in the world
-    // Volume wVol = desc.pickMotherVolume(det);
-    //
-    // PlacedVolume siPV = wVol.placeVolume(siVol);
-    // wVol.placeVolume(ancVol, ancshapeTrp);
-    // wVol.placeVolume(ancVol, ancshapeTr0);
-    // wVol.placeVolume(ancVol, ancshapeTrm);
-    //
-    // // Assign the system ID to our mother volume
-    // siPV.addPhysVolID("system", detID);
-    //
-    // // Associate the silicon Placed Volume to the detector element.
-    // det.setPlacement(siPV);
 
     return det;
 
