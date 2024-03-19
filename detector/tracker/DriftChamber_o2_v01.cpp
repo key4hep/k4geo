@@ -138,7 +138,15 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
         throw std::runtime_error("Empty database");
     DCH_info::Show_DCH_info_database();
 
-    auto gasvol_material = desc.material("GasHe_90Isob_10");
+    auto gasElem    = detElem.child("gas");
+    auto gasvolMat  = desc.material(gasElem.attr<std::string>(_Unicode(material)));
+    auto gasvolVis  = desc.visAttributes(gasElem.attr<std::string>(_Unicode(vis)));
+
+    auto vesselElem = detElem.child("vessel");
+    auto vesselSkinMat  = desc.material(vesselElem.attr<std::string>(_Unicode(material)));
+    auto vesselSkinVis  = desc.visAttributes(vesselElem.attr<std::string>(_Unicode(vis)));
+
+
 
     MyLength_t dch_SWire_thickness = desc.constantAsDouble("dch_SWire_thickness");
     MyLength_t dch_FSideWire_thickness = desc.constantAsDouble("dch_FSideWire_thickness");
@@ -164,15 +172,15 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
     dd4hep::Tube vessel_s(  DCH_info::dch_rin_z0 - vessel_thickness,
                             DCH_info::dch_rout_z0+ vessel_thickness,
                             DCH_info::dch_Lhalf  + vessel_thickness);
-    dd4hep::Volume vessel_v (detName+"_vessel", vessel_s,  desc.material("Silicon") );
-    vessel_v.setVisAttributes( desc.visAttributes("dch_no_vis") );
+    dd4hep::Volume vessel_v (detName+"_vessel", vessel_s,  vesselSkinMat );
+    vessel_v.setVisAttributes( vesselSkinVis );
 
 
     dd4hep::Tube gas_s( DCH_info::dch_rin_z0,
                         DCH_info::dch_rout_z0,
                         DCH_info::dch_Lhalf + 2*safety_z_interspace );
-    dd4hep::Volume gas_v (detName+"_gas", gas_s, gasvol_material );
-    gas_v.setVisAttributes( desc.visAttributes("dch_no_vis") );
+    dd4hep::Volume gas_v (detName+"_gas", gas_s, gasvolMat );
+    gas_v.setVisAttributes( gasvolVis );
     vessel_v.placeVolume(gas_v);
 //     dd4hep::Assembly vessel_v("vessel_v");
 
@@ -212,9 +220,8 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
 
 
         std::string layer_name = detName+"_layer"+std::to_string(ilayer);
-        dd4hep::Volume layer_v ( layer_name , layer_s, gasvol_material );
-        //layer_v.setVisAttributes( desc.visAttributes( Form("dch_layer_vis%d", ilayer%22) ) );
-        layer_v.setVisAttributes( desc.visAttributes( "dch_no_vis") );
+        dd4hep::Volume layer_v ( layer_name , layer_s, gasvolMat );
+        layer_v.setVisAttributes( desc.visAttributes( Form("dch_layer_vis%d", ilayer%22) ) );
         auto layer_pv = gas_v.placeVolume(layer_v);
         layer_pv.addPhysVolID("layer", ilayer);
 
@@ -245,9 +252,9 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
 
         // initialize cell volume
         std::string cell_name = detName+"_layer"+std::to_string(ilayer)+"_cell";
-        dd4hep::Volume cell_v (cell_name, cell_s, gasvol_material );
+        dd4hep::Volume cell_v (cell_name, cell_s, gasvolMat );
         cell_v.setSensitiveDetector(sens);
-        cell_v.setVisAttributes( desc.visAttributes( "dch_gas_vis" /* Form("dch_layer_vis%d", ilayer%22)*/ ) );
+        cell_v.setVisAttributes( desc.visAttributes( "dch_no_vis_nodaughters" ) );
 
         // // // // // // // // // // // // // // // // // // // //
         // // // // // // POSITIONING OF WIRES // // // // // // //
