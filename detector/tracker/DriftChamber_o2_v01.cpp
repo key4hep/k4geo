@@ -156,12 +156,9 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
     bool buildSenseWires  = wiresElem.attr<bool>(_Unicode(buildSenseWires));
     bool buildFieldWires  = wiresElem.attr<bool>(_Unicode(buildFieldWires));
 
-
-
-
-    MyLength_t dch_SWire_thickness = desc.constantAsDouble("dch_SWire_thickness");
-    MyLength_t dch_FSideWire_thickness = desc.constantAsDouble("dch_FSideWire_thickness");
-    MyLength_t dch_FCentralWire_thickness = desc.constantAsDouble("dch_FCentralWire_thickness");
+    MyLength_t dch_SWire_thickness        = wiresElem.attr<double>(_Unicode(SWire_thickness)) ;
+    MyLength_t dch_FSideWire_thickness    = wiresElem.attr<double>(_Unicode(FSideWire_thickness)) ;
+    MyLength_t dch_FCentralWire_thickness = wiresElem.attr<double>(_Unicode(FCentralWire_thickness)) ;
 
     /* Geometry tree:
      * Wall (tube) -> Gas (tube) -> Layer_1 (hyp) -> cell_1 (twisted tube)
