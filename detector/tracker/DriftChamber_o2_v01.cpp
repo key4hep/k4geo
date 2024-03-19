@@ -248,9 +248,12 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
         cell_v.setVisAttributes( desc.visAttributes( Form("dch_layer_vis%d", ilayer%22) ) );
 
         // // // // // // // // // // // // // // // // // // // //
-        // // // // // // POSITIONING OF SENSE WIRES // // // // //
+        // // // // // // POSITIONING OF WIRES // // // // // // //
         // // // // // // // // // // // // // // // // // // // //
         {
+            // // // // // // // // // // // // // // // // // // // //
+            // // // // // // POSITIONING OF SENSE WIRES // // // // //
+            // // // // // // // // // // // // // // // // // // // //
             // average radius to position sense wire
             MyLength_t cell_rave_z0 = 0.5*(cell_rin_z0+cell_rout_z0);
             MyLength_t swlength = 0.5*l.WireLength(cell_rave_z0) - dch_SWire_thickness*cos(l.stereoangle_z0(cell_rave_z0)) - safety_z_interspace;
@@ -263,8 +266,10 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
         }
         for(int nphi = 0; nphi < ncells; ++nphi)
         {
-            // conversion of RotationZ into Transform3D using constructor
-            dd4hep::Transform3D cellTr ( dd4hep::RotationZ(phi_step * nphi) );
+            // phi positioning, adding offset for odd ilayers
+            MyAngle_t cell_phi_angle = phi_step * nphi + 0.5*cell_phi_width*(ilayer%2);
+            // conversion of RotationZ into Transform3D using constructor)
+            dd4hep::Transform3D cellTr { dd4hep::RotationZ(cell_phi_angle) };
             auto cell_pv = layer_v.placeVolume(cell_v, cellTr);
             cell_pv.addPhysVolID("nphi", nphi);
             cell_pv.addPhysVolID("stereosign", l.StereoSign() );
