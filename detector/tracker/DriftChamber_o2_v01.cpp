@@ -136,7 +136,10 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
     DCH_info::Fill_DCH_info_database(desc);
     if( DCH_info::IsDatabaseEmpty() )
         throw std::runtime_error("Empty database");
-    DCH_info::Show_DCH_info_database();
+
+    bool printExcelTable = detElem.attr<bool>(_Unicode(printExcelTable));
+    if(printExcelTable)
+        DCH_info::Show_DCH_info_database();
 
     auto gasElem    = detElem.child("gas");
     auto gasvolMat  = desc.material(gasElem.attr<std::string>(_Unicode(material)));
@@ -145,6 +148,14 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
     auto vesselElem = detElem.child("vessel");
     auto vesselSkinMat  = desc.material(vesselElem.attr<std::string>(_Unicode(material)));
     auto vesselSkinVis  = desc.visAttributes(vesselElem.attr<std::string>(_Unicode(vis)));
+
+
+    auto wiresElem = detElem.child("wires");
+    auto wiresMat  = desc.material(wiresElem.attr<std::string>(_Unicode(material)));
+    auto wiresVis  = desc.visAttributes(wiresElem.attr<std::string>(_Unicode(vis)));
+    bool buildSenseWires  = wiresElem.attr<bool>(_Unicode(buildSenseWires));
+    bool buildFieldWires  = wiresElem.attr<bool>(_Unicode(buildFieldWires));
+
 
 
 
@@ -182,24 +193,11 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
     dd4hep::Volume gas_v (detName+"_gas", gas_s, gasvolMat );
     gas_v.setVisAttributes( gasvolVis );
     vessel_v.placeVolume(gas_v);
-//     dd4hep::Assembly vessel_v("vessel_v");
 
     for(const auto& [ilayer, l]  : DCH_info::database )
     {
 
 //             if(ilayer>1)break;
-
-//         MyLength_t rmin = l.Radius_zLhalf(l.radius_fdw_z0+safety_r_interspace);
-//         MyLength_t rmax = l.Radius_zLhalf(l.radius_fuw_z0-safety_r_interspace);
-//         MyLength_t dz = DCH_info::dch_Lhalf;
-//         dd4hep::TwistedTube layer_s( DCH_info::dch_twist_angle,
-//                                      rmin,
-//                                      rmax,
-//                                      dz,
-//                                      1,
-//                                      PI*dd4hep::rad
-//                                    );
-//         dd4hep::Hyperboloid layer_s(0.,0., 1*dd4hep::m, 30*dd4hep::deg, 1*dd4hep::m);
 
         // // // // // // // // // // // // // // // // // // // // /
         // // // // // INITIALIZATION OF THE LAYER // // // // // //
@@ -267,154 +265,165 @@ static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Hand
             MyLength_t cell_rave_z0 = 0.5*(cell_rin_z0+cell_rout_z0);
             MyLength_t cell_swire_radius = dch_SWire_thickness/2;
             MyLength_t swlength = 0.5*l.WireLength(cell_rave_z0) - cell_swire_radius*cos(l.stereoangle_z0(cell_rave_z0)) - safety_z_interspace;
-            dd4hep::Tube swire_s(0., dch_SWire_thickness, swlength);
-            dd4hep::Volume swire_v(cell_name+"_swire", swire_s, desc.material("W"));
-            // Change sign of stereo angle to place properly the wire inside the twisted tube
-            dd4hep::RotationX stereoTr( (-1.)*l.StereoSign()*l.stereoangle_z0(cell_rave_z0) );
-            dd4hep::Transform3D swireTr ( stereoTr * dd4hep::Translation3D(cell_rave_z0,0.,0.) );
-            cell_v.placeVolume(swire_v,swireTr);
-
-            // // // // // // // // // // // // // // // // // // // //
-            // // // // // // POSITIONING OF FIELD WIRES // // // // //
-            // // // // // // // // // // // // // // // // // // // //
-            //
-            //  The following sketch represents the crossection of a DCH cell, where
-            //      O symbol = Field wires, the number in parenthesis is used as ID
-            //      X symbol = sense wire
-            //
-            //   ^ radius
-            //
-            //   O(1)---O(4)---O(6)    radius_z0 = l.radius_fuw_z0 == (++l).radius_fdw_z0
-            //
-            //   O(2)   X      O(7)    radius_z0 = average(l.radius_fuw_z0, l.radius_fdw_z0)
-            //
-            //   O(3)---O(5)---O(8)    radius_z0 = l.radius_fdw_z0 == (--l).radius_fuw_z0
-            //
-            //   --> phi axis
-            //
-            //  In the previous sketch, the wires are shared among several cells.
-            //  Since we are using an actual shape to contain each cell,
-            //  it is not feasible.
-            //
-            //  As a workaround, we introduce an offset in phi and radially to the cell center,
-            //  in such a manner that the wires are fully contained in one cell.
-            //  The following code implements the following sketch:
-            //
-            //   O(1)---O(4)---    radius_z0 = l.radius_fuw_z0 - wire_thickness/2
-            //
-            //   O(2)   X          radius_z0 = average(l.radius_fuw_z0, l.radius_fdw_z0)
-            //
-            //   O(3)---O(5)---    radius_z0 = l.radius_fdw_z0 + wire_thickness/2
-            //
-            //  phi_offset(n) = atan(  wire_thickness/2 / radius_z0 )
-            //
-            //  notice that the field wires are offcentered with respect to the sense wire
-            //  by about 20um/1cm ~ 0.1 mrad, which is not expected to have any impact
-
-            /// encapsulate the calculation of the phi offset into a function
-            /// since it will be different for each field wire
-            /// it includes the safety phi distance
-            auto fwire_phi_offset = [&](MyLength_t radial_distance, MyLength_t wire_radius)->MyAngle_t
+            if(buildSenseWires)
             {
-                return atan(wire_radius/radial_distance)*dd4hep::rad + safety_phi_interspace;
-            };
-
-            // // // // // // // // // // // // // // // // // // // //
-            // // // // // // POSITIONING OF F WIRE 2 // // // // // //
-            // // // // // // REQUIRES OFFSET OF PHI  // // // // // //
-            // // // // // // // // // // // // // // // // // // // //
-            {
-                MyLength_t fwire_radius = dch_FCentralWire_thickness/2;
-                MyLength_t fwire_r_z0   = cell_rave_z0;
-                MyAngle_t  fwire_stereo =  (-1.)*l.StereoSign()*l.stereoangle_z0(fwire_r_z0);
-                MyAngle_t  fwire_phi    = -cell_phi_width/2 + fwire_phi_offset( fwire_r_z0, fwire_radius);
-                MyLength_t fwire_length = 0.5*l.WireLength(fwire_r_z0) - fwire_radius*cos(l.stereoangle_z0(fwire_r_z0)) - safety_z_interspace;;
-
-                dd4hep::Tube fwire_s(0., fwire_radius, fwire_length);
-                dd4hep::Volume fwire_v(cell_name+"_f2wire", fwire_s, desc.material("W"));
+                dd4hep::Tube swire_s(0., dch_SWire_thickness, swlength);
+                dd4hep::Volume swire_v(cell_name+"_swire", swire_s, wiresMat);
+                swire_v.setVisAttributes( wiresVis );
                 // Change sign of stereo angle to place properly the wire inside the twisted tube
-                dd4hep::RotationX fwireStereoTr( fwire_stereo );
-                dd4hep::RotationZ fwirePhoTr( fwire_phi );
-                dd4hep::Transform3D fwireTr ( fwirePhoTr * fwireStereoTr * dd4hep::Translation3D(fwire_r_z0,0.,0.) );
-                cell_v.placeVolume(fwire_v,fwireTr);
+                dd4hep::RotationX stereoTr( (-1.)*l.StereoSign()*l.stereoangle_z0(cell_rave_z0) );
+                dd4hep::Transform3D swireTr ( stereoTr * dd4hep::Translation3D(cell_rave_z0,0.,0.) );
+                cell_v.placeVolume(swire_v,swireTr);
             }
-
-            // // // // // // // // // // // // // // // // // // // //
-            // // // // // // POSITIONING OF F WIRE 1    // // // // //
-            // // // // // // REQUIRES OFFSET OF PHI & R // // // // //
-            // // // // // // // // // // // // // // // // // // // //
+            if(buildFieldWires)
             {
-                MyLength_t fwire_radius = dch_FSideWire_thickness/2;
-                // decrease radial distance, move it closer to the sense wire
-                MyLength_t fwire_r_z0   = cell_rout_z0 - fwire_radius;
-                MyAngle_t  fwire_stereo =  (-1.)*l.StereoSign()*l.stereoangle_z0(fwire_r_z0);
-                MyAngle_t  fwire_phi    = -cell_phi_width/2 + fwire_phi_offset( fwire_r_z0, fwire_radius);
-                MyLength_t fwire_length = 0.5*l.WireLength(fwire_r_z0) - fwire_radius*cos(l.stereoangle_z0(fwire_r_z0)) - safety_z_interspace;;
+                // // // // // // // // // // // // // // // // // // // //
+                // // // // // // POSITIONING OF FIELD WIRES // // // // //
+                // // // // // // // // // // // // // // // // // // // //
+                //
+                //  The following sketch represents the crossection of a DCH cell, where
+                //      O symbol = Field wires, the number in parenthesis is used as ID
+                //      X symbol = sense wire
+                //
+                //   ^ radius
+                //
+                //   O(1)---O(4)---O(6)    radius_z0 = l.radius_fuw_z0 == (++l).radius_fdw_z0
+                //
+                //   O(2)   X      O(7)    radius_z0 = average(l.radius_fuw_z0, l.radius_fdw_z0)
+                //
+                //   O(3)---O(5)---O(8)    radius_z0 = l.radius_fdw_z0 == (--l).radius_fuw_z0
+                //
+                //   --> phi axis
+                //
+                //  In the previous sketch, the wires are shared among several cells.
+                //  Since we are using an actual shape to contain each cell,
+                //  it is not feasible.
+                //
+                //  As a workaround, we introduce an offset in phi and radially to the cell center,
+                //  in such a manner that the wires are fully contained in one cell.
+                //  The following code implements the following sketch:
+                //
+                //   O(1)---O(4)---    radius_z0 = l.radius_fuw_z0 - wire_thickness/2
+                //
+                //   O(2)   X          radius_z0 = average(l.radius_fuw_z0, l.radius_fdw_z0)
+                //
+                //   O(3)---O(5)---    radius_z0 = l.radius_fdw_z0 + wire_thickness/2
+                //
+                //  phi_offset(n) = atan(  wire_thickness/2 / radius_z0 )
+                //
+                //  notice that the field wires are offcentered with respect to the sense wire
+                //  by about 20um/1cm ~ 0.1 mrad, which is not expected to have any impact
 
-                dd4hep::Tube fwire_s(0., fwire_radius, fwire_length);
-                dd4hep::Volume fwire_v(cell_name+"_f1wire", fwire_s, desc.material("W"));
-                // Change sign of stereo angle to place properly the wire inside the twisted tube
-                dd4hep::RotationX fwireStereoTr( fwire_stereo );
-                dd4hep::RotationZ fwirePhoTr( fwire_phi );
-                dd4hep::Transform3D fwireTr ( fwirePhoTr * fwireStereoTr * dd4hep::Translation3D(fwire_r_z0,0.,0.) );
-                cell_v.placeVolume(fwire_v,fwireTr);
-            }
-            // // // // // // // // // // // // // // // // // // // //
-            // // // // // // POSITIONING OF F WIRE 3    // // // // //
-            // // // // // // REQUIRES OFFSET OF PHI & R // // // // //
-            // // // // // // // // // // // // // // // // // // // //
-            {
-                MyLength_t fwire_radius = dch_FSideWire_thickness/2;
-                // increase radial distance, move it closer to the sense wire
-                MyLength_t fwire_r_z0   = cell_rin_z0 + fwire_radius;
-                MyAngle_t  fwire_stereo =  (-1.)*l.StereoSign()*l.stereoangle_z0(fwire_r_z0);
-                MyAngle_t  fwire_phi    = -cell_phi_width/2 + fwire_phi_offset( fwire_r_z0, fwire_radius);
-                MyLength_t fwire_length = 0.5*l.WireLength(fwire_r_z0) - fwire_radius*cos(l.stereoangle_z0(fwire_r_z0)) - safety_z_interspace;;
+                /// encapsulate the calculation of the phi offset into a function
+                /// since it will be different for each field wire
+                /// it includes the safety phi distance
+                auto fwire_phi_offset = [&](MyLength_t radial_distance, MyLength_t wire_radius)->MyAngle_t
+                {
+                    return atan(wire_radius/radial_distance)*dd4hep::rad + safety_phi_interspace;
+                };
 
-                dd4hep::Tube fwire_s(0., fwire_radius, fwire_length);
-                dd4hep::Volume fwire_v(cell_name+"_f3wire", fwire_s, desc.material("W"));
-                // Change sign of stereo angle to place properly the wire inside the twisted tube
-                dd4hep::RotationX fwireStereoTr( fwire_stereo );
-                dd4hep::RotationZ fwirePhoTr( fwire_phi );
-                dd4hep::Transform3D fwireTr ( fwirePhoTr * fwireStereoTr * dd4hep::Translation3D(fwire_r_z0,0.,0.) );
-                cell_v.placeVolume(fwire_v,fwireTr);
-            }
-            // // // // // // // // // // // // // // // // // // // //
-            // // // // // // POSITIONING OF F WIRE 5    // // // // //
-            // // // // // // REQUIRES OFFSET OF R       // // // // //
-            // // // // // // // // // // // // // // // // // // // //
-            {
-                MyLength_t fwire_radius = dch_FSideWire_thickness/2;
-                // increase radial distance, move it closer to the sense wire
-                MyLength_t fwire_r_z0   = cell_rin_z0 + fwire_radius;
-                MyAngle_t  fwire_stereo =  (-1.)*l.StereoSign()*l.stereoangle_z0(fwire_r_z0);
-                MyLength_t fwire_length = 0.5*l.WireLength(fwire_r_z0) - fwire_radius*cos(l.stereoangle_z0(fwire_r_z0)) - safety_z_interspace;;
+                // // // // // // // // // // // // // // // // // // // //
+                // // // // // // POSITIONING OF F WIRE 2 // // // // // //
+                // // // // // // REQUIRES OFFSET OF PHI  // // // // // //
+                // // // // // // // // // // // // // // // // // // // //
+                {
+                    MyLength_t fwire_radius = dch_FCentralWire_thickness/2;
+                    MyLength_t fwire_r_z0   = cell_rave_z0;
+                    MyAngle_t  fwire_stereo =  (-1.)*l.StereoSign()*l.stereoangle_z0(fwire_r_z0);
+                    MyAngle_t  fwire_phi    = -cell_phi_width/2 + fwire_phi_offset( fwire_r_z0, fwire_radius);
+                    MyLength_t fwire_length = 0.5*l.WireLength(fwire_r_z0) - fwire_radius*cos(l.stereoangle_z0(fwire_r_z0)) - safety_z_interspace;;
 
-                dd4hep::Tube fwire_s(0., fwire_radius, fwire_length);
-                dd4hep::Volume fwire_v(cell_name+"_f5wire", fwire_s, desc.material("W"));
-                // Change sign of stereo angle to place properly the wire inside the twisted tube
-                dd4hep::RotationX fwireStereoTr( fwire_stereo );
-                dd4hep::Transform3D fwireTr ( fwireStereoTr * dd4hep::Translation3D(fwire_r_z0,0.,0.) );
-                cell_v.placeVolume(fwire_v,fwireTr);
-            }
-            // // // // // // // // // // // // // // // // // // // //
-            // // // // // // POSITIONING OF F WIRE 3    // // // // //
-            // // // // // // REQUIRES OFFSET OF R       // // // // //
-            // // // // // // // // // // // // // // // // // // // //
-            {
-                MyLength_t fwire_radius = dch_FSideWire_thickness/2;
-                // increase radial distance, move it closer to the sense wire
-                MyLength_t fwire_r_z0   = cell_rout_z0 - fwire_radius;
-                MyAngle_t  fwire_stereo =  (-1.)*l.StereoSign()*l.stereoangle_z0(fwire_r_z0);
-                MyLength_t fwire_length = 0.5*l.WireLength(fwire_r_z0) - fwire_radius*cos(l.stereoangle_z0(fwire_r_z0)) - safety_z_interspace;;
+                    dd4hep::Tube fwire_s(0., fwire_radius, fwire_length);
+                    dd4hep::Volume fwire_v(cell_name+"_f2wire", fwire_s, wiresMat );
+                    fwire_v.setVisAttributes( wiresVis );
+                    // Change sign of stereo angle to place properly the wire inside the twisted tube
+                    dd4hep::RotationX fwireStereoTr( fwire_stereo );
+                    dd4hep::RotationZ fwirePhoTr( fwire_phi );
+                    dd4hep::Transform3D fwireTr ( fwirePhoTr * fwireStereoTr * dd4hep::Translation3D(fwire_r_z0,0.,0.) );
+                    cell_v.placeVolume(fwire_v,fwireTr);
+                }
 
-                dd4hep::Tube fwire_s(0., fwire_radius, fwire_length);
-                dd4hep::Volume fwire_v(cell_name+"_f3wire", fwire_s, desc.material("W"));
-                // Change sign of stereo angle to place properly the wire inside the twisted tube
-                dd4hep::RotationX fwireStereoTr( fwire_stereo );
-                dd4hep::Transform3D fwireTr ( fwireStereoTr * dd4hep::Translation3D(fwire_r_z0,0.,0.) );
-                cell_v.placeVolume(fwire_v,fwireTr);
-            }
+                // // // // // // // // // // // // // // // // // // // //
+                // // // // // // POSITIONING OF F WIRE 1    // // // // //
+                // // // // // // REQUIRES OFFSET OF PHI & R // // // // //
+                // // // // // // // // // // // // // // // // // // // //
+                {
+                    MyLength_t fwire_radius = dch_FSideWire_thickness/2;
+                    // decrease radial distance, move it closer to the sense wire
+                    MyLength_t fwire_r_z0   = cell_rout_z0 - fwire_radius;
+                    MyAngle_t  fwire_stereo =  (-1.)*l.StereoSign()*l.stereoangle_z0(fwire_r_z0);
+                    MyAngle_t  fwire_phi    = -cell_phi_width/2 + fwire_phi_offset( fwire_r_z0, fwire_radius);
+                    MyLength_t fwire_length = 0.5*l.WireLength(fwire_r_z0) - fwire_radius*cos(l.stereoangle_z0(fwire_r_z0)) - safety_z_interspace;;
+
+                    dd4hep::Tube fwire_s(0., fwire_radius, fwire_length);
+                    dd4hep::Volume fwire_v(cell_name+"_f1wire", fwire_s, wiresMat );
+                    fwire_v.setVisAttributes( wiresVis );
+                    // Change sign of stereo angle to place properly the wire inside the twisted tube
+                    dd4hep::RotationX fwireStereoTr( fwire_stereo );
+                    dd4hep::RotationZ fwirePhoTr( fwire_phi );
+                    dd4hep::Transform3D fwireTr ( fwirePhoTr * fwireStereoTr * dd4hep::Translation3D(fwire_r_z0,0.,0.) );
+                    cell_v.placeVolume(fwire_v,fwireTr);
+                }
+                // // // // // // // // // // // // // // // // // // // //
+                // // // // // // POSITIONING OF F WIRE 3    // // // // //
+                // // // // // // REQUIRES OFFSET OF PHI & R // // // // //
+                // // // // // // // // // // // // // // // // // // // //
+                {
+                    MyLength_t fwire_radius = dch_FSideWire_thickness/2;
+                    // increase radial distance, move it closer to the sense wire
+                    MyLength_t fwire_r_z0   = cell_rin_z0 + fwire_radius;
+                    MyAngle_t  fwire_stereo =  (-1.)*l.StereoSign()*l.stereoangle_z0(fwire_r_z0);
+                    MyAngle_t  fwire_phi    = -cell_phi_width/2 + fwire_phi_offset( fwire_r_z0, fwire_radius);
+                    MyLength_t fwire_length = 0.5*l.WireLength(fwire_r_z0) - fwire_radius*cos(l.stereoangle_z0(fwire_r_z0)) - safety_z_interspace;;
+
+                    dd4hep::Tube fwire_s(0., fwire_radius, fwire_length);
+                    dd4hep::Volume fwire_v(cell_name+"_f3wire", fwire_s, wiresMat );
+                    fwire_v.setVisAttributes( wiresVis );
+                    // Change sign of stereo angle to place properly the wire inside the twisted tube
+                    dd4hep::RotationX fwireStereoTr( fwire_stereo );
+                    dd4hep::RotationZ fwirePhoTr( fwire_phi );
+                    dd4hep::Transform3D fwireTr ( fwirePhoTr * fwireStereoTr * dd4hep::Translation3D(fwire_r_z0,0.,0.) );
+                    cell_v.placeVolume(fwire_v,fwireTr);
+                }
+                // // // // // // // // // // // // // // // // // // // //
+                // // // // // // POSITIONING OF F WIRE 5    // // // // //
+                // // // // // // REQUIRES OFFSET OF R       // // // // //
+                // // // // // // // // // // // // // // // // // // // //
+                {
+                    MyLength_t fwire_radius = dch_FSideWire_thickness/2;
+                    // increase radial distance, move it closer to the sense wire
+                    MyLength_t fwire_r_z0   = cell_rin_z0 + fwire_radius;
+                    MyAngle_t  fwire_stereo =  (-1.)*l.StereoSign()*l.stereoangle_z0(fwire_r_z0);
+                    MyLength_t fwire_length = 0.5*l.WireLength(fwire_r_z0) - fwire_radius*cos(l.stereoangle_z0(fwire_r_z0)) - safety_z_interspace;;
+
+                    dd4hep::Tube fwire_s(0., fwire_radius, fwire_length);
+                    dd4hep::Volume fwire_v(cell_name+"_f5wire", fwire_s, wiresMat );
+                    fwire_v.setVisAttributes( wiresVis );
+                    // Change sign of stereo angle to place properly the wire inside the twisted tube
+                    dd4hep::RotationX fwireStereoTr( fwire_stereo );
+                    dd4hep::Transform3D fwireTr ( fwireStereoTr * dd4hep::Translation3D(fwire_r_z0,0.,0.) );
+                    cell_v.placeVolume(fwire_v,fwireTr);
+                }
+                // // // // // // // // // // // // // // // // // // // //
+                // // // // // // POSITIONING OF F WIRE 4    // // // // //
+                // // // // // // REQUIRES OFFSET OF R       // // // // //
+                // // // // // // // // // // // // // // // // // // // //
+                {
+                    MyLength_t fwire_radius = dch_FSideWire_thickness/2;
+                    // increase radial distance, move it closer to the sense wire
+                    MyLength_t fwire_r_z0   = cell_rout_z0 - fwire_radius;
+                    MyAngle_t  fwire_stereo =  (-1.)*l.StereoSign()*l.stereoangle_z0(fwire_r_z0);
+                    MyLength_t fwire_length = 0.5*l.WireLength(fwire_r_z0) - fwire_radius*cos(l.stereoangle_z0(fwire_r_z0)) - safety_z_interspace;;
+
+                    dd4hep::Tube fwire_s(0., fwire_radius, fwire_length);
+                    dd4hep::Volume fwire_v(cell_name+"_f4wire", fwire_s, wiresMat );
+                    fwire_v.setVisAttributes( wiresVis );
+                    // Change sign of stereo angle to place properly the wire inside the twisted tube
+                    dd4hep::RotationX fwireStereoTr( fwire_stereo );
+                    dd4hep::Transform3D fwireTr ( fwireStereoTr * dd4hep::Translation3D(fwire_r_z0,0.,0.) );
+                    cell_v.placeVolume(fwire_v,fwireTr);
+                }
+            }// end building field wires
         }/// end building wires
         for(int nphi = 0; nphi < ncells; ++nphi)
         {

@@ -112,23 +112,28 @@
     name="DCH_o2"
     type="DriftChamber_o2_v01_T"
     readout="DCHCollection"
+    printExcelTable="True"
     >
   <!-- /detectors/detector/vessel -->
   <vessel
-
       material="CarbonFibStr"
       vis="dch_vessel_vis"
-
     >
   </vessel>
   <!-- /detectors/detector/gas -->
   <gas
-
       material="GasHe_90Isob_10"
       vis="dch_gas_vis"
-
     >
   </gas>
+  <!-- /detectors/detector/wires -->
+  <wires
+      material="W"
+      vis="dch_no_vis_nodaughters"
+      buildSenseWires="True"
+      buildFieldWires="True"
+    >
+  </wires>
   </detector>
 </detectors>
 
