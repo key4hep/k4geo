@@ -132,6 +132,9 @@
       vis="dch_no_vis_nodaughters"
       buildSenseWires="True"
       buildFieldWires="True"
+      SWire_thickness       ="dch_SWire_thickness"
+      FSideWire_thickness   ="dch_FSideWire_thickness"
+      FCentralWire_thickness="dch_FCentralWire_thickness"
     >
   </wires>
   </detector>
