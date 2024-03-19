@@ -10,7 +10,12 @@
     <fraction n="0.107061807167701" ref="H"/>
     <fraction n="0.510303092386095" ref="C"/>
   </material>
-
+    <material name="CarbonFibStr">
+      <D type="density" value="1.45" unit="g/cm3"/>
+      <comment> CMS ECAL https://gitlab.cern.ch/geant4/geant4/-/blob/master/examples/advanced/composite_calorimeter/dataglobal/material.cms#L183 </comment>
+      <composite n="2"   ref="C"/>
+      <composite n="13"  ref="H"/>
+    </material>
 </materials>
 
 </lccdd>
