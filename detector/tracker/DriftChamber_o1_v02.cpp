@@ -177,7 +177,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
     MyLength_t safety_phi_interspace = 1e-6 * dd4hep::rad;
 
 
-    MyLength_t vessel_thickness = desc.constantAsDouble("dch_vessel_thickness");
+    MyLength_t vessel_thickness = desc.constantAsDouble("DCH_vessel_thickness");
     dd4hep::Tube vessel_s(  DCH_info::dch_rin_z0 - vessel_thickness,
                             DCH_info::dch_rout_z0+ vessel_thickness,
                             DCH_info::dch_Lhalf  + vessel_thickness);
@@ -463,38 +463,38 @@ void DCH_info::Fill_DCH_info_database(dd4hep::Detector & desc)
     if( not IsDatabaseEmpty() ) return;
 
     // DCH outer geometry dimensions
-    DCH_info::dch_rin_z0 = desc.constantAsDouble("dch_inner_cyl_R_z0");
-    DCH_info::dch_rout_z0  = desc.constantAsDouble("dch_outer_cyl_R_z0");
-    DCH_info::dch_Lhalf = desc.constantAsDouble("dch_Lhalf");
+    DCH_info::dch_rin_z0 = desc.constantAsDouble("DCH_inner_cyl_R_z0");
+    DCH_info::dch_rout_z0  = desc.constantAsDouble("DCH_outer_cyl_R_z0");
+    DCH_info::dch_Lhalf = desc.constantAsDouble("DCH_Lhalf");
 
     // guard wires position, fix position
-    DCH_info::dch_rin_z0_guard  = desc.constantAsDouble("dch_in_guard_z0");
-    DCH_info::dch_rout_z0_guard = desc.constantAsDouble("dch_out_guard_zL2");
+    DCH_info::dch_rin_z0_guard  = desc.constantAsDouble("DCH_in_guard_z0");
+    DCH_info::dch_rout_z0_guard = desc.constantAsDouble("DCH_out_guard_zL2");
 
     /// number of cells of first layer
-    DCH_info::dch_ncell0 = desc.constantAsLong("dch_ncell");
+    DCH_info::dch_ncell0 = desc.constantAsLong("DCH_ncell");
     /// increment of cell number by each superlayer
-    DCH_info::dch_ncell_increment = desc.constantAsLong("dch_ncell_increment");
+    DCH_info::dch_ncell_increment = desc.constantAsLong("DCH_ncell_increment");
     /// layer cells are grouped into sectors
-    DCH_info::dch_ncell_per_sector = desc.constantAsLong("dch_ncell_per_sector");
+    DCH_info::dch_ncell_per_sector = desc.constantAsLong("DCH_ncell_per_sector");
     // if dch_ncell_per_sector is not divisor of dch_ncell0 and dch_ncell_increment
     // trow an error
     if( 0 != (dch_ncell0 % dch_ncell_per_sector) || 0 != (dch_ncell_increment % dch_ncell_per_sector) )
         throw std::runtime_error("dch_ncell_per_sector is not divisor of dch_ncell0 or dch_ncell_increment");
 
     // wires/cells are grouped in layers (and superlayers)
-    DCH_info::dch_nsuperlayers = desc.constantAsLong("dch_nsuperlayers");
-    DCH_info::dch_nlayersPerSuperlayer = desc.constantAsLong("dch_nlayersPerSuperlayer");
+    DCH_info::dch_nsuperlayers = desc.constantAsLong("DCH_nsuperlayers");
+    DCH_info::dch_nlayersPerSuperlayer = desc.constantAsLong("DCH_nlayersPerSuperlayer");
     /// nlayers = nsuperlayers * nlayersPerSuperlayer
     /// default: 112 = 14 * 8
     DCH_info::dch_nlayers = DCH_info::dch_nsuperlayers * DCH_info::dch_nlayersPerSuperlayer;
 
-    MyAngle_t dch_alpha = desc.constantAsDouble("dch_alpha");
+    MyAngle_t dch_alpha = desc.constantAsDouble("DCH_alpha");
     DCH_info::dch_twist_angle = 2*dch_alpha;
 
     // retrieve some initial values for the first layer
-    double dch_first_width = desc.constantAsDouble("dch_first_width");
-    MyLength_t dch_first_sense_r = desc.constantAsDouble("dch_first_sense_r");
+    double dch_first_width = desc.constantAsDouble("DCH_first_width");
+    MyLength_t dch_first_sense_r = desc.constantAsDouble("DCH_first_sense_r");
 
     // intialize layer 1 from input parameters
     {
