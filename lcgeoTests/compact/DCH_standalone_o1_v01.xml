@@ -143,7 +143,7 @@
 
 <readouts>
   <readout name="DCHCollection">
-      <id>system:5,layer:7,nphi:15,stereosign:3</id>
+      <id>system:5,superlayer:4,layer:7,nphi:15,stereosign:3</id>
   </readout>
 </readouts>
 
