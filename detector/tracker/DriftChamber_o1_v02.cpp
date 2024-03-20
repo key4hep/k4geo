@@ -223,7 +223,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
         // add superlayer bitfield
         // WARNING: division of integers on purpose!
         int nsuperlayer_minus_1 = (ilayer-1)/l.dch_nlayersPerSuperlayer;
-        layer_pv.addPhysVolID("superlayer", nsuperlayer_minus_1+1 );
+        layer_pv.addPhysVolID("superlayer", nsuperlayer_minus_1 );
 
         dd4hep::DetElement layer_DE(det,layer_name+"DE", ilayer);
         layer_DE.setPlacement(layer_pv);
