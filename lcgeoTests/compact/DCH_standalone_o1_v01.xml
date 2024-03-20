@@ -110,7 +110,7 @@
   <detector
     id="DetID_DCH"
     name="DCH_o2"
-    type="DriftChamber_o2_v01_T"
+    type="DriftChamber_o1_v02_T"
     readout="DCHCollection"
     printExcelTable="True"
     >
