@@ -1,0 +1,33 @@
+<lccdd >
+
+  <info name="DCH standalone"
+        title="DCHsubdetector"
+        author="A. Tolosa Delgado, Brieuc Francois"
+        url="https://indico.cern.ch/"
+        status="development"
+        version="o2, v01">
+	<comment>The compact format of the DCH subdetector, built from XLSX spreadsheet</comment>
+  </info>
+
+
+  <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml" />
+
+  <includes>
+    <gdmlFile  ref="../../FCCee/IDEA/compact/IDEA_o1_v03/elements_o1_v01.xml"/>
+    <gdmlFile  ref="../../FCCee/IDEA/compact/IDEA_o1_v03/materials_o1_v02.xml"/>
+  </includes>
+
+  <define>
+    <constant name="world_size" value="25*m"/>
+    <constant name="world_x" value="world_size"/>
+    <constant name="world_y" value="world_size"/>
+    <constant name="world_z" value="world_size"/>
+  </define>
+
+  <include ref="../../FCCee/IDEA/compact/IDEA_o1_v03/DectDimensions_IDEA_o1_v02.xml"/>
+  <include ref="../../FCCee/IDEA/compact/IDEA_o1_v03/DriftChamber_o1_v02.xml"/>
+
+
+
+</lccdd>
+
