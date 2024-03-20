@@ -20,7 +20,7 @@
 
 #include <map>
 
-namespace DCH_o2 {
+namespace DCH_v2 {
 
 // use alias of types to show more clear what the variable is
 // if everything is double, the code is not readable
@@ -124,8 +124,8 @@ public:
 
 };
 
-/// Function to build ARC endcaps
-static dd4hep::Ref_t create_DCH_o2_v01(dd4hep::Detector &desc, dd4hep::xml::Handle_t handle, dd4hep::SensitiveDetector sens)
+/// Function to build DCH
+static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Handle_t handle, dd4hep::SensitiveDetector sens)
 {
     dd4hep::xml::DetElement detElem = handle;
     std::string detName = detElem.nameStr();
@@ -616,4 +616,4 @@ void DCH_info::Show_DCH_info_database()
 
 
 }; // end DCH_o2 namespace
-DECLARE_DETELEMENT(DriftChamber_o2_v01_T, DCH_o2::create_DCH_o2_v01)
+DECLARE_DETELEMENT(DriftChamber_o1_v02_T, DCH_v2::create_DCH_o1_v02)
