@@ -51,19 +51,19 @@ find_package ( ROOT REQUIRED COMPONENTS Geom GenVector)
 message ( STATUS "ROOT_VERSION: ${ROOT_VERSION}" )
 
 find_package( Geant4 REQUIRED ) 
-find_package( LCIO REQUIRED)
-# Shim for older LCIO versions
-if(NOT TARGET LCIO::lcio)
-  add_library(LCIO::lcio INTERFACE IMPORTED GLOBAL)
-  set_target_properties(LCIO::lcio
-    PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${LCIO_INCLUDE_DIRS}"
-    INTERFACE_LINK_LIBRARIES "${LCIO_LIBRARIES}"
-  )
+OPTION(K4GEO_USE_LCIO "Enable or disable the use of LCIO, which is needed for some detector constructors and plugins" ON)
+if(K4GEO_USE_LCIO)
+  find_package(LCIO REQUIRED)
+  # Shim for older LCIO versions
+  if(NOT TARGET LCIO::lcio)
+    add_library(LCIO::lcio INTERFACE IMPORTED GLOBAL)
+    set_target_properties(LCIO::lcio
+      PROPERTIES
+      INTERFACE_INCLUDE_DIRECTORIES "${LCIO_INCLUDE_DIRS}"
+      INTERFACE_LINK_LIBRARIES "${LCIO_LIBRARIES}"
+    )
+  endif()
 endif()
-
-add_subdirectory(detectorSegmentations)
-add_subdirectory(detectorCommon)
 
 file(GLOB sources 
   ./detector/tracker/*.cpp
@@ -75,6 +75,25 @@ file(GLOB sources
   ./plugins/LinearSortingPolicy.cpp
   ./detector/PID/ARC_geo_o1_v01.cpp
   )
+
+if(NOT K4GEO_USE_LCIO)
+  set(lcio_sources # in ./detector/tracker
+    TrackerEndcap_o2_v05_geo.cpp
+    SiTrackerEndcap_o2_v02ext_geo.cpp
+    TrackerBarrel_o1_v03_geo.cpp
+    TrackerBarrel_o1_v04_geo.cpp
+    TrackerBarrel_o1_v05_geo.cpp
+    TrackerEndcap_o1_v05_geo.cpp
+    TrackerEndcap_o2_v06_geo.cpp
+    VertexBarrel_detailed_o1_v01_geo.cpp
+    VertexEndcap_o1_v05_geo.cpp
+    ZPlanarTracker_geo.cpp
+    )
+  foreach(lcio_source ${lcio_sources})
+    list(FILTER sources EXCLUDE REGEX "${lcio_source}")
+  endforeach()
+  message(STATUS "Use of LCIO is DISABLED, some detectors that depend on LCIO will not be built: ${lcio_sources}")
+endif()
 
 file(GLOB G4sources
   ./plugins/TPCSDAction.cpp
@@ -94,11 +113,19 @@ add_library(lcgeo ALIAS k4geo)
 target_include_directories(${PackageName}   PRIVATE ${PROJECT_SOURCE_DIR}/detector/include )
 target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detector/include )
 
-target_link_libraries(${PackageName}   DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers ROOT::Core LCIO::lcio detectorSegmentations)
-target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ROOT::Core ${Geant4_LIBRARIES} LCIO::lcio)
+target_link_libraries(${PackageName}   DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers ROOT::Core detectorSegmentations)
+target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ROOT::Core ${Geant4_LIBRARIES})
+
+if(K4GEO_USE_LCIO)
+  target_link_libraries(${PackageName}   LCIO::lcio)
+  target_link_libraries(${PackageName}G4 LCIO::lcio)
+endif()
 
 #Create this_package.sh file, and install
 dd4hep_instantiate_package(${PackageName})
+
+add_subdirectory(detectorSegmentations)
+add_subdirectory(detectorCommon)
 
 # Destination directories are hardcoded because GNUdirectories are not included
 install(TARGETS ${PackageName}  ${PackageName}G4
