@@ -1,0 +1,110 @@
+<lccdd>
+  <info name="CDCH" title="CDCH" author="CDCH" status="development" version="$Id: $">
+    <comment>
+      Detector description for the IDEA Drift Chamber. To understand the free parameters below, look e.g. at https://indico.cern.ch/event/932973/contributions/4041314/attachments/2139657/3664808/primavera_FCCworkshop_2020.pdf
+    </comment>
+  </info>
+
+  <!-- %%%%%%             Central Drift Chamber Basic Parameters                 %%%%%% -->
+  <define>
+    <!-- Radius of the beginning of the carbon fiber cylinder walls -->
+    <constant name = "CDCH:inner_radius"            value = "DCH_inner_radius"/>
+    <!-- Radius of the end of the carbon fiber cylinder walls, mind that changing this value does not propagate to the sensitive volume layout -->
+    <constant name = "CDCH:outer_radius"            value = "DCH_outer_radius"/>
+    <!-- Half z extent of the envelope (includes services) -->
+    <constant name = "CDCH:zHalfExtentWithServices" value = "DCH_half_length"/>
+    <!-- Angle for the rotation of phi sectors leading to the stereo angle of the wires (the way the chamber will be built)
+    alpha = angle between the line (0,0,-zHalfLength) - (wireX,wireY,-zHalfLength) and the line (0,0,+zHalfLength) - (wireX,wireY,+zHalfLength) projected on the -zHalfLength plane perpandicular to z
+    It is used to determine the radius of the hyperboloid in +- zHalfLength-->
+    <constant name = "CDCH:alpha"                  value = "30*degree"/>
+    <!-- Radial extent of the cell in the first layer, used to define the radial step between layers -->
+    <constant name = "CDCH:cellDimension"          value = "11.846*mm"/>
+    <!-- Number of super layer (baseline = 14). All layers within a super layer have the same number of cell (or sense wire)-->
+    <constant name = "CDCH:nSuperLayer"            value = "14"/>
+    <!-- Number of layer in a super-layer (baseline = 8) -->
+    <constant name = "CDCH:nLayer"                  value = "8"/>
+    <!-- For development, you can lower the number of (super-)layer to run faster
+    <constant name = "CDCH:nSuperLayer"            value = "4"/>
+    <constant name = "CDCH:nLayer"                  value = "2"/>-->
+    <!-- Number of sense wires (i.e. sensitive cells) in the first super-layer -->
+    <constant name = "CDCH:nSWireFirstLayer"                 value = "192"/>
+    <!-- Number of sense wire to add when jumping from a super layer to another to keep reasonably constant cell sizes w.r.t. cell radius. -->
+    <constant name = "CDCH:nSDeltaWire"            value = "48"/>
+    <!-- Ratio between the number of field and sense wires, this and nCenterFWirePerCell will tell how many sense wires are in the top/bottom of the cell -->
+    <constant name = "CDCH:nFtoSWireRatio"         value = "5"/>
+    <!-- Number of field wires in the middle of a single cell. Note that only the lateral wires 'ending' the cell in the phi direction are included in the next cell.
+         be careful if you modify this parameter, I am not sure it will propagate properly to everything (e.g. the phi_offset) -->
+    <constant name = "CDCH:nCenterFWirePerCell"         value = "1"/>
+    <!-- The following lines set the wire thickness (inlcuding coating): diameter = ShellThickIn + ShellThickOut i.e. ShellThickOut should be = to the coating thickness * 2 -->
+    <constant name = "CDCH:FWireShellThickIn"      value = "0.040*mm"/>
+    <constant name = "CDCH:FWireShellThickOut"     value = "0.0006*mm"/>
+    <constant name = "CDCH:centerFWireShellThickIn"   value = "0.050*mm"/> <!-- Field wires in the middle of the cell are thicker -->
+    <constant name = "CDCH:centerFWireShellThickOut"  value = "0.0006*mm"/>
+    <constant name = "CDCH:SWireShellThickIn"      value = "0.020*mm"/>
+    <constant name = "CDCH:SWireShellThickOut"     value = "0.0006*mm"/>
+    <constant name = "CDCH:InGWireShellThickIn"    value = "0.050*mm"/>
+    <constant name = "CDCH:InGWireShellThickOut"   value = "0.0006*mm"/>
+    <constant name = "CDCH:OutGWireShellThickIn"   value = "0.050*mm"/>
+    <constant name = "CDCH:OutGWireShellThickOut"  value = "0.0006*mm"/>
+    <!-- Factor applied to enlarge the wire thickness (baseline = 1.0). Use it only to visualize the wires which are otherwise too small-->
+    <!-- NB: not propagated to the envelope volumes, you will have volume extrusions if != 1 -->
+    <constant name = "CDCH:wireThicknessDilution"  value = "1.0"/>
+    <!-- Thicknesses of the carbon fiber support structure, the endcap including services should sum up to 5% of X0 -->
+    <constant name = "CDCH:CarbonInnerWallThick"   value = "0.2*mm"/>
+    <constant name = "CDCH:CopperInnerWallThick"   value = "0.001*mm"/>
+    <constant name = "CDCH:GasInnerWallThick"      value = "10.825*mm"/>
+    <constant name = "CDCH:Carbon1OuterWallThick"  value = "2.5*mm"/>
+    <constant name = "CDCH:Carbon2OuterWallThick"  value = "2.5*mm"/>
+    <constant name = "CDCH:CopperOuterWallThick"   value = "0.018*mm"/>
+    <constant name = "CDCH:FoamOuterWallThick"     value = "10.000*mm"/>
+    <constant name = "CDCH:GasEndcapWallThick"   value = "249.7475*mm"/>
+    <constant name = "CDCH:CopperEndcapWallThick"  value = "0.0005*mm"/>
+    <constant name = "CDCH:KaptonEndcapWallThick"  value = "0.012*mm"/>
+    <constant name = "CDCH:CarbonEndcapWallThick"  value = "0.240*mm"/>
+    <constant name = "CDCH:secure"                 value = "1.0e-2*mm"/>
+    <constant name = "CDCH:capGasLayer"            value = "1.0e-3*mm"/>
+    <constant name = "CDCH:extShiftFW"             value = "1.55e-3*mm"/>
+    <!-- Radius of the inner/outer guard layer, at z = 0 -->
+    <constant name = "CDCH:inGuardRad"             value = "354.0*mm"/>
+    <constant name = "CDCH:outGuardRad"            value = "1927.0*mm"/>
+  </define>
+
+  <!--<regions>
+    <region name="CDCH_region" eunit="MeV" lunit="mm" cut="0.001" threshold="0.001">
+    </region>
+  </regions>-->
+
+
+  <detectors>
+    <detector id="DetID_DCH" name="CDCH" type="DriftChamber_o1_v01" readout="DriftChamber_simHits" vis="CDCH"> <!-- region="CDCH_region">-->
+      <sensitive type="tracker"/>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="DriftChamber_simHits">
+       <!-- <id>system: identifies the detector, superLayer: identifies the super layer (bloc of rings with the same number of wires in phi), ring: identifies a ring inside a super layer, phi: identifies a single wire whithin a ring which is formed of a replication of wires in phi, hitorigin: tells where the hit occured (0 in the gas, 1 in the sense wire, 2 in the field wire, 3 in the guard wire, 4 in the walls), stereo:tells whether it was a wire with positive -0- or negative -1- stereo angle, layerInCell: a cell is composed of three 'layers' with field wires only, both sense and field wires then field wire only again, this fields tells where it belongs 0 = not applicable e.g. hit in gas, 1 = bottom, 2 = middle, 3 = top (mind that the cells are built per stereo angle, so the + stereo bottom will correspond to the - stereo top) </id>-->
+       <id>system:4,superLayer:5,layer:5,phi:11,hitorigin:3,stereo:1,layerInCell:2</id>
+    </readout>
+  </readouts>
+
+  <display>
+    <vis name="vCDCH:Pb"            alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="vCDCH:Sc"            alpha="0.6" r="0.8" g="0.8" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="vCDCH:Plastic"       alpha="1.0" r="1.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="vCDCH:Steel"         alpha="0.0" showDaughters="true" visible="false"/>
+    <vis name="vCDCH:Gas1"          alpha="1.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="vCDCH:Gas2"    alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="vCDCH:Gas3"        alpha="1.0" r="1.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="vCDCH:Wire1"         alpha="1.0"  r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="vCDCH:Wire2"         alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="vCDCH:Wire3"         alpha="1.0" r="1.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="vCDCH:Fwire"         alpha="1.0" r="1.0" g="1.0" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="vCDCH:Stack"         showDaughters="true" visible="false"/>
+    <vis name="vCDCH:Fiber"         alpha="1.0" r="0.8" g="0.8" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="vCDCH:ReadOutBox"    alpha="1.0" r="0.8" g="0.5" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="vCDCH:ROSteel"       alpha="1.0" r="0.8" g="0.5" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="vCDCH:Air"           showDaughters="true" visible="false"/>
+  </display>
+
+</lccdd>
