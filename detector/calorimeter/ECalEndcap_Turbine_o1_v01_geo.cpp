@@ -40,23 +40,27 @@ namespace det {
     double t0 = (thickness_outer*ri-thickness_inner*ro)/(ri-ro);
     double r0 = 0.;
     dd4hep::Solid shapeBeforeSubtraction;
+    std::cout << "Building blade, ro, ri = " << ro << " " << ri << std::endl;
     if (t0 < 0.) { // now we need to adjust what we call r0...
       r0 = (thickness_outer*ri-thickness_inner*ro)/(thickness_outer-thickness_inner);
       t0 = 0.;
-      dd4hep::Trd2 tmp1(t0/2.+0.01, thickness_outer/2., width/2., width/2., (ro-r0)/2. );
-      dd4hep::Trd2 tmp2(thickness_inner/2., thickness_inner/2., width/2., width/2., ro );
+      dd4hep::Trd2 tmp1(t0/2.+0.01, thickness_outer, width/2., width/2., 2*(ro-ri) );
+      dd4hep::Trd2 tmp2(thickness_inner/2., thickness_inner/2., width/2., width/2., 2*(ro-ri) );
       dd4hep::UnionSolid tmp3(tmp2, tmp1, dd4hep::Transform3D(dd4hep::RotationZYX( 0, 0, 0),dd4hep::Position(0, 0, r0)));
       shapeBeforeSubtraction = tmp3;
       lLog << MSG::INFO << "extrapolated thickness is " << t0 <<  " and r0 is " << r0 << endmsg;
     } else {
-      dd4hep::Trd2 tmp1(t0/2., thickness_outer/2., width/2., width/2., ro );
+      dd4hep::Trd2 tmp1(t0/2., thickness_outer/2., width/2., width/2., 2*(ro-ri) );
       shapeBeforeSubtraction = tmp1;
     }
 
     dd4hep::Tube outerTube(ro, ro*100, delZ);
-    dd4hep::Tube innerTube(0., ri, delZ); 
-    dd4hep::SubtractionSolid tmp4(shapeBeforeSubtraction, outerTube, dd4hep::Transform3D(dd4hep::RotationZYX( 0, TMath::Pi()/2.-bladeangle, TMath::Pi()/2.),dd4hep::Position(0, 0, -ro/2.)));
-    return dd4hep::SubtractionSolid(tmp4, innerTube, dd4hep::Transform3D(dd4hep::RotationZYX( 0 , TMath::Pi()/2.-bladeangle, TMath::Pi()/2.),dd4hep::Position(0, 0, -ro/2.)));
+    dd4hep::Tube innerTube(0., ri, delZ);
+    // get rid of "-r" side of blade
+    dd4hep::Box dummyBox(100, 100, 100);
+    dd4hep::SubtractionSolid tmp4(shapeBeforeSubtraction, dummyBox, dd4hep::Transform3D(dd4hep::RotationZYX(0.,0,0.), dd4hep::Position(0, 0, -100.-ri)));
+    dd4hep::SubtractionSolid tmp5(tmp4, outerTube, dd4hep::Transform3D(dd4hep::RotationZYX( 0, TMath::Pi()/2.-bladeangle, TMath::Pi()/2.),dd4hep::Position(0, 0, -(ro+ri)/2.)));
+    return dd4hep::SubtractionSolid(tmp5, innerTube, dd4hep::Transform3D(dd4hep::RotationZYX( 0 , TMath::Pi()/2.-bladeangle, TMath::Pi()/2.),dd4hep::Position(0, 0, -(ro+ri)/2.)));
     //return shapeBeforeSubtraction;
 
   }
@@ -226,7 +230,7 @@ namespace det {
 // Retrieve cryostat data
     int    nBladesToDraw = nBlades;
     nBladesToDraw = nBlades/10;
-    // nBladesToDraw = 3;
+    //nBladesToDraw = 2;
    
     lLog << MSG::INFO << "Number of blades "<< nBlades << endmsg;
 
@@ -238,8 +242,9 @@ namespace det {
       float phi = iBlade*2*TMath::Pi()/nBlades;
       float delPhi = 2*TMath::Pi()/nBlades;
       
-      float x = (ro/2.)*TMath::Cos(phi);
-      float y = (ro/2.)*TMath::Sin(phi); //ri*TMath::Sin(phi)/6.;
+      std::cout << "Placing blade, ro, ri = " << ro << " " << ri << std::endl;
+      float x = (ro-ri)/2.*TMath::Cos(phi);
+      float y = (ro-ri)/2.*TMath::Sin(phi); //ri*TMath::Sin(phi)/6.;
       float z =  0.;
       
       TGeoRotation tgr;
@@ -275,8 +280,8 @@ namespace det {
       for (auto absBladeLayerVol: absBladeLayerVols) {
 	
 	float roLayer = riLayer+delr;
-	float xLayer = (roLayer/2.)*TMath::Cos(phi);
-	float yLayer = (roLayer/2.)*TMath::Sin(phi); //ri*TMath::Sin(phi)/6.;
+	float xLayer = ((roLayer+riLayer)/2.)*TMath::Cos(phi);
+	float yLayer = ((roLayer+riLayer)/2.)*TMath::Sin(phi); //ri*TMath::Sin(phi)/6.;
 	float zLayer =  0.;
 	riLayer = roLayer;
 
@@ -288,7 +293,7 @@ namespace det {
 	absBladeVol_pv.addPhysVolID("subcyl", iSubcyl);
 	absBladeVol_pv.addPhysVolID("module", iBlade);
 	absBladeVol_pv.addPhysVolID("type", 1);  // 0 = active, 1 = passive, 2 = readout
-	if (iLayer > 10) std::cout << "Abs layer > 10? " << iLayer << std::endl;
+	std::cout << "Blade layer, rho is " << iLayer << " " << absBladeVol_pv.position().Rho() << " " << roLayer/2. << std::endl;
 	absBladeVol_pv.addPhysVolID("layer", iSubcyl*ECalEndcapNumLayers+iLayer);
 	dd4hep::DetElement absBladeDetElem(bathDetElem, "absorber"+std::to_string(sign)+"_"+std::to_string(iSubcyl)+"_"+std::to_string(iBlade)+"_"+std::to_string(iSubcyl*ECalEndcapNumLayers+iLayer), ECalEndCapElementCounter++);
 	absBladeDetElem.setPlacement(absBladeVol_pv);
@@ -303,8 +308,8 @@ namespace det {
 	
 	float roLayer = riLayer+delr;
 
-	float xLayer = (roLayer/2.)*TMath::Cos(phi+delPhi/2.);
-	float yLayer = (roLayer/2.)*TMath::Sin(phi+delPhi/2.);
+	float xLayer = ((roLayer+riLayer)/2.)*TMath::Cos(phi+delPhi/2.);
+	float yLayer = ((roLayer+riLayer)/2.)*TMath::Sin(phi+delPhi/2.);
 	float zLayer = 0;
 	dd4hep::Transform3D com2(r3d2, dd4hep::Translation3D(xLayer,yLayer,zLayer));
 	dd4hep::PlacedVolume electrodeBladeVol_pv = aEnvelope.placeVolume(electrodeBladeLayerVol, com2);
@@ -330,8 +335,8 @@ namespace det {
 	
 	float roLayer = riLayer+delr;
 
-	float xLayer = (roLayer/2.)*TMath::Cos(phi+delPhi/2.);
-	float yLayer = (roLayer/2.)*TMath::Sin(phi+delPhi/2.);
+	float xLayer = ((roLayer+riLayer)/2.)*TMath::Cos(phi+delPhi/2.);
+	float yLayer = ((roLayer+riLayer)/2.)*TMath::Sin(phi+delPhi/2.);
 	float zLayer = 0;
 	dd4hep::Transform3D com2(r3d2, dd4hep::Translation3D(xLayer,yLayer,zLayer));
 	dd4hep::PlacedVolume LArVol_pv(aEnvelope.placeVolume(LArTotalLayerVol, com2));
