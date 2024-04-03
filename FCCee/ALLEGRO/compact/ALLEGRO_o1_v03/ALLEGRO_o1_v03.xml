@@ -10,7 +10,7 @@
     status="development"
     version="1.0">
     <comment>
-      Master compact file describing the latest developments of the FCCee ALLEGRO detector concept. With respect to v02 it features and ECal barrel with 11 layers and cell corners projective along phi
+      Master compact file describing the latest developments of the FCCee ALLEGRO detector concept. With respect to v02 it features an ECal barrel with 11 layers and cell corners projective along phi
     </comment>
   </info>
 
