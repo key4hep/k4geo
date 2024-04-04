@@ -229,7 +229,7 @@ namespace det {
   //build cryostat
 // Retrieve cryostat data
     int    nBladesToDraw = nBlades;
-    nBladesToDraw = nBlades/10;
+    nBladesToDraw = 50;
     //nBladesToDraw = 2;
    
     lLog << MSG::INFO << "Number of blades "<< nBlades << endmsg;
@@ -239,7 +239,7 @@ namespace det {
       //      absMass += absBladeMass;
       // electrodeMass += electrodeBladeMass;
 
-      float phi = iBlade*2*TMath::Pi()/nBlades;
+      float phi = (iBlade-nBladesToDraw/2.)*2*TMath::Pi()/nBlades;
       float delPhi = 2*TMath::Pi()/nBlades;
       
       std::cout << "Placing blade, ro, ri = " << ro << " " << ri << std::endl;

@@ -6,7 +6,6 @@ namespace DDSegmentation {
 
 /// default constructor using an encoding string
   FCCSWEndcapTurbine_k4geo::FCCSWEndcapTurbine_k4geo(const std::string& cellEncoding) : Segmentation(cellEncoding) {
-  std::cout << "In string ctor" << std::endl;
   // define type and description
   _type = "FCCSWEndcapTurbine_k4geo";
   _description = "Turbine-specific segmentation in the global coordinates";
@@ -38,7 +37,6 @@ namespace DDSegmentation {
 }
 
   FCCSWEndcapTurbine_k4geo::FCCSWEndcapTurbine_k4geo(const BitFieldCoder* decoder) : Segmentation(decoder) {
-    std::cout << "In BitFieldCoder ctor" << std::endl;
   // define type and description
   _type = "FCCSWEndcapTurbine_k4geo";
   _description = "Turbine-specific segmentation in the global coordinates";
@@ -74,7 +72,8 @@ Vector3D FCCSWEndcapTurbine_k4geo::position(const CellID& cID) const {
   //  Vector3D localPos = PositionRhoZPhi(rho(cID), z(cID), phi(cID));
   //  std::cout << "Local position is " << localPos.x() << " " << localPos.y() << " " << localPos.z() << std::endl;
   //Vector3D dummyPos(z(cID),0,rho(cID));
-  // Vector3D dummyPos(x(cID),0,z(cID));  /* this one seemed close when G4 elements were entire blades */
+  //Vector3D dummyPos(x(cID),0,z(cID));  /* this one gets z right, but not x and y */
+  //Vector3D dummyPos(x(cID),rho(cID),z(cID)); /* screws up z, seems to result in anti-correlation and offset in x, y looks random */
   Vector3D dummyPos(0, 0, 0);
   return dummyPos;
   // return PositionRhoZPhi(rho(cID), z(cID), phi(cID));
@@ -87,17 +86,17 @@ CellID FCCSWEndcapTurbine_k4geo::cellID(const Vector3D& /* localPosition */, con
   CellID cID = vID;
   double lRho = rhoFromXYZ(globalPosition);
   _decoder->set(cID, m_rhoID, positionToBin(lRho, m_gridSizeRho, m_offsetRho));
-  std::cout << "vID = " << std::hex <<vID << std::dec << std::endl;
-  std::cout << "lRho = " << lRho << std::endl;
-  std::cout << "bin = " << positionToBin(lRho, m_gridSizeRho, m_offsetRho) << std::endl;
+  // std::cout << "vID = " << std::hex <<vID << std::dec << std::endl;
+  //std::cout << "lRho = " << lRho << std::endl;
+  //std::cout << "bin = " << positionToBin(lRho, m_gridSizeRho, m_offsetRho) << std::endl;
 
   double lZ = TMath::Abs(globalPosition.Z);
-  std::cout << "Actual Z position is " << lZ << std::endl;
-  std::cout << "Thus Z bin is " << positionToBin(lZ, m_gridSizeZ, m_offsetZ) << std::endl;
+  //std::cout << "Actual Z position is " << lZ << std::endl;
+  //std::cout << "Thus Z bin is " << positionToBin(lZ, m_gridSizeZ, m_offsetZ) << std::endl;
   _decoder->set(cID, m_zID, positionToBin(lZ, m_gridSizeZ, m_offsetZ));
 
-  std::cout << "cID = " << std::hex << cID << std::dec << std::endl;  
-  std::cout << "Global position (x,y,z) and cellID: " << globalPosition.X << " "  << globalPosition.Y << " " << globalPosition.Z << " " << cID << std::endl;
+  //std::cout << "cID = " << std::hex << cID << std::dec << std::endl;  
+  //std::cout << "Global position (x,y,z) and cellID: " << globalPosition.X << " "  << globalPosition.Y << " " << globalPosition.Z << " " << cID << std::endl;
 
   //  double lTheta = thetaFromXYZ(globalPosition);
   // double lPhi = phiFromXYZ(globalPosition);
@@ -120,7 +119,7 @@ double FCCSWEndcapTurbine_k4geo::phi(const CellID& cID) const {
   double zLoc = TMath::Abs(x(cID))-m_offsetZ;
   double zCotBladeAngle = zLoc/TMath::Tan(m_bladeAngle);
 
-  std::cout << "Calculated phi is " << TMath::ATan(zCotBladeAngle/TMath::Sqrt(rhoLoc*rhoLoc-zCotBladeAngle*zCotBladeAngle)) << std::endl;
+  //  std::cout << "Calculated phi is " << TMath::ATan(zCotBladeAngle/TMath::Sqrt(rhoLoc*rhoLoc-zCotBladeAngle*zCotBladeAngle)) << std::endl;
     
   //  return 0;
 
@@ -128,34 +127,34 @@ double FCCSWEndcapTurbine_k4geo::phi(const CellID& cID) const {
 }
 /// determine the transverse distance from the beamline r based on the cell ID
 double FCCSWEndcapTurbine_k4geo::rho(const CellID& cID) const {
-  std::cout << "Calculating rho... " << std::endl;
+  //std::cout << "Calculating rho... " << std::endl;
   CellID rhoValue = _decoder->get(cID, m_rhoID);
-  std::cout << "Calculated bin is " << rhoValue << std::endl;
-  std::cout << "Thus, calculated rho position is " << binToPosition(rhoValue,m_gridSizeRho) << std::endl;
+  //std::cout << "Calculated bin is " << rhoValue << std::endl;
+  //std::cout << "Thus, calculated rho position is " << binToPosition(rhoValue,m_gridSizeRho) << std::endl;
   return binToPosition(rhoValue,m_gridSizeRho);
 }
 /// determine local x in plane of blade based on the cell ID
 double FCCSWEndcapTurbine_k4geo::x(const CellID& cID) const {
-  std::cout << "Calculating x for cID " << std::hex << cID << std::dec <<std::endl;
+  //std::cout << "Calculating x for cID " << std::hex << cID << std::dec <<std::endl;
   CellID zValue = _decoder->get(cID, m_zID);
   CellID sideValue = _decoder->get(cID, m_sideID);
-  std::cout << "Calculated bin is " << (long long int)zValue << std::endl;
-  std::cout << "Side value is " << (long long int)sideValue << std::endl;
-  std::cout << "Thus, calculated x position is " << binToPosition(zValue,m_gridSizeZ)/TMath::Cos(m_bladeAngle) << std::endl;
+  //std::cout << "Calculated bin is " << (long long int)zValue << std::endl;
+  //std::cout << "Side value is " << (long long int)sideValue << std::endl;
+  //std::cout << "Thus, calculated x position is " << binToPosition(zValue,m_gridSizeZ)/TMath::Cos(m_bladeAngle) << std::endl;
   return -((long long int)sideValue)*binToPosition(zValue,m_gridSizeZ)/TMath::Cos(m_bladeAngle);
 }
 
 /// determine local y in plane of blade based on cellID
 double FCCSWEndcapTurbine_k4geo::z(const CellID& cID) const {
 
-  std::cout << "Calculating z for cID " << std::hex << cID << std::dec <<std::endl;
+  //std::cout << "Calculating z for cID " << std::hex << cID << std::dec <<std::endl;
   CellID zValue = _decoder->get(cID, m_zID);
   CellID rhoValue = _decoder->get(cID, m_rhoID);
 
   double zGlob=  binToPosition(zValue,m_gridSizeZ);
   double rho= binToPosition(rhoValue,m_gridSizeRho)+m_offsetRho;
-  std::cout << "Rho, zGlob are " << rho << ", " << zGlob << std::endl; 
-  std::cout << "Calculated z position is " << -TMath::Sqrt(rho*rho-zGlob*zGlob) - m_offsetRho << std::endl;
+  //std::cout << "Rho, zGlob are " << rho << ", " << zGlob << std::endl; 
+  //std::cout << "Calculated z position is " << -TMath::Sqrt(rho*rho-zGlob*zGlob) - m_offsetRho << std::endl;
   return -TMath::Sqrt(rho*rho-zGlob*zGlob) - m_offsetRho;
 
 }

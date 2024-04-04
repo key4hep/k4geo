@@ -17,7 +17,7 @@ thetaMax = 50.
 
 from Configurables import k4DataSvc, PodioInput
 evtsvc = k4DataSvc('EventDataSvc')
-evtsvc.input = "/data1/varnes/FCC/key4hep3/k4geo/ALLEGRO_sim_edm4hep.root"
+evtsvc.input = "/data1/varnes/FCC/key4hep3/k4geo/ALLEGRO_sim_edm4hep_mu_10GeV.root"
 podioevent  = k4DataSvc("EventDataSvc")
 
 inp = PodioInput('InputReader')
@@ -50,7 +50,7 @@ hist = SamplingFractionInLayers("hists",
                                  layerFieldName = "layer",
                                  activeFieldName = "type",
                                  activeFieldValue = 0,
-                                 numLayers = 10,
+                                 numLayers = 30,
                                  OutputLevel = INFO)
 hist.deposits.Path = ecalEndcapHitsName
 
@@ -82,7 +82,7 @@ event_counter.Frequency = 10
 from Configurables import ApplicationMgr
 ApplicationMgr( TopAlg = [inp, event_counter, hist, out],
                 EvtSel = 'NONE',
-                EvtMax = 1000,
+                EvtMax = -1,
                 # order is important, as GeoSvc is needed by G4SimSvc
                 ExtSvc = [geoservice, podioevent, audsvc],
                 OutputLevel = INFO,

@@ -37,7 +37,7 @@
   <!--taken from DetFCCeeCLD/compact/FCCee_o2_v02  -->
   <include ref="Vertex.xml"/>
   <include ref="SimplifiedDriftChamber.xml"/>
-  <include ref="FCCee_ECalBarrel_thetamodulemerged.xml"/>
+  <include ref="ECalBarrel_thetamodulemerged.xml"/>
   <include ref="FCCee_HCalBarrel_TileCal.xml"/>
   <include ref="FCCee_ECalEndcaps_Turbine.xml"/>
   <include ref="FCCee_HCalEndcaps_ThreeParts_TileCal.xml"/>
