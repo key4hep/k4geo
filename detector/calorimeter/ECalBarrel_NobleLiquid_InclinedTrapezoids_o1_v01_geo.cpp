@@ -196,7 +196,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
   // Readout is in the middle between two passive planes
   double offsetPassivePhi = caloDim.offset() + dPhi / 2.;
   double offsetReadoutPhi = caloDim.offset() + 0;
-  lLog << MSG::INFO << "readout material = " << readoutMaterial << "\n"
+  lLog << MSG::INFO << "EWV readout material = " << readoutMaterial << "\n"
        << " thickness of readout planes (cm) =  " << readoutThickness << "\n number of readout layers = " << numLayers
        << endmsg;
   double Rmin = caloDim.rmin();
