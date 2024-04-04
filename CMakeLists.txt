@@ -1,15 +1,15 @@
 cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 
 #---------------------------
-set( PackageName lcgeo )
+set( PackageName k4geo )
 #---------------------------
 
 project(${PackageName})
 
 # project version
 SET( ${PackageName}_VERSION_MAJOR 0 )
-SET( ${PackageName}_VERSION_MINOR 18 )
-SET( ${PackageName}_VERSION_PATCH 1 )
+SET( ${PackageName}_VERSION_MINOR 20 )
+SET( ${PackageName}_VERSION_PATCH 0 )
 
 SET( ${PackageName}_VERSION "${${PackageName}_VERSION_MAJOR}.${${PackageName}_VERSION_MINOR}" )
 SET( ${PackageName}_SOVERSION "${${PackageName}_VERSION_MAJOR}.${${PackageName}_VERSION_MINOR}" )
@@ -17,6 +17,10 @@ SET( ${PackageName}_SOVERSION "${${PackageName}_VERSION_MAJOR}.${${PackageName}_
 set(CMAKE_MODULE_PATH  ${CMAKE_MODULE_PATH}  ${PROJECT_SOURCE_DIR}/cmake )
 set(LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+
+include(GNUInstallDirs)
+set(CMAKE_INSTALL_LIBDIR lib)
+set(CMAKE_INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 
 #------------- set the default installation directory to be the source directory
 
@@ -47,9 +51,19 @@ find_package ( ROOT REQUIRED COMPONENTS Geom GenVector)
 message ( STATUS "ROOT_VERSION: ${ROOT_VERSION}" )
 
 find_package( Geant4 REQUIRED ) 
-find_package( LCIO REQUIRED)
-
-add_subdirectory(detectorSegmentations)
+OPTION(K4GEO_USE_LCIO "Enable or disable the use of LCIO, which is needed for some detector constructors and plugins" ON)
+if(K4GEO_USE_LCIO)
+  find_package(LCIO REQUIRED)
+  # Shim for older LCIO versions
+  if(NOT TARGET LCIO::lcio)
+    add_library(LCIO::lcio INTERFACE IMPORTED GLOBAL)
+    set_target_properties(LCIO::lcio
+      PROPERTIES
+      INTERFACE_INCLUDE_DIRECTORIES "${LCIO_INCLUDE_DIRS}"
+      INTERFACE_LINK_LIBRARIES "${LCIO_LIBRARIES}"
+    )
+  endif()
+endif()
 
 file(GLOB sources 
   ./detector/tracker/*.cpp
@@ -61,6 +75,25 @@ file(GLOB sources
   ./plugins/LinearSortingPolicy.cpp
   ./detector/PID/ARC_geo_o1_v01.cpp
   )
+
+if(NOT K4GEO_USE_LCIO)
+  set(lcio_sources # in ./detector/tracker
+    TrackerEndcap_o2_v05_geo.cpp
+    SiTrackerEndcap_o2_v02ext_geo.cpp
+    TrackerBarrel_o1_v03_geo.cpp
+    TrackerBarrel_o1_v04_geo.cpp
+    TrackerBarrel_o1_v05_geo.cpp
+    TrackerEndcap_o1_v05_geo.cpp
+    TrackerEndcap_o2_v06_geo.cpp
+    VertexBarrel_detailed_o1_v01_geo.cpp
+    VertexEndcap_o1_v05_geo.cpp
+    ZPlanarTracker_geo.cpp
+    )
+  foreach(lcio_source ${lcio_sources})
+    list(FILTER sources EXCLUDE REGEX "${lcio_source}")
+  endforeach()
+  message(STATUS "Use of LCIO is DISABLED, some detectors that depend on LCIO will not be built: ${lcio_sources}")
+endif()
 
 file(GLOB G4sources
   ./plugins/TPCSDAction.cpp
@@ -75,17 +108,30 @@ endif()
 add_dd4hep_plugin(${PackageName} SHARED ${sources})
 add_dd4hep_plugin(${PackageName}G4 SHARED ${G4sources})
 
+add_library(lcgeo ALIAS k4geo)
+
 target_include_directories(${PackageName}   PRIVATE ${PROJECT_SOURCE_DIR}/detector/include )
 target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detector/include )
 
-target_include_directories(${PackageName}   SYSTEM PUBLIC ${LCIO_INCLUDE_DIRS})
-target_include_directories(${PackageName}G4 SYSTEM PUBLIC ${LCIO_INCLUDE_DIRS})
+target_link_libraries(${PackageName}   DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers ROOT::Core detectorSegmentations)
+target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ROOT::Core ${Geant4_LIBRARIES})
 
-target_link_libraries(${PackageName}   DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers ${ROOT_LIBRARIES} ${LCIO_LIBRARIES} detectorSegmentations)
-target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ${ROOT_LIBRARIES} ${Geant4_LIBRARIES} ${LCIO_LIBRARIES})
+if(K4GEO_USE_LCIO)
+  target_link_libraries(${PackageName}   LCIO::lcio)
+  target_link_libraries(${PackageName}G4 LCIO::lcio)
+endif()
 
 #Create this_package.sh file, and install
 dd4hep_instantiate_package(${PackageName})
+
+add_subdirectory(detectorSegmentations)
+add_subdirectory(detectorCommon)
+
+# Destination directories are hardcoded because GNUdirectories are not included
+install(TARGETS ${PackageName}  ${PackageName}G4
+  EXPORT ${PROJECT_NAME}Targets
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT shlib
+)
 
 #---Testing-------------------------------------------------------------------------
 if(BUILD_TESTING)
@@ -104,3 +150,25 @@ INSTALL(FILES ${hfiles}
 if(INSTALL_COMPACT_FILES)
   INSTALL(DIRECTORY CaloTB CLIC FCalTB FCCee ILD fieldmaps SiD DESTINATION share/k4geo )
 endif()
+
+# create k4geoConfig and friends
+
+INSTALL(EXPORT ${PROJECT_NAME}Targets
+  NAMESPACE ${PROJECT_NAME}::
+  DESTINATION ${CMAKE_INSTALL_CMAKEDIR}
+  FILE k4geoConfig-targets.cmake)
+
+include(CMakePackageConfigHelpers)
+
+configure_package_config_file(cmake/k4geoConfig.cmake.in ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_CMAKEDIR}/k4geoConfig.cmake
+  PATH_VARS CMAKE_INSTALL_CMAKEDIR
+  INSTALL_DESTINATION ${CMAKE_INSTALL_CMAKEDIR} )
+
+write_basic_package_version_file(
+  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_CMAKEDIR}/k4geoConfigVersion.cmake
+  VERSION ${${PackageName}_VERSION}
+  COMPATIBILITY SameMajorVersion )
+
+install(FILES ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_CMAKEDIR}/k4geoConfig.cmake
+              ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_CMAKEDIR}/k4geoConfigVersion.cmake
+        DESTINATION ${CMAKE_INSTALL_CMAKEDIR} )

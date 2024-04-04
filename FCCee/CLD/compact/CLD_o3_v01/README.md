@@ -3,6 +3,10 @@ CLD_o3_v01 Detector
 
 This option (o3) of CLD includes the Array of RICH Cells (ARC) subdetector. The ARC is placed after the tracker and before the calorimeters. 
 
+# CLD detector
+
+This option evolves from CLD option 2, version 5, (CLD_o2_v05). The changes with respect to the CLD baseline aim to shrink by 20 cm the outer geometry of the Outer Tracker (OT) Endcap, OT Barrel and Inner Tracker (IT)v Endcap. For that reason the main IT and OT XML file name option/version was upgraded from `o2_v07` to `o3_v08`. The ARC detector fills the new 20 cm gap. Full description of changes and tests was presented in a [detector concept meeting](https://indico.cern.ch/event/1324747/contributions/5574704/attachments/2716315/4718193/ARC_IntegrationCLD_230918.pdf) (step-by-step changes are detailed in the backup slides).
+
 # PID assisted by ARC
 
 Array of RICH Cells (ARC) is a novel RICH detector concept. Detailed description of it can be found in [this dedicated README file](../../../detector/PID/README.md).
@@ -31,7 +35,7 @@ There are 4 compact `.xml` files that are needed for building the detector.
 
 * Thickness of mirror and sensor
 
-* Z position of endcap: The variable `ARC_ENDCAP_ZPOS` defines the middle point of the endcap along the Z axis. Therefore, the endcap spans over `ARC_ENDCAP_ZPOS +- ARC_ENDCAP_LENGTH/2` along the Z axis.
+* Z position of endcap: The variable `ArcEndcap_position_z` defines the middle point of the endcap along the Z axis. Therefore, the endcap spans over `ArcEndcap_position_z +- ArcEndcap_total_length/2` along the Z axis.
 
 * Readout and segmentation of the light sensors. The readout includes the definition of the Volume ID bit-field. Barrel field corresponds to barrel (0) or endcaps (+/-1), cellnumber fields correspond to a number which is given consecutively as the cells are placed.
 

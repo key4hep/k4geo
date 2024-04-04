@@ -84,9 +84,9 @@
     <constant name="OuterTracker_outer_radius" value="2000*mm"/>
     <constant name="OuterTracker_half_length" value="2300*mm"/>
 
-    <constant name="DCH_inner_radius" value="350*mm"/>
-    <constant name="DCH_outer_radius" value="2000*mm"/>
-    <constant name="DCH_half_length" value="2850*mm"/>
+    <constant name="DCH_inner_radius" value="345*mm"/>
+    <constant name="DCH_outer_radius" value="2000*mm"/> <!-- Contact the drift chamber experts if you need to change the DC radiuses (just changing the radius is not enough, the DC has been optimized for those values, the detector geometry is constrained by many construction/mechanical/electronics/etc considerations -->
+    <constant name="DCH_half_length" value="2850*mm"/> <!-- this includes the services -->
     
     <!-- LAr ECAL Calo Barrel -->
     <constant name="BarECal_id" value="DetID_ECAL_Barrel"/>

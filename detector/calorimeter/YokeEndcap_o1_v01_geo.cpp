@@ -20,7 +20,6 @@ using dd4hep::RotationZYX;
 using dd4hep::Segmentation;
 using dd4hep::SensitiveDetector;
 using dd4hep::Transform3D;
-using dd4hep::Tube;
 using dd4hep::Volume;
 using dd4hep::_toString;
 
@@ -114,7 +113,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         
         double sliceZ = -l_thick/2;
         double totalAbsorberThickness=0.;
-	double th_i(0.), th_o(-1.) ;
         for(xml_coll_t s(x_layer,_U(slice)); s; ++s)  {
             xml_comp_t x_slice = s;
             string     s_name  = _toString(s_num,"slice%d");
@@ -132,15 +130,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                 s_phv.addPhysVolID("submodule",sensor_num);
                 sensor_num++;
 		
-		th_i += s_thick / 2. ;
-		th_o  = s_thick / 2. ;
-	    } else {
-	      if( th_o < 0. ){
-		th_i += s_thick;
-	      } else {
-		th_o += s_thick;
-	      }
-	    }
+	    } 
             
             if( x_slice.isRadiator() ==true)
                 totalAbsorberThickness+= s_thick;

@@ -33,8 +33,18 @@ This model is based on `FCCee_o2_v02` from k4geo. It has an updated design of th
 standard design (low-impedance, no HOM absorber); changed Vertex Detector Barrel layers to fit the beampipe contraints (reduced barrel length); fixed
 Overlaps in the Inner and Outer Tracker.
 
+CLD_o2_v06
+----------
+
+This model is based on `CLD_o2_v05` with the following changes: LumiCal outer radius from 112 mm to 115 mm, remove
+unused nose shield parameters, place LumiCal at 1074*mm along the beam-axis, instead of at 1074*mm in Z, moves LumiCal by 100*micron.
 
 CLD_o3_v01
 ----------
 
-CLD option 3 includes ARC detector for PID. The detector concept evolves from CLD_o2_v05. The tracker has been shrunk by 20 cm radially and along Z to make space for the ARC detector. 
+This model is based on CLD_o2_v05. The tracker size is reduced to accomodate the ARC detector for PID.
+
+CLD_o4_v05
+----------
+
+This model is based on CLD_o2_v05. The ECAL barrel is replaced by the Noble Liquid calorimeter from ALLEGRO to enable PandoraPFA technical developments. To accomodate the thicker ALLEGRO calorimeter, the CLD detectors after ECAL were pushed towards higher radius. 
