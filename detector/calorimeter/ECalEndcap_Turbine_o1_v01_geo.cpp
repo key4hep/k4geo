@@ -79,6 +79,8 @@ namespace det {
 
     dd4hep::xml::DetElement genericBladeElem = aXmlElement.child(_Unicode(turbineBlade));
     dd4hep::xml::DetElement absBladeElem = genericBladeElem.child(_Unicode(absorberBlade));
+    dd4hep::xml::DetElement claddingElem = genericBladeElem.child(_Unicode(cladding));
+    dd4hep::xml::DetElement glueElem = genericBladeElem.child(_Unicode(glue));
     dd4hep::xml::DetElement electrodeBladeElem = genericBladeElem.child(_Unicode(electrodeBlade));
     dd4hep::xml::DetElement nobleLiquidElem = genericBladeElem.child(_Unicode(nobleLiquidGap));
 
@@ -105,7 +107,12 @@ namespace det {
     int nBlades;
     double delrPhi, delrPhiNoGap;
     
-    float AbsThicki = absBladeElem.attr<float>(_Unicode(thickness));
+    float GlueThick = glueElem.attr<float>(_Unicode(thickness));
+    float CladdingThick = claddingElem.attr<float>(_Unicode(thickness));
+    float AbsThicki = absBladeElem.attr<float>(_Unicode(thickness))-(GlueThick+CladdingThick);
+    if (AbsThicki < 0.) {
+      std::cout << "Error: requested absorber thickness is negative after accounting for glue and cladding thickness" << std::endl;
+    }
     float ElectrodeThick = electrodeBladeElem.attr<float>(_Unicode(thickness));
     float LArgapi = nobleLiquidElem.attr<float>(_Unicode(gap));
     
@@ -120,10 +127,10 @@ namespace det {
     }
 
     if (sameNblades) {
-      nBlades = 2*TMath::Pi()*grmin/(2*LArgapi+AbsThicki+ElectrodeThick)*TMath::Sin(BladeAngle);
+      nBlades = 2*TMath::Pi()*grmin/(2*LArgapi+AbsThicki+2*(GlueThick+CladdingThick)+ElectrodeThick)*TMath::Sin(BladeAngle);
     } else {
       double x1 = delZ/2./TMath::Tan(BladeAngle);
-      double x2 = delZ/2./TMath::Tan(BladeAngle)+(2*LArgapi+AbsThicki+ElectrodeThick)/TMath::Sin(BladeAngle);
+      double x2 = delZ/2./TMath::Tan(BladeAngle)+(2*LArgapi+AbsThicki+2*(GlueThick+CladdingThick)+ElectrodeThick)/TMath::Sin(BladeAngle);
       double y1 = TMath::Sqrt(ri*ri-x1*x1);
       double y2 = TMath::Sqrt(ri*ri-x2*x2);
       double rPhi1 = ri*TMath::ATan(x1/y1);
@@ -137,7 +144,7 @@ namespace det {
     // adjust gap thickness at inner layer
     double circ = 2*TMath::Pi()*ri;
     double x1 = delZ/2./TMath::Tan(BladeAngle);
-    double x2 = delZ/2./TMath::Tan(BladeAngle)+(AbsThicki+ElectrodeThick)/TMath::Sin(BladeAngle);
+    double x2 = delZ/2./TMath::Tan(BladeAngle)+(AbsThicki+2*(GlueThick+CladdingThick)+ElectrodeThick)/TMath::Sin(BladeAngle);
     double y1 = TMath::Sqrt(ri*ri-x1*x1);
     double y2 = TMath::Sqrt(ri*ri-x2*x2);
     double rPhi1 = ri*TMath::ATan(x1/y1);
@@ -156,6 +163,8 @@ namespace det {
     float riLayer = ri;
     float delr = (ro-ri)/ECalEndcapNumLayers;
 
+    std::vector<dd4hep::Volume> claddingLayerVols;
+    std::vector<dd4hep::Volume> glueLayerVols;
     std::vector<dd4hep::Volume> absBladeLayerVols;
     std::vector<dd4hep::Volume> LArTotalLayerVols;
     std::vector<dd4hep::Volume> electrodeBladeLayerVols;
@@ -163,7 +172,23 @@ namespace det {
     for (unsigned iLayer = 0; iLayer < ECalEndcapNumLayers; iLayer++) {
       float roLayer = riLayer + delr;
       std::cout << "Making layer in inner, outer radii " << riLayer << " " << roLayer << std::endl;
+      dd4hep::Solid absGlueCladdingLayer = buildOneBlade(AbsThicki+GlueThick+CladdingThick, AbsThicko+GlueThick+CladdingThick, xRange, roLayer, riLayer, BladeAngle, delZ );
+      dd4hep::Solid absGlueLayer = buildOneBlade(AbsThicki+GlueThick, AbsThicko+GlueThick, xRange, roLayer, riLayer, BladeAngle, delZ );
+      dd4hep::SubtractionSolid claddingLayer(absGlueCladdingLayer, absGlueLayer);
       dd4hep::Solid  absBladeLayer = buildOneBlade(AbsThicki, AbsThicko, xRange, roLayer, riLayer, BladeAngle, delZ );
+      dd4hep::SubtractionSolid glueLayer(absGlueLayer, absBladeLayer);
+      dd4hep::Volume claddingLayerVol("claddingLayer", claddingLayer, aLcdd.material(claddingElem.materialStr()));
+      if (claddingElem.isSensitive()) {
+	claddingLayerVol.setSensitiveDetector(aSensDet);
+      }
+      claddingLayerVols.push_back(claddingLayerVol);
+
+      dd4hep::Volume glueLayerVol("glueLayer", glueLayer, aLcdd.material(glueElem.materialStr()));
+      if (glueElem.isSensitive()) {
+	glueLayerVol.setSensitiveDetector(aSensDet);
+      }
+      glueLayerVols.push_back(glueLayerVol);
+
       dd4hep::Volume absBladeLayerVol("absBladeLayer", absBladeLayer, aLcdd.material(absBladeElem.materialStr()));
       if (absBladeElem.isSensitive()) {
 	absBladeLayerVol.setSensitiveDetector(aSensDet);
@@ -293,6 +318,7 @@ namespace det {
 	absBladeVol_pv.addPhysVolID("subcyl", iSubcyl);
 	absBladeVol_pv.addPhysVolID("module", iBlade);
 	absBladeVol_pv.addPhysVolID("type", 1);  // 0 = active, 1 = passive, 2 = readout
+	absBladeVol_pv.addPhysVolID("subtype", 0); // 0 = absorber, 1 = glue, 2 = cladding
 	std::cout << "Blade layer, rho is " << iLayer << " " << absBladeVol_pv.position().Rho() << " " << roLayer/2. << std::endl;
 	absBladeVol_pv.addPhysVolID("layer", iSubcyl*ECalEndcapNumLayers+iLayer);
 	dd4hep::DetElement absBladeDetElem(bathDetElem, "absorber"+std::to_string(sign)+"_"+std::to_string(iSubcyl)+"_"+std::to_string(iBlade)+"_"+std::to_string(iSubcyl*ECalEndcapNumLayers+iLayer), ECalEndCapElementCounter++);
@@ -304,6 +330,61 @@ namespace det {
       riLayer = ri;
       iLayer =0;
       
+      for (auto claddingLayerVol: claddingLayerVols) {
+	
+	float roLayer = riLayer+delr;
+	float xLayer = ((roLayer+riLayer)/2.)*TMath::Cos(phi);
+	float yLayer = ((roLayer+riLayer)/2.)*TMath::Sin(phi); //ri*TMath::Sin(phi)/6.;
+	float zLayer =  0.;
+	riLayer = roLayer;
+
+	dd4hep::Transform3D comLayer(r3d, dd4hep::Translation3D(xLayer,yLayer,zLayer));	
+	dd4hep::PlacedVolume claddingVol_pv = aEnvelope.placeVolume(claddingLayerVol, comLayer);
+	
+	
+	claddingVol_pv.addPhysVolID("side",sign); 
+	claddingVol_pv.addPhysVolID("subcyl", iSubcyl);
+	claddingVol_pv.addPhysVolID("module", iBlade);
+	claddingVol_pv.addPhysVolID("type", 1);  // 0 = active, 1 = passive, 2 = readout
+	claddingVol_pv.addPhysVolID("subtype", 2); // 0 = absorber, 1 = glue, 2 = cladding
+	claddingVol_pv.addPhysVolID("layer", iSubcyl*ECalEndcapNumLayers+iLayer);
+	dd4hep::DetElement claddingDetElem(bathDetElem, "cladding"+std::to_string(sign)+"_"+std::to_string(iSubcyl)+"_"+std::to_string(iBlade)+"_"+std::to_string(iSubcyl*ECalEndcapNumLayers+iLayer), ECalEndCapElementCounter++);
+	claddingDetElem.setPlacement(claddingVol_pv);
+	riLayer = roLayer;
+	iLayer++;
+      }
+
+      riLayer = ri;
+      iLayer =0;
+
+      for (auto glueLayerVol: glueLayerVols) {
+	
+	float roLayer = riLayer+delr;
+	float xLayer = ((roLayer+riLayer)/2.)*TMath::Cos(phi);
+	float yLayer = ((roLayer+riLayer)/2.)*TMath::Sin(phi); //ri*TMath::Sin(phi)/6.;
+	float zLayer =  0.;
+	riLayer = roLayer;
+
+	dd4hep::Transform3D comLayer(r3d, dd4hep::Translation3D(xLayer,yLayer,zLayer));	
+	dd4hep::PlacedVolume glueVol_pv = aEnvelope.placeVolume(glueLayerVol, comLayer);
+	
+	
+	glueVol_pv.addPhysVolID("side",sign); 
+	glueVol_pv.addPhysVolID("subcyl", iSubcyl);
+	glueVol_pv.addPhysVolID("module", iBlade);
+	glueVol_pv.addPhysVolID("type", 1);  // 0 = active, 1 = passive, 2 = readout
+	glueVol_pv.addPhysVolID("subtype", 1); // 0 = absorber, 1 = glue, 2 = cladding
+	glueVol_pv.addPhysVolID("layer", iSubcyl*ECalEndcapNumLayers+iLayer);
+
+	dd4hep::DetElement glueDetElem(bathDetElem, "glue"+std::to_string(sign)+"_"+std::to_string(iSubcyl)+"_"+std::to_string(iBlade)+"_"+std::to_string(iSubcyl*ECalEndcapNumLayers+iLayer), ECalEndCapElementCounter++);
+	glueDetElem.setPlacement(glueVol_pv);
+	riLayer = roLayer;
+	iLayer++;
+      }
+
+      riLayer = ri;
+      iLayer =0;
+
       for (auto electrodeBladeLayerVol: electrodeBladeLayerVols) {
 	
 	float roLayer = riLayer+delr;
