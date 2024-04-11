@@ -100,7 +100,7 @@
   </readouts>
 
   <detectors>
-    <detector id="BarECal_id" name="ECalBarrel" type="ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v02" readout="ECalBarrelModuleThetaMerged">
+    <detector id="BarECal_id" name="ECalBarrel" type="ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03" readout="ECalBarrelModuleThetaMerged">
       <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_BARREL"/>
       <sensitive type="SimpleCalorimeterSD"/>
       <dimensions rmin="BarCryoECal_rmin" rmax="BarCryoECal_rmax" dz="BarCryoECal_dz" vis="ecal_envelope"/>
@@ -145,17 +145,17 @@
         <layers>
 	  <!-- pcb electrode segmentation, rescaled to the total radial thickness of the active ECAL volume -->
 	  <!-- This is NOT the radial thickness of each layer!!! -->
-          <layer thickness="1.65*cm" repeat="1"/>
-	  <layer thickness="3.36*cm" repeat="1"/>
-	  <layer thickness="3.46*cm" repeat="1"/>
-	  <layer thickness="3.56*cm" repeat="1"/>
-	  <layer thickness="3.68*cm" repeat="1"/>
-	  <layer thickness="3.79*cm" repeat="1"/>
-	  <layer thickness="3.92*cm" repeat="1"/>
-	  <layer thickness="4.05*cm" repeat="1"/>
-	  <layer thickness="4.20*cm" repeat="1"/>
-	  <layer thickness="4.35*cm" repeat="1"/>
-	  <layer thickness="4.52*cm" repeat="1"/>
+          <layer thickness="2.33596*cm" repeat="1"/>
+	  <layer thickness="4.75685*cm" repeat="1"/>
+	  <layer thickness="4.89843*cm" repeat="1"/>
+	  <layer thickness="5.04*cm" repeat="1"/>
+	  <layer thickness="5.20989*cm" repeat="1"/>
+	  <layer thickness="5.36562*cm" repeat="1"/>
+	  <layer thickness="5.54966*cm" repeat="1"/>
+	  <layer thickness="5.73371*cm" repeat="1"/>
+	  <layer thickness="5.94607*cm" repeat="1"/>
+	  <layer thickness="6.15843*cm" repeat="1"/>
+	  <layer thickness="6.3991*cm" repeat="1"/>
         </layers>
       </calorimeter>
     </detector>
