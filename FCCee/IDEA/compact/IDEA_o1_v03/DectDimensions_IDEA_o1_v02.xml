@@ -89,8 +89,8 @@
     <constant name="Outer_Vertex_half_length" value="1050*mm"/>
 
     <!-- Changing the radius of DCH is not enough to resize the detector, please contact the experts-->
-    <constant name="DCH_inner_cyl_R_z0"       value=" 350 * mm "    />
-    <constant name="DCH_outer_cyl_R_z0"       value=" 2000 * mm "    />
+    <constant name="DCH_inner_cyl_R"       value=" 350 * mm "    />
+    <constant name="DCH_outer_cyl_R"       value=" 2000 * mm "    />
     <constant name="DCH_L"                    value=" 4000 * mm "    />
     <constant name="DCH_half_length_total"    value="2250*mm"/> <!-- this includes the services -->
     
@@ -207,7 +207,7 @@
     <constant name="CollimatorInFrontOfQD0_dr" value="16*mm"/>
 
     <constant name="tracker_region_zmax" value="DCH_half_length_total"/>
-    <constant name="tracker_region_rmax" value="DCH_outer_cyl_R_z0"/>
+    <constant name="tracker_region_rmax" value="DCH_outer_cyl_R"/>
   </define>
   
   

@@ -2,15 +2,15 @@
   <!-- %%%%%%             Central Drift Chamber Basic Parameters                 %%%%%% -->
   <define>
   <!-- Vesssel geometry, some parameters moved to DetDimensions file   -->
-  <!--   <constant name="DCH_inner_cyl_R_z0"       value=" 350 * mm "    /> -->
-  <!--   <constant name="DCH_outer_cyl_R_z0"       value=" 2000 * mm "    /> -->
+  <!--   <constant name="DCH_inner_cyl_R"       value=" 350 * mm "    /> -->
+  <!--   <constant name="DCH_outer_cyl_R"       value=" 2000 * mm "    /> -->
   <!--   <constant name="DCH_L"                    value=" 4000 * mm "    /> -->
   <constant name="DCH_Lhalf"                value=" DCH_L/2.0 "    />
   <constant name="DCH_vessel_thickness"     value=" 1 * mm"  />
 
   <!-- Position of guard wires   -->
-  <constant name="DCH_in_guard_z0"          value=" DCH_inner_cyl_R_z0 + 4*mm "    />
-  <constant name="DCH_out_guard_zL2"        value=" DCH_outer_cyl_R_z0 - 12.5 "    />
+  <constant name="DCH_in_guard_z0"          value=" DCH_inner_cyl_R + 4*mm "    />
+  <constant name="DCH_out_guard_zL2"        value=" DCH_outer_cyl_R - 12.5 "    />
 
   <!-- Parametrization of number of cells ands layer/superlayer   -->
   <constant name="DCH_ncell"                value=" 192 "    />

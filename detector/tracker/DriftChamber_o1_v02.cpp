@@ -50,9 +50,9 @@ class DCH_info
 public:
     // global variables of DCH
     MyLength_t dch_Lhalf = {0};
-    MyLength_t dch_rin_z0 = {0};
+    MyLength_t dch_rin = {0};
     MyLength_t dch_rin_z0_guard = {0};
-    MyLength_t dch_rout_z0 = {0};
+    MyLength_t dch_rout = {0};
     MyLength_t dch_rout_z0_guard = {0};
     int dch_ncell0 = {0};
     int dch_ncell_increment = {0};
@@ -102,7 +102,7 @@ public:
     /// Internal helper struct for defining the layer layout
     struct DCH_info_layer
     {
-        // each member corresopnds to a column in the excel table
+        // each member corresponds to a column in the excel table
         /// layer number
         DCH_layer layer = {0};
         /// 2x number of wires in that layer
@@ -207,15 +207,15 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
 
 
     MyLength_t vessel_thickness = desc.constantAsDouble("DCH_vessel_thickness");
-    dd4hep::Tube vessel_s(  DCH_i.dch_rin_z0 - vessel_thickness,
-                            DCH_i.dch_rout_z0+ vessel_thickness,
+    dd4hep::Tube vessel_s(  DCH_i.dch_rin - vessel_thickness,
+                            DCH_i.dch_rout+ vessel_thickness,
                             DCH_i.dch_Lhalf  + vessel_thickness);
     dd4hep::Volume vessel_v (detName+"_vessel", vessel_s,  vesselSkinMat );
     vessel_v.setVisAttributes( vesselSkinVis );
 
 
-    dd4hep::Tube gas_s( DCH_i.dch_rin_z0,
-                        DCH_i.dch_rout_z0,
+    dd4hep::Tube gas_s( DCH_i.dch_rin,
+                        DCH_i.dch_rout,
                         DCH_i.dch_Lhalf + 2*safety_z_interspace );
     dd4hep::Volume gas_v (detName+"_gas", gas_s, gasvolMat );
     gas_v.setVisAttributes( gasvolVis );
@@ -506,9 +506,9 @@ void DCH_info::Fill_DCH_info_database(dd4hep::Detector & desc)
     if( not this->IsDatabaseEmpty() ) return;
 
     // DCH outer geometry dimensions
-    this->dch_rin_z0   = desc.constantAsDouble("DCH_inner_cyl_R_z0");
-    this->dch_rout_z0  = desc.constantAsDouble("DCH_outer_cyl_R_z0");
-    this->dch_Lhalf    = desc.constantAsDouble("DCH_Lhalf");
+    this->dch_rin   = desc.constantAsDouble("DCH_inner_cyl_R");
+    this->dch_rout  = desc.constantAsDouble("DCH_outer_cyl_R");
+    this->dch_Lhalf = desc.constantAsDouble("DCH_Lhalf");
 
     // guard wires position, fix position
     this->dch_rin_z0_guard  = desc.constantAsDouble("DCH_in_guard_z0");
@@ -611,8 +611,8 @@ void DCH_info::Show_DCH_info_database()
     std::cout << "\n";
     std::cout << "Global parameters of DCH:\n";
     std::cout << "\tHalf length/mm = " << dch_Lhalf/dd4hep::mm << '\n';
-    std::cout << "\tRadius in/mm  = " << dch_rin_z0/dd4hep::mm << '\n';
-    std::cout << "\tRadius out/mm = " << dch_rout_z0/dd4hep::mm<< '\n';
+    std::cout << "\tRadius in/mm  = " << dch_rin/dd4hep::mm << '\n';
+    std::cout << "\tRadius out/mm = " << dch_rout/dd4hep::mm<< '\n';
     std::cout << "\tRadius guard in/mm  = " << dch_rin_z0_guard/dd4hep::mm << '\n';
     std::cout << "\tRadius guard out/mm = " << dch_rout_z0_guard/dd4hep::mm << '\n';
     std::cout << "\n";
