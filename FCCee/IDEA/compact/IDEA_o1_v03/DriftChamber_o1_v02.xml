@@ -11,8 +11,8 @@
   <!-- Position of guard wires   -->
   <!--    _z0 := at z=0          -->
   <!--    _zL2 := at z=DCH_Lhalf -->
-  <constant name="DCH_in_guard_z0"          value=" DCH_inner_cyl_R + 4*mm "    />
-  <constant name="DCH_out_guard_zL2"        value=" DCH_outer_cyl_R - 12.5*mm " />
+  <constant name="DCH_guard_inner_r_at_z0"         value=" DCH_inner_cyl_R + 4*mm "    />
+  <constant name="DCH_guard_outer_r_at_zL2"        value=" DCH_outer_cyl_R - 12.5*mm " />
 
   <!-- Parametrization of number of cells ands layer/superlayer   -->
   <constant name="DCH_ncell"                value=" 192 "    />
@@ -25,7 +25,7 @@
   <constant name="DCH_alpha"                value=" 15*deg "    />
 
   <!--  Parameters of first layer  -->
-  <constant name="DCH_first_sense_r"        value=" DCH_in_guard_z0 + 8*mm "    />
+  <constant name="DCH_first_sense_r"        value=" DCH_guard_inner_r_at_z0 + 8*mm "    />
   <constant name="DCH_first_width"          value=" 2*3.14159265358979* DCH_first_sense_r / DCH_ncell"    />
 
 

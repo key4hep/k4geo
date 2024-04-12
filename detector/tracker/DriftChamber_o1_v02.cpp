@@ -511,8 +511,8 @@ void DCH_info::Fill_DCH_info_database(dd4hep::Detector & desc)
     this->dch_Lhalf = desc.constantAsDouble("DCH_Lhalf");
 
     // guard wires position, fix position
-    this->dch_rin_z0_guard  = desc.constantAsDouble("DCH_in_guard_z0");
-    this->dch_rout_z0_guard = desc.constantAsDouble("DCH_out_guard_zL2");
+    this->dch_rin_z0_guard  = desc.constantAsDouble("DCH_guard_inner_r_at_z0");
+    this->dch_rout_z0_guard = desc.constantAsDouble("DCH_guard_outer_r_at_zL2");
 
     /// number of cells of first layer
     this->dch_ncell0 = desc.constantAsLong("DCH_ncell");
