@@ -9,8 +9,10 @@
   <constant name="DCH_vessel_thickness"     value=" 1 * mm"  />
 
   <!-- Position of guard wires   -->
+  <!--    _z0 := at z=0          -->
+  <!--    _zL2 := at z=DCH_Lhalf -->
   <constant name="DCH_in_guard_z0"          value=" DCH_inner_cyl_R + 4*mm "    />
-  <constant name="DCH_out_guard_zL2"        value=" DCH_outer_cyl_R - 12.5 "    />
+  <constant name="DCH_out_guard_zL2"        value=" DCH_outer_cyl_R - 12.5*mm " />
 
   <!-- Parametrization of number of cells ands layer/superlayer   -->
   <constant name="DCH_ncell"                value=" 192 "    />
