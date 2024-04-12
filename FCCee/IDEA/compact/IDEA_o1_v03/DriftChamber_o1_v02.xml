@@ -1,5 +1,6 @@
 <lccdd>
   <!-- %%%%%%             Central Drift Chamber Basic Parameters                 %%%%%% -->
+  <!-- %%%%%%           based on the geometry version "IDEA231026"               %%%%%% -->
   <define>
   <!-- Vesssel geometry, some parameters moved to DetDimensions file   -->
   <!--   <constant name="DCH_inner_cyl_R"       value=" 350 * mm "    /> -->
