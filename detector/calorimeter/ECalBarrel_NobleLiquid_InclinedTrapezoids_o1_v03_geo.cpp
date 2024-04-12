@@ -72,7 +72,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     }
     layersTotalHeight += layer.repeat() * layer.thickness();
   }
-  lLog << MSG::DEBUG << "Total electrode length from detector XML (cm): " << layersTotalHeight << endmsg;
+  lLog << MSG::DEBUG << "Total electrode length from calorimeter xml description (cm): " << layersTotalHeight << endmsg;
 
 
   // The following code checks if the xml geometry file contains a constant defining
@@ -89,12 +89,12 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     ;
   }
   if (nLayers > 0 && nLayers != int(numLayers)) {
-    lLog << MSG::ERROR << "Incorrect number of layers (ECalBarrelNumLayers) in readout in xml file!" << endmsg;
+    lLog << MSG::ERROR << "Incorrect number of layers (ECalBarrelNumLayers) in readout in calorimeter xml description!" << endmsg;
     lLog << MSG::ERROR << "Number of layers should be: " << numLayers << endmsg;
     // todo: incidentSvc->fireIncident(Incident("ECalConstruction", "GeometryFailure"));
     // make the code crash (incidentSvc does not work)
     // Andre, Alvaro, assert replaced by exception
-    throw std::runtime_error("Incorrect number of layers (ECalBarrelNumLayers) in xml file!");
+    throw std::runtime_error("Incorrect number of layers (ECalBarrelNumLayers) in calorimeter xml description!");
   }
 
   // Retrieve information about the readout
@@ -261,11 +261,11 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     ;
   }
   if (nModules > 0 && nModules != int(numPlanes)) {
-    lLog << MSG::ERROR << "Incorrect number of planes (ECalBarrelNumPlanes) in xml file!" << endmsg;
+    lLog << MSG::ERROR << "Incorrect number of planes (ECalBarrelNumPlanes) in calorimeter xml description!" << endmsg;
     // todo: incidentSvc->fireIncident(Incident("ECalConstruction", "GeometryFailure"));
     // make the code crash (incidentSvc does not work)
     // Andre, Alvaro, assert replaced by exception
-    throw std::runtime_error("Incorrect number of planes (ECalBarrelNumPlanes) in xml file!");
+    throw std::runtime_error("Incorrect number of planes (ECalBarrelNumPlanes) in calorimeter xml description!");
   }
   // Readout is in the middle between two passive planes
   double offsetPassivePhi = caloDim.offset() + dPhi / 2.;
@@ -277,7 +277,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
 
   // electrode length, given inclination angle and min/max radius of the active calorimeter volume
   double planeLength = -Rmin * cos(angle) + sqrt(pow(Rmax, 2) - pow(Rmin * sin(angle), 2));
-
+  
   double runningHeight = 0.;
   lLog << MSG::INFO << "   total length from Rmin, Rmax and angle (cm) =  " << planeLength << endmsg;
   lLog << MSG::INFO << "   predicted layer radii: " << endmsg;
@@ -290,6 +290,12 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     lLog << MSG::INFO << "      layer " << iLay << " (cm) = " << rMin << " - " << rMax << endmsg;
   }
 
+  // check that electrode length is consistent with calorimeter radial extent
+  // and inclination angle to within 0.5 mm
+  if (fabs(planeLength - layersTotalHeight) > 0.05) {
+    lLog << MSG::ERROR << "   the sum of the electrode lengths per layer in the calorimeter xml file is not consistent with the length calculated from the calorimeter radial extent and the inclination angle" << endmsg;
+    throw std::runtime_error("Incorrect length of electrode layers in calorimeter xml description!");
+  }
   // calculate the thickness of the passive material in each layer
   // it's not constant in case of trapezoidal absorbers  (passiveInnerThicknessMax != passiveInnerThicknessMin)
   // the code calculates the (max) passive thickness per layer i.e. at Rout of layer

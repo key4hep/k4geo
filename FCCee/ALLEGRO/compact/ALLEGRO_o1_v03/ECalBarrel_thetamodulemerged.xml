@@ -143,19 +143,21 @@
           <material name="PCB"/>
         </readout>
         <layers>
-	  <!-- pcb electrode segmentation, rescaled to the total radial thickness of the active ECAL volume -->
-	  <!-- This is NOT the radial thickness of each layer!!! -->
+          <!-- pcb electrode segmentation (length of each layer along the electrode direction) -->
+          <!-- calculated given calo Rmin and inclination angle to yield cell corners aligned  -->
+          <!-- in rho-phi view, with constant number of crossings vs phi for projective particles -->
+	  <!-- (2 crossings in L0 and 4 in L1-10 -->
           <layer thickness="2.33596*cm" repeat="1"/>
 	  <layer thickness="4.75685*cm" repeat="1"/>
 	  <layer thickness="4.89843*cm" repeat="1"/>
-	  <layer thickness="5.04*cm" repeat="1"/>
+	  <layer thickness="5.04000*cm" repeat="1"/>
 	  <layer thickness="5.20989*cm" repeat="1"/>
 	  <layer thickness="5.36562*cm" repeat="1"/>
 	  <layer thickness="5.54966*cm" repeat="1"/>
 	  <layer thickness="5.73371*cm" repeat="1"/>
 	  <layer thickness="5.94607*cm" repeat="1"/>
 	  <layer thickness="6.15843*cm" repeat="1"/>
-	  <layer thickness="6.3991*cm" repeat="1"/>
+	  <layer thickness="6.39910*cm" repeat="1"/>
         </layers>
       </calorimeter>
     </detector>
