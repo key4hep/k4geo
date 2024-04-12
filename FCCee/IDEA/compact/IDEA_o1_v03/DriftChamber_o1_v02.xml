@@ -29,26 +29,21 @@
   <constant name="DCH_first_sense_r"        value=" DCH_guard_inner_r_at_z0 + 8*mm "    />
   <constant name="DCH_first_width"          value=" 2*3.14159265358979* DCH_first_sense_r / DCH_ncell"    />
 
-
+  <!--
+  Details about geometry of wires:
+    - guard wire:             50 um Al (core), 0.3 um Ag (coating)
+    - sense wire:             20 um W  (core), 0.3 um Au (coating)
+    - field wires top/bottom: 40 um Al (core), 0.3 um Ag (coating)
+    - field wire center:      50 um Al (core), 0.3 um Ag (coating)
+  -->
   <!-- sense wire thickness (total)   -->
-  <constant name="DCH_SWire_thickness"           value="0.0206*mm"   />
-  <!-- sense wire thickness (core), ignored at the moment   -->
-  <constant name = "CDCH:SWireShellThickIn"      value = "0.020*mm"/>
-  <!-- sense wire thickness (coating), to be added to core, ignored at the moment   -->
+  <constant name="DCH_SWire_thickness"           value="0.0203*mm"   />
 
   <!-- Field Side (top/bottom) wire thickness (total)   -->
-  <constant name="DCH_FSideWire_thickness"       value="0.0406*mm"   />
-  <!-- Field Side (top/bottom) wire thickness (coating), to be added to core, ignored at the moment   -->
-  <constant name = "CDCH:SWireShellThickOut"     value = "0.0006*mm"/>
-  <!-- Field Side (top/bottom) wire thickness (core), ignored at the moment   -->
-  <constant name = "CDCH:FWireShellThickIn"      value = "0.040*mm"/>
+  <constant name="DCH_FSideWire_thickness"       value="0.0403*mm"   />
 
   <!-- Field Central wire thickness (total)   -->
-  <constant name="DCH_FCentralWire_thickness"       value="0.0506*mm"   />
-  <!-- Field Central wire thickness (coating), to be added to core, ignored at the moment   -->
-  <constant name = "CDCH:centerFWireShellThickOut"  value = "0.0006*mm"/>
-  <!-- Field Central wire thickness (core), ignored at the moment   -->
-  <constant name = "CDCH:centerFWireShellThickIn"   value = "0.050*mm"/> <!-- Field wires in the middle of the cell are thicker -->
+  <constant name="DCH_FCentralWire_thickness"    value="0.0503*mm"   />
 
   </define>
 
