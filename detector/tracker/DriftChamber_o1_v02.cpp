@@ -132,7 +132,7 @@ public:
             return (IsStereoPositive()*2 -1 );
         }
 
-        /// separation between wires
+        /// separation between wires (along the circle)
         MyLength_t Pitch_z0(MyLength_t r_z0) const {
             return TWOPI*r_z0/nwires;
         };
