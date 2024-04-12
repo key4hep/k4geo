@@ -27,7 +27,7 @@
 
   <!--  Parameters of first layer  -->
   <constant name="DCH_first_sense_r"        value=" DCH_guard_inner_r_at_z0 + 8*mm "    />
-  <constant name="DCH_first_width"          value=" 2*3.14159265358979* DCH_first_sense_r / DCH_ncell"    />
+  <constant name="DCH_first_width"          value=" 2*pi* DCH_first_sense_r / DCH_ncell"    />
 
   <!--
   Details about geometry of wires:
