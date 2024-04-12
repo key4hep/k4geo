@@ -180,7 +180,6 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
 
 
     auto wiresElem = detElem.child("wires");
-    auto wiresMat  = desc.material(wiresElem.attr<std::string>(_Unicode(material)));
     auto wiresVis  = desc.visAttributes(wiresElem.attr<std::string>(_Unicode(vis)));
     bool buildSenseWires  = wiresElem.attr<bool>(_Unicode(buildSenseWires));
     bool buildFieldWires  = wiresElem.attr<bool>(_Unicode(buildFieldWires));
@@ -188,6 +187,10 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
     MyLength_t dch_SWire_thickness        = wiresElem.attr<double>(_Unicode(SWire_thickness)) ;
     MyLength_t dch_FSideWire_thickness    = wiresElem.attr<double>(_Unicode(FSideWire_thickness)) ;
     MyLength_t dch_FCentralWire_thickness = wiresElem.attr<double>(_Unicode(FCentralWire_thickness)) ;
+
+    auto dch_SWire_material        = desc.material(wiresElem.attr<std::string>(_Unicode(SWire_material)) ) ;
+    auto dch_FSideWire_material    = desc.material(wiresElem.attr<std::string>(_Unicode(FSideWire_material)) ) ;
+    auto dch_FCentralWire_material = desc.material(wiresElem.attr<std::string>(_Unicode(FCentralWire_material)) ) ;
 
     /* Geometry tree:
      * Wall (tube) -> Gas (tube) -> Layer_1 (hyp) -> cell_1 (twisted tube)
@@ -300,7 +303,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
             if(buildSenseWires)
             {
                 dd4hep::Tube swire_s(0., dch_SWire_thickness, swlength);
-                dd4hep::Volume swire_v(cell_name+"_swire", swire_s, wiresMat);
+                dd4hep::Volume swire_v(cell_name+"_swire", swire_s, dch_SWire_material);
                 swire_v.setVisAttributes( wiresVis );
                 // Change sign of stereo angle to place properly the wire inside the twisted tube
                 dd4hep::RotationX stereoTr( (-1.)*l.StereoSign()*DCH_i.stereoangle_z0(cell_rave_z0) );
@@ -368,7 +371,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
                                             - safety_z_interspace;
 
                     dd4hep::Tube fwire_s(0., fwire_radius, fwire_length);
-                    dd4hep::Volume fwire_v(cell_name+"_f2wire", fwire_s, wiresMat );
+                    dd4hep::Volume fwire_v(cell_name+"_f2wire", fwire_s, dch_FCentralWire_material );
                     fwire_v.setVisAttributes( wiresVis );
                     // Change sign of stereo angle to place properly the wire inside the twisted tube
                     dd4hep::RotationX fwireStereoTr( fwire_stereo );
@@ -392,7 +395,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
                                             - safety_z_interspace;
 
                     dd4hep::Tube fwire_s(0., fwire_radius, fwire_length);
-                    dd4hep::Volume fwire_v(cell_name+"_f1wire", fwire_s, wiresMat );
+                    dd4hep::Volume fwire_v(cell_name+"_f1wire", fwire_s, dch_FSideWire_material );
                     fwire_v.setVisAttributes( wiresVis );
                     // Change sign of stereo angle to place properly the wire inside the twisted tube
                     dd4hep::RotationX fwireStereoTr( fwire_stereo );
@@ -415,7 +418,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
                                             - safety_z_interspace;
 
                     dd4hep::Tube fwire_s(0., fwire_radius, fwire_length);
-                    dd4hep::Volume fwire_v(cell_name+"_f3wire", fwire_s, wiresMat );
+                    dd4hep::Volume fwire_v(cell_name+"_f3wire", fwire_s, dch_FSideWire_material );
                     fwire_v.setVisAttributes( wiresVis );
                     // Change sign of stereo angle to place properly the wire inside the twisted tube
                     dd4hep::RotationX fwireStereoTr( fwire_stereo );
@@ -437,7 +440,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
                                             - safety_z_interspace;
 
                     dd4hep::Tube fwire_s(0., fwire_radius, fwire_length);
-                    dd4hep::Volume fwire_v(cell_name+"_f5wire", fwire_s, wiresMat );
+                    dd4hep::Volume fwire_v(cell_name+"_f5wire", fwire_s, dch_FSideWire_material );
                     fwire_v.setVisAttributes( wiresVis );
                     // Change sign of stereo angle to place properly the wire inside the twisted tube
                     dd4hep::RotationX fwireStereoTr( fwire_stereo );
@@ -458,7 +461,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
                                             - safety_z_interspace;
 
                     dd4hep::Tube fwire_s(0., fwire_radius, fwire_length);
-                    dd4hep::Volume fwire_v(cell_name+"_f4wire", fwire_s, wiresMat );
+                    dd4hep::Volume fwire_v(cell_name+"_f4wire", fwire_s, dch_FSideWire_material );
                     fwire_v.setVisAttributes( wiresVis );
                     // Change sign of stereo angle to place properly the wire inside the twisted tube
                     dd4hep::RotationX fwireStereoTr( fwire_stereo );

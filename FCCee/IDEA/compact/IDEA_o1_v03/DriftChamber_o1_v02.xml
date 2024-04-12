@@ -75,13 +75,15 @@
     </gas>
     <!-- /detectors/detector/wires -->
     <wires
-        material="W"
         vis="dch_no_vis_nodaughters"
         buildSenseWires="True"
         buildFieldWires="True"
         SWire_thickness       ="DCH_SWire_thickness"
         FSideWire_thickness   ="DCH_FSideWire_thickness"
         FCentralWire_thickness="DCH_FCentralWire_thickness"
+        SWire_material       ="W"
+        FSideWire_material   ="Al"
+        FCentralWire_material="Al"
       >
     </wires>
     </detector>
