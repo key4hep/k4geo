@@ -54,12 +54,28 @@ public:
     MyLength_t dch_rin_z0_guard = {0};
     MyLength_t dch_rout = {0};
     MyLength_t dch_rout_z0_guard = {0};
+
+    /// number of cells of first layer
     int dch_ncell0 = {0};
+    /// increment the number of cells for each superlayer as:
+    ///   ncells(ilayer) = dch_ncell0 + increment*superlayer(ilayer)
+    ///   See DCH_info::Get_nsuperlayer_minus_1(ilayer)
     int dch_ncell_increment = {0};
+
+    /// cells within the same layer may be grouped into sectors, not in use atm
     int dch_ncell_per_sector = {0};
+
+    /// input number of layers in each superlayer
     int dch_nlayersPerSuperlayer = {0};
+    /// input number of superlayers
+    /// superlayer is an abstract level of grouping layers used to
+    /// parametrize the increment of cells in each layer
     int dch_nsuperlayers = {0};
+    /// Calculated as dch_nlayersPerSuperlayer * dch_nsuperlayers
     int dch_nlayers = {0};
+
+    /// global twist angle
+    /// alternating layers will change its sign
     MyAngle_t  dch_twist_angle = {0};
 
     void Set_lhalf(MyLength_t _dch_Lhalf){dch_Lhalf=_dch_Lhalf;};
@@ -69,12 +85,15 @@ public:
     void Set_guard_rin (MyLength_t _dch_rin_z0_guard ){dch_rin_z0_guard  = _dch_rin_z0_guard; };
     void Set_guard_rout(MyLength_t _dch_rout_z0_guard){dch_rout_z0_guard = _dch_rout_z0_guard;};
 
-    // int dch_ncell0 = {0};
-    // int dch_ncell_increment = {0};
-    // int dch_ncell_per_sector = {0};
-    // int dch_nlayersPerSuperlayer = {0};
-    // int dch_nsuperlayers = {0};
-    // int dch_nlayers = {0};
+    void Set_ncell0              (int _ncell0              ){dch_ncell0               = _ncell0;              };
+    void Set_ncell_increment     (int _ncell_increment     ){dch_ncell_increment      = _ncell_increment;     };
+
+    void Set_nlayersPerSuperlayer(int _nlayersPerSuperlayer){dch_nlayersPerSuperlayer = _nlayersPerSuperlayer;};
+    void Set_nsuperlayers        (int _nsuperlayers        ){dch_nsuperlayers         = _nsuperlayers;        };
+
+    void Set_ncell_per_sector(int _ncell_per_sector){dch_ncell_per_sector = _ncell_per_sector;};
+
+
 
     void Set_twist_angle (MyLength_t _dch_twist_angle ){dch_twist_angle = _dch_twist_angle;};
 
@@ -191,8 +210,12 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
         MyAngle_t dch_alpha = desc.constantAsDouble("DCH_alpha");
         DCH_i.Set_twist_angle( 2*dch_alpha );
 
+        DCH_i.Set_nsuperlayers(desc.constantAsLong("DCH_nsuperlayers"));
+        DCH_i.Set_nlayersPerSuperlayer(desc.constantAsLong("DCH_nlayersPerSuperlayer"));
 
-
+        DCH_i.Set_ncell0(desc.constantAsLong("DCH_ncell"));
+        DCH_i.Set_ncell_increment(desc.constantAsLong("DCH_ncell_increment"));
+        DCH_i.Set_ncell_per_sector(desc.constantAsLong("DCH_ncell_per_sector"));
 
     }
     DCH_i.Fill_DCH_info_database(desc);
@@ -553,20 +576,18 @@ void DCH_info::Fill_DCH_info_database(dd4hep::Detector & desc)
     ff_check_positive_parameter(this->dch_rout_z0_guard,"outer radius of guard wires" );
 
 
-    /// number of cells of first layer
-    this->dch_ncell0 = desc.constantAsLong("DCH_ncell");
-    /// increment of cell number by each superlayer
-    this->dch_ncell_increment = desc.constantAsLong("DCH_ncell_increment");
-    /// layer cells are grouped into sectors
-    this->dch_ncell_per_sector = desc.constantAsLong("DCH_ncell_per_sector");
+    ff_check_positive_parameter(this->dch_ncell0,"ncells in the first layer" );
+    ff_check_positive_parameter(this->dch_ncell_increment,"ncells increment per superlayer" );
+    ff_check_positive_parameter(this->dch_ncell_per_sector,"ncells per sector" );
+
     // if dch_ncell_per_sector is not divisor of dch_ncell0 and dch_ncell_increment
     // trow an error
     if( 0 != (dch_ncell0 % dch_ncell_per_sector) || 0 != (dch_ncell_increment % dch_ncell_per_sector) )
         throw std::runtime_error("dch_ncell_per_sector is not divisor of dch_ncell0 or dch_ncell_increment");
 
-    // wires/cells are grouped in layers (and superlayers)
-    this->dch_nsuperlayers = desc.constantAsLong("DCH_nsuperlayers");
-    this->dch_nlayersPerSuperlayer = desc.constantAsLong("DCH_nlayersPerSuperlayer");
+    ff_check_positive_parameter(this->dch_nsuperlayers,"number of superlayers" );
+    ff_check_positive_parameter(this->dch_nlayersPerSuperlayer,"number of layers per superlayer" );
+
     /// nlayers = nsuperlayers * nlayersPerSuperlayer
     /// default: 112 = 14 * 8
     this->dch_nlayers = this->dch_nsuperlayers * this->dch_nlayersPerSuperlayer;
