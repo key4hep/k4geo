@@ -62,6 +62,21 @@ public:
     int dch_nlayers = {0};
     MyAngle_t  dch_twist_angle = {0};
 
+    void Set_lhalf(MyLength_t _dch_Lhalf){dch_Lhalf=_dch_Lhalf;};
+    void Set_rin  (MyLength_t _dch_rin  ){dch_rin  = _dch_rin; };
+    void Set_rout (MyLength_t _dch_rout ){dch_rout = _dch_rout;};
+
+    void Set_guard_rin (MyLength_t _dch_rin_z0_guard ){dch_rin_z0_guard  = _dch_rin_z0_guard; };
+    void Set_guard_rout(MyLength_t _dch_rout_z0_guard){dch_rout_z0_guard = _dch_rout_z0_guard;};
+
+    // int dch_ncell0 = {0};
+    // int dch_ncell_increment = {0};
+    // int dch_ncell_per_sector = {0};
+    // int dch_nlayersPerSuperlayer = {0};
+    // int dch_nsuperlayers = {0};
+    // int dch_nlayers = {0};
+    // MyAngle_t  dch_twist_angle = {0};
+
     /// Get number of cells in a given layer
     ///   ncells = 2x number of wires
     inline int Get_ncells(int ilayer){return database.at(ilayer).nwires/2;}
@@ -162,6 +177,18 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
     sens.setType("tracker");
 
     kk::DCH_info DCH_i;
+    {
+        // DCH outer geometry dimensions
+        DCH_i.Set_rin  ( desc.constantAsDouble("DCH_inner_cyl_R") );
+        DCH_i.Set_rout ( desc.constantAsDouble("DCH_outer_cyl_R") );
+        DCH_i.Set_lhalf( desc.constantAsDouble("DCH_Lhalf")       );
+
+        // guard wires position, fix position
+        DCH_i.Set_guard_rin ( desc.constantAsDouble("DCH_guard_inner_r_at_z0" ) );
+        DCH_i.Set_guard_rout( desc.constantAsDouble("DCH_guard_outer_r_at_zL2") );
+
+
+    }
     DCH_i.Fill_DCH_info_database(desc);
     if( DCH_i.IsDatabaseEmpty() )
         throw std::runtime_error("Empty database");
@@ -508,14 +535,7 @@ void DCH_info::Fill_DCH_info_database(dd4hep::Detector & desc)
     // do not fill twice the database
     if( not this->IsDatabaseEmpty() ) return;
 
-    // DCH outer geometry dimensions
-    this->dch_rin   = desc.constantAsDouble("DCH_inner_cyl_R");
-    this->dch_rout  = desc.constantAsDouble("DCH_outer_cyl_R");
-    this->dch_Lhalf = desc.constantAsDouble("DCH_Lhalf");
 
-    // guard wires position, fix position
-    this->dch_rin_z0_guard  = desc.constantAsDouble("DCH_guard_inner_r_at_z0");
-    this->dch_rout_z0_guard = desc.constantAsDouble("DCH_guard_outer_r_at_zL2");
 
     /// number of cells of first layer
     this->dch_ncell0 = desc.constantAsLong("DCH_ncell");
