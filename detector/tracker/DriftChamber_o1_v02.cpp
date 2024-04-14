@@ -188,6 +188,8 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
         DCH_i.Set_guard_rout( desc.constantAsDouble("DCH_guard_outer_r_at_zL2") );
 
 
+
+
     }
     DCH_i.Fill_DCH_info_database(desc);
     if( DCH_i.IsDatabaseEmpty() )
@@ -535,6 +537,16 @@ void DCH_info::Fill_DCH_info_database(dd4hep::Detector & desc)
     // do not fill twice the database
     if( not this->IsDatabaseEmpty() ) return;
 
+    auto ff_check_positive_parameter = [](double p, std::string pname) -> void {
+        if(p<0)throw std::runtime_error(Form("DCH: %s can not be negative",pname.c_str()));
+        return;
+    };
+    ff_check_positive_parameter(this->dch_rin  ,"inner radius");
+    ff_check_positive_parameter(this->dch_rout ,"outer radius");
+    ff_check_positive_parameter(this->dch_Lhalf,"half length" );
+
+    ff_check_positive_parameter(this->dch_rin_z0_guard ,"inner radius of guard wires" );
+    ff_check_positive_parameter(this->dch_rout_z0_guard,"outer radius of guard wires" );
 
 
     /// number of cells of first layer
