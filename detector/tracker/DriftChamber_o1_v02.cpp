@@ -30,9 +30,6 @@ using MyLength_t = double;
 /// tpye for angles
 using MyAngle_t = double;
 
-// hardcode values in the code at compilation time
-constexpr double PI = TMath::Pi();
-constexpr double TWOPI = TMath::TwoPi();
 /* Data structure to store DCH excel table
  * to be filled before building the geometry!
  *
@@ -114,7 +111,7 @@ public:
     inline int Get_ncells(int ilayer){return database.at(ilayer).nwires/2;}
 
     /// Get phi width for the twisted tube and the step (phi distance between cells)
-    inline MyAngle_t Get_phi_width(int ilayer){return (TWOPI/Get_ncells(ilayer))*dd4hep::rad;}
+    inline MyAngle_t Get_phi_width(int ilayer){return (TMath::TwoPi()/Get_ncells(ilayer))*dd4hep::rad;}
 
     ///
     // TODO: check if staggering is just + 0.25*cell_phi_width*(ilayer%2);
@@ -181,7 +178,7 @@ public:
 
         /// separation between wires (along the circle)
         MyLength_t Pitch_z0(MyLength_t r_z0) const {
-            return TWOPI*r_z0/nwires;
+            return TMath::TwoPi()*r_z0/nwires;
         };
 
     };
@@ -193,7 +190,7 @@ public:
     void Show_DCH_info_database();
 
 };
-} // end namespace kk
+} // end namespace myspace
 
 namespace DCH_v2 {
 
@@ -337,7 +334,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
 
         // ncells in this layer = 2x number of wires
         int ncells = l.nwires/2;
-        MyAngle_t phi_step = (TWOPI/ncells)*dd4hep::rad;
+        MyAngle_t phi_step = (TMath::TwoPi()/ncells)*dd4hep::rad;
 
         // unitary cell (Twisted tube) is repeated for each layer l.nwires/2 times
         // Twisted tube parameters
@@ -618,7 +615,7 @@ void DCH_info::BuildLayerDatabase()
         layer1_info.radius_sw_z0  = dch_first_sense_r;
         layer1_info.radius_fdw_z0 = dch_first_sense_r - 0.5*dch_first_width;
         layer1_info.radius_fuw_z0 = dch_first_sense_r + 0.5*dch_first_width;
-        layer1_info.width_z0      = TWOPI*dch_first_sense_r/this->dch_ncell0;
+        layer1_info.width_z0      = TMath::TwoPi()*dch_first_sense_r/this->dch_ncell0;
 
         this->database.emplace(layer1_info.layer, layer1_info);
     }
@@ -648,7 +645,7 @@ void DCH_info::BuildLayerDatabase()
             if(0 == Get_nsuperlayer_minus_1(ilayer))
                 layer_info.height_z0 = h*ru/rd;
             else
-                layer_info.height_z0 = TWOPI*ru/(0.5*layer_info.nwires - PI);
+                layer_info.height_z0 = TMath::TwoPi()*ru/(0.5*layer_info.nwires - TMath::Pi());
 
             layer_info.radius_sw_z0 = 0.5*layer_info.height_z0 + ru;
         }
@@ -656,7 +653,7 @@ void DCH_info::BuildLayerDatabase()
         //calculate radius_fdw_z0, radius_fuw_z0, width_z0
         layer_info.radius_fdw_z0 = previousLayer.radius_fuw_z0;
         layer_info.radius_fuw_z0 = previousLayer.radius_fuw_z0 + layer_info.height_z0;
-        layer_info.width_z0 = TWOPI*layer_info.radius_sw_z0/(0.5*layer_info.nwires);
+        layer_info.width_z0 = TMath::TwoPi()*layer_info.radius_sw_z0/(0.5*layer_info.nwires);
 
         // according to excel, width_z0 == height_z0
         if(fabs(layer_info.width_z0 - layer_info.height_z0)>1e-4)
@@ -728,6 +725,6 @@ void DCH_info::Show_DCH_info_database()
     return;
 }
 
-} // close namespace kk
+} // close namespace myspace
 
 DECLARE_DETELEMENT(DriftChamber_o1_v02_T, DCH_v2::create_DCH_o1_v02)
