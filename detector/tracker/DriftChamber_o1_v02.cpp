@@ -633,10 +633,8 @@ void DCH_info::BuildLayerDatabase()
 
         // the loop counter actually corresponds to the layer number
         layer_info.layer = ilayer;
-        // calculate number of superlayer
-        // WARNING: division of integers on purpose!
-        int nsuperlayer_minus_1 = (ilayer-1)/dch_nlayersPerSuperlayer;
-        layer_info.nwires = 2*(this->dch_ncell0 + this->dch_ncell_increment*nsuperlayer_minus_1 );
+        // nwires is twice the number of cells in this particular layer (ilayer)
+        layer_info.nwires = 2*(this->dch_ncell0 + this->dch_ncell_increment*Get_nsuperlayer_minus_1(ilayer) );
 
         // the previous layer info is needed to calculate parameters of current layer
         auto previousLayer = this->database.at(ilayer-1);
@@ -647,7 +645,7 @@ void DCH_info::BuildLayerDatabase()
             double ru = previousLayer.radius_fuw_z0;
             double rd = previousLayer.radius_fdw_z0;
 
-            if(0 == nsuperlayer_minus_1)
+            if(0 == Get_nsuperlayer_minus_1(ilayer))
                 layer_info.height_z0 = h*ru/rd;
             else
                 layer_info.height_z0 = TWOPI*ru/(0.5*layer_info.nwires - PI);
