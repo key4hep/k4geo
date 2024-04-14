@@ -20,7 +20,7 @@
 
 #include <map>
 
-namespace kk{
+namespace myspace{
 // use alias of types to show more clear what the variable is
 // if everything is double, the code is not readable
 /// type for layer number
@@ -197,7 +197,7 @@ public:
 
 namespace DCH_v2 {
 
-using namespace kk;
+using namespace myspace;
 
 /// Function to build DCH
 static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Handle_t handle, dd4hep::SensitiveDetector sens)
@@ -208,7 +208,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
     dd4hep::DetElement det(detName, detID);
     sens.setType("tracker");
 
-    kk::DCH_info DCH_i;
+    myspace::DCH_info DCH_i;
     {
         // DCH outer geometry dimensions
         DCH_i.Set_rin  ( desc.constantAsDouble("DCH_inner_cyl_R") );
@@ -571,7 +571,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
 
 }; // end DCH_o2 namespace
 
-namespace kk{
+namespace myspace{
 void DCH_info::BuildLayerDatabase()
 {
     // do not fill twice the database
