@@ -48,11 +48,16 @@ constexpr double TWOPI = TMath::TwoPi();
 class DCH_info
 {
 public:
-    // global variables of DCH
+    /// Half length of the active volume
     MyLength_t dch_Lhalf = {0};
+    /// Inner radius of the active volume
     MyLength_t dch_rin = {0};
-    MyLength_t dch_rin_z0_guard = {0};
+    /// Outer radius of the active volume
     MyLength_t dch_rout = {0};
+
+    /// Inner guard wires radius
+    MyLength_t dch_rin_z0_guard = {0};
+    /// Outer guard wires radius
     MyLength_t dch_rout_z0_guard = {0};
 
     /// number of cells of first layer
@@ -78,6 +83,11 @@ public:
     /// alternating layers will change its sign
     MyAngle_t  dch_twist_angle = {0};
 
+    /// Cell width for the first layer
+    double dch_first_width = {0};
+    /// Cell radius for the first layer
+    MyLength_t dch_first_sense_r = {0};
+
     void Set_lhalf(MyLength_t _dch_Lhalf){dch_Lhalf=_dch_Lhalf;};
     void Set_rin  (MyLength_t _dch_rin  ){dch_rin  = _dch_rin; };
     void Set_rout (MyLength_t _dch_rout ){dch_rout = _dch_rout;};
@@ -93,9 +103,11 @@ public:
 
     void Set_ncell_per_sector(int _ncell_per_sector){dch_ncell_per_sector = _ncell_per_sector;};
 
-
-
     void Set_twist_angle (MyLength_t _dch_twist_angle ){dch_twist_angle = _dch_twist_angle;};
+
+    void Set_first_width  (double _first_width  ){dch_first_width   = _first_width;   };
+    void Set_first_sense_r(double _first_sense_r){dch_first_sense_r = _first_sense_r; };
+
 
     /// Get number of cells in a given layer
     ///   ncells = 2x number of wires
@@ -177,7 +189,7 @@ public:
     std::map<DCH_layer, DCH_info_layer> database;
     bool IsDatabaseEmpty() { return (0 == database.size() ); }
 
-    void Fill_DCH_info_database(dd4hep::Detector &desc);
+    void BuildLayerDatabase();
     void Show_DCH_info_database();
 
 };
@@ -217,8 +229,11 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
         DCH_i.Set_ncell_increment(desc.constantAsLong("DCH_ncell_increment"));
         DCH_i.Set_ncell_per_sector(desc.constantAsLong("DCH_ncell_per_sector"));
 
+        DCH_i.Set_first_width  ( desc.constantAsDouble("DCH_first_width")   );
+        DCH_i.Set_first_sense_r( desc.constantAsDouble("DCH_first_sense_r") );
+
     }
-    DCH_i.Fill_DCH_info_database(desc);
+    DCH_i.BuildLayerDatabase();
     if( DCH_i.IsDatabaseEmpty() )
         throw std::runtime_error("Empty database");
 
@@ -559,13 +574,13 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
 }; // end DCH_o2 namespace
 
 namespace kk{
-void DCH_info::Fill_DCH_info_database(dd4hep::Detector & desc)
+void DCH_info::BuildLayerDatabase()
 {
     // do not fill twice the database
     if( not this->IsDatabaseEmpty() ) return;
 
     auto ff_check_positive_parameter = [](double p, std::string pname) -> void {
-        if(p<0)throw std::runtime_error(Form("DCH: %s can not be negative",pname.c_str()));
+        if(p<=0)throw std::runtime_error(Form("DCH: %s must be positive",pname.c_str()));
         return;
     };
     ff_check_positive_parameter(this->dch_rin  ,"inner radius");
@@ -592,11 +607,9 @@ void DCH_info::Fill_DCH_info_database(dd4hep::Detector & desc)
     /// default: 112 = 14 * 8
     this->dch_nlayers = this->dch_nsuperlayers * this->dch_nlayersPerSuperlayer;
 
+    ff_check_positive_parameter(this->dch_first_width,"width of first layer cells" );
+    ff_check_positive_parameter(this->dch_first_sense_r,"radius of first layer cells" );
 
-
-    // retrieve some initial values for the first layer
-    double dch_first_width = desc.constantAsDouble("DCH_first_width");
-    MyLength_t dch_first_sense_r = desc.constantAsDouble("DCH_first_sense_r");
 
     // intialize layer 1 from input parameters
     {
