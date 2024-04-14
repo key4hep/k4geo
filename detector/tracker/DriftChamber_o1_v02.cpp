@@ -184,12 +184,14 @@ public:
     };
     /// map to store excel table
     std::map<DCH_layer, DCH_info_layer> database;
-    bool IsDatabaseEmpty() { return (0 == database.size() ); }
+    bool IsDatabaseEmpty() const { return (0 == database.size() ); }
 
     void BuildLayerDatabase();
-    void Show_DCH_info_database();
+    void Show_DCH_info_database(std::ostream& io) const;
+
 
 };
+std::ostream& operator<<( std::ostream& io , const DCH_info& d ){d.Show_DCH_info_database(io); return io;}
 } // end namespace myspace
 
 namespace DCH_v2 {
@@ -236,7 +238,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
 
     bool printExcelTable = detElem.attr<bool>(_Unicode(printExcelTable));
     if(printExcelTable)
-        DCH_i.Show_DCH_info_database();
+        DCH_i.Show_DCH_info_database(std::cout);
 
     auto gasElem    = detElem.child("gas");
     auto gasvolMat  = desc.material(gasElem.attr<std::string>(_Unicode(material)));
@@ -668,31 +670,31 @@ void DCH_info::BuildLayerDatabase()
     return;
 }
 
-void DCH_info::Show_DCH_info_database()
+void DCH_info::Show_DCH_info_database(std::ostream & oss) const
 {
     if( this->IsDatabaseEmpty() )
         throw std::runtime_error("Can not show empty database!");
 
-    std::cout << "\n";
-    std::cout << "Global parameters of DCH:\n";
-    std::cout << "\tHalf length/mm = " << dch_Lhalf/dd4hep::mm << '\n';
-    std::cout << "\tRadius in/mm  = " << dch_rin/dd4hep::mm << '\n';
-    std::cout << "\tRadius out/mm = " << dch_rout/dd4hep::mm<< '\n';
-    std::cout << "\tRadius guard in/mm  = " << dch_rin_z0_guard/dd4hep::mm << '\n';
-    std::cout << "\tRadius guard out/mm = " << dch_rout_z0_guard/dd4hep::mm << '\n';
-    std::cout << "\n";
-    std::cout << "\tTwis angle (2*alpha) / deg = " << dch_twist_angle/dd4hep::deg << '\n';
-    std::cout << "\n";
-    std::cout << "\tN superlayers = " << dch_nsuperlayers << '\n';
-    std::cout << "\tN layers per superlayer = " << dch_nlayersPerSuperlayer << '\n';
-    std::cout << "\tN layers = " << dch_nlayers << '\n';
-    std::cout << "\n";
-    std::cout << "\tN cells layer1 = " << dch_ncell0 << '\n';
-    std::cout << "\tN cells increment per superlayer = " << dch_ncell_increment << '\n';
-    std::cout << "\tN cells per sector = " << dch_ncell_per_sector << '\n';
-    std::cout << "\n";
-    std::cout << "Layer parameters of DCH:\n";
-    std::cout
+    oss << "\n";
+    oss << "Global parameters of DCH:\n";
+    oss << "\tHalf length/mm = " << dch_Lhalf/dd4hep::mm << '\n';
+    oss << "\tRadius in/mm  = " << dch_rin/dd4hep::mm << '\n';
+    oss << "\tRadius out/mm = " << dch_rout/dd4hep::mm<< '\n';
+    oss << "\tRadius guard in/mm  = " << dch_rin_z0_guard/dd4hep::mm << '\n';
+    oss << "\tRadius guard out/mm = " << dch_rout_z0_guard/dd4hep::mm << '\n';
+    oss << "\n";
+    oss << "\tTwis angle (2*alpha) / deg = " << dch_twist_angle/dd4hep::deg << '\n';
+    oss << "\n";
+    oss << "\tN superlayers = " << dch_nsuperlayers << '\n';
+    oss << "\tN layers per superlayer = " << dch_nlayersPerSuperlayer << '\n';
+    oss << "\tN layers = " << dch_nlayers << '\n';
+    oss << "\n";
+    oss << "\tN cells layer1 = " << dch_ncell0 << '\n';
+    oss << "\tN cells increment per superlayer = " << dch_ncell_increment << '\n';
+    oss << "\tN cells per sector = " << dch_ncell_per_sector << '\n';
+    oss << "\n";
+    oss << "Layer parameters of DCH:\n";
+    oss
             << "\t" << "layer"
             << "\t" << "nwires"
             << "\t" << "height_z0/mm"
@@ -708,7 +710,7 @@ void DCH_info::Show_DCH_info_database()
 
     for(const auto& [nlayer, l]  : DCH_info::database )
     {
-        std::cout
+        oss
                 << "\t" << l.layer
                 << "\t" << l.nwires
                 << "\t" << l.height_z0/dd4hep::mm
