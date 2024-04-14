@@ -75,7 +75,8 @@ public:
     // int dch_nlayersPerSuperlayer = {0};
     // int dch_nsuperlayers = {0};
     // int dch_nlayers = {0};
-    // MyAngle_t  dch_twist_angle = {0};
+
+    void Set_twist_angle (MyLength_t _dch_twist_angle ){dch_twist_angle = _dch_twist_angle;};
 
     /// Get number of cells in a given layer
     ///   ncells = 2x number of wires
@@ -186,6 +187,9 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
         // guard wires position, fix position
         DCH_i.Set_guard_rin ( desc.constantAsDouble("DCH_guard_inner_r_at_z0" ) );
         DCH_i.Set_guard_rout( desc.constantAsDouble("DCH_guard_outer_r_at_zL2") );
+
+        MyAngle_t dch_alpha = desc.constantAsDouble("DCH_alpha");
+        DCH_i.Set_twist_angle( 2*dch_alpha );
 
 
 
@@ -567,8 +571,7 @@ void DCH_info::Fill_DCH_info_database(dd4hep::Detector & desc)
     /// default: 112 = 14 * 8
     this->dch_nlayers = this->dch_nsuperlayers * this->dch_nlayersPerSuperlayer;
 
-    MyAngle_t dch_alpha = desc.constantAsDouble("DCH_alpha");
-    this->dch_twist_angle = 2*dch_alpha;
+
 
     // retrieve some initial values for the first layer
     double dch_first_width = desc.constantAsDouble("DCH_first_width");
