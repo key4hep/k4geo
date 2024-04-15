@@ -568,6 +568,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
     det.setPlacement(vessel_pv);
     // Assign the system ID to our mother volume
     vessel_pv.addPhysVolID("system", detID);
+    det.addExtension<dd4hep::rec::DCH_info>(&DCH_i);
 
     return det;
 
