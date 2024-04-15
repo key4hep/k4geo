@@ -24,25 +24,25 @@ namespace dd4hep {  namespace rec {
 struct DCH_info_struct
 {
 public:
-    // use alias of types to show more clear what the variable is
+    // use alias of types to show more clearly what the variable is
     // if everything is double, the code is not readable
     /// type for layer number
     using DCH_layer = int;
     /// tpye for lengths
-    using MyLength_t = double;
+    using DCH_length_t = double;
     /// tpye for angles
-    using MyAngle_t = double;
+    using DCH_angle_t = double;
     /// Half length of the active volume
-    MyLength_t Lhalf = {0};
+    DCH_length_t Lhalf = {0};
     /// Inner radius of the active volume
-    MyLength_t rin = {0};
+    DCH_length_t rin = {0};
     /// Outer radius of the active volume
-    MyLength_t rout = {0};
+    DCH_length_t rout = {0};
 
     /// Inner guard wires radius
-    MyLength_t guard_inner_r_at_z0 = {0};
+    DCH_length_t guard_inner_r_at_z0 = {0};
     /// Outer guard wires radius
-    MyLength_t guard_outer_r_at_z0 = {0};
+    DCH_length_t guard_outer_r_at_z0 = {0};
 
     /// number of cells of first layer
     int ncell0 = {0};
@@ -65,32 +65,32 @@ public:
 
     /// global twist angle
     /// alternating layers will change its sign
-    MyAngle_t  twist_angle = {0};
+    DCH_angle_t  twist_angle = {0};
 
     /// Cell width for the first layer
     double first_width = {0};
     /// Cell radius for the first layer
-    MyLength_t dch_first_sense_r = {0};
+    DCH_length_t first_sense_r = {0};
 
-    void Set_lhalf(MyLength_t _dch_Lhalf){Lhalf=_dch_Lhalf;};
-    void Set_rin  (MyLength_t _dch_rin  ){rin  = _dch_rin; };
-    void Set_rout (MyLength_t _dch_rout ){rout = _dch_rout;};
+    void Set_lhalf(DCH_length_t _dch_Lhalf){Lhalf=_dch_Lhalf;}
+    void Set_rin  (DCH_length_t _dch_rin  ){rin  = _dch_rin; }
+    void Set_rout (DCH_length_t _dch_rout ){rout = _dch_rout;}
 
-    void Set_guard_rin (MyLength_t _dch_rin_z0_guard ){guard_inner_r_at_z0  = _dch_rin_z0_guard; };
-    void Set_guard_rout(MyLength_t _dch_rout_z0_guard){guard_outer_r_at_z0 = _dch_rout_z0_guard;};
+    void Set_guard_rin (DCH_length_t _dch_rin_z0_guard ){guard_inner_r_at_z0  = _dch_rin_z0_guard; }
+    void Set_guard_rout(DCH_length_t _dch_rout_z0_guard){guard_outer_r_at_z0 = _dch_rout_z0_guard; }
 
-    void Set_ncell0              (int _ncell0              ){ncell0               = _ncell0;              };
-    void Set_ncell_increment     (int _ncell_increment     ){ncell_increment      = _ncell_increment;     };
+    void Set_ncell0              (int _ncell0              ){ncell0               = _ncell0;              }
+    void Set_ncell_increment     (int _ncell_increment     ){ncell_increment      = _ncell_increment;     }
 
-    void Set_nlayersPerSuperlayer(int _nlayersPerSuperlayer){nlayersPerSuperlayer = _nlayersPerSuperlayer;};
-    void Set_nsuperlayers        (int _nsuperlayers        ){nsuperlayers         = _nsuperlayers;        };
+    void Set_nlayersPerSuperlayer(int _nlayersPerSuperlayer){nlayersPerSuperlayer = _nlayersPerSuperlayer;}
+    void Set_nsuperlayers        (int _nsuperlayers        ){nsuperlayers         = _nsuperlayers;        }
 
-    void Set_ncell_per_sector(int _ncell_per_sector){ncell_per_sector = _ncell_per_sector;};
+    void Set_ncell_per_sector(int _ncell_per_sector){ncell_per_sector = _ncell_per_sector;}
 
-    void Set_twist_angle (MyLength_t _dch_twist_angle ){twist_angle = _dch_twist_angle;};
+    void Set_twist_angle (DCH_length_t _dch_twist_angle ){twist_angle = _dch_twist_angle;}
 
-    void Set_first_width  (double _first_width  ){first_width   = _first_width;   };
-    void Set_first_sense_r(double _first_sense_r){dch_first_sense_r = _first_sense_r; };
+    void Set_first_width  (double _first_width  ){first_width   = _first_width;   }
+    void Set_first_sense_r(double _first_sense_r){first_sense_r = _first_sense_r; }
 
 
     /// Get number of cells in a given layer
@@ -98,34 +98,34 @@ public:
     inline int Get_ncells(int ilayer){return database.at(ilayer).nwires/2;}
 
     /// Get phi width for the twisted tube and the step (phi distance between cells)
-    inline MyAngle_t Get_phi_width(int ilayer){return (TMath::TwoPi()/Get_ncells(ilayer))*dd4hep::rad;}
+    inline DCH_angle_t Get_phi_width(int ilayer){return (TMath::TwoPi()/Get_ncells(ilayer))*dd4hep::rad;}
 
     ///
     // TODO: check if staggering is just + 0.25*cell_phi_width*(ilayer%2);
     // phi positioning, adding offset for odd ilayers
-    MyAngle_t Get_cell_phi_angle(int ilayer, int nphi){ return (Get_phi_width(ilayer) * (nphi + 0.25*(ilayer%2)));}
+    DCH_angle_t Get_cell_phi_angle(int ilayer, int nphi){ return (Get_phi_width(ilayer) * (nphi + 0.25*(ilayer%2)));}
 
     /// calculate superlayer for a given ilayer.
     /// WARNING: division of integers on purpose!
     int Get_nsuperlayer_minus_1(int ilayer){ return int((ilayer-1)/nlayersPerSuperlayer);}
 
     /// Calculate radius at z=L/2 given at z=0
-    MyLength_t Radius_zLhalf(MyLength_t r_z0) const {
+    DCH_length_t Radius_zLhalf(DCH_length_t r_z0) const {
         return r_z0/cos(twist_angle/2/dd4hep::rad);
     }
 
     /// tan(stereoangle) = R(z=0)   / (L/2) * tan( twist_angle/2)
-    inline MyAngle_t stereoangle_z0(MyLength_t r_z0) const {
+    inline DCH_angle_t stereoangle_z0(DCH_length_t r_z0) const {
         return atan( r_z0/Lhalf*tan(twist_angle/2));
     }
 
     /// tan(stereoangle) = R(z=L/2) / (L/2) * sin( twist_angle/2)
-    inline MyAngle_t stereoangle_zLhalf(MyLength_t r_zLhalf) const {
+    inline DCH_angle_t stereoangle_zLhalf(DCH_length_t r_zLhalf) const {
         return atan( r_zLhalf/Lhalf*sin(twist_angle/2));
     }
 
     /// WireLength = 2*dch_Lhalf/cos(atan(Pitch_z0(r_z0)/(2*dch_Lhalf)))/cos(stereoangle_z0(r_z0))
-    inline MyLength_t WireLength(int nlayer, MyLength_t r_z0) const {
+    inline DCH_length_t WireLength(int nlayer, DCH_length_t r_z0) const {
         auto Pitch_z0 = database.at(nlayer).Pitch_z0(r_z0);
         return  2*Lhalf/cos(atan(Pitch_z0/(2*Lhalf)))/cos(stereoangle_z0(r_z0)) ;
     };
@@ -136,7 +136,7 @@ public:
         // each member corresponds to a column in the excel table
         /// layer number
         DCH_layer layer = {0};
-        /// 2x number of wires in that layer
+        /// 2x number of cells in that layer
         int nwires = {0};
         /// cell parameter
         double height_z0 = {0.};
@@ -144,15 +144,15 @@ public:
         double width_z0 = {0.};
 
         /// radius (cylindral coord) of sensitive wire
-        MyLength_t radius_sw_z0 = {0.};
+        DCH_length_t radius_sw_z0 = {0.};
 
         /// radius (cylindral coord) of 'down' field wires
-        MyLength_t radius_fdw_z0 = {0.};
+        DCH_length_t radius_fdw_z0 = {0.};
 
         /// radius (cylindral coord) of 'up' field wires
-        MyLength_t radius_fuw_z0 = {0.};
+        DCH_length_t radius_fuw_z0 = {0.};
 
-        // some quantityies are derived from previous ones
+        // some quantities are derived from previous ones
         // see excel and paper for equations
         ///  stereo angle is positive for odd layer number
         bool IsStereoPositive() const {
@@ -160,18 +160,18 @@ public:
         }
         /// calculate sign based on IsStereoPositive
         inline int StereoSign() const {
-            return (IsStereoPositive()*2 -1 );
+            return (IsStereoPositive()*2 - 1);
         }
 
         /// separation between wires (along the circle)
-        MyLength_t Pitch_z0(MyLength_t r_z0) const {
+        DCH_length_t Pitch_z0(DCH_length_t r_z0) const {
             return TMath::TwoPi()*r_z0/nwires;
         };
 
     };
     /// map to store excel table
     std::map<DCH_layer, DCH_info_layer> database;
-    bool IsDatabaseEmpty() const { return (0 == database.size() ); }
+    bool IsDatabaseEmpty() const { return database.empty(); }
 
     void BuildLayerDatabase();
     void Show_DCH_info_database(std::ostream& io) const;
@@ -203,7 +203,7 @@ void DCH_info_struct::BuildLayerDatabase()
     ff_check_positive_parameter(this->ncell_per_sector,"ncells per sector" );
 
     // if dch_ncell_per_sector is not divisor of dch_ncell0 and dch_ncell_increment
-    // trow an error
+    // throw an error
     if( 0 != (ncell0 % ncell_per_sector) || 0 != (ncell_increment % ncell_per_sector) )
         throw std::runtime_error("dch_ncell_per_sector is not divisor of dch_ncell0 or dch_ncell_increment");
 
@@ -215,7 +215,7 @@ void DCH_info_struct::BuildLayerDatabase()
     this->nlayers = this->nsuperlayers * this->nlayersPerSuperlayer;
 
     ff_check_positive_parameter(this->first_width,"width of first layer cells" );
-    ff_check_positive_parameter(this->dch_first_sense_r,"radius of first layer cells" );
+    ff_check_positive_parameter(this->first_sense_r,"radius of first layer cells" );
 
 
     // intialize layer 1 from input parameters
@@ -224,10 +224,10 @@ void DCH_info_struct::BuildLayerDatabase()
         layer1_info.layer         = 1;
         layer1_info.nwires        = 2*this->ncell0;
         layer1_info.height_z0     = first_width;
-        layer1_info.radius_sw_z0  = dch_first_sense_r;
-        layer1_info.radius_fdw_z0 = dch_first_sense_r - 0.5*first_width;
-        layer1_info.radius_fuw_z0 = dch_first_sense_r + 0.5*first_width;
-        layer1_info.width_z0      = TMath::TwoPi()*dch_first_sense_r/this->ncell0;
+        layer1_info.radius_sw_z0  = first_sense_r;
+        layer1_info.radius_fdw_z0 = first_sense_r - 0.5*first_width;
+        layer1_info.radius_fuw_z0 = first_sense_r + 0.5*first_width;
+        layer1_info.width_z0      = TMath::TwoPi()*first_sense_r/this->ncell0;
 
         this->database.emplace(layer1_info.layer, layer1_info);
     }
@@ -246,7 +246,7 @@ void DCH_info_struct::BuildLayerDatabase()
         layer_info.nwires = 2*(this->ncell0 + this->ncell_increment*Get_nsuperlayer_minus_1(ilayer) );
 
         // the previous layer info is needed to calculate parameters of current layer
-        auto previousLayer = this->database.at(ilayer-1);
+        const auto& previousLayer = this->database.at(ilayer-1);
 
         //calculate height_z0, radius_sw_z0
         {
@@ -282,9 +282,6 @@ void DCH_info_struct::BuildLayerDatabase()
 
 void DCH_info_struct::Show_DCH_info_database(std::ostream & oss) const
 {
-    if( this->IsDatabaseEmpty() )
-        throw std::runtime_error("Can not show empty database!");
-
     oss << "\n";
     oss << "Global parameters of DCH:\n";
     oss << "\tHalf length/mm = " << Lhalf/dd4hep::mm << '\n';
@@ -293,7 +290,7 @@ void DCH_info_struct::Show_DCH_info_database(std::ostream & oss) const
     oss << "\tRadius guard in/mm  = " << guard_inner_r_at_z0/dd4hep::mm << '\n';
     oss << "\tRadius guard out/mm = " << guard_outer_r_at_z0/dd4hep::mm << '\n';
     oss << "\n";
-    oss << "\tTwis angle (2*alpha) / deg = " << twist_angle/dd4hep::deg << '\n';
+    oss << "\tTwist angle (2*alpha) / deg = " << twist_angle/dd4hep::deg << '\n';
     oss << "\n";
     oss << "\tN superlayers = " << nsuperlayers << '\n';
     oss << "\tN layers per superlayer = " << nlayersPerSuperlayer << '\n';
@@ -317,6 +314,12 @@ void DCH_info_struct::Show_DCH_info_database(std::ostream & oss) const
             << "\t" << "radius_sw_zLhalf/mm"
             << "\t" << "WireLength/mm"
             << "\n" << std::endl;
+
+    if( this->IsDatabaseEmpty() )
+    {
+        oss << "\nDatabase empty\n";
+        return;
+    }
 
     for(const auto& [nlayer, l]  : database )
     {
