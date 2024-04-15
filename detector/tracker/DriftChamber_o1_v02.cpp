@@ -18,17 +18,11 @@
 #include "DD4hep/Printout.h"
 #include "TMath.h"
 
+#include "DDRec/DetectorData.h"
 #include <map>
 
-namespace myspace{
-// use alias of types to show more clear what the variable is
-// if everything is double, the code is not readable
-/// type for layer number
-using DCH_layer = int;
-/// tpye for lengths
-using MyLength_t = double;
-/// tpye for angles
-using MyAngle_t = double;
+namespace dd4hep {  namespace rec {
+
 
 /* Data structure to store DCH excel table
  * to be filled before building the geometry!
@@ -42,9 +36,17 @@ using MyAngle_t = double;
  * @version Drift chamber v2
  *
  */
-class DCH_info
+struct DCH_info_struct
 {
 public:
+    // use alias of types to show more clear what the variable is
+    // if everything is double, the code is not readable
+    /// type for layer number
+    using DCH_layer = int;
+    /// tpye for lengths
+    using MyLength_t = double;
+    /// tpye for angles
+    using MyAngle_t = double;
     /// Half length of the active volume
     MyLength_t dch_Lhalf = {0};
     /// Inner radius of the active volume
@@ -191,12 +193,15 @@ public:
 
 
 };
+typedef StructExtension<DCH_info_struct> DCH_info ;
 std::ostream& operator<<( std::ostream& io , const DCH_info& d ){d.Show_DCH_info_database(io); return io;}
-} // end namespace myspace
+}} // end namespace dd4hep::rec::
 
 namespace DCH_v2 {
 
-using namespace myspace;
+using MyLength_t = dd4hep::rec::DCH_info_struct::MyLength_t;
+using MyAngle_t  = dd4hep::rec::DCH_info_struct::MyAngle_t;
+using DCH_layer  = dd4hep::rec::DCH_info_struct::DCH_layer;
 
 /// Function to build DCH
 static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Handle_t handle, dd4hep::SensitiveDetector sens)
@@ -207,7 +212,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
     dd4hep::DetElement det(detName, detID);
     sens.setType("tracker");
 
-    myspace::DCH_info DCH_i;
+    dd4hep::rec::DCH_info DCH_i;
     {
         // DCH outer geometry dimensions
         DCH_i.Set_rin  ( desc.constantAsDouble("DCH_inner_cyl_R") );
@@ -570,8 +575,9 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
 
 }; // end DCH_o2 namespace
 
-namespace myspace{
-void DCH_info::BuildLayerDatabase()
+namespace dd4hep {  namespace rec {
+
+void DCH_info_struct::BuildLayerDatabase()
 {
     // do not fill twice the database
     if( not this->IsDatabaseEmpty() ) return;
@@ -666,11 +672,11 @@ void DCH_info::BuildLayerDatabase()
         this->database.emplace(ilayer, layer_info);
     }
 
-    std::cout << "\t+ Total size of DCH database = " << DCH_info::database.size() << std::endl;
+    std::cout << "\t+ Total size of DCH database = " << database.size() << std::endl;
     return;
 }
 
-void DCH_info::Show_DCH_info_database(std::ostream & oss) const
+void DCH_info_struct::Show_DCH_info_database(std::ostream & oss) const
 {
     if( this->IsDatabaseEmpty() )
         throw std::runtime_error("Can not show empty database!");
@@ -708,7 +714,7 @@ void DCH_info::Show_DCH_info_database(std::ostream & oss) const
             << "\t" << "WireLength/mm"
             << "\n" << std::endl;
 
-    for(const auto& [nlayer, l]  : DCH_info::database )
+    for(const auto& [nlayer, l]  : database )
     {
         oss
                 << "\t" << l.layer
@@ -727,6 +733,6 @@ void DCH_info::Show_DCH_info_database(std::ostream & oss) const
     return;
 }
 
-} // close namespace myspace
+}} // close namespace dd4hep::rec
 
 DECLARE_DETELEMENT(DriftChamber_o1_v02_T, DCH_v2::create_DCH_o1_v02)
