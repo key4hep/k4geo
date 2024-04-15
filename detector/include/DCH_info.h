@@ -94,7 +94,7 @@ public:
 
 
     /// Get number of cells in a given layer
-    ///   ncells = 2x number of wires
+    ///   ncells = number of wires/2
     inline int Get_ncells(int ilayer){return database.at(ilayer).nwires/2;}
 
     /// Get phi width for the twisted tube and the step (phi distance between cells)
