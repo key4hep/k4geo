@@ -107,16 +107,16 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
 
 
     MyLength_t vessel_thickness = desc.constantAsDouble("DCH_vessel_thickness");
-    dd4hep::Tube vessel_s(  DCH_i->dch_rin - vessel_thickness,
-                            DCH_i->dch_rout+ vessel_thickness,
-                            DCH_i->dch_Lhalf  + vessel_thickness);
+    dd4hep::Tube vessel_s(  DCH_i->rin - vessel_thickness,
+                            DCH_i->rout+ vessel_thickness,
+                            DCH_i->Lhalf  + vessel_thickness);
     dd4hep::Volume vessel_v (detName+"_vessel", vessel_s,  vesselSkinMat );
     vessel_v.setVisAttributes( vesselSkinVis );
 
 
-    dd4hep::Tube gas_s( DCH_i->dch_rin,
-                        DCH_i->dch_rout,
-                        DCH_i->dch_Lhalf + 2*safety_z_interspace );
+    dd4hep::Tube gas_s( DCH_i->rin,
+                        DCH_i->rout,
+                        DCH_i->Lhalf + 2*safety_z_interspace );
     dd4hep::Volume gas_v (detName+"_gas", gas_s, gasvolMat );
     gas_v.setVisAttributes( gasvolVis );
     vessel_v.placeVolume(gas_v);
@@ -137,7 +137,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
         /// outer stereoangle, calculated from rout(z=0)
         MyAngle_t  stout = DCH_i->stereoangle_z0(rout);
         /// half-length
-        MyLength_t dz    = DCH_i->dch_Lhalf + safety_z_interspace;
+        MyLength_t dz    = DCH_i->Lhalf + safety_z_interspace;
 
         dd4hep::Hyperboloid layer_s(rin, stin, rout, stout, dz);
 
@@ -167,12 +167,12 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
 
         // unitary cell (Twisted tube) is repeated for each layer l.nwires/2 times
         // Twisted tube parameters
-        MyAngle_t cell_twistangle    = l.StereoSign() * DCH_i->dch_twist_angle;
+        MyAngle_t cell_twistangle    = l.StereoSign() * DCH_i->twist_angle;
         MyLength_t cell_rin_z0       = l.radius_fdw_z0 + 2*safety_r_interspace;
         MyLength_t cell_rout_z0      = l.radius_fuw_z0 - 2*safety_r_interspace;
         MyLength_t cell_rin_zLhalf   = DCH_i->Radius_zLhalf(cell_rin_z0);
         MyLength_t cell_rout_zLhalf  = DCH_i->Radius_zLhalf(cell_rout_z0);
-        MyLength_t cell_dz           = DCH_i->dch_Lhalf;
+        MyLength_t cell_dz           = DCH_i->Lhalf;
         MyAngle_t cell_phi_width     = phi_step - safety_phi_interspace;
         dd4hep::TwistedTube cell_s( cell_twistangle, cell_rin_zLhalf, cell_rout_zLhalf, cell_dz, 1, cell_phi_width);
 

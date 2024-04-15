@@ -12,8 +12,8 @@ namespace dd4hep {  namespace rec {
 /* Data structure to store DCH excel table
  * to be filled before building the geometry!
  *
- * Global variables are members of this class
- * Helper class DCH_info contains one entry in the table
+ * Global constants are members of this class
+ * Helper class DCH_info_layer contains one row in the table
  * which corresponds to one layer
  *
  * @author A. Tolosa Delgado, CERN
@@ -33,63 +33,63 @@ public:
     /// tpye for angles
     using MyAngle_t = double;
     /// Half length of the active volume
-    MyLength_t dch_Lhalf = {0};
+    MyLength_t Lhalf = {0};
     /// Inner radius of the active volume
-    MyLength_t dch_rin = {0};
+    MyLength_t rin = {0};
     /// Outer radius of the active volume
-    MyLength_t dch_rout = {0};
+    MyLength_t rout = {0};
 
     /// Inner guard wires radius
-    MyLength_t dch_rin_z0_guard = {0};
+    MyLength_t guard_inner_r_at_z0 = {0};
     /// Outer guard wires radius
-    MyLength_t dch_rout_z0_guard = {0};
+    MyLength_t guard_outer_r_at_z0 = {0};
 
     /// number of cells of first layer
-    int dch_ncell0 = {0};
+    int ncell0 = {0};
     /// increment the number of cells for each superlayer as:
     ///   ncells(ilayer) = dch_ncell0 + increment*superlayer(ilayer)
     ///   See DCH_info::Get_nsuperlayer_minus_1(ilayer)
-    int dch_ncell_increment = {0};
+    int ncell_increment = {0};
 
     /// cells within the same layer may be grouped into sectors, not in use atm
-    int dch_ncell_per_sector = {0};
+    int ncell_per_sector = {0};
 
     /// input number of layers in each superlayer
-    int dch_nlayersPerSuperlayer = {0};
+    int nlayersPerSuperlayer = {0};
     /// input number of superlayers
     /// superlayer is an abstract level of grouping layers used to
     /// parametrize the increment of cells in each layer
-    int dch_nsuperlayers = {0};
+    int nsuperlayers = {0};
     /// Calculated as dch_nlayersPerSuperlayer * dch_nsuperlayers
-    int dch_nlayers = {0};
+    int nlayers = {0};
 
     /// global twist angle
     /// alternating layers will change its sign
-    MyAngle_t  dch_twist_angle = {0};
+    MyAngle_t  twist_angle = {0};
 
     /// Cell width for the first layer
-    double dch_first_width = {0};
+    double first_width = {0};
     /// Cell radius for the first layer
     MyLength_t dch_first_sense_r = {0};
 
-    void Set_lhalf(MyLength_t _dch_Lhalf){dch_Lhalf=_dch_Lhalf;};
-    void Set_rin  (MyLength_t _dch_rin  ){dch_rin  = _dch_rin; };
-    void Set_rout (MyLength_t _dch_rout ){dch_rout = _dch_rout;};
+    void Set_lhalf(MyLength_t _dch_Lhalf){Lhalf=_dch_Lhalf;};
+    void Set_rin  (MyLength_t _dch_rin  ){rin  = _dch_rin; };
+    void Set_rout (MyLength_t _dch_rout ){rout = _dch_rout;};
 
-    void Set_guard_rin (MyLength_t _dch_rin_z0_guard ){dch_rin_z0_guard  = _dch_rin_z0_guard; };
-    void Set_guard_rout(MyLength_t _dch_rout_z0_guard){dch_rout_z0_guard = _dch_rout_z0_guard;};
+    void Set_guard_rin (MyLength_t _dch_rin_z0_guard ){guard_inner_r_at_z0  = _dch_rin_z0_guard; };
+    void Set_guard_rout(MyLength_t _dch_rout_z0_guard){guard_outer_r_at_z0 = _dch_rout_z0_guard;};
 
-    void Set_ncell0              (int _ncell0              ){dch_ncell0               = _ncell0;              };
-    void Set_ncell_increment     (int _ncell_increment     ){dch_ncell_increment      = _ncell_increment;     };
+    void Set_ncell0              (int _ncell0              ){ncell0               = _ncell0;              };
+    void Set_ncell_increment     (int _ncell_increment     ){ncell_increment      = _ncell_increment;     };
 
-    void Set_nlayersPerSuperlayer(int _nlayersPerSuperlayer){dch_nlayersPerSuperlayer = _nlayersPerSuperlayer;};
-    void Set_nsuperlayers        (int _nsuperlayers        ){dch_nsuperlayers         = _nsuperlayers;        };
+    void Set_nlayersPerSuperlayer(int _nlayersPerSuperlayer){nlayersPerSuperlayer = _nlayersPerSuperlayer;};
+    void Set_nsuperlayers        (int _nsuperlayers        ){nsuperlayers         = _nsuperlayers;        };
 
-    void Set_ncell_per_sector(int _ncell_per_sector){dch_ncell_per_sector = _ncell_per_sector;};
+    void Set_ncell_per_sector(int _ncell_per_sector){ncell_per_sector = _ncell_per_sector;};
 
-    void Set_twist_angle (MyLength_t _dch_twist_angle ){dch_twist_angle = _dch_twist_angle;};
+    void Set_twist_angle (MyLength_t _dch_twist_angle ){twist_angle = _dch_twist_angle;};
 
-    void Set_first_width  (double _first_width  ){dch_first_width   = _first_width;   };
+    void Set_first_width  (double _first_width  ){first_width   = _first_width;   };
     void Set_first_sense_r(double _first_sense_r){dch_first_sense_r = _first_sense_r; };
 
 
@@ -107,27 +107,27 @@ public:
 
     /// calculate superlayer for a given ilayer.
     /// WARNING: division of integers on purpose!
-    int Get_nsuperlayer_minus_1(int ilayer){ return int((ilayer-1)/dch_nlayersPerSuperlayer);}
+    int Get_nsuperlayer_minus_1(int ilayer){ return int((ilayer-1)/nlayersPerSuperlayer);}
 
     /// Calculate radius at z=L/2 given at z=0
     MyLength_t Radius_zLhalf(MyLength_t r_z0) const {
-        return r_z0/cos(dch_twist_angle/2/dd4hep::rad);
+        return r_z0/cos(twist_angle/2/dd4hep::rad);
     }
 
     /// tan(stereoangle) = R(z=0)   / (L/2) * tan( twist_angle/2)
     inline MyAngle_t stereoangle_z0(MyLength_t r_z0) const {
-        return atan( r_z0/dch_Lhalf*tan(dch_twist_angle/2));
+        return atan( r_z0/Lhalf*tan(twist_angle/2));
     }
 
     /// tan(stereoangle) = R(z=L/2) / (L/2) * sin( twist_angle/2)
     inline MyAngle_t stereoangle_zLhalf(MyLength_t r_zLhalf) const {
-        return atan( r_zLhalf/dch_Lhalf*sin(dch_twist_angle/2));
+        return atan( r_zLhalf/Lhalf*sin(twist_angle/2));
     }
 
     /// WireLength = 2*dch_Lhalf/cos(atan(Pitch_z0(r_z0)/(2*dch_Lhalf)))/cos(stereoangle_z0(r_z0))
     inline MyLength_t WireLength(int nlayer, MyLength_t r_z0) const {
         auto Pitch_z0 = database.at(nlayer).Pitch_z0(r_z0);
-        return  2*dch_Lhalf/cos(atan(Pitch_z0/(2*dch_Lhalf)))/cos(stereoangle_z0(r_z0)) ;
+        return  2*Lhalf/cos(atan(Pitch_z0/(2*Lhalf)))/cos(stereoangle_z0(r_z0)) ;
     };
 
     /// Internal helper struct for defining the layer layout
@@ -190,31 +190,31 @@ void DCH_info_struct::BuildLayerDatabase()
         if(p<=0)throw std::runtime_error(Form("DCH: %s must be positive",pname.c_str()));
         return;
     };
-    ff_check_positive_parameter(this->dch_rin  ,"inner radius");
-    ff_check_positive_parameter(this->dch_rout ,"outer radius");
-    ff_check_positive_parameter(this->dch_Lhalf,"half length" );
+    ff_check_positive_parameter(this->rin  ,"inner radius");
+    ff_check_positive_parameter(this->rout ,"outer radius");
+    ff_check_positive_parameter(this->Lhalf,"half length" );
 
-    ff_check_positive_parameter(this->dch_rin_z0_guard ,"inner radius of guard wires" );
-    ff_check_positive_parameter(this->dch_rout_z0_guard,"outer radius of guard wires" );
+    ff_check_positive_parameter(this->guard_inner_r_at_z0 ,"inner radius of guard wires" );
+    ff_check_positive_parameter(this->guard_outer_r_at_z0,"outer radius of guard wires" );
 
 
-    ff_check_positive_parameter(this->dch_ncell0,"ncells in the first layer" );
-    ff_check_positive_parameter(this->dch_ncell_increment,"ncells increment per superlayer" );
-    ff_check_positive_parameter(this->dch_ncell_per_sector,"ncells per sector" );
+    ff_check_positive_parameter(this->ncell0,"ncells in the first layer" );
+    ff_check_positive_parameter(this->ncell_increment,"ncells increment per superlayer" );
+    ff_check_positive_parameter(this->ncell_per_sector,"ncells per sector" );
 
     // if dch_ncell_per_sector is not divisor of dch_ncell0 and dch_ncell_increment
     // trow an error
-    if( 0 != (dch_ncell0 % dch_ncell_per_sector) || 0 != (dch_ncell_increment % dch_ncell_per_sector) )
+    if( 0 != (ncell0 % ncell_per_sector) || 0 != (ncell_increment % ncell_per_sector) )
         throw std::runtime_error("dch_ncell_per_sector is not divisor of dch_ncell0 or dch_ncell_increment");
 
-    ff_check_positive_parameter(this->dch_nsuperlayers,"number of superlayers" );
-    ff_check_positive_parameter(this->dch_nlayersPerSuperlayer,"number of layers per superlayer" );
+    ff_check_positive_parameter(this->nsuperlayers,"number of superlayers" );
+    ff_check_positive_parameter(this->nlayersPerSuperlayer,"number of layers per superlayer" );
 
     /// nlayers = nsuperlayers * nlayersPerSuperlayer
     /// default: 112 = 14 * 8
-    this->dch_nlayers = this->dch_nsuperlayers * this->dch_nlayersPerSuperlayer;
+    this->nlayers = this->nsuperlayers * this->nlayersPerSuperlayer;
 
-    ff_check_positive_parameter(this->dch_first_width,"width of first layer cells" );
+    ff_check_positive_parameter(this->first_width,"width of first layer cells" );
     ff_check_positive_parameter(this->dch_first_sense_r,"radius of first layer cells" );
 
 
@@ -222,12 +222,12 @@ void DCH_info_struct::BuildLayerDatabase()
     {
         DCH_info_layer layer1_info;
         layer1_info.layer         = 1;
-        layer1_info.nwires        = 2*this->dch_ncell0;
-        layer1_info.height_z0     = dch_first_width;
+        layer1_info.nwires        = 2*this->ncell0;
+        layer1_info.height_z0     = first_width;
         layer1_info.radius_sw_z0  = dch_first_sense_r;
-        layer1_info.radius_fdw_z0 = dch_first_sense_r - 0.5*dch_first_width;
-        layer1_info.radius_fuw_z0 = dch_first_sense_r + 0.5*dch_first_width;
-        layer1_info.width_z0      = TMath::TwoPi()*dch_first_sense_r/this->dch_ncell0;
+        layer1_info.radius_fdw_z0 = dch_first_sense_r - 0.5*first_width;
+        layer1_info.radius_fuw_z0 = dch_first_sense_r + 0.5*first_width;
+        layer1_info.width_z0      = TMath::TwoPi()*dch_first_sense_r/this->ncell0;
 
         this->database.emplace(layer1_info.layer, layer1_info);
     }
@@ -235,7 +235,7 @@ void DCH_info_struct::BuildLayerDatabase()
     // some parameters of the following layer are calculated based on the previous ones
     // the rest are left as methods of DCH_info or DCH_info_layer class
     // loop over all layers, skipping the first one
-    for(int ilayer = 2; ilayer<= this->dch_nlayers; ++ilayer)
+    for(int ilayer = 2; ilayer<= this->nlayers; ++ilayer)
     {
         // initialize here an object that will contain one row from the excel table
         DCH_info_layer layer_info;
@@ -243,7 +243,7 @@ void DCH_info_struct::BuildLayerDatabase()
         // the loop counter actually corresponds to the layer number
         layer_info.layer = ilayer;
         // nwires is twice the number of cells in this particular layer (ilayer)
-        layer_info.nwires = 2*(this->dch_ncell0 + this->dch_ncell_increment*Get_nsuperlayer_minus_1(ilayer) );
+        layer_info.nwires = 2*(this->ncell0 + this->ncell_increment*Get_nsuperlayer_minus_1(ilayer) );
 
         // the previous layer info is needed to calculate parameters of current layer
         auto previousLayer = this->database.at(ilayer-1);
@@ -287,21 +287,21 @@ void DCH_info_struct::Show_DCH_info_database(std::ostream & oss) const
 
     oss << "\n";
     oss << "Global parameters of DCH:\n";
-    oss << "\tHalf length/mm = " << dch_Lhalf/dd4hep::mm << '\n';
-    oss << "\tRadius in/mm  = " << dch_rin/dd4hep::mm << '\n';
-    oss << "\tRadius out/mm = " << dch_rout/dd4hep::mm<< '\n';
-    oss << "\tRadius guard in/mm  = " << dch_rin_z0_guard/dd4hep::mm << '\n';
-    oss << "\tRadius guard out/mm = " << dch_rout_z0_guard/dd4hep::mm << '\n';
+    oss << "\tHalf length/mm = " << Lhalf/dd4hep::mm << '\n';
+    oss << "\tRadius in/mm  = " << rin/dd4hep::mm << '\n';
+    oss << "\tRadius out/mm = " << rout/dd4hep::mm<< '\n';
+    oss << "\tRadius guard in/mm  = " << guard_inner_r_at_z0/dd4hep::mm << '\n';
+    oss << "\tRadius guard out/mm = " << guard_outer_r_at_z0/dd4hep::mm << '\n';
     oss << "\n";
-    oss << "\tTwis angle (2*alpha) / deg = " << dch_twist_angle/dd4hep::deg << '\n';
+    oss << "\tTwis angle (2*alpha) / deg = " << twist_angle/dd4hep::deg << '\n';
     oss << "\n";
-    oss << "\tN superlayers = " << dch_nsuperlayers << '\n';
-    oss << "\tN layers per superlayer = " << dch_nlayersPerSuperlayer << '\n';
-    oss << "\tN layers = " << dch_nlayers << '\n';
+    oss << "\tN superlayers = " << nsuperlayers << '\n';
+    oss << "\tN layers per superlayer = " << nlayersPerSuperlayer << '\n';
+    oss << "\tN layers = " << nlayers << '\n';
     oss << "\n";
-    oss << "\tN cells layer1 = " << dch_ncell0 << '\n';
-    oss << "\tN cells increment per superlayer = " << dch_ncell_increment << '\n';
-    oss << "\tN cells per sector = " << dch_ncell_per_sector << '\n';
+    oss << "\tN cells layer1 = " << ncell0 << '\n';
+    oss << "\tN cells increment per superlayer = " << ncell_increment << '\n';
+    oss << "\tN cells per sector = " << ncell_per_sector << '\n';
     oss << "\n";
     oss << "Layer parameters of DCH:\n";
     oss
