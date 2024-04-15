@@ -55,13 +55,13 @@ public:
     int ncell_per_sector = {0};
 
     /// input number of layers in each superlayer
-    int nlayersPerSuperlayer = {0};
+    DCH_layer nlayersPerSuperlayer = {0};
     /// input number of superlayers
     /// superlayer is an abstract level of grouping layers used to
     /// parametrize the increment of cells in each layer
-    int nsuperlayers = {0};
+    DCH_layer nsuperlayers = {0};
     /// Calculated as dch_nlayersPerSuperlayer * dch_nsuperlayers
-    int nlayers = {0};
+    DCH_layer nlayers = {0};
 
     /// global twist angle
     /// alternating layers will change its sign
