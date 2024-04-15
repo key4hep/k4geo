@@ -212,38 +212,38 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
     dd4hep::DetElement det(detName, detID);
     sens.setType("tracker");
 
-    dd4hep::rec::DCH_info DCH_i;
+    dd4hep::rec::DCH_info * DCH_i = new dd4hep::rec::DCH_info();
     {
         // DCH outer geometry dimensions
-        DCH_i.Set_rin  ( desc.constantAsDouble("DCH_inner_cyl_R") );
-        DCH_i.Set_rout ( desc.constantAsDouble("DCH_outer_cyl_R") );
-        DCH_i.Set_lhalf( desc.constantAsDouble("DCH_Lhalf")       );
+        DCH_i->Set_rin  ( desc.constantAsDouble("DCH_inner_cyl_R") );
+        DCH_i->Set_rout ( desc.constantAsDouble("DCH_outer_cyl_R") );
+        DCH_i->Set_lhalf( desc.constantAsDouble("DCH_Lhalf")       );
 
         // guard wires position, fix position
-        DCH_i.Set_guard_rin ( desc.constantAsDouble("DCH_guard_inner_r_at_z0" ) );
-        DCH_i.Set_guard_rout( desc.constantAsDouble("DCH_guard_outer_r_at_zL2") );
+        DCH_i->Set_guard_rin ( desc.constantAsDouble("DCH_guard_inner_r_at_z0" ) );
+        DCH_i->Set_guard_rout( desc.constantAsDouble("DCH_guard_outer_r_at_zL2") );
 
         MyAngle_t dch_alpha = desc.constantAsDouble("DCH_alpha");
-        DCH_i.Set_twist_angle( 2*dch_alpha );
+        DCH_i->Set_twist_angle( 2*dch_alpha );
 
-        DCH_i.Set_nsuperlayers(desc.constantAsLong("DCH_nsuperlayers"));
-        DCH_i.Set_nlayersPerSuperlayer(desc.constantAsLong("DCH_nlayersPerSuperlayer"));
+        DCH_i->Set_nsuperlayers(desc.constantAsLong("DCH_nsuperlayers"));
+        DCH_i->Set_nlayersPerSuperlayer(desc.constantAsLong("DCH_nlayersPerSuperlayer"));
 
-        DCH_i.Set_ncell0(desc.constantAsLong("DCH_ncell"));
-        DCH_i.Set_ncell_increment(desc.constantAsLong("DCH_ncell_increment"));
-        DCH_i.Set_ncell_per_sector(desc.constantAsLong("DCH_ncell_per_sector"));
+        DCH_i->Set_ncell0(desc.constantAsLong("DCH_ncell"));
+        DCH_i->Set_ncell_increment(desc.constantAsLong("DCH_ncell_increment"));
+        DCH_i->Set_ncell_per_sector(desc.constantAsLong("DCH_ncell_per_sector"));
 
-        DCH_i.Set_first_width  ( desc.constantAsDouble("DCH_first_width")   );
-        DCH_i.Set_first_sense_r( desc.constantAsDouble("DCH_first_sense_r") );
+        DCH_i->Set_first_width  ( desc.constantAsDouble("DCH_first_width")   );
+        DCH_i->Set_first_sense_r( desc.constantAsDouble("DCH_first_sense_r") );
 
     }
-    DCH_i.BuildLayerDatabase();
-    if( DCH_i.IsDatabaseEmpty() )
+    DCH_i->BuildLayerDatabase();
+    if( DCH_i->IsDatabaseEmpty() )
         throw std::runtime_error("Empty database");
 
     bool printExcelTable = detElem.attr<bool>(_Unicode(printExcelTable));
     if(printExcelTable)
-        DCH_i.Show_DCH_info_database(std::cout);
+        DCH_i->Show_DCH_info_database(std::cout);
 
     auto gasElem    = detElem.child("gas");
     auto gasvolMat  = desc.material(gasElem.attr<std::string>(_Unicode(material)));
@@ -285,21 +285,21 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
 
 
     MyLength_t vessel_thickness = desc.constantAsDouble("DCH_vessel_thickness");
-    dd4hep::Tube vessel_s(  DCH_i.dch_rin - vessel_thickness,
-                            DCH_i.dch_rout+ vessel_thickness,
-                            DCH_i.dch_Lhalf  + vessel_thickness);
+    dd4hep::Tube vessel_s(  DCH_i->dch_rin - vessel_thickness,
+                            DCH_i->dch_rout+ vessel_thickness,
+                            DCH_i->dch_Lhalf  + vessel_thickness);
     dd4hep::Volume vessel_v (detName+"_vessel", vessel_s,  vesselSkinMat );
     vessel_v.setVisAttributes( vesselSkinVis );
 
 
-    dd4hep::Tube gas_s( DCH_i.dch_rin,
-                        DCH_i.dch_rout,
-                        DCH_i.dch_Lhalf + 2*safety_z_interspace );
+    dd4hep::Tube gas_s( DCH_i->dch_rin,
+                        DCH_i->dch_rout,
+                        DCH_i->dch_Lhalf + 2*safety_z_interspace );
     dd4hep::Volume gas_v (detName+"_gas", gas_s, gasvolMat );
     gas_v.setVisAttributes( gasvolVis );
     vessel_v.placeVolume(gas_v);
 
-    for(const auto& [ilayer, l]  : DCH_i.database )
+    for(const auto& [ilayer, l]  : DCH_i->database )
     {
 
         // // // // // // // // // // // // // // // // // // // // /
@@ -309,13 +309,13 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
         /// inner radius at z=0
         MyLength_t rin   = l.radius_fdw_z0+safety_r_interspace;
         /// inner stereoangle, calculated from rin(z=0)
-        MyAngle_t  stin  = DCH_i.stereoangle_z0(rin);
+        MyAngle_t  stin  = DCH_i->stereoangle_z0(rin);
         /// outer radius at z=0
         MyLength_t rout  = l.radius_fuw_z0-safety_r_interspace;
         /// outer stereoangle, calculated from rout(z=0)
-        MyAngle_t  stout = DCH_i.stereoangle_z0(rout);
+        MyAngle_t  stout = DCH_i->stereoangle_z0(rout);
         /// half-length
-        MyLength_t dz    = DCH_i.dch_Lhalf + safety_z_interspace;
+        MyLength_t dz    = DCH_i->dch_Lhalf + safety_z_interspace;
 
         dd4hep::Hyperboloid layer_s(rin, stin, rout, stout, dz);
 
@@ -326,7 +326,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
         auto layer_pv = gas_v.placeVolume(layer_v);
         layer_pv.addPhysVolID("layer", ilayer);
         // add superlayer bitfield
-        int nsuperlayer_minus_1 = DCH_i.Get_nsuperlayer_minus_1(ilayer);
+        int nsuperlayer_minus_1 = DCH_i->Get_nsuperlayer_minus_1(ilayer);
         layer_pv.addPhysVolID("superlayer", nsuperlayer_minus_1 );
 
         dd4hep::DetElement layer_DE(det,layer_name+"DE", ilayer);
@@ -345,12 +345,12 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
 
         // unitary cell (Twisted tube) is repeated for each layer l.nwires/2 times
         // Twisted tube parameters
-        MyAngle_t cell_twistangle    = l.StereoSign() * DCH_i.dch_twist_angle;
+        MyAngle_t cell_twistangle    = l.StereoSign() * DCH_i->dch_twist_angle;
         MyLength_t cell_rin_z0       = l.radius_fdw_z0 + 2*safety_r_interspace;
         MyLength_t cell_rout_z0      = l.radius_fuw_z0 - 2*safety_r_interspace;
-        MyLength_t cell_rin_zLhalf   = DCH_i.Radius_zLhalf(cell_rin_z0);
-        MyLength_t cell_rout_zLhalf  = DCH_i.Radius_zLhalf(cell_rout_z0);
-        MyLength_t cell_dz           = DCH_i.dch_Lhalf;
+        MyLength_t cell_rin_zLhalf   = DCH_i->Radius_zLhalf(cell_rin_z0);
+        MyLength_t cell_rout_zLhalf  = DCH_i->Radius_zLhalf(cell_rout_z0);
+        MyLength_t cell_dz           = DCH_i->dch_Lhalf;
         MyAngle_t cell_phi_width     = phi_step - safety_phi_interspace;
         dd4hep::TwistedTube cell_s( cell_twistangle, cell_rin_zLhalf, cell_rout_zLhalf, cell_dz, 1, cell_phi_width);
 
@@ -370,8 +370,8 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
             // average radius to position sense wire
             MyLength_t cell_rave_z0 = 0.5*(cell_rin_z0+cell_rout_z0);
             MyLength_t cell_swire_radius = dch_SWire_thickness/2;
-            MyLength_t swlength = 0.5*DCH_i.WireLength(ilayer,cell_rave_z0)
-                                - cell_swire_radius*cos(DCH_i.stereoangle_z0(cell_rave_z0))
+            MyLength_t swlength = 0.5*DCH_i->WireLength(ilayer,cell_rave_z0)
+                                - cell_swire_radius*cos(DCH_i->stereoangle_z0(cell_rave_z0))
                                 - safety_z_interspace;
             if(buildSenseWires)
             {
@@ -379,7 +379,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
                 dd4hep::Volume swire_v(cell_name+"_swire", swire_s, dch_SWire_material);
                 swire_v.setVisAttributes( wiresVis );
                 // Change sign of stereo angle to place properly the wire inside the twisted tube
-                dd4hep::RotationX stereoTr( (-1.)*l.StereoSign()*DCH_i.stereoangle_z0(cell_rave_z0) );
+                dd4hep::RotationX stereoTr( (-1.)*l.StereoSign()*DCH_i->stereoangle_z0(cell_rave_z0) );
                 dd4hep::Transform3D swireTr ( stereoTr * dd4hep::Translation3D(cell_rave_z0,0.,0.) );
                 cell_v.placeVolume(swire_v,swireTr);
             }
@@ -437,10 +437,10 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
                 {
                     MyLength_t fwire_radius = dch_FCentralWire_thickness/2;
                     MyLength_t fwire_r_z0   = cell_rave_z0;
-                    MyAngle_t  fwire_stereo =  (-1.)*l.StereoSign()*DCH_i.stereoangle_z0(fwire_r_z0);
+                    MyAngle_t  fwire_stereo =  (-1.)*l.StereoSign()*DCH_i->stereoangle_z0(fwire_r_z0);
                     MyAngle_t  fwire_phi    = -cell_phi_width/2 + fwire_phi_offset( fwire_r_z0, fwire_radius);
-                    MyLength_t fwire_length = 0.5*DCH_i.WireLength(ilayer, fwire_r_z0)
-                                            - fwire_radius*cos(DCH_i.stereoangle_z0(fwire_r_z0))
+                    MyLength_t fwire_length = 0.5*DCH_i->WireLength(ilayer, fwire_r_z0)
+                                            - fwire_radius*cos(DCH_i->stereoangle_z0(fwire_r_z0))
                                             - safety_z_interspace;
 
                     dd4hep::Tube fwire_s(0., fwire_radius, fwire_length);
@@ -461,10 +461,10 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
                     MyLength_t fwire_radius = dch_FSideWire_thickness/2;
                     // decrease radial distance, move it closer to the sense wire
                     MyLength_t fwire_r_z0   = cell_rout_z0 - fwire_radius;
-                    MyAngle_t  fwire_stereo =  (-1.)*l.StereoSign()*DCH_i.stereoangle_z0(fwire_r_z0);
+                    MyAngle_t  fwire_stereo =  (-1.)*l.StereoSign()*DCH_i->stereoangle_z0(fwire_r_z0);
                     MyAngle_t  fwire_phi    = -cell_phi_width/2 + fwire_phi_offset( fwire_r_z0, fwire_radius);
-                    MyLength_t fwire_length = 0.5*DCH_i.WireLength(ilayer, fwire_r_z0)
-                                            - fwire_radius*cos(DCH_i.stereoangle_z0(fwire_r_z0))
+                    MyLength_t fwire_length = 0.5*DCH_i->WireLength(ilayer, fwire_r_z0)
+                                            - fwire_radius*cos(DCH_i->stereoangle_z0(fwire_r_z0))
                                             - safety_z_interspace;
 
                     dd4hep::Tube fwire_s(0., fwire_radius, fwire_length);
@@ -484,10 +484,10 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
                     MyLength_t fwire_radius = dch_FSideWire_thickness/2;
                     // increase radial distance, move it closer to the sense wire
                     MyLength_t fwire_r_z0   = cell_rin_z0 + fwire_radius;
-                    MyAngle_t  fwire_stereo =  (-1.)*l.StereoSign()*DCH_i.stereoangle_z0(fwire_r_z0);
+                    MyAngle_t  fwire_stereo =  (-1.)*l.StereoSign()*DCH_i->stereoangle_z0(fwire_r_z0);
                     MyAngle_t  fwire_phi    = -cell_phi_width/2 + fwire_phi_offset( fwire_r_z0, fwire_radius);
-                    MyLength_t fwire_length = 0.5*DCH_i.WireLength(ilayer, fwire_r_z0)
-                                            - fwire_radius*cos(DCH_i.stereoangle_z0(fwire_r_z0))
+                    MyLength_t fwire_length = 0.5*DCH_i->WireLength(ilayer, fwire_r_z0)
+                                            - fwire_radius*cos(DCH_i->stereoangle_z0(fwire_r_z0))
                                             - safety_z_interspace;
 
                     dd4hep::Tube fwire_s(0., fwire_radius, fwire_length);
@@ -507,9 +507,9 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
                     MyLength_t fwire_radius = dch_FSideWire_thickness/2;
                     // increase radial distance, move it closer to the sense wire
                     MyLength_t fwire_r_z0   = cell_rin_z0 + fwire_radius;
-                    MyAngle_t  fwire_stereo =  (-1.)*l.StereoSign()*DCH_i.stereoangle_z0(fwire_r_z0);
-                    MyLength_t fwire_length = 0.5*DCH_i.WireLength(ilayer, fwire_r_z0)
-                                            - fwire_radius*cos(DCH_i.stereoangle_z0(fwire_r_z0))
+                    MyAngle_t  fwire_stereo =  (-1.)*l.StereoSign()*DCH_i->stereoangle_z0(fwire_r_z0);
+                    MyLength_t fwire_length = 0.5*DCH_i->WireLength(ilayer, fwire_r_z0)
+                                            - fwire_radius*cos(DCH_i->stereoangle_z0(fwire_r_z0))
                                             - safety_z_interspace;
 
                     dd4hep::Tube fwire_s(0., fwire_radius, fwire_length);
@@ -528,9 +528,9 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
                     MyLength_t fwire_radius = dch_FSideWire_thickness/2;
                     // increase radial distance, move it closer to the sense wire
                     MyLength_t fwire_r_z0   = cell_rout_z0 - fwire_radius;
-                    MyAngle_t  fwire_stereo =  (-1.)*l.StereoSign()*DCH_i.stereoangle_z0(fwire_r_z0);
-                    MyLength_t fwire_length = 0.5*DCH_i.WireLength(ilayer, fwire_r_z0)
-                                            - fwire_radius*cos(DCH_i.stereoangle_z0(fwire_r_z0))
+                    MyAngle_t  fwire_stereo =  (-1.)*l.StereoSign()*DCH_i->stereoangle_z0(fwire_r_z0);
+                    MyLength_t fwire_length = 0.5*DCH_i->WireLength(ilayer, fwire_r_z0)
+                                            - fwire_radius*cos(DCH_i->stereoangle_z0(fwire_r_z0))
                                             - safety_z_interspace;
 
                     dd4hep::Tube fwire_s(0., fwire_radius, fwire_length);
@@ -568,7 +568,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
     det.setPlacement(vessel_pv);
     // Assign the system ID to our mother volume
     vessel_pv.addPhysVolID("system", detID);
-    det.addExtension<dd4hep::rec::DCH_info>(&DCH_i);
+    det.addExtension<dd4hep::rec::DCH_info>(DCH_i);
 
     return det;
 
