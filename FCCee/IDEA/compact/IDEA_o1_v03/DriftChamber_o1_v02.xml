@@ -47,11 +47,18 @@
 
   </define>
 
-  <!--<regions>
-    <region name="CDCH_region" eunit="MeV" lunit="mm" cut="0.001" threshold="0.001">
+  <limits>
+    <limitset name="DCH_limits">
+      <limit name="step_length_max" particles="e[+-]" value="1.0" unit="mm" />
+      <limit name="step_length_max" particles="mu[+-]" value="2.0" unit="mm" />
+      <limit name="step_length_max" particles="*" value="1.0" unit="mm" />
+    </limitset>
+  </limits>
+  <regions>
+    <region name="DCH_region" eunit="eV" lunit="mm" cut="1.0" threshold="1.0">
+      <limitsetref name="DCH_limits"/>
     </region>
-  </regions>-->
-
+  </regions>
 
   <detectors>
     <detector
@@ -59,6 +66,8 @@
       name="DCH_o2"
       type="DriftChamber_o1_v02_T"
       readout="DCHCollection"
+      region="DCH_region"
+      limits="DCH_limits"
       printExcelTable="True"
       >
     <!-- /detectors/detector/vessel -->

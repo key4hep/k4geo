@@ -16,6 +16,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Shapes.h"
 #include "DD4hep/Printout.h"
+#include "DD4hep/Detector.h"
 
 #include "DCH_info.h"
 
@@ -112,6 +113,8 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
                             DCH_i->Lhalf  + vessel_thickness);
     dd4hep::Volume vessel_v (detName+"_vessel", vessel_s,  vesselSkinMat );
     vessel_v.setVisAttributes( vesselSkinVis );
+    vessel_v.setRegion  ( desc, detElem.regionStr() );
+    vessel_v.setLimitSet( desc, detElem.limitsStr() );
 
 
     dd4hep::Tube gas_s( DCH_i->rin,
