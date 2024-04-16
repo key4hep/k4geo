@@ -1,5 +1,5 @@
-#ifndef DETECTORCOMMON_XTALK_H
-#define DETECTORCOMMON_XTALK_H
+#ifndef DETECTORCOMMON_XTALKMODULETHETAMERGED_H
+#define DETECTORCOMMON_XTALKMODULETHETAMERGED_H
 
 // k4geo
 #include "detectorSegmentations/FCCSWGridPhiEta_k4geo.h"
@@ -53,4 +53,4 @@ std::vector<int> xtalk_get_cell_position(const dd4hep::DDSegmentation::FCCSWGrid
                                  uint64_t aCellId);
 }
 }
-#endif /* DETCOMMON_XTALK_H */
+#endif /* DETCOMMON_XTALKMODULETHETAMERGED_H */
