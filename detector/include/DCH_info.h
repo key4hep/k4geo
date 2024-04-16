@@ -100,9 +100,8 @@ public:
     /// Get phi width for the twisted tube and the step (phi distance between cells)
     inline DCH_angle_t Get_phi_width(int ilayer){return (TMath::TwoPi()/Get_ncells(ilayer))*dd4hep::rad;}
 
-    ///
-    // TODO: check if staggering is just + 0.25*cell_phi_width*(ilayer%2);
-    // phi positioning, adding offset for odd ilayers
+    /// phi positioning, adding offset for odd ilayers
+    /// there is a staggering in phi for alternating layers, 0.25*cell_phi_width*(ilayer%2);
     DCH_angle_t Get_cell_phi_angle(int ilayer, int nphi){ return (Get_phi_width(ilayer) * (nphi + 0.25*(ilayer%2)));}
 
     /// calculate superlayer for a given ilayer.
