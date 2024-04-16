@@ -42,7 +42,7 @@ public:
     /// Inner guard wires radius
     DCH_length_t guard_inner_r_at_z0 = {0};
     /// Outer guard wires radius
-    DCH_length_t guard_outer_r_at_z0 = {0};
+    DCH_length_t guard_outer_r_at_zL2 = {0};
 
     /// number of cells of first layer
     int ncell0 = {0};
@@ -76,8 +76,8 @@ public:
     void Set_rin  (DCH_length_t _dch_rin  ){rin  = _dch_rin; }
     void Set_rout (DCH_length_t _dch_rout ){rout = _dch_rout;}
 
-    void Set_guard_rin (DCH_length_t _dch_rin_z0_guard ){guard_inner_r_at_z0  = _dch_rin_z0_guard; }
-    void Set_guard_rout(DCH_length_t _dch_rout_z0_guard){guard_outer_r_at_z0 = _dch_rout_z0_guard; }
+    void Set_guard_rin_at_z0  (DCH_length_t _dch_rin_z0_guard  ){guard_inner_r_at_z0  = _dch_rin_z0_guard;   }
+    void Set_guard_rout_at_zL2(DCH_length_t _dch_rout_zL2_guard){guard_outer_r_at_zL2 = _dch_rout_zL2_guard; }
 
     void Set_ncell0              (int _ncell0              ){ncell0               = _ncell0;              }
     void Set_ncell_increment     (int _ncell_increment     ){ncell_increment      = _ncell_increment;     }
@@ -194,7 +194,7 @@ void DCH_info_struct::BuildLayerDatabase()
     ff_check_positive_parameter(this->Lhalf,"half length" );
 
     ff_check_positive_parameter(this->guard_inner_r_at_z0 ,"inner radius of guard wires" );
-    ff_check_positive_parameter(this->guard_outer_r_at_z0,"outer radius of guard wires" );
+    ff_check_positive_parameter(this->guard_outer_r_at_zL2,"outer radius of guard wires" );
 
 
     ff_check_positive_parameter(this->ncell0,"ncells in the first layer" );
@@ -283,11 +283,11 @@ void DCH_info_struct::Show_DCH_info_database(std::ostream & oss) const
 {
     oss << "\n";
     oss << "Global parameters of DCH:\n";
-    oss << "\tHalf length/mm = " << Lhalf/dd4hep::mm << '\n';
-    oss << "\tRadius in/mm  = " << rin/dd4hep::mm << '\n';
-    oss << "\tRadius out/mm = " << rout/dd4hep::mm<< '\n';
-    oss << "\tRadius guard in/mm  = " << guard_inner_r_at_z0/dd4hep::mm << '\n';
-    oss << "\tRadius guard out/mm = " << guard_outer_r_at_z0/dd4hep::mm << '\n';
+    oss << "\tGas, half length/mm = " << Lhalf/dd4hep::mm << '\n';
+    oss << "\tGas, radius in/mm  = " << rin/dd4hep::mm << '\n';
+    oss << "\tGas, radius out/mm = " << rout/dd4hep::mm<< '\n';
+    oss << "\tGuard, radius in(z=0)/mm  = " << guard_inner_r_at_z0/dd4hep::mm << '\n';
+    oss << "\tGuard, radius out(z=L/2)/mm = " << guard_outer_r_at_zL2/dd4hep::mm << '\n';
     oss << "\n";
     oss << "\tTwist angle (2*alpha) / deg = " << twist_angle/dd4hep::deg << '\n';
     oss << "\n";

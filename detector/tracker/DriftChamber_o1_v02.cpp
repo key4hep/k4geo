@@ -43,8 +43,8 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
         DCH_i->Set_lhalf( desc.constantAsDouble("DCH_Lhalf")       );
 
         // guard wires position, fix position
-        DCH_i->Set_guard_rin ( desc.constantAsDouble("DCH_guard_inner_r_at_z0" ) );
-        DCH_i->Set_guard_rout( desc.constantAsDouble("DCH_guard_outer_r_at_zL2") );
+        DCH_i->Set_guard_rin_at_z0 ( desc.constantAsDouble("DCH_guard_inner_r_at_z0" ) );
+        DCH_i->Set_guard_rout_at_zL2( desc.constantAsDouble("DCH_guard_outer_r_at_zL2") );
 
         DCH_angle_t dch_alpha = desc.constantAsDouble("DCH_alpha");
         DCH_i->Set_twist_angle( 2*dch_alpha );
