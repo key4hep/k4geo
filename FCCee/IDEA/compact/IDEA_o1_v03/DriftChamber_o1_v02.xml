@@ -12,9 +12,9 @@
   <constant name="DCH_guard_outer_r_at_zL2"        value=" DCH_outer_cyl_R - 12.5*mm " />
 
   <!-- Parametrization of number of cells ands layer/superlayer   -->
-  <constant name="DCH_ncell"                value=" 192 "    />
-  <constant name="DCH_ncell_increment"      value=" 48 "    />
-  <constant name="DCH_nsuperlayers"         value=" 14 "    />
+  <constant name="DCH_ncell"                value=" 192 "  />
+  <constant name="DCH_ncell_increment"      value=" 48 "   />
+  <constant name="DCH_nsuperlayers"         value=" 14 "   />
   <constant name="DCH_nlayersPerSuperlayer" value=" 8 "    />
   <constant name="DCH_ncell_per_sector"     value=" 24 "   />
 
@@ -22,7 +22,7 @@
   <constant name="DCH_alpha"                value=" 15*deg "    />
 
   <!--  Parameters of first layer  -->
-  <constant name="DCH_first_sense_r"        value=" DCH_guard_inner_r_at_z0 + 8*mm "    />
+  <constant name="DCH_first_sense_r"        value=" DCH_guard_inner_r_at_z0 + 8*mm "        />
   <constant name="DCH_first_width"          value=" 2*pi* DCH_first_sense_r / DCH_ncell"    />
 
   <!--
@@ -45,9 +45,9 @@
 
   <limits>
     <limitset name="DCH_limits">
-      <limit name="step_length_max" particles="e[+-]" value="1.0" unit="mm" />
-      <limit name="step_length_max" particles="mu[+-]" value="2.0" unit="mm" />
-      <limit name="step_length_max" particles="*" value="1.0" unit="mm" />
+      <limit name="step_length_max" particles="e[+-]"  value="1.0" unit="mm"  />
+      <limit name="step_length_max" particles="mu[+-]" value="2.0" unit="mm"  />
+      <limit name="step_length_max" particles="*"      value="1.0" unit="mm"  />
     </limitset>
   </limits>
   <regions>
@@ -101,12 +101,12 @@
   </readouts>
 
 <display>
-  <vis name="dch_vessel_vis"  r="236/256" g="237/256" b="232/256" alpha="1.00"  showDaughters="true" visible="false" />
+  <vis name="dch_vessel_vis"  r="236/256" g="237/256" b="232/256" alpha="1.0"  showDaughters="true" visible="false" />
   <vis name="dch_gas_vis"     r="227/256" g="239/256" b="217/256" alpha="0.3"  showDaughters="true" visible="true" />
   <vis name="dch_aerogel_vis" r="244/256" g="177/256" b="132/256" alpha="0.5"  showDaughters="false" visible="true" />
   <vis name="dch_cooling_vis" r="254/256" g="230/256" b="151/256" alpha="0.5"  showDaughters="false" visible="true" />
   <vis name="dch_sensor_vis"  r="255/256" g="0/256"   b="0/256"   alpha="1.0"  showDaughters="false" visible="true" />
-  <vis name="dch_layer_vis"  r="255/256" g="230/256" b="153/256" alpha="1.0"  showDaughters="false" visible="true" />
+  <vis name="dch_layer_vis"   r="255/256" g="230/256" b="153/256" alpha="1.0"  showDaughters="false" visible="true" />
   <vis name="dch_layer_vis1"  r="128/256" g="230/256" b="153/256" alpha="1.0"  showDaughters="false" visible="true" />
   <vis name="dch_layer_vis2"  r="128/256" g="128/256" b="153/256" alpha="1.0"  showDaughters="false" visible="true" />
   <vis name="dch_layer_vis3"  r="128/256" g="128/256" b="256/256" alpha="1.0"  showDaughters="false" visible="true" />
