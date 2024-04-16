@@ -4,15 +4,17 @@
 
 #include <DDRec/DetectorData.h>
 
-// Taken from https://github.com/HEP-FCC/FCCDetectors/blob/main/Detector/DetFCChhECalInclined/src/ECalBarrelInclined_geo.cpp  (go there to see older commit history)
+// like v02, but in xml the layer dimensions are along the electrode
+// directions, without rescaling by R/L where R = radial extent of ECAL
+// and L = electrode length
 
 // todo: remove gaudi logging and properly capture output
 #define endmsg std::endl
 #define lLog std::cout
 namespace MSG {
-const std::string ERROR = " Error: ";
-const std::string DEBUG = " Debug: ";
-const std::string INFO  = " Info: ";
+const std::string ERROR = "createECalBarrelInclined   ERROR  ";
+const std::string DEBUG = "createECalBarrelInclined   DEBUG  ";
+const std::string INFO  = "createECalBarrelInclined   INFO   ";
 }
 
 namespace det {
@@ -57,7 +59,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     //todo: incidentSvc->fireIncident(Incident("ECalConstruction", "GeometryFailure"));
   }
 
-  // Retrieve length of layers along electrode, rescaled to active barrel radial extent
+  // Retrieve length of layers along electrode
   dd4hep::xml::DetElement layers = calo.child(_Unicode(layers));
   uint numLayers = 0;
   std::vector<double> layerHeight;
@@ -70,7 +72,8 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     }
     layersTotalHeight += layer.repeat() * layer.thickness();
   }
-  lLog << MSG::DEBUG << "Number of layers: " << numLayers << " total thickness " << layersTotalHeight << endmsg;
+  lLog << MSG::DEBUG << "Total electrode length from calorimeter xml description (cm): " << layersTotalHeight/dd4hep::cm << endmsg;
+
 
   // The following code checks if the xml geometry file contains a constant defining
   // the number of layers the barrel. In that case, it makes the program abort
@@ -86,11 +89,12 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     ;
   }
   if (nLayers > 0 && nLayers != int(numLayers)) {
-    lLog << MSG::ERROR << "Incorrect number of layers (ECalBarrelNumLayers) in xml file!" << endmsg;
+    lLog << MSG::ERROR << "Incorrect number of layers (ECalBarrelNumLayers) in readout in calorimeter xml description!" << endmsg;
+    lLog << MSG::ERROR << "Number of layers should be: " << numLayers << endmsg;
     // todo: incidentSvc->fireIncident(Incident("ECalConstruction", "GeometryFailure"));
     // make the code crash (incidentSvc does not work)
     // Andre, Alvaro, assert replaced by exception
-    throw std::runtime_error("Incorrect number of layers (ECalBarrelNumLayers) in xml file!");
+    throw std::runtime_error("Incorrect number of layers (ECalBarrelNumLayers) in calorimeter xml description!");
   }
 
   // Retrieve information about the readout
@@ -129,9 +133,18 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     dd4hep::Tube cryoBackShape(cryoDim.rmax1(), cryoDim.rmax2(), cryoDim.dz());
     dd4hep::Tube cryoSideOuterShape(cryoDim.rmin2(), cryoDim.rmax1(), cryoDim.dz());
     dd4hep::SubtractionSolid cryoSideShape(cryoSideOuterShape, bathAndServicesOuterShape);
-    lLog << MSG::INFO << "ECAL cryostat: front: rmin (cm) = " << cryoDim.rmin1() << " rmax (cm) = " << cryoDim.rmin2() << " dz (cm) = " << cryoDim.dz()  << endmsg;
-    lLog << MSG::INFO << "ECAL cryostat: back: rmin (cm) = " << cryoDim.rmax1() << " rmax (cm) = " << cryoDim.rmax2() << " dz (cm) = " << cryoDim.dz() << endmsg;
-    lLog << MSG::INFO << "ECAL cryostat: side: rmin (cm) = " << cryoDim.rmin2() << " rmax (cm) = " << cryoDim.rmax1() << " dz (cm) = " << cryoDim.dz() - caloDim.dz()  << endmsg;
+    lLog << MSG::INFO
+	 << "ECAL cryostat: front: rmin (cm) = " << cryoDim.rmin1()/dd4hep::cm
+	 << " rmax (cm) = " << cryoDim.rmin2()/dd4hep::cm
+	 << " dz (cm) = " << cryoDim.dz()/dd4hep::cm  << endmsg;
+    lLog << MSG::INFO
+	 << "ECAL cryostat: back: rmin (cm) = " << cryoDim.rmax1()/dd4hep::cm
+	 << " rmax (cm) = " << cryoDim.rmax2()/dd4hep::cm
+	 << " dz (cm) = " << cryoDim.dz()/dd4hep::cm << endmsg;
+    lLog << MSG::INFO
+	 << "ECAL cryostat: side: rmin (cm) = " << cryoDim.rmin2()/dd4hep::cm
+	 << " rmax (cm) = " << cryoDim.rmax1()/dd4hep::cm
+	 << " dz (cm) = " << (cryoDim.dz() - caloDim.dz())/dd4hep::cm  << endmsg;
     dd4hep::Volume cryoFrontVol(cryostat.nameStr()+"_front", cryoFrontShape, aLcdd.material(cryostat.materialStr()));
     dd4hep::Volume cryoBackVol(cryostat.nameStr()+"_back", cryoBackShape, aLcdd.material(cryostat.materialStr()));
     dd4hep::Volume cryoSideVol(cryostat.nameStr()+"_side", cryoSideShape, aLcdd.material(cryostat.materialStr()));
@@ -142,19 +155,19 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
       cryoFrontVol.setSensitiveDetector(aSensDet);
       cryoFrontPhysVol.addPhysVolID("cryo", 1);
       cryoFrontPhysVol.addPhysVolID("type", 1);
-      lLog << MSG::INFO << "Cryostat front volume set as sensitive" << endmsg;
+      lLog << MSG::INFO << "ECAL Cryostat front volume set as sensitive" << endmsg;
     }
     if (cryoBackSensitive) {
       cryoBackVol.setSensitiveDetector(aSensDet);
       cryoBackPhysVol.addPhysVolID("cryo", 1);
       cryoBackPhysVol.addPhysVolID("type", 2);
-      lLog << MSG::INFO << "Cryostat back volume set as sensitive" << endmsg;
+      lLog << MSG::INFO << "ECAL Cryostat back volume set as sensitive" << endmsg;
     }
     if (cryoSideSensitive) {
       cryoSideVol.setSensitiveDetector(aSensDet);
       cryoSidePhysVol.addPhysVolID("cryo", 1);
       cryoSidePhysVol.addPhysVolID("type", 3);
-      lLog << MSG::INFO << "Cryostat front volume set as sensitive" << endmsg;
+      lLog << MSG::INFO << "ECAL Cryostat front volume set as sensitive" << endmsg;
     }
     dd4hep::DetElement cryoFrontDetElem(caloDetElem, "cryo_front", 0);
     cryoFrontDetElem.setPlacement(cryoFrontPhysVol);
@@ -165,8 +178,14 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     // 1.2. Create place-holder for services
     dd4hep::Tube servicesFrontShape(cryoDim.rmin2(), bathRmin, caloDim.dz());
     dd4hep::Tube servicesBackShape(bathRmax, cryoDim.rmax1(), caloDim.dz());
-    lLog << MSG::INFO << "ECAL services: front: rmin (cm) = " << cryoDim.rmin2() << " rmax (cm) = " <<  bathRmin << " dz (cm) = " << caloDim.dz() << endmsg;
-    lLog << MSG::INFO << "ECAL services: back: rmin (cm) = " << bathRmax << " rmax (cm) = " << cryoDim.rmax1() << " dz (cm) = " << caloDim.dz() << endmsg;
+    lLog << MSG::INFO
+	 << "ECAL services: front: rmin (cm) = " << cryoDim.rmin2()/dd4hep::cm
+	 << " rmax (cm) = " <<  bathRmin/dd4hep::cm/dd4hep::cm
+	 << " dz (cm) = " << caloDim.dz()/dd4hep::cm << endmsg;
+    lLog << MSG::INFO
+	 << "ECAL services: back: rmin (cm) = " << bathRmax/dd4hep::cm
+	 << " rmax (cm) = " << cryoDim.rmax1()/dd4hep::cm
+	 << " dz (cm) = " << caloDim.dz()/dd4hep::cm << endmsg;
     dd4hep::Volume servicesFrontVol("services_front", servicesFrontShape, aLcdd.material(activeMaterial));
     dd4hep::Volume servicesBackVol("services_back", servicesBackShape, aLcdd.material(activeMaterial));
     dd4hep::PlacedVolume servicesFrontPhysVol = envelopeVol.placeVolume(servicesFrontVol);
@@ -175,13 +194,13 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
       servicesFrontVol.setSensitiveDetector(aSensDet);
       servicesFrontPhysVol.addPhysVolID("cryo", 1);
       servicesFrontPhysVol.addPhysVolID("type", 4);
-      lLog << MSG::INFO << "Services front volume set as sensitive" << endmsg;
+      lLog << MSG::INFO << "ECAL Services front volume set as sensitive" << endmsg;
     }
     if (cryoBackSensitive) {
       servicesBackVol.setSensitiveDetector(aSensDet);
       servicesBackPhysVol.addPhysVolID("cryo", 1);
       servicesBackPhysVol.addPhysVolID("type", 5);
-      lLog << MSG::INFO << "Services back volume set as sensitive" << endmsg;
+      lLog << MSG::INFO << "ECAL Services back volume set as sensitive" << endmsg;
     }
     dd4hep::DetElement servicesFrontDetElem(caloDetElem, "services_front", 0);
     servicesFrontDetElem.setPlacement(servicesFrontPhysVol);
@@ -192,9 +211,18 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
   // 2. Create bath that is inside the cryostat and surrounds the detector
   //    Bath is filled with active material -> but not sensitive
   dd4hep::Volume bathVol(activeMaterial + "_bath", bathOuterShape, aLcdd.material(activeMaterial));
-  lLog << MSG::INFO << "ECAL bath: material = " << activeMaterial << " rmin (cm) =  " << bathRmin
-       << " rmax (cm) = " << bathRmax << " thickness in front of ECal (cm) = " << caloDim.rmin() - cryoDim.rmin2()
-       << " thickness behind ECal (cm) = " << cryoDim.rmax1() - caloDim.rmax() << endmsg;
+  lLog << MSG::INFO << "ECAL bath: material = " << activeMaterial
+       << " rmin (cm) =  " << bathRmin/dd4hep::cm
+       << " rmax (cm) = " << bathRmax/dd4hep::cm << endmsg;
+  double Rmin = caloDim.rmin();
+  double Rmax = caloDim.rmax();
+  double dR = Rmax - Rmin;
+  lLog << MSG::INFO
+       << "ECAL calorimeter volume rmin (cm) =  " << Rmin/dd4hep::cm
+       << " rmax (cm) = " << Rmax/dd4hep::cm << endmsg;
+  lLog << MSG::INFO << "ECAL thickness of calorimeter (cm) = " << dR/dd4hep::cm << endmsg;  
+  lLog << MSG::INFO << "ECAL thickness in front of calorimeter (between cryostat front and calorimeter) (cm) = " << (Rmin - cryoDim.rmin2())/dd4hep::cm << endmsg;
+  lLog << MSG::INFO << "ECAL thickness behind calorimeter (between calorimeter and cryostat back) (cm) = " << (cryoDim.rmax1() - Rmax)/dd4hep::cm << endmsg;
 
   // 3. Create the calorimeter by placing the passive material, trapezoid active layers, readout and again trapezoid
   // active layers in the bath.
@@ -202,8 +230,6 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
   dd4hep::SensitiveDetector sd = aSensDet;
   dd4hep::xml::Dimension sdType = xmlDetElem.child(_U(sensitive));
   sd.setType(sdType.typeStr());
-  lLog << MSG::INFO << "ECAL calorimeter volume rmin (cm) =  " << caloDim.rmin() << " rmax (cm) = " << caloDim.rmax()
-       << endmsg;
 
   // 3.a. Create the passive planes, readout in between of 2 passive planes and the remaining space fill with active
   // material
@@ -213,22 +239,28 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
   //////////////////////////////
 
   // passive volumes consist of inner part and two outer, joined by glue
-  lLog << MSG::INFO << "passive inner material = " << passiveInnerMaterial << "\n"
-       << " and outer material = " << passiveOuterMaterial << "\n"
-       << " thickness of inner part at inner radius (cm) =  " << passiveInnerThicknessMin << "\n"
-       << " thickness of inner part at outer radius (cm) =  " << passiveInnerThicknessMax << "\n"
-       << " thickness of outer part (cm) =  " << passiveOuterThickness << "\n"
-       << " thickness of total (cm) =  " << passiveThickness << "\n"
-       << " rotation angle = " << angle << endmsg;
+  lLog << MSG::INFO << "Passive elements:" << endmsg;
+  lLog << MSG::INFO << "   material in inner part of absorber (except 1st layer) = " << passiveInnerMaterial << endmsg;
+  lLog << MSG::INFO << "   material in inner part of absorber (1st layer) = " << activeMaterial << endmsg;
+  lLog << MSG::INFO << "   material in outer part of absorber = " << passiveOuterMaterial << endmsg;
+  lLog << MSG::INFO << "   material in between = " << passiveGlueMaterial << endmsg;
+  lLog << MSG::INFO << "   thickness of inner part  at inner radius (cm) =  " << passiveInnerThicknessMin/dd4hep::cm << endmsg;
+  lLog << MSG::INFO << "   thickness of inner part at outer radius (cm) =  " << passiveInnerThicknessMax/dd4hep::cm << endmsg;
+  lLog << MSG::INFO << "   thickness of outer part (cm) =  " << passiveOuterThickness/dd4hep::cm << endmsg;
+  lLog << MSG::INFO << "   thickness of middle part (cm) =  " << passiveGlueThickness/dd4hep::cm << endmsg;
+  lLog << MSG::INFO << "   total thickness of absorber (cm) =  " << passiveThickness/dd4hep::cm << endmsg;
+
+  lLog << MSG::INFO << "Electrodes:" << endmsg;
+  lLog << MSG::INFO << "   rotation angle (radians) = " << angle << " , (degrees) = " << angle*57.295780 << endmsg;
 
   // calculate number of modules
   uint numPlanes =
-      round(M_PI / asin((passiveThickness + activeThickness + readoutThickness) / (2. * caloDim.rmin() * cos(angle))));
+      round(M_PI / asin((passiveThickness + activeThickness + readoutThickness) / (2. * Rmin * cos(angle))));
 
   double dPhi = 2. * M_PI / numPlanes;
-  lLog << MSG::INFO << "number of passive plates = " << numPlanes << " azim. angle difference =  " << dPhi << endmsg;
-  lLog << MSG::INFO << " distance at inner radius (cm) = " << 2. * M_PI * caloDim.rmin() / numPlanes << "\n"
-       << " distance at outer radius (cm) = " << 2. * M_PI * caloDim.rmax() / numPlanes << endmsg;
+  lLog << MSG::INFO << "   number of planes (calculated) = " << numPlanes << " , azim. angle difference =  " << dPhi << endmsg;
+  lLog << MSG::INFO << "   distance at inner radius (cm) = " << 2. * M_PI * Rmin/dd4hep::cm / numPlanes << endmsg;
+  lLog << MSG::INFO << "   distance at outer radius (cm) = " << 2. * M_PI * Rmax/dd4hep::cm / numPlanes << endmsg;
 
   // The following code checks if the xml geometry file contains a constant defining
   // the number of planes in the barrel. In that case, it makes the program abort
@@ -247,49 +279,57 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     ;
   }
   if (nModules > 0 && nModules != int(numPlanes)) {
-    lLog << MSG::ERROR << "Incorrect number of planes (ECalBarrelNumPlanes) in xml file!" << endmsg;
+    lLog << MSG::ERROR << "Incorrect number of planes (ECalBarrelNumPlanes) in calorimeter xml description!" << endmsg;
     // todo: incidentSvc->fireIncident(Incident("ECalConstruction", "GeometryFailure"));
     // make the code crash (incidentSvc does not work)
     // Andre, Alvaro, assert replaced by exception
-    throw std::runtime_error("Incorrect number of planes (ECalBarrelNumPlanes) in xml file!");
+    throw std::runtime_error("Incorrect number of planes (ECalBarrelNumPlanes) in calorimeter xml description!");
   }
   // Readout is in the middle between two passive planes
   double offsetPassivePhi = caloDim.offset() + dPhi / 2.;
   double offsetReadoutPhi = caloDim.offset() + 0;
-  lLog << MSG::INFO << "readout material = " << readoutMaterial << "\n"
-       << " thickness of readout planes (cm) =  " << readoutThickness << "\n number of readout layers = " << numLayers
-       << endmsg;
+  lLog << MSG::INFO << "   readout material = " << readoutMaterial << endmsg;
+  lLog << MSG::INFO << "   thickness of readout planes (cm) =  " << readoutThickness/dd4hep::cm << endmsg;
+  lLog << MSG::INFO << "   number of layers = " << numLayers << endmsg;
 
-  // min and max radius of active calorimeter volume, and its radial thickness
-  double Rmin = caloDim.rmin();
-  double Rmax = caloDim.rmax();
-  double dR = Rmax - Rmin;
+
   // electrode length, given inclination angle and min/max radius of the active calorimeter volume
   double planeLength = -Rmin * cos(angle) + sqrt(pow(Rmax, 2) - pow(Rmin * sin(angle), 2));
-  lLog << MSG::INFO << "thickness of calorimeter (cm) = " << dR << "\n"
-       << " length of passive or readout planes (cm) =  " << planeLength << endmsg;
+  
+  double runningHeight = 0.;
+  lLog << MSG::INFO << "   total length from Rmin, Rmax and angle (cm) =  " << planeLength/dd4hep::cm << endmsg;
+  lLog << MSG::INFO << "   predicted layer radii: " << endmsg;
+  for (uint iLay = 0; iLay < numLayers; iLay++) {
+    double Lmin = runningHeight;
+    double Lmax = runningHeight + layerHeight[iLay];
+    runningHeight += layerHeight[iLay];
+    double rMin = sqrt(Rmin*Rmin + Lmin*Lmin + 2*Rmin*Lmin*cos(angle));
+    double rMax = sqrt(Rmin*Rmin + Lmax*Lmax + 2*Rmin*Lmax*cos(angle));
+    lLog << MSG::INFO << "      layer " << iLay << " (cm) = " << rMin/dd4hep::cm << " - " << rMax/dd4hep::cm << endmsg;
+  }
 
+  // check that electrode length is consistent with calorimeter radial extent
+  // and inclination angle to within 0.5 mm
+  if (fabs(planeLength - layersTotalHeight) > 0.05*dd4hep::cm) {
+    lLog << MSG::ERROR << "   the sum of the electrode lengths per layer in the calorimeter xml file is not consistent with the length calculated from the calorimeter radial extent and the inclination angle" << endmsg;
+    throw std::runtime_error("Incorrect length of electrode layers in calorimeter xml description!");
+  }
   // calculate the thickness of the passive material in each layer
   // it's not constant in case of trapezoidal absorbers  (passiveInnerThicknessMax != passiveInnerThicknessMin)
   // the code calculates the (max) passive thickness per layer i.e. at Rout of layer
-  // rescaling by runningHeight / (Rmax - Rmin)
-  // GM : should be OK since both Rmax-Rmin and runningHeight are radial extents
-  // but shouldn't it be simpler to define layerHeight as the length along the electrode
-  // and here use as rescaling factor runningHeight / layersTotalHeight ?
-  // This is only place where the fact that the layer thicknesses in the xml are rescaled to
-  // the radial extent of the calo is used, because after this block of code the
-  // layer thicknesses are rescaled to the electrode length.
-  // So maybe we could implement in the xml the length along the electrode, and here
-  // rescale by runningHeight/Ltot where runningHeight is calculated along the electrode direction?
+  // rescaling by runningHeight / Ltot
   std::vector<double> passiveInnerThicknessLayer(numLayers+1);
-  double runningHeight = 0;
+  lLog << MSG::DEBUG << "passiveInnerThickness: " << endmsg;
+  runningHeight = 0.;
   for (uint iLay = 0; iLay < numLayers; iLay++) {
     passiveInnerThicknessLayer[iLay] = passiveInnerThicknessMin + (passiveInnerThicknessMax - passiveInnerThicknessMin) *
-                                       (runningHeight) / (Rmax - Rmin);
-    runningHeight += layerHeight[iLay];
+      (runningHeight) / layersTotalHeight;
+    lLog << MSG::DEBUG << "   layer " << iLay << " = " << passiveInnerThicknessLayer[iLay] << " cm" << endmsg;
   }
   passiveInnerThicknessLayer[numLayers] = passiveInnerThicknessMin + (passiveInnerThicknessMax - passiveInnerThicknessMin) *
-                                          (runningHeight) / (Rmax - Rmin);
+    (runningHeight) / layersTotalHeight;
+
+  lLog << MSG::DEBUG << "   layer " << numLayers << " = " << passiveInnerThicknessLayer[numLayers] << " cm" << endmsg;
 
   // calculate the angle of the passive elements if trapezoidal absorbers are used (Max != Min)
   // if parallel absorbers are used then passiveAngle = 0 and cosPassiveAngle = 1
@@ -297,17 +337,6 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
   double cosPassiveAngle = cos(passiveAngle);
   double rotatedOuterThickness = passiveOuterThickness / cosPassiveAngle;
   double rotatedGlueThickness = passiveGlueThickness / cosPassiveAngle;
-
-  // rescale layer thicknesses from xml so that they now represent the real
-  // lengths along the electrode direction
-  double scaleLayerThickness = planeLength / layersTotalHeight;
-  layersTotalHeight = 0;
-  for (uint iLay = 0; iLay < numLayers; iLay++) {
-    layerHeight[iLay] *= scaleLayerThickness;
-
-    layersTotalHeight += layerHeight[iLay];
-    lLog << MSG::DEBUG << "Thickness of layer " << iLay << " : " << layerHeight[iLay] << endmsg;
-  }
 
   // distance from the center of the electrode to the center of the 1st layer, in the electrode direction
   double layerFirstOffset = -planeLength / 2. + layerHeight[0] / 2.;
@@ -443,7 +472,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
   dd4hep::Box readoutShape(readoutThickness / 2., caloDim.dz(), planeLength / 2.);
   dd4hep::Volume readoutVol(readoutMaterial, readoutShape, aLcdd.material(readoutMaterial));
   if (readout.isSensitive()) {
-    lLog << MSG::INFO << "Readout volume set as sensitive" << endmsg;
+    lLog << MSG::INFO << "ECAL readout volume set as sensitive" << endmsg;
     double layerOffset = layerFirstOffset;
     for (uint iLayer = 0; iLayer < numLayers; iLayer++) {
       dd4hep::Box layerReadoutShape(readoutThickness / 2., caloDim.dz(), layerHeight[iLayer] / 2.);
@@ -491,14 +520,16 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
   double activeOutThicknessAfterSubtraction =
       2. * activeOutThickness - readoutThickness - 2. * activePassiveOverlap *
       (passiveThickness + passiveInnerThicknessMax - passiveInnerThicknessMin); // correct thickness for trapezoid
-  lLog << MSG::INFO << "active material = " << activeMaterial
-       << " active layers thickness at inner radius (cm) = " << activeInThicknessAfterSubtraction
-       << " thickness at outer radious (cm) = " << activeOutThicknessAfterSubtraction << " making "
+  lLog << MSG::INFO << "Active elements:" << endmsg;
+  lLog << MSG::INFO << "   material = " << activeMaterial << endmsg;
+  lLog << MSG::INFO << "   thickness at inner radius (cm) = " << activeInThicknessAfterSubtraction/dd4hep::cm << endmsg;
+  lLog << MSG::INFO << "   thickness at outer radius (cm) = " << activeOutThicknessAfterSubtraction/dd4hep::cm << endmsg;
+  lLog << MSG::INFO << "   thickness relative increase from inner to outer radius = "
        << (activeOutThicknessAfterSubtraction - activeInThicknessAfterSubtraction) * 100 /
           activeInThicknessAfterSubtraction
-       << " % increase." << endmsg;
+       << " %." << endmsg;
   lLog << MSG::INFO
-       << "active passive initial overlap (before subtraction) (cm) = " << passiveThickness * activePassiveOverlap
+       << "   active passive initial overlap (before subtraction) (cm) = " << passiveThickness/dd4hep::cm * activePassiveOverlap
        << " = " << activePassiveOverlap * 100 << " %" << endmsg;
 
   // creating shape for rows of layers (active material between two passive planes, with readout in the middle)
@@ -663,4 +694,4 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
 }
 }  // namespace det
 
-DECLARE_DETELEMENT(ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v02, det::createECalBarrelInclined)
+DECLARE_DETELEMENT(ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03, det::createECalBarrelInclined)
