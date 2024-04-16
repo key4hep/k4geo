@@ -119,7 +119,7 @@ std::vector<std::pair<uint64_t, double>> xtalk_neighbours_ModuleThetaMerged(cons
     // instead of the extrema only for a certain layer
     // this border effect is also present in the original method..
     for (int i=-1; i <= aSeg.mergedThetaCells(layer_id); i++) {
-      int theta_id_neighbour = (theta_id + i) - ((theta_id + i) % aSeg.mergedThetaCells(layer_id+deltaLayer));
+      int theta_id_neighbour = (theta_id + i) - ((theta_id + i) % (aSeg.mergedThetaCells(layer_id+deltaLayer) ? aSeg.mergedThetaCells(layer_id+deltaLayer):1) );
       // Do we need to check if the index neighbour theta is valid?
       if (theta_id_neighbour >= theta_id && theta_id_neighbour < (theta_id + aSeg.mergedThetaCells(layer_id))) { // crosstalk neighbour type 1
         dummy_xtalk = dummy_xtalk_radial;
