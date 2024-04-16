@@ -1,5 +1,5 @@
 #include "detectorCommon/DetUtils_k4geo.h"
-#include "detectorCommon/xtalk_k4geo.h"
+#include "detectorCommon/xtalk_neighbors_moduleThetaMergedSegmentation.h"
 
 // DD4hep
 #include "DDG4/Geant4Mapping.h"
@@ -43,13 +43,13 @@ std::vector<std::pair<uint64_t, double>> xtalk_neighbours_ModuleThetaMerged(cons
   int idModuleField(-1);
   int idThetaField(-1);
   int idLayerField(-1);
-  for (uint itField = 0; itField < aFieldNames.size(); itField++) {
+  for (int itField = 0; itField < aFieldNames.size(); itField++) {
     if (aFieldNames[itField] == aSeg.fieldNameModule())
-      idModuleField = (int) itField;
+      idModuleField = itField;
     else if (aFieldNames[itField] == aSeg.fieldNameTheta())
-      idThetaField = (int) itField;
+      idThetaField = itField;
     else if (aFieldNames[itField] == aSeg.fieldNameLayer())
-      idLayerField = (int) itField;
+      idLayerField = itField;
    
   }
   if (idModuleField < 0) {
@@ -172,7 +172,7 @@ std::vector<std::pair<uint64_t, double>> xtalk_neighbours_ModuleThetaMerged(cons
     int loopLayer_indice_offset = loopLayer - aFieldExtremes_layer[0][idLayerField].first;
     // find crosstalk neighbours in the same theta tower
     for (int i=-1; i <= aSeg.mergedThetaCells(layer_id); i++) {
-      int theta_id_neighbour = (theta_id + i) - ((theta_id + i) % aSeg.mergedThetaCells(loopLayer));
+      int theta_id_neighbour = (theta_id + i) - ((theta_id + i) % (aSeg.mergedThetaCells(loopLayer) ? aSeg.mergedThetaCells(loopLayer):1) );
       // check if the neighbour theta index is valid
       if (theta_id_neighbour >= theta_id && theta_id_neighbour < (theta_id + aSeg.mergedThetaCells(layer_id)) && theta_id_neighbour>=aFieldExtremes_layer[loopLayer_indice_offset][idThetaField].first && theta_id_neighbour<=aFieldExtremes_layer[loopLayer_indice_offset][idThetaField].second) { // crosstalk neighbour type 4
         dummy_xtalk = dummy_xtalk_tower;
@@ -222,13 +222,13 @@ std::vector<int> xtalk_get_cell_position(const dd4hep::DDSegmentation::FCCSWGrid
   int idModuleField(-1);
   int idThetaField(-1);
   int idLayerField(-1);
-  for (uint itField = 0; itField < aFieldNames.size(); itField++) {
+  for (int itField = 0; itField < aFieldNames.size(); itField++) {
     if (aFieldNames[itField] == aSeg.fieldNameModule())
-      idModuleField = (int) itField;
+      idModuleField = itField;
     else if (aFieldNames[itField] == aSeg.fieldNameTheta())
-      idThetaField = (int) itField;
+      idThetaField = itField;
     else if (aFieldNames[itField] == aSeg.fieldNameLayer())
-      idLayerField = (int) itField;
+      idLayerField = itField;
   }
   // retrieve layer/module/theta of the cell under study
   int layer_id = aDecoder.get(aCellId, aFieldNames[idLayerField]);
