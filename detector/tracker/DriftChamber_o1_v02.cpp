@@ -149,15 +149,17 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
         dd4hep::Volume layer_v ( layer_name , layer_s, gasvolMat );
         layer_v.setVisAttributes( desc.visAttributes( Form("dch_layer_vis%d", ilayer%22) ) );
         auto layer_pv = gas_v.placeVolume(layer_v);
-        layer_pv.addPhysVolID("layer", ilayer);
+        // ilayer is a counter that runs from 1 to 112 (nsuperlayers * nlayersPerSuperlayer)
+        // it seems more convenient to store the layer number within the superlayer
+        // ilayerWithinSuperlayer runs from 0 to 7 (nlayersPerSuperlayer-1)
+        int ilayerWithinSuperlayer = (ilayer-1) % DCH_i->nlayersPerSuperlayer;
+        layer_pv.addPhysVolID("layer", ilayerWithinSuperlayer  );
         // add superlayer bitfield
         int nsuperlayer_minus_1 = DCH_i->Get_nsuperlayer_minus_1(ilayer);
         layer_pv.addPhysVolID("superlayer", nsuperlayer_minus_1 );
 
         dd4hep::DetElement layer_DE(det,layer_name+"DE", ilayer);
         layer_DE.setPlacement(layer_pv);
-        // Assign the system ID to our mother volume
-
 
         // // // // // // // // // // // // // // // // // // // //
         // // // // // SEGMENTATION OF THE LAYER  // // // // // //
