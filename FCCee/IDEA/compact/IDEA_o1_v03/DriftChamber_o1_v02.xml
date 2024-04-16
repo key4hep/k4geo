@@ -2,12 +2,8 @@
   <!-- %%%%%%             Central Drift Chamber Basic Parameters                 %%%%%% -->
   <!-- %%%%%%           based on the geometry version "IDEA231026"               %%%%%% -->
   <define>
-  <!-- Vesssel geometry, some parameters moved to DetDimensions file   -->
-  <!--   <constant name="DCH_inner_cyl_R"       value=" 350 * mm "    /> -->
-  <!--   <constant name="DCH_outer_cyl_R"       value=" 2000 * mm "    /> -->
-  <!--   <constant name="DCH_L"                    value=" 4000 * mm "    /> -->
-  <constant name="DCH_Lhalf"                value=" DCH_L/2.0 "    />
-  <constant name="DCH_vessel_thickness"     value=" 1 * mm"  />
+  <!--  Drift Chamber parameters    -->
+  <!--      Gas and vesssel geometry parameters moved to DetDimensions file   -->
 
   <!-- Position of guard wires   -->
   <!--    _z0 := at z=0          -->

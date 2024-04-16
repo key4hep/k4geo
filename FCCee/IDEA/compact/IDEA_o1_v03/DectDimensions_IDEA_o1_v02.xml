@@ -88,12 +88,18 @@
     <constant name="Inner_Vertex_half_length" value="257.5*mm"/>
     <constant name="Outer_Vertex_half_length" value="1050*mm"/>
 
-    <!-- Changing the radius of DCH is not enough to resize the detector, please contact the experts-->
-    <constant name="DCH_inner_cyl_R"       value=" 350 * mm "    />
-    <constant name="DCH_outer_cyl_R"       value=" 2000 * mm "    />
-    <constant name="DCH_L"                    value=" 4000 * mm "    />
-    <constant name="DCH_half_length_total"    value="2250*mm"/> <!-- this includes the services -->
-    
+    <!--  Drift Chamber parameters    -->
+    <!-- Changing the radius is not enough to resize the detector, please contact the experts-->
+    <!--    Parameters for the active volume (cylinder of gas)  -->
+    <constant name="DCH_inner_cyl_R"          value=" 350 * mm "   />
+    <constant name="DCH_outer_cyl_R"          value=" 2000 * mm "  />
+    <constant name="DCH_L"                    value=" 4000 * mm "  />
+    <constant name="DCH_Lhalf"                value=" DCH_L/2.0 "  />
+    <!--    Vessel cylinder surrounds the gas cylinder, eating 1mm extra in radius/z     -->
+    <constant name="DCH_vessel_thickness"     value=" 1 * mm"      />
+    <!--    Service layers fill the space from z=2m to z=2.25m  -->
+    <constant name="DCH_half_length_total"    value="2250*mm"      />
+
     <constant name="ECalBarrel_inner_radius" value="2150*mm"/>
     <constant name="ECalBarrel_outer_radius" value="2352*mm"/>
     <constant name="ECalBarrel_half_length" value="2210*mm"/>
