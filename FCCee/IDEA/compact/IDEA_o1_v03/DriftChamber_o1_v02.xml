@@ -8,14 +8,15 @@
   <!--     <constant name="DCH_outer_cyl_R_total"          value=" 2001 * mm "  /> -->
   <!--     <constant name="DCH_half_length_total"          value=" 2250 * mm "  /> -->
 
-
+  <!-- Gas (active volume) geometry     -->
   <constant name="DCH_gas_inner_cyl_R"          value=" 350 * mm "   />
   <constant name="DCH_gas_outer_cyl_R"          value=" 2000 * mm "  />
   <constant name="DCH_gas_Lhalf"                value=" 2000 * mm "  />
+
   <!--    Vessel cylinder surrounds the gas cylinder in radius and z     -->
   <constant name="DCH_vessel_thickness"         value=" DCH_gas_inner_cyl_R - DCH_inner_cyl_R_total"      />
 
-  <!--    Service layers fill the space from z=2m to z=2.25m  -->
+  <!--    Service components fill the space from z=2m to z=2.25m  -->
   <constant name="DCH_services_zmin"    value="DCH_gas_Lhalf + DCH_vessel_thickness"      />
   <constant name="DCH_services_zmax"    value="DCH_half_length_total"                    />
 
