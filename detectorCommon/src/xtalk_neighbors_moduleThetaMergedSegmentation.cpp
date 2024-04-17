@@ -212,7 +212,7 @@ std::vector<std::pair<uint64_t, double>> xtalk_neighbours_ModuleThetaMerged(cons
   return xtalk_neighbours;
 }
 
-// return cell position, a function used for debug purpose
+// return indices of layer/module/theta fields of a give cell. This is a function to be used for debug purpose
 std::vector<int> xtalk_get_cell_position(const dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo& aSeg,
 						   const dd4hep::DDSegmentation::BitFieldCoder& aDecoder,
 						   const std::vector<std::string>& aFieldNames,
