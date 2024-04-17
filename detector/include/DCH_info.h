@@ -9,7 +9,7 @@
 namespace dd4hep {  namespace rec {
 
 
-/* Data structure to store DCH excel table
+/* Data structure to store DCH geometry parameters
  * to be filled before building the geometry!
  *
  * Global constants are members of this class
@@ -132,7 +132,6 @@ public:
     /// Internal helper struct for defining the layer layout
     struct DCH_info_layer
     {
-        // each member corresponds to a column in the excel table
         /// layer number
         DCH_layer layer = {0};
         /// 2x number of cells in that layer
@@ -151,8 +150,7 @@ public:
         /// radius (cylindral coord) of 'up' field wires
         DCH_length_t radius_fuw_z0 = {0.};
 
-        // some quantities are derived from previous ones
-        // see excel and paper for equations
+        /// some quantities are derived from previous-layer ones
         ///  stereo angle is positive for odd layer number
         bool IsStereoPositive() const {
             return (1 == layer%2);
@@ -168,7 +166,7 @@ public:
         };
 
     };
-    /// map to store excel table
+    /// map to store parameters for each layer
     std::map<DCH_layer, DCH_info_layer> database;
     bool IsDatabaseEmpty() const { return database.empty(); }
 
@@ -236,7 +234,7 @@ void DCH_info_struct::BuildLayerDatabase()
     // loop over all layers, skipping the first one
     for(int ilayer = 2; ilayer<= this->nlayers; ++ilayer)
     {
-        // initialize here an object that will contain one row from the excel table
+        // initialize empty object, parameters are set later
         DCH_info_layer layer_info;
 
         // the loop counter actually corresponds to the layer number
@@ -266,7 +264,7 @@ void DCH_info_struct::BuildLayerDatabase()
         layer_info.radius_fuw_z0 = previousLayer.radius_fuw_z0 + layer_info.height_z0;
         layer_info.width_z0 = TMath::TwoPi()*layer_info.radius_sw_z0/(0.5*layer_info.nwires);
 
-        // according to excel, width_z0 == height_z0
+        // according to expert prescription, width_z0 == height_z0
         if(fabs(layer_info.width_z0 - layer_info.height_z0)>1e-4)
             throw std::runtime_error("fabs(l.width_z0 - l.height_z0)>1e-4");
 
