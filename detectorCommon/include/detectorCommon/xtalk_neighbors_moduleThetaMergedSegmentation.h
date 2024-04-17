@@ -44,7 +44,7 @@ std::vector<std::pair<uint64_t, double>> xtalk_neighbours_ModuleThetaMerged(cons
                                  uint64_t aCellId);
 
 // debug: return cell layer/module/theta indices
-std::vector<int> xtalk_get_cell_position(const dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo& aSeg,
+std::vector<int> xtalk_get_cell_indices(const dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo& aSeg,
                                  const dd4hep::DDSegmentation::BitFieldCoder& aDecoder,
                                  const std::vector<std::string>& aFieldNames,
                                  uint64_t aCellId);
