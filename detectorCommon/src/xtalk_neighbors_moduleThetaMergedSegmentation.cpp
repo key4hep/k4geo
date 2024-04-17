@@ -213,7 +213,7 @@ std::vector<std::pair<uint64_t, double>> xtalk_neighbours_ModuleThetaMerged(cons
 }
 
 // return indices of layer/module/theta fields of a give cell. This is a function to be used for debug purpose
-std::vector<int> xtalk_get_cell_position(const dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo& aSeg,
+std::vector<int> xtalk_get_cell_indices(const dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo& aSeg,
 						   const dd4hep::DDSegmentation::BitFieldCoder& aDecoder,
 						   const std::vector<std::string>& aFieldNames,
 						   uint64_t aCellId) {
@@ -234,11 +234,11 @@ std::vector<int> xtalk_get_cell_position(const dd4hep::DDSegmentation::FCCSWGrid
   int layer_id = aDecoder.get(aCellId, aFieldNames[idLayerField]);
   int module_id = aDecoder.get(aCellId, aFieldNames[idModuleField]);
   int theta_id = aDecoder.get(aCellId, aFieldNames[idThetaField]);
-  std::vector<int> cell_position;
-  cell_position.emplace_back(layer_id);
-  cell_position.emplace_back(module_id);
-  cell_position.emplace_back(theta_id);
-  return cell_position;
+  std::vector<int> cell_indices;
+  cell_indices.emplace_back(layer_id);
+  cell_indices.emplace_back(module_id);
+  cell_indices.emplace_back(theta_id);
+  return cell_indices;
 }
 
 }
