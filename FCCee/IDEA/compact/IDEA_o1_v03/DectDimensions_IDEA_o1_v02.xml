@@ -90,15 +90,11 @@
 
     <!--  Drift Chamber parameters    -->
     <!-- Changing the radius is not enough to resize the detector, please contact the experts-->
-    <!--    Parameters for the active volume (cylinder of gas)  -->
-    <constant name="DCH_inner_cyl_R"          value=" 350 * mm "   />
-    <constant name="DCH_outer_cyl_R"          value=" 2000 * mm "  />
-    <constant name="DCH_L"                    value=" 4000 * mm "  />
-    <constant name="DCH_Lhalf"                value=" DCH_L/2.0 "  />
-    <!--    Vessel cylinder surrounds the gas cylinder, eating 1mm extra in radius/z     -->
-    <constant name="DCH_vessel_thickness"     value=" 1 * mm"      />
-    <!--    Service layers fill the space from z=2m to z=2.25m  -->
-    <constant name="DCH_half_length_total"    value="2250*mm"      />
+    <constant name="DCH_inner_cyl_R_total"          value=" 349  * mm "  />
+    <constant name="DCH_outer_cyl_R_total"          value=" 2001 * mm "  />
+    <constant name="DCH_half_length_total"          value=" 2250 * mm "  />
+
+
 
     <constant name="ECalBarrel_inner_radius" value="2150*mm"/>
     <constant name="ECalBarrel_outer_radius" value="2352*mm"/>
@@ -213,7 +209,7 @@
     <constant name="CollimatorInFrontOfQD0_dr" value="16*mm"/>
 
     <constant name="tracker_region_zmax" value="DCH_half_length_total"/>
-    <constant name="tracker_region_rmax" value="DCH_outer_cyl_R"/>
+    <constant name="tracker_region_rmax" value="DCH_outer_cyl_R_total"/>
   </define>
   
   

@@ -38,9 +38,9 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
     dd4hep::rec::DCH_info * DCH_i = new dd4hep::rec::DCH_info();
     {
         // DCH outer geometry dimensions
-        DCH_i->Set_rin  ( desc.constantAsDouble("DCH_inner_cyl_R") );
-        DCH_i->Set_rout ( desc.constantAsDouble("DCH_outer_cyl_R") );
-        DCH_i->Set_lhalf( desc.constantAsDouble("DCH_Lhalf")       );
+        DCH_i->Set_rin  ( desc.constantAsDouble("DCH_gas_inner_cyl_R") );
+        DCH_i->Set_rout ( desc.constantAsDouble("DCH_gas_outer_cyl_R") );
+        DCH_i->Set_lhalf( desc.constantAsDouble("DCH_gas_Lhalf")       );
 
         // guard wires position, fix position
         DCH_i->Set_guard_rin_at_z0 ( desc.constantAsDouble("DCH_guard_inner_r_at_z0" ) );
@@ -108,6 +108,9 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
 
 
     DCH_length_t vessel_thickness = desc.constantAsDouble("DCH_vessel_thickness");
+    if( 0 > vessel_thickness )
+        throw std::runtime_error("DCH_vessel_thickness must be positive");
+
     dd4hep::Tube vessel_s(  DCH_i->rin - vessel_thickness,
                             DCH_i->rout+ vessel_thickness,
                             DCH_i->Lhalf  + vessel_thickness);

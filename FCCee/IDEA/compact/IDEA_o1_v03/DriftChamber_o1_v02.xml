@@ -4,12 +4,26 @@
   <define>
   <!--  Drift Chamber parameters    -->
   <!--      Gas and vesssel geometry parameters moved to DetDimensions file   -->
+  <!--     <constant name="DCH_inner_cyl_R_total"          value=" 349  * mm "  /> -->
+  <!--     <constant name="DCH_outer_cyl_R_total"          value=" 2001 * mm "  /> -->
+  <!--     <constant name="DCH_half_length_total"          value=" 2250 * mm "  /> -->
+
+
+  <constant name="DCH_gas_inner_cyl_R"          value=" 350 * mm "   />
+  <constant name="DCH_gas_outer_cyl_R"          value=" 2000 * mm "  />
+  <constant name="DCH_gas_Lhalf"                value=" 2000 * mm "  />
+  <!--    Vessel cylinder surrounds the gas cylinder in radius and z     -->
+  <constant name="DCH_vessel_thickness"         value=" DCH_gas_inner_cyl_R - DCH_inner_cyl_R_total"      />
+
+  <!--    Service layers fill the space from z=2m to z=2.25m  -->
+  <constant name="DCH_services_zmin"    value="DCH_gas_Lhalf + DCH_vessel_thickness"      />
+  <constant name="DCH_services_zmax"    value="DCH_half_length_total"                    />
 
   <!-- Position of guard wires   -->
   <!--    _z0 := at z=0          -->
   <!--    _zL2 := at z=DCH_Lhalf -->
-  <constant name="DCH_guard_inner_r_at_z0"         value=" DCH_inner_cyl_R + 4*mm "    />
-  <constant name="DCH_guard_outer_r_at_zL2"        value=" DCH_outer_cyl_R - 12.5*mm " />
+  <constant name="DCH_guard_inner_r_at_z0"         value=" DCH_gas_inner_cyl_R + 4*mm "    />
+  <constant name="DCH_guard_outer_r_at_zL2"        value=" DCH_gas_outer_cyl_R - 12.5*mm " />
 
   <!-- Parametrization of number of cells ands layer/superlayer   -->
   <constant name="DCH_ncell"                value=" 192 "  />
