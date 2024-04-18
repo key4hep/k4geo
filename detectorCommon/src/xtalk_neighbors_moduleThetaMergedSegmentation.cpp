@@ -55,12 +55,13 @@ std::vector<std::pair<uint64_t, double>> getNeighboursModuleThetaMerged(const dd
     std::cout << "WARNING: will return empty neighbour map" << std::endl;
     return xtalk_neighbours;
   }
-  
-  double dummy_xtalk=0;
-  double dummy_xtalk_radial=0.7e-2; // type 1
-  double dummy_xtalk_theta=0.2e-2; // type 2
-  double dummy_xtalk_diagonal=0.04e-2; // type 3
-  double dummy_xtalk_tower=0.1e-2; // type 4
+ 
+  // crosstalk coefficients
+  // also see https://indico.cern.ch/event/1368231/contributions/5904291/
+  double dummy_xtalk_radial = 0.7e-2; // type 1
+  double dummy_xtalk_theta = 0.2e-2; // type 2
+  double dummy_xtalk_diagonal = 0.04e-2; // type 3
+  double dummy_xtalk_tower = 0.1e-2; // type 4
 
   // retrieve layer/module/theta of cell under study
   int layer_id = aDecoder.get(aCellId, aFieldNames[idLayerField]);
@@ -107,6 +108,7 @@ std::vector<std::pair<uint64_t, double>> getNeighboursModuleThetaMerged(const dd
     // instead of the extrema only for a certain layer
     // this border effect is also present in the original method..
     for (int i=-1; i <= aSeg.mergedThetaCells(layer_id); i++) {
+      double dummy_xtalk = 0.0; // will be set to the crosstalk coefficient for this neighbour, either radial or diagonal
       int theta_id_neighbour = (theta_id + i) - ((theta_id + i) % (aSeg.mergedThetaCells(layer_id+deltaLayer) ? aSeg.mergedThetaCells(layer_id+deltaLayer):1) );
       // Do we need to check if the index neighbour theta is valid?
       if ((theta_id_neighbour >= theta_id && theta_id_neighbour < (theta_id + aSeg.mergedThetaCells(layer_id))) or (theta_id_neighbour < theta_id && theta_id_neighbour > (theta_id - aSeg.mergedThetaCells(layer_id+deltaLayer)))) { // crosstalk neighbour type 1
@@ -157,14 +159,12 @@ std::vector<std::pair<uint64_t, double>> getNeighboursModuleThetaMerged(const dd
       int theta_id_neighbour = (theta_id + i) - ((theta_id + i) % (aSeg.mergedThetaCells(loopLayer) ? aSeg.mergedThetaCells(loopLayer):1) );
       // check if the neighbour theta index is valid
       if (theta_id_neighbour >= theta_id && theta_id_neighbour < (theta_id + aSeg.mergedThetaCells(layer_id)) && theta_id_neighbour>=aFieldExtremes_layer[loopLayer_indice_offset][idThetaField].first && theta_id_neighbour<=aFieldExtremes_layer[loopLayer_indice_offset][idThetaField].second) { // crosstalk neighbour type 4
-        dummy_xtalk = dummy_xtalk_tower;
         aDecoder.set(cID, aSeg.fieldNameTheta(), theta_id_neighbour);
-        xtalk_neighbours.emplace_back(cID, dummy_xtalk);
+        xtalk_neighbours.emplace_back(cID, dummy_xtalk_tower);
       }
       else if (theta_id_neighbour < theta_id && theta_id_neighbour > (theta_id - aSeg.mergedThetaCells(loopLayer)) && theta_id_neighbour>=aFieldExtremes_layer[loopLayer_indice_offset][idThetaField].first && theta_id_neighbour<=aFieldExtremes_layer[loopLayer_indice_offset][idThetaField].second) { // crosstalk neighbour type 4
-        dummy_xtalk = dummy_xtalk_tower;
         aDecoder.set(cID, aSeg.fieldNameTheta(), theta_id_neighbour);
-        xtalk_neighbours.emplace_back(cID, dummy_xtalk);
+        xtalk_neighbours.emplace_back(cID, dummy_xtalk_tower);
       }
       else continue;
     }
