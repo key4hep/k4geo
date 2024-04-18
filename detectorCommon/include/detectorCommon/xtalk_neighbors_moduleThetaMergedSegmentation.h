@@ -2,30 +2,15 @@
 #define DETECTORCOMMON_XTALKMODULETHETAMERGED_H
 
 // k4geo
-#include "detectorSegmentations/FCCSWGridPhiEta_k4geo.h"
-#include "detectorSegmentations/FCCSWGridPhiTheta_k4geo.h"
 #include "detectorSegmentations/FCCSWGridModuleThetaMerged_k4geo.h"
 
 // DD4hep
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Segmentations.h"
 #include "DDSegmentation/BitFieldCoder.h"
-// Include GridPhiEta from dd4hep once eta calculation is fixed
-//#include "DDSegmentation/GridPhiEta.h"
-#include "DDSegmentation/CartesianGridXY.h"
-#include "DDSegmentation/CartesianGridXYZ.h"
-#include "DDSegmentation/PolarGridRPhi.h"
-
-// Geant
-#include "G4Step.hh"
-
-// CLHEP
-#include "CLHEP/Vector/ThreeVector.h"
-
-#include "TGeoManager.h"
 
 namespace det {
-namespace xtalk {
+namespace crosstalk {
 
  /** The crosstalk neighbours finding function for the readout with module and theta merged cells
  *  Compared to the `neighbours` function from DetUtils, it needs a reference to the segmentation class to
@@ -37,14 +22,14 @@ namespace xtalk {
  *   @param[in] aCellId ID of cell.
  *   return Vector of neighbours andcross talk coefficients.
  */
-std::vector<std::pair<uint64_t, double>> xtalk_neighbours_ModuleThetaMerged(const dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo& aSeg,
+std::vector<std::pair<uint64_t, double>> getNeighboursModuleThetaMerged(const dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo& aSeg,
                                  const dd4hep::DDSegmentation::BitFieldCoder& aDecoder,
                                  const std::vector<std::string>& aFieldNames,
                                  const std::vector<std::vector<std::pair<int, int>>>& aFieldExtremes,
                                  uint64_t aCellId);
 
 // debug: return cell layer/module/theta indices
-std::vector<int> xtalk_get_cell_indices(const dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo& aSeg,
+std::vector<int> getCellIndices(const dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo& aSeg,
                                  const dd4hep::DDSegmentation::BitFieldCoder& aDecoder,
                                  const std::vector<std::string>& aFieldNames,
                                  uint64_t aCellId);
