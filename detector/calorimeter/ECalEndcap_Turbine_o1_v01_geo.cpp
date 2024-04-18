@@ -25,6 +25,11 @@ namespace det {
     double c = (TMath::Tan(s/r) +b)/(1.-b*TMath::Tan(s/r));
     double d = c*c*r*r/(1+c*c);
     return (TMath::Sqrt(d)-zp)*TMath::Sin(bladeangle);
+    
+    // try approximating the arclength as dx.  Less accurate, but that 
+    // approximation is used in calculating the LAr gap, so maybe this 
+    // will make it more consistent?
+    //return s*TMath::Sin(bladeangle);
 
   }
 
@@ -40,17 +45,17 @@ namespace det {
     double t0 = (thickness_outer*ri-thickness_inner*ro)/(ri-ro);
     double r0 = 0.;
     dd4hep::Solid shapeBeforeSubtraction;
-    std::cout << "Building blade, ro, ri = " << ro << " " << ri << std::endl;
+    std::cout << "Building blade, ro, ri, t0 = " << ro << " " << ri << " " << t0 << std::endl;
     if (t0 < 0.) { // now we need to adjust what we call r0...
       r0 = (thickness_outer*ri-thickness_inner*ro)/(thickness_outer-thickness_inner);
       t0 = 0.;
-      dd4hep::Trd2 tmp1(t0/2.+0.01, thickness_outer, width/2., width/2., 2*(ro-ri) );
-      dd4hep::Trd2 tmp2(thickness_inner/2., thickness_inner/2., width/2., width/2., 2*(ro-ri) );
+      dd4hep::Trd2 tmp1(t0/2.+0.01, thickness_outer, width/2., width/2., ro/2. );
+      dd4hep::Trd2 tmp2(thickness_inner/2., thickness_inner/2., width/2., width/2., ro/2. );
       dd4hep::UnionSolid tmp3(tmp2, tmp1, dd4hep::Transform3D(dd4hep::RotationZYX( 0, 0, 0),dd4hep::Position(0, 0, r0)));
       shapeBeforeSubtraction = tmp3;
       lLog << MSG::INFO << "extrapolated thickness is " << t0 <<  " and r0 is " << r0 << endmsg;
     } else {
-      dd4hep::Trd2 tmp1(t0/2., thickness_outer/2., width/2., width/2., 2*(ro-ri) );
+      dd4hep::Trd2 tmp1(t0/2., thickness_outer/2., width/2., width/2., ro/2. );
       shapeBeforeSubtraction = tmp1;
     }
 
@@ -109,8 +114,8 @@ namespace det {
     
     float GlueThick = glueElem.attr<float>(_Unicode(thickness));
     float CladdingThick = claddingElem.attr<float>(_Unicode(thickness));
-    float AbsThicki = absBladeElem.attr<float>(_Unicode(thickness))-(GlueThick+CladdingThick);
-    if (AbsThicki < 0.) {
+    float AbsThickMin = absBladeElem.attr<float>(_Unicode(thickness))-(GlueThick+CladdingThick);
+    if (AbsThickMin < 0.) {
       std::cout << "Error: requested absorber thickness is negative after accounting for glue and cladding thickness" << std::endl;
     }
     float ElectrodeThick = electrodeBladeElem.attr<float>(_Unicode(thickness));
@@ -119,23 +124,29 @@ namespace det {
     bool sameNblades = genericBladeElem.attr<bool>(_Unicode(sameNblades));;
 
     bool scaleBladeThickness = absBladeElem.attr<bool>(_Unicode(scaleThickness));
-    float AbsThicko;
-    if (scaleBladeThickness) {
-      AbsThicko = AbsThicki*(ro/ri);
-    } else {
-      AbsThicko = AbsThicki;
-    }
+    float bladeThicknessScaleFactor = absBladeElem.attr<float>(_Unicode(thicknessScaleFactor));
 
     if (sameNblades) {
-      nBlades = 2*TMath::Pi()*grmin/(2*LArgapi+AbsThicki+2*(GlueThick+CladdingThick)+ElectrodeThick)*TMath::Sin(BladeAngle);
+      nBlades = 2*TMath::Pi()*grmin/(2*LArgapi+AbsThickMin+(GlueThick+CladdingThick)+ElectrodeThick)*TMath::Sin(BladeAngle);
     } else {
-      double x1 = delZ/2./TMath::Tan(BladeAngle);
-      double x2 = delZ/2./TMath::Tan(BladeAngle)+(2*LArgapi+AbsThicki+2*(GlueThick+CladdingThick)+ElectrodeThick)/TMath::Sin(BladeAngle);
+      //      double x1 = delZ/2./TMath::Tan(BladeAngle);
+      //      double x2 = delZ/2./TMath::Tan(BladeAngle)+(2*LArgapi+AbsThickMin+(GlueThick+CladdingThick)+ElectrodeThick)/TMath::Sin(BladeAngle);
+      double x1 = 0;
+      double x2 = (2*LArgapi+AbsThickMin+(GlueThick+CladdingThick)+ElectrodeThick)/TMath::Sin(BladeAngle);
       double y1 = TMath::Sqrt(ri*ri-x1*x1);
       double y2 = TMath::Sqrt(ri*ri-x2*x2);
-      double rPhi1 = ri*TMath::ATan(x1/y1);
-      double rPhi2 = ri*TMath::ATan(x2/y2);
+      //double rPhi1 = ri*TMath::ATan(y1/x1);
+      double rPhi1 = ri*TMath::Pi()/2.;
+      double rPhi2 = ri*TMath::ATan(y2/x2);
       delrPhi = TMath::Abs(rPhi1-rPhi2);
+      std::cout << "2*LArgapi = " << 2*LArgapi << std::endl;
+      std::cout << "AbsThickMin = " << AbsThickMin << std::endl;
+      std::cout << "GlueThick = " << GlueThick << std::endl;
+      std::cout << "CladdingThick = " << CladdingThick << std::endl;
+      std::cout << "ElectrodeThick = " << ElectrodeThick << std::endl;
+      std::cout << "delx " << x2 - x1 << std::endl;
+      std::cout << "ri " << ri << std::endl;
+      std::cout << "delrPhi = " << delrPhi << std::endl;
       nBlades = 2*TMath::Pi()*ri/delrPhi;
 
     }
@@ -143,18 +154,22 @@ namespace det {
     std::cout << "nBlades: " << nBlades << std::endl;
     // adjust gap thickness at inner layer
     double circ = 2*TMath::Pi()*ri;
-    double x1 = delZ/2./TMath::Tan(BladeAngle);
-    double x2 = delZ/2./TMath::Tan(BladeAngle)+(AbsThicki+2*(GlueThick+CladdingThick)+ElectrodeThick)/TMath::Sin(BladeAngle);
+    //    double x1 = delZ/2./TMath::Tan(BladeAngle);
+    // double x2 = delZ/2./TMath::Tan(BladeAngle)+(AbsThickMin+(GlueThick+CladdingThick)+ElectrodeThick)/TMath::Sin(BladeAngle);
+    double x1 = 0.;
+    double x2 =(AbsThickMin+(GlueThick+CladdingThick)+ElectrodeThick)/TMath::Sin(BladeAngle);
     double y1 = TMath::Sqrt(ri*ri-x1*x1);
     double y2 = TMath::Sqrt(ri*ri-x2*x2);
-    double rPhi1 = ri*TMath::ATan(x1/y1);
-    double rPhi2 = ri*TMath::ATan(x2/y2);    
+    //    double rPhi1 = ri*TMath::ATan(y1/x1);
+    double rPhi1 = ri*TMath::Pi()/2.;
+    double rPhi2 = ri*TMath::ATan(y2/x2);    
     delrPhiNoGap = TMath::Abs(rPhi1-rPhi2);
     double leftoverS = (circ - nBlades*delrPhiNoGap);
     double delrPhiGapOnly = leftoverS/(2*nBlades);
     std::cout << "LAr gap was " << LArgapi ;
     std::cout << "fixed s is " << delrPhiNoGap << std::endl;
     LArgapi = tForArcLength(delrPhiGapOnly, BladeAngle, delZ, ri);
+    LArgapi = delrPhiGapOnly*TMath::Sin(BladeAngle);
     std::cout << " but is now " << LArgapi << " since s = " << delrPhiGapOnly << " s for full unit cell is " << delrPhi << std::endl;
 
   
@@ -169,9 +184,17 @@ namespace det {
     std::vector<dd4hep::Volume> LArTotalLayerVols;
     std::vector<dd4hep::Volume> electrodeBladeLayerVols;
 
+    float AbsThicki = AbsThickMin;
     for (unsigned iLayer = 0; iLayer < ECalEndcapNumLayers; iLayer++) {
       float roLayer = riLayer + delr;
       std::cout << "Making layer in inner, outer radii " << riLayer << " " << roLayer << std::endl;
+      float AbsThicko;
+      if (scaleBladeThickness) {
+	AbsThicko = AbsThicki + bladeThicknessScaleFactor*((roLayer/riLayer)-1.)*AbsThicki;
+      } else {
+	AbsThicko = AbsThicki;
+      }
+      std::cout << "Inner and outer absorber thicknesses " << AbsThicki << " " << AbsThicko << std::endl;
       dd4hep::Solid absGlueCladdingLayer = buildOneBlade(AbsThicki+GlueThick+CladdingThick, AbsThicko+GlueThick+CladdingThick, xRange, roLayer, riLayer, BladeAngle, delZ );
       dd4hep::Solid absGlueLayer = buildOneBlade(AbsThicki+GlueThick, AbsThicko+GlueThick, xRange, roLayer, riLayer, BladeAngle, delZ );
       dd4hep::SubtractionSolid claddingLayer(absGlueCladdingLayer, absGlueLayer);
@@ -200,16 +223,20 @@ namespace det {
 
       // now find gap at outer layer
       circ = 2*TMath::Pi()*roLayer;
-      x1 = delZ/2./TMath::Tan(BladeAngle);
-      x2 = delZ/2./TMath::Tan(BladeAngle)+(AbsThicko+ElectrodeThick)/TMath::Sin(BladeAngle);
+      //  x1 = delZ/2./TMath::Tan(BladeAngle);
+      //x2 = delZ/2./TMath::Tan(BladeAngle)+(AbsThicko+GlueThick+CladdingThick+ElectrodeThick)/TMath::Sin(BladeAngle);
+      x1 = 0.;
+      x2 = (AbsThicko+GlueThick+CladdingThick+ElectrodeThick)/TMath::Sin(BladeAngle);
       y1 = TMath::Sqrt(roLayer*roLayer-x1*x1);
       y2 = TMath::Sqrt(roLayer*roLayer-x2*x2);
-      rPhi1 = roLayer*TMath::ATan(x1/y1);
-      rPhi2 = roLayer*TMath::ATan(x2/y2);    
+      //     rPhi1 = roLayer*TMath::ATan(x1/y1);
+      rPhi1 = roLayer*TMath::Pi()/2.;
+      rPhi2 = roLayer*TMath::ATan(y2/x2);    
       delrPhiNoGap = TMath::Abs(rPhi1-rPhi2);
       leftoverS = (circ - nBlades*delrPhiNoGap);
       delrPhiGapOnly = leftoverS/(2*nBlades);   
       double LArgapo = tForArcLength(delrPhiGapOnly, BladeAngle, delZ, roLayer);
+      LArgapo = delrPhiGapOnly*TMath::Sin(BladeAngle);
       std::cout << "Outer LAr gap is " << LArgapo << std::endl ;
       lLog << MSG::INFO << "Inner and outer thicknesses of noble liquid volume " << ElectrodeThick+LArgapi*2 <<  " " <<  ElectrodeThick+LArgapo*2 << endmsg;
     
@@ -249,6 +276,7 @@ namespace det {
     */
       riLayer = roLayer;
       LArgapi = LArgapo;
+      AbsThicki = AbsThicko;
     }
     lLog << MSG::INFO << "ECal endcap materials:  nobleLiquid: " << nobleLiquidElem.materialStr() << " absorber: " << absBladeElem.materialStr() << " electrode: " << electrodeBladeElem.materialStr() << endmsg; 
   //build cryostat
