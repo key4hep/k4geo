@@ -20,7 +20,7 @@ namespace crosstalk {
  *   @param[in] aFieldNames Names of the fields for which crosstalk neighbours are found.
  *   @param[in] aFieldExtremes Minimal and maximal values for the fields.
  *   @param[in] aCellId ID of cell.
- *   return Vector of neighbours andcross talk coefficients.
+ *   return Vector of neighbours and their crosstalk coefficients.
  */
 std::vector<std::pair<uint64_t, double>> getNeighboursModuleThetaMerged(const dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo& aSeg,
                                  const dd4hep::DDSegmentation::BitFieldCoder& aDecoder,
