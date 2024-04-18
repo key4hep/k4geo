@@ -5,27 +5,15 @@
 #include "DDG4/Geant4Mapping.h"
 #include "DDG4/Geant4VolumeManager.h"
 
-// Geant
-#include "G4NavigationHistory.hh"
-
-// ROOT
-#include "TGeoBBox.h"
-
-#ifdef HAVE_GEANT4_UNITS
-#define MM_2_CM 1.0
-#else
-#define MM_2_CM 0.1
-#endif
-
 #include <iostream>
 
 #include <unordered_set>
 
 namespace det {
-namespace xtalk {
+namespace crosstalk {
 
 // use it for module-theta merged readout (FCCSWGridModuleThetaMerged_k4geo)
-std::vector<std::pair<uint64_t, double>> xtalk_neighbours_ModuleThetaMerged(const dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo& aSeg,
+std::vector<std::pair<uint64_t, double>> getNeighboursModuleThetaMerged(const dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo& aSeg,
 						   const dd4hep::DDSegmentation::BitFieldCoder& aDecoder,
 						   const std::vector<std::string>& aFieldNames,
 						   const std::vector<std::vector<std::pair<int, int>>>& aFieldExtremes_layer,
@@ -69,10 +57,10 @@ std::vector<std::pair<uint64_t, double>> xtalk_neighbours_ModuleThetaMerged(cons
   }
   
   double dummy_xtalk=0;
-  double dummy_xtalk_radial=0.35; // type 1
-  double dummy_xtalk_theta=0.25; // type 2
-  double dummy_xtalk_diagonal=0.05; // type 3
-  double dummy_xtalk_tower=0.15; // type 4
+  double dummy_xtalk_radial=0.7e-2; // type 1
+  double dummy_xtalk_theta=0.2e-2; // type 2
+  double dummy_xtalk_diagonal=0.04e-2; // type 3
+  double dummy_xtalk_tower=0.1e-2; // type 4
 
   // retrieve layer/module/theta of cell under study
   int layer_id = aDecoder.get(aCellId, aFieldNames[idLayerField]);
@@ -121,16 +109,10 @@ std::vector<std::pair<uint64_t, double>> xtalk_neighbours_ModuleThetaMerged(cons
     for (int i=-1; i <= aSeg.mergedThetaCells(layer_id); i++) {
       int theta_id_neighbour = (theta_id + i) - ((theta_id + i) % (aSeg.mergedThetaCells(layer_id+deltaLayer) ? aSeg.mergedThetaCells(layer_id+deltaLayer):1) );
       // Do we need to check if the index neighbour theta is valid?
-      if (theta_id_neighbour >= theta_id && theta_id_neighbour < (theta_id + aSeg.mergedThetaCells(layer_id))) { // crosstalk neighbour type 1
+      if ((theta_id_neighbour >= theta_id && theta_id_neighbour < (theta_id + aSeg.mergedThetaCells(layer_id))) or (theta_id_neighbour < theta_id && theta_id_neighbour > (theta_id - aSeg.mergedThetaCells(layer_id+deltaLayer)))) { // crosstalk neighbour type 1
         dummy_xtalk = dummy_xtalk_radial;
       }
-      else if (theta_id_neighbour < theta_id && theta_id_neighbour > (theta_id - aSeg.mergedThetaCells(layer_id+deltaLayer))) { // crosstalk neighbour type 1
-        dummy_xtalk = dummy_xtalk_radial;
-      }
-      else if (theta_id_neighbour == (theta_id + aSeg.mergedThetaCells(layer_id))) { // crosstalk neighbour type 3
-        dummy_xtalk = dummy_xtalk_diagonal;
-      }
-      else if (theta_id_neighbour == (theta_id - aSeg.mergedThetaCells(layer_id+deltaLayer))) { // crosstalk neighbour type 3
+      else if ((theta_id_neighbour == (theta_id + aSeg.mergedThetaCells(layer_id))) or (theta_id_neighbour == (theta_id - aSeg.mergedThetaCells(layer_id+deltaLayer)))) { // crosstalk neighbour type 3
         dummy_xtalk = dummy_xtalk_diagonal;
       }
       else continue; 
@@ -138,7 +120,7 @@ std::vector<std::pair<uint64_t, double>> xtalk_neighbours_ModuleThetaMerged(cons
       // check if neighbour theta index is valid
       if (theta_id_neighbour < aFieldExtremes_layer[layer_indice_offset + deltaLayer][idThetaField].first || theta_id_neighbour > aFieldExtremes_layer[layer_indice_offset + deltaLayer][idThetaField].second) continue; 
       aDecoder.set(cID, aSeg.fieldNameTheta(), theta_id_neighbour);
-      xtalk_neighbours.emplace_back(std::make_pair(cID, dummy_xtalk));
+      xtalk_neighbours.emplace_back(cID, dummy_xtalk);
     }
   }
 
@@ -158,7 +140,7 @@ std::vector<std::pair<uint64_t, double>> xtalk_neighbours_ModuleThetaMerged(cons
 	) continue;
     // set theta_id of cell ID
     aDecoder[aSeg.fieldNameTheta()].set(cID, theta_id + i*aSeg.mergedThetaCells(layer_id));
-    xtalk_neighbours.emplace_back(std::make_pair(cID, dummy_xtalk_theta));
+    xtalk_neighbours.emplace_back(cID, dummy_xtalk_theta);
   }
  
   // cross talk type 4
@@ -177,12 +159,12 @@ std::vector<std::pair<uint64_t, double>> xtalk_neighbours_ModuleThetaMerged(cons
       if (theta_id_neighbour >= theta_id && theta_id_neighbour < (theta_id + aSeg.mergedThetaCells(layer_id)) && theta_id_neighbour>=aFieldExtremes_layer[loopLayer_indice_offset][idThetaField].first && theta_id_neighbour<=aFieldExtremes_layer[loopLayer_indice_offset][idThetaField].second) { // crosstalk neighbour type 4
         dummy_xtalk = dummy_xtalk_tower;
         aDecoder.set(cID, aSeg.fieldNameTheta(), theta_id_neighbour);
-        xtalk_neighbours.emplace_back(std::make_pair(cID, dummy_xtalk));
+        xtalk_neighbours.emplace_back(cID, dummy_xtalk);
       }
       else if (theta_id_neighbour < theta_id && theta_id_neighbour > (theta_id - aSeg.mergedThetaCells(loopLayer)) && theta_id_neighbour>=aFieldExtremes_layer[loopLayer_indice_offset][idThetaField].first && theta_id_neighbour<=aFieldExtremes_layer[loopLayer_indice_offset][idThetaField].second) { // crosstalk neighbour type 4
         dummy_xtalk = dummy_xtalk_tower;
         aDecoder.set(cID, aSeg.fieldNameTheta(), theta_id_neighbour);
-        xtalk_neighbours.emplace_back(std::make_pair(cID, dummy_xtalk));
+        xtalk_neighbours.emplace_back(cID, dummy_xtalk);
       }
       else continue;
     }
@@ -199,6 +181,7 @@ std::vector<std::pair<uint64_t, double>> xtalk_neighbours_ModuleThetaMerged(cons
       if (sort_neighbours[i_loop]==i.first)
       {
         IsNewNeighbour=false;
+	break;
       }
     }
     if (IsNewNeighbour)
@@ -213,7 +196,7 @@ std::vector<std::pair<uint64_t, double>> xtalk_neighbours_ModuleThetaMerged(cons
 }
 
 // return indices of layer/module/theta fields of a give cell. This is a function to be used for debug purpose
-std::vector<int> xtalk_get_cell_indices(const dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo& aSeg,
+std::vector<int> getCellIndices(const dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo& aSeg,
 						   const dd4hep::DDSegmentation::BitFieldCoder& aDecoder,
 						   const std::vector<std::string>& aFieldNames,
 						   uint64_t aCellId) {
@@ -234,11 +217,7 @@ std::vector<int> xtalk_get_cell_indices(const dd4hep::DDSegmentation::FCCSWGridM
   int layer_id = aDecoder.get(aCellId, aFieldNames[idLayerField]);
   int module_id = aDecoder.get(aCellId, aFieldNames[idModuleField]);
   int theta_id = aDecoder.get(aCellId, aFieldNames[idThetaField]);
-  std::vector<int> cell_indices;
-  cell_indices.emplace_back(layer_id);
-  cell_indices.emplace_back(module_id);
-  cell_indices.emplace_back(theta_id);
-  return cell_indices;
+  return {layer_id, module_id, theta_id};
 }
 
 }
