@@ -35,7 +35,10 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
     dd4hep::DetElement det(detName, detID);
     sens.setType("tracker");
 
+    // initialize empty DCH_info object
+    // data extension mechanism requires it to be a raw pointer
     dd4hep::rec::DCH_info * DCH_i = new dd4hep::rec::DCH_info();
+    // fill DCH_i with information from the XML file
     {
         // DCH outer geometry dimensions
         DCH_i->Set_rin  ( desc.constantAsDouble("DCH_gas_inner_cyl_R") );
@@ -59,23 +62,35 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
         DCH_i->Set_first_width  ( desc.constantAsDouble("DCH_first_width")   );
         DCH_i->Set_first_sense_r( desc.constantAsDouble("DCH_first_sense_r") );
 
-    }
-    DCH_i->BuildLayerDatabase();
-    if( DCH_i->IsDatabaseEmpty() )
-        throw std::runtime_error("Empty database");
+        bool buildLayers = detElem.attr<bool>(_Unicode(buildLayers));
+        if(buildLayers){
+            DCH_i->BuildLayerDatabase();
+            // safety check just in case something went wrong...
+            if( DCH_i->IsDatabaseEmpty() )
+                throw std::runtime_error("Empty database");
+        }
 
-    bool printExcelTable = detElem.attr<bool>(_Unicode(printExcelTable));
-    if(printExcelTable)
-        DCH_i->Show_DCH_info_database(std::cout);
+        bool printExcelTable = detElem.attr<bool>(_Unicode(printExcelTable));
+        if(printExcelTable)
+            DCH_i->Show_DCH_info_database(std::cout);
+    }
 
     auto gasElem    = detElem.child("gas");
     auto gasvolMat  = desc.material(gasElem.attr<std::string>(_Unicode(material)));
     auto gasvolVis  = desc.visAttributes(gasElem.attr<std::string>(_Unicode(vis)));
 
     auto vesselElem = detElem.child("vessel");
-    auto vesselSkinMat  = desc.material(vesselElem.attr<std::string>(_Unicode(material)));
-    auto vesselSkinVis  = desc.visAttributes(vesselElem.attr<std::string>(_Unicode(vis)));
-
+    auto vesselSkinVis  = desc.visAttributes(vesselElem.attr<std::string>(_Unicode(visSkin)));
+    auto vesselBulkVis  = desc.visAttributes(vesselElem.attr<std::string>(_Unicode(visBulk)));
+    auto vessel_mainMaterial         = desc.material(vesselElem.attr<std::string>(_Unicode(mainMaterial)));
+    auto vessel_fillmaterial_outerR  = desc.material(vesselElem.attr<std::string>(_Unicode(fillmaterial_outerR)));
+    auto vessel_fillmaterial_z       = desc.material(vesselElem.attr<std::string>(_Unicode(fillmaterial_z)));
+    DCH_length_t vessel_fillmaterial_fraction_outerR = vesselElem.attr<double>(_Unicode(fillmaterial_fraction_outerR)) ;
+    DCH_length_t vessel_fillmaterial_fraction_z      = vesselElem.attr<double>(_Unicode(fillmaterial_fraction_z)) ;
+    if( 0 > vessel_fillmaterial_fraction_outerR || 1 < vessel_fillmaterial_fraction_outerR )
+        throw std::runtime_error("vessel_fillmaterial_fraction_outerR must be between 0 and 1");
+    if( 0 > vessel_fillmaterial_fraction_z || 1 < vessel_fillmaterial_fraction_z )
+        throw std::runtime_error("vessel_fillmaterial_fraction_z must be between 0 and 1");
 
     auto wiresElem = detElem.child("wires");
     auto wiresVis  = desc.visAttributes(wiresElem.attr<std::string>(_Unicode(vis)));
@@ -91,41 +106,93 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
     auto dch_FCentralWire_material = desc.material(wiresElem.attr<std::string>(_Unicode(FCentralWire_material)) ) ;
 
     /* Geometry tree:
-     * Wall (tube) -> Gas (tube) -> Layer_1 (hyp) -> cell_1 (twisted tube)
-     *                                            -> cell_... (twisted tube)
-     *
-     *                          -> Layer_... (hyp) -> cell_1 (twisted tube)
-     *                                             -> cell_... (twisted tube)
+     * Gas (tube) -> Layer_1 (hyp) -> cell_1 (twisted tube)
+     *                             -> cell_... (twisted tube)
+     *            -> Layer_... (hyp) -> cell_1 (twisted tube)
+     *                               -> cell_... (twisted tube)
+     *            -> Inner radius vessel wall
+     *            -> Outer radius vessel wall -> fill made of foam
+     *            -> Endcap disk  vessel wall -> fill made of kapton
      *
      * Layers represent a segmentation in radius
      * Sectors represent a segmentation in phi
      * Each cell corresponds to a Detector Element
+     * Vessel wall has to be defined as 3 volumes to account for independent thickness and materials
      */
 
     DCH_length_t safety_r_interspace   = 1    * dd4hep::nm;
     DCH_length_t safety_z_interspace   = 1    * dd4hep::nm;
     DCH_length_t safety_phi_interspace = 1e-6 * dd4hep::rad;
 
+    DCH_length_t vessel_thickness_innerR  = desc.constantAsDouble("DCH_vessel_thickness_innerR");
+    DCH_length_t vessel_thickness_outerR  = desc.constantAsDouble("DCH_vessel_thickness_outerR");
+    DCH_length_t vessel_endcapdisk_zmin   = desc.constantAsDouble("DCH_vessel_disk_zmin");
+    DCH_length_t vessel_endcapdisk_zmax   = desc.constantAsDouble("DCH_vessel_disk_zmax");
 
-    DCH_length_t vessel_thickness = desc.constantAsDouble("DCH_vessel_thickness");
-    if( 0 > vessel_thickness )
-        throw std::runtime_error("DCH_vessel_thickness must be positive");
+    // if( 0 > vessel_thickness_z )
+        // throw std::runtime_error("vessel_thickness_z must be positive");
+    if( 0 > vessel_thickness_innerR )
+        throw std::runtime_error("vessel_thickness_innerR must be positive");
+    if( 0 > vessel_thickness_outerR )
+        throw std::runtime_error("vessel_thickness_outerR must be positive");
 
-    dd4hep::Tube vessel_s(  DCH_i->rin - vessel_thickness,
-                            DCH_i->rout+ vessel_thickness,
-                            DCH_i->Lhalf  + vessel_thickness);
-    dd4hep::Volume vessel_v (detName+"_vessel", vessel_s,  vesselSkinMat );
-    vessel_v.setVisAttributes( vesselSkinVis );
-    vessel_v.setRegion  ( desc, detElem.regionStr() );
-    vessel_v.setLimitSet( desc, detElem.limitsStr() );
-
-
-    dd4hep::Tube gas_s( DCH_i->rin,
-                        DCH_i->rout,
-                        DCH_i->Lhalf + 2*safety_z_interspace );
+    // // // // // // // // // // // // // // //
+    // // // // // MAIN VOLUME // // // // // //
+    // // // // // // // // // // // // // // //
+    dd4hep::Tube gas_s( DCH_i->rin   - vessel_thickness_innerR,
+                        DCH_i->rout  + vessel_thickness_outerR,
+                        DCH_i->Lhalf + vessel_endcapdisk_zmax );
     dd4hep::Volume gas_v (detName+"_gas", gas_s, gasvolMat );
     gas_v.setVisAttributes( gasvolVis );
-    vessel_v.placeVolume(gas_v);
+    gas_v.setRegion  ( desc, detElem.regionStr() );
+    gas_v.setLimitSet( desc, detElem.limitsStr() );
+
+    DCH_length_t vessel_innerR_start = DCH_i->rin   - vessel_thickness_innerR   + safety_r_interspace;
+    DCH_length_t vessel_innerR_end   = DCH_i->rin   ;
+    DCH_length_t vessel_outerR_start = DCH_i->rout;
+    DCH_length_t vessel_outerR_end   = DCH_i->rout  + vessel_thickness_outerR - safety_r_interspace;
+    DCH_length_t vessel_R_zhalf      = vessel_endcapdisk_zmax - safety_z_interspace;
+    // // // // // // // // // // // // // // //
+    // // // // //  INNER R WALL  // // // // //
+    // // // // // // // // // // // // // // //
+    dd4hep::Tube vessel_innerR_s(  vessel_innerR_start,
+                                   vessel_innerR_end  ,
+                                   vessel_R_zhalf
+                                 );
+    dd4hep::Volume vessel_innerR_v (detName+"_vessel_innerR", vessel_innerR_s,  vessel_mainMaterial );
+    vessel_innerR_v.setVisAttributes( vesselSkinVis );
+    gas_v.placeVolume(vessel_innerR_v);
+    // // // // // // // // // // // // // // //
+    // // // // //  OUTER R WALL  // // // // //
+    // // // // // // // // // // // // // // //
+    dd4hep::Tube vessel_outerR_s(  vessel_outerR_start,
+                                   vessel_outerR_end  ,
+                                   vessel_R_zhalf
+                                 );
+    dd4hep::Volume vessel_outerR_v (detName+"_vessel_outerR", vessel_outerR_s,  vessel_mainMaterial );
+    vessel_outerR_v.setVisAttributes( vesselSkinVis );
+
+    // if thickness fraction of bulk material is defined, build the bulk material
+    if(0 < vessel_fillmaterial_fraction_outerR)
+    {
+        double f = vessel_fillmaterial_fraction_outerR;
+        DCH_length_t fillmaterial_thickness = f * (vessel_outerR_end - vessel_outerR_start);
+        DCH_length_t rstart = vessel_outerR_start + 0.5*(1-f)*fillmaterial_thickness;
+        DCH_length_t rend   = vessel_outerR_end   - 0.5*(1-f)*fillmaterial_thickness;
+        dd4hep::Tube vessel_fillmat_outerR_s( rstart,
+                                              rend  ,
+                                              vessel_R_zhalf - safety_z_interspace
+                                             );
+        dd4hep::Volume vessel_fillmat_outerR_v (detName+"_vessel_fillmat_outerR",
+                                                vessel_fillmat_outerR_s,
+                                                vessel_fillmaterial_outerR
+                                                );
+        vessel_fillmat_outerR_v.setVisAttributes( vesselBulkVis );
+        vessel_outerR_v.placeVolume(vessel_fillmat_outerR_v);
+    }
+    gas_v.placeVolume(vessel_outerR_v);
+
+
 
     for(const auto& [ilayer, l]  : DCH_i->database )
     {
@@ -393,7 +460,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
 
     // Place our mother volume in the world
     dd4hep::Volume wVol = desc.pickMotherVolume(det);
-    dd4hep::PlacedVolume vessel_pv = wVol.placeVolume(vessel_v);
+    dd4hep::PlacedVolume vessel_pv = wVol.placeVolume(gas_v);
     // Associate the wall to the detector element.
     det.setPlacement(vessel_pv);
     // Assign the system ID to our mother volume

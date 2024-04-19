@@ -14,11 +14,15 @@
   <constant name="DCH_gas_Lhalf"                value=" 2000 * mm "  />
 
   <!--    Vessel cylinder surrounds the gas cylinder in radius and z     -->
-  <constant name="DCH_vessel_thickness"         value=" DCH_gas_inner_cyl_R - DCH_inner_cyl_R_total"      />
+  <!--    Inner wall and outer wall have different thickness-->
+  <constant name="DCH_vessel_thickness_innerR"           value=" DCH_gas_inner_cyl_R - DCH_inner_cyl_R_total"      />
+  <constant name="DCH_vessel_thickness_outerR"           value=" DCH_outer_cyl_R_total - DCH_gas_outer_cyl_R"      />
+  <!--    Wall that make up the base of the cylindrical vessel includes services-->
+  <!--    filling the space from z=2m to z=2.25m  -->
+  <constant name="DCH_vessel_disk_zmin"                  value=" DCH_gas_Lhalf"                                    />
+  <constant name="DCH_vessel_disk_zmax"                  value=" DCH_half_length_total"                            />
 
-  <!--    Service components fill the space from z=2m to z=2.25m  -->
-  <constant name="DCH_services_zmin"    value="DCH_gas_Lhalf + DCH_vessel_thickness"      />
-  <constant name="DCH_services_zmax"    value="DCH_half_length_total"                    />
+
 
   <!-- Position of guard wires   -->
   <!--    _z0 := at z=0          -->
@@ -60,9 +64,9 @@
 
   <limits>
     <limitset name="DCH_limits">
-      <limit name="step_length_max" particles="e[+-]"  value="1.0" unit="mm"  />
-      <limit name="step_length_max" particles="mu[+-]" value="2.0" unit="mm"  />
-      <limit name="step_length_max" particles="*"      value="1.0" unit="mm"  />
+      <limit name="step_length_max" particles="e[+-]"  value="1.0" unit="m"  />
+      <limit name="step_length_max" particles="mu[+-]" value="2.0" unit="m"  />
+      <limit name="step_length_max" particles="*"      value="1.0" unit="m"  />
     </limitset>
   </limits>
   <regions>
@@ -79,12 +83,18 @@
       readout="DCHCollection"
       region="DCH_region"
       limits="DCH_limits"
+      buildLayers="False"
       printExcelTable="True"
       >
     <!-- /detectors/detector/vessel -->
     <vessel
-        material="CarbonFibStr"
-        vis="dch_vessel_vis"
+        mainMaterial="CarbonFibStr"
+        fillmaterial_outerR="PolystyreneFoam"
+        fillmaterial_z="Kapton"
+        fillmaterial_fraction_outerR="0.67"
+        fillmaterial_fraction_z="0.99"
+        visSkin="dch_vessel_vis"
+        visBulk="dch_vessel_bulk_vis"
       >
     </vessel>
     <!-- /detectors/detector/gas -->
@@ -119,8 +129,8 @@
   </readouts>
 
 <display>
-  <vis name="dch_vessel_vis"  r="236/256" g="237/256" b="232/256" alpha="1.0"  showDaughters="true" visible="false" />
-  <vis name="dch_gas_vis"     r="227/256" g="239/256" b="217/256" alpha="0.3"  showDaughters="true" visible="true" />
+  <vis name="dch_vessel_vis"  r="236/256" g="237/256" b="232/256" alpha="0.5"  showDaughters="true" visible="true" />
+  <vis name="dch_gas_vis"     r="227/256" g="239/256" b="217/256" alpha="0.0"  showDaughters="true" visible="true" />
   <vis name="dch_aerogel_vis" r="244/256" g="177/256" b="132/256" alpha="0.5"  showDaughters="false" visible="true" />
   <vis name="dch_cooling_vis" r="254/256" g="230/256" b="151/256" alpha="0.5"  showDaughters="false" visible="true" />
   <vis name="dch_sensor_vis"  r="255/256" g="0/256"   b="0/256"   alpha="1.0"  showDaughters="false" visible="true" />
