@@ -84,7 +84,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
     auto vesselBulkVis  = desc.visAttributes(vesselElem.attr<std::string>(_Unicode(visBulk)));
     auto vessel_mainMaterial         = desc.material(vesselElem.attr<std::string>(_Unicode(mainMaterial)));
     auto vessel_fillmaterial_outerR  = desc.material(vesselElem.attr<std::string>(_Unicode(fillmaterial_outerR)));
-    auto vessel_fillmaterial_z       = desc.material(vesselElem.attr<std::string>(_Unicode(fillmaterial_z)));
+    auto vessel_fillmaterial_endcap       = desc.material(vesselElem.attr<std::string>(_Unicode(fillmaterial_z)));
     DCH_length_t vessel_fillmaterial_fraction_outerR = vesselElem.attr<double>(_Unicode(fillmaterial_fraction_outerR)) ;
     DCH_length_t vessel_fillmaterial_fraction_endcap      = vesselElem.attr<double>(_Unicode(fillmaterial_fraction_z)) ;
     if( 0 > vessel_fillmaterial_fraction_outerR || 1 < vessel_fillmaterial_fraction_outerR )
@@ -197,33 +197,33 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
     // // // // // // // // // // // // // // //
     DCH_length_t vessel_endcap_thickness = vessel_endcapdisk_zmax - vessel_endcapdisk_zmin - safety_z_interspace;
     DCH_length_t vessel_endcap_zpos = 0.5*(vessel_endcapdisk_zmax + vessel_endcapdisk_zmin);
-
-    dd4hep::Tube vessel_endcap_s(  vessel_innerR_end   + safety_r_interspace,
-                                   vessel_outerR_start - safety_r_interspace ,
+    DCH_length_t vessel_endcap_rstart = vessel_innerR_end   + safety_r_interspace;
+    DCH_length_t vessel_endcap_rend   = vessel_outerR_start - safety_r_interspace;
+    dd4hep::Tube vessel_endcap_s(  vessel_endcap_rstart,
+                                   vessel_endcap_rend,
                                    0.5*vessel_endcap_thickness
                                  );
     dd4hep::Volume vessel_endcap_v (detName+"_vessel_endcap", vessel_endcap_s,  vessel_mainMaterial );
     vessel_endcap_v.setVisAttributes( vesselSkinVis );
 
     // if thickness fraction of bulk material is defined, build the bulk material
-    // if(0 < vessel_fillmaterial_fraction_endcap)
-    // {
-    //     double f = vessel_fillmaterial_fraction_outerR;
-    //     DCH_length_t fillmaterial_thickness = f * (vessel_outerR_end - vessel_outerR_start);
-    //     DCH_length_t rstart = vessel_outerR_start + 0.5*(1-f)*fillmaterial_thickness;
-    //     DCH_length_t rend   = vessel_outerR_end   - 0.5*(1-f)*fillmaterial_thickness;
-    //     dd4hep::Tube vessel_fillmat_outerR_s( rstart,
-    //                                           rend  ,
-    //                                           vessel_R_zhalf - safety_z_interspace
-    //                                          );
-    //     dd4hep::Volume vessel_fillmat_outerR_v (detName+"_vessel_fillmat_outerR",
-    //                                             vessel_fillmat_outerR_s,
-    //                                             vessel_fillmaterial_outerR
-    //                                             );
-    //     vessel_fillmat_outerR_v.setVisAttributes( vesselBulkVis );
-    //     vessel_endcap_v.placeVolume(vessel_fillmat_outerR_v);
-    // }
-    gas_v.placeVolume(vessel_endcap_v, dd4hep::Position(0,0,vessel_endcap_zpos));
+    if(0 < vessel_fillmaterial_fraction_endcap)
+    {
+        double f = vessel_fillmaterial_fraction_endcap;
+        DCH_length_t fillmaterial_thickness = f * vessel_endcap_thickness;
+        dd4hep::Tube vessel_fillmat_endcap_s( vessel_endcap_rstart + safety_r_interspace,
+                                              vessel_endcap_rend   - safety_r_interspace  ,
+                                              0.5*fillmaterial_thickness
+                                             );
+        dd4hep::Volume vessel_fillmat_endcap_v (detName+"_vessel_fillmat_endcap",
+                                                vessel_fillmat_endcap_s,
+                                                vessel_fillmaterial_endcap
+                                                );
+        vessel_fillmat_endcap_v.setVisAttributes( vesselBulkVis );
+        vessel_endcap_v.placeVolume(vessel_fillmat_endcap_v);
+    }
+    gas_v.placeVolume(vessel_endcap_v, dd4hep::Position(0,0, vessel_endcap_zpos));
+    gas_v.placeVolume(vessel_endcap_v, dd4hep::Position(0,0,-vessel_endcap_zpos));
 
     for(const auto& [ilayer, l]  : DCH_i->database )
     {
