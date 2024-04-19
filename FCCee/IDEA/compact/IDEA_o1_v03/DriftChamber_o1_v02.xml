@@ -129,9 +129,9 @@
   </readouts>
 
 <display>
-  <vis name="dch_vessel_vis"  r="236/256" g="237/256" b="232/256" alpha="0.5"  showDaughters="true" visible="true" />
-  <vis name="dch_gas_vis"     r="227/256" g="239/256" b="217/256" alpha="0.0"  showDaughters="true" visible="true" />
-  <vis name="dch_aerogel_vis" r="244/256" g="177/256" b="132/256" alpha="0.5"  showDaughters="false" visible="true" />
+  <vis name="dch_aerogel_vis" r="236/256" g="237/256" b="232/256" alpha="0.5"  showDaughters="true" visible="true" />
+  <vis name="dch_gas_vis"     r="227/256" g="239/256" b="217/256" alpha="0.5"  showDaughters="true" visible="true" />
+  <vis name="dch_vessel_vis"  r="244/256" g="177/256" b="132/256" alpha="0.5"  showDaughters="true" visible="true" />
   <vis name="dch_cooling_vis" r="254/256" g="230/256" b="151/256" alpha="0.5"  showDaughters="false" visible="true" />
   <vis name="dch_sensor_vis"  r="255/256" g="0/256"   b="0/256"   alpha="1.0"  showDaughters="false" visible="true" />
   <vis name="dch_layer_vis"   r="255/256" g="230/256" b="153/256" alpha="1.0"  showDaughters="false" visible="true" />
