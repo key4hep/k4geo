@@ -78,7 +78,7 @@
   <detectors>
     <detector
       id="DetID_DCH"
-      name="DCH_o2"
+      name="DCH_v2"
       type="DriftChamber_o1_v02_T"
       readout="DCHCollection"
       region="DCH_region"

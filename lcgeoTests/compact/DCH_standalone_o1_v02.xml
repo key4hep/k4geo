@@ -5,7 +5,7 @@
         author="A. Tolosa Delgado, Brieuc Francois"
         url="https://indico.cern.ch/"
         status="development"
-        version="o2, v01">
+        version="o1, v02">
 	<comment>The compact format of the DCH subdetector, built from XLSX spreadsheet</comment>
   </info>
 

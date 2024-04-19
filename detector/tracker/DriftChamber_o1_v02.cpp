@@ -1,9 +1,9 @@
 //----------------------------------
-//         DCH detector o2
+//         DCH detector v2
 //----------------------------------
 
 /*!
- *  \brief     Detector constructor of DCH o2
+ *  \brief     Detector constructor of DCH v2
  *  \details   This code creates full geometry of IDEA DCH subdetector
  *  \author    Alvaro Tolosa-Delgado alvaro.tolosa.delgado@cern.ch
  *  \author    Brieuc Francois       brieuc.francois@cern.ch
