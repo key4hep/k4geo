@@ -90,9 +90,9 @@
     <vessel
         mainMaterial="CarbonFibStr"
         fillmaterial_outerR="PolystyreneFoam"
-        fillmaterial_z="PolystyreneFoam"
+        fillmaterial_endcap="PolystyreneFoam"
         fillmaterial_fraction_outerR="0.67"
-        fillmaterial_fraction_z="0.94"
+        fillmaterial_fraction_endcap="0.94"
         visSkin="dch_vessel_vis"
         visBulk="dch_vessel_bulk_vis"
       >

@@ -84,9 +84,9 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
     auto vesselBulkVis  = desc.visAttributes(vesselElem.attr<std::string>(_Unicode(visBulk)));
     auto vessel_mainMaterial         = desc.material(vesselElem.attr<std::string>(_Unicode(mainMaterial)));
     auto vessel_fillmaterial_outerR  = desc.material(vesselElem.attr<std::string>(_Unicode(fillmaterial_outerR)));
-    auto vessel_fillmaterial_endcap       = desc.material(vesselElem.attr<std::string>(_Unicode(fillmaterial_z)));
+    auto vessel_fillmaterial_endcap       = desc.material(vesselElem.attr<std::string>(_Unicode(fillmaterial_endcap)));
     DCH_length_t vessel_fillmaterial_fraction_outerR = vesselElem.attr<double>(_Unicode(fillmaterial_fraction_outerR)) ;
-    DCH_length_t vessel_fillmaterial_fraction_endcap      = vesselElem.attr<double>(_Unicode(fillmaterial_fraction_z)) ;
+    DCH_length_t vessel_fillmaterial_fraction_endcap      = vesselElem.attr<double>(_Unicode(fillmaterial_fraction_endcap)) ;
     if( 0 > vessel_fillmaterial_fraction_outerR || 1 < vessel_fillmaterial_fraction_outerR )
         throw std::runtime_error("vessel_fillmaterial_fraction_outerR must be between 0 and 1");
     if( 0 > vessel_fillmaterial_fraction_endcap || 1 < vessel_fillmaterial_fraction_endcap )
