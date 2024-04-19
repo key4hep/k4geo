@@ -61,6 +61,30 @@
   <constant name="DCH_FCentralWire_thickness"    value="0.0503*mm"   />
 
   </define>
+  <materials>
+    <material name="DCH_FCentralWireMat">
+      <comment> 0.98810714*2.7 + 0.011892860*10.49 </comment>
+      <D type="density" value="2.7926454" unit="g/cm3"/>
+      <comment> field wire center:      50 um Al (core), 0.3 um Ag (coating) </comment>
+      <fraction n="0.98810714"   ref="Al"/>
+      <fraction n="0.011892860"  ref="Ag"/>
+    </material>
+    <material name="DCH_FSideWireMat">
+      <comment> 0.98516708*2.7 + 0.014832922*10.49 </comment>
+      <D type="density" value="2.8155485" unit="g/cm3"/>
+      <comment> field wires top/bottom: 40 um Al (core), 0.3 um Ag (coating) </comment>
+      <fraction n="0.98516708"   ref="Al"/>
+      <fraction n="0.014832922"  ref="Ag"/>
+    </material>
+    <material name="DCH_SWireMat">
+      <comment> 0.97066175*19.28+0.029338250*19.3 </comment>
+      <D type="density" value="19.280587" unit="g/cm3"/>
+      <comment> sense wire:             20 um W  (core), 0.3 um Au (coating) </comment>
+      <fraction n="0.97066175"   ref="W"/>
+      <fraction n="0.029338250"  ref="Au"/>
+    </material>
+  </materials>
+
 
   <limits>
     <limitset name="DCH_limits">
@@ -83,7 +107,7 @@
       readout="DCHCollection"
       region="DCH_region"
       limits="DCH_limits"
-      buildLayers="False"
+      buildLayers="True"
       printExcelTable="True"
       >
     <!-- /detectors/detector/vessel -->
@@ -106,14 +130,14 @@
     <!-- /detectors/detector/wires -->
     <wires
         vis="dch_no_vis_nodaughters"
-        buildSenseWires="True"
-        buildFieldWires="True"
+        buildSenseWires="False"
+        buildFieldWires="False"
         SWire_thickness       ="DCH_SWire_thickness"
         FSideWire_thickness   ="DCH_FSideWire_thickness"
         FCentralWire_thickness="DCH_FCentralWire_thickness"
-        SWire_material       ="W"
-        FSideWire_material   ="Al"
-        FCentralWire_material="Al"
+        SWire_material        ="DCH_SWireMat"
+        FSideWire_material    ="DCH_FSideWireMat"
+        FCentralWire_material ="DCH_FCentralWireMat"
       >
     </wires>
     </detector>

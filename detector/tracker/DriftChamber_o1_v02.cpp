@@ -87,6 +87,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
     auto vessel_fillmaterial_endcap       = desc.material(vesselElem.attr<std::string>(_Unicode(fillmaterial_endcap)));
     DCH_length_t vessel_fillmaterial_fraction_outerR = vesselElem.attr<double>(_Unicode(fillmaterial_fraction_outerR)) ;
     DCH_length_t vessel_fillmaterial_fraction_endcap      = vesselElem.attr<double>(_Unicode(fillmaterial_fraction_endcap)) ;
+
     if( 0 > vessel_fillmaterial_fraction_outerR || 1 < vessel_fillmaterial_fraction_outerR )
         throw std::runtime_error("vessel_fillmaterial_fraction_outerR must be between 0 and 1");
     if( 0 > vessel_fillmaterial_fraction_endcap || 1 < vessel_fillmaterial_fraction_endcap )
@@ -195,7 +196,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
     // // // // // // // // // // // // // // //
     // // // // //  ENDCAP WALL   // // // // //
     // // // // // // // // // // // // // // //
-    DCH_length_t vessel_endcap_thickness = vessel_endcapdisk_zmax - vessel_endcapdisk_zmin - safety_z_interspace;
+    DCH_length_t vessel_endcap_thickness = vessel_endcapdisk_zmax - vessel_endcapdisk_zmin - 2*safety_z_interspace;
     DCH_length_t vessel_endcap_zpos = 0.5*(vessel_endcapdisk_zmax + vessel_endcapdisk_zmin);
     DCH_length_t vessel_endcap_rstart = vessel_innerR_end   + safety_r_interspace;
     DCH_length_t vessel_endcap_rend   = vessel_outerR_start - safety_r_interspace;
@@ -222,9 +223,13 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
         vessel_fillmat_endcap_v.setVisAttributes( vesselBulkVis );
         vessel_endcap_v.placeVolume(vessel_fillmat_endcap_v);
     }
+    // place endcap wall at +/- z
     gas_v.placeVolume(vessel_endcap_v, dd4hep::Position(0,0, vessel_endcap_zpos));
     gas_v.placeVolume(vessel_endcap_v, dd4hep::Position(0,0,-vessel_endcap_zpos));
 
+    // // // // // // // // // // // // // // //
+    // // // // //  DCH layers    // // // // //
+    // // // // // // // // // // // // // // //
     for(const auto& [ilayer, l]  : DCH_i->database )
     {
 
