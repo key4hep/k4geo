@@ -156,6 +156,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         int l_id    = x_layer.id();
         int mod_num = 0;
         int ring_no=0;
+	int petal_num=0;
         //Cannot handle rings in ZDiskPetalsData, calculate approximate petal quantities
         double sumZ(0.), innerR(1e100),outerR(0.);
         double sensitiveThickness(0.0);
@@ -199,6 +200,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             //We chose to do it so one phi-ring is one module. i.e. Modules have constant R
             
             for(int k=0; k<nmodules; ++k) {
+	        petal_num = nmodules ;  // store the module number of this ring for nPetals in ZDiskPetalsData
                 string m_base = _toString(l_id,"layer%d") + _toString(mod_num,"_module%d") + _toString(k,"_sensor%d");
                 
                 double x = -r*std::cos(phi);
@@ -308,7 +310,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             thisLayer.zPosition= sumZ/ring_no; //calc average z
             thisLayer.distanceSensitive   = innerR ; 
             thisLayer.lengthSensitive   = outerR-innerR;
-            thisLayer.petalNumber   = ring_no ; //Store the number of rings in petalNumber needed for tracking
+            thisLayer.petalNumber      = petal_num ;  // module number is the number of petals - needed for CED event display
+            thisLayer.sensorsPerPetal  = ring_no ; //Store the number of rings as sensors per petal - needed for tracking
 
             //this assumes there is a constant sensitive thickness even though
             //the layer could have different modules with different thicknesses
