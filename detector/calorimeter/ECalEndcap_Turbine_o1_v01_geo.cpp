@@ -46,18 +46,18 @@ namespace det {
     double r0 = 0.;
     dd4hep::Solid shapeBeforeSubtraction;
     std::cout << "Building blade, ro, ri, t0 = " << ro << " " << ri << " " << t0 << std::endl;
-    if (t0 < 0.) { // now we need to adjust what we call r0...
+    //  if (t0 < 0.) { // now we need to adjust what we call r0...
       r0 = (thickness_outer*ri-thickness_inner*ro)/(thickness_outer-thickness_inner);
       t0 = 0.;
-      dd4hep::Trd2 tmp1(t0/2.+0.01, thickness_outer, width/2., width/2., ro/2. );
+      dd4hep::Trd2 tmp1(t0/2.+0.01, thickness_outer/2., width/2., width/2., (ro-r0)/2. );
       dd4hep::Trd2 tmp2(thickness_inner/2., thickness_inner/2., width/2., width/2., ro/2. );
       dd4hep::UnionSolid tmp3(tmp2, tmp1, dd4hep::Transform3D(dd4hep::RotationZYX( 0, 0, 0),dd4hep::Position(0, 0, r0)));
       shapeBeforeSubtraction = tmp3;
       lLog << MSG::INFO << "extrapolated thickness is " << t0 <<  " and r0 is " << r0 << endmsg;
-    } else {
-      dd4hep::Trd2 tmp1(t0/2., thickness_outer/2., width/2., width/2., ro/2. );
-      shapeBeforeSubtraction = tmp1;
-    }
+      //  } else {
+      //dd4hep::Trd2 tmp1(t0/2., thickness_outer/2., width/2., width/2., ro/2. );
+      //      shapeBeforeSubtraction = tmp1;
+      // }
 
     dd4hep::Tube outerTube(ro, ro*100, delZ);
     dd4hep::Tube innerTube(0., ri, delZ);
