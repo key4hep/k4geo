@@ -102,7 +102,7 @@
 	<material name="Steel235" />
       </supportTube>
       <turbineBlade name="turbineBlade" angle="BladeAngle" decreaseAnglePerSubCylinder="false"  sameNblades="false">
-	<absorberBlade name="absorberBlade" thickness="AbsorberBladeThickness" scaleThickness="true" thicknessScaleFactor="0.99" sensitive="true">
+	<absorberBlade name="absorberBlade" thickness="AbsorberBladeThickness" scaleThickness="true" thicknessScaleFactor="1.09" sensitive="true">
 	  <material name="Lead" />
 	</absorberBlade>
 	<glue thickness="EMEC_glue_thickness" sensitive="true">
