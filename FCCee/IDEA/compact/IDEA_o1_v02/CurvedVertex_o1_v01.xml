@@ -1,15 +1,11 @@
-<!-- Changes :
-   o1_v01 : First version for IDEA in k4geo, corresponding to state described in MDI+vertex mid-term report first draft (14.07.2023)
--->
-
 <lccdd>
-    <info name="Vertex_IDEA_o1_v02"
-        title="IDEA vertex detector: Started with CLD vertex detector design from FCCDetectors, but adapted to IDEA vertex detector and extended functionality of detector builders"
-        author="Niloufar Alipour Tehrani (adapting original CLD version), Armin Ilg (adapting and extending to IDEA)"
+    <info name="CurvedVertex_IDEA_o1_v02"
+        title="Ultra-light vertex detector concept for FCC-ee using stitched wafer-scale MAPS"
+        author="Armin Ilg"
         url="no"
         status="development"
         version="o1_v02"> 
-        <comment>A Vertex Detector for the FCC-ee IDEA detector concept, based on the engineered design by Fabrizio Palla and Filippo Bosi (INFN Pisa)</comment>
+        <comment>An ultra-light vertex detector for the FCC-ee IDEA detector concept</comment>
     </info>
     <comment>Vertex detector</comment>
     <detectors>
