@@ -18,6 +18,59 @@
     </comment>
   </info>
 
+  <materials>
+    <material name="FluorinatedPolymer">
+      <D value="1.43" unit="g/cm3"/>
+      <composite n="2" ref="C"/>
+      <composite n="2" ref="F"/>
+      <composite n="2" ref="H"/>
+      <property name="RINDEX" ref="RI_FluoPoly"/>
+    </material>
+    <material name="PMMA">
+      <D value="1.19" unit="g/cm3"/>
+      <composite n="5" ref="C"/>
+      <composite n="8" ref="H"/>
+      <composite n="2" ref="O"/>
+      <property name="RINDEX" ref="RI_PMMA"/>
+      <property name="ABSLENGTH" ref="AbsLen_PMMA"/>
+    </material>
+    <material name="PolyvinylChloride">
+      <D value="1.3" unit="g/cm3"/>
+      <fraction n="0.04838" ref="H"/>
+      <fraction n="0.38436" ref="C"/>
+      <fraction n="0.56726" ref="Cl"/>
+    </material>
+
+    <material name="DR_Air">
+      <D type="density" unit="g/cm3" value="0.0012"/>
+      <fraction n="0.754" ref="N"/>
+      <fraction n="0.234" ref="O"/>
+      <fraction n="0.012" ref="Ar"/>
+      <property name="RINDEX" ref="RI_Air"/>
+    </material>
+    <material name="DR_Polystyrene">
+      <D value="1.032" unit="g/cm3"/>
+      <composite n="19" ref="C"/>
+      <composite n="21" ref="H"/>
+      <property name="RINDEX" ref="RI_PS"/>
+      <property name="ABSLENGTH" ref="AbsLen_PS"/>
+      <property name="SCINTILLATIONCOMPONENT1" ref="scintFast_PS"/>
+      <constant name="SCINTILLATIONYIELD" value="13.9/keV"/>
+      <constant name="SCINTILLATIONTIMECONSTANT1" value="2.8*ns"/>
+      <constant name="RESOLUTIONSCALE" value="1."/>
+      <constant name="BirksConstant" value="0.126*mm/MeV"/> <!-- Add Birks const -->
+    </material>
+    <material name="DR_PyrexGlass">
+      <D type="density" value="2.23" unit="g/cm3"/>
+      <fraction n="0.806" ref="SiliconOxide"/>
+      <fraction n="0.130" ref="BoronOxide"/>
+      <fraction n="0.040" ref="SodiumOxide"/>
+      <fraction n="0.023" ref="AluminumOxide"/>
+      <property name="RINDEX" ref="RI_Glass"/>
+      <property name="ABSLENGTH" ref="Abslength_Glass"/>
+    </material>
+  </materials>
+  
   <!-- For optics -->
   <properties>
     <matrix name="RI_Air" coldim="2" values="
@@ -539,16 +592,16 @@
       <sensitive type="DRcaloSiPMSD"/>
       <sipmDim height="0.3*mm" material="PolyvinylChloride" vis="DRCGenericVis">
         <sipmGlass material="DR_PyrexGlass" vis="DRCGlassVis"/>
-        <sipmWafer height="0.01*mm" material="Silicon" vis="DRCWaferVis" sensitive="true"/>
+        <sipmWafer height="0.3*mm" material="Silicon" vis="DRCWaferVis" sensitive="true"/> <!-- Original height : 0.01 mm, change to 0.3 mm, same as sipmDim (to reduce memory)-->
       </sipmDim>
       <structure>
         <dim distance="1.5*mm" dx="1.2*mm"/>
         <cladC name="cladC" rmax="0.5*mm" rmin="0.49*mm" material="FluorinatedPolymer" vis="DRCCladVis"/>
         <coreC name="coreC" rmax="0.5*mm" rmin="0.49*mm" material="PMMA" vis="DRCCerenVis"/> <!--also cladS-->
         <coreS name="coreS" rmax="0.5*mm" rmin="0.485*mm" material="DR_Polystyrene" vis="DRCScintVis"/>
-        <hole name="hole" rmax="0.5*mm" material="DR_Air" vis="DRCGenericVis" gap="1"/>
+        <hole name="hole" rmax="0.5*mm" material="DR_Air" vis="DRCGenericVis" gap="0"/> <!-- Set gap = 0 to remove air holes in DRC tower (to reduce memory) -->
         <dark name="dark" rmax="0.5*mm" material="PolyvinylChloride" vis="DRCGenericVis"/>
-        <mirror name="mirror" rmax="0.5*mm" height="0.01*mm" material="Aluminum" vis="DRCGlassVis"/>
+        <mirror name="mirror" rmax="0.5*mm" height="0.*mm" material="Aluminum" vis="DRCGlassVis"/> <!-- original height 0.01mm, set it to 0 to remove mirror (to reduce memory) -->
       </structure>
       <barrel height="FiberDRCalo_barrel_height" rmin="FiberDRCalo_barrel_inner_radius" nphi="FiberDRCalo_barrel_nphi" theta="0.0" start="0" material="Copper" vis="DRCTowerVis">
         <deltatheta deltatheta="0.019634954"/>

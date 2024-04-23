@@ -31,13 +31,18 @@ namespace ddDRcalo {
 
   private:
     void implementTowers(xml_comp_t& x_theta, dd4hep::DDSegmentation::DRparamBase_k4geo* param);
+    // void placeAssembly(xml_comp_t& x_theta, xml_comp_t& x_wafer, dd4hep::DDSegmentation::DRparamBase_k4geo* param,
+    //                    dd4hep::Trap& assemblyEnvelop, dd4hep::Volume& towerVol, dd4hep::Volume& sipmLayerVol, dd4hep::Volume& sipmWaferVol,
+    //                    int towerNo, int nPhi, bool isRHS=true); // Remove SiPMLayer
     void placeAssembly(xml_comp_t& x_theta, xml_comp_t& x_wafer, dd4hep::DDSegmentation::DRparamBase_k4geo* param,
-                       dd4hep::Trap& assemblyEnvelop, dd4hep::Volume& towerVol, dd4hep::Volume& sipmLayerVol, dd4hep::Volume& sipmWaferVol,
+                       dd4hep::Trap& assemblyEnvelop, dd4hep::Volume& towerVol, dd4hep::Volume& sipmWaferVol,
                        int towerNo, int nPhi, bool isRHS=true);
     void implementFibers(xml_comp_t& x_theta, dd4hep::Volume& towerVol, dd4hep::Trap& trap, dd4hep::DDSegmentation::DRparamBase_k4geo* param, int towerNo);
+    // void implementFiber(dd4hep::Volume& towerVol, dd4hep::Trap& trap, dd4hep::Position pos, int col, int row,
+    //                     dd4hep::Tube& fiberEnv, dd4hep::Tube& fiber, dd4hep::Tube& fiberC, dd4hep::Tube& fiberS,
+    //                     dd4hep::Volume& capC, dd4hep::Volume& capS); // Remove cap
     void implementFiber(dd4hep::Volume& towerVol, dd4hep::Trap& trap, dd4hep::Position pos, int col, int row,
-                        dd4hep::Tube& fiberEnv, dd4hep::Tube& fiber, dd4hep::Tube& fiberC, dd4hep::Tube& fiberS,
-                        dd4hep::Volume& capC, dd4hep::Volume& capS);
+                        dd4hep::Tube& fiberEnv, dd4hep::Tube& fiber, dd4hep::Tube& fiberC, dd4hep::Tube& fiberS);
     void implementSipms(dd4hep::Volume& sipmLayerVol, dd4hep::Trap& trap);
     double calculateDistAtZ(TGeoTrap* rootTrap, dd4hep::Position& pos, double* norm, double z);
     float calculateFiberLen(TGeoTrap* rootTrap, dd4hep::Position& pos, double* norm, double z1, double diff, double towerHeight);

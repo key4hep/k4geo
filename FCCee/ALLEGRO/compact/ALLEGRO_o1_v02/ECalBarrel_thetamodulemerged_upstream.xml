@@ -133,7 +133,9 @@
         <readout thickness="readout_thickness" sensitive="false">
           <material name="PCB"/>
         </readout>
-        <layers> <!-- pcb electrode segmentation in the radial direction -->
+        <layers>
+           <!-- pcb electrode segmentation, rescaled to the total radial thickness of the active ECAL volume -->
+           <!-- This is NOT the radial thickness of each layer!!! -->
            <layer thickness="1.5*cm" repeat="1"/>
            <layer thickness="3.5*cm" repeat="11"/>
         </layers>

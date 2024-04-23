@@ -64,11 +64,12 @@ void ddDRcalo::DRconstructor::implementTowers(xml_comp_t& x_theta, dd4hep::DDSeg
 
     xml_comp_t x_wafer ( fX_sipmDim.child( _Unicode(sipmWafer) ) );
 
-    // Assume the top surface is nearly rectangular shape
-    dd4hep::Trap sipmLayer( (param->GetSipmHeight()-x_wafer.height())/2., 0., 0., param->GetH2(), param->GetBl2(), param->GetTl2(), 0.,
-                            param->GetH2(), param->GetBl2(), param->GetTl2(), 0. );
-    dd4hep::Volume sipmLayerVol( "sipmLayer", sipmLayer, fDescription->material(fX_sipmDim.materialStr()) );
-    if (fVis) sipmLayerVol.setVisAttributes(*fDescription, fX_sipmDim.visStr());
+    // // Remove sipmLayer
+    // // Assume the top surface is nearly rectangular shape
+    // dd4hep::Trap sipmLayer( (param->GetSipmHeight()-x_wafer.height())/2., 0., 0., param->GetH2(), param->GetBl2(), param->GetTl2(), 0.,
+    //                         param->GetH2(), param->GetBl2(), param->GetTl2(), 0. );
+    // dd4hep::Volume sipmLayerVol( "sipmLayer", sipmLayer, fDescription->material(fX_sipmDim.materialStr()) );
+    // if (fVis) sipmLayerVol.setVisAttributes(*fDescription, fX_sipmDim.visStr());
 
     // Photosensitive wafer
     dd4hep::Trap sipmWaferBox( x_wafer.height()/2., 0., 0., param->GetH2(), param->GetBl2(), param->GetTl2(), 0.,
@@ -81,13 +82,17 @@ void ddDRcalo::DRconstructor::implementTowers(xml_comp_t& x_theta, dd4hep::DDSeg
       sipmWaferVol.setSensitiveDetector(*fSensDet);
     }
 
-    implementSipms(sipmLayerVol, tower);
+    // Remove sipmLayer, clear fFiberCoords instead of implementSipms()
+    // implementSipms(sipmLayerVol, tower);
+    fFiberCoords.clear();
 
     for (int nPhi = 0; nPhi < x_theta.nphi(); nPhi++) {
-      placeAssembly(x_theta,x_wafer,param,assemblyEnvelop,towerVol,sipmLayerVol,sipmWaferVol,towerNo,nPhi);
+      // placeAssembly(x_theta,x_wafer,param,assemblyEnvelop,towerVol,sipmLayerVol,sipmWaferVol,towerNo,nPhi);
+      placeAssembly(x_theta,x_wafer,param,assemblyEnvelop,towerVol,sipmWaferVol,towerNo,nPhi);
 
       if ( fX_det.reflect() )
-        placeAssembly(x_theta,x_wafer,param,assemblyEnvelop,towerVol,sipmLayerVol,sipmWaferVol,towerNo,nPhi,false);
+        // placeAssembly(x_theta,x_wafer,param,assemblyEnvelop,towerVol,sipmLayerVol,sipmWaferVol,towerNo,nPhi,false);
+        placeAssembly(x_theta,x_wafer,param,assemblyEnvelop,towerVol,sipmWaferVol,towerNo,nPhi,false);
     }
   }
 
@@ -95,8 +100,11 @@ void ddDRcalo::DRconstructor::implementTowers(xml_comp_t& x_theta, dd4hep::DDSeg
   param->SetTotTowerNum( towerNo - x_theta.start() );
 }
 
+// void ddDRcalo::DRconstructor::placeAssembly(xml_comp_t& x_theta, xml_comp_t& x_wafer, dd4hep::DDSegmentation::DRparamBase_k4geo* param,
+//                                             dd4hep::Trap& assemblyEnvelop, dd4hep::Volume& towerVol, dd4hep::Volume& sipmLayerVol, dd4hep::Volume& sipmWaferVol,
+//                                             int towerNo, int nPhi, bool isRHS) {
 void ddDRcalo::DRconstructor::placeAssembly(xml_comp_t& x_theta, xml_comp_t& x_wafer, dd4hep::DDSegmentation::DRparamBase_k4geo* param,
-                                            dd4hep::Trap& assemblyEnvelop, dd4hep::Volume& towerVol, dd4hep::Volume& sipmLayerVol, dd4hep::Volume& sipmWaferVol,
+                                            dd4hep::Trap& assemblyEnvelop, dd4hep::Volume& towerVol, dd4hep::Volume& sipmWaferVol,
                                             int towerNo, int nPhi, bool isRHS) {
   param->SetIsRHS(isRHS);
   int towerNoLR = param->signedTowerNo(towerNo);
@@ -109,7 +117,8 @@ void ddDRcalo::DRconstructor::placeAssembly(xml_comp_t& x_theta, xml_comp_t& x_w
 
   assemblyEnvelopVol.placeVolume( towerVol, towerId32, dd4hep::Position(0.,0.,-param->GetSipmHeight()/2.) );
 
-  assemblyEnvelopVol.placeVolume( sipmLayerVol, towerId32, dd4hep::Position(0.,0.,(x_theta.height()-x_wafer.height())/2.) );
+  // Remove sipmLayer
+  // assemblyEnvelopVol.placeVolume( sipmLayerVol, towerId32, dd4hep::Position(0.,0.,(x_theta.height()-x_wafer.height())/2.) );
 
   dd4hep::PlacedVolume sipmWaferPhys = assemblyEnvelopVol.placeVolume( sipmWaferVol, towerId32, dd4hep::Position(0.,0.,(x_theta.height()+param->GetSipmHeight()-x_wafer.height())/2.) );
   sipmWaferPhys.addPhysVolID("eta", towerNoLR);
@@ -125,12 +134,13 @@ void ddDRcalo::DRconstructor::implementFibers(xml_comp_t& x_theta, dd4hep::Volum
   dd4hep::Tube fiberC = dd4hep::Tube(0.,fX_coreC.rmin(),x_theta.height()/2.-fX_mirror.height()/2.);
   dd4hep::Tube fiberS = dd4hep::Tube(0.,fX_coreS.rmin(),x_theta.height()/2.-fX_mirror.height()/2.);
 
-  dd4hep::Tube cap = dd4hep::Tube(0.,fX_coreC.rmax(),fX_mirror.height()/2.);
-  dd4hep::Volume capC = dd4hep::Volume("capC", cap, fDescription->material(fX_mirror.materialStr()));
-  dd4hep::Volume capS = dd4hep::Volume("capS", cap, fDescription->material(fX_dark.materialStr()));
-  dd4hep::SkinSurface(*fDescription, *fDetElement, "MirrorSurf_Tower"+std::to_string(towerNo), *fMirrorSurf, capC);
-  if (fVis) capC.setVisAttributes(*fDescription, fX_mirror.visStr());
-  if (fVis) capS.setVisAttributes(*fDescription, fX_dark.visStr());
+  // // Remove cap (mirror or black paint in front of the fiber)
+  // dd4hep::Tube cap = dd4hep::Tube(0.,fX_coreC.rmax(),fX_mirror.height()/2.);
+  // dd4hep::Volume capC = dd4hep::Volume("capC", cap, fDescription->material(fX_mirror.materialStr()));
+  // dd4hep::Volume capS = dd4hep::Volume("capS", cap, fDescription->material(fX_dark.materialStr()));
+  // dd4hep::SkinSurface(*fDescription, *fDetElement, "MirrorSurf_Tower"+std::to_string(towerNo), *fMirrorSurf, capC);
+  // if (fVis) capC.setVisAttributes(*fDescription, fX_mirror.visStr());
+  // if (fVis) capS.setVisAttributes(*fDescription, fX_dark.visStr());
 
   auto rootTrap = trap.access();
 
@@ -157,10 +167,16 @@ void ddDRcalo::DRconstructor::implementFibers(xml_comp_t& x_theta, dd4hep::Volum
   if (fVis)
     unitBoxVol.setVisAttributes(*fDescription, x_theta.visStr());
 
-  implementFiber(unitBoxVol, trap, dd4hep::Position(-gridSize/2.,-gridSize/2.,0.), cmin, rmin, fiberEnv, fiber, fiberC, fiberS, capC, capS);
-  implementFiber(unitBoxVol, trap, dd4hep::Position(gridSize/2.,-gridSize/2.,0.), cmin+1, rmin, fiberEnv, fiber, fiberC, fiberS, capC, capS);
-  implementFiber(unitBoxVol, trap, dd4hep::Position(-gridSize/2.,gridSize/2.,0.), cmin, rmin+1, fiberEnv, fiber, fiberC, fiberS, capC, capS);
-  implementFiber(unitBoxVol, trap, dd4hep::Position(gridSize/2.,gridSize/2.,0.), cmin+1, rmin+1, fiberEnv, fiber, fiberC, fiberS, capC, capS);
+  // // Remove cap (mirror or black paint in front of the fiber)
+  // implementFiber(unitBoxVol, trap, dd4hep::Position(-gridSize/2.,-gridSize/2.,0.), cmin, rmin, fiberEnv, fiber, fiberC, fiberS, capC, capS);
+  // implementFiber(unitBoxVol, trap, dd4hep::Position(gridSize/2.,-gridSize/2.,0.), cmin+1, rmin, fiberEnv, fiber, fiberC, fiberS, capC, capS);
+  // implementFiber(unitBoxVol, trap, dd4hep::Position(-gridSize/2.,gridSize/2.,0.), cmin, rmin+1, fiberEnv, fiber, fiberC, fiberS, capC, capS);
+  // implementFiber(unitBoxVol, trap, dd4hep::Position(gridSize/2.,gridSize/2.,0.), cmin+1, rmin+1, fiberEnv, fiber, fiberC, fiberS, capC, capS);
+
+  implementFiber(unitBoxVol, trap, dd4hep::Position(-gridSize/2.,-gridSize/2.,0.), cmin, rmin, fiberEnv, fiber, fiberC, fiberS);
+  implementFiber(unitBoxVol, trap, dd4hep::Position(gridSize/2.,-gridSize/2.,0.), cmin+1, rmin, fiberEnv, fiber, fiberC, fiberS);
+  implementFiber(unitBoxVol, trap, dd4hep::Position(-gridSize/2.,gridSize/2.,0.), cmin, rmin+1, fiberEnv, fiber, fiberC, fiberS);
+  implementFiber(unitBoxVol, trap, dd4hep::Position(gridSize/2.,gridSize/2.,0.), cmin+1, rmin+1, fiberEnv, fiber, fiberC, fiberS);
 
   bool isEvenRow = false, isEvenCol = false;
   placeUnitBox(fullBoxVol,unitBoxVol,rmin,rmax,cmin,cmax,isEvenRow,isEvenCol);
@@ -181,7 +197,8 @@ void ddDRcalo::DRconstructor::implementFibers(xml_comp_t& x_theta, dd4hep::Volum
           bool check = fullBox.access()->Contains(pos_);
 
           if (check) {
-            implementFiber(fullBoxVol, trap, pos, column, row, fiberEnv, fiber, fiberC, fiberS, capC, capS);
+            // implementFiber(fullBoxVol, trap, pos, column, row, fiberEnv, fiber, fiberC, fiberS, capC, capS); // Remove cap (mirror or black paint in front of the fiber)
+            implementFiber(fullBoxVol, trap, pos, column, row, fiberEnv, fiber, fiberC, fiberS);
             fFiberCoords.push_back( std::make_pair(column,row) );
           }
         }
@@ -220,7 +237,8 @@ void ddDRcalo::DRconstructor::implementFibers(xml_comp_t& x_theta, dd4hep::Volum
         dd4hep::Tube shortFiberC = dd4hep::Tube(0.,fX_coreC.rmin(),fiberLen/2.-fX_mirror.height()/2.);
         dd4hep::Tube shortFiberS = dd4hep::Tube(0.,fX_coreS.rmin(),fiberLen/2.-fX_mirror.height()/2.);
 
-        implementFiber(towerVol, trap, centerPos, column, row, shortFiberEnv, shortFiber, shortFiberC, shortFiberS, capC, capS);
+        // implementFiber(towerVol, trap, centerPos, column, row, shortFiberEnv, shortFiber, shortFiberC, shortFiberS, capC, capS); // Remove cap (mirror or black paint in front of the fiber)
+        implementFiber(towerVol, trap, centerPos, column, row, shortFiberEnv, shortFiber, shortFiberC, shortFiberS);
         fFiberCoords.push_back( std::make_pair(column,row) );
         }
       }
@@ -228,10 +246,13 @@ void ddDRcalo::DRconstructor::implementFibers(xml_comp_t& x_theta, dd4hep::Volum
   }
 }
 
+// Remove cap (mirror or black paint in front of the fiber)
+// void ddDRcalo::DRconstructor::implementFiber(dd4hep::Volume& towerVol, dd4hep::Trap& trap, dd4hep::Position pos, int col, int row,
+//                                              dd4hep::Tube& fiberEnv, dd4hep::Tube& fiber, dd4hep::Tube& fiberC, dd4hep::Tube& fiberS,
+//                                              dd4hep::Volume& capC, dd4hep::Volume& capS) {
 void ddDRcalo::DRconstructor::implementFiber(dd4hep::Volume& towerVol, dd4hep::Trap& trap, dd4hep::Position pos, int col, int row,
-                                             dd4hep::Tube& fiberEnv, dd4hep::Tube& fiber, dd4hep::Tube& fiberC, dd4hep::Tube& fiberS,
-                                             dd4hep::Volume& capC, dd4hep::Volume& capS) {
-  // punch air hole
+                                             dd4hep::Tube& fiberEnv, dd4hep::Tube& fiber, dd4hep::Tube& fiberC, dd4hep::Tube& fiberS) {
+  // punch air hole // -> Can remove this from XML
   if ( fX_hole.gap() && pos.z() > TGeoShape::Tolerance() ) {
     dd4hep::Tube airHoleTube = dd4hep::Tube(0.,fX_cladC.rmax(),pos.z());
     dd4hep::Position airPos( pos.x(), pos.y(), -fiberEnv.dZ() );
@@ -251,7 +272,7 @@ void ddDRcalo::DRconstructor::implementFiber(dd4hep::Volume& towerVol, dd4hep::T
     dd4hep::Volume coreVol("coreC", fiberC, fDescription->material(fX_coreC.materialStr()));
     if (fVis) coreVol.setVisAttributes(*fDescription, fX_coreC.visStr());
     cladVol.placeVolume( coreVol );
-    fiberEnvVol.placeVolume( capC, dd4hep::Position(0.,0.,fX_mirror.height()/2.-fiberEnv.dZ()) );
+    // fiberEnvVol.placeVolume( capC, dd4hep::Position(0.,0.,fX_mirror.height()/2.-fiberEnv.dZ()) ); // Remove cap (mirror or black paint in front of the fiber)
 
     coreVol.setRegion(*fDescription, fX_det.regionStr());
     cladVol.setRegion(*fDescription, fX_det.regionStr());
@@ -263,13 +284,14 @@ void ddDRcalo::DRconstructor::implementFiber(dd4hep::Volume& towerVol, dd4hep::T
     dd4hep::Volume coreVol("coreS", fiberS, fDescription->material(fX_coreS.materialStr()));
     if (fVis) coreVol.setVisAttributes(*fDescription, fX_coreS.visStr());
     cladVol.placeVolume( coreVol );
-    fiberEnvVol.placeVolume( capS, dd4hep::Position(0.,0.,fX_mirror.height()/2.-fiberEnv.dZ()) );
+    // fiberEnvVol.placeVolume( capS, dd4hep::Position(0.,0.,fX_mirror.height()/2.-fiberEnv.dZ()) ); Remove cap (mirror or black paint in front of the fiber)
 
     coreVol.setRegion(*fDescription, fX_det.regionStr());
     cladVol.setRegion(*fDescription, fX_det.regionStr());
   }
 }
 
+// Not used after removing sipmLayer
 void ddDRcalo::DRconstructor::implementSipms(dd4hep::Volume& sipmLayerVol, dd4hep::Trap& trap) {
   xml_comp_t x_glass ( fX_sipmDim.child( _Unicode(sipmGlass) ) );
   xml_comp_t x_wafer ( fX_sipmDim.child( _Unicode(sipmWafer) ) );

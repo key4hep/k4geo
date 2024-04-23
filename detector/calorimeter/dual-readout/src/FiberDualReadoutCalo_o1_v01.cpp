@@ -10,7 +10,12 @@
 #include "DD4hep/Detector.h"
 
 namespace ddDRcalo {
-  static dd4hep::Ref_t create_detector( dd4hep::Detector &description, xml_h xmlElement, dd4hep::SensitiveDetector sensDet ) {
+  static dd4hep::Ref_t create_detector( dd4hep::Detector &description, xml_h xmlElement, dd4hep::SensitiveDetector sensDet ) {    
+    // For Debug
+    // std::cout << __PRETTY_FUNCTION__  << std::endl;
+    // std::cout << "Here is my DRCalo"  << std::endl;
+    // std::cout << " and this is the sensitive detector: " << &sensDet  << std::endl;
+
     // Get the detector description from the xml-tree
     xml_det_t    x_det = xmlElement;
     std::string  name  = x_det.nameStr();
