@@ -53,6 +53,9 @@
     <constant name="DetID_SiWrapper_Barrel"       value=" 23"/>
     <constant name="DetID_SiWrapper_Disks"       value=" 24"/>
 
+    <!-- Fiber dual-readout calorimeter DetID -->
+    <constant name="DetID_FiberDRCalo"             value=" 25"/>
+
         <!-- BPW: Beam Pipe Width -->
     <constant name="BPWWall"       value="0.35*mm" />
     <constant name="BPWCool"       value="1.0*mm" />
@@ -212,6 +215,15 @@
 
     <constant name="tracker_region_zmax" value="DCH_half_length"/>
     <constant name="tracker_region_rmax" value="DCH_outer_radius"/>
+
+    <!-- Fiber dual-readout calorimeter tower dim-->
+    <constant name="FiberDRCalo_barrel_height"       value="2.*m"/>
+    <constant name="FiberDRCalo_barrel_inner_radius" value="2.5*m"/>
+    <constant name="FiberDRCalo_barrel_nphi"         value="144"/>
+    <constant name="FiberDRCalo_endcap_height"       value="2.*m"/>
+    <constant name="FiberDRCalo_endcap_inner_radius" value="2.5*m"/>
+    <constant name="FiberDRCalo_endcap_nphi"         value="144"/>
+
   </define>
   
   
@@ -228,6 +240,8 @@
 
     <region name="SiWrapperBRegion"/>
     <region name="SiWrapperDRegion"/>
+
+    <region name="FastSimOpFiberRegion"/>
   </regions>
 
 
@@ -260,6 +274,15 @@
     <vis name="GlueVis"       alpha="1.0" r="1.0"     g="0.75"  b="0.79"  showDaughters="true"  visible="true"/>
     <vis name="RohacellVis"   alpha="1.0" r="1.0"     g="1.0"   b="1.0"   showDaughters="true"  visible="true"/>
     <vis name="AirVis"        alpha="0.1" r="0.1"     g="0.1"   b="1.0"   showDaughters="false" visible="true"/>
+<vis name="DRCInvisible" showDaughters="false" visible="false"/> <!-- For fiber-based dual-readout calorimeter -->
+    <vis name="DRCTowerVis" alpha="1." r="0.7" g="0.4" b="0.1" showDaughters="false" visible="true"/>
+    <vis name="DRCCerenVis" alpha="0.5" r="0.3" g="0.6" b="0.9" showDaughters="false" visible="false"/>
+    <vis name="DRCScintVis" alpha="0.5" r="1.0" g="0.8" b="0.1" showDaughters="false" visible="false"/>
+    <vis name="DRCCladVis" alpha="0.5" r="0.0" g="0.5" b="0.5" showDaughters="false" visible="false"/>
+    <vis name="DRCGenericVis" alpha="0.8" r="0.5" g="0.5" b="0.5" showDaughters="false" visible="false"/>
+    <vis name="DRCGlassVis" alpha="0.5" r="0.0" g="0.1" b="0.9" showDaughters="false" visible="false"/>
+    <vis name="DRCWaferVis" alpha="1." r="0.0" g="0.9" b="0.2" showDaughters="false" visible="false"/>
+    <vis name="DRCfilterVis" alpha="0.5" r="0.9" g="0.8" b="0.1" showDaughters="false" visible="false"/>
   </display>
 
 </lccdd>
