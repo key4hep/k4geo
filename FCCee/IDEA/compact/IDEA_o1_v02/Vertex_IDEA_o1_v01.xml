@@ -25,8 +25,9 @@
                 <position x="0" y="0" z="VTXOB_half_length/2." />
             </shape>
             <comment>Vertex Assembly</comment>
-            <composite name="VTXB"/>
+            <composite name="VTXIB"/>
             <!-- <composite name="VTXIBSupport"/> -->
+            <composite name="VTXOB"/>
             <composite name="VTXD"/>
         </detector>
     </detectors>
@@ -316,26 +317,30 @@
 
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
-        <readout name="VTXBCollection">
-            <id>${GlobalTrackerReadoutID}</id>
+        <readout name="VTXIBCollection">
+            <segmentation type="CartesianGridYZ" grid_size_y="0.025*mm" grid_size_z="0.025*mm"/>  <!-- Pixels of 25x25 µm-->
+            <id>${GlobalTrackerReadoutID},y:32:-16,z:-16</id>
         </readout>
+        <readout name="VTXOBCollection">
+            <segmentation type="CartesianGridYZ" grid_size_y="0.050*mm" grid_size_z="0.150*mm"/>  <!-- Pixels of 50x150 µm in r-phi x z -->
+            <id>${GlobalTrackerReadoutID},y:32:-16,z:-16</id>
+        </readout>       
         <readout name="VTXDCollection">
-            <id>${GlobalTrackerReadoutID}</id>
+            <segmentation type="CartesianGridXY" grid_size_x="0.050*mm" grid_size_y="0.150*mm"/>  <!-- Pixels of 50x150 µm in r-phi x r -->
+            <id>${GlobalTrackerReadoutID},x:32:-16,y:-16</id>
         </readout>
     </readouts>
 
    <detectors>
  
-    <!-- Vertex inner and outer barrels -->
-        <detector name="VTXB" type="VertexBarrel_detailed_o1_v01" vis="VXDVis" id="DetID_VXD_IB" readout="VTXBCollection"  region="VTXBRegion">
+    <!-- Vertex inner barrel -->
+        <detector name="VTXIB" type="VertexBarrel_detailed_o1_v01" vis="VXDVis" id="DetID_VXD_IB" readout="VTXIBCollection"  region="VTXIBRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>
             <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_BARREL"/>
             
             <!-- Definition of our "stave" object that is used to build the barrel -->
-
-            <!-- Vertex inner barrel -->
             <stave name="SiVTXIBStave1">
                 <!-- Sensor -->
                 <sensor r="0.0*mm" thickness="VTXIB_Sensitive_Thickness" material="Silicon">
@@ -376,6 +381,7 @@
                 </end_z>
             </stave>
 
+            <!-- Definition of our "stave" object that is used to build the barrel, this time for layer 2 -->
             <stave name="SiVTXIBStave2">
                 <!-- Sensor -->
                 <sensor r="0.0*mm" thickness="VTXIB_Sensitive_Thickness" material="Silicon">
@@ -416,6 +422,7 @@
                 </end_z>
             </stave>
 
+            <!-- Definition of our "stave" object that is used to build the barrel. There are two different versions for layer 3 as they are mirrored in x-y and are at a different r -->
             <stave name="SiVTXIBStave3">
                 <!-- Sensor -->
                 <sensor r="0.0*mm" thickness="VTXIB_Sensitive_Thickness" material="Silicon">
@@ -456,8 +463,33 @@
                 </end_z>
             </stave>
 
+            <!-- Here we construct the barrel -->
+            <layer nLadders="VTXIB_L1_Staves" phi0="0.0" r="VTXIB_r1" offset="VTXIB_L1_offset" id="0" nmodules="VTXIB_L1_nModules" name="SiVTXIBStave1" step="VTXIB_mod_z_spacing" dr="VTXIB_dr1"/>
+            <layer nLadders="VTXIB_L2_Staves" phi0="0.0" r="VTXIB_r2" offset="VTXIB_L2_offset" id="1" nmodules="VTXIB_L2_nModules" name="SiVTXIBStave2" step="VTXIB_mod_z_spacing" dr="VTXIB_dr2"/>
+            <layer nLadders="VTXIB_L3_Staves" phi0="0.0" r="VTXIB_r3" offset="VTXIB_L3_offset" id="2" nmodules="VTXIB_L3_nModules" name="SiVTXIBStave3" step="VTXIB_mod_z_spacing" dr="VTXIB_dr3"/>
+        </detector>
 
-            <!-- Vertex outer barrel   -->
+
+        <!-- Vertex inner barrel support structure imported via DDCAD, material budget evaluation with g4MaterialScan is working, but not with the k4SimGeant4 methods. Should be furthermore rotated by 90 degrees around z, but feature not working currently -->
+         <detector id="DetID_NOTUSED" name="VTXIBSupport" type="DD4hep_TestShape_Creator">
+            <envelope vis="VXDVis">
+                <shape type="Assembly"/>
+            </envelope>
+            <check>
+                <shape type="CAD_MultiVolume" ref="VertexSupport_o1_v02.obj" unit="mm"/>
+                <rotation x="0" y="0" z="0"/>
+            </check>
+        </detector> 
+
+ 
+        <!-- Vertex outer barrel   -->
+        <detector name="VTXOB" type="VertexBarrel_detailed_o1_v01" vis="VXDVis" id="DetID_VXD_OB" readout="VTXOBCollection"  region="VTXOBRegion">
+            <envelope vis="VXDVis">
+                <shape type="Assembly"/>
+            </envelope>
+            <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_BARREL"/>
+            
+            <!-- Definition of our "stave" object that is used to build the barrel, here for the middle layer -->
             <stave name="SiVTXOBStave1">
                 <components name="flexes" r="0.0*mm" length="VTXOB_z1">
                     <component thickness="VTXO_flex_Aluminium_thickness" width="VTXO_flex_width" r="0.0*mm"                                                                  material="Al" vis="CableVis"/>
@@ -515,6 +547,7 @@
                 </end_z>
             </stave>
 
+            <!-- Definition of our "stave" object that is used to build the barrel, here for the outer layer -->
             <stave name="SiVTXOBStave2">
                 <components name="support" r="0.0*mm" length="VTXOB_z2">
                     <component thickness="VTXOB_TrussStructure_thickness2" width="VTXO_mod_rphi"     r="-VTXOB_TrussStructure_distance" material="CarbonFiberVtx" vis="TrussStructureVis"/>   <!--Proxy for the lightweight truss structure -->
@@ -573,28 +606,9 @@
             </stave>
 
             <!-- Here we construct the barrel -->
-
-            <!-- Vertex inner barrel   -->
-            <layer nLadders="VTXIB_L1_Staves" phi0="0.0" r="VTXIB_r1" offset="VTXIB_L1_offset" id="0" nmodules="VTXIB_L1_nModules" name="SiVTXIBStave1" step="VTXIB_mod_z_spacing" dr="VTXIB_dr1"/>
-            <layer nLadders="VTXIB_L2_Staves" phi0="0.0" r="VTXIB_r2" offset="VTXIB_L2_offset" id="1" nmodules="VTXIB_L2_nModules" name="SiVTXIBStave2" step="VTXIB_mod_z_spacing" dr="VTXIB_dr2"/>
-            <layer nLadders="VTXIB_L3_Staves" phi0="0.0" r="VTXIB_r3" offset="VTXIB_L3_offset" id="2" nmodules="VTXIB_L3_nModules" name="SiVTXIBStave3" step="VTXIB_mod_z_spacing" dr="VTXIB_dr3"/>
-
-            <!-- Vertex outer barrel   -->
-            <layer nLadders="VTXOB_Staves1" phi0="0.0" r="VTXOB_r1" offset="VTXOB_offset1" id="3" nmodules="VTXOB_nModules1" name="SiVTXOBStave1" step="VTXOB_mod_z_spacing"/>
-            <layer nLadders="VTXOB_Staves2" phi0="0.0" r="VTXOB_r2" offset="VTXOB_offset2" id="4" nmodules="VTXOB_nModules2" name="SiVTXOBStave2" step="VTXOB_mod_z_spacing"/>
+            <layer nLadders="VTXOB_Staves1" phi0="0.0" r="VTXOB_r1" offset="VTXOB_offset1" id="0" nmodules="VTXOB_nModules1" name="SiVTXOBStave1" step="VTXOB_mod_z_spacing"/>
+            <layer nLadders="VTXOB_Staves2" phi0="0.0" r="VTXOB_r2" offset="VTXOB_offset2" id="1" nmodules="VTXOB_nModules2" name="SiVTXOBStave2" step="VTXOB_mod_z_spacing"/>
         </detector>
-
-
-        <!-- Vertex inner barrel support structure imported via DDCAD, material budget evaluation with g4MaterialScan is working, but not with the k4SimGeant4 methods. Should be furthermore rotated by 90 degrees around z, but feature not working currently -->
-         <detector id="DetID_NOTUSED" name="VTXIBSupport" type="DD4hep_TestShape_Creator">
-            <envelope vis="VXDVis">
-                <shape type="Assembly"/>
-            </envelope>
-            <check>
-                <shape type="CAD_MultiVolume" ref="VertexSupport_o1_v02.obj" unit="mm"/>
-                <rotation x="0" y="0" z="0"/>
-            </check>
-        </detector> 
 
 
         <!-- Vertex disks -->
@@ -753,7 +767,15 @@
     <!-- Plugin to define the sensitive surfaces -->
     <plugins>
         <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
-            <argument value="VTXB"/> 
+            <argument value="VTXIB"/> 
+            <argument value="dimension=2"/>
+            <argument value="u_y=1."/>
+            <argument value="v_z=1."/>
+            <argument value="n_x=1."/>
+        </plugin>
+
+        <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
+            <argument value="VTXOB"/> 
             <argument value="dimension=2"/>
             <argument value="u_y=1."/>
             <argument value="v_z=1."/>
