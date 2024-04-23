@@ -4,7 +4,6 @@
   <!-- <includes>
     <gdmlFile ref="${DD4hepINSTALL}/DDDetectors/compact/elements.xml"/>
     <gdmlFile ref="${DD4hepINSTALL}/DDDetectors/compact/materials.xml"/>
-    <gdmlFile  ref="materials_o1_v01.xml"/>
   </includes> -->
 
   <!-- some information about your detector: -->
@@ -71,6 +70,7 @@
       <property name="ABSLENGTH" ref="Abslength_Glass"/>
     </material>
   </materials>
+  
   <!-- For optics -->
   <properties>
     <matrix name="RI_Air" coldim="2" values="

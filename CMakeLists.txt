@@ -131,6 +131,7 @@ if(K4GEO_USE_LCIO)
   target_link_libraries(${PackageName}G4 LCIO::lcio)
 endif()
 
+
 #Create this_package.sh file, and install
 dd4hep_instantiate_package(${PackageName})
 

@@ -178,7 +178,6 @@ void ddDRcalo::DRconstructor::implementFibers(xml_comp_t& x_theta, dd4hep::Volum
   implementFiber(unitBoxVol, trap, dd4hep::Position(-gridSize/2.,gridSize/2.,0.), cmin, rmin+1, fiberEnv, fiber, fiberC, fiberS);
   implementFiber(unitBoxVol, trap, dd4hep::Position(gridSize/2.,gridSize/2.,0.), cmin+1, rmin+1, fiberEnv, fiber, fiberC, fiberS);
 
-
   bool isEvenRow = false, isEvenCol = false;
   placeUnitBox(fullBoxVol,unitBoxVol,rmin,rmax,cmin,cmax,isEvenRow,isEvenCol);
   towerVol.placeVolume(fullBoxVol);
@@ -253,7 +252,7 @@ void ddDRcalo::DRconstructor::implementFibers(xml_comp_t& x_theta, dd4hep::Volum
 //                                              dd4hep::Volume& capC, dd4hep::Volume& capS) {
 void ddDRcalo::DRconstructor::implementFiber(dd4hep::Volume& towerVol, dd4hep::Trap& trap, dd4hep::Position pos, int col, int row,
                                              dd4hep::Tube& fiberEnv, dd4hep::Tube& fiber, dd4hep::Tube& fiberC, dd4hep::Tube& fiberS) {
-  // punch air hole // -> XML 에서 gap = 0 으로 설정해서 실행 스킵 가능
+  // punch air hole // -> Can remove this from XML
   if ( fX_hole.gap() && pos.z() > TGeoShape::Tolerance() ) {
     dd4hep::Tube airHoleTube = dd4hep::Tube(0.,fX_cladC.rmax(),pos.z());
     dd4hep::Position airPos( pos.x(), pos.y(), -fiberEnv.dZ() );
