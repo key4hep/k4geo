@@ -38,8 +38,12 @@
   <include ref="BeamInstrumentation_o1_v01.xml"/>
   <include ref="LumiCal_o1_v01.xml"/>
 
-  <!-- Import vertex -->
-  <include ref="Vertex_IDEA_o1_v01.xml"/>
+  <!-- Import inner vertex detector -->
+  <include ref="InnerVertex_IDEA_o1_v01.xml"/>
+  <!-- <include ref="CurvedVertex_o1_v01.xml"/> -->
+
+  <!-- Import outer vertex detector -->
+  <include ref="OuterVertex_IDEA_o1_v01.xml"/>
 
   <!-- Import drift chamber -->
   <include ref="DriftChamber_o1_v01.xml"/>

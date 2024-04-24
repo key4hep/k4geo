@@ -5,11 +5,11 @@
         url="no"
         status="development"
         version="o1_v02"> 
-        <comment>An ultra-light vertex detector for the FCC-ee IDEA detector concept</comment>
+        <comment>An ultra-light vertex detector for the FCC-ee IDEA detector concept. Conception by Fabrizio Palla (INFN Pisa) and Armin Ilg (UZH). Implementation by Armin Ilg (UZH)</comment>
     </info>
-    <comment>Vertex detector</comment>
+    <comment>Ultra-light IDEA vertex detector</comment>
     <detectors>
-        <detector name="Vertex" type="DD4hep_SubdetectorAssembly" vis="VXDVis">
+        <detector name="InnerVertex" type="DD4hep_SubdetectorAssembly" vis="VXDVis">
             <shape type="BooleanShape" operation="Subtraction" material="Air">
                 <shape type="BooleanShape" operation="Subtraction">
                     <shape type="Tube" rmin="Beampipe_outer_r" rmax="VTXOB_r_max" dz="VTXOB_half_length"/>
@@ -24,12 +24,6 @@
             <composite name="VTXIB"/>
         </detector>
     </detectors>
-    
-    <display>
-        <vis name="TerminalPartVis"     alpha="1.0" r="1.0"     g="0.65" b="0.0"    showDaughters="true"  visible="true"/>
-        <vis name="TrussStructureVis"   alpha="0.3" r="0.5"     g="0.5"  b="0.5"    showDaughters="true"  visible="true"/>
-    </display>
-     
 
     <define>
             <constant name="M_PI" value="3.14159265359"/>
