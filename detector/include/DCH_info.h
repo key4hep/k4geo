@@ -95,10 +95,10 @@ public:
 
     /// Get number of cells in a given layer
     ///   ncells = number of wires/2
-    inline int Get_ncells(int ilayer){return database.at(ilayer).nwires/2;}
+    int Get_ncells(int ilayer){return database.at(ilayer).nwires/2;}
 
     /// Get phi width for the twisted tube and the step (phi distance between cells)
-    inline DCH_angle_t Get_phi_width(int ilayer){return (TMath::TwoPi()/Get_ncells(ilayer))*dd4hep::rad;}
+    DCH_angle_t Get_phi_width(int ilayer){return (TMath::TwoPi()/Get_ncells(ilayer))*dd4hep::rad;}
 
     /// phi positioning, adding offset for odd ilayers
     /// there is a staggering in phi for alternating layers, 0.25*cell_phi_width*(ilayer%2);
@@ -114,17 +114,17 @@ public:
     }
 
     /// tan(stereoangle) = R(z=0)   / (L/2) * tan( twist_angle/2)
-    inline DCH_angle_t stereoangle_z0(DCH_length_t r_z0) const {
+    DCH_angle_t stereoangle_z0(DCH_length_t r_z0) const {
         return atan( r_z0/Lhalf*tan(twist_angle/2));
     }
 
     /// tan(stereoangle) = R(z=L/2) / (L/2) * sin( twist_angle/2)
-    inline DCH_angle_t stereoangle_zLhalf(DCH_length_t r_zLhalf) const {
+    DCH_angle_t stereoangle_zLhalf(DCH_length_t r_zLhalf) const {
         return atan( r_zLhalf/Lhalf*sin(twist_angle/2));
     }
 
     /// WireLength = 2*dch_Lhalf/cos(atan(Pitch_z0(r_z0)/(2*dch_Lhalf)))/cos(stereoangle_z0(r_z0))
-    inline DCH_length_t WireLength(int nlayer, DCH_length_t r_z0) const {
+    DCH_length_t WireLength(int nlayer, DCH_length_t r_z0) const {
         auto Pitch_z0 = database.at(nlayer).Pitch_z0(r_z0);
         return  2*Lhalf/cos(atan(Pitch_z0/(2*Lhalf)))/cos(stereoangle_z0(r_z0)) ;
     };
@@ -156,7 +156,7 @@ public:
             return (1 == layer%2);
         }
         /// calculate sign based on IsStereoPositive
-        inline int StereoSign() const {
+        int StereoSign() const {
             return (IsStereoPositive()*2 - 1);
         }
 
@@ -170,15 +170,15 @@ public:
     std::map<DCH_layer, DCH_info_layer> database;
     bool IsDatabaseEmpty() const { return database.empty(); }
 
-    void BuildLayerDatabase();
-    void Show_DCH_info_database(std::ostream& io) const;
+    inline void BuildLayerDatabase();
+    inline void Show_DCH_info_database(std::ostream& io) const;
 
 
 };
 typedef StructExtension<DCH_info_struct> DCH_info ;
 std::ostream& operator<<( std::ostream& io , const DCH_info& d ){d.Show_DCH_info_database(io); return io;}
 
-void DCH_info_struct::BuildLayerDatabase()
+inline void DCH_info_struct::BuildLayerDatabase()
 {
     // do not fill twice the database
     if( not this->IsDatabaseEmpty() ) return;
@@ -277,7 +277,7 @@ void DCH_info_struct::BuildLayerDatabase()
     return;
 }
 
-void DCH_info_struct::Show_DCH_info_database(std::ostream & oss) const
+inline void DCH_info_struct::Show_DCH_info_database(std::ostream & oss) const
 {
     oss << "\n";
     oss << "Global parameters of DCH:\n";
