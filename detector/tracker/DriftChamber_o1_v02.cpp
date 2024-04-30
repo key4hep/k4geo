@@ -75,6 +75,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
             DCH_i->Show_DCH_info_database(std::cout);
     }
 
+    bool debugGeometry = detElem.hasChild(_Unicode(debugGeometry));
     auto gasElem    = detElem.child("gas");
     auto gasvolMat  = desc.material(gasElem.attr<std::string>(_Unicode(material)));
     auto gasvolVis  = desc.visAttributes(gasElem.attr<std::string>(_Unicode(vis)));
@@ -476,7 +477,10 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
                 }
             }// end building field wires
         }/// end building wires
-        for(int nphi = 0; nphi < ncells; ++nphi)
+        int maxphi = ncells;
+        if(debugGeometry)
+            maxphi=3;
+        for(int nphi = 0; nphi < maxphi; ++nphi)
         {
             // TODO: check if staggering is just + 0.25*cell_phi_width*(ilayer%2);
             // phi positioning, adding offset for odd ilayers
