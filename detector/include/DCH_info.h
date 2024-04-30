@@ -13,8 +13,8 @@ namespace dd4hep {  namespace rec {
  * to be filled before building the geometry!
  *
  * Global constants are members of this class
- * Helper class DCH_info_layer contains one row in the table
- * which corresponds to one layer
+ * Helper class DCH_info_layer contains the info
+ * to build one single layer
  *
  * @author A. Tolosa Delgado, CERN
  * @date April 2024
