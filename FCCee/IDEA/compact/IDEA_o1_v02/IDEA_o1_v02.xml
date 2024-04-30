@@ -21,8 +21,6 @@
   <includes>
     <gdmlFile  ref="elements_o1_v01.xml"/>
     <gdmlFile  ref="materials_o1_v01.xml"/>
-    <gdmlFile ref="${DD4hepINSTALL}/DDDetectors/compact/elements.xml"/>
-    <gdmlFile ref="${DD4hepINSTALL}/DDDetectors/compact/materials.xml"/>
   </includes>
 
   <define>

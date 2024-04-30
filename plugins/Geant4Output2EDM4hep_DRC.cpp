@@ -514,11 +514,6 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
     Geant4Sensitive* sd = coll->sensitive();
     int hit_creation_mode = sd->hitCreationMode();
 
-    printout(INFO,"Geant4Output2EDM4hep_DRC","+++ Saving EDM4hep : Using Geant4Tracker::Hit");
-    printout(INFO,"Geant4Output2EDM4hep_DRC","+++ Saving EDM4hep : SD : %016llX", sd);
-    printout(INFO,"Geant4Output2EDM4hep_DRC","+++ Saving EDM4hep hit_creation_mode : %d", hit_creation_mode);
-    printout(INFO,"Geant4Output2EDM4hep_DRC","+++ Saving EDM4hep nhits : %d", nhits);
-
     auto& hits = m_trackerHits[colName];
     for(unsigned i=0 ; i < nhits ; ++i){
       auto sth = hits->create();
@@ -605,7 +600,6 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
       sch.setCellID( hit->cellID );
       sch.setPosition({float(pos.x()/CLHEP::mm), float(pos.y()/CLHEP::mm), float(pos.z()/CLHEP::mm)});
       sch.setEnergy( hit->energyDeposit/CLHEP::GeV );
-
 
       // now add the individual step contributions
       for(auto ci=hit->truth.begin(); ci != hit->truth.end(); ++ci){
