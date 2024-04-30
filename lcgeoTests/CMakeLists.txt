@@ -116,7 +116,7 @@ set_tests_properties( t_${test_name} PROPERTIES TIMEOUT 360)
 
 #--------------------------------------------------
 
-# test for ARC o1 v02
+# test for DCH o1 v02
 SET( test_name "test_DCH_o1_v02_overlap" )
 ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
 	ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/compact/DCH_standalone_o1_v02.xml --runType run --part.userParticleHandler= --macroFile=${CMAKE_CURRENT_SOURCE_DIR}/../utils/overlap.mac  )
