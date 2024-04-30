@@ -130,8 +130,8 @@
     <!-- /detectors/detector/wires -->
     <wires
         vis="dch_no_vis_nodaughters"
-        buildSenseWires="False"
-        buildFieldWires="False"
+        buildSenseWires="True"
+        buildFieldWires="True"
         SWire_thickness       ="DCH_SWire_thickness"
         FSideWire_thickness   ="DCH_FSideWire_thickness"
         FCentralWire_thickness="DCH_FCentralWire_thickness"
