@@ -12,24 +12,6 @@
         <comment>A Vertex Detector for the FCC-ee IDEA detector concept, based on the engineered design by Fabrizio Palla and Filippo Bosi (INFN Pisa), implemented in DD4hep by Armin Ilg (UZH)</comment>
     </info>
     <comment>Vertex inner barrel </comment>
-    <detectors>
-        <detector name="InnerVertex" type="DD4hep_SubdetectorAssembly" vis="VXDVis">
-            <shape type="BooleanShape" operation="Subtraction" material="Air">
-                <shape type="BooleanShape" operation="Subtraction">
-                    <shape type="Tube" rmin="VTXIB_r_min_layer-VTXIB_r_min_clearance" rmax="VTXIB_r_max_layer+VTXIB_r_max_clearance" dz="VTXOB_half_length"/>
-                    <shape type="Cone" rmin1="0" rmax1="tan(VertexClearanceTheta)*VTXOB_half_length" rmin2="0" rmax2="0" z="VTXOB_half_length/2."/>
-                    <position x="0" y="0" z="-VTXOB_half_length/2." />
-                </shape>
-                
-                <shape type="Cone" rmin1="0" rmax1="0" rmin2="0" rmax2="tan(VertexClearanceTheta)*VTXOB_half_length" z="VTXOB_half_length/2."/>
-                <position x="0" y="0" z="VTXOB_half_length/2." />
-            </shape>
-            <comment>Vertex Assembly</comment>
-            <composite name="VTXIB"/>
-            <composite name="VTXIBSupport"/>
-        </detector>
-    </detectors>
-
 
     <define>
         <!-- Vertex inner barrel (VTXIB): Let's take the ARCADIA sensor! -->
@@ -96,6 +78,8 @@
             <constant name="VTXIB_L2_Holder_Rohacell_rphi"  value="2.0*mm"/>
             <constant name="VTXIB_L3_Holder_Rohacell_rphi"  value="1.0*mm"/>
             <constant name="VTXIB_Holder_CarbonFiber_rphi"  value="0.2*mm"/>
+
+            <constant name="VTXIB_half_length" value="VTXIB_z3+VTXIB_hybrid_z+VTXIB_mod_z_spacing"/> <!-- 140.95*mm -->
     </define>        
 
 
@@ -112,7 +96,16 @@
     <!-- Vertex inner barrel -->
         <detector name="VTXIB" type="VertexBarrel_detailed_o1_v01" vis="VXDVis" id="DetID_VXD_IB" readout="VTXIBCollection"  region="VTXIBRegion">
             <envelope vis="VXDVis">
-                <shape type="Assembly"/>
+                <shape type="BooleanShape" operation="Subtraction" material="Air">
+                    <shape type="BooleanShape" operation="Subtraction">
+                        <shape type="Tube" rmin="VTXIB_r_min_layer-VTXIB_r_min_clearance" rmax="VTXIB_r_max_layer+VTXIB_r_max_clearance" dz="VTXIB_half_length"/>
+                        <shape type="Cone" rmin1="0" rmax1="tan(VertexClearanceTheta)*2000.0*mm" rmin2="0" rmax2="0" z="2000.0*mm/2."/>
+                        <position x="0" y="0" z="-2000.0*mm/2." />
+                    </shape>
+                    
+                    <shape type="Cone" rmin1="0" rmax1="0" rmin2="0" rmax2="tan(VertexClearanceTheta)*2000.0*mm" z="2000.0*mm/2."/>
+                    <position x="0" y="0" z="2000.0*mm/2." />
+                </shape>
             </envelope>
             <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_BARREL"/>
             

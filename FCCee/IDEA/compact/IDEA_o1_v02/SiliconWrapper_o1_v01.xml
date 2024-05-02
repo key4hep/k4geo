@@ -12,23 +12,6 @@
         <comment>A Silicon Wrapper layer for the FCC-ee IDEA detector concept with timing to enable excellent PID together with drift chamber. </comment>
     </info>
     <comment>Silicon wrapper</comment>
-    <detectors>
-        <detector name="SiliconWrapper" type="DD4hep_SubdetectorAssembly" vis="SiWrVis">
-            <shape type="BooleanShape" operation="Union" material="Air">
-                <shape type="BooleanShape" operation="Union">
-                    <shape type="Tube" rmin="SiWrB_inner_radius" rmax="SiWrB_outer_radius" dz="SiWrB_half_length"/>             <!-- Silicon Wrapper barrel -->
-                    <shape type="Tube" rmin="SiWrD_inner_radius" rmax="SiWrD_outer_radius" dz="0.5*(SiWrD_zmax-SiWrD_zmin)"/>   <!-- Silicon Wrapper disks on one side -->
-                    <position x="0" y="0" z="SiWrD_zmin+0.5*(SiWrD_zmax-SiWrD_zmin)"/>
-                </shape>
-                <shape type="Tube" rmin="SiWrD_inner_radius" rmax="SiWrD_outer_radius" dz="0.5*(SiWrD_zmax-SiWrD_zmin)"/>       <!-- Silicon Wrapper disks on one side -->
-                <position x="0" y="0" z="-SiWrD_zmin-0.5*(SiWrD_zmax-SiWrD_zmin)"/>
-            </shape>
-            
-            <comment>Silicon Wrapper Assembly</comment>
-            <composite name="SiWrB"/>
-            <composite name="SiWrD"/> 
-        </detector>
-    </detectors>
 
     <define>
         <!-- ATLASPix3 properties -->
@@ -135,8 +118,8 @@
     <!-- Silicon wrapper barrel  -->
     <detectors>
         <detector name="SiWrB" type="VertexBarrel_detailed_o1_v01" vis="SiWrVis" id="DetID_SiWr_Barrel" readout="SiWrBCollection" region="SiWrBRegion">
-            <envelope vis="SiWrVis">
-                <shape type="Assembly"/>
+            <envelope vis="SiWrVis">       
+                <shape type="Tube" rmin="SiWrB_inner_radius" rmax="SiWrB_outer_radius" dz="SiWrB_half_length" material="Air"/>
             </envelope>
             <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_BARREL"/>
             
@@ -210,7 +193,13 @@
     <detectors>
         <detector id="DetID_SiWr_Disks" name="SiWrD" vis="SiWrVis" type="VertexDisks_detailed_o1_v01" readout="SiWrDCollection" reflect="true" region="SiWrDRegion">
             <envelope vis="SiWrVis">
-                <shape type="Assembly"/>
+                <shape type="BooleanShape" operation="Union" material="Air">
+                    <shape type="Tube" rmin="SiWrD_inner_radius" rmax="SiWrD_outer_radius" dz="0.5*(SiWrD_zmax-SiWrD_zmin)"/>   <!-- Silicon Wrapper disks on one side -->
+                    <position x="0" y="0" z="+SiWrD_zmin+0.5*(SiWrD_zmax-SiWrD_zmin)"/>
+
+                    <shape type="Tube" rmin="SiWrD_inner_radius" rmax="SiWrD_outer_radius" dz="0.5*(SiWrD_zmax-SiWrD_zmin)"/>       <!-- Silicon Wrapper disks on one side -->
+                    <position x="0" y="0" z="-SiWrD_zmin-0.5*(SiWrD_zmax-SiWrD_zmin)"/>
+                </shape>
             </envelope>
             <comment>Silicon wrapper disks</comment>
 

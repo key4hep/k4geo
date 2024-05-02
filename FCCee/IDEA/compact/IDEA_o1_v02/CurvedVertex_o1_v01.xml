@@ -8,22 +8,6 @@
         <comment>An ultra-light vertex detector for the FCC-ee IDEA detector concept. Conception by Fabrizio Palla (INFN Pisa) and Armin Ilg (UZH). Implementation by Armin Ilg (UZH)</comment>
     </info>
     <comment>Ultra-light IDEA vertex detector</comment>
-    <detectors>
-        <detector name="InnerVertex" type="DD4hep_SubdetectorAssembly" vis="VXDVis">
-            <shape type="BooleanShape" operation="Subtraction" material="Air">
-                <shape type="BooleanShape" operation="Subtraction">
-                    <shape type="Tube" rmin="Beampipe_outer_r" rmax="VTXOB_r_max" dz="VTXOB_half_length"/>
-                    <shape type="Cone" rmin1="0" rmax1="tan(VertexClearanceTheta)*VTXOB_half_length" rmin2="0" rmax2="0" z="VTXOB_half_length/2."/>
-                    <position x="0" y="0" z="-VTXOB_half_length/2." />
-                </shape>
-                
-                <shape type="Cone" rmin1="0" rmax1="0" rmin2="0" rmax2="tan(VertexClearanceTheta)*VTXOB_half_length" z="VTXOB_half_length/2."/>
-                <position x="0" y="0" z="VTXOB_half_length/2." />
-            </shape>
-            <comment>Vertex Assembly</comment>
-            <composite name="VTXIB"/>
-        </detector>
-    </detectors>
 
     <define>
             <constant name="M_PI" value="3.14159265359"/>
@@ -54,9 +38,9 @@
             <constant name="VTXIB_nModules4" value="9"/>
 
             <constant name="VTXIB_z1" value="(VTXIB_nModules1*RSU_z)/2."/> <!-- 10*21.666 = 216.66*mm-->
-            <constant name="VTXIB_z2" value="(VTXIB_nModules2*RSU_z)/2."/> <!-- 10*21.666 = 216.66*mm-->
-            <constant name="VTXIB_z3" value="(VTXIB_nModules3*RSU_z)/2."/> <!-- 10*21.666 = 216.66*mm-->
-            <constant name="VTXIB_z4" value="(VTXIB_nModules4*RSU_z)/2."/> <!-- 10*21.666 = 216.66*mm-->
+            <constant name="VTXIB_z2" value="(VTXIB_nModules2*RSU_z)/2."/> <!-- 12*21.666 = 259.992*mm-->
+            <constant name="VTXIB_z3" value="(VTXIB_nModules3*RSU_z)/2."/> <!-- 9*21.666 = 194.994*mm-->
+            <constant name="VTXIB_z4" value="(VTXIB_nModules4*RSU_z)/2."/> <!-- 9*21.666 = 194.994*mm-->
 
             <constant name="VTXIB_phi0_1" value="0.0*deg"/>
             <constant name="VTXIB_phi0_2" value="8.0*deg"/>
@@ -105,6 +89,8 @@
             <constant name="VTXIB_curved_tolerance_r" value="0.1*mm"/> <!-- To get rid of overlaps when visualising the geometry, SET TO 0 FOR OTHER PURPOSES! -->
            <!-- <constant name="VTXIB_curved_tolerance_r" value="0.1*mm"/> -->
 
+           <constant name="VTXIB_half_length" value="2.0*VTXIB_z4+VTXIB_endcap4_length_center+VTXIB_endcap4_length_side+VTXIB_flex_length+VTXIB_gap_z4"/>
+
     </define>        
 
 
@@ -121,7 +107,16 @@
     <!-- Vertex inner barrel -->
         <detector name="VTXIB" type="VertexCylindrical_o1_v01" vis="VXDVis" id="DetID_VXD_IB" readout="VTXIBCollection"  region="VTXIBRegion">
             <envelope vis="VXDVis">
-                <shape type="Assembly"/>
+                <shape type="BooleanShape" operation="Subtraction" material="Air">
+                    <shape type="BooleanShape" operation="Subtraction">
+                        <shape type="Tube" rmin="Beampipe_outer_r" rmax="VTXIB_r_outer" dz="VTXIB_half_length"/>
+                        <shape type="Cone" rmin1="0" rmax1="tan(VertexClearanceTheta)*2000.0*mm" rmin2="0" rmax2="0" z="2000.0*mm/2."/>
+                        <position x="0" y="0" z="-2000.0*mm/2."/>
+                    </shape>
+                    
+                    <shape type="Cone" rmin1="0" rmax1="0" rmin2="0" rmax2="tan(VertexClearanceTheta)*2000.0*mm" z="2000.0*mm/2."/>
+                    <position x="0" y="0" z="2000.0*mm/2."/>
+                </shape>      
             </envelope>
             <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_BARREL"/>
             
@@ -327,11 +322,11 @@
 
             <!-- Here we construct the barrel -->
             <layer nLadders="2" phi0="0.5*RSU_rphi/(2*M_PI*VTXIB_r1)*360.*deg+VTXIB_phi0_1" id="0" nmodules="VTXIB_nModules1" name="SiVTXIBStave1Curved" step="0.0*mm"/>
-            <!-- <layer nLadders="2" phi0="0.5*RSU_rphi/(2*M_PI*VTXIB_r2)*360.*deg+VTXIB_phi0_2" id="1" nmodules="VTXIB_nModules2" name="SiVTXIBStave2Curved" step="0.0*mm"/>
+            <layer nLadders="2" phi0="0.5*RSU_rphi/(2*M_PI*VTXIB_r2)*360.*deg+VTXIB_phi0_2" id="1" nmodules="VTXIB_nModules2" name="SiVTXIBStave2Curved" step="0.0*mm"/>
             <layer nLadders="2" phi0="0.5*RSU_rphi/(2*M_PI*VTXIB_r3)*360.*deg+VTXIB_phi0_3" id="2" nmodules="VTXIB_nModules3" name="SiVTXIBStave3Curved"    step="0.0*mm" z_offset="VTXIB_z3+VTXIB_endcap3_length_center+VTXIB_gap_z3/2."/>
             <layer nLadders="2" phi0="0.5*RSU_rphi/(2*M_PI*VTXIB_r3)*360.*deg+VTXIB_phi0_3" id="3" nmodules="VTXIB_nModules3" name="SiVTXIBStave3Curved_2"  step="0.0*mm" z_offset="-(VTXIB_z3+VTXIB_endcap3_length_center+VTXIB_gap_z3/2.)"/>
             <layer nLadders="2" phi0="0.5*RSU_rphi/(2*M_PI*VTXIB_r4)*360.*deg+VTXIB_phi0_4" id="4" nmodules="VTXIB_nModules4" name="SiVTXIBStave4Curved"    step="0.0*mm" z_offset="VTXIB_z4+VTXIB_endcap4_length_center+VTXIB_gap_z4/2."/>
-            <layer nLadders="2" phi0="0.5*RSU_rphi/(2*M_PI*VTXIB_r4)*360.*deg+VTXIB_phi0_4" id="5" nmodules="VTXIB_nModules4" name="SiVTXIBStave4Curved_2"  step="0.0*mm" z_offset="-(VTXIB_z4+VTXIB_endcap4_length_center+VTXIB_gap_z4/2.)"/> -->
+            <layer nLadders="2" phi0="0.5*RSU_rphi/(2*M_PI*VTXIB_r4)*360.*deg+VTXIB_phi0_4" id="5" nmodules="VTXIB_nModules4" name="SiVTXIBStave4Curved_2"  step="0.0*mm" z_offset="-(VTXIB_z4+VTXIB_endcap4_length_center+VTXIB_gap_z4/2.)"/>
         </detector>
     </detectors>
    
