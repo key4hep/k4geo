@@ -388,20 +388,22 @@
         <!-- Vertex disks -->
         <detector id="DetID_VXD_Disks" name="VTXD" vis="VXDVis" type="VertexDisks_detailed_o1_v01" readout="VTXDCollection" reflect="true" region="VTXDRegion">
             <envelope vis="VXDVis">
-                <!-- <shape type="BooleanShape" operation="Subtraction" material="Air"> -->
+                <shape type="BooleanShape" operation="Subtraction" material="Air">
                     <shape type="BooleanShape" operation="Subtraction" material="Air">
                         <shape type="BooleanShape" operation="Subtraction">
                             <shape type="Tube" rmin="VTXD_rmin1" rmax="VTXOB_r_max" dz="VTXD_z_max_total"/>
-                            <shape type="Cone" rmin1="0" rmax1="tan(VertexClearanceTheta)*VTXD_z_max_total" rmin2="0" rmax2="0" z="VTXD_z_max_total/2."/>
-                            <position x="0" y="0" z="-VTXD_z_max_total/2." />
+
+                            <shape type="Tube" rmin="0.0*mm" rmax="2.0*VTXOB_r_max" dz="VTXD_z_min_total"/>
+                            <position x="0" y="0" z="0"/>
                         </shape>
 
-                        <shape type="Cone" rmin1="0" rmax1="0" rmin2="0" rmax2="tan(VertexClearanceTheta)*VTXD_z_max_total" z="VTXD_z_max_total/2."/>
-                        <position x="0" y="0" z="VTXD_z_max_total/2." />
+                        <shape type="Cone" rmin1="0" rmax1="tan(VertexClearanceTheta)*VTXD_z_max_total" rmin2="0" rmax2="0" z="VTXD_z_max_total/2."/>
+                        <position x="0" y="0" z="-VTXD_z_max_total/2." />
                     </shape>
-                    <!-- <shape type="Tube" rmin="0.0*mm" rmax="2.0*VTXOB_r_max" dz="VTXD_z_min"/>
-                    <position x="0" y="0" z="0"/>
-                </shape> -->
+
+                    <shape type="Cone" rmin1="0" rmax1="0" rmin2="0" rmax2="tan(VertexClearanceTheta)*VTXD_z_max_total" z="VTXD_z_max_total/2."/>
+                    <position x="0" y="0" z="VTXD_z_max_total/2." />
+                </shape>
             </envelope>
             <comment>Vertex Detector Disks</comment>
 

@@ -87,6 +87,7 @@
     <constant name="VTXOB_r_max"          value="VTXOB_r_max_layer+VTXOB_rmax_clearance"/>    <!-- r where the vertex subdetector assembly ends -->
 
     <constant name="VTXD_z_min" value="279.06*mm"/>            <!-- Start of VTX disks in z -->
+    <constant name="VTXD_z_min_total" value="VTXD_z_min-30.0*mm"/>      <!-- Outermost edge of VTX disks in z -->
     <constant name="VTXD_z_max" value="918.641*mm"/>            <!-- Outermost VTX disk in z -->
     <constant name="VTXD_z_max_total" value="VTXD_z_max+40.0*mm"/>            <!-- Outermost edge of VTX disk in z -->
     <constant name="VTXD_r_min" value="69.0/2.0*mm"/>        <!-- Start of VTX disks in r -->
