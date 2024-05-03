@@ -32,9 +32,9 @@
         <!-- <constant name="DetID_VXD_Barrel"       value=" 1"/>
         <constant name="DetID_VXD_Endcap"       value=" 3"/> -->
 
-        <constant name="DetID_VXD_IB"         value="1"/>
-        <constant name="DetID_VXD_OB"           value=" 2"/>
-        <constant name="DetID_VXD_Disks"      value="3"/>        
+        <constant name="DetID_VXD_IB"           value="1"/>
+        <constant name="DetID_VXD_OB"           value="2"/>
+        <constant name="DetID_VXD_Disks"        value="3"/>        
 
         <constant name="DetID_IT_Barrel"        value=" 4"/>
         <constant name="DetID_IT_Endcap"        value=" 5"/>
@@ -135,27 +135,27 @@
         <constant name="Vertex_LumiCal_Clearence" value="110*mrad"/>
 
         <!-- For CLD IDEAvertex-->
-        <constant name="VertexClearanceTheta" value="0.103*rad"/> <!-- Clearance of vertex detector in mrad from IP -->
+        <constant name="VertexClearanceTheta" value="0.105*rad"/> <!-- Clearance of vertex detector in mrad from IP -->
         <constant name="VTXIB_r_min_clearance" value="1.0*mm"/>    <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
         <constant name="VTXIB_r_min_layer"    value="13.7*mm"/>   <!-- Start of inner vertex detector layers. To keep distance of 1.3 mm from outer beam pipe end (10+0.35+1+0.35 mm = 11.7 mm). This changes to 13.7 mm due to cooling issues (see https://indico.cern.ch/event/1176398/contributions/5207171/attachments/2581129/4451907/Krakow%202023_v23_final.pdf) -->
         <constant name="VTXIB_r_max_layer"    value="34.0*mm"/>   <!-- Position of the outermost vertex inner barrel layer -->
         <constant name="VTXIB_r_max_clearance" value="15.0*mm"/>  <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
 
         <constant name="VTXOB_r_min_layer"    value="140*mm"/>      <!-- R of the innermost layer of the outer vertex -->
-        <constant name="VTXOB_r_min_clearance" value="10.0*mm"/>     <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
+        <constant name="VTXOB_r_min_clearance" value="15.0*mm"/>     <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
         <constant name="VTXOB_r_max_layer"    value="315*mm"/>      <!-- R of the outermost layer of the outer vertex -->
-        <constant name="VTXOB_rmax_clearance" value="35.0*mm"/>     <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
-        <constant name="VTXOB_r_max"          value="VTXOB_r_max_layer+VTXOB_rmax_clearance"/>    <!-- r where the vertex subdetector assembly ends -->
+        <constant name="VTXOB_rmax_clearance" value="15.0*mm"/>     <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
 
         <constant name="VTXD_z_min" value="279.06*mm"/>            <!-- Start of VTX disks in z -->
-        <constant name="VTXD_z_min_total" value="VTXD_z_min-30.0*mm"/>      <!-- Outermost edge of VTX disks in z -->
+        <constant name="VTXD_z_min_total" value="VTXD_z_min-20.0*mm"/>      <!-- Outermost edge of VTX disks in z -->
         <constant name="VTXD_z_max" value="918.641*mm"/>            <!-- Outermost VTX disk in z -->
         <constant name="VTXD_z_max_total" value="VTXD_z_max+40.0*mm"/>            <!-- Outermost edge of VTX disk in z -->
         <constant name="VTXD_r_min" value="69.0/2.0*mm"/>        <!-- Start of VTX disks in r -->
+        <constant name="VTXD_r_max" value="315.0*mm"/>        <!-- Start of VTX disks in r -->
 
         <!-- Limits of complete vertex detector system -->
         <constant name="VTX_r_min" value="VTXIB_r_min_layer-VTXIB_r_min_clearance"/> 
-        <constant name="VTX_r_max" value="VTXOB_r_max"/>
+
 
         <constant name="InnerTracker_inner_radius" value="61*mm"/>
         <constant name="InnerTracker_outer_radius" value="696*mm"/>
