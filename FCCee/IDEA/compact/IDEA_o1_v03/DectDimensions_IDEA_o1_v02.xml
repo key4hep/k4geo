@@ -93,8 +93,18 @@
     <constant name="DCH_inner_cyl_R_total"          value=" 349.8  * mm "  />
     <constant name="DCH_outer_cyl_R_total"          value=" 2015   * mm "  />
     <constant name="DCH_half_length_total"          value=" 2250   * mm "  />
+    
+    <constant name="Solenoid_inner_radius" value="2100*mm"/>
+    <constant name="Solenoid_outer_radius" value="2400*mm"/>
+    <constant name="Solenoid_half_length" value="2500*mm"/>
+    <constant name="Solenoid_Coil_half_length" value="Solenoid_half_length-200*mm"/>
+    <constant name="Solenoid_Coil_radius" value="Solenoid_inner_radius+200*mm"/>
 
-
+    <!-- These are lead plates that we put in the endcap to have the same material budget (from solenoid) as in the barrel-->
+    <constant name="EndPlateAbsorber_inner_radius" value="380*mm"/>
+    <constant name="EndPlateAbsorber_outer_radius" value="2090*mm"/>
+    <constant name="EndPlateAbsorber_z_min" value="2490*mm"/>
+    <constant name="EndPlateAbsorber_z_half_length" value="4.209/2.0*mm"/>
 
     <constant name="ECalBarrel_inner_radius" value="2150*mm"/>
     <constant name="ECalBarrel_outer_radius" value="2352*mm"/>
