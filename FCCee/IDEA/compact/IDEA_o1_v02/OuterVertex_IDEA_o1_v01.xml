@@ -120,7 +120,7 @@
 
         <!-- Vertex disks parameters -->
             <constant name="VTXD_support_thickness" value="VTXO_support_Fleece_thickness+VTXO_support_CarbonFiber_thickness+VTXO_support_PaperGraphite_thickness"/>      
-            <constant name="VTXD_z1" value="VTXD_z_min + 1.5*cm"/> <!-- +1.5 cm to avoid overlap with vertex inner barrel envelope. FIX! -->
+            <constant name="VTXD_z1" value="VTXD_z_min"/>
             <constant name="VTXD_z2" value="609.086*mm"/>
             <constant name="VTXD_z3" value="VTXD_z_max"/>
             <constant name="VTXD_dz1" value="0.0*mm"/> <!-- This is not correct, but needed to increase it to avoid clashes of end-of-stave volumes as they are only approximated! -->

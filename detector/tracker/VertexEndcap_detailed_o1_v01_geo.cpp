@@ -217,11 +217,18 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             
             string disk_name = side_name + _toString(layer_id,"_layer%d");
 
-            double disk_motherVolThickness = getAttrOrDefault(x_layer, _Unicode(motherVolThickness), double(50.0));
-            Tube whole_disk_tube = Tube(rmin, rmax, disk_motherVolThickness);
-            Volume whole_disk_volume = Volume(disk_name, whole_disk_tube, theDetector.material("Air"));
-            whole_disk_volume.setVisAttributes(theDetector, x_det.visStr());
+            //// In principle better, but don't use for the moment, see below
+            // double disk_motherVolThickness = getAttrOrDefault(x_layer, _Unicode(motherVolThickness), double(50.0));
+            // Tube whole_disk_tube = Tube(rmin, rmax, disk_motherVolThickness);
+            // Volume whole_disk_volume = Volume(disk_name, whole_disk_tube, theDetector.material("Air"));
+            // whole_disk_volume.setVisAttributes(theDetector, x_det.visStr());
+            // PlacedVolume whole_disk_volume_placed = side_assembly.placeVolume(whole_disk_volume, Position(0.0, 0.0, side*z));
+
+            //// Use assembly to avoid overlap between first disk and vertex inner barrel
+            Assembly whole_disk_volume(disk_name);
             PlacedVolume whole_disk_volume_placed = side_assembly.placeVolume(whole_disk_volume, Position(0.0, 0.0, side*z));
+
+
             whole_disk_volume_placed.addPhysVolID("layer", layer_id);  
 
             DetElement diskDE( sdet , disk_name, layer_id);
