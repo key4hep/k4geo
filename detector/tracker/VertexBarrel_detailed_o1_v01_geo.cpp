@@ -21,6 +21,7 @@ using namespace std;
 
 using dd4hep::Assembly;
 using dd4hep::Box;
+using dd4hep::Tube;
 using dd4hep::BUILD_ENVELOPE;
 using dd4hep::DetElement;
 using dd4hep::Detector;
@@ -34,6 +35,7 @@ using dd4hep::Transform3D;
 using dd4hep::Translation3D;
 using dd4hep::Volume;
 using dd4hep::_toString;
+using dd4hep::getAttrOrDefault;
 
 static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector sens)  {
 
@@ -225,23 +227,26 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
             return stave.name == nameStr;
         });    
 
+        double stave_length = nmodules*m.sensor_length + (nmodules-1)*step;
+
+        double motherVolThickness = getAttrOrDefault(x_layer, _Unicode(motherVolThickness), double(5.0));
+        double motherVolLength = getAttrOrDefault(x_layer, _Unicode(motherVolLength), double(stave_length));
+
+
         // --- create an assembly and DetElement for the layer
         std::string layer_name = det_name+_toString(layer_id,"_layer%d");
-        Assembly layer_assembly(layer_name);
-        DetElement layerDE( sdet , _toString(layer_id,"layer_%d"), layer_id );
-        pv = envelope.placeVolume(  layer_assembly );
-        pv.addPhysVolID("layer", layer_id);  
-        layerDE.setPlacement( pv ) ;
+        double motherVolRmin = getAttrOrDefault(x_layer, _Unicode(motherVolRmin), double(x_layer.r()));
 
-        // Assemblies for the four quadrants, reducing the number of objects in an assembly (makes detectors with many barrels faster)
-        Assembly quadrant_assembly0(layer_name + "_quadrant0");
-        pv = layer_assembly.placeVolume(quadrant_assembly0);
-        Assembly quadrant_assembly1(layer_name + "_quadrant1");
-        pv = layer_assembly.placeVolume(quadrant_assembly1);
-        Assembly quadrant_assembly2(layer_name + "_quadrant2");
-        pv = layer_assembly.placeVolume(quadrant_assembly2);
-        Assembly quadrant_assembly3(layer_name + "_quadrant3");
-        pv = layer_assembly.placeVolume(quadrant_assembly3);
+        Tube whole_layer_tube = Tube(motherVolRmin, motherVolRmin+motherVolThickness, motherVolLength/2.);
+        Volume whole_layer_volume = Volume(layer_name, whole_layer_tube, theDetector.material("Air"));
+        whole_layer_volume.setVisAttributes(theDetector, x_det.visStr());
+        PlacedVolume whole_layer_placed_volume = envelope.placeVolume(whole_layer_volume);
+
+        whole_layer_placed_volume.addPhysVolID("system", x_det.id()).addPhysVolID("side",0).addPhysVolID("layer", layer_id);  
+
+        DetElement layerDE( sdet , _toString(layer_id,"layer_%d"), layer_id );
+        layerDE.setPlacement( whole_layer_placed_volume ) ;
+
     
         //--------- loop over ladders ---------------------------
         for(int iStave=0; iStave<nLadders; ++iStave) {
@@ -251,16 +256,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
             string stave_name = layer_name + _toString(iStave,"_stave%d");
             Assembly stave_assembly(stave_name);
-            // layer_assembly.placeVolume(stave_assembly);
-
-            if(float(iStave)/nLadders<0.25)
-                pv = quadrant_assembly0.placeVolume(stave_assembly);
-            else if(float(iStave)/nLadders<0.5)
-                pv = quadrant_assembly1.placeVolume(stave_assembly);
-            else if(float(iStave)/nLadders<0.75)
-                pv = quadrant_assembly2.placeVolume(stave_assembly);
-            else
-                pv = quadrant_assembly3.placeVolume(stave_assembly);
+            pv = whole_layer_volume.placeVolume(stave_assembly);
 
             double stave_length = nmodules*m.sensor_length + (nmodules-1)*step;
             
@@ -343,7 +339,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
             }
             stave_assembly->GetShape()->ComputeBBox() ;
         }
-        layer_assembly->GetShape()->ComputeBBox() ;
     }
 
     sdet.setAttributes(theDetector,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());

@@ -233,9 +233,9 @@
             </stave>
 
             <!-- Here we construct the barrel -->
-            <layer nLadders="VTXIB_L1_Staves" phi0="0.0" r="VTXIB_r1" offset="VTXIB_L1_offset" id="0" nmodules="VTXIB_L1_nModules" name="SiVTXIBStave1" step="VTXIB_mod_z_spacing" dr="VTXIB_dr1"/>
-            <layer nLadders="VTXIB_L2_Staves" phi0="0.0" r="VTXIB_r2" offset="VTXIB_L2_offset" id="1" nmodules="VTXIB_L2_nModules" name="SiVTXIBStave2" step="VTXIB_mod_z_spacing" dr="VTXIB_dr2"/>
-            <layer nLadders="VTXIB_L3_Staves" phi0="0.0" r="VTXIB_r3" offset="VTXIB_L3_offset" id="2" nmodules="VTXIB_L3_nModules" name="SiVTXIBStave3" step="VTXIB_mod_z_spacing" dr="VTXIB_dr3"/>
+            <layer nLadders="VTXIB_L1_Staves" phi0="0.0" r="VTXIB_r1" offset="VTXIB_L1_offset" id="0" nmodules="VTXIB_L1_nModules" name="SiVTXIBStave1" step="VTXIB_mod_z_spacing" dr="VTXIB_dr1" motherVolLength="2.0*(VTXIB_z1+VTXIB_hybrid_z+VTXIB_mod_z_spacing)" motherVolThickness="VTXIB_r2-VTXIB_r1"/>
+            <layer nLadders="VTXIB_L2_Staves" phi0="0.0" r="VTXIB_r2" offset="VTXIB_L2_offset" id="1" nmodules="VTXIB_L2_nModules" name="SiVTXIBStave2" step="VTXIB_mod_z_spacing" dr="VTXIB_dr2" motherVolLength="2.0*(VTXIB_z2+VTXIB_hybrid_z+VTXIB_mod_z_spacing)" motherVolThickness="VTXIB_r3-VTXIB_r2"/>
+            <layer nLadders="VTXIB_L3_Staves" phi0="0.0" r="VTXIB_r3" offset="VTXIB_L3_offset" id="2" nmodules="VTXIB_L3_nModules" name="SiVTXIBStave3" step="VTXIB_mod_z_spacing" dr="VTXIB_dr3" motherVolLength="2.0*(VTXIB_z3+VTXIB_hybrid_z+VTXIB_mod_z_spacing)" motherVolThickness="12.0*mm"/>
         </detector>
 
 

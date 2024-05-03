@@ -37,7 +37,9 @@ using dd4hep::Transform3D;
 using dd4hep::Translation3D;
 using dd4hep::Volume;
 using dd4hep::_toString;
+using dd4hep::getAttrOrDefault;
 using dd4hep::Box;
+using dd4hep::Tube;
 
 static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens)  {
     xml_det_t   x_det     = e;
@@ -205,6 +207,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             xml_comp_t  x_layer(li);
             int layer_id        = x_layer.id();
             double rmin         = x_layer.rmin();
+            double rmax         = x_layer.rmax();
             double dr           = x_layer.dr(0);
             double z            = x_layer.z();
             double layer_dz     = x_layer.dz(0);
@@ -213,11 +216,16 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             double reflect_rot  = x_layer.attr<double>(_Unicode(reflect_rot),0.0);
             
             string disk_name = side_name + _toString(layer_id,"_layer%d");
-            Assembly disk_assembly(disk_name);
+
+            double disk_motherVolThickness = getAttrOrDefault(x_layer, _Unicode(motherVolThickness), double(50.0));
+            Tube whole_disk_tube = Tube(rmin, rmax, disk_motherVolThickness);
+            Volume whole_disk_volume = Volume(disk_name, whole_disk_tube, theDetector.material("Air"));
+            whole_disk_volume.setVisAttributes(theDetector, x_det.visStr());
+            PlacedVolume whole_disk_volume_placed = side_assembly.placeVolume(whole_disk_volume, Position(0.0, 0.0, side*z));
+            whole_disk_volume_placed.addPhysVolID("layer", layer_id);  
+
             DetElement diskDE( sdet , disk_name, layer_id);
-            pv = side_assembly.placeVolume(disk_assembly);
-            pv.addPhysVolID("layer", layer_id);  
-            diskDE.setPlacement( pv ) ;
+            diskDE.setPlacement( whole_disk_volume_placed );
 
             int iModule_tot = 0;
             for(int iPetal=0; iPetal<nPetals; iPetal++){
@@ -225,7 +233,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
                 string petal_name = disk_name + _toString(iPetal,"_petal%d");
                 Assembly petal_assembly(petal_name);
-                pv = disk_assembly.placeVolume(petal_assembly);
+                pv = whole_disk_volume.placeVolume(petal_assembly);
 
                 // Defining additional assemblies to have less placements per assembly, which makes detector building faster
                 std::vector<Assembly> id_assemblies;
@@ -283,7 +291,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                             double r_offset_component = stave_offset;
                             double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
                             double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
-                            double z_pos = z + z_alternate_petal + z_offset + component.z_offset + component.z_offsets[i] + component.thicknesses[i]/2.; 
+                            double z_pos = z_alternate_petal + z_offset + component.z_offset + component.z_offsets[i] + component.thicknesses[i]/2.; 
                             if(side == -1){z_pos = -z_pos;}
                             Position pos(x_pos, y_pos, z_pos);
 
@@ -306,7 +314,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                             double r_offset_component = stave_offset + endOfStave.xs[i]>0 ? stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dxs[i] : -(stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dxs[i]);
                             double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
                             double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
-                            double z_pos = z + z_alternate_petal + z_offset + endOfStave.z_offset + endOfStave.z_offsets[i] + endOfStave.thicknesses[i]/2.; 
+                            double z_pos = z_alternate_petal + z_offset + endOfStave.z_offset + endOfStave.z_offsets[i] + endOfStave.thicknesses[i]/2.; 
 
                             if(side == -1){z_pos = -z_pos;}
                             Position pos(x_pos, y_pos, z_pos);
@@ -323,7 +331,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                         double r_offset_component = stave_offset - stave_length/2. + m.sensor_length/2. + iModule*m.sensor_length + iModule*step;
                         double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
                         double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
-                        double z_pos = z + z_alternate_petal + z_offset + m.sensor_z_offset + z_alternate_module + m.sensor_thickness/2.; 
+                        double z_pos = z_alternate_petal + z_offset + m.sensor_z_offset + z_alternate_module + m.sensor_thickness/2.; 
                         if(side == -1){z_pos = -z_pos;}
                         Position pos(x_pos, y_pos, z_pos);
 
@@ -361,7 +369,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                     stave_assembly->GetShape()->ComputeBBox() ;
                }
             }
-            disk_assembly->GetShape()->ComputeBBox() ;
         }        
     }
     
