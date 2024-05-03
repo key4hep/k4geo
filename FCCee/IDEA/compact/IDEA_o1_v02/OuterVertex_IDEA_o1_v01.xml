@@ -70,9 +70,9 @@
         <!-- Vertex outer barrel parameters -->
             <constant name="VTXOB_Staves1" value="23"/>
             <constant name="VTXOB_Staves2" value="51"/>
-            <constant name="VTXOB_nModules1" value="8"/>
-            <constant name="VTXOB_nModules2" value="16"/>
-            <constant name="VTXOB_mod_z_spacing" value="0.2*mm"/> <!-- Must be done for disks as well! Currently not done -->
+            <constant name="VTXOB_nModules1" value="8"/>            <!-- 163.1 mm-->
+            <constant name="VTXOB_nModules2" value="16"/>           <!-- 326.3 mm -->
+            <constant name="VTXOB_mod_z_spacing" value="0.2*mm"/>   <!-- Must be done for disks as well! Currently not done -->
     
             <constant name="VTXOB_z1" value="(VTXOB_nModules1*VTXO_mod_z+(VTXOB_nModules1-1)*VTXOB_mod_z_spacing)/2.0"/>
             <constant name="VTXOB_z2" value="(VTXOB_nModules2*VTXO_mod_z+(VTXOB_nModules2-1)*VTXOB_mod_z_spacing)/2.0"/>
@@ -115,6 +115,9 @@
             <constant name="VTXOB_TerminalPart_L2_length3"        value="9.25*mm"/>
             <constant name="VTXOB_TerminalPart_L2_thickness3"        value="304.345*mm*mm*mm/VTXOB_TerminalPart_L2_width3/VTXOB_TerminalPart_L2_length3"/>
         
+            <constant name="VTXOB_z1_passive" value="VTXOB_z1+VTXOB_mod_z_spacing+VTXO_hybrid_length+VTXOB_TerminalPart_L1_length1+VTXOB_TerminalPart_L1_length3"/> 
+            <constant name="VTXOB_z2_passive" value="VTXOB_z2+VTXOB_mod_z_spacing+VTXO_hybrid_length+VTXOB_TerminalPart_L2_length1+VTXOB_TerminalPart_L2_length3"/> 
+
         <!-- Vertex disks parameters -->
             <constant name="VTXD_support_thickness" value="VTXO_support_Fleece_thickness+VTXO_support_CarbonFiber_thickness+VTXO_support_PaperGraphite_thickness"/>      
             <constant name="VTXD_z1" value="VTXD_z_min"/>
@@ -250,15 +253,9 @@
         <!-- Vertex outer barrel   -->
         <detector name="VTXOB" type="VertexBarrel_detailed_o1_v01" vis="VXDVis" id="DetID_VXD_OB" readout="VTXOBCollection"  region="VTXOBRegion">
             <envelope vis="VXDVis">
-                <shape type="BooleanShape" operation="Subtraction" material="Air">
-                    <shape type="BooleanShape" operation="Subtraction">
-                        <shape type="Tube" rmin="VTXOB_r_min_layer-VTXOB_r_min_clearance" rmax="VTXOB_r_max" dz="VTXOB_half_length"/>
-                        <shape type="Cone" rmin1="0" rmax1="tan(VertexClearanceTheta)*VTXOB_half_length" rmin2="0" rmax2="0" z="VTXOB_half_length/2."/>
-                        <position x="0" y="0" z="-VTXOB_half_length/2." />
-                    </shape>
-                    
-                    <shape type="Cone" rmin1="0" rmax1="0" rmin2="0" rmax2="tan(VertexClearanceTheta)*VTXOB_half_length" z="VTXOB_half_length/2."/>
-                    <position x="0" y="0" z="VTXOB_half_length/2." />
+                <shape type="BooleanShape" operation="Union" material="Air">
+                    <shape type="Tube" rmin="VTXOB_r_min_layer-VTXOB_r_min_clearance" rmax="VTXOB_r_min_layer+VTXOB_r_min_clearance" dz="VTXOB_z1_passive"/>
+                    <shape type="Tube" rmin="VTXOB_r_max_layer-VTXOB_rmax_clearance" rmax="VTXOB_r_max_layer+VTXOB_rmax_clearance" dz="VTXOB_z2_passive"/>
                 </shape>
             </envelope>
             <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_BARREL"/>
@@ -388,22 +385,27 @@
         <!-- Vertex disks -->
         <detector id="DetID_VXD_Disks" name="VTXD" vis="VXDVis" type="VertexDisks_detailed_o1_v01" readout="VTXDCollection" reflect="true" region="VTXDRegion">
             <envelope vis="VXDVis">
-                <shape type="BooleanShape" operation="Subtraction" material="Air">
                     <shape type="BooleanShape" operation="Subtraction" material="Air">
-                        <shape type="BooleanShape" operation="Subtraction">
-                            <shape type="Tube" rmin="VTXD_rmin1" rmax="VTXOB_r_max" dz="VTXD_z_max_total"/>
+                        <shape type="BooleanShape" operation="Subtraction" material="Air">
+                            <shape type="BooleanShape" operation="Subtraction" material="Air">
+                                <shape type="BooleanShape" operation="Subtraction" material="Air">
+                                    <shape type="Tube" rmin="VTXD_rmin1" rmax="VTXD_r_max" dz="VTXD_z_max_total"/>
+                                    <shape type="Tube" rmin="VTXOB_r_max_layer-VTXOB_rmax_clearance" rmax="VTXOB_r_max_layer+VTXOB_rmax_clearance" dz="VTXOB_z2_passive"/> <!-- Subtract volume of outermost barrel to avoid overlap -->
+                                    <position x="0" y="0" z="0"/>
+                                </shape>
+                                
+                                <shape type="Tube" rmin="0.0*mm" rmax="VTXD_r_max" dz="VTXD_z_min_total"/>
+                                <position x="0" y="0" z="0"/>
+                            </shape>
 
-                            <shape type="Tube" rmin="0.0*mm" rmax="2.0*VTXOB_r_max" dz="VTXD_z_min_total"/>
-                            <position x="0" y="0" z="0"/>
+                            <shape type="Cone" rmin1="0" rmax1="tan(VertexClearanceTheta)*VTXD_z_max_total" rmin2="0" rmax2="0" z="VTXD_z_max_total/2."/>
+                            <position x="0" y="0" z="-VTXD_z_max_total/2." />
                         </shape>
 
-                        <shape type="Cone" rmin1="0" rmax1="tan(VertexClearanceTheta)*VTXD_z_max_total" rmin2="0" rmax2="0" z="VTXD_z_max_total/2."/>
-                        <position x="0" y="0" z="-VTXD_z_max_total/2." />
+                        <shape type="Cone" rmin1="0" rmax1="0" rmin2="0" rmax2="tan(VertexClearanceTheta)*VTXD_z_max_total" z="VTXD_z_max_total/2."/>
+                        <position x="0" y="0" z="VTXD_z_max_total/2." />
                     </shape>
 
-                    <shape type="Cone" rmin1="0" rmax1="0" rmin2="0" rmax2="tan(VertexClearanceTheta)*VTXD_z_max_total" z="VTXD_z_max_total/2."/>
-                    <position x="0" y="0" z="VTXD_z_max_total/2." />
-                </shape>
             </envelope>
             <comment>Vertex Detector Disks</comment>
 

@@ -81,20 +81,19 @@
     <constant name="VTXIB_r_max_clearance" value="15.0*mm"/>  <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
 
     <constant name="VTXOB_r_min_layer"    value="140*mm"/>      <!-- R of the innermost layer of the outer vertex -->
-    <constant name="VTXOB_r_min_clearance" value="10.0*mm"/>     <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
+    <constant name="VTXOB_r_min_clearance" value="15.0*mm"/>     <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
     <constant name="VTXOB_r_max_layer"    value="315*mm"/>      <!-- R of the outermost layer of the outer vertex -->
-    <constant name="VTXOB_rmax_clearance" value="35.0*mm"/>     <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
-    <constant name="VTXOB_r_max"          value="VTXOB_r_max_layer+VTXOB_rmax_clearance"/>    <!-- r where the vertex subdetector assembly ends -->
+    <constant name="VTXOB_rmax_clearance" value="15.0*mm"/>     <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
 
     <constant name="VTXD_z_min" value="279.06*mm"/>            <!-- Start of VTX disks in z -->
-    <constant name="VTXD_z_min_total" value="VTXD_z_min-30.0*mm"/>      <!-- Outermost edge of VTX disks in z -->
+    <constant name="VTXD_z_min_total" value="VTXD_z_min-20.0*mm"/>      <!-- Outermost edge of VTX disks in z -->
     <constant name="VTXD_z_max" value="918.641*mm"/>            <!-- Outermost VTX disk in z -->
     <constant name="VTXD_z_max_total" value="VTXD_z_max+40.0*mm"/>            <!-- Outermost edge of VTX disk in z -->
     <constant name="VTXD_r_min" value="69.0/2.0*mm"/>        <!-- Start of VTX disks in r -->
+    <constant name="VTXD_r_max" value="315.0*mm"/>        <!-- Start of VTX disks in r -->
 
     <!-- Limits of complete vertex detector system -->
     <constant name="VTX_r_min" value="VTXIB_r_min_layer-VTXIB_r_min_clearance"/> 
-    <constant name="VTX_r_max" value="VTXOB_r_max"/>
 
     <constant name="DCH_inner_radius" value="345*mm"/>
     <constant name="DCH_outer_radius" value="2000*mm"/> <!-- Contact the drift chamber experts if you need to change the DC radiuses (just changing the radius is not enough, the DC has been optimized for those values, the detector geometry is constrained by many construction/mechanical/electronics/etc considerations -->
