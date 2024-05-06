@@ -31,7 +31,7 @@ std::vector<std::pair<uint64_t, double>> getNeighboursModuleThetaMerged(const dd
   int idModuleField(-1);
   int idThetaField(-1);
   int idLayerField(-1);
-  for (int itField = 0; itField < static_cast<int>(aFieldNames.size()); itField++) {
+  for (size_t itField = 0; itField < aFieldNames.size(); itField++) {
     if (aFieldNames[itField] == aSeg.fieldNameModule())
       idModuleField = itField;
     else if (aFieldNames[itField] == aSeg.fieldNameTheta())
@@ -205,7 +205,7 @@ std::vector<int> getCellIndices(const dd4hep::DDSegmentation::FCCSWGridModuleThe
   int idModuleField(-1);
   int idThetaField(-1);
   int idLayerField(-1);
-  for (int itField = 0; itField < static_cast<int>(aFieldNames.size()); itField++) {
+  for (size_t itField = 0; itField < aFieldNames.size(); itField++) {
     if (aFieldNames[itField] == aSeg.fieldNameModule())
       idModuleField = itField;
     else if (aFieldNames[itField] == aSeg.fieldNameTheta())
