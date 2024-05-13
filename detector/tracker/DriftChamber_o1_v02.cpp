@@ -18,7 +18,7 @@
 #include "DD4hep/Printout.h"
 #include "DD4hep/Detector.h"
 
-#include "DCH_info.h"
+#include "DDRec/DCH_info.h"
 
 namespace DCH_v2 {
 
