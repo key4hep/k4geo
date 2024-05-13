@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+<!--
+  <info name="geotests"
+    title="tests for geometry and CAD implementation"
+    author="aciarma"
+    url="no"
+    status="development"
+    version="1.0">
+  </info>-->
+
+  <includes>
+    <gdmlFile  ref="elements.xml"/>
+    <gdmlFile  ref="materials.xml"/>
+  </includes>
+
+  <define>
+    <constant name="world_size" value="10*m"/>
+    <constant name="world_x" value="world_size"/>
+    <constant name="world_y" value="world_size"/>
+    <constant name="world_z" value="world_size"/>
+  </define>
+
+<!--
+<materials>
+    <material name="DefaultMaterial">
+      <D value="7.85" unit="g/cm3"/>
+      <fraction n="0.998" ref="Fe"/>
+      <fraction n=".002"  ref="C"/>
+    </material>
+    <material name="Material01">
+      <D value="7.85" unit="g/cm3"/>
+      <fraction n="1.0" ref="Fe"/>
+    </material>
+</materials>
+-->
+
+
+<display>
+    <vis name="AlBeMet_vis"       alpha="1.0" r="1.0" g="1.0" b="1.0"   showDaughters="true" visible="true"/>
+    <vis name="CopperCooling_vis" alpha="1.0" r="1.0" g="0.5" b="0.0"   showDaughters="true" visible="true"/>
+    <vis name="Gold_vis"          alpha="1.0" r="2.5" g="1.0" b="1.5"   showDaughters="true" visible="true"/>
+    <vis name="Paraffin_vis"      alpha="1.0" r="0.0" g="0.0" b="1.0"   showDaughters="true" visible="true"/>
+    <vis name="Water_vis"         alpha="0.8" r="0.0" g="0.5" b="1.0"   showDaughters="true" visible="true"/>
+    <vis name="Tungsten_vis"      alpha="1.0" r="1.0" g="0.2" b="0.0"   showDaughters="true" visible="true"/>
+</display>
+
+
+<include ref="Beampipe_CADimport_o1_v00.xml"/>
+
+
+</lccdd>

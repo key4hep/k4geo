@@ -1,4 +1,4 @@
-!-- aciarma 28.09.2023
+!-- aciarma 03.10.2023
 
 Engineered beam pipe model + copper cooling
 CAD design courtesy of F. Fransesini
@@ -16,10 +16,11 @@ To use in simulation, include in the main xml file:
 STL files stored in:
 PATH.TO.K4GEO/FCCee/CAD_beampipe/CAD_beampipe
 
-STL files present (upd. 28.09.2023):
-Beampipe - AlBeMet:	  Pipe_230830/AlBeMet162_30082023.stl
-Beampipe - Copper:	  Pipe_230830/Copper_pipe_28092023.stl
-Cooling Manifold:    	  Pipe_230830/Copper_cooling_30082023.stl
-Paraffin:       	  Pipe_230830/Paraffin_30082023.stl
-Gold layer:     	  Pipe_230830/Gold_29082022.stl
-Water:			  Pipe_230830/Water_30082023.stl
+STL files present (upd. 03.10.2023):
+Beampipe - AlBeMet:	  Pipe_231003/AlBeMet162_30082023.stl
+Beampipe - Copper:	  Pipe_231003/Copper_pipe_03102023.stl
+Cooling Manifold:    	  Pipe_231003/Copper_cooling_30082023.stl
+Paraffin:       	  Pipe_231003/Paraffin_30082023.stl
+Gold layer:     	  Pipe_231003/Gold_29082022.stl
+Water:			  Pipe_231003/Water_30082023.stl
+Tungsten mask:		  Pipe_231003/Tungsten_mask_03102023.stl
