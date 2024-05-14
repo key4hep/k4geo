@@ -300,19 +300,18 @@
             <constant name="VTXD_Terminal_thickness" value="5.84*mm"/> 
 
             <constant name="VTXOB_half_length" value="VTXOB_z2+VTXO_hybrid_length+VTXOB_mod_z_spacing+VTXOB_TerminalPart_L1_length2+VTXOB_TerminalPart_L1_length3"/>
-
     </define>        
 
 
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
         <readout name="VTXIBCollection">
-<!--            <segmentation type="CartesianGridYZ" grid_size_y="0.025*mm" grid_size_z="0.025*mm"/>  <!~~ Pixels of 25x25 µm~~>
--->            <id>${GlobalTrackerReadoutID}</id>
+            <segmentation type="CartesianGridYZ" grid_size_y="0.025*mm" grid_size_z="0.025*mm"/>  <!-- Pixels of 25x25 µm for first three layers, other two are 50x150 µm (not correctly implemented currently!)-->
+            <id>${GlobalTrackerReadoutID},y:32:-16,z:-16</id>
         </readout>  
         <readout name="VTXDCollection">
-   <!--         <segmentation type="CartesianGridXY" grid_size_x="0.050*mm" grid_size_y="0.150*mm"/>  <!~~ Pixels of 50x150 µm in r-phi x r ~~>
-   -->         <id>${GlobalTrackerReadoutID}</id>
+            <segmentation type="CartesianGridXY" grid_size_x="0.050*mm" grid_size_y="0.150*mm"/>  <!-- Pixels of 50x150 µm in r-phi x r -->
+            <id>${GlobalTrackerReadoutID},x:32:-16,y:-16</id>
         </readout>
     </readouts>
 
@@ -356,8 +355,8 @@
             <stave name="SiVTXIBStave1">
                 <!-- Sensor -->
                 <sensor r="0.0*mm" thickness="VTXIB_Sensitive_Thickness" material="Silicon">
-                    <component sensitive="False"    xmin="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_sensitive" xmax="VTXIB_mod_rphi/2.0"                                       ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="SiPeripheryVis"/>
-                    <component sensitive="True"     xmin="-VTXIB_mod_rphi/2.0"                                      xmax="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_sensitive" ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="SiSensitiveVis"/>
+                    <component sensitive="False"    xmin="-VTXIB_mod_rphi/2.0" xmax="-VTXIB_mod_rphi/2.0 + VTXIB_mod_rphi_periphery"    ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="SiPeripheryVis"/>
+                    <component sensitive="True"     xmin="-VTXIB_mod_rphi/2.0 + VTXIB_mod_rphi_periphery"                               xmax="VTXIB_mod_rphi/2.0" ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="SiSensitiveVis"/>
                 </sensor>
 
                 <components name="support" r="VTXIB_Sensitive_Thickness" length="VTXIB_z1">
@@ -397,8 +396,8 @@
             <stave name="SiVTXIBStave2">
                 <!-- Sensor -->
                 <sensor r="0.0*mm" thickness="VTXIB_Sensitive_Thickness" material="Silicon">
-                    <component sensitive="False"    xmin="-VTXIB_mod_rphi/2.0"                          xmax="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_periphery" ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="SiPeripheryVis"/>
-                    <component sensitive="True"     xmin="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_periphery" xmax="VTXIB_mod_rphi/2.0"                           ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="SiSensitiveVis"/>
+                    <component sensitive="False"    xmin="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_sensitive" xmax="VTXIB_mod_rphi/2.0"                                       ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="SiPeripheryVis"/>
+                    <component sensitive="True"     xmin="-VTXIB_mod_rphi/2.0"                                      xmax="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_sensitive" ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="SiSensitiveVis"/>
                 </sensor>
 
                 <components name="support" r="VTXIB_Sensitive_Thickness" length="VTXIB_z2">
