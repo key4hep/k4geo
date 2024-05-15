@@ -95,6 +95,17 @@ if(NOT K4GEO_USE_LCIO)
   message(STATUS "Use of LCIO is DISABLED, some detectors that depend on LCIO will not be built: ${lcio_sources}")
 endif()
 
+include(CheckIncludeFileCXX)
+set(CMAKE_REQUIRED_LIBRARIES DD4hep::DDRec)
+CHECK_INCLUDE_FILE_CXX(DDRec/DCH_info.h DCH_INFO_H_EXIST)
+set(CMAKE_REQUIRED_LIBRARIES)
+set(FILES_DEPENDINGON_DCH_INFO_H "DriftChamber_o1_v02.cpp" )
+
+if(NOT DCH_INFO_H_EXIST)
+    list(FILTER sources EXCLUDE REGEX "${FILES_DEPENDINGON_DCH_INFO_H}")
+    message(WARNING "Subdetector ${FILES_DEPENDINGON_DCH_INFO_H} will not be built because header file ${DCH_INFO_H} was not found")
+endif()
+
 file(GLOB G4sources
   ./plugins/TPCSDAction.cpp
   ./plugins/CaloPreShowerSDAction.cpp
