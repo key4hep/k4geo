@@ -145,12 +145,6 @@
     <constant name="HCalRing_max_z" value="HCalEndcap_min_z"/>
     <constant name="HCalRing_symmetry" value="12"/>
     
-    <constant name="Solenoid_inner_radius" value="3719*mm"/>
-    <constant name="Solenoid_outer_radius" value="4272*mm"/>
-    <constant name="Solenoid_half_length" value="3705*mm"/>
-    <constant name="Solenoid_Coil_half_length" value="3476*mm"/>
-    <constant name="Solenoid_Coil_radius" value="3930*mm"/>
-    
     <constant name="YokeBarrel_inner_radius" value="4479*mm"/>
     <constant name="YokeBarrel_outer_radius" value="6000*mm"/>
     <constant name="YokeBarrel_half_length" value="3755*mm"/>
