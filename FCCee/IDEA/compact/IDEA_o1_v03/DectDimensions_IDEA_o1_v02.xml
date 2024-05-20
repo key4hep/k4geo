@@ -252,8 +252,8 @@
     <constant name = "EndcapSecondYokeZOffset"                     value = "5040*mm"/>
     <constant name = "EndcapThirdLayerZOffset"                     value = "5340*mm"/>
 
-    <constant name = "EndcapLayersInnerRadius"                    value = "700*mm"/> <!--Endcap detector inner radius, its the start point of thicknesses of the detector material ** it applys for both detector layers and yoke-->
-    <constant name = "EndcapLayersOuterRadius"                    value = "5320*mm"/> <!--Endcap detector outer radius, its the end point of thicknesses of the detector material ** it applys for both detector layers and yoke-->
+    <constant name = "EndcapLayersInnerRadius"                    value = "700*mm"/> <!--Endcap detector inner radius, its the start point of thicknesses of the detector material ** it applies for both detector layers and yoke-->
+    <constant name = "EndcapLayersOuterRadius"                    value = "5320*mm"/> <!--Endcap detector outer radius, its the end point of thicknesses of the detector material ** it applies for both detector layers and yoke-->
       
     <!-- End of Muon system Parameters-->
         

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lccdd>
 
-  <info name="detailedMuonSystem"
+  <info name="MuonSystem"
 	title=" detailed version of IDEA muon system for FCC-ee"
 	author="Mahmoud Ali, mahmoud.ali@cern.ch"
 	url="no"
@@ -51,9 +51,10 @@
   </display>
 
   <readouts>
-    <readout name="mRWELLChamberReadout">
+    <readout name="MuonSystemCollection">
      <segmentation type="CartesianGridYZ" grid_size_y="1.4*mm" grid_size_z="1.4*mm"/>   <!-- Depending on strip pitch 1.4 mm  -->
-     <id>system:5,layer:4,chamber:15,gasLayer:15,y:-12,z:-12</id>
+     <id>system:5,layer:4,chamber:15,gasLayer:15,y:-12,z:-12</id> <!-- The bit field is divided into 2^5 systems(IDEA sub-detectors), 2^4 layers(Muon System layers"barrel and endcap layers"), 2^11 chambers(the number of muRWELL chambers in every layer), 2^1 gasLayer(number of sensitive layers inside every chambers), and 2^10 y&z strips in every sensitive layer-->
+
     </readout>
 
   </readouts>   
@@ -63,10 +64,10 @@
   <detectors>
 
     <!-- mRWELL envelope -->
-    <detector name="Barrel_layer1" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_Barrel_1" readout="mRWELLChamberReadout">
+    <detector name="Barrel_layer1" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_Barrel_1" readout="MuonSystemCollection">
       <envelope rmin="BarrelFirstLayerRadius" rmax="BarrelSecondLayerRadius" z="BarrelLength"  z_offset="0*mm" material="Air"/>
       <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
-      <sensitive type="SimpleTrackerSD"/>
+      <sensitive type="tracker"/>
 
       <!-- Specify the detector parameters and the overlap /// if you want exclude any component, e.g: endcap, just put endcapDetectorParameters=0   // radius is put in the middle, so its not the inner neither the outer // the endcap detector layers z-offset values have to be changed.. now the layer is thicker = 12 cm -->
       <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
@@ -91,10 +92,10 @@
 
 
 
-   <detector name="Barrel_layer2" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_Barrel_2" readout="mRWELLChamberReadout">
+   <detector name="Barrel_layer2" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_Barrel_2" readout="MuonSystemCollection">
       <envelope rmin="BarrelSecondLayerRadius" rmax="BarrelThirdLayerRadius" z="BarrelLength"  z_offset="0*mm" material="Air"/>
       <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
-      <sensitive type="SimpleTrackerSD"/>
+      <sensitive type="tracker"/>
 
       <!-- Specify the detector parameters and the overlap -->
       <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
@@ -120,10 +121,10 @@
 
 
 
-    <detector name="Barrel_layer3" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_Barrel_3" readout="mRWELLChamberReadout">
+    <detector name="Barrel_layer3" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_Barrel_3" readout="MuonSystemCollection">
       <envelope rmin="BarrelThirdLayerRadius" rmax="BarrelThirdLayerRadius+ 2 * microRWELLVolumeThick" z="BarrelThirdLayerLength"  z_offset="0*mm" material="Air"/>   
       <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
-     <sensitive type="SimpleTrackerSD"/>
+     <sensitive type="tracker"/>
 
       <!-- Specify the detector parameters and the overlap -->
       <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
@@ -151,10 +152,10 @@
      <!--  Just for the negative endcap   //                  /////////////////  -->
 
     <!-- mRWELL envelope -->
-    <detector name="NegativeEndcap_layer1" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_negEndcap_1" readout="mRWELLChamberReadout">
+    <detector name="NegativeEndcap_layer1" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_negEndcap_1" readout="MuonSystemCollection">
       <envelope rmin="EndcapLayersInnerRadius" rmax="EndcapLayersOuterRadius" z="YokeThickness+microRWELLVolumeThickEndcap"  z_offset="-471*cm" material="Air"/>   
       <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
-      <sensitive type="SimpleTrackerSD"/>
+      <sensitive type="tracker"/>
 
       <!-- Specify the detector parameters and the overlap  // radius is put in the middle, so its not the inner neither the outer // the endcap detector layers z-offset values have to be changed.. now the layer is thicker = 12 cm -->
       <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
@@ -177,10 +178,10 @@
  
     </detector>
 
-    <detector name="NegativeEndcap_layer2" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_negEndcap_2" readout="mRWELLChamberReadout">
+    <detector name="NegativeEndcap_layer2" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_negEndcap_2" readout="MuonSystemCollection">
       <envelope rmin="EndcapLayersInnerRadius" rmax="EndcapLayersOuterRadius" z="YokeThickness+microRWELLVolumeThickEndcap" z_offset="-513*cm" material="Air"/>
       <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
-      <sensitive type="SimpleTrackerSD"/>
+      <sensitive type="tracker"/>
 
       <!-- Specify the detector parameters and the overlap -->
       <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
@@ -203,10 +204,10 @@
  
     </detector>
 
-    <detector name="NegativeEndcap_layer3" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_negEndcap_3" readout="mRWELLChamberReadout">
+    <detector name="NegativeEndcap_layer3" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_negEndcap_3" readout="MuonSystemCollection">
       <envelope rmin="EndcapLayersInnerRadius" rmax="EndcapLayersOuterRadius" z="microRWELLVolumeThickEndcap"  z_offset="-540*cm" material="Air"/>
       <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
-      <sensitive type="SimpleTrackerSD"/>
+      <sensitive type="tracker"/>
 
       <!-- Specify the detector parameters and the overlap -->
       <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
@@ -234,10 +235,10 @@
      <!--  Just for the positive endcap   //                  /////////////////  -->
 
     <!-- mRWELL envelope -->
-    <detector name="PositiveEndcap_layer1" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_posEndcap_1" readout="mRWELLChamberReadout">
+    <detector name="PositiveEndcap_layer1" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_posEndcap_1" readout="MuonSystemCollection">
       <envelope rmin="EndcapLayersInnerRadius" rmax="EndcapLayersOuterRadius" z="YokeThickness+microRWELLVolumeThickEndcap"  z_offset="471*cm" material="Air"/>
       <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
-      <sensitive type="SimpleTrackerSD"/>
+      <sensitive type="tracker"/>
 
       <!-- Specify the detector parameters and the overlap  // radius is put in the middle, so its not the inner neither the outer // the endcap detector layers z-offset values have to be changed.. now the layer is thicker = 12 cm -->
       <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
@@ -260,10 +261,10 @@
  
     </detector>
 
-    <detector name="PositiveEndcap_layer2" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_posEndcap_2" readout="mRWELLChamberReadout">
+    <detector name="PositiveEndcap_layer2" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_posEndcap_2" readout="MuonSystemCollection">
       <envelope rmin="EndcapLayersInnerRadius" rmax="EndcapLayersOuterRadius" z="YokeThickness+microRWELLVolumeThickEndcap"  z_offset="513*cm" material="Air"/>
       <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
-      <sensitive type="SimpleTrackerSD"/>
+      <sensitive type="tracker"/>
 
       <!-- Specify the detector parameters and the overlap -->
       <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
@@ -286,10 +287,10 @@
  
     </detector>
 
-    <detector name="PositiveEndcap_layer3" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_posEndcap_3" readout="mRWELLChamberReadout">
+    <detector name="PositiveEndcap_layer3" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_posEndcap_3" readout="MuonSystemCollection">
       <envelope rmin="EndcapLayersInnerRadius" rmax="EndcapLayersOuterRadius" z="microRWELLVolumeThickEndcap"  z_offset="540*cm" material="Air"/>
       <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
-      <sensitive type="SimpleTrackerSD"/>
+      <sensitive type="tracker"/>
 
       <!-- Specify the detector parameters and the overlap -->
       <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
