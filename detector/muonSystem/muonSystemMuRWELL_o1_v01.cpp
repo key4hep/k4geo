@@ -6,8 +6,8 @@ Factory for IDEA muon system
 Expected xml structure (the 'sensitive' keyword is optional and defaults to false):
 <detector type="muonSystemMuRWELL_o1_v01" ...>
   <envelope rmin="..." rmax="..." z="..."  z_offset="..." material="..."/>  <!-- dimensions of the whole detector envelope-->
-  <dimensions x="..." y="..." z="..." z_offset="..." x_offset="..." y_offset="...">  <!--  dimension of the local chamber envelope-->
-  <sensitive type="SimpleTrackerSD"/>
+  <dimensions x="..." y="..." z="..." z_offset="..." x_offset="..." y_offset="...">  <!--  dimension of the local chamber envelope. x: the thickness of the chamber, y&z: the 2D plane dimensions of the chambers-->
+  <sensitive type="tracker"/>
 
   <!-- Specify the detector parameters and the overlap // if you want exclude any component, e.g: endcap, just put endcapDetectorParameters =0 // radius is put in the middle, so its not the inner neither the outer  -->
   <generalParameters numSides="..." overlapY="..." overlapZ="..." clearance="..."/>
