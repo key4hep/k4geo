@@ -19,8 +19,8 @@
     </display>
 
     <define>
-        <constant name="nInnerVertexLayers" value="4"/>
-        <!-- <constant name="nInnerVertexLayers" value="3"/> -->
+        <!-- <constant name="nInnerVertexLayers" value="4"/> -->
+        <constant name="nInnerVertexLayers" value="3"/>
     </define>
 
 
@@ -413,7 +413,7 @@
  
     <!-- Vertex inner barrel -->
         <detector name="VTXIB" type="VertexCylindrical_o1_v01" vis="VXDVis" id="DetID_VXD_IB" readout="VTXIBCollection"  region="VTXIBRegion">
-          <!-- <envelope vis="VXDVis">
+          <envelope vis="VXDVis">
                 <shape type="BooleanShape" operation="Subtraction" material="Air">
                     <shape type="BooleanShape" operation="Subtraction" material="Air">
                         <shape type="BooleanShape" operation="Union" material="Air">
@@ -429,13 +429,13 @@
                     <shape type="Cone" rmin1="0" rmax1="0" rmin2="0" rmax2="tan(VertexClearanceTheta)*2000.0*mm" z="2000.0*mm/2."/>
                     <position x="0" y="0" z="2000.0*mm/2." />
                 </shape>
-            </envelope> -->
+            </envelope>
  
-             <envelope vis="VXDVis">
+             <!-- <envelope vis="VXDVis">
                 <shape type="BooleanShape" operation="Union" material="Air">
                     <shape type="Tube" rmin="VTXIB_r_min_layer-VTXIB_r_min_clearance" rmax="VTXOB_r_max_layer+VTXOB_rmax_clearance" dz="VTXOB_z2_passive/2."/>
                 </shape>
-            </envelope>
+            </envelope> -->
 
 
             <!-- <envelope vis="VXDVis">
@@ -820,15 +820,15 @@
             </stave>
 
             <!-- Vertex inner barrel -->
-            <!-- <layer nLadders="VTXIB_L1_Staves" phi0="0.0" r="VTXIB_r1" offset="VTXIB_L1_offset" id="0" nmodules="VTXIB_L1_nModules" name="SiVTXIBStave1" step="VTXIB_mod_z_spacing" dr="VTXIB_dr1" motherVolLength="2.0*(VTXIB_z1+VTXIB_hybrid_z+VTXIB_mod_z_spacing)" motherVolThickness="VTXIB_r2-VTXIB_r1"/>
+            <layer nLadders="VTXIB_L1_Staves" phi0="0.0" r="VTXIB_r1" offset="VTXIB_L1_offset" id="0" nmodules="VTXIB_L1_nModules" name="SiVTXIBStave1" step="VTXIB_mod_z_spacing" dr="VTXIB_dr1" motherVolLength="2.0*(VTXIB_z1+VTXIB_hybrid_z+VTXIB_mod_z_spacing)" motherVolThickness="VTXIB_r2-VTXIB_r1"/>
             <layer nLadders="VTXIB_L2_Staves" phi0="0.0" r="VTXIB_r2" offset="VTXIB_L2_offset" id="1" nmodules="VTXIB_L2_nModules" name="SiVTXIBStave2" step="VTXIB_mod_z_spacing" dr="VTXIB_dr2" motherVolLength="2.0*(VTXIB_z2+VTXIB_hybrid_z+VTXIB_mod_z_spacing)" motherVolThickness="VTXIB_r3-VTXIB_r2"/>
-            <layer nLadders="VTXIB_L3_Staves" phi0="0.0" r="VTXIB_r3" offset="VTXIB_L3_offset" id="2" nmodules="VTXIB_L3_nModules" name="SiVTXIBStave3" step="VTXIB_mod_z_spacing" dr="VTXIB_dr3" motherVolLength="2.0*(VTXIB_z3+VTXIB_hybrid_z+VTXIB_mod_z_spacing)" motherVolThickness="12.0*mm"/> -->
+            <layer nLadders="VTXIB_L3_Staves" phi0="0.0" r="VTXIB_r3" offset="VTXIB_L3_offset" id="2" nmodules="VTXIB_L3_nModules" name="SiVTXIBStave3" step="VTXIB_mod_z_spacing" dr="VTXIB_dr3" motherVolLength="2.0*(VTXIB_z3+VTXIB_hybrid_z+VTXIB_mod_z_spacing)" motherVolThickness="12.0*mm"/>
 
             <!-- Ultra-light vertex -->
-            <layer nLadders="2" phi0="0.5*RSU_rphi/(2*M_PI*VTXIB_curved_r1)*360.*deg+VTXIB_curved_phi0_1" r="VTXIB_curved_r1" id="0" nmodules="VTXIB_curved_nModules1" name="SiVTXIBStave1Curved" step="0.0*mm" motherVolThickness="VTXIB_curved_r2-VTXIB_curved_r1"        motherVolLength="VTXIB_z1_passive"/>
+            <!-- <layer nLadders="2" phi0="0.5*RSU_rphi/(2*M_PI*VTXIB_curved_r1)*360.*deg+VTXIB_curved_phi0_1" r="VTXIB_curved_r1" id="0" nmodules="VTXIB_curved_nModules1" name="SiVTXIBStave1Curved" step="0.0*mm" motherVolThickness="VTXIB_curved_r2-VTXIB_curved_r1"        motherVolLength="VTXIB_z1_passive"/>
             <layer nLadders="2" phi0="0.5*RSU_rphi/(2*M_PI*VTXIB_curved_r2)*360.*deg+VTXIB_curved_phi0_2" r="VTXIB_curved_r2" id="1" nmodules="VTXIB_curved_nModules2" name="SiVTXIBStave2Curved" step="0.0*mm" motherVolThickness="VTXIB_curved_r3-VTXIB_curved_r2"        motherVolLength="VTXIB_z2_passive"/>
             <layer nLadders="2" phi0="0.5*RSU_rphi/(2*M_PI*VTXIB_curved_r3)*360.*deg+VTXIB_curved_phi0_3" r="VTXIB_curved_r3" id="2" nmodules="VTXIB_curved_nModules3" name="SiVTXIBStave3Curved" step="0.0*mm" motherVolThickness="VTXIB_curved_r4-VTXIB_curved_r3"        motherVolLength="VTXIB_z3_passive" z_offset="VTXIB_curved_gap_z3+2.0*VTXIB_curved_endcap3_length_center" nUnits="2"/>
-            <layer nLadders="2" phi0="0.5*RSU_rphi/(2*M_PI*VTXIB_curved_r4)*360.*deg+VTXIB_curved_phi0_4" r="VTXIB_curved_r4" id="3" nmodules="VTXIB_curved_nModules4" name="SiVTXIBStave4Curved" step="0.0*mm" motherVolThickness="VTXIB_curved_r_outer-VTXIB_curved_r4"   motherVolLength="VTXIB_z4_passive" z_offset="VTXIB_curved_gap_z4+2.0*VTXIB_curved_endcap4_length_center" nUnits="2"/>
+            <layer nLadders="2" phi0="0.5*RSU_rphi/(2*M_PI*VTXIB_curved_r4)*360.*deg+VTXIB_curved_phi0_4" r="VTXIB_curved_r4" id="3" nmodules="VTXIB_curved_nModules4" name="SiVTXIBStave4Curved" step="0.0*mm" motherVolThickness="VTXIB_curved_r_outer-VTXIB_curved_r4"   motherVolLength="VTXIB_z4_passive" z_offset="VTXIB_curved_gap_z4+2.0*VTXIB_curved_endcap4_length_center" nUnits="2"/> -->
 
             <!-- Vertex outer barrel -->
             <layer nLadders="VTXOB_Staves1" phi0="0.0" r="VTXOB_r1" offset="VTXOB_offset1" id="nInnerVertexLayers+0" nmodules="VTXOB_nModules1" name="SiVTXOBStave1" step="VTXOB_mod_z_spacing" motherVolThickness="1.2*cm" motherVolLength="VTXOB_z1_passive"/>
