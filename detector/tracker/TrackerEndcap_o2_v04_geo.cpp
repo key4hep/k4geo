@@ -206,7 +206,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             thisLayer.distanceSensitive   = innerR ; 
             thisLayer.lengthSensitive   = outerR-innerR;
             thisLayer.petalNumber = petal_num;
-            thisLayer.sensersPerPetal   = ring_no ; //Store the number of rings in petalNumber needed for tracking
+            thisLayer.sensorsPerPetal   = ring_no ; //Store the number of rings in petalNumber needed for tracking
 
             //this assumes there is a constant sensitive thickness even though
             //the layer could have different modules with different thicknesses
