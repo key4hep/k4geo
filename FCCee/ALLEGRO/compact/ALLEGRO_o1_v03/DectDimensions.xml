@@ -186,6 +186,12 @@
     <constant name="tracker_region_zmax" value="OuterTracker_half_length"/>
     <constant name="tracker_region_rmax" value="OuterTracker_outer_radius"/>
 
+    <constant name="Solenoid_inner_radius" value="2100*mm"/>
+    <constant name="Solenoid_outer_radius" value="2400*mm"/>
+    <constant name="Solenoid_half_length" value="2500*mm"/>
+    <constant name="Solenoid_Coil_half_length" value="Solenoid_half_length-200*mm"/>
+    <constant name="Solenoid_Coil_radius" value="Solenoid_inner_radius+200*mm"/>
+    
     <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:6,module:11,sensor:8"/>
   </define>
   
