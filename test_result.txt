@@ -1,0 +1,30 @@
+PersistencyIO    INFO  +++ Set Streamer to dd4hep::OpaqueDataBlock
+XMLLoader        INFO  +++ Processing XML file: file:/afs/cern.ch/user/n/nnitika/public/k4geo_preshower_niti/FCCee/IDEA/compact/IDEA_o1_v03/IDEA_o1_v03.xml
+DD4hep           WARN  ++ STD conditions NOT defined by client. NTP defaults taken.
+Detector         INFO  *********** Created World volume with size: 2500 2500 2500
+XercesC          FATAL +++ FATAL Error at file "/afs/cern.ch/user/n/nnitika/public/k4geo_preshower_niti/FCCee/IDEA/compact/IDEA_o1_v03/DectDimensions_IDEA_o1_v02.xml", Line 228 Column: 6 Message:'--' sequence is illegal in comment
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_inner_radius value=3719*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_inner_radius' is already defined. New value will be ignored
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_outer_radius value=4272*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_outer_radius' is already defined. New value will be ignored
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_half_length value=3705*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_half_length' is already defined. New value will be ignored
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_Coil_half_length value=3476*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_Coil_half_length' is already defined. New value will be ignored
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_Coil_radius value=3930*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_Coil_radius' is already defined. New value will be ignored
+Compact          ERROR FAILED     subdetector:PreShower_Barrel of type muonSystemMuRWELL_o1_v01 [sensitive]
+PluginService    ERROR Factory requested: muonSystemMuRWELL_o1_v01 (N10__cxxabiv120__function_type_infoE) :bad any_cast
+PluginService    ERROR Stub is invalid!
+Compact          ERROR Failed to execute subdetector creation plugin. 		No factory with name Create(muonSystemMuRWELL_o1_v01) for type muonSystemMuRWELL_o1_v01 found.
+		Please check library load path and/or plugin factory name.
+Compact          ERROR ++ FAILED    to convert subdetector: PreShower_Barrel: Compact: Failed to execute subdetector creation plugin. 		No factory with name Create(muonSystemMuRWELL_o1_v01) for type muonSystemMuRWELL_o1_v01 found.
+		Please check library load path and/or plugin factory name.
+
+**************************************************** 
+*  A runtime error has occured :                     
+*    Compact: Failed to execute subdetector creation plugin. 		No factory with name Create(muonSystemMuRWELL_o1_v01) for type muonSystemMuRWELL_o1_v01 found.
+		Please check library load path and/or plugin factory name.
+*  the program will have to be terminated - sorry.   
+**************************************************** 
+

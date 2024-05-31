@@ -1,0 +1,943 @@
+PersistencyIO    INFO  +++ Set Streamer to dd4hep::OpaqueDataBlock
+XMLLoader        INFO  +++ Processing XML file: file:/afs/cern.ch/user/n/nnitika/public/k4geo_preshower_niti/FCCee/IDEA/compact/IDEA_o1_v03/IDEA_o1_v03.xml
+XercesC          FATAL +++ FATAL Error at file "/afs/cern.ch/user/n/nnitika/public/k4geo_preshower_niti/FCCee/IDEA/compact/IDEA_o1_v03/IDEA_o1_v03.xml", Line 53 Column: 8 Message:'--' sequence is illegal in comment
+DD4hep           WARN  ++ STD conditions NOT defined by client. NTP defaults taken.
+Detector         INFO  *********** Created World volume with size: 2500 2500 2500
+XercesC          FATAL +++ FATAL Error at file "/afs/cern.ch/user/n/nnitika/public/k4geo_preshower_niti/FCCee/IDEA/compact/IDEA_o1_v03/DectDimensions_IDEA_o1_v02.xml", Line 228 Column: 12 Message:'--' sequence is illegal in comment
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_inner_radius value=3719*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_inner_radius' is already defined. New value will be ignored
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_outer_radius value=4272*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_outer_radius' is already defined. New value will be ignored
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_half_length value=3705*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_half_length' is already defined. New value will be ignored
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_Coil_half_length value=3476*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_Coil_half_length' is already defined. New value will be ignored
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_Coil_radius value=3930*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_Coil_radius' is already defined. New value will be ignored
+Utilities        INFO  +++ setDetectorTypeFlags for detector: BeBeampipe not set.
+DD4hep_Beampipe  INFO         0      90      10      10   10.35   10.35    0.35       0                tube_VertexInnerAlb     AlBeMet162
+DD4hep_Beampipe  INFO         0      90   10.35   10.35   11.35   11.35       1       0                tube_VertexParaffin  LiquidNDecane
+DD4hep_Beampipe  INFO         0      90   11.35   11.35    11.7    11.7    0.35       0                tube_VertexOuterAlb     AlBeMet162
+DD4hep_Beampipe  INFO        90    1190      10    28.9      12    30.9       2       0                    tube_AlBeMet162     AlBeMet162
+Compact          INFO  ++ Converted subdetector:BeBeampipe of type DD4hep_Beampipe_o1_v01 
+Utilities        INFO  +++ setDetectorTypeFlags for detector: BeamPipe not set.
+DD4hep_Beampipe  INFO         0      90   9.994   9.994   9.999   9.999   0.005       0               tube_VertexInnerGold           Gold
+DD4hep_Beampipe  INFO        90    1190   9.994  28.894   9.999  28.899   0.005       0            tube_ConicalChamberGold           Gold
+DD4hep_Beampipe  INFO      1190    1193      15      15    30.9    30.9    15.9       3              tube_SplitVacChambers         Copper
+DD4hep_Beampipe  INFO      1193    6000      15      15      16      16       1       7          tube_DownStreamBeamPipe_1         Copper
+DD4hep_Beampipe  INFO      1193    2070      15      15      16      16       1       6            tube_UpStreamBeamPipe_1         Copper
+DD4hep_Beampipe  INFO      2070    2090      15      10      16   10.01       1       1            tube_UpStreamBeamPipe_2         Copper
+DD4hep_Beampipe  INFO      2090    2110      10      10   10.01   10.01    0.01       1            tube_UpStreamBeamPipe_3         Copper
+DD4hep_Beampipe  INFO      2110    2130      10      15   10.01      16    0.01       1            tube_UpStreamBeamPipe_4         Copper
+DD4hep_Beampipe  INFO      2130    6000      15      15      16      16       1       1            tube_UpStreamBeamPipe_5         Copper
+Compact          INFO  ++ Converted subdetector:BeamPipe of type DD4hep_Beampipe_o1_v01 
+DD4hep_Mask      INFO      2070    2090  16.001  10.011  16.002  16.002   0.001       1     tube_UpStreamBeamPipe_SRmask_1       Tungsten       0 6.28319    none
+DD4hep_Mask      INFO      2090    2110  10.011  10.011  16.002  16.002   5.991       1     tube_UpStreamBeamPipe_SRmask_2       Tungsten       0 6.28319    none
+DD4hep_Mask      INFO      2110    2130  10.011  16.001  16.002  16.002   5.991       1     tube_UpStreamBeamPipe_SRmask_3       Tungsten       0 6.28319    none
+Compact          INFO  ++ Converted subdetector:SynchRadMask of type DD4hep_Mask_o1_v01 
+DD4hep_Mask      INFO      1195    2180    16.8    16.8  49.725    64.5  32.925       3                      tube_TaShield       Tungsten       0 6.28319    none
+Compact          INFO  ++ Converted subdetector:BeamPipeShield of type DD4hep_Mask_o1_v01 
+DD4hep_Mask      INFO       500  1191.4   19.89 33.0266   27.89 48.0266       8       0               tube_TaShieldTopPart       Tungsten 5.689770.593412    none
+DD4hep_Mask      INFO       330     500   16.66   19.89   16.76   27.89     0.1       0              tube_TaShieldTopPart2       Tungsten 5.689770.593412    none
+DD4hep_Mask      INFO       600  1191.4   21.79 33.0266   28.79 48.0266       7       0               tube_TaShieldFiller1       Tungsten0.593412 1.22173    none
+DD4hep_Mask      INFO       600  1191.4   21.79 33.0266   28.79 48.0266       7       0               tube_TaShieldFiller2       Tungsten 5.07891 5.68977    none
+Compact          INFO  ++ Converted subdetector:BeamPipeShield_noRot of type DD4hep_Mask_o1_v01 
+DD4hep_Mask      INFO      1230    2000     103     180     123     200      20       0                       tube_CompSolSolenoidMixture       0 6.28319    none
+Compact          INFO  ++ Converted subdetector:CompSol of type DD4hep_Mask_o1_v01 
+DD4hep_Mask      INFO      2000    2050      66      66     200     200     134       0                       tube_CompSolSolenoidMixture       0 6.28319    none
+DD4hep_Mask      INFO      2050    5200     180     180     200     200      20       0                       tube_CompSolSolenoidMixture       0 6.28319    none
+Compact          INFO  ++ Converted subdetector:ScreenSol of type DD4hep_Mask_o1_v01 
+dd4hep::Ref_t create_detector(dd4hep::Detector&, xml_h, dd4hep::SensitiveDetector)
+Here is my LumiCal
+ and this is the sensitive detector: 0x7ffd18d86908
+ The crossing angle is: 0.03 radian
+Total Length 11.25 cm
+Layer Thickness 0.45 cm
+Compact          INFO  ++ Converted subdetector:LumiCal of type LumiCal_o1_v01 [calorimeter]
+dd4hep::Ref_t create_detector(dd4hep::Detector&, xml_h, dd4hep::SensitiveDetector)
+Here is my LumiCal
+ and this is the sensitive detector: 0x7ffd18d86908
+ The crossing angle is: 0.03 radian
+Total Length 11.25 cm
+Layer Thickness 0.45 cm
+Compact          INFO  ++ Converted subdetector:LumiCalInstrumentation of type LumiCal_o1_v01 [calorimeter]
+dd4hep::Ref_t create_detector(dd4hep::Detector&, xml_h, dd4hep::SensitiveDetector)
+Here is my LumiCal
+ and this is the sensitive detector: 0x7ffd18d86908
+ The crossing angle is: 0.03 radian
+Total Length 11.25 cm
+Layer Thickness 0.45 cm
+Compact          INFO  ++ Converted subdetector:LumiCalCooling of type LumiCal_o1_v01 [calorimeter]
+dd4hep::Ref_t create_detector(dd4hep::Detector&, xml_h, dd4hep::SensitiveDetector)
+Here is my LumiCal
+ and this is the sensitive detector: 0x7ffd18d86908
+ The crossing angle is: 0.03 radian
+Total Length 0.35 cm
+Layer Thickness 0.35 cm
+Compact          INFO  ++ Converted subdetector:LumiCalBackShield of type LumiCal_o1_v01 [calorimeter]
+Detector         INFO  +++ Patching names of anonymous shapes....
+DDG4             INFO +++ Imported 174 global values to namespace:DDG4
+Geant4Kernel           OutputLevel:  2
+Geant4Kernel           UI:           UI
+Geant4Kernel           NumEvents:    10
+DDG4             INFO +++  List of sensitive detectors:
+Geant4Kernel           NumThreads:   0
+DDG4             INFO +++  LumiCal                          type:calorimeter   --> Sensitive type: Geant4ScintillatorCalorimeterAction
+DDG4             INFO +++  LumiCalBackShield                type:calorimeter   --> Sensitive type: Geant4ScintillatorCalorimeterAction
+DDG4             INFO +++  LumiCalCooling                   type:calorimeter   --> Sensitive type: Geant4ScintillatorCalorimeterAction
+DDG4             INFO +++  LumiCalInstrumentation           type:calorimeter   --> Sensitive type: Geant4ScintillatorCalorimeterAction
+Geant4UI         INFO  +++ UI> Install Geant4 control directory:/ddg4/UI/
+Geant4Kernel     INFO  ++ Registered global action UI of type dd4hep::sim::Geant4UIManager
+Geant4UI         INFO  +++ MagFieldTrackingSetup> Install Geant4 control directory:/ddg4/MagFieldTrackingSetup/
+Geant4UI         INFO  +++ DetectorConstructionAction> Install Geant4 control directory:/ddg4/DetectorConstructionAction/
+Geant4UI         INFO  +++ ConstructSD> Install Geant4 control directory:/ddg4/ConstructSD/
+Geant4Kernel     INFO  ++ Registered global action RunInit of type dd4hep::sim::Test::Geant4TestRunAction
+DDSim.Helper.Random INFO Choosing random seed for you: 1778725220
+DDSim.Helper.OutputConfig INFO ++++ Setting up LCIO Output ++++
+Geant4UI         INFO  +++ RunAction> Install Geant4 control directory:/ddg4/RunAction/
+Geant4UI         INFO  +++ LcioOutput> Install Geant4 control directory:/ddg4/LcioOutput/
+Geant4UI         INFO  +++ EventAction> Install Geant4 control directory:/ddg4/EventAction/
+Geant4UI         INFO  +++ TrackingAction> Install Geant4 control directory:/ddg4/TrackingAction/
+Geant4UI         INFO  +++ SteppingAction> Install Geant4 control directory:/ddg4/SteppingAction/
+Geant4UI         INFO  +++ GeneratorAction> Install Geant4 control directory:/ddg4/GeneratorAction/
+DDSim.Helper.Filter INFO ReqFilt {'edep0', 'edep1kev'}
+DDSim            INFO getDetectorLists - found active detector LumiCal type: calorimeter
+DDSim            INFO getDetectorLists - Identified LumiCal as a calorimeter
+DDSim            INFO getDetectorLists - found active detector LumiCalBackShield type: calorimeter
+DDSim            INFO getDetectorLists - Identified LumiCalBackShield as a calorimeter
+DDSim            INFO getDetectorLists - found active detector LumiCalCooling type: calorimeter
+DDSim            INFO getDetectorLists - Identified LumiCalCooling as a calorimeter
+DDSim            INFO getDetectorLists - found active detector LumiCalInstrumentation type: calorimeter
+DDSim            INFO getDetectorLists - Identified LumiCalInstrumentation as a calorimeter
+DDSim            INFO Setting up SD for LumiCal with Geant4ScintillatorCalorimeterAction
+Geant4UI         INFO  +++ ParticleHandler> Install Geant4 control directory:/ddg4/ParticleHandler/
+Geant4UI         INFO  +++ LumiCal> Install Geant4 control directory:/ddg4/LumiCal/
+DDSim.Helper.Filter INFO Adding default filter 'edep0' to sensitive detector for 'LumiCal' 
+DDSim            INFO Setting up SD for LumiCalBackShield with Geant4ScintillatorCalorimeterAction
+Geant4UI         INFO  +++ LumiCalHandler> Install Geant4 control directory:/ddg4/LumiCalHandler/
+Geant4UI         INFO  +++ LumiCalBackShield> Install Geant4 control directory:/ddg4/LumiCalBackShield/
+DDSim.Helper.Filter INFO Adding default filter 'edep0' to sensitive detector for 'LumiCalBackShield' 
+DDSim            INFO Setting up SD for LumiCalCooling with Geant4ScintillatorCalorimeterAction
+Geant4UI         INFO  +++ LumiCalBackShieldHandler> Install Geant4 control directory:/ddg4/LumiCalBackShieldHandler/
+Geant4UI         INFO  +++ LumiCalCooling> Install Geant4 control directory:/ddg4/LumiCalCooling/
+DDSim.Helper.Filter INFO Adding default filter 'edep0' to sensitive detector for 'LumiCalCooling' 
+DDSim            INFO Setting up SD for LumiCalInstrumentation with Geant4ScintillatorCalorimeterAction
+Geant4UI         INFO  +++ LumiCalCoolingHandler> Install Geant4 control directory:/ddg4/LumiCalCoolingHandler/
+Geant4UI         INFO  +++ LumiCalInstrumentation> Install Geant4 control directory:/ddg4/LumiCalInstrumentation/
+DDSim.Helper.Filter INFO Adding default filter 'edep0' to sensitive detector for 'LumiCalInstrumentation' 
+Geant4UI         INFO  +++ LumiCalInstrumentationHandler> Install Geant4 control directory:/ddg4/LumiCalInstrumentationHandler/
+Geant4UI         INFO  +++ PhysicsList> Install Geant4 control directory:/ddg4/PhysicsList/
+PhysicsList            +++ Dump of physics list component(s)
+PhysicsList            +++ Extension name       FTFP_BERT
+PhysicsList            +++ Transportation flag: 0
+PhysicsList            +++ Program decays:      0
+PhysicsList            +++ RangeCut:            0.700000
+Geant4UI         INFO  +++ GlobalRangeCut> Install Geant4 control directory:/ddg4/GlobalRangeCut/
+ G4ChordFinder: stepperDriverId: 2
+FieldSetup       INFO  Geant4 magnetic field tracking configured.
+FieldSetup       INFO  G4MagIntegratorStepper:ClassicalRK4 G4Mag_EqRhs:Mag_UsualEqRhs
+FieldSetup       INFO  Epsilon:[min:0.000050 mm max:0.001000 mm]
+FieldSetup       INFO  Delta:[chord:0.250000 1-step:0.010000 intersect:0.001000] LargestStep 10000.000000 mm
+
+**************************************************************
+ Geant4 version Name: geant4-11-02-patch-01 [MT]   (16-February-2024)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+
+Geant4UI         INFO  +++ Geant4RunManager> Install Geant4 control directory:/ddg4/Geant4RunManager/
+Geant4RunManager WARN  +++ Configured run manager of type: G4RunManager.
+Geant4Kernel     WARN  +++ Multi-threaded mode requested, but not supported by this compilation of Geant4.
+Geant4Kernel     WARN  +++ Falling back to single threaded mode.
+G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
+<<< Geant4 Physics List simulation engine: FTFP_BERT
+
+
+Myphysics        INFO  Registered Geant4 physics constructor G4StepLimiterPhysics to physics list
+UserInitialization INFO  +++ Executing Geant4UserActionInitialization::Build. Context:0x2123c9e0 Kernel:0x2128e600 [-1]
+Geant4Converter  INFO  +++  Successfully converted geometry to Geant4.
+Geant4UI         INFO  +++ ConstructGeo> Install Geant4 control directory:/ddg4/ConstructGeo/
+
+ hInelastic FTFP_BERT : threshold between BERT and FTFP is over the interval 
+ for pions :   3 to 6 GeV
+ for kaons :   3 to 6 GeV
+ for proton :  3 to 6 GeV
+ for neutron : 3 to 6 GeV
+
+### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
+GlobalRangeCut   INFO  +++ Set PhysicsList RangeCut to 0.700000 mm
+UI               INFO  ++ Executing UI setup: overlap.mac
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : UIMAN0123
+      issued by : G4UImanager::ApplyCommand
+Command aborted (400)
+Error code : 400
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+DDSim            INFO DDSim            INFO  Total Time:   8.43 s (User), 16.85 s (System)
+Geant4Kernel     INFO  ++ Terminate Geant4 and delete associated actions.
+PersistencyIO    INFO  +++ Set Streamer to dd4hep::OpaqueDataBlock
+XMLLoader        INFO  +++ Processing XML file: file:/afs/cern.ch/user/n/nnitika/public/k4geo_preshower_niti/FCCee/IDEA/compact/IDEA_o1_v03/IDEA_o1_v03.xml
+XercesC          FATAL +++ FATAL Error at file "/afs/cern.ch/user/n/nnitika/public/k4geo_preshower_niti/FCCee/IDEA/compact/IDEA_o1_v03/IDEA_o1_v03.xml", Line 53 Column: 8 Message:'--' sequence is illegal in comment
+DD4hep           WARN  ++ STD conditions NOT defined by client. NTP defaults taken.
+Detector         INFO  *********** Created World volume with size: 2500 2500 2500
+XercesC          FATAL +++ FATAL Error at file "/afs/cern.ch/user/n/nnitika/public/k4geo_preshower_niti/FCCee/IDEA/compact/IDEA_o1_v03/DectDimensions_IDEA_o1_v02.xml", Line 228 Column: 12 Message:'--' sequence is illegal in comment
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_inner_radius value=3719*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_inner_radius' is already defined. New value will be ignored
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_outer_radius value=4272*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_outer_radius' is already defined. New value will be ignored
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_half_length value=3705*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_half_length' is already defined. New value will be ignored
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_Coil_half_length value=3476*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_Coil_half_length' is already defined. New value will be ignored
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_Coil_radius value=3930*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_Coil_radius' is already defined. New value will be ignored
+Utilities        INFO  +++ setDetectorTypeFlags for detector: BeBeampipe not set.
+DD4hep_Beampipe  INFO         0      90      10      10   10.35   10.35    0.35       0                tube_VertexInnerAlb     AlBeMet162
+DD4hep_Beampipe  INFO         0      90   10.35   10.35   11.35   11.35       1       0                tube_VertexParaffin  LiquidNDecane
+DD4hep_Beampipe  INFO         0      90   11.35   11.35    11.7    11.7    0.35       0                tube_VertexOuterAlb     AlBeMet162
+DD4hep_Beampipe  INFO        90    1190      10    28.9      12    30.9       2       0                    tube_AlBeMet162     AlBeMet162
+Compact          INFO  ++ Converted subdetector:BeBeampipe of type DD4hep_Beampipe_o1_v01 
+Utilities        INFO  +++ setDetectorTypeFlags for detector: BeamPipe not set.
+DD4hep_Beampipe  INFO         0      90   9.994   9.994   9.999   9.999   0.005       0               tube_VertexInnerGold           Gold
+DD4hep_Beampipe  INFO        90    1190   9.994  28.894   9.999  28.899   0.005       0            tube_ConicalChamberGold           Gold
+DD4hep_Beampipe  INFO      1190    1193      15      15    30.9    30.9    15.9       3              tube_SplitVacChambers         Copper
+DD4hep_Beampipe  INFO      1193    6000      15      15      16      16       1       7          tube_DownStreamBeamPipe_1         Copper
+DD4hep_Beampipe  INFO      1193    2070      15      15      16      16       1       6            tube_UpStreamBeamPipe_1         Copper
+DD4hep_Beampipe  INFO      2070    2090      15      10      16   10.01       1       1            tube_UpStreamBeamPipe_2         Copper
+DD4hep_Beampipe  INFO      2090    2110      10      10   10.01   10.01    0.01       1            tube_UpStreamBeamPipe_3         Copper
+DD4hep_Beampipe  INFO      2110    2130      10      15   10.01      16    0.01       1            tube_UpStreamBeamPipe_4         Copper
+DD4hep_Beampipe  INFO      2130    6000      15      15      16      16       1       1            tube_UpStreamBeamPipe_5         Copper
+Compact          INFO  ++ Converted subdetector:BeamPipe of type DD4hep_Beampipe_o1_v01 
+DD4hep_Mask      INFO      2070    2090  16.001  10.011  16.002  16.002   0.001       1     tube_UpStreamBeamPipe_SRmask_1       Tungsten       0 6.28319    none
+DD4hep_Mask      INFO      2090    2110  10.011  10.011  16.002  16.002   5.991       1     tube_UpStreamBeamPipe_SRmask_2       Tungsten       0 6.28319    none
+DD4hep_Mask      INFO      2110    2130  10.011  16.001  16.002  16.002   5.991       1     tube_UpStreamBeamPipe_SRmask_3       Tungsten       0 6.28319    none
+Compact          INFO  ++ Converted subdetector:SynchRadMask of type DD4hep_Mask_o1_v01 
+DD4hep_Mask      INFO      1195    2180    16.8    16.8  49.725    64.5  32.925       3                      tube_TaShield       Tungsten       0 6.28319    none
+Compact          INFO  ++ Converted subdetector:BeamPipeShield of type DD4hep_Mask_o1_v01 
+DD4hep_Mask      INFO       500  1191.4   19.89 33.0266   27.89 48.0266       8       0               tube_TaShieldTopPart       Tungsten 5.689770.593412    none
+DD4hep_Mask      INFO       330     500   16.66   19.89   16.76   27.89     0.1       0              tube_TaShieldTopPart2       Tungsten 5.689770.593412    none
+DD4hep_Mask      INFO       600  1191.4   21.79 33.0266   28.79 48.0266       7       0               tube_TaShieldFiller1       Tungsten0.593412 1.22173    none
+DD4hep_Mask      INFO       600  1191.4   21.79 33.0266   28.79 48.0266       7       0               tube_TaShieldFiller2       Tungsten 5.07891 5.68977    none
+Compact          INFO  ++ Converted subdetector:BeamPipeShield_noRot of type DD4hep_Mask_o1_v01 
+DD4hep_Mask      INFO      1230    2000     103     180     123     200      20       0                       tube_CompSolSolenoidMixture       0 6.28319    none
+Compact          INFO  ++ Converted subdetector:CompSol of type DD4hep_Mask_o1_v01 
+DD4hep_Mask      INFO      2000    2050      66      66     200     200     134       0                       tube_CompSolSolenoidMixture       0 6.28319    none
+DD4hep_Mask      INFO      2050    5200     180     180     200     200      20       0                       tube_CompSolSolenoidMixture       0 6.28319    none
+Compact          INFO  ++ Converted subdetector:ScreenSol of type DD4hep_Mask_o1_v01 
+dd4hep::Ref_t create_detector(dd4hep::Detector&, xml_h, dd4hep::SensitiveDetector)
+Here is my LumiCal
+ and this is the sensitive detector: 0x7fff2120eca8
+ The crossing angle is: 0.03 radian
+Total Length 11.25 cm
+Layer Thickness 0.45 cm
+Compact          INFO  ++ Converted subdetector:LumiCal of type LumiCal_o1_v01 [calorimeter]
+dd4hep::Ref_t create_detector(dd4hep::Detector&, xml_h, dd4hep::SensitiveDetector)
+Here is my LumiCal
+ and this is the sensitive detector: 0x7fff2120eca8
+ The crossing angle is: 0.03 radian
+Total Length 11.25 cm
+Layer Thickness 0.45 cm
+Compact          INFO  ++ Converted subdetector:LumiCalInstrumentation of type LumiCal_o1_v01 [calorimeter]
+dd4hep::Ref_t create_detector(dd4hep::Detector&, xml_h, dd4hep::SensitiveDetector)
+Here is my LumiCal
+ and this is the sensitive detector: 0x7fff2120eca8
+ The crossing angle is: 0.03 radian
+Total Length 11.25 cm
+Layer Thickness 0.45 cm
+Compact          INFO  ++ Converted subdetector:LumiCalCooling of type LumiCal_o1_v01 [calorimeter]
+dd4hep::Ref_t create_detector(dd4hep::Detector&, xml_h, dd4hep::SensitiveDetector)
+Here is my LumiCal
+ and this is the sensitive detector: 0x7fff2120eca8
+ The crossing angle is: 0.03 radian
+Total Length 0.35 cm
+Layer Thickness 0.35 cm
+Compact          INFO  ++ Converted subdetector:LumiCalBackShield of type LumiCal_o1_v01 [calorimeter]
+Detector         INFO  +++ Patching names of anonymous shapes....
+DDG4             INFO +++ Imported 174 global values to namespace:DDG4
+Geant4Kernel           OutputLevel:  2
+Geant4Kernel           UI:           UI
+Geant4Kernel           NumEvents:    10
+DDG4             INFO +++  List of sensitive detectors:
+Geant4Kernel           NumThreads:   0
+DDG4             INFO +++  LumiCal                          type:calorimeter   --> Sensitive type: Geant4ScintillatorCalorimeterAction
+DDG4             INFO +++  LumiCalBackShield                type:calorimeter   --> Sensitive type: Geant4ScintillatorCalorimeterAction
+DDG4             INFO +++  LumiCalCooling                   type:calorimeter   --> Sensitive type: Geant4ScintillatorCalorimeterAction
+DDG4             INFO +++  LumiCalInstrumentation           type:calorimeter   --> Sensitive type: Geant4ScintillatorCalorimeterAction
+Geant4UI         INFO  +++ UI> Install Geant4 control directory:/ddg4/UI/
+Geant4Kernel     INFO  ++ Registered global action UI of type dd4hep::sim::Geant4UIManager
+Geant4UI         INFO  +++ MagFieldTrackingSetup> Install Geant4 control directory:/ddg4/MagFieldTrackingSetup/
+Geant4UI         INFO  +++ DetectorConstructionAction> Install Geant4 control directory:/ddg4/DetectorConstructionAction/
+Geant4UI         INFO  +++ ConstructSD> Install Geant4 control directory:/ddg4/ConstructSD/
+Geant4Kernel     INFO  ++ Registered global action RunInit of type dd4hep::sim::Test::Geant4TestRunAction
+DDSim.Helper.Random INFO Choosing random seed for you: 1749696066
+DDSim.Helper.OutputConfig INFO ++++ Setting up LCIO Output ++++
+Geant4UI         INFO  +++ RunAction> Install Geant4 control directory:/ddg4/RunAction/
+Geant4UI         INFO  +++ LcioOutput> Install Geant4 control directory:/ddg4/LcioOutput/
+Geant4UI         INFO  +++ EventAction> Install Geant4 control directory:/ddg4/EventAction/
+Geant4UI         INFO  +++ TrackingAction> Install Geant4 control directory:/ddg4/TrackingAction/
+Geant4UI         INFO  +++ SteppingAction> Install Geant4 control directory:/ddg4/SteppingAction/
+Geant4UI         INFO  +++ GeneratorAction> Install Geant4 control directory:/ddg4/GeneratorAction/
+DDSim.Helper.Filter INFO ReqFilt {'edep0', 'edep1kev'}
+DDSim            INFO getDetectorLists - found active detector LumiCal type: calorimeter
+DDSim            INFO getDetectorLists - Identified LumiCal as a calorimeter
+DDSim            INFO getDetectorLists - found active detector LumiCalBackShield type: calorimeter
+DDSim            INFO getDetectorLists - Identified LumiCalBackShield as a calorimeter
+DDSim            INFO getDetectorLists - found active detector LumiCalCooling type: calorimeter
+DDSim            INFO getDetectorLists - Identified LumiCalCooling as a calorimeter
+DDSim            INFO getDetectorLists - found active detector LumiCalInstrumentation type: calorimeter
+DDSim            INFO getDetectorLists - Identified LumiCalInstrumentation as a calorimeter
+DDSim            INFO Setting up SD for LumiCal with Geant4ScintillatorCalorimeterAction
+Geant4UI         INFO  +++ ParticleHandler> Install Geant4 control directory:/ddg4/ParticleHandler/
+Geant4UI         INFO  +++ LumiCal> Install Geant4 control directory:/ddg4/LumiCal/
+DDSim.Helper.Filter INFO Adding default filter 'edep0' to sensitive detector for 'LumiCal' 
+DDSim            INFO Setting up SD for LumiCalBackShield with Geant4ScintillatorCalorimeterAction
+Geant4UI         INFO  +++ LumiCalHandler> Install Geant4 control directory:/ddg4/LumiCalHandler/
+Geant4UI         INFO  +++ LumiCalBackShield> Install Geant4 control directory:/ddg4/LumiCalBackShield/
+DDSim.Helper.Filter INFO Adding default filter 'edep0' to sensitive detector for 'LumiCalBackShield' 
+DDSim            INFO Setting up SD for LumiCalCooling with Geant4ScintillatorCalorimeterAction
+Geant4UI         INFO  +++ LumiCalBackShieldHandler> Install Geant4 control directory:/ddg4/LumiCalBackShieldHandler/
+Geant4UI         INFO  +++ LumiCalCooling> Install Geant4 control directory:/ddg4/LumiCalCooling/
+DDSim.Helper.Filter INFO Adding default filter 'edep0' to sensitive detector for 'LumiCalCooling' 
+DDSim            INFO Setting up SD for LumiCalInstrumentation with Geant4ScintillatorCalorimeterAction
+Geant4UI         INFO  +++ LumiCalCoolingHandler> Install Geant4 control directory:/ddg4/LumiCalCoolingHandler/
+Geant4UI         INFO  +++ LumiCalInstrumentation> Install Geant4 control directory:/ddg4/LumiCalInstrumentation/
+DDSim.Helper.Filter INFO Adding default filter 'edep0' to sensitive detector for 'LumiCalInstrumentation' 
+Geant4UI         INFO  +++ LumiCalInstrumentationHandler> Install Geant4 control directory:/ddg4/LumiCalInstrumentationHandler/
+Geant4UI         INFO  +++ PhysicsList> Install Geant4 control directory:/ddg4/PhysicsList/
+PhysicsList            +++ Dump of physics list component(s)
+PhysicsList            +++ Extension name       FTFP_BERT
+PhysicsList            +++ Transportation flag: 0
+PhysicsList            +++ Program decays:      0
+PhysicsList            +++ RangeCut:            0.700000
+Geant4UI         INFO  +++ GlobalRangeCut> Install Geant4 control directory:/ddg4/GlobalRangeCut/
+ G4ChordFinder: stepperDriverId: 2
+FieldSetup       INFO  Geant4 magnetic field tracking configured.
+FieldSetup       INFO  G4MagIntegratorStepper:ClassicalRK4 G4Mag_EqRhs:Mag_UsualEqRhs
+FieldSetup       INFO  Epsilon:[min:0.000050 mm max:0.001000 mm]
+FieldSetup       INFO  Delta:[chord:0.250000 1-step:0.010000 intersect:0.001000] LargestStep 10000.000000 mm
+
+**************************************************************
+ Geant4 version Name: geant4-11-02-patch-01 [MT]   (16-February-2024)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
+
+Geant4UI         INFO  +++ Geant4RunManager> Install Geant4 control directory:/ddg4/Geant4RunManager/
+Geant4RunManager WARN  +++ Configured run manager of type: G4RunManager.
+Geant4Kernel     WARN  +++ Multi-threaded mode requested, but not supported by this compilation of Geant4.
+Geant4Kernel     WARN  +++ Falling back to single threaded mode.
+G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
+<<< Geant4 Physics List simulation engine: FTFP_BERT
+
+
+Myphysics        INFO  Registered Geant4 physics constructor G4StepLimiterPhysics to physics list
+UserInitialization INFO  +++ Executing Geant4UserActionInitialization::Build. Context:0x21a01020 Kernel:0x21a1ee20 [-1]
+Geant4Converter  INFO  +++  Successfully converted geometry to Geant4.
+Geant4UI         INFO  +++ ConstructGeo> Install Geant4 control directory:/ddg4/ConstructGeo/
+
+ hInelastic FTFP_BERT : threshold between BERT and FTFP is over the interval 
+ for pions :   3 to 6 GeV
+ for kaons :   3 to 6 GeV
+ for proton :  3 to 6 GeV
+ for neutron : 3 to 6 GeV
+
+### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
+GlobalRangeCut   INFO  +++ Set PhysicsList RangeCut to 0.700000 mm
+UI               INFO  ++ Executing UI setup: overlap.mac
+Running geometry overlaps check...
+Checking overlaps for volume LumiCal_envelope_7:7 (G4UnionSolid) ... OK! 
+Checking overlaps for volume LumiCal_module_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer4_4:4 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer4slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer4slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer4slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer4slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer3slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer3slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer3slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer3slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer0slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer0slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer0slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer0slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer1slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer1slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer1slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer1slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer2slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer2slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer2slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer2slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer5_5:5 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer5slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer5slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer5slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer5slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer6_6:6 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer6slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer6slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer6slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer6slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer7_7:7 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer7slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer7slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer7slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer7slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer8_8:8 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer8slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer8slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer8slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer8slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer9_9:9 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer9slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer9slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer9slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer9slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer10_10:10 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer10slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer10slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer10slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer10slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer11_11:11 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer11slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer11slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer11slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer11slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer12_12:12 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer12slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer12slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer12slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer12slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer13_13:13 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer13slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer13slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer13slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer13slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer14_14:14 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer14slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer14slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer14slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer14slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer15_15:15 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer15slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer15slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer15slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer15slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer16_16:16 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer16slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer16slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer16slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer16slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer17_17:17 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer17slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer17slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer17slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer17slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer18_18:18 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer18slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer18slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer18slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer18slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer19_19:19 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer19slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer19slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer19slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer19slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer20_20:20 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer20slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer20slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer20slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer20slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer21_21:21 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer21slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer21slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer21slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer21slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer22_22:22 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer22slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer22slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer22slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer22slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer23_23:23 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer23slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer23slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer23slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer23slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer24_24:24 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer24slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer24slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer24slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer24slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_module_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer4_4:4 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer4slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer4slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer4slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer4slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer3slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer3slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer3slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer3slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer0slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer0slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer0slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer0slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer1slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer1slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer1slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer1slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer2slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer2slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer2slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer2slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer5_5:5 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer5slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer5slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer5slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer5slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer6_6:6 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer6slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer6slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer6slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer6slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer7_7:7 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer7slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer7slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer7slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer7slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer8_8:8 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer8slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer8slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer8slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer8slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer9_9:9 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer9slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer9slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer9slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer9slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer10_10:10 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer10slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer10slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer10slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer10slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer11_11:11 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer11slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer11slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer11slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer11slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer12_12:12 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer12slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer12slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer12slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer12slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer13_13:13 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer13slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer13slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer13slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer13slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer14_14:14 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer14slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer14slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer14slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer14slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer15_15:15 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer15slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer15slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer15slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer15slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer16_16:16 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer16slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer16slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer16slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer16slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer17_17:17 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer17slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer17slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer17slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer17slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer18_18:18 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer18slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer18slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer18slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer18slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer19_19:19 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer19slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer19slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer19slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer19slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer20_20:20 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer20slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer20slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer20slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer20slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer21_21:21 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer21slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer21slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer21slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer21slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer22_22:22 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer22slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer22slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer22slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer22slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer23_23:23 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer23slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer23slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer23slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer23slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer24_24:24 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer24slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer24slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer24slice2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCal_layer24slice3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume AV_1!BeBeampipe_assembly_0#0!tube_VertexInnerAlb_wall_0#0:2 (G4Cons) ... OK! 
+Checking overlaps for volume AV_1!BeBeampipe_assembly_0#0!tube_VertexInnerAlb_wall2_1#1:3 (G4Cons) ... OK! 
+Checking overlaps for volume AV_1!BeBeampipe_assembly_0#0!tube_VertexParaffin_wall_2#2:4 (G4Cons) ... OK! 
+Checking overlaps for volume AV_1!BeBeampipe_assembly_0#0!tube_VertexParaffin_wall2_3#3:5 (G4Cons) ... OK! 
+Checking overlaps for volume AV_1!BeBeampipe_assembly_0#0!tube_VertexOuterAlb_wall_4#4:6 (G4Cons) ... OK! 
+Checking overlaps for volume AV_1!BeBeampipe_assembly_0#0!tube_VertexOuterAlb_wall2_5#5:7 (G4Cons) ... OK! 
+Checking overlaps for volume AV_1!BeBeampipe_assembly_0#0!tube_AlBeMet162_wall_6#6:8 (G4Cons) ... OK! 
+Checking overlaps for volume AV_1!BeBeampipe_assembly_0#0!tube_AlBeMet162_wall2_7#7:9 (G4Cons) ... OK! 
+Checking overlaps for volume AV_2!BeamPipe_assembly_1#1!tube_VertexInnerGold_0#0:2 (G4Cons) ... OK! 
+Checking overlaps for volume tube_VertexInnerGold_wall_0:0 (G4Cons) ... OK! 
+Checking overlaps for volume AV_2!BeamPipe_assembly_1#1!tube_VertexInnerGold_1#1:3 (G4Cons) ... OK! 
+Checking overlaps for volume tube_VertexInnerGold_wall2_0:0 (G4Cons) ... OK! 
+Checking overlaps for volume AV_2!BeamPipe_assembly_1#1!tube_ConicalChamberGold_2#2:4 (G4Cons) ... OK! 
+Checking overlaps for volume tube_ConicalChamberGold_wall_0:0 (G4Cons) ... OK! 
+Checking overlaps for volume AV_2!BeamPipe_assembly_1#1!tube_ConicalChamberGold_3#3:5 (G4Cons) ... OK! 
+Checking overlaps for volume tube_ConicalChamberGold_wall2_0:0 (G4Cons) ... OK! 
+Checking overlaps for volume AV_2!BeamPipe_assembly_1#1!tube_SplitVacChambers_0_4#4:6 (G4Cons) ... OK! 
+Checking overlaps for volume tube_SplitVacChambers_wall_0_0:0 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume AV_2!BeamPipe_assembly_1#1!tube_SplitVacChambers_1_5#5:7 (G4Cons) ... OK! 
+Checking overlaps for volume tube_SplitVacChambers_wall_1_0:0 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume AV_2!BeamPipe_assembly_1#1!tube_DownStreamBeamPipe_1_0_6#6:8 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume tube_DownStreamBeamPipe_1_wall_0_0:0 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume AV_2!BeamPipe_assembly_1#1!tube_DownStreamBeamPipe_1_1_7#7:9 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume tube_DownStreamBeamPipe_1_wall_1_0:0 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume AV_2!BeamPipe_assembly_1#1!tube_UpStreamBeamPipe_1_0_8#8:10 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume tube_UpStreamBeamPipe_1_wall_0_0:0 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume AV_2!BeamPipe_assembly_1#1!tube_UpStreamBeamPipe_1_1_9#9:11 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume tube_UpStreamBeamPipe_1_wall_1_0:0 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume AV_2!BeamPipe_assembly_1#1!tube_UpStreamBeamPipe_2_10#10:12 (G4Cons) ... OK! 
+Checking overlaps for volume tube_UpStreamBeamPipe_2_wall_0:0 (G4Cons) ... OK! 
+Checking overlaps for volume AV_2!BeamPipe_assembly_1#1!tube_UpStreamBeamPipe_2_11#11:13 (G4Cons) ... OK! 
+Checking overlaps for volume tube_UpStreamBeamPipe_2_wall2_0:0 (G4Cons) ... OK! 
+Checking overlaps for volume AV_2!BeamPipe_assembly_1#1!tube_UpStreamBeamPipe_3_12#12:14 (G4Cons) ... OK! 
+Checking overlaps for volume tube_UpStreamBeamPipe_3_wall_0:0 (G4Cons) ... OK! 
+Checking overlaps for volume AV_2!BeamPipe_assembly_1#1!tube_UpStreamBeamPipe_3_13#13:15 (G4Cons) ... OK! 
+Checking overlaps for volume tube_UpStreamBeamPipe_3_wall2_0:0 (G4Cons) ... OK! 
+Checking overlaps for volume AV_2!BeamPipe_assembly_1#1!tube_UpStreamBeamPipe_4_14#14:16 (G4Cons) ... OK! 
+Checking overlaps for volume tube_UpStreamBeamPipe_4_wall_0:0 (G4Cons) ... OK! 
+Checking overlaps for volume AV_2!BeamPipe_assembly_1#1!tube_UpStreamBeamPipe_4_15#15:17 (G4Cons) ... OK! 
+Checking overlaps for volume tube_UpStreamBeamPipe_4_wall2_0:0 (G4Cons) ... OK! 
+Checking overlaps for volume AV_2!BeamPipe_assembly_1#1!tube_UpStreamBeamPipe_5_16#16:18 (G4Cons) ... OK! 
+Checking overlaps for volume tube_UpStreamBeamPipe_5_wall_0:0 (G4Cons) ... OK! 
+Checking overlaps for volume AV_2!BeamPipe_assembly_1#1!tube_UpStreamBeamPipe_5_17#17:19 (G4Cons) ... OK! 
+Checking overlaps for volume tube_UpStreamBeamPipe_5_wall2_0:0 (G4Cons) ... OK! 
+Checking overlaps for volume AV_3!SynchRadMask_assembly_2#2!tube_UpStreamBeamPipe_SRmask_1_0#0:3 (G4Cons) ... OK! 
+Checking overlaps for volume AV_3!SynchRadMask_assembly_2#2!tube_UpStreamBeamPipe_SRmask_1_1#1:4 (G4Cons) ... OK! 
+Checking overlaps for volume AV_3!SynchRadMask_assembly_2#2!tube_UpStreamBeamPipe_SRmask_2_2#2:5 (G4Cons) ... OK! 
+Checking overlaps for volume AV_3!SynchRadMask_assembly_2#2!tube_UpStreamBeamPipe_SRmask_2_3#3:6 (G4Cons) ... OK! 
+Checking overlaps for volume AV_3!SynchRadMask_assembly_2#2!tube_UpStreamBeamPipe_SRmask_3_4#4:7 (G4Cons) ... OK! 
+Checking overlaps for volume AV_3!SynchRadMask_assembly_2#2!tube_UpStreamBeamPipe_SRmask_3_5#5:8 (G4Cons) ... OK! 
+Checking overlaps for volume AV_4!BeamPipeShield_assembly_3#3!tube_TaShield_0_0#0:4 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume AV_4!BeamPipeShield_assembly_3#3!tube_TaShield_1_1#1:5 (G4SubtractionSolid) ... OK! 
+Checking overlaps for volume AV_5!BeamPipeShield_noRot_assembly_4#4!tube_TaShieldTopPart_0#0:5 (G4Cons) ... OK! 
+Checking overlaps for volume AV_5!BeamPipeShield_noRot_assembly_4#4!tube_TaShieldTopPart_1#1:6 (G4Cons) ... OK! 
+Checking overlaps for volume AV_5!BeamPipeShield_noRot_assembly_4#4!tube_TaShieldTopPart2_2#2:7 (G4Cons) ... OK! 
+Checking overlaps for volume AV_5!BeamPipeShield_noRot_assembly_4#4!tube_TaShieldTopPart2_3#3:8 (G4Cons) ... OK! 
+Checking overlaps for volume AV_5!BeamPipeShield_noRot_assembly_4#4!tube_TaShieldFiller1_4#4:9 (G4Cons) ... OK! 
+Checking overlaps for volume AV_5!BeamPipeShield_noRot_assembly_4#4!tube_TaShieldFiller1_5#5:10 (G4Cons) ... OK! 
+Checking overlaps for volume AV_5!BeamPipeShield_noRot_assembly_4#4!tube_TaShieldFiller2_6#6:11 (G4Cons) ... OK! 
+Checking overlaps for volume AV_5!BeamPipeShield_noRot_assembly_4#4!tube_TaShieldFiller2_7#7:12 (G4Cons) ... OK! 
+Checking overlaps for volume AV_6!CompSol_assembly_5#5!tube_CompSol_0#0:6 (G4Cons) ... OK! 
+Checking overlaps for volume AV_6!CompSol_assembly_5#5!tube_CompSol_1#1:7 (G4Cons) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_envelope_8:8 (G4UnionSolid) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_module_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer14_14:14 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer14slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer14slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer21_21:21 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer21slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer21slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer1slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer1slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer0slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer0slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer2slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer2slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer3slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer3slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer4_4:4 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer4slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer4slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer5_5:5 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer5slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer5slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer6_6:6 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer6slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer6slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer7_7:7 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer7slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer7slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer8_8:8 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer8slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer8slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer9_9:9 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer9slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer9slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer10_10:10 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer10slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer10slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer11_11:11 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer11slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer11slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer12_12:12 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer12slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer12slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer13_13:13 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer13slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer13slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer15_15:15 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer15slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer15slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer16_16:16 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer16slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer16slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer17_17:17 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer17slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer17slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer18_18:18 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer18slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer18slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer19_19:19 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer19slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer19slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer20_20:20 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer20slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer20slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer22_22:22 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer22slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer22slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer23_23:23 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer23slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer23slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer24_24:24 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer24slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer24slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_module_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer14_14:14 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer14slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer14slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer21_21:21 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer21slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer21slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer1slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer1slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer0slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer0slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer2slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer2slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer3slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer3slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer4_4:4 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer4slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer4slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer5_5:5 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer5slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer5slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer6_6:6 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer6slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer6slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer7_7:7 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer7slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer7slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer8_8:8 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer8slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer8slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer9_9:9 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer9slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer9slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer10_10:10 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer10slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer10slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer11_11:11 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer11slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer11slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer12_12:12 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer12slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer12slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer13_13:13 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer13slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer13slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer15_15:15 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer15slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer15slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer16_16:16 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer16slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer16slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer17_17:17 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer17slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer17slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer18_18:18 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer18slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer18slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer19_19:19 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer19slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer19slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer20_20:20 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer20slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer20slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer22_22:22 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer22slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer22slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer23_23:23 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer23slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer23slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer24_24:24 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer24slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalInstrumentation_layer24slice1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume AV_7!ScreenSol_assembly_6#6!tube_CompSol_0#0:7 (G4Cons) ... OK! 
+Checking overlaps for volume AV_7!ScreenSol_assembly_6#6!tube_CompSol_1#1:8 (G4Cons) ... OK! 
+Checking overlaps for volume AV_7!ScreenSol_assembly_6#6!tube_CompSol_2#2:9 (G4Cons) ... OK! 
+Checking overlaps for volume AV_7!ScreenSol_assembly_6#6!tube_CompSol_3#3:10 (G4Cons) ... OK! 
+Checking overlaps for volume LumiCalCooling_envelope_9:9 (G4UnionSolid) ... OK! 
+Checking overlaps for volume LumiCalCooling_module_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer0slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer1slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer2slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer3slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer4_4:4 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer4slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer5_5:5 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer5slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer6_6:6 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer6slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer7_7:7 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer7slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer8_8:8 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer8slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer9_9:9 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer9slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer10_10:10 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer10slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer11_11:11 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer11slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer12_12:12 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer12slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer13_13:13 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer13slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer14_14:14 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer14slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer15_15:15 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer15slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer16_16:16 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer16slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer17_17:17 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer17slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer18_18:18 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer18slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer19_19:19 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer19slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer20_20:20 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer20slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer21_21:21 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer21slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer22_22:22 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer22slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer23_23:23 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer23slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer24_24:24 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer24slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_module_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer0slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer1_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer1slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer2_2:2 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer2slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer3_3:3 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer3slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer4_4:4 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer4slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer5_5:5 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer5slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer6_6:6 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer6slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer7_7:7 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer7slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer8_8:8 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer8slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer9_9:9 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer9slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer10_10:10 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer10slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer11_11:11 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer11slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer12_12:12 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer12slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer13_13:13 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer13slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer14_14:14 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer14slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer15_15:15 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer15slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer16_16:16 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer16slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer17_17:17 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer17slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer18_18:18 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer18slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer19_19:19 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer19slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer20_20:20 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer20slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer21_21:21 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer21slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer22_22:22 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer22slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer23_23:23 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer23slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer24_24:24 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalCooling_layer24slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalBackShield_envelope_10:10 (G4UnionSolid) ... OK! 
+Checking overlaps for volume LumiCalBackShield_module_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalBackShield_layer0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalBackShield_layer0slice0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalBackShield_module_1:1 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalBackShield_layer0_0:0 (G4Tubs) ... OK! 
+Checking overlaps for volume LumiCalBackShield_layer0slice0_0:0 (G4Tubs) ... OK! 
+Geometry overlaps check completed !
+
+DDSim            INFO DDSim            INFO  Total Time:   21.47 s (User), 15.41 s (System)
+Geant4Kernel     INFO  ++ Terminate Geant4 and delete associated actions.

@@ -1,0 +1,181 @@
+PersistencyIO    INFO  +++ Set Streamer to dd4hep::OpaqueDataBlock
+XMLLoader        INFO  +++ Processing XML file: file:/afs/cern.ch/user/n/nnitika/public/k4geo_preshower_niti/afs/cern.ch/user/n/nnitika/public/k4geo_preshower_niti/FCCee/IDEA/compact/IDEA_o1_v03/IDEA_o1_v03.xml
+XercesC          FATAL +++ FATAL Error at file "", Line 0 Column: 0 Message:unable to open primary document entity '/afs/cern.ch/user/n/nnitika/public/k4geo_preshower_niti/afs/cern.ch/user/n/nnitika/public/k4geo_preshower_niti/FCCee/IDEA/compact/IDEA_o1_v03/IDEA_o1_v03.xml'
+PersistencyIO    INFO  +++ Set Streamer to dd4hep::OpaqueDataBlock
+XMLLoader        INFO  +++ Processing XML file: file:/afs/cern.ch/user/n/nnitika/public/k4geo_preshower_niti/FCCee/IDEA/compact/IDEA_o1_v03/IDEA_o1_v03.xml
+DD4hep           WARN  ++ STD conditions NOT defined by client. NTP defaults taken.
+Detector         INFO  *********** Created World volume with size: 2500 2500 2500
+XercesC          FATAL +++ FATAL Error at file "/afs/cern.ch/user/n/nnitika/public/k4geo_preshower_niti/FCCee/IDEA/compact/IDEA_o1_v03/DectDimensions_IDEA_o1_v02.xml", Line 228 Column: 64 Message:'--' sequence is illegal in comment
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_inner_radius value=3719*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_inner_radius' is already defined. New value will be ignored
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_outer_radius value=4272*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_outer_radius' is already defined. New value will be ignored
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_half_length value=3705*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_half_length' is already defined. New value will be ignored
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_Coil_half_length value=3476*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_Coil_half_length' is already defined. New value will be ignored
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_Coil_radius value=3930*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_Coil_radius' is already defined. New value will be ignored
+Utilities        INFO  +++ setDetectorTypeFlags for detector: BeBeampipe not set.
+DD4hep_Beampipe  INFO         0      90      10      10   10.35   10.35    0.35       0                tube_VertexInnerAlb     AlBeMet162
+DD4hep_Beampipe  INFO         0      90   10.35   10.35   11.35   11.35       1       0                tube_VertexParaffin  LiquidNDecane
+DD4hep_Beampipe  INFO         0      90   11.35   11.35    11.7    11.7    0.35       0                tube_VertexOuterAlb     AlBeMet162
+DD4hep_Beampipe  INFO        90    1190      10    28.9      12    30.9       2       0                    tube_AlBeMet162     AlBeMet162
+Compact          INFO  ++ Converted subdetector:BeBeampipe of type DD4hep_Beampipe_o1_v01 
+Utilities        INFO  +++ setDetectorTypeFlags for detector: BeamPipe not set.
+DD4hep_Beampipe  INFO         0      90   9.994   9.994   9.999   9.999   0.005       0               tube_VertexInnerGold           Gold
+DD4hep_Beampipe  INFO        90    1190   9.994  28.894   9.999  28.899   0.005       0            tube_ConicalChamberGold           Gold
+DD4hep_Beampipe  INFO      1190    1193      15      15    30.9    30.9    15.9       3              tube_SplitVacChambers         Copper
+DD4hep_Beampipe  INFO      1193    6000      15      15      16      16       1       7          tube_DownStreamBeamPipe_1         Copper
+DD4hep_Beampipe  INFO      1193    2070      15      15      16      16       1       6            tube_UpStreamBeamPipe_1         Copper
+DD4hep_Beampipe  INFO      2070    2090      15      10      16   10.01       1       1            tube_UpStreamBeamPipe_2         Copper
+DD4hep_Beampipe  INFO      2090    2110      10      10   10.01   10.01    0.01       1            tube_UpStreamBeamPipe_3         Copper
+DD4hep_Beampipe  INFO      2110    2130      10      15   10.01      16    0.01       1            tube_UpStreamBeamPipe_4         Copper
+DD4hep_Beampipe  INFO      2130    6000      15      15      16      16       1       1            tube_UpStreamBeamPipe_5         Copper
+Compact          INFO  ++ Converted subdetector:BeamPipe of type DD4hep_Beampipe_o1_v01 
+DD4hep_Mask      INFO      2070    2090  16.001  10.011  16.002  16.002   0.001       1     tube_UpStreamBeamPipe_SRmask_1       Tungsten       0 6.28319    none
+DD4hep_Mask      INFO      2090    2110  10.011  10.011  16.002  16.002   5.991       1     tube_UpStreamBeamPipe_SRmask_2       Tungsten       0 6.28319    none
+DD4hep_Mask      INFO      2110    2130  10.011  16.001  16.002  16.002   5.991       1     tube_UpStreamBeamPipe_SRmask_3       Tungsten       0 6.28319    none
+Compact          INFO  ++ Converted subdetector:SynchRadMask of type DD4hep_Mask_o1_v01 
+DD4hep_Mask      INFO      1195    2180    16.8    16.8  49.725    64.5  32.925       3                      tube_TaShield       Tungsten       0 6.28319    none
+Compact          INFO  ++ Converted subdetector:BeamPipeShield of type DD4hep_Mask_o1_v01 
+DD4hep_Mask      INFO       500  1191.4   19.89 33.0266   27.89 48.0266       8       0               tube_TaShieldTopPart       Tungsten 5.689770.593412    none
+DD4hep_Mask      INFO       330     500   16.66   19.89   16.76   27.89     0.1       0              tube_TaShieldTopPart2       Tungsten 5.689770.593412    none
+DD4hep_Mask      INFO       600  1191.4   21.79 33.0266   28.79 48.0266       7       0               tube_TaShieldFiller1       Tungsten0.593412 1.22173    none
+DD4hep_Mask      INFO       600  1191.4   21.79 33.0266   28.79 48.0266       7       0               tube_TaShieldFiller2       Tungsten 5.07891 5.68977    none
+Compact          INFO  ++ Converted subdetector:BeamPipeShield_noRot of type DD4hep_Mask_o1_v01 
+DD4hep_Mask      INFO      1230    2000     103     180     123     200      20       0                       tube_CompSolSolenoidMixture       0 6.28319    none
+Compact          INFO  ++ Converted subdetector:CompSol of type DD4hep_Mask_o1_v01 
+DD4hep_Mask      INFO      2000    2050      66      66     200     200     134       0                       tube_CompSolSolenoidMixture       0 6.28319    none
+DD4hep_Mask      INFO      2050    5200     180     180     200     200      20       0                       tube_CompSolSolenoidMixture       0 6.28319    none
+Compact          INFO  ++ Converted subdetector:ScreenSol of type DD4hep_Mask_o1_v01 
+dd4hep::Ref_t create_detector(dd4hep::Detector&, xml_h, dd4hep::SensitiveDetector)
+Here is my LumiCal
+ and this is the sensitive detector: 0x7ffcd3c3e988
+ The crossing angle is: 0.03 radian
+Total Length 11.25 cm
+Layer Thickness 0.45 cm
+Compact          INFO  ++ Converted subdetector:LumiCal of type LumiCal_o1_v01 [calorimeter]
+dd4hep::Ref_t create_detector(dd4hep::Detector&, xml_h, dd4hep::SensitiveDetector)
+Here is my LumiCal
+ and this is the sensitive detector: 0x7ffcd3c3e988
+ The crossing angle is: 0.03 radian
+Total Length 11.25 cm
+Layer Thickness 0.45 cm
+Compact          INFO  ++ Converted subdetector:LumiCalInstrumentation of type LumiCal_o1_v01 [calorimeter]
+dd4hep::Ref_t create_detector(dd4hep::Detector&, xml_h, dd4hep::SensitiveDetector)
+Here is my LumiCal
+ and this is the sensitive detector: 0x7ffcd3c3e988
+ The crossing angle is: 0.03 radian
+Total Length 11.25 cm
+Layer Thickness 0.45 cm
+Compact          INFO  ++ Converted subdetector:LumiCalCooling of type LumiCal_o1_v01 [calorimeter]
+dd4hep::Ref_t create_detector(dd4hep::Detector&, xml_h, dd4hep::SensitiveDetector)
+Here is my LumiCal
+ and this is the sensitive detector: 0x7ffcd3c3e988
+ The crossing angle is: 0.03 radian
+Total Length 0.35 cm
+Layer Thickness 0.35 cm
+Compact          INFO  ++ Converted subdetector:LumiCalBackShield of type LumiCal_o1_v01 [calorimeter]
+Utilities        INFO  +++ setDetectorTypeFlags for detector: Vertex not set.
+Compact          INFO  ++ Converted subdetector:Vertex of type DD4hep_SubdetectorAssembly 
+Compact          ERROR ++ FAILED    to convert subdetector: VTXIB: getRefChild: Failed to find child with name: VTXIBRegion Map  contains 0 elements: {}
+
+**************************************************** 
+*  A runtime error has occured :                     
+*    getRefChild: Failed to find child with name: VTXIBRegion Map  contains 0 elements: {}
+*  the program will have to be terminated - sorry.   
+**************************************************** 
+
+PersistencyIO    INFO  +++ Set Streamer to dd4hep::OpaqueDataBlock
+XMLLoader        INFO  +++ Processing XML file: file:/afs/cern.ch/user/n/nnitika/public/k4geo_preshower_niti/compact/IDEA_o1_v03/IDEA_o1_v03.xml
+XercesC          FATAL +++ FATAL Error at file "", Line 0 Column: 0 Message:unable to open primary document entity '/afs/cern.ch/user/n/nnitika/public/k4geo_preshower_niti/compact/IDEA_o1_v03/IDEA_o1_v03.xml'
+PersistencyIO    INFO  +++ Set Streamer to dd4hep::OpaqueDataBlock
+XMLLoader        INFO  +++ Processing XML file: file:/afs/cern.ch/user/n/nnitika/public/k4geo_preshower_niti/compact/IDEA_o1_v03/IDEA_o1_v03.xml
+XercesC          FATAL +++ FATAL Error at file "", Line 0 Column: 0 Message:unable to open primary document entity '/afs/cern.ch/user/n/nnitika/public/k4geo_preshower_niti/compact/IDEA_o1_v03/IDEA_o1_v03.xml'
+PersistencyIO    INFO  +++ Set Streamer to dd4hep::OpaqueDataBlock
+XMLLoader        INFO  +++ Processing XML file: file:/afs/cern.ch/user/n/nnitika/public/k4geo_preshower_niti/FCCee/IDEA/compact/IDEA_o1_v03/IDEA_o1_v03.xml
+DD4hep           WARN  ++ STD conditions NOT defined by client. NTP defaults taken.
+Detector         INFO  *********** Created World volume with size: 2500 2500 2500
+XercesC          FATAL +++ FATAL Error at file "/afs/cern.ch/user/n/nnitika/public/k4geo_preshower_niti/FCCee/IDEA/compact/IDEA_o1_v03/DectDimensions_IDEA_o1_v02.xml", Line 228 Column: 64 Message:'--' sequence is illegal in comment
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_inner_radius value=3719*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_inner_radius' is already defined. New value will be ignored
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_outer_radius value=4272*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_outer_radius' is already defined. New value will be ignored
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_half_length value=3705*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_half_length' is already defined. New value will be ignored
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_Coil_half_length value=3476*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_Coil_half_length' is already defined. New value will be ignored
+Evaluator        WARN  +++ Overwriting variable: name=Solenoid_Coil_radius value=3930*mm  Evaluator::Object : existing variable [setVariable error]
+Detector         WARN  +++ Object 'Solenoid_Coil_radius' is already defined. New value will be ignored
+Utilities        INFO  +++ setDetectorTypeFlags for detector: BeBeampipe not set.
+DD4hep_Beampipe  INFO         0      90      10      10   10.35   10.35    0.35       0                tube_VertexInnerAlb     AlBeMet162
+DD4hep_Beampipe  INFO         0      90   10.35   10.35   11.35   11.35       1       0                tube_VertexParaffin  LiquidNDecane
+DD4hep_Beampipe  INFO         0      90   11.35   11.35    11.7    11.7    0.35       0                tube_VertexOuterAlb     AlBeMet162
+DD4hep_Beampipe  INFO        90    1190      10    28.9      12    30.9       2       0                    tube_AlBeMet162     AlBeMet162
+Compact          INFO  ++ Converted subdetector:BeBeampipe of type DD4hep_Beampipe_o1_v01 
+Utilities        INFO  +++ setDetectorTypeFlags for detector: BeamPipe not set.
+DD4hep_Beampipe  INFO         0      90   9.994   9.994   9.999   9.999   0.005       0               tube_VertexInnerGold           Gold
+DD4hep_Beampipe  INFO        90    1190   9.994  28.894   9.999  28.899   0.005       0            tube_ConicalChamberGold           Gold
+DD4hep_Beampipe  INFO      1190    1193      15      15    30.9    30.9    15.9       3              tube_SplitVacChambers         Copper
+DD4hep_Beampipe  INFO      1193    6000      15      15      16      16       1       7          tube_DownStreamBeamPipe_1         Copper
+DD4hep_Beampipe  INFO      1193    2070      15      15      16      16       1       6            tube_UpStreamBeamPipe_1         Copper
+DD4hep_Beampipe  INFO      2070    2090      15      10      16   10.01       1       1            tube_UpStreamBeamPipe_2         Copper
+DD4hep_Beampipe  INFO      2090    2110      10      10   10.01   10.01    0.01       1            tube_UpStreamBeamPipe_3         Copper
+DD4hep_Beampipe  INFO      2110    2130      10      15   10.01      16    0.01       1            tube_UpStreamBeamPipe_4         Copper
+DD4hep_Beampipe  INFO      2130    6000      15      15      16      16       1       1            tube_UpStreamBeamPipe_5         Copper
+Compact          INFO  ++ Converted subdetector:BeamPipe of type DD4hep_Beampipe_o1_v01 
+DD4hep_Mask      INFO      2070    2090  16.001  10.011  16.002  16.002   0.001       1     tube_UpStreamBeamPipe_SRmask_1       Tungsten       0 6.28319    none
+DD4hep_Mask      INFO      2090    2110  10.011  10.011  16.002  16.002   5.991       1     tube_UpStreamBeamPipe_SRmask_2       Tungsten       0 6.28319    none
+DD4hep_Mask      INFO      2110    2130  10.011  16.001  16.002  16.002   5.991       1     tube_UpStreamBeamPipe_SRmask_3       Tungsten       0 6.28319    none
+Compact          INFO  ++ Converted subdetector:SynchRadMask of type DD4hep_Mask_o1_v01 
+DD4hep_Mask      INFO      1195    2180    16.8    16.8  49.725    64.5  32.925       3                      tube_TaShield       Tungsten       0 6.28319    none
+Compact          INFO  ++ Converted subdetector:BeamPipeShield of type DD4hep_Mask_o1_v01 
+DD4hep_Mask      INFO       500  1191.4   19.89 33.0266   27.89 48.0266       8       0               tube_TaShieldTopPart       Tungsten 5.689770.593412    none
+DD4hep_Mask      INFO       330     500   16.66   19.89   16.76   27.89     0.1       0              tube_TaShieldTopPart2       Tungsten 5.689770.593412    none
+DD4hep_Mask      INFO       600  1191.4   21.79 33.0266   28.79 48.0266       7       0               tube_TaShieldFiller1       Tungsten0.593412 1.22173    none
+DD4hep_Mask      INFO       600  1191.4   21.79 33.0266   28.79 48.0266       7       0               tube_TaShieldFiller2       Tungsten 5.07891 5.68977    none
+Compact          INFO  ++ Converted subdetector:BeamPipeShield_noRot of type DD4hep_Mask_o1_v01 
+DD4hep_Mask      INFO      1230    2000     103     180     123     200      20       0                       tube_CompSolSolenoidMixture       0 6.28319    none
+Compact          INFO  ++ Converted subdetector:CompSol of type DD4hep_Mask_o1_v01 
+DD4hep_Mask      INFO      2000    2050      66      66     200     200     134       0                       tube_CompSolSolenoidMixture       0 6.28319    none
+DD4hep_Mask      INFO      2050    5200     180     180     200     200      20       0                       tube_CompSolSolenoidMixture       0 6.28319    none
+Compact          INFO  ++ Converted subdetector:ScreenSol of type DD4hep_Mask_o1_v01 
+dd4hep::Ref_t create_detector(dd4hep::Detector&, xml_h, dd4hep::SensitiveDetector)
+Here is my LumiCal
+ and this is the sensitive detector: 0x7ffc61ed7338
+ The crossing angle is: 0.03 radian
+Total Length 11.25 cm
+Layer Thickness 0.45 cm
+Compact          INFO  ++ Converted subdetector:LumiCal of type LumiCal_o1_v01 [calorimeter]
+dd4hep::Ref_t create_detector(dd4hep::Detector&, xml_h, dd4hep::SensitiveDetector)
+Here is my LumiCal
+ and this is the sensitive detector: 0x7ffc61ed7338
+ The crossing angle is: 0.03 radian
+Total Length 11.25 cm
+Layer Thickness 0.45 cm
+Compact          INFO  ++ Converted subdetector:LumiCalInstrumentation of type LumiCal_o1_v01 [calorimeter]
+dd4hep::Ref_t create_detector(dd4hep::Detector&, xml_h, dd4hep::SensitiveDetector)
+Here is my LumiCal
+ and this is the sensitive detector: 0x7ffc61ed7338
+ The crossing angle is: 0.03 radian
+Total Length 11.25 cm
+Layer Thickness 0.45 cm
+Compact          INFO  ++ Converted subdetector:LumiCalCooling of type LumiCal_o1_v01 [calorimeter]
+dd4hep::Ref_t create_detector(dd4hep::Detector&, xml_h, dd4hep::SensitiveDetector)
+Here is my LumiCal
+ and this is the sensitive detector: 0x7ffc61ed7338
+ The crossing angle is: 0.03 radian
+Total Length 0.35 cm
+Layer Thickness 0.35 cm
+Compact          INFO  ++ Converted subdetector:LumiCalBackShield of type LumiCal_o1_v01 [calorimeter]
+Utilities        INFO  +++ setDetectorTypeFlags for detector: Vertex not set.
+Compact          INFO  ++ Converted subdetector:Vertex of type DD4hep_SubdetectorAssembly 
+Compact          ERROR ++ FAILED    to convert subdetector: VTXIB: getRefChild: Failed to find child with name: VTXIBRegion Map  contains 0 elements: {}
+
+**************************************************** 
+*  A runtime error has occured :                     
+*    getRefChild: Failed to find child with name: VTXIBRegion Map  contains 0 elements: {}
+*  the program will have to be terminated - sorry.   
+**************************************************** 
+

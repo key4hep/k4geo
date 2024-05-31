@@ -1,0 +1,1000 @@
+   25  ls
+   26  cd 100000/
+   27  nano mc.MGPy8EG_A14N23LO_LO_LQ_S1_PairProd_m1000.py 
+   28  cd ..
+   29  less log.generate 
+   30  cd 100000/
+   31  nano mc.MGPy8EG_A14N23LO_LO_LQ_S1_PairProd_m1000.py 
+   32  cd ..
+   33  Gen_tf.py --ecmEnergy=13600.           --maxEvents=100           --randomSeed=123456           --outputEVNTFile=evgen.root           --jobConfig=100000
+   34  exit
+   35  cd MCTutorial/MCGeneration/100000/
+   36  nano mc.MGPy8EG_A14N23LO_LO_LQ_S1_PairProd_m1000.py 
+   37  cd ..
+   38  Gen_tf.py --ecmEnergy=13600.           --maxEvents=100           --randomSeed=123456           --outputEVNTFile=evgen.root           --jobConfig=100000
+   39  setupATLAS
+   40  asetup AthGeneration,23.6.6
+   41  cd ..
+   42  cd MCDerivation/
+   43  setupATLAS
+   44  asetup Athena,23.0.16
+   45  cd ..
+   46  cd MCValidation/
+   47  source setup.sh
+   48  source compile.sh
+   49  source build/x86_64*/setup.sh
+   50  cd run/
+   51  source run.sh
+   52  cd submitDir/
+   53  ls
+   54  root hist-MCDerivation.root 
+   55  cd ..
+   56  cd
+   57  export ALRB_TutorialData=/cvmfs/atlas.cern.ch/repo/tutorials/asg/cern-nov2022
+   58  export ALRB_TutorialData=/cvmfs/atlas.cern.ch/repo/tutorials/asg/cern-mar2023
+   59  source $HOME/.bashrc
+   60  ls
+   61  cd MCTutorial/
+   62  ls
+   63  export ALRB_TutorialData=/cvmfs/atlas.cern.ch/repo/tutorials/asg/cern-mar2023
+   64  ls
+   65  source $HOME/.bashrc
+   66  cp -rp /cvmfs/atlas.cern.ch/repo/tutorials/asg/cern-nov2022/AnalysisTutorial .
+   67  ls
+   68  cd AnalysisTutorial/source/
+   69  ls
+   70  git clone ssh://git@gitlab.cern.ch:7999/[YOUR_USER_NAME]/MyAnalysis.git
+   71  git clone ssh://git@gitlab.cern.ch:7999/nnitika/MyAnalysis.git
+   72  ssh://git@gitlab.cern.ch:7999/nnitika/myanalysis.git
+   73  https://gitlab.cern.ch/nnitika/myanalysis.git
+   74  pwd
+   75  cd
+   76  ls
+   77  cd at
+   78  cd athena/
+   79  ls
+   80  cd
+   81  ls
+   82  cd MCtest/
+   83  ls
+   84  cd
+   85  mkdir Analysis
+   86  ls
+   87  cd Analysis/
+   88  cp -rp /cvmfs/atlas.cern.ch/repo/tutorials/asg/cern-nov2022/AnalysisTutorial .
+   89  cp -rp /cvmfs/atlas.cern.ch/repo/tutorials/asg/cern-mar2023/AnalysisTutorial .
+   90  ls
+   91  cd AnalysisTutorial/
+   92  ls
+   93  cd source/
+   94  ls
+   95  cd ..
+   96  cd source/
+   97  ssh://git@gitlab.cern.ch:7999/nnitika/myanalysis.git
+   98  https://gitlab.cern.ch/nnitika/myanalysis.git
+   99  https://:@gitlab.cern.ch:8443/nnitika/myanalysis.git
+  100  https://gitlab.cern.ch/nnitika/myanalysis.git
+  101  ssh://git@gitlab.cern.ch:7999/nnitika/myanalysis.git
+  102  source $HOME/.bashrc
+  103  ls
+  104  cd Workdir/
+  105  ls
+  106  mkdir HepMC
+  107  cd HepMC/
+  108  Thank you for your participation in the last meeting and for leading the project-related questions. I'd like to keep you updated on the issue. I'm now installing the software on lxplus because I tried to run fullSImLight on my laptop but it takes too long or freezes. Maybe (hopefullycd HepMC/) I'll get a new laptop from INFN in April. Yet, in my opinion, lxplus is one of the finest solutions because it reduces reliance on the laptop. Please correct me if I am mistaken. I'll keep you updated as things go.Thank you for your participation in the last meeting and for leading the project-related questions. I'd like to keep you updated on the issue. I'm now installing the software on lxplus because I tried to run fullSImLight on my laptop but it takes too long or freezes. Maybe (hopefullycd HepMC/) I'll get a new laptop from INFN in April. Yet, in my opinion, lxplus is one of the finest solutions because it reduces reliance on the laptop. Please correct me if I am mistaken. I'll keep you updated as things go.Thank you for your participation in the last meeting and for leading the project-related questions. I'd like to keep you updated on the issue. I'm now installing the software on lxplus because I tried to run fullSImLight on my laptop but it takes too long or freezes. Maybe (hopefullycd HepMC/) I'll get a new laptop from INFN in April. Yet, in my opinion, lxplus is one ofclear
+  109  exit
+  110    wget http://hepmc.web.cern.ch/hepmc/releases/HepMC3-3.2.6.tar.gz
+  111  ls
+  112  cd Workdir/
+  113  ls
+  114  cd HepMC/
+  115  ls
+  116    wget http://hepmc.web.cern.ch/hepmc/releases/HepMC3-3.2.6.tar.gz
+  117  wget http://hepmc.web.cern.ch/hepmc/releases/HepMC3-3.2.6.tar.gz
+  118  ls
+  119  ls -a
+  120  git clone https://gitlab.cern.ch/hepmc/HepMC3.git
+  121  ls
+  122  mkdir HepMc3-build
+  123  ls
+  124  cd HepMc3-build/
+  125  cmake -DCMAKE_INSTALL_PREFIX=../hepmc3-install           -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF                    -DHEPMC3_ENABLE_PROTOBUFIO:BOOL=OFF                -DHEPMC3_ENABLE_TEST:BOOL=OFF                      -DHEPMC3_INSTALL_INTERFACES:BOOL=ON                -DHEPMC3_BUILD_STATIC_LIBS:BOOL=OFF                -DHEPMC3_BUILD_DOCS:BOOL=OFF             -DHEPMC3_ENABLE_PYTHON:BOOL=ON           -DHEPMC3_PYTHON_VERSIONS=2.7             -DHEPMC3_Python_SITEARCH27=../hepmc3-install/lib/python2.7/site-packages         ../HepMC3-3.2.6
+  126  cmake -DCMAKE_INSTALL_PREFIX=../hepmc3-install           -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF                    -DHEPMC3_ENABLE_PROTOBUFIO:BOOL=OFF                -DHEPMC3_ENABLE_TEST:BOOL=OFF                      -DHEPMC3_INSTALL_INTERFACES:BOOL=ON                -DHEPMC3_BUILD_STATIC_LIBS:BOOL=OFF                -DHEPMC3_BUILD_DOCS:BOOL=OFF             -DHEPMC3_ENABLE_PYTHON:BOOL=ON           -DHEPMC3_PYTHON_VERSIONS=2.7             -DHEPMC3_Python_SITEARCH27=../hepmc3-install/lib/python2.7/site-packages         ../HepMC3
+  127  cmake
+  128  cmake vs
+  129  cmake
+  130  cmake .
+  131  cmake.
+  132  sudo apt install cmake
+  133  apt install cmake
+  134  install cmake
+  135  sudo apt install
+  136  sudo apt update
+  137  cmake --version
+  138  exit
+  139  ls
+  140  cd Workdir/
+  141  ls
+  142  cd ..
+  143  cmake --version
+  144  ls
+  145  exit
+  146  ls
+  147  cd Workdir/Geant4/CLHEP/2.4.6.4/
+  148  ls
+  149  cd build/
+  150  cmake -DCMAKE_INSTALL_PREFIX=~/CLHEP ~/CLHEP
+  151  pwd
+  152  cmake -DCMAKE_INSTALL_PREFIX=~/n/nnitika/Workdir/Geant4/CLHEP ~/CLHEP
+  153  cd ..
+  154  ls
+  155  cd CLHEP/
+  156  ls
+  157  cd ..
+  158  cd build/
+  159  cmake -DCMAKE_INSTALL_PREFIX=~/n/nnitika/Workdir/Geant4/CLHEP/2.4.6.4/ ~/CLHEP
+  160  cmake -DCMAKE_INSTALL_PREFIX=~/n/nnitika/Workdir/Geant4/CLHEP/2.4.6.4/CLHEP/ ~/CLHEP
+  161  cmake -DCMAKE_INSTALL_PREFIX=~/n/nnitika/Workdir/Geant4/CLHEP/2.4.6.4/CLHEP/install
+  162  cd ..
+  163  cmake -DCMAKE_INSTALL_PREFIX=~/n/nnitika/Workdir/Geant4/CLHEP/2.4.6.4/CLHEP/install
+  164  cd ..
+  165  cmake -DCMAKE_INSTALL_PREFIX=~/n/nnitika/Workdir/Geant4/CLHEP/2.4.6.4/CLHEP/install ~/CLHEP
+  166  cmake -DCMAKE_INSTALL_PREFIX=~/n/nnitika/Workdir/Geant4/CLHEP/2.4.6.4/CLHEP/install
+  167  cmake -DCMAKE_INSTALL_PREFIX=~/n/nnitika/Workdir/Geant4/CLHEP/2.4.6.4/install
+  168  cmake -DCMAKE_INSTALL_PREFIX=~/n/nnitika/Workdir/Geant4/CLHEP/install
+  169  cmake -DCMAKE_INSTALL_PREFIX=~/n/nnitika/Workdir/Geant4/CLHEP/2.4.6.4/CLHEP/
+  170  cmake -DCMAKE_INSTALL_PREFIX=~/n/nnitika/Workdir/Geant4/CLHEP/2.4.6.4/CLHEP
+  171  cmake -DCMAKE_INSTALL_PREFIX=~/n/nnitika/Workdir/Geant4/CLHEP/2.4.6.4/
+  172  ./configure -DCMAKE_INSTALL_PREFIX=/n/nnitika/Workdir/Geant4/CLHEP/2.4.6.4/
+  173  ls
+  174  cd 2.4.6.4/
+  175  ls
+  176  cmake -DCMAKE_INSTALL_PREFIX=~/n/nnitika/Workdir/Geant4/CLHEP/install
+  177  cmake -DCMAKE_INSTALL_PREFIX=~/n/nnitika/Workdir/Geant4/CLHEP/2.4.6.4/CLHEP/
+  178  exit
+  179  cd Workdir/Geant4/CLHEP/
+  180  ls
+  181  cd 2.4.6.4/
+  182  ls
+  183  cmake -DCMAKE_INSTALL_PREFIX=~/n/nnitika/Workdir/Geant4/CLHEP/install
+  184  cd build/
+  185  ls
+  186  cd ..
+  187  getit .bashrc
+  188  gedit .bashrc
+  189  exit
+  190  cd Workdir/Geant4/CLHEP/2.4.6.4/
+  191  ls
+  192  gedit .bashrc
+  193  nano .bashrc
+  194  cd CLHEP/
+  195  ls
+  196  install gnome
+  197  .bashrc
+  198  cd ..
+  199  exit
+  200  ls
+  201  setupATLAS 
+  202  cmake -version
+  203  source /cvmfs/fcc.cern.ch/sw/latest/setup.sh 
+  204  cd Workdir/Geant4/geant4_build/
+  205  cmake -DCMAKE_INSTALL_PREFIX=/afs/cern.ch/user/n/nnitika/Workdir/Geant4/geant4-install -DGEANT4_USE_QT=ON -DGEANT4_USE_OPENGL_X11=ON -DGEANT4_INSTALL_DATA=ON -DGEANT4_USE_RAYTRACER_X11=ON -DGEANT4_USE_GDML=ON -DGEANT4_USE_SYSTEM_CLHEP=ON -DCLHEP_INCLUDE_DIR=/afs/cern.ch/user/n/nnitika/n/nnitika/Workdir/Geant4/CLHEP/2.4.6.4/CLHEP-install/include/ -DCLHEP_LIBRARY=/afs/cern.ch/user/n/nnitika/n/nnitika/Workdir/Geant4/CLHEP/2.4.6.4/CLHEP-install/lib/libCLHEP.so -DGEANT4_INSTALL_EXAMPLES=ON /afs/cern.ch/user/n/nnitika/Workdir/Geant4/geant4-v11.1.1
+  206  cmake3 -DCMAKE_INSTALL_PREFIX=/afs/cern.ch/user/n/nnitika/Workdir/Geant4/geant4-install -DGEANT4_USE_QT=ON -DGEANT4_USE_OPENGL_X11=ON -DGEANT4_INSTALL_DATA=ON -DGEANT4_USE_RAYTRACER_X11=ON -DGEANT4_USE_GDML=ON -DGEANT4_USE_SYSTEM_CLHEP=ON -DCLHEP_INCLUDE_DIR=/afs/cern.ch/user/n/nnitika/n/nnitika/Workdir/Geant4/CLHEP/2.4.6.4/CLHEP-install/include/ -DCLHEP_LIBRARY=/afs/cern.ch/user/n/nnitika/n/nnitika/Workdir/Geant4/CLHEP/2.4.6.4/CLHEP-install/lib/libCLHEP.so -DGEANT4_INSTALL_EXAMPLES=ON /afs/cern.ch/user/n/nnitika/Workdir/Geant4/geant4-v11.1.1
+  207  source /cvmfs/fcc.cern.ch/sw/latest/setup.sh
+  208  pwd
+  209  cd /eos/home-n/nnitika
+  210  cd Software/Geant4/geant4-v11.1.1/test/TestEm7_build/
+  211  make -j8
+  212  ls
+  213  ./TestEm7
+  214  source /cvmfs/fcc.cern.ch/sw/latest/setup.sh
+  215  ./TestEm7
+  216  cmake -Dgeant4_DIR=/eos/home-n/nnitika/Software/Geant4/geant4-v11.1.1-install /eos/home-n/nnitika/Software/Geant4/geant4-v11.1.1/test/TestEm7
+  217  make -j8
+  218  ./TestEm7
+  219  exit
+  220  ls
+  221  source /cvmfs/fcc.cern.ch/sw/latest/setup.sh
+  222  cd /eos/home-n/nnitika
+  223  ls
+  224  cd Software/Pythia/
+  225  ls
+  226  cd B
+  227  cd pythia8309/build/
+  228  pwd
+  229  history>cmd_history.txt
+  230  cd /eos/home-n/nnitika
+  231  source /cvmfs/fcc.cern.ch/sw/latest/setup.sh
+  232  cd Software/GeoModel/build_GeoModel/
+  233  pwd
+  234  cd ..
+  235  cd Pythia/pythia8309/
+  236  ls
+  237  ./configure --prefix=~/Desktop/Software/pythia8309/install
+  238  pwd
+  239  ./configure --prefix=/eos/home-n/nnitika/Software/Pythia/pythia8309/install
+  240  ls
+  241  gmake
+  242  ls
+  243  gmake install
+  244  ls
+  245  cd ..
+  246  cd GeoModel/
+  247  ls
+  248  git clone --recursive https://gitlab.cern.ch/GeoModelDev/GeoModel.git
+  249  ls
+  250  cd ..
+  251  cd GeoModel/build_GeoModel/
+  252  pwd
+  253  cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../install ../GeoModel -DGEOMODEL_BUILD_FULLSIMLIGHT=ON -DPythia_INCLUDE_DIR=/eos/home-n/nnitika/Software/Pythia/pythia8309/install/include -DPythia_LIBRARY=/eos/home-n/nnitika/Software/Pythia/pythia8309/install/lib/libpythia8.so
+  254  ls
+  255  make -j12
+  256  make install
+  257  cd ..
+  258  cd Pythia/
+  259  ls
+  260  cd pythia8309/
+  261  ls
+  262  pwd
+  263  cd install/
+  264  ls
+  265  cd lib/
+  266  ls
+  267  cd ..
+  268  cd ~Software
+  269  cd ~/Software
+  270  cd ..
+  271  cd GeoModel/build_GeoModel/
+  272  cmake3 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../install ../GeoModel -DGEOMODEL_BUILD_FULLSIMLIGHT=ON -DPythia_INCLUDE_DIR=/eos/home-n/nnitika/Software/Pythia/pythia8309/install/include -DPythia_LIBRARY=/eos/home-n/nnitika/Software/Pythia/pythia8309/install/lib/libpythia8.so
+  273  make
+  274  cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../install ../GeoModel -DGEOMODEL_BUILD_FULLSIMLIGHT=ON -DPythia_INCLUDE_DIR=/eos/home-n/nnitika/Software/Pythia/pythia8309/install/include -DPythia_LIBRARY=/eos/home-n/nnitika/Software/Pythia/pythia8309/install/lib/libpythia8.so
+  275  exit
+  276  cd /eos/home-n/nnitika/
+  277  ls
+  278  git clone https://github.com/HEP-FCC/FCCAnalyses.git
+  279  ls
+  280  cd FCCAnalyses/
+  281  ls
+  282  source setup.sh
+  283  mkdir build install
+  284  cd b
+  285  cd build/
+  286  cmake cmake .. -DCMAKE_INSTALL_PREFIX=../install
+  287  cmake .. -DCMAKE_INSTALL_PREFIX=../install
+  288  make install
+  289  ls
+  290  cd ..
+  291  ls
+  292  fccanalysis examples/FCCee/higgs/mH-recoil/mumu/analysis_stage1.py 
+  293  ls
+  294  cd FCCAnalyses/
+  295  ls
+  296  cd examples/FCCee/AFB/
+  297  ls
+  298  pwd
+  299  cd
+  300  .q
+  301  exit
+  302  ls
+  303  cd /eos/user/n/nnitika/
+  304  ls
+  305  git clone https://github.com/HEP-FCC/FCCAnalyses.git
+  306  cd FCCAnalyses/
+  307  source ./setup.sh
+  308  mkdir build install
+  309  cd build/
+  310  cmake .. -DCMAKE_INSTALL_PREFIX=../install
+  311  make install
+  312  cd ..
+  313  cd examples/FCCee/
+  314  mkdir AFB
+  315  cd ..
+  316  ls
+  317  source /cvmfs/fcc.cern.ch/sw/latest/setup.sh
+  318  fccanalysis run examples/FCCee/AFB/analysis_stage1_JetCharge_Leonardo.py
+  319  exit
+  320  ls
+  321  cmake --version
+  322  gedit .bashrc
+  323  gedit ~/.bashrc
+  324  gedit /.bashrc
+  325  ls
+  326  cd
+  327  nano ~/.bashrc
+  328  fccdetExport
+  329  cmake --version
+  330  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  331  cmake --version
+  332  ls
+  333  cd FCCDetectors//build/
+  334  make install -j 8
+  335  cd ../../
+  336  ls
+  337  export FCCDETECTORS=$PWD/FCCDetectors/;PATH=$PWD/FCCDetectors/install/bin/:$PATH;CMAKE_PREFIX_PATH=$PWD/FCCDetectors/install/:$CMAKE_PREFIX_PATH;LD_LIBRARY_PATH=$PWD/FCCDetectors/install/lib:$LD_LIBRARY_PATH;export PYTHONPATH=$PWD/FCCDetectors/install/python:$PYTHONPATH;LD_LIBRARY_PATH=$PWD/FCCDetectors/install/lib64:$LD_LIBRARY_PATH
+  338  nano ~/.bashrc
+  339  source ~/.bashrc
+  340  fccdetExport
+  341  cd
+  342  ls
+  343  cd FCCd
+  344  cd FCCDetectors/
+  345  ls
+  346  exit
+  347  ls
+  348  ./dd4hep2root -c FCCee_DectMaster_v01_file.xml  -o TGeo_output_file.root 
+  349  cd FCCDetectors/
+  350  ls
+  351  cd Detector/
+  352  ls
+  353  ./dd4hep2root -c /DetFCCeeIDEA/compact/IDEA_o1_v01/FCCee_DectMaster_v01_file.xml  -o TGeo_output_file.root 
+  354  ./dd4hep2root -c DetFCCeeIDEA/compact/IDEA_o1_v01/FCCee_DectMaster_v01_file.xml  -o TGeo_output_file.root 
+  355  cd
+  356  ls
+  357  ./dd4hep2root -c FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/FCCee_DectMaster_v01_file.xml  -o TGeo_output_file.root 
+  358  ./dd4hep2root -c FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/FCCee_DectMaster_v01.xml  -o TGeo_output_file.root 
+  359  ls
+  360  ls FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/
+  361  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  362  source ~/.bashrc
+  363  ls
+  364  git config --global user.email nnitika@cern.ch
+  365  ls
+  366  git status
+  367  pwd
+  368  git push origin magFieldOpt
+  369  ls
+  370  cd build/
+  371  ls
+  372  cd ..
+  373  ls
+  374  exit
+  375  ls
+  376  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  377  git clone https://github.com/key4hep/EDM4hep
+  378  ls
+  379  cd EDM4hep/
+  380  ls
+  381  mkdir build
+  382  cd build/
+  383  cmake ..
+  384  make 
+  385  make test
+  386  exit
+  387  . /cvmfs/sw-nightlies.hsf.org/key4hep/setup-paestum.sh
+  388  ls
+  389  mkdir Pae
+  390  ls
+  391  cd Pae/
+  392  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  393  mkdir work_whizard
+  394  cd work_whizard
+  395  ls
+  396  wget https://raw.githubusercontent.com/key4hep/key4hep-tutorials/main/whizard_gen/zhiggs.sin
+  397  ls
+  398  whizard zhiggs.sin
+  399  ls
+  400  dumpevent zhiggs.slcio 3 | less
+  401  wget https://raw.githubusercontent.com/key4hep/key4hep-tutorials/main/whizard_gen/lcio_mcparticle
+  402  ls
+  403  python lcio_mcparticle.py zh_mumu.slcio
+  404  ls
+  405  python lcio_mcparticle.py zh_mumu.slcio
+  406  #  Loading LCIO ROOT dictionaries ...
+  407  dumpevent zmu_mu.slcio 3 | less
+  408  dumpevent zhmu_mu.slcio 3 | less
+  409  python lcio_mcparticle.py zh_mumu
+  410  whizard zhiggs.sin
+  411  whizard zh_mumu.sin
+  412  dumpevent zh_mumu.slcio 3 | less
+  413  cd ..
+  414  ls
+  415  mkdir ILD
+  416  cd ILD/
+  417  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  418  git clone https://github.com/iLCSoft/ILDConfig
+  419  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  420  cd..
+  421  cd ..
+  422  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  423  exit
+  424  cd Pae/
+  425  ls
+  426  cd work_whizard/
+  427  ls
+  428  ddsim --compactFile $lcgeo_DIR/ILD/compact/ILD_l5_v02/ILD_l5_v02.xml       --steeringFile ddsim_steer.py       --inputFiles zh_mumu.slcio       --outputFile zh_mumu_SIM.edm4hep.root
+  429  wget https://raw.githubusercontent.com/key4hep/key4hep-tutorials/main/gaudi_ild_reco/input_files/zh_mumu.slcio
+  430  ddsim --compactFile $lcgeo_DIR/ILD/compact/ILD_l5_v02/ILD_l5_v02.xml       --steeringFile ddsim_steer.py       --inputFiles zh_mumu.slcio       --outputFile zh_mumu_SIM.edm4hep.root
+  431  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  432  cd ILDConfig/StandardConfig/production
+  433  ls
+  434  cd key4hep_tut_ild_reco 
+  435  pwd
+  436  cd ..
+  437  ls
+  438  cd ILD/key4hep_tut_ild_reco/ILDConfig/StandardConfig/production/
+  439  wget https://raw.githubusercontent.com/key4hep/key4hep-tutorials/main/gaudi_ild_reco/input_files/zh_mumu.slcio
+  440  ddsim --compactFile $lcgeo_DIR/ILD/compact/ILD_l5_v02/ILD_l5_v02.xml       --steeringFile ddsim_steer.py       --inputFiles zh_mumu.slcio       --outputFile zh_mumu_SIM.edm4hep.root
+  441  ls
+  442  Marlin -n MarlinStdReco.xml --constant.DetectorModel=ILD_l5_o1_v02
+  443  ls
+  444  convertMarlinSteeringToGaudi.py MarlinStdRecoParsed.xml MarlinStdReco.py
+  445  ls
+  446  sed -i '1s/^/import os\n/' MarlinStdReco.py
+  447  sed -i 's/\( *.lcgeo_DIR.:\).*/\1 os.environ["lcgeo_DIR"],'/ MarlinStdReco.py
+  448  sed -i 's/algList.append(BgOverlayWW)/# algList.append(BgOverlayWW)/' MarlinStdReco.py
+  449  sed -i 's/algList.append(BgOverlayWB)/# algList.append(BgOverlayWB)/' MarlinStdReco.py
+  450  sed -i 's/algList.append(BgOverlayBW)/# algList.append(BgOverlayBW)/' MarlinStdReco.py
+  451  sed -i 's/algList.append(BgOverlayBB)/# algList.append(BgOverlayBB)/' MarlinStdReco.py
+  452  sed -i 's/algList.append(PairBgOverlay)/# algList.append(PairBgOverlay)/' MarlinStdReco.py
+  453  k4run MarlinStdReco.py --LcioEvent.Files=zh_mumu_SIM.slcio
+  454  k4run MarlinStdReco.py --LcioEvent.Files=zh_mumu.slcio
+  455  ls StandardReco_*.*
+  456  k4run MarlinStdReco.py --num-events=3 --EventDataSvc.input=zh_mumu_SIM.edm4hep.root
+  457  k4run MarlinStdReco.py --num-events=3 --EventDataSvc.input=zh_mumu.edm4hep.root
+  458  exit
+  459  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  460  cd Pae/ILD/
+  461  mkdir key4hep_tut_ild_reco
+  462  cd key4hep_tut_ild_reco 
+  463  git clone https://github.com/iLCSoft/ILDConfig
+  464  /eos/project/k/key4hep/www/key4hep/tutorial/
+  465  cd /eos/project/k/key4hep/www/key4hep/tutorial/
+  466  cd ..
+  467  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.shsource /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  468  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  469  mkdir build
+  470  cd build
+  471  cmake .. -DCMAKE_INSTALL_PREFIX=../install
+  472  cmake --build . -j $(nproc) -t install 
+  473  cd ../install
+  474  export PATH=$PWD/bin:$PATH
+  475  export LD_LIBRARY_PATH=$PWD/lib:$PWD/lib64:$LD_LIBRARY_PATH
+  476  export ROOT_INCLUDE_PATH=$PWD/include:$ROOT_INCLUDE_PATH
+  477  export PYTHONPATH=$PWD/python:$PYTHONPATH
+  478  export CMAKE_PREFIX_PATH=$PWD:$CMAKE_PREFIX_PATH
+  479  cd ../
+  480  ls
+  481  cd build/
+  482  ls
+  483  ls -l
+  484  cd ..
+  485  wget https://key4hep.web.cern.ch/tutorial/zh_mumu_ild_dst/rv02-02.sv02-02.mILD_l5_o1_v02.E250-SetA.I402004.Pe2e2h.eR.pL.n000.d_dstm_15090_0.edm4hep.root
+  486  ls
+  487  k4run higgs_recoil/options/runHiggsRecoil.py
+  488  cd build/
+  489  cmake .. -DCMAKE_INSTALL_PREFIX=../install
+  490  cd ..
+  491  echo $KEY4HEP_STACK
+  492  ls
+  493  mkdir setup
+  494  ls
+  495  cd setup/
+  496  ls
+  497  gitgi
+  498  exit
+  499  ls
+  500  .q
+  501  exit
+  502  ls
+  503  chmod +x dd4hep2root 
+  504  cd FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/
+  505  ls
+  506  pwd
+  507  cd ../../../../../
+  508  ls
+  509  pwd
+  510  ./dd4hep2root -c /afs/cern.ch/user/n/nnitika/FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/PreShower.xml -o PreShower.root 
+  511  ./dd4hep2root -c /afs/cern.ch/user/n/nnitika/FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/PreShower.xml -o /afs/cern.ch/user/n/nnitika/PreShower.root 
+  512  ./dd4hep2root -c /afs/cern.ch/user/n/nnitika/FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/MuonSystem.xml -o /afs/cern.ch/user/n/nnitika/PreShower.root 
+  513  source ~/.bashrc
+  514  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  515  fccdetExport
+  516  ./dd4hep2root
+  517  ./dd4hep2root -c FCCee_DectMaster_v01_file.xml  -o TGeo_output_file.root 
+  518  ./dd4hep2root -c FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/FCCee_DectMaster_v01.xml  -o TGeo_output_file.root
+  519  ./dd4hep2root -c FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/PreShower.xml  -o TGeo_output_file.root
+  520  ./dd4hep2root -c FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/FCCee_DectMaster_v01.xml  -o TGeo_output_file.root
+  521  geoDisplay FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/FCCee_DectMaster_v01.xml
+  522  ./dd4hep2root -c FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/FCCee_DectMaster_v01.xml  -o TGeo_output_file.root
+  523  ./dd4hep2root -c FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/FCCee_DectMaster_v01.xml  -o TGeo_output_filee.root
+  524  git status
+  525  cd FCCDetectors
+  526  git status
+  527  git commit "PreShower.xml file added"
+  528  git commit "PreShower_xml file added"
+  529  git add Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/PreShower.xml
+  530   git commit -m "PreShower.xml added"
+  531  git status
+  532  git push
+  533  cd ..
+  534  ls
+  535  cd FCCDetectors_preShower/
+  536  git status
+  537  git add Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/PreShower.xml
+  538   git commit -m "PreShower.xml added"
+  539  git push
+  540  git config --global user.name nnitika
+  541  git push
+  542  git history
+  543  git log
+  544  git status
+  545  git log
+  546  git branch
+  547  git status
+  548  git add Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/PreShower.xml
+  549  git commit -m "PreShower.xml added"
+  550  git push
+  551  git remote --v
+  552  git push origin
+  553  git push origin main
+  554  git push origin/main
+  555  git status
+  556  git log
+  557  git fetch
+  558  git push origin main
+  559  git add Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/PreShower.xml
+  560  git commit -m "PreShower"
+  561  git checkout main
+  562  git pull
+  563  git config pull.rebase true
+  564  git pull
+  565  git stauts
+  566  git stats
+  567  git status
+  568  git add Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/PreShower.xml
+  569  git commit -m "PreShower"
+  570  git push
+  571  git log
+  572  git config --global user.name nnitika
+  573  git status
+  574  git pull
+  575  git push
+  576  git checkout -b "preshower_niti"
+  577  git status
+  578  git push
+  579  git push --set-upstream origin preshower_niti
+  580  kinit nnitika@CERN.CH
+  581  git push --set-upstream origin preshower_niti
+  582  git checkout -b "preshower_niti"
+  583  git status
+  584  exit
+  585  [200~source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh~
+  586  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh~
+  587  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  588  clear
+  589  cd FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/
+  590  ls
+  591  pwd
+  592  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  593  ls
+  594  cd ~
+  595  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  596  fccdetExport
+  597  pwd
+  598  ls
+  599  exit
+  600  pwd
+  601  ls
+  602  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  603  fccdetExport
+  604  ./dd4hep2root -c FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/FCCee_DectMaster_v01.xml -o TGeo_output_file_Pre.root 
+  605  nano FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/PreShower.xml 
+  606  nano FCCDetectors/Detector/DetCommon/src/SimpleSensitiveLayeredCylinder_geo.cpp 
+  607  ls
+  608  pwd
+  609  cd ..
+  610  ls
+  611  cd ..
+  612  ls
+  613  cd work/
+  614  ls
+  615  cd n/
+  616  ls
+  617  cd nnitika
+  618  mkdir nnitika
+  619  pwd
+  620  ls
+  621  cd ../../
+  622  la
+  623  ls
+  624  cd atlas/
+  625  ls
+  626  cd groups/
+  627  ls
+  628  cd ../../
+  629  ls
+  630  cd work/
+  631  ls
+  632  cd n
+  633  ls
+  634  cd nnikit
+  635  ls
+  636  cd ..
+  637  cd nkw
+  638  ls
+  639  cd ../../
+  640  cd nnikit
+  641  cd n/nnikit
+  642  ls
+  643  cd private/
+  644  cd ../../../
+  645  ls
+  646  cd user/
+  647  ls
+  648  cd n
+  649  ls
+  650  cd nnitika/
+  651  ls
+  652  rm -rf FCCDetectors_preShower
+  653  ls
+  654  rm -rf FCCDetectors
+  655  ls
+  656  clear
+  657  ls
+  658  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  659  git clone https://github.com/HEP-FCC/FCCDetectors
+  660  git clone https://github.com/HEP-FCC/FCCDetectors
+  661  ls
+  662  cd FCCDetectors
+  663  mkdir build install
+  664  ls
+  665  cd build/
+  666  cmake .. -DCMAKE_INSTALL_PREFIX=../install
+  667  make install -j 8
+  668  cd ../../
+  669  export FCCDETECTORS=$PWD/FCCDetectors/;PATH=$PWD/FCCDetectors/install/bin/:$PATH;CMAKE_PREFIX_PATH=$PWD/FCCDetectors/install/:$CMAKE_PREFIX_PATH;LD_LIBRARY_PATH=$PWD/FCCDetectors/install/lib:$LD_LIBRARY_PATH;export PYTHONPATH=$PWD/FCCDetectors/install/python:$PYTHONPATH;LD_LIBRARY_PATH=$PWD/FCCDetectors/install/lib64:$LD_LIBRARY_PATH
+  670  ls
+  671  nano ~/.bashrc c
+  672  nano ~/.bashrc
+  673  fccdetExport 
+  674  rm -rf dd4hep2root 
+  675  wget https://fccsw.web.cern.ch/fccsw/tutorials/static/python/dd4hep2root
+  676  ls
+  677  chmod +x dd4hep2root 
+  678  ls
+  679  cd FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/
+  680  ls
+  681  nano FCCee_DectMaster_v01.xml 
+  682  cd ~
+  683  ls
+  684  ./dd4hep2root -c FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/FCCee_DectMaster_v01.xml -o TGeo_output_file_Muon.root
+  685  ls
+  686  nano FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/PreShower.xml
+  687  nano FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/FCCee_DectMaster_v01.xml 
+  688  ./dd4hep2root -c FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/FCCee_DectMaster_v01.xml -o TGeo_output_file_Pre.root
+  689  ls
+  690  pwd
+  691  scp /afs/cern.ch/user/n/nnitika/TGeo_output_file_Pre.root /home/nitika
+  692  scp nnitika@lxplus917:/afs/cern.ch/user/n/nnitika/TGeo_output_file_Pre.root /home/nitika/Desktop
+  693  cp nnitika@lxplus917:/afs/cern.ch/user/n/nnitika/TGeo_output_file_Pre.root /home/nitika/Desktop
+  694  ddsim --help
+  695  ddsim --enableGun --gun.distribution uniform --gun.ernergy "10*GeV" --gun.particle mu- --numberOfEvents 10 --outputFile ddsim_output_edm4hep.root --compactFile PATHCOMPACTFILE
+  696  ddsim --enableGun --gun.distribution uniform --gun.energy "10*GeV" --gun.particle mu- --numberOfEvents 10 --outputFile ddsim_output_edm4hep.root --compactFile PATHCOMPACTFILE
+  697  exit
+  698  ls
+  699  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  700  fccdetExport
+  701  ddsim --enableGun --gun.distribution uniform --gun.energy "10*GeV" --gun.particle mu- --numberOfEvents 10 --outputFile ddsim_output_edm4hep.root --compactFile /FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/FCCee_DectMaster_v01.xml
+  702  ls
+  703  nano overlap.mac
+  704  ls
+  705  ddsim --compactFile /FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/PreShower.xml --runType run --part.userParticleHandler='' --macroFile overlap.mac >> overlapDump.txt
+  706  ddsim --help
+  707  ddsim --compactFile /FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/PreShower.xml --runType run --part.userParticleHandler PART.USERPARTICLEHANDLER --macroFile overlap.mac >> overlapDump.txt
+  708  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  709  fccdetExport
+  710  ddsim --compactFile /FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/PreShower.xml --runType run --part.userParticleHandler PART.USERPARTICLEHANDLER --macroFile overlap.mac >> overlapDump.txt
+  711  cd FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/
+  712  ls
+  713  pwd
+  714  cd ~
+  715  pwd FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/PreShower.xml
+  716  pwd FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/
+  717  ddsim --compactFile /FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/FCCee_DectMaster_v01.xml --runType run --part.userParticleHandler PART.USERPARTICLEHANDLER --macroFile overlap.mac >> overlapDump.txt
+  718  ddsim --compactFile /afs/cern.ch/user/n/nnitika/FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/FCCee_DectMaster_v01.xml --runType run --pa
+  719  ls
+  720  ddsim --compactFile /afs/cern.ch/user/n/nnitika/FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/FCCee_DectMaster_v01.xml --runType run --macroFile overlap.mac >> overlapDump.txt
+  721  ddsim --compactFile /afs/cern.ch/user/n/nnitika/FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/FCCee_DectMaster_v01.xml --runType run --part.userParticleHandler="  --macroFile overlap.mac >> overlapDump.txt
+  722  ddsim --compactFile /afs/cern.ch/user/n/nnitika/FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/FCCee_DectMaster_v01.xml --runType run --part.userParticleHandler="  --macroFile overlap.mac >> overlapDump.txt
+  723  exit
+  724   ssh-keygen -t ed25519 -C nnitika@cern.ch
+  725  evtal "$(ssh-agent -S)"
+  726  eval "$(ssh-agent -S)"
+  727  eval "$(ssh-agent -s)"
+  728  ~/.ssh/config
+  729  touch ~/.ssh/config
+  730  nano ~/.ssh/config
+  731  ssh-add ~/.ssh/id_ed25519
+  732  cat ~/.ssh/id_ed25519
+  733   ssh-keygen -t ed25519 -C "nnitika@cern.ch"
+  734  eval "$(ssh-agent -s)"
+  735  ls
+  736  pwd
+  737  cd .ssh
+  738  ls
+  739  ssh-add ~/.ssh/id_ed25519
+  740  cat ~/.ssh/id_ed25519.pub
+  741  cd ~
+  742  ls
+  743  ssh -T git@github.com
+  744   git status
+  745  cd public/
+  746   git status
+  747  ls
+  748  cd FCCDetectors/
+  749   git status
+  750  git add Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/PreShower.xml
+  751  git commit -m "PreShower.xml file added"
+  752  git branch -M preShower
+  753  git push origin preShower 
+  754  ls
+  755  pwd
+  756  cd ../..
+  757  ls
+  758  cd public/
+  759   ssh-keygen -t ed25519 -C "nnitika@cern.ch"
+  760  cd FCCDetectors/
+  761  ls
+  762  git status
+  763  git push msin preShower 
+  764  git push main preShower 
+  765  git push origin preShower 
+  766  exit
+  767  cd public/FCCDetectors/
+  768  git status 
+  769  git push origin pre
+  770  git push origin preShower
+  771  ssh-keygen -t ed25519 -C nnitika@cern.ch
+  772  eval "$(ssh-agent -s)"
+  773  ssh -T git@github.com
+  774  git push origin preShower
+  775  cat ~/.ssh/id_ed25519.pub
+  776  ssh -T git@github.com
+  777  cd ..
+  778  ssh -T git@github.com
+  779  cat ~/.ssh/id_ed25519.pub
+  780  cd ..
+  781  ssh -T git@github.com
+  782  eval "$(ssh-agent -s)"
+  783  ssh -T git@github.com
+  784  exit
+  785  ssh -XY nnitika@farmts.infn.it
+  786  ssh -XY nnitika@farmts.ts.infn.it
+  787  rxit
+  788  exit
+  789  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  790  fccdetExport 
+  791  [200~/FCCDetectors/Detector//compact/
+  792  ddsim --compactFile /FCCDetectors/Detector/DetFCCeeCLD/compact/FCCee_o2_v02/FCCee_o2_v02.xml       --enableGun       --gun.distribution uniform       --gun.energy "10*GeV"       --gun.particle mu-       --numberOfEvents 1       --outputFile Step1_edm4hep.root
+  793  cd /FCCDetectors/Detector/DetFCCeeCLD/compact/
+  794  ls
+  795  cd public/
+  796  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  797  ddsim --compactFile /FCCDetectors/Detector/DetFCCeeCLD/compact/FCCee_o2_v02/FCCee_o2_v02.xml       --enableGun       --gun.distribution uniform       --gun.energy "10*GeV"       --gun.particle mu-       --numberOfEvents 1       --outputFile Step1_edm4hep.root
+  798  cd /FCCDetectors/Detector/DetFCCeeCLD/compact/
+  799  ls
+  800  cd FCCDetectors/Detector/DetFCCeeCLD/compact/
+  801  ddsim --compactFile FCCDetectors/Detector/DetFCCeeCLD/compact/FCCee_o2_v02/FCCee_o2_v02.xml       --enableGun       --gun.distribution uniform       --gun.energy "10*GeV"       --gun.particle mu-       --numberOfEvents 1       --outputFile Step1_edm4hep.root
+  802  ddsim --compactFile FCCee_o2_v02/FCCee_o2_v02.xml       --enableGun       --gun.distribution uniform       --gun.energy "10*GeV"       --gun.particle mu-       --numberOfEvents 1       --outputFile Step1_edm4hep.root
+  803  ls
+  804  root
+  805  TBrowser browser("Step1_edm4hep.root");
+  806  root
+  807  exit
+  808  logout
+  809  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  810  fccdetExport 
+  811  pip install --user uproot3
+  812  pwd
+  813  cd FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/
+  814  ls
+  815  ddsim --compactFile FCCee_DectMaster_v01.xml       --enableGun       --gun.distribution uniform       --gun.energy "10*GeV"       --gun.particle mu-       --numberOfEvents 1       --outputFile Test.root
+  816  pip install --user uproot3
+  817  ddsim --compactFile FCCee_DectMaster_v01.xml       --enableGun       --gun.distribution uniform       --gun.energy "10*GeV"       --gun.particle mu-       --numberOfEvents 1       --outputFile Test.root
+  818  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  819  fccdetExport 
+  820  pip install --user uproot3
+  821  ddsim --compactFile FCCee_DectMaster_v01.xml       --enableGun       --gun.distribution uniform       --gun.energy "10*GeV"       --gun.particle mu-       --numberOfEvents 1       --outputFile Test.root
+  822  nano Zoff.py
+  823  source Zoff.py 
+  824  pwd
+  825  cd ..
+  826  cd ~
+  827  ls
+  828  cd public/
+  829  ls
+  830  python3 Zoff.py
+  831  cd ..
+  832  cd FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/
+  833  python3 Zoff.py
+  834  exit
+  835  ls
+  836  cd public/
+  837  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  838  fccdetExport 
+  839  cd FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/
+  840  pip install --user uproot3
+  841  ls
+  842  python3 Zoff.py
+  843  ls
+  844  python3 Zoff.py
+  845  nano Zoff.py
+  846  python3 Zoff.py
+  847  nano PreShower.xml 
+  848  logout
+  849  ls
+  850  cd public/
+  851  ls
+  852  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  853  fccdetExport 
+  854  cd FCCDetectors/Detector/DetFCCeeIDEA/compact/IDEA_o1_v01/
+  855  ls
+  856  pip install --user uproot3
+  857  git status
+  858  git add PreShower.xml 
+  859  git commit -m "PreShower"
+  860  git branch
+  861  git remote add myfork git@github.com:Ns921/FCCDetectors_preShower.git
+  862  git push myfork preShower 
+  863  ls
+  864  nano PreShower.xml 
+  865  logout
+  866  cd public/
+  867  ls
+  868  cd k4geo/
+  869  ls
+  870  cd FCCee/
+  871  ls
+  872  cd IDEA/
+  873  ls
+  874  cd compact/
+  875  ls
+  876  cd IDEA_o1_v02/
+  877  ls
+  878  nano DectDimensions_IDEA_o1_v01.xml 
+  879  git status
+  880  nano PreShowerSystem_v00.xml
+  881  nano IDEA_o1_v02.xml 
+  882  git status
+  883  nano PreShowerSystem_v00.xml
+  884  ls
+  885  nano PreShowerSystem_v00.xml
+  886  exit
+  887  ls
+  888  cd public/
+  889  ls
+  890  cd k4geo/FCCee/IDEA/compact/IDEA_o1_v02
+  891  ls
+  892  nano PreShowerSystem_v00.xml 
+  893  nano DectDimensions_IDEA_o1_v01.xml 
+  894  exit
+  895  ls
+  896  cd public/k4geo/
+  897  ls
+  898  pwd
+  899  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  900          source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh -r 2024-04-19
+  901  fccdetExport
+  902  ddsim --compactFile /afs/cern.ch/user/n/nnitika/public/k4geo/FCCee/IDEA/compact/IDEA_o1_v02/IDEA_o1_v02.xml --runType run --part.userParticleHandler="  --macroFile overlap.mac
+  903  exit
+  904  ls
+  905  source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+  906          source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh -r 2024-04-19
+  907  pwd
+  908  history>April_history.txt
+  909  ls
+  910  ls /cvmfs/sw-nightlies.hsf.org/key4hep/releases/2024-03-08/x86_64-almalinux9-gcc11.3.1-opt/key4hep-stack/2024-03-08-gamvaf/
+  911  nano /cvmfs/sw-nightlies.hsf.org/key4hep/releases/2024-03-08/x86_64-almalinux9-gcc11.3.1-opt/key4hep-stack/2024-03-08-gamvaf/setup.sh 
+  912  source /cvmfs/sw-nightlies.hsf.org/key4hep/releases/2024-03-08/x86_64-almalinux9-gcc11.3.1-opt/key4hep-stack/2024-03-08-gamvaf/setup.sh 
+  913  ls
+  914  cd public/
+  915  ls
+  916  nano overlap.mac 
+  917  cd FCCDetectors/
+  918  ls
+  919  cd ..
+  920   cd k4geo/
+  921  ls
+  922  nano README.md 
+  923  ls
+  924  pip install --user uproot3
+  925  pwd
+  926  cd FCCee/IDEA/compact/IDEA_o1_v01/
+  927  ls
+  928  pwd
+  929  cd /afs/cern.ch/user/n/nnitika/public/
+  930  ls
+  931  pwd
+  932  ddsim --compactFile /afs/cern.ch/user/n/nnitika/public/k4geo/FCCee/IDEA/compact/IDEA_o1_v01/IDEA_o1_v01.xml --runType run --part.userParticleHandler="  --macroFile overlap.mac
+  933  exit
+  934  pwd
+  935  ls
+  936  cd public/k4geo/
+  937  pwd
+  938  git remote -v
+  939  git fetch origin
+  940  git checkout main
+  941  git pull origin main
+  942  git add FCCee/IDEA/compact/IDEA_o1_v02/DectDimensions_IDEA_o1_v01.xml
+  943  git add FCCee/IDEA/compact/IDEA_o1_v02/IDEA_o1_v02.xml
+  944  git commit -m "PreShower updates"
+  945  git pull --rebase origin main
+  946  git status
+  947  git add FCCee/IDEA/compact/IDEA_o1_v02/PreShowerSystem_v00.xml
+  948  git add FCCee/IDEA/compact/IDEA_o1_v01/IDEA_o1_v01.xml 
+  949  git commit -m "PreShower updates"
+  950  git pull --rebase origin main
+  951  git add FCCee/IDEA/compact/IDEA_o1_v02/DectDimensions_IDEA_o1_v01.xml
+  952  git add FCCee/IDEA/compact/IDEA_o1_v02/IDEA_o1_v02.xml
+  953  git rebase --continue
+  954  git status 
+  955  git add FCCee/IDEA/compact/IDEA_o1_v02/IDEA_o1_v02.xml
+  956  git add FCCee/IDEA/compact/IDEA_o1_v02/PreShowerSystem_v00.xml
+  957  git add FCCee/IDEA/compact/IDEA_o1_v03/DectDimensions_IDEA_o1_v02.xml
+  958  git add FCCee/IDEA/compact/IDEA_o1_v03/IDEA_o1_v03.xml
+  959  git add FCCee/IDEA/compact/IDEA_o1_v03/PreShowerSystem_v01.xml
+  960  git commit -m "Changes for PreShower"
+  961  git log
+  962  clear
+  963  wget https://fccsw.web.cern.
+  964  chmod +x dd4hep2root
+  965  cd ..
+  966  ls
+  967  fccdetExport
+  968  nano ~/.bashrc 
+  969  source /cvmfs/sw-nightlies.hsf.org/key4hep/releases/2024-03-08/x86_64-almalinux9-gcc11.3.1-opt/key4hep-stack/2024-03-08-gamvaf/setup.sh
+  970  pip install --user uproot3
+  971  python3.10 -m pip install --upgrade pip
+  972  git log
+  973  cd k4geo/
+  974  git log
+  975  git push origin main
+  976  clear
+  977  git push origin main
+  978  git config --global user.name
+  979  git config --global user.email
+  980  git push origin main
+  981  ls -al ~/.ssh
+  982  cat ~/.ssh/id_ed25519.pub
+  983  exit
+  984  ls
+  985  cd public/
+  986  ls
+  987  cd k4geo_preshower_niti/
+  988  ls
+  989  https://github.com/mahmoudali2/k4geo/blob/main/detector/muonSystem/muonSystemMuRWELL_o1_v01.cpp
+  990  curl -o detector/muonSystem/muonSystemMuRWELL_o1_v01.cpp https://raw.githubusercontent.com/mahmoudali2/k4geo/main/detector/muonSystem/muonSystemMuRWELL_o1_v01.cpp
+  991  ls detector/muonSystem
+  992  pwd
+  993  ls
+  994  l
+  995  ls
+  996  cd FCCee/
+  997  ls
+  998  cd IDEA/
+  999  ls
+ 1000  cd compact/
+ 1001  ;s
+ 1002  ls
+ 1003  clear
+ 1004  cd ../../../
+ 1005  ls
+ 1006  cd detector
+ 1007  ls
+ 1008  cd muonSystem/
+ 1009  ls
+ 1010  cd ../../
+ 1011  ls
+ 1012  pwd
+ 1013  ls detector/muonSystem
+ 1014  git add detector/muonSystem/muonSystemMuRWELL_o1_v01.cpp
+ 1015  git commit -m "Add muonSystemMuRWELL_o1_v01.cpp from unmerged merge request for test"
+ 1016  git push origin main
+ 1017  source /cvmfs/sw-nightlies.hsf.org/key4hep/releases/2024-03-08/x86_64-almalinux9-gcc11.3.1-opt/key4hep-stack/2024-03-08-gamvaf/setup.sh
+ 1018  source ~/.bashrc 
+ 1019  ddsim --compactFile /afs/cern.ch/user/n/nnitika/public/k4geo_preshower_niti/FCCee/IDEA/compact/IDEA_o1_v0_ --runType run --part.userParticleHandler="  --macroFile overlap.mac
+ 1020  ddsim --compactFile /afs/cern.ch/user/n/nnitika/public/k4geo_preshower_niti/FCCee/IDEA/compact/IDEA_o1_v03/IDEA_o1_v03.xml --runType run --part.userParticleHandler="  --macroFile overlap1.mac
+ 1021  ddsim --compactFile /afs/cern.ch/user/n/nnitika/public/k4geo_preshower_niti/FCCee/IDEA/compact/IDEA_o1_v03/IDEA_o1_v03.xml --runType run --part.userParticleHandler="  --macroFile overlap2.mac
+ 1022  ddsim --compactFile /afs/cern.ch/user/n/nnitika/public/k4geo_preshower_niti/FCCee/IDEA/compact/IDEA_o1_v03/IDEA_o1_v03.xml --runType run --part.userParticleHandler="  --macroFile overlap.mac >test_result.txt
+ 1023  ddsim
+ 1024  history> hist.txt

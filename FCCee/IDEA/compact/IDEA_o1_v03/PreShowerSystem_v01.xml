@@ -7,13 +7,12 @@
 	url="no"
 	status="development"
 	version="2.0">
-    <comment> It depends on the factory: muonSystemMuRWELL_o1_v01 </comment>			
+  			
   </info>
 
   <define>
 
-     <!---                            PreShower     Barrel                -->   
-     <!--     <constant name = "microRWELLVolumeThick"                      value = "40*mm"/>   <!--20+20 The thickness of the detector layer including the microRWELL material and the spacing between the layers too -->
+     <!--                            PreShower     Barrel                -->   
      <!-- %%%%%%                      microRWELL chamber different layers thicknesses                %%%%%% -->
 
      <constant name = "G10_FR4Thick"                          value = "1.6*mm"/>
@@ -47,7 +46,7 @@
   <readouts>
      <readout name="PreShower_mRWELLChamberReadout">
      <segmentation type="CartesianGridYZ" grid_size_y="1*cm" grid_size_z="1*cm"/>   <!-- Depending on cell size 1cm*1cm  -->		
-      <id>system:4,layer:1,chamber:15,gasLayer:15,y:-12,z:-12</id>  <!-- chamber, gas layer......later updates--->
+      <id>system:4,layer:1,chamber:15,gasLayer:15,y:-12,z:-12</id>  <!-- chamber, gas layer......later updates -->
      
     </readout>
   </readouts>   
@@ -66,7 +65,7 @@
       <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
       <sensitive type="SimpleTrackerSD"/>			-->
 
-      <!-- Specify the detector parameters and the overlap /// if you want exclude any component, e.g: endcap, just put endcapDetectorParameters=0   // radius is put in the middle, so its not the inner neither the outer // the endcap detector layers z-offset values have to be changed.. now the layer is thicker = 12 cm -->
+      <!-- Specify the detector parameters and the overlap, if you want exclude any component, e.g: endcap, just put endcapDetectorParameters=0, radius is put in the middle, so its not the inner neither the outer, the endcap detector layers z-offset values have to be changed.. now the layer is thicker = 12 cm -->
       <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
       <barrelDetectorParameters numBarrelDetectorLayers ="1" detectorVolumeThickness="microRWELLVolumeThick" radius="BarrelFirstLayerRadius+microRWELLVolumeThick/2.0" barrelLength="BarrelLength" />
       <endcapDetectorParameters numEndcapDetectorLayers="0" endcapDetectorVolumeThickness="microRWELLVolumeThickEndcap" endcapDetectorLayerInnerRadius="EndcapLayersInnerRadius" endcapDetectorLayerOuterRadius="EndcapLayersOuterRadius" endcapDetectorZOffset="EndcapFirstLayerZOffset+microRWELLVolumeThickEndcap/2.0" />
@@ -86,18 +85,18 @@
     </detector>
     
   
-      <!--  Just for the negative endcap   //                  /////////////////  -->
+      <!--  Just for the negative endcap -->
 
     <!-- mRWELL envelope -->
     <detector name="PreShower_NegativeEndcap" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="PreShower_negEndcap" readout="PreShower_mRWELLChamberReadout">
-      <envelope rmin="EndcapLayersInnerRadius" rmax="EndcapLayersOuterRadius" z="YokeThickness+microRWELLVolumeThickEndcap"  z_offset="-2580*mm" material="Air"/>   	<!-- 	///////z_offset="-471*cm" ???????? -->
+      <envelope rmin="EndcapLayersInnerRadius" rmax="EndcapLayersOuterRadius" z="YokeThickness+microRWELLVolumeThickEndcap"  z_offset="-2580*mm" material="Air"/>   
       <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
       <sensitive type="SimpleTrackerSD"/>
     
-         <!-- Specify the detector parameters and the overlap  // radius is put in the middle, so its not the inner neither the outer // the endcap detector layers z-offset values have to be changed.. now the layer is thicker = 12 cm -->
+         <!-- Specify the detector parameters and the overlap,  radius is put in the middle, so its not the inner neither the outer, the endcap detector layers z-offset values have to be changed.. now the layer is thicker = 12 cm -->
       <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
       <barrelDetectorParameters numBarrelDetectorLayers ="0" detectorVolumeThickness="microRWELLVolumeThick" radius="0.0*mm" barrelLength="BarrelLength" />
-      <endcapDetectorParameters numEndcapDetectorLayers="1" endcapDetectorVolumeThickness="microRWELLVolumeThickEndcap" endcapDetectorLayerInnerRadius="EndcapLayersInnerRadius" endcapDetectorLayerOuterRadius="EndcapLayersOuterRadius" endcapDetectorZOffset="6*cm" />	<!--//endcapDetectorZOffset="-(microRWELLVolumeThickEndcap/2.0)-->
+      <endcapDetectorParameters numEndcapDetectorLayers="1" endcapDetectorVolumeThickness="microRWELLVolumeThickEndcap" endcapDetectorLayerInnerRadius="EndcapLayersInnerRadius" endcapDetectorLayerOuterRadius="EndcapLayersOuterRadius" endcapDetectorZOffset="6*cm" />	<!--endcapDetectorZOffset="-(microRWELLVolumeThickEndcap/2.0)-->
 
       <!-- mRWELL chamber -->
       <layer x="G10_FR4Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="G10_FR40x5633439ca570" vis="MuonVis" />
@@ -113,7 +112,7 @@
 
     </detector>
 
-     <!--  Just for the positive endcap   //                  /////////////////  -->
+     <!--  Just for the positive endcap -->
 
     <!-- mRWELL envelope -->
     <detector name="PreShower_PositiveEndcap" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="PreShower_posEndcap" readout="PreShower_mRWELLChamberReadout">
@@ -121,7 +120,7 @@
       <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
       <sensitive type="SimpleTrackerSD"/>
 
-      <!-- Specify the detector parameters and the overlap  // radius is put in the middle, so its not the inner neither the outer // the endcap detector layers z-offset values have to be changed.. now the layer is thicker = 12 cm -->
+      <!-- Specify the detector parameters and the overlap,  radius is put in the middle, so its not the inner neither the outer, the endcap detector layers z-offset values have to be changed.. now the layer is thicker = 12 cm -->
       <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
       <barrelDetectorParameters numBarrelDetectorLayers ="0" detectorVolumeThickness="microRWELLVolumeThick" radius="0.0*mm" barrelLength="BarrelLength" />
       <endcapDetectorParameters numEndcapDetectorLayers="1" endcapDetectorVolumeThickness="microRWELLVolumeThickEndcap" endcapDetectorLayerInnerRadius="EndcapLayersInnerRadius" endcapDetectorLayerOuterRadius="EndcapLayersOuterRadius" endcapDetectorZOffset="-6*cm" />
