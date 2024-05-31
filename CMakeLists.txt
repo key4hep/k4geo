@@ -71,6 +71,7 @@ file(GLOB sources
   ./detector/fcal/*.cpp
   ./detector/other/*.cpp
   ./detector/CaloTB/*.cpp
+  ./detector/muonSystem/*.cpp
   ./FCalTB/setup/*.cpp
   ./plugins/LinearSortingPolicy.cpp
   ./detector/PID/ARC_geo_o1_v01.cpp
