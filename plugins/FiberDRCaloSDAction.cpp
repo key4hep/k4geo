@@ -55,12 +55,13 @@ namespace dd4hep {
             G4float fWavlenStep;
             G4float fTimeStep;
 
-            G4double wavToE(G4double wav) { return h_Planck*c_light/wav; }
+            G4double wavToE(G4double wav) { return CLHEP::h_Planck*CLHEP::c_light/wav; }
 
             int findWavBin(G4double en) {
                 int i = 0;
                 for ( ; i < fWavBin+1; i++) {
-                    if ( en < wavToE( (fWavlenStart - static_cast<float>(i)*fWavlenStep)*nm ) )
+                    // if ( en < wavToE( (fWavlenStart - static_cast<float>(i)*fWavlenStep)*nm ) )
+                    if ( en < wavToE( (fWavlenStart - static_cast<float>(i)*fWavlenStep)*CLHEP::nm ) )
                     break;
                 }
 
@@ -77,13 +78,15 @@ namespace dd4hep {
                 return i;
             }
 
-            bool applyYellowFilter(G4double energy) {
-                if (energy >= 2.69531) return true;
+            bool applyYellowFilter(G4double en) {
+                double energy = (en * 1000000.); // MeV -> eV unit change
+
+                if (energy >= 2.69531) return true; // Photon w/ E > 2.69531 eV filtered
 
                 TF1* uniform = new TF1("f1", "pol0", 0, 1); // TODO :: Pointer -> change to unique pointer
                 uniform->SetParameter(0, 1);
                 double randVal = uniform->GetRandom(0,1); // TODO :: Change random engine to DDSim or G4 random!
-                const int N = 23;
+                const int N = 24;
                 double graph_X[N] = {   1.37760,
                                         1.45864,
                                         1.54980,
@@ -106,7 +109,8 @@ namespace dd4hep {
                                         2.47968,
                                         2.53029,
                                         2.58300,
-                                        2.63796 };
+                                        2.63796,
+                                        2.69531 };
                 double graph_Y[N] = {   0.903 * 0.903,
                                         0.903 * 0.903,
                                         0.903 * 0.903,
@@ -129,13 +133,16 @@ namespace dd4hep {
                                         0.345 * 0.345,
                                         0.207 * 0.207,
                                         0.083 * 0.083,
-                                        0.018 * 0.018 };
+                                        0.018 * 0.018,
+                                        0. };
                 TGraph* FilterEffGraph = new TGraph(N, graph_X, graph_Y); // TODO :: Pointer -> change to unique pointer
                 double FilterEff = FilterEffGraph->Eval((double) energy);
 
                 delete uniform;
                 delete FilterEffGraph;
-
+                
+                // filter efficiency == probability of photon passing filter
+                // == Probability of random value (from uniform distribution with range 0 ~ 1) larger than filter efficiency
                 return ( randVal > FilterEff );
             }
 
@@ -190,6 +197,7 @@ namespace dd4hep {
             dd4hep::DDSegmentation::VolumeID ceren = static_cast<dd4hep::DDSegmentation::VolumeID>(m_segmentation->decoder()->get(cID, "c"));
             bool IsCeren = static_cast<bool>(ceren);
             if ( !(IsCeren) ) {
+                // std::cout << "Photon energy : " << energy << std::endl;
                 if ( m_userData.applyYellowFilter(energy) ) return true;
             }
 
@@ -206,6 +214,7 @@ namespace dd4hep {
 
             hit->photonCount();
             int wavBin = m_userData.findWavBin(energy);
+            std::cout << "wavBin : " << wavBin << std::endl;
             hit->CountWavlenSpectrum(wavBin);
             int timeBin = m_userData.findTimeBin(hitTime);
             hit->CountTimeStruct(timeBin);

@@ -49,12 +49,14 @@ namespace dd4hep {
 
       using drcalopair_t = std::pair< edm4hep::RawCalorimeterHitCollection, edm4hep::RawTimeSeriesCollection> ; // Required info for IDEA DRC sim hit
       using drcalomap_t = std::map< std::string, drcalopair_t >;                                                // Required info for IDEA DRC sim hit
+      using drcaloWavmap_t = std::map< std::string, edm4hep::RawTimeSeriesCollection >;
       std::unique_ptr<writer_t>     m_file  { };
       podio::Frame                  m_frame { };
       edm4hep::MCParticleCollection m_particles { };
       trackermap_t                  m_trackerHits;
       calorimetermap_t              m_calorimeterHits;
       drcalomap_t                   m_drcaloHits;
+      drcaloWavmap_t                m_drcaloWaves;
       stringmap_t                   m_runHeader;
       stringmap_t                   m_eventParametersInt;
       stringmap_t                   m_eventParametersFloat;
@@ -282,11 +284,15 @@ void Geant4Output2EDM4hep_DRC::commit( OutputContext<G4Event>& /* ctxt */)   {
       m_frame.put( std::move(calorimeterHits.first), colName + "RawHit");
       m_frame.put( std::move(calorimeterHits.second), colName + "TimeStruct");
     }
+    for (auto it = m_drcaloWaves.begin(); it != m_drcaloWaves.end(); ++it) {
+      m_frame.put( std::move(it->second), it->first + "WaveLen");
+    }
     m_file->writeFrame(m_frame, m_section_name);
     m_particles.clear();
     m_trackerHits.clear();
     m_calorimeterHits.clear();
     m_drcaloHits.clear();
+    m_drcaloWaves.clear();
     m_frame = {};
     return;
   }
@@ -325,6 +331,7 @@ void Geant4Output2EDM4hep_DRC::begin(const G4Event* event)  {
   m_trackerHits.clear();
   m_calorimeterHits.clear();
   m_drcaloHits.clear();
+  m_drcaloWaves.clear();
 }
 
 /// Data conversion interface for MC particles to EDM4hep format
@@ -584,8 +591,9 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
     Geant4Sensitive* sd = coll->sensitive();
     int hit_creation_mode = sd->hitCreationMode();
     // Create the hit container even if there are no entries!
-    auto& hits   = m_calorimeterHits[colName];
-    auto& DRhits = m_drcaloHits[colName];
+    auto& hits    = m_calorimeterHits[colName];
+    auto& DRhits  = m_drcaloHits[colName];
+    auto& DRwaves = m_drcaloWaves[colName];
 
     // DEBUG
     // printout(INFO,"Geant4Output2EDM4hep_DRC","+++ Saving EDM4hep : Using Geant4DRCalorimeter::Hit");
@@ -624,6 +632,7 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
       // For DRC raw calo hit & raw time series
       auto rawCaloHits   = DRhits.first->create();
       auto rawTimeStruct = DRhits.second->create();
+      auto rawWaveStruct = DRwaves->create();
 
       float samplingT = hit->GetSamplingTime();
       float timeStart = hit->GetTimeStart();
@@ -635,7 +644,18 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
       rawTimeStruct.setCharge( static_cast<float>(hit->GetPhotonCount()) );
       rawTimeStruct.setCellID( hit->cellID );
 
+      // abuse time series for saving wavelength spectrum (for R&D purpose)
+      float samplingW = hit->GetSamplingWavlen();
+      float wavMax = hit->GetWavlenMax();
+      float wavMin = hit->GetWavlenMin();
+      auto& wavmap = hit->GetWavlenSpectrum();
+      rawWaveStruct.setInterval(samplingW);
+      rawWaveStruct.setTime(wavMin);
+      rawWaveStruct.setCharge( static_cast<float>(hit->GetPhotonCount()) );
+      rawWaveStruct.setCellID( hit->cellID );
+
       unsigned nbinTime = static_cast<unsigned>((timeEnd-timeStart)/samplingT);
+      unsigned nbinWav = static_cast<unsigned>((wavMax-wavMin)/samplingW);
       int peakTime = 0.;
       int peakVal = 0;
 
@@ -654,6 +674,15 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
         }
 
         rawTimeStruct.addToAdcCounts(count);
+      }
+
+      for (unsigned iwav = 1; iwav < nbinWav+1; iwav++) {
+        int count = 0;
+
+        if ( wavmap.find(iwav)!=wavmap.end() )
+          count = wavmap.at(iwav);
+
+        rawWaveStruct.addToAdcCounts(count);
       }
 
       rawCaloHits.setCellID( hit->cellID );
