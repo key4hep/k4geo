@@ -53,6 +53,9 @@
     <constant name="DetID_SiWrapper_Barrel"       value=" 23"/>
     <constant name="DetID_SiWrapper_Disks"       value=" 24"/>
 
+    <!-- Fiber dual-readout calorimeter DetID -->
+    <constant name="DetID_FiberDRCalo"             value=" 25"/>
+
         <!-- BPW: Beam Pipe Width -->
     <constant name="BPWWall"       value="0.35*mm" />
     <constant name="BPWCool"       value="1.0*mm" />
@@ -105,45 +108,6 @@
     <constant name="EndPlateAbsorber_outer_radius" value="2090*mm"/>
     <constant name="EndPlateAbsorber_z_min" value="2490*mm"/>
     <constant name="EndPlateAbsorber_z_half_length" value="4.209/2.0*mm"/>
-
-    <constant name="ECalBarrel_inner_radius" value="2150*mm"/>
-    <constant name="ECalBarrel_outer_radius" value="2352*mm"/>
-    <constant name="ECalBarrel_half_length" value="2210*mm"/>
-    <constant name="ECalBarrel_symmetry" value="12"/>
-    
-    <constant name="ECalEndcap_inner_radius" value="340*mm"/>
-    <constant name="ECalEndcap_outer_radius" value="2350*mm"/>
-    <constant name="ECalEndcap_min_z" value="2307*mm"/>
-    <constant name="ECalEndcap_max_z" value="2509*mm"/>
-    <constant name="ECalEndcap_outer_symmetry" value="12"/>
-    <constant name="ECalEndcap_inner_symmetry" value="12"/>
-    
-    <!-- ECal plug not used -->
-    <constant name="ECalPlug_inner_radius" value="260*mm"/>
-    <constant name="ECalPlug_outer_radius" value="380*mm"/>
-    <constant name="ECalPlug_min_z" value="2307*mm"/>
-    <constant name="ECalPlug_max_z" value="2509*mm"/>
-    <constant name="ECalPlug_outer_symmetry" value="12"/>
-    <constant name="ECalPlug_inner_symmetry" value="12"/>
-    
-    <constant name="HCalBarrel_inner_radius" value="2400*mm"/>
-    <constant name="HCalBarrel_outer_radius" value="3566*mm"/>
-    <constant name="HCalBarrel_half_length" value="2210*mm"/>
-    <constant name="HCalBarrel_symmetry" value="12"/>
-    
-    <constant name="HCalEndcap_inner_radius" value="340*mm"/>
-    <constant name="HCalEndcap_outer_radius" value="3566*mm"/>
-    <constant name="HCalEndcap_min_z" value="2539*mm"/>
-    <constant name="HCalEndcap_max_z" value="3705*mm"/>
-    <constant name="HCalEndcap_symmetry" value="12"/>
-    <constant name="HCalEndcap_zcutout" value="200*mm"/>
-    <constant name="HCalEndcap_rcutout" value="0*mm"/>
-    
-    <constant name="HCalRing_inner_radius" value="2370*mm"/>
-    <constant name="HCalRing_outer_radius" value="HCalEndcap_outer_radius"/>
-    <constant name="HCalRing_min_z" value="2353.5*mm"/>
-    <constant name="HCalRing_max_z" value="HCalEndcap_min_z"/>
-    <constant name="HCalRing_symmetry" value="12"/>
     
     <constant name="YokeBarrel_inner_radius" value="4479*mm"/>
     <constant name="YokeBarrel_outer_radius" value="6000*mm"/>
@@ -214,6 +178,15 @@
 
     <constant name="tracker_region_zmax" value="DCH_half_length_total"/>
     <constant name="tracker_region_rmax" value="DCH_outer_cyl_R_total"/>
+    
+    <!-- Fiber dual-readout calorimeter tower dim-->
+    <constant name="FiberDRCalo_barrel_height"       value="2.*m"/>
+    <constant name="FiberDRCalo_barrel_inner_radius" value="2.5*m"/>
+    <constant name="FiberDRCalo_barrel_nphi"         value="144"/>
+    <constant name="FiberDRCalo_endcap_height"       value="2.*m"/>
+    <constant name="FiberDRCalo_endcap_inner_radius" value="2.5*m"/>
+    <constant name="FiberDRCalo_endcap_nphi"         value="144"/>
+
   </define>
   
   
@@ -230,6 +203,8 @@
 
     <region name="SiWrapperBRegion"/>
     <region name="SiWrapperDRegion"/>
+
+    <region name="FastSimOpFiberRegion"/>
   </regions>
 
 
@@ -262,6 +237,15 @@
     <vis name="GlueVis"       alpha="1.0" r="1.0"     g="0.75"  b="0.79"  showDaughters="true"  visible="true"/>
     <vis name="RohacellVis"   alpha="1.0" r="1.0"     g="1.0"   b="1.0"   showDaughters="true"  visible="true"/>
     <vis name="AirVis"        alpha="0.1" r="0.1"     g="0.1"   b="1.0"   showDaughters="false" visible="true"/>
+    <vis name="DRCInvisible" showDaughters="false" visible="false"/> <!-- For fiber-based dual-readout calorimeter -->
+    <vis name="DRCTowerVis" alpha="1." r="0.7" g="0.4" b="0.1" showDaughters="false" visible="true"/>
+    <vis name="DRCCerenVis" alpha="0.5" r="0.3" g="0.6" b="0.9" showDaughters="false" visible="false"/>
+    <vis name="DRCScintVis" alpha="0.5" r="1.0" g="0.8" b="0.1" showDaughters="false" visible="false"/>
+    <vis name="DRCCladVis" alpha="0.5" r="0.0" g="0.5" b="0.5" showDaughters="false" visible="false"/>
+    <vis name="DRCGenericVis" alpha="0.8" r="0.5" g="0.5" b="0.5" showDaughters="false" visible="false"/>
+    <vis name="DRCGlassVis" alpha="0.5" r="0.0" g="0.1" b="0.9" showDaughters="false" visible="false"/>
+    <vis name="DRCWaferVis" alpha="1." r="0.0" g="0.9" b="0.2" showDaughters="false" visible="false"/>
+    <vis name="DRCfilterVis" alpha="0.5" r="0.9" g="0.8" b="0.1" showDaughters="false" visible="false"/>
   </display>
 
 </lccdd>
