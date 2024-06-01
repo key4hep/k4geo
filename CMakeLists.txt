@@ -107,6 +107,7 @@ if(NOT DCH_INFO_H_EXIST)
     message(WARNING "Subdetector ${FILES_DEPENDINGON_DCH_INFO_H} will not be built because header file ${DCH_INFO_H} was not found")
 endif()
 
+find_package(EDM4HEP)
 file(GLOB G4sources
   ./plugins/TPCSDAction.cpp
   ./plugins/CaloPreShowerSDAction.cpp

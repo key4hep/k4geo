@@ -214,7 +214,7 @@ namespace dd4hep {
 
             hit->photonCount();
             int wavBin = m_userData.findWavBin(energy);
-            std::cout << "wavBin : " << wavBin << std::endl;
+            // std::cout << "wavBin : " << wavBin << std::endl;
             hit->CountWavlenSpectrum(wavBin);
             int timeBin = m_userData.findTimeBin(hitTime);
             hit->CountTimeStruct(timeBin);
