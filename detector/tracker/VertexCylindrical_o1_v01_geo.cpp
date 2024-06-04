@@ -42,6 +42,7 @@ using dd4hep::rec::volSurfaceList;
 using dd4hep::rec::Vector3D;
 using dd4hep::rec::VolPlane;
 
+
 static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector sens)  {
 
     xml_det_t    x_det = e;
@@ -290,7 +291,9 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         double motherVolLength = getAttrOrDefault(x_layer, _Unicode(motherVolLength), double(stave_length));
 
         std::string layer_name = det_name+_toString(layer_id,"_layer%d");
-        Tube whole_layer_tube = Tube(x_layer.r(), x_layer.r()+motherVolThickness, motherVolLength/2.);
+        double motherVolRmin = getAttrOrDefault(x_layer, _Unicode(motherVolRmin), double(x_layer.r()));
+        Tube whole_layer_tube = Tube(motherVolRmin, motherVolRmin+motherVolThickness, motherVolLength/2.);
+
         Volume whole_layer_volume = Volume(layer_name, whole_layer_tube, theDetector.material("Air"));
         whole_layer_volume.setVisAttributes(theDetector, x_det.visStr());
         PlacedVolume whole_layer_placed_volume = envelope.placeVolume(whole_layer_volume);

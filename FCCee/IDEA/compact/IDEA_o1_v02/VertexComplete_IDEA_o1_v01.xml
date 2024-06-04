@@ -399,11 +399,11 @@
 
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
-        <readout name="VTXIBCollection">
+        <readout name="VertexBarrelCollection">
             <segmentation type="CartesianGridYZ" grid_size_y="0.025*mm" grid_size_z="0.025*mm"/>  <!-- Pixels of 25x25 µm for first three layers, other two are 50x150 µm (not correctly implemented currently!)-->
             <id>${GlobalTrackerReadoutID},y:32:-16,z:-16</id>
         </readout>  
-        <readout name="VTXDCollection">
+        <readout name="VertexEndcapCollection">
             <segmentation type="CartesianGridXY" grid_size_x="0.050*mm" grid_size_y="0.150*mm"/>  <!-- Pixels of 50x150 µm in r-phi x r -->
             <id>${GlobalTrackerReadoutID},x:32:-16,y:-16</id>
         </readout>
@@ -412,7 +412,7 @@
    <detectors>
  
     <!-- Vertex inner barrel -->
-        <detector name="VTXIB" type="VertexCylindrical_o1_v01" vis="VXDVis" id="DetID_VXD_IB" readout="VTXIBCollection"  region="VTXIBRegion">
+        <detector name="VTXIB" type="VertexCylindrical_o1_v01" vis="VXDVis" id="DetID_VXD_IB" readout="VertexBarrelCollection"  region="VTXIBRegion">
           <envelope vis="VXDVis">
                 <shape type="BooleanShape" operation="Subtraction" material="Air">
                     <shape type="BooleanShape" operation="Subtraction" material="Air">
@@ -837,7 +837,7 @@
 
 
         <!-- Vertex inner barrel support structure imported via DDCAD, material budget evaluation with g4MaterialScan is working, but not with the k4SimGeant4 methods. Should be furthermore rotated by 90 degrees around z, but feature not working currently -->
-         <!-- <detector id="DetID_NOTUSED" name="VTXIBSupport" type="DD4hep_TestShape_Creator">
+         <detector id="DetID_NOTUSED" name="VTXIBSupport" type="DD4hep_TestShape_Creator">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -845,10 +845,10 @@
                 <shape type="CAD_MultiVolume" ref="VertexSupport_o1_v02.obj" unit="mm"/>
                 <rotation x="0" y="0" z="0"/>
             </check>
-        </detector>  -->
+        </detector> 
 
         <!-- Vertex disks -->
-        <detector id="DetID_VXD_Disks" name="VertexEndcap" vis="VXDVis" type="VertexDisks_detailed_o1_v01" readout="VTXDCollection" reflect="true" region="VTXDRegion">
+        <detector id="DetID_VXD_Disks" name="VertexEndcap" vis="VXDVis" type="VertexDisks_detailed_o1_v01" readout="VertexEndcapCollection" reflect="true" region="VTXDRegion">
             <envelope vis="VXDVis">
                 <shape type="BooleanShape" operation="Subtraction" material="Air">
                     <shape type="BooleanShape" operation="Subtraction" material="Air">
