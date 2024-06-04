@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+  <info name="ALLEGRO_o1_v03 Master"
+    title="ALLEGRO_o1_v03 Master"
+    author="Giovanni Marchiori"
+    url="no"
+    status="development"
+    version="1.0">
+    <comment>
+      Master compact file describing the latest developments of the FCCee ALLEGRO detector concept.
+    </comment>
+  </info>
+
+  <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml" />
+
+  <includes>
+    <gdmlFile  ref="elements.xml"/>
+    <gdmlFile  ref="materials.xml"/>
+  </includes>
+
+  <define>
+    <constant name="world_size" value="25*m"/>
+    <constant name="world_x" value="world_size"/>
+    <constant name="world_y" value="world_size"/>
+    <constant name="world_z" value="world_size"/>
+  </define>
+
+  <include ref="./DectDimensions.xml" />
+
+  <include ref="ECalBarrel_thetamodulemerged.xml"/>
+  <include ref="ECalEndcaps_coneCryo.xml"/>
+
+</lccdd>

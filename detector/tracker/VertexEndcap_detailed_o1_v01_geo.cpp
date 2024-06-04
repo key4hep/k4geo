@@ -26,7 +26,6 @@ using dd4hep::Assembly;
 using dd4hep::BUILD_ENVELOPE;
 using dd4hep::DetElement;
 using dd4hep::Detector;
-using dd4hep::ERROR;
 using dd4hep::Material;
 using dd4hep::PlacedVolume;
 using dd4hep::Position;

@@ -35,7 +35,6 @@ using dd4hep::Transform3D;
 using dd4hep::Translation3D;
 using dd4hep::Volume;
 using dd4hep::_toString;
-using dd4hep::getAttrOrDefault;
 
 static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector sens)  {
 
@@ -312,7 +311,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 moduleDE.setPlacement(pv);
 
                 // Place all sensor parts
-                int iSensitive = 0, iPassive = 0;
+                int iSensitive = 0;
                 for(int i=0; i<int(m.sensor_volumes.size()); i++){
                     x_pos = 0.0;
                     y_pos = m.sensor_xmin[i]+abs(m.sensor_xmax[i]-m.sensor_xmin[i])/2.;
@@ -331,8 +330,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                     }
                     // Place passive sensor parts
                     else{
-                        pv = module_assembly.placeVolume(m.sensor_volumes[i], Transform3D(rot, pos)*Translation3D(pos2));
-                        iPassive++;
+                        stave_assembly.placeVolume(m.sensor_volumes[i], Transform3D(rot, pos)*Translation3D(pos2));
                     }
                 }
                 iModule_tot++;
