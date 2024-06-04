@@ -61,8 +61,8 @@
 
 
     <display>
-        <vis name="InnerTrackerModuleVis"  alpha="0.5" r="0.0" g="1.0" b="0.6" showDaughters="false" visible="true"/>
-        <vis name="InnerTrackerForwardVis" alpha="1.0" r="0.8" g="0.1" b="0.1" showDaughters="false" visible="true"/>
+        <vis name="InnerTrackerModuleVis"  alpha="0.5" r="0.0" g="1.0" b="0.6" showDaughters="false" visible="false"/>
+        <vis name="InnerTrackerForwardVis" alpha="1.0" r="0.8" g="0.1" b="0.1" showDaughters="false" visible="false"/>
         <vis name="RedVis" alpha="1.0" r="1" g="0" b="0" showDaughters="true" visible="true"/>
         <vis name="BlueVis" alpha="1.0" r="0" g="0" b="1" showDaughters="true" visible="true"/>
         <vis name="InterlinkVis" alpha="1.0" r="0.078" g="0.12" b="0.59" showDaughters="true" visible="true"/>
