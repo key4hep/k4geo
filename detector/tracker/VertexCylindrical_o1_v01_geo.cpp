@@ -268,11 +268,11 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         // child elements: ladder, sensitive and periphery
 
         int layer_id = x_layer.id();
-        int nUnits = getAttrOrDefault(x_layer, _Unicode(nUnits), int(1));
+        int side = getAttrOrDefault(x_layer, _Unicode(side), 0);    // Use side=1 or -1 to use two staves/wafers with the same layer id
 
         double dr           = x_layer.dr(0);     // Spacing in r for every second stave. 
         double layer_offset = x_layer.offset(0);
-        double layer_z_offset = x_layer.z_offset(0);
+        double z_offset     = x_layer.z_offset(0);
 
         string nameStr          = x_layer.nameStr();
         int    nmodules         = x_layer.nmodules();
@@ -290,7 +290,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         double motherVolThickness = getAttrOrDefault(x_layer, _Unicode(motherVolThickness), double(5.0));
         double motherVolLength = getAttrOrDefault(x_layer, _Unicode(motherVolLength), double(stave_length));
 
-        std::string layer_name = det_name+_toString(layer_id,"_layer%d");
+        std::string layer_name = det_name+_toString(layer_id,"_layer%d")+_toString(side,"_side%d");
         double motherVolRmin = getAttrOrDefault(x_layer, _Unicode(motherVolRmin), double(x_layer.r()));
         Tube whole_layer_tube = Tube(motherVolRmin, motherVolRmin+motherVolThickness, motherVolLength/2.);
 
@@ -298,159 +298,152 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         whole_layer_volume.setVisAttributes(theDetector, x_det.visStr());
         PlacedVolume whole_layer_placed_volume = envelope.placeVolume(whole_layer_volume);
 
-        whole_layer_placed_volume.addPhysVolID("system", x_det.id()).addPhysVolID("side",0).addPhysVolID("layer", layer_id);  
+        whole_layer_placed_volume.addPhysVolID("system", x_det.id()).addPhysVolID("side",side).addPhysVolID("layer", layer_id);  
 
-        DetElement layerDE( sdet , _toString(layer_id,"layer_%d"), layer_id );
+        DetElement layerDE( sdet , _toString(layer_id,"layer_%d")+_toString(side,"_side%d"), layer_id );
         layerDE.setPlacement( whole_layer_placed_volume ) ;
 
-        // Loop over units: Multiple staves/curved sensors consisting of multiple modules, consisting of multiple sensors can be placed along z
-        for(int iUnit=0; iUnit<nUnits; iUnit++){
+        int nLadders = x_layer.attr<int>(  _Unicode(nLadders) ) ;
+        double dphi = 2.*M_PI / double(nLadders);
+        double phi0 = x_layer.phi0(0);
 
-            double z_unit = -(nUnits-1)/2.*stave_length - (nUnits-1)/2.*layer_z_offset + iUnit*stave_length + iUnit*layer_z_offset;
+        //--------- loop over ladders ---------------------------
+        for(int iStave=0; iStave<nLadders; ++iStave) {
+            double layer_r = x_layer.r() + ((iStave%2 == 0) ? 0.0 : dr) + m.stave_r;  // Offset every second stave in r
+            double phi = phi0 + iStave * dphi;
+            RotationZYX rot( phi , 0, 0  ) ;
 
-            int nLadders = x_layer.attr<int>(  _Unicode(nLadders) ) ;
-            double dphi = 2.*M_PI / double(nLadders);
-            double phi0 = x_layer.phi0(0);
-
-            //--------- loop over ladders ---------------------------
-            for(int iStave=0; iStave<nLadders; ++iStave) {
-                double layer_r = x_layer.r() + ((iStave%2 == 0) ? 0.0 : dr) + m.stave_r;  // Offset every second stave in r
-                double phi = phi0 + iStave * dphi;
-                RotationZYX rot( phi , 0, 0  ) ;
-
-                string stave_name = layer_name + _toString(iUnit,"_unit%d") + _toString(iStave,"_stave%d");
-                Assembly stave_assembly(stave_name);
-                pv = whole_layer_volume.placeVolume(stave_assembly);
-                
-                // Place components
-                for(auto& component : m.components_vec){
-                    Assembly component_assembly(stave_name + "_" + component.name);
-                    stave_assembly.placeVolume(component_assembly);
-                    for(int i=0; i<int(component.thicknesses.size()); i++){
-                        double r_component = layer_r + component.r + component.rs[i] + component.thicknesses[i]/2.;
-                        double r_offset_component = layer_offset + component.offset + component.offsets[i];
-                        double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
-                        double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
-                        double z_pos = z_unit; 
-                        Position pos(x_pos, y_pos, z_pos);
-
-                        if(component.isCurved[i]){
-                            double r_component_curved = r_component - component.r - component.thicknesses[i]/2. - layer_r; // Correct for the fact that a tube element's origin is offset compared to the origin of a box
-                            x_pos = r_component_curved*cos(phi) - r_offset_component*sin(phi);
-                            y_pos = r_component_curved*sin(phi) + r_offset_component*cos(phi);
-                            z_pos = z_unit;
-                            pos = Position(x_pos, y_pos, z_pos);
-                        }
-
-                        component_assembly.placeVolume(component.volumes[i], Transform3D(rot, pos));
-                    }
-                }
-
-                // Place end of stave structures
-                for(auto& endOfStave : m.endOfStaves_vec){
-                    Assembly endOfStave_assembly(stave_name + "_" + endOfStave.name);
-                    stave_assembly.placeVolume(endOfStave_assembly);
-                    for(int i=0; i<int(endOfStave.volumes.size()); i++){
-                        std::vector<int> sides = {1,-1};
-                        if(endOfStave.side[i] != 0)
-                            sides = {endOfStave.side[i]};
-                        for(auto& side : sides){  // Place it on both sides of the stave
-                            double r_component = layer_r + endOfStave.r + endOfStave.rs[i] + endOfStave.thicknesses[i]/2.;
-                            double r_offset_component = layer_offset + endOfStave.offset + endOfStave.offsets[i];
-                            double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
-                            double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
-                            double z_pos = stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dzs[i]; 
-                            Position pos(x_pos, y_pos, z_pos*side+z_unit);
-
-                            if(endOfStave.isCurved[i]){
-                                double r_component_curved = r_component - endOfStave.r - endOfStave.thicknesses[i]/2. - layer_r; // Correct for the fact that a tube element's origin is offset compared to the origin of a box
-                                x_pos = r_component_curved*cos(phi) - r_offset_component*sin(phi);
-                                y_pos = r_component_curved*sin(phi) + r_offset_component*cos(phi);
-                                z_pos = stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dzs[i];
-                                int side_unit = z_unit>0 ? 1 : -1;
-                                pos = Position(x_pos, y_pos, z_pos*side*side_unit+z_unit);
-                            }
-
-                            endOfStave_assembly.placeVolume(endOfStave.volumes[i], Transform3D(rot, pos));
-                        }
-                    }
-                }
-
-                // Place sensor
-                for(int iModule=0; iModule<nmodules; iModule++){
-                    double r_component = layer_r + m.sensor_r + m.sensor_thickness/2. + (iModule%2 == 0 ? 0.0 : m.stave_dr);
-                    double r_offset_component = layer_offset + m.sensor_offset;
+            string stave_name = layer_name + _toString(side,"_side%d") + _toString(iStave,"_stave%d");
+            Assembly stave_assembly(stave_name);
+            pv = whole_layer_volume.placeVolume(stave_assembly);
+            
+            // Place components
+            for(auto& component : m.components_vec){
+                Assembly component_assembly(stave_name + "_" + component.name);
+                stave_assembly.placeVolume(component_assembly);
+                for(int i=0; i<int(component.thicknesses.size()); i++){
+                    double r_component = layer_r + component.r + component.rs[i] + component.thicknesses[i]/2.;
+                    double r_offset_component = layer_offset + component.offset + component.offsets[i];
                     double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
                     double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
-                    double z_pos = z_unit + -(nmodules-1)/2.*(m.sensor_length) - (nmodules-1)/2.*step + iModule*m.sensor_length + iModule*step;
+                    double z_pos = z_offset; 
                     Position pos(x_pos, y_pos, z_pos);
-                        
-                    string module_name = stave_name + _toString(iModule,"_module%d");
-                    Assembly module_assembly(module_name);
-                    pv = stave_assembly.placeVolume(module_assembly);
-                    pv.addPhysVolID("module", iModule_tot);
-                    DetElement moduleDE(layerDE,module_name,x_det.id());
-                    moduleDE.setPlacement(pv);
 
-                    // Place all sensor parts
-                    int iSensitive = 0;
-                    RotationZYX rot2 = rot;
+                    if(component.isCurved[i]){
+                        double r_component_curved = r_component - component.r - component.thicknesses[i]/2. - layer_r; // Correct for the fact that a tube element's origin is offset compared to the origin of a box
+                        x_pos = r_component_curved*cos(phi) - r_offset_component*sin(phi);
+                        y_pos = r_component_curved*sin(phi) + r_offset_component*cos(phi);
+                        z_pos = z_offset;
+                        pos = Position(x_pos, y_pos, z_pos);
+                    }
 
-                    for(int i=0; i<int(m.sensor_volumes.size()); i++){
-                        Position pos2(0.0, 0.0, 0.0);
-                        double r_component_curved = 0.0;
+                    component_assembly.placeVolume(component.volumes[i], Transform3D(rot, pos));
+                }
+            }
+
+            // Place end of stave structures
+            for(auto& endOfStave : m.endOfStaves_vec){
+                Assembly endOfStave_assembly(stave_name + "_" + endOfStave.name);
+                stave_assembly.placeVolume(endOfStave_assembly);
+                for(int i=0; i<int(endOfStave.volumes.size()); i++){
+                    std::vector<int> endOfStave_sides = {1,-1};
+                    if(endOfStave.side[i] != 0)
+                        endOfStave_sides = {endOfStave.side[i]};
+                    for(auto& endOfStave_side : endOfStave_sides){  // Place it on both sides of the stave
+                        double r_component = layer_r + endOfStave.r + endOfStave.rs[i] + endOfStave.thicknesses[i]/2.;
+                        double r_offset_component = layer_offset + endOfStave.offset + endOfStave.offsets[i];
+                        double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
+                        double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
+                        double z_pos = stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dzs[i]; 
+                        Position pos(x_pos, y_pos, z_pos*endOfStave_side+z_offset);
+
+                        if(endOfStave.isCurved[i]){
+                            double r_component_curved = r_component - endOfStave.r - endOfStave.thicknesses[i]/2. - layer_r; // Correct for the fact that a tube element's origin is offset compared to the origin of a box
+                            x_pos = r_component_curved*cos(phi) - r_offset_component*sin(phi);
+                            y_pos = r_component_curved*sin(phi) + r_offset_component*cos(phi);
+                            z_pos = stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dzs[i];
+                            pos = Position(x_pos, y_pos, z_pos*endOfStave_side+z_offset);
+                        }
+
+                        endOfStave_assembly.placeVolume(endOfStave.volumes[i], Transform3D(rot, pos));
+                    }
+                }
+            }
+
+            // Place sensor
+            for(int iModule=0; iModule<nmodules; iModule++){
+                double r_component = layer_r + m.sensor_r + m.sensor_thickness/2. + (iModule%2 == 0 ? 0.0 : m.stave_dr);
+                double r_offset_component = layer_offset + m.sensor_offset;
+                double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
+                double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
+                double z_pos = z_offset + -(nmodules-1)/2.*(m.sensor_length) - (nmodules-1)/2.*step + iModule*m.sensor_length + iModule*step;
+                Position pos(x_pos, y_pos, z_pos);
+                    
+                string module_name = stave_name + _toString(iModule,"_module%d");
+                Assembly module_assembly(module_name);
+                pv = stave_assembly.placeVolume(module_assembly);
+                pv.addPhysVolID("module", iModule_tot);
+                DetElement moduleDE(layerDE,module_name,x_det.id());
+                moduleDE.setPlacement(pv);
+
+                // Place all sensor parts
+                int iSensitive = 0;
+                RotationZYX rot2 = rot;
+
+                for(int i=0; i<int(m.sensor_volumes.size()); i++){
+                    Position pos2(0.0, 0.0, 0.0);
+                    double r_component_curved = 0.0;
+                    if(m.isCurved[i]){
+                        double phi_i = phi + 2.*(m.sensor_xmin[i]+abs(m.sensor_xmax[i]-m.sensor_xmin[i])/2.)/(layer_r+m.sensor_r);
+                        r_component_curved = m.sensor_thickness/2. + (iModule%2 == 0 ? 0.0 : m.stave_dr);
+                        x_pos = r_component_curved*cos(phi_i) - r_offset_component*sin(phi_i);
+                        y_pos = r_component_curved*sin(phi_i) + r_offset_component*cos(phi_i);
+                        z_pos = z_offset -(nmodules-1)/2.*(m.sensor_length) - (nmodules-1)/2.*step + iModule*m.sensor_length + iModule*step;
+                        pos = Position(x_pos, y_pos, z_pos);
+
+                        x_pos = 0.0;
+                        y_pos = 0.0;
+                        z_pos = m.sensor_ymin[i]+abs(m.sensor_ymax[i]-m.sensor_ymin[i])/2.;
+                        pos2 = Position(x_pos, y_pos, z_pos);
+
+                        rot2 = RotationZYX(phi_i, 0, 0);
+                    }
+                    else{
+                        x_pos = 0.0;
+                        y_pos = m.sensor_xmin[i]+abs(m.sensor_xmax[i]-m.sensor_xmin[i])/2.;
+                        z_pos = m.sensor_ymin[i]+abs(m.sensor_ymax[i]-m.sensor_ymin[i])/2.;
+                        pos2 = Position(x_pos, y_pos, z_pos);
+                    }
+
+                    pv = module_assembly.placeVolume(m.sensor_volumes[i], Transform3D(rot2, pos)*Translation3D(pos2));
+
+                    // Place active sensor parts
+                    if(m.sensor_sensitives[i]) {
+                        string sensor_name = module_name + _toString(iSensitive,"_sensor%d");
+                        pv.addPhysVolID("sensor", iSensitive);
+                        DetElement sensorDE(moduleDE,sensor_name,x_det.id());
+                        sensorDE.setPlacement(pv);
+
+                        dd4hep::rec::SurfaceType type = dd4hep::rec::SurfaceType::Sensitive;
                         if(m.isCurved[i]){
-                            double phi_i = phi + 2.*(m.sensor_xmin[i]+abs(m.sensor_xmax[i]-m.sensor_xmin[i])/2.)/(layer_r+m.sensor_r);
-                            r_component_curved = m.sensor_thickness/2. + (iModule%2 == 0 ? 0.0 : m.stave_dr);
-                            x_pos = r_component_curved*cos(phi_i) - r_offset_component*sin(phi_i);
-                            y_pos = r_component_curved*sin(phi_i) + r_offset_component*cos(phi_i);
-                            z_pos = z_unit -(nmodules-1)/2.*(m.sensor_length) - (nmodules-1)/2.*step + iModule*m.sensor_length + iModule*step;
-                            pos = Position(x_pos, y_pos, z_pos);
-
-                            x_pos = 0.0;
-                            y_pos = 0.0;
-                            z_pos = m.sensor_ymin[i]+abs(m.sensor_ymax[i]-m.sensor_ymin[i])/2.;
-                            pos2 = Position(x_pos, y_pos, z_pos);
-
-                            rot2 = RotationZYX(phi_i, 0, 0);
+                            Vector3D ocyl(-(r_component_curved+layer_r/2.), 0., 0.) ;  
+                            type.setProperty(dd4hep::rec::SurfaceType::Cylinder,true);
+                            dd4hep::rec::VolCylinder surf(m.sensor_volumes[i], type, m.sensor_thickness/2., m.sensor_thickness/2., ocyl);
+                            volSurfaceList(sensorDE)->push_back(surf);
                         }
                         else{
-                            x_pos = 0.0;
-                            y_pos = m.sensor_xmin[i]+abs(m.sensor_xmax[i]-m.sensor_xmin[i])/2.;
-                            z_pos = m.sensor_ymin[i]+abs(m.sensor_ymax[i]-m.sensor_ymin[i])/2.;
-                            pos2 = Position(x_pos, y_pos, z_pos);
+                            Vector3D u( 0. , 1. , 0. ) ;
+                            Vector3D v( 0. , 0. , 1. ) ;
+                            Vector3D n( 1. , 0. , 0. ) ;
+                            VolPlane surf( m.sensor_volumes[i] , type , m.sensor_thickness/2. , m.sensor_thickness/2. , u,v,n );
+                            volSurfaceList(sensorDE)->push_back(surf);
                         }
-
-                        pv = module_assembly.placeVolume(m.sensor_volumes[i], Transform3D(rot2, pos)*Translation3D(pos2));
-
-                        // Place active sensor parts
-                        if(m.sensor_sensitives[i]) {
-                            string sensor_name = module_name + _toString(iSensitive,"_sensor%d");
-                            pv.addPhysVolID("sensor", iSensitive);
-                            DetElement sensorDE(moduleDE,sensor_name,x_det.id());
-                            sensorDE.setPlacement(pv);
-
-                            dd4hep::rec::SurfaceType type = dd4hep::rec::SurfaceType::Sensitive;
-                            if(m.isCurved[i]){
-                                Vector3D ocyl(-(r_component_curved+layer_r/2.), 0., 0.) ;  
-                                type.setProperty(dd4hep::rec::SurfaceType::Cylinder,true);
-                                dd4hep::rec::VolCylinder surf(m.sensor_volumes[i], type, m.sensor_thickness/2., m.sensor_thickness/2., ocyl);
-                                volSurfaceList(sensorDE)->push_back(surf);
-                            }
-                            else{
-                                Vector3D u( 0. , 1. , 0. ) ;
-                                Vector3D v( 0. , 0. , 1. ) ;
-                                Vector3D n( 1. , 0. , 0. ) ;
-                                VolPlane surf( m.sensor_volumes[i] , type , m.sensor_thickness/2. , m.sensor_thickness/2. , u,v,n );
-                                volSurfaceList(sensorDE)->push_back(surf);
-                            }
-                            iSensitive++;
-                        }
+                        iSensitive++;
                     }
-                    iModule_tot++;
                 }
-                stave_assembly->GetShape()->ComputeBBox() ;
+                iModule_tot++;
             }
+            stave_assembly->GetShape()->ComputeBBox() ;
         }
     }
 

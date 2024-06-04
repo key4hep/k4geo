@@ -262,7 +262,7 @@
             </module>
 
             <!-- Here we construct the disks, all disks use the same base stave (SiWrDStave) with different numbers of modules and other properties -->
-           <layer id="0" z="SiWrD_z1" nphi="2" dz="0.0*mm" rmin="SiWrD_rmin1" dr="0.0*mm">
+           <layer id="0" z="SiWrD_z1" nphi="2" dz="0.0*mm" rmin="SiWrD_rmin1" rmax="SiWrD_rmin2" dr="0.0*mm">
                 <!-- Column 0 -->
                 <stave nmodules="12" dz="SiWr_distance_two_sides" r="0.0*mm" step="SiWr_mod_overlap" offset="SiWrD_layer1_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="0" module="SiWrDStave"/> <!-- first tile -->
 
@@ -521,7 +521,7 @@
             </layer>
 
 
-           <layer id="1" z="SiWrD_z2" nphi="2" dz="0.0*mm" rmin="SiWrD_rmin2" dr="0.0*mm">
+           <layer id="1" z="SiWrD_z2" nphi="2" dz="0.0*mm" rmin="SiWrD_rmin2" rmax="SiWrD_rmin2+SiWr_mod_rphi/2.+1.0*SiWrD_tile_spacing_column" dr="0.0*mm">
                 <!-- Column 0 -->
                 <stave nmodules="12" dz="SiWr_distance_two_sides" r="0.0*mm" step="SiWr_mod_overlap" offset="SiWrD_layer2_offset+0.0*(SiWrD_double_tile_length+SiWrD_tile_spacing_row)" id="0" module="SiWrDStave"/> <!-- first tile -->
 
