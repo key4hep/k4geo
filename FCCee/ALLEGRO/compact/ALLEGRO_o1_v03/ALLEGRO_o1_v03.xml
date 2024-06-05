@@ -34,9 +34,8 @@
   <include ref="BeamInstrumentation.xml"/>
   <include ref="LumiCal.xml"/>
   <include ref="HOMAbsorber.xml"/> 
-  <!--taken from DetFCCeeCLD/compact/FCCee_o2_v02  -->
-  <include ref="Vertex.xml"/>
-  <include ref="DriftChamber.xml"/>
+  <include ref="Vertex_IDEA_o1_v01.xml"/> <!-- symbolic link to ../../../IDEA/compact/IDEA_o1_v03/Vertex_IDEA_o1_v01.xml"/>-->
+  <include ref="DriftChamber_o1_v02.xml"/> <!-- symbolic link to ../../../IDEA/compact/IDEA_o1_v03/DriftChamber_o1_v02.xml -->
   <include ref="ECalBarrel_thetamodulemerged.xml"/>
   <include ref="HCalBarrel_TileCal.xml"/>
   <include ref="ECalEndcaps_coneCryo.xml"/>

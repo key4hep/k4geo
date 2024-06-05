@@ -18,15 +18,19 @@
     <constant name="world_side" value="6100*mm"/>
     <constant name="CrossingAngle" value="0.030*rad"/>  
 
-    <constant name="GlobalTrackerReadoutID_DCH" type="string" value="system:1,layer:16,phi:16"/>
-    <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:6,module:11,sensor:8"/>
+    <constant name="GlobalTrackerReadoutID" type="string" value="system:5,layer:3,stave:6,module:5,sensor:2"/>
+    <constant name="GlobalTrackerReadoutID_OB" type="string" value="system:5,layer:1,stave:6,module:4,sensor:2"/>
+    <constant name="GlobalTrackerReadoutID_Disk" type="string" value="system:5,side:-2,layer:3,petal:3,stave:6,module:10,sensor:2"/>
+    <constant name="GlobalTrackerReadoutID_SiWrapperB" type="string" value="system:5,layer:1,stave:9,module:6,sensor:1"/>
+    <constant name="GlobalTrackerReadoutID_SiWrapperD" type="string" value="system:5,side:1,layer:1,module:6,sensor:1"/>
 
     <constant name="SolenoidField" value="2*tesla"/>
         
     <constant name="DetID_NOTUSED"          value=" 0"/>
     
-    <constant name="DetID_VXD_Barrel"       value=" 1"/>
-    <constant name="DetID_VXD_Endcap"       value=" 2"/>
+    <constant name="DetID_VXD_IB"       value=" 1"/>
+    <constant name="DetID_VXD_Disks"       value=" 2"/>
+    <constant name="DetID_VXD_OB"           value=" 20"/>
     <constant name="DetID_DCH"              value=" 3"/>
     <constant name="DetID_ECAL_Barrel"      value=" 4"/>
     <constant name="DetID_ECAL_Endcap"      value=" 5"/>
@@ -54,11 +58,6 @@
     <constant name="BeamPipeGoldWidth" value="0.005*mm" /> 
     <constant name="BeamPipeGoldTolerance" value="0.001*mm" />  <!-- dummy tolerance, some small non zero value -->
     
-    <constant name="InnerTracker_half_length" value="2300*mm" />
-    
-    <constant name="ConeBeamPipe_zmax" value="InnerTracker_half_length" />
-    <constant name="ConeBeamPipe_rmax_1"  value="InnerTracker_half_length * 0.1 + 1*mm" />
-    
     <constant name="BigBeamPipe_zmax" value="1120*mm"/>
     <constant name="SeparatedBeamPipe_rmax"  value="15*mm"/>
     <constant name="BeamPipeTantalShieldWidth"  value="15*mm"/>
@@ -72,22 +71,24 @@
     <constant name="size_z" value="50*mm"/>   
     
     <constant name="env_safety" value="0.1*mm"/>
-    
-    <constant name="Vertex_inner_radius" value="17*mm"/>
-    <constant name="Vertex_outer_radius" value="340*mm"/>
-    <constant name="Vertex_half_length" value="302*mm"/>
-   
-    <constant name="InnerTracker_inner_radius" value="61*mm"/>
-    <constant name="InnerTracker_outer_radius" value="696*mm"/>
-    
-    <constant name="OuterTracker_inner_radius" value="696*mm"/>
-    <constant name="OuterTracker_outer_radius" value="2000*mm"/>
-    <constant name="OuterTracker_half_length" value="2300*mm"/>
 
-    <constant name="DCH_inner_radius" value="345*mm"/>
-    <constant name="DCH_outer_radius" value="2000*mm"/> <!-- Contact the drift chamber experts if you need to change the DC radiuses (just changing the radius is not enough, the DC has been optimized for those values, the detector geometry is constrained by many construction/mechanical/electronics/etc considerations -->
-    <constant name="DCH_half_length" value="2850*mm"/> <!-- this includes the services -->
-    
+    <!-- VTX parameters -->
+    <constant name="VertexClearanceTheta" value="0.110"/>                  <!-- Clearance of vertex detector in mrad-->
+    <constant name="VTXIB_r_clearance" value="1*mm"/> <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
+    <constant name="VTXIB_r_min" value="13.7*mm"/>          <!-- Start of inner vertex detector layers. To keep distance of 1.3 mm from outer beam pipe end (10+0.35+1+0.35 mm = 11.7 mm). This changes to 13.7 mm due to cooling issues (see https://indico.cern.ch/event/1176398/contributions/5207171/attachments/2581129/4451907/Krakow%202023_v23_final.pdf) -->
+    <constant name="VTXIB_r_max" value="31*mm"/>            <!-- End of inner vertex detector layers (the ones with smaller pixels) -->
+    <constant name="VTXOB_r_min" value="320*mm"/>           <!-- Start of outer vertex layers (the ones with larger pixels) -->
+    <constant name="VTXOB_r_max" value="340*mm"/>           <!-- End of outer vertex layer (the one with larger pixels) -->
+    <constant name="Outer_Vertex_half_length" value="1050*mm"/>
+    <!-- End of VTX parameters -->
+
+    <!--  Drift Chamber parameters    -->
+    <!-- Changing the radius is not enough to resize the detector, please contact the experts-->
+    <constant name="DCH_inner_cyl_R_total"          value=" 349.8  * mm "  />
+    <constant name="DCH_outer_cyl_R_total"          value=" 2015   * mm "  />
+    <constant name="DCH_half_length_total"          value=" 2250   * mm "  />
+    <!-- End of Drift Chamber parameters    -->
+
     <!-- LAr ECAL Calo Barrel -->
     <constant name="BarECal_id" value="DetID_ECAL_Barrel"/>
     <constant name="BarECal_rmin" value="2100*mm"/>
@@ -183,10 +184,9 @@
     <constant name="CollimatorInFrontOfQD0_radius" value="10*mm"/>
     <constant name="CollimatorInFrontOfQD0_dr" value="16*mm"/>
     
-    <constant name="tracker_region_zmax" value="OuterTracker_half_length"/>
-    <constant name="tracker_region_rmax" value="OuterTracker_outer_radius"/>
+    <constant name="tracker_region_zmax" value="DCH_half_length_total"/>
+    <constant name="tracker_region_rmax" value="DCH_outer_cyl_R_total"/>
 
-    <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:6,module:11,sensor:8"/>
   </define>
   
   
@@ -197,8 +197,11 @@
   </limits>
   <regions>
     <region name="BeampipeRegion"/>
-    <region name="VertexBarrelRegion"/>
-    <region name="VertexEndcapRegion"/>
+    <region name="VTXIBRegion"/>
+    <region name="VTXOBRegion"/>
+    <region name="VTXDRegion"/>
+    <region name="SiWrapperBRegion"/>
+    <region name="SiWrapperDRegion"/>
   </regions>
 
 
