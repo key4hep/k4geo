@@ -94,6 +94,8 @@ def main():
             match material:
                 case "CarbonFiber":
                     fillcolor = FCCStyle.fillcolors[0]
+                case "CarbonFoam":
+                    fillcolor = FCCStyle.fillcolors[0]
                 case "CarbonFleece":
                     fillcolor = ROOT.kBlack
                 case "Rohacell":

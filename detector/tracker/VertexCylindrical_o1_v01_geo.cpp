@@ -289,6 +289,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         
         double motherVolThickness = getAttrOrDefault(x_layer, _Unicode(motherVolThickness), double(5.0));
         double motherVolLength = getAttrOrDefault(x_layer, _Unicode(motherVolLength), double(stave_length));
+        double motherVolOffset = getAttrOrDefault(x_layer, _Unicode(motherVolOffset), double(0.0)); // In case wafer/stave is asymmetric
 
         std::string layer_name = det_name+_toString(layer_id,"_layer%d")+_toString(side,"_side%d");
         double motherVolRmin = getAttrOrDefault(x_layer, _Unicode(motherVolRmin), double(x_layer.r()));
@@ -296,7 +297,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
         Volume whole_layer_volume = Volume(layer_name, whole_layer_tube, theDetector.material("Air"));
         whole_layer_volume.setVisAttributes(theDetector, x_det.visStr());
-        PlacedVolume whole_layer_placed_volume = envelope.placeVolume(whole_layer_volume);
+        PlacedVolume whole_layer_placed_volume = envelope.placeVolume(whole_layer_volume, Position(0., 0., z_offset));
 
         whole_layer_placed_volume.addPhysVolID("system", x_det.id()).addPhysVolID("side",side).addPhysVolID("layer", layer_id);  
 
@@ -326,14 +327,14 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                     double r_offset_component = layer_offset + component.offset + component.offsets[i];
                     double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
                     double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
-                    double z_pos = z_offset; 
+                    double z_pos = motherVolOffset; 
                     Position pos(x_pos, y_pos, z_pos);
 
                     if(component.isCurved[i]){
                         double r_component_curved = r_component - component.r - component.thicknesses[i]/2. - layer_r; // Correct for the fact that a tube element's origin is offset compared to the origin of a box
                         x_pos = r_component_curved*cos(phi) - r_offset_component*sin(phi);
                         y_pos = r_component_curved*sin(phi) + r_offset_component*cos(phi);
-                        z_pos = z_offset;
+                        z_pos = motherVolOffset;
                         pos = Position(x_pos, y_pos, z_pos);
                     }
 
@@ -355,14 +356,14 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                         double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
                         double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
                         double z_pos = stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dzs[i]; 
-                        Position pos(x_pos, y_pos, z_pos*endOfStave_side+z_offset);
+                        Position pos(x_pos, y_pos, z_pos*endOfStave_side+motherVolOffset);
 
                         if(endOfStave.isCurved[i]){
                             double r_component_curved = r_component - endOfStave.r - endOfStave.thicknesses[i]/2. - layer_r; // Correct for the fact that a tube element's origin is offset compared to the origin of a box
                             x_pos = r_component_curved*cos(phi) - r_offset_component*sin(phi);
                             y_pos = r_component_curved*sin(phi) + r_offset_component*cos(phi);
                             z_pos = stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dzs[i];
-                            pos = Position(x_pos, y_pos, z_pos*endOfStave_side+z_offset);
+                            pos = Position(x_pos, y_pos, z_pos*endOfStave_side+motherVolOffset);
                         }
 
                         endOfStave_assembly.placeVolume(endOfStave.volumes[i], Transform3D(rot, pos));
@@ -376,7 +377,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 double r_offset_component = layer_offset + m.sensor_offset;
                 double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
                 double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
-                double z_pos = z_offset + -(nmodules-1)/2.*(m.sensor_length) - (nmodules-1)/2.*step + iModule*m.sensor_length + iModule*step;
+                double z_pos = motherVolOffset + -(nmodules-1)/2.*(m.sensor_length) - (nmodules-1)/2.*step + iModule*m.sensor_length + iModule*step;
                 Position pos(x_pos, y_pos, z_pos);
                     
                 string module_name = stave_name + _toString(iModule,"_module%d");
@@ -398,7 +399,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                         r_component_curved = m.sensor_thickness/2. + (iModule%2 == 0 ? 0.0 : m.stave_dr);
                         x_pos = r_component_curved*cos(phi_i) - r_offset_component*sin(phi_i);
                         y_pos = r_component_curved*sin(phi_i) + r_offset_component*cos(phi_i);
-                        z_pos = z_offset -(nmodules-1)/2.*(m.sensor_length) - (nmodules-1)/2.*step + iModule*m.sensor_length + iModule*step;
+                        z_pos = motherVolOffset -(nmodules-1)/2.*(m.sensor_length) - (nmodules-1)/2.*step + iModule*m.sensor_length + iModule*step;
                         pos = Position(x_pos, y_pos, z_pos);
 
                         x_pos = 0.0;
