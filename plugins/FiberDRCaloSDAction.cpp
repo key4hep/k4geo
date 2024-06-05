@@ -60,7 +60,6 @@ namespace dd4hep {
             int findWavBin(G4double en) {
                 int i = 0;
                 for ( ; i < fWavBin+1; i++) {
-                    // if ( en < wavToE( (fWavlenStart - static_cast<float>(i)*fWavlenStep)*nm ) )
                     if ( en < wavToE( (fWavlenStart - static_cast<float>(i)*fWavlenStep)*CLHEP::nm ) )
                     break;
                 }
@@ -197,7 +196,6 @@ namespace dd4hep {
             dd4hep::DDSegmentation::VolumeID ceren = static_cast<dd4hep::DDSegmentation::VolumeID>(m_segmentation->decoder()->get(cID, "c"));
             bool IsCeren = static_cast<bool>(ceren);
             if ( !(IsCeren) ) {
-                // std::cout << "Photon energy : " << energy << std::endl;
                 if ( m_userData.applyYellowFilter(energy) ) return true;
             }
 
@@ -214,7 +212,6 @@ namespace dd4hep {
 
             hit->photonCount();
             int wavBin = m_userData.findWavBin(energy);
-            // std::cout << "wavBin : " << wavBin << std::endl;
             hit->CountWavlenSpectrum(wavBin);
             int timeBin = m_userData.findTimeBin(hitTime);
             hit->CountTimeStruct(timeBin);

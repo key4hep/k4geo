@@ -595,12 +595,6 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
     auto& DRhits  = m_drcaloHits[colName];
     auto& DRwaves = m_drcaloWaves[colName];
 
-    // DEBUG
-    // printout(INFO,"Geant4Output2EDM4hep_DRC","+++ Saving EDM4hep : Using Geant4DRCalorimeter::Hit");
-    // printout(INFO,"Geant4Output2EDM4hep_DRC","+++ Saving EDM4hep : SD : %016llX", sd);
-    // printout(INFO,"Geant4Output2EDM4hep_DRC","+++ Saving EDM4hep hit_creation_mode : %d", hit_creation_mode);
-    // printout(INFO,"Geant4Output2EDM4hep_DRC","+++ Saving EDM4hep nhits : %d", nhits);
-
     for(unsigned i=0 ; i < nhits ; ++i){
       auto sch = hits.first->create();
       const Geant4DRCalorimeter::Hit* hit = coll->hit(i);

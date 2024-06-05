@@ -600,7 +600,7 @@
         <dark name="dark" rmax="0.5*mm" material="PolyvinylChloride" vis="DRCGenericVis"/>
         <mirror name="mirror" rmax="0.5*mm" height="0.*mm" material="Aluminum" vis="DRCGlassVis"/> <!-- original height 0.01mm, set it to 0 to remove mirror (to reduce memory) -->
       </structure>
-      <barrel height="FiberDRCalo_barrel_height" rmin="FiberDRCalo_barrel_inner_radius" nphi="FiberDRCalo_barrel_nphi" theta="0.0" start="0" material="Copper" vis="DRCTowerVis">
+      <barrel height="FiberDRCalo_barrel_z_extent" rmin="FiberDRCalo_barrel_z_start" nphi="FiberDRCalo_barrel_nphi" theta="0.0" start="0" material="Copper" vis="DRCTowerVis">
         <deltatheta deltatheta="0.019634954"/>
         <deltatheta deltatheta="0.019634954"/>
         <deltatheta deltatheta="0.019634954"/>
@@ -645,7 +645,7 @@
         <deltatheta deltatheta="0.019634954"/>
         <deltatheta deltatheta="0.019634954"/>
       </barrel>
-      <endcap height="FiberDRCalo_endcap_height" rmin="FiberDRCalo_endcap_inner_radius" nphi="FiberDRCalo_endcap_nphi" theta="0.785398" start="40" material="Copper" vis="DRCTowerVis">
+      <endcap height="FiberDRCalo_endcap_z_extent" rmin="FiberDRCalo_endcap_z_start" nphi="FiberDRCalo_endcap_nphi" theta="0.785398" start="40" material="Copper" vis="DRCTowerVis">
         <deltatheta deltatheta="0.019634954"/>
         <deltatheta deltatheta="0.019634954"/>
         <deltatheta deltatheta="0.019634954"/>
