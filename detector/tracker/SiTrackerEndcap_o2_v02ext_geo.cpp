@@ -156,9 +156,10 @@ static Ref_t create_detector(Detector& theDetector,xml_h e,SensitiveDetector sen
 	outerR=r+mod_shape->GetDZ();
       sumZ+=zstart;
       r=r+mod_shape->GetDY();
-      
+
+      petal_num = nmodules;  // store the module number of this ring for nPetals in ZDiskPetalsData
+
       for(int k=0;k<nmodules;++k){
-        petal_num = nmodules;  // store the module number of this ring for nPetals in ZDiskPetalsData
 	string m_base=_toString(l_id,"layer%d")+_toString(mod_num,"_module%d")+_toString(k,"_sensor%d");
 	double x=-r*std::cos(phi);
 	double y=-r*std::sin(phi);

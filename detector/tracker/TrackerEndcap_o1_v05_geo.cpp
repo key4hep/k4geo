@@ -174,6 +174,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                  
             sumZ+=zstart;
             
+            petal_num = nmodules;  // store the module number of this ring for nPetals in ZDiskPetalsData
             
             //NOTE: As in the barrel, what we call "module" in the xml is like a single trapezoidal wafer
             //For reasons of bit conservation in the encoding and to be more similar to the ILD geometry
@@ -181,8 +182,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             //We chose to do it so one phi-ring is one module. i.e. Modules have constant R
             
             for(int k=0; k<nmodules; ++k) {
-                petal_num = nmodules;  // store the module number of this ring for nPetals in ZDiskPetalsData
-
                 string m_base = _toString(l_id,"layer%d") + _toString(mod_num,"_module%d") + _toString(k,"_sensor%d");
                 
                 double x = -r*std::cos(phi);
