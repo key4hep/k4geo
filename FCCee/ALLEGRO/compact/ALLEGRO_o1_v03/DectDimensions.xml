@@ -25,9 +25,8 @@
     <constant name="GlobalTrackerReadoutID_SiWrapperD" type="string" value="system:5,side:1,layer:1,module:6,sensor:1"/>
 
     <constant name="SolenoidField" value="2*tesla"/>
-        
+
     <constant name="DetID_NOTUSED"          value=" 0"/>
-    
     <constant name="DetID_VXD_IB"       value=" 1"/>
     <constant name="DetID_VXD_Disks"       value=" 2"/>
     <constant name="DetID_VXD_OB"           value=" 20"/>
@@ -131,6 +130,7 @@
     <constant name="MuonTaggerEndcap_min_z" value="5550*mm"/>
     <constant name="MuonTaggerEndcap_max_z" value="6000*mm"/>
    
+    <!-- MDI -->
     <constant name="CompSol_min_z" value="1230*mm"/>
 
     <constant name="LumiCal_max_z" value="1186.5*mm" />
@@ -183,6 +183,13 @@
     <constant name="CollimatorInFrontOfQD0_dz" value="20*cm"/>   
     <constant name="CollimatorInFrontOfQD0_radius" value="10*mm"/>
     <constant name="CollimatorInFrontOfQD0_dr" value="16*mm"/>
+
+    <constant name="QC1_rmin" value="42/2*mm"/>
+    <constant name="QC1_rmax" value="64/2*mm"/>
+    <constant name="QC1L1_len" value="700*mm"/>
+    <constant name="QC1L1_start" value="2200*mm"/>
+    <constant name="screenstart" value="-10*mm"/>
+    <!-- end MDI -->
     
     <constant name="tracker_region_zmax" value="DCH_half_length_total"/>
     <constant name="tracker_region_rmax" value="DCH_outer_cyl_R_total"/>
