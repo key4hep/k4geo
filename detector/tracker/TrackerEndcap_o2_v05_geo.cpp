@@ -140,6 +140,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         int l_id    = x_layer.id();
         int mod_num = 0;
         int ring_no=0;
+        int petal_num = 0;
         //Cannot handle rings in ZDiskPetalsData, calculate approximate petal quantities
         double sumZ(0.), innerR(1e100),outerR(0.);
         double sensitiveThickness(0.0);
@@ -176,12 +177,14 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             sumZ+=zstart;
             
             r=r+mod_shape->GetDY();
+
+            petal_num = nmodules;  // store the module number of this ring for nPetals in ZDiskPetalsData
             
             //NOTE: As in the barrel, what we call "module" in the xml is like a single trapezoidal wafer
             //For reasons of bit conservation in the encoding and to be more similar to the ILD geometry
             //A module has to be something that consists of many "sensors" (wafers) 
             //We chose to do it so one phi-ring is one module. i.e. Modules have constant R
-            
+
             for(int k=0; k<nmodules; ++k) {
                 string m_base = _toString(l_id,"layer%d") + _toString(mod_num,"_module%d") + _toString(k,"_sensor%d");
                 
@@ -292,7 +295,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             thisLayer.zPosition= sumZ/ring_no; //calc average z
             thisLayer.distanceSensitive   = innerR ; 
             thisLayer.lengthSensitive   = outerR-innerR;
-            thisLayer.petalNumber   = ring_no ; //Store the number of rings in petalNumber needed for tracking
+            thisLayer.petalNumber = petal_num;
+            thisLayer.sensorsPerPetal = ring_no; // number of rings in petalNumber, needed for tracking
 
             //this assumes there is a constant sensitive thickness even though
             //the layer could have different modules with different thicknesses
