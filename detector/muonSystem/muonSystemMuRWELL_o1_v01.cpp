@@ -224,19 +224,17 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
       dd4hep::DetElement sideDE;
 
       if (side % 2 == 0) {
-        sideTrans = dd4hep::Position(sideXPos, sideYPos, sideZPos); // Assign value inside if block
+        sideTrans = dd4hep::Position(sideXPos, sideYPos, sideZPos); 
         sidePhys = BarrelDetectorLayerVolume.placeVolume(sideVol, dd4hep::Transform3D(sideRotation, sideTrans));
-        sideDE = dd4hep::DetElement(detElement, sideName + "DE", side);
-        sideDE.setPlacement(sidePhys);
-        sideVol.setVisAttributes(lcdd, xmlDet.visStr());  
-
       } else {
-        sideTrans = dd4hep::Position(sideXPos2, sideYPos2, sideZPos); // Assign value inside else block
+        sideTrans = dd4hep::Position(sideXPos2, sideYPos2, sideZPos); 
         sidePhys = BarrelDetectorLayerVolume.placeVolume(sideVol2, dd4hep::Transform3D(sideRotation, sideTrans));
-        sideDE = dd4hep::DetElement(detElement, sideName + "DE", side);
-        sideDE.setPlacement(sidePhys);
-        sideVol2.setVisAttributes(lcdd, xmlDet.visStr());        
       } 
+
+      sideDE = dd4hep::DetElement(detElement, sideName + "DE", side);
+      sideDE.setPlacement(sidePhys);
+      sideVol.setVisAttributes(lcdd, xmlDet.visStr());
+      sideVol2.setVisAttributes(lcdd, xmlDet.visStr());
 
       // -------------------------------------------------------------------------------------------------------
       //  Dividing every side to small rectangles  //
