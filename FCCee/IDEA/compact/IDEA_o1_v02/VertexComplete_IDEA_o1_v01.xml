@@ -355,7 +355,8 @@
             <constant name="VTXIB_curved_ring3_phi_offset" value="2*M_PI*1.5*RSU_rphi/(8.*RSU_rphi+2.*VTXIB_curved_gap_rphi)"/>
             <constant name="VTXIB_curved_ring4_phi_offset" value="2*M_PI*2.0*RSU_rphi/(10.*RSU_rphi+2.*VTXIB_curved_gap_rphi)"/>
 
-            <constant name="VTXIB_curved_sensitive_thickness"   value="50e-03*mm"/>
+            <constant name="VTXIB_curved_metal_thickness"       value="0e-03*mm"/>    <!-- Average Si-equivalent thickness of metal layer along wafer. Use "MetalStack" as material, which is just a copy of Silicon. 16 µm is too thin to be seen with checkMaterialBudget.sh, so instead add it to the silicon sensitive surface -->
+            <constant name="VTXIB_curved_sensitive_thickness"   value="50e-03*mm+16e-03*mm"/>
 
             <constant name="VTXIB_curved_flex_Aluminium_thickness" value="0.050*mm"/>
             <constant name="VTXIB_curved_flex_Kapton_thickness"    value="0.200*mm"/>
@@ -404,8 +405,8 @@
             <constant name="VTXIB_curved_z4_offset2" value="+(VTXIB_curved_z4_passive1+VTXIB_curved_z4_passive2+VTXIB_curved_gap_z4)/2. - VTXIB_curved_z4_passive2/2."/> 
 
            <constant name="VTXIB_curved_half_length" value="VTXIB_curved_z4_passive1+VTXIB_curved_z4_passive2+VTXIB_curved_gap_z4"/>
-<!--            <constant name="VTXIB_curved_curved_tolerance_r" value="0.1*mm"/> <!~~ To get rid of overlaps when visualising the geometry, SET TO 0 FOR OTHER PURPOSES! ~~>             
--->            <constant name="VTXIB_curved_curved_tolerance_r" value="0.0*mm"/>
+<!--            <constant name="VTXIB_curved_curved_tolerance_r" value="0.1*mm"/> <!~~ To get rid of overlaps when visualising the geometry, SET TO 0 FOR OTHER PURPOSES! ~~>             -->
+           <constant name="VTXIB_curved_curved_tolerance_r" value="0.0*mm"/>
 
     </define>
 
@@ -413,12 +414,15 @@
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
         <readout name="VertexBarrelCollection">
-            <segmentation type="CartesianGridYZ" grid_size_y="0.025*mm" grid_size_z="0.025*mm"/>  <!-- Pixels of 25x25 µm for first three layers, other two are 50x150 µm (not correctly implemented currently!)-->
+<!--            <segmentation type="CartesianGridYZ" grid_size_y="0.025*mm" grid_size_z="0.025*mm"/>  <!~~ Pixels of 25x25 µm for first three layers, other two are 50x150 µm (not correctly implemented currently!)~~>
             <id>${GlobalTrackerReadoutID},y:32:-16,z:-16</id>
+-->
+            <id>${GlobalTrackerReadoutID}</id>
         </readout>  
         <readout name="VertexEndcapCollection">
-            <segmentation type="CartesianGridXY" grid_size_x="0.050*mm" grid_size_y="0.150*mm"/>  <!-- Pixels of 50x150 µm in r-phi x r -->
-            <id>${GlobalTrackerReadoutID},x:32:-16,y:-16</id>
+<!--            <segmentation type="CartesianGridXY" grid_size_x="0.050*mm" grid_size_y="0.150*mm"/>  <!~~ Pixels of 50x150 µm in r-phi x r ~~>
+            <id>${GlobalTrackerReadoutID},x:32:-16,y:-16</id>-->
+            <id>${GlobalTrackerReadoutID}</id>
         </readout>
     </readouts>
 
@@ -444,17 +448,6 @@
                 </shape>
             </envelope>
  
-             <!-- <envelope vis="VXDVis">
-                <shape type="BooleanShape" operation="Union" material="Air">
-                    <shape type="Tube" rmin="VTXIB_r_min_layer-VTXIB_r_min_clearance" rmax="VTXOB_r_max_layer+VTXOB_rmax_clearance" dz="VTXOB_z2_passive/2."/>
-                </shape>
-            </envelope> -->
-
-
-            <!-- <envelope vis="VXDVis">
-                <shape type="Assembly"/>
-            </envelope> -->
-
             <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_BARREL"/>
             
             <!-- Definition of our "stave" object that is used to build the barrel -->
@@ -594,9 +587,14 @@
                     <component sensitive="True"     xmin="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="1.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="SiSensitiveVis"/>
                 </sensor>
 
+                <!-- Metal layer -->
+                <!-- <components name="metal_stack" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r" length="VTXIB_curved_z1+VTXIB_curved_endcap1_length">
+                    <component thickness="VTXIB_curved_metal_thickness" width="2.0*RSU_rphi" offset="0.0*mm" phi_offset="VTXIB_curved_ring1_phi_offset" material="MetalStack" isCurved="true" vis="SiMetalVis"/>
+                </components> -->
+
                 <!-- Longerons -->
-                <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r" length="VTXIB_curved_z1+VTXIB_curved_endcap1_length-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
-                    <component thickness="VTXIB_curved_r2-VTXIB_curved_r1-2.0*VTXIB_curved_curved_tolerance_r" width="VTXIB_curved_longeron1_width" offset="0.0*mm" phi_offset="0.0*deg-VTXIB_curved_longeron1_phi_offset" material="CarbonFoam" isCurved="true" vis="CarbonFoam"/>
+                <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r+VTXIB_curved_metal_thickness+VTXIB_curved_curved_tolerance_r" length="VTXIB_curved_z1+VTXIB_curved_endcap1_length-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
+                    <component thickness="VTXIB_curved_r2-VTXIB_curved_r1-3.0*VTXIB_curved_curved_tolerance_r" width="VTXIB_curved_longeron1_width" offset="0.0*mm" phi_offset="0.0*deg-VTXIB_curved_longeron1_phi_offset" material="CarbonFoam" isCurved="true" vis="CarbonFoam"/>
                 </components>
 
                 <end_z name="endcaps_flexes">
@@ -609,8 +607,8 @@
                 </end_z>
 
                 <!-- Support rings -->
-                <end_z name="support_rings" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r">
-                    <component thickness="VTXIB_curved_r2-VTXIB_curved_r1-VTXIB_curved_sensitive_thickness-2.0*VTXIB_curved_curved_tolerance_r" width="M_PI*(VTXIB_curved_r1+VTXIB_curved_sensitive_thickness)" length="VTXIB_curved_support_ring_length" phi_offset="VTXIB_curved_ring1_phi_offset" isCurved="true" material="CarbonFoam" vis="CarbonFoam" dz="+VTXIB_curved_endcap1_length-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset"/>
+                <end_z name="support_rings" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r+VTXIB_curved_metal_thickness+VTXIB_curved_curved_tolerance_r">
+                    <component thickness="VTXIB_curved_r2-VTXIB_curved_r1-VTXIB_curved_sensitive_thickness-3.0*VTXIB_curved_curved_tolerance_r" width="M_PI*(VTXIB_curved_r1+VTXIB_curved_sensitive_thickness)" length="VTXIB_curved_support_ring_length" phi_offset="VTXIB_curved_ring1_phi_offset" isCurved="true" material="CarbonFoam" vis="CarbonFoam" dz="+VTXIB_curved_endcap1_length-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset"/>
                 </end_z>
             </stave>
 
@@ -629,8 +627,13 @@
                     <component sensitive="True"     xmin="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="2.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="SiSensitiveVis"/>
                 </sensor>
 
-                <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r" length="VTXIB_curved_z2+VTXIB_curved_endcap2_length-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
-                    <component thickness="VTXIB_curved_r3-VTXIB_curved_r2-2.0*VTXIB_curved_curved_tolerance_r" width="VTXIB_curved_longeron2_width" offset="0.0*mm" phi_offset="0.0*deg-VTXIB_curved_longeron2_phi_offset" material="CarbonFoam" isCurved="true" vis="CarbonFoam"/>
+                <!-- Metal layer -->
+                <!-- <components name="metal_stack" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r" length="VTXIB_curved_z2+VTXIB_curved_endcap2_length">
+                    <component thickness="VTXIB_curved_metal_thickness" width="3.0*RSU_rphi" offset="0.0*mm" phi_offset="VTXIB_curved_ring2_phi_offset" material="MetalStack" isCurved="true" vis="SiMetalVis"/>
+                </components> -->
+
+                <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r+VTXIB_curved_metal_thickness+VTXIB_curved_curved_tolerance_r" length="VTXIB_curved_z2+VTXIB_curved_endcap2_length-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
+                    <component thickness="VTXIB_curved_r3-VTXIB_curved_r2-3.0*VTXIB_curved_curved_tolerance_r" width="VTXIB_curved_longeron2_width" offset="0.0*mm" phi_offset="0.0*deg-VTXIB_curved_longeron2_phi_offset" material="CarbonFoam" isCurved="true" vis="CarbonFoam"/>
                 </components> 
                 
                 <end_z name="endcaps_flexes">
@@ -639,9 +642,9 @@
                     <component thickness="VTXIB_curved_flex_Kapton_thickness"      width="3.0*RSU_rphi" length="VTXIB_curved_flex_length" phi_offset="VTXIB_curved_ring2_phi_offset" isCurved="true" material="Kapton" vis="CableVis" dz="VTXIB_curved_endcap2_length" r="VTXIB_curved_flex_Aluminium_thickness+VTXIB_curved_curved_tolerance_r"/>
                 </end_z>
 
-                <end_z name="support_rings" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r">
+                <end_z name="support_rings" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r+VTXIB_curved_metal_thickness+VTXIB_curved_curved_tolerance_r">
                     <!-- Sides, one per half barrel -->
-                    <component thickness="VTXIB_curved_r3-VTXIB_curved_r2-VTXIB_curved_sensitive_thickness-2.0*VTXIB_curved_curved_tolerance_r" width="M_PI*(VTXIB_curved_r2+VTXIB_curved_sensitive_thickness)" length="VTXIB_curved_support_ring_length" phi_offset="VTXIB_curved_ring2_phi_offset" isCurved="true" material="CarbonFoam" vis="CarbonFoam" dz="+VTXIB_curved_endcap2_length-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset"/>
+                    <component thickness="VTXIB_curved_r3-VTXIB_curved_r2-VTXIB_curved_sensitive_thickness-3.0*VTXIB_curved_curved_tolerance_r" width="M_PI*(VTXIB_curved_r2+VTXIB_curved_sensitive_thickness)" length="VTXIB_curved_support_ring_length" phi_offset="VTXIB_curved_ring2_phi_offset" isCurved="true" material="CarbonFoam" vis="CarbonFoam" dz="+VTXIB_curved_endcap2_length-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset"/>
                 </end_z>
             </stave>
 
@@ -660,8 +663,12 @@
                     <component sensitive="True"     xmin="3.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="3.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="SiSensitiveVis"/>
                 </sensor>
 
-                <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r" length="VTXIB_curved_z3_1+VTXIB_curved_endcap3_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
-                    <component thickness="VTXIB_curved_r4-VTXIB_curved_r3-2.0*VTXIB_curved_curved_tolerance_r" width="VTXIB_curved_longeron3_width" offset="0.0*mm" phi_offset="0.0*deg-VTXIB_curved_longeron3_phi_offset" material="CarbonFoam" isCurved="true" vis="CarbonFoam"/>
+                <!-- <components name="metal_stack" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r" length="VTXIB_curved_z3_1+VTXIB_curved_endcap3_length_center/2.+VTXIB_curved_endcap3_length_side/2.">
+                    <component thickness="VTXIB_curved_metal_thickness" width="4.0*RSU_rphi" z_offset="-(VTXIB_curved_endcap3_length_center+VTXIB_curved_endcap3_length_side)/4." phi_offset="VTXIB_curved_ring3_phi_offset" material="MetalStack" isCurved="true" vis="SiMetalVis"/>
+                </components> -->
+
+                <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r+VTXIB_curved_metal_thickness+VTXIB_curved_curved_tolerance_r" length="VTXIB_curved_z3_1+VTXIB_curved_endcap3_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
+                    <component thickness="VTXIB_curved_r4-VTXIB_curved_r3-3.0*VTXIB_curved_curved_tolerance_r" width="VTXIB_curved_longeron3_width" offset="0.0*mm" phi_offset="0.0*deg-VTXIB_curved_longeron3_phi_offset" material="CarbonFoam" isCurved="true" vis="CarbonFoam"/>
                 </components>
 
                 <end_z name="endcaps_flexes">
@@ -671,8 +678,8 @@
                     <component thickness="VTXIB_curved_sensitive_thickness" width="4.0*RSU_rphi" length="VTXIB_curved_endcap3_length_side"   phi_offset="VTXIB_curved_ring3_phi_offset" isCurved="true" material="Silicon" vis="SiPeripheryVis" side="-1"/>
                 </end_z>
 
-                <end_z name="support_rings" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r">
-                    <component thickness="VTXIB_curved_r4-VTXIB_curved_r3-VTXIB_curved_sensitive_thickness-2.0*VTXIB_curved_curved_tolerance_r" width="M_PI*(VTXIB_curved_r3+VTXIB_curved_sensitive_thickness)" length="VTXIB_curved_support_ring_length" phi_offset="VTXIB_curved_ring3_phi_offset" isCurved="true" material="CarbonFoam" vis="CarbonFoam" dz="+VTXIB_curved_endcap3_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset"/>
+                <end_z name="support_rings" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r+VTXIB_curved_metal_thickness+VTXIB_curved_curved_tolerance_r">
+                    <component thickness="VTXIB_curved_r4-VTXIB_curved_r3-VTXIB_curved_sensitive_thickness-3.0*VTXIB_curved_curved_tolerance_r" width="M_PI*(VTXIB_curved_r3+VTXIB_curved_sensitive_thickness)" length="VTXIB_curved_support_ring_length" phi_offset="VTXIB_curved_ring3_phi_offset" isCurved="true" material="CarbonFoam" vis="CarbonFoam" dz="+VTXIB_curved_endcap3_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset"/>
                 </end_z>
             </stave>
 
@@ -691,8 +698,12 @@
                     <component sensitive="True"     xmin="3.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="3.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="SiSensitiveVis"/>
                 </sensor>
 
-                <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r" length="VTXIB_curved_z3_2+VTXIB_curved_endcap3_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
-                    <component thickness="VTXIB_curved_r4-VTXIB_curved_r3-2.0*VTXIB_curved_curved_tolerance_r" width="VTXIB_curved_longeron3_width" offset="0.0*mm" phi_offset="0.0*deg-VTXIB_curved_longeron3_phi_offset" material="CarbonFoam" isCurved="true" vis="CarbonFoam"/>
+                <!-- <components name="metal_stack" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r" length="VTXIB_curved_z3_2+VTXIB_curved_endcap3_length_center/2.+VTXIB_curved_endcap3_length_side/2.">
+                    <component thickness="VTXIB_curved_metal_thickness" width="4.0*RSU_rphi" z_offset="+(VTXIB_curved_endcap3_length_center+VTXIB_curved_endcap3_length_side)/4." phi_offset="VTXIB_curved_ring3_phi_offset" material="MetalStack" isCurved="true" vis="SiMetalVis"/>
+                </components> -->
+
+                <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r+VTXIB_curved_metal_thickness+VTXIB_curved_curved_tolerance_r" length="VTXIB_curved_z3_2+VTXIB_curved_endcap3_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
+                    <component thickness="VTXIB_curved_r4-VTXIB_curved_r3-3.0*VTXIB_curved_curved_tolerance_r" width="VTXIB_curved_longeron3_width" offset="0.0*mm" phi_offset="0.0*deg-VTXIB_curved_longeron3_phi_offset" material="CarbonFoam" isCurved="true" vis="CarbonFoam"/>
                 </components>
 
                 <end_z name="endcaps_flexes">
@@ -702,8 +713,8 @@
                     <component thickness="VTXIB_curved_sensitive_thickness" width="4.0*RSU_rphi" length="VTXIB_curved_endcap3_length_side"   phi_offset="VTXIB_curved_ring3_phi_offset" isCurved="true" material="Silicon" vis="SiPeripheryVis" side="+1"/>
                 </end_z>
 
-                <end_z name="support_rings" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r">
-                    <component thickness="VTXIB_curved_r4-VTXIB_curved_r3-VTXIB_curved_sensitive_thickness-2.0*VTXIB_curved_curved_tolerance_r" width="M_PI*(VTXIB_curved_r3+VTXIB_curved_sensitive_thickness)" length="VTXIB_curved_support_ring_length" phi_offset="VTXIB_curved_ring3_phi_offset" isCurved="true" material="CarbonFoam" vis="CarbonFoam" dz="+VTXIB_curved_endcap3_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset"/>
+                <end_z name="support_rings" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r+VTXIB_curved_metal_thickness+VTXIB_curved_curved_tolerance_r">
+                    <component thickness="VTXIB_curved_r4-VTXIB_curved_r3-VTXIB_curved_sensitive_thickness-3.0*VTXIB_curved_curved_tolerance_r" width="M_PI*(VTXIB_curved_r3+VTXIB_curved_sensitive_thickness)" length="VTXIB_curved_support_ring_length" phi_offset="VTXIB_curved_ring3_phi_offset" isCurved="true" material="CarbonFoam" vis="CarbonFoam" dz="+VTXIB_curved_endcap3_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset"/>
                 </end_z>
             </stave>
 
@@ -725,8 +736,12 @@
                     <component sensitive="True"     xmin="4.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="4.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="SiSensitiveVis"/>
                 </sensor>
 
-                <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r" length="VTXIB_curved_z4_1+VTXIB_curved_endcap4_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
-                    <component thickness="VTXIB_curved_r_outer-VTXIB_curved_r4" width="VTXIB_curved_longeron4_width" offset="0.0*mm" phi_offset="0.0*deg-VTXIB_curved_longeron4_phi_offset" material="CarbonFoam" isCurved="true" vis="CarbonFoam"/>
+                <!-- <components name="metal_stack" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r" length="VTXIB_curved_z4_1+VTXIB_curved_endcap4_length_center/2.+VTXIB_curved_endcap4_length_side/2.">
+                    <component thickness="VTXIB_curved_metal_thickness" width="5.0*RSU_rphi" z_offset="-(VTXIB_curved_endcap4_length_center+VTXIB_curved_endcap4_length_side)/4." phi_offset="VTXIB_curved_ring4_phi_offset" material="MetalStack" isCurved="true" vis="SiMetalVis"/>
+                </components> -->
+
+                <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r+VTXIB_curved_metal_thickness+VTXIB_curved_curved_tolerance_r" length="VTXIB_curved_z4_1+VTXIB_curved_endcap4_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
+                    <component thickness="VTXIB_curved_r_outer-VTXIB_curved_r4-3.0*VTXIB_curved_curved_tolerance_r" width="VTXIB_curved_longeron4_width" offset="0.0*mm" phi_offset="0.0*deg-VTXIB_curved_longeron4_phi_offset" material="CarbonFoam" isCurved="true" vis="CarbonFoam"/>
                 </components>
 
                 <end_z name="endcaps_flexes">
@@ -737,7 +752,7 @@
                 </end_z>
 
                 <end_z name="support_rings" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r">
-                    <component thickness="VTXIB_curved_r_outer-VTXIB_curved_r4-VTXIB_curved_sensitive_thickness" width="M_PI*(VTXIB_curved_r4+VTXIB_curved_sensitive_thickness)" length="VTXIB_curved_support_ring_length" phi_offset="VTXIB_curved_ring4_phi_offset" isCurved="true" material="CarbonFoam" vis="CarbonFoam" dz="+VTXIB_curved_endcap4_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset"/>
+                    <component thickness="VTXIB_curved_r_outer-VTXIB_curved_r4-VTXIB_curved_sensitive_thickness-3.0*VTXIB_curved_curved_tolerance_r" width="M_PI*(VTXIB_curved_r4+VTXIB_curved_sensitive_thickness)" length="VTXIB_curved_support_ring_length" phi_offset="VTXIB_curved_ring4_phi_offset" isCurved="true" material="CarbonFoam" vis="CarbonFoam" dz="+VTXIB_curved_endcap4_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset"/>
                 </end_z>
             </stave>
 
@@ -759,8 +774,12 @@
                     <component sensitive="True"     xmin="4.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="4.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="SiSensitiveVis"/>
                 </sensor>
 
+                <!-- <components name="metal_stack" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r" length="VTXIB_curved_z4_2+VTXIB_curved_endcap4_length_center/2.+VTXIB_curved_endcap4_length_side/2.">
+                    <component thickness="VTXIB_curved_metal_thickness" width="5.0*RSU_rphi" z_offset="+(VTXIB_curved_endcap4_length_center+VTXIB_curved_endcap4_length_side)/4." phi_offset="VTXIB_curved_ring4_phi_offset" material="MetalStack" isCurved="true" vis="SiMetalVis"/>
+                </components> -->
+
                 <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r" length="VTXIB_curved_z4_2+VTXIB_curved_endcap4_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
-                    <component thickness="VTXIB_curved_r_outer-VTXIB_curved_r4" width="VTXIB_curved_longeron4_width" offset="0.0*mm" phi_offset="0.0*deg-VTXIB_curved_longeron4_phi_offset" material="CarbonFoam" isCurved="true" vis="CarbonFoam"/>
+                    <component thickness="VTXIB_curved_r_outer-VTXIB_curved_r4-3.0*VTXIB_curved_curved_tolerance_r" width="VTXIB_curved_longeron4_width" offset="0.0*mm" phi_offset="0.0*deg-VTXIB_curved_longeron4_phi_offset" material="CarbonFoam" isCurved="true" vis="CarbonFoam"/>
                 </components>
 
                 <end_z name="endcaps_flexes">
@@ -771,7 +790,7 @@
                 </end_z>
 
                 <end_z name="support_rings" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_curved_tolerance_r">
-                    <component thickness="VTXIB_curved_r_outer-VTXIB_curved_r4-VTXIB_curved_sensitive_thickness" width="M_PI*(VTXIB_curved_r4+VTXIB_curved_sensitive_thickness)" length="VTXIB_curved_support_ring_length" phi_offset="VTXIB_curved_ring4_phi_offset" isCurved="true" material="CarbonFoam" vis="CarbonFoam" dz="+VTXIB_curved_endcap4_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset"/>
+                    <component thickness="VTXIB_curved_r_outer-VTXIB_curved_r4-VTXIB_curved_sensitive_thickness-3.0*VTXIB_curved_curved_tolerance_r" width="M_PI*(VTXIB_curved_r4+VTXIB_curved_sensitive_thickness)" length="VTXIB_curved_support_ring_length" phi_offset="VTXIB_curved_ring4_phi_offset" isCurved="true" material="CarbonFoam" vis="CarbonFoam" dz="+VTXIB_curved_endcap4_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset"/>
                 </end_z>
             </stave>
 
@@ -962,10 +981,6 @@
             </shape>
             </envelope>
 
-            <!-- <envelope vis="VXDVis">
-                <shape type="Assembly"/>
-            </envelope> -->
-
             <comment>Vertex Detector Disks</comment>
 
             <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_ENDCAP"/>
@@ -1039,7 +1054,7 @@
             </module>
 
             <!-- Here we construct the disks, all disks use the same base stave (SiVTXDStave) with different numbers of modules and other properties -->
-           <layer id="0" z="VTXD_z1" nphi="2" dz="VTXD_dz1" rmin="VTXD_rmin1" rmax="VTXOB_r_max_layer-VTXOB_TerminalPart_L2_thickness1-12.771*mm" motherVolThickness="5.5*cm" reflect_rot="pi/4.0">
+           <layer id="0" z="VTXD_z1" nphi="2" dz="VTXD_dz1" rmin="VTXD_rmin1" rmax="VTXOB_r_max_layer-VTXOB_TerminalPart_L2_thickness1-12.771*mm" reflect_rot="pi/4.0">
                 <!-- Face B, one half -->
                 <stave nmodules="2" z_offset="VTXD_disk1_zoffset_stave1B_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave1B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
                 <stave nmodules="3" z_offset="VTXD_disk1_zoffset_stave2B_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave2B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
@@ -1077,7 +1092,7 @@
                 <stave nmodules="6" z_offset="VTXD_zoffset_face1+13.5*mm+VTXD_disk1_zoffset_stave7A_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave7A" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1A" module="SiVTXDStave"/>
             </layer>
 
-            <layer id="1" z="VTXD_z2" nphi="4" dz="VTXD_dz2" rmin="VTXD_rmin2" rmax="VTXD_r_max" motherVolThickness="5.5*cm">
+            <layer id="1" z="VTXD_z2" nphi="4" dz="VTXD_dz2" rmin="VTXD_rmin2" rmax="VTXD_r_max">
                 <!-- Face A -->
                 <stave nmodules="3" z_offset="VTXD_disk2_zoffset_stave1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave1" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
                 <stave nmodules="4" z_offset="VTXD_disk2_zoffset_stave2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave2" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
@@ -1096,7 +1111,7 @@
 
             </layer>         
 
-             <layer id="2" z="VTXD_z3" nphi="4" dz="VTXD_dz3" rmin="VTXD_rmin3" rmax="VTXD_r_max" motherVolThickness="5.5*cm" reflect_rot="pi/4.0">
+             <layer id="2" z="VTXD_z3" nphi="4" dz="VTXD_dz3" rmin="VTXD_rmin3" rmax="VTXD_r_max" reflect_rot="pi/4.0">
                 <!-- Face A -->
                 <stave nmodules="4" z_offset="VTXD_disk3_zoffset_stave1A" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave1A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>
                 <stave nmodules="5" z_offset="VTXD_disk3_zoffset_stave2A" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave2A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="SiVTXDStave"/>

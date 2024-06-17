@@ -79,6 +79,11 @@
     <composite n="2" ref="O"/>
   </material>
 
+  <material name="MetalStack">
+    <D type="density" value="2.65" unit="g/cm3"/>
+    <composite n="1" ref="Si"/>
+  </material>
+
   <material name="BoronOxide">
     <D type="density" value="2.46" unit="g/cm3"/>
     <composite n="2" ref="B"/>

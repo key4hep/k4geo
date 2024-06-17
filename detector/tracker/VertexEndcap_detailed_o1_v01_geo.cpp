@@ -216,16 +216,22 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             
             string disk_name = side_name + _toString(layer_id,"_layer%d");
 
-            //// In principle better, but don't use for the moment, see below
-            // double disk_motherVolThickness = getAttrOrDefault(x_layer, _Unicode(motherVolThickness), double(50.0));
-            // Tube whole_disk_tube = Tube(rmin, rmax, disk_motherVolThickness);
-            // Volume whole_disk_volume = Volume(disk_name, whole_disk_tube, theDetector.material("Air"));
-            // whole_disk_volume.setVisAttributes(theDetector, x_det.visStr());
-            // PlacedVolume whole_disk_volume_placed = side_assembly.placeVolume(whole_disk_volume, Position(0.0, 0.0, side*z));
-
-            //// Use assembly to avoid overlap between first disk and vertex inner barrel
-            Assembly whole_disk_volume(disk_name);
-            PlacedVolume whole_disk_volume_placed = side_assembly.placeVolume(whole_disk_volume, Position(0.0, 0.0, side*z));
+            // Either use assembly or volume, depending on whether motherVolThickness is given
+            PlacedVolume whole_disk_volume_placed;
+            Volume whole_disk_volume_v;
+            Assembly whole_disk_volume_a;
+            double disk_motherVolThickness = getAttrOrDefault(x_layer, _Unicode(motherVolThickness), double(0.0));
+            if(disk_motherVolThickness>0.0){
+                Tube whole_disk_tube = Tube(rmin, rmax, disk_motherVolThickness);
+                whole_disk_volume_v = Volume(disk_name, whole_disk_tube, theDetector.material("Air"));
+                whole_disk_volume_v.setVisAttributes(theDetector, x_det.visStr());
+                whole_disk_volume_placed = side_assembly.placeVolume(whole_disk_volume_v, Position(0.0, 0.0, side*z));
+            }
+            else{
+                //// Use just assembly to avoid overlap between disk volume and other volumes
+                whole_disk_volume_a = Assembly(disk_name);
+                whole_disk_volume_placed = side_assembly.placeVolume(whole_disk_volume_a, Position(0.0, 0.0, side*z));
+            }
 
 
             whole_disk_volume_placed.addPhysVolID("layer", layer_id);  
@@ -239,22 +245,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
                 string petal_name = disk_name + _toString(iPetal,"_petal%d");
                 Assembly petal_assembly(petal_name);
-                pv = whole_disk_volume.placeVolume(petal_assembly);
-
-                // Defining additional assemblies to have less placements per assembly, which makes detector building faster
-                std::vector<Assembly> id_assemblies;
-                std::vector<int> id_used;
-                for(xml_coll_t ri(x_layer,_U(stave)); ri; ++ri)  {
-                    xml_comp_t x_stave = ri;
-
-                    int stave_id = x_stave.id(0);
-                    if( std::find(id_used.begin(), id_used.end(), stave_id) == id_used.end()){
-                        Assembly id_assembly(petal_name + _toString(stave_id,"_row%d"));
-                        pv = petal_assembly.placeVolume(id_assembly);
-                        id_assemblies.push_back(id_assembly);
-                        id_used.push_back(stave_id);
-                    }
-                }
+                if(disk_motherVolThickness>0.)
+                    pv = whole_disk_volume_v.placeVolume(petal_assembly);
+                else
+                    pv = whole_disk_volume_a.placeVolume(petal_assembly);
 
                 int iStave = 0;
                 for(xml_coll_t ri(x_layer,_U(stave)); ri; ++ri,++iStave)  {
@@ -275,29 +269,51 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                         return module.name == moduleStr;
                     });
 
-                    string stave_name = petal_name + _toString(iStave,"_stave%d");
-                    Assembly stave_assembly(stave_name);
 
-                    // Assign the correct assembly given the stave id (using these additional assemblies allows to have less placements per assembly, making detector building faster)
-                    int stave_id = x_stave.id(0);
-                    auto index = find(id_used.begin(), id_used.end(), stave_id) - id_used.begin(); // Find index of the existing assembly with id
-                    pv = id_assemblies[index].placeVolume(stave_assembly);
          
                     // Place all components
                     RotationZYX rot( phi , 0, 0  );
                     double stave_length = nmodules*m.sensor_length + (nmodules-1)*step;
                     double r = rmin + m.sensor_width/2.0 + r_stave + ((iPetal%2 == 0) ? 0.0 : dr);
 
+                    double x_pos = r*cos(phi) - stave_offset*sin(phi);
+                    double y_pos = r*sin(phi) + stave_offset*cos(phi);
+                    double z_pos = z_alternate_petal + z_offset; 
+                    if(side == -1){z_pos = -z_pos;}
+                    Position stave_pos = Position(x_pos, y_pos, z_pos);
+
+                    string stave_name = petal_name + _toString(iStave,"_stave%d");
+
+                    PlacedVolume whole_stave_volume_placed;
+                    Volume whole_stave_volume_v;
+                    Assembly whole_stave_volume_a;
+                    double stave_motherVolThickness = getAttrOrDefault(x_stave, _Unicode(motherVolThickness), double(0.0));
+                    double stave_motherVolWidth     = getAttrOrDefault(x_stave, _Unicode(motherVolWidth), double(0.0));
+                    if(stave_motherVolThickness>0.0 && stave_motherVolWidth>0.0){
+                        Box whole_stave_box = Box(stave_motherVolWidth/2., stave_length/2., stave_motherVolThickness/2.);
+                        whole_stave_volume_v = Volume(stave_name, whole_stave_box, theDetector.material("Air"));
+                        whole_stave_volume_v.setVisAttributes(theDetector, x_det.visStr());
+                        whole_stave_volume_placed = petal_assembly.placeVolume(whole_stave_volume_v, Transform3D(rot,stave_pos));
+                    }
+                    else{
+                        //// Use just assembly to avoid overlap between stave volume and other volumes
+                        whole_stave_volume_a = Assembly(stave_name);
+                        whole_stave_volume_placed = petal_assembly.placeVolume(whole_stave_volume_a, Transform3D(rot,stave_pos));
+                    }
+
                     // Place components
                     for(auto& component : m.components_vec){
                         Assembly component_assembly(stave_name + "_" + component.name);
-                        pv = stave_assembly.placeVolume(component_assembly);
+
+                        if(stave_motherVolThickness>0.0 && stave_motherVolWidth>0.0)
+                            pv = whole_stave_volume_v.placeVolume(component_assembly);
+                        else
+                            pv = whole_stave_volume_a.placeVolume(component_assembly);
+                        
                         for(int i=0; i<int(component.thicknesses.size()); i++){
-                            double r_component = r + component.offset + component.offsets[i];
-                            double r_offset_component = stave_offset;
-                            double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
-                            double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
-                            double z_pos = z_alternate_petal + z_offset + component.z_offset + component.z_offsets[i] + component.thicknesses[i]/2.; 
+                            double x_pos = component.offset + component.offsets[i];
+                            double y_pos = 0.0;
+                            double z_pos = component.z_offset + component.z_offsets[i] + component.thicknesses[i]/2.; 
                             if(side == -1){z_pos = -z_pos;}
                             Position pos(x_pos, y_pos, z_pos);
 
@@ -306,7 +322,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                             Volume ele_vol = Volume(component.name + _toString(i, "_%d"), ele_box, component.materials[i]);                    
                             ele_vol.setAttributes(theDetector, x_det.regionStr(), x_det.limitsStr(), component.viss[i]);
 
-                            pv = component_assembly.placeVolume(ele_vol, Transform3D(rot, pos) );
+                            pv = component_assembly.placeVolume(ele_vol, pos);
                         }
                     }
 
@@ -314,18 +330,21 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                     int iEndOfStave = 0;
                     for(auto& endOfStave : m.endOfStaves){
                         Assembly endOfStave_assembly(stave_name + "_" + endOfStave.name + _toString(iEndOfStave,"_%d"));
-                        pv = stave_assembly.placeVolume(endOfStave_assembly);
+
+                        if(stave_motherVolThickness>0.0 && stave_motherVolWidth>0.0)
+                            pv = whole_stave_volume_v.placeVolume(endOfStave_assembly);
+                        else
+                            pv = whole_stave_volume_a.placeVolume(endOfStave_assembly);
+
                         for(int i=0; i<int(endOfStave.thicknesses.size()); i++){
-                            double r_component = r + endOfStave.offset + endOfStave.offsets[i];
-                            double r_offset_component = stave_offset + endOfStave.xs[i]>0 ? stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dxs[i] : -(stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dxs[i]);
-                            double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
-                            double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
-                            double z_pos = z_alternate_petal + z_offset + endOfStave.z_offset + endOfStave.z_offsets[i] + endOfStave.thicknesses[i]/2.; 
+                            double x_pos = endOfStave.offset + endOfStave.offsets[i];
+                            double y_pos = endOfStave.xs[i]>0 ? stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dxs[i] : -(stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dxs[i]);
+                            double z_pos = endOfStave.z_offset + endOfStave.z_offsets[i] + endOfStave.thicknesses[i]/2.; 
 
                             if(side == -1){z_pos = -z_pos;}
                             Position pos(x_pos, y_pos, z_pos);
 
-                            pv = endOfStave_assembly.placeVolume(endOfStave.volumes[i], Transform3D(rot, pos) );
+                            pv = endOfStave_assembly.placeVolume(endOfStave.volumes[i], pos);
                             iEndOfStave++;
                         }
                     }
@@ -333,17 +352,20 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                     // Place sensor
                     for(int iModule=0; iModule<nmodules; iModule++){
                         double z_alternate_module = (iModule%2 == 0) ? 0.0 : stave_dz;
-                        double r_component = r + m.sensor_offset;
-                        double r_offset_component = stave_offset - stave_length/2. + m.sensor_length/2. + iModule*m.sensor_length + iModule*step;
-                        double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
-                        double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
-                        double z_pos = z_alternate_petal + z_offset + m.sensor_z_offset + z_alternate_module + m.sensor_thickness/2.; 
+                        double x_pos = m.sensor_offset;
+                        double y_pos = - stave_length/2. + m.sensor_length/2. + iModule*m.sensor_length + iModule*step;
+                        double z_pos = m.sensor_z_offset + z_alternate_module + m.sensor_thickness/2.; 
                         if(side == -1){z_pos = -z_pos;}
                         Position pos(x_pos, y_pos, z_pos);
 
                         string module_name = stave_name + _toString(iModule,"_module%d");
                         Assembly module_assembly(module_name);
-                        pv = stave_assembly.placeVolume(module_assembly);
+
+                        if(stave_motherVolThickness>0.0 && stave_motherVolWidth>0.0)
+                            pv = whole_stave_volume_v.placeVolume(module_assembly);
+                        else
+                            pv = whole_stave_volume_a.placeVolume(module_assembly);
+
                         pv.addPhysVolID("module", iModule_tot);
                         DetElement moduleDE(diskDE,module_name,x_det.id());
                         moduleDE.setPlacement(pv);
@@ -358,7 +380,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                             // Place active sensor parts
                             if(m.sensor_sensitives[i]) {
                                 string sensor_name = module_name + _toString(iSensitive,"_sensor%d");
-                                pv = module_assembly.placeVolume(m.sensor_volumes[i], Transform3D(rot, pos)*Translation3D(pos_i));
+                                pv = module_assembly.placeVolume(m.sensor_volumes[i], pos+pos_i);
 
                                 pv.addPhysVolID("sensor", iSensitive);
                                 DetElement sensorDE(moduleDE,sensor_name,x_det.id());
@@ -367,13 +389,12 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                             }
                             // Place passive sensor parts
                             else{
-                                pv = module_assembly.placeVolume(m.sensor_volumes[i], Transform3D(rot, pos)*Translation3D(pos_i));
+                                pv = module_assembly.placeVolume(m.sensor_volumes[i], pos+pos_i);
                             }
                         }
                         iModule_tot++;
                     }
-                    stave_assembly->GetShape()->ComputeBBox() ;
-               }
+                }
             }
         }        
     }

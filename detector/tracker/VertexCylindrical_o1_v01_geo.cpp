@@ -66,8 +66,10 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         double r;
         double offset;
         double length;
+        double z_offset;
         vector<double> thicknesses;
         vector<double> offsets; 
+        vector<double> z_offsets; 
         vector<double> rs; 
         vector<Volume> volumes;
         vector<bool> isCurved;
@@ -78,10 +80,12 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         string name;
         double r;
         double offset;
+        double z_offset;
         vector<double> thicknesses;
         vector<double> lengths;
         vector<double> dzs;
         vector<double> offsets; 
+        vector<double> z_offsets; 
         vector<double> rs; 
         vector<Volume> volumes;
         vector<int> side;
@@ -130,6 +134,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
             components.r = xml_comp_t(c_components).r(0);
             components.length = xml_comp_t(c_components).length();
             components.offset = xml_comp_t(c_components).offset(0);
+            components.z_offset = xml_comp_t(c_components).z_offset(0);
 
 
             xml_coll_t c_component(c_components,_U(component));
@@ -138,6 +143,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 xml_comp_t component = c_component;
                 components.thicknesses.push_back(component.thickness());
                 components.offsets.push_back(component.offset(0));
+                components.z_offsets.push_back(component.z_offset(0));
                 components.rs.push_back(component.r(0));
 
                 bool isCurved = getAttrOrDefault(component, _Unicode(isCurved), bool(false));
@@ -168,6 +174,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         for(c_endOfStave.reset(); c_endOfStave; ++c_endOfStave){
             endOfStaveStruct endOfStave;    
             endOfStave.offset = xml_comp_t(c_endOfStave).offset(0);
+            endOfStave.z_offset = xml_comp_t(c_endOfStave).z_offset(0);
             endOfStave.r =      xml_comp_t(c_endOfStave).r(0);
             endOfStave.name =   xml_comp_t(c_endOfStave).nameStr();
 
@@ -178,6 +185,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 endOfStave.thicknesses.push_back(component.thickness());
                 endOfStave.dzs.push_back(component.dz(0));
                 endOfStave.offsets.push_back(component.offset(0));
+                endOfStave.z_offsets.push_back(component.z_offset(0));
                 endOfStave.lengths.push_back(component.length());
                 endOfStave.rs.push_back(component.r(0));
                 
@@ -297,12 +305,11 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
         Volume whole_layer_volume = Volume(layer_name, whole_layer_tube, theDetector.material("Air"));
         whole_layer_volume.setVisAttributes(theDetector, x_det.visStr());
-        PlacedVolume whole_layer_placed_volume = envelope.placeVolume(whole_layer_volume, Position(0., 0., z_offset));
+        pv = envelope.placeVolume(whole_layer_volume, Position(0., 0., z_offset));
+        pv.addPhysVolID("layer", layer_id);
 
-        whole_layer_placed_volume.addPhysVolID("system", x_det.id()).addPhysVolID("side",side).addPhysVolID("layer", layer_id);  
-
-        DetElement layerDE( sdet , _toString(layer_id,"layer_%d")+_toString(side,"_side%d"), layer_id );
-        layerDE.setPlacement( whole_layer_placed_volume ) ;
+        DetElement layerDE( sdet , _toString(layer_id,"layer_%d")+_toString(side,"_side%d"), x_det.id() );
+        layerDE.setPlacement( pv ) ;
 
         int nLadders = x_layer.attr<int>(  _Unicode(nLadders) ) ;
         double dphi = 2.*M_PI / double(nLadders);
@@ -327,14 +334,14 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                     double r_offset_component = layer_offset + component.offset + component.offsets[i];
                     double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
                     double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
-                    double z_pos = motherVolOffset; 
+                    double z_pos = component.z_offset + component.z_offsets[i] + motherVolOffset; 
                     Position pos(x_pos, y_pos, z_pos);
 
                     if(component.isCurved[i]){
                         double r_component_curved = r_component - component.r - component.thicknesses[i]/2. - layer_r; // Correct for the fact that a tube element's origin is offset compared to the origin of a box
                         x_pos = r_component_curved*cos(phi) - r_offset_component*sin(phi);
                         y_pos = r_component_curved*sin(phi) + r_offset_component*cos(phi);
-                        z_pos = motherVolOffset;
+                        z_pos = component.z_offset + component.z_offsets[i] + motherVolOffset;
                         pos = Position(x_pos, y_pos, z_pos);
                     }
 
@@ -355,14 +362,14 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                         double r_offset_component = layer_offset + endOfStave.offset + endOfStave.offsets[i];
                         double x_pos = r_component*cos(phi) - r_offset_component*sin(phi);
                         double y_pos = r_component*sin(phi) + r_offset_component*cos(phi);
-                        double z_pos = stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dzs[i]; 
+                        double z_pos = stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dzs[i] + endOfStave.z_offset + endOfStave.z_offsets[i]; 
                         Position pos(x_pos, y_pos, z_pos*endOfStave_side+motherVolOffset);
 
                         if(endOfStave.isCurved[i]){
                             double r_component_curved = r_component - endOfStave.r - endOfStave.thicknesses[i]/2. - layer_r; // Correct for the fact that a tube element's origin is offset compared to the origin of a box
                             x_pos = r_component_curved*cos(phi) - r_offset_component*sin(phi);
                             y_pos = r_component_curved*sin(phi) + r_offset_component*cos(phi);
-                            z_pos = stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dzs[i];
+                            z_pos = stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dzs[i] + endOfStave.z_offset + endOfStave.z_offsets[i];
                             pos = Position(x_pos, y_pos, z_pos*endOfStave_side+motherVolOffset);
                         }
 
@@ -384,6 +391,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 Assembly module_assembly(module_name);
                 pv = stave_assembly.placeVolume(module_assembly);
                 pv.addPhysVolID("module", iModule_tot);
+
                 DetElement moduleDE(layerDE,module_name,x_det.id());
                 moduleDE.setPlacement(pv);
 
@@ -421,7 +429,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                     // Place active sensor parts
                     if(m.sensor_sensitives[i]) {
                         string sensor_name = module_name + _toString(iSensitive,"_sensor%d");
-                        pv.addPhysVolID("sensor", iSensitive);
+                        
+                        pv.addPhysVolID("sensor", iSensitive);                
                         DetElement sensorDE(moduleDE,sensor_name,x_det.id());
                         sensorDE.setPlacement(pv);
 
@@ -444,13 +453,12 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 }
                 iModule_tot++;
             }
-            stave_assembly->GetShape()->ComputeBBox() ;
         }
     }
 
-    sdet.setAttributes(theDetector,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+    pv.addPhysVolID( "system", x_det.id() ).addPhysVolID("side",0 )  ;
 
-    pv.addPhysVolID("system", x_det.id()).addPhysVolID("side",0);
+    sdet.setAttributes(theDetector,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
 
     return sdet;
 }
