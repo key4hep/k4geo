@@ -69,7 +69,7 @@ public:
    /**  Get the coordinate offset in rho.
    *   return The offset in rho.
    */
-  inline double offsetRho() const { return m_offsetRho; }
+  inline double offsetRho(int iWheel) const { return m_offsetRho[iWheel]; }
   /**  Get the field name for rho.
    *   return The field name for rho.
    */
@@ -81,22 +81,25 @@ public:
   /**  Set the coordinate offset in rho.
    *   @param[in] aOffset Offset in rho.
    */
-  inline void setOffsetRho(double offset) { m_offsetRho = offset; }
+  //  inline void setOffsetRho(double offset) { m_offsetRho = offset; }
  /**  Set the field name used for transverse distance from IP rho.
    *   @param[in] aFieldName Field name for rho.
    */
   inline void setFieldNameRho(const std::string& fieldName) { m_rhoID = fieldName; }
-
-  /**  Determine the x coordinate based on the cell ID.
-   *   @param[in] aCellId ID of a cell.
-   *   return x.
+ /**  Set the field name used for the wheel ID.
+   *   @param[in] aFieldName Field name for wheel.
    */
-  double x(const CellID& aCellID) const;
+  inline void setFieldNameWheel(const std::string& fieldName) {m_wheelID = fieldName; }
   /**  Determine the z coordinate based on the cell ID.
    *   @param[in] aCellId ID of a cell.
    *   return z.
    */
   double z(const CellID& aCellID) const;
+  /**  Determine the y coordinate based on the cell ID.
+   *   @param[in] aCellId ID of a cell.
+   *   return y.
+   */
+  double y(const CellID& aCellID) const;
   /**  Get the coordinate offset in z.
    *   return The offset in z.
    */
@@ -134,11 +137,15 @@ protected:
   /// the number of bins in rho
   int m_rhoBins;
   ////grid size in rho
-  double m_gridSizeRho;
+  std::vector<float> m_gridSizeRho;
   /// the coordinate offset in rho
-  double m_offsetRho;
+  std::vector<float> m_offsetRho;
   /// the field name used for rho
   std::string m_rhoID;
+  /// the field name used for wheel
+  std::string m_wheelID;
+  /// the field name used for module
+  std::string m_moduleID;
   /// the number of bins in z
   int m_zBins;
   ///grid size in z
