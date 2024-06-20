@@ -39,7 +39,7 @@
   <include ref="SimplifiedDriftChamber.xml"/>
   <include ref="ECalBarrel_thetamodulemerged.xml"/>
   <include ref="HCalBarrel_TileCal.xml"/>
-  <include ref="FCCee_ECalEndcaps_Turbine.xml"/>
+  <include ref="ECalEndcaps_Turbine.xml"/>
   <include ref="HCalEndcaps_ThreeParts_TileCal.xml"/>
   <include ref="MuonTagger.xml"/>
 

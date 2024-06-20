@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+  <info name="FCCee_ECalEndcaps_Turbine"
+        title="Calorimeter endcaps"
+        author="E.Varnes, J.Rutherfoord, R.Walker"
+        url="no"
+        status="development"
+        version="1.0">
+    <comment>
+      Liquid argon EM calorimeter endcap design.
+      Electromagnetic part (EMEC) includes lead+steel absorber.
+      Turbine geometry.
+    </comment>
+  </info>
+
+  <define>
+    <!-- cryostat -->
+    <constant name="CryoEMECThicknessFront" value="50*mm"/>
+    <constant name="CryoEMECThicknessBack" value="100*mm"/>
+    <constant name="CryoEMECThicknessInner" value="50*mm"/>
+    <constant name="CryoEMECThicknessOuter" value="100*mm"/>
+    <constant name="CryoEndcap_front_rmin" value="ECalEndcap_inner_radius"/>
+    <constant name="CryoEndcap_back_rmin" value="ECalEndcap_inner_radius"/>
+    <constant name="CryoEndcap_rmax" value="ECalEndcap_outer_radius"/>
+    <constant name="CryoEndcap_z1" value="ECalEndcap_min_z"/>
+    <constant name="CryoEndcap_z2" value="ECalEndcap_max_z"/>
+    <constant name="CryoEndcap_dz" value="(ECalEndcap_max_z - ECalEndcap_min_z)*0.5"/>
+    <constant name="CryoEndcap_zOffset" value="ECalEndcap_min_z + 0.5*(ECalEndcap_max_z - ECalEndcap_min_z)"/>
+    <!-- space between the cryostat and calorimeter -->
+    <constant name="BathThicknessFront" value="10*mm"/>
+    <constant name="BathThicknessBack" value="40*mm"/>
+    <constant name="BathThicknessOuter" value="50*mm"/>
+    <!-- electromegnetic calorimeter: EMEC -->
+    <constant name="EMEC_z1" value="CryoEndcap_z1 + CryoEMECThicknessFront + BathThicknessFront"/>
+    <constant name="EMEC_z2" value="ECalEndcap_max_z - CryoEMECThicknessBack - BathThicknessBack"/>
+    <constant name="EMEC_rmin1" value="CryoEndcap_front_rmin + CryoEMECThicknessInner + BathThicknessFront"/>
+    <constant name="EMEC_rmin2" value="EMEC_rmin1"/>
+    <constant name="EMEC_rmax" value="ECalEndcap_outer_radius - CryoEMECThicknessOuter - BathThicknessOuter"/>
+    <!-- LAr thickness: double gap size -->
+    <constant name="ECalEndcapNumBlades" value="1604"/>
+    <constant name="ECalEndcapNumLayers" value="10"/>
+    <constant name="nSubcylinders" value="3" />
+    <constant name="BladeAngle" value="55*deg" />
+    <constant name="NobleLiquidGap" value="2.0*mm" />
+    <constant name="AbsorberBladeThickness" value="3.0*mm" />
+    <constant name="ElectrodeBladeThickness" value="1.3*mm" />
+    <!-- total amount of steel in one passive plate: it is divided for the outside layer on top and bottom -->
+    <constant name="EMEC_steel_thickness" value="0.1*mm"/>
+     <!-- total amount of glue in one passive plate: it is divided for the outside layer on top and bottom -->
+    <constant name="EMEC_glue_thickness" value="0.1*mm"/>
+  </define>
+
+  <display>
+    <vis name="emec_cryo_vis" r="0.6" g="0.6" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_bath_vis" r="0.6" g="0.4" b="0.5" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_envelope_vis_vis" r="0.6" g="0.3" b="0" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_layer_vis" r="0.6" g="0.3" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_lar_vis" r="0.5" g="0.3" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_pb_vis" r="0.5" g="0.5" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="emec_readout_vis" r="0.5" g="0.1" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+  </display> 
+
+
+  <readouts>
+   <readout name="ECalEndcapTurbine">
+      <segmentation type="FCCSWEndcapTurbine_k4geo" offset_rho="137.5" offset_z="348.5" offset_phi="0.0" grid_size_rho="1.0" grid_size_z="1.0" />
+      <id>system:4,cryo:1,type:3,subtype:3,side:-2,subcyl:3,layer:10,module:14,rho:-10,z:-10</id> 
+<!--      <id>system:4,cryo:1,type:3,subtype:3,side:-2,subcyl:3,layer:9,module:14,rho:-10,z:-14</id> -->
+    </readout>
+<!--
+    <readout name="ECalEndcapPhiTheta">
+      <segmentation type="FCCSWGridModuleThetaMerged_k4geo" mergedCells_Theta="1 1 1 1 " mergedModules="1 1 1 1" grid_size_theta="0.005" offset_theta="-3.14"/>
+      <id>system:4,cryo:1,type:3,subtype:3,side:1,subcyl:3,layer:5,module:14,theta:10</id>
+    </readout>
+    <readout name="ECalEndcapPhiEtaReco">
+      <segmentation type="FCCSWGridPhiEta_k4geo" phi_bins="704" offset_phi="-pi+(pi/704.)" grid_size_eta="0.05" offset_eta="-2.91"/>
+      <id>system:4,cryo:1,type:3,subtype:3,layer:8,eta:10,phi:10</id>
+    </readout>
+-->
+  </readouts>
+
+  <detectors>
+     <!-- electromagnetic calorimeter -->
+    <detector id="EndcapECal_id" name="EMEC_turbine" type="ECalEndcap_Turbine_o1_v01" readout="ECalEndcapTurbine" vis="emec_envelope_vis" sensitive="true">
+      <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_ENDCAP"/>
+      <sensitive type="SimpleCalorimeterSD"/>
+      <dimensions rmin1="EMEC_rmin1"  rmin2="EMEC_rmin2" rmax="EMEC_rmax" dz="(EMEC_z2-EMEC_z1)/2." z_offset="EMEC_z1+(EMEC_z2-EMEC_z1)/2."/>
+      <cryostat name="ECAL_EndCapCryo">
+        <material name="Aluminum"/>
+        <dimensions rmin1="CryoEndcap_front_rmin" rmin2="CryoEndcap_front_rmin+CryoEMECThicknessInner" rmax1="CryoEndcap_rmax-CryoEMECThicknessOuter" rmax2="CryoEndcap_rmax" dz="(CryoEndcap_z2-CryoEndcap_z1-CryoEMECThicknessFront-CryoEMECThicknessBack)/2."/>
+        <front sensitive="false"/> <!-- inner wall of the cryostat -->
+        <side sensitive="false"/> <!-- both sides of the cryostat -->
+        <back sensitive="false"/> <!-- outer wall of the cryostat -->
+      </cryostat>
+      <calorimeter name="EM_endcap">
+	<dimensions rmin="EMEC_rmin1" rmax="EMEC_rmax" dz="(EMEC_z2-EMEC_z1)/2." z_offset="EMEC_z1+(EMEC_z2-EMEC_z1)/2."/>
+      </calorimeter>	
+      <supportTube name="supportTube" nSubcylinders="nSubcylinders" thickness="1.0*cm" sensitive="true"> 
+	<material name="Steel235" />
+      </supportTube>
+      <turbineBlade name="turbineBlade" angle="BladeAngle" decreaseAnglePerSubCylinder="false"  sameNblades="false">
+	<absorberBlade name="absorberBlade" thickness="AbsorberBladeThickness" scaleThickness="true" thicknessScaleFactor="1.09" sensitive="true">
+	  <material name="Lead" />
+	</absorberBlade>
+	<glue thickness="EMEC_glue_thickness" sensitive="true">
+            <material name="lArCaloGlue"/>
+        </glue>
+        <cladding thickness="EMEC_steel_thickness" sensitive="true">
+            <material name="lArCaloSteel"/>
+        </cladding>
+	<electrodeBlade name="electrodeBlade" thickness="ElectrodeBladeThickness" sensitive="true">
+	   <material name="PCB" />
+	</electrodeBlade>
+	<nobleLiquidGap name="nobleLiquidGap" gap="NobleLiquidGap" sensitive="true">
+	  <material name="LAr" />
+	</nobleLiquidGap>
+      </turbineBlade>
+    </detector>
+ 
+  </detectors>
+
+</lccdd>
