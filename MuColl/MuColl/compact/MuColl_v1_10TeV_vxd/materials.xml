@@ -224,23 +224,4 @@
         <fraction n="0.922582" ref="C"/>
     </material>
 
-    <material name="LeadDiflourite">
-        <D type="density" value="7.77" unit="g/cm3"/>
-        <composite n="1" ref="PB"/>
-        <composite n="2" ref="F"/>
-    </material>
-
-    <material name="BGO">
-        <D type="density" value="7.12" unit="g/cm3"/>
-        <composite n="4" ref="BI"/>
-        <composite n="3" ref="GE"/>
-        <composite n="12" ref="O"/>
-    </material>
-
-    <material name="CsI">
-        <D type="density" value="4.51" unit="g/cm3"/>
-        <composite n="1" ref="CS"/>
-        <composite n="1" ref="I"/>
-    </material>
-
 </materials>
