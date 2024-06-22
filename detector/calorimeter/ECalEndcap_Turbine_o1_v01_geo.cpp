@@ -541,7 +541,7 @@ namespace det {
  
   dd4hep::xml::DetElement supportTubeElem = aXmlElement.child(_Unicode(supportTube));
   unsigned nWheels = supportTubeElem.attr<unsigned>(_Unicode(nWheels));
-  std:: cout << "Will build " << nWheels << " wheels" << endmsg;
+  lLog << MSG::INFO  << "Will build " << nWheels << " wheels" << endmsg;
   double rmin = dim.rmin1();
   double rmax = dim.rmax();
   float radiusRatio = pow(rmax/rmin, 1./nWheels);

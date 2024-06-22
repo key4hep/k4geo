@@ -16,6 +16,7 @@ namespace DDSegmentation {
   registerIdentifier("identifier_rho", "Cell ID identifier for rho", m_rhoID, "rho"); // might want to have separate concepts for rho and layer...
   registerParameter("grid_size_z", "Grid size in z", m_gridSizeZ, 0.);
   registerParameter("offset_z", "Offset in z", m_offsetZ, 0.);
+  registerParameter("offset_theta", "Angular offset in theta", m_offsetTheta, 0., SegmentationParameter::AngleUnit, true);
   registerIdentifier("identifier_z", "Cell ID identifier for z", m_zID, "z");
   registerIdentifier("identifier_side", "Cell ID identifier for side", m_sideID, "side");
 
@@ -42,6 +43,7 @@ namespace DDSegmentation {
   registerIdentifier("identifier_rho", "Cell ID identifier for rho", m_rhoID, "rho");
   registerParameter("grid_size_z", "Grid size in z", m_gridSizeZ, 0.);
   registerParameter("offset_z", "Offset in z", m_offsetZ, 0.);
+  registerParameter("offset_theta", "Angular offset in theta", m_offsetTheta, 0., SegmentationParameter::AngleUnit, true);
   registerIdentifier("identifier_z", "Cell ID identifier for z", m_zID, "z");
   registerIdentifier("identifier_side", "Cell ID identifier for side", m_sideID, "side");
   registerIdentifier("identifier_wheel", "Cell ID identifier for wheel", m_wheelID, "wheel");
@@ -65,7 +67,6 @@ Vector3D FCCSWEndcapTurbine_k4geo::position(const CellID& cID) const {
   double rhoVal = rho(cID);
   double zVal = z(cID);
   double phiVal = phi(cID);
-  std::cout << "returning rho, z, phi = " << rhoVal << " " << zVal << " " << phiVal << std::endl;
   return PositionRhoZPhi(rhoVal, zVal, phiVal);
 }
 
@@ -75,14 +76,8 @@ CellID FCCSWEndcapTurbine_k4geo::cellID(const Vector3D& /* localPosition */, con
   CellID cID = vID;
   double lRho = rhoFromXYZ(globalPosition);
   CellID iWheel = _decoder->get(cID, m_wheelID);
-  std::cout << "iWheel = " << iWheel << std::endl;
   _decoder->set(cID, m_rhoID, positionToBin(lRho, m_gridSizeRho[iWheel], m_offsetRho[iWheel]));
-  std::cout << "lRho = " << lRho << std::endl;
-  std::cout << "bin = " << positionToBin(lRho, m_gridSizeRho[iWheel], m_offsetRho[iWheel]) << std::endl;
-
   double lZ = TMath::Abs(globalPosition.Z);
-  std::cout << "Actual Z position is " << lZ << std::endl;
-  std::cout << "Thus Z bin is " << positionToBin(lZ, m_gridSizeZ, m_offsetZ) << std::endl;
   _decoder->set(cID, m_zID, positionToBin(lZ, m_gridSizeZ, m_offsetZ));
 
   return cID;
@@ -110,7 +105,6 @@ double FCCSWEndcapTurbine_k4geo::phi(const CellID& cID) const {
 }
 /// determine the transverse distance from the beamline r based on the cell ID
 double FCCSWEndcapTurbine_k4geo::rho(const CellID& cID) const {
-  std::cout << "Calculating rho... " << std::endl;
   CellID rhoValue = _decoder->get(cID, m_rhoID);
   CellID iWheel = _decoder->get(cID, m_wheelID);
 
