@@ -34,14 +34,14 @@
     <constant name="BathThicknessBack" value="40*mm"/>
     <constant name="BathThicknessOuter" value="50*mm"/>
     <!-- electromegnetic calorimeter: EMEC -->
-    <constant name="EMEC_z1" value="CryoEndcap_z1 + CryoEMECThicknessFront + BathThicknessFront"/>
+    <constant name="EMEC_z1" value="CryoEndcap_z1 + CryoEMECThicknessFront + BathThicknessFront"/>offset
     <constant name="EMEC_z2" value="ECalEndcap_max_z - CryoEMECThicknessBack - BathThicknessBack"/>
     <constant name="EMEC_rmin1" value="CryoEndcap_front_rmin + CryoEMECThicknessInner + BathThicknessFront"/>
     <constant name="EMEC_rmin2" value="EMEC_rmin1"/>
     <constant name="EMEC_rmax" value="ECalEndcap_outer_radius - CryoEMECThicknessOuter - BathThicknessOuter"/>
     <!-- LAr thickness: double gap size -->
     <constant name="ECalEndcapNumPlanes" value="928"/>    
-    <constant name="ECalEndcapNumLayers" value="10"/>
+    <constant name="ECalEndcapNumCalibLayers" value="10"/>
     <constant name="nWheels" value="3" />
     <constant name="BladeAngle" value="40*deg" />
     <constant name="NobleLiquidGap" value="3.4*mm" />
@@ -71,7 +71,7 @@
         <id>system:4,cryo:1,type:3,subtype:3,side:3,wheel:3,layer:8,module:11,theta:10</id>
     </readout>
 -->
-    <segmentation type="FCCSWEndcapTurbine_k4geo" offset_rho="42 78.3215 146.82" offset_z="303.5" offset_phi="0.0" grid_size_rho="2.016 2.014 2.004" grid_size_z="1.80" />
+    <segmentation type="FCCSWEndcapTurbine_k4geo" offset_rho="42 78.3215 146.82" offset_z="303.5" offset_phi="0.0" offset_theta="0.11242" grid_size_rho="2.016 2.014 2.004" grid_size_z="1.80" />
       <id>system:4,cryo:1,type:3,subtype:3,side:-2,wheel:3,layer:8,module:17,rho:8,z:8</id> 
 
 <!--      <id>system:4,cryo:1,type:3,subtype:3,side:-2,wheel:3,layer:9,module:14,rho:-10,z:-14</id> -->
