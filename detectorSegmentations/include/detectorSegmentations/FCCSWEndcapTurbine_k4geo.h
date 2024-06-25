@@ -45,6 +45,10 @@ public:
    *   return The offset in phi.
    */
   inline double offsetPhi() const { return m_offsetPhi; }
+  /**  Get the coordinate offset in theta angle.
+   *   return The offset in theta.
+   */
+  inline double offsetTheta() const { return m_offsetTheta; }
   /**  Get the field name for azimuthal angle.
    *   return The field name for phi.
    */
@@ -57,6 +61,10 @@ public:
    *   @param[in] aOffset Offset in phi.
    */
   inline void setOffsetPhi(double offset) { m_offsetPhi = offset; }
+  /**  Set the coordinate offset in theta angle.
+   *   @param[in] aOffset Offset in theta.
+   */
+  inline void setOffsetTheta(double offset) { m_offsetTheta = offset; }
   /**  Set the field name used for phi.
    *   @param[in] aFieldName Field name for phi.
    */
@@ -132,7 +140,8 @@ protected:
   int m_phiBins;
   /// the coordinate offset in phi
   double m_offsetPhi;
-  /// the field name used for phi
+  /// the coordinate offset in theta
+  double m_offsetTheta;  /// the field name used for phi
   std::string m_phiID; 
   /// the number of bins in rho
   int m_rhoBins;
