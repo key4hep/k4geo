@@ -103,11 +103,6 @@ public:
    *   return z.
    */
   double z(const CellID& aCellID) const;
-  /**  Determine the y coordinate based on the cell ID.
-   *   @param[in] aCellId ID of a cell.
-   *   return y.
-   */
-  double y(const CellID& aCellID) const;
   /**  Get the coordinate offset in z.
    *   return The offset in z.
    */

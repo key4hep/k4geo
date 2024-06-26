@@ -159,9 +159,6 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
     Volume tileSequenceVolume("HCalTileSequenceVol", tileSequenceShape, lcdd.air());
 
     
-    lLog << MSG::DEBUG << "EWV 4 layer radii:  " << rminLayer << " - " << rmaxLayer << " [cm]" << endmsg;
-    lLog << MSG::DEBUG << "LD_LIBRARY_PATH = " << getenv("LD_LIBRARY_PATH") << endmsg;
-
     dd4hep::Tube layerShape(rminLayer, rmaxLayer, dzDetector - dZEndPlate - space );
     Volume layerVolume("HCalLayerVol", layerShape, lcdd.air());
 
