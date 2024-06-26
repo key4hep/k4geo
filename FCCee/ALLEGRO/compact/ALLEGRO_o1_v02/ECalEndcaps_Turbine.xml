@@ -102,28 +102,28 @@
         <back sensitive="false"/> <!-- outer wall of the cryostat -->
       </cryostat>
       <calorimeter name="EM_endcap">
-	<dimensions rmin="EMEC_rmin1" rmax="EMEC_rmax" dz="(EMEC_z2-EMEC_z1)/2." z_offset="EMEC_z1+(EMEC_z2-EMEC_z1)/2."/>
-      </calorimeter>	
-      <supportTube name="supportTube" nWheels="nWheels" thickness="1.0*cm" sensitive="false"> 
-	<material name="Steel235" />
-      </supportTube>
-      <turbineBlade name="turbineBlade" angle="BladeAngle" decreaseAnglePerWheel="false"  sameNUnitCells="false" nUnitCells="144 272 512" nUnitCellsLeastCommonMultiple="78336">
-	<absorberBlade name="absorberBlade" thickness="AbsorberBladeThickness" scaleThickness="true" thicknessScaleFactor="1.20" sensitive="false">
-	  <material name="Lead" />
-	</absorberBlade>
-	<glue thickness="EMEC_glue_thickness" sensitive="false">
+	<dimensions rmin="EMEC_rmin1" rmax="EMEC_rmax" dz="(EMEC_z2-EMEC_z1)/2." z_offset="EMEC_z1+(EMEC_z2-EMEC_z1)/2."/>   	
+	<supportTube name="supportTube" nWheels="nWheels" thickness="1.0*cm" sensitive="false"> 
+	  <material name="Steel235" />
+	</supportTube>
+	<turbineBlade name="turbineBlade" angle="BladeAngle" decreaseAnglePerWheel="false"  sameNUnitCells="false" nUnitCells="144 272 512" nUnitCellsLeastCommonMultiple="78336">
+	  <absorberBlade name="absorberBlade" thickness="AbsorberBladeThickness" scaleThickness="true" thicknessScaleFactor="1.20" sensitive="false">
+	    <material name="Lead" />
+	  </absorberBlade>
+	  <glue thickness="EMEC_glue_thickness" sensitive="false">
             <material name="lArCaloGlue"/>
-        </glue>
-        <cladding thickness="EMEC_steel_thickness" sensitive="false">
+          </glue>
+          <cladding thickness="EMEC_steel_thickness" sensitive="false">
             <material name="lArCaloSteel"/>
-        </cladding>
-	<electrodeBlade name="electrodeBlade" thickness="ElectrodeBladeThickness" sensitive="false">
-	   <material name="PCB" />
-	</electrodeBlade>
-	<nobleLiquidGap name="nobleLiquidGap" gap="NobleLiquidGap" sensitive="true">
-	  <material name="LAr" />
-	</nobleLiquidGap>
-      </turbineBlade>
+          </cladding>
+	  <electrodeBlade name="electrodeBlade" thickness="ElectrodeBladeThickness" sensitive="false">
+	    <material name="PCB" />
+	  </electrodeBlade>
+	  <nobleLiquidGap name="nobleLiquidGap" gap="NobleLiquidGap" sensitive="true">
+	    <material name="LAr" />
+	  </nobleLiquidGap>
+	</turbineBlade>
+      </calorimeter>
     </detector>
  
   </detectors>
