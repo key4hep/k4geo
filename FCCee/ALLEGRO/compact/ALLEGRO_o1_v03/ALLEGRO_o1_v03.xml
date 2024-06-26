@@ -25,7 +25,7 @@
     <constant name="world_size" value="25*m"/>
     <constant name="world_x" value="world_size"/>
     <constant name="world_y" value="world_size"/>
-    <constant name="world_z" value="world_size"/>    
+    <constant name="world_z" value="world_size"/>
   </define>
 
   <include ref="./DectDimensions.xml" />
