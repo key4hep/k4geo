@@ -87,7 +87,7 @@ CellID FCCSWEndcapTurbine_k4geo::cellID(const Vector3D& /* localPosition */, con
 double FCCSWEndcapTurbine_k4geo::phi(const CellID& cID) const {
 
   CellID iModule = _decoder->get(cID, m_moduleID);
-  double phiCent = twopi*iModule/78336;
+  double phiCent = twopi*(iModule+0.5)/78336;
 
   CellID iWheel = _decoder->get(cID, m_wheelID);
   double rhoLoc = rho(cID);
@@ -117,17 +117,6 @@ double FCCSWEndcapTurbine_k4geo::z(const CellID& cID) const {
   return ((long long int)sideValue)*binToPosition(zValue,m_gridSizeZ,m_offsetZ);
 }
 
-/// determine local y in plane of blade based on cellID
-double FCCSWEndcapTurbine_k4geo::y(const CellID& cID) const {
-
-  CellID zValue = _decoder->get(cID, m_zID);
-  CellID rhoValue = _decoder->get(cID, m_rhoID);
-  CellID iWheel = _decoder->get(cID, m_wheelID);
-  double zGlob=  binToPosition(zValue,m_gridSizeZ);
-  double rho= binToPosition(rhoValue,m_gridSizeRho[iWheel])+m_offsetRho[iWheel];
-
-  return -TMath::Sqrt(rho*rho-zGlob*zGlob) - m_offsetRho[iWheel];
-
 }
 }
-}
+

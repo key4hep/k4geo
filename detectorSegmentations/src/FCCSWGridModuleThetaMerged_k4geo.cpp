@@ -66,9 +66,6 @@ Vector3D FCCSWGridModuleThetaMerged_k4geo::position(const CellID& cID) const {
   // std::cout << "cellID: " << cID << std::endl;
 
   // cannot return for R=0 otherwise will lose phi info, return for R=1
-  Vector3D dummyPos = positionFromRThetaPhi(1.0, theta(cID), phi(cID));
-  std::cout << "For barrel, theta, phi, x,y,z= " << theta(cID) << " " << phi(cID) << " " << dummyPos.X << " " << dummyPos.Y << " " << dummyPos.Z << std::endl;
-  //  return dummyPos;
   
   return positionFromRThetaPhi(1.0, theta(cID), phi(cID));
 }
