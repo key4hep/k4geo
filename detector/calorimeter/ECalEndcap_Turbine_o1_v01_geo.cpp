@@ -87,7 +87,8 @@ namespace det {
 			unsigned iWheel) {
 
 
-    dd4hep::xml::DetElement genericBladeElem = aXmlElement.child(_Unicode(turbineBlade));
+    dd4hep::xml::DetElement calorimeterElem =  aXmlElement.child(_Unicode(calorimeter));
+    dd4hep::xml::DetElement genericBladeElem = calorimeterElem.child(_Unicode(turbineBlade));
     dd4hep::xml::DetElement absBladeElem = genericBladeElem.child(_Unicode(absorberBlade));
     dd4hep::xml::DetElement claddingElem = genericBladeElem.child(_Unicode(cladding));
     dd4hep::xml::DetElement glueElem = genericBladeElem.child(_Unicode(glue));
@@ -142,6 +143,16 @@ namespace det {
     float bladeThicknessScaleFactor = absBladeElem.attr<float>(_Unicode(thicknessScaleFactor));
 
     lLog << MSG::DEBUG << "nUnitCells: " << nUnitCells << endmsg;
+
+    float AbsThicki = AbsThickMin;
+    // make volumes for the noble liquid, electrode, and absorber blades
+    float AbsThicko;
+    if (scaleBladeThickness) {
+      AbsThicko = AbsThicki + bladeThicknessScaleFactor*((ro/ri)-1.)*AbsThicki;
+    } else {
+      AbsThicko = AbsThicki;
+    } 
+
     // Calculate gap thickness at inner layer
     double circ = 2*TMath::Pi()*ri;
     double x2 =(AbsThickMin+(GlueThick+CladdingThick)+ElectrodeThick)/TMath::Sin(BladeAngle);
@@ -154,6 +165,18 @@ namespace det {
     LArgapi = delrPhiGapOnly*TMath::Sin(BladeAngle);
     lLog << MSG::DEBUG << "LArGap at inner radius is " << LArgapi <<  endmsg;
 
+     // now find gap at outer radius
+    circ = 2*TMath::Pi()*ro;
+    x2 = (AbsThicko+GlueThick+CladdingThick+ElectrodeThick)/TMath::Sin(BladeAngle);
+    y2 = TMath::Sqrt(ro*ro-x2*x2);
+    rPhi1 = ro*TMath::Pi()/2.;
+    rPhi2 = ro*TMath::ATan(y2/x2);    
+    delrPhiNoGap = TMath::Abs(rPhi1-rPhi2);
+    leftoverS = (circ - nUnitCells*delrPhiNoGap);
+    delrPhiGapOnly = leftoverS/(2*nUnitCells);   
+    float LArgapo = delrPhiGapOnly*TMath::Sin(BladeAngle);
+    LArgapo *= 2.;
+    
     dd4hep::Solid absBlade;
     float riLayer = ri;
 
@@ -163,17 +186,13 @@ namespace det {
     std::vector<dd4hep::Volume> LArTotalLayerVols;
     std::vector<dd4hep::Volume> electrodeBladeLayerVols;
 
-    float AbsThicki = AbsThickMin;
-    // make volumes for the noble liquid, electrode, and absorber blades
-    float AbsThicko;
-    if (scaleBladeThickness) {
-      AbsThicko = AbsThicki + bladeThicknessScaleFactor*((ro/ri)-1.)*AbsThicki;
-    } else {
-      AbsThicko = AbsThicki;
-    }    
+   
     dd4hep::Solid passiveShape = buildOneBlade(AbsThicki+GlueThick+CladdingThick, AbsThicko+GlueThick+CladdingThick, xRange, ro, ri, BladeAngle, delZ );
     dd4hep::Volume passiveVol("passive", passiveShape, aLcdd.material("Air"));
 
+    dd4hep::Solid activeShape = buildOneBlade(ElectrodeThick+LArgapi*2, ElectrodeThick+LArgapo*2, xRange, ro, ri, BladeAngle, delZ);
+    dd4hep::Volume activeVol("active", activeShape, aLcdd.material("Air"));
+    
     unsigned numNonActiveLayers = 1;
     // check that either all non-active volumes are set to sensitive (for
     // sampling fraction calculations) or none are (for normal running)
@@ -193,10 +212,11 @@ namespace det {
       lLog << MSG::ERROR << "Some non-active layers are sensitive and others are not -- this is likely a misconfiguration";
     }
 
-    float delr = (ro-ri)/numNonActiveLayers;
-
+    float delrNonActive = (ro-ri)/numNonActiveLayers;
+    float delrActive = (ro-ri)/ECalEndcapNumCalibLayers;
+    
     for (unsigned iLayer = 0; iLayer < numNonActiveLayers; iLayer++) {
-      float roLayer = riLayer + delr;
+      float roLayer = riLayer + delrNonActive;
       lLog << MSG::ERROR << "Making layer in inner, outer radii " << riLayer << " " << roLayer << endmsg;
       //      float AbsThicko;
       if (scaleBladeThickness) {
@@ -240,12 +260,20 @@ namespace det {
     }
 
     riLayer = ri;
+
+    AbsThicki = AbsThickMin;
     
     for (unsigned iLayer = 0; iLayer < ECalEndcapNumCalibLayers; iLayer++) {
-      
-      delr = (ro-ri)/ECalEndcapNumCalibLayers;
 
-      float roLayer = riLayer + delr;
+      float roLayer = riLayer + delrActive;
+      
+      if (scaleBladeThickness) {
+	AbsThicko = AbsThicki + bladeThicknessScaleFactor*((roLayer/riLayer)-1.)*AbsThicki;
+      } else {
+	AbsThicko = AbsThicki;
+      }
+
+
       // now find gap at outer layer
       circ = 2*TMath::Pi()*roLayer;
       x2 = (AbsThicko+GlueThick+CladdingThick+ElectrodeThick)/TMath::Sin(BladeAngle);
@@ -256,8 +284,8 @@ namespace det {
       delrPhiNoGap = TMath::Abs(rPhi1-rPhi2);
       leftoverS = (circ - nUnitCells*delrPhiNoGap);
       delrPhiGapOnly = leftoverS/(2*nUnitCells);   
-      float LArgapo = delrPhiGapOnly*TMath::Sin(BladeAngle);
-      LArgapo *= 2.;
+      LArgapo = delrPhiGapOnly*TMath::Sin(BladeAngle);
+      //      LArgapo *= 2.;
       lLog << MSG::DEBUG << "Outer LAr gap is " << LArgapo << endmsg ;
       lLog << MSG::INFO << "Inner and outer thicknesses of noble liquid volume " << ElectrodeThick+LArgapi*2 <<  " " <<  ElectrodeThick+LArgapo*2 << endmsg;
 
@@ -295,7 +323,7 @@ namespace det {
   //build cryostat
 // Retrieve cryostat data
     int    nUnitCellsToDraw = nUnitCells;
-    //nUnitCellsToDraw = 1;
+    //  nUnitCellsToDraw = 1;
     //nBladesToDraw = 2;
    
     lLog << MSG::INFO << "Number of unit cells "<< nUnitCells << endmsg;
@@ -307,43 +335,35 @@ namespace det {
     riLayer = ri;
 
     for (auto absBladeLayerVol: absBladeLayerVols) {
+
+       float roLayer = riLayer+delrNonActive;
       
-      float roLayer = riLayer+delr;
-      float xLayer = ((roLayer+riLayer)/2.);
-      float yLayer = 0.; // ((roLayer+riLayer)/2.)*TMath::Sin(phi); //ri*TMath::Sin(phi)/6.;
-      float zLayer =  0.;
-      riLayer = roLayer;
-      
-      dd4hep::Position posLayer(0,0,0);	
-      dd4hep::PlacedVolume absBladeVol_pv = passiveVol.placeVolume(absBladeLayerVol, posLayer);
+       dd4hep::Position posLayer(0,0,(riLayer-ri+roLayer-ro)/2.);	
+       dd4hep::PlacedVolume absBladeVol_pv = passiveVol.placeVolume(absBladeLayerVol, posLayer);
       
       
       //      absBladeVol_pv.addPhysVolID("side",sign); 
       //   absBladeVol_pv.addPhysVolID("wheel", iWheel);
       // absBladeVol_pv.addPhysVolID("module", modIndex*nUnitCellsLeastCommonMultiple/nUnitCells);
       // absBladeVol_pv.addPhysVolID("type", 1);  // 0 = active, 1 = passive, 2 = readout
-      absBladeVol_pv.addPhysVolID("subtype", 0); // 0 = absorber, 1 = glue, 2 = cladding
-      lLog << MSG::DEBUG << "Blade layer, rho is " << iLayer << " " << absBladeVol_pv.position().Rho() << " " << roLayer/2. << endmsg;
+       absBladeVol_pv.addPhysVolID("subtype", 0); // 0 = absorber, 1 = glue, 2 = cladding
+       lLog << MSG::DEBUG << "Blade layer, rho is " << iLayer << " " << absBladeVol_pv.position().Rho() << " " << roLayer/2. << endmsg;
       //	absBladeVol_pv.addPhysVolID("layer", iWheel*ECalEndcapNumLayers+iLayer);
-      absBladeVol_pv.addPhysVolID("layer", iLayer);
+       absBladeVol_pv.addPhysVolID("layer", iLayer);
       //  dd4hep::DetElement absBladeDetElem(passiveDetElem, "absorber"+std::to_string(sign)+"_"+std::to_string(iWheel)+"_"+std::to_string(iUnitCell)+"_"+std::to_string(iWheel*ECalEndcapNumLayers+iLayer), ECalEndCapElementCounter++);
       // absBladeDetElem.setPlacement(absBladeVol_pv);
-      riLayer = roLayer;
-      iLayer++;
+       riLayer = roLayer;
+       iLayer++;
     }
     
     riLayer = ri;
     iLayer =0;
     
     for (auto claddingLayerVol: claddingLayerVols) {
-      
-      float roLayer = riLayer+delr;
-      float xLayer = ((roLayer+riLayer)/2.);
-      float yLayer = 0.; // ((roLayer+riLayer)/2.)*TMath::Sin(phi); //ri*TMath::Sin(phi)/6.;
-      float zLayer =  0.;
-      riLayer = roLayer;
-     
-      dd4hep::Position posLayer(0,0,0);	 
+
+      float roLayer = riLayer+delrNonActive;
+       
+      dd4hep::Position posLayer(0,0,(riLayer-ri+roLayer-ro)/2.);	 
       dd4hep::PlacedVolume claddingVol_pv = passiveVol.placeVolume(claddingLayerVol, posLayer);
       
       
@@ -364,14 +384,10 @@ namespace det {
     iLayer =0;
     
     for (auto glueLayerVol: glueLayerVols) {
-      
-      float roLayer = riLayer+delr;
-      float xLayer = ((roLayer+riLayer)/2.);
-      float yLayer = 0.; //((roLayer+riLayer)/2.)*TMath::Sin(phi); //ri*TMath::Sin(phi)/6.;
-      float zLayer =  0.;
-      riLayer = roLayer;
-      
-      dd4hep::Position posLayer(0,0,0);	
+
+      float roLayer = riLayer+delrNonActive;
+       
+      dd4hep::Position posLayer(0,0,(riLayer-ri+roLayer-ro)/2.);	
       dd4hep::PlacedVolume glueVol_pv = passiveVol.placeVolume(glueLayerVol, posLayer);
             
       // glueVol_pv.addPhysVolID("side",sign); 
@@ -387,6 +403,29 @@ namespace det {
       iLayer++;
     }
 
+    iLayer = 0;
+    
+    for (auto LArTotalLayerVol: LArTotalLayerVols) {
+      
+      float roLayer = riLayer+delrActive;
+      
+      dd4hep::Position posLayer(0,0,(riLayer+ri+roLayer-3*ro)/2.);
+
+      dd4hep::PlacedVolume LArVol_pv(activeVol.placeVolume(LArTotalLayerVol, posLayer));
+      //	LArVol_pv.addPhysVolID("side",sign); 
+      //	LArVol_pv.addPhysVolID("wheel", iWheel);
+      //	LArVol_pv.addPhysVolID("module", modIndex*nUnitCellsLeastCommonMultiple/nUnitCells);
+      //	LArVol_pv.addPhysVolID("type", 0);  // 0 = active, 1 = passive, 2 = readout
+      lLog << MSG::DEBUG << "LAr layer: " << iLayer << endmsg;
+      //	LArVol_pv.addPhysVolID("layer", iWheel*ECalEndcapNumLayers+iLayer);
+      LArVol_pv.addPhysVolID("layer", iLayer);
+      // dd4hep::DetElement LArDetElem("layer", iLayer);
+      //LArDetElem.setPlacement(LArVol_pv);
+      
+      riLayer = roLayer;
+      iLayer++;
+    }
+      
     for (int iUnitCell = 0; iUnitCell < nUnitCellsToDraw; iUnitCell++) {
 
       int modIndex = iUnitCell-nUnitCellsToDraw/2;
@@ -431,16 +470,34 @@ namespace det {
       
       // place passive volume in LAr bath
       dd4hep::PlacedVolume passivePhysVol = aEnvelope.placeVolume(passiveVol, comCell);
-      passivePhysVol.addPhysVolID("module", iUnitCell);
+      passivePhysVol.addPhysVolID("module", modIndex*nUnitCellsLeastCommonMultiple/nUnitCells);
+      passivePhysVol.addPhysVolID("wheel", iWheel);
+      passivePhysVol.addPhysVolID("side", sign);
       passivePhysVol.addPhysVolID("type", 1);  // 0 = active, 1 = passive, 2 = readout
       dd4hep::DetElement passiveDetElem(bathDetElem, "passive_" + std::to_string(iUnitCell)+"_"+std::to_string(iWheel), ECalEndCapElementCounter++);
       passiveDetElem.setPlacement(passivePhysVol);
+
+      // place active volume in LAr bath
+
+      xCell = ((ro+ri)/2.)*TMath::Cos(phi+delPhi/2.);
+      yCell = ((ro+ri)/2.)*TMath::Sin(phi+delPhi/2.); //ri*TMath::Sin(phi)/6.;
+      zCell =  0.;
+      dd4hep::Transform3D comCell2(r3d2, dd4hep::Translation3D(xCell,yCell,zCell));
+      dd4hep::PlacedVolume activePhysVol = aEnvelope.placeVolume(activeVol, comCell2);
+      activePhysVol.addPhysVolID("module",  modIndex*nUnitCellsLeastCommonMultiple/nUnitCells);
+      activePhysVol.addPhysVolID("wheel", iWheel);
+      activePhysVol.addPhysVolID("side", sign);
+      activePhysVol.addPhysVolID("type", 0);  // 0 = active, 1 = passive, 2 = readout
+
+      std::cout << "module, wheel, type " << iUnitCell << " " << iWheel << " " << 9 << std::endl;
+      dd4hep::DetElement activeDetElem(bathDetElem, "active_" + std::to_string(iUnitCell)+"_"+std::to_string(iWheel), ECalEndCapElementCounter++);
+      activeDetElem.setPlacement(activePhysVol);
 
       iLayer =0;
 
       for (auto electrodeBladeLayerVol: electrodeBladeLayerVols) {
 	
-	float roLayer = riLayer+delr;
+	float roLayer = riLayer+delrNonActive;
 
 	float xLayer = ((roLayer+riLayer)/2.)*TMath::Cos(phi+delPhi/2.);
 	float yLayer = ((roLayer+riLayer)/2.)*TMath::Sin(phi+delPhi/2.);
@@ -465,32 +522,7 @@ namespace det {
     
       lLog << MSG::DEBUG << "LArTotalLayerVols.size = " << LArTotalLayerVols.size() << endmsg;
 
-      for (auto LArTotalLayerVol: LArTotalLayerVols) {
-	
-	float roLayer = riLayer+delr;
-
-	float xLayer = ((roLayer+riLayer)/2.)*TMath::Cos(phi+delPhi/2.);
-	float yLayer = ((roLayer+riLayer)/2.)*TMath::Sin(phi+delPhi/2.);
-	float zLayer = 0;
-	dd4hep::Transform3D com2(r3d2, dd4hep::Translation3D(xLayer,yLayer,zLayer));
-	dd4hep::PlacedVolume LArVol_pv(aEnvelope.placeVolume(LArTotalLayerVol, com2));
-	LArVol_pv.addPhysVolID("side",sign); 
-	LArVol_pv.addPhysVolID("wheel", iWheel);
-	LArVol_pv.addPhysVolID("module", modIndex*nUnitCellsLeastCommonMultiple/nUnitCells);
-	LArVol_pv.addPhysVolID("type", 0);  // 0 = active, 1 = passive, 2 = readout
-        lLog << MSG::DEBUG << "LAr layer: " << iLayer << endmsg;
-	//	LArVol_pv.addPhysVolID("layer", iWheel*ECalEndcapNumLayers+iLayer);
-	LArVol_pv.addPhysVolID("layer", iLayer);
-	dd4hep::DetElement LArDetElem(bathDetElem, "LAr"+std::to_string(sign)+"_"+std::to_string(iWheel)+"_"+std::to_string(iUnitCell)+"_"+std::to_string(iWheel*ECalEndcapNumCalibLayers+iLayer), ECalEndCapElementCounter++);
-	LArDetElem.setPlacement(LArVol_pv);
-	lLog << MSG::INFO << "How big is a LArTotalLayerVol: " << sizeof(LArTotalLayerVol) << endmsg;
-	lLog << MSG::INFO << "How big is a LAVol_pv: " << sizeof(LArVol_pv) << endmsg; 
-	lLog << MSG::INFO << "How big is a LArDetElem: " << sizeof(LArDetElem) << endmsg;
- 
-	riLayer = roLayer;
-	iLayer++;
-      }
-      
+    
       /*      for (unsigned iLayer = 0; iLayer<nLayers; iLayer++) {
 	dd4hep::PlacedVolume LArLayerVol_pv = LArTotalVol.placeVolume(LArVolLayers[iLayer], 0);
 	//	LArLayerVol_pv.addPhysVolID("module", iModule);
@@ -514,7 +546,8 @@ namespace det {
     dd4hep::xml::DetElement calo = aXmlElement.child(_Unicode(calorimeter));
     dd4hep::xml::Dimension caloDim(calo.dimensions());
 
-    dd4hep::xml::DetElement blade = aXmlElement.child(_Unicode(turbineBlade));
+    
+    dd4hep::xml::DetElement blade = calo.child(_Unicode(turbineBlade));
     dd4hep::xml::DetElement nobleLiquid = blade.child(_Unicode(nobleLiquidGap));
 
     dd4hep::xml::DetElement xmlDetElem = aXmlElement;
@@ -596,7 +629,7 @@ namespace det {
   double length = dim.dz() * 2.;
   double zOffsetEnvelope = length / 2. * -sign;
  
-  dd4hep::xml::DetElement supportTubeElem = aXmlElement.child(_Unicode(supportTube));
+  dd4hep::xml::DetElement supportTubeElem = calo.child(_Unicode(supportTube));
   unsigned nWheels = supportTubeElem.attr<unsigned>(_Unicode(nWheels));
   lLog << MSG::INFO  << "Will build " << nWheels << " wheels" << endmsg;
   double rmin = dim.rmin1();
