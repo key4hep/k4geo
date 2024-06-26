@@ -25,13 +25,7 @@
     <constant name="world_size" value="25*m"/>
     <constant name="world_x" value="world_size"/>
     <constant name="world_y" value="world_size"/>
-    <constant name="world_z" value="world_size"/>
-    
-    <constant name="QC1_rmin" value="42/2*mm"/>
-    <constant name="QC1_rmax" value="64/2*mm"/>
-    <constant name="QC1L1_len" value="700*mm"/>
-    <constant name="QC1L1_start" value="2200*mm"/>
-    <constant name="screenstart" value="-10*mm"/>
+    <constant name="world_z" value="world_size"/>    
   </define>
 
   <include ref="./DectDimensions.xml" />
@@ -80,6 +74,8 @@
            outer_radius="20*cm">
     </field>
 
+    <!-- FFQ fields at Z pole, V23) -->
+    <!--
     <field name="QC1L1_field_ED" type="MultipoleMagnet" Z="0.0*tesla">
       <position y="0*cm" x="(QC1L1_len/2. + QC1L1_start)*sin(CrossingAngle/2.)" z="(QC1L1_len/2. + QC1L1_start)*cos(CrossingAngle/2.)"/>
       <rotation x="0" y="CrossingAngle/2." z="0.0"/>
@@ -111,7 +107,8 @@
       <coefficient coefficient="(-1)*(45.6)*(-0.273)/0.3*tesla/m"/>
       <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L1_len/2." />
     </field>
-
+    -->
+    
     <!--End of MDI magnetic fields  -->
 
   </fields>
