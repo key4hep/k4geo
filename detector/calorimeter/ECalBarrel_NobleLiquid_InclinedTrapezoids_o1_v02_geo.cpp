@@ -93,8 +93,6 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
   std::string readoutMaterial = readout.materialStr();
   double readoutThickness = readout.thickness();
 
-  lLog << MSG::DEBUG << "EWV readout seems OK" << endmsg;
-  
   dd4hep::xml::DetElement passive = calo.child(_Unicode(passive));
   dd4hep::xml::DetElement passiveInner = passive.child(_Unicode(inner));
   dd4hep::xml::DetElement passiveInnerMax = passive.child(_Unicode(innerMax));
@@ -183,16 +181,12 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     servicesBackDetElem.setPlacement(servicesBackPhysVol);
     }
 
-  lLog << MSG::DEBUG << "EWV cryostat seems OK" << endmsg;
-
   // 2. Create bath that is inside the cryostat and surrounds the detector
   //    Bath is filled with active material -> but not sensitive
   dd4hep::Volume bathVol(activeMaterial + "_bath", bathOuterShape, aLcdd.material(activeMaterial));
   lLog << MSG::INFO << "ECAL bath: material = " << activeMaterial << " rmin (cm) =  " << bathRmin
        << " rmax (cm) = " << bathRmax << " thickness in front of ECal (cm) = " << caloDim.rmin() - cryoDim.rmin2()
        << " thickness behind ECal (cm) = " << cryoDim.rmax1() - caloDim.rmax() << endmsg;
-
-  lLog << MSG::DEBUG << "EWV bath seems OK " << endmsg;
 
   // 3. Create the calorimeter by placing the passive material, trapezoid active layers, readout and again trapezoid
   // active layers in the bath.
@@ -250,7 +244,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
   double offsetPassivePhi = caloDim.offset() + dPhi / 2.;
   double offsetReadoutPhi = caloDim.offset() + 0;
   lLog << MSG::INFO << "readout material = " << readoutMaterial << "\n"
-       << " EWV thickness of readout planes (cm) =  " << readoutThickness << "\n number of readout layers = " << numLayers
+       << " thickness of readout planes (cm) =  " << readoutThickness << "\n number of readout layers = " << numLayers
        << endmsg;
   double Rmin = caloDim.rmin();
   double Rmax = caloDim.rmax();
