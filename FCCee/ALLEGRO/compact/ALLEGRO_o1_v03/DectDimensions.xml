@@ -95,6 +95,7 @@
     <constant name="BarECal_dz" value="3100*mm"/>
 
     <!-- LAr ECAL Endcaps -->
+    <constant name="ECalEndcap_id" value="DetID_ECAL_Endcap"/> 
     <constant name="ECalEndcap_inner_radius" value="350*mm"/>
     <constant name="ECalEndcap_outer_radius" value="2900*mm"/>
     <constant name="ECalEndcap_min_z" value="3200*mm"/>
