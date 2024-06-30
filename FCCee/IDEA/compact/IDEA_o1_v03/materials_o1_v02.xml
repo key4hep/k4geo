@@ -395,4 +395,207 @@
 
   <!-- FCCeeIDEA: end of material for the drift chamber -->
 
+  <!-- FCCeeIDEA: material for the microRWELL detectors(for Muon system and Pre-shower)-->
+  <isotope N="63" Z="29" name="Cu63">
+    <atom unit="g/mole" value="62.9296"/>
+  </isotope>
+
+  <isotope N="65" Z="29" name="Cu65">
+    <atom unit="g/mole" value="64.9278"/>
+  </isotope>
+
+  <element name="CuMixture">
+    <fraction n="0.6917" ref="Cu63"/>
+    <fraction n="0.3083" ref="Cu65"/>
+  </element>
+
+  <material name="G4_Cu" state="solid">
+    <T unit="K" value="293.15"/>
+    <MEE unit="eV" value="322"/>
+    <D unit="g/cm3" value="8.96"/>
+    <fraction n="1" ref="CuMixture"/>
+  </material>
+
+  <material name="C19-H20-O4">
+    <D value="1.16" unit="g/cm3" />
+    <composite n="19" ref="C"/>
+    <composite n="20" ref="H" />
+    <composite n="4" ref="O" />
+  </material>
+
+  <material name="CO2" state="gas">
+    <D value="0.001977" unit="g/cm3" />
+    <composite n="1" ref="C"/>
+    <composite n="2" ref="O" />
+  </material>
+
+  <material name="CF4" formula="CF4" state="gas">
+    <D value="0.00372" unit="g/cm3" />
+    <composite n="1" ref="C"/>
+    <composite n="4" ref="F"/>
+  </material>
+
+  <material name="ARCO2CF4" state="gas">
+    <D value="0.00253245" unit="g/cm3" />
+    <composite n="0.45" ref="Argon"/>
+    <composite n="0.15" ref="CO2"/>
+    <composite n="0.40" ref="CF4"/>
+  </material>
+
+  <material name="G4_Fe" state="solid">
+    <MEE unit="eV" value="286"/>
+    <D value="7.874" unit="g/cm3" />
+    <fraction n="1" ref="Fe"/>
+  </material>
+
+  <material name="G4_Si" state="solid">
+    <T unit="K" value="293.15"/>
+    <MEE unit="eV" value="173"/>
+    <D unit="g/cm3" value="2.33"/>
+    <fraction n="1" ref="Si"/>
+  </material>
+
+  <isotope N="40" Z="20" name="Ca40">
+    <atom unit="g/mole" value="39.9626"/>
+  </isotope>
+  <isotope N="42" Z="20" name="Ca42">
+    <atom unit="g/mole" value="41.9586"/>
+  </isotope>
+  <isotope N="43" Z="20" name="Ca43">
+    <atom unit="g/mole" value="42.9588"/>
+  </isotope>
+  <isotope N="44" Z="20" name="Ca44">
+    <atom unit="g/mole" value="43.9555"/>
+  </isotope>
+  <isotope N="46" Z="20" name="Ca46">
+    <atom unit="g/mole" value="45.9537"/>
+  </isotope>
+  <isotope N="48" Z="20" name="Ca48">
+    <atom unit="g/mole" value="47.9525"/>
+  </isotope>
+  <element name="Calcium">
+    <fraction n="0.96941" ref="Ca40"/>
+    <fraction n="0.00647" ref="Ca42"/>
+    <fraction n="0.00135" ref="Ca43"/>
+    <fraction n="0.02086" ref="Ca44"/>
+    <fraction n="4e-05" ref="Ca46"/>
+    <fraction n="0.00187" ref="Ca48"/>
+  </element>
+  <isotope N="27" Z="13" name="Al27">
+    <atom unit="g/mole" value="26.9815"/>
+  </isotope>
+  <element name="Aluminum">
+    <fraction n="1" ref="Al27"/>
+  </element>
+  <isotope N="24" Z="12" name="Mg24">
+    <atom unit="g/mole" value="23.985"/>
+  </isotope>
+  <isotope N="25" Z="12" name="Mg25">
+    <atom unit="g/mole" value="24.9858"/>
+  </isotope>
+  <isotope N="26" Z="12" name="Mg26">
+    <atom unit="g/mole" value="25.9826"/>
+  </isotope>
+  <element name="Magnesium">
+    <fraction n="0.7899" ref="Mg24"/>
+    <fraction n="0.1" ref="Mg25"/>
+    <fraction n="0.1101" ref="Mg26"/>
+  </element>
+  <isotope N="10" Z="5" name="B10">
+    <atom unit="g/mole" value="10.0129"/>
+  </isotope>
+  <isotope N="11" Z="5" name="B11">
+    <atom unit="g/mole" value="11.0093"/>
+  </isotope>
+  <element name="Boron">
+    <fraction n="0.199" ref="B10"/>
+    <fraction n="0.801" ref="B11"/>
+  </element>
+  <isotope N="46" Z="22" name="Ti46">
+    <atom unit="g/mole" value="45.9526"/>
+  </isotope>
+  <isotope N="47" Z="22" name="Ti47">
+    <atom unit="g/mole" value="46.9518"/>
+  </isotope>
+  <isotope N="48" Z="22" name="Ti48">
+    <atom unit="g/mole" value="47.9479"/>
+  </isotope>
+  <isotope N="49" Z="22" name="Ti49">
+    <atom unit="g/mole" value="48.9479"/>
+  </isotope>
+  <isotope N="50" Z="22" name="Ti50">
+    <atom unit="g/mole" value="49.9448"/>
+  </isotope>
+  <element name="Titanium">
+    <fraction n="0.0825" ref="Ti46"/>
+    <fraction n="0.0744" ref="Ti47"/>
+    <fraction n="0.7372" ref="Ti48"/>
+    <fraction n="0.0541" ref="Ti49"/>
+    <fraction n="0.0518" ref="Ti50"/>
+  </element>
+  <isotope N="23" Z="11" name="Na23">
+    <atom unit="g/mole" value="22.9898"/>
+  </isotope>
+  <element name="Sodium">
+    <fraction n="1" ref="Na23"/>
+  </element>
+  <isotope N="39" Z="19" name="K39">
+    <atom unit="g/mole" value="38.9637"/>
+  </isotope>
+  <isotope N="40" Z="19" name="K40">
+    <atom unit="g/mole" value="39.964"/>
+  </isotope>
+  <isotope N="41" Z="19" name="K41">
+    <atom unit="g/mole" value="40.9618"/>
+  </isotope>
+  <element name="Potassium">
+    <fraction n="0.932581" ref="K39"/>
+    <fraction n="0.000117" ref="K40"/>
+    <fraction n="0.067302" ref="K41"/>
+  </element>
+  <isotope N="54" Z="26" name="Fe54">
+    <atom unit="g/mole" value="53.9396"/>
+  </isotope>
+  <isotope N="56" Z="26" name="Fe56">
+    <atom unit="g/mole" value="55.9349"/>
+  </isotope>
+  <isotope N="57" Z="26" name="Fe57">
+    <atom unit="g/mole" value="56.9354"/>
+  </isotope>
+  <isotope N="58" Z="26" name="Fe58">
+    <atom unit="g/mole" value="57.9333"/>
+  </isotope>
+  <element name="Iron">
+    <fraction n="0.05845" ref="Fe54"/>
+    <fraction n="0.91754" ref="Fe56"/>
+    <fraction n="0.02119" ref="Fe57"/>
+    <fraction n="0.00282" ref="Fe58"/>
+  </element>
+  <isotope N="19" Z="9" name="F19">
+    <atom unit="g/mole" value="18.9984"/>
+  </isotope>
+  <element name="Fluorine">
+    <fraction n="1" ref="F19"/>
+  </element>
+  <material name="G10_FR4" state="solid">
+    <T unit="K" value="293.15"/>
+    <MEE unit="eV" value="97.5174862751826"/>
+    <D unit="g/cm3" value="1.8"/>
+    <fraction n="0.275294485761732" ref="C"/>
+    <fraction n="0.0342756035967338" ref="H"/>
+    <fraction n="0.360438084258819" ref="O"/>
+    <fraction n="0.0141585430641827" ref="N"/>
+    <fraction n="0.151448564740455" ref="Si"/>
+    <fraction n="0.0814747796865075" ref="Calcium"/>
+    <fraction n="0.0412815383454296" ref="Aluminum"/>
+    <fraction n="0.00904554293278041" ref="Magnesium"/>
+    <fraction n="0.0139757056089465" ref="Boron"/>
+    <fraction n="0.00287683979315724" ref="Titanium"/>
+    <fraction n="0.00445114704467721" ref="Sodium"/>
+    <fraction n="0.0049808870209235" ref="Potassium"/>
+    <fraction n="0.00209827814565587" ref="Iron"/>
+    <fraction n="0.0042" ref="Fluorine"/>
+  </material>
+  <!-- End of microRWELL materials -->
+  
 </materials>
