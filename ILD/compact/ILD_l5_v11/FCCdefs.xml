@@ -104,6 +104,6 @@
 
   <constant name="InnerTracker_outer_radius" value="top_TPC_inner_radius-5*mm" />
 
-  <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:6,module:11,sensor:8"/>
+  <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:9,module:8,sensor:8"/>
 
 </define>
