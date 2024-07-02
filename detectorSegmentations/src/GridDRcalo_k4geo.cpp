@@ -14,6 +14,7 @@ GridDRcalo_k4geo::GridDRcalo_k4geo(const std::string& cellEncoding) : Segmentati
   _description = "DRcalo segmentation based on the tower / (Cerenkov or Scintillation) fiber / SiPM hierarchy";
 
   // register all necessary parameters
+  registerIdentifier("identifier_assembly", "Cell ID identifier for assembly", fAssemblyId, "assembly");
   registerIdentifier("identifier_eta", "Cell ID identifier for numEta", fNumEtaId, "eta");
   registerIdentifier("identifier_phi", "Cell ID identifier for numPhi", fNumPhiId, "phi");
   registerIdentifier("identifier_x", "Cell ID identifier for x", fXId, "x");
@@ -31,6 +32,7 @@ GridDRcalo_k4geo::GridDRcalo_k4geo(const BitFieldCoder* decoder) : Segmentation(
   _description = "DRcalo segmentation based on the tower / (Cerenkov or Scintillation) fiber / SiPM hierarchy";
 
   // register all necessary parameters
+  registerIdentifier("identifier_assembly", "Cell ID identifier for assembly", fAssemblyId, "assembly");
   registerIdentifier("identifier_eta", "Cell ID identifier for numEta", fNumEtaId, "eta");
   registerIdentifier("identifier_phi", "Cell ID identifier for numPhi", fNumPhiId, "phi");
   registerIdentifier("identifier_x", "Cell ID identifier for x", fXId, "x");
@@ -84,7 +86,7 @@ Vector3D GridDRcalo_k4geo::localPosition(int numx, int numy, int x_, int y_) con
 }
 
 /// determine the cell ID based on the position
-CellID GridDRcalo_k4geo::cellID(const Vector3D& localPosition, const Vector3D& /*globalPosition*/, const VolumeID& vID) const {
+CellID GridDRcalo_k4geo::cellID(const Vector3D& localPosition, const Vector3D& globalPosition, const VolumeID& vID) const {
   int numx = numX(vID);
   int numy = numY(vID);
 
@@ -94,7 +96,8 @@ CellID GridDRcalo_k4geo::cellID(const Vector3D& localPosition, const Vector3D& /
   int x = std::floor( ( localX + ( numx%2==0 ? 0. : fGridSize/2. ) ) / fGridSize ) + numx/2;
   int y = std::floor( ( localY + ( numy%2==0 ? 0. : fGridSize/2. ) ) / fGridSize ) + numy/2;
 
-  return setCellID( numEta(vID), numPhi(vID), x, y );
+  int signedNumEta = (globalPosition.z() >= 0) ? numEta(vID) : (-numEta(vID) - 1);
+  return setCellID( signedNumEta, numPhi(vID), x, y );
 }
 
 VolumeID GridDRcalo_k4geo::setVolumeID(int numEta, int numPhi) const {
@@ -126,6 +129,9 @@ CellID GridDRcalo_k4geo::setCellID(int numEta, int numPhi, int x, int y) const {
 
   VolumeID isCeren = IsCerenkov(x,y) ? 1 : 0;
   _decoder->set(vID, fIsCerenkovId, isCeren);
+
+  VolumeID assemblyId = (numEta >= 0) ? 0 : 1;
+  _decoder->set(vID, fAssemblyId, assemblyId);
 
   return vID;
 }

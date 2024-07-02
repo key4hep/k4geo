@@ -182,6 +182,12 @@
     <constant name="tracker_region_rmax" value="DCH_outer_cyl_R_total"/>
 
     <!-- Fiber dual-readout calorimeter tower dim-->
+    <constant name="FiberDRCalo_world_outer_radius" value="4501.*mm"/>
+    <constant name="FiberDRCalo_world_inner_radius" value="252.*mm"/>
+    <constant name="FiberDRCalo_world_z_extent" value="4501.*mm"/>
+    <constant name="FiberDRCalo_barrel_tube_outer_radius" value="2499.*mm"/>
+    <constant name="FiberDRCalo_barrel_tube_inner_radius" value="252.*mm"/>
+    <constant name="FiberDRCalo_barrel_tube_z_extent" value="2499.*mm"/>
     <constant name="FiberDRCalo_barrel_z_extent"       value="2.*m"/>
     <constant name="FiberDRCalo_barrel_z_start" value="2.5*m"/>
     <constant name="FiberDRCalo_barrel_nphi"         value="144"/>
@@ -263,7 +269,8 @@
     <vis name="DRCGenericVis" alpha="0.8" r="0.5" g="0.5" b="0.5" showDaughters="false" visible="false"/>
     <vis name="DRCGlassVis" alpha="0.5" r="0.0" g="0.1" b="0.9" showDaughters="false" visible="false"/>
     <vis name="DRCWaferVis" alpha="1." r="0.0" g="0.9" b="0.2" showDaughters="false" visible="false"/>
-    <vis name="DRCfilterVis" alpha="0.5" r="0.9" g="0.8" b="0.1" showDaughters="false" visible="false"/>
+
+    <vis name="DRCWorldVis" alpha="0.2" r="0.9" g="0.8" b="0.1" showDaughters="false" visible="false"/>
 
     <vis name="yoke_vis" r="255/256" g="0/256" b="0/256" alpha="1.0" showDaughters="true" visible="true" />
     <vis name="no_vis" showDaughters="true" visible="false" />

@@ -69,6 +69,7 @@ public:
   bool IsTower(const int& aId32) const { return IsTower( convertLast32to64(aId32) ); }
   bool IsSiPM(const int& aId32) const { return IsSiPM( convertLast32to64(aId32) ); }
 
+  inline const std::string& fieldNameAssembly() const { return fAssemblyId; }
   inline const std::string& fieldNameNumEta() const { return fNumEtaId; }
   inline const std::string& fieldNameNumPhi() const { return fNumPhiId; }
   inline const std::string& fieldNameX() const { return fXId; }
@@ -76,6 +77,7 @@ public:
   inline const std::string& fieldNameIsCerenkov() const { return fIsCerenkovId; }
   inline const std::string& fieldNameModule() const { return fModule; }
 
+  inline void setFieldNameAssembly(const std::string& fieldName) { fAssemblyId = fieldName; }
   inline void setFieldNameNumEta(const std::string& fieldName) { fNumEtaId = fieldName; }
   inline void setFieldNameNumPhi(const std::string& fieldName) { fNumPhiId = fieldName; }
   inline void setFieldNameX(const std::string& fieldName) { fXId = fieldName; }
@@ -89,6 +91,7 @@ public:
   DRparamBase_k4geo* setParamBase(int noEta) const;
 
 protected:
+  std::string fAssemblyId;
   std::string fNumEtaId;
   std::string fNumPhiId;
   std::string fXId;
