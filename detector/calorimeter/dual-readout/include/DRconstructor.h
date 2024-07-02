@@ -21,7 +21,6 @@ namespace ddDRcalo {
     void setDescription(dd4hep::Detector* description) { fDescription = description; }
     void setDetElement(dd4hep::DetElement* drDet) { fDetElement = drDet; }
     void setSipmSurf(dd4hep::OpticalSurface* sipmSurf) { fSipmSurf = sipmSurf; }
-    void setMirrorSurf(dd4hep::OpticalSurface* mirrorSurf) { fMirrorSurf = mirrorSurf; }
     void setSensDet(dd4hep::SensitiveDetector* sensDet) {
       fSensDet = sensDet;
       fSegmentation = dynamic_cast<dd4hep::DDSegmentation::GridDRcalo_k4geo*>( sensDet->readout().segmentation().segmentation() );
@@ -53,9 +52,8 @@ namespace ddDRcalo {
     xml_comp_t fX_cladC;
     xml_comp_t fX_coreC;
     xml_comp_t fX_coreS;
-    xml_comp_t fX_hole;
-    xml_comp_t fX_dark;
-    xml_comp_t fX_mirror;
+    xml_comp_t fX_worldTube;
+    xml_comp_t fX_barrelTube;
     dd4hep::Assembly* fExperimentalHall;
     dd4hep::Detector* fDescription;
     dd4hep::DDSegmentation::DRparamBarrel_k4geo* fParamBarrel;
@@ -63,7 +61,6 @@ namespace ddDRcalo {
     dd4hep::DetElement* fDetElement;
     dd4hep::SensitiveDetector* fSensDet;
     dd4hep::OpticalSurface* fSipmSurf;
-    dd4hep::OpticalSurface* fMirrorSurf;
     dd4hep::DDSegmentation::GridDRcalo_k4geo* fSegmentation;
 
     bool fVis;

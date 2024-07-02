@@ -596,9 +596,8 @@
         <cladC name="cladC" rmax="0.5*mm" rmin="0.49*mm" material="FluorinatedPolymer" vis="DRCCladVis"/>
         <coreC name="coreC" rmax="0.5*mm" rmin="0.49*mm" material="PMMA" vis="DRCCerenVis"/> <!--also cladS-->
         <coreS name="coreS" rmax="0.5*mm" rmin="0.485*mm" material="DR_Polystyrene" vis="DRCScintVis"/>
-        <hole name="hole" rmax="0.5*mm" material="DR_Air" vis="DRCGenericVis" gap="0"/> <!-- Set gap = 0 to remove air holes in DRC tower (to reduce memory) -->
-        <dark name="dark" rmax="0.5*mm" material="PolyvinylChloride" vis="DRCGenericVis"/>
-        <mirror name="mirror" rmax="0.5*mm" height="0.*mm" material="Aluminum" vis="DRCGlassVis"/> <!-- original height 0.01mm, set it to 0 to remove mirror (to reduce memory) -->
+        <worldTube name="worldTube" rmax="FiberDRCalo_world_outer_radius" rmin="FiberDRCalo_world_inner_radius" height="FiberDRCalo_world_z_extent" material="Vacuum" vis="DRCWorldVis"/>
+        <barrelTube name="barrelTube" rmax="FiberDRCalo_barrel_tube_outer_radius" rmin="FiberDRCalo_barrel_tube_inner_radius" height="FiberDRCalo_barrel_tube_z_extent" material="Vacuum" vis="DRCWorldVis"/>
       </structure>
       <barrel height="FiberDRCalo_barrel_z_extent" rmin="FiberDRCalo_barrel_z_start" nphi="FiberDRCalo_barrel_nphi" theta="0.0" start="0" material="Copper" vis="DRCTowerVis">
         <deltatheta deltatheta="0.019634954"/>
@@ -684,10 +683,6 @@
         <deltatheta deltatheta="0.019634954"/>
         <deltatheta deltatheta="0.019634954"/>
         <deltatheta deltatheta="0.019634954"/>
-        <deltatheta deltatheta="0.019634954"/>
-        <deltatheta deltatheta="0.019634954"/>
-        <deltatheta deltatheta="0.019634954"/>
-        <deltatheta deltatheta="0.019634954"/>
       </endcap>
     </detector>
   </detectors>
@@ -696,7 +691,7 @@
     <readout name="DRcaloSiPMreadout">
       <segmentation type="GridDRcalo_k4geo"/>
       <!-- Mendatory to use the first 32 bits for tower infos & the last 32 bits for fiber/SiPM infos -->
-      <id>system:5,eta:-8,phi:9,x:32:-11,y:-9,c:1,module:2</id>
+      <id>system:5,assembly:1,eta:-8,phi:9,x:32:-11,y:-9,c:1,module:2</id>
     </readout>
   </readouts>
 

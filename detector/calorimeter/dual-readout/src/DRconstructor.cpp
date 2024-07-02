@@ -11,22 +11,19 @@ ddDRcalo::DRconstructor::DRconstructor(xml_det_t& x_det)
   fX_cladC( fX_struct.child( _Unicode(cladC) ) ),
   fX_coreC( fX_struct.child( _Unicode(coreC) ) ),
   fX_coreS( fX_struct.child( _Unicode(coreS) ) ),
-  fX_hole( fX_struct.child( _Unicode(hole) ) ),
-  fX_dark( fX_struct.child( _Unicode(dark) ) ),
-  fX_mirror( fX_struct.child( _Unicode(mirror) ) ) {
+  fX_worldTube( fX_struct.child( _Unicode(worldTube) ) ),
+  fX_barrelTube( fX_struct.child( _Unicode(barrelTube) ) ) {
   fExperimentalHall = nullptr;
   fParamBarrel = nullptr;
   fDescription = nullptr;
   fDetElement = nullptr;
   fSensDet = nullptr;
   fSipmSurf = nullptr;
-  fMirrorSurf = nullptr;
   fSegmentation = nullptr;
   fVis = false;
   fNumx = 0;
   fNumy = 0;
   fFiberCoords.reserve(100000);
-
   fFiberEnvVec.reserve(4000);
   fFiberCoreCVec.reserve(4000);
   fFiberCoreSVec.reserve(4000);
@@ -36,20 +33,27 @@ void ddDRcalo::DRconstructor::construct() {
   // set vis on/off
   fVis = fDescription->visAttributes(fX_det.visStr()).showDaughters();
 
-  dd4hep::Box AssemblyBox = dd4hep::Box(1000, 1000, 500);
-  dd4hep::Volume AssemblyBoxVol("AssemblyBox",AssemblyBox, fDescription->material("Vacuum") );
-  dd4hep::PlacedVolume PlacedAssemblyBoxVol = fExperimentalHall->placeVolume( AssemblyBoxVol, dd4hep::Position(0,0,500) );
-  PlacedAssemblyBoxVol.addPhysVolID("system", 1);
-  // TODO : Have to update box ID encoding
+  // Tube to cover all +eta DRC geometry, Rmin = 252 - 1 mm (Rmin in endcap region), Rmax = 4500 + 1 mm, length = 4500 + 1mm
+  dd4hep::Tube WorldTube(fX_worldTube.rmin(), fX_worldTube.rmax(), fX_worldTube.height()/2. );
+  // Tube to be subtracted from Large tube, this is for barrel region, will be subtracted from z = 0 to z = 2500 -1 mm
+  // Rmin = 252 - 1 mm mm, Rmax = 2500 - 1mm, length = 2500 -1 mm
+  dd4hep::Tube BarrelTube(fX_barrelTube.rmin(), fX_barrelTube.rmax(), fX_barrelTube.height()/2.);
+  // Create World assembly tube by subtracting BarrelTube from WorldTube
+  dd4hep::SubtractionSolid AssemblyTube(WorldTube, BarrelTube, dd4hep::Position( 0, 0, -(fX_worldTube.height() - fX_barrelTube.height())/2. ));
+  dd4hep::Volume AssemblyTubeVol("AssemblyTube",AssemblyTube, fDescription->material(fX_worldTube.materialStr()) );
+  AssemblyTubeVol.setVisAttributes(*fDescription, fX_worldTube.visStr());
+  dd4hep::PlacedVolume PlacedAssemblyTubeVol = fExperimentalHall->placeVolume( AssemblyTubeVol, dd4hep::Position( 0, 0, fX_worldTube.height()/2.) );
+  PlacedAssemblyTubeVol.addPhysVolID("assembly", 0); // TODO : Have to update box ID encoding
 
   initiateFibers();
 
-  implementTowers(fX_barrel, fParamBarrel, AssemblyBoxVol);
-  implementTowers(fX_endcap, fParamEndcap, AssemblyBoxVol);
+  implementTowers(fX_barrel, fParamBarrel, AssemblyTubeVol);
+  implementTowers(fX_endcap, fParamEndcap, AssemblyTubeVol);
 
   if (fX_det.reflect()) {
-    dd4hep::PlacedVolume PlacedAssemblyBoxVol_refl = fExperimentalHall->placeVolume( AssemblyBoxVol, 1, dd4hep::Transform3D(dd4hep::RotationZYX(0., 0., M_PI), dd4hep::Position(0,0,-500)) );
-    PlacedAssemblyBoxVol_refl.addPhysVolID("system", 2);
+    auto refl_pos = dd4hep::Transform3D( dd4hep::RotationZYX(0., 0., M_PI), dd4hep::Position( 0, 0, -(fX_worldTube.height()/2.)) );
+    dd4hep::PlacedVolume PlacedAssemblyTubeVol_refl = fExperimentalHall->placeVolume( AssemblyTubeVol, 1, refl_pos);
+    PlacedAssemblyTubeVol_refl.addPhysVolID("assembly", 1);
   }
 }
 
@@ -120,11 +124,14 @@ void ddDRcalo::DRconstructor::placeAssembly(xml_comp_t& x_theta, xml_comp_t& x_w
   auto towerId64 = fSegmentation->setVolumeID( towerNoLR, nPhi );
   int towerId32 = fSegmentation->getFirst32bits(towerId64);
 
-  dd4hep::Position towerPos = param->GetTowerPos(nPhi) + dd4hep::Position(0, 0, -500);
-  AssemblyBoxVol.placeVolume( towerVol, towerId32, dd4hep::Transform3D( param->GetRotationZYX(nPhi), towerPos ) );
+  dd4hep::Position towerPos = param->GetTowerPos(nPhi) + dd4hep::Position(0, 0, -(fX_worldTube.height()/2.));
+  dd4hep::PlacedVolume towerPhys = AssemblyBoxVol.placeVolume( towerVol, towerId32, dd4hep::Transform3D( param->GetRotationZYX(nPhi), towerPos ) );
+  towerPhys.addPhysVolID("eta", towerNoLR);
+  towerPhys.addPhysVolID("phi", nPhi);
+  towerPhys.addPhysVolID("module", 0);
 
   // Remove sipmLayer
-  dd4hep::Position sipmPos = param->GetSipmLayerPos(nPhi) + dd4hep::Position(0, 0, -500);
+  dd4hep::Position sipmPos = param->GetSipmLayerPos(nPhi) + dd4hep::Position(0, 0, -(fX_worldTube.height()/2.));
   dd4hep::PlacedVolume sipmWaferPhys = AssemblyBoxVol.placeVolume( sipmWaferVol, towerId32, dd4hep::Transform3D( param->GetRotationZYX(nPhi), sipmPos ) );
   sipmWaferPhys.addPhysVolID("eta", towerNoLR);
   sipmWaferPhys.addPhysVolID("phi", nPhi);
@@ -229,7 +236,7 @@ void ddDRcalo::DRconstructor::implementFibers(xml_comp_t& x_theta, dd4hep::Volum
 
 // Remove cap (mirror or black paint in front of the fiber)
 void ddDRcalo::DRconstructor::implementFiber(dd4hep::Volume& towerVol, dd4hep::Trap& trap, dd4hep::Position pos, int col, int row, float fiberLen) {
-  // FIXME : What if the fiber length is shorter than 0.5 mm ?
+  // Don't implement fiber if the length required is shorter than 0.5 mm
   if (fiberLen < 0.05)
     return;
 
@@ -371,7 +378,7 @@ void ddDRcalo::DRconstructor::placeUnitBox(dd4hep::Volume& fullBox, dd4hep::Volu
     for (int col = cmin; col < cmax; col+=2) {
       auto pos0 = dd4hep::Position( fSegmentation->localPosition(fNumx,fNumy,col,row) );
       auto pos3 = dd4hep::Position( fSegmentation->localPosition(fNumx,fNumy,col+1,row+1) );
-      dd4hep::PlacedVolume unitBoxPhys = fullBox.placeVolume(unitBox,(pos0+pos3)/2.);
+      fullBox.placeVolume(unitBox,(pos0+pos3)/2.);
     }
   }
 
