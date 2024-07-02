@@ -42,7 +42,7 @@
   <include ref="Vertex_IDEA_o1_v01.xml"/>
 
   <!-- Import drift chamber -->
-  <include ref="DriftChamber_o1_v02.xml"/>
+  <!-- <include ref="DriftChamber_o1_v02.xml"/> -->
 
   <!-- Import silicon wrapper -->
   <!-- <include ref="SiliconWrapper_o1_v01.xml"/> -->
@@ -52,6 +52,9 @@
 
   <!-- Import Endcap plate absorber -->
   <include ref="EndPlateAbsorber_o1_v01.xml"/>
+
+  <!-- Import fiber-based dual-readout calorimeter -->
+  <include ref="FiberDualReadoutCalo_o1_v01.xml"/>
 
   <plugins>
     <plugin name="DD4hepVolumeManager"/>

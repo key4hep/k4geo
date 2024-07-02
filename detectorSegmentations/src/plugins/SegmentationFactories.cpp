@@ -29,4 +29,5 @@ DECLARE_SEGMENTATION(GridRPhiEta_k4geo, create_segmentation<dd4hep::DDSegmentati
 #include "detectorSegmentations/GridSimplifiedDriftChamber_k4geo.h"
 DECLARE_SEGMENTATION(GridSimplifiedDriftChamber_k4geo, create_segmentation<dd4hep::DDSegmentation::GridSimplifiedDriftChamber_k4geo>)
 
-
+#include "detectorSegmentations/GridDRcalo_k4geo.h"
+DECLARE_SEGMENTATION(GridDRcalo_k4geo, create_segmentation<dd4hep::DDSegmentation::GridDRcalo_k4geo>)

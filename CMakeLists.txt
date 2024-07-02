@@ -68,6 +68,7 @@ endif()
 file(GLOB sources 
   ./detector/tracker/*.cpp
   ./detector/calorimeter/*.cpp
+  ./detector/calorimeter/dual-readout/src/*.cpp
   ./detector/fcal/*.cpp
   ./detector/other/*.cpp
   ./detector/CaloTB/*.cpp
@@ -106,9 +107,15 @@ if(NOT DCH_INFO_H_EXIST)
     message(WARNING "Subdetector ${FILES_DEPENDINGON_DCH_INFO_H} will not be built because header file ${DCH_INFO_H} was not found")
 endif()
 
+find_package(EDM4HEP)
 file(GLOB G4sources
   ./plugins/TPCSDAction.cpp
   ./plugins/CaloPreShowerSDAction.cpp
+  ./plugins/FiberDRCaloSDAction.h
+  ./plugins/FiberDRCaloSDAction.cpp
+  ./plugins/Geant4Output2EDM4hep_DRC.cpp
+  ./plugins/DRCaloFastSimModel.cpp
+  ./plugins/DRCaloFastSimModel.h
 )
 
 if(DD4HEP_USE_PYROOT)
@@ -124,8 +131,11 @@ add_library(lcgeo ALIAS k4geo)
 target_include_directories(${PackageName}   PRIVATE ${PROJECT_SOURCE_DIR}/detector/include )
 target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detector/include )
 
+target_include_directories(${PackageName}   PRIVATE ${PROJECT_SOURCE_DIR}/detector/calorimeter/dual-readout/include )
+target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detector/calorimeter/dual-readout/include )
+
 target_link_libraries(${PackageName}   DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers ROOT::Core detectorSegmentations)
-target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ROOT::Core ${Geant4_LIBRARIES})
+target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ROOT::Core EDM4HEP::edm4hep EDM4HEP::edm4hepDict podio::podio podio::podioDict podio::podioRootIO ${Geant4_LIBRARIES})
 
 if(K4GEO_USE_LCIO)
   target_link_libraries(${PackageName}   LCIO::lcio)
