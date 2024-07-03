@@ -58,9 +58,8 @@ void ddDRcalo::DRconstructor::construct() {
 }
 
 void ddDRcalo::DRconstructor::initiateFibers() {
-
   for (int idx = 1; idx <= 4000; idx++) {
-    double length = 0.05 * idx;
+    double length = 0.05*dd4hep::cm * idx; // fiber with length interval of 0.5 mm
 
     fFiberEnvVec.push_back(   dd4hep::Tube (0., fX_cladC.rmax(), length/2. ) );
     fFiberCoreCVec.push_back( dd4hep::Tube (0., fX_coreC.rmin(), length/2.) );
@@ -237,13 +236,13 @@ void ddDRcalo::DRconstructor::implementFibers(xml_comp_t& x_theta, dd4hep::Volum
 // Remove cap (mirror or black paint in front of the fiber)
 void ddDRcalo::DRconstructor::implementFiber(dd4hep::Volume& towerVol, dd4hep::Trap& trap, dd4hep::Position pos, int col, int row, float fiberLen) {
   // Don't implement fiber if the length required is shorter than 0.5 mm
-  if (fiberLen < 0.05)
+  if (fiberLen < 0.05*dd4hep::cm)
     return;
 
-  int fiberIdx = int( (float) fiberLen / (float) 0.05 ) - 1; // index of fiber in fiber vectors
+  int fiberIdx = int( (float) fiberLen / (float) 0.05*dd4hep::cm ) - 1; // index of fiber in fiber vectors
   // Actual length of fiber to be implemented, quantized in 0.5 mm unit
-  float approxFiberLen =  0.05 * (fiberIdx + 1);
-  // Fix Z position of fiber since the length of fiber can differ in [0, 0.05) mm
+  float approxFiberLen =  0.05*dd4hep::cm * (fiberIdx + 1);
+  // Fix Z position of fiber since the length of fiber can differ in [0, 0.5) mm
   dd4hep::Position fixedPos = dd4hep::Position(pos.x(), pos.y(), pos.z() + (fiberLen - approxFiberLen));
 
   if ( fSegmentation->IsCerenkov(col,row) ) { //c fiber

@@ -3,7 +3,7 @@
 #include "DD4hep/Objects.h"
 #include "DD4hep/Segmentations.h"
 #include "DD4hep/DD4hepUnits.h"
-
+#include "DDG4/Geant4Random.h"
 // k4geo Framework include files
 
 #include "FiberDRCaloSDAction.h"
@@ -57,6 +57,55 @@ namespace dd4hep
       G4float fTimeEnd;
       G4float fWavlenStep;
       G4float fTimeStep;
+      static const int fArraySize = 24;
+      double fGraph_X[fArraySize] ={1.37760 * dd4hep::eV,
+                                    1.45864 * dd4hep::eV,
+                                    1.54980 * dd4hep::eV,
+                                    1.65312 * dd4hep::eV,
+                                    1.71013 * dd4hep::eV,
+                                    1.77120 * dd4hep::eV,
+                                    1.83680 * dd4hep::eV,
+                                    1.90745 * dd4hep::eV,
+                                    1.98375 * dd4hep::eV,
+                                    2.06640 * dd4hep::eV,
+                                    2.10143 * dd4hep::eV,
+                                    2.13766 * dd4hep::eV,
+                                    2.17516 * dd4hep::eV,
+                                    2.21400 * dd4hep::eV,
+                                    2.25426 * dd4hep::eV,
+                                    2.29600 * dd4hep::eV,
+                                    2.33932 * dd4hep::eV,
+                                    2.38431 * dd4hep::eV,
+                                    2.43106 * dd4hep::eV,
+                                    2.47968 * dd4hep::eV,
+                                    2.53029 * dd4hep::eV,
+                                    2.58300 * dd4hep::eV,
+                                    2.63796 * dd4hep::eV,
+                                    2.69531 * dd4hep::eV};
+        double fGraph_Y[fArraySize] ={0.903 * 0.903,
+                                      0.903 * 0.903,
+                                      0.903 * 0.903,
+                                      0.903 * 0.903,
+                                      0.903 * 0.903,
+                                      0.903 * 0.903,
+                                      0.902 * 0.902,
+                                      0.901 * 0.901,
+                                      0.898 * 0.898,
+                                      0.895 * 0.895,
+                                      0.893 * 0.893,
+                                      0.891 * 0.891,
+                                      0.888 * 0.888,
+                                      0.883 * 0.883,
+                                      0.87 * 0.87,
+                                      0.838 * 0.838,
+                                      0.76 * 0.76,
+                                      0.62 * 0.62,
+                                      0.488 * 0.488,
+                                      0.345 * 0.345,
+                                      0.207 * 0.207,
+                                      0.083 * 0.083,
+                                      0.018 * 0.018,
+                                      0.};
 
       G4double wavToE(G4double wav) { return CLHEP::h_Planck * CLHEP::c_light / wav; }
 
@@ -84,74 +133,42 @@ namespace dd4hep
         return i;
       }
 
-      bool applyYellowFilter(G4double en)
+      // Linear interpolation function for calculating the efficiency of yellow filter, used in rejectedByYellowFilter
+      double getFilterEff(G4double G4energy) {
+        double energy = (G4energy * (dd4hep::MeV / CLHEP::MeV)); // Convert G4 MeV to dd4hep MeV
+        if (energy <= fGraph_X[0]) // If the photon energy <= 1.37760 eV, than return maximum filter efficiency
+          return fGraph_Y[0];
+        
+        for(int idx = 0; idx < fArraySize; ++idx) {
+          if (energy <= fGraph_X[idx]) {
+            double x1 = fGraph_X[idx - 1];
+            double x2 = fGraph_X[idx];
+            double y1 = fGraph_Y[idx - 1];
+            double y2 = fGraph_Y[idx];
+
+            return (y1 + ((y2 - y1) / (x2 - x1))*(energy - x1)); // return linear interpolated filter efficiency
+          }
+        }
+
+        // This should not happen
+        std::cout << "Error in Yellow filter efficiency with photon energy : " << energy << " MeV" << std::endl;
+        std::cout << "Cannot find corresponding filter efficiency" << std::endl;
+        return 0.;
+      }
+
+      // If true, then the photon is rejected by yellow filter
+      bool rejectedByYellowFilter(G4double G4energy, double rndVal)
       {
-        double energy = (en * 1000000.); // MeV -> eV unit change
+        double energy = (G4energy * (dd4hep::MeV / CLHEP::MeV)); // Convert G4 MeV to dd4hep MeV
+        if ( energy >= fGraph_X[fArraySize-1] ) // Photon w/ E > 2.69531 eV rejected
+          return true;
 
-        if (energy >= 2.69531)
-          return true; // Photon w/ E > 2.69531 eV filtered
+        double FilterEff = getFilterEff(G4energy); // Get efficiency of filter using photon's energy
 
-        TF1 *uniform = new TF1("f1", "pol0", 0, 1); // TODO :: Pointer -> change to unique pointer
-        uniform->SetParameter(0, 1);
-        double randVal = uniform->GetRandom(0, 1); // TODO :: Change random engine to DDSim or G4 random!
-        const int N = 24;
-        double graph_X[N] = {1.37760,
-                             1.45864,
-                             1.54980,
-                             1.65312,
-                             1.71013,
-                             1.77120,
-                             1.83680,
-                             1.90745,
-                             1.98375,
-                             2.06640,
-                             2.10143,
-                             2.13766,
-                             2.17516,
-                             2.21400,
-                             2.25426,
-                             2.29600,
-                             2.33932,
-                             2.38431,
-                             2.43106,
-                             2.47968,
-                             2.53029,
-                             2.58300,
-                             2.63796,
-                             2.69531};
-        double graph_Y[N] = {0.903 * 0.903,
-                             0.903 * 0.903,
-                             0.903 * 0.903,
-                             0.903 * 0.903,
-                             0.903 * 0.903,
-                             0.903 * 0.903,
-                             0.902 * 0.902,
-                             0.901 * 0.901,
-                             0.898 * 0.898,
-                             0.895 * 0.895,
-                             0.893 * 0.893,
-                             0.891 * 0.891,
-                             0.888 * 0.888,
-                             0.883 * 0.883,
-                             0.87 * 0.87,
-                             0.838 * 0.838,
-                             0.76 * 0.76,
-                             0.62 * 0.62,
-                             0.488 * 0.488,
-                             0.345 * 0.345,
-                             0.207 * 0.207,
-                             0.083 * 0.083,
-                             0.018 * 0.018,
-                             0.};
-        TGraph *FilterEffGraph = new TGraph(N, graph_X, graph_Y); // TODO :: Pointer -> change to unique pointer
-        double FilterEff = FilterEffGraph->Eval((double)energy);
-
-        delete uniform;
-        delete FilterEffGraph;
-
-        // filter efficiency == probability of photon passing filter
-        // == Probability of random value (from uniform distribution with range 0 ~ 1) larger than filter efficiency
-        return (randVal > FilterEff);
+        // filter efficiency == probability of photon accepted by filter
+        // == Probability of random value (from uniform distribution with range 0 ~ 1) smaller than filter efficiency
+        // So if the rndVal is larger than the FilterEff, than the photon is rejected
+        return (rndVal > FilterEff);
       }
 
       DRCData()
@@ -191,6 +208,7 @@ namespace dd4hep
       dd4hep::VolumeID volID = volMgr.volumeID(theTouchable);
       G4ThreeVector global = step->GetPostStepPoint()->GetPosition();
       G4ThreeVector local = theTouchable->GetHistory()->GetTopTransform().TransformPoint(global);
+      // MoveUpHistory(GetHistoryDepth - 2) -> tower touchable, local position
       dd4hep::Position loc(local.x() * dd4hep::millimeter / CLHEP::millimeter, local.y() * dd4hep::millimeter / CLHEP::millimeter, local.z() * dd4hep::millimeter / CLHEP::millimeter);
       dd4hep::Position glob(global.x() * dd4hep::millimeter / CLHEP::millimeter, global.y() * dd4hep::millimeter / CLHEP::millimeter, global.z() * dd4hep::millimeter / CLHEP::millimeter);
 
@@ -203,12 +221,15 @@ namespace dd4hep
       // Apply yellow filter here
       // Get random number from (0~1) uniform distribution
       // If the photon is from Scint. process, calculate the filter eff. based on its energy
-      // If  (random number) > (Eff), apply yellow filter (= do not make hit (or count photon) for that photon)
+      // If  (random number) > (Eff), the photon is rejected by yellow filter (= do not make hit (or count photon) for that photon)
       dd4hep::DDSegmentation::VolumeID ceren = static_cast<dd4hep::DDSegmentation::VolumeID>(m_segmentation->decoder()->get(cID, "c"));
       bool IsCeren = static_cast<bool>(ceren);
       if (!(IsCeren))
       {
-        if (m_userData.applyYellowFilter(energy))
+        Geant4Event&  evt = context()->event();
+        Geant4Random& rnd = evt.random(); // Get random generator
+        double rndVal = rnd.uniform(0, 1); // Get random number from uniform distribution [0, 1]
+        if (m_userData.rejectedByYellowFilter(energy, rndVal))
           return true;
       }
 
