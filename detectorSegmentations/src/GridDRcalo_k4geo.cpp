@@ -45,8 +45,8 @@ GridDRcalo_k4geo::GridDRcalo_k4geo(const BitFieldCoder* decoder) : Segmentation(
 }
 
 GridDRcalo_k4geo::~GridDRcalo_k4geo() {
-  if (fParamBarrel) delete fParamBarrel;
-  if (fParamEndcap) delete fParamEndcap;
+  delete fParamBarrel;
+  delete fParamEndcap;
 }
 
 Vector3D GridDRcalo_k4geo::position(const CellID& cID) const {
@@ -182,7 +182,7 @@ bool GridDRcalo_k4geo::IsCerenkov(const CellID& aCellID) const {
   VolumeID isCeren = static_cast<VolumeID>(_decoder->get(aCellID, fIsCerenkovId));
   return static_cast<bool>(isCeren);
 }
-
+// Identify if the fiber is Cerenkov or scintillation by its column and row number
 bool GridDRcalo_k4geo::IsCerenkov(int col, int row) const {
   bool isCeren = false;
   if ( col%2 == 1 ) { isCeren = !isCeren; }
