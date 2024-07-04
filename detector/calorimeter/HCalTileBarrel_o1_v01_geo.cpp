@@ -35,7 +35,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   xml_comp_t xSteelSupport = xmlDet.child(_Unicode(steel_support));
   double dSteelSupport = xSteelSupport.thickness();
 
-  lLog << MSG::DEBUG << "steel support thickness: " << dSteelSupport << " [cm]" << endmsg;
+  lLog << MSG::DEBUG << "steel support thickness (cm): " << dSteelSupport << endmsg;
   lLog << MSG::DEBUG << "steel support material:  " << xSteelSupport.materialStr() << endmsg;
 
   double sensitiveBarrelRmin = xDimensions.rmin() + xFacePlate.thickness() + space;
@@ -45,9 +45,9 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   // NOTE: This assumes that both have the same dimensions!
   Dimension sequenceDimensions(sequences[1].dimensions());
   double dzSequence = sequenceDimensions.dz();
-  lLog << MSG::DEBUG << "sequence thickness " << dzSequence << endmsg;
+  lLog << MSG::DEBUG << "sequence thickness (cm) " << dzSequence << endmsg;
 
-  // calculate the number of modules fitting in Z
+  // calculate the number of sequences fitting in Z
   unsigned int numSequencesZ = static_cast<unsigned>((2 * xDimensions.dz() - 2 * dZEndPlate - 2 * space) / dzSequence);
 
   // get all 'layer' children of the 'layers' tag
@@ -67,9 +67,9 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
       layerDepths.push_back(layerDimension.dr());
     }
   }
-  lLog << MSG::DEBUG << "retrieved number of layers:  " << numSequencesR
-       << " , which end up to a full module depth in rho of " << moduleDepth << endmsg;
-  lLog << MSG::DEBUG << "retrieved number of layers:  " << layerDepths.size() << endmsg;
+  lLog << MSG::DEBUG << "retrieved number of radial layers:  " << numSequencesR
+       << " , which end up to a full module depth in rho of " << moduleDepth << " cm" << endmsg;
+  lLog << MSG::DEBUG << "retrieved number of radial layers:  " << layerDepths.size() << endmsg;
 
   lLog << MSG::INFO << "constructing: " << numSequencesZ << " rings in Z, " << numSequencesR << " layers in Rho, "
        << numSequencesR * numSequencesZ << " tiles" << endmsg;
@@ -92,10 +92,11 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   tilesPerLayer.reserve(layerDepths.size());
 
   // top level det element representing whole hcal barrel
-  DetElement hCal(xmlDet.nameStr(), xmlDet.id());
+  DetElement caloDetElem(xmlDet.nameStr(), xmlDet.id());
 
   /// envelope shape
   dd4hep::Tube envelopeShape(xDimensions.rmin(), xDimensions.rmax(), xDimensions.dz());
+
   Volume envelopeVolume("HCalEnvelopeVolume", envelopeShape, lcdd.air());
   envelopeVolume.setVisAttributes(lcdd, xDimensions.visStr());
 
@@ -104,7 +105,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   Volume facePlateVol("HCalFacePlateVol", facePlateShape, lcdd.material(xFacePlate.materialStr()));
   facePlateVol.setVisAttributes(lcdd, xFacePlate.visStr());
   PlacedVolume placedFacePlate = envelopeVolume.placeVolume(facePlateVol);
-  DetElement facePlate_det(hCal, "HCalFacePlate", 0);
+  DetElement facePlate_det(caloDetElem, "HCalFacePlate", 0);
   facePlate_det.setPlacement(placedFacePlate);
 
   // Add structural support made of steel at both ends of HCal
@@ -112,12 +113,12 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   Volume endPlateVol("HCalEndPlateVol", endPlateShape, lcdd.material(xEndPlate.materialStr()));
   endPlateVol.setVisAttributes(lcdd, xEndPlate.visStr());
 
-  DetElement endPlatePos(hCal, "HCalEndPlatePos", 0);
+  DetElement endPlatePos(caloDetElem, "HCalEndPlatePos", 0);
   dd4hep::Position posOffset(0, 0, dzDetector - (dZEndPlate / 2));
   PlacedVolume placedEndPlatePos = envelopeVolume.placeVolume(endPlateVol, posOffset);
   endPlatePos.setPlacement(placedEndPlatePos);
 
-  DetElement endPlateNeg(hCal, "HCalEndPlateNeg", 1);
+  DetElement endPlateNeg(caloDetElem, "HCalEndPlateNeg", 1);
   dd4hep::Position negOffset(0, 0, -dzDetector + (dZEndPlate / 2));
   PlacedVolume placedEndPlateNeg = envelopeVolume.placeVolume(endPlateVol, negOffset);
   endPlateNeg.setPlacement(placedEndPlateNeg);
@@ -126,7 +127,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   Volume steelSupportVolume("HCalSteelSupportVol", supportShape, lcdd.material(xSteelSupport.materialStr()));
   steelSupportVolume.setVisAttributes(lcdd.invisible());
   PlacedVolume placedSupport = envelopeVolume.placeVolume(steelSupportVolume);
-  DetElement support(hCal, "HCalSteelSupport", 0);
+  DetElement support(caloDetElem, "HCalSteelSupport", 0);
   support.setPlacement(placedSupport);
 
   //  double sensitiveBarrelDz = dzDetector - dZEndPlate;
@@ -194,7 +195,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
 
   // Place det elements wihtin each other to recover volume positions later via cellID
   for (uint iLayer = 0; iLayer < numSequencesR; iLayer++) {
-    DetElement layerDet(hCal, dd4hep::xml::_toString(iLayer, "layer%d"), iLayer);
+    DetElement layerDet(caloDetElem, dd4hep::xml::_toString(iLayer, "layer%d"), iLayer);
     layerDet.setPlacement(layers[iLayer]);
 
     for (uint iSeq = 0; iSeq < seqInLayers[iLayer].size(); iSeq++) {
@@ -207,12 +208,39 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   }
 
   // Place envelope (or barrel) volume
-  Volume motherVol = lcdd.pickMotherVolume(hCal);
+  Volume motherVol = lcdd.pickMotherVolume(caloDetElem);
   motherVol.setVisAttributes(lcdd.invisible());
-  PlacedVolume placedHCal = motherVol.placeVolume(envelopeVolume);
-  placedHCal.addPhysVolID("system", hCal.id());
-  hCal.setPlacement(placedHCal);
-  return hCal;
+  PlacedVolume envelopePhysVol = motherVol.placeVolume(envelopeVolume);
+  envelopePhysVol.addPhysVolID("system", xmlDet.id());
+  caloDetElem.setPlacement(envelopePhysVol);
+
+  
+  // Create caloData object
+  auto caloData = new dd4hep::rec::LayeredCalorimeterData;
+  caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::BarrelLayout;
+  caloDetElem.addExtension<dd4hep::rec::LayeredCalorimeterData>(caloData);
+
+  caloData->extent[0] = sensitiveBarrelRmin;
+  caloData->extent[1] = sensitiveBarrelRmax; // or r_max ?
+  caloData->extent[2] = 0.;      // NN: for barrel detectors this is 0
+  caloData->extent[3] = dzDetector; 
+
+  dd4hep::rec::LayeredCalorimeterData::Layer caloLayer;
+
+  for (unsigned int idxLayer = 0; idxLayer < layerDepths.size(); ++idxLayer) {
+        const double difference_bet_r1r2 = layerDepths.at(idxLayer); 
+
+        caloLayer.distance                  = sensitiveBarrelRmin; // should this be always the radius of the first layer as it is now?  
+        caloLayer.sensitive_thickness       = difference_bet_r1r2; // not really sure what is this variable 
+        caloLayer.inner_thickness           = difference_bet_r1r2 / 2.0;
+        caloLayer.outer_thickness           = difference_bet_r1r2 / 2.0;
+
+        caloData->layers.push_back(caloLayer);
+  }
+
+
+  return caloDetElem;
+
 }
 } // namespace det
 
