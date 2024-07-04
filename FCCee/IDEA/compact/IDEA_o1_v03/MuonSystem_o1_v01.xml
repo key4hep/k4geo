@@ -29,8 +29,8 @@
        <constant name = "mRWELLYLength"                         value = "250*mm"/>
        <constant name = "mRWELLZLength"                         value = "250*mm"/>
 
-       <constant name = "microRWELLVolumeThick"                 value = "60*mm"/> <!--The thickness of the detector layer including the microRWELL material and the spacing between the layers too -->
-       <constant name = "microRWELLVolumeThickEndcap"           value = "120*mm"/>
+       <!--- <constant name = "microRWELLVolumeThick"                 value = "60*mm"/>  --> <!--The thickness of the detector layer including the microRWELL material and the spacing between the layers too -->
+       <!---<constant name = "microRWELLVolumeThickEndcap"           value = "120*mm"/>  -->
 
        <constant name = "overlapingY"                           value = "5*mm"/> <!-- the common distance between mRWELL chambers in Y direction -->
        <constant name = "overlapingZ"                           value = "5*mm"/> <!-- the common distance between mRWELL chambers in Z direction -->
@@ -53,7 +53,7 @@
   <readouts>
     <readout name="MuonSystemCollection">
      <segmentation type="CartesianGridYZ" grid_size_y="1.2*mm" grid_size_z="1.2*mm"/>   <!-- Depending on strip pitch 1.4 mm  -->
-     <id>system:5,layer:4,chamber:11,gasLayer:1,y:-10,z:-10</id> <!-- The bit field is divided into 2^5 systems(IDEA sub-detectors), 2^4 layers(Muon System layers"barrel and endcap layers"), 2^11 chambers(the number of muRWELL chambers in every layer), 2^1 gasLayer(number of sensitive layers inside every chambers), and 2^10 y&z strips in every sensitive layer-->
+     <id>system:5,layer:4,chamber:15,gasLayer:1,y:-10,z:-10</id> <!-- The bit field is divided into 2^5 systems(IDEA sub-detectors), 2^4 layers(Muon System layers"barrel and endcap layers"), 2^11 chambers(the number of muRWELL chambers in every layer), 2^1 gasLayer(number of sensitive layers inside every chambers), and 2^10 y&z strips in every sensitive layer-->
     </readout>
 
   </readouts>   
@@ -63,17 +63,15 @@
   <detectors>
 
     <!-- mRWELL envelope -->
-    <detector name="Barrel_layer1" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_Barrel_1" readout="MuonSystemCollection">
-      <envelope rmin="BarrelFirstLayerRadius" rmax="BarrelSecondLayerRadius" z="BarrelLength"  z_offset="0*mm" material="Air"/>
+    <detector name="Muon-System" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_Barrel_1" readout="MuonSystemCollection">
+      <envelope rmin="70" rmax="600" z="1200"  z_offset="0*mm" material="Air"/>
       <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
       <sensitive type="tracker"/>
 
-      <!-- Specify the detector parameters and the overlap /// if you want exclude any component, e.g: endcap, just put endcapDetectorParameters=0   // radius is put in the middle, so its not the inner neither the outer // the endcap detector layers z-offset values have to be changed.. now the layer is thicker = 12 cm -->
+      <!-- Specify the detector parameters and the overlap /// if you want exclude any component, e.g: endcap, just put endcapDetectorParameters=0   // radius is put in the middle, so its not the inner neither the outer -->
       <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
-      <barrelDetectorParameters numBarrelDetectorLayers ="1" detectorVolumeThickness="microRWELLVolumeThick" radius="BarrelFirstLayerRadius+microRWELLVolumeThick/2.0" barrelLength="BarrelLength" />
-      <barrelRadiatorParameters numBarrelRadiators="1" barrelRadiatorThickness="YokeThickness" barrelRadiatorLayerRadius="BarrelFirstYokeRadius+YokeThickness/2.0" material="G4_Fe"/> 
-      <endcapRadiatorParameters numEndcapRadiators="0" endcapRadiatorThickness="YokeThickness"   endcapRadiatorLayerInnerRadius="EndcapLayersInnerRadius" endcapRadiatorLayerOuterRadius="EndcapLayersOuterRadius" endcapRadiatorZOffset="EndcapFirstYokeZOffset+YokeThickness/2.0" material="G4_Fe"/>
-      <endcapDetectorParameters numEndcapDetectorLayers="0" endcapDetectorVolumeThickness="microRWELLVolumeThickEndcap" endcapDetectorLayerInnerRadius="EndcapLayersInnerRadius" endcapDetectorLayerOuterRadius="EndcapLayersOuterRadius" endcapDetectorZOffset="EndcapFirstLayerZOffset+microRWELLVolumeThickEndcap/2.0" />
+      <Barrel numDetectorLayers ="3"  rmin="BarrelFirstLayerRadius" length="BarrelLength" numYokes="2" yoke_Thickness="YokeThickness" yoke_Material="G4_Fe"/> 
+      <Endcap numDetectorLayers="3"  rmin="EndcapLayersInnerRadius" rmax="EndcapLayersOuterRadius" z_offset="EndcapFirstLayerZOffset" numYokes="2" yoke_Thickness="YokeThickness" yoke_Material="G4_Fe" />
 
       <!-- mRWELL chamber -->
       <layer x="G10_FR4Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="G10_FR4" vis="MuonVis" />
@@ -88,234 +86,7 @@
       <layer x="SiThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick+CuThick+SiThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Si" vis="MuonVis" />
  
     </detector>
-
-
-
-   <detector name="Barrel_layer2" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_Barrel_2" readout="MuonSystemCollection">
-      <envelope rmin="BarrelSecondLayerRadius" rmax="BarrelThirdLayerRadius" z="BarrelLength"  z_offset="0*mm" material="Air"/>
-      <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
-      <sensitive type="tracker"/>
-
-      <!-- Specify the detector parameters and the overlap -->
-      <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
-      <barrelDetectorParameters numBarrelDetectorLayers ="1" detectorVolumeThickness="microRWELLVolumeThick" radius="BarrelSecondLayerRadius+microRWELLVolumeThick/2.0" barrelLength="BarrelLength" /> 
-      <barrelRadiatorParameters numBarrelRadiators="1" barrelRadiatorThickness="YokeThickness" barrelRadiatorLayerRadius="BarrelSecondYokeRadius+YokeThickness/2.0" material="G4_Fe"/> 
-      <endcapRadiatorParameters numEndcapRadiators="0" endcapRadiatorThickness="YokeThickness"   endcapRadiatorLayerInnerRadius="EndcapLayersInnerRadius" endcapRadiatorLayerOuterRadius="EndcapLayersOuterRadius" endcapRadiatorZOffset="EndcapSecondYokeZOffset+YokeThickness/2.0" material="G4_Fe"/>
-      <endcapDetectorParameters numEndcapDetectorLayers="0" endcapDetectorVolumeThickness="microRWELLVolumeThickEndcap" endcapDetectorLayerInnerRadius="EndcapLayersInnerRadius" endcapDetectorLayerOuterRadius="EndcapLayersOuterRadius" endcapDetectorZOffset="EndcapSecondLayerZOffset+microRWELLVolumeThickEndcap/2.0" />
-
-      <!-- mRWELL chamber -->
-      <layer x="G10_FR4Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="G10_FR4" vis="MuonVis" />
-      <layer x="CuThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="GasLayerThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick/2.0" y_offset="0*mm" z_offset="0*mm" material="ARCO2CF4" sensitive="true" vis="MuonVis" />
-      <layer x="Cu2Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="KaptonThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick/2.0" y_offset="0*mm" z_offset="0*mm" material="Kapton" vis="MuonVis" />
-      <layer x="CarnonFiberThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick/2.0" y_offset="0*mm" z_offset="0*mm" material="CarbonFiber" vis="MuonVis" />
-      <layer x="CuThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="CarbonFiber2Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="CarbonFiber" vis="MuonVis" />
-      <layer x="CuThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick+CuThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="SiThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick+CuThick+SiThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Si" vis="MuonVis" />
- 
-    </detector>
-
-
-
-
-    <detector name="Barrel_layer3" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_Barrel_3" readout="MuonSystemCollection">
-      <envelope rmin="BarrelThirdLayerRadius" rmax="BarrelThirdLayerRadius+ 2 * microRWELLVolumeThick" z="BarrelThirdLayerLength"  z_offset="0*mm" material="Air"/>   
-      <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
-     <sensitive type="tracker"/>
-
-      <!-- Specify the detector parameters and the overlap -->
-      <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
-      <barrelDetectorParameters numBarrelDetectorLayers ="1" detectorVolumeThickness="microRWELLVolumeThick" radius="BarrelThirdLayerRadius+microRWELLVolumeThick/2.0" barrelLength="BarrelThirdLayerLength" /> 
-      <barrelRadiatorParameters numBarrelRadiators="0" barrelRadiatorThickness="YokeThickness" barrelRadiatorLayerRadius="0.0*mm" material="G4_Fe"/> 
-      <endcapRadiatorParameters numEndcapRadiators="0" endcapRadiatorThickness="YokeThickness"   endcapRadiatorLayerInnerRadius="EndcapLayersInnerRadius" endcapRadiatorLayerOuterRadius="EndcapLayersOuterRadius" endcapRadiatorZOffset="0.0*mm" material="G4_Fe"/>
-      <endcapDetectorParameters numEndcapDetectorLayers="0" endcapDetectorVolumeThickness="microRWELLVolumeThickEndcap" endcapDetectorLayerInnerRadius="EndcapLayersInnerRadius" endcapDetectorLayerOuterRadius="EndcapLayersOuterRadius" endcapDetectorZOffset="EndcapThirdLayerZOffset+microRWELLVolumeThickEndcap/2.0"/>
-
-      <!-- mRWELL chamber -->
-      <layer x="G10_FR4Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="G10_FR4" vis="MuonVis" />
-      <layer x="CuThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="GasLayerThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick/2.0" y_offset="0*mm" z_offset="0*mm" material="ARCO2CF4" sensitive="true" vis="MuonVis" />
-      <layer x="Cu2Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="KaptonThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick/2.0" y_offset="0*mm" z_offset="0*mm" material="Kapton" vis="MuonVis" />
-      <layer x="CarnonFiberThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick/2.0" y_offset="0*mm" z_offset="0*mm" material="CarbonFiber" vis="MuonVis" />
-      <layer x="CuThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="CarbonFiber2Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="CarbonFiber" vis="MuonVis" />
-      <layer x="CuThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick+CuThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="SiThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick+CuThick+SiThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Si" vis="MuonVis" />
- 
-    </detector>
-
-
-
-     <!--  Just for the negative endcap   //                  /////////////////  -->
-
-    <!-- mRWELL envelope -->
-    <detector name="NegativeEndcap_layer1" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_negEndcap_1" readout="MuonSystemCollection">
-      <envelope rmin="EndcapLayersInnerRadius" rmax="EndcapLayersOuterRadius" z="YokeThickness+microRWELLVolumeThickEndcap"  z_offset="-471*cm" material="Air"/>   
-      <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
-      <sensitive type="tracker"/>
-
-      <!-- Specify the detector parameters and the overlap  // radius is put in the middle, so its not the inner neither the outer // the endcap detector layers z-offset values have to be changed.. now the layer is thicker = 12 cm -->
-      <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
-      <barrelDetectorParameters numBarrelDetectorLayers ="0" detectorVolumeThickness="microRWELLVolumeThick" radius="0.0*mm" barrelLength="BarrelLength" />
-      <barrelRadiatorParameters numBarrelRadiators="0" barrelRadiatorThickness="YokeThickness" barrelRadiatorLayerRadius="0.0*mm" material="G4_Fe"/> 
-      <endcapRadiatorParameters numEndcapRadiators="2" endcapRadiatorThickness="YokeThickness"   endcapRadiatorLayerInnerRadius="EndcapLayersInnerRadius" endcapRadiatorLayerOuterRadius="EndcapLayersOuterRadius" endcapRadiatorZOffset="-6*cm" material="G4_Fe"/>
-      <endcapDetectorParameters numEndcapDetectorLayers="3" endcapDetectorVolumeThickness="microRWELLVolumeThickEndcap" endcapDetectorLayerInnerRadius="EndcapLayersInnerRadius" endcapDetectorLayerOuterRadius="EndcapLayersOuterRadius" endcapDetectorZOffset="15*cm" />
-
-      <!-- mRWELL chamber -->
-      <layer x="G10_FR4Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="G10_FR4" vis="MuonVis" />
-      <layer x="CuThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="GasLayerThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick/2.0" y_offset="0*mm" z_offset="0*mm" material="ARCO2CF4" sensitive="true" vis="MuonVis" />
-      <layer x="Cu2Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="KaptonThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick/2.0" y_offset="0*mm" z_offset="0*mm" material="Kapton" vis="MuonVis" />
-      <layer x="CarnonFiberThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick/2.0" y_offset="0*mm" z_offset="0*mm" material="CarbonFiber" vis="MuonVis" />
-      <layer x="CuThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="CarbonFiber2Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="CarbonFiber" vis="MuonVis" />
-      <layer x="CuThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick+CuThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="SiThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick+CuThick+SiThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Si" vis="MuonVis" />
- 
-    </detector>
-
-    <detector name="NegativeEndcap_layer2" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_negEndcap_2" readout="MuonSystemCollection">
-      <envelope rmin="EndcapLayersInnerRadius" rmax="EndcapLayersOuterRadius" z="YokeThickness+microRWELLVolumeThickEndcap" z_offset="-513*cm" material="Air"/>
-      <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
-      <sensitive type="tracker"/>
-
-      <!-- Specify the detector parameters and the overlap -->
-      <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
-      <barrelDetectorParameters numBarrelDetectorLayers ="0" detectorVolumeThickness="microRWELLVolumeThick" radius="0.0*mm" barrelLength="BarrelLength" /> 
-      <barrelRadiatorParameters numBarrelRadiators="0" barrelRadiatorThickness="YokeThickness" barrelRadiatorLayerRadius="0.0*mm" material="G4_Fe"/> 
-      <endcapRadiatorParameters numEndcapRadiators="2" endcapRadiatorThickness="YokeThickness"   endcapRadiatorLayerInnerRadius="EndcapLayersInnerRadius" endcapRadiatorLayerOuterRadius="EndcapLayersOuterRadius" endcapRadiatorZOffset="-6*cm" material="G4_Fe"/>
-      <endcapDetectorParameters numEndcapDetectorLayers="3" endcapDetectorVolumeThickness="microRWELLVolumeThickEndcap" endcapDetectorLayerInnerRadius="EndcapLayersInnerRadius" endcapDetectorLayerOuterRadius="EndcapLayersOuterRadius" endcapDetectorZOffset="15*cm" />
-
-      <!-- mRWELL chamber -->
-      <layer x="G10_FR4Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="G10_FR4" vis="MuonVis" />
-      <layer x="CuThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="GasLayerThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick/2.0" y_offset="0*mm" z_offset="0*mm" material="ARCO2CF4" sensitive="true" vis="MuonVis" />
-      <layer x="Cu2Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="KaptonThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick/2.0" y_offset="0*mm" z_offset="0*mm" material="Kapton" vis="MuonVis" />
-      <layer x="CarnonFiberThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick/2.0" y_offset="0*mm" z_offset="0*mm" material="CarbonFiber" vis="MuonVis" />
-      <layer x="CuThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="CarbonFiber2Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="CarbonFiber" vis="MuonVis" />
-      <layer x="CuThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick+CuThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="SiThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick+CuThick+SiThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Si" vis="MuonVis" />
- 
-    </detector>
-
-    <detector name="NegativeEndcap_layer3" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_negEndcap_3" readout="MuonSystemCollection">
-      <envelope rmin="EndcapLayersInnerRadius" rmax="EndcapLayersOuterRadius" z="microRWELLVolumeThickEndcap"  z_offset="-540*cm" material="Air"/>
-      <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
-      <sensitive type="tracker"/>
-
-      <!-- Specify the detector parameters and the overlap -->
-      <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
-      <barrelDetectorParameters numBarrelDetectorLayers ="0" detectorVolumeThickness="microRWELLVolumeThick" radius="0.0*mm" barrelLength="BarrelThirdLayerLength" /> 
-      <barrelRadiatorParameters numBarrelRadiators="0" barrelRadiatorThickness="YokeThickness" barrelRadiatorLayerRadius="0.0*mm" material="G4_Fe"/> 
-      <endcapRadiatorParameters numEndcapRadiators="0" endcapRadiatorThickness="YokeThickness"   endcapRadiatorLayerInnerRadius="EndcapLayersInnerRadius" endcapRadiatorLayerOuterRadius="EndcapLayersOuterRadius" endcapRadiatorZOffset="0.0*mm" material="G4_Fe"/>
-      <endcapDetectorParameters numEndcapDetectorLayers="3" endcapDetectorVolumeThickness="microRWELLVolumeThickEndcap" endcapDetectorLayerInnerRadius="EndcapLayersInnerRadius" endcapDetectorLayerOuterRadius="EndcapLayersOuterRadius" endcapDetectorZOffset="0.0*mm" />
-
-      <!-- mRWELL chamber -->
-      <layer x="G10_FR4Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="G10_FR4" vis="MuonVis" />
-      <layer x="CuThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="GasLayerThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick/2.0" y_offset="0*mm" z_offset="0*mm" material="ARCO2CF4" sensitive="true" vis="MuonVis" />
-      <layer x="Cu2Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="KaptonThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick/2.0" y_offset="0*mm" z_offset="0*mm" material="Kapton" vis="MuonVis" />
-      <layer x="CarnonFiberThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick/2.0" y_offset="0*mm" z_offset="0*mm" material="CarbonFiber" vis="MuonVis" />
-      <layer x="CuThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="CarbonFiber2Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="CarbonFiber" vis="MuonVis" />
-      <layer x="CuThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick+CuThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="SiThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick+CuThick+SiThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Si" vis="MuonVis" />
- 
-    </detector>
-
-
-
-     <!--  Just for the positive endcap   //                  /////////////////  -->
-
-    <!-- mRWELL envelope -->
-    <detector name="PositiveEndcap_layer1" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_posEndcap_1" readout="MuonSystemCollection">
-      <envelope rmin="EndcapLayersInnerRadius" rmax="EndcapLayersOuterRadius" z="YokeThickness+microRWELLVolumeThickEndcap"  z_offset="471*cm" material="Air"/>
-      <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
-      <sensitive type="tracker"/>
-
-      <!-- Specify the detector parameters and the overlap  // radius is put in the middle, so its not the inner neither the outer // the endcap detector layers z-offset values have to be changed.. now the layer is thicker = 12 cm -->
-      <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
-      <barrelDetectorParameters numBarrelDetectorLayers ="0" detectorVolumeThickness="microRWELLVolumeThick" radius="0.0*mm" barrelLength="BarrelLength" />
-      <barrelRadiatorParameters numBarrelRadiators="0" barrelRadiatorThickness="YokeThickness" barrelRadiatorLayerRadius="0.0*mm" material="G4_Fe"/> 
-      <endcapRadiatorParameters numEndcapRadiators="2" endcapRadiatorThickness="YokeThickness"   endcapRadiatorLayerInnerRadius="EndcapLayersInnerRadius" endcapRadiatorLayerOuterRadius="EndcapLayersOuterRadius" endcapRadiatorZOffset="6*cm" material="G4_Fe"/>
-      <endcapDetectorParameters numEndcapDetectorLayers="3" endcapDetectorVolumeThickness="microRWELLVolumeThickEndcap" endcapDetectorLayerInnerRadius="EndcapLayersInnerRadius" endcapDetectorLayerOuterRadius="EndcapLayersOuterRadius" endcapDetectorZOffset="-15*cm" />
-
-      <!-- mRWELL chamber -->
-      <layer x="G10_FR4Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="G10_FR4" vis="MuonVis" />
-      <layer x="CuThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="GasLayerThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick/2.0" y_offset="0*mm" z_offset="0*mm" material="ARCO2CF4" sensitive="true" vis="MuonVis" />
-      <layer x="Cu2Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="KaptonThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick/2.0" y_offset="0*mm" z_offset="0*mm" material="Kapton" vis="MuonVis" />
-      <layer x="CarnonFiberThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick/2.0" y_offset="0*mm" z_offset="0*mm" material="CarbonFiber" vis="MuonVis" />
-      <layer x="CuThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="CarbonFiber2Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="CarbonFiber" vis="MuonVis" />
-      <layer x="CuThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick+CuThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="SiThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick+CuThick+SiThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Si" vis="MuonVis" />
- 
-    </detector>
-
-    <detector name="PositiveEndcap_layer2" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_posEndcap_2" readout="MuonSystemCollection">
-      <envelope rmin="EndcapLayersInnerRadius" rmax="EndcapLayersOuterRadius" z="YokeThickness+microRWELLVolumeThickEndcap"  z_offset="513*cm" material="Air"/>
-      <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
-      <sensitive type="tracker"/>
-
-      <!-- Specify the detector parameters and the overlap -->
-      <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
-      <barrelDetectorParameters numBarrelDetectorLayers ="0" detectorVolumeThickness="microRWELLVolumeThick" radius="0.0*mm" barrelLength="BarrelLength" /> 
-      <barrelRadiatorParameters numBarrelRadiators="0" barrelRadiatorThickness="YokeThickness" barrelRadiatorLayerRadius="0.0*mm" material="G4_Fe"/> 
-      <endcapRadiatorParameters numEndcapRadiators="2" endcapRadiatorThickness="YokeThickness"   endcapRadiatorLayerInnerRadius="EndcapLayersInnerRadius" endcapRadiatorLayerOuterRadius="EndcapLayersOuterRadius" endcapRadiatorZOffset="6*cm" material="G4_Fe"/>
-      <endcapDetectorParameters numEndcapDetectorLayers="3" endcapDetectorVolumeThickness="microRWELLVolumeThickEndcap" endcapDetectorLayerInnerRadius="EndcapLayersInnerRadius" endcapDetectorLayerOuterRadius="EndcapLayersOuterRadius" endcapDetectorZOffset="-15*cm" />
-
-      <!-- mRWELL chamber -->
-      <layer x="G10_FR4Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="G10_FR4" vis="MuonVis" />
-      <layer x="CuThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="GasLayerThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick/2.0" y_offset="0*mm" z_offset="0*mm" material="ARCO2CF4" sensitive="true" vis="MuonVis" />
-      <layer x="Cu2Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="KaptonThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick/2.0" y_offset="0*mm" z_offset="0*mm" material="Kapton" vis="MuonVis" />
-      <layer x="CarnonFiberThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick/2.0" y_offset="0*mm" z_offset="0*mm" material="CarbonFiber" vis="MuonVis" />
-      <layer x="CuThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="CarbonFiber2Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="CarbonFiber" vis="MuonVis" />
-      <layer x="CuThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick+CuThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="SiThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick+CuThick+SiThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Si" vis="MuonVis" />
- 
-    </detector>
-
-    <detector name="PositiveEndcap_layer3" type="muonSystemMuRWELL_o1_v01"  vis="MuonVisEnv" id="DetID_muonSystem_posEndcap_3" readout="MuonSystemCollection">
-      <envelope rmin="EndcapLayersInnerRadius" rmax="EndcapLayersOuterRadius" z="microRWELLVolumeThickEndcap"  z_offset="540*cm" material="Air"/>
-      <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
-      <sensitive type="tracker"/>
-
-      <!-- Specify the detector parameters and the overlap -->
-      <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
-      <barrelDetectorParameters numBarrelDetectorLayers ="0" detectorVolumeThickness="microRWELLVolumeThick" radius="0.0*mm" barrelLength="BarrelThirdLayerLength" /> 
-      <barrelRadiatorParameters numBarrelRadiators="0" barrelRadiatorThickness="YokeThickness" barrelRadiatorLayerRadius="0.0*mm" material="G4_Fe"/> 
-      <endcapRadiatorParameters numEndcapRadiators="0" endcapRadiatorThickness="YokeThickness"   endcapRadiatorLayerInnerRadius="EndcapLayersInnerRadius" endcapRadiatorLayerOuterRadius="EndcapLayersOuterRadius" endcapRadiatorZOffset="0.0*mm" material="G4_Fe"/>
-      <endcapDetectorParameters numEndcapDetectorLayers="3" endcapDetectorVolumeThickness="microRWELLVolumeThickEndcap" endcapDetectorLayerInnerRadius="EndcapLayersInnerRadius" endcapDetectorLayerOuterRadius="EndcapLayersOuterRadius" endcapDetectorZOffset="0*mm" />
-
-      <!-- mRWELL chamber -->
-      <layer x="G10_FR4Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="G10_FR4" vis="MuonVis" />
-      <layer x="CuThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="GasLayerThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick/2.0" y_offset="0*mm" z_offset="0*mm" material="ARCO2CF4" sensitive="true" vis="MuonVis" />
-      <layer x="Cu2Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="KaptonThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick/2.0" y_offset="0*mm" z_offset="0*mm" material="Kapton" vis="MuonVis" />
-      <layer x="CarnonFiberThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick/2.0" y_offset="0*mm" z_offset="0*mm" material="CarbonFiber" vis="MuonVis" />
-      <layer x="CuThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="CarbonFiber2Thick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick/2.0" y_offset="0*mm" z_offset="0*mm" material="CarbonFiber" vis="MuonVis" />
-      <layer x="CuThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick+CuThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Cu"  vis="MuonVis" />
-      <layer x="SiThick/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="-mRWELLTotalThickness/2.0+G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick+CuThick+SiThick/2.0" y_offset="0*mm" z_offset="0*mm" material="G4_Si" vis="MuonVis" />
- 
-    </detector>
-
-
 
   </detectors>
-
-
 
 </lccdd>
