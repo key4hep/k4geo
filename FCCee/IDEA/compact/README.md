@@ -9,10 +9,10 @@ IDEA version picked from the latest version in FCCDetectors repo
 IDEA_o1_v02
 ------------
 
-Based on o1_v01 but with a detailed description of the vertex detector, drift chamber and muon system, a place holder solenoid and the endplate absorber. Missing: SiWrapper, calorimeter.
+Based on o1_v01 but with a detailed description of the vertex detector, drift chamber, a place holder solenoid and the endplate absorber. Missing: SiWrapper, calorimeter.
 
 IDEA_o1_v03
 ------------
 
-Based on o1_v02 but replacing the drift chamber (o1, v01) for the lightweight implementation based on twisted tubes (o1, v02). Production threshold and step limit physics have to be tuned
+Based on o1_v02 but replacing the drift chamber (o1, v01) for the lightweight implementation based on twisted tubes (o1, v02), and Add a detailed version of the muon system. Production threshold and step limit physics have to be tuned
 

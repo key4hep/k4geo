@@ -93,6 +93,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
   double endcapDetectorSideBoxLength = 2 * (endcapDetectorLayerOuterRadius) * std::tan(shapeAngle_radians);
   double endcapDetectorSideBoxYLength = 2 * dimensions.z();
 
+  // endcapRadiatorSideLength and endcapRadiatorSideLength2 are the lengths of the parallel sides of the trapezoid.
   double endcapRadiatorSideLength = 2 * (endcapRadiatorLayerInnerRadius) * std::tan(shapeAngle_radians); //it is also the same for the endcap detector layers.
   double endcapRadiatorSideLength2 = 2 * (endcapRadiatorLayerOuterRadius) * std::tan(shapeAngle_radians); //it is also the same for the endcap detector layers.
 
@@ -170,6 +171,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
   std::string barrelDetectorName = dd4hep::xml::_toString(numBarrelLayer +1, "MS-BarrelDetectorLayer%d");
   dd4hep::Volume BarrelDetectorLayerVolume(barrelDetectorName, BarrelDetectorLayer, mat);
 
+  // sideLength and sideLength2 are the lengths of the parallel sides of the trapezoid.
   double sideLength = 2 * (barrelLayerRMid - detectorVolumeThickness/2.0) * std::tan(shapeAngle_radians);
   double sideLength2 = 2 * (barrelLayerRMid + detectorVolumeThickness/2.0) * std::tan(shapeAngle_radians);  
   double sideEnvX = detectorVolumeThickness/2.0;

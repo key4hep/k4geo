@@ -36,7 +36,7 @@
   <readouts>
     <readout name="MuonSystemCollection">
      <segmentation type="CartesianGridYZ" grid_size_y="1.2*mm" grid_size_z="1.2*mm"/>   <!-- Depending on strip pitch 1.4 mm  -->
-     <id>system:5,type:2,layer:4,chamber:15,slice:1,y:-10,z:-10</id> <!-- The bit field is divided into 2^5 systems(IDEA sub-detectors), 2^4 layers(Muon System layers"barrel and endcap layers"), 2^11 chambers(the number of muRWELL chambers in every layer), 2^1 slice(number of sensitive layers inside every chambers), and 2^10 y&z strips in every sensitive layer-->
+     <id>system:5,type:2,layer:4,chamber:15,slice:1,y:-10,z:-10</id> <!-- The bit field is divided into 2^5 systems(IDEA sub-detectors), 2^2 types(Barrel Muon System, positive endcap, and negative endcap"), 2^4 layers(number of layers in barrel for example) ,2^15 chambers(the number of muRWELL chambers in every layer), 2^1 slice(number of sensitive layers inside every chambers), and 2^10 y&z strips in every sensitive layer-->
   </readout>
   </readouts>   
 
@@ -46,7 +46,7 @@
       <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
       <sensitive type="tracker"/>
 
-      <!-- Specify the detector parameters and the overlap /// if you want exclude any component, e.g: endcap, just put endcapDetectorParameters=0   // radius is put in the middle, so its not the inner neither the outer -->
+      <!-- Specify the detector parameters and the overlap /// if you want exclude any component, e.g: endcap, just put endcapDetectorLayerss=0 in the Endcap Entry  // radius is put in the middle, so its not the inner neither the outer -->
       <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
       <Barrel numDetectorLayers ="3"  rmin="BarrelFirstLayerRadius" length="BarrelLength" numYokes="2" yoke_Thickness="YokeThickness" yoke_Material="G4_Fe"/> 
       <Endcap numDetectorLayers="3"  rmin="EndcapLayersInnerRadius" rmax="EndcapLayersOuterRadius" z_offset="EndcapFirstLayerZOffset" numYokes="2" yoke_Thickness="YokeThickness" yoke_Material="G4_Fe" />
