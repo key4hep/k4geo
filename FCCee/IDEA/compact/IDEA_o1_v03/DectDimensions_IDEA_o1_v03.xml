@@ -53,15 +53,7 @@
     <constant name="DetID_SiWrapper_Barrel"       value=" 23"/>
     <constant name="DetID_SiWrapper_Disks"       value=" 24"/>
 
-    <constant name="DetID_muonSystem_Barrel_1"       value=" 25"/>
-    <constant name="DetID_muonSystem_Barrel_2"       value=" 26"/>
-    <constant name="DetID_muonSystem_Barrel_3"       value=" 27"/> 
-    <constant name="DetID_muonSystem_posEndcap_1"       value=" 28"/>
-    <constant name="DetID_muonSystem_posEndcap_2"       value=" 29"/>
-    <constant name="DetID_muonSystem_posEndcap_3"       value=" 30"/>   
-    <constant name="DetID_muonSystem_negEndcap_1"       value=" 31"/>
-    <constant name="DetID_muonSystem_negEndcap_2"       value=" 32"/>
-    <constant name="DetID_muonSystem_negEndcap_3"       value=" 33"/>      
+    <constant name="DetID_muonSystem"       value=" 25"/>
 
         <!-- BPW: Beam Pipe Width -->
     <constant name="BPWWall"       value="0.35*mm" />
@@ -231,21 +223,9 @@
 
                                                 <!-- Barrel -->
     <constant name = "BarrelFirstLayerRadius"                     value = "4500*mm"/>  <!-- 1st Barrel microRWELL detector inner radius-> its the start point of thicknesses of the microRWELL material. In our case the shape is Polygon, so the radius is in the middle of the polygon side. -->
-    <constant name = "BarrelFirstYokeRadius"                      value = "4620*mm"/> <!-- 1st Barrel Return-Yoke inner radius -->
-    <constant name = "BarrelSecondLayerRadius"                    value = "4920*mm"/>
-    <constant name = "BarrelSecondYokeRadius"                     value = "5040*mm"/>
-    <constant name = "BarrelThirdLayerRadius"                     value = "5340*mm"/>
-
-    <constant name = "BarrelLength"                               value = "9000*mm"/> <!--Barrel detector length, in the description of the detctor we always use the half-length -->
-    <constant name = "BarrelThirdLayerLength"                     value = "10920*mm"/> <!-- The third layer is longer than the other layers to cover the endcap areas (the previous value = 10520*mm)-->
-      
+    <constant name = "BarrelLength"                               value = "9000*mm"/> <!--Barrel detector length, in the description of the detctor we always use the half-length -->      
                                                 <!-- Endcap -->
     <constant name = "EndcapFirstLayerZOffset"                     value = "4500*mm"/>  <!-- 1st Endcap microRWELL detector inner ZOffset-> its the start point of thicknesses of the microRWELL volume -->
-    <constant name = "EndcapFirstYokeZOffset"                      value = "4620*mm"/> <!-- 1st Endcap Return-Yoke inner ZOffset -> its the start point of thicknesses of the yoke volume -->
-    <constant name = "EndcapSecondLayerZOffset"                    value = "4920*mm"/>
-    <constant name = "EndcapSecondYokeZOffset"                     value = "5040*mm"/>
-    <constant name = "EndcapThirdLayerZOffset"                     value = "5340*mm"/>
-
     <constant name = "EndcapLayersInnerRadius"                    value = "700*mm"/> <!--Endcap detector inner radius, its the start point of thicknesses of the detector material ** it applies for both detector layers and yoke-->
     <constant name = "EndcapLayersOuterRadius"                    value = "5320*mm"/> <!--Endcap detector outer radius, its the end point of thicknesses of the detector material ** it applies for both detector layers and yoke-->
       
@@ -299,6 +279,16 @@
     <vis name="GlueVis"       alpha="1.0" r="1.0"     g="0.75"  b="0.79"  showDaughters="true"  visible="true"/>
     <vis name="RohacellVis"   alpha="1.0" r="1.0"     g="1.0"   b="1.0"   showDaughters="true"  visible="true"/>
     <vis name="AirVis"        alpha="0.1" r="0.1"     g="0.1"   b="1.0"   showDaughters="false" visible="true"/>
+    <vis name="yoke_vis" r="255/256" g="0/256" b="0/256" alpha="1.0" showDaughters="true" visible="true" />
+    <vis name="no_vis" showDaughters="true" visible="false" />
+    <vis name="G10_FR4_vis" r="0.6" g="0.4" b="0.2" alpha="1.0" showDaughters="true" visible="true" />
+    <vis name="Cu_vis" r="0.8" g="0.5" b="0.2" alpha="1.0" showDaughters="true" visible="true" />
+    <vis name="GasLayer_vis" r="0.0" g="0.8" b="0.2" alpha="1.0" showDaughters="true" visible="true" />
+    <vis name="Kapton_vis" r="1.0" g="0.6" b="0.0" alpha="1.0" showDaughters="true" visible="true" />
+    <vis name="CarbonFiber_vis" r="0.4" g="0.4" b="0.4" alpha="1.0" showDaughters="true" visible="true" />
+    <vis name="Si_vis" r="0.6" g="0.6" b="0.6" alpha="1.0" showDaughters="true" visible="true" />
+    <vis name="Sensitive_vis" r="0.0" g="0.0" b="1.0" alpha="1.0" showDaughters="true" visible="true" />
+
   </display>
 
 </lccdd>
