@@ -47,11 +47,6 @@
   <!-- Import silicon wrapper -->
   <!-- <include ref="SiliconWrapper_o1_v01.xml"/> -->
 
-  <!-- Import muon system -->
-  <include ref="MuonSystem_o1_v01.xml"/>
-
-  
-
   <!-- Import solenoid -->
   <include ref="Solenoid_o1_v01.xml"/>
 
