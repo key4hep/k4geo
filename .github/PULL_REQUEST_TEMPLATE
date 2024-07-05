@@ -1,3 +1,4 @@
+<!--
 To ease the review process, please consider the following before to open the pull request:
 - is your code well commented?
 - did you update the relevant README(s)? See e.g. https://github.com/key4hep/k4geo/blob/main/detector/calorimeter/README.md or https://github.com/key4hep/k4geo/blob/main/FCCee/IDEA/compact/README.md
@@ -5,7 +6,8 @@ To ease the review process, please consider the following before to open the pul
 - is your PR branch up to date with origin 'main'?
 - are you not adding/modifying files that should not have been added/modified (or at least, not in this PR)?
 
-If your modifications are compliant with the above: delete thoses lines from the PR description, populate the release note text below, and open the PR!
+If your modifications are compliant with the above, populate the release note text below, and open the PR!
+-->
 
 BEGINRELEASENOTES
 - Thank you for writing the text to appear in the release notes. It will show up
