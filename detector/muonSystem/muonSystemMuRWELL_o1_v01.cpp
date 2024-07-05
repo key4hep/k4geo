@@ -5,7 +5,6 @@ mahmoud.ali@cern.ch
 Factory for IDEA muon system
 Expected xml structure (the 'sensitive' keyword is optional and defaults to false):
 <detector type="muonSystemMuRWELL_o1_v01" ...>
-  <envelope rmin="..." rmax="..." z="..."  z_offset="..." material="..."/>  <!-- dimensions of the whole detector envelope-->
   <dimensions x="..." y="..." z="..." z_offset="..." x_offset="..." y_offset="...">  <!--  dimension of the local chamber envelope. x: the half length of the thickness of the chamber, y&z: the half length of the 2D plane dimensions of the chambers-->
   <sensitive type="tracker"/>
 
@@ -39,12 +38,12 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
   dd4hep::xml::DetElement xmlDet = static_cast<dd4hep::xml::DetElement>(xmlElement);
   std::string name = xmlDet.nameStr();
   dd4hep::DetElement detElement(name, xmlDet.id());
+  dd4hep::Material mat = lcdd.material("Air");
   dd4hep::Volume experimentalHall = lcdd.pickMotherVolume(detElement);
   
-
   xml_comp_t dimensions(xmlDet.dimensions());
-  dd4hep::xml::Dimension envelopeDimensions(xmlDet.envelope());
 
+  // ----------------------------------------------------------------------------------------------------
   //                         --- General parameters ---
 
   auto generalParameters = xmlElement.child(_Unicode(generalParameters));
@@ -52,15 +51,6 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
   double overlapY = generalParameters.attr<double>("overlapY");
   double overlapZ = generalParameters.attr<double>("overlapZ");
   double clearance = generalParameters.attr<double>("clearance"); // it's a small distance to be used to avoid overlapping between the different volumes ~ 1 mm
-
-  //                            --------
-
-  dd4hep::PolyhedraRegular  detectorEnvelope(numSides, envelopeDimensions.rmin(), envelopeDimensions.rmax(), envelopeDimensions.z());
-  // dd4hep::Box detectorEnvelope(envelopeDimensions.x() , envelopeDimensions.y() , envelopeDimensions.z());
-  dd4hep::Material mat = lcdd.material("Air");
-  dd4hep::Volume detectorVolume(name, detectorEnvelope, mat);
-
-  // ----------------------------------------------------------------------------------------------------
 
   //                         --- Barrel parameters ---
 
@@ -121,12 +111,39 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
   int barrelIdCounter = 1;
   int endcapIdCounter = 1;
 
+  //-------------------------// Building system envelope //----------------------------
+
+  dd4hep::PolyhedraRegular  BarrelEnv(numSides, radius, barrelRMax, barreltotalLength);
+  dd4hep::PolyhedraRegular  EndcapEnv(numSides, endcapDetectorLayerInnerRadius, endcapDetectorLayerOuterRadius, EndcaptotalLength);
+
+  double unionOffsetZpositive = endcapOffset;
+  double unionOffsetZnegative = -endcapOffset;
+
+  dd4hep::Position unionPos(0.0 , 0.0, unionOffsetZpositive);
+  dd4hep::Position unionPos2(0.0 , 0.0, unionOffsetZnegative);  
+  dd4hep::Rotation3D unionRot(dd4hep::RotationY(0.0 * dd4hep::degree));
+      
+  dd4hep::Transform3D unionTransform(unionRot, unionPos);
+  dd4hep::Transform3D unionTransform2(unionRot, unionPos2);
+
+  //Combining two shapes by UnionSolid: the first shape is centralized and the second transform around the first..
+  dd4hep::UnionSolid barrelAndPositiveEndcap(BarrelEnv, EndcapEnv, unionTransform);
+  dd4hep::UnionSolid systemEnvelope(barrelAndPositiveEndcap, EndcapEnv, unionTransform2);  
+  dd4hep::Volume detectorVolume(name, systemEnvelope, mat);
+
 // ----------------------------------------------------------------------------------------------------
 // ------------------------------// B A R R E L // ----------------------------------------------------
 
-  dd4hep::PolyhedraRegular  BarrelEnv(numSides, radius, barrelRMax, barreltotalLength);
+  dd4hep::PolyhedraRegular  BarrelEnvWithoutLastLayer(numSides, radius, barrelRMax, barrelLength);
+  dd4hep::PolyhedraRegular  BarrelLastLayerEnv(numSides, (barrelRMax - 2 * detectorVolumeThickness), barrelRMax, barreltotalLength);
   std::string barrelName = dd4hep::xml::_toString(0, "MS-Barrel%d");
-  dd4hep::Volume BarrelVolume(barrelName, BarrelEnv, mat);
+
+  dd4hep::Position barrelUnionPos(0.0 , 0.0, 0.0);  
+  dd4hep::Rotation3D barrelUnionRot(dd4hep::RotationY(0.0 * dd4hep::degree));
+  dd4hep::Transform3D barrelUnionTransform(barrelUnionRot, barrelUnionPos);
+
+  dd4hep::UnionSolid barrelUnion(BarrelEnvWithoutLastLayer, BarrelLastLayerEnv, barrelUnionTransform);
+  dd4hep::Volume BarrelVolume(barrelName, barrelUnion, mat);
 
   dd4hep::Position barrelTrans(0., 0., 0.);
   dd4hep::PlacedVolume barrelPhys = detectorVolume.placeVolume(BarrelVolume, dd4hep::Transform3D(dd4hep::RotationZ(0.), barrelTrans));
@@ -582,7 +599,6 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
 //  ----------------------------------// E N D C A P //---------------------------------------
 //--------------------------------------- Endcap Detectors------------------------------------
 
-  dd4hep::PolyhedraRegular  EndcapEnv(numSides, endcapDetectorLayerInnerRadius, endcapDetectorLayerOuterRadius, EndcaptotalLength);
   std::string EndcapName; 
   dd4hep::Volume endcapVolume;
   dd4hep::Position endcapTrans;
@@ -917,7 +933,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
   }
   }
   // ------------------------------------------------------------------------------------------- 
-  dd4hep::Position detectorTrans(0., 0., envelopeDimensions.z_offset());
+  dd4hep::Position detectorTrans(0., 0., 0.);
   dd4hep::PlacedVolume detectorPhys = experimentalHall.placeVolume(detectorVolume, dd4hep::Transform3D(dd4hep::RotationZ(shapeAngle_radians), detectorTrans));
   detectorPhys.addPhysVolID("system", xmlDet.id());
   detElement.setPlacement(detectorPhys);

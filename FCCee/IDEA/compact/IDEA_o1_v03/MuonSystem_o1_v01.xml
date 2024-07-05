@@ -36,14 +36,13 @@
   <readouts>
     <readout name="MuonSystemCollection">
      <segmentation type="CartesianGridYZ" grid_size_y="1.2*mm" grid_size_z="1.2*mm"/>   <!-- Depending on strip pitch 1.4 mm  -->
-     <id>system:1,type:2,layer:4,chamber:15,slice:1,y:-10,z:-10</id> <!-- The bit field is divided into 2^5 systems(IDEA sub-detectors), 2^4 layers(Muon System layers"barrel and endcap layers"), 2^11 chambers(the number of muRWELL chambers in every layer), 2^1 slice(number of sensitive layers inside every chambers), and 2^10 y&z strips in every sensitive layer-->
+     <id>system:5,type:2,layer:4,chamber:15,slice:1,y:-10,z:-10</id> <!-- The bit field is divided into 2^5 systems(IDEA sub-detectors), 2^4 layers(Muon System layers"barrel and endcap layers"), 2^11 chambers(the number of muRWELL chambers in every layer), 2^1 slice(number of sensitive layers inside every chambers), and 2^10 y&z strips in every sensitive layer-->
   </readout>
   </readouts>   
 
   <detectors>
     <!-- mRWELL envelope -->
     <detector name="Muon-System" type="muonSystemMuRWELL_o1_v01" id="DetID_muonSystem" readout="MuonSystemCollection">
-      <envelope rmin="70" rmax="600" z="1200"  z_offset="0*mm" material="Air"/>
       <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
       <sensitive type="tracker"/>
 
