@@ -1,5 +1,5 @@
-#ifndef DD4HEP_DDG4_GEANT4OUTPUT2EDM4hep_DRC_H
-#define DD4HEP_DDG4_GEANT4OUTPUT2EDM4hep_DRC_H
+#ifndef DD4HEP_DDG4_Geant4Output2EDM4hep_DRC_H
+#define DD4HEP_DDG4_Geant4Output2EDM4hep_DRC_H
 
 ///  Framework include files
 #include <DD4hep/Detector.h>
@@ -7,24 +7,28 @@
 #include <DDG4/Geant4OutputAction.h>
 #include <DDG4/RunParameters.h>
 
-#include "FiberDRCaloSDAction.h"
-
 /// edm4hep include files
 #include <edm4hep/MCParticleCollection.h>
 #include <edm4hep/SimTrackerHitCollection.h>
 #include <edm4hep/CaloHitContributionCollection.h>
 #include <edm4hep/SimCalorimeterHitCollection.h>
-#include "edm4hep/RawCalorimeterHitCollection.h"
-#include "edm4hep/RawTimeSeriesCollection.h"
+#include <edm4hep/RawCalorimeterHitCollection.h>
+#include <edm4hep/RawTimeSeriesCollection.h>
 #include <edm4hep/EDM4hepVersion.h>
 /// podio include files
+#include <podio/CollectionBase.h>
+#include <podio/podioVersion.h>
 #include <podio/Frame.h>
-#if PODIO_VERSION_MAJOR > 0 || (PODIO_VERSION_MAJOR == 0 && PODIO_VERSION_MINOR >= 99)
+#if PODIO_BUILD_VERSION >= PODIO_VERSION(0, 99, 0)
 #include <podio/ROOTWriter.h>
 #else
 #include <podio/ROOTFrameWriter.h>
+namespace podio {
+  using ROOTWriter = podio::ROOTFrameWriter;
+}
 #endif
-#include <podio/podioVersion.h>
+
+#include "FiberDRCaloSDAction.h"
 
 /// Namespace for the AIDA detector description toolkit
 namespace dd4hep {
@@ -35,21 +39,24 @@ namespace dd4hep {
   namespace sim {
 
     class  Geant4ParticleMap;
+
+    /// Base class to output Geant4 event data to EDM4hep
+    /**
+     *  \author  F.Gaede
+     *  \version 1.0
+     *  \ingroup DD4HEP_SIMULATION
+     */
     class Geant4Output2EDM4hep_DRC : public Geant4OutputAction  {
     protected:
-#if PODIO_VERSION_MAJOR > 0 || (PODIO_VERSION_MAJOR == 0 && PODIO_VERSION_MINOR >= 99)
       using writer_t = podio::ROOTWriter;
-#else
-      using writer_t = podio::ROOTFrameWriter;
-#endif
       using stringmap_t = std::map< std::string, std::string >;
       using trackermap_t = std::map< std::string, edm4hep::SimTrackerHitCollection >;
       using calorimeterpair_t = std::pair< edm4hep::SimCalorimeterHitCollection, edm4hep::CaloHitContributionCollection >;
       using calorimetermap_t = std::map< std::string, calorimeterpair_t >;
-
       using drcalopair_t = std::pair< edm4hep::RawCalorimeterHitCollection, edm4hep::RawTimeSeriesCollection> ; // Required info for IDEA DRC sim hit
       using drcalomap_t = std::map< std::string, drcalopair_t >;                                                // Required info for IDEA DRC sim hit
       using drcaloWavmap_t = std::map< std::string, edm4hep::RawTimeSeriesCollection >;
+
       std::unique_ptr<writer_t>     m_file  { };
       podio::Frame                  m_frame { };
       edm4hep::MCParticleCollection m_particles { };
@@ -118,7 +125,7 @@ namespace dd4hep {
         printout(DEBUG, "Geant4OutputEDM4hep", "Saving event parameter: %s", p.first.c_str());
         frame.putParameter(p.first, p.second);
       }
-#if podio_VERSION_MAJOR > 0 || podio_VERSION_MINOR > 16 || podio_VERSION_PATCH > 2
+#if PODIO_BUILD_VERSION > PODIO_VERSION(0, 16, 2)
       // This functionality is only present in podio > 0.16.2
       for (auto const& p: this->dblParameters()) {
         printout(DEBUG, "Geant4OutputEDM4hep", "Saving event parameter: %s", p.first.c_str());
@@ -140,7 +147,7 @@ namespace dd4hep {
         printout(DEBUG, "Geant4OutputEDM4hep", "Saving run parameter: %s", p.first.c_str());
         frame.putParameter(p.first, p.second);
       }
-#if podio_VERSION_MAJOR > 0 || podio_VERSION_MINOR > 16 || podio_VERSION_PATCH > 2
+#if PODIO_BUILD_VERSION > PODIO_VERSION(0, 16, 2)
       // This functionality is only present in podio > 0.16.2
       for (auto const& p: this->dblParameters()) {
         printout(DEBUG, "Geant4OutputEDM4hep", "Saving run parameter: %s", p.first.c_str());
@@ -151,7 +158,7 @@ namespace dd4hep {
 
   }    // End namespace sim
 }      // End namespace dd4hep
-#endif // DD4HEP_DDG4_GEANT4OUTPUT2EDM4hep_DRC_H
+#endif // DD4HEP_DDG4_Geant4Output2EDM4hep_DRC_H
 
 //==========================================================================
 //  AIDA Detector description implementation 
@@ -237,11 +244,7 @@ void Geant4Output2EDM4hep_DRC::beginRun(const G4Run* run)  {
     }
   }
   if ( !fname.empty() )   {
-#if PODIO_VERSION_MAJOR > 0 || (PODIO_VERSION_MAJOR == 0 && PODIO_VERSION_MINOR >= 99)
     m_file = std::make_unique<podio::ROOTWriter>(fname);
-#else
-    m_file = std::make_unique<podio::ROOTFrameWriter>(fname);
-#endif
     if ( !m_file )   {
       fatal("+++ Failed to open output file: %s", fname.c_str());
     }
@@ -448,9 +451,13 @@ void Geant4Output2EDM4hep_DRC::saveEvent(OutputContext<G4Event>& ctxt)  {
     runNumber = parameters->runNumber() + runNumberOffset;
     eventNumber = parameters->eventNumber() + eventNumberOffset;
     parameters->extractParameters(m_frame);
-#if podio_VERSION_MAJOR > 0 || podio_VERSION_MINOR > 16 || podio_VERSION_PATCH > 2
+#if PODIO_BUILD_VERSION > PODIO_VERSION(0, 16, 2)
     // This functionality is only present in podio > 0.16.2
+#if PODIO_BUILD_VERSION > PODIO_VERSION(0, 99, 0)
+    eventWeight = m_frame.getParameter<double>("EventWeights").value_or(0.0);
+#else
     eventWeight = m_frame.getParameter<double>("EventWeights");
+#endif
 #endif
   } else { // ... or from DD4hep framework
     runNumber = m_runNo + runNumberOffset;
@@ -518,9 +525,6 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
   //-------------------------------------------------------------------
   if( typeid( Geant4Tracker::Hit ) == coll->type().type()  ){
     // Create the hit container even if there are no entries!
-    Geant4Sensitive* sd = coll->sensitive();
-    int hit_creation_mode = sd->hitCreationMode();
-
     auto& hits = m_trackerHits[colName];
     for(unsigned i=0 ; i < nhits ; ++i){
       auto sth = hits->create();
@@ -535,8 +539,11 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
       sth.setEDep(hit->energyDeposit/CLHEP::GeV);
       sth.setPathLength(hit->length/CLHEP::mm);
       sth.setTime(hit->truth.time/CLHEP::ns);
+#if EDM4HEP_BUILD_VERSION >= EDM4HEP_VERSION(0, 10, 99)
+      sth.setParticle(mcp);
+#else
       sth.setMCParticle(mcp);
-      // sth.setParticle(std::move(mcp));
+#endif
       sth.setPosition( {pos.x()/CLHEP::mm, pos.y()/CLHEP::mm, pos.z()/CLHEP::mm} );
       sth.setMomentum( {float(mom.x()/CLHEP::GeV),float(mom.y()/CLHEP::GeV),float(mom.z()/CLHEP::GeV)} );
       auto particleIt = pm->particles().find(trackID);
@@ -550,10 +557,8 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
     //-------------------------------------------------------------------
   }
   else if( typeid( Geant4Calorimeter::Hit ) == coll->type().type() ){
-
     Geant4Sensitive* sd = coll->sensitive();
     int hit_creation_mode = sd->hitCreationMode();
-
     // Create the hit container even if there are no entries!
     auto& hits = m_calorimeterHits[colName];
     for(unsigned i=0 ; i < nhits ; ++i){
@@ -563,6 +568,7 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
       sch.setCellID( hit->cellID );
       sch.setPosition({float(pos.x()/CLHEP::mm), float(pos.y()/CLHEP::mm), float(pos.z()/CLHEP::mm)});
       sch.setEnergy( hit->energyDeposit/CLHEP::GeV );
+
 
       // now add the individual step contributions
       for(auto ci=hit->truth.begin(); ci != hit->truth.end(); ++ci){

@@ -88,7 +88,7 @@ void ddDRcalo::DRconstructor::implementTowers(xml_comp_t& x_theta, dd4hep::DDSeg
     dd4hep::Volume towerVol( "tower", tower, fDescription->material(x_theta.materialStr()) );
     towerVol.setVisAttributes(*fDescription, x_theta.visStr());
     
-    implementFibers(x_theta, towerVol, tower, param, towerNo);
+    implementFibers(x_theta, towerVol, tower, param);
 
     xml_comp_t x_wafer ( fX_sipmDim.child( _Unicode(sipmWafer) ) );
 
@@ -107,7 +107,7 @@ void ddDRcalo::DRconstructor::implementTowers(xml_comp_t& x_theta, dd4hep::DDSeg
     fFiberCoords.clear();
 
     for (int nPhi = 0; nPhi < x_theta.nphi(); nPhi++) {
-      placeAssembly(x_theta,x_wafer,param,AssemblyBoxVol,towerVol,sipmWaferVol,towerNo,nPhi);
+      placeAssembly(param,AssemblyBoxVol,towerVol,sipmWaferVol,towerNo,nPhi);
     }
   }
 
@@ -115,19 +115,15 @@ void ddDRcalo::DRconstructor::implementTowers(xml_comp_t& x_theta, dd4hep::DDSeg
   param->SetTotTowerNum( towerNo - x_theta.start() );
 }
 
-void ddDRcalo::DRconstructor::placeAssembly(xml_comp_t& x_theta, xml_comp_t& x_wafer, dd4hep::DDSegmentation::DRparamBase_k4geo* param,
-                                            dd4hep::Volume& AssemblyBoxVol, dd4hep::Volume& towerVol, dd4hep::Volume& sipmWaferVol,
-                                            int towerNo, int nPhi, bool isRHS) {
+void ddDRcalo::DRconstructor::placeAssembly(dd4hep::DDSegmentation::DRparamBase_k4geo* param, dd4hep::Volume& AssemblyBoxVol,
+                                            dd4hep::Volume& towerVol, dd4hep::Volume& sipmWaferVol, int towerNo, int nPhi, bool isRHS) {
   param->SetIsRHS(isRHS);
   int towerNoLR = param->signedTowerNo(towerNo);
   auto towerId64 = fSegmentation->setVolumeID( towerNoLR, nPhi );
   int towerId32 = fSegmentation->getFirst32bits(towerId64);
 
   dd4hep::Position towerPos = param->GetTowerPos(nPhi) + dd4hep::Position(0, 0, -(fX_worldTube.height()/2.));
-  dd4hep::PlacedVolume towerPhys = AssemblyBoxVol.placeVolume( towerVol, towerId32, dd4hep::Transform3D( param->GetRotationZYX(nPhi), towerPos ) );
-  towerPhys.addPhysVolID("eta", towerNoLR);
-  towerPhys.addPhysVolID("phi", nPhi);
-  towerPhys.addPhysVolID("module", 0);
+  AssemblyBoxVol.placeVolume( towerVol, towerId32, dd4hep::Transform3D( param->GetRotationZYX(nPhi), towerPos ) );
 
   // Remove sipmLayer
   dd4hep::Position sipmPos = param->GetSipmLayerPos(nPhi) + dd4hep::Position(0, 0, -(fX_worldTube.height()/2.));
@@ -139,7 +135,7 @@ void ddDRcalo::DRconstructor::placeAssembly(xml_comp_t& x_theta, xml_comp_t& x_w
   return;
 }
 
-void ddDRcalo::DRconstructor::implementFibers(xml_comp_t& x_theta, dd4hep::Volume& towerVol, dd4hep::Trap& trap, dd4hep::DDSegmentation::DRparamBase_k4geo* param, int towerNo) {
+void ddDRcalo::DRconstructor::implementFibers(xml_comp_t& x_theta, dd4hep::Volume& towerVol, dd4hep::Trap& trap, dd4hep::DDSegmentation::DRparamBase_k4geo* param) {
   auto rootTrap = trap.access();
 
   float sipmSize = fX_dim.dx();
@@ -166,10 +162,10 @@ void ddDRcalo::DRconstructor::implementFibers(xml_comp_t& x_theta, dd4hep::Volum
     unitBoxVol.setVisAttributes(*fDescription, x_theta.visStr());
 
   // // Remove cap (mirror or black paint in front of the fiber)
-  implementFiber(unitBoxVol, trap, dd4hep::Position(-gridSize/2.,-gridSize/2.,0.), cmin, rmin  );
-  implementFiber(unitBoxVol, trap, dd4hep::Position(gridSize/2.,-gridSize/2.,0.), cmin+1, rmin );
-  implementFiber(unitBoxVol, trap, dd4hep::Position(-gridSize/2.,gridSize/2.,0.), cmin, rmin+1 );
-  implementFiber(unitBoxVol, trap, dd4hep::Position(gridSize/2.,gridSize/2.,0.), cmin+1, rmin+1);
+  implementFiber(unitBoxVol, dd4hep::Position(-gridSize/2.,-gridSize/2.,0.), cmin, rmin  );
+  implementFiber(unitBoxVol, dd4hep::Position(gridSize/2.,-gridSize/2.,0.), cmin+1, rmin );
+  implementFiber(unitBoxVol, dd4hep::Position(-gridSize/2.,gridSize/2.,0.), cmin, rmin+1 );
+  implementFiber(unitBoxVol, dd4hep::Position(gridSize/2.,gridSize/2.,0.), cmin+1, rmin+1);
 
 
   bool isEvenRow = false, isEvenCol = false;
@@ -191,7 +187,7 @@ void ddDRcalo::DRconstructor::implementFibers(xml_comp_t& x_theta, dd4hep::Volum
           bool check = fullBox.access()->Contains(pos_);
 
           if (check) {
-            implementFiber(fullBoxVol, trap, pos, column, row);
+            implementFiber(fullBoxVol, pos, column, row);
             fFiberCoords.push_back( std::make_pair(column,row) );
           }
         }
@@ -223,10 +219,9 @@ void ddDRcalo::DRconstructor::implementFibers(xml_comp_t& x_theta, dd4hep::Volum
 
         // final check
         if ( checkContained(rootTrap,pos,towerHeight/2.-fiberLen) ) {
-        dd4hep::Position centerPos( pos.x(),pos.y(),centerZ );
-
-        implementFiber(towerVol, trap, centerPos, column, row, fiberLen);
-        fFiberCoords.push_back( std::make_pair(column,row) );
+          dd4hep::Position centerPos( pos.x(),pos.y(),centerZ );
+          implementFiber(towerVol, centerPos, column, row, fiberLen);
+          fFiberCoords.push_back( std::make_pair(column,row) );
         }
       }
     }
@@ -234,7 +229,7 @@ void ddDRcalo::DRconstructor::implementFibers(xml_comp_t& x_theta, dd4hep::Volum
 }
 
 // Remove cap (mirror or black paint in front of the fiber)
-void ddDRcalo::DRconstructor::implementFiber(dd4hep::Volume& towerVol, dd4hep::Trap& trap, dd4hep::Position pos, int col, int row, float fiberLen) {
+void ddDRcalo::DRconstructor::implementFiber(dd4hep::Volume& towerVol, dd4hep::Position pos, int col, int row, float fiberLen) {
   // Don't implement fiber if the length required is shorter than 0.5 mm
   if (fiberLen < 0.05*dd4hep::cm)
     return;
