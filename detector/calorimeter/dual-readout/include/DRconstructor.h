@@ -31,11 +31,10 @@ namespace ddDRcalo {
   private:
     void initiateFibers();
     void implementTowers(xml_comp_t& x_theta, dd4hep::DDSegmentation::DRparamBase_k4geo* param, dd4hep::Volume& AssemblyBoxVol);
-    void placeAssembly(xml_comp_t& x_theta, xml_comp_t& x_wafer, dd4hep::DDSegmentation::DRparamBase_k4geo* param,
-                       dd4hep::Volume& AssemblyBoxVol, dd4hep::Volume& towerVol, dd4hep::Volume& sipmWaferVol,
-                       int towerNo, int nPhi, bool isRHS=true);
-    void implementFibers(xml_comp_t& x_theta, dd4hep::Volume& towerVol, dd4hep::Trap& trap, dd4hep::DDSegmentation::DRparamBase_k4geo* param, int towerNo);
-    void implementFiber(dd4hep::Volume& towerVol, dd4hep::Trap& trap, dd4hep::Position pos, int col, int row, float fiberLen = 200.*dd4hep::cm);
+    void placeAssembly(dd4hep::DDSegmentation::DRparamBase_k4geo* param, dd4hep::Volume& AssemblyBoxVol,
+                       dd4hep::Volume& towerVol, dd4hep::Volume& sipmWaferVol, int towerNo, int nPhi, bool isRHS=true);
+    void implementFibers(xml_comp_t& x_theta, dd4hep::Volume& towerVol, dd4hep::Trap& trap, dd4hep::DDSegmentation::DRparamBase_k4geo* param);
+    void implementFiber(dd4hep::Volume& towerVol, dd4hep::Position pos, int col, int row, float fiberLen = 200.*dd4hep::cm);
     double calculateDistAtZ(TGeoTrap* rootTrap, dd4hep::Position& pos, double* norm, double z);
     float calculateFiberLen(TGeoTrap* rootTrap, dd4hep::Position& pos, double* norm, double z1, double diff, double towerHeight);
     dd4hep::Box calculateFullBox(TGeoTrap* rootTrap, int& rmin, int& rmax, int& cmin, int& cmax, double dz);
