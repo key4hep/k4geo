@@ -69,6 +69,7 @@ file(GLOB sources
   ./detector/tracker/*.cpp
   ./detector/calorimeter/*.cpp
   ./detector/fcal/*.cpp
+  ./detector/muonSystem/*.cpp
   ./detector/other/*.cpp
   ./detector/CaloTB/*.cpp
   ./FCalTB/setup/*.cpp
