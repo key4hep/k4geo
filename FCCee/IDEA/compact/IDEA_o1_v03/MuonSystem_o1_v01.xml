@@ -18,7 +18,7 @@
        <constant name = "GasLayerThick"                         value = "6*mm"/>
        <constant name = "Cu2Thick"                              value = "0.005*mm"/>
        <constant name = "KaptonThick"                           value = "0.05*mm"/>
-       <constant name = "CarnonFiberThick"                      value = "0.0001*mm"/>
+       <constant name = "CarbonFiberThick"                      value = "0.0001*mm"/>
        <constant name = "CarbonFiber2Thick"                     value = "0.1*mm"/>
        <constant name = "SiThick"                               value = "1.6*mm"/>
        <constant name = "mRWELLTotalThickness"                  value = "G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick+CuThick+SiThick"/> <!-- This sequense is the current order of mRWELL (total 10 slices) -->
@@ -36,7 +36,7 @@
   <readouts>
     <readout name="MuonSystemCollection">
      <segmentation type="CartesianGridYZ" grid_size_y="1.2*mm" grid_size_z="1.2*mm"/>   <!-- Depending on strip pitch 1.4 mm  -->
-     <id>system:5,type:2,layer:4,chamber:15,slice:1,y:-10,z:-10</id> <!-- The bit field is divided into 2^5 systems(IDEA sub-detectors), 2^2 types(Barrel Muon System, positive endcap, and negative endcap"), 2^4 layers(number of layers in barrel for example) ,2^15 chambers(the number of muRWELL chambers in every layer), 2^1 slice(number of sensitive layers inside every chambers), and 2^10 y&z strips in every sensitive layer-->
+     <id>system:5,type:2,layer:4,chamber:15,slice:1,y:-10,z:-10</id> <!-- The bit field is divided into 2^5 systems(IDEA sub-detectors), 2^2 types(0 = Barrel Muon System, +1 = positive endcap, and -1 = negative endcap"), 2^4 layers(number of layers in barrel for example) ,2^15 chambers(the number of muRWELL chambers in every layer), 2^1 slice(number of sensitive layers inside every chambers), and 2^10 y&z strips in every sensitive layer-->
   </readout>
   </readouts>   
 
@@ -58,7 +58,7 @@
       <slice x="GasLayerThick/2.0" material="ARCO2CF4" sensitive="true" vis="Sensitive_vis" />
       <slice x="Cu2Thick/2.0" material="G4_Cu" vis="Cu_vis" />
       <slice x="KaptonThick/2.0" material="Kapton" vis="Kapton_vis" />
-      <slice x="CarnonFiberThick/2.0" material="CarbonFiber" vis="CarbonFiber_vis" />
+      <slice x="CarbonFiberThick/2.0" material="CarbonFiber" vis="CarbonFiber_vis" />
       <slice x="CuThick/2.0" material="G4_Cu" vis="Cu_vis" />
       <slice x="CarbonFiber2Thick/2.0" material="CarbonFiber" vis="CarbonFiber_vis" />
       <slice x="CuThick/2.0" material="G4_Cu" vis="Cu_vis" />
