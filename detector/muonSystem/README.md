@@ -5,6 +5,6 @@ The IDEA detector concept includes a muon detection system and pre-shower design
 ## muonSystemMuRWELL_o1_v01.cpp
 The first version of the detailed muon system driver, it can be used to describe both barrel and endcap, if you want to eleminate one of them, just set the number of layers= 0.
 The code has been designed to be very flexible, where the user can choose the number of sides in the R-Phi plane, `numSides` (hexagon, octagon, etc), and the detector builder will automatically calculate the number and places of the copied chambers. Some of the code advantages: 
- * If the side length do not fit with an integer number of 50 × 50 cm² , the builderwill make a chamber with unusual dimensions, which can fit the excess area at the end of the side.
+ * If the side length do not fit with an integer number of 50 × 50 cm² , the builder will make a chamber with unusual dimensions, which can fit the excess area at the end of the side.
  * The availability to make multiple layers with different inner radius and barrel length.
  * The code is very general, it can be used to describe any detector system made from repeated tiles (e.g. pre-shower) and has the capability to fill the gaps with unusual dimensions tiles.
