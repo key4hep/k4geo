@@ -21,7 +21,7 @@
        <constant name = "CarbonFiberThick"                      value = "0.0001*mm"/>
        <constant name = "CarbonFiber2Thick"                     value = "0.1*mm"/>
        <constant name = "SiThick"                               value = "1.6*mm"/>
-       <constant name = "mRWELLTotalThickness"                  value = "G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick+CuThick+SiThick"/> <!-- This sequense is the current order of mRWELL (total 10 slices) -->
+       <constant name = "mRWELLTotalThickness"                  value = "G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarbonFiberThick+CuThick+CarbonFiber2Thick+CuThick+SiThick"/> <!-- This sequense is the current order of mRWELL (total 10 slices) -->
 
        <constant name = "mRWELLYLength"                         value = "250*mm"/>
        <constant name = "mRWELLZLength"                         value = "250*mm"/>
