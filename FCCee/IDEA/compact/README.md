@@ -15,4 +15,4 @@ IDEA_o1_v03
 ------------
 
 Based on o1_v02 but replacing the drift chamber (o1, v01) for the lightweight implementation based on twisted tubes (o1, v02). Production threshold and step limit physics have to be tuned
-
+CAD beam pipe elements have been added.
