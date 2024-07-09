@@ -524,7 +524,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
   dd4hep::Position detectorLayerTrans(0., 0., 0.);
   dd4hep::PlacedVolume detectorLayerPhys = BarrelVolume.placeVolume(BarrelDetectorLayerVolume, dd4hep::Transform3D(dd4hep::RotationZ(0.), detectorLayerTrans));
   detectorLayerPhys.addPhysVolID("layer", numBarrelLayer+1); 
-  dd4hep::DetElement BarrelDetectorLayerDE(BarrelDE, "MSBarrelDetectorLayerDE" + numBarrelLayer+1, numBarrelLayer+1);
+  dd4hep::DetElement BarrelDetectorLayerDE(BarrelDE, "MSBarrelDetectorLayerDE" + std::to_string(numBarrelLayer+1), numBarrelLayer+1);
   BarrelDetectorLayerDE.setPlacement(detectorLayerPhys);
   BarrelDetectorLayerVolume.setVisAttributes(lcdd.visAttributes("no_vis")); 
 
@@ -589,7 +589,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
 
     dd4hep::Position radiatorLayerTrans(0., 0., 0.);
     dd4hep::PlacedVolume radiatorLayerPhys = BarrelVolume.placeVolume(BarrelRadiatorLayerVolume, dd4hep::Transform3D(dd4hep::RotationZ(0.), radiatorLayerTrans));
-    dd4hep::DetElement BarrelRadiatorLayerDE(BarrelDE, "MSBarrel_RadiatorLayerDE" + numBarrelRadiatorLayer+1, numBarrelRadiatorLayer+1);
+    dd4hep::DetElement BarrelRadiatorLayerDE(BarrelDE, "MSBarrel_RadiatorLayerDE" + std::to_string(numBarrelRadiatorLayer+1), numBarrelRadiatorLayer+1);
     BarrelRadiatorLayerDE.setPlacement(radiatorLayerPhys);
     BarrelRadiatorLayerVolume.setVisAttributes(lcdd.visAttributes("no_vis")); 
 
@@ -614,7 +614,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
     endcapTrans = dd4hep::Position(0., 0., endcapType * endcapOffset);
     endcapPhys = detectorVolume.placeVolume(endcapVolume, dd4hep::Transform3D(dd4hep::RotationZ(0.), endcapTrans));
     endcapPhys.addPhysVolID("type", endcapType);
-    EndcapDE = dd4hep::DetElement(detElement, "MSEndcapDE" + endcapType , endcapType);
+    EndcapDE = dd4hep::DetElement(detElement, "MSEndcapDE" + std::to_string(endcapType) , endcapType);
     EndcapDE.setPlacement(endcapPhys);
     endcapVolume.setVisAttributes(lcdd.visAttributes("no_vis"));
 
