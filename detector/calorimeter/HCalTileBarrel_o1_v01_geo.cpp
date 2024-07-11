@@ -41,7 +41,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   xml_comp_t xSteelSupport = xmlDet.child(_Unicode(steel_support));
   double dSteelSupport = xSteelSupport.thickness();
 
-  lLog << MSG::DEBUG << "steel support thickness (cm): " << dSteelSupport << endmsg;
+  lLog << MSG::DEBUG << "steel support thickness (cm): " << dSteelSupport / dd4hep::cm  << endmsg;
   lLog << MSG::DEBUG << "steel support material:  " << xSteelSupport.materialStr() << endmsg;
 
   double sensitiveBarrelRmin = xDimensions.rmin() + xFacePlate.thickness() + space;
@@ -51,7 +51,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   // NOTE: This assumes that both have the same dimensions!
   Dimension sequenceDimensions(sequences[1].dimensions());
   double dzSequence = sequenceDimensions.dz();
-  lLog << MSG::DEBUG << "sequence thickness (cm) " << dzSequence << endmsg;
+  lLog << MSG::DEBUG << "sequence thickness (cm) " << dzSequence / dd4hep::cm << endmsg;
 
   // calculate the number of sequences fitting in Z
   unsigned int numSequencesZ = static_cast<unsigned>((2 * xDimensions.dz() - 2 * dZEndPlate - 2 * space) / dzSequence);
@@ -64,6 +64,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   unsigned int numSequencesR = 0;
   double moduleDepth = 0.;
   std::vector<double> layerDepths = std::vector<double>();
+  std::vector<double> layerInnerRadii = std::vector<double>();
   for (std::vector<xml_comp_t>::iterator it = Layers.begin(); it != Layers.end(); ++it) {
     xml_comp_t layer = *it;
     Dimension layerDimension(layer.dimensions());
@@ -82,7 +83,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
 
   // Calculate correction along z based on the module size (can only have natural number of modules)
   double dzDetector = (numSequencesZ * dzSequence) / 2 + dZEndPlate + space;
-  lLog << MSG::DEBUG << "dzDetector (cm):  " <<  dzDetector << endmsg;
+  lLog << MSG::DEBUG << "dzDetector (cm):  " <<  dzDetector / dd4hep::cm << endmsg;
   lLog << MSG::INFO << "correction of dz in cm (negative = size reduced):" << dzDetector - xDimensions.dz() << endmsg;
   
   double rminSupport = sensitiveBarrelRmin + moduleDepth;
@@ -152,15 +153,13 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
     double rminLayer = sensitiveBarrelRmin + layerR;
     double rmaxLayer = sensitiveBarrelRmin + layerR + layerDepths.at(idxLayer);
     layerR += layerDepths.at(idxLayer);
+    layerInnerRadii.push_back(rminLayer);
 
     //alternate: even layers consist of tile sequence b, odd layer of tile sequence a
     unsigned int sequenceIdx = idxLayer % 2;
     
     dd4hep::Tube tileSequenceShape(rminLayer, rmaxLayer, 0.5*dzSequence);
-    Volume tileSequenceVolume("HCalTileSequenceVol", tileSequenceShape, lcdd.air());
-
-    lLog << MSG::INFO << "layer radii:  " << rminLayer << " - " << rmaxLayer << " [cm]" << endmsg;
-    
+    Volume tileSequenceVolume("HCalTileSequenceVol", tileSequenceShape, lcdd.air());    
 
     dd4hep::Tube layerShape(rminLayer, rmaxLayer, dzDetector - dZEndPlate - space );
     Volume layerVolume("HCalLayerVol", layerShape, lcdd.air());
@@ -246,8 +245,8 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   for (unsigned int idxLayer = 0; idxLayer < layerDepths.size(); ++idxLayer) {
         const double difference_bet_r1r2 = layerDepths.at(idxLayer); 
 
-        caloLayer.distance                  = sensitiveBarrelRmin; // should this be always the radius of the first layer as it is now?  
-        caloLayer.sensitive_thickness       = difference_bet_r1r2; // not really sure what is this variable 
+        caloLayer.distance                  = layerInnerRadii.at(idxLayer); // radius of the current layer   
+        caloLayer.sensitive_thickness       = difference_bet_r1r2;  // radial dimension of the current layer 
         caloLayer.inner_thickness           = difference_bet_r1r2 / 2.0;
         caloLayer.outer_thickness           = difference_bet_r1r2 / 2.0;
 

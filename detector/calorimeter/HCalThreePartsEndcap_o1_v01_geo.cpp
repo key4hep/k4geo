@@ -92,6 +92,10 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
     std::vector<double> layerDepths2 = std::vector<double>();
     std::vector<double> layerDepths3 = std::vector<double>();
 
+    std::vector<double> layerInnerRadii1 = std::vector<double>();
+    std::vector<double> layerInnerRadii2 = std::vector<double>();
+    std::vector<double> layerInnerRadii3 = std::vector<double>();
+
     // get all 'layer' children of the 'layers' tag
     std::vector<xml_comp_t> Layers;
     for (xml_coll_t xCompColl(xmlElement.child(_Unicode(layers)), _Unicode(layer)); xCompColl; ++xCompColl){
@@ -216,6 +220,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
             double rminLayer = sensitiveBarrel1Rmin + layerR;
             double rmaxLayer = sensitiveBarrel1Rmin + layerR + layerDepths1.at(idxLayer);
             layerR += layerDepths1.at(idxLayer);
+            layerInnerRadii1.push_back(rminLayer);
 
             //alternate: even layers consist of tile sequence b, odd layer of tile sequence a
             unsigned int sequenceIdx = (idxLayer+1) % 2;
@@ -285,6 +290,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
             double rminLayer = sensitiveBarrel2Rmin + layerR;
             double rmaxLayer = sensitiveBarrel2Rmin + layerR + layerDepths2.at(idxLayer);
             layerR += layerDepths2.at(idxLayer);
+            layerInnerRadii2.push_back(rminLayer);
 
             //alternate: even layers consist of tile sequence b, odd layer of tile sequence a                                                                                  
             unsigned int sequenceIdx = (idxLayer+1) % 2;
@@ -351,6 +357,8 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
             double rminLayer = sensitiveBarrel3Rmin + layerR;
             double rmaxLayer = sensitiveBarrel3Rmin + layerR + layerDepths3.at(idxLayer);
             layerR += layerDepths3.at(idxLayer);
+            layerInnerRadii3.push_back(rminLayer);
+
          
             //alternate: even layers consist of tile sequence b, odd layer of tile sequence a                                                                                  
             unsigned int sequenceIdx = (idxLayer+1) % 2;
@@ -449,11 +457,12 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
 
     dd4hep::rec::LayeredCalorimeterData::Layer caloLayer;
 
+
     for (unsigned int idxLayer = 0; idxLayer < layerDepths1.size(); ++idxLayer) {
         const double difference_bet_r1r2 = layerDepths1.at(idxLayer); 
 
-        caloLayer.distance                  = sensitiveBarrel1Rmin; // should this be always the radius of the first layer as it is now?  
-        caloLayer.sensitive_thickness       = difference_bet_r1r2; // not really sure what is this variable 
+        caloLayer.distance                  = layerInnerRadii1.at(idxLayer); // radius of the current layer 
+        caloLayer.sensitive_thickness       = difference_bet_r1r2;           // radial dimension of the current layer
         caloLayer.inner_thickness           = difference_bet_r1r2 / 2.0;
         caloLayer.outer_thickness           = difference_bet_r1r2 / 2.0;
 
@@ -463,7 +472,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
     for (unsigned int idxLayer = 0; idxLayer < layerDepths2.size(); ++idxLayer) {
         const double difference_bet_r1r2 = layerDepths2.at(idxLayer); 
 
-        caloLayer.distance                  = sensitiveBarrel2Rmin; 
+        caloLayer.distance                  = layerInnerRadii2.at(idxLayer);
         caloLayer.sensitive_thickness       = difference_bet_r1r2; 
         caloLayer.inner_thickness           = difference_bet_r1r2 / 2.0;
         caloLayer.outer_thickness           = difference_bet_r1r2 / 2.0;
@@ -474,7 +483,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
     for (unsigned int idxLayer = 0; idxLayer < layerDepths3.size(); ++idxLayer) {
         const double difference_bet_r1r2 = layerDepths3.at(idxLayer); 
 
-        caloLayer.distance                  = sensitiveBarrel3Rmin;  
+        caloLayer.distance                  = layerInnerRadii3.at(idxLayer); 
         caloLayer.sensitive_thickness       = difference_bet_r1r2; 
         caloLayer.inner_thickness           = difference_bet_r1r2 / 2.0;
         caloLayer.outer_thickness           = difference_bet_r1r2 / 2.0;
