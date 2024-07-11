@@ -43,10 +43,10 @@ using dd4hep::Translation3D;
 using dd4hep::Trapezoid;
 using dd4hep::Volume;
 using dd4hep::_toString;
-using dd4hep::rec::Vector3D;
-using dd4hep::rec::SurfaceType;
+// using dd4hep::rec::Vector3D;
+// using dd4hep::rec::SurfaceType;
 using dd4hep::rec::VolPlane;
-using dd4hep::rec::volSurfaceList;
+// using dd4hep::rec::volSurfaceList;
 
 static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector sens)  {
 
@@ -55,7 +55,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     std::string  det_name  = x_det.nameStr();
 
     DetElement sdet( det_name, x_det.id()  ) ;
-    PlacedVolume pv;
+    // PlacedVolume pv;
 
     // put the whole detector into an assembly
     //  - should be replaced by an envelope volume ...
@@ -182,7 +182,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         m.sensor_thickness = xml_comp_t(c_sensor).thickness();
         xml_coll_t c_component = xml_coll_t(c_sensor,_U(component));
 
-        int iSensitive, iPassive = 0;
+        // Is iSensitive being used later with this default value in a call to _toString?
+        int iSensitive = 0, iPassive = 0;
         for(c_component.reset(); c_component; ++c_component){
             xml_comp_t component = c_component;
             m.sensor_sensitives.push_back(component.isSensitive());
@@ -341,7 +342,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 // passivesDE.setPlacement(pv);
 
                 // Place all sensor parts
-                int iSensitive = 0, iPassive = 0;
+                int iSensitive = 0;
                 for(int i=0; i<int(m.sensor_volumes.size()); i++){
                     x_pos = 0.0;
                     y_pos = m.sensor_xmin[i]+abs(m.sensor_xmax[i]-m.sensor_xmin[i])/2.;
@@ -368,7 +369,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                     // Place passive sensor parts
                     else{
                         stave_assembly.placeVolume(m.sensor_volumes[i], Transform3D(rot, pos)*Translation3D(pos2));
-                        iPassive++;
                     }
                 }
             }

@@ -210,7 +210,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   //
   //====================================================================
 
-  int Number_of_Si_Layers_in_Barrel = 0;
+  int Number_of_Si_Layers_in_Barrel [[maybe_unused]] = 0;
 
 #ifdef VERBOSE
   std::cout << " Ecal total number of Silicon layers = " << Number_of_Si_Layers_in_Barrel  << std::endl;

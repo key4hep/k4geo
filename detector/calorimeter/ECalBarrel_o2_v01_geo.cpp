@@ -71,8 +71,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   string det_type = x_det.typeStr();
   Material air = theDetector.air();
   double totalThickness = layering.totalThickness();
-  int totalRepeat = 0;
-  int totalSlices = 0;
   double gap = xml_dim_t(x_det).gap();
   int nsides = dim.numsides();
 
@@ -106,14 +104,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   caloData->gap0 = 0.; //FIXME
   caloData->gap1 = 0.; //FIXME
   caloData->gap2 = 0.; //FIXME
-
-
-  for (xml_coll_t c(x_det, _U(layer)); c; ++c) {
-    xml_comp_t x_layer = c;
-    int repeat = x_layer.repeat();
-    totalRepeat += repeat;
-    totalSlices += x_layer.numChildren(_U(slice));
-  }
 
 // --- create an envelope volume and position it into the world ---------------------
 

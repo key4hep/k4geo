@@ -30,3 +30,19 @@ What to improve:
 - better automation in the C++ to rely less on user defined parameters from the xml
 - better variable naming (started already but could still be improved)
 - make sense out of the many layer radiuses defined
+
+
+### o1_v02
+Reimplementation of the drift chamber concept, based on a fully detailed spreadsheet. The improvements with respect the previous implementation are the following:
+- The standalone simulation consumes 400MB of memory, out of which the geometry represents 150MB.
+- The DCH is built out of few global parameters, thanks to the prescription given in the spreadsheet
+- C++ guidelines are followed
+- ASCII drawing is included to make sense of positioning of wires inside the cells
+- The cell shape corresponds to a twisted tube, which is missing in ROOT, but DD4hep provides a workaround
+- Because of the previous point, this subdetector can not be used by any ROOT-based application, and the shape parameters can be accessed only by DD4hep/Geant4
+- Visualization of the full DCH is possible with Geant4+Qt, but not with ROOT-based applications
+- The optional tag `<debugGeometry/>` build only 3 sectors of each layer, it must be used only when checking for overlaps.
+- Endcap services. A dummy plate with 5% X0 is used to account for such services.
+- Vessel wall is a sandwich of Carbon fiber and PE foam. The thickness of the fill material is given as a fraction of the total thickness of the wall. It is adjusted to provide 1.2%X0 radially and 5%X0 longitudinally.
+- Material of field and sense wire is averaged for the sake of speedup.
+- Guard wires are not implemented yet.

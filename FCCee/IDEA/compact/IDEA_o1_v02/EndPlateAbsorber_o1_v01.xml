@@ -1,0 +1,21 @@
+<lccdd>
+
+  <info name="EndPlateAbsorber" title="EndPlateAbsorber" status="development" version="$Id: $">
+    <comment>
+      Endcap plate absorber to mimic the material budget from the solenoid (0.75 X0) present only in the barrel and start the showers.
+    </comment>
+  </info>
+
+  <detectors>
+
+    <detector name="EndPlateAbsorber_positive" type="SimpleCylinder_o1_v01" vis="muon_vis">
+      <dimensions rmin="EndPlateAbsorber_inner_radius" rmax="EndPlateAbsorber_outer_radius" dz="EndPlateAbsorber_z_half_length" z_offset = "EndPlateAbsorber_z_min + EndPlateAbsorber_z_half_length" material="Lead" phi0="0" deltaphi="360*deg" vis="muon_vis"/>
+    </detector>
+
+    <detector name="EndPlateAbsorber_negative" type="SimpleCylinder_o1_v01" vis="muon_vis">
+      <dimensions rmin="EndPlateAbsorber_inner_radius" rmax="EndPlateAbsorber_outer_radius" dz="EndPlateAbsorber_z_half_length" z_offset = "-1*(EndPlateAbsorber_z_min + EndPlateAbsorber_z_half_length)" material="Lead" phi0="0" deltaphi="360*deg" vis="muon_vis"/>
+    </detector>
+
+  </detectors>
+
+</lccdd>

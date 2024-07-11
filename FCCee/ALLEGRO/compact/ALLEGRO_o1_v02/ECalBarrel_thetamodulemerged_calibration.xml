@@ -102,6 +102,10 @@
         <side sensitive="false"/> <!-- both sides of the cryostat -->
         <back sensitive="false"/> <!-- outer wall of the cryostat -->
       </cryostat>
+      <bath name="ECAL_bath">
+        <material name="LAr"/>
+        <dimensions rmin="Bath_rmin" rmax="Bath_rmax" dz="EMBarrel_dz"/>
+      </bath>
       <calorimeter name="EM_barrel">
         <!-- offset defines the numbering of the modules: module==0 for phi=0 direction -->
         <dimensions rmin="EMBarrel_rmin" rmax="EMBarrel_rmax" dz="EMBarrel_dz" offset="-InclinationAngle"/>
@@ -129,7 +133,9 @@
         <readout thickness="readout_thickness" sensitive="true">
           <material name="PCB"/>
         </readout>
-        <layers> <!-- pcb electrode segmentation in the radial direction -->
+        <layers>
+           <!-- pcb electrode segmentation, rescaled to the total radial thickness of the active ECAL volume -->
+           <!-- This is NOT the radial thickness of each layer!!! -->
            <layer thickness="1.5*cm" repeat="1"/>
            <layer thickness="3.5*cm" repeat="11"/>
         </layers>

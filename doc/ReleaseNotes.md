@@ -1,3 +1,47 @@
+# v00-20-00
+
+* 2024-02-22 BrieucF ([PR#323](https://github.com/key4hep/k4geo/pull/323))
+  - Increase IDEA test timeout
+
+* 2024-02-21 Giovanni Marchiori ([PR#318](https://github.com/key4hep/k4geo/pull/318))
+  * ALLEGRO: Update some xml config files
+
+* 2024-02-16 Andre Sailer ([PR#320](https://github.com/key4hep/k4geo/pull/320))
+  - CMake: Add shim for older LCIO versions that do not have LCIO::lcio yet
+  - LinearSortingPolicy: adapt check for existing extension to silence error message from DD4hep
+
+* 2024-02-09 Andre Sailer ([PR#317](https://github.com/key4hep/k4geo/pull/317))
+  - ALLEGRO: EcalBarrel: fix the length of the Z extent for the calorimeter data extension for reconstruction
+
+* 2024-02-06 BrieucF ([PR#315](https://github.com/key4hep/k4geo/pull/315))
+  - [ALLEGRO_o1_v02] Replace the simplified drift chamber with the detailed one
+  - [TESTS] Add a test for ALLEGRO_o1_v02
+  - [ALLEGRO_o1_v02] File and variable renaming plus propagation of overlap fix to upstream and calibration xml's
+
+* 2024-02-06 Juraj Smiesko ([PR#309](https://github.com/key4hep/k4geo/pull/309))
+  - CMake: Add printing of "Found k4geo" message in downstream projects picking up k4geoConfig.cmake
+
+* 2024-01-18 jmcarcell ([PR#310](https://github.com/key4hep/k4geo/pull/310))
+  - Change LCIO::LCIO to LCIO::lcio. The target provided by LCIO is LCIO::lcio; DD4hep provides LCIO::LCIO so building without DD4hep and using LCIO::LCIO doesn't seem to work.
+
+* 2024-01-09 Jana ([PR#308](https://github.com/key4hep/k4geo/pull/308))
+  - fixing the overlaps in ALLEGRO Ecal barrel geometry by increasing the LAr bath volume.
+
+* 2023-12-18 Swathi Sasikumar ([PR#312](https://github.com/key4hep/k4geo/pull/312))
+  - CLD_o4_v05: The name of the inclined calorimeter was given as `EmCaloBarrelInclined` before. This is now changed to the latest naming convention as `ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v01`
+  - ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v01: The units for cell sizes has been added to the CaloLayerData ensure that they are given correctly and not mistaken due to confusion in units. now they are represented in mm.
+
+* 2023-12-14 BrieucF ([PR#307](https://github.com/key4hep/k4geo/pull/307))
+  - Added DriftChamber_o1_v01, a first version of the detailed IDEA drift chamber to enable further technical developments (digitization, tracking, PFlow, ...)
+
+* 2023-12-13 Giovanni Marchiori ([PR#304](https://github.com/key4hep/k4geo/pull/304))
+  - Code changes related to k4geo migration of FCC segmentation classes and related utilities
+  - Also moves HCal readout for Allegro from eta-based to theta-based
+  - Basically a rebasing of https://github.com/key4hep/k4geo/pull/296 after https://github.com/key4hep/k4geo/pull/298 was merged
+
+* 2023-12-12 BrieucF ([PR#311](https://github.com/key4hep/k4geo/pull/311))
+  - Changed the sensitive detector type of the ALLEGO simplified drift chamber to be able to run with ddsim
+
 # v00-19-00
 
 * 2023-11-22 alvarotd ([PR#289](https://github.com/key4hep/k4geo/pull/289))

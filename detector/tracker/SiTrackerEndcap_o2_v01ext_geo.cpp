@@ -111,6 +111,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     int l_id    = x_layer.id();
     int mod_num = 0;
     int ring_num = 0;
+    int petal_num = 0;
 
     double sumZ(0.), innerR(1e100), outerR(0.);
 
@@ -134,6 +135,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 	outerR = r + mod_shape->GetDZ();
       sumZ += zstart;
       r = r + mod_shape->GetDY();
+
+      petal_num = nmodules;  // store the module number of this ring for nPetals in ZDiskPetalsData
 
       for(int k=0; k<nmodules; ++k) {
         string m_base = _toString(l_id,"layer%d") + _toString(mod_num,"_module%d") + _toString(k,"_sensor%d");
@@ -173,7 +176,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     thisLayer.zPosition = sumZ/ring_num; // average z
     thisLayer.distanceSensitive = innerR;
     thisLayer.lengthSensitive = outerR - innerR;
-    thisLayer.petalNumber = ring_num; // number of rings in petalNumber, needed for tracking
+    thisLayer.petalNumber = petal_num;
+    thisLayer.sensorsPerPetal = ring_num; // number of rings in petalNumber, needed for tracking
     zDiskPetalsData->layers.push_back(thisLayer);
 
   }
