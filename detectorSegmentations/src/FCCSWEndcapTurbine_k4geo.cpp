@@ -93,7 +93,7 @@ double FCCSWEndcapTurbine_k4geo::phi(const CellID& cID) const {
   double zLoc = TMath::Abs(z(cID))-m_offsetZ - 45;  // hard-code midpoint in z for now
 
   CellID sideValue = _decoder->get(cID, m_sideID);
-  double zCotBladeAngle = ((long long int)sideValue)*zLoc/TMath::Tan(m_bladeAngle);
+  double zCotBladeAngle = zLoc/TMath::Tan(m_bladeAngle);
   double x = zCotBladeAngle;
   double y = TMath::Sqrt(rhoLoc*rhoLoc - x*x);
   // rotate about z axis by phiCent
