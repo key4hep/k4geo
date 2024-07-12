@@ -1,0 +1,28 @@
+<processor name="InitDD4hep" type="InitializeDD4hep">
+ <!--InitializeDD4hep reads a compact xml file and initializes the dd4hep::Detector object-->
+  <!--Name of the DD4hep compact xml file to load-->
+  <parameter name="DD4hepXMLFile" type="string">
+    <!-- /opt/ilcsoft/v02-01-pre/detector-simulation/HEAD/geometries/CLIC_o3_v14_mod4/CLIC_o3_v14.xml -->
+	  /users/muoncollider/zuliani/lcgeo/MuColl/MuColl_v1_10TeV_vxd/MuColl_v1_10TeV_vxd.xml
+    <!-- /opt/ilcsoft/muonc/detector-simulation/geometries/MuColl_v1/MuColl_v1.xml -->
+  </parameter>
+  <!--Alternate name for EncodingStringParameterName-->
+  <!--If given, the Compact File parameter of that name will be used as argument to LCTrackerCellID::set_encoding_string()-->
+  <parameter name="EncodingStringParameterName" type="string"> GlobalTrackerReadoutID  </parameter>
+  <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+  <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+</processor>
+
+<processor name="InitDD4hep_Crilin" type="InitializeDD4hep">
+ <!--InitializeDD4hep reads a compact xml file and initializes the dd4hep::Detector object-->
+  <!--Name of the DD4hep compact xml file to load-->
+  <parameter name="DD4hepXMLFile" type="string">
+    /opt/ilcsoft/muonc/detector-simulation/geometries/Crilin_ECAL/MuColl_crilin.xml
+  </parameter>
+  <!--Alternate name for EncodingStringParameterName-->
+  <!--If given, the Compact File parameter of that name will be used as argument to LCTrackerCellID::set_encoding_string()-->
+  <parameter name="EncodingStringParameterName" type="string"> GlobalTrackerReadoutID  </parameter>
+  <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+  <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+</processor>
+
