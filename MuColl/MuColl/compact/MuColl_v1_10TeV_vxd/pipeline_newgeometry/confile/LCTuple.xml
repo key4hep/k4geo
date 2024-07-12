@@ -1,0 +1,63 @@
+<processor name="LCTupleDefault" type="LCTuple">
+ <!--LCTuple creates a ROOT TTRee with a column wise ntuple from LCIO collections ....-->
+  <!--Name of the CalorimeterHit collection-->
+  <parameter name="CalorimeterHitCollection" type="string" lcioInType="CalorimeterHit"> </parameter>
+  <!--Name of the Cluster collection-->
+  <parameter name="ClusterCollection" type="string" lcioInType="Cluster"> PandoraClusters </parameter>
+  <!--Name of the IsoLep collection-->
+  <parameter name="IsoLepCollection" type="string" lcioInType="ReconstructedParticle"> </parameter>
+  <!--Name of the Jet collection-->
+  <parameter name="JetCollection" type="string" lcioInType="ReconstructedParticle"> </parameter>
+  <!--Switch to write out extra parameters calculated using information from Jet Finder-->
+  <parameter name="JetCollectionExtraParameters" type="bool">false </parameter>
+  <!--Switch to write out jet parameters coming from LCFIPlus tagging processor-->
+  <parameter name="JetCollectionTaggingParameters" type="bool">false </parameter>
+  <!--Names of LCRelation collections - need parallel prefix names in RelPrefixes-->
+  <parameter name="LCRelationCollections" type="StringVec" lcioInType="LCRelation">  </parameter>
+  <!-- Names of prefixes for variables from LCRelation collections - needs to be parallel to LCRelationCollections (one prefix per collection) -->
+  <parameter name="LCRelationPrefixes" type="StringVec"> </parameter>
+  <!--Names of LCRelation collections of PFO-->
+  <parameter name="LCRelationwithPFOCollections" type="string" lcioInType="LCRelation"> </parameter>
+  <!--Name of the MCParticle collection-->
+  <parameter name="MCParticleCollection" type="string" lcioInType="MCParticle"> MCParticle </parameter>
+  <!--Name of the MCParticle collection where the overlay is removed-->111111
+  <parameter name="MCParticleRemoveOverlayCollection" type="string" lcioInType="MCParticle"> </parameter>
+  <!--Name of the PFO collection with Relation-->
+  <parameter name="PFOwithRelationCollection" type="string" lcioInType="ReconstructedParticle"> </parameter>
+  <!--Name of the ReconstructedParticle collection-->
+  <parameter name="RecoParticleCollection" type="string" lcioInType="ReconstructedParticle">ReconstructedParticle </parameter>
+  <!--Name of the SimCalorimeterHit collection-->
+  <parameter name="SimCalorimeterHitCollection" type="string" lcioInType="SimCalorimeterHit"> </parameter>
+  <!--Name of the SimTrackerHit collection-->
+  <parameter name="SimTrackerHitCollection" type="string" lcioInType="SimTrackerHit"> </parameter>
+  <!--Name of the Track collection-->
+  <parameter name="TrackCollection" type="string" lcioInType="Track"> </parameter>
+  <!--Name of the TrackerHit collection-->
+  <parameter name="TrackerHitCollection" type="string" lcioInType="TrackerHit"> </parameter>
+  <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+  <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+  <!--Name of the Vertex collection-->
+  <parameter name="VertexCollection" type="string" lcioInType="Vertex"> </parameter>
+  <!--Switch to write out collection parameters-->
+  <parameter name="WriteCalorimeterHitCollectionParameters" type="bool">false </parameter>
+  <!--Switch to write out collection parameters-->
+  <parameter name="WriteClusterCollectionParameters" type="bool">false </parameter>
+  <!--Switch to write out collection parameters-->
+  <parameter name="WriteIsoLepCollectionParameters" type="bool">false </parameter>
+  <!--Switch to write out collection parameters-->
+  <parameter name="WriteJetCollectionParameters" type="bool">false </parameter>
+  <!--Switch to write out collection parameters-->
+  <parameter name="WriteMCParticleCollectionParameters" type="bool">false </parameter>
+  <!--Switch to write out collection parameters-->
+  <parameter name="WriteRecoParticleCollectionParameters" type="bool">false </parameter>
+  <!--Switch to write out collection parameters-->
+  <parameter name="WriteSimCalorimeterHitCollectionParameters" type="bool">false </parameter>
+  <!--Switch to write out collection parameters-->
+  <parameter name="WriteSimTrackerHitCollectionParameters" type="bool">false </parameter>
+  <!--Switch to write out collection parameters-->
+  <parameter name="WriteTrackCollectionParameters" type="bool">true </parameter>
+  <!--Switch to write out collection parameters-->
+  <parameter name="WriteTrackerHitCollectionParameters" type="bool">true </parameter>
+  <!--Switch to write out collection parameters-->
+  <parameter name="WriteVertexCollectionParameters" type="bool">false </parameter>
+</processor>

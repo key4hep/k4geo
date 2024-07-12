@@ -1,0 +1,246 @@
+  <processor name="FilterDL_VXDB" type="FilterDoubleLayerHits">
+    <parameter name="FillHistograms" type="bool" value="false" />
+    <parameter name="SubDetectorName" type="string" value="Vertex" />
+    <!-- Name of the input hit collection -->
+    <parameter name="InputCollection" type="string" value="VXDTrackerHits" />
+    <!-- Name of the output filtered hit collection -->
+    <parameter name="OutputCollection" type="string" value="VXDTrackerHits_DLFiltered" />
+    <!-- Configuration of the maximum dX and dTheta between a pair of hits at the inner and outer layer -->
+    <!-- 4 numbers per double-layer: <inner layer ID>  <outer layer ID>  <dX max [mm]>  <dTheta max [mrad]> -->
+    <parameter name="DoubleLayerCuts" type="StringVec">
+      0 1 1.0 0.6
+      2 3 1.0 0.33
+      4 5 1.0 0.27
+      6 7 1.0 0.21
+    </parameter>
+    <parameter name="Verbosity" type="string"> MESSAGE5 </parameter>
+  </processor>
+
+  <processor name="FilterDL_VXDE" type="FilterDoubleLayerHits">
+    <parameter name="FillHistograms" type="bool" value="false" />
+    <parameter name="SubDetectorName" type="string" value="Vertex" />
+    <!-- Name of the input hit collection -->
+    <parameter name="InputCollection" type="string" value="VXDEndcapTrackerHits" />
+    <!-- Name of the output filtered hit collection -->
+    <parameter name="OutputCollection" type="string" value="VXDEndcapTrackerHits_DLFiltered" />
+    <!-- Configuration of the maximum dX and dTheta between a pair of hits at the inner and outer layer -->
+    <!-- 4 numbers per double-layer: <inner layer ID>  <outer layer ID>  <dX max [mm]>  <dTheta max [mrad]> -->
+    <parameter name="DoubleLayerCuts" type="StringVec">
+      0 1 1.0 0.21
+      2 3 1.0 0.18
+      4 5 0.8 0.12
+      6 7 0.6 0.12
+    </parameter>
+    <parameter name="Verbosity" type="string"> MESSAGE5 </parameter>
+  </processor>
+
+  <processor name="TightFilterDL_VXDB" type="FilterDoubleLayerHits">
+    <parameter name="FillHistograms" type="bool" value="false" />
+    <parameter name="SubDetectorName" type="string" value="Vertex" />
+    <!-- Name of the input hit collection -->
+    <parameter name="InputCollection" type="string" value="VXDTrackerHits" />
+    <!-- Name of the output filtered hit collection -->
+    <parameter name="OutputCollection" type="string" value="VXDTrackerHits_DLFiltered" />
+    <!-- Configuration of the maximum dX and dTheta between a pair of hits at the inner and outer layer -->
+    <!-- 4 numbers per double-layer: <inner layer ID>  <outer layer ID>  <dX max [mm]>  <dTheta max [mrad]> -->
+    <parameter name="DoubleLayerCuts" type="StringVec">
+        0 1 0.55 0.3
+        2 3 0.55 0.2
+        4 5 0.5 0.15
+        6 7 0.4 0.12
+    </parameter>
+    <parameter name="Verbosity" type="string"> MESSAGE5 </parameter>
+  </processor>
+
+  <processor name="TightFilterDL_VXDE" type="FilterDoubleLayerHits">
+    <parameter name="FillHistograms" type="bool" value="false" />
+    <parameter name="SubDetectorName" type="string" value="Vertex" />
+    <!-- Name of the input hit collection -->
+    <parameter name="InputCollection" type="string" value="VXDEndcapTrackerHits" />
+    <!-- Name of the output filtered hit collection -->
+    <parameter name="OutputCollection" type="string" value="VXDEndcapTrackerHits_DLFiltered" />
+    <!-- Configuration of the maximum dX and dTheta between a pair of hits at the inner and outer layer -->
+    <!-- 4 numbers per double-layer: <inner layer ID>  <outer layer ID>  <dX max [mm]>  <dTheta max [mrad]> -->
+    <parameter name="DoubleLayerCuts" type="StringVec">
+        0 1 0.7 0.11
+        2 3 0.7 0.09
+        4 5 0.4 0.06
+        6 7 0.3 0.042
+    </parameter>
+    <parameter name="Verbosity" type="string"> MESSAGE5 </parameter>
+  </processor>
+
+  <processor name="VXDBarrelDigitiser" type="DDPlanarDigiProcessor">
+    <parameter name="SubDetectorName" type="string"> Vertex </parameter>
+    <!--PlanarDigiProcessor creates TrackerHits from SimTrackerHits, smearing them according to the input parameters.-->
+    <!--whether hits are 1D strip hits-->
+    <parameter name="IsStrip" type="bool">false </parameter>
+    <!--resolution in direction of u-->
+    <parameter name="ResolutionU" type="float"> 0.005 </parameter>
+    <!--resolution in direction of v-->
+    <parameter name="ResolutionV" type="float"> 0.005 </parameter>
+    <!--Name of the Input SimTrackerHit collection-->
+    <parameter name="SimTrackHitCollectionName" type="string" lcioInType="SimTrackerHit"> VertexBarrelCollection </parameter>
+    <!--Name of TrackerHit SimTrackHit relation collection-->
+    <parameter name="SimTrkHitRelCollection" type="string" lcioOutType="LCRelation"> VXDTrackerHitRelations </parameter>
+    <!--Name of the TrackerHit output collection-->
+    <parameter name="TrackerHitCollectionName" type="string" lcioOutType="TrackerHitPlane"> VXDTrackerHits </parameter>
+    <!--resolution in time-->
+    <parameter name="ResolutionT" type="FloatVec"> 0.03  </parameter>
+    <!--resolution in direction of u - either one per layer or one for all layers -->
+    <parameter name="UseTimeWindow" type="bool"> true </parameter>
+    <!--Correct hit times for propagation: radial distance/c-->
+    <parameter name="CorrectTimesForPropagation" type="bool" value="true"/>
+    <!--Lower bound of the time window [ns]-->
+    <parameter name="TimeWindowMin" type="float"> -0.09 </parameter>
+    <!--Upper bound of the time window [ns]-->
+    <parameter name="TimeWindowMax" type="float"> 0.15 </parameter>
+    <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+    <parameter name="Verbosity" type="string"> WARNING </parameter>
+  </processor>
+
+  <processor name="VXDEndcapDigitiser" type="DDPlanarDigiProcessor">
+    <parameter name="SubDetectorName" type="string"> Vertex </parameter>
+    <!--PlanarDigiProcessor creates TrackerHits from SimTrackerHits, smearing them according to the input parameters.-->
+    <!--whether hits are 1D strip hits-->
+    <parameter name="IsStrip" type="bool">false </parameter>
+    <!--resolution in direction of u-->
+    <parameter name="ResolutionU" type="float"> 0.005 </parameter>
+    <!--resolution in direction of v-->
+    <parameter name="ResolutionV" type="float"> 0.005 </parameter>
+    <!--Name of the Input SimTrackerHit collection-->
+    <parameter name="SimTrackHitCollectionName" type="string" lcioInType="SimTrackerHit"> VertexEndcapCollection </parameter>
+    <!--Name of TrackerHit SimTrackHit relation collection-->
+    <parameter name="SimTrkHitRelCollection" type="string" lcioOutType="LCRelation"> VXDEndcapTrackerHitRelations </parameter>
+    <!--Name of the TrackerHit output collection-->
+    <parameter name="TrackerHitCollectionName" type="string" lcioOutType="TrackerHitPlane"> VXDEndcapTrackerHits </parameter>
+    <!--resolution in time-->
+    <parameter name="ResolutionT" type="FloatVec"> 0.03  </parameter>
+    <!--resolution in direction of u - either one per layer or one for all layers -->
+    <parameter name="UseTimeWindow" type="bool"> true </parameter>
+    <!--Correct hit times for propagation: radial distance/c-->
+    <parameter name="CorrectTimesForPropagation" type="bool" value="true"/>
+    <!--Lower bound of the time window [ns]-->
+    <parameter name="TimeWindowMin" type="float"> -0.09 </parameter>
+    <!--Upper bound of the time window [ns]-->
+    <parameter name="TimeWindowMax" type="float"> 0.15 </parameter>
+    <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+    <parameter name="Verbosity" type="string"> WARNING </parameter>
+  </processor>
+
+  <processor name="InnerPlanarDigiProcessor" type="DDPlanarDigiProcessor">
+    <!--PlanarDigiProcessor creates TrackerHits from SimTrackerHits, smearing them according to the input parameters.-->
+    <parameter name="SubDetectorName" type="string"> InnerTrackers </parameter>
+    <!--whether hits are 1D strip hits-->
+    <parameter name="IsStrip" type="bool"> false </parameter>
+    <!--resolution in direction of u-->
+    <parameter name="ResolutionU" type="float"> 0.007 </parameter>
+    <!--resolution in direction of v-->
+    <parameter name="ResolutionV" type="float"> 0.090 </parameter>
+    <!--Name of the Input SimTrackerHit collection-->
+    <parameter name="SimTrackHitCollectionName" type="string" lcioInType="SimTrackerHit"> InnerTrackerBarrelCollection </parameter>
+    <!--Name of TrackerHit SimTrackHit relation collection-->
+    <parameter name="SimTrkHitRelCollection" type="string" lcioOutType="LCRelation"> ITBarrelHitsRelations </parameter>
+    <!--Name of the TrackerHit output collection-->
+    <parameter name="TrackerHitCollectionName" type="string" lcioOutType="TrackerHitPlane"> ITrackerHits </parameter>
+    <!--resolution in time-->
+    <parameter name="ResolutionT" type="FloatVec"> 0.06  </parameter>
+    <!--resolution in direction of u - either one per layer or one for all layers -->
+    <parameter name="UseTimeWindow" type="bool"> true </parameter>
+    <!--Correct hit times for propagation: radial distance/c-->
+    <parameter name="CorrectTimesForPropagation" type="bool" value="true"/>
+    <!--Lower bound of the time window [ns]-->
+    <parameter name="TimeWindowMin" type="float"> -0.18 </parameter>
+    <!--Upper bound of the time window [ns]-->
+    <parameter name="TimeWindowMax" type="float"> 0.3 </parameter>
+    <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+    <parameter name="Verbosity" type="string"> WARNING </parameter>
+  </processor>
+
+  <processor name="InnerEndcapPlanarDigiProcessor" type="DDPlanarDigiProcessor">
+    <!--PlanarDigiProcessor creates TrackerHits from SimTrackerHits, smearing them according to the input parameters.-->
+    <parameter name="SubDetectorName" type="string"> InnerTrackers </parameter>
+    <!--whether hits are 1D strip hits-->
+    <parameter name="IsStrip" type="bool"> false </parameter>
+    <!--resolution in direction of u-->
+    <parameter name="ResolutionU" type="float"> 0.007 </parameter>
+    <!--resolution in direction of v-->
+    <parameter name="ResolutionV" type="float"> 0.090 </parameter>
+    <!--Name of the Input SimTrackerHit collection-->
+    <parameter name="SimTrackHitCollectionName" type="string" lcioInType="SimTrackerHit"> InnerTrackerEndcapCollection </parameter>
+    <!--Name of TrackerHit SimTrackHit relation collection-->
+    <parameter name="SimTrkHitRelCollection" type="string" lcioOutType="LCRelation"> ITEndcapHitsRelations </parameter>
+    <!--Name of the TrackerHit output collection-->
+    <parameter name="TrackerHitCollectionName" type="string" lcioOutType="TrackerHitPlane"> ITrackerEndcapHits </parameter>
+    <!--resolution in time-->
+    <parameter name="ResolutionT" type="FloatVec"> 0.06  </parameter>
+    <!--resolution in direction of u - either one per layer or one for all layers -->
+    <parameter name="UseTimeWindow" type="bool"> true </parameter>
+    <!--Correct hit times for propagation: radial distance/c-->
+    <parameter name="CorrectTimesForPropagation" type="bool" value="true"/>
+    <!--Lower bound of the time window [ns]-->
+    <parameter name="TimeWindowMin" type="float"> -0.18 </parameter>
+    <!--Upper bound of the time window [ns]-->
+    <parameter name="TimeWindowMax" type="float"> 0.3 </parameter>
+    <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+    <parameter name="Verbosity" type="string"> WARNING </parameter>
+  </processor>
+
+  <processor name="OuterPlanarDigiProcessor" type="DDPlanarDigiProcessor">
+    <!--PlanarDigiProcessor creates TrackerHits from SimTrackerHits, smearing them according to the input parameters.-->
+    <parameter name="SubDetectorName" type="string"> OuterTrackers </parameter>
+    <!--whether hits are 1D strip hits-->
+    <parameter name="IsStrip" type="bool"> false </parameter>
+    <!--resolution in direction of u-->
+    <parameter name="ResolutionU" type="float"> 0.007 </parameter>
+    <!--resolution in direction of v-->
+    <parameter name="ResolutionV" type="float"> 0.090 </parameter>
+    <!--Name of the Input SimTrackerHit collection-->
+    <parameter name="SimTrackHitCollectionName" type="string" lcioInType="SimTrackerHit"> OuterTrackerBarrelCollection </parameter>
+    <!--Name of TrackerHit SimTrackHit relation collection-->
+    <parameter name="SimTrkHitRelCollection" type="string" lcioOutType="LCRelation"> OTBarrelHitsRelations </parameter>
+    <!--Name of the TrackerHit output collection-->
+    <parameter name="TrackerHitCollectionName" type="string" lcioOutType="TrackerHitPlane"> OTrackerHits </parameter>
+    <!--resolution in time-->
+    <parameter name="ResolutionT" type="FloatVec"> 0.06  </parameter>
+    <!--resolution in direction of u - either one per layer or one for all layers -->
+    <parameter name="UseTimeWindow" type="bool"> true </parameter>
+    <!--Correct hit times for propagation: radial distance/c-->
+    <parameter name="CorrectTimesForPropagation" type="bool" value="true"/>
+    <!--Lower bound of the time window [ns]-->
+    <parameter name="TimeWindowMin" type="float"> -0.18 </parameter>
+    <!--Upper bound of the time window [ns]-->
+    <parameter name="TimeWindowMax" type="float"> 0.3 </parameter>
+    <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+    <parameter name="Verbosity" type="string"> WARNING </parameter>
+  </processor>
+
+  <processor name="OuterEndcapPlanarDigiProcessor" type="DDPlanarDigiProcessor">
+    <!--PlanarDigiProcessor creates TrackerHits from SimTrackerHits, smearing them according to the input parameters.-->
+    <parameter name="SubDetectorName" type="string"> OuterTrackers </parameter>
+    <!--whether hits are 1D strip hits-->
+    <parameter name="IsStrip" type="bool"> false </parameter>
+    <!--resolution in direction of u-->
+    <parameter name="ResolutionU" type="float"> 0.007 </parameter>
+    <!--resolution in direction of v-->
+    <parameter name="ResolutionV" type="float"> 0.090 </parameter>
+    <!--Name of the Input SimTrackerHit collection-->
+    <parameter name="SimTrackHitCollectionName" type="string" lcioInType="SimTrackerHit"> OuterTrackerEndcapCollection </parameter>
+    <!--Name of TrackerHit SimTrackHit relation collection-->
+    <parameter name="SimTrkHitRelCollection" type="string" lcioOutType="LCRelation"> OTEndcapHitsRelations </parameter>
+    <!--Name of the TrackerHit output collection-->
+    <parameter name="TrackerHitCollectionName" type="string" lcioOutType="TrackerHitPlane"> OTrackerEndcapHits </parameter>
+    <!--resolution in time-->
+    <parameter name="ResolutionT" type="FloatVec"> 0.06  </parameter>
+    <!--resolution in direction of u - either one per layer or one for all layers -->
+    <parameter name="UseTimeWindow" type="bool"> true </parameter>
+    <!--Correct hit times for propagation: radial distance/c-->
+    <parameter name="CorrectTimesForPropagation" type="bool" value="true"/>
+    <!--Lower bound of the time window [ns]-->
+    <parameter name="TimeWindowMin" type="float"> -0.18 </parameter>
+    <!--Upper bound of the time window [ns]-->
+    <parameter name="TimeWindowMax" type="float"> 0.3 </parameter>
+    <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+    <parameter name="Verbosity" type="string"> WARNING </parameter>
+  </processor>
+
