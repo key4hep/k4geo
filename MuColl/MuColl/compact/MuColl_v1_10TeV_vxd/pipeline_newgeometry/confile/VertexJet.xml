@@ -1,0 +1,158 @@
+  <!-- ========== Rename collection (to have same output collection name as FastJet ================================== -->
+
+  <processor name="RenameCollection" type="MergeCollections">
+    <parameter name="CollectionParameterIndex" type="int">0 </parameter>
+    <parameter name="InputCollectionIDs" type="IntVec"> </parameter>
+    <parameter name="InputCollections" type="StringVec"> PandoraPFOs </parameter>
+    <parameter name="OutputCollection" type="string"> PFOsFromJets </parameter>
+  </processor>
+
+  <processor name="MyFastJetProcessor" type="FastJetProcessor">
+    <parameter name="algorithm" type="StringVec">kt_algorithm 0.5</parameter>
+    <parameter name="clusteringMode" type="StringVec"> Inclusive 5</parameter>
+    <parameter name="jetOut" type="string" lcioOutType="ReconstructedParticle">JetCaloOut </parameter>
+    <parameter name="recParticleIn" type="string" lcioInType="ReconstructedParticle"> SelectedPandoraPFOs </parameter>
+    <parameter name="recombinationScheme" type="string">E_scheme </parameter>
+  </processor>
+
+  <!-- ========== Vertexing for flavour tagging (constrained) and vertex resolutions (unconstrained) ================================== -->
+  <group name="Vertexing">
+    <parameter name="Algorithms" type="stringVec"> PrimaryVertexFinder BuildUpVertex </parameter>
+    <parameter name="ReadSubdetectorEnergies" type="int" value="0"/> <!-- true for ILD -->
+    <parameter name="UpdateVertexRPDaughters" type="int" value="0"/> <!-- false for non-updative PandoraPFOs -->
+    <parameter name="TrackHitOrdering" type="int" value="2"/> <!-- Track hit ordering: 0=ILD-LOI (default), 1=ILD-DBD, 2=CLICdet -->
+    <parameter name="PrintEventNumber" type="int" value="1"/> <!-- 0 for not printing event number, n for printing every n events -->
+    <!-- specify input collection names -->
+    <parameter name="UseMCP" type="int" value="0" /> <!-- MC info not used -->
+    <parameter name="MCPCollection" type="string" value="MCParticle" />
+    <parameter name="MCPFORelation" type="string" value="RecoMCTruthLink" />
+    <parameter name="MagneticField" type="float" value="4.0"/> <!-- CLIC B field -->
+    <parameter name="BeamSizeX" type="float" value="40.E-6"/> <!-- CLIC beam sizes from CDR -->
+    <parameter name="BeamSizeY" type="float" value="1.0E-6"/>
+    <parameter name="BeamSizeZ" type="float" value="44E-3"/>
+    <!-- parameters for primary vertex finder -->
+    <parameter name="PrimaryVertexFinder.BeamspotSmearing" type="boolean" value="false" />
+    <parameter name="PrimaryVertexFinder.TrackMaxD0" type="double" value="20." />
+    <parameter name="PrimaryVertexFinder.TrackMaxZ0" type="double" value="20." />
+    <parameter name="PrimaryVertexFinder.TrackMaxInnermostHitRadius" type="double" value="61" /><!-- obsolete? -->
+    <parameter name="PrimaryVertexFinder.TrackMinVtxFtdHits" type="int" value="1" />
+    <parameter name="PrimaryVertexFinder.Chi2Threshold" type="double" value="25." />
+    <!-- irrelevant because of TrackMinVtxFtdHits = 1 -->
+    <parameter name="PrimaryVertexFinder.TrackMinFtdHits" type="int" value="999999" />
+    <parameter name="PrimaryVertexFinder.TrackMinVxdHits" type="double" value="999999" />
+    <!-- No tracks with hits only in the main silicon tracker -->
+    <parameter name="PrimaryVertexFinder.TrackMinTpcHits" type="int" value="999999" />
+    <parameter name="PrimaryVertexFinder.TrackMinTpcHitsMinPt" type="double" value="999999" />
+
+    <!-- parameters for secondary vertex finder -->
+    <parameter name="BuildUpVertex.TrackMaxD0" type="double" value="10." />
+    <parameter name="BuildUpVertex.TrackMaxZ0" type="double" value="20." />
+    <parameter name="BuildUpVertex.TrackMinPt" type="double" value="0.1" />
+    <parameter name="BuildUpVertex.TrackMaxD0Err" type="double" value="0.1" />
+    <parameter name="BuildUpVertex.TrackMaxZ0Err" type="double" value="0.1" />
+    <parameter name="BuildUpVertex.TrackMinTpcHits" type="int" value="1" />
+    <parameter name="BuildUpVertex.TrackMinTpcHitsMinPt" type="double" value="999999" /><!--FIXME-->
+    <parameter name="BuildUpVertex.TrackMinFtdHits" type="int" value="1" />
+    <parameter name="BuildUpVertex.TrackMinVxdHits" type="int" value="1" />
+    <parameter name="BuildUpVertex.TrackMinVxdFtdHits" type="int" value="1" />
+    <parameter name="BuildUpVertex.PrimaryChi2Threshold" type="double" value="25." />
+    <parameter name="BuildUpVertex.SecondaryChi2Threshold" type="double" value="9." />
+    <parameter name="BuildUpVertex.MassThreshold" type="double" value="10." />
+    <parameter name="BuildUpVertex.MinDistFromIP" type="double" value="0.3" />
+    <parameter name="BuildUpVertex.MaxChi2ForDistOrder" type="double" value="1.0" />
+    <parameter name="BuildUpVertex.AssocIPTracks" type="int" value="1" />
+    <parameter name="BuildUpVertex.AssocIPTracksMinDist" type="double" value="0." />
+    <parameter name="BuildUpVertex.AssocIPTracksChi2RatioSecToPri" type="double" value="2.0" />
+    <parameter name="BuildUpVertex.UseV0Selection" type="int" value="1" />
+    <!-- Disable AVF -->
+    <parameter name="BuildUpVertex.UseAVF" type="boolean" value="false" />
+    <parameter name="BuildUpVertex.AVFTemperature" type="double" value="5.0" />
+
+    <!-- Primary and Secondary vertex finder ================================================ -->
+    <processor name="VertexFinder" type="LcfiplusProcessor">
+      <!-- run primary and secondary vertex finders -->
+      <parameter name="PFOCollection" type="string" value="PFOsFromJets" />
+      <parameter name="PrimaryVertexCollectionName" type="string" value="PrimaryVertices" />
+      <parameter name="BuildUpVertexCollectionName" type="string" value="BuildUpVertices" />
+      <parameter name="BuildUpVertex.V0VertexCollectionName" type="string" value="BuildUpVertices_V0" />
+      <parameter name="PrimaryVertexFinder.BeamspotConstraint" type="bool">1 </parameter>
+    </processor>
+
+    <!-- Primary and Secondary vertex finder for resolutions ================================= -->
+    <processor name="VertexFinderUnconstrained" type="LcfiplusProcessor">
+      <!-- run primary and secondary vertex finders -->
+      <parameter name="PFOCollection" type="string" value="TightSelectedPandoraPFOs" />
+      <parameter name="PrimaryVertexCollectionName" type="string" value="PrimaryVertices_res" />
+      <parameter name="BuildUpVertexCollectionName" type="string" value="BuildUpVertices_res" />
+      <parameter name="BuildUpVertex.V0VertexCollectionName" type="string" value="BuildUpVertices_V0_res" />
+      <parameter name="PrimaryVertexFinder.BeamspotConstraint" type="bool">0 </parameter>
+    </processor>
+  </group>
+
+
+  <processor name="JetClusteringAndRefiner" type="LcfiplusProcessor">
+    <parameter name="Algorithms" type="stringVec"> JetClustering JetVertexRefiner </parameter>
+    <!-- general parameters -->
+    <parameter name="PFOCollection" type="string" value="PFOsFromJets" /> <!-- input PFO collection -->
+    <parameter name="UseMCP" type="int" value="0" /> <!-- MC info not used -->
+    <parameter name="MCPCollection" type="string" value="MCParticle" />
+    <parameter name="MCPFORelation" type="string" value="RecoMCTruthLink" />
+    <parameter name="ReadSubdetectorEnergies" type="int" value="0"/> <!-- true for ILD -->
+    <parameter name="UpdateVertexRPDaughters" type="int" value="0"/> <!-- false for non-updative PandoraPFOs -->
+    <parameter name="TrackHitOrdering" type="int" value="2"/> <!-- Track hit ordering: 0=ILD-LOI (default), 1=ILD-DBD, 2=CLICdet -->
+    <parameter name="PrintEventNumber" type="int" value="1"/> <!-- 0 for not printing event number, n for printing every n events -->
+    <parameter name="MagneticField" type="float" value="4.0"/> <!-- ILC and CLIC detectors have different values -->
+    <!-- jet clustering parameters -->
+    <parameter name="JetClustering.PrimaryVertexCollectionName" type="string" value="PrimaryVertices" /> <!-- Needed for post 00.06.09 -->
+    <parameter name="JetClustering.InputVertexCollectionName" type="string" value="BuildUpVertices" /> <!-- vertex collections to be used in JC -->
+    <parameter name="JetClustering.OutputJetCollectionName" type="stringVec" value="VertexJets" /> <!-- output collection name, may be multiple -->
+    <parameter name="JetClustering.NJetsRequested" type="intVec" value="4" /> <!-- Multiple NJets can be specified -->
+    <parameter name="JetClustering.YCut" type="doubleVec" value="0." /> <!-- specify 0 if not used -->
+    <parameter name="JetClustering.UseMuonID" type="int" value="1" /> <!-- jet-muon ID for jet clustering -->
+    <parameter name="JetClustering.VertexSelectionMinimumDistance" type="double" value="0.3" /> <!-- in mm -->
+    <parameter name="JetClustering.VertexSelectionMaximumDistance" type="double" value="30." /> <!-- in mm -->
+    <parameter name="JetClustering.VertexSelectionK0MassWidth" type="double" value="0.02" /> <!-- in GeV -->
+    <parameter name="JetClustering.YAddedForJetVertexVertex" type="double" value="100"/> <!-- add penalty for combining vertices -->
+    <parameter name="JetClustering.YAddedForJetLeptonVertex" type="double" value="100"/> <!-- add penalty for combining lepton and vertex -->
+    <parameter name="JetClustering.YAddedForJetLeptonLepton" type="double" value="100"/> <!-- add penalty for combining leptons -->
+
+    <parameter name="JetClustering.JetAlgorithm" type="string" value="ValenciaVertex" /> <!-- jet algorithm -->
+    <parameter name="JetClustering.UseBeamJets" type="int" value="1" /> <!-- beam jet rejection -->
+    <parameter name="JetClustering.AlphaParameter" type="double" value="1.0" />
+    <parameter name="JetClustering.BetaParameter" type="double" value="1.0" />
+    <parameter name="JetClustering.GammaParameter" type="double" value="1.0" />
+    <parameter name="JetClustering.RParameter" type="double" value="1.0" />
+    <parameter name="JetClustering.OutputJetStoresVertex" type="int" value="0" />
+    <parameter name="JetClustering.YAddedForJetVertexLepton" type="int" value="0" />
+    <parameter name="JetClustering.MuonIDExternal" type="int" value="0" />
+    <parameter name="JetClustering.MuonIDMinimumEnergy" type="double" value="5.0" />
+    <parameter name="JetClustering.MuonIDMinimumEnergy" type="int" value="0" />
+    <parameter name="JetClustering.MuonIDMinimumD0Significance" type="double" value="5.0" />
+    <parameter name="JetClustering.MuonIDMinimumZ0Significance" type="double" value="5.0" />
+    <parameter name="JetClustering.MuonIDMaximum3DImpactParameter" type="double" value="5.0" />
+    <parameter name="JetClustering.MuonIDMinimumProbability" type="double" value="0.5" />
+    <parameter name="JetClustering.MaxNumberOfJetsForYThreshold" type="int" value="10" />
+
+    <!-- vertex refiner parameters -->
+    <parameter name="JetVertexRefiner.InputJetCollectionName" type="string" value="VertexJets" />
+    <parameter name="JetVertexRefiner.OutputJetCollectionName" type="string" value="RefinedVertexJets" />
+    <parameter name="JetVertexRefiner.PrimaryVertexCollectionName" type="string" value="PrimaryVertices" />
+    <parameter name="JetVertexRefiner.InputVertexCollectionName" type="string" value="BuildUpVertices" />
+    <parameter name="JetVertexRefiner.V0VertexCollectionName" type="string" value="BuildUpVertices_V0" />
+    <parameter name="JetVertexRefiner.OutputVertexCollectionName" type="string" value="RefinedVertices" />
+    <parameter name="JetVertexRefiner.MinPosSingle" type="double" value="0.3" />
+    <parameter name="JetVertexRefiner.MaxPosSingle" type="double" value="30." />
+    <parameter name="JetVertexRefiner.MinEnergySingle" type="double" value="1." />
+    <parameter name="JetVertexRefiner.MaxAngleSingle" type="double" value="0.5" />
+    <parameter name="JetVertexRefiner.MaxSeparationPerPosSingle" type="double" value="0.1" />
+    <parameter name="JetVertexRefiner.mind0sigSingle" type="double" value="5." />
+    <parameter name="JetVertexRefiner.minz0sigSingle" type="double" value="5." />
+    <parameter name="JetVertexRefiner.OneVertexProbThreshold" type="double" value="0.001" />
+    <parameter name="JetVertexRefiner.MaxCharmFlightLengthPerJetEnergy" type="double" value="0.1" />
+    <parameter name="JetVertexRefiner.useBNess" type="bool" value="0" />
+    <parameter name="JetVertexRefiner.BNessCut" type="double" value="-0.80" />
+    <parameter name="JetVertexRefiner.BNessCutE1" type="double" value="-0.15" />
+  </processor>
+
+
+
