@@ -157,43 +157,43 @@
                 <trd x1="VertexEndcap_rmin2 * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" x2="VertexEndcap_rmax * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" z="(VertexEndcap_rmax - VertexEndcap_rmin2)/2" />
                 <module_component thickness="VertexEndcap_Support_Thickness"  material="Silicon" vis="SiVertexPassiveVis"/>
                 <module_component thickness="VertexEndcap_Sensitive_Thickness"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
-                <!-- <module_component thickness="VertexEndcap_DoubleLayer_Gap/2"  material="Air" vis="SiVertexAir" /> -->
+                <module_component thickness="VertexEndcap_DoubleLayer_Gap/2"  material="Air" vis="SiVertexAir" />
             </module>
 
-            <module name="SiVertexEndcapModule2_1" vis="SiVertexModuleVis">
+            <!-- <module name="SiVertexEndcapModule2_1" vis="SiVertexModuleVis">
                 <trd x1="VertexEndcap_rmin2 * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" x2="VertexEndcap_rmax * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" z="(VertexEndcap_rmax - VertexEndcap_rmin2)/2" />
-                <!-- <module_component thickness="VertexEndcap_DoubleLayer_Gap/2"  material="Air" vis="SiVertexAir" /> -->
+                <module_component thickness="VertexEndcap_DoubleLayer_Gap/2"  material="Air" vis="SiVertexAir" />
                 <module_component thickness="VertexEndcap_Sensitive_Thickness"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
                 <module_component thickness="VertexEndcap_Support_Thickness"  material="Silicon" vis="SiVertexPassiveVis"/>
-            </module>
+            </module> -->
 
             <module name="SiVertexEndcapModule3_0" vis="SiVertexModuleVis">
                 <trd x1="VertexEndcap_rmin3 * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" x2="VertexEndcap_rmax * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" z="(VertexEndcap_rmax - VertexEndcap_rmin3)/2" />
                 <module_component thickness="VertexEndcap_Support_Thickness"  material="Silicon" vis="SiVertexPassiveVis"/>
                 <module_component thickness="VertexEndcap_Sensitive_Thickness"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
-                <!-- <module_component thickness="VertexEndcap_DoubleLayer_Gap/2"  material="Air" vis="SiVertexAir" /> -->
+                <module_component thickness="VertexEndcap_DoubleLayer_Gap/2"  material="Air" vis="SiVertexAir" />
             </module>
 
-            <module name="SiVertexEndcapModule3_1" vis="SiVertexModuleVis">
+            <!-- <module name="SiVertexEndcapModule3_1" vis="SiVertexModuleVis">
                 <trd x1="VertexEndcap_rmin3 * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" x2="VertexEndcap_rmax * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" z="(VertexEndcap_rmax - VertexEndcap_rmin3)/2" />
-                <!-- <module_component thickness="VertexEndcap_DoubleLayer_Gap/2"  material="Air" vis="SiVertexAir" /> -->
+                <module_component thickness="VertexEndcap_DoubleLayer_Gap/2"  material="Air" vis="SiVertexAir" />
                 <module_component thickness="VertexEndcap_Sensitive_Thickness"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
                 <module_component thickness="VertexEndcap_Support_Thickness"  material="Silicon" vis="SiVertexPassiveVis"/>
-            </module>
+            </module> -->
 
             <module name="SiVertexEndcapModule4_0" vis="SiVertexModuleVis">
                 <trd x1="VertexEndcap_rmin4 * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" x2="VertexEndcap_rmax * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" z="(VertexEndcap_rmax - VertexEndcap_rmin4)/2" />
                 <module_component thickness="VertexEndcap_Support_Thickness"  material="Silicon" vis="SiVertexPassiveVis"/>
                 <module_component thickness="VertexEndcap_Sensitive_Thickness"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
-                <!-- <module_component thickness="VertexEndcap_DoubleLayer_Gap/2"  material="Air" vis="SiVertexAir" /> -->
+                <module_component thickness="VertexEndcap_DoubleLayer_Gap/2"  material="Air" vis="SiVertexAir" />
             </module>
 
-            <module name="SiVertexEndcapModule4_1" vis="SiVertexModuleVis">
+            <!-- <module name="SiVertexEndcapModule4_1" vis="SiVertexModuleVis">
                 <trd x1="VertexEndcap_rmin4 * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" x2="VertexEndcap_rmax * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" z="(VertexEndcap_rmax - VertexEndcap_rmin4)/2" />
-                <!-- <module_component thickness="VertexEndcap_DoubleLayer_Gap/2"  material="Air" vis="SiVertexAir" /> -->
+                <module_component thickness="VertexEndcap_DoubleLayer_Gap/2"  material="Air" vis="SiVertexAir" />
                 <module_component thickness="VertexEndcap_Sensitive_Thickness"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
                 <module_component thickness="VertexEndcap_Support_Thickness"  material="Silicon" vis="SiVertexPassiveVis"/>
-            </module>
+            </module> -->
 
             <!-- <layer id="0"  vis="SiVertexLayerVis">
                 <ring r="(VertexEndcap_rmax + VertexEndcap_rmin1)/2" zstart="VertexEndcap_z1" nmodules="(int) VertexEndcapModules" dz="0" phi0="pi/(VertexEndcapModules)" module="SiVertexEndcapModule1_0"/>
