@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!--
+?xml-stylesheet type="text/xsl"
+href="http://ilcsoft.desy.de/marlin/marlin.xsl"?
+-->
+<!-- ?xml-stylesheet type="text/xsl" href="marlin.xsl"? -->
+
+<marlin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ilcsoft.desy.de/marlin/marlin.xsd">
+
+  <!-- ======================================================================================================== -->
+  <!-- ======================================================================================================== -->
+  <!-- == List of processors to execute                                                                      == -->
+  <!-- ======================================================================================================== -->
+  <!-- ======================================================================================================== -->
+
+  <execute>
+
+    <!-- ========== setup  ========== -->
+    <processor name="MyAIDAProcessor"/>
+    <processor name="EventNumber" />
+    <processor name="Config" />
+
+    <!-- ==========  InitDD4hep.xml  ========== -->
+    <processor name="InitDD4hep"/>
+
+    <!-- ========== DigiOverlay.xml  ========== -->
+    <if condition="Config.OverlayBIB">
+      <processor name="OverlayBIB"/>
+    </if>
+    <if condition="Config.OverlayTrimmed">
+      <processor name="OverlayTrimmed"/>
+    </if>
+    <if condition="Config.OverlayFalse">
+      <processor name="OverlayFalse"/>
+    </if>
+    <if condition="Config.OverlayTest">
+      <processor name="OverlayTest"/>
+    </if>
+
+    <!-- ==========  TrackerDigitization.xml ========== -->
+    <processor name="VXDBarrelDigitiser"/>
+    <processor name="VXDEndcapDigitiser"/>
+    <processor name="InnerPlanarDigiProcessor"/>
+    <processor name="InnerEndcapPlanarDigiProcessor"/>
+    <processor name="OuterPlanarDigiProcessor"/>
+    <processor name="OuterEndcapPlanarDigiProcessor"/>
+
+    <!-- ==========  ACTs  ========== -->
+    <processor name="MyCKFTracking"/>
+    <processor name="MyTrackDeduper"/>
+    <processor name="MyTrackTruth"/>
+
+    <!-- ========== Tracking.xml  ========== -->
+    <processor name="Refit" />
+
+    <!-- ========== Calo.xml ============ -->
+    <processor name="MyDDCaloDigi"/>
+    <processor name="MyDDSimpleMuonDigi"/>
+    <processor name="MyDDMarlinPandora"/>
+
+    <!-- =============== PFOSelector.xml ================= -->
+    <group name="PfoSelector" />
+
+    <!-- =============== VertexJet.xml ================== -->
+    <processor name="MyFastJetProcessor"/>
+
+    <!-- ==========  Output  ========== -->
+    <processor name="MyLCTuple" />
+    <processor name="Output_REC"/>
+
+    <processor name="ECalBarrelTuple"/>
+    <processor name="ECalEndcapTuple"/>
+    <processor name="ECalBarrelCollectionTuple"/>
+    <processor name="ECalEndcapCollectionTuple"/>
+    <processor name="HCalBarrelTuple"/>
+    <processor name="HCalBarrelCollectionTuple"/>
+    <processor name="HCalEndcapTuple"/>
+    <processor name="HCalEndcapCollectionTuple"/>
+
+  </execute>
+
+  <!-- Include default configuration files -->
+  <include ref="confile/InitDD4hep.xml"/>
+  <include ref="confile/DigiOverlay.xml"/>
+  <include ref="confile/TrackerDigitization.xml"/>
+  <include ref="confile/Tracking.xml"/>
+  <include ref="confile/Calo.xml"/>
+  <include ref="confile/PFOSelector.xml"/>
+  <include ref="confile/VertexJet.xml"/>
+
+  <!-- ======================================================================================================== -->
+  <!-- ======================================================================================================== -->
+  <!-- == Input configuration                                                                               == -->
+  <!-- ======================================================================================================== -->
+  <!-- ======================================================================================================== -->
+
+  <global>
+	  <parameter name="LCIOInputFiles">muonGun_tracker10TeV_p001-100_theta89_10k_sim.slcio</parameter>
+    <!-- Limit the number of processed records (run+evt): -->
+    <parameter name="MaxRecordNumber" value="-1" />
+    <parameter name="SkipNEvents" value="0" />
+    <parameter name="SupressCheck" value="false" />
+    <parameter name="Verbosity" options="DEBUG0-9,MESSAGE0-9,WARNING0-9,ERROR0-9,SILENT">DEBUG </parameter>
+    <parameter name="RandomSeed" value="1234567890" />
+  </global>
+
+  <!-- ======================================================================================================== -->
+  <!-- ======================================================================================================== -->
+  <!-- == Global setup                                                                                       == -->
+  <!-- ======================================================================================================== -->
+  <!-- ======================================================================================================== -->
+
+  <processor name="Config" type="CLICRecoConfig" >
+    <parameter name="Verbosity" options="DEBUG0-9,MESSAGE0-9,WARNING0-9,ERROR0-9,SILENT"> DEBUG </parameter>
+    <!--Which option to use for Overlay: False, BIB. Then use, e.g., Config.OverlayFalse in the condition-->
+    <parameter name="Overlay" type="string">False</parameter>
+    <!--Possible values and conditions for option Overlay-->
+    <parameter name="OverlayChoices" type="StringVec">False Test BIB Trimmed</parameter>
+    <!--Which option to use for Tracking: Truth, ConformalPlusExtrapolator, Conformal. Then use, e.g., Config.TrackingTruth in the condition-->
+    <parameter name="Tracking" type="string">Truth</parameter>
+    <!--Possible values and conditions for option Tracking-->
+    <parameter name="TrackingChoices" type="StringVec">Truth Conformal</parameter>
+    <!--Which option to use for VertexUnconstrained: ON, OFF. Then use, e.g., Config.VertexUnconstrainedOFF in the condition-->
+    <parameter name="VertexUnconstrained" type="string">OFF </parameter>
+    <!--Possible values and conditions for option Tracking-->
+    <parameter name="VertexUnconstrainedChoices" type="StringVec">ON OFF  </parameter>
+    <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+    <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> DEBUG  </parameter>
+  </processor>
+
+  <processor name="EventNumber" type="Statusmonitor">
+    <parameter name="HowOften" type="int">1 </parameter>
+    <parameter name="Verbosity" type="string"> DEBUG </parameter>
+  </processor>
+
+  <processor name="MyAIDAProcessor" type="AIDAProcessor">
+    <!--Processor that handles AIDA files. Creates on directory per processor.  Processors only need to create and fill the histograms, clouds and tuples. Needs to be the first ActiveProcessor-->
+    <!-- compression of output file 0: false >0: true (default) -->
+    <parameter name="Compress" type="int" value="1"/>
+    <!-- filename without extension-->
+    <parameter name="FileName" type="string" value="lctuple_actsseedcdk"/>
+    <!-- type of output file xml (default) or root ( only OpenScientist)-->
+    <parameter name="FileType" type="string" value="root "/>
+  </processor>
+
+  <!-- ======================================================================================================== -->
+  <!-- ======================================================================================================== -->
+  <!-- == Output configuration                                                                               == -->
+  <!-- ======================================================================================================== -->
+  <!-- ======================================================================================================== -->
+
+  <processor name="Output_REC" type="LCIOOutputProcessor">
+    <!--   standard output: full reconstruction keep all collections -->
+    <parameter name="LCIOOutputFile" type="string"> muonGun_tracker10TeV_p001-100_theta89_10k_reco.slcio </parameter>
+    <parameter name="FullSubsetCollections" type="StringVec"> EfficientMCParticles InefficientMCParticles </parameter>
+    <parameter name="LCIOWriteMode" type="string" value="WRITE_NEW"/>
+    <!-- <parameter name="SplitFileSizekB" type="int">996147 </parameter> -->
+    <parameter name="Verbosity" type="string">DEBUG </parameter>
+    <parameter name="DropCollectionNames" type="StringVec">  </parameter>
+    <parameter name="DropCollectionTypes" type="StringVec">
+      TrackerHitPlane
+      LCRelation
+    </parameter>
+    <parameter name="KeepCollectionNames" type="StringVec">  </parameter>
+  </processor>
+
+  <!-- ======================================================================================================== -->
+  <!-- ======================================================================================================== -->
+  <!-- == LCTuple configuration                                                                              == -->
+  <!-- ======================================================================================================== -->
+  <!-- ======================================================================================================== -->
+
+  <processor name="MyTrackTruth" type="TrackTruthProc">
+    <parameter name="TrackCollection" type="string" lcioInType="Track">SiTracks</parameter>
+    <parameter name="MCParticleCollection" type="string" lcioInType="MCParticle">MCParticle</parameter>
+    <parameter name="TrackerHit2SimTrackerHitRelationName" type="StringVec" lcioInType="LCRelation">
+      VXDTrackerHitRelations
+      VXDEndcapTrackerHitRelations
+      ITBarrelHitsRelations
+      ITEndcapHitsRelations
+      OTBarrelHitsRelations
+      OTEndcapHitsRelations
+    </parameter>
+    <parameter name="Particle2TrackRelationName" type="string" lcioOutType="LCRelation">MCParticle_Tracks</parameter>
+  </processor>
+
+  <processor name="MyLCTuple" type="LCTuple">
+    <!--Name of the MCParticle collection-->
+    <parameter name="MCParticleCollection" type="string" lcioInType="MCParticle">MCParticle</parameter>
+    <!--Name of the Track collection-->
+    <parameter name="ClusterCollection" type="string" lcioInType="Cluster"> PandoraClusters </parameter>
+    <parameter name="TrackCollection" type="string" lcioInType="Track">SiTracks</parameter>
+    <!--Relations-->
+    <parameter name="LCRelationCollections" type="string" lcioInType="LCRelation">MCParticle_Tracks</parameter>
+    <parameter name="RecoParticleCollection" type="string" lcioInType="ReconstructedParticle"> PandoraPFOs </parameter>
+    <parameter name="LCRelationPrefixes" type="string">mctr</parameter>
+    <!--Switch to write out collection parameters-->
+    <parameter name="WriteMCParticleCollectionParameters" type="bool">false </parameter>
+    <!--Switch to write out collection parameters-->
+    <parameter name="WriteTrackCollectionParameters" type="bool">true </parameter>
+    <!--Name of the Jet collection-->
+    <parameter name="JetCollection" type="string" lcioInType="ReconstructedParticle"> JetCaloOut </parameter>
+    <!--Switch to write out extra parameters calculated using information from Jet Finder-->
+    <parameter name="JetCollectionExtraParameters" type="bool">true </parameter>
+    <!--Switch to write out jet parameters coming from LCFIPlus tagging processor-->
+    <parameter name="JetCollectionTaggingParameters" type="bool">false </parameter>
+    <!--Switch to write out collection parameters-->
+    <parameter name="WriteJetCollectionParameters" type="bool">true </parameter>
+    <!--Switch to write out jet daughters parameters-->
+    <parameter name="JetCollectionDaughtersParameters" type="bool">true </parameter>
+    <!--Switch to write out collection parameters-->
+
+
+  </processor>
+
+  <processor name="ECalBarrelTuple" type="LCTuple">
+    <parameter name="CalorimeterHitCollection" type="string" lcioInType="CalorimeterHit"> ECALBarrel </parameter>
+  </processor>
+  <processor name="ECalEndcapTuple" type="LCTuple">
+    <parameter name="CalorimeterHitCollection" type="string" lcioInType="CalorimeterHit"> ECALEndcap </parameter>
+  </processor>
+  <processor name="ECalBarrelCollectionTuple" type="LCTuple">
+    <parameter name="SimCalorimeterHitCollection" type="string" lcioInType="SimCalorimeterHit"> ECalBarrelCollection </parameter>
+  </processor>
+  <processor name="ECalEndcapCollectionTuple" type="LCTuple">
+    <parameter name="SimCalorimeterHitCollection" type="string" lcioInType="SimCalorimeterHit"> ECalEndcapCollection </parameter>
+  </processor>
+  <processor name="HCalBarrelTuple" type="LCTuple">
+    <parameter name="CalorimeterHitCollection" type="string" lcioInType="CalorimeterHit"> HCALBarrel </parameter>
+  </processor>
+  <processor name="HCalEndcapTuple" type="LCTuple">
+    <parameter name="CalorimeterHitCollection" type="string" lcioInType="CalorimeterHit"> HCALEndcap </parameter>
+  </processor>
+  <processor name="HCalBarrelCollectionTuple" type="LCTuple">
+    <parameter name="SimCalorimeterHitCollection" type="string" lcioInType="SimCalorimeterHit"> HCalBarrelCollection </parameter>
+  </processor>
+  <processor name="HCalEndcapCollectionTuple" type="LCTuple">
+    <parameter name="SimCalorimeterHitCollection" type="string" lcioInType="SimCalorimeterHit"> HCalEndcapCollection </parameter>
+  </processor>
+
+
+  <!-- ======================================================================================================== -->
+  <!-- ======================================================================================================== -->
+  <!-- == TEST processors                                                                                    == -->
+  <!-- ======================================================================================================== -->
+  <!-- ======================================================================================================== -->
+
+  <!-- == TruthTrackFinder parameters == -->
+  <processor name="MyCKFTracking" type="ACTSSeededCKFTrackingProc">
+    <!-- Path to material description -->
+    <parameter name="MatFile" type="string">
+      /opt/ilcsoft/muonc/ACTSTracking/v1.1.0/data/material-maps.json
+      <!-- /users/muoncollider/zuliani/lcgeo/MuColl/MuColl_v1_10TeV_vxd/material-maps.json -->
+    </parameter>
+    <!-- Path to tracking geometry -->
+    <parameter name="TGeoFile" type="string">
+      <!-- /opt/ilcsoft/muonc/ACTSTracking/v1.1.0/data/MuColl_v1.root -->
+      /users/muoncollider/zuliani/lcgeo/MuColl/MuColl_v1_10TeV_vxd/MuColl_v1_10TeV_vxd.root
+    </parameter>
+    <!-- Vol Layer, use -1 for all, ACTS numbers -->
+    <parameter name="SeedingLayers" type="string">
+      13 2
+      13 6
+      13 10
+      13 14
+      14  2
+      14  6
+      14 10
+      14 14
+      15  2
+      15  6
+      15 10
+      15 14
+    </parameter>
+    <parameter name="SeedFinding_RMax" type="float">150</parameter>
+    <parameter name="SeedFinding_DeltaRMin" type="float">5</parameter>
+    <parameter name="SeedFinding_DeltaRMax" type="float">80</parameter>
+    <parameter name="SeedFinding_CollisionRegion" type="float">1</parameter>
+    <parameter name="SeedFinding_RadLengthPerSeed" type="float">0.1</parameter>
+    <parameter name="SeedFinding_SigmaScattering" type="float">50</parameter>
+    <parameter name="SeedFinding_MinPt" type="float">500</parameter>
+    <!-- CKF Configuration -->
+    <parameter name="CKF_Chi2CutOff" type="float">10</parameter>
+    <parameter name="CKF_NumMeasurementsCutOff" type="int">1</parameter>
+    <!--Define input tracker hits and relations. NB. Order must be respected -->
+    <parameter name="TrackerHitCollectionNames" type="StringVec" lcioInType="TrackerHitPlane">
+      VXDTrackerHits
+      VXDEndcapTrackerHits
+      ITrackerHits
+      ITrackerEndcapHits
+      OTrackerHits
+      OTrackerEndcapHits
+    </parameter>
+    <!--Track Collection Names-->
+    <parameter name="RunCKF" type="bool">True</parameter>
+    <parameter name="TrackCollectionName" type="string" lcioOutType="Track">AllTracks</parameter>
+    <parameter name="Verbosity" type="string">DEBUG0-4 </parameter>
+  </processor>
+
+  <processor name="MyTrackDeduper" type="ACTSDuplicateRemoval">
+    <parameter name="InputTrackCollectionName" type="string" lcioOutType="Track">AllTracks</parameter>
+    <parameter name="OutputTrackCollectionName" type="string" lcioOutType="Track">SiTracks</parameter>
+  </processor>
+
+
+</marlin>

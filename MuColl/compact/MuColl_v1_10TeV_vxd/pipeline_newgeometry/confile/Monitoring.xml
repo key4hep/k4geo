@@ -1,0 +1,70 @@
+<processor name="MyClicEfficiencyCalculator" type="ClicEfficiencyCalculator">
+    <!--ClicEfficiencyCalculator calculates the tracking efficiency and makes some performance plots-->
+    <!--Name of the efficiency tree-->
+    <parameter name="efficiencyTreeName" type="string">trktree </parameter>
+    <!--Name of the purity tree-->
+    <parameter name="purityTreeName" type="string">puritytree </parameter>
+    <!--Name of the efficiency tree-->
+    <parameter name="mcTreeName" type="string">mctree </parameter>   <!-- probably to be killed soon -->
+    <!--Track collection name-->
+    <parameter name="TrackCollectionName" type="string" lcioInType="Track"> SiTracks_Refitted </parameter>
+    <!--Name of the TrackerHit input collections-->
+    <parameter name="TrackerHitCollectionNames" type="StringVec" lcioInType="TrackerHitPlane"> VXDTrackerHits_DLFiltered VXDEndcapTrackerHits_DLFiltered ITrackerHits OTrackerHits ITrackerEndcapHits OTrackerEndcapHits  </parameter>
+    <!--Name of TrackerHit relation collections-->
+    <parameter name="TrackerHitRelCollectionNames" type="StringVec" lcioInType="LCRelation"> VXDTrackerHitRelations VXDEndcapTrackerHitRelations ITBarrelHitsRelations OTBarrelHitsRelations ITEndcapHitsRelations OTEndcapHitsRelations </parameter>
+    <!--Name of the MCParticle input collection-->
+    <parameter name="MCParticleCollectionName" type="string" lcioInType="MCParticle">MCParticle </parameter>
+    <!--Name of the MCPhysicsParticles input collection-->
+    <parameter name="MCPhysicsParticleCollectionName" type="string" lcioInType="MCParticle">MCPhysicsParticles </parameter>
+    <!--Name of the output collection of the not reconstructed charged MCParticle-->
+    <parameter name="MCParticleNotReco" type="string" lcioOutType="MCParticle">MCParticleNotReco </parameter>
+    <parameter name="EfficientMCParticleCollection" type="string" lcioOutType="MCParticle" > EfficientMCParticles </parameter>
+    <parameter name="InefficientMCParticleCollection" type="string" lcioOutType="MCParticle"> InefficientMCParticles </parameter>
+
+    <!--If true additional plots (n of hits per subdetector per mc particle, mc theta, mc pt, info if the particle is decayed in the tracker) will be added to the Ntuple mctree-->
+    <parameter name="morePlots" type="bool">false </parameter>
+    <!--Set of cuts to define 'reconstractable' particles for eff computation. The options are: NHits, NHitsVXD, ILDLike-->
+    <parameter name="reconstructableDefinition" type="string">ILDLike </parameter>
+    <!--Detector element ID for the vertex Barrel-->
+    <parameter name="vertexBarrelID" type="int">1 </parameter>  <!-- obsolete -->
+    <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+    <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+  </processor>
+
+  <processor name="MyTrackChecker" type="TrackChecker">
+    <!--TrackChecker plots pull distributions, track resolution parameters and reconstruction efficiencies-->
+    <!--Name of the MCParticle input collection-->
+    <parameter name="MCParticleCollectionName" type="string" lcioInType="MCParticle">MCParticle </parameter>
+    <!--Track collection name-->
+    <parameter name="TrackCollectionName" type="string" lcioInType="Track"> SiTracks_Refitted </parameter>
+    <!--Track relation collection name-->
+    <parameter name="TrackRelationCollectionName" type="string" lcioInType="LCRelation">SiTracksMCTruthLink </parameter>
+    <!--Name of the root tree-->
+    <parameter name="TreeName" type="string">checktree </parameter>
+    <!--Flag to fill only tree variables or also histogram version of pulls and residuals-->
+    <parameter name="UseOnlyTree" type="bool">true </parameter>  <!-- probably obsolete- to be checked -->
+    <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+    <parameter name="Verbosity" type="string">WARNING </parameter>
+  </processor>
+
+  <processor name="MyHitResiduals" type="HitResiduals">
+    <!--HitResiduals plots te residual between the track fit and the hit in the local coordinate system u,v,w.-->
+    <!--Use Energy Loss in Fit-->
+    <parameter name="EnergyLossOn" type="bool">true </parameter>
+    <!--Maximum increment allowed for the chi2-->
+    <parameter name="MaxChi2Increment" type="double">1000 </parameter>
+    <!--Use MultipleScattering in Fit-->
+    <parameter name="MultipleScatteringOn" type="bool">true </parameter>
+    <!--Smooth All Mesurement Sites in Fit-->
+    <parameter name="SmoothOn" type="bool">false </parameter>
+    <!--Name of the input track collection-->
+    <parameter name="TrackCollectionName" type="string" lcioInType="Track"> SiTracks_Refitted </parameter>
+    <!--Name of the output root file-->
+    <parameter name="outFileName" type="string">residuals.root </parameter>
+    <!--Name of the tree-->
+    <parameter name="treeName" type="string">restree </parameter>
+    <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+    <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+  </processor>
+
+
