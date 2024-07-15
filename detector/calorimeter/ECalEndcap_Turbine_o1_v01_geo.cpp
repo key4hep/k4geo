@@ -65,12 +65,12 @@ namespace det {
   }
 			      
   void buildWheel(dd4hep::Detector& aLcdd,
-			dd4hep::SensitiveDetector& aSensDet,
-			dd4hep::Volume& aEnvelope,
-			dd4hep::xml::Handle_t& aXmlElement,
-			dd4hep::DetElement& bathDetElem,
-			float ri, float ro,
-			unsigned iWheel) {
+		  dd4hep::SensitiveDetector& aSensDet,
+		  dd4hep::Volume& aEnvelope,
+		  dd4hep::xml::Handle_t& aXmlElement,
+		  dd4hep::DetElement& bathDetElem,
+		  float ri, float ro, float delZ,
+		  unsigned iWheel) {
 
 
     dd4hep::xml::DetElement calorimeterElem =  aXmlElement.child(_Unicode(calorimeter));
@@ -87,7 +87,6 @@ namespace det {
     lLog << MSG::DEBUG << "Blade angle is " << BladeAngle << "; decrease angle per wheel? " << decreaseAnglePerWheel << endmsg;
     dd4hep::xml::Dimension dim(aXmlElement.child(_Unicode(dimensions)));
     double grmin = dim.rmin1();
-    double delZ = dim.dz()*2;
     lLog << MSG::DEBUG << "delZ is " << delZ << endmsg;
     if (decreaseAnglePerWheel) {
       float tubeFracCovered = delZ/(2*grmin*TMath::Tan(BladeAngle));
@@ -203,7 +202,7 @@ namespace det {
     
     for (unsigned iLayer = 0; iLayer < numNonActiveLayers; iLayer++) {
       float roLayer = riLayer + delrNonActive;
-      lLog << MSG::ERROR << "Making layer in inner, outer radii " << riLayer << " " << roLayer << endmsg;
+      lLog << MSG::INFO << "Making layer in inner, outer radii " << riLayer << " " << roLayer << endmsg;
  
       if (scaleBladeThickness) {
 	AbsThicko = AbsThicki + bladeThicknessScaleFactor*((roLayer/riLayer)-1.)*AbsThicki;
@@ -292,8 +291,7 @@ namespace det {
       AbsThicki = AbsThicko;
     }
     lLog << MSG::INFO << "ECal endcap materials:  nobleLiquid: " << nobleLiquidElem.materialStr() << " absorber: " << absBladeElem.materialStr() << " electrode: " << electrodeBladeElem.materialStr() << endmsg; 
-  //build cryostat
-// Retrieve cryostat data
+
     int    nUnitCellsToDraw = nUnitCells;
     //    nUnitCellsToDraw = 2;
    
@@ -496,7 +494,7 @@ namespace det {
 
   //build cryostat
 // Retrieve cryostat data
-  dd4hep::xml::DetElement cryostat = aXmlElement.child(_Unicode(cryostat));
+  dd4hep::xml::DetElement cryostat = calo.child(_Unicode(cryostat));
   dd4hep::xml::Dimension cryoDim(cryostat.dimensions());
   double cryoThicknessFront = cryoDim.rmin2() - cryoDim.rmin1();
 
@@ -509,7 +507,8 @@ namespace det {
 
   double bathRmin = caloDim.rmin(); // - margin for inclination
   double bathRmax = caloDim.rmax(); // + margin for inclination
-  dd4hep::Tube bathOuterShape(bathRmin, bathRmax, caloDim.dz()); // make it 4 volumes + 5th for detector envelope
+  double bathDelZ = caloDim.dz();
+  dd4hep::Tube bathOuterShape(bathRmin, bathRmax, bathDelZ); // make it 4 volumes + 5th for detector envelope
   dd4hep::Tube bathAndServicesOuterShape(cryoDim.rmin2(), cryoDim.rmax1(), caloDim.dz()); // make it 4 volumes + 5th for detector envelope
 
   lLog << MSG::INFO << "Cryostat front thickness is " <<  cryoDim.rmin2() << endmsg;
@@ -522,6 +521,8 @@ namespace det {
     lLog << MSG::INFO << "ECAL endcap cryostat: front: rmin (cm) = " << cryoDim.rmin1() << " rmax (cm) = " << cryoDim.rmin2() << " dz (cm) = " << cryoDim.dz()  << endmsg;
     lLog << MSG::INFO << "ECAL encdap cryostat: back: rmin (cm) = " << cryoDim.rmax1() << " rmax (cm) = " << cryoDim.rmax2() << " dz (cm) = " << cryoDim.dz() << endmsg;
     lLog << MSG::INFO << "ECAL endcap cryostat: side: rmin (cm) = " << cryoDim.rmin2() << " rmax (cm) = " << cryoDim.rmax1() << " dz (cm) = " << cryoDim.dz() - caloDim.dz()  << endmsg;
+    lLog << MSG::INFO << "Cryostat is made out of " << cryostat.materialStr() << endmsg;
+   
     dd4hep::Volume cryoFrontVol(cryostat.nameStr()+"_front", cryoFrontShape, aLcdd.material(cryostat.materialStr()));
     dd4hep::Volume cryoBackVol(cryostat.nameStr()+"_back", cryoBackShape, aLcdd.material(cryostat.materialStr()));
     dd4hep::Volume cryoSideVol(cryostat.nameStr()+"_side", cryoSideShape, aLcdd.material(cryostat.materialStr()));
@@ -559,7 +560,7 @@ namespace det {
   std::string nobleLiquidMaterial = nobleLiquid.materialStr();
   dd4hep::Volume bathVol(nobleLiquidMaterial + "_bath", bathOuterShape, aLcdd.material(nobleLiquidMaterial));
   lLog << MSG::INFO << "ECAL endcap bath: material = " << nobleLiquidMaterial << " rmin (cm) =  " << bathRmin
-       << " rmax (cm) = " << bathRmax << " thickness in front of ECal (cm) = " << caloDim.rmin() - cryoDim.rmin2()
+       << " rmax (cm) = " << bathRmax << " dz (cm) = " << caloDim.dz()  << " thickness in front of ECal (cm) = " << caloDim.rmin() - cryoDim.rmin2()
        << " thickness behind ECal (cm) = " << cryoDim.rmax1() - caloDim.rmax() << endmsg;
   dd4hep::DetElement bathDetElem(caloDetElem, "bath", 1);
 
@@ -570,8 +571,8 @@ namespace det {
   dd4hep::xml::DetElement supportTubeElem = calo.child(_Unicode(supportTube));
   unsigned nWheels = supportTubeElem.attr<unsigned>(_Unicode(nWheels));
   lLog << MSG::INFO  << "Will build " << nWheels << " wheels" << endmsg;
-  double rmin = dim.rmin1();
-  double rmax = dim.rmax();
+  double rmin = bathRmin;
+  double rmax = bathRmax;
   float radiusRatio = pow(rmax/rmin, 1./nWheels);
   double ro = rmin*radiusRatio;
   double ri = rmin;
@@ -581,7 +582,7 @@ namespace det {
 
   for (unsigned iWheel = 0; iWheel < nWheels; iWheel++) {
    
-    dd4hep::Tube supportTube(ro, ro+supportTubeThickness, dim.dz() );
+    dd4hep::Tube supportTube(ro, ro+supportTubeThickness, bathDelZ );
   
     dd4hep::Volume supportTubeVol("supportTube", supportTube, aLcdd.material(supportTubeElem.materialStr()));
     if (supportTubeElem.isSensitive()) {
@@ -595,7 +596,7 @@ namespace det {
     supportTubeDetElem.setPlacement(supportTube_pv);
 
    
-    buildWheel(aLcdd, aSensDet, bathVol, aXmlElement, bathDetElem, ri+supportTubeThickness, ro, iWheel);
+    buildWheel(aLcdd, aSensDet, bathVol, aXmlElement, bathDetElem, ri+supportTubeThickness, ro, bathDelZ*2, iWheel);
     ri = ro;
     ro *= radiusRatio;
     if (ro > rmax) ro = rmax;
@@ -628,7 +629,7 @@ createECalEndcapTurbine(dd4hep::Detector& aLcdd, dd4hep::xml::Handle_t aXmlEleme
  
 
   // Create air envelope for one endcap (will be copied to make both endcaps)
-  dd4hep::Tube endcapShape( dim.rmin1(), dim.rmax(), dim.dz());
+  dd4hep::Tube endcapShape( dim.rmin1(), dim.rmax1(), dim.dz());
 
   dd4hep::Volume envelopeVol(nameDet + "_vol", endcapShape, aLcdd.material("Air"));
   
@@ -636,7 +637,7 @@ createECalEndcapTurbine(dd4hep::Detector& aLcdd, dd4hep::xml::Handle_t aXmlEleme
   //  dd4hep::DetElement caloPositiveDetElem(caloDetElem, "positive", 0);
   //  dd4hep::DetElement caloNegativeDetElem(caloDetElem, "negative", 0);
 
-  lLog << MSG::DEBUG << "Placing dector on the positive side: (cm) " << dim.z_offset() << " with min, max radii " << dim.rmin1() << " " << dim.rmax() << endmsg;
+  lLog << MSG::DEBUG << "Placing dector on the positive side: (cm) " << dim.z_offset() << " with min, max radii " << dim.rmin1() << " " << dim.rmax1() << endmsg;
   unsigned iModule = 0;
   buildOneSide_Turbine(aLcdd, aSensDet, envelopeVol,  aXmlElement, iModule);
   //  lLog << MSG::DEBUG << "Placing dector on the negative side: (cm) " << -dim.z_offset()  << " with min, max radii " << dim.rmin1() << " " << dim.rmax() << endmsg;
