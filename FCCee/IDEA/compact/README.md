@@ -15,4 +15,3 @@ IDEA_o1_v03
 ------------
 
 Based on o1_v02 but replacing the drift chamber (o1, v01) for the lightweight implementation based on twisted tubes (o1, v02). NB: production threshold and step limit physics have to be tuned for the drift chamber. July 2024: Added a detailed version of the muon system. 
-

@@ -30,16 +30,21 @@
 
   <include ref="./DectDimensions.xml" />
 
-  <include ref="Beampipe.xml"/>
-  <include ref="BeamInstrumentation.xml"/>
+  <!-- shape based model of the beam pipe -->
+  <include ref="../../../MDI/compact/MDI_o1_v00/Beampipe_o4_v05.xml" />
+  <include ref="../../../MDI/compact/MDI_o1_v00/BeamInstrumentation_o1_v01.xml" />
+  
+  <!-- engineered CAD model of the beam pipe -->
+  <!-- <include ref="../../../MDI/compact/MDI_o1_v01/Beampipe_CADimport_o1_v02.xml" /> -->
+  <!-- <include ref="../../../MDI/compact/MDI_o1_v01/BeamInstrumentation_o1_v01.xml"/> -->
+
   <include ref="LumiCal.xml"/>
-  <include ref="HOMAbsorber.xml"/>
   <include ref="Vertex_IDEA_o1_v01.xml"/> <!-- symbolic link to ../../../IDEA/compact/IDEA_o1_v03/Vertex_IDEA_o1_v01.xml"/>-->
   <include ref="DriftChamber_o1_v02.xml"/> <!-- symbolic link to ../../../IDEA/compact/IDEA_o1_v03/DriftChamber_o1_v02.xml -->
   <include ref="ECalBarrel_thetamodulemerged.xml"/> <!-- if you remove the ECalBarrel, you also have to remove or update the "GlobalSolenoid" field (it depends on ECAL dimensions) -->
-  <include ref="HCalBarrel_TileCal.xml"/>
   <include ref="ECalEndcaps_coneCryo.xml"/>
   <include ref="HCalEndcaps_ThreeParts_TileCal.xml"/>
+  <include ref="HCalBarrel_TileCal.xml"/>
   <include ref="MuonTagger.xml"/>
 
   <fields>
@@ -72,6 +77,8 @@
            outer_radius="20*cm">
     </field>
 
+    <!-- FFQ fields at Z pole, V23) -->
+    <!--
     <field name="QC1L1_field_ED" type="MultipoleMagnet" Z="0.0*tesla">
       <position y="0*cm" x="(QC1L1_len/2. + QC1L1_start)*sin(CrossingAngle/2.)" z="(QC1L1_len/2. + QC1L1_start)*cos(CrossingAngle/2.)"/>
       <rotation x="0" y="CrossingAngle/2." z="0.0"/>
@@ -103,7 +110,8 @@
       <coefficient coefficient="(-1)*(45.6)*(-0.273)/0.3*tesla/m"/>
       <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L1_len/2." />
     </field>
-
+    -->
+    
     <!--End of MDI magnetic fields  -->
 
   </fields>
