@@ -7,6 +7,7 @@ aciarma - 08/07/24
 
 - MDI_o1_v01 (STL FILES NOT IN THIS REPO!!! WILL BE ADDED LATER)
 -- Beampipe_CADimport_o1_v02.xml : import CAD models for engineered beam pipe (by F. Fransesini/INFN-LNF)
+These .stl files are hosted [here](https://fccsw.web.cern.ch/fccsw/filesForSimDigiReco/MDI/MDI_o1_v01/)
 -- stl_files/Pipe_240430
     ├── AlBeMet162_30042024.stl    : central and elliptoconical chambers, with cooling manifolds 
     ├── Copper_pipe_28092023.stl   : low impedance beam pipe separation region
