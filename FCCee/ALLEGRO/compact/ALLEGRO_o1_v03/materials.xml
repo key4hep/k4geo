@@ -475,4 +475,35 @@
     <fraction n="0.084" ref="Nb"/>
   </material>
 
+
+  <material name="Water">
+      <D value="1" unit="g/cm3" />
+      <composite n="2" ref="H" />
+      <composite n="1" ref="O" />
+  </material>
+
+  <material name="DefaultMaterial">
+    <D value="7.85" unit="g/cm3"/>
+    <fraction n="0.998" ref="Fe"/>
+    <fraction n=".002"  ref="C"/>
+  </material>
+
+  <material name="IronDens785">
+    <D value="7.85" unit="g/cm3"/>
+    <fraction n="1.0" ref="Fe"/>
+  </material>
+  
+  <material name="AlBeMet162">
+    <D value="2.1" unit="g/cm3"/>
+    <fraction n="0.38" ref="Al"/>
+    <fraction n="0.62" ref="Be"/>
+  </material>
+  
+  <material name="LiquidNDecane">
+    <D value="0.73" unit="g/cm3"/>
+    <composite n="10" ref="C" />
+    <composite n="22" ref="H" />
+  </material>
+
+  
 </materials>
