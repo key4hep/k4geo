@@ -69,6 +69,7 @@ file(GLOB sources
   ./detector/tracker/*.cpp
   ./detector/calorimeter/*.cpp
   ./detector/fcal/*.cpp
+  ./detector/muonSystem/*.cpp
   ./detector/other/*.cpp
   ./detector/CaloTB/*.cpp
   ./FCalTB/setup/*.cpp
@@ -103,7 +104,7 @@ set(FILES_DEPENDINGON_DCH_INFO_H "DriftChamber_o1_v02.cpp" )
 
 if(NOT DCH_INFO_H_EXIST)
     list(FILTER sources EXCLUDE REGEX "${FILES_DEPENDINGON_DCH_INFO_H}")
-    message(WARNING "Subdetector ${FILES_DEPENDINGON_DCH_INFO_H} will not be built because header file ${DCH_INFO_H} was not found")
+    message(WARNING "Subdetector ${FILES_DEPENDINGON_DCH_INFO_H} will not be built because header file DDRec/DCH_info.h was not found")
 endif()
 
 file(GLOB G4sources
@@ -147,7 +148,7 @@ install(TARGETS ${PackageName}  ${PackageName}G4
 #---Testing-------------------------------------------------------------------------
 if(BUILD_TESTING)
   include(CTest)
-  add_subdirectory(lcgeoTests)
+  add_subdirectory(test)
   set(BUILDNAME "${CMAKE_SYSTEM}-${CMAKE_CXX_COMPILER}-${CMAKE_BUILD_TYPE}" CACHE STRING "set build string for cdash")
 endif(BUILD_TESTING)
 
