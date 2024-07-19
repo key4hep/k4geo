@@ -5,6 +5,7 @@ To ease the review process, please consider the following before to open the pul
 - if you added some code, is it covered by tests? See https://github.com/key4hep/k4geo/blob/main/lcgeoTests/CMakeLists.txt
 - is your PR branch up to date with origin 'main'?
 - are you not adding/modifying files that should not have been added/modified (or at least, not in this PR)?
+- if you added/modified a detector geometry, have you checked that was no overlap? You can do so with the following command: ddsim --compactFile PATH_TO_COMPACT_FILE --runType run --ui.commandsInitialize "/geometry/test/run" >> overlapDump.txt
 
 If your modifications are compliant with the above, populate the release note text below, and open the PR!
 -->
