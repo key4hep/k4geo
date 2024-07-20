@@ -61,6 +61,7 @@
     <vis name="emec_lar_vis" r="0.5" g="0.3" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
     <vis name="emec_pb_vis" r="0.5" g="0.5" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
     <vis name="emec_readout_vis" r="0.5" g="0.1" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
+    <vis name="electrode_vis" r="0.5" g="0.0" b="0.0" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
   </display> 
 
 
@@ -117,7 +118,7 @@
           <cladding thickness="EMEC_steel_thickness" sensitive="false">
             <material name="lArCaloSteel"/>
           </cladding>
-	  <electrodeBlade name="electrodeBlade" thickness="ElectrodeBladeThickness" sensitive="false">
+	  <electrodeBlade name="electrodeBlade" thickness="ElectrodeBladeThickness" sensitive="false" vis="electrode_vis">
 	    <material name="PCB" />
 	  </electrodeBlade>
 	  <nobleLiquidGap name="nobleLiquidGap" gap="NobleLiquidGap" sensitive="true">

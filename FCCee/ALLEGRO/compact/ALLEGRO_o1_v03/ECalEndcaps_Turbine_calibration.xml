@@ -35,9 +35,9 @@
     <constant name="ECalEndcapNumPlanes" value="928"/>    
     <constant name="ECalEndcapNumCalibLayers" value="10"/>
     <constant name="nWheels" value="3"/>
-    <constant name="BladeAngle" value="40*deg"/>
-    <constant name="NobleLiquidGap" value="3.4*mm"/>
-    <constant name="AbsorberBladeThickness" value="3.7*mm"/>
+    <constant name="BladeAngle" value="41*deg"/>
+    <constant name="NobleLiquidGap" value="3.9*mm"/>
+    <constant name="AbsorberBladeThickness" value="2.9*mm"/>
     <constant name="ElectrodeBladeThickness" value="1.3*mm"/>
     <!-- total amount of steel in one passive plate: it is divided for the outside layer on top and bottom -->
     <constant name="EMEC_steel_thickness" value="0.1*mm"/>
@@ -53,6 +53,7 @@
     <vis name="emec_lar_vis" r="0.5" g="0.3" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid"/>
     <vis name="emec_pb_vis" r="0.5" g="0.5" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid"/>
     <vis name="emec_readout_vis" r="0.5" g="0.1" b="0.2" alpha="1" showDaughters="true" visible="true" drawingStyle="solid"/>
+    <vis name="electrode_vis" r="0.5" g="0.0" b="0.0" alpha="1" showDaughters="true" visible="true" drawingStyle="solid"/>
   </display> 
 
 
@@ -82,24 +83,25 @@
 
   <detectors>
      <!-- electromagnetic calorimeter -->
-    <detector id="EndcapECal_id" name="EMEC_turbine" type="ECalEndcap_Turbine_o1_v01" readout="ECalEndcapTurbine" vis="emec_envelope_vis" sensitive="true">
+    <detector id="ECalEndcap_id" name="EMEC_turbine" type="ECalEndcap_Turbine_o1_v01" readout="ECalEndcapTurbine" vis="emec_envelope_vis" sensitive="true">
       <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_ENDCAP"/>
       <sensitive type="SimpleCalorimeterSD"/>
-      <dimensions rmin1="EMEC_rmin1" rmin2="EMEC_rmin2" rmax="EMEC_rmax" dz="(EMEC_z2-EMEC_z1)/2." z_offset="EMEC_z1+(EMEC_z2-EMEC_z1)/2."/>
-      <cryostat name="ECAL_EndCapCryo">
-        <material name="Aluminum"/>
-        <dimensions rmin1="CryoEndcap_front_rmin" rmin2="CryoEndcap_front_rmin+CryoEMECThicknessInner" rmax1="CryoEndcap_rmax-CryoEMECThicknessOuter" rmax2="CryoEndcap_rmax" dz="(CryoEndcap_z2-CryoEndcap_z1-CryoEMECThicknessFront-CryoEMECThicknessBack)/2."/>
-        <front sensitive="false"/> <!-- inner wall of the cryostat -->
-        <side sensitive="false"/> <!-- both sides of the cryostat -->
-        <back sensitive="false"/> <!-- outer wall of the cryostat -->
-      </cryostat>
+      <!--  <dimensions rmin1="EMEC_rmin1"  rmin2="EMEC_rmin2" rmax="EMEC_rmax" dz="(EMEC_z2-EMEC_z1)/2." z_offset="EMEC_z1+(EMEC_z2-EMEC_z1)/2."/>  -->
+      <dimensions rmin1="CryoEndcap_front_rmin" rmin2="CryoEndcap_front_rmin" rmax1="CryoEndcap_rmax" rmax2="CryoEndcap_rmax" dz="(CryoEndcap_z2-CryoEndcap_z1)/2." z_offset="EMEC_z1+(EMEC_z2-EMEC_z1)/2."/>
       <calorimeter name="EM_endcap">
-	<dimensions rmin="EMEC_rmin1" rmax="EMEC_rmax" dz="(EMEC_z2-EMEC_z1)/2." z_offset="EMEC_z1+(EMEC_z2-EMEC_z1)/2."/>   	
+	<dimensions rmin="EMEC_rmin1" rmax="EMEC_rmax" dz="(EMEC_z2-EMEC_z1)/2." z_offset="EMEC_z1+(EMEC_z2-EMEC_z1)/2."/>
+	<cryostat name="ECAL_EndCapCryo">
+          <material name="Aluminum"/>
+          <dimensions rmin1="CryoEndcap_front_rmin" rmin2="CryoEndcap_front_rmin+CryoEMECThicknessInner" rmax1="CryoEndcap_rmax-CryoEMECThicknessOuter" rmax2="CryoEndcap_rmax" dz="(CryoEndcap_z2-CryoEndcap_z1-CryoEMECThicknessFront-CryoEMECThicknessBack)/2."/>
+          <front sensitive="false"/> <!-- inner wall of the cryostat -->
+          <side sensitive="false"/> <!-- both sides of the cryostat -->
+          <back sensitive="false"/> <!-- outer wall of the cryostat -->
+	</cryostat>
 	<supportTube name="supportTube" nWheels="nWheels" thickness="1.0*cm" sensitive="false"> 
-	  <material name="Steel235"/>
+	  <material name="CarbonFiber"/>
 	</supportTube>
 	<turbineBlade name="turbineBlade" angle="BladeAngle" decreaseAnglePerWheel="false" sameNUnitCells="false" nUnitCells="144 272 512" nUnitCellsLeastCommonMultiple="78336">
-	  <absorberBlade name="absorberBlade" thickness="AbsorberBladeThickness" scaleThickness="true" thicknessScaleFactor="1.20" sensitive="true">
+	  <absorberBlade name="absorberBlade" thickness="AbsorberBladeThickness" scaleThickness="true" thicknessScaleFactor="1.0" sensitive="true">
 	    <material name="Lead"/>
 	  </absorberBlade>
 	  <glue thickness="EMEC_glue_thickness" sensitive="true">
@@ -108,7 +110,7 @@
           <cladding thickness="EMEC_steel_thickness" sensitive="true">
             <material name="lArCaloSteel"/>
           </cladding>
-	  <electrodeBlade name="electrodeBlade" thickness="ElectrodeBladeThickness" sensitive="true">
+	  <electrodeBlade name="electrodeBlade" thickness="ElectrodeBladeThickness" sensitive="true" vis="electrode_vis">
 	    <material name="PCB"/>
 	  </electrodeBlade>
 	  <nobleLiquidGap name="nobleLiquidGap" gap="NobleLiquidGap" sensitive="true">
