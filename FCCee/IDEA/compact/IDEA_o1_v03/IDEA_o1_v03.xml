@@ -34,8 +34,12 @@
   <include ref="DectDimensions_IDEA_o1_v03.xml"/>
 
   <!-- Import accelerator components -->
-  <include ref="Beampipe_o4_v05.xml"/>
-  <include ref="BeamInstrumentation_o1_v01.xml"/>
+  <!-- shape based model of the beam pipe -->
+  <include ref="../../../MDI/compact/MDI_o1_v00/Beampipe_o4_v05.xml" />
+  <include ref="../../../MDI/compact/MDI_o1_v00/BeamInstrumentation_o1_v01.xml" />
+  <!-- engineered CAD model of the beam pipe -->
+  <!-- <include ref="../../../MDI/compact/MDI_o1_v01/Beampipe_CADimport_o1_v02.xml" /> -->
+  <!-- <include ref="../../../MDI/compact/MDI_o1_v01/BeamInstrumentation_o1_v01.xml"/> -->
   <include ref="LumiCal_o1_v01.xml"/>
 
   <!-- Import vertex -->
@@ -52,6 +56,9 @@
 
   <!-- Import Endcap plate absorber -->
   <include ref="EndPlateAbsorber_o1_v01.xml"/>
+
+  <!-- Import muon system -->
+  <include ref="MuonSystem_o1_v01.xml"/>
 
   <plugins>
     <plugin name="DD4hepVolumeManager"/>

@@ -92,7 +92,7 @@
   </readouts>
 
   <detectors>
-    <detector id="BarECal_id" name="ECalBarrel" type="ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v02" readout="ECalBarrelModuleThetaMerged">
+    <detector id="BarECal_id" name="ECalBarrel" type="ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03" readout="ECalBarrelModuleThetaMerged">
       <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_BARREL"/>
       <sensitive type="SimpleCalorimeterSD"/>
       <dimensions rmin="BarCryoECal_rmin" rmax="BarCryoECal_rmax" dz="BarCryoECal_dz" vis="ecal_envelope"/>
@@ -149,7 +149,7 @@
 	  <layer thickness="5.73371*cm" repeat="1"/>
 	  <layer thickness="5.94607*cm" repeat="1"/>
 	  <layer thickness="6.15843*cm" repeat="1"/>
-	  <layer thickness="6.39910*cm" repeat="1"/>	  
+	  <layer thickness="6.39910*cm" repeat="1"/>
         </layers>
       </calorimeter>
     </detector>
