@@ -182,12 +182,12 @@
     <constant name="tracker_region_rmax" value="DCH_outer_cyl_R_total"/>
 
     <!-- Fiber dual-readout calorimeter tower dim-->
-    <constant name="FiberDRCalo_world_outer_radius" value="4501.*mm"/>
+    <constant name="FiberDRCalo_world_outer_radius" value="4525.*mm"/>
     <constant name="FiberDRCalo_world_inner_radius" value="252.*mm"/>
-    <constant name="FiberDRCalo_world_z_extent" value="4501.*mm"/>
-    <constant name="FiberDRCalo_barrel_tube_outer_radius" value="2499.*mm"/>
+    <constant name="FiberDRCalo_world_z_extent" value="4525.*mm"/>
+    <constant name="FiberDRCalo_barrel_tube_outer_radius" value="2475.*mm"/>
     <constant name="FiberDRCalo_barrel_tube_inner_radius" value="252.*mm"/>
-    <constant name="FiberDRCalo_barrel_tube_z_extent" value="2499.*mm"/>
+    <constant name="FiberDRCalo_barrel_tube_z_extent" value="2475.*mm"/>
     <constant name="FiberDRCalo_barrel_z_extent"       value="2.*m"/>
     <constant name="FiberDRCalo_barrel_z_start" value="2.5*m"/>
     <constant name="FiberDRCalo_barrel_nphi"         value="144"/>
