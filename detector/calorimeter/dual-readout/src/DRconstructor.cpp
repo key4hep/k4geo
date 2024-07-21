@@ -145,9 +145,9 @@ void ddDRcalo::DRconstructor::implementFibers(xml_comp_t& x_theta, dd4hep::Volum
   float diff = fX_cladC.rmax(); // can be arbitrary small number
   float z1 = towerHeight/2.-2*diff; // can be arbitrary number slightly smaller than towerHeight/2-diff
 
-  fNumx = static_cast<int>( std::floor( ( param->GetTl2()*2. - sipmSize )/gridSize ) ) + 1; // in phi direction
-  fNumy = static_cast<int>( std::floor( ( param->GetH2()*2. - sipmSize )/gridSize ) ) + 1; // in eta direction
-  int numxBl2 = static_cast<int>( std::floor( ( param->GetBl2()*2. - sipmSize )/gridSize ) ) + 1; // only used for estimating normals
+  fNumx = static_cast<int>( std::floor( ( param->GetTl2()*2. - sipmSize/2. )/gridSize ) ) + 1; // in phi direction
+  fNumy = static_cast<int>( std::floor( ( param->GetH2()*2. - sipmSize/2. )/gridSize ) ) + 1; // in eta direction
+  int numxBl2 = static_cast<int>( std::floor( ( param->GetBl2()*2. - sipmSize/2. )/gridSize ) ) + 1; // only used for estimating normals
 
   // full length fibers
   int rmin = 0, rmax = 0, cmin = 0, cmax = 0;
@@ -238,7 +238,7 @@ void ddDRcalo::DRconstructor::implementFiber(dd4hep::Volume& towerVol, dd4hep::P
   // Actual length of fiber to be implemented, quantized in 0.5 mm unit
   float approxFiberLen =  0.05*dd4hep::cm * (fiberIdx + 1);
   // Fix Z position of fiber since the length of fiber can differ in [0, 0.5) mm
-  dd4hep::Position fixedPos = dd4hep::Position(pos.x(), pos.y(), pos.z() + (fiberLen - approxFiberLen));
+  dd4hep::Position fixedPos = dd4hep::Position(pos.x(), pos.y(), pos.z() + (fiberLen - approxFiberLen)/2.);
 
   if ( fSegmentation->IsCerenkov(col,row) ) { //c fiber
     dd4hep::Volume cladVol("cladC", fFiberEnvVec.at(fiberIdx), fDescription->material(fX_cladC.materialStr()));

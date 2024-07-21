@@ -592,7 +592,7 @@
         <sipmWafer height="0.3*mm" material="Silicon" vis="DRCWaferVis" sensitive="true"/> <!-- Original height : 0.01 mm, change to 0.3 mm, same as sipmDim (to reduce memory)-->
       </sipmDim>
       <structure>
-        <dim distance="1.5*mm" dx="1.2*mm"/>
+        <dim distance="1.5*mm" dx="1.0*mm"/>
         <cladC name="cladC" rmax="0.5*mm" rmin="0.49*mm" material="FluorinatedPolymer" vis="DRCCladVis"/>
         <coreC name="coreC" rmax="0.5*mm" rmin="0.49*mm" material="PMMA" vis="DRCCerenVis"/> <!--also cladS-->
         <coreS name="coreS" rmax="0.5*mm" rmin="0.485*mm" material="DR_Polystyrene" vis="DRCScintVis"/>
