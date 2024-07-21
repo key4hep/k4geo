@@ -79,6 +79,7 @@ Vector3D GridDRcalo_k4geo::localPosition(const CellID& cID) const {
 }
 
 Vector3D GridDRcalo_k4geo::localPosition(int numx, int numy, int x_, int y_) const {
+  // Here x & y range from 0 to numx & numy (used for the geometry construction)
   float ptX = -fGridSize*static_cast<float>(numx/2) + static_cast<float>(x_)*fGridSize + ( numx%2==0 ? fGridSize/2. : 0. );
   float ptY = -fGridSize*static_cast<float>(numy/2) + static_cast<float>(y_)*fGridSize + ( numy%2==0 ? fGridSize/2. : 0. );
 
@@ -153,7 +154,7 @@ int GridDRcalo_k4geo::numX(const CellID& aCellID) const {
 
   DRparamBase_k4geo* paramBase = setParamBase(noEta);
 
-  int noX = static_cast<int>( std::floor( ( paramBase->GetTl2()*2. - fSipmSize )/fGridSize ) ) + 1; // in phi direction
+  int noX = static_cast<int>( std::floor( ( paramBase->GetTl2()*2. - fSipmSize/2. )/fGridSize ) ) + 1; // in phi direction
 
   return noX;
 }
@@ -163,7 +164,7 @@ int GridDRcalo_k4geo::numY(const CellID& aCellID) const {
 
   DRparamBase_k4geo* paramBase = setParamBase(noEta);
 
-  int noY = static_cast<int>( std::floor( ( paramBase->GetH2()*2. - fSipmSize )/fGridSize ) ) + 1; // in eta direction
+  int noY = static_cast<int>( std::floor( ( paramBase->GetH2()*2. - fSipmSize/2. )/fGridSize ) ) + 1; // in eta direction
 
   return noY;
 }
