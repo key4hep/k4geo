@@ -9,3 +9,4 @@ Known caveat: the drift chamber has a larger z extent than in the IDEA detector 
 ALLEGRO_o1_v03: with respect to v02 it features an ECal barrel with 11 layers and cell corners projective along phi.
 The vertex detector and drift chamber are now taken directly from IDEA_o1_v03, this effectively updates both the vertex detector (which was taken from an old CLD version) and the drift chamber (which was corresponding to IDEA_o1_v02/DriftChamber_o1_v01.xml). The z-extent of the drift chamber is now unchanged w.r.t. the IDEA detector (2 m) since it requires optimization anyway.
 Magnetic fields (solenoid + MDI) have been added.
+Added "turbine-style" endcap ecal, and invoke this in the top-level xml (replacing the coneCyro geometry).
