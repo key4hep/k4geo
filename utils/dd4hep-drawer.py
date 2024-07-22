@@ -27,8 +27,11 @@ parser.add_argument(
     action="extend",
     nargs="+",
     metavar=("Vertex", "InnerTrackers"),
-    help="Names of the immediate children of the world element that should be drawn.",
+    help="Names of the immediate children of the start element that should be drawn.",
     default=[],
+)
+parser.add_argument(
+    "--startNode", help="Start of the traversal", default="world"
 )
 
 args = parser.parse_args()
@@ -41,8 +44,8 @@ detector_name = args.compactFile.split("/")[-1].split(".")[0]
 
 dot = graphviz.Digraph("detector_name")
 
-# start = theDetector.detector("OpenDataTracker")
-start = theDetector.world()
+start = theDetector.detector(args.startNode)
+# start = theDetector.world()
 
 dot.node(start.name(), start.name())
 
@@ -62,7 +65,10 @@ def add_children(detElement, depth=0, children=[]):
     for raw_name, child in children:
         name = process_name(raw_name)
         parent_name = process_name(detElement.name())
-        dot.node(name, name)
+        sens = child.volume().isSensitive()
+        sens_lbl = "sensitive" if sens else ""
+        dot.node(name, name, {"xlabel": sens_lbl})
+        # dot.node(name, name)
         if edge_counter[(parent_name, name)] < args.maxEdges:
             dot.edge(parent_name, name)
             edge_counter[(parent_name, name)] += 1
@@ -73,4 +79,4 @@ def add_children(detElement, depth=0, children=[]):
 start_children = [(name, start.child(name)) for name in args.drawList]
 add_children(start, children=start_children)
 
-dot.render(f"{detector_name}.gv")
+dot.render(f"{detector_name}_{args.startNode}_{'-'.join(args.drawList)}.gv")
