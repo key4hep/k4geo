@@ -214,25 +214,25 @@ if(INSTALL_BEAMPIPE_STL_FILES)
     set(OUTPUT_DIR "${CMAKE_BINARY_DIR}/${STL_PATH}")
     file(MAKE_DIRECTORY ${OUTPUT_DIR})
 
-    set(FILES_DOWNLOADED)
-
     foreach(STL_FILE ${STL_FILES})
         set(FULL_URL "${FCC_URL}/${STL_PATH}/${STL_FILE}")
         message(DEBUG "Downloading file ${FULL_URL}")
         set(OUTPUT_FILE "${OUTPUT_DIR}/${STL_FILE}")
 
-        # Download the file
-        file(DOWNLOAD ${FULL_URL} ${OUTPUT_FILE}
-          SHOW_PROGRESS
-          STATUS download_status)
+        if(EXISTS "${OUTPUT_FILE}")
+          message(STATUS "File ${STL_FILE} already exists. Skipping download.")
+        else()
+          # Download the file
+          file(DOWNLOAD ${FULL_URL} ${OUTPUT_FILE}
+            SHOW_PROGRESS
+            STATUS download_status)
 
-        list(GET download_status 0 status_code)
-        if(NOT status_code EQUAL 0)
-            list(GET download_status 1 error_message)
-            message(FATAL_ERROR "Failed to download file: ${error_message}")
+          list(GET download_status 0 status_code)
+          if(NOT status_code EQUAL 0)
+              list(GET download_status 1 error_message)
+              message(FATAL_ERROR "Failed to download file: ${error_message}")
+          endif()
         endif()
-        list(APPEND FILES_DOWNLOADED "${FULL_URL}")
-
     endforeach()
 
     file(MAKE_DIRECTORY share/k4geo/FCCee)
