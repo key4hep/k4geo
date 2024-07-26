@@ -86,9 +86,9 @@
     <constant name="VTXOB_rmax_clearance" value="15.0*mm"/>     <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
 
     <constant name="VTXD_z_min" value="279.06*mm"/>            <!-- Start of VTX disks in z -->
-    <constant name="VTXD_z_min_total" value="VTXD_z_min-5.5*cm"/>      <!-- Outermost edge of VTX disks in z -->
+    <constant name="VTXD_z_min_total" value="VTXD_z_min-1.5*cm"/>      <!-- Outermost edge of VTX disks in z -->
     <constant name="VTXD_z_max" value="918.641*mm"/>            <!-- Outermost VTX disk in z -->
-    <constant name="VTXD_z_max_total" value="VTXD_z_max+5.5*cm"/>            <!-- Outermost edge of VTX disk in z -->
+    <constant name="VTXD_z_max_total" value="VTXD_z_max+4.5*cm"/>            <!-- Outermost edge of VTX disk in z -->
     <constant name="VTXD_r_min" value="34.5*mm"/>        <!-- Start of VTX disks in r -->
     <constant name="VTXD_r_max" value="315.0*mm"/>        <!-- Start of VTX disks in r -->
 

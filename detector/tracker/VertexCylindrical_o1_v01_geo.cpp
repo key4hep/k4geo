@@ -334,7 +334,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
             double z_pos = motherVolOffset;
             Position stave_pos = Position(x_pos, y_pos, z_pos);
             
-            string stave_name = layer_name + _toString(side,"_side%d") + _toString(iStave,"_stave%d");
+            string stave_name = layer_name + _toString(iStave,"_stave%d");
 
             PlacedVolume whole_stave_volume_placed;
             Volume whole_stave_volume_v;
@@ -365,15 +365,14 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                         double r_offset_component = component.offset + component.offsets[i];
                         x_pos = r_component_curved*cos(phi) - r_offset_component*sin(phi);
                         y_pos = r_component_curved*sin(phi) + r_offset_component*cos(phi);
-                        z_pos = component.z_offset + component.z_offsets[i];
+                        z_pos = component.z_offset + component.z_offsets[i] + motherVolOffset;
                         Position pos(x_pos, y_pos, z_pos);
                         component_assembly.placeVolume(component.volumes[i], Transform3D(rot,stave_pos).Inverse()*Transform3D(rot,pos));
-
                     }
                     else{
                         double x_pos = component.r + component.rs[i] + component.thicknesses[i]/2.;
                         double y_pos = component.offset + component.offsets[i];
-                        double z_pos = component.z_offset + component.z_offsets[i]; 
+                        double z_pos = component.z_offset + component.z_offsets[i] + motherVolOffset;
                         Position pos(x_pos, y_pos, z_pos);
                         component_assembly.placeVolume(component.volumes[i], pos);
                     }
@@ -393,21 +392,20 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                     if(endOfStave.side[i] != 0)
                         endOfStave_sides = {endOfStave.side[i]};
                     for(auto& endOfStave_side : endOfStave_sides){  // Place it on both sides of the stave
-                        double x_pos = endOfStave.r + endOfStave.rs[i] + endOfStave.thicknesses[i]/2.;
-                        double y_pos = endOfStave.offset + endOfStave.offsets[i];
-                        double z_pos = stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dzs[i] + endOfStave.z_offset + endOfStave.z_offsets[i]; 
-                        Position pos(x_pos, y_pos, z_pos*endOfStave_side+motherVolOffset);
-
                         if(endOfStave.isCurved[i]){
                             double r_component_curved = 0.0; // endOfStave.r + endOfStave.rs[i] + endOfStave.thicknesses[i]/2; // Correct for the fact that a tube element's origin is offset compared to the origin of a box
                             double r_offset_component = endOfStave.offset + endOfStave.offsets[i];
                             x_pos = r_component_curved*cos(phi) - r_offset_component*sin(phi);
                             y_pos = r_component_curved*sin(phi) + r_offset_component*cos(phi);
                             z_pos = stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dzs[i] + endOfStave.z_offset + endOfStave.z_offsets[i];
-                            pos = Position(x_pos, y_pos, z_pos*endOfStave_side+motherVolOffset);
+                            Position pos = Position(x_pos, y_pos, z_pos*endOfStave_side+motherVolOffset);
                             endOfStave_assembly.placeVolume(endOfStave.volumes[i], Transform3D(rot,stave_pos).Inverse()*Transform3D(rot,pos));
                         }
                         else{
+                            double x_pos = endOfStave.r + endOfStave.rs[i] + endOfStave.thicknesses[i]/2.;
+                            double y_pos = endOfStave.offset + endOfStave.offsets[i];
+                            double z_pos = stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dzs[i] + endOfStave.z_offset + endOfStave.z_offsets[i]; 
+                            Position pos(x_pos, y_pos, z_pos*endOfStave_side+motherVolOffset);
                             endOfStave_assembly.placeVolume(endOfStave.volumes[i], pos);
                         }
                     }
@@ -445,7 +443,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                         r_component_curved = m.sensor_thickness/2. + (iModule%2 == 0 ? 0.0 : m.stave_dr);
                         x_pos = r_component_curved*cos(phi_i) - r_offset_component*sin(phi_i);
                         y_pos = r_component_curved*sin(phi_i) + r_offset_component*cos(phi_i);
-                        z_pos = -(nmodules-1)/2.*(m.sensor_length) - (nmodules-1)/2.*step + iModule*m.sensor_length + iModule*step;
+                        z_pos = motherVolOffset -(nmodules-1)/2.*(m.sensor_length) - (nmodules-1)/2.*step + iModule*m.sensor_length + iModule*step;
                         pos = Position(x_pos, y_pos, z_pos);
 
                         x_pos = 0.0;
