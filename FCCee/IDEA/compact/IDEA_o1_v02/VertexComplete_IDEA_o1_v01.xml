@@ -19,7 +19,7 @@
     </display>
 
     <define>
-        <!-- <constant name="nInnerVertexLayers" value="4"/> -->
+        <!-- <constant name="nInnerVertexLayers" value="4"/> --> <!-- To change to ultra-light inner vertex design: 1. Uncomment this line, comment the next line and disable/enable the layers in " Ultra-light inner vertex"-->
         <constant name="nInnerVertexLayers" value="3"/>
     </define>
 
@@ -90,8 +90,9 @@
             <constant name="VTXIB_L3_Holder_Rohacell_rphi"  value="1.0*mm"/>
             <constant name="VTXIB_Holder_CarbonFiber_rphi"  value="0.2*mm"/>
 
-            <constant name="VTXIB_half_length" value="VTXIB_z3+VTXIB_hybrid_z+VTXIB_mod_z_spacing"/> <!-- 140.95*mm -->
-
+            
+            <!-- Inner vertex tube -->
+            <constant name="VTXIB_tube_thickness"   value="1.5*mm"/>
 
         <!-- Vertex outer barrel (VTXOB) + disks (VTXD): Let's take the ATLASPix3 sensor -->
             <constant name="VTXO_sens_z_sensitive" value="19.8*mm"/> <!-- Chip length in z: Sensitive -->
@@ -323,11 +324,11 @@
 
             <constant name="Beampipe_outer_r" value="CentralBeamPipe_rmax+BeamPipeWidth"/>
 
-            <constant name="VTXIB_curved_r1" value="(RSU_rphi*4.+2*VTXIB_curved_gap_rphi)/(2.0*M_PI)"/> <!-- Assume 2 mm of gap between the two sensors, so r=(18.516*4.+2*2)/(2.0*pi)=12.424 mm-->
-            <constant name="VTXIB_curved_r2" value="(RSU_rphi*6.+2*VTXIB_curved_gap_rphi)/(2.0*M_PI)"/> <!-- Assume 2 mm of gap between the two sensors -->
-            <constant name="VTXIB_curved_r3" value="(RSU_rphi*8.+2*VTXIB_curved_gap_rphi)/(2.0*M_PI)"/> <!-- Assume 2 mm of gap between the two sensors -->
-            <constant name="VTXIB_curved_r4" value="(RSU_rphi*10.+2*VTXIB_curved_gap_rphi)/(2.0*M_PI)"/> <!-- Assume 2 mm of gap between the two sensors -->
-            <constant name="VTXIB_curved_r_outer" value="40.0*mm"/>     <!-- End of vertex inner barrel -->
+            <constant name="VTXIB_curved_r1" value="(RSU_rphi*4.+2*VTXIB_curved_gap_rphi)/(2.0*M_PI)"/>     <!-- Assume 2 mm of gap between the two sensors -->
+            <constant name="VTXIB_curved_r2" value="(RSU_rphi*6.+2*VTXIB_curved_gap_rphi)/(2.0*M_PI)"/>     <!-- Assume 2 mm of gap between the two sensors -->
+            <constant name="VTXIB_curved_r3" value="(RSU_rphi*8.+2*VTXIB_curved_gap_rphi)/(2.0*M_PI)"/>     <!-- Assume 2 mm of gap between the two sensors -->
+            <constant name="VTXIB_curved_r4" value="(RSU_rphi*10.+2*VTXIB_curved_gap_rphi)/(2.0*M_PI)"/>    <!-- Assume 2 mm of gap between the two sensors -->
+            <constant name="VTXIB_curved_r_outer" value="42.0*mm"/>     <!-- End of vertex inner barrel -->
 
             <constant name="VTXIB_curved_sensitive_thickness"   value="50e-03*mm+16e-03*mm"/> <!-- Assume 50 µm of sensor thickness + 16 µm of Si-equivalent for metal layer connecting RSUs for powering -->
 
@@ -425,20 +426,10 @@
           <envelope vis="VXDVis">
                 <shape type="BooleanShape" operation="Subtraction" material="Air">
                     <shape type="BooleanShape" operation="Subtraction" material="Air">
-                        <shape type="BooleanShape" operation="Subtraction" material="Air">
-                            <shape type="BooleanShape" operation="Subtraction" material="Air">
-                                <shape type="BooleanShape" operation="Union" material="Air">
-                                    <shape type="Tube" rmin="VTXOB_r_max_layer-VTXOB_TerminalPart_L2_thickness1-12.771*mm" rmax="VTXOB_r_max_layer+VTXOB_rmax_clearance" dz="VTXOB_z2_passive/2."/>
-                                    <shape type="BooleanShape" operation="Union" material="Air">
-                                        <shape type="Tube" rmin="VTXOB_r_min_layer-VTXOB_r_min_clearance" rmax="VTXOB_r_max_layer-VTXOB_TerminalPart_L2_thickness1-12.771*mm" dz="VTXOB_z1_passive/2."/>
-                                        <shape type="Tube" rmin="VTXIB_r_min_layer-VTXIB_r_min_clearance" rmax="VTXOB_r_min_layer-VTXOB_r_min_clearance" dz="VTXIB_half_length"/>
-                                    </shape>
-                                </shape>
-                                <shape type="Tube" rmin="VTXIB_r_max_layer+VTXIB_r_max_clearance" rmax="VTXOB_r_min_layer-VTXOB_r_min_clearance" dz="1000.0*mm-VTXOB_z1_passive/2."/>
-                                <position x="0" y="0" z="-1000.0*mm" />
-                            </shape>
-                            <shape type="Tube" rmin="VTXIB_r_max_layer+VTXIB_r_max_clearance" rmax="VTXOB_r_min_layer-VTXOB_r_min_clearance" dz="1000.0*mm-VTXOB_z1_passive/2."/>
-                            <position x="0" y="0" z="1000.0*mm" />                     
+                        <shape type="BooleanShape" operation="Union" material="Air">0
+                            <shape type="Tube" rmin="VTXOB_r_max_layer-VTXOB_TerminalPart_L2_thickness1-12.771*mm" rmax="VTXOB_r_max_layer+VTXOB_rmax_clearance" dz="VTXOB_z2_passive/2."/>
+                            <shape type="Tube" rmin="VTXIB_r_min_layer-VTXIB_r_min_clearance" rmax="VTXIB_r_max" dz="VTXIB_half_length"/>
+                            <shape type="Tube" rmin="VTXIB_r_max" rmax="VTXOB_r_max_layer-VTXOB_TerminalPart_L2_thickness1-12.771*mm" dz="VTXOB_z1_passive/2."/>
                         </shape>
                         <shape type="Cone" rmin1="0" rmax1="tan(VertexClearanceTheta)*2000.0*mm" rmin2="0" rmax2="0" z="2000.0*mm/2."/>
                         <position x="0" y="0" z="-2000.0*mm/2." />
@@ -571,6 +562,10 @@
                     <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" length="VTXIB_hybrid_z+VTXIB_mod_z_spacing" offset="-VTXIB_L3_Holder_Rohacell_rphi/2.0-VTXIB_Holder_CarbonFiber_rphi/2.0"   r="VTXIB_endOfStave_Thickness" material="CarbonFiberVtx66D"    vis="SupportVis"/> <!-- Holder structure -->
                     <component thickness="VTXIB_L3_Holder_Thickness"  width="VTXIB_Holder_CarbonFiber_rphi" length="VTXIB_hybrid_z+VTXIB_mod_z_spacing" offset="VTXIB_L3_Holder_Rohacell_rphi/2.0+VTXIB_Holder_CarbonFiber_rphi/2.0"    r="VTXIB_endOfStave_Thickness" material="CarbonFiberVtx66D"    vis="SupportVis"/> <!-- Holder structure -->
                 </end_z>
+
+                <components name="inner_vertex_tube" r="VTXIB_r_max-VTXIB_tube_thickness" length="VTXIB_half_length">
+                    <component thickness="VTXIB_tube_thickness" width="2.*M_PI*(VTXIB_r_max-VTXIB_tube_thickness)/VTXIB_L3_Staves" material="PEEK" isCurved="true" vis="TerminalPartVis"/>
+                </components>
             </stave>
 
 
@@ -732,6 +727,10 @@
                 <end_z name="support_rings" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r">
                     <component thickness="VTXIB_curved_r_outer-VTXIB_curved_r4-VTXIB_curved_sensitive_thickness-2.0*VTXIB_curved_tolerance_r" width="M_PI*(VTXIB_curved_r4+VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r)" length="VTXIB_curved_support_ring_length" phi_offset="VTXIB_curved_ring4_phi_offset" isCurved="true" material="CarbonFoam" vis="CarbonFoam" dz="+VTXIB_curved_endcap4_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset"/>
                 </end_z>
+
+                <components name="inner_vertex_tube" r="VTXIB_curved_r_outer-VTXIB_curved_r4" length="VTXIB_curved_z4_1+VTXIB_curved_support_ring_length/2.">
+                    <component thickness="VTXIB_tube_thickness" width="2.*M_PI*(VTXIB_curved_r_outer)/2." material="PEEK" isCurved="true" vis="TerminalPartVis"/>
+                </components>
             </stave>
 
             <stave name="SiVTXIBStave4Curved_2" r="VTXIB_curved_r4">
@@ -766,6 +765,10 @@
                 <end_z name="support_rings" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r">
                     <component thickness="VTXIB_curved_r_outer-VTXIB_curved_r4-VTXIB_curved_sensitive_thickness-2.0*VTXIB_curved_tolerance_r" width="M_PI*(VTXIB_curved_r4+VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r)" length="VTXIB_curved_support_ring_length" phi_offset="VTXIB_curved_ring4_phi_offset" isCurved="true" material="CarbonFoam" vis="CarbonFoam" dz="+VTXIB_curved_endcap4_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset"/>
                 </end_z>
+
+                <components name="inner_vertex_tube" r="VTXIB_curved_r_outer-VTXIB_curved_r4" length="VTXIB_curved_z4_2+VTXIB_curved_support_ring_length/2.">
+                    <component thickness="VTXIB_tube_thickness" width="2.*M_PI*(VTXIB_curved_r_outer)/2." material="PEEK" isCurved="true" vis="TerminalPartVis"/>
+                </components>
             </stave>
 
             <!-- Outer barrel -->
@@ -887,7 +890,7 @@
             <!-- Vertex inner barrel -->
             <layer nLadders="VTXIB_L1_Staves" phi0="0.0" r="VTXIB_r1" offset="VTXIB_L1_offset" id="0" nmodules="VTXIB_L1_nModules" name="SiVTXIBStave1" step="VTXIB_mod_z_spacing" dr="VTXIB_dr1" motherVolLength="2.0*(VTXIB_z1+VTXIB_hybrid_z+VTXIB_mod_z_spacing)" motherVolThickness="VTXIB_r2-VTXIB_r1"/>
             <layer nLadders="VTXIB_L2_Staves" phi0="0.0" r="VTXIB_r2" offset="VTXIB_L2_offset" id="1" nmodules="VTXIB_L2_nModules" name="SiVTXIBStave2" step="VTXIB_mod_z_spacing" dr="VTXIB_dr2" motherVolLength="2.0*(VTXIB_z2+VTXIB_hybrid_z+VTXIB_mod_z_spacing)" motherVolThickness="VTXIB_r3-VTXIB_r2"/>
-            <layer nLadders="VTXIB_L3_Staves" phi0="0.0" r="VTXIB_r3" offset="VTXIB_L3_offset" id="2" nmodules="VTXIB_L3_nModules" name="SiVTXIBStave3" step="VTXIB_mod_z_spacing" dr="VTXIB_dr3" motherVolLength="2.0*(VTXIB_z3+VTXIB_hybrid_z+VTXIB_mod_z_spacing)" motherVolThickness="12.0*mm"/>
+            <layer nLadders="VTXIB_L3_Staves" phi0="0.0" r="VTXIB_r3" offset="VTXIB_L3_offset" id="2" nmodules="VTXIB_L3_nModules" name="SiVTXIBStave3" step="VTXIB_mod_z_spacing" dr="VTXIB_dr3" motherVolLength="2.0*VTXIB_half_length" motherVolThickness="VTXIB_r_max-VTXIB_r3"/>
 
             <!-- Ultra-light inner vertex -->
             <!-- <layer nLadders="2" phi0="0.5*RSU_rphi/(2*M_PI*VTXIB_curved_r1)*360.*deg+VTXIB_curved_phi0_1" r="VTXIB_curved_r1" id="0" nmodules="VTXIB_curved_nModules1" name="SiVTXIBStave1Curved" step="0.0*mm" motherVolThickness="VTXIB_curved_r2-VTXIB_curved_r1"        motherVolLength="VTXIB_curved_z1_passive"/>
@@ -897,8 +900,8 @@
             <layer nLadders="2" phi0="0.5*RSU_rphi/(2*M_PI*VTXIB_curved_r3)*360.*deg+VTXIB_curved_phi0_3" r="VTXIB_curved_r3" id="2" nmodules="VTXIB_curved_nModules3_1" name="SiVTXIBStave3Curved_1" step="0.0*mm" motherVolThickness="VTXIB_curved_r4-VTXIB_curved_r3"        motherVolLength="VTXIB_curved_z3_passive1" motherVolOffset="+(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap3_length_center-VTXIB_curved_endcap3_length_side)/2.)" side="-1" z_offset="VTXIB_curved_z3_offset1"/>
             <layer nLadders="2" phi0="0.5*RSU_rphi/(2*M_PI*VTXIB_curved_r3)*360.*deg+VTXIB_curved_phi0_3" r="VTXIB_curved_r3" id="2" nmodules="VTXIB_curved_nModules3_2" name="SiVTXIBStave3Curved_2" step="0.0*mm" motherVolThickness="VTXIB_curved_r4-VTXIB_curved_r3"        motherVolLength="VTXIB_curved_z3_passive2" motherVolOffset="-(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap3_length_center-VTXIB_curved_endcap3_length_side)/2.)" side="+1" z_offset="VTXIB_curved_z3_offset2"/>
 
-            <layer nLadders="2" phi0="0.5*RSU_rphi/(2*M_PI*VTXIB_curved_r4)*360.*deg+VTXIB_curved_phi0_4" r="VTXIB_curved_r4" id="3" nmodules="VTXIB_curved_nModules4_1" name="SiVTXIBStave4Curved_1" step="0.0*mm" motherVolThickness="VTXIB_curved_r_outer-VTXIB_curved_r4"   motherVolLength="VTXIB_curved_z4_passive1" motherVolOffset="+(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap4_length_center-VTXIB_curved_endcap4_length_side)/2.)" side="-1" z_offset="VTXIB_curved_z4_offset1"/>
-            <layer nLadders="2" phi0="0.5*RSU_rphi/(2*M_PI*VTXIB_curved_r4)*360.*deg+VTXIB_curved_phi0_4" r="VTXIB_curved_r4" id="3" nmodules="VTXIB_curved_nModules4_2" name="SiVTXIBStave4Curved_2" step="0.0*mm" motherVolThickness="VTXIB_curved_r_outer-VTXIB_curved_r4"   motherVolLength="VTXIB_curved_z4_passive2" motherVolOffset="-(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap4_length_center-VTXIB_curved_endcap4_length_side)/2.)" side="+1" z_offset="VTXIB_curved_z4_offset2"/> -->
+            <layer nLadders="2" phi0="0.5*RSU_rphi/(2*M_PI*VTXIB_curved_r4)*360.*deg+VTXIB_curved_phi0_4" r="VTXIB_curved_r4" id="3" nmodules="VTXIB_curved_nModules4_1" name="SiVTXIBStave4Curved_1" step="0.0*mm" motherVolThickness="VTXIB_curved_r_outer-VTXIB_curved_r4+VTXIB_tube_thickness"   motherVolLength="VTXIB_curved_z4_passive1" motherVolOffset="+(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap4_length_center-VTXIB_curved_endcap4_length_side)/2.)" side="-1" z_offset="VTXIB_curved_z4_offset1"/>
+            <layer nLadders="2" phi0="0.5*RSU_rphi/(2*M_PI*VTXIB_curved_r4)*360.*deg+VTXIB_curved_phi0_4" r="VTXIB_curved_r4" id="3" nmodules="VTXIB_curved_nModules4_2" name="SiVTXIBStave4Curved_2" step="0.0*mm" motherVolThickness="VTXIB_curved_r_outer-VTXIB_curved_r4+VTXIB_tube_thickness"   motherVolLength="VTXIB_curved_z4_passive2" motherVolOffset="-(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap4_length_center-VTXIB_curved_endcap4_length_side)/2.)" side="+1" z_offset="VTXIB_curved_z4_offset2"/> -->
 
             <!-- Vertex outer barrel -->
             <layer nLadders="VTXOB_Staves1" phi0="0.0" r="VTXOB_r1" offset="VTXOB_offset1" id="nInnerVertexLayers+0" nmodules="VTXOB_nModules1" name="SiVTXOBStave1" step="VTXOB_mod_z_spacing" motherVolThickness="1.2*cm" motherVolLength="VTXOB_z1_passive"/>
@@ -907,12 +910,16 @@
 
 
         <!-- Vertex inner barrel support structure imported via DDCAD, material budget evaluation with g4MaterialScan is working, but not with the k4SimGeant4 methods. Should be furthermore rotated by 90 degrees around z, but feature not working currently -->
-        <!-- <detector id="DetID_NOTUSED" name="VTXIBSupport" type="DD4hep_TestShape_Creator">
-            <envelope vis="VXDVis">
-                <shape type="Assembly"/>
-            </envelope>
+        <!-- <detector id="DetID_NOTUSED" name="VTXIB_Support" type="DD4hep_TestShape_Creator">
             <check>
-                <shape type="CAD_MultiVolume" ref="VertexSupport_o1_v02.obj" unit="mm"/>
+                <shape type="CAD_MultiVolume" ref="VertexSupport_o1_v03.obj" unit="mm"/>
+                <rotation x="180.0*deg" y="0" z="0"/>
+            </check>
+        </detector>  -->
+
+        <!-- <detector id="DetID_NOTUSED" name="VTXIB_CoolingCones" type="DD4hep_TestShape_Creator">
+            <check>
+                <shape type="CAD_MultiVolume" ref="VertexCoolingCones_o1_v03.obj" unit="mm"/>
                 <rotation x="0" y="0" z="0"/>
             </check>
         </detector>  -->
@@ -929,7 +936,7 @@
                                         <shape type="BooleanShape" operation="Subtraction" material="Air">
                                             <shape type="Tube" rmin="VTXD_rmin1" rmax="VTXD_r_max" dz="VTXD_z_max_total"/>
 
-                                            <shape type="Tube" rmin="VTXIB_r_min_layer-VTXIB_r_min_clearance" rmax="VTXIB_r_max_layer+VTXIB_r_max_clearance" dz="VTXIB_half_length"/> <!-- Subtract volume of inner barrel to avoid overlap -->
+                                            <shape type="Tube" rmin="VTXIB_r_min_layer-VTXIB_r_min_clearance" rmax="VTXIB_r_max" dz="VTXIB_half_length"/> <!-- Subtract volume of inner barrel to avoid overlap -->
                                             <position x="0" y="0" z="0"/>
                                         </shape>
                                         <shape type="Tube" rmin="VTXOB_r_max_layer-VTXOB_TerminalPart_L2_thickness1-12.771*mm" rmax="VTXOB_r_max_layer+VTXOB_rmax_clearance" dz="VTXOB_z2_passive/2."/> <!-- Subtract volume of outermost barrel to avoid overlap -->

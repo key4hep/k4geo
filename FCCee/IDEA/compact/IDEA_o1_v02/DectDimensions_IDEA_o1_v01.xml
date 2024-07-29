@@ -74,11 +74,13 @@
     <constant name="SynchRadMaskSize" value="5*mm" /> <!-- mask tip is at 10 mm from the beamline -->
     <constant name="mask_epsilon" value="0.001*mm" />
         
+    <!-- Vertex detector -->
     <constant name="VertexClearanceTheta" value="0.1035*rad"/> <!-- Clearance of vertex detector in mrad from IP -->
     <constant name="VTXIB_r_min_clearance" value="1.0*mm"/>    <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
     <constant name="VTXIB_r_min_layer"    value="13.7*mm"/>   <!-- Start of inner vertex detector layers. To keep distance of 1.3 mm from outer beam pipe end (10+0.35+1+0.35 mm = 11.7 mm). This changes to 13.7 mm due to cooling issues (see https://indico.cern.ch/event/1176398/contributions/5207171/attachments/2581129/4451907/Krakow%202023_v23_final.pdf) -->
     <constant name="VTXIB_r_max_layer"    value="34.0*mm"/>   <!-- Position of the outermost vertex inner barrel layer -->
-    <constant name="VTXIB_r_max_clearance" value="12.0*mm"/>  <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
+    <constant name="VTXIB_r_max"          value="50.0*mm"/>  <!-- End of inner vertex = outer radius of inner vertex tube -->
+    <constant name="VTXIB_half_length"          value="556.2/2.*mm"/> <!-- 278.1*mm, half length of inner vertex tube -->
 
     <constant name="VTXOB_r_min_layer"    value="140*mm"/>      <!-- R of the innermost layer of the outer vertex -->
     <constant name="VTXOB_r_min_clearance" value="15.0*mm"/>     <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
@@ -94,7 +96,10 @@
 
     <!-- Limits of complete vertex detector system -->
     <constant name="VTX_r_min" value="VTXIB_r_min_layer-VTXIB_r_min_clearance"/> 
+    <constant name="VTX_r_max" value="VTXOB_r_max_layer+VTXOB_rmax_clearance"/>
+    <constant name="VTX_z_max" value="VTXD_z_max+4.5*cm"/>
 
+    <!-- Drift chamber -->
     <constant name="DCH_inner_radius" value="345*mm"/>
     <constant name="DCH_outer_radius" value="2000*mm"/> <!-- Contact the drift chamber experts if you need to change the DC radiuses (just changing the radius is not enough, the DC has been optimized for those values, the detector geometry is constrained by many construction/mechanical/electronics/etc considerations -->
     <constant name="DCH_half_length" value="2250*mm"/> <!-- this includes the services -->
