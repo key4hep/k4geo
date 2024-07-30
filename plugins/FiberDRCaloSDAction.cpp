@@ -192,7 +192,7 @@ namespace dd4hep
 
     /// Method for generating hit(s) using the information of G4Step object.
     template <>
-    G4bool Geant4SensitiveAction<DRCData>::process(G4Step GEANT4_CONST_STEP *step, G4TouchableHistory *history)
+    G4bool Geant4SensitiveAction<DRCData>::process(G4Step GEANT4_CONST_STEP *step, G4TouchableHistory*)
     {
       if (step->GetTrack()->GetDefinition() != G4OpticalPhoton::OpticalPhotonDefinition())
         return false;
