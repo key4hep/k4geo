@@ -16,6 +16,8 @@
     </comment>
   </info>
 
+  <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml" />
+
   <includes>
     <gdmlFile  ref="elements_o1_v01.xml"/>
     <gdmlFile  ref="materials_o1_v01.xml"/>
@@ -28,8 +30,6 @@
     <constant name="world_z" value="world_size"/>
   </define>
 
-  <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml" />
-
   <!-- Import dimensions -->
   <include ref="DectDimensions_IDEA_o1_v01.xml"/>
 
@@ -38,13 +38,14 @@
   <include ref="BeamInstrumentation_o1_v01.xml"/>
   <include ref="LumiCal_o1_v01.xml"/>
 
-  <include ref="VertexComplete_IDEA_o1_v01.xml"/>
+  <!-- Import vertex -->
+  <include ref="Vertex_IDEA_o1_v01.xml"/>
 
   <!-- Import drift chamber -->
-  <!-- <include ref="DriftChamber_o1_v01.xml"/> -->
+  <include ref="DriftChamber_o1_v01.xml"/>
 
   <!-- Import silicon wrapper -->
-  <include ref="SiliconWrapper_o1_v01.xml"/>
+  <!-- <include ref="SiliconWrapper_o1_v01.xml"/> -->
 
   <!-- Import solenoid -->
   <include ref="Solenoid_o1_v01.xml"/>
