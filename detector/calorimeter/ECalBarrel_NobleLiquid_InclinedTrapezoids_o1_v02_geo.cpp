@@ -1,6 +1,8 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Handle.h"
 #include "XML/Utilities.h"
+#include "DDRec/MaterialManager.h"
+#include "DDRec/Vector3D.h"
 
 #include <DDRec/DetectorData.h>
 
