@@ -340,10 +340,14 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
             Volume whole_stave_volume_v;
             Assembly whole_stave_volume_a;
             if(m.motherVolThickness>0.0 && m.motherVolWidth>0.0){
-                Box whole_stave_box = Box(m.motherVolWidth/2., stave_length/2., m.motherVolThickness/2.);
+
+                r = layer_r + m.motherVolThickness/2.;
+                x_pos = r*cos(phi) - r_offset_component*sin(phi);
+                y_pos = r*sin(phi) + r_offset_component*cos(phi);
+                Box whole_stave_box = Box(m.motherVolThickness/2., m.motherVolWidth/2., stave_length/2.);
                 whole_stave_volume_v = Volume(stave_name, whole_stave_box, theDetector.material("Air"));
                 whole_stave_volume_v.setVisAttributes(theDetector, x_det.visStr());
-                whole_stave_volume_placed = whole_layer_volume.placeVolume(whole_stave_volume_v, Transform3D(rot,stave_pos));
+                whole_stave_volume_placed = whole_layer_volume.placeVolume(whole_stave_volume_v, Transform3D(rot,Position(x_pos, y_pos, z_pos)));
             }
             else{
                 //// Use just assembly to avoid overlap between stave volume and other volumes
@@ -355,7 +359,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
             for(auto& component : m.components_vec){
                 Assembly component_assembly(stave_name + "_" + component.name);
                 if(m.motherVolThickness>0.0 && m.motherVolWidth>0.0)
-                    pv = whole_stave_volume_v.placeVolume(component_assembly);
+                    pv = whole_stave_volume_v.placeVolume(component_assembly, Position(-m.motherVolThickness/2., 0., 0.));
                 else
                     pv = whole_stave_volume_a.placeVolume(component_assembly);
                 
@@ -383,7 +387,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
             for(auto& endOfStave : m.endOfStaves_vec){
                 Assembly endOfStave_assembly(stave_name + "_" + endOfStave.name);
                 if(m.motherVolThickness>0.0 && m.motherVolWidth>0.0)
-                    pv = whole_stave_volume_v.placeVolume(endOfStave_assembly);
+                    pv = whole_stave_volume_v.placeVolume(endOfStave_assembly, Position(-m.motherVolThickness/2., 0., 0.));
                 else
                     pv = whole_stave_volume_a.placeVolume(endOfStave_assembly);
 
@@ -422,7 +426,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 string module_name = stave_name + _toString(iModule,"_module%d");
                 Assembly module_assembly(module_name);
                 if(m.motherVolThickness>0.0 && m.motherVolWidth>0.0)
-                    pv = whole_stave_volume_v.placeVolume(module_assembly);
+                    pv = whole_stave_volume_v.placeVolume(module_assembly, Position(-m.motherVolThickness/2., 0., 0.));
                 else
                     pv = whole_stave_volume_a.placeVolume(module_assembly);
                 pv.addPhysVolID("module", iModule_tot);

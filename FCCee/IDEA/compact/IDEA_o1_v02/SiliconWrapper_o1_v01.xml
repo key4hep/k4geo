@@ -107,26 +107,22 @@
 
 
         <!-- Simplified silicon wrapper parameters -->
-            <constant name="SiWrB_nModules1" value="1"/> <!-- Length of SiWr_half_length = 2400 mm -> Let's take 131 modules with 130 SiWr_mod_overlap gaps (131*42.2+130*-5.4 = 4826.2 mm)-->
-            <constant name="SiWrB_nModules2" value="SiWrB_nModules1"/> <!-- Same number of modules so that gaps in r-phi in layer 1 can be filled by layer 2-->
+<!--            <constant name="SiWrB_nModules1" value="1"/> <!~~ Length of SiWr_half_length = 2400 mm -> Let's take 131 modules with 130 SiWr_mod_overlap gaps (131*42.2+130*-5.4 = 4826.2 mm)~~>
+            <constant name="SiWrB_nModules2" value="SiWrB_nModules1"/> <!~~ Same number of modules so that gaps in r-phi in layer 1 can be filled by layer 2~~>
 
             <constant name="SiWrD_tile_nmodules"        value="2"/>
             <constant name="SiWrD_double_tile_nmodules" value="4"/>
-            <constant name="SiWrD_half_tile_nmodules"   value="1"/>
+            <constant name="SiWrD_half_tile_nmodules"   value="1"/>-->
     </define>        
 
 
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
         <readout name="SiWrBCollection">
-<!--            <segmentation type="CartesianGridYZ" grid_size_y="0.050*mm" grid_size_z="1.0*mm"/>  <!~~ Pixels of 50x1000 µm~~>
-            <id>${GlobalTrackerReadoutID},y:32:-16,z:-16</id>-->
             <id>${GlobalTrackerReadoutID}</id>
 
         </readout>       
         <readout name="SiWrDCollection">
-<!--            <segmentation type="CartesianGridXY" grid_size_x="0.050*mm" grid_size_y="1.0*mm"/>  <!~~ Pixels of 50x1000 µm, NEED TO THINK WHETHER THIS MAKES SENSE AS SILICON WRAPPER DISKS DON'T FEATURE PETAL STRUCTURE, SQUARE PIXELS WOULD MAKE MORE SENSE! ~~>
-            <id>${GlobalTrackerReadoutID},x:32:-16,y:-16</id>-->
             <id>${GlobalTrackerReadoutID}</id>
         </readout>
     </readouts>
@@ -134,14 +130,14 @@
 
     <!-- Silicon wrapper barrel  -->
     <detectors>
-        <detector name="SiWrB" type="VertexBarrel_detailed_o1_v01" vis="SiWrVis" id="DetID_SiWr_Barrel" readout="SiWrBCollection" region="SiWrBRegion">
+        <detector name="SiWrB" type="VertexCylindrical_o1_v01" vis="SiWrVis" id="DetID_SiWr_Barrel" readout="SiWrBCollection" region="SiWrBRegion">
             <envelope vis="SiWrVis">       
                 <shape type="Tube" rmin="SiWrB_inner_radius" rmax="SiWrB_outer_radius" dz="SiWrB_half_length" material="Air"/>
             </envelope>
             <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_BARREL"/>
             
             <!-- Definition of our "stave" object that is used to build the barrel. -->
-            <stave name="SiWrStave" dr="SiWr_distance_two_sides">
+            <stave name="SiWrStave" dr="SiWr_distance_two_sides" motherVolWidth="SiWr_mod_rphi" motherVolThickness="0.8*(SiWrB_r2-SiWrB_r1)">
                 <!-- Front flexes. Same flexes as in IDEA vertex. Detailed -->
                 <!-- <components name="flex_leftQuads" r="0.0*mm" length="SiWrB_z">
                     <component thickness="SiWr_flex_Aluminium_thickness" width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." r="0.0*mm"                                                       material="Al" vis="CableVis"/>
