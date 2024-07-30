@@ -909,8 +909,8 @@
         </detector>
 
 
-        <!-- Vertex inner barrel support structure imported via DDCAD, material budget evaluation with g4MaterialScan is working, but not with the k4SimGeant4 methods. Should be furthermore rotated by 90 degrees around z, but feature not working currently -->
-        <detector id="DetID_NOTUSED" name="VTXIB_Support" type="DD4hep_TestShape_Creator">
+        <!-- Vertex inner barrel support structure and cooling cones imported via DDCAD. Disabled because of overlaps within and with Vertex detector -->
+        <!-- <detector id="DetID_NOTUSED" name="VTXIB_Support" type="DD4hep_TestShape_Creator">
             <check>
                 <shape type="CAD_MultiVolume" ref="VertexSupport_o1_v03.obj" unit="mm"/>
                 <rotation x="180.0*deg" y="0" z="0"/>
@@ -922,7 +922,7 @@
                 <shape type="CAD_MultiVolume" ref="VertexCoolingCones_o1_v03.obj" unit="mm"/>
                 <rotation x="0" y="0" z="0"/>
             </check>
-        </detector> 
+        </detector>  -->
 
         <!-- Vertex disks -->
         <detector id="DetID_VXD_Disks" name="VertexEndcap" vis="VXDVis" type="VertexDisks_detailed_o1_v01" readout="VertexEndcapCollection" reflect="true" region="VTXDRegion">

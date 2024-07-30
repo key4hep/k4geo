@@ -41,7 +41,7 @@
   <include ref="VertexComplete_IDEA_o1_v01.xml"/>
 
   <!-- Import drift chamber -->
-  <include ref="DriftChamber_o1_v01.xml"/>
+  <!-- <include ref="DriftChamber_o1_v01.xml"/> -->
 
   <!-- Import silicon wrapper -->
   <include ref="SiliconWrapper_o1_v01.xml"/>

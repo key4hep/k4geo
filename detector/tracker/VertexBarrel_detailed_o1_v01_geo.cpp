@@ -257,8 +257,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
             string stave_name = layer_name + _toString(iStave,"_stave%d");
             Assembly stave_assembly(stave_name);
             pv = whole_layer_volume.placeVolume(stave_assembly);
-
-            double stave_length = nmodules*m.sensor_length + (nmodules-1)*step;
             
             // Place components
             for(auto& component : m.components_vec){

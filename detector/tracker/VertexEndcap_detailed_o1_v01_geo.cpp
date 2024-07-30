@@ -222,10 +222,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             Assembly whole_disk_volume_a;
             double disk_motherVolThickness = getAttrOrDefault(x_layer, _Unicode(motherVolThickness), double(0.0));
             if(disk_motherVolThickness>0.0){
-                Tube whole_disk_tube = Tube(rmin, rmax, disk_motherVolThickness);
+                Tube whole_disk_tube = Tube(rmin, rmax, disk_motherVolThickness/2.);
                 whole_disk_volume_v = Volume(disk_name, whole_disk_tube, theDetector.material("Air"));
-                whole_disk_volume_v.setVisAttributes(theDetector, x_det.visStr());
-                whole_disk_volume_placed = side_assembly.placeVolume(whole_disk_volume_v, Position(0.0, 0.0, side*z));
+                whole_disk_volume_v.setVisAttributes(theDetector, x_layer.visStr());
+                whole_disk_volume_placed = side_assembly.placeVolume(whole_disk_volume_v, Position(0.0, 0.0, side*(z+disk_motherVolThickness/2.)));
             }
             else{
                 //// Use just assembly to avoid overlap between disk volume and other volumes
@@ -292,7 +292,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                     if(stave_motherVolThickness>0.0 && stave_motherVolWidth>0.0){
                         Box whole_stave_box = Box(stave_motherVolWidth/2., stave_length/2., stave_motherVolThickness/2.);
                         whole_stave_volume_v = Volume(stave_name, whole_stave_box, theDetector.material("Air"));
-                        whole_stave_volume_v.setVisAttributes(theDetector, x_det.visStr());
+                        whole_stave_volume_v.setVisAttributes(theDetector, x_stave.visStr());
                         whole_stave_volume_placed = petal_assembly.placeVolume(whole_stave_volume_v, Transform3D(rot,stave_pos));
                     }
                     else{
@@ -311,9 +311,9 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                             pv = whole_stave_volume_a.placeVolume(component_assembly);
                         
                         for(int i=0; i<int(component.thicknesses.size()); i++){
-                            double x_pos = component.offset + component.offsets[i];
-                            double y_pos = 0.0;
-                            double z_pos = component.z_offset + component.z_offsets[i] + component.thicknesses[i]/2.; 
+                            x_pos = component.offset + component.offsets[i];
+                            y_pos = 0.0;
+                            z_pos = component.z_offset + component.z_offsets[i] + component.thicknesses[i]/2.; 
                             if(side == -1){z_pos = -z_pos;}
                             Position pos(x_pos, y_pos, z_pos);
 
@@ -337,9 +337,9 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                             pv = whole_stave_volume_a.placeVolume(endOfStave_assembly);
 
                         for(int i=0; i<int(endOfStave.thicknesses.size()); i++){
-                            double x_pos = endOfStave.offset + endOfStave.offsets[i];
-                            double y_pos = endOfStave.xs[i]>0 ? stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dxs[i] : -(stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dxs[i]);
-                            double z_pos = endOfStave.z_offset + endOfStave.z_offsets[i] + endOfStave.thicknesses[i]/2.; 
+                            x_pos = endOfStave.offset + endOfStave.offsets[i];
+                            y_pos = endOfStave.xs[i]>0 ? stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dxs[i] : -(stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dxs[i]);
+                            z_pos = endOfStave.z_offset + endOfStave.z_offsets[i] + endOfStave.thicknesses[i]/2.; 
 
                             if(side == -1){z_pos = -z_pos;}
                             Position pos(x_pos, y_pos, z_pos);
@@ -352,9 +352,9 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                     // Place sensor
                     for(int iModule=0; iModule<nmodules; iModule++){
                         double z_alternate_module = (iModule%2 == 0) ? 0.0 : stave_dz;
-                        double x_pos = m.sensor_offset;
-                        double y_pos = - stave_length/2. + m.sensor_length/2. + iModule*m.sensor_length + iModule*step;
-                        double z_pos = m.sensor_z_offset + z_alternate_module + m.sensor_thickness/2.; 
+                        x_pos = m.sensor_offset;
+                        y_pos = - stave_length/2. + m.sensor_length/2. + iModule*m.sensor_length + iModule*step;
+                        z_pos = m.sensor_z_offset + z_alternate_module + m.sensor_thickness/2.; 
                         if(side == -1){z_pos = -z_pos;}
                         Position pos(x_pos, y_pos, z_pos);
 

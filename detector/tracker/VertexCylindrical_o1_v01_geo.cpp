@@ -114,6 +114,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         double sensor_length;
         double stave_dr;
         double stave_r;
+        string staveVis;
         vector<Volume> sensor_volumes;
     };
     list<stave_information> stave_information_list;
@@ -124,6 +125,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
         stave_information m;
         m.name = x_stave.nameStr();
+        m.staveVis = x_stave.visStr();
 
         m.stave_dr = x_stave.dr(0); // Offset for every second module in r
         m.stave_r = x_stave.r(0); // Radius of stave
@@ -309,7 +311,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         Tube whole_layer_tube = Tube(motherVolRmin, motherVolRmin+motherVolThickness, motherVolLength/2.);
 
         Volume whole_layer_volume = Volume(layer_name, whole_layer_tube, theDetector.material("Air"));
-        whole_layer_volume.setVisAttributes(theDetector, x_det.visStr());
+        whole_layer_volume.setVisAttributes(theDetector, x_layer.visStr());
         pv = envelope.placeVolume(whole_layer_volume, Position(0., 0., z_offset));
         pv.addPhysVolID("layer", layer_id);
 
@@ -346,7 +348,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 y_pos = r*sin(phi) + r_offset_component*cos(phi);
                 Box whole_stave_box = Box(m.motherVolThickness/2., m.motherVolWidth/2., stave_length/2.);
                 whole_stave_volume_v = Volume(stave_name, whole_stave_box, theDetector.material("Air"));
-                whole_stave_volume_v.setVisAttributes(theDetector, x_det.visStr());
+                whole_stave_volume_v.setVisAttributes(theDetector, m.staveVis);
                 whole_stave_volume_placed = whole_layer_volume.placeVolume(whole_stave_volume_v, Transform3D(rot,Position(x_pos, y_pos, z_pos)));
             }
             else{
@@ -366,7 +368,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 for(int i=0; i<int(component.thicknesses.size()); i++){
                     if(component.isCurved[i]){
                         double r_component_curved = 0.0; // component.r + component.rs[i]+ component.thicknesses[i]/2.;
-                        double r_offset_component = component.offset + component.offsets[i];
+                        r_offset_component = component.offset + component.offsets[i];
                         x_pos = r_component_curved*cos(phi) - r_offset_component*sin(phi);
                         y_pos = r_component_curved*sin(phi) + r_offset_component*cos(phi);
                         z_pos = component.z_offset + component.z_offsets[i] + motherVolOffset;
@@ -374,9 +376,9 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                         component_assembly.placeVolume(component.volumes[i], Transform3D(rot,stave_pos).Inverse()*Transform3D(rot,pos));
                     }
                     else{
-                        double x_pos = component.r + component.rs[i] + component.thicknesses[i]/2.;
-                        double y_pos = component.offset + component.offsets[i];
-                        double z_pos = component.z_offset + component.z_offsets[i] + motherVolOffset;
+                        x_pos = component.r + component.rs[i] + component.thicknesses[i]/2.;
+                        y_pos = component.offset + component.offsets[i];
+                        z_pos = component.z_offset + component.z_offsets[i] + motherVolOffset;
                         Position pos(x_pos, y_pos, z_pos);
                         component_assembly.placeVolume(component.volumes[i], pos);
                     }
@@ -398,7 +400,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                     for(auto& endOfStave_side : endOfStave_sides){  // Place it on both sides of the stave
                         if(endOfStave.isCurved[i]){
                             double r_component_curved = 0.0; // endOfStave.r + endOfStave.rs[i] + endOfStave.thicknesses[i]/2; // Correct for the fact that a tube element's origin is offset compared to the origin of a box
-                            double r_offset_component = endOfStave.offset + endOfStave.offsets[i];
+                            r_offset_component = endOfStave.offset + endOfStave.offsets[i];
                             x_pos = r_component_curved*cos(phi) - r_offset_component*sin(phi);
                             y_pos = r_component_curved*sin(phi) + r_offset_component*cos(phi);
                             z_pos = stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dzs[i] + endOfStave.z_offset + endOfStave.z_offsets[i];
@@ -406,9 +408,9 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                             endOfStave_assembly.placeVolume(endOfStave.volumes[i], Transform3D(rot,stave_pos).Inverse()*Transform3D(rot,pos));
                         }
                         else{
-                            double x_pos = endOfStave.r + endOfStave.rs[i] + endOfStave.thicknesses[i]/2.;
-                            double y_pos = endOfStave.offset + endOfStave.offsets[i];
-                            double z_pos = stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dzs[i] + endOfStave.z_offset + endOfStave.z_offsets[i]; 
+                            x_pos = endOfStave.r + endOfStave.rs[i] + endOfStave.thicknesses[i]/2.;
+                            y_pos = endOfStave.offset + endOfStave.offsets[i];
+                            z_pos = stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dzs[i] + endOfStave.z_offset + endOfStave.z_offsets[i]; 
                             Position pos(x_pos, y_pos, z_pos*endOfStave_side+motherVolOffset);
                             endOfStave_assembly.placeVolume(endOfStave.volumes[i], pos);
                         }
@@ -418,9 +420,9 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
             // Place sensor
             for(int iModule=0; iModule<nmodules; iModule++){
-                double x_pos = m.sensor_r + m.sensor_thickness/2. + (iModule%2 == 0 ? 0.0 : m.stave_dr);
-                double y_pos = m.sensor_offset;
-                double z_pos = motherVolOffset + -(nmodules-1)/2.*(m.sensor_length) - (nmodules-1)/2.*step + iModule*m.sensor_length + iModule*step;
+                x_pos = m.sensor_r + m.sensor_thickness/2. + (iModule%2 == 0 ? 0.0 : m.stave_dr);
+                y_pos = m.sensor_offset;
+                z_pos = motherVolOffset + -(nmodules-1)/2.*(m.sensor_length) - (nmodules-1)/2.*step + iModule*m.sensor_length + iModule*step;
                 Position pos(x_pos, y_pos, z_pos);
                     
                 string module_name = stave_name + _toString(iModule,"_module%d");
@@ -456,20 +458,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                         pos2 = Position(x_pos, y_pos, z_pos);
 
                         rot2 = RotationZYX(phi_i, 0, 0);
-
-                        // double phi_i = 2.*(m.sensor_xmin[i]+abs(m.sensor_xmax[i]-m.sensor_xmin[i])/2.)/(layer_r+m.sensor_r);
-
-                        // x_pos = m.sensor_thickness/2. + (iModule%2 == 0 ? 0.0 : m.stave_dr);
-                        // y_pos = phi_i;
-                        // z_pos = motherVolOffset -(nmodules-1)/2.*(m.sensor_length) - (nmodules-1)/2.*step + iModule*m.sensor_length + iModule*step;
-                        // pos = Position(x_pos, y_pos, z_pos);
-
-                        // x_pos = 0.0;
-                        // y_pos = 2.*(m.sensor_xmin[i]+abs(m.sensor_xmax[i]-m.sensor_xmin[i])/2.)/(layer_r+m.sensor_r);
-                        // z_pos = m.sensor_ymin[i]+abs(m.sensor_ymax[i]-m.sensor_ymin[i])/2.;
-                        // pos2 = Position(x_pos, y_pos, z_pos);
-
-                        // rot2 = RotationZYX(phi_i, 0, 0);
                         pv = module_assembly.placeVolume(m.sensor_volumes[i], Transform3D(rot,stave_pos).Inverse()*Transform3D(rot2, pos)*Translation3D(pos2));
 
                     }
