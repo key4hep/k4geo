@@ -27,7 +27,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
     // Make DetElement
     dd4hep::DetElement caloDetElem(detName, xmlDet.id());
 
-    // Make volume that envelopes the whole barrel; set material to air
+    // Make volume that envelopes the whole endcap; set material to air
     Dimension dimensions(xmlDet.dimensions());
 
     dd4hep::Tube envelope(dimensions.rmin(), dimensions.rmax1(), (dimensions.v_offset() + dimensions.z_length()));
@@ -46,7 +46,6 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
     Dimension sensDetType = xmlElement.child(_Unicode(sensitive));
     sensDet.setType(sensDetType.typeStr());
 
-    // Dimension dimensions(xmlElement.child(_Unicode(dimensions)));
     xml_comp_t xEndPlate = xmlElement.child(_Unicode(end_plate));
     double dZEndPlate = xEndPlate.thickness() / 2.;
     xml_comp_t xFacePlate = xmlElement.child(_Unicode(face_plate));
@@ -70,9 +69,19 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
 
     // Hard-coded assumption that we have two different sequences for the modules
     std::vector<xml_comp_t> sequences = {xmlElement.child(_Unicode(sequence_a)), xmlElement.child(_Unicode(sequence_b))};
-    // NOTE: This assumes that both have the same dimensions!
-    Dimension sequenceDimensions(sequences[1].dimensions());
-    double dzSequence = sequenceDimensions.dz();
+    // Check if both sequences are present
+    if (!sequences[0] || !sequences[1]) {
+      lLog << MSG::ERROR << "The two sequences sequence_a and sequence_b must be present in the xml file." << endmsg;
+      throw std::runtime_error("Missing sequence_a or sequence_b in the xml file.");
+    }
+    // Check if both sequences have the same dimensions
+    Dimension dimensionsA(sequences[0].dimensions());
+    Dimension dimensionsB(sequences[1].dimensions());
+    if (dimensionsA.dz() != dimensionsB.dz()) {
+        lLog << MSG::ERROR << "The dimensions of sequence_a and sequence_b do not match." << endmsg;
+        throw std::runtime_error("The dimensions of the sequence_a and sequence_b do not match.");
+    }
+    double dzSequence = dimensionsB.dz();
     lLog << MSG::DEBUG << "sequence thickness " << dzSequence << endmsg;
 
     // calculate the number of modules fitting in  Z
@@ -87,7 +96,6 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
     double moduleDepth2 = 0.;
     double moduleDepth3 = 0.;
 
-    // MM: using layers and Layers is not very fortunate
     std::vector<double> layerDepths1 = std::vector<double>();
     std::vector<double> layerDepths2 = std::vector<double>();
     std::vector<double> layerDepths3 = std::vector<double>();
@@ -96,24 +104,19 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
     std::vector<double> layerInnerRadii2 = std::vector<double>();
     std::vector<double> layerInnerRadii3 = std::vector<double>();
 
-    // get all 'layer' children of the 'layers' tag
-    std::vector<xml_comp_t> Layers;
+    // iterating over XML elements to retrieve all child elements of 'layers'
     for (xml_coll_t xCompColl(xmlElement.child(_Unicode(layers)), _Unicode(layer)); xCompColl; ++xCompColl){
-        Layers.push_back(xCompColl);
-    }
-  
-    for (std::vector<xml_comp_t>::iterator it = Layers.begin(); it != Layers.end(); ++it){ 
-        xml_comp_t layer = *it;
-        Dimension layerDimension(layer.dimensions());
+        xml_comp_t currentLayer = xCompColl;
+        Dimension layerDimension(currentLayer.dimensions());
         numSequencesR1 += layerDimension.nmodules();
-        numSequencesR2 += layerDimension.nModules();
+        numSequencesR2 += layerDimension.nsegments();
         numSequencesR3 += layerDimension.nPads();
 
         for (int nLayer = 0; nLayer < layerDimension.nmodules(); nLayer++){
             moduleDepth1 += layerDimension.dr();
             layerDepths1.push_back(layerDimension.dr());
         }
-        for (int nLayer = 0; nLayer < layerDimension.nModules(); nLayer++){
+        for (int nLayer = 0; nLayer < layerDimension.nsegments(); nLayer++){
             moduleDepth2 += layerDimension.dr();
             layerDepths2.push_back(layerDimension.dr());
         }
@@ -147,15 +150,15 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
     lLog << MSG::INFO << "dz third part EC:" << dzDetector2 * 2 << endmsg;
 
 
-    for (int iSign = 0; iSign < 2; iSign++){
+    for (int iSign = -1; iSign < 2; iSign+=2){
         int sign; 
-        if(iSign == 0){
-            sign = +1; 
-            lLog << MSG::DEBUG << "Placing detector on the positive side: (cm) " << (dimensions.offset() + dimensions.dz()) << endmsg;
+        if(iSign < 0){
+            sign = -1;
+            lLog << MSG::DEBUG << "Placing detector on the negative side: (cm) " << -(dimensions.offset() + dimensions.dz()) << endmsg;
         }
         else{
-            sign = -1; 
-            lLog << MSG::DEBUG << "Placing detector on the negative side: (cm) " << -(dimensions.offset() + dimensions.dz()) << endmsg;
+            sign = +1;
+            lLog << MSG::DEBUG << "Placing detector on the positive side: (cm) " << (dimensions.offset() + dimensions.dz()) << endmsg;
         }
         // Add structural support made of steel inside of HCal
         DetElement facePlate1(caloDetElem, "FacePlate_" + std::to_string(1 * sign), 0);
@@ -441,7 +444,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
     Volume motherVol = lcdd.pickMotherVolume(caloDetElem);
 
     PlacedVolume placedHCal = motherVol.placeVolume(envelopeVolume);
-    placedHCal.addPhysVolID("system", xmlDet.id());
+    placedHCal.addPhysVolID("system", caloDetElem.id());
     caloDetElem.setPlacement(placedHCal);
 
 

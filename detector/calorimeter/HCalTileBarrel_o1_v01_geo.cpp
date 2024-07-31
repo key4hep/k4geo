@@ -48,10 +48,20 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
 
   // Hard-coded assumption that we have two different sequences for the modules
   std::vector<xml_comp_t> sequences = {xmlDet.child(_Unicode(sequence_a)), xmlDet.child(_Unicode(sequence_b))};
-  // NOTE: This assumes that both have the same dimensions!
-  Dimension sequenceDimensions(sequences[1].dimensions());
-  double dzSequence = sequenceDimensions.dz();
-  lLog << MSG::DEBUG << "sequence thickness (cm) " << dzSequence / dd4hep::cm << endmsg;
+  // Check if both sequences are present
+  if (!sequences[0] || !sequences[1]) {
+    lLog << MSG::ERROR << "The two sequences 'sequence_a' and 'sequence_b' must be present in the xml file." << endmsg;
+    throw std::runtime_error("Missing sequence_a or sequence_b in the xml file.");
+  }
+  // Check if both sequences have the same dimensions
+  Dimension dimensionsA(sequences[0].dimensions());
+  Dimension dimensionsB(sequences[1].dimensions());
+  if (dimensionsA.dz() != dimensionsB.dz()) {
+    lLog << MSG::ERROR << "The dimensions of sequence_a and sequence_b do not match." << endmsg;
+    throw std::runtime_error("The dimensions of the sequence_a and sequence_b do not match.");
+  }
+  double dzSequence = dimensionsB.dz();
+  lLog << MSG::DEBUG << "sequence thickness " << dzSequence << endmsg;
 
   // calculate the number of sequences fitting in Z
   unsigned int numSequencesZ = static_cast<unsigned>((2 * xDimensions.dz() - 2 * dZEndPlate - 2 * space) / dzSequence);
@@ -226,7 +236,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   Volume motherVol = lcdd.pickMotherVolume(caloDetElem);
   motherVol.setVisAttributes(lcdd.invisible());
   PlacedVolume envelopePhysVol = motherVol.placeVolume(envelopeVolume);
-  envelopePhysVol.addPhysVolID("system", xmlDet.id());
+  envelopePhysVol.addPhysVolID("system", caloDetElem.id());
   caloDetElem.setPlacement(envelopePhysVol);
 
   
@@ -236,7 +246,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   caloDetElem.addExtension<dd4hep::rec::LayeredCalorimeterData>(caloData);
 
   caloData->extent[0] = sensitiveBarrelRmin;
-  caloData->extent[1] = sensitiveBarrelRmax; // or r_max ?
+  caloData->extent[1] = sensitiveBarrelRmax;
   caloData->extent[2] = 0.;      // NN: for barrel detectors this is 0
   caloData->extent[3] = dzDetector; 
 
