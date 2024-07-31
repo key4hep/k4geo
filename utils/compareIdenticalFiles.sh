@@ -3,11 +3,15 @@
 # This script compares all the files named the same within a given path (as argument)
 # If files with the same name have different contents, it prints the paths of those files
 # If the files are identical, nothing is printed
-# README files are excluded
+# Files listed in an ignore file are excluded
+
+# Usage: ./script.sh <search_dir> <ignore_file>
 
 search_dir="$1"
+ignore_file="$2"
 
-files_to_ignore="README.md materials.xml elements.xml CMakeLists.txt"
+# Read filenames to ignore from the ignore file
+files_to_ignore=$(<"$ignore_file")
 
 # Create an associative array to store file paths with the same names
 declare -A file_names
@@ -18,8 +22,8 @@ find "$search_dir" -not -path '*/.*' -type f | while read -r file; do
     # Get the base name of the file (without the path)
     file_name=$(basename "$file")
 
-    # Ignore README files
-    if [[ $files_to_ignore == *"$file_name"* ]]; then
+    # Ignore files listed in the ignore file
+    if grep -qx "$file_name" <<< "$files_to_ignore"; then
         continue
     fi
 
@@ -28,7 +32,7 @@ find "$search_dir" -not -path '*/.*' -type f | while read -r file; do
         # Compare the contents of the files
         if ! cmp -s "$file" "${file_names[$file_name]}"; then
             # Print the paths of the files if they differ
-            echo "Error: files with the same name but different contents:"
+            echo "Error. Files with the same name but different contents:"
             echo "$file"
             echo "${file_names[$file_name]}"
             echo
@@ -39,4 +43,3 @@ find "$search_dir" -not -path '*/.*' -type f | while read -r file; do
     fi
 
 done
-
