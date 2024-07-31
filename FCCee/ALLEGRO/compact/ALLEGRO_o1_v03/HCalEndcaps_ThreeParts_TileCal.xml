@@ -57,8 +57,8 @@
     </readout>
   </readouts>
 
-  <!-- nmodules is the number of radial layers in the first part 
-+      nModules is the number of radial layers in the second part 
+  <!-- nmodules is the number of radial layers in the first part;
++      nsegments is the number of radial layers in the second part;
        nPads is the number of radial layers in the third part --> 
 
   <detectors>
@@ -74,7 +74,7 @@
           <dimensions
               dr="100*mm"
 	      nmodules="5"
-	      nModules="4"
+	      nsegments="4"
 	      nPads="4"
              />
 	</layer>
@@ -82,7 +82,7 @@
 	  <dimensions
               dr="150*mm"
 	      nmodules="1"
-        nModules="3"
+        nsegments="3"
         nPads="10"
              />
 	</layer>
@@ -90,7 +90,7 @@
 	  <dimensions
               dr="250*mm"
 	      nmodules="0"
-        nModules="2"
+        nsegments="2"
         nPads="8"
              />
 	</layer>
