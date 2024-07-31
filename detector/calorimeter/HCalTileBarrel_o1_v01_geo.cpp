@@ -12,7 +12,6 @@ using dd4hep::PlacedVolume;
 #define endmsg std::endl
 #define lLog std::cout
 namespace MSG {
-const std::string ERROR = " Error: ";
 const std::string DEBUG = " Debug: ";
 const std::string INFO  = " Info: ";
 }
@@ -168,7 +167,6 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
     
     layerVolume.setVisAttributes(lcdd.invisible());
     unsigned int idxSubMod = 0;
-    unsigned int idxActMod = 0;
     
 
     dd4hep::PlacedVolume placedLayerVolume = envelopeVolume.placeVolume(layerVolume);
@@ -192,7 +190,6 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
       if (xComp.isSensitive()) {
         tileVol.setSensitiveDetector(sensDet);
         tilesPerLayer.push_back(placedTileVol);
-	idxActMod++;
       }
       tileZOffset += xComp.thickness();
     }

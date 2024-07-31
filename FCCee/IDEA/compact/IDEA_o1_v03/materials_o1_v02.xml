@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<materials>
+
+  <material name="PbWO4">
+    <D type="density" unit="g/cm3" value="8.280"/>
+    <composite n="1" ref="Pb"/>
+    <composite n="1" ref="W"/>
+    <composite n="4" ref="O"/>
+  </material>
+
+  <material name="FR4">
+    <D type="density" unit="g/cm3" value="1.7"/>
+    <fraction n="0.1808" ref="Si"/>
+    <fraction n="0.4056" ref="O"/>
+    <fraction n="0.2780" ref="C"/>
+    <fraction n="0.0684" ref="H"/>
+    <fraction n="0.0671" ref="Br"/>
+  </material>
+
+  <!--
+       Air by weight from
+
+       http://www.engineeringtoolbox.com/air-composition-24_212.html
+  -->
+
+  <material name="Air">
+    <D type="density" unit="g/cm3" value="0.0012"/>
+    <fraction n="0.754" ref="N"/>
+    <fraction n="0.234" ref="O"/>
+    <fraction n="0.012" ref="Ar"/>
+  </material>
+
+  <material name="Water">
+    <D type="density" unit="g/cm3" value="0.99984"/>
+    <composite n="2" ref="H"/>
+    <composite n="1" ref="O"/>
+  </material>
+
+  <material name="Vacuum">
+    <D type="density" unit="g/cm3" value="0.00000001" />
+    <fraction n="1" ref="H" />
+  </material>
+
+  <material name="Epoxy">
+    <D type="density" value="1.3" unit="g/cm3"/>
+    <composite n="44" ref="H"/>
+    <composite n="15" ref="C"/>
+    <composite n="7" ref="O"/>
+  </material>
+
+  <material name="Quartz">
+    <D type="density" value="2.2" unit="g/cm3"/>
+    <composite n="1" ref="Si"/>
+    <composite n="2" ref="O"/>
+  </material>
+
+  <material name="G10">
+    <D type="density" value="1.7" unit="g/cm3"/>
+    <fraction n="0.08" ref="Cl"/>
+    <fraction n="0.773" ref="Quartz"/>
+    <fraction n="0.147" ref="Epoxy"/>
+  </material>
+
+  <material name="Polystyrene">
+    <D value="1.032" unit="g/cm3"/>
+    <composite n="19" ref="C"/>
+    <composite n="21" ref="H"/>
+  </material>
+
+  <material name="Steel235">
+    <D value="7.85" unit="g/cm3"/>
+    <fraction n="0.998" ref="Fe"/>
+    <fraction n=".002" ref="C"/>
+  </material>
+
+  <material name="SiliconOxide">
+    <D type="density" value="2.65" unit="g/cm3"/>
+    <composite n="1" ref="Si"/>
+    <composite n="2" ref="O"/>
+  </material>
+
+  <material name="BoronOxide">
+    <D type="density" value="2.46" unit="g/cm3"/>
+    <composite n="2" ref="B"/>
+    <composite n="3" ref="O"/>
+  </material>
+
+  <material name="SodiumOxide">
+    <D type="density" value="2.65" unit="g/cm3"/>
+    <composite n="2" ref="Na"/>
+    <composite n="1" ref="O"/>
+  </material>
+
+  <material name="AluminumOxide">
+    <D type="density" value="3.89" unit="g/cm3"/>
+    <composite n="2" ref="Al"/>
+    <composite n="3" ref="O"/>
+  </material>
+
+  <material name="PyrexGlass">
+    <D type="density" value="2.23" unit="g/cm3"/>
+    <fraction n="0.806" ref="SiliconOxide"/>
+    <fraction n="0.130" ref="BoronOxide"/>
+    <fraction n="0.040" ref="SodiumOxide"/>
+    <fraction n="0.023" ref="AluminumOxide"/>
+  </material>
+
+  <material name="CarbonFiber">
+    <D type="density" value="1.5" unit="g/cm3"/>
+    <fraction n="0.65" ref="C"/>
+    <fraction n="0.35" ref="Epoxy"/>
+  </material>
+
+  <material name="CarbonFleece"> <!-- Carbon fiber for IDEA vertex: X0 of 106.8 cm -> (0.65*42.7 g/cm2 + 0.35*55.36 g/cm2)/x g/cm3 = 106.8 cm, -> so use density of 0.441 g/cm^3 instead, FIX COMPOSITION! -->
+    <D type="density" value="0.441" unit="g/cm3"/>
+    <fraction n="0.65" ref="C"/>
+    <fraction n="0.35" ref="Epoxy"/>
+  </material>
+
+  <!-- Carbon fiber for IDEA vertex: X0 of 26 cm -> (0.65*42.7 g/cm2 + 0.35*55.36 g/cm2)/1.5 g/cm3 = 31.4 cm, so use density of 1.5 g/cm^3 * 26 cm/31.4 cm = 1.242 g/cm^3 instead, FIX COMPOSITION! -->
+  <material name="CarbonFiberVtx">
+    <D type="density" value="1.242" unit="g/cm3"/>
+    <fraction n="0.65" ref="C"/>
+    <fraction n="0.35" ref="Epoxy"/>
+  </material>  
+
+    <!-- Carbon fiber for IDEA vertex: X0 of 26 cm -> (0.65*42.7 g/cm2 + 0.35*55.36 g/cm2)/1.5 g/cm3 = 31.4 cm, so use density of 1.5 g/cm^3 * 26 cm/31.4 cm = 1.242 g/cm^3 instead, FIX COMPOSITION! Scaled down to 66% to account for fill factor of 66% -->
+  <material name="CarbonFiberVtx66D">
+    <D type="density" value="0.8197" unit="g/cm3"/>
+    <fraction n="0.65" ref="C"/>
+    <fraction n="0.35" ref="Epoxy"/>
+  </material>  
+
+  <material name="CarbonFiber_66D">
+    <D type="density" value="1.0" unit="g/cm3"/>
+    <fraction n="0.65" ref="C"/>
+    <fraction n="0.35" ref="Epoxy"/>
+  </material>  
+
+  <material name="CarbonFiber_20D">
+    <D type="density" value="0.3" unit="g/cm3"/>
+    <fraction n="0.65" ref="C"/>
+    <fraction n="0.35" ref="Epoxy"/>
+  </material>  
+
+  <material name="Rohacell31">
+    <D type="density" value="0.032" unit="g/cm3"/>
+    <composite n="9" ref="C"/>
+    <composite n="13" ref="H"/>
+    <composite n="2" ref="O"/>
+    <composite n="1" ref="N"/>
+  </material>
+  
+  <material name="Rohacell31_50D">
+    <D type="density" value="0.016" unit="g/cm3"/>
+    <composite n="9" ref="C"/>
+    <composite n="13" ref="H"/>
+    <composite n="2" ref="O"/>
+    <composite n="1" ref="N"/>
+  </material>  
+
+  <material name="RPCGasDefault" state="gas">
+    <D type="density" value="0.0037" unit="g/cm3"/>
+    <composite n="209" ref="C"/>
+    <composite n="239" ref="H"/>
+    <composite n="381" ref="F"/>
+  </material>
+
+  <material name="PolystyreneFoam">
+    <D type="density" value="0.0056" unit="g/cm3"/>
+    <fraction n="1.0" ref="Polystyrene"/>
+  </material>
+
+  <material name="PE">
+    <D type="density" value="0.95" unit="g/cm3"/>
+    <fraction n="0.6666666" ref="H"/>
+    <fraction n="0.3333333" ref="C"/>
+  </material>
+
+  <material name="RohacellVtx"> <!-- (9*42.7 g/cm2 + 13*63.04 g/cm2 + 1*37.99 g/cm2 + 1*34.24 g/cm2)/(9+13+2+1)/x g/cm^3 = 563 cm -> density = 0.091 g/cm^3 , FIX COMPOSITION! -->
+    <D type="density" value="0.091" unit="g/cm3"/>
+    <composite n="9" ref="C"/>
+    <composite n="13" ref="H"/>
+    <composite n="2" ref="O"/>
+    <composite n="1" ref="N"/>
+  </material>
+
+    <material name="RohacellVtx66D"> <!-- (9*42.7 g/cm2 + 13*63.04 g/cm2 + 1*37.99 g/cm2 + 1*34.24 g/cm2)/(9+13+2+1)/x g/cm^3 = 563 cm -> density = 0.091 g/cm^3 , FIX COMPOSITION!  Scaled down to 66% to account for fill factor of 66%-->
+    <D type="density" value="0.060" unit="g/cm3"/>
+    <composite n="9" ref="C"/>
+    <composite n="13" ref="H"/>
+    <composite n="2" ref="O"/>
+    <composite n="1" ref="N"/>
+  </material>
+
+  <material name="Kapton">
+    <D value="1.43" unit="g/cm3" />
+    <composite n="22" ref="C"/>
+    <composite n="10" ref="H" />
+    <composite n="2" ref="N" />
+    <composite n="5" ref="O" />
+  </material>
+
+  <material name="KaptonVtx"> <!-- Kapton for IDEA vertex: X0=28.41 cm, (22*42.7 g/cm2 + 10*63.04 g/cm2 + 2*37.99 g/cm2 + 5*34.24 g/cm2)/(22+10+2+5)/1.43 g/cm^3 = 32.58 cm, so use density of 28.41 cm/32.58 cm * 1.43 g/cm^2 = 1.237 g/cm^3, FIX COMPOSITION! -->
+    <D value="1.237" unit="g/cm3" />
+    <composite n="22" ref="C"/>
+    <composite n="10" ref="H" />
+    <composite n="2" ref="N" />
+    <composite n="5" ref="O" />
+  </material>
+
+  <material name="PEEK">
+    <D value="1.37" unit="g/cm3" />
+    <composite n="19" ref="C"/>
+    <composite n="12" ref="H" />
+    <composite n="3" ref="O" />
+  </material>
+
+  <material name="LAr">
+    <D value="1.396" unit="g/cm3" />
+    <composite n="1" ref="Ar"/>
+  </material>
+
+  <material name="LKr">
+    <D value="2.416" unit="g/cm3" />
+    <composite n="1" ref="Kr"/>
+  </material>
+
+  <!-- from  DD4hep/examples/SimpleDetector/compact/materials.xml -->
+  <material name="PCB" state="solid">
+    <D unit="g/cm3" value="1.7"/>
+    <fraction n="0.180774" ref="Si"/>
+    <fraction n="0.405633" ref="O"/>
+    <fraction n="0.278042" ref="C"/>
+    <fraction n="0.0684428" ref="H"/>
+    <fraction n="0.0671091" ref="Br"/>
+  </material>
+
+ <!-- Steel for shielding -->
+  <!-- from FLUKA simulations (M.I.Besana) -->
+  <material name="SteelShielding">
+    <D value="7.9" unit="g/cm3" />
+    <fraction n="0.6868" ref="Fe"/>
+    <fraction n="0.17" ref="Cr" />
+    <fraction n="0.032" ref="Mo" />
+    <fraction n="0.11" ref="Ni" />
+    <fraction n="2.E-4" ref="C" />
+    <fraction n="0.001" ref="N" />
+  </material>
+
+  <material name="H_CH2">
+    <D value="15.0345" unit="g/mol" />
+    <fraction n="0.201125" ref="H" />
+    <fraction n="0.798875" ref="C" />
+  </material>
+
+  <material name="lithiatedPolyethylene">
+    <D value="1." unit="g/cm3" />
+    <fraction n="0.12935" ref="H_CH2"/>
+    <fraction n="0.77065" ref="C" />
+    <fraction n="0.026750" ref="Lithium" />
+    <fraction n="0.07324" ref="Fluorine" />
+  </material>
+
+  <!-- prepreg glue (C5H8O4Si) between steel and lead in absorber of EM calo -->
+  <!-- from ATL-LARG-PUB-2009-001 -->
+  <material name="lArCaloGlue">
+    <D value="1.69" unit="g/cm3" />
+    <composite n="5" ref="C"/>
+    <composite n="8" ref="H" />
+    <composite n="4" ref="O" />
+    <composite n="1" ref="Si" />
+  </material>
+
+  <!-- Glue used in IDEA vtx: (5*42.70g/cm^2+8*63.04g/cm^2+4*32.24 g/cm^2+1*21.82 g/cm^2)/(5+8+4+1)/(x g/cm^3) = 33.5 cm -> x = 1.44 g/cm^3, FIX COMPOSITION! -->
+  <material name="Glue">
+    <D value="1.44" unit="g/cm3" />
+    <composite n="5" ref="C"/>
+    <composite n="8" ref="H" />
+    <composite n="4" ref="O" />
+    <composite n="1" ref="Si" />
+  </material>
+
+  <!-- Glue used in IDEA outer vtx: (5*42.70g/cm^2+8*63.04g/cm^2+4*32.24 g/cm^2+1*21.82 g/cm^2)/(5+8+4+1)/(x g/cm^3) = 44.37 cm -> x = 1.087 g/cm^3, FIX COMPOSITION! -->
+  <material name="GlueEcobond45">
+    <D value="1.087" unit="g/cm3" />
+    <composite n="5" ref="C"/>
+    <composite n="8" ref="H" />
+    <composite n="4" ref="O" />
+    <composite n="1" ref="Si" />
+  </material>
+
+  <!-- stainless steel as in ATLAS EM calo -->
+  <!-- from ATL-LARG-PUB-2009-001 -->
+  <material name="lArCaloSteel">
+    <D value="7.84" unit="g/cm3" />
+    <fraction n="0.7175" ref="Fe"/>
+    <fraction n="0.19"   ref="Cr" />
+    <fraction n="0.0925" ref="Ni" />
+  </material>
+
+  <material name="beam" state="gas">
+    <P unit="pascal" value="6.25e-06"/>
+    <MEE unit="eV" value="38.5760755714278"/>
+    <D unit="g/cm3" value="1.7e-14"/>
+    <fraction n="0.36264" ref="H"/>
+    <fraction n="0.36276" ref="N"/>
+    <fraction n="0.117748421296248" ref="C"/>
+    <fraction n="0.156851578703752" ref="O"/>
+  </material>
+
+  <material name="TungstenDens24">
+    <D value="17.8" unit="g/cm3"/>
+    <fraction n="0.93" ref="W"/>
+    <fraction n="0.061" ref="Ni"/>
+    <fraction n="0.009" ref="Fe"/>
+  </material>
+
+  <material name="SolenoidMixture">
+    <D value="4.38" unit="g/cm3"/>
+    <fraction n="0.666" ref="Al"/>
+    <fraction n="0.166" ref="Cu"/>
+    <fraction n="0.084" ref="Ti"/>
+    <fraction n="0.084" ref="Nb"/>
+  </material>
+
+  <!-- Default material to use in DDCAD import of CAD models (see CheckShape.xml in DD4hep) -->
+  <material name="DefaultMaterial">
+    <D value="7.85" unit="g/cm3"/>
+    <fraction n="0.998" ref="Fe"/>
+    <fraction n=".002"  ref="C"/>
+  </material>
+  <material name="IronDens785">
+    <D value="7.85" unit="g/cm3"/>
+    <fraction n="1.0" ref="Fe"/>
+  </material>  
+
+    <material name="AlBeMet162">
+      <D value="2.1" unit="g/cm3"/>
+      <fraction n="0.38" ref="Al"/>
+      <fraction n="0.62" ref="Be"/>
+    </material>
+
+    <material name="LiquidNDecane">
+      <D value="0.73" unit="g/cm3"/>
+      <composite n="10" ref="C" />
+      <composite n="22" ref="H" />
+    </material>
+
+  <!-- FCCeeIDEA: material for the drift chamber -->
+  <material name="CarbonFiber_50D">
+    <D type="density" value="0.75" unit="g/cm3"/>
+    <fraction n="0.65" ref="C"/>
+    <fraction n="0.35" ref="Epoxy"/>
+  </material>
+  <material name="CarbonFibStr">
+      <D type="density" value="1.45" unit="g/cm3"/>
+      <comment> CMS ECAL https://gitlab.cern.ch/geant4/geant4/-/blob/master/examples/advanced/composite_calorimeter/dataglobal/material.cms#L183 </comment>
+      <composite n="2"   ref="C"/>
+      <composite n="13"  ref="H"/>
+  </material>
+
+  <material name="GasHe_90Isob_10" state="gas">
+    <T unit="K" value="293.15"/>
+    <MEE unit="eV" value="48.8432249317198"/>
+    <D unit="g/cm3" value="0.0003984"/>
+    <fraction n="0.382635100446205" ref="He"/>
+    <fraction n="0.107061807167701" ref="H"/>
+    <fraction n="0.510303092386095" ref="C"/>
+  </material>
+
+  <!--  average material for wires  -->
+  <material name="DCH_FCentralWireMat">
+    <comment> 0.98810714*2.7 + 0.011892860*10.49 </comment>
+    <D type="density" value="2.7926454" unit="g/cm3"/>
+    <comment> field wire center:      50 um Al (core), 0.3 um Ag (coating) </comment>
+    <fraction n="0.98810714"   ref="Al"/>
+    <fraction n="0.011892860"  ref="Ag"/>
+  </material>
+  <material name="DCH_FSideWireMat">
+    <comment> 0.98516708*2.7 + 0.014832922*10.49 </comment>
+    <D type="density" value="2.8155485" unit="g/cm3"/>
+    <comment> field wires top/bottom: 40 um Al (core), 0.3 um Ag (coating) </comment>
+    <fraction n="0.98516708"   ref="Al"/>
+    <fraction n="0.014832922"  ref="Ag"/>
+  </material>
+  <material name="DCH_SWireMat">
+    <comment> 0.97066175*19.28+0.029338250*19.3 </comment>
+    <D type="density" value="19.280587" unit="g/cm3"/>
+    <comment> sense wire:             20 um W  (core), 0.3 um Au (coating) </comment>
+    <fraction n="0.97066175"   ref="W"/>
+    <fraction n="0.029338250"  ref="Au"/>
+  </material>
+
+
+  <!-- FCCeeIDEA: end of material for the drift chamber -->
+
+  <!-- FCCeeIDEA: material for the microRWELL detectors(for Muon system and Pre-shower)-->
+  <isotope N="63" Z="29" name="Cu63">
+    <atom unit="g/mole" value="62.9296"/>
+  </isotope>
+
+  <isotope N="65" Z="29" name="Cu65">
+    <atom unit="g/mole" value="64.9278"/>
+  </isotope>
+
+  <element name="CuMixture">
+    <fraction n="0.6917" ref="Cu63"/>
+    <fraction n="0.3083" ref="Cu65"/>
+  </element>
+
+  <material name="G4_Cu" state="solid">
+    <T unit="K" value="293.15"/>
+    <MEE unit="eV" value="322"/>
+    <D unit="g/cm3" value="8.96"/>
+    <fraction n="1" ref="CuMixture"/>
+  </material>
+
+  <material name="C19-H20-O4">
+    <D value="1.16" unit="g/cm3" />
+    <composite n="19" ref="C"/>
+    <composite n="20" ref="H" />
+    <composite n="4" ref="O" />
+  </material>
+
+  <material name="CO2" state="gas">
+    <D value="0.001977" unit="g/cm3" />
+    <composite n="1" ref="C"/>
+    <composite n="2" ref="O" />
+  </material>
+
+  <material name="CF4" formula="CF4" state="gas">
+    <D value="0.00372" unit="g/cm3" />
+    <composite n="1" ref="C"/>
+    <composite n="4" ref="F"/>
+  </material>
+
+  <material name="ARCO2CF4" state="gas">
+    <D value="0.00253245" unit="g/cm3" />
+    <composite n="0.45" ref="Argon"/>
+    <composite n="0.15" ref="CO2"/>
+    <composite n="0.40" ref="CF4"/>
+  </material>
+
+  <material name="G4_Fe" state="solid">
+    <MEE unit="eV" value="286"/>
+    <D value="7.874" unit="g/cm3" />
+    <fraction n="1" ref="Fe"/>
+  </material>
+
+  <material name="G4_Si" state="solid">
+    <T unit="K" value="293.15"/>
+    <MEE unit="eV" value="173"/>
+    <D unit="g/cm3" value="2.33"/>
+    <fraction n="1" ref="Si"/>
+  </material>
+
+  <isotope N="40" Z="20" name="Ca40">
+    <atom unit="g/mole" value="39.9626"/>
+  </isotope>
+  <isotope N="42" Z="20" name="Ca42">
+    <atom unit="g/mole" value="41.9586"/>
+  </isotope>
+  <isotope N="43" Z="20" name="Ca43">
+    <atom unit="g/mole" value="42.9588"/>
+  </isotope>
+  <isotope N="44" Z="20" name="Ca44">
+    <atom unit="g/mole" value="43.9555"/>
+  </isotope>
+  <isotope N="46" Z="20" name="Ca46">
+    <atom unit="g/mole" value="45.9537"/>
+  </isotope>
+  <isotope N="48" Z="20" name="Ca48">
+    <atom unit="g/mole" value="47.9525"/>
+  </isotope>
+  <element name="Calcium">
+    <fraction n="0.96941" ref="Ca40"/>
+    <fraction n="0.00647" ref="Ca42"/>
+    <fraction n="0.00135" ref="Ca43"/>
+    <fraction n="0.02086" ref="Ca44"/>
+    <fraction n="4e-05" ref="Ca46"/>
+    <fraction n="0.00187" ref="Ca48"/>
+  </element>
+  <isotope N="27" Z="13" name="Al27">
+    <atom unit="g/mole" value="26.9815"/>
+  </isotope>
+  <element name="Aluminum">
+    <fraction n="1" ref="Al27"/>
+  </element>
+  <isotope N="24" Z="12" name="Mg24">
+    <atom unit="g/mole" value="23.985"/>
+  </isotope>
+  <isotope N="25" Z="12" name="Mg25">
+    <atom unit="g/mole" value="24.9858"/>
+  </isotope>
+  <isotope N="26" Z="12" name="Mg26">
+    <atom unit="g/mole" value="25.9826"/>
+  </isotope>
+  <element name="Magnesium">
+    <fraction n="0.7899" ref="Mg24"/>
+    <fraction n="0.1" ref="Mg25"/>
+    <fraction n="0.1101" ref="Mg26"/>
+  </element>
+  <isotope N="10" Z="5" name="B10">
+    <atom unit="g/mole" value="10.0129"/>
+  </isotope>
+  <isotope N="11" Z="5" name="B11">
+    <atom unit="g/mole" value="11.0093"/>
+  </isotope>
+  <element name="Boron">
+    <fraction n="0.199" ref="B10"/>
+    <fraction n="0.801" ref="B11"/>
+  </element>
+  <isotope N="46" Z="22" name="Ti46">
+    <atom unit="g/mole" value="45.9526"/>
+  </isotope>
+  <isotope N="47" Z="22" name="Ti47">
+    <atom unit="g/mole" value="46.9518"/>
+  </isotope>
+  <isotope N="48" Z="22" name="Ti48">
+    <atom unit="g/mole" value="47.9479"/>
+  </isotope>
+  <isotope N="49" Z="22" name="Ti49">
+    <atom unit="g/mole" value="48.9479"/>
+  </isotope>
+  <isotope N="50" Z="22" name="Ti50">
+    <atom unit="g/mole" value="49.9448"/>
+  </isotope>
+  <element name="Titanium">
+    <fraction n="0.0825" ref="Ti46"/>
+    <fraction n="0.0744" ref="Ti47"/>
+    <fraction n="0.7372" ref="Ti48"/>
+    <fraction n="0.0541" ref="Ti49"/>
+    <fraction n="0.0518" ref="Ti50"/>
+  </element>
+  <isotope N="23" Z="11" name="Na23">
+    <atom unit="g/mole" value="22.9898"/>
+  </isotope>
+  <element name="Sodium">
+    <fraction n="1" ref="Na23"/>
+  </element>
+  <isotope N="39" Z="19" name="K39">
+    <atom unit="g/mole" value="38.9637"/>
+  </isotope>
+  <isotope N="40" Z="19" name="K40">
+    <atom unit="g/mole" value="39.964"/>
+  </isotope>
+  <isotope N="41" Z="19" name="K41">
+    <atom unit="g/mole" value="40.9618"/>
+  </isotope>
+  <element name="Potassium">
+    <fraction n="0.932581" ref="K39"/>
+    <fraction n="0.000117" ref="K40"/>
+    <fraction n="0.067302" ref="K41"/>
+  </element>
+  <isotope N="54" Z="26" name="Fe54">
+    <atom unit="g/mole" value="53.9396"/>
+  </isotope>
+  <isotope N="56" Z="26" name="Fe56">
+    <atom unit="g/mole" value="55.9349"/>
+  </isotope>
+  <isotope N="57" Z="26" name="Fe57">
+    <atom unit="g/mole" value="56.9354"/>
+  </isotope>
+  <isotope N="58" Z="26" name="Fe58">
+    <atom unit="g/mole" value="57.9333"/>
+  </isotope>
+  <element name="Iron">
+    <fraction n="0.05845" ref="Fe54"/>
+    <fraction n="0.91754" ref="Fe56"/>
+    <fraction n="0.02119" ref="Fe57"/>
+    <fraction n="0.00282" ref="Fe58"/>
+  </element>
+  <isotope N="19" Z="9" name="F19">
+    <atom unit="g/mole" value="18.9984"/>
+  </isotope>
+  <element name="Fluorine">
+    <fraction n="1" ref="F19"/>
+  </element>
+  <material name="G10_FR4" state="solid">
+    <T unit="K" value="293.15"/>
+    <MEE unit="eV" value="97.5174862751826"/>
+    <D unit="g/cm3" value="1.8"/>
+    <fraction n="0.275294485761732" ref="C"/>
+    <fraction n="0.0342756035967338" ref="H"/>
+    <fraction n="0.360438084258819" ref="O"/>
+    <fraction n="0.0141585430641827" ref="N"/>
+    <fraction n="0.151448564740455" ref="Si"/>
+    <fraction n="0.0814747796865075" ref="Calcium"/>
+    <fraction n="0.0412815383454296" ref="Aluminum"/>
+    <fraction n="0.00904554293278041" ref="Magnesium"/>
+    <fraction n="0.0139757056089465" ref="Boron"/>
+    <fraction n="0.00287683979315724" ref="Titanium"/>
+    <fraction n="0.00445114704467721" ref="Sodium"/>
+    <fraction n="0.0049808870209235" ref="Potassium"/>
+    <fraction n="0.00209827814565587" ref="Iron"/>
+    <fraction n="0.0042" ref="Fluorine"/>
+  </material>
+  <!-- End of microRWELL materials -->
+  
+</materials>

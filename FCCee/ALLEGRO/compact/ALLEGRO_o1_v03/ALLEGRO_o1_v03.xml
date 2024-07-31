@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+  <info name="ALLEGRO_o1_v03 Master"
+    title="ALLEGRO_o1_v03 Master"
+    author="Giovanni Marchiori"
+    url="no"
+    status="development"
+    version="1.0">
+    <comment>
+      Master compact file describing the latest developments of the FCCee ALLEGRO detector concept. With respect to v02 it features an ECal barrel with 11 layers and cell corners projective along phi
+    </comment>
+  </info>
+
+  <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml" />
+
+  <includes>
+    <gdmlFile  ref="elements.xml"/>
+    <gdmlFile  ref="materials.xml"/>
+  </includes>
+
+  <define>
+    <constant name="world_size" value="25*m"/>
+    <constant name="world_x" value="world_size"/>
+    <constant name="world_y" value="world_size"/>
+    <constant name="world_z" value="world_size"/>
+  </define>
+
+  <include ref="./DectDimensions.xml" />
+
+  <!-- shape based model of the beam pipe -->
+  <include ref="../../../MDI/compact/MDI_o1_v00/Beampipe_o4_v05.xml" />
+  <include ref="../../../MDI/compact/MDI_o1_v00/BeamInstrumentation_o1_v01.xml" />
+  
+  <!-- engineered CAD model of the beam pipe -->
+  <!-- <include ref="../../../MDI/compact/MDI_o1_v01/Beampipe_CADimport_o1_v02.xml" /> -->
+  <!-- <include ref="../../../MDI/compact/MDI_o1_v01/BeamInstrumentation_o1_v01.xml"/> -->
+
+  <include ref="LumiCal.xml"/>
+  <include ref="Vertex_IDEA_o1_v01.xml"/> <!-- symbolic link to ../../../IDEA/compact/IDEA_o1_v03/Vertex_IDEA_o1_v01.xml"/>-->
+  <include ref="DriftChamber_o1_v02.xml"/> <!-- symbolic link to ../../../IDEA/compact/IDEA_o1_v03/DriftChamber_o1_v02.xml -->
+  <include ref="ECalBarrel_thetamodulemerged.xml"/> <!-- if you remove the ECalBarrel, you also have to remove or update the "GlobalSolenoid" field (it depends on ECAL dimensions) -->
+  <include ref="HCalBarrel_TileCal.xml"/>
+  <include ref="ECalEndcaps_Turbine.xml"/>
+  <include ref="HCalEndcaps_ThreeParts_TileCal.xml"/>
+  <include ref="MuonTagger.xml"/>
+
+  <fields>
+    <!-- FIXME this is a place holder to get a reasonable magnetic field, it should be a real MAP obtained from FEM tools taking into account HCAL return yoke -->
+    <!-- The z extent should also accomodate space for the feedthroughs, need input from R&D and decisions on cold/warm electronics -->
+    <field name="GlobalSolenoid" type="solenoid"
+           inner_field="SolenoidField"
+           outer_field="-1.0*tesla"
+           zmax="EMBarrel_dz"
+           outer_radius="BarCryoECal_rmax-CryoBarrelBackWarm-CryoBarrelBackCold">
+    </field>
+
+
+    <!-- MDI magnetic fields  -->
+    <!-- Important for background studies  -->
+
+    <field name="CompensatingSolenoidZplus" type="solenoid"
+           inner_field="-SolenoidField -SolenoidField * QD0_min_z / ( QD0_min_z - CompSol_min_z)"
+           outer_field="0*tesla"
+           zmax="QD0_min_z"
+           zmin="CompSol_min_z"
+           outer_radius="20*cm">
+    </field>
+
+    <field name="CompensatingSolenoidZminus" type="solenoid"
+           inner_field="-SolenoidField -SolenoidField * QD0_min_z / ( QD0_min_z - CompSol_min_z)"
+           outer_field="0*tesla"
+           zmin="-QD0_min_z"
+           zmax="-CompSol_min_z"
+           outer_radius="20*cm">
+    </field>
+
+    <!-- FFQ fields at Z pole, V23) -->
+    <!--
+    <field name="QC1L1_field_ED" type="MultipoleMagnet" Z="0.0*tesla">
+      <position y="0*cm" x="(QC1L1_len/2. + QC1L1_start)*sin(CrossingAngle/2.)" z="(QC1L1_len/2. + QC1L1_start)*cos(CrossingAngle/2.)"/>
+      <rotation x="0" y="CrossingAngle/2." z="0.0"/>
+      <coefficient coefficient="0*tesla"/>
+      <coefficient coefficient="(-1)*(45.6)*(-0.273)/0.3*tesla/m"/>
+      <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L1_len/2." />
+    </field>
+
+    <field name="QC1L1_field_EU" type="MultipoleMagnet" Z="0.0*tesla">
+      <position y="0*cm" x="-(QC1L1_len/2. + QC1L1_start)*sin(CrossingAngle/2.)" z="-(QC1L1_len/2. + QC1L1_start)*cos(CrossingAngle/2.)"/>
+      <rotation x="0" y="CrossingAngle/2." z="0.0"/>
+      <coefficient coefficient="0*tesla"/>
+      <coefficient coefficient="(-1)*(45.6)*(-0.273)/0.3*tesla/m"/>
+      <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L1_len/2." />
+    </field>
+
+    <field name="QC1L1_field_PD" type="MultipoleMagnet" Z="0.0*tesla">
+      <position y="0*cm" x="(QC1L1_len/2. + QC1L1_start)*sin(CrossingAngle/2.)" z="-(QC1L1_len/2. + QC1L1_start)*cos(CrossingAngle/2.)"/>
+      <rotation x="0" y="-CrossingAngle/2." z="0.0"/>
+      <coefficient coefficient="0*tesla"/>
+      <coefficient coefficient="(+1)*(45.6)*(-0.273)/0.3*tesla/m"/>
+      <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L1_len/2." />
+    </field>
+
+    <field name="QC1L1_field_PU" type="MultipoleMagnet" Z="0.0*tesla">
+      <position y="0*cm" x="-(QC1L1_len/2. + QC1L1_start)*sin(CrossingAngle/2.)" z="(QC1L1_len/2. + QC1L1_start)*cos(CrossingAngle/2.)"/>
+      <rotation x="0" y="-CrossingAngle/2.+pi" z="0.0"/>
+      <coefficient coefficient="0*tesla"/>
+      <coefficient coefficient="(-1)*(45.6)*(-0.273)/0.3*tesla/m"/>
+      <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L1_len/2." />
+    </field>
+    -->
+    
+    <!--End of MDI magnetic fields  -->
+
+  </fields>
+
+</lccdd>

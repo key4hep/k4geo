@@ -1,5 +1,5 @@
-#ifndef DETSEGMENTATION_GRIDTHETA_H
-#define DETSEGMENTATION_GRIDTHETA_H
+#ifndef DETECTORSEGMENTATIONS_GRIDTHETA_K4GEO_H
+#define DETECTORSEGMENTATIONS_GRIDTHETA_K4GEO_H
 
 #include "DDSegmentation/Segmentation.h"
 
@@ -69,7 +69,7 @@ public:
   inline void setFieldNameTheta(const std::string& fieldName) { m_thetaID = fieldName; }
   /// calculates the Cartesian position from cylindrical coordinates (r, phi, theta)
   inline Vector3D positionFromRThetaPhi(double ar, double atheta, double aphi) const {
-    return Vector3D(ar * std::cos(aphi), ar * std::sin(aphi), ar / std::tan(atheta));
+    return Vector3D(ar * std::cos(aphi), ar * std::sin(aphi), ar * std::cos(atheta)/std::sin(atheta));
   }
   /// calculates the theta angle from Cartesian coordinates
   inline double thetaFromXYZ(const Vector3D& aposition) const {

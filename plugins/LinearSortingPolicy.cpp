@@ -91,9 +91,13 @@ namespace {
 
           dd4hep::rec::DoubleParameters* para = nullptr;
           try { // use existing map, or create a new one
-            para = ddsurf->detElement().extension<dd4hep::rec::DoubleParameters>();
+            para = ddsurf->detElement().extension<dd4hep::rec::DoubleParameters>(false);
+            if(not para) {
+              para = new dd4hep::rec::DoubleParameters;
+              ddsurf->detElement().addExtension<dd4hep::rec::DoubleParameters>(para);
+            }
             para->doubleParameters["SortingPolicy"] = rValue;
-          } catch(...){
+          } catch(...) {
             para = new dd4hep::rec::DoubleParameters;
             para->doubleParameters["SortingPolicy"] = rValue;
             ddsurf->detElement().addExtension<dd4hep::rec::DoubleParameters>(para);

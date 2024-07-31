@@ -223,6 +223,24 @@
 
 <constant name="EndCapRadiator_c7_r3_DetPositionZ"             value="0.8 * mm"      />
 
+<constant name="EndCapRadiator_c2_r1_DetPositionZ"             value="6 * mm"      />
+<constant name="EndCapRadiator_c3_r1_DetPositionZ"             value="6 * mm"      />
+<constant name="EndCapRadiator_c4_r1_DetPositionZ"             value="6 * mm"      />
+<constant name="EndCapRadiator_c5_r1_DetPositionZ"             value="6 * mm"      />
+<constant name="EndCapRadiator_c6_r1_DetPositionZ"             value="6 * mm"      />
+<constant name="EndCapRadiator_c2_r2_DetPositionZ"             value="6 * mm"      />
+<constant name="EndCapRadiator_c3_r2_DetPositionZ"             value="6 * mm"      />
+<constant name="EndCapRadiator_c4_r2_DetPositionZ"             value="6 * mm"      />
+<constant name="EndCapRadiator_c5_r2_DetPositionZ"             value="6 * mm"      />
+<constant name="EndCapRadiator_c6_r2_DetPositionZ"             value="6 * mm"      />
+<constant name="EndCapRadiator_c7_r2_DetPositionZ"             value="6 * mm"      />
+<constant name="EndCapRadiator_c3_r3_DetPositionZ"             value="6 * mm"      />
+<constant name="EndCapRadiator_c4_r3_DetPositionZ"             value="6 * mm"      />
+<constant name="EndCapRadiator_c5_r3_DetPositionZ"             value="6 * mm"      />
+<constant name="EndCapRadiator_c6_r3_DetPositionZ"             value="6 * mm"      />
+<constant name="EndCapRadiator_c5_r4_DetPositionZ"             value="6 * mm"      />
+<constant name="EndCapRadiator_c6_r4_DetPositionZ"             value="6 * mm"      />
+
 
 </define>
 </lccdd>

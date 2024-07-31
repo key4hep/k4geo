@@ -5,7 +5,6 @@
 #define endmsg std::endl
 #define lLog std::cout
 namespace MSG {
-const std::string ERROR = " Error: ";
 const std::string DEBUG = " Debug: ";
 const std::string INFO  = " Info: ";
 }
@@ -216,7 +215,6 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
   
     layerVolume.setVisAttributes(aLcdd.invisible());
     unsigned int idxSubMod = 0;
-    unsigned int idxActMod = 0;    
 
     dd4hep::Position moduleOffset1 (0,0,sign * extBarrelOffset1);
 
@@ -248,7 +246,6 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
       if (xComp.isSensitive()) {
         tileVol.setSensitiveDetector(sensDet);
         tilesPerLayer.push_back(placedTileVol);
-	idxActMod++;
       }
       tileZOffset += xComp.thickness();
     }
@@ -290,7 +287,6 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
 
     layerVolume.setVisAttributes(aLcdd.invisible());
     unsigned int idxSubMod = 0;
-    unsigned int idxActMod = 0;
 
     double tileZOffset = - 0.5* dzSequence;
 
@@ -311,7 +307,6 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
       if (xComp.isSensitive()) {
         tileVol.setSensitiveDetector(sensDet);
         tilesPerLayer.push_back(placedTileVol);
-        idxActMod++;
       }
       tileZOffset += xComp.thickness();
     }
@@ -361,7 +356,6 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
 
     layerVolume.setVisAttributes(aLcdd.invisible());
     unsigned int idxSubMod = 0;
-    unsigned int idxActMod = 0;
 
     double tileZOffset = - 0.5* dzSequence;
 
@@ -382,7 +376,6 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
       if (xComp.isSensitive()) {
 	tileVol.setSensitiveDetector(sensDet);
 	tilesPerLayer.push_back(placedTileVol);
-	idxActMod++;
       }
       tileZOffset += xComp.thickness();
     }

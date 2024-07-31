@@ -4,7 +4,6 @@
 #define endmsg std::endl
 #define lLog std::cout
 namespace MSG {
-const std::string ERROR = " Error: ";
 const std::string DEBUG = " Debug: ";
 const std::string INFO  = " Info: ";
 }

@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+       xmlns:xs="http://www.w3.org/2001/XMLSchema"
+       xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+  <info name="FCCDectDimensions"
+	title="master file with includes and world dimension"
+	author="nalipour"
+	url="no"
+	status="development"
+	version="1.0">
+    <comment>
+    </comment>
+  </info>
+
+
+  <define>
+    <constant name="world_side" value="6100*mm"/>
+    <constant name="CrossingAngle" value="0.030*rad"/>  
+
+    <constant name="GlobalTrackerReadoutID" type="string" value="system:5,layer:3,stave:6,module:5,sensor:2"/>
+    <constant name="GlobalTrackerReadoutID_OB" type="string" value="system:5,layer:1,stave:6,module:4,sensor:2"/>
+    <constant name="GlobalTrackerReadoutID_Disk" type="string" value="system:5,side:-2,layer:3,petal:3,stave:6,module:10,sensor:2"/>
+    <constant name="GlobalTrackerReadoutID_SiWrapperB" type="string" value="system:5,layer:1,stave:9,module:6,sensor:1"/>
+    <constant name="GlobalTrackerReadoutID_SiWrapperD" type="string" value="system:5,side:1,layer:1,module:6,sensor:1"/>
+
+    <constant name="SolenoidField" value="2*tesla"/>
+
+    <constant name="DetID_NOTUSED"          value=" 0"/>
+    <constant name="DetID_VXD_IB"       value=" 1"/>
+    <constant name="DetID_VXD_Disks"       value=" 2"/>
+    <constant name="DetID_VXD_OB"           value=" 20"/>
+    <constant name="DetID_DCH"              value=" 3"/>
+    <constant name="DetID_ECAL_Barrel"      value=" 4"/>
+    <constant name="DetID_ECAL_Endcap"      value=" 5"/>
+    
+    <constant name="DetID_HCAL_Barrel"      value=" 8"/>
+    <constant name="DetID_HCAL_Endcap"     value=" 9"/>
+   
+    <constant name="DetID_Muon_Barrel"      value=" 12"/>
+    <constant name="DetID_Muon_Endcap_1"       value=" 13"/>
+    <constant name="DetID_Muon_Endcap_2"       value=" 14"/>
+
+    <constant name="DetID_LumiCal"          value=" 15"/>
+    <constant name="DetID_LumiCalInstrumentation"          value=" 16"/>
+    <constant name="DetID_LumiCalCooling"          value=" 17"/>
+    <constant name="DetID_LumiCalBackShield"          value=" 18"/>
+    <constant name="DetID_HOMAbsorber"          value=" 19"/>
+    <constant name="DetID_LumiCalNoseShield"          value=" 22"/>
+    
+    <!-- BPW: Beam Pipe Width -->
+    <constant name="BPWWall"       value="0.35*mm" />
+    <constant name="BPWCool"       value="1.0*mm" />
+    <constant name="BeamPipeWidth" value="2.0*BPWWall + BPWCool"/>
+
+    <constant name="BeamPipeWidthFirstCone" value="2.0*mm" />
+    <constant name="CentralBeamPipe_zmax" value="9.0*cm"/>          <!-- Shorter central beam pipe -->
+    <constant name="SeparatedBeamPipe_z" value="1190.0*mm"/> <!-- was 1159.97*mm in FCCDetectors/> -->
+    <constant name="CentralBeamPipe_rmax" value="10.0*mm"/>
+    <constant name="ConeBeamPipe_Rmax" value="28.9*mm" />
+    <constant name="BeamPipeGoldWidth" value="0.005*mm" />
+    <constant name="BeamPipeGoldTolerance" value="0.001*mm" />  <!-- dummy tolerance, some small non zero value -->
+    <constant name="BeamPipeConeHalfAngle" value="(ConeBeamPipe_Rmax + BeamPipeWidthFirstCone - CentralBeamPipe_rmax ) / (SeparatedBeamPipe_z - CentralBeamPipe_zmax)" />
+
+    <constant name="SeparatedBeamPipe_rmax"  value="15*mm"/>
+    <constant name="BeamPipeTantalShieldWidth"  value="15*mm"/>
+    <constant name="SideFillerShieldWidth"  value="7*mm"/>
+    <constant name="TopFillerShieldWidth"  value="8*mm"/>
+    <constant name="BeamPipe_end" value="12500*mm"/>
+
+    <!-- Mike Sullivan's Synch Rad mask -->
+    <constant name="MiddleOfSRMask_z" value="2.1*m" />
+    <constant name="SynchRadMaskSize" value="5*mm" /> <!-- mask tip is at 10 mm from the beamline -->
+    <constant name="mask_epsilon" value="0.001*mm" />    
+    
+    <constant name="size_x" value="60*mm"/>       
+    <constant name="size_y" value="12*mm"/>         
+    <constant name="size_z" value="50*mm"/>   
+    
+    <constant name="env_safety" value="0.1*mm"/>
+
+    <!-- VTX parameters -->
+    <constant name="VertexClearanceTheta" value="0.110"/>                  <!-- Clearance of vertex detector in mrad-->
+    <constant name="VTXIB_r_clearance" value="1*mm"/> <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
+    <constant name="VTXIB_r_min" value="13.7*mm"/>          <!-- Start of inner vertex detector layers. To keep distance of 1.3 mm from outer beam pipe end (10+0.35+1+0.35 mm = 11.7 mm). This changes to 13.7 mm due to cooling issues (see https://indico.cern.ch/event/1176398/contributions/5207171/attachments/2581129/4451907/Krakow%202023_v23_final.pdf) -->
+    <constant name="VTXIB_r_max" value="31*mm"/>            <!-- End of inner vertex detector layers (the ones with smaller pixels) -->
+    <constant name="VTXOB_r_min" value="320*mm"/>           <!-- Start of outer vertex layers (the ones with larger pixels) -->
+    <constant name="VTXOB_r_max" value="340*mm"/>           <!-- End of outer vertex layer (the one with larger pixels) -->
+    <constant name="Outer_Vertex_half_length" value="1050*mm"/>
+    <!-- End of VTX parameters -->
+
+    <!--  Drift Chamber parameters    -->
+    <!-- Changing the radius is not enough to resize the detector, please contact the experts-->
+    <constant name="DCH_inner_cyl_R_total"          value=" 349.8  * mm "  />
+    <constant name="DCH_outer_cyl_R_total"          value=" 2015   * mm "  />
+    <constant name="DCH_half_length_total"          value=" 2250   * mm "  />
+    <!-- End of Drift Chamber parameters    -->
+
+    <!-- LAr ECAL Calo Barrel -->
+    <constant name="BarECal_id" value="DetID_ECAL_Barrel"/>
+    <constant name="BarECal_rmin" value="2100*mm"/>
+    <constant name="BarECal_rmax" value="2770*mm"/>
+    <constant name="BarECal_dz" value="3100*mm"/>
+
+    <!-- LAr ECAL Endcaps -->
+    <constant name="ECalEndcap_id" value="DetID_ECAL_Endcap"/> 
+    <constant name="ECalEndcap_inner_radius" value="350*mm"/>
+    <constant name="ECalEndcap_outer_radius" value="2900*mm"/>
+    <constant name="ECalEndcap_min_z" value="3200*mm"/>
+    <constant name="ECalEndcap_max_z" value="3850*mm"/>
+
+    <!-- HCAL Barrel -->
+    <constant name="BarHCal_id" value="DetID_HCAL_Barrel"/>
+    <constant name="BarHCal_rmin" value="2800*mm"/>
+    <constant name="BarHCal_rmax" value="4500*mm"/>
+    <constant name="BarHCal_dz" value="2800*mm"/>
+
+    <!-- HCAL Endcaps -->
+    <constant name="HCalEndcap_inner_radius1" value="3600*mm"/>
+    <constant name="HCalEndcap_outer_radius1" value="4500*mm"/>
+    <constant name="HCalEndcap_inner_radius2" value="2900*mm"/>
+    <constant name="HCalEndcap_outer_radius2" value="HCalEndcap_outer_radius1"/>
+    <constant name="HCalEndcap_inner_radius3" value="350*mm"/>
+    <constant name="HCalEndcap_outer_radius3" value="HCalEndcap_outer_radius1"/>
+    <constant name="HCalEndcap_min_z1" value="2900*mm"/>
+    <constant name="HCalEndcap_max_z1" value="3400*mm"/>
+    <constant name="HCalEndcap_min_z2" value="HCalEndcap_max_z1"/>
+    <constant name="HCalEndcap_max_z2" value="3900*mm"/>
+    <constant name="HCalEndcap_min_z3" value="HCalEndcap_max_z2"/>
+    <constant name="HCalEndcap_max_z3" value="5450*mm"/>
+    
+    <!-- Muon tagger -->
+    <constant name="MuonTagger_inner_radius" value="4550*mm"/>
+    <constant name="MuonTagger_outer_radius" value="4650*mm"/>
+    <constant name="MuonTagger_half_length" value="6000*mm"/>
+   
+    <constant name="MuonTaggerEndcap_inner_radius" value="1100*mm"/>
+    <constant name="MuonTaggerEndcap_outer_radius" value="4500*mm"/>
+    <constant name="MuonTaggerEndcap_min_z" value="5550*mm"/>
+    <constant name="MuonTaggerEndcap_max_z" value="6000*mm"/>
+   
+    <!-- MDI -->
+    <constant name="CompSol_min_z" value="1230*mm"/>
+
+    <constant name="LumiCal_max_z" value="1186.5*mm" />
+    <constant name="LumiCal_min_z" value="1074*mm"/>
+    
+    <constant name="LumiCal_dz" value="(LumiCal_max_z-LumiCal_min_z)/2.0"/>
+    
+    <constant name="LumiCal_inner_radius" value="55.0*mm"/>
+    <constant name="LumiCal_outer_radius" value="112.0*mm- env_safety"/>
+    
+    <constant name="LumiCal_Instr_thickness" value="20*mm"/>
+    <constant name="LumiCal_Instr_inner_radius" value="LumiCal_outer_radius"/>
+    <constant name="LumiCal_Instr_outer_radius" value="LumiCal_outer_radius+LumiCal_Instr_thickness - env_safety"/>
+    
+    <constant name="LumiCal_Cool_thickness" value="9.75*mm"/>
+    <constant name="LumiCal_Cool_inner_radius" value="LumiCal_Instr_outer_radius"/>
+    <constant name="LumiCal_Cool_outer_radius" value="LumiCal_Instr_outer_radius+LumiCal_Cool_thickness"/>
+    
+    <constant name="Lcal_services_rmax" value="LumiCal_outer_radius+30*mm"/>
+    <constant name="Lcal_offset_phi" value=" 0."/>
+    <!--preliminary LumiCal shielding-->
+    <!--back shielding-->
+    <constant name="LumiCal_Shield_inner_radius" value="LumiCal_inner_radius"/>
+    <constant name="LumiCal_Shield_outer_radius" value="LumiCal_outer_radius+LumiCal_Instr_thickness+LumiCal_Cool_thickness"/>
+    <constant name="LumiCal_shield_dz" value="1.75*mm"/> 
+    <!--nose-->
+    <constant name="LumiCal_NoseShield_inner_radius" value="LumiCal_inner_radius-5*mm"/>
+    <constant name="LumiCal_NoseShield_outer_radius" value="LumiCal_inner_radius+10*mm"/>
+    <constant name="LumiCal_nose_shield_dz" value="12*mm"/>
+    
+    <constant name="BeamCal_inner_radius" value="32*mm"/>
+    <constant name="BeamCal_outer_radius" value="150*mm"/>
+    <constant name="BeamCal_min_z" value="3181*mm"/>
+    <constant name="BeamCal_max_z" value="3441*mm"/>
+    <constant name="BeamCal_dz" value="(BeamCal_max_z-BeamCal_min_z)/2.0"/>
+    
+    <constant name="Kicker_inner_radius" value="4*mm"/>
+    <constant name="Kicker_outer_radius" value="25*mm"/>
+    <constant name="Kicker_min_z" value="3480*mm"/>
+    <constant name="Kicker_max_z" value="3780*mm"/>
+    
+    <constant name="BPM_inner_radius" value="36*mm"/>
+    <constant name="BPM_outer_radius" value="55*mm"/>
+    <constant name="BPM_min_z" value="3790*mm"/>
+    <constant name="BPM_max_z" value="3880*mm"/>        
+
+    <constant name="QD0_min_z" value="2000*mm"/>
+    <constant name="QD0_max_z" value="5200*mm"/>
+    <constant name="QD0Coil_outer_radius" value="30*mm"/>
+    <constant name="CollimatorInFrontOfQD0_dz" value="20*cm"/>   
+    <constant name="CollimatorInFrontOfQD0_radius" value="10*mm"/>
+    <constant name="CollimatorInFrontOfQD0_dr" value="16*mm"/>
+
+    <constant name="QC1_rmin" value="42/2*mm"/>
+    <constant name="QC1_rmax" value="64/2*mm"/>
+    <constant name="QC1L1_len" value="700*mm"/>
+    <constant name="QC1L1_start" value="2200*mm"/>
+    <constant name="screenstart" value="-10*mm"/>
+    <!-- end MDI -->
+    
+    <constant name="tracker_region_zmax" value="DCH_half_length_total"/>
+    <constant name="tracker_region_rmax" value="DCH_outer_cyl_R_total"/>
+
+  </define>
+  
+  
+  <limits>
+    <limitset name="cal_limits">
+      <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
+    </limitset>
+  </limits>
+  <regions>
+    <region name="BeampipeRegion"/>
+    <region name="VTXIBRegion"/>
+    <region name="VTXOBRegion"/>
+    <region name="VTXDRegion"/>
+    <region name="SiWrapperBRegion"/>
+    <region name="SiWrapperDRegion"/>
+  </regions>
+
+
+  <display>
+    <vis name="VXDVis"        alpha="0.1" r="0.1" 	g=".5"      b=".5"    showDaughters="true"  visible="false"/>
+    <vis name="VXDLayerVis"   alpha="1.0" r="0.1" 	g=".5"      b=".5"    showDaughters="true"  visible="true"/>
+    <vis name="VXDSupportVis" alpha="1.0" r="0.0" 	g="1.0"     b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="ITVis"       	alpha="1.0" r="0.54"  	g="0.43"    b="0.04"  showDaughters="true"  visible="true"/>
+    <vis name="OTVis"       	alpha="1.0" r="0.8"   	g="0.8"     b="0.4"   showDaughters="true"  visible="false"/>
+    <vis name="ECALVis"     	alpha="1.0" r="0.2"   	g="0.6"     b="0"     showDaughters="true"  visible="true"/>
+    <vis name="HCALVis"     	alpha="1.0" r="0.078" 	g="0.01176" b="0.588" showDaughters="true"  visible="true"/>
+    <vis name="SOLVis"      	alpha="1.0" r="0.4"   	g="0.4"     b="0.4"   showDaughters="true"  visible="true"/>
+    <vis name="MUONVis"     	alpha="1.0" r="0.6"   	g="0.0"     b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="LCALInstrVis"  alpha="1.0" r="0.35"  	g="0.0"     b="0.47"  showDaughters="true"  visible="true"/>
+    <vis name="LCALVis"    	alpha="1.0" r="0.25"  	g="0.88"    b="0.81"  showDaughters="true"  visible="true"/>
+    <vis name="LCALCoolVis"   alpha="1.0" r="0.2"   	g="0.6"     b="0"     showDaughters="true"  visible="true"/>
+    <vis name="BCALVis"     	alpha="1.0" r="0.0"   	g="0.4"     b="0.4"   showDaughters="true"  visible="true"/>
+    <vis name="KICKVis"     	alpha="1.0" r="1.0"   	g="0.498"   b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="QD0CoilIVis"   alpha="1.0" r="1.0"   	g="0.498"   b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="QD0CoilOVis"   alpha="1.0" r="1.0"   	g="0.25"    b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="CompSolVis"    alpha="1.0" r="0.5"   	g="0.5"     b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="ScreenSolVis"  alpha="1.0" r="1"   	g="1"       b="0"     showDaughters="true"  visible="true"/>
+    <vis name="ColliVis"      alpha="1.0" r="0.7"   	g="0.5"     b="1"     showDaughters="true"  visible="true"/>
+    <vis name="TantalumVis"   alpha="1.0" r="1"   	g="0.5"     b="0.5"   showDaughters="true"  visible="true"/>
+    <vis name="BPMVis"      	alpha="1.0" r="0.25"  	g="0.88"    b="0.81"  showDaughters="true"  visible="true"/>
+    <vis name="SupportVis"  	alpha="1"   r="0.2"   	g="0.2"     b="0.2"   showDaughters="true" visible="true"/>
+  </display>
+
+</lccdd>
