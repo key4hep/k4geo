@@ -156,7 +156,7 @@ SET( test_name "test_files_versions_FCCee" )
 ADD_TEST(
     NAME t_${test_name}
     COMMAND "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
-            "${CMAKE_SOURCE_DIR}/utils/compareIdenticalFiles.sh"
-            "${CMAKE_SOURCE_DIR}/FCCee"
-            "${CMAKE_SOURCE_DIR}/utils/IdenticalFiles_ToBeIgnored.txt"
+            "${PROJECT_SOURCE_DIR}/utils/compareIdenticalFiles.sh"
+            "${PROJECT_SOURCE_DIR}/FCCee"
+            "${PROJECT_SOURCE_DIR}/utils/IdenticalFiles_ToBeIgnored.txt"
 )
