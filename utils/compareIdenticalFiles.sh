@@ -16,9 +16,11 @@ files_to_ignore=$(<"$ignore_file")
 # Create an associative array to store file paths with the same names
 declare -A file_names
 
-# Iterate through files in the directory
-find "$search_dir" -not -path '*/.*' -type f | while read -r file; do
+# Initialize status code variable
+status_code=0
 
+# Iterate through files in the directory
+while IFS= read -r -d '' file; do
     # Get the base name of the file (without the path)
     file_name=$(basename "$file")
 
@@ -36,10 +38,12 @@ find "$search_dir" -not -path '*/.*' -type f | while read -r file; do
             echo "$file"
             echo "${file_names[$file_name]}"
             echo
+            status_code=1
         fi
     else
         # Store the file path in the array
         file_names["$file_name"]="$file"
     fi
+done < <(find "$search_dir" -not -path '*/.*' -type f -print0)
 
-done
+exit $status_code
