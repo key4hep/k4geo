@@ -51,10 +51,6 @@
      <segmentation type="FCCSWGridPhiTheta_k4geo" grid_size_theta="0.022180" phi_bins="EndcapHCal_n_phi_modules" offset_theta="0.06" offset_phi="-pi+(pi/EndcapHCal_n_phi_modules)"/>
      <id>system:4,type:2,layer:5,theta:11,phi:10</id>
     </readout>
-   <readout name="HCalEndcapReadout_phi">
-     <segmentation type="FCCSWGridPhiTheta_k4geo" grid_size_theta="3." phi_bins="EndcapHCal_n_phi_modules" offset_theta="0.06" offset_phi="-pi+(pi/EndcapHCal_n_phi_modules)"/>
-     <id>system:4,type:2,layer:5,row:9,theta:0,phi:10</id>
-    </readout>
   </readouts>
 
   <!-- nmodules is the number of radial layers in the first part;

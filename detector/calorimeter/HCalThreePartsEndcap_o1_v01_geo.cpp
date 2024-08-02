@@ -397,7 +397,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
                 tileZOffset += xComp.thickness();
             }
        
-            // second z loop (place sequences in layer)                                                                                                                        
+            // second z loop (place sequences in layer)
             std::vector<dd4hep::PlacedVolume> seqs;
             double zOffset = - dzDetector3 + 0.5 * dzSequence; //2*dZEndPlate + space + (dzSequence * 0.5);
 
@@ -460,10 +460,10 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
 
     dd4hep::rec::LayeredCalorimeterData::Layer caloLayer;
 
-
+    // IMPORTANT: the information below is used to calculate the cell position in CellPositionsHCalPhiThetaSegTool in k4RecCalorimeter
+    // if the definition distance or sensitive_thickness is modified, one also needs to modify CellPositionsHCalPhiThetaSegTool
     for (unsigned int idxLayer = 0; idxLayer < layerDepths1.size(); ++idxLayer) {
         const double difference_bet_r1r2 = layerDepths1.at(idxLayer); 
-
         caloLayer.distance                  = layerInnerRadii1.at(idxLayer); // radius of the current layer 
         caloLayer.sensitive_thickness       = difference_bet_r1r2;           // radial dimension of the current layer
         caloLayer.inner_thickness           = difference_bet_r1r2 / 2.0;
