@@ -152,9 +152,8 @@ ADD_TEST( t_SensThickness_CLIC_o3_v15 "${CMAKE_INSTALL_PREFIX}/bin/run_test_${Pa
 
 #--------------------------------------------------
 # check if files named the same contain the same in FCCee
-SET( test_name "test_files_versions_FCCee" )
 ADD_TEST(
-    NAME t_${test_name}
+    NAME t_test_files_versions_FCCee
     COMMAND "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
             "${PROJECT_SOURCE_DIR}/utils/compareIdenticalFiles.sh"
             "${PROJECT_SOURCE_DIR}/FCCee"
