@@ -71,25 +71,25 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   for (xml_coll_t xCompColl(xmlDet.child(_Unicode(layers)), _Unicode(layer)); xCompColl; ++xCompColl) {
     Layers.push_back(xCompColl);
   }
-  unsigned int numSequencesR = 0;
+  unsigned int numLayersR = 0;
   double moduleDepth = 0.;
   std::vector<double> layerDepths = std::vector<double>();
   std::vector<double> layerInnerRadii = std::vector<double>();
   for (std::vector<xml_comp_t>::iterator it = Layers.begin(); it != Layers.end(); ++it) {
     xml_comp_t layer = *it;
     Dimension layerDimension(layer.dimensions());
-    numSequencesR += layerDimension.nModules();
+    numLayersR += layerDimension.nModules();
     for (int nLayer = 0; nLayer < layerDimension.nModules(); nLayer++) {
       moduleDepth += layerDimension.dr();
       layerDepths.push_back(layerDimension.dr());
     }
   }
-  lLog << MSG::DEBUG << "retrieved number of radial layers:  " << numSequencesR
+  lLog << MSG::DEBUG << "retrieved number of radial layers:  " << numLayersR
        << " , which end up to a full module depth in rho of " << moduleDepth << " cm" << endmsg;
   lLog << MSG::DEBUG << "retrieved number of radial layers:  " << layerDepths.size() << endmsg;
 
-  lLog << MSG::INFO << "constructing: " << numSequencesZ << " sequences in Z, " << numSequencesR
-       << " radial layers, in total " << numSequencesR * numSequencesZ << " tiles" << endmsg;
+  lLog << MSG::INFO << "constructing: " << numSequencesZ << " sequences in Z, " << numLayersR
+       << " radial layers, in total " << numLayersR * numSequencesZ << " tiles" << endmsg;
 
   // Calculate correction along z based on the module size (can only have natural number of modules)
   double dzDetector = (numSequencesZ * dzSequence) / 2 + dZEndPlate + space;
@@ -219,7 +219,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   }
 
   // Place det elements wihtin each other to recover volume positions later via cellID  
-  for (uint iLayer = 0; iLayer < numSequencesR; iLayer++) {
+  for (uint iLayer = 0; iLayer < numLayersR; iLayer++) {
     DetElement layerDet(caloDetElem, dd4hep::xml::_toString(iLayer, "layer%d"), iLayer);
     layerDet.setPlacement(layers[iLayer]);
     
