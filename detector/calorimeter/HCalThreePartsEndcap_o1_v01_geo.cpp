@@ -89,9 +89,9 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
     unsigned int numSequencesZ2 = static_cast<unsigned>((2 * dimensions.dz() - 2 * dZEndPlate - space) / dzSequence);
     unsigned int numSequencesZ3 = static_cast<unsigned>((2 * dimensions.z_length() - 2 * dZEndPlate - space) / dzSequence);
 
-    unsigned int numSequencesR1 = 0;
-    unsigned int numSequencesR2 = 0;
-    unsigned int numSequencesR3 = 0;
+    unsigned int numLayersR1 = 0;
+    unsigned int numLayersR2 = 0;
+    unsigned int numLayersR3 = 0;
     double moduleDepth1 = 0.;
     double moduleDepth2 = 0.;
     double moduleDepth3 = 0.;
@@ -108,9 +108,9 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
     for (xml_coll_t xCompColl(xmlElement.child(_Unicode(layers)), _Unicode(layer)); xCompColl; ++xCompColl){
         xml_comp_t currentLayer = xCompColl;
         Dimension layerDimension(currentLayer.dimensions());
-        numSequencesR1 += layerDimension.nmodules();
-        numSequencesR2 += layerDimension.nsegments();
-        numSequencesR3 += layerDimension.nPads();
+        numLayersR1 += layerDimension.nmodules();
+        numLayersR2 += layerDimension.nsegments();
+        numLayersR3 += layerDimension.nPads();
 
         for (int nLayer = 0; nLayer < layerDimension.nmodules(); nLayer++){
             moduleDepth1 += layerDimension.dr();
@@ -126,16 +126,16 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
         }
     }
 
-    lLog << MSG::DEBUG << "retrieved number of layers in first Endcap part:  " << numSequencesR1 << " , which end up to a full module depth in rho of " << moduleDepth1 << " cm" << endmsg;
-    lLog << MSG::DEBUG << "retrieved number of layers in second Endcap part:  " << numSequencesR2 << " , which end up to a full module depth in rho of " << moduleDepth2 << " cm" << endmsg;
-    lLog << MSG::DEBUG << "retrieved number of layers in third Endcap part:  " << numSequencesR3 << " , which end up to a full module depth in rho of " << moduleDepth3 << " cm" << endmsg;
+    lLog << MSG::DEBUG << "retrieved number of layers in first Endcap part:  " << numLayersR1 << " , which end up to a full module depth in rho of " << moduleDepth1 << " cm" << endmsg;
+    lLog << MSG::DEBUG << "retrieved number of layers in second Endcap part:  " << numLayersR2 << " , which end up to a full module depth in rho of " << moduleDepth2 << " cm" << endmsg;
+    lLog << MSG::DEBUG << "retrieved number of layers in third Endcap part:  " << numLayersR3 << " , which end up to a full module depth in rho of " << moduleDepth3 << " cm" << endmsg;
 
-    lLog << MSG::INFO << "constructing first part EC: with z offset " << extBarrelOffset1 << " cm: "<< numSequencesZ1 << " sequences in Z, " << numSequencesR1 << " layers in Rho, " << numSequencesR1 * numSequencesZ1 << " tiles" << endmsg;
-    lLog << MSG::INFO << "constructing second part EC: with offset " << extBarrelOffset2 << " cm: " << numSequencesZ2 << " sequences in Z, " << numSequencesR2 << " layers in Rho, " << layerDepths2.size() * numSequencesZ2 << " tiles" << endmsg;
+    lLog << MSG::INFO << "constructing first part EC: with z offset " << extBarrelOffset1 << " cm: "<< numSequencesZ1 << " sequences in Z, " << numLayersR1 << " layers in Rho, " << numLayersR1 * numSequencesZ1 << " tiles" << endmsg;
+    lLog << MSG::INFO << "constructing second part EC: with offset " << extBarrelOffset2 << " cm: " << numSequencesZ2 << " sequences in Z, " << numLayersR2 << " layers in Rho, " << layerDepths2.size() * numSequencesZ2 << " tiles" << endmsg;
 
-    lLog << MSG::INFO << "constructing third part EC: with offset " << extBarrelOffset3 << " cm: " << numSequencesZ3 << " sequences in Z, " << numSequencesR3 << " layers in Rho, " << layerDepths3.size() * numSequencesZ3 << " tiles" << endmsg;
+    lLog << MSG::INFO << "constructing third part EC: with offset " << extBarrelOffset3 << " cm: " << numSequencesZ3 << " sequences in Z, " << numLayersR3 << " layers in Rho, " << layerDepths3.size() * numSequencesZ3 << " tiles" << endmsg;
 
-    lLog << MSG::INFO << "number of channels: " << (numSequencesR1 * numSequencesZ1) + (numSequencesR2 * numSequencesZ2) + (numSequencesR3 * numSequencesZ3) << endmsg;
+    lLog << MSG::INFO << "number of channels: " << (numLayersR1 * numSequencesZ1) + (numLayersR2 * numSequencesZ2) + (numLayersR3 * numSequencesZ3) << endmsg;
 
     // Calculate correction along z based on the module size (can only have natural number of modules)
     double dzDetector1 = (numSequencesZ1 * dzSequence) / 2 + 2 * dZEndPlate + space;
@@ -147,7 +147,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
     lLog << MSG::INFO << "width second part EC:" << dimensions.dz() * 2 << endmsg;
     lLog << MSG::INFO << "correction of dz (negative = size reduced) second part EB:" << dzDetector2*2 - dimensions.dz()*2 << endmsg;
 
-    lLog << MSG::INFO << "dz third part EC:" << dzDetector2 * 2 << endmsg;
+    lLog << MSG::INFO << "dz third part EC:" << dzDetector3 * 2 << endmsg;
 
 
     for (int iSign = -1; iSign < 2; iSign+=2){
@@ -232,7 +232,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
             Volume tileSequenceVolume("HCalECTileSequenceVol1", tileSequenceShape, lcdd.air());
 
             lLog << MSG::DEBUG << "layer radii:  " << rminLayer << " - " << rmaxLayer << " [cm]" << endmsg;
-         
+
             dd4hep::Tube layerShape(rminLayer, rmaxLayer, dzDetector1 );
             Volume layerVolume("HCalECLayerVol1", layerShape, lcdd.air());
 
@@ -474,7 +474,6 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
 
     for (unsigned int idxLayer = 0; idxLayer < layerDepths2.size(); ++idxLayer) {
         const double difference_bet_r1r2 = layerDepths2.at(idxLayer); 
-
         caloLayer.distance                  = layerInnerRadii2.at(idxLayer);
         caloLayer.sensitive_thickness       = difference_bet_r1r2; 
         caloLayer.inner_thickness           = difference_bet_r1r2 / 2.0;
@@ -485,7 +484,6 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
 
     for (unsigned int idxLayer = 0; idxLayer < layerDepths3.size(); ++idxLayer) {
         const double difference_bet_r1r2 = layerDepths3.at(idxLayer); 
-
         caloLayer.distance                  = layerInnerRadii3.at(idxLayer); 
         caloLayer.sensitive_thickness       = difference_bet_r1r2; 
         caloLayer.inner_thickness           = difference_bet_r1r2 / 2.0;
