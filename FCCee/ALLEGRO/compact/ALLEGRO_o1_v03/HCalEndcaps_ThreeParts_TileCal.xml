@@ -44,12 +44,12 @@
   <readouts>
     <!-- Default readout of DetailedWedge geometry -->
     <readout name="HCalEndcapReadout">
-      <segmentation type="FCCSWGridPhiTheta_k4geo" grid_size_theta="0.022180" phi_bins="EndcapHCal_n_phi_modules" offset_theta="0.06" offset_phi="-pi+(pi/EndcapHCal_n_phi_modules)"/>
-      <id>system:4,type:2,layer:5,row:9,theta:11,phi:10</id>
+      <segmentation type="FCCSWGridPhiTheta_k4geo" grid_size_theta="0.022180" phi_bins="EndcapHCal_n_phi_modules" offset_theta="0.007106" offset_phi="-pi+(pi/EndcapHCal_n_phi_modules)"/>
+      <id>system:4,type:3,layer:6,row:11,theta:11,phi:10</id>
     </readout>
    <readout name="HCalEndcapReadout_phitheta">
-     <segmentation type="FCCSWGridPhiTheta_k4geo" grid_size_theta="0.022180" phi_bins="EndcapHCal_n_phi_modules" offset_theta="0.06" offset_phi="-pi+(pi/EndcapHCal_n_phi_modules)"/>
-     <id>system:4,type:2,layer:5,theta:11,phi:10</id>
+     <segmentation type="FCCSWGridPhiTheta_k4geo" grid_size_theta="0.022180" phi_bins="EndcapHCal_n_phi_modules" offset_theta="0.007106" offset_phi="-pi+(pi/EndcapHCal_n_phi_modules)"/>
+     <id>system:4,type:3,layer:6,theta:11,phi:10</id>
     </readout>
   </readouts>
 
