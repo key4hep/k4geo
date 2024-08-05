@@ -23,6 +23,28 @@
         <constant name="nInnerVertexLayers" value="3"/>
     </define>
 
+<!--    <detectors>
+       <!~~ The envelope consists of a tube generally surrounding the vertex barrel and endcap disks, subtracted by a
+            cone describing the upper acceptance of the LumiCal, about 110 mrad in this version of the detector.
+       ~~>
+        <detector name="Vertex" type="DD4hep_SubdetectorAssembly" vis="VXDVis">
+            <shape type="BooleanShape" operation="Subtraction" material="Air">
+                <shape type="BooleanShape" operation="Subtraction" material="Air">
+                    <shape type="Tube" rmin="VTXIB_r_min_layer-VTXIB_r_min_clearance" rmax="VTXOB_r_max_layer+VTXOB_rmax_clearance" dz="VTXD_z_max_total"/>
+                    <shape type="Cone" rmin1="0" rmax1="tan(VertexClearanceTheta)*2000.0*mm" rmin2="0" rmax2="0" z="2000.0*mm/2."/>
+                    <position x="0" y="0" z="-2000.0*mm/2." />
+                </shape>                            
+                <shape type="Cone" rmin1="0" rmax1="0" rmin2="0" rmax2="tan(VertexClearanceTheta)*2000.0*mm" z="2000.0*mm/2."/>
+                <position x="0" y="0" z="2000.0*mm/2." />
+            </shape>
+
+            <comment>Vertex Assembly</comment>
+            <composite name="VTXIB"/>
+            <composite name="VertexEndcap"/>
+            <!~~ <composite name="VTXIB_Support"/>
+            <composite name="VTXIB_CoolingCones"/> ~~>
+        </detector>
+    </detectors>-->
 
     <define>
         <!-- Vertex inner barrel (VTXIB): Let's take the ARCADIA sensor! -->
@@ -423,10 +445,10 @@
  
     <!-- Vertex inner barrel -->
         <detector name="VTXIB" type="VertexCylindrical_o1_v01" vis="VXDVis" id="DetID_VXD_IB" readout="VertexBarrelCollection"  region="VTXBRegion">
-          <envelope vis="VXDVis">
+          <!-- <envelope vis="VXDVis">
                 <shape type="BooleanShape" operation="Subtraction" material="Air">
                     <shape type="BooleanShape" operation="Subtraction" material="Air">
-                        <shape type="BooleanShape" operation="Union" material="Air">0
+                        <shape type="BooleanShape" operation="Union" material="Air">
                             <shape type="Tube" rmin="VTXOB_r_max_layer-VTXOB_TerminalPart_L2_thickness1-12.771*mm" rmax="VTXOB_r_max_layer+VTXOB_rmax_clearance" dz="VTXOB_z2_passive/2."/>
                             <shape type="Tube" rmin="VTXIB_r_min_layer-VTXIB_r_min_clearance" rmax="VTXIB_r_max" dz="VTXIB_half_length"/>
                             <shape type="Tube" rmin="VTXIB_r_max" rmax="VTXOB_r_max_layer-VTXOB_TerminalPart_L2_thickness1-12.771*mm" dz="VTXOB_z1_passive/2."/>
@@ -437,8 +459,19 @@
                     <shape type="Cone" rmin1="0" rmax1="0" rmin2="0" rmax2="tan(VertexClearanceTheta)*2000.0*mm" z="2000.0*mm/2."/>
                     <position x="0" y="0" z="2000.0*mm/2." />
                 </shape>
-            </envelope>
+            </envelope> -->
  
+             <!-- <envelope vis="VXDVis">
+                <shape type="Assembly"/>
+            </envelope> -->
+
+             <envelope vis="VXDVis">
+                <shape type="BooleanShape" operation="Union" material="Air">
+                    <shape type="Tube" rmin="VTXIB_r_min_layer-VTXIB_r_min_clearance" rmax="VTXIB_r_max" dz="VTXIB_half_length"/>
+                    <shape type="Tube" rmin="VTXOB_r_max_layer-VTXOB_TerminalPart_L2_thickness1-12.771*mm" rmax="VTXOB_r_max_layer+VTXOB_rmax_clearance" dz="VTXOB_z2_passive/2."/>
+                </shape>
+            </envelope>
+
             <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_BARREL"/>
             
             <!-- Definition of our "stave" object that is used to build the barrel -->
@@ -926,6 +959,46 @@
 
         <!-- Vertex disks -->
         <detector id="DetID_VXD_Disks" name="VertexEndcap" vis="VXDVis" type="VertexDisks_detailed_o1_v01" readout="VertexEndcapCollection" reflect="true" region="VTXDRegion">
+ <!--           <envelope vis="VXDVis">
+                <shape type="BooleanShape" operation="Subtraction" material="Air">
+                    <shape type="BooleanShape" operation="Subtraction" material="Air">
+                        <shape type="BooleanShape" operation="Subtraction" material="Air">
+                            <shape type="BooleanShape" operation="Subtraction" material="Air">
+                                <shape type="BooleanShape" operation="Subtraction" material="Air">
+                                    <shape type="BooleanShape" operation="Subtraction" material="Air">
+                                        <shape type="BooleanShape" operation="Subtraction" material="Air">
+                                            <shape type="Tube" rmin="VTXD_rmin1" rmax="VTXD_r_max" dz="VTXD_z_max_total"/>
+
+                                            <shape type="Tube" rmin="VTXIB_r_min_layer-VTXIB_r_min_clearance" rmax="VTXIB_r_max" dz="VTXIB_half_length"/> <!~~ Subtract volume of inner barrel to avoid overlap ~~>
+                                            <position x="0" y="0" z="0"/>
+                                        </shape>
+                                        <shape type="Tube" rmin="VTXOB_r_max_layer-VTXOB_TerminalPart_L2_thickness1-12.771*mm" rmax="VTXOB_r_max_layer+VTXOB_rmax_clearance" dz="VTXOB_z2_passive/2."/> <!~~ Subtract volume of outermost barrel to avoid overlap ~~>
+                                        <position x="0" y="0" z="0"/>
+                                    </shape>
+                                    
+                                    <shape type="Tube" rmin="0.0*mm" rmax="VTXD_r_max" dz="VTXD_z_min_total"/> <!~~ Subtract inner area between disks ~~>
+                                    <position x="0" y="0" z="0"/>
+                                </shape>
+
+                                <shape type="Cone" rmin1="0" rmax1="tan(VertexClearanceTheta)*VTXD_z_max_total" rmin2="0" rmax2="0" z="VTXD_z_max_total/2."/>
+                                <position x="0" y="0" z="-VTXD_z_max_total/2." />
+                            </shape>
+
+                            <shape type="Cone" rmin1="0" rmax1="0" rmin2="0" rmax2="tan(VertexClearanceTheta)*VTXD_z_max_total" z="VTXD_z_max_total/2."/>
+                            <position x="0" y="0" z="VTXD_z_max_total/2." />
+                        </shape>
+                        <shape type="Cone" rmin1="0" rmax1="tan(VertexClearanceTheta)*2000.0*mm" rmin2="0" rmax2="0" z="2000.0*mm/2."/>
+                        <position x="0" y="0" z="-2000.0*mm/2." />
+                    </shape>   
+                <shape type="Cone" rmin1="0" rmax1="0" rmin2="0" rmax2="tan(VertexClearanceTheta)*2000.0*mm" z="2000.0*mm/2."/>
+                <position x="0" y="0" z="2000.0*mm/2." />
+            </shape>
+            </envelope>-->
+
+            <!-- <envelope vis="VXDVis">
+                <shape type="Assembly"/>
+            </envelope> -->
+
             <envelope vis="VXDVis">
                 <shape type="BooleanShape" operation="Subtraction" material="Air">
                     <shape type="BooleanShape" operation="Subtraction" material="Air">

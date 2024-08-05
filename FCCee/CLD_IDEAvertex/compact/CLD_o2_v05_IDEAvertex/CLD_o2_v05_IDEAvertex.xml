@@ -144,7 +144,7 @@
     <constant name="VTXD_z_min" value="279.06*mm"/>            <!-- Start of VTX disks in z -->
     <constant name="VTXD_z_min_total" value="VTXD_z_min-1.5*cm"/>      <!-- Outermost edge of VTX disks in z -->
     <constant name="VTXD_z_max" value="918.641*mm"/>            <!-- Outermost VTX disk in z -->
-    <constant name="VTXD_z_max_total" value="VTXD_z_max+4.5*cm"/>            <!-- Outermost edge of VTX disk in z -->
+    <constant name="VTXD_z_max_total" value="VTXD_z_max+5.5*cm"/>            <!-- Outermost edge of VTX disk in z -->
     <constant name="VTXD_r_min" value="34.5*mm"/>        <!-- Start of VTX disks in r -->
     <constant name="VTXD_r_max" value="315.0*mm"/>        <!-- Start of VTX disks in r -->
 
@@ -153,9 +153,10 @@
     <constant name="VTX_z_max" value="VTXD_z_max+4.5*cm"/>
 
         <constant name="Vertex_inner_radius" value="12.5*mm"/>
+        <!-- <constant name="Vertex_outer_radius" value="330.0*mm"/>
+        <constant name="Vertex_half_length" value="968.641*mm"/> -->
         <constant name="Vertex_outer_radius" value="VTXOB_r_max_layer+VTXOB_rmax_clearance"/>
         <constant name="Vertex_half_length" value="VTXD_z_max_total"/>
-
 
         <constant name="InnerTracker_inner_radius" value="61*mm"/>
         <constant name="InnerTracker_outer_radius" value="696*mm"/>
