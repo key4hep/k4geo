@@ -96,6 +96,16 @@ ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh
 endif()
 
 #--------------------------------------------------
+# test for IDEA o1 v03, with DRC
+if(DCH_INFO_H_EXIST)
+SET( test_name "test_IDEA_with_DRC_o1_v03" )
+ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
+    ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/compact/IDEA_withDRC_o1_v03.xml --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o1_v03.py --gun.direction "3 4 0")
+    SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  " Exception; EXCEPTION;ERROR;Error" TIMEOUT 1200)
+endif()
+
+
+#--------------------------------------------------
 # test for ALLEGRO o1 v02
 SET( test_name "test_ALLEGRO_o1_v02" )
 ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
