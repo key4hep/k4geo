@@ -19,8 +19,8 @@
   <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml" />
 
   <includes>
-    <gdmlFile  ref="elements_o1_v01.xml"/>
-    <gdmlFile  ref="materials_o1_v02.xml"/>
+    <gdmlFile  ref="../../FCCee/IDEA/compact/IDEA_o1_v03/elements_o1_v01.xml"/>
+    <gdmlFile  ref="../../FCCee/IDEA/compact/IDEA_o1_v03/materials_o1_v02.xml"/>
   </includes>
 
   <define>
@@ -31,7 +31,7 @@
   </define>
 
   <!-- Import dimensions -->
-  <include ref="DectDimensions_IDEA_o1_v03.xml"/>
+  <include ref="../../FCCee/IDEA/compact/IDEA_o1_v03/DectDimensions_IDEA_o1_v03.xml"/>
 
   <!-- Import accelerator components -->
   <!-- shape based model of the beam pipe -->
