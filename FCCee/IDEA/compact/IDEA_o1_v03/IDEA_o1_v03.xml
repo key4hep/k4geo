@@ -61,7 +61,8 @@
   <include ref="EndPlateAbsorber_o1_v01.xml"/>
 
   <!-- Import fiber-based dual-readout calorimeter -->
-  <include ref="FiberDualReadoutCalo_o1_v01.xml"/>
+  <!-- (uncomment the following line to effectively include it) -->
+  <!--  <include ref="FiberDualReadoutCalo_o1_v01.xml"/> -->
 
   <!-- Import muon system -->
   <include ref="MuonSystem_o1_v01.xml"/>
