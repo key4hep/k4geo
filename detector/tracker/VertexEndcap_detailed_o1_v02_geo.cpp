@@ -13,7 +13,9 @@
 //  The staves are arranged in petals, and can feature any number of modules.
 //  The modules can be built by smaller rectangular structures to represent
 //  both sensitive and insensitive (periphery) parts so that e.g Quad
-//  modules can be bult.
+//  modules can be bult. When using this detector constructor, in addition,
+//  the DD4hep_GenericSurfaceInstallerPlugin plugin needs to be instantiated
+//  in the xml compact file to define the sensitive surfaces.
 //====================================================================
 
 #include "DD4hep/DetFactoryHelper.h"
@@ -419,4 +421,4 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     return sdet;
 }
 
-DECLARE_DETELEMENT(VertexDisks_detailed_o1_v01,create_detector)
+DECLARE_DETELEMENT(VertexEndcap_detailed_o1_v02,create_detector)

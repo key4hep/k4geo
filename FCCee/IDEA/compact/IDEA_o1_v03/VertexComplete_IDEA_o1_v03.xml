@@ -445,7 +445,7 @@
    <detectors>
  
     <!-- Vertex inner barrel -->
-        <detector name="VTXIB" type="VertexCylindrical_o1_v01" vis="VXDVis" id="DetID_VXD_IB" readout="VertexBarrelCollection"  region="VTXBRegion">
+        <detector name="VTXIB" type="VertexBarrel_o1_v02" vis="VXDVis" id="DetID_VXD_IB" readout="VertexBarrelCollection"  region="VTXBRegion">
              <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -936,7 +936,7 @@
         </detector>  -->
 
         <!-- Vertex disks -->
-        <detector id="DetID_VXD_Disks" name="VertexEndcap" vis="VXDVis" type="VertexDisks_detailed_o1_v01" readout="VertexEndcapCollection" reflect="true" region="VTXDRegion">
+        <detector id="DetID_VXD_Disks" name="VertexEndcap" vis="VXDVis" type="VertexEndcap_detailed_o1_v02" readout="VertexEndcapCollection" reflect="true" region="VTXDRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>

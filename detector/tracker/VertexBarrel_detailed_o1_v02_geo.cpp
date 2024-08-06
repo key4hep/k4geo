@@ -6,7 +6,8 @@
 //  The vertex detector is assembled of stave structures which feature 
 //  support and readout (flex) elements. Each stave features multiple 
 //  individual modules, that consist of sensitive and insensitive
-//  sensor elements.
+//  sensor elements. From o1_v02 it is possible to define curved 
+//  sensor and support elements. 
 //--------------------------------------------------------------------
 //
 //  Author     : Armin Ilg
@@ -514,4 +515,4 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     return sdet;
 }
 
-DECLARE_DETELEMENT(VertexCylindrical_o1_v01,create_element)
+DECLARE_DETELEMENT(VertexBarrel_o1_v02,create_element)
