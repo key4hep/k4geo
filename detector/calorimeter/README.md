@@ -42,4 +42,8 @@ This sub-detector makes calorimeter endcaps. Each endcap is made up by three cyl
 Original version taken from [FCCDetectors](https://github.com/HEP-FCC/FCCDetectors/blob/70a989a6fc333610e3b1b979c3596da9c41543d8/Detector/DetFCCeeHCalTile/src/HCalThreePartsEndcap_geo.cpp#L4). 
 
 
+## dual-readout
 
+### o1_v01
+This sub-detector makes full 4-pi monolithic fiber dual-readout calorimeter.
+Inside the single tower (trapezoidal copper absorber), two types of optical fibers (Cherenkov and scintillation) are implemented. The readout (SiPM) is attached at the rear side of the tower. The tower is repeated in both eta and phi direction to cover both barrel and endcap region.

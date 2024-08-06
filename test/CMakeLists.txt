@@ -91,8 +91,8 @@ SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Except
 if(DCH_INFO_H_EXIST)
 SET( test_name "test_IDEA_o1_v03" )
 ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
-    ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o1_v03/IDEA_o1_v03.xml --runType=batch -G -N=1 --outputFile=testIDEA_o1_v03.slcio )
-SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  " Exception; EXCEPTION;ERROR;Error" TIMEOUT 700)
+    ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o1_v03/IDEA_o1_v03.xml --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o1_v03.py )
+    SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  " Exception; EXCEPTION;ERROR;Error" TIMEOUT 700)
 endif()
 
 #--------------------------------------------------
@@ -149,3 +149,13 @@ ADD_TEST( t_SensThickness_Clic_o2_v4 "${CMAKE_INSTALL_PREFIX}/bin/run_test_${Pac
           ${CMAKE_INSTALL_PREFIX}/bin/TestSensThickness ${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o2_v04/CLIC_o2_v04.xml 300 50 )
 ADD_TEST( t_SensThickness_CLIC_o3_v15 "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
           ${CMAKE_INSTALL_PREFIX}/bin/TestSensThickness ${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o3_v15/CLIC_o3_v15.xml 100 50 )
+
+#--------------------------------------------------
+# check if files named the same contain the same in FCCee
+ADD_TEST(
+    NAME t_test_files_versions_FCCee
+    COMMAND "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
+            "${PROJECT_SOURCE_DIR}/utils/compareIdenticalFiles.sh"
+            "${PROJECT_SOURCE_DIR}/FCCee"
+            "${PROJECT_SOURCE_DIR}/utils/IdenticalFiles_ToBeIgnored.txt"
+)

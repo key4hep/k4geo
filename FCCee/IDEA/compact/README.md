@@ -14,4 +14,12 @@ Based on o1_v01 but with a detailed description of the vertex detector, drift ch
 IDEA_o1_v03
 ------------
 
-Based on o1_v02 but replacing the drift chamber (o1, v01) for the lightweight implementation based on twisted tubes (o1, v02). NB: production threshold and step limit physics have to be tuned for the drift chamber. July 2024: Added a detailed version of the muon system. August 2024: Added an updated vertex detector (also with the ultra-light inner vertex option) and a more light-weight implementation of the silicon wrapper.
+Based on o1_v02 but replacing the drift chamber (o1, v01) for the lightweight implementation based on twisted tubes (o1,
+v02). NB: production threshold and step limit physics have to be tuned for the drift chamber.
+
+July 2024: Added a detailed version of the muon system.
+
+The monolithic fiber dual-readout calorimeter (o1, v01) is added.
+
+August 2024: Added an updated vertex detector (also with the ultra-light inner vertex option) and a more light-weight 
+implementation of the silicon wrapper.
