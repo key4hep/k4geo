@@ -265,7 +265,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         }
         m.sensor_width  = *max_element(m.sensor_xmax.begin(), m.sensor_xmax.end()) - *min_element(m.sensor_xmin.begin(), m.sensor_xmin.end());
         m.sensor_length = *max_element(m.sensor_ymax.begin(), m.sensor_ymax.end()) - *min_element(m.sensor_ymin.begin(), m.sensor_ymin.end());
-        cout << "Module: " << m.name << ", sensor width: " << to_string(m.sensor_width)  << ", sensor length: " << to_string(m.sensor_length) << endl;
+        cout << det_name << ": Module: " << m.name << ", sensor width: " << to_string(m.sensor_width)  << ", sensor length: " << to_string(m.sensor_length) << endl;
 
         stave_information_list.push_back(m);
         cout << "Read stave information of stave " << m.name << endl;
@@ -275,7 +275,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
     //=========  loop over layer elements in xml  ======================================
 
-    cout << "Building vertex barrel detector " << det_name << "..." << endl;
+    cout << "Building " << det_name << " barrel detector " << det_name << "..." << endl;
     for(xml_coll_t c(e, _U(layer) ); c; ++c)  {
 
         xml_comp_t x_layer( c );
@@ -383,6 +383,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                         component_assembly.placeVolume(component.volumes[i], pos);
                     }
                 }
+                component_assembly->GetShape()->ComputeBBox(); 
             }
 
             // Place end of stave structures
@@ -416,6 +417,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                         }
                     }
                 }
+                endOfStave_assembly->GetShape()->ComputeBBox(); 
             }
 
             // Place sensor
@@ -496,6 +498,11 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                     }
                 }
                 iModule_tot++;
+                module_assembly->GetShape()->ComputeBBox();
+            }
+            if(m.motherVolThickness>0.0 && m.motherVolWidth>0.0){}
+            else{
+                whole_stave_volume_a->GetShape()->ComputeBBox();
             }
         }
     }

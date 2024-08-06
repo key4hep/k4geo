@@ -188,7 +188,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         }
         m.sensor_width  = *max_element(m.sensor_xmax.begin(), m.sensor_xmax.end()) - *min_element(m.sensor_xmin.begin(), m.sensor_xmin.end());
         m.sensor_length = *max_element(m.sensor_ymax.begin(), m.sensor_ymax.end()) - *min_element(m.sensor_ymin.begin(), m.sensor_ymin.end());
-        cout << "Module: " << m.name << ", sensor width: " << to_string(m.sensor_width)  << ", sensor length: " << to_string(m.sensor_length) << endl;
+        cout << det_name << "Module: " << m.name << ", sensor width: " << to_string(m.sensor_width)  << ", sensor length: " << to_string(m.sensor_length) << endl;
         module_information_list.push_back(m);
     }
    
@@ -324,6 +324,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
                             pv = component_assembly.placeVolume(ele_vol, pos);
                         }
+                        component_assembly->GetShape()->ComputeBBox();
                     }
 
                     // Place end of stave structures
@@ -347,6 +348,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                             pv = endOfStave_assembly.placeVolume(endOfStave.volumes[i], pos);
                             iEndOfStave++;
                         }
+                        endOfStave_assembly->GetShape()->ComputeBBox();
                     }
 
                     // Place sensor
@@ -393,13 +395,24 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                             }
                         }
                         iModule_tot++;
+                        module_assembly->GetShape()->ComputeBBox();
+                    }
+                    if(stave_motherVolThickness>0.0 && stave_motherVolWidth>0.0){}
+                    else{
+                        whole_stave_volume_a->GetShape()->ComputeBBox();
                     }
                 }
+                petal_assembly->GetShape()->ComputeBBox();
             }
-        }        
+            if(disk_motherVolThickness>0.0){}
+            else{
+                whole_disk_volume_a->GetShape()->ComputeBBox();
+            }
+        } 
+        side_assembly->GetShape()->ComputeBBox();       
     }
     
-    cout << "Built vertex disks detector." << endl;
+    cout << "Built disks detector:" << det_name << endl;
     sdet.setAttributes(theDetector,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
     pv.addPhysVolID("system", x_det.id());
 
