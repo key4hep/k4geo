@@ -5,6 +5,7 @@
 file(GLOB sources src/*.cpp)
 
 add_library(detectorSegmentations SHARED ${sources} )
+add_library(k4geo::detectorSegmentations ALIAS detectorSegmentations)
 dd4hep_generate_rootmap(detectorSegmentationsPlugin)
 target_link_libraries(detectorSegmentations DD4hep::DDCore)
 target_include_directories(detectorSegmentations

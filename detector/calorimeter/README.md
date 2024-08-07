@@ -22,6 +22,13 @@ This sub-detector makes calorimeter endcaps (original and reflected). It is used
 ### o1_v01 
 Original version taken from [FCCDetectors](https://github.com/HEP-FCC/FCCDetectors/blob/70a989a6fc333610e3b1b979c3596da9c41543d8/Detector/DetFCChhCalDiscs/src/CaloEndcapDiscs_geo.cpp).
 
+## ECalEndcap_Turbine
+
+Sub-detector for the ecal endcaps, with the absorbers and readout boards arranged in a "turbine-like" geometry.
+
+### 01_v01
+Initial implementation.  A custom segmentation that creates readout cells and constant radius and z is also included (FCCSWEndcapTurbine_k4geo).
+
 ## HCalTileBarrel
 This sub-detector makes calorimeter barrel. It is used in ALLEGRO detector concept.
 

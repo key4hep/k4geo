@@ -37,6 +37,7 @@ ENDIF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
 option(BUILD_TESTING "Enable and build tests" ON)
 option(INSTALL_COMPACT_FILES "Copy compact files to install area" OFF)
+option(INSTALL_BEAMPIPE_STL_FILES "Download CAD files for building the detailed beampipe" OFF)
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -70,6 +71,7 @@ file(GLOB sources
   ./detector/calorimeter/*.cpp
   ./detector/calorimeter/dual-readout/src/*.cpp
   ./detector/fcal/*.cpp
+  ./detector/muonSystem/*.cpp
   ./detector/other/*.cpp
   ./detector/CaloTB/*.cpp
   ./FCalTB/setup/*.cpp
@@ -104,7 +106,7 @@ set(FILES_DEPENDINGON_DCH_INFO_H "DriftChamber_o1_v02.cpp" )
 
 if(NOT DCH_INFO_H_EXIST)
     list(FILTER sources EXCLUDE REGEX "${FILES_DEPENDINGON_DCH_INFO_H}")
-    message(WARNING "Subdetector ${FILES_DEPENDINGON_DCH_INFO_H} will not be built because header file ${DCH_INFO_H} was not found")
+    message(WARNING "Subdetector ${FILES_DEPENDINGON_DCH_INFO_H} will not be built because header file DDRec/DCH_info.h was not found")
 endif()
 
 find_package(EDM4HEP)
@@ -157,7 +159,7 @@ install(TARGETS ${PackageName}  ${PackageName}G4
 #---Testing-------------------------------------------------------------------------
 if(BUILD_TESTING)
   include(CTest)
-  add_subdirectory(lcgeoTests)
+  add_subdirectory(test)
   set(BUILDNAME "${CMAKE_SYSTEM}-${CMAKE_CXX_COMPILER}-${CMAKE_BUILD_TYPE}" CACHE STRING "set build string for cdash")
 endif(BUILD_TESTING)
 
@@ -193,3 +195,47 @@ write_basic_package_version_file(
 install(FILES ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_CMAKEDIR}/k4geoConfig.cmake
               ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_CMAKEDIR}/k4geoConfigVersion.cmake
         DESTINATION ${CMAKE_INSTALL_CMAKEDIR} )
+
+if(INSTALL_BEAMPIPE_STL_FILES)
+
+    set(STL_FILES
+          "AlBeMet162_30042024.stl"
+          "Copper_pipe_28092023.stl"
+          "Gold_19042024.stl"
+          "Paraffine_19042024.stl"
+          "Tungsten_mask_02102023.stl"
+          "Water_30042024.stl"
+        )
+    # Set main FCC url
+    set(FCC_URL "https://fccsw.web.cern.ch/fccsw/filesForSimDigiReco")
+    set(STL_PATH "MDI/MDI_o1_v01/stl_files/Pipe_240430")
+
+    # Set the output directory where the file will be placed
+    set(OUTPUT_DIR "${CMAKE_BINARY_DIR}/${STL_PATH}")
+    file(MAKE_DIRECTORY ${OUTPUT_DIR})
+
+    foreach(STL_FILE ${STL_FILES})
+        set(FULL_URL "${FCC_URL}/${STL_PATH}/${STL_FILE}")
+        message(DEBUG "Downloading file ${FULL_URL}")
+        set(OUTPUT_FILE "${OUTPUT_DIR}/${STL_FILE}")
+
+        if(EXISTS "${OUTPUT_FILE}")
+          message(STATUS "File ${STL_FILE} already exists. Skipping download.")
+        else()
+          # Download the file
+          file(DOWNLOAD ${FULL_URL} ${OUTPUT_FILE}
+            SHOW_PROGRESS
+            STATUS download_status)
+
+          list(GET download_status 0 status_code)
+          if(NOT status_code EQUAL 0)
+              list(GET download_status 1 error_message)
+              message(FATAL_ERROR "Failed to download file: ${error_message}")
+          endif()
+        endif()
+    endforeach()
+
+    file(MAKE_DIRECTORY share/k4geo/FCCee)
+    INSTALL(DIRECTORY ${OUTPUT_DIR} DESTINATION share/k4geo/FCCee/MDI/compact/MDI_o1_v01/stl_files )
+
+endif()

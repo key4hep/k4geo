@@ -591,8 +591,7 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
       }
     }
     //-------------------------------------------------------------------
-  }
-  else if( typeid( Geant4DRCalorimeter::Hit ) == coll->type().type() ) {
+  } else if( typeid( Geant4DRCalorimeter::Hit ) == coll->type().type() ) {
     // Create the hit container even if there are no entries!
     auto& DRhits  = m_drcaloHits[colName];
     auto& DRwaves = m_drcaloWaves[colName];

@@ -8,14 +8,14 @@
   <constant name="ILDDetID_NOTUSED"      value="  0"/>
 
 
-  <constant name="ILDDetID_TPC"          value="  5"/>
+  <constant name="ILDDetID_TPC"          value="  4"/>
   <constant name="ILDDetID_SET"          value="  6"/>
 
 <!-- from FCC -->
   <constant name="DetID_VXD_Barrel"        value="1"/>
   <constant name="DetID_VXD_Endcap"        value="2"/>
   <constant name="DetID_IT_Barrel"         value="3"/>
-  <constant name="DetID_IT_Endcap"         value="4"/>
+  <constant name="DetID_IT_Endcap"         value="5"/>
   <constant name="DetID_LumiCalNoseShield"       value="14"/> <!-- to avoid clash "22"/ -->
   <constant name="DetID_LumiCal"                 value="15"/>
   <constant name="DetID_LumiCalInstrumentation"  value="16"/>

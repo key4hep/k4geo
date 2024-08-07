@@ -87,7 +87,11 @@ void ddDRcalo::DRconstructor::implementTowers(xml_comp_t& x_theta, dd4hep::DDSeg
 
     dd4hep::Volume towerVol( "tower", tower, fDescription->material(x_theta.materialStr()) );
     towerVol.setVisAttributes(*fDescription, x_theta.visStr());
+<<<<<<< HEAD
 
+=======
+
+>>>>>>> 0c59147029d16e04d5ae26e358500947361c798f
     implementFibers(x_theta, towerVol, tower, param);
 
     xml_comp_t x_wafer ( fX_sipmDim.child( _Unicode(sipmWafer) ) );
@@ -253,8 +257,11 @@ void ddDRcalo::DRconstructor::implementFiber(dd4hep::Volume& towerVol, dd4hep::P
     if (fVis) coreVol.setVisAttributes(*fDescription, fX_coreC.visStr());
     cladVol.placeVolume( coreVol );
 
+<<<<<<< HEAD
     // we use the region for the sensitive elements for
     // manipulating optical photons (DRCaloFastSimModel)
+=======
+>>>>>>> 0c59147029d16e04d5ae26e358500947361c798f
     coreVol.setRegion(*fDescription, fX_det.regionStr());
     cladVol.setRegion(*fDescription, fX_det.regionStr());
   } else { // s fiber
@@ -266,8 +273,11 @@ void ddDRcalo::DRconstructor::implementFiber(dd4hep::Volume& towerVol, dd4hep::P
     if (fVis) coreVol.setVisAttributes(*fDescription, fX_coreS.visStr());
     cladVol.placeVolume( coreVol );
 
+<<<<<<< HEAD
     // we use the region for the sensitive elements for
     // manipulating optical photons (DRCaloFastSimModel)
+=======
+>>>>>>> 0c59147029d16e04d5ae26e358500947361c798f
     coreVol.setRegion(*fDescription, fX_det.regionStr());
     cladVol.setRegion(*fDescription, fX_det.regionStr());
   }

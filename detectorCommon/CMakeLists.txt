@@ -4,6 +4,7 @@
 
 file(GLOB sources src/*.cpp)
 add_dd4hep_plugin(detectorCommon SHARED ${sources})
+add_library(k4geo::detectorCommon ALIAS detectorCommon)
 target_link_libraries(detectorCommon DD4hep::DDCore DD4hep::DDG4 detectorSegmentations)
 target_include_directories(detectorCommon
     PUBLIC

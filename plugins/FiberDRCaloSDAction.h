@@ -56,9 +56,9 @@ namespace dd4hep
         typedef std::map<int, int> DRsimWavlenSpectrum;
 
         /// Hit position
-        Position      position      {     };
+        ROOT::Math::XYZVector position;
         /// Hit contributions by individual particles
-        Contributions truth         {     };
+        std::vector<MonteCarloContrib> truth;
         /// Total energy deposit
         double energyDeposit;
 
