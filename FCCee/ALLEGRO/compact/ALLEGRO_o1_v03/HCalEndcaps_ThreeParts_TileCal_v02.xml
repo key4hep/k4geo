@@ -44,18 +44,19 @@
   <readouts>
     <!-- Default readout of DetailedWedge geometry -->
     <readout name="HCalEndcapReadout">
-      <segmentation type="FCCSWGridPhiTheta_k4geo" grid_size_theta="0.022180" phi_bins="EndcapHCal_n_phi_modules" offset_theta="0.007106" offset_phi="-pi+(pi/EndcapHCal_n_phi_modules)"/>
-      <id>system:4,type:3,layer:6,row:11,theta:11,phi:10</id>
+      <segmentation type="FCCSWGridPhiEta_k4geo" grid_size_eta="0.025" phi_bins="EndcapHCal_n_phi_modules" offset_eta="-3.5" offset_phi="-pi+(pi/EndcapHCal_n_phi_modules)"/>
+      <id>system:4,type:2,layer:5,row:9,eta:11,phi:10</id>
     </readout>
-   <readout name="HCalEndcapReadout_phitheta">
-     <segmentation type="FCCSWGridPhiTheta_k4geo" grid_size_theta="0.022180" phi_bins="EndcapHCal_n_phi_modules" offset_theta="0.007106" offset_phi="-pi+(pi/EndcapHCal_n_phi_modules)"/>
-     <id>system:4,type:3,layer:6,theta:11,phi:10</id>
+   <readout name="HCalEndcapReadout_phieta">
+     <segmentation type="FCCSWGridPhiEta_k4geo" grid_size_eta="0.025" offset_eta="-3.5" phi_bins="256" offset_phi="-pi+pi/256."/>
+     <id>system:4,type:2,layer:4,eta:11,phi:10</id>
+    </readout>
+   <readout name="HCalEndcapReadout_phi">
+     <!-- the eta segmentation here is a dummy - the whole hcal is contained in one bin. the z position is stored in the "row" field. -->
+     <segmentation type="FCCSWGridPhiEta_k4geo" grid_size_eta="4." phi_bins="EndcapHCal_n_phi_modules" offset_eta="-3.5" offset_phi="-pi+(pi/EndcapHCal_n_phi_modules)"/>
+     <id>system:4,type:2,layer:5,row:9,eta:10,phi:10</id>
     </readout>
   </readouts>
-
-  <!-- nmodules is the number of radial layers in the first part;
-+      nsegments is the number of radial layers in the second part;
-       nPads is the number of radial layers in the third part --> 
 
   <detectors>
     <detector id="DetID_HCAL_Endcap" name="HCalThreePartsEndcap" type="CaloThreePartsEndcap_o1_v02" readout="HCalEndcapReadout" >
@@ -69,25 +70,25 @@
 	<layer id="0" name="type_1" material="Air" vis="endcaphcal_barrel_layer_vis">
           <dimensions
               dr="100*mm"
-	      nmodules="5"
-	      nsegments="4"
+	      nmodules="4"
+	      nModules="4"
 	      nPads="4"
              />
 	</layer>
 	<layer id="1" name="type_2" material="Air" vis="endcaphcal_barrel_layer_vis">
 	  <dimensions
               dr="150*mm"
-	      nmodules="1"
-        nsegments="3"
-        nPads="10"
+	      nmodules="2"
+              nModules="3"
+              nPads="10"
              />
 	</layer>
 	<layer id="2" name="type_3" material="Air" vis="endcaphcal_barrel_layer_vis">
 	  <dimensions
               dr="250*mm"
 	      nmodules="0"
-        nsegments="2"
-        nPads="8"
+              nModules="2"
+              nPads="8"
              />
 	</layer>
       </layers>
