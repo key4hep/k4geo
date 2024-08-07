@@ -71,7 +71,7 @@
           <dimensions
               dr="100*mm"
 	      nmodules="4"
-	      nsegments="4"
+	      nModules="4"
 	      nPads="4"
              />
 	</layer>
@@ -79,7 +79,7 @@
 	  <dimensions
               dr="150*mm"
 	      nmodules="2"
-              nsegments="3"
+              nModules="3"
               nPads="10"
              />
 	</layer>
@@ -87,7 +87,7 @@
 	  <dimensions
               dr="250*mm"
 	      nmodules="0"
-              nsegments="2"
+              nModules="2"
               nPads="8"
              />
 	</layer>
