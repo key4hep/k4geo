@@ -57,7 +57,7 @@
 
     <detectors>
 
-        <detector id="DetID_OT_Barrel" name="OuterTrackerBarrel" type="TrackerBarrel_o1_v05" readout="OuterTrackerBarrelCollection" region="OuterTrackerBarrelRegion">
+        <detector id="DetID_OT_Barrel" name="OuterTrackerBarrel" type="TrackerBarrel_o1_v06" readout="OuterTrackerBarrelCollection" region="OuterTrackerBarrelRegion">
             <envelope vis="OTVis">
                 <shape type="Assembly"/>
             </envelope>
