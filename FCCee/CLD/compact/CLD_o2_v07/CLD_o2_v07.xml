@@ -2,12 +2,12 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-    <info name="CLD_o2_v05"
-        title="FCCee detector model option 2 version 05 (updated Beampipe and VXD)"
-	author="Andre Sailer"
+    <info name="CLD_o2_v07"
+        title="FCCee detector model option 2 version 07 (updated TrackerBarrel)"
+        author="Andre Sailer, Leonhard Reichenbach"
         url="http://ilcsoft.desy.de"
         status="development"
-        version="5">
+        version="7">
         <comment>The compact format for the FCCee Detector design</comment>
     </info>
 
@@ -297,8 +297,6 @@
 
     <include ref="Vertex_o4_v07_smallBP.xml"/>
 
-    <include ref="InnerTracker_o2_v07.xml"/>
-    <include ref="OuterTracker_o2_v07.xml"/>
 
     <include ref="ECalBarrel_o2_v01_03.xml"/>
     <include ref="ECalEndcap_o2_v01_03.xml"/>
