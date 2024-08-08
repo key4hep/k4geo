@@ -297,6 +297,8 @@
 
     <include ref="Vertex_o4_v07_smallBP.xml"/>
 
+    <include ref="InnerTracker_o2_v08.xml"/>
+    <include ref="OuterTracker_o2_v08.xml"/>
 
     <include ref="ECalBarrel_o2_v01_03.xml"/>
     <include ref="ECalEndcap_o2_v01_03.xml"/>

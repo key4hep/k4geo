@@ -80,7 +80,7 @@
 
     <detectors>
 
-        <detector id="DetID_IT_Barrel" name="InnerTrackerBarrel" type="TrackerBarrel_o1_v05" readout="InnerTrackerBarrelCollection" region="InnerTrackerBarrelRegion">
+        <detector id="DetID_IT_Barrel" name="InnerTrackerBarrel" type="TrackerBarrel_o1_v06" readout="InnerTrackerBarrelCollection" region="InnerTrackerBarrelRegion">
             <envelope vis="ITVis">
                 <shape type="Assembly"/>
             </envelope>
