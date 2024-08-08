@@ -7,7 +7,6 @@
 //
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
-#include "XML/Layering.h"
 #include "XML/Utilities.h"
 
 using namespace std;

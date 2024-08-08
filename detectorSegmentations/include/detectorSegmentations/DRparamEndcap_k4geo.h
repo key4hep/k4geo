@@ -3,11 +3,8 @@
 
 #include "detectorSegmentations/DRparamBase_k4geo.h"
 
-#include "TVector3.h"
 #include "DD4hep/DetFactoryHelper.h"
 
-#include <vector>
-#include <cmath>
 
 namespace dd4hep {
 namespace DDSegmentation {

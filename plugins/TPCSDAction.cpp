@@ -2,7 +2,6 @@
 #include "DDG4/Geant4SensDetAction.inl"
 #include "DDG4/Geant4EventAction.h"
 #include "DDG4/Geant4Mapping.h"
-#include "G4OpticalPhoton.hh"
 #include "G4VProcess.hh"
 
 #if DD4HEP_VERSION_GE(1, 21)
@@ -453,4 +452,5 @@ namespace dd4hep {
 
 
 #include "DDG4/Factories.h"
+
 DECLARE_GEANT4SENSITIVE( TPCSDAction )

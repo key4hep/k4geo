@@ -23,10 +23,8 @@ If used with sensitive layers, the readout must contain a "slice" field
 
 
 #include "DD4hep/DetFactoryHelper.h"
-#include "DD4hep/Printout.h"
 #include "XML/XMLElements.h"
-#include <sstream> 
-#include <iostream>
+#include <sstream>
 #include <cmath>
 
 using namespace std;

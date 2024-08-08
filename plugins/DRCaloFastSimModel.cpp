@@ -1,14 +1,8 @@
 // Framework include files
 #include <DDG4/Geant4FastSimShowerModel.inl.h>
-#include <DDG4/Geant4FastSimSpot.h>
-#include <DDG4/Geant4Random.h>
 
-// Geant4 include files
 #include <G4VFastSimulationModel.hh>
-#include <G4Gamma.hh>
-#include <G4SystemOfUnits.hh>
 #include <G4ParticleDefinition.hh>
-#include <G4ParticleTypes.hh>
 #include <G4ProcessManager.hh>
 #include <G4OpProcessSubType.hh>
 #include <G4GeometryTolerance.hh>
@@ -16,7 +10,6 @@
 #include <G4OpBoundaryProcess.hh>
 #include <G4OpAbsorption.hh>
 #include <G4OpWLS.hh>
-#include <G4Material.hh>
 
 // C/C++ include files
 #include "DRCaloFastSimModel.h"
@@ -379,4 +372,5 @@ namespace dd4hep
 }
 
 #include <DDG4/Factories.h>
+
 DECLARE_GEANT4ACTION_NS(dd4hep::sim, Geant4DRCFiberModel)
