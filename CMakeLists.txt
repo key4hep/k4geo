@@ -208,14 +208,14 @@ if(INSTALL_BEAMPIPE_STL_FILES)
         )
     # Set main FCC url
     set(FCC_URL "https://fccsw.web.cern.ch/fccsw/filesForSimDigiReco")
-    set(STL_PATH "MDI/MDI_o1_v01/stl_files/Pipe_240430")
+    set(STL_PATH "MDI_o1_v01/stl_files/Pipe_240430")
 
     # Set the output directory where the file will be placed
-    set(OUTPUT_DIR "${CMAKE_BINARY_DIR}/${STL_PATH}")
+    set(OUTPUT_DIR "${PROJECT_SOURCE_DIR}/FCCee/MDI/compact/${STL_PATH}")
     file(MAKE_DIRECTORY ${OUTPUT_DIR})
 
     foreach(STL_FILE ${STL_FILES})
-        set(FULL_URL "${FCC_URL}/${STL_PATH}/${STL_FILE}")
+        set(FULL_URL "${FCC_URL}/MDI/${STL_PATH}/${STL_FILE}")
         message(DEBUG "Downloading file ${FULL_URL}")
         set(OUTPUT_FILE "${OUTPUT_DIR}/${STL_FILE}")
 
