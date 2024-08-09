@@ -5,7 +5,6 @@
 //#include "detectorSegmentations/GridTheta_k4geo.h"
 #include "DDSegmentation/Segmentation.h"
 #include "TVector3.h"
-#include <cmath>
 
 /** FCCSWEndcapTurbine_k4geo 
  *

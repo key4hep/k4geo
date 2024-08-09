@@ -1,13 +1,8 @@
-#include "detectorCommon/DetUtils_k4geo.h"
 #include "detectorCommon/xtalk_neighbors_moduleThetaMergedSegmentation.h"
 
-// DD4hep
-#include "DDG4/Geant4Mapping.h"
-#include "DDG4/Geant4VolumeManager.h"
 
 #include <iostream>
 
-#include <unordered_set>
 
 namespace det {
 namespace crosstalk {

@@ -17,10 +17,8 @@
 //====================================================================
 
 #include "DD4hep/DetFactoryHelper.h"
-#include <map>
+#include <list>
 #include "XML/Utilities.h"
-#include "DD4hep/Printout.h"
-#include "DDRec/DetectorData.h"
 
 using namespace std;
 

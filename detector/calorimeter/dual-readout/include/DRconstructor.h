@@ -1,13 +1,9 @@
 #ifndef DRconstructor_h
 #define DRconstructor_h 1
 
-#include "detectorSegmentations/DRparamBarrel_k4geo.h"
 #include "detectorSegmentations/GridDRcaloHandle_k4geo.h"
 
 #include "DD4hep/DetFactoryHelper.h"
-#include "DD4hep/OpticalSurfaces.h"
-#include "DD4hep/Printout.h"
-#include "DD4hep/Detector.h"
 
 namespace ddDRcalo {
   class DRconstructor {
