@@ -309,7 +309,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         pv.addPhysVolID("layer", lay_id);       // Set the layer ID.
         lay_elt.setAttributes(theDetector,lay_vol,x_layer.regionStr(),x_layer.limitsStr(),x_layer.visStr());
         lay_elt.setPlacement(pv);
-
     }
     sdet.setAttributes(theDetector,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
     sdet.addExtension< ZPlanarData >( zPlanarData ) ;
