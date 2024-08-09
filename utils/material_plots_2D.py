@@ -3,8 +3,7 @@ import argparse
 import math
 
 import sys,os
-print(os.path.dirname(os.path.abspath(__file__)) + "/../../FCCSW/Examples/scripts")
-sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../../FCCSW/Examples/scripts")    # FCC Style from https://github.com/HEP-FCC/FCCSW/blob/master/Examples/scripts/plotstyle.py
+sys.path.append(os.path.expandvars("$FCCSW") + "/Examples/scripts")
 from plotstyle import FCCStyle
 import ROOT
 
