@@ -122,7 +122,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     // Assembly    assembly   (det_name);
     std::map<std::string, Volume>    volumes;
     std::map<std::string, Placements>  sensitives;
-
     PlacedVolume pv;
     
 
