@@ -40,6 +40,40 @@ using dd4hep::_toString;
 using dd4hep::rec::NeighbourSurfacesData;
 using dd4hep::rec::ZPlanarData;
 
+void populateNeighbourData(NeighbourSurfacesData* neighbourSurfacesData, UTIL::BitField64& encoder, int module_idx, int sensor_idx, int nphi, int nz) {
+    const dd4hep::CellID cellID = encoder.lowWord(); // 32 bits
+
+    //compute neighbours 
+    int n_neighbours_module = 1; // 1 gives the adjacent modules (i do not think we would like to change this)
+    int n_neighbours_sensor = 1;
+
+    int newmodule=0, newsensor=0;
+
+    for(int imodule=-n_neighbours_module; imodule<=n_neighbours_module; imodule++){ // neighbouring modules
+      for(int isensor=-n_neighbours_sensor; isensor<=n_neighbours_sensor; isensor++){ // neighbouring sensors
+        
+        if (imodule==0 && isensor==0) continue; // cellID we started with
+        newmodule = module_idx + imodule;
+        newsensor = sensor_idx + isensor;
+
+        //compute special case at the boundary  
+        //general computation to allow (if necessary) more then adjacent neighbours (ie: +-2)
+        
+        if (newmodule < 0) newmodule = nphi + newmodule;
+        if (newmodule >= nphi) newmodule = newmodule - nphi;
+
+        if (newsensor < 0 || newsensor >= nz) continue; //out of the stave
+
+        //encoding
+        encoder[lcio::LCTrackerCellID::module()] = newmodule;
+        encoder[lcio::LCTrackerCellID::sensor()] = newsensor;
+        
+        neighbourSurfacesData->sameLayer[cellID].push_back(encoder.lowWord());
+
+      }
+    }
+
+}
 
 static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens)  {
     typedef std::vector<PlacedVolume> Placements;
@@ -185,50 +219,20 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             for (int j = 0; j < nz; j++)          {
                 std::string sensor_name = _toString(sensor_idx,"sensor%d");
 
-		///////////////////
+                ///////////////////
 
-		//get cellID and fill map< cellID of surface, vector of cellID of neighbouring surfaces >
+                //get cellID and fill map< cellID of surface, vector of cellID of neighbouring surfaces >
 
-		//encoding
+                //encoding
 
-		encoder[lcio::LCTrackerCellID::layer()] = lay_id;
-		encoder[lcio::LCTrackerCellID::module()] = module_idx;
-		encoder[lcio::LCTrackerCellID::sensor()] = sensor_idx;
+                encoder[lcio::LCTrackerCellID::layer()] = lay_id;
+                encoder[lcio::LCTrackerCellID::module()] = module_idx;
+                encoder[lcio::LCTrackerCellID::sensor()] = sensor_idx;
 
-		const dd4hep::CellID cellID = encoder.lowWord(); // 32 bits
+                populateNeighbourData(neighbourSurfacesData, encoder, module_idx, sensor_idx, nphi, nz);
 
-		//compute neighbours 
 
-		int n_neighbours_module = 1; // 1 gives the adjacent modules (i do not think we would like to change this)
-		int n_neighbours_sensor = 1;
-
-		int newmodule=0, newsensor=0;
-
-		for(int imodule=-n_neighbours_module; imodule<=n_neighbours_module; imodule++){ // neighbouring modules
-		  for(int isensor=-n_neighbours_sensor; isensor<=n_neighbours_sensor; isensor++){ // neighbouring sensors
-		    
-		    if (imodule==0 && isensor==0) continue; // cellID we started with
-		    newmodule = module_idx + imodule;
-		    newsensor = sensor_idx + isensor;
-
-		    //compute special case at the boundary  
-		    //general computation to allow (if necessary) more then adjacent neighbours (ie: +-2)
-		    
-		    if (newmodule < 0) newmodule = nphi + newmodule;
-		    if (newmodule >= nphi) newmodule = newmodule - nphi;
-
-		    if (newsensor < 0 || newsensor >= nz) continue; //out of the stave
-
-		    //encoding
-		    encoder[lcio::LCTrackerCellID::module()] = newmodule;
-		    encoder[lcio::LCTrackerCellID::sensor()] = newsensor;
-		    
-		    neighbourSurfacesData->sameLayer[cellID].push_back(encoder.lowWord());
-
-		  }
-		}
-
-		///////////////////
+                ///////////////////
 
                 
                 //FIXME
