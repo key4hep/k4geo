@@ -18,7 +18,6 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "XML/Utilities.h"
 #include <map>
-#include "DDRec/DetectorData.h"
 
 using namespace std;
 

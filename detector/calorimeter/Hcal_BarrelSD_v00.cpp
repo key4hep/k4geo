@@ -8,10 +8,7 @@
 //====================================================================
 
 #include "DD4hep/DetFactoryHelper.h"
-#include "XML/Layering.h"
 #include "XML/Utilities.h"
-#include "DDRec/DetectorData.h"
-#include "LcgeoExceptions.h"
 
 using namespace std;
 

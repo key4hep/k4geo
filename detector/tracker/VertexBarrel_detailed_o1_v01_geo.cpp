@@ -3,8 +3,8 @@
 //  Based on ZPlanarTracker module from F. Gaede
 
 //  Tracking detector to describe the FCC-ee IDEA vertex detector barrel.
-//  The vertex detector is assembled of stave structures which feature 
-//  support and readout (flex) elements. Each stave features multiple 
+//  The vertex detector is assembled of stave structures which feature
+//  support and readout (flex) elements. Each stave features multiple
 //  individual modules, that consist of sensitive and insensitive
 //  sensor elements.
 //--------------------------------------------------------------------
@@ -14,16 +14,9 @@
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
 #include "XML/Utilities.h"
-#include "XMLHandlerDB.h"
 
 #include "DDRec/Surface.h"
-#include "DDRec/DetectorData.h"
-#include <exception>
 
-#include <UTIL/BitField64.h>
-#include <UTIL/BitSet32.h>
-#include "UTIL/LCTrackerConf.h"
-#include <UTIL/ILDConf.h>
 
 using namespace std;
 
