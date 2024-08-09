@@ -21,8 +21,6 @@
 #include "UTIL/LCTrackerConf.h"
 #include <UTIL/ILDConf.h>
 
-using namespace std;
-
 using dd4hep::Assembly;
 using dd4hep::BUILD_ENVELOPE;
 using dd4hep::Box;
@@ -44,15 +42,15 @@ using dd4hep::rec::ZPlanarData;
 
 
 static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens)  {
-    typedef vector<PlacedVolume> Placements;
+    typedef std::vector<PlacedVolume> Placements;
     xml_det_t   x_det     = e;
     Material    air       = theDetector.air();
     int         det_id    = x_det.id();
-    string      det_name  = x_det.nameStr();
+    std::string      det_name  = x_det.nameStr();
     DetElement  sdet       (det_name,det_id);
     // Assembly    assembly   (det_name);
-    map<string, Volume>    volumes;
-    map<string, Placements>  sensitives;
+    std::map<std::string, Volume>    volumes;
+    std::map<std::string, Placements>  sensitives;
     PlacedVolume pv;
     
 
@@ -81,12 +79,12 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     for(xml_coll_t mi(x_det,_U(module)); mi; ++mi)  {
         xml_comp_t x_mod  = mi;
         xml_comp_t m_env  = x_mod.child(_U(module_envelope));
-        string     m_nam  = x_mod.nameStr();
+        std::string     m_nam  = x_mod.nameStr();
 
         
         if ( volumes.find(m_nam) != volumes.end() )   {
             printout(ERROR,"TrackerBarrel","Logics error in building modules.");
-            throw runtime_error("Logic error in building modules.");
+            throw std::runtime_error("Logic error in building modules.");
         }
 
         double module_thickness = 0;
@@ -115,7 +113,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             xml_det_t incl_stack = includes;
             for (xml_coll_t ci(incl_stack, _U(module_component)); ci; ++ci, ++ncomponents) {
                 xml_comp_t x_comp = ci;
-                string c_nam = _toString(ncomponents, "component%d");
+                std::string c_nam = _toString(ncomponents, "component%d");
                 Box c_box(m_env.width() / 2.0, m_env.length() / 2.0, x_comp.thickness() / 2.0);
                 Volume c_vol(c_nam, c_box, theDetector.material(x_comp.materialStr()));
 
@@ -141,8 +139,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         xml_comp_t z_layout = x_layer.child(_U(z_layout));      // Get the <z_layout> element.
         int        lay_id   = x_layer.id();
         // int        type     = x_layer.type();
-        string     m_nam    = x_layer.moduleStr();
-        string     lay_nam  = _toString(x_layer.id(),"layer%d");
+        std::string     m_nam    = x_layer.moduleStr();
+        std::string     lay_nam  = _toString(x_layer.id(),"layer%d");
         Assembly   lay_vol   (lay_nam);         // Create the layer envelope volume.
         double     phi0     = x_layout.phi0();              // Starting phi of first sensor.
         double     phi_tilt = x_layout.phi_tilt();          // Phi tilt of a sensor.
@@ -180,12 +178,12 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             
             // Loop over the number of sensors in z.
             //Create stave FIXME disable for now
-            string module_name = _toString(module_idx,"module%d");
+            std::string module_name = _toString(module_idx,"module%d");
             //       DetElement module_elt(lay_elt,module_name,module_idx);
             int sensor_idx = 0;
             
             for (int j = 0; j < nz; j++)          {
-                string sensor_name = _toString(sensor_idx,"sensor%d");
+                std::string sensor_name = _toString(sensor_idx,"sensor%d");
 
 		///////////////////
 
