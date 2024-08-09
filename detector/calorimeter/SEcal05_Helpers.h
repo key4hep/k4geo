@@ -6,9 +6,7 @@
 #include "DDRec/DetectorData.h"
 
 #include "XML/Layering.h"
-#include "XML/Utilities.h"
 
-#include "DD4hep/Segmentations.h"
 
 #include "DDSegmentation/MegatileLayerGridXY.h"
 

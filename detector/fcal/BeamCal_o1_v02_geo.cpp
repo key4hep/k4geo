@@ -1,5 +1,4 @@
 #include <DD4hep/DetFactoryHelper.h>
-#include "DD4hep/DetType.h"
 #include <XML/Layering.h>
 #include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"

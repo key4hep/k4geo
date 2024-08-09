@@ -3,7 +3,6 @@
 
 // FCCSW
 #include "detectorSegmentations/GridTheta_k4geo.h"
-#include "DD4hep/VolumeManager.h"
 
 /** FCCSWGridModuleThetaMerged_k4geo Detector/DetSegmentation/DetSegmentation/FCCSWGridModuleThetaMerged_k4geo.h FCCSWGridModuleThetaMerged_k4geo.h
  *

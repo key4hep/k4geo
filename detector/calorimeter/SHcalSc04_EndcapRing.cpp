@@ -35,7 +35,6 @@
  */
 
 #include "DD4hep/DetFactoryHelper.h"
-#include "DD4hep/DetType.h"
 #include "XML/Layering.h"
 #include "DD4hep/Shapes.h"
 #include "XML/Utilities.h"

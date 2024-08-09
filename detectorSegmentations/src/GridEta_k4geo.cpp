@@ -1,5 +1,4 @@
 #include "detectorSegmentations/GridEta_k4geo.h"
-#include "DD4hep/Factories.h"
 
 namespace dd4hep {
 namespace DDSegmentation {

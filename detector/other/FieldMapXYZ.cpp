@@ -7,14 +7,10 @@
 #include <DD4hep/Handle.inl>
 #endif
 
-#include <DD4hep/FieldTypes.h>
 
 
 #include <DD4hep/DetFactoryHelper.h>
-#include <XML/Utilities.h>
 
-//Thanks stackoverflow
-#include <boost/algorithm/string.hpp>
 
 
 #include <TFile.h>

@@ -9,14 +9,10 @@
 #include "OtherDetectorHelpers.h"
 
 #include "DD4hep/DetFactoryHelper.h"
-#include "DD4hep/DD4hepUnits.h"
-#include "DD4hep/DetType.h"
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
 #include "XML/Utilities.h"
-#include "XMLHandlerDB.h"
 #include <cmath>
-#include <map>
 #include <string>
 
 

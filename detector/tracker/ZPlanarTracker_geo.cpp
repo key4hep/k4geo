@@ -13,10 +13,8 @@
 
 #include "DDRec/Surface.h"
 #include "DDRec/DetectorData.h"
-#include <exception>
 
 #include <UTIL/BitField64.h>
-#include <UTIL/BitSet32.h>
 #include "UTIL/LCTrackerConf.h"
 #include <UTIL/ILDConf.h>
 

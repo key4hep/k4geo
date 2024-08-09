@@ -40,7 +40,6 @@
 #include "DD4hep/Shapes.h"
 #include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"
-#include "DDSegmentation/WaferGridXY.h"
 #include <sstream>
 
 using namespace std;

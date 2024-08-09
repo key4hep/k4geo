@@ -21,9 +21,7 @@
 #include "XML/Utilities.h"
 #include <map>
 #include "DDRec/DetectorData.h"
-#include "XML/DocumentHandler.h"
 #include <UTIL/BitField64.h>
-#include <UTIL/BitSet32.h>
 #include "UTIL/LCTrackerConf.h"
 #include <UTIL/ILDConf.h>
 
