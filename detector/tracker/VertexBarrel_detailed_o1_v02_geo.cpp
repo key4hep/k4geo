@@ -110,6 +110,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         vector<double> sensor_xmax;
         vector<double> sensor_ymin;
         vector<double> sensor_ymax;
+        vector<double> sensor_phi_offsets;
         vector<bool> isCurved;
         double sensor_width;
         double sensor_length;
@@ -239,6 +240,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
             m.sensor_xmax.push_back(component.xmax());
             m.sensor_ymin.push_back(component.ymin());
             m.sensor_ymax.push_back(component.ymax());
+
+            m.sensor_phi_offsets.push_back(getAttrOrDefault(component, _Unicode(phi_offset), double(0.0)) );
 
             bool isCurved = getAttrOrDefault(component, _Unicode(isCurved), bool(false));
             m.isCurved.push_back(isCurved);
@@ -439,15 +442,12 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 DetElement moduleDE(layerDE,module_name,x_det.id());
                 moduleDE.setPlacement(pv);
 
+
                 // Place all sensor parts
                 int iSensitive = 0;
-                RotationZYX rot2 = rot;
-
                 for(int i=0; i<int(m.sensor_volumes.size()); i++){
-                    Position pos2(0.0, 0.0, 0.0);
                     double r_component_curved = 0.0;
-                    if(m.isCurved[i]){
-
+                    if(m.isCurved[i]){ // curved sensors
                         double phi_i = phi + 2.*(m.sensor_xmin[i]+abs(m.sensor_xmax[i]-m.sensor_xmin[i])/2.)/(layer_r+m.sensor_r);
                         r_component_curved = m.sensor_thickness/2. + (iModule%2 == 0 ? 0.0 : m.stave_dr);
                         x_pos = r_component_curved*cos(phi_i) - r_offset_component*sin(phi_i);
@@ -455,47 +455,46 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                         z_pos = motherVolOffset -(nmodules-1)/2.*(m.sensor_length) - (nmodules-1)/2.*step + iModule*m.sensor_length + iModule*step;
                         pos = Position(x_pos, y_pos, z_pos);
 
-                        x_pos = 0.0;
-                        y_pos = 0.0;
-                        z_pos = m.sensor_ymin[i]+abs(m.sensor_ymax[i]-m.sensor_ymin[i])/2.;
-                        pos2 = Position(x_pos, y_pos, z_pos);
-
-                        rot2 = RotationZYX(phi_i, 0, 0);
+                        Position pos2(0., 0., m.sensor_ymin[i]+abs(m.sensor_ymax[i]-m.sensor_ymin[i])/2.);
+                        RotationZYX rot2(phi_i, 0, 0);
                         pv = module_assembly.placeVolume(m.sensor_volumes[i], Transform3D(rot,stave_pos).Inverse()*Transform3D(rot2, pos)*Translation3D(pos2));
 
+                        if(m.sensor_sensitives[i]) { // Define as sensitive and add sensitive surface
+                            string sensor_name = module_name + _toString(iSensitive,"_sensor%d");
+                            pv.addPhysVolID("sensor", iSensitive);                
+                            DetElement sensorDE(moduleDE,sensor_name,x_det.id());
+                            sensorDE.setPlacement(pv);
+
+                            Vector3D ocyl(+(r_component_curved+layer_r/2.), 0., 0.) ;  
+                            dd4hep::rec::SurfaceType type = dd4hep::rec::SurfaceType::Sensitive;
+                            type.setProperty(dd4hep::rec::SurfaceType::Cylinder,true);
+
+                            double half_width = abs(m.sensor_xmax[i]-m.sensor_xmin[i])/(m.stave_r + m.sensor_r)/2.;
+                            dd4hep::rec::VolCylinder surf(m.sensor_volumes[i], type, m.sensor_thickness/2., m.sensor_thickness/2., ocyl, half_width*2., +M_PI/2.-phi0+m.sensor_phi_offsets[i]);
+                            volSurfaceList(sensorDE)->push_back(surf);
+                            iSensitive++;
+                        }
                     }
-                    else{
+                    else{ // not curved
                         x_pos = 0.0;
                         y_pos = m.sensor_xmin[i]+abs(m.sensor_xmax[i]-m.sensor_xmin[i])/2.;
                         z_pos = m.sensor_ymin[i]+abs(m.sensor_ymax[i]-m.sensor_ymin[i])/2.;
-                        pos2 = Position(x_pos, y_pos, z_pos);
+                        Position pos2(x_pos, y_pos, z_pos);
                         pv = module_assembly.placeVolume(m.sensor_volumes[i], pos+pos2);
-                    }
 
+                        if(m.sensor_sensitives[i]) { // Define as sensitive and add sensitive surface
+                            string sensor_name = module_name + _toString(iSensitive,"_sensor%d");
+                            pv.addPhysVolID("sensor", iSensitive);                
+                            DetElement sensorDE(moduleDE,sensor_name,x_det.id());
+                            sensorDE.setPlacement(pv);
 
-                    // Place active sensor parts
-                    if(m.sensor_sensitives[i]) {
-                        string sensor_name = module_name + _toString(iSensitive,"_sensor%d");
-                        
-                        pv.addPhysVolID("sensor", iSensitive);                
-                        DetElement sensorDE(moduleDE,sensor_name,x_det.id());
-                        sensorDE.setPlacement(pv);
-
-                        dd4hep::rec::SurfaceType type = dd4hep::rec::SurfaceType::Sensitive;
-                        if(m.isCurved[i]){
-                            Vector3D ocyl(-(r_component_curved+layer_r/2.), 0., 0.) ;  
-                            type.setProperty(dd4hep::rec::SurfaceType::Cylinder,true);
-                            dd4hep::rec::VolCylinder surf(m.sensor_volumes[i], type, m.sensor_thickness/2., m.sensor_thickness/2., ocyl);
-                            volSurfaceList(sensorDE)->push_back(surf);
-                        }
-                        else{
                             Vector3D u( 0. , 1. , 0. ) ;
                             Vector3D v( 0. , 0. , 1. ) ;
                             Vector3D n( 1. , 0. , 0. ) ;
-                            VolPlane surf( m.sensor_volumes[i] , type , m.sensor_thickness/2. , m.sensor_thickness/2. , u,v,n );
+                            VolPlane surf( m.sensor_volumes[i] , dd4hep::rec::SurfaceType::Sensitive , m.sensor_thickness/2. , m.sensor_thickness/2. , u,v,n );
                             volSurfaceList(sensorDE)->push_back(surf);
+                            iSensitive++;
                         }
-                        iSensitive++;
                     }
                 }
                 iModule_tot++;
