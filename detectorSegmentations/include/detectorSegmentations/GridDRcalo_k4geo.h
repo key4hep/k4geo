@@ -18,12 +18,12 @@ public:
   virtual ~GridDRcalo_k4geo() override;
 
   //  Determine the global(local) position based on the cell ID.
-  virtual Vector3D position(const CellID& aCellID) const;
+  virtual Vector3D position(const CellID& aCellID) const override;
   Vector3D localPosition(const CellID& aCellID) const;
   Vector3D localPosition(int numx, int numy, int x_, int y_) const;
 
   virtual CellID cellID(const Vector3D& aLocalPosition, const Vector3D& aGlobalPosition,
-                        const VolumeID& aVolumeID) const;
+                        const VolumeID& aVolumeID) const override;
 
   VolumeID setVolumeID(int numEta, int numPhi) const;
   CellID setCellID(int numEta, int numPhi, int x, int y) const;
