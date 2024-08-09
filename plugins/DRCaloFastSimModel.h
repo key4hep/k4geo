@@ -5,7 +5,11 @@ struct FastFiberData
 {
 public:
   FastFiberData(G4int, G4double, G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4int status = G4OpBoundaryProcessStatus::Undefined);
-  ~FastFiberData() {}
+  FastFiberData& operator=(const FastFiberData& theData) = default;
+  
+  FastFiberData(const FastFiberData& theData) = default;
+  ~FastFiberData() = default;
+
 
   void reset();
 
