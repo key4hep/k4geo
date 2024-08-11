@@ -1,14 +1,17 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
+
 #include "TMatrixT.h"
 
 // todo: remove gaudi logging and properly capture output
 #define endmsg std::endl
 #define lLog std::cout
 namespace MSG {
+
   const std::string ERROR = " Error: ";
   const std::string DEBUG = " Debug: ";
   const std::string INFO  = " Info: ";
+
 }
 
 namespace det {
