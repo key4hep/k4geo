@@ -75,6 +75,41 @@ void populateNeighbourData(NeighbourSurfacesData* neighbourSurfacesData, UTIL::B
 
 }
 
+ZPlanarData::LayerLayout buildLayerLayout(double radius, int staves, double phi0, double z0, Volume module, PlacedVolume sensor) {
+    ZPlanarData::LayerLayout thisLayer ;
+    /// GET GEAR INFORMATION
+    /// NOTE WORKS ONLY FOR ONE WAFER
+    /// FIXME: does not take phi_dr and z_dr into account.
+    Box mod_shape(module.solid()), comp_shape(sensor.volume().solid());
+
+    const double* trans = sensor->GetMatrix()->GetTranslation();
+    double half_module_thickness = mod_shape->GetDZ();
+    double half_silicon_thickness = comp_shape->GetDZ();
+
+    double sensitive_z_position  = trans[2];
+
+    double inner_thickness = half_module_thickness - sensitive_z_position;
+
+    thisLayer.distanceSupport  = radius;
+
+    thisLayer.offsetSupport    =  0; 
+    thisLayer.thicknessSupport = inner_thickness- half_silicon_thickness;
+    thisLayer.zHalfSupport    = z0 + mod_shape->GetDY();
+    thisLayer.widthSupport     = 2*mod_shape->GetDX(); 
+
+    thisLayer.distanceSensitive = radius + sensitive_z_position; 
+    thisLayer.offsetSensitive  = 0. ;
+    thisLayer.thicknessSensitive = 2*half_silicon_thickness;//Assembled along Z
+    //Changed by Thorben Quast (same applies to zHalfSupport)
+    //z0 = center of most right sensor, comp_shape-GetDY() = half length of one sensitive are of the module
+    thisLayer.zHalfSensitive    = z0 + comp_shape->GetDY();
+    thisLayer.widthSensitive = 2*comp_shape->GetDX();
+    thisLayer.ladderNumber = staves;
+    thisLayer.phi0 =  phi0;
+    
+    return thisLayer;
+}
+
 static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens)  {
     typedef std::vector<PlacedVolume> Placements;
     xml_det_t   x_det     = e;
@@ -200,35 +235,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         int module_idx =0;
         
         
-        ZPlanarData::LayerLayout thisLayer ;
-        /// GET GEAR INFORMATION
-        /// NOTE WORKS ONLY FOR ONE WAFER
-        Box mod_shape(m_env.solid()), comp_shape(waferVols[0].volume().solid());
-
-        const double* trans = waferVols[0]->GetMatrix()->GetTranslation();
-        double half_module_thickness = mod_shape->GetDZ();
-        double half_silicon_thickness = comp_shape->GetDZ();
-
-        double sensitive_z_position  = trans[2];
-
-        double inner_thickness = half_module_thickness - sensitive_z_position;
-
-        thisLayer.distanceSupport  = rc  ;
-
-        thisLayer.offsetSupport    =  0; 
-        thisLayer.thicknessSupport = inner_thickness- half_silicon_thickness;
-        thisLayer.zHalfSupport    = z0 + mod_shape->GetDY();
-        thisLayer.widthSupport     = 2*mod_shape->GetDX(); 
-
-        thisLayer.distanceSensitive = rc+sensitive_z_position; 
-        thisLayer.offsetSensitive  = 0. ;
-        thisLayer.thicknessSensitive = 2*half_silicon_thickness;//Assembled along Z
-        //Changed by Thorben Quast (same applies to zHalfSupport)
-        //z0 = center of most right sensor, comp_shape-GetDY() = half length of one sensitive are of the module
-        thisLayer.zHalfSensitive    = z0 + comp_shape->GetDY();
-        thisLayer.widthSensitive = 2*comp_shape->GetDX();
-        thisLayer.ladderNumber = nphi;
-        thisLayer.phi0 =  phic;
+        ZPlanarData::LayerLayout thisLayer = buildLayerLayout(rc, nphi, phi0, z0, m_env, waferVols[0]);
         zPlanarData->layers.push_back(thisLayer);
 
        
