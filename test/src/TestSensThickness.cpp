@@ -1,14 +1,9 @@
 // Test the setting of the sensitiveThickness for the DataStructs in some Tracker detectorDrivers
 
-#include <DD4hep/DD4hepUnits.h>
 #include <DD4hep/DDTest.h>
-#include <DD4hep/Detector.h>
 #include <DD4hep/Detector.h>
 #include <DDRec/DetectorData.h>
 
-#include <exception>
-#include <iomanip>
-#include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>

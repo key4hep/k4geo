@@ -2,25 +2,15 @@
 #include "DD4hep/Version.h"
 #include "DD4hep/Objects.h"
 #include "DD4hep/Segmentations.h"
-#include "DD4hep/DD4hepUnits.h"
 #include "DDG4/Geant4Random.h"
+#include "DDG4/Geant4SensDetAction.inl"
+#include "DDG4/Geant4Mapping.h"
+
+#include "G4OpticalPhoton.hh"
 // k4geo Framework include files
 
-#include "FiberDRCaloSDAction.h"
 
-// Geant4 include files
-#include "G4THitsCollection.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4Step.hh"
-#include "G4TouchableHistory.hh"
-#include "G4ThreeVector.hh"
-#include "G4HCofThisEvent.hh"
-#include "G4SDManager.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTypes.hh"
-#include "G4OpticalPhoton.hh"
-#include "G4VProcess.hh"
+#include "FiberDRCaloSDAction.h"
 
 #if DD4HEP_VERSION_GE(1, 21)
 #define GEANT4_CONST_STEP const
@@ -263,4 +253,5 @@ namespace dd4hep
 }
 
 #include "DDG4/Factories.h"
+
 DECLARE_GEANT4SENSITIVE(DRCaloSDAction)

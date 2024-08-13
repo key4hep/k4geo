@@ -1,15 +1,15 @@
 #include "G4OpBoundaryProcess.hh"
-#include "G4GenericMessenger.hh"
-#include "G4OpBoundaryProcess.hh"
-#include "G4OpAbsorption.hh"
-#include "G4OpWLS.hh"
-#include "G4Material.hh"
+
 
 struct FastFiberData
 {
 public:
   FastFiberData(G4int, G4double, G4double, G4double, G4ThreeVector, G4ThreeVector, G4ThreeVector, G4int status = G4OpBoundaryProcessStatus::Undefined);
-  ~FastFiberData() {}
+  FastFiberData& operator=(const FastFiberData& theData) = default;
+  
+  FastFiberData(const FastFiberData& theData) = default;
+  ~FastFiberData() = default;
+
 
   void reset();
 
