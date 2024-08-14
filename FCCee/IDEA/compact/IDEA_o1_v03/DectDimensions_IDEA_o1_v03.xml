@@ -24,7 +24,7 @@
     
     <constant name="DetID_NOTUSED"            value=" 0"/>
     
-    <constant name="DetID_VXD_IB"             value=" 1"/>
+    <constant name="DetID_VXD_Barrel"             value=" 1"/>
     <constant name="DetID_VXD_Disks"          value=" 2"/>
 
     <constant name="DetID_DCH"                value=" 3"/>
@@ -251,18 +251,13 @@
 
 
   <display> <!-- Note: If the colors should be correctly displayed when geometry is saved as a root file using k4geo/scripts/save_detector_to_root.sh, then colors should be picked that are defined in TColor::InitializeColors(): https://root.cern/doc/master/classTColor.html#a383d38e0cb4f29614310a0653d6b2342 -->
-    <vis name="SiSensitiveVis"  alpha="1.0" r="1.0"     g="1.0"     b="0.0"   showDaughters="true"  visible="true"/>
-    <vis name="SiMetalVis"      alpha="0.5" r="1.0"     g="1.0"     b="0.0"   showDaughters="true"  visible="true"/>
-    <vis name="SiPeripheryVis"  alpha="1.0" r="200/255" g="254/255" b="0.0"   showDaughters="true"  visible="true"/>    
     <vis name="VXDVis"          alpha="0.2" r="0.1" 	  g=".5"      b=".5"    showDaughters="true"  visible="true"/>
     <vis name="SiWrVis"         alpha="0.2" r="1.0"  	  g="1.0"     b="0.0"   showDaughters="false" visible="true"/>
     <vis name="ECALVis"     	  alpha="1.0" r="0.2"   	g="0.6"     b="0"     showDaughters="true"  visible="true"/>
     <vis name="HCALVis"     	  alpha="1.0" r="0.078" 	g="0.01176" b="0.588" showDaughters="true"  visible="true"/>
     <vis name="SOLVis"      	  alpha="1.0" r="0.4"   	g="0.4"     b="0.4"   showDaughters="true"  visible="true"/>
     <vis name="YOKEVis"     	  alpha="1.0" r="0.6"   	g="0.0"     b="0.0"   showDaughters="true"  visible="true"/>
-    <vis name="LCALInstrVis"    alpha="1.0" r="0.35"  	g="0.0"     b="0.47"  showDaughters="true"  visible="true"/>
     <vis name="LCALVis"    	    alpha="1.0" r="0.25"  	g="0.88"    b="0.81"  showDaughters="true"  visible="true"/>
-    <vis name="LCALCoolVis"     alpha="1.0" r="0.2"   	g="0.6"     b="0"     showDaughters="true"  visible="true"/>
     <vis name="BCALVis"     	  alpha="1.0" r="0.0"   	g="0.4"     b="0.4"   showDaughters="true"  visible="true"/>
     <vis name="KICKVis"     	  alpha="1.0" r="1.0"   	g="0.498"   b="0.0"   showDaughters="true"  visible="true"/>
     <vis name="QD0CoilIVis"     alpha="1.0" r="1.0"   	g="0.498"   b="0.0"   showDaughters="true"  visible="true"/>
@@ -272,14 +267,6 @@
     <vis name="ColliVis"        alpha="1.0" r="0.7"   	g="0.5"     b="1"     showDaughters="true"  visible="true"/>
     <vis name="TantalumVis"     alpha="1.0" r="1"   	  g="0.5"     b="0.5"   showDaughters="true"  visible="true"/>
     <vis name="BPMVis"      	  alpha="1.0" r="0.25"  	g="0.88"    b="0.81"  showDaughters="true"  visible="true"/>
-    <vis name="SupportVis"  	  alpha="1"   r="0.2"   	g="0.2"     b="0.2"   showDaughters="true"  visible="true"/>
-    <vis name="CarbonFoam"      alpha="1.0" r="0.2" 	  g="0.2"     b="0.2"   showDaughters="true"  visible="true"/>
-    <vis name="CableVis"        alpha="1.0" r="0.0"     g="1.0"     b="0.4"   showDaughters="true"  visible="true"/>
-    <vis name="HybridVis"       alpha="1.0" r="0.35"    g="0.83"    b="0.33"  showDaughters="true"  visible="true"/>
-    <vis name="PipingVis"       alpha="1.0" r="1.0"     g="1.0"     b="1.0"   showDaughters="true"  visible="true"/>
-    <vis name="WaterVis"        alpha="1.0" r="0.0"     g="0.0"     b="1.0"   showDaughters="true"  visible="true"/>
-    <vis name="GlueVis"         alpha="1.0" r="1.0"     g="0.75"    b="0.79"  showDaughters="true"  visible="true"/>
-    <vis name="RohacellVis"     alpha="1.0" r="1.0"     g="1.0"     b="1.0"   showDaughters="true"  visible="true"/>
     <vis name="AirVis"          alpha="0.1" r="0.1"     g="0.1"     b="1.0"   showDaughters="false" visible="true"/>
     <vis name="DRCInvisible" showDaughters="false" visible="false"/> <!-- For fiber-based dual-readout calorimeter -->
     <vis name="DRCTowerVis" alpha="1." r="0.7" g="0.4" b="0.1" showDaughters="false" visible="true"/>
