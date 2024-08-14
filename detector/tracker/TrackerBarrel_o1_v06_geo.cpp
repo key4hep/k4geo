@@ -31,7 +31,9 @@ using dd4hep::Material;
 using dd4hep::PlacedVolume;
 using dd4hep::Position;
 using dd4hep::Ref_t;
-using dd4hep::RotationZYX;
+using dd4hep::Rotation3D;
+using dd4hep::RotationX;
+using dd4hep::RotationZ;
 using dd4hep::SensitiveDetector;
 using dd4hep::Transform3D;
 using dd4hep::Tube;
@@ -144,6 +146,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     
     sens.setType("tracker");
     
+    // TODO: refactor module creation code into a function...
     //NOTE modules are what is defined in compact. Later we call a "module" as a "sensor".
     for(xml_coll_t mi(x_det,_U(module)); mi; ++mi)  {
         xml_comp_t x_mod  = mi;
@@ -218,42 +221,70 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         double     rphi_dr  = x_layout.dr();                // The delta radius of every other sensor.
         
         double     phi_incr = (M_PI * 2) / nphi;            // Phi increment for one sensor.
-        double     phic     = phi0;                         // Phi of the sensor center.
         double     z0       = z_layout.z0();                // Z position of first sensor in phi.
         double     nz       = z_layout.nz();                // Number of sensors to place in z.
         double     z_dr     = z_layout.dr();                // Radial displacement parameter, of every other sensor.
-        Volume     m_env    = volumes[m_nam];
+        Volume sensorVol = volumes[m_nam];
         DetElement lay_elt(sdet,_toString(x_layer.id(),"layer%d"),lay_id);
         Placements& waferVols = sensitives[m_nam];
-        
+
+        ZPlanarData::LayerLayout thisLayer = buildLayerLayout(rc, nphi, phi0, z0, sensorVol, waferVols[0]);
+        zPlanarData->layers.push_back(thisLayer);
+
+        Assembly stave("stave");
         // Z increment for sensor placement along Z axis.
         // Adjust for z0 at center of sensor rather than
         // the end of cylindrical envelope.
-        double z_incr   = nz > 1 ? (2.0 * z0) / (nz - 1) : 0.0;
-        // Starting z for sensor placement along Z axis.
-        double sensor_z = -z0;
-        int module_idx =0;
-        
-        
-        ZPlanarData::LayerLayout thisLayer = buildLayerLayout(rc, nphi, phi0, z0, m_env, waferVols[0]);
-        zPlanarData->layers.push_back(thisLayer);
+        DetElement staveElementTemplate("staveElementTemplate", 0);
+        double z_incr = nz > 1 ? (2.0 * z0) / (nz - 1) : 0.0;
+        for (int i = 0; i < nz; i++)
+        {
+            // sensor/module still lives in a world where:
+            // x: width, y: length, z: thickness
+            // we construct the stave in the same way,
+            // i.e. the modules are placed along y from z0 to -z0
+            // and dr is applied along z
+            double y = z0 - i * z_incr;
+            double z = i % 2 == 0 ? 0 : z_dr;
+            Position pos(0., y, z);
+            auto sensorPv = stave.placeVolume(sensorVol, pos);
+            sensorPv.addPhysVolID("sensor", i);
+            std::string sensorName = _toString(i, "sensor%d");
+            DetElement sensorElement(sensorName, i);
+            staveElementTemplate.add(sensorElement);
+            sensorElement.setPlacement(sensorPv);
 
-       
-        // Loop over the number of sensors in phi.
-        for (int ii = 0; ii < nphi; ii++)        {
-            double dx = z_dr * std::cos(phic + phi_tilt);        // Delta x of sensor position.
-            double dy = z_dr * std::sin(phic + phi_tilt);        // Delta y of sensor position.
-            double  x = rc * std::cos(phic);                     // Basic x sensor position.
-            double  y = rc * std::sin(phic);                     // Basic y sensor position.
-            
-            // Loop over the number of sensors in z.
-            //Create stave FIXME disable for now
-            std::string module_name = _toString(module_idx,"module%d");
-            //       DetElement module_elt(lay_elt,module_name,module_idx);
-            int sensor_idx = 0;
-            
-            for (int j = 0; j < nz; j++)          {
-                std::string sensor_name = _toString(sensor_idx,"sensor%d");
+            // also add a DetElement for the sensitive component
+            for (const PlacedVolume& wafer_pv : waferVols) {
+                DetElement comp_elt(sensorElement, wafer_pv.volume().name(), i);
+                comp_elt.setPlacement(wafer_pv);
+            }
+        }
+
+        // Loop over the number of staves in phi.
+        for (int i = 0; i < nphi; i++)
+        {
+            double dr = i % 2 == 0 ? 0 : rphi_dr;
+            double r = rc + dr;
+            double phi = phi0 + i * phi_incr;
+            double x = r * std::cos(phi); // Basic x stave position.
+            double y = r * std::sin(phi); // Basic y stave position.
+
+            // module: stave
+            std::string moduleName = _toString(i, "module%d");
+            // stave has x: width, y: length, z: thickness (pointing outwards)
+            // rotate -pi/2 around x to align length with z
+            // rotate -p/2 * phi around z to point outwards again
+            Rotation3D rotation = RotationZ(-M_PI/2 + phi + phi_tilt) * RotationX(-M_PI/2);
+            Transform3D transform(rotation, Position(x, y, 0.));
+            auto stavePv = lay_vol.placeVolume(stave, transform);
+            stavePv.addPhysVolID("module", i);
+            DetElement staveElement = staveElementTemplate.clone(moduleName, i);
+            staveElement.setPlacement(stavePv);
+            lay_elt.add(staveElement);
+
+            for (int j = 0; j < nz; j++)
+            {
 
                 ///////////////////
 
@@ -262,51 +293,15 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                 //encoding
 
                 encoder[lcio::LCTrackerCellID::layer()] = lay_id;
-                encoder[lcio::LCTrackerCellID::module()] = module_idx;
-                encoder[lcio::LCTrackerCellID::sensor()] = sensor_idx;
+                encoder[lcio::LCTrackerCellID::module()] = i;
+                encoder[lcio::LCTrackerCellID::sensor()] = j;
 
-                populateNeighbourData(neighbourSurfacesData, encoder, module_idx, sensor_idx, nphi, nz);
+                populateNeighbourData(neighbourSurfacesData, encoder, i, j, nphi, nz);
 
 
                 ///////////////////
 
-                
-                //FIXME
-                sensor_name = module_name + sensor_name;
-                
-                DetElement sens_elt(lay_elt,sensor_name,sensor_idx);
-                // Module PhysicalVolume.
-                Transform3D tr(RotationZYX(0,((M_PI/2)-phic-phi_tilt),-M_PI/2),Position(x,y,sensor_z));
-                
-                //FIXME
-                pv = lay_vol.placeVolume(m_env,tr);
-                pv.addPhysVolID(_U(module), module_idx);
-                pv.addPhysVolID(_U(sensor), sensor_idx);
-                sens_elt.setPlacement(pv);
-                for(size_t ic=0; ic<waferVols.size(); ++ic)  {
-//                     std::cout<<"Layer: "<<lay_id<<" phiIdx: "<<ii<<" zidx: "<<j<<" wafer idx: "<<ic<<std::endl;
-                    PlacedVolume wafer_pv = waferVols[ic];
-                    DetElement comp_elt(sens_elt,wafer_pv.volume().name(),sensor_idx);
-                    comp_elt.setPlacement(wafer_pv);
-                }
-                
-
-                /// Increase counters etc.
-                sensor_idx++;
-                // Adjust the x and y coordinates of the sensor.
-                x += dx;
-                y += dy;
-                // Flip sign of x and y adjustments.
-                dx *= -1;
-                dy *= -1;
-                // Add z increment to get next z placement pos.
-                sensor_z += z_incr;
             }
-            module_idx++;
-            phic     += phi_incr;      // Increment the phi placement of sensor.
-            rc       += rphi_dr;       // Increment the center radius according to dr parameter.
-            rphi_dr  *= -1;            // Flip sign of dr parameter.
-            sensor_z  = -z0;           // Reset the Z placement parameter for sensor.
         }
         // Create the PhysicalVolume for the layer.
         pv = envelope.placeVolume(lay_vol); // Place layer in mother
