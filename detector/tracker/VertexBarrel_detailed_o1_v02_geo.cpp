@@ -250,7 +250,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
             Volume ele_vol;
             if(isCurved){
                 double rmin = m.stave_r + m.sensor_r;
-                double half_width = abs(component.xmax()-component.xmin())/(2.*M_PI*rmin)*(2.0*M_PI)/2.;
+                double half_width = abs(component.xmax()-component.xmin())/rmin/2.;
                 double phi_offset = getAttrOrDefault(component, _Unicode(phi_offset), double(0.0));
                 Tube ele_box = Tube(rmin, rmin + m.sensor_thickness, abs(component.ymax()-component.ymin())/2., -half_width+phi_offset, half_width+phi_offset);
                 ele_vol = Volume("sensor" +  _toString(iSensor, "_%d"), ele_box, m.sensor_material);                    
@@ -328,7 +328,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
         //--------- loop over ladders ---------------------------
         for(int iStave=0; iStave<nLadders; ++iStave) {
-            double layer_r = x_layer.r() + ((iStave%2 == 0) ? 0.0 : dr) + m.stave_r;  // Offset every second stave in r
+            double layer_r = x_layer.r() + ((iStave%2 == 0) ? 0.0 : dr);  // Offset every second stave in r
             double phi = phi0 + iStave * dphi;
             RotationZYX rot( phi , 0, 0  ) ;
 
@@ -448,7 +448,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 for(int i=0; i<int(m.sensor_volumes.size()); i++){
                     double r_component_curved = 0.0;
                     if(m.isCurved[i]){ // curved sensors
-                        double phi_i = phi + 2.*(m.sensor_xmin[i]+abs(m.sensor_xmax[i]-m.sensor_xmin[i])/2.)/(layer_r+m.sensor_r);
+                        double phi_i = phi + (m.sensor_xmin[i]+abs(m.sensor_xmax[i]-m.sensor_xmin[i])/2.)/m.stave_r;
                         r_component_curved = m.sensor_thickness/2. + (iModule%2 == 0 ? 0.0 : m.stave_dr);
                         x_pos = r_component_curved*cos(phi_i) - r_offset_component*sin(phi_i);
                         y_pos = r_component_curved*sin(phi_i) + r_offset_component*cos(phi_i);
@@ -465,12 +465,13 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                             DetElement sensorDE(moduleDE,sensor_name,x_det.id());
                             sensorDE.setPlacement(pv);
 
-                            Vector3D ocyl(+(r_component_curved+layer_r/2.), 0., 0.) ;  
+                            Vector3D ocyl(-(r_component_curved+m.stave_r+m.sensor_r), 0., 0.) ;  
                             dd4hep::rec::SurfaceType type = dd4hep::rec::SurfaceType::Sensitive;
                             type.setProperty(dd4hep::rec::SurfaceType::Cylinder,true);
 
-                            double half_width = abs(m.sensor_xmax[i]-m.sensor_xmin[i])/(m.stave_r + m.sensor_r)/2.;
-                            dd4hep::rec::VolCylinder surf(m.sensor_volumes[i], type, m.sensor_thickness/2., m.sensor_thickness/2., ocyl, half_width*2., +M_PI/2.-phi0+m.sensor_phi_offsets[i]);
+                            double width = abs(m.sensor_xmax[i]-m.sensor_xmin[i])/(m.stave_r+m.sensor_r);
+                            double phi_offset = +M_PI/2. + (m.sensor_xmin[0]+abs(m.sensor_xmax[0]-m.sensor_xmin[0])/2.)/(m.stave_r+m.sensor_r)  + m.sensor_phi_offsets[i];
+                            dd4hep::rec::VolCylinder surf(m.sensor_volumes[i], type, m.sensor_thickness/2., m.sensor_thickness/2., ocyl, width, phi_offset);
                             volSurfaceList(sensorDE)->push_back(surf);
                             iSensitive++;
                         }
