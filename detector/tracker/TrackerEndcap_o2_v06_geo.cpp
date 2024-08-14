@@ -30,7 +30,6 @@
 #include "DDRec/DetectorData.h"
 
 #include <UTIL/BitField64.h>
-#include <UTIL/BitSet32.h>
 #include "UTIL/LCTrackerConf.h"
 #include <UTIL/ILDConf.h>
 
