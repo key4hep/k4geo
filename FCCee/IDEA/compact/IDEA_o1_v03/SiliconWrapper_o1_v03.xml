@@ -13,6 +13,14 @@
     </info>
     <comment>Silicon wrapper</comment>
 
+    <display>
+        <vis name="SiWrSensitiveVis"      alpha="1.0" r="1.0"     g="1.0"     b="0.0"   showDaughters="true"  visible="true"/>
+        <vis name="SiWrPeripheryVis"      alpha="1.0" r="200/255" g="254/255" b="0.0"   showDaughters="true"  visible="true"/>    
+        <vis name="SiWrCableVis"            alpha="1.0" r="0.0"     g="1.0"     b="0.4"   showDaughters="true"  visible="true"/>
+        <vis name="SiWrPipingVis"           alpha="1.0" r="1.0"     g="1.0"     b="1.0"   showDaughters="true"  visible="true"/>
+        <vis name="SiWrWaterVis"            alpha="1.0" r="0.0"     g="0.0"     b="1.0"   showDaughters="true"  visible="true"/>
+    </display>
+
     <define>
         <!-- ATLASPix3 properties -->
             <constant name="SiWr_sens_rphi_sensitive"       value="19.8*mm"/> 
@@ -145,36 +153,36 @@
             <stave name="SiWrStave" dr="SiWr_distance_two_sides" motherVolWidth="SiWr_mod_rphi" motherVolThickness="0.8*(SiWrB_r2-SiWrB_r1)">
                 <!-- Front flexes. Same flexes as in IDEA vertex. Detailed -->
                  <components name="flex_leftQuads" r="0.0*mm" length="SiWrB_z">
-                    <component thickness="SiWr_flex_Aluminium_thickness" width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." r="0.0*mm"                                                       material="Al" vis="CableVis"/>
-                    <component thickness="SiWr_flex_Kapton_thickness"    width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." r="SiWr_flex_Aluminium_thickness"                               material="KaptonVtx" vis="CableVis"/>
-                    <component thickness="SiWr_flex_Glue_thickness"      width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." r="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness"   material="GlueEcobond45" vis="CableVis"/>
+                    <component thickness="SiWr_flex_Aluminium_thickness" width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." r="0.0*mm"                                                       material="Al" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Kapton_thickness"    width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." r="SiWr_flex_Aluminium_thickness"                               material="KaptonVtx" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Glue_thickness"      width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." r="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness"   material="GlueEcobond45" vis="SiWrCableVis"/>
                 </components>
 
                 <components name="flex_rightQuads" r="0.0*mm" length="SiWrB_z">
-                    <component thickness="SiWr_flex_Aluminium_thickness" width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="0.0*mm"                                                       material="Al" vis="CableVis"/>
-                    <component thickness="SiWr_flex_Kapton_thickness"    width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="SiWr_flex_Aluminium_thickness"                               material="KaptonVtx" vis="CableVis"/>
-                    <component thickness="SiWr_flex_Glue_thickness"      width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness"   material="GlueEcobond45" vis="CableVis"/>
+                    <component thickness="SiWr_flex_Aluminium_thickness" width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="0.0*mm"                                                       material="Al" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Kapton_thickness"    width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="SiWr_flex_Aluminium_thickness"                               material="KaptonVtx" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Glue_thickness"      width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness"   material="GlueEcobond45" vis="SiWrCableVis"/>
                 </components> 
 
                 <!-- Simplified flexes. Assume they only consist of Aluminium (pessimistic) -->
 <!--                <components name="flexes" r="0.0*mm" length="SiWrB_z">
-                    <component thickness="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness+SiWr_flex_Glue_thickness" width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." r="0.0*mm" material="Al" vis="CableVis"/>
-                    <component thickness="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness+SiWr_flex_Glue_thickness" width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="0.0*mm" material="Al" vis="CableVis"/>
+                    <component thickness="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness+SiWr_flex_Glue_thickness" width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." r="0.0*mm" material="Al" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness+SiWr_flex_Glue_thickness" width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="0.0*mm" material="Al" vis="SiWrCableVis"/>
                 </components>                
 -->
                 <!-- Two ATLASPix3-sized sensors, but with only one periphery region each. Detailed -->
 <!--                <sensor r="SiWr_flex_thickness" thickness="SiWr_Sensitive_Thickness" material="Silicon">
-                    <component sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="-SiWr_mod_rphi/2." xmax="-SiWr_mod_quad_spacing/2." vis="SiSensitiveVis"/> <!~~ Left quad ~~>
-                    <component sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="SiWr_mod_quad_spacing/2." xmax="SiWr_mod_rphi/2." vis="SiSensitiveVis"/> <!~~ Right quad ~~>
+                    <component sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="-SiWr_mod_rphi/2." xmax="-SiWr_mod_quad_spacing/2." vis="SiWrSensitiveVis"/> <!~~ Left quad ~~>
+                    <component sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="SiWr_mod_quad_spacing/2." xmax="SiWr_mod_rphi/2." vis="SiWrSensitiveVis"/> <!~~ Right quad ~~>
 
-                    <component sensitive="False" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="-SiWr_mod_quad_spacing/2." xmax="SiWr_mod_quad_spacing/2." vis="SiPeripheryVis"/> <!~~ Space between quads ~~>          
-                    <component sensitive="False" ymin="-SiWr_mod_z/2." ymax="-SiWr_mod_z/2.+SiWr_mod_z_periphery" xmin="-SiWr_mod_rphi/2." xmax="SiWr_mod_rphi/2." vis="SiPeripheryVis"/> <!~~ Periphery ~~>   
+                    <component sensitive="False" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="-SiWr_mod_quad_spacing/2." xmax="SiWr_mod_quad_spacing/2." vis="SiWrPeripheryVis"/> <!~~ Space between quads ~~>          
+                    <component sensitive="False" ymin="-SiWr_mod_z/2." ymax="-SiWr_mod_z/2.+SiWr_mod_z_periphery" xmin="-SiWr_mod_rphi/2." xmax="SiWr_mod_rphi/2." vis="SiWrPeripheryVis"/> <!~~ Periphery ~~>   
                 </sensor>-->
 
                 <!-- Simplified design -->
                 <sensor r="SiWr_flex_thickness" thickness="SiWr_Sensitive_Thickness" material="Silicon">
-                    <component sensitive="True" ymin="-SiWrB_z" ymax="SiWrB_z" xmin="-SiWr_mod_rphi/2." xmax="+SiWr_mod_rphi/2.-SiWr_mod_rphi_periphery" vis="SiSensitiveVis"/> <!-- Left quad -->
-                    <component sensitive="False" ymin="-SiWrB_z" ymax="SiWrB_z" xmin="+SiWr_mod_rphi/2.-SiWr_mod_rphi_periphery" xmax="SiWr_mod_rphi/2." vis="SiPeripheryVis"/> <!-- Space between quads -->          
+                    <component sensitive="True" ymin="-SiWrB_z" ymax="SiWrB_z" xmin="-SiWr_mod_rphi/2." xmax="+SiWr_mod_rphi/2.-SiWr_mod_rphi_periphery" vis="SiWrSensitiveVis"/> <!-- Left quad -->
+                    <component sensitive="False" ymin="-SiWrB_z" ymax="SiWrB_z" xmin="+SiWr_mod_rphi/2.-SiWr_mod_rphi_periphery" xmax="SiWr_mod_rphi/2." vis="SiWrPeripheryVis"/> <!-- Space between quads -->          
                 </sensor>
 
                 <components name="support" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness" length="SiWrB_z">
@@ -183,13 +191,13 @@
 
                 <!-- Cooling pipes in-between supports. Commented out for performance -->
                  <components name="coolingPipes" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness/2." length="SiWrB_z">
-                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" r="0.0*mm" material="KaptonVtx" vis="PipingVis"/> 
-                    <component thickness="SiWr_Water_thickness" width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" r="SiWr_Pipe_thickness" material="Water" vis="WaterVis"/>
-                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" r="SiWr_Pipe_thickness+SiWr_Water_thickness" material="KaptonVtx" vis="PipingVis"/>
+                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" r="0.0*mm" material="KaptonVtx" vis="SiWrPipingVis"/> 
+                    <component thickness="SiWr_Water_thickness" width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" r="SiWr_Pipe_thickness" material="Water" vis="SiWrWaterVis"/>
+                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" r="SiWr_Pipe_thickness+SiWr_Water_thickness" material="KaptonVtx" vis="SiWrPipingVis"/>
 
-                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="-SiWr_Pipe_offset" r="0.0*mm" material="KaptonVtx" vis="PipingVis"/> 
-                    <component thickness="SiWr_Water_thickness" width="SiWr_Pipe_rphi" offset="-SiWr_Pipe_offset" r="SiWr_Pipe_thickness" material="Water" vis="WaterVis"/>
-                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="-SiWr_Pipe_offset" r="SiWr_Pipe_thickness+SiWr_Water_thickness" material="KaptonVtx" vis="PipingVis"/>
+                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="-SiWr_Pipe_offset" r="0.0*mm" material="KaptonVtx" vis="SiWrPipingVis"/> 
+                    <component thickness="SiWr_Water_thickness" width="SiWr_Pipe_rphi" offset="-SiWr_Pipe_offset" r="SiWr_Pipe_thickness" material="Water" vis="SiWrWaterVis"/>
+                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="-SiWr_Pipe_offset" r="SiWr_Pipe_thickness+SiWr_Water_thickness" material="KaptonVtx" vis="SiWrPipingVis"/>
                 </components>  
 
                 <components name="support" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness/2.+SiWr_Cooling_thickness" length="SiWrB_z">
@@ -201,20 +209,20 @@
 
                 <!-- Back flexes. Same flexes as in IDEA vertex. Detailed -->
                  <components name="flex_leftQuads" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness+SiWr_Sensitive_Thickness" length="SiWrB_z">
-                    <component thickness="SiWr_flex_Aluminium_thickness" width="SiWr_flex_width" offset="-SiWr_flex_width/2.-SiWr_mod_quad_spacing/2." r="0.0*mm"                                                       material="Al" vis="CableVis"/>
-                    <component thickness="SiWr_flex_Kapton_thickness"    width="SiWr_flex_width" offset="-SiWr_flex_width/2.-SiWr_mod_quad_spacing/2." r="SiWr_flex_Aluminium_thickness"                               material="KaptonVtx" vis="CableVis"/>
-                    <component thickness="SiWr_flex_Glue_thickness"      width="SiWr_flex_width" offset="-SiWr_flex_width/2.-SiWr_mod_quad_spacing/2." r="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness"   material="GlueEcobond45" vis="CableVis"/>
+                    <component thickness="SiWr_flex_Aluminium_thickness" width="SiWr_flex_width" offset="-SiWr_flex_width/2.-SiWr_mod_quad_spacing/2." r="0.0*mm"                                                       material="Al" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Kapton_thickness"    width="SiWr_flex_width" offset="-SiWr_flex_width/2.-SiWr_mod_quad_spacing/2." r="SiWr_flex_Aluminium_thickness"                               material="KaptonVtx" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Glue_thickness"      width="SiWr_flex_width" offset="-SiWr_flex_width/2.-SiWr_mod_quad_spacing/2." r="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness"   material="GlueEcobond45" vis="SiWrCableVis"/>
                 </components>
                 <components name="flex_rightQuads" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness+SiWr_Sensitive_Thickness" length="SiWrB_z">
-                    <component thickness="SiWr_flex_Aluminium_thickness" width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." r="0.0*mm"                                                       material="Al" vis="CableVis"/>
-                    <component thickness="SiWr_flex_Kapton_thickness"    width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." r="SiWr_flex_Aluminium_thickness"                               material="KaptonVtx" vis="CableVis"/>
-                    <component thickness="SiWr_flex_Glue_thickness"      width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." r="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness"   material="GlueEcobond45" vis="CableVis"/>
+                    <component thickness="SiWr_flex_Aluminium_thickness" width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." r="0.0*mm"                                                       material="Al" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Kapton_thickness"    width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." r="SiWr_flex_Aluminium_thickness"                               material="KaptonVtx" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Glue_thickness"      width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." r="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness"   material="GlueEcobond45" vis="SiWrCableVis"/>
                 </components> 
 
                 <!-- Simplified flexes. Just assume they consist only of Aluminium (pessimistic) -->
 <!--                <components name="flex_leftQuads" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness+SiWr_Sensitive_Thickness" length="SiWrB_z">
-                    <component thickness="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness+SiWr_flex_Glue_thickness" width="SiWr_flex_width" offset="-SiWr_flex_width/2.-SiWr_mod_quad_spacing/2." r="0.0*mm" material="Al" vis="CableVis"/>
-                    <component thickness="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness+SiWr_flex_Glue_thickness" width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." r="0.0*mm" material="Al" vis="CableVis"/>
+                    <component thickness="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness+SiWr_flex_Glue_thickness" width="SiWr_flex_width" offset="-SiWr_flex_width/2.-SiWr_mod_quad_spacing/2." r="0.0*mm" material="Al" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness+SiWr_flex_Glue_thickness" width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." r="0.0*mm" material="Al" vis="SiWrCableVis"/>
                 </components>
 -->            </stave>
 
@@ -246,28 +254,28 @@
             <module name="SiWrDStave" dz="SiWr_distance_two_sides">
                 <!-- Front side flexes -->
                 <components z_offset="0.0*mm" name="flexes">
-                    <component thickness="SiWr_flex_Aluminium_thickness"    width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." z_offset="0.0*mm" material="Al" vis="CableVis"/>
-                    <component thickness="SiWr_flex_Kapton_thickness"       width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." z_offset="SiWr_flex_Aluminium_thickness" material="KaptonVtx" vis="CableVis"/>
-                    <component thickness="SiWr_flex_Glue_thickness"         width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." z_offset="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness" material="GlueEcobond45" vis="CableVis"/> <!-- NEED TO USE CORRECT GLUE DESCRIPTION!-->
+                    <component thickness="SiWr_flex_Aluminium_thickness"    width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." z_offset="0.0*mm" material="Al" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Kapton_thickness"       width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." z_offset="SiWr_flex_Aluminium_thickness" material="KaptonVtx" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Glue_thickness"         width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." z_offset="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness" material="GlueEcobond45" vis="SiWrCableVis"/> <!-- NEED TO USE CORRECT GLUE DESCRIPTION!-->
 
-                    <component thickness="SiWr_flex_Aluminium_thickness"    width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." z_offset="0.0*mm" material="Al" vis="CableVis"/>
-                    <component thickness="SiWr_flex_Kapton_thickness"       width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." z_offset="SiWr_flex_Aluminium_thickness" material="KaptonVtx" vis="CableVis"/>
-                    <component thickness="SiWr_flex_Glue_thickness"         width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." z_offset="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness" material="GlueEcobond45" vis="CableVis"/> <!-- NEED TO USE CORRECT GLUE DESCRIPTION!-->
+                    <component thickness="SiWr_flex_Aluminium_thickness"    width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." z_offset="0.0*mm" material="Al" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Kapton_thickness"       width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." z_offset="SiWr_flex_Aluminium_thickness" material="KaptonVtx" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Glue_thickness"         width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." z_offset="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness" material="GlueEcobond45" vis="SiWrCableVis"/> <!-- NEED TO USE CORRECT GLUE DESCRIPTION!-->
                 </components>
 
                 <!-- Two ATLASPix3-sized sensors, but with only one periphery region each. Detailed -->
 <!--                <sensor z_offset="SiWr_flex_thickness" thickness="SiWr_Sensitive_Thickness" material="Silicon">
-                    <component sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="-SiWr_mod_rphi/2." xmax="-SiWr_mod_quad_spacing/2." vis="SiSensitiveVis"/> <!~~ Left quad ~~>
-                    <component sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="SiWr_mod_quad_spacing/2." xmax="SiWr_mod_rphi/2." vis="SiSensitiveVis"/> <!~~ Right quad ~~>
+                    <component sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="-SiWr_mod_rphi/2." xmax="-SiWr_mod_quad_spacing/2." vis="SiWrSensitiveVis"/> <!~~ Left quad ~~>
+                    <component sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="SiWr_mod_quad_spacing/2." xmax="SiWr_mod_rphi/2." vis="SiWrSensitiveVis"/> <!~~ Right quad ~~>
 
-                    <component sensitive="False" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="-SiWr_mod_quad_spacing/2." xmax="SiWr_mod_quad_spacing/2." vis="SiPeripheryVis"/> <!~~ Space between quads ~~>          
-                    <component sensitive="False" ymin="-SiWr_mod_z/2." ymax="-SiWr_mod_z/2.+SiWr_mod_z_periphery" xmin="-SiWr_mod_rphi/2." xmax="SiWr_mod_rphi/2." vis="SiPeripheryVis"/> <!~~ Periphery ~~>          
+                    <component sensitive="False" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="-SiWr_mod_quad_spacing/2." xmax="SiWr_mod_quad_spacing/2." vis="SiWrPeripheryVis"/> <!~~ Space between quads ~~>          
+                    <component sensitive="False" ymin="-SiWr_mod_z/2." ymax="-SiWr_mod_z/2.+SiWr_mod_z_periphery" xmin="-SiWr_mod_rphi/2." xmax="SiWr_mod_rphi/2." vis="SiWrPeripheryVis"/> <!~~ Periphery ~~>          
                 </sensor>-->
 
                  <!-- Simplified design  -->
                 <sensor z_offset="SiWr_flex_thickness" thickness="SiWr_Sensitive_Thickness" material="Silicon">
-                    <component sensitive="True" ymin="-SiWrD_half_tile_length/2." ymax="SiWrD_half_tile_length/2." xmin="-SiWr_mod_rphi/2." xmax="SiWr_mod_rphi/2.-SiWr_mod_rphi_periphery" vis="SiSensitiveVis"/> <!-- Left quad -->
-                    <component sensitive="False" ymin="-SiWrD_half_tile_length/2." ymax="SiWrD_half_tile_length/2." xmin="SiWr_mod_rphi/2.-SiWr_mod_rphi_periphery/2." xmax="+SiWr_mod_rphi/2." vis="SiPeripheryVis"/> <!-- Space between quads -->          
+                    <component sensitive="True" ymin="-SiWrD_half_tile_length/2." ymax="SiWrD_half_tile_length/2." xmin="-SiWr_mod_rphi/2." xmax="SiWr_mod_rphi/2.-SiWr_mod_rphi_periphery" vis="SiWrSensitiveVis"/> <!-- Left quad -->
+                    <component sensitive="False" ymin="-SiWrD_half_tile_length/2." ymax="SiWrD_half_tile_length/2." xmin="SiWr_mod_rphi/2.-SiWr_mod_rphi_periphery/2." xmax="+SiWr_mod_rphi/2." vis="SiWrPeripheryVis"/> <!-- Space between quads -->          
                 </sensor>
 
                 <components name="support_low_z" z_offset="SiWr_flex_thickness+SiWr_Sensitive_Thickness">
@@ -276,13 +284,13 @@
 
                 <!-- Cooling pipes in-between supports. Commented out for performance -->
                  <components name="cooling_pipes" z_offset="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness/2.">
-                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="-SiWr_Pipe_offset" z_offset="0.0*mm" material="KaptonVtx" vis="PipingVis"/> 
-                    <component thickness="SiWr_Water_thickness" width="SiWr_Pipe_rphi" offset="-SiWr_Pipe_offset" z_offset="SiWr_Pipe_thickness" material="Water" vis="WaterVis"/>
-                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="-SiWr_Pipe_offset" z_offset="SiWr_Pipe_thickness+SiWr_Water_thickness" material="KaptonVtx" vis="PipingVis"/>
+                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="-SiWr_Pipe_offset" z_offset="0.0*mm" material="KaptonVtx" vis="SiWrPipingVis"/> 
+                    <component thickness="SiWr_Water_thickness" width="SiWr_Pipe_rphi" offset="-SiWr_Pipe_offset" z_offset="SiWr_Pipe_thickness" material="Water" vis="SiWrWaterVis"/>
+                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="-SiWr_Pipe_offset" z_offset="SiWr_Pipe_thickness+SiWr_Water_thickness" material="KaptonVtx" vis="SiWrPipingVis"/>
 
-                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" z_offset="0.0*mm" material="KaptonVtx" vis="PipingVis"/> 
-                    <component thickness="SiWr_Water_thickness" width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" z_offset="SiWr_Pipe_thickness" material="Water" vis="WaterVis"/>
-                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" z_offset="SiWr_Pipe_thickness+SiWr_Water_thickness" material="KaptonVtx" vis="PipingVis"/>
+                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" z_offset="0.0*mm" material="KaptonVtx" vis="SiWrPipingVis"/> 
+                    <component thickness="SiWr_Water_thickness" width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" z_offset="SiWr_Pipe_thickness" material="Water" vis="SiWrWaterVis"/>
+                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" z_offset="SiWr_Pipe_thickness+SiWr_Water_thickness" material="KaptonVtx" vis="SiWrPipingVis"/>
                 </components> 
 
                 <components name="support_low_z" z_offset="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness/2.+SiWr_Cooling_thickness">
@@ -293,13 +301,13 @@
 
                 <!-- Back side flexes -->
                 <components z_offset="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness+SiWr_Sensitive_Thickness" name="flexes">
-                    <component thickness="SiWr_flex_Aluminium_thickness"    width="SiWr_flex_width" offset="-SiWr_flex_width/2.-SiWr_mod_quad_spacing/2." z_offset="0.0*mm" material="Al" vis="CableVis"/>
-                    <component thickness="SiWr_flex_Kapton_thickness"       width="SiWr_flex_width" offset="-SiWr_flex_width/2.-SiWr_mod_quad_spacing/2." z_offset="SiWr_flex_Aluminium_thickness" material="KaptonVtx" vis="CableVis"/>
-                    <component thickness="SiWr_flex_Glue_thickness"         width="SiWr_flex_width" offset="-SiWr_flex_width/2.-SiWr_mod_quad_spacing/2." z_offset="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness" material="GlueEcobond45" vis="CableVis"/> <!-- NEED TO USE CORRECT GLUE DESCRIPTION!-->
+                    <component thickness="SiWr_flex_Aluminium_thickness"    width="SiWr_flex_width" offset="-SiWr_flex_width/2.-SiWr_mod_quad_spacing/2." z_offset="0.0*mm" material="Al" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Kapton_thickness"       width="SiWr_flex_width" offset="-SiWr_flex_width/2.-SiWr_mod_quad_spacing/2." z_offset="SiWr_flex_Aluminium_thickness" material="KaptonVtx" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Glue_thickness"         width="SiWr_flex_width" offset="-SiWr_flex_width/2.-SiWr_mod_quad_spacing/2." z_offset="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness" material="GlueEcobond45" vis="SiWrCableVis"/> <!-- NEED TO USE CORRECT GLUE DESCRIPTION!-->
 
-                    <component thickness="SiWr_flex_Aluminium_thickness"    width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." z_offset="0.0*mm" material="Al" vis="CableVis"/>
-                    <component thickness="SiWr_flex_Kapton_thickness"       width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." z_offset="SiWr_flex_Aluminium_thickness" material="KaptonVtx" vis="CableVis"/>
-                    <component thickness="SiWr_flex_Glue_thickness"         width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." z_offset="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness" material="GlueEcobond45" vis="CableVis"/> <!-- NEED TO USE CORRECT GLUE DESCRIPTION!-->
+                    <component thickness="SiWr_flex_Aluminium_thickness"    width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." z_offset="0.0*mm" material="Al" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Kapton_thickness"       width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." z_offset="SiWr_flex_Aluminium_thickness" material="KaptonVtx" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Glue_thickness"         width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." z_offset="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness" material="GlueEcobond45" vis="SiWrCableVis"/> <!-- NEED TO USE CORRECT GLUE DESCRIPTION!-->
                 </components>
             </module>
 
