@@ -254,7 +254,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             staveElementTemplate.add(sensorElement);
             sensorElement.setPlacement(sensorPv);
 
-
             for (const PlacedVolume& wafer_pv : waferVols) {
                 DetElement comp_elt(sensorElement, wafer_pv.volume().name(), i);
                 comp_elt.setPlacement(wafer_pv);
