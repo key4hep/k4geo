@@ -79,11 +79,6 @@
     <composite n="2" ref="O"/>
   </material>
 
-  <material name="MetalStack">
-    <D type="density" value="2.65" unit="g/cm3"/>
-    <composite n="1" ref="Si"/>
-  </material>
-
   <material name="BoronOxide">
     <D type="density" value="2.46" unit="g/cm3"/>
     <composite n="2" ref="B"/>
@@ -146,11 +141,6 @@
     <D type="density" value="0.3" unit="g/cm3"/>
     <fraction n="0.65" ref="C"/>
     <fraction n="0.35" ref="Epoxy"/>
-  </material>  
-
-    <material name="CarbonFoam">
-    <D type="density" value="0.06" unit="g/cm3"/>
-    <fraction n="1" ref="C"/>
   </material>  
 
   <material name="Rohacell31">

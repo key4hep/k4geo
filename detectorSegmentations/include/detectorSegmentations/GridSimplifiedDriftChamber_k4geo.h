@@ -5,7 +5,6 @@
 
 #include "TVector3.h"
 #include <cmath>
-#include <iostream>
 
 /** GridSimplifiedDriftChamber_k4geo Detector/detectorSegmentations/detectorSegmentations/GridSimplifiedDriftChamber_k4geo.h GridSimplifiedDriftChamber_k4geo.h
  *

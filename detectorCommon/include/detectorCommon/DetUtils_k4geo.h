@@ -16,13 +16,11 @@
 #include "DDSegmentation/CartesianGridXYZ.h"
 #include "DDSegmentation/PolarGridRPhi.h"
 
-// Geant
 #include "G4Step.hh"
 
 // CLHEP
 #include "CLHEP/Vector/ThreeVector.h"
 
-#include "TGeoManager.h"
 
 /** Given a XML element with several daughters with the same name, e.g.
  <detector> <layer name="1" /> <layer name="2"> </detector>

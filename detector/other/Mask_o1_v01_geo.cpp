@@ -10,7 +10,6 @@
 #include "OtherDetectorHelpers.h"
 
 #include "DD4hep/DetFactoryHelper.h"
-#include "DD4hep/DD4hepUnits.h"
 #include <cmath>
 #include <string>
 
