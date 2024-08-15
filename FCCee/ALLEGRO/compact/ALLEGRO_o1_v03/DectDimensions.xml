@@ -18,31 +18,39 @@
     <constant name="world_side" value="6100*mm"/>
     <constant name="CrossingAngle" value="0.030*rad"/>  
 
-    <constant name="GlobalTrackerReadoutID" type="string" value="system:5,layer:3,stave:6,module:5,sensor:2"/>
+    <constant name="GlobalTrackerReadoutID_DCH" type="string" value="system:1,layer:16,phi:16"/>
+    <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:3,module:16,sensor:3"/>
 
     <constant name="SolenoidField" value="2*tesla"/>
 
-    <constant name="DetID_NOTUSED"          value=" 0"/>
-    <constant name="DetID_VXD_Barrel"           value=" 1"/>
-    <constant name="DetID_VXD_Disks"        value=" 2"/>
-    <constant name="DetID_DCH"              value=" 3"/>
-    <constant name="DetID_ECAL_Barrel"      value=" 4"/>
-    <constant name="DetID_ECAL_Endcap"      value=" 5"/>
-    
-    <constant name="DetID_HCAL_Barrel"      value=" 8"/>
-    <constant name="DetID_HCAL_Endcap"     value=" 9"/>
-   
-    <constant name="DetID_Muon_Barrel"      value=" 12"/>
-    <constant name="DetID_Muon_Endcap_1"       value=" 13"/>
-    <constant name="DetID_Muon_Endcap_2"       value=" 14"/>
+    <!-- Detector IDs -->
+    <constant name="DetID_NOTUSED"                value=" 0"/>
 
-    <constant name="DetID_LumiCal"          value=" 15"/>
-    <constant name="DetID_LumiCalInstrumentation"          value=" 16"/>
-    <constant name="DetID_LumiCalCooling"          value=" 17"/>
-    <constant name="DetID_LumiCalBackShield"          value=" 18"/>
-    <constant name="DetID_HOMAbsorber"          value=" 19"/>
-    <constant name="DetID_LumiCalNoseShield"          value=" 22"/>
+    <constant name="DetID_VXD_Barrel"             value=" 1"/>
+    <constant name="DetID_VXD_Disks"              value=" 2"/>
+
+    <constant name="DetID_DCH"                    value=" 3"/>
+
+    <constant name="DetID_SiWr_Barrel"            value=" 23"/>
+    <constant name="DetID_SiWr_Disks"             value=" 24"/>
+
+    <constant name="DetID_ECAL_Barrel"            value=" 4"/>
+    <constant name="DetID_ECAL_Endcap"            value=" 5"/>
     
+    <constant name="DetID_HCAL_Barrel"            value=" 8"/>
+    <constant name="DetID_HCAL_Endcap"            value=" 9"/>
+   
+    <constant name="DetID_Muon_Barrel"            value=" 12"/>
+    <constant name="DetID_Muon_Endcap_1"          value=" 13"/>
+    <constant name="DetID_Muon_Endcap_2"          value=" 14"/>
+
+    <constant name="DetID_LumiCal"                value=" 15"/>
+    <constant name="DetID_LumiCalInstrumentation" value=" 16"/>
+    <constant name="DetID_LumiCalCooling"         value=" 17"/>
+    <constant name="DetID_LumiCalBackShield"      value=" 18"/>
+    <constant name="DetID_HOMAbsorber"            value=" 19"/>
+    <constant name="DetID_LumiCalNoseShield"      value=" 22"/>
+
     <!-- BPW: Beam Pipe Width -->
     <constant name="BPWWall"       value="0.35*mm" />
     <constant name="BPWCool"       value="1.0*mm" />
@@ -105,6 +113,16 @@
     <constant name="DCH_outer_cyl_R_total"          value=" 2015   * mm "  />
     <constant name="DCH_half_length_total"          value=" 2250   * mm "  />
     <!-- End of Drift Chamber parameters    -->
+
+    <!-- Silicon wrapper. Changing the values of the disk parameters is not enough, please contact the expert (Armin Ilg) -->
+    <constant name="SiWrB_inner_radius" value="2040*mm"/>
+    <constant name="SiWrB_outer_radius" value="2080*mm"/>   
+    <constant name="SiWrB_half_length"  value="2400*mm"/>
+    <constant name="SiWrD_inner_radius" value="350.0*mm"/>
+    <constant name="SiWrD_outer_radius" value="2040.0*mm"/>
+    <constant name="SiWrD_zmin"         value="2300.0*mm"/>
+    <constant name="SiWrD_zmax"         value="2340.0*mm"/>
+    <!-- End of Silicon Wrapper parameters -->
 
     <!-- LAr ECAL Calo Barrel -->
     <constant name="BarECal_id" value="DetID_ECAL_Barrel"/>
@@ -225,13 +243,14 @@
     <region name="BeampipeRegion"/>
     <region name="VTXBRegion"/>
     <region name="VTXDRegion"/>
-    <region name="SiWrapperBRegion"/>
-    <region name="SiWrapperDRegion"/>
+    <region name="SiWrBRegion"/>
+    <region name="SiWrDRegion"/>
   </regions>
 
 
   <display>
-    <vis name="VXDVis"          alpha="0.2" r="0.1" 	  g=".5"      b=".5"    showDaughters="true"  visible="true"/>
+    <vis name="VXDVis"        alpha="0.2" r="0.1" 	  g=".5"      b=".5"    showDaughters="true"  visible="true"/>
+    <vis name="SiWrVis"       alpha="0.2" r="1.0"  	  g="1.0"     b="0.0"   showDaughters="false" visible="true"/>
     <vis name="ITVis"       	alpha="1.0" r="0.54"  	g="0.43"    b="0.04"  showDaughters="true"  visible="true"/>
     <vis name="OTVis"       	alpha="1.0" r="0.8"   	g="0.8"     b="0.4"   showDaughters="true"  visible="false"/>
     <vis name="ECALVis"     	alpha="1.0" r="0.2"   	g="0.6"     b="0"     showDaughters="true"  visible="true"/>

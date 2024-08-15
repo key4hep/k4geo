@@ -9,11 +9,6 @@
     <comment>LumiCal for FCCee detector</comment>
   </info>
 
-    <display>
-        <vis name="LCALCoolVis"     alpha="1.0" r="0.2"   	g="0.6"     b="0"     showDaughters="true"  visible="true"/>
-        <vis name="LCALInstrVis"    alpha="1.0" r="0.35"  	g="0.0"     b="0.47"  showDaughters="true"  visible="true"/>
-        <vis name="LCALSupportVis"  alpha="1"   r="0.2"   	g="0.2"     b="0.2"   showDaughters="true"  visible="true"/>
-    </display>
 
     <define>
             <constant name="LumiCal_cell_size" value="1.81*mm"/>
@@ -106,8 +101,8 @@
             
             
             <layer repeat="25" vis="SeeThrough">
-                <slice material = "Aluminum" thickness = "2.0*mm" 	sensitive = "no"  vis="LCALSupportVis"/>
-		<slice material = "Air" thickness = "2.5*mm" 	sensitive = "no"  vis="LCALSupportVis"/>
+                <slice material = "Aluminum" thickness = "2.0*mm" 	sensitive = "no"  vis="SupportVis"/>
+		<slice material = "Air" thickness = "2.5*mm" 	sensitive = "no"  vis="SupportVis"/>
             </layer>
             
             
@@ -146,7 +141,7 @@
             
             
             <layer repeat="25" vis="SeeThrough">
-		<slice material = "Air" thickness = "4.5*mm" 	sensitive = "no"  vis="LCALSupportVis"/>
+		<slice material = "Air" thickness = "4.5*mm" 	sensitive = "no"  vis="SupportVis"/>
             </layer>
             
             
@@ -184,7 +179,7 @@
             
             
             <layer repeat="1" vis="SeeThrough">
-                <slice material = "TungstenDens24" thickness = "3.5*mm" 	sensitive = "no"  vis="LCALSupportVis"/>
+                <slice material = "TungstenDens24" thickness = "3.5*mm" 	sensitive = "no"  vis="SupportVis"/>
             </layer>
             
             

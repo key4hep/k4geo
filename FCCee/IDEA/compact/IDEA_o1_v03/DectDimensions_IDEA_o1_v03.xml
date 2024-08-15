@@ -20,25 +20,30 @@
 
     <constant name="GlobalTrackerReadoutID_DCH" type="string" value="system:1,layer:16,phi:16"/>
     <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:3,module:16,sensor:3"/>
+
     <constant name="SolenoidField" value="2*tesla"/>
     
-    <constant name="DetID_NOTUSED"            value=" 0"/>
+    <!-- Detector IDs -->
+    <constant name="DetID_NOTUSED"                value=" 0"/>
     
     <constant name="DetID_VXD_Barrel"             value=" 1"/>
-    <constant name="DetID_VXD_Disks"          value=" 2"/>
+    <constant name="DetID_VXD_Disks"              value=" 2"/>
 
-    <constant name="DetID_DCH"                value=" 3"/>
+    <constant name="DetID_DCH"                    value=" 3"/>
 
-    <constant name="DetID_Calo_Barrel"        value=" 4"/>
-    <constant name="DetID_Calo_Endcap"        value=" 5"/>
-    <constant name="DetID_Calo_Endcap_2"      value=" 6"/>
+    <constant name="DetID_SiWr_Barrel"            value=" 23"/>
+    <constant name="DetID_SiWr_Disks"             value=" 24"/>
 
-    <constant name="DetID_HCAL_Barrel"        value=" 10"/>
-    <constant name="DetID_HCAL_Endcap"        value=" 11"/>
-    <constant name="DetID_HCAL_Ring"          value=" 12"/>
+    <constant name="DetID_Calo_Barrel"            value=" 4"/>
+    <constant name="DetID_Calo_Endcap"            value=" 5"/>
+    <constant name="DetID_Calo_Endcap_2"          value=" 6"/>
+
+    <constant name="DetID_HCAL_Barrel"            value=" 10"/>
+    <constant name="DetID_HCAL_Endcap"            value=" 11"/>
+    <constant name="DetID_HCAL_Ring"              value=" 12"/>
     
-    <constant name="DetID_Yoke_Barrel"        value=" 13"/>
-    <constant name="DetID_Yoke_Endcap"        value=" 14"/>
+    <constant name="DetID_Yoke_Barrel"            value=" 13"/>
+    <constant name="DetID_Yoke_Endcap"            value=" 14"/>
     
     <constant name="DetID_LumiCal"                value=" 15"/>
     <constant name="DetID_LumiCalInstrumentation" value=" 16"/>
@@ -47,8 +52,6 @@
     <constant name="DetID_HOMAbsorber"            value=" 19"/>
     <constant name="DetID_LumiCalNoseShield"      value=" 22"/>
 
-    <constant name="DetID_SiWr_Barrel"        value=" 23"/>
-    <constant name="DetID_SiWr_Disks"         value=" 24"/>
 
     <!-- Fiber dual-readout calorimeter DetID -->
     <constant name="DetID_FiberDRCalo"             value=" 25"/>
@@ -103,6 +106,7 @@
     <constant name="VTX_r_min" value="VTXIB_r_min_layer-VTXIB_r_min_clearance"/> 
     <constant name="VTX_r_max" value="VTXOB_r_max_layer+VTXOB_rmax_clearance"/>
     <constant name="VTX_z_max" value="VTXD_z_max+4.5*cm"/>
+    <!-- End of VTX parameters -->
 
     <!--  Drift Chamber parameters    -->
     <!-- Changing the radius is not enough to resize the detector, please contact the experts-->
@@ -116,7 +120,7 @@
     <constant name="Solenoid_Coil_half_length" value="Solenoid_half_length-200*mm"/>
     <constant name="Solenoid_Coil_radius" value="Solenoid_inner_radius+200*mm"/>
 
-    <!-- Silicon wrapper -->
+    <!-- Silicon wrapper. Changing the values of the disk parameters is not enough, please contact the expert (Armin Ilg) -->
     <constant name="SiWrB_inner_radius" value="2040*mm"/>
     <constant name="SiWrB_outer_radius" value="2080*mm"/>   
     <constant name="SiWrB_half_length"  value="2400*mm"/>
@@ -124,6 +128,7 @@
     <constant name="SiWrD_outer_radius" value="2040.0*mm"/>
     <constant name="SiWrD_zmin"         value="2300.0*mm"/>
     <constant name="SiWrD_zmax"         value="2340.0*mm"/>
+    <!-- End of Silicon Wrapper parameters -->
 
     <!-- These are lead plates that we put in the endcap to have the same material budget (from solenoid) as in the barrel-->
     <constant name="EndPlateAbsorber_inner_radius" value="380*mm"/>
@@ -286,7 +291,9 @@
     <vis name="CarbonFiber_vis" r="0.4" g="0.4" b="0.4" alpha="1.0" showDaughters="true" visible="true" />
     <vis name="Si_vis" r="0.6" g="0.6" b="0.6" alpha="1.0" showDaughters="true" visible="true" />
     <vis name="Sensitive_vis" r="0.0" g="0.0" b="1.0" alpha="1.0" showDaughters="true" visible="true" />
-
+    <vis name="SupportVis"  	alpha="1"   r="0.2"   	g="0.2"   b="0.2"     showDaughters="true"  visible="true"/>
+    <vis name="LCALInstrVis"  alpha="1.0" r="0.35"  	g="0.0"     b="0.47"  showDaughters="true"  visible="true"/>
+    <vis name="LCALCoolVis"   alpha="1.0" r="0.2"   	g="0.6"   b="0"       showDaughters="true"  visible="true"/>
   </display>
 
 </lccdd>
