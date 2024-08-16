@@ -338,6 +338,11 @@
             <constant name="VTXD_TerminalPart_length" value="9.0*mm"/> 
             <constant name="VTXD_Terminal_thickness" value="5.84*mm"/> 
 
+            <!-- Properties of global disk supports. The disk supports are modelled as cylinders with the same rmin and rmax as the disks and with an average thickness of carbon fiber-->
+            <constant name="VTXD_disk1_support_thickness" value="3.3*mm"/>    <!-- Area of 1307*cm^2, with a thickness of 6 mm -> 784.2 cm^3. Use proxy volume with reduced thickness according to (VTXD_rmax1^2*pi-VTXD_rmin1^2*pi)*thickness =  784.2 cm^3 (VTXD_rmax1 = 27.5 cm), so 784/pi/(27.5^2-3.56^2) ~ 3.3 mm -->
+            <constant name="VTXD_disk2_support_thickness" value="2.56*mm"/>    <!-- Area of 1331*cm^2, with a thickness of 6 mm -> 798.6 cm^3. Use proxy volume with reduced thickness according to (VTXD_rmax3^2*pi-VTXD_rmin2^2*pi)*thickness =  798.6 cm^3 (VTXD_rmax2 = 32.25 cm), so 798.6/pi/(32.25^2-7^2) ~ 2.56 mm -->
+            <constant name="VTXD_disk2_support_thickness" value="2.46*mm"/>    <!-- Area of 1220*cm^2, with a thickness of 6 mm -> 732 cm^3. Use proxy volume with reduced thickness according to (VTXD_rmax3^2*pi-VTXD_rmin3^2*pi)*thickness =  732 cm^3 (VTXD_rmax1 = 27.5 cm), so 732/pi/(32.5^2-10.5^2) ~ 2.46 mm -->
+
             <constant name="VTXOB_half_length" value="VTXOB_z2+VTXO_hybrid_length+VTXOB_mod_z_spacing+VTXOB_TerminalPart_L1_length2+VTXOB_TerminalPart_L1_length3"/>
     </define>
 
