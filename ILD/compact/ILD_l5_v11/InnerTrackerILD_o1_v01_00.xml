@@ -126,7 +126,7 @@ adapted by DJeans to fit into ILD model at FCCee
                 <z_layout dr="0" z0="InnerTracker_Barrel_half_length_1-15.05*mm" nz="32"/>
             </layer>
 -->
-            <layer module="InnerTrackerBarrelModule_01" id="2" >
+            <layer module="InnerTrackerBarrelModule_01" id="1" >
                 <rphi_layout phi_tilt="0*deg" nphi="71*2" phi0="0" rc="InnerTracker_Barrel_radius_2" dr="2.5*mm"/>
                 <z_layout dr="0" z0="InnerTracker_Barrel_half_length_2-15.05*mm" nz="46"/>
             </layer>
