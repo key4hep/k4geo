@@ -21,7 +21,6 @@
         <vis name="SiWrPipingVis"       alpha="1.0" r="1.0"     g="1.0"     b="1.0"   showDaughters="true"  visible="true"/>
         <vis name="SiWrWaterVis"        alpha="1.0" r="0.0"     g="0.0"     b="1.0"   showDaughters="true"  visible="true"/>
         <vis name="SiWrRohacellVis"     alpha="1.0" r="1.0"     g="1.0"     b="1.0"   showDaughters="true"  visible="true"/>
-        <vis name="SiWrBOuterTubeVis"   alpha="0.2" r="0.0"     g="0.0"     b="1.0"   showDaughters="true"  visible="true"/>
     </display>
 
     <define>
@@ -90,6 +89,16 @@
             <constant name="SiWrB_holder_rohacell_rphi" value="5.0*mm"/>
             <constant name="SiWrB_holder_carbonfiber_rphi" value="1.0*mm"/>
 
+            <constant name="SiWrB_inner_support_length" value="10.0*cm"/>
+            <constant name="SiWrB_inner_support_ring_thickness"     value="1.0*cm"/>
+            <constant name="SiWrB_inner_support_longeron_thickness" value="1.0*cm"/>
+            <constant name="SiWrB_inner_support_longeron_width"     value="2.0*cm"/>            
+            <constant name="SiWrB_inner_support_nLongerons" value="SiWrB_Staves1/2."/>
+            <constant name="SiWrB_inner_support_ring_z0" value="0.0*cm"/>
+            <constant name="SiWrB_inner_support_ring_z1" value="50.0*cm"/>
+            <constant name="SiWrB_inner_support_ring_z2" value="100.0*cm"/>
+            <constant name="SiWrB_inner_support_ring_z3" value="150.0*cm"/>
+            <constant name="SiWrB_inner_support_ring_z4" value="200.0*cm"/>
 
         <!-- Silicon wrapper disks parameters -->
             <constant name="SiWrD_tile_nmodules"        value="6"/>
@@ -150,14 +159,31 @@
     <detectors>
         <detector name="SiWrB" type="VertexBarrel_o1_v02" vis="SiWrVis" id="DetID_SiWr_Barrel" readout="SiWrBCollection" region="SiWrBRegion">
             <envelope vis="SiWrEnvVis">       
-                <shape type="Tube" rmin="SiWrB_inner_radius" rmax="SiWrB_outer_radius" dz="SiWrB_half_length" material="Air"/>
+                <shape type="Tube" rmin="DCH_outer_cyl_R_total" rmax="SiWrB_outer_radius" dz="SiWrB_half_length" material="Air"/>
             </envelope>
             <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_BARREL"/>
-            
+
+            <!-- Silicon wrapper barrel inner support structure on top of drift chamber -->
+            <stave name="SiWrB_inner_support" r="DCH_outer_cyl_R_total" motherVolWidth="2*pi*DCH_outer_cyl_R_total" motherVolThickness="SiWrB_inner_radius-DCH_outer_cyl_R_total-SiWrB_inner_support_longeron_thickness" length="SiWrB_z">                
+                <!-- Support rings at various +-z values -->
+                <end_z name="inner_support_rings" r="0.0*cm">
+                    <component thickness="SiWrB_inner_support_ring_thickness" width="2.*pi*DCH_outer_cyl_R_total/SiWrB_inner_support_nLongerons" length="SiWrB_inner_support_length" isCurved="true" material="CarbonFiberVtx" vis="SiWrSupportVis" dz="-SiWrB_z/2.-SiWrB_inner_support_length/2.+SiWrB_inner_support_ring_z0" side="1"/>
+                    <component thickness="SiWrB_inner_support_ring_thickness" width="2.*pi*DCH_outer_cyl_R_total/SiWrB_inner_support_nLongerons" length="SiWrB_inner_support_length" isCurved="true" material="CarbonFiberVtx" vis="SiWrSupportVis" dz="-SiWrB_z/2.-SiWrB_inner_support_length/2.+SiWrB_inner_support_ring_z1"/>
+                    <component thickness="SiWrB_inner_support_ring_thickness" width="2.*pi*DCH_outer_cyl_R_total/SiWrB_inner_support_nLongerons" length="SiWrB_inner_support_length" isCurved="true" material="CarbonFiberVtx" vis="SiWrSupportVis" dz="-SiWrB_z/2.-SiWrB_inner_support_length/2.+SiWrB_inner_support_ring_z2"/>
+                    <component thickness="SiWrB_inner_support_ring_thickness" width="2.*pi*DCH_outer_cyl_R_total/SiWrB_inner_support_nLongerons" length="SiWrB_inner_support_length" isCurved="true" material="CarbonFiberVtx" vis="SiWrSupportVis" dz="-SiWrB_z/2.-SiWrB_inner_support_length/2.+SiWrB_inner_support_ring_z3"/>
+                    <component thickness="SiWrB_inner_support_ring_thickness" width="2.*pi*DCH_outer_cyl_R_total/SiWrB_inner_support_nLongerons" length="SiWrB_inner_support_length" isCurved="true" material="CarbonFiberVtx" vis="SiWrSupportVis" dz="-SiWrB_z/2.-SiWrB_inner_support_length/2.+SiWrB_inner_support_ring_z4"/>
+                </end_z>
+
+                <!-- Support longerons along z -->
+                <components name="inner_support_longerons" r="SiWrB_inner_support_ring_thickness" length="SiWrB_z">
+                    <component thickness="SiWrB_inner_support_longeron_thickness" width="SiWrB_inner_support_longeron_width" r="0.0*mm" material="CarbonFiberVtx" vis="SiWrSupportVis"/>
+                </components>
+            </stave>
+
             <!-- Inner stave type -->
-            <stave name="SiWrBStave1" motherVolWidth="SiWr_mod_rphi" motherVolThickness="0.8*(SiWrB_outer_radius-SiWrB_r1)">
+            <stave name="SiWrBStave1" motherVolWidth="SiWr_mod_rphi" motherVolThickness="0.8*(SiWrB_outer_radius-SiWrB_r1)" length="SiWrB_z">
                 <!-- Simplified sensors -->
-                <sensor r="0" thickness="SiWr_Sensitive_Thickness" material="Silicon">
+                <sensor name="simple_sensor" r="0" thickness="SiWr_Sensitive_Thickness" material="Silicon">
                     <component sensitive="True" ymin="-SiWrB_z" ymax="SiWrB_z" xmin="-SiWr_mod_rphi/2." xmax="+SiWr_mod_rphi/2.-SiWr_mod_rphi_periphery" vis="SiWrSensitiveVis"/> <!-- Left quad -->
                     <component sensitive="False" ymin="-SiWrB_z" ymax="SiWrB_z" xmin="+SiWr_mod_rphi/2.-SiWr_mod_rphi_periphery" xmax="SiWr_mod_rphi/2." vis="SiWrPeripheryVis"/> <!-- Space between quads -->          
                 </sensor>
@@ -173,7 +199,7 @@
 
                 <!-- Support structure first part -->
                 <components name="support" r="SiWr_Sensitive_Thickness" length="SiWrB_z">
-                    <component thickness="SiWr_support_CarbonFiber_thickness/2." width="SiWr_mod_rphi" r="0.0*mm" material="CarbonFiberVtx" vis="SupportVis"/>
+                    <component thickness="SiWr_support_CarbonFiber_thickness/2." width="SiWr_mod_rphi" r="0.0*mm" material="CarbonFiberVtx" vis="SiWrSupportVis"/>
                 </components>
 
                <!-- Cooling pipes in-between supports -->
@@ -189,7 +215,7 @@
 
                 <!-- Support structure second part -->
                 <components name="support" r="SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness/2.+SiWr_Cooling_thickness" length="SiWrB_z">
-                    <component thickness="SiWr_support_CarbonFiber_thickness/2."    width="SiWr_mod_rphi" r="0.0*mm" material="CarbonFiberVtx" vis="SupportVis"/>
+                    <component thickness="SiWr_support_CarbonFiber_thickness/2."    width="SiWr_mod_rphi" r="0.0*mm" material="CarbonFiberVtx" vis="SiWrSupportVis"/>
                 </components>
 
                 <!-- Flexes. Same flexes as in IDEA vertex -->
@@ -208,16 +234,22 @@
                 <!-- Holder (similar to inner vertex) -->
                 <components name="holder" r="SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness" length="SiWrB_z">
                     <component thickness="SiWrB_holder_thickness1"  width="SiWrB_holder_rohacell_rphi"      offset="0.0*mm"                                                            material="RohacellVtx66D"    vis="SiWrRohacellVis"/>
-                    <component thickness="SiWrB_holder_thickness1"  width="SiWrB_holder_carbonfiber_rphi"   offset="-SiWrB_holder_rohacell_rphi/2.0-SiWrB_holder_carbonfiber_rphi/2.0" material="CarbonFiberVtx66D" vis="SiWrSupportVis"/>
-                    <component thickness="SiWrB_holder_thickness1"  width="SiWrB_holder_carbonfiber_rphi"   offset="SiWrB_holder_rohacell_rphi/2.0+SiWrB_holder_carbonfiber_rphi/2.0"  material="CarbonFiberVtx66D" vis="SiWrSupportVis"/>
+                    <component thickness="SiWrB_holder_thickness1"  width="SiWrB_holder_carbonfiber_rphi"   offset="-SiWrB_holder_rohacell_rphi/2.0-SiWrB_holder_carbonfiber_rphi/2.0" material="CarbonFiberVtx66D" vis="SiWrSiWrSupportVis"/>
+                    <component thickness="SiWrB_holder_thickness1"  width="SiWrB_holder_carbonfiber_rphi"   offset="SiWrB_holder_rohacell_rphi/2.0+SiWrB_holder_carbonfiber_rphi/2.0"  material="CarbonFiberVtx66D" vis="SiWrSiWrSupportVis"/>
+                </components>
+
+                <!-- Ferris-wheel structure connecting outer and inner support structures -->
+                <components name="ferris_wheel_structure" r="-2.5*cm" length="SiWrB_z">
+                    <component thickness="8.0*cm" width="0.5*cm" r="0.0*mm" phi="-55./180.*pi" offset="+3.5*cm" material="CarbonFiberVtx" vis="SiWrSupportVis"/>
+                    <component thickness="8.0*cm" width="0.5*cm" r="0.0*mm" phi="+55./180.*pi" offset="-3.5*cm" material="CarbonFiberVtx" vis="SiWrSupportVis"/>
                 </components>
             </stave>
 
 
             <!-- Outer stave type -->
-            <stave name="SiWrBStave2" motherVolWidth="SiWr_mod_rphi" motherVolThickness="0.8*(SiWrB_outer_radius-SiWrB_r1)">
+            <stave name="SiWrBStave2" motherVolWidth="SiWr_mod_rphi" motherVolThickness="0.8*(SiWrB_outer_radius-SiWrB_r1)" length="SiWrB_z">
                 <!-- Simplified sensors -->
-                <sensor r="0" thickness="SiWr_Sensitive_Thickness" material="Silicon">
+                <sensor name="simple_sensor" r="0" thickness="SiWr_Sensitive_Thickness" material="Silicon">
                     <component sensitive="True" ymin="-SiWrB_z" ymax="SiWrB_z" xmin="-SiWr_mod_rphi/2." xmax="+SiWr_mod_rphi/2.-SiWr_mod_rphi_periphery" vis="SiWrSensitiveVis"/> <!-- Left quad -->
                     <component sensitive="False" ymin="-SiWrB_z" ymax="SiWrB_z" xmin="+SiWr_mod_rphi/2.-SiWr_mod_rphi_periphery" xmax="SiWr_mod_rphi/2." vis="SiWrPeripheryVis"/> <!-- Space between quads -->          
                 </sensor>
@@ -233,7 +265,7 @@
 
                 <!-- Support structure first part -->
                 <components name="support" r="SiWr_Sensitive_Thickness" length="SiWrB_z">
-                    <component thickness="SiWr_support_CarbonFiber_thickness/2." width="SiWr_mod_rphi" r="0.0*mm" material="CarbonFiberVtx" vis="SupportVis"/>
+                    <component thickness="SiWr_support_CarbonFiber_thickness/2." width="SiWr_mod_rphi" r="0.0*mm" material="CarbonFiberVtx" vis="SiWrSupportVis"/>
                 </components>
 
                <!-- Cooling pipes in-between supports -->
@@ -249,7 +281,7 @@
 
                 <!-- Support structure second part -->
                 <components name="support" r="SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness/2.+SiWr_Cooling_thickness" length="SiWrB_z">
-                    <component thickness="SiWr_support_CarbonFiber_thickness/2."    width="SiWr_mod_rphi" r="0.0*mm" material="CarbonFiberVtx" vis="SupportVis"/>
+                    <component thickness="SiWr_support_CarbonFiber_thickness/2."    width="SiWr_mod_rphi" r="0.0*mm" material="CarbonFiberVtx" vis="SiWrSupportVis"/>
                 </components>
 
                 <!-- Flexes. Same flexes as in IDEA vertex -->
@@ -268,19 +300,32 @@
                 <!-- Holder (similar to inner vertex) -->
                 <components name="holder" r="SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness" length="SiWrB_z">
                     <component thickness="SiWrB_holder_thickness2"  width="SiWrB_holder_rohacell_rphi"      offset="0.0*mm"                                                            material="RohacellVtx66D"    vis="SiWrRohacellVis"/>
-                    <component thickness="SiWrB_holder_thickness2"  width="SiWrB_holder_carbonfiber_rphi"   offset="-SiWrB_holder_rohacell_rphi/2.0-SiWrB_holder_carbonfiber_rphi/2.0" material="CarbonFiberVtx66D" vis="SiWrSupportVis"/>
-                    <component thickness="SiWrB_holder_thickness2"  width="SiWrB_holder_carbonfiber_rphi"   offset="SiWrB_holder_rohacell_rphi/2.0+SiWrB_holder_carbonfiber_rphi/2.0"  material="CarbonFiberVtx66D" vis="SiWrSupportVis"/>
-                </components>
-
-                <!-- Outer support tube -->
-                <components name="SiWrB_outer_support_tube" r="SiWrB_outer_radius-SiWrB_tube_thickness" length="SiWrB_z">
-                    <component thickness="SiWrB_tube_thickness" width="2.*pi*(SiWrB_outer_radius)/(SiWrB_Staves1/2.)" material="PEEK" isCurved="true" vis="SiWrBOuterTubeVis"/>
+                    <component thickness="SiWrB_holder_thickness2"  width="SiWrB_holder_carbonfiber_rphi"   offset="-SiWrB_holder_rohacell_rphi/2.0-SiWrB_holder_carbonfiber_rphi/2.0" material="CarbonFiberVtx66D" vis="SiWrSiWrSupportVis"/>
+                    <component thickness="SiWrB_holder_thickness2"  width="SiWrB_holder_carbonfiber_rphi"   offset="SiWrB_holder_rohacell_rphi/2.0+SiWrB_holder_carbonfiber_rphi/2.0"  material="CarbonFiberVtx66D" vis="SiWrSiWrSupportVis"/>
                 </components>
             </stave>
 
-            <!-- Here we construct the barrel -->
+            <!-- Outer support tube -->
+            <stave name="SiWrB_outer_support_tube" length="SiWrB_z" r="SiWrB_outer_radius-SiWrB_tube_thickness">
+                <components name="SiWrB_outer_support_tube" r="0." length="SiWrB_z">
+                    <component thickness="SiWrB_tube_thickness" width="2.*pi*(SiWrB_outer_radius)*2." material="PEEK" isCurved="true" vis="SiWrSupportVis"/>
+                </components>
+            </stave>
+
+            <!-- @@@ Here we construct the barrel @@@ -->
+
+            <!-- First half of staves at lower r -->
             <layer nLadders="SiWrB_Staves1/2." r="SiWrB_r1"             offset="SiWrB_offset1" id="0" nmodules="SiWrB_nModules1" name="SiWrBStave1" step="SiWr_mod_overlap" motherVolLength="2.*SiWrB_z" motherVolThickness="SiWrB_outer_radius-SiWrB_r1" phi0="0.0*rad" side="+1"/>
+
+            <!-- Second half of staves at higher r -->
             <layer nLadders="SiWrB_Staves1/2." r="SiWrB_r1+SiWrB_dr"    offset="SiWrB_offset1" id="0" nmodules="SiWrB_nModules1" name="SiWrBStave2" step="SiWr_mod_overlap" motherVolLength="2.*SiWrB_z" motherVolThickness="SiWrB_outer_radius-SiWrB_r1" phi0="2.*pi*(SiWrB_r1+SiWrB_dr)/(SiWrB_Staves1/2.)/2." side="-1"/>
+
+            <!-- Inner support structure -->
+            <layer nLadders="SiWrB_inner_support_nLongerons" r="DCH_outer_cyl_R_total" id="1" nmodules="0" name="SiWrB_inner_support" phi0="2.*pi/SiWrB_inner_support_nLongerons/2." motherVolLength="2.*SiWrB_z" motherVolThickness="SiWrB_inner_radius-DCH_outer_cyl_R_total"/>
+
+            <!-- Outer support tube --> 
+            <layer nLadders="1" r="SiWrB_outer_radius" id="2" nmodules="0" name="SiWrB_outer_support_tube" motherVolLength="2.*SiWrB_z" motherVolThickness="SiWrB_tube_thickness"/>
+
         </detector>
     </detectors>
 
@@ -331,7 +376,7 @@
                 </sensor>
 
                 <components name="support_low_z" z_offset="SiWr_flex_thickness+SiWr_Sensitive_Thickness">
-                    <component thickness="SiWr_support_CarbonFiber_thickness/2." width="SiWr_mod_rphi" material="CarbonFiberVtx" vis="SupportVis"/>
+                    <component thickness="SiWr_support_CarbonFiber_thickness/2." width="SiWr_mod_rphi" material="CarbonFiberVtx" vis="SiWrSupportVis"/>
                 </components>
 
                 <!~~ Cooling pipes in-between supports. Commented out for performance ~~>
@@ -346,7 +391,7 @@
                 </components> 
 
                 <components name="support_low_z" z_offset="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness/2.+SiWr_Cooling_thickness">
-                    <component thickness="SiWr_support_CarbonFiber_thickness/2." width="SiWr_mod_rphi" material="CarbonFiberVtx" vis="SupportVis"/>
+                    <component thickness="SiWr_support_CarbonFiber_thickness/2." width="SiWr_mod_rphi" material="CarbonFiberVtx" vis="SiWrSupportVis"/>
                 </components>
 
                 <!~~ Second layer of sensor (inserted automatically)~~>
