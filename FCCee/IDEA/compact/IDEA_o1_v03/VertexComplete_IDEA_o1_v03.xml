@@ -1137,6 +1137,9 @@
                 <stave nmodules="7" z_offset="VTXD_zoffset_face3+VTXD_disk3_zoffset_stave5B" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave5B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="SiVTXDStave"/>
             </layer>  
         </detector>
+
+        <!-- Disk support proxy volumes -->
+        
     </detectors>   
 
 
