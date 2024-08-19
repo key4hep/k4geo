@@ -109,9 +109,9 @@
 
     <!--  Drift Chamber parameters    -->
     <!-- Changing the radius is not enough to resize the detector, please contact the experts-->
-    <constant name="DCH_inner_cyl_R_total"          value=" 349.8  * mm "  />
-    <constant name="DCH_outer_cyl_R_total"          value=" 2015   * mm "  />
-    <constant name="DCH_half_length_total"          value=" 2250   * mm "  />
+    <constant name="DCH_inner_cyl_R_total"          value=" 349.8  * mm"  />
+    <constant name="DCH_outer_cyl_R_total"          value=" 2015.   * mm"  />
+    <constant name="DCH_half_length_total"          value=" 2250.   * mm"  />
     
     <constant name="Solenoid_inner_radius" value="2100*mm"/>
     <constant name="Solenoid_outer_radius" value="2400*mm"/>

@@ -467,9 +467,9 @@
             <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_BARREL"/>
             
             <!-- Definition of our "stave" object that is used to build the barrel -->
-            <stave name="SiVTXIBStave1">
+            <stave name="SiVTXIBStave1" length="2.*VTXIB_z1">
                 <!-- Sensor -->
-                <sensor r="0.0*mm" thickness="VTXIB_Sensitive_Thickness" material="Silicon">
+                <sensor name="sensor" r="0.0*mm" thickness="VTXIB_Sensitive_Thickness" material="Silicon">
                     <component sensitive="False"    xmin="-VTXIB_mod_rphi/2.0" xmax="-VTXIB_mod_rphi/2.0 + VTXIB_mod_rphi_periphery"    ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXPeripheryVis"/>
                     <component sensitive="True"     xmin="-VTXIB_mod_rphi/2.0 + VTXIB_mod_rphi_periphery"                               xmax="VTXIB_mod_rphi/2.0" ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXSensitiveVis"/>
                 </sensor>
@@ -508,9 +508,9 @@
             </stave>
 
             <!-- Definition of our "stave" object that is used to build the barrel, this time for layer 2 -->
-            <stave name="SiVTXIBStave2">
+            <stave name="SiVTXIBStave2" length="2.*VTXIB_z2">
                 <!-- Sensor -->
-                <sensor r="0.0*mm" thickness="VTXIB_Sensitive_Thickness" material="Silicon">
+                <sensor name="sensor" r="0.0*mm" thickness="VTXIB_Sensitive_Thickness" material="Silicon">
                     <component sensitive="False"    xmin="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_sensitive" xmax="VTXIB_mod_rphi/2.0"                                       ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXPeripheryVis"/>
                     <component sensitive="True"     xmin="-VTXIB_mod_rphi/2.0"                                      xmax="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_sensitive" ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXSensitiveVis"/>
                 </sensor>
@@ -549,9 +549,9 @@
             </stave>
 
             <!-- Definition of our "stave" object that is used to build the barrel. There are two different versions for layer 3 as they are mirrored in x-y and are at a different r -->
-            <stave name="SiVTXIBStave3">
+            <stave name="SiVTXIBStave3" length="2.*VTXIB_z3">
                 <!-- Sensor -->
-                <sensor r="0.0*mm" thickness="VTXIB_Sensitive_Thickness" material="Silicon">
+                <sensor name="sensor" r="0.0*mm" thickness="VTXIB_Sensitive_Thickness" material="Silicon">
                     <component sensitive="False"    xmin="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_sensitive" xmax="VTXIB_mod_rphi/2.0"                                       ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXPeripheryVis"/>
                     <component sensitive="True"     xmin="-VTXIB_mod_rphi/2.0"                                      xmax="-VTXIB_mod_rphi/2.0+VTXIB_mod_rphi_sensitive" ymin="-VTXIB_mod_z/2.0" ymax="+VTXIB_mod_z/2.0" vis="VTXSensitiveVis"/>
                 </sensor>
@@ -595,9 +595,9 @@
 
 
             <!-- Curved vertex -->
-            <stave name="SiVTXIBStave1Curved" r="VTXIB_curved_r1">
+            <stave name="SiVTXIBStave1Curved" r="VTXIB_curved_r1" length="2.*VTXIB_curved_z1">
                 <!-- Sensor -->
-                <sensor thickness="VTXIB_curved_sensitive_thickness" material="Silicon">
+                <sensor name="sensor" thickness="VTXIB_curved_sensitive_thickness" material="Silicon">
                     <!-- First segment -->
                     <component sensitive="False"    xmin="0.0*RSU_rphi-RSU_rphi/2."                     xmax="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
                     <component sensitive="True"     xmin="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="0.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
@@ -627,8 +627,8 @@
                 </end_z>
             </stave>
 
-            <stave name="SiVTXIBStave2Curved" r="VTXIB_curved_r2">
-                <sensor thickness="VTXIB_curved_sensitive_thickness" material="Silicon">
+            <stave name="SiVTXIBStave2Curved" r="VTXIB_curved_r2" length="2.*VTXIB_curved_z2">
+                <sensor name="sensor" thickness="VTXIB_curved_sensitive_thickness" material="Silicon">
                     <!-- First segment -->
                     <component sensitive="False"    xmin="0.0*RSU_rphi-RSU_rphi/2."                     xmax="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
                     <component sensitive="True"     xmin="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="0.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
@@ -658,8 +658,8 @@
                 </end_z>
             </stave>
 
-            <stave name="SiVTXIBStave3Curved_1" r="VTXIB_curved_r3">
-                <sensor thickness="VTXIB_curved_sensitive_thickness" material="Silicon">
+            <stave name="SiVTXIBStave3Curved_1" r="VTXIB_curved_r3" length="2.*VTXIB_curved_z3_1">
+                <sensor name="sensor" thickness="VTXIB_curved_sensitive_thickness" material="Silicon">
                     <component sensitive="False"    xmin="0.0*RSU_rphi-RSU_rphi/2."                     xmax="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
                     <component sensitive="True"     xmin="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="0.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
 
@@ -689,8 +689,8 @@
                 </end_z>
             </stave>
 
-            <stave name="SiVTXIBStave3Curved_2" r="VTXIB_curved_r3">
-                <sensor thickness="VTXIB_curved_sensitive_thickness" material="Silicon">
+            <stave name="SiVTXIBStave3Curved_2" r="VTXIB_curved_r3" length="2.*VTXIB_curved_z3_2">
+                <sensor name="sensor" thickness="VTXIB_curved_sensitive_thickness" material="Silicon">
                     <component sensitive="False"    xmin="0.0*RSU_rphi-RSU_rphi/2."                     xmax="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
                     <component sensitive="True"     xmin="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="0.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
 
@@ -720,8 +720,8 @@
                 </end_z>
             </stave>
 
-            <stave name="SiVTXIBStave4Curved_1" r="VTXIB_curved_r4">
-                <sensor thickness="VTXIB_curved_sensitive_thickness" material="Silicon">
+            <stave name="SiVTXIBStave4Curved_1" r="VTXIB_curved_r4" length="2.*VTXIB_curved_z4_1">
+                <sensor name="sensor" thickness="VTXIB_curved_sensitive_thickness" material="Silicon">
                     <component sensitive="False"    xmin="0.0*RSU_rphi-RSU_rphi/2."                     xmax="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
                     <component sensitive="True"     xmin="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="0.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
 
@@ -758,8 +758,8 @@
                 </components>
             </stave>
 
-            <stave name="SiVTXIBStave4Curved_2" r="VTXIB_curved_r4">
-                <sensor thickness="VTXIB_curved_sensitive_thickness" material="Silicon">
+            <stave name="SiVTXIBStave4Curved_2" r="VTXIB_curved_r4" length="2.*VTXIB_curved_z4_2">
+                <sensor name="sensor" thickness="VTXIB_curved_sensitive_thickness" material="Silicon">
                     <component sensitive="False"    xmin="0.0*RSU_rphi-RSU_rphi/2."                     xmax="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
                     <component sensitive="True"     xmin="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="0.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
 
@@ -791,13 +791,13 @@
                     <component thickness="VTXIB_curved_r_outer-VTXIB_curved_r4-VTXIB_curved_sensitive_thickness-2.0*VTXIB_curved_tolerance_r" width="pi*(VTXIB_curved_r4+VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r)" length="VTXIB_curved_support_ring_length" phi_offset="VTXIB_curved_ring4_phi_offset" isCurved="true" material="CarbonFoam" vis="VTXCarbonFoamVis" dz="+VTXIB_curved_endcap4_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset"/>
                 </end_z>
 
-                <components name="inner_vertex_tube" r="VTXIB_curved_r_outer-VTXIB_curved_r4" length="VTXIB_curved_z4_2+VTXIB_curved_support_ring_length/2.">
-                    <component thickness="VTXIB_tube_thickness" width="2.*pi*(VTXIB_curved_r_outer)/2." material="PEEK" isCurved="true" vis="VTXTerminalPartVis"/>
+                <components name="inner_vertex_tube" r="0.0" length="VTXIB_curved_z4_2+VTXIB_curved_support_ring_length/2.">
+                    <component thickness="VTXIB_tube_thickness" width="2.*M_PI*(VTXIB_curved_r_outer)/2." material="PEEK" isCurved="true" vis="VTXTerminalPartVis"/>
                 </components>
             </stave>
 
             <!-- Outer barrel -->
-            <stave name="SiVTXOBStave1">
+            <stave name="SiVTXOBStave1" length="2.*VTXOB_z1">
                 <components name="flexes" r="0.0*mm" length="VTXOB_z1">
                     <component thickness="VTXO_flex_Aluminium_thickness" width="VTXO_flex_width" r="0.0*mm"                                                                  material="Al" vis="VTXCableVis"/>
                     <component thickness="VTXO_flex_Kapton_thickness"    width="VTXO_flex_width" r="VTXO_flex_Aluminium_thickness"                                    material="KaptonVtx" vis="VTXCableVis"/>
@@ -805,7 +805,7 @@
                 </components>
 
                 <!-- Sensor  -->
-                <sensor r="VTXO_flex_thickness" thickness="VTXO_Sensitive_Thickness" material="Silicon">
+                <sensor name="sensor" r="VTXO_flex_thickness" thickness="VTXO_Sensitive_Thickness" material="Silicon">
                     <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_periphery+VTXO_sens_z_sens_spacing/2.0)" ymax="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"                    xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0"    vis="VTXPeripheryVis"/> <!-- top Quad periphery-->
                     <component sensitive="False" ymin="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"                          ymax="VTXO_sens_z_sensitive+VTXO_sens_z_periphery+VTXO_sens_z_sens_spacing/2.0" xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0"    vis="VTXPeripheryVis"/> <!-- bottom Quad periphery-->   
                     <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"                       ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"                       xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_sens_spacing/2.0)"                          vis="VTXPeripheryVis"/> <!-- left Quad periphery-->   
@@ -855,7 +855,7 @@
             </stave>
 
             <!-- Definition of our "stave" object that is used to build the barrel, here for the outer layer -->
-            <stave name="SiVTXOBStave2">
+            <stave name="SiVTXOBStave2" length="2.*VTXOB_z2">
                 <components name="support" r="0.0*mm" length="VTXOB_z2">
                     <component thickness="VTXOB_TrussStructure_thickness2" width="VTXO_mod_rphi"     r="-VTXOB_TrussStructure_distance" material="CarbonFiberVtx" vis="VTXTrussStructureVis"/>   <!--Proxy for the lightweight truss structure -->
 
@@ -876,7 +876,7 @@
                 </components>
 
                  <!-- Sensor  -->
-                <sensor r="VTXOB_support_thickness" thickness="VTXO_Sensitive_Thickness" material="Silicon">
+                <sensor name="sensor" r="VTXOB_support_thickness" thickness="VTXO_Sensitive_Thickness" material="Silicon">
                     <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_periphery+VTXO_sens_z_sens_spacing/2.0)" ymax="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"                    xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0"    vis="VTXPeripheryVis"/> <!-- top Quad periphery-->
                     <component sensitive="False" ymin="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"                          ymax="VTXO_sens_z_sensitive+VTXO_sens_z_periphery+VTXO_sens_z_sens_spacing/2.0" xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0"    vis="VTXPeripheryVis"/> <!-- bottom Quad periphery-->   
                     <component sensitive="False" ymin="-(VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0)"                       ymax="VTXO_sens_z_sensitive+VTXO_sens_z_sens_spacing/2.0"                       xmin="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery+VTXO_sens_rphi_sens_spacing/2.0)" xmax="-(VTXO_sens_rphi_sensitive+VTXO_sens_rphi_sens_spacing/2.0)"                          vis="VTXPeripheryVis"/> <!-- left Quad periphery-->   
@@ -1139,7 +1139,7 @@
         </detector>
 
         <!-- Disk support proxy volumes -->
-        
+
     </detectors>   
 
 
