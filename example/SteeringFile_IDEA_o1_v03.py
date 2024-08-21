@@ -221,6 +221,11 @@ SIM.geometry.enablePrintPlacements = False
 ## Print information about Sensitives
 SIM.geometry.enablePrintSensitives = False
 
+## configure regex SD
+SIM.geometry.regexSensitiveDetector = {'Detector':'DRcalo',
+                                       'Match':['(core|clad)'],
+                                       'OutputLevel':3
+                                       }
 
 ################################################################################
 ## Configuration for the GuineaPig InputFiles 
@@ -563,13 +568,6 @@ def setupOpticalPhysics(kernel):
     cerenkov.enableUI()
     seq.adopt(cerenkov)
 
-    scint = PhysicsList(kernel, 'Geant4ScintillationPhysics/ScintillationPhys')
-    scint.VerboseLevel = 1
-    scint.TrackSecondariesFirst = True
-    scint.BoundaryInvokeSD = True
-    scint.enableUI()
-    seq.adopt(scint)
-    
     opt = PhysicsList(kernel, 'Geant4OpticalPhotonPhysics/OpticalGammaPhys')
     opt.addParticleConstructor('G4OpticalPhoton')
     opt.VerboseLevel = 1
@@ -600,7 +598,9 @@ def setupDRCFastSim(kernel):
     ph.enableUI()
     phys.adopt(ph)
     phys.dump()
-SIM.physics.setupUserPhysics(setupDRCFastSim)
+
+# enable fastsim when simulating scintillation photons
+# SIM.physics.setupUserPhysics(setupDRCFastSim)
 
 ################################################################################
 ## Properties for the random number generator 
@@ -649,3 +649,7 @@ SIM.ui.commandsPreRun = []
 
 ## List of UI commands to run during the 'Terminate' phase.
 SIM.ui.commandsTerminate = []
+
+# run simulation
+SIM.run()
+
