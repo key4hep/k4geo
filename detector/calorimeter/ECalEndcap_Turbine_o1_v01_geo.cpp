@@ -84,7 +84,7 @@ namespace det {
 
     float BladeAngle = genericBladeElem.attr<float>(_Unicode(angle));
     bool decreaseAnglePerWheel = genericBladeElem.attr<bool>(_Unicode(decreaseAnglePerWheel));
-    dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v01", "Making wheel with inner, outer radii %f, %f", ri, << ro);
+    dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v01", "Making wheel with inner, outer radii %f, %f", ri, ro);
     dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v01", "Blade angle is %f; decrease angle per wheel? ", BladeAngle, decreaseAnglePerWheel);
     dd4hep::xml::Dimension dim(aXmlElement.child(_Unicode(dimensions)));
     double grmin = dim.rmin1();
@@ -267,7 +267,7 @@ namespace det {
       delrPhiGapOnly = leftoverS/(2*nUnitCells);   
       LArgapo = delrPhiGapOnly*TMath::Sin(BladeAngle);
       dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v01",  "Outer LAr gap is %f", LArgapo) ;
-      dd4hep::printout(dd4hep::INFO, "ECalEndcap_Turbine_o1_v01", "Inner and outer thicknesses of noble liquid volume %f, %f" ElectrodeThick+LArgapi*2,  ElectrodeThick+LArgapo*2);
+      dd4hep::printout(dd4hep::INFO, "ECalEndcap_Turbine_o1_v01", "Inner and outer thicknesses of noble liquid volume %f, %f", ElectrodeThick+LArgapi*2,  ElectrodeThick+LArgapo*2);
 
       dd4hep::Solid electrodeBladeAndGapLayer = buildOneBlade(ElectrodeThick+LArgapi*2, ElectrodeThick+LArgapo*2, xRange, roLayer, riLayer, BladeAngle, delZ);
 
