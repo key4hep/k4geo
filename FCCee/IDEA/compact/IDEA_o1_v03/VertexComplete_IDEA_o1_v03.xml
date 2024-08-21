@@ -950,7 +950,7 @@
 
 
         <!-- Vertex inner barrel support structure and cooling cones imported via DDCAD. Disabled because of overlaps within and with Vertex detector -->
-       <detector id="DetID_NOTUSED" name="VTXIB_Support_PEEK" type="DD4hep_TestShape_Creator">
+       <!-- <detector id="DetID_NOTUSED" name="VTXIB_Support_PEEK" type="DD4hep_TestShape_Creator">
             <check>
                 <shape type="CAD_MultiVolume" ref="VertexSupport_PEEK_o1_v03.stl" material="PEEK" unit="mm">
                     <volume id="0"  name="Body1" material="PEEK" vis="VTXPEEKVis"/>
@@ -975,7 +975,7 @@
                 </shape>
                 <rotation x="0" y="0" z="0"/>
             </check>
-        </detector>
+        </detector> -->
 
 
         <!-- Vertex disks  -->
