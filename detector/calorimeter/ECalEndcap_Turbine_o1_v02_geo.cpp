@@ -87,6 +87,7 @@ namespace det {
       dd4hep::xml::DetElement nobleLiquidElem = genericBladeElem.child(_Unicode(nobleLiquidGap));
 
       float BladeAngle = 0.0, AbsThickMin = 0.0, BladeThicknessScaleFactor=0.0;
+
       // hardcode for three wheels
       if (iWheel == 0) {
 	BladeAngle = genericBladeElem.attr<float>(_Unicode(angle1));
@@ -107,6 +108,7 @@ namespace det {
       dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v02", "Making wheel with inner, outer radii %f, %f", ri, ro);
       dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v02", "Blade angle is %f ", BladeAngle);
       dd4hep::xml::Dimension dim(aXmlElement.child(_Unicode(dimensions)));
+
       dd4hep::printout( dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v02", "delZ is %f", delZ);
     
       if (TMath::Abs(TMath::Tan(BladeAngle)) < delZ/(2.*ri)) {
@@ -131,7 +133,9 @@ namespace det {
       bool sameNUnitCells = genericBladeElem.attr<bool>(_Unicode(sameNUnitCells));
       char* nUnitCellsStrArr = (char*)genericBladeElem.attr<std::string>(_Unicode(nUnitCells)).c_str();
       char* nUnitCellsCStr = strtok(nUnitCellsStrArr, " ");   
+
       int nUnitCells = -1;
+
       if (!sameNUnitCells) {
 	for (unsigned i = 0; i < iWheel; i++) {
 	  nUnitCellsCStr = strtok(NULL, " ");
@@ -186,7 +190,7 @@ namespace det {
 
       dd4hep::Solid activeShape = buildOneBlade(ElectrodeThick+LArgapi*2, ElectrodeThick+LArgapo*2, xRange, ro, ri, BladeAngle, delZ);
       dd4hep::Volume activeVol("active", activeShape, aLcdd.material("Air"));
- 
+
       unsigned numNonActiveLayers = 1;
       // check that either all non-active volumes are set to sensitive (for
       // sampling fraction calculations) or none are (for normal running)
