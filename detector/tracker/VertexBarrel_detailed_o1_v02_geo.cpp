@@ -539,4 +539,4 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     return sdet;
 }
 
-DECLARE_DETELEMENT(VertexBarrel_o1_v02,create_element)
+DECLARE_DETELEMENT(VertexBarrel_detailed_o1_v02,create_element)
