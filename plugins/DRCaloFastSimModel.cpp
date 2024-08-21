@@ -1,7 +1,5 @@
 // Framework include files
 #include <DDG4/Geant4FastSimShowerModel.inl.h>
-#include <DDG4/Geant4FastSimSpot.h>
-#include <DDG4/Geant4Random.h>
 
 #include "G4FastStep.hh"
 
@@ -85,4 +83,5 @@ namespace dd4hep
 }
 
 #include <DDG4/Factories.h>
+
 DECLARE_GEANT4ACTION_NS(dd4hep::sim, Geant4DRCFiberModel)

@@ -3,33 +3,13 @@
 
 // DD4hep Framework include files
 #include "DD4hep/Version.h"
-#include "DD4hep/Objects.h"
 #include "DD4hep/Segmentations.h"
-#include "DD4hep/DD4hepUnits.h"
 
-#include "DDG4/Geant4SensDetAction.inl"
-#include "DDG4/Geant4EventAction.h"
-#include "DDG4/Geant4HitCollection.h"
-#include "DDG4/Geant4Mapping.h"
-#include "DDG4/Geant4VolumeManager.h"
 #include "DDG4/Geant4Data.h"
 
-// Geant4 include files
-#include "G4THitsCollection.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4Step.hh"
-#include "G4TouchableHistory.hh"
-#include "G4ThreeVector.hh"
-#include "G4HCofThisEvent.hh"
-#include "G4SDManager.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTypes.hh"
-#include "G4OpticalPhoton.hh"
-#include "G4VProcess.hh"
+#include <G4Types.hh>
 
-#include "TF1.h"
-#include "TGraph.h"
+#include <map>
 
 #if DD4HEP_VERSION_GE(1, 21)
 #define GEANT4_CONST_STEP const

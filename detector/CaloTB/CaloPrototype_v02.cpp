@@ -8,12 +8,8 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
-#include "DDRec/DetectorData.h"
 #include "DDSegmentation/TiledLayerGridXY.h"
-#include "LcgeoExceptions.h"
 
-#include <iostream>
-#include <vector>
 
 using namespace std;
 

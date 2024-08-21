@@ -67,7 +67,10 @@ Vector3D FCCSWEndcapTurbine_k4geo::position(const CellID& cID) const {
   double rhoVal = rho(cID);
   double zVal = z(cID);
   double phiVal = phi(cID);
-  return PositionRhoZPhi(rhoVal, zVal, phiVal);
+  Vector3D pos = PositionRhoZPhi(rhoVal, zVal, phiVal);
+  // account for the fact that the -z endcap is mirrored wrt to the +z one
+  if (pos.Z < 0.) pos.Y = -pos.Y;
+  return pos;
 }
 
 /// determine the cell ID based on the position
@@ -92,7 +95,6 @@ double FCCSWEndcapTurbine_k4geo::phi(const CellID& cID) const {
   double rhoLoc = rho(cID);
   double zLoc = TMath::Abs(z(cID))-m_offsetZ - 45;  // hard-code midpoint in z for now
 
-  CellID sideValue = _decoder->get(cID, m_sideID);
   double zCotBladeAngle = zLoc/TMath::Tan(m_bladeAngle);
   double x = zCotBladeAngle;
   double y = TMath::Sqrt(rhoLoc*rhoLoc - x*x);

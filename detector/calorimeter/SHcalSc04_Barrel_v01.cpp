@@ -6,7 +6,6 @@
 //====================================================================
 #include "DD4hep/Printout.h"
 #include "DD4hep/DetFactoryHelper.h"
-#include "XML/Layering.h"
 #include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"
 #include "DDSegmentation/TiledLayerGridXY.h"

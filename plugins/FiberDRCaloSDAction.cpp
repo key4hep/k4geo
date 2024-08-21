@@ -1,7 +1,10 @@
 // DD4hep Framework include files
 #include "DD4hep/Segmentations.h"
-#include "DD4hep/DD4hepUnits.h"
 #include "DDG4/Geant4Random.h"
+#include "DDG4/Geant4SensDetAction.inl"
+#include "DDG4/Geant4Mapping.h"
+
+#include "G4OpticalPhoton.hh"
 // k4geo Framework include files
 
 #include "FiberDRCaloSDAction.h"

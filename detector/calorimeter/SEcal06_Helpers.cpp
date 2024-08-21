@@ -1,6 +1,5 @@
 #include "SEcal06_Helpers.h"
 #include "LcgeoExceptions.h"
-#include <sstream>
 
 #include "DDSegmentation/MegatileLayerGridXY.h"
 #include "DDSegmentation/WaferGridXY.h"

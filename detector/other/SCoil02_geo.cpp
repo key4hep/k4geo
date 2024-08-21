@@ -5,12 +5,7 @@
 //  $Id$
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
-#include "DD4hep/DD4hepUnits.h"
-#include "DD4hep/DetType.h"
-#include "DDRec/Surface.h"
-#include "XMLHandlerDB.h"
 #include "XML/Utilities.h"
-#include <cmath>
 #include "DDRec/DetectorData.h"
 
 //#include "GearWrapper.h"

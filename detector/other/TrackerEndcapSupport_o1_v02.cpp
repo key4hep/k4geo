@@ -4,16 +4,11 @@
 // * an issue that reflected volumes had double thickness
 // * an issue that the whole layer volume was twice as thick as it needed to be
 
-#include "OtherDetectorHelpers.h"
 
 #include "DD4hep/DetFactoryHelper.h"
-#include "DD4hep/DD4hepUnits.h"
-#include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
 #include "XML/Utilities.h"
-#include "XMLHandlerDB.h"
 #include <cmath>
-#include <map>
 #include <string>
 
 using namespace std;

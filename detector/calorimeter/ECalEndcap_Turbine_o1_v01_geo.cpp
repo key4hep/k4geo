@@ -112,9 +112,9 @@ namespace det {
     float LArgapi = nobleLiquidElem.attr<float>(_Unicode(gap));
     
     bool sameNUnitCells = genericBladeElem.attr<bool>(_Unicode(sameNUnitCells));
-    char* nUnitCellsStrArr = (char*)genericBladeElem.attr<std::string>(_Unicode(nUnitCells)).c_str();
-    char* nUnitCellsCStr = strtok(nUnitCellsStrArr, " ");   
-    int nUnitCells;
+    auto nUnitCellsStrArr = genericBladeElem.attr<std::string>(_Unicode(nUnitCells));
+    char* nUnitCellsCStr = strtok(const_cast<char*>(nUnitCellsStrArr.c_str()), " ");
+    int nUnitCells = 0;
     if (!sameNUnitCells) {
       for (unsigned i = 0; i < iWheel; i++) {
 	nUnitCellsCStr = strtok(NULL, " ");
@@ -162,7 +162,6 @@ namespace det {
     float LArgapo = delrPhiGapOnly*TMath::Sin(BladeAngle);
     //    LArgapo *= 2.;
     
-    dd4hep::Solid absBlade;
     float riLayer = ri;
 
     std::vector<dd4hep::Volume> claddingLayerVols;
@@ -578,7 +577,6 @@ namespace det {
   double ri = rmin;
 
   float supportTubeThickness=supportTubeElem.thickness();
-  unsigned iSupportTube = 0;
 
   for (unsigned iWheel = 0; iWheel < nWheels; iWheel++) {
    
@@ -600,7 +598,6 @@ namespace det {
     ri = ro;
     ro *= radiusRatio;
     if (ro > rmax) ro = rmax;
-    iSupportTube++;
   }
 
 

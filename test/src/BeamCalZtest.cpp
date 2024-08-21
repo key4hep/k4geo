@@ -1,6 +1,5 @@
 #include <DD4hep/Detector.h>
 #include <DDRec/DetectorData.h>
-#include "DD4hep/DD4hepUnits.h"
 
 #include <string>
 #include <vector>

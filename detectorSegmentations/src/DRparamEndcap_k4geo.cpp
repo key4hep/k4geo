@@ -1,6 +1,5 @@
 #include "detectorSegmentations/DRparamEndcap_k4geo.h"
 
-#include "Math/GenVector/RotationZYX.h"
 
 #include <stdexcept>
 

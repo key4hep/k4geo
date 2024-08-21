@@ -26,7 +26,6 @@
 
 #include <map>
 #include <string>
-#include <tuple>
 #include <vector>
 
 using dd4hep::DetElement;

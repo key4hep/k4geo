@@ -10,7 +10,6 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
-#include "LcgeoExceptions.h"
 
 #include <string>
 

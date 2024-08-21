@@ -7,11 +7,9 @@
 #include <DD4hep/Handle.inl>
 #endif
 
-#include <DD4hep/FieldTypes.h>
 
 
 #include <DD4hep/DetFactoryHelper.h>
-#include <XML/Utilities.h>
 
 #include <TFile.h>
 #include <TTree.h>

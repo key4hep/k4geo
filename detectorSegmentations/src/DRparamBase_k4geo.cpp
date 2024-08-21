@@ -2,7 +2,6 @@
 
 #include "Math/GenVector/RotationZYX.h"
 
-#include <stdexcept>
 
 namespace dd4hep {
 namespace DDSegmentation {

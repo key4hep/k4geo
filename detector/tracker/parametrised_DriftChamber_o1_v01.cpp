@@ -1,8 +1,6 @@
 #include "DD4hep/DetFactoryHelper.h"
-#include "DD4hep/Printout.h"
 #include "DDSegmentation/Segmentation.h"
 #include "detectorSegmentations/GridSimplifiedDriftChamber_k4geo.h"
-#include "XML/Utilities.h"
 #include "XML/XMLElements.h"
 
 namespace det {
