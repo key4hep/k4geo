@@ -560,9 +560,7 @@ namespace det {
   // 2. Create noble liquid bath
   std::string nobleLiquidMaterial = nobleLiquid.materialStr();
   dd4hep::Volume bathVol(nobleLiquidMaterial + "_bath", bathOuterShape, aLcdd.material(nobleLiquidMaterial));
-  dd4hep::printout( INFO, "ECalEndcap_Turbine_o1_v01", "ECAL endcap bath: material = %s rmin (cm) = %f rmin (cm) = %f ,  nobleLiquidMaterial = %<< " rmin (cm) =  " << bathRmin
-       << " rmax (cm) = " << bathRmax << " dz (cm) = " << caloDim.dz()  << " thickness in front of ECal (cm) = " << caloDim.rmin() - cryoDim.rmin2()
-       << " thickness behind ECal (cm) = " << cryoDim.rmax1() - caloDim.rmax() << endmsg;
+  dd4hep::printout( INFO, "ECalEndcap_Turbine_o1_v01", "ECAL endcap bath: material = %s rmin (cm) = %f rmax (cm) = %f, dz (cm) = %f, thickness in front of ECal (cm) = %f,  thickness behind ECal (cm) = %f", nobleLiquidMaterial,  bathRmin, bathRmax, caloDim.dz(), caloDim.rmin() - cryoDim.rmin2(), cryoDim.rmax1() - caloDim.rmax());
   dd4hep::DetElement bathDetElem(caloDetElem, "bath", 1);
 
   // 3. Create detector structure
@@ -571,7 +569,7 @@ namespace det {
  
   dd4hep::xml::DetElement supportTubeElem = calo.child(_Unicode(supportTube));
   unsigned nWheels = supportTubeElem.attr<unsigned>(_Unicode(nWheels));
-  dd4hep::printout( << MSG::INFO  << "Will build " << nWheels << " wheels" << endmsg;
+  dd4hep::printout(INFO, "ECalEndcap_Turbine_o1_v01",  "Will build %d wheels",  nWheels);
   double rmin = bathRmin;
   double rmax = bathRmax;
   float radiusRatio = pow(rmax/rmin, 1./nWheels);
@@ -608,7 +606,7 @@ namespace det {
   dd4hep::PlacedVolume bathPhysVol = aEnvelope.placeVolume(bathVol);
   bathDetElem.setPlacement(bathPhysVol);
 
-  dd4hep::printout( << MSG::DEBUG << "Total number of modules: " << iModule << endmsg;
+  dd4hep::printout(DEBUG, "ECalEndcap_Turbine_o1_v01", "Total number of modules:  %d", iModule);
 
   return;
 }
@@ -638,7 +636,7 @@ createECalEndcapTurbine(dd4hep::Detector& aLcdd, dd4hep::xml::Handle_t aXmlEleme
   //  dd4hep::DetElement caloPositiveDetElem(caloDetElem, "positive", 0);
   //  dd4hep::DetElement caloNegativeDetElem(caloDetElem, "negative", 0);
 
-  dd4hep::printout( << MSG::DEBUG << "Placing dector on the positive side: (cm) " << dim.z_offset() << " with min, max radii " << dim.rmin1() << " " << dim.rmax1() << endmsg;
+  dd4hep::printout(DEBUG, "ECalEndcap_Turbine_o1_v01",  "Placing dector on the positive side: (cm) %f  with min, max radii %f %f",dim.z_offset(), dim.rmin1(), dim.rmax1() );
   unsigned iModule = 0;
   buildOneSide_Turbine(aLcdd, aSensDet, envelopeVol,  aXmlElement, iModule);
 
