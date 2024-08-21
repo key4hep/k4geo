@@ -84,8 +84,8 @@ namespace det {
 
     float BladeAngle = genericBladeElem.attr<float>(_Unicode(angle));
     bool decreaseAnglePerWheel = genericBladeElem.attr<bool>(_Unicode(decreaseAnglePerWheel));
-
     dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v01", "Making wheel with inner, outer radii %f, %f", ri, ro);
+
     dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v01", "Blade angle is %f; decrease angle per wheel? ", BladeAngle, decreaseAnglePerWheel);
     dd4hep::xml::Dimension dim(aXmlElement.child(_Unicode(dimensions)));
     double grmin = dim.rmin1();
@@ -197,7 +197,6 @@ namespace det {
     } else if (allNonActiveNotSensitive) {
       numNonActiveLayers = 1;
     } else {
-
       dd4hep::printout(dd4hep::ERROR, "ECalEndcap_Turbine_o1_v01",  "Some non-active layers are sensitive and others are not -- this is likely a misconfiguration");
     }
 
@@ -318,7 +317,6 @@ namespace det {
       
        absBladeVol_pv.addPhysVolID("subtype", 0); // 0 = absorber, 1 = glue, 2 = cladding
        dd4hep::printout( dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v01_geo",  "Blade layer, rho is %d, %f, %f", iLayer, absBladeVol_pv.position().Rho(), roLayer/2.);
-
        absBladeVol_pv.addPhysVolID("layer", iWheel*numNonActiveLayers+iLayer);
 
        riLayer = roLayer;
@@ -398,7 +396,6 @@ namespace det {
      
      dd4hep::PlacedVolume LArVol_pv(activeVol.placeVolume(LArTotalLayerVol, posLayer));
      dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v01",  "LAr layer: %d", iLayer );
-
      LArVol_pv.addPhysVolID("layer", iWheel*ECalEndcapNumCalibLayers+iLayer);
      
      riLayer = roLayer;
@@ -413,7 +410,6 @@ namespace det {
       float delPhi = 2*TMath::Pi()/nUnitCells;
       
       dd4hep::printout( dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v01",  "Placing blade, ro, ri = %f %f", ro, ri);
-
       TGeoRotation tgr;
       tgr.RotateZ(BladeAngle*180/TMath::Pi());
       tgr.RotateX(-phi*180/TMath::Pi());   
@@ -556,7 +552,6 @@ namespace det {
       cryoSidePhysVol.addPhysVolID("cryo", 1);
       cryoSidePhysVol.addPhysVolID("type", sidetype+3);
       dd4hep::printout( dd4hep::INFO, "ECalEndcap_Turbine_o1_v01",  "Cryostat front volume set as sensitive");
-
     }
     dd4hep::DetElement cryoFrontDetElem(caloDetElem, "cryo_front", 0);
     cryoFrontDetElem.setPlacement(cryoFrontPhysVol);
@@ -646,7 +641,7 @@ createECalEndcapTurbine(dd4hep::Detector& aLcdd, dd4hep::xml::Handle_t aXmlEleme
   //  dd4hep::DetElement caloNegativeDetElem(caloDetElem, "negative", 0);
 
   dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v01",  "Placing detector on the positive side: (cm) %f  with min, max radii %f %f",dim.z_offset(), dim.rmin1(), dim.rmax1() );
-
+  
   unsigned iModule = 0;
   buildOneSide_Turbine(aLcdd, aSensDet, envelopeVol,  aXmlElement, iModule);
 
