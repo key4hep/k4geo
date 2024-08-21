@@ -641,7 +641,7 @@ createECalEndcapTurbine(dd4hep::Detector& aLcdd, dd4hep::xml::Handle_t aXmlEleme
   //  dd4hep::DetElement caloNegativeDetElem(caloDetElem, "negative", 0);
 
   dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v01",  "Placing detector on the positive side: (cm) %f  with min, max radii %f %f",dim.z_offset(), dim.rmin1(), dim.rmax1() );
-  
+
   unsigned iModule = 0;
   buildOneSide_Turbine(aLcdd, aSensDet, envelopeVol,  aXmlElement, iModule);
 

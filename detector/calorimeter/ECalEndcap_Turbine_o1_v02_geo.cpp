@@ -181,13 +181,12 @@ namespace det {
       std::vector<dd4hep::Volume> LArTotalLayerVols;
       std::vector<dd4hep::Volume> electrodeBladeLayerVols;
 
-   
       dd4hep::Solid passiveShape = buildOneBlade(AbsThicki+GlueThick+CladdingThick, AbsThicko+GlueThick+CladdingThick, xRange, ro, ri, BladeAngle, delZ );
       dd4hep::Volume passiveVol("passive", passiveShape, aLcdd.material("Air"));
 
       dd4hep::Solid activeShape = buildOneBlade(ElectrodeThick+LArgapi*2, ElectrodeThick+LArgapo*2, xRange, ro, ri, BladeAngle, delZ);
       dd4hep::Volume activeVol("active", activeShape, aLcdd.material("Air"));
-    
+ 
       unsigned numNonActiveLayers = 1;
       // check that either all non-active volumes are set to sensitive (for
       // sampling fraction calculations) or none are (for normal running)
