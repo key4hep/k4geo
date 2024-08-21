@@ -21,15 +21,41 @@ namespace DDSegmentation {
   registerIdentifier("identifier_side", "Cell ID identifier for side", m_sideID, "side");
 
   dd4hep::Detector* dd4hepgeo = &(dd4hep::Detector::getInstance());
+  m_bladeAngle.clear();
+  
   try {
-    m_bladeAngle = dd4hepgeo->constant<double>("BladeAngle");
-    std::cout << "Blade angle is " << m_bladeAngle << std::endl;
+    m_bladeAngle.push_back(dd4hepgeo->constant<double>("BladeAngle1"));
+    std::cout << "Blade angle 1 is " << m_bladeAngle[0] << std::endl;
   }
   catch(...) {
-    std::cout << "Blade angle not found in detector metadata, exiting..." << std::endl;
+    std::cout << "Blade angle 1 not found in detector metadata, exiting..." << std::endl;
+    exit(1);
+  }
+  try {
+    m_bladeAngle.push_back(dd4hepgeo->constant<double>("BladeAngle2"));
+    std::cout << "Blade angle 2 is " << m_bladeAngle[1] << std::endl;
+  }
+  catch(...) {
+    std::cout << "Blade angle 2 not found in detector metadata, exiting..." << std::endl;
+    exit(1);
+  }  
+  try {
+    m_bladeAngle.push_back(dd4hepgeo->constant<double>("BladeAngle3"));
+    std::cout << "Blade angle 3 is " << m_bladeAngle[2] << std::endl;
+  }
+  catch(...) {
+    std::cout << "Blade angle 3 not found in detector metadata, exiting..." << std::endl;
     exit(1);
   }
 
+  try {
+    m_nUnitCellsLeastCommonMultiple = dd4hepgeo->constant<int>("nUnitCellsLeastCommonMultiple");
+  }
+  catch(...) {
+    std::cout << "nUnitCellsLeastCommonMultiple not found in detector metadata, exiting..." << std::endl;
+    exit(1);
+  }
+  
 }
 
   FCCSWEndcapTurbine_k4geo::FCCSWEndcapTurbine_k4geo(const BitFieldCoder* decoder) : Segmentation(decoder) {
@@ -49,15 +75,40 @@ namespace DDSegmentation {
   registerIdentifier("identifier_wheel", "Cell ID identifier for wheel", m_wheelID, "wheel");
   registerIdentifier("identifier_module", "Cell ID identifier for module", m_moduleID, "module");
   dd4hep::Detector* dd4hepgeo = &(dd4hep::Detector::getInstance());
+
+  m_bladeAngle.clear();
+  
   try {
-    m_bladeAngle = dd4hepgeo->constant<double>("BladeAngle");
-    std::cout << "Blade angle is " << m_bladeAngle << std::endl;
+    m_bladeAngle.push_back(dd4hepgeo->constant<double>("BladeAngle1"));
+    std::cout << "Blade angle 1 is " << m_bladeAngle[0] << std::endl;
   }
   catch(...) {
-    std::cout << "Blade angle not found in detector metadata, exiting..." << std::endl;
+    std::cout << "Blade angle 1 not found in detector metadata, exiting..." << std::endl;
     exit(1);
   }
-
+  try {
+    m_bladeAngle.push_back(dd4hepgeo->constant<double>("BladeAngle2"));
+    std::cout << "Blade angle 2 is " << m_bladeAngle[1] << std::endl;
+  }
+  catch(...) {
+    std::cout << "Blade angle 2 not found in detector metadata, exiting..." << std::endl;
+    exit(1);
+  }  
+  try {
+    m_bladeAngle.push_back(dd4hepgeo->constant<double>("BladeAngle3"));
+    std::cout << "Blade angle 3 is " << m_bladeAngle[2] << std::endl;
+  }
+  catch(...) {
+    std::cout << "Blade angle 3 not found in detector metadata, exiting..." << std::endl;
+    exit(1);
+  }
+  try {
+    m_nUnitCellsLeastCommonMultiple = dd4hepgeo->constant<int>("nUnitCellsLeastCommonMultiple");
+  }
+  catch(...) {
+    std::cout << "nUnitCellsLeastCommonMultiple not found in detector metadata, exiting..." << std::endl;
+    exit(1);
+  }
 
 }
 
@@ -90,12 +141,14 @@ CellID FCCSWEndcapTurbine_k4geo::cellID(const Vector3D& /* localPosition */, con
 double FCCSWEndcapTurbine_k4geo::phi(const CellID& cID) const {
 
   CellID iModule = _decoder->get(cID, m_moduleID);
-  double phiCent = twopi*(iModule+0.5)/78336;
+  CellID iWheel = _decoder->get(cID, m_wheelID);
+  
+  double phiCent = twopi*(iModule+0.5)/m_nUnitCellsLeastCommonMultiple;
 
   double rhoLoc = rho(cID);
   double zLoc = TMath::Abs(z(cID))-m_offsetZ - 45;  // hard-code midpoint in z for now
 
-  double zCotBladeAngle = zLoc/TMath::Tan(m_bladeAngle);
+  double zCotBladeAngle = zLoc/TMath::Tan(m_bladeAngle[iWheel]);
   double x = zCotBladeAngle;
   double y = TMath::Sqrt(rhoLoc*rhoLoc - x*x);
   // rotate about z axis by phiCent
