@@ -82,15 +82,24 @@ namespace det {
     dd4hep::xml::DetElement electrodeBladeElem = genericBladeElem.child(_Unicode(electrodeBlade));
     dd4hep::xml::DetElement nobleLiquidElem = genericBladeElem.child(_Unicode(nobleLiquidGap));
 
-    char* BladeAngleStrArr = (char*)genericBladeElem.attr<std::string>(_Unicode(angle)).c_str();
-    char* BladeAngleCStr =  strtok(BladeAngleStrArr, " ");
-    float BladeAngle;
-    for (unsigned i = 0; i < iWheel; i++) {
-      BladeAngleCStr = strtok(NULL, " ");
+    float BladeAngle, AbsThickMin, BladeThicknessScaleFactor;
+    // hardcode for three wheels
+    if (iWheel == 0) {
+      BladeAngle = genericBladeElem.attr<float>(_Unicode(angle1));
+      AbsThickMin = absBladeElem.attr<float>(_Unicode(thickness1));
+      BladeThicknessScaleFactor = absBladeElem.attr<float>(_Unicode(thicknessScaleFactor1));
     }
-    std::string BladeAngleStr = BladeAngleCStr;
-    BladeAngle = std::stof(BladeAngleStr);
-
+    if (iWheel == 1) {
+      BladeAngle = genericBladeElem.attr<float>(_Unicode(angle2));
+      AbsThickMin = absBladeElem.attr<float>(_Unicode(thickness2));
+      BladeThicknessScaleFactor = absBladeElem.attr<float>(_Unicode(thicknessScaleFactor2));
+    }
+    if (iWheel == 2) {
+      BladeAngle = genericBladeElem.attr<float>(_Unicode(angle3));
+      AbsThickMin = absBladeElem.attr<float>(_Unicode(thickness3));
+      BladeThicknessScaleFactor = absBladeElem.attr<float>(_Unicode(thicknessScaleFactor3));
+    }
+    
     dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v01", "Making wheel with inner, outer radii %f, %f", ri, << ro);
     dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v01", "Blade angle is %f; decrease angle per wheel? ", BladeAngle, decreaseAnglePerWheel);
     dd4hep::xml::Dimension dim(aXmlElement.child(_Unicode(dimensions)));
@@ -108,14 +117,8 @@ namespace det {
     
     float GlueThick = glueElem.attr<float>(_Unicode(thickness));
     float CladdingThick = claddingElem.attr<float>(_Unicode(thickness));
-    char* AbsThickMinStrArr = (char*)absBladeElem.attr<std::string>(_Unicode(thickness)).c_str();
-    char* AbsThickMinCStr =  strtok(AbsThickMinStrArr, " ");
-    float AbsThickMin;
-    for (unsigned i = 0; i < iWheel; i++) {
-      AbsThickMinCStr = strtok(NULL, " ");
-    }
-    std::string AbsThickMinStr = AbsThickMinCStr;
-    AbsThickMin = std::stof(AbsThickMinStr)-(GlueThick+CladdingThick);
+
+    AbsThickMin = AbsThickMin-(GlueThick+CladdingThick);
     if (AbsThickMin < 0.) {
       dd4hep::printout(dd4hep::ERROR, "ECalEndcap_Turbine_o1_v01",  "Error: requested absorber thickness is negative after accounting for glue and cladding thickness");
     }
