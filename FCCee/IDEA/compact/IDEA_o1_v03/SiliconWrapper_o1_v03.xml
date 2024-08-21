@@ -143,7 +143,7 @@
 
     <!-- Silicon wrapper barrel  -->
     <detectors>
-        <detector name="SiWrB" type="VertexBarrel_o1_v02" vis="SiWrVis" id="DetID_SiWr_Barrel" readout="SiWrBCollection" region="SiWrBRegion">
+        <detector name="SiWrB" type="VertexBarrel_detailed_o1_v02" vis="SiWrVis" id="DetID_SiWr_Barrel" readout="SiWrBCollection" region="SiWrBRegion">
             <envelope vis="SiWrEnvVis">       
                 <shape type="Tube" rmin="SiWrB_inner_radius" rmax="SiWrB_outer_radius" dz="SiWrB_half_length" material="Air"/>
             </envelope>

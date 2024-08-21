@@ -474,7 +474,7 @@
    <detectors>
  
         <!-- Vertex inner barrel -->
-        <detector name="VertexBarrel" type="VertexBarrel_o1_v02" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelCollection"  region="VTXBRegion">
+        <detector name="VertexBarrel" type="VertexBarrel_detailed_o1_v02" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelCollection"  region="VTXBRegion">
              <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>
