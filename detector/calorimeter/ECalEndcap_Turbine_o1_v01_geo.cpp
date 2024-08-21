@@ -179,7 +179,6 @@ void buildWheel(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd
     } else if (allNonActiveNotSensitive) {
       numNonActiveLayers = 1;
     } else {
-
       dd4hep::printout(dd4hep::ERROR, "ECalEndcap_Turbine_o1_v01",  "Some non-active layers are sensitive and others are not -- this is likely a misconfiguration");
     }
 
@@ -300,7 +299,6 @@ void buildWheel(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd
       
        absBladeVol_pv.addPhysVolID("subtype", 0); // 0 = absorber, 1 = glue, 2 = cladding
        dd4hep::printout( dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v01_geo",  "Blade layer, rho is %d, %f, %f", iLayer, absBladeVol_pv.position().Rho(), roLayer/2.);
-
        absBladeVol_pv.addPhysVolID("layer", iWheel*numNonActiveLayers+iLayer);
 
        riLayer = roLayer;
@@ -380,7 +378,6 @@ void buildWheel(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd
      
      dd4hep::PlacedVolume LArVol_pv(activeVol.placeVolume(LArTotalLayerVol, posLayer));
      dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v01",  "LAr layer: %d", iLayer );
-
      LArVol_pv.addPhysVolID("layer", iWheel*ECalEndcapNumCalibLayers+iLayer);
      
      riLayer = roLayer;
@@ -395,7 +392,6 @@ void buildWheel(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd
       float delPhi = 2*TMath::Pi()/nUnitCells;
       
       dd4hep::printout( dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v01",  "Placing blade, ro, ri = %f %f", ro, ri);
-
       TGeoRotation tgr;
       tgr.RotateZ(BladeAngle*180/TMath::Pi());
       tgr.RotateX(-phi*180/TMath::Pi());   
@@ -930,16 +926,11 @@ void buildOneSide_Turbine(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aS
   // 2. Create noble liquid bath
   std::string nobleLiquidMaterial = nobleLiquid.materialStr();
   dd4hep::Volume bathVol(nobleLiquidMaterial + "_bath", bathOuterShape, aLcdd.material(nobleLiquidMaterial));
-<<<<<<< HEAD
   dd4hep::printout(dd4hep::INFO, "ECalEndcap_Turbine_o1_v01",
                    "ECAL endcap bath: material = %s rmin (cm) = %f rmax (cm) = %f, dz (cm) = %f, thickness in front of "
                    "ECal (cm) = %f,  thickness behind ECal (cm) = %f",
                    nobleLiquidMaterial.c_str(), bathRmin, bathRmax, caloDim.dz(), caloDim.rmin() - cryoDim.rmin2(),
                    cryoDim.rmax1() - caloDim.rmax());
-=======
-  dd4hep::printout( dd4hep::INFO, "ECalEndcap_Turbine_o1_v01", "ECAL endcap bath: material = %s rmin (cm) = %f rmax (cm) = %f, dz (cm) = %f, thickness in front of ECal (cm) = %f,  thickness behind ECal (cm) = %f", nobleLiquidMaterial.c_str(),  bathRmin, bathRmax, caloDim.dz(), caloDim.rmin() - cryoDim.rmin2(), cryoDim.rmax1() - caloDim.rmax());
-  
->>>>>>> 7799539b (Fix printouts)
   dd4hep::DetElement bathDetElem(caloDetElem, "bath", 1);
 
   // 3. Create detector structure
