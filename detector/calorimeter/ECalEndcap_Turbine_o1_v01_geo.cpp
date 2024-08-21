@@ -570,7 +570,7 @@ namespace det {
   std::string nobleLiquidMaterial = nobleLiquid.materialStr();
   dd4hep::Volume bathVol(nobleLiquidMaterial + "_bath", bathOuterShape, aLcdd.material(nobleLiquidMaterial));
   dd4hep::printout( dd4hep::INFO, "ECalEndcap_Turbine_o1_v01", "ECAL endcap bath: material = %s rmin (cm) = %f rmax (cm) = %f, dz (cm) = %f, thickness in front of ECal (cm) = %f,  thickness behind ECal (cm) = %f", nobleLiquidMaterial.c_str(),  bathRmin, bathRmax, caloDim.dz(), caloDim.rmin() - cryoDim.rmin2(), cryoDim.rmax1() - caloDim.rmax());
-
+  
   dd4hep::DetElement bathDetElem(caloDetElem, "bath", 1);
 
   // 3. Create detector structure
