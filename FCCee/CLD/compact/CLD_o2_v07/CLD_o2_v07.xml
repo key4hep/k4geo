@@ -254,6 +254,22 @@
         <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:6,module:11,sensor:8"/>
     </define>
 
+        <!--
+       If the volume should be connected to the world:   connected="true"
+       else if the volume is part of the parallelworld:  connected="false"
+       The volume is always connected to the top level!
+    -->
+    <parallelworld_volume name="tracking_volume" anchor="/world" material="Air" connected="true"
+        vis="VisibleBlue">
+        <shape type="Polycone" material="Air">
+            <!-- small-angle approximation for tan(theta) -->
+            <zplane z="-OuterTracker_half_length"   rmin="149*mrad * ConeBeamPipe_zmax" rmax="OuterTracker_outer_radius" />
+            <zplane z="-CentralBeamPipe_zmax"       rmin="0"                            rmax="OuterTracker_outer_radius" />
+            <zplane z="+CentralBeamPipe_zmax"       rmin="0"                            rmax="OuterTracker_outer_radius" />
+            <zplane z="+OuterTracker_half_length"   rmin="149*mrad * ConeBeamPipe_zmax" rmax="OuterTracker_outer_radius" />
+        </shape>
+    </parallelworld_volume>
+
     <limits>
         <limitset name="cal_limits">
             <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
