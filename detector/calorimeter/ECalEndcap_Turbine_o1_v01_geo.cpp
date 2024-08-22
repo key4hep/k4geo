@@ -278,7 +278,6 @@ void buildWheel(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd
     }
     dd4hep::printout(dd4hep::INFO, "ECalEndcap_Turbine_o1_v01",  "ECal endcap materials:  nobleLiquid: %s absorber %s electrode %s",  nobleLiquidElem.materialStr().c_str(), absBladeElem.materialStr().c_str(), electrodeBladeElem.materialStr().c_str() ); 
 
-
     int    nUnitCellsToDraw = nUnitCells;
     //    nUnitCellsToDraw = 2;
    
