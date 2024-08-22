@@ -291,7 +291,7 @@ namespace det {
       LArgapi = LArgapo;
       AbsThicki = AbsThicko;
     }
-    dd4hep::printout(dd4hep::INFO, "ECalEndcap_Turbine_o1_v01",  "ECal endcap materials:  nobleLiquid: %s absorber %s electrode %s",  nobleLiquidElem.materialStr(), absBladeElem.materialStr(), electrodeBladeElem.materialStr() ); 
+    dd4hep::printout(dd4hep::INFO, "ECalEndcap_Turbine_o1_v01",  "ECal endcap materials:  nobleLiquid: %s absorber %s electrode %s",  nobleLiquidElem.materialStr().c_str(), absBladeElem.materialStr().c_str(), electrodeBladeElem.materialStr().c_str() ); 
 
     int    nUnitCellsToDraw = nUnitCells;
     //    nUnitCellsToDraw = 2;
@@ -521,7 +521,7 @@ namespace det {
     dd4hep::printout(dd4hep::INFO, "ECalEndcap_Turbine_o1_v01",  "ECAL endcap cryostat: front: rmin (cm) = %f rmax (cm) = %f dz (cm) = %f ", cryoDim.rmin1(),  cryoDim.rmin2(),  cryoDim.dz());
     dd4hep::printout(dd4hep::INFO, "ECalEndcap_Turbine_o1_v01",  "ECAL encdap cryostat: back: rmin (cm) =  %f rmax (cm) = %f dz (cm) = %f", cryoDim.rmax1(), cryoDim.rmax2(), cryoDim.dz());
     dd4hep::printout( dd4hep::INFO, "ECalEndcap_Turbine_o1_v01", "ECAL endcap cryostat: side: rmin (cm) =  %f rmax (cm) = %f dz (cm) = %f", cryoDim.rmin2(), cryoDim.rmax1(), cryoDim.dz() - caloDim.dz());
-    dd4hep::printout( dd4hep::INFO, "ECalEndcap_Turbine_o1_v01",  "Cryostat is made out of %s", cryostat.materialStr() );
+    dd4hep::printout( dd4hep::INFO, "ECalEndcap_Turbine_o1_v01",  "Cryostat is made out of %s", cryostat.materialStr().c_str() );
    
     dd4hep::Volume cryoFrontVol(cryostat.nameStr()+"_front", cryoFrontShape, aLcdd.material(cryostat.materialStr()));
     dd4hep::Volume cryoBackVol(cryostat.nameStr()+"_back", cryoBackShape, aLcdd.material(cryostat.materialStr()));
@@ -559,7 +559,7 @@ namespace det {
   // 2. Create noble liquid bath
   std::string nobleLiquidMaterial = nobleLiquid.materialStr();
   dd4hep::Volume bathVol(nobleLiquidMaterial + "_bath", bathOuterShape, aLcdd.material(nobleLiquidMaterial));
-  dd4hep::printout( dd4hep::INFO, "ECalEndcap_Turbine_o1_v01", "ECAL endcap bath: material = %s rmin (cm) = %f rmax (cm) = %f, dz (cm) = %f, thickness in front of ECal (cm) = %f,  thickness behind ECal (cm) = %f", nobleLiquidMaterial,  bathRmin, bathRmax, caloDim.dz(), caloDim.rmin() - cryoDim.rmin2(), cryoDim.rmax1() - caloDim.rmax());
+  dd4hep::printout( dd4hep::INFO, "ECalEndcap_Turbine_o1_v01", "ECAL endcap bath: material = %s rmin (cm) = %f rmax (cm) = %f, dz (cm) = %f, thickness in front of ECal (cm) = %f,  thickness behind ECal (cm) = %f", nobleLiquidMaterial.c_str(),  bathRmin, bathRmax, caloDim.dz(), caloDim.rmin() - cryoDim.rmin2(), cryoDim.rmax1() - caloDim.rmax());
   dd4hep::DetElement bathDetElem(caloDetElem, "bath", 1);
 
   // 3. Create detector structure
