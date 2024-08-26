@@ -11,7 +11,6 @@
 #include "DD4hep/DetFactoryHelper.h"
 
 #include "DDRec/Surface.h"
-#include "DDRec/DetectorData.h"
 #include "XML/Utilities.h"
 
 using dd4hep::BUILD_ENVELOPE;

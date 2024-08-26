@@ -15,7 +15,6 @@
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Shapes.h"
-#include "DD4hep/Printout.h"
 #include "DD4hep/Detector.h"
 
 #include "DDRec/DCH_info.h"

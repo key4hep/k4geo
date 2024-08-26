@@ -12,9 +12,6 @@
 //=========================================================================
 
 #include "DD4hep/DetFactoryHelper.h"
-#include "DD4hep/Printout.h"
-#include "XML/Layering.h"
-#include "TGeoTrd2.h"
 #include "XML/Utilities.h"
 
 using namespace std;

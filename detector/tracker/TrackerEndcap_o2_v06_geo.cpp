@@ -30,7 +30,6 @@
 #include "DDRec/DetectorData.h"
 
 #include <UTIL/BitField64.h>
-#include <UTIL/BitSet32.h>
 #include "UTIL/LCTrackerConf.h"
 #include <UTIL/ILDConf.h>
 
@@ -184,11 +183,11 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             
             Box mod_shape(m_vol.solid());
             
-             if(r - mod_shape->GetDZ()<innerR)
-                 innerR= r- mod_shape->GetDZ();
+             if(r < innerR)
+                 innerR = r;
              
-             if(r + mod_shape->GetDZ()>outerR)
-                 outerR = r + mod_shape->GetDZ();
+             if(r + 2*mod_shape->GetDY() > outerR)
+                 outerR = r + 2*mod_shape->GetDY();
                  
             sumZ+=zstart;
             

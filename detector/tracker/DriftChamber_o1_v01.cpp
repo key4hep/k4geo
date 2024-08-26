@@ -4,13 +4,8 @@
 \***************************************************************************************/
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
-#include "DD4hep/detail/DetectorInterna.h"
-#include "TClass.h"
 #include "TMath.h"
 #include "XML/Utilities.h"
-#include <XML/Layering.h>
-#include <iostream>
-#include <math.h>
 
 using namespace std;
 using namespace dd4hep;

@@ -5,7 +5,6 @@
 //  $Id$
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
-#include "DD4hep/DD4hepUnits.h"
 #include "DDRec/DetectorData.h"
 #include "XMLHandlerDB.h"
 #include <cmath>
