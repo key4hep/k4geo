@@ -364,7 +364,8 @@
         <!-- Vertex inner barrel (VTXIB), using curved MAPS! -->
             <constant name="RSU_z" value="21.666*mm"/> <!-- Length of a single RSU in z -->
             <constant name="RSU_rphi" value="(2.*VTXIB_r_min_layer*pi-2.*VTXIB_curved_gap_rphi)/2./2."/> <!-- Length of a single RSU in rphi, derived from circumference of first layer minus the two gaps, divided by 2 (for two wafers), divided by 2 (for two RSUs for the first layer), = 20.895 mm -->
-            <constant name="RSU_rphi_periphery" value="0.05*RSU_rphi"/> <!-- Assume 5% periphery -->
+            <constant name="RSU_rphi_periphery" value="0.05*RSU_rphi"/> <!-- Assume 5% periphery in r-phi -->
+            <constant name="RSU_z_periphery"    value="0.01*RSU_z"/> <!-- Assume 1% periphery in z -->
             <constant name="RSU_rphi_sensitive" value="0.95*RSU_rphi"/>
 
         <!-- Vertex inner barrel parameters -->    
@@ -614,12 +615,14 @@
                 <!-- Sensor -->
                 <sensor name="sensor" thickness="VTXIB_curved_sensitive_thickness" material="Silicon">
                     <!-- First segment -->
-                    <component sensitive="False"    xmin="0.0*RSU_rphi-RSU_rphi/2."                     xmax="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="0.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="0.0*RSU_rphi-RSU_rphi/2."                     xmax="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2."                    ymax="+RSU_z/2."/>
+                    <component sensitive="True"  isCurved="true" vis="VTXSensitiveVis" xmin="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="0.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2."                    ymax="+RSU_z/2.-RSU_z_periphery"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="0.0*RSU_rphi+RSU_rphi/2."                     ymin="+RSU_z/2.-RSU_z_periphery"    ymax="+RSU_z/2"/>
 
                     <!-- Second segment -->
-                    <component sensitive="False"    xmin="1.0*RSU_rphi-RSU_rphi/2."                     xmax="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="1.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="1.0*RSU_rphi-RSU_rphi/2."                     xmax="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2."                    ymax="+RSU_z/2."/>
+                    <component sensitive="True"  isCurved="true" vis="VTXSensitiveVis" xmin="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="1.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2."                    ymax="+RSU_z/2.-RSU_z_periphery"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="1.0*RSU_rphi+RSU_rphi/2."                     ymin="+RSU_z/2.-RSU_z_periphery"    ymax="+RSU_z/2"/>
                 </sensor>
 
                 <!-- Longerons -->
@@ -644,17 +647,17 @@
 
             <stave name="VTXIBStave2Curved" r="VTXIB_curved_r2" length="2.*VTXIB_curved_z2">
                 <sensor name="sensor" thickness="VTXIB_curved_sensitive_thickness" material="Silicon">
-                    <!-- First segment -->
-                    <component sensitive="False"    xmin="0.0*RSU_rphi-RSU_rphi/2."                     xmax="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="0.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="0.0*RSU_rphi-RSU_rphi/2."                     xmax="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2."                    ymax="+RSU_z/2."/>
+                    <component sensitive="True"  isCurved="true" vis="VTXSensitiveVis" xmin="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="0.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2."                    ymax="+RSU_z/2.-RSU_z_periphery"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="0.0*RSU_rphi+RSU_rphi/2."                     ymin="+RSU_z/2.-RSU_z_periphery"    ymax="+RSU_z/2"/>
 
-                    <!-- Second segment -->
-                    <component sensitive="False"    xmin="1.0*RSU_rphi-RSU_rphi/2."                     xmax="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="1.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="1.0*RSU_rphi-RSU_rphi/2."                     xmax="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2."                    ymax="+RSU_z/2."/>
+                    <component sensitive="True"  isCurved="true" vis="VTXSensitiveVis" xmin="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="1.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2."                    ymax="+RSU_z/2.-RSU_z_periphery"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="1.0*RSU_rphi+RSU_rphi/2."                     ymin="+RSU_z/2.-RSU_z_periphery"    ymax="+RSU_z/2"/>
 
-                    <!-- Third segment -->
-                    <component sensitive="False"    xmin="2.0*RSU_rphi-RSU_rphi/2."                     xmax="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="2.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="2.0*RSU_rphi-RSU_rphi/2."                     xmax="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2."                    ymax="+RSU_z/2."/>
+                    <component sensitive="True"  isCurved="true" vis="VTXSensitiveVis" xmin="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="2.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2."                    ymax="+RSU_z/2.-RSU_z_periphery"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="2.0*RSU_rphi+RSU_rphi/2."                     ymin="+RSU_z/2.-RSU_z_periphery"    ymax="+RSU_z/2"/>
                 </sensor>
 
                 <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r" length="VTXIB_curved_z2+VTXIB_curved_endcap2_length-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
@@ -675,17 +678,21 @@
 
             <stave name="VTXIBStave3Curved_1" r="VTXIB_curved_r3" length="2.*VTXIB_curved_z3_1">
                 <sensor name="sensor" thickness="VTXIB_curved_sensitive_thickness" material="Silicon">
-                    <component sensitive="False"    xmin="0.0*RSU_rphi-RSU_rphi/2."                     xmax="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="0.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="0.0*RSU_rphi-RSU_rphi/2."                     xmax="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2."                    ymax="+RSU_z/2."/>
+                    <component sensitive="True"  isCurved="true" vis="VTXSensitiveVis" xmin="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="0.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2."                    ymax="+RSU_z/2.-RSU_z_periphery"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="0.0*RSU_rphi+RSU_rphi/2."                     ymin="+RSU_z/2.-RSU_z_periphery"    ymax="+RSU_z/2"/>
 
-                    <component sensitive="False"    xmin="1.0*RSU_rphi-RSU_rphi/2."                     xmax="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="1.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="1.0*RSU_rphi-RSU_rphi/2."                     xmax="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2."                    ymax="+RSU_z/2."/>
+                    <component sensitive="True"  isCurved="true" vis="VTXSensitiveVis" xmin="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="1.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2."                    ymax="+RSU_z/2.-RSU_z_periphery"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="1.0*RSU_rphi+RSU_rphi/2."                     ymin="+RSU_z/2.-RSU_z_periphery"    ymax="+RSU_z/2"/>
 
-                    <component sensitive="False"    xmin="2.0*RSU_rphi-RSU_rphi/2."                     xmax="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="2.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="2.0*RSU_rphi-RSU_rphi/2."                     xmax="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2."                    ymax="+RSU_z/2."/>
+                    <component sensitive="True"  isCurved="true" vis="VTXSensitiveVis" xmin="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="2.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2."                    ymax="+RSU_z/2.-RSU_z_periphery"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="2.0*RSU_rphi+RSU_rphi/2."                     ymin="+RSU_z/2.-RSU_z_periphery"    ymax="+RSU_z/2"/>
 
-                    <component sensitive="False"    xmin="3.0*RSU_rphi-RSU_rphi/2."                     xmax="3.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="3.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="3.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="3.0*RSU_rphi-RSU_rphi/2."                     xmax="3.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2."                    ymax="+RSU_z/2."/>
+                    <component sensitive="True"  isCurved="true" vis="VTXSensitiveVis" xmin="3.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="3.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2."                    ymax="+RSU_z/2.-RSU_z_periphery"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="3.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="3.0*RSU_rphi+RSU_rphi/2."                     ymin="+RSU_z/2.-RSU_z_periphery"    ymax="+RSU_z/2"/>
                 </sensor>
 
                 <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r" length="VTXIB_curved_z3_1+VTXIB_curved_endcap3_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
@@ -706,17 +713,21 @@
 
             <stave name="VTXIBStave3Curved_2" r="VTXIB_curved_r3" length="2.*VTXIB_curved_z3_2">
                 <sensor name="sensor" thickness="VTXIB_curved_sensitive_thickness" material="Silicon">
-                    <component sensitive="False"    xmin="0.0*RSU_rphi-RSU_rphi/2."                     xmax="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="0.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="0.0*RSU_rphi-RSU_rphi/2."                     xmax="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2."                    ymax="+RSU_z/2."/>
+                    <component sensitive="True"  isCurved="true" vis="VTXSensitiveVis" xmin="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="0.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2."                    ymax="+RSU_z/2.-RSU_z_periphery"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="0.0*RSU_rphi+RSU_rphi/2."                     ymin="+RSU_z/2.-RSU_z_periphery"    ymax="+RSU_z/2"/>
 
-                    <component sensitive="False"    xmin="1.0*RSU_rphi-RSU_rphi/2."                     xmax="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="1.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="1.0*RSU_rphi-RSU_rphi/2."                     xmax="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2."                    ymax="+RSU_z/2."/>
+                    <component sensitive="True"  isCurved="true" vis="VTXSensitiveVis" xmin="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="1.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2."                    ymax="+RSU_z/2.-RSU_z_periphery"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="1.0*RSU_rphi+RSU_rphi/2."                     ymin="+RSU_z/2.-RSU_z_periphery"    ymax="+RSU_z/2"/>
 
-                    <component sensitive="False"    xmin="2.0*RSU_rphi-RSU_rphi/2."                     xmax="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="2.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="2.0*RSU_rphi-RSU_rphi/2."                     xmax="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2."                    ymax="+RSU_z/2."/>
+                    <component sensitive="True"  isCurved="true" vis="VTXSensitiveVis" xmin="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="2.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2."                    ymax="+RSU_z/2.-RSU_z_periphery"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="2.0*RSU_rphi+RSU_rphi/2."                     ymin="+RSU_z/2.-RSU_z_periphery"    ymax="+RSU_z/2"/>
 
-                    <component sensitive="False"    xmin="3.0*RSU_rphi-RSU_rphi/2."                     xmax="3.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="3.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="3.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="3.0*RSU_rphi-RSU_rphi/2."                     xmax="3.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2."                    ymax="+RSU_z/2."/>
+                    <component sensitive="True"  isCurved="true" vis="VTXSensitiveVis" xmin="3.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="3.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2."                    ymax="+RSU_z/2.-RSU_z_periphery"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="3.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="3.0*RSU_rphi+RSU_rphi/2."                     ymin="+RSU_z/2.-RSU_z_periphery"    ymax="+RSU_z/2"/>
                 </sensor>
 
                 <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r" length="VTXIB_curved_z3_2+VTXIB_curved_endcap3_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
@@ -737,20 +748,25 @@
 
             <stave name="VTXIBStave4Curved_1" r="VTXIB_curved_r4" length="2.*VTXIB_curved_z4_1">
                 <sensor name="sensor" thickness="VTXIB_curved_sensitive_thickness" material="Silicon">
-                    <component sensitive="False"    xmin="0.0*RSU_rphi-RSU_rphi/2."                     xmax="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="0.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="0.0*RSU_rphi-RSU_rphi/2."                     xmax="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2."                    ymax="+RSU_z/2."/>
+                    <component sensitive="True"  isCurved="true" vis="VTXSensitiveVis" xmin="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="0.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2."                    ymax="+RSU_z/2.-RSU_z_periphery"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="0.0*RSU_rphi+RSU_rphi/2."                     ymin="+RSU_z/2.-RSU_z_periphery"    ymax="+RSU_z/2"/>
 
-                    <component sensitive="False"    xmin="1.0*RSU_rphi-RSU_rphi/2."                     xmax="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="1.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="1.0*RSU_rphi-RSU_rphi/2."                     xmax="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2."                    ymax="+RSU_z/2."/>
+                    <component sensitive="True"  isCurved="true" vis="VTXSensitiveVis" xmin="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="1.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2."                    ymax="+RSU_z/2.-RSU_z_periphery"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="1.0*RSU_rphi+RSU_rphi/2."                     ymin="+RSU_z/2.-RSU_z_periphery"    ymax="+RSU_z/2"/>
 
-                    <component sensitive="False"    xmin="2.0*RSU_rphi-RSU_rphi/2."                     xmax="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="2.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="2.0*RSU_rphi-RSU_rphi/2."                     xmax="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2."                    ymax="+RSU_z/2."/>
+                    <component sensitive="True"  isCurved="true" vis="VTXSensitiveVis" xmin="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="2.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2."                    ymax="+RSU_z/2.-RSU_z_periphery"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="2.0*RSU_rphi+RSU_rphi/2."                     ymin="+RSU_z/2.-RSU_z_periphery"    ymax="+RSU_z/2"/>
 
-                    <component sensitive="False"    xmin="3.0*RSU_rphi-RSU_rphi/2."                     xmax="3.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="3.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="3.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="3.0*RSU_rphi-RSU_rphi/2."                     xmax="3.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2."                    ymax="+RSU_z/2."/>
+                    <component sensitive="True"  isCurved="true" vis="VTXSensitiveVis" xmin="3.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="3.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2."                    ymax="+RSU_z/2.-RSU_z_periphery"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="3.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="3.0*RSU_rphi+RSU_rphi/2."                     ymin="+RSU_z/2.-RSU_z_periphery"    ymax="+RSU_z/2"/>
 
-                    <component sensitive="False"    xmin="4.0*RSU_rphi-RSU_rphi/2."                     xmax="4.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="4.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="4.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="4.0*RSU_rphi-RSU_rphi/2."                     xmax="4.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2."                    ymax="+RSU_z/2."/>
+                    <component sensitive="True"  isCurved="true" vis="VTXSensitiveVis" xmin="4.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="4.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2."                    ymax="+RSU_z/2.-RSU_z_periphery"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="4.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="4.0*RSU_rphi+RSU_rphi/2."                     ymin="+RSU_z/2.-RSU_z_periphery"    ymax="+RSU_z/2"/>
                 </sensor>
 
                 <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r" length="VTXIB_curved_z4_1+VTXIB_curved_endcap4_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
@@ -769,26 +785,31 @@
                 </end_z>
 
                 <components name="inner_vertex_tube" r="VTXIB_curved_r_outer-VTXIB_curved_r4" length="VTXIB_curved_z4_1+VTXIB_curved_support_ring_length/2.">
-                    <component thickness="VTXIB_tube_thickness" width="2.*pi*(VTXIB_curved_r_outer)/2." material="PEEK" isCurved="true" vis="VTXPEEKVis"/>
+                    <component thickness="VTXIB_tube_thickness" width="2.*pi*(VTXIB_curved_r_outer)/2." phi_offset="VTXIB_curved_ring4_phi_offset+pi/2." material="PEEK" isCurved="true" vis="VTXPEEKVis"/>
                 </components>
             </stave>
 
             <stave name="VTXIBStave4Curved_2" r="VTXIB_curved_r4" length="2.*VTXIB_curved_z4_2">
                 <sensor name="sensor" thickness="VTXIB_curved_sensitive_thickness" material="Silicon">
-                    <component sensitive="False"    xmin="0.0*RSU_rphi-RSU_rphi/2."                     xmax="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="0.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="0.0*RSU_rphi-RSU_rphi/2."                     xmax="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2."                    ymax="+RSU_z/2."/>
+                    <component sensitive="True"  isCurved="true" vis="VTXSensitiveVis" xmin="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="0.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2."                    ymax="+RSU_z/2.-RSU_z_periphery"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="0.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="0.0*RSU_rphi+RSU_rphi/2."                     ymin="+RSU_z/2.-RSU_z_periphery"    ymax="+RSU_z/2"/>
 
-                    <component sensitive="False"    xmin="1.0*RSU_rphi-RSU_rphi/2."                     xmax="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="1.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="1.0*RSU_rphi-RSU_rphi/2."                     xmax="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2."                    ymax="+RSU_z/2."/>
+                    <component sensitive="True"  isCurved="true" vis="VTXSensitiveVis" xmin="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="1.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2."                    ymax="+RSU_z/2.-RSU_z_periphery"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="1.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="1.0*RSU_rphi+RSU_rphi/2."                     ymin="+RSU_z/2.-RSU_z_periphery"    ymax="+RSU_z/2"/>
 
-                    <component sensitive="False"    xmin="2.0*RSU_rphi-RSU_rphi/2."                     xmax="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="2.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="2.0*RSU_rphi-RSU_rphi/2."                     xmax="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2."                    ymax="+RSU_z/2."/>
+                    <component sensitive="True"  isCurved="true" vis="VTXSensitiveVis" xmin="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="2.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2."                    ymax="+RSU_z/2.-RSU_z_periphery"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="2.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="2.0*RSU_rphi+RSU_rphi/2."                     ymin="+RSU_z/2.-RSU_z_periphery"    ymax="+RSU_z/2"/>
 
-                    <component sensitive="False"    xmin="3.0*RSU_rphi-RSU_rphi/2."                     xmax="3.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="3.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="3.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="3.0*RSU_rphi-RSU_rphi/2."                     xmax="3.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2."                    ymax="+RSU_z/2."/>
+                    <component sensitive="True"  isCurved="true" vis="VTXSensitiveVis" xmin="3.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="3.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2."                    ymax="+RSU_z/2.-RSU_z_periphery"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="3.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="3.0*RSU_rphi+RSU_rphi/2."                     ymin="+RSU_z/2.-RSU_z_periphery"    ymax="+RSU_z/2"/>
 
-                    <component sensitive="False"    xmin="4.0*RSU_rphi-RSU_rphi/2."                     xmax="4.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXPeripheryVis"/>
-                    <component sensitive="True"     xmin="4.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="4.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2." ymax="+RSU_z/2." isCurved="true" vis="VTXSensitiveVis"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="4.0*RSU_rphi-RSU_rphi/2."                     xmax="4.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  ymin="-RSU_z/2."                    ymax="+RSU_z/2."/>
+                    <component sensitive="True"  isCurved="true" vis="VTXSensitiveVis" xmin="4.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="4.0*RSU_rphi+RSU_rphi/2."                     ymin="-RSU_z/2."                    ymax="+RSU_z/2.-RSU_z_periphery"/>
+                    <component sensitive="False" isCurved="true" vis="VTXPeripheryVis" xmin="4.0*RSU_rphi-RSU_rphi/2.+RSU_rphi_periphery"  xmax="4.0*RSU_rphi+RSU_rphi/2."                     ymin="+RSU_z/2.-RSU_z_periphery"    ymax="+RSU_z/2"/>
                 </sensor>
 
                 <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r" length="VTXIB_curved_z4_2+VTXIB_curved_endcap4_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
@@ -806,8 +827,8 @@
                     <component thickness="VTXIB_curved_r_outer-VTXIB_curved_r4-VTXIB_curved_sensitive_thickness-2.0*VTXIB_curved_tolerance_r" width="pi*(VTXIB_curved_r4+VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r)" length="VTXIB_curved_support_ring_length" phi_offset="VTXIB_curved_ring4_phi_offset" isCurved="true" material="CarbonFoam" vis="VTXCarbonFoamVis" dz="+VTXIB_curved_endcap4_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset"/>
                 </end_z>
 
-                <components name="inner_vertex_tube" r="0.0" length="VTXIB_curved_z4_2+VTXIB_curved_support_ring_length/2.">
-                    <component thickness="VTXIB_tube_thickness" width="2.*pi*(VTXIB_curved_r_outer)/2." material="PEEK" isCurved="true" vis="VTXPEEKVis"/>
+                <components name="inner_vertex_tube" r="VTXIB_curved_r_outer-VTXIB_curved_r4" length="VTXIB_curved_z4_2+VTXIB_curved_support_ring_length/2.">
+                    <component thickness="VTXIB_tube_thickness" width="2.*pi*(VTXIB_curved_r_outer)/2." phi_offset="VTXIB_curved_ring4_phi_offset+pi/2." material="PEEK" isCurved="true" vis="VTXPEEKVis"/>
                 </components>
             </stave>
 
@@ -1132,7 +1153,7 @@
         </detector>
 
          <!-- Disk support proxy volumes  -->
-        <detector name="VertexDisks_support" type="VertexBarrel_detailed_o1_v02" vis="VXDVis" id="DetID_NOTUSED" readout="VertexEndcapDummyCollection"  region="VTXDRegion">
+        <detector name="VertexDisks_support" type="VertexBarrel_detailed_o1_v02" vis="VXDVis" id="-1" readout="VertexEndcapDummyCollection"  region="VTXDRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>
