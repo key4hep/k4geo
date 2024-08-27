@@ -198,12 +198,14 @@
         <!-- _prime marks the coordinate system along the beamline instead of the detector coordinate frame -->
         <constant name="LumiCal_min_z_prime" value="1074*mm"/>
         <constant name="LumiCal_dz_prime" value="0.5 * 25 * 4.5 * mm"/> <!-- Must be consistent with layers defined in the lumiCal xml, half-length-->
+        <constant name="LumiCal_max_z_prime" value="LumiCal_min_z_prime + LumiCal_dz_prime * 2" />
 
         <!-- calculate the Z position in the detector reference frame for consistency with existing drivers -->
         <constant name="LumiCal_min_z" value="LumiCal_min_z_prime*cos(0.5*CrossingAngle)"/>
+        <constant name="LumiCal_max_z" value="LumiCal_max_z_prime*cos(0.5*CrossingAngle)" />
+
         <!-- This has nothing to do with the actual length of the LumiCal, the value is only used for the positioning -->
         <constant name="LumiCal_dz" value="LumiCal_dz_prime * cos(0.5 * CrossingAngle)"/>
-        <constant name="LumiCal_max_z" value="LumiCal_min_z + LumiCal_dz * 2" />
 
         <constant name="LumiCal_inner_radius" value="55.0*mm"/>
         <constant name="LumiCal_outer_radius" value="115.0*mm- env_safety"/>
@@ -309,7 +311,7 @@
 
     <include ref="BeamInstrumentation_o3_v02_fitShield.xml"/>
 
-    <include ref="LumiCal_o3_v02_04.xml"/>
+    <include ref="LumiCal_o3_v02_05.xml"/>
 
     <include ref="Vertex_o4_v07_smallBP.xml"/>
 
