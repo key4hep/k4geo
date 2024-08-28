@@ -10,3 +10,5 @@ ALLEGRO_o1_v03: with respect to v02 it features an ECal barrel with 11 layers an
 The vertex detector and drift chamber are now taken directly from IDEA_o1_v03, this effectively updates both the vertex detector (which was taken from an old CLD version) and the drift chamber (which was corresponding to IDEA_o1_v02/DriftChamber_o1_v01.xml). The z-extent of the drift chamber is now unchanged w.r.t. the IDEA detector (2 m) since it requires optimization anyway.
 Magnetic fields (solenoid + MDI) have been added.
 Added "turbine-style" endcap ecal, and invoke this in the top-level xml (replacing the coneCyro geometry).
+Added HCalBarrel_TileCal_v02.xml which uses HCalTileBarrel_o1_v02_geo.cpp and removed unused readout BarHCal_Readout_phi. 
+Added HCalEndcaps_ThreeParts_TileCal_v02.xml which uses HCalThreePartsEndcap_o1_v02_geo.cpp. Additionally, wrt v02 the readout was migrated to the theta-phi segmentation; unused readout *Readout_phi was removed; radial dimensions of layers were modified, so the outer radius of all three cylinders is the same. 
