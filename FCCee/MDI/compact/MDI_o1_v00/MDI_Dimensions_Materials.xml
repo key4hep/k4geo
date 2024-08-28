@@ -1,0 +1,208 @@
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+    <info name="MDI_Dimensions_Materials"
+        title="Dimensions and Materials for the FCCee common MDI"
+	author="Andrea Ciarma"
+        url=""
+        status="development"
+        version="1">
+        <comment>Dimensions and Materials for the FCCee common MDI</comment>
+    </info>
+
+    <!-- Materials unique to the MDI -->
+    <materials>
+
+      <!-- for Beam Pipe -->
+      <material name="SolenoidMixture">
+	<D value="4.38" unit="g/cm3"/>
+	<fraction n="0.666" ref="Al"/>
+	<fraction n="0.166" ref="Cu"/>
+	<fraction n="0.084" ref="Ti"/>
+	<fraction n="0.084" ref="Nb"/>
+      </material>
+      
+      <material name="AlBeMet162">
+	<D value="2.1" unit="g/cm3"/>
+	<fraction n="0.38" ref="Al"/>
+	<fraction n="0.62" ref="Be"/>
+      </material>
+      
+      <material name="LiquidNDecane">
+	<D value="0.73" unit="g/cm3"/>
+	<composite n="10" ref="C" />
+	<composite n="22" ref="H" />
+      </material>
+
+      <!-- for LumiCal -->
+      <material name="TungstenDens24">
+	<D value="17.8" unit="g/cm3"/>
+	<fraction n="0.93" ref="W"/>
+	<fraction n="0.061" ref="Ni"/>
+	<fraction n="0.009" ref="Fe"/>
+      </material>
+      
+    </materials>
+
+    
+    <define>
+        <constant name="CrossingAngle" value="0.030*rad"/>
+        <constant name="SolenoidField" value="2*tesla"/>
+
+        <!-- Central Chamber -->
+        <constant name="CentralBeamPipe_zmax" value="90*mm"/>
+        <constant name="CentralBeamPipe_rmax" value="10.0*mm"/> <!-- inner value -->
+        <constant name="BPWWall"       value="0.35*mm" /> <!-- Beam Pipe Width -->
+        <constant name="BPWCool"       value="1.0*mm" />
+        <constant name="BeamPipeWidth" value="2.0*BPWWall + BPWCool"/>
+
+        <constant name="BeamPipeGoldWidth" value="0.005*mm" />
+	<constant name="BeamPipeGoldTolerance" value="0.001*mm" />  <!-- dummy tolerance, some small non zero value -->
+
+	<!-- Conical Chamber -->
+	<constant name="SeparatedBeamPipe_rmax"  value="15*mm"/>
+        <constant name="SeparatedBeamPipe_z" value="1190.0*mm"/>
+	<constant name="BeamPipeWidthFirstCone" value="2.0*mm" />
+	<constant name="ConeBeamPipe_Rmax" value="28.9*mm" /> <!-- this is the inner length of the longer elipse axis -->
+	<constant name="BeamPipeConeHalfAngle" value="(ConeBeamPipe_Rmax+BeamPipeWidthFirstCone-CentralBeamPipe_rmax) / (SeparatedBeamPipe_z-CentralBeamPipe_zmax)"/>
+
+
+        <constant name="BeamPipeTantalShieldWidth"  value="15*mm"/>
+        <constant name="SideFillerShieldWidth"  value="7*mm"/>
+        <constant name="TopFillerShieldWidth"  value="8*mm"/>
+        <constant name="BeamPipe_end" value="12500*mm"/>
+
+        <!-- Mike Sullivan's Synch Rad mask -->
+        <constant name="MiddleOfSRMask_z" value="2.1*m" />
+        <constant name="SynchRadMaskSize" value="5*mm" /> <!-- mask tip is at 10 mm from the beamline -->
+        <constant name="mask_epsilon" value="0.001*mm" />
+
+	<!-- compensating and screening solenoids -->
+	<constant name="CompSol_min_z" value="1230*mm"/>
+	<constant name="QD0_min_z" value="2000*mm"/>
+        <constant name="QD0_max_z" value="5400*mm"/>
+        <constant name="QD0Coil_outer_radius" value="30*mm"/> <!-- ? -->
+	
+        <!-- _prime marks the coordinate system along the beamline instead of the detector coordinate frame -->
+        <constant name="LumiCal_min_z_prime" value="1074*mm"/>
+        <constant name="LumiCal_dz_prime" value="0.5 * 25 * 4.5 * mm"/> <!-- Must be consistent with layers defined in the lumiCal xml, half-length-->
+
+        <!-- calculate the Z position in the detector reference frame for consistency with existing drivers -->
+        <constant name="LumiCal_min_z" value="LumiCal_min_z_prime*cos(0.5*CrossingAngle)"/>
+        <!-- This has nothing to do with the actual length of the LumiCal, the value is only used for the positioning -->
+        <constant name="LumiCal_dz" value="LumiCal_dz_prime * cos(0.5 * CrossingAngle)"/>
+        <constant name="LumiCal_max_z" value="LumiCal_min_z + LumiCal_dz * 2" />
+
+        <constant name="LumiCal_inner_radius" value="55.0*mm"/>
+        <constant name="LumiCal_outer_radius" value="115.0*mm- env_safety"/>
+
+	<constant name="LumiCal_Instr_thickness" value="20*mm"/>
+	<constant name="LumiCal_Instr_inner_radius" value="LumiCal_outer_radius"/>
+	<constant name="LumiCal_Instr_outer_radius" value="LumiCal_outer_radius+LumiCal_Instr_thickness - env_safety"/>
+
+	<constant name="LumiCal_Cool_thickness" value="9.75*mm"/>
+	<constant name="LumiCal_Cool_inner_radius" value="LumiCal_Instr_outer_radius"/>
+	<constant name="LumiCal_Cool_outer_radius" value="LumiCal_Instr_outer_radius+LumiCal_Cool_thickness"/>
+
+        <constant name="Lcal_services_rmax" value="LumiCal_outer_radius+30*mm"/>
+        <constant name="Lcal_offset_phi" value=" 0."/>
+        <!--preliminary LumiCal shielding-->
+        <!--back shielding-->
+        <constant name="LumiCal_Shield_inner_radius" value="LumiCal_inner_radius"/>
+        <constant name="LumiCal_Shield_outer_radius" value="LumiCal_outer_radius+LumiCal_Instr_thickness+LumiCal_Cool_thickness"/>
+        <!-- For convenience, z here refers to dimensions *along the beam pipe*, which is tilted by CrossingAngle/2 w.r.t the global z axis -->
+        <constant name="LumiCal_shield_dz" value="3.5/2.0*mm"/> <!-- Must be consistent with layers defined in the lumiCal xml (1*3.5 mm)-->
+
+        <constant name="BeamCal_inner_radius" value="32*mm"/>
+        <constant name="BeamCal_outer_radius" value="150*mm"/>
+        <constant name="BeamCal_min_z" value="3181*mm"/>
+        <constant name="BeamCal_max_z" value="3441*mm"/>
+        <constant name="BeamCal_dz" value="(BeamCal_max_z-BeamCal_min_z)/2.0"/>
+
+        <constant name="Kicker_inner_radius" value="4*mm"/>
+        <constant name="Kicker_outer_radius" value="25*mm"/>
+        <constant name="Kicker_min_z" value="3480*mm"/>
+        <constant name="Kicker_max_z" value="3780*mm"/>
+
+        <constant name="BPM_inner_radius" value="36*mm"/>
+        <constant name="BPM_outer_radius" value="55*mm"/>
+        <constant name="BPM_min_z" value="3790*mm"/>
+        <constant name="BPM_max_z" value="3880*mm"/>
+
+        <constant name="QD0_min_z" value="2000*mm"/>
+        <constant name="QD0_max_z" value="5400*mm"/>
+	<constant name="QD0Coil_outer_radius" value="30*mm"/>
+        <constant name="CollimatorInFrontOfQD0_dz" value="20*cm"/>
+        <constant name="CollimatorInFrontOfQD0_radius" value="10*mm"/>
+        <constant name="CollimatorInFrontOfQD0_dr" value="16*mm"/>
+    </define>
+
+
+    <fields>
+<!--
+      <field name="GlobalSolenoid" type="solenoid"
+             inner_field="SolenoidField"
+             outer_field="-1.0*tesla"
+             zmax="Solenoid_Coil_half_length"
+             outer_radius="Solenoid_Coil_radius">
+      </field>
+
+      <field name="CompensatingSolenoidZplus" type="solenoid"
+             inner_field="-SolenoidField -SolenoidField * QD0_min_z / ( QD0_min_z - CompSol_min_z)"
+             outer_field="0*tesla"
+             zmax="QD0_min_z"
+	     zmin="CompSol_min_z"
+             outer_radius="20*cm">
+      </field>
+
+      <field name="CompensatingSolenoidZminus" type="solenoid"
+             inner_field="-SolenoidField -SolenoidField * QD0_min_z / ( QD0_min_z - CompSol_min_z)"
+             outer_field="0*tesla"
+             zmin="-QD0_min_z"
+             zmax="-CompSol_min_z"
+             outer_radius="20*cm">
+      </field>
+-->
+<!-- Detailed field map -->
+<!--field name="TestField" type="FieldXYZ"
+             filename    = "fieldMapXYZ_120218.root"
+             treeName    = "ntuple"
+             xVarName    = "X"
+             yVarName    = "Y"
+             zVarName    = "Z"
+             BxVarName   = "Bx"
+             ByVarName   = "By"
+             BzVarName   = "Bz"
+             xScale      = "1.0"
+             yScale      = "1.0"
+             zScale      = "1.0"
+             bScale      = "1.0"
+             inner_radius="0*mm"
+             outer_radius="500*mm"
+             zmax="3000*mm"
+             coorUnits   = "mm"
+             BfieldUnits = "tesla">
+      </field-->
+
+<!-- to check with the visualisation that this works... :
+      <field name="GlobalSolenoid" type="solenoid"
+             inner_field="SolenoidField"
+             outer_field="-1.5*tesla"
+             zmax="1*m"
+             outer_radius="Solenoid_Coil_radius">
+      </field>
+      <field name="CompensatingSolenoid" type="solenoid"
+             inner_field="-SolenoidField"
+             outer_field="0*tesla"
+             zmax="3*m"
+             zmin="1*m"
+             outer_radius="Solenoid_Coil_radius">
+      </field>
+-->
+
+
+    </fields>
+
+
+</lccdd>
