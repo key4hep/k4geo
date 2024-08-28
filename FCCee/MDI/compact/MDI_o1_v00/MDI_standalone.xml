@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+  <info name="MDI Standalone"
+    title="MDI Standalone"
+    author="Andrea Ciarma"
+    url="no"
+    status="development"
+    version="1.0">
+    <comment>
+      Master compact file for the common FCCee Machine Detector Interface. For debug only.
+    </comment>
+  </info>
+
+  <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml" />
+
+  <includes>
+    <gdmlFile  ref="local_elements.xml"/>
+    <gdmlFile  ref="local_materials.xml"/>
+  </includes>
+  
+  <define>
+    <constant name="world_size" value="25*m"/>
+    <constant name="world_x" value="world_size"/>
+    <constant name="world_y" value="world_size"/>
+    <constant name="world_z" value="world_size"/>
+
+    <!-- only for standalone, should normally be included in the detector dimensions compact -->
+    <constant name="env_safety" value="0.1*mm"/>
+    <constant name="world_side" value="6100*mm"/>
+    
+    <constant name="DetID_LumiCal"          value=" 15"/>
+    <constant name="DetID_LumiCalInstrumentation"          value=" 16"/>
+    <constant name="DetID_LumiCalCooling"          value=" 17"/>
+    <constant name="DetID_LumiCalBackShield"          value=" 18"/>
+    <constant name="DetID_HOMAbsorber"          value=" 19"/>
+    <constant name="DetID_LumiCalNoseShield"          value=" 22"/>
+  </define>
+
+  <include ref="MDI_Dimensions_Materials.xml" />
+
+  <include ref="Beampipe_o4_v05.xml"/>
+  <include ref="BeamInstrumentation_o1_v01.xml"/>
+  <include ref="LumiCal_o3_v02_04.xml"/>
+  <include ref="HOMAbsorber.xml"/> 
+
+</lccdd>
