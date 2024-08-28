@@ -39,10 +39,14 @@
 
             <shape type="Polycone" material="Air">
               <zplane z="-InnerTracker_half_length"       rmin="ITEnvelopeClearanceConeHalfAngle * ConeBeamPipe_zmax"             rmax="InnerTracker_outer_radius" />
+              <zplane z="-(LumiCal_min_z + 30 * mm)"      rmin="InnerTracker_Endcap_radius_2 - 3.5*mm"                            rmax="InnerTracker_outer_radius" /> <!-- constant radius! -->
+              <zplane z="-(LumiCal_min_z - 0.2 * mm)"     rmin="InnerTracker_Endcap_radius_2 - 3.5*mm"                            rmax="InnerTracker_outer_radius" />
               <zplane z="-(Vertex_half_length + 5 * mm)"  rmin="ITEnvelopeClearanceConeHalfAngle * (Vertex_half_length + 5 * mm)" rmax="InnerTracker_outer_radius" />
               <zplane z="-(Vertex_half_length)"           rmin="Vertex_outer_radius"                                              rmax="InnerTracker_outer_radius" />
               <zplane z="+(Vertex_half_length)"           rmin="Vertex_outer_radius"                                              rmax="InnerTracker_outer_radius" />
               <zplane z="+(Vertex_half_length + 5 * mm)"  rmin="ITEnvelopeClearanceConeHalfAngle * (Vertex_half_length + 5 * mm)" rmax="InnerTracker_outer_radius" />
+              <zplane z="+(LumiCal_min_z - 0.2 * mm)"     rmin="InnerTracker_Endcap_radius_2 - 3.5*mm"                            rmax="InnerTracker_outer_radius" />
+              <zplane z="+(LumiCal_min_z + 30 * mm)"      rmin="InnerTracker_Endcap_radius_2 - 3.5*mm"                            rmax="InnerTracker_outer_radius" /> <!-- constant radius! -->
               <zplane z="+InnerTracker_half_length"       rmin="ITEnvelopeClearanceConeHalfAngle * ConeBeamPipe_zmax"             rmax="InnerTracker_outer_radius" />
 	    </shape>
 
