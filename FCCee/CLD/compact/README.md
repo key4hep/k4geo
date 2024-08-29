@@ -45,6 +45,7 @@ CLD_o2_v07
 This model is based on `CLD_o2_v06` with the following changes: reduced loading time by adding stave assemblies in the tracker barrel.
 Additionally, a non-cylindrical (polycone) tracking volume was added that excludes the LumiCal. To profit from this feature the `Geant4TVUserParticleHandler`
 needs to be used in `ddsim`. The definitions for the cylindrical volume were kept to be backwards compatible to the `Geant4TCUserParticleHandler`.
+Overlaps related to the LumiCal were fixed that were present in the v06 model
 
 CLD_o3_v01
 ----------
