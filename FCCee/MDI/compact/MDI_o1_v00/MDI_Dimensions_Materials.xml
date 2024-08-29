@@ -83,17 +83,20 @@
 	<constant name="QD0_min_z" value="2000*mm"/>
         <constant name="QD0_max_z" value="5400*mm"/>
         <constant name="QD0Coil_outer_radius" value="30*mm"/> <!-- ? -->
-	
+
+	<!-- LumiCal -->
         <!-- _prime marks the coordinate system along the beamline instead of the detector coordinate frame -->
         <constant name="LumiCal_min_z_prime" value="1074*mm"/>
         <constant name="LumiCal_dz_prime" value="0.5 * 25 * 4.5 * mm"/> <!-- Must be consistent with layers defined in the lumiCal xml, half-length-->
-
+	<constant name="LumiCal_max_z_prime" value="LumiCal_min_z_prime + LumiCal_dz_prime * 2" />
+	
         <!-- calculate the Z position in the detector reference frame for consistency with existing drivers -->
         <constant name="LumiCal_min_z" value="LumiCal_min_z_prime*cos(0.5*CrossingAngle)"/>
+	<constant name="LumiCal_max_z" value="LumiCal_max_z_prime*cos(0.5*CrossingAngle)" />
+	
         <!-- This has nothing to do with the actual length of the LumiCal, the value is only used for the positioning -->
         <constant name="LumiCal_dz" value="LumiCal_dz_prime * cos(0.5 * CrossingAngle)"/>
-        <constant name="LumiCal_max_z" value="LumiCal_min_z + LumiCal_dz * 2" />
-
+        
         <constant name="LumiCal_inner_radius" value="55.0*mm"/>
         <constant name="LumiCal_outer_radius" value="115.0*mm- env_safety"/>
 
@@ -112,30 +115,12 @@
         <constant name="LumiCal_Shield_inner_radius" value="LumiCal_inner_radius"/>
         <constant name="LumiCal_Shield_outer_radius" value="LumiCal_outer_radius+LumiCal_Instr_thickness+LumiCal_Cool_thickness"/>
         <!-- For convenience, z here refers to dimensions *along the beam pipe*, which is tilted by CrossingAngle/2 w.r.t the global z axis -->
-        <constant name="LumiCal_shield_dz" value="3.5/2.0*mm"/> <!-- Must be consistent with layers defined in the lumiCal xml (1*3.5 mm)-->
+	<constant name="LumiCal_shield_dz_prime" value="3.5/2.0*mm"/> <!-- Must be consistent with layers defined in the lumiCal xml (1*3.5 mm)-->
+        <constant name="LumiCal_shield_dz" value="LumiCal_shield_dz_prime  * cos(0.5 * CrossingAngle)"/>
 
-        <constant name="BeamCal_inner_radius" value="32*mm"/>
-        <constant name="BeamCal_outer_radius" value="150*mm"/>
-        <constant name="BeamCal_min_z" value="3181*mm"/>
-        <constant name="BeamCal_max_z" value="3441*mm"/>
-        <constant name="BeamCal_dz" value="(BeamCal_max_z-BeamCal_min_z)/2.0"/>
-
-        <constant name="Kicker_inner_radius" value="4*mm"/>
-        <constant name="Kicker_outer_radius" value="25*mm"/>
-        <constant name="Kicker_min_z" value="3480*mm"/>
-        <constant name="Kicker_max_z" value="3780*mm"/>
-
-        <constant name="BPM_inner_radius" value="36*mm"/>
-        <constant name="BPM_outer_radius" value="55*mm"/>
-        <constant name="BPM_min_z" value="3790*mm"/>
-        <constant name="BPM_max_z" value="3880*mm"/>
-
+	
         <constant name="QD0_min_z" value="2000*mm"/>
         <constant name="QD0_max_z" value="5400*mm"/>
-	<constant name="QD0Coil_outer_radius" value="30*mm"/>
-        <constant name="CollimatorInFrontOfQD0_dz" value="20*cm"/>
-        <constant name="CollimatorInFrontOfQD0_radius" value="10*mm"/>
-        <constant name="CollimatorInFrontOfQD0_dr" value="16*mm"/>
     </define>
 
 
