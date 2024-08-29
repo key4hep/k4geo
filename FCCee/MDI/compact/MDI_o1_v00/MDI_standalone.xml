@@ -37,6 +37,7 @@
     <constant name="DetID_LumiCalBackShield"          value=" 18"/>
     <constant name="DetID_HOMAbsorber"          value=" 19"/>
     <constant name="DetID_LumiCalNoseShield"          value=" 22"/>
+    <constant name="DetID_FFQs"  value="23"/>
   </define>
 
   <include ref="MDI_Dimensions_Materials.xml" />
@@ -44,6 +45,10 @@
   <include ref="Beampipe_o4_v05.xml"/>
   <include ref="BeamInstrumentation_o1_v01.xml"/>
   <include ref="LumiCal_o3_v02_05.xml"/>
-  <include ref="HOMAbsorber.xml"/> 
-
+  <include ref="HOMAbsorber.xml"/>
+  <include ref="FFQuad_sens_o1_v01.xml"/>
+  <!-- <include ref="fields_antisol_map.xml"/> -->
+  <!-- <include ref="${k4geo_DIR}/ILD/compact/ILD_common_v02/Field_AntiDID_Map_l.xml"/> -->
+  <!-- <include ref="fields_antisol_ideal.xml"/> -->
+  
 </lccdd>
