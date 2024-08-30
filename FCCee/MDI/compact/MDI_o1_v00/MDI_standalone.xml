@@ -27,6 +27,8 @@
     <constant name="world_y" value="world_size"/>
     <constant name="world_z" value="world_size"/>
 
+    <constant name="FFQ_ON" value="1"/>   <!-- turn on/off FFQ magnetic field -->
+    
     <!-- only for standalone, should normally be included in the detector dimensions compact -->
     <constant name="env_safety" value="0.1*mm"/>
     <constant name="world_side" value="6100*mm"/>
@@ -46,8 +48,15 @@
   <include ref="BeamInstrumentation_o1_v01.xml"/>
   <include ref="LumiCal_o3_v02_05.xml"/>
   <include ref="HOMAbsorber.xml"/>
-  <include ref="FFQuad_sens.xml"/>
-  <!-- <include ref="fields_antisol_map.xml"/> -->
+
+  <!-- must use one FFQuads_params_xxx.xml BEFORE FFQuads_v01.xml -->
+  <include ref="FFQuads_params_v530_Z.xml"/>
+  <!-- <include ref="FFQuads_params_v572_Z.xml"/>-->
+  <!-- <include ref="FFQuads_params_v572_T.xml"/>-->
+  <include ref="FFQuads_v01.xml"/>
+
+
+  <!-- <include ref="fields_antisol_map.xml"/>-->
   <!-- <include ref="${k4geo_DIR}/ILD/compact/ILD_common_v02/Field_AntiDID_Map_l.xml"/> -->
   <!-- <include ref="fields_antisol_ideal.xml"/> -->
   
