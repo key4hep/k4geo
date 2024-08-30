@@ -108,6 +108,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         vector<double> ymin;
         vector<double> ymax;
         vector<double> phi_offsets;
+        vector<string> names;
         vector<bool> isCurved;
         double width;
         double length;
@@ -241,11 +242,11 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         for(c_sensor.reset(); c_sensor; ++c_sensor){
             sensorsStruct sensor;   
 
-            sensor.name = xml_comp_t(c_sensor).nameStr(); 
             sensor.r = xml_comp_t(c_sensor).r(0);
             sensor.offset = xml_comp_t(c_sensor).offset(0);
             sensor.thickness = xml_comp_t(c_sensor).thickness();
             sensor.material = theDetector.material(xml_comp_t(c_sensor).materialStr());
+            sensor.name = xml_comp_t(c_sensor).nameStr(); 
 
             xml_coll_t c_component = xml_coll_t(c_sensor,_U(component));
             int iSensor = 0;
@@ -256,6 +257,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 sensor.xmax.push_back(component.xmax());
                 sensor.ymin.push_back(component.ymin());
                 sensor.ymax.push_back(component.ymax());
+                sensor.names.push_back(component.nameStr("sensor"));
 
                 sensor.phi_offsets.push_back(getAttrOrDefault(component, _Unicode(phi_offset), double(0.0)) );
 
@@ -269,11 +271,11 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                     double half_width = abs(component.xmax()-component.xmin())/rmin/2.;
                     double phi_offset = getAttrOrDefault(component, _Unicode(phi_offset), double(0.0));
                     Tube ele_box = Tube(rmin, rmin + sensor.thickness, abs(component.ymax()-component.ymin())/2., -half_width+phi_offset, half_width+phi_offset);
-                    ele_vol = Volume(sensor.name +  _toString(iSensor, "_%d"), ele_box, sensor.material);                    
+                    ele_vol = Volume(sensor.names.back() +  _toString(iSensor, "_%d"), ele_box, sensor.material);                    
                 }
                 else{
                     Box ele_box = Box(sensor.thickness/2., abs(component.xmax()-component.xmin())/2., abs(component.ymax()-component.ymin())/2.);            
-                    ele_vol = Volume(sensor.name +  _toString(iSensor, "_%d"), ele_box, sensor.material);                    
+                    ele_vol = Volume(sensor.names.back() +  _toString(iSensor, "_%d"), ele_box, sensor.material);                    
                 }
 
                 if(sensor.sensitives.back())

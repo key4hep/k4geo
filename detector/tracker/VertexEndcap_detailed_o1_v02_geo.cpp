@@ -101,6 +101,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         vector<double> sensor_xmax;
         vector<double> sensor_ymin;
         vector<double> sensor_ymax;
+        vector<string> sensor_names;
         double sensor_width;
         double sensor_length;
         vector<Volume> sensor_volumes;
@@ -178,9 +179,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             m.sensor_xmax.push_back(component.xmax());
             m.sensor_ymin.push_back(component.ymin());
             m.sensor_ymax.push_back(component.ymax());
+            m.sensor_names.push_back(component.nameStr("sensor"));
 
             Box ele_box = Box( abs(component.xmax()-component.xmin())/2., abs(component.ymax()-component.ymin())/2., m.sensor_thickness/2.);
-            Volume ele_vol = Volume( "sensor" + _toString(iSensor, "_%d"), ele_box, m.sensor_material);                    
+            Volume ele_vol = Volume( m.sensor_names.back() + _toString(iSensor, "_%d"), ele_box, m.sensor_material);                    
             ele_vol.setAttributes(theDetector, x_det.regionStr(), x_det.limitsStr(), component.visStr());
 
             if(m.sensor_sensitives.back())
