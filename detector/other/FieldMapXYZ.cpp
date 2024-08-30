@@ -40,6 +40,7 @@ namespace {
 }
 
 FieldMapXYZ::FieldMapXYZ() {
+  field_type = CartesianField::MAGNETIC;
   type = CartesianField::MAGNETIC;
 } //ctor
 
