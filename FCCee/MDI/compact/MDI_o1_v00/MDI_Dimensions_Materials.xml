@@ -137,10 +137,7 @@
 
 	<!-- maybe outdated, but used in beampipe and beaminstr. To be checked -->
         <constant name="QD0_min_z" value="2000*mm"/>
-        <constant name="QD0_max_z" value="5400*mm"/>
-
-
-	<!-- Final Focus Quadrupoles -->
+        <constant name="QD0_max_z" value="5400*mm"/>	
 	
     </define>
 
