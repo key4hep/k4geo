@@ -28,11 +28,13 @@
     <constant name="world_x" value="world_size"/>
     <constant name="world_y" value="world_size"/>
     <constant name="world_z" value="world_size"/>
+    <constant name="FFQ_ON" value="1"/>
   </define>
 
   <!-- Import dimensions -->
   <include ref="DectDimensions_IDEA_o1_v03.xml"/>
-
+  <include ref="../../../MDI/compact/MDI_o1_v00/MDI_Dimensions_Materials_o1_v00.xml" />
+  
   <!-- Import accelerator components -->
   <!-- shape based model of the beam pipe -->
   <include ref="../../../MDI/compact/MDI_o1_v00/Beampipe_o4_v05.xml" />
@@ -43,7 +45,17 @@
   cmake -D INSTALL_BEAMPIPE_STL_FILES=ON which will download the files needed -->
   <!-- <include ref="../../../MDI/compact/MDI_o1_v01/Beampipe_CADimport_o1_v02.xml" /> -->
   <!-- <include ref="../../../MDI/compact/MDI_o1_v01/BeamInstrumentation_o1_v01.xml"/> -->
-  <include ref="LumiCal_o1_v01.xml"/>
+
+  <include ref="../../../MDI/compact/MDI_o1_v00/LumiCal_o3_v02_05.xml"/>
+  <include ref="../../../MDI/compact/MDI_o1_v00/HOMAbsorber.xml"/>
+  <!-- must use one FFQuads_params_xxx.xml BEFORE FFQuads_v01.xml -->
+  <!--<include ref="../../../MDI/compact/MDI_o1_v00/FFQuads_params_v530_Z.xml"/>-->
+  <include ref="../../../MDI/compact/MDI_o1_v00/FFQuads_params_v572_Z.xml"/>
+  <!-- <include ref="../../../MDI/compact/MDI_o1_v00/FFQuads_params_v572_T.xml"/>-->
+  <include ref="../../../MDI/compact/MDI_o1_v00/FFQuads_v01.xml"/>
+  <include ref="../../../MDI/compact/MDI_o1_v00/fields_antisol_map.xml"/>
+  <!--<include ref="../../../MDI/compact/MDI_o1_v00/fields_antisol_ideal.xml"/>-->
+  
 
   <!-- Import vertex -->
   <include ref="Vertex_IDEA_o1_v01.xml"/>
@@ -73,29 +85,13 @@
   </plugins>
 
   <fields>
-    <!-- FIXME The magnetic field should be a map derived from FEM tools including all field sources, the return yoke geometry, etc -->
+    <!-- Only the Detector 2T solenoid field. The fields from antisolenoids and quadrupoles are located in the MDI folder -->
     <!-- Currently the outer field value is kind of arbitrary and it will also impregnate the calorimeter volume while the field there is very small -->
     <field name="GlobalSolenoid" type="solenoid"
            inner_field="SolenoidField"
            outer_field="-1.7*tesla"
            zmax="Solenoid_Coil_half_length"
            outer_radius="Solenoid_Coil_radius">
-    </field>
-
-    <field name="CompensatingSolenoidZplus" type="solenoid"
-           inner_field="-SolenoidField -SolenoidField * QD0_min_z / ( QD0_min_z - CompSol_min_z)"
-           outer_field="0*tesla"
-           zmax="QD0_min_z"
-           zmin="CompSol_min_z"
-           outer_radius="20*cm">
-    </field>
-
-    <field name="CompensatingSolenoidZminus" type="solenoid"
-           inner_field="-SolenoidField -SolenoidField * QD0_min_z / ( QD0_min_z - CompSol_min_z)"
-           outer_field="0*tesla"
-           zmin="-QD0_min_z"
-           zmax="-CompSol_min_z"
-           outer_radius="20*cm">
     </field>
   </fields>
 

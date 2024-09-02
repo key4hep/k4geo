@@ -57,31 +57,8 @@
     <constant name="DetID_FiberDRCalo"             value=" 25"/>
 
     <constant name="DetID_muonSystem"       value=" 26"/>
-
-        <!-- BPW: Beam Pipe Width -->
-    <constant name="BPWWall"       value="0.35*mm" />
-    <constant name="BPWCool"       value="1.0*mm" />
-    <constant name="BeamPipeWidth" value="2.0*BPWWall + BPWCool"/>
-
-    <constant name="BeamPipeWidthFirstCone" value="2.0*mm" />
-    <constant name="CentralBeamPipe_zmax" value="9.0*cm"/>          <!-- Shorter central beam pipe -->
-    <constant name="SeparatedBeamPipe_z" value="1190.0*mm"/> <!-- was 1159.97*mm in FCCDetectors/> -->
-    <constant name="CentralBeamPipe_rmax" value="10.0*mm"/>
-    <constant name="ConeBeamPipe_Rmax" value="28.9*mm" />
-    <constant name="BeamPipeGoldWidth" value="0.005*mm" /> 
-    <constant name="BeamPipeGoldTolerance" value="0.001*mm" />  <!-- dummy tolerance, some small non zero value -->
-    <constant name="BeamPipeConeHalfAngle" value="(ConeBeamPipe_Rmax + BeamPipeWidthFirstCone - CentralBeamPipe_rmax ) / (SeparatedBeamPipe_z - CentralBeamPipe_zmax)" />
-
-    <constant name="SeparatedBeamPipe_rmax"  value="15*mm"/>
-    <constant name="BeamPipeTantalShieldWidth"  value="15*mm"/>
-    <constant name="SideFillerShieldWidth"  value="7*mm"/>
-    <constant name="TopFillerShieldWidth"  value="8*mm"/>
-    <constant name="BeamPipe_end" value="12500*mm"/>
-
-    <!-- Mike Sullivan's Synch Rad mask -->
-    <constant name="MiddleOfSRMask_z" value="2.1*m" />
-    <constant name="SynchRadMaskSize" value="5*mm" /> <!-- mask tip is at 10 mm from the beamline -->
-    <constant name="mask_epsilon" value="0.001*mm" />
+    <constant name="DetID_FFQs"  value="27"/>
+    
         
     <constant name="VertexClearanceTheta" value="0.110"/>                  <!-- Clearance of vertex detector in mrad-->
     <constant name="VTXIB_r_clearance" value="1*mm"/> <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
@@ -123,60 +100,7 @@
     <constant name="YokeEndcap_outer_symmetry" value="12"/>
     <constant name="YokeEndcap_inner_symmetry" value="0"/>
     
-    <constant name="CompSol_min_z" value="1230*mm"/>
-
     <constant name="env_safety" value="0.1*mm"/>
-
-    <constant name="LumiCal_max_z" value="1186.5*mm" />
-    <constant name="LumiCal_min_z" value="1074*mm"/>
-    
-    <constant name="LumiCal_dz" value="(LumiCal_max_z-LumiCal_min_z)/2.0"/>
-    
-    <constant name="LumiCal_inner_radius" value="55.0*mm"/>
-    <constant name="LumiCal_outer_radius" value="112.0*mm- env_safety"/>
-    
-    <constant name="LumiCal_Instr_thickness" value="20*mm"/>
-    <constant name="LumiCal_Instr_inner_radius" value="LumiCal_outer_radius"/>
-    <constant name="LumiCal_Instr_outer_radius" value="LumiCal_outer_radius+LumiCal_Instr_thickness - env_safety"/>
-    
-    <constant name="LumiCal_Cool_thickness" value="9.75*mm"/>
-    <constant name="LumiCal_Cool_inner_radius" value="LumiCal_Instr_outer_radius"/>
-    <constant name="LumiCal_Cool_outer_radius" value="LumiCal_Instr_outer_radius+LumiCal_Cool_thickness"/>
-    
-    <constant name="Lcal_services_rmax" value="LumiCal_outer_radius+30*mm"/>
-    <constant name="Lcal_offset_phi" value=" 0."/>
-    <!--preliminary LumiCal shielding-->
-    <!--back shielding-->
-    <constant name="LumiCal_Shield_inner_radius" value="LumiCal_inner_radius"/>
-    <constant name="LumiCal_Shield_outer_radius" value="LumiCal_outer_radius+LumiCal_Instr_thickness+LumiCal_Cool_thickness"/>
-    <constant name="LumiCal_shield_dz" value="1.75*mm"/> 
-    <!--nose-->
-    <constant name="LumiCal_NoseShield_inner_radius" value="LumiCal_inner_radius-5*mm"/>
-    <constant name="LumiCal_NoseShield_outer_radius" value="LumiCal_inner_radius+10*mm"/>
-    <constant name="LumiCal_nose_shield_dz" value="12*mm"/>
-    
-    <constant name="BeamCal_inner_radius" value="32*mm"/>
-    <constant name="BeamCal_outer_radius" value="150*mm"/>
-    <constant name="BeamCal_min_z" value="3181*mm"/>
-    <constant name="BeamCal_max_z" value="3441*mm"/>
-    <constant name="BeamCal_dz" value="(BeamCal_max_z-BeamCal_min_z)/2.0"/>
-    
-    <constant name="Kicker_inner_radius" value="4*mm"/>
-    <constant name="Kicker_outer_radius" value="25*mm"/>
-    <constant name="Kicker_min_z" value="3480*mm"/>
-    <constant name="Kicker_max_z" value="3780*mm"/>
-    
-    <constant name="BPM_inner_radius" value="36*mm"/>
-    <constant name="BPM_outer_radius" value="55*mm"/>
-    <constant name="BPM_min_z" value="3790*mm"/>
-    <constant name="BPM_max_z" value="3880*mm"/>        
-
-    <constant name="QD0_min_z" value="2000*mm"/>
-    <constant name="QD0_max_z" value="5200*mm"/>
-    <constant name="QD0Coil_outer_radius" value="30*mm"/>
-    <constant name="CollimatorInFrontOfQD0_dz" value="20*cm"/>   
-    <constant name="CollimatorInFrontOfQD0_radius" value="10*mm"/>
-    <constant name="CollimatorInFrontOfQD0_dr" value="16*mm"/>
 
     <constant name="tracker_region_zmax" value="DCH_half_length_total"/>
     <constant name="tracker_region_rmax" value="DCH_outer_cyl_R_total"/>
