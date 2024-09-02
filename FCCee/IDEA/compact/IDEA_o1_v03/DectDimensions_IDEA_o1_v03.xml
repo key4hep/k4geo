@@ -56,6 +56,7 @@
     <constant name="DetID_FiberDRCalo"             value=" 25"/>
 
     <constant name="DetID_muonSystem"       value=" 26"/>
+
     <constant name="DetID_Preshower"       value=" 27"/>
 
     <!-- BPW: Beam Pipe Width -->
@@ -82,6 +83,9 @@
     <constant name="MiddleOfSRMask_z" value="2.1*m" />
     <constant name="SynchRadMaskSize" value="5*mm" /> <!-- mask tip is at 10 mm from the beamline -->
     <constant name="mask_epsilon" value="0.001*mm" />
+
+    <constant name="DetID_FFQs"  value="27"/>
+    
 
     <!-- Vertex detector. Changing the values here it not enough to resize the detector, contact expert (Armin Ilg) -->
     <constant name="VertexClearanceTheta" value="0.1035*rad"/> <!-- Clearance of vertex detector in mrad from IP. !!! Too high currently, lumical acceptance is 107 mrad so consider 110 mrad as limit -> Need to adapt vertex disks!!! -->
