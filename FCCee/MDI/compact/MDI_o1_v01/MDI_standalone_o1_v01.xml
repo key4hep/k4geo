@@ -49,7 +49,6 @@
   <include ref="Beampipe_CADimport_o1_v02.xml"/>
   <include ref="BeamInstrumentation_o1_v01.xml"/>
   <include ref="LumiCal_o3_v02_05.xml"/>
-  <include ref="HOMAbsorber.xml"/>
 
   <!-- must use one FFQuads_params_xxx.xml BEFORE FFQuads_v01.xml -->
   <include ref="FFQuads_params_v530_Z.xml"/>
