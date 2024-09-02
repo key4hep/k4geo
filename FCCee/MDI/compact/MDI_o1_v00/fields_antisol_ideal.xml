@@ -9,45 +9,34 @@
   </define>
   
     <fields>
-      <field name="GlobalSolenoid" type="solenoid"
-             inner_field="SolenoidField"
-             outer_field="-1.0*tesla"
-             zmax="Solenoid_Coil_half_length"
-             outer_radius="Solenoid_Coil_radius">
-      </field>
-
       <field name="CompensatingSolenoidZplus" type="solenoid"
-             inner_field="-SolenoidField -SolenoidField * QD0_min_z / ( QD0_min_z - CompSol_min_z)"
+             inner_field="-5*tesla"
              outer_field="0*tesla"
              zmax="QD0_min_z"
 	     zmin="CompSol_min_z"
              outer_radius="20*cm">
       </field>
-
       <field name="CompensatingSolenoidZminus" type="solenoid"
-             inner_field="-SolenoidField -SolenoidField * QD0_min_z / ( QD0_min_z - CompSol_min_z)"
+             inner_field="-5*tesla"
              outer_field="0*tesla"
              zmin="-QD0_min_z"
              zmax="-CompSol_min_z"
              outer_radius="20*cm">
       </field>
-
-      <!-- to check with the visualisation that this works... :
-      <field name="GlobalSolenoid" type="solenoid"
-             inner_field="SolenoidField"
-             outer_field="-1.5*tesla"
-             zmax="1*m"
-             outer_radius="Solenoid_Coil_radius">
-      </field>
-      <field name="CompensatingSolenoid" type="solenoid"
-             inner_field="-SolenoidField"
+      <field name="ScreeningSolenoidZplus" type="solenoid"
+             inner_field="-2*tesla"
              outer_field="0*tesla"
-             zmax="3*m"
-             zmin="1*m"
-             outer_radius="Solenoid_Coil_radius">
+             zmin="QD0_min_z+env_safety"
+             zmax="Solenoid_half_length"
+             outer_radius="20*cm">
       </field>
--->
-
+      <field name="ScreeningSolenoidZminus" type="solenoid"
+             inner_field="-2*tesla"
+             outer_field="0*tesla"
+             zmax="-QD0_min_z-env_safety"
+             zmin="-Solenoid_half_length"
+             outer_radius="20*cm">
+      </field>
 
     </fields>
 
