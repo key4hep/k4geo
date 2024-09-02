@@ -44,7 +44,7 @@
     <constant name="DetID_FFQs"  value="23"/>
   </define>
 
-  <include ref="MDI_Dimensions_Materials.xml" />
+  <include ref="MDI_Dimensions_Materials_o1_v00.xml" />
 
   <include ref="Beampipe_o4_v05.xml"/>
   <include ref="BeamInstrumentation_o1_v01.xml"/>

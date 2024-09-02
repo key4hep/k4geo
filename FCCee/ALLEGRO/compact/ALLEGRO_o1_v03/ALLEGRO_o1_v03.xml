@@ -30,7 +30,8 @@
   </define>
 
   <include ref="./DectDimensions.xml" />
-
+  <include ref="../../../MDI/compact/MDI_o1_v00/MDI_Dimensions_Materials_o1_v00.xml" />
+  
   <!-- shape based model of the beam pipe -->
   <include ref="../../../MDI/compact/MDI_o1_v00/Beampipe_o4_v05.xml" />
   <include ref="../../../MDI/compact/MDI_o1_v00/BeamInstrumentation_o1_v01.xml" />
