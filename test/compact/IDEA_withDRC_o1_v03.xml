@@ -33,14 +33,28 @@
   <!-- Import dimensions -->
   <include ref="../../FCCee/IDEA/compact/IDEA_o1_v03/DectDimensions_IDEA_o1_v03.xml"/>
 
+  <include ref="../../MDI/compact/MDI_o1_v00/MDI_Dimensions_Materials_o1_v00.xml" />
+
   <!-- Import accelerator components -->
   <!-- shape based model of the beam pipe -->
-  <include ref="../../FCCee/MDI/compact/MDI_o1_v00/Beampipe_o4_v05.xml" />
-  <include ref="../../FCCee/MDI/compact/MDI_o1_v00/BeamInstrumentation_o1_v01.xml" />
+  <include ref="../../MDI/compact/MDI_o1_v00/Beampipe_o4_v05.xml" />
+  <include ref="../../MDI/compact/MDI_o1_v00/BeamInstrumentation_o1_v01.xml" />
+
   <!-- engineered CAD model of the beam pipe -->
-  <!-- <include ref="../../../MDI/compact/MDI_o1_v01/Beampipe_CADimport_o1_v02.xml" /> -->
-  <!-- <include ref="../../../MDI/compact/MDI_o1_v01/BeamInstrumentation_o1_v01.xml"/> -->
-  <include ref="../../FCCee/IDEA/compact/IDEA_o1_v03/LumiCal_o1_v01.xml"/>
+  <!-- In order to use the CAD beampipe, build k4geo with the following CMake option:                                                                                        
+  cmake -D INSTALL_BEAMPIPE_STL_FILES=ON which will download the files needed -->
+  <!-- <include ref="../../MDI/compact/MDI_o1_v01/Beampipe_CADimport_o1_v02.xml" /> -->
+  <!-- <include ref="../../MDI/compact/MDI_o1_v01/BeamInstrumentation_o1_v01.xml"/> -->
+
+  <include ref="../../MDI/compact/MDI_o1_v00/LumiCal_o3_v02_05.xml"/>
+  <include ref="../../MDI/compact/MDI_o1_v00/HOMAbsorber.xml"/>
+  <!-- must use one FFQuads_params_xxx.xml BEFORE FFQuads_v01.xml -->
+  <!--<include ref="../../MDI/compact/MDI_o1_v00/FFQuads_params_v530_Z.xml"/>-->
+  <include ref="../../MDI/compact/MDI_o1_v00/FFQuads_params_v572_Z.xml"/>
+  <!-- <include ref="../../MDI/compact/MDI_o1_v00/FFQuads_params_v572_T.xml"/>-->
+  <include ref="../../MDI/compact/MDI_o1_v00/FFQuads_v01.xml"/>
+  <include ref="../../MDI/compact/MDI_o1_v00/fields_antisol_map.xml"/>
+  <!--<include ref="../../MDI/compact/MDI_o1_v00/fields_antisol_ideal.xml"/>-->
 
   <!-- Import vertex -->
   <include ref="../../FCCee/IDEA/compact/IDEA_o1_v03/Vertex_IDEA_o1_v01.xml"/>
