@@ -26,6 +26,7 @@
     <constant name="world_x" value="world_size"/>
     <constant name="world_y" value="world_size"/>
     <constant name="world_z" value="world_size"/>
+    <constant name="FFQ_ON" value="1"/>
   </define>
 
   <include ref="./DectDimensions.xml" />
@@ -40,7 +41,16 @@
   <!-- <include ref="../../../MDI/compact/MDI_o1_v01/Beampipe_CADimport_o1_v02.xml" /> -->
   <!-- <include ref="../../../MDI/compact/MDI_o1_v01/BeamInstrumentation_o1_v01.xml"/> -->
 
-  <include ref="LumiCal.xml"/>
+  <include ref="../../../MDI/compact/MDI_o1_v00/LumiCal_o3_v02_05.xml"/>
+  <include ref="../../../MDI/compact/MDI_o1_v00/HOMAbsorber.xml"/>
+  <!-- must use one FFQuads_params_xxx.xml BEFORE FFQuads_v01.xml -->
+  <!--<include ref="../../../MDI/compact/MDI_o1_v00/FFQuads_params_v530_Z.xml"/>-->
+  <include ref="../../../MDI/compact/MDI_o1_v00/FFQuads_params_v572_Z.xml"/>
+  <!-- <include ref="../../../MDI/compact/MDI_o1_v00/FFQuads_params_v572_T.xml"/>-->
+  <include ref="../../../MDI/compact/MDI_o1_v00/FFQuads_v01.xml"/>
+  <include ref="../../../MDI/compact/MDI_o1_v00/fields_antisol_map.xml"/>
+  <!--<include ref="../../../MDI/compact/MDI_o1_v00/fields_antisol_ideal.xml"/>-->
+  
   <include ref="Vertex_IDEA_o1_v01.xml"/> <!-- symbolic link to ../../../IDEA/compact/IDEA_o1_v03/Vertex_IDEA_o1_v01.xml"/>-->
   <include ref="DriftChamber_o1_v02.xml"/> <!-- symbolic link to ../../../IDEA/compact/IDEA_o1_v03/DriftChamber_o1_v02.xml -->
   <include ref="ECalBarrel_thetamodulemerged.xml"/> <!-- if you remove the ECalBarrel, you also have to remove or update the "GlobalSolenoid" field (it depends on ECAL dimensions) -->
@@ -50,7 +60,7 @@
   <include ref="MuonTagger.xml"/>
 
   <fields>
-    <!-- FIXME this is a place holder to get a reasonable magnetic field, it should be a real MAP obtained from FEM tools taking into account HCAL return yoke -->
+    <!-- Only the Detector 2T solenoid field. The fields from antisolenoids and quadrupoles are located in the MDI folder -->
     <!-- The z extent should also accomodate space for the feedthroughs, need input from R&D and decisions on cold/warm electronics -->
     <field name="GlobalSolenoid" type="solenoid"
            inner_field="SolenoidField"
@@ -58,63 +68,6 @@
            zmax="EMBarrel_dz"
            outer_radius="BarCryoECal_rmax-CryoBarrelBackWarm-CryoBarrelBackCold">
     </field>
-
-
-    <!-- MDI magnetic fields  -->
-    <!-- Important for background studies  -->
-
-    <field name="CompensatingSolenoidZplus" type="solenoid"
-           inner_field="-SolenoidField -SolenoidField * QD0_min_z / ( QD0_min_z - CompSol_min_z)"
-           outer_field="0*tesla"
-           zmax="QD0_min_z"
-           zmin="CompSol_min_z"
-           outer_radius="20*cm">
-    </field>
-
-    <field name="CompensatingSolenoidZminus" type="solenoid"
-           inner_field="-SolenoidField -SolenoidField * QD0_min_z / ( QD0_min_z - CompSol_min_z)"
-           outer_field="0*tesla"
-           zmin="-QD0_min_z"
-           zmax="-CompSol_min_z"
-           outer_radius="20*cm">
-    </field>
-
-    <!-- FFQ fields at Z pole, V23) -->
-    <!--
-    <field name="QC1L1_field_ED" type="MultipoleMagnet" Z="0.0*tesla">
-      <position y="0*cm" x="(QC1L1_len/2. + QC1L1_start)*sin(CrossingAngle/2.)" z="(QC1L1_len/2. + QC1L1_start)*cos(CrossingAngle/2.)"/>
-      <rotation x="0" y="CrossingAngle/2." z="0.0"/>
-      <coefficient coefficient="0*tesla"/>
-      <coefficient coefficient="(-1)*(45.6)*(-0.273)/0.3*tesla/m"/>
-      <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L1_len/2." />
-    </field>
-
-    <field name="QC1L1_field_EU" type="MultipoleMagnet" Z="0.0*tesla">
-      <position y="0*cm" x="-(QC1L1_len/2. + QC1L1_start)*sin(CrossingAngle/2.)" z="-(QC1L1_len/2. + QC1L1_start)*cos(CrossingAngle/2.)"/>
-      <rotation x="0" y="CrossingAngle/2." z="0.0"/>
-      <coefficient coefficient="0*tesla"/>
-      <coefficient coefficient="(-1)*(45.6)*(-0.273)/0.3*tesla/m"/>
-      <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L1_len/2." />
-    </field>
-
-    <field name="QC1L1_field_PD" type="MultipoleMagnet" Z="0.0*tesla">
-      <position y="0*cm" x="(QC1L1_len/2. + QC1L1_start)*sin(CrossingAngle/2.)" z="-(QC1L1_len/2. + QC1L1_start)*cos(CrossingAngle/2.)"/>
-      <rotation x="0" y="-CrossingAngle/2." z="0.0"/>
-      <coefficient coefficient="0*tesla"/>
-      <coefficient coefficient="(+1)*(45.6)*(-0.273)/0.3*tesla/m"/>
-      <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L1_len/2." />
-    </field>
-
-    <field name="QC1L1_field_PU" type="MultipoleMagnet" Z="0.0*tesla">
-      <position y="0*cm" x="-(QC1L1_len/2. + QC1L1_start)*sin(CrossingAngle/2.)" z="(QC1L1_len/2. + QC1L1_start)*cos(CrossingAngle/2.)"/>
-      <rotation x="0" y="-CrossingAngle/2.+pi" z="0.0"/>
-      <coefficient coefficient="0*tesla"/>
-      <coefficient coefficient="(-1)*(45.6)*(-0.273)/0.3*tesla/m"/>
-      <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L1_len/2." />
-    </field>
-    -->
-    
-    <!--End of MDI magnetic fields  -->
 
   </fields>
 
