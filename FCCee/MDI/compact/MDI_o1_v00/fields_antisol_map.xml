@@ -11,7 +11,7 @@
     <fields>
       <!-- Detailed field map -->
       <field name="AntisolField" type="FieldXYZ"
-	     filename    = "${k4geo_DIR}/fieldmaps/FCCee_fieldMapXYZ_120218.root"
+	     filename    = "${K4GEO}/fieldmaps/FCCee_fieldMapXYZ_120218.root"
              treeName    = "ntuple"
              xVarName    = "X"
              yVarName    = "Y"

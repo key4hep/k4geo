@@ -56,7 +56,7 @@
   <include ref="FFQuads_v01.xml"/>
 
 
-  <!-- <include ref="fields_antisol_map.xml"/>-->
+  <include ref="fields_antisol_map.xml"/>
   <!-- <include ref="${k4geo_DIR}/ILD/compact/ILD_common_v02/Field_AntiDID_Map_l.xml"/> -->
   <!-- <include ref="fields_antisol_ideal.xml"/> -->
   
