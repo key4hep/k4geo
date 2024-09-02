@@ -35,6 +35,12 @@
 	<composite n="22" ref="H" />
       </material>
 
+      <material name="Water">
+	<D value="1" unit="g/cm3" />
+	<composite n="2" ref="H" />
+	<composite n="1" ref="O" />
+      </material>
+      
       <!-- for LumiCal -->
       <material name="TungstenDens24">
 	<D value="17.8" unit="g/cm3"/>
@@ -58,6 +64,13 @@
 	<fraction n="0.117630293" ref="Cu"/>
 	<fraction n="0.097743288" ref="Paraffine"/>
 	<fraction n="0.068657524" ref="Kapton"/>
+      </material>
+
+      <!-- needed for CAD import, not really used. It's Steel but can be changed -->
+      <material name="DefaultMaterial">
+	<D value="7.85" unit="g/cm3"/>
+	<fraction n="0.998" ref="Fe"/>
+	<fraction n=".002"  ref="C"/>
       </material>
       
     </materials>
