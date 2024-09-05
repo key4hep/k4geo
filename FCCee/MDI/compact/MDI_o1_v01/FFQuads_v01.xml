@@ -49,7 +49,7 @@
       <section type="Dnstream"               start="QC2L1_start"    end="QC2L1_start+QC2L1_len"
                rMin1="QC2_rmin"              rMin2="QC2_rmin"
 	       rMax1="QC2_rmax"              rMax2="QC2_rmax"
-               material="FFQMaterial" name="QC2L1d" sensitive="tracker"/>
+               material="FFQMaterial" name="QC2L1d"/>
       <section type="Upstream"               start="QC2L2_start"    end="QC2L2_start+QC2L2_len"
                rMin1="QC2_rmin"              rMin2="QC2_rmin"
                rMax1="QC2_rmax"              rMax2="QC2_rmax"
