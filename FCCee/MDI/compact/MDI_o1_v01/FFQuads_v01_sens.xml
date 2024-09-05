@@ -8,12 +8,18 @@
         url="no"
         status="development"
         version="1">
-    <comment>Final Focusing Quadrupoles simplified geometry + fields - Started from MaskTrafos.xml by A. Sailer</comment>
+    <comment>Final Focusing Quadrupoles simplified sensitive geometry + fields - Started from MaskTrafos.xml by A. Sailer</comment>
   </info>
 
+  <readouts>
+    <!-- this may be improved -->
+    <readout name="FFQ_Readout">
+      <id>system:5,side:-2,layer:6,module:11,sensor:8</id>
+    </readout>
+  </readouts>
 
   <detectors>
-    <detector name="QC1" type="DD4hep_Mask_o1_v01" vis="KICKVis" id="DetID_FFQs">
+    <detector name="QC1" type="DD4hep_Mask_o1_v01" vis="KICKVis" id="DetID_FFQs" readout="FFQ_Readout">
       <parameter crossingangle="CrossingAngle" />
       <envelope vis="KICKVis">
         <shape type="Assembly"/>
@@ -21,31 +27,31 @@
       <section type="Upstream"               start="QC1L1_start"    end="QC1L1_start+QC1L1_len"
                rMin1="QC1_rmin"              rMin2="QC1_rmin"
                rMax1="QC1_rmax"              rMax2="QC1_rmax"
-               material="FFQMaterial" name="QC1L1u"/>
+               material="FFQMaterial" name="QC1L1u" sensitive="tracker"/>
       <section type="Dnstream"               start="QC1L1_start"    end="QC1L1_start+QC1L1_len"
                rMin1="QC1_rmin"              rMin2="QC1_rmin"
                rMax1="QC1_rmax"              rMax2="QC1_rmax"
-               material="FFQMaterial" name="QC1L1d"/>
+               material="FFQMaterial" name="QC1L1d" sensitive="tracker"/>
       <section type="Upstream"               start="QC1L2_start"    end="QC1L2_start+QC1L2_len"
                rMin1="QC1_rmin"              rMin2="QC1_rmin"
                rMax1="QC1_rmax"              rMax2="QC1_rmax"
-               material="FFQMaterial" name="QC1L2u"/>
+               material="FFQMaterial" name="QC1L2u" sensitive="tracker"/>
       <section type="Dnstream"               start="QC1L2_start"    end="QC1L2_start+QC1L2_len"
                rMin1="QC1_rmin"              rMin2="QC1_rmin"
                rMax1="QC1_rmax"              rMax2="QC1_rmax"
-               material="FFQMaterial" name="QC1L2d"/>
+               material="FFQMaterial" name="QC1L2d" sensitive="tracker"/>
       <section type="Upstream"               start="QC1L3_start"    end="QC1L3_start+QC1L3_len"
                rMin1="QC1_rmin"              rMin2="QC1_rmin"
                rMax1="QC1_rmax"              rMax2="QC1_rmax"
-               material="FFQMaterial" name="QC1L3u"/>
+               material="FFQMaterial" name="QC1L3u" sensitive="tracker"/>
       <section type="Dnstream"               start="QC1L3_start"    end="QC1L3_start+QC1L3_len"
                rMin1="QC1_rmin"              rMin2="QC1_rmin"
                rMax1="QC1_rmax"              rMax2="QC1_rmax"
-               material="FFQMaterial" name="QC1L3d"/>
+               material="FFQMaterial" name="QC1L3d" sensitive="tracker"/>
       <section type="Upstream"               start="QC2L1_start"    end="QC2L1_start+QC2L1_len"
                rMin1="QC2_rmin"              rMin2="QC2_rmin"
                rMax1="QC2_rmax"              rMax2="QC2_rmax"
-               material="FFQMaterial" name="QC2L1u"/>
+               material="FFQMaterial" name="QC2L1u" sensitive="tracker"/>
       <section type="Dnstream"               start="QC2L1_start"    end="QC2L1_start+QC2L1_len"
                rMin1="QC2_rmin"              rMin2="QC2_rmin"
 	       rMax1="QC2_rmax"              rMax2="QC2_rmax"
@@ -53,11 +59,11 @@
       <section type="Upstream"               start="QC2L2_start"    end="QC2L2_start+QC2L2_len"
                rMin1="QC2_rmin"              rMin2="QC2_rmin"
                rMax1="QC2_rmax"              rMax2="QC2_rmax"
-               material="FFQMaterial" name="QC2L2u"/>
+               material="FFQMaterial" name="QC2L2u" sensitive="tracker"/>
       <section type="Dnstream"               start="QC2L2_start"    end="QC2L2_start+QC2L2_len"
                rMin1="QC2_rmin"              rMin2="QC2_rmin"
                rMax1="QC2_rmax"              rMax2="QC2_rmax"
-               material="FFQMaterial" name="QC2L2d"/>
+               material="FFQMaterial" name="QC2L2d" sensitive="tracker"/>
     </detector>
   </detectors>
 
