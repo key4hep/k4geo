@@ -13,7 +13,7 @@
 
 
   <detectors>
-    <detector name="QC1" type="DD4hep_Mask_o1_v01" vis="KICKVis" id="DetID_FFQs">
+    <detector name="QC1" type="DD4hep_Mask_o1_v01" vis="KICKVis">
       <parameter crossingangle="CrossingAngle" />
       <envelope vis="KICKVis">
         <shape type="Assembly"/>
