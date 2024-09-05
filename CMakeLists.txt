@@ -137,7 +137,7 @@ target_include_directories(${PackageName}   PRIVATE ${PROJECT_SOURCE_DIR}/detect
 target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detector/calorimeter/dual-readout/include )
 
 target_link_libraries(${PackageName}   DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers ROOT::Core detectorSegmentations)
-target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ROOT::Core EDM4HEP::edm4hep EDM4HEP::edm4hepDict podio::podio podio::podioDict podio::podioRootIO ${Geant4_LIBRARIES})
+target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ROOT::Core podio::podioRootIO EDM4HEP::edm4hep ${Geant4_LIBRARIES})
 
 if(K4GEO_USE_LCIO)
   target_link_libraries(${PackageName}   LCIO::lcio)
