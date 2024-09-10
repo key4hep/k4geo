@@ -18,6 +18,8 @@ set(CMAKE_MODULE_PATH  ${CMAKE_MODULE_PATH}  ${PROJECT_SOURCE_DIR}/cmake )
 set(LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
+include(cmake/Key4hepConfig.cmake)
+
 include(GNUInstallDirs)
 set(CMAKE_INSTALL_LIBDIR lib)
 set(CMAKE_INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
@@ -43,10 +45,6 @@ option(INSTALL_BEAMPIPE_STL_FILES "Download CAD files for building the detailed 
 
 
 find_package(DD4hep REQUIRED COMPONENTS DDRec DDG4 DDParsers)
-# dd4hep_set_compiler_flags() expects DD4hep_SET_RPATH to be set to ON
-# otherwise it will not set the rpath when installing
-set(DD4HEP_SET_RPATH ON)
-dd4hep_set_compiler_flags()
 
 find_package ( ROOT REQUIRED COMPONENTS Geom GenVector)
 message ( STATUS "ROOT_VERSION: ${ROOT_VERSION}" )
