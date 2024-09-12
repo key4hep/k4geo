@@ -21,17 +21,13 @@
         <detector name="LumiCal" type="LumiCal_o1_v01" vis="SeeThrough" id="DetID_LumiCal" readout="LumiCalCollection" insideTrackingVolume="false" >
 
             <envelope vis="LCALVis">
-                <shape type="BooleanShape" operation="union" material="Air">
-                    <shape type="BooleanShape" operation="Intersection">
-                        <shape type="Box"  dx="world_side" dy="world_side" dz="world_side"/>
-                        <shape type="Tube"  rmin="LumiCal_inner_radius" rmax="LumiCal_outer_radius" dz="LumiCal_dz_prime"/>
+                <shape type="Assembly" >
+                    <shape type="Tube"  rmin="LumiCal_inner_radius" rmax="LumiCal_outer_radius" dz="LumiCal_dz_prime" >
                         <!-- Center the tube on the outgoing beampipe and rotate it so that it is aligned -->
                         <position x="tan(0.5*abs(CrossingAngle))*(LumiCal_min_z+LumiCal_dz)" y="0" z="LumiCal_min_z+LumiCal_dz"/>
                         <rotation x="0" y="0.5*abs(CrossingAngle)" z="0"/>
                     </shape>
-                    <shape type="BooleanShape" operation="Intersection">
-                        <shape type="Box"  dx="world_side" dy="world_side" dz="world_side"/>
-                        <shape type="Tube"  rmin="LumiCal_inner_radius" rmax="LumiCal_outer_radius" dz="LumiCal_dz_prime"/>
+                    <shape type="Tube"  rmin="LumiCal_inner_radius" rmax="LumiCal_outer_radius" dz="LumiCal_dz_prime" >
                         <!-- Center the tube on the outgoing beampipe and rotate it so that it is aligned -->
                         <position x="tan(0.5*abs(CrossingAngle))*(LumiCal_min_z+LumiCal_dz)" y="0" z="-(LumiCal_min_z+LumiCal_dz)"/>
                         <rotation x="0" y="-0.5*abs(CrossingAngle)" z="0"/>
@@ -64,17 +60,13 @@
         <detector name="LumiCalInstrumentation" type="LumiCal_o1_v01" vis="SeeThrough" id="DetID_LumiCalInstrumentation" readout="LumiCalCollection" insideTrackingVolume="false" >
 
             <envelope vis="LCALInstrVis">
-                <shape type="BooleanShape" operation="union" material="Air">
-                    <shape type="BooleanShape" operation="Intersection">
-                        <shape type="Box"  dx="world_side" dy="world_side" dz="world_side"/>
-                        <shape type="Tube"  rmin="LumiCal_Instr_inner_radius" rmax="LumiCal_Instr_outer_radius" dz="LumiCal_dz_prime"/>
+                <shape type="Assembly">
+                    <shape type="Tube"  rmin="LumiCal_Instr_inner_radius" rmax="LumiCal_Instr_outer_radius" dz="LumiCal_dz_prime">
                         <!-- Center the tube on the outgoing beampipe and rotate it so that it is aligned -->
                         <position x="tan(0.5*abs(CrossingAngle))*(LumiCal_min_z+LumiCal_dz)" y="0" z="LumiCal_min_z+LumiCal_dz"/>
                         <rotation x="0" y="0.5*abs(CrossingAngle)" z="0"/>
                     </shape>
-                    <shape type="BooleanShape" operation="Intersection">
-                        <shape type="Box"  dx="world_side" dy="world_side" dz="world_side"/>
-                        <shape type="Tube"  rmin="LumiCal_Instr_inner_radius" rmax="LumiCal_Instr_outer_radius" dz="LumiCal_dz_prime"/>
+                    <shape type="Tube"  rmin="LumiCal_Instr_inner_radius" rmax="LumiCal_Instr_outer_radius" dz="LumiCal_dz_prime">
                         <!-- Center the tube on the outgoing beampipe and rotate it so that it is aligned -->
                         <position x="tan(0.5*abs(CrossingAngle))*(LumiCal_min_z+LumiCal_dz)" y="0" z="-(LumiCal_min_z+LumiCal_dz)"/>
                         <rotation x="0" y="-0.5*abs(CrossingAngle)" z="0"/>
@@ -106,17 +98,13 @@
         <detector name="LumiCalCooling" type="LumiCal_o1_v01" vis="SeeThrough" id="DetID_LumiCalCooling" readout="LumiCalCollection" insideTrackingVolume="false" >
 
             <envelope vis="LCALCoolVis">
-                <shape type="BooleanShape" operation="union" material="Air">
-                    <shape type="BooleanShape" operation="Intersection">
-                        <shape type="Box"  dx="world_side" dy="world_side" dz="world_side"/>
-                        <shape type="Tube"  rmin="LumiCal_Cool_inner_radius" rmax="LumiCal_Cool_outer_radius" dz="LumiCal_dz_prime"/>
+                <shape type="Assembly">
+                    <shape type="Tube"  rmin="LumiCal_Cool_inner_radius" rmax="LumiCal_Cool_outer_radius" dz="LumiCal_dz_prime">
                         <!-- Center the tube on the outgoing beampipe and rotate it so that it is aligned -->
                         <position x="tan(0.5*abs(CrossingAngle))*(LumiCal_min_z+LumiCal_dz)" y="0" z="LumiCal_min_z+LumiCal_dz"/>
                         <rotation x="0" y="0.5*abs(CrossingAngle)" z="0"/>
                     </shape>
-                    <shape type="BooleanShape" operation="Intersection">
-                        <shape type="Box"  dx="world_side" dy="world_side" dz="world_side"/>
-                        <shape type="Tube"  rmin="LumiCal_Cool_inner_radius" rmax="LumiCal_Cool_outer_radius" dz="LumiCal_dz_prime"/>
+                    <shape type="Tube"  rmin="LumiCal_Cool_inner_radius" rmax="LumiCal_Cool_outer_radius" dz="LumiCal_dz_prime">
                         <!-- Center the tube on the outgoing beampipe and rotate it so that it is aligned -->
                         <position x="tan(0.5*abs(CrossingAngle))*(LumiCal_min_z+LumiCal_dz)" y="0" z="-(LumiCal_min_z+LumiCal_dz)"/>
                         <rotation x="0" y="-0.5*abs(CrossingAngle)" z="0"/>
