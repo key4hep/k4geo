@@ -13,10 +13,6 @@
     <vis name="BlackVis"         alpha="1.0" r="0.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
     <vis name="GrayVis"          alpha="1.0" r="0.5" g="0.5"  b="0.5"   showDaughters="true"  visible="true"/>
 
-    <vis name="TubeVis"   alpha="0.1" r="1.0" g="0.7"  b="0.5"   showDaughters="true"  visible="true"/>
-    <vis name="BeamPipeVis" alpha="0.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="false"/>
-    <vis name="VacVis"   alpha="1.0" r="0.0" g="0.0"  b="0.0"   showDaughters="true"  visible="false"/>
-
     <vis name="TPCVis"        alpha="0.1" r="0" g="0"  b="0"         showDaughters="true"  visible="true"/>
     <vis name="TPCMotherVis"  alpha="0.1" r="0.9" g="0.9"  b="0.9"   showDaughters="true"  visible="false"/>
 
