@@ -40,6 +40,9 @@ The following ILD detector models are available in lcgeo ( current production mo
 
 ## Details
 
+### ILD_FCCee_v01
+ILD for the FCCee with large TPC.
+
 ### ILD_l5_v11
 same detector geometry as ILD_l5_v02 model, but with FCCee MDI and CLD-inspired silicon inner tracker & VTX in place of original ILD's VTX, SIT, FTD. 
 BeamCal, LHCAL removed.

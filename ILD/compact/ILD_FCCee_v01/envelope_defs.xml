@@ -1,0 +1,103 @@
+<!-- ################### ENVELOPE PARAMETERS ######################################################## 
+     avoid hardcoded numbers in here: they should all be defined in the top_defs.xml file -->
+
+<define>
+  
+
+  <comment> suggested naming convention:
+
+    main parameters:
+
+    DET_inner_radius    : inner radius of tube like envelope  ( inscribed cylinder )
+    DET_outer_radius    : outer radius of tube like envelope  ( inscribed cylinder )
+    DET_half_length     : half length along z axis
+    DET_min_z           : smallest absolute value on z-axis
+    DET_max_z           : largest  absolute value on z-axis
+    DET_inner_symmetry  : number of sides on the inside  ( 0 for tube )
+    DET_outer_symmetry  : number of sides on the inside  ( 0 for tube )
+    DET_inner_phi0      : optional rotation of the inner polygon ( in r-phi plane )
+    DET_outer_phi0      : optional rotation of the outer polygon ( in r-phi plane )
+
+    additional parameters for cutting away volumes/shapes use one of the above with a number
+    appended and/or an extra specifiaction such as cone ( for a cut away cone )
+
+    DET_inner_radius_1
+    DET_outer_radius_2
+    DET_cone_min_z
+    DET_cone_max_z
+
+  </comment>
+
+  <constant name="env_safety" value="0.1*mm"/>
+
+  <!-- a few defined parameters needed for envelopes -->
+  <constant name="TPC_inner_radius"    value="top_TPC_inner_radius"/>
+  <constant name="TPC_outer_radius"    value="top_TPC_outer_radius"/>
+  <constant name="TPC_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ"/>
+
+  <constant name="SET_inner_radius"    value="TPC_outer_radius+ env_safety "/>
+  <constant name="SET_outer_radius"    value="SET_inner_radius+ Ecal_Tpc_gap - 6*env_safety "/>
+  <constant name="SET_half_length"     value="TPC_half_length"/>
+
+  <constant name="Ecal_inner_radius"    value="TPC_outer_radius+Ecal_Tpc_gap"/>
+  <constant name="Ecal_outer_radius"    value="Ecal_inner_radius+Ecal_barrel_thickness"/>
+  <constant name="Ecal_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ"/>
+  <constant name="Ecal_symmetry"        value="Ecal_Hcal_symmetry"/>
+
+  <constant name="Hcal_inner_radius"    value="Ecal_outer_radius+Hcal_Ecal_gap"/>
+  <constant name="Hcal_outer_radius"    value="(Hcal_inner_radius+Hcal_barrel_thickness)/cos(pi/Hcal_outer_symmetry)"/> <!-- cos(pi/16)   -->
+  <constant name="Hcal_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ"/>
+  <constant name="Hcal_inner_symmetry"  value="Ecal_Hcal_symmetry"/>
+
+  <constant name="EcalEndcap_inner_radius"    value="Ecal_endcap_center_box_size/2.0"/>
+  <constant name="EcalEndcap_outer_radius"    value="Ecal_outer_radius+Ecal_endcap_extra_size"/>
+  <constant name="EcalEndcap_min_z"           value="Ecal_endcap_zmin"/>
+  <constant name="EcalEndcap_max_z"           value="EcalEndcap_min_z+(Ecal_outer_radius-Ecal_inner_radius)"/>
+  <constant name="EcalEndcap_symmetry"        value="Ecal_Hcal_symmetry"/>
+
+  <constant name="HcalEndcap_inner_radius"    value="Hcal_endcap_center_box_size/2.0"/>
+  <constant name="HcalEndcap_outer_radius"    value="Hcal_outer_radius - Hcal_endcap_cryostat_gap"/>
+  <constant name="HcalEndcap_min_z"           value="Hcal_endcap_zmin"/>
+  <constant name="HcalEndcap_max_z"           value="HcalEndcap_min_z+Hcal_endcap_thickness"/>
+
+  <constant name="HcalEndcapRing_symmetry"        value="Ecal_Hcal_symmetry"/>
+  <constant name="HcalEndcapRing_inner_radius"    value="EcalEndcap_outer_radius+Hcal_radial_ring_inner_gap"/>
+  <constant name="HcalEndcapRing_outer_radius"    value="HcalEndcap_outer_radius*cos(pi/HcalEndcapRing_symmetry)"/>
+  <constant name="HcalEndcapRing_min_z"           value="EcalEndcap_min_z"/>
+  <constant name="HcalEndcapRing_max_z"           value="EcalEndcap_max_z"/>
+
+  <constant name="Coil_inner_radius"    value="Hcal_outer_radius+Hcal_Coil_additional_gap"/>
+  <constant name="Coil_outer_radius"    value="Hcal_outer_radius+Hcal_Coil_additional_gap+Coil_thickness"/>
+  <constant name="Coil_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ+Coil_extra_size"/>
+
+  <constant name="Yoke_inner_radius"    value="Coil_outer_radius+top_Hcal_Yoke_gap"/>
+  <constant name="Yoke_outer_radius"    value="Yoke_inner_radius+top_Yoke_thickness"/>
+  <constant name="Yoke_half_length"     value="top_Yoke_half_length"/>
+  <constant name="Yoke_symmetry"        value="top_Yoke_symmetry"/>
+
+  <constant name="YokeEndcap_inner_radius"    value="Yoke_endcap_inner_radius"/>
+  <constant name="YokeEndcap_outer_radius"    value="Yoke_inner_radius+top_Yoke_thickness"/>
+  <constant name="YokeEndcap_min_z"           value="Yoke_Z_start_endcaps"/>
+  <constant name="YokeEndcap_max_z"           value="YokeEndcap_min_z+(Yoke_outer_radius-Yoke_inner_radius)"/>
+  <constant name="YokeEndcap_symmetry"        value="Yoke_symmetry"/>
+
+  <constant name="YokeEndcapPlug_inner_radius"    value="YokeEndcap_inner_radius"/>
+  <constant name="YokeEndcapPlug_outer_radius"    value="Hcal_outer_radius"/>
+  <constant name="YokeEndcapPlug_min_z"           value="HcalEndcap_max_z + env_safety*2.0"/>
+  <constant name="YokeEndcapPlug_max_z"           value="YokeEndcap_min_z"/>
+  <constant name="YokeEndcapPlug_symmetry"        value="Yoke_symmetry"/>
+
+  <!-- just this change for FCC-like model -->
+  <constant name="EcalEndcapRing_inner_radius"    value="220*mm"/>
+
+  <constant name="EcalEndcapRing_outer_radius"    value="Ecal_endcap_center_box_size/2.0-Ecal_EC_Ring_gap"/>
+  <constant name="EcalEndcapRing_min_z"           value="EcalEndcap_min_z"/>
+  <constant name="EcalEndcapRing_max_z"           value="EcalEndcap_max_z"/>
+
+  <constant name="Lcal_inner_radius" value="top_Lcal_inner_radius"/>
+  <constant name="Lcal_z_begin" value="top_Lcal_z_begin"/>
+
+
+  <!-- ########### END ENVELOPE PARAMETERS ############################################################## -->
+
+</define>
