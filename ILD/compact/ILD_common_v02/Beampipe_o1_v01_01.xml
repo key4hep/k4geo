@@ -3,6 +3,7 @@
   <detectors>        
 
 
+<!-- detector name="Tube" type="DD4hep_Beampipe_o1_v01" limits="Tracker_limits" vis="BeamPipeVis" id="ILDDetID_NOTUSED" -->
 <detector name="Tube" type="DD4hep_Beampipe_o1_v01" vis="BeamPipeVis" id="ILDDetID_NOTUSED">
 
   <envelope vis="BlueVis">
@@ -151,6 +152,7 @@
 
 </detector>
 
+<!-- detector name="QD0_cryostat" type="TubeSupport_o1_v01" limits="Tracker_limits" vis="BeamPipeVis" id="ILDDetID_NOTUSED" reflect="true" -->
 <detector name="QD0_cryostat" type="TubeSupport_o1_v01" vis="BeamPipeVis" id="ILDDetID_NOTUSED" reflect="true">
 
   <envelope vis="BlueVis">
@@ -183,6 +185,7 @@
 
 </detector>
 
+<!-- detector name="QD0_support" type="BoxSupport_o1_v01" limits="Tracker_limits" vis="BeamPipeVis" id="ILDDetID_NOTUSED" reflect="true" -->
 <detector name="QD0_support" type="BoxSupport_o1_v01" vis="BeamPipeVis" id="ILDDetID_NOTUSED" reflect="true">
 
   <envelope vis="BlueVis">
