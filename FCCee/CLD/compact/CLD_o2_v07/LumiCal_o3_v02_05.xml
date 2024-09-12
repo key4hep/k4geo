@@ -146,21 +146,16 @@
    <detector name="LumiCalBackShield" type="LumiCal_o1_v01" vis="SeeThrough" id="DetID_LumiCalBackShield"  readout="LumiCalCollection" insideTrackingVolume="false" >
 
      <envelope vis="LCALShieldVis">
-       <shape type="BooleanShape" operation="union" material="Air">
-
-         <shape type="BooleanShape" operation="Intersection">
-           <shape type="Box"  dx="world_side" dy="world_side" dz="world_side"/>
-           <shape type="Tube"  rmin="LumiCal_Shield_inner_radius" rmax="LumiCal_Shield_outer_radius" dz="LumiCal_shield_dz_prime"/>
-           <!-- Center the tube on the outgoing beampipe and rotate it so that it is aligned -->
-           <position x="tan(0.5*abs(CrossingAngle))*(LumiCal_max_z+LumiCal_shield_dz)" y="0" z="LumiCal_max_z+LumiCal_shield_dz"/>
-           <rotation x="0" y="0.5*abs(CrossingAngle)" z="0"/>
+       <shape type="Assembly">
+           <shape type="Tube"  rmin="LumiCal_Shield_inner_radius" rmax="LumiCal_Shield_outer_radius" dz="LumiCal_shield_dz_prime">
+               <!-- Center the tube on the outgoing beampipe and rotate it so that it is aligned -->
+               <position x="tan(0.5*abs(CrossingAngle))*(LumiCal_max_z+LumiCal_shield_dz)" y="0" z="LumiCal_max_z+LumiCal_shield_dz"/>
+               <rotation x="0" y="0.5*abs(CrossingAngle)" z="0"/>
          </shape>
-         <shape type="BooleanShape" operation="Intersection">
-           <shape type="Box"  dx="world_side" dy="world_side" dz="world_side"/>
-           <shape type="Tube"  rmin="LumiCal_Shield_inner_radius" rmax="LumiCal_Shield_outer_radius" dz="LumiCal_shield_dz_prime"/>
-           <!-- Center the tube on the outgoing beampipe and rotate it so that it is aligned -->
-           <position x="tan(0.5*abs(CrossingAngle))*(LumiCal_max_z+LumiCal_shield_dz)" y="0" z="-(LumiCal_max_z+LumiCal_shield_dz)"/>
-           <rotation x="0" y="-0.5*abs(CrossingAngle)" z="0"/>
+         <shape type="Tube"  rmin="LumiCal_Shield_inner_radius" rmax="LumiCal_Shield_outer_radius" dz="LumiCal_shield_dz_prime">
+               <!-- Center the tube on the outgoing beampipe and rotate it so that it is aligned -->
+               <position x="tan(0.5*abs(CrossingAngle))*(LumiCal_max_z+LumiCal_shield_dz)" y="0" z="-(LumiCal_max_z+LumiCal_shield_dz)"/>
+               <rotation x="0" y="-0.5*abs(CrossingAngle)" z="0"/>
          </shape>
 
        </shape>
