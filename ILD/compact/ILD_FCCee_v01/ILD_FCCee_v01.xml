@@ -65,8 +65,8 @@
   <include ref="../../../FCCee/MDI/compact/MDI_o1_v00/Beampipe_o4_v05.xml"/>
   <include ref="../../../FCCee/MDI/compact/MDI_o1_v00/HOMAbsorber.xml"/>
 
-  <include ref="LumiCal_o3_v02_05.xml"/>
-  <include ref="Vertex_o4_v07_smallBP.xml"/>
+  <include ref="../../../FCCee/CLD/compact/CLD_o2_v07/LumiCal_o3_v02_05.xml"/>
+  <include ref="../../../FCCee/CLD/compact/CLD_o2_v07/Vertex_o4_v07_smallBP.xml"/>
 
   <!-- include ref="InnerTrackerILD_o1_v02_00.xml"/ -->  
 
