@@ -148,7 +148,9 @@ double FCCSWEndcapTurbine_k4geo::phi(const CellID& cID) const {
   double rhoLoc = rho(cID);
   double zLoc = TMath::Abs(z(cID))-m_offsetZ - 45;  // hard-code midpoint in z for now
 
+
   double zCotBladeAngle = zLoc/TMath::Tan(m_bladeAngle[iWheel]);
+
   double x = zCotBladeAngle;
   double y = TMath::Sqrt(rhoLoc*rhoLoc - x*x);
   // rotate about z axis by phiCent
