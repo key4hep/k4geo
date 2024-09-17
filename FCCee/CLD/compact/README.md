@@ -39,6 +39,14 @@ CLD_o2_v06
 This model is based on `CLD_o2_v05` with the following changes: LumiCal outer radius from 112 mm to 115 mm, remove
 unused nose shield parameters, place LumiCal at 1074*mm along the beam-axis, instead of at 1074*mm in Z, moves LumiCal by 100*micron.
 
+CLD_o2_v07
+----------
+
+This model is based on `CLD_o2_v06` with the following changes: reduced loading time by adding stave assemblies in the tracker barrel.
+Additionally, a non-cylindrical (polycone) tracking volume was added that excludes the LumiCal. To profit from this feature the `Geant4TVUserParticleHandler`
+needs to be used in `ddsim`. The definitions for the cylindrical volume were kept to be backwards compatible to the `Geant4TCUserParticleHandler`.
+Overlaps related to the LumiCal were fixed that were present in the v06 model
+
 CLD_o3_v01
 ----------
 

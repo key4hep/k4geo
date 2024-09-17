@@ -38,6 +38,7 @@ namespace {
 }
 
 FieldMapBrBz::FieldMapBrBz() {
+  field_type = CartesianField::MAGNETIC;
   type = CartesianField::MAGNETIC;
 } //ctor
 
