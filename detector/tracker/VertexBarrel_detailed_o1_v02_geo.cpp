@@ -72,7 +72,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         vector<double> thicknesses;
         vector<double> offsets; 
         vector<double> z_offsets; 
-        vector<double> rs; 
+        vector<double> rs;
+        vector<double> phis;
         vector<Volume> volumes;
         vector<bool> isCurved;
     };
@@ -94,6 +95,26 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         vector<bool> isCurved;
     };
 
+    // Struct for sensors
+    struct sensorsStruct{
+        string name;
+        double r;
+        double offset;
+        double thickness;
+        Material material;
+        vector<bool> sensitives;
+        vector<double> xmin;
+        vector<double> xmax;
+        vector<double> ymin;
+        vector<double> ymax;
+        vector<double> phi_offsets;
+        vector<string> names;
+        vector<bool> isCurved;
+        double width;
+        double length;
+        vector<Volume> volumes;
+    };
+
     // --- Module information struct ---
     struct stave_information{
         string name;
@@ -102,23 +123,12 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
         vector<componentsStruct> components_vec;
         vector<endOfStaveStruct> endOfStaves_vec;
-        double sensor_r;
-        double sensor_offset;
-        double sensor_thickness;
-        Material sensor_material;
-        vector<bool> sensor_sensitives;
-        vector<double> sensor_xmin;
-        vector<double> sensor_xmax;
-        vector<double> sensor_ymin;
-        vector<double> sensor_ymax;
-        vector<double> sensor_phi_offsets;
-        vector<bool> isCurved;
-        double sensor_width;
-        double sensor_length;
+        vector<sensorsStruct> sensorsVec;
+
         double stave_dr;
         double stave_r;
+        double stave_length;
         string staveVis;
-        vector<Volume> sensor_volumes;
     };
     list<stave_information> stave_information_list;
 
@@ -129,6 +139,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         stave_information m;
         m.name = x_stave.nameStr();
         m.staveVis = x_stave.visStr();
+        m.stave_length = x_stave.length();
 
         m.stave_dr = x_stave.dr(0); // Offset for every second module in r
         m.stave_r = x_stave.r(0); // Radius of stave
@@ -155,6 +166,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 components.offsets.push_back(component.offset(0));
                 components.z_offsets.push_back(component.z_offset(0));
                 components.rs.push_back(component.r(0));
+                components.phis.push_back(component.phi(0));    // Rotation of component around its own axis, not applicable for curved components
 
                 bool isCurved = getAttrOrDefault(component, _Unicode(isCurved), bool(false));
                 components.isCurved.push_back(isCurved);
@@ -227,50 +239,57 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
         // Sensor
         xml_coll_t c_sensor(x_stave,_U(sensor));
-        m.sensor_r = xml_comp_t(c_sensor).r(0);
-        m.sensor_offset = xml_comp_t(c_sensor).offset(0);
-        m.sensor_thickness = xml_comp_t(c_sensor).thickness();
-        m.sensor_material = theDetector.material(xml_comp_t(c_sensor).materialStr());
-        xml_coll_t c_component = xml_coll_t(c_sensor,_U(component));
+        for(c_sensor.reset(); c_sensor; ++c_sensor){
+            sensorsStruct sensor;   
 
-        int iSensor = 0;
-        for(c_component.reset(); c_component; ++c_component){
-            xml_comp_t component = c_component;
-            m.sensor_sensitives.push_back(component.isSensitive());
-            m.sensor_xmin.push_back(component.xmin());
-            m.sensor_xmax.push_back(component.xmax());
-            m.sensor_ymin.push_back(component.ymin());
-            m.sensor_ymax.push_back(component.ymax());
+            sensor.r = xml_comp_t(c_sensor).r(0);
+            sensor.offset = xml_comp_t(c_sensor).offset(0);
+            sensor.thickness = xml_comp_t(c_sensor).thickness();
+            sensor.material = theDetector.material(xml_comp_t(c_sensor).materialStr());
+            sensor.name = xml_comp_t(c_sensor).nameStr(); 
 
-            m.sensor_phi_offsets.push_back(getAttrOrDefault(component, _Unicode(phi_offset), double(0.0)) );
+            xml_coll_t c_component = xml_coll_t(c_sensor,_U(component));
+            int iSensor = 0;
+            for(c_component.reset(); c_component; ++c_component){
+                xml_comp_t component = c_component;
+                sensor.sensitives.push_back(component.isSensitive());
+                sensor.xmin.push_back(component.xmin());
+                sensor.xmax.push_back(component.xmax());
+                sensor.ymin.push_back(component.ymin());
+                sensor.ymax.push_back(component.ymax());
+                sensor.names.push_back(component.nameStr("sensor"));
 
-            bool isCurved = getAttrOrDefault(component, _Unicode(isCurved), bool(false));
-            m.isCurved.push_back(isCurved);
+                sensor.phi_offsets.push_back(getAttrOrDefault(component, _Unicode(phi_offset), double(0.0)) );
 
-            // Already create volumes for all sensor components as this is independent of number of sensors per layer
-            Volume ele_vol;
-            if(isCurved){
-                double rmin = m.stave_r + m.sensor_r;
-                double half_width = abs(component.xmax()-component.xmin())/rmin/2.;
-                double phi_offset = getAttrOrDefault(component, _Unicode(phi_offset), double(0.0));
-                Tube ele_box = Tube(rmin, rmin + m.sensor_thickness, abs(component.ymax()-component.ymin())/2., -half_width+phi_offset, half_width+phi_offset);
-                ele_vol = Volume("sensor" +  _toString(iSensor, "_%d"), ele_box, m.sensor_material);                    
+                bool isCurved = getAttrOrDefault(component, _Unicode(isCurved), bool(false));
+                sensor.isCurved.push_back(isCurved);
+
+                // Already create volumes for all sensor components as this is independent of number of sensors per layer
+                Volume ele_vol;
+                if(isCurved){
+                    double rmin = m.stave_r + sensor.r;
+                    double half_width = abs(component.xmax()-component.xmin())/rmin/2.;
+                    double phi_offset = getAttrOrDefault(component, _Unicode(phi_offset), double(0.0));
+                    Tube ele_box = Tube(rmin, rmin + sensor.thickness, abs(component.ymax()-component.ymin())/2., -half_width+phi_offset, half_width+phi_offset);
+                    ele_vol = Volume(sensor.names.back() +  _toString(iSensor, "_%d"), ele_box, sensor.material);                    
+                }
+                else{
+                    Box ele_box = Box(sensor.thickness/2., abs(component.xmax()-component.xmin())/2., abs(component.ymax()-component.ymin())/2.);            
+                    ele_vol = Volume(sensor.names.back() +  _toString(iSensor, "_%d"), ele_box, sensor.material);                    
+                }
+
+                if(sensor.sensitives.back())
+                    ele_vol.setSensitiveDetector(sens);
+                ele_vol.setAttributes(theDetector, x_det.regionStr(), x_det.limitsStr(), component.visStr());  
+                sensor.volumes.push_back(ele_vol);
+
+                iSensor++;
             }
-            else{
-                Box ele_box = Box(m.sensor_thickness/2., abs(component.xmax()-component.xmin())/2., abs(component.ymax()-component.ymin())/2.);            
-                ele_vol = Volume("sensor" +  _toString(iSensor, "_%d"), ele_box, m.sensor_material);                    
-            }
-
-            if(m.sensor_sensitives.back())
-                ele_vol.setSensitiveDetector(sens);
-            ele_vol.setAttributes(theDetector, x_det.regionStr(), x_det.limitsStr(), component.visStr());  
-            m.sensor_volumes.push_back(ele_vol);
-
-            iSensor++;
+            sensor.width  = *max_element(sensor.xmax.begin(), sensor.xmax.end()) - *min_element(sensor.xmin.begin(), sensor.xmin.end());
+            sensor.length = *max_element(sensor.ymax.begin(), sensor.ymax.end()) - *min_element(sensor.ymin.begin(), sensor.ymin.end());
+            cout << det_name << ": Module: " << sensor.name << ", sensor width: " << to_string(sensor.width)  << ", sensor length: " << to_string(sensor.length) << endl;
+            m.sensorsVec.push_back(sensor);
         }
-        m.sensor_width  = *max_element(m.sensor_xmax.begin(), m.sensor_xmax.end()) - *min_element(m.sensor_xmin.begin(), m.sensor_xmin.end());
-        m.sensor_length = *max_element(m.sensor_ymax.begin(), m.sensor_ymax.end()) - *min_element(m.sensor_ymin.begin(), m.sensor_ymin.end());
-        cout << det_name << ": Module: " << m.name << ", sensor width: " << to_string(m.sensor_width)  << ", sensor length: " << to_string(m.sensor_length) << endl;
 
         stave_information_list.push_back(m);
         cout << "Read stave information of stave " << m.name << endl;
@@ -296,7 +315,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
         string nameStr          = x_layer.nameStr();
         int    nmodules         = x_layer.nmodules();
-        double step             = x_layer.step();   // Spacing of modules
+        double step             = x_layer.step(0);   // Spacing of modules
 
 
         // Use the correct stave
@@ -304,11 +323,9 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
             return stave.name == nameStr;
         });    
 
-
-        double stave_length = nmodules*m.sensor_length + (nmodules-1)*step;
         
         double motherVolThickness = getAttrOrDefault(x_layer, _Unicode(motherVolThickness), double(5.0));
-        double motherVolLength = getAttrOrDefault(x_layer, _Unicode(motherVolLength), double(stave_length));
+        double motherVolLength = getAttrOrDefault(x_layer, _Unicode(motherVolLength), double(m.stave_length));
         double motherVolOffset = getAttrOrDefault(x_layer, _Unicode(motherVolOffset), double(0.0)); // In case wafer/stave is asymmetric
 
         std::string layer_name = det_name+_toString(layer_id,"_layer%d")+_toString(side,"_side%d");
@@ -351,7 +368,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 r = layer_r + m.motherVolThickness/2.;
                 x_pos = r*cos(phi) - r_offset_component*sin(phi);
                 y_pos = r*sin(phi) + r_offset_component*cos(phi);
-                Box whole_stave_box = Box(m.motherVolThickness/2., m.motherVolWidth/2., stave_length/2.);
+                Box whole_stave_box = Box(m.motherVolThickness/2., m.motherVolWidth/2., m.stave_length/2.);
                 whole_stave_volume_v = Volume(stave_name, whole_stave_box, theDetector.material("Air"));
                 whole_stave_volume_v.setVisAttributes(theDetector, m.staveVis);
                 whole_stave_volume_placed = whole_layer_volume.placeVolume(whole_stave_volume_v, Transform3D(rot,Position(x_pos, y_pos, z_pos)));
@@ -385,7 +402,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                         y_pos = component.offset + component.offsets[i];
                         z_pos = component.z_offset + component.z_offsets[i] + motherVolOffset;
                         Position pos(x_pos, y_pos, z_pos);
-                        component_assembly.placeVolume(component.volumes[i], pos);
+                        component_assembly.placeVolume(component.volumes[i], Transform3D(RotationZYX(component.phis[i],0,0), pos));
                     }
                 }
                 component_assembly->GetShape()->ComputeBBox(); 
@@ -409,14 +426,14 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                             r_offset_component = endOfStave.offset + endOfStave.offsets[i];
                             x_pos = r_component_curved*cos(phi) - r_offset_component*sin(phi);
                             y_pos = r_component_curved*sin(phi) + r_offset_component*cos(phi);
-                            z_pos = stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dzs[i] + endOfStave.z_offset + endOfStave.z_offsets[i];
+                            z_pos = m.stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dzs[i] + endOfStave.z_offset + endOfStave.z_offsets[i];
                             Position pos = Position(x_pos, y_pos, z_pos*endOfStave_side+motherVolOffset);
                             endOfStave_assembly.placeVolume(endOfStave.volumes[i], Transform3D(rot,stave_pos).Inverse()*Transform3D(rot,pos));
                         }
                         else{
                             x_pos = endOfStave.r + endOfStave.rs[i] + endOfStave.thicknesses[i]/2.;
                             y_pos = endOfStave.offset + endOfStave.offsets[i];
-                            z_pos = stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dzs[i] + endOfStave.z_offset + endOfStave.z_offsets[i]; 
+                            z_pos = m.stave_length/2.+endOfStave.lengths[i]/2.+endOfStave.dzs[i] + endOfStave.z_offset + endOfStave.z_offsets[i]; 
                             Position pos(x_pos, y_pos, z_pos*endOfStave_side+motherVolOffset);
                             endOfStave_assembly.placeVolume(endOfStave.volumes[i], pos);
                         }
@@ -426,87 +443,90 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
             }
 
             // Place sensor
-            for(int iModule=0; iModule<nmodules; iModule++){
-                x_pos = m.sensor_r + m.sensor_thickness/2. + (iModule%2 == 0 ? 0.0 : m.stave_dr);
-                y_pos = m.sensor_offset;
-                z_pos = motherVolOffset + -(nmodules-1)/2.*(m.sensor_length) - (nmodules-1)/2.*step + iModule*m.sensor_length + iModule*step;
-                Position pos(x_pos, y_pos, z_pos);
-                    
-                string module_name = stave_name + _toString(iModule,"_module%d");
-                Assembly module_assembly(module_name);
-                if(m.motherVolThickness>0.0 && m.motherVolWidth>0.0)
-                    pv = whole_stave_volume_v.placeVolume(module_assembly, Position(-m.motherVolThickness/2., 0., 0.));
-                else
-                    pv = whole_stave_volume_a.placeVolume(module_assembly);
-                pv.addPhysVolID("module", iModule_tot);
+            for(auto& sensor : m.sensorsVec){
+                for(int iModule=0; iModule<nmodules; iModule++){
+                    x_pos = sensor.r + sensor.thickness/2. + (iModule%2 == 0 ? 0.0 : m.stave_dr);
+                    y_pos = sensor.offset;
+                    z_pos = motherVolOffset + -(nmodules-1)/2.*(sensor.length) - (nmodules-1)/2.*step + iModule*sensor.length + iModule*step;
+                    Position pos(x_pos, y_pos, z_pos);
+                        
+                    string module_name = stave_name + _toString(iModule,"_module%d");
+                    Assembly module_assembly(module_name);
+                    if(m.motherVolThickness>0.0 && m.motherVolWidth>0.0)
+                        pv = whole_stave_volume_v.placeVolume(module_assembly, Position(-m.motherVolThickness/2., 0., 0.));
+                    else
+                        pv = whole_stave_volume_a.placeVolume(module_assembly);
+                    pv.addPhysVolID("module", iModule_tot);
 
-                DetElement moduleDE(layerDE,module_name,x_det.id());
-                moduleDE.setPlacement(pv);
+                    DetElement moduleDE(layerDE,module_name,x_det.id());
+                    moduleDE.setPlacement(pv);
 
 
-                // Place all sensor parts
-                int iSensitive = 0;
-                for(int i=0; i<int(m.sensor_volumes.size()); i++){
-                    double r_component_curved = 0.0;
-                    if(m.isCurved[i]){ // curved sensors
-                        double phi_i = phi + (m.sensor_xmin[i]+abs(m.sensor_xmax[i]-m.sensor_xmin[i])/2.)/m.stave_r;
-                        r_component_curved = m.sensor_thickness/2. + (iModule%2 == 0 ? 0.0 : m.stave_dr);
-                        x_pos = r_component_curved*cos(phi_i) - r_offset_component*sin(phi_i);
-                        y_pos = r_component_curved*sin(phi_i) + r_offset_component*cos(phi_i);
-                        z_pos = motherVolOffset -(nmodules-1)/2.*(m.sensor_length) - (nmodules-1)/2.*step + iModule*m.sensor_length + iModule*step;
-                        pos = Position(x_pos, y_pos, z_pos);
+                    // Place all sensor parts
+                    int iSensitive = 0;
+                    for(int i=0; i<int(sensor.volumes.size()); i++){
+                        double r_component_curved = 0.0;
+                        if(sensor.isCurved[i]){ // curved sensors
+                            double phi_i = phi + (sensor.xmin[i]+abs(sensor.xmax[i]-sensor.xmin[i])/2.)/m.stave_r;
+                            r_component_curved = sensor.thickness/2. + (iModule%2 == 0 ? 0.0 : m.stave_dr);
+                            x_pos = r_component_curved*cos(phi_i) - r_offset_component*sin(phi_i);
+                            y_pos = r_component_curved*sin(phi_i) + r_offset_component*cos(phi_i);
+                            z_pos = motherVolOffset -(nmodules-1)/2.*(sensor.length) - (nmodules-1)/2.*step + iModule*sensor.length + iModule*step;
+                            pos = Position(x_pos, y_pos, z_pos);
 
-                        Position pos2(0., 0., m.sensor_ymin[i]+abs(m.sensor_ymax[i]-m.sensor_ymin[i])/2.);
-                        RotationZYX rot2(phi_i, 0, 0);
-                        pv = module_assembly.placeVolume(m.sensor_volumes[i], Transform3D(rot,stave_pos).Inverse()*Transform3D(rot2, pos)*Translation3D(pos2));
+                            Position pos2(0., 0., sensor.ymin[i]+abs(sensor.ymax[i]-sensor.ymin[i])/2.);
+                            RotationZYX rot2(phi_i, 0, 0);
+                            pv = module_assembly.placeVolume(sensor.volumes[i], Transform3D(rot,stave_pos).Inverse()*Transform3D(rot2, pos)*Translation3D(pos2));
 
-                        if(m.sensor_sensitives[i]) { // Define as sensitive and add sensitive surface
-                            string sensor_name = module_name + _toString(iSensitive,"_sensor%d");
-                            pv.addPhysVolID("sensor", iSensitive);                
-                            DetElement sensorDE(moduleDE,sensor_name,x_det.id());
-                            sensorDE.setPlacement(pv);
+                            if(sensor.sensitives[i]) { // Define as sensitive and add sensitive surface
+                                string sensor_name = module_name + _toString(iSensitive,"_sensor%d");
+                                pv.addPhysVolID("sensor", iSensitive);                
+                                DetElement sensorDE(moduleDE,sensor_name,x_det.id());
+                                sensorDE.setPlacement(pv);
 
-                            Vector3D ocyl(-(r_component_curved+m.stave_r+m.sensor_r), 0., 0.) ;  
-                            SurfaceType type = SurfaceType::Sensitive;
-                            type.setProperty(SurfaceType::Cylinder,true);
+                                Vector3D ocyl(-(r_component_curved+m.stave_r+sensor.r), 0., 0.) ;  
+                                SurfaceType type = SurfaceType::Sensitive;
+                                type.setProperty(SurfaceType::Cylinder,true);
 
-                            //// New dd4hep functionality required for cylinder segment sensitive surface                            
-                            // double width = abs(m.sensor_xmax[i]-m.sensor_xmin[i])/(m.stave_r+m.sensor_r);
-                            // double phi_offset = +M_PI/2. + (m.sensor_xmin[0]+abs(m.sensor_xmax[0]-m.sensor_xmin[0])/2.)/(m.stave_r+m.sensor_r)  + m.sensor_phi_offsets[i];
-                            // VolCylinder surf(m.sensor_volumes[i], type, m.sensor_thickness/2., m.sensor_thickness/2., ocyl, width, phi_offset);                            
+                                //// New dd4hep functionality required for cylinder segment sensitive surface                            
+                                // double width = abs(sensor.xmax[i]-sensor.xmin[i])/(m.stave_r+sensor.r);
+                                // double phi_offset = +M_PI/2. + (sensor.xmin[0]+abs(sensor.xmax[0]-sensor.xmin[0])/2.)/(m.stave_r+sensor.r)  + sensor.phi_offsets[i];
+                                // VolCylinder surf(sensor.volumes[i], type, sensor.thickness/2., sensor.thickness/2., ocyl, width, phi_offset);                            
 
-                            //// For the moment use the old functionality
-                            VolCylinder surf(m.sensor_volumes[i], type, m.sensor_thickness/2., m.sensor_thickness/2., ocyl);
+                                //// For the moment use the old functionality
+                                VolCylinder surf(sensor.volumes[i], type, sensor.thickness/2., sensor.thickness/2., ocyl);
 
-                            volSurfaceList(sensorDE)->push_back(surf);
-                            iSensitive++;
+                                volSurfaceList(sensorDE)->push_back(surf);
+                                iSensitive++;
+                            }
+                        }
+                        else{ // not curved
+                            x_pos = 0.0;
+                            y_pos = sensor.xmin[i]+abs(sensor.xmax[i]-sensor.xmin[i])/2.;
+                            z_pos = sensor.ymin[i]+abs(sensor.ymax[i]-sensor.ymin[i])/2.;
+                            Position pos2(x_pos, y_pos, z_pos);
+                            pv = module_assembly.placeVolume(sensor.volumes[i], pos+pos2);
+
+                            if(sensor.sensitives[i]) { // Define as sensitive and add sensitive surface
+                                string sensor_name = module_name + _toString(iSensitive,"_sensor%d");
+                                pv.addPhysVolID("sensor", iSensitive);                
+                                DetElement sensorDE(moduleDE,sensor_name,x_det.id());
+                                sensorDE.setPlacement(pv);
+
+                                Vector3D u( 0. , 1. , 0. ) ;
+                                Vector3D v( 0. , 0. , 1. ) ;
+                                Vector3D n( 1. , 0. , 0. ) ;
+                                VolPlane surf( sensor.volumes[i] , dd4hep::rec::SurfaceType::Sensitive , sensor.thickness/2. , sensor.thickness/2. , u,v,n );
+                                volSurfaceList(sensorDE)->push_back(surf);
+                                iSensitive++;
+                            }
                         }
                     }
-                    else{ // not curved
-                        x_pos = 0.0;
-                        y_pos = m.sensor_xmin[i]+abs(m.sensor_xmax[i]-m.sensor_xmin[i])/2.;
-                        z_pos = m.sensor_ymin[i]+abs(m.sensor_ymax[i]-m.sensor_ymin[i])/2.;
-                        Position pos2(x_pos, y_pos, z_pos);
-                        pv = module_assembly.placeVolume(m.sensor_volumes[i], pos+pos2);
-
-                        if(m.sensor_sensitives[i]) { // Define as sensitive and add sensitive surface
-                            string sensor_name = module_name + _toString(iSensitive,"_sensor%d");
-                            pv.addPhysVolID("sensor", iSensitive);                
-                            DetElement sensorDE(moduleDE,sensor_name,x_det.id());
-                            sensorDE.setPlacement(pv);
-
-                            Vector3D u( 0. , 1. , 0. ) ;
-                            Vector3D v( 0. , 0. , 1. ) ;
-                            Vector3D n( 1. , 0. , 0. ) ;
-                            VolPlane surf( m.sensor_volumes[i] , dd4hep::rec::SurfaceType::Sensitive , m.sensor_thickness/2. , m.sensor_thickness/2. , u,v,n );
-                            volSurfaceList(sensorDE)->push_back(surf);
-                            iSensitive++;
-                        }
-                    }
+                    iModule_tot++;
+                    module_assembly->GetShape()->ComputeBBox();
                 }
-                iModule_tot++;
-                module_assembly->GetShape()->ComputeBBox();
             }
+            
             if(m.motherVolThickness>0.0 && m.motherVolWidth>0.0){}
             else{
                 whole_stave_volume_a->GetShape()->ComputeBBox();
@@ -521,4 +541,4 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     return sdet;
 }
 
-DECLARE_DETELEMENT(VertexBarrel_o1_v02,create_element)
+DECLARE_DETELEMENT(VertexBarrel_detailed_o1_v02,create_element)

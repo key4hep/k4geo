@@ -143,14 +143,14 @@
 
     <!-- Silicon wrapper barrel  -->
     <detectors>
-        <detector name="SiWrB" type="VertexBarrel_o1_v02" vis="SiWrVis" id="DetID_SiWr_Barrel" readout="SiWrBCollection" region="SiWrBRegion">
+        <detector name="SiWrB" type="VertexBarrel_detailed_o1_v02" vis="SiWrVis" id="DetID_SiWr_Barrel" readout="SiWrBCollection" region="SiWrBRegion">
             <envelope vis="SiWrEnvVis">       
                 <shape type="Tube" rmin="SiWrB_inner_radius" rmax="SiWrB_outer_radius" dz="SiWrB_half_length" material="Air"/>
             </envelope>
             <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_BARREL"/>
             
             <!-- Definition of our "stave" object that is used to build the barrel. -->
-            <stave name="SiWrStave" dr="SiWr_distance_two_sides" motherVolWidth="SiWr_mod_rphi" motherVolThickness="0.8*(SiWrB_r2-SiWrB_r1)">
+            <stave name="SiWrStave" length="2.*SiWrB_z" dr="SiWr_distance_two_sides" motherVolWidth="SiWr_mod_rphi" motherVolThickness="0.8*(SiWrB_r2-SiWrB_r1)">
                 <!-- Front flexes. Same flexes as in IDEA vertex. Detailed -->
                  <components name="flex_leftQuads" r="0.0*mm" length="SiWrB_z">
                     <component thickness="SiWr_flex_Aluminium_thickness" width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." r="0.0*mm"                                                       material="Al" vis="SiWrCableVis"/>
@@ -180,7 +180,7 @@
                 </sensor>-->
 
                 <!-- Simplified design -->
-                <sensor r="SiWr_flex_thickness" thickness="SiWr_Sensitive_Thickness" material="Silicon">
+                <sensor name="SiWrSensor" r="SiWr_flex_thickness" thickness="SiWr_Sensitive_Thickness" material="Silicon">
                     <component sensitive="True" ymin="-SiWrB_z" ymax="SiWrB_z" xmin="-SiWr_mod_rphi/2." xmax="+SiWr_mod_rphi/2.-SiWr_mod_rphi_periphery" vis="SiWrSensitiveVis"/> <!-- Left quad -->
                     <component sensitive="False" ymin="-SiWrB_z" ymax="SiWrB_z" xmin="+SiWr_mod_rphi/2.-SiWr_mod_rphi_periphery" xmax="SiWr_mod_rphi/2." vis="SiWrPeripheryVis"/> <!-- Space between quads -->          
                 </sensor>
