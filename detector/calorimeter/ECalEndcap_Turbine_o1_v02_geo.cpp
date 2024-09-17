@@ -83,7 +83,7 @@ namespace det {
       dd4hep::xml::DetElement electrodeBladeElem = genericBladeElem.child(_Unicode(electrodeBlade));
       dd4hep::xml::DetElement nobleLiquidElem = genericBladeElem.child(_Unicode(nobleLiquidGap));
 
-      float BladeAngle, AbsThickMin, BladeThicknessScaleFactor;
+      float BladeAngle = 0.0, AbsThickMin = 0.0, BladeThicknessScaleFactor;
       // hardcode for three wheels
       if (iWheel == 0) {
 	BladeAngle = genericBladeElem.attr<float>(_Unicode(angle1));
@@ -128,7 +128,7 @@ namespace det {
       bool sameNUnitCells = genericBladeElem.attr<bool>(_Unicode(sameNUnitCells));
       char* nUnitCellsStrArr = (char*)genericBladeElem.attr<std::string>(_Unicode(nUnitCells)).c_str();
       char* nUnitCellsCStr = strtok(nUnitCellsStrArr, " ");   
-      int nUnitCells;
+      int nUnitCells = -1;
       if (!sameNUnitCells) {
 	for (unsigned i = 0; i < iWheel; i++) {
 	  nUnitCellsCStr = strtok(NULL, " ");
