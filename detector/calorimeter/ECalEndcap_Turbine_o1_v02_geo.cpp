@@ -104,7 +104,6 @@ namespace det {
       dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v02", "Making wheel with inner, outer radii %f, %f", ri, ro);
       dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v02", "Blade angle is %f ", BladeAngle);
       dd4hep::xml::Dimension dim(aXmlElement.child(_Unicode(dimensions)));
-      double grmin = dim.rmin1();
       dd4hep::printout( dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v02", "delZ is %f", delZ);
     
       if (TMath::Abs(TMath::Tan(BladeAngle)) < delZ/(2.*ri)) {
