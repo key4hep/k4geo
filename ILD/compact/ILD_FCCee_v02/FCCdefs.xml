@@ -1,0 +1,109 @@
+<!-- This file contains parameters specific to the FCC imlementation -->
+
+<define>
+
+  <constant name="SolenoidField" value="2*tesla"/>
+  <constant name="Solenoid_Coil_half_length" value="Coil_half_length"/>
+  <constant name="Solenoid_Coil_radius" value="Coil_inner_radius"/>
+
+  <constant name="CrossingAngle" value="0.030*rad"/>
+
+  <constant name="Kicker_inner_radius" value="4*mm"/>
+  <constant name="Kicker_outer_radius" value="25*mm"/>
+  <constant name="Kicker_min_z" value="3480*mm"/>
+  <constant name="Kicker_max_z" value="3780*mm"/>
+
+  <constant name="BPM_inner_radius" value="36*mm"/>
+  <constant name="BPM_outer_radius" value="55*mm"/>
+  <constant name="BPM_min_z" value="3790*mm"/>
+  <constant name="BPM_max_z" value="3880*mm"/>
+
+
+  <constant name="QD0_min_z" value="2000*mm"/>
+  <constant name="QD0_max_z" value="5400*mm"/>
+  <constant name="QD0Coil_outer_radius" value="30*mm"/>
+  <constant name="CollimatorInFrontOfQD0_dz" value="20*cm"/>
+  <constant name="CollimatorInFrontOfQD0_radius" value="10*mm"/>
+  <constant name="CollimatorInFrontOfQD0_dr" value="16*mm"/>
+
+  <!-- BPW: Beam Pipe Width -->
+  <constant name="BPWWall"       value="0.35*mm" />
+  <constant name="BPWCool"       value="1.0*mm" />
+  <constant name="BeamPipeWidth" value="2.0*BPWWall + BPWCool"/>
+
+  <constant name="BeamPipeWidthFirstCone" value="2.0*mm" />
+  <!-- this is the inner length of the longer elipse axis -->
+  <constant name="ConeBeamPipe_Rmax" value="28.9*mm" />
+  <constant name="CentralBeamPipe_zmax" value="90*mm"/>
+  <constant name="SeparatedBeamPipe_z" value="1190.0*mm"/>
+  <constant name="CentralBeamPipe_rmax" value="10.0*mm"/>
+  <constant name="BeamPipeGoldWidth" value="0.005*mm" />
+  <constant name="BeamPipeGoldTolerance" value="0.001*mm" />  <!-- dummy tolerance, some small non zero value -->
+  <constant name="BeamPipeConeHalfAngle" value="(ConeBeamPipe_Rmax + BeamPipeWidthFirstCone - CentralBeamPipe_rmax ) / (SeparatedBeamPipe_z - CentralBeamPipe_zmax)" />
+
+  <constant name="InnerTracker_half_length" value="2300*mm" />
+
+  <!-- used in the tracker detector -->
+  <constant name="ConeBeamPipe_zmax" value="InnerTracker_half_length" />
+  <constant name="ConeBeamPipe_rmax_1"  value="InnerTracker_half_length * 0.1 + 1*mm" />
+
+  <constant name="SeparatedBeamPipe_rmax"  value="15*mm"/>
+  <constant name="BeamPipeTantalShieldWidth"  value="15*mm"/>
+  <constant name="SideFillerShieldWidth"  value="7*mm"/>
+  <constant name="TopFillerShieldWidth"  value="8*mm"/>
+  <constant name="BeamPipe_end" value="12500*mm"/>
+
+  <!-- Mike Sullivan's Synch Rad mask -->
+  <constant name="MiddleOfSRMask_z" value="2.1*m" />
+  <constant name="SynchRadMaskSize" value="5*mm" /> <!-- mask tip is at 10 mm from the beamline -->
+  <constant name="mask_epsilon" value="0.001*mm" />
+
+  <constant name="Vertex_inner_radius" value="12.5*mm"/>
+  <constant name="Vertex_outer_radius" value="111*mm"/>
+  <constant name="Vertex_half_length" value="302*mm"/>
+  <!-- cone to describe the upper acceptance of the LumiCal -->
+  <constant name="Vertex_LumiCal_Clearence" value="110*mrad"/>
+
+  <constant name="CompSol_min_z" value="1230*mm"/>
+
+
+  <!-- _prime marks the coordinate system along the beamline instead of the detector coordinate frame -->
+  <constant name="LumiCal_min_z_prime" value="1074*mm"/>
+  <constant name="LumiCal_dz_prime" value="0.5 * 25 * 4.5 * mm"/> <!-- Must be consistent with layers defined in the lumiCal xml, half-length-->
+  <constant name="LumiCal_max_z_prime" value="LumiCal_min_z_prime + LumiCal_dz_prime * 2" />
+
+  <!-- calculate the Z position in the detector reference frame for consistency with existing drivers -->
+  <constant name="LumiCal_min_z" value="LumiCal_min_z_prime*cos(0.5*CrossingAngle)"/>
+  <constant name="LumiCal_max_z" value="LumiCal_max_z_prime*cos(0.5*CrossingAngle)" />
+
+  <!-- This has nothing to do with the actual length of the LumiCal, the value is only used for the positioning -->
+  <constant name="LumiCal_dz" value="LumiCal_dz_prime * cos(0.5 * CrossingAngle)"/>
+
+  <constant name="LumiCal_inner_radius" value="55.0*mm"/>
+  <constant name="LumiCal_outer_radius" value="115.0*mm- env_safety"/>
+
+  <constant name="LumiCal_Instr_thickness" value="20*mm"/>
+  <constant name="LumiCal_Instr_inner_radius" value="LumiCal_outer_radius"/>
+  <constant name="LumiCal_Instr_outer_radius" value="LumiCal_outer_radius+LumiCal_Instr_thickness - env_safety"/>
+
+  <constant name="LumiCal_Cool_thickness" value="9.75*mm"/>
+  <constant name="LumiCal_Cool_inner_radius" value="LumiCal_Instr_outer_radius"/>
+  <constant name="LumiCal_Cool_outer_radius" value="LumiCal_Instr_outer_radius+LumiCal_Cool_thickness"/>
+
+  <constant name="Lcal_services_rmax" value="LumiCal_outer_radius+30*mm"/>
+  <constant name="Lcal_offset_phi" value=" 0."/>
+  <!--preliminary LumiCal shielding-->
+  <!--back shielding-->
+  <constant name="LumiCal_Shield_inner_radius" value="LumiCal_inner_radius"/>
+  <constant name="LumiCal_Shield_outer_radius" value="LumiCal_outer_radius+LumiCal_Instr_thickness+LumiCal_Cool_thickness"/>
+  <!-- For convenience, z here refers to dimensions *along the beam pipe*, which is tilted by CrossingAngle/2 w.r.t the global z axis -->
+  <constant name="LumiCal_shield_dz_prime" value="3.5/2.0*mm"/> <!-- Must be consistent with layers defined in the lumiCal xml (1*3.5 mm)-->
+  <constant name="LumiCal_shield_dz" value="LumiCal_shield_dz_prime  * cos(0.5 * CrossingAngle)"/>
+
+
+  <constant name="InnerTracker_outer_radius" value="top_InnerTracker_outer_radius" /> <!-- top_TPC_inner_radius-5*mm -->
+
+  <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:9,module:8,sensor:8"/>
+
+
+</define>
