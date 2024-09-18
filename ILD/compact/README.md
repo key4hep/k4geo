@@ -5,6 +5,7 @@ The following ILD detector models are available in lcgeo ( current production mo
 
 
 
+
 | Model         |  Description               | Hcal   |  Ecal   | geometry | Status            |
 | ------------- | ---------------------------|--------|---------|----------|-------------------|
 | ILD_l5_v02    | large simulation model     | hybrid | hybrid  | Tesla    |  validated        |
@@ -41,10 +42,11 @@ The following ILD detector models are available in lcgeo ( current production mo
 ## Details
 
 ### ILD_FCCee_v01
-ILD for the FCCee with large TPC.
+ILD model for the FCCee with large TPC.
+This model definition can be found under FCCee/ILD_FCCee/compact/ILD_FCCee_v01
 
 ### ILD_l5_v11
-same detector geometry as ILD_l5_v02 model, but with FCCee MDI and CLD-inspired silicon inner tracker & VTX in place of original ILD's VTX, SIT, FTD. 
+TEST model: same detector geometry as ILD_l5_v02 model, but with FCCee MDI and CLD-inspired silicon inner tracker & VTX in place of original ILD's VTX, SIT, FTD. 
 BeamCal, LHCAL removed.
 
 ### ILD_l5_v10

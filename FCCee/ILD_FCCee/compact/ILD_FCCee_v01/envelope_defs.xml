@@ -87,17 +87,6 @@
   <constant name="YokeEndcapPlug_max_z"           value="YokeEndcap_min_z"/>
   <constant name="YokeEndcapPlug_symmetry"        value="Yoke_symmetry"/>
 
-  <!-- just this change for FCC-like model -->
-  <constant name="EcalEndcapRing_inner_radius"    value="220*mm"/>
-
-  <constant name="EcalEndcapRing_outer_radius"    value="Ecal_endcap_center_box_size/2.0-Ecal_EC_Ring_gap"/>
-  <constant name="EcalEndcapRing_min_z"           value="EcalEndcap_min_z"/>
-  <constant name="EcalEndcapRing_max_z"           value="EcalEndcap_max_z"/>
-
-  <constant name="Lcal_inner_radius" value="top_Lcal_inner_radius"/>
-  <constant name="Lcal_z_begin" value="top_Lcal_z_begin"/>
-
-
   <!-- ########### END ENVELOPE PARAMETERS ############################################################## -->
 
 </define>
