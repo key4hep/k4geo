@@ -83,7 +83,7 @@ namespace det {
       dd4hep::xml::DetElement electrodeBladeElem = genericBladeElem.child(_Unicode(electrodeBlade));
       dd4hep::xml::DetElement nobleLiquidElem = genericBladeElem.child(_Unicode(nobleLiquidGap));
 
-      float BladeAngle = 0.0, AbsThickMin = 0.0, BladeThicknessScaleFactor;
+      float BladeAngle = 0.0, AbsThickMin = 0.0, BladeThicknessScaleFactor=0.0;
       // hardcode for three wheels
       if (iWheel == 0) {
 	BladeAngle = genericBladeElem.attr<float>(_Unicode(angle1));
