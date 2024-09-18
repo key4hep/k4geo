@@ -241,6 +241,14 @@
     <fraction n="1" ref="C"/>
   </material>  
   
+  <material name="RohacellVtx"> <!-- (9*42.7 g/cm2 + 13*63.04 g/cm2 + 1*37.99 g/cm2 + 1*34.24 g/cm2)/(9+13+2+1)/x g/cm^3 = 563 cm -> density = 0.091 g/cm^3 , FIX COMPOSITION! -->
+    <D type="density" value="0.091" unit="g/cm3"/>
+    <composite n="9" ref="C"/>
+    <composite n="13" ref="H"/>
+    <composite n="2" ref="O"/>
+    <composite n="1" ref="N"/>
+  </material>
+    
   <material name="RohacellVtx66D"> <!-- (9*42.7 g/cm2 + 13*63.04 g/cm2 + 1*37.99 g/cm2 + 1*34.24 g/cm2)/(9+13+2+1)/x g/cm^3 = 563 cm -> density = 0.091 g/cm^3 , FIX COMPOSITION!  Scaled down to 66% to account for fill factor of 66%-->
     <D type="density" value="0.060" unit="g/cm3"/>
     <composite n="9" ref="C"/>
