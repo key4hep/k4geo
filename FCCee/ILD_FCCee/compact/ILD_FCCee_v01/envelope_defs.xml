@@ -31,8 +31,10 @@
   <constant name="env_safety" value="0.1*mm"/>
 
   <!-- a few defined parameters needed for envelopes -->
+<!--
   <constant name="TPC_inner_radius"    value="top_TPC_inner_radius"/>
   <constant name="TPC_outer_radius"    value="top_TPC_outer_radius"/>
+-->
   <constant name="TPC_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ"/>
 
   <constant name="SET_inner_radius"    value="TPC_outer_radius+ env_safety "/>

@@ -6,26 +6,10 @@
   <constant name="Solenoid_Coil_half_length" value="Coil_half_length"/>
   <constant name="Solenoid_Coil_radius" value="Coil_inner_radius"/>
 
+
   <constant name="CrossingAngle" value="0.030*rad"/>
 
-  <constant name="Kicker_inner_radius" value="4*mm"/>
-  <constant name="Kicker_outer_radius" value="25*mm"/>
-  <constant name="Kicker_min_z" value="3480*mm"/>
-  <constant name="Kicker_max_z" value="3780*mm"/>
-
-  <constant name="BPM_inner_radius" value="36*mm"/>
-  <constant name="BPM_outer_radius" value="55*mm"/>
-  <constant name="BPM_min_z" value="3790*mm"/>
-  <constant name="BPM_max_z" value="3880*mm"/>
-
-
-  <constant name="QD0_min_z" value="2000*mm"/>
-  <constant name="QD0_max_z" value="5400*mm"/>
-  <constant name="QD0Coil_outer_radius" value="30*mm"/>
-  <constant name="CollimatorInFrontOfQD0_dz" value="20*cm"/>
-  <constant name="CollimatorInFrontOfQD0_radius" value="10*mm"/>
-  <constant name="CollimatorInFrontOfQD0_dr" value="16*mm"/>
-
+  <!-- info copied from CLD_o2_v07.xml -->
   <!-- BPW: Beam Pipe Width -->
   <constant name="BPWWall"       value="0.35*mm" />
   <constant name="BPWCool"       value="1.0*mm" />
@@ -58,13 +42,15 @@
   <constant name="SynchRadMaskSize" value="5*mm" /> <!-- mask tip is at 10 mm from the beamline -->
   <constant name="mask_epsilon" value="0.001*mm" />
 
+  <constant name="CompSol_min_z" value="1230*mm"/>
+
+  
   <constant name="Vertex_inner_radius" value="12.5*mm"/>
   <constant name="Vertex_outer_radius" value="111*mm"/>
   <constant name="Vertex_half_length" value="302*mm"/>
   <!-- cone to describe the upper acceptance of the LumiCal -->
   <constant name="Vertex_LumiCal_Clearence" value="110*mrad"/>
-
-  <constant name="CompSol_min_z" value="1230*mm"/>
+  <!-- END vertex info copied from CLD_o2_v07.xml -->
 
 
   <!-- _prime marks the coordinate system along the beamline instead of the detector coordinate frame -->
@@ -101,8 +87,16 @@
   <constant name="LumiCal_shield_dz" value="LumiCal_shield_dz_prime  * cos(0.5 * CrossingAngle)"/>
 
 
-  <constant name="InnerTracker_outer_radius" value="top_InnerTracker_outer_radius" /> <!-- top_TPC_inner_radius-5*mm -->
+  <constant name="QD0_min_z" value="2000*mm"/>
+  <constant name="QD0_max_z" value="5400*mm"/>
+  <constant name="QD0Coil_outer_radius" value="30*mm"/>
+  <constant name="CollimatorInFrontOfQD0_dz" value="20*cm"/>
+  <constant name="CollimatorInFrontOfQD0_radius" value="10*mm"/>
+  <constant name="CollimatorInFrontOfQD0_dr" value="16*mm"/>
 
+
+
+  <!-- END info copied from CLD_o2_v07.xml -->  
   <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:9,module:8,sensor:8"/>
 
 
