@@ -38,9 +38,8 @@ def main():
             if material == "Tungsten": continue
             if material == "Copper": continue
             if material == "beam": continue
-            if material == "LiquidNDecane": continue
-            if material == "AlBeMet162": continue
-            if material == "Gold": continue
+            if material in ["LiquidNDecane", "AlBeMet162", "Gold"]:
+                continue
             if material not in histDict.keys():
                 histDict[material] = {
                     "x0": ROOT.TH1F("", "", (int)((args.angleMax-args.angleMin) / args.angleBinning), args.angleMin, args.angleMax),
