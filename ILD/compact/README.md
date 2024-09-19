@@ -43,7 +43,7 @@ The following ILD detector models are available in lcgeo ( current production mo
 
 ### ILD_FCCee_v01
 ILD model for the FCCee with large TPC.
-This model definition can be found under FCCee/ILD_FCCee/compact/ILD_FCCee_v01
+This model definition can be found under [FCCee/ILD_FCCee/compact/ILD_FCCee_v01](../../FCCee/ILD_FCCee/compact/ILD_FCCee_v01/ILD_FCCee_v01.xml)
 
 ### ILD_FCCee_v02
 ILD model for the FCCee with the CLD InnerTracker and a correspondingly shrunk TPC.
