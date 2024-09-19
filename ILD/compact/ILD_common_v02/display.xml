@@ -1,37 +1,37 @@
   <display>
     <!-- fixme:  white comes out as red !!!???? |  vis name="WhiteVis"         alpha="0.0" r="1.0" g="1.0"  b="1.0"   showDaughters="true"  visible="true"/ -->
-    <vis name="WhiteVis"         alpha="0.0" r=".96" g=".96"  b=".96"   showDaughters="true"  visible="true"/>
-    <vis name="LightGrayVis"         alpha="0.0" r=".75" g=".75"  b=".75"   showDaughters="true"  visible="true"/>
-    <vis name="Invisible"         alpha="0.0" r="0" g="0"  b="0"   showDaughters="false"  visible="false"/>
-    <vis name="SeeThrough"         alpha="0.0" r="0" g="0"  b="0"   showDaughters="true"  visible="false"/>
-    <vis name="RedVis"           alpha="1.0" r="1.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
-    <vis name="GreenVis"         alpha="1.0" r="0.0" g="1.0"  b="0.0"   showDaughters="true"  visible="true"/>
-    <vis name="BlueVis"          alpha="1.0" r="0.0" g="0.0"  b="1.0"   showDaughters="true"  visible="true"/>
-    <vis name="CyanVis"          alpha="1.0" r="0.0" g="1.0"  b="1.0"   showDaughters="true"  visible="true"/>
-    <vis name="MagentaVis"       alpha="1.0" r="1.0" g="0.0"  b="1.0"   showDaughters="true"  visible="true"/>
-    <vis name="YellowVis"        alpha="1.0" r="1.0" g="1.0"  b="0.0"   showDaughters="true"  visible="true"/>
-    <vis name="BlackVis"         alpha="1.0" r="0.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
-    <vis name="GrayVis"          alpha="1.0" r="0.5" g="0.5"  b="0.5"   showDaughters="true"  visible="true"/>
+    <vis name="ILD_WhiteVis"         alpha="0.0" r=".96" g=".96"  b=".96"   showDaughters="true"  visible="true"/>
+    <vis name="ILD_LightGrayVis"         alpha="0.0" r=".75" g=".75"  b=".75"   showDaughters="true"  visible="true"/>
+    <vis name="ILD_Invisible"         alpha="0.0" r="0" g="0"  b="0"   showDaughters="false"  visible="false"/>
+    <vis name="ILD_SeeThrough"         alpha="0.0" r="0" g="0"  b="0"   showDaughters="true"  visible="false"/>
+    <vis name="ILD_RedVis"           alpha="1.0" r="1.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="ILD_GreenVis"         alpha="1.0" r="0.0" g="1.0"  b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="ILD_BlueVis"          alpha="1.0" r="0.0" g="0.0"  b="1.0"   showDaughters="true"  visible="true"/>
+    <vis name="ILD_CyanVis"          alpha="1.0" r="0.0" g="1.0"  b="1.0"   showDaughters="true"  visible="true"/>
+    <vis name="ILD_MagentaVis"       alpha="1.0" r="1.0" g="0.0"  b="1.0"   showDaughters="true"  visible="true"/>
+    <vis name="ILD_YellowVis"        alpha="1.0" r="1.0" g="1.0"  b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="ILD_BlackVis"         alpha="1.0" r="0.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="ILD_GrayVis"          alpha="1.0" r="0.5" g="0.5"  b="0.5"   showDaughters="true"  visible="true"/>
 
-    <vis name="TPCVis"        alpha="0.1" r="0" g="0"  b="0"         showDaughters="true"  visible="true"/>
-    <vis name="TPCMotherVis"  alpha="0.1" r="0.9" g="0.9"  b="0.9"   showDaughters="true"  visible="false"/>
+    <vis name="ILD_TPCVis2"        alpha="0.1" r="0" g="0"  b="0"         showDaughters="true"  visible="true"/>
+    <vis name="ILD_TPCMotherVis"  alpha="0.1" r="0.9" g="0.9"  b="0.9"   showDaughters="true"  visible="false"/>
 
-    <vis name="VXDVis"        alpha="0.1" r="0.1" g=".5"  b=".5"   showDaughters="true"  visible="true"/>
-    <vis name="VXDLayerVis"   alpha="1.0" r="0.1" g=".5"  b=".5"   showDaughters="true"  visible="true"/>
-    <vis name="VXDSupportVis" alpha="1.0" r="0.0" g="1.0" b="0.0"  showDaughters="true"  visible="true"/>
+    <vis name="ILD_VXDVis"        alpha="0.1" r="0.1" g=".5"  b=".5"   showDaughters="true"  visible="true"/>
+    <vis name="ILD_VXDLayerVis"   alpha="1.0" r="0.1" g=".5"  b=".5"   showDaughters="true"  visible="true"/>
+    <vis name="ILD_VXDSupportVis" alpha="1.0" r="0.0" g="1.0" b="0.0"  showDaughters="true"  visible="true"/>
 
-    <vis name="FTDVis"           alpha="1.0" r="0.0" g="0.1"  b="0.0"   showDaughters="true"  visible="false"/>
-    <vis name="FTDSensitiveVis" alpha="1.0"  r="1.0"  g="1.0" b="0.45" showDaughters="true" visible="true"/>
-    <vis name="FTDSupportVis"   alpha="1.0"  r="1.0"  g="0.5" b="0.5"  showDaughters="true" visible="true"/>
-    <vis name="FTDHolePetalVis" alpha="1.0"  r="0.5"  g="0.5" b="1.0" showDaughters="true" visible="true"/>
-    <vis name="FTDCylVis"       alpha="0.45" r="0.2"  g="0.9" b="0.98" showDaughters="true" visible="true"/>
-    <vis name="FTDCablesVis"    alpha="1.0"  r="0.0"  g="0.9" b="0.0"  showDaughters="true" visible="true"/>
+    <vis name="ILD_FTDVis2"         alpha="1.0" r="0.0" g="0.1"  b="0.0"   showDaughters="true"  visible="false"/>
+    <vis name="ILD_FTDSensitiveVis" alpha="1.0"  r="1.0"  g="1.0" b="0.45" showDaughters="true" visible="true"/>
+    <vis name="ILD_FTDSupportVis"   alpha="1.0"  r="1.0"  g="0.5" b="0.5"  showDaughters="true" visible="true"/>
+    <vis name="ILD_FTDHolePetalVis" alpha="1.0"  r="0.5"  g="0.5" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="ILD_FTDCylVis"       alpha="0.45" r="0.2"  g="0.9" b="0.98" showDaughters="true" visible="true"/>
+    <vis name="ILD_FTDCablesVis"    alpha="1.0"  r="0.0"  g="0.9" b="0.0"  showDaughters="true" visible="true"/>
 
-    <vis name="MyBeamCalVis"  alpha="0.5"  r="1.0" g="1.0"  b="1.0" showDaughters="true"  visible="false"/>
-    <vis name="BCLayerVis1"   alpha="1.0"  r="1.0" g="0.0"  b="0.0" showDaughters="true"  visible="true"/>
-    <vis name="BCLayerVis2"   alpha="1.0"  r="0.0" g="1.0"  b="0.0" showDaughters="true"  visible="true"/>
-    <vis name="BCLayerVis3"   alpha="1.0"  r="0.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
-    <vis name="BCLayerVis4"   alpha="1.0"  r="1.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
+    <vis name="ILD_BeamCalVis"  alpha="0.5"  r="1.0" g="1.0"  b="1.0" showDaughters="true"  visible="false"/>
+    <vis name="ILD_BCLayerVis1"   alpha="1.0"  r="1.0" g="0.0"  b="0.0" showDaughters="true"  visible="true"/>
+    <vis name="ILD_BCLayerVis2"   alpha="1.0"  r="0.0" g="1.0"  b="0.0" showDaughters="true"  visible="true"/>
+    <vis name="ILD_BCLayerVis3"   alpha="1.0"  r="0.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
+    <vis name="ILD_BCLayerVis4"   alpha="1.0"  r="1.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
 
     <!-- colors used in Mokka and CED for ILD -->
     <vis name="ILD_SITVis"  alpha="1.0" r="0.86" g="0.86"  b="0.86" showDaughters="true"  visible="true"/>

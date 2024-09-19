@@ -1,4 +1,4 @@
-<detector name="EcalEndcapFace" type="PolyhedralEndcapSurfaces" id="ILDDetID_ECAL_ENDCAP_FACE" readout="EcalEndcapFaceReadout" vis="BlueVis" >
+<detector name="EcalEndcapFace" type="PolyhedralEndcapSurfaces" id="ILDDetID_ECAL_ENDCAP_FACE" readout="EcalEndcapFaceReadout" vis="ILD_BlueVis" >
 
     <comment>Surfaces at the face of the Ecal Endcap </comment>
 

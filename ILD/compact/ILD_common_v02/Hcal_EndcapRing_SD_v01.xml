@@ -1,7 +1,7 @@
 <lccdd>
 
   <detectors>
-    <detector name="HcalRing" type="Hcal_EndcapRing_SD_v01" id="ILDDetID_HCAL_RING" readout="HCalECRingRPCHits" vis="SeeThrough" insideTrackingVolume="false" >
+    <detector name="HcalRing" type="Hcal_EndcapRing_SD_v01" id="ILDDetID_HCAL_RING" readout="HCalECRingRPCHits" vis="ILD_SeeThrough" insideTrackingVolume="false" >
       <comment>Hadron Calorimeter EndcapRing</comment>
 
       <envelope vis="ILD_HCALVis">
@@ -23,24 +23,24 @@
 
       <!-- absorber material
         -->
-      <staves  material = "Steel304L"  vis="GreenVis"/>
+      <staves  material = "Steel304L"  vis="ILD_GreenVis"/>
       <material name="Steel304L"/>
 
-      <layer repeat="HcalEndcapRingSD_nlayers" vis="SeeThrough">
-        <slice material = "Steel304L"      thickness = "HcalSD_radiator_thickness"                    vis="BlueVis"   />
-        <slice material = "Air"            thickness = "HcalSD_airgap_thickness"                      vis="WhiteVis"   />
-        <slice material = "Steel304L"      thickness = "HcalSD_steel_casette_thickness"               vis="BlueVis"   />
-        <slice material = "epoxy"          thickness = "HcalSD_electronics_mask_thickness"            vis="GreenVis" />
-        <slice material = "PCB"            thickness = "HcalSD_PCB_thickness"                         vis="CyanVis" />
-        <slice material = "mylar"          thickness = "HcalSD_mylar_anode_thickness"                 vis="MagentaVis" />
-        <slice material = "graphite"       thickness = "HcalSD_graphite_anode_thickness"              vis="Invisible" />
-        <slice material = "FloatGlass"     thickness = "HcalSD_glass_anode_thickness"                 vis="RedVis" />
-        <slice material = "RPCGAS2"        thickness = "HcalSD_sensitive_gas_gap"  sensitive = "yes"   vis="YellowVis" />
-        <slice material = "FloatGlass"     thickness = "HcalSD_glass_cathode_thickness"               vis="RedVis" />
-        <slice material = "graphite"       thickness = "HcalSD_graphite_cathode_thickness"            vis="Invisible" />
-        <slice material = "mylar"          thickness = "HcalSD_mylar_cathode_thickness"               vis="MagentaVis" />
-        <slice material = "Steel304L"      thickness = "HcalSD_steel_casette_thickness"               vis="BlueVis"   />
-        <slice material = "Air"            thickness = "HcalSD_airgap_thickness"                      vis="WhiteVis"   />
+      <layer repeat="HcalEndcapRingSD_nlayers" vis="ILD_SeeThrough">
+        <slice material = "Steel304L"      thickness = "HcalSD_radiator_thickness"                    vis="ILD_BlueVis"   />
+        <slice material = "Air"            thickness = "HcalSD_airgap_thickness"                      vis="ILD_WhiteVis"   />
+        <slice material = "Steel304L"      thickness = "HcalSD_steel_casette_thickness"               vis="ILD_BlueVis"   />
+        <slice material = "epoxy"          thickness = "HcalSD_electronics_mask_thickness"            vis="ILD_GreenVis" />
+        <slice material = "PCB"            thickness = "HcalSD_PCB_thickness"                         vis="ILD_CyanVis" />
+        <slice material = "mylar"          thickness = "HcalSD_mylar_anode_thickness"                 vis="ILD_MagentaVis" />
+        <slice material = "graphite"       thickness = "HcalSD_graphite_anode_thickness"              vis="ILD_Invisible" />
+        <slice material = "FloatGlass"     thickness = "HcalSD_glass_anode_thickness"                 vis="ILD_RedVis" />
+        <slice material = "RPCGAS2"        thickness = "HcalSD_sensitive_gas_gap"  sensitive = "yes"  vis="ILD_YellowVis" />
+        <slice material = "FloatGlass"     thickness = "HcalSD_glass_cathode_thickness"               vis="ILD_RedVis" />
+        <slice material = "graphite"       thickness = "HcalSD_graphite_cathode_thickness"            vis="ILD_Invisible" />
+        <slice material = "mylar"          thickness = "HcalSD_mylar_cathode_thickness"               vis="ILD_MagentaVis" />
+        <slice material = "Steel304L"      thickness = "HcalSD_steel_casette_thickness"               vis="ILD_BlueVis"   />
+        <slice material = "Air"            thickness = "HcalSD_airgap_thickness"                      vis="ILD_WhiteVis"   />
       </layer>
     </detector>
   </detectors>
