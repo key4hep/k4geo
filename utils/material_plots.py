@@ -2,9 +2,9 @@ from __future__ import print_function
 import argparse
 
 import sys,os
-print(os.path.dirname(os.path.abspath(__file__)) + "/../../FCCSW/Examples/scripts")
-sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../../FCCSW/Examples/scripts")    # FCC Style from https://github.com/HEP-FCC/FCCSW/blob/master/Examples/scripts/plotstyle.py
+sys.path.append(os.path.expandvars("$FCCSW") + "/Examples/scripts")
 from plotstyle import FCCStyle
+
 import ROOT
 
 def main():
@@ -38,6 +38,8 @@ def main():
             if material == "Tungsten": continue
             if material == "Copper": continue
             if material == "beam": continue
+            if material in ["LiquidNDecane", "AlBeMet162", "Gold"]:
+                continue
             if material not in histDict.keys():
                 histDict[material] = {
                     "x0": ROOT.TH1F("", "", (int)((args.angleMax-args.angleMin) / args.angleBinning), args.angleMin, args.angleMax),
@@ -91,6 +93,8 @@ def main():
             match material:
                 case "CarbonFiber":
                     fillcolor = FCCStyle.fillcolors[0]
+                case "CarbonFoam":
+                    fillcolor = FCCStyle.fillcolors[0]
                 case "CarbonFleece":
                     fillcolor = ROOT.kBlack
                 case "Rohacell":
@@ -105,6 +109,8 @@ def main():
                     fillcolor = FCCStyle.fillcolors[6] 
                 case "Water":
                     fillcolor = FCCStyle.fillcolors[5] 
+                case "PCB":
+                    fillcolor = ROOT.kGreen
 
             histDict_ordered[material][plot].SetLineColor(linecolor)
             histDict_ordered[material][plot].SetFillColor(fillcolor)

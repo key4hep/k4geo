@@ -7,7 +7,7 @@
 
   <info name="IDEA_o1_v03"
     title="FCCee IDEA detector geometry master file"
-    author="Niloufar Alipour Tehrani, vertex detector by Armin Ilg, DCH by Alvaro Tolosa-Delgado"
+    author="Niloufar Alipour Tehrani, vertex detector and silicon wrapper by Armin Ilg, DCH by Alvaro Tolosa-Delgado"
     url="no"
     status="development"
     version="o1_v03">
@@ -20,7 +20,7 @@
 
   <includes>
     <gdmlFile  ref="elements_o1_v01.xml"/>
-    <gdmlFile  ref="materials_o1_v02.xml"/>
+    <gdmlFile  ref="materials_o1_v03.xml"/>
   </includes>
 
   <define>
@@ -46,13 +46,13 @@
   <include ref="LumiCal_o1_v01.xml"/>
 
   <!-- Import vertex -->
-  <include ref="Vertex_IDEA_o1_v01.xml"/>
+  <include ref="VertexComplete_IDEA_o1_v03.xml"/>
 
   <!-- Import drift chamber -->
   <include ref="DriftChamber_o1_v02.xml"/>
 
   <!-- Import silicon wrapper -->
-  <!-- <include ref="SiliconWrapper_o1_v01.xml"/> -->
+  <include ref="SiliconWrapper_o1_v03.xml"/>
 
   <!-- Import solenoid -->
   <include ref="Solenoid_o1_v01.xml"/>
