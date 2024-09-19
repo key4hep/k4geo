@@ -20,7 +20,7 @@
 
   <includes>
     <gdmlFile  ref="../../FCCee/IDEA/compact/IDEA_o1_v03/elements_o1_v01.xml"/>
-    <gdmlFile  ref="../../FCCee/IDEA/compact/IDEA_o1_v03/materials_o1_v02.xml"/>
+    <gdmlFile  ref="../../FCCee/IDEA/compact/IDEA_o1_v03/materials_o1_v03.xml"/>
   </includes>
 
   <define>
@@ -43,13 +43,13 @@
   <include ref="../../FCCee/IDEA/compact/IDEA_o1_v03/LumiCal_o1_v01.xml"/>
 
   <!-- Import vertex -->
-  <include ref="../../FCCee/IDEA/compact/IDEA_o1_v03/Vertex_IDEA_o1_v01.xml"/>
+  <include ref="../../FCCee/IDEA/compact/IDEA_o1_v03/VertexComplete_IDEA_o1_v03.xml"/>
 
   <!-- Import drift chamber -->
   <include ref="../../FCCee/IDEA/compact/IDEA_o1_v03/DriftChamber_o1_v02.xml"/>
 
   <!-- Import silicon wrapper -->
-  <!-- <include ref="SiliconWrapper_o1_v01.xml"/> -->
+  <include ref="SiliconWrapper_o1_v03.xml"/>
 
   <!-- Import solenoid -->
   <include ref="../../FCCee/IDEA/compact/IDEA_o1_v03/Solenoid_o1_v01.xml"/>

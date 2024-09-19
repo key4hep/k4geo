@@ -14,7 +14,7 @@
 
   <includes>
     <gdmlFile  ref="../../FCCee/IDEA/compact/IDEA_o1_v03/elements_o1_v01.xml"/>
-    <gdmlFile  ref="../../FCCee/IDEA/compact/IDEA_o1_v03/materials_o1_v02.xml"/>
+    <gdmlFile  ref="../../FCCee/IDEA/compact/IDEA_o1_v03/materials_o1_v03.xml"/>
   </includes>
 
   <define>
