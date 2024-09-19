@@ -66,11 +66,11 @@
   <include ref="../../../MDI/compact/MDI_o1_v00/Beampipe_o4_v05.xml"/>
   <include ref="../../../MDI/compact/MDI_o1_v00/HOMAbsorber.xml"/>
 
-  <!-- vertex and inner tracker from CLD_02_v07 -->
+  <!-- vertex and lumiCal from CLD_02_v07 -->
   <include ref="../../../CLD/compact/CLD_o2_v07/LumiCal_o3_v02_05.xml"/>
   <include ref="../../../CLD/compact/CLD_o2_v07/Vertex_o4_v07_smallBP.xml"/>
 
-  <!-- this is the modified version of the CLD iner tracker -->
+  <!-- this is the modified version of the CLD inner tracker -->
   <include ref="InnerTrackerILD_o1_v02_00.xml"/>  
 
   <!-- these are from the "main" ILD versions -->
