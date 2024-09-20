@@ -7,7 +7,7 @@
 
   <constant name="ILDDetID_NOTUSED"      value="  0"/>
 
-
+  <!-- please keep TPC as "4", to avoid breaking the ILD reconstruction... -->
   <constant name="ILDDetID_TPC"          value="  4"/>
   <constant name="ILDDetID_SET"          value="  6"/>
 
