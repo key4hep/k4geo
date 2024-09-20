@@ -94,10 +94,8 @@
   <constant name="CollimatorInFrontOfQD0_radius" value="10*mm"/>
   <constant name="CollimatorInFrontOfQD0_dr" value="16*mm"/>
 
-
-
-  <!-- END info copied from CLD_o2_v07.xml -->  
-  <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:9,module:8,sensor:8"/>
+  <!-- this variable used by CLD trackers -->  
+  <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:2,layer:9,module:8,sensor:8"/>
 
 
 </define>
