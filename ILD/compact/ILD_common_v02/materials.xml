@@ -496,6 +496,7 @@
    </material>
 
    <material name="RPCGAS2" >
+     <!-- mass fractions: R134a:0.93 + IsoButane:0.05 + SF6:0.02 --> 
      <D value="0.00449" unit="g/cm3" />
      <fraction n="0.93" ref="R134a"/>
      <fraction n="0.05" ref="IsoButane"/>
