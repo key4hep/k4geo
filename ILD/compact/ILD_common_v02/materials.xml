@@ -434,7 +434,6 @@
       <MEE unit="eV" value="790"/>
       <D unit="g/cm3" value="19.32"/>
       <atom unit="g/mole" value="196.967"/>
-      <fraction n="1" ref="Au"/>
     </material>
     <material name="G4_POLYETHYLENE" state="solid">
       <MEE unit="eV" value="57.4"/>
