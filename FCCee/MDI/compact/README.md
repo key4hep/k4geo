@@ -9,6 +9,7 @@ aciarma - 08/07/24
 -- Beampipe_CADimport_o1_v02.xml : import CAD models for engineered beam pipe (by F. Fransesini/INFN-LNF)
 These .stl files are hosted [here](https://fccsw.web.cern.ch/fccsw/filesForSimDigiReco/MDI/MDI_o1_v01/).
 The CMake option `INSTALL_BEAMPIPE_STL_FILES=ON` downloads these STL.
+```
 -- stl_files/Pipe_240430
     ├── AlBeMet162_30042024.stl    : central and elliptoconical chambers, with cooling manifolds 
     ├── Copper_pipe_28092023.stl   : low impedance beam pipe separation region
@@ -17,3 +18,4 @@ The CMake option `INSTALL_BEAMPIPE_STL_FILES=ON` downloads these STL.
     ├── Tungsten_mask_02102023.stl : SR masks 2.1m upstream
     └── Water_30042024.stl         : cooling for elliptoconical chambers
 -- BeamInstrumentation_o1_v01.xml : compensating and screening solenoids
+```
