@@ -93,10 +93,9 @@
   <constant name="CollimatorInFrontOfQD0_dz" value="20*cm"/>
   <constant name="CollimatorInFrontOfQD0_radius" value="10*mm"/>
   <constant name="CollimatorInFrontOfQD0_dr" value="16*mm"/>
-
-
-
   <!-- END info copied from CLD_o2_v07.xml -->  
+
+  <!-- side should be kept as -2 to avoid driver crash -->
   <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:9,module:8,sensor:8"/>
 
 
