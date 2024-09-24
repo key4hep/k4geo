@@ -135,7 +135,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
 
   dd4hep::PolyhedraRegular  BarrelEnvWithoutLastLayer(numSides, radius, barrelRMax, barrelLength);
   dd4hep::PolyhedraRegular  BarrelLastLayerEnv(numSides, (barrelRMax - 2 * detectorVolumeThickness), barrelRMax, barreltotalLength);
-  std::string barrelName = dd4hep::xml::_toString(0, "MS-Barrel%d");
+  std::string barrelName = name + "-Barrel" + std::to_string(0);
 
   dd4hep::Position barrelUnionPos(0.0 , 0.0, 0.0);  
   dd4hep::Rotation3D barrelUnionRot(dd4hep::RotationY(0.0 * dd4hep::degree));
@@ -147,7 +147,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
   dd4hep::Position barrelTrans(0., 0., 0.);
   dd4hep::PlacedVolume barrelPhys = detectorVolume.placeVolume(BarrelVolume, dd4hep::Transform3D(dd4hep::RotationZ(0.), barrelTrans));
   barrelPhys.addPhysVolID("type", 0); 
-  dd4hep::DetElement BarrelDE(detElement, "MSBarrelDE" , 0);
+  dd4hep::DetElement BarrelDE(detElement, name +"-BarrelDE" , 0);
   BarrelDE.setPlacement(barrelPhys);
   BarrelVolume.setVisAttributes(lcdd.visAttributes("no_vis"));
 
@@ -166,7 +166,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
   }
 
   dd4hep::PolyhedraRegular  BarrelDetectorLayer(numSides, barrelLayerRMin, barrelLayerRMax, barrelLayerLength);
-  std::string barrelDetectorName = dd4hep::xml::_toString(numBarrelLayer +1, "MS-BarrelDetectorLayer%d");
+  std::string barrelDetectorName = name + "-BarrelDetectorLayer" + std::to_string(numBarrelLayer + 1);
   dd4hep::Volume BarrelDetectorLayerVolume(barrelDetectorName, BarrelDetectorLayer, mat);
 
   // sideLength and sideLength2 are the lengths of the parallel sides of the trapezoid.
@@ -524,7 +524,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
   dd4hep::Position detectorLayerTrans(0., 0., 0.);
   dd4hep::PlacedVolume detectorLayerPhys = BarrelVolume.placeVolume(BarrelDetectorLayerVolume, dd4hep::Transform3D(dd4hep::RotationZ(0.), detectorLayerTrans));
   detectorLayerPhys.addPhysVolID("layer", numBarrelLayer+1); 
-  dd4hep::DetElement BarrelDetectorLayerDE(BarrelDE, "MSBarrel_DetectorLayerDE_" + std::to_string(numBarrelLayer+1), numBarrelLayer+1);
+  dd4hep::DetElement BarrelDetectorLayerDE(BarrelDE, name + "-Barrel_DetectorLayerDE_" + std::to_string(numBarrelLayer+1), numBarrelLayer+1);
   BarrelDetectorLayerDE.setPlacement(detectorLayerPhys);
   BarrelDetectorLayerVolume.setVisAttributes(lcdd.visAttributes("no_vis")); 
 
@@ -539,7 +539,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
     double barrelRadiatorLayerRMid = (barrelRadiatorLayerRMin + barrelRadiatorLayerRMax)/2.0;
 
     dd4hep::PolyhedraRegular  BarrelRadiatorLayer(numSides, barrelRadiatorLayerRMin, barrelRadiatorLayerRMax, barrelLength);
-    std::string barrelRadiatorEnvName = dd4hep::xml::_toString(numBarrelRadiatorLayer +1, "MS-BarrelRadiatorLayer%d");
+    std::string barrelRadiatorEnvName = name + "-BarrelRadiatorLayer" + std::to_string(numBarrelRadiatorLayer + 1);
     dd4hep::Volume BarrelRadiatorLayerVolume(barrelRadiatorEnvName , BarrelRadiatorLayer, mat);
 
     double barrelRadiatorSideLength = 2 * (barrelRadiatorLayerRMid - barrelRadiatorThickness/2.0)* std::tan(shapeAngle_radians);
@@ -548,7 +548,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
     for (int side = 0; side < numSides; ++side) {
       int sideID = (numBarrelRadiatorLayer + 1) * 100 + (side +1);  // to differentiated with the same side in different layers.
       dd4hep::Trapezoid barrelRadiatorEnvelope(barrelLength/2.0, barrelLength/2.0, barrelRadiatorSideLength/2.0, barrelRadiatorSideLength2/2.0, barrelRadiatorThickness/2.0);
-      std::string barrelRadiatorEnvelopeName = dd4hep::xml::_toString(sideID, "MSBarrelRadiatorSide%d");
+      std::string barrelRadiatorEnvelopeName = name + "-BarrelRadiatorSide" + std::to_string(sideID);
       dd4hep::Volume barrelRadiatorEnvVol(barrelRadiatorEnvelopeName, barrelRadiatorEnvelope, mat);
 
       double angle_degrees = shapeAngle * side; // Calculate the angle for each side
@@ -589,7 +589,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
 
     dd4hep::Position radiatorLayerTrans(0., 0., 0.);
     dd4hep::PlacedVolume radiatorLayerPhys = BarrelVolume.placeVolume(BarrelRadiatorLayerVolume, dd4hep::Transform3D(dd4hep::RotationZ(0.), radiatorLayerTrans));
-    dd4hep::DetElement BarrelRadiatorLayerDE(BarrelDE, "MSBarrel_RadiatorLayerDE_" + std::to_string(numBarrelRadiatorLayer+1), numBarrelRadiatorLayer+1);
+    dd4hep::DetElement BarrelRadiatorLayerDE(BarrelDE, name + "-Barrel_RadiatorLayerDE_" + std::to_string(numBarrelRadiatorLayer+1), numBarrelRadiatorLayer+1);
     BarrelRadiatorLayerDE.setPlacement(radiatorLayerPhys);
     BarrelRadiatorLayerVolume.setVisAttributes(lcdd.visAttributes("no_vis")); 
 
@@ -609,12 +609,12 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
     if (endcapType == 0) {
         continue; // Skip the iteration when endcapType is 0
     }
-    EndcapName = dd4hep::xml::_toString(endcapType, "MS-Endcap%d");
+    EndcapName = name + "-Endcap" + std::to_string(endcapType);
     endcapVolume = dd4hep::Volume(EndcapName, EndcapEnv, mat);
     endcapTrans = dd4hep::Position(0., 0., endcapType * endcapOffset);
     endcapPhys = detectorVolume.placeVolume(endcapVolume, dd4hep::Transform3D(dd4hep::RotationZ(0.), endcapTrans));
     endcapPhys.addPhysVolID("type", endcapType);
-    EndcapDE = dd4hep::DetElement(detElement, "MSEndcapDE_" + std::to_string(endcapType) , endcapType);
+    EndcapDE = dd4hep::DetElement(detElement, name + "EndcapDE_" + std::to_string(endcapType) , endcapType);
     EndcapDE.setPlacement(endcapPhys);
     endcapVolume.setVisAttributes(lcdd.visAttributes("no_vis"));
 
@@ -629,7 +629,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
     dd4hep::PolyhedraRegular  endcapDetectorEnvelope(numSides, endcapDetectorLayerInnerRadius, endcapDetectorLayerOuterRadius, 2 * detectorVolumeThickness);
 
     endcapLayerZOffset = - EndcaptotalLength/2.0 + detectorVolumeThickness + numEndcapLayer * (2 * detectorVolumeThickness) + numEndcapLayer * endcapRadiatorThickness;  // Automation of inner Z-Offset of different layers, taking into account that every detector layer is followed by a yoke(radiator) layer
-    endcapDetectorEnvelopeName = dd4hep::xml::_toString(numEndcapLayer+1, "MS-EndcapDetectorLayer%d");
+    endcapDetectorEnvelopeName = name + "-EndcapDetectorLayer" + std::to_string(numEndcapLayer + 1);
     endcapDetectorEnvZPos = endcapLayerZOffset; 
 
 
@@ -886,7 +886,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
     double endcapRadiatorLayerZOffset = - EndcaptotalLength/2.0 + (endcapRadiatorThickness/2.0) + (numEndcapRadiatorLayer +1) * (2 * detectorVolumeThickness) + numEndcapRadiatorLayer * endcapRadiatorThickness;  // Automation of inner Z-Offset of different layers, taking into account that every detector layer is followed by a yoke(radiator) layer
 
     dd4hep::PolyhedraRegular  endcapRadiatorEnvelope(numSides, endcapRadiatorLayerInnerRadius, endcapRadiatorLayerOuterRadius, endcapRadiatorThickness);
-    std::string endcapRadiatorEnvelopeName = dd4hep::xml::_toString(numEndcapRadiatorLayer+1, "MS-EndcapRadiatorLayer%d");
+    std::string endcapRadiatorEnvelopeName = name + "-EndcapRadiatorLayer" + std::to_string(numEndcapRadiatorLayer + 1);
     dd4hep::Volume endcapRadiatorEnvVol(endcapRadiatorEnvelopeName, endcapRadiatorEnvelope, mat);
 
     double endcapRadiatorEnvXPos = 0.0 ; 
