@@ -36,8 +36,9 @@ def main():
 
         entry_x0, entry_lambda, entry_depth = 0.0, 0.0, 0.0
         for i in range(nMat):
-            if entry.material.at(i) == "Air": continue
-
+            # Ignore materials used in beam pipe as vertex material budget does not work without beam pipe. You can add more materials to ignore here
+            if entry.material.at(i) in ["Air","Tungsten","Copper","beam","LiquidNDecane", "AlBeMet162", "Gold"]:
+                continue
             entry_x0        += entry.nX0.at(i)*100.0
             entry_lambda    += entry.nLambda.at(i)
             entry_depth     += entry.matDepth.at(i)

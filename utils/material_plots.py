@@ -34,11 +34,8 @@ def main():
             material = material.replace("66D","")
             material = material.replace("Vtx","")
 
-            if material == "Air": continue
-            if material == "Tungsten": continue
-            if material == "Copper": continue
-            if material == "beam": continue
-            if material in ["LiquidNDecane", "AlBeMet162", "Gold"]:
+            # Ignore materials used in beam pipe as vertex material budget does not work without beam pipe. You can add more materials to ignore here
+            if material in ["Air","Tungsten","Copper","beam","LiquidNDecane", "AlBeMet162", "Gold"]:
                 continue
             if material not in histDict.keys():
                 histDict[material] = {
