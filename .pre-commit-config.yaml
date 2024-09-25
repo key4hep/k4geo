@@ -3,3 +3,10 @@ repos:
     rev: v4.5.0
     hooks:
       - id: check-xml
+  - repo: local
+    hooks:
+      - id: ruff-format
+        name: ruff-format
+        entry: ruff format --force-exclude
+        types: [python]
+        language: system

@@ -17,6 +17,10 @@ jobs:
           source /root/pre-commit-venv/bin/activate
           pip install pre-commit
           export PYTHONPATH=$VIRTUAL_ENV/lib/python3.$(python3 -c 'import sys; print(f"{sys.version_info[1]}")')/site-packages:$PYTHONPATH
+          # Newer versions of git are more cautious around the github runner
+          # environment and without this git rev-parse --show-cdup in pre-commit
+          # fails
+          git config --global --add safe.directory $(pwd)
           pre-commit run --show-diff-on-failure \
             --color=always \
             --all-files
