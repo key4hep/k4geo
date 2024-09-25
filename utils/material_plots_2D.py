@@ -1,65 +1,80 @@
+"""
+This script must be called with python: 'python material_scan_2D.py --{argument} {value}'.
+The output files are saved in data/{outputDir}/name.suffix.
+If no outputDir is specified, it will be data/plots/name.suffix.
+"""
+
 from __future__ import print_function
+
 import argparse
 import math
+import sys
+from os import fspath
+from os.path import expandvars
+from pathlib import Path
 
-import sys, os
-
-sys.path.append(os.path.expandvars("$FCCSW") + "/Examples/scripts")
-from plotstyle import FCCStyle
 import ROOT
+
+sys.path.append(expandvars("$FCCSW") + "/Examples/scripts")
+from plotstyle import FCCStyle
 
 
 def main():
     parser = argparse.ArgumentParser(description="Material Plotter")
     parser.add_argument(
-        "--fname", "-f", dest="fname", type=str, help="name of file to read"
+        "--inputFile", "-f", type=str, help="relative path to the input file"
     )
     parser.add_argument(
         "--angleMin",
-        dest="angleMin",
         default=6,
         type=float,
-        help="minimum eta/theta/cosTheta",
+        help="Minimum eta/theta/cosTheta",
     )
     parser.add_argument(
         "--angleMax",
-        dest="angleMax",
         default=6,
         type=float,
-        help="maximum eta/theta/cosTheta",
+        help="Maximum eta/theta/cosTheta",
     )
     parser.add_argument(
         "--angleDef",
-        dest="angleDef",
         default="eta",
+        choices=["eta", "theta", "cosTheta", "thetaRad"],
         type=str,
-        help="angle definition to use: eta, theta or cosTheta, default: eta",
+        help="Angle definition to use: eta, theta, thetaRad or cosTheta; default: eta",
     )
     parser.add_argument(
         "--angleBinning",
         "-b",
-        dest="angleBinning",
         default=0.05,
         type=float,
-        help="eta/theta/cosTheta bin width",
+        help="Eta/theta/cosTheta bin width",
     )
     parser.add_argument(
         "--nPhiBins",
-        dest="nPhiBins",
         default=100,
         type=int,
-        help="number of bins in phi",
+        help="Number of bins in phi",
     )
+    parser.add_argument("--x0Max", "-x", default=0.0, type=float, help="Max of x0")
     parser.add_argument(
-        "--x0max", "-x", dest="x0max", default=0.0, type=float, help="Max of x0"
+        "--outputDir",
+        "-o",
+        type=str,
+        default="plots",
+        help="Directory to store output files in",
     )
     args = parser.parse_args()
 
+    output_dir = Path("data") / args.outputDir
+    output_dir.mkdir(
+        parents=True, exist_ok=True
+    )  # Create the directory if it doesn't exist
+
     ROOT.gStyle.SetNumberContours(100)
 
-    f = ROOT.TFile.Open(args.fname, "read")
+    f = ROOT.TFile.Open(fspath(Path(args.inputFile).with_suffix(".root")), "read")
     tree = f.Get("materials")
-    histDict = {}
 
     ROOT.gROOT.SetBatch(1)
 
@@ -110,7 +125,7 @@ def main():
         h_lambda.Fill(tree.angle, tree.phi, entry_lambda)
         h_depth.Fill(tree.angle, tree.phi, entry_depth)
 
-    # go through the
+    # go through the plots
     plots = ["x0", "lambda", "depth"]
     histograms = [h_x0, h_lambda, h_depth]
     axis_titles = [
@@ -118,7 +133,7 @@ def main():
         "Number of #lambda",
         "Material depth [cm]",
     ]
-    for i in range(len(plots)):
+    for i, plot in enumerate(plots):
         cv = ROOT.TCanvas("", "", 800, 600)
         cv.SetRightMargin(0.18)
         histograms[i].Draw("COLZ")
@@ -127,6 +142,8 @@ def main():
             title = "#eta"
         elif args.angleDef == "theta":
             title = "#theta [#circ]"
+        elif args.angleDef == "thetaRad":
+            title = "#theta [rad]"
         elif args.angleDef == "cosTheta":
             title = "cos(#theta)"
         histograms[i].GetXaxis().SetTitle(title)
@@ -134,15 +151,16 @@ def main():
 
         histograms[i].GetZaxis().SetTitle(axis_titles[i])
 
-        if args.x0max != 0.0 and plots[i] == "x0":
-            histograms[i].SetMaximum(args.x0max)
+        if args.x0Max != 0.0 and plot == "x0":
+            histograms[i].SetMaximum(args.x0Max)
 
         histograms[i].GetXaxis().SetRangeUser(args.angleMin, args.angleMax)
 
         ROOT.gStyle.SetPadRightMargin(0.5)
-        cv.Print(plots[i] + ".pdf")
-        cv.Print(plots[i] + ".png")
-        cv.SaveAs(plots[i] + ".root")
+        output_path = output_dir / plot
+        cv.Print(fspath(output_path.with_suffix(".pdf")))
+        cv.Print(fspath(output_path.with_suffix(".png")))
+        cv.SaveAs(fspath(output_path.with_suffix(".root")))
 
 
 if __name__ == "__main__":
