@@ -14,7 +14,9 @@ def main():
     parser.add_argument('--angleMax', dest='angleMax', default=6, type=float, help="maximum eta/theta/cosTheta")
     parser.add_argument('--angleDef', dest='angleDef', default="eta", type=str, help="angle definition to use: eta, theta, cosTheta or thetaRad, default: eta")
     parser.add_argument('--angleBinning', "-b", dest='angleBinning', default=0.05, type=float, help="eta/theta/cosTheta/thetaRad bin width")
-    parser.add_argument('--x0max', "-x", dest='x0max', default=0.0, type=float, help="Max of x0")                                                                                                                                                
+    parser.add_argument('--x0max', "-x", dest='x0max', default=0.0, type=float, help="Max of x0")
+    parser.add_argument('--removeMatsSubstrings', dest='removeMatsSubstrings', nargs='+', default=[], help="Substrings to be removed from materials strings (e.g. '66D' for reduced density materials)")
+    parser.add_argument('--ignoreMats', "-i", dest='ignoreMats', nargs='+', default=[], help="List of materials that should be ignored")
     args = parser.parse_args()
 
     f = ROOT.TFile.Open(args.fname, "read")
@@ -30,13 +32,14 @@ def main():
         for i in range(nMat):
             material = entry.material.at(i)
 
-            # If you need to replace some string in the material, add that here
-            material = material.replace("66D","")
-            material = material.replace("Vtx","")
+            # Removing substrings from materials
+            for substring in args.removeMatsSubstrings:
+                material = material.replace(substring,"")
 
-            # Ignore materials used in beam pipe as vertex material budget does not work without beam pipe. You can add more materials to ignore here
-            if material in ["Air","Tungsten","Copper","beam","LiquidNDecane", "AlBeMet162", "Gold"]:
+            # Ignore certain materials if specified
+            if material in args.ignoreMats:
                 continue
+
             if material not in histDict.keys():
                 histDict[material] = {
                     "x0": ROOT.TH1F("", "", (int)((args.angleMax-args.angleMin) / args.angleBinning), args.angleMin, args.angleMax),
