@@ -12,11 +12,11 @@ def writeTopCompactXml( outfile, version, name, Large, Option, SolenoidMap, Anti
         ecal_sl1=3
         ecal_sl2=11
     elif Option>1:
-        print 'ERROR: do not know about Option', Option
+        print( 'ERROR: do not know about Option', Option)
         return
 
     if FwdFields!=250 and FwdFields!=500 and FwdFields!=1000 and FwdFields!=0:
-        print 'ERROR: do not know about FwdFields at energy', FwdFields
+        print( 'ERROR: do not know about FwdFields at energy', FwdFields)
         return
 
     outfile.write('<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"\n')
@@ -151,7 +151,7 @@ def getVersionParameters(version):
         vparams['AntiDID']=True
         vparams['FwdFields']=1000
     else:
-        print 'ERROR: unknown version requested:',version,'!!'
+        print( 'ERROR: unknown version requested:',version,'!!')
         return vparams
 
     if version<10:

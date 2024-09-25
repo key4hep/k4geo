@@ -20,8 +20,8 @@ try:
   paramFile   = sys.argv[2]
   dictFile     = sys.argv[3]
 except IndexError:
-  print " usage:  python extractParameters.py compact.xml param_names.txt pyDict.py"
-  print
+  print( " usage:  python extractParameters.py compact.xml param_names.txt pyDict.py")
+  print()
   sys.exit(1)
 
 #-----------------------------------------------
@@ -40,8 +40,8 @@ def run():
     install_dir = os.environ['DD4hepINSTALL']
 
   except (KeyError):
-    print " please set the environment variable  DD4hepINSTALL  "
-    print "        to your DD4hep installation path ! "
+    print( " please set the environment variable  DD4hepINSTALL  ")
+    print( "        to your DD4hep installation path ! ")
     exit(1)
 
   kernel.loadGeometry("file:"+ compactFile )
@@ -94,9 +94,9 @@ def writeDictionary( names, of ):
 
 def printEnvelopeParameters( det ):
     
-    print " ========== ", det , " ================== "
+    print( " ========== ", det , " ================== ")
     for p in dict[ det ]:
-        print "  ", p ,  getattr( DDG4, p )
+        print( "  ", p ,  getattr( DDG4, p ))
 
 
 #-----------------------------------------------

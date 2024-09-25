@@ -23,7 +23,7 @@ from pyLCIO import UTIL, EVENT, IMPL, IO, IOIMPL
 
 #================================================
 if len( sys.argv ) < 2:
-    print " usage: python guineapig_to_lcio.py eepair_guineapig.pair  "
+    print(" usage: python guineapig_to_lcio.py eepair_guineapig.pair  ")
     sys.exit(0)
 
 #=================================================
