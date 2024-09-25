@@ -17,6 +17,7 @@ def main():
     parser.add_argument('--angleBinning', "-b", dest='angleBinning', default=0.05, type=float, help="eta/theta/cosTheta bin width")
     parser.add_argument('--nPhiBins', dest='nPhiBins', default=100, type=int, help="number of bins in phi")
     parser.add_argument('--x0max', "-x", dest='x0max', default=0.0, type=float, help="Max of x0")                                                                                                                                                
+    parser.add_argument('--ignoreMats', "-i", dest='ignoreMats', nargs='+', default=[], help="List of materials that should be ignored")
     args = parser.parse_args()
 
     ROOT.gStyle.SetNumberContours(100)
@@ -36,7 +37,9 @@ def main():
 
         entry_x0, entry_lambda, entry_depth = 0.0, 0.0, 0.0
         for i in range(nMat):
-            if entry.material.at(i) == "Air": continue
+            # Ignore certain materials if specified
+            if entry.material.at(i) in args.ignoreMats:
+                continue
 
             entry_x0        += entry.nX0.at(i)*100.0
             entry_lambda    += entry.nLambda.at(i)
