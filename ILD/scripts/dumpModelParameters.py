@@ -11,7 +11,7 @@ dbName="models03"            # name of the data base
 #---------------------------------------
 
 if len( sys.argv ) != 2:
-    print " usage: python dumpModelParameters.py MODEL_NAME "
+    print( " usage: python dumpModelParameters.py MODEL_NAME ")
     sys.exit(0)
 
 model   = sys.argv[1]
@@ -67,22 +67,21 @@ for row in cur.fetchall() :
 
 #dump params to xml file
 
-print >>file, "<!-- "
-print >>file, "  global model parameters for model: " + model
-print >>file,  "    extracted from Mokka DB at " + host + " - db: " + dbName 
-print >>file,  "    on " + time.strftime("%d/%m/%Y")
-print >>file,  "    at " + time.strftime("%H:%M:%S")
+print("<!-- ", file=file)
+print("  global model parameters for model: " + model, file=file)
+print("    extracted from Mokka DB at " + host + " - db: " + dbName , file=file)
+print("    on " + time.strftime("%d/%m/%Y"), file=file)
+print("    at " + time.strftime("%H:%M:%S"), file=file)
 
-print >>file, " -->"
+print(" -->", file=file)
 
 
 for k in sorted( params ):
    v = params[ k ]
    if v:
-      print >>file, "<constant name=\"" + k + "\" value=\"" + str(v) + "\"/>"
+      print("<constant name=\"" + k + "\" value=\"" + str(v) + "\"/>", file=file)
    else:
       cur.execute("select name, default_value from parameters where name=\"" + k + "\";")
       for row in cur.fetchall() :
           v = row[1]
-      print >>file, "<constant name=\"" + k + "\" value=\"" + str(v) + "\"/>"
-
+      print("<constant name=\"" + k + "\" value=\"" + str(v) + "\"/>", file=file)

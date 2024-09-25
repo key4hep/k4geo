@@ -190,9 +190,9 @@ try:
   dictFile = sys.argv[1]
 
 except IndexError:
-  print " usage:  python documentEnvelopes.py pyDict.py "
-  print "    pyDict.py : python file with a data dictionary (created with extractParameters)"
-  print  
+  print( " usage:  python documentEnvelopes.py pyDict.py ")
+  print( "    pyDict.py : python file with a data dictionary (created with extractParameters)")
+  print()
   sys.exit(1)
 
 
@@ -230,7 +230,7 @@ def writeILDEnvTable( file ):
     cmds.extend( getDocFooterCmds() )
 
     for cmd in cmds:
-        print >>of, cmd 
+        print(cmd , file=of)
 
     of.close()
 #-----------------------------------------------
@@ -353,7 +353,7 @@ def getEnvPoints(det,scale):
     env = envRZDict[det]
     for ep in env:
         p = (scale * values[ ep[0] ], scale * values[ ep[1] ] )
-        print det, ' point: ' , p
+        print( det, ' point: ' , p)
         points.append( p )
     return points
 
@@ -373,7 +373,7 @@ def writeTexFile( det, fileExt, method, width ):
     cmds.extend( getDocFooterCmds() ) 
 
     for cmd in cmds:
-        print >>of, cmd 
+        print(cmd , file=of)
 
     of.close()
 
@@ -383,15 +383,15 @@ def lineStr( tl, opt="" ):
 
     o = cStringIO.StringIO()
     
-    print >>o, '\draw ', opt,
+    print('\draw ', opt, file=o)
     
     i=0
     for t in tl:
         if( i>0 ):
-            print >>o, ' -- ',
-        print >>o, '(', t[0] ,',', t[1],') ',
+            print(' -- ', file=o)
+        print('(', t[0] ,',', t[1],') ', file=o)
         i += 1
-    print >>o,';'
+    print(';', file=o)
     str = o.getvalue()
     o.close()
     return str
