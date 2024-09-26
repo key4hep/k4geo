@@ -1,8 +1,9 @@
 from __future__ import print_function
+
 import argparse
 import math
-
-import sys, os
+import os
+import sys
 
 sys.path.append(os.path.expandvars("$FCCSW") + "/Examples/scripts")
 from plotstyle import FCCStyle
