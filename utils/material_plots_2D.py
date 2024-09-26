@@ -18,6 +18,24 @@ from plotstyle import FCCStyle
 import ROOT
 
 
+def create_histogram(
+    name_and_title: str, argument_name_space: argparse.Namespace
+) -> ROOT.TH2F:
+    return ROOT.TH2F(
+        name_and_title,
+        name_and_title,
+        int(
+            (argument_name_space.angleMax - argument_name_space.angleMin)
+            / argument_name_space.angleBinning
+        ),
+        argument_name_space.angleMin,
+        argument_name_space.angleMax,
+        argument_name_space.nPhiBins,
+        -math.pi,
+        math.pi,
+    )
+
+
 def main():
     parser = argparse.ArgumentParser(description="Material Plotter")
     parser.add_argument("--inputFile", "-f", type=str, help="relative path to the input file")
@@ -76,36 +94,9 @@ def main():
 
     ROOT.gROOT.SetBatch(1)
 
-    h_x0 = ROOT.TH2F(
-        "h_x0",
-        "h_x0",
-        int((args.angleMax - args.angleMin) / args.angleBinning),
-        args.angleMin,
-        args.angleMax,
-        args.nPhiBins,
-        -math.pi,
-        math.pi,
-    )
-    h_lambda = ROOT.TH2F(
-        "h_lambda",
-        "h_lambda",
-        int((args.angleMax - args.angleMin) / args.angleBinning),
-        args.angleMin,
-        args.angleMax,
-        args.nPhiBins,
-        -math.pi,
-        math.pi,
-    )
-    h_depth = ROOT.TH2F(
-        "h_depth",
-        "h_depth",
-        int((args.angleMax - args.angleMin) / args.angleBinning),
-        args.angleMin,
-        args.angleMax,
-        args.nPhiBins,
-        -math.pi,
-        math.pi,
-    )
+    h_x0 = create_histogram("h_x0", args)
+    h_lambda = create_histogram("h_lambda", args)
+    h_depth = create_histogram("h_depth", args)
 
     for angleBinning, entry in enumerate(tree):
         nMat = entry.nMaterials
