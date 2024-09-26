@@ -1,7 +1,8 @@
-""" 
- python dictionary with parameters extracted from: /data/ilcsoft/HEAD/lcgeo/HEAD/ILD/compact/ILD_o1_v05/ILD_o1_v05.xml
-""" 
-values={}
+"""
+python dictionary with parameters extracted from: /data/ilcsoft/HEAD/lcgeo/HEAD/ILD/compact/ILD_o1_v05/ILD_o1_v05.xml
+"""
+
+values = {}
 values["VXD_inner_radius"] = 16.0
 values["VXD_outer_radius"] = 60.0
 values["VXD_half_length"] = 177.6
