@@ -86,14 +86,14 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
   double rectangleAngle_rad = std::atan(rectangleThickness/dimensions.z());
   double detectorVolumeThickness;
   if (sideLengthEstimate <= (2 * dimensions.y()) && numBarrelDetectorLayers == 1){      // putting this condtition to minimize the volume thickness in case of there is only one chamber per side(espicially for circular shape detector)
-    detectorVolumeThickness = rectangleThickness;
+    detectorVolumeThickness = rectangleThickness + 2 * clearance;
   } else {
     detectorVolumeThickness = (2 * dimensions.z()) * std::sin(rectangleAngle_rad) + rectangleThickness * std::cos(rectangleAngle_rad);
   }
 
-  double endcapDetectorSideLength = (2 * (endcapDetectorLayerInnerRadius) * std::tan(shapeAngle_radians)) + 42.0; // shouldn't be hardcoded, but // the offset of 42.0 cm to avoid the overalp with the rectangles
+  double endcapDetectorSideLength = (2 * (endcapDetectorLayerInnerRadius + 2 * dimensions.y()) * std::tan(shapeAngle_radians)) + 2 * clearance; 
+  double endcapDetectorSideTrapLength = (2 * (endcapDetectorLayerOuterRadius) * std::tan(shapeAngle_radians)) + 2 * clearance;
 
-  double endcapDetectorSideTrapLength = (2 * (endcapDetectorLayerOuterRadius - 2 * dimensions.z()) * std::tan(shapeAngle_radians)) + 42.0;  // the offset of 42.0 cm to avoid the overalp with the rectangles
   double endcapDetectorSideTrapYLength = endcapDetectorLayerOuterRadius - 2 * dimensions.z() - endcapDetectorLayerInnerRadius;
   double endcapDetectorSideBoxLength = 2 * (endcapDetectorLayerOuterRadius) * std::tan(shapeAngle_radians);
   double endcapDetectorSideBoxYLength = 2 * dimensions.z();
