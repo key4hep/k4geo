@@ -63,7 +63,7 @@ def main():
     parser.add_argument(
         "--nPhiBins", default=100, type=int, help="Number of bins in phi"
     )
-    parser.add_argument("--x0Max", "-x", default=0.0, type=float, help="Max of x0")
+    parser.add_argument("--x0max", "-x", default=0.0, type=float, help="Max of x0")
     parser.add_argument(
         "--outputDir",
         "-o",
