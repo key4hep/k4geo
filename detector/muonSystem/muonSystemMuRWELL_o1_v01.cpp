@@ -85,10 +85,13 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
   double rectangleThickness = (2 * dimensions.y()) * std::sin(chamberAngle_rad) + (2 * dimensions.x()) * std::cos(chamberAngle_rad) + 1.2 * clearance;
   double rectangleAngle_rad = std::atan(rectangleThickness/dimensions.z());
   double detectorVolumeThickness;
+  double endcapDetectorEnvZ;  // endcap detetcor layer thickness
   if (sideLengthEstimate <= (2 * dimensions.y()) && numBarrelDetectorLayers == 1){      // putting this condtition to minimize the volume thickness in case of there is only one chamber per side(espicially for circular shape detector)
-    detectorVolumeThickness = rectangleThickness + 2 * clearance;
+    detectorVolumeThickness = rectangleThickness * 1.33;  // multiplying by 1.33 fit the best thickness avoiding overlaps with smaller volumes insides (rectangles).
+    endcapDetectorEnvZ = 2 * detectorVolumeThickness; 
   } else {
     detectorVolumeThickness = (2 * dimensions.z()) * std::sin(rectangleAngle_rad) + rectangleThickness * std::cos(rectangleAngle_rad);
+    endcapDetectorEnvZ = detectorVolumeThickness;
   }
 
   double endcapDetectorSideLength = (2 * (endcapDetectorLayerInnerRadius + 2 * dimensions.y()) * std::tan(shapeAngle_radians)) + 2 * clearance; 
@@ -107,11 +110,9 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
 
   double endcapRemainderZ = std::fmod((endcapDetectorYLength - 2 * clearance), (2 * dimensions.z() - overlapZ)) / (2 * dimensions.z()) - (2 * clearance / dimensions.z());
 
-  double endcapDetectorEnvZ = detectorVolumeThickness;  // layer thickness
-
   double barrelRMax = radius + numBarrelDetectorLayers * (2 * detectorVolumeThickness) + numBarrelRadiators * barrelRadiatorThickness;
   double barreltotalLength = barrelLength + (numEndcapDetectorLayers * 2) * (2 * detectorVolumeThickness) + (numEndcapRadiators * 2) * endcapRadiatorThickness; // This condition to make the last barrel layer encloses all the endcap layers inside it.
-  double EndcaptotalLength = numEndcapDetectorLayers * (2 * detectorVolumeThickness) + numEndcapRadiators * endcapRadiatorThickness;
+  double EndcaptotalLength = numEndcapDetectorLayers * (2 * endcapDetectorEnvZ) + numEndcapRadiators * endcapRadiatorThickness;
   double endcapOffset = endcapZOffset + EndcaptotalLength/2.0;
 
   int barrelIdCounter = 1;
@@ -673,9 +674,9 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
     std::string endcapDetectorEnvelopeName;
     double endcapDetectorEnvZPos;
 
-    dd4hep::PolyhedraRegular  endcapDetectorEnvelope(numSides, endcapDetectorLayerInnerRadius, endcapDetectorLayerOuterRadius, 2 * detectorVolumeThickness);
+    dd4hep::PolyhedraRegular  endcapDetectorEnvelope(numSides, endcapDetectorLayerInnerRadius, endcapDetectorLayerOuterRadius, 2 * endcapDetectorEnvZ);
 
-    endcapLayerZOffset = - EndcaptotalLength/2.0 + detectorVolumeThickness + numEndcapLayer * (2 * detectorVolumeThickness) + numEndcapLayer * endcapRadiatorThickness;  // Automation of inner Z-Offset of different layers, taking into account that every detector layer is followed by a yoke(radiator) layer
+    endcapLayerZOffset = - EndcaptotalLength/2.0 + endcapDetectorEnvZ + numEndcapLayer * (2 * endcapDetectorEnvZ) + numEndcapLayer * endcapRadiatorThickness;  // Automation of inner Z-Offset of different layers, taking into account that every detector layer is followed by a yoke(radiator) layer
     endcapDetectorEnvelopeName = name + "-EndcapDetectorLayer" + std::to_string(numEndcapLayer + 1);
     endcapDetectorEnvZPos = endcapLayerZOffset; 
 
@@ -698,8 +699,8 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
     for (int side = 0; side < numSides; ++side) {
 
       int sideID = (numEndcapLayer + 1) * 100 + (side +1);  // to differentiated with the same side in different layers.
-      dd4hep::Trapezoid endcapDetectorSideTrap(endcapDetectorEnvZ/2.0, endcapDetectorEnvZ/2.0, endcapDetectorSideLength/2.0, endcapDetectorSideTrapLength/2.0, endcapDetectorSideTrapYLength/2.0);
-      dd4hep::Box endcapDetectorSideBox(endcapDetectorEnvZ/2.0, endcapDetectorSideBoxLength/2.0, endcapDetectorSideBoxYLength/2.0);
+      dd4hep::Trapezoid endcapDetectorSideTrap(detectorVolumeThickness/2.0, detectorVolumeThickness/2.0, endcapDetectorSideLength/2.0, endcapDetectorSideTrapLength/2.0, endcapDetectorSideTrapYLength/2.0);
+      dd4hep::Box endcapDetectorSideBox(detectorVolumeThickness/2.0, endcapDetectorSideBoxLength/2.0, endcapDetectorSideBoxYLength/2.0);
 
       double boxOffsetZ = endcapDetectorYLength/2.0;
 
@@ -727,31 +728,44 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
 
       double endcapDetectorSideEnvXPos = endcapDetectorXOffset ; 
       double endcapDetectorSideEnvYPos = endcapDetectorYOffset ;   
-      double endcapDetectorSideEnvZPos = - endcapDetectorEnvZ/2.0 ;   
-      double endcapDetectorSideEnvZPos2 = endcapDetectorEnvZ/2.0;
-
-     // ---------  here I start to divide the two z-positions // by odd and even numbers
+      double endcapDetectorSideEnvZPos;
+      double endcapDetectorSideEnvZPos2;
 
       dd4hep::Position endcapDetectorSideEnvTrans;
       dd4hep::PlacedVolume endcapDetectorSideEnvPhys;
       dd4hep::DetElement endcapDetectorSideEnvDE;
 
-      if (side % 2 == 0) {
+      if (sideLengthEstimate <= (2 * dimensions.y())){ // in case of small side's length, put the sides in 4 differnet positions, to avoid overlaps between different sides, and the probability increases for small sides
+        endcapDetectorSideEnvZPos = -endcapDetectorEnvZ/4.0;
+        endcapDetectorSideEnvZPos2 = -endcapDetectorEnvZ * 3.0/4.0;
+        double endcapDetectorSideEnvZPos3 = endcapDetectorEnvZ/4.0;
+        double endcapDetectorSideEnvZPos4 = endcapDetectorEnvZ * 3.0/4.0;
 
-        endcapDetectorSideEnvTrans = dd4hep::Position(endcapDetectorSideEnvXPos, endcapDetectorSideEnvYPos, endcapDetectorSideEnvZPos);
-        endcapDetectorSideEnvPhys = endcapDetectorEnvVol.placeVolume(endcapDetectorSideEnvVol, dd4hep::Transform3D(endcapDetectorRotation * dd4hep::RotationY(90.0 * dd4hep::degree) , endcapDetectorSideEnvTrans));
-        endcapDetectorSideEnvDE = dd4hep::DetElement(endcapDetectorEnvelopeDE, endcapDetectorSideEnvName + "DE", sideID);
-        endcapDetectorSideEnvDE.setPlacement(endcapDetectorSideEnvPhys);
-        endcapDetectorSideEnvVol.setVisAttributes(lcdd, xmlDet.visStr());
+        if (side % 4 == 0) {
+          endcapDetectorSideEnvTrans = dd4hep::Position(endcapDetectorSideEnvXPos, endcapDetectorSideEnvYPos, endcapDetectorSideEnvZPos);
+        } else if (side % 4 == 1) {
+          endcapDetectorSideEnvTrans = dd4hep::Position(endcapDetectorSideEnvXPos, endcapDetectorSideEnvYPos, endcapDetectorSideEnvZPos2);
+        } else if (side % 4 == 2) {
+          endcapDetectorSideEnvTrans = dd4hep::Position(endcapDetectorSideEnvXPos, endcapDetectorSideEnvYPos, endcapDetectorSideEnvZPos3);
+        } else {
+          endcapDetectorSideEnvTrans = dd4hep::Position(endcapDetectorSideEnvXPos, endcapDetectorSideEnvYPos, endcapDetectorSideEnvZPos4);
+        }
 
-      } else {
+      } else { // else, put the sides in 2 differnet positions.
+        endcapDetectorSideEnvZPos = -endcapDetectorEnvZ/2.0;
+        endcapDetectorSideEnvZPos2 = endcapDetectorEnvZ/2.0;
 
-        endcapDetectorSideEnvTrans = dd4hep::Position(endcapDetectorSideEnvXPos, endcapDetectorSideEnvYPos, endcapDetectorSideEnvZPos2);
-        endcapDetectorSideEnvPhys = endcapDetectorEnvVol.placeVolume(endcapDetectorSideEnvVol, dd4hep::Transform3D(endcapDetectorRotation * dd4hep::RotationY(90.0 * dd4hep::degree) , endcapDetectorSideEnvTrans));
-        endcapDetectorSideEnvDE = dd4hep::DetElement(endcapDetectorEnvelopeDE, endcapDetectorSideEnvName + "DE", sideID);
-        endcapDetectorSideEnvDE.setPlacement(endcapDetectorSideEnvPhys);
-        endcapDetectorSideEnvVol.setVisAttributes(lcdd, xmlDet.visStr());
-      }
+        if (side % 2 == 0) {
+          endcapDetectorSideEnvTrans = dd4hep::Position(endcapDetectorSideEnvXPos, endcapDetectorSideEnvYPos, endcapDetectorSideEnvZPos);
+        } else {
+          endcapDetectorSideEnvTrans = dd4hep::Position(endcapDetectorSideEnvXPos, endcapDetectorSideEnvYPos, endcapDetectorSideEnvZPos2);
+        }  
+      }    
+
+      endcapDetectorSideEnvPhys = endcapDetectorEnvVol.placeVolume(endcapDetectorSideEnvVol, dd4hep::Transform3D(endcapDetectorRotation * dd4hep::RotationY(90.0 * dd4hep::degree) , endcapDetectorSideEnvTrans));
+      endcapDetectorSideEnvDE = dd4hep::DetElement(endcapDetectorEnvelopeDE, endcapDetectorSideEnvName + "DE", sideID);
+      endcapDetectorSideEnvDE.setPlacement(endcapDetectorSideEnvPhys);
+      endcapDetectorSideEnvVol.setVisAttributes(lcdd, xmlDet.visStr());
 
      // ----- dividing the trapezoid envelope to smaller pieces (rectangles)
 
@@ -952,7 +966,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
 
   for (int numEndcapRadiatorLayer = 0; numEndcapRadiatorLayer < numEndcapRadiators; ++numEndcapRadiatorLayer){
 
-    double endcapRadiatorLayerZOffset = - EndcaptotalLength/2.0 + (endcapRadiatorThickness/2.0) + (numEndcapRadiatorLayer +1) * (2 * detectorVolumeThickness) + numEndcapRadiatorLayer * endcapRadiatorThickness;  // Automation of inner Z-Offset of different layers, taking into account that every detector layer is followed by a yoke(radiator) layer
+    double endcapRadiatorLayerZOffset = - EndcaptotalLength/2.0 + (endcapRadiatorThickness/2.0) + (numEndcapRadiatorLayer +1) * (2 * endcapDetectorEnvZ) + numEndcapRadiatorLayer * endcapRadiatorThickness;  // Automation of inner Z-Offset of different layers, taking into account that every detector layer is followed by a yoke(radiator) layer
 
     dd4hep::PolyhedraRegular  endcapRadiatorEnvelope(numSides, endcapRadiatorLayerInnerRadius, endcapRadiatorLayerOuterRadius, endcapRadiatorThickness);
     std::string endcapRadiatorEnvelopeName = name + "-EndcapRadiatorLayer" + std::to_string(numEndcapRadiatorLayer + 1);

@@ -3,7 +3,7 @@
 
   <info name="pre-shower"
 	title=" detailed version of IDEA pre-shower system for FCC-ee"
-	author="Nitika Nitika and Mahmoud Ali- mahmoud.ali@cern.ch"
+	author="Nitika Nitika- nitika.nitika@cern.ch, Mahmoud Ali- mahmoud.ali@cern.ch"
 	url="no"
 	status="development"
 	version="2.0">
@@ -29,8 +29,6 @@
        <constant name = "overlapingY"                           value = "5*mm"/> <!-- the common distance between mRWELL chambers in Y direction -->
        <constant name = "overlapingZ"                           value = "5*mm"/> <!-- the common distance between mRWELL chambers in Z direction -->
        <constant name = "clearance"                             value = "1*mm"/> <!-- it's a small distance to be used to avoid overlapping between the different volumes ~ 1 mm -->
-     <!-- %%%%%%                      Iron yoke thickness                %%%%%% -->
-      <constant name = "YokeThickness"                          value = "300*mm"/>  
   </define>   
 
   <readouts>
@@ -42,14 +40,14 @@
 
   <detectors>
     <!-- mRWELL envelope -->
-    <detector name="Preshower" type="muonSystemMuRWELL_o1_v01" id="33" readout="PreshowerSystemCollection">
+    <detector name="Preshower" type="muonSystemMuRWELL_o1_v01" id="DetID_Preshower" readout="PreshowerSystemCollection">
       <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
       <sensitive type="tracker"/>
 
       <!-- Specify the detector parameters and the overlap /// if you want exclude any component, e.g: endcap, just put endcapDetectorParameters=0   // radius is put in the middle, so its not the inner neither the outer -->
-      <generalParameters numSides="32" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
-      <Barrel numDetectorLayers ="1"  rmin="2440*mm" length="5100*mm" numYokes="0" yoke_Thickness="0*mm" yoke_Material="G4_Fe"/> 
-      <Endcap numDetectorLayers="1"  rmin="390*mm" rmax="2430*mm" z_offset="2550*mm" numYokes="0" yoke_Thickness="0*mm" yoke_Material="G4_Fe" />
+      <generalParameters numSides="psNumSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
+      <Barrel numDetectorLayers ="1"  rmin="psBarrelFirstLayerRadius" length="psBarrelLength" numYokes="0" yoke_Thickness="0*mm" yoke_Material="G4_Fe"/> 
+      <Endcap numDetectorLayers="1"  rmin="psEndcapLayersInnerRadius" rmax="psEndcapLayersOuterRadius" z_offset="psEndcapFirstLayerZOffset" numYokes="0" yoke_Thickness="0*mm" yoke_Material="G4_Fe" />
 
       <!-- mRWELL chamber -->
       <!-- note: all thicknesses are half-lengths -->
