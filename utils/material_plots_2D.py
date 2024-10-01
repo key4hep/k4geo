@@ -125,17 +125,8 @@ def main():
     # go through the plots
     plots = ["x0", "lambda", "depth"]
     histograms = [h_x0, h_lambda, h_depth]
-<<<<<<< HEAD
     axis_titles = ["Material budget x/X_{0} [%]", "Number of #lambda", "Material depth [cm]"]
-    for i in range(len(plots)):
-=======
-    axis_titles = [
-        "Material budget x/X_{0} [%]",
-        "Number of #lambda",
-        "Material depth [cm]",
-    ]
     for i, plot in enumerate(plots):
->>>>>>> 00de82a (refactorization, parseArgs added to material_scan_2D.py, thetaRad as angleDef option added to material_plots_2D.py)
         cv = ROOT.TCanvas("", "", 800, 600)
         cv.SetRightMargin(0.18)
         histograms[i].Draw("COLZ")
