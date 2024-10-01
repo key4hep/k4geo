@@ -1,4 +1,4 @@
-<"""
+"""
 This script must be called with k4run: 'k4run material_scan_2D.py --{argument} {value}'.
 The output files are saved in 'data/{outputDir}/{outputFileBase}.root'.
 If no outputDir is specified, it will be 'data/{outputFileBase}.root'.
