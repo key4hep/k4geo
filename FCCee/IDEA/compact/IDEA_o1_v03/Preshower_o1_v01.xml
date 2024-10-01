@@ -11,7 +11,7 @@
   </info>
 
   <define>
-     <!---                            Muon System Parameters                       -->
+     <!---                            Pre-shower System Parameters                       -->
      <!-- %%%%%%                      microRWELL chamber different layers thicknesses                %%%%%% -->
        <constant name = "psG10_FR4Thick"                          value = "1.6*mm"/>
        <constant name = "psCuThick"                               value = "0.035*mm"/>
