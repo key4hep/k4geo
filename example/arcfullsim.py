@@ -2,10 +2,11 @@
 Test of ARC detector
 The lines 27-95 setup the simulation using DD4hep
 The lines 99-127 run the simulation and produce some plots
-An exception is thrown in case the simulation failed or the output file is too small. 
-	Last modification 2023-Jun-23
-	Author: Alvaro Tolosa-Delgado
+An exception is thrown in case the simulation failed or the output file is too small.
+        Last modification 2023-Jun-23
+        Author: Alvaro Tolosa-Delgado
 """
+
 from __future__ import absolute_import, unicode_literals
 import logging
 import sys
@@ -20,14 +21,14 @@ if __name__ == "__main__":
         format="%(name)-16s %(levelname)s %(message)s",
         level=logging.INFO,
         stream=sys.stdout,
-        )
+    )
     logger = logging.getLogger("DDSim")
 
     SIM = DD4hepSimulation()
 
     # Default is enable visualization of tracks
     SIM.runType = "qt"
-    SIM.macroFile ='vis.mac'
+    SIM.macroFile = "vis.mac"
 
     # Ensure that Cerenkov and optical physics are always loaded
     def setupCerenkov(kernel):
@@ -58,7 +59,7 @@ if __name__ == "__main__":
     SIM.filter.filters["opticalphotons"] = dict(
         name="ParticleSelectFilter/OpticalPhotonSelector",
         parameter={"particle": "opticalphoton"},
-        )
+    )
     SIM.filter.mapDetFilter["ARCBARREL"] = "opticalphotons"
     SIM.filter.mapDetFilter["ARCENDCAP"] = "opticalphotons"
 
@@ -74,14 +75,13 @@ if __name__ == "__main__":
     SIM.enableGun = True
     SIM.gun.energy = "50*GeV"
     SIM.gun.particle = "pi+"
-    #SIM.gun.thetaMin = "30*deg"
-    #SIM.gun.thetaMax = "150*deg"
-    #SIM.gun.phiMin = "0*deg"
-    #SIM.gun.phiMax = "240.1*deg"
+    # SIM.gun.thetaMin = "30*deg"
+    # SIM.gun.thetaMax = "150*deg"
+    # SIM.gun.phiMin = "0*deg"
+    # SIM.gun.phiMax = "240.1*deg"
     SIM.gun.distribution = "uniform"
     SIM.gun.multiplicity = 1
     SIM.gun.position = "0 0 0*cm"
-
 
     # Default compact file
     SIM.compactFile = "./compact/arc_full_v0.xml"
@@ -90,7 +90,7 @@ if __name__ == "__main__":
     SIM.outputFile = "arcsim.root"
     if hasattr(SIM, "outputConfig") and hasattr(SIM.outputConfig, "forceDD4HEP"):
         SIM.outputConfig.forceDD4HEP = True  # use DD4hep root format, not EDM4HEP
-    #SIM.outputFile = "arcsim_edm4hep.root"
+    # SIM.outputFile = "arcsim_edm4hep.root"
 
     # Override with user options
     SIM.parseOptions()
@@ -98,32 +98,56 @@ if __name__ == "__main__":
     # Run the simulation
     try:
         SIM.run()
-        if os.path.getsize( SIM.outputFile ) < 1000000 :
+        if os.path.getsize(SIM.outputFile) < 1000000:
             raise RuntimeError("Output file not found or size less than 1MB")
         # Create some images
         outImagePrefix = "arcsim_"
         ROOT.gROOT.SetBatch(1)
         rootfile = ROOT.TFile(SIM.outputFile)
-        if not "edm4hep" in SIM.outputFile :
+        if not "edm4hep" in SIM.outputFile:
             EVENT = rootfile.Get("EVENT")
-            EVENT.Draw("ArcCollection.position.Z():ArcCollection.position.phi()","((ArcCollection.cellID>>5)&0x7)==0")
-            ROOT.gPad.SaveAs( outImagePrefix + "barrel_" + SIM.gun.particle + ".png")
-            EVENT.Draw("ArcCollection.position.Y():ArcCollection.position.X()","((ArcCollection.cellID>>5)&0x7)==1")
-            ROOT.gPad.SaveAs( outImagePrefix + "endcapZpos_" + SIM.gun.particle + ".png")
-            EVENT.Draw("ArcCollection.position.Y():ArcCollection.position.X()","((ArcCollection.cellID>>5)&0x7)==2")
-            ROOT.gPad.SaveAs( outImagePrefix + "endcapZneg_" + SIM.gun.particle + ".png")
-            EVENT.Draw("ArcCollection.position.Y():ArcCollection.position.X()","((ArcCollection.cellID>>5)&0x7)==2&&ArcCollection.position.Y()>0&&ArcCollection.position.X()>0")
-            ROOT.gPad.SaveAs( outImagePrefix + "endcapZneg_" + SIM.gun.particle + "zoom.png")
-        else :
+            EVENT.Draw(
+                "ArcCollection.position.Z():ArcCollection.position.phi()",
+                "((ArcCollection.cellID>>5)&0x7)==0",
+            )
+            ROOT.gPad.SaveAs(outImagePrefix + "barrel_" + SIM.gun.particle + ".png")
+            EVENT.Draw(
+                "ArcCollection.position.Y():ArcCollection.position.X()",
+                "((ArcCollection.cellID>>5)&0x7)==1",
+            )
+            ROOT.gPad.SaveAs(outImagePrefix + "endcapZpos_" + SIM.gun.particle + ".png")
+            EVENT.Draw(
+                "ArcCollection.position.Y():ArcCollection.position.X()",
+                "((ArcCollection.cellID>>5)&0x7)==2",
+            )
+            ROOT.gPad.SaveAs(outImagePrefix + "endcapZneg_" + SIM.gun.particle + ".png")
+            EVENT.Draw(
+                "ArcCollection.position.Y():ArcCollection.position.X()",
+                "((ArcCollection.cellID>>5)&0x7)==2&&ArcCollection.position.Y()>0&&ArcCollection.position.X()>0",
+            )
+            ROOT.gPad.SaveAs(outImagePrefix + "endcapZneg_" + SIM.gun.particle + "zoom.png")
+        else:
             EVENT = rootfile.Get("events")
-            EVENT.Draw("ArcCollection.position.z:atan(ArcCollection.position.y/ArcCollection.position.x)","((ArcCollection.cellID>>5)&0x7)==0&& ArcCollection.position.x>0")
-            ROOT.gPad.SaveAs( outImagePrefix + "barrel_" + SIM.gun.particle + ".png")
-            EVENT.Draw("ArcCollection.position.y:ArcCollection.position.x","((ArcCollection.cellID>>5)&0x7)==1")
-            ROOT.gPad.SaveAs( outImagePrefix + "endcapZpos_" + SIM.gun.particle + ".png")
-            EVENT.Draw("ArcCollection.position.y:ArcCollection.position.x","((ArcCollection.cellID>>5)&0x7)==2")
-            ROOT.gPad.SaveAs( outImagePrefix + "endcapZneg_" + SIM.gun.particle + ".png")
-            EVENT.Draw("ArcCollection.position.y:ArcCollection.position.x","((ArcCollection.cellID>>5)&0x7)==2&& ArcCollection.position.x>0&& ArcCollection.position.y>0")
-            ROOT.gPad.SaveAs( outImagePrefix + "endcapZneg_" + SIM.gun.particle + "zoom.png")
+            EVENT.Draw(
+                "ArcCollection.position.z:atan(ArcCollection.position.y/ArcCollection.position.x)",
+                "((ArcCollection.cellID>>5)&0x7)==0&& ArcCollection.position.x>0",
+            )
+            ROOT.gPad.SaveAs(outImagePrefix + "barrel_" + SIM.gun.particle + ".png")
+            EVENT.Draw(
+                "ArcCollection.position.y:ArcCollection.position.x",
+                "((ArcCollection.cellID>>5)&0x7)==1",
+            )
+            ROOT.gPad.SaveAs(outImagePrefix + "endcapZpos_" + SIM.gun.particle + ".png")
+            EVENT.Draw(
+                "ArcCollection.position.y:ArcCollection.position.x",
+                "((ArcCollection.cellID>>5)&0x7)==2",
+            )
+            ROOT.gPad.SaveAs(outImagePrefix + "endcapZneg_" + SIM.gun.particle + ".png")
+            EVENT.Draw(
+                "ArcCollection.position.y:ArcCollection.position.x",
+                "((ArcCollection.cellID>>5)&0x7)==2&& ArcCollection.position.x>0&& ArcCollection.position.y>0",
+            )
+            ROOT.gPad.SaveAs(outImagePrefix + "endcapZneg_" + SIM.gun.particle + "zoom.png")
 
         rootfile.Close()
 
@@ -133,4 +157,7 @@ if __name__ == "__main__":
         logger.fatal("TEST: failed")
         if "global name" in str(e):
             globalToSet = str(e).split("'")[1]
-            logger.fatal("Unknown global variable, please add\nglobal %s\nto your steeringFile" % globalToSet)
+            logger.fatal(
+                "Unknown global variable, please add\nglobal %s\nto your steeringFile"
+                % globalToSet
+            )
