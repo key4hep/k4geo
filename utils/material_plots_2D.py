@@ -144,8 +144,8 @@ def main():
 
         histograms[i].GetZaxis().SetTitle(axis_titles[i])
 
-        if args.x0Max != 0.0 and plot == "x0":
-            histograms[i].SetMaximum(args.x0Max)
+        if args.x0max != 0.0 and plot == "x0":
+            histograms[i].SetMaximum(args.x0max)
 
         histograms[i].GetXaxis().SetRangeUser(args.angleMin, args.angleMax)
 
