@@ -13,22 +13,22 @@
   <define>
      <!---                            Muon System Parameters                       -->
      <!-- %%%%%%                      microRWELL chamber different layers thicknesses                %%%%%% -->
-       <constant name = "G10_FR4Thick"                          value = "1.6*mm"/>
-       <constant name = "CuThick"                               value = "0.035*mm"/>
-       <constant name = "GasLayerThick"                         value = "6*mm"/>
-       <constant name = "Cu2Thick"                              value = "0.005*mm"/>
-       <constant name = "KaptonThick"                           value = "0.05*mm"/>
-       <constant name = "CarnonFiberThick"                      value = "0.0001*mm"/>
-       <constant name = "CarbonFiber2Thick"                     value = "0.1*mm"/>
-       <constant name = "SiThick"                               value = "1.6*mm"/>
-       <constant name = "mRWELLTotalThickness"                  value = "G10_FR4Thick+CuThick+GasLayerThick+Cu2Thick+KaptonThick+CarnonFiberThick+CuThick+CarbonFiber2Thick+CuThick+SiThick"/> <!-- This sequense is the current order of mRWELL (total 10 slices) -->
+       <constant name = "psG10_FR4Thick"                          value = "1.6*mm"/>
+       <constant name = "psCuThick"                               value = "0.035*mm"/>
+       <constant name = "psGasLayerThick"                         value = "6*mm"/>
+       <constant name = "psCu2Thick"                              value = "0.005*mm"/>
+       <constant name = "psKaptonThick"                           value = "0.05*mm"/>
+       <constant name = "psCarnonFiberThick"                      value = "0.0001*mm"/>
+       <constant name = "psCarbonFiber2Thick"                     value = "0.1*mm"/>
+       <constant name = "psSiThick"                               value = "1.6*mm"/>
+       <constant name = "psMRWELLTotalThickness"                  value = "psG10_FR4Thick+psCuThick+psGasLayerThick+psCu2Thick+psKaptonThick+psCarnonFiberThick+psCuThick+psCarbonFiber2Thick+psCuThick+psSiThick"/> <!-- This sequense is the current order of mRWELL (total 10 slices) -->
 
-       <constant name = "mRWELLYLength"                         value = "250*mm"/>
-       <constant name = "mRWELLZLength"                         value = "250*mm"/>
+       <constant name = "psMRWELLYLength"                         value = "250*mm"/>
+       <constant name = "psMRWELLZLength"                         value = "250*mm"/>
 
-       <constant name = "overlapingY"                           value = "5*mm"/> <!-- the common distance between mRWELL chambers in Y direction -->
-       <constant name = "overlapingZ"                           value = "5*mm"/> <!-- the common distance between mRWELL chambers in Z direction -->
-       <constant name = "clearance"                             value = "1*mm"/> <!-- it's a small distance to be used to avoid overlapping between the different volumes ~ 1 mm -->
+       <constant name = "psOverlapingY"                           value = "5*mm"/> <!-- the common distance between mRWELL chambers in Y direction -->
+       <constant name = "psOverlapingZ"                           value = "5*mm"/> <!-- the common distance between mRWELL chambers in Z direction -->
+       <constant name = "psClearance"                             value = "1*mm"/> <!-- it's a small distance to be used to avoid overlapping between the different volumes ~ 1 mm -->
   </define>   
 
   <readouts>
@@ -41,26 +41,26 @@
   <detectors>
     <!-- mRWELL envelope -->
     <detector name="Preshower" type="muonSystemMuRWELL_o1_v01" id="DetID_Preshower" readout="PreshowerSystemCollection">
-      <dimensions x="mRWELLTotalThickness/2.0" y="mRWELLYLength" z="mRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
+      <dimensions x="psMRWELLTotalThickness/2.0" y="psMRWELLYLength" z="psMRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
       <sensitive type="tracker"/>
 
       <!-- Specify the detector parameters and the overlap /// if you want exclude any component, e.g: endcap, just put endcapDetectorParameters=0   // radius is put in the middle, so its not the inner neither the outer -->
-      <generalParameters numSides="psNumSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
+      <generalParameters numSides="psNumSides" overlapY="psOverlapingY" overlapZ="psOverlapingZ" clearance="psClearance"/>
       <Barrel numDetectorLayers ="1"  rmin="psBarrelFirstLayerRadius" length="psBarrelLength" numYokes="0" yoke_Thickness="0*mm" yoke_Material="G4_Fe"/> 
       <Endcap numDetectorLayers="1"  rmin="psEndcapLayersInnerRadius" rmax="psEndcapLayersOuterRadius" z_offset="psEndcapFirstLayerZOffset" numYokes="0" yoke_Thickness="0*mm" yoke_Material="G4_Fe" />
 
       <!-- mRWELL chamber -->
       <!-- note: all thicknesses are half-lengths -->
-      <slice x="G10_FR4Thick/2.0" material="G10_FR4" vis="G10_FR4_vis" />
-      <slice x="CuThick/2.0" material="G4_Cu" vis="Cu_vis" />
-      <slice x="GasLayerThick/2.0" material="ARCO2CF4" sensitive="true" vis="Sensitive_vis" />
-      <slice x="Cu2Thick/2.0" material="G4_Cu" vis="Cu_vis" />
-      <slice x="KaptonThick/2.0" material="Kapton" vis="Kapton_vis" />
-      <slice x="CarnonFiberThick/2.0" material="CarbonFiber" vis="CarbonFiber_vis" />
-      <slice x="CuThick/2.0" material="G4_Cu" vis="Cu_vis" />
-      <slice x="CarbonFiber2Thick/2.0" material="CarbonFiber" vis="CarbonFiber_vis" />
-      <slice x="CuThick/2.0" material="G4_Cu" vis="Cu_vis" />
-      <slice x="SiThick/2.0" material="G4_Si" vis="Si_vis" />
+      <slice x="psG10_FR4Thick/2.0" material="G10_FR4" vis="G10_FR4_vis" />
+      <slice x="psCuThick/2.0" material="G4_Cu" vis="Cu_vis" />
+      <slice x="psGasLayerThick/2.0" material="ARCO2CF4" sensitive="true" vis="Sensitive_vis" />
+      <slice x="psCu2Thick/2.0" material="G4_Cu" vis="Cu_vis" />
+      <slice x="psKaptonThick/2.0" material="Kapton" vis="Kapton_vis" />
+      <slice x="psCarnonFiberThick/2.0" material="CarbonFiber" vis="CarbonFiber_vis" />
+      <slice x="psCuThick/2.0" material="G4_Cu" vis="Cu_vis" />
+      <slice x="psCarbonFiber2Thick/2.0" material="CarbonFiber" vis="CarbonFiber_vis" />
+      <slice x="psCuThick/2.0" material="G4_Cu" vis="Cu_vis" />
+      <slice x="psSiThick/2.0" material="G4_Si" vis="Si_vis" />
     </detector>
   </detectors>
 
