@@ -23,11 +23,7 @@ parser.add_argument(
     help="Compact detector file to use",
     type=str,
     default=fspath(
-        Path(environ["k4geo_DIR"])
-        / "ILD"
-        / "compact"
-        / "ILD_sl5_v02"
-        / "ILD_l5_v02.xml"
+        Path(environ["k4geo_DIR"]) / "ILD" / "compact" / "ILD_sl5_v02" / "ILD_l5_v02.xml"
     ),
 )
 parser.add_argument(
@@ -53,9 +49,7 @@ reco_args = parser.parse_known_args()[0]
 compact_file = reco_args.compactFile
 angle_def = reco_args.angleDef
 output_dir = "data" / Path(reco_args.outputDir)
-output_dir.mkdir(
-    parents=True, exist_ok=True
-)  # Create the directory if it doesn't exist
+output_dir.mkdir(parents=True, exist_ok=True)  # Create the directory if it doesn't exist
 
 ## parse the given xml file
 geoservice = GeoSvc("GeoSvc")
@@ -71,9 +65,7 @@ from Configurables import MaterialScan_2D_genericAngle
 # For instance adding envelopeName="BoundaryPostCalorimetry" will perform the scan only till the end of calorimetry.
 # BoundaryPostCalorimetry is defined in Detector/DetFCChhECalInclined/compact/envelopePreCalo.xml
 materialservice = MaterialScan_2D_genericAngle("GeoDump")
-materialservice.filename = fspath(
-    output_dir / Path(reco_args.outputFileBase).with_suffix(".root")
-)
+materialservice.filename = fspath(output_dir / Path(reco_args.outputFileBase).with_suffix(".root"))
 
 materialservice.angleDef = angle_def  # eta, theta, cosTheta or thetaRad
 materialservice.angleBinning = 0.05
