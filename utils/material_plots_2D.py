@@ -18,9 +18,7 @@ from plotstyle import FCCStyle
 import ROOT
 
 
-def create_histogram(
-    name_and_title: str, argument_name_space: argparse.Namespace
-) -> ROOT.TH2F:
+def create_histogram(name_and_title: str, argument_name_space: argparse.Namespace) -> ROOT.TH2F:
     return ROOT.TH2F(
         name_and_title,
         name_and_title,
@@ -61,9 +59,7 @@ def main():
         type=float,
         help="Eta/theta/cosTheta bin width",
     )
-    parser.add_argument(
-        "--nPhiBins", default=100, type=int, help="Number of bins in phi"
-    )
+    parser.add_argument("--nPhiBins", default=100, type=int, help="Number of bins in phi")
     parser.add_argument("--x0max", "-x", default=0.0, type=float, help="Max of x0")
     parser.add_argument(
         "--outputDir",
@@ -84,9 +80,7 @@ def main():
     args = parser.parse_args()
 
     output_dir = Path("data") / args.outputDir
-    output_dir.mkdir(
-        parents=True, exist_ok=True
-    )  # Create the directory if it doesn't exist
+    output_dir.mkdir(parents=True, exist_ok=True)  # Create the directory if it doesn't exist
 
     ROOT.gStyle.SetNumberContours(100)
 
