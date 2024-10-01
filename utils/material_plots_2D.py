@@ -38,8 +38,9 @@ def create_histogram(
 
 def main():
     parser = argparse.ArgumentParser(description="Material Plotter")
-    parser.add_argument("--inputFile", "-f", type=str, help="relative path to the input file")
-    parser.add_argument("--fname", "-f", dest="inputFile", type=str, help="name of file to read")
+    parser.add_argument(
+        "--inputFile", "--fname", "-f", type=str, help="relative path to the input file"
+    )
     parser.add_argument(
         "--angleMin", dest="angleMin", default=6, type=float, help="minimum eta/theta/cosTheta"
     )
