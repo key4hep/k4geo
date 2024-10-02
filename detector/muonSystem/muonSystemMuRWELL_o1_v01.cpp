@@ -309,24 +309,27 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
             for (int chamberIndex = 0; chamberIndex < (numChambersInRectangle + 1); chamberIndex++) {
 
             std::stringstream barrelNameStream;
-            barrelNameStream << "MuRWELL_Barrel_" << barrelIdCounter++;            
-            std::string BarrelChamberName = barrelNameStream.str();
+            barrelNameStream << "-MuRWELL_Barrel_" << barrelIdCounter++;            
+            std::string BarrelChamberName = name + barrelNameStream.str();
 
             dd4hep::Box envelope(dimensions.x(), dimensions.y(), remainderZ *  dimensions.z());
             dd4hep::Volume envVolume(BarrelChamberName, envelope, lcdd.material(dimensions.materialStr())); 
             
             double rectangleRemainderY;
+            double rectangleRemainderREnvYPos;
             if (numChambersInRectangle == 0){
               rectangleRemainderY = std::abs(std::fmod((2 * rectangleEnvY - clearance), (2 * dimensions.y() - clearance))) / (2 * dimensions.y());
+              rectangleRemainderREnvYPos = (chamberIndex * 2 * dimensions.y()) - (overlapY * chamberIndex) + dimensions.y_offset() - rectangleEnvY + rectangleRemainderY * dimensions.y() + clearance/20;
             }else {
               rectangleRemainderY = std::fmod(2 * (rectangleEnvY - clearance), (2 * dimensions.y() - overlapY)) / (2 * dimensions.y());
+              rectangleRemainderREnvYPos = (chamberIndex * 2 * dimensions.y()) - (overlapY * chamberIndex) + dimensions.y_offset() - rectangleEnvY + rectangleRemainderY * dimensions.y() + 1.5 * clearance;
             }
 
             dd4hep::Box rectangleRemainderYEnvelope(dimensions.x(), rectangleRemainderY * dimensions.y(), remainderZ *  dimensions.z());
             dd4hep::Volume rectangleRemainderYEnvVolume(BarrelChamberName + "rectangleRemainderY", rectangleRemainderYEnvelope, lcdd.material(dimensions.materialStr()));          
 
             double envYPos = (chamberIndex * 2 * dimensions.y()) - (overlapY * chamberIndex) + dimensions.y_offset() - rectangleEnvY + dimensions.y() + clearance/20.0 ; // found that the positioning of the chambers inside the rectangle had an overlap with the mother volume ~ 45 um.
-            double rectangleRemainderREnvYPos = (chamberIndex * 2 * dimensions.y()) - (overlapY * chamberIndex) + dimensions.y_offset() - rectangleEnvY + rectangleRemainderY * dimensions.y() + clearance/20.0;
+            //double rectangleRemainderREnvYPos = (chamberIndex * 2 * dimensions.y()) - (overlapY * chamberIndex) + dimensions.y_offset() - rectangleEnvY + rectangleRemainderY * dimensions.y() + 1.5 * clearance;
           
             double zRotation;
             double rectangleRemainderZRotation;
@@ -335,7 +338,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
               rectangleRemainderZRotation = 0.0;
             } else {
               zRotation = std::atan(dimensions.x() / (dimensions.y() - (2 * overlapY)));
-              rectangleRemainderZRotation = std::atan(dimensions.x() / (rectangleRemainderY * dimensions.y() - (2 * overlapY))); // Y and Z are reversed in local remainder
+              rectangleRemainderZRotation = std::atan(dimensions.x() / (rectangleRemainderY * dimensions.y() - overlapY * 1.5)); // Y and Z are reversed in local remainder
             }
              
             dd4hep::RotationZ chamberRotation(zRotation); 
@@ -450,24 +453,27 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
           for (int chamberIndex = 0; chamberIndex < (numChambersInRectangle + 1); chamberIndex++) {
 
             std::stringstream barrelNameStream;
-            barrelNameStream << "MuRWELL_Barrel_" << barrelIdCounter++;            
-            std::string BarrelChamberName = barrelNameStream.str();
+            barrelNameStream << "-MuRWELL_Barrel_" << barrelIdCounter++;            
+            std::string BarrelChamberName = name + barrelNameStream.str();
 
             dd4hep::Box envelope(dimensions.x(), dimensions.y(), dimensions.z());
             dd4hep::Volume envVolume(BarrelChamberName, envelope, lcdd.material(dimensions.materialStr())); 
 
             double rectangleRemainderY;
+            double rectangleRemainderREnvYPos;
             if (numChambersInRectangle == 0){
               rectangleRemainderY = std::abs(std::fmod((2 * rectangleEnvY - clearance), (2 * dimensions.y() - clearance))) / (2 * dimensions.y());
+              rectangleRemainderREnvYPos = (chamberIndex * 2 * dimensions.y()) - (overlapY * chamberIndex) + dimensions.y_offset() - rectangleEnvY + rectangleRemainderY * dimensions.y() + clearance/20;
             }else {
               rectangleRemainderY = std::fmod(2 * (rectangleEnvY - clearance), (2 * dimensions.y() - overlapY)) / (2 * dimensions.y());
+              rectangleRemainderREnvYPos = (chamberIndex * 2 * dimensions.y()) - (overlapY * chamberIndex) + dimensions.y_offset() - rectangleEnvY + rectangleRemainderY * dimensions.y() + 1.5 * clearance;
             }
 
             dd4hep::Box rectangleRemainderYEnvelope(dimensions.x(), rectangleRemainderY * dimensions.y(), dimensions.z());
             dd4hep::Volume rectangleRemainderYEnvVolume(BarrelChamberName + "rectangleRemainderY", rectangleRemainderYEnvelope, lcdd.material(dimensions.materialStr()));          
 
             double envYPos = (chamberIndex * 2 * dimensions.y()) - (overlapY * chamberIndex) + dimensions.y_offset() - rectangleEnvY + dimensions.y() + clearance/20.0 ; // found that the positioning of the chambers inside the rectangle had an overlap with the mother volume ~ 45 um.
-            double rectangleRemainderREnvYPos = (chamberIndex * 2 * dimensions.y()) - (overlapY * chamberIndex) + dimensions.y_offset() - rectangleEnvY + rectangleRemainderY * dimensions.y() + clearance/20.0;
+            //double rectangleRemainderREnvYPos = (chamberIndex * 2 * dimensions.y()) - (overlapY * chamberIndex) + dimensions.y_offset() - rectangleEnvY + rectangleRemainderY * dimensions.y() + 1.5 * clearance;
           
             double zRotation;
             double rectangleRemainderZRotation;
@@ -476,7 +482,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
               rectangleRemainderZRotation = 0.0;
             } else {
               zRotation = std::atan(dimensions.x() / (dimensions.y() - (2 * overlapY)));
-              rectangleRemainderZRotation = std::atan(dimensions.x() / (rectangleRemainderY * dimensions.y() - (2 * overlapY))); // Y and Z are reversed in local remainder
+              rectangleRemainderZRotation = std::atan(dimensions.x() / (rectangleRemainderY * dimensions.y() - overlapY * 1.5)); // Y and Z are reversed in local remainder
             }
 
             dd4hep::RotationZ chamberRotation(zRotation);
@@ -826,8 +832,8 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
           for (int chamberIndex = 0; chamberIndex < (numChambersInRectangle + 1); chamberIndex++) {
             
           std::stringstream endcapNameStream;
-          endcapNameStream << "MuRWELL_Endcap_" << endcapIdCounter++;
-          std::string EndcapChamberName = endcapNameStream.str();
+          endcapNameStream << "-MuRWELL_Endcap_" << endcapIdCounter++;
+          std::string EndcapChamberName = name + endcapNameStream.str();
 
           dd4hep::Box envelope;
           if (rectangle == numRectangles) {
