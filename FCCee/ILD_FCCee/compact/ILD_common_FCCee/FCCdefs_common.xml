@@ -1,13 +1,16 @@
 <!-- This file contains parameters specific to the FCC imlementation -->
+<!-- hard coded numbers, and ones derived from them -->
+<!-- should not depend on definitions elsewhere -->
 
 <define>
 
+  <constant name="env_safety" value="0.1*mm"/>
+  
   <constant name="SolenoidField" value="2*tesla"/>
-  <constant name="Solenoid_Coil_half_length" value="Coil_half_length"/>
-  <constant name="Solenoid_Coil_radius" value="Coil_inner_radius"/>
-
 
   <constant name="CrossingAngle" value="0.030*rad"/>
+
+  <constant name="ILC_Main_Crossing_Angle" value="0*mrad"/> <!-- this is used only for the ECAL endcap ring ... -->
 
   <!-- info copied from CLD_o2_v07.xml -->
   <!-- BPW: Beam Pipe Width -->
@@ -95,6 +98,10 @@
   <constant name="CollimatorInFrontOfQD0_dr" value="16*mm"/>
   <!-- END info copied from CLD_o2_v07.xml -->  
 
+  <!-- 200*mm is the outer radius of the cryostat, defined in MDI_o1_v00/BeamInstrumentation_o1_v01.xml -->
+  <!-- we add 50*mm clearance -->
+  <constant name="EcalEndcapRing_FCCee_inner_radius" value="200*mm + 50*mm"/>
+  
   <!-- side should be kept as -2 to avoid driver crash -->
   <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:9,module:8,sensor:8"/>
 

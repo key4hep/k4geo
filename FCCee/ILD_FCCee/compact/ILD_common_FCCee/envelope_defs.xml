@@ -28,8 +28,6 @@
 
   </comment>
 
-  <constant name="env_safety" value="0.1*mm"/>
-
   <!-- a few defined parameters needed for envelopes -->
 <!--
   <constant name="TPC_inner_radius"    value="top_TPC_inner_radius"/>
@@ -57,6 +55,11 @@
   <constant name="EcalEndcap_max_z"           value="EcalEndcap_min_z+(Ecal_outer_radius-Ecal_inner_radius)"/>
   <constant name="EcalEndcap_symmetry"        value="Ecal_Hcal_symmetry"/>
 
+  <constant name="EcalEndcapRing_min_z"        value="EcalEndcap_min_z"/>
+  <constant name="EcalEndcapRing_max_z"        value="EcalEndcap_max_z"/>
+  <constant name="EcalEndcapRing_outer_radius" value="Ecal_endcap_center_box_size/2.0-Ecal_EC_Ring_gap"/>
+  <constant name="EcalEndcapRing_inner_radius" value="EcalEndcapRing_FCCee_inner_radius"/>
+  
   <constant name="HcalEndcap_inner_radius"    value="Hcal_endcap_center_box_size/2.0"/>
   <constant name="HcalEndcap_outer_radius"    value="Hcal_outer_radius - Hcal_endcap_cryostat_gap"/>
   <constant name="HcalEndcap_min_z"           value="Hcal_endcap_zmin"/>
