@@ -1,7 +1,7 @@
 <!-- comment>Calorimeters</comment -->
 <lccdd>
   <detectors>
-    <detector name="YokeEndcap" type="Yoke06_Endcaps" id="ILDDetID_YOKE_ENDCAP" readout="YokeEndcapsCollection" vis="YellowVis" insideTrackingVolume="false" >
+    <detector name="YokeEndcap" type="Yoke06_Endcaps" id="ILDDetID_YOKE_ENDCAP" readout="YokeEndcapsCollection" vis="ILD_YellowVis" insideTrackingVolume="false" >
 
       <envelope vis="ILD_YOKEVis">
         <shape type="BooleanShape" operation="Subtraction" material="Air">
@@ -34,10 +34,10 @@
 
       <dimensions numsides="12" rmin="Yoke_inner_radius" z="Yoke_barrel_halfZ" />
       <material name="Iron"/>
-      <layer repeat="12" vis="SeeThrough">
-        <slice material = "Air"            thickness = "15.0*mm"                    vis="YellowVis" />
-        <slice material = "G4_POLYSTYRENE" thickness = "10.0*mm" sensitive = "yes"  vis="CyanVis"   />
-        <slice material = "Air"            thickness = "15.0*mm"                    vis="YellowVis" />
+      <layer repeat="12" vis="ILD_SeeThrough">
+        <slice material = "Air"            thickness = "15.0*mm"                    vis="ILD_YellowVis" />
+        <slice material = "G4_POLYSTYRENE" thickness = "10.0*mm" sensitive = "yes"  vis="ILD_CyanVis"   />
+        <slice material = "Air"            thickness = "15.0*mm"                    vis="ILD_YellowVis" />
       </layer>
     </detector>
   </detectors>

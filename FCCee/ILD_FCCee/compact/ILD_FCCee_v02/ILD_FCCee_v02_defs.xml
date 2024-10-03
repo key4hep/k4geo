@@ -1,0 +1,6 @@
+<define>
+  <constant name="InnerTracker_outer_radius" value="top_InnerTracker_outer_radius" />
+  <constant name="TPC_inner_radius"    value="InnerTracker_outer_radius + 5*mm" />
+  <constant name="TPC_outer_radius"    value="top_TPC_outer_radius"/>
+</define>
+

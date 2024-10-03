@@ -1,11 +1,10 @@
 <define>
 
 <comment> 
-hardcoded overall dimensions specific to this model ILD_l5_v10 (ie not common to all/many models)
+all hardcoded overall dimensions which differ between large and small models
 </comment>
 
-  <constant name="Field_nominal_value" value="3.5*tesla"/>
-  <constant name="top_TPC_inner_radius"    value="329*mm"/>
+  <constant name="top_InnerTracker_outer_radius" value="696*mm"/>
   <constant name="top_TPC_outer_radius"    value="1769.8*mm"/>
   <constant name="Ecal_endcap_extra_size" value="67.84*mm"/>
   <constant name="Ecal_endcap_number_of_towers" type="string" value="3 3 3"/>

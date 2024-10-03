@@ -38,7 +38,6 @@
 
   <!-- TPC -->
   <constant name="TPC_Ecal_Hcal_barrel_halfZ" value="2350*mm"/>
-  <constant name="top_TPC_inner_radius"    value="329*mm"/>
 
   <!-- ECAL -->
   <constant name="Ecal_Tpc_gap" value="35*mm"/>

@@ -5,7 +5,7 @@
 <lccdd>
 <detectors>
 
-<detector name="VXD" type="VXD04" vis="VXDVis" id="ILDDetID_VXD" limits="Tracker_limits" readout="VXDCollection" insideTrackingVolume="true">
+<detector name="VXD" type="VXD04" vis="ILD_VXDVis" id="ILDDetID_VXD" limits="Tracker_limits" readout="VXDCollection" insideTrackingVolume="true">
   
   <envelope vis="ILD_VXDVis">
     <shape type="BooleanShape" operation="Subtraction" material="Air" >
