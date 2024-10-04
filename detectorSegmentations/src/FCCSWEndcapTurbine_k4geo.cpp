@@ -11,9 +11,9 @@ namespace DDSegmentation {
   _description = "Turbine-specific segmentation in the global coordinates";
 
   // register all necessary parameters
-  registerParameter("grid_size_rho", "Grid size in rho", m_gridSizeRho, std::vector<float>());
-  registerParameter("offset_rho", "Offset in rho", m_offsetRho, std::vector<float>());
-  registerIdentifier("identifier_rho", "Cell ID identifier for rho", m_rhoID, "rho"); // might want to have separate concepts for rho and layer...
+  //  registerParameter("grid_size_rho", "Grid size in rho", m_gridSizeRho, std::vector<float>());
+  // registerParameter("offset_rho", "Offset in rho", m_offsetRho, std::vector<float>());
+  // registerIdentifier("identifier_rho", "Cell ID identifier for rho", m_rhoID, "rho"); // might want to have separate concepts for rho and layer...
   registerParameter("grid_size_z", "Grid size in z", m_gridSizeZ, 0.);
   registerParameter("offset_z", "Offset in z", m_offsetZ, 0.);
   registerParameter("offset_theta", "Angular offset in theta", m_offsetTheta, 0., SegmentationParameter::AngleUnit, true);
@@ -25,37 +25,49 @@ namespace DDSegmentation {
   
   try {
     m_bladeAngle.push_back(dd4hepgeo->constant<double>("BladeAngle1"));
-    std::cout << "Blade angle 1 is " << m_bladeAngle[0] << std::endl;
   }
   catch(...) {
-    std::cout << "Blade angle 1 not found in detector metadata, exiting..." << std::endl;
+    std::cout << "BladeAngle1 not found in detector metadata, exiting..." << std::endl;
     exit(1);
   }
   try {
     m_bladeAngle.push_back(dd4hepgeo->constant<double>("BladeAngle2"));
-    std::cout << "Blade angle 2 is " << m_bladeAngle[1] << std::endl;
   }
   catch(...) {
-    std::cout << "Blade angle 2 not found in detector metadata, exiting..." << std::endl;
+    std::cout << "BladeAngle2 not found in detector metadata, exiting..." << std::endl;
     exit(1);
   }  
   try {
     m_bladeAngle.push_back(dd4hepgeo->constant<double>("BladeAngle3"));
-    std::cout << "Blade angle 3 is " << m_bladeAngle[2] << std::endl;
   }
   catch(...) {
-    std::cout << "Blade angle 3 not found in detector metadata, exiting..." << std::endl;
+    std::cout << "BladeAngle3 not found in detector metadata, exiting..." << std::endl;
     exit(1);
   }
 
+  m_nUnitCells.clear();
   try {
-    m_nUnitCellsLeastCommonMultiple = dd4hepgeo->constant<int>("nUnitCellsLeastCommonMultiple");
+    m_nUnitCells.push_back(dd4hepgeo->constant<int>("nUnitCells1"));
   }
   catch(...) {
-    std::cout << "nUnitCellsLeastCommonMultiple not found in detector metadata, exiting..." << std::endl;
+    std::cout << "nUnitCells1 not found in detector metadata, exiting..." << std::endl;
     exit(1);
   }
-  
+  try {
+    m_nUnitCells.push_back(dd4hepgeo->constant<int>("nUnitCells2"));
+  }
+  catch(...) {
+    std::cout << "nUnitCells2 not found in detector metadata, exiting..." << std::endl;
+    exit(1);
+  }
+  try {
+    m_nUnitCells.push_back(dd4hepgeo->constant<int>("nUnitCells3"));
+  }
+  catch(...) {
+    std::cout << "nUnitCells3 not found in detector metadata, exiting..." << std::endl;
+    exit(1);
+  }
+    
 }
 
   FCCSWEndcapTurbine_k4geo::FCCSWEndcapTurbine_k4geo(const BitFieldCoder* decoder) : Segmentation(decoder) {
@@ -64,9 +76,9 @@ namespace DDSegmentation {
   _description = "Turbine-specific segmentation in the global coordinates";
 
   // register all necessary parameters
-  registerParameter("grid_size_rho", "Grid size in rho", m_gridSizeRho, std::vector<float>());
-  registerParameter("offset_rho", "Offset in rho", m_offsetRho, std::vector<float>());
-  registerIdentifier("identifier_rho", "Cell ID identifier for rho", m_rhoID, "rho");
+  //  registerParameter("grid_size_rho", "Grid size in rho", m_gridSizeRho, std::vector<float>());
+  // registerParameter("offset_rho", "Offset in rho", m_offsetRho, std::vector<float>());
+  // registerIdentifier("identifier_rho", "Cell ID identifier for rho", m_rhoID, "rho");
   registerParameter("grid_size_z", "Grid size in z", m_gridSizeZ, 0.);
   registerParameter("offset_z", "Offset in z", m_offsetZ, 0.);
   registerParameter("offset_theta", "Angular offset in theta", m_offsetTheta, 0., SegmentationParameter::AngleUnit, true);
@@ -80,47 +92,66 @@ namespace DDSegmentation {
   
   try {
     m_bladeAngle.push_back(dd4hepgeo->constant<double>("BladeAngle1"));
-    std::cout << "Blade angle 1 is " << m_bladeAngle[0] << std::endl;
   }
   catch(...) {
-    std::cout << "Blade angle 1 not found in detector metadata, exiting..." << std::endl;
+    std::cout << "BladeAngle1 not found in detector metadata, exiting..." << std::endl;
     exit(1);
   }
   try {
     m_bladeAngle.push_back(dd4hepgeo->constant<double>("BladeAngle2"));
-    std::cout << "Blade angle 2 is " << m_bladeAngle[1] << std::endl;
   }
   catch(...) {
-    std::cout << "Blade angle 2 not found in detector metadata, exiting..." << std::endl;
+    std::cout << "BladeAngle2 not found in detector metadata, exiting..." << std::endl;
     exit(1);
   }  
   try {
     m_bladeAngle.push_back(dd4hepgeo->constant<double>("BladeAngle3"));
-    std::cout << "Blade angle 3 is " << m_bladeAngle[2] << std::endl;
   }
   catch(...) {
-    std::cout << "Blade angle 3 not found in detector metadata, exiting..." << std::endl;
-    exit(1);
-  }
-  try {
-    m_nUnitCellsLeastCommonMultiple = dd4hepgeo->constant<int>("nUnitCellsLeastCommonMultiple");
-  }
-  catch(...) {
-    std::cout << "nUnitCellsLeastCommonMultiple not found in detector metadata, exiting..." << std::endl;
+    std::cout << "BladeAngle3 not found in detector metadata, exiting..." << std::endl;
     exit(1);
   }
 
+  
+  m_nUnitCells.clear();
+  try {
+    m_nUnitCells.push_back(dd4hepgeo->constant<int>("nUnitCells1"));
+  }
+  catch(...) {
+    std::cout << "nUnitCells1 not found in detector metadata, exiting..." << std::endl;
+    exit(1);
+  }
+  try {
+    m_nUnitCells.push_back(dd4hepgeo->constant<int>("nUnitCells2"));
+  }
+  catch(...) {
+    std::cout << "nUnitCells2 not found in detector metadata, exiting..." << std::endl;
+    exit(1);
+  }
+  try {
+    m_nUnitCells.push_back(dd4hepgeo->constant<int>("nUnitCells3"));
+  }
+  catch(...) {
+    std::cout << "nUnitCells3 not found in detector metadata, exiting..." << std::endl;
+    exit(1);
+  }
 }
 
 /// determine the local position based on the cell ID
 Vector3D FCCSWEndcapTurbine_k4geo::position(const CellID& cID) const {
 
-  double rhoVal = rho(cID);
+  //  double rhoVal = rho(cID);  // just the center of the blade
   double zVal = z(cID);
   double phiVal = phi(cID);
-  Vector3D pos = PositionRhoZPhi(rhoVal, zVal, phiVal);
-  // account for the fact that the -z endcap is mirrored wrt to the +z one
-  if (pos.Z < 0.) pos.Y = -pos.Y;
+  double xVal = x(cID);
+  
+  //Vector3D pos = PositionRhoZPhi(rhoVal, zVal, phiVal);
+
+  // make a dummy "position" vector that has phi, x, and z
+  Vector3D pos(phiVal, xVal, zVal);
+  
+  //  // account for the fact that the -z endcap is mirrored wrt to the +z one
+  // if (pos.Z < 0.) pos.Y = -pos.Y;
   return pos;
 }
 
@@ -128,9 +159,9 @@ Vector3D FCCSWEndcapTurbine_k4geo::position(const CellID& cID) const {
 CellID FCCSWEndcapTurbine_k4geo::cellID(const Vector3D& /* localPosition */, const Vector3D& globalPosition,
                           const VolumeID& vID) const {
   CellID cID = vID;
-  double lRho = rhoFromXYZ(globalPosition);
-  CellID iWheel = _decoder->get(cID, m_wheelID);
-  _decoder->set(cID, m_rhoID, positionToBin(lRho, m_gridSizeRho[iWheel], m_offsetRho[iWheel]));
+
+  //  _decoder->set(cID, m_rhoID, positionToBin(lRho, m_gridSizeRho[iWheel], m_offsetRho[iWheel]));
+  //_decoder->set(cID, m_rhoID, 0);
   double lZ = TMath::Abs(globalPosition.Z);
   _decoder->set(cID, m_zID, positionToBin(lZ, m_gridSizeZ, m_offsetZ));
 
@@ -140,32 +171,40 @@ CellID FCCSWEndcapTurbine_k4geo::cellID(const Vector3D& /* localPosition */, con
 /// determine the azimuthal angle phi based on the cell ID
 double FCCSWEndcapTurbine_k4geo::phi(const CellID& cID) const {
 
+  // just return the phi of the module center
   CellID iModule = _decoder->get(cID, m_moduleID);
   CellID iWheel = _decoder->get(cID, m_wheelID);
+  CellID iSide = _decoder->get(cID, m_sideID);
   
-  double phiCent = twopi*(iModule+0.5)/m_nUnitCellsLeastCommonMultiple;
+  double phiCent = ((long long int)iSide)*twopi*(iModule)/m_nUnitCells[iWheel];
 
-  double rhoLoc = rho(cID);
-  double zLoc = TMath::Abs(z(cID))-m_offsetZ - 45;  // hard-code midpoint in z for now
-
-
-  double zCotBladeAngle = zLoc/TMath::Tan(m_bladeAngle[iWheel]);
-
-  double x = zCotBladeAngle;
-  double y = TMath::Sqrt(rhoLoc*rhoLoc - x*x);
-  // rotate about z axis by phiCent
-  double xprime = x*TMath::Cos(phiCent) +y*TMath::Sin(phiCent);
-  double yprime = y*TMath::Cos(phiCent) -x*TMath::Sin(phiCent);
+  return phiCent;
   
-  return TMath::ATan2(xprime,yprime);
-}
-/// determine the transverse distance from the beamline r based on the cell ID
-double FCCSWEndcapTurbine_k4geo::rho(const CellID& cID) const {
-  CellID rhoValue = _decoder->get(cID, m_rhoID);
-  CellID iWheel = _decoder->get(cID, m_wheelID);
+  //double rhoLoc = rho(cID);
+  //double zLoc = TMath::Abs(z(cID))-m_offsetZ - 45;  // hard-code midpoint in z for now
 
-  return binToPosition(rhoValue,m_gridSizeRho[iWheel], m_offsetRho[iWheel]);
+  //double zCotBladeAngle = zLoc/TMath::Tan(m_bladeAngle[iWheel]);
+  // double x = zCotBladeAngle;
+  //double y = TMath::Sqrt(rhoLoc*rhoLoc - x*x);
+  //// rotate about z axis by phiCent
+  //double xprime = x*TMath::Cos(phiCent) +y*TMath::Sin(phiCent);
+  //double yprime = y*TMath::Cos(phiCent) -x*TMath::Sin(phiCent);
+  
+  //return TMath::ATan2(xprime,yprime);
 }
+/// determine the value of the x coordinate relative to the center of the blade
+  double FCCSWEndcapTurbine_k4geo::x(const CellID& cID) const {
+
+    CellID iWheel = _decoder->get(cID, m_wheelID);
+    double zLoc = TMath::Abs(z(cID))-m_offsetZ - 45;  // hard-code midpoint in z for now
+
+    double zCotBladeAngle = zLoc/TMath::Tan(m_bladeAngle[iWheel]);
+    double x = zCotBladeAngle;
+
+    return x;
+}
+
+  
 /// determine local x in plane of blade based on the cell ID
 double FCCSWEndcapTurbine_k4geo::z(const CellID& cID) const {
   CellID zValue = _decoder->get(cID, m_zID);
