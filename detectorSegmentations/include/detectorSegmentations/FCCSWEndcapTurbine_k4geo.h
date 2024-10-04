@@ -68,40 +68,24 @@ public:
    *   @param[in] aFieldName Field name for phi.
    */
   inline void setFieldNamePhi(const std::string& fieldName) { m_phiID = fieldName; }
-  /**  Determine the transverse distance from the beamline rho based on the cell ID.
-   *   @param[in] aCellId ID of a cell.
-   *   return rho.
-   */
-  double rho(const CellID& aCellID) const;
-   /**  Get the coordinate offset in rho.
-   *   return The offset in rho.
-   */
-  inline double offsetRho(int iWheel) const { return m_offsetRho[iWheel]; }
-  /**  Get the field name for rho.
-   *   return The field name for rho.
-   */
-  inline const std::string& fieldNameRho() const { return m_rhoID; }
-  /**  Set the number of bins in rho.
-   *   @param[in] aNumberBins Number of bins in rho.
-   */
-  inline void setRhoBins(int bins) { m_rhoBins = bins; }
-  /**  Set the coordinate offset in rho.
-   *   @param[in] aOffset Offset in rho.
-   */
-  //  inline void setOffsetRho(double offset) { m_offsetRho = offset; }
- /**  Set the field name used for transverse distance from IP rho.
-   *   @param[in] aFieldName Field name for rho.
-   */
-  inline void setFieldNameRho(const std::string& fieldName) { m_rhoID = fieldName; }
  /**  Set the field name used for the wheel ID.
    *   @param[in] aFieldName Field name for wheel.
    */
   inline void setFieldNameWheel(const std::string& fieldName) {m_wheelID = fieldName; }
+  /**  Determine the x coordinate based on the cell ID.
+   *   @param[in] aCellId ID of a cell.
+   *   return x.
+   */
+  double x(const CellID& aCellID) const;
   /**  Determine the z coordinate based on the cell ID.
    *   @param[in] aCellId ID of a cell.
    *   return z.
    */
   double z(const CellID& aCellID) const;
+  /** Get the grid size in z for a given wheel
+   * return grid size in z
+   */
+  inline double gridSizeZ() const { return m_gridSizeZ; }
   /**  Get the coordinate offset in z.
    *   return The offset in z.
    */
@@ -128,10 +112,10 @@ public:
   }
 
 protected:
-  /// turbine blade angle
+  /// turbine blade angle in each wheel
   std::vector<double> m_bladeAngle;
-  /// least common multiple of number of unit cells
-  int m_nUnitCellsLeastCommonMultiple;
+  /// number of unit cells in each wheel
+  std::vector<int> m_nUnitCells;
   /// the number of bins in phi
   int m_phiBins;
   /// the coordinate offset in phi
