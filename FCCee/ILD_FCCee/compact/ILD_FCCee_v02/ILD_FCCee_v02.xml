@@ -7,7 +7,7 @@
         url="http://ilcsoft.desy.de"
         status="experimental"
         version="v01">
-    <comment>ILD simulation model for FCCee </comment>
+    <comment>experimental ILD simulation model for FCCee </comment>
   </info>
 
   <includes>
