@@ -52,7 +52,7 @@ This model definition can be found under [FCCee/ILD_FCCee/compact/ILD_FCCee_v02]
 ### ILD_l5_v11
 TEST DEVELOPMENT model: same detector geometry as ILD_l5_v02 model, but with FCCee MDI and CLD-inspired silicon inner tracker & VTX in place of original ILD's VTX, SIT, FTD. 
 BeamCal, LHCAL removed.
-We recommend that you use an ILD model under FCCee/ILD_FCCee/ instead. Model ILD_FCCee_v01 is rather similar to ILD_l5_v11.
+**We recommend that you use an ILD model under FCCee/ILD_FCCee/ instead. Model ILD_FCCee_v01 is rather similar to ILD_l5_v11.**
 
 ### ILD_l5_v10
 same detector geometry as ILD_l5_v02 model, but with CLD-inspired silicon inner tracker/VTX in place of original VTX, SIT, FTD
