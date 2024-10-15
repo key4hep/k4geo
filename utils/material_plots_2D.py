@@ -93,8 +93,12 @@ def main():
     ROOT.gROOT.SetBatch(1)
 
     h_x0 = create_histogram("h_x0", args.angleMin, args.angleMax, args.angleBinning, args.nPhiBins)
-    h_lambda = create_histogram("h_lambda", args.angleMin, args.angleMax, args.angleBinning, args.nPhiBins)
-    h_depth = create_histogram("h_depth", args.angleMin, args.angleMax, args.angleBinning, args.nPhiBins)
+    h_lambda = create_histogram(
+        "h_lambda", args.angleMin, args.angleMax, args.angleBinning, args.nPhiBins
+    )
+    h_depth = create_histogram(
+        "h_depth", args.angleMin, args.angleMax, args.angleBinning, args.nPhiBins
+    )
 
     for angleBinning, entry in enumerate(tree):
         nMat = entry.nMaterials
