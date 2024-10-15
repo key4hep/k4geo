@@ -8,9 +8,8 @@ from __future__ import print_function
 
 import argparse
 import math
+import os
 import sys
-from os import fspath
-from os.path import expandvars
 from pathlib import Path
 
 sys.path.append(os.path.expandvars("$FCCSW") + "/Examples/scripts")
@@ -84,7 +83,7 @@ def main():
 
     ROOT.gStyle.SetNumberContours(100)
 
-    f = ROOT.TFile.Open(fspath(Path(args.inputFile).with_suffix(".root")), "read")
+    f = ROOT.TFile.Open(os.fspath(Path(args.inputFile).with_suffix(".root")), "read")
     tree = f.Get("materials")
 
     ROOT.gROOT.SetBatch(1)
@@ -145,9 +144,9 @@ def main():
 
         ROOT.gStyle.SetPadRightMargin(0.5)
         output_path = output_dir / plot
-        cv.Print(fspath(output_path.with_suffix(".pdf")))
-        cv.Print(fspath(output_path.with_suffix(".png")))
-        cv.SaveAs(fspath(output_path.with_suffix(".root")))
+        cv.Print(os.fspath(output_path.with_suffix(".pdf")))
+        cv.Print(os.fspath(output_path.with_suffix(".png")))
+        cv.SaveAs(os.fspath(output_path.with_suffix(".root")))
 
 
 if __name__ == "__main__":
