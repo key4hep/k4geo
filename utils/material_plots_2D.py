@@ -108,13 +108,7 @@ def main():
             entry_x0 += entry.nX0.at(i) * 100.0
             entry_lambda += entry.nLambda.at(i)
             entry_depth += entry.matDepth.at(i)
-            entry_x0 += entry.nX0.at(i) * 100.0
-            entry_lambda += entry.nLambda.at(i)
-            entry_depth += entry.matDepth.at(i)
 
-        h_x0.Fill(tree.angle, tree.phi, entry_x0)
-        h_lambda.Fill(tree.angle, tree.phi, entry_lambda)
-        h_depth.Fill(tree.angle, tree.phi, entry_depth)
         h_x0.Fill(tree.angle, tree.phi, entry_x0)
         h_lambda.Fill(tree.angle, tree.phi, entry_lambda)
         h_depth.Fill(tree.angle, tree.phi, entry_depth)
