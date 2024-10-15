@@ -17,17 +17,21 @@ from plotstyle import FCCStyle
 import ROOT
 
 
-def create_histogram(name_and_title: str, argument_name_space: argparse.Namespace) -> ROOT.TH2F:
+def create_histogram(
+    name_and_title: str,
+    angle_min: float,
+    angle_max: float,
+    angle_binning: float,
+    n_phi_bins: int,
+) -> ROOT.TH2F:
+    num_bins = int((angle_max - angle_min) / angle_binning)
     return ROOT.TH2F(
         name_and_title,
         name_and_title,
-        int(
-            (argument_name_space.angleMax - argument_name_space.angleMin)
-            / argument_name_space.angleBinning
-        ),
-        argument_name_space.angleMin,
-        argument_name_space.angleMax,
-        argument_name_space.nPhiBins,
+        num_bins,
+        angle_min,
+        angle_max,
+        n_phi_bins,
         -math.pi,
         math.pi,
     )
@@ -88,9 +92,9 @@ def main():
 
     ROOT.gROOT.SetBatch(1)
 
-    h_x0 = create_histogram("h_x0", args)
-    h_lambda = create_histogram("h_lambda", args)
-    h_depth = create_histogram("h_depth", args)
+    h_x0 = create_histogram("h_x0", args.angleMin, args.angleMax, args.angleBinning, args.nPhiBins)
+    h_lambda = create_histogram("h_lambda", args.angleMin, args.angleMax, args.angleBinning, args.nPhiBins)
+    h_depth = create_histogram("h_depth", args.angleMin, args.angleMax, args.angleBinning, args.nPhiBins)
 
     for angleBinning, entry in enumerate(tree):
         nMat = entry.nMaterials
