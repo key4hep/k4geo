@@ -14,6 +14,7 @@
 //
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
+#include "DD4hep/Printout.h"
 #include "XML/Utilities.h"
 #include "XMLHandlerDB.h"
 #include <exception>
@@ -38,6 +39,8 @@ using dd4hep::Translation3D;
 using dd4hep::Volume;
 using dd4hep::getAttrOrDefault;
 using dd4hep::_toString;
+using dd4hep::DEBUG;
+using dd4hep::INFO;
 
 using dd4hep::rec::volSurfaceList;
 using dd4hep::rec::Vector3D;
@@ -287,19 +290,19 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
             }
             sensor.width  = *max_element(sensor.xmax.begin(), sensor.xmax.end()) - *min_element(sensor.xmin.begin(), sensor.xmin.end());
             sensor.length = *max_element(sensor.ymax.begin(), sensor.ymax.end()) - *min_element(sensor.ymin.begin(), sensor.ymin.end());
-            cout << det_name << ": Module: " << sensor.name << ", sensor width: " << to_string(sensor.width)  << ", sensor length: " << to_string(sensor.length) << endl;
+            printout(DEBUG, det_name, "Module: " + sensor.name + ", sensor width: " + to_string(sensor.width) + ", sensor length: " + to_string(sensor.length) ) ;
             m.sensorsVec.push_back(sensor);
         }
 
         stave_information_list.push_back(m);
-        cout << "Read stave information of stave " << m.name << endl;
+        printout(DEBUG, det_name, "Read stave information of stave " + m.name) ;
     }
 
     int iModule_tot = 0;
 
     //=========  loop over layer elements in xml  ======================================
 
-    cout << "Building " << det_name << " barrel detector " << det_name << "..." << endl;
+    printout(INFO, det_name, "Building of detector ...");
     for(xml_coll_t c(e, _U(layer) ); c; ++c)  {
 
         xml_comp_t x_layer( c );
@@ -537,6 +540,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     pv.addPhysVolID( "system", x_det.id() ).addPhysVolID("side",0 )  ;
 
     sdet.setAttributes(theDetector,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
+
+    printout(INFO, det_name, "Building of detector successfully completed");
 
     return sdet;
 }

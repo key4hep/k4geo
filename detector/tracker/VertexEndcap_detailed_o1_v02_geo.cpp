@@ -41,6 +41,8 @@ using dd4hep::_toString;
 using dd4hep::getAttrOrDefault;
 using dd4hep::Box;
 using dd4hep::Tube;
+using dd4hep::DEBUG;
+using dd4hep::INFO;
 
 static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens)  {
     xml_det_t   x_det     = e;
@@ -192,13 +194,14 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         }
         m.sensor_width  = *max_element(m.sensor_xmax.begin(), m.sensor_xmax.end()) - *min_element(m.sensor_xmin.begin(), m.sensor_xmin.end());
         m.sensor_length = *max_element(m.sensor_ymax.begin(), m.sensor_ymax.end()) - *min_element(m.sensor_ymin.begin(), m.sensor_ymin.end());
-        cout << det_name << "Module: " << m.name << ", sensor width: " << to_string(m.sensor_width)  << ", sensor length: " << to_string(m.sensor_length) << endl;
+        printout(DEBUG, det_name, "Module: " + m.name + ", sensor width: " + to_string(m.sensor_width) + ", sensor length: " + to_string(m.sensor_length) );
         module_information_list.push_back(m);
     }
    
     vector<int> sides = {1};
     if(reflect){sides.push_back(-1);}
- 
+
+    printout(INFO, det_name, "Building of detector ...");
     for(auto & side : sides){
         string side_name = det_name + _toString(side,"_side%d");
 
@@ -416,10 +419,11 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         side_assembly->GetShape()->ComputeBBox();       
     }
     
-    cout << "Built disks detector:" << det_name << endl;
     sdet.setAttributes(theDetector,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
     pv.addPhysVolID("system", x_det.id());
 
+    printout(INFO, det_name, "Building of detector successfully completed.");
+ 
     return sdet;
 }
 

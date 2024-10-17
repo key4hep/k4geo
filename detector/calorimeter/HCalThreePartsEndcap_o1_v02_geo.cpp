@@ -1,15 +1,7 @@
 // DD4hep
 #include "DD4hep/DetFactoryHelper.h"
 #include <DDRec/DetectorData.h>
-
-// todo: remove gaudi logging and properly capture output
-#define endmsg std::endl
-#define lLog std::cout
-namespace MSG {
-const std::string ERROR = "createHCalThrePartsEndcap   ERROR  ";
-const std::string DEBUG = "createHCalThrePartsEndcap   DEBUG  ";
-const std::string INFO  = "createHCalThrePartsEndcap   INFO   ";
-}
+#include "DD4hep/Printout.h"
 
 using dd4hep::Volume;
 using dd4hep::DetElement;
@@ -54,8 +46,8 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
     double space = xSpace.thickness();
     xml_comp_t xSteelSupport = xmlElement.child(_Unicode(steel_support));
     double dSteelSupport = xSteelSupport.thickness();
-    lLog << MSG::DEBUG << "steel support thickness " << dSteelSupport << endmsg;
-    lLog << MSG::DEBUG << "steel support material  " << xSteelSupport.materialStr() << endmsg;
+
+    dd4hep::printout(dd4hep::DEBUG, "HCalThreePartsEndcap_o1_v02", "steel support thickness (cm): %.2f", dSteelSupport); 
 
     // Calculate sensitive barrel dimensions
     double sensitiveBarrel1Rmin = dimensions.rmin1() + 2 * dRhoFacePlate + space;
@@ -71,18 +63,18 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
     std::vector<xml_comp_t> sequences = {xmlElement.child(_Unicode(sequence_a)), xmlElement.child(_Unicode(sequence_b))};
     // Check if both sequences are present
     if (!sequences[0] || !sequences[1]) {
-      lLog << MSG::ERROR << "The two sequences sequence_a and sequence_b must be present in the xml file." << endmsg;
+      dd4hep::printout(dd4hep::ERROR, "HCalThreePartsEndcap_o1_v02", "The two sequences 'sequence_a' and 'sequence_b' must be present in the xml file."); 
       throw std::runtime_error("Missing sequence_a or sequence_b in the xml file.");
     }
     // Check if both sequences have the same dimensions
     Dimension dimensionsA(sequences[0].dimensions());
     Dimension dimensionsB(sequences[1].dimensions());
     if (dimensionsA.dz() != dimensionsB.dz()) {
-        lLog << MSG::ERROR << "The dimensions of sequence_a and sequence_b do not match." << endmsg;
+        dd4hep::printout(dd4hep::ERROR, "HCalThreePartsEndcap_o1_v02", "The dimensions of sequence_a and sequence_b do not match."); 
         throw std::runtime_error("The dimensions of the sequence_a and sequence_b do not match.");
     }
     double dzSequence = dimensionsB.dz();
-    lLog << MSG::DEBUG << "sequence thickness " << dzSequence << endmsg;
+    dd4hep::printout(dd4hep::DEBUG, "HCalThreePartsEndcap_o1_v02", "sequence thickness %.2f", dzSequence); 
 
     // calculate the number of modules fitting in  Z
     unsigned int numSequencesZ1 = static_cast<unsigned>((2 * dimensions.width() - 2 * dZEndPlate - space) / dzSequence);
@@ -126,39 +118,38 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
         }
     }
 
-    lLog << MSG::DEBUG << "retrieved number of layers in first Endcap part:  " << numLayersR1 << " , which end up to a full module depth in rho of " << moduleDepth1 << " cm" << endmsg;
-    lLog << MSG::DEBUG << "retrieved number of layers in second Endcap part:  " << numLayersR2 << " , which end up to a full module depth in rho of " << moduleDepth2 << " cm" << endmsg;
-    lLog << MSG::DEBUG << "retrieved number of layers in third Endcap part:  " << numLayersR3 << " , which end up to a full module depth in rho of " << moduleDepth3 << " cm" << endmsg;
+    dd4hep::printout(dd4hep::DEBUG, "HCalThreePartsEndcap_o1_v02", "retrieved number of layers in first Endcap part: %d , which end up to a full module depth in rho of %.2f cm", numLayersR1, moduleDepth1); 
+    dd4hep::printout(dd4hep::DEBUG, "HCalThreePartsEndcap_o1_v02", "retrieved number of layers in second Endcap part: %d , which end up to a full module depth in rho of %.2f cm", numLayersR2, moduleDepth2); 
+    dd4hep::printout(dd4hep::DEBUG, "HCalThreePartsEndcap_o1_v02", "retrieved number of layers in third Endcap part: %d , which end up to a full module depth in rho of %.2f cm", numLayersR3, moduleDepth3); 
 
-    lLog << MSG::INFO << "constructing first part EC: with z offset " << extBarrelOffset1 << " cm: "<< numSequencesZ1 << " sequences in Z, " << numLayersR1 << " layers in Rho, " << numLayersR1 * numSequencesZ1 << " tiles" << endmsg;
-    lLog << MSG::INFO << "constructing second part EC: with offset " << extBarrelOffset2 << " cm: " << numSequencesZ2 << " sequences in Z, " << numLayersR2 << " layers in Rho, " << layerDepths2.size() * numSequencesZ2 << " tiles" << endmsg;
+    dd4hep::printout(dd4hep::INFO, "HCalThreePartsEndcap_o1_v02", "constructing first part EC: with z offset %.2f cm: %d sequences in Z, %d radial layers, %d tiles", extBarrelOffset1, numSequencesZ1, numLayersR1, numSequencesZ1*numLayersR1); 
+    dd4hep::printout(dd4hep::INFO, "HCalThreePartsEndcap_o1_v02", "constructing second part EC: with z offset %.2f cm: %d sequences in Z, %d radial layers, %d tiles", extBarrelOffset2, numSequencesZ2, numLayersR2, numSequencesZ2*numLayersR2); 
+    dd4hep::printout(dd4hep::INFO, "HCalThreePartsEndcap_o1_v02", "constructing third part EC: with z offset %.2f cm: %d sequences in Z, %d radial layers, %d tiles", extBarrelOffset3, numSequencesZ3, numLayersR3, numSequencesZ3*numLayersR3); 
 
-    lLog << MSG::INFO << "constructing third part EC: with offset " << extBarrelOffset3 << " cm: " << numSequencesZ3 << " sequences in Z, " << numLayersR3 << " layers in Rho, " << layerDepths3.size() * numSequencesZ3 << " tiles" << endmsg;
-
-    lLog << MSG::INFO << "number of channels: " << (numLayersR1 * numSequencesZ1) + (numLayersR2 * numSequencesZ2) + (numLayersR3 * numSequencesZ3) << endmsg;
+    dd4hep::printout(dd4hep::DEBUG, "HCalThreePartsEndcap_o1_v02", "number of sequences in the whole Endcap ", numLayersR1*numSequencesZ1 + numLayersR2*numSequencesZ2 + numLayersR3*numSequencesZ3);  
 
     // Calculate correction along z based on the module size (can only have natural number of modules)
     double dzDetector1 = (numSequencesZ1 * dzSequence) / 2 + 2 * dZEndPlate + space;
     double dzDetector2 = (numSequencesZ2 * dzSequence) / 2;
     double dzDetector3 = (numSequencesZ3 * dzSequence) / 2 + 2 * dZEndPlate + space;
 
-    lLog << MSG::INFO << "correction of dz (negative = size reduced) first part EC :" << dzDetector1*2 - dimensions.width()*2 << endmsg;
-    lLog << MSG::INFO << "dz second part EC:" << dzDetector2 * 2 << endmsg;
-    lLog << MSG::INFO << "width second part EC:" << dimensions.dz() * 2 << endmsg;
-    lLog << MSG::INFO << "correction of dz (negative = size reduced) second part EB:" << dzDetector2*2 - dimensions.dz()*2 << endmsg;
+    dd4hep::printout(dd4hep::DEBUG, "HCalThreePartsEndcap_o1_v02", "correction of dz (negative = size reduced) first part EC: %.2f", dzDetector1*2 - dimensions.width()*2); 
+    dd4hep::printout(dd4hep::DEBUG, "HCalThreePartsEndcap_o1_v02", "dz second part EC: %.2f", dzDetector2 * 2); 
+    dd4hep::printout(dd4hep::DEBUG, "HCalThreePartsEndcap_o1_v02", "width second part EC: %.2f", dimensions.dz() * 2); 
+    dd4hep::printout(dd4hep::DEBUG, "HCalThreePartsEndcap_o1_v02", "correction of dz (negative = size reduced) second part EB: %.2f", dzDetector2*2 - dimensions.dz()*2); 
 
-    lLog << MSG::INFO << "dz third part EC:" << dzDetector3 * 2 << endmsg;
+    dd4hep::printout(dd4hep::DEBUG, "HCalThreePartsEndcap_o1_v02", "dz third part EC: %.2f", dzDetector3 * 2); 
 
 
     for (int iSign = -1; iSign < 2; iSign+=2){
         int sign; 
         if(iSign < 0){
             sign = -1;
-            lLog << MSG::DEBUG << "Placing detector on the negative side: (cm) " << -(dimensions.offset() + dimensions.dz()) << endmsg;
+            dd4hep::printout(dd4hep::INFO, "HCalThreePartsEndcap_o1_v02", "Placing detector on the negative side: (cm) %.2f", -(dimensions.offset() + dimensions.dz())); 
         }
         else{
             sign = +1;
-            lLog << MSG::DEBUG << "Placing detector on the positive side: (cm) " << (dimensions.offset() + dimensions.dz()) << endmsg;
+            dd4hep::printout(dd4hep::INFO, "HCalThreePartsEndcap_o1_v02", "Placing detector on the positive side: (cm) %.2f", (dimensions.offset() + dimensions.dz())); 
         }
         // Add structural support made of steel inside of HCal
         DetElement facePlate1(caloDetElem, "FacePlate_" + std::to_string(1 * sign), 0);
@@ -231,7 +222,9 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
             dd4hep::Tube tileSequenceShape(rminLayer, rmaxLayer, 0.5*dzSequence);
             Volume tileSequenceVolume("HCalECTileSequenceVol1", tileSequenceShape, lcdd.air());
 
-            lLog << MSG::DEBUG << "layer radii:  " << rminLayer << " - " << rmaxLayer << " [cm]" << endmsg;
+            if(iSign < 0){
+                dd4hep::printout(dd4hep::INFO, "HCalThreePartsEndcap_o1_v02", "first part: layer %d (cm): %.2f - %.2f", idxLayer, rminLayer, rmaxLayer); 
+            }
 
             dd4hep::Tube layerShape(rminLayer, rmaxLayer, dzDetector1 );
             Volume layerVolume("HCalECLayerVol1", layerShape, lcdd.air());
@@ -301,7 +294,9 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
             dd4hep::Tube tileSequenceShape(rminLayer, rmaxLayer, 0.5*dzSequence);
             Volume tileSequenceVolume("HCalECTileSequenceVol2", tileSequenceShape, lcdd.air());
 
-            lLog << MSG::DEBUG << "layer radii:  " << rminLayer << " - " << rmaxLayer << " [cm]" << endmsg;
+            if(iSign < 0){
+                dd4hep::printout(dd4hep::INFO, "HCalThreePartsEndcap_o1_v02", "second part: layer %d (cm): %.2f - %.2f", idxLayer, rminLayer, rmaxLayer); 
+            }
 
             dd4hep::Tube layerShape(rminLayer, rmaxLayer, dzDetector2);
             Volume layerVolume("HCalECLayerVol2", layerShape, lcdd.air());
@@ -369,7 +364,9 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
             dd4hep::Tube tileSequenceShape(rminLayer, rmaxLayer, 0.5*dzSequence);
             Volume tileSequenceVolume("HCalECTileSequenceVol3", tileSequenceShape, lcdd.air());
 
-            lLog << MSG::DEBUG << "layer radii:  " << rminLayer << " - " << rmaxLayer << " [cm]" << endmsg;
+            if(iSign < 0){
+                dd4hep::printout(dd4hep::INFO, "HCalThreePartsEndcap_o1_v02", "third part: layer %d (cm): %.2f - %.2f", idxLayer, rminLayer, rmaxLayer); 
+            }
 
             dd4hep::Tube layerShape(rminLayer, rmaxLayer, dzDetector3);
             Volume layerVolume("HCalECLayerVol3", layerShape, lcdd.air());
@@ -422,8 +419,9 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
         } // end loop placement of subwedges
 
         // Placement of DetElements
-        lLog << MSG::DEBUG << "Layers in r :    " << layers.size() << std::endl;
-        lLog << MSG::DEBUG << "Tiles in layers :" << tilesPerLayer.size() << std::endl;
+        dd4hep::printout(dd4hep::DEBUG, "HCalThreePartsEndcap_o1_v02", "Layers in r : %d", layers.size()); 
+        dd4hep::printout(dd4hep::DEBUG, "HCalThreePartsEndcap_o1_v02", "Tiles in layers : %d", tilesPerLayer.size()); 
+
 
         // Place det elements wihtin each other to recover volume positions later via cellID  
         for (uint iLayer = 0; iLayer < (layerDepths1.size()+layerDepths2.size()+layerDepths3.size()); iLayer++){

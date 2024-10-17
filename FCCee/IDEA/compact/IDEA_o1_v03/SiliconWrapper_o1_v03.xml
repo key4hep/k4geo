@@ -68,6 +68,19 @@
             <constant name="SiWr_distance_two_sides"    value="SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness"/>    <!-- Distance between sensor modules along thickness when having alternating modules in front and in the back -->
 
         <!-- Silicon wrapper barrel parameters -->
+
+            <!-- Simplified silicon wrapper barrel  -->
+            <constant name="SiWrB_nModules1" value="1"/> <!-- Length of SiWr_half_length = 2400 mm -> Let's take 131 modules with 130 SiWr_mod_overlap gaps (131*42.2+130*-5.4 = 4826.2 mm)-->
+            <constant name="SiWrB_z" value="SiWrB_half_length"/>
+
+            <!-- Complex silicon wrapper barrel -->
+            <!-- <constant name="SiWrB_nModules1" value="floor((2*SiWrB_half_length - SiWr_mod_overlap)/(SiWr_mod_z + SiWr_mod_overlap))"/> -->
+            <!-- <constant name="SiWrB_z" value="(SiWrB_nModules1*SiWr_mod_z+(SiWrB_nModules1-1)*SiWr_mod_overlap)/2.0"/> -->
+
+            <!-- Other silicon wrapper barrel parameters -->
+            <constant name="SiWrB_nModules2" value="SiWrB_nModules1"/> <!-- Same number of modules so that gaps in r-phi in layer 1 can be filled by layer 2-->
+            <constant name="SiWrB_phiOffset2" value="2*pi/SiWrB_nModules2/2."/> <!-- Same number of modules so that gaps in r-phi in layer 1 can be filled by layer 2, offset of half a tile width -->
+
             <constant name="SiWrB_r1" value="SiWrB_inner_radius"/>
             <constant name="SiWrB_r2" value="SiWrB_r1 + 2.0*cm"/>
 
@@ -75,25 +88,29 @@
             <constant name="SiWrB_Staves1" value="floor(2.*pi*SiWrB_inner_radius/(SiWr_mod_rphi+SiWrB_Distance_between_staves))"/> <!-- Circumference of 2*pi*SiWrB_inner_radius divided by width of stave and space between. Floor to get to integer number, 151 -->
             <constant name="SiWrB_Staves2" value="SiWrB_Staves1"/> <!-- Use same number of staves for second layer -->
 
-            <constant name="SiWrB_nModules1" value="floor((2*SiWrB_half_length - SiWr_mod_overlap)/(SiWr_mod_z + SiWr_mod_overlap))"/> <!-- Length of SiWr_half_length = 2400 mm -> Let's take 131 modules with 130 SiWr_mod_overlap gaps (131*42.2+130*-5.4 = 4826.2 mm)-->
-            <constant name="SiWrB_nModules2" value="SiWrB_nModules1"/> <!-- Same number of modules so that gaps in r-phi in layer 1 can be filled by layer 2-->
-            <constant name="SiWrB_phiOffset2" value="2*pi/SiWrB_nModules2/2."/> <!-- Same number of modules so that gaps in r-phi in layer 1 can be filled by layer 2, offset of half a tile width -->
-        
-            <constant name="SiWrB_z" value="(SiWrB_nModules1*SiWr_mod_z+(SiWrB_nModules1-1)*SiWr_mod_overlap)/2.0"/>
-
             <constant name="SiWrB_offset1" value="0.0*mm"/>
             <constant name="SiWrB_offset2" value="0.0*mm"/>
 
 
         <!-- Silicon wrapper disks parameters -->
-            <constant name="SiWrD_tile_nmodules"        value="6"/>
-            <constant name="SiWrD_double_tile_nmodules" value="12"/>
-            <constant name="SiWrD_half_tile_nmodules"   value="3"/>
 
-            <constant name="SiWrD_tile_length"          value="SiWrD_tile_nmodules*SiWr_mod_z+(SiWrD_tile_nmodules-1)*SiWr_mod_overlap"/>          <!-- Six modules. Tile length = 6*42.2-5*5.2 = 227.2 mm -->
-            <constant name="SiWrD_double_tile_length"   value="SiWrD_double_tile_nmodules*SiWr_mod_z+(SiWrD_double_tile_nmodules-1)*SiWr_mod_overlap"/> <!-- Double tile with 12 modules. Tile length = 12*42.2-11*5.2 = 454.4 mm -->
-            <constant name="SiWrD_half_tile_length"     value="SiWrD_half_tile_nmodules*SiWr_mod_z+(SiWrD_half_tile_nmodules-1)*SiWr_mod_overlap"/> <!-- Half tile with 3 modules. Tile length = 3*42.2-2*5.2 = 116.2 mm -->
+            <!-- Complex silicon wrapper disk -->
+            <!-- <constant name="SiWrD_tile_nmodules"        value="6"/> -->
+            <!-- <constant name="SiWrD_double_tile_nmodules" value="12"/> -->
+            <!-- <constant name="SiWrD_half_tile_nmodules"   value="3"/> -->
+            <!-- <constant name="SiWrD_tile_length"          value="SiWrD_tile_nmodules*SiWr_mod_z+(SiWrD_tile_nmodules-1)*SiWr_mod_overlap"/>  -->
+            <!-- <constant name="SiWrD_double_tile_length"   value="SiWrD_double_tile_nmodules*SiWr_mod_z+(SiWrD_double_tile_nmodules-1)*SiWr_mod_overlap"/> -->
+            <!-- <constant name="SiWrD_half_tile_length"     value="SiWrD_half_tile_nmodules*SiWr_mod_z+(SiWrD_half_tile_nmodules-1)*SiWr_mod_overlap"/> -->
 
+            <!-- Simplified silicon wrapper disks -->
+            <constant name="SiWrD_tile_nmodules"        value="2"/>
+            <constant name="SiWrD_double_tile_nmodules" value="4"/>
+            <constant name="SiWrD_half_tile_nmodules"   value="1"/>
+            <constant name="SiWrD_tile_length"          value="3.*SiWrD_tile_nmodules*SiWr_mod_z+(3.*SiWrD_tile_nmodules-1)*SiWr_mod_overlap"/> 
+            <constant name="SiWrD_double_tile_length"   value="3.*SiWrD_double_tile_nmodules*SiWr_mod_z+(3.*SiWrD_double_tile_nmodules-1)*SiWr_mod_overlap"/>
+            <constant name="SiWrD_half_tile_length"     value="3.*SiWrD_half_tile_nmodules*SiWr_mod_z+(3.*SiWrD_half_tile_nmodules-1)*SiWr_mod_overlap"/>
+
+            <!-- Other silicon wrapper disks parameters -->
             <constant name="SiWrD_tile_spacing_row"     value="1.0*mm"/>
             <constant name="SiWrD_tile_spacing_column"  value="1.0*mm"/>
 
@@ -118,14 +135,6 @@
             <constant name="SiWrD_layer2_offset3" value="SiWrD_rmin2-15.0*mm"/> 
             <constant name="SiWrD_layer2_offset4" value="SiWrD_rmin2-3.0*mm"/> 
             <constant name="SiWrD_layer2_offset5" value="SiWrD_rmin2"/> 
-
-        <!-- Simplified silicon wrapper parameters -->
-            <constant name="SiWrB_nModules1" value="1"/> <!-- Length of SiWr_half_length = 2400 mm -> Let's take 131 modules with 130 SiWr_mod_overlap gaps (131*42.2+130*-5.4 = 4826.2 mm)-->
-            <constant name="SiWrB_nModules2" value="SiWrB_nModules1"/> <!-- Same number of modules so that gaps in r-phi in layer 1 can be filled by layer 2-->
-
-            <constant name="SiWrD_tile_nmodules"        value="2"/>
-            <constant name="SiWrD_double_tile_nmodules" value="4"/>
-            <constant name="SiWrD_half_tile_nmodules"   value="1"/>
     </define>        
 
 
@@ -164,12 +173,6 @@
                     <component thickness="SiWr_flex_Glue_thickness"      width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness"   material="GlueEcobond45" vis="SiWrCableVis"/>
                 </components> 
 
-                <!-- Simplified flexes. Assume they only consist of Aluminium (pessimistic) -->
-<!--                <components name="flexes" r="0.0*mm" length="SiWrB_z">
-                    <component thickness="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness+SiWr_flex_Glue_thickness" width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." r="0.0*mm" material="Al" vis="SiWrCableVis"/>
-                    <component thickness="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness+SiWr_flex_Glue_thickness" width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="0.0*mm" material="Al" vis="SiWrCableVis"/>
-                </components>                
--->
                 <!-- Two ATLASPix3-sized sensors, but with only one periphery region each. Detailed -->
 <!--                <sensor r="SiWr_flex_thickness" thickness="SiWr_Sensitive_Thickness" material="Silicon">
                     <component sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="-SiWr_mod_rphi/2." xmax="-SiWr_mod_quad_spacing/2." vis="SiWrSensitiveVis"/> <!~~ Left quad ~~>
@@ -218,13 +221,7 @@
                     <component thickness="SiWr_flex_Kapton_thickness"    width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." r="SiWr_flex_Aluminium_thickness"                               material="KaptonVtx" vis="SiWrCableVis"/>
                     <component thickness="SiWr_flex_Glue_thickness"      width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." r="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness"   material="GlueEcobond45" vis="SiWrCableVis"/>
                 </components> 
-
-                <!-- Simplified flexes. Just assume they consist only of Aluminium (pessimistic) -->
-<!--                <components name="flex_leftQuads" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness+SiWr_Sensitive_Thickness" length="SiWrB_z">
-                    <component thickness="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness+SiWr_flex_Glue_thickness" width="SiWr_flex_width" offset="-SiWr_flex_width/2.-SiWr_mod_quad_spacing/2." r="0.0*mm" material="Al" vis="SiWrCableVis"/>
-                    <component thickness="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness+SiWr_flex_Glue_thickness" width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." r="0.0*mm" material="Al" vis="SiWrCableVis"/>
-                </components>
--->            </stave>
+            </stave>
 
             <!-- Here we construct the barrel -->
             <layer nLadders="SiWrB_Staves1" r="SiWrB_r1" offset="SiWrB_offset1" id="0" nmodules="SiWrB_nModules1" name="SiWrStave" step="SiWr_mod_overlap" motherVolLength="2.*SiWrB_z" motherVolThickness="SiWrB_r2-SiWrB_r1"              phi0="0.0*rad"/>
@@ -819,14 +816,6 @@
 
     <!-- Plugin needed for the surfaces-->
     <plugins>
-       <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
-            <argument value="SiWrB"/> 
-            <argument value="dimension=2"/>
-            <argument value="u_y=1."/>
-            <argument value="v_z=1."/>
-            <argument value="n_x=1."/>
-        </plugin>
-
         <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
             <argument value="SiWrD"/> 
             <argument value="dimension=2"/>

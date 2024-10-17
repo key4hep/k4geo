@@ -23,3 +23,5 @@ The monolithic fiber dual-readout calorimeter (o1, v01) is added to the director
 
 August 2024: Added an updated vertex detector (also with the ultra-light inner vertex option) and a more light-weight 
 implementation of the silicon wrapper.
+
+September 2024: Added detailed version of the pre-shower, based on muon system builder.

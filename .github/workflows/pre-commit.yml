@@ -6,18 +6,21 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: cvmfs-contrib/github-action-cvmfs@v3.1
+    - uses: actions/checkout@v4
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
     - uses: aidasoft/run-lcg-view@v4
       with:
-        release-platform: LCG_101/x86_64-centos7-clang12-opt
+        container: el9
+        view-path: /cvmfs/sw-nightlies.hsf.org/key4hep
         run: |
-          export PYTHONPATH=$(python -m site --user-site):$PYTHONPATH
-          export PATH=/root/.local/bin:$PATH
-          pip install --upgrade --user pip
-          pip install pre-commit --user
-          # Use virtualenv from the LCG release
-          pip uninstall --yes virtualenv
+          python -m venv /root/pre-commit-venv
+          source /root/pre-commit-venv/bin/activate
+          pip install pre-commit
+          export PYTHONPATH=$VIRTUAL_ENV/lib/python3.$(python3 -c 'import sys; print(f"{sys.version_info[1]}")')/site-packages:$PYTHONPATH
+          # Newer versions of git are more cautious around the github runner
+          # environment and without this git rev-parse --show-cdup in pre-commit
+          # fails
+          git config --global --add safe.directory $(pwd)
           pre-commit run --show-diff-on-failure \
             --color=always \
             --all-files
