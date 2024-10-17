@@ -502,9 +502,9 @@
    </material>
 
    <material name="RPCGAS2" >
-     <!-- ORIG: mass fractions: R134a:0.93 + IsoButane:0.05 + SF6:0.02 --> 
-     <!-- SUGGESTED UPDATE from G.GRENIER (10/2024) mass fractions: R134a:0.93 + CO2:0.05 + SF6:0.02 --> 
-     <D value="0.00449" unit="g/cm3" />
+     <!-- mass fractions: R134a:0.93 + CO2:0.05 + SF6:0.02 --> 
+     <!-- calculated density: 0.0041749 g/cm3 -->
+     <D value="0.0041749" unit="g/cm3" />
      <fraction n="0.93" ref="R134a"/>
      <fraction n="0.05" ref="CarbonDioxide"/>
      <fraction n="0.02" ref="SulphurHexafluoride"/>
