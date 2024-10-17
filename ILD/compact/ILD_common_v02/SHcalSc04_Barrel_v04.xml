@@ -2,7 +2,7 @@
 
 <lccdd>
   <detectors>
-    <detector name="HcalBarrel" type="SHcalSc04_Barrel_v04" id="ILDDetID_HCAL" readout="HcalBarrelReadout" vis="GreenVis" insideTrackingVolume="false" >
+    <detector name="HcalBarrel" type="SHcalSc04_Barrel_v04" id="ILDDetID_HCAL" readout="HcalBarrelReadout" vis="ILD_GreenVis" insideTrackingVolume="false" >
       <comment>Hadron Calorimeter Barrel</comment>
 
       <envelope vis="ILD_HCALVis">
@@ -16,18 +16,18 @@
 
       <type_flags type=" DetType_CALORIMETER + DetType_BARREL + DetType_HADRONIC " />
 
-      <staves  material = "Steel235"  vis="BlueVis"/>
+      <staves  material = "Steel235"  vis="ILD_BlueVis"/>
 
 
       <!--  select which subsegmentation will be used to fill the DDRec:LayeredCalorimeterData cell dimensions -->
       <subsegmentation key="slice" value="Hcal_readout_segmentation_slice"/>
 
-      <layer repeat="Hcal_nlayers" vis="SeeThrough">
-        <slice material="FloatGlass" thickness="HcalSD_glass_anode_thickness" vis="Invisible"/>
-        <slice material="RPCGAS2"    thickness="HcalSD_sensitive_gas_gap" sensitive="yes" limits="cal_limits" vis="YellowVis"/>
-        <slice material="FloatGlass" thickness="HcalSD_glass_cathode_thickness" vis="Invisible"/>
-        <slice material="G4_POLYSTYRENE" thickness = "Hcal_scintillator_thickness" sensitive = "yes"   limits="cal_limits"  vis="CyanVis"   />
-        <slice material="Air"      thickness="Hcal_chamber_thickness - ( HcalSD_glass_anode_thickness + HcalSD_sensitive_gas_gap + HcalSD_glass_cathode_thickness + Hcal_scintillator_thickness)" vis="Invisible" />
+      <layer repeat="Hcal_nlayers" vis="ILD_SeeThrough">
+        <slice material="FloatGlass" thickness="HcalSD_glass_anode_thickness" vis="ILD_Invisible"/>
+        <slice material="RPCGAS2"    thickness="HcalSD_sensitive_gas_gap" sensitive="yes" limits="cal_limits" vis="ILD_YellowVis"/>
+        <slice material="FloatGlass" thickness="HcalSD_glass_cathode_thickness" vis="ILD_Invisible"/>
+        <slice material="G4_POLYSTYRENE" thickness = "Hcal_scintillator_thickness" sensitive = "yes"   limits="cal_limits"  vis="ILD_CyanVis"   />
+        <slice material="Air"      thickness="Hcal_chamber_thickness - ( HcalSD_glass_anode_thickness + HcalSD_sensitive_gas_gap + HcalSD_glass_cathode_thickness + Hcal_scintillator_thickness)" vis="ILD_Invisible" />
       </layer>
     </detector>
   </detectors>

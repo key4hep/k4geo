@@ -35,6 +35,16 @@ ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh
   ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_l5_v11/ILD_l5_v11.xml --runType=batch -G -N=1 --outputFile=testILD_l5_v11.slcio )
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
+SET( test_name "test_ILD_FCCee_v01" )
+ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
+  ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ILD_FCCee/compact/ILD_FCCee_v01/ILD_FCCee_v01.xml --runType=batch -G -N=1 --outputFile=testILD_FCCee_v01.slcio )
+SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
+
+SET( test_name "test_ILD_FCCee_v02" )
+ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
+  ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ILD_FCCee/compact/ILD_FCCee_v02/ILD_FCCee_v02.xml --runType=batch -G -N=1 --outputFile=testILD_FCCee_v02.slcio )
+SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
+
 #--------------------------------------------------
 # tests for SiD
 SET( test_name "test_SiD_o2_v03" )
