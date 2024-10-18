@@ -20,3 +20,8 @@ v02). NB: production threshold and step limit physics have to be tuned for the d
 July 2024: Added a detailed version of the muon system.
 
 The monolithic fiber dual-readout calorimeter (o1, v01) is added to the directory, but commented in the main file IDEA_o1_v03.xml for the sake of speed. Please remove the comments to include this calorimeter in the full IDEA detector. 
+
+August 2024: Added an updated vertex detector (also with the ultra-light inner vertex option) and a more light-weight 
+implementation of the silicon wrapper.
+
+September 2024: Added detailed version of the pre-shower, based on muon system builder.

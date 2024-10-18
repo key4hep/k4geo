@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+
+  <info name="pre-shower"
+	title=" detailed version of IDEA pre-shower system for FCC-ee"
+	author="Nitika Nitika- nitika.nitika@cern.ch, Mahmoud Ali- mahmoud.ali@cern.ch"
+	url="no"
+	status="development"
+	version="2.0">
+    <comment> It depends on the factory: muonSystemMuRWELL_o1_v01 </comment>
+  </info>
+
+  <define>
+     <!---                            Pre-shower System Parameters                       -->
+     <!-- %%%%%%                      microRWELL chamber different layers thicknesses                %%%%%% -->
+       <constant name = "psG10_FR4Thick"                          value = "1.6*mm"/>
+       <constant name = "psCuThick"                               value = "0.035*mm"/>
+       <constant name = "psGasLayerThick"                         value = "6*mm"/>
+       <constant name = "psCu2Thick"                              value = "0.005*mm"/>
+       <constant name = "psKaptonThick"                           value = "0.05*mm"/>
+       <constant name = "psCarnonFiberThick"                      value = "0.0001*mm"/>
+       <constant name = "psCarbonFiber2Thick"                     value = "0.1*mm"/>
+       <constant name = "psSiThick"                               value = "1.6*mm"/>
+       <constant name = "psMRWELLTotalThickness"                  value = "psG10_FR4Thick+psCuThick+psGasLayerThick+psCu2Thick+psKaptonThick+psCarnonFiberThick+psCuThick+psCarbonFiber2Thick+psCuThick+psSiThick"/> <!-- This sequense is the current order of mRWELL (total 10 slices) -->
+
+       <constant name = "psMRWELLYLength"                         value = "250*mm"/>
+       <constant name = "psMRWELLZLength"                         value = "250*mm"/>
+
+       <constant name = "psOverlapingY"                           value = "5*mm"/> <!-- the common distance between mRWELL chambers in Y direction -->
+       <constant name = "psOverlapingZ"                           value = "5*mm"/> <!-- the common distance between mRWELL chambers in Z direction -->
+       <constant name = "psClearance"                             value = "1*mm"/> <!-- it's a small distance to be used to avoid overlapping between the different volumes ~ 1 mm -->
+  </define>   
+
+  <readouts>
+    <readout name="PreshowerSystemCollection">
+     <segmentation type="CartesianGridYZ" grid_size_y="1.2*mm" grid_size_z="1.2*mm"/>   <!-- Depending on strip pitch 1.4 mm  -->
+     <id>system:5,type:2,layer:4,chamber:15,slice:1,y:-10,z:-10</id> <!-- The bit field is divided into 2^5 systems(IDEA sub-detectors), 2^4 layers(Muon System layers"barrel and endcap layers"), 2^11 chambers(the number of muRWELL chambers in every layer), 2^1 slice(number of sensitive layers inside every chambers), and 2^10 y&z strips in every sensitive layer-->
+  </readout>
+  </readouts>   
+
+  <detectors>
+    <!-- mRWELL envelope -->
+    <detector name="Preshower" type="muonSystemMuRWELL_o1_v01" id="DetID_Preshower" readout="PreshowerSystemCollection">
+      <dimensions x="psMRWELLTotalThickness/2.0" y="psMRWELLYLength" z="psMRWELLZLength" x_offset="0*mm" y_offset="0*mm" z_offset="0*mm" material="Air"/>
+      <sensitive type="tracker"/>
+
+      <!-- Specify the detector parameters and the overlap /// if you want exclude any component, e.g: endcap, just put endcapDetectorParameters=0   // radius is put in the middle, so its not the inner neither the outer -->
+      <generalParameters numSides="psNumSides" overlapY="psOverlapingY" overlapZ="psOverlapingZ" clearance="psClearance"/>
+      <Barrel numDetectorLayers ="1"  rmin="psBarrelFirstLayerRadius" length="psBarrelLength" numYokes="0" yoke_Thickness="0*mm" yoke_Material="G4_Fe"/> 
+      <Endcap numDetectorLayers="1"  rmin="psEndcapLayersInnerRadius" rmax="psEndcapLayersOuterRadius" z_offset="psEndcapFirstLayerZOffset" numYokes="0" yoke_Thickness="0*mm" yoke_Material="G4_Fe" />
+
+      <!-- mRWELL chamber -->
+      <!-- note: all thicknesses are half-lengths -->
+      <slice x="psG10_FR4Thick/2.0" material="G10_FR4" vis="G10_FR4_vis" />
+      <slice x="psCuThick/2.0" material="G4_Cu" vis="Cu_vis" />
+      <slice x="psGasLayerThick/2.0" material="ARCO2CF4" sensitive="true" vis="Sensitive_vis" />
+      <slice x="psCu2Thick/2.0" material="G4_Cu" vis="Cu_vis" />
+      <slice x="psKaptonThick/2.0" material="Kapton" vis="Kapton_vis" />
+      <slice x="psCarnonFiberThick/2.0" material="CarbonFiber" vis="CarbonFiber_vis" />
+      <slice x="psCuThick/2.0" material="G4_Cu" vis="Cu_vis" />
+      <slice x="psCarbonFiber2Thick/2.0" material="CarbonFiber" vis="CarbonFiber_vis" />
+      <slice x="psCuThick/2.0" material="G4_Cu" vis="Cu_vis" />
+      <slice x="psSiThick/2.0" material="G4_Si" vis="Si_vis" />
+    </detector>
+  </detectors>
+
+</lccdd>

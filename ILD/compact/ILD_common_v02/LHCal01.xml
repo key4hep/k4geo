@@ -3,7 +3,7 @@
   -->
 <lccdd>
   <detectors>
-    <detector name="LHCal" type="LHCal_v01" vis="SeeThrough" id="ILDDetID_LHCAL"
+    <detector name="LHCal" type="LHCal_v01" vis="ILD_SeeThrough" id="ILDDetID_LHCAL"
               readout="LHCalCollection" insideTrackingVolume="false" >
 
       <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_HADRONIC + DetType_FORWARD " />
@@ -32,12 +32,12 @@
                   />
 
 
-      <layer repeat="30" vis="SeeThrough">
-        <slice material = "TungstenDens24" thickness = "13.8*mm"                   vis="BCLayerVis1" />
-        <slice material = "Air"     thickness = "0.1*mm"   vis="Invisible" />
-        <slice material = "Silicon" thickness = "1.0*mm"        sensitive = "yes"  vis="BCLayerVis2"/>
-        <slice material = "Copper"  thickness = "0.1*mm"                    vis="BCLayerVis3"/>
-        <slice material = "Air"     thickness = "1.0*mm"    vis="Invisible"/>
+      <layer repeat="30" vis="ILD_SeeThrough">
+        <slice material = "TungstenDens24" thickness = "13.8*mm"                   vis="ILD_BCLayerVis1" />
+        <slice material = "Air"     thickness = "0.1*mm"   vis="ILD_Invisible" />
+        <slice material = "Silicon" thickness = "1.0*mm"        sensitive = "yes"  vis="ILD_BCLayerVis2"/>
+        <slice material = "Copper"  thickness = "0.1*mm"                    vis="ILD_BCLayerVis3"/>
+        <slice material = "Air"     thickness = "1.0*mm"    vis="ILD_Invisible"/>
       </layer>
 
     </detector>

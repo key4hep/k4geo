@@ -84,7 +84,7 @@
       region="DCH_region"
       limits="DCH_limits"
       buildLayers="True"
-      printExcelTable="True"
+      printExcelTable="False"
       >
     <!-- /detectors/detector/vessel -->
     <vessel

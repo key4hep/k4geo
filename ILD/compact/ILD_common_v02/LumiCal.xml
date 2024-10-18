@@ -5,7 +5,7 @@
 <lccdd>
   <detectors>
 
-    <detector name="Lcal" type="LumiCal_o1_v03" vis="BlueVis" id="ILDDetID_LCAL"
+    <detector name="Lcal" type="LumiCal_o1_v03" vis="ILD_BlueVis" id="ILDDetID_LCAL"
               readout="LumiCalCollection" insideTrackingVolume="false" >
 
       <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_ELECTROMAGNETIC + DetType_FORWARD " />
@@ -61,12 +61,12 @@
                   r_gap = "Lcal_tile_gap" />
 
 
-      <layer repeat="30" vis="SeeThrough">
-        <slice material = "TungstenDens24" thickness = "Lcal_tungsten_thickness"                   vis="BCLayerVis1"/>
-        <slice material = "fanele1" thickness = "( Lcal_support_thickness - 0.02*mm) / 2."     vis="Invisible"/>
-        <slice material = "Silicon" thickness = "Lcal_silicon_thickness"        sensitive = "yes"  vis="BCLayerVis2"/>
-        <slice material = "G4_Al"   thickness = "0.02*mm"                                      vis="BCLayerVis3"/>
-        <slice material = "fanele2" thickness = "( Lcal_support_thickness - 0.02*mm) / 2."      vis="Invisible"/>
+      <layer repeat="30" vis="ILD_SeeThrough">
+        <slice material = "TungstenDens24" thickness = "Lcal_tungsten_thickness"                   vis="ILD_BCLayerVis1"/>
+        <slice material = "fanele1" thickness = "( Lcal_support_thickness - 0.02*mm) / 2."         vis="ILD_Invisible"/>
+        <slice material = "Silicon" thickness = "Lcal_silicon_thickness"        sensitive = "yes"  vis="ILD_BCLayerVis2"/>
+        <slice material = "G4_Al"   thickness = "0.02*mm"                                          vis="ILD_BCLayerVis3"/>
+        <slice material = "fanele2" thickness = "( Lcal_support_thickness - 0.02*mm) / 2."         vis="ILD_Invisible"/>
         <slice material = "Air"     thickness = "Lcal_layer_gap" />
       </layer>
 
