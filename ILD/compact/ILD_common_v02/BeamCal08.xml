@@ -5,7 +5,7 @@
 <lccdd>
   <detectors>
 
-    <detector name="BeamCal" type="BeamCal_o1_v02" vis="SeeThrough" id="ILDDetID_BCAL"
+    <detector name="BeamCal" type="BeamCal_o1_v02" vis="ILD_SeeThrough" id="ILDDetID_BCAL"
               readout="BeamCalCollection" insideTrackingVolume="false" buildType="BUILD_ENVELOPE" >
 
       <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_ELECTROMAGNETIC + DetType_FORWARD + DetType_AUXILIARY " />
@@ -97,20 +97,20 @@
       <!--   <slice material = "C"         thickness = "BCal_dGraphite" vis="LayerVis1"      layerType="holeForIncomingBeampipe"/> -->
       <!-- </layer> -->
 
-      <layer repeat="1" vis="SeeThrough">
+      <layer repeat="1" vis="ILD_SeeThrough">
         <slice material = "C"       thickness = "BCal_dGraphite" vis="LayerVis1" outer_radius = "BCal_rGraphite"  layerType="holeForIncomingBeampipe"/>
-        <slice material = "TungstenDens24" thickness = "BCal_dAbsorber"        vis="BCLayerVis1" layerType="holeForIncomingBeampipe" />
-        <slice material = "Silicon" thickness = "0.3004*mm" sensitive = "yes"  vis="BCLayerVis2"/>
-        <slice material = "Copper"  thickness = "0.0004*mm"                    vis="BCLayerVis3"/>
-        <slice material = "Kapton"  thickness = "0.15*mm"                      vis="BCLayerVis4"/>
+        <slice material = "TungstenDens24" thickness = "BCal_dAbsorber"        vis="ILD_BCLayerVis1" layerType="holeForIncomingBeampipe" />
+        <slice material = "Silicon" thickness = "0.3004*mm" sensitive = "yes"  vis="ILD_BCLayerVis2"/>
+        <slice material = "Copper"  thickness = "0.0004*mm"                    vis="ILD_BCLayerVis3"/>
+        <slice material = "Kapton"  thickness = "0.15*mm"                      vis="ILD_BCLayerVis4"/>
         <slice material = "Air"     thickness = "0.05*mm" />
       </layer>
 
-      <layer repeat="BCal_nLayers-1" vis="SeeThrough">
-        <slice material = "TungstenDens24" thickness = "BCal_dAbsorber"        vis="BCLayerVis1" layerType="holeForIncomingBeampipe" />
-        <slice material = "Silicon" thickness = "0.3004*mm" sensitive = "yes"  vis="BCLayerVis2"/>
-        <slice material = "Copper"  thickness = "0.0004*mm"                    vis="BCLayerVis3"/>
-        <slice material = "Kapton"  thickness = "0.15*mm"                      vis="BCLayerVis4"/>
+      <layer repeat="BCal_nLayers-1" vis="ILD_SeeThrough">
+        <slice material = "TungstenDens24" thickness = "BCal_dAbsorber"        vis="ILD_BCLayerVis1" layerType="holeForIncomingBeampipe" />
+        <slice material = "Silicon" thickness = "0.3004*mm" sensitive = "yes"  vis="ILD_BCLayerVis2"/>
+        <slice material = "Copper"  thickness = "0.0004*mm"                    vis="ILD_BCLayerVis3"/>
+        <slice material = "Kapton"  thickness = "0.15*mm"                      vis="ILD_BCLayerVis4"/>
         <slice material = "Air"     thickness = "0.05*mm" />
       </layer>
 

@@ -1,6 +1,13 @@
 <lccdd>
 
-  <detectors>        
+  <display>
+    <vis name="TubeVis"   alpha="0.1" r="1.0" g="0.7"  b="0.5"   showDaughters="true"  visible="true"/>
+    <vis name="BeamPipeVis" alpha="0.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="false"/>
+    <vis name="VacVis"   alpha="1.0" r="0.0" g="0.0"  b="0.0"   showDaughters="true"  visible="false"/>
+  </display>
+
+
+    <detectors>        
 
 
 <detector name="Tube" type="DD4hep_Beampipe_o1_v01" limits="Tracker_limits" vis="BeamPipeVis" id="ILDDetID_NOTUSED">

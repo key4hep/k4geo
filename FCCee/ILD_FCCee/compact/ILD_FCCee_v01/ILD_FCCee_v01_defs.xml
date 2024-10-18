@@ -1,0 +1,8 @@
+<!-- This file contains parameters specific to the ILD_FCCee_v01 -->
+
+<define>
+  <constant name="InnerTracker_outer_radius" value="top_TPC_inner_radius-5*mm" />
+  <constant name="TPC_inner_radius"    value="top_TPC_inner_radius"/>
+  <constant name="TPC_outer_radius"    value="top_TPC_outer_radius"/>
+</define>
+

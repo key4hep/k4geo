@@ -1,7 +1,7 @@
 <!-- comment>Calorimeters</comment -->
 <lccdd>
   <detectors>
-    <detector name="YokeBarrel" type="Yoke05_Barrel" id="ILDDetID_YOKE" readout="YokeBarrelCollection" vis="YellowVis" insideTrackingVolume="false" buildType="BUILD_ENVELOPE">
+    <detector name="YokeBarrel" type="Yoke05_Barrel" id="ILDDetID_YOKE" readout="YokeBarrelCollection" vis="ILD_YellowVis" insideTrackingVolume="false" buildType="BUILD_ENVELOPE">
       <envelope vis="ILD_YOKEVis">
         <shape type="BooleanShape" operation="Intersection" material="Air" >
           <shape type="Box" dx="Yoke_outer_radius + env_safety" dy="Yoke_outer_radius + env_safety"
@@ -18,11 +18,11 @@
                   zhalf="Yoke_half_length"  material="Air"/>
       <position x="0*mm" y="0*mm" z="0*mm"/>
       <rotation x="0*deg" y="0*deg" z="0*deg"/>
-      <staves  material = "Iron"  vis="BlueVis"/>
-      <layer repeat="14" vis="SeeThrough">
-        <slice material = "Air"            thickness = "15.0*mm"                    vis="YellowVis" />
-        <slice material = "G4_POLYSTYRENE" thickness = "10.0*mm" sensitive = "yes"  vis="CyanVis"   />
-        <slice material = "Air"            thickness = "15.0*mm"                    vis="YellowVis" />
+      <staves  material = "Iron"  vis="ILD_BlueVis"/>
+      <layer repeat="14" vis="ILD_SeeThrough">
+        <slice material = "Air"            thickness = "15.0*mm"                    vis="ILD_YellowVis" />
+        <slice material = "G4_POLYSTYRENE" thickness = "10.0*mm" sensitive = "yes"  vis="ILD_CyanVis"   />
+        <slice material = "Air"            thickness = "15.0*mm"                    vis="ILD_YellowVis" />
       </layer>
     </detector>
   </detectors>

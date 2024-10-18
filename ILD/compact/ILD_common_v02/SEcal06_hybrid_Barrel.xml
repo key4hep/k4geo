@@ -7,7 +7,7 @@
 
   <detectors>
 
-    <detector name="EcalBarrel" type="SEcal06_Barrel" id="ILDDetID_ECAL" readout="EcalBarrelCollection" vis="BlueVis"
+    <detector name="EcalBarrel" type="SEcal06_Barrel" id="ILDDetID_ECAL" readout="EcalBarrelCollection" vis="ILD_BlueVis"
      region="EcalBarrelRegion">
 
       <comment>EM Calorimeter Barrel</comment>
@@ -22,46 +22,46 @@
 
 
       <dimensions numsides="Ecal_symmetry" rmin="Ecal_inner_radius" rmax="Ecal_outer_radius" z="Ecal_half_length" />
-      <staves  material = "G4_W"  vis="BlueVis"/>
+      <staves  material = "G4_W"  vis="ILD_BlueVis"/>
 
 
       <!--  select which subsegmentation will be used to fill the DDRec:LayeredCalorimeterData cell dimensions -->
       <subsegmentation key="slice" value0="Ecal_readout_segmentation_slice0" value1="Ecal_readout_segmentation_slice1"/>
 
-      <layer repeat="Ecal_nlayers1/2" vis="SeeThrough" >
-	<slice material = "G4_Al"          thickness = "Ecal_Slab_shielding"                 vis="Invisible" />
-	<slice material = "G4_Cu"          thickness = "Ecal_Slab_copper_thickness"          vis="Invisible" />
-	<slice material = "G4_AIR"         thickness = "Ecal_HybridExtraGap_thickness"       vis="Invisible" />
-        <slice material = "G4_POLYSTYRENE" thickness = "Ecal_Sc_thickness" sensitive = "yes" limits="cal_limits" vis="CyanVis"   />
-        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes" limits="cal_limits" vis="Invisible" />
-        <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"          vis="Invisible" />
-        <slice material = "CarbonFiber"    thickness = "Ecal_fiber_thickness_slabAbs"        vis="Invisible" />
-        <slice material = "G4_W"           thickness = "Ecal_radiator_layers_set1_thickness" vis="BlueVis"   radiator="yes"/>
-        <slice material = "CarbonFiber"    thickness = "Ecal_fiber_thickness_slabAbs"        vis="Invisible" />
-        <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"          vis="Invisible" />
-        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes" limits="cal_limits" vis="Invisible" />
-        <slice material = "G4_POLYSTYRENE" thickness = "Ecal_Sc_thickness" sensitive = "yes" limits="cal_limits" vis="CyanVis"   />
-	<slice material = "G4_AIR"         thickness = "Ecal_HybridExtraGap_thickness"       vis="Invisible" />
-	<slice material = "G4_Cu"          thickness = "Ecal_Slab_copper_thickness"          vis="Invisible" />
-	<slice material = "G4_Al"          thickness = "Ecal_Slab_shielding"                 vis="Invisible" />
+      <layer repeat="Ecal_nlayers1/2" vis="ILD_SeeThrough" >
+	<slice material = "G4_Al"          thickness = "Ecal_Slab_shielding"                                     vis="ILD_Invisible" />
+	<slice material = "G4_Cu"          thickness = "Ecal_Slab_copper_thickness"                              vis="ILD_Invisible" />
+	<slice material = "G4_AIR"         thickness = "Ecal_HybridExtraGap_thickness"                           vis="ILD_Invisible" />
+        <slice material = "G4_POLYSTYRENE" thickness = "Ecal_Sc_thickness" sensitive = "yes" limits="cal_limits" vis="ILD_CyanVis"   />
+        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes" limits="cal_limits" vis="ILD_Invisible" />
+        <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"                              vis="ILD_Invisible" />
+        <slice material = "CarbonFiber"    thickness = "Ecal_fiber_thickness_slabAbs"                            vis="ILD_Invisible" />
+        <slice material = "G4_W"           thickness = "Ecal_radiator_layers_set1_thickness"                     vis="ILD_BlueVis"   radiator="yes"/>
+        <slice material = "CarbonFiber"    thickness = "Ecal_fiber_thickness_slabAbs"                            vis="ILD_Invisible" />
+        <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"                              vis="ILD_Invisible" />
+        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes" limits="cal_limits" vis="ILD_Invisible" />
+        <slice material = "G4_POLYSTYRENE" thickness = "Ecal_Sc_thickness" sensitive = "yes" limits="cal_limits" vis="ILD_CyanVis"   />
+	<slice material = "G4_AIR"         thickness = "Ecal_HybridExtraGap_thickness"                           vis="ILD_Invisible" />
+	<slice material = "G4_Cu"          thickness = "Ecal_Slab_copper_thickness"                              vis="ILD_Invisible" />
+	<slice material = "G4_Al"          thickness = "Ecal_Slab_shielding"                                     vis="ILD_Invisible" />
       </layer>
 
-      <layer repeat="(Ecal_nlayers2+1)/2" vis="SeeThrough">
-	<slice material = "G4_Al"          thickness = "Ecal_Slab_shielding"                 vis="Invisible" />
-	<slice material = "G4_Cu"          thickness = "Ecal_Slab_copper_thickness"          vis="Invisible" />
-	<slice material = "G4_AIR"         thickness = "Ecal_HybridExtraGap_thickness"       vis="Invisible" />
-        <slice material = "G4_POLYSTYRENE" thickness = "Ecal_Sc_thickness" sensitive = "yes" limits="cal_limits" vis="CyanVis"   />
-        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes" limits="cal_limits" vis="Invisible" />
-        <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"          vis="Invisible" />
-        <slice material = "CarbonFiber"    thickness = "Ecal_fiber_thickness_slabAbs"        vis="Invisible" />
-        <slice material = "G4_W"           thickness = "Ecal_radiator_layers_set2_thickness" vis="BlueVis"   radiator="yes"/>
-        <slice material = "CarbonFiber"    thickness = "Ecal_fiber_thickness_slabAbs"        vis="Invisible" />
-        <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"          vis="Invisible" />
-        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes" limits="cal_limits" vis="Invisible" />
-        <slice material = "G4_POLYSTYRENE" thickness = "Ecal_Sc_thickness" sensitive = "yes" limits="cal_limits" vis="CyanVis"   />
-	<slice material = "G4_AIR"         thickness = "Ecal_HybridExtraGap_thickness"       vis="Invisible" />
-	<slice material = "G4_Cu"          thickness = "Ecal_Slab_copper_thickness"          vis="Invisible" />
-	<slice material = "G4_Al"          thickness = "Ecal_Slab_shielding"                 vis="Invisible" />
+      <layer repeat="(Ecal_nlayers2+1)/2" vis="ILD_SeeThrough">
+	<slice material = "G4_Al"          thickness = "Ecal_Slab_shielding"                                     vis="ILD_Invisible" />
+	<slice material = "G4_Cu"          thickness = "Ecal_Slab_copper_thickness"                              vis="ILD_Invisible" />
+	<slice material = "G4_AIR"         thickness = "Ecal_HybridExtraGap_thickness"                           vis="ILD_Invisible" />
+        <slice material = "G4_POLYSTYRENE" thickness = "Ecal_Sc_thickness" sensitive = "yes" limits="cal_limits" vis="ILD_CyanVis"   />
+        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes" limits="cal_limits" vis="ILD_Invisible" />
+        <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"                              vis="ILD_Invisible" />
+        <slice material = "CarbonFiber"    thickness = "Ecal_fiber_thickness_slabAbs"                            vis="ILD_Invisible" />
+        <slice material = "G4_W"           thickness = "Ecal_radiator_layers_set2_thickness"                     vis="ILD_BlueVis"   radiator="yes"/>
+        <slice material = "CarbonFiber"    thickness = "Ecal_fiber_thickness_slabAbs"                            vis="ILD_Invisible" />
+        <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"                              vis="ILD_Invisible" />
+        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes" limits="cal_limits" vis="ILD_Invisible" />
+        <slice material = "G4_POLYSTYRENE" thickness = "Ecal_Sc_thickness" sensitive = "yes" limits="cal_limits" vis="ILD_CyanVis"   />
+	<slice material = "G4_AIR"         thickness = "Ecal_HybridExtraGap_thickness"                           vis="ILD_Invisible" />
+	<slice material = "G4_Cu"          thickness = "Ecal_Slab_copper_thickness"                              vis="ILD_Invisible" />
+	<slice material = "G4_Al"          thickness = "Ecal_Slab_shielding"                                     vis="ILD_Invisible" />
       </layer>
     </detector>
 

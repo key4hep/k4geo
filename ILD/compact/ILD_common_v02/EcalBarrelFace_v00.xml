@@ -1,4 +1,4 @@
-<detector name="EcalBarrelFace" type="PolyhedralBarrelSurfaces" id="ILDDetID_ECAL_BARREL_FACE" readout="EcalBarrelFaceReadout" vis="BlueVis" >
+<detector name="EcalBarrelFace" type="PolyhedralBarrelSurfaces" id="ILDDetID_ECAL_BARREL_FACE" readout="EcalBarrelFaceReadout" vis="ILD_BlueVis" >
 
     <comment>Surfaces at the face of the Ecal Barrel </comment>
 
