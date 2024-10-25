@@ -40,3 +40,6 @@ DECLARE_SEGMENTATION(FCCSWHCalPhiTheta_k4geo, create_segmentation<dd4hep::DDSegm
 
 #include "detectorSegmentations/FCCSWHCalPhiRow_k4geo.h"
 DECLARE_SEGMENTATION(FCCSWHCalPhiRow_k4geo, create_segmentation<dd4hep::DDSegmentation::FCCSWHCalPhiRow_k4geo>)
+
+#include "detectorSegmentations/SCEPCalSegmentation_k4geo.h"
+DECLARE_SEGMENTATION(SCEPCalSegmentation_k4geo, create_segmentation<dd4hep::DDSegmentation::SCEPCalSegmentation_k4geo>)
