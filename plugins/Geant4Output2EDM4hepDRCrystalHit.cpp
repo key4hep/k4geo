@@ -11,7 +11,7 @@
 #include <edm4hep/MCParticleCollection.h>
 #include <edm4hep/SimTrackerHitCollection.h>
 #include <edm4hep/CaloHitContributionCollection.h>
-#include <edm4dr/SimDRCalorimeterHitCollection.h>
+#include <edm4hep/SimDRCalorimeterHitCollection.h>
 #include "detectorSegmentations/DRCrystalHit.h"
 #include <podio/Frame.h>
 #include <podio/ROOTFrameWriter.h>
@@ -30,7 +30,7 @@ namespace dd4hep {
       using writer_t = podio::ROOTFrameWriter;
       using stringmap_t = std::map< std::string, std::string >;
       using trackermap_t = std::map< std::string, edm4hep::SimTrackerHitCollection >;
-      using calorimeterpair_t = std::pair< edm4dr::SimDRCalorimeterHitCollection, edm4hep::CaloHitContributionCollection >;
+      using calorimeterpair_t = std::pair< edm4hep::SimDRCalorimeterHitCollection, edm4hep::CaloHitContributionCollection >;
       using calorimetermap_t = std::map< std::string, calorimeterpair_t >;
 
       std::unique_ptr<writer_t>     m_file  { };
