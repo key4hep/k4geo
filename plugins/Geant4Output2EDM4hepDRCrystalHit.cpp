@@ -461,20 +461,13 @@ void Geant4Output2EDM4hepDRCrystalHit::saveCollection(OutputContext<G4Event>& /*
 
       sch.setCellID( hit->cellID );
       sch.setPosition( hitpos );
-      sch.setEta( hit->eta );
-      sch.setPhi( hit->phi );
-      sch.setDepth( hit->depth );
-      sch.setSystem( hit->system );
       sch.setEnergy( hit->energyDeposit/CLHEP::GeV );
 
-      sch.setNcerenkov( hit->ncerenkov );
-      sch.setNscintillator( hit->nscintillator );
+      sch.setNCerenkovProd(     hit->nCerenkovProd );
+      sch.setNScintillationProd(hit->nScintillationProd );
 
-      sch.setNwavelen_cer( hit->nwavelen_cer );
-      sch.setNwavelen_scint( hit->nwavelen_scint );
-      
-      sch.setNtime_cer( hit->ntime_cer );
-      sch.setNtime_scint( hit->ntime_scint );
+      sch.setTAvgS( hit->tAvgC );
+      sch.setTAvgS( hit->tAvgS );
 
       for(auto ci=hit->truth.begin(); ci != hit->truth.end(); ++ci){
 

@@ -3,14 +3,17 @@
 //         Princeton University
 //===============================
 #include "detectorSegmentations/DRCrystalHit.h"
-#include "detectorSegmentations/SCEPCalSegmentation.h"
+#include "detectorSegmentations/SCEPCalSegmentation_k4geo.h"
 #include "DDG4/Geant4SensDetAction.inl"
 #include "DDG4/Factories.h"
+#include "G4OpticalPhoton.hh"
+#include "G4VProcess.hh"
+#include <DDG4/Geant4Data.h>
 
 namespace SCEPCal {
   G4double convertEvtoNm(G4double energy)
   {
-    return 1239.84187/energy*1000.;
+    return 1239.84187/energy*1000.; //GeV to nm
   }
   class SegmentedCrystalCalorimeterSD_DRHit {
     public:
@@ -45,74 +48,51 @@ namespace dd4hep {
       Geant4HitCollection* coll    = collection(m_collectionID);
 
       dd4hep::Segmentation* _geoSeg = &m_segmentation;
-      auto segmentation=dynamic_cast<dd4hep::DDSegmentation::SCEPCalSegmentation *>(_geoSeg->segmentation());
+      auto segmentation=dynamic_cast<dd4hep::DDSegmentation::SCEPCalSegmentation_k4geo *>(_geoSeg->segmentation());
       auto copyNum64 = segmentation->convertFirst32to64(thePreStepTouchable->GetCopyNumber(0));
       int cellID = (int)copyNum64;
 
       SegmentedCrystalCalorimeterSD_DRHit::Hit* hit = coll->findByKey<SegmentedCrystalCalorimeterSD_DRHit::Hit>(cellID);
+      
       if(!hit) {    
         DDSegmentation::Vector3D pos = segmentation->myPosition(copyNum64);    
         Position global(pos.x(),pos.y(),pos.z());
         hit = new SegmentedCrystalCalorimeterSD_DRHit::Hit(global);
         hit->cellID = cellID;
-        hit->system = segmentation->System(copyNum64);
-        hit->eta = segmentation->Eta(copyNum64);
-        hit->phi = segmentation->Phi(copyNum64);
-        hit->depth = segmentation->Depth(copyNum64);
         coll->add(cellID, hit);
       }
+
       G4Track * track =  step->GetTrack();
+
       if(track->GetDefinition()==G4OpticalPhoton::OpticalPhotonDefinition()) {
-        float wavelength=convertEvtoNm(track->GetTotalEnergy()/eV);
-        int ibin=-1;
-        float binsize=(hit->wavelen_max-hit->wavelen_min)/hit->nbins;
-        ibin = (wavelength-hit->wavelen_min)/binsize;
+
         float avgarrival=(pretime+posttime)/2.;
-        int jbin=-1;
-        float tbinsize=(hit->time_max-hit->time_min)/hit->nbins;
-        jbin = (avgarrival-hit->time_min)/tbinsize;
+
+        // count 1st and kill
+        // apply scale factor and poisson smearing offline
 
         int phstep = track->GetCurrentStepNumber();
 
         if (track->GetCreatorProcess()->G4VProcess::GetProcessName()=="CerenkovPhys") {
-          std::string amedia = ((track->GetMaterial())->GetName());
-          if(amedia.find("Silicon")!=std::string::npos)
-          {
-            if(phstep>1) {
-              hit->ncerenkov+=1;
-              if(ibin>-1 && ibin<hit->nbins) ((hit->nwavelen_cer).at(ibin)) +=1;
-              if(jbin>-1 && jbin<hit->nbins) ((hit->ntime_cer).at(jbin)) +=1;
-            }
-            track->SetTrackStatus(fStopAndKill);
+          if(phstep==1) {
+            float tAvgC_new = (((hit->tAvgC)*(hit->nCerenkovProd)) +avgarrival)/(hit->nCerenkovProd+1);
+            hit->nCerenkovProd+=1;
+            hit->tAvgC = tAvgC_new;
           }
-          else {
-            if(phstep==1) {
-              hit->ncerenkov+=1;
-              if(ibin>-1 && ibin<hit->nbins) ((hit->nwavelen_cer).at(ibin)) +=1;
-              if(jbin>-1 && jbin<hit->nbins) ((hit->ntime_cer).at(jbin)) +=1;
-            }
-          }
+          track->SetTrackStatus(fStopAndKill);
         } 
+
         else if (track->GetCreatorProcess()->G4VProcess::GetProcessName()=="ScintillationPhys") {
-          std::string amedia = ((track->GetMaterial())->GetName());
-          if(amedia.find("Silicon")!=std::string::npos)
-          {
-            if(phstep>1) {
-              hit->nscintillator+=1;
-              if((ibin>-1)&&(ibin<hit->nbins)) ((hit->nwavelen_scint).at(ibin))+=1;
-              if(jbin>-1&&jbin<hit->nbins) ((hit->ntime_scint).at(jbin))+=1;
-            }
-            track->SetTrackStatus(fStopAndKill);
+          if(phstep==1) {
+            float tAvgS_new = (((hit->tAvgS)*(hit->nScintillationProd)) +avgarrival)/(hit->nScintillationProd+1);
+            hit->nScintillationProd+=1;
+            hit->tAvgS = tAvgS_new;
           }
-          else {
-            if((track->GetCurrentStepNumber()==1)) {
-              hit->nscintillator+=1; 
-              if((ibin>-1)&&(ibin<hit->nbins)) ((hit->nwavelen_scint).at(ibin))+=1;
-              if(jbin>-1&&jbin<hit->nbins) ((hit->ntime_scint).at(jbin))+=1;
-            }
-          }
+          track->SetTrackStatus(fStopAndKill);
         }
+
       }
+
       hit->truth.emplace_back(contrib);
       hit->energyDeposit+=edep;
       mark(h.track);

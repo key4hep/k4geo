@@ -2,8 +2,8 @@
 // Author: Wonyong Chung
 //         Princeton University
 //===============================
-#ifndef SCEPCalSegmentation_h
-#define SCEPCalSegmentation_h 1
+#ifndef SCEPCalSegmentation_k4geo_h
+#define SCEPCalSegmentation_k4geo_h 1
 #include "DDSegmentation/Segmentation.h"
 #include "TVector3.h"
 #include "DD4hep/DetFactoryHelper.h"
@@ -13,15 +13,15 @@
 namespace dd4hep {
 namespace DDSegmentation {
 
-class SCEPCalSegmentation : public Segmentation {
+class SCEPCalSegmentation_k4geo : public Segmentation {
     public:
-        SCEPCalSegmentation(const std::string& aCellEncoding);
-        SCEPCalSegmentation(const BitFieldCoder* decoder);
-        virtual ~SCEPCalSegmentation() override;
+        SCEPCalSegmentation_k4geo(const std::string& aCellEncoding);
+        SCEPCalSegmentation_k4geo(const BitFieldCoder* decoder);
+        virtual ~SCEPCalSegmentation_k4geo() override;
 
         virtual Vector3D position(const CellID& aCellID) const;
 
-        virtual Vector3D myPosition(const CellID& aCellID) ;
+        virtual Vector3D myPosition(const CellID& aCellID) const;
 
         virtual CellID cellID(const Vector3D& aLocalPosition,
                               const Vector3D& aGlobalPosition,

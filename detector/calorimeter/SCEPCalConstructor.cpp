@@ -3,7 +3,7 @@
 //         Princeton University
 //===============================
 
-#include "detectorSegmentations/SCEPCalSegmentationHandle.h"
+#include "detectorSegmentations/SCEPCalSegmentationHandle_k4geo.h"
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/DetectorTools.h"
 #include "DD4hep/Printout.h"
@@ -34,7 +34,7 @@ create_detector_SCEPCal(dd4hep::Detector &theDetector,xml_h xmlElement,dd4hep::S
   xml_comp_t timingLgXML                 =detectorXML.child(_Unicode(timingLayerLg));
   xml_comp_t sipmLgXML                   =detectorXML.child(_Unicode(sipmLg));
   xml_comp_t sipmTrXML                   =detectorXML.child(_Unicode(sipmTr));
-  xml_comp_t instXML                     =detectorXML.child(_Unicode(inst));
+  // xml_comp_t instXML                     =detectorXML.child(_Unicode(inst));
   xml_comp_t timingAssemblyGlobalVisXML  =detectorXML.child(_Unicode(timingAssemblyGlobalVis));
   xml_comp_t barrelAssemblyGlobalVisXML  =detectorXML.child(_Unicode(barrelAssemblyGlobalVis));
   xml_comp_t endcapAssemblyGlobalVisXML  =detectorXML.child(_Unicode(endcapAssemblyGlobalVis));
@@ -45,7 +45,7 @@ create_detector_SCEPCal(dd4hep::Detector &theDetector,xml_h xmlElement,dd4hep::S
   dd4hep::Material timingLgMat           =theDetector.material(timingLgXML.materialStr());
   dd4hep::Material sipmLgMat             =theDetector.material(sipmLgXML.materialStr());
   dd4hep::Material sipmTrMat             =theDetector.material(sipmTrXML.materialStr());
-  dd4hep::Material instMat               =theDetector.material(instXML.materialStr());
+  // dd4hep::Material instMat               =theDetector.material(instXML.materialStr());
   const double  EBz                      =dimXML.attr<double>(_Unicode(barrelHalfZ));
   const double  Rin                      =dimXML.attr<double>(_Unicode(barrelInnerR));
   const double  nomfw                    =dimXML.attr<double>(_Unicode(crystalFaceWidthNominal));
@@ -56,8 +56,8 @@ create_detector_SCEPCal(dd4hep::Detector &theDetector,xml_h xmlElement,dd4hep::S
   const int     PHI_SEGMENTS             =dimXML.attr<int>(_Unicode(phiSegments));
   const int     N_PROJECTIVE_FILL        =dimXML.attr<int>(_Unicode(projectiveFill));
   const bool    CONSTRUCT_TIMING         =timingXML.attr<bool>(_Unicode(construct));
-  const int     TIMING_PHI_START         =timingXML.attr<int>(_Unicode(phistart));
-  const int     TIMING_PHI_END           =timingXML.attr<int>(_Unicode(phiend));
+  // const int     TIMING_PHI_START         =timingXML.attr<int>(_Unicode(phistart));
+  // const int     TIMING_PHI_END           =timingXML.attr<int>(_Unicode(phiend));
   const bool    CONSTRUCT_BARREL         =barrelXML.attr<bool>(_Unicode(construct));
   const int     BARREL_PHI_START         =barrelXML.attr<int>(_Unicode(phistart));
   const int     BARREL_PHI_END           =barrelXML.attr<int>(_Unicode(phiend));
@@ -93,30 +93,30 @@ create_detector_SCEPCal(dd4hep::Detector &theDetector,xml_h xmlElement,dd4hep::S
   int           nCy                      =floor(lT/nomth);
   double        actY                     =lT/nCy;
   double        actX                     =2*wT/nCy;
-  double        r2slice_end              =r0slice_end+Fdz+Rdz;
-  double        z2slice_end              =r2slice_end*cos(thC_end)+PROJECTIVE_GAP;
-  double        Rin2slice_end            =r2slice_end*sin(thC_end);
-  double        y2slice_end              =r2slice_end*tan(D_THETA_BARREL/2.);
-  double        slice_front_jut2         =y2slice_end*sin(M_PI/2-thC_end);
-  double        slice_side_jut2          =y2slice_end*cos(M_PI/2-thC_end);
+  // double        r2slice_end              =r0slice_end+Fdz+Rdz;
+  // double        z2slice_end              =r2slice_end*cos(thC_end)+PROJECTIVE_GAP;
+  // double        Rin2slice_end            =r2slice_end*sin(thC_end);
+  // double        y2slice_end              =r2slice_end*tan(D_THETA_BARREL/2.);
+  // double        slice_front_jut2         =y2slice_end*sin(M_PI/2-thC_end);
+  // double        slice_side_jut2          =y2slice_end*cos(M_PI/2-thC_end);
   double        barrelSlice_z1           =z0slice_end+slice_side_jut;
   double        barrelSlice_z2           =y2slice;
-  double        barrelSlice_rmin2        =Rin2slice_end-slice_front_jut2;
+  // double        barrelSlice_rmin2        =Rin2slice_end-slice_front_jut2;
   double        thCEnd                   =THETA_SIZE_ENDCAP-D_THETA_ENDCAP/2;
   double        thCBeg                   =D_THETA_ENDCAP/2+ENDCAP_THETA_START*D_THETA_ENDCAP;
   double        r0eEnd                   =EBz/cos(thCEnd);
-  double        r2eEnd                   =r0eEnd+Fdz+Rdz;
-  double        y2eEnd                   =r2eEnd*tan(D_THETA_ENDCAP/2.);
+  // double        r2eEnd                   =r0eEnd+Fdz+Rdz;
+  // double        y2eEnd                   =r2eEnd*tan(D_THETA_ENDCAP/2.);
   double        r0eBeg                   =EBz/cos(thCBeg);
   double        r2eBeg                   =r0eBeg+Fdz+Rdz;
   double        y2eBeg                   =r2eBeg*tan(D_THETA_ENDCAP/2.);
   double        aEnd                     =r0eEnd/cos(D_THETA_ENDCAP/2);
-  double        bEnd                     =sqrt(r2eEnd*r2eEnd+y2eEnd*y2eEnd);
+  // double        bEnd                     =sqrt(r2eEnd*r2eEnd+y2eEnd*y2eEnd);
   double        z1End                    =aEnd*cos(thCEnd+D_THETA_ENDCAP/2);
-  double        z2End                    =bEnd*cos(thCEnd-D_THETA_ENDCAP/2);
-  double        aBeg                     =r0eBeg/cos(D_THETA_ENDCAP/2);
+  // double        z2End                    =bEnd*cos(thCEnd-D_THETA_ENDCAP/2);
+  // double        aBeg                     =r0eBeg/cos(D_THETA_ENDCAP/2);
   double        bBeg                     =sqrt(r2eBeg*r2eBeg+y2eBeg*y2eBeg);
-  double        z1Beg                    =aBeg*cos(thCBeg+D_THETA_ENDCAP/2);
+  // double        z1Beg                    =aBeg*cos(thCBeg+D_THETA_ENDCAP/2);
   double        z2Beg                    =bBeg*cos(thCBeg-D_THETA_ENDCAP/2);
   double        z1rmaxE                  =z1End*tan(thCEnd+D_THETA_ENDCAP/2);
   double        z2rmaxE                  =z2Beg*tan(thCEnd+D_THETA_ENDCAP/2);
@@ -175,7 +175,7 @@ create_detector_SCEPCal(dd4hep::Detector &theDetector,xml_h xmlElement,dd4hep::S
   dd4hep::Readout readout=sens.readout();
   dd4hep::Segmentation geomseg=readout.segmentation();
   dd4hep::Segmentation* _geoSeg=&geomseg;
-  auto segmentation=dynamic_cast<dd4hep::DDSegmentation::SCEPCalSegmentation *>(_geoSeg->segmentation());
+  auto segmentation=dynamic_cast<dd4hep::DDSegmentation::SCEPCalSegmentation_k4geo *>(_geoSeg->segmentation());
   segmentation->setGeomParams(Fdz,Rdz,nomfw,nomth,EBz,Rin,sipmth,PHI_SEGMENTS,N_PROJECTIVE_FILL);
 
   std::vector<double> zTimingPolyhedra   ={-barrelSlice_z1,barrelSlice_z1};
@@ -211,10 +211,10 @@ create_detector_SCEPCal(dd4hep::Detector &theDetector,xml_h xmlElement,dd4hep::S
   int  endcapAssemblyVolId32=segmentation->getFirst32bits(endcapAssemblyVolId);
   auto endcap1AssemblyVolId  =segmentation->setVolumeID(2,1,0,0);
   int  endcap1AssemblyVolId32=segmentation->getFirst32bits(endcap1AssemblyVolId);
-  dd4hep::PlacedVolume timingPlacedVol =experimentalHall.placeVolume(timingAssemblyVol,timingAssemblyVolId32);
+  experimentalHall.placeVolume(timingAssemblyVol,timingAssemblyVolId32);
   dd4hep::PlacedVolume barrelPlacedVol =experimentalHall.placeVolume(barrelAssemblyVol,barrelAssemblyVolId32);
-  dd4hep::PlacedVolume endcapPlacedVol =experimentalHall.placeVolume(endcapAssemblyVol,endcapAssemblyVolId32);
-  dd4hep::PlacedVolume endcap1PlacedVol=experimentalHall.placeVolume(endcap1AssemblyVol,endcap1AssemblyVolId32);
+  experimentalHall.placeVolume(endcapAssemblyVol,endcapAssemblyVolId32);
+  experimentalHall.placeVolume(endcap1AssemblyVol,endcap1AssemblyVolId32);
 
   ScepcalDetElement.setPlacement(barrelPlacedVol);
 
@@ -231,7 +231,7 @@ create_detector_SCEPCal(dd4hep::Detector &theDetector,xml_h xmlElement,dd4hep::S
     RotationZ rotZPhi(phiEnvBarrel);
     double rTimingAssembly=rT+nomth;
     Position dispTimingAssembly(rTimingAssembly*cos(phiEnvBarrel),rTimingAssembly*sin(phiEnvBarrel),0);
-    dd4hep::PlacedVolume timingPhiAssemblyPlacedVol=timingAssemblyVol.placeVolume(timingPhiAssemblyVolume,Transform3D(rotZPhi,dispTimingAssembly));
+    timingAssemblyVol.placeVolume(timingPhiAssemblyVolume,Transform3D(rotZPhi,dispTimingAssembly));
 
     dd4hep::Box timingCrystalLg(nomth/2,actX/2,lT/2-sipmth);
     dd4hep::Box timingCrystalTr(nomth/2,wT-sipmth,actY/2);
@@ -255,7 +255,7 @@ create_detector_SCEPCal(dd4hep::Detector &theDetector,xml_h xmlElement,dd4hep::S
       dd4hep::Volume tileAssemblyVolume("tileAssembly",tileAssemblyShape,theDetector.material("Vacuum"));
       tileAssemblyVolume.setVisAttributes(theDetector,scepcalAssemblyXML.visStr());
       Position dispTileAssembly(0,0,-y1slice+nTile*lT+lT/2);
-      dd4hep::PlacedVolume tileAssemblyPlacedVol=timingPhiAssemblyVolume.placeVolume(tileAssemblyVolume,dispTileAssembly);
+      timingPhiAssemblyVolume.placeVolume(tileAssemblyVolume,dispTileAssembly);
 
       for (int nC=0;nC<nCy;nC++) {
         int phiEnvBarrelSign=iPhi%2==0? 1:-1;
@@ -327,7 +327,7 @@ create_detector_SCEPCal(dd4hep::Detector &theDetector,xml_h xmlElement,dd4hep::S
       dd4hep::EightPointSolid barrelPhiAssemblyShape(zheight_slice,verticesS);
       dd4hep::Volume barrelPhiAssemblyVolume("barrelPhiAssembly",barrelPhiAssemblyShape,theDetector.material("Vacuum"));
       barrelPhiAssemblyVolume.setVisAttributes(theDetector,scepcalAssemblyXML.visStr());
-      dd4hep::PlacedVolume barrelPhiAssemblyPlacedVol=barrelAssemblyVol.placeVolume(barrelPhiAssemblyVolume,Transform3D(rotSlice,dispSlice));
+      barrelAssemblyVol.placeVolume(barrelPhiAssemblyVolume,Transform3D(rotSlice,dispSlice));
 
       for (int iTheta=0; iTheta<N_THETA_BARREL; iTheta++) {
         double thC  =THETA_SIZE_ENDCAP+D_THETA_BARREL/2+(iTheta*D_THETA_BARREL);
@@ -486,8 +486,8 @@ create_detector_SCEPCal(dd4hep::Detector &theDetector,xml_h xmlElement,dd4hep::S
     dd4hep::Volume    endcap1RingAssemblyVolume("endcapRingAssembly",endcapRingAssemblyShape,theDetector.material("Vacuum"));
     endcap1RingAssemblyVolume.setVisAttributes(theDetector,scepcalAssemblyXML.visStr());
     RotationY rotMirror(M_PI);
-    dd4hep::PlacedVolume endcapRingAssemblyPlacedVol=endcapAssemblyVol.placeVolume(endcapRingAssemblyVolume);
-    dd4hep::PlacedVolume endcap1RingAssemblyPlacedVol=endcap1AssemblyVol.placeVolume(endcap1RingAssemblyVolume,Transform3D(rotMirror));
+    endcapAssemblyVol.placeVolume(endcapRingAssemblyVolume);
+    endcap1AssemblyVol.placeVolume(endcap1RingAssemblyVolume,Transform3D(rotMirror));
 
     for (int iPhi=ENDCAP_PHI_START;iPhi<ENDCAP_PHI_END;iPhi++) {
       double phiEnvEndcap=iPhi*D_PHI_GLOBAL;

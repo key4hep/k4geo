@@ -2,7 +2,7 @@
 // Author: Wonyong Chung
 //         Princeton University
 //===============================
-#include "detectorSegmentations/SCEPCalSegmentation.h"
+#include "detectorSegmentations/SCEPCalSegmentation_k4geo.h"
 #include <climits>
 #include <cmath>
 #include <stdexcept>
@@ -10,8 +10,8 @@
 namespace dd4hep {
 namespace DDSegmentation {
 
-SCEPCalSegmentation::SCEPCalSegmentation(const std::string& cellEncoding) : Segmentation(cellEncoding) {
-    _type = "SCEPCalSegmentation";
+SCEPCalSegmentation_k4geo::SCEPCalSegmentation_k4geo(const std::string& cellEncoding) : Segmentation(cellEncoding) {
+    _type = "SCEPCalSegmentation_k4geo";
     _description = "SCEPCal segmentation based on side/eta/phi/depth/S/C";
     registerIdentifier("identifier_system", "Cell ID identifier for numSystem", fSystemId, "system");
     registerIdentifier("identifier_eta", "Cell ID identifier for numEta", fEtaId, "eta");
@@ -19,8 +19,8 @@ SCEPCalSegmentation::SCEPCalSegmentation(const std::string& cellEncoding) : Segm
     registerIdentifier("identifier_depth", "Cell ID identifier for numDepth", fDepthId, "depth");
 }
 
-SCEPCalSegmentation::SCEPCalSegmentation(const BitFieldCoder* decoder) : Segmentation(decoder) {
-    _type = "SCEPCalSegmentation";
+SCEPCalSegmentation_k4geo::SCEPCalSegmentation_k4geo(const BitFieldCoder* decoder) : Segmentation(decoder) {
+    _type = "SCEPCalSegmentation_k4geo";
     _description = "SCEPCal segmentation based on side/eta/phi/depth/S/C";
     registerIdentifier("identifier_system", "Cell ID identifier for numSystem", fSystemId, "system");
     registerIdentifier("identifier_eta", "Cell ID identifier for Eta", fEtaId, "eta");
@@ -28,13 +28,13 @@ SCEPCalSegmentation::SCEPCalSegmentation(const BitFieldCoder* decoder) : Segment
     registerIdentifier("identifier_depth", "Cell ID identifier for Depth", fDepthId, "depth");
 }
 
-SCEPCalSegmentation::~SCEPCalSegmentation() {}
+SCEPCalSegmentation_k4geo::~SCEPCalSegmentation_k4geo() {}
 
-Vector3D SCEPCalSegmentation::position(const CellID& cID) const {
-    return Vector3D(0,0,0);
+Vector3D SCEPCalSegmentation_k4geo::position(const CellID& cID) const {
+    return myPosition(cID);
 };
 
-Vector3D SCEPCalSegmentation::myPosition(const CellID& cID) {
+Vector3D SCEPCalSegmentation_k4geo::myPosition(const CellID& cID) const {
 
     int copyNum = (int)cID;
 
@@ -54,7 +54,7 @@ Vector3D SCEPCalSegmentation::myPosition(const CellID& cID) {
 
     double  D_PHI_GLOBAL        =2*M_PI/PHI_SEGMENTS;
     double  PROJECTIVE_GAP      =(N_PROJECTIVE_FILL*nomfw)/2;
-    double  THETA_SIZE_BARREL   =atan(EBz/Rin);
+    // double  THETA_SIZE_BARREL   =atan(EBz/Rin);
     double  THETA_SIZE_ENDCAP   =atan(Rin/EBz);
     int     N_THETA_BARREL      =2*floor(EBz/nomfw);
     int     N_THETA_ENDCAP      =floor(Rin/nomfw);
@@ -69,7 +69,7 @@ Vector3D SCEPCalSegmentation::myPosition(const CellID& cID) {
         double y0slice_end     =r0slice_end*tan(D_THETA_BARREL/2.);
         double slice_front_jut =y0slice_end*sin(M_PI/2-thC_end);
         double z1slice         =Rin -slice_front_jut;
-        double z2slice         =Rin +Fdz +Rdz +slice_front_jut;
+        // double z2slice         =Rin +Fdz +Rdz +slice_front_jut;
         double y1slice         =z1slice*tan(M_PI/2-THETA_SIZE_ENDCAP) +PROJECTIVE_GAP;
         double phiTiming       =nPhi_in*D_PHI_GLOBAL;
         double rT              =z1slice -2*nomth;
@@ -180,13 +180,13 @@ Vector3D SCEPCalSegmentation::myPosition(const CellID& cID) {
     return Vector3D(0,0,0);
 }
 
-CellID SCEPCalSegmentation::cellID(const Vector3D& /*localPosition*/, 
+CellID SCEPCalSegmentation_k4geo::cellID(const Vector3D& /*localPosition*/, 
                                    const Vector3D& /*globalPosition*/, 
                                    const VolumeID& vID) const {
     return setCellID(System(vID), Eta(vID), Phi(vID), Depth(vID) );
 }
 
-VolumeID SCEPCalSegmentation::setVolumeID(int System, int Eta, int Phi, int Depth) const {
+VolumeID SCEPCalSegmentation_k4geo::setVolumeID(int System, int Eta, int Phi, int Depth) const {
     VolumeID SystemId = static_cast<VolumeID>(System);
     VolumeID EtaId = static_cast<VolumeID>(Eta);
     VolumeID PhiId = static_cast<VolumeID>(Phi);
@@ -199,7 +199,7 @@ VolumeID SCEPCalSegmentation::setVolumeID(int System, int Eta, int Phi, int Dept
     return vID;
 }
 
-CellID SCEPCalSegmentation::setCellID(int System, int Eta, int Phi, int Depth) const {
+CellID SCEPCalSegmentation_k4geo::setCellID(int System, int Eta, int Phi, int Depth) const {
     VolumeID SystemId = static_cast<VolumeID>(System);
     VolumeID EtaId = static_cast<VolumeID>(Eta);
     VolumeID PhiId = static_cast<VolumeID>(Phi);
@@ -212,33 +212,33 @@ CellID SCEPCalSegmentation::setCellID(int System, int Eta, int Phi, int Depth) c
     return vID;
 }
 
-int SCEPCalSegmentation::System(const CellID& aCellID) const {
+int SCEPCalSegmentation_k4geo::System(const CellID& aCellID) const {
     VolumeID System = static_cast<VolumeID>(_decoder->get(aCellID, fSystemId));
     return static_cast<int>(System);
 }
 
-int SCEPCalSegmentation::Eta(const CellID& aCellID) const {
+int SCEPCalSegmentation_k4geo::Eta(const CellID& aCellID) const {
     VolumeID Eta = static_cast<VolumeID>(_decoder->get(aCellID, fEtaId));
     return static_cast<int>(Eta);
 }
 
-int SCEPCalSegmentation::Phi(const CellID& aCellID) const {
+int SCEPCalSegmentation_k4geo::Phi(const CellID& aCellID) const {
     VolumeID Phi = static_cast<VolumeID>(_decoder->get(aCellID, fPhiId));
     return static_cast<int>(Phi);
 }
 
-int SCEPCalSegmentation::Depth(const CellID& aCellID) const {
+int SCEPCalSegmentation_k4geo::Depth(const CellID& aCellID) const {
     VolumeID Depth = static_cast<VolumeID>(_decoder->get(aCellID, fDepthId));
     return static_cast<int>(Depth);
 }
 
-int SCEPCalSegmentation::getLast32bits(const CellID& aCellID) const {
+int SCEPCalSegmentation_k4geo::getLast32bits(const CellID& aCellID) const {
     CellID aId64 = aCellID >> sizeof(int)*CHAR_BIT;
     int aId32 = (int)aId64;
     return aId32;
 }
 
-CellID SCEPCalSegmentation::convertLast32to64(const int aId32) const {
+CellID SCEPCalSegmentation_k4geo::convertLast32to64(const int aId32) const {
     CellID aId64 = (CellID)aId32;
     aId64 <<= sizeof(int)*CHAR_BIT;
     return aId64;

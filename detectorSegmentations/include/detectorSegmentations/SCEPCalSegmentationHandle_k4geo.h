@@ -2,9 +2,9 @@
 // Author: Wonyong Chung
 //         Princeton University
 //===============================
-#ifndef SCEPCalSegmentationHandle_h
-#define SCEPCalSegmentationHandle_h 1
-#include "detectorSegmentations/SCEPCalSegmentation.h"
+#ifndef SCEPCalSegmentationHandle_k4geo_h
+#define SCEPCalSegmentationHandle_k4geo_h 1
+#include "detectorSegmentations/SCEPCalSegmentation_k4geo.h"
 #include "DD4hep/Segmentations.h"
 #include "DD4hep/detail/SegmentationsInterna.h"
 
@@ -14,21 +14,21 @@ class Segmentation;
 template <typename T>
 class SegmentationWrapper;
 
-typedef Handle<SegmentationWrapper<DDSegmentation::SCEPCalSegmentation>> SCEPCalSegmentationHandle;
+typedef Handle<SegmentationWrapper<DDSegmentation::SCEPCalSegmentation_k4geo>> SCEPCalSegmentationHandle_k4geo;
 
-class SCEPCalSegmentation : public SCEPCalSegmentationHandle {
+class SCEPCalSegmentation_k4geo : public SCEPCalSegmentationHandle_k4geo {
 public:
-    typedef SCEPCalSegmentationHandle::Object Object;
+    typedef SCEPCalSegmentationHandle_k4geo::Object Object;
 
 public:
-    SCEPCalSegmentation() = default;
-    SCEPCalSegmentation(const SCEPCalSegmentation& e) = default;
-    SCEPCalSegmentation(const Segmentation& e) : Handle<Object>(e) {}
-    SCEPCalSegmentation(const Handle<Object>& e) : Handle<Object>(e) {}
+    SCEPCalSegmentation_k4geo() = default;
+    SCEPCalSegmentation_k4geo(const SCEPCalSegmentation_k4geo& e) = default;
+    SCEPCalSegmentation_k4geo(const Segmentation& e) : Handle<Object>(e) {}
+    SCEPCalSegmentation_k4geo(const Handle<Object>& e) : Handle<Object>(e) {}
     template <typename Q>
-    SCEPCalSegmentation(const Handle<Q>& e) : Handle<Object>(e) {}
-    SCEPCalSegmentation& operator=(const SCEPCalSegmentation& seg) = default;
-    bool operator==(const SCEPCalSegmentation& seg) const { return m_element == seg.m_element; }
+    SCEPCalSegmentation_k4geo(const Handle<Q>& e) : Handle<Object>(e) {}
+    SCEPCalSegmentation_k4geo& operator=(const SCEPCalSegmentation_k4geo& seg) = default;
+    bool operator==(const SCEPCalSegmentation_k4geo& seg) const { return m_element == seg.m_element; }
 
     inline Position position(const CellID& id) const {
         return Position(access()->implementation->position(id));
