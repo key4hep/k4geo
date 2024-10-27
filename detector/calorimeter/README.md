@@ -55,3 +55,9 @@ Changes wrt o1_v01: Added extension (LayeredCalorimeterData) to store radial lay
 ### o1_v01
 This sub-detector makes full 4-pi monolithic fiber dual-readout calorimeter.
 Inside the single tower (trapezoidal copper absorber), two types of optical fibers (Cherenkov and scintillation) are implemented. The readout (SiPM) is attached at the rear side of the tower. The tower is repeated in both eta and phi direction to cover both barrel and endcap region.
+
+## dual-readout-tubes
+
+### o1_v01
+This folder containes the subdetectors (endcap + barrel) to make a full 4-pi fiber dual-readout calorimeter exploiting the INFN capillary-tubes technology. Each trapezoidal tower is constructed with brass capillary-tubes housing optical fibers (Cherenkov and scintillating).
+For the moment, only the endcap subdetector is included, the barrel will be added with a dedicated PR.
