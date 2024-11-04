@@ -126,11 +126,11 @@
         </active>
         <passive>
           <rotation angle="InclinationAngle"/>  <!-- inclination angle -->
-          <inner thickness="Pb_thickness" sensitive="false">
-            <material name="Lead"/>
+          <inner thickness="Pb_thickness" sensitive="false"> <!-- thickness of inner part of the absorber, at Rmin, and whether its is active in layer 1 -->
+            <material name="G10"/> <!-- material of the inner part of the absorber, in the first layer of the calorimeter -->
           </inner>
-          <innerMax thickness="Pb_thickness_max" sensitive="false">
-            <material name="Lead"/>
+          <innerMax thickness="Pb_thickness_max" sensitive="false"> <!-- thickness of the inner part of the absorber, at Rmax, and whether its is active in layers 2-N -->
+            <material name="Lead"/> <!-- material of the inner part of the absorber, in the other layers (2-N) of the calorimeter -->
           </innerMax>
           <glue thickness="Glue_thickness" sensitive="false">
             <material name="lArCaloGlue"/>
