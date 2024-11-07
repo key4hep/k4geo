@@ -12,3 +12,5 @@ Magnetic fields (solenoid + MDI) have been added.
 Added "turbine-style" endcap ecal, and invoke this in the top-level xml (replacing the coneCyro geometry).
 Added HCalBarrel_TileCal_v02.xml which uses HCalTileBarrel_o1_v02_geo.cpp and removed unused readout BarHCal_Readout_phi. 
 Added HCalEndcaps_ThreeParts_TileCal_v02.xml which uses HCalThreePartsEndcap_o1_v02_geo.cpp. Additionally, wrt v02 the readout was migrated to the theta-phi segmentation; unused readout *Readout_phi was removed; radial dimensions of layers were modified, so the outer radius of all three cylinders is the same. 
+
+ALLEGRO_o1_v04: same as v03, but material in inner part of absorber in first layer of ECAL is configurable and set by default to G10
