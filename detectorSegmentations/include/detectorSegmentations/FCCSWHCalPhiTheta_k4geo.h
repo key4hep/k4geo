@@ -26,9 +26,8 @@ namespace dd4hep {
         virtual ~FCCSWHCalPhiTheta_k4geo() = default;
 
         /**  Determine the position of HCal cell based on the cellID.
-        *   @warning This segmentation has no knowledge of radius, so radius = 1 is taken into calculations.
         *   @param[in] aCellId ID of a cell.
-        *   return Position (radius = 1).
+        *   return Position.
         */
         virtual Vector3D position(const CellID& aCellID) const;
 
@@ -40,6 +39,12 @@ namespace dd4hep {
         */
         virtual CellID cellID(const Vector3D& aLocalPosition, const Vector3D& aGlobalPosition,
                         const VolumeID& aVolumeID) const;
+
+        /**  Find neighbours of the cell
+        *   @param[in] aCellId ID of a cell.
+        *   return vector of neighbour cellIDs.
+        */
+	std::vector<uint64_t> neighbours(const CellID& cID) const;
 
         /**  Calculate layer radii and edges in z-axis, then define cell edges in each layer using defineCellEdges().
         */
@@ -119,6 +124,17 @@ namespace dd4hep {
         inline Vector3D centerPosition(const CellID& cID) const;
 
 
+        /**  Determine the minimum and maximum polar angle of HCal cell based on the cellID.
+        *   @param[in] aCellId ID of a cell.
+        *   return Theta.
+        */
+        std::array<double, 2> cellTheta(const CellID& cID) const;
+
+        /**  Get the min and max layer indexes of each HCal part.
+        * For Endcap, returns the three elements vector, while for Barrel - single element vector.
+        */
+	std::vector<std::pair<uint,uint> > getMinMaxLayerId() const ;
+
         /**  Set the number of bins in azimuthal angle.
         *   @param[in] aNumberBins Number of bins in phi.
         */
@@ -183,6 +199,8 @@ namespace dd4hep {
         mutable std::vector<double> m_radii;
         /// z-min and z-max of each layer
         mutable std::vector<std::pair<double, double> >  m_layerEdges;
+        /// dR of each layer
+        mutable std::vector<double>  m_layerDepth;
         /// theta bins (cells) in each layer
         mutable std::vector<std::vector<int> > m_thetaBins;
         /// z-min and z-max of each cell (theta bin) in each layer
