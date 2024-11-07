@@ -57,6 +57,19 @@
          offset_phi="-pi+(pi/BarHCal_n_phi_modules)"/>
       <id>system:4,layer:5,row:9,theta:9,phi:10</id>
     </readout>
+    <readout name="HCalBarrelReadoutPhiRow">
+      <segmentation type="FCCSWHCalPhiRow_k4geo" 
+         offset_z="0"
+         width_z="279.55*2"
+         offset_r="BarHCal_rmin+BarHCal_face_plate_thickness+BarHCal_plate_space"
+         numLayers="4 6 3"
+         dRlayer="50*mm 100*mm 200*mm"
+         grid_size_row="1 1 1 1 1 1 1 1 1 1 1 1 1"
+         dz_row="2*BarHCal_master_plate_thickness + BarHCal_spacer_plate_thickness + BarHCal_scintillator_thickness + 2*BarHCal_air_space_thickness"
+         phi_bins="BarHCal_n_phi_modules"
+         offset_phi="-pi+(pi/BarHCal_n_phi_modules)"/>
+      <id>system:4,layer:5,row:9,phi:10</id>
+    </readout>
   </readouts>
 
   <detectors>

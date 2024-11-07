@@ -56,6 +56,19 @@
          offset_phi="-pi+(pi/EndcapHCal_n_phi_modules)"/>
       <id>system:4,type:3,layer:6,row:11,theta:11,phi:10</id>
     </readout>
+    <readout name="HCalEndcapReadoutPhiRow">
+      <segmentation type="FCCSWHCalPhiRow_k4geo" 
+         offset_z="HCalEndcap_min_z1+(HCalEndcap_max_z1-HCalEndcap_min_z1)*0.5 HCalEndcap_min_z2+(HCalEndcap_max_z2-HCalEndcap_min_z2)*0.5 HCalEndcap_min_z3+(HCalEndcap_max_z3-HCalEndcap_min_z3)*0.5" 
+         width_z="24.85*2 24.3*2 77.05*2"
+         offset_r="HCalEndcap_inner_radius1+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space HCalEndcap_inner_radius2+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space HCalEndcap_inner_radius3+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space"
+         numLayers="5 1 0  4 3 2  4 10 8"
+         dRlayer="100*mm 150*mm 250*mm"
+         grid_size_row="1 1 1 1 1 1   1 1 1 1 1 1 1 1 1   1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1"
+         dz_row="2*EndcapHCal_master_plate_thickness + EndcapHCal_spacer_plate_thickness + EndcapHCal_scintillator_thickness + 2*EndcapHCal_air_space_thickness" 
+         phi_bins="EndcapHCal_n_phi_modules" 
+         offset_phi="-pi+(pi/EndcapHCal_n_phi_modules)"/>
+      <id>system:4,type:3,layer:6,row:-8,phi:10</id>
+    </readout>
   </readouts>
 
   <!-- nmodules is the number of radial layers in the first part;

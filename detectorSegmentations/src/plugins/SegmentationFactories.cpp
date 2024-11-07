@@ -37,3 +37,6 @@ DECLARE_SEGMENTATION(FCCSWEndcapTurbine_k4geo, create_segmentation<dd4hep::DDSeg
 
 #include "detectorSegmentations/FCCSWHCalPhiTheta_k4geo.h"
 DECLARE_SEGMENTATION(FCCSWHCalPhiTheta_k4geo, create_segmentation<dd4hep::DDSegmentation::FCCSWHCalPhiTheta_k4geo>)
+
+#include "detectorSegmentations/FCCSWHCalPhiRow_k4geo.h"
+DECLARE_SEGMENTATION(FCCSWHCalPhiRow_k4geo, create_segmentation<dd4hep::DDSegmentation::FCCSWHCalPhiRow_k4geo>)
