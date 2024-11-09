@@ -614,8 +614,10 @@ std::vector<uint64_t> FCCSWHCalPhiRow_k4geo::neighbours(const CellID& cID) const
      }
    }
 
+/*
    // Now loop over the neighbours and add the cells from next/previous phi module
-   for(auto nID : cellNeighbours)
+   std::vector<uint64_t> cellNeighboursCopy(cellNeighbours);
+   for(auto nID : cellNeighboursCopy)
    {
      CellID newID = nID;
      // previous: if the current is 0 then previous is the last bin (id = m_phiBins - 1) else current - 1
@@ -634,7 +636,7 @@ std::vector<uint64_t> FCCSWHCalPhiRow_k4geo::neighbours(const CellID& cID) const
    // next: if the current is the last bin (id = m_phiBins - 1) then the next is the first bin (id = 0) else current + 1
    _decoder->set(nID,m_phiID, (_decoder->get(cID,m_phiID) == (m_phiBins - 1)) ? 0 : _decoder->get(cID,m_phiID) + 1);
    cellNeighbours.push_back(nID);
-
+*/
    return cellNeighbours;
 }
 

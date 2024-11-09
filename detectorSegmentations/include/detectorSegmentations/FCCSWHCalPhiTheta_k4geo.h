@@ -25,9 +25,9 @@ namespace dd4hep {
         /// destructor
         virtual ~FCCSWHCalPhiTheta_k4geo() = default;
 
-        /**  Determine the position of HCal cell based on the cellID.
-        *   @param[in] aCellId ID of a cell.
-        *   return Position.
+        /**  Get the postion of the geometric center of the cell based on the cellID
+        *   @param[in] aCellID
+        *   return the global coordinates of cell center
         */
         virtual Vector3D position(const CellID& aCellID) const;
 
@@ -116,13 +116,6 @@ namespace dd4hep {
         *   return The field name for phi.
         */
         inline const std::string& fieldNamePhi() const { return m_phiID; }
-
-        /**  Get the postion og the geometric center of the cell based on the cellID
-        *   @param[in] aCellID
-        *   return the global coordinates of cell center
-        */
-        inline Vector3D centerPosition(const CellID& cID) const;
-
 
         /**  Determine the minimum and maximum polar angle of HCal cell based on the cellID.
         *   @param[in] aCellId ID of a cell.
