@@ -38,7 +38,7 @@ FCCSWHCalPhiTheta_k4geo::FCCSWHCalPhiTheta_k4geo(const BitFieldCoder* decoder) :
 }
 
 
-/// determine the global position based on the cell ID
+/** /// determine the global position based on the cell ID
 Vector3D FCCSWHCalPhiTheta_k4geo::position(const CellID& cID) const {
   uint layer = _decoder->get(cID,"layer");
   double radius = 1.0;
@@ -48,11 +48,11 @@ Vector3D FCCSWHCalPhiTheta_k4geo::position(const CellID& cID) const {
 
   return positionFromRThetaPhi(radius, theta(cID), phi(cID));
 }
-
+**/
 
 /// determine the global position based on the cell ID
 /// returns the geometric center of the cell
-Vector3D FCCSWHCalPhiTheta_k4geo::centerPosition(const CellID& cID) const {
+Vector3D FCCSWHCalPhiTheta_k4geo::position(const CellID& cID) const {
   uint layer = _decoder->get(cID,"layer");
   int thetaID = _decoder->get(cID,"theta");
   double zpos = 0.;
@@ -678,7 +678,8 @@ std::vector<uint64_t> FCCSWHCalPhiTheta_k4geo::neighbours(const CellID& cID) con
    }
 
    // Now loop over the neighbours and add the cells from next/previous phi module
-   for(auto nID : cellNeighbours)
+   std::vector<uint64_t> cellNeighboursCopy(cellNeighbours);
+   for(auto nID : cellNeighboursCopy)
    {
      CellID newID = nID;
      // previous: if the current is 0 then previous is the last bin (id = m_phiBins - 1) else current - 1
