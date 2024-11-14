@@ -16,7 +16,7 @@ FCCSWHCalPhiRow_k4geo::FCCSWHCalPhiRow_k4geo(const std::string& cellEncoding) : 
   // register all necessary parameters
   registerParameter("phi_bins", "Number of bins phi", m_phiBins, 1);
   registerParameter("offset_phi", "Angular offset in phi", m_offsetPhi, 0., SegmentationParameter::AngleUnit, true);
-  registerParameter("grid_size_row", "Cell size in row", m_gridSizeRow, std::vector<int>());
+  registerParameter("grid_size_row", "Number of rows combined in a cell", m_gridSizeRow, std::vector<int>());
   registerParameter("dz_row", "dz of row", m_dz_row, 0.);
   registerParameter("offset_z", "Offset in z-axis of the layer center", m_offsetZ, std::vector<double>());
   registerParameter("width_z", "Width in z of the layer", m_widthZ, std::vector<double>());
@@ -35,7 +35,7 @@ FCCSWHCalPhiRow_k4geo::FCCSWHCalPhiRow_k4geo(const BitFieldCoder* decoder) : Seg
   // register all necessary parameters
   registerParameter("phi_bins", "Number of bins phi", m_phiBins, 1);
   registerParameter("offset_phi", "Angular offset in phi", m_offsetPhi, 0., SegmentationParameter::AngleUnit, true);
-  registerParameter("grid_size_row", "Cell size in row", m_gridSizeRow, std::vector<int>());
+  registerParameter("grid_size_row", "Number of rows combined in a cell", m_gridSizeRow, std::vector<int>());
   registerParameter("dz_row", "dz of row", m_dz_row, 0.);
   registerParameter("offset_z", "Offset in z-axis of the layer center", m_offsetZ, std::vector<double>());
   registerParameter("width_z", "Width in z of the layer", m_widthZ, std::vector<double>());
