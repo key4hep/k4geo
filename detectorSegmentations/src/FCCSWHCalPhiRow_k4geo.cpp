@@ -67,7 +67,7 @@ Vector3D FCCSWHCalPhiRow_k4geo::position(const CellID& cID) const {
   // calculate z-coordinate of the cell center
   double zpos = minLayerZ + (idx-1) * m_dz_row * m_gridSizeRow[layer] + 0.5 * m_dz_row * m_gridSizeRow[layer];
 
-  // for negative-z Endcap, the index is negetive (starts from -1!)
+  // for negative-z Endcap, the index is negative (starts from -1!)
   if(idx < 0) zpos = -minLayerZ + (idx+1) * m_dz_row * m_gridSizeRow[layer] - 0.5 * m_dz_row * m_gridSizeRow[layer];
 
   return Vector3D( radius * std::cos(phi), radius * std::sin(phi), zpos );
