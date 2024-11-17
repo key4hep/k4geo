@@ -334,7 +334,7 @@ std::vector<std::pair<uint,uint> > FCCSWHCalPhiTheta_k4geo::getMinMaxLayerId() c
 
 
 /// Calculates the neighbours of the given cell ID and adds them to the list of neighbours
-std::vector<uint64_t> FCCSWHCalPhiTheta_k4geo::neighbours(const CellID& cID) const {
+std::vector<uint64_t> FCCSWHCalPhiTheta_k4geo::neighbours(const CellID& cID, bool aDiagonal) const {
    std::vector<uint64_t> cellNeighbours;
 
    if(m_radii.empty()) defineCellsInRZplan();
@@ -448,6 +448,9 @@ std::vector<uint64_t> FCCSWHCalPhiTheta_k4geo::neighbours(const CellID& cID) con
    // deal with the Barrel
    if(m_offsetZ.size() == 1)
    {
+     double currentCellZmin = m_cellEdges[currentLayerId][currentCellThetaBin].first;
+     double currentCellZmax = m_cellEdges[currentLayerId][currentCellThetaBin].second;
+
      // if this is not the first layer then look for neighbours in the previous layer
      if(currentLayerId > minLayerId)
      {
@@ -463,21 +466,40 @@ std::vector<uint64_t> FCCSWHCalPhiTheta_k4geo::neighbours(const CellID& cID) con
        {
          _decoder->set(nID,m_thetaID,currentCellThetaBin - 1);
          cellNeighbours.push_back(nID); // add the cell from the previous layer of the same phi module
+         if(aDiagonal && currentCellThetaBin > (m_thetaBins[prevLayerId].front()+1))
+         {
+           //add the previous layer cell from the prev to prev theta bin if it overlaps with the current cell in z-coordinate
+           double zmin = m_cellEdges[prevLayerId][currentCellThetaBin - 2].first;
+           if(zmin <= currentCellZmax)
+           {
+             //add the previous layer cell from the prev to prev theta bin
+             _decoder->set(nID,m_thetaID,currentCellThetaBin - 2);
+             cellNeighbours.push_back(nID);
+           }
+         }
        }
        // if the cID is in the negative-z side and prev layer cell is not in the last theta bin then add the cell from previous theta bin
        if(theta(cID) > M_PI/2. && currentCellThetaBin < m_thetaBins[prevLayerId].back() ) 
        {
          _decoder->set(nID,m_thetaID,currentCellThetaBin + 1);
          cellNeighbours.push_back(nID); // add the cell from the previous layer of the same phi module
+         if(aDiagonal && currentCellThetaBin < (m_thetaBins[prevLayerId].back()-1))
+         {
+           //add the previous layer cell from the next to next theta bin if it overlaps with the current cell in z-coordinate
+           double zmax = m_cellEdges[prevLayerId][currentCellThetaBin + 2].second;
+           if(zmax >= currentCellZmin)
+           {
+             //add the previous layer cell from the next to next theta bin
+             _decoder->set(nID,m_thetaID,currentCellThetaBin + 2);
+             cellNeighbours.push_back(nID);
+           }
+         }
        }
      }
 
      // if this is not the last layer then look for neighbours in the next layer
      if(currentLayerId < maxLayerId)
      {
-       double currentCellZmin = m_cellEdges[currentLayerId][currentCellThetaBin].first;
-       double currentCellZmax = m_cellEdges[currentLayerId][currentCellThetaBin].second;
-
        CellID nID = cID ;
        int nextLayerId = currentLayerId + 1;
        _decoder->set(nID,"layer",nextLayerId);
@@ -492,13 +514,16 @@ std::vector<uint64_t> FCCSWHCalPhiTheta_k4geo::neighbours(const CellID& cID) con
          _decoder->set(nID,m_thetaID,currentCellThetaBin + 1);
          cellNeighbours.push_back(nID);
 
-         //add the next layer cell from the next-to-next theta bin if it overlaps with the current cell in z-coordinate
-         double zmax = m_cellEdges[nextLayerId][currentCellThetaBin + 2].second;
-         if(zmax >= currentCellZmin)
+         if(aDiagonal)
          {
-           //add the next layer cell from the next to next theta bin
-           _decoder->set(nID,m_thetaID,currentCellThetaBin + 2);
-           cellNeighbours.push_back(nID);
+           //add the next layer cell from the next-to-next theta bin if it overlaps with the current cell in z-coordinate
+           double zmax = m_cellEdges[nextLayerId][currentCellThetaBin + 2].second;
+           if(zmax >= currentCellZmin)
+           {
+             //add the next layer cell from the next to next theta bin
+             _decoder->set(nID,m_thetaID,currentCellThetaBin + 2);
+             cellNeighbours.push_back(nID);
+           }
          }
        }
        // if the cID is in the negative-z side
@@ -508,13 +533,16 @@ std::vector<uint64_t> FCCSWHCalPhiTheta_k4geo::neighbours(const CellID& cID) con
          _decoder->set(nID,m_thetaID,currentCellThetaBin - 1);
          cellNeighbours.push_back(nID);
 
-         //add the next layer cell from the next-to-next theta bin if it overlaps with the current cell in z-coordinate
-         double zmin = m_cellEdges[nextLayerId][currentCellThetaBin - 2].first;
-         if(zmin <= currentCellZmax)
+         if(aDiagonal)
          {
-           //add the next layer cell from the next to next theta bin
-           _decoder->set(nID,m_thetaID,currentCellThetaBin - 2);
-           cellNeighbours.push_back(nID);
+           //add the next layer cell from the prev to prev theta bin if it overlaps with the current cell in z-coordinate
+           double zmin = m_cellEdges[nextLayerId][currentCellThetaBin - 2].first;
+           if(zmin <= currentCellZmax)
+           {
+             //add the next layer cell from the prev to prev theta bin
+             _decoder->set(nID,m_thetaID,currentCellThetaBin - 2);
+             cellNeighbours.push_back(nID);
+           }
          }
        }
      }
@@ -538,13 +566,39 @@ std::vector<uint64_t> FCCSWHCalPhiTheta_k4geo::neighbours(const CellID& cID) con
          double zmin = m_cellEdges[prevLayerId][bin].first;
          double zmax = m_cellEdges[prevLayerId][bin].second;
 
-         if( (zmin >= currentCellZmin && zmin <=currentCellZmax)
-           || (zmax >= currentCellZmin && zmax <=currentCellZmax)
-           || (currentCellZmin >= zmin && currentCellZmax <= zmax)
-         )
+         // if the cID is in the positive-z side
+         if(theta(cID) < M_PI/2.)
          {
-           _decoder->set(nID,m_thetaID,bin);
-           cellNeighbours.push_back(nID); // add the cell from the previous layer of the same phi module
+           if( (zmin >= currentCellZmin && zmin < currentCellZmax)
+             || (zmax >= currentCellZmin && zmax <= currentCellZmax)
+             || (currentCellZmin >= zmin && currentCellZmax <= zmax)
+           )
+           {
+             _decoder->set(nID,m_thetaID,bin);
+             cellNeighbours.push_back(nID); // add the cell from the previous layer of the same phi module
+           }
+           if(aDiagonal && zmin == currentCellZmax)
+           {
+             _decoder->set(nID,m_thetaID,bin);
+             cellNeighbours.push_back(nID); // add the cell from the previous layer of the same phi module
+           }
+         }
+         // if the cID is in the negative-z side
+         if(theta(cID) > M_PI/2.)
+         {
+           if( (zmin >= currentCellZmin && zmin <= currentCellZmax)
+             || (zmax > currentCellZmin && zmax <= currentCellZmax)
+             || (currentCellZmin >= zmin && currentCellZmax <= zmax)
+           )
+           {
+             _decoder->set(nID,m_thetaID,bin);
+             cellNeighbours.push_back(nID); // add the cell from the previous layer of the same phi module
+           }
+           if(aDiagonal && zmax == currentCellZmin)
+           {
+             _decoder->set(nID,m_thetaID,bin);
+             cellNeighbours.push_back(nID); // add the cell from the previous layer of the same phi module
+           }
          }
        }
      }
@@ -559,14 +613,39 @@ std::vector<uint64_t> FCCSWHCalPhiTheta_k4geo::neighbours(const CellID& cID) con
        {
          double zmin = m_cellEdges[nextLayerId][bin].first;
          double zmax = m_cellEdges[nextLayerId][bin].second;
-
-         if( (zmin >= currentCellZmin && zmin <=currentCellZmax)
-           || (zmax >= currentCellZmin && zmax <=currentCellZmax)
-           || (currentCellZmin >= zmin && currentCellZmax <= zmax)
-         )
+         // if the cID is in the positive-z side
+         if(theta(cID) < M_PI/2.)
          {
-           _decoder->set(nID,m_thetaID,bin);
-           cellNeighbours.push_back(nID); // add the cell from the previous layer of the same phi module
+           if( (zmin >= currentCellZmin && zmin <=currentCellZmax)
+             || (zmax > currentCellZmin && zmax <=currentCellZmax)
+             || (currentCellZmin >= zmin && currentCellZmax <= zmax)
+           )
+           {
+             _decoder->set(nID,m_thetaID,bin);
+             cellNeighbours.push_back(nID); // add the cell from the next layer of the same phi module
+           }
+           if(aDiagonal && zmax == currentCellZmin)
+           {
+             _decoder->set(nID,m_thetaID,bin);
+             cellNeighbours.push_back(nID); // add the cell from the next layer of the same phi module
+           }
+         }
+         // if the cID is in the negative-z side
+         if(theta(cID) > M_PI/2.)
+         {
+           if( (zmin >= currentCellZmin && zmin < currentCellZmax)
+             || (zmax >= currentCellZmin && zmax <=currentCellZmax)
+             || (currentCellZmin >= zmin && currentCellZmax <= zmax)
+           )
+           {
+             _decoder->set(nID,m_thetaID,bin);
+             cellNeighbours.push_back(nID); // add the cell from the next layer of the same phi module
+           }
+           if(aDiagonal && zmin == currentCellZmax)
+           {
+             _decoder->set(nID,m_thetaID,bin);
+             cellNeighbours.push_back(nID); // add the cell from the next layer of the same phi module
+           }
          }
        }
      }
@@ -594,10 +673,17 @@ std::vector<uint64_t> FCCSWHCalPhiTheta_k4geo::neighbours(const CellID& cID) con
          double Rmax = m_radii[part2layerId] + 0.5*m_layerDepth[part2layerId];
 
          if( (Rmin >= currentLayerRmin && Rmin <= currentLayerRmax)
-          || (Rmax >= currentLayerRmin && Rmax <= currentLayerRmax)
-          || (currentLayerRmin >= Rmin && currentLayerRmin <= Rmax)
+          || (Rmax > currentLayerRmin && Rmax <= currentLayerRmax)
+          || (currentLayerRmin >= Rmin && currentLayerRmin < Rmax)
           || (currentLayerRmax >= Rmin && currentLayerRmax <= Rmax)
          )
+         {
+           CellID nID = cID ;
+           _decoder->set(nID,"layer",part2layerId);
+           _decoder->set(nID,m_thetaID,maxCellThetaBin);
+           cellNeighbours.push_back(nID); // add the last theta bin cell from part2 layer
+         }
+         if(aDiagonal && Rmax == currentLayerRmin)
          {
            CellID nID = cID ;
            _decoder->set(nID,"layer",part2layerId);
@@ -616,11 +702,18 @@ std::vector<uint64_t> FCCSWHCalPhiTheta_k4geo::neighbours(const CellID& cID) con
          double Rmin = m_radii[part1layerId] - 0.5*m_layerDepth[part1layerId];
          double Rmax = m_radii[part1layerId] + 0.5*m_layerDepth[part1layerId];
 
-         if( (Rmin >= currentLayerRmin && Rmin <= currentLayerRmax)
+         if( (Rmin >= currentLayerRmin && Rmin < currentLayerRmax)
           || (Rmax >= currentLayerRmin && Rmax <= currentLayerRmax)
           || (currentLayerRmin >= Rmin && currentLayerRmin <= Rmax)
-          || (currentLayerRmax >= Rmin && currentLayerRmax <= Rmax)
+          || (currentLayerRmax > Rmin && currentLayerRmax <= Rmax)
          )
+         {
+           CellID nID = cID ;
+           _decoder->set(nID,"layer",part1layerId);
+           _decoder->set(nID,m_thetaID,minCellThetaBin);
+           cellNeighbours.push_back(nID); // add the first theta bin cell from the part1 layer
+         }
+         if(aDiagonal && Rmin == currentLayerRmax)
          {
            CellID nID = cID ;
            _decoder->set(nID,"layer",part1layerId);
@@ -640,10 +733,17 @@ std::vector<uint64_t> FCCSWHCalPhiTheta_k4geo::neighbours(const CellID& cID) con
          double Rmax = m_radii[part3layerId] + 0.5*m_layerDepth[part3layerId];
 
          if( (Rmin >= currentLayerRmin && Rmin <= currentLayerRmax)
-          || (Rmax >= currentLayerRmin && Rmax <= currentLayerRmax)
-          || (currentLayerRmin >= Rmin && currentLayerRmin <= Rmax)
+          || (Rmax > currentLayerRmin && Rmax <= currentLayerRmax)
+          || (currentLayerRmin >= Rmin && currentLayerRmin < Rmax)
           || (currentLayerRmax >= Rmin && currentLayerRmax <= Rmax)
          )
+         {
+           CellID nID = cID ;
+           _decoder->set(nID,"layer",part3layerId);
+           _decoder->set(nID,m_thetaID,maxCellThetaBin);
+           cellNeighbours.push_back(nID); // add the first cell from the part3 layer
+         }
+         if(aDiagonal && Rmax == currentLayerRmin)
          {
            CellID nID = cID ;
            _decoder->set(nID,"layer",part3layerId);
@@ -662,11 +762,18 @@ std::vector<uint64_t> FCCSWHCalPhiTheta_k4geo::neighbours(const CellID& cID) con
          double Rmin = m_radii[part2layerId] - 0.5*m_layerDepth[part2layerId];
          double Rmax = m_radii[part2layerId] + 0.5*m_layerDepth[part2layerId];
 
-         if( (Rmin >= currentLayerRmin && Rmin <= currentLayerRmax)
+         if( (Rmin >= currentLayerRmin && Rmin < currentLayerRmax)
           || (Rmax >= currentLayerRmin && Rmax <= currentLayerRmax)
           || (currentLayerRmin >= Rmin && currentLayerRmin <= Rmax)
-          || (currentLayerRmax >= Rmin && currentLayerRmax <= Rmax)
+          || (currentLayerRmax > Rmin && currentLayerRmax <= Rmax)
          )
+         {
+           CellID nID = cID ;
+           _decoder->set(nID,"layer",part2layerId);
+           _decoder->set(nID,m_thetaID,minCellThetaBin);
+           cellNeighbours.push_back(nID); // add the first theta bin cell from the part2 layer
+         }
+         if(aDiagonal && Rmin == currentLayerRmax)
          {
            CellID nID = cID ;
            _decoder->set(nID,"layer",part2layerId);

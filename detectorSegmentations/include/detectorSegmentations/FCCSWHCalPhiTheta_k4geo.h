@@ -44,7 +44,7 @@ namespace dd4hep {
         *   @param[in] aCellId ID of a cell.
         *   return vector of neighbour cellIDs.
         */
-	std::vector<uint64_t> neighbours(const CellID& cID) const;
+	std::vector<uint64_t> neighbours(const CellID& cID, bool aDiagonal) const;
 
         /**  Calculate layer radii and edges in z-axis, then define cell edges in each layer using defineCellEdges().
         */
