@@ -59,7 +59,7 @@
     <readout name="HCalEndcapReadoutPhiRow">
       <segmentation type="FCCSWHCalPhiRow_k4geo" 
          offset_z="HCalEndcap_min_z1+(HCalEndcap_max_z1-HCalEndcap_min_z1)*0.5 HCalEndcap_min_z2+(HCalEndcap_max_z2-HCalEndcap_min_z2)*0.5 HCalEndcap_min_z3+(HCalEndcap_max_z3-HCalEndcap_min_z3)*0.5" 
-         width_z="24.85*2 24.3*2 77.05*2"
+         width_z="248.5*2*mm 243.0*2*mm 770.5*2*mm"
          offset_r="HCalEndcap_inner_radius1+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space HCalEndcap_inner_radius2+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space HCalEndcap_inner_radius3+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space"
          numLayers="5 1 0  4 3 2  4 10 8"
          dRlayer="100*mm 150*mm 250*mm"
@@ -77,6 +77,7 @@
 
   <detectors>
     <detector id="DetID_HCAL_Endcap" name="HCalThreePartsEndcap" type="CaloThreePartsEndcap_o1_v02" readout="HCalEndcapReadout" >
+      <type_flags type="DetType_CALORIMETER + DetType_HADRONIC + DetType_ENDCAP"/>
       <!-- vis="endcapHcal_envelope"> -->
       <sensitive type="BirksLawCalorimeterSD"/>
       <dimensions rmin1="HCalEndcap_inner_radius1" rmin2="HCalEndcap_inner_radius2" rmin="HCalEndcap_inner_radius3"
