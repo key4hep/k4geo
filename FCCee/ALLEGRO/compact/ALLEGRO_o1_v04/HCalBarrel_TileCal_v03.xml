@@ -57,10 +57,10 @@
          offset_phi="-pi+(pi/BarHCal_n_phi_modules)"/>
       <id>system:4,layer:5,row:9,theta:9,phi:10</id>
     </readout>
-    <readout name="HCalBarrelReadoutPhiRow">
+    <readout name="HCalBarrelReadoutRowPhi">
       <segmentation type="FCCSWHCalPhiRow_k4geo" 
          offset_z="0"
-         width_z="279.55*2"
+         width_z="2795.5*2*mm"
          offset_r="BarHCal_rmin+BarHCal_face_plate_thickness+BarHCal_plate_space"
          numLayers="4 6 3"
          dRlayer="50*mm 100*mm 200*mm"
@@ -74,6 +74,7 @@
 
   <detectors>
     <detector id="BarHCal_id" name="HCalBarrel" type="HCalTileBarrel_o1_v02" readout="HCalBarrelReadout">
+      <type_flags type="DetType_CALORIMETER + DetType_HADRONIC + DetType_BARREL"/>
       <dimensions rmin="BarHCal_rmin" rmax="BarHCal_rmax" dz="BarHCal_dz" vis="hcal_envelope" />
       <sensitive type="BirksLawCalorimeterSD"/>
       <end_plate name="end_plate" thickness="BarHCal_end_plate_thickness" material="Fe" sensitive="false" vis="hcal_end_plate_vis" />
