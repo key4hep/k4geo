@@ -50,7 +50,6 @@ FCCSWHCalPhiRow_k4geo::FCCSWHCalPhiRow_k4geo(const BitFieldCoder* decoder) : Seg
 /// determine the global position based on the cell ID
 Vector3D FCCSWHCalPhiRow_k4geo::position(const CellID& cID) const {
   uint layer = _decoder->get(cID,"layer");
-  double phi = _decoder->get(cID,m_phiID);
 
   if(m_radii.empty()) calculateLayerRadii();
   if(m_radii.empty() || m_layerEdges.empty())
@@ -70,7 +69,7 @@ Vector3D FCCSWHCalPhiRow_k4geo::position(const CellID& cID) const {
   // for negative-z Endcap, the index is negative (starts from -1!)
   if(idx < 0) zpos = -minLayerZ + (idx+1) * m_dz_row * m_gridSizeRow[layer] - 0.5 * m_dz_row * m_gridSizeRow[layer];
 
-  return Vector3D( radius * std::cos(phi), radius * std::sin(phi), zpos );
+  return Vector3D( radius * std::cos(phi(cID)), radius * std::sin(phi(cID)), zpos );
 }
 
 
@@ -212,7 +211,7 @@ void FCCSWHCalPhiRow_k4geo::defineCellIndexes(const uint layer) const {
       double z1 = minLayerZ + (idx-1) * m_dz_row * m_gridSizeRow[layer]; // lower edge
       double z2 = minLayerZ + (idx) * m_dz_row * m_gridSizeRow[layer]; // upper edge
 
-      // for negative-z Endcap, the index is negetive (starts from -1!)
+      // for negative-z Endcap, the index is negative (starts from -1!)
       if(idx < 0)
       { 
         z1 = -minLayerZ + (idx) * m_dz_row * m_gridSizeRow[layer]; // lower edge
@@ -614,7 +613,6 @@ std::vector<uint64_t> FCCSWHCalPhiRow_k4geo::neighbours(const CellID& cID) const
      }
    }
 
-/*
    // Now loop over the neighbours and add the cells from next/previous phi module
    std::vector<uint64_t> cellNeighboursCopy(cellNeighbours);
    for(auto nID : cellNeighboursCopy)
@@ -636,7 +634,7 @@ std::vector<uint64_t> FCCSWHCalPhiRow_k4geo::neighbours(const CellID& cID) const
    // next: if the current is the last bin (id = m_phiBins - 1) then the next is the first bin (id = 0) else current + 1
    _decoder->set(nID,m_phiID, (_decoder->get(cID,m_phiID) == (m_phiBins - 1)) ? 0 : _decoder->get(cID,m_phiID) + 1);
    cellNeighbours.push_back(nID);
-*/
+
    return cellNeighbours;
 }
 
