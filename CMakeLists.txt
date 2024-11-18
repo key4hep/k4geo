@@ -117,6 +117,8 @@ file(GLOB G4sources
   ./plugins/Geant4Output2EDM4hep_DRC.cpp
   ./plugins/DRCaloFastSimModel.cpp
   ./plugins/DRCaloFastSimModel.h
+  ./plugins/DRTubesSDAction.hh
+  ./plugins/DRTubesSDAction.cpp
 )
 
 if(DD4HEP_USE_PYROOT)
