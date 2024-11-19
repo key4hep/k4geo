@@ -29,19 +29,19 @@
 // Includers from project files
 #include "DRTubesSglHpr.hh"
 
-// #define DREndcapTubesSDDebug
+// #define DRTubesSDDebug
 
 namespace dd4hep
 {
 namespace sim
 {
-class DREndcapTubesSDData
+class DRTubesSDData
 {
     // Constructor and destructor
     //
   public:
-    DREndcapTubesSDData() = default;
-    ~DREndcapTubesSDData() = default;
+    DRTubesSDData() = default;
+    ~DRTubesSDData() = default;
 
     // Methods
     //
@@ -80,7 +80,7 @@ namespace sim
 // Function template specialization of Geant4SensitiveAction class.
 // Define actions
 template<>
-void Geant4SensitiveAction<DREndcapTubesSDData>::initialize()
+void Geant4SensitiveAction<DRTubesSDData>::initialize()
 {
   //eventAction().callAtBegin(&m_userData, &DREndcapTubesSDData::beginEvent);
   //eventAction().callAtEnd(&m_userData, &DREndcapTubesSDData::endEvent);
@@ -94,7 +94,7 @@ void Geant4SensitiveAction<DREndcapTubesSDData>::initialize()
 // Function template specialization of Geant4SensitiveAction class.
 // Define collections created by this sensitivie action object
 template<>
-void Geant4SensitiveAction<DREndcapTubesSDData>::defineCollections()
+void Geant4SensitiveAction<DRTubesSDData>::defineCollections()
 {
   std::string ROname = m_sensitive.readout().name();
   m_collectionID = defineCollection<Geant4Calorimeter::Hit>(ROname + "ScinRight");
@@ -106,7 +106,7 @@ void Geant4SensitiveAction<DREndcapTubesSDData>::defineCollections()
 // Function template specialization of Geant4SensitiveAction class.
 // Method that accesses the G4Step object at each track step.
 template<>
-bool Geant4SensitiveAction<DREndcapTubesSDData>::process(const G4Step* aStep,
+bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
                                                          G4TouchableHistory* /*history*/)
 {
   // NOTE: Here we do manipulation of the signal in each fiber (Scintillating and Cherenkov)
@@ -133,7 +133,7 @@ bool Geant4SensitiveAction<DREndcapTubesSDData>::process(const G4Step* aStep,
   // (see https://github.com/AIDASoft/DD4hep/issues/1319).
   // Therefore we use copynumbers instead of volIDs.
 
-#ifdef DREndcapTubesSDDebug
+#ifdef DRTubesSDDebug
   // Print out some info step-by-step in sensitive volumes
   //
   DRTubesSglHpr::PrintStepInfo(aStep);
@@ -283,9 +283,9 @@ namespace dd4hep
 {
 namespace sim
 {
-typedef Geant4SensitiveAction<DREndcapTubesSDData> DREndcapTubesSDAction;
+typedef Geant4SensitiveAction<DRTubesSDData> DRTubesSDAction;
 }
 }  // namespace dd4hep
-DECLARE_GEANT4SENSITIVE(DREndcapTubesSDAction)
+DECLARE_GEANT4SENSITIVE(DRTubesSDAction)
 
 //**************************************************************************
