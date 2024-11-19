@@ -43,27 +43,9 @@ class DRTubesSDData
     DRTubesSDData() = default;
     ~DRTubesSDData() = default;
 
-    // Methods
-    //
-  public:
-    //void beginRun(const G4Run* run)
-    //{
-      //fRunAction = new DREndcapTubesRunAction;
-      //fEvtAction = new DREndcapTubesEvtAction;
-      //fRunAction->BeginOfRunAction(run);
-    //}
-
-    //void endRun(const G4Run* run) { fRunAction->EndOfRunAction(run); }
-
-    //void beginEvent(const G4Event* event) { fEvtAction->BeginOfEventAction(event); }
-
-    //void endEvent(const G4Event* event) { fEvtAction->EndOfEventAction(event); }
-
     // Fields
     //
   public:
-    //DREndcapTubesRunAction* fRunAction;
-    //DREndcapTubesEvtAction* fEvtAction;
     Geant4Sensitive* sensitive{};
     int collection_cher_right;
     int collection_cher_left;
@@ -82,12 +64,6 @@ namespace sim
 template<>
 void Geant4SensitiveAction<DRTubesSDData>::initialize()
 {
-  //eventAction().callAtBegin(&m_userData, &DREndcapTubesSDData::beginEvent);
-  //eventAction().callAtEnd(&m_userData, &DREndcapTubesSDData::endEvent);
-
-  //runAction().callAtBegin(&m_userData, &DREndcapTubesSDData::beginRun);
-  //runAction().callAtEnd(&m_userData, &DREndcapTubesSDData::endRun);
-
   m_userData.sensitive = this;
 }
 
