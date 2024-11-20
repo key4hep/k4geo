@@ -209,10 +209,6 @@
         "/>
   </properties>
 
-  <includes>
-      <gdmlFile  ref="elements.xml"/>
-  </includes>
-  
   <materials>
     <material name="Vacuum">
       <D type="density" unit="g/cm3" value="0.0000000001" />

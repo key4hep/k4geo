@@ -29,6 +29,6 @@ September 2024: Added detailed version of the pre-shower, based on muon system b
 IDEA_o2_v01
 ------------
 
-Second option of IDEA detector. The inner part up to the drift-chamber is identical to IDEA_o1, the dual-readout calorimeter uses the INFN capillary-tubes technology and replaces the monolithic calorimeter description. Between the drift-chamber and the dual-readout calorimeter a dual-readout crystal electromagnetic calorimeter is will place, consequentially the preshower is removed. The muon system is identical to IDEA_o1.
+Second option of IDEA detector. The inner part up to the drift-chamber is identical to IDEA_o1, the dual-readout calorimeter uses the INFN capillary-tubes technology and replaces the monolithic calorimeter description. Between the drift-chamber and the dual-readout calorimeter a dual-readout crystal electromagnetic calorimeter will be placed, consequentially the preshower is removed. The muon system is identical to IDEA_o1.
 
 October 2024: first implementation using the dual-readout capillary-tubes endcap geometry.
