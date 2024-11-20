@@ -224,6 +224,7 @@
     <constant name="DRETTubeRadius"  value="1.0*mm"/>
     <constant name="DRETCladRadius"  value="0.5*mm"/>
     <constant name="DRETCoreRadius"  value="0.45*mm"/>
+    <!-- end of Dual-Readout Endcap Tubes (DRET) calorimeter dimensions-->
 
     <!-- Muon System Parameters-->
     <constant name = "numberOfSides"                              value = "8"/>        <!-- The number of sides of the muon system e.g (Octagon, Hexagon, ...)--> 
@@ -272,15 +273,17 @@
     <vis name="TantalumVis"     alpha="1.0" r="1"   	  g="0.5"     b="0.5"   showDaughters="true"  visible="true"/>
     <vis name="BPMVis"      	  alpha="1.0" r="0.25"  	g="0.88"    b="0.81"  showDaughters="true"  visible="true"/>
     <vis name="AirVis"          alpha="0.1" r="0.1"     g="0.1"     b="1.0"   showDaughters="false" visible="true"/>
-    <vis name="DRCInvisible" showDaughters="false" visible="false"/> <!-- For fiber-based dual-readout calorimeter -->
-    <vis name="DRCTowerVis" alpha="1." r="0.7" g="0.4" b="0.1" showDaughters="false" visible="true"/>
-    <vis name="DRCCerenVis" alpha="0.5" r="0.3" g="0.6" b="0.9" showDaughters="false" visible="false"/>
-    <vis name="DRCScintVis" alpha="0.5" r="1.0" g="0.8" b="0.1" showDaughters="false" visible="false"/>
-    <vis name="DRCCladVis" alpha="0.5" r="0.0" g="0.5" b="0.5" showDaughters="false" visible="false"/>
-    <vis name="DRCGenericVis" alpha="0.8" r="0.5" g="0.5" b="0.5" showDaughters="false" visible="false"/>
-    <vis name="DRCGlassVis" alpha="0.5" r="0.0" g="0.1" b="0.9" showDaughters="false" visible="false"/>
-    <vis name="DRCWaferVis" alpha="1." r="0.0" g="0.9" b="0.2" showDaughters="false" visible="false"/>
-    <vis name="DRCWorldVis" alpha="0.2" r="0.9" g="0.8" b="0.1" showDaughters="false" visible="false"/>
+    <!-- Dual-Readout Endcap Tubes vis-->
+    <vis name="DRETAssemblyVis" alpha="0.05" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false"/>
+    <vis name="DRETStaveVis" alpha="0.1" r="0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="DRETTowerVis" alpha="0.5" r="1.0" g="0.624" b="0.0" showDaughters="false" visible="true"/>
+    <vis name="DRETtube_S_Vis" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="DRETtube_C_Vis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="DRETclad_S_Vis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="false"/>
+    <vis name="DRETclad_C_Vis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="false"/>
+    <vis name="DRETcore_S_Vis" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false"/>
+    <vis name="DRETcore_C_Vis" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false"/>
+    <!-- end of DRET vis-->
     <vis name="yoke_vis" r="255/256" g="0/256" b="0/256" alpha="1.0" showDaughters="true" visible="true" />
     <vis name="no_vis" showDaughters="true" visible="false" />
     <vis name="G10_FR4_vis" r="0.6" g="0.4" b="0.2" alpha="1.0" showDaughters="true" visible="true" />
