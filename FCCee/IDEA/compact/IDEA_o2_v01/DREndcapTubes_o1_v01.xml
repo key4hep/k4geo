@@ -241,43 +241,27 @@
     </material>
   </materials>
 
-  <!-- Define vis attributes for the sphere and the box. Vis attributes contains an
-       alpha value for transparency, r-g-b for color, show daughters possibility true/false
-       and visibile (or invisible) true/false.
-  -->
-  <display>
-    <vis name="AssemblyVis" alpha="0.05" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false"/>
-    <vis name="StaveVis" alpha="0.1" r="0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
-    <vis name="TowerVis" alpha="0.5" r="1.0" g="0.624" b="0.0" showDaughters="false" visible="true"/>
-    <vis name="tube_S_Vis" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
-    <vis name="tube_C_Vis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
-    <vis name="clad_S_Vis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="false"/>
-    <vis name="clad_C_Vis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="false"/>
-    <vis name="core_S_Vis" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false"/>
-    <vis name="core_C_Vis" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false"/>
-  </display>
-
   <!-- Define the detector. A detector has a name, type to be returned in .cpp file with 
        DECLARE_DETELEMENT(type,create_detector_c++method), vis attributes (optional),
        and sensitive-detector (true/false), if sensitive="true" a readout must the passed.
        If a detector contains sub-detectors, their information must be included as below.
   -->
   <detectors>
-    <detector name="DREndcapTubes" type="DREndcapTubes" vis="AssemblyVis" id ="DetID_DREndcapTubes" readout="DREndcapTubesRO">
+    <detector name="DREndcapTubes" type="DREndcapTubes" vis="DRETAssemblyVis" id ="DetID_DREndcapTubes" readout="DREndcapTubesRO">
     <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_BARREL"/>
     <dimensions 
       inner_radius="DRETinnerRadius"
       z_length="DRETtowerHeight"
       deltaphi="DRETNbOfZRot"/>
-      <assembly material="Air" vis="AssemblyVis"/>
-      <stave material="Air" vis="StaveVis"/>
-      <tower material="Air" vis="TowerVis"/>
-      <tube_S material="Brass" outer_radius="DRETTubeRadius" sensitive="false" vis="tube_S_Vis"/>
-      <tube_C material="Brass" outer_radius="DRETTubeRadius" sensitive="false" vis="tube_C_Vis"/>
-      <clad_S material="PMMA_Scin" outer_radius="DRETCladRadius" sensitive="false" vis="clad_S_Vis"/>
-      <clad_C material="Fluorinated_Polymer" outer_radius="DRETCladRadius" sensitive="false" vis="clad_C_Vis"/>
-      <core_S material="DR_Polystyrene" outer_radius="DRETCoreRadius" sensitive="false" vis="core_S_Vis"/>
-      <core_C material="PMMA" outer_radius="DRETCoreRadius" sensitive="false" vis="core_C_Vis"/>
+      <assembly material="Air" vis="DRETAssemblyVis"/>
+      <stave material="Air" vis="DRETStaveVis"/>
+      <tower material="Air" vis="DRETTowerVis"/>
+      <tube_S material="Brass" outer_radius="DRETTubeRadius" sensitive="false" vis="DRETtube_S_Vis"/>
+      <tube_C material="Brass" outer_radius="DRETTubeRadius" sensitive="false" vis="DRETtube_C_Vis"/>
+      <clad_S material="PMMA_Scin" outer_radius="DRETCladRadius" sensitive="false" vis="DRETclad_S_Vis"/>
+      <clad_C material="Fluorinated_Polymer" outer_radius="DRETCladRadius" sensitive="false" vis="DRETclad_C_Vis"/>
+      <core_S material="DR_Polystyrene" outer_radius="DRETCoreRadius" sensitive="false" vis="DRETcore_S_Vis"/>
+      <core_C material="PMMA" outer_radius="DRETCoreRadius" sensitive="false" vis="DRETcore_C_Vis"/>
     </detector>
   </detectors>
 
