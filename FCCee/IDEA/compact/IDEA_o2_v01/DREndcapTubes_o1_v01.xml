@@ -28,15 +28,6 @@
     <comment></comment>
   </info>
 
-  <define>
-    <constant name="innerRadius" value="2.5*m"/>
-    <constant name="towerHeight" value="2.5*m"/>
-    <constant name="NbOfZRot"    value="36"/>
-    <constant name="TubeRadius"  value="1.0*mm"/>
-    <constant name="CladRadius"  value="0.5*mm"/>
-    <constant name="CoreRadius"  value="0.45*mm"/>
-  </define>
-
   <properties>
         <matrix name="RI_DR_Polystyrene" coldim="2" values="
             1.37760*eV 1.59
@@ -272,21 +263,21 @@
        If a detector contains sub-detectors, their information must be included as below.
   -->
   <detectors>
-    <detector name="DREndcapTubes" type="DREndcapTubes" vis="AssemblyVis" id ="0" readout="DREndcapTubesRO">
+    <detector name="DREndcapTubes" type="DREndcapTubes" vis="AssemblyVis" id ="DetID_DREndcapTubes" readout="DREndcapTubesRO">
     <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_BARREL"/>
     <dimensions 
-      inner_radius="innerRadius"
-      z_length="towerHeight"
-      deltaphi="NbOfZRot"/>
+      inner_radius="DRETinnerRadius"
+      z_length="DRETtowerHeight"
+      deltaphi="DRETNbOfZRot"/>
       <assembly material="Air" vis="AssemblyVis"/>
       <stave material="Air" vis="StaveVis"/>
       <tower material="Air" vis="TowerVis"/>
-      <tube_S material="Brass" outer_radius="TubeRadius" sensitive="false" vis="tube_S_Vis"/>
-      <tube_C material="Brass" outer_radius="TubeRadius" sensitive="false" vis="tube_C_Vis"/>
-      <clad_S material="PMMA_Scin" outer_radius="CladRadius" sensitive="false" vis="clad_S_Vis"/>
-      <clad_C material="Fluorinated_Polymer" outer_radius="CladRadius" sensitive="false" vis="clad_C_Vis"/>
-      <core_S material="DR_Polystyrene" outer_radius="CoreRadius" sensitive="false" vis="core_S_Vis"/>
-      <core_C material="PMMA" outer_radius="CoreRadius" sensitive="false" vis="core_C_Vis"/>
+      <tube_S material="Brass" outer_radius="DRETTubeRadius" sensitive="false" vis="tube_S_Vis"/>
+      <tube_C material="Brass" outer_radius="DRETTubeRadius" sensitive="false" vis="tube_C_Vis"/>
+      <clad_S material="PMMA_Scin" outer_radius="DRETCladRadius" sensitive="false" vis="clad_S_Vis"/>
+      <clad_C material="Fluorinated_Polymer" outer_radius="DRETCladRadius" sensitive="false" vis="clad_C_Vis"/>
+      <core_S material="DR_Polystyrene" outer_radius="DRETCoreRadius" sensitive="false" vis="core_S_Vis"/>
+      <core_C material="PMMA" outer_radius="DRETCoreRadius" sensitive="false" vis="core_C_Vis"/>
     </detector>
   </detectors>
 
