@@ -3,8 +3,6 @@
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-
-
   <info name="IDEA_o2_v01"
     title="FCCee IDEA option 2 detector geometry master file"
     author="Niloufar Alipour Tehrani, vertex detector and silicon wrapper by Armin Ilg, DCH by Alvaro Tolosa-Delgado, dual-readout-tubes calorimeter by Lorenzo Pezzotti"
@@ -31,7 +29,7 @@
   </define>
 
   <!-- Import dimensions -->
-  <include ref="../IDEA_o1_v03/DectDimensions_IDEA_o1_v03.xml"/>
+  <include ref="DectDimensions_IDEA_o2_v01.xml"/>
 
   <!-- Import accelerator components -->
   <!-- shape based model of the beam pipe -->
