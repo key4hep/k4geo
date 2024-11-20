@@ -20,7 +20,7 @@
 
   <includes>
     <gdmlFile  ref="../IDEA_o1_v03/elements_o1_v01.xml"/>
-    <gdmlFile  ref="../IDEA_o1_v03/materials_o1_v03.xml"/>
+    <gdmlFile  ref="materials_o2_v01.xml"/>
   </includes>
 
   <define>
