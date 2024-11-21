@@ -97,14 +97,16 @@ SIM.vertexSigma = [0.0, 0.0, 0.0, 0.0]
 ##
 ################################################################################
 
-SIM.action.calo = "DRTubesSDAction"
-SIM.action.calorimeterSDTypes = [u'calorimeter']
+##  set the default calorimeter action
+SIM.action.calo = "Geant4ScintillatorCalorimeterAction"
+
+## List of patterns matching sensitive detectors of type Calorimeter.
+SIM.action.calorimeterSDTypes = ["calorimeter"]
+
+## Replace SDAction for DREndcapTubes subdetector
 SIM.action.mapActions['DREndcapTubes'] = "DRTubesSDAction"
-SIM.filter.calo = ""
-# Configure the regexSD
-SIM.geometry.regexSensitiveDetector['DREndcapTubes'] = {'Match': ['DRETS'],
-                                                         'OutputLevel': 4,
-                                                       }
+## Configure the regexSD for DREndcapTubes subdetector
+SIM.geometry.regexSensitiveDetector['DREndcapTubes'] = {'Match': ['DRETS'],'OutputLevel': 4,}
 
 ##  set the default run action
 SIM.action.run = []
