@@ -218,9 +218,9 @@
     <!-- End of Pre-shower Parameters-->
 
     <!-- Dual-Readout Endcap Tubes (DRET) calorimeter dimensions-->
-    <constant name="DRETinnerRadius" value="2.5*m"/>
-    <constant name="DRETtowerHeight" value="2.5*m"/>
-    <constant name="DRETNbOfZRot"    value="36"/>
+    <constant name="DRETinnerRadius" value="2.8*m"/>
+    <constant name="DRETtowerHeight" value="1.8*m"/>
+    <constant name="DRETNbOfZRot"    value="72"/>
     <constant name="DRETTubeRadius"  value="1.0*mm"/>
     <constant name="DRETCladRadius"  value="0.5*mm"/>
     <constant name="DRETCoreRadius"  value="0.45*mm"/>
