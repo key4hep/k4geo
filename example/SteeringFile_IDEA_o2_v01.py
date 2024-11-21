@@ -1,5 +1,5 @@
 from DDSim.DD4hepSimulation import DD4hepSimulation
-from g4units import mm, GeV, MeV
+from g4units import cm, mm, GeV, MeV
 
 SIM = DD4hepSimulation()
 
@@ -16,11 +16,11 @@ SIM.inputFiles = []
 ## Macro file to execute for runType 'run' or 'vis'
 SIM.macroFile = ""
 ## number of events to simulate, used in batch mode
-SIM.numberOfEvents = 100
+SIM.numberOfEvents = 10
 ## Outputfile from the simulation: .slcio, edm4hep.root and .root output files are supported
 SIM.outputFile = "IDEA_o2_v01.root"
 ## Physics list to use in simulation
-SIM.physicsList = None
+SIM.physicsList = "FTFP_BERT"
 ## Verbosity use integers from 1(most) to 7(least) verbose
 ## or strings: VERBOSE, DEBUG, INFO, WARNING, ERROR, FATAL, ALWAYS
 SIM.printLevel = 3
@@ -171,7 +171,7 @@ SIM.field.stepper = "ClassicalRK4"
 ##     default filter for calorimeter sensitive detectors;
 ##     this is applied if no other filter is used for a calorimeter
 ##
-SIM.filter.calo = "edep0"
+SIM.filter.calo = ""
 
 ##  list of filter objects: map between name and parameter dictionary
 SIM.filter.filters = {
@@ -240,7 +240,7 @@ SIM.guineapig.particlesPerEvent = "-1"
 ################################################################################
 
 ##  direction of the particle gun, 3 vector
-SIM.gun.direction = (1.0, 1.0, 1.0)
+SIM.gun.direction = (0, 0, 1)
 
 ## choose the distribution of the random direction for theta
 ##
@@ -258,7 +258,7 @@ SIM.gun.distribution = None
 ## Total energy (including mass) for the particle gun.
 ##
 ## If not None, it will overwrite the setting of momentumMin and momentumMax
-SIM.gun.energy = None
+SIM.gun.energy = 10.*GeV
 
 ## Maximal pseudorapidity for random distibution (overrides thetaMin)
 SIM.gun.etaMax = None
@@ -279,7 +279,7 @@ SIM.gun.momentumMax = 10000.0
 ## Minimal momentum when using distribution (default = 0.0)
 SIM.gun.momentumMin = 0.0
 SIM.gun.multiplicity = 1
-SIM.gun.particle = "mu-"
+SIM.gun.particle = "e-"
 
 ## Maximal azimuthal angle for random distribution
 SIM.gun.phiMax = None
@@ -288,7 +288,7 @@ SIM.gun.phiMax = None
 SIM.gun.phiMin = None
 
 ##  position of the particle gun, 3 vector
-SIM.gun.position = (0.0, 0.0, 0.0)
+SIM.gun.position = (0.0, 90.0*cm, 0.0)
 
 ## Maximal polar angle for random distribution
 SIM.gun.thetaMax = None
