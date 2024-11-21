@@ -148,7 +148,7 @@ Vector3D FCCSWEndcapTurbine_k4geo::position(const CellID& cID) const {
   //Vector3D pos = PositionRhoZPhi(rhoVal, zVal, phiVal);
 
   // make a dummy "position" vector that has phi, x, and z
-  Vector3D pos(phiVal, xVal, zVal);
+  Vector3D pos(phiVal, 0., 0);
   
   //  // account for the fact that the -z endcap is mirrored wrt to the +z one
   // if (pos.Z < 0.) pos.Y = -pos.Y;
