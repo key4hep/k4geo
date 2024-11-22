@@ -121,27 +121,32 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   // Volume that contains a slice of the right endcap
   // I use the EightPointSolid/Arb8/G4Generictrap so I define directly its 8 points
   //
-  // The first two points of the inner face collide on the beam pipe into (0,0)
+  // Distance between z-axis and the starting point of the Air stave containing
+  // the towers, it is included to avoid overlaps with the compensating solenoid
+  const double DistancetoSolenoid = 22*cm;
+  // The first two points of the inner face are defined by DistancetoSolenoid
+  // similarly to the second two points
   // The second two points of the inner face are at (x=tan(0.5*phi_unit, y=innerR)
   // x with plus or minus sign
   double vertices[16];
-  vertices[0] = static_cast<double>(0.);
-  vertices[1] = static_cast<double>(0.);
-  vertices[2] = static_cast<double>(0.);
-  vertices[3] = static_cast<double>(0.);
-  vertices[4] = static_cast<double>(-innerR * tan(0.5 * phi_unit));
+  vertices[0] = static_cast<double>(-DistancetoSolenoid * tan(0.5 * phi_unit));
+  vertices[1] = static_cast<double>(DistancetoSolenoid);
+  vertices[2] = static_cast<double>(DistancetoSolenoid * tan(0.5 * phi_unit));
+  vertices[3] = static_cast<double>(DistancetoSolenoid);
+  vertices[4] = static_cast<double>(innerR * tan(0.5 * phi_unit));
   vertices[5] = static_cast<double>(innerR);
-  vertices[6] = static_cast<double>(innerR * tan(0.5 * phi_unit));
+  vertices[6] = static_cast<double>(-innerR * tan(0.5 * phi_unit));
   vertices[7] = static_cast<double>(innerR);
-  // The first two points of the outer face collide on the beam pipe into (0,0)
+  // The first two points of the outer face are at the same distance to the z-axis
+  // as in the inner face
   // The second two poits of the outer face are same as before with innerR+tower_height
-  vertices[8] = static_cast<double>(0.);
-  vertices[9] = static_cast<double>(0.);
-  vertices[10] = static_cast<double>(0.);
-  vertices[11] = static_cast<double>(0.);
-  vertices[12] = static_cast<double>(-(innerR + tower_height) * tan(0.5 * phi_unit));
+  vertices[8] = static_cast<double>(-DistancetoSolenoid * tan(0.5 * phi_unit));
+  vertices[9] = static_cast<double>(DistancetoSolenoid);
+  vertices[10] = static_cast<double>(DistancetoSolenoid * tan(0.5 * phi_unit));
+  vertices[11] = static_cast<double>(DistancetoSolenoid);
+  vertices[12] = static_cast<double>((innerR + tower_height) * tan(0.5 * phi_unit));
   vertices[13] = static_cast<double>(innerR + tower_height);
-  vertices[14] = static_cast<double>((innerR + tower_height) * tan(0.5 * phi_unit));
+  vertices[14] = static_cast<double>(-(innerR + tower_height) * tan(0.5 * phi_unit));
   vertices[15] = static_cast<double>(innerR + tower_height);
   // Equivalent of Geant4 GenericTrap shape constructor
   EightPointSolid phiER("phiER", tower_height / 2., vertices);
