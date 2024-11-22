@@ -16,7 +16,7 @@ SIM.inputFiles = []
 ## Macro file to execute for runType 'run' or 'vis'
 SIM.macroFile = ""
 ## number of events to simulate, used in batch mode
-SIM.numberOfEvents = 10
+SIM.numberOfEvents = 1000
 ## Outputfile from the simulation: .slcio, edm4hep.root and .root output files are supported
 SIM.outputFile = "IDEA_o2_v01.root"
 ## Physics list to use in simulation
