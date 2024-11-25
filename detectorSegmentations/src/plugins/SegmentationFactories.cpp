@@ -34,3 +34,7 @@ DECLARE_SEGMENTATION(GridDRcalo_k4geo, create_segmentation<dd4hep::DDSegmentatio
 
 #include "detectorSegmentations/FCCSWEndcapTurbine_k4geo.h"
 DECLARE_SEGMENTATION(FCCSWEndcapTurbine_k4geo, create_segmentation<dd4hep::DDSegmentation::FCCSWEndcapTurbine_k4geo>)
+
+#include "detectorSegmentations/SCEPCalSegmentation.h"
+DECLARE_SEGMENTATION(SCEPCalSegmentation, create_segmentation<dd4hep::DDSegmentation::SCEPCalSegmentation>)
+
