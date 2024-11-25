@@ -131,23 +131,23 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double vertices[16];
   vertices[0] = static_cast<double>(-DistancetoSolenoid * tan(0.5 * phi_unit));
   vertices[1] = static_cast<double>(DistancetoSolenoid);
-  vertices[2] = static_cast<double>(DistancetoSolenoid * tan(0.5 * phi_unit));
-  vertices[3] = static_cast<double>(DistancetoSolenoid);
+  vertices[2] = static_cast<double>(-innerR * tan(0.5 * phi_unit));
+  vertices[3] = static_cast<double>(innerR);
   vertices[4] = static_cast<double>(innerR * tan(0.5 * phi_unit));
   vertices[5] = static_cast<double>(innerR);
-  vertices[6] = static_cast<double>(-innerR * tan(0.5 * phi_unit));
-  vertices[7] = static_cast<double>(innerR);
+  vertices[6] = static_cast<double>(DistancetoSolenoid * tan(0.5 * phi_unit));
+  vertices[7] = static_cast<double>(DistancetoSolenoid);
   // The first two points of the outer face are at the same distance to the z-axis
   // as in the inner face
   // The second two poits of the outer face are same as before with innerR+tower_height
   vertices[8] = static_cast<double>(-DistancetoSolenoid * tan(0.5 * phi_unit));
   vertices[9] = static_cast<double>(DistancetoSolenoid);
-  vertices[10] = static_cast<double>(DistancetoSolenoid * tan(0.5 * phi_unit));
-  vertices[11] = static_cast<double>(DistancetoSolenoid);
+  vertices[10] = static_cast<double>(-(innerR + tower_height) * tan(0.5 * phi_unit));
+  vertices[11] = static_cast<double>(innerR + tower_height);
   vertices[12] = static_cast<double>((innerR + tower_height) * tan(0.5 * phi_unit));
   vertices[13] = static_cast<double>(innerR + tower_height);
-  vertices[14] = static_cast<double>(-(innerR + tower_height) * tan(0.5 * phi_unit));
-  vertices[15] = static_cast<double>(innerR + tower_height);
+  vertices[14] = static_cast<double>(DistancetoSolenoid * tan(0.5 * phi_unit));
+  vertices[15] = static_cast<double>(DistancetoSolenoid);
   // Equivalent of Geant4 GenericTrap shape constructor
   EightPointSolid phiER("phiER", tower_height / 2., vertices);
   Volume phiERLog("phiER", phiER, description.material(x_stave.attr<std::string>(_U(material))));
