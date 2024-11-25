@@ -16,7 +16,7 @@ SIM.inputFiles = []
 ## Macro file to execute for runType 'run' or 'vis'
 SIM.macroFile = ""
 ## number of events to simulate, used in batch mode
-SIM.numberOfEvents = 1000
+SIM.numberOfEvents = 10
 ## Outputfile from the simulation: .slcio, edm4hep.root and .root output files are supported
 SIM.outputFile = "IDEA_o2_v01.root"
 ## Physics list to use in simulation
@@ -104,9 +104,12 @@ SIM.action.calo = "Geant4ScintillatorCalorimeterAction"
 SIM.action.calorimeterSDTypes = ["calorimeter"]
 
 ## Replace SDAction for DREndcapTubes subdetector
-SIM.action.mapActions['DREndcapTubes'] = "DRTubesSDAction"
+SIM.action.mapActions["DREndcapTubes"] = "DRTubesSDAction"
 ## Configure the regexSD for DREndcapTubes subdetector
-SIM.geometry.regexSensitiveDetector['DREndcapTubes'] = {'Match': ['DRETS'],'OutputLevel': 4,}
+SIM.geometry.regexSensitiveDetector["DREndcapTubes"] = {
+    "Match": ["DRETS"],
+    "OutputLevel": 4,
+}
 
 ##  set the default run action
 SIM.action.run = []
@@ -258,7 +261,7 @@ SIM.gun.distribution = None
 ## Total energy (including mass) for the particle gun.
 ##
 ## If not None, it will overwrite the setting of momentumMin and momentumMax
-SIM.gun.energy = 10.*GeV
+SIM.gun.energy = 10.0 * GeV
 
 ## Maximal pseudorapidity for random distibution (overrides thetaMin)
 SIM.gun.etaMax = None
@@ -288,7 +291,7 @@ SIM.gun.phiMax = None
 SIM.gun.phiMin = None
 
 ##  position of the particle gun, 3 vector
-SIM.gun.position = (0.0, 90.0*cm, 0.0)
+SIM.gun.position = (0.0, 90.0 * cm, 0.0)
 
 ## Maximal polar angle for random distribution
 SIM.gun.thetaMax = None
@@ -580,22 +583,25 @@ SIM.physics.rejectPDGs = {
 ##
 SIM.physics.zeroTimePDGs = {17, 11, 13, 15}
 
+
 def setupCerenkov(kernel):
-	from DDG4 import PhysicsList
-	seq = kernel.physicsList()
-	cerenkov = PhysicsList(kernel, 'Geant4CerenkovPhysics/CerenkovPhys')
-	cerenkov.MaxNumPhotonsPerStep = 1000
-	# cerenkov.MaxBetaChangePerStep = 10.0
-	# cerenkov.TrackSecondariesFirst = True
-	cerenkov.VerboseLevel = 0
-	cerenkov.enableUI()
-	seq.adopt(cerenkov)
-	ph = PhysicsList(kernel, 'Geant4OpticalPhotonPhysics/OpticalGammaPhys')
-	ph.addParticleConstructor('G4OpticalPhoton')
-	ph.VerboseLevel = 0
-	ph.enableUI()
-	seq.adopt(ph)
-	return None
+    from DDG4 import PhysicsList
+
+    seq = kernel.physicsList()
+    cerenkov = PhysicsList(kernel, "Geant4CerenkovPhysics/CerenkovPhys")
+    cerenkov.MaxNumPhotonsPerStep = 1000
+    # cerenkov.MaxBetaChangePerStep = 10.0
+    # cerenkov.TrackSecondariesFirst = True
+    cerenkov.VerboseLevel = 0
+    cerenkov.enableUI()
+    seq.adopt(cerenkov)
+    ph = PhysicsList(kernel, "Geant4OpticalPhotonPhysics/OpticalGammaPhys")
+    ph.addParticleConstructor("G4OpticalPhoton")
+    ph.VerboseLevel = 0
+    ph.enableUI()
+    seq.adopt(ph)
+    return None
+
 
 SIM.physics.setupUserPhysics(setupCerenkov)
 
