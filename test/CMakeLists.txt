@@ -114,6 +114,14 @@ ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh
     SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  " Exception; EXCEPTION;ERROR;Error" TIMEOUT 600)
 endif()
 
+#--------------------------------------------------
+# test for IDEA o2 v01
+if(DCH_INFO_H_EXIST)
+SET( test_name "test_IDEA_o2_v01" )
+ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
+    ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o2_v01/IDEA_o2_v01.xml -N 1 -G --gun.distribution uniform --random.seed 1988301045 --outputFile=testIDEA_o2_v01.root )
+    SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  " Exception; EXCEPTION;ERROR;Error" TIMEOUT 600)
+endif()
 
 #--------------------------------------------------
 # test for ALLEGRO o1 v02
