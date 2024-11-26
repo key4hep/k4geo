@@ -40,9 +40,24 @@ class DRTubesSglHpr
     }
 
     // Smear S signal according to Poissonian fluctuations and light yield
+    //
+    // This method calculates how many Scintillation photo electrons are
+    // detected given an energy deposited in MeV (satde). 9.5 is a convertion
+    // factor that translates the average energy deposited in MonteCarlo
+    // to the average Scintillating photo electrons observed (from 2023 test-beam).
+    // A Poissonian smearing is applyed at every step to include poissonian
+    // fluctuations of light emission.
     static G4int SmearSSignal(const G4double& satde) { return G4Poisson(satde * 9.5); }
 
     // Smear C signal according to Poissonian fluctuations and light yield
+    //
+    // This method calculates how many cherenkov photo electrons are detected
+    // per single Cherenkov photon trapped inside a fiber in the simulation.
+    // Given the average number of Cherenkov photons emitted by Geant4 this
+    // number is converted in average number of Cherenkov photons as measured
+    // in test-beams (0.177 comes from 2023 test-beam).
+    // A poissonian smearing is added at every calculation to include
+    // poissonian light fluctuations.
     static G4int SmearCSignal() { return G4Poisson(0.177); }
 
     // Calculate distance from step in fiber to SiPM
