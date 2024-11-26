@@ -132,6 +132,15 @@ SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  " Excep
 endif()
 
 #--------------------------------------------------
+# test for ALLEGRO o1 v04
+if(DCH_INFO_H_EXIST)
+SET( test_name "test_ALLEGRO_o1_v04" )
+ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
+  ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o1_v04/ALLEGRO_o1_v04.xml --runType=batch -G -N=1 --outputFile=testALLEGRO_o1_v04.root --gun.direction "1,0,1" )
+SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  " Exception;EXCEPTION;ERROR;Error" )
+endif()
+
+#--------------------------------------------------
 # test for ARC o1 v01
 SET( test_name "test_ARC_o1_v01_run" )
 ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
