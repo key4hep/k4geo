@@ -240,7 +240,7 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
     Position FiberPos(FiberVec.x(), FiberVec.y(), FiberVec.z());
     hit->position = FiberPos;  // this should be assigned only once
     // Note, when the hit is saved in edm4hep format the energyDeposit is
-    // divided by 1000, i.e. it translates from MeV (Geant4 unit) to GeV (DD4hep unit).
+    // divided by 1000, i.e. it translates from MeV (Geant4 unit) to GeV (EDM4hep unit).
     // Here I am using this field to save photo-electrons, so I multiply it by 1000
     hit->energyDeposit = signalhit * 1000;
     coll->add(VolID, hit);  // add the hit to the hit collection
