@@ -69,7 +69,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     
     Layering    layering(x_det);
     double      totalThickness = layering.totalThickness();
-    int         n_layers = layering.layers().size();
     Readout readout = sens.readout();
     Segmentation seg = readout.segmentation();
     
