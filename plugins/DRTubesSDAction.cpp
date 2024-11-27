@@ -109,6 +109,13 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
   // (see https://github.com/AIDASoft/DD4hep/issues/1319).
   // Therefore we use copynumbers instead of volIDs.
 
+  // NOTE: in this SDAction we apply our custom Birks' Law correction
+  // on the G4Step via the method DRTubesSglHpr::ApplyBirks().
+  // However it should be known that the dd4hep Geant4StepHandler can apply Birks' Law
+  // correction too (using internally the Geant4 class G4EmSaturation).
+  // Therefore, if the Geant4StepHandler is used on this subdetector it might
+  // lead to a double application of Birks' correction.
+
 #ifdef DRTubesSDDebug
   // Print out some info step-by-step in sensitive volumes
   //
