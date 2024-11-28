@@ -5,7 +5,7 @@ To ease the review process, please consider the following before to open the pul
 - [ ] the code is covered by tests. See https://github.com/key4hep/k4geo/blob/main/test/CMakeLists.txt
 - [ ] the PR source branch has been rebased (`--ff-only`) to `k4geo/main`
 - [ ] the PR does not contain any additions or modifications that do not belong to it
-- [ ] the changes in this PR have not introduced any overlaps. You can do so with the following command: ddsim --compactFile PATH_TO_COMPACT_FILE --runType run --ui.commandsInitialize "/geometry/test/run" >> overlapDump.txt
+- [ ] the changes in this PR have not introduced any overlaps. You can check so with the following command: ddsim --compactFile PATH_TO_COMPACT_FILE --runType run --ui.commandsInitialize "/geometry/test/run" >> overlapDump.txt
 - [ ] The release notes below contain a succinct and comprehensive description of the changes that are sufficiently self-explanatory
 
 BEGINRELEASENOTES
