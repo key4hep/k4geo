@@ -71,7 +71,7 @@
     <constant name="Glue_thickness" value="0.1*mm"/>
     <!-- readout in between two absorber plates -->
     <constant name="readout_thickness" value="1.2*mm"/>
-    <constant name="ECal_cell_size" value="5.1*mm"/>
+    <constant name="ECal_cell_size" value="20*mm"/>
   </define>
 
   <display>
