@@ -511,6 +511,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   Volume motherVolume = description.pickMotherVolume(sdet);
   // Place the assembly container inside the mother volume
   PlacedVolume AssemblyEndcapPV = motherVolume.placeVolume(AssemblyEndcap);
+  AssemblyEndcapPV.addPhysVolID("system",x_det.id());
   sdet.setPlacement(AssemblyEndcapPV);
 
   std::cout << "--> DREndcapTubes::create_detector() end" << std::endl;

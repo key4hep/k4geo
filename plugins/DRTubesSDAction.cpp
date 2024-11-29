@@ -155,7 +155,8 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
   auto StaveID = static_cast<unsigned int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(4));
 
   VolumeID VolID = 0; // recreate the 64-bit VolumeID
-  BitFieldCoder bc("stave:10,tower:6,air:1,col:16,row:16,clad:1,core:1,cherenkov:1");
+  BitFieldCoder bc("system:5,stave:10,tower:6,air:1,col:16,row:16,clad:1,core:1,cherenkov:1");
+  bc.set(VolID, "system", 25); // this number is set in DectDimensions_IDEA_o2_v01.xml
   bc.set(VolID, "stave" , StaveID);
   bc.set(VolID, "tower" , TowerID);
   bc.set(VolID, "air", 0);
@@ -178,8 +179,6 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
 
   if (IsScin) {  // it is a scintillating fiber
 
-    //m_userData.fEvtAction->AddEdepScin(Edep);
-
     if (aStep->GetTrack()->GetDefinition()->GetPDGCharge() == 0 || steplength == 0.) {
       return true;  // not ionizing particle
     }
@@ -188,12 +187,9 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
       DRTubesSglHpr::SmearSSignal(DRTubesSglHpr::ApplyBirks(Edep, steplength));
     signalhit = DRTubesSglHpr::AttenuateSSignal(signalhit, distance_to_sipm);
     if (signalhit == 0) return true;
-    //m_userData.fEvtAction->AddSglScin(signalhit);
   }  // end of scintillating fibre sigal calculation
 
   else {  // it is a Cherenkov fiber
-    // save mc truth info in analysismanager auxiliary outputfile
-    //m_userData.fEvtAction->AddEdepCher(Edep);
     // calculate the signal in terms of Cherenkov photo-electrons
     if (aStep->GetTrack()->GetParticleDefinition() == G4OpticalPhoton::Definition()) {
       G4OpBoundaryProcessStatus theStatus = Undefined;
@@ -221,8 +217,6 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
           G4int c_signal = DRTubesSglHpr::SmearCSignal();
           signalhit = DRTubesSglHpr::AttenuateCSignal(c_signal, distance_to_sipm);
           if (signalhit == 0) return true;
-          // save mc truth info in analysismanager auxiliary outputfile
-          //m_userData.fEvtAction->AddSglCher(signalhit);
           aStep->GetTrack()->SetTrackStatus(fStopAndKill);
           break;
         }
