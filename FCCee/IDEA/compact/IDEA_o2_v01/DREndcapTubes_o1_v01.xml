@@ -270,8 +270,21 @@
       <segmentation type="CartesianGridXY" 
              grid_size_x="1*mm" 
              grid_size_y="1*mm"/>
+      <!--
+          Volume ids of this subdetector are defined as "system" for the entire endcap calorimeter,
+	  "stave" for the phi-slices, "tower" for the towers (trapezoids) inside a phi-slice,
+	  "air" dummy for the moment but useful if a tower supporting structure will be added,
+	  "col" and "row" colum and row of tube inside a tower, "clad" "core" "cherenkov"
+	  cladding core volumes and cherenkov identifiers of an optical fiber
+      -->
+      <!--
+	  This subdetector is supposed to be used with regexSD, therefore volumeID(aStep) will
+	  not work in the DRTubesSDAction to retrieve the volumeID. Instead we use g4 copynumbers
+	  accessed from the G4Step to recreate the 64-bit volume ID inside DRTubesSDAction.
+	  Do not change these ids, contact the experts (Lorenzo Pezzotti) before any modification.
+      -->
       <!-- NO SPACES BETWEEN ID DESCRIPTORS!!! -->
-      <id>stave:10,tower:6,air:1,col:16,row:16,clad:1,core:1,cherenkov:1</id>
+      <id>system:5,stave:10,tower:6,air:1,col:16,row:16,clad:1,core:1,cherenkov:1</id>
     </readout>
   </readouts> 
 

@@ -53,6 +53,11 @@
 
 
     <!-- Dual-Readout Endcap Tubes (DRET) calorimeter DetID-->
+    <!-- This number is used in DRTubesSDAction to recreate
+	 the volume ids for this subdetector.
+	 Do not change it, contact the experts (Lorenzo Pezzoti)
+	 before any modification.
+    -->
     <constant name="DetID_DREndcapTubes"          value=" 25"/>
 
     <constant name="DetID_muonSystem"       value=" 26"/>
