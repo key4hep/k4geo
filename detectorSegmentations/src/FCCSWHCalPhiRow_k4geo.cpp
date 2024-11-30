@@ -602,5 +602,32 @@ std::array<double, 2> FCCSWHCalPhiRow_k4geo::cellTheta(const CellID& cID) const 
   return cTheta;
 }
 
+/// determine maximum theta value of the detector. This is used by SW clustering
+double FCCSWHCalPhiRow_k4geo::thetaMax() const {
+  std::vector<std::pair<uint,uint> > minMaxLayerId(getMinMaxLayerId());
+  if(minMaxLayerId.empty()) return 0.;
+
+  // get the first layerId in the Barrel or in the last part of the Endcap
+  uint layer = minMaxLayerId[minMaxLayerId.size()-1].first;
+
+  if(m_radii.empty()) calculateLayerRadii();
+  if(m_cellEdges.empty()) return 0;
+
+  // get the last cell index (which is in the positive-z side)
+  int idx = abs(m_cellIndexes[layer].back());
+
+  // get the z-coordinate of the right-hand edge of the last cell
+  double zhigh = m_cellEdges[layer][idx].second;
+
+  // get the inner radius of the first layer
+  double Rmin = m_radii[layer] - 0.5*m_layerDepth[layer];
+
+  // calculate the minimum theta of the last cell in the first layer -> this is the minimum theta of the detector (Barrel or Endcap)
+  double thetaMin = std::atan2(Rmin,zhigh); // theta min
+
+  return (M_PI - thetaMin); // theta max
+}
+
+
 }
 }

@@ -111,13 +111,18 @@ namespace dd4hep {
         */
         std::array<double, 2> cellTheta(const CellID& cID) const;
 
-        /**  Get the vector of cell indexes in a give layer.
+        /**  Get the vector of cell indexes in a given layer.
         */
 	inline std::vector<int> cellIndexes(const uint layer) const {
           if(m_radii.empty()) calculateLayerRadii();
           if(!m_cellIndexes.empty()) return m_cellIndexes[layer];
           else return std::vector<int>();
         }
+
+        /**  Get the thetaMax needed for SW clustering
+        *   return max theta value of the detector
+        */
+        double thetaMax() const;
 
         /**  Get the min and max layer indexes of each HCal part.
         * For Endcap, returns the three elements vector, while for Barrel - single element vector.
