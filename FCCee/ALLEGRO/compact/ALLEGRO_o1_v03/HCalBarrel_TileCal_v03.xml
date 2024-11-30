@@ -46,6 +46,7 @@
   <readouts>
     <readout name="HCalBarrelReadout">
       <segmentation type="FCCSWHCalPhiTheta_k4geo" 
+         detLayout="0"
          offset_z="0"
          width_z="BarHCal_dz*2"
          offset_r="BarHCal_rmin+BarHCal_face_plate_thickness+BarHCal_plate_space"
@@ -59,6 +60,7 @@
     </readout>
     <readout name="HCalBarrelReadoutPhiRow">
       <segmentation type="FCCSWHCalPhiRow_k4geo" 
+         detLayout="0"
          offset_z="0"
          width_z="2795.5*2*mm"
          offset_r="BarHCal_rmin+BarHCal_face_plate_thickness+BarHCal_plate_space"

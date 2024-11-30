@@ -45,6 +45,7 @@
     <!-- Default readout of DetailedWedge geometry -->
     <readout name="HCalEndcapReadout">
       <segmentation type="FCCSWHCalPhiTheta_k4geo" 
+         detLayout="1"
          offset_z="HCalEndcap_min_z1+(HCalEndcap_max_z1-HCalEndcap_min_z1)*0.5 HCalEndcap_min_z2+(HCalEndcap_max_z2-HCalEndcap_min_z2)*0.5 HCalEndcap_min_z3+(HCalEndcap_max_z3-HCalEndcap_min_z3)*0.5" 
          width_z="(HCalEndcap_max_z1-HCalEndcap_min_z1) (HCalEndcap_max_z2-HCalEndcap_min_z2) (HCalEndcap_max_z3-HCalEndcap_min_z3)" 
          offset_r="HCalEndcap_inner_radius1+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space HCalEndcap_inner_radius2+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space HCalEndcap_inner_radius3+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space"
@@ -58,6 +59,7 @@
     </readout>
     <readout name="HCalEndcapReadoutPhiRow">
       <segmentation type="FCCSWHCalPhiRow_k4geo" 
+         detLayout="1"
          offset_z="HCalEndcap_min_z1+(HCalEndcap_max_z1-HCalEndcap_min_z1)*0.5 HCalEndcap_min_z2+(HCalEndcap_max_z2-HCalEndcap_min_z2)*0.5 HCalEndcap_min_z3+(HCalEndcap_max_z3-HCalEndcap_min_z3)*0.5" 
          width_z="248.5*2*mm 243.0*2*mm 770.5*2*mm"
          offset_r="HCalEndcap_inner_radius1+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space HCalEndcap_inner_radius2+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space HCalEndcap_inner_radius3+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space"
