@@ -13,12 +13,14 @@ FCCSWHCalPhiTheta_k4geo::FCCSWHCalPhiTheta_k4geo(const std::string& cellEncoding
   // register all necessary parameters (additional to those registered in GridTheta_k4geo)
   registerParameter("phi_bins", "Number of bins phi", m_phiBins, 1);
   registerParameter("offset_phi", "Angular offset in phi", m_offsetPhi, 0., SegmentationParameter::AngleUnit, true);
+  registerParameter("detLayout", "The detector layout (0 = Barrel; 1 = Endcap)", m_detLayout, -1);
   registerParameter("offset_z", "Offset in z-axis of the layer center", m_offsetZ, std::vector<double>());
   registerParameter("width_z", "Width in z of the layer", m_widthZ, std::vector<double>());
   registerParameter("offset_r", "Offset in radius of the layer (Rmin)", m_offsetR, std::vector<double>());
   registerParameter("numLayers", "Number of layers", m_numLayers, std::vector<int>());
   registerParameter("dRlayer", "dR of the layer", m_dRlayer, std::vector<double>());
   registerIdentifier("identifier_phi", "Cell ID identifier for phi", m_phiID, "phi");
+  registerIdentifier("identifier_layer", "Cell ID identifier for layer", m_layerID, "layer");
 }
 
 FCCSWHCalPhiTheta_k4geo::FCCSWHCalPhiTheta_k4geo(const BitFieldCoder* decoder) : GridTheta_k4geo(decoder) {
@@ -29,18 +31,20 @@ FCCSWHCalPhiTheta_k4geo::FCCSWHCalPhiTheta_k4geo(const BitFieldCoder* decoder) :
   // register all necessary parameters (additional to those registered in GridTheta_k4geo)
   registerParameter("phi_bins", "Number of bins phi", m_phiBins, 1);
   registerParameter("offset_phi", "Angular offset in phi", m_offsetPhi, 0., SegmentationParameter::AngleUnit, true);
+  registerParameter("detLayout", "The detector layout (0 = Barrel; 1 = Endcap)", m_detLayout, -1);
   registerParameter("offset_z", "Offset in z-axis of the layer center", m_offsetZ, std::vector<double>());
   registerParameter("width_z", "Width in z of the layer", m_widthZ, std::vector<double>());
   registerParameter("offset_r", "Offset in radius of the layer (Rmin)", m_offsetR, std::vector<double>());
   registerParameter("numLayers", "Number of layers", m_numLayers, std::vector<int>());
   registerParameter("dRlayer", "dR of the layer", m_dRlayer, std::vector<double>());
   registerIdentifier("identifier_phi", "Cell ID identifier for phi", m_phiID, "phi");
+  registerIdentifier("identifier_layer", "Cell ID identifier for layer", m_layerID, "layer");
 }
 
 
 /** /// determine the global position based on the cell ID
 Vector3D FCCSWHCalPhiTheta_k4geo::position(const CellID& cID) const {
-  uint layer = _decoder->get(cID,"layer");
+  uint layer = _decoder->get(cID,m_layerID);
   double radius = 1.0;
 
   if(m_radii.empty()) defineCellsInRZplan();
@@ -53,8 +57,8 @@ Vector3D FCCSWHCalPhiTheta_k4geo::position(const CellID& cID) const {
 /// determine the global position based on the cell ID
 /// returns the geometric center of the cell
 Vector3D FCCSWHCalPhiTheta_k4geo::position(const CellID& cID) const {
-  uint layer = _decoder->get(cID,"layer");
-  int thetaID = _decoder->get(cID,"theta");
+  uint layer = _decoder->get(cID,m_layerID);
+  int thetaID = _decoder->get(cID,m_thetaID);
   double zpos = 0.;
   double radius = 1.0;
 
@@ -73,76 +77,33 @@ void FCCSWHCalPhiTheta_k4geo::defineCellsInRZplan() const {
   if(m_radii.empty())
   {
     // check if all necessary variables are available
-    if(m_offsetZ.empty() || m_widthZ.empty() || m_offsetR.empty() || m_numLayers.empty() || m_dRlayer.empty())
+    if(m_detLayout==-1 || m_offsetZ.empty() || m_widthZ.empty() || m_offsetR.empty() || m_numLayers.empty() || m_dRlayer.empty())
     {
-       dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiTheta_k4geo","Please check the readout description in the XML file!",
-                                       "One of the variables is missing: offset_z | width_z | offset_r | numLayers | dRlayer");
+       dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiRow_k4geo","Please check the readout description in the XML file!",
+                                       "One of the variables is missing: detLayout | offset_z | width_z | offset_r | numLayers | dRlayer");
        return;
     }
 
-    // calculate the radius for each layer
-    if(m_offsetZ.size() == 1) // Barrel
-    {
-      dd4hep::printout(dd4hep::INFO, "FCCSWHCalPhiTheta_k4geo","Barrel configuration found!");
-      uint N_dR = m_numLayers.size();
-      double moduleDepth = 0.;
-      for(uint i_dR = 0; i_dR < N_dR; i_dR++)
-      {
-       	for(int i_row = 1; i_row <= m_numLayers[i_dR]; i_row++)
-        {
-          moduleDepth+=m_dRlayer[i_dR];
-          m_radii.push_back(m_offsetR[0] + moduleDepth - m_dRlayer[i_dR]*0.5);
-          // layer lower and upper edges in z-axis
-          m_layerEdges.push_back( std::make_pair(m_offsetZ[0] - 0.5*m_widthZ[0], m_offsetZ[0] + 0.5*m_widthZ[0]) );
-          m_layerDepth.push_back(m_dRlayer[i_dR]);
-        }
-      }
-    } // Barrel
+    if(m_detLayout==0)  dd4hep::printout(dd4hep::INFO, "FCCSWHCalPhiRow_k4geo","Barrel configuration found!");
+    else dd4hep::printout(dd4hep::INFO, "FCCSWHCalPhiRow_k4geo","EndCap configuration found!");
 
-    if(m_offsetZ.size() > 1) // ThreePartsEndCap
+    // calculate the radius for each layer
+    uint N_dR = m_numLayers.size()/m_offsetZ.size();
+    std::vector<double> moduleDepth(m_offsetZ.size());
+    for(uint i_section = 0; i_section < m_offsetZ.size(); i_section++)
     {
-      dd4hep::printout(dd4hep::INFO, "FCCSWHCalPhiTheta_k4geo","ThreePartsEndCap configuration found!");
-      uint N_dR = m_numLayers.size()/3;
-      double moduleDepth1 = 0.;
-      double moduleDepth2 = 0.;
-      double moduleDepth3 = 0.;
-      // part1
       for(uint i_dR = 0; i_dR < N_dR; i_dR++)
       {
-        for(int i_row = 1; i_row <= m_numLayers[i_dR]; i_row++)
+       	for(int i_row = 1; i_row <= m_numLayers[i_dR+i_section*N_dR]; i_row++)
         {
-          moduleDepth1+=m_dRlayer[i_dR];
-          m_radii.push_back(m_offsetR[0] + moduleDepth1 - m_dRlayer[i_dR]*0.5);
+          moduleDepth[i_section]+=m_dRlayer[i_dR];
+          m_radii.push_back(m_offsetR[i_section] + moduleDepth[i_section] - m_dRlayer[i_dR]*0.5);
           // layer lower and upper edges in z-axis
-          m_layerEdges.push_back( std::make_pair(m_offsetZ[0] - 0.5*m_widthZ[0], m_offsetZ[0] + 0.5*m_widthZ[0]) );
+          m_layerEdges.push_back( std::make_pair(m_offsetZ[i_section] - 0.5*m_widthZ[i_section], m_offsetZ[i_section] + 0.5*m_widthZ[i_section]) );
           m_layerDepth.push_back(m_dRlayer[i_dR]);
         }
       }
-      // part2
-      for(uint i_dR = 0; i_dR < N_dR; i_dR++)
-      {
-       	for(int i_row = 1; i_row <= m_numLayers[i_dR + N_dR]; i_row++)
-        {
-          moduleDepth2+=m_dRlayer[i_dR];
-          m_radii.push_back(m_offsetR[1] + moduleDepth2 - m_dRlayer[i_dR]*0.5);
-          // layer lower and upper edges in z-axis
-          m_layerEdges.push_back( std::make_pair(m_offsetZ[1] - 0.5*m_widthZ[1], m_offsetZ[1] + 0.5*m_widthZ[1]) );
-          m_layerDepth.push_back(m_dRlayer[i_dR]);
-        }
-      }
-      // part3
-      for(uint i_dR = 0; i_dR < N_dR; i_dR++)
-      {
-       	for(int i_row = 1; i_row <= m_numLayers[i_dR + 2*N_dR]; i_row++)
-        {
-          moduleDepth3+=m_dRlayer[i_dR];
-          m_radii.push_back(m_offsetR[2] + moduleDepth3 - m_dRlayer[i_dR]*0.5);
-          // layer lower and upper edges in z-axis
-          m_layerEdges.push_back( std::make_pair(m_offsetZ[2] - 0.5*m_widthZ[2], m_offsetZ[2] + 0.5*m_widthZ[2]) );
-          m_layerDepth.push_back(m_dRlayer[i_dR]);
-        }
-      }
-    } // ThreePartsEndcap
+    }
 
     // print info of calculated radii and edges
     for(uint i_layer = 0; i_layer < m_radii.size(); i_layer++){
@@ -196,7 +157,7 @@ void FCCSWHCalPhiTheta_k4geo::defineCellEdges(const uint layer) const {
     m_cellEdges[layer][prevBin].first = m_layerEdges[layer].first;
 
     // for the EndCap, do it again but for negative z part
-    if(m_offsetZ.size() > 1)
+    if(m_detLayout == 1)
     {
       while(m_radii[layer]*std::cos(m_offsetTheta+ibin*m_gridSizeTheta)/std::sin(m_offsetTheta+ibin*m_gridSizeTheta) > (-m_layerEdges[layer].second))
       {
@@ -248,11 +209,11 @@ CellID FCCSWHCalPhiTheta_k4geo::cellID(const Vector3D& /* localPosition */, cons
 
   // For endcap, the volume ID comes with "type" field information which would screw up the topo-clustering as the "row" field,
   // therefore, lets set it to zero, as it is for the cell IDs in the neighbours map.
-  if(m_offsetZ.size() > 1) _decoder->set(cID, "type", 0);
+  if(m_detLayout == 1) _decoder->set(cID, "type", 0);
 
   double lTheta = thetaFromXYZ(globalPosition);
   double lPhi = phiFromXYZ(globalPosition);
-  uint layer = _decoder->get(vID,"layer");
+  uint layer = _decoder->get(vID,m_layerID);
 
   // define cell boundaries in R-z plan
   if(m_radii.empty()) defineCellsInRZplan();
@@ -288,45 +249,32 @@ double FCCSWHCalPhiTheta_k4geo::phi(const CellID& cID) const {
 
 /// Get the min and max layer indexes for each part of the HCal
 std::vector<std::pair<uint,uint> > FCCSWHCalPhiTheta_k4geo::getMinMaxLayerId() const {
-   /*
-    *  hardcoded numbers would be the following:
-    *  std::vector<int> minLayerIdEndcap = {0, 6, 15};
-    *  std::vector<int> maxLayerIdEndcap = {5, 14, 36};
-    *  but lets try to avoid hardcoding:
-    */
-
    std::vector<std::pair<uint,uint> > minMaxLayerId;
 
    if(m_radii.empty()) defineCellsInRZplan();
    if(m_radii.empty()) return minMaxLayerId;
 
+   std::vector<uint> minLayerId(m_offsetZ.size(), 0);
+   std::vector<uint> maxLayerId(m_offsetZ.size(), 0);
 
-   std::vector<int> minLayerIdEndcap = {0, 0, 0};
-   std::vector<int> maxLayerIdEndcap = {-1, 0, 0};
-   if(m_offsetZ.size() > 1)
+   uint Nl = m_numLayers.size()/m_offsetZ.size();
+
+   for(uint i_section = 0; i_section < m_offsetZ.size(); i_section++)
    {
-     uint Nl = m_numLayers.size()/3;
+     if(i_section > 0)
+     {
+       minLayerId[i_section] = maxLayerId[i_section-1] + 1;
+       maxLayerId[i_section] = maxLayerId[i_section-1];
+     }
 
-     // count the number of layers in the first part of the Endcap
-     for(uint i=0; i < Nl; i++) maxLayerIdEndcap[0] += m_numLayers[i];
+     for(uint i=0; i < Nl; i++)
+     {
+       maxLayerId[i_section] += m_numLayers[i+i_section*Nl];
+     }
 
-     minLayerIdEndcap[1] = maxLayerIdEndcap[0]+1;
-     maxLayerIdEndcap[1] = maxLayerIdEndcap[0];
-     // count the number of layers in the second part of the Endcap
-     for(uint i=0; i < Nl; i++) maxLayerIdEndcap[1] += m_numLayers[i+Nl];
+     if(i_section == 0) maxLayerId[0] -= 1;
 
-     minLayerIdEndcap[2] = maxLayerIdEndcap[1]+1;
-     maxLayerIdEndcap[2] = maxLayerIdEndcap[1];
-     // count the number of layers in the third part of the Endcap
-     for(uint i=0; i < Nl; i++) maxLayerIdEndcap[2] += m_numLayers[i+2*Nl];
-
-     minMaxLayerId.push_back(std::make_pair(minLayerIdEndcap[0],maxLayerIdEndcap[0]));
-     minMaxLayerId.push_back(std::make_pair(minLayerIdEndcap[1],maxLayerIdEndcap[1]));
-     minMaxLayerId.push_back(std::make_pair(minLayerIdEndcap[2],maxLayerIdEndcap[2]));
-   }
-   else // for Barrel
-   {
-     minMaxLayerId.push_back(std::make_pair(0,m_radii.size()-1));
+     minMaxLayerId.push_back(std::make_pair(minLayerId[i_section], maxLayerId[i_section]));
    }
 
    return minMaxLayerId;
@@ -340,14 +288,11 @@ std::vector<uint64_t> FCCSWHCalPhiTheta_k4geo::neighbours(const CellID& cID, boo
    if(m_radii.empty()) defineCellsInRZplan();
    if(m_thetaBins.empty()) return cellNeighbours;
 
-   bool EndcapPart1 = false;
-   bool EndcapPart2 = false;
-   bool EndcapPart3 = false;
-
+   uint EndcapPart = 0;
    int minLayerId = -1;
    int maxLayerId = -1;
 
-   int currentLayerId = _decoder->get(cID,"layer");
+   int currentLayerId = _decoder->get(cID,m_layerID);
    int currentCellThetaBin = _decoder->get(cID,m_thetaID);
 
    int minCellThetaBin = m_thetaBins[currentLayerId].front();
@@ -356,48 +301,29 @@ std::vector<uint64_t> FCCSWHCalPhiTheta_k4geo::neighbours(const CellID& cID, boo
    //--------------------------------
    // Determine min and max layer Id
    //--------------------------------
-   // if this is the segmentation of three parts Endcap
-   std::vector<int> minLayerIdEndcap = {0, 0, 0};
-   std::vector<int> maxLayerIdEndcap = {0, 0, 0};
-   if(m_offsetZ.size() > 1)
+   std::vector<int> minLayerIdEndcap(m_offsetZ.size(),0);
+   std::vector<int> maxLayerIdEndcap(m_offsetZ.size(),0);
+   if(m_detLayout == 1)
    {
      std::vector<std::pair<uint,uint> > minMaxLayerId(getMinMaxLayerId());
      if(minMaxLayerId.empty())
      {
-       dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiTheta_k4geo","Can not get ThreePartsEndcap min and max layer indexes! --> returning empty neighbours");
+       dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiTheta_k4geo","Can not get Endcap min and max layer indexes! --> returning empty neighbours");
        return cellNeighbours;
      }
 
-     // part1 min and max layer index
-     minLayerIdEndcap[0] = minMaxLayerId[0].first;
-     maxLayerIdEndcap[0] = minMaxLayerId[0].second;
-     // part2 min and max layer index
-     minLayerIdEndcap[1] = minMaxLayerId[1].first;
-     maxLayerIdEndcap[1] = minMaxLayerId[1].second;
-     // part3 min and max layer index
-     minLayerIdEndcap[2] = minMaxLayerId[2].first;
-     maxLayerIdEndcap[2] = minMaxLayerId[2].second;
+     // determine min and max layer Ids and which section/part it is
+     for(uint i_section = 0; i_section < minMaxLayerId.size(); i_section++)
+     {
+       minLayerIdEndcap[i_section] = minMaxLayerId[i_section].first;
+       maxLayerIdEndcap[i_section] = minMaxLayerId[i_section].second;
 
-     // Part 1
-     if(currentLayerId >= minLayerIdEndcap[0] && currentLayerId <= maxLayerIdEndcap[0])
-     {
-       minLayerId = minLayerIdEndcap[0];
-       maxLayerId = maxLayerIdEndcap[0];
-       EndcapPart1 = true;
-     }
-     // Part 2
-     if(currentLayerId >= minLayerIdEndcap[1] && currentLayerId <= maxLayerIdEndcap[1])
-     {
-       minLayerId = minLayerIdEndcap[1];
-       maxLayerId = maxLayerIdEndcap[1];
-       EndcapPart2 = true;
-     }
-     // Part 3
-     if(currentLayerId >= minLayerIdEndcap[2] && currentLayerId <= maxLayerIdEndcap[2])
-     {
-       minLayerId = minLayerIdEndcap[2];
-       maxLayerId = maxLayerIdEndcap[2];
-       EndcapPart3 = true;
+       if(currentLayerId >= minLayerIdEndcap[i_section] && currentLayerId <= maxLayerIdEndcap[i_section])
+       {
+         minLayerId = minLayerIdEndcap[i_section];
+         maxLayerId = maxLayerIdEndcap[i_section];
+         EndcapPart = i_section;
+       }
      }
 
      // correct the min and max theta bin for endcap
@@ -446,7 +372,7 @@ std::vector<uint64_t> FCCSWHCalPhiTheta_k4geo::neighbours(const CellID& cID, boo
    //----------------------------------------------
 
    // deal with the Barrel
-   if(m_offsetZ.size() == 1)
+   if(m_detLayout == 0)
    {
      double currentCellZmin = m_cellEdges[currentLayerId][currentCellThetaBin].first;
      double currentCellZmax = m_cellEdges[currentLayerId][currentCellThetaBin].second;
@@ -456,7 +382,7 @@ std::vector<uint64_t> FCCSWHCalPhiTheta_k4geo::neighbours(const CellID& cID, boo
      {
        CellID nID = cID ;
        int prevLayerId = currentLayerId - 1;
-       _decoder->set(nID,"layer",prevLayerId);
+       _decoder->set(nID,m_layerID,prevLayerId);
 
        _decoder->set(nID,m_thetaID,currentCellThetaBin);
        cellNeighbours.push_back(nID); // add the cell with the same theta bin from the previous layer of the same phi module
@@ -502,7 +428,7 @@ std::vector<uint64_t> FCCSWHCalPhiTheta_k4geo::neighbours(const CellID& cID, boo
      {
        CellID nID = cID ;
        int nextLayerId = currentLayerId + 1;
-       _decoder->set(nID,"layer",nextLayerId);
+       _decoder->set(nID,m_layerID,nextLayerId);
 
        _decoder->set(nID,m_thetaID,currentCellThetaBin);
        cellNeighbours.push_back(nID); // add the cell with the same theta bin from the next layer of the same phi module
@@ -548,8 +474,8 @@ std::vector<uint64_t> FCCSWHCalPhiTheta_k4geo::neighbours(const CellID& cID, boo
      }
    }
 
-   // if this is the Endcap then look for neighbours in different parts as well
-   if(m_offsetZ.size() > 1)
+   // Endcap
+   if(m_detLayout == 1)
    {
      double currentCellZmin = m_cellEdges[currentLayerId][currentCellThetaBin].first;
      double currentCellZmax = m_cellEdges[currentLayerId][currentCellThetaBin].second;
@@ -559,7 +485,7 @@ std::vector<uint64_t> FCCSWHCalPhiTheta_k4geo::neighbours(const CellID& cID, boo
      {
        CellID nID = cID ;
        int prevLayerId = currentLayerId - 1;
-       _decoder->set(nID,"layer",prevLayerId);
+       _decoder->set(nID,m_layerID,prevLayerId);
        // find the ones that share at least part of a border with the current cell
        for( auto bin : m_thetaBins[prevLayerId] )
        {
@@ -607,7 +533,7 @@ std::vector<uint64_t> FCCSWHCalPhiTheta_k4geo::neighbours(const CellID& cID, boo
      {
        CellID nID = cID ;
        int nextLayerId = currentLayerId + 1;
-       _decoder->set(nID,"layer",nextLayerId);
+       _decoder->set(nID,m_layerID,nextLayerId);
        // find the ones that share at least part of a border with the current cell
        for( auto bin : m_thetaBins[nextLayerId] )
        {
@@ -650,135 +576,143 @@ std::vector<uint64_t> FCCSWHCalPhiTheta_k4geo::neighbours(const CellID& cID, boo
        }
      }
 
-
-     //
-     double currentLayerRmin = m_radii[currentLayerId] - 0.5*m_layerDepth[currentLayerId];
-     double currentLayerRmax = m_radii[currentLayerId] + 0.5*m_layerDepth[currentLayerId];
-
-
-     // if the cell is in negative-z part, then swap min and max theta bins
-     if(theta(cID) > M_PI/2.)
+     // if the Endcap consists of more than 1 part/section then look for neighbours in different parts as well
+     if(m_offsetZ.size() > 1)
      {
-       minCellThetaBin = m_thetaBins[currentLayerId].back();
-       maxCellThetaBin = m_thetaBins[currentLayerId][m_thetaBins[currentLayerId].size()/2];
-     }
+       //
+       double currentLayerRmin = m_radii[currentLayerId] - 0.5*m_layerDepth[currentLayerId];
+       double currentLayerRmax = m_radii[currentLayerId] + 0.5*m_layerDepth[currentLayerId];
 
-     // if it is the last cell in the part1
-     if(EndcapPart1 && currentCellThetaBin == minCellThetaBin )
-     {
-       // find the layers in the part2 that share a border with the current layer
-       for(int part2layerId = minLayerIdEndcap[1]; part2layerId <= maxLayerIdEndcap[1]; part2layerId++)
+       // if the cell is in negative-z part, then swap min and max theta bins
+       if(theta(cID) > M_PI/2.)
        {
-         double Rmin = m_radii[part2layerId] - 0.5*m_layerDepth[part2layerId];
-         double Rmax = m_radii[part2layerId] + 0.5*m_layerDepth[part2layerId];
+         minCellThetaBin = m_thetaBins[currentLayerId].back();
+         maxCellThetaBin = m_thetaBins[currentLayerId][m_thetaBins[currentLayerId].size()/2];
+       }
 
-         if( (Rmin >= currentLayerRmin && Rmin <= currentLayerRmax)
-          || (Rmax > currentLayerRmin && Rmax <= currentLayerRmax)
-          || (currentLayerRmin >= Rmin && currentLayerRmin < Rmax)
-          || (currentLayerRmax >= Rmin && currentLayerRmax <= Rmax)
-         )
+       // if it is the last cell in the part1
+       if(EndcapPart == 0 && currentCellThetaBin == minCellThetaBin )
+       {
+         // find the layers in the part2 that share a border with the current layer
+         for(int part2layerId = minLayerIdEndcap[1]; part2layerId <= maxLayerIdEndcap[1]; part2layerId++)
          {
-           CellID nID = cID ;
-           _decoder->set(nID,"layer",part2layerId);
-           _decoder->set(nID,m_thetaID,maxCellThetaBin);
-           cellNeighbours.push_back(nID); // add the last theta bin cell from part2 layer
-         }
-         if(aDiagonal && Rmax == currentLayerRmin)
-         {
-           CellID nID = cID ;
-           _decoder->set(nID,"layer",part2layerId);
-           _decoder->set(nID,m_thetaID,maxCellThetaBin);
-           cellNeighbours.push_back(nID); // add the last theta bin cell from part2 layer
+           double Rmin = m_radii[part2layerId] - 0.5*m_layerDepth[part2layerId];
+           double Rmax = m_radii[part2layerId] + 0.5*m_layerDepth[part2layerId];
+
+           if( (Rmin >= currentLayerRmin && Rmin <= currentLayerRmax)
+            || (Rmax > currentLayerRmin && Rmax <= currentLayerRmax)
+            || (currentLayerRmin >= Rmin && currentLayerRmin < Rmax)
+            || (currentLayerRmax >= Rmin && currentLayerRmax <= Rmax)
+           )
+           {
+             CellID nID = cID ;
+             _decoder->set(nID,m_layerID,part2layerId);
+             _decoder->set(nID,m_thetaID,maxCellThetaBin);
+             cellNeighbours.push_back(nID); // add the last theta bin cell from part2 layer
+           }
+           if(aDiagonal && Rmax == currentLayerRmin)
+           {
+             CellID nID = cID ;
+             _decoder->set(nID,m_layerID,part2layerId);
+             _decoder->set(nID,m_thetaID,maxCellThetaBin);
+             cellNeighbours.push_back(nID); // add the last theta bin cell from part2 layer
+           }
          }
        }
-     }
 
-     // if it is the last theta bin cell in the part2
-     if(EndcapPart2 && currentCellThetaBin == maxCellThetaBin)
-     {
-       // find the layers in part1 that share a border with the current layer
-       for(int part1layerId = minLayerIdEndcap[0]; part1layerId <= maxLayerIdEndcap[0]; part1layerId++)
+       // if the Endcap consists of more than 2 parts:
+       for(uint i_section = 1; i_section < (m_offsetZ.size()-1); i_section++)
        {
-         double Rmin = m_radii[part1layerId] - 0.5*m_layerDepth[part1layerId];
-         double Rmax = m_radii[part1layerId] + 0.5*m_layerDepth[part1layerId];
+         if(i_section != EndcapPart) continue;
 
-         if( (Rmin >= currentLayerRmin && Rmin < currentLayerRmax)
-          || (Rmax >= currentLayerRmin && Rmax <= currentLayerRmax)
-          || (currentLayerRmin >= Rmin && currentLayerRmin <= Rmax)
-          || (currentLayerRmax > Rmin && currentLayerRmax <= Rmax)
-         )
+         // if it is the last theta bin cell then look for neighbours in previous part
+         if(currentCellThetaBin == maxCellThetaBin)
          {
-           CellID nID = cID ;
-           _decoder->set(nID,"layer",part1layerId);
-           _decoder->set(nID,m_thetaID,minCellThetaBin);
-           cellNeighbours.push_back(nID); // add the first theta bin cell from the part1 layer
+           // find the layers in the previous part that share a border with the current layer
+           for(int prevPartLayerId = minLayerIdEndcap[i_section-1]; prevPartLayerId <= maxLayerIdEndcap[i_section-1]; prevPartLayerId++)
+           {
+             double Rmin = m_radii[prevPartLayerId] - 0.5*m_layerDepth[prevPartLayerId];
+             double Rmax = m_radii[prevPartLayerId] + 0.5*m_layerDepth[prevPartLayerId];
+
+             if( (Rmin >= currentLayerRmin && Rmin < currentLayerRmax)
+              || (Rmax >= currentLayerRmin && Rmax <= currentLayerRmax)
+              || (currentLayerRmin >= Rmin && currentLayerRmin <= Rmax)
+              || (currentLayerRmax > Rmin && currentLayerRmax <= Rmax)
+             )
+             {
+               CellID nID = cID ;
+               _decoder->set(nID,m_layerID,prevPartLayerId);
+               _decoder->set(nID,m_thetaID,minCellThetaBin);
+               cellNeighbours.push_back(nID); // add the first theta bin cell from the part1 layer
+             }
+             if(aDiagonal && Rmin == currentLayerRmax)
+             {
+               CellID nID = cID ;
+               _decoder->set(nID,m_layerID,prevPartLayerId);
+               _decoder->set(nID,m_thetaID,minCellThetaBin);
+               cellNeighbours.push_back(nID); // add the first theta bin cell from the part1 layer
+             }
+           }
          }
-         if(aDiagonal && Rmin == currentLayerRmax)
+
+         // if it is the first theta bin cell then look for neighbours in the next part
+         if(currentCellThetaBin == minCellThetaBin)
          {
-           CellID nID = cID ;
-           _decoder->set(nID,"layer",part1layerId);
-           _decoder->set(nID,m_thetaID,minCellThetaBin);
-           cellNeighbours.push_back(nID); // add the first theta bin cell from the part1 layer
+           // find the layers in the next part that share a border with the current layer
+           for(int nextPartLayerId = minLayerIdEndcap[i_section+1]; nextPartLayerId <= maxLayerIdEndcap[i_section+1]; nextPartLayerId++)
+           {
+             double Rmin = m_radii[nextPartLayerId] - 0.5*m_layerDepth[nextPartLayerId];
+             double Rmax = m_radii[nextPartLayerId] + 0.5*m_layerDepth[nextPartLayerId];
+
+             if( (Rmin >= currentLayerRmin && Rmin <= currentLayerRmax)
+              || (Rmax > currentLayerRmin && Rmax <= currentLayerRmax)
+              || (currentLayerRmin >= Rmin && currentLayerRmin < Rmax)
+              || (currentLayerRmax >= Rmin && currentLayerRmax <= Rmax)
+             )
+             {
+               CellID nID = cID ;
+               _decoder->set(nID,m_layerID,nextPartLayerId);
+               _decoder->set(nID,m_thetaID,maxCellThetaBin);
+               cellNeighbours.push_back(nID); // add the first cell from the part3 layer
+             }
+             if(aDiagonal && Rmax == currentLayerRmin)
+             {
+               CellID nID = cID ;
+               _decoder->set(nID,m_layerID,nextPartLayerId);
+               _decoder->set(nID,m_thetaID,maxCellThetaBin);
+               cellNeighbours.push_back(nID); // add the first cell from the part3 layer
+             }
+           }
          }
        }
-     }
 
-     // if it is the first theta bin cell in the part2
-     if(EndcapPart2 && currentCellThetaBin == minCellThetaBin)
-     {
-       // find the layers in the part3 that share a border with the current layer
-       for(int part3layerId = minLayerIdEndcap[2]; part3layerId <= maxLayerIdEndcap[2]; part3layerId++)
+       // if it is the last theta bin cell in the last part of the Endcap
+       if(EndcapPart == (m_offsetZ.size() - 1) && currentCellThetaBin == maxCellThetaBin)
        {
-         double Rmin = m_radii[part3layerId] - 0.5*m_layerDepth[part3layerId];
-         double Rmax = m_radii[part3layerId] + 0.5*m_layerDepth[part3layerId];
+         // find the layers in the previous part that share a border with the current layer
+         for(int prevPartLayerId = minLayerIdEndcap[m_offsetZ.size()-2]; prevPartLayerId <= maxLayerIdEndcap[m_offsetZ.size()-2]; prevPartLayerId++)
+         {
+           double Rmin = m_radii[prevPartLayerId] - 0.5*m_layerDepth[prevPartLayerId];
+           double Rmax = m_radii[prevPartLayerId] + 0.5*m_layerDepth[prevPartLayerId];
 
-         if( (Rmin >= currentLayerRmin && Rmin <= currentLayerRmax)
-          || (Rmax > currentLayerRmin && Rmax <= currentLayerRmax)
-          || (currentLayerRmin >= Rmin && currentLayerRmin < Rmax)
-          || (currentLayerRmax >= Rmin && currentLayerRmax <= Rmax)
-         )
-         {
-           CellID nID = cID ;
-           _decoder->set(nID,"layer",part3layerId);
-           _decoder->set(nID,m_thetaID,maxCellThetaBin);
-           cellNeighbours.push_back(nID); // add the first cell from the part3 layer
-         }
-         if(aDiagonal && Rmax == currentLayerRmin)
-         {
-           CellID nID = cID ;
-           _decoder->set(nID,"layer",part3layerId);
-           _decoder->set(nID,m_thetaID,maxCellThetaBin);
-           cellNeighbours.push_back(nID); // add the first cell from the part3 layer
-         }
-       }
-     }
-
-     // if it is the last theta bin cell in the part3
-     if(EndcapPart3 && currentCellThetaBin == maxCellThetaBin)
-     {
-       // find the layers in the part2 that share a border with the current layer
-       for(int part2layerId = minLayerIdEndcap[1]; part2layerId <= maxLayerIdEndcap[1]; part2layerId++)
-       {
-         double Rmin = m_radii[part2layerId] - 0.5*m_layerDepth[part2layerId];
-         double Rmax = m_radii[part2layerId] + 0.5*m_layerDepth[part2layerId];
-
-         if( (Rmin >= currentLayerRmin && Rmin < currentLayerRmax)
-          || (Rmax >= currentLayerRmin && Rmax <= currentLayerRmax)
-          || (currentLayerRmin >= Rmin && currentLayerRmin <= Rmax)
-          || (currentLayerRmax > Rmin && currentLayerRmax <= Rmax)
-         )
-         {
-           CellID nID = cID ;
-           _decoder->set(nID,"layer",part2layerId);
-           _decoder->set(nID,m_thetaID,minCellThetaBin);
-           cellNeighbours.push_back(nID); // add the first theta bin cell from the part2 layer
-         }
-         if(aDiagonal && Rmin == currentLayerRmax)
-         {
-           CellID nID = cID ;
-           _decoder->set(nID,"layer",part2layerId);
-           _decoder->set(nID,m_thetaID,minCellThetaBin);
-           cellNeighbours.push_back(nID); // add the first theta bin cell from the part2 layer
+           if( (Rmin >= currentLayerRmin && Rmin < currentLayerRmax)
+            || (Rmax >= currentLayerRmin && Rmax <= currentLayerRmax)
+            || (currentLayerRmin >= Rmin && currentLayerRmin <= Rmax)
+            || (currentLayerRmax > Rmin && currentLayerRmax <= Rmax)
+           )
+           {
+             CellID nID = cID ;
+             _decoder->set(nID,m_layerID,prevPartLayerId);
+             _decoder->set(nID,m_thetaID,minCellThetaBin);
+             cellNeighbours.push_back(nID); // add the first theta bin cell from the part2 layer
+           }
+           if(aDiagonal && Rmin == currentLayerRmax)
+           {
+             CellID nID = cID ;
+             _decoder->set(nID,m_layerID,prevPartLayerId);
+             _decoder->set(nID,m_thetaID,minCellThetaBin);
+             cellNeighbours.push_back(nID); // add the first theta bin cell from the part2 layer
+           }
          }
        }
      }
@@ -816,7 +750,7 @@ std::array<double, 2> FCCSWHCalPhiTheta_k4geo::cellTheta(const CellID& cID) cons
   // get the cell index
   int idx = _decoder->get(cID, m_thetaID);
   // get the layer index
-  uint layer = _decoder->get(cID,"layer");
+  uint layer = _decoder->get(cID,m_layerID);
 
   if(m_radii.empty()) defineCellsInRZplan();
   if(m_cellEdges.empty()) return cTheta;

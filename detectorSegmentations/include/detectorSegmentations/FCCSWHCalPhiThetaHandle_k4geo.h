@@ -86,6 +86,9 @@ public:
   /// set the coordinate offset in Phi
   inline void setOffsetPhi(double offset) const { access()->implementation->setOffsetPhi(offset); }
 
+  /// set the detector layout
+  inline void setDetLayout(int detLayout) const { access()->implementation->setDetLayout(detLayout); }
+
   /// set the coordinate offset in z-axis
   inline void setOffsetZ(std::vector<double> const&offset) const { access()->implementation->setOffsetZ(offset); }
 
@@ -112,6 +115,10 @@ public:
 
   /// access the field name used for Phi
   inline const std::string& fieldNamePhi() const { return access()->implementation->fieldNamePhi(); }
+
+  /// access the field name used for layer
+  inline const std::string& fieldNameLayer() const { return access()->implementation->fieldNameLayer(); }
+
 
   /** \brief Returns a std::vector<double> of the cellDimensions of the given cell ID
       in natural order of dimensions (dPhi, dTheta)

@@ -11,6 +11,9 @@
  *  Segmentation in row and phi.
  *
  *  Cells are defined in r-z plan by merging the row/sequence of scintillator/absorber.
+ *  Each row consists of 2 * Master_Plate + 1 * Spacer_Plate + 1 * Scintillator.
+ *  Considering a single row as a single cell gives the highest possible granularity.
+ *  More details:  https://indico.cern.ch/event/1475808/contributions/6219554/attachments/2966253/5218774/FCC_FullSim_HCal_slides.pdf
  *
  */
 
@@ -42,6 +45,7 @@ namespace dd4hep {
                         const VolumeID& aVolumeID) const;
 
         /**  Find neighbours of the cell
+        *   Definition of neighbours is explained on slide 7: https://indico.cern.ch/event/1475808/contributions/6219554/attachments/2966253/5218774/FCC_FullSim_HCal_slides.pdf
         *   @param[in] aCellId ID of a cell.
         *   return vector of neighbour cellIDs.
         */
@@ -49,6 +53,10 @@ namespace dd4hep {
 
 
         /**  Calculate layer radii and edges in z-axis.
+        *    Following member variables are calculated:
+        *      m_radii
+        *      m_layerEdges
+        *      m_layerDepth
         */
         void calculateLayerRadii() const;
 
@@ -58,7 +66,9 @@ namespace dd4hep {
         *  In case of a cell with single row/sequence, the index is directly the number of row in the layer.
         *  In case of a cell with several rows/sequences merged, the index is the number of cell in the layer.
         *  For the layers of negative-z Endcap, indexes of cells are negative.
-        *
+        *  Following member variables are calculated:
+        *   m_cellIndexes
+        *   m_cellEdges
         *   @param[in] layer index 
         */
 	void defineCellIndexes(const unsigned int layer) const;
@@ -79,7 +89,7 @@ namespace dd4hep {
         */
         inline int phiBins() const { return m_phiBins; }
 
-        /**  Get the coordinate offset in azimuthal angle.
+        /**  Get the coordinate offset in azimuthal angle, which is the center of cell with m_phiID=0.
         *   return The offset in phi.
         */
         inline double offsetPhi() const { return m_offsetPhi; }
@@ -114,27 +124,34 @@ namespace dd4hep {
         */
         std::vector<std::pair<uint,uint> > getMinMaxLayerId() const ;
 
-        /**  Get the coordinate offset in z-axis.
+        /**  Get the coordinate offset in z-axis. 
+        *   Offset is the middle position of the Barrel or each section of the Endcap.
+        *   For the Barrel, the vector size is 1, while for the Endcap - number of section.
         *   return The offset in z.
         */
         inline std::vector<double> offsetZ() const { return m_offsetZ; }
 
-        /**  Get the z width of the layer.
-        *   return the z width.
+        /**  Get the z length of the layer.
+        *   return the z length.
         */
 	inline std::vector<double> widthZ() const { return m_widthZ; }
 
         /**  Get the coordinate offset in radius.
+        *   Offset is the inner radius of the first layer in the Barrel or in each section of the Endcap.
+        *   For the Barrel, the vector size is 1, while for the Endcap - number of sections.
         *   return the offset in radius.
         */
 	inline std::vector<double> offsetR() const { return m_offsetR; }
 
-        /**  Get the number of layers.
+        /**  Get the number of layers for each different thickness retrieved with dRlayer().
+        *   For the Barrel, the vector size equals to the number of different thicknesses used to form the layers.
+        *   For the Endcap, the vector size equals to the number of sections in the Endcap times the number of different thicknesses used to form the layers.
         *   return the number of layers.
         */
 	inline std::vector<int> numLayers() const { return m_numLayers; }
 
-        /**  Get the dR of layers.
+        /**  Get the dR (thickness) of layers.
+        *   The size of the vector equals to the number of different thicknesses used to form the layers.
         *   return the dR.
         */
 	inline std::vector<double> dRlayer() const { return m_dRlayer; }
@@ -143,6 +160,11 @@ namespace dd4hep {
         *   return The field name for phi.
         */
         inline const std::string& fieldNamePhi() const { return m_phiID; }
+
+        /**  Get the field name for layer.
+        *   return The field name for layer.
+        */
+	inline const std::string& fieldNameLayer() const { return m_layerID; }
 
         /**  Get the field name for row number.
         *   return The field name for row.
@@ -163,6 +185,11 @@ namespace dd4hep {
         *   @param[in] aCellSize Cell size in theta.
         */
         inline void setGridSizeRow(std::vector<int> const&size) { m_gridSizeRow = size; }
+
+        /**  Set the detector layout (0 = Barrel; 1 = Endcap).
+        *   @param[in] detLayout
+        */
+	inline void setDetLayout(int detLayout) { m_detLayout = detLayout; }
 
         /**  Set the coordinate offset in z-axis.
         *   @param[in] offset in z (centre of the layer).
@@ -208,12 +235,16 @@ namespace dd4hep {
         double m_offsetPhi;
         /// the field name used for phi
         std::string m_phiID;
+        /// the field name used for layer
+        std::string m_layerID;
         /// the grid size in row for each layer
         std::vector<int> m_gridSizeRow;
         /// dz of row
         double m_dz_row;
         /// the field name used for row
         std::string m_rowID;
+        /// the detector layout (0 = Barrel; 1 = Endcap)
+        int m_detLayout;
         /// the z offset of middle of the layer
         std::vector<double> m_offsetZ;
         /// the z width of the layer

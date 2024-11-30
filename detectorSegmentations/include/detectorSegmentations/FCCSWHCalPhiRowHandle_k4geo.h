@@ -80,6 +80,9 @@ public:
   /// set the coordinate offset in Phi
   inline void setOffsetPhi(double offset) const { access()->implementation->setOffsetPhi(offset); }
 
+  /// set the detector layout
+  inline void setDetLayout(int detLayout) const { access()->implementation->setDetLayout(detLayout); }
+
   /// set the coordinate offset in z-axis
   inline void setOffsetZ(std::vector<double> const&offset) const { access()->implementation->setOffsetZ(offset); }
 
@@ -100,6 +103,9 @@ public:
 
   /// set the grid size in Phi
   inline void setPhiBins(int cellSize) const { access()->implementation->setPhiBins(cellSize); }
+
+  /// access the field name used for layer
+  inline const std::string& fieldNameLayer() const { return access()->implementation->fieldNameLayer(); }
 
   /// access the field name used for theta
   inline const std::string& fieldNameRow() const { return access()->implementation->fieldNameRow(); }
