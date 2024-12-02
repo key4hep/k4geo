@@ -242,7 +242,7 @@
             type="DDDRCaloTubes"
             id="1234"
             readout="MyReadout"
-            vis="MyVis" >
+            vis="DRBTVis" >
 
             <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_BARREL"/>
 
@@ -254,16 +254,16 @@
                 deltaphi="DRBTTowerPhiCoverage" />
 
             <trap>
-                <support material="Brass" width="DRBTSupportSideThickness" depth="DRBTSupportFrontThickness" z2="DRBTSupportBackThickness" vis="trap_vis"/>
-                <air  material="Air"   vis="air_vis" />
+                <support material="Brass" width="DRBTSupportSideThickness" depth="DRBTSupportFrontThickness" z2="DRBTSupportBackThickness" vis="DRBTtrap_vis"/>
+                <air  material="Air"   vis="DRBTair_vis" />
             </trap>
 
             <tube>
-                <capillary  material="Brass"               outer_r="DRBTTubeOuterRadius" sensitive="false" vis="capillary_vis" threshold="DRBTTubeTolerance" />
-                <scin_clad  material="PMMA"                outer_r="DRBTCladOuterRadius" sensitive="false" vis="scin_clad_vis" />
-                <scin_core material="DR_Polystyrene"       outer_r="DRBTCoreOuterRadius" sensitive="false"  vis="scin_core_vis" />
-                <cher_clad  material="Fluorinated_Polymer" outer_r="DRBTCladOuterRadius" sensitive="false" vis="cher_clad_vis" />
-                <cher_core material="PMMA"                 outer_r="DRBTCoreOuterRadius" sensitive="false"  vis="cher_core_vis" />
+                <capillary  material="Brass"               outer_r="DRBTTubeOuterRadius" sensitive="false" vis="DRBTcapillary_vis" threshold="DRBTTubeTolerance" />
+                <scin_clad  material="PMMA"                outer_r="DRBTCladOuterRadius" sensitive="false" vis="DRBTscin_clad_vis" />
+                <scin_core material="DR_Polystyrene"       outer_r="DRBTCoreOuterRadius" sensitive="false"  vis="DRBTscin_core_vis" />
+                <cher_clad  material="Fluorinated_Polymer" outer_r="DRBTCladOuterRadius" sensitive="false" vis="DRBTcher_clad_vis" />
+                <cher_core material="PMMA"                 outer_r="DRBTCoreOuterRadius" sensitive="false"  vis="DRBTcher_core_vis" />
             </tube>
 
         </detector>
@@ -279,69 +279,6 @@
                 grid_size_y="1*mm"/>
         </readout>
     </readouts>
-
-    <display>
-        <vis name="MyVis" 
-            alpha="0.1"
-            r="0.1" g=".5" b=".5"
-            showDaughters="true"
-            visible="false"/>
-
-        <vis name="capillary_vis"
-            alpha="1.0"
-            r="0.855" g="0.647" b="0.125"
-            showDaughters="false"
-            visible="false" />
-
-        <vis name="scin_clad_vis" 
-            alpha="1.0"
-            r="0.800" g="0.188" b="0.078"
-            showDaughters="false"
-            visible="false" />
-
-        <vis name="scin_core_vis" 
-            alpha="1.0"
-            r="1.000" g="0.388" b="0.278"
-            showDaughters="false"
-            visible="false" />
-
-        <vis name="cher_clad_vis" 
-            alpha="1.0"
-            r="0.192" g="0.484" b="0.729"
-            showDaughters="false"
-            visible="false" />
-
-        <vis name="cher_core_vis" 
-            alpha="1.0"
-            r="0.392" g="0.584" b="0.929"
-            showDaughters="false"
-            visible="false" />
-
-        <vis name="air_vis" 
-            alpha="0.10"
-            r="1.0" g="0.0" b="0.0"
-            showDaughters="true"
-            visible="false" />
-
-        <vis name="trap_vis"
-            alpha="1.0"
-            r="0.855" g="0.647" b="0.125"
-            showDaughters="false"
-            visible="true" />
-
-        <vis name="stave_vis"
-            alpha="0.1"
-            r="0.2" g="0.2" b="0.2"
-            showDaughters="true"
-            visible="true" />
-
-        <vis name="assembly_vis"
-            alpha="0.0"
-            r="0.33" g="0.33" b="0.33"
-            showDaughters="true"
-            visible="true" />
-
-    </display>
 
     <!--<limits>
         <limitset name="cal_limits">
