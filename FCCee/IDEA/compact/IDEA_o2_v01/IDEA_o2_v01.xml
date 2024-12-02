@@ -62,7 +62,7 @@
   <include ref="DREndcapTubes_o1_v01.xml"/>
 
   <!-- Import tubes-based dual-readout barrel calorimeter -->
-  <include ref="DDDRCaloTubes.xml"/>
+  <include ref="DDDRCaloTubes_o1_v01.xml"/>
 
   <!-- Import muon system -->
   <include ref="../IDEA_o1_v03/MuonSystem_o1_v01.xml"/>

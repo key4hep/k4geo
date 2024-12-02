@@ -23,11 +23,11 @@
     xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">-->
 
     <info name="DDDRCaloTubes"
-        title="My first detector"
+        title=""
 	    author="Andreas Loeschcke Centeno"
         status="development"
-        version="1">
-        <comment>My first detector</comment>
+        version="0.1">
+        <comment></comment>
     </info>
 
     <properties>
