@@ -296,6 +296,18 @@
     <vis name="DRETcore_S_Vis" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false"/>
     <vis name="DRETcore_C_Vis" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false"/>
     <!-- end of DRET vis-->
+    <!-- Dual-Readout Battel Tubs vis-->
+    <vis name="DRBTVis" alpha="0.1" r="0.1" g=".5" b=".5" showDaughters="true" visible="false"/>
+    <vis name="DRBTcapillary_vis" alpha="1.0" r="0.855" g="0.647" b="0.125" showDaughters="false" visible="false" />
+    <vis name="DRBTscin_clad_vis" alpha="1.0" r="0.800" g="0.188" b="0.078" showDaughters="false" visible="false" />
+    <vis name="DRBTscin_core_vis" alpha="1.0" r="1.000" g="0.388" b="0.278" showDaughters="false" visible="false" />
+    <vis name="DRBTcher_clad_vis" alpha="1.0" r="0.192" g="0.484" b="0.729" showDaughters="false" visible="false" />
+    <vis name="DRBTcher_core_vis" alpha="1.0" r="0.392" g="0.584" b="0.929" showDaughters="false" visible="false" />
+    <vis name="DRBTair_vis" alpha="0.10" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false" />
+    <vis name="DRBTtrap_vis" alpha="1.0" r="0.855" g="0.647" b="0.125" showDaughters="false" visible="true" />
+    <vis name="DRBTstave_vis" alpha="0.1" r="0.2" g="0.2" b="0.2" showDaughters="true" visible="true" />
+    <vis name="DRBTassembly_vis" alpha="0.0" r="0.33" g="0.33" b="0.33" showDaughters="true" visible="true" />
+    <!-- end of DRBT vis-->
     <vis name="yoke_vis" r="255/256" g="0/256" b="0/256" alpha="1.0" showDaughters="true" visible="true" />
     <vis name="no_vis" showDaughters="true" visible="false" />
     <vis name="G10_FR4_vis" r="0.6" g="0.4" b="0.2" alpha="1.0" showDaughters="true" visible="true" />
