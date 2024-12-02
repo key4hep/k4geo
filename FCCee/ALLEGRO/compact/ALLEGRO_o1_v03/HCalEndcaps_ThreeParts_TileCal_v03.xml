@@ -25,6 +25,10 @@
     <constant name="EndcapHCal_end_plate_thickness" value="5*mm" />
     <constant name="EndcapHCal_face_plate_thickness" value="10*mm" />
     <constant name="EndcapHCal_plate_space" value="0.5*mm" />
+    <!-- different sizes of the layers -->
+    <constant name="layer_size1" value="100*mm" />
+    <constant name="layer_size2" value="150*mm" />
+    <constant name="layer_size3" value="250*mm" />
   </define>
 
   <display>
@@ -44,13 +48,29 @@
   <readouts>
     <!-- Default readout of DetailedWedge geometry -->
     <readout name="HCalEndcapReadout">
+      <!-- Description of the variables:
+           detLayout - variable to determine if it's a Barrel(=0) or Endcap(=1).
+           offset_z - takes three numbers: middle position in z of each section of the Endcap.
+           width_z - takes three numbers: z length of each section of the Endcap.
+           offset_r - takes three numbers: inner radius of each section of the Endcap.
+           numLayers - takes Nx3 numbers: N is the number of different sizes of the layers;
+                       each set of N numbers corresponds to different sections of the Endcap; 
+                       1st number in each set of N numbers is the number of layers with the dR/thickness equal to the 1st element of dRlayer variable;
+                       N-th number in each set of N numbers is the number of layers with the dR/thickness equal to the N-th element of dRlayer variable. 
+           dRlayer - all different dRs/thicknesses used to form the layers.
+           grid_size_theta - granularity in theta which is followed to define cells; 
+                             the center of each cell approximately matches to the center of the theta bin with the size defined in this variable. 
+           phi_bins - number of bins in phi
+           offset_theta - offset in theta to start theta binning; it is the center of the first theta bin that is outside the theta range of the Endcap.
+           offset_phi - center of the first phi bin.
+      -->
       <segmentation type="FCCSWHCalPhiTheta_k4geo" 
          detLayout="1"
          offset_z="HCalEndcap_min_z1+(HCalEndcap_max_z1-HCalEndcap_min_z1)*0.5 HCalEndcap_min_z2+(HCalEndcap_max_z2-HCalEndcap_min_z2)*0.5 HCalEndcap_min_z3+(HCalEndcap_max_z3-HCalEndcap_min_z3)*0.5" 
          width_z="(HCalEndcap_max_z1-HCalEndcap_min_z1) (HCalEndcap_max_z2-HCalEndcap_min_z2) (HCalEndcap_max_z3-HCalEndcap_min_z3)" 
          offset_r="HCalEndcap_inner_radius1+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space HCalEndcap_inner_radius2+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space HCalEndcap_inner_radius3+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space"
          numLayers="5 1 0  4 3 2  4 10 8"
-         dRlayer="100*mm 150*mm 250*mm"
+         dRlayer="layer_size1 layer_size2 layer_size3"
          grid_size_theta="0.022180" 
          phi_bins="EndcapHCal_n_phi_modules" 
          offset_theta="0.007106" 
@@ -58,13 +78,29 @@
       <id>system:4,type:3,layer:6,row:11,theta:11,phi:10</id>
     </readout>
     <readout name="HCalEndcapReadoutPhiRow">
+      <!-- Description of the variables:
+           detLayout - variable to determine if it's a Barrel(=0) or Endcap(=1).
+           offset_z - takes three numbers: middle position in z of each section of the Endcap.
+           width_z - takes three numbers: z length of "sensitive" part of each section of the Endcap.
+           offset_r - takes three numbers: inner radius of each section of the Endcap.
+           numLayers - takes Nx3 numbers: N is the number of different sizes of the layers;
+                       each set of N numbers corresponds to different sections of the Endcap; 
+                       1st number in each set of N numbers is the number of layers with the dR/thickness equal to the 1st element of dRlayer variable;
+                       N-th number in each set of N numbers is the number of layers with the dR/thickness equal to the N-th element of dRlayer variable. 
+           dRlayer - all different dRs/thicknesses used to form the layers.  
+           grid_size_row - takes 37 numbers which equals to the number of layers in all three sections of the Endcap;
+                           each value is the number of rows/scintillators grouped in a cell in each layer.
+           dz_row - size of the row consisting of 2 * Master plate + 1 * Spacer plate + 1 * Scintillator + Air.
+           phi_bins - number of bins in phi
+           offset_phi - center of the first phi bin.
+      -->
       <segmentation type="FCCSWHCalPhiRow_k4geo" 
          detLayout="1"
          offset_z="HCalEndcap_min_z1+(HCalEndcap_max_z1-HCalEndcap_min_z1)*0.5 HCalEndcap_min_z2+(HCalEndcap_max_z2-HCalEndcap_min_z2)*0.5 HCalEndcap_min_z3+(HCalEndcap_max_z3-HCalEndcap_min_z3)*0.5" 
          width_z="248.5*2*mm 243.0*2*mm 770.5*2*mm"
          offset_r="HCalEndcap_inner_radius1+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space HCalEndcap_inner_radius2+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space HCalEndcap_inner_radius3+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space"
          numLayers="5 1 0  4 3 2  4 10 8"
-         dRlayer="100*mm 150*mm 250*mm"
+         dRlayer="layer_size1 layer_size2 layer_size3"
          grid_size_row="1 1 1 1 1 1   1 1 1 1 1 1 1 1 1   1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1"
          dz_row="2*EndcapHCal_master_plate_thickness + EndcapHCal_spacer_plate_thickness + EndcapHCal_scintillator_thickness + 2*EndcapHCal_air_space_thickness" 
          phi_bins="EndcapHCal_n_phi_modules" 
@@ -89,7 +125,7 @@
       <layers>
 	<layer id="0" name="type_1" material="Air" vis="endcaphcal_barrel_layer_vis">
           <dimensions
-              dr="100*mm"
+              dr="layer_size1"
 	      nmodules="5"
 	      nsegments="4"
 	      nPads="4"
@@ -97,7 +133,7 @@
 	</layer>
 	<layer id="1" name="type_2" material="Air" vis="endcaphcal_barrel_layer_vis">
 	  <dimensions
-              dr="150*mm"
+              dr="layer_size2"
 	      nmodules="1"
         nsegments="3"
         nPads="10"
@@ -105,7 +141,7 @@
 	</layer>
 	<layer id="2" name="type_3" material="Air" vis="endcaphcal_barrel_layer_vis">
 	  <dimensions
-              dr="250*mm"
+              dr="layer_size3"
 	      nmodules="0"
         nsegments="2"
         nPads="8"

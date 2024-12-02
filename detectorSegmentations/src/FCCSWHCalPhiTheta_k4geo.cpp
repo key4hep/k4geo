@@ -68,7 +68,7 @@ Vector3D FCCSWHCalPhiTheta_k4geo::position(const CellID& cID) const {
 
   auto pos = positionFromRThetaPhi(radius, theta(cID), phi(cID));
 
-  // retrun the position with corrected z corrdinate to match to the geometric center
+  // return the position with corrected z coordinate to match to the geometric center
   return Vector3D(pos.x(),pos.y(),zpos);
 }
 
