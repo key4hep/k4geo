@@ -220,6 +220,24 @@
     <constant name="DRETCoreRadius"  value="0.45*mm"/>
     <!-- end of Dual-Readout Endcap Tubes (DRET) calorimeter dimensions-->
 
+    <!-- Dual-Readout Barrel Tubes (DRBT) calorimeter dimensions-->
+    <constant name="DRBTCoreOuterRadius" value="0.485*mm"/>
+    <constant name="DRBTCladOuterRadius"  value="0.5*mm"  />
+    <constant name="DRBTTubeOuterRadius"  value="1.0*mm"  />
+    <constant name="DRBTTubeTolerance"    value="50*um" />
+
+    <constant name="DRBTInnerCaloRadius"     value="2.8*m"  />
+    <constant name="DRBTOuterCaloRadius"     value="4.6*m"  />
+    <constant name="DRBTInnerCaloHalfLength" value="2.8*m"  />
+
+    <constant name="DRBTTowerThetaCoverage"  value="1.0*deg"/>
+    <constant name="DRBTTowerPhiCoverage"    value="10.0*deg"  />
+
+    <constant name="DRBTSupportSideThickness" value="1.0*mm" />
+    <constant name="DRBTSupportFrontThickness" value="1.0*mm" />
+    <constant name="DRBTSupportBackThickness" value="0.0*cm" />
+    <!-- end of Dual-Readout Barrel Tubes (DRBT) calorimeter dimensions-->
+
     <!-- Muon System Parameters-->
     <constant name = "numberOfSides"                              value = "8"/>        <!-- The number of sides of the muon system e.g (Octagon, Hexagon, ...)--> 
                                                 <!-- Barrel -->
