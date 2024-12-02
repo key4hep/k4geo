@@ -413,7 +413,7 @@ void DDDRCaloTubes::DRTubesconstructor::assemble_tower(Volume& tower_air_volume)
     // Number of rows of tubes in the back face of the tower
     unsigned int num_rows = fast_floor((m_tower_backface_y-m_capillary_diameter)/m_V) + 1; 
 
-    std::cout << "TOTAL ROWS = " << num_rows << " COLS = " << num_back_cols_rightangleedge << std::endl;
+    std::cout << "----> DRBarrelTubes: TOTAL ROWS = " << num_rows << " COLS = " << num_back_cols_rightangleedge << std::endl;
 
     // Loop over the rows of tubes in the tower, starting at the right angle edge
     for (unsigned int row = 0; row < num_rows; row++, covered_tower_y+=m_V)
@@ -673,7 +673,7 @@ void DDDRCaloTubes::DRTubesconstructor::construct_calorimeter(Volume& calorimete
     // Place towers in theta direection into the stave as long we are in the barrel region
     while (m_covered_theta<m_barrel_endcap_angle)
     {
-        std::cout << "tower = " << tower << std::endl;
+        std::cout << "----> DRBarrelTubes: tower = " << tower << std::endl;
         Volume trap_volume("tower");
         trap_volume.setMaterial(m_trap_material);
         this->construct_tower(trap_volume);
@@ -704,7 +704,7 @@ void DDDRCaloTubes::DRTubesconstructor::construct_calorimeter(Volume& calorimete
     }
 
     //Print length of tube map m_cher_tube_volume_map and m_scin_tube_volume_map
-    std::cout << "Length of C map = " << m_cher_tube_volume_map.size() << std::endl;
-    std::cout << "Length of S map = " << m_scin_tube_volume_map.size() << std::endl;
+    std::cout << "----> DRBarrelTubes: Length of C map = " << m_cher_tube_volume_map.size() << std::endl;
+    std::cout << "----> DRBarrelTubes: Length of S map = " << m_scin_tube_volume_map.size() << std::endl;
 
 }
