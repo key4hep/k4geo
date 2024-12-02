@@ -79,7 +79,7 @@ void FCCSWHCalPhiTheta_k4geo::defineCellsInRZplan() const {
     // check if all necessary variables are available
     if(m_detLayout==-1 || m_offsetZ.empty() || m_widthZ.empty() || m_offsetR.empty() || m_numLayers.empty() || m_dRlayer.empty())
     {
-       dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiRow_k4geo","Please check the readout description in the XML file!\n%s",
+       dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiTheta_k4geo","Please check the readout description in the XML file!\n%s",
                                        "One of the variables is missing: detLayout | offset_z | width_z | offset_r | numLayers | dRlayer");
        return;
     }
@@ -87,37 +87,37 @@ void FCCSWHCalPhiTheta_k4geo::defineCellsInRZplan() const {
     // some sanity checks of the xml
     if( m_offsetZ.size() != m_offsetR.size() )
     {
-       dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiRow_k4geo","Please check the readout description in the XML file!\n%s",
+       dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiTheta_k4geo","Please check the readout description in the XML file!\n%s",
                                        "Number of elements in offsetZ and offsetR must be the same!");
        return;
     }
     if( m_widthZ.size() != m_offsetR.size() )
     {
-       dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiRow_k4geo","Please check the readout description in the XML file!\n%s",
+       dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiTheta_k4geo","Please check the readout description in the XML file!\n%s",
                                        "Number of elements in widthZ and offsetR must be the same!");
        return;
     }
     if( m_detLayout == 0 && m_offsetZ.size() != 1)
     {
-       dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiRow_k4geo","Please check the readout description in the XML file!\n%s",
+       dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiTheta_k4geo","Please check the readout description in the XML file!\n%s",
                                        "Number of elements in offsetZ/offsetR/widthZ must be 1 for the Barrel!");
        return;
     }
     if( m_numLayers.size() % m_offsetZ.size() != 0 )
     {
-       dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiRow_k4geo","Please check the readout description in the XML file!\n%s",
+       dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiTheta_k4geo","Please check the readout description in the XML file!\n%s",
                                                                 "Number of elements in numLayers must be multiple of offsetZ.size()!");
        return;
     }
     if( m_dRlayer.size() != m_numLayers.size()/m_offsetZ.size() )
     {
-       dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiRow_k4geo","Please check the readout description in the XML file!\n%s",
+       dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiTheta_k4geo","Please check the readout description in the XML file!\n%s",
                                        "Number of elements in dRlayer must be equal to numLayers.size()/offsetZ.size()!");
        return;
     }
 
-    if(m_detLayout==0)  dd4hep::printout(dd4hep::INFO, "FCCSWHCalPhiRow_k4geo","Barrel configuration found!");
-    else dd4hep::printout(dd4hep::INFO, "FCCSWHCalPhiRow_k4geo","EndCap configuration found!");
+    if(m_detLayout==0)  dd4hep::printout(dd4hep::INFO, "FCCSWHCalPhiTheta_k4geo","Barrel configuration found!");
+    else dd4hep::printout(dd4hep::INFO, "FCCSWHCalPhiTheta_k4geo","EndCap configuration found!");
 
     // calculate the radius for each layer
     uint N_dR = m_numLayers.size()/m_offsetZ.size();
