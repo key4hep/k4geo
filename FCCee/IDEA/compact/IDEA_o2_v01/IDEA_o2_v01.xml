@@ -59,7 +59,7 @@
   <include ref="../IDEA_o1_v03/EndPlateAbsorber_o1_v01.xml"/>
 
   <!-- Import tubes-based dual-readout endcap calorimeter -->
-      <!--<include ref="DREndcapTubes_o1_v01.xml"/>-->
+  <include ref="DREndcapTubes_o1_v01.xml"/>
 
   <!-- Import tubes-based dual-readout barrel calorimeter -->
   <include ref="DDDRCaloTubes.xml"/>

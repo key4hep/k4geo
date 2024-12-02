@@ -30,37 +30,6 @@
         <comment>My first detector</comment>
     </info>
 
-    <!-- Constants, Readout, VIS goes here -->
-    <!--<includes>
-        <gdmlFile  ref="elements.xml"/>
-        <gdmlFile  ref="materials.xml"/>
-    </includes>-->
-
-    <!--<include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>-->
-    
-    <define>
-	<!--<constant name="world_side" value="600.*m"/>
-        <constant name="world_x" value="world_side"/>
-        <constant name="world_y" value="world_side"/>
-	<constant name="world_z" value="world_side"/>-->
-
-        <constant name="CoreOuterRadius" value="0.485*mm"/>
-        <constant name="CladOuterRadius"  value="0.5*mm"  />
-        <constant name="TubeOuterRadius"  value="1.0*mm"  />
-        <constant name="TubeTolerance"    value="50*um" />
-
-        <constant name="InnerCaloRadius"     value="2.8*m"  />
-        <constant name="OuterCaloRadius"     value="4.6*m"  />
-        <constant name="InnerCaloHalfLength" value="2.8*m"  />
-
-        <constant name="TowerThetaCoverage"  value="1.0*deg"/>
-        <constant name="TowerPhiCoverage"    value="10.0*deg"  />
-
-        <constant name="SupportSideThickness" value="1.0*mm" />
-        <constant name="SupportFrontThickness" value="1.0*mm" />
-        <constant name="SupportBackThickness" value="0.0*cm" />
-        
-    </define>
     <properties>
         <matrix name="DRBTRI_DR_Polystyrene" coldim="2" values="
             1.37760*eV 1.59
@@ -235,23 +204,6 @@
 
     
     <materials>
-
-	<!--<material name="Vacuum">
-            <D type="density" unit="g/cm3" value="0.0000000001" />
-            <fraction n="0.754" ref="N"/>
-            <fraction n="0.234" ref="O"/>
-            <fraction n="0.012" ref="Ar"/>
-        </material>
-
-
-        <material name="Air">
-            <D type="density" unit="g/cm3" value="0.0012"/>
-            <fraction n="0.754" ref="N"/>
-            <fraction n="0.234" ref="O"/>
-            <fraction n="0.012" ref="Ar"/>
-            <property name="RINDEX"        ref="RINDEX__Air"/>
-	</material>-->
-
         <material name="Brass">
             <D type="density" unit="g/cm3" value="8.44" />
             <fraction n="0.7" ref="Cu" />
@@ -295,23 +247,23 @@
             <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_BARREL"/>
 
             <dimensions
-                inner_radius="InnerCaloRadius"
-                outer_radius="OuterCaloRadius"
-                z_length="InnerCaloHalfLength"
-                deltatheta="TowerThetaCoverage"
-                deltaphi="TowerPhiCoverage" />
+                inner_radius="DRBTInnerCaloRadius"
+                outer_radius="DRBTOuterCaloRadius"
+                z_length="DRBTInnerCaloHalfLength"
+                deltatheta="DRBTTowerThetaCoverage"
+                deltaphi="DRBTTowerPhiCoverage" />
 
             <trap>
-                <support material="Brass" width="SupportSideThickness" depth="SupportFrontThickness" z2="SupportBackThickness" vis="trap_vis"/>
+                <support material="Brass" width="DRBTSupportSideThickness" depth="DRBTSupportFrontThickness" z2="DRBTSupportBackThickness" vis="trap_vis"/>
                 <air  material="Air"   vis="air_vis" />
             </trap>
 
             <tube>
-                <capillary  material="Brass"               outer_r="TubeOuterRadius" sensitive="false" vis="capillary_vis" threshold="TubeTolerance" />
-                <scin_clad  material="PMMA"                outer_r="CladOuterRadius" sensitive="false" vis="scin_clad_vis" />
-                <scin_core material="DR_Polystyrene"       outer_r="CoreOuterRadius" sensitive="false"  vis="scin_core_vis" />
-                <cher_clad  material="Fluorinated_Polymer" outer_r="CladOuterRadius" sensitive="false" vis="cher_clad_vis" />
-                <cher_core material="PMMA"                 outer_r="CoreOuterRadius" sensitive="false"  vis="cher_core_vis" />
+                <capillary  material="Brass"               outer_r="DRBTTubeOuterRadius" sensitive="false" vis="capillary_vis" threshold="DRBTTubeTolerance" />
+                <scin_clad  material="PMMA"                outer_r="DRBTCladOuterRadius" sensitive="false" vis="scin_clad_vis" />
+                <scin_core material="DR_Polystyrene"       outer_r="DRBTCoreOuterRadius" sensitive="false"  vis="scin_core_vis" />
+                <cher_clad  material="Fluorinated_Polymer" outer_r="DRBTCladOuterRadius" sensitive="false" vis="cher_clad_vis" />
+                <cher_core material="PMMA"                 outer_r="DRBTCoreOuterRadius" sensitive="false"  vis="cher_core_vis" />
             </tube>
 
         </detector>
