@@ -231,7 +231,7 @@
     <constant name="DRBTInnerCaloHalfLength" value="2.8*m"  />
 
     <constant name="DRBTTowerThetaCoverage"  value="1.0*deg"/>
-    <constant name="DRBTTowerPhiCoverage"    value="10.0*deg"  />
+    <constant name="DRBTTowerPhiCoverage"    value="5.0*deg"  />
 
     <constant name="DRBTSupportSideThickness" value="1.0*mm" />
     <constant name="DRBTSupportFrontThickness" value="1.0*mm" />
