@@ -83,7 +83,7 @@ void Geant4SensitiveAction<DRTubesSDData>::defineCollections()
 // Method that accesses the G4Step object at each track step.
 template<>
 bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
-                                                         G4TouchableHistory* /*history*/)
+                                                   G4TouchableHistory* /*history*/)
 {
   // NOTE: Here we do manipulation of the signal in each fiber (Scintillating and Cherenkov)
   // to compute the calorimeter signal and populate the corresponding hit.
@@ -126,8 +126,8 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
   auto cpNo = aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber();
   // The second bit of the CopyNumber corresponds to the "core" entry:
   // 1 if the step is in the fiber core (S or C) and 0 if it is
-  // in the fiber cladding (C only) 
-  unsigned int CoreID = (cpNo & 0b10) >> 1; // take CpNo 2nd bit
+  // in the fiber cladding (C only)
+  unsigned int CoreID = (cpNo & 0b10) >> 1;  // take CpNo 2nd bit
   bool IsCherClad = (CoreID == 0);
   // The first bit of the CopyNumber corresponds to the "cherenkov" entry
   // 1 for C fibers and 0 for S fibers
@@ -151,14 +151,16 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
   auto TubeID = aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(2);
   unsigned int ColumnID = TubeID >> 16;
   unsigned int RawID = TubeID & 0xFFFF;
-  auto TowerID = static_cast<unsigned int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(3));
-  auto StaveID = static_cast<unsigned int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(4));
+  auto TowerID =
+    static_cast<unsigned int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(3));
+  auto StaveID =
+    static_cast<unsigned int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(4));
 
-  VolumeID VolID = 0; // recreate the 64-bit VolumeID
+  VolumeID VolID = 0;  // recreate the 64-bit VolumeID
   BitFieldCoder bc("system:5,stave:10,tower:6,air:1,col:16,row:16,clad:1,core:1,cherenkov:1");
-  bc.set(VolID, "system", 25); // this number is set in DectDimensions_IDEA_o2_v01.xml
-  bc.set(VolID, "stave" , StaveID);
-  bc.set(VolID, "tower" , TowerID);
+  bc.set(VolID, "system", 25);  // this number is set in DectDimensions_IDEA_o2_v01.xml
+  bc.set(VolID, "stave", StaveID);
+  bc.set(VolID, "tower", TowerID);
   bc.set(VolID, "air", 0);
   bc.set(VolID, "col", ColumnID);
   bc.set(VolID, "row", RawID);
@@ -173,6 +175,7 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
    * 2. associate DRTubesSDAction to DREncapTubes subdetector
    * in the steering file (instead of using RegexSD)
    * 3. Uncomment the code below */
+  // clang-format off
   /*std::cout<<"Volume id, created "<<VolID<<" and DD4hep oroginal "<<volumeID(aStep)<<std::endl;
   std::cout<<"system id, created "<<25<<" and DD4hep original "<<bc.get(volumeID(aStep),"system")<<std::endl;
   std::cout<<"stave id, created "<<StaveID<<" and DD4hep original "<<bc.get(volumeID(aStep),"stave")<<std::endl;
@@ -183,6 +186,7 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
   std::cout<<"clad id, created "<<1<<" and DD4hep original "<<bc.get(volumeID(aStep),"clad")<<std::endl;
   std::cout<<"core id, created "<<CoreID<<" and DD4hep original "<<bc.get(volumeID(aStep),"core")<<std::endl;
   std::cout<<"cherenkov id, created "<<CherenkovID<<" and DD4hep original "<<bc.get(volumeID(aStep),"cherenkov")<<std::endl;*/
+  // clang-format on
 
   bool IsRight = (aStep->GetPreStepPoint()->GetPosition().z() > 0.);
 
@@ -201,8 +205,7 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
       return true;  // not ionizing particle
     }
     G4double distance_to_sipm = DRTubesSglHpr::GetDistanceToSiPM(aStep);
-    signalhit =
-      DRTubesSglHpr::SmearSSignal(DRTubesSglHpr::ApplyBirks(Edep, steplength));
+    signalhit = DRTubesSglHpr::SmearSSignal(DRTubesSglHpr::ApplyBirks(Edep, steplength));
     signalhit = DRTubesSglHpr::AttenuateSSignal(signalhit, distance_to_sipm);
     if (signalhit == 0) return true;
   }  // end of scintillating fibre sigal calculation

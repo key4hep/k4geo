@@ -110,7 +110,7 @@ inline G4double DRTubesSglHpr::GetDistanceToSiPM(const G4Step* step, bool preste
 }
 
 inline G4int DRTubesSglHpr::AttenuateHelper(const G4int& signal, const G4double& distance,
-                                                  const G4double& attenuation_length)
+                                            const G4double& attenuation_length)
 {
   double probability_of_survival = exp(-distance / attenuation_length);
 

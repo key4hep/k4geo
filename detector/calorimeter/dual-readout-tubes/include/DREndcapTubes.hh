@@ -15,7 +15,7 @@
 struct Plane
 {
     Vector3D P1, P2, P3, P4;
-    Plane(Vector3D p1, Vector3D p2, Vector3D p3, Vector3D p4) : P1(p1), P2(p2), P3(p3), P4(p4){};
+    Plane(Vector3D p1, Vector3D p2, Vector3D p3, Vector3D p4) : P1(p1), P2(p2), P3(p3), P4(p4) {};
 };
 
 // This struct represents a line towards negatize Z
@@ -27,7 +27,7 @@ struct ZLine
 {
     Vector3D origin;
     Vector3D fuZ = Vector3D(0, 0, -1);
-    ZLine(Vector3D P) : origin(P){};
+    ZLine(Vector3D P) : origin(P) {};
 };
 
 // Custom exception class for intersecting ZLines with Planes
