@@ -166,6 +166,24 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
   bc.set(VolID, "core", CoreID);
   bc.set(VolID, "cherenkov", CherenkovID);
 
+  /* If you want to compare the 64-bits VolID created here
+   * with the original DD4hep volumeID:
+   * 1. set in DREndcapTubes_o1_v01.xml clad_C, core_C and core_S
+   * volumes as sensitive
+   * 2. associate DRTubesSDAction to DREncapTubes subdetector
+   * in the steering file (instead of using RegexSD)
+   * 3. Uncomment the code below */
+  /*std::cout<<"Volume id, created "<<VolID<<" and DD4hep oroginal "<<volumeID(aStep)<<std::endl;
+  std::cout<<"system id, created "<<25<<" and DD4hep original "<<bc.get(volumeID(aStep),"system")<<std::endl;
+  std::cout<<"stave id, created "<<StaveID<<" and DD4hep original "<<bc.get(volumeID(aStep),"stave")<<std::endl;
+  std::cout<<"tower id, created "<<TowerID<<" and DD4hep original "<<bc.get(volumeID(aStep),"tower")<<std::endl;
+  std::cout<<"air id, created "<<0<<" and DD4hep original "<<bc.get(volumeID(aStep),"air")<<std::endl;
+  std::cout<<"col id, created "<<ColumnID<<" and DD4hep original "<<bc.get(volumeID(aStep),"col")<<std::endl;
+  std::cout<<"row id, created "<<RawID<<" and DD4hep original "<<bc.get(volumeID(aStep),"row")<<std::endl;
+  std::cout<<"clad id, created "<<1<<" and DD4hep original "<<bc.get(volumeID(aStep),"clad")<<std::endl;
+  std::cout<<"core id, created "<<CoreID<<" and DD4hep original "<<bc.get(volumeID(aStep),"core")<<std::endl;
+  std::cout<<"cherenkov id, created "<<CherenkovID<<" and DD4hep original "<<bc.get(volumeID(aStep),"cherenkov")<<std::endl;*/
+
   bool IsRight = (aStep->GetPreStepPoint()->GetPosition().z() > 0.);
 
   // We now calculate the signal in S and C fiber according to the step contribution
