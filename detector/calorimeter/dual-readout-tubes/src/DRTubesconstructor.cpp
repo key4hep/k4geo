@@ -114,19 +114,41 @@ void DDDRCaloTubes::DRTubesconstructor::calculate_tower_parameters()
     m_tower_tan_half_phi = std::tan(m_tower_half_phi); // Needed several times, calculate once here
 
 
-    m_stave_half_length  = (m_calo_outer_r*std::cos(m_tower_half_phi) - m_calo_inner_r)/2; // Trapezoid half length
+    m_stave_half_length  = (m_calo_outer_r*std::cos(m_tower_half_phi) - m_calo_inner_r)/2; // Maximal trapezoid half length
 
-    // Protection against tilted towers in theta going past the outer radius of the calorimeter
-    double protect_covered_z = std::tan(m_tower_theta)*m_calo_inner_r;
-    double protect_tower_z = std::tan(2*m_tower_theta)*m_calo_inner_r - protect_covered_z;
-    double protect_back_shift = std::sin(m_tower_theta)*protect_tower_z;
+    /* Protection against tilted towers in theta going past the outer radius of the calorimeter
+    Depending on other parameters, it is not obvious which one of the towers is the one to "stick out" the most
+    (Usually 2nd - 3rd tower)
+    Calculate the maximal distance a tower can stick out, by looping over all tower and saving the maximal one
+    In the end, make the trapezoids (towers) a bit shorter to accomodate for this */
+    double shortening = 0.0; 
+    unsigned int tower_number = 2;
+    // First tower has protrusion 0 because it is placed without tilting, so start with second tower
+    for (double theta = m_tower_theta; theta < m_barrel_endcap_angle; theta += m_tower_theta, tower_number++)
+    {
+        double protection_covered_z = std::tan(theta)*m_calo_inner_r;
+        double protection_tower_z = std::tan(theta+m_tower_theta)*m_calo_inner_r - protection_covered_z;
+        double protection_back_shift = std::sin(theta)*protection_tower_z;
+
+        // Calculate how much the trapezoid needs to be shortened
+        double protection_shortening = 2*m_stave_half_length+protection_back_shift - 2*m_stave_half_length/std::cos(theta);
+
+        if (protection_shortening > shortening) { 
+            shortening = protection_shortening; // Save the new highest shortening value
+            // std::cout << "Tower number: " << tower_number << " shortening: " << shortening/mm << "mm" << std::endl;            
+        }
+        else break; // If the required shortening is decreasing, we have found the maximal value      
+    }
+
 
     // "_trap_" always* refers to the Trap volume including the support structure
-    m_trap_half_length = m_stave_half_length/std::cos(m_tower_theta) - protect_back_shift/2;
+    m_trap_half_length = m_stave_half_length - shortening/2;
+    if (m_trap_half_length <= 0.0) throw std::runtime_error("Could not construct sensible towers with given parameters!");
     
     // "_tower_" always* refers to the collection of tubes forming the tower
     // "Tower" volume encapsulates the air, which is "hollowing out" the trapezoid volume
     m_tower_half_length = m_trap_half_length - m_trap_wall_thickness_front/2.0 - m_trap_wall_thickness_back/2.0; // Tower half length
+    if (m_tower_half_length <= 0.0) throw std::runtime_error("Could not construct sensible towers with given parameters!");
 
     // * "always" means that I tried to use it consistently, but there might be exceptions (like m_tower_phi&theta refer to the full strucutre, including support)
     // due to the history of the code, where I started out without the support, only the collection of tubes 
