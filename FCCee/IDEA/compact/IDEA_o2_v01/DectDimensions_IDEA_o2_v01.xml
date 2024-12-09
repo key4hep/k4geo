@@ -225,10 +225,12 @@
     <constant name="DRBTCladOuterRadius"  value="0.5*mm"  />
     <constant name="DRBTTubeOuterRadius"  value="1.0*mm"  />
     <constant name="DRBTTubeTolerance"    value="50*um" />
-
-    <constant name="DRBTInnerCaloRadius"     value="2.8*m"  />
+    <!-- The barrel calorimeter starts at 2.8 m but we add
+         a 0.5 cm displacement to avoid overlap between
+         the calo staves and the solenoid -->
+    <constant name="DRBTInnerCaloRadius"     value="2.805*m"  />
     <constant name="DRBTOuterCaloRadius"     value="4.6*m"  />
-    <constant name="DRBTInnerCaloHalfLength" value="2.8*m"  />
+    <constant name="DRBTInnerCaloHalfLength" value="2.805*m"  />
 
     <constant name="DRBTTowerThetaCoverage"  value="1.0*deg"/>
     <constant name="DRBTTowerPhiCoverage"    value="5.0*deg"  />
