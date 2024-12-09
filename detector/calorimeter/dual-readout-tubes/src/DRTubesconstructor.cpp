@@ -3,9 +3,9 @@
 #include <TMatrixD.h>
 
 using namespace dd4hep;
-using namespace DDDRCaloTubes;
+using namespace DRBarrelTubes;
 
-DDDRCaloTubes::DRTubesconstructor::DRTubesconstructor(Detector* description,
+DRBarrelTubes::DRTubesconstructor::DRTubesconstructor(Detector* description,
                                             xml_h& entities,
                                             SensitiveDetector* sens):
                                             m_entities(entities)
@@ -96,7 +96,7 @@ DDDRCaloTubes::DRTubesconstructor::DRTubesconstructor(Detector* description,
 }
 
 // Function to calculate all tower parameters which are derived from user given values
-void DDDRCaloTubes::DRTubesconstructor::calculate_tower_parameters()
+void DRBarrelTubes::DRTubesconstructor::calculate_tower_parameters()
 {
     // Angle where endcap and barrel meet
     m_barrel_endcap_angle = std::atan2(m_calo_inner_half_z, m_calo_inner_r);
@@ -156,7 +156,7 @@ void DDDRCaloTubes::DRTubesconstructor::calculate_tower_parameters()
 }
 
 // Function to calculate tower parameters specifically for phi direction
-void DDDRCaloTubes::DRTubesconstructor::calculate_phi_parameters()
+void DRBarrelTubes::DRTubesconstructor::calculate_phi_parameters()
 {
     double num_phi_towers_d = 360.0*deg/m_tower_phi;
     if (num_phi_towers_d < 0.0) throw std::runtime_error("Negative tower phi coverage not allowed");
@@ -195,7 +195,7 @@ void DDDRCaloTubes::DRTubesconstructor::calculate_phi_parameters()
     Anytime a variable contains "edge" it refers to the edge that would be running in y direction in this sketch with global coordinates
     (but is the x direction in the local coordinate system of the Trap volume).
 */
-void DDDRCaloTubes::DRTubesconstructor::calculate_theta_parameters()
+void DRBarrelTubes::DRTubesconstructor::calculate_theta_parameters()
 {
     // How much the front faces of the already placed towers cover in global z direction in the global coordinate system
     double covered_z = std::tan(m_covered_theta)*m_calo_inner_r;
@@ -272,7 +272,7 @@ void DDDRCaloTubes::DRTubesconstructor::calculate_theta_parameters()
 
 // Check if tube of this (half-)length already exists, if not, create it
 // and store it in the corresponding volume map
-void DDDRCaloTubes::DRTubesconstructor::assert_tube_existence(int key, bool cher)
+void DRBarrelTubes::DRTubesconstructor::assert_tube_existence(int key, bool cher)
 {
     std::unordered_map<int, Volume>* tube_volume_map;
 
@@ -342,7 +342,7 @@ void DDDRCaloTubes::DRTubesconstructor::assert_tube_existence(int key, bool cher
 
 // Similar to calculate_tower_width (see abelow), but for the encasing trapezoid support volume
 // Width is calculated for any given point in th z-y plane
-double DDDRCaloTubes::DRTubesconstructor::calculate_trap_width(double given_y, double given_z, bool backface)
+double DRBarrelTubes::DRTubesconstructor::calculate_trap_width(double given_y, double given_z, bool backface)
 {
     // Calculate width (x_direction) of trapezoid at given y
     // Assuming y=0 corresponds to right angle edge of the tower
@@ -384,7 +384,7 @@ double DDDRCaloTubes::DRTubesconstructor::calculate_trap_width(double given_y, d
     |______> x
     /
  |/_ z                                          */
-double DDDRCaloTubes::DRTubesconstructor::calculate_tower_width(int given_row, bool backface)
+double DRBarrelTubes::DRTubesconstructor::calculate_tower_width(int given_row, bool backface)
 {
     // Calculate width (x_direction) of tower at given row
     // Assuming row 0 is at the right angle edge
@@ -404,7 +404,7 @@ double DDDRCaloTubes::DRTubesconstructor::calculate_tower_width(int given_row, b
 
 
 // Place all tubes which make up the tower
-void DDDRCaloTubes::DRTubesconstructor::assemble_tower(Volume& tower_air_volume)
+void DRBarrelTubes::DRTubesconstructor::assemble_tower(Volume& tower_air_volume)
 {    
     // Y-distance of rightangle wall from coordinate system origin
     // Used throughout this function
@@ -619,7 +619,7 @@ void DDDRCaloTubes::DRTubesconstructor::assemble_tower(Volume& tower_air_volume)
 
 
 // Function to calculate the position of the tower inside the stave
-void DDDRCaloTubes::DRTubesconstructor::calculate_tower_position()
+void DRBarrelTubes::DRTubesconstructor::calculate_tower_position()
 {
     // Since the Trapezoids are defined including polar and azimuthal angles, we need to convert between cartesian and polar coordinates
     double trap_centre_r = m_trap_half_length/std::cos(m_trap_polar_angle);
@@ -645,7 +645,7 @@ void DDDRCaloTubes::DRTubesconstructor::calculate_tower_position()
 
 
 // Function to construct the trapezoidal supoprt structure for the tower in which fibres are placed
-void DDDRCaloTubes::DRTubesconstructor::construct_tower_trapezoid(Volume& trap_volume)
+void DRBarrelTubes::DRTubesconstructor::construct_tower_trapezoid(Volume& trap_volume)
 {
         // Coordinate conversion, since the Trap volume uses polar coordinates
         double delta_y = (m_trap_backface_y - m_trap_frontface_y)/2.0;
@@ -695,7 +695,7 @@ void DDDRCaloTubes::DRTubesconstructor::construct_tower_trapezoid(Volume& trap_v
 }
 
 
-void DDDRCaloTubes::DRTubesconstructor::construct_tower(Volume& trap_volume)
+void DRBarrelTubes::DRTubesconstructor::construct_tower(Volume& trap_volume)
 {
     // For each placed tower, recalculate the parameters
     this->calculate_theta_parameters();
@@ -706,7 +706,7 @@ void DDDRCaloTubes::DRTubesconstructor::construct_tower(Volume& trap_volume)
 
 // Placement of the tower in the stave volume
 // One tower is being placed twice, once in the forward and once in the backward region
-void DDDRCaloTubes::DRTubesconstructor::place_tower(Volume& stave_volume,
+void DRBarrelTubes::DRTubesconstructor::place_tower(Volume& stave_volume,
                  Volume& tower_volume,
                  unsigned int tower)
 {
@@ -735,7 +735,7 @@ void DDDRCaloTubes::DRTubesconstructor::place_tower(Volume& stave_volume,
 // Highest level function to construct the calorimeter
 // In first loop all the towers are created and placed inside a stave
 // In the second loop the staves are placed in the calorimeter
-void DDDRCaloTubes::DRTubesconstructor::construct_calorimeter(Volume& calorimeter_volume)
+void DRBarrelTubes::DRTubesconstructor::construct_calorimeter(Volume& calorimeter_volume)
 {
     // Parameters for stave contruction. Shape is a trapezoid over the full barrel region (forward and backward)
     double dy1 = m_calo_inner_half_z;

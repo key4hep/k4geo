@@ -40,7 +40,7 @@ static Ref_t create_detector(Detector& description,
     Volume        mother_volume = description.pickMotherVolume(s_detElement);
 
     // Helper class to construct the calorimeter
-    DDDRCaloTubes::DRTubesconstructor constructor(&description, entities, &sens);
+    DRBarrelTubes::DRTubesconstructor constructor(&description, entities, &sens);
     constructor.construct_calorimeter(barrel_volume);
 
 
@@ -54,4 +54,4 @@ static Ref_t create_detector(Detector& description,
 }
 
 
-DECLARE_DETELEMENT(DDDRCaloTubes,create_detector)
+DECLARE_DETELEMENT(DRBarrelTubes,create_detector)

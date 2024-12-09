@@ -22,7 +22,7 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">-->
 
-    <info name="DDDRCaloTubes"
+    <info name="DRBarrelTubes"
         title=""
 	    author="Andreas Loeschcke Centeno"
         status="development"
@@ -238,10 +238,10 @@
 
     <detectors>
         <detector 
-            name="DDDRCaloTubes"
-            type="DDDRCaloTubes"
+            name="DRBarrelTubes"
+            type="DRBarrelTubes"
             id="DetID_DRBarrelTubes"
-            readout="MyReadout"
+            readout="DRBarrelTubeRO"
             vis="DRBTVis" >
 
             <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_BARREL"/>
@@ -270,7 +270,7 @@
     </detectors>
 
     <readouts>
-        <readout name="MyReadout">
+        <readout name="DRBarrelTubeRO">
             <!-- NO SPACES BETWEEN ID DESCRIPTORS!!! -->
             <id>system:5,stave:10,tower:-8,air:1,col:-11,row:7,clad:1,core:1,cherenkov:1</id>
             

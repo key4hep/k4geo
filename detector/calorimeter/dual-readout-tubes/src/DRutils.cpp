@@ -3,7 +3,7 @@
 
 using namespace dd4hep;
 
-namespace DDDRCaloTubes
+namespace DRBarrelTubes
 {
     // Fast rounding function which do not do some safety checks the std:: functions provide, since we don't expect problems with the input
     int fast_floor(double x)
@@ -55,4 +55,4 @@ namespace DDDRCaloTubes
         return intersection;
     }
 
-} // namespace DDDRCaloTubes
+} // namespace DRBarrelTubes

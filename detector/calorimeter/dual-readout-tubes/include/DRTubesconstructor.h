@@ -11,7 +11,7 @@
 
 using namespace dd4hep;
 
-namespace DDDRCaloTubes {
+namespace DRBarrelTubes {
 
 class DRTubesconstructor {
 public:
@@ -165,6 +165,6 @@ private:
 
 };
 
-} // namespace DDDRCaloTubes
+} // namespace DRBarrelTubes
 
 #endif // DRCONSTRUCTOR_H
