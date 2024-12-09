@@ -10,7 +10,7 @@ using namespace dd4hep;
 
 
 // Utility functions for the construction of the barrel dual-readout calorimeter (based on tubes)
-namespace DDDRCaloTubes
+namespace DRBarrelTubes
 {
     // Quick rounding functions
     int fast_floor(double x);
@@ -22,6 +22,6 @@ namespace DDDRCaloTubes
     std::vector<double> get_plane_equation(const Position& point1, const Position& point2, const Position& point3);
     Position get_intersection(const std::vector<double>& plane_coefficients, const Position& line_point, const Direction& line_direction);
     Position get_intersection(const Direction& plane_normal, const Position& plane_point, const Position& line_point, const Direction& line_direction);
-} // namespace DDDRCaloTubes
+} // namespace DRBarrelTubes
 
 #endif // DRutils_h
