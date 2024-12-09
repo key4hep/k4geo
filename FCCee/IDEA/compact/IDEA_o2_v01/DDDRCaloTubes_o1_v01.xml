@@ -240,7 +240,7 @@
         <detector 
             name="DDDRCaloTubes"
             type="DDDRCaloTubes"
-            id="1234"
+            id="DetID_DRBarrelTubes"
             readout="MyReadout"
             vis="DRBTVis" >
 
