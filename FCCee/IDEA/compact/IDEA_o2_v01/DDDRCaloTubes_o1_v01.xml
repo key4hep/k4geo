@@ -204,13 +204,13 @@
 
     
     <materials>
-        <material name="Brass">
+        <material name="DRBTBrass">
             <D type="density" unit="g/cm3" value="8.44" />
             <fraction n="0.7" ref="Cu" />
             <fraction n="0.3" ref="Zn" />
         </material>
 
-        <material name="DR_Polystyrene" >
+        <material name="DRBTDR_Polystyrene" >
             <D type="density" unit="g/cm3" value="1.05" />
             <composite n="8" ref="C" />
             <composite n="8" ref="H" />
@@ -218,7 +218,7 @@
 	    <property name="ABSLENGTH" ref="AbsLen_DR_Polystyrene"/>-->
         </material>
 
-        <material name="PMMA" >
+        <material name="DRBTPMMA" >
             <D type="density" unit="g/cm3" value="1.19" />
             <composite n="5" ref="C" />
             <composite n="2" ref="O" />
@@ -227,7 +227,7 @@
 	    <property name="ABSLENGTH" ref="AbsLen_PMMA"/>-->
         </material>
 
-        <material name="Fluorinated_Polymer">
+        <material name="DRBTFluorinated_Polymer">
             <D type="density" unit="g/cm3" value="1.43" />
             <composite n="2" ref="C" />
             <composite n="2" ref="F" />
@@ -254,16 +254,16 @@
                 deltaphi="DRBTTowerPhiCoverage" />
 
             <trap>
-                <support material="Brass" width="DRBTSupportSideThickness" depth="DRBTSupportFrontThickness" z2="DRBTSupportBackThickness" vis="DRBTtrap_vis"/>
+                <support material="DRBTBrass" width="DRBTSupportSideThickness" depth="DRBTSupportFrontThickness" z2="DRBTSupportBackThickness" vis="DRBTtrap_vis"/>
                 <air  material="Air"   vis="DRBTair_vis" />
             </trap>
 
             <tube>
-                <capillary  material="Brass"               outer_r="DRBTTubeOuterRadius" sensitive="false" vis="DRBTcapillary_vis" threshold="DRBTTubeTolerance" />
-                <scin_clad  material="PMMA"                outer_r="DRBTCladOuterRadius" sensitive="false" vis="DRBTscin_clad_vis" />
-                <scin_core material="DR_Polystyrene"       outer_r="DRBTCoreOuterRadius" sensitive="false"  vis="DRBTscin_core_vis" />
-                <cher_clad  material="Fluorinated_Polymer" outer_r="DRBTCladOuterRadius" sensitive="false" vis="DRBTcher_clad_vis" />
-                <cher_core material="PMMA"                 outer_r="DRBTCoreOuterRadius" sensitive="false"  vis="DRBTcher_core_vis" />
+                <capillary  material="DRBTBrass"               outer_r="DRBTTubeOuterRadius" sensitive="false" vis="DRBTcapillary_vis" threshold="DRBTTubeTolerance" />
+                <scin_clad  material="DRBTPMMA"                outer_r="DRBTCladOuterRadius" sensitive="false" vis="DRBTscin_clad_vis" />
+                <scin_core material="DRBTDR_Polystyrene"       outer_r="DRBTCoreOuterRadius" sensitive="false"  vis="DRBTscin_core_vis" />
+                <cher_clad  material="DRBTFluorinated_Polymer" outer_r="DRBTCladOuterRadius" sensitive="false" vis="DRBTcher_clad_vis" />
+                <cher_core material="DRBTPMMA"                 outer_r="DRBTCoreOuterRadius" sensitive="false"  vis="DRBTcher_core_vis" />
             </tube>
 
         </detector>

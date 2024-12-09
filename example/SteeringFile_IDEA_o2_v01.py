@@ -243,7 +243,7 @@ SIM.guineapig.particlesPerEvent = "-1"
 ################################################################################
 
 ##  direction of the particle gun, 3 vector
-SIM.gun.direction = (0, 0, 1)
+SIM.gun.direction = (0, 1, 0)
 
 ## choose the distribution of the random direction for theta
 ##
@@ -291,7 +291,7 @@ SIM.gun.phiMax = None
 SIM.gun.phiMin = None
 
 ##  position of the particle gun, 3 vector
-SIM.gun.position = (0.0, 90.0 * cm, 0.0)
+SIM.gun.position = (0.0, 0.0, 0.0)
 
 ## Maximal polar angle for random distribution
 SIM.gun.thetaMax = None
