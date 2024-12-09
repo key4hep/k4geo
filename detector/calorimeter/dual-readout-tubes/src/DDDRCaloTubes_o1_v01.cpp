@@ -22,22 +22,24 @@ static Ref_t create_detector(Detector& description,
 
     sens.setType("calorimeter");
 
-    // Cylinder encompassing entire calorimeter
     xml_dim_t   x_dim                  = x_det.dimensions();
     double      calo_inner_r           = x_dim.inner_radius();
     double      calo_outer_r           = x_dim.outer_radius();
 
+    // Safety check to make sure dimensions are sensible
     double tower_length = calo_outer_r - calo_inner_r;
     if (tower_length<=0*mm) throw std::runtime_error("Outer calorimeter radius needs to be larger than inner radius");
 
+    // The barrel volume is an assembly of staves (Trap volumes)
+    // A cylindrical volume would only be an approximation and lead to overlaps
     Assembly barrel_volume("calorimeter_barrel");
     barrel_volume.setMaterial(air);
-    barrel_volume.setVisAttributes(description, "assembly_vis");
+    barrel_volume.setVisAttributes(description, "DRBTassembly_vis");
 
     DetElement    s_detElement(det_name, det_id);
     Volume        mother_volume = description.pickMotherVolume(s_detElement);
 
-
+    // Helper class to construct the calorimeter
     DDDRCaloTubes::DRTubesconstructor constructor(&description, entities, &sens);
     constructor.construct_calorimeter(barrel_volume);
 
