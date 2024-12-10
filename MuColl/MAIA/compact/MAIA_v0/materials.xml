@@ -124,7 +124,9 @@
     </material>
 
     <material name="Tungsten_Alloy" state="solid">
-        <D type="density" value="17.8" unit="g/cm3"/>
+        <D type="density" value="18.0" unit="g/cm3"/>
+        <RL type="X0" unit="cm" value="0.3847" />
+        <NIL type="lambda" unit="cm" value="9.694" />
         <fraction n="0.95" ref="W"/>
         <fraction n="0.035" ref="Ni"/>
         <fraction n="0.015" ref="Cu"/>
@@ -166,10 +168,9 @@
         <D type="density" unit="g/cm3" value="0.93"/>
         <RL type="X0" unit="cm" value="45.0507" />
         <NIL type="lambda" unit="cm" value="76.3153" />
-        <fraction n="0.116" ref="H"/>
-        <fraction n="0.050" ref="B"/>
-        <fraction n="0.612" ref="C"/>
-        <fraction n="0.222" ref="O"/>
+        <fraction n="0.5" ref="H"/>
+        <fraction n="0.25" ref="B"/>
+        <fraction n="0.25" ref="C"/>
     </material>
 
     <material name="Steel235">
