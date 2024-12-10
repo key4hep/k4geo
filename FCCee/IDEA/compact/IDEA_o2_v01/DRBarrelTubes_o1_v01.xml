@@ -1,0 +1,289 @@
+<!-- ====================================================================== -->
+<!--                                                                        -->
+<!--    XML description of the complete SCEPCAL IDEA detector               -->
+<!--    of the SCEPCAL IDEA collider detector design.                       -->
+<!--                                                                        -->
+<!--    Contained are the required                                          -->
+<!--      ++ global constants used uniquely by this module                  -->
+<!--      ++ visualization attributes                                       -->
+<!--      ++ the definition of the readout structure and the                -->
+<!--         readout segmentation (if necessary)                            -->
+<!--      ++ the include statements for the sensitive detectors and         -->
+<!--         the corresponding support structure(s)                         -->
+<!--                                                                        -->
+<!--                                                                        -->
+<!--   @author  M.Frank                                                     -->
+<!--   @date    14/11/2014                                                  -->
+<!--                                                                        -->
+<!-- ====================================================================== -->
+
+
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">-->
+
+    <info name="DRBarrelTubes"
+        title=""
+	    author="Andreas Loeschcke Centeno"
+        status="development"
+        version="0.1">
+        <comment></comment>
+    </info>
+
+    <properties>
+        <matrix name="DRBTRI_DR_Polystyrene" coldim="2" values="
+            1.37760*eV 1.59
+            1.45864*eV 1.59
+            1.54980*eV 1.59
+            1.65312*eV 1.59
+            1.71013*eV 1.59
+            1.77120*eV 1.59
+            1.83680*eV 1.59
+            1.90745*eV 1.59
+            1.98375*eV 1.59
+            2.06640*eV 1.59
+            2.10143*eV 1.59
+            2.13766*eV 1.59
+            2.17516*eV 1.59
+            2.21400*eV 1.59
+            2.25426*eV 1.59
+            2.29600*eV 1.59
+            2.33932*eV 1.59
+            2.38431*eV 1.59
+            2.43106*eV 1.59
+            2.47968*eV 1.59
+            2.53029*eV 1.59
+            2.58300*eV 1.59
+            2.63796*eV 1.59
+            2.69531*eV 1.59
+            2.75520*eV 1.59
+            2.81782*eV 1.59
+            2.88335*eV 1.59
+            2.95200*eV 1.59
+            3.09960*eV 1.59
+            3.54241*eV 1.59
+            4.13281*eV 1.59
+        "/>
+
+        <matrix name="DRBTRI_PMMA" coldim="2" values="
+            1.37760*eV 1.49
+            1.45864*eV 1.49
+            1.54980*eV 1.49
+            1.65312*eV 1.49
+            1.71013*eV 1.49
+            1.77120*eV 1.49
+            1.83680*eV 1.49
+            1.90745*eV 1.49
+            1.98375*eV 1.49
+            2.06640*eV 1.49
+            2.10143*eV 1.49
+            2.13766*eV 1.49
+            2.17516*eV 1.49
+            2.21400*eV 1.49
+            2.25426*eV 1.49
+            2.29600*eV 1.49
+            2.33932*eV 1.49
+            2.38431*eV 1.49
+            2.43106*eV 1.49
+            2.47968*eV 1.49
+            2.53029*eV 1.49
+            2.58300*eV 1.49
+            2.63796*eV 1.49
+            2.69531*eV 1.49
+            2.75520*eV 1.49
+            2.81782*eV 1.49
+            2.88335*eV 1.49
+            2.95200*eV 1.49
+            3.09960*eV 1.49
+            3.54241*eV 1.49
+            4.13281*eV 1.49
+        "/>
+
+        <matrix name="DRBTRI_Fluorinated_Polymer" coldim="2" values="
+            1.37760*eV 1.42
+            1.45864*eV 1.42
+            1.54980*eV 1.42
+            1.65312*eV 1.42
+            1.71013*eV 1.42
+            1.77120*eV 1.42
+            1.83680*eV 1.42
+            1.90745*eV 1.42
+            1.98375*eV 1.42
+            2.06640*eV 1.42
+            2.10143*eV 1.42
+            2.13766*eV 1.42
+            2.17516*eV 1.42
+            2.21400*eV 1.42
+            2.25426*eV 1.42
+            2.29600*eV 1.42
+            2.33932*eV 1.42
+            2.38431*eV 1.42
+            2.43106*eV 1.42
+            2.47968*eV 1.42
+            2.53029*eV 1.42
+            2.58300*eV 1.42
+            2.63796*eV 1.42
+            2.69531*eV 1.42
+            2.75520*eV 1.42
+            2.81782*eV 1.42
+            2.88335*eV 1.42
+            2.95200*eV 1.42
+            3.09960*eV 1.42
+            3.54241*eV 1.42
+            4.13281*eV 1.42
+        "/>
+
+        <matrix name="DRBTAbsLen_DR_Polystyrene" coldim="2" values="
+            1.37760*eV 2.714*m
+            1.45864*eV 3.619*m
+            1.54980*eV 5.791*m
+            1.65312*eV 4.343*m
+            1.71013*eV 7.896*m
+            1.77120*eV 5.429*m
+            1.83680*eV 36.19*m
+            1.90745*eV 17.37*m
+            1.98375*eV 36.19*m
+            2.06640*eV 5.429*m
+            2.10143*eV 13.00*m
+            2.13766*eV 14.50*m
+            2.17516*eV 16.00*m
+            2.21400*eV 18.00*m
+            2.25426*eV 16.50*m
+            2.29600*eV 17.00*m
+            2.33932*eV 14.00*m
+            2.38431*eV 16.00*m
+            2.43106*eV 15.00*m
+            2.47968*eV 14.50*m
+            2.53029*eV 13.00*m
+            2.58300*eV 12.00*m
+            2.63796*eV 10.00*m
+            2.69531*eV 8.000*m
+            2.75520*eV 7.238*m
+            2.81782*eV 4.000*m
+            2.88335*eV 1.200*m
+            2.95200*eV 0.500*m
+            3.09960*eV 0.200*m
+            3.54241*eV 0.200*m
+            4.13281*eV 0.100*m
+        "/>
+
+        <matrix name="DRBTAbsLen_PMMA" coldim="2" values="
+            1.37760*eV 0.414*m
+            1.45864*eV 0.965*m
+            1.54980*eV 2.171*m
+            1.65312*eV 4.343*m
+            1.71013*eV 1.448*m
+            1.77120*eV 4.343*m
+            1.83680*eV 14.48*m
+            1.90745*eV 21.71*m
+            1.98375*eV 8.686*m
+            2.06640*eV 39.48*m
+            2.10143*eV 48.25*m
+            2.13766*eV 54.29*m
+            2.17516*eV 57.91*m
+            2.21400*eV 54.29*m
+            2.25426*eV 33.40*m
+            2.29600*eV 31.02*m
+            2.33932*eV 43.43*m
+            2.38431*eV 43.43*m
+            2.43106*eV 41.36*m
+            2.47968*eV 39.48*m
+            2.53029*eV 37.76*m
+            2.58300*eV 36.19*m
+            2.63796*eV 36.19*m
+            2.69531*eV 33.40*m
+            2.75520*eV 31.02*m
+            2.81782*eV 28.95*m
+            2.88335*eV 25.55*m
+            2.95200*eV 24.13*m
+            3.09960*eV 21.71*m
+            3.54241*eV 2.171*m
+            4.13281*eV 0.434*m
+        "/>
+    </properties>
+
+    
+    <materials>
+        <material name="DRBTBrass">
+            <D type="density" unit="g/cm3" value="8.44" />
+            <fraction n="0.7" ref="Cu" />
+            <fraction n="0.3" ref="Zn" />
+        </material>
+
+        <material name="DRBTDR_Polystyrene" >
+            <D type="density" unit="g/cm3" value="1.05" />
+            <composite n="8" ref="C" />
+            <composite n="8" ref="H" />
+	    <!--<property name="RINDEX" ref="RI_DR_Polystyrene"/>
+	    <property name="ABSLENGTH" ref="AbsLen_DR_Polystyrene"/>-->
+        </material>
+
+        <material name="DRBTPMMA" >
+            <D type="density" unit="g/cm3" value="1.19" />
+            <composite n="5" ref="C" />
+            <composite n="2" ref="O" />
+            <composite n="8" ref="H" />
+	    <!--<property name="RINDEX" ref="RI_PMMA"/>
+	    <property name="ABSLENGTH" ref="AbsLen_PMMA"/>-->
+        </material>
+
+        <material name="DRBTFluorinated_Polymer">
+            <D type="density" unit="g/cm3" value="1.43" />
+            <composite n="2" ref="C" />
+            <composite n="2" ref="F" />
+	    <!--<property name="RINDEX" ref="RI_Fluorinated_Polymer"/>-->
+        </material>
+
+    </materials>
+
+    <detectors>
+        <detector 
+            name="DRBarrelTubes"
+            type="DRBarrelTubes"
+            id="DetID_DRBarrelTubes"
+            readout="DRBarrelTubeRO"
+            vis="DRBTVis" >
+
+            <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_BARREL"/>
+
+            <dimensions
+                inner_radius="DRBTInnerCaloRadius"
+                outer_radius="DRBTOuterCaloRadius"
+                z_length="DRBTInnerCaloHalfLength"
+                deltatheta="DRBTTowerThetaCoverage"
+                deltaphi="DRBTTowerPhiCoverage" />
+
+            <trap>
+                <support material="DRBTBrass" width="DRBTSupportSideThickness" depth="DRBTSupportFrontThickness" z2="DRBTSupportBackThickness" vis="DRBTtrap_vis"/>
+                <air  material="Air"   vis="DRBTair_vis" />
+            </trap>
+
+            <tube>
+                <capillary  material="DRBTBrass"               outer_r="DRBTTubeOuterRadius" sensitive="false" vis="DRBTcapillary_vis" threshold="DRBTTubeTolerance" />
+                <scin_clad  material="DRBTPMMA"                outer_r="DRBTCladOuterRadius" sensitive="false" vis="DRBTscin_clad_vis" />
+                <scin_core material="DRBTDR_Polystyrene"       outer_r="DRBTCoreOuterRadius" sensitive="false"  vis="DRBTscin_core_vis" />
+                <cher_clad  material="DRBTFluorinated_Polymer" outer_r="DRBTCladOuterRadius" sensitive="false" vis="DRBTcher_clad_vis" />
+                <cher_core material="DRBTPMMA"                 outer_r="DRBTCoreOuterRadius" sensitive="false"  vis="DRBTcher_core_vis" />
+            </tube>
+
+        </detector>
+    </detectors>
+
+    <readouts>
+        <readout name="DRBarrelTubeRO">
+            <!-- NO SPACES BETWEEN ID DESCRIPTORS!!! -->
+            <id>system:5,stave:10,tower:-8,air:1,col:-11,row:7,clad:1,core:1,cherenkov:1</id>
+            
+            <segmentation type="CartesianGridXY" 
+                grid_size_x="1*mm" 
+                grid_size_y="1*mm"/>
+        </readout>
+    </readouts>
+
+    <!--<limits>
+        <limitset name="cal_limits">
+            <limit name="step_length_max" particles="*" value="100.0" unit="mm" />
+        </limitset>
+    </limits>-->
+
+</lccdd>
