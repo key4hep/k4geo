@@ -59,5 +59,4 @@ Inside the single tower (trapezoidal copper absorber), two types of optical fibe
 ## dual-readout-tubes
 
 ### o1_v01
-This folder containes the subdetectors (endcap + barrel) to make a full 4-pi fiber dual-readout calorimeter exploiting the INFN capillary-tubes technology. Each trapezoidal tower is constructed with brass capillary-tubes housing optical fibers (Cherenkov and scintillating).
-For the moment, only the endcap subdetector is included, the barrel will be added with a dedicated PR.
+This folder containes the subdetectors (endcap + barrel) to make a full 4-pi fiber dual-readout calorimeter exploiting the INFN capillary-tubes technology. Each trapezoidal tower is constructed with brass capillary-tubes housing optical fibers (Cherenkov and scintillating). Endcap and barrel calorimeters are implemented ad separate subdetectors.
