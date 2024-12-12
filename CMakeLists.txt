@@ -136,9 +136,6 @@ add_library(lcgeo ALIAS k4geo)
 target_include_directories(${PackageName}   PRIVATE ${PROJECT_SOURCE_DIR}/detector/include )
 target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detector/include )
 
-# target_include_directories(${PackageName}   PRIVATE ${PROJECT_SOURCE_DIR}/detectorSegmentations/include )
-# target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detectorSegmentations/include )
-
 target_include_directories(${PackageName}   PRIVATE ${PROJECT_SOURCE_DIR}/detector/calorimeter/dual-readout/include )
 target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detector/calorimeter/dual-readout/include )
 

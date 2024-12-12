@@ -3,7 +3,7 @@
 //         Princeton University
 //===============================
 
-#include "detectorSegmentations/SCEPCalSegmentationHandle_k4geo.h"
+#include "detectorSegmentations/SCEPCalSegmentation_k4geo.h"
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/DetectorTools.h"
 #include "DD4hep/Printout.h"
@@ -203,18 +203,20 @@ create_detector_SCEPCal(dd4hep::Detector &theDetector,xml_h xmlElement,dd4hep::S
   dd4hep::Polyhedra endcap1AssemblyShape(PHI_SEGMENTS,D_PHI_GLOBAL/2,2*M_PI,zEndcap1Polyhedra,rminEndcap1Polyhedra,rmaxEndcap1Polyhedra);
   dd4hep::Volume    endcap1AssemblyVol("endcap1AssemblyVol",endcap1AssemblyShape,theDetector.material("Vacuum"));
   endcap1AssemblyVol.setVisAttributes(theDetector,endcapAssemblyGlobalVisXML.visStr());
-  auto timingAssemblyVolId  =segmentation->setVolumeID(3,0,0,0);
+  auto timingAssemblyVolId  =segmentation->setVolumeID(6,0,0,0);
   int  timingAssemblyVolId32=segmentation->getFirst32bits(timingAssemblyVolId);
-  auto barrelAssemblyVolId  =segmentation->setVolumeID(1,0,0,0);
+  auto barrelAssemblyVolId  =segmentation->setVolumeID(4,0,0,0);
   int  barrelAssemblyVolId32=segmentation->getFirst32bits(barrelAssemblyVolId);
-  auto endcapAssemblyVolId  =segmentation->setVolumeID(2,0,0,0);
+  auto endcapAssemblyVolId  =segmentation->setVolumeID(5,0,0,0);
   int  endcapAssemblyVolId32=segmentation->getFirst32bits(endcapAssemblyVolId);
-  auto endcap1AssemblyVolId  =segmentation->setVolumeID(2,1,0,0);
+  auto endcap1AssemblyVolId  =segmentation->setVolumeID(5,1,0,0);
   int  endcap1AssemblyVolId32=segmentation->getFirst32bits(endcap1AssemblyVolId);
   experimentalHall.placeVolume(timingAssemblyVol,timingAssemblyVolId32);
   dd4hep::PlacedVolume barrelPlacedVol =experimentalHall.placeVolume(barrelAssemblyVol,barrelAssemblyVolId32);
   experimentalHall.placeVolume(endcapAssemblyVol,endcapAssemblyVolId32);
   experimentalHall.placeVolume(endcap1AssemblyVol,endcap1AssemblyVolId32);
+
+  barrelPlacedVol.addPhysVolID("system", detectorXML.id());
 
   ScepcalDetElement.setPlacement(barrelPlacedVol);
 
@@ -265,24 +267,24 @@ create_detector_SCEPCal(dd4hep::Detector &theDetector,xml_h xmlElement,dd4hep::S
         Position dispSipmLg(0,0,lT/2-sipmth/2);
         Position dispSipmTr(0,wT-sipmth/2,0);
 
-        auto timingLgId64=segmentation->setVolumeID(3,nTile*nCy+nC ,iPhi,3);
-        auto timingTrId64=segmentation->setVolumeID(3,nTile*nCy+nC ,iPhi,6);
+        auto timingLgId64=segmentation->setVolumeID(6,nTile*nCy+nC ,iPhi,3);
+        auto timingTrId64=segmentation->setVolumeID(6,nTile*nCy+nC ,iPhi,6);
         int  timingLgId32=segmentation->getFirst32bits(timingLgId64);
         int  timingTrId32=segmentation->getFirst32bits(timingTrId64);
         dd4hep::PlacedVolume timingLgp=tileAssemblyVolume.placeVolume(timingCrystalLgVol,timingLgId32,dispLg);
         dd4hep::PlacedVolume timingTrp=tileAssemblyVolume.placeVolume(timingCrystalTrVol,timingTrId32,dispTr);
-        timingLgp.addPhysVolID("system",3);
+        timingLgp.addPhysVolID("system",6);
         timingLgp.addPhysVolID("eta",nTile*nCy+nC);
         timingLgp.addPhysVolID("phi",iPhi);
         timingLgp.addPhysVolID("depth",3);
-        timingTrp.addPhysVolID("system",3);
+        timingTrp.addPhysVolID("system",6);
         timingTrp.addPhysVolID("eta",nTile*nCy+nC);
         timingTrp.addPhysVolID("phi",iPhi);
         timingTrp.addPhysVolID("depth",6);
-        auto sipmLgId64_1=segmentation->setVolumeID(3,nTile*nCy+nC ,iPhi,4);
-        auto sipmLgId64_2=segmentation->setVolumeID(3,nTile*nCy+nC ,iPhi,5);
-        auto sipmTrId64_1=segmentation->setVolumeID(3,nTile*nCy+nC ,iPhi,7);
-        auto sipmTrId64_2=segmentation->setVolumeID(3,nTile*nCy+nC ,iPhi,8);
+        auto sipmLgId64_1=segmentation->setVolumeID(6,nTile*nCy+nC ,iPhi,4);
+        auto sipmLgId64_2=segmentation->setVolumeID(6,nTile*nCy+nC ,iPhi,5);
+        auto sipmTrId64_1=segmentation->setVolumeID(6,nTile*nCy+nC ,iPhi,7);
+        auto sipmTrId64_2=segmentation->setVolumeID(6,nTile*nCy+nC ,iPhi,8);
         int  sipmLgId32_1=segmentation->getFirst32bits(sipmLgId64_1);
         int  sipmLgId32_2=segmentation->getFirst32bits(sipmLgId64_2);
         int  sipmTrId32_1=segmentation->getFirst32bits(sipmTrId64_1);
@@ -291,19 +293,19 @@ create_detector_SCEPCal(dd4hep::Detector &theDetector,xml_h xmlElement,dd4hep::S
         dd4hep::PlacedVolume sipmLgp2=tileAssemblyVolume.placeVolume(sipmBoxLgVol,sipmLgId32_2,dispLg-dispSipmLg);
         dd4hep::PlacedVolume sipmTrp1=tileAssemblyVolume.placeVolume(sipmBoxTrVol,sipmTrId32_1,dispTr+dispSipmTr);
         dd4hep::PlacedVolume sipmTrp2=tileAssemblyVolume.placeVolume(sipmBoxTrVol,sipmTrId32_2,dispTr-dispSipmTr);
-        sipmLgp1.addPhysVolID("system",3);
+        sipmLgp1.addPhysVolID("system",6);
         sipmLgp1.addPhysVolID("eta",nTile*nCy+nC);
         sipmLgp1.addPhysVolID("phi",iPhi);
         sipmLgp1.addPhysVolID("depth",4);
-        sipmLgp2.addPhysVolID("system",3);
+        sipmLgp2.addPhysVolID("system",6);
         sipmLgp2.addPhysVolID("eta",nTile*nCy+nC);
         sipmLgp2.addPhysVolID("phi",iPhi);
         sipmLgp2.addPhysVolID("depth",5);
-        sipmTrp1.addPhysVolID("system",3);
+        sipmTrp1.addPhysVolID("system",6);
         sipmTrp1.addPhysVolID("eta",nTile*nCy+nC);
         sipmTrp1.addPhysVolID("phi",iPhi);
         sipmTrp1.addPhysVolID("depth",7);
-        sipmTrp2.addPhysVolID("system",3);
+        sipmTrp2.addPhysVolID("system",6);
         sipmTrp2.addPhysVolID("eta",nTile*nCy+nC);
         sipmTrp2.addPhysVolID("phi",iPhi);
         sipmTrp2.addPhysVolID("depth",8);
@@ -374,17 +376,17 @@ create_detector_SCEPCal(dd4hep::Detector &theDetector,xml_h xmlElement,dd4hep::S
         crystalRVol.setVisAttributes(theDetector,crystalRXML.visStr());
         crystalFVol.setSensitiveDetector(sens);
         crystalRVol.setSensitiveDetector(sens);
-        auto crystalFId64=segmentation->setVolumeID(1,N_THETA_ENDCAP+iTheta ,iPhi*N_PHI_BARREL_CRYSTAL+nGamma,1);
-        auto crystalRId64=segmentation->setVolumeID(1,N_THETA_ENDCAP+iTheta ,iPhi*N_PHI_BARREL_CRYSTAL+nGamma,2);
+        auto crystalFId64=segmentation->setVolumeID(4,N_THETA_ENDCAP+iTheta ,iPhi*N_PHI_BARREL_CRYSTAL+nGamma,1);
+        auto crystalRId64=segmentation->setVolumeID(4,N_THETA_ENDCAP+iTheta ,iPhi*N_PHI_BARREL_CRYSTAL+nGamma,2);
         int  crystalFId32=segmentation->getFirst32bits(crystalFId64);
         int  crystalRId32=segmentation->getFirst32bits(crystalRId64);
         dd4hep::PlacedVolume crystalFp=barrelPhiAssemblyVolume.placeVolume(crystalFVol,crystalFId32,Transform3D(rot,dispF));
         dd4hep::PlacedVolume crystalRp=barrelPhiAssemblyVolume.placeVolume(crystalRVol,crystalRId32,Transform3D(rot,dispR));
-        crystalFp.addPhysVolID("system",1);
+        crystalFp.addPhysVolID("system",4);
         crystalFp.addPhysVolID("eta",N_THETA_ENDCAP+iTheta);
         crystalFp.addPhysVolID("phi",iPhi*N_PHI_BARREL_CRYSTAL+nGamma);
         crystalFp.addPhysVolID("depth",1);
-        crystalRp.addPhysVolID("system",1);
+        crystalRp.addPhysVolID("system",4);
         crystalRp.addPhysVolID("eta",N_THETA_ENDCAP+iTheta);
         crystalRp.addPhysVolID("phi",iPhi*N_PHI_BARREL_CRYSTAL+nGamma);
         crystalRp.addPhysVolID("depth",2);
@@ -437,17 +439,17 @@ create_detector_SCEPCal(dd4hep::Detector &theDetector,xml_h xmlElement,dd4hep::S
         crystalRVol.setVisAttributes(theDetector,projRXML.visStr());
         crystalFVol.setSensitiveDetector(sens);
         crystalRVol.setSensitiveDetector(sens);
-        auto crystalFId64=segmentation->setVolumeID(4,iTheta,iPhi*N_PHI_BARREL_CRYSTAL+nGamma,1);
-        auto crystalRId64=segmentation->setVolumeID(4,iTheta,iPhi*N_PHI_BARREL_CRYSTAL+nGamma,2);
+        auto crystalFId64=segmentation->setVolumeID(7,iTheta,iPhi*N_PHI_BARREL_CRYSTAL+nGamma,1);
+        auto crystalRId64=segmentation->setVolumeID(7,iTheta,iPhi*N_PHI_BARREL_CRYSTAL+nGamma,2);
         int  crystalFId32=segmentation->getFirst32bits(crystalFId64);
         int  crystalRId32=segmentation->getFirst32bits(crystalRId64);
         dd4hep::PlacedVolume crystalFp=barrelPhiAssemblyVolume.placeVolume(crystalFVol,crystalFId32,Transform3D(rot,dispF));
         dd4hep::PlacedVolume crystalRp=barrelPhiAssemblyVolume.placeVolume(crystalRVol,crystalRId32,Transform3D(rot,dispR));
-        crystalFp.addPhysVolID("system",4);
+        crystalFp.addPhysVolID("system",7);
         crystalFp.addPhysVolID("eta",iTheta);
         crystalFp.addPhysVolID("phi",iPhi*N_PHI_BARREL_CRYSTAL+nGamma);
         crystalFp.addPhysVolID("depth",1);
-        crystalRp.addPhysVolID("system",4);
+        crystalRp.addPhysVolID("system",7);
         crystalRp.addPhysVolID("eta",iTheta);
         crystalRp.addPhysVolID("phi",iPhi*N_PHI_BARREL_CRYSTAL+nGamma);
         crystalRp.addPhysVolID("depth",2);
@@ -529,31 +531,31 @@ create_detector_SCEPCal(dd4hep::Detector &theDetector,xml_h xmlElement,dd4hep::S
         crystalRVol.setVisAttributes(theDetector,crystalRXML.visStr());
         crystalFVol.setSensitiveDetector(sens);
         crystalRVol.setSensitiveDetector(sens);
-        auto crystalFId64=segmentation->setVolumeID(2,iTheta,iPhi*nPhiEndcapCrystal+nGamma,1);
-        auto crystalRId64=segmentation->setVolumeID(2,iTheta,iPhi*nPhiEndcapCrystal+nGamma,2);
+        auto crystalFId64=segmentation->setVolumeID(5,iTheta,iPhi*nPhiEndcapCrystal+nGamma,1);
+        auto crystalRId64=segmentation->setVolumeID(5,iTheta,iPhi*nPhiEndcapCrystal+nGamma,2);
         int  crystalFId32=segmentation->getFirst32bits(crystalFId64);
         int  crystalRId32=segmentation->getFirst32bits(crystalRId64);
         dd4hep::PlacedVolume crystalFp=endcapRingAssemblyVolume.placeVolume(crystalFVol,crystalFId32,Transform3D(rot,dispF));
         dd4hep::PlacedVolume crystalRp=endcapRingAssemblyVolume.placeVolume(crystalRVol,crystalRId32,Transform3D(rot,dispR));
-        crystalFp.addPhysVolID("system",2);
+        crystalFp.addPhysVolID("system",5);
         crystalFp.addPhysVolID("eta",iTheta);
         crystalFp.addPhysVolID("phi",iPhi*nPhiEndcapCrystal+nGamma);
         crystalFp.addPhysVolID("depth",1);
-        crystalRp.addPhysVolID("system",2);
+        crystalRp.addPhysVolID("system",5);
         crystalRp.addPhysVolID("eta",iTheta);
         crystalRp.addPhysVolID("phi",iPhi*nPhiEndcapCrystal+nGamma);
         crystalRp.addPhysVolID("depth",2);
-        auto crystalFId641=segmentation->setVolumeID(2,N_THETA_ENDCAP+N_THETA_BARREL+N_THETA_ENDCAP-iTheta,iPhi*nPhiEndcapCrystal+nGamma,1);
-        auto crystalRId641=segmentation->setVolumeID(2,N_THETA_ENDCAP+N_THETA_BARREL+N_THETA_ENDCAP-iTheta,iPhi*nPhiEndcapCrystal+nGamma,2);
+        auto crystalFId641=segmentation->setVolumeID(5,N_THETA_ENDCAP+N_THETA_BARREL+N_THETA_ENDCAP-iTheta,iPhi*nPhiEndcapCrystal+nGamma,1);
+        auto crystalRId641=segmentation->setVolumeID(5,N_THETA_ENDCAP+N_THETA_BARREL+N_THETA_ENDCAP-iTheta,iPhi*nPhiEndcapCrystal+nGamma,2);
         int  crystalFId321=segmentation->getFirst32bits(crystalFId641);
         int  crystalRId321=segmentation->getFirst32bits(crystalRId641);
         dd4hep::PlacedVolume crystalFp1=endcap1RingAssemblyVolume.placeVolume(crystalFVol,crystalFId321,Transform3D(rot,dispF));
         dd4hep::PlacedVolume crystalRp1=endcap1RingAssemblyVolume.placeVolume(crystalRVol,crystalRId321,Transform3D(rot,dispR));
-        crystalFp1.addPhysVolID("system",2);
+        crystalFp1.addPhysVolID("system",5);
         crystalFp1.addPhysVolID("eta",N_THETA_ENDCAP+N_THETA_BARREL+N_THETA_ENDCAP-iTheta);
         crystalFp1.addPhysVolID("phi",iPhi*nPhiEndcapCrystal+nGamma);
         crystalFp1.addPhysVolID("depth",1);
-        crystalRp1.addPhysVolID("system",2);
+        crystalRp1.addPhysVolID("system",5);
         crystalRp1.addPhysVolID("eta",N_THETA_ENDCAP+N_THETA_BARREL+N_THETA_ENDCAP-iTheta);
         crystalRp1.addPhysVolID("phi",iPhi*nPhiEndcapCrystal+nGamma);
         crystalRp1.addPhysVolID("depth",2);

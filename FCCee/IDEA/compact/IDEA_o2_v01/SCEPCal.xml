@@ -980,8 +980,8 @@
   </readouts>
 
   <display>
-    <vis name="projectiveFillFVis"  alpha="1"   r="0.5"  g="0.0"  b="1.0"  showDaughters="true"  visible="true"/>
-    <vis name="projectiveFillRVis"  alpha="1"   r="0.5"  g="0.5"  b="0.0"  showDaughters="true"  visible="true"/>
+    <vis name="projectiveFillFVis"  alpha="1"   r="0.0"  g="0.0"  b="1.0"  showDaughters="true"  visible="true"/>
+    <vis name="projectiveFillRVis"  alpha="1"   r="0.0"  g="0.5"  b="1.0"  showDaughters="true"  visible="true"/>
     <vis name="crystalFVis"  alpha="1"   r="0.0"  g="0.0"  b="1.0"  showDaughters="true"  visible="true"/>
     <vis name="crystalRVis"  alpha="1"   r="0.0"  g="0.5"  b="1.0"  showDaughters="true"  visible="true"/>
     <vis name="timingVisTr"  alpha="1"   r="0.0"  g="1.0"  b="0.1"  showDaughters="true"  visible="true"/>
@@ -1006,7 +1006,7 @@
   </define>
 
   <detectors>
-    <detector id="1"
+    <detector id="4"
               name="SCEPCal"
               type="SegmentedCrystalECAL" 
               readout="SCEPCal_readout"
@@ -1018,8 +1018,8 @@
       <barrel construct="true" phistart="0" phiend="128"/>
       <endcap construct="true" phistart="0" phiend="128" thetastart="10"/>
 
-      <dim    barrelHalfZ="2.25*m"
-              barrelInnerR="2*m" 
+      <dim    barrelHalfZ="1.8*m"
+              barrelInnerR="2.25*m" 
               crystalFaceWidthNominal="10*mm"
               crystalFlength="50*mm"
               crystalRlength="150*mm"

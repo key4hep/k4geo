@@ -63,7 +63,8 @@ Vector3D SCEPCalSegmentation_k4geo::myPosition(const CellID& cID) const {
     int     N_PHI_BARREL_CRYSTAL=floor(2*M_PI*Rin/(PHI_SEGMENTS*nomfw));
     double  D_PHI_BARREL_CRYSTAL=D_PHI_GLOBAL/N_PHI_BARREL_CRYSTAL;
 
-    if (system == 3) {
+    // timing
+    if (system == 6) {
         double thC_end         =THETA_SIZE_ENDCAP+D_THETA_BARREL/2;
         double r0slice_end     =Rin/sin(thC_end);
         double y0slice_end     =r0slice_end*tan(D_THETA_BARREL/2.);
@@ -98,7 +99,8 @@ Vector3D SCEPCalSegmentation_k4geo::myPosition(const CellID& cID) const {
         else if (nDepth_in==7) {return rotZ*(dispTimingAssembly +dispTileAssembly +dispTr +dispSipmTr);}
         else if (nDepth_in==8) {return rotZ*(dispTimingAssembly +dispTileAssembly +dispTr -dispSipmTr);}
     }
-    else if (system == 2) {
+    // endcap
+    else if (system == 5) {
         int nTheta;
         if (nEta_in<N_THETA_ENDCAP) {nTheta=nEta_in;}
         else if (nEta_in>N_THETA_ENDCAP+N_THETA_BARREL) {
@@ -130,7 +132,8 @@ Vector3D SCEPCalSegmentation_k4geo::myPosition(const CellID& cID) const {
             return rotY*(dispSlice+rotZ*dispR);
         }
     }
-    else if (system == 1) {
+    // barrel
+    else if (system == 4) {
         int    nTheta         =nEta_in-N_THETA_ENDCAP;
         int    nPhi           =int(nPhi_in/N_PHI_BARREL_CRYSTAL);
         int    nGamma         =nPhi_in%N_PHI_BARREL_CRYSTAL;
@@ -154,7 +157,8 @@ Vector3D SCEPCalSegmentation_k4geo::myPosition(const CellID& cID) const {
             return (dispSlice+rotZ*dispR);
         }
     }
-    else if (system == 4) {
+    // projective fill
+    else if (system == 7) {
         int nTheta   =nEta_in;
         int nPhi     =int(nPhi_in/N_PHI_BARREL_CRYSTAL);
         int nGamma   =nPhi_in%N_PHI_BARREL_CRYSTAL;

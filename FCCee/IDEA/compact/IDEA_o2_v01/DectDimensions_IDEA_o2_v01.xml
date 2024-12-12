@@ -269,7 +269,7 @@
     <vis name="AirVis"          alpha="0.1" r="0.1"     g="0.1"     b="1.0"   showDaughters="false" visible="true"/>
     <!-- Dual-Readout Endcap Tubes vis-->
     <vis name="DRETAssemblyVis" alpha="0.05" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false"/>
-    <vis name="DRETStaveVis" alpha="0.1" r="0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="DRETStaveVis" alpha="0.1" r="0" g="0.0" b="1.0" showDaughters="true" visible="false"/>
     <vis name="DRETTowerVis" alpha="0.5" r="1.0" g="0.624" b="0.0" showDaughters="false" visible="true"/>
     <vis name="DRETtube_S_Vis" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
     <vis name="DRETtube_C_Vis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>

@@ -103,8 +103,10 @@ SIM.action.calo = "Geant4ScintillatorCalorimeterAction"
 ## List of patterns matching sensitive detectors of type Calorimeter.
 SIM.action.calorimeterSDTypes = ["calorimeter"]
 
-## Replace SDAction for DREndcapTubes subdetector
+## Replace SDAction for subdetectors
 SIM.action.mapActions["DREndcapTubes"] = "DRTubesSDAction"
+SIM.action.mapActions["SCEPCal"] = "SCEPCalSDAction_DRHit"
+
 ## Configure the regexSD for DREndcapTubes subdetector
 SIM.geometry.regexSensitiveDetector["DREndcapTubes"] = {
     "Match": ["DRETS"],
@@ -184,7 +186,7 @@ SIM.filter.filters = {
 }
 
 ##  a map between patterns and filter objects, using patterns to attach filters to sensitive detector
-SIM.filter.mapDetFilter = {}
+SIM.filter.mapDetFilter = {'SCEPCal' : 'edep1kev'}
 
 ##  default filter for tracking sensitive detectors; this is applied if no other filter is used for a tracker
 SIM.filter.tracker = "edep1kev"
@@ -440,7 +442,25 @@ SIM.outputConfig.forceLCIO = False
 ##       # arbitrary options can be created and set via the steering file or command line
 ##       SIM.outputConfig.myExtension = '.csv'
 ##
-
+def setupEDM4hepOutputDR(dd4hepSimulation):
+     from DDG4 import EventAction, Kernel
+     dd = dd4hepSimulation
+     evt_edm4hep = EventAction(Kernel(), 'Geant4Output2EDM4hep_DRC/' + dd.outputFile, True)
+     evt_edm4hep.Control = True
+     output = dd.outputFile
+     if not dd.outputFile.endswith(dd.outputConfig.myExtension):
+          output = dd.outputFile + dd.outputConfig.myExtension
+     evt_edm4hep.Output = output
+     evt_edm4hep.enableUI()
+     Kernel().eventAction().add(evt_edm4hep)
+     eventPars = dd.meta.parseEventParameters()
+     evt_edm4hep.RunHeader = dd.meta.addParametersToRunHeader(dd)
+     evt_edm4hep.EventParametersString, evt_edm4hep.EventParametersInt, evt_edm4hep.EventParametersFloat = eventPars
+     evt_edm4hep.RunNumberOffset = dd.meta.runNumberOffset if dd.meta.runNumberOffset > 0 else 0
+     evt_edm4hep.EventNumberOffset = dd.meta.eventNumberOffset if dd.meta.eventNumberOffset > 0 else 0
+     return None
+SIM.outputConfig.userOutputPlugin = setupEDM4hepOutputDR
+SIM.outputConfig.myExtension = '.root'
 
 ################################################################################
 ## Configuration for the Particle Handler/ MCTruth treatment
