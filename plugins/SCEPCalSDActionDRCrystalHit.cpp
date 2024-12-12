@@ -2,7 +2,7 @@
 // Author: Wonyong Chung
 //         Princeton University
 //===============================
-#include "detectorSegmentations/DRCrystalHit.h"
+#include "DRCrystalHit.h"
 #include "detectorSegmentations/SCEPCalSegmentation_k4geo.h"
 #include "DDG4/Geant4SensDetAction.inl"
 #include "DDG4/Factories.h"

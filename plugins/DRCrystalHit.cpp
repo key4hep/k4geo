@@ -10,7 +10,7 @@
 // #include <G4Step.hh>
 // #include <G4Allocator.hh>
 // #include <G4OpticalPhoton.hh>
-#include "detectorSegmentations/DRCrystalHit.h"
+#include "DRCrystalHit.h"
 // #include "G4Track.hh"
 
 SCEPCal::DRCrystalHit::DRCrystalHit()
