@@ -1983,7 +1983,7 @@ N. Nikiforou 19/08/2015
      - Example XML for the fields section of the compact XML
 
             <field name="DetectorMap" type="FieldBrBz"
-                   filename="${lcgeo_DIR}/fieldmaps/ILDMap_KB_20150204_BRhoZ.root"
+                   filename="${k4geo_DIR}/fieldmaps/ILDMap_KB_20150204_BRhoZ.root"
                tree="fieldmap:rho:z:Brho:Bz"
                rScale = "1.0"
                zScale = "1.0"
