@@ -303,7 +303,7 @@ void DRBarrelTubes::DRTubesconstructor::assert_tube_existence(int key, bool cher
     {
         // Cherenkov cladding
         Tube        cher_clad_solid(0.0*mm, m_cher_clad_outer_r, length_rounded_down);
-        Volume      cher_clad_volume("cher_clad", cher_clad_solid, m_cher_clad_material);
+        Volume      cher_clad_volume("DRBT_cher_clad", cher_clad_solid, m_cher_clad_material);
         if (m_cher_clad_isSensitive) cher_clad_volume.setSensitiveDetector(*m_sens);
         PlacedVolume cher_clad_placed = capillary_volume.placeVolume(cher_clad_volume, 1);
         cher_clad_volume.setVisAttributes(*m_description, m_cher_clad_visString);
