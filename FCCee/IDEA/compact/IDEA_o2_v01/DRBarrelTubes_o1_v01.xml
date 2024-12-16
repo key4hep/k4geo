@@ -272,7 +272,7 @@
     <readouts>
         <readout name="DRBarrelTubeRO">
             <!-- NO SPACES BETWEEN ID DESCRIPTORS!!! -->
-            <id>system:5,stave:10,tower:-8,air:1,col:-11,row:7,clad:1,core:1,cherenkov:1</id>
+            <id>system:5,stave:10,tower:-8,air:1,col:-16,row:16,clad:1,core:1,cherenkov:1</id>
             
             <segmentation type="CartesianGridXY" 
                 grid_size_x="1*mm" 
