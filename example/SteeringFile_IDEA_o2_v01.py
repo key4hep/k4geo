@@ -111,6 +111,14 @@ SIM.geometry.regexSensitiveDetector["DREndcapTubes"] = {
     "OutputLevel": 4,
 }
 
+## Replace SDAction for DRBarrelTubes subdetector
+SIM.action.mapActions["DRBarrelTubes"] = "DRTubesSDAction"
+## Configure the regexSD for DRBarrelTubes subdetector
+SIM.geometry.regexSensitiveDetector["DRBarrelTubes"] = {
+    "Match": ["DRBT"],
+    "OutputLevel": 4,
+}
+
 ##  set the default run action
 SIM.action.run = []
 
