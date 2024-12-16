@@ -517,6 +517,8 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
 
 inline double Circumradius(double Apothem, double dphi){return Apothem/cos(0.5*dphi/dd4hep::rad);}
 
+/// Solid equivalent to a twisted tube, resulting from the intersection of an hyperboloid and a generic trapezoid
+/// the hyperboloid provides the hyperboloidal surfaces, the trapezoid provides the other two types of surfaces
 dd4hep::Solid CompositeTT(double twist_angle,  double cell_rin_z0,  double cell_rout_z0, double dz, double dphi, const dd4hep::rec::DCH_info & DCH_i)
 {
 
