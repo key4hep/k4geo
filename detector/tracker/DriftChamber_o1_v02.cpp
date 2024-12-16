@@ -578,7 +578,7 @@ dd4hep::Solid CompositeTT(double twist_angle,  double cell_rin_z0,  double cell_
   // ROOT hyperboloid require stereoangles stin and stout
   //-- stereo for rmin
   double stin  = DCH_i.stereoangle_z0(cell_rin_z0);
-  //-- stereo for rour
+  //-- stereo for rout
   double stout = DCH_i.stereoangle_z0(cell_rout_z0);
 
   // make hyperboloid longer, later intersection with gtrap will lead to proper length
