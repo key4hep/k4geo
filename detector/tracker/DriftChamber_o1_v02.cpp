@@ -519,6 +519,7 @@ inline double Circumradius(double Apothem, double dphi){return Apothem/cos(0.5*d
 
 /// Solid equivalent to a twisted tube, resulting from the intersection of an hyperboloid and a generic trapezoid
 /// the hyperboloid provides the hyperboloidal surfaces, the trapezoid provides the other two types of surfaces
+/// the generic trapezoid is built in such a manner that circumscribe the twisted tube
 dd4hep::Solid CompositeTT(double twist_angle,  double cell_rin_z0,  double cell_rout_z0, double dz, double dphi, const dd4hep::rec::DCH_info & DCH_i)
 {
 
@@ -551,6 +552,9 @@ dd4hep::Solid CompositeTT(double twist_angle,  double cell_rin_z0,  double cell_
 
   face fZneg;
   face fZpos;
+
+  // The generic trapezoid is built in such a manner as to circumscribe the twisted tube
+  // The following points correspond to the corners of the twisted tube
 
   fZpos.A = { trap_rin*cos(  poly_angle + twist_angle_half ), trap_rin*sin(  poly_angle + twist_angle_half ) };
   fZpos.B = { trap_rin*cos( -poly_angle + twist_angle_half ), trap_rin*sin( -poly_angle + twist_angle_half ) };
