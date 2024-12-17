@@ -75,10 +75,10 @@ template<>
 void Geant4SensitiveAction<DRTubesSDData>::defineCollections()
 {
   std::string ROname = m_sensitive.readout().name();
-  m_collectionID = defineCollection<Geant4Calorimeter::Hit>(ROname + "ScinRight");
-  m_userData.collection_cher_right = defineCollection<Geant4Calorimeter::Hit>(ROname + "CherRight");
-  m_userData.collection_scin_left = defineCollection<Geant4Calorimeter::Hit>(ROname + "ScinLeft");
-  m_userData.collection_cher_left = defineCollection<Geant4Calorimeter::Hit>(ROname + "CherLeft");
+  m_collectionID = defineCollection<Geant4Calorimeter::Hit>("DRETScinRight");
+  m_userData.collection_cher_right = defineCollection<Geant4Calorimeter::Hit>("DRETCherRight");
+  m_userData.collection_scin_left = defineCollection<Geant4Calorimeter::Hit>("DRETScinLeft");
+  m_userData.collection_cher_left = defineCollection<Geant4Calorimeter::Hit>("DRETCherLeft");
   m_userData.collection_drbt_cher = defineCollection<Geant4Calorimeter::Hit>("DRBTCher");
   m_userData.collection_drbt_scin = defineCollection<Geant4Calorimeter::Hit>("DRBTScin");
 }
