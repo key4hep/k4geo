@@ -29,7 +29,7 @@
 // Includers from project files
 #include "DRTubesSglHpr.hh"
 
-#define DRTubesSDDebug
+// #define DRTubesSDDebug
 
 namespace dd4hep
 {
@@ -140,7 +140,6 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
   // 1 for C fibers and 0 for S fibers
   unsigned int CherenkovID = cpNo & 0b1;
   bool IsScin = (CherenkovID == 0);
-  std::cout << "coreid " << CoreID << " is scin " << IsScin << std::endl;
   // Skip this step if edep is 0 and it is a scintillating fiber
   if (IsScin && Edep == 0.) return true;
   // If it is a track inside the cherenkov CLADDING skip this step,
@@ -157,7 +156,6 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
   // Now we check if we are in the barrel and the endcap calo
   double theta = aStep->GetPreStepPoint()->GetPosition().theta();
   bool IsBarrel = (theta >= 45.0 * deg && theta <= 135.0 * deg) ? true : false;
-  std::cout <<"theta deg"<<theta * deg<<" theta rad"<< theta << " " << IsBarrel << std::endl;
   VolumeID VolID = 0;  // this 64-bits VolumeID will be recreated for barrel and endcap volumes
   Geant4HitCollection* coll = nullptr;  // to be assigned correctly below
 
@@ -220,9 +218,9 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
     auto TowerID = static_cast<int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(4));
     auto StaveID =
       static_cast<unsigned int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(5));
-    std::cout<<" tube id "<<TubeID<<" col "<<ColumnID<<" row "<<RowID<<" Tower "<<TowerID<<" Stave "<<StaveID<<std::endl;
 
-    BitFieldCoder bcbarrel("system:5,stave:10,tower:-8,air:1,col:-16,row:16,clad:1,core:1,cherenkov:1");
+    BitFieldCoder bcbarrel(
+      "system:5,stave:10,tower:-8,air:1,col:-16,row:16,clad:1,core:1,cherenkov:1");
     bcbarrel.set(VolID, "system", 28);  // this number is set in DectDimensions_IDEA_o2_v01.xml
     bcbarrel.set(VolID, "stave", StaveID);
     bcbarrel.set(VolID, "tower", TowerID);
@@ -232,7 +230,6 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
     bcbarrel.set(VolID, "clad", 1);
     bcbarrel.set(VolID, "core", CoreID);
     bcbarrel.set(VolID, "cherenkov", CherenkovID);
-    std::cout << "volid barrel " << VolID << std::endl;
 
     /* If you want to compare the 64-bits VolID created here
      * with the original DD4hep volumeID:
