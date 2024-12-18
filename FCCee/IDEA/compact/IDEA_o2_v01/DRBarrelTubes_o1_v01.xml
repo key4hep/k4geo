@@ -214,8 +214,17 @@
             <D type="density" unit="g/cm3" value="1.05" />
             <composite n="8" ref="C" />
             <composite n="8" ref="H" />
-	    <!--<property name="RINDEX" ref="RI_DR_Polystyrene"/>
-	    <property name="ABSLENGTH" ref="AbsLen_DR_Polystyrene"/>-->
+	    <!--<property name="RINDEX" ref="DRBTRI_DR_Polystyrene"/>
+	    <property name="ABSLENGTH" ref="DRBTAbsLen_DR_Polystyrene"/>-->
+        </material>
+
+        <material name="DRBTPMMA_Scin" >
+            <D type="density" unit="g/cm3" value="1.1901" />
+            <composite n="5" ref="C" />
+            <composite n="2" ref="O" />
+            <composite n="8" ref="H" />
+	    <!--<property name="RINDEX" ref="DRBTRI_PMMA"/>
+	    <property name="ABSLENGTH" ref="DRBTAbsLen_PMMA"/>-->
         </material>
 
         <material name="DRBTPMMA" >
@@ -223,15 +232,15 @@
             <composite n="5" ref="C" />
             <composite n="2" ref="O" />
             <composite n="8" ref="H" />
-	    <!--<property name="RINDEX" ref="RI_PMMA"/>
-	    <property name="ABSLENGTH" ref="AbsLen_PMMA"/>-->
+	    <property name="RINDEX" ref="DRBTRI_PMMA"/>
+	    <!--<property name="ABSLENGTH" ref="DRBTAbsLen_PMMA"/>-->
         </material>
 
         <material name="DRBTFluorinated_Polymer">
             <D type="density" unit="g/cm3" value="1.43" />
             <composite n="2" ref="C" />
             <composite n="2" ref="F" />
-	    <!--<property name="RINDEX" ref="RI_Fluorinated_Polymer"/>-->
+	    <property name="RINDEX" ref="DRBTRI_Fluorinated_Polymer"/>
         </material>
 
     </materials>
@@ -260,7 +269,7 @@
 
             <tube>
                 <capillary  material="DRBTBrass"               outer_r="DRBTTubeOuterRadius" sensitive="false" vis="DRBTcapillary_vis" threshold="DRBTTubeTolerance" />
-                <scin_clad  material="DRBTPMMA"                outer_r="DRBTCladOuterRadius" sensitive="false" vis="DRBTscin_clad_vis" />
+                <scin_clad  material="DRBTPMMA_Scin"            outer_r="DRBTCladOuterRadius" sensitive="false" vis="DRBTscin_clad_vis" />
                 <scin_core material="DRBTDR_Polystyrene"       outer_r="DRBTCoreOuterRadius" sensitive="false"  vis="DRBTscin_core_vis" />
                 <cher_clad  material="DRBTFluorinated_Polymer" outer_r="DRBTCladOuterRadius" sensitive="false" vis="DRBTcher_clad_vis" />
                 <cher_core material="DRBTPMMA"                 outer_r="DRBTCoreOuterRadius" sensitive="false"  vis="DRBTcher_core_vis" />
