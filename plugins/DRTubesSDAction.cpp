@@ -164,7 +164,7 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
     // fist16 bits for the columnID and second 16 bits for the rowID
     auto TubeID = aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(2);
     unsigned int ColumnID = TubeID >> 16;
-    unsigned int RawID = TubeID & 0xFFFF;
+    unsigned int RowID = TubeID & 0xFFFF;
     auto TowerID =
       static_cast<unsigned int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(3));
     auto StaveID =
@@ -176,7 +176,7 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
     bc.set(VolID, "tower", TowerID);
     bc.set(VolID, "air", 0);
     bc.set(VolID, "col", ColumnID);
-    bc.set(VolID, "row", RawID);
+    bc.set(VolID, "row", RowID);
     bc.set(VolID, "clad", 1);
     bc.set(VolID, "core", CoreID);
     bc.set(VolID, "cherenkov", CherenkovID);
@@ -195,7 +195,7 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
     std::cout<<"tower id, created "<<TowerID<<" and DD4hep original "<<bc.get(volumeID(aStep),"tower")<<std::endl;
     std::cout<<"air id, created "<<0<<" and DD4hep original "<<bc.get(volumeID(aStep),"air")<<std::endl;
     std::cout<<"col id, created "<<ColumnID<<" and DD4hep original "<<bc.get(volumeID(aStep),"col")<<std::endl;
-    std::cout<<"row id, created "<<RawID<<" and DD4hep original "<<bc.get(volumeID(aStep),"row")<<std::endl;
+    std::cout<<"row id, created "<<RowID<<" and DD4hep original "<<bc.get(volumeID(aStep),"row")<<std::endl;
     std::cout<<"clad id, created "<<1<<" and DD4hep original "<<bc.get(volumeID(aStep),"clad")<<std::endl;
     std::cout<<"core id, created "<<CoreID<<" and DD4hep original "<<bc.get(volumeID(aStep),"core")<<std::endl;
     std::cout<<"cherenkov id, created "<<CherenkovID<<" and DD4hep original "<<bc.get(volumeID(aStep),"cherenkov")<<std::endl;*/
@@ -239,16 +239,16 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
      * in the steering file (instead of using RegexSD)
      * 3. Uncomment the code below */
     // clang-format off
-    /*std::cout<<"Volume id, created "<<VolID<<" and DD4hep oroginal "<<volumeID(aStep)<<std::endl;
-    std::cout<<"system id, created "<<28<<" and DD4hep original "<<bc.get(volumeID(aStep),"system")<<std::endl;
-    std::cout<<"stave id, created "<<StaveID<<" and DD4hep original "<<bc.get(volumeID(aStep),"stave")<<std::endl;
-    std::cout<<"tower id, created "<<TowerID<<" and DD4hep original "<<bc.get(volumeID(aStep),"tower")<<std::endl;
-    std::cout<<"air id, created "<<1<<" and DD4hep original "<<bc.get(volumeID(aStep),"air")<<std::endl;
-    std::cout<<"col id, created "<<ColumnID<<" and DD4hep original "<<bc.get(volumeID(aStep),"col")<<std::endl;
-    std::cout<<"row id, created "<<RawID<<" and DD4hep original "<<bc.get(volumeID(aStep),"row")<<std::endl;
-    std::cout<<"clad id, created "<<1<<" and DD4hep original "<<bc.get(volumeID(aStep),"clad")<<std::endl;
-    std::cout<<"core id, created "<<CoreID<<" and DD4hep original "<<bc.get(volumeID(aStep),"core")<<std::endl;
-    std::cout<<"cherenkov id, created "<<CherenkovID<<" and DD4hep original "<<bc.get(volumeID(aStep),"cherenkov")<<std::endl;*/
+    std::cout<<"Volume id, created "<<VolID<<" and DD4hep oroginal "<<volumeID(aStep)<<std::endl;
+    std::cout<<"system id, created "<<28<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"system")<<std::endl;
+    std::cout<<"stave id, created "<<StaveID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"stave")<<std::endl;
+    std::cout<<"tower id, created "<<TowerID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"tower")<<std::endl;
+    std::cout<<"air id, created "<<1<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"air")<<std::endl;
+    std::cout<<"col id, created "<<ColumnID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"col")<<std::endl;
+    std::cout<<"row id, created "<<RowID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"row")<<std::endl;
+    std::cout<<"clad id, created "<<1<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"clad")<<std::endl;
+    std::cout<<"core id, created "<<CoreID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"core")<<std::endl;
+    std::cout<<"cherenkov id, created "<<CherenkovID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"cherenkov")<<std::endl;
     // clang-format on
 
     coll = (IsScin) ? collection(m_userData.collection_drbt_scin)
