@@ -189,7 +189,7 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
      * in the steering file (instead of using RegexSD)
      * 3. Uncomment the code below */
     // clang-format off
-    /*std::cout<<"Volume id, created "<<VolID<<" and DD4hep oroginal "<<volumeID(aStep)<<std::endl;
+    /*std::cout<<"Volume id, created "<<VolID<<" and DD4hep original "<<volumeID(aStep)<<std::endl;
     std::cout<<"system id, created "<<25<<" and DD4hep original "<<bc.get(volumeID(aStep),"system")<<std::endl;
     std::cout<<"stave id, created "<<StaveID<<" and DD4hep original "<<bc.get(volumeID(aStep),"stave")<<std::endl;
     std::cout<<"tower id, created "<<TowerID<<" and DD4hep original "<<bc.get(volumeID(aStep),"tower")<<std::endl;
@@ -239,7 +239,7 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
      * in the steering file (instead of using RegexSD)
      * 3. Uncomment the code below */
     // clang-format off
-    std::cout<<"Volume id, created "<<VolID<<" and DD4hep oroginal "<<volumeID(aStep)<<std::endl;
+    /*std::cout<<"Volume id, created "<<VolID<<" and DD4hep original "<<volumeID(aStep)<<std::endl;
     std::cout<<"system id, created "<<28<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"system")<<std::endl;
     std::cout<<"stave id, created "<<StaveID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"stave")<<std::endl;
     std::cout<<"tower id, created "<<TowerID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"tower")<<std::endl;
@@ -248,7 +248,7 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
     std::cout<<"row id, created "<<RowID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"row")<<std::endl;
     std::cout<<"clad id, created "<<1<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"clad")<<std::endl;
     std::cout<<"core id, created "<<CoreID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"core")<<std::endl;
-    std::cout<<"cherenkov id, created "<<CherenkovID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"cherenkov")<<std::endl;
+    std::cout<<"cherenkov id, created "<<CherenkovID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"cherenkov")<<std::endl;*/
     // clang-format on
 
     coll = (IsScin) ? collection(m_userData.collection_drbt_scin)
