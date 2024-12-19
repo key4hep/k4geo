@@ -165,16 +165,16 @@ inline bool DRTubesSglHpr::IsReflectedForward(const G4Step* step)
 inline void DRTubesSglHpr::PrintStepInfo(const G4Step* aStep)
 {
   std::cout << "-------------------------------" << std::endl;
-  std::cout << "--> DREndcapTubes: track info: " << std::endl;
+  std::cout << "--> DRTubesSglHpr: track info: " << std::endl;
   std::cout << "----> Track #: " << aStep->GetTrack()->GetTrackID() << " "
             << "Step #: " << aStep->GetTrack()->GetCurrentStepNumber() << " "
             << "Volume: " << aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetName()
             << " " << std::endl;
-  std::cout << "--> DREndcapTubes:: position info(mm): " << std::endl;
+  std::cout << "--> DRTubesSglHpt:: position info(mm): " << std::endl;
   std::cout << "----> x: " << aStep->GetPreStepPoint()->GetPosition().x()
             << " y: " << aStep->GetPreStepPoint()->GetPosition().y()
             << " z: " << aStep->GetPreStepPoint()->GetPosition().z() << std::endl;
-  std::cout << "--> DREndcapTubes: particle info: " << std::endl;
+  std::cout << "--> DRTubesSglHpr: particle info: " << std::endl;
   std::cout << "----> Particle " << aStep->GetTrack()->GetParticleDefinition()->GetParticleName()
             << " "
             << "Dep(MeV) " << aStep->GetTotalEnergyDeposit() << " "
