@@ -78,14 +78,16 @@
 
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
-        <readout name="VertexBarrelCollection">
-            <id>${GlobalTrackerReadoutID}</id>
-        </readout>
-        <readout name="VertexEndcapCollection">
-            <id>${GlobalTrackerReadoutID}</id>
-        </readout>
+      <readout name="VertexBarrelCollection">
+	<segmentation type="CartesianGridYZ" key="layer" name="ARCADIA" grid_size_y="0.025*mm" grid_size_z="0.025*mm"/>
+        <id>${GlobalTrackerReadoutID},y:32:-16,z:-16</id>
+      </readout>
+      <readout name="VertexEndcapCollection">
+	<segmentation type="CartesianGridXY" key="layer" name="ARCADIA" grid_size_x="0.025*mm" grid_size_y="0.025*mm"/>
+        <id>${GlobalTrackerReadoutID},x:32:-16,y:-16</id>
+      </readout>
     </readouts>
-
+    
 
     <detectors>
         <detector name="VertexBarrel" type="ZPlanarTracker" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelCollection"  region="VertexBarrelRegion">
