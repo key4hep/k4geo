@@ -316,7 +316,7 @@ namespace det {
       dd4hep::printout(dd4hep::INFO, "ECalEndcap_Turbine_o1_v03",  "ECal endcap materials:  nobleLiquid: %s absorber %s electrode %s",  nobleLiquidElem.materialStr().c_str(), absBladeElem.materialStr().c_str(), electrodeBladeElem.materialStr().c_str() ); 
 
       int    nUnitCellsToDraw = nUnitCells;
-      //   nUnitCellsToDraw = 1;
+      //nUnitCellsToDraw = 5;
 
       dd4hep::printout(dd4hep::INFO, "ECalEndcap_Turbine_o1_v03",  "Number of unit cells %d",  nUnitCells);
 
