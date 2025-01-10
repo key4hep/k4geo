@@ -74,7 +74,7 @@ namespace det {
 		    dd4hep::Volume& aEnvelope,
 		    dd4hep::xml::Handle_t& aXmlElement,
 		    dd4hep::DetElement& bathDetElem,
-		    float ri, float ro, float delZ,
+		    float ri, float ro, float delZ, float offsetZ,
 		    unsigned iWheel) {
 
 
@@ -130,6 +130,7 @@ namespace det {
       double delrPhiNoGap;
     
       float GlueThick = glueElem.attr<float>(_Unicode(thickness));
+      
       float CladdingThick = claddingElem.attr<float>(_Unicode(thickness));
 
       AbsThickMin = AbsThickMin-(GlueThick+CladdingThick);
@@ -510,7 +511,7 @@ namespace det {
 
 	float xCell = ((ro+zminri)/2.)*TMath::Cos(phi);
 	float yCell = ((ro+zminri)/2.)*TMath::Sin(phi); //ri*TMath::Sin(phi)/6.;
-	float zCell =  0.;
+	float zCell =  offsetZ;
 
 	dd4hep::Transform3D comCell(r3d, dd4hep::Translation3D(xCell,yCell,zCell));	
       
@@ -528,7 +529,7 @@ namespace det {
 
 	xCell = ((ro+zminri)/2.)*TMath::Cos(phi+delPhi/2.);
 	yCell = ((ro+zminri)/2.)*TMath::Sin(phi+delPhi/2.); //ri*TMath::Sin(phi)/6.;
-	zCell =  0.;
+	zCell =  offsetZ;
 	dd4hep::Transform3D comCell2(r3d2, dd4hep::Translation3D(xCell,yCell,zCell));
 	dd4hep::PlacedVolume activePhysVol = aEnvelope.placeVolume(activeVol, comCell2);
 	activePhysVol.addPhysVolID("module",  modIndex);
@@ -714,7 +715,7 @@ namespace det {
 	supportTubeDetElem.setPlacement(supportTube_pv);
 
    
-	buildWheel(aLcdd, aSensDet, bathVol, aXmlElement, bathDetElem, ri+supportTubeThickness, ro, bathDelZ*2-bathThicknessFront-bathThicknessBack, iWheel);
+	buildWheel(aLcdd, aSensDet, bathVol, aXmlElement, bathDetElem, ri+supportTubeThickness, ro, bathDelZ*2-bathThicknessFront-bathThicknessBack, (bathThicknessFront-bathThicknessBack)/2., iWheel);
 	ri = ro;
 	ro *= radiusRatio;
 	if (ro > rmax) ro = rmax;
@@ -740,14 +741,38 @@ namespace det {
       dd4hep::DetElement caloDetElem(nameDet, idDet);
       dd4hep::xml::Dimension sdType = xmlDetElem.child(_U(sensitive));
       aSensDet.setType(sdType.typeStr());
- 
-      ECalEndcapNumCalibRhoLayersArr[0] = aLcdd.constant<int>("ECalEndcapNumCalibRhoLayersWheel1");
-      ECalEndcapNumCalibRhoLayersArr[1] = aLcdd.constant<int>("ECalEndcapNumCalibRhoLayersWheel2");
-      ECalEndcapNumCalibRhoLayersArr[2] = aLcdd.constant<int>("ECalEndcapNumCalibRhoLayersWheel3");
-      ECalEndcapNumCalibZLayersArr[0] = aLcdd.constant<int>("ECalEndcapNumCalibZLayersWheel1");
-      ECalEndcapNumCalibZLayersArr[1] = aLcdd.constant<int>("ECalEndcapNumCalibZLayersWheel2");
-      ECalEndcapNumCalibZLayersArr[2] = aLcdd.constant<int>("ECalEndcapNumCalibZLayersWheel3");
 
+      unsigned numReadoutRhoLayers, numReadoutZLayers;
+      ECalEndcapNumCalibRhoLayersArr[0] = aLcdd.constant<int>("ECalEndcapNumCalibRhoLayersWheel1");
+      numReadoutRhoLayers = aLcdd.constant<int>("ECalEndcapNumReadoutRhoLayersWheel1");
+      if ((numReadoutRhoLayers % ECalEndcapNumCalibRhoLayersArr[0]) != 0) {
+	dd4hep::printout(dd4hep::ERROR, "ECalEndcap_Turbine_o1_v03",  "Number of readout layers must be a multiple of number of calibration layers");
+      }      
+      ECalEndcapNumCalibRhoLayersArr[1] = aLcdd.constant<int>("ECalEndcapNumCalibRhoLayersWheel2");
+      numReadoutRhoLayers = aLcdd.constant<int>("ECalEndcapNumReadoutRhoLayersWheel2");
+      if ((numReadoutRhoLayers % ECalEndcapNumCalibRhoLayersArr[1]) != 0) {
+	dd4hep::printout(dd4hep::ERROR, "ECalEndcap_Turbine_o1_v03",  "Number of readout layers must be a multiple of number of calibration layers");
+      }      
+      ECalEndcapNumCalibRhoLayersArr[2] = aLcdd.constant<int>("ECalEndcapNumCalibRhoLayersWheel3");
+      numReadoutRhoLayers = aLcdd.constant<int>("ECalEndcapNumReadoutRhoLayersWheel3");
+      if ((numReadoutRhoLayers % ECalEndcapNumCalibRhoLayersArr[2]) != 0) {
+	dd4hep::printout(dd4hep::ERROR, "ECalEndcap_Turbine_o1_v03",  "Number of readout layers must be a multiple of number of calibration layers");
+      }      
+      ECalEndcapNumCalibZLayersArr[0] = aLcdd.constant<int>("ECalEndcapNumCalibZLayersWheel1");
+      numReadoutZLayers = aLcdd.constant<int>("ECalEndcapNumReadoutZLayersWheel1");
+      if ((numReadoutZLayers % ECalEndcapNumCalibZLayersArr[0]) != 0) {
+	dd4hep::printout(dd4hep::ERROR, "ECalEndcap_Turbine_o1_v03",  "Number of readout layers must be a multiple of number of calibration layers");
+      }      
+      ECalEndcapNumCalibZLayersArr[1] = aLcdd.constant<int>("ECalEndcapNumCalibZLayersWheel2");
+      numReadoutZLayers = aLcdd.constant<int>("ECalEndcapNumReadoutZLayersWheel2");
+      if ((numReadoutZLayers % ECalEndcapNumCalibZLayersArr[1]) != 0) {
+	dd4hep::printout(dd4hep::ERROR, "ECalEndcap_Turbine_o1_v03",  "Number of readout layers must be a multiple of number of calibration layers");
+      }  
+      ECalEndcapNumCalibZLayersArr[2] = aLcdd.constant<int>("ECalEndcapNumCalibZLayersWheel3");
+      numReadoutZLayers = aLcdd.constant<int>("ECalEndcapNumReadoutZLayersWheel3");
+      if ((numReadoutZLayers % ECalEndcapNumCalibZLayersArr[2]) != 0) {
+	dd4hep::printout(dd4hep::ERROR, "ECalEndcap_Turbine_o1_v03",  "Number of readout layers must be a multiple of number of calibration layers");
+      }  
       
       // Create air envelope for one endcap (will be copied to make both endcaps)
       dd4hep::Tube endcapShape( dim.rmin1(), dim.rmax1(), dim.dz());
