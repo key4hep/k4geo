@@ -20,7 +20,8 @@ public:
   FCCSWEndcapTurbine_k4geo(const std::string& aCellEncoding);
   /// Default constructor used by derived classes passing an existing decoder
   FCCSWEndcapTurbine_k4geo(const BitFieldCoder* decoder);
-
+  ///common setup that needs to be done for either of the above constructors
+  void commonSetup();
   /// destructor
   virtual ~FCCSWEndcapTurbine_k4geo() = default;
 
@@ -34,6 +35,37 @@ public:
    */
   virtual CellID cellID(const Vector3D& aLocalPosition, const Vector3D& aGlobalPosition,
                         const VolumeID& aVolumeID) const;
+
+   /**  Determine the transverse distance from the beamline (rho) based on the cell ID.
+   *   @param[in] aCellId ID of a cell.
+   *   return rho.
+   */
+  double rho(const CellID& aCellID) const;
+  /** Get the grid size in rho for a given wheel
+   * return grid size in rho
+   */
+  inline double gridSizeRho(int iWheel) const { return m_gridSizeRho[iWheel]; }
+  /** Get the number of cells in rho for a given wheel
+   * @param[in] iWheel wheel index
+   * return number of cells in rho for the specified wheel
+   */
+   inline int numCellsRho(int iWheel) const {return m_numReadoutRhoLayers[iWheel];}
+
+    /** Get the number of calibration cells in rho for a given wheel
+   * @param[in] iWheel wheel index
+   * return number of calibration cells in rho for the specified wheel
+   */
+   inline int numCellsRhoCalib(int iWheel) const {return m_numCalibRhoLayers[iWheel];}
+
+  /**  Get the coordinate offset in rho for a given wheel.
+   *   return The offset in rho.
+   */
+  inline double offsetRho(int iWheel) const { return m_offsetRho[iWheel]; }
+  /**  Get the field name for rho.
+   *   return The field name for rho.
+   */
+  
+  inline const std::string& fieldNameRho() const { return m_rhoID; }
   /**  Determine the azimuthal angle based on the cell ID.
    *   @param[in] aCellId ID of a cell.
    *   return Phi.
@@ -85,11 +117,24 @@ public:
   /** Get the grid size in z for a given wheel
    * return grid size in z
    */
-  inline double gridSizeZ() const { return m_gridSizeZ; }
+  inline double gridSizeZ(int iWheel) const { return m_gridSizeZ[iWheel]; }
   /**  Get the coordinate offset in z.
    *   return The offset in z.
    */
-  inline double offsetZ() const { return m_offsetZ; }
+  /** Get the number of cells in z for a given wheel
+   * @param[in] iWheel wheel index
+   * return number of cells in z for the specified wheel
+   */
+   inline int numCellsZ(int iWheel) const {return m_numReadoutZLayers[iWheel];}
+  /** Get the number of calibration cells in z for a given wheel
+   * @param[in] iWheel wheel index
+   * return number of calibration cells in z for the specified wheel
+   */
+   inline int numCellsZCalib(int iWheel) const {return m_numCalibZLayers[iWheel];}  /** Get the offset in z for a given wheel
+   * @param[in] iWheel wheel index
+   * return offset in z for the specified wheel
+   */
+  inline double offsetZ(int iWheel) const { return m_offsetZ[iWheel]; }
   /**  Get the field name for z.
    *   return The field name for z.
    */
@@ -98,10 +143,11 @@ public:
    *   @param[in] aNumberBins Number of bins in z.
    */
   inline void setZBins(int bins) { m_zBins = bins; }
-  /**  Set the coordinate offset in z.
+  /**  Set the coordinate offset in z for the specified wheel.
+   *   @param[in] iWheel wheel index
    *   @param[in] aOffset Offset in z.
    */
-  inline void setOffsetZ(double offset) { m_offsetZ = offset; }
+  inline void setOffsetZ(int iWheel, double offset) { m_offsetZ[iWheel] = offset; }
   /**  Set the field name used for z.
    *   @param[in] aFieldName Field name for z.
    */
@@ -111,11 +157,32 @@ public:
     return vec.Perp();
   }
 
+  /** return the number of unit cells in each wheel
+   * @param[in] iWheel wheel identifier
+   */ 
+  inline int nModules(int iWheel) {
+    return m_nUnitCells[iWheel];
+  }
+   /** return the expected value of the layer index
+   * @param[in] iWheel wheel identifier
+   * @param[in] iRho rho readout cell identifier
+   * @param[in] iZ z readout cell identifier
+   */ 
+  unsigned expLayer(unsigned iWheel, unsigned iRho, unsigned iZ) const;
+
 protected:
   /// turbine blade angle in each wheel
   std::vector<double> m_bladeAngle;
   /// number of unit cells in each wheel
   std::vector<int> m_nUnitCells;
+  /// the number of cells in rho for each wheel
+  std::vector<int> m_numReadoutRhoLayers;
+  /// the number of cells in z for each wheel
+  std::vector<int> m_numReadoutZLayers;
+  /// the number of calibration cells in rho for each wheel
+  std::vector<int> m_numCalibRhoLayers;
+  /// the number of calibration cells in z for each wheel
+  std::vector<int> m_numCalibZLayers;
   /// the number of bins in phi
   int m_phiBins;
   /// the coordinate offset in phi
@@ -126,9 +193,9 @@ protected:
   /// the number of bins in rho
   int m_rhoBins;
   ////grid size in rho
-  std::vector<float> m_gridSizeRho;
+  std::vector<double> m_gridSizeRho;
   /// the coordinate offset in rho
-  std::vector<float> m_offsetRho;
+  std::vector<double> m_offsetRho;
   /// the field name used for rho
   std::string m_rhoID;
   /// the field name used for wheel
@@ -138,12 +205,13 @@ protected:
   /// the number of bins in z
   int m_zBins;
   ///grid size in z
-  double m_gridSizeZ; 
+  std::vector<double> m_gridSizeZ; 
   /// the coordinate offset in z
-  double m_offsetZ;
+  std::vector<double> m_offsetZ;
   /// the field name used for z
   std::string m_zID; 
   std::string m_sideID;
+  std::string m_layerID;
 };
 }
 }
