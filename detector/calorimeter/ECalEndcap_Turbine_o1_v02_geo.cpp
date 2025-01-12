@@ -87,7 +87,8 @@ namespace det {
       dd4hep::xml::DetElement nobleLiquidElem = genericBladeElem.child(_Unicode(nobleLiquidGap));
 
       float BladeAngle = 0.0, AbsThickMin = 0.0, BladeThicknessScaleFactor=0.0;
-
+      int nUnitCells = -1;
+      
       // hardcode for three wheels
       if (iWheel == 0) {
 	BladeAngle = genericBladeElem.attr<float>(_Unicode(angle1));
@@ -133,12 +134,10 @@ namespace det {
       float ElectrodeThick = electrodeBladeElem.attr<float>(_Unicode(thickness));
       float LArgapi = nobleLiquidElem.attr<float>(_Unicode(gap));
     
-<<<<<<< HEAD
       bool sameNUnitCells = genericBladeElem.attr<bool>(_Unicode(sameNUnitCells));
       char* nUnitCellsStrArr = (char*)genericBladeElem.attr<std::string>(_Unicode(nUnitCells)).c_str();
       char* nUnitCellsCStr = strtok(nUnitCellsStrArr, " ");   
 
-      int nUnitCells = -1;
 
       if (!sameNUnitCells) {
 	for (unsigned i = 0; i < iWheel; i++) {
@@ -147,8 +146,6 @@ namespace det {
 	std::string nUnitCellsStr = nUnitCellsCStr;
 	nUnitCells = std::stoi(nUnitCellsStr);
       }
-=======
->>>>>>> c85fb7c2 (Fix bugs in LAr bath placement and in placement of passive elements when split into layers)
 
       dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v02",  "nUnitCells: %d", nUnitCells);
 
