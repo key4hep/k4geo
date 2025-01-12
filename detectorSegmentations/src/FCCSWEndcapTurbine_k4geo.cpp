@@ -214,8 +214,8 @@ CellID FCCSWEndcapTurbine_k4geo::cellID(const Vector3D& /* localPosition */, con
   CellID iWheel = _decoder->get(cID, m_wheelID);
   CellID iLayer = _decoder->get(cID, m_layerID);
   double lRho = rhoFromXYZ(globalPosition);
-  unsigned iRho = positionToBin(lRho, m_gridSizeRho[iWheel], m_offsetRho[iWheel]);
-  if (iRho < 0) iRho == 0;
+  int iRho = positionToBin(lRho, m_gridSizeRho[iWheel], m_offsetRho[iWheel]);
+  if (iRho < 0) iRho = 0;
   if (iRho >= m_numReadoutRhoLayers[iWheel]) iRho = m_numReadoutRhoLayers[iWheel]-1;
 
   _decoder->set(cID, m_rhoID, iRho);
@@ -223,8 +223,8 @@ CellID FCCSWEndcapTurbine_k4geo::cellID(const Vector3D& /* localPosition */, con
   std::cout << " for tree: " << lRho << " " << TMath::Abs(globalPosition.Z) << " " <<  positionToBin(lRho, m_gridSizeRho[iWheel], m_offsetRho[iWheel]) << " " << positionToBin(TMath::Abs(globalPosition.Z), m_gridSizeZ[iWheel], m_offsetZ[iWheel]) << " " <<  _decoder->get(cID, m_layerID)  << std::endl;
   std::cout << "rho bin is " <<  positionToBin(lRho, m_gridSizeRho[iWheel], m_offsetRho[iWheel])  << "  based on " << lRho << " " << m_gridSizeRho[iWheel] << " " << m_offsetRho[iWheel] << std::endl;
   double lZ = TMath::Abs(globalPosition.Z);
-  unsigned iZ = positionToBin(lZ, m_gridSizeZ[iWheel], m_offsetZ[iWheel]);
-  if (iZ < 0) iZ == 0;
+  int iZ = positionToBin(lZ, m_gridSizeZ[iWheel], m_offsetZ[iWheel]);
+  if (iZ < 0) iZ = 0;
   if (iZ >= m_numReadoutZLayers[iWheel]) iZ = m_numReadoutZLayers[iWheel]-1;
   _decoder->set(cID, m_zID, iZ);
   std::cout << "z bin is " <<  positionToBin(lZ, m_gridSizeZ[iWheel], m_offsetZ[iWheel])  << "  based on " << lZ << " " << m_gridSizeZ[iWheel] << " " << m_offsetZ[iWheel] << " and layer is " << iLayer << " and cell ID is " << cID << std::endl;
