@@ -212,9 +212,6 @@ namespace det {
       float delrNonActive = (ro-ri)/numNonActiveRhoLayers;
       float delrActive = (ro-ri)/ECalEndcapNumCalibRhoLayers;
 
-      float delzNonActive = delZ/numNonActiveZLayers;
-      float delzActive = delZ/ECalEndcapNumCalibZLayers;
-    
       for (unsigned iRhoLayer = 0; iRhoLayer < numNonActiveRhoLayers; iRhoLayer++) {
 	float roLayer = riLayer + delrNonActive;
 	dd4hep::printout(dd4hep::INFO, "ECalEndcap_Turbine_o1_v03", "Making layer with inner, outer radii %f, %f", riLayer, roLayer);
