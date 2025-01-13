@@ -220,16 +220,11 @@ CellID FCCSWEndcapTurbine_k4geo::cellID(const Vector3D& /* localPosition */, con
 
   _decoder->set(cID, m_rhoID, iRho);
 
-  std::cout << " for tree: " << lRho << " " << TMath::Abs(globalPosition.Z) << " " <<  positionToBin(lRho, m_gridSizeRho[iWheel], m_offsetRho[iWheel]) << " " << positionToBin(TMath::Abs(globalPosition.Z), m_gridSizeZ[iWheel], m_offsetZ[iWheel]) << " " <<  _decoder->get(cID, m_layerID)  << std::endl;
-  std::cout << "rho bin is " <<  positionToBin(lRho, m_gridSizeRho[iWheel], m_offsetRho[iWheel])  << "  based on " << lRho << " " << m_gridSizeRho[iWheel] << " " << m_offsetRho[iWheel] << std::endl;
   double lZ = TMath::Abs(globalPosition.Z);
   int iZ = positionToBin(lZ, m_gridSizeZ[iWheel], m_offsetZ[iWheel]);
   if (iZ < 0) iZ = 0;
   if (iZ >= m_numReadoutZLayers[iWheel]) iZ = m_numReadoutZLayers[iWheel]-1;
   _decoder->set(cID, m_zID, iZ);
-  std::cout << "z bin is " <<  positionToBin(lZ, m_gridSizeZ[iWheel], m_offsetZ[iWheel])  << "  based on " << lZ << " " << m_gridSizeZ[iWheel] << " " << m_offsetZ[iWheel] << " and layer is " << iLayer << " and cell ID is " << cID << std::endl;
-
-  std::cout << "Expected, actual layer : " << expLayer(iWheel, positionToBin(lRho, m_gridSizeRho[iWheel], m_offsetRho[iWheel]), positionToBin(lZ, m_gridSizeZ[iWheel], m_offsetZ[iWheel])) << " " << iLayer << std::endl;
 
   if (expLayer(iWheel, iRho, iZ) != iLayer) {
     _decoder->set(cID, m_layerID, expLayer(iWheel, iRho, iZ));
@@ -243,9 +238,6 @@ double FCCSWEndcapTurbine_k4geo::rho(const CellID& cID) const {
   CellID rhoValue = _decoder->get(cID, m_rhoID);
   CellID iWheel = _decoder->get(cID, m_wheelID);
 
-  if (iWheel == 0) {
-    std::cout << "rho value is " << binToPosition(rhoValue,m_gridSizeRho[iWheel], m_offsetRho[iWheel]) << " based on " << rhoValue << " " << m_gridSizeRho[iWheel] << " " <<  m_offsetRho[iWheel] << std::endl;
-  }
   return binToPosition(rhoValue,m_gridSizeRho[iWheel], m_offsetRho[iWheel]);
 }  
   
@@ -255,11 +247,9 @@ double FCCSWEndcapTurbine_k4geo::phi(const CellID& cID) const {
   CellID iWheel = _decoder->get(cID, m_wheelID);
   
   double phiCent = twopi*(iModule+0.5)/m_nUnitCells[iWheel];
-
   double rhoLoc = rho(cID);
   double zLoc = TMath::Abs(z(cID))-m_offsetZ[iWheel] - 45/2.;  // hard-code midpoint in z for now
 
-  std::cout << "zLoc is " << zLoc << std::endl;
   double zCotBladeAngle = zLoc/TMath::Tan(m_bladeAngle[iWheel]);
 
   double x = zCotBladeAngle;
