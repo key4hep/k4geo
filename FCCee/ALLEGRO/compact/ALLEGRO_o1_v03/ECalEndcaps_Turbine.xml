@@ -40,23 +40,54 @@
     <constant name="EMEC_rmin2" value="EMEC_rmin1"/>
     <constant name="EMEC_rmax" value="ECalEndcap_outer_radius - CryoEMECThicknessOuter - BathThicknessOuter"/>
     <!-- LAr thickness: double gap size -->
-    <constant name="ECalEndcapNumPlanes" value="928"/>    
-    <constant name="ECalEndcapNumCalibLayers" value="10"/>
+    <constant name="ECalEndcapNumCalibRhoLayersWheel1" value="10"/>
+    <constant name="ECalEndcapNumCalibZLayersWheel1" value="5"/>
+    <constant name="ECalEndcapNumCalibRhoLayersWheel2" value="14"/>
+    <constant name="ECalEndcapNumCalibZLayersWheel2" value="1"/>
+    <constant name="ECalEndcapNumCalibRhoLayersWheel3" value="34"/>
+    <constant name="ECalEndcapNumCalibZLayersWheel3" value="1"/>
+    <constant name="ECalEndcapNumReadoutRhoLayersWheel1" value="10"/>
+    <constant name="ECalEndcapNumReadoutZLayersWheel1" value="10"/>
+    <constant name="ECalEndcapNumReadoutRhoLayersWheel2" value="14"/>
+    <constant name="ECalEndcapNumReadoutZLayersWheel2" value="10"/>
+    <constant name="ECalEndcapNumReadoutRhoLayersWheel3" value="34"/>
+    <constant name="ECalEndcapNumReadoutZLayersWheel3" value="10"/> 
     <constant name="nWheels" value="3" />
-<!-- following three lines just to satisfy new segmentation interface -->
-    <constant name="BladeAngle1" value="41*deg" />
-    <constant name="BladeAngle2" value="41*deg" />
-    <constant name="BladeAngle3" value="41*deg" />
-    
-    <constant name="BladeAngle" value="41*deg" />
+    <constant name="BladeAngle1" value="49*deg" />
+    <constant name="BladeAngle2" value="49*deg" />
+    <constant name="BladeAngle3" value="49*deg" />
     <constant name="NobleLiquidGap" value="3.9*mm" />
-    <constant name="AbsorberBladeThickness" value="2.9*mm" />
+    <constant name="AbsorberBladeThickness1" value="1.3*mm" />
+    <constant name="AbsorberBladeThickness2" value="1.3*mm" />
+    <constant name="AbsorberBladeThickness3" value="1.3*mm" />
     <constant name="ElectrodeBladeThickness" value="1.3*mm" />
+    <constant name="AbsorberBladeThicknessScaleFactor1" value="1.0" />
+    <constant name="AbsorberBladeThicknessScaleFactor2" value="1.0" />
+    <constant name="AbsorberBladeThicknessScaleFactor3" value="1.0" />
+    <constant name="ECalEndcapSupportTubeThickness" value="10.0*mm" />
+    <constant name="ECalEndcapRmin" value="CryoEndcap_front_rmin+CryoEMECThicknessInner" />
+    <constant name="ECalEndcapRMax" value="CryoEndcap_rmax-CryoEMECThicknessOuter" />
+    <constant name="ECalEndcapRadiusRatio" value="(ECalEndcapRMax/ECalEndcapRmin)^(1./nWheels)" />
+    <constant name="ECalEndcapRmin1" value="ECalEndcapRmin" />
+    <constant name="ECalEndcapRmax1" value="ECalEndcapRmin1*ECalEndcapRadiusRatio" />
+    <constant name="ECalEndcapRmin2" value="ECalEndcapRmax1" />
+    <constant name="ECalEndcapRmax2" value="ECalEndcapRmin2*ECalEndcapRadiusRatio" />
+    <constant name="ECalEndcapRmin3" value="ECalEndcapRmax2" />
+    <constant name="ECalEndcapRmax3" value="ECalEndcapRmin3*ECalEndcapRadiusRatio" />
+    <constant name="ECalEndcapGridSizeRho1" value="(ECalEndcapRmax1-ECalEndcapRmin1-ECalEndcapSupportTubeThickness)/ECalEndcapNumReadoutRhoLayersWheel1" />
+    <constant name="ECalEndcapGridSizeRho2" value="(ECalEndcapRmax2-ECalEndcapRmin2-ECalEndcapSupportTubeThickness)/ECalEndcapNumReadoutRhoLayersWheel2" />
+    <constant name="ECalEndcapGridSizeRho3" value="(ECalEndcapRmax3-ECalEndcapRmin3-ECalEndcapSupportTubeThickness)/ECalEndcapNumReadoutRhoLayersWheel3" />
+    <constant name="ECalEndcapGridSizeZ1" value="(EMEC_z2-EMEC_z1)/ECalEndcapNumReadoutZLayersWheel1" />
+    <constant name="ECalEndcapGridSizeZ2" value="(EMEC_z2-EMEC_z1)/ECalEndcapNumReadoutZLayersWheel2" />
+    <constant name="ECalEndcapGridSizeZ3" value="(EMEC_z2-EMEC_z1)/ECalEndcapNumReadoutZLayersWheel3" />
+   
     <!-- total amount of steel in one passive plate: it is divided for the outside layer on top and bottom -->
     <constant name="EMEC_steel_thickness" value="0.1*mm"/>
      <!-- total amount of glue in one passive plate: it is divided for the outside layer on top and bottom -->
-    <constant name="EMEC_glue_thickness" value="0.1*mm"/>
-    <constant name="nUnitCellsLeastCommonMultiple" value="78336"/>
+     <constant name="EMEC_glue_thickness" value="0.1*mm"/> 
+     <constant name="nUnitCells1" value="384"/>
+     <constant name="nUnitCells2" value="720"/>
+     <constant name="nUnitCells3" value="1360"/>
   </define>
 
   <display>
@@ -73,16 +104,11 @@
 
   <readouts>
    <readout name="ECalEndcapTurbine">
-<!-- temporarily use the same segmentation as the barrel ECal, since that works in reco, even though it's not ideal (or maybe not even tenable) for the endcap 
- <segmentation type="FCCSWGridModuleThetaMerged_k4geo" nModules="928" mergedCells_Theta="1 1 1 1 1 1 1 1 1 1" mergedModules="1 1 1 1 1 1 1 1 1 1" grid_size_theta="0.009817477/4" offset_theta="0.08"/>
-        <id>system:4,cryo:1,type:3,subtype:3,side:3,wheel:3,layer:8,module:11,theta:10</id>
-    </readout>
--->
-    <segmentation type="FCCSWEndcapTurbine_k4geo" offset_rho="42 78.3215 146.82" offset_z="303.5" offset_phi="0.0" offset_theta="0.11242" grid_size_rho="2.016 2.014 2.004" grid_size_z="1.80" />
-      <id>system:4,cryo:1,type:3,subtype:3,side:-2,wheel:3,layer:8,module:17,rho:8,z:8</id> 
+     <segmentation type="FCCSWEndcapTurbine_k4geo" offset_rho1="ECalEndcapRmin1+ECalEndcapSupportTubeThickness+ECalEndcapGridSizeRho1/2." offset_rho2="ECalEndcapRmin2+ECalEndcapSupportTubeThickness+ECalEndcapGridSizeRho2/2." offset_rho3="ECalEndcapRmin3+ECalEndcapSupportTubeThickness+ECalEndcapGridSizeRho3/2." offset_z1="EMEC_z1+ECalEndcapGridSizeZ1/2." offset_z2="EMEC_z1+ECalEndcapGridSizeZ2/2." offset_z3="EMEC_z1+ECalEndcapGridSizeZ3/2." offset_phi="0.0" offset_theta="0.1127" grid_size_rho1="ECalEndcapGridSizeRho1" grid_size_rho2="ECalEndcapGridSizeRho2" grid_size_rho3="ECalEndcapGridSizeRho3" grid_size_z1="ECalEndcapGridSizeZ1" grid_size_z2="ECalEndcapGridSizeZ2" grid_size_z3="ECalEndcapGridSizeZ3" />
+     <id>system:4,cryo:1,type:3,subtype:3,side:-2,wheel:3,layer:12,module:11,rho:8,z:8</id> 
 
 <!--      <id>system:4,cryo:1,type:3,subtype:3,side:-2,wheel:3,layer:9,module:14,rho:-10,z:-14</id> -->
-    </readout> -->
+    </readout> 
 <!--
     <readout name="ECalEndcapPhiTheta">
       <segmentation type="FCCSWGridModuleThetaMerged_k4geo" mergedCells_Theta="1 1 1 1 " mergedModules="1 1 1 1" grid_size_theta="0.005" offset_theta="-3.14"/>
@@ -97,25 +123,26 @@
 
   <detectors>
      <!-- electromagnetic calorimeter -->
-    <detector id="ECalEndcap_id" name="EMEC_turbine" type="ECalEndcap_Turbine_o1_v01" readout="ECalEndcapTurbine" vis="emec_envelope_vis" sensitive="true">
+    <detector id="ECalEndcap_id" name="EMEC_turbine" type="ECalEndcap_Turbine_o1_v03" readout="ECalEndcapTurbine" vis="emec_envelope_vis" sensitive="true">
       <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_ENDCAP"/>
       <sensitive type="SimpleCalorimeterSD"/>
       <!--  <dimensions rmin1="EMEC_rmin1"  rmin2="EMEC_rmin2" rmax="EMEC_rmax" dz="(EMEC_z2-EMEC_z1)/2." z_offset="EMEC_z1+(EMEC_z2-EMEC_z1)/2."/>  -->
-      <dimensions rmin1="CryoEndcap_front_rmin" rmin2="CryoEndcap_front_rmin" rmax1="CryoEndcap_rmax" rmax2="CryoEndcap_rmax" dz="(CryoEndcap_z2-CryoEndcap_z1)/2."  z_offset="EMEC_z1+(EMEC_z2-EMEC_z1)/2."/>
+      <dimensions rmin1="CryoEndcap_front_rmin" rmin2="CryoEndcap_front_rmin" rmax1="CryoEndcap_rmax" rmax2="CryoEndcap_rmax" dz="(CryoEndcap_z2-CryoEndcap_z1)/2."  z_offset="CryoEndcap_z1+(CryoEndcap_z2-CryoEndcap_z1)/2."/>
       <calorimeter name="EM_endcap">
 	<dimensions rmin="EMEC_rmin1" rmax="EMEC_rmax" dz="(EMEC_z2-EMEC_z1)/2." z_offset="EMEC_z1+(EMEC_z2-EMEC_z1)/2."/>
 	<cryostat name="ECAL_EndCapCryo">
           <material name="Aluminum" />
           <dimensions rmin1="CryoEndcap_front_rmin" rmin2="CryoEndcap_front_rmin+CryoEMECThicknessInner" rmax1="CryoEndcap_rmax-CryoEMECThicknessOuter" rmax2="CryoEndcap_rmax" dz="(CryoEndcap_z2-CryoEndcap_z1-CryoEMECThicknessFront-CryoEMECThicknessBack)/2."/>
-          <front sensitive="false"/> <!-- inner wall of the cryostat -->
-          <side sensitive="false"/> <!-- both sides of the cryostat -->
-          <back sensitive="false"/> <!-- outer wall of the cryostat -->
+          <front sensitive="false"/> <!-- low-|z| wall of the cryostat -->
+          <back sensitive="false"/> <!-- high-|z| wall of the cryostat -->
+	  <inner sensitive="false"/> <!-- inner radius wall of the cryostat -->
+          <outer sensitive="false"/> <!-- outer radius wall of the cryostat -->
 	</cryostat>
-	<supportTube name="supportTube" nWheels="nWheels" thickness="1.0*cm" sensitive="false"> 
+	<supportTube name="supportTube" nWheels="nWheels" thickness="ECalEndcapSupportTubeThickness" sensitive="false"> 
 	  <material name="CarbonFiber" />
 	</supportTube>
-	<turbineBlade name="turbineBlade" angle="BladeAngle" decreaseAnglePerWheel="false"  sameNUnitCells="false" nUnitCells="144 272 512" nUnitCellsLeastCommonMultiple="nUnitCellsLeastCommonMultiple">
-	  <absorberBlade name="absorberBlade" thickness="AbsorberBladeThickness" scaleThickness="true" thicknessScaleFactor="1.0" sensitive="false">
+	<turbineBlade name="turbineBlade" angle1="BladeAngle1" angle2="BladeAngle2" angle3="BladeAngle3" decreaseAnglePerWheel="false"  nUnitCells1="nUnitCells1" nUnitCells2="nUnitCells2" nUnitCells3="nUnitCells3">
+	  <absorberBlade name="absorberBlade" thickness1="AbsorberBladeThickness1" thickness2="AbsorberBladeThickness2" thickness3="AbsorberBladeThickness3"  thicknessScaleFactor1="AbsorberBladeThicknessScaleFactor1" thicknessScaleFactor2="AbsorberBladeThicknessScaleFactor2" thicknessScaleFactor3="AbsorberBladeThicknessScaleFactor3" sensitive="false">
 	    <material name="Lead" />
 	  </absorberBlade>
 	  <glue thickness="EMEC_glue_thickness" sensitive="false">
@@ -128,7 +155,7 @@
 	    <material name="PCB" />
 	  </electrodeBlade>
 	  <nobleLiquidGap name="nobleLiquidGap" gap="NobleLiquidGap" sensitive="true">
-	    <material name="LAr" />
+	    <material name="LKr" />
 	  </nobleLiquidGap>
 	</turbineBlade>
       </calorimeter>
