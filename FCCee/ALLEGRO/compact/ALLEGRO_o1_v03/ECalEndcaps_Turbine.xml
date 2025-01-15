@@ -155,7 +155,7 @@
 	    <material name="PCB" />
 	  </electrodeBlade>
 	  <nobleLiquidGap name="nobleLiquidGap" gap="NobleLiquidGap" sensitive="true">
-	    <material name="LKr" />
+	    <material name="LAr" />
 	  </nobleLiquidGap>
 	</turbineBlade>
       </calorimeter>
