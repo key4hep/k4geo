@@ -683,14 +683,15 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
   envelopePhysVol.addPhysVolID("system", xmlDetElem.id());
   caloDetElem.setPlacement(envelopePhysVol);
 
-  // Create caloData object
+  // Create caloData object for the reconstruction
   auto caloData = new dd4hep::rec::LayeredCalorimeterData;
   caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::BarrelLayout;
   caloDetElem.addExtension<dd4hep::rec::LayeredCalorimeterData>(caloData);
-
+  // Extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm
+  // (for barrel detectors zmin is 0)
   caloData->extent[0] = Rmin;
-  caloData->extent[1] = Rmax; // or r_max ?
-  caloData->extent[2] = 0.;      // NN: for barrel detectors this is 0
+  caloData->extent[1] = Rmax;
+  caloData->extent[2] = 0.;
   caloData->extent[3] = caloDim.dz();
 
 

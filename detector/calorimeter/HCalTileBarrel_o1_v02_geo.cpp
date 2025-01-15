@@ -2,6 +2,9 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include <DDRec/DetectorData.h>
 #include "DD4hep/Printout.h"
+#include "XML/Utilities.h"
+#include "DDRec/MaterialManager.h"
+#include "DDRec/Vector3D.h"
 
 using dd4hep::Volume;
 using dd4hep::DetElement;
@@ -238,22 +241,59 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   caloData->extent[2] = 0.;      // NN: for barrel detectors this is 0
   caloData->extent[3] = dzDetector; 
 
+  dd4hep::rec::MaterialManager matMgr(envelopeVolume);
   dd4hep::rec::LayeredCalorimeterData::Layer caloLayer;
 
   for (unsigned int idxLayer = 0; idxLayer < layerDepths.size(); ++idxLayer) {
-        const double difference_bet_r1r2 = layerDepths.at(idxLayer); 
+    const double difference_bet_r1r2 = layerDepths.at(idxLayer);
+    double thickness_sen = 0.;
+    double absorberThickness = 0.;
 
-        caloLayer.distance                  = layerInnerRadii.at(idxLayer); // radius of the current layer   
-        caloLayer.sensitive_thickness       = difference_bet_r1r2;  // radial dimension of the current layer 
-        caloLayer.inner_thickness           = difference_bet_r1r2 / 2.0;
-        caloLayer.outer_thickness           = difference_bet_r1r2 / 2.0;
+    // AD: average material radiation length in a given layer depends on the polar angle... not sure how it is used by Pandora... lets calculate it at the angle of 60 degrees...
+    const double angle = 60.*M_PI/180.;
+    dd4hep::rec::Vector3D ivr1 = dd4hep::rec::Vector3D(0., layerInnerRadii.at(idxLayer), 0); // defining starting vector points of the given layer
+    dd4hep::rec::Vector3D ivr2 = dd4hep::rec::Vector3D(0., layerInnerRadii.at(idxLayer) + layerDepths.at(idxLayer), layerDepths.at(idxLayer)*cos(angle)/sin(angle));  // defining end vector points of the given layer
 
-        caloData->layers.push_back(caloLayer);
+    const dd4hep::rec::MaterialVec &materials = matMgr.materialsBetween(ivr1, ivr2); // calling material manager to get material info between two points
+    auto mat = matMgr.createAveragedMaterial(materials);                             // creating average of all the material between two points to calculate X0 and lambda of averaged material
+    const double nRadiationLengths = layerDepths.at(idxLayer) / mat.radiationLength();
+    const double nInteractionLengths = layerDepths.at(idxLayer) / mat.interactionLength();
+
+    std::string str1("Polystyrene"); // sensitive material
+    for (size_t imat = 0; imat < materials.size(); imat++) {
+      std::string str2(materials.at(imat).first.name());
+      if (str1.compare(str2) == 0){
+          thickness_sen += materials.at(imat).second;
+      }
+      else if(str2!="Air") {
+        absorberThickness += materials.at(imat).second;
+      }
+    }
+    std::cout << "The sensitive thickness is " << thickness_sen << std::endl;
+    std::cout << "The absorber thickness is " << absorberThickness << std::endl;
+    std::cout << "The number of radiation length is " << nRadiationLengths << " and the number of interaction length is " << nInteractionLengths << std::endl;
+
+    caloLayer.distance                  = layerInnerRadii.at(idxLayer); // radius of the current layer   
+    caloLayer.sensitive_thickness	= difference_bet_r1r2;  // radial dimension of the current layer 
+    //caloLayer.sensitive_thickness	= thickness_sen;
+    caloLayer.absorberThickness         = absorberThickness;
+
+    caloLayer.inner_thickness           = difference_bet_r1r2 / 2.0;
+    caloLayer.inner_nRadiationLengths   = nRadiationLengths / 2.0;
+    caloLayer.inner_nInteractionLengths = nInteractionLengths / 2.0;
+    caloLayer.outer_nRadiationLengths   = nRadiationLengths / 2.0;
+    caloLayer.outer_nInteractionLengths = nInteractionLengths / 2.0;
+    caloLayer.outer_thickness           = difference_bet_r1r2 / 2;
+
+    caloLayer.cellSize0 = 20 * dd4hep::mm; // should be updated from DDGeometryCreatorALLEGRO
+    caloLayer.cellSize1 = 20 * dd4hep::mm; // should be updated from DDGeometryCreatorALLEGRO
+    caloData->layers.push_back(caloLayer);
   }
 
+  // Set type flags
+  dd4hep::xml::setDetectorTypeFlag(xmlDet, caloDetElem);
 
   return caloDetElem;
-
 }
 }  // namespace hcal
 

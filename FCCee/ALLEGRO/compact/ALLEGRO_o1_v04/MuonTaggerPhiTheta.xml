@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+  <info name="FCCeeMuonTagger"
+        title="Muon Tagger for ALLEGRO, with phi-theta segmentation"
+        author="Created by A. Duglishvili from MuonTagger.xml, moving from eta to theta segmentation"
+        url="no"
+        status="development"
+        version="1.0">
+    <comment>
+      Simple muon tagger with phi-theta segmentation - barrel and endcaps
+    </comment>
+  </info>
+
+  <display>
+    <vis name="muon_vis" r="1.0" g="0.1" b="0.1" showDaughters="true" visible="true" />
+  </display> 
+  
+  <readouts>
+    <readout name="MuonTaggerPhiTheta">
+      <segmentation type="FCCSWGridPhiTheta_k4geo" phi_bins="704" offset_phi="-pi+(pi/704.)" grid_size_theta="0.010013373" offset_theta="0.10884388"/>
+      <id>system:4,subsystem:1,layer:5,theta:10,phi:10</id>
+    </readout>
+  </readouts>
+
+  <detectors>
+    <!-- positive side: cryostat -->
+    <detector id="DetID_Muon_Barrel" name="MuonTaggerBarrel" type="SimpleCylinder_o1_v02" sensitive="true" vis="muon_vis" readout="MuonTaggerPhiTheta">
+      <!-- added for Pandora -->
+      <type_flags type="DetType_CALORIMETER + DetType_MUON + DetType_BARREL"/>
+      <!-- end -->
+      <sensitive type="SimpleTrackerSD"/>
+      <dimensions rmin="MuonTagger_inner_radius" rmax="MuonTagger_outer_radius"
+                  dz="MuonTagger_half_length" z_offset = "0" material="Polystyrene" phi0="0" deltaphi="360*deg" vis="muon_vis"/>
+    </detector>
+
+    <detector id="DetID_Muon_Endcap_1" name="MuonTaggerEndcap_positive" type="SimpleCylinder_o1_v02" sensitive="true" vis="muon_vis" readout="MuonTaggerPhiTheta">
+      <!-- added for Pandora -->
+      <type_flags type="DetType_CALORIMETER + DetType_MUON + DetType_ENDCAP"/>
+      <!-- end -->
+      <sensitive type="SimpleTrackerSD"/>
+      <dimensions rmin="MuonTaggerEndcap_inner_radius" rmax="MuonTaggerEndcap_outer_radius"
+                  dz="(MuonTaggerEndcap_max_z - MuonTaggerEndcap_min_z)*0.5" z_offset = "MuonTaggerEndcap_min_z + (MuonTaggerEndcap_max_z - MuonTaggerEndcap_min_z)*0.5" material="Polystyrene" phi0="0" deltaphi="360*deg" vis="muon_vis"/>
+    </detector>
+    
+  </detectors>
+
+</lccdd>

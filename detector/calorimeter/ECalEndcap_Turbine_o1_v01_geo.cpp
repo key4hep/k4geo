@@ -1,6 +1,8 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
 #include "TMatrixT.h"
+#include "XML/Utilities.h"
+#include <DDRec/DetectorData.h>
 
 // todo: remove gaudi logging and properly capture output
 #define endmsg std::endl
@@ -659,6 +661,16 @@ createECalEndcapTurbine(dd4hep::Detector& aLcdd, dd4hep::xml::Handle_t aXmlEleme
   dd4hep::PlacedVolume envelopePhysVol = motherVol.placeVolume(endcapsAssembly);
   caloDetElem.setPlacement(envelopePhysVol);
   envelopePhysVol.addPhysVolID("system", idDet);
+
+  // Create dummy caloData object for PandoraPFA
+  // FIXME: fill calo and layer data information
+  auto caloData = new dd4hep::rec::LayeredCalorimeterData;
+  caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::EndcapLayout;
+  caloDetElem.addExtension<dd4hep::rec::LayeredCalorimeterData>(caloData);
+
+  // Set type flags
+  dd4hep::xml::setDetectorTypeFlag(xmlDetElem, caloDetElem);
+
   return caloDetElem;
 }
 }  // namespace det
