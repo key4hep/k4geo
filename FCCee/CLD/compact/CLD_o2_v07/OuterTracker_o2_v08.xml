@@ -47,8 +47,9 @@
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
       <readout name="OuterTrackerBarrelCollection">
-	<segmentation type="CartesianGridYZ" key="layer" name="ATLASPix3" grid_size_y="0.300*mm" grid_size_z="0.050*mm"/>
-        <id>${GlobalTrackerReadoutID},y:32:-16,z:-16</id>
+	<segmentation type="CartesianGridXY" key="layer" name="ATLASPix3" grid_size_x="0.050*mm" grid_size_y="0.300*mm"/>
+	<!-- The segmentation frame is in the sensor frame which is in XY with Y along beampipe and x transversal -->
+        <id>${GlobalTrackerReadoutID},x:32:-16,y:-16</id>
       </readout>
       <readout name="OuterTrackerEndcapCollection">
 	<segmentation type="CartesianGridXY" key="layer" name="ATLASPix3" grid_size_x="0.050*mm" grid_size_y="0.300*mm"/> <!--Change to consider real alignment of the strips ?-->
