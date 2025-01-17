@@ -83,7 +83,8 @@
       <readout name="InnerTrackerEndcapCollection">
 	<segmentation type="MultiSegmentation" key="layer">
 	  <segmentation name="ARCADIA" type="CartesianGridXY" key_value="0" grid_size_x="0.025*mm" grid_size_y="0.025*mm"/>
-	  <segmentation name="ATLASPix3" type="CartesianGridXY" key_min="1" key_max="nInnerTrackerEndcapLayers-1" grid_size_x="0.050*mm" grid_size_y="0.300*mm"/> <!--Change to consider real alignment of the strips ?-->
+	  <segmentation name="ATLASPix3" type="CartesianGridXY" key_min="1" key_max="nInnerTrackerEndcapLayers-1" grid_size_x="0.050*mm" grid_size_y="0.300*mm"/>
+	  <!-- y is in the same direction than the petals (along the radius of Disks) and x orthogonal -->
 	</segmentation>
         <id>${GlobalTrackerReadoutID},x:32:-16,y:-16</id>
       </readout>

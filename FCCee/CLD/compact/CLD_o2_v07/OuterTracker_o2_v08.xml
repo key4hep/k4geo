@@ -52,7 +52,8 @@
         <id>${GlobalTrackerReadoutID},x:32:-16,y:-16</id>
       </readout>
       <readout name="OuterTrackerEndcapCollection">
-	<segmentation type="CartesianGridXY" key="layer" name="ATLASPix3" grid_size_x="0.050*mm" grid_size_y="0.300*mm"/> <!--Change to consider real alignment of the strips ?-->
+	<segmentation type="CartesianGridXY" key="layer" name="ATLASPix3" grid_size_x="0.050*mm" grid_size_y="0.300*mm"/>
+	<!-- y is in the same direction than the petals (along the radius of Disks) and x orthogonal -->
         <id>${GlobalTrackerReadoutID},x:32:-16,y:-16</id>
       </readout>
     </readouts>
