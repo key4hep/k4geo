@@ -1,0 +1,55 @@
+<!--
+   SIT parameters for ILD_o1_v5
+  -->
+
+<lccdd>
+
+  <detectors>
+
+    <detector name="SIT" type="SIT_Simple_Pixel" vis="ILD_SITVis" id="ILDDetID_SIT" readout="SITCollection" insideTrackingVolume="true">
+
+      <envelope vis="ILD_SITVis">
+
+        <shape type="BooleanShape" operation="Union" material="Air" >
+          <shape type="Tube" rmin="SIT_inner_radius"   rmax="SIT_outer_radius_1" dz="SIT_half_length_1" />
+          <shape type="Tube" rmin="SIT_outer_radius_1" rmax="SIT_outer_radius"   dz="SIT_half_length" />
+        </shape>
+
+      </envelope>
+
+      <type_flags type="DetType_TRACKER + DetType_BARREL + DetType_STRIP "/>
+
+      <!-- database : sit_simple_planar_sensors_03 -->
+
+      <!-- SQL command: "select * from extended_reconstruction_parameters;"  -->
+      <reconstruction strip_width="0." strip_length="92*mm" strip_pitch="0." strip_angle="0*deg"  />
+
+      <!-- SQL command: "select * from global;"  -->
+      <global sensitive_thickness="0.2*mm" support_thickness="1*mm" sensor_length="92*mm"
+              sensitive_mat="G4_Si" support_mat="G4_C" sensitive_threshold_KeV="64*keV"  />
+
+      <!-- SQL command: "select * from sit_layers;"  -->
+      <layer layer_id="0" sensitive_radius="153*mm" n_sensors_per_ladder="8" n_ladders="10"
+             ladder_clearance="0.1*mm" faces_IP="1" is_SIT1="1" is_SIT2="0"  />
+
+      <layer layer_id="1" sensitive_radius="155.5*mm" n_sensors_per_ladder="8" n_ladders="10"
+             ladder_clearance="0.1*mm" faces_IP="0" is_SIT1="0" is_SIT2="0"  />
+
+      <layer layer_id="2" sensitive_radius="300*mm" n_sensors_per_ladder="14" n_ladders="19"
+             ladder_clearance="0.1*mm" faces_IP="1" is_SIT1="0" is_SIT2="1"  />
+
+      <layer layer_id="3" sensitive_radius="302.5*mm" n_sensors_per_ladder="14" n_ladders="19"
+             ladder_clearance="0.1*mm" faces_IP="0" is_SIT1="0" is_SIT2="0"  />
+
+    </detector>
+
+  </detectors>
+
+  <readouts>
+    <readout name="SITCollection">
+      <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
+      <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+    </readout>
+  </readouts>
+
+</lccdd>

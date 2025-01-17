@@ -1,0 +1,19 @@
+<lccdd>
+  <fields>
+    <field name="SolenoidMap" type="FieldBrBz"
+	   filename="${lcgeo_DIR}/fieldmaps/ild_fieldMap_Solenoid3.5T_StandardYoke_10cm_v1_20170223.root"
+	   treeName="ntuple"
+	   rhoVarName="rho_mm"
+	   zVarName="z_mm"
+	   BrhoVarName="Brho"
+	   BzVarName="Bz"
+           rScale = "1.0"
+           zScale = "1.0"
+           bScale = "1.0"
+	   coorUnits="mm"
+	   BfieldUnits="tesla"
+	   >
+    </field>
+  </fields>
+</lccdd>
+ 

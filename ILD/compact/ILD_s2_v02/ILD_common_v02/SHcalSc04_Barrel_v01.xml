@@ -1,0 +1,40 @@
+<!-- comment>Calorimeters</comment -->
+
+<lccdd>
+  <detectors>
+    <detector name="HcalBarrel" type="SHcalSc04_Barrel_v01" id="ILDDetID_HCAL" readout="HcalBarrelRegCollection" vis="GreenVis" insideTrackingVolume="false" >
+      <comment>Hadron Calorimeter Barrel</comment>
+
+      <envelope vis="ILD_HCALVis">
+        <shape type="BooleanShape" operation="Subtraction" material="Air" >
+          <shape type="Cone" rmin1="0.0" rmax1="Hcal_outer_radius + env_safety" rmin2="0.0" rmax2="Hcal_outer_radius + env_safety" z="Hcal_half_length + env_safety/2.0"/>
+          <shape type="PolyhedraRegular"  numsides="Hcal_inner_symmetry" rmin="0.0"
+                 rmax="Hcal_inner_radius - env_safety" dz="2*(Hcal_half_length + env_safety)"/>
+        </shape>
+        <rotation x="0" y="0" z="90*deg-180*deg/Hcal_inner_symmetry"/>
+      </envelope>
+
+      <type_flags type=" DetType_CALORIMETER + DetType_BARREL + DetType_HADRONIC " />
+
+      <staves  material = "Steel235"  vis="BlueVis"/>
+
+      <!-- The layer structure reference on page 10 in the following paper-->
+      <!-- https://bib-pubdb1.desy.de/record/139781/files/LC-TOOL-2012-082.pdf -->
+      <layer repeat="Hcal_nlayers" vis="SeeThrough">
+        <slice material = "G4_POLYSTYRENE" thickness = "Hcal_scintillator_thickness" sensitive = "yes"  vis="CyanVis"   />
+        <slice material = "PCB"            thickness = "Hcal_PCB_thickness"                             vis="Invisible" />
+        <slice material = "Cu"             thickness = "Hcal_Cu_thickness"                              vis="Invisible" />
+        <slice material = "Air"            thickness = "Hcal_fiber_gap"                                 vis="YellowVis" />
+      </layer>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="HcalBarrelRegCollection">
+      <segmentation type="TiledLayerGridXY" grid_size_x="3" grid_size_y="3.03248"/>
+      <id>system:5,module:3,stave:4,tower:5,layer:6,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+
+</lccdd>

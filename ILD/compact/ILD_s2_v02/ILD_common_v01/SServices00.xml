@@ -1,0 +1,22 @@
+<!-- 
+     SService00 parameters for ILD_o1_v5  
+-->
+
+<detector name="SServices00" type="SServices00" id="ILDDetID_NOTUSED" vis="RedVis" insideTrackingVolume="false" sensitive="no">
+  <!--
+      First test version!
+  -->
+  <type_flags type=" DetType_SUPPORT " />
+  
+  <!-- SQL command: "select * from sit_layers;"  -->
+  <TPC_Cooling number_of_rings="TPC_cooling_nRings"/>
+  <ring ring_id="0" tpcEndplateServicesRing_R="450*mm"  tpcEndplateServicesRing_ro="1.555*mm"  />
+  <ring ring_id="1" tpcEndplateServicesRing_R="650*mm"  tpcEndplateServicesRing_ro="1.555*mm"  />
+  <ring ring_id="2" tpcEndplateServicesRing_R="850*mm"  tpcEndplateServicesRing_ro="1.555*mm"  />
+  <ring ring_id="3" tpcEndplateServicesRing_R="1050*mm" tpcEndplateServicesRing_ro="1.555*mm"  />
+  <ring ring_id="4" tpcEndplateServicesRing_R="1250*mm" tpcEndplateServicesRing_ro="1.555*mm"  />
+  <ring ring_id="5" tpcEndplateServicesRing_R="1450*mm" tpcEndplateServicesRing_ro="1.555*mm"  />
+  <ring ring_id="6" tpcEndplateServicesRing_R="1650*mm" tpcEndplateServicesRing_ro="2.985*mm"  />
+  <ring ring_id="7" tpcEndplateServicesRing_R="1750*mm" tpcEndplateServicesRing_ro="2.453*mm"  />
+
+</detector>

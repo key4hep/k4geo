@@ -1,0 +1,109 @@
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0" 
+       xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+       xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+  
+  <info name="noviceN04"
+        title="ExN04 to DD4hep"
+        author="F. Gaede"
+        url="http://aidasoft.cern.ch/dd4hep"
+        status="development"
+        version="$Id: BeamCalOnly.xml 298 2015-02-25 15:09:08Z gaede $">
+    <comment>geant4 example novice N04 ported to DD4hep </comment>        
+  </info>
+  
+  <includes>
+    <gdmlFile  ref="elements.xml"/>
+    <gdmlFile  ref="materials.xml"/>
+  </includes>
+  
+  <define>
+    <!-- constants as defined in ExN04DetectorParameter.icc -->
+    <constant name="world_side" value="600*cm"/>
+    <!-- DD4hep expects world_xyz parameters : -->
+    <constant name="world_x"    value="world_side"/>
+    <constant name="world_y"    value="world_side"/>
+    <constant name="world_z"    value="world_side"/>        
+    <constant name="expHall_x"  value="world_side"/>
+    <constant name="expHall_y"  value="world_side"/>
+    <constant name="expHall_z"  value="world_side"/>        
+
+    <constant name="BeamCal_rmin"  value="30*mm"/>
+    <constant name="BeamCal_rmax"  value="15*cm"/>
+    <constant name="BeamCal_zmin"  value="3.3*m"/>
+
+    <constant name="OutgoingBP_radius"  value="25*mm"/>
+    <constant name="IncomingBP_radius"  value="3.4*mm"/>
+    <constant name="CrossingAngle"  value="20*mrad"/>
+    
+    
+  </define>
+
+  <materials>
+    <!--  Ar =   new G4Material("ArgonGas",z=18., a= 39.95*g/mole, density=1.782*mg/cm3); -->
+    <!-- material name="ArgonGas" z="18." a="39.95*g/mole" density="1.782*mg/cm3"/-->
+    <!--    Silicon =  new G4Material("Silicon", z=14., a= 28.09*g/mole, density= 2.33*g/cm3); -->
+    <!--material name="Silicon" z="14." a="28.09*g/mole" density="2.33*g/cm3" /-->
+
+    <material name="ArgonGas">
+      <D type="density" unit="mg/cm3" value="1.782" />
+      <fraction n="1" ref="Ar" />
+    </material>
+    <material name="Silicon">
+      <D type="density" unit="g/cm3" value="2.33" />
+      <fraction n="1" ref="Si" />
+    </material>
+    
+    <material name="Scintillator">
+      <D value="1.032" unit="g/cm3"/>
+      <composite n="9" ref="C"/>
+      <composite n="10" ref="H"/>
+    </material>
+    
+  </materials>
+
+  <display>
+    <vis name="MyBeamCalVis"    r="1.0" g="1.0"  b="1.0" alpha="0.5" showDaughters="true"  visible="false"/>
+    <vis name="LayerVis1"       r="1.0" g="0.0"  b="0.0" alpha="1" showDaughters="true"  visible="true"/>
+    <vis name="LayerVis2"       r="0.0" g="1.0"  b="0.0" alpha="1" showDaughters="true"  visible="true"/>
+    <vis name="LayerVis3"       r="0.0" g="0.0"  b="1.0" alpha="1" showDaughters="true"  visible="true"/>
+    <vis name="LayerVis4"       r="1.0" g="0.0"  b="1.0" alpha="1" showDaughters="true"  visible="true"/>
+    <vis name="BeamCalVis"      r="1.0" g="0.0"  b="1.0" alpha="1" showDaughters="true"  visible="true"/>
+  </display>
+
+  <detectors>
+
+
+    <detector name="BeamCal" type="BeamCal" vis="MyBeamCalVis" id="1" readout="BeamCalHits" insideTrackingVolume="false">
+      <parameter crossingangle="CrossingAngle"  cutoutspanningangle="10*deg" incomingbeampiperadius="IncomingBP_radius"/>
+      <dimensions inner_r = "BeamCal_rmin" inner_z = "BeamCal_zmin" outer_r = "BeamCal_rmax" />
+
+      <layer repeat="1" >
+        <slice material = "C"         thickness = "10.00*cm" vis="LayerVis1"      layerType="holeForIncomingBeampipe"/>
+      </layer>
+      <layer repeat="30" >
+        <slice material = "TungstenDens24" thickness = "0.271*cm" vis="LayerVis2"  layerType="holeForIncomingBeampipe" />
+        <slice material = "Silicon"        thickness = "0.032*cm" vis="LayerVis3"  layerType="keyholeshape" sensitive="yes"      />
+        <slice material = "Copper"         thickness = "0.005*cm" vis="LayerVis3"  layerType="keyholeshape" />
+        <slice material = "Kapton"         thickness = "0.030*cm" vis="LayerVis4"  layerType="keyholeshape" />
+        <slice material = "Air"            thickness = "0.033*cm"                  layerType="keyholeshape" />
+      </layer>
+    </detector>
+
+  </detectors>
+
+  <readouts>
+    <readout name="BeamCalHits">
+      <segmentation type="GridXYZ" gridSizeX="0.35*cm" gridSizeY="0.35*cm" />
+      <id>system:8,layer:8,barrel:3,layer:8,slice:5,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+  <fields>
+    <!-- see: ExN04Field.cc -->
+    <field type="solenoid" name="GlobalSolenoid" inner_field="4.0*tesla"
+	   outer_field="0*tesla" zmax="500*cm"
+	   inner_radius="50*cm"
+	   outer_radius="world_side" />
+  </fields> 
+
+</lccdd>

@@ -1,0 +1,42 @@
+<!-- 
+     LHCal parameters for ILD 
+-->
+
+<detector name="LHCal" type="LHCal_v01" vis="SeeThrough" id="ILDDetID_LHCAL"
+	  readout="LHCalCollection" insideTrackingVolume="false" >
+
+  <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_HADRONIC + DetType_FORWARD " />
+ 
+  <envelope vis="ILD_FCALVis">    
+    <shape type="BooleanShape" operation="Subtraction" material="Air">
+      <shape type="BooleanShape" operation="Subtraction" material="Air">
+	<shape type="Box" dx="LHCal_outer_radius + env_safety" 
+	       dy="LHCal_outer_radius + env_safety" 
+	       dz="LHCal_max_z + env_safety"/>
+	<shape type="Tube" rmin="0.0" rmax="LHCal_inner_radius - env_safety" dz="LHCal_max_z + 2.0*env_safety"/>
+        <position x="0.5*(LHCal_min_z + LHCal_max_z)*tan(ILC_Main_Crossing_Angle/2.0)" y="0" z="0" />
+      </shape>
+      <shape type="Box" dx="LHCal_outer_radius + 1.5*env_safety"
+	     dy="LHCal_outer_radius + 1.5*env_safety"
+	     dz="LHCal_min_z - env_safety"/>
+    </shape>
+  </envelope>  
+
+  <parameter crossingangle="ILC_Main_Crossing_Angle" />
+  
+  <dimensions width = "LHCal_outer_radius*2.0"
+	      inner_z = "LHCal_min_z"
+	      height = "LHCal_outer_radius*2.0"
+	      inner_r = "LHCal_inner_radius"
+	/>          
+
+  
+  <layer repeat="30" vis="SeeThrough">
+    <slice material = "TungstenDens24" thickness = "13.8*mm" 		   vis="BCLayerVis1" />
+    <slice material = "Air"     thickness = "0.1*mm"   vis="Invisible" />
+    <slice material = "Silicon" thickness = "1.0*mm" 	sensitive = "yes"  vis="BCLayerVis2"/>
+    <slice material = "Copper"  thickness = "0.1*mm"                    vis="BCLayerVis3"/>
+    <slice material = "Air"     thickness = "1.0*mm"    vis="Invisible"/>
+  </layer>
+
+</detector>

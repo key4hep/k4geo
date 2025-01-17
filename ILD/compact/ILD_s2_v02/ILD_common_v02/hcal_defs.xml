@@ -1,0 +1,85 @@
+<define>
+
+
+  <constant name="Hcal_radiator_thickness" value="20.0*mm"/>
+  <constant name="Hcal_chamber_thickness" value="6.5*mm"/>
+  <constant name="Hcal_back_plate_thickness" value="15*mm"/>
+  <constant name="Hcal_lateral_structure_thickness" value="15*mm"/>
+  <constant name="Hcal_stave_gaps" value="10*mm"/>
+  <constant name="Hcal_modules_gap" value="0.001*mm"/>
+  <constant name="Hcal_layer_air_gap" value="2*mm"/>
+  <constant name="Hcal_middle_stave_gaps" value="10*mm"/>
+  <constant name="Hcal_nlayers" value="48"/>
+  <constant name="Hcal_fiber_gap" value="2.7*mm"/>
+  <constant name="Hcal_Cu_thickness" value="0.1*mm"/>
+  <constant name="Hcal_PCB_thickness" value="0.7*mm"/>
+  <constant name="Hcal_scintillator_thickness" value="3.0*mm"/>
+  <constant name="Hcal_cells_size" value="30*mm"/>
+  <constant name="Hcal_endcap_lateral_structure_thickness" value="5.0*mm"/>
+  <constant name="Hcal_endcap_layer_air_gap" value="2.5*mm"/>
+  <constant name="Hcal_endcap_nlayers" value="48"/> <!-- needed for ring only? -->
+
+  <!-- fg:
+      copy extra parameters for SDHcal from ILD_o2_v01 here
+      maybe they should all be renamed to SDHCal_ for clarity ? 
+     TK: Yes, here are they ... HcalSD_  
+  -->
+  <constant name="HcalSD_cells_size" value="10.406*mm"/>
+  <constant name="HcalSD_pad_separation" value="0.406*mm"/>
+  <constant name="HcalSD_radiator_thickness" value="15.0*mm"/>
+  <constant name="HcalSD_sensitive_gas_gap" value="1.2*mm"/>
+  <constant name="HcalSD_graphite_cathode_thickness" value="0.05*mm"/>
+  <constant name="HcalSD_graphite_anode_thickness" value="0.05*mm"/>
+  <constant name="HcalSD_glass_cathode_thickness" value="1.1*mm"/>
+  <constant name="HcalSD_glass_anode_thickness" value="0.7*mm"/>
+  <constant name="HcalSD_g10_thickness" value="1.4*mm"/>
+  <constant name="HcalSD_mylar_anode_thickness" value="0.05*mm"/>
+  <constant name="HcalSD_mylar_cathode_thickness" value="0.175*mm"/>
+  <constant name="HcalSD_mylar_thickness" value="0.2*mm"/>
+  <constant name="HcalSD_PCB_thickness" value="1.2*mm"/>
+  <constant name="HcalSD_electronics_mask_thickness" value="1.6*mm"/>
+  <constant name="HcalSD_steel_casette_thickness" value="2.5*mm"/>
+  <constant name="HcalSD_airgap_thickness" value="0.5*mm"/>
+  <constant name="HcalSD_back_plate_thickness" value="10*mm"/>
+  <constant name="HcalSD_barrel_end_module_type" value="1"/>
+  <constant name="HcalSD_stave_gaps" value="10*mm"/>
+  <constant name="HcalSD_lateral_structure_thickness" value="10*mm"/>
+  <constant name="HcalSD_layer_air_gap" value="2*mm"/>
+  <constant name="HcalSD_endcap_lateral_structure_thickness" value="5.0*mm"/>
+
+  <constant name="HcalSD_module_wall_thickness" value="10*mm"/>   
+
+  <constant name="HcalBarrelSD_nlayers" value="48"/>
+  <constant name="HcalSD_MinNumCellsInTransvPlane" value="1"/>
+  <constant name="HcalBarrelSD_number_modules" value="5"/>
+  <constant name="HcalEndcap_symmetry" value="Hcal_outer_symmetry"/>
+  <constant name="HcalEndcapRingSD_inner_symmetry"  value="Ecal_Hcal_symmetry"/>
+  <constant name="HcalEndcapRingSD_outer_symmetry"  value="HcalEndcap_symmetry"/>
+  <constant name="HcalEndcapRingSD_nlayers"         value="7"/>
+  <constant name="HcalEndcapSD_nlayers" value="48"/>
+
+  <constant name="HcalSD_gasInlet_length" value="3.0*mm"/>
+  <constant name="HcalSD_modules_gap" value="20*mm"/>
+  <constant name="HcalSD_spacer_separation" value="100*mm"/>
+  <constant name="HcalSD_spacer_thickness" value="8*mm"/>
+  <constant name="HcalSD_gasInlet_innerRadius" value="0.4*mm"/>
+  <constant name="HcalSD_gasInlet_outerRadius" value="0.5*mm"/>
+
+  
+
+  <!-- translations -->
+  <constant name="Hcal_endcap_zmin" value="HcalEndcap_min_z"/>
+
+  <!-- used for "hybrid" readout segmentation -->
+  <constant name="AHCal_cell_size" value="3.0*cm"/>
+  <constant name="SDHCal_cell_size" value="1.0*cm"/>
+  
+  <!-- TODO move these two element at the correct place -->
+  <!-- TODO create the additional detectors for the different options for l/s4 and l/s5 -->
+  <!-- TODO merge the two variables to only one for both barrel and endcap -->
+  <!-- barrel and endcvap constructors use the slices in reversed order ! -->
+  <!-- <constant name="Hcal_readout_segmentation_slice_barrel" value="3"/> -->
+  <!-- <constant name="Hcal_readout_segmentation_slice_endcap" value="3"/> -->
+
+
+</define>

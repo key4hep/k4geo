@@ -1,0 +1,70 @@
+<!--
+   FTD parameters for ILD_o1_v5
+   from database : ftd_simple_staggered_02
+  -->
+
+<lccdd>
+  <detectors>
+
+
+    <detector name="FTD" type="FTD_Simple_Staggered" vis="FTDVis" id="ILDDetID_FTD" limits="Tracker_limits" readout="FTDCollection" insideTrackingVolume="true">
+
+      <envelope vis="ILD_FTDVis">
+
+        <shape type="BooleanShape" operation="Subtraction" material="Air" >
+          <shape type="BooleanShape" operation="Subtraction" material="Air" >
+            <shape type="BooleanShape" operation="Subtraction" material="Air" >
+              <shape type="BooleanShape" operation="Subtraction" material="Air" >
+                <shape type="BooleanShape" operation="Subtraction" material="Air" >
+                  <shape type="Tube" rmin="FTD_inner_radius"   rmax="FTD_outer_radius" dz="FTD_half_length"  />
+                  <shape type="Tube" rmin="0." rmax="FTD_outer_radius+env_safety" dz="FTD_min_z_0" />
+                </shape>
+                <shape type="Tube" rmin="FTD_outer_radius_1" rmax="FTD_outer_radius+env_safety" dz="FTD_min_z_2-petal_cp_support_thickness-petal_support_zoffset" />
+              </shape>
+              <shape type="Tube" rmin="FTD_outer_radius_2" rmax="FTD_outer_radius+env_safety" dz="FTD_min_z_2" />
+            </shape>
+            <shape type="Cone" rmin1="0" rmax1="FTD_inner_radius" rmin2="0" rmax2="FTD_cone_radius"
+                   z="(FTD_half_length-FTD_cone_min_z)/2. + env_safety "/>
+            <position x="0" y="0" z="FTD_cone_min_z+(FTD_half_length-FTD_cone_min_z)/2."/>
+          </shape>
+          <shape type="Cone" rmin1="0" rmax1="FTD_inner_radius" rmin2="0" rmax2="FTD_cone_radius"
+                 z="(FTD_half_length-FTD_cone_min_z)/2. + env_safety "/>
+          <position x="0" y="0" z="-FTD_cone_min_z-(FTD_half_length-FTD_cone_min_z)/2."/>
+          <rotation x="0" y="180.*deg" z="0" />
+        </shape>
+      </envelope>
+
+      <type_flags type="DetType_TRACKER +  DetType_ENDCAP  + DetType_PIXEL + DetType_STRIP "/>
+
+      <!-- SQL command: "select * from common_parameters;"  -->
+      <common_parameters ftd1_vtx3_distance_z="top_FTD1_vtx3_distance_z"
+                         ftd7_ecal_distance_z="top_FTD7_ecal_distance_z" ftd1_sit1_radial_diff="-1*mm" ftd2_sit1_radial_diff="-1*mm" ftd3_sit2_radial_diff="-1*mm"
+                         ftd4to7_tpc_radial_gap="20*mm" beamtube_clearance="15*mm" cables_thickness="0.08*mm" cable_shield_thickness="0.1*mm" outer_cylinder_total_thickness="1*mm"
+                         petal_half_angle_support="11.25*deg" petal_y_ratio="0.5015*mm"
+                         support_spaceframe_width="10*mm"/>
+
+      <!-- SQL command: "select * from extended_reconstruction_parameters;"  -->
+      <extended_reconstruction_parameters strip_width="0.001*mm" strip_length="250*mm" strip_pitch="0.01*mm" strip_angle="5*deg"  />
+
+      <!-- SQL command: "select * from disks;"  -->
+      <disk disk_number="1" z_position_ReltoTPCLength="0" disk_si_thickness="0.02*mm" petal_cp_support_dxMax="72*mm" padUp_Si_dxMax="68*mm" petal_cp_support_thickness="1*mm" petal_support_zoffset="1.5*mm" sensor_is_pixel="1" double_sided="0"  />
+      <disk disk_number="2" z_position_ReltoTPCLength="FTD_disk2_zPosRelToTpcLength" disk_si_thickness="0.02*mm" petal_cp_support_dxMax="72*mm" padUp_Si_dxMax="68*mm" petal_cp_support_thickness="1*mm" petal_support_zoffset="1.5*mm" sensor_is_pixel="1" double_sided="0"  />
+      <disk disk_number="3" z_position_ReltoTPCLength="FTD_disk3_zPosRelToTpcLength" disk_si_thickness="0.2*mm" petal_cp_support_dxMax="122.49*mm" padUp_Si_dxMax="118.46*mm" petal_cp_support_thickness="2*mm" petal_support_zoffset="1.5*mm" sensor_is_pixel="0" double_sided="1"  />
+      <disk disk_number="4" z_position_ReltoTPCLength="FTD_disk4_zPosRelToTpcLength" disk_si_thickness="0.2*mm" petal_cp_support_dxMax="122.49*mm" padUp_Si_dxMax="118.46*mm" petal_cp_support_thickness="2*mm" petal_support_zoffset="1.5*mm" sensor_is_pixel="0" double_sided="1"  />
+      <disk disk_number="5" z_position_ReltoTPCLength="FTD_disk5_zPosRelToTpcLength" disk_si_thickness="0.2*mm" petal_cp_support_dxMax="122.49*mm" padUp_Si_dxMax="118.46*mm" petal_cp_support_thickness="2*mm" petal_support_zoffset="1.5*mm" sensor_is_pixel="0" double_sided="1"  />
+      <disk disk_number="6" z_position_ReltoTPCLength="FTD_disk6_zPosRelToTpcLength" disk_si_thickness="0.2*mm" petal_cp_support_dxMax="122.49*mm" padUp_Si_dxMax="118.46*mm" petal_cp_support_thickness="2*mm" petal_support_zoffset="1.5*mm" sensor_is_pixel="0" double_sided="1"  />
+      <disk disk_number="7" z_position_ReltoTPCLength="0" disk_si_thickness="0.2*mm" petal_cp_support_dxMax="122.49*mm" padUp_Si_dxMax="118.46*mm" petal_cp_support_thickness="2*mm" petal_support_zoffset="1.5*mm" sensor_is_pixel="0" double_sided="1"  />
+
+    </detector>
+
+  </detectors>
+
+  <readouts>
+    <readout name="FTDCollection">
+      <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
+      <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+    </readout>
+  </readouts>
+
+
+</lccdd>

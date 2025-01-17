@@ -1,0 +1,50 @@
+<!-- comment>Calorimeters</comment -->
+
+<lccdd>
+  <detectors>
+    <detector name="HcalBarrel" type="SHcalSc04_Barrel_v04" id="ILDDetID_HCAL" readout="HcalBarrelReadout" vis="GreenVis" insideTrackingVolume="false" >
+      <comment>Hadron Calorimeter Barrel</comment>
+
+      <envelope vis="ILD_HCALVis">
+        <shape type="BooleanShape" operation="Subtraction" material="Air" >
+          <shape type="Cone" rmin1="0.0" rmax1="Hcal_outer_radius + env_safety" rmin2="0.0" rmax2="Hcal_outer_radius + env_safety" z="Hcal_half_length + env_safety/2.0"/>
+          <shape type="PolyhedraRegular"  numsides="Hcal_inner_symmetry" rmin="0.0"
+                 rmax="Hcal_inner_radius - env_safety" dz="2*(Hcal_half_length + env_safety)"/>
+        </shape>
+        <rotation x="0" y="0" z="90*deg-180*deg/Hcal_inner_symmetry"/>
+      </envelope>
+
+      <type_flags type=" DetType_CALORIMETER + DetType_BARREL + DetType_HADRONIC " />
+
+      <staves  material = "Steel235"  vis="BlueVis"/>
+
+
+      <!--  select which subsegmentation will be used to fill the DDRec:LayeredCalorimeterData cell dimensions -->
+      <subsegmentation key="slice" value="Hcal_readout_segmentation_slice"/>
+
+      <layer repeat="Hcal_nlayers" vis="SeeThrough">
+        <slice material="FloatGlass" thickness="HcalSD_glass_anode_thickness" vis="Invisible"/>
+        <slice material="RPCGAS2"    thickness="HcalSD_sensitive_gas_gap" sensitive="yes" limits="cal_limits" vis="YellowVis"/>
+        <slice material="FloatGlass" thickness="HcalSD_glass_cathode_thickness" vis="Invisible"/>
+        <slice material="G4_POLYSTYRENE" thickness = "Hcal_scintillator_thickness" sensitive = "yes"   limits="cal_limits"  vis="CyanVis"   />
+        <slice material="Air"      thickness="Hcal_chamber_thickness - ( HcalSD_glass_anode_thickness + HcalSD_sensitive_gas_gap + HcalSD_glass_cathode_thickness + Hcal_scintillator_thickness)" vis="Invisible" />
+      </layer>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="HcalBarrelReadout">
+      <segmentation   type="MultiSegmentation"  key="slice">
+        <segmentation name="RPCgrid" type="CartesianGridXY"   key_value="1"  grid_size_x="SDHCal_cell_size" grid_size_y="SDHCal_cell_size" />
+        <segmentation name="Scigrid" type="TiledLayerGridXY"  key_value="3"  grid_size_x="3" grid_size_y="3.03248"/>
+      </segmentation>
+      <hits_collections>
+        <hits_collection name="HCalBarrelRPCHits"  key="slice" key_value="1"/>
+        <hits_collection name="HcalBarrelRegCollection"  key="slice" key_value="3"/>
+      </hits_collections>
+      <id>system:5,module:3,stave:4,tower:5,layer:6,slice:4,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+
+</lccdd>

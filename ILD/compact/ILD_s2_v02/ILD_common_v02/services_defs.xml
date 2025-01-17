@@ -1,0 +1,45 @@
+<define>
+
+  <!-- services -->
+  <!-- constant name="EcalBarrelServices_RailDistanceToRight" value="166.5*mm"/ -->
+  <constant name="EcalBarrelServices_RailDistanceToRight" value="500*mm"/>
+  <constant name="EcalBarrelServices_RailHeight" value="30.0*mm"/>
+  <constant name="EcalBarrelServices_RailSeparation" value="880.0*mm"/>
+  <constant name="EcalBarrelServices_RailWidth" value="103.25*mm"/>
+
+  <constant name="EcalBarrelServices_ZMinus_FirstInterrail_Cu_Thickness" value="(1.8*mm+0.9*mm)/2."/>
+  <constant name="EcalBarrelServices_ZMinus_FirstInterrail_PE_Thickness" value="4.5*mm"/>
+  <constant name="EcalBarrelServices_ZPlus_FirstInterrail_Cu_Thickness" value="(1.09*mm+0.61*mm)/2."/>
+  <constant name="EcalBarrelServices_ZPlus_FirstInterrail_PE_Thickness" value="2.67*mm"/>
+
+  <constant name="EcalBarrel_EndCapServices_ZMinus_Cu_Thickness" value="5.2*mm"/>
+  <constant name="EcalBarrel_EndCapServices_ZMinus_PE_Thickness" value="12.4*mm"/>
+  <constant name="EcalBarrel_EndCapServices_ZPlus_Cu_Thickness" value="3.5*mm"/>
+  <constant name="EcalBarrel_EndCapServices_ZPlus_PE_Thickness" value="8.3*mm"/>
+
+  <constant name="HcalServicesModule_InnerServicesWidth" value="200.0*mm"/>
+  <constant name="BuildHcalElectronicsInterface" value="1"/>
+  <constant name="HcalServicesModule_ZMinus_StainlessSteel_Thickness" value="15.0*mm"/>
+  <constant name="HcalServicesModule_ZMinus_PE_Thickness" value="27.5*mm"/>
+  <constant name="HcalServicesModule_ZMinus_Cu_Thickness" value="8.2*mm"/>
+  <constant name="HcalServicesModule_ZPlus_StainlessSteel_Thickness" value="15.0*mm"/>
+  <constant name="HcalServicesModule_ZPlus_PE_Thickness" value="25.6*mm"/>
+  <constant name="HcalServicesModule_ZPlus_Cu_Thickness" value="7.4*mm"/>
+  <constant name="Hcal_steel_cassette_thickness" value="0.5*mm"/>
+  <constant name="HcalServices_outer_FR4_thickness" value="2.8*mm"/>
+  <constant name="HcalServices_outer_Cu_thickness" value="0.4*mm"/>
+  <constant name="Hcal_endcap_services_module_width" value="100.0*mm"/>
+
+  <constant name="SIT12_cable_thickness" value="0.063*mm"/>
+  <constant name="petal_cp_support_thickness" value="2.0*mm"/>
+  <constant name="disk_si_thickness" value="0.2*mm"/>
+  <constant name="petal_support_zoffset" value="1.5*mm"/>
+  <constant name="ftd2_sit1_radial_diff" value="0.0*mm"/>
+  <constant name="ftd3_sit2_radial_diff" value="-1.0*mm"/>
+  <constant name="SServices_FTD2_cone_thickness" value="0.040*mm"/>
+  <constant name="SServices_FTD3_cone_thickness" value="0.020*mm"/>
+  <constant name="SServices_FTD7_cables_thickness" value="0.85*mm"/>
+
+  <constant name="VXD_cable_cross_section_area" value="25.0*mm*mm"/>
+  <constant name="VXD_cable_inner1_radius" value="30.0*mm"/>
+</define>

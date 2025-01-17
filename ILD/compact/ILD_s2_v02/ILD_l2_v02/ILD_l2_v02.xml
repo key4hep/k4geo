@@ -1,0 +1,102 @@
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+       xmlns:xs="http://www.w3.org/2001/XMLSchema"
+       xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+  <info name="ILD_l2_v02"
+        title="ILD large model w/ SDHcal in Videau geometry"
+        author="F. Gaede, S.Lu, D.Jeans"
+        url="http://ilcsoft.desy.de"
+        status="experimental"
+        version="v02">
+    <comment>ILD Mokka model used for the DBD - ported to DD4hep </comment>
+  </info>
+
+  <includes>
+    <gdmlFile  ref="../ILD_common_v02/elements.xml"/>
+    <gdmlFile  ref="../ILD_common_v02/materials.xml"/>
+  </includes>
+
+  <define>
+
+    <include ref="top_defs_ILD_l2_v02.xml"/>
+    <include ref="../ILD_common_v02/top_defs_common_v02.xml"/>
+    <include ref="../ILD_common_v02/basic_defs.xml"/>
+    <include ref="../ILD_common_v02/envelope_defs.xml"/>
+    <include ref="../ILD_common_v02/tube_defs.xml"/>
+    <include ref="../ILD_common_v02/misc_defs.xml"/>
+    <include ref="../ILD_common_v02/tracker_defs.xml"/>
+    <include ref="../ILD_common_v02/fcal_defs.xml"/>
+    <include ref="../ILD_common_v02/ecal_defs.xml"/>
+    <include ref="../ILD_common_v02/hcal_defs.xml"/>
+    <include ref="../ILD_common_v02/yoke_defs.xml"/>
+    <include ref="../ILD_common_v02/services_defs.xml"/>
+    <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
+
+  </define>
+
+  <limits>
+    <limitset name="cal_limits">
+      <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
+    </limitset>
+    <limitset name="TPC_limits">
+      <limit name="step_length_max" particles="*" value="10.0" unit="mm" />
+    </limitset>
+    <limitset name="Tracker_limits">
+      <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
+    </limitset>
+  </limits>
+
+  <include ref="../ILD_common_v02/display.xml"/>
+
+  <comment>Trackers</comment>
+  <include ref="../ILD_common_v02/Beampipe_o1_v01_01.xml"/>
+  <include ref="../ILD_common_v02/vxd07.xml"/>
+  <include ref="../ILD_common_v02/ftd_simple_staggered_02.xml"/>
+  <include ref="../ILD_common_v02/sit_simple_pixel_sensors_01.xml"/>
+  <include ref="../ILD_common_v02/tpc10_01.xml"/>
+  <include ref="../ILD_common_v02/set_simple_planar_sensors_01.xml"/>  
+
+  <comment>Calorimeters</comment>
+  <include ref="../ILD_common_v02/SEcal05_siw_Barrel.xml"/>
+  <include ref="../ILD_common_v02/SEcal05_siw_Endcaps.xml"/>
+  <include ref="../ILD_common_v02/SEcal05_siw_ECRing.xml"/>
+  <include ref="../ILD_common_v02/Hcal_Endcaps_SD_v01.xml"/>
+  <include ref="../ILD_common_v02/Hcal_EndcapRing_SD_v01.xml"/>
+  <include ref="../ILD_common_v02/Hcal_Barrel_SD_v01.xml"/>
+  <include ref="../ILD_common_v02/Yoke05_Barrel.xml"/>
+  <include ref="../ILD_common_v02/Yoke05_Endcaps.xml"/>
+  <include ref="../ILD_common_v02/LumiCal.xml"/> 
+  <include ref="../ILD_common_v02/LHCal01.xml"/>
+  <include ref="../ILD_common_v02/BeamCal08.xml"/>
+
+  <include ref="../ILD_common_v02/coil03.xml"/>
+  <include ref="../ILD_common_v02/SServices00.xml"/>
+
+  <plugins>
+    <plugin name="DD4hepVolumeManager"/>
+    <plugin name="InstallSurfaceManager"/>
+  </plugins>
+
+  <fields>
+    <field type="solenoid" name="GlobalSolenoid" inner_field="Field_nominal_value"
+           outer_field="outerField_nominal_value" zmax="Coil_half_length"
+           inner_radius="Coil_inner_radius"
+           outer_radius="world_side" />
+
+    <!-- <field name="DetectorMap" type="FieldBrBz" -->
+         <!--        filename="${lcgeo_DIR}/fieldmaps/ILDMap_KB_20150204_BRhoZ.root" -->
+         <!--        tree="fieldmap:rho:z:Brho:Bz" -->
+         <!--        rScale = "1.0" -->
+         <!--        zScale = "1.0" -->
+         <!--        bScale = "3.5/4.12841" -->
+         <!--        rhoMin = "5*mm" -->
+         <!--        zMin = "5*mm" -->
+         <!--        rhoMax = "7005*mm" -->
+         <!--        zMax = "7005*mm" -->
+         <!--        nRho = "701" -->
+         <!--        nZ = "701" -->
+         <!--        > -->
+         <!-- </field> -->
+
+  </fields>
+</lccdd>

@@ -1,0 +1,47 @@
+<!--
+   SET parameters for ILD_o1_v5
+  -->
+
+<lccdd>
+
+  <detectors>
+
+    <detector name="SET" type="SET_Simple_Planar" vis="ILD_SETVis" id="ILDDetID_SET" readout="SETCollection" insideTrackingVolume="true">
+
+      <envelope vis="ILD_SETVis">
+        <shape type="Tube" rmin="SET_inner_radius" rmax="SET_outer_radius" dz="SET_half_length"  material = "Air" />
+      </envelope>
+
+      <type_flags type="DetType_TRACKER +  DetType_BARREL + DetType_STRIP "/>
+
+      <!-- database : set_simple_planar_sensors_01 -->
+
+      <!-- SQL command: "select * from extended_reconstruction_parameters;"  -->
+      <reconstruction strip_width="0.0125*mm" strip_length="92*mm" strip_pitch="0.05*mm" strip_angle="7*deg"  />
+
+      <!-- SQL command: "select * from global;"  -->
+      <global sensitive_thickness="0.2*mm" support_thickness="1*mm" sensor_length="92*mm" sensitive_mat="G4_Si"
+              support_mat="G4_C" sensitive_threshold_KeV="64*keV"  />
+
+      <!-- SQL command: "select * from set_layers;"  -->
+
+      <layer layer_id="0" sensitive_distance_from_tpc="3*mm" coverage_of_TPC_Ecal_Hcal_barrel="0.98"
+             n_ladders="24" ladder_clearance="0.1*mm" faces_IP="1"  />
+
+      <layer layer_id="1" sensitive_distance_from_tpc="5.5*mm" coverage_of_TPC_Ecal_Hcal_barrel="0.98"
+             n_ladders="24" ladder_clearance="0.1*mm" faces_IP="0"  />
+
+    </detector>
+
+  </detectors>
+
+  <readouts>
+    <readout name="SETCollection">
+      <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
+      <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+    </readout>
+  </readouts>
+
+
+</lccdd>
+

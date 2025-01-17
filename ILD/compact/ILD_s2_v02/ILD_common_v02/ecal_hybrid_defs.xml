@@ -1,0 +1,65 @@
+<define>
+
+  <constant name="Ecal_Barrel_halfZ" value="TPC_Ecal_Hcal_barrel_halfZ"/>
+
+  <constant name="Ecal_nlayers1" value="20"/>
+  <constant name="Ecal_nlayers2" value="10"/>
+  <constant name="Ecal_nlayers3" value="0"/>
+  <constant name="Ecal_radiator_layers_set1_thickness" value="2.1*mm"/>
+  <constant name="Ecal_radiator_layers_set2_thickness" value="4.2*mm"/>
+  <constant name="Ecal_radiator_layers_set3_thickness" value="0*mm"/>
+
+  <constant name="Ecal_barrel_number_of_towers" value="5"/>
+
+  <constant name="Ecal_fiber_thickness_structure" value="0.42*mm"/> <!-- 0.5*(3.82 - 2.1 - 2*0.44)=  -->
+  <constant name="Ecal_fiber_thickness_alveolus" value="0.44*mm"/> <!--  0.88 / 2 -->
+  <constant name="Ecal_fiber_thickness_slabAbs" value="0.15*mm"/>
+
+  <constant name="Ecal_front_face_thickness" value="0.66*mm"/> <!-- 4.04 - 2.1 - 0.44 - 2*0.42  = 0.66 -->
+  <constant name="Ecal_support_thickness" value="14.49*mm"/> <!-- 14.93 - 0.44 -->
+
+  <constant name="Ecal_lateral_face_thickness" value="(1.10+0.5)*mm"/> <!-- 1.54 - 0.44  --> <!-- 0.5 for the 1mm tolerance between modules -->
+
+  <constant name="Ecal_Alveolus_Air_Gap" value="0.2*mm"/>
+  <constant name="Ecal_Si_thickness" value=".525*mm"/>
+  <constant name="Ecal_Slab_H_fiber_thickness" value="0.55*mm"/>
+  <constant name="Ecal_Slab_ASIC_thickness" value="0.7*mm"/>
+  <constant name="Ecal_Slab_PCB_thickness" value="1.0*mm"/>
+
+  <constant name="Ecal_Slab_copper_thickness" value="0.4*mm"/>
+
+  <constant name="Ecal_Slab_glue_gap" value="0.1*mm"/>
+  <constant name="Ecal_Slab_ground_thickness" value="0.1*mm"/>
+
+  <constant name="Ecal_Slab_shielding" value="0.1*mm"/>
+
+  <constant name="Ecal_guard_ring_size" value="0.5*mm"/>
+  <constant name="Ecal_n_wafers_per_tower" value="2"/>
+
+  <constant name="Ecal_barrel_z_modules" value="5"/>
+  <constant name="Ecal_Barrel_Preshower" value="0"/>
+  <constant name="Ecal_layer_pattern" type="string" value="0"/>
+  <constant name="Ecal_end_of_slab_strategy" value="1"/>
+  <constant name="Ecal_cells_across_megatile" value="18"/>
+
+  <constant name="Ecal_strips_across_megatile" value="18"/>
+  <constant name="Ecal_strips_along_megatile" value="2"/>
+
+  <constant name="Ecal_Endcap_Preshower" value="0"/>
+
+  <!-- constant name="Ecal_cables_gap" value="100.*mm"/ -->
+  <constant name="Ecal_cables_gap" value="Ecal_endcap_zmin-TPC_Ecal_Hcal_barrel_halfZ"/>
+
+  <constant name="Ecal_Slab_Plug_length" value="8*mm"/>
+
+  <!-- needed only for ecal ring driver... -->
+  <constant name="Ecal_cells_size" value="5.*mm"/>
+  <constant name="Ecal_Sc_reflector_thickness" value="0.057*mm"/>
+  <constant name="Ecal_Slab_Sc_PCB_thickness" value="0.8*mm"/>
+
+  <!-- for hybrid, replace asic + pcb + air gaps with sc+air : adjust air to give exactly same thickness as si-only model -->
+  <constant name="Ecal_Sc_thickness" value="1.5*mm"/>
+  <constant name="Ecal_HybridExtraGap_thickness" value="Ecal_Slab_ASIC_thickness+Ecal_Slab_PCB_thickness+2*Ecal_Slab_glue_gap+Ecal_Alveolus_Air_Gap/2.-Ecal_Sc_thickness"/>
+
+</define>
+

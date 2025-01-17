@@ -1,0 +1,56 @@
+<!-- comment>Calorimeters</comment -->
+<lccdd>
+
+  <detectors>
+    <detector name="HcalRing" type="SHcalSc04_EndcapRing_v01" id="ILDDetID_HCAL_RING" readout="HcalEndcapRingReadout" vis="GreenVis" insideTrackingVolume="false" >
+      <comment>Hadron Calorimeter EndcapRing</comment>
+
+      <envelope vis="ILD_HCALVis">
+        <shape type="BooleanShape" operation="Subtraction" material="Air">
+          <shape type="BooleanShape" operation="Intersection" material="Air" >
+            <shape type="Box" dx="HcalEndcapRing_outer_radius + 2.0*env_safety" dy="HcalEndcapRing_outer_radius + 2.0*env_safety"
+                   dz="HcalEndcapRing_max_z + 2.0*env_safety"/> <!--Box defined the coordinate system-->
+            <shape type="PolyhedraRegular"  numsides="HcalEndcapRing_symmetry" rmin="HcalEndcapRing_inner_radius - env_safety"
+                   rmax="HcalEndcapRing_outer_radius + env_safety" dz="2.0*HcalEndcapRing_max_z + env_safety" material="Air"/>
+            <rotation x="0" y="0" z="90*deg-180*deg/HcalEndcapRing_symmetry"/>
+          </shape>
+          <shape type="Box" dx="HcalEndcapRing_outer_radius + 2.0*env_safety" dy="HcalEndcapRing_outer_radius + 2.0*env_safety"
+                 dz="HcalEndcapRing_min_z - env_safety"/>
+        </shape>
+      </envelope>
+
+      <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_HADRONIC + DetType_AUXILIARY " />
+
+      <!-- absorber material-->
+      <material name="Steel235"/>
+      <staves  material = "Steel235"  vis="GreenVis"/>
+
+      <!--  select which subsegmentation will be used to fill the DDRec:LayeredCalorimeterData cell dimensions -->
+      <subsegmentation key="slice" value="Hcal_readout_segmentation_slice"/>
+
+      <layer vis="SeeThrough">
+        <slice material="FloatGlass" thickness="HcalSD_glass_anode_thickness" vis="Invisible"/>
+        <slice material="RPCGAS2"    thickness="HcalSD_sensitive_gas_gap" sensitive="yes" limits="cal_limits" vis="YellowVis"/>
+        <slice material="FloatGlass" thickness="HcalSD_glass_cathode_thickness" vis="Invisible"/>
+        <slice material="G4_POLYSTYRENE" thickness = "Hcal_scintillator_thickness" sensitive = "yes"   limits="cal_limits"  vis="CyanVis"   />
+        <slice material="Air"      thickness="Hcal_chamber_thickness - ( HcalSD_glass_anode_thickness + HcalSD_sensitive_gas_gap + HcalSD_glass_cathode_thickness + Hcal_scintillator_thickness)" vis="Invisible" />
+      </layer>
+
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="HcalEndcapRingReadout">
+      <segmentation   type="MultiSegmentation"  key="slice">
+        <segmentation name="RPCgrid" type="CartesianGridXY"    key_value="1"    grid_size_x="SDHCal_cell_size" grid_size_y="SDHCal_cell_size" />
+        <segmentation name="Scigrid" type="CartesianGridXY"    key_value="3"    grid_size_x="AHCal_cell_size" grid_size_y="AHCal_cell_size" />
+      </segmentation>
+      <hits_collections>
+        <hits_collection name="HCalECRingRPCHits"  key="slice" key_value="1"/>
+        <hits_collection name="HcalEndcapRingCollection"  key="slice" key_value="3"/>
+      </hits_collections>
+      <id>system:5,module:3,stave:4,tower:3,layer:6,slice:4,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>

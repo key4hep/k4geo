@@ -1,0 +1,15 @@
+<!-- 
+     SService00 parameters for ILD_*_v2
+-->
+<lccdd>
+<detectors>
+
+<detector name="SServices00" type="SServices00" id="ILDDetID_NOTUSED" vis="RedVis" insideTrackingVolume="false" sensitive="no">
+  <type_flags type=" DetType_SUPPORT " />
+  
+  <TPC_Cooling number_of_rings="0"/> <!-- Daniel's understanding (via Dimitra) -->
+
+
+</detector>
+</detectors>
+</lccdd>

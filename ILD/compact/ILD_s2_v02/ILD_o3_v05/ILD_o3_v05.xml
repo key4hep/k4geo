@@ -1,0 +1,602 @@
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0" 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+    <info name="ILD_o3_v05"
+        title="ILD Mokka model used for the DBD - ported to DD4hep"
+        author="F. Gaede"
+        url="http://ilcsoft.desy.de"
+        status="experimental"
+        version="$Id: ILD_o3_v05.xml 944 2016-03-30 09:48:47Z shaojun $">
+        <comment>ILD Mokka model used for the DBD - ported to DD4hep </comment>        
+    </info>
+  
+    <includes>
+        <gdmlFile  ref="elements.xml"/>
+        <gdmlFile  ref="materials.xml"/>
+        <!--pyBuilder ref="../drivers"/-->
+    </includes>
+  
+    <define>
+        <constant name="world_side"             value="30*m"/>
+        <constant name="world_x"                value="world_side/2"/>
+        <constant name="world_y"                value="world_side/2"/>
+        <constant name="world_z"                value="world_side/2"/>        
+
+	<!--- constants defined in class UTIL::ILDConfig  -->
+	<!-- constant name="ILDCellID0_encoder_string"   value="subdet:5,side:-2,layer:9,module:8,sensor:8"/ -->
+
+	<constant name="ILDDetID_NOTUSED"      value="  0"/>
+	<constant name="ILDDetID_VXD"          value="  1"/>
+	<constant name="ILDDetID_SIT"          value="  2"/>
+	<constant name="ILDDetID_FTD"          value="  3"/>
+	<constant name="ILDDetID_TPC"          value="  4"/>
+	<constant name="ILDDetID_SET"          value="  5"/>
+	<constant name="ILDDetID_ETD"          value="  6"/>
+
+	<!-- <constant name="ILDDetID_ECAL_ENDCAP_FACE"    value="18"/> -->
+	<!-- <constant name="ILDDetID_ECAL_BARREL_FACE"    value="19"/> -->
+
+	<constant name="ILDDetID_ECAL"         value=" 20"/>
+	<constant name="ILDDetID_ECAL_PLUG"    value=" 21"/>
+	<constant name="ILDDetID_HCAL"         value=" 22"/>
+	<constant name="ILDDetID_HCAL_RING"    value=" 23"/>
+	<constant name="ILDDetID_LCAL"         value=" 24"/>
+	<constant name="ILDDetID_BCAL"         value=" 25"/>
+	<constant name="ILDDetID_LHCAL"        value=" 26"/>
+	<constant name="ILDDetID_YOKE"         value=" 27"/>
+	<constant name="ILDDetID_COIL"         value=" 28"/>
+	<constant name="ILDDetID_ECAL_ENDCAP"  value=" 29"/>
+	<constant name="ILDDetID_HCAL_ENDCAP"  value=" 30"/>
+	<constant name="ILDDetID_YOKE_ENDCAP"  value=" 31"/>
+
+	<constant name="ILDDetID_bwd"       value="- 1"/>
+	<constant name="ILDDetID_barrel"    value="  0"/>
+	<constant name="ILDDetID_fwd"       value="  1"/>
+	
+	<include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
+
+	<!-- *****  global parameters from Mokka model ILD_o3_v05 **** -->
+
+	<include ref="model_parameters_ILD_o3_v05.xml"/>
+
+	<!-- ***** end global parameters from Mokka model ILD_o3_v05 **** -->
+
+
+	<!-- #####################################################
+	     global parameters used in subdetector drivers 
+	     other the one they were created for
+             - these are often the ones modified by Mokka drivers at runtime ...
+             - moved here from model_parameters_ILD_o3_v05.xml
+               to make this more explicit                
+	-->
+
+	<constant name="Ecal_endcap_zmax" value="2635.*mm"/>
+
+	<!--used in FTD -->
+
+	<constant name="VXD_length_r3" value="125*mm"/>
+
+	<constant name="TUBE_IPOuterTube_start_radius"  value="24*mm"/>
+	<constant name="TUBE_IPOuterTube_start_z"       value="150*mm"/>
+	<constant name="TUBE_IPOuterTube_end_radius"    value="25*mm"/>
+	<constant name="TUBE_IPOuterTube_end_z"         value="230*mm"/>
+
+	<!--fixme: from Mokka DB we have these values: -->
+	<!-- <constant name="TUBE_IPOuterBulge_end_radius"   value="184*mm"/> -->
+	<!-- <constant name="TUBE_IPOuterBulge_end_z"        value="2364.5*mm"/> -->
+	<!-- ... in the beamcal driver/xml these values are used !!! -->
+	<constant name="TUBE_IPOuterBulge_end_radius"   value="183.993*mm+Lcal_outer_radius-195.2*mm"/>
+	<!-- <constant name="TUBE_IPOuterBulge_end_z"        value="2200*mm+Ecal_endcap_zmax-2470.5*mm"/> -->
+
+
+
+
+	<constant name="SIT1_Half_Length_Z" value="368.00*mm"/>
+	<constant name="SIT1_Radius"        value="153.00*mm"/>
+	<constant name="SIT2_Half_Length_Z" value="644.00*mm"/>
+	<constant name="SIT2_Radius"        value="299.90*mm"/>
+
+	<constant name="Ecal_Barrel_halfZ" value="2350*mm"/>
+	<constant name="TPC_Ecal_Hcal_barrel_halfZ" value="Ecal_Barrel_halfZ"/>
+	<constant name="Ecal_endcap_zmin" value="2450.0*mm"/>
+
+	<constant name="TUBE_IPOuterBulge_end_z"        value="TPC_Ecal_Hcal_barrel_halfZ"/> 
+	<!-- end FTD -->
+
+	<!-- fg: add helper parameters for the two innermost segments of the beam pipe
+	         needed for construction of the VXD envelope
+	     fixme: use thes in the Beampipe xml !!!
+	-->
+	<constant name="TUBE_IPInnerTube_end_z"         value="80*mm"/>
+	<constant name="TUBE_IPInnerBulge_end_radius"   value="24*mm"/>
+	<constant name="TUBE_IPInnerBulge_end_z"        value="150*mm"/>
+
+	<constant name="Hcal_Coil_additional_gap" value="29.5*mm"/>
+
+	<constant name="Coil_extra_size" value="1522*mm"/>
+	<constant name="Coil_thickness" value="750.0*mm"/>
+
+	<constant name="LHcal_inner_radius" value="93*mm"/>
+
+	<comment>
+	 ...  these are the values we have in the gear_ILD_o3_v05.xml from Mokka ....
+	 
+	      ->   use them as these are (should be) the runtime values after 
+                   detector instantiation
+
+	      -> simply overwrite them for now  ...
+
+	</comment>
+	 
+        <!-- <detector name="MokkaParameters" geartype="GearParameters"> -->
+        <constant name="Ecal_endcap_outer_radius" type="string" value="2088.8" />
+        <constant name="Ecal_endcap_plug_rmin" type="string" value="250" />
+        <constant name="Ecal_endcap_zmax" type="string" value="2635" />
+        <constant name="Ecal_endcap_zmin" type="string" value="2450" />
+        <!-- <constant name="Ecal_outer_radius" type="string" value="2028" /> -->
+        <constant name="Hcal_R_max" type="string" value="3395.46" />
+        <constant name="Hcal_endcap_zmin" value="2650*mm" />
+        <constant name="LHcal_zend" value="3085*mm"/>
+        <constant name="Lcal_z_begin" type="string" value="2506.9" />
+        <constant name="Lcal_z_thickness" type="string" value="128.1" />
+        <constant name="MokkaModel" type="string" value="ILD_o3_v05" />
+        <constant name="MokkaVersion" type="string" value="trunk" />
+        <constant name="SIT1_Half_Length_Z" type="string" value="368" />
+        <constant name="SIT1_Radius" type="string" value="152.9" />
+        <constant name="SIT2_Half_Length_Z" type="string" value="644" />
+        <constant name="SIT2_Radius" type="string" value="299.9" />
+        <constant name="TPC_Ecal_Hcal_barrel_halfZ" type="string" value="2350" />
+        <constant name="TUBE_IPOuterBulge_end_radius" type="string" value="183.993" />
+        <constant name="TUBE_IPOuterBulge_end_z" type="string" value="2364.5" />
+        <constant name="TUBE_IPOuterTube_end_radius" type="string" value="25" />
+        <constant name="TUBE_IPOuterTube_end_z" type="string" value="230" />
+        <constant name="TUBE_IPOuterTube_start_radius" type="string" value="25" />
+        <constant name="TUBE_IPOuterTube_start_z" type="string" value="220" />
+        <constant name="Yoke_Z_start_endcaps" type="string" value="4072" />
+        <constant name="Yoke_barrel_inner_radius" type="string" value="4424.9599609375" />
+        <constant name="calorimeter_region_rmax" type="string" value="3395.46" />
+        <constant name="calorimeter_region_zmax" type="string" value="3937" />
+        <!-- <constant name="tracker_region_rmax" type="string" value="1842.9" /> -->
+        <!-- <constant name="tracker_region_zmax" type="string" value="2350" /> -->
+        <!-- </detector> -->
+
+	<constant name="BCal_SpanningPhi" value="320*degree"/>
+	<constant name="ILC_Main_Crossing_Angle" value="14*mrad"/>
+	  
+	<!-- ################### ENVELOPE PARAMETERS ######################################################## -->
+
+	<comment> suggested naming convention:
+	
+	main parameters:
+	
+    	DET_inner_radius    : inner radius of tube like envelope  ( inscribed cylinder ) 
+	DET_outer_radius    : outer radius of tube like envelope  ( circumscribed cylinder )
+	DET_half_length     : half length along z axis
+	DET_min_z           : smallest absolute value on z-axis
+	DET_max_z           : largest  absolute value on z-axis
+	DET_inner_symmetry  : number of sides on the inside  ( 0 for tube ) 
+	DET_outer_symmetry  : number of sides on the inside  ( 0 for tube )
+	DET_inner_phi0      : optional rotation of the inner polygon ( in r-phi plane ) 
+	DET_outer_phi0      : optional rotation of the outer polygon ( in r-phi plane ) 
+	
+	additional parameters for cutting away volumes/shapes use one of the above with a number
+	appended and/or an extra specifiaction such as cone ( for a cut away cone )
+	
+	DET_inner_radius_1
+	DET_outer_radius_2
+	DET_cone_min_z
+	DET_cone_max_z
+	
+	</comment> 
+
+	<constant name="env_safety" value="0.1*mm"/>
+
+	<!--***** fixme: need to have the proper envelope values from the VXD paramaters ... ***** -->
+	<constant name="VXD_inner_radius"   value=" 15*mm "/> 
+	<constant name="VXD_outer_radius"   value=" 101*mm "/> 
+	<constant name="VXD_half_length"    value=" 177.6*mm "/> 
+	<constant name="VXD_cone_min_z"     value=" TUBE_IPInnerTube_end_z "/> 
+	<constant name="VXD_cone_max_z"     value=" TUBE_IPInnerBulge_end_z "/> 
+	<constant name="VXD_inner_radius_1" value=" TUBE_IPInnerBulge_end_radius + env_safety "/> 
+
+
+	<constant name="SIT_inner_radius"    value="SIT1_Radius - env_safety"/> 
+	<constant name="SIT_outer_radius_1"  value="SIT2_Radius - env_safety"/> 
+	<constant name="SIT_half_length_1"   value="SIT1_Half_Length_Z + env_safety "/> 
+	<constant name="SIT_outer_radius"    value="SIT2_Radius / cos(pi/8.) "/> 
+	<constant name="SIT_half_length"     value="SIT2_Half_Length_Z + env_safety "/> 
+
+	<constant name="TPC_inner_radius"    value="329*mm"/>
+	<constant name="TPC_outer_radius"    value="1808*mm"/>
+	<constant name="TPC_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ"/> 
+
+	<constant name="FTD_inner_radius"    value=" TUBE_IPOuterTube_end_radius + env_safety"/> 
+	<constant name="FTD_outer_radius_1"  value=" SIT_inner_radius   - env_safety"/> 
+	<constant name="FTD_outer_radius_2"  value=" SIT_outer_radius_1 - env_safety"/> 
+	<constant name="FTD_outer_radius"    value=" TPC_inner_radius - env_safety"/> 
+	<constant name="FTD_half_length"     value=" TUBE_IPOuterBulge_end_z"/> 
+	<constant name="FTD_min_z_0"         value=" VXD_half_length   + env_safety"/> 
+	<constant name="FTD_min_z_1"         value=" SIT_half_length_1 + env_safety"/> 
+	<constant name="FTD_min_z_2"         value=" SIT_half_length   + env_safety"/> 
+	<constant name="FTD_cone_min_z"      value=" TUBE_IPOuterTube_end_z "/> 
+	<constant name="FTD_cone_radius"     value=" TUBE_IPOuterBulge_end_radius  + env_safety"/> 
+
+
+	<constant name="SET_inner_radius"    value="TPC_outer_radius+ env_safety "/> 
+	<constant name="SET_outer_radius"    value="SET_inner_radius+ 0.99 * TPC_ECal_gap "/> 
+	<constant name="SET_half_length"     value="TPC_half_length"/> 
+
+	<!-- NOTE: All envelope parameters could be fundamental with value, when built alone.   -->
+	<!-- NOTE: The envelope parameters could be derivative or shared, when built together. -->
+	<constant name="Ecal_Hcal_symmetry"   value="8"/>                             <!-- Fundamental -->
+
+	<constant name="Ecal_inner_radius"    value="TPC_outer_radius+Ecal_Tpc_gap"/> <!-- Derivative  -->
+	<!--constant name="Ecal_outer_radius"    value="2028.*mm+200*mm"/-->                      <!-- FixMe! Trap -->
+	<!--constant name="Ecal_outer_radius"    value="2028.*mm"/--> <!--default-->
+	<constant name="Ecal_outer_radius"    value="Ecal_inner_radius+Ecal_barrel_thickness"/> 
+	<constant name="Ecal_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ"/>    <!-- Shared ILD  -->
+	<constant name="Ecal_symmetry"        value="Ecal_Hcal_symmetry"/>            <!-- Shared ILD  -->
+        <constant name="EcalEndcap_outer_symmetry" value="Ecal_Hcal_symmetry"/>
+        <constant name="EcalEndcap_inner_symmetry" value="4"/>
+
+	<constant name="Hcal_inner_radius"    value="Ecal_outer_radius+Hcal_Ecal_gap"/> <!-- Derivative  -->
+	<!--constant name="Hcal_outer_radius"    value="3395.46*mm"/-->                      <!-- FixMe! Trap -->
+	<constant name="Hcal_outer_radius"    value="(Hcal_inner_radius+Hcal_barrel_thickness)/0.98078528105"/> <!-- Derivative cos(pi/16)=0.9807...-->
+	<constant name="Hcal_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ"/>      <!-- Shared ILD  -->
+	<constant name="Hcal_inner_symmetry"  value="Ecal_Hcal_symmetry"/>              <!-- Shared ILD  -->
+
+	<!-- Should we define every sub-detector envelope parameters explicity -->
+	<constant name="Yoke_inner_radius"    value="4424.0*mm"/>      <!-- explicity Fundamental -->
+	<constant name="Yoke_outer_radius"    value="7725.0*mm"/>      <!-- explicity Fundamental -->
+	<constant name="Yoke_half_length"     value="4047.0*mm"/>      <!-- explicity Fundamental -->
+	<constant name="Yoke_symmetry"        value="12"/>             <!-- explicity Fundamental -->
+
+	<constant name="EcalEndcap_inner_radius"    value="Ecal_endcap_center_box_size/2.0"/> <!-- Fundamental -->
+	<constant name="EcalEndcap_outer_radius"    value="Ecal_outer_radius+Ecal_endcap_extra_size"/>
+	<constant name="EcalEndcap_min_z"           value="Ecal_endcap_zmin"/>            <!-- Shared ILD  -->
+	<constant name="EcalEndcap_max_z"           value="EcalEndcap_min_z+(Ecal_outer_radius-Ecal_inner_radius)"/>
+	<constant name="EcalEndcap_symmetry"        value="Ecal_Hcal_symmetry"/>          <!-- Shared ILD  -->
+
+	<constant name="HcalEndcap_inner_radius"    value="Hcal_endcap_center_box_size/2.0"/><!-- Fundamental -->
+	<constant name="HcalEndcap_outer_radius"    value="Hcal_outer_radius"/>              <!-- Shared ILD  -->
+	<constant name="HcalEndcap_min_z"           value="Hcal_endcap_zmin"/>               <!-- Fundamental -->
+	<constant name="HcalEndcap_max_z"           value="HcalEndcap_min_z+1287.0*mm"/>     <!-- FixMe! Trap SHcalSc04_Endcaps.xml-->
+	
+	<constant name="HcalEndcapRing_inner_radius"    value="EcalEndcap_outer_radius+Hcal_radial_ring_inner_gap"/>
+	<constant name="HcalEndcapRing_outer_radius"    value="Hcal_outer_radius*0.923879533"/>  <!-- cos(pi/8)   -->
+	<constant name="HcalEndcapRing_min_z"           value="EcalEndcap_min_z"/>               <!-- Shared ILD  -->
+	<constant name="HcalEndcapRing_max_z"           value="EcalEndcap_max_z"/>               <!-- Shared ILD  -->
+	<constant name="HcalEndcapRing_symmetry"        value="Ecal_Hcal_symmetry"/>             <!-- Shared ILD  -->
+	
+	<!-- Yoke05_Endcaps geometry driver include Yoke endcap plug -->
+	<constant name="YokeEndcap_inner_radius"    value="Yoke_endcap_inner_radius"/>           <!-- Fundamental -->
+	<constant name="YokeEndcap_outer_radius"    value="Yoke_outer_radius"/>                  <!-- Shared ILD  -->
+	<constant name="YokeEndcap_min_z"           value="Yoke_Z_start_endcaps"/>               <!-- FixMe! Trap Coil -->
+	<constant name="YokeEndcap_max_z"           value="YokeEndcap_min_z+(Yoke_outer_radius-Yoke_inner_radius)"/>
+	<constant name="YokeEndcap_symmetry"        value="Yoke_symmetry"/>                      <!-- Shared ILD  -->
+	<constant name="YokeEndcapPlug_inner_radius"    value="YokeEndcap_inner_radius"/>
+	<constant name="YokeEndcapPlug_outer_radius"    value="Hcal_outer_radius"/>
+	<constant name="YokeEndcapPlug_min_z"           value="3981.5*mm"/> <!-- FixMe! Trap. and Mokka hardcode number -->
+	<constant name="YokeEndcapPlug_max_z"           value="YokeEndcap_min_z"/>
+	<constant name="YokeEndcapPlug_symmetry"        value="Yoke_symmetry"/>                  <!-- Shared ILD  -->
+
+	<constant name="EcalEndcapRing_inner_radius"    value="Lcal_outer_radius + Ecal_Lcal_ring_gap"/>
+	<constant name="EcalEndcapRing_outer_radius"    value="Ecal_endcap_center_box_size/2.0-Ecal_EC_Ring_gap"/>
+	<constant name="EcalEndcapRing_min_z"           value="EcalEndcap_min_z"/>               <!-- Shared ILD  -->
+	<constant name="EcalEndcapRing_max_z"           value="EcalEndcap_max_z"/>               <!-- Shared ILD  -->
+
+	<!-- forward calorimeter -->
+	<constant name="COS_halfCrossingAngle"         value="0.999976"/>
+
+	<!-- The values are copied from dimensions in LHCal.xml -->
+	<constant name="LHCal_thickness"               value="520.0*mm"/>
+	<constant name="LHCal_inner_radius"            value="100*mm"/>
+	<constant name="LHCal_outer_radius"            value="325*mm"/>
+	<constant name="LHCal_min_z"                   value="2680*mm"/>
+	<constant name="LHCal_max_z"                   value="LHCal_min_z+LHCal_thickness"/>
+
+	<!-- BeamCal envelope is rotated according to the ILC_Main_Crossing_Angle -->
+	<constant name="BeamCal_thickness"             value="220.0024*mm"/>
+	<constant name="BeamCal_inner_radius"          value="BCal_rInner"/>
+	<constant name="BeamCal_outer_radius"          value="BCal_rOuter"/>
+	<constant name="BeamCal_min_z"                 value="LHcal_zend + LHcal_BCal_clearance"/>
+	<constant name="BeamCal_max_z"                 value="BeamCal_min_z + BeamCal_thickness"/>
+	<constant name="BeamCal_tubeIncoming_radius"   value="15.0*mm"/>
+
+	<!-- The values are copied from dimensions in LumiCal.xml -->
+	<constant name="LumiCal_thickness"             value="130.65*mm"/>
+	<constant name="LumiCal_inner_radius"          value="80*mm"/>
+	<constant name="LumiCal_outer_radius"          value="195.2*mm"/>
+	<constant name="LumiCal_min_z"                 value="2500*mm"/>
+	<constant name="LumiCal_max_z"                 value="LumiCal_min_z+LumiCal_thickness"/>
+
+
+	<constant name="Coil_inner_radius"    value="Hcal_outer_radius+Hcal_Coil_additional_gap"/> 
+	<constant name="Coil_outer_radius"    value="Hcal_outer_radius+Hcal_Coil_additional_gap+Coil_thickness"/>
+	<constant name="Coil_half_length"     value="TPC_Ecal_Hcal_barrel_halfZ+Coil_extra_size"/>      
+
+	<!-- ########### END ENVELOPE PARAMETERS ############################################################## -->
+
+
+
+	<constant name="tracker_region_rmax" value="TPC_outer_radius" />  
+	<constant name="tracker_region_zmax" value="Ecal_endcap_zmin" />  
+
+
+
+	<comment>Dummy Parameters for the BeamCal</comment>
+	<constant name="BeamCal_rmin"  value="30*mm"/>
+	<constant name="BeamCal_rmax"  value="15*cm"/>
+	<constant name="BeamCal_zmin"  value="3.3*m"/>
+	<!-- <constant name="CrossingAngle"  value="14*mrad"/> -->
+
+    </define>
+
+  
+    <limits>
+        <limitset name="cal_limits">
+            <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
+        </limitset>
+        <limitset name="TPC_limits">
+            <limit name="step_length_max" particles="*" value="10.0" unit="mm" />
+        </limitset>
+        <limitset name="Tracker_limits">
+            <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
+        </limitset>
+    </limits>
+
+    <display>
+      <!-- fixme:  white comes out as red !!!???? |  vis name="WhiteVis"         alpha="0.0" r="1.0" g="1.0"  b="1.0"   showDaughters="true"  visible="true"/ --> 
+      <vis name="WhiteVis"         alpha="0.0" r=".96" g=".96"  b=".96"   showDaughters="true"  visible="true"/>
+
+      <vis name="LightGrayVis"         alpha="0.0" r=".75" g=".75"  b=".75"   showDaughters="true"  visible="true"/>
+
+      <vis name="Invisible"         alpha="0.0" r="0" g="0"  b="0"   showDaughters="false"  visible="false"/>
+      <vis name="SeeThrough"         alpha="0.0" r="0" g="0"  b="0"   showDaughters="true"  visible="false"/>
+
+      <vis name="RedVis"           alpha="1.0" r="1.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
+      <vis name="GreenVis"         alpha="1.0" r="0.0" g="1.0"  b="0.0"   showDaughters="true"  visible="true"/>
+      <vis name="BlueVis"          alpha="1.0" r="0.0" g="0.0"  b="1.0"   showDaughters="true"  visible="true"/>
+      <vis name="CyanVis"          alpha="1.0" r="0.0" g="1.0"  b="1.0"   showDaughters="true"  visible="true"/>
+      <vis name="MagentaVis"       alpha="1.0" r="1.0" g="0.0"  b="1.0"   showDaughters="true"  visible="true"/>
+      <vis name="YellowVis"        alpha="1.0" r="1.0" g="1.0"  b="0.0"   showDaughters="true"  visible="true"/>
+      <vis name="BlackVis"         alpha="1.0" r="0.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
+      <vis name="GrayVis"          alpha="1.0" r="0.5" g="0.5"  b="0.5"   showDaughters="true"  visible="true"/>
+
+
+      <vis name="TubeVis"   alpha="0.1" r="1.0" g="0.7"  b="0.5"   showDaughters="true"  visible="true"/>
+      <!-- <vis name="TubeVis"           alpha="1.0" r="1.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/> -->
+      <vis name="BeamPipeVis" alpha="0.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="false"/>
+      <vis name="VacVis"   alpha="1.0" r="0.0" g="0.0"  b="0.0"   showDaughters="true"  visible="false"/>
+
+      <vis name="TPCVis"        alpha="0.1" r="0" g="0"  b="0"         showDaughters="true"  visible="true"/>
+      <vis name="TPCMotherVis"  alpha="0.1" r="0.9" g="0.9"  b="0.9"   showDaughters="true"  visible="false"/>
+
+      <vis name="VXDVis"        alpha="0.1" r="0.1" g=".5"  b=".5"   showDaughters="true"  visible="true"/>
+      <vis name="VXDLayerVis"   alpha="1.0" r="0.1" g=".5"  b=".5"   showDaughters="true"  visible="true"/>
+      <vis name="VXDSupportVis" alpha="1.0" r="0.0" g="1.0" b="0.0"  showDaughters="true"  visible="true"/>
+
+
+      <vis name="FTDVis"           alpha="1.0" r="0.0" g="0.1"  b="0.0"   showDaughters="true"  visible="false"/>
+      <vis name="FTDSensitiveVis" alpha="1.0"  r="1.0"  g="1.0" b="0.45" showDaughters="true" visible="true"/>
+      <vis name="FTDSupportVis"   alpha="1.0"  r="1.0"  g="0.5" b="0.5"  showDaughters="true" visible="true"/>
+      <vis name="FTDHolePetalVis" alpha="1.0"  r="0.5"  g="0.5" b="1.0" showDaughters="true" visible="true"/>
+      <vis name="FTDCylVis"       alpha="0.45" r="0.2"  g="0.9" b="0.98" showDaughters="true" visible="true"/>
+      <vis name="FTDCablesVis"    alpha="1.0"  r="0.0"  g="0.9" b="0.0"  showDaughters="true" visible="true"/>
+      
+      <vis name="MyBeamCalVis"  alpha="0.5"  r="1.0" g="1.0"  b="1.0" showDaughters="true"  visible="false"/>
+      <vis name="BCLayerVis1"   alpha="1.0"  r="1.0" g="0.0"  b="0.0" showDaughters="true"  visible="true"/>
+      <vis name="BCLayerVis2"   alpha="1.0"  r="0.0" g="1.0"  b="0.0" showDaughters="true"  visible="true"/>
+      <vis name="BCLayerVis3"   alpha="1.0"  r="0.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
+      <vis name="BCLayerVis4"   alpha="1.0"  r="1.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
+
+      <!-- colors used in Mokka and CED for ILD -->
+      <vis name="ILD_SITVis"  alpha="1.0" r="0.86" g="0.86"  b="0.86" showDaughters="true"  visible="true"/>
+      <vis name="ILD_SETVis"  alpha="1.0" r="0.86" g="0.86"  b="0.86" showDaughters="true"  visible="true"/>
+      <vis name="ILD_TPCVis"  alpha="1.0" r="0.96" g="0.95"  b="0.0" showDaughters="true"  visible="true"/>
+      <vis name="ILD_ECALVis" alpha="1.0" r="0.48" g="0.95"  b="0.0" showDaughters="true"  visible="true"/>
+      <vis name="ILD_HCALVis" alpha="1.0" r="0.76" g="0.76"  b="0.19" showDaughters="true"  visible="true"/>
+      <vis name="ILD_YOKEVis" alpha="1.0" r="0.09" g="0.76"  b="0.76" showDaughters="true"  visible="true"/>
+      <vis name="ILD_COILVis" alpha="1.0" r="0.28" g="0.28"  b="0.86" showDaughters="true"  visible="true"/>
+      <vis name="ILD_FTDVis"  alpha="1.0" r="0.39" g="0.1"  b="0.57" showDaughters="true"  visible="true"/>
+      <vis name="ILD_FCALVis" alpha="1.0" r="0.67" g="0.66"  b="0.67" showDaughters="true"  visible="true"/>
+
+    </display>
+
+    <materials>
+      <material name="TPC_endplate_mix">
+	<!--D value="1.7" unit="g/cm3"/-->
+	<composite n="74" ref="G4_AIR"/>
+	<composite n="12" ref="g10"/>
+	<composite n="14" ref="G4_Al"/>
+      </material>      
+    </materials>
+
+    <detectors>
+        <comment>Trackers</comment>
+
+<!--
+	<include ref="Beampipe_o1_v01_01.xml"/>
+	
+	<include ref="ftd_simple_staggered_02.xml"/>
+	
+	<include ref="vxd07.xml"/>
+ 	
+	<include ref="sit_simple_planar_sensors_03.xml"/>
+	
+	<include ref="tpc10_01.xml"/>
+	
+	<include ref="set_simple_planar_sensors_01.xml"/>
+-->
+        <comment>Calorimeters</comment>
+	
+	<include ref="SEcal05_sciw_Barrel.xml"/>
+
+	<include ref="SEcal05_sciw_Endcaps.xml"/>
+
+	<include ref="SEcal04_ECRing.xml"/>
+
+<!--
+	<include ref="SHcalSc04_Barrel_v01.xml"/>
+
+	<include ref="SHcalSc04_Endcaps.xml"/>
+
+	<include ref="SHcalSc04_EndcapRing.xml"/>
+
+	<include ref="Yoke05_Barrel.xml"/>
+
+	<include ref="Yoke05_Endcaps.xml"/>
+
+	 <include ref="BeamCal08.xml"/>
+
+	<include ref="LumiCal.xml"/>
+
+	<include ref="LHCal.xml"/>
+
+	<include ref="coil03.xml"/>
+
+	<include ref="SServices00.xml"/>
+-->
+
+      </detectors> 
+
+    <readouts>
+        <readout name="VXDCollection">
+	  <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
+            <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+        </readout>
+        <readout name="SITCollection">
+	  <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
+            <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+        </readout>
+        <readout name="FTDCollection">
+	  <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
+            <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+        </readout>
+        <readout name="TPCCollection">
+	  <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
+            <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+        </readout>
+        <readout name="SETCollection">
+	  <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
+            <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+        </readout>
+
+
+
+        <!-- megatile-based segmentation for SEcal05 drivers-->
+        <readout name="EcalBarrelCollection">
+          <segmentation type="MegatileLayerGridXY"/>
+          <id>system:5,module:3,stave:4,tower:5,layer:6,wafer:6,cellX:32:-16,cellY:-16</id>
+        </readout>
+
+        <readout name="EcalEndcapsCollection">
+          <segmentation type="MegatileLayerGridXY"/>
+          <id>system:5,module:3,stave:4,tower:5,layer:6,wafer:6,cellX:32:-16,cellY:-16</id>
+        </readout>
+
+	<!-- cartesian grid for plug -->
+	<readout name="EcalEndcapRingCollection">
+	  <segmentation type="CartesianGridXY" grid_size_x="Ecal_cells_size" grid_size_y="Ecal_cells_size"/>
+	  <id>system:5,module:3,stave:4,tower:3,layer:6,x:32:-16,y:-16</id>
+	</readout>
+
+	<readout name="HcalBarrelRegCollection">
+	  <segmentation type="TiledLayerGridXY" grid_size_x="3" grid_size_y="3.03248"/>
+	  <id>system:5,module:3,stave:3,tower:5,layer:6,x:32:-16,y:-16</id>
+	</readout>
+
+	<readout name="HcalEndcapsCollection">
+	  <segmentation type="CartesianGridXZ" grid_size_x="Hcal_cells_size" grid_size_z="Hcal_cells_size" offset_x="Hcal_cells_size/2.0" offset_z="Hcal_cells_size/2.0" />
+	  <id>system:5,module:3,stave:3,tower:5,layer:6,x:32:-16,z:-16</id>
+	</readout>
+
+	<readout name="HcalEndcapRingCollection">
+	  <segmentation type="CartesianGridXY" grid_size_x="Hcal_cells_size" grid_size_y="Hcal_cells_size"/>
+	  <id>system:5,module:3,stave:4,tower:3,layer:6,x:32:-16,y:-16</id>
+	</readout>
+
+ 	<readout name="YokeBarrelCollection">
+	  <segmentation type="CartesianGridXZ" grid_size_x="Yoke_cells_size" grid_size_z="Yoke_cells_size"/>
+ 	 <id>system:5,module:3,stave:4,tower:3,layer:6,x:32:-16,z:-16</id>
+ 	</readout>
+
+ 	<readout name="YokeEndcapsCollection">
+	  <segmentation type="CartesianGridXY" grid_size_x="Yoke_cells_size" grid_size_y="Yoke_cells_size"/>
+ 	 <id>system:5,module:3,stave:4,tower:3,layer:6,x:32:-16,y:-16</id>
+ 	</readout>
+
+	<readout name="BeamCalCollection">
+	  <!-- <segmentation type="CartesianGridXY" grid_size_x="BeamCal_cell_size" grid_size_y="BeamCal_cell_size"  grid_size_z="BeamCal_cell_size" /> -->
+	  
+	  <segmentation type="PolarGridRPhi2"
+			grid_r_values="20.00*mm 27.6565*mm 35.3029*mm 42.9494*mm 50.5959*mm 58.2424*mm 65.8888*mm 73.5353*mm 81.1818*mm 88.8282*mm 96.4747*mm 104.121*mm 111.768*mm 119.414*mm 127.061*mm 134.707*mm 142.354*mm 150.0*mm"
+			grid_phi_values="BCal_SpanningPhi/(3*8) BCal_SpanningPhi/(3*8) BCal_SpanningPhi/(4*8) BCal_SpanningPhi/(5*8) BCal_SpanningPhi/(5*8) BCal_SpanningPhi/(6*8) BCal_SpanningPhi/(7*8) BCal_SpanningPhi/(8*8) BCal_SpanningPhi/(8*8) BCal_SpanningPhi/(9*8) BCal_SpanningPhi/(10*8) BCal_SpanningPhi/(10*8) BCal_SpanningPhi/(11*8) BCal_SpanningPhi/(12*8) BCal_SpanningPhi/(12*8) BCal_SpanningPhi/(13*8) BCal_SpanningPhi/(14*8)"
+                        offset_phi="-180*degree+(360*degree-BCal_SpanningPhi)*0.5"
+	  		/>
+
+	  <id>system:8,barrel:3,layer:8,slice:5,r:32:16,phi:16</id>
+	</readout>
+	
+	<readout name="LumiCalCollection">
+	    <segmentation type="PolarGridRPhi"
+			  grid_size_r="(LumiCal_outer_radius-LumiCal_inner_radius)/64"
+			  grid_size_phi="360/48*degree"
+			  offset_r="LumiCal_inner_radius"
+			  />
+	    <id>system:8,barrel:3,layer:8,slice:8,r:32:-16,phi:-16</id>
+	</readout>
+
+	<readout name="LHCalCollection">
+	  <segmentation type="CartesianGridXY" grid_size_x="LHcal_cell_size" grid_size_y="LHcal_cell_size" offset_x="0*cm" />
+	  <id>system:8,barrel:3,layer:6,slice:5,x:-16,y:-16 </id>
+	</readout>
+
+      </readouts>
+
+      <plugins>
+	<plugin name="DD4hep_CaloFaceEndcapSurfacePlugin">
+          <argument value="EcalEndcap"/>
+	  <argument value="zpos=EcalEndcap_min_z"    />
+	  <argument value="radius=EcalEndcap_outer_radius"  />
+	  <argument value="phi0=0"    />
+	  <argument value="symmetry=EcalEndcap_symmetry"/>
+	  <argument value="systemID=ILDDetID_ECAL_ENDCAP"/>
+	  <!-- <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> --> 
+	</plugin>
+	<plugin name="DD4hep_CaloFaceBarrelSurfacePlugin">
+          <argument value="EcalBarrel"/>
+	  <argument value="length=2.*Ecal_half_length"    />
+	  <argument value="radius=Ecal_inner_radius"  />
+	  <argument value="phi0=0"    />
+	  <argument value="symmetry=Ecal_symmetry"/>
+	  <argument value="systemID=ILDDetID_ECAL"/>
+	  <!-- <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> --> 
+	</plugin>
+	<plugin name="InstallSurfaceManager"/>
+      </plugins>
+
+<fields>
+  <field type="solenoid" name="GlobalSolenoid" inner_field="Field_nominal_value*tesla"
+  	  outer_field="-1.5*tesla" zmax="Coil_half_length"
+  	  inner_radius="Coil_inner_radius"
+  	  outer_radius="world_side" />
+
+  <!-- <field name="DetectorMap" type="FieldBrBz" -->
+  <!--        filename="${lcgeo_DIR}/fieldmaps/ILDMap_KB_20150204_BRhoZ.root" -->
+  <!--        tree="fieldmap:rho:z:Brho:Bz" -->
+  <!--        rScale = "1.0" -->
+  <!--        zScale = "1.0" -->
+  <!--        bScale = "3.5/4.12841" -->
+  <!--        rhoMin = "5*mm" -->
+  <!--        zMin = "5*mm" -->
+  <!--        rhoMax = "7005*mm" -->
+  <!--        zMax = "7005*mm" -->
+  <!--        nRho = "701" -->
+  <!--        nZ = "701" -->
+  <!--        > -->
+  <!-- </field> -->
+
+ </fields> 
+</lccdd>

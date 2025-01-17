@@ -1,0 +1,64 @@
+<lccdd>
+
+<detectors>
+
+<detector id="ILDDetID_HCAL_ENDCAP" name="HcalEndcap" type="Hcal_Endcaps_SD_v02" readout="HCalEndcapRPCHits"  vis="SeeThrough" calorimeterType="HAD_ENDCAP">
+ <comment>Hadron Calorimeter Endcap</comment>
+ <envelope vis="ILD_HCALVis">
+       <shape type="BooleanShape" operation="Subtraction" material="Air">
+         <shape type="BooleanShape" operation="Subtraction" material="Air" >
+            <shape type="Tube" rmin="0.0" rmax="HcalEndcap_outer_radius + env_safety" dz="HcalEndcap_max_z + env_safety"/>
+            <shape type="Tube" rmin="0.0" rmax="HcalEndcap_outer_radius + 2.0*env_safety" dz="HcalEndcap_min_z - env_safety"/>
+         </shape>
+         <shape type="Box" dx="HcalEndcap_inner_radius - env_safety" dy="HcalEndcap_inner_radius - env_safety"
+                dz="HcalEndcap_max_z + 2.0*env_safety"/> 
+         <rotation x="0" y="0" z="0"/>
+         </shape>
+ </envelope>
+
+    <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_HADRONIC " />
+    <material name="Steel304L"/><!-- radiator and the thickness has been defined in the main xml file-->
+    <staves  material = "Steel235"  vis="SeeThrough"/>
+
+      <dimensions numsides="8"><!-- the detail dimensions list. there are 8 in this version. -->
+      <!-- towers: from inner  to outer edge -->  
+      <dimensions id="1"  y_offset="1630.0*mm" dim_x="375.0*mm" dim_y="2536.0*mm" dim_z="1287.0*mm"/>
+      <dimensions id="2"  y_offset="1449.0*mm" dim_x="375.0*mm" dim_y="2898.0*mm" dim_z="1287.0*mm"/>
+      <dimensions id="3"  y_offset="1449.0*mm" dim_x="375.0*mm" dim_y="2898.0*mm" dim_z="1287.0*mm"/>
+      <dimensions id="4"  y_offset="1268.0*mm" dim_x="375.0*mm" dim_y="2536.0*mm" dim_z="1287.0*mm"/>
+      <dimensions id="5"  y_offset="1268.0*mm" dim_x="375.0*mm" dim_y="2536.0*mm" dim_z="1287.0*mm"/>
+      <dimensions id="6"  y_offset="1086.5*mm" dim_x="375.0*mm" dim_y="2173.0*mm" dim_z="1287.0*mm"/>
+      <dimensions id="7"  y_offset= "905.5*mm" dim_x="375.0*mm" dim_y="1811.0*mm" dim_z="1287.0*mm"/>
+      <dimensions id="8"  y_offset= "543.5*mm" dim_x="375.0*mm" dim_y="1087.0*mm" dim_z="1287.0*mm"/>
+  </dimensions>
+
+      <!-- slice: from inner  to outer -->  
+    <layer repeat="HcalEndcapSD_nlayers" vis="SeeThrough">  
+        <slice material = "Steel304L"      thickness = "HcalSD_radiator_thickness"                    vis="BlueVis"   />  
+        <slice material = "Air"            thickness = "HcalSD_airgap_thickness"                      vis="WhiteVis"  /> 
+        <slice material = "Steel304L"      thickness = "HcalSD_steel_casette_thickness"               vis="BlueVis"   />
+        <slice material = "epoxy"          thickness = "HcalSD_electronics_mask_thickness"            vis="GreenVis"  />
+        <slice material = "PCB"            thickness = "HcalSD_PCB_thickness"                         vis="CyanVis"   />
+        <slice material = "mylar"          thickness = "HcalSD_mylar_anode_thickness"                 vis="MagentaVis"/>
+        <slice material = "graphite"       thickness = "HcalSD_graphite_anode_thickness"              vis="Invisible" />
+        <slice material = "FloatGlass"     thickness = "HcalSD_glass_anode_thickness"                 vis="RedVis"    />
+        <slice material = "RPCGAS2"        thickness = "HcalSD_sensitive_gas_gap"   sensitive = "yes"   vis="YellowVis" />
+        <slice material = "FloatGlass"     thickness = "HcalSD_glass_cathode_thickness"               vis="RedVis"    />
+        <slice material = "graphite"       thickness = "HcalSD_graphite_cathode_thickness"            vis="Invisible" />
+        <slice material = "mylar"          thickness = "HcalSD_mylar_cathode_thickness"               vis="MagentaVis"/>
+        <slice material = "Steel304L"      thickness = "HcalSD_steel_casette_thickness"               vis="BlueVis"   /> 
+        <slice material = "Air"            thickness = "HcalSD_airgap_thickness"                      vis="WhiteVis"  />  
+    </layer>
+
+</detector>
+</detectors>
+
+<readouts>
+  <readout name="HCalEndcapRPCHits">
+    <segmentation type="CartesianGridXY" grid_size_x="HcalSD_cells_size" grid_size_y="HcalSD_cells_size" offset_x="HcalSD_cells_size/2.0" offset_y="HcalSD_cells_size/2.0" />
+    <id>system:5,module:3,stave:3,tower:5,layer:6,x:32:-16,y:-16</id>
+  </readout>
+</readouts>
+
+</lccdd>
+

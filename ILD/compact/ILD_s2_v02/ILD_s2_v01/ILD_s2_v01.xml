@@ -1,0 +1,282 @@
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+       xmlns:xs="http://www.w3.org/2001/XMLSchema"
+       xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+  <info name="ILD_l1_v01"
+        title="ILD small model w/ SDHcal in Videau geometry"
+        author="F.Gaede, S.Lu"
+        url="http://ilcsoft.desy.de"
+        status="experimental"
+	version="v01">
+    <comment>
+
+      copied SDHcal Barrel from ILD_o2_v01 using the rest from ILD_common_v01 ...
+      still needs testing and endcap ( and endcap ring )  for SDHcal 
+
+    </comment>
+  </info>
+
+  <includes>
+    <gdmlFile  ref="../ILD_common_v01/elements.xml"/>
+    <gdmlFile  ref="../ILD_common_v01/materials.xml"/>
+  </includes>
+
+  <define>
+
+    <include ref="top_defs_ILD_s2_v01.xml"/>
+    <include ref="../ILD_common_v01/top_defs_common_v01.xml"/>
+    <include ref="../ILD_common_v01/basic_defs.xml"/>
+    <include ref="../ILD_common_v01/envelope_defs.xml"/>
+    <include ref="../ILD_common_v01/tube_defs.xml"/>
+    <include ref="../ILD_common_v01/misc_defs.xml"/>
+    <include ref="../ILD_common_v01/tracker_defs.xml"/>
+    <include ref="../ILD_common_v01/fcal_defs.xml"/>
+    <include ref="../ILD_common_v01/ecal_defs.xml"/>
+    <include ref="../ILD_common_v01/hcal_defs.xml"/>
+    <include ref="../ILD_common_v01/yoke_defs.xml"/>
+    <include ref="../ILD_common_v01/services_defs.xml"/>
+    <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
+    <constant name="tracker_region_rmax" value="TPC_outer_radius" />  
+    <constant name="tracker_region_zmax" value="Ecal_endcap_zmin" />
+
+  </define>
+
+
+  <limits>
+    <limitset name="cal_limits">
+      <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
+    </limitset>
+    <limitset name="TPC_limits">
+      <limit name="step_length_max" particles="*" value="10.0" unit="mm" />
+    </limitset>
+    <limitset name="Tracker_limits">
+      <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
+    </limitset>
+  </limits>
+
+  <display>
+    <!-- fixme:  white comes out as red !!!???? |  vis name="WhiteVis"         alpha="0.0" r="1.0" g="1.0"  b="1.0"   showDaughters="true"  visible="true"/ -->
+    <vis name="WhiteVis"         alpha="0.0" r=".96" g=".96"  b=".96"   showDaughters="true"  visible="true"/>
+    <vis name="LightGrayVis"         alpha="0.0" r=".75" g=".75"  b=".75"   showDaughters="true"  visible="true"/>
+    <vis name="Invisible"         alpha="0.0" r="0" g="0"  b="0"   showDaughters="false"  visible="false"/>
+    <vis name="SeeThrough"         alpha="0.0" r="0" g="0"  b="0"   showDaughters="true"  visible="false"/>
+    <vis name="RedVis"           alpha="1.0" r="1.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="GreenVis"         alpha="1.0" r="0.0" g="1.0"  b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="BlueVis"          alpha="1.0" r="0.0" g="0.0"  b="1.0"   showDaughters="true"  visible="true"/>
+    <vis name="CyanVis"          alpha="1.0" r="0.0" g="1.0"  b="1.0"   showDaughters="true"  visible="true"/>
+    <vis name="MagentaVis"       alpha="1.0" r="1.0" g="0.0"  b="1.0"   showDaughters="true"  visible="true"/>
+    <vis name="YellowVis"        alpha="1.0" r="1.0" g="1.0"  b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="BlackVis"         alpha="1.0" r="0.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="GrayVis"          alpha="1.0" r="0.5" g="0.5"  b="0.5"   showDaughters="true"  visible="true"/>
+
+    <vis name="TubeVis"   alpha="0.1" r="1.0" g="0.7"  b="0.5"   showDaughters="true"  visible="true"/>
+    <vis name="BeamPipeVis" alpha="0.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="false"/>
+    <vis name="VacVis"   alpha="1.0" r="0.0" g="0.0"  b="0.0"   showDaughters="true"  visible="false"/>
+
+    <vis name="TPCVis"        alpha="0.1" r="0" g="0"  b="0"         showDaughters="true"  visible="true"/>
+    <vis name="TPCMotherVis"  alpha="0.1" r="0.9" g="0.9"  b="0.9"   showDaughters="true"  visible="false"/>
+
+    <vis name="VXDVis"        alpha="0.1" r="0.1" g=".5"  b=".5"   showDaughters="true"  visible="true"/>
+    <vis name="VXDLayerVis"   alpha="1.0" r="0.1" g=".5"  b=".5"   showDaughters="true"  visible="true"/>
+    <vis name="VXDSupportVis" alpha="1.0" r="0.0" g="1.0" b="0.0"  showDaughters="true"  visible="true"/>
+
+    <vis name="FTDVis"           alpha="1.0" r="0.0" g="0.1"  b="0.0"   showDaughters="true"  visible="false"/>
+    <vis name="FTDSensitiveVis" alpha="1.0"  r="1.0"  g="1.0" b="0.45" showDaughters="true" visible="true"/>
+    <vis name="FTDSupportVis"   alpha="1.0"  r="1.0"  g="0.5" b="0.5"  showDaughters="true" visible="true"/>
+    <vis name="FTDHolePetalVis" alpha="1.0"  r="0.5"  g="0.5" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="FTDCylVis"       alpha="0.45" r="0.2"  g="0.9" b="0.98" showDaughters="true" visible="true"/>
+    <vis name="FTDCablesVis"    alpha="1.0"  r="0.0"  g="0.9" b="0.0"  showDaughters="true" visible="true"/>
+
+    <vis name="MyBeamCalVis"  alpha="0.5"  r="1.0" g="1.0"  b="1.0" showDaughters="true"  visible="false"/>
+    <vis name="BCLayerVis1"   alpha="1.0"  r="1.0" g="0.0"  b="0.0" showDaughters="true"  visible="true"/>
+    <vis name="BCLayerVis2"   alpha="1.0"  r="0.0" g="1.0"  b="0.0" showDaughters="true"  visible="true"/>
+    <vis name="BCLayerVis3"   alpha="1.0"  r="0.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
+    <vis name="BCLayerVis4"   alpha="1.0"  r="1.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
+
+    <!-- colors used in Mokka and CED for ILD -->
+    <vis name="ILD_SITVis"  alpha="1.0" r="0.86" g="0.86"  b="0.86" showDaughters="true"  visible="true"/>
+    <vis name="ILD_SETVis"  alpha="1.0" r="0.86" g="0.86"  b="0.86" showDaughters="true"  visible="true"/>
+    <vis name="ILD_TPCVis"  alpha="1.0" r="0.96" g="0.95"  b="0.0" showDaughters="true"  visible="true"/>
+    <vis name="ILD_ECALVis" alpha="1.0" r="0.48" g="0.95"  b="0.0" showDaughters="true"  visible="true"/>
+    <vis name="ILD_HCALVis" alpha="1.0" r="0.76" g="0.76"  b="0.19" showDaughters="true"  visible="true"/>
+    <vis name="ILD_YOKEVis" alpha="1.0" r="0.09" g="0.76"  b="0.76" showDaughters="true"  visible="true"/>
+    <vis name="ILD_COILVis" alpha="1.0" r="0.28" g="0.28"  b="0.86" showDaughters="true"  visible="true"/>
+    <vis name="ILD_FTDVis"  alpha="1.0" r="0.39" g="0.1"   b="0.57" showDaughters="true"  visible="true"/>
+    <vis name="ILD_FCALVis" alpha="1.0" r="0.67" g="0.66"  b="0.67" showDaughters="true"  visible="true"/>
+
+  </display>
+
+  <materials>
+  </materials>
+
+  <detectors>
+    <comment>Trackers</comment>
+    <include ref="../ILD_common_v01/Beampipe_o1_v01_01.xml"/>
+    <include ref="../ILD_common_v01/vxd07.xml"/>
+    <include ref="../ILD_common_v01/ftd_simple_staggered_02.xml"/>
+    <include ref="../ILD_common_v01/sit_simple_planar_sensors_03.xml"/>
+    <include ref="../ILD_common_v01/tpc10_01.xml"/>
+    <include ref="../ILD_common_v01/set_simple_planar_sensors_01.xml"/>  
+    <comment>Calorimeters</comment>
+    <include ref="../ILD_common_v01/SEcal05_siw_Endcaps.xml"/>
+    <include ref="../ILD_common_v01/SEcal05_siw_ECRing.xml"/>
+    <include ref="../ILD_common_v01/SEcal05_siw_Barrel.xml"/>
+    <include ref="../ILD_common_v01/Hcal_Endcaps_SD_v01.xml"/>
+    <include ref="../ILD_common_v01/Hcal_EndcapRing_SD_v01.xml"/>
+    <include ref="../ILD_common_v01/Hcal_Barrel_SD_v01.xml"/>
+    <include ref="../ILD_common_v01/Yoke05_Barrel.xml"/>
+    <include ref="../ILD_common_v01/Yoke05_Endcaps.xml"/>
+    <include ref="../ILD_common_v01/LumiCal.xml"/> 
+    <include ref="../ILD_common_v01/LHCal01.xml"/>
+    <include ref="../ILD_common_v01/BeamCal08.xml"/>
+    <include ref="../ILD_common_v01/coil03.xml"/>
+    <include ref="../ILD_common_v01/SServices00.xml"/>
+  </detectors>
+
+  <readouts>
+    <readout name="VXDCollection">
+      <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
+      <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+    </readout>
+
+    <readout name="SITCollection">
+      <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
+      <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+    </readout>
+
+    <readout name="FTDCollection">
+      <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
+      <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+    </readout>
+    <readout name="TPCCollection">
+      <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
+      <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+    </readout>
+    <readout name="SETCollection">
+      <!-- fixme: for now DD4hep cannot handle signed values - side should actually be "-2" -->
+      <id>system:5,side:2,layer:9,module:8,sensor:8</id>
+    </readout>
+
+
+    <!-- megatile-based segmentation for SEcal05 drivers-->
+    <readout name="EcalBarrelCollection">
+      <segmentation type="MegatileLayerGridXY"/>
+      <id>system:5,module:3,stave:4,tower:5,layer:6,wafer:6,cellX:32:-16,cellY:-16</id>
+    </readout>
+
+    <readout name="EcalEndcapsCollection">
+      <segmentation type="MegatileLayerGridXY"/>
+      <id>system:5,module:3,stave:4,tower:5,layer:6,wafer:6,cellX:32:-16,cellY:-16</id>
+    </readout>
+
+    <readout name="EcalEndcapRingCollection">
+      <segmentation type="CartesianGridXY" grid_size_x="Ecal_cells_size" grid_size_y="Ecal_cells_size"/>
+      <id>system:5,module:3,stave:4,tower:3,layer:6,x:32:-16,y:-16</id>
+    </readout>
+
+    <readout name="HcalBarrelRegCollection">
+      <segmentation type="CartesianGridXY" grid_size_x="HcalSD_cells_size" grid_size_y="HcalSD_cells_size"/>
+      <id>system:5,module:3,stave:3,tower:5,layer:6,slice:4,x:32:-16,y:-16</id>
+    </readout>
+
+    <readout name="HcalEndcapsCollection">
+      <segmentation type="CartesianGridXY" grid_size_x="HcalSD_cells_size" grid_size_y="HcalSD_cells_size" offset_x="HcalSD_cells_size/2.0" offset_y="HcalSD_cells_size/2.0" />
+      <id>system:5,module:3,stave:3,tower:5,layer:6,x:32:-16,y:-16</id>
+    </readout>
+
+    <readout name="HcalEndcapRingCollection">
+      <segmentation type="CartesianGridXY" grid_size_x="HcalSD_cells_size" grid_size_y="HcalSD_cells_size"/>
+      <id>system:5,module:3,stave:4,tower:3,layer:6,x:32:-16,y:-16</id>
+    </readout>
+
+    <readout name="YokeBarrelCollection">
+      <segmentation type="CartesianGridXZ" grid_size_x="Yoke_cells_size" grid_size_z="Yoke_cells_size"/>
+      <id>system:5,module:3,stave:4,tower:3,layer:6,x:32:-16,z:-16</id>
+    </readout>
+
+    <readout name="YokeEndcapsCollection">
+      <segmentation type="CartesianGridXY" grid_size_x="Yoke_cells_size" grid_size_y="Yoke_cells_size"/>
+      <id>system:5,module:3,stave:4,tower:3,layer:6,x:32:-16,y:-16</id>
+    </readout>
+
+    <readout name="BeamCalCollUniform">
+      <segmentation type="PolarGridRPhi2"
+                    grid_r_values="17.80*mm 27.6565*mm 35.3029*mm 42.9494*mm 50.5959*mm 58.2424*mm 65.8888*mm 73.5353*mm 81.1818*mm 88.8282*mm 96.4747*mm 104.121*mm 111.768*mm 119.414*mm 127.061*mm 134.707*mm 142.354*mm 150.0*mm"
+                    grid_phi_values="BCal_SpanningPhi/(3*8) BCal_SpanningPhi/(3*8) BCal_SpanningPhi/(4*8) BCal_SpanningPhi/(5*8) BCal_SpanningPhi/(5*8) BCal_SpanningPhi/(6*8) BCal_SpanningPhi/(7*8) BCal_SpanningPhi/(8*8) BCal_SpanningPhi/(8*8) BCal_SpanningPhi/(9*8) BCal_SpanningPhi/(10*8) BCal_SpanningPhi/(10*8) BCal_SpanningPhi/(11*8) BCal_SpanningPhi/(12*8) BCal_SpanningPhi/(12*8) BCal_SpanningPhi/(13*8) BCal_SpanningPhi/(14*8)"
+                    offset_phi="-180*degree+(360*degree-BCal_SpanningPhi)*0.5"
+                    />
+      <id>system:8,barrel:3,layer:8,slice:5,r:32:16,phi:16</id>
+    </readout>
+
+    <readout name="BeamCalCollection">
+      <segmentation type="PolarGridRPhi2"
+                    grid_r_values="17.80*mm 19.73*mm 21.88*mm 24.25*mm 26.89*mm 29.81*mm 33.05*mm 36.64*mm 40.62*mm 45.03*mm 49.92*mm 55.34*mm 61.35*mm 68.02*mm 75.41*mm 83.60*mm 92.68*mm 102.74*mm 113.91*mm 126.28*mm 140.00*mm"
+                    grid_phi_values="5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree"
+                    offset_phi="-180*degree"
+                    />
+      <id>system:8,barrel:3,layer:8,slice:5,r:32:16,phi:16</id>
+    </readout>
+
+    <readout name="LumiCalCollection">
+      <segmentation type="PolarGridRPhi"
+                    grid_size_r="(Lcal_sensor_rmax-Lcal_sensor_rmin)/Lcal_nstrips_theta"
+                    grid_size_phi="360/Lcal_nstrips_phi*degree"
+                    offset_r="Lcal_sensor_rmin"
+                    offset_phi="Lcal_offset_phi"
+                    />
+      <id>system:8,barrel:3,layer:8,slice:8,r:32:-16,phi:-16</id>
+    </readout>
+
+
+    <readout name="LHCalCollection">
+      <segmentation type="CartesianGridXY" grid_size_x="LHcal_cell_size" grid_size_y="LHcal_cell_size" offset_x="0*cm" />
+      <id>system:8,barrel:3,layer:6,slice:5,x:-16,y:-16 </id>
+    </readout>
+
+  </readouts>
+
+  <plugins>
+    <plugin name="DD4hep_CaloFaceEndcapSurfacePlugin">
+      <argument value="EcalEndcap"/>
+      <argument value="zpos=EcalEndcap_min_z"    />
+      <argument value="radius=EcalEndcap_outer_radius"  />
+      <argument value="phi0=0"    />
+      <argument value="symmetry=EcalEndcap_symmetry"/>
+      <argument value="systemID=ILDDetID_ECAL_ENDCAP"/>
+      <comment> <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> </comment>
+    </plugin>
+    <plugin name="DD4hep_CaloFaceBarrelSurfacePlugin">
+      <argument value="EcalBarrel"/>
+      <argument value="length=2.*Ecal_half_length"    />
+      <argument value="radius=Ecal_inner_radius"  />
+      <argument value="phi0=0"    />
+      <argument value="symmetry=Ecal_symmetry"/>
+      <argument value="systemID=ILDDetID_ECAL"/>
+      <comment> <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> </comment>
+    </plugin>
+    <plugin name="InstallSurfaceManager"/>
+  </plugins>
+
+  <fields>
+    <field type="solenoid" name="GlobalSolenoid" inner_field="Field_nominal_value"
+           outer_field="outerField_nominal_value" zmax="Coil_half_length"
+           inner_radius="Coil_inner_radius"
+           outer_radius="world_side" />
+
+    <!-- <field name="DetectorMap" type="FieldBrBz" -->
+         <!--        filename="${lcgeo_DIR}/fieldmaps/ILDMap_KB_20150204_BRhoZ.root" -->
+         <!--        tree="fieldmap:rho:z:Brho:Bz" -->
+         <!--        rScale = "1.0" -->
+         <!--        zScale = "1.0" -->
+         <!--        bScale = "3.5/4.12841" -->
+         <!--        rhoMin = "5*mm" -->
+         <!--        zMin = "5*mm" -->
+         <!--        rhoMax = "7005*mm" -->
+         <!--        zMax = "7005*mm" -->
+         <!--        nRho = "701" -->
+         <!--        nZ = "701" -->
+         <!--        > -->
+         <!-- </field> -->
+
+  </fields>
+</lccdd>

@@ -1,0 +1,93 @@
+<lccdd>
+  <detectors>
+
+    <detector name="EcalBarrel" type="SEcal05_Barrel" id="ILDDetID_ECAL" readout="EcalBarrelCollection" vis="BlueVis" >
+
+      <comment>EM Calorimeter Barrel</comment>
+
+      <envelope vis="ILD_ECALVis">
+        <shape type="PolyhedraRegular" numsides="Ecal_symmetry"  rmin="Ecal_inner_radius - env_safety"
+               rmax="Ecal_outer_radius + env_safety" dz="2.*Ecal_half_length + env_safety"  material = "Air" vis="Invisible" />
+        <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/Ecal_symmetry"/>
+      </envelope>
+
+      <type_flags type=" DetType_CALORIMETER + DetType_BARREL + DetType_ELECTROMAGNETIC " />
+
+
+      <dimensions numsides="Ecal_symmetry" rmin="Ecal_inner_radius" rmax="Ecal_outer_radius" z="Ecal_half_length" />
+      <staves  material = "G4_W"  vis="BlueVis"/>
+
+      <!-- this has all sort of assumptions in it...like even/odd number in first/second stack -->
+
+      <layer repeat="Ecal_nlayers1/2" vis="SeeThrough" > <!-- 10 double SD Layers, and 5 W palte after each double SD Layer -->
+        <slice material = "G4_AIR"         thickness = "Ecal_Alveolus_Air_Gap/2."                vis="Invisible" />
+	<slice material = "G4_Al"          thickness = "Ecal_Slab_shielding"        vis="Invisible" />
+	<slice material = "G4_Cu"          thickness = "Ecal_Slab_copper_thickness"        vis="Invisible" />
+	<slice material = "G4_AIR"         thickness = "Ecal_Slab_ASIC_thickness"   vis="Invisible"/>
+	<slice material = "PCB"            thickness = "Ecal_Slab_PCB_thickness"    vis="Invisible"/>
+        <slice material = "G4_AIR"         thickness = "Ecal_Slab_glue_gap"                      vis="Invisible" />
+        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes"     vis="Invisible"    />
+        <slice material = "G4_AIR"         thickness = "Ecal_Slab_glue_gap"                      vis="Invisible" />
+        <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"              vis="Invisible" />
+        <slice material = "CarbonFiber"    thickness = "Ecal_fiber_thickness_slabAbs"                    vis="Invisible" />
+        <slice material = "G4_W"           thickness = "Ecal_radiator_layers_set1_thickness"   vis="BlueVis"   radiator="yes"/>
+        <slice material = "CarbonFiber"    thickness = "Ecal_fiber_thickness_slabAbs"                    vis="Invisible" />
+        <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"              vis="Invisible" />
+        <slice material = "G4_AIR"         thickness = "Ecal_Slab_glue_gap"                      vis="Invisible" />
+        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes"     vis="Invisible"    />
+        <slice material = "G4_AIR"         thickness = "Ecal_Slab_glue_gap"                      vis="Invisible" />
+	<slice material = "PCB"            thickness = "Ecal_Slab_PCB_thickness"    vis="Invisible"/>
+	<slice material = "G4_AIR"         thickness = "Ecal_Slab_ASIC_thickness"   vis="Invisible"/>
+	<slice material = "G4_Cu"          thickness = "Ecal_Slab_copper_thickness"        vis="Invisible" />
+	<slice material = "G4_Al"          thickness = "Ecal_Slab_shielding"        vis="Invisible" />
+        <slice material = "G4_AIR"         thickness = "Ecal_Alveolus_Air_Gap/2."                vis="Invisible" />
+      </layer>
+
+      <layer repeat="(Ecal_nlayers2+1)/2" vis="SeeThrough">
+        <slice material = "G4_AIR"         thickness = "Ecal_Alveolus_Air_Gap/2."                vis="Invisible" />
+	<slice material = "G4_Al"          thickness = "Ecal_Slab_shielding"        vis="Invisible" />
+	<slice material = "G4_Cu"          thickness = "Ecal_Slab_copper_thickness"        vis="Invisible" />
+	<slice material = "G4_AIR"         thickness = "Ecal_Slab_ASIC_thickness"   vis="Invisible"/>
+	<slice material = "PCB"            thickness = "Ecal_Slab_PCB_thickness"    vis="Invisible"/>
+        <slice material = "G4_AIR"         thickness = "Ecal_Slab_glue_gap"                      vis="Invisible" />
+        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes"     vis="Invisible"    />
+        <slice material = "G4_AIR"         thickness = "Ecal_Slab_glue_gap"                      vis="Invisible" />
+        <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"              vis="Invisible" />
+        <slice material = "CarbonFiber"    thickness = "Ecal_fiber_thickness_slabAbs"                    vis="Invisible" />
+        <slice material = "G4_W"           thickness = "Ecal_radiator_layers_set2_thickness"   vis="BlueVis"   radiator="yes"/>
+        <slice material = "CarbonFiber"    thickness = "Ecal_fiber_thickness_slabAbs"                    vis="Invisible" />
+        <slice material = "GroundOrHVMix"  thickness = "Ecal_Slab_ground_thickness"              vis="Invisible" />
+        <slice material = "G4_AIR"         thickness = "Ecal_Slab_glue_gap"                      vis="Invisible" />
+        <slice material = "Si"             thickness = "Ecal_Si_thickness" sensitive = "yes"     vis="Invisible"    />
+        <slice material = "G4_AIR"         thickness = "Ecal_Slab_glue_gap"                      vis="Invisible" />
+	<slice material = "PCB"            thickness = "Ecal_Slab_PCB_thickness"    vis="Invisible"/>
+	<slice material = "G4_AIR"         thickness = "Ecal_Slab_ASIC_thickness"   vis="Invisible"/>
+	<slice material = "G4_Cu"          thickness = "Ecal_Slab_copper_thickness"        vis="Invisible" />
+	<slice material = "G4_Al"          thickness = "Ecal_Slab_shielding"        vis="Invisible" />
+        <slice material = "G4_AIR"         thickness = "Ecal_Alveolus_Air_Gap/2."                vis="Invisible" />
+      </layer>
+    </detector>
+
+  </detectors>
+
+  <readouts>
+    <readout name="EcalBarrelCollection">
+      <segmentation type="MegatileLayerGridXY"/>
+      <id>system:5,module:3,stave:4,tower:5,layer:6,wafer:6,cellX:32:-16,cellY:-16</id>
+    </readout>
+  </readouts>
+
+  <plugins>
+    <plugin name="DD4hep_CaloFaceBarrelSurfacePlugin">
+      <argument value="EcalBarrel"/>
+      <argument value="length=2.*Ecal_half_length"    />
+      <argument value="radius=Ecal_inner_radius"  />
+      <argument value="phi0=0"    />
+      <argument value="symmetry=Ecal_symmetry"/>
+      <argument value="systemID=ILDDetID_ECAL"/>
+      <comment> <argument value="encoding=system:5,side:-2,layer:9,module:8,sensor:8"/> </comment>
+    </plugin>
+  </plugins>
+  
+
+</lccdd>

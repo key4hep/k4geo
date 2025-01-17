@@ -1,0 +1,143 @@
+<!--
+   beamcal parameters for ILD
+  -->
+
+<lccdd>
+  <detectors>
+
+    <detector name="BeamCal" type="BeamCal_o1_v02" vis="SeeThrough" id="ILDDetID_BCAL"
+              readout="BeamCalCollection" insideTrackingVolume="false" buildType="BUILD_ENVELOPE" >
+
+      <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_ELECTROMAGNETIC + DetType_FORWARD + DetType_AUXILIARY " />
+
+      <envelope vis="ILD_FCALVis">
+        <shape type="BooleanShape" operation="Intersection" material="Air">
+          <shape type="Box" dx="BeamCal_outer_radius*2.0" dy="BeamCal_outer_radius*2.0" dz="BeamCal_max_z*2.0"/>
+
+          <shape type="BooleanShape" operation="Union" material="Air">
+
+            <!-- -z -->
+            <shape type="BooleanShape" operation="Subtraction" material="Air">
+
+              <shape type="BooleanShape" operation="Subtraction" material="Air">
+                <!-- BeamCal -->
+                <shape type="Tube" rmin="BeamCal_inner_radius - env_safety"
+                       rmax="BeamCal_outer_radius + env_safety"
+                       dz="BeamCal_max_z/COS_halfCrossingAngle + env_safety"/>
+                <!-- Incoming beampipe cutout -->
+                <shape type="Tube" rmin="0.0" rmax="BCal_TubeIncomingRadius + BCal_TubeIncomingClearance - env_safety"
+                       dz="BeamCal_max_z*2.0 +env_safety"/>
+                <rotation x="0" y="ILC_Main_Crossing_Angle" z="0"/>
+                <position x="0" y="0" z="0"/>
+              </shape>
+
+              <!-- Volume to subtract from center to z_min -->
+              <shape type="BooleanShape" operation="Union" material="Air">
+                <!-- Tungsten radius -->
+                <shape type="Tube" rmin="BCal_rGraphite + 1*env_safety" rmax="BeamCal_outer_radius + 1.5*env_safety"
+                       dz="BeamCal_min_z/COS_halfCrossingAngle+BeamCal_thickness + BCal_dGraphite/COS_halfCrossingAngle - env_safety"/>
+                <!-- Graphite radius -->
+                <shape type="Tube" rmin="0" rmax="BCal_rGraphite  + 1.5*env_safety"
+                       dz="BeamCal_min_z/COS_halfCrossingAngle+BeamCal_thickness - env_safety"/>
+                <position x="0" y="0" z="0"/>
+              </shape>
+
+              <position x="0" y="0" z="BeamCal_thickness"/>
+            </shape>
+
+            <!-- +z -->
+            <shape type="BooleanShape" operation="Subtraction" material="Air">
+
+              <shape type="BooleanShape" operation="Subtraction" material="Air">
+                <!-- BeamCal -->
+                <shape type="Tube" rmin="BeamCal_inner_radius - env_safety"
+                       rmax="BeamCal_outer_radius + env_safety"
+                       dz="BeamCal_max_z/COS_halfCrossingAngle + env_safety"/>
+                <!-- Incoming beampipe cutout -->
+                <shape type="Tube" rmin="0.0" rmax="BCal_TubeIncomingRadius + BCal_TubeIncomingClearance - env_safety"
+                       dz="BeamCal_max_z*2.0 + env_safety"/>
+                <rotation x="0" y="-ILC_Main_Crossing_Angle" z="0"/>
+                <position x="0" y="0" z="0"/>
+              </shape>
+
+              <!-- Volume to subtract from center to z_min -->
+              <shape type="BooleanShape" operation="Union" material="Air">
+                <!-- Tungsten radius -->
+                <shape type="Tube" rmin="BCal_rGraphite + 1*env_safety" rmax="BeamCal_outer_radius + 1.5*env_safety"
+                       dz="BeamCal_min_z/COS_halfCrossingAngle+BeamCal_thickness + BCal_dGraphite/COS_halfCrossingAngle - env_safety"/>
+                <!-- Graphite radius -->
+                <shape type="Tube" rmin="0" rmax="BCal_rGraphite  + 1.5*env_safety"
+                       dz="BeamCal_min_z/COS_halfCrossingAngle+BeamCal_thickness - env_safety"/>
+                <position x="0" y="0" z="0"/>
+              </shape>
+              <position x="0" y="0" z="-BeamCal_thickness"/>
+            </shape>
+
+            <!-- Angel between -z and +z -->
+            <rotation x="0" y="ILC_Main_Crossing_Angle" z="0"/>
+            <position x="0" y="0" z="0"/>
+          </shape>
+
+          <!-- Use big box to define the global coordination -->
+          <rotation x="0" y="-ILC_Main_Crossing_Angle*0.5" z="0"/>
+          <position x="0" y="0" z="0"/>
+        </shape>
+      </envelope>
+
+      <parameter crossingangle="ILC_Main_Crossing_Angle"
+                 cutoutspanningangle="BCal_cutoutSpanning"
+                 incomingbeampiperadius="BCal_TubeIncomingRadius + BCal_TubeIncomingClearance"
+                 />
+
+      <dimensions inner_r = "BCal_rInner"
+                  inner_z = "BeamCal_min_z"
+                  outer_r = "BCal_rOuter" />
+
+      <!-- <layer repeat="1" vis="SeeThrough"> -->
+      <!--   <slice material = "C"         thickness = "BCal_dGraphite" vis="LayerVis1"      layerType="holeForIncomingBeampipe"/> -->
+      <!-- </layer> -->
+
+      <layer repeat="1" vis="SeeThrough">
+        <slice material = "C"       thickness = "BCal_dGraphite" vis="LayerVis1" outer_radius = "BCal_rGraphite"  layerType="holeForIncomingBeampipe"/>
+        <slice material = "TungstenDens24" thickness = "BCal_dAbsorber"        vis="BCLayerVis1" layerType="holeForIncomingBeampipe" />
+        <slice material = "Silicon" thickness = "0.3004*mm" sensitive = "yes"  vis="BCLayerVis2"/>
+        <slice material = "Copper"  thickness = "0.0004*mm"                    vis="BCLayerVis3"/>
+        <slice material = "Kapton"  thickness = "0.15*mm"                      vis="BCLayerVis4"/>
+        <slice material = "Air"     thickness = "0.05*mm" />
+      </layer>
+
+      <layer repeat="BCal_nLayers-1" vis="SeeThrough">
+        <slice material = "TungstenDens24" thickness = "BCal_dAbsorber"        vis="BCLayerVis1" layerType="holeForIncomingBeampipe" />
+        <slice material = "Silicon" thickness = "0.3004*mm" sensitive = "yes"  vis="BCLayerVis2"/>
+        <slice material = "Copper"  thickness = "0.0004*mm"                    vis="BCLayerVis3"/>
+        <slice material = "Kapton"  thickness = "0.15*mm"                      vis="BCLayerVis4"/>
+        <slice material = "Air"     thickness = "0.05*mm" />
+      </layer>
+
+    </detector>
+
+  </detectors>
+
+  <readouts>
+    <readout name="BeamCalCollUniform">
+      <segmentation type="PolarGridRPhi2"
+                    grid_r_values="17.80*mm 27.6565*mm 35.3029*mm 42.9494*mm 50.5959*mm 58.2424*mm 65.8888*mm 73.5353*mm 81.1818*mm 88.8282*mm 96.4747*mm 104.121*mm 111.768*mm 119.414*mm 127.061*mm 134.707*mm 142.354*mm 150.0*mm"
+                    grid_phi_values="BCal_SpanningPhi/(3*8) BCal_SpanningPhi/(3*8) BCal_SpanningPhi/(4*8) BCal_SpanningPhi/(5*8) BCal_SpanningPhi/(5*8) BCal_SpanningPhi/(6*8) BCal_SpanningPhi/(7*8) BCal_SpanningPhi/(8*8) BCal_SpanningPhi/(8*8) BCal_SpanningPhi/(9*8) BCal_SpanningPhi/(10*8) BCal_SpanningPhi/(10*8) BCal_SpanningPhi/(11*8) BCal_SpanningPhi/(12*8) BCal_SpanningPhi/(12*8) BCal_SpanningPhi/(13*8) BCal_SpanningPhi/(14*8)"
+                    offset_phi="-180*degree+(360*degree-BCal_SpanningPhi)*0.5"
+                    />
+      <id>system:8,barrel:3,layer:8,slice:5,r:32:16,phi:16</id>
+    </readout>
+
+    <readout name="BeamCalCollection">
+      <segmentation type="PolarGridRPhi2"
+                    grid_r_values="17.80*mm 19.73*mm 21.88*mm 24.25*mm 26.89*mm 29.81*mm 33.05*mm 36.64*mm 40.62*mm 45.03*mm 49.92*mm 55.34*mm 61.35*mm 68.02*mm 75.41*mm 83.60*mm 92.68*mm 102.74*mm 113.91*mm 126.28*mm 140.00*mm"
+                    grid_phi_values="5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree 5.625*degree"
+                    offset_phi="-180*degree"
+                    />
+      <id>system:8,barrel:3,layer:8,slice:5,r:32:16,phi:16</id>
+    </readout>
+  </readouts>
+
+
+
+</lccdd>

@@ -1,0 +1,13 @@
+<define>
+
+  <constant name="VXD_radius_r1" value="16*mm"/>
+  <constant name="VXD_length_r1" value="62.5*mm"/>
+  <constant name="VXD_radius_r3" value="37*mm"/>
+  <constant name="VXD_length_r3" value="125*mm"/>
+  <constant name="VXD_radius_r5" value="58*mm"/>
+
+
+  <constant name="tracker_region_rmax" value="TPC_outer_radius" />
+  <constant name="tracker_region_zmax" value="Ecal_endcap_zmin" />
+
+</define>

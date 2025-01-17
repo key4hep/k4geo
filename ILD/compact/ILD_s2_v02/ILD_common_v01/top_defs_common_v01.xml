@@ -1,0 +1,130 @@
+<define>
+
+<comment> 
+all hardcoded overall dimensions needed to define envelopes are in this file
+this file has the parts common to the different detector versions
+
+subdetector-specific ones are in separate files
+</comment>
+
+  <constant name="ILC_Main_Crossing_Angle" value="14*mrad"/>
+
+  <!-- the field inside and outside the solenoid -->
+  <constant name="outerField_nominal_value" value="-1.5*tesla"/>
+
+
+  <!-- VXD -->
+  <constant name="top_VXD_inner_radius"   value="15*mm "/>
+  <constant name="top_VXD_outer_radius"   value="101*mm "/>
+  <constant name="top_VXD_half_length"    value="177.6*mm "/>
+
+  <!-- FTD -->
+  <constant name="top_FTD1_vtx3_distance_z" value="95*mm"/>
+
+  <constant name="FTD_disk2_zPosRelToTpcLength" value="0.158004"/>
+  <constant name="FTD_disk3_zPosRelToTpcLength" value="0.274428"/>
+  <constant name="FTD_disk4_zPosRelToTpcLength" value="0.445156"/>
+  <constant name="FTD_disk5_zPosRelToTpcLength" value="0.615884"/>
+  <constant name="FTD_disk6_zPosRelToTpcLength" value="0.786611"/>
+
+  <constant name="top_FTD7_ecal_distance_z" value="200*mm"/>
+
+
+  <!-- SIT -->
+  <constant name="SIT1_Half_Length_Z" value="368.00*mm"/>
+  <constant name="SIT1_Radius"        value="153.00*mm"/>
+  <constant name="SIT2_Half_Length_Z" value="644.00*mm"/>
+  <constant name="SIT2_Radius"        value="299.90*mm"/>
+
+  <!-- TPC -->
+  <constant name="TPC_Ecal_Hcal_barrel_halfZ" value="2350*mm"/>
+  <constant name="top_TPC_inner_radius"    value="329*mm"/>
+
+  <!-- ECAL -->
+  <constant name="Ecal_Tpc_gap" value="35*mm"/>
+  <constant name="Ecal_Hcal_symmetry"   value="8"/>
+  <constant name="Ecal_barrel_thickness" value="185.0*mm"/>
+  <constant name="Hcal_Ecal_gap" value="30*mm"/>
+
+  <constant name="Ecal_endcap_zmin" value="2450.0*mm"/>
+  <constant name="Ecal_endcap_center_box_size" value="800.0*mm"/>
+
+  <constant name="Ecal_Lcal_ring_gap" value="54.8*mm"/>
+  <constant name="Ecal_EC_Ring_gap" value="10*mm"/>
+
+  <!-- HCAL -->
+  <constant name="Hcal_barrel_thickness" value="1272.3*mm"/>
+  <constant name="Hcal_Coil_additional_gap" value="29.5*mm"/>
+  <constant name="Hcal_outer_symmetry" value="16"/>
+
+  <constant name="Hcal_endcap_center_box_size" value="700.0*mm"/>
+  <constant name="Hcal_endcap_zmin" value="2650*mm" />
+  <constant name="Hcal_endcap_thickness" value="1287.0*mm"/>
+  <constant name="Hcal_radial_ring_inner_gap" value="50*mm"/>
+  <constant name="Hcal_endcap_cryostat_gap" value="170*mm"/>
+
+  <!-- coil -->
+  <constant name="Coil_extra_size" value="1522*mm"/>
+  <constant name="Coil_thickness" value="750.0*mm"/>
+
+
+  <!-- Yoke -->
+  <constant name="top_Yoke_symmetry"        value="12"/>
+  <!-- define relative to HCAL
+       <constant name="top_Yoke_inner_radius"    value="4424.0*mm"/>
+       <constant name="top_Yoke_outer_radius"    value="7725.0*mm"/>
+       -->
+  <constant name="top_Hcal_Yoke_gap"       value="300*mm"/>
+  <constant name="top_Yoke_thickness"      value="3301*mm"/>
+
+  <constant name="top_Yoke_half_length"     value="4047.0*mm"/>
+  <constant name="Yoke_Z_start_endcaps"     value="4072.0*mm"/>
+  <constant name="Yoke_endcap_inner_radius" value="300*mm"/>
+
+  <!-- lumical -->
+  <constant name="top_Lcal_inner_radius" value="80.0*mm"/>
+  <constant name="Lcal_outer_radius"     value="195.2*mm"/>
+  <constant name="LumiCal_tubebulge_overshoot"   value="11.2*mm"/>
+  <constant name="top_Lcal_z_begin"      value="Ecal_endcap_zmin" /> <!--"2505.0*mm"/-->
+
+  <!-- lhcal -->
+  <constant name="top_LHCal_thickness"               value="480*mm"/> <!--464.0*mm"/-->
+  <constant name="top_LHCal_inner_radius"            value="130*mm"/>
+  <constant name="top_LHCal_outer_radius"            value="315*mm"/>
+  <constant name="top_LHCal_min_z"                   value="2680*mm"/>
+  <constant name="LHcal_zend"           value="top_LHCal_min_z + top_LHCal_thickness"/>
+  <constant name="LHcal_BCal_clearance" value="35*mm"/>
+
+  <!-- beamcal -->
+  <constant name="top_BCal_nLayers"                  value="30"/>
+  <constant name="top_BeamCal_layerThickness"        value="4.0008*mm"/>
+  <constant name="top_BCal_dGraphite"                value="80*mm"/>
+  <constant name="top_BeamCal_thickness"             value="top_BCal_dGraphite + top_BCal_nLayers*top_BeamCal_layerThickness"/>
+  <constant name="top_BeamCal_tubeIncoming_radius"   value="15.0*mm"/>
+  <constant name="top_BeamCal_tubeIncoming_clearance"   value="1.0*mm"/> <!-- Allow some clearance -->
+  <constant name="BCal_rInner" value="17.8*mm"/>
+  <constant name="BCal_rOuter" value="140*mm"/>
+
+
+  <!-- the beam tube -->
+  <constant name="TUBE_IPInnerTube_end_z"         value="80*mm"/>
+  <constant name="TUBE_central_inner_radius" value="13.5*mm"/>
+  <constant name="TUBE_central_thickness" value="0.5*mm"/>
+
+  <constant name="TUBE_IPInnerBulge_end_z"        value="150*mm"/>
+  <constant name="TUBE_IPInnerBulge_end_innerradius" value="24*mm"/>
+
+  <constant name="TUBE_IPOuterTube_start_z"       value="150*mm"/>
+  <constant name="TUBE_IPOuterTube_end_z"         value="230*mm"/>
+
+  <constant name="TUBE_Lcal_clearance" value="20*mm"/>
+
+  <!-- space left for envelopes (counting from inner beampipe surface) -->
+  <!-- for inner tube, inner cone, outer tube -->
+  <constant name="TUBE_inner_maxthick" value="1.0*mm"/> 
+  <!-- for outer bulge: include thickness for cables, and the angle effect (should be at least TUBE_secondCone_part4_thickness/TUBE_secondCone_cosOpeningAngle) -->
+  <constant name="TUBE_outer_maxthick" value="3.0*mm"/> 
+
+
+
+</define>

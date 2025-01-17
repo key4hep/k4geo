@@ -1,0 +1,210 @@
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0" 
+       xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+       xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+  <info name="ILD_l1_v01"
+        title="ILD Mokka model used for the DBD - ported to DD4hep"
+        author="F. Gaede"
+        url="http://ilcsoft.desy.de"
+        status="experimantal"
+        version="$Id: LumiCalOnly.xml 298 2015-02-25 15:09:08Z gaede $">
+    <comment>ILD Mokka model used for the DBD - ported to DD4hep </comment>        
+  </info>
+  
+  <includes>
+    <gdmlFile  ref="elements.xml"/>
+    <gdmlFile  ref="materials.xml"/>
+    <!--pyBuilder ref="../drivers"/-->
+  </includes>
+  
+  <define>
+    <constant name="world_side"             value="30*m"/>
+    <constant name="world_x"                value="world_side/2"/>
+    <constant name="world_y"                value="world_side/2"/>
+    <constant name="world_z"                value="world_side/2"/>        
+
+    <!--- constants defined in class UTIL::ILDConfig  -->
+    <!-- constant name="ILDCellID0_encoder_string"   value="subdet:5,side:-2,layer:9,module:8,sensor:8"/ -->
+
+    <constant name="ILDDetID_NOTUSED"   value="  0"/>
+    <constant name="ILDDetID_VXD"       value="  1"/>
+    <constant name="ILDDetID_SIT"       value="  2"/>
+    <constant name="ILDDetID_FTD"       value="  3"/>
+    <constant name="ILDDetID_TPC"       value="  4"/>
+    <constant name="ILDDetID_SET"       value="  5"/>
+    <constant name="ILDDetID_ETD"       value="  6"/>
+    <constant name="ILDDetID_ECAL"      value=" 20"/>
+    <constant name="ILDDetID_ECAL_PLUG" value=" 21"/>
+    <constant name="ILDDetID_HCAL"      value=" 22"/>
+    <constant name="ILDDetID_HCAL_RING" value=" 23"/>
+    <constant name="ILDDetID_LCAL"      value=" 24"/>
+    <constant name="ILDDetID_BCAL"      value=" 25"/>
+    <constant name="ILDDetID_LHCAL"     value=" 26"/>
+    <constant name="ILDDetID_YOKE"      value=" 27"/>
+    <constant name="ILDDetID_bwd"       value="- 1"/>
+    <constant name="ILDDetID_barrel"    value="  0"/>
+    <constant name="ILDDetID_fwd"       value="  1"/>
+    
+
+    <!-- global parameters from Mokka model ILD_l1_v01 -->
+    <include ref="model_parameters_ILD_l1_v01.xml"/>
+
+    <constant name="env_safety" value="0.1*mm"/>
+    <constant name="ILC_Main_Crossing_Angle" value="14*mrad"/>
+
+    <constant name="Ecal_endcap_zmax" value="2635.0*mm" />
+    <constant name="Ecal_endcap_zmin" value="2450.0*mm"/>
+    <constant name="Ecal_endcap_plug_rmin" type="string" value="250.0*mm" />
+    <constant name="Hcal_outer_radius" value="3395.46*mm"/> 
+    <constant name="Ecal_Barrel_halfZ" value="2350*mm"/>
+    <constant name="TPC_Ecal_Hcal_barrel_halfZ" value="Ecal_Barrel_halfZ"/>
+    <constant name="TPC_outer_radius" value="1808*mm"/>
+    <constant name="Ecal_inner_radius"    value="TPC_outer_radius+Ecal_Tpc_gap"/>
+    <constant name="Ecal_outer_radius"    value="Ecal_inner_radius+Ecal_barrel_thickness"/> 
+    <constant name="Hcal_inner_radius" value="Ecal_outer_radius+Hcal_Ecal_gap" />  
+<!-- bp : set it here as it depends on Ecal_endcap_zmax -->
+    <constant name="Lcal_z_begin" value="Ecal_endcap_zmax - Lcal_z_thickness"/>
+
+
+    <constant name="tracker_region_rmax" value="TPC_outer_radius" />  
+    <constant name="tracker_region_zmax" value="Ecal_endcap_zmin" />
+  
+    <constant name="TUBE_IPInnerTube_end_z"         value="80*mm"/>
+    <constant name="TUBE_IPInnerBulge_end_radius"   value="24*mm"/>
+    <constant name="TUBE_IPInnerBulge_end_z"        value="150*mm"/>
+    <constant name="TUBE_IPOuterBulge_end_radius" type="string" value="183.993" />
+    <!--constant name="TUBE_IPOuterBulge_end_z" type="string" value="2364.5" /-->
+    <constant name="TUBE_IPOuterBulge_end_z"        value="TPC_Ecal_Hcal_barrel_halfZ"/> 
+    <constant name="TUBE_IPOuterTube_end_radius" type="string" value="25" />
+    <constant name="TUBE_IPOuterTube_start_radius" type="string" value="25" />
+    <constant name="TUBE_IPOuterTube_start_z" type="string" value="220" />
+    <constant name="TUBE_IPOuterTube_end_z" type="string" value="230" />
+
+
+
+    <comment> Parameters for the LumiCal</comment>
+	<!-- The values are copied from dimensions in model_parameters.xml -->
+	<constant name="LumiCal_thickness"             value="128.7*mm"/>  <!--"130.65*mm"/-->
+	<constant name="LumiCal_inner_radius"          value="80*mm"/>
+	<constant name="LumiCal_outer_radius"          value="202.086*mm"/> <!--"195.2*mm"/-->
+	<constant name="LumiCal_max_z"                 value="Ecal_endcap_zmax"/>
+	<constant name="LumiCal_min_z"                 value="LumiCal_max_z - LumiCal_thickness"/>
+	<constant name="COS_halfCrossingAngle"         value="cos( ILC_Main_Crossing_Angle/2. )"/>
+        <constant name="Lcal_z_begin" value="LumiCal_min_z" />
+	<!-- B.P: added,  LumiCal readout need this -->
+	<constant name="LcalHalfTilePhi"  value="180./Lcal_n_tiles*degree"/>
+	<constant name="CosHalfTilePhi"   value=" cos( LcalHalfTilePhi )"/>
+	<constant name="Lcal_sensor_rmin" value=" LumiCal_inner_radius/CosHalfTilePhi + Lcal_tile_gap"/>
+	<constant name="Lcal_sensor_rmax" value=" LumiCal_outer_radius*CosHalfTilePhi - Lcal_tile_gap"/>
+	<constant name="Lcal_offset_phi" value=" 360./Lcal_nstrips_phi/2.*degree"/>
+
+	<comment>Dummy Parameters for the LHcal  </comment>
+	<constant name="LHcal_inner_radius" value="93*mm"/>
+        <constant name="LHcal_zend" value="3085*mm"/>
+
+	<comment>Dummy Parameters for the BeamCal</comment>
+	<constant name="BeamCal_rmin"  value="30*mm"/>
+	<constant name="BeamCal_rmax"  value="15*cm"/>
+	<constant name="BeamCal_zmin"  value="3.3*m"/>
+
+  </define>
+
+      <limits>
+        <limitset name="cal_limits">
+            <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
+        </limitset>
+        <limitset name="TPC_limits">
+            <limit name="step_length_max" particles="*" value="10.0" unit="mm" />
+        </limitset>
+        <limitset name="Tracker_limits">
+            <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
+        </limitset>
+    </limits>
+
+
+  <display>
+    <vis name="WhiteVis"         alpha="0.0" r=".96" g=".96"  b=".96"   showDaughters="true"  visible="true"/>
+    <vis name="Invisible"        alpha="0.0" r="0"   g="0"    b="0"     showDaughters="false" visible="false"/>
+    <vis name="SeeThrough"       alpha="0.0" r="0"   g="0"    b="0"     showDaughters="true"  visible="true"/>
+    <vis name="RedVis"           alpha="1.0" r="1.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="GreenVis"         alpha="1.0" r="0.0" g="1.0"  b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="BlueVis"          alpha="1.0" r="0.0" g="0.0"  b="1.0"   showDaughters="true"  visible="true"/>
+    <vis name="CyanVis"          alpha="1.0" r="0.0" g="1.0"  b="1.0"   showDaughters="true"  visible="true"/>
+    <vis name="MagentaVis"       alpha="1.0" r="1.0" g="0.0"  b="1.0"   showDaughters="true"  visible="true"/>
+    <vis name="YellowVis"        alpha="1.0" r="1.0" g="1.0"  b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="BlackVis"         alpha="1.0" r="0.0" g="0.0"  b="0.0"   showDaughters="true"  visible="true"/>
+    <vis name="GrayVis"          alpha="1.0" r="0.5" g="0.5"  b="0.5"   showDaughters="true"  visible="true"/>
+
+
+    <!--vis name="TubeVis"   alpha="0.1" r="1.0" g="0.7"  b="0.5"   showDaughters="true"  visible="true"/> -->
+    <vis name="TubeVis"           alpha="1.0" r="0.5" g="0.5"  b="0.5"   showDaughters="true"  visible="true"/>
+    <vis name="BeamPipeVis"       alpha="0.1" r="0.5" g="1.0"  b="0.0"   showDaughters="true"  visible="false"/> 
+    <vis name="VacVis"            alpha="1.0" r="0.0" g="0.0"  b="0.0"   showDaughters="true"  visible="false"/>
+
+    <vis name="TPCVis"        alpha="0.1" r="0" g="0"  b="0"         showDaughters="true"  visible="true"/>
+    <vis name="TPCMotherVis"  alpha="0.1" r="0.9" g="0.9"  b="0.9"   showDaughters="true"  visible="false"/>
+
+    <vis name="VXDVis"        alpha="0.1" r="0.1" g=".5"  b=".5"   showDaughters="true"  visible="true"/>
+    <vis name="VXDLayerVis"   alpha="1.0" r="0.1" g=".5"  b=".5"   showDaughters="true"  visible="true"/>
+    <vis name="VXDSupportVis" alpha="1.0" r="0.0" g="1.0" b="0.0"  showDaughters="true"  visible="true"/>
+
+
+    <vis name="FTDVis"           alpha="1.0" r="0.0" g="0.1"  b="0.0"   showDaughters="true"  visible="false"/>
+    <vis name="FTDSensitiveVis" alpha="1.0"  r="1.0"  g="1.0" b="0.45" showDaughters="true" visible="true"/>
+    <vis name="FTDSupportVis"   alpha="1.0"  r="1.0"  g="0.5" b="0.5"  showDaughters="true" visible="true"/>
+    <vis name="FTDHolePetalVis" alpha="1.0"  r="0.5"  g="0.5" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="FTDCylVis"       alpha="0.45" r="0.2"  g="0.9" b="0.98" showDaughters="true" visible="true"/>
+    <vis name="FTDCablesVis"    alpha="1.0"  r="0.0"  g="0.9" b="0.0"  showDaughters="true" visible="true"/>
+    
+    <vis name="LumiCalVis"    alpha="0.3"  r="0.7" g="1.0"  b="1.0" showDaughters="true"  visible="false"/>
+    <vis name="BCLayerVis1"   alpha="1.0"  r="0.5" g="0.5"  b="0.5" showDaughters="true"  visible="true"/>
+    <vis name="BCLayerVis2"   alpha="1.0"  r="0.1" g="0.1"  b="0.1" showDaughters="true"  visible="true"/>
+    <vis name="BCLayerVis3"   alpha="1.0"  r="0.6" g="0.0"  b="0.0" showDaughters="true"  visible="true"/>
+    <vis name="BCLayerVis4"   alpha="1.0"  r="1.0" g="0.0"  b="1.0" showDaughters="true"  visible="true"/>
+    <vis name="PhiGapVis"     alpha="0.0"  r="1.0" g="1.0"  b="1.0" showDaughters="true"  visible="true"/>
+    <!-- colors used in Mokka and CED for ILD -->
+    <vis name="ILD_SITVis"  alpha="1.0" r="0.86" g="0.86"  b="0.86" showDaughters="true"  visible="true"/>
+    <vis name="ILD_SETVis"  alpha="1.0" r="0.86" g="0.86"  b="0.86" showDaughters="true"  visible="true"/>
+    <vis name="ILD_TPCVis"  alpha="1.0" r="0.96" g="0.95"  b="0.0"  showDaughters="true"  visible="true"/>
+    <vis name="ILD_ECALVis" alpha="1.0" r="0.48" g="0.95"  b="0.0"  showDaughters="true"  visible="true"/>
+    <vis name="ILD_HCALVis" alpha="1.0" r="0.76" g="0.76"  b="0.19" showDaughters="true"  visible="true"/>
+    <vis name="ILD_YOKEVis" alpha="1.0" r="0.09" g="0.76"  b="0.76" showDaughters="true"  visible="true"/>
+    <vis name="ILD_COILVis" alpha="1.0" r="0.28" g="0.28"  b="0.86" showDaughters="true"  visible="true"/>
+    <vis name="ILD_FTDVis"  alpha="1.0" r="0.39" g="0.1"   b="0.57" showDaughters="true"  visible="true"/>
+    <vis name="ILD_FCALVis" alpha="1.0" r="0.67" g="0.66"  b="0.67" showDaughters="true"  visible="true"/>
+
+  </display>
+
+  <detectors>
+    <comment> Beam pipe </comment> 
+	<include ref="Beampipe_o1_v01_01.xml"/> 
+
+    <comment>Forward Calorimeters</comment>
+
+        <include ref="LumiCal.xml"/>
+
+
+  </detectors> 
+
+  <readouts>
+
+	<readout name="LumiCalCollection">
+	    <segmentation type="PolarGridRPhi"
+			  grid_size_r="(Lcal_sensor_rmax-Lcal_sensor_rmin)/Lcal_nstrips_theta"
+			  grid_size_phi="360/Lcal_nstrips_phi*degree"
+			  offset_r="Lcal_sensor_rmin"
+			  offset_phi="Lcal_offset_phi"
+			  />
+	    <id>system:8,barrel:3,layer:8,slice:8,r:32:-16,phi:-16</id>
+	</readout>
+
+  </readouts>
+
+  <fields>
+    <field type="solenoid" name="GlobalSolenoid" inner_field="Field_nominal_value*tesla" 
+   	   outer_field="-1.5*tesla" zmax="TPC_Ecal_Hcal_barrel_halfZ"
+   	   inner_radius="TPC_outer_radius" 
+   	   outer_radius="world_side" />
+  </fields>
+
+</lccdd>

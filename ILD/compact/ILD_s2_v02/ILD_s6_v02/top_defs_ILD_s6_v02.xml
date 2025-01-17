@@ -1,0 +1,12 @@
+<define>
+
+<comment> 
+all hardcoded overall dimensions which differ between large and small models
+</comment>
+
+  <constant name="Field_nominal_value" value="4.0*tesla"/>
+  <constant name="top_TPC_outer_radius"    value="1426.8*mm"/>
+  <constant name="Ecal_endcap_extra_size" value="32.92*mm"/>
+  <constant name="Ecal_endcap_number_of_towers" type="string" value="4 3"/>
+
+</define>

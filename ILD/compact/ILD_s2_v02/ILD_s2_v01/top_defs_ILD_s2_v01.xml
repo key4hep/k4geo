@@ -1,0 +1,14 @@
+<define>
+
+<comment> 
+all hardcoded overall dimensions which differ between large and small models
+</comment>
+
+  <constant name="Field_nominal_value" value="4.0*tesla"/>   <!-- changed wrt large model -->
+  <constant name="top_TPC_outer_radius"    value="1460*mm"/>   <!-- changed wrt large model -->
+  <constant name="Ecal_endcap_extra_size" value="38.4*mm"/>   <!-- changed wrt large model -->
+  <constant name="Ecal_endcap_number_of_towers" type="string" value="4 3"/>   <!-- changed wrt large model -->
+  <constant name="TPC_cooling_nRings" value="6"/>
+
+
+</define>
