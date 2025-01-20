@@ -668,6 +668,12 @@ createECalEndcapTurbine(dd4hep::Detector& aLcdd, dd4hep::xml::Handle_t aXmlEleme
   caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::EndcapLayout;
   caloDetElem.addExtension<dd4hep::rec::LayeredCalorimeterData>(caloData);
 
+  // save extent information
+  caloData->extent[0] = dim.rmin1();
+  caloData->extent[1] = dim.rmax1();
+  caloData->extent[2] = dim.z_offset()-dim.dz()/2.;
+  caloData->extent[3] = dim.z_offset()+dim.dz()/2.;
+
   // Set type flags
   dd4hep::xml::setDetectorTypeFlag(xmlDetElem, caloDetElem);
 
