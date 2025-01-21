@@ -686,8 +686,10 @@ void DRBarrelTubes::DRTubesconstructor::construct_tower_trapezoid(Volume& trap_v
         trap_volume.setSolid(trap_solid);
         trap_volume.setVisAttributes(*m_description, m_trap_visString);
 
-        PlacedVolume tower_air_placed = trap_volume.placeVolume(tower_air_volume, 1, tower_air_pos);
-        tower_air_placed.addPhysVolID("air", 1);
+        // Air gets copy number and physVolID of 63
+        // Used in the sensitive action to distinguish between barrel and endcaps
+        PlacedVolume tower_air_placed = trap_volume.placeVolume(tower_air_volume, 63, tower_air_pos);
+        tower_air_placed.addPhysVolID("air", 63);
 
         // Place all the tubes inside the tower
         this->assemble_tower(tower_air_volume);

@@ -220,11 +220,11 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
       static_cast<unsigned int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(5));
 
     BitFieldCoder bcbarrel(
-      "system:5,stave:10,tower:-8,air:1,col:-16,row:16,clad:1,core:1,cherenkov:1");
+      "system:5,stave:10,tower:-8,air:6,col:-16,row:16,clad:1,core:1,cherenkov:1");
     bcbarrel.set(VolID, "system", 28);  // this number is set in DectDimensions_IDEA_o2_v01.xml
     bcbarrel.set(VolID, "stave", StaveID);
     bcbarrel.set(VolID, "tower", TowerID);
-    bcbarrel.set(VolID, "air", 1);
+    bcbarrel.set(VolID, "air", 63);
     bcbarrel.set(VolID, "col", ColumnID);
     bcbarrel.set(VolID, "row", RowID);
     bcbarrel.set(VolID, "clad", 1);
