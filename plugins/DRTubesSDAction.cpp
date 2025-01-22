@@ -153,9 +153,13 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
 
   // Now we are inside fibers' core volume (either Scintillating or Cherenkov)
 
-  // Now we check if we are in the barrel and the endcap calo
-  double theta = aStep->GetPreStepPoint()->GetPosition().theta();
-  bool IsBarrel = (theta >= 45.0 * deg && theta <= 135.0 * deg) ? true : false;
+  // Now we check if we are in the barrel and the endcap calo.
+  // For the barrel GetCopyNumber(3) would be the air-volume with cpno 63
+  // For the endcap GetCopyNumber(3) is never 63
+  // (patchy for the moment, can be improved later on)
+  //
+  bool IsBarrel = aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(3) == 63;
+
   VolumeID VolID = 0;  // this 64-bits VolumeID will be recreated for barrel and endcap volumes
   Geant4HitCollection* coll = nullptr;  // to be assigned correctly below
 
