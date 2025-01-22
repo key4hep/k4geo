@@ -15,6 +15,8 @@
 #include <edm4hep/RawCalorimeterHitCollection.h>
 #include <edm4hep/RawTimeSeriesCollection.h>
 #include <edm4hep/EDM4hepVersion.h>
+#include <edm4hep/SimDRCalorimeterHitCollection.h>
+#include "DRCrystalHit.h"
 /// podio include files
 #include <podio/CollectionBase.h>
 #include <podio/podioVersion.h>
@@ -51,11 +53,16 @@ namespace dd4hep {
       using writer_t = podio::ROOTWriter;
       using stringmap_t = std::map< std::string, std::string >;
       using trackermap_t = std::map< std::string, edm4hep::SimTrackerHitCollection >;
+
       using calorimeterpair_t = std::pair< edm4hep::SimCalorimeterHitCollection, edm4hep::CaloHitContributionCollection >;
       using calorimetermap_t = std::map< std::string, calorimeterpair_t >;
+
       using drcalopair_t = std::pair< edm4hep::RawCalorimeterHitCollection, edm4hep::RawTimeSeriesCollection> ; // Required info for IDEA DRC sim hit
       using drcalomap_t = std::map< std::string, drcalopair_t >;                                                // Required info for IDEA DRC sim hit
       using drcaloWavmap_t = std::map< std::string, edm4hep::RawTimeSeriesCollection >;
+
+      using scepcalcalopair_t = std::pair< edm4hep::SimDRCalorimeterHitCollection, edm4hep::CaloHitContributionCollection >;
+      using scepcalcalomap_t = std::map< std::string, scepcalcalopair_t >;
 
       std::unique_ptr<writer_t>     m_file  { };
       podio::Frame                  m_frame { };
@@ -64,6 +71,7 @@ namespace dd4hep {
       calorimetermap_t              m_calorimeterHits;
       drcalomap_t                   m_drcaloHits;
       drcaloWavmap_t                m_drcaloWaves;
+      scepcalcalomap_t              m_scepcalcaloHits;
       stringmap_t                   m_runHeader;
       stringmap_t                   m_eventParametersInt;
       stringmap_t                   m_eventParametersFloat;
@@ -290,12 +298,18 @@ void Geant4Output2EDM4hep_DRC::commit( OutputContext<G4Event>& /* ctxt */)   {
     for (auto it = m_drcaloWaves.begin(); it != m_drcaloWaves.end(); ++it) {
       m_frame.put( std::move(it->second), it->first + "WaveLen");
     }
+    for (auto& [colName, calorimeterHits] : m_scepcalcaloHits) {
+      m_frame.put( std::move(calorimeterHits.first), colName);
+      m_frame.put( std::move(calorimeterHits.second), colName + "Contributions");
+    }
+
     m_file->writeFrame(m_frame, m_section_name);
     m_particles.clear();
     m_trackerHits.clear();
     m_calorimeterHits.clear();
     m_drcaloHits.clear();
     m_drcaloWaves.clear();
+    m_scepcalcaloHits.clear();
     m_frame = {};
     return;
   }
@@ -335,6 +349,7 @@ void Geant4Output2EDM4hep_DRC::begin(const G4Event* event)  {
   m_calorimeterHits.clear();
   m_drcaloHits.clear();
   m_drcaloWaves.clear();
+  m_scepcalcaloHits.clear();
 }
 
 /// Data conversion interface for MC particles to EDM4hep format
@@ -591,6 +606,52 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
     }
     //-------------------------------------------------------------------
   }
+  else if( typeid( SCEPCal::DRCrystalHit ) == coll->type().type() ){
+    
+    Geant4Sensitive* sd = coll->sensitive();
+    int hit_creation_mode = sd->hitCreationMode();
+
+    auto& hits = m_scepcalcaloHits[colName];
+
+    for(unsigned i=0 ; i < nhits ; ++i){
+    
+      auto sch = hits.first->create();
+      const SCEPCal::DRCrystalHit* hit = coll->hit(i);
+
+      const auto& pos = hit->position;
+      edm4hep::Vector3f hitpos( float(pos.x()/CLHEP::mm), float(pos.y()/CLHEP::mm), float(pos.z()/CLHEP::mm) );
+
+      sch.setCellID( hit->cellID );
+      sch.setPosition( hitpos );
+      sch.setEnergy( hit->energyDeposit/CLHEP::GeV );
+
+      sch.setNCerenkovProd(     hit->nCerenkovProd );
+      sch.setNScintillationProd(hit->nScintillationProd );
+
+      sch.setTAvgS( hit->tAvgC );
+      sch.setTAvgS( hit->tAvgS );
+
+      for(auto ci=hit->truth.begin(); ci != hit->truth.end(); ++ci){
+
+        auto sCaloHitCont = hits.second->create();
+        sch.addToContributions( sCaloHitCont );
+
+        const Geant4HitData::MonteCarloContrib& c = *ci;
+    
+        int trackID = pm->particleID(c.trackID);
+        auto mcp = m_particles.at(trackID);
+    
+        sCaloHitCont.setEnergy( c.deposit/CLHEP::GeV );
+        sCaloHitCont.setTime( c.time/CLHEP::ns );
+        sCaloHitCont.setParticle( mcp );
+        
+        edm4hep::Vector3f p(c.x/CLHEP::mm, c.y/CLHEP::mm, c.z/CLHEP::mm);
+    
+        sCaloHitCont.setPDG( c.pdgID );
+        sCaloHitCont.setStepPosition( p );
+      }
+    }
+  } 
   else if( typeid( Geant4DRCalorimeter::Hit ) == coll->type().type() ){
     Geant4Sensitive* sd = coll->sensitive();
     int hit_creation_mode = sd->hitCreationMode();

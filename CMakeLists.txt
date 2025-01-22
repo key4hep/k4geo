@@ -119,6 +119,8 @@ file(GLOB G4sources
   ./plugins/DRCaloFastSimModel.h
   ./plugins/DRTubesSDAction.hh
   ./plugins/DRTubesSDAction.cpp
+  ./plugins/SCEPCalSDActionDRCrystalHit.cpp
+  ./plugins/DRCrystalHit.cpp
 )
 
 if(DD4HEP_USE_PYROOT)
@@ -141,7 +143,7 @@ target_include_directories(${PackageName}   PRIVATE ${PROJECT_SOURCE_DIR}/detect
 target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detector/calorimeter/dual-readout-tubes/include )
 
 target_link_libraries(${PackageName}   DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers ROOT::Core detectorSegmentations)
-target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ROOT::Core podio::podioRootIO EDM4HEP::edm4hep ${Geant4_LIBRARIES})
+target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ROOT::Core detectorSegmentations podio::podioRootIO EDM4HEP::edm4hep ${Geant4_LIBRARIES})
 
 if(K4GEO_USE_LCIO)
   target_link_libraries(${PackageName}   LCIO::lcio)
