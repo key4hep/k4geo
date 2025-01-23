@@ -63,7 +63,7 @@ createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4hep::SensitiveDetector 
     cylinderPhys1.addPhysVolID("layer", 0);
 
     cylinderPhys2.addPhysVolID("system", x_det.id());
-    cylinderPhys1.addPhysVolID("subsystem", 1); // positive endcap
+    cylinderPhys2.addPhysVolID("subsystem", 1); // positive endcap
     cylinderPhys2.addPhysVolID("layer", 0);
 
     cylinderDet.setPlacement(cylinderPhys1);
