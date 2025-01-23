@@ -26,9 +26,19 @@ If used with sensitive layers, the readout must contain a "slice" field
 #include "XML/XMLElements.h"
 #include <sstream>
 #include <cmath>
+#include "DDRec/Surface.h"
+#include "DDRec/DetectorData.h"
+#include "XML/Utilities.h"
+#include "XML/DocumentHandler.h"
 
 using namespace std;
 using namespace dd4hep;
+
+using dd4hep::rec::volSurfaceList;
+using dd4hep::rec::Vector3D;
+using dd4hep::rec::VolPlane;
+using dd4hep::rec::VolCylinder;
+using dd4hep::rec::SurfaceType;
 
 static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
                                                            dd4hep::xml::Handle_t xmlElement,
@@ -379,6 +389,8 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
                 sensDet.setType(sdType.typeStr());
                 sliceVolume.setSensitiveDetector(sensDet);
                 slicePlacedVolume.addPhysVolID("slice", sensitiveSliceIndex);
+                dd4hep::DetElement sliceDE(rectangleRemainderEnvDE, "slice_"+sensitiveSliceIndex, sensitiveSliceIndex);
+                sliceDE.setPlacement(slicePlacedVolume);
               //  dd4hep::printout(dd4hep::INFO,"Sensitive Slice has been created at", name, BarrelChamberName);
                 sensitiveSliceIndex++;
               }
@@ -416,6 +428,8 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
                     sensDet.setType(sdType.typeStr());
                     sliceVolume.setSensitiveDetector(sensDet);
                     slicePlacedVolume.addPhysVolID("slice", sensitiveSliceIndex);
+                    dd4hep::DetElement sliceDE(envDE, "slice_"+sensitiveSliceIndex, sensitiveSliceIndex);
+                    sliceDE.setPlacement(slicePlacedVolume);                    
                     // dd4hep::printout(dd4hep::INFO,"Sensitive slice has been created at", name, BarrelChamberName);
                     sensitiveSliceIndex++;
                   }
@@ -522,7 +536,9 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
                 sensDet.setType(sdType.typeStr());
                 sliceVolume.setSensitiveDetector(sensDet);
                 slicePlacedVolume.addPhysVolID("slice", sensitiveSliceIndex);
-                //dd4hep::printout(dd4hep::INFO,"Sensitive slice has been created at", name, BarrelChamberName);
+                dd4hep::DetElement sliceDE(rectangleRemainderEnvDE, "slice_"+sensitiveSliceIndex, sensitiveSliceIndex);
+                sliceDE.setPlacement(slicePlacedVolume); 
+                //dd4hep::printout(dd4hep::INFO,"Sensitive slice has been created at", name, BarrelChamberName);                 
                 sensitiveSliceIndex++;
               }
               // Increment the current x-offset by the width of the current slice
@@ -559,6 +575,8 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
                     sensDet.setType(sdType.typeStr());
                     sliceVolume.setSensitiveDetector(sensDet);
                     slicePlacedVolume.addPhysVolID("slice", sensitiveSliceIndex);
+                    dd4hep::DetElement sliceDE(envDE, "slice_"+sensitiveSliceIndex, sensitiveSliceIndex);
+                    sliceDE.setPlacement(slicePlacedVolume); 
                     // dd4hep::printout(dd4hep::INFO,"Sensitive slice has been created at", name, BarrelChamberName);
                     sensitiveSliceIndex++;
                   }
@@ -915,6 +933,8 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
             sensDet.setType(sdType.typeStr());
             sliceVolume.setSensitiveDetector(sensDet);
             slicePlacedVolume.addPhysVolID("slice", sensitiveSliceIndex);
+            dd4hep::DetElement sliceDE(rectangleRemainderEnvDE, "slice_"+sensitiveSliceIndex, sensitiveSliceIndex);
+            sliceDE.setPlacement(slicePlacedVolume); 
           //  dd4hep::printout(dd4hep::INFO,"Sensitive slice has been created at", name,EndcapChamberName);
             sensitiveSliceIndex++;
           }
@@ -956,6 +976,8 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
             sensDet.setType(sdType.typeStr());
             sliceVolume.setSensitiveDetector(sensDet);
             slicePlacedVolume.addPhysVolID("slice", sensitiveSliceIndex);
+            dd4hep::DetElement sliceDE(envDE, "slice_"+sensitiveSliceIndex, sensitiveSliceIndex);
+            sliceDE.setPlacement(slicePlacedVolume);
            // dd4hep::printout(dd4hep::INFO,"Sensitive slice has been created at", name, EndcapChamberName);
             sensitiveSliceIndex++;
           }
