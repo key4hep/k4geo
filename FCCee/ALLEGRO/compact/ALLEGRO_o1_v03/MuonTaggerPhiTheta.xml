@@ -30,7 +30,7 @@
   </readouts>
 
   <detectors>
-    <!-- positive side: cryostat -->
+    <!-- barrel -->
     <detector id="DetID_Muon_Barrel" name="MuonTaggerBarrel" type="SimpleCylinder_o1_v02" sensitive="true" vis="muon_vis" readout="MuonTaggerBarrelPhiTheta">
       <!-- added for Pandora -->
       <type_flags type="DetType_CALORIMETER + DetType_MUON + DetType_BARREL"/>
@@ -40,6 +40,7 @@
                   dz="MuonTagger_half_length" z_offset = "0" material="Polystyrene" phi0="0" deltaphi="360*deg" vis="muon_vis"/>
     </detector>
 
+    <!-- endcaps -->
     <detector id="DetID_Muon_Endcap_1" name="MuonTaggerEndcap" type="SimpleCylinder_o1_v02" sensitive="true" vis="muon_vis" readout="MuonTaggerEndcapPhiTheta">
       <!-- added for Pandora -->
       <type_flags type="DetType_CALORIMETER + DetType_MUON + DetType_ENDCAP"/>
