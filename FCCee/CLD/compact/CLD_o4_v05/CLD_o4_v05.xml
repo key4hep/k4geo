@@ -61,15 +61,15 @@
         <constant name="BPWCool"       value="1.0*mm" />
         <constant name="BeamPipeWidth" value="2.0*BPWWall + BPWCool"/>
 
-	<constant name="BeamPipeWidthFirstCone" value="2.0*mm" />
+	    <constant name="BeamPipeWidthFirstCone" value="2.0*mm" />
         <!-- this is the inner length of the longer elipse axis -->
-	<constant name="ConeBeamPipe_Rmax" value="28.9*mm" />
+	    <constant name="ConeBeamPipe_Rmax" value="28.9*mm" />
         <constant name="CentralBeamPipe_zmax" value="90*mm"/>
-	<constant name="SeparatedBeamPipe_z" value="1190.0*mm"/>
+	    <constant name="SeparatedBeamPipe_z" value="1190.0*mm"/>
         <constant name="CentralBeamPipe_rmax" value="10.0*mm"/>
-	<constant name="BeamPipeGoldWidth" value="0.005*mm" />
-	<constant name="BeamPipeGoldTolerance" value="0.001*mm" />  <!-- dummy tolerance, some small non zero value -->
-	<constant name="BeamPipeConeHalfAngle" value="(ConeBeamPipe_Rmax + BeamPipeWidthFirstCone - CentralBeamPipe_rmax ) / (SeparatedBeamPipe_z - CentralBeamPipe_zmax)" />
+	    <constant name="BeamPipeGoldWidth" value="0.005*mm" />
+	    <constant name="BeamPipeGoldTolerance" value="0.001*mm" />  <!-- dummy tolerance, some small non zero value -->
+	    <constant name="BeamPipeConeHalfAngle" value="(ConeBeamPipe_Rmax + BeamPipeWidthFirstCone - CentralBeamPipe_rmax ) / (SeparatedBeamPipe_z - CentralBeamPipe_zmax)" />
 
         <constant name="InnerTracker_half_length" value="2300*mm" />
 
@@ -200,16 +200,16 @@
 
         <constant name="LumiCal_dz" value="(LumiCal_max_z-LumiCal_min_z)/2.0"/>
 
-	<constant name="LumiCal_inner_radius" value="55.0*mm"/>
-	<constant name="LumiCal_outer_radius" value="112.0*mm- env_safety"/>
+	    <constant name="LumiCal_inner_radius" value="55.0*mm"/>
+	    <constant name="LumiCal_outer_radius" value="112.0*mm- env_safety"/>
 
-	<constant name="LumiCal_Instr_thickness" value="20*mm"/>
-	<constant name="LumiCal_Instr_inner_radius" value="LumiCal_outer_radius"/>
-	<constant name="LumiCal_Instr_outer_radius" value="LumiCal_outer_radius+LumiCal_Instr_thickness - env_safety"/>
+	    <constant name="LumiCal_Instr_thickness" value="20*mm"/>
+	    <constant name="LumiCal_Instr_inner_radius" value="LumiCal_outer_radius"/>
+	    <constant name="LumiCal_Instr_outer_radius" value="LumiCal_outer_radius+LumiCal_Instr_thickness - env_safety"/>
 
-	<constant name="LumiCal_Cool_thickness" value="9.75*mm"/>
-	<constant name="LumiCal_Cool_inner_radius" value="LumiCal_Instr_outer_radius"/>
-	<constant name="LumiCal_Cool_outer_radius" value="LumiCal_Instr_outer_radius+LumiCal_Cool_thickness"/>
+	    <constant name="LumiCal_Cool_thickness" value="9.75*mm"/>
+	    <constant name="LumiCal_Cool_inner_radius" value="LumiCal_Instr_outer_radius"/>
+	    <constant name="LumiCal_Cool_outer_radius" value="LumiCal_Instr_outer_radius+LumiCal_Cool_thickness"/>
 
         <constant name="Lcal_services_rmax" value="LumiCal_outer_radius+30*mm"/>
         <constant name="Lcal_offset_phi" value=" 0."/>
@@ -241,7 +241,7 @@
 
         <constant name="QD0_min_z" value="2000*mm"/>
         <constant name="QD0_max_z" value="5400*mm"/>
-	<constant name="QD0Coil_outer_radius" value="30*mm"/>
+	    <constant name="QD0Coil_outer_radius" value="30*mm"/>
         <constant name="CollimatorInFrontOfQD0_dz" value="20*cm"/>
         <constant name="CollimatorInFrontOfQD0_radius" value="10*mm"/>
         <constant name="CollimatorInFrontOfQD0_dr" value="16*mm"/>
@@ -365,6 +365,27 @@
         <argument value="VertexBarrel_r3+0.5*cm" />
         <argument value="0" />
       </plugin>
+
+      <plugin name="Pandora_LayeredCalorimeterPlugin">
+        <argument value="/ECalBarrel"/>
+        <argument value="ECalBarrel_inner_radius"/> <!-- Rmin -->
+        <argument value="ECalBarrel_outer_radius"/> <!-- Rmax -->
+        <argument value="ECalBarrel_half_length"/>  <!-- half_length -->
+        <argument value="InclinationAngle"/>  <!-- Scaling factor -->
+        <argument value="1.5*cm"/>   <!-- Layer 1 height -->
+        <argument value="3.5*cm"/>   <!-- Layer 2 height -->
+        <argument value="3.5*cm"/>   <!-- Layer 3 height -->
+        <argument value="3.5*cm"/>   <!-- Layer 4 height -->
+        <argument value="3.5*cm"/>   <!-- Layer 5 height -->
+        <argument value="3.5*cm"/>   <!-- Layer 6 height -->
+        <argument value="3.5*cm"/>   <!-- Layer 7 height -->
+        <argument value="3.5*cm"/>   <!-- Layer 8 height -->
+        <argument value="3.5*cm"/>   <!-- Layer 9 height -->
+        <argument value="3.5*cm"/>   <!-- Layer 10 height -->
+        <argument value="3.5*cm"/>   <!-- Layer 11 height -->
+        <argument value="3.5*cm"/>   <!-- Layer 12 height -->
+       
+     </plugin>
 
     </plugins>
 

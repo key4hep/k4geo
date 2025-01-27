@@ -75,6 +75,7 @@ file(GLOB sources
   ./detector/CaloTB/*.cpp
   ./FCalTB/setup/*.cpp
   ./plugins/LinearSortingPolicy.cpp
+  ./plugins/Pandora_LayeredCalorimeterPlugin.cpp
   ./detector/PID/ARC_geo_o1_v01.cpp
   )
 
