@@ -50,6 +50,8 @@ class DRTubesSDData
     int collection_cher_right;
     int collection_cher_left;
     int collection_scin_left;
+    int collection_drbt_cher;
+    int collection_drbt_scin;
 };
 }  // namespace sim
 }  // namespace dd4hep
@@ -73,10 +75,12 @@ template<>
 void Geant4SensitiveAction<DRTubesSDData>::defineCollections()
 {
   std::string ROname = m_sensitive.readout().name();
-  m_collectionID = defineCollection<Geant4Calorimeter::Hit>(ROname + "ScinRight");
-  m_userData.collection_cher_right = defineCollection<Geant4Calorimeter::Hit>(ROname + "CherRight");
-  m_userData.collection_scin_left = defineCollection<Geant4Calorimeter::Hit>(ROname + "ScinLeft");
-  m_userData.collection_cher_left = defineCollection<Geant4Calorimeter::Hit>(ROname + "CherLeft");
+  m_collectionID = defineCollection<Geant4Calorimeter::Hit>("DRETScinRight");
+  m_userData.collection_cher_right = defineCollection<Geant4Calorimeter::Hit>("DRETCherRight");
+  m_userData.collection_scin_left = defineCollection<Geant4Calorimeter::Hit>("DRETScinLeft");
+  m_userData.collection_cher_left = defineCollection<Geant4Calorimeter::Hit>("DRETCherLeft");
+  m_userData.collection_drbt_cher = defineCollection<Geant4Calorimeter::Hit>("DRBTCher");
+  m_userData.collection_drbt_scin = defineCollection<Geant4Calorimeter::Hit>("DRBTScin");
 }
 
 // Function template specialization of Geant4SensitiveAction class.
@@ -122,6 +126,9 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
   DRTubesSglHpr::PrintStepInfo(aStep);
 #endif
 
+  // This part is needed to kill non ionizing particles in S fibers,
+  // skipping steps in C fibers cladding and killing optical photons
+  // in C fibers cladding. It is common to the endcap and barrel calo.
   auto Edep = aStep->GetTotalEnergyDeposit();
   auto cpNo = aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber();
   // The second bit of the CopyNumber corresponds to the "core" entry:
@@ -146,59 +153,115 @@ bool Geant4SensitiveAction<DRTubesSDData>::process(const G4Step* aStep,
 
   // Now we are inside fibers' core volume (either Scintillating or Cherenkov)
 
-  // We recreate the TubeID from the tube copynumber:
-  // fist16 bits for the columnID and second 16 bits for the rowID
-  auto TubeID = aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(2);
-  unsigned int ColumnID = TubeID >> 16;
-  unsigned int RawID = TubeID & 0xFFFF;
-  auto TowerID =
-    static_cast<unsigned int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(3));
-  auto StaveID =
-    static_cast<unsigned int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(4));
-
-  VolumeID VolID = 0;  // recreate the 64-bit VolumeID
-  BitFieldCoder bc("system:5,stave:10,tower:6,air:1,col:16,row:16,clad:1,core:1,cherenkov:1");
-  bc.set(VolID, "system", 25);  // this number is set in DectDimensions_IDEA_o2_v01.xml
-  bc.set(VolID, "stave", StaveID);
-  bc.set(VolID, "tower", TowerID);
-  bc.set(VolID, "air", 0);
-  bc.set(VolID, "col", ColumnID);
-  bc.set(VolID, "row", RawID);
-  bc.set(VolID, "clad", 1);
-  bc.set(VolID, "core", CoreID);
-  bc.set(VolID, "cherenkov", CherenkovID);
-
-  /* If you want to compare the 64-bits VolID created here
-   * with the original DD4hep volumeID:
-   * 1. set in DREndcapTubes_o1_v01.xml clad_C, core_C and core_S
-   * volumes as sensitive
-   * 2. associate DRTubesSDAction to DREncapTubes subdetector
-   * in the steering file (instead of using RegexSD)
-   * 3. Uncomment the code below */
-  // clang-format off
-  /*std::cout<<"Volume id, created "<<VolID<<" and DD4hep oroginal "<<volumeID(aStep)<<std::endl;
-  std::cout<<"system id, created "<<25<<" and DD4hep original "<<bc.get(volumeID(aStep),"system")<<std::endl;
-  std::cout<<"stave id, created "<<StaveID<<" and DD4hep original "<<bc.get(volumeID(aStep),"stave")<<std::endl;
-  std::cout<<"tower id, created "<<TowerID<<" and DD4hep original "<<bc.get(volumeID(aStep),"tower")<<std::endl;
-  std::cout<<"air id, created "<<0<<" and DD4hep original "<<bc.get(volumeID(aStep),"air")<<std::endl;
-  std::cout<<"col id, created "<<ColumnID<<" and DD4hep original "<<bc.get(volumeID(aStep),"col")<<std::endl;
-  std::cout<<"row id, created "<<RawID<<" and DD4hep original "<<bc.get(volumeID(aStep),"row")<<std::endl;
-  std::cout<<"clad id, created "<<1<<" and DD4hep original "<<bc.get(volumeID(aStep),"clad")<<std::endl;
-  std::cout<<"core id, created "<<CoreID<<" and DD4hep original "<<bc.get(volumeID(aStep),"core")<<std::endl;
-  std::cout<<"cherenkov id, created "<<CherenkovID<<" and DD4hep original "<<bc.get(volumeID(aStep),"cherenkov")<<std::endl;*/
-  // clang-format on
-
-  bool IsRight = (aStep->GetPreStepPoint()->GetPosition().z() > 0.);
-
-  // We now calculate the signal in S and C fiber according to the step contribution
+  // Now we check if we are in the barrel and the endcap calo.
+  // For the barrel GetCopyNumber(3) would be the air-volume with cpno 63
+  // For the endcap GetCopyNumber(3) is never 63
+  // (patchy for the moment, can be improved later on)
   //
+  bool IsBarrel = aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(3) == 63;
+
+  VolumeID VolID = 0;  // this 64-bits VolumeID will be recreated for barrel and endcap volumes
+  Geant4HitCollection* coll = nullptr;  // to be assigned correctly below
+
+  if (!IsBarrel) {  // get VolumeID and hit collection for endcap
+    // We recreate the TubeID from the tube copynumber:
+    // fist16 bits for the columnID and second 16 bits for the rowID
+    auto TubeID = aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(2);
+    unsigned int ColumnID = TubeID >> 16;
+    unsigned int RowID = TubeID & 0xFFFF;
+    auto TowerID =
+      static_cast<unsigned int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(3));
+    auto StaveID =
+      static_cast<unsigned int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(4));
+
+    BitFieldCoder bc("system:5,stave:10,tower:6,air:1,col:16,row:16,clad:1,core:1,cherenkov:1");
+    bc.set(VolID, "system", 25);  // this number is set in DectDimensions_IDEA_o2_v01.xml
+    bc.set(VolID, "stave", StaveID);
+    bc.set(VolID, "tower", TowerID);
+    bc.set(VolID, "air", 0);
+    bc.set(VolID, "col", ColumnID);
+    bc.set(VolID, "row", RowID);
+    bc.set(VolID, "clad", 1);
+    bc.set(VolID, "core", CoreID);
+    bc.set(VolID, "cherenkov", CherenkovID);
+
+    /* If you want to compare the 64-bits VolID created here
+     * with the original DD4hep volumeID:
+     * 1. set in DREndcapTubes_o1_v01.xml clad_C, core_C and core_S
+     * volumes as sensitive
+     * 2. associate DRTubesSDAction to DREncapTubes subdetector
+     * in the steering file (instead of using RegexSD)
+     * 3. Uncomment the code below */
+    // clang-format off
+    /*std::cout<<"Volume id, created "<<VolID<<" and DD4hep original "<<volumeID(aStep)<<std::endl;
+    std::cout<<"system id, created "<<25<<" and DD4hep original "<<bc.get(volumeID(aStep),"system")<<std::endl;
+    std::cout<<"stave id, created "<<StaveID<<" and DD4hep original "<<bc.get(volumeID(aStep),"stave")<<std::endl;
+    std::cout<<"tower id, created "<<TowerID<<" and DD4hep original "<<bc.get(volumeID(aStep),"tower")<<std::endl;
+    std::cout<<"air id, created "<<0<<" and DD4hep original "<<bc.get(volumeID(aStep),"air")<<std::endl;
+    std::cout<<"col id, created "<<ColumnID<<" and DD4hep original "<<bc.get(volumeID(aStep),"col")<<std::endl;
+    std::cout<<"row id, created "<<RowID<<" and DD4hep original "<<bc.get(volumeID(aStep),"row")<<std::endl;
+    std::cout<<"clad id, created "<<1<<" and DD4hep original "<<bc.get(volumeID(aStep),"clad")<<std::endl;
+    std::cout<<"core id, created "<<CoreID<<" and DD4hep original "<<bc.get(volumeID(aStep),"core")<<std::endl;
+    std::cout<<"cherenkov id, created "<<CherenkovID<<" and DD4hep original "<<bc.get(volumeID(aStep),"cherenkov")<<std::endl;*/
+    // clang-format on
+
+    bool IsRight = (aStep->GetPreStepPoint()->GetPosition().z() > 0.);
+
+    coll = (IsRight && IsScin)    ? collection(m_collectionID)
+           : (IsRight && !IsScin) ? collection(m_userData.collection_cher_right)
+           : (!IsRight && IsScin) ? collection(m_userData.collection_scin_left)
+                                  : collection(m_userData.collection_cher_left);
+  }  // end of encap VolumeID and hit collection creation
+  else {  // create VolumeID and hit collection for the barrel
+
+    // We recreate the TubeID from the tube copynumber:
+    // fist16 bits for the columnID and second 16 bits for the rowID
+    auto TubeID = aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(2);
+    int ColumnID = TubeID >> 16;
+    unsigned int RowID = TubeID & 0xFFFF;
+    auto TowerID = static_cast<int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(4));
+    auto StaveID =
+      static_cast<unsigned int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(5));
+
+    BitFieldCoder bcbarrel(
+      "system:5,stave:10,tower:-8,air:6,col:-16,row:16,clad:1,core:1,cherenkov:1");
+    bcbarrel.set(VolID, "system", 28);  // this number is set in DectDimensions_IDEA_o2_v01.xml
+    bcbarrel.set(VolID, "stave", StaveID);
+    bcbarrel.set(VolID, "tower", TowerID);
+    bcbarrel.set(VolID, "air", 63);
+    bcbarrel.set(VolID, "col", ColumnID);
+    bcbarrel.set(VolID, "row", RowID);
+    bcbarrel.set(VolID, "clad", 1);
+    bcbarrel.set(VolID, "core", CoreID);
+    bcbarrel.set(VolID, "cherenkov", CherenkovID);
+
+    /* If you want to compare the 64-bits VolID created here
+     * with the original DD4hep volumeID:
+     * 1. set in DRBarrelTubes_o1_v01.xml clad_C, core_C and core_S
+     * volumes as sensitive
+     * 2. associate DRTubesSDAction to DRBarrelTubes subdetector
+     * in the steering file (instead of using RegexSD)
+     * 3. Uncomment the code below */
+    // clang-format off
+    /*std::cout<<"Volume id, created "<<VolID<<" and DD4hep original "<<volumeID(aStep)<<std::endl;
+    std::cout<<"system id, created "<<28<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"system")<<std::endl;
+    std::cout<<"stave id, created "<<StaveID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"stave")<<std::endl;
+    std::cout<<"tower id, created "<<TowerID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"tower")<<std::endl;
+    std::cout<<"air id, created "<<1<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"air")<<std::endl;
+    std::cout<<"col id, created "<<ColumnID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"col")<<std::endl;
+    std::cout<<"row id, created "<<RowID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"row")<<std::endl;
+    std::cout<<"clad id, created "<<1<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"clad")<<std::endl;
+    std::cout<<"core id, created "<<CoreID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"core")<<std::endl;
+    std::cout<<"cherenkov id, created "<<CherenkovID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"cherenkov")<<std::endl;*/
+    // clang-format on
+
+    coll = (IsScin) ? collection(m_userData.collection_drbt_scin)
+                    : collection(m_userData.collection_drbt_cher);
+  }  // end of Volume ID and hit collection creation for barrel
+
+  // We now calculate the hit signal
   G4double steplength = aStep->GetStepLength();
   G4int signalhit = 0;
-  Geant4HitCollection* coll = (IsRight && IsScin)    ? collection(m_collectionID)
-                              : (IsRight && !IsScin) ? collection(m_userData.collection_cher_right)
-                              : (!IsRight && IsScin) ? collection(m_userData.collection_scin_left)
-                                                     : collection(m_userData.collection_cher_left);
-
   if (IsScin) {  // it is a scintillating fiber
 
     if (aStep->GetTrack()->GetDefinition()->GetPDGCharge() == 0 || steplength == 0.) {
