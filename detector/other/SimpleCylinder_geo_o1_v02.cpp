@@ -17,33 +17,39 @@ namespace det {
 static dd4hep::Ref_t
 createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4hep::SensitiveDetector sensDet) {
   xml_det_t x_det = e;
+
+  // get detector name, ID and dimensions from compact file
   std::string name = x_det.nameStr();
-  dd4hep::DetElement cylinderDet(name, x_det.id());
-
-  dd4hep::Volume experimentalHall = lcdd.pickMotherVolume(cylinderDet);
-
+  int detID = x_det.id();
   xml_comp_t cylinderDim(x_det.child(_U(dimensions)));
 
+  // create the mother Detector element to be returned at the end
+  dd4hep::DetElement detMaster(name, detID);
+
+  // get the world volume, where the detector will be placed
+  dd4hep::Volume experimentalHall = lcdd.pickMotherVolume(detMaster);
+
+  // define the geometrical shape of the detector (barrel or each endcap)
   dd4hep::Tube cylinder(
-      cylinderDim.rmin(), cylinderDim.rmax(), cylinderDim.dz(), cylinderDim.phi0(), cylinderDim.deltaphi());
+    cylinderDim.rmin(), cylinderDim.rmax(),cylinderDim.dz(), cylinderDim.phi0(), cylinderDim.deltaphi());
 
+  // define the volume (shape + material) of the detector
   dd4hep::Volume cylinderVol(
-      x_det.nameStr() + "_SimpleCylinder", cylinder, lcdd.material(cylinderDim.materialStr()));
-
+    x_det.nameStr() + "_SimpleCylinder", cylinder, lcdd.material(cylinderDim.materialStr()));
   if (x_det.isSensitive()) {
     dd4hep::xml::Dimension sdType(x_det.child(_U(sensitive)));
     cylinderVol.setSensitiveDetector(sensDet);
     sensDet.setType(sdType.typeStr());
   }
+  detMaster.setVisAttributes(lcdd, x_det.visStr(), cylinderVol);
 
-  // Create caloData object
+  // create caloData object and fill rmin, rmax info
   auto caloData = new dd4hep::rec::LayeredCalorimeterData;
-  dd4hep::rec::LayeredCalorimeterData::Layer caloLayer;
-  dd4hep::rec::MaterialManager matMgr(experimentalHall);
-
   caloData->extent[0] = cylinderDim.rmin();
   caloData->extent[1] = cylinderDim.rmax();
-
+  
+  dd4hep::rec::LayeredCalorimeterData::Layer caloLayer;
+  dd4hep::rec::MaterialManager matMgr(experimentalHall);
   double zoff = cylinderDim.z_offset();
   double zmin = zoff - cylinderDim.dz();
   double zmax = zoff + cylinderDim.dz();
@@ -51,25 +57,43 @@ createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4hep::SensitiveDetector 
   
   if (isEndcap)
   {
-    dd4hep::PlacedVolume cylinderPhys1; // negative endcap
-    dd4hep::PlacedVolume cylinderPhys2; // positive endcap
-    dd4hep::Position trans1(0., 0., -zoff);
-    dd4hep::Position trans2(0., 0., zoff);
-    cylinderPhys1 = experimentalHall.placeVolume(cylinderVol, dd4hep::Transform3D(dd4hep::RotationZ(0.), trans1));
-    cylinderPhys2 = experimentalHall.placeVolume(cylinderVol, dd4hep::Transform3D(dd4hep::RotationZ(0.), trans2));
+    // create DetElements for each endcap, as daughters of detMaster
+    dd4hep::DetElement endcapPos(detMaster);
+    dd4hep::DetElement endcapNeg(detMaster);
 
-    cylinderPhys1.addPhysVolID("system", x_det.id());
-    cylinderPhys1.addPhysVolID("subsystem", 0); // negative endcap
-    cylinderPhys1.addPhysVolID("layer", 0);
+    // define the tranforms for positioning the two endcaps
+    dd4hep::Transform3D endcapPos_position(dd4hep::RotationZ( 000*dd4hep::deg), dd4hep::Translation3D(0, 0,  zoff));
+    dd4hep::Transform3D endcapNeg_position(dd4hep::RotationZ( 180*dd4hep::deg), dd4hep::Translation3D(0, 0, -zoff));
 
-    cylinderPhys2.addPhysVolID("system", x_det.id());
-    cylinderPhys2.addPhysVolID("subsystem", 1); // positive endcap
-    cylinderPhys2.addPhysVolID("layer", 0);
+    // top volume of endcaps is an assembly
+    dd4hep::Assembly endcapAssembly("Endcaps_assembly");
 
-    cylinderDet.setPlacement(cylinderPhys1);
-    cylinderDet.setPlacement(cylinderPhys2);
-    cylinderDet.setVisAttributes(lcdd, x_det.visStr(), cylinderVol);
+    // place the endcap on the right and left
+    auto endcapPos_pv = endcapAssembly.placeVolume( cylinderVol, endcapPos_position );
+    auto endcapNeg_pv = endcapAssembly.placeVolume( cylinderVol, endcapNeg_position );
 
+    // mark each placed volume (pv) with the proper phys vol ID
+    endcapPos_pv.addPhysVolID("subsystem", 1);
+    endcapNeg_pv.addPhysVolID("subsystem", 0);
+
+    // link each pv with its corresponding det element
+    endcapPos.setPlacement( endcapPos_pv );
+    endcapNeg.setPlacement( endcapNeg_pv );
+
+    // set the layer ID of each endcap to 0
+    endcapPos_pv.addPhysVolID("layer", 0);
+    endcapNeg_pv.addPhysVolID("layer", 0);
+
+    // place the assembly volume in the world
+    auto endcapAssembly_pv = experimentalHall.placeVolume(endcapAssembly);
+
+    // assign the system ID to the assembly volume
+    endcapAssembly_pv.addPhysVolID("system", detID);
+
+    // link volume with top DetElement to be returned
+    detMaster.setPlacement(endcapAssembly_pv);
+
+    // fill the caloData info
     caloData->extent[2] = zmin;
     caloData->extent[3] = zmax;
     caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::EndcapLayout;
@@ -94,14 +118,19 @@ createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4hep::SensitiveDetector 
   }
   else
   {
-    dd4hep::PlacedVolume cylinderPhys;
-    cylinderPhys = experimentalHall.placeVolume(cylinderVol);
+    // place the volume in the world
+    auto barrel_pv = experimentalHall.placeVolume(cylinderVol);
 
-    cylinderPhys.addPhysVolID("system", x_det.id());
-    cylinderPhys.addPhysVolID("layer", 0);
-    cylinderDet.setPlacement(cylinderPhys);
-    cylinderDet.setVisAttributes(lcdd, x_det.visStr(), cylinderVol);
+    // assign the system ID to the volume
+    barrel_pv.addPhysVolID("system", x_det.id());
 
+    // Set layer ID to 0
+    barrel_pv.addPhysVolID("layer", 0);
+
+    // link volume with top DetElement to be returned
+    detMaster.setPlacement(barrel_pv);
+
+    // Fill caloData object
     caloData->extent[2] = 0;
     caloData->extent[3] = cylinderDim.dz();
     caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::BarrelLayout;
@@ -132,12 +161,12 @@ createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4hep::SensitiveDetector 
   caloData->layers.push_back(caloLayer);
 
   // attach the layer to the cylinderDet
-  cylinderDet.addExtension<dd4hep::rec::LayeredCalorimeterData>(caloData);
+  detMaster.addExtension<dd4hep::rec::LayeredCalorimeterData>(caloData);
 
   // Set type flags
-  dd4hep::xml::setDetectorTypeFlag(x_det, cylinderDet);
+  dd4hep::xml::setDetectorTypeFlag(x_det, detMaster);
 
-  return cylinderDet;
+  return detMaster;
 }
 }
 DECLARE_DETELEMENT(SimpleCylinder_o1_v02, det::createSimpleCylinder)
