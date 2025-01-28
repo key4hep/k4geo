@@ -67,7 +67,7 @@
   <include ref="../../../MDI/compact/MDI_o1_v00/Beampipe_o4_v05.xml"/>
   <include ref="../../../MDI/compact/MDI_o1_v00/HOMAbsorber.xml"/>
 
-  <!-- vertex innerTracker and lumiCal from CLD_02_v07 -->
+  <!-- vertex, innerTracker and lumiCal from CLD_02_v07 -->
   <include ref="../../../CLD/compact/CLD_o2_v07/LumiCal_o3_v02_05.xml"/>
   <include ref="../../../CLD/compact/CLD_o2_v07/Vertex_o4_v07_smallBP.xml"/>
   <include ref="../../../CLD/compact/CLD_o2_v07/InnerTracker_o2_v08.xml"/>
