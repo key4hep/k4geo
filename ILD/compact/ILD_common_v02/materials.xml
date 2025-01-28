@@ -635,6 +635,12 @@
       <composite n="22" ref="H" />
     </material>
 
+    <!-- Default material to use in DDCAD import of CAD models (see CheckShape.xml in DD4hep) -->
+    <material name="DefaultMaterial">
+      <D value="7.85" unit="g/cm3"/>
+      <fraction n="0.998" ref="Fe"/>
+      <fraction n=".002"  ref="C"/>
+    </material>
 
 
   </materials>
