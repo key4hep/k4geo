@@ -84,6 +84,11 @@ public:
    *   return The field name for phi.
    */
   inline const std::string& fieldNamePhi() const { return m_phiID; }
+  /** Get the angle of the turbine blades in a given wheel
+   *   @param[in] iWheel index of wheel.
+   *  return the blade angle for the requested wheel
+   */
+  double bladeAngle(unsigned iWheel) const {return m_bladeAngle[iWheel];}
   /**  Set the number of bins in azimuthal angle.
    *   @param[in] aNumberBins Number of bins in phi.
    */
