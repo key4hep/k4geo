@@ -39,7 +39,7 @@
 
   </define>
 
-  
+
   <limits>
     <limitset name="cal_limits">
       <limit name="step_length_max" particles="*" value="cal_steplimit_val" unit="cal_steplimit_unit" />
@@ -94,14 +94,14 @@
 
 <!-- the simplest description, a la ILD -->
     <field type="solenoid" name="GlobalSolenoid" inner_field="SolenoidField"
-           outer_field="-1.0*tesla" 
+           outer_field="-1.0*tesla"
 	   zmax="Coil_half_length"
            inner_radius="Coil_inner_radius"
            outer_radius="world_side" />
 
 <!-- with compensating soleoids, a la CLD -->
 <!-- DJeans thinks this may not be quite correct; check before using... -->
-<!-- 
+<!--
     <field name="GlobalSolenoid" type="solenoid"
            inner_field="SolenoidField"
            outer_field="-1.0*tesla"
