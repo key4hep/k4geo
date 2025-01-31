@@ -44,9 +44,6 @@ Original version taken from [FCCDetectors](https://github.com/HEP-FCC/FCCDetecto
 ### o1_v02
 Changes wrt o1_v01: Added extension (LayeredCalorimeterData) to store radial layer radii and dimensions. Added several checks for the geometry building and made small changes in the code to improve readibility.
 
-### o1_v02
-Changes wrt o1_v01: Added extension (LayeredCalorimeterData) to store radial layer radii and dimensions. Added several checks for the geometry building and made small changes in the code to improve readibility.
-
 ## HCalThreePartsEndcap
 This sub-detector makes calorimeter endcaps. Each endcap is made up by three cylindrical pieces with different thickness and inner radius, but same outer radius. It is used in ALLEGRO detector concept.
 
