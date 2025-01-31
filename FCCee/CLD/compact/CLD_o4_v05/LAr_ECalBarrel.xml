@@ -51,7 +51,7 @@
     <!-- calorimeter active volume -->
     <constant name="EMBarrel_rmin" value="BarCryoECal_rmin+CryoBarrelFront+LArBathThicknessFront"/>
     <constant name="EMBarrel_rmax" value="BarCryoECal_rmax-CryoBarrelBack-LArBathThicknessBack"/>
-    <constant name="EMBarrel_dz" value="(ECalBarrel_half_length)-CryoBarrelSide"/>
+    <constant name="EMBarrel_dz" value="BarCryoECal_dz-CryoBarrelSide"/>
     <!-- thickness of active volume between two absorber plates at EMBarrel_rmin, measuring perpendicular to the readout plate -->
     <constant name="LAr_thickness" value="LArGapThickness"/>
     <!-- passive layer consists of lead in the middle and steel on the outside, glued -->
@@ -71,7 +71,7 @@
     <constant name="Glue_thickness" value="0.1*mm"/>
     <!-- readout in between two absorber plates -->
     <constant name="readout_thickness" value="1.2*mm"/>
-    <constant name="ECal_cell_size" value="5.1*mm"/>
+    <constant name="ECal_cell_size" value="20*mm"/>
   </define>
 
   <display>
@@ -82,15 +82,15 @@
     <!-- readout for the simulation -->
     <!-- offset in eta is eta max value including cryostat -->
     <readout name="ECalBarrelEta">
-        <!-- segmentation type="GridTheta" grid_size_theta="0.5625" offset_theta="-0.83"/ -->
-	<segmentation type="GridEta" grid_size_eta="0.01" offset_eta="-1.2"/>
+        <!-- segmentation type="GridTheta_k4geo" grid_size_theta="0.5625" offset_theta="-0.83"/ -->
+        <segmentation type="GridEta_k4geo" grid_size_eta="0.01" offset_eta="-1.2"/>
       <id>system:5,cryo:1,type:3,subtype:3,layer:8,module:11,eta:9</id>
     </readout>
     <!-- readout for the reconstruction -->
     <!-- phi position is calculated based on the centre of volume (hence it cannot be done in the simulation from energy deposits position) -->
     <readout name="ECalBarrelPhiEta">
-        <!-- segmentation type="FCCSWGridPhiTheta" grid_size_theta="0.5625" phi_bins="768" offset_theta="-0.83" offset_phi="-pi+(pi/768.)"/ -->
-        <segmentation type="FCCSWGridPhiEta" grid_size_eta="0.01" phi_bins="768" offset_eta="-1.2" offset_phi="-pi+(pi/768.)"/>
+        <!-- segmentation type="FCCSWGridPhiTheta_k4geo" grid_size_theta="0.5625" phi_bins="768" offset_theta="-0.83" offset_phi="-pi+(pi/768.)"/ -->
+        <segmentation type="FCCSWGridPhiEta_k4geo" grid_size_eta="0.01" phi_bins="768" offset_eta="-1.2" offset_phi="-pi+(pi/768.)"/>
       <id>system:5,cryo:1,type:3,subtype:3,layer:8,eta:9,phi:10</id>
     </readout>
   </readouts>

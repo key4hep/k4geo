@@ -434,6 +434,7 @@
       <MEE unit="eV" value="790"/>
       <D unit="g/cm3" value="19.32"/>
       <atom unit="g/mole" value="196.967"/>
+      <fraction n="1" ref="Au"/>
     </material>
     <material name="G4_POLYETHYLENE" state="solid">
       <MEE unit="eV" value="57.4"/>
@@ -471,19 +472,45 @@
       <composite n="5" ref="O" />
     </material>
 
-    <comment> materials for the SemiDigital Hadronic calorimeter</comment>
-    <material name="RPCGAS2" >
-    <!-- C2H2F4 (TFE) 0.93% + IsoButane 0.05% + SF6 0.02% -->
-    <!--  <D value="0.00421" unit="g/cm3" /> -->
-      <D value="0.00449" unit="g/cm3" />
-      <fraction n="0.70828" ref="F"/>
-      <fraction n="0.26054" ref="C"/>
-      <fraction n="0.01928" ref="H"/>
-      <fraction n="0.00439" ref="S"/>
+
+   <comment> materials for the SemiDigital Hadronic calorimeter</comment>
+
+   <material name="R134a">
+     <!-- R134a is C2H2F4 -->
+     <D value="0.00425" unit="g/cm3" />
+     <composite n="2" ref="C"/>
+     <composite n="2" ref="H"/>
+     <composite n="4" ref="F"/>
+   </material>
+
+   <material name="IsoButane">
+     <D value="0.002489" unit="g/cm3" />
+     <composite n="4" ref="C"/>
+     <composite n="10" ref="H"/>
+   </material>
+
+   <material name="CarbonDioxide">
+     <D value="0.00198" unit="g/cm3" />
+     <composite n="1" ref="C"/>
+     <composite n="2" ref="O"/>
+   </material>
+   
+   <material name="SulphurHexafluoride">
+     <D value="0.00617" unit="g/cm3" />
+     <composite n="1" ref="S"/>
+     <composite n="6" ref="F"/>
+   </material>
+
+   <material name="RPCGAS2" >
+     <!-- mass fractions: R134a:0.93 + CO2:0.05 + SF6:0.02 --> 
+     <!-- calculated density: 0.0041749 g/cm3 -->
+     <D value="0.0041749" unit="g/cm3" />
+     <fraction n="0.93" ref="R134a"/>
+     <fraction n="0.05" ref="CarbonDioxide"/>
+     <fraction n="0.02" ref="SulphurHexafluoride"/>
     </material>
 
     <material name="FloatGlass" >
-<!--      <D value="2.44" unit="g/cm3" /> -->
       <D value="2.49" unit="g/cm3" />
       <fraction n="0.46645" ref="O"/>
       <fraction n="0.34125" ref="Si"/>
@@ -509,22 +536,26 @@
       <fraction n="0.141389" ref="O"/>
     </material>
 
+    <material name="PEEK" >
+      <D value="1.32" unit="g/cm3" />
+      <composite n="19" ref="C"/>
+      <composite n="12" ref="H"/>
+      <composite n="3" ref="O"/>
+    </material>
+
     <material name="PEEK-GF30" >
       <D value="1.51" unit="g/cm3" />
-      <fraction n="0.554056" ref="C"/>
-      <fraction n="0.116535" ref="O"/>
-      <fraction n="0.029408" ref="H"/>
-      <fraction n="0.333333" ref="Si"/>
+      <fraction n="0.70" ref="PEEK"/>
+      <fraction n="0.30" ref="FloatGlass"/>
     </material>
 
     <material name="g10-RPC">
-<!--      <MEE unit="eV" value="114.378463512112"/> -->
       <D value="1.80" unit="g/cm3" />
-      <fraction n="0.07868" ref="C"/>
-      <fraction n="0.46056" ref="O"/>
-      <fraction n="0.02045" ref="H"/>
-      <fraction n="0.46056" ref="Si"/>
-      <fraction n="0.080"   ref="Cl"/>
+      <fraction n="0.0786" ref="C"/>
+      <fraction n="0.4605" ref="O"/>
+      <fraction n="0.0204" ref="H"/>
+      <fraction n="0.3605" ref="Si"/>
+      <fraction n="0.0800" ref="Cl"/>
     </material>
 
     <material name="graphite">
@@ -604,6 +635,12 @@
       <composite n="22" ref="H" />
     </material>
 
+    <!-- Default material to use in DDCAD import of CAD models (see CheckShape.xml in DD4hep) -->
+    <material name="DefaultMaterial">
+      <D value="7.85" unit="g/cm3"/>
+      <fraction n="0.998" ref="Fe"/>
+      <fraction n=".002"  ref="C"/>
+    </material>
 
 
   </materials>
