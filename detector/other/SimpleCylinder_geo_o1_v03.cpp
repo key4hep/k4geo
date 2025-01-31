@@ -17,7 +17,6 @@ namespace det {
 /**
   Simple cylinder using Tube to be used to define cylinder composed of 1 single material
   Based on SimpleCylinder_geo_o1_v02.cpp, but with 2 layers (todo: read N layers from xml)
-  @author A. Durglishvili
   @author G. Marchiori
 **/
 static dd4hep::Ref_t
@@ -37,23 +36,6 @@ createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4hep::SensitiveDetector 
   // get the world volume, where the detector will be placed
   dd4hep::Volume experimentalHall = lcdd.pickMotherVolume(detMaster);
 
-/*
-  // define the geometrical shape of the detector (barrel or each endcap)
-  dd4hep::Tube cylinder(
-    cylinderDim.rmin(), cylinderDim.rmax(),cylinderDim.dz(), cylinderDim.phi0(), cylinderDim.deltaphi());
-
-  // define the volume (shape + material) of the detector
-  dd4hep::Volume cylinderVol(
-    x_det.nameStr() + "_SimpleCylinder", cylinder, lcdd.material(cylinderDim.materialStr()));
-
-  if (x_det.isSensitive()) {
-    dd4hep::xml::Dimension sdType(x_det.child(_U(sensitive)));
-    cylinderVol.setSensitiveDetector(sensDet);
-    sensDet.setType(sdType.typeStr());
-  }
-  detMaster.setVisAttributes(lcdd, x_det.visStr(), cylinderVol);
-*/
-
   // create caloData object and fill rmin, rmax info
   auto caloData = new dd4hep::rec::LayeredCalorimeterData;
   caloData->extent[0] = cylinderDim.rmin();
@@ -71,74 +53,74 @@ createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4hep::SensitiveDetector 
     // top volume of endcaps is an assembly
     dd4hep::Assembly endcapAssembly("Endcaps_assembly");
 
-    // create DetElements for each endcap, as daughters of detMaster
-    dd4hep::DetElement endcapPos(detMaster);
-    dd4hep::DetElement endcapNeg(detMaster);
+    // top volume element (do I need this?)
+    //  dd4hep::DetElement endcapElement(detMaster);
 
-    // define the tranforms for positioning the two endcaps
-    dd4hep::Transform3D endcapPos_position(dd4hep::RotationZ( 000*dd4hep::deg), dd4hep::Translation3D(0, 0,  zoff));
-    dd4hep::Transform3D endcapNeg_position(dd4hep::RotationZ( 180*dd4hep::deg), dd4hep::Translation3D(0, 0, -zoff));
+    // loop over the endcaps
+    for (int iEndcap = 0; iEndcap<2; iEndcap++) {
+      // create DetElement for endcap, as daughter of detMaster
+      dd4hep::DetElement endcap(detMaster);
+ 
+      // define the tranform for positioning the endcap
+      double zoffset = iEndcap == 1 ? zoff : -zoff;
+      int rot = iEndcap == 1 ? 0 : 180;
+      dd4hep::Transform3D endcap_position(dd4hep::RotationZ( rot*dd4hep::deg), dd4hep::Translation3D(0, 0,  zoffset));
 
-    // define the geometrical shape of the endcap
-    dd4hep::Tube cylinder(
-      cylinderDim.rmin(), cylinderDim.rmax(),cylinderDim.dz(), cylinderDim.phi0(), cylinderDim.deltaphi());
+      // define the geometrical shape of the endcap
+      dd4hep::Tube cylinder(
+        cylinderDim.rmin(), cylinderDim.rmax(),cylinderDim.dz(), cylinderDim.phi0(), cylinderDim.deltaphi());
 
-    // define the volume (shape + material) of the detector
-    dd4hep::Volume cylinderVol(
-      x_det.nameStr() + "_SimpleCylinder", cylinder, lcdd.material(cylinderDim.materialStr()));
+      // define the volume (shape + material) of the detector envelope
+      dd4hep::Volume cylinderVol(
+      //  x_det.nameStr() + "_SimpleCylinder", cylinder, lcdd.material(cylinderDim.materialStr()));
+        x_det.nameStr() + "_SimpleCylinder", cylinder, lcdd.material("Air"));
+    
+      detMaster.setVisAttributes(lcdd, x_det.visStr(), cylinderVol);
 
-    if (x_det.isSensitive()) {
-      dd4hep::xml::Dimension sdType(x_det.child(_U(sensitive)));
-      cylinderVol.setSensitiveDetector(sensDet);
-      sensDet.setType(sdType.typeStr());
-    }
-    detMaster.setVisAttributes(lcdd, x_det.visStr(), cylinderVol);
+      // place the endcap
+      auto endcap_pv = endcapAssembly.placeVolume( cylinderVol, endcap_position );
 
-    // place the endcap on the right and left
-    auto endcapPos_pv = endcapAssembly.placeVolume( cylinderVol, endcapPos_position );
-    auto endcapNeg_pv = endcapAssembly.placeVolume( cylinderVol, endcapNeg_position );
+      // mark each placed volume (pv) with the proper phys vol ID
+      endcap_pv.addPhysVolID("subsystem", iEndcap);
 
-    // mark each placed volume (pv) with the proper phys vol ID
-    endcapPos_pv.addPhysVolID("subsystem", 1);
-    endcapNeg_pv.addPhysVolID("subsystem", 0);
+      // link each pv with its corresponding det element
+      endcap.setPlacement( endcap_pv );
 
-    // link each pv with its corresponding det element
-    endcapPos.setPlacement( endcapPos_pv );
-    endcapNeg.setPlacement( endcapNeg_pv );
+      // segment the endcap into layers
+      float dzLayer = cylinderDim.dz()*2.0/nLayers;
+      lLog << MSG::DEBUG << "dZ of each layer : " << dzLayer << endmsg;
+      for (int iLayer=0; iLayer<nLayers; iLayer++) {
+        // calculate z extent
+        float zMiddle = -cylinderDim.dz() + dzLayer/2.0 + iLayer*dzLayer;
+        lLog <<  MSG::DEBUG << "Layer : " << iLayer << " , z offset wrt center of detector : " << zMiddle << endmsg;
+        
+        // create detector element as daughter of endcap
+        dd4hep::DetElement layer(endcap);
 
-    // segment the endcaps
-    float dzLayer = cylinderDim.dz()*2.0/nLayers;
-    lLog << MSG::DEBUG << "dZ of each layer : " << dzLayer << endmsg;
-    for (int iLayer=0; iLayer<nLayers; iLayer++) {
-      // calculate z extent
-      float zMiddle = -cylinderDim.dz() + dzLayer/2.0 + iLayer*dzLayer;
-      lLog <<  MSG::DEBUG << "Layer : " << iLayer << " , z offset wrt center of detector : " << zMiddle << endmsg;
+        // define the geometrical shape of the detector layer
+        dd4hep::Tube cylinderL(cylinderDim.rmin(), cylinderDim.rmax(), dzLayer/2.0, cylinderDim.phi0(), cylinderDim.deltaphi());
 
-      // define the geometrical shape of the detector layer
-      dd4hep::Tube cylinderL(cylinderDim.rmin(), cylinderDim.rmax(), dzLayer/2.0, cylinderDim.phi0(), cylinderDim.deltaphi());
+        // define the volume (shape + material) of the detector
+        dd4hep::Volume cylinderLVol(
+        //  x_det.nameStr() + _toString(iLayer, "_layer%d"), cylinderL, lcdd.material(cylinderDim.materialStr()));
+          x_det.nameStr() + _toString(iEndcap, "_side%d") + _toString(iLayer, "_layer%d"), cylinderL, lcdd.material(cylinderDim.materialStr()));
+        if (x_det.isSensitive()) {
+          dd4hep::xml::Dimension sdType(x_det.child(_U(sensitive)));
+          cylinderLVol.setSensitiveDetector(sensDet);
+          sensDet.setType(sdType.typeStr());
+        }
+        detMaster.setVisAttributes(lcdd, x_det.visStr(), cylinderLVol);
 
-      // define the volume (shape + material) of the detector
-      dd4hep::Volume cylinderLVol(
-        x_det.nameStr() + _toString(iLayer, "_layer%d"), cylinderL, lcdd.material(cylinderDim.materialStr()));
-      if (x_det.isSensitive()) {
-        dd4hep::xml::Dimension sdType(x_det.child(_U(sensitive)));
-        cylinderLVol.setSensitiveDetector(sensDet);
-        sensDet.setType(sdType.typeStr());
+        // place the layer volume inside the endcap volume
+        dd4hep::Transform3D layerPosition(dd4hep::RotationZ( 000*dd4hep::deg), dd4hep::Translation3D(0, 0, zMiddle));
+        auto detLayer_pv = cylinderVol.placeVolume( cylinderLVol, layerPosition );
+
+        // link PV with corresponding det element
+        layer.setPlacement( detLayer_pv );
+
+        // set the layer ID
+        detLayer_pv.addPhysVolID("layer", iLayer);
       }
-      detMaster.setVisAttributes(lcdd, x_det.visStr(), cylinderLVol);
-
-      // create DetElement for layer, as daughter of the cylindrical volume
-      // dd4hep::DetElement detLayer( cylinderVol );
-
-      // place the layer volume inside the endcap volume
-      dd4hep::Transform3D layerPosition(dd4hep::RotationZ( 000*dd4hep::deg), dd4hep::Translation3D(0, 0, zMiddle));
-      auto detLayer_pv = cylinderVol.placeVolume( cylinderLVol, layerPosition );
-
-      // link PV with corresponding det element (does not work, needs to be called for DetElement)
-      // detLayer.setPlacement( detLayer_pv );
-
-      // set the layer ID
-      detLayer_pv.addPhysVolID("layer", iLayer);
     }
 
     // place the assembly volume in the world
@@ -178,6 +160,29 @@ createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4hep::SensitiveDetector 
     // top volume of barrel is an assembly
     dd4hep::Assembly barrelAssembly("Barrel_assembly");
 
+    // top volume element
+    dd4hep::DetElement barrelElement(detMaster);
+
+    // define the geometrical shape of the barrel
+    dd4hep::Tube cylinder(
+        cylinderDim.rmin(), cylinderDim.rmax(),cylinderDim.dz(), cylinderDim.phi0(), cylinderDim.deltaphi());
+
+    // define the volume (shape + material) of the detector envelope
+    dd4hep::Volume cylinderVol(
+      //  x_det.nameStr() + "_SimpleCylinder", cylinder, lcdd.material(cylinderDim.materialStr()));
+      x_det.nameStr() + "_SimpleCylinder", cylinder, lcdd.material("Air"));
+    
+    detMaster.setVisAttributes(lcdd, x_det.visStr(), cylinderVol);
+
+    // place the barrel
+    auto barrel_pv = barrelAssembly.placeVolume( cylinderVol );
+
+    // mark each placed volume (pv) with the proper phys vol ID
+    barrel_pv.addPhysVolID("subsystem", 0);
+
+    // link each pv with its corresponding det element
+    barrelElement.setPlacement( barrel_pv );
+
     // create the layers
     float drLayer = (cylinderDim.rmax() - cylinderDim.rmin())/nLayers;
     float rIn = cylinderDim.rmin();
@@ -186,26 +191,26 @@ createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4hep::SensitiveDetector 
       float rOut = rIn + drLayer;
 
       // define the geometrical shape of the detector layer
-      dd4hep::Tube cylinder(rIn, rOut, cylinderDim.dz(), cylinderDim.phi0(), cylinderDim.deltaphi());
+      dd4hep::Tube cylinderL(rIn, rOut, cylinderDim.dz(), cylinderDim.phi0(), cylinderDim.deltaphi());
 
       // define the volume (shape + material) of the detector
-      dd4hep::Volume cylinderVol(
-        x_det.nameStr() + _toString(iLayer, "_layer%d"), cylinder, lcdd.material(cylinderDim.materialStr()));
+      dd4hep::Volume cylinderLVol(
+        x_det.nameStr() + _toString(iLayer, "_layer%d"), cylinderL, lcdd.material(cylinderDim.materialStr()));
       if (x_det.isSensitive()) {
         dd4hep::xml::Dimension sdType(x_det.child(_U(sensitive)));
-        cylinderVol.setSensitiveDetector(sensDet);
+        cylinderLVol.setSensitiveDetector(sensDet);
         sensDet.setType(sdType.typeStr());
       }
-      detMaster.setVisAttributes(lcdd, x_det.visStr(), cylinderVol);
+      detMaster.setVisAttributes(lcdd, x_det.visStr(), cylinderLVol);
 
       // create DetElement for layer, as daughter of the barrel assembly
-      // dd4hep::DetElement detLayer(barrelAssembly);
+      dd4hep::DetElement detLayer(barrelElement);
 
       // place the layer volume inside the assembly
-      auto detLayer_pv = barrelAssembly.placeVolume( cylinderVol );
+      auto detLayer_pv = cylinderVol.placeVolume( cylinderLVol );
 
-      // link PV with corresponding det element (does not work, needs to be called for DetElement)
-      // cylinderVol.setPlacement( detLayer_pv );
+      // link PV with corresponding det element
+      detLayer.setPlacement( detLayer_pv );
 
       // set the layer ID
       detLayer_pv.addPhysVolID("layer", iLayer);
@@ -218,7 +223,6 @@ createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4hep::SensitiveDetector 
 
     // assign the system ID to the assembly volume
     barrelAssembly_pv.addPhysVolID("system", detID);
-    barrelAssembly_pv.addPhysVolID("subsystem", 0);
     
     // link volume with top DetElement to be returned
     detMaster.setPlacement(barrelAssembly_pv);
