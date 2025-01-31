@@ -28,7 +28,22 @@ createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4hep::SensitiveDetector 
   int detID = x_det.id();
   xml_comp_t cylinderDim(x_det.child(_U(dimensions)));
 
-  const int nLayers(2);
+  // retrieve layer information
+  dd4hep::xml::DetElement layers = x_det.child(_Unicode(layers));
+  int nLayers = 0;
+  std::vector<double> layerDepth;
+  double layersTotalDepth = 0;
+  for (dd4hep::xml::Collection_t layer_coll(layers, _Unicode(layer)); layer_coll; ++layer_coll) {
+    dd4hep::xml::Component layer = layer_coll;
+    nLayers += layer.repeat();
+    for (int iLay = 0; iLay < layer.repeat(); iLay++) {
+      layerDepth.push_back(layer.thickness());
+    }
+    layersTotalDepth += layer.repeat() * layer.thickness();
+  }
+  lLog << MSG::DEBUG << "Number of layers: " << nLayers << endmsg;
+  lLog << MSG::DEBUG << "Total thickness from sum of layers in xml description (cm): " << layersTotalDepth/dd4hep::cm << endmsg;
+  lLog << MSG::INFO << "Ignoring layer thickness from xml description, assuming all layers have same thickness" << endmsg;
 
   // create the mother Detector element to be returned at the end
   dd4hep::DetElement detMaster(name, detID);
@@ -41,7 +56,6 @@ createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4hep::SensitiveDetector 
   caloData->extent[0] = cylinderDim.rmin();
   caloData->extent[1] = cylinderDim.rmax();
   
-  dd4hep::rec::LayeredCalorimeterData::Layer caloLayer;
   dd4hep::rec::MaterialManager matMgr(experimentalHall);
   double zoff = cylinderDim.z_offset();
   double zmin = zoff - cylinderDim.dz();
@@ -87,11 +101,11 @@ createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4hep::SensitiveDetector 
       endcap.setPlacement( endcap_pv );
 
       // segment the endcap into layers
-      float dzLayer = cylinderDim.dz()*2.0/nLayers;
+      double dzLayer = cylinderDim.dz()*2.0/nLayers;
       lLog << MSG::DEBUG << "dZ of each layer : " << dzLayer << endmsg;
       for (int iLayer=0; iLayer<nLayers; iLayer++) {
         // calculate z extent
-        float zMiddle = -cylinderDim.dz() + dzLayer/2.0 + iLayer*dzLayer;
+        double zMiddle = -cylinderDim.dz() + dzLayer/2.0 + iLayer*dzLayer;
         lLog <<  MSG::DEBUG << "Layer : " << iLayer << " , z offset wrt center of detector : " << zMiddle << endmsg;
         
         // create detector element as daughter of endcap
@@ -137,6 +151,30 @@ createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4hep::SensitiveDetector 
     caloData->extent[3] = zmax;
     caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::EndcapLayout;
 
+    dd4hep::rec::LayeredCalorimeterData::Layer caloLayer;
+    double dzLayer = cylinderDim.dz()*2.0/nLayers;
+    for (int idxLayer = 0; idxLayer < nLayers; ++idxLayer) {
+      double zIn = zmin + idxLayer*dzLayer;
+      // double zOut = zIn + dzLayer;
+
+      caloLayer.distance                  = zIn; // distance from origin to innermost face of laye   
+      caloLayer.sensitive_thickness	      = dzLayer; // thickness of the sensitive element
+      caloLayer.absorberThickness         = 0.0; // thickness of absorber part of layer. consider using inner/outer_nRadiationLenghts and inner/outer_nInteractionLengths
+
+      caloLayer.inner_thickness           = dzLayer/2.0; // distance between center of sensitive element and innermost face or layer
+      caloLayer.inner_nRadiationLengths   = 0.; // absorber material in front of sensitive element in layer
+      caloLayer.inner_nInteractionLengths = 0.; // absorber material in front of sensitive element in layer
+      caloLayer.outer_thickness           = dzLayer/2.0; // distance between center of sensitive element and outermost face or layer
+      caloLayer.outer_nRadiationLengths   = 0.; // absorber material behind sensitive element in layer
+      caloLayer.outer_nInteractionLengths = 0.; // absorber material behind sensitive element in layer
+
+      caloLayer.cellSize0 = 20 * dd4hep::mm; // FIXME! AD: should be corrected from DDGeometryCreatorALLEGRO. GM: get it from segmentation class
+      caloLayer.cellSize1 = 20 * dd4hep::mm; // FIXME! AD: should be corrected from DDGeometryCreatorALLEGRO. GM: get it from segmentation class
+
+      // attach the layer to the caloData
+      caloData->layers.push_back(caloLayer);
+    }
+    /*
     dd4hep::rec::Vector3D ivr1 = dd4hep::rec::Vector3D(0., 0., zmin); // defining starting vector points
     dd4hep::rec::Vector3D ivr2 = dd4hep::rec::Vector3D(0., 0., zmax); // defining end vector
 
@@ -152,8 +190,7 @@ createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4hep::SensitiveDetector 
 
     caloLayer.inner_nRadiationLengths   = nRadiationLengths / 2.0;
     caloLayer.inner_nInteractionLengths = nInteractionLengths / 2.0;
-    caloLayer.outer_nRadiationLengths   = nRadiationLengths / 2.0;
-    caloLayer.outer_nInteractionLengths = nInteractionLengths / 2.0;
+    */
   }
   else
   {
@@ -184,11 +221,11 @@ createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4hep::SensitiveDetector 
     barrelElement.setPlacement( barrel_pv );
 
     // create the layers
-    float drLayer = (cylinderDim.rmax() - cylinderDim.rmin())/nLayers;
-    float rIn = cylinderDim.rmin();
+    double drLayer = (cylinderDim.rmax() - cylinderDim.rmin())/nLayers;
+    double rIn = cylinderDim.rmin();
     for (int iLayer=0; iLayer<nLayers; iLayer++) {
       // calculate radial extent
-      float rOut = rIn + drLayer;
+      double rOut = rIn + drLayer;
 
       // define the geometrical shape of the detector layer
       dd4hep::Tube cylinderL(rIn, rOut, cylinderDim.dz(), cylinderDim.phi0(), cylinderDim.deltaphi());
@@ -232,32 +269,32 @@ createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4hep::SensitiveDetector 
     caloData->extent[3] = cylinderDim.dz();
     caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::BarrelLayout;
 
-    dd4hep::rec::Vector3D ivr1 = dd4hep::rec::Vector3D(0., cylinderDim.rmin(), 0.); // defining starting vector points 
-    dd4hep::rec::Vector3D ivr2 = dd4hep::rec::Vector3D(0., cylinderDim.rmax(), 0.); // defining end vector
+    dd4hep::rec::LayeredCalorimeterData::Layer caloLayer;
+    for (int idxLayer = 0; idxLayer < nLayers; ++idxLayer) {
+      rIn = cylinderDim.rmin() + idxLayer*drLayer;
+      // double rOut = rIn + drLayer;
 
-    const dd4hep::rec::MaterialVec &materials = matMgr.materialsBetween(ivr1, ivr2); // calling material manager to get material info between two points
-    auto mat = matMgr.createAveragedMaterial(materials); // creating average of all the material between two points to calculate X0 and lambda of averaged material
-    const double nRadiationLengths = (cylinderDim.rmax() - cylinderDim.rmin()) / mat.radiationLength();
-    const double nInteractionLengths = (cylinderDim.rmax() - cylinderDim.rmin()) / mat.interactionLength();
+      caloLayer.distance                  = rIn; // distance from origin to innermost face of layer   
+      caloLayer.sensitive_thickness	      = drLayer; // thickness of the sensitive element
+      caloLayer.absorberThickness         = 0.0; // thickness of absorber part of layer. consider using inner/outer_nRadiationLenghts and inner/outer_nInteractionLengths
 
-    caloLayer.distance                  = cylinderDim.rmin();
-    caloLayer.sensitive_thickness       = (cylinderDim.rmax() - cylinderDim.rmin());
-    caloLayer.inner_thickness           = (cylinderDim.rmax() - cylinderDim.rmin()) / 2.0;
-    caloLayer.outer_thickness           = (cylinderDim.rmax() - cylinderDim.rmin()) / 2.0;
+      caloLayer.inner_thickness           = drLayer/2.0; // distance between center of sensitive element and innermost face or layer
+      caloLayer.inner_nRadiationLengths   = 0.; // absorber material in front of sensitive element in layer
+      caloLayer.inner_nInteractionLengths = 0.; // absorber material in front of sensitive element in layer
+      caloLayer.outer_thickness           = drLayer/2.0; // distance between center of sensitive element and outermost face or layer
+      caloLayer.outer_nRadiationLengths   = 0.; // absorber material behind sensitive element in layer
+      caloLayer.outer_nInteractionLengths = 0.; // absorber material behind sensitive element in layer
 
-    caloLayer.inner_nRadiationLengths   = nRadiationLengths / 2.0;
-    caloLayer.inner_nInteractionLengths = nInteractionLengths / 2.0;
-    caloLayer.outer_nRadiationLengths   = nRadiationLengths / 2.0;
-    caloLayer.outer_nInteractionLengths = nInteractionLengths / 2.0;
+      caloLayer.cellSize0 = 20 * dd4hep::mm; // FIXME! AD: should be corrected from DDGeometryCreatorALLEGRO. GM: get it from segmentation class
+      caloLayer.cellSize1 = 20 * dd4hep::mm; // FIXME! AD: should be corrected from DDGeometryCreatorALLEGRO. GM: get it from segmentation class
+
+      // attach the layer to the caloData
+      caloData->layers.push_back(caloLayer);
+    }
+
   }
 
-  caloLayer.cellSize0 = 20 * dd4hep::mm; // FIXME! AD: should be corrected from DDGeometryCreatorALLEGRO. GM: get it from segmentation class
-  caloLayer.cellSize1 = 20 * dd4hep::mm; // FIXME! AD: should be corrected from DDGeometryCreatorALLEGRO. GM: get it from segmentation class
-
-  // attach the layer to the caloData
-  caloData->layers.push_back(caloLayer);
-
-  // attach the layer to the cylinderDet
+  // attach the calo data to the detector
   detMaster.addExtension<dd4hep::rec::LayeredCalorimeterData>(caloData);
 
   // Set type flags
