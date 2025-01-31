@@ -2,7 +2,7 @@
      LHCal parameters for ILD 
 -->
 
-<detector name="LHcal" type="LHCal" vis="SeeThrough" id="ILDDetID_LHCAL"
+<detector name="LHcal" type="LHCal" vis="ILD_SeeThrough" id="ILDDetID_LHCAL"
 	  readout="LHCalCollection" insideTrackingVolume="false" >
 
   <type_flags type=" DetType_CALORIMETER + DetType_ENDCAP + DetType_HADRONIC + DetType_FORWARD " />
@@ -35,11 +35,11 @@
 	/>          
 
   
-  <layer repeat="40" vis="SeeThrough">
-    <slice material = "TungstenDens24" thickness = "10*mm" 		   vis="BCLayerVis1" />
+  <layer repeat="40" vis="ILD_SeeThrough">
+    <slice material = "TungstenDens24" thickness = "10*mm" 		   vis="ILD_BCLayerVis1" />
     <slice material = "Air"     thickness = "0.1*mm"  />
-    <slice material = "Silicon" thickness = "1.0*mm" 	sensitive = "yes"  vis="BCLayerVis2"/>
-    <slice material = "Copper"  thickness = "1.9*mm"                    vis="BCLayerVis3"/>
+    <slice material = "Silicon" thickness = "1.0*mm" 	sensitive = "yes"  vis="ILD_BCLayerVis2"/>
+    <slice material = "Copper"  thickness = "1.9*mm"                    vis="ILD_BCLayerVis3"/>
   </layer>
 
 </detector>

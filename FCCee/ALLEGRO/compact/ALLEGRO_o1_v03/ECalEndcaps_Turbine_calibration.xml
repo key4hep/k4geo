@@ -35,6 +35,11 @@
     <constant name="ECalEndcapNumPlanes" value="928"/>    
     <constant name="ECalEndcapNumCalibLayers" value="10"/>
     <constant name="nWheels" value="3"/>
+<!-- following three lines just to satisfy new segmentation interface -->
+    <constant name="BladeAngle1" value="41*deg"/>
+    <constant name="BladeAngle2" value="41*deg"/>
+    <constant name="BladeAngle3" value="41*deg"/>
+    
     <constant name="BladeAngle" value="41*deg"/>
     <constant name="NobleLiquidGap" value="3.9*mm"/>
     <constant name="AbsorberBladeThickness" value="2.9*mm"/>
@@ -43,6 +48,7 @@
     <constant name="EMEC_steel_thickness" value="0.1*mm"/>
      <!-- total amount of glue in one passive plate: it is divided for the outside layer on top and bottom -->
     <constant name="EMEC_glue_thickness" value="0.1*mm"/>
+    <constant name="nUnitCellsLeastCommonMultiple" value="78336"/>
   </define>
 
   <display>
@@ -100,7 +106,7 @@
 	<supportTube name="supportTube" nWheels="nWheels" thickness="1.0*cm" sensitive="false"> 
 	  <material name="CarbonFiber"/>
 	</supportTube>
-	<turbineBlade name="turbineBlade" angle="BladeAngle" decreaseAnglePerWheel="false" sameNUnitCells="false" nUnitCells="144 272 512" nUnitCellsLeastCommonMultiple="78336">
+	<turbineBlade name="turbineBlade" angle="BladeAngle" decreaseAnglePerWheel="false" sameNUnitCells="false" nUnitCells="144 272 512" nUnitCellsLeastCommonMultiple="nUnitCellsLeastCommonMultiple">
 	  <absorberBlade name="absorberBlade" thickness="AbsorberBladeThickness" scaleThickness="true" thicknessScaleFactor="1.0" sensitive="true">
 	    <material name="Lead"/>
 	  </absorberBlade>

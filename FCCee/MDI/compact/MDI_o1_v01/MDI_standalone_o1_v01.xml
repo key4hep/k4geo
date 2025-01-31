@@ -54,8 +54,9 @@
   <!--<include ref="FFQuads_params_v530_Z.xml"/>-->
   <include ref="FFQuads_params_v572_Z.xml"/>
   <!-- <include ref="FFQuads_params_v572_T.xml"/>-->
-  <include ref="FFQuads_v01.xml"/>
-
+  <!-- <include ref="FFQuads_v01.xml"/>-->
+  <include ref="FFQuads_v01_sens.xml"/>
+  
   <include ref="fields_solenoid.xml"/>
   <include ref="fields_antisol_map.xml"/>
   <!--<include ref="fields_antisol_ideal.xml"/>-->

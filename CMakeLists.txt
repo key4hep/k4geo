@@ -8,7 +8,7 @@ project(${PackageName})
 
 # project version
 SET( ${PackageName}_VERSION_MAJOR 0 )
-SET( ${PackageName}_VERSION_MINOR 20 )
+SET( ${PackageName}_VERSION_MINOR 21 )
 SET( ${PackageName}_VERSION_PATCH 0 )
 
 SET( ${PackageName}_VERSION "${${PackageName}_VERSION_MAJOR}.${${PackageName}_VERSION_MINOR}" )
@@ -17,6 +17,8 @@ SET( ${PackageName}_SOVERSION "${${PackageName}_VERSION_MAJOR}.${${PackageName}_
 set(CMAKE_MODULE_PATH  ${CMAKE_MODULE_PATH}  ${PROJECT_SOURCE_DIR}/cmake )
 set(LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+
+include(cmake/Key4hepConfig.cmake)
 
 include(GNUInstallDirs)
 set(CMAKE_INSTALL_LIBDIR lib)
@@ -43,10 +45,6 @@ option(INSTALL_BEAMPIPE_STL_FILES "Download CAD files for building the detailed 
 
 
 find_package(DD4hep REQUIRED COMPONENTS DDRec DDG4 DDParsers)
-# dd4hep_set_compiler_flags() expects DD4hep_SET_RPATH to be set to ON
-# otherwise it will not set the rpath when installing
-set(DD4HEP_SET_RPATH ON)
-dd4hep_set_compiler_flags()
 
 find_package ( ROOT REQUIRED COMPONENTS Geom GenVector)
 message ( STATUS "ROOT_VERSION: ${ROOT_VERSION}" )
@@ -70,6 +68,7 @@ file(GLOB sources
   ./detector/tracker/*.cpp
   ./detector/calorimeter/*.cpp
   ./detector/calorimeter/dual-readout/src/*.cpp
+  ./detector/calorimeter/dual-readout-tubes/src/*.cpp
   ./detector/fcal/*.cpp
   ./detector/muonSystem/*.cpp
   ./detector/other/*.cpp
@@ -98,15 +97,10 @@ if(NOT K4GEO_USE_LCIO)
   message(STATUS "Use of LCIO is DISABLED, some detectors that depend on LCIO will not be built: ${lcio_sources}")
 endif()
 
-include(CheckIncludeFileCXX)
-set(CMAKE_REQUIRED_LIBRARIES DD4hep::DDRec)
-CHECK_INCLUDE_FILE_CXX(DDRec/DCH_info.h DCH_INFO_H_EXIST)
-set(CMAKE_REQUIRED_LIBRARIES)
-set(FILES_DEPENDINGON_DCH_INFO_H "DriftChamber_o1_v02.cpp" )
-
-if(NOT DCH_INFO_H_EXIST)
-    list(FILTER sources EXCLUDE REGEX "${FILES_DEPENDINGON_DCH_INFO_H}")
-    message(WARNING "Subdetector ${FILES_DEPENDINGON_DCH_INFO_H} will not be built because header file DDRec/DCH_info.h was not found")
+if(${DD4hep_VERSION} VERSION_LESS 1.29)
+  set(FILES_DEPENDINGON_DCH_INFO_H "DriftChamber_o1_v02.cpp" )
+  list(FILTER sources EXCLUDE REGEX "${FILES_DEPENDINGON_DCH_INFO_H}")
+  message(WARNING "Subdetector ${FILES_DEPENDINGON_DCH_INFO_H} will not be built because the current version of DD4hep does not ship with the header file DDRec/DCH_info.h")
 endif()
 
 find_package(EDM4HEP)
@@ -118,6 +112,8 @@ file(GLOB G4sources
   ./plugins/Geant4Output2EDM4hep_DRC.cpp
   ./plugins/DRCaloFastSimModel.cpp
   ./plugins/DRCaloFastSimModel.h
+  ./plugins/DRTubesSDAction.hh
+  ./plugins/DRTubesSDAction.cpp
 )
 
 if(DD4HEP_USE_PYROOT)
@@ -135,6 +131,9 @@ target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detect
 
 target_include_directories(${PackageName}   PRIVATE ${PROJECT_SOURCE_DIR}/detector/calorimeter/dual-readout/include )
 target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detector/calorimeter/dual-readout/include )
+
+target_include_directories(${PackageName}   PRIVATE ${PROJECT_SOURCE_DIR}/detector/calorimeter/dual-readout-tubes/include )
+target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detector/calorimeter/dual-readout-tubes/include )
 
 target_link_libraries(${PackageName}   DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers ROOT::Core detectorSegmentations)
 target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ROOT::Core podio::podioRootIO EDM4HEP::edm4hep ${Geant4_LIBRARIES})

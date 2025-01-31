@@ -34,3 +34,9 @@ DECLARE_SEGMENTATION(GridDRcalo_k4geo, create_segmentation<dd4hep::DDSegmentatio
 
 #include "detectorSegmentations/FCCSWEndcapTurbine_k4geo.h"
 DECLARE_SEGMENTATION(FCCSWEndcapTurbine_k4geo, create_segmentation<dd4hep::DDSegmentation::FCCSWEndcapTurbine_k4geo>)
+
+#include "detectorSegmentations/FCCSWHCalPhiTheta_k4geo.h"
+DECLARE_SEGMENTATION(FCCSWHCalPhiTheta_k4geo, create_segmentation<dd4hep::DDSegmentation::FCCSWHCalPhiTheta_k4geo>)
+
+#include "detectorSegmentations/FCCSWHCalPhiRow_k4geo.h"
+DECLARE_SEGMENTATION(FCCSWHCalPhiRow_k4geo, create_segmentation<dd4hep::DDSegmentation::FCCSWHCalPhiRow_k4geo>)

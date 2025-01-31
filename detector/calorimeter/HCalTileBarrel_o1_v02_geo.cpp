@@ -1,22 +1,12 @@
 // DD4hep
 #include "DD4hep/DetFactoryHelper.h"
-
 #include <DDRec/DetectorData.h>
+#include "DD4hep/Printout.h"
 
 using dd4hep::Volume;
 using dd4hep::DetElement;
 using dd4hep::xml::Dimension;
 using dd4hep::PlacedVolume;
-
-
-// todo: remove gaudi logging and properly capture output
-#define endmsg std::endl
-#define lLog std::cout
-namespace MSG {
-const std::string ERROR = "createHCalTileBarrel   ERROR  ";
-const std::string DEBUG = "createHCalTileBarrel   DEBUG  ";
-const std::string INFO  = "createHCalTileBarrel   INFO   ";
-}
 
 namespace det {
 
@@ -41,8 +31,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   xml_comp_t xSteelSupport = xmlDet.child(_Unicode(steel_support));
   double dSteelSupport = xSteelSupport.thickness();
 
-  lLog << MSG::DEBUG << "steel support thickness (cm): " << dSteelSupport / dd4hep::cm  << endmsg;
-  lLog << MSG::DEBUG << "steel support material:  " << xSteelSupport.materialStr() << endmsg;
+  dd4hep::printout(dd4hep::DEBUG, "HCalTileBarrel_o1_v02", "steel support thickness (cm): %.2f", dSteelSupport); 
 
   double sensitiveBarrelRmin = xDimensions.rmin() + xFacePlate.thickness() + space;
 
@@ -50,18 +39,18 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   std::vector<xml_comp_t> sequences = {xmlDet.child(_Unicode(sequence_a)), xmlDet.child(_Unicode(sequence_b))};
   // Check if both sequences are present
   if (!sequences[0] || !sequences[1]) {
-    lLog << MSG::ERROR << "The two sequences 'sequence_a' and 'sequence_b' must be present in the xml file." << endmsg;
+    dd4hep::printout(dd4hep::ERROR, "HCalTileBarrel_o1_v02", "The two sequences 'sequence_a' and 'sequence_b' must be present in the xml file."); 
     throw std::runtime_error("Missing sequence_a or sequence_b in the xml file.");
   }
   // Check if both sequences have the same dimensions
   Dimension dimensionsA(sequences[0].dimensions());
   Dimension dimensionsB(sequences[1].dimensions());
   if (dimensionsA.dz() != dimensionsB.dz()) {
-    lLog << MSG::ERROR << "The dimensions of sequence_a and sequence_b do not match." << endmsg;
+    dd4hep::printout(dd4hep::ERROR, "HCalTileBarrel_o1_v02", "The dimensions of sequence_a and sequence_b do not match."); 
     throw std::runtime_error("The dimensions of the sequence_a and sequence_b do not match.");
   }
   double dzSequence = dimensionsB.dz();
-  lLog << MSG::DEBUG << "sequence thickness " << dzSequence << endmsg;
+  dd4hep::printout(dd4hep::DEBUG, "HCalTileBarrel_o1_v02", "sequence thickness %.2f", dzSequence); 
 
   // calculate the number of sequences fitting in Z
   unsigned int numSequencesZ = static_cast<unsigned>((2 * xDimensions.dz() - 2 * dZEndPlate - 2 * space) / dzSequence);
@@ -84,17 +73,15 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
       layerDepths.push_back(layerDimension.dr());
     }
   }
-  lLog << MSG::DEBUG << "retrieved number of radial layers:  " << numLayersR
-       << " , which end up to a full module depth in rho of " << moduleDepth << " cm" << endmsg;
-  lLog << MSG::DEBUG << "retrieved number of radial layers:  " << layerDepths.size() << endmsg;
-
-  lLog << MSG::INFO << "constructing: " << numSequencesZ << " sequences in Z, " << numLayersR
-       << " radial layers, in total " << numLayersR * numSequencesZ << " tiles" << endmsg;
-
   // Calculate correction along z based on the module size (can only have natural number of modules)
   double dzDetector = (numSequencesZ * dzSequence) / 2 + dZEndPlate + space;
-  lLog << MSG::DEBUG << "dzDetector (cm):  " <<  dzDetector / dd4hep::cm << endmsg;
-  lLog << MSG::INFO << "correction of dz in cm (negative = size reduced):" << dzDetector - xDimensions.dz() << endmsg;
+  
+  dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "dzDetector (cm): %.2f", dzDetector); 
+  dd4hep::printout(dd4hep::DEBUG, "HCalTileBarrel_o1_v02", "correction of dz in cm (negative = size reduced): %.2f", dzDetector - xDimensions.dz()); 
+
+  dd4hep::printout(dd4hep::DEBUG, "HCalTileBarrel_o1_v02", "retrieved number of radial layers: %d , which end up to a full module depth in rho of %.2f cm", numLayersR, moduleDepth); 
+  dd4hep::printout(dd4hep::DEBUG, "HCalTileBarrel_o1_v02", "retrieved number of radial layers: %d", layerDepths.size()); 
+  dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "constructing: %d sequences in Z, %d radial layers, in total %d tiles", numSequencesZ, numLayersR, numLayersR * numSequencesZ); 
   
   double rminSupport = sensitiveBarrelRmin + moduleDepth;
   double rmaxSupport = sensitiveBarrelRmin + moduleDepth + dSteelSupport;
@@ -164,6 +151,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
     double rmaxLayer = sensitiveBarrelRmin + layerR + layerDepths.at(idxLayer);
     layerR += layerDepths.at(idxLayer);
     layerInnerRadii.push_back(rminLayer);
+    dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "layer %d (cm): %.2f - %.2f", idxLayer, rminLayer, rmaxLayer); 
 
     //alternate: even layers consist of tile sequence b, odd layer of tile sequence a
     unsigned int sequenceIdx = idxLayer % 2;
