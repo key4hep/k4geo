@@ -7,6 +7,9 @@
 
         <constant name="OuterTracker_Barrel_half_length" value="1264.2*mm"/>
 
+	<constant name="OuterTrackerBarrel_PixSize_x" value="0.050*mm"/>
+	<constant name="OuterTrackerBarrel_PixSize_y" value="0.300*mm"/>
+	
         <constant name="OuterTracker_Endcap_outer_radius" value="2080*mm"/>
         <constant name="OuterTracker_Endcap_inner_radius" value="718*mm"/>
 
@@ -19,6 +22,9 @@
         <constant name="OuterTracker_Endcap_radius_1" value="988.9*mm"/>
         <constant name="OuterTracker_Endcap_radius_2" value="1289.9*mm"/>
         <constant name="OuterTracker_Endcap_radius_3" value="1530.6*mm"/>
+
+	<constant name="OuterTrackerEndcap_PixSize_x" value="0.050*mm"/>
+	<constant name="OuterTrackerEndcap_PixSize_y" value="0.300*mm"/>
 
     </define>
 
@@ -47,12 +53,12 @@
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
       <readout name="OuterTrackerBarrelCollection">
-	<segmentation type="CartesianGridXY" key="layer" name="ATLASPix3" grid_size_x="0.050*mm" grid_size_y="0.300*mm"/>
+	<segmentation type="CartesianGridXY" key="layer" name="ATLASPix3" grid_size_x="OuterTrackerBarrel_PixSize_x" grid_size_y="OuterTrackerBarrel_PixSize_y"/>
 	<!-- The segmentation frame is in the sensor frame which is in XY with Y along beampipe and x transversal -->
         <id>${GlobalTrackerReadoutID},x:32:-16,y:-16</id>
       </readout>
       <readout name="OuterTrackerEndcapCollection">
-	<segmentation type="CartesianGridXY" key="layer" name="ATLASPix3" grid_size_x="0.050*mm" grid_size_y="0.300*mm"/>
+	<segmentation type="CartesianGridXY" key="layer" name="ATLASPix3" grid_size_x="OuterTrackerEndcap_PixSize_x" grid_size_y="OuterTrackerEndcap_PixSize_y"/>
 	<!-- y is in the same direction than the petals (along the radius of Disks) and x orthogonal -->
         <id>${GlobalTrackerReadoutID},x:32:-16,y:-16</id>
       </readout>

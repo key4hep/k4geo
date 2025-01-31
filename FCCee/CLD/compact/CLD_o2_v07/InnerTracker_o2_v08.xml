@@ -9,6 +9,9 @@
         <constant name="InnerTracker_Barrel_half_length_1" value="481.6*mm"/>
         <constant name="InnerTracker_Barrel_half_length_2" value="692.3*mm"/>
 
+	<constant name="InnerTrackerBarrel_PixSize_x" value="0.050*mm"/>
+	<constant name="InnerTrackerBarrel_PixSize_y" value="0.300*mm"/>
+	
 	<constant name="nInnerTrackerEndcapLayers" value="7"/>
         <constant name="InnerTracker_Endcap_z_0" value="524*mm"/>
         <constant name="InnerTracker_Endcap_z_1" value="808*mm"/>
@@ -26,6 +29,11 @@
         <constant name="InnerTracker_Endcap_radius_5" value="293*mm"/>
         <constant name="InnerTracker_Endcap_radius_6" value="330*mm"/>
 
+	<constant name="InnerTrackerEndcap_PixSize_x" value="0.050*mm"/>
+	<constant name="InnerTrackerEndcap_PixSize_y" value="0.300*mm"/>
+	<constant name="InnerTrackerEndcap_FirstLayer_PixSize_x" value="0.025*mm"/>
+	<constant name="InnerTrackerEndcap_FirstLayer_PixSize_y" value="0.025*mm"/>
+	
         <constant name="VertexCoolingGap"            value="5*mm"/>
         <constant name="VertexCoolingShellThickness" value="1*mm"/>
 
@@ -76,14 +84,14 @@
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>
       <readout name="InnerTrackerBarrelCollection">
-	<segmentation type="CartesianGridXY" key="layer" name="ATLASPix3" grid_size_x="0.050*mm" grid_size_y="0.300*mm"/>
+	<segmentation type="CartesianGridXY" key="layer" name="ATLASPix3" grid_size_x="InnerTrackerBarrel_PixSize_x" grid_size_y="InnerTrackerBarrel_PixSize_y"/>
 	<!-- The segmentation frame is in the sensor frame which is in XY with Y along beampipe and x transversal -->
         <id>${GlobalTrackerReadoutID},x:32:-16,y:-16</id>
       </readout>
       <readout name="InnerTrackerEndcapCollection">
 	<segmentation type="MultiSegmentation" key="layer">
-	  <segmentation name="ARCADIA" type="CartesianGridXY" key_value="0" grid_size_x="0.025*mm" grid_size_y="0.025*mm"/>
-	  <segmentation name="ATLASPix3" type="CartesianGridXY" key_min="1" key_max="nInnerTrackerEndcapLayers-1" grid_size_x="0.050*mm" grid_size_y="0.300*mm"/>
+	  <segmentation name="ARCADIA" type="CartesianGridXY" key_value="0" grid_size_x="InnerTrackerEndcap_FirstLayer_PixSize_x" grid_size_y="InnerTrackerEndcap_FirstLayer_PixSize_y"/>
+	  <segmentation name="ATLASPix3" type="CartesianGridXY" key_min="1" key_max="nInnerTrackerEndcapLayers-1" grid_size_x="InnerTrackerEndcap_PixSize_x" grid_size_y="InnerTrackerEndcap_PixSize_y"/>
 	  <!-- y is in the same direction than the petals (along the radius of Disks) and x orthogonal -->
 	</segmentation>
         <id>${GlobalTrackerReadoutID},x:32:-16,y:-16</id>
