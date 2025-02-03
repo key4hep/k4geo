@@ -153,20 +153,21 @@ createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4hep::SensitiveDetector 
 
     dd4hep::rec::LayeredCalorimeterData::Layer caloLayer;
     double dzLayer = cylinderDim.dz()*2.0/nLayers;
+    auto mat = lcdd.material(cylinderDim.materialStr());
     for (int idxLayer = 0; idxLayer < nLayers; ++idxLayer) {
       double zIn = zmin + idxLayer*dzLayer;
       // double zOut = zIn + dzLayer;
 
-      caloLayer.distance                  = zIn; // distance from origin to innermost face of laye   
-      caloLayer.sensitive_thickness	      = dzLayer; // thickness of the sensitive element
-      caloLayer.absorberThickness         = 0.0; // thickness of absorber part of layer. consider using inner/outer_nRadiationLenghts and inner/outer_nInteractionLengths
+      caloLayer.distance                  = zIn; // distance from origin to innermost face of layer
+      caloLayer.sensitive_thickness       = dzLayer; // thickness of the sensitive element
+      // caloLayer.absorberThickness         = 0.0; // thickness of absorber part of layer. consider using inner/outer_nRadiationLenghts and inner/outer_nInteractionLengths
 
       caloLayer.inner_thickness           = dzLayer/2.0; // distance between center of sensitive element and innermost face or layer
-      caloLayer.inner_nRadiationLengths   = 0.; // absorber material in front of sensitive element in layer
-      caloLayer.inner_nInteractionLengths = 0.; // absorber material in front of sensitive element in layer
+      caloLayer.inner_nRadiationLengths   = caloLayer.inner_thickness / mat.radLength(); // absorber material in front of sensitive element in layer
+      caloLayer.inner_nInteractionLengths = caloLayer.inner_thickness / mat.intLength(); // absorber material in front of sensitive element in layer
       caloLayer.outer_thickness           = dzLayer/2.0; // distance between center of sensitive element and outermost face or layer
-      caloLayer.outer_nRadiationLengths   = 0.; // absorber material behind sensitive element in layer
-      caloLayer.outer_nInteractionLengths = 0.; // absorber material behind sensitive element in layer
+      caloLayer.outer_nRadiationLengths   = caloLayer.outer_thickness / mat.radLength(); // absorber material behind sensitive element in layer
+      caloLayer.outer_nInteractionLengths = caloLayer.outer_thickness / mat.intLength(); // absorber material behind sensitive element in layer
 
       caloLayer.cellSize0 = 20 * dd4hep::mm; // FIXME! AD: should be corrected from DDGeometryCreatorALLEGRO. GM: get it from segmentation class
       caloLayer.cellSize1 = 20 * dd4hep::mm; // FIXME! AD: should be corrected from DDGeometryCreatorALLEGRO. GM: get it from segmentation class
@@ -269,21 +270,22 @@ createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4hep::SensitiveDetector 
     caloData->extent[3] = cylinderDim.dz();
     caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::BarrelLayout;
 
+    auto mat = lcdd.material(cylinderDim.materialStr());
     dd4hep::rec::LayeredCalorimeterData::Layer caloLayer;
     for (int idxLayer = 0; idxLayer < nLayers; ++idxLayer) {
       rIn = cylinderDim.rmin() + idxLayer*drLayer;
       // double rOut = rIn + drLayer;
 
       caloLayer.distance                  = rIn; // distance from origin to innermost face of layer   
-      caloLayer.sensitive_thickness	      = drLayer; // thickness of the sensitive element
-      caloLayer.absorberThickness         = 0.0; // thickness of absorber part of layer. consider using inner/outer_nRadiationLenghts and inner/outer_nInteractionLengths
+      caloLayer.sensitive_thickness       = drLayer; // thickness of the sensitive element
+      // caloLayer.absorberThickness         = 0.0; // thickness of absorber part of layer. consider using inner/outer_nRadiationLenghts and inner/outer_nInteractionLengths
 
       caloLayer.inner_thickness           = drLayer/2.0; // distance between center of sensitive element and innermost face or layer
-      caloLayer.inner_nRadiationLengths   = 0.; // absorber material in front of sensitive element in layer
-      caloLayer.inner_nInteractionLengths = 0.; // absorber material in front of sensitive element in layer
+      caloLayer.inner_nRadiationLengths   = caloLayer.inner_thickness / mat.radLength(); // absorber material in front of sensitive element in layer
+      caloLayer.inner_nInteractionLengths = caloLayer.inner_thickness / mat.intLength(); // absorber material in front of sensitive element in layer
       caloLayer.outer_thickness           = drLayer/2.0; // distance between center of sensitive element and outermost face or layer
-      caloLayer.outer_nRadiationLengths   = 0.; // absorber material behind sensitive element in layer
-      caloLayer.outer_nInteractionLengths = 0.; // absorber material behind sensitive element in layer
+      caloLayer.outer_nRadiationLengths   = caloLayer.outer_thickness / mat.radLength(); // absorber material behind sensitive element in layer
+      caloLayer.outer_nInteractionLengths = caloLayer.outer_thickness / mat.intLength(); // absorber material behind sensitive element in layer
 
       caloLayer.cellSize0 = 20 * dd4hep::mm; // FIXME! AD: should be corrected from DDGeometryCreatorALLEGRO. GM: get it from segmentation class
       caloLayer.cellSize1 = 20 * dd4hep::mm; // FIXME! AD: should be corrected from DDGeometryCreatorALLEGRO. GM: get it from segmentation class
