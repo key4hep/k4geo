@@ -367,7 +367,7 @@
       </plugin>
 
       <plugin name="Pandora_LayeredCalorimeterPlugin">
-        <argument value="/ECalBarrel"/>
+        <argument value="ECalBarrel"/>
         <argument value="ECalBarrel_inner_radius"/> <!-- Rmin -->
         <argument value="ECalBarrel_outer_radius"/> <!-- Rmax -->
         <argument value="ECalBarrel_half_length"/>  <!-- half_length -->
