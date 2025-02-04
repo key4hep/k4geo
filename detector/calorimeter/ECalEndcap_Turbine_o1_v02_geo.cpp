@@ -312,7 +312,7 @@ namespace det {
 	dd4hep::Position posLayer(0,0,0);
 	dd4hep::PlacedVolume absBladeVol_pv = glueLayerVols[iLayer].placeVolume(absBladeLayerVol, posLayer);
       
-	absBladeVol_pv.addPhysVolID("subtype", 4); // 1 = absorber, 2 = glue, 3 = cladding
+	absBladeVol_pv.addPhysVolID("subtype", 1); // 1 = absorber, 2 = glue, 3 = cladding
 	dd4hep::printout( dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v02_geo",  "Blade layer, rho is %d, %f, %f", iLayer, absBladeVol_pv.position().Rho(), roLayer/2.);
 	absBladeVol_pv.addPhysVolID("layer", iWheel*numNonActiveLayers+iLayer);
 
@@ -334,7 +334,7 @@ namespace det {
 	dd4hep::PlacedVolume glueVol_pv = claddingLayerVols[iLayer].placeVolume(glueLayerVol, posLayer);
 
       
-	glueVol_pv.addPhysVolID("subtype", 1); // 1 = absorber, 2 = glue, 3 = cladding
+	glueVol_pv.addPhysVolID("subtype", 2); // 1 = absorber, 2 = glue, 3 = cladding
 	glueVol_pv.addPhysVolID("layer", iWheel*numNonActiveLayers+iLayer);
 
 	dd4hep::printout( dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v02_geo",  "Glue volume %s", glueVol_pv.toString().c_str());
@@ -357,7 +357,7 @@ namespace det {
 	dd4hep::Position posLayer(0,0,(zminLayer-zminri+roLayer-ro)/2.);	 
 	dd4hep::PlacedVolume claddingVol_pv = passiveVol.placeVolume(claddingLayerVol, posLayer);
             
-	claddingVol_pv.addPhysVolID("subtype", 2); // 1 = absorber, 2 = glue, 3 = cladding
+	claddingVol_pv.addPhysVolID("subtype", 3); // 1 = absorber, 2 = glue, 3 = cladding
 	claddingVol_pv.addPhysVolID("layer", iWheel*numNonActiveLayers+iLayer);
 
 	dd4hep::printout( dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v02_geo",  "Cladding volume %s", claddingVol_pv.toString().c_str());
