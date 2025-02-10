@@ -40,7 +40,8 @@
       <!-- added for Pandora -->
       <type_flags type="DetType_CALORIMETER + DetType_MUON + DetType_BARREL"/>
       <!-- end -->
-      <sensitive type="SimpleTrackerSD"/>
+      <!-- sensitive type="SimpleTrackerSD"/ -->
+      <sensitive type="BirksLawCalorimeterSD"/>
       <dimensions rmin="MuonTagger_inner_radius" rmax="MuonTagger_outer_radius"
                   dz="MuonTagger_half_length" z_offset = "0" material="Polystyrene" phi0="0" deltaphi="360*deg" vis="muon_vis"/>
       <layers>
