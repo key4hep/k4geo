@@ -249,7 +249,14 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
     double thickness_sen = 0.;
     double absorberThickness = 0.;
 
-    // AD: average material radiation length in a given layer depends on the polar angle... not sure how it is used by Pandora... lets calculate it at the angle of 60 degrees...
+    // Average material radiation length in a given layer depends on the polar angle.
+    // Pandora uses it (but mainly for ECAL) to calculate expected amount of radiation from previous layer
+    // However, it assumes that the material distribution is uniform vs z, and then corrects the radiation length
+    // based on the direction of the particle.
+    // In our case, this is not true. At the moment, we are going to calculate it at an angle of 60 degrees
+    // so that a mixture of active and passive material is seen, but we'll probably have to do something different
+    // in Pandora if we see that this has a significant impact on the results (probably it won't seen this information
+    // does not seem to be relied upon a lot for the HCAL).
     const double angle = 60.*M_PI/180.;
     dd4hep::rec::Vector3D ivr1 = dd4hep::rec::Vector3D(0., layerInnerRadii.at(idxLayer), 0); // defining starting vector points of the given layer
     dd4hep::rec::Vector3D ivr2 = dd4hep::rec::Vector3D(0., layerInnerRadii.at(idxLayer) + layerDepths.at(idxLayer), layerDepths.at(idxLayer)*cos(angle)/sin(angle));  // defining end vector points of the given layer
