@@ -761,7 +761,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
 
   // Fill caloData information
 
-  // Extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm
+  // Extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in dd4hep units (mm)
   // (for barrel detectors zmin is 0)
   caloData->extent[0] = Rmin;
   caloData->extent[1] = Rmax;
@@ -787,7 +787,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
   double rad_last = 0;
   double scale_fact = dR / (-Rmin * cos(angle) + sqrt(pow(Rmax, 2) - pow(Rmin * sin(angle), 2)));
   // since the layer height is given along the electrode and not along the radius it needs to be scaled to get the values of layer height radially
-  std::cout << "Scaling factor " << scale_fact << std::endl;
+  lLog << MSG::DEBUG << "Scaling factor " << scale_fact << endmsg;
   for (size_t il = 0; il < layerHeight.size(); il++) {
     double thickness_sen = 0.;
     double absorberThickness = 0.;
@@ -796,14 +796,14 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     dd4hep::rec::Vector3D ivr1 = dd4hep::rec::Vector3D(0., rad_first, 0); // defining starting vector points of the given layer
     dd4hep::rec::Vector3D ivr2 = dd4hep::rec::Vector3D(0., rad_last, 0);  // defining end vector points of the given layer
 
-    std::cout << "radius first " << rad_first << " radius last " << rad_last << std::endl;
+    lLog << MSG::DEBUG << "radius first " << rad_first << " radius last " << rad_last << endmsg;
     const dd4hep::rec::MaterialVec &materials = matMgr.materialsBetween(ivr1, ivr2); // calling material manager to get material info between two points
     auto mat = matMgr.createAveragedMaterial(materials);                             // creating average of all the material between two points to calculate X0 and lambda of averaged material
     const double nRadiationLengths = mat.radiationLength();
     const double nInteractionLengths = mat.interactionLength();
-    const double difference_bet_r1r2 = (ivr1 - ivr2).r(); // should be identical to layerHeight[il] * scale_fact
-    const double value_of_x0 = layerHeight[il] / nRadiationLengths; // GM : shouldn't this be multiplied by scale_fact?
-    const double value_of_lambda = layerHeight[il] / nInteractionLengths; // GM : shouldn't this be multiplied by scale_fact?
+    const double difference_bet_r1r2 = (ivr1 - ivr2).r();  // equal to layerHeight[il]*scale_fact
+    const double value_of_x0 = difference_bet_r1r2 / nRadiationLengths;
+    const double value_of_lambda = difference_bet_r1r2 / nInteractionLengths;
     std::string str1("LAr");
 
     for (size_t imat = 0; imat < materials.size(); imat++) {
@@ -817,9 +817,9 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
       }
     }
     rad_first = rad_last;
-    std::cout << "The sensitive thickness is " << thickness_sen << std::endl;
-    std::cout << "The absorber thickness is " << absorberThickness << std::endl;
-    std::cout << "The radiation length is " << value_of_x0 << " and the interaction length is " << value_of_lambda << std::endl;
+    lLog << MSG::DEBUG << "The sensitive thickness is " << thickness_sen << endmsg;
+    lLog << MSG::DEBUG << "The absorber thickness is " << absorberThickness << endmsg;
+    lLog << MSG::DEBUG << "The radiation length is " << value_of_x0 << " and the interaction length is " << value_of_lambda << endmsg;
 
     caloLayer.distance = rad_first;
     caloLayer.absorberThickness         = absorberThickness;
