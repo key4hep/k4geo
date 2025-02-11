@@ -5,16 +5,17 @@
 
   <info name="FCCeeMuonTagger"
         title="Muon Tagger for ALLEGRO, with phi-theta segmentation"
-        author="Created by A. Duglishvili from MuonTagger.xml, moving from eta to theta segmentation"
+        author="Created by A. Duglishvili from MuonTagger.xml, moving from eta to theta segmentation. Further mods by G. Marchiori to allow longitudinal layers"
         url="no"
         status="development"
         version="1.0">
     <comment>
-      Simple muon tagger with phi-theta segmentation - barrel and endcaps
+      Simple muon tagger with phi-theta segmentation - barrel and endcaps. The detector is a simple cylinder of plastic scintillator.
     </comment>
   </info>
 
   <define>
+    <!-- define here the number of radial (barrel) or longitudinal, z (endcap) layers into which the overall cylinder(s) will be segmented -->
     <constant name="MuonTaggerBarrelLayers" value="2"/>
     <constant name="MuonTaggerEndcapLayers" value="2"/>
   </define>
@@ -25,11 +26,16 @@
   
   <readouts>
     <readout name="MuonTaggerBarrelPhiTheta">
-      <segmentation type="FCCSWGridPhiTheta_k4geo" phi_bins="704" offset_phi="-pi+(pi/704.)" grid_size_theta="0.010013373" offset_theta="0.10884388"/>
+      <!-- the phi binning is the same as in MuonTagger.xml -->
+      <!-- the theta offset (which sets the acceptance of the readout) was initially calculated from the eta offset of MuonTagger.xml -->
+      <!-- and slightly rounded so that the number of theta bins is integer. The theta width was set to 0.5 degrees giving a total of
+           336 bins (for MuonTagger it was 582 bins of delta_eta = 0.01). As this is not more than a "toy" muon detector this should be
+           OK for the moment - more refined geometry models and segmentations will be implemented when ready -->
+      <segmentation type="FCCSWGridPhiTheta_k4geo" phi_bins="704" offset_phi="-pi+(pi/704.)" grid_size_theta="0.0087266" offset_theta="0.1047277"/>
       <id>system:4,subsystem:1,layer:5,theta:10,phi:10</id>
     </readout>
     <readout name="MuonTaggerEndcapPhiTheta">
-      <segmentation type="FCCSWGridPhiTheta_k4geo" phi_bins="704" offset_phi="-pi+(pi/704.)" grid_size_theta="0.010013373" offset_theta="0.10884388"/>
+      <segmentation type="FCCSWGridPhiTheta_k4geo" phi_bins="704" offset_phi="-pi+(pi/704.)" grid_size_theta="0.0087266" offset_theta="0.1047277"/>
       <id>system:4,subsystem:1,layer:5,theta:10,phi:10</id>
     </readout>
   </readouts>
@@ -41,6 +47,7 @@
       <type_flags type="DetType_CALORIMETER + DetType_MUON + DetType_BARREL"/>
       <!-- end -->
       <!-- sensitive type="SimpleTrackerSD"/ -->
+      <!-- use calorimeter sensitive detector for scintillator - this is needed since PandoraPFA expects muon sim hits to be of type SimCaloHit -->
       <sensitive type="BirksLawCalorimeterSD"/>
       <dimensions rmin="MuonTagger_inner_radius" rmax="MuonTagger_outer_radius"
                   dz="MuonTagger_half_length" z_offset = "0" material="Polystyrene" phi0="0" deltaphi="360*deg" vis="muon_vis"/>
