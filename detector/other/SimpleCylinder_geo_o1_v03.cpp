@@ -16,7 +16,7 @@ const std::string INFO  = "createSimpleCylinder   INFO   ";
 namespace det {
 /**
   Simple cylinder using Tube to be used to define cylinder composed of 1 single material
-  Based on SimpleCylinder_geo_o1_v02.cpp, but with 2 layers (todo: read N layers from xml)
+  Based on SimpleCylinder_geo_o1_v02.cpp, but with N layers
   @author G. Marchiori
 **/
 static dd4hep::Ref_t
