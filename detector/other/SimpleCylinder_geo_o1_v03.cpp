@@ -169,29 +169,16 @@ createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4hep::SensitiveDetector 
       caloLayer.outer_nRadiationLengths   = caloLayer.outer_thickness / mat.radLength(); // absorber material behind sensitive element in layer
       caloLayer.outer_nInteractionLengths = caloLayer.outer_thickness / mat.intLength(); // absorber material behind sensitive element in layer
 
-      caloLayer.cellSize0 = 20 * dd4hep::mm; // FIXME! AD: should be corrected from DDGeometryCreatorALLEGRO. GM: get it from segmentation class
-      caloLayer.cellSize1 = 20 * dd4hep::mm; // FIXME! AD: should be corrected from DDGeometryCreatorALLEGRO. GM: get it from segmentation class
+      // FIXME! we should get the latter from segmentation class but requires also to set
+      // the cell geometry to pointing in theta-phi, which does not exist yet in Pandora
+      // For the moment, we use an approximation of fixed-size cells with reasonable numbers
+      // so that we can make Pandora run and then we can fix all the missing/outdated pieces
+      caloLayer.cellSize0 = 40 * dd4hep::mm;  // 0.5 degrees in theta, R~4.5 m
+      caloLayer.cellSize1 = 40 * dd4hep::mm;  // 704 bins in phi (2pi),  R~4.5 m
 
       // attach the layer to the caloData
       caloData->layers.push_back(caloLayer);
     }
-    /*
-    dd4hep::rec::Vector3D ivr1 = dd4hep::rec::Vector3D(0., 0., zmin); // defining starting vector points
-    dd4hep::rec::Vector3D ivr2 = dd4hep::rec::Vector3D(0., 0., zmax); // defining end vector
-
-    const dd4hep::rec::MaterialVec &materials = matMgr.materialsBetween(ivr1, ivr2); // calling material manager to get material info between two points
-    auto mat = matMgr.createAveragedMaterial(materials); // creating average of all the material between two points to calculate X0 and lambda of averaged material
-    const double nRadiationLengths = cylinderDim.dz()*2. / mat.radiationLength();
-    const double nInteractionLengths = cylinderDim.dz()*2. / mat.interactionLength();
-
-    caloLayer.distance                  = zmin;
-    caloLayer.sensitive_thickness       = cylinderDim.dz()*2.;
-    caloLayer.inner_thickness           = cylinderDim.dz();
-    caloLayer.outer_thickness           = cylinderDim.dz();
-
-    caloLayer.inner_nRadiationLengths   = nRadiationLengths / 2.0;
-    caloLayer.inner_nInteractionLengths = nInteractionLengths / 2.0;
-    */
   }
   else
   {
