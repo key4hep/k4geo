@@ -61,7 +61,7 @@
   <include ref="HCalBarrel_TileCal_v03.xml"/>
   <include ref="ECalEndcaps_Turbine.xml"/>
   <include ref="HCalEndcaps_ThreeParts_TileCal_v03.xml"/>
-  <include ref="MuonTagger.xml"/>
+  <include ref="MuonTaggerPhiTheta.xml"/>
 
   <fields>
     <!-- Only the Detector 2T solenoid field. The fields from antisolenoids and quadrupoles are located in the MDI folder -->
