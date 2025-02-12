@@ -135,9 +135,6 @@
 	<constant name="LumiCal_shield_dz_prime" value="3.5/2.0*mm"/> <!-- Must be consistent with layers defined in the lumiCal xml (1*3.5 mm)-->
         <constant name="LumiCal_shield_dz" value="LumiCal_shield_dz_prime  * cos(0.5 * CrossingAngle)"/>
 
-	<!-- maybe outdated, but used in beampipe and beaminstr. To be checked -->
-        <constant name="QD0_min_z" value="2000*mm"/>
-        <constant name="QD0_max_z" value="5400*mm"/>	
 	
     </define>
 
