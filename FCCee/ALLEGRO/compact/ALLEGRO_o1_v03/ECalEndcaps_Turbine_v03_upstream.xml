@@ -99,18 +99,8 @@
      <segmentation type="FCCSWEndcapTurbine_k4geo" offset_rho1="ECalEndcapRmin1+ECalEndcapSupportTubeThickness+ECalEndcapGridSizeRho1/2." offset_rho2="ECalEndcapRmin2+ECalEndcapSupportTubeThickness+ECalEndcapGridSizeRho2/2." offset_rho3="ECalEndcapRmin3+ECalEndcapSupportTubeThickness+ECalEndcapGridSizeRho3/2." offset_z1="EMEC_z1+ECalEndcapGridSizeZ1/2." offset_z2="EMEC_z1+ECalEndcapGridSizeZ2/2." offset_z3="EMEC_z1+ECalEndcapGridSizeZ3/2." offset_phi="0.0" offset_theta="0.1127" grid_size_rho1="ECalEndcapGridSizeRho1" grid_size_rho2="ECalEndcapGridSizeRho2" grid_size_rho3="ECalEndcapGridSizeRho3" grid_size_z1="ECalEndcapGridSizeZ1" grid_size_z2="ECalEndcapGridSizeZ2" grid_size_z3="ECalEndcapGridSizeZ3"/>
      <id>system:4,cryo:1,type:3,subtype:3,side:-2,wheel:3,layer:12,module:11,rho:8,z:8</id> 
 
-<!--      <id>system:4,cryo:1,type:3,subtype:3,side:-2,wheel:3,layer:9,module:14,rho:-10,z:-14</id> -->
     </readout> 
-<!--
-    <readout name="ECalEndcapPhiTheta">
-      <segmentation type="FCCSWGridModuleThetaMerged_k4geo" mergedCells_Theta="1 1 1 1 " mergedModules="1 1 1 1" grid_size_theta="0.005" offset_theta="-3.14"/>
-      <id>system:4,cryo:1,type:3,subtype:3,side:1,wheel:3,layer:5,module:14,theta:10</id>
-    </readout>
-    <readout name="ECalEndcapPhiEtaReco">
-      <segmentation type="FCCSWGridPhiEta_k4geo" phi_bins="704" offset_phi="-pi+(pi/704.)" grid_size_eta="0.05" offset_eta="-2.91"/>
-      <id>system:4,cryo:1,type:3,subtype:3,layer:8,eta:10,phi:10</id>
-    </readout>
--->
+
   </readouts>
 
   <detectors>
@@ -118,7 +108,7 @@
     <detector id="ECalEndcap_id" name="EMEC_turbine" type="ECalEndcap_Turbine_o1_v03" readout="ECalEndcapTurbine" vis="emec_envelope_vis" sensitive="true">
       <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_ENDCAP"/>
       <sensitive type="SimpleCalorimeterSD"/>
-      <!--  <dimensions rmin1="EMEC_rmin1"  rmin2="EMEC_rmin2" rmax="EMEC_rmax" dz="(EMEC_z2-EMEC_z1)/2." z_offset="EMEC_z1+(EMEC_z2-EMEC_z1)/2."/>  -->
+
       <dimensions rmin1="CryoEndcap_front_rmin" rmin2="CryoEndcap_front_rmin" rmax1="CryoEndcap_rmax" rmax2="CryoEndcap_rmax" dz="(CryoEndcap_z2-CryoEndcap_z1)/2." z_offset="CryoEndcap_z1+(CryoEndcap_z2-CryoEndcap_z1)/2."/>
       <calorimeter name="EM_endcap">
 	<dimensions rmin="EMEC_rmin1" rmax="EMEC_rmax" dz="(EMEC_z2-EMEC_z1)/2." z_offset="EMEC_z1+(EMEC_z2-EMEC_z1)/2."/>
