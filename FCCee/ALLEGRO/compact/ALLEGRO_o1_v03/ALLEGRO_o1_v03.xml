@@ -48,7 +48,7 @@
   <include ref="HCalBarrel_TileCal_v03.xml"/>
   <include ref="ECalEndcaps_Turbine_v03.xml"/>
   <include ref="HCalEndcaps_ThreeParts_TileCal_v03.xml"/>
-  <include ref="MuonTagger.xml"/>
+  <include ref="MuonTaggerPhiTheta.xml"/>
 
   <fields>
     <!-- FIXME this is a place holder to get a reasonable magnetic field, it should be a real MAP obtained from FEM tools taking into account HCAL return yoke -->
