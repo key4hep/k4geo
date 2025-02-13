@@ -1,3 +1,34 @@
+/*
+ * Copyright (c) 2020-2024 Key4hep-Project.
+ *
+ * This file is part of Key4hep.
+ * See https://key4hep.github.io/key4hep-doc/ for further info.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+
+// Author     : S.Sasikumar
+//
+//==========================================================================
+//
+// Pandora Layered Calorimeter Plugin
+//
+// The plugin builds LayeredCalorimeterData dynamically by
+// configuring detector's material properties, interaction lengths, and type classifications
+// ensuring proper adaptibility of a calorimeter with PandoraPFA irrespective of its geometry.
+//
+//==========================================================================
+*/
+
 #include <DD4hep/DetFactoryHelper.h>
 #include <DD4hep/Detector.h>
 #include <DD4hep/Handle.h>
@@ -21,34 +52,43 @@ namespace {
     const std::string LOG_SOURCE("LayeredCalorimeterPlugin");
 
     // Ensure there are at least 4 arguments
-    if (argc < 4) {
+    if (argc < 7) {
       printout(PrintLevel::ERROR, LOG_SOURCE, "Insufficient arguments. Expected: path, Rmin, Rmax, half_length,angle, and layer heights.");
       return 1;
     }
 
     // Parse basic parameters
-    std::string path = argv[0];
-    double Rmin = dd4hep::_toDouble(argv[1]);
-    double Rmax = dd4hep::_toDouble(argv[2]);
-    double half_length = dd4hep::_toDouble(argv[3]);
-    double angle = dd4hep::_toDouble(argv[4]);
-    std::string name_of_the_material = argv[5];
+    std::string subDetectorName = argv[0];
+    std::string type_flags = argv[1];
+    double Rmin = dd4hep::_toDouble(argv[2]);
+    double Rmax = dd4hep::_toDouble(argv[3]);
+    double half_length = dd4hep::_toDouble(argv[4]);
+    double angle = dd4hep::_toDouble(argv[5]);
+    std::string name_of_the_material = argv[6];
 
     // Parse layer heights (all remaining arguments)
     std::vector<double> layerHeights;
-    for (int i = 6; i < argc; ++i) {
+    for (int i = 7; i < argc; ++i) {
       layerHeights.push_back(dd4hep::_toDouble(argv[i]));
     }
 
     dd4hep::printout(PrintLevel::DEBUG, LOG_SOURCE, "Parsed: path=%s, Rmin=%f, Rmax=%f, dR=%f, angle=%f,layers=%zu",
-                     path.c_str(), Rmin, Rmax, half_length, angle,layerHeights.size());
+                    subDetectorName.c_str(), Rmin, Rmax, half_length, angle,layerHeights.size());
 
     // Retrieve the detector element
-    auto caloDetElem = description.detector(path);
+    auto caloDetElem = description.detector(subDetectorName);
     if (!caloDetElem.isValid()) {
-      dd4hep::printout(PrintLevel::ERROR, LOG_SOURCE, "Invalid DetElement path: %s", path.c_str());
+      dd4hep::printout(PrintLevel::ERROR, LOG_SOURCE, "Invalid DetElement path: %s", subDetectorName.c_str());
       return 1;
     }
+     
+    unsigned int typeFlag = dd4hep::_toInt(type_flags);
+    dd4hep::printout(PrintLevel::INFO, LOG_SOURCE,"+++ setDetectorTypeFlags for detector :%s set to 0x%x",
+		     subDetectorName.c_str(),
+		     typeFlag);
+
+    caloDetElem.setTypeFlag(typeFlag);
+
 
     // Create LayeredCalorimeterData
     auto caloData = new dd4hep::rec::LayeredCalorimeterData;
@@ -117,7 +157,7 @@ namespace {
      
     }
 
-    dd4hep::printout(PrintLevel::INFO, LOG_SOURCE, "Successfully added LayeredCalorimeterData to %s", path.c_str());
+    dd4hep::printout(PrintLevel::INFO, LOG_SOURCE, "Successfully added LayeredCalorimeterData to %s", subDetectorName.c_str());
     return 1;
   }
 }// namespace
