@@ -5,9 +5,8 @@
 #include "DDRec/Vector3D.h"
 #include <DDRec/DetectorData.h>
 
-// like v02, but in xml the layer dimensions are along the electrode
-// directions, without rescaling by R/L where R = radial extent of ECAL
-// and L = electrode length
+// like v03, but can configure material in inner part of absorber
+// in first layer
 
 // todo: remove gaudi logging and properly capture output
 #define endmsg std::endl
@@ -30,7 +29,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
 
   // Create air envelope for the whole barrel
   dd4hep::Volume envelopeVol(nameDet + "_vol", dd4hep::Tube(dim.rmin(), dim.rmax(), dim.dz()),
-                                       aLcdd.material("Air"));
+                             aLcdd.material("Air"));
   envelopeVol.setVisAttributes(aLcdd, dim.visStr());
 
   // Retrieve cryostat data
@@ -418,13 +417,14 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
   dd4hep::Box passiveGlueShape(passiveGlueThickness / 4., caloDim.dz(), planeLength / 2. / cosPassiveAngle);
   dd4hep::Volume passiveVol("passive", passiveShape, aLcdd.material("Air"));
   dd4hep::Volume passiveInnerVol(passiveInnerMaterial + "_passive", passiveInnerShape,
-                                                         aLcdd.material(passiveInnerMaterial));
-  dd4hep::Volume passiveInnerVolFirstLayer(passiveInnerMaterialFirstLayer + "_passive", passiveInnerShapeFirstLayer,
-                                                                         aLcdd.material(passiveInnerMaterialFirstLayer));
+                                 aLcdd.material(passiveInnerMaterial));
+  dd4hep::Volume passiveInnerVolFirstLayer(passiveInnerMaterialFirstLayer + "_passive",
+                                           passiveInnerShapeFirstLayer,
+                                           aLcdd.material(passiveInnerMaterialFirstLayer));
   dd4hep::Volume passiveOuterVol(passiveOuterMaterial + "_passive", passiveOuterShape,
-                                                         aLcdd.material(passiveOuterMaterial));
+                                 aLcdd.material(passiveOuterMaterial));
   dd4hep::Volume passiveGlueVol(passiveGlueMaterial + "_passive", passiveGlueShape,
-                                                        aLcdd.material(passiveGlueMaterial));
+                                aLcdd.material(passiveGlueMaterial));
 
   // translate and rotate the elements of the module appropriately
   // the Pb absorber does not need to be rotated, but the glue and
@@ -511,7 +511,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     for (uint iLayer = 0; iLayer < numLayers; iLayer++) {
       dd4hep::Box layerPassiveOuterShape(passiveOuterThickness / 4., caloDim.dz(), layerHeight[iLayer] / 2. / cosPassiveAngle);
       dd4hep::Volume layerPassiveOuterVol(passiveOuterMaterial, layerPassiveOuterShape,
-                                                    aLcdd.material(passiveOuterMaterial));
+                                          aLcdd.material(passiveOuterMaterial));
       layerPassiveOuterVol.setSensitiveDetector(aSensDet);
       dd4hep::PlacedVolume layerPassiveOuterPhysVol =
           passiveOuterVol.placeVolume(layerPassiveOuterVol, dd4hep::Position(0, 0, layerOffset));
@@ -532,7 +532,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     for (uint iLayer = 0; iLayer < numLayers; iLayer++) {
       dd4hep::Box layerPassiveGlueShape(passiveGlueThickness / 4., caloDim.dz(), layerHeight[iLayer] / 2. / cosPassiveAngle);
       dd4hep::Volume layerPassiveGlueVol(passiveGlueMaterial, layerPassiveGlueShape,
-                                                   aLcdd.material(passiveGlueMaterial));
+                                         aLcdd.material(passiveGlueMaterial));
       layerPassiveGlueVol.setSensitiveDetector(aSensDet);
       dd4hep::PlacedVolume layerPassiveGluePhysVol =
           passiveGlueVol.placeVolume(layerPassiveGlueVol, dd4hep::Position(0, 0, layerOffset));
