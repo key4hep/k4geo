@@ -136,17 +136,17 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     dd4hep::Tube cryoSideOuterShape(cryoDim.rmin2(), cryoDim.rmax1(), cryoDim.dz());
     dd4hep::SubtractionSolid cryoSideShape(cryoSideOuterShape, bathAndServicesOuterShape);
     lLog << MSG::INFO
-	       << "ECAL cryostat: front: rmin (cm) = " << cryoDim.rmin1()/dd4hep::cm
-	       << " rmax (cm) = " << cryoDim.rmin2()/dd4hep::cm
-	       << " dz (cm) = " << cryoDim.dz()/dd4hep::cm  << endmsg;
+               << "ECAL cryostat: front: rmin (cm) = " << cryoDim.rmin1()/dd4hep::cm
+               << " rmax (cm) = " << cryoDim.rmin2()/dd4hep::cm
+               << " dz (cm) = " << cryoDim.dz()/dd4hep::cm  << endmsg;
     lLog << MSG::INFO
-	       << "ECAL cryostat: back: rmin (cm) = " << cryoDim.rmax1()/dd4hep::cm
-	       << " rmax (cm) = " << cryoDim.rmax2()/dd4hep::cm
-	       << " dz (cm) = " << cryoDim.dz()/dd4hep::cm << endmsg;
+               << "ECAL cryostat: back: rmin (cm) = " << cryoDim.rmax1()/dd4hep::cm
+               << " rmax (cm) = " << cryoDim.rmax2()/dd4hep::cm
+               << " dz (cm) = " << cryoDim.dz()/dd4hep::cm << endmsg;
     lLog << MSG::INFO
-	       << "ECAL cryostat: side: rmin (cm) = " << cryoDim.rmin2()/dd4hep::cm
-	       << " rmax (cm) = " << cryoDim.rmax1()/dd4hep::cm
-	       << " dz (cm) = " << (cryoDim.dz() - caloDim.dz())/dd4hep::cm  << endmsg;
+               << "ECAL cryostat: side: rmin (cm) = " << cryoDim.rmin2()/dd4hep::cm
+               << " rmax (cm) = " << cryoDim.rmax1()/dd4hep::cm
+               << " dz (cm) = " << (cryoDim.dz() - caloDim.dz())/dd4hep::cm  << endmsg;
     dd4hep::Volume cryoFrontVol(cryostat.nameStr()+"_front", cryoFrontShape, aLcdd.material(cryostat.materialStr()));
     dd4hep::Volume cryoBackVol(cryostat.nameStr()+"_back", cryoBackShape, aLcdd.material(cryostat.materialStr()));
     dd4hep::Volume cryoSideVol(cryostat.nameStr()+"_side", cryoSideShape, aLcdd.material(cryostat.materialStr()));
@@ -181,13 +181,13 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     dd4hep::Tube servicesFrontShape(cryoDim.rmin2(), bathRmin, caloDim.dz());
     dd4hep::Tube servicesBackShape(bathRmax, cryoDim.rmax1(), caloDim.dz());
     lLog << MSG::INFO
-	       << "ECAL services: front: rmin (cm) = " << cryoDim.rmin2()/dd4hep::cm
-	       << " rmax (cm) = " <<  bathRmin/dd4hep::cm/dd4hep::cm
-	       << " dz (cm) = " << caloDim.dz()/dd4hep::cm << endmsg;
+               << "ECAL services: front: rmin (cm) = " << cryoDim.rmin2()/dd4hep::cm
+               << " rmax (cm) = " <<  bathRmin/dd4hep::cm/dd4hep::cm
+               << " dz (cm) = " << caloDim.dz()/dd4hep::cm << endmsg;
     lLog << MSG::INFO
-	       << "ECAL services: back: rmin (cm) = " << bathRmax/dd4hep::cm
-	       << " rmax (cm) = " << cryoDim.rmax1()/dd4hep::cm
-	       << " dz (cm) = " << caloDim.dz()/dd4hep::cm << endmsg;
+               << "ECAL services: back: rmin (cm) = " << bathRmax/dd4hep::cm
+               << " rmax (cm) = " << cryoDim.rmax1()/dd4hep::cm
+               << " dz (cm) = " << caloDim.dz()/dd4hep::cm << endmsg;
     dd4hep::Volume servicesFrontVol("services_front", servicesFrontShape, aLcdd.material(activeMaterial));
     dd4hep::Volume servicesBackVol("services_back", servicesBackShape, aLcdd.material(activeMaterial));
     dd4hep::PlacedVolume servicesFrontPhysVol = envelopeVol.placeVolume(servicesFrontVol);
@@ -418,13 +418,13 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
   dd4hep::Box passiveGlueShape(passiveGlueThickness / 4., caloDim.dz(), planeLength / 2. / cosPassiveAngle);
   dd4hep::Volume passiveVol("passive", passiveShape, aLcdd.material("Air"));
   dd4hep::Volume passiveInnerVol(passiveInnerMaterial + "_passive", passiveInnerShape,
-				                         aLcdd.material(passiveInnerMaterial));
+                                                         aLcdd.material(passiveInnerMaterial));
   dd4hep::Volume passiveInnerVolFirstLayer(passiveInnerMaterialFirstLayer + "_passive", passiveInnerShapeFirstLayer,
-					                                 aLcdd.material(passiveInnerMaterialFirstLayer));
+                                                                         aLcdd.material(passiveInnerMaterialFirstLayer));
   dd4hep::Volume passiveOuterVol(passiveOuterMaterial + "_passive", passiveOuterShape,
-				                         aLcdd.material(passiveOuterMaterial));
+                                                         aLcdd.material(passiveOuterMaterial));
   dd4hep::Volume passiveGlueVol(passiveGlueMaterial + "_passive", passiveGlueShape,
-				                        aLcdd.material(passiveGlueMaterial));
+                                                        aLcdd.material(passiveGlueMaterial));
 
   // translate and rotate the elements of the module appropriately
   // the Pb absorber does not need to be rotated, but the glue and
@@ -490,7 +490,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     for (uint iLayer = 1; iLayer < numLayers; iLayer++) {
       dd4hep::Trd1 layerPassiveInnerShape(passiveInnerThicknessLayer[iLayer] / 2., passiveInnerThicknessLayer[iLayer+1] / 2., caloDim.dz(), layerHeight[iLayer] / 2.);
       dd4hep::Volume layerPassiveInnerVol(passiveInnerMaterial, layerPassiveInnerShape,
-					  aLcdd.material(passiveInnerMaterial));
+                                          aLcdd.material(passiveInnerMaterial));
       layerPassiveInnerVol.setSensitiveDetector(aSensDet);
       dd4hep::PlacedVolume layerPassiveInnerPhysVol =
           passiveInnerVol.placeVolume(layerPassiveInnerVol, dd4hep::Position(0, 0, layerOffset));
@@ -783,20 +783,24 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
   // double cellSize1 : second cell size, perpendicular to the first direction cellSize0 and the depth of the layers
   dd4hep::rec::MaterialManager matMgr(envelopeVol);
   dd4hep::rec::LayeredCalorimeterData::Layer caloLayer;
-  double rad_first = Rmin;
-  double rad_last = 0;
-  double scale_fact = dR / (-Rmin * cos(angle) + sqrt(pow(Rmax, 2) - pow(Rmin * sin(angle), 2)));
-  // since the layer height is given along the electrode and not along the radius it needs to be scaled to get the values of layer height radially
-  lLog << MSG::DEBUG << "Scaling factor " << scale_fact << endmsg;
-  for (size_t il = 0; il < layerHeight.size(); il++) {
+
+  runningHeight = 0.0;
+  for (uint iLay = 0; iLay < numLayers; iLay++) {
+    double Lmin = runningHeight;
+    double Lmax = runningHeight + layerHeight[iLay];
+    double Lmid = runningHeight + layerHeight[iLay]/2.0;
+    runningHeight += layerHeight[iLay];
+    double rad_first = sqrt(Rmin*Rmin + Lmin*Lmin + 2*Rmin*Lmin*cos(angle));
+    double rad_last = sqrt(Rmin*Rmin + Lmax*Lmax + 2*Rmin*Lmax*cos(angle));
+    double rad_mid = sqrt(Rmin*Rmin + Lmid*Lmid + 2*Rmin*Lmid*cos(angle));
+
     double thickness_sen = 0.;
     double absorberThickness = 0.;
 
-    rad_last = rad_first + (layerHeight[il] * scale_fact);
     dd4hep::rec::Vector3D ivr1 = dd4hep::rec::Vector3D(0., rad_first, 0); // defining starting vector points of the given layer
     dd4hep::rec::Vector3D ivr2 = dd4hep::rec::Vector3D(0., rad_last, 0);  // defining end vector points of the given layer
 
-    lLog << MSG::DEBUG << "radius first " << rad_first << " radius last " << rad_last << endmsg;
+    lLog << MSG::DEBUG << "radius first " << rad_first << " radius last " << rad_last << " radius middle " << rad_mid << endmsg;
     const dd4hep::rec::MaterialVec &materials = matMgr.materialsBetween(ivr1, ivr2); // calling material manager to get material info between two points
     auto mat = matMgr.createAveragedMaterial(materials);                             // creating average of all the material between two points to calculate X0 and lambda of averaged material
     const double nRadiationLengths = mat.radiationLength();
@@ -810,13 +814,12 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
 
       std::string str2(materials.at(imat).first.name());
       if (str1.compare(str2) == 0){
-	      thickness_sen += materials.at(imat).second;
+        thickness_sen += materials.at(imat).second;
       }
       else {
-	      absorberThickness += materials.at(imat).second;
+        absorberThickness += materials.at(imat).second;
       }
     }
-    rad_first = rad_last;
     lLog << MSG::DEBUG << "The sensitive thickness is " << thickness_sen << endmsg;
     lLog << MSG::DEBUG << "The absorber thickness is " << absorberThickness << endmsg;
     lLog << MSG::DEBUG << "The radiation length is " << value_of_x0 << " and the interaction length is " << value_of_lambda << endmsg;
@@ -825,13 +828,13 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     caloLayer.absorberThickness         = absorberThickness;
     caloLayer.sensitive_thickness       = thickness_sen;
 
-    caloLayer.inner_nRadiationLengths   = value_of_x0 / 2.0;
-    caloLayer.inner_nInteractionLengths = value_of_lambda / 2.0;
-    caloLayer.inner_thickness           = difference_bet_r1r2 / 2.0;
+    caloLayer.inner_nRadiationLengths   = value_of_x0 * (rad_mid - rad_first)/(rad_last - rad_first);
+    caloLayer.inner_nInteractionLengths = value_of_lambda * (rad_mid - rad_first)/(rad_last - rad_first);
+    caloLayer.inner_thickness           = rad_mid - rad_first;
 
-    caloLayer.outer_nRadiationLengths   = value_of_x0 / 2.0;
-    caloLayer.outer_nInteractionLengths = value_of_lambda / 2.0;
-    caloLayer.outer_thickness           = difference_bet_r1r2 / 2;
+    caloLayer.outer_nRadiationLengths   = value_of_x0 * (rad_last - rad_mid)/(rad_last - rad_first);
+    caloLayer.outer_nInteractionLengths = value_of_lambda * (rad_last - rad_mid)/(rad_last - rad_first);
+    caloLayer.outer_thickness           = rad_last - rad_mid;
 
     // GM: rather retrieve cellDimensions vector from segmentation class
     caloLayer.cellSize0 = 20 * dd4hep::mm; // GM: rather put delta_eta here and use pandora::POINTING cell type (should actually modify pandora to accept theta grid)
