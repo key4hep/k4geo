@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+
+  <info name="FCCee"
+        title="FCCee Beam pipe from CAD drawings"
+        author="aciarma"
+        url="no"
+        status="development"
+        version="1.0">
+    <comment>A beampipe for FCCee coming from F. Fransesini CAD drawings. </comment>
+  </info>
+
+
+
+  <detectors>
+    
+    <detector name="Beampipe_STL" type="DD4hep_TestShape_Creator">
+      <check>
+        <shape type="CAD_MultiVolume" ref="${K4GEO}/FCCee/MDI/compact/MDI_o1_v01/stl_files/Pipe_04022025/AlBeMet162_035_nocentral_04022025.stl"
+	       unit="mm" material="AlBeMet162">
+	  <volume id="0" name="s1" vis="AlBeMet_vis" material="AlBeMet162"> 
+	    <position x="0*cm"  y="0*cm"  z="0*cm"/>
+            <rotation x="0*rad" y="0*rad" z="0*rad"/>
+	  </volume> 
+        </shape>
+      </check>
+    </detector>
+    
+    
+    <detector name="Beampipe_inner" type="DD4hep_Mask_o1_v01" insideTrackingVolume="true" vis="AlBeMet_vis">
+      <parameter crossingangle="0" />
+      <envelope vis="AlBeMet_vis">
+        <shape type="Assembly"/>
+      </envelope>
+      <section type="Center"  start="0*mm"    end="90*mm"
+	       rMin1="10*mm"  rMin2="10*mm"  rMax1="10.35*mm" rMax2="10.35*mm"
+	       material="AlBeMet162"  name="Beampipe_inner" />
+    </detector>
+
+    <detector name="Beampipe_outer" type="DD4hep_Mask_o1_v01" insideTrackingVolume="true" vis="AlBeMet_vis">
+      <parameter crossingangle="0" />
+      <envelope vis="AlBeMet_vis">
+        <shape type="Assembly"/>
+      </envelope>
+      <section type="Center"  start="0*mm"    end="90*mm"
+               rMin1="11.35*mm"  rMin2="11.35*mm"  rMax1="11.70*mm" rMax2="11.70*mm"
+               material="AlBeMet162"  name="Beampipe_outer" />
+    </detector>
+    
+    <detector name="GoldLayer" type="DD4hep_Mask_o1_v01" insideTrackingVolume="true" vis="Gold_vis">
+      <parameter crossingangle="0" />
+      <envelope vis="Gold_vis">
+        <shape type="Assembly"/>
+      </envelope>
+      <section type="Center"  start="0*mm"    end="90*mm"
+               rMin1="9.995*mm"  rMin2="9.995*mm"  rMax1="10*mm" rMax2="10*mm"
+               material="Au"  name="GoldLayer" />
+    </detector>
+
+    <detector name="BeamLayer" type="DD4hep_Mask_o1_v01" insideTrackingVolume="true" vis="AlBeMet_vis">
+      <parameter crossingangle="0" />
+      <envelope vis="AlBeMet_vis">
+        <shape type="Assembly"/>
+      </envelope>
+      <section type="Center"  start="0*mm"    end="90*mm"
+               rMin1="0*mm"  rMin2="0*mm"  rMax1="9.995*mm" rMax2="9.995*mm"
+               material="beam"  name="BeamLayer" />
+    </detector>
+
+    <detector name="ParaffineLayer" type="DD4hep_Mask_o1_v01" insideTrackingVolume="true" vis="Paraffin_vis">
+      <parameter crossingangle="0" />
+      <envelope vis="Paraffin_vis">
+        <shape type="Assembly"/>
+      </envelope>
+      <section type="Center"  start="0*mm"    end="90*mm"
+               rMin1="10.35*mm"  rMin2="10.35*mm"  rMax1="11.35*mm" rMax2="11.35*mm"
+               material="LiquidNDecane"  name="ParaffineLayer" />
+    </detector>
+
+
+    
+    <detector name="Beam_STL" type="DD4hep_TestShape_Creator">
+      <check>
+        <shape type="CAD_MultiVolume" ref="${K4GEO}/FCCee/MDI/compact/MDI_o1_v01/stl_files/Pipe_04022025/Beam_nocentral_04022025.stl"
+               unit="mm" material="beam">
+          <volume id="0" name="s1" vis="AlBeMet_vis" material="beam">
+            <position x="0*cm"  y="0*cm"  z="0*cm"/>
+            <rotation x="0*rad" y="0*rad" z="0*rad"/>
+          </volume>
+        </shape>
+      </check>
+    </detector>
+    
+    <detector name="Paraffin_STL" type="DD4hep_TestShape_Creator">
+      <check>
+        <shape type="CAD_MultiVolume" ref="${K4GEO}/FCCee/MDI/compact/MDI_o1_v01/stl_files/Pipe_04022025/Paraffine_nocentral_04022025.stl"
+	       unit="mm" material="LiquidNDecane">
+          <volume id="0" name="s1" vis="Paraffin_vis" material="LiquidNDecane">
+            <position x="0*cm"  y="0*cm"  z="0*cm"/>
+            <rotation x="0*rad" y="0*rad" z="0*rad"/>
+          </volume>
+        </shape>
+      </check>
+    </detector>
+
+    <detector name="Water_STL" type="DD4hep_TestShape_Creator">
+      <check>
+        <shape type="CAD_MultiVolume" ref="${K4GEO}/FCCee/MDI/compact/MDI_o1_v01/stl_files/Pipe_04022025/Water_04022025.stl"
+               unit="mm" material="Water">
+          <volume id="0" name="s1" vis="Water_vis" material="Water">
+            <position x="0*cm"  y="0*cm"  z="0*cm"/>
+            <rotation x="0*rad" y="0*rad" z="0*rad"/>
+          </volume>
+        </shape>
+      </check>
+    </detector>
+
+    <detector name="Bellows_STL" type="DD4hep_TestShape_Creator">
+      <check>
+        <shape type="CAD_MultiVolume" ref="${K4GEO}/FCCee/MDI/compact/MDI_o1_v01/stl_files/Pipe_04022025/Steel235_Bellows_04022025.stl"
+               unit="mm" material="Steel235">
+          <volume id="0" name="s1" vis="CopperCooling_vis" material="Steel235">
+            <position x="0*cm"  y="0*cm"  z="0*cm"/>
+            <rotation x="0*rad" y="0*rad" z="0*rad"/>
+          </volume>
+        </shape>
+      </check>
+    </detector>
+
+    <detector name="Beampipe_crotch_STL" type="DD4hep_TestShape_Creator">
+      <check>
+        <shape type="CAD_MultiVolume" ref="${K4GEO}/FCCee/MDI/compact/MDI_o1_v01/stl_files/Pipe_04022025/Copper_pipe_04022025.stl"
+               unit="mm" material="Copper">
+          <volume id="0" name="s1" vis="CopperCooling_vis" material="Cu">
+            <position x="0*cm"  y="0*cm"  z="0*cm"/>
+            <rotation x="0*rad" y="0*rad" z="0*rad"/>
+          </volume>
+        </shape>
+      </check>
+    </detector>
+    
+    <detector name="Tungsten_STL" type="DD4hep_TestShape_Creator">
+      <check>
+        <shape type="CAD_MultiVolume" ref="${K4GEO}/FCCee/MDI/compact/MDI_o1_v01/stl_files/Pipe_04022025/Tungsten_mask_04022025.stl"
+               unit="mm" material="Tungsten">
+          <volume id="0" name="s1" vis="Tungsten_vis" material="W">
+            <position x="0*cm"  y="0*cm"  z="0*cm"/>
+            <rotation x="0*rad" y="0*rad" z="0*rad"/>
+          </volume>
+        </shape>
+      </check>
+    </detector>
+
+  </detectors>
+  
+
+</lccdd>
