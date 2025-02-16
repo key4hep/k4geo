@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 set( PackageName k4geo )
 #---------------------------
 
-project(${PackageName})
+project(${PackageName} LANGUAGES CXX)
 
 # project version
 SET( ${PackageName}_VERSION_MAJOR 0 )
