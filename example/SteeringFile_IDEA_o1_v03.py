@@ -16,11 +16,11 @@ SIM.inputFiles = []
 ## Macro file to execute for runType 'run' or 'vis'
 SIM.macroFile = ""
 ## number of events to simulate, used in batch mode
-SIM.numberOfEvents = 10
+SIM.numberOfEvents = 1
 ## Outputfile from the simulation: .slcio, edm4hep.root and .root output files are supported
 SIM.outputFile = "testIDEA_o1_v03.root"
 ## Physics list to use in simulation
-SIM.physicsList = "FTFP_BERT"
+SIM.physicsList = None
 ## Verbosity use integers from 1(most) to 7(least) verbose
 ## or strings: VERBOSE, DEBUG, INFO, WARNING, ERROR, FATAL, ALWAYS
 SIM.printLevel = 3
@@ -112,7 +112,7 @@ SIM.action.event = []
 ##
 ##       SIM.action.mapActions['tpc'] = "TPCSDAction"
 ##
-SIM.action.mapActions["DRcalo"] = "DRCaloSDAction"
+SIM.action.mapActions = {"DRcalo": "DRCaloSDAction"}
 
 ##  set the default run action
 SIM.action.run = []
@@ -177,8 +177,7 @@ SIM.field.stepper = "ClassicalRK4"
 ##     default filter for calorimeter sensitive detectors;
 ##     this is applied if no other filter is used for a calorimeter
 ##
-# note: do not turn on the calo filter, otherwise all optical photons will be killed!
-SIM.filter.calo = ""
+SIM.filter.calo = "edep0"
 
 ##  list of filter objects: map between name and parameter dictionary
 SIM.filter.filters = {
@@ -230,8 +229,6 @@ SIM.geometry.enablePrintPlacements = False
 ## Print information about Sensitives
 SIM.geometry.enablePrintSensitives = False
 
-## configure regex SD
-SIM.geometry.regexSensitiveDetector["DRcalo"] = {"Match": ["(core|clad)"], "OutputLevel": 3}
 
 ################################################################################
 ## Configuration for the GuineaPig InputFiles
@@ -249,7 +246,7 @@ SIM.guineapig.particlesPerEvent = "-1"
 ################################################################################
 
 ##  direction of the particle gun, 3 vector
-SIM.gun.direction = (1.0, 0.1, 0.1)
+SIM.gun.direction = (1.0, 1.0, 1.0)
 
 ## choose the distribution of the random direction for theta
 ##
@@ -267,7 +264,7 @@ SIM.gun.distribution = None
 ## Total energy (including mass) for the particle gun.
 ##
 ## If not None, it will overwrite the setting of momentumMin and momentumMax
-SIM.gun.energy = 10.0 * GeV
+SIM.gun.energy = None
 
 ## Maximal pseudorapidity for random distibution (overrides thetaMin)
 SIM.gun.etaMax = None
@@ -283,12 +280,12 @@ SIM.gun.etaMin = None
 SIM.gun.isotrop = False
 
 ## Maximal momentum when using distribution (default = 0.0)
-# SIM.gun.momentumMax = 10000.0
+SIM.gun.momentumMax = 10000.0
 
 ## Minimal momentum when using distribution (default = 0.0)
-# SIM.gun.momentumMin = 0.0
+SIM.gun.momentumMin = 0.0
 SIM.gun.multiplicity = 1
-SIM.gun.particle = "e-"
+SIM.gun.particle = "mu-"
 
 ## Maximal azimuthal angle for random distribution
 SIM.gun.phiMax = None
@@ -555,7 +552,7 @@ SIM.physics.pdgfile = None
 ##     Set printlevel to DEBUG to see a printout of all range cuts,
 ##     but this only works if range cut is not "None"
 ##
-SIM.physics.rangecut = None
+SIM.physics.rangecut = 0.7
 
 ## Set of PDG IDs that will not be passed from the input record to Geant4.
 ##
@@ -616,11 +613,17 @@ def setupOpticalPhysics(kernel):
     cerenkov.enableUI()
     seq.adopt(cerenkov)
 
+    scint = PhysicsList(kernel, "Geant4ScintillationPhysics/ScintillationPhys")
+    scint.VerboseLevel = 1
+    scint.TrackSecondariesFirst = True
+    scint.BoundaryInvokeSD = True
+    scint.enableUI()
+    seq.adopt(scint)
+
     opt = PhysicsList(kernel, "Geant4OpticalPhotonPhysics/OpticalGammaPhys")
     opt.addParticleConstructor("G4OpticalPhoton")
     opt.VerboseLevel = 1
-    # set BoundaryInvokeSD to true when using DRC wafer as the SD
-    # opt.BoundaryInvokeSD = True
+    opt.BoundaryInvokeSD = True
     opt.enableUI()
     seq.adopt(opt)
 
@@ -653,8 +656,7 @@ def setupDRCFastSim(kernel):
     phys.dump()
 
 
-# turn-on fastsim if the skipScint option of the SD is set to false
-# SIM.physics.setupUserPhysics(setupDRCFastSim)
+SIM.physics.setupUserPhysics(setupDRCFastSim)
 
 ################################################################################
 ## Properties for the random number generator

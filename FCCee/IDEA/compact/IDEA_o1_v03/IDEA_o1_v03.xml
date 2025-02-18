@@ -11,7 +11,7 @@
     url="no"
     status="development"
     version="o1_v03">
-    <comment>
+    <comment> 
       Version o1_v03 of the IDEA detector
     </comment>
   </info>
@@ -37,9 +37,9 @@
   <!-- shape based model of the beam pipe -->
   <include ref="../../../MDI/compact/MDI_o1_v00/Beampipe_o4_v05.xml" />
   <include ref="../../../MDI/compact/MDI_o1_v00/BeamInstrumentation_o1_v01.xml" />
-
+  
   <!-- engineered CAD model of the beam pipe -->
-  <!-- In order to use the CAD beampipe, build k4geo with the following CMake option:
+  <!-- In order to use the CAD beampipe, build k4geo with the following CMake option: 
   cmake -D INSTALL_BEAMPIPE_STL_FILES=ON which will download the files needed -->
   <!-- <include ref="../../../MDI/compact/MDI_o1_v01/Beampipe_CADimport_o1_v02.xml" /> -->
   <!-- <include ref="../../../MDI/compact/MDI_o1_v01/BeamInstrumentation_o1_v01.xml"/> -->
@@ -65,7 +65,7 @@
 
   <!-- Import fiber-based dual-readout calorimeter -->
   <!-- (uncomment the following line to effectively include it) -->
-  <include ref="FiberDualReadoutCalo_o1_v01.xml"/>
+  <!--  <include ref="FiberDualReadoutCalo_o1_v01.xml"/> -->
 
   <!-- Import muon system -->
   <include ref="MuonSystem_o1_v01.xml"/>

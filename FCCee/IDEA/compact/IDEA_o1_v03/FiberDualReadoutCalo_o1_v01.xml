@@ -13,7 +13,7 @@
       The compact format for the dual-readout calorimeter (for FCCee IDEA)
     </comment>
   </info>
-
+  
   <!-- For optics -->
   <properties>
     <matrix name="RI_Air" coldim="2" values="
@@ -589,7 +589,7 @@
       <sensitive type="DRcaloSiPMSD"/>
       <sipmDim height="0.3*mm" material="PolyvinylChloride" vis="DRCGenericVis">
         <sipmGlass material="DR_PyrexGlass" vis="DRCGlassVis"/>
-        <sipmWafer height="0.3*mm" material="Silicon" vis="DRCWaferVis" sensitive="false"/> <!-- Original height : 0.01 mm, change to 0.3 mm, same as sipmDim (to reduce memory)-->
+        <sipmWafer height="0.3*mm" material="Silicon" vis="DRCWaferVis" sensitive="true"/> <!-- Original height : 0.01 mm, change to 0.3 mm, same as sipmDim (to reduce memory)-->
       </sipmDim>
       <structure>
         <dim distance="1.5*mm" dx="1.0*mm"/>
@@ -691,7 +691,7 @@
     <readout name="DRcaloSiPMreadout">
       <segmentation type="GridDRcalo_k4geo"/>
       <!-- Mendatory to use the first 32 bits for tower infos & the last 32 bits for fiber/SiPM infos -->
-      <id>system:5,assembly:1,eta:-8,phi:9,x:32:-12,y:-12,c:1,module:2</id>
+      <id>system:5,assembly:1,eta:-8,phi:9,x:32:-11,y:-9,c:1,module:2</id>
     </readout>
   </readouts>
 
