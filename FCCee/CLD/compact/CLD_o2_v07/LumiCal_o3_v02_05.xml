@@ -157,7 +157,6 @@
 		 outer_r = "LumiCal_Shield_outer_radius"
 	         inner_z = "LumiCal_max_z - LumiCal_shield_dz_prime + LumiCal_shield_dz"/>
 
-
             <layer repeat="1" vis="SeeThrough">
                 <slice material = "TungstenDens24" thickness = "3.5*mm" 	sensitive = "no"  vis="SupportVis"/>
             </layer>

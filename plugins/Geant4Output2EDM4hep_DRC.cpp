@@ -75,7 +75,7 @@ namespace dd4hep {
       int                           m_eventNo           { 0 };
       int                           m_eventNumberOffset { 0 };
       bool                          m_filesByRun        { false };
-
+      
       /// Data conversion interface for MC particles to EDM4hep format
       void saveParticles(Geant4ParticleMap* particles);
       /// Store the metadata frame with e.g. the cellID encoding strings
@@ -111,7 +111,7 @@ namespace dd4hep {
         }
       }
     };
-
+    
     template <> void EventParameters::extractParameters(podio::Frame& frame)   {
       for(auto const& p: this->intParameters()) {
         printout(DEBUG, "Geant4OutputEDM4hep", "Saving event parameter: %s", p.first.c_str());
@@ -161,7 +161,7 @@ namespace dd4hep {
 #endif // DD4HEP_DDG4_Geant4Output2EDM4hep_DRC_H
 
 //==========================================================================
-//  AIDA Detector description implementation
+//  AIDA Detector description implementation 
 //--------------------------------------------------------------------------
 // Copyright (C) Organisation europeenne pour la Recherche nucleaire (CERN)
 // All rights reserved.
@@ -590,13 +590,42 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
       }
     }
     //-------------------------------------------------------------------
-  } else if( typeid( Geant4DRCalorimeter::Hit ) == coll->type().type() ) {
+  }
+  else if( typeid( Geant4DRCalorimeter::Hit ) == coll->type().type() ){
+    Geant4Sensitive* sd = coll->sensitive();
+    int hit_creation_mode = sd->hitCreationMode();
     // Create the hit container even if there are no entries!
+    auto& hits    = m_calorimeterHits[colName];
     auto& DRhits  = m_drcaloHits[colName];
     auto& DRwaves = m_drcaloWaves[colName];
 
-    for(unsigned i=0; i < nhits; ++i) {
+    for(unsigned i=0 ; i < nhits ; ++i){
+      auto sch = hits.first->create();
       const Geant4DRCalorimeter::Hit* hit = coll->hit(i);
+      const auto& pos = hit->position;
+      sch.setCellID( hit->cellID );
+      sch.setPosition({float(pos.x()/CLHEP::mm), float(pos.y()/CLHEP::mm), float(pos.z()/CLHEP::mm)});
+      sch.setEnergy( hit->energyDeposit/CLHEP::GeV );
+      
+      // now add the individual step contributions
+      for(auto ci=hit->truth.begin(); ci != hit->truth.end(); ++ci){
+
+        auto sCaloHitCont = hits.second->create();
+        sch.addToContributions( sCaloHitCont );
+
+        const Geant4HitData::Contribution& c = *ci;
+        int trackID = pm->particleID(c.trackID);
+        auto mcp = m_particles.at(trackID);
+        sCaloHitCont.setEnergy( c.deposit/CLHEP::GeV );
+        sCaloHitCont.setTime( c.time/CLHEP::ns );
+        sCaloHitCont.setParticle( mcp );
+
+        if ( hit_creation_mode == Geant4Sensitive::DETAILED_MODE )     {
+          edm4hep::Vector3f p(c.x/CLHEP::mm, c.y/CLHEP::mm, c.z/CLHEP::mm);
+          sCaloHitCont.setPDG( c.pdgID );
+          sCaloHitCont.setStepPosition( p );
+        }
+      }
 
       // For DRC raw calo hit & raw time series
       auto rawCaloHits   = DRhits.first->create();
@@ -607,7 +636,7 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
       float timeStart = hit->GetTimeStart();
       float timeEnd = hit->GetTimeEnd();
       auto& timemap = hit->GetTimeStruct();
-
+      
       rawTimeStruct.setInterval(samplingT);
       rawTimeStruct.setTime(timeStart);
       rawTimeStruct.setCharge( static_cast<float>(hit->GetPhotonCount()) );

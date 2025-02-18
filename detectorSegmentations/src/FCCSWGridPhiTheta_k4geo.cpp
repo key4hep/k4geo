@@ -42,6 +42,12 @@ CellID FCCSWGridPhiTheta_k4geo::cellID(const Vector3D& /* localPosition */, cons
   return cID;
 }
 
+/// determine the azimuthal angle phi based on the current cell ID
+//double FCCSWGridPhiTheta_k4geo::phi() const {
+//  CellID phiValue = (*_decoder)[m_phiID].value();
+//  return binToPosition(phiValue, 2. * M_PI / (double)m_phiBins, m_offsetPhi);
+//}
+
 /// determine the azimuthal angle phi based on the cell ID
 double FCCSWGridPhiTheta_k4geo::phi(const CellID& cID) const {
   CellID phiValue = _decoder->get(cID, m_phiID);

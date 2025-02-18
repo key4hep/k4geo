@@ -2,7 +2,6 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include <DDRec/DetectorData.h>
 #include "DD4hep/Printout.h"
-#include "XML/Utilities.h"
 
 using dd4hep::Volume;
 using dd4hep::DetElement;
@@ -423,7 +422,6 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
         dd4hep::printout(dd4hep::DEBUG, "HCalThreePartsEndcap_o1_v02", "Layers in r : %d", layers.size()); 
         dd4hep::printout(dd4hep::DEBUG, "HCalThreePartsEndcap_o1_v02", "Tiles in layers : %d", tilesPerLayer.size()); 
 
-
         // Place det elements wihtin each other to recover volume positions later via cellID  
         for (uint iLayer = 0; iLayer < (layerDepths1.size()+layerDepths2.size()+layerDepths3.size()); iLayer++){
             DetElement layerDet(caloDetElem, dd4hep::xml::_toString(sign*(iLayer+1), "layer%d"), sign*(iLayer+1));
@@ -452,10 +450,10 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
     caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::EndcapLayout;
     caloDetElem.addExtension<dd4hep::rec::LayeredCalorimeterData>(caloData);
 
-    caloData->extent[0] = sensitiveBarrel3Rmin; // innerRCoordinate
-    caloData->extent[1] = sensitiveBarrel3Rmin + moduleDepth3; // outerRCoordinate
-    caloData->extent[2] = extBarrelOffset1 - dzDetector1; // innerZCoordinate (start of the first part of the Endcap)
-    caloData->extent[3] = extBarrelOffset3 + dzDetector3; // outerZCoordinate (end of the third part of the Endcap)
+    caloData->extent[0] = sensitiveBarrel3Rmin;
+    caloData->extent[1] = sensitiveBarrel3Rmin + moduleDepth3; // 
+    caloData->extent[2] = 0.;      // NN: for barrel detectors this is 0
+    caloData->extent[3] = dzDetector1 + dzDetector2 + dzDetector3; 
 
     dd4hep::rec::LayeredCalorimeterData::Layer caloLayer;
 
@@ -490,10 +488,6 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
 
         caloData->layers.push_back(caloLayer);
     }
-
-    // Set type flags
-    dd4hep::xml::setDetectorTypeFlag(xmlDet, caloDetElem);
-
     return caloDetElem; 
 }  
 }// namespace det

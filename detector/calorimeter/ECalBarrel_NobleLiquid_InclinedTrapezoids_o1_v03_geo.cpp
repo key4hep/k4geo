@@ -683,15 +683,14 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
   envelopePhysVol.addPhysVolID("system", xmlDetElem.id());
   caloDetElem.setPlacement(envelopePhysVol);
 
-  // Create caloData object for the reconstruction
+  // Create caloData object
   auto caloData = new dd4hep::rec::LayeredCalorimeterData;
   caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::BarrelLayout;
   caloDetElem.addExtension<dd4hep::rec::LayeredCalorimeterData>(caloData);
-  // Extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in dd4hep units (mm)
-  // (for barrel detectors zmin is 0)
+
   caloData->extent[0] = Rmin;
-  caloData->extent[1] = Rmax;
-  caloData->extent[2] = 0.;
+  caloData->extent[1] = Rmax; // or r_max ?
+  caloData->extent[2] = 0.;      // NN: for barrel detectors this is 0
   caloData->extent[3] = caloDim.dz();
 
 
@@ -704,7 +703,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
   double rad_last = 0;
   double scale_fact = dR / (-Rmin * cos(angle) + sqrt(pow(Rmax, 2) - pow(Rmin * sin(angle), 2)));
   // since the layer height is given along the electrode and not along the radius it needs to be scaled to get the values of layer height radially
-  lLog << MSG::DEBUG << "Scaling factor " << scale_fact << endmsg;
+  std::cout << "Scaling factor " << scale_fact << std::endl;
   for (size_t il = 0; il < layerHeight.size(); il++) {
     double thickness_sen = 0.;
     double absorberThickness = 0.;
@@ -713,30 +712,30 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     dd4hep::rec::Vector3D ivr1 = dd4hep::rec::Vector3D(0., rad_first, 0); // defining starting vector points of the given layer
     dd4hep::rec::Vector3D ivr2 = dd4hep::rec::Vector3D(0., rad_last, 0);  // defining end vector points of the given layer
 
-    lLog << MSG::DEBUG << "radius first " << rad_first << " radius last " << rad_last << endmsg;
+    std::cout << "radius first " << rad_first << " radius last " << rad_last << std::endl;
     const dd4hep::rec::MaterialVec &materials = matMgr.materialsBetween(ivr1, ivr2); // calling material manager to get material info between two points
     auto mat = matMgr.createAveragedMaterial(materials);                             // creating average of all the material between two points to calculate X0 and lambda of averaged material
     const double nRadiationLengths = mat.radiationLength();
     const double nInteractionLengths = mat.interactionLength();
-    const double difference_bet_r1r2 = (ivr1 - ivr2).r();  // equal to layerHeight[il]*scale_fact
-    const double value_of_x0 = difference_bet_r1r2 / nRadiationLengths;
-    const double value_of_lambda = difference_bet_r1r2 / nInteractionLengths;
+    const double difference_bet_r1r2 = (ivr1 - ivr2).r();
+    const double value_of_x0 = layerHeight[il] / nRadiationLengths;
+    const double value_of_lambda = layerHeight[il] / nInteractionLengths;
     std::string str1("LAr");
 
     for (size_t imat = 0; imat < materials.size(); imat++) {
 
       std::string str2(materials.at(imat).first.name());
       if (str1.compare(str2) == 0){
-        thickness_sen += materials.at(imat).second;
+	  thickness_sen += materials.at(imat).second;
       }
       else {
-        absorberThickness += materials.at(imat).second;
+	absorberThickness += materials.at(imat).second;
       }
     }
     rad_first = rad_last;
-    lLog << MSG::DEBUG << "The sensitive thickness is " << thickness_sen << endmsg;
-    lLog << MSG::DEBUG << "The absorber thickness is " << absorberThickness << endmsg;
-    lLog << MSG::DEBUG << "The radiation length is " << value_of_x0 << " and the interaction length is " << value_of_lambda << endmsg;
+    std::cout << "The sensitive thickness is " << thickness_sen << std::endl;
+    std::cout << "The absorber thickness is " << absorberThickness << std::endl;
+    std::cout << "The radiation length is " << value_of_x0 << " and the interaction length is " << value_of_lambda << std::endl;
 
     caloLayer.distance = rad_first;
     caloLayer.sensitive_thickness       = thickness_sen;

@@ -753,41 +753,26 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
   envelopePhysVol.addPhysVolID("system", xmlDetElem.id());
   caloDetElem.setPlacement(envelopePhysVol);
 
-  // Create caloData object for the reconstruction
+  // Create caloData object
   auto caloData = new dd4hep::rec::LayeredCalorimeterData;
   caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::BarrelLayout;
   caloDetElem.addExtension<dd4hep::rec::LayeredCalorimeterData>(caloData);
-  dd4hep::xml::setDetectorTypeFlag(xmlDetElem, caloDetElem);
 
-  // Fill caloData information
-
-  // Extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in dd4hep units (mm)
-  // (for barrel detectors zmin is 0)
   caloData->extent[0] = Rmin;
-  caloData->extent[1] = Rmax;
-  caloData->extent[2] = 0.;
+  caloData->extent[1] = Rmax; // or r_max ?
+  caloData->extent[2] = 0.;      // NN: for barrel detectors this is 0
   caloData->extent[3] = caloDim.dz();
   
-  // Information about each layer
-  // double distance : distance from Origin (or the z-axis) to the inner-most face of the layer
-  // double phi0 : phi0 of layer: potential rotation around normal to absorber plane, e.g. if layers are 'staggered' in phi in fwd. calos
-  // double absorberThickness : thickness of the absorber part of the layer. Consider using inner/outer_nRadiationLengths and inner/outer_nInteractionLengths
-  // double inner_nRadiationLengths : Absorber material in front of sensitive element in the layer, units of radiation lengths
-  // double inner_nInteractionLengths : Absorber material in front of sensitive element in the layer, units of radiation lengths
-  // double outer_nRadiationLengths : Absorber material in behind of sensitive element in the layer, units of radiation lengths
-  // double outer_nInteractionLengths : Absorber material in behind of sensitive element in the layer, units of radiation lengths
-  // double inner_thickness : Distance between the innermost face of the layer (closest to IP) and the center of the sensitive element
-  // double outer_thickness : Distance between the center of the sensitive element and the outermost face of the layer
-  // double sensitive_thickness : Thickness of the sensitive element (e.g. scintillator)
-  // double cellSize0 : cell size along the first axis where first is either along the beam (BarrelLayout) or up (EndcapLayout) or the direction closest to that
-  // double cellSize1 : second cell size, perpendicular to the first direction cellSize0 and the depth of the layers
+  // Set type flags
+  dd4hep::xml::setDetectorTypeFlag(xmlDetElem, caloDetElem);
   dd4hep::rec::MaterialManager matMgr(envelopeVol);
   dd4hep::rec::LayeredCalorimeterData::Layer caloLayer;
+  
   double rad_first = Rmin;
   double rad_last = 0;
   double scale_fact = dR / (-Rmin * cos(angle) + sqrt(pow(Rmax, 2) - pow(Rmin * sin(angle), 2)));
   // since the layer height is given along the electrode and not along the radius it needs to be scaled to get the values of layer height radially
-  lLog << MSG::DEBUG << "Scaling factor " << scale_fact << endmsg;
+  std::cout << "Scaling factor " << scale_fact << std::endl;
   for (size_t il = 0; il < layerHeight.size(); il++) {
     double thickness_sen = 0.;
     double absorberThickness = 0.;
@@ -796,35 +781,33 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     dd4hep::rec::Vector3D ivr1 = dd4hep::rec::Vector3D(0., rad_first, 0); // defining starting vector points of the given layer
     dd4hep::rec::Vector3D ivr2 = dd4hep::rec::Vector3D(0., rad_last, 0);  // defining end vector points of the given layer
 
-    lLog << MSG::DEBUG << "radius first " << rad_first << " radius last " << rad_last << endmsg;
+    std::cout << "radius first " << rad_first << " radius last " << rad_last << std::endl;
     const dd4hep::rec::MaterialVec &materials = matMgr.materialsBetween(ivr1, ivr2); // calling material manager to get material info between two points
     auto mat = matMgr.createAveragedMaterial(materials);                             // creating average of all the material between two points to calculate X0 and lambda of averaged material
     const double nRadiationLengths = mat.radiationLength();
     const double nInteractionLengths = mat.interactionLength();
-    const double difference_bet_r1r2 = (ivr1 - ivr2).r();  // equal to layerHeight[il]*scale_fact
-    const double value_of_x0 = difference_bet_r1r2 / nRadiationLengths;
-    const double value_of_lambda = difference_bet_r1r2 / nInteractionLengths;
+    const double difference_bet_r1r2 = (ivr1 - ivr2).r();
+    const double value_of_x0 = layerHeight[il] / nRadiationLengths;
+    const double value_of_lambda = layerHeight[il] / nInteractionLengths;
     std::string str1("LAr");
 
     for (size_t imat = 0; imat < materials.size(); imat++) {
 
       std::string str2(materials.at(imat).first.name());
       if (str1.compare(str2) == 0){
-	      thickness_sen += materials.at(imat).second;
+	  thickness_sen += materials.at(imat).second;
       }
       else {
-	      absorberThickness += materials.at(imat).second;
+	absorberThickness += materials.at(imat).second;
       }
     }
     rad_first = rad_last;
-    lLog << MSG::DEBUG << "The sensitive thickness is " << thickness_sen << endmsg;
-    lLog << MSG::DEBUG << "The absorber thickness is " << absorberThickness << endmsg;
-    lLog << MSG::DEBUG << "The radiation length is " << value_of_x0 << " and the interaction length is " << value_of_lambda << endmsg;
+    std::cout << "The sensitive thickness is " << thickness_sen << std::endl;
+    std::cout << "The absorber thickness is " << absorberThickness << std::endl;
+    std::cout << "The radiation length is " << value_of_x0 << " and the interaction length is " << value_of_lambda << std::endl;
 
     caloLayer.distance = rad_first;
-    caloLayer.absorberThickness         = absorberThickness;
     caloLayer.sensitive_thickness       = thickness_sen;
-
     caloLayer.inner_nRadiationLengths   = value_of_x0 / 2.0;
     caloLayer.inner_nInteractionLengths = value_of_lambda / 2.0;
     caloLayer.inner_thickness           = difference_bet_r1r2 / 2.0;
@@ -833,9 +816,9 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     caloLayer.outer_nInteractionLengths = value_of_lambda / 2.0;
     caloLayer.outer_thickness           = difference_bet_r1r2 / 2;
 
-    // GM: rather retrieve cellDimensions vector from segmentation class
-    caloLayer.cellSize0 = 20 * dd4hep::mm; // GM: rather put delta_eta here and use pandora::POINTING cell type (should actually modify pandora to accept theta grid)
-    caloLayer.cellSize1 = 20 * dd4hep::mm; // GM: rather delta_phi here + pandora::POINTING cell type
+    caloLayer.absorberThickness         = absorberThickness;
+    caloLayer.cellSize0 = 20 * dd4hep::mm;
+    caloLayer.cellSize1 = 20 * dd4hep::mm;
   
     caloData->layers.push_back(caloLayer);
   }
