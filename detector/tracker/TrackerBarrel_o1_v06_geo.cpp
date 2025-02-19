@@ -152,6 +152,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         xml_comp_t x_mod  = mi;
         xml_comp_t m_env  = x_mod.child(_U(module_envelope));
         std::string     m_nam  = x_mod.nameStr();
+
         
         if ( volumes.find(m_nam) != volumes.end() )   {
             printout(ERROR,"TrackerBarrel","Logics error in building modules.");
@@ -212,7 +213,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         // int        type     = x_layer.type();
         std::string     m_nam    = x_layer.moduleStr();
         std::string     lay_nam  = _toString(x_layer.id(),"layer%d");
-
         Assembly   lay_vol   (lay_nam);         // Create the layer envelope volume.
         double     phi0     = x_layout.phi0();              // Starting phi of first sensor.
         double     phi_tilt = x_layout.phi_tilt();          // Phi tilt of a sensor.
@@ -254,6 +254,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             staveElementTemplate.add(sensorElement);
             sensorElement.setPlacement(sensorPv);
 
+            // also add a DetElement for the sensitive component
             for (const PlacedVolume& wafer_pv : waferVols) {
                 DetElement comp_elt(sensorElement, wafer_pv.volume().name(), i);
                 comp_elt.setPlacement(wafer_pv);
@@ -301,7 +302,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                 ///////////////////
 
             }
-
         }
         // Create the PhysicalVolume for the layer.
         pv = envelope.placeVolume(lay_vol); // Place layer in mother
