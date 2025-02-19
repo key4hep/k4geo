@@ -138,10 +138,10 @@ SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Except
 #--------------------------------------------------
 # test for ALLEGRO o1 v03
 if(DCH_INFO_H_EXIST)
-SET( test_name "test_ALLEGRO_o1_v03" )
-ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
-  ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o1_v03/ALLEGRO_o1_v03.xml --runType=batch -G -N=1 --outputFile=testALLEGRO_o1_v03.root )
-SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  " Exception; EXCEPTION;ERROR;Error" )
+  SET( test_name "test_ALLEGRO_o1_v03" )
+  ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
+    ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o1_v03/ALLEGRO_o1_v03.xml --runType=batch -G -N=100000 --gun.distribution uniform --gun.particle geantino --outputFile=testALLEGRO_o1_v03.root )
+  SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  " Exception; EXCEPTION;ERROR;Error" TIMEOUT 600)
 endif()
 
 #--------------------------------------------------
