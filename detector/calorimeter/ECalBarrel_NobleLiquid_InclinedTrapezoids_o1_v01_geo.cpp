@@ -560,7 +560,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
   envelopePhysVol.addPhysVolID("system", xmlDetElem.id());
   caloDetElem.setPlacement(envelopePhysVol);
 
-  // Create caloData object
+ /* // Create caloData object
   auto caloData = new dd4hep::rec::LayeredCalorimeterData;
   caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::BarrelLayout;
   caloDetElem.addExtension<dd4hep::rec::LayeredCalorimeterData>(caloData);
@@ -628,7 +628,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
     caloLayer.cellSize1 = 20 * dd4hep::mm;
   
     caloData->layers.push_back(caloLayer);
-  }
+  }*/
 
   
   return caloDetElem;
