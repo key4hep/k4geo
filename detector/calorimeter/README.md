@@ -30,7 +30,10 @@ Sub-detector for the ecal endcaps, with the absorbers and readout boards arrange
 Initial implementation.  A custom segmentation that creates readout cells and constant radius and z is also included (FCCSWEndcapTurbine_k4geo).
 
 ### o1_v02
-Changes wrt o1_v01: Added flexibility to configure the wheels individual (to allow for example the possibiliity of having different blade angles in each).  This is still a work in progress, so o1_v01 should be used for integrated tests.
+Changes wrt o1_v01: Added flexibility to configure the wheels individual (to allow for example the possibiliity of having different blade angles in each).
+
+### o1_v03
+Changes wrt o1_v02: Modified the calibration "layers" to be a 2d grid in both dimensions on the surface of an absorber plate (which map to the rho and z dimensions in the global coordinate system), since the NL gap varies in both directions. The readout segmentation is also a 2d grid in the same coordinates, but the readout is allowed to be finer-grained than the calibration.
 
 ## HCalTileBarrel
 This sub-detector makes calorimeter barrel. It is used in ALLEGRO detector concept.
