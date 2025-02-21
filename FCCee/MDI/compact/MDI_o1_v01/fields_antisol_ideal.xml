@@ -1,0 +1,44 @@
+<lccdd>
+
+  <define>
+    <constant name="Solenoid_inner_radius" value="3719*mm"/>
+    <constant name="Solenoid_outer_radius" value="4272*mm"/>
+    <constant name="Solenoid_half_length" value="3705*mm"/>
+    <constant name="Solenoid_Coil_half_length" value="3476*mm"/>
+    <constant name="Solenoid_Coil_radius" value="3930*mm"/>
+  </define>
+  
+    <fields>
+      <field name="CompensatingSolenoidZplus" type="solenoid"
+             inner_field="-5*tesla"
+             outer_field="0*tesla"
+             zmax="QD0_min_z"
+	     zmin="CompSol_min_z"
+             outer_radius="20*cm">
+      </field>
+      <field name="CompensatingSolenoidZminus" type="solenoid"
+             inner_field="-5*tesla"
+             outer_field="0*tesla"
+             zmin="-QD0_min_z"
+             zmax="-CompSol_min_z"
+             outer_radius="20*cm">
+      </field>
+      <field name="ScreeningSolenoidZplus" type="solenoid"
+             inner_field="-2*tesla"
+             outer_field="0*tesla"
+             zmin="QD0_min_z+env_safety"
+             zmax="Solenoid_half_length"
+             outer_radius="20*cm">
+      </field>
+      <field name="ScreeningSolenoidZminus" type="solenoid"
+             inner_field="-2*tesla"
+             outer_field="0*tesla"
+             zmax="-QD0_min_z-env_safety"
+             zmin="-Solenoid_half_length"
+             outer_radius="20*cm">
+      </field>
+
+    </fields>
+
+
+</lccdd>
