@@ -69,7 +69,7 @@
   <plugins>
     <plugin name="DD4hep_GenericSurfaceInstallerPlugin"> <!-- Plugin needed for the surfaces-->
       <argument value="Muon-System" />
-      <argument value="dimension=2" />
+      <argument value="dimension=1" />
       <argument value="u_y=1." />
       <argument value="v_z=1." />
       <argument value="n_x=1." />

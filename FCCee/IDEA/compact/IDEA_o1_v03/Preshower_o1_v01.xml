@@ -34,7 +34,7 @@
   <readouts>
     <readout name="PreshowerSystemCollection">
      <segmentation type="CartesianGridYZ" grid_size_y="1.2*mm" grid_size_z="1.2*mm"/>   <!-- Depending on strip pitch 1.4 mm  -->
-     <id>system:5,type:2,layer:4,chamber:15,slice:1,y:-10,z:-10</id> <!-- The bit field is divided into 2^5 systems(IDEA sub-detectors), 2^4 layers(Muon System layers"barrel and endcap layers"), 2^11 chambers(the number of muRWELL chambers in every layer), 2^1 slice(number of sensitive layers inside every chambers), and 2^10 y&z strips in every sensitive layer-->
+     <id>system:5,type:2,layer:4,side:6,rectangle:6,chamber:5,slice:1,y:-10,z:-10</id> <!-- The bit field is divided into 2^5 systems(IDEA sub-detectors), 2^4 layers(Muon System layers"barrel and endcap layers"), 2^11 chambers(the number of muRWELL chambers in every layer), 2^1 slice(number of sensitive layers inside every chambers), and 2^10 y&z strips in every sensitive layer-->
   </readout>
   </readouts>   
 
@@ -63,5 +63,15 @@
       <slice x="psSiThick/2.0" material="G4_Si" vis="Si_vis" />
     </detector>
   </detectors>
+
+  <plugins>
+    <plugin name="DD4hep_GenericSurfaceInstallerPlugin"> <!-- Plugin needed for the surfaces-->
+      <argument value="Preshower" />
+      <argument value="dimension=1" />
+      <argument value="u_y=1." />
+      <argument value="v_z=1." />
+      <argument value="n_x=1." />
+    </plugin>
+  </plugins>
 
 </lccdd>
