@@ -26,9 +26,9 @@
     <constant name="EndcapHCal_face_plate_thickness" value="10*mm" />
     <constant name="EndcapHCal_plate_space" value="0.5*mm" />
     <!-- different sizes of the layers -->
-    <constant name="layer_size1" value="100*mm" />
-    <constant name="layer_size2" value="150*mm" />
-    <constant name="layer_size3" value="250*mm" />
+    <constant name="EndcapHCal_layer_size1" value="100*mm" />
+    <constant name="EndcapHCal_layer_size2" value="150*mm" />
+    <constant name="EndcapHCal_layer_size3" value="250*mm" />
   </define>
 
   <display>
@@ -70,7 +70,7 @@
          width_z="(HCalEndcap_max_z1-HCalEndcap_min_z1) (HCalEndcap_max_z2-HCalEndcap_min_z2) (HCalEndcap_max_z3-HCalEndcap_min_z3)" 
          offset_r="HCalEndcap_inner_radius1+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space HCalEndcap_inner_radius2+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space HCalEndcap_inner_radius3+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space"
          numLayers="5 1 0  4 3 2  4 10 8"
-         dRlayer="layer_size1 layer_size2 layer_size3"
+         dRlayer="EndcapHCal_layer_size1 EndcapHCal_layer_size2 EndcapHCal_layer_size3"
          grid_size_theta="0.022180" 
          phi_bins="EndcapHCal_n_phi_modules" 
          offset_theta="0.007106" 
@@ -100,7 +100,7 @@
          width_z="248.5*2*mm 243.0*2*mm 770.5*2*mm"
          offset_r="HCalEndcap_inner_radius1+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space HCalEndcap_inner_radius2+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space HCalEndcap_inner_radius3+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space"
          numLayers="5 1 0  4 3 2  4 10 8"
-         dRlayer="layer_size1 layer_size2 layer_size3"
+         dRlayer="EndcapHCal_layer_size1 EndcapHCal_layer_size2 EndcapHCal_layer_size3"
          grid_size_row="1 1 1 1 1 1   1 1 1 1 1 1 1 1 1   1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1"
          dz_row="2*EndcapHCal_master_plate_thickness + EndcapHCal_spacer_plate_thickness + EndcapHCal_scintillator_thickness + 2*EndcapHCal_air_space_thickness" 
          phi_bins="EndcapHCal_n_phi_modules" 
@@ -125,7 +125,7 @@
       <layers>
 	<layer id="0" name="type_1" material="Air" vis="endcaphcal_barrel_layer_vis">
           <dimensions
-              dr="layer_size1"
+              dr="EndcapHCal_layer_size1"
 	      nmodules="5"
 	      nsegments="4"
 	      nPads="4"
@@ -133,7 +133,7 @@
 	</layer>
 	<layer id="1" name="type_2" material="Air" vis="endcaphcal_barrel_layer_vis">
 	  <dimensions
-              dr="layer_size2"
+              dr="EndcapHCal_layer_size2"
 	      nmodules="1"
         nsegments="3"
         nPads="10"
@@ -141,7 +141,7 @@
 	</layer>
 	<layer id="2" name="type_3" material="Air" vis="endcaphcal_barrel_layer_vis">
 	  <dimensions
-              dr="layer_size3"
+              dr="EndcapHCal_layer_size3"
 	      nmodules="0"
         nsegments="2"
         nPads="8"
