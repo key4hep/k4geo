@@ -1,0 +1,37 @@
+<lccdd>
+
+  <info name="FFQs_params_v572_T"
+        title="FFQs parameters for lattice v572 - T"
+        author="Andrea Ciarma"
+        url="no"
+        status="development"
+        version="1">
+  </info>
+  
+  <define>
+    
+    <constant name="KQC1R1"  value="-.15900773272484095 * FFQ_ON"/>
+    <constant name="KQC1R2"  value="-.15964258393480346 * FFQ_ON"/>
+    <constant name="KQC1R3"  value="-.13587115066684027 * FFQ_ON"/>
+    <constant name="KQC2R1"  value=" .028469701366310038 * FFQ_ON"/>
+    <constant name="KQC2R2"  value=" .10204790063532039 * FFQ_ON"/>
+    <constant name="BEAM_E"  value="182.5"/>
+    
+    <constant name="QC1_rmin" value="42/2*mm"/>
+    <constant name="QC1_rmax" value="64/2*mm"/>
+    <constant name="QC2_rmin" value="42/2*mm"/>
+    <constant name="QC2_rmax" value="64/2*mm"/>
+    <constant name="QC1L1_len"   value="700*mm"/>
+    <constant name="QC1L2_len"   value="1250*mm"/>
+    <constant name="QC1L3_len"   value="1250*mm"/>
+    <constant name="QC2L1_len"   value="1250*mm"/>
+    <constant name="QC2L2_len"   value="1250*mm"/>
+    <constant name="QC1L1_start" value="2200*mm"/>
+    <constant name="QC1L2_start" value="2980*mm"/>
+    <constant name="QC1L3_start" value="4310*mm"/>
+    <constant name="QC2L1_start" value="5860*mm"/>
+    <constant name="QC2L2_start" value="7190*mm"/>
+   
+  </define>
+  
+</lccdd>
