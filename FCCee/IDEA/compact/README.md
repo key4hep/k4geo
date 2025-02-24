@@ -26,6 +26,8 @@ implementation of the silicon wrapper.
 
 September 2024: Added detailed version of the pre-shower, based on muon system builder.
 
+Febraury 2025: Added surface plugins for both muon-system and preshower, with adopting the detElement hierarchy.
+
 IDEA_o2_v01
 ------------
 
