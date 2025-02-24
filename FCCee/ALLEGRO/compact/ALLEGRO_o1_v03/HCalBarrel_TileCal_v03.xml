@@ -109,7 +109,7 @@
   </readouts>
 
   <detectors>
-    <detector id="BarHCal_id" name="HCalBarrel" type="HCalTileBarrel_o1_v02" readout="HCalBarrelReadoutPhiRow">
+    <detector id="BarHCal_id" name="HCalBarrel" type="HCalTileBarrel_o1_v02" readout="HCalBarrelReadout">
       <type_flags type="DetType_CALORIMETER + DetType_HADRONIC + DetType_BARREL"/>
       <dimensions rmin="BarHCal_rmin" rmax="BarHCal_rmax" dz="BarHCal_dz" vis="hcal_envelope" />
       <sensitive type="BirksLawCalorimeterSD"/>
