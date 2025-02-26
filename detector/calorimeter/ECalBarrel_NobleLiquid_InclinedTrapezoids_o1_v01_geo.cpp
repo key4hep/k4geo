@@ -60,12 +60,14 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
   dd4hep::xml::DetElement layers = calo.child(_Unicode(layers));
   uint numLayers = 0;
   std::vector<double> layerHeight;
+  std::vector<double> layerHeight_radial;
   double layersTotalHeight = 0;
   for (dd4hep::xml::Collection_t layer_coll(layers, _Unicode(layer)); layer_coll; ++layer_coll) {
     dd4hep::xml::Component layer = layer_coll;
     numLayers += layer.repeat();
     for (int iLay = 0; iLay < layer.repeat(); iLay++) {
       layerHeight.push_back(layer.thickness());
+      layerHeight_radial.push_back(layer.thickness());
     }
     layersTotalHeight += layer.repeat() * layer.thickness();
   }
@@ -572,34 +574,34 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd,
 
   // Set type flags
   dd4hep::xml::setDetectorTypeFlag(xmlDetElem, caloDetElem);
-  dd4hep::rec::MaterialManager matMgr(envelopeVol);
+  dd4hep::rec::MaterialManager matMgr(caloDetElem.volume());
   dd4hep::rec::LayeredCalorimeterData::Layer caloLayer;
   
   double rad_first = Rmin;
   double rad_last = 0;
-  double scale_fact = dR / (-Rmin * cos(angle) + sqrt(pow(Rmax, 2) - pow(Rmin * sin(angle), 2)));
-  // since the layer height is given along the electrode and not along the radius it needs to be scaled to get the values of layer height radially
-  std::cout << "Scaling factor " << scale_fact << std::endl;
-  for (size_t il = 0; il < layerHeight.size(); il++) {
+
+  for (size_t il = 0; il < layerHeight_radial.size(); il++) {
     double thickness_sen = 0.;
     double absorberThickness = 0.;
 
-    rad_last = rad_first + (layerHeight[il] * scale_fact);
+    rad_last = rad_first + layerHeight_radial[il];
     dd4hep::rec::Vector3D ivr1 = dd4hep::rec::Vector3D(0., rad_first, 0); // defining starting vector points of the given layer
     dd4hep::rec::Vector3D ivr2 = dd4hep::rec::Vector3D(0., rad_last, 0);  // defining end vector points of the given layer
 
-    std::cout << "radius first " << rad_first << " radius last " << rad_last << std::endl;
+    std::cout << "radius first " << rad_first << " radius last " << rad_last
+              << " layerHeight " << layerHeight_radial[il]
+              << std::endl;
     const dd4hep::rec::MaterialVec &materials = matMgr.materialsBetween(ivr1, ivr2); // calling material manager to get material info between two points
     auto mat = matMgr.createAveragedMaterial(materials);                             // creating average of all the material between two points to calculate X0 and lambda of averaged material
     const double nRadiationLengths = mat.radiationLength();
     const double nInteractionLengths = mat.interactionLength();
     const double difference_bet_r1r2 = (ivr1 - ivr2).r();
-    const double value_of_x0 = layerHeight[il] / nRadiationLengths;
-    const double value_of_lambda = layerHeight[il] / nInteractionLengths;
+    const double value_of_x0 = layerHeight_radial[il] / nRadiationLengths;
+    const double value_of_lambda = layerHeight_radial[il] / nInteractionLengths;
     std::string str1("LAr");
 
-    for (size_t imat = 0; imat < materials.size(); imat++) {
 
+    for (size_t imat = 0; imat < materials.size(); imat++) {
       std::string str2(materials.at(imat).first.name());
       if (str1.compare(str2) == 0){
 	  thickness_sen += materials.at(imat).second;
