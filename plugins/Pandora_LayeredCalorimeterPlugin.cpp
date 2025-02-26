@@ -63,17 +63,16 @@ namespace {
     double Rmin = dd4hep::_toDouble(argv[2]);
     double Rmax = dd4hep::_toDouble(argv[3]);
     double half_length = dd4hep::_toDouble(argv[4]);
-    double angle = dd4hep::_toDouble(argv[5]);
-    std::string name_of_the_material = argv[6];
+    std::string name_of_sensitive_material = argv[5];
 
-    // Parse layer heights (all remaining arguments)
+    // Parse radial layer heights (all remaining arguments)
     std::vector<double> layerHeights;
-    for (int i = 7; i < argc; ++i) {
+    for (int i = 6; i < argc; ++i) {
       layerHeights.push_back(dd4hep::_toDouble(argv[i]));
     }
 
     dd4hep::printout(PrintLevel::DEBUG, LOG_SOURCE, "Parsed: path=%s, Rmin=%f, Rmax=%f, dR=%f, angle=%f,layers=%zu",
-                    subDetectorName.c_str(), Rmin, Rmax, half_length, angle,layerHeights.size());
+                    subDetectorName.c_str(), Rmin, Rmax, half_length, layerHeights.size());
 
     // Retrieve the detector element
     auto caloDetElem = description.detector(subDetectorName);
@@ -101,15 +100,13 @@ namespace {
     caloDetElem.addExtension<dd4hep::rec::LayeredCalorimeterData>(caloData);
 
     // Material manager
-    rec::MaterialManager matMgr(caloDetElem.volume());
+    dd4hep::rec::MaterialManager matMgr(caloDetElem.volume());
     double rad_first = Rmin;
     double rad_last = 0;
-    double dR =  Rmax - Rmin;
-    double scale_fact = dR / (-Rmin * cos(angle) + sqrt(pow(Rmax, 2) - pow(Rmin * sin(angle), 2)));
 
     // Loop through provided layer heights
     for (double layerHeight : layerHeights) {
-      rad_last = rad_first + (layerHeight * scale_fact);
+      rad_last = rad_first + layerHeight;       //calculate rad_last by adding layer heights along the RADIUS to rad_first
       dd4hep::rec::Vector3D ivr1 = dd4hep::rec::Vector3D(0., rad_first, 0); // defining starting vector points of the given layer
       dd4hep::rec::Vector3D ivr2 = dd4hep::rec::Vector3D(0., rad_last, 0);  // defining end vector points of the given layer
      
@@ -126,7 +123,7 @@ namespace {
       for (size_t imat = 0; imat < materials.size(); imat++) {
 
 	std::string material_found_by_MM(materials.at(imat).first.name());
-	if (name_of_the_material.compare(material_found_by_MM) == 0){
+	if (name_of_sensitive_material.compare(material_found_by_MM) == 0){
 	  thickness_sen += materials.at(imat).second;
 	}
 	else {

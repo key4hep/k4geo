@@ -369,10 +369,11 @@
       <plugin name="Pandora_LayeredCalorimeterPlugin">
         <argument value="ECalBarrel"/>
         <argument value="DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_BARREL" />
-        <argument value="ECalBarrel_inner_radius"/> <!-- Rmin -->
-        <argument value="ECalBarrel_outer_radius"/> <!-- Rmax -->
-        <argument value="ECalBarrel_half_length"/>  <!-- half_length -->
-        <argument value="InclinationAngle"/>  <!-- Scaling factor -->
+        <argument value="EMBarrel_rmin"/> <!-- Rmin ECalBarrel_inner_radius -->
+        <argument value="EMBarrel_rmax"/> <!-- Rmax ECalBarrel_outer_radius -->
+        <argument value="EMBarrel_dz"/>  <!-- half_length -->
+       	<argument value="LAr"/>  <!-- Material -->
+	<!--Input layer heights RADIALLY. Number of layers can be manipulated-->
         <argument value="1.5*cm"/>   <!-- Layer 1 height -->
         <argument value="3.5*cm"/>   <!-- Layer 2 height -->
         <argument value="3.5*cm"/>   <!-- Layer 3 height -->
