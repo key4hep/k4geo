@@ -1,8 +1,19 @@
+To ease the review process, please consider the following before opening a pull request:
+- [ ] the code is sufficiently well documented (e.g. inline comments)
+- [ ] the relevant README(s) were updated. See e.g. https://github.com/key4hep/k4geo/blob/main/detector/calorimeter/README.md or https://github.com/key4hep/k4geo/blob/main/FCCee/IDEA/compact/README.md
+- [ ] the code is covered by tests. See https://github.com/key4hep/k4geo/blob/main/test/CMakeLists.txt
+- [ ] the PR source branch has been rebased (`--ff-only`) to `k4geo/main`
+- [ ] the PR does not contain any additions or modifications that do not belong to it
+- [ ] The release notes below contain a succinct and comprehensive description of the changes that are sufficiently self-explanatory
 
+If you are modifying detector dimensions or adding new xml parameters, also consider the following:
+- [ ] the xml file free parameters that can not be modified without additional prescriptions are well indicated
+- [ ] the changes in this PR have not introduced any overlaps. You can check so with the following command: `ddsim --compactFile PATH_TO_COMPACT_FILE --runType run --ui.commandsInitialize "/geometry/test/run" > overlapDump.txt`
 
 BEGINRELEASENOTES
 - Thank you for writing the text to appear in the release notes. It will show up
-  exactly as it appears between the two bold lines
+  exactly as it appears between the two ALL CAPS lines
 - ...
 
 ENDRELEASENOTES
+
