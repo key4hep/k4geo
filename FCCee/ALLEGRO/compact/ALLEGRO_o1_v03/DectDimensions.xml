@@ -89,7 +89,7 @@
     <constant name="VTXIB_r_max"          value="50.0*mm"/>  <!-- End of inner vertex = outer radius of inner vertex tube -->
     <constant name="VTXIB_half_length"          value="556.2/2.*mm"/> <!-- 278.1*mm, half length of inner vertex tube -->
 
-    <constant name="VTXOB_r_min_layer"    value="140*mm"/>      <!-- R of the innermost layer of the outer vertex -->
+    <constant name="VTXOB_r_min_layer"    value="130*mm"/>      <!-- R of the innermost layer of the outer vertex -->
     <constant name="VTXOB_r_min_clearance" value="15.0*mm"/>     <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
     <constant name="VTXOB_r_max_layer"    value="315*mm"/>      <!-- R of the outermost layer of the outer vertex -->
     <constant name="VTXOB_rmax_clearance" value="15.0*mm"/>     <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
