@@ -32,13 +32,13 @@
      <!-- %%%%%%                      Iron yoke thickness                %%%%%% -->
       <constant name = "YokeThickness"                          value = "300*mm"/> 
       <!-- %%%%%%                      Readout dsecription               %%%%%% -->
-      <constant name = "MuonSystemReadoutID"            type="string"  value = "system:5,type:3,layer:2,chamber:13,slice:1,y:-10,z:-10"/>  
+      <constant name = "MuonSystemReadoutID"            type="string"  value = "system:5,type:2,layer:2,chamber:13,slice:1,y:-10,z:-10"/>  <!-- The bit field is divided into 2^5 systems(IDEA sub-detectors), 2^2 types(0 = Barrel Muon System, +1 = positive endcap, and -1 = negative endcap"), 2^4 layers(number of layers in barrel for example) ,2^15 chambers(the number of muRWELL chambers in every layer), 2^1 slice(number of sensitive layers inside every chambers), and 2^10 y&z strips in every sensitive layer-->
   </define>   
 
   <readouts>
     <readout name="MuonSystemCollection">
      <segmentation type="CartesianGridYZ" grid_size_y="1.2*mm" grid_size_z="1.2*mm"/>   <!-- Depending on strip pitch 1.4 mm  -->
-     <id>${MuonSystemReadoutID}</id> <!-- The bit field is divided into 2^5 systems(IDEA sub-detectors), 2^2 types(0 = Barrel Muon System, +1 = positive endcap, and -1 = negative endcap"), 2^4 layers(number of layers in barrel for example) ,2^15 chambers(the number of muRWELL chambers in every layer), 2^1 slice(number of sensitive layers inside every chambers), and 2^10 y&z strips in every sensitive layer-->
+     <id>${MuonSystemReadoutID}</id>
   </readout>
   </readouts>   
 
@@ -71,7 +71,7 @@
   <plugins>
     <plugin name="DD4hep_GenericSurfaceInstallerPlugin"> <!-- Plugin needed for the surfaces-->
       <argument value="Muon-System" />
-      <argument value="dimension=1" />
+      <argument value="dimension=2" />
       <argument value="u_y=1." />
       <argument value="v_z=1." />
       <argument value="n_x=1." />

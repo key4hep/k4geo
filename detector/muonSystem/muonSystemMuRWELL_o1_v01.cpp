@@ -401,7 +401,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
               }
               if (slice.hasAttr("sensitive") && sliceDet.isSensitive()) {
                 dd4hep::xml::Dimension sdType(xmlElement.child(_U(sensitive)));
-                sensDet.setType(sdType.typeStr());
+                sensDet.setType(sdType.typeStr("tracker"));
                 sliceVolume.setSensitiveDetector(sensDet);
                 slicePlacedVolume.addPhysVolID("slice", sensitiveSliceIndex);
                 dd4hep::DetElement sliceDE(rectangleRemainderEnvDE, "slice_"+sensitiveSliceIndex, sensitiveSliceIndex);
@@ -440,7 +440,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
                   }
                   if (slice.hasAttr("sensitive") && sliceDet.isSensitive()) {
                     dd4hep::xml::Dimension sdType(xmlElement.child(_U(sensitive)));
-                    sensDet.setType(sdType.typeStr());
+                    sensDet.setType(sdType.typeStr("tracker"));
                     sliceVolume.setSensitiveDetector(sensDet);
                     slicePlacedVolume.addPhysVolID("slice", sensitiveSliceIndex);
                     dd4hep::DetElement sliceDE(envDE, "slice_"+sensitiveSliceIndex, sensitiveSliceIndex);
@@ -549,7 +549,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
               }
               if (slice.hasAttr("sensitive") && sliceDet.isSensitive()) {
                 dd4hep::xml::Dimension sdType(xmlElement.child(_U(sensitive)));
-                sensDet.setType(sdType.typeStr());
+                sensDet.setType(sdType.typeStr("tracker"));
                 sliceVolume.setSensitiveDetector(sensDet);
                 slicePlacedVolume.addPhysVolID("slice", sensitiveSliceIndex);
                 dd4hep::DetElement sliceDE(rectangleRemainderEnvDE, "slice_"+sensitiveSliceIndex, sensitiveSliceIndex);
@@ -588,7 +588,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
                   }
                   if (slice.hasAttr("sensitive") && sliceDet.isSensitive()) {
                     dd4hep::xml::Dimension sdType(xmlElement.child(_U(sensitive)));
-                    sensDet.setType(sdType.typeStr());
+                    sensDet.setType(sdType.typeStr("tracker"));
                     sliceVolume.setSensitiveDetector(sensDet);
                     slicePlacedVolume.addPhysVolID("slice", sensitiveSliceIndex);
                     dd4hep::DetElement sliceDE(envDE, "slice_"+sensitiveSliceIndex, sensitiveSliceIndex);
@@ -944,7 +944,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
           }
           if (slice.hasAttr("sensitive") && sliceDet.isSensitive()) {
             dd4hep::xml::Dimension sdType(xmlElement.child(_U(sensitive)));
-            sensDet.setType(sdType.typeStr());
+            sensDet.setType(sdType.typeStr("tracker"));
             sliceVolume.setSensitiveDetector(sensDet);
             slicePlacedVolume.addPhysVolID("slice", sensitiveSliceIndex);
             dd4hep::DetElement sliceDE(rectangleRemainderEnvDE, "slice_"+sensitiveSliceIndex, sensitiveSliceIndex);
@@ -987,7 +987,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
           }
           if (slice.hasAttr("sensitive") && sliceDet.isSensitive()) {
             dd4hep::xml::Dimension sdType(xmlElement.child(_U(sensitive)));
-            sensDet.setType(sdType.typeStr());
+            sensDet.setType(sdType.typeStr("tracker"));
             sliceVolume.setSensitiveDetector(sensDet);
             slicePlacedVolume.addPhysVolID("slice", sensitiveSliceIndex);
             dd4hep::DetElement sliceDE(envDE, "slice_"+sensitiveSliceIndex, sensitiveSliceIndex);
