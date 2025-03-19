@@ -401,7 +401,8 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
         double r1_x_gamma_shift=projOffsetXmax*(r1e-r0e)/r0e;
         double r2_x_gamma_shift=projOffsetXmax*(r2e-r0e)/r0e;
 
-        int left, right;
+        int left=0;
+        int right=0;
 
         if(N_GAMMA_BARREL%2==0){
           if (nGamma <(N_GAMMA_BARREL/2-1))  {left=1;right=1;}
@@ -570,7 +571,8 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
         double r1_x_gamma_shift=projOffsetXmax*(r1e-r0e)/r0e;
         double r2_x_gamma_shift=projOffsetXmax*(r2e-r0e)/r0e;
 
-        int left, right;
+        int left=0;
+        int right=0;
 
         if(nGammaEndcap%2==0){
           if (nGamma <(nGammaEndcap/2-1))  {left=1;right=1;}
