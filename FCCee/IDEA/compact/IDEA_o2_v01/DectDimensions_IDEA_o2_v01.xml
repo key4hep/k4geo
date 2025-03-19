@@ -215,7 +215,7 @@
     <constant name="tracker_region_rmax" value="DCH_outer_cyl_R_total"/>
 
     <!-- SCEPCal dimensions (Wonyong Chung) -->
-    <constant name="scepcal_barrel_half_z" value="2.40*m"/>
+    <constant name="scepcal_barrel_half_z" value="2.45*m"/>
     <constant name="scepcal_barrel_inner_r" value="2.25*m"/>
     <constant name="scepcal_phi_segments" value="128"/>
     <constant name="scepcal_beampipe_opening" value="45*cm"/>
