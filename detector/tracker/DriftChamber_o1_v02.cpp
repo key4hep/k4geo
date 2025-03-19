@@ -16,6 +16,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Shapes.h"
 #include "DD4hep/Detector.h"
+#include "XML/Utilities.h"
 
 #include "DDRec/DCH_info.h"
 
@@ -34,6 +35,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector &desc, dd4hep::xml::Hand
     std::string detName = detElem.nameStr();
     int detID = detElem.id();
     dd4hep::DetElement det(detName, detID);
+    dd4hep::xml::setDetectorTypeFlag(detElem, det);
     sens.setType("tracker");
 
     // initialize empty DCH_info object
