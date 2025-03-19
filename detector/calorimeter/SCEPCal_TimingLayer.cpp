@@ -195,7 +195,6 @@ create_detector_SCEPCal_TimingLayer(dd4hep::Detector &theDetector,xml_h xmlEleme
 
   dd4hep::OpticalSurfaceManager surfMgr = theDetector.surfaceManager();
   dd4hep::OpticalSurface LYSO_to_ESR = surfMgr.opticalSurface("/world/"+detName+"#LYSO_to_ESR");
-  dd4hep::OpticalSurface PbWO4_to_OptGrease = surfMgr.opticalSurface("/world/"+detName+"#PbWO4_to_OptGrease");
 
   std::vector<double> zTimingPolyhedra   ={-tl_phislice_8pa_y2,-tl_phislice_8pa_y0,tl_phislice_8pa_y0,tl_phislice_8pa_y2};
   std::vector<double> rminTimingPolyhedra={tl_phislice_8pa_z2,tl_phislice_8pa_z1,tl_phislice_8pa_z1,tl_phislice_8pa_z2};

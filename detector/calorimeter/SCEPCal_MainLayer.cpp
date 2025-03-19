@@ -180,7 +180,6 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
   
   dd4hep::OpticalSurfaceManager surfMgr = theDetector.surfaceManager();
   dd4hep::OpticalSurface PbWO4_to_ESR = surfMgr.opticalSurface("/world/"+detName+"#PbWO4_to_ESR");
-  dd4hep::OpticalSurface PbWO4_to_OptGrease = surfMgr.opticalSurface("/world/"+detName+"#PbWO4_to_OptGrease");
   
   std::vector<double> zBarrelPolyhedra   ={-br_phislice_8pa_y2,-br_phislice_8pa_y0,br_phislice_8pa_y0,br_phislice_8pa_y2};
   std::vector<double> rminBarrelPolyhedra={br_phislice_8pa_z2,br_phislice_8pa_z1,br_phislice_8pa_z1,br_phislice_8pa_z2};
