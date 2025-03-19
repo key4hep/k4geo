@@ -226,9 +226,16 @@
     <constant name="QC1L1_start" value="2200*mm"/>
     <constant name="screenstart" value="-10*mm"/>
     <!-- end MDI -->
-    
-    <constant name="tracker_region_zmax" value="DCH_half_length_total"/>
-    <constant name="tracker_region_rmax" value="DCH_outer_cyl_R_total"/>
+
+    <!-- these constants are used to define the full tracking volume in reconstruction (e.g. pandora) -->
+    <!-- modified to include also the wrapper region -->
+    <!-- constant name="tracker_region_zmax" value="DCH_half_length_total"/-->
+    <!-- constant name="tracker_region_rmax" value="DCH_outer_cyl_R_total"/-->
+    <!-- the two alternatives below should be equivalent, the latter being safer -->
+    <!-- constant name="tracker_region_zmax" value="SiWrD_zmax"/ -->
+    <!-- constant name="tracker_region_rmax" value="SiWrB_outer_radius"/ -->
+    <constant name="tracker_region_zmax" value="ECalEndcap_min_z"/>
+    <constant name="tracker_region_rmax" value="BarECal_rmin"/>
 
   </define>
   
