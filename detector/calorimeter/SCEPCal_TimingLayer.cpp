@@ -235,21 +235,21 @@ create_detector_SCEPCal_TimingLayer(dd4hep::Detector &theDetector,xml_h xmlEleme
     "timingGlobalAssemblyVol",
     PHI_SEGMENTS,D_PHI_GLOBAL/2,2*M_PI,zTimingPolyhedra,rminTimingPolyhedra,rmaxTimingPolyhedra,
     tlbarrelAssemblyGlobalVisXML,experimentalHall,&tlbarrelAssemblyPlacedVol);
-  tlbarrelAssemblyPlacedVol.addPhysVolID("system",6);
+  tlbarrelAssemblyPlacedVol.addPhysVolID("system",TLBARREL_SYSTEM_NO);
 
   dd4hep::PlacedVolume tlendcapAssemblyPlacedVol;
   auto tlendcapGlobalAssemblyVol = CreatePolyhedraShapeVolume_SetVolAttributes_Place_SetCellId(
     "tlendcapGlobalAssemblyVol",
     PHI_SEGMENTS,D_PHI_GLOBAL/2,2*M_PI,zTlEndcapPolyhedra,rminTlEndcapPolyhedra,rmaxTlEndcapPolyhedra,
     tlendcapAssemblyGlobalVisXML,experimentalHall,&tlendcapAssemblyPlacedVol);
-  tlendcapAssemblyPlacedVol.addPhysVolID("system",7);
+  tlendcapAssemblyPlacedVol.addPhysVolID("system",TLENDCAP_SYSTEM_NO);
 
   dd4hep::PlacedVolume tlendcapAssemblyPlacedVol_1;
   auto tlendcapGlobalAssemblyVol_1 = CreatePolyhedraShapeVolume_SetVolAttributes_Place_SetCellId(
     "tlendcapGlobalAssemblyVol_1",
     PHI_SEGMENTS,D_PHI_GLOBAL/2,2*M_PI,zTlEndcapPolyhedra_1,rminTlEndcapPolyhedra_1,rmaxTlEndcapPolyhedra_1,
     tlendcapAssemblyGlobalVisXML,experimentalHall,&tlendcapAssemblyPlacedVol_1);
-  tlendcapAssemblyPlacedVol_1.addPhysVolID("system",7);
+  tlendcapAssemblyPlacedVol_1.addPhysVolID("system",TLENDCAP_SYSTEM_NO);
   tlendcapAssemblyPlacedVol_1.addPhysVolID("eta",1);
 
   ScepcalDetElement.setPlacement(tlbarrelAssemblyPlacedVol);
