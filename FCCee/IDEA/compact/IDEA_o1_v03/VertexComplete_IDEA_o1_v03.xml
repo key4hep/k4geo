@@ -83,7 +83,7 @@
             
             <constant name="VTXIB_L1_nModules" value="6"/>
             <constant name="VTXIB_L2_nModules" value="10"/>
-            <constant name="VTXIB_L3_nModules" value="16"/>
+            <constant name="VTXIB_L3_nModules" value="15"/>
     
             <constant name="VTXIB_mod_z_spacing" value="0.2*mm"/>
     
@@ -91,8 +91,10 @@
             <constant name="VTXIB_z2" value="(VTXIB_L2_nModules*VTXIB_mod_z+(VTXIB_L2_nModules-1)*VTXIB_mod_z_spacing)/2.0"/> <!-- 160.9*mm -->
             <constant name="VTXIB_z3" value="(VTXIB_L3_nModules*VTXIB_mod_z+(VTXIB_L3_nModules-1)*VTXIB_mod_z_spacing)/2.0"/> <!-- 257.5*mm -->
             <constant name="VTXIB_r1" value="VTXIB_r_min_layer"/> 
-            <constant name="VTXIB_r2" value="22.7*mm"/>
+            <constant name="VTXIB_r2" value="23.7*mm"/>
             <constant name="VTXIB_r3"  value="VTXIB_r_max_layer"/> <!-- 34 mm-->
+
+            <constant name="VTXIB_zoffset2" value="0.5*mm"/> <!-- To make sure no gap at theta=90 degree exists-->
 
             <constant name="VTXIB_dr1" value="0.0*mm"/>
             <constant name="VTXIB_dr2" value="0.0*mm"/>
@@ -177,23 +179,26 @@
         <!-- Vertex outer barrel parameters -->
             <constant name="VTXOB_Staves1" value="23"/>
             <constant name="VTXOB_Staves2" value="51"/>
-            <constant name="VTXOB_nModules1" value="8"/>            <!-- 163.1 mm-->
-            <constant name="VTXOB_nModules2" value="16"/>           <!-- 326.3 mm -->
+            <constant name="VTXOB_nModules1" value="8"/>            <!-- 183.5 mm-->
+            <constant name="VTXOB_nModules2" value="16"/>           <!-- 346.7 mm -->
             <constant name="VTXOB_mod_z_spacing" value="0.2*mm"/>   <!-- Must be done for disks as well! Currently not done -->
     
             <constant name="VTXOB_z1" value="(VTXOB_nModules1*VTXO_mod_z+(VTXOB_nModules1-1)*VTXOB_mod_z_spacing)/2.0"/>
             <constant name="VTXOB_z2" value="(VTXOB_nModules2*VTXO_mod_z+(VTXOB_nModules2-1)*VTXOB_mod_z_spacing)/2.0"/>
-            <constant name="VTXOB_r1" value="VTXOB_r_min_layer"/>   <!-- 140 mm-->
+            <constant name="VTXOB_r1" value="VTXOB_r_min_layer"/>   <!-- 130 mm-->
             <constant name="VTXOB_r2" value="VTXOB_r_max_layer"/>   <!-- 315 mm -->
 
             <constant name="VTXOB_support_thickness"                value="2.0*VTXO_support_Fleece_thickness+VTXO_support_CarbonFiber_thickness+VTXO_support_PaperGraphite_thickness"/>
             <constant name="VTXOB_Pipe_offset"                      value="21.18*mm/2.0"/>
             <constant name="VTXOB_TrussStructure_thickness1"        value="0.501*mm"/> <!-- 326 mm length * 8.4 mm width / 5464.3 mm^3 volume = 0.501 mm of proxy carbon fiber thickness for light-weight truss structure -->
             <constant name="VTXOB_TrussStructure_thickness2"        value="0.477*mm"/> <!-- 652 mm length * 8.4 mm width / 11473.8 mm^3 volume = 0.477 mm of proxy carbon fiber thickness for light-weight truss structure -->
-            <constant name="VTXOB_TrussStructure_distance"          value="3.3*mm"/>
+            <constant name="VTXOB_TrussStructure_distance"          value="4.0*mm"/>
     
             <constant name="VTXOB_offset1" value="10.0*mm"/>
             <constant name="VTXOB_offset2" value="20.0*mm"/>
+
+            <constant name="VTXOB_zoffset1" value="-0.5*mm"/> <!-- To make sure no gap at theta=90 degree exists-->
+            <constant name="VTXOB_zoffset2" value="+0.5*mm"/> <!-- To make sure no gap at theta=90 degree exists-->
 
             <!-- Proxy for terminal part in VTXOB made out of PEEK, used in middle tracker barrel-->
             <constant name="VTXOB_TerminalPart_L1_width1"        value="(34.436*mm+25.604*mm)/2."/>
@@ -1696,7 +1701,7 @@
 
             <!-- Vertex inner barrel -->
             <layer nLadders="VTXIB_L1_Staves" phi0="0.0" r="VTXIB_r1" offset="VTXIB_L1_offset" id="0" nmodules="VTXIB_L1_nModules" name="VTXIBStave1" step="VTXIB_mod_z_spacing" dr="VTXIB_dr1" motherVolLength="2.0*(VTXIB_z1+VTXIB_hybrid_z+VTXIB_mod_z_spacing)" motherVolThickness="VTXIB_r2-VTXIB_r1"/>
-            <layer nLadders="VTXIB_L2_Staves" phi0="0.0" r="VTXIB_r2" offset="VTXIB_L2_offset" id="1" nmodules="VTXIB_L2_nModules" name="VTXIBStave2" step="VTXIB_mod_z_spacing" dr="VTXIB_dr2" motherVolLength="2.0*(VTXIB_z2+VTXIB_hybrid_z+VTXIB_mod_z_spacing)" motherVolThickness="VTXIB_r3-VTXIB_r2"/>
+            <layer nLadders="VTXIB_L2_Staves" phi0="0.0" r="VTXIB_r2" offset="VTXIB_L2_offset" id="1" nmodules="VTXIB_L2_nModules" name="VTXIBStave2" step="VTXIB_mod_z_spacing" dr="VTXIB_dr2" motherVolLength="2.0*(VTXIB_z2+VTXIB_hybrid_z+VTXIB_mod_z_spacing)" motherVolThickness="VTXIB_r3-VTXIB_r2" z_offset="VTXIB_zoffset2"/>
             <layer nLadders="VTXIB_L3_Staves" phi0="0.0" r="VTXIB_r3" offset="VTXIB_L3_offset" id="2" nmodules="VTXIB_L3_nModules" name="VTXIBStave3" step="VTXIB_mod_z_spacing" dr="VTXIB_dr3" motherVolLength="2.0*VTXIB_half_length"                             motherVolThickness="VTXIB_r_max-VTXIB_r3-VTXIB_tube_thickness"/>
 
             <!-- Ultra-light inner vertex -->
@@ -1711,8 +1716,8 @@
             <layer nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r4)*360.*deg+VTXIB_curved_phi0_4" r="VTXIB_curved_r4" id="3" nmodules="VTXIB_curved_nModules4_2" name="VTXIBStave4Curved_2" step="0.0*mm" motherVolThickness="VTXIB_curved_r_outer-VTXIB_curved_r4-VTXIB_tube_thickness"   motherVolLength="VTXIB_curved_z4_passive2" motherVolOffset="-(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap4_length_center-VTXIB_curved_endcap4_length_side)/2.)" side="+1" z_offset="VTXIB_curved_z4_offset2"/> -->
 
             <!-- Vertex outer barrel -->
-            <layer nLadders="VTXOB_Staves1" phi0="0.0" r="VTXOB_r1" offset="VTXOB_offset1" id="nInnerVertexLayers+0" nmodules="VTXOB_nModules1" name="VTXOBStave1" step="VTXOB_mod_z_spacing" motherVolThickness="1.2*cm" motherVolLength="VTXOB_z1_passive"/>
-            <layer nLadders="VTXOB_Staves2" phi0="0.0" r="VTXOB_r2" offset="VTXOB_offset2" id="nInnerVertexLayers+1" nmodules="VTXOB_nModules2" name="VTXOBStave2" step="VTXOB_mod_z_spacing" motherVolThickness="3.0*cm" motherVolRmin="VTXOB_r2-VTXOB_TerminalPart_L2_thickness1-12.771*mm" motherVolLength="VTXOB_z2_passive"/>
+            <layer nLadders="VTXOB_Staves1" phi0="0.0" r="VTXOB_r1" offset="VTXOB_offset1" id="nInnerVertexLayers+0" nmodules="VTXOB_nModules1" name="VTXOBStave1" step="VTXOB_mod_z_spacing" motherVolThickness="1.2*cm" motherVolLength="VTXOB_z1_passive" z_offset="VTXOB_zoffset1"/>
+            <layer nLadders="VTXOB_Staves2" phi0="0.0" r="VTXOB_r2" offset="VTXOB_offset2" id="nInnerVertexLayers+1" nmodules="VTXOB_nModules2" name="VTXOBStave2" step="VTXOB_mod_z_spacing" motherVolThickness="3.0*cm" motherVolRmin="VTXOB_r2-VTXOB_TerminalPart_L2_thickness1-12.771*mm" motherVolLength="VTXOB_z2_passive" z_offset="VTXOB_zoffset2"/>
         </detector>
 
 
