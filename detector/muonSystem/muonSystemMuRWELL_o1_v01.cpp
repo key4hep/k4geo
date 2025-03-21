@@ -251,7 +251,6 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
 
       sideDE = dd4hep::DetElement(BarrelDetectorLayerDE, sideName + "DE", sideID);
       sideDE.setPlacement(sidePhys);
-      //sidePhys.addPhysVolID("side", side+1); 
       sideVol.setVisAttributes(lcdd, xmlDet.visStr());
       sideVol2.setVisAttributes(lcdd, xmlDet.visStr());
 
@@ -319,7 +318,6 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
             }
             dd4hep::DetElement rectangleEnvelopeDE(sideDE, rectangleRemainderEnvelopeName + "DE", rectangle); 
             rectangleEnvelopeDE.setPlacement(rectangleEnvelopePhys);
-            //rectangleEnvelopePhys.addPhysVolID("rectangle", rectangle+1); 
             rectangleEnvVol.setVisAttributes(lcdd, xmlDet.visStr());
 
             // ------------------------ start to build the chamber envelopes -------------------
@@ -467,7 +465,6 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
           }
           dd4hep::DetElement rectangleEnvelopeDE(sideDE, rectangleEnvelopeName + "DE", rectangle); 
           rectangleEnvelopeDE.setPlacement(rectangleEnvelopePhys);
-          //rectangleEnvelopePhys.addPhysVolID("rectangle", rectangle+1);
           rectangleEnvVol.setVisAttributes(lcdd, xmlDet.visStr());
 
 
@@ -801,7 +798,6 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
       endcapDetectorSideEnvPhys = endcapDetectorEnvVol.placeVolume(endcapDetectorSideEnvVol, dd4hep::Transform3D(endcapDetectorRotation * dd4hep::RotationY(90.0 * dd4hep::degree) , endcapDetectorSideEnvTrans));
       endcapDetectorSideEnvDE = dd4hep::DetElement(endcapDetectorEnvelopeDE, endcapDetectorSideEnvName + "DE", sideID);
       endcapDetectorSideEnvDE.setPlacement(endcapDetectorSideEnvPhys);
-      //endcapDetectorSideEnvPhys.addPhysVolID("side", side);
       endcapDetectorSideEnvVol.setVisAttributes(lcdd, xmlDet.visStr());
 
      // ----- dividing the trapezoid envelope to smaller pieces (rectangles)
@@ -849,7 +845,6 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd,
           dd4hep::PlacedVolume rectangleEnvelopePhys = endcapDetectorSideEnvVol.placeVolume(rectangleEnvVol, dd4hep::Transform3D(rotationY, rectangeEnvelopeTrans));
           dd4hep::DetElement rectangleEnvelopeDE(endcapDetectorSideEnvDE, rectangleEnvelopeName + "DE", rectangle); // remember to loop over numEndcapDetectorLayers.. because now it still just one number.
           rectangleEnvelopeDE.setPlacement(rectangleEnvelopePhys);
-          //rectangleEnvelopePhys.addPhysVolID("rectangle", rectangle);
           rectangleEnvVol.setVisAttributes(lcdd, xmlDet.visStr());
         
           // ------------------------ start to build the chamber envelopes -------------------
