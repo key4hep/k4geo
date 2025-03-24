@@ -1,9 +1,9 @@
 //====================================================================
-//  lcgeo - LC detector models in DD4hep 
+//  lcgeo - LC detector models in DD4hep
 //--------------------------------------------------------------------
 //  Geometry driver for semi-digitia HcalBarrel
 //--------------------------------------------------------------------
-//  G.Grenier 
+//  G.Grenier
 //  $Id$
 //====================================================================
 
@@ -13,8 +13,8 @@
 using namespace std;
 
 using dd4hep::BUILD_ENVELOPE;
-using dd4hep::DetElement;
 using dd4hep::Detector;
+using dd4hep::DetElement;
 using dd4hep::PlacedVolume;
 using dd4hep::Ref_t;
 using dd4hep::SensitiveDetector;
@@ -23,8 +23,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 
   // static double tolerance = 0e0;
 
-  xml_det_t   x_det       = element;
-  string      det_name    = x_det.nameStr();
+  xml_det_t x_det = element;
+  string det_name = x_det.nameStr();
 
   // xml_comp_t   x_dim      = x_det.dimensions();
   // int          nsides     = x_dim.numsides();
@@ -34,32 +34,28 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   // double  Hcal_outer_radius   = x_dim.rmax();
   // double  detZ                = x_dim.zhalf();
 
-  DetElement  sdet( det_name,x_det.id() );
-
+  DetElement sdet(det_name, x_det.id());
 
   // --- create an envelope volume and position it into the world ---------------------
-  
+
   // Volume envelope =
-  dd4hep::xml::createPlacedEnvelope( theDetector,  element , sdet ) ;
-  
-  if( theDetector.buildType() == BUILD_ENVELOPE ) return sdet ;
+  dd4hep::xml::createPlacedEnvelope(theDetector, element, sdet);
+
+  if (theDetector.buildType() == BUILD_ENVELOPE)
+    return sdet;
 
   //-----------------------------------------------------------------------------------
 
   sens.setType("calorimeter");
 
-
   // Some verbose output
   cout << " \n\n\n CREATE DETECTOR: Hcal_BarrelSD_v00" << endl;
 
-
   //-----------------------------------------------------------------------------------
-  //  
+  //
   //  ...  construct the calorimeter in its envelope
-  // 
+  //
   //-----------------------------------------------------------------------------------
-
-
 
   //  sdet.addExtension< DDRec::LayeredCalorimeterData >( caloData ) ;
   return sdet;
