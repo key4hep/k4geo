@@ -9,14 +9,12 @@
 
 #include "DRutils.h"
 
-using namespace dd4hep;
-
 namespace DRBarrelTubes {
 
 class DRTubesconstructor {
 public:
   // Constructor
-  DRTubesconstructor(Detector* description, xml_h& entities, SensitiveDetector* sens);
+  DRTubesconstructor(dd4hep::Detector* description, xml_h& entities, dd4hep::SensitiveDetector* sens);
 
   // Destructor
   ~DRTubesconstructor() {}
@@ -42,29 +40,29 @@ public:
   double calculate_tower_width(int given_row, bool backface = true);
 
   // Function to calculate the tube lengths and place them to create the actual tower (not the air)
-  void assemble_tower(Volume& tower_air_volume);
+  void assemble_tower(dd4hep::Volume& tower_air_volume);
 
   // Mostly just a wrapper function
-  void construct_tower_trapezoid(Volume& trap_volume);
+  void construct_tower_trapezoid(dd4hep::Volume& trap_volume);
 
   // Function to calculate the position of the tower inside the stave
   void calculate_tower_position();
 
   // Function to construct the trapezoidal support structure for the tower in which fibres are placed
-  void construct_tower(Volume& trap_volume);
+  void construct_tower(dd4hep::Volume& trap_volume);
 
   void increase_covered_theta(const double& delta_theta) { m_covered_theta += delta_theta; }
 
   // Function to place the tower in the stave volume
-  void place_tower(Volume& stave_volume, Volume& tower_volume, unsigned int layer);
+  void place_tower(dd4hep::Volume& stave_volume, dd4hep::Volume& tower_volume, unsigned int layer);
 
   // Overarching function to construct the calorimeter
-  void construct_calorimeter(Volume& calorimeter_volume);
+  void construct_calorimeter(dd4hep::Volume& calorimeter_volume);
 
 private:
-  Detector* m_description;
+  dd4hep::Detector* m_description;
   xml_h m_entities;
-  SensitiveDetector* m_sens;
+  dd4hep::SensitiveDetector* m_sens;
 
   // Calorimeter parameters
   double m_calo_inner_r;
@@ -79,11 +77,11 @@ private:
   double m_scin_core_outer_r;
   double m_cher_clad_outer_r;
   double m_cher_core_outer_r;
-  Material m_capillary_material;
-  Material m_scin_clad_material;
-  Material m_scin_core_material;
-  Material m_cher_clad_material;
-  Material m_cher_core_material;
+  dd4hep::Material m_capillary_material;
+  dd4hep::Material m_scin_clad_material;
+  dd4hep::Material m_scin_core_material;
+  dd4hep::Material m_cher_clad_material;
+  dd4hep::Material m_cher_core_material;
   std::string m_capillary_visString;
   std::string m_scin_clad_visString;
   std::string m_scin_core_visString;
@@ -97,8 +95,8 @@ private:
 
   // Maps to store the tube volumes, so that one volume can be used multiple times
   // The key to the map is an indicator of the tube length (multiple of the tolerance)
-  std::unordered_map<int, Volume> m_scin_tube_volume_map;
-  std::unordered_map<int, Volume> m_cher_tube_volume_map;
+  std::unordered_map<int, dd4hep::Volume> m_scin_tube_volume_map;
+  std::unordered_map<int, dd4hep::Volume> m_cher_tube_volume_map;
 
   // Tolerance for which new tube volumes are created
   // e.g 1mm, then all tube lengths are rounded (down) to the nearest mm
@@ -147,15 +145,15 @@ private:
   double m_trap_azimuthal_angle; // azimuthal angle for the trapezoid
   double m_trap_polar_angle;     // polar angle for the trapezoid
   double m_trap_half_length;     // half length for the trapezoid
-  Material m_trap_material;
+  dd4hep::Material m_trap_material;
   std::string m_trap_visString;
 
   // Construction parameters (which change for each tower)
   double m_covered_theta;
   double m_back_shift;
-  Position m_tower_position;
+  dd4hep::Position m_tower_position;
 
-  Material m_air;
+  dd4hep::Material m_air;
   std::string m_air_visString;
 };
 
