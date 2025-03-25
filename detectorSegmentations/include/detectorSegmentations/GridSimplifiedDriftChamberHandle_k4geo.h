@@ -23,7 +23,8 @@ template <typename T>
 class SegmentationWrapper;
 
 /// We need some abbreviation to make the code more readable.
-typedef Handle<SegmentationWrapper<DDSegmentation::GridSimplifiedDriftChamber_k4geo>> GridSimplifiedDriftChamberHandle_k4geo;
+typedef Handle<SegmentationWrapper<DDSegmentation::GridSimplifiedDriftChamber_k4geo>>
+    GridSimplifiedDriftChamberHandle_k4geo;
 
 class GridSimplifiedDriftChamber_k4geo : public GridSimplifiedDriftChamberHandle_k4geo {
 public:
@@ -71,9 +72,7 @@ public:
     access()->implementation->setWiresInLayer(layer, numWires);
   }
 
-  inline auto returnAllWires() const {
-    access()->implementation->returnAllWires();
-  }
+  inline auto returnAllWires() const { access()->implementation->returnAllWires(); }
 
   inline double phiFromXY(const Position& aposition) const { return access()->implementation->phiFromXY(aposition); }
   inline TVector3 distanceClosestApproach(const CellID& cID, const TVector3& hitPos) const {
@@ -92,4 +91,4 @@ public:
 };
 
 } /* End namespace dd4hep                */
-#endif  // DD4HEP_DDCORE_GRIDSIMPLIFIEDDRIFTCHAMBER_H
+#endif // DD4HEP_DDCORE_GRIDSIMPLIFIEDDRIFTCHAMBER_H
