@@ -42,9 +42,10 @@ using dd4hep::Volume;
 using dd4hep::rec::NeighbourSurfacesData;
 using dd4hep::rec::ZPlanarData;
 
-void populateNeighbourData(NeighbourSurfacesData* neighbourSurfacesData, UTIL::BitField64& encoder, int module_idx,
-                           int sensor_idx, int nphi, int nz) {
+void populateNeighbourData(NeighbourSurfacesData* neighbourSurfacesData, UTIL::BitField64& encoder,
+                           const int module_idx, const int sensor_idx, const int nphi, const int nz) {
   const dd4hep::CellID cellID = encoder.lowWord(); // 32 bits
+  auto& neighbours = neighbourSurfacesData->sameLayer[cellID];
 
   // compute neighbours
   int n_neighbours_module = 1; // 1 gives the adjacent modules (i do not think we would like to change this)
@@ -57,8 +58,11 @@ void populateNeighbourData(NeighbourSurfacesData* neighbourSurfacesData, UTIL::B
 
       if (imodule == 0 && isensor == 0)
         continue; // cellID we started with
-      newmodule = module_idx + imodule;
       newsensor = sensor_idx + isensor;
+      if (newsensor < 0 || newsensor >= nz)
+        continue; // out of the stave
+
+      newmodule = module_idx + imodule;
 
       // compute special case at the boundary
       // general computation to allow (if necessary) more then adjacent neighbours (ie: +-2)
@@ -68,14 +72,11 @@ void populateNeighbourData(NeighbourSurfacesData* neighbourSurfacesData, UTIL::B
       if (newmodule >= nphi)
         newmodule = newmodule - nphi;
 
-      if (newsensor < 0 || newsensor >= nz)
-        continue; // out of the stave
-
       // encoding
       encoder[lcio::LCTrackerCellID::module()] = newmodule;
       encoder[lcio::LCTrackerCellID::sensor()] = newsensor;
 
-      neighbourSurfacesData->sameLayer[cellID].push_back(encoder.lowWord());
+      neighbours.push_back(encoder.lowWord());
     }
   }
 }
