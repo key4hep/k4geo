@@ -11,7 +11,6 @@
 #include "DDRec/DetectorData.h"
 #include "DD4hep/Volumes.h"
 #include "TGeoTrd2.h"
-#include "CLHEP/Units/SystemOfUnits.h"
 #include <bitset>
 
 using dd4hep::Transform3D;
@@ -89,19 +88,19 @@ create_detector_SCEPCal_TimingLayer(dd4hep::Detector &theDetector,xml_h xmlEleme
   int           N_GAMMA_TLBARREL         =std::max(int(2*M_PI*BARREL_INNER_R/(PHI_SEGMENTS*XTAL_LENGTH_T)),1);
   double        D_GAMMA_TLBARREL         =D_PHI_GLOBAL/N_GAMMA_TLBARREL;
 
-  // Main Barrel
+  // Main layer Barrel - minimal set needed for timing layer calculations
   double        thC_br_end               =THETA_SIZE_BARREL-D_THETA_BARREL/2;
   double        r0_br_end                =(BARREL_INNER_R+PROJ_OFFSET_R)/cos(thC_br_end);
   double        r0_proj_arm_br_end       =r0_br_end/cos(D_THETA_BARREL/2);
   double        br_phislice_8pa_z1       =r0_proj_arm_br_end*cos(thC_br_end+D_THETA_BARREL/2)-PROJ_OFFSET_R;
 
-  // Main Endcap
+  // Main layer Endcap - minimal set needed for timing layer calculations
   double        thC_ec_end               =THETA_SIZE_ENDCAP-D_THETA_ENDCAP/2;
   double        r0_ec_end                =BARREL_HALF_Z/cos(thC_ec_end);
   double        r0_proj_arm_ec_end       =r0_ec_end/cos(D_THETA_ENDCAP/2);
   double        ec_phislice_8pa_z1       =r0_proj_arm_ec_end*cos(thC_ec_end+D_THETA_ENDCAP/2);
 
-  // Timing Barrel
+  // Timing Barrel Phi envelope with protrusions for tilted crystals
   double        rT                       =br_phislice_8pa_z1-TIMING_GAP-XTAL_DEPTH_T;
 
   double        thC_tl_end               =THETA_SIZE_TLBARREL-D_THETA_TLBARREL/2;
@@ -119,7 +118,7 @@ create_detector_SCEPCal_TimingLayer(dd4hep::Detector &theDetector,xml_h xmlEleme
   double        tl_phislice_8pa_y0       =tl_phislice_8pa_z1*tan(thC_tl_end+D_THETA_TLBARREL/2);
   double        tl_phislice_8pa_y2       =tl_phislice_8pa_z2*tan(thC_tl_end+D_THETA_TLBARREL/2);
 
-  // Timing Endcap
+  // Timing Endcap Phi envelope with protrusions for tilted crystals
   double        zT                       =ec_phislice_8pa_z1-TIMING_GAP-XTAL_DEPTH_T;
 
   int           TLENDCAP_THETA_START     =0;
@@ -184,6 +183,7 @@ create_detector_SCEPCal_TimingLayer(dd4hep::Detector &theDetector,xml_h xmlEleme
   std::cout                                                         << std::endl;
   std::cout                                                         << std::endl;
 
+  // Initialization
   dd4hep::DetElement ScepcalDetElement(detName,detectorXML.id());
   dd4hep::Volume experimentalHall=theDetector.pickMotherVolume(ScepcalDetElement);
   dd4hep::xml::Dimension sdType=detectorXML.child(_Unicode(sensitive));
@@ -196,6 +196,7 @@ create_detector_SCEPCal_TimingLayer(dd4hep::Detector &theDetector,xml_h xmlEleme
   dd4hep::OpticalSurfaceManager surfMgr = theDetector.surfaceManager();
   dd4hep::OpticalSurface LYSO_to_ESR = surfMgr.opticalSurface("/world/"+detName+"#LYSO_to_ESR");
 
+  // Global assembly volumes
   std::vector<double> zTimingPolyhedra   ={-tl_phislice_8pa_y2,-tl_phislice_8pa_y0,tl_phislice_8pa_y0,tl_phislice_8pa_y2};
   std::vector<double> rminTimingPolyhedra={tl_phislice_8pa_z2,tl_phislice_8pa_z1,tl_phislice_8pa_z1,tl_phislice_8pa_z2};
   std::vector<double> rmaxTimingPolyhedra={tl_phislice_8pa_z2,tl_phislice_8pa_z2,tl_phislice_8pa_z2,tl_phislice_8pa_z2};
@@ -208,52 +209,27 @@ create_detector_SCEPCal_TimingLayer(dd4hep::Detector &theDetector,xml_h xmlEleme
   std::vector<double> rminTlEndcapPolyhedra_1={tlec_beg_phislice_8pa_y2,tlec_beg_phislice_8pa_y0};
   std::vector<double> rmaxTlEndcapPolyhedra_1={tlec_end_phislice_8pa_y2,tlec_end_phislice_8pa_y0};
 
-  auto CreatePolyhedraShapeVolume_SetVolAttributes_Place_SetCellId = [
-    &theDetector, 
-    &segmentation
-  ](
-    std::string volName,
-    int nSegments,
-    double phiOffset,
-    double phiExtent,
-    std::vector<double> zPoints,
-    std::vector<double> rMin,
-    std::vector<double> rMax,
-    xml_comp_t compXml,
-    dd4hep::Volume assemblyVol,
-    dd4hep::PlacedVolume *thePlacedVol=nullptr
-  ) {
-      dd4hep::Polyhedra theShape(nSegments,phiOffset,phiExtent,zPoints,rMin,rMax);
-      dd4hep::Volume theVolume(volName, theShape, theDetector.material("Vacuum"));
-      theVolume.setVisAttributes(theDetector,compXml.visStr());
-      *thePlacedVol=assemblyVol.placeVolume(theVolume);
-      return theVolume;
-  };
-
-  dd4hep::PlacedVolume tlbarrelAssemblyPlacedVol;
-  auto timingGlobalAssemblyVol = CreatePolyhedraShapeVolume_SetVolAttributes_Place_SetCellId(
-    "timingGlobalAssemblyVol",
-    PHI_SEGMENTS,D_PHI_GLOBAL/2,2*M_PI,zTimingPolyhedra,rminTimingPolyhedra,rmaxTimingPolyhedra,
-    tlbarrelAssemblyGlobalVisXML,experimentalHall,&tlbarrelAssemblyPlacedVol);
+  dd4hep::Polyhedra timingGlobalAssemblyShape(PHI_SEGMENTS,D_PHI_GLOBAL/2,2*M_PI,zTimingPolyhedra,rminTimingPolyhedra,rmaxTimingPolyhedra);
+  dd4hep::Volume timingGlobalAssemblyVol("timingGlobalAssemblyVol", timingGlobalAssemblyShape, theDetector.material("Vacuum"));
+  timingGlobalAssemblyVol.setVisAttributes(theDetector,tlbarrelAssemblyGlobalVisXML.visStr());
+  dd4hep::PlacedVolume tlbarrelAssemblyPlacedVol=experimentalHall.placeVolume(timingGlobalAssemblyVol);
   tlbarrelAssemblyPlacedVol.addPhysVolID("system",TLBARREL_SYSTEM_NO);
 
-  dd4hep::PlacedVolume tlendcapAssemblyPlacedVol;
-  auto tlendcapGlobalAssemblyVol = CreatePolyhedraShapeVolume_SetVolAttributes_Place_SetCellId(
-    "tlendcapGlobalAssemblyVol",
-    PHI_SEGMENTS,D_PHI_GLOBAL/2,2*M_PI,zTlEndcapPolyhedra,rminTlEndcapPolyhedra,rmaxTlEndcapPolyhedra,
-    tlendcapAssemblyGlobalVisXML,experimentalHall,&tlendcapAssemblyPlacedVol);
+  dd4hep::Polyhedra tlendcapGlobalAssemblyShape(PHI_SEGMENTS,D_PHI_GLOBAL/2,2*M_PI,zTlEndcapPolyhedra,rminTlEndcapPolyhedra,rmaxTlEndcapPolyhedra);
+  dd4hep::Volume tlendcapGlobalAssemblyVol("tlendcapGlobalAssemblyVol", tlendcapGlobalAssemblyShape, theDetector.material("Vacuum"));
+  tlendcapGlobalAssemblyVol.setVisAttributes(theDetector,tlendcapAssemblyGlobalVisXML.visStr());
+  dd4hep::PlacedVolume tlendcapAssemblyPlacedVol=experimentalHall.placeVolume(tlendcapGlobalAssemblyVol);
   tlendcapAssemblyPlacedVol.addPhysVolID("system",TLENDCAP_SYSTEM_NO);
 
-  dd4hep::PlacedVolume tlendcapAssemblyPlacedVol_1;
-  auto tlendcapGlobalAssemblyVol_1 = CreatePolyhedraShapeVolume_SetVolAttributes_Place_SetCellId(
-    "tlendcapGlobalAssemblyVol_1",
-    PHI_SEGMENTS,D_PHI_GLOBAL/2,2*M_PI,zTlEndcapPolyhedra_1,rminTlEndcapPolyhedra_1,rmaxTlEndcapPolyhedra_1,
-    tlendcapAssemblyGlobalVisXML,experimentalHall,&tlendcapAssemblyPlacedVol_1);
+  dd4hep::Polyhedra tlendcapGlobalAssemblyShape_1(PHI_SEGMENTS,D_PHI_GLOBAL/2,2*M_PI,zTlEndcapPolyhedra_1,rminTlEndcapPolyhedra_1,rmaxTlEndcapPolyhedra_1);
+  dd4hep::Volume tlendcapGlobalAssemblyVol_1("tlendcapGlobalAssemblyVol_1", tlendcapGlobalAssemblyShape_1, theDetector.material("Vacuum"));
+  tlendcapGlobalAssemblyVol_1.setVisAttributes(theDetector,tlendcapAssemblyGlobalVisXML.visStr());
+  dd4hep::PlacedVolume tlendcapAssemblyPlacedVol_1=experimentalHall.placeVolume(tlendcapGlobalAssemblyVol_1);
   tlendcapAssemblyPlacedVol_1.addPhysVolID("system",TLENDCAP_SYSTEM_NO);
   tlendcapAssemblyPlacedVol_1.addPhysVolID("eta",1);
-
   ScepcalDetElement.setPlacement(tlbarrelAssemblyPlacedVol);
 
+  // Lambda for crystals
   auto CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId = [
     &theDetector, 
     &sens, 
@@ -296,8 +272,11 @@ create_detector_SCEPCal_TimingLayer(dd4hep::Detector &theDetector,xml_h xmlEleme
 
   //////////////////////////////
   // Timing Barrel
+  // Phi - divide barrel into phi slices
+  // Theta - divide phi slice into slabs in theta
+  // Gamma - divide a theta slab into shorter segments in phi
   //////////////////////////////
-
+  
   for (int iPhi=CONSTRUCT_TLBARREL? TIMING_PHI_START:TIMING_PHI_END; iPhi<TIMING_PHI_END; iPhi++) {
     double phiGlobal=iPhi*D_PHI_GLOBAL;
     RotationZ rotZphiGlobal(phiGlobal);
@@ -364,7 +343,7 @@ create_detector_SCEPCal_TimingLayer(dd4hep::Detector &theDetector,xml_h xmlEleme
         Position dispT(0,0,0);
 
         XYZVector dispGlobal(rE*sin(thC),rE*sin(thC)*tan(gamma),rE*cos(thC));
-        XYZVector posGlobal=(rotZphiGlobal*dispGlobal)*CLHEP::cm;
+        XYZVector posGlobal=(rotZphiGlobal*dispGlobal)/dd4hep::cm;
 
         CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
           "TimingCrystal", XTAL_DEPTH_T/2, verticesT, crystalTXML,
@@ -380,6 +359,9 @@ create_detector_SCEPCal_TimingLayer(dd4hep::Detector &theDetector,xml_h xmlEleme
 
   //////////////////////////////
   // Timing Endcap
+  // Phi - divide barrel into phi slices
+  // Theta - divide phi slice into slabs in theta
+  // Gamma - divide a theta slab into shorter segments in phi
   //////////////////////////////
 
   for (int iPhi=CONSTRUCT_TLENDCAP? TLENDCAP_PHI_START:TLENDCAP_PHI_END;iPhi<TLENDCAP_PHI_END;iPhi++) {
@@ -462,7 +444,7 @@ create_detector_SCEPCal_TimingLayer(dd4hep::Detector &theDetector,xml_h xmlEleme
         Position dispT(0,0,0);
 
         XYZVector dispGlobal(rE*sin(thC),rE*sin(thC)*tan(gamma),rE*cos(thC));
-        XYZVector posGlobal=(rotZphiGlobal*dispGlobal)*CLHEP::cm;
+        XYZVector posGlobal=(rotZphiGlobal*dispGlobal)/dd4hep::cm;
 
         CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
           "TlEndcapCrystal", XTAL_DEPTH_T/2, verticesT, crystalTXML,

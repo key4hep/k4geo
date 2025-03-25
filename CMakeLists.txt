@@ -43,7 +43,6 @@ option(INSTALL_BEAMPIPE_STL_FILES "Download CAD files for building the detailed 
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-find_package(CLHEP REQUIRED)
 find_package(DD4hep REQUIRED COMPONENTS DDRec DDG4 DDParsers)
 
 find_package ( ROOT REQUIRED COMPONENTS Geom GenVector)
@@ -119,8 +118,6 @@ file(GLOB G4sources
   ./plugins/DRTubesSDAction.cpp
   ./plugins/SCEPCal_MainSDAction.cpp
   ./plugins/SCEPCal_TimingSDAction.cpp
-  ./detector/calorimeter/SCEPCal_MainLayer.cpp
-  ./detector/calorimeter/SCEPCal_TimingLayer.cpp
 )
 
 if(DD4HEP_USE_PYROOT)
@@ -142,7 +139,7 @@ target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detect
 target_include_directories(${PackageName}   PRIVATE ${PROJECT_SOURCE_DIR}/detector/calorimeter/dual-readout-tubes/include )
 target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detector/calorimeter/dual-readout-tubes/include )
 
-target_link_libraries(${PackageName}   DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers ROOT::Core detectorSegmentations CLHEP::CLHEP)
+target_link_libraries(${PackageName}   DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers ROOT::Core detectorSegmentations)
 target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ROOT::Core detectorSegmentations podio::podioRootIO EDM4HEP::edm4hep ${Geant4_LIBRARIES})
 
 if(K4GEO_USE_LCIO)

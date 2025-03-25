@@ -1041,6 +1041,21 @@
   </info>
 
   <readouts>
+    <!-- Different segmentations used to accommodate different granularities in main and timing layer -->
+    <!--  -->
+    <!-- System supposed to be fixed at 5 bits (is this really necessary?) -->
+    <!-- Phi - divide detector into phi slices, max 128 phi segments for 7 bits -->
+    <!-- Eta - divide phi slice into slabs in theta -->
+    <!-- Gamma - tower index within theta (divide a theta slab into square NxN crystal towers in phi), max 16 values -->
+    <!-- Epsilon - crystal index inside NxN tower, max 16 values (4x4 crystal tower) -->
+    <!-- Depth - front/rear depth index -->
+    <!--  -->
+    <!-- Note: -->
+    <!-- 1cm crystals with 64 phi segments instead of 128 would exceed 16 in gamma -->
+    <!-- 2048 eta values is ok for the main layer since the crystals are not imagined to be much smaller than 1cm -->
+    <!-- for the timing layer they can be as thin as 2mm, and with a ~4.8m span in Z that is roughly 2400 values, -->
+    <!-- which exceeds 11 bits, therefore a separate segmentation for the timing layer is used, without epsilon and depth -->
+    <!--  -->
     <readout name="SCEPCal_Main">
       <segmentation type="SCEPCal_MainSegmentation_k4geo"/>
       <id>system:5,phi:7,eta:11,gamma:4,epsilon:4,depth:1</id>

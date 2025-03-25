@@ -11,14 +11,12 @@
 #include "DDRec/DetectorData.h"
 #include "DD4hep/Volumes.h"
 #include "TGeoTrd2.h"
-#include "CLHEP/Units/SystemOfUnits.h"
 #include <bitset>
 
 using dd4hep::Transform3D;
 using dd4hep::RotationZYX;
 using ROOT::Math::RotationY;
 using ROOT::Math::RotationZ;
-using dd4hep::Rotation3D;
 using dd4hep::Position;
 using ROOT::Math::XYZVector;
 using namespace dd4hep;
@@ -93,7 +91,7 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
     if (RinEndcap<(BEAMPIPE_OPENING+PROJ_OFFSET_R)) ENDCAP_THETA_START++;
   }
 
-  // Barrel
+  // Barrel Phi envelope with protrusions for tilted crystals
   double        thC_br_end               =THETA_SIZE_BARREL-D_THETA_BARREL/2;
   double        thC_br_beg               =D_THETA_BARREL/2;
 
@@ -109,7 +107,7 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
   double        br_phislice_8pa_y0       =(br_phislice_8pa_z1+PROJ_OFFSET_R)*tan(thC_br_end+D_THETA_BARREL/2);
   double        br_phislice_8pa_y2       =(br_phislice_8pa_z2+PROJ_OFFSET_R)*tan(thC_br_end+D_THETA_BARREL/2);
 
-  // Endcap
+  // Endcap Phi envelope with protrusions for tilted crystals
   double        thC_ec_end               =THETA_SIZE_ENDCAP-D_THETA_ENDCAP/2;
   double        thC_ec_beg               =D_THETA_ENDCAP/2+ENDCAP_THETA_START*D_THETA_ENDCAP;
 
@@ -169,6 +167,7 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
   std::cout                                                         << std::endl;
   std::cout                                                         << std::endl;
 
+  // Initialization
   dd4hep::DetElement ScepcalDetElement(detName,detectorXML.id());
   dd4hep::Volume experimentalHall=theDetector.pickMotherVolume(ScepcalDetElement);
   dd4hep::xml::Dimension sdType=detectorXML.child(_Unicode(sensitive));
@@ -181,6 +180,7 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
   dd4hep::OpticalSurfaceManager surfMgr = theDetector.surfaceManager();
   dd4hep::OpticalSurface PbWO4_to_ESR = surfMgr.opticalSurface("/world/"+detName+"#PbWO4_to_ESR");
   
+  // Global assembly volumes
   std::vector<double> zBarrelPolyhedra   ={-br_phislice_8pa_y2,-br_phislice_8pa_y0,br_phislice_8pa_y0,br_phislice_8pa_y2};
   std::vector<double> rminBarrelPolyhedra={br_phislice_8pa_z2,br_phislice_8pa_z1,br_phislice_8pa_z1,br_phislice_8pa_z2};
   std::vector<double> rmaxBarrelPolyhedra={br_phislice_8pa_z2,br_phislice_8pa_z2,br_phislice_8pa_z2,br_phislice_8pa_z2};
@@ -193,52 +193,28 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
   std::vector<double> rminEndcapPolyhedra_1={ec_beg_phislice_8pa_y2,ec_beg_phislice_8pa_y0};
   std::vector<double> rmaxEndcapPolyhedra_1={ec_end_phislice_8pa_y2,ec_end_phislice_8pa_y0};
 
-  auto CreatePolyhedraShapeVolume_SetVolAttributes_Place_SetCellId = [
-    &theDetector, 
-    &segmentation
-  ](
-    std::string volName,
-    int nSegments,
-    double phiOffset,
-    double phiExtent,
-    std::vector<double> zPoints,
-    std::vector<double> rMin,
-    std::vector<double> rMax,
-    xml_comp_t compXml,
-    dd4hep::Volume assemblyVol,
-    dd4hep::PlacedVolume *thePlacedVol=nullptr
-  ) {
-      dd4hep::Polyhedra theShape(nSegments,phiOffset,phiExtent,zPoints,rMin,rMax);
-      dd4hep::Volume theVolume(volName, theShape, theDetector.material("Vacuum"));
-      theVolume.setVisAttributes(theDetector,compXml.visStr());
-      *thePlacedVol=assemblyVol.placeVolume(theVolume);
-      return theVolume;
-  };
-
-  dd4hep::PlacedVolume barrelAssemblyPlacedVol;
-  auto barrelGlobalAssemblyVol = CreatePolyhedraShapeVolume_SetVolAttributes_Place_SetCellId(
-    "barrelGlobalAssemblyVol",
-    PHI_SEGMENTS,D_PHI_GLOBAL/2,2*M_PI,zBarrelPolyhedra,rminBarrelPolyhedra,rmaxBarrelPolyhedra,
-    barrelAssemblyGlobalVisXML,experimentalHall,&barrelAssemblyPlacedVol);
+  dd4hep::Polyhedra barrelGlobalAssemblyShape(PHI_SEGMENTS,D_PHI_GLOBAL/2,2*M_PI,zBarrelPolyhedra,rminBarrelPolyhedra,rmaxBarrelPolyhedra);
+  dd4hep::Volume barrelGlobalAssemblyVol("barrelGlobalAssemblyVol", barrelGlobalAssemblyShape, theDetector.material("Vacuum"));
+  barrelGlobalAssemblyVol.setVisAttributes(theDetector,barrelAssemblyGlobalVisXML.visStr());
+  dd4hep::PlacedVolume barrelAssemblyPlacedVol=experimentalHall.placeVolume(barrelGlobalAssemblyVol);
   barrelAssemblyPlacedVol.addPhysVolID("system",BARREL_SYSTEM_NO);
 
-  dd4hep::PlacedVolume endcapAssemblyPlacedVol;
-  auto endcapGlobalAssemblyVol = CreatePolyhedraShapeVolume_SetVolAttributes_Place_SetCellId(
-    "endcapGlobalAssemblyVol",
-    PHI_SEGMENTS,D_PHI_GLOBAL/2,2*M_PI,zEndcapPolyhedra,rminEndcapPolyhedra,rmaxEndcapPolyhedra,
-    endcapAssemblyGlobalVisXML,experimentalHall,&endcapAssemblyPlacedVol);
+  dd4hep::Polyhedra endcapGlobalAssemblyShape(PHI_SEGMENTS,D_PHI_GLOBAL/2,2*M_PI,zEndcapPolyhedra,rminEndcapPolyhedra,rmaxEndcapPolyhedra);
+  dd4hep::Volume endcapGlobalAssemblyVol("endcapGlobalAssemblyVol", endcapGlobalAssemblyShape, theDetector.material("Vacuum"));
+  endcapGlobalAssemblyVol.setVisAttributes(theDetector,endcapAssemblyGlobalVisXML.visStr());
+  dd4hep::PlacedVolume endcapAssemblyPlacedVol=experimentalHall.placeVolume(endcapGlobalAssemblyVol);
   endcapAssemblyPlacedVol.addPhysVolID("system",ENDCAP_SYSTEM_NO);
 
-  dd4hep::PlacedVolume endcapAssemblyPlacedVol_1;
-  auto endcapGlobalAssemblyVol_1 = CreatePolyhedraShapeVolume_SetVolAttributes_Place_SetCellId(
-    "endcapGlobalAssemblyVol_1",
-    PHI_SEGMENTS,D_PHI_GLOBAL/2,2*M_PI,zEndcapPolyhedra_1,rminEndcapPolyhedra_1,rmaxEndcapPolyhedra_1,
-    endcapAssemblyGlobalVisXML,experimentalHall,&endcapAssemblyPlacedVol_1);
+  dd4hep::Polyhedra endcapGlobalAssemblyShape_1(PHI_SEGMENTS,D_PHI_GLOBAL/2,2*M_PI,zEndcapPolyhedra_1,rminEndcapPolyhedra_1,rmaxEndcapPolyhedra_1);
+  dd4hep::Volume endcapGlobalAssemblyVol_1("endcapGlobalAssemblyVol_1", endcapGlobalAssemblyShape_1, theDetector.material("Vacuum"));
+  endcapGlobalAssemblyVol_1.setVisAttributes(theDetector,endcapAssemblyGlobalVisXML.visStr());
+  dd4hep::PlacedVolume endcapAssemblyPlacedVol_1=experimentalHall.placeVolume(endcapGlobalAssemblyVol_1);
   endcapAssemblyPlacedVol_1.addPhysVolID("system",ENDCAP_SYSTEM_NO);
   endcapAssemblyPlacedVol_1.addPhysVolID("eta",1);
 
   ScepcalDetElement.setPlacement(barrelAssemblyPlacedVol);
 
+  // Lambda for crystals
   auto CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId = [
     &theDetector, 
     &sens, 
@@ -281,7 +257,8 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
       segmentation->savePosition(volID_32,posGlobal);
   };
 
-  auto bilinearInterpolate = [&](const double* vf, double u, double v) {
+  // Lambdas for crystal tower divisions
+  auto bilinearInterpolateTower = [&](const double* vf, double u, double v) {
     double x0 =(1-u)*(1-v)*vf[0]
               +   u *(1-v)*vf[2]
               +   u *   v *vf[4]
@@ -305,7 +282,7 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
     return std::array<double, 4>{ x0,y0,x1,y1 };
   };
 
-  auto getSubVertices = [&] (
+  auto getSingleCrystalVertices = [&] (
     int i, int j, int xtalDiv,
     const double *vertices
   ) -> std::array<double, 16> {
@@ -314,10 +291,10 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
     double v0=double(j)  /double(xtalDiv);
     double v1=double(j+1)/double(xtalDiv);
 
-    auto P00=bilinearInterpolate(vertices,u0,v0);
-    auto P10=bilinearInterpolate(vertices,u1,v0);
-    auto P11=bilinearInterpolate(vertices,u1,v1);
-    auto P01=bilinearInterpolate(vertices,u0,v1);
+    auto P00=bilinearInterpolateTower(vertices,u0,v0);
+    auto P10=bilinearInterpolateTower(vertices,u1,v0);
+    auto P11=bilinearInterpolateTower(vertices,u1,v1);
+    auto P01=bilinearInterpolateTower(vertices,u0,v1);
 
     std::array<double, 16> verticesSub = {P00[0],P00[1],P10[0],P10[1],P11[0],P11[1],P01[0],P01[1],
                                           P00[2],P00[3],P10[2],P10[3],P11[2],P11[3],P01[2],P01[3]};
@@ -325,7 +302,7 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
     return verticesSub;
   };
 
-  auto getSubCenter = [&] (
+  auto getSingleCrystalCenter = [&] (
     const std::array<double, 16> vSub
   ) -> std::array<double, 2> {
     std::array<double, 2> center = {
@@ -337,6 +314,11 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
 
   //////////////////////////////
   // Barrel
+  // Phi - divide barrel into phi slices
+  // Theta - divide phi slice into slabs in theta
+  // Gamma - divide a theta slab into square NxN crystal towers in phi
+  // Epsilon - index of single crystal in a NxN tower
+  // Projective offsets - tilt the rear face of the trapezoids to point at specified offset away from IP
   //////////////////////////////
 
   for (int iPhi=CONSTRUCT_BARREL? BARREL_PHI_START:BARREL_PHI_END; iPhi<BARREL_PHI_END; iPhi++) {
@@ -443,14 +425,14 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
           for(int j = 0; j < XTAL_DIV_F; j++) {
             int nEpsilon = i*XTAL_DIV_F+j;
 
-            auto vFsub =getSubVertices(i,j,XTAL_DIV_F,verticesF);
-            auto center=getSubCenter(vFsub);
+            auto vFsub =getSingleCrystalVertices(i,j,XTAL_DIV_F,verticesF);
+            auto center=getSingleCrystalCenter(vFsub);
 
             Position dispFsub(0,0,-XTAL_LEN_R/2);
 
             double rGlobal=r0e+XTAL_LEN_F/2;
             XYZVector dispGlobal(-center[1],center[0],rGlobal);
-            XYZVector posGlobal=(rotZphiGlobal*(rotYthGlobal*dispGlobal+DISP_PROJ_R))*CLHEP::cm;
+            XYZVector posGlobal=(rotZphiGlobal*(rotYthGlobal*dispGlobal+DISP_PROJ_R))/dd4hep::mm;
 
             CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
               "BarrelCrystalF", XTAL_LEN_F/2, vFsub, crystalFXML,
@@ -467,14 +449,14 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
           for(int j = 0; j < XTAL_DIV_R; j++) {
             int nEpsilon = i*XTAL_DIV_R+j;
 
-            auto vRsub =getSubVertices(i,j,XTAL_DIV_R,verticesR);
-            auto center=getSubCenter(vRsub);
+            auto vRsub =getSingleCrystalVertices(i,j,XTAL_DIV_R,verticesR);
+            auto center=getSingleCrystalCenter(vRsub);
 
             Position dispRsub(0,0,XTAL_LEN_F/2);
 
             double rGlobal=r0e+XTAL_LEN_F+XTAL_LEN_R/2;
             XYZVector dispGlobal(-center[1],center[0],rGlobal);
-            XYZVector posGlobal=(rotZphiGlobal*(rotYthGlobal*dispGlobal+DISP_PROJ_R))*CLHEP::cm;
+            XYZVector posGlobal=(rotZphiGlobal*(rotYthGlobal*dispGlobal+DISP_PROJ_R))/dd4hep::mm;
 
             CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
               "BarrelCrystalR", XTAL_LEN_R/2, vRsub, crystalRXML,
@@ -492,6 +474,11 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
  
   //////////////////////////////
   // Endcap
+  // Phi - divide endcap into phi slices
+  // Theta - divide phi slice into slabs in theta
+  // Gamma - divide a theta slab into square NxN crystal towers in phi
+  // Epsilon - index of single crystal in a NxN tower
+  // Projective offsets - tilt the rear face of the trapezoids to point at specified offset away from IP
   //////////////////////////////
 
   for (int iPhi=CONSTRUCT_ENDCAP? ENDCAP_PHI_START:ENDCAP_PHI_END;iPhi<ENDCAP_PHI_END;iPhi++) {
@@ -613,14 +600,14 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
           for(int j = 0; j < XTAL_DIV_F; j++) {
             int nEpsilon = i*XTAL_DIV_F+j;
 
-            auto vFsub =getSubVertices(i,j,XTAL_DIV_F,verticesF);
-            auto center=getSubCenter(vFsub);
+            auto vFsub =getSingleCrystalVertices(i,j,XTAL_DIV_F,verticesF);
+            auto center=getSingleCrystalCenter(vFsub);
 
             Position dispFsub(0,0,-XTAL_LEN_R/2);
               
             double rGlobal=r0e+XTAL_LEN_F/2;
             XYZVector dispGlobal(-center[1],center[0],rGlobal);
-            XYZVector posGlobal=(rotZphiGlobal*(rotYthGlobal*dispGlobal+DISP_PROJ_R))*CLHEP::cm;
+            XYZVector posGlobal=(rotZphiGlobal*(rotYthGlobal*dispGlobal+DISP_PROJ_R))/dd4hep::mm;
 
             CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
               "EndcapCrystalF", XTAL_LEN_F/2, vFsub, crystalFXML,
@@ -646,14 +633,14 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
           for(int j = 0; j < XTAL_DIV_R; j++) {
             int nEpsilon = i*XTAL_DIV_R+j;
 
-            auto vRsub =getSubVertices(i,j,XTAL_DIV_R,verticesR);
-            auto center=getSubCenter(vRsub);
+            auto vRsub =getSingleCrystalVertices(i,j,XTAL_DIV_R,verticesR);
+            auto center=getSingleCrystalCenter(vRsub);
 
             Position dispRsub(0,0,XTAL_LEN_F/2);
             
             double rGlobal=r0e+XTAL_LEN_F+XTAL_LEN_R/2;
             XYZVector dispGlobal(-center[1],center[0],rGlobal);
-            XYZVector posGlobal=(rotZphiGlobal*(rotYthGlobal*dispGlobal+DISP_PROJ_R))*CLHEP::cm;
+            XYZVector posGlobal=(rotZphiGlobal*(rotYthGlobal*dispGlobal+DISP_PROJ_R))/dd4hep::mm;
 
             CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
               "EndcapCrystalR", XTAL_LEN_R/2, vRsub, crystalRXML,

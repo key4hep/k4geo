@@ -67,7 +67,7 @@ namespace dd4hep {
         if (track->GetCurrentStepNumber()==1) {
           auto* hitSC =newOrExistingHitIn(isScintillation? m_userData.m_collectionID_scint:
                                                            m_userData.m_collectionID_ceren);
-          hitSC->energyDeposit+=(int)1000; // edep is in MeV, readout is in GeV, therefore a count of 1 is 1000
+          hitSC->energyDeposit+=1/dd4hep::MeV;
           track->SetTrackStatus(fStopAndKill);
         }
       }
