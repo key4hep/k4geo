@@ -5,17 +5,6 @@
 #include "XML/Utilities.h"
 #include <DDRec/DetectorData.h>
 
-// todo: remove gaudi logging and properly capture output
-#define endmsg std::endl
-#define lLog std::cout
-namespace MSG {
-
-const std::string ERROR = " Error: ";
-const std::string DEBUG = " Debug: ";
-const std::string INFO = " Info: ";
-
-} // namespace MSG
-
 namespace det {
 
 namespace ECalEndcap_Turbine_o1_v02 {
@@ -174,7 +163,6 @@ namespace ECalEndcap_Turbine_o1_v02 {
     delrPhiGapOnly = leftoverS / (2 * nUnitCells);
     float LArgapo = delrPhiGapOnly * TMath::Sin(BladeAngle);
 
-    dd4hep::Solid absBlade;
     float riLayer = ri;
 
     std::vector<dd4hep::Volume> claddingLayerVols;
@@ -648,7 +636,6 @@ namespace ECalEndcap_Turbine_o1_v02 {
     double ri = rmin;
 
     float supportTubeThickness = supportTubeElem.thickness();
-    unsigned iSupportTube = 0;
 
     for (unsigned iWheel = 0; iWheel < nWheels; iWheel++) {
 
@@ -671,7 +658,6 @@ namespace ECalEndcap_Turbine_o1_v02 {
       ro *= radiusRatio;
       if (ro > rmax)
         ro = rmax;
-      iSupportTube++;
     }
 
     dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v02", "Total number of modules:  %d", iModule);

@@ -481,7 +481,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
                   sensDet.setType(sdType.typeStr());
                   sliceVolume.setSensitiveDetector(sensDet);
                   slicePlacedVolume.addPhysVolID("slice", sensitiveSliceIndex);
-                  dd4hep::DetElement sliceDE(rectangleRemainderEnvDE, "slice_" + sensitiveSliceIndex,
+                  dd4hep::DetElement sliceDE(rectangleRemainderEnvDE, "slice_" + std::to_string(sensitiveSliceIndex),
                                              sensitiveSliceIndex);
                   sliceDE.setPlacement(slicePlacedVolume);
                   //  dd4hep::printout(dd4hep::INFO,"Sensitive Slice has been created at", name, BarrelChamberName);
@@ -523,7 +523,8 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
                   sensDet.setType(sdType.typeStr());
                   sliceVolume.setSensitiveDetector(sensDet);
                   slicePlacedVolume.addPhysVolID("slice", sensitiveSliceIndex);
-                  dd4hep::DetElement sliceDE(envDE, "slice_" + sensitiveSliceIndex, sensitiveSliceIndex);
+                  dd4hep::DetElement sliceDE(envDE, "slice_" + std::to_string(sensitiveSliceIndex),
+                                             sensitiveSliceIndex);
                   sliceDE.setPlacement(slicePlacedVolume);
                   // dd4hep::printout(dd4hep::INFO,"Sensitive slice has been created at", name, BarrelChamberName);
                   sensitiveSliceIndex++;
@@ -655,7 +656,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
                   sensDet.setType(sdType.typeStr());
                   sliceVolume.setSensitiveDetector(sensDet);
                   slicePlacedVolume.addPhysVolID("slice", sensitiveSliceIndex);
-                  dd4hep::DetElement sliceDE(rectangleRemainderEnvDE, "slice_" + sensitiveSliceIndex,
+                  dd4hep::DetElement sliceDE(rectangleRemainderEnvDE, "slice_" + std::to_string(sensitiveSliceIndex),
                                              sensitiveSliceIndex);
                   sliceDE.setPlacement(slicePlacedVolume);
                   // dd4hep::printout(dd4hep::INFO,"Sensitive slice has been created at", name, BarrelChamberName);
@@ -697,7 +698,8 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
                   sensDet.setType(sdType.typeStr());
                   sliceVolume.setSensitiveDetector(sensDet);
                   slicePlacedVolume.addPhysVolID("slice", sensitiveSliceIndex);
-                  dd4hep::DetElement sliceDE(envDE, "slice_" + sensitiveSliceIndex, sensitiveSliceIndex);
+                  dd4hep::DetElement sliceDE(envDE, "slice_" + std::to_string(sensitiveSliceIndex),
+                                             sensitiveSliceIndex);
                   sliceDE.setPlacement(slicePlacedVolume);
                   // dd4hep::printout(dd4hep::INFO,"Sensitive slice has been created at", name, BarrelChamberName);
                   sensitiveSliceIndex++;
@@ -1117,7 +1119,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
                   sensDet.setType(sdType.typeStr());
                   sliceVolume.setSensitiveDetector(sensDet);
                   slicePlacedVolume.addPhysVolID("slice", sensitiveSliceIndex);
-                  dd4hep::DetElement sliceDE(rectangleRemainderEnvDE, "slice_" + sensitiveSliceIndex,
+                  dd4hep::DetElement sliceDE(rectangleRemainderEnvDE, "slice_" + std::to_string(sensitiveSliceIndex),
                                              sensitiveSliceIndex);
                   sliceDE.setPlacement(slicePlacedVolume);
                   //  dd4hep::printout(dd4hep::INFO,"Sensitive slice has been created at", name,EndcapChamberName);
@@ -1164,7 +1166,8 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
                   sensDet.setType(sdType.typeStr());
                   sliceVolume.setSensitiveDetector(sensDet);
                   slicePlacedVolume.addPhysVolID("slice", sensitiveSliceIndex);
-                  dd4hep::DetElement sliceDE(envDE, "slice_" + sensitiveSliceIndex, sensitiveSliceIndex);
+                  dd4hep::DetElement sliceDE(envDE, "slice_" + std::to_string(sensitiveSliceIndex),
+                                             sensitiveSliceIndex);
                   sliceDE.setPlacement(slicePlacedVolume);
                   // dd4hep::printout(dd4hep::INFO,"Sensitive slice has been created at", name, EndcapChamberName);
                   sensitiveSliceIndex++;

@@ -22,6 +22,8 @@
 #include "DD4hep/Printout.h"
 #include "XML/Utilities.h"
 
+#include <list>
+
 using namespace std;
 
 using dd4hep::_toString;
