@@ -371,7 +371,6 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
           }
           dd4hep::DetElement rectangleEnvelopeDE(sideDE, rectangleRemainderEnvelopeName + "DE", rectangle);
           rectangleEnvelopeDE.setPlacement(rectangleEnvelopePhys);
-          rectangleEnvelopePhys.addPhysVolID("rectangle", rectangle + 1);
           rectangleEnvVol.setVisAttributes(lcdd, xmlDet.visStr());
 
           // ------------------------ start to build the chamber envelopes -------------------
