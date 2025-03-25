@@ -39,47 +39,7 @@ using dd4hep::SensitiveDetector;
 using dd4hep::Transform3D;
 using dd4hep::Tube;
 using dd4hep::Volume;
-using dd4hep::rec::NeighbourSurfacesData;
 using dd4hep::rec::ZPlanarData;
-
-void populateNeighbourData(NeighbourSurfacesData* neighbourSurfacesData, UTIL::BitField64& encoder,
-                           const int module_idx, const int sensor_idx, const int nphi, const int nz) {
-  const dd4hep::CellID cellID = encoder.lowWord(); // 32 bits
-  auto& neighbours = neighbourSurfacesData->sameLayer[cellID];
-
-  // compute neighbours
-  int n_neighbours_module = 1; // 1 gives the adjacent modules (i do not think we would like to change this)
-  int n_neighbours_sensor = 1;
-
-  int newmodule = 0, newsensor = 0;
-
-  for (int imodule = -n_neighbours_module; imodule <= n_neighbours_module; imodule++) {   // neighbouring modules
-    for (int isensor = -n_neighbours_sensor; isensor <= n_neighbours_sensor; isensor++) { // neighbouring sensors
-
-      if (imodule == 0 && isensor == 0)
-        continue; // cellID we started with
-      newsensor = sensor_idx + isensor;
-      if (newsensor < 0 || newsensor >= nz)
-        continue; // out of the stave
-
-      newmodule = module_idx + imodule;
-
-      // compute special case at the boundary
-      // general computation to allow (if necessary) more then adjacent neighbours (ie: +-2)
-
-      if (newmodule < 0)
-        newmodule = nphi + newmodule;
-      if (newmodule >= nphi)
-        newmodule = newmodule - nphi;
-
-      // encoding
-      encoder[lcio::LCTrackerCellID::module()] = newmodule;
-      encoder[lcio::LCTrackerCellID::sensor()] = newsensor;
-
-      neighbours.push_back(encoder.lowWord());
-    }
-  }
-}
 
 ZPlanarData::LayerLayout buildLayerLayout(double radius, int staves, double phi0, double z0, Volume module,
                                           PlacedVolume sensor) {
@@ -146,7 +106,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
   //-----------------------------------------------------------------------------------
   ZPlanarData* zPlanarData = new ZPlanarData();
-  NeighbourSurfacesData* neighbourSurfacesData = new NeighbourSurfacesData();
 
   sens.setType("tracker");
 
@@ -281,23 +240,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
       DetElement staveElement = staveElementTemplate.clone(moduleName, i);
       staveElement.setPlacement(stavePv);
       lay_elt.add(staveElement);
-
-      for (int j = 0; j < nz; j++) {
-
-        ///////////////////
-
-        // get cellID and fill map< cellID of surface, vector of cellID of neighbouring surfaces >
-
-        // encoding
-
-        encoder[lcio::LCTrackerCellID::layer()] = lay_id;
-        encoder[lcio::LCTrackerCellID::module()] = i;
-        encoder[lcio::LCTrackerCellID::sensor()] = j;
-
-        populateNeighbourData(neighbourSurfacesData, encoder, i, j, nphi, nz);
-
-        ///////////////////
-      }
     }
     // Create the PhysicalVolume for the layer.
     pv = envelope.placeVolume(lay_vol); // Place layer in mother
@@ -307,7 +249,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   }
   sdet.setAttributes(theDetector, envelope, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   sdet.addExtension<ZPlanarData>(zPlanarData);
-  sdet.addExtension<NeighbourSurfacesData>(neighbourSurfacesData);
 
   // envelope.setVisAttributes(theDetector.invisible());
   /*pv = theDetector.pickMotherVolume(sdet).placeVolume(assembly);
