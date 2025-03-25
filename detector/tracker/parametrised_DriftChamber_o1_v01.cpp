@@ -1,7 +1,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DDSegmentation/Segmentation.h"
-#include "detectorSegmentations/GridSimplifiedDriftChamber_k4geo.h"
 #include "XML/XMLElements.h"
+#include "detectorSegmentations/GridSimplifiedDriftChamber_k4geo.h"
 
 namespace det {
 
@@ -11,7 +11,7 @@ static dd4hep::Ref_t createParamSimplifiedDriftChamber(dd4hep::Detector& theDete
   auto delta_a_func = [](auto x, auto y) { return 2 * std::sqrt((x + y) * (x - y)); };
   auto epsilon_func = [](auto delta_a, auto L) {
     return std::atan(delta_a / L);
-  };  // L is the full length of the detector
+  }; // L is the full length of the detector
   // ----------------------------- //
 
   xml_det_t x_det = e;
@@ -50,9 +50,10 @@ static dd4hep::Ref_t createParamSimplifiedDriftChamber(dd4hep::Detector& theDete
       auto layer_id = superlayer * nRing + iring;
       int numWire = 192 + superlayer * 48;
 
-      double R_i0 = r0 + (layer_id)*cellDimension;  // Location of the wire at z=0
-      double R_i = R_i0 /
-          std::cos(alpha / 2.0);  // the radius of the circle containing the wire (at z=halfLength or z=-halfLength)
+      double R_i0 = r0 + (layer_id)*cellDimension; // Location of the wire at z=0
+      double R_i =
+          R_i0 /
+          std::cos(alpha / 2.0); // the radius of the circle containing the wire (at z=halfLength or z=-halfLength)
       double sign_eps = 1;
       if (layer_id % 2) {
         sign_eps = -1;
@@ -72,7 +73,7 @@ static dd4hep::Ref_t createParamSimplifiedDriftChamber(dd4hep::Detector& theDete
       double eps_out = epsilon_func(delta_a_out, halfLength * 2);
 
       if (layer_id == 0) {
-        dd4hep::Hyperboloid negativeVol(0, 0, r_in0, eps_in, 5 * halfLength);  // to avoid overlaps
+        dd4hep::Hyperboloid negativeVol(0, 0, r_in0, eps_in, 5 * halfLength); // to avoid overlaps
         dd4hep::SubtractionSolid envelopeShape(envelopeVol, negativeVol);
         envelopeVolume = dd4hep::Volume(x_det.nameStr(), envelopeShape, theDetector.material("Air"));
         envelopeVolume.setVisAttributes(theDetector, detectorDim.visStr());
@@ -92,13 +93,13 @@ static dd4hep::Ref_t createParamSimplifiedDriftChamber(dd4hep::Detector& theDete
       pv = envelopeVolume.placeVolume(hyperbolVol);
       pv.addPhysVolID("layer", layer_id);
     }
-  }  // end superlayer
+  } // end superlayer
 
   pv = mother.placeVolume(envelopeVolume);
   pv.addPhysVolID("system", x_det.id());
   sdet.setPlacement(pv);
   return sdet;
 }
-}
+} // namespace det
 
 DECLARE_DETELEMENT(parametrised_SimplifiedDriftChamber_o1_v01, det::createParamSimplifiedDriftChamber)

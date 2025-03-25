@@ -5,7 +5,6 @@
 
 #include "DD4hep/DetFactoryHelper.h"
 
-
 namespace dd4hep {
 namespace DDSegmentation {
   class DRparamBarrel_k4geo : public DRparamBase_k4geo {
@@ -18,7 +17,7 @@ namespace DDSegmentation {
 
     virtual void init() override;
   };
-}
-}
+} // namespace DDSegmentation
+} // namespace dd4hep
 
 #endif

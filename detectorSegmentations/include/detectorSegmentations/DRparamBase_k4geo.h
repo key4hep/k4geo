@@ -1,11 +1,11 @@
 #ifndef DETSEGMENTATION_DRPARAMBASE_H
 #define DETSEGMENTATION_DRPARAMBASE_H
 
-#include "TVector3.h"
 #include "DD4hep/DetFactoryHelper.h"
+#include "TVector3.h"
 
-#include <vector>
 #include <cmath>
+#include <vector>
 
 namespace dd4hep {
 namespace DDSegmentation {
@@ -17,7 +17,10 @@ namespace DDSegmentation {
     void SetIsRHS(bool isRHS) { fIsRHS = isRHS; }
     void SetInnerX(double innerX) { fInnerX = innerX; }
     void SetTowerH(double towerH) { fTowerH = towerH; }
-    void SetNumZRot(int num) { fNumZRot = num; fPhiZRot = 2*M_PI/(double)num; }
+    void SetNumZRot(int num) {
+      fNumZRot = num;
+      fPhiZRot = 2 * M_PI / (double)num;
+    }
     void SetDeltaTheta(double theta) { fDeltaTheta = theta; }
     void SetThetaOfCenter(double theta) { fThetaOfCenter = theta; }
     void SetSipmHeight(double SipmHeight) { fSipmHeight = SipmHeight; }
@@ -27,15 +30,15 @@ namespace DDSegmentation {
     double GetTowerH() { return fTowerH; }
     double GetSipmHeight() { return fSipmHeight; }
     double GetH1() { return fCurrentInnerHalf; }
-    double GetBl1() { return fV3.X()*std::tan(fPhiZRot/2.); }
-    double GetTl1() { return fV1.X()*std::tan(fPhiZRot/2.); }
+    double GetBl1() { return fV3.X() * std::tan(fPhiZRot / 2.); }
+    double GetTl1() { return fV1.X() * std::tan(fPhiZRot / 2.); }
     double GetH2() { return fCurrentOuterHalf; }
-    double GetBl2() { return fV4.X()*std::tan(fPhiZRot/2.); }
-    double GetTl2() { return fV2.X()*std::tan(fPhiZRot/2.); }
+    double GetBl2() { return fV4.X() * std::tan(fPhiZRot / 2.); }
+    double GetTl2() { return fV2.X() * std::tan(fPhiZRot / 2.); }
 
     double GetH2sipm() { return fCurrentOuterHalfSipm; }
-    double GetBl2sipm() { return fV4sipm.X()*std::tan(fPhiZRot/2.); }
-    double GetTl2sipm() { return fV2sipm.X()*std::tan(fPhiZRot/2.); }
+    double GetBl2sipm() { return fV4sipm.X() * std::tan(fPhiZRot / 2.); }
+    double GetTl2sipm() { return fV2sipm.X() * std::tan(fPhiZRot / 2.); }
 
     dd4hep::RotationZYX GetRotationZYX(int numPhi);
     dd4hep::Position GetTowerPos(int numPhi);
@@ -46,12 +49,12 @@ namespace DDSegmentation {
     dd4hep::Transform3D GetAssembleTransform3D(int numPhi);
     dd4hep::Transform3D GetSipmTransform3D(int numPhi);
 
-    int signedTowerNo(int unsignedTowerNo) { return fIsRHS ? unsignedTowerNo : -unsignedTowerNo-1; }
-    int unsignedTowerNo(int signedTowerNo) { return signedTowerNo >= 0 ? signedTowerNo : -signedTowerNo-1; }
+    int signedTowerNo(int unsignedTowerNo) { return fIsRHS ? unsignedTowerNo : -unsignedTowerNo - 1; }
+    int unsignedTowerNo(int signedTowerNo) { return signedTowerNo >= 0 ? signedTowerNo : -signedTowerNo - 1; }
 
-    virtual void SetDeltaThetaByTowerNo(int , int ) {}
-    virtual void SetThetaOfCenterByTowerNo(int , int ) {}
-    void SetIsRHSByTowerNo(int signedTowerNo) { fIsRHS = ( signedTowerNo >=0 ? true : false ); }
+    virtual void SetDeltaThetaByTowerNo(int, int) {}
+    virtual void SetThetaOfCenterByTowerNo(int, int) {}
+    void SetIsRHSByTowerNo(int signedTowerNo) { fIsRHS = (signedTowerNo >= 0 ? true : false); }
 
     int GetTotTowerNum() { return fTotNum; }
     void SetTotTowerNum(int totNum) { fTotNum = totNum; }
@@ -93,7 +96,7 @@ namespace DDSegmentation {
     bool fFilled;
     bool fFinalized;
   };
-}
-}
+} // namespace DDSegmentation
+} // namespace dd4hep
 
 #endif

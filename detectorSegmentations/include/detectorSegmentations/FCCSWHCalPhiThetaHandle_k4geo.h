@@ -12,10 +12,10 @@
 namespace dd4hep {
 /// Namespace for base segmentations
 
-
 // Forward declarations
 class Segmentation;
-template <typename T> class SegmentationWrapper;
+template <typename T>
+class SegmentationWrapper;
 
 /// We need some abbreviation to make the code more readable.
 typedef Handle<SegmentationWrapper<DDSegmentation::FCCSWHCalPhiTheta_k4geo>> FCCSWHCalPhiThetaHandle_k4geo;
@@ -90,19 +90,19 @@ public:
   inline void setDetLayout(int detLayout) const { access()->implementation->setDetLayout(detLayout); }
 
   /// set the coordinate offset in z-axis
-  inline void setOffsetZ(std::vector<double> const&offset) const { access()->implementation->setOffsetZ(offset); }
+  inline void setOffsetZ(std::vector<double> const& offset) const { access()->implementation->setOffsetZ(offset); }
 
   /// set the z width
-  inline void setWidthZ(std::vector<double> const&width) const { access()->implementation->setWidthZ(width); }
+  inline void setWidthZ(std::vector<double> const& width) const { access()->implementation->setWidthZ(width); }
 
   /// set the offset in radius
-  inline void setOffsetR(std::vector<double> const&offset) const { access()->implementation->setOffsetR(offset); }
+  inline void setOffsetR(std::vector<double> const& offset) const { access()->implementation->setOffsetR(offset); }
 
   /// set the number of layers with different dR
-  inline void setNumLayers(std::vector<int> const&num) const { access()->implementation->setNumLayers(num); }
+  inline void setNumLayers(std::vector<int> const& num) const { access()->implementation->setNumLayers(num); }
 
   /// set the dR of each layer
-  inline void setdRlayer(std::vector<double> const&dRlayer) const { access()->implementation->setdRlayer(dRlayer); }
+  inline void setdRlayer(std::vector<double> const& dRlayer) const { access()->implementation->setdRlayer(dRlayer); }
 
   /// set the grid size in theta
   inline void setGridSizeTheta(double cellSize) const { access()->implementation->setGridSizeTheta(cellSize); }
@@ -119,7 +119,6 @@ public:
   /// access the field name used for layer
   inline const std::string& fieldNameLayer() const { return access()->implementation->fieldNameLayer(); }
 
-
   /** \brief Returns a std::vector<double> of the cellDimensions of the given cell ID
       in natural order of dimensions (dPhi, dTheta)
 
@@ -135,4 +134,4 @@ public:
 };
 
 } /* End namespace dd4hep */
-#endif  // DETECTORSEGMENTATIONS_HCALPHITHETAHANDLE_K4GEO_H
+#endif // DETECTORSEGMENTATIONS_HCALPHITHETAHANDLE_K4GEO_H

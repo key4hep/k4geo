@@ -7,17 +7,18 @@
 //
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
-#include "XML/Layering.h"
-#include "XML/Utilities.h"
 #include "DDRec/DetectorData.h"
 #include "DDSegmentation/Segmentation.h"
+#include "XML/Layering.h"
+#include "XML/Utilities.h"
 
 using namespace std;
 
-using dd4hep::BUILD_ENVELOPE;
+using dd4hep::_toString;
 using dd4hep::Box;
-using dd4hep::DetElement;
+using dd4hep::BUILD_ENVELOPE;
 using dd4hep::Detector;
+using dd4hep::DetElement;
 using dd4hep::Layer;
 using dd4hep::Layering;
 using dd4hep::Material;
@@ -32,13 +33,11 @@ using dd4hep::Transform3D;
 using dd4hep::Translation3D;
 using dd4hep::Trapezoid;
 using dd4hep::Volume;
-using dd4hep::_toString;
 
 using dd4hep::rec::LayeredCalorimeterData;
 
 static void placeStaves(DetElement& parent, DetElement& stave, double rmin, int numsides, double total_thickness,
-                        Volume envelopeVolume, double innerAngle, Volume sectVolume)
-{
+                        Volume envelopeVolume, double innerAngle, Volume sectVolume) {
   double innerRotation = innerAngle;
   double offsetRotation = -innerRotation / 2;
   double sectCenterRadius = rmin + total_thickness / 2;
@@ -61,7 +60,6 @@ static void placeStaves(DetElement& parent, DetElement& stave, double rmin, int 
   }
 }
 
-
 static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens) {
   xml_det_t x_det = e;
   Layering layering(x_det);
@@ -82,13 +80,14 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   Readout readout = sens.readout();
   Segmentation seg = readout.segmentation();
 
-  std::vector<double> cellSizeVector = seg.segmentation()->cellDimensions(0); //Assume uniform cell sizes, provide dummy cellID
-  double cell_sizeX      = cellSizeVector[0];
-  double cell_sizeY      = cellSizeVector[1];
+  std::vector<double> cellSizeVector =
+      seg.segmentation()->cellDimensions(0); // Assume uniform cell sizes, provide dummy cellID
+  double cell_sizeX = cellSizeVector[0];
+  double cell_sizeY = cellSizeVector[1];
 
-  //Create caloData object to extend driver with data required for reconstruction
-  LayeredCalorimeterData* caloData = new LayeredCalorimeterData ;
-  caloData->layoutType = LayeredCalorimeterData::BarrelLayout ;
+  // Create caloData object to extend driver with data required for reconstruction
+  LayeredCalorimeterData* caloData = new LayeredCalorimeterData;
+  caloData->layoutType = LayeredCalorimeterData::BarrelLayout;
   caloData->inner_symmetry = nsides;
   caloData->outer_symmetry = nsides;
 
@@ -101,20 +100,21 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
   caloData->inner_phi0 = 0.;
   caloData->outer_phi0 = 0.;
-  caloData->gap0 = 0.; //FIXME
-  caloData->gap1 = 0.; //FIXME
-  caloData->gap2 = 0.; //FIXME
+  caloData->gap0 = 0.; // FIXME
+  caloData->gap1 = 0.; // FIXME
+  caloData->gap2 = 0.; // FIXME
 
-// --- create an envelope volume and position it into the world ---------------------
+  // --- create an envelope volume and position it into the world ---------------------
 
-  Volume envelopeVol = dd4hep::xml::createPlacedEnvelope(theDetector,  e , sdet) ;
+  Volume envelopeVol = dd4hep::xml::createPlacedEnvelope(theDetector, e, sdet);
 
-  if (theDetector.buildType() == BUILD_ENVELOPE) return sdet ;
+  if (theDetector.buildType() == BUILD_ENVELOPE)
+    return sdet;
 
   //-----------------------------------------------------------------------------------
 
-//  PolyhedraRegular polyhedra(nsides, rmin, rmin + totalThickness, detZ);
-//  Volume envelopeVol(det_name, polyhedra, air);
+  //  PolyhedraRegular polyhedra(nsides, rmin, rmin + totalThickness, detZ);
+  //  Volume envelopeVol(det_name, polyhedra, air);
 
   std::cout << "!!!!!!!!!!" << std::setprecision(16) << rmin + totalThickness << std::endl;
 
@@ -127,10 +127,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   double staveThickness = totalThickness;
 
   /// extent of the calorimeter in the r-z-plane [ rmin, rmax, zmin, zmax ] in mm.
-  caloData->extent[0] = rmin ;
-  caloData->extent[1] = rmin + totalThickness ;
-  caloData->extent[2] = 0. ;
-  caloData->extent[3] = detZ / 2.0 ;
+  caloData->extent[0] = rmin;
+  caloData->extent[1] = rmin + totalThickness;
+  caloData->extent[2] = 0.;
+  caloData->extent[3] = detZ / 2.0;
 
   Trapezoid staveTrdOuter(innerFaceLen / 2, outerFaceLen / 2, detZ / 2, detZ / 2, staveThickness / 2);
   Volume staveOuterVol("stave_outer", staveTrdOuter, air);
@@ -144,22 +144,21 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   double layer_dim_x = innerFaceLen / 2 - gap * 2;
   int layer_num = 1;
 
-  //#### LayeringExtensionImpl* layeringExtension = new LayeringExtensionImpl();
-  //#### Position layerNormal(0,0,1);
+  // #### LayeringExtensionImpl* layeringExtension = new LayeringExtensionImpl();
+  // #### Position layerNormal(0,0,1);
 
   for (xml_coll_t c(x_det, _U(layer)); c; ++c) {
     xml_comp_t x_layer = c;
-    int repeat = x_layer.repeat();            // Get number of times to repeat this layer.
+    int repeat = x_layer.repeat();                    // Get number of times to repeat this layer.
     const Layer* lay = layering.layer(layer_num - 1); // Get the layer from the layering engine.
     // Loop over repeats for this layer.
     for (int j = 0; j < repeat; j++) {
       string layer_name = _toString(layer_num, "layer%d");
       double layer_thickness = lay->thickness();
       DetElement layer(stave, layer_name, layer_num);
-      //### layeringExtension->setLayer(layer_num, layer, layerNormal);
+      // ### layeringExtension->setLayer(layer_num, layer, layerNormal);
 
-      LayeredCalorimeterData::Layer caloLayer ;
-
+      LayeredCalorimeterData::Layer caloLayer;
 
       // Layer position in Z within the stave.
       layer_pos_z += layer_thickness / 2;
@@ -172,7 +171,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
       double totalAbsorberThickness = 0.;
 
-      double th_i(0.), th_o(-1.) ;
+      double th_i(0.), th_o(-1.);
       for (xml_coll_t k(x_layer, _U(slice)); k; ++k) {
         xml_comp_t x_slice = k;
         string slice_name = _toString(slice_number, "slice%d");
@@ -187,23 +186,20 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         if (x_slice.isRadiator() == true)
           totalAbsorberThickness += slice_thickness;
 
-
-
         if (x_slice.isSensitive()) {
           sens.setType("calorimeter");
           slice_vol.setSensitiveDetector(sens);
-	  
-	  th_i += slice_thickness / 2. ;
-	  th_o  = slice_thickness / 2. ;
 
-	} else {
-	  if( th_o < 0. ){
-	    th_i += slice_thickness;
-	  } else {
-	    th_o += slice_thickness;
-	  }
-	}
+          th_i += slice_thickness / 2.;
+          th_o = slice_thickness / 2.;
 
+        } else {
+          if (th_o < 0.) {
+            th_i += slice_thickness;
+          } else {
+            th_o += slice_thickness;
+          }
+        }
 
         // Set region, limitset, and vis.
         slice_vol.setAttributes(theDetector, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
@@ -224,19 +220,18 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
       layer_phv.addPhysVolID("layer", layer_num);
       layer.setPlacement(layer_phv);
 
-
-      ///FIXME! CHECK IF THEY ARE RIGHT. MIGHT BE OFF BY SOME TRIG FUNCTION OF SOME ANGLE
-      caloLayer.distance = rmin + layer_pos_z + staveThickness / 2; //NEED TO START FROM ORIGIN
-      caloLayer.inner_thickness = th_i ;
-      caloLayer.outer_thickness = th_o ;
+      /// FIXME! CHECK IF THEY ARE RIGHT. MIGHT BE OFF BY SOME TRIG FUNCTION OF SOME ANGLE
+      caloLayer.distance = rmin + layer_pos_z + staveThickness / 2; // NEED TO START FROM ORIGIN
+      caloLayer.inner_thickness = th_i;
+      caloLayer.outer_thickness = th_o;
       caloLayer.absorberThickness = totalAbsorberThickness;
       caloLayer.cellSize0 = cell_sizeX;
       caloLayer.cellSize1 = cell_sizeY;
 
-      caloData->layers.push_back(caloLayer) ;
+      caloData->layers.push_back(caloLayer);
 
       // Increment the layer X dimension.
-      layer_dim_x += layer_thickness * std::tan(layerInnerAngle);    // * 2;
+      layer_dim_x += layer_thickness * std::tan(layerInnerAngle); // * 2;
       // Increment the layer Z position.
       layer_pos_z += layer_thickness / 2;
       // Increment the layer number.
@@ -246,7 +241,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
   // Add stave inner physical volume to outer stave volume.
   staveOuterVol.placeVolume(staveInnerVol);
-  if (staves)  {
+  if (staves) {
     // Set the vis attributes of the outer stave section.
     stave.setVisAttributes(theDetector, staves.visStr(), staveInnerVol);
     stave.setVisAttributes(theDetector, staves.visStr(), staveOuterVol);
@@ -256,10 +251,9 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   // Set envelope volume attributes.
   envelopeVol.setAttributes(theDetector, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
 
-
-  //FOR NOW, USE A MORE "SIMPLE" VERSION OF EXTENSIONS, INCLUDING NECESSARY GEAR PARAMETERS
-  //Copied from Frank's SECalSc04 Implementation
-  sdet.addExtension< LayeredCalorimeterData >(caloData) ;
+  // FOR NOW, USE A MORE "SIMPLE" VERSION OF EXTENSIONS, INCLUDING NECESSARY GEAR PARAMETERS
+  // Copied from Frank's SECalSc04 Implementation
+  sdet.addExtension<LayeredCalorimeterData>(caloData);
 
   return sdet;
 }
