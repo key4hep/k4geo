@@ -29,7 +29,6 @@ public:
     mOpWLSNumIntLenLeft = DBL_MAX;
     mStepLengthInterval = 0.;
   }
-  ~FastFiberData() = default;
 
   void reset() {
     this->mOpBoundaryStatus = G4OpBoundaryProcessStatus::Undefined;

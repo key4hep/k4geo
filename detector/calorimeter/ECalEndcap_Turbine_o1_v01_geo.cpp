@@ -4,15 +4,6 @@
 #include "XML/Utilities.h"
 #include <DDRec/DetectorData.h>
 
-// todo: remove gaudi logging and properly capture output
-#define endmsg std::endl
-#define lLog std::cout
-namespace MSG {
-const std::string ERROR = " Error: ";
-const std::string DEBUG = " Debug: ";
-const std::string INFO = " Info: ";
-} // namespace MSG
-
 namespace det {
 
 unsigned ECalEndCapElementCounter = 0;
