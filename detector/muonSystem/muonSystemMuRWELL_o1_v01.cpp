@@ -1246,7 +1246,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
       }
     }
   }
-  }
+  
   // ------------------------------------------------------------------------------------------- 
   return detElement;
 }
