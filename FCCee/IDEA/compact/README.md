@@ -28,6 +28,8 @@ September 2024: Added detailed version of the pre-shower, based on muon system b
 
 Febraury 2025: Added surface plugins for both muon-system and preshower, with adopting the detElement hierarchy.
 
+March 2025: The SiPM & optical filter part of the fiber DRC SD action are now moved to the k4RecCalorimeter (now part of the SiPM simulation)
+
 IDEA_o2_v01
 ------------
 
