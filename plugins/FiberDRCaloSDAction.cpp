@@ -314,10 +314,6 @@ namespace sim {
       G4double hitTime = step->GetPostStepPoint()->GetGlobalTime();
       G4double energy = step->GetTrack()->GetTotalEnergy();
 
-      dd4hep::DDSegmentation::VolumeID ceren =
-          static_cast<dd4hep::DDSegmentation::VolumeID>(m_segmentation->decoder()->get(cID, "c"));
-      bool IsCeren = static_cast<bool>(ceren);
-
       if (!hit) {
         hit = new Geant4DRCalorimeter::Hit(m_userData.fWavlenStep, m_userData.fTimeStep);
         hit->cellID = cID;
