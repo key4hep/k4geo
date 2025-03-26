@@ -36,13 +36,15 @@ ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
 SET( test_name "test_ILD_FCCee_v01" )
-ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
-  ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ILD_FCCee/compact/ILD_FCCee_v01/ILD_FCCee_v01.xml --runType=batch -G -N=1 --outputFile=testILD_FCCee_v01.slcio )
+ADD_TEST( t_${test_name} sh -c "
+ ${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ILD_FCCee/compact/ILD_FCCee_v01/ILD_FCCee_v01.xml --runType=batch -G -N=1 --outputFile=testILD_FCCee_v01.slcio 2>&1 |
+  python3 ${CMAKE_CURRENT_SOURCE_DIR}/scripts/filter_G4Tessellated_warnings.py")
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
 SET( test_name "test_ILD_FCCee_v02" )
-ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
-  ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ILD_FCCee/compact/ILD_FCCee_v02/ILD_FCCee_v02.xml --runType=batch -G -N=1 --outputFile=testILD_FCCee_v02.slcio )
+ADD_TEST( t_${test_name} sh -c "
+ ${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ILD_FCCee/compact/ILD_FCCee_v02/ILD_FCCee_v02.xml --runType=batch -G -N=1 --outputFile=testILD_FCCee_v02.slcio 2>&1 |
+  python3 ${CMAKE_CURRENT_SOURCE_DIR}/scripts/filter_G4Tessellated_warnings.py")
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
 #--------------------------------------------------
