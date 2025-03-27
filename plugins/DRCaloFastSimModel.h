@@ -1,23 +1,22 @@
 #ifndef DRCaloFastSimModel_h
 #define DRCaloFastSimModel_h
 
-#include "G4OpBoundaryProcess.hh"
 #include "G4GenericMessenger.hh"
-#include "G4OpAbsorption.hh"
-#include "G4OpWLS.hh"
 #include "G4Material.hh"
+#include "G4OpAbsorption.hh"
+#include "G4OpBoundaryProcess.hh"
+#include "G4OpWLS.hh"
+#include <G4GeometryTolerance.hh>
+#include <G4OpProcessSubType.hh>
 #include <G4ParticleDefinition.hh>
 #include <G4ParticleTypes.hh>
 #include <G4ProcessManager.hh>
-#include <G4OpProcessSubType.hh>
-#include <G4GeometryTolerance.hh>
 #include <G4Tubs.hh>
 
 struct FastFiberData {
 public:
-  FastFiberData(G4int id, G4double en, G4double globTime, G4double path,
-                G4ThreeVector pos, G4ThreeVector mom, G4ThreeVector pol,
-                G4int status = G4OpBoundaryProcessStatus::Undefined) {
+  FastFiberData(G4int id, G4double en, G4double globTime, G4double path, G4ThreeVector pos, G4ThreeVector mom,
+                G4ThreeVector pol, G4int status = G4OpBoundaryProcessStatus::Undefined) {
     trackID = id;
     kineticEnergy = en;
     globalTime = globTime;
@@ -30,7 +29,6 @@ public:
     mOpWLSNumIntLenLeft = DBL_MAX;
     mStepLengthInterval = 0.;
   }
-  ~FastFiberData()=default;
 
   void reset() {
     this->mOpBoundaryStatus = G4OpBoundaryProcessStatus::Undefined;
@@ -56,7 +54,8 @@ public:
       return false;
     if (this->mOpBoundaryStatus != theData.mOpBoundaryStatus)
       return false;
-    if (checkInterval && std::abs(this->mStepLengthInterval - theData.mStepLengthInterval) > G4GeometryTolerance::GetInstance()->GetSurfaceTolerance())
+    if (checkInterval && std::abs(this->mStepLengthInterval - theData.mStepLengthInterval) >
+                             G4GeometryTolerance::GetInstance()->GetSurfaceTolerance())
       return false;
 
     return true;
@@ -79,8 +78,8 @@ private:
 
 class DRCFiberModel {
 public:
-  DRCFiberModel()=default;
-  ~DRCFiberModel()=default;
+  DRCFiberModel() = default;
+  ~DRCFiberModel() = default;
 
   G4OpBoundaryProcess* pOpBoundaryProc = nullptr;
   G4OpAbsorption* pOpAbsorption = nullptr;
@@ -100,7 +99,7 @@ public:
   G4bool fSwitch = true;
   G4int fVerbose = 0;
 
-  G4bool checkTotalInternalReflection(const G4Track *track) {
+  G4bool checkTotalInternalReflection(const G4Track* track) {
     if (!fProcAssigned)
       setPostStepProc(track); // locate OpBoundaryProcess only once
 
@@ -126,7 +125,8 @@ public:
     // some cases have a status StepTooSmall when the reflection happens
     // between the boundary of cladding & outer volume (outside->cladding)
     // since the outer volume is not a G4Region
-    if (theStatus == G4OpBoundaryProcessStatus::TotalInternalReflection || theStatus == G4OpBoundaryProcessStatus::StepTooSmall) {
+    if (theStatus == G4OpBoundaryProcessStatus::TotalInternalReflection ||
+        theStatus == G4OpBoundaryProcessStatus::StepTooSmall) {
       if (theStatus != G4OpBoundaryProcessStatus::TotalInternalReflection) {
         // skip StepTooSmall if the track already has TotalInternalReflection
         if (mDataCurrent.GetOpBoundaryStatus() == G4OpBoundaryProcessStatus::TotalInternalReflection)
@@ -143,8 +143,8 @@ public:
       G4ThreeVector momentumDirection = track->GetMomentumDirection();
       G4ThreeVector polarization = track->GetPolarization();
 
-      auto candidate = FastFiberData(trackID, kineticEnergy, globalTime, pathLength,
-                                     globalPosition, momentumDirection, polarization, theStatus);
+      auto candidate = FastFiberData(trackID, kineticEnergy, globalTime, pathLength, globalPosition, momentumDirection,
+                                     polarization, theStatus);
 
       if (pOpAbsorption != nullptr)
         candidate.SetAbsorptionNILL(pOpAbsorption->GetNumberOfInteractionLengthLeft());
@@ -235,7 +235,8 @@ public:
     auto solid = theTouchable->GetSolid();
 
     if (fVerbose > 0)
-      print(); // at this point, the track should have passed all prerequisites before entering computationally heavy operations
+      print(); // at this point, the track should have passed all prerequisites before entering computationally heavy
+               // operations
 
     if (solid->GetEntityType() != "G4Tubs")
       return false; // only works for G4Tubs at the moment
@@ -250,7 +251,8 @@ public:
     mTransportUnit = delta.dot(mFiberAxis);
 
     // estimate the number of expected total internal reflections before reaching fiber end
-    auto fiberEnd = (mTransportUnit > 0.) ? mFiberPos + mFiberAxis * fiberLen / 2. : mFiberPos - mFiberAxis * fiberLen / 2.;
+    auto fiberEnd =
+        (mTransportUnit > 0.) ? mFiberPos + mFiberAxis * fiberLen / 2. : mFiberPos - mFiberAxis * fiberLen / 2.;
     auto toEnd = fiberEnd - track->GetPosition();
     G4double toEndAxis = toEnd.dot(mFiberAxis);
     G4double maxTransport = std::floor(toEndAxis / mTransportUnit);
@@ -267,8 +269,8 @@ public:
     return true;
   }
 
-  void setPostStepProc(const G4Track *track) {
-    G4ProcessManager *pm = track->GetDefinition()->GetProcessManager();
+  void setPostStepProc(const G4Track* track) {
+    G4ProcessManager* pm = track->GetDefinition()->GetProcessManager();
     auto postStepProcessVector = pm->GetPostStepProcessVector();
 
     for (unsigned int np = 0; np < postStepProcessVector->entries(); np++) {
@@ -280,11 +282,11 @@ public:
         continue;
 
       if (theProcess->GetProcessSubType() == G4OpProcessSubType::fOpBoundary)
-        pOpBoundaryProc = dynamic_cast<G4OpBoundaryProcess *>(theProcess);
+        pOpBoundaryProc = dynamic_cast<G4OpBoundaryProcess*>(theProcess);
       else if (theProcess->GetProcessSubType() == G4OpProcessSubType::fOpAbsorption)
-        pOpAbsorption = dynamic_cast<G4OpAbsorption *>(theProcess);
+        pOpAbsorption = dynamic_cast<G4OpAbsorption*>(theProcess);
       else if (theProcess->GetProcessSubType() == G4OpProcessSubType::fOpWLS)
-        pOpWLS = dynamic_cast<G4OpWLS *>(theProcess);
+        pOpWLS = dynamic_cast<G4OpWLS*>(theProcess);
     }
 
     fProcAssigned = true;
