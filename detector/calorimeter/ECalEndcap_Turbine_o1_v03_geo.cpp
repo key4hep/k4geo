@@ -15,9 +15,9 @@ namespace det {
 
   namespace ECalEndcap_Turbine_o1_v03 {
     unsigned ECalEndCapElementCounter = 0;
-    const unsigned nWheels = 3;
+    const unsigned nWheelsMax = 3;
 
-    unsigned ECalEndcapNumCalibRhoLayersArr[nWheels], ECalEndcapNumCalibZLayersArr[nWheels];
+    unsigned ECalEndcapNumCalibRhoLayersArr[nWheelsMax], ECalEndcapNumCalibZLayersArr[nWheelsMax];
     
   
     double tForArcLength(double s, double bladeangle, double delZ, double r) {
@@ -658,9 +658,9 @@ namespace det {
       double zOffsetEnvelope = -length / 2.;
  
       dd4hep::xml::DetElement supportTubeElem = calo.child(_Unicode(supportTube));
-      unsigned nWheelsXML = supportTubeElem.attr<unsigned>(_Unicode(nWheels));
-      if (nWheelsXML != nWheels) {
-	dd4hep::printout(dd4hep::ERROR, "ECalEndcap_Turbine_o1_v03",  "Number of wheels in XML (%d) does not match hard-coded number of wheels (%d) ",  nWheelsXML, nWheels);
+      unsigned nWheels = supportTubeElem.attr<unsigned>(_Unicode(nWheels));
+      if (nWheels > nWheelsMax) {
+	dd4hep::printout(dd4hep::ERROR, "ECalEndcap_Turbine_o1_v03",  "Number of wheels in XML (%d) is larger than hard-coded limit on number of wheels (%d) ",  nWheels, nWheelsMax);
       }
       
       dd4hep::printout(dd4hep::INFO, "ECalEndcap_Turbine_o1_v03",  "Will build %d wheels",  nWheels);
