@@ -16,4 +16,3 @@ Added HCalBarrel_TileCal_v02.xml which uses HCalTileBarrel_o1_v02_geo.cpp and re
 Added HCalEndcaps_ThreeParts_TileCal_v02.xml which uses HCalThreePartsEndcap_o1_v02_geo.cpp. Additionally, wrt v02 the readout was migrated to the theta-phi segmentation; unused readout *Readout_phi was removed; radial dimensions of layers were modified, so the outer radius of all three cylinders is the same.
 For the muon tagger, switched from eta-phi to theta-phi segmentation.
 
-
