@@ -6,13 +6,6 @@
 // todo: remove gaudi logging and properly capture output
 #define endmsg std::endl
 #define lLog std::cout
-namespace MSG {
-
-  const std::string ERROR = " Error: ";
-  const std::string DEBUG = " Debug: ";
-  const std::string INFO  = " Info: ";
-
-}
 
 namespace det {
 
@@ -135,8 +128,10 @@ namespace det {
       float LArgapi = nobleLiquidElem.attr<float>(_Unicode(gap));
     
       bool sameNUnitCells = genericBladeElem.attr<bool>(_Unicode(sameNUnitCells));
-      char* nUnitCellsStrArr = (char*)genericBladeElem.attr<std::string>(_Unicode(nUnitCells)).c_str();
-      char* nUnitCellsCStr = strtok(nUnitCellsStrArr, " ");   
+      std::string nUnitCellsStrArr = genericBladeElem.attr<std::string>(_Unicode(nUnitCells));
+      char* nUnitCellsStrChar = new char[nUnitCellsStrArr.length() + 1];
+      std::strcpy(nUnitCellsStrChar, nUnitCellsStrArr.c_str()); 
+      char* nUnitCellsCStr = strtok(nUnitCellsStrChar, " ");   
 
 
       if (!sameNUnitCells) {
@@ -177,7 +172,6 @@ namespace det {
       delrPhiGapOnly = leftoverS/(2*nUnitCells);   
       float LArgapo = delrPhiGapOnly*TMath::Sin(BladeAngle);
     
-      dd4hep::Solid absBlade;
       float riLayer = ri;
 
       std::vector<dd4hep::Volume> claddingLayerVols;
@@ -620,8 +614,6 @@ namespace det {
       double ri = rmin;
 
       float supportTubeThickness=supportTubeElem.thickness();
-      unsigned iSupportTube = 0;
-
       
       for (unsigned iWheel = 0; iWheel < nWheels; iWheel++) {
    
@@ -642,7 +634,6 @@ namespace det {
 	ri = ro;
 	ro *= radiusRatio;
 	if (ro > rmax) ro = rmax;
-	iSupportTube++;
       }
 
 
