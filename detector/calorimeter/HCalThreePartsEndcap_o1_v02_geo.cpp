@@ -453,7 +453,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
     dd4hep::printout(dd4hep::DEBUG, "HCalThreePartsEndcap_o1_v02", "Layers in r : %d", layers.size());
     dd4hep::printout(dd4hep::DEBUG, "HCalThreePartsEndcap_o1_v02", "Tiles in layers : %d", tilesPerLayer.size());
 
-    // Place det elements wihtin each other to recover volume positions later via cellID
+    // Place det elements within each other to recover volume positions later via cellID
     for (uint iLayer = 0; iLayer < (layerDepths1.size() + layerDepths2.size() + layerDepths3.size()); iLayer++) {
       DetElement layerDet(caloDetElem, dd4hep::xml::_toString(sign * (iLayer + 1), "layer%d"), sign * (iLayer + 1));
       layerDet.setPlacement(layers[iLayer]);
