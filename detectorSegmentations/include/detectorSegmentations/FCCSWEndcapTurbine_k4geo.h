@@ -8,8 +8,9 @@
 
 /** FCCSWEndcapTurbine_k4geo
  *
- *  Segmentation for turbine-style endcap calorimeter
- *
+ *  Segmentation for turbine-style endcap calorimeter, allowing for 
+ *  modules to be merged to reduce the readout channel count
+*
  */
 
 namespace dd4hep {
@@ -163,11 +164,17 @@ namespace DDSegmentation {
       TVector3 vec(aposition.X, aposition.Y, aposition.Z);
       return vec.Perp();
     }
+    inline double phiFromXYZ(const Vector3D& aposition) const {
+      TVector3 vec(aposition.X, aposition.Y, aposition.Z);
+      return vec.Phi();
+    }
 
     /** return the number of unit cells in each wheel
      * @param[in] iWheel wheel identifier
      */
-    inline int nModules(int iWheel) { return m_nUnitCells[iWheel]; }
+    inline int nModules(int iWheel) {
+      return m_nUnitCells[iWheel]/m_mergedModules[iWheel];
+    }
     /** return the expected value of the layer index
      * @param[in] iWheel wheel identifier
      * @param[in] iRho rho readout cell identifier
@@ -180,6 +187,8 @@ namespace DDSegmentation {
     std::vector<double> m_bladeAngle;
     /// number of unit cells in each wheel
     std::vector<int> m_nUnitCells;
+    /// number of merged modules in each wheel
+    std::vector<int> m_mergedModules;
     /// the number of cells in rho for each wheel
     std::vector<int> m_numReadoutRhoLayers;
     /// the number of cells in z for each wheel
