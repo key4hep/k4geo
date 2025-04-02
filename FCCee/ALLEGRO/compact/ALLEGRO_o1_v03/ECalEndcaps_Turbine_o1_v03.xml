@@ -104,7 +104,7 @@
 
   <readouts>
    <readout name="ECalEndcapTurbine">
-     <segmentation type="FCCSWEndcapTurbine_k4geo" offset_rho1="ECalEndcapRmin1+ECalEndcapSupportTubeThickness+ECalEndcapGridSizeRho1/2." offset_rho2="ECalEndcapRmin2+ECalEndcapSupportTubeThickness+ECalEndcapGridSizeRho2/2." offset_rho3="ECalEndcapRmin3+ECalEndcapSupportTubeThickness+ECalEndcapGridSizeRho3/2." offset_z1="EMEC_z1+ECalEndcapGridSizeZ1/2." offset_z2="EMEC_z1+ECalEndcapGridSizeZ2/2." offset_z3="EMEC_z1+ECalEndcapGridSizeZ3/2." offset_phi="0.0" offset_theta="0.1127" grid_size_rho1="ECalEndcapGridSizeRho1" grid_size_rho2="ECalEndcapGridSizeRho2" grid_size_rho3="ECalEndcapGridSizeRho3" grid_size_z1="ECalEndcapGridSizeZ1" grid_size_z2="ECalEndcapGridSizeZ2" grid_size_z3="ECalEndcapGridSizeZ3" />
+     <segmentation type="FCCSWEndcapTurbine_k4geo" offset_rho="ECalEndcapRmin1+ECalEndcapSupportTubeThickness ECalEndcapRmin2+ECalEndcapSupportTubeThickness ECalEndcapRmin3+ECalEndcapSupportTubeThickness" offset_z="EMEC_z1 EMEC_z1 EMEC_z1" offset_theta="0.1127" grid_size_rho="ECalEndcapGridSizeRho1 ECalEndcapGridSizeRho2 ECalEndcapGridSizeRho3" grid_size_z="ECalEndcapGridSizeZ1 ECalEndcapGridSizeZ2 ECalEndcapGridSizeZ3" mergedModules="1 1 1"/>
      <id>system:4,cryo:1,type:3,subtype:3,side:-2,wheel:3,layer:12,module:11,rho:8,z:8</id> 
 
     </readout> 
