@@ -89,7 +89,7 @@
     <constant name="VTXIB_r_max"          value="50.0*mm"/>  <!-- End of inner vertex = outer radius of inner vertex tube -->
     <constant name="VTXIB_half_length"          value="556.2/2.*mm"/> <!-- 278.1*mm, half length of inner vertex tube -->
 
-    <constant name="VTXOB_r_min_layer"    value="140*mm"/>      <!-- R of the innermost layer of the outer vertex -->
+    <constant name="VTXOB_r_min_layer"    value="130*mm"/>      <!-- R of the innermost layer of the outer vertex -->
     <constant name="VTXOB_r_min_clearance" value="15.0*mm"/>     <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
     <constant name="VTXOB_r_max_layer"    value="315*mm"/>      <!-- R of the outermost layer of the outer vertex -->
     <constant name="VTXOB_rmax_clearance" value="15.0*mm"/>     <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
@@ -226,9 +226,16 @@
     <constant name="QC1L1_start" value="2200*mm"/>
     <constant name="screenstart" value="-10*mm"/>
     <!-- end MDI -->
-    
-    <constant name="tracker_region_zmax" value="DCH_half_length_total"/>
-    <constant name="tracker_region_rmax" value="DCH_outer_cyl_R_total"/>
+
+    <!-- these constants are used to define the full tracking volume in reconstruction (e.g. pandora) -->
+    <!-- modified to include also the wrapper region -->
+    <!-- constant name="tracker_region_zmax" value="DCH_half_length_total"/-->
+    <!-- constant name="tracker_region_rmax" value="DCH_outer_cyl_R_total"/-->
+    <!-- the two alternatives below should be equivalent, the latter being safer -->
+    <!-- constant name="tracker_region_zmax" value="SiWrD_zmax"/ -->
+    <!-- constant name="tracker_region_rmax" value="SiWrB_outer_radius"/ -->
+    <constant name="tracker_region_zmax" value="ECalEndcap_min_z"/>
+    <constant name="tracker_region_rmax" value="BarECal_rmin"/>
 
   </define>
   

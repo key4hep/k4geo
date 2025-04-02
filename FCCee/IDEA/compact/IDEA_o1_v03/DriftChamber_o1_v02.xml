@@ -116,6 +116,10 @@
         FCentralWire_material ="DCH_FCentralWireMat"
       >
     </wires>
+    <!-- /detectors/detector/type_flags -->
+    <!-- for reconstrution -->
+    <type_flags type="DetType_TRACKER +  DetType_BARREL + DetType_GASEOUS "/>
+
     </detector>
   </detectors>
 
