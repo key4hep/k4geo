@@ -63,3 +63,8 @@ Inside the single tower (trapezoidal copper absorber), two types of optical fibe
 
 ### o1_v01
 This folder containes the subdetectors (endcap + barrel) to make a full 4-pi fiber dual-readout calorimeter exploiting the INFN capillary-tubes technology. Each trapezoidal tower is constructed with brass capillary-tubes housing optical fibers (Cherenkov and scintillating). Endcap and barrel calorimeters are implemented ad separate subdetectors.
+
+## Segmented Crystal ECAL (SCEPCal)
+
+### o1_v01
+Introduced the segmented crystal ECAL with timing layer. The main crystals in the segmented layer can be configured in towers with varying front/rear granularities, see https://github.com/wonyongc/SCEPCal for images. The main layer is pseudo-projective with a controllable pointing offset from the IP. The timing layer is pure-projective. The main layer of segmented crystals and timing layer are implemented as separate subdetectors.
