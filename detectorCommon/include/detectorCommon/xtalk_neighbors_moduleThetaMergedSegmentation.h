@@ -23,7 +23,11 @@ namespace crosstalk {
    *   return Vector of neighbours and their crosstalk coefficients.
    */
   std::vector<std::pair<uint64_t, double>>
-  getNeighboursModuleThetaMerged(const dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo& aSeg,
+  getNeighboursModuleThetaMerged(const double xtalk_coef_radial,
+                                 const double xtalk_coef_theta,
+                                 const double xtalk_coef_diagonal,
+                                 const double xtalk_coef_tower,
+                                 const dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo& aSeg,
                                  const dd4hep::DDSegmentation::BitFieldCoder& aDecoder,
                                  const std::vector<std::string>& aFieldNames,
                                  const std::vector<std::vector<std::pair<int, int>>>& aFieldExtremes, uint64_t aCellId);
