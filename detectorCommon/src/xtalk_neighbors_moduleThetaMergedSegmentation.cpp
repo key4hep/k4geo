@@ -54,13 +54,6 @@ namespace crosstalk {
       return xtalk_neighbours;
     }
 
-    // crosstalk coefficients
-    // also see https://indico.cern.ch/event/1368231/contributions/5904291/
-    //double dummy_xtalk_radial = 0.7e-2;    // type 1
-    //double dummy_xtalk_theta = 0.2e-2;     // type 2
-    //double dummy_xtalk_diagonal = 0.04e-2; // type 3
-    //double dummy_xtalk_tower = 0.1e-2;     // type 4
-
     // retrieve layer/module/theta of cell under study
     int layer_id = aDecoder.get(aCellId, aFieldNames[idLayerField]);
     // int module_id = aDecoder.get(aCellId, aFieldNames[idModuleField]);
