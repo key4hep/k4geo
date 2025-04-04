@@ -5,8 +5,10 @@
 #include "detectorSegmentations/SCEPCal_MainSegmentation_k4geo.h"
 #include "DDG4/Geant4SensDetAction.inl"
 #include "DDG4/Factories.h"
-#include "G4OpticalPhoton.hh"
 #include "G4VProcess.hh"
+#include "G4ProcessType.hh"
+#include "G4EmProcessSubType.hh"
+#include "G4OpticalPhoton.hh"
 
 namespace SCEPCal {
   class SCEPCal_MainSDAction {
@@ -37,7 +39,7 @@ namespace dd4hep {
       dd4hep::Segmentation *_geoSeg=&m_segmentation;
       auto segmentation=dynamic_cast<dd4hep::DDSegmentation::SCEPCal_MainSegmentation_k4geo *>(_geoSeg->segmentation());
 
-      DDSegmentation::Vector3D pos =segmentation->myPosition(cellID);
+      DDSegmentation::Vector3D pos =segmentation->position(cellID);
       Position global(pos.x(),pos.y(),pos.z());
 
       G4double edep =step->GetTotalEnergyDeposit();
@@ -59,16 +61,21 @@ namespace dd4hep {
 
       // Scintillation and Cerenkov hits
       if(track->GetDefinition()==G4OpticalPhoton::OpticalPhotonDefinition()) {
-        auto procName =track->GetCreatorProcess()->GetProcessName();
-        bool isCerenkov       =(procName =="CerenkovPhys");
-        bool isScintillation  =(procName =="ScintillationPhys");
-        if (!isCerenkov && !isScintillation) return true;
+        auto* creatorProc =track->GetCreatorProcess();
+        if (creatorProc) {
+          if (creatorProc->GetProcessType() == fOptical) {
+            bool isCerenkov      = (creatorProc->GetProcessSubType() == fCerenkov);
+            bool isScintillation = (creatorProc->GetProcessSubType() == fScintillation);
 
-        if (track->GetCurrentStepNumber()==1) {
-          auto* hitSC =newOrExistingHitIn(isScintillation? m_userData.m_collectionID_scint:
+            if (!isCerenkov && !isScintillation) return true;
+
+            if (track->GetCurrentStepNumber()==1) {
+              auto* hitSC =newOrExistingHitIn(isScintillation? m_userData.m_collectionID_scint:
                                                            m_userData.m_collectionID_ceren);
-          hitSC->energyDeposit+=1/dd4hep::MeV;
-          track->SetTrackStatus(fStopAndKill);
+              hitSC->energyDeposit+=1/dd4hep::MeV;
+              track->SetTrackStatus(fStopAndKill);
+            }
+          }
         }
       }
       return true;

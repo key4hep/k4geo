@@ -210,7 +210,7 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
   endcapGlobalAssemblyVol_1.setVisAttributes(theDetector,endcapAssemblyGlobalVisXML.visStr());
   dd4hep::PlacedVolume endcapAssemblyPlacedVol_1=experimentalHall.placeVolume(endcapGlobalAssemblyVol_1);
   endcapAssemblyPlacedVol_1.addPhysVolID("system",ENDCAP_SYSTEM_NO);
-  endcapAssemblyPlacedVol_1.addPhysVolID("eta",1);
+  endcapAssemblyPlacedVol_1.addPhysVolID("theta",1);
 
   ScepcalDetElement.setPlacement(barrelAssemblyPlacedVol);
 
@@ -229,7 +229,7 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
     xml_comp_t compXml,
     dd4hep::Transform3D transform,
     dd4hep::Volume assemblyVol,
-    int nSystem, int nPhi, int nEta, int nGamma, int nEpsilon, int nDepth,
+    int nSystem, int nPhi, int nTheta, int nGamma, int nEpsilon, int nDepth,
     XYZVector posGlobal
   ) {
       dd4hep::EightPointSolid theShape(dz,vertices.data());
@@ -238,18 +238,18 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
 
       if (USE_OPTICAL_SURFACES) {
         dd4hep::SkinSurface(theDetector, ScepcalDetElement, 
-          volName+"Surface_"+std::to_string(nPhi)+"_"+std::to_string(nEta)+"_"+std::to_string(nGamma)+"_"+std::to_string(nDepth), 
+          volName+"Surface_"+std::to_string(nPhi)+"_"+std::to_string(nTheta)+"_"+std::to_string(nGamma)+"_"+std::to_string(nDepth), 
           PbWO4_to_ESR, theVolume);
       }
 
       theVolume.setSensitiveDetector(sens);
-      auto volID   =segmentation->setVolumeID(nSystem,nPhi,nEta,nGamma,nEpsilon,nDepth);
+      auto volID   =segmentation->setVolumeID(nSystem,nPhi,nTheta,nGamma,nEpsilon,nDepth);
       int  volID_32=segmentation->getFirst32bits(volID);
       dd4hep::PlacedVolume thePlacedVol=assemblyVol.placeVolume(theVolume,volID_32,transform);
 
       thePlacedVol.addPhysVolID("system",nSystem);
       thePlacedVol.addPhysVolID("phi",nPhi);
-      thePlacedVol.addPhysVolID("eta",nEta);
+      thePlacedVol.addPhysVolID("theta",nTheta);
       thePlacedVol.addPhysVolID("gamma",nGamma);
       thePlacedVol.addPhysVolID("epsilon",nEpsilon);
       thePlacedVol.addPhysVolID("depth",nDepth);

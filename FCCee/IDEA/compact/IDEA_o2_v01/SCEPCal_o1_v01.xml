@@ -1052,17 +1052,17 @@
     <!--  -->
     <!-- Note: -->
     <!-- 1cm crystals with 64 phi segments instead of 128 would exceed 16 in gamma -->
-    <!-- 2048 eta values is ok for the main layer since the crystals are not imagined to be much smaller than 1cm -->
+    <!-- 2048 theta values is ok for the main layer since the crystals are not imagined to be much smaller than 1cm -->
     <!-- for the timing layer they can be as thin as 2mm, and with a ~4.8m span in Z that is roughly 2400 values, -->
     <!-- which exceeds 11 bits, therefore a separate segmentation for the timing layer is used, without epsilon and depth -->
     <!--  -->
     <readout name="SCEPCal_Main">
       <segmentation type="SCEPCal_MainSegmentation_k4geo"/>
-      <id>system:5,phi:7,eta:11,gamma:4,epsilon:4,depth:1</id>
+      <id>system:5,phi:7,theta:11,gamma:4,epsilon:4,depth:1</id>
     </readout>
     <readout name="SCEPCal_Timing">
       <segmentation type="SCEPCal_TimingSegmentation_k4geo"/>
-      <id>system:5,phi:7,eta:14,gamma:6</id>
+      <id>system:5,phi:7,theta:14,gamma:6</id>
     </readout>
   </readouts>
 

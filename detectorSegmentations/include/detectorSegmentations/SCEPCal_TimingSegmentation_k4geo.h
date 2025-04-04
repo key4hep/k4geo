@@ -19,38 +19,36 @@ class SCEPCal_TimingSegmentation_k4geo : public Segmentation {
         SCEPCal_TimingSegmentation_k4geo(const BitFieldCoder* decoder);
         virtual ~SCEPCal_TimingSegmentation_k4geo() override;
 
-        virtual Vector3D position(const CellID& aCellID) const;
-
-        virtual Vector3D myPosition(const int& aCellID) const;
+        virtual Vector3D position(const CellID& aCellID) const override;
 
         CellID cellID(const Vector3D& /*localPosition*/, 
             const Vector3D& /*globalPosition*/, 
-            const VolumeID& vID) const {
-            return setCellID(System(vID), Phi(vID), Eta(vID), Gamma(vID));
+            const VolumeID& vID) const override {
+            return setCellID(System(vID), Phi(vID), Theta(vID), Gamma(vID));
         }
 
-        VolumeID setVolumeID(int System, int Phi, int Eta, int Gamma) const {
+        VolumeID setVolumeID(int System, int Phi, int Theta, int Gamma) const {
             VolumeID SystemId = static_cast<VolumeID>(System);
             VolumeID PhiId = static_cast<VolumeID>(Phi);
-            VolumeID EtaId = static_cast<VolumeID>(Eta);
+            VolumeID ThetaId = static_cast<VolumeID>(Theta);
             VolumeID GammaId = static_cast<VolumeID>(Gamma);
             VolumeID vID = 0;
             _decoder->set(vID, fSystemId, SystemId);
             _decoder->set(vID, fPhiId, PhiId);
-            _decoder->set(vID, fEtaId, EtaId);
+            _decoder->set(vID, fThetaId, ThetaId);
             _decoder->set(vID, fGammaId, GammaId);
             return vID;
         }
 
-        CellID setCellID(int System, int Phi, int Eta, int Gamma) const {
+        CellID setCellID(int System, int Phi, int Theta, int Gamma) const {
             VolumeID SystemId = static_cast<VolumeID>(System);
             VolumeID PhiId = static_cast<VolumeID>(Phi);
-            VolumeID EtaId = static_cast<VolumeID>(Eta);
+            VolumeID ThetaId = static_cast<VolumeID>(Theta);
             VolumeID GammaId = static_cast<VolumeID>(Gamma);
             VolumeID vID = 0;
             _decoder->set(vID, fSystemId, SystemId);
             _decoder->set(vID, fPhiId, PhiId);
-            _decoder->set(vID, fEtaId, EtaId);
+            _decoder->set(vID, fThetaId, ThetaId);
             _decoder->set(vID, fGammaId, GammaId);
             return vID;
         }
@@ -65,9 +63,9 @@ class SCEPCal_TimingSegmentation_k4geo : public Segmentation {
             return static_cast<int>(Phi);
         }
         
-        int Eta(const CellID& aCellID) const {
-            VolumeID Eta = static_cast<VolumeID>(_decoder->get(aCellID, fEtaId));
-            return static_cast<int>(Eta);
+        int Theta(const CellID& aCellID) const {
+            VolumeID Theta = static_cast<VolumeID>(_decoder->get(aCellID, fThetaId));
+            return static_cast<int>(Theta);
         }
         
         int Gamma(const CellID& aCellID) const {
@@ -91,7 +89,7 @@ class SCEPCal_TimingSegmentation_k4geo : public Segmentation {
 
         int System(const int& aId32) const { return System( convertFirst32to64(aId32) ); }
         int Phi(const int& aId32) const { return Phi( convertFirst32to64(aId32) ); }
-        int Eta(const int& aId32) const { return Eta( convertFirst32to64(aId32) ); }
+        int Theta(const int& aId32) const { return Theta( convertFirst32to64(aId32) ); }
         int Gamma(const int& aId32) const { return Gamma( convertFirst32to64(aId32) ); }
         
         inline void savePosition(int volID_32, Vector3D pos) {
@@ -101,7 +99,7 @@ class SCEPCal_TimingSegmentation_k4geo : public Segmentation {
     protected:
         std::string fSystemId;
         std::string fPhiId;
-        std::string fEtaId;
+        std::string fThetaId;
         std::string fGammaId;
 
     private:

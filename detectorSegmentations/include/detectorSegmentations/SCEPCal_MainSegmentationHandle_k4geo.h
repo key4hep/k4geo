@@ -39,17 +39,17 @@ public:
         return access()->implementation->cellID(local, global, volID);
     }
 
-    inline VolumeID setVolumeID(int System, int Phi, int Eta, int Gamma, int Epsilon, int Depth) const {
-        return access()->implementation->setVolumeID(System, Phi, Eta, Gamma, Epsilon, Depth);
+    inline VolumeID setVolumeID(int System, int Phi, int Theta, int Gamma, int Epsilon, int Depth) const {
+        return access()->implementation->setVolumeID(System, Phi, Theta, Gamma, Epsilon, Depth);
     }
 
-    inline CellID setCellID(int System, int Phi, int Eta, int Gamma, int Epsilon, int Depth) const {
-        return access()->implementation->setCellID(System, Phi, Eta, Gamma, Epsilon, Depth);
+    inline CellID setCellID(int System, int Phi, int Theta, int Gamma, int Epsilon, int Depth) const {
+        return access()->implementation->setCellID(System, Phi, Theta, Gamma, Epsilon, Depth);
     }
 
     inline int System(const CellID& aCellID) const { return access()->implementation->System(aCellID); }
     inline int Phi(const CellID& aCellID) const { return access()->implementation->Phi(aCellID); }
-    inline int Eta(const CellID& aCellID) const { return access()->implementation->Eta(aCellID); }
+    inline int Theta(const CellID& aCellID) const { return access()->implementation->Theta(aCellID); }
     inline int Gamma(const CellID& aCellID) const { return access()->implementation->Gamma(aCellID); }
     inline int Epsilon(const CellID& aCellID) const { return access()->implementation->Epsilon(aCellID); }
     inline int Depth(const CellID& aCellID) const { return access()->implementation->Depth(aCellID); }
@@ -62,7 +62,7 @@ public:
 
     inline int System(const int& aId32) const { return access()->implementation->System(aId32); }
     inline int Phi(const int& aId32) const { return access()->implementation->Phi(aId32); }
-    inline int Eta(const int& aId32) const { return access()->implementation->Eta(aId32); }
+    inline int Theta(const int& aId32) const { return access()->implementation->Theta(aId32); }
     inline int Gamma(const int& aId32) const { return access()->implementation->Gamma(aId32); }
     inline int Epsilon(const int& aId32) const { return access()->implementation->Epsilon(aId32); }
     inline int Depth(const int& aId32) const { return access()->implementation->Depth(aId32); }
