@@ -632,8 +632,6 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
 
       unsigned nbinTime = static_cast<unsigned>((timeEnd - timeStart) / samplingT);
       unsigned nbinWav = static_cast<unsigned>((wavMax - wavMin) / samplingW);
-      int peakTime = 0.;
-      int peakVal = 0;
 
       // same as the ROOT TH1 binning scheme (0: underflow, nbin+1:overflow)
       for (unsigned itime = 1; itime < nbinTime + 1; itime++) {
@@ -641,13 +639,6 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
 
         if (timemap.find(itime) != timemap.end())
           count = timemap.at(itime);
-
-        int candidate = std::max(peakVal, count);
-
-        if (peakVal < candidate) {
-          peakVal = candidate;
-          peakTime = itime;
-        }
 
         rawTimeStruct.addToAdcCounts(count);
       }
