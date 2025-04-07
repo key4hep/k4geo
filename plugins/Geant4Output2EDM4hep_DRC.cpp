@@ -287,7 +287,7 @@ void Geant4Output2EDM4hep_DRC::commit(OutputContext<G4Event>& /* ctxt */) {
       m_frame.put(std::move(calorimeterHits.second), colName + "Contributions");
     }
     for (auto& [colName, calorimeterHits] : m_drcaloHits) {
-      m_frame.put(std::move(calorimeterHits.first), colName + "RawHit");
+      m_frame.put(std::move(calorimeterHits.first), colName + "SimHit");
       m_frame.put(std::move(calorimeterHits.second), colName + "TimeStruct");
     }
     for (auto it = m_drcaloWaves.begin(); it != m_drcaloWaves.end(); ++it) {
@@ -605,7 +605,7 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
     for (unsigned i = 0; i < nhits; ++i) {
       const Geant4DRCalorimeter::Hit* hit = coll->hit(i);
 
-      // For DRC raw calo hit & raw time series
+      // For DRC calo hit & time series
       auto simCaloHits = DRhits.first->create();
       auto rawTimeStruct = DRhits.second->create();
       auto rawWaveStruct = DRwaves->create();
