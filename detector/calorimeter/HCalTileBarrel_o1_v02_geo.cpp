@@ -6,6 +6,10 @@
 #include "XML/Utilities.h"
 #include <DDRec/DetectorData.h>
 
+// k4geo
+#include "detectorSegmentations/FCCSWHCalPhiRow_k4geo.h"
+#include "detectorSegmentations/FCCSWHCalPhiTheta_k4geo.h"
+
 using dd4hep::DetElement;
 using dd4hep::PlacedVolume;
 using dd4hep::Volume;
@@ -229,6 +233,27 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   envelopePhysVol.addPhysVolID("system", caloDetElem.id());
   caloDetElem.setPlacement(envelopePhysVol);
 
+  // retrieve handle to segmentation, needed to get cell sizes
+  dd4hep::Segmentation segHandle = sensDet.readout().segmentation();
+  // try to retrieve segmentation itself
+  std::string layerFieldName;
+  dd4hep::DDSegmentation::FCCSWHCalPhiTheta_k4geo* seg_phitheta =
+    dynamic_cast<dd4hep::DDSegmentation::FCCSWHCalPhiTheta_k4geo*>(segHandle.segmentation());
+  dd4hep::DDSegmentation::FCCSWHCalPhiRow_k4geo* seg_phirow =
+    dynamic_cast<dd4hep::DDSegmentation::FCCSWHCalPhiRow_k4geo*>(segHandle.segmentation());
+  if (seg_phitheta) {
+    dd4hep::printout(dd4hep::DEBUG, "HCalTileBarrel_o1_v02", "Segmentation is of type FCCSWHCalPhiTheta_k4geo");
+    layerFieldName = seg_phitheta->fieldNameLayer();
+  } else if (seg_phirow) {
+    dd4hep::printout(dd4hep::DEBUG, "HCalTileBarrel_o1_v02", "Segmentation is of type FCCSWHCalPhiRow_k4geo");
+    layerFieldName = seg_phirow->fieldNameLayer();
+  } else {
+    dd4hep::printout(dd4hep::ERROR, "HCalTileBarrel_o1_v02", "Unknown segmentation");
+    throw std::runtime_error("Incorrect readout in calorimeter xml description!");
+  }
+  std::string cellIDEncoding = sensDet.readout().idSpec().fieldDescription();
+  dd4hep::BitFieldCoder encoder(cellIDEncoding);
+
   // Create caloData object
   auto caloData = new dd4hep::rec::LayeredCalorimeterData;
   caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::BarrelLayout;
@@ -242,7 +267,9 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   dd4hep::rec::MaterialManager matMgr(envelopeVolume);
   dd4hep::rec::LayeredCalorimeterData::Layer caloLayer;
 
+  dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "Layer structure information:");
   for (unsigned int idxLayer = 0; idxLayer < layerDepths.size(); ++idxLayer) {
+    dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "  Layer %d", idxLayer);
     const double difference_bet_r1r2 = layerDepths.at(idxLayer);
     double thickness_sen = 0.;
     double absorberThickness = 0.;
@@ -278,10 +305,10 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
         absorberThickness += materials.at(imat).second;
       }
     }
-    std::cout << "The sensitive thickness is " << thickness_sen << std::endl;
-    std::cout << "The absorber thickness is " << absorberThickness << std::endl;
-    std::cout << "The number of radiation length is " << nRadiationLengths
-              << " and the number of interaction length is " << nInteractionLengths << std::endl;
+    dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "    sensitive thickness is: %lf", thickness_sen);
+    dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "    absorber thickness is: %lf", absorberThickness);
+    dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "    number of radiation length is: %lf", nRadiationLengths);
+    dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "    number of interaction length is: %lf", nInteractionLengths);
 
     caloLayer.distance = layerInnerRadii.at(idxLayer);   // radius of the current layer
     caloLayer.sensitive_thickness = difference_bet_r1r2; // radial dimension of the current layer
@@ -295,8 +322,25 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
     caloLayer.outer_nInteractionLengths = nInteractionLengths / 2.0;
     caloLayer.outer_thickness = difference_bet_r1r2 / 2;
 
-    caloLayer.cellSize0 = 20 * dd4hep::mm; // should be updated from DDGeometryCreatorALLEGRO
-    caloLayer.cellSize1 = 20 * dd4hep::mm; // should be updated from DDGeometryCreatorALLEGRO
+    if (seg_phitheta) {
+      // cells have all the same phi-theta nominal sizes, so can pass dummy cell ID (it is ignored)
+      std::vector<double> cellSizeVector = seg_phitheta->cellDimensions(0);
+      double cellSizeTheta = cellSizeVector[1];
+      double cellSizePhi = cellSizeVector[0];
+      dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "    cell sizes in theta, phi: %lf , %lf", cellSizeTheta, cellSizePhi);
+      caloLayer.cellSize0 = cellSizeTheta;
+      caloLayer.cellSize1 = cellSizePhi;
+    }
+    else if (seg_phirow) {
+      dd4hep::CellID cID;
+      encoder.set(cID, layerFieldName, idxLayer);
+      std::vector<double> cellSizeVector = seg_phirow->cellDimensions(cID);
+      double cellSizeRow = cellSizeVector[1];
+      double cellSizePhi = cellSizeVector[0];
+      dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "    cell sizes in row, phi: %lf , %lf", cellSizeRow, cellSizePhi);
+      caloLayer.cellSize0 = cellSizeRow;
+      caloLayer.cellSize1 = cellSizePhi;
+    }
     caloData->layers.push_back(caloLayer);
   }
 
