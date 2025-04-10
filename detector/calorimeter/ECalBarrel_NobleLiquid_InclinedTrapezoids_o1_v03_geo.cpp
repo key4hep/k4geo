@@ -861,13 +861,11 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
     caloLayer.outer_thickness = rad_last - rad_mid;
 
     // retrieve cell dimensions vector from segmentation class
-    dd4hep::CellID cID;
-    encoder.set(cID, layerFieldName, iLay);
-
     // set volume ID and layer ID
     // cell size does not depend on theta/module so no need to set moduleID and thetaID
-    std::vector<double> cellSizeVector =
-      seg->cellDimensions(cID);
+    dd4hep::CellID cID;
+    encoder.set(cID, layerFieldName, iLay);
+    std::vector<double> cellSizeVector = seg->cellDimensions(cID);
     double cellSizeTheta = cellSizeVector[1];
     double cellSizeModule = cellSizeVector[0];
     double cellSizePhi = dPhi*cellSizeModule;
