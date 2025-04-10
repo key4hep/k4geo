@@ -3,6 +3,8 @@
 #include "DDRec/Vector3D.h"
 #include "XML/Utilities.h"
 #include <DDRec/DetectorData.h>
+#include "detectorSegmentations/FCCSWGridPhiTheta_k4geo.h"
+
 using dd4hep::_toString;
 
 #define endmsg std::endl
@@ -154,6 +156,16 @@ static dd4hep::Ref_t createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4he
     caloData->extent[3] = zmax;
     caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::EndcapLayout;
 
+    // retrieve handle to segmentation, needed to get cell sizes
+    dd4hep::Segmentation segHandle = sensDet.readout().segmentation();
+    // try to retrieve segmentation itself so that we can order cell size as desired by pandora
+    // if we do not want this, then we'll have to handle it elsewhere i.e. when creating pandora's calo hits
+    // in DDMarlinPandora
+    dd4hep::DDSegmentation::FCCSWGridPhiTheta_k4geo* seg = dynamic_cast<dd4hep::DDSegmentation::FCCSWGridPhiTheta_k4geo*>(segHandle.segmentation());
+    if (seg) {
+      lLog << MSG::DEBUG << "Segmentation is of type FCCSWGridPhiTheta" << endmsg;
+    }
+
     dd4hep::rec::LayeredCalorimeterData::Layer caloLayer;
     double dzLayer = cylinderDim.dz() * 2.0 / nLayers;
     auto mat = lcdd.material(cylinderDim.materialStr());
@@ -179,12 +191,23 @@ static dd4hep::Ref_t createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4he
       caloLayer.outer_nInteractionLengths =
           caloLayer.outer_thickness / mat.intLength(); // absorber material behind sensitive element in layer
 
-      // FIXME! we should get the latter from segmentation class but requires also to set
-      // the cell geometry to pointing in theta-phi, which does not exist yet in Pandora
-      // For the moment, we use an approximation of fixed-size cells with reasonable numbers
-      // so that we can make Pandora run and then we can fix all the missing/outdated pieces
-      caloLayer.cellSize0 = 40 * dd4hep::mm; // 0.5 degrees in theta, R~4.5 m
-      caloLayer.cellSize1 = 40 * dd4hep::mm; // 704 bins in phi (2pi),  R~4.5 m
+      // assume cell sizes are the same so pass dummy cell ID
+      if (seg) {
+        // if the readout is FCCSWGridPhiTheta, we store in cellSize0 dTheta and in cellSize1 dPhi
+        std::vector<double> cellSizeVector = seg->cellDimensions(0);
+        double cellSizeTheta = cellSizeVector[1];
+        double cellSizePhi = cellSizeVector[0];
+        lLog << MSG::DEBUG << "Cell sizes in theta, phi: " << cellSizeTheta << " , " << cellSizePhi << endmsg;
+        caloLayer.cellSize0 = cellSizeTheta;
+        caloLayer.cellSize1 = cellSizePhi;
+      }
+      else {
+        // otherwise we just assume that the segmentation (handle) returns the sizes in the proper order
+        std::vector<double> cellSizeVector = segHandle.cellDimensions(0);
+        lLog << MSG::DEBUG << "Cell sizes: " << cellSizeVector[0] << " , " << cellSizeVector[1] << endmsg;
+        caloLayer.cellSize0 = cellSizeVector[0];
+        caloLayer.cellSize1 = cellSizeVector[1];
+      }
 
       // attach the layer to the caloData
       caloData->layers.push_back(caloLayer);
