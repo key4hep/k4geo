@@ -107,15 +107,15 @@ namespace DDSegmentation {
     /// be assigned to the same cell.
     virtual bool cellsSpanVolumes() const { return true; }
 
-  /** Returns a std::vector<double> of the cellDimensions of the given cell ID
-   *  in natural order of dimensions (nModules, dTheta)
-   *  @param[in] cellID
-   *  return a std::vector of size 2 with the cellDimensions of the given cell ID(modules, theta)
-  */
-  inline std::vector<double> cellDimensions(const CellID& id) const {
-    const int aLayer = layer(id);
-    return {(double) mergedModules(aLayer), gridSizeTheta()*mergedThetaCells(aLayer)};
-  }
+    /** Returns a std::vector<double> of the cellDimensions of the given cell ID
+     *  in natural order of dimensions (nModules, dTheta)
+     *  @param[in] cellID
+     *  return a std::vector of size 2 with the cellDimensions of the given cell ID(modules, theta)
+    */
+    inline std::vector<double> cellDimensions(const CellID& id) const {
+      const int aLayer = layer(id);
+      return {(double) mergedModules(aLayer), gridSizeTheta()*mergedThetaCells(aLayer)};
+    }
 
   protected:
     /// the field name used for layer
