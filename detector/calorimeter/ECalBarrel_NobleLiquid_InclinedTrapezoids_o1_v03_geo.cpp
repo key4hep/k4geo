@@ -5,6 +5,8 @@
 #include "XML/Utilities.h"
 #include <DDRec/DetectorData.h>
 
+#include "detectorSegmentations/FCCSWGridModuleThetaMerged_k4geo.h"
+
 // like v02, but in xml the layer dimensions are along the electrode
 // directions, without rescaling by R/L where R = radial extent of ECAL
 // and L = electrode length
@@ -772,6 +774,17 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
   caloData->extent[2] = 0.;
   caloData->extent[3] = caloDim.dz();
 
+  // Retrieve segmentation, needed to get cell size in theta and phi
+  dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo* seg = dynamic_cast<dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo*>(aSensDet.readout().segmentation().segmentation());
+  if (seg == nullptr) {
+    lLog << MSG::ERROR << "Incorrect readout, cannot cast to FCCSWGridModuleThetaMerged"
+         << endmsg;
+    throw std::runtime_error("Incorrect readout in calorimeter xml description!");
+  }
+  std::string layerFieldName = seg->fieldNameLayer();
+  std::string cellIDEncoding = aSensDet.readout().idSpec().fieldDescription();
+  dd4hep::BitFieldCoder encoder(cellIDEncoding);
+
   // Information about each layer
   // double distance : distance from Origin (or the z-axis) to the inner-most face of the layer
   // double phi0 : phi0 of layer: potential rotation around normal to absorber plane, e.g. if layers are 'staggered' in
@@ -847,10 +860,20 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
     caloLayer.outer_nInteractionLengths = value_of_lambda * (rad_last - rad_mid) / (rad_last - rad_first);
     caloLayer.outer_thickness = rad_last - rad_mid;
 
-    // GM: rather retrieve cellDimensions vector from segmentation class
-    caloLayer.cellSize0 = 20 * dd4hep::mm; // GM: rather put delta_eta here and use pandora::POINTING cell type (should
-                                           // actually modify pandora to accept theta grid)
-    caloLayer.cellSize1 = 20 * dd4hep::mm; // GM: rather delta_phi here + pandora::POINTING cell type
+    // retrieve cell dimensions vector from segmentation class
+    dd4hep::CellID cID;
+    encoder.set(cID, layerFieldName, iLay);
+
+    // set volume ID and layer ID
+    // cell size does not depend on theta/module so no need to set moduleID and thetaID
+    std::vector<double> cellSizeVector =
+      seg->cellDimensions(cID);
+    double cellSizeTheta = cellSizeVector[1];
+    double cellSizeModule = cellSizeVector[0];
+    double cellSizePhi = dPhi*cellSizeModule;
+    lLog << MSG::DEBUG << "Cell sizes in theta, phi: " << cellSizeTheta << " , " << cellSizePhi << endmsg;
+    caloLayer.cellSize0 = cellSizeTheta;
+    caloLayer.cellSize1 = cellSizePhi;
 
     caloData->layers.push_back(caloLayer);
   }
