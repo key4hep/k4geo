@@ -844,9 +844,12 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
   // direction cellSize0 and the depth of the layers
   dd4hep::rec::MaterialManager matMgr(envelopeVol);
   dd4hep::rec::LayeredCalorimeterData::Layer caloLayer;
-
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "Layer structure information:");
   runningHeight = 0.0;
   for (uint iLay = 0; iLay < numLayers; iLay++) {
+    dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                     "  Layer %d", iLay);
     double Lmin = runningHeight;
     double Lmax = runningHeight + layerHeight[iLay];
     double Lmid = runningHeight + layerHeight[iLay] / 2.0;
@@ -864,7 +867,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
         dd4hep::rec::Vector3D(0., rad_last, 0); // defining end vector points of the given layer
 
     dd4hep::printout(dd4hep::DEBUG, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
-                     "radius first = %f, radius last = %f, radius middle = %f",
+                     "    radius first = %f, radius last = %f, radius middle = %f",
                      rad_first, rad_last, rad_mid);
     const dd4hep::rec::MaterialVec& materials =
         matMgr.materialsBetween(ivr1, ivr2); // calling material manager to get material info between two points
@@ -886,12 +889,12 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
         absorberThickness += materials.at(imat).second;
       }
     }
-    dd4hep::printout(dd4hep::DEBUG, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
-                     "The sensitive thickness is %f", thickness_sen);
-    dd4hep::printout(dd4hep::DEBUG, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
-                     "The absorber thickness is %f", absorberThickness);
-    dd4hep::printout(dd4hep::DEBUG, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
-                     "The radiation length is %f and the interaction length is %f",
+    dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                     "    sensitive thickness : %f", thickness_sen);
+    dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                     "    absorber thickness : %f", absorberThickness);
+    dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                     "    radiation length : %f , interaction length : %f",
                      value_of_x0, value_of_lambda );
 
     caloLayer.distance = rad_first;
@@ -916,7 +919,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
     double cellSizeModule = cellSizeVector[0];
     double cellSizePhi = dPhi*cellSizeModule;
     dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
-                     "Cell sizes in theta, phi: %f , %f", cellSizeTheta, cellSizePhi);
+                     "    cell sizes in theta, phi: %f , %f", cellSizeTheta, cellSizePhi);
     caloLayer.cellSize0 = cellSizeTheta;
     caloLayer.cellSize1 = cellSizePhi;
 
