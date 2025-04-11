@@ -99,6 +99,8 @@ namespace sim {
 
     m_userData.fastfiber.fSafety = 1;
     m_userData.fastfiber.fVerbose = 0;
+
+    m_hitCreationMode = HitCreationFlags::DETAILED_MODE; // always store step position
   }
 
   /// Define collections created by this sensitive action object
