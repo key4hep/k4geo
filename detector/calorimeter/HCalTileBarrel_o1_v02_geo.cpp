@@ -337,10 +337,10 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
       dd4hep::CellID cID;
       encoder.set(cID, layerFieldName, idxLayer);
       std::vector<double> cellSizeVector = seg_phirow->cellDimensions(cID);
-      double cellSizeRow = cellSizeVector[1];
+      double cellSizeZ = cellSizeVector[1];
       double cellSizePhi = cellSizeVector[0];
-      dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "    cell sizes in row, phi: %lf , %lf", cellSizeRow, cellSizePhi);
-      caloLayer.cellSize0 = cellSizeRow;
+      dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "    cell sizes in z, phi: %lf , %lf", cellSizeZ, cellSizePhi);
+      caloLayer.cellSize0 = cellSizeZ;
       caloLayer.cellSize1 = cellSizePhi;
     }
     caloData->layers.push_back(caloLayer);
