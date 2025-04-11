@@ -332,6 +332,8 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
       caloLayer.cellSize1 = cellSizePhi;
     }
     else if (seg_phirow) {
+      // the merging of the rows into cells can differ layer by layer so need to pass
+      // cellID with layer field properly filled in order to get good dimension
       dd4hep::CellID cID;
       encoder.set(cID, layerFieldName, idxLayer);
       std::vector<double> cellSizeVector = seg_phirow->cellDimensions(cID);
