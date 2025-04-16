@@ -262,7 +262,7 @@
        else if the volume is part of the parallelworld:  connected="false"
        The volume is always connected to the top level!
     -->
-    <parallelworld_volume name="tracking_volume" anchor="/world" material="Air" connected="true"
+    <parallelworld_volume name="tracking_volume" anchor="/world" material="Air" connected="false"
         vis="VisibleBlue">
         <shape type="Polycone" material="Air">
             <!-- small-angle approximation for tan(theta) -->
