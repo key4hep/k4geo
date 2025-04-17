@@ -15,7 +15,6 @@
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
 
-#include "UTIL/LCTrackerConf.h"
 #include <UTIL/BitField64.h>
 #include <UTIL/BitSet32.h>
 #include <UTIL/ILDConf.h>
@@ -53,13 +52,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
   DetElement tracker(name, x_det.id());
 
   PlacedVolume pv;
-
-  // for encoding
-  std::string cellIDEncoding = sens.readout().idSpec().fieldDescription();
-  UTIL::BitField64 encoder(cellIDEncoding);
-  encoder.reset();
-  encoder[lcio::LCTrackerCellID::subdet()] = x_det.id();
-  encoder[lcio::LCTrackerCellID::side()] = lcio::ILDDetID::barrel;
 
   ZPlanarData* zPlanarData = new ZPlanarData;
 
@@ -239,17 +231,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         sensorDE.setPlacement(pv);
 
         volSurfaceList(sensorDE)->push_back(surf);
-
-        ///////////////////
-
-        // get cellID and fill map< cellID of surface, vector of cellID of neighbouring surfaces >
-
-        // encoding
-
-        encoder[lcio::LCTrackerCellID::side()] = lcio::ILDDetID::barrel;
-        encoder[lcio::LCTrackerCellID::layer()] = layer_id;
-        encoder[lcio::LCTrackerCellID::module()] = j;
-        encoder[lcio::LCTrackerCellID::sensor()] = s;
       }
     }
 
