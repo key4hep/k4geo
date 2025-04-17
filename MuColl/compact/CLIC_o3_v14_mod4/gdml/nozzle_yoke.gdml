@@ -1,0 +1,2791 @@
+<?xml version="1.0"?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+  <define>
+    <position name="NozzleW_right_0inworld_volumepos" x="0" y="0" z="0" unit="cm"/>
+    <position name="NozzleW_left_1inworld_volumepos" x="0" y="0" z="0" unit="cm"/>
+    <position name="NozzleBCH_right_2inworld_volumepos" x="0" y="0" z="0" unit="cm"/>
+    <position name="NozzleBCH_left_3inworld_volumepos" x="0" y="0" z="0" unit="cm"/>
+    <position name="slice0_0inlayerType0pos" x="0" y="0" z="-14.149999999999999" unit="cm"/>
+    <position name="slice1_1inlayerType0pos" x="0" y="0" z="-13.924999999999997" unit="cm"/>
+    <position name="slice2_2inlayerType0pos" x="0" y="0" z="-13.649999999999997" unit="cm"/>
+    <position name="slice3_3inlayerType0pos" x="0" y="0" z="-13.449999999999998" unit="cm"/>
+    <position name="slice4_4inlayerType0pos" x="0" y="0" z="-13.249999999999998" unit="cm"/>
+    <position name="slice5_5inlayerType0pos" x="0" y="0" z="-12.974999999999998" unit="cm"/>
+    <position name="slice6_6inlayerType0pos" x="0" y="0" z="-12.749999999999996" unit="cm"/>
+    <position name="slice7_7inlayerType0pos" x="0" y="0" z="-12.649999999999995" unit="cm"/>
+    <position name="slice8_8inlayerType0pos" x="0" y="0" z="-12.424999999999994" unit="cm"/>
+    <position name="slice9_9inlayerType0pos" x="0" y="0" z="-12.149999999999993" unit="cm"/>
+    <position name="slice10_10inlayerType0pos" x="0" y="0" z="-11.949999999999994" unit="cm"/>
+    <position name="slice11_11inlayerType0pos" x="0" y="0" z="-11.749999999999995" unit="cm"/>
+    <position name="slice12_12inlayerType0pos" x="0" y="0" z="-11.474999999999994" unit="cm"/>
+    <position name="slice13_13inlayerType0pos" x="0" y="0" z="-11.249999999999993" unit="cm"/>
+    <position name="slice14_14inlayerType0pos" x="0" y="0" z="-10.699999999999992" unit="cm"/>
+    <position name="slice15_15inlayerType0pos" x="0" y="0" z="2.0000000000000071" unit="cm"/>
+    <position name="layerType0_0instave_innerpos" x="0" y="0" z="-85.200000000000003" unit="cm"/>
+    <position name="slice0_00x1inlayerType00x1pos" x="0" y="0" z="-14.149999999999999" unit="cm"/>
+    <position name="slice1_10x1inlayerType00x1pos" x="0" y="0" z="-13.924999999999997" unit="cm"/>
+    <position name="slice2_20x1inlayerType00x1pos" x="0" y="0" z="-13.649999999999997" unit="cm"/>
+    <position name="slice3_30x1inlayerType00x1pos" x="0" y="0" z="-13.449999999999998" unit="cm"/>
+    <position name="slice4_40x1inlayerType00x1pos" x="0" y="0" z="-13.249999999999998" unit="cm"/>
+    <position name="slice5_50x1inlayerType00x1pos" x="0" y="0" z="-12.974999999999998" unit="cm"/>
+    <position name="slice6_60x1inlayerType00x1pos" x="0" y="0" z="-12.749999999999996" unit="cm"/>
+    <position name="slice7_70x1inlayerType00x1pos" x="0" y="0" z="-12.649999999999995" unit="cm"/>
+    <position name="slice8_80x1inlayerType00x1pos" x="0" y="0" z="-12.424999999999994" unit="cm"/>
+    <position name="slice9_90x1inlayerType00x1pos" x="0" y="0" z="-12.149999999999993" unit="cm"/>
+    <position name="slice10_100x1inlayerType00x1pos" x="0" y="0" z="-11.949999999999994" unit="cm"/>
+    <position name="slice11_110x1inlayerType00x1pos" x="0" y="0" z="-11.749999999999995" unit="cm"/>
+    <position name="slice12_120x1inlayerType00x1pos" x="0" y="0" z="-11.474999999999994" unit="cm"/>
+    <position name="slice13_130x1inlayerType00x1pos" x="0" y="0" z="-11.249999999999993" unit="cm"/>
+    <position name="slice14_140x1inlayerType00x1pos" x="0" y="0" z="-10.699999999999992" unit="cm"/>
+    <position name="slice15_150x1inlayerType00x1pos" x="0" y="0" z="2.0000000000000071" unit="cm"/>
+    <position name="layerType0_1instave_innerpos" x="0" y="0" z="-56.799999999999997" unit="cm"/>
+    <position name="slice0_00x2inlayerType00x2pos" x="0" y="0" z="-14.149999999999999" unit="cm"/>
+    <position name="slice1_10x2inlayerType00x2pos" x="0" y="0" z="-13.924999999999997" unit="cm"/>
+    <position name="slice2_20x2inlayerType00x2pos" x="0" y="0" z="-13.649999999999997" unit="cm"/>
+    <position name="slice3_30x2inlayerType00x2pos" x="0" y="0" z="-13.449999999999998" unit="cm"/>
+    <position name="slice4_40x2inlayerType00x2pos" x="0" y="0" z="-13.249999999999998" unit="cm"/>
+    <position name="slice5_50x2inlayerType00x2pos" x="0" y="0" z="-12.974999999999998" unit="cm"/>
+    <position name="slice6_60x2inlayerType00x2pos" x="0" y="0" z="-12.749999999999996" unit="cm"/>
+    <position name="slice7_70x2inlayerType00x2pos" x="0" y="0" z="-12.649999999999995" unit="cm"/>
+    <position name="slice8_80x2inlayerType00x2pos" x="0" y="0" z="-12.424999999999994" unit="cm"/>
+    <position name="slice9_90x2inlayerType00x2pos" x="0" y="0" z="-12.149999999999993" unit="cm"/>
+    <position name="slice10_100x2inlayerType00x2pos" x="0" y="0" z="-11.949999999999994" unit="cm"/>
+    <position name="slice11_110x2inlayerType00x2pos" x="0" y="0" z="-11.749999999999995" unit="cm"/>
+    <position name="slice12_120x2inlayerType00x2pos" x="0" y="0" z="-11.474999999999994" unit="cm"/>
+    <position name="slice13_130x2inlayerType00x2pos" x="0" y="0" z="-11.249999999999993" unit="cm"/>
+    <position name="slice14_140x2inlayerType00x2pos" x="0" y="0" z="-10.699999999999992" unit="cm"/>
+    <position name="slice15_150x2inlayerType00x2pos" x="0" y="0" z="2.0000000000000071" unit="cm"/>
+    <position name="layerType0_2instave_innerpos" x="0" y="0" z="-28.399999999999995" unit="cm"/>
+    <position name="slice0_00x3inlayerType00x3pos" x="0" y="0" z="-14.149999999999999" unit="cm"/>
+    <position name="slice1_10x3inlayerType00x3pos" x="0" y="0" z="-13.924999999999997" unit="cm"/>
+    <position name="slice2_20x3inlayerType00x3pos" x="0" y="0" z="-13.649999999999997" unit="cm"/>
+    <position name="slice3_30x3inlayerType00x3pos" x="0" y="0" z="-13.449999999999998" unit="cm"/>
+    <position name="slice4_40x3inlayerType00x3pos" x="0" y="0" z="-13.249999999999998" unit="cm"/>
+    <position name="slice5_50x3inlayerType00x3pos" x="0" y="0" z="-12.974999999999998" unit="cm"/>
+    <position name="slice6_60x3inlayerType00x3pos" x="0" y="0" z="-12.749999999999996" unit="cm"/>
+    <position name="slice7_70x3inlayerType00x3pos" x="0" y="0" z="-12.649999999999995" unit="cm"/>
+    <position name="slice8_80x3inlayerType00x3pos" x="0" y="0" z="-12.424999999999994" unit="cm"/>
+    <position name="slice9_90x3inlayerType00x3pos" x="0" y="0" z="-12.149999999999993" unit="cm"/>
+    <position name="slice10_100x3inlayerType00x3pos" x="0" y="0" z="-11.949999999999994" unit="cm"/>
+    <position name="slice11_110x3inlayerType00x3pos" x="0" y="0" z="-11.749999999999995" unit="cm"/>
+    <position name="slice12_120x3inlayerType00x3pos" x="0" y="0" z="-11.474999999999994" unit="cm"/>
+    <position name="slice13_130x3inlayerType00x3pos" x="0" y="0" z="-11.249999999999993" unit="cm"/>
+    <position name="slice14_140x3inlayerType00x3pos" x="0" y="0" z="-10.699999999999992" unit="cm"/>
+    <position name="slice15_150x3inlayerType00x3pos" x="0" y="0" z="2.0000000000000071" unit="cm"/>
+    <position name="layerType0_3instave_innerpos" x="0" y="0" z="3.5527136788005009e-15" unit="cm"/>
+    <position name="slice0_00x4inlayerType00x4pos" x="0" y="0" z="-14.149999999999999" unit="cm"/>
+    <position name="slice1_10x4inlayerType00x4pos" x="0" y="0" z="-13.924999999999997" unit="cm"/>
+    <position name="slice2_20x4inlayerType00x4pos" x="0" y="0" z="-13.649999999999997" unit="cm"/>
+    <position name="slice3_30x4inlayerType00x4pos" x="0" y="0" z="-13.449999999999998" unit="cm"/>
+    <position name="slice4_40x4inlayerType00x4pos" x="0" y="0" z="-13.249999999999998" unit="cm"/>
+    <position name="slice5_50x4inlayerType00x4pos" x="0" y="0" z="-12.974999999999998" unit="cm"/>
+    <position name="slice6_60x4inlayerType00x4pos" x="0" y="0" z="-12.749999999999996" unit="cm"/>
+    <position name="slice7_70x4inlayerType00x4pos" x="0" y="0" z="-12.649999999999995" unit="cm"/>
+    <position name="slice8_80x4inlayerType00x4pos" x="0" y="0" z="-12.424999999999994" unit="cm"/>
+    <position name="slice9_90x4inlayerType00x4pos" x="0" y="0" z="-12.149999999999993" unit="cm"/>
+    <position name="slice10_100x4inlayerType00x4pos" x="0" y="0" z="-11.949999999999994" unit="cm"/>
+    <position name="slice11_110x4inlayerType00x4pos" x="0" y="0" z="-11.749999999999995" unit="cm"/>
+    <position name="slice12_120x4inlayerType00x4pos" x="0" y="0" z="-11.474999999999994" unit="cm"/>
+    <position name="slice13_130x4inlayerType00x4pos" x="0" y="0" z="-11.249999999999993" unit="cm"/>
+    <position name="slice14_140x4inlayerType00x4pos" x="0" y="0" z="-10.699999999999992" unit="cm"/>
+    <position name="slice15_150x4inlayerType00x4pos" x="0" y="0" z="2.0000000000000071" unit="cm"/>
+    <position name="layerType0_4instave_innerpos" x="0" y="0" z="28.400000000000002" unit="cm"/>
+    <position name="slice0_00x5inlayerType00x5pos" x="0" y="0" z="-14.149999999999999" unit="cm"/>
+    <position name="slice1_10x5inlayerType00x5pos" x="0" y="0" z="-13.924999999999997" unit="cm"/>
+    <position name="slice2_20x5inlayerType00x5pos" x="0" y="0" z="-13.649999999999997" unit="cm"/>
+    <position name="slice3_30x5inlayerType00x5pos" x="0" y="0" z="-13.449999999999998" unit="cm"/>
+    <position name="slice4_40x5inlayerType00x5pos" x="0" y="0" z="-13.249999999999998" unit="cm"/>
+    <position name="slice5_50x5inlayerType00x5pos" x="0" y="0" z="-12.974999999999998" unit="cm"/>
+    <position name="slice6_60x5inlayerType00x5pos" x="0" y="0" z="-12.749999999999996" unit="cm"/>
+    <position name="slice7_70x5inlayerType00x5pos" x="0" y="0" z="-12.649999999999995" unit="cm"/>
+    <position name="slice8_80x5inlayerType00x5pos" x="0" y="0" z="-12.424999999999994" unit="cm"/>
+    <position name="slice9_90x5inlayerType00x5pos" x="0" y="0" z="-12.149999999999993" unit="cm"/>
+    <position name="slice10_100x5inlayerType00x5pos" x="0" y="0" z="-11.949999999999994" unit="cm"/>
+    <position name="slice11_110x5inlayerType00x5pos" x="0" y="0" z="-11.749999999999995" unit="cm"/>
+    <position name="slice12_120x5inlayerType00x5pos" x="0" y="0" z="-11.474999999999994" unit="cm"/>
+    <position name="slice13_130x5inlayerType00x5pos" x="0" y="0" z="-11.249999999999993" unit="cm"/>
+    <position name="slice14_140x5inlayerType00x5pos" x="0" y="0" z="-10.699999999999992" unit="cm"/>
+    <position name="slice15_150x5inlayerType00x5pos" x="0" y="0" z="2.0000000000000071" unit="cm"/>
+    <position name="layerType0_5instave_innerpos" x="0" y="0" z="56.799999999999997" unit="cm"/>
+    <position name="slice0_00x6inlayerType00x6pos" x="0" y="0" z="-14.149999999999999" unit="cm"/>
+    <position name="slice1_10x6inlayerType00x6pos" x="0" y="0" z="-13.924999999999997" unit="cm"/>
+    <position name="slice2_20x6inlayerType00x6pos" x="0" y="0" z="-13.649999999999997" unit="cm"/>
+    <position name="slice3_30x6inlayerType00x6pos" x="0" y="0" z="-13.449999999999998" unit="cm"/>
+    <position name="slice4_40x6inlayerType00x6pos" x="0" y="0" z="-13.249999999999998" unit="cm"/>
+    <position name="slice5_50x6inlayerType00x6pos" x="0" y="0" z="-12.974999999999998" unit="cm"/>
+    <position name="slice6_60x6inlayerType00x6pos" x="0" y="0" z="-12.749999999999996" unit="cm"/>
+    <position name="slice7_70x6inlayerType00x6pos" x="0" y="0" z="-12.649999999999995" unit="cm"/>
+    <position name="slice8_80x6inlayerType00x6pos" x="0" y="0" z="-12.424999999999994" unit="cm"/>
+    <position name="slice9_90x6inlayerType00x6pos" x="0" y="0" z="-12.149999999999993" unit="cm"/>
+    <position name="slice10_100x6inlayerType00x6pos" x="0" y="0" z="-11.949999999999994" unit="cm"/>
+    <position name="slice11_110x6inlayerType00x6pos" x="0" y="0" z="-11.749999999999995" unit="cm"/>
+    <position name="slice12_120x6inlayerType00x6pos" x="0" y="0" z="-11.474999999999994" unit="cm"/>
+    <position name="slice13_130x6inlayerType00x6pos" x="0" y="0" z="-11.249999999999993" unit="cm"/>
+    <position name="slice14_140x6inlayerType00x6pos" x="0" y="0" z="-10.699999999999992" unit="cm"/>
+    <position name="slice15_150x6inlayerType00x6pos" x="0" y="0" z="2.0000000000000071" unit="cm"/>
+    <position name="layerType0_6instave_innerpos" x="0" y="0" z="85.200000000000003" unit="cm"/>
+    <position name="stave_inner_0instave_outerpos" x="0" y="0" z="0" unit="cm"/>
+    <position name="stave_outer_0inYokeBarrel_envelopepos" x="141.18578910342507" y="-526.91253824068679" z="0" unit="cm"/>
+    <rotation name="stave_outer_0inYokeBarrel_enveloperot" x="-90" y="-14.999999999999998" z="-0" unit="deg"/>
+    <position name="stave_outer_1inYokeBarrel_envelopepos" x="-141.18578910342507" y="-526.91253824068679" z="0" unit="cm"/>
+    <rotation name="stave_outer_1inYokeBarrel_enveloperot" x="-90" y="14.999999999999998" z="-0" unit="deg"/>
+    <position name="stave_outer_2inYokeBarrel_envelopepos" x="-385.72674913726166" y="-385.72674913726172" z="0" unit="cm"/>
+    <rotation name="stave_outer_2inYokeBarrel_enveloperot" x="-90" y="44.999999999999993" z="-0" unit="deg"/>
+    <position name="stave_outer_3inYokeBarrel_envelopepos" x="-526.91253824068667" y="-141.18578910342518" z="0" unit="cm"/>
+    <rotation name="stave_outer_3inYokeBarrel_enveloperot" x="-90" y="74.999999999999986" z="-0" unit="deg"/>
+    <position name="stave_outer_4inYokeBarrel_envelopepos" x="-526.91253824068679" y="141.1857891034249" z="0" unit="cm"/>
+    <rotation name="stave_outer_4inYokeBarrel_enveloperot" x="90" y="75.000000000000014" z="-180" unit="deg"/>
+    <position name="stave_outer_5inYokeBarrel_envelopepos" x="-385.72674913726189" y="385.72674913726144" z="0" unit="cm"/>
+    <rotation name="stave_outer_5inYokeBarrel_enveloperot" x="90" y="45.000000000000043" z="-180" unit="deg"/>
+    <position name="stave_outer_6inYokeBarrel_envelopepos" x="-141.18578910342544" y="526.91253824068667" z="0" unit="cm"/>
+    <rotation name="stave_outer_6inYokeBarrel_enveloperot" x="90" y="15.000000000000037" z="-180" unit="deg"/>
+    <position name="stave_outer_7inYokeBarrel_envelopepos" x="141.18578910342461" y="526.9125382406869" z="0" unit="cm"/>
+    <rotation name="stave_outer_7inYokeBarrel_enveloperot" x="90" y="-14.999999999999982" z="-180" unit="deg"/>
+    <position name="stave_outer_8inYokeBarrel_envelopepos" x="385.72674913726127" y="385.72674913726206" z="0" unit="cm"/>
+    <rotation name="stave_outer_8inYokeBarrel_enveloperot" x="90" y="-44.99999999999995" z="-180" unit="deg"/>
+    <position name="stave_outer_9inYokeBarrel_envelopepos" x="526.91253824068667" y="141.18578910342546" z="0" unit="cm"/>
+    <rotation name="stave_outer_9inYokeBarrel_enveloperot" x="90" y="-74.999999999999972" z="-180" unit="deg"/>
+    <position name="stave_outer_10inYokeBarrel_envelopepos" x="526.91253824068679" y="-141.18578910342481" z="0" unit="cm"/>
+    <rotation name="stave_outer_10inYokeBarrel_enveloperot" x="-90" y="-75.000000000000014" z="-0" unit="deg"/>
+    <position name="stave_outer_11inYokeBarrel_envelopepos" x="385.72674913726178" y="-385.72674913726166" z="0" unit="cm"/>
+    <rotation name="stave_outer_11inYokeBarrel_enveloperot" x="-90" y="-44.999999999999993" z="-0" unit="deg"/>
+    <position name="YokeBarrel_envelope_4inworld_volumepos" x="0" y="0" z="0" unit="cm"/>
+    <rotation name="YokeBarrel_envelope_4inworld_volumerot" x="-0" y="-0" z="-75" unit="deg"/>
+    <position name="slice0_00x7inlayerType00x7pos" x="0" y="0" z="-1.5000000000000036" unit="cm"/>
+    <position name="slice1_10x7inlayerType00x7pos" x="0" y="0" z="8.3999999999999968" unit="cm"/>
+    <position name="slice2_20x7inlayerType00x7pos" x="0" y="0" z="8.6249999999999982" unit="cm"/>
+    <position name="slice3_30x7inlayerType00x7pos" x="0" y="0" z="8.8999999999999986" unit="cm"/>
+    <position name="slice4_40x7inlayerType00x7pos" x="0" y="0" z="9.0999999999999979" unit="cm"/>
+    <position name="slice5_50x7inlayerType00x7pos" x="0" y="0" z="9.2999999999999972" unit="cm"/>
+    <position name="slice6_60x7inlayerType00x7pos" x="0" y="0" z="9.5749999999999975" unit="cm"/>
+    <position name="slice7_70x7inlayerType00x7pos" x="0" y="0" z="9.7999999999999989" unit="cm"/>
+    <position name="slice8_80x7inlayerType00x7pos" x="0" y="0" z="9.9000000000000004" unit="cm"/>
+    <position name="slice9_90x7inlayerType00x7pos" x="0" y="0" z="10.125000000000002" unit="cm"/>
+    <position name="slice10_100x7inlayerType00x7pos" x="0" y="0" z="10.400000000000002" unit="cm"/>
+    <position name="slice11_110x7inlayerType00x7pos" x="0" y="0" z="10.600000000000001" unit="cm"/>
+    <position name="slice12_120x7inlayerType00x7pos" x="0" y="0" z="10.800000000000001" unit="cm"/>
+    <position name="slice13_130x7inlayerType00x7pos" x="0" y="0" z="11.075000000000001" unit="cm"/>
+    <position name="slice14_140x7inlayerType00x7pos" x="0" y="0" z="11.300000000000002" unit="cm"/>
+    <position name="layerType0_00x1inendcappos" x="0" y="0" z="-61.650000000000027" unit="cm"/>
+    <position name="slice0_00x8inlayerType1pos" x="0" y="0" z="-1.5000000000000036" unit="cm"/>
+    <position name="slice1_10x8inlayerType1pos" x="0" y="0" z="8.3999999999999968" unit="cm"/>
+    <position name="slice2_20x8inlayerType1pos" x="0" y="0" z="8.6249999999999982" unit="cm"/>
+    <position name="slice3_30x8inlayerType1pos" x="0" y="0" z="8.8999999999999986" unit="cm"/>
+    <position name="slice4_40x8inlayerType1pos" x="0" y="0" z="9.0999999999999979" unit="cm"/>
+    <position name="slice5_50x8inlayerType1pos" x="0" y="0" z="9.2999999999999972" unit="cm"/>
+    <position name="slice6_60x8inlayerType1pos" x="0" y="0" z="9.5749999999999975" unit="cm"/>
+    <position name="slice7_70x8inlayerType1pos" x="0" y="0" z="9.7999999999999989" unit="cm"/>
+    <position name="slice8_80x8inlayerType1pos" x="0" y="0" z="9.9000000000000004" unit="cm"/>
+    <position name="slice9_90x8inlayerType1pos" x="0" y="0" z="10.125000000000002" unit="cm"/>
+    <position name="slice10_100x8inlayerType1pos" x="0" y="0" z="10.400000000000002" unit="cm"/>
+    <position name="slice11_110x8inlayerType1pos" x="0" y="0" z="10.600000000000001" unit="cm"/>
+    <position name="slice12_120x8inlayerType1pos" x="0" y="0" z="10.800000000000001" unit="cm"/>
+    <position name="slice13_130x8inlayerType1pos" x="0" y="0" z="11.075000000000001" unit="cm"/>
+    <position name="slice14_140x8inlayerType1pos" x="0" y="0" z="11.300000000000002" unit="cm"/>
+    <position name="layerType1_1inendcappos" x="0" y="0" z="-38.950000000000024" unit="cm"/>
+    <position name="slice0_00x9inlayerType2pos" x="0" y="0" z="-1.5000000000000036" unit="cm"/>
+    <position name="slice1_10x9inlayerType2pos" x="0" y="0" z="8.3999999999999968" unit="cm"/>
+    <position name="slice2_20x9inlayerType2pos" x="0" y="0" z="8.6249999999999982" unit="cm"/>
+    <position name="slice3_30x9inlayerType2pos" x="0" y="0" z="8.8999999999999986" unit="cm"/>
+    <position name="slice4_40x9inlayerType2pos" x="0" y="0" z="9.0999999999999979" unit="cm"/>
+    <position name="slice5_50x9inlayerType2pos" x="0" y="0" z="9.2999999999999972" unit="cm"/>
+    <position name="slice6_60x9inlayerType2pos" x="0" y="0" z="9.5749999999999975" unit="cm"/>
+    <position name="slice7_70x9inlayerType2pos" x="0" y="0" z="9.7999999999999989" unit="cm"/>
+    <position name="slice8_80x9inlayerType2pos" x="0" y="0" z="9.9000000000000004" unit="cm"/>
+    <position name="slice9_90x9inlayerType2pos" x="0" y="0" z="10.125000000000002" unit="cm"/>
+    <position name="slice10_100x9inlayerType2pos" x="0" y="0" z="10.400000000000002" unit="cm"/>
+    <position name="slice11_110x9inlayerType2pos" x="0" y="0" z="10.600000000000001" unit="cm"/>
+    <position name="slice12_120x9inlayerType2pos" x="0" y="0" z="10.800000000000001" unit="cm"/>
+    <position name="slice13_130x9inlayerType2pos" x="0" y="0" z="11.075000000000001" unit="cm"/>
+    <position name="slice14_140x9inlayerType2pos" x="0" y="0" z="11.300000000000002" unit="cm"/>
+    <position name="layerType2_2inendcappos" x="0" y="0" z="-16.250000000000021" unit="cm"/>
+    <position name="slice0_00x10inlayerType3pos" x="0" y="0" z="-1.5000000000000036" unit="cm"/>
+    <position name="slice1_10x10inlayerType3pos" x="0" y="0" z="8.3999999999999968" unit="cm"/>
+    <position name="slice2_20x10inlayerType3pos" x="0" y="0" z="8.6249999999999982" unit="cm"/>
+    <position name="slice3_30x10inlayerType3pos" x="0" y="0" z="8.8999999999999986" unit="cm"/>
+    <position name="slice4_40x10inlayerType3pos" x="0" y="0" z="9.0999999999999979" unit="cm"/>
+    <position name="slice5_50x10inlayerType3pos" x="0" y="0" z="9.2999999999999972" unit="cm"/>
+    <position name="slice6_60x10inlayerType3pos" x="0" y="0" z="9.5749999999999975" unit="cm"/>
+    <position name="slice7_70x10inlayerType3pos" x="0" y="0" z="9.7999999999999989" unit="cm"/>
+    <position name="slice8_80x10inlayerType3pos" x="0" y="0" z="9.9000000000000004" unit="cm"/>
+    <position name="slice9_90x10inlayerType3pos" x="0" y="0" z="10.125000000000002" unit="cm"/>
+    <position name="slice10_100x10inlayerType3pos" x="0" y="0" z="10.400000000000002" unit="cm"/>
+    <position name="slice11_110x10inlayerType3pos" x="0" y="0" z="10.600000000000001" unit="cm"/>
+    <position name="slice12_120x10inlayerType3pos" x="0" y="0" z="10.800000000000001" unit="cm"/>
+    <position name="slice13_130x10inlayerType3pos" x="0" y="0" z="11.075000000000001" unit="cm"/>
+    <position name="slice14_140x10inlayerType3pos" x="0" y="0" z="11.300000000000002" unit="cm"/>
+    <position name="layerType3_3inendcappos" x="0" y="0" z="6.4499999999999851" unit="cm"/>
+    <position name="slice0_00x11inlayerType4pos" x="0" y="0" z="-1.5000000000000036" unit="cm"/>
+    <position name="slice1_10x11inlayerType4pos" x="0" y="0" z="8.3999999999999968" unit="cm"/>
+    <position name="slice2_20x11inlayerType4pos" x="0" y="0" z="8.6249999999999982" unit="cm"/>
+    <position name="slice3_30x11inlayerType4pos" x="0" y="0" z="8.8999999999999986" unit="cm"/>
+    <position name="slice4_40x11inlayerType4pos" x="0" y="0" z="9.0999999999999979" unit="cm"/>
+    <position name="slice5_50x11inlayerType4pos" x="0" y="0" z="9.2999999999999972" unit="cm"/>
+    <position name="slice6_60x11inlayerType4pos" x="0" y="0" z="9.5749999999999975" unit="cm"/>
+    <position name="slice7_70x11inlayerType4pos" x="0" y="0" z="9.7999999999999989" unit="cm"/>
+    <position name="slice8_80x11inlayerType4pos" x="0" y="0" z="9.9000000000000004" unit="cm"/>
+    <position name="slice9_90x11inlayerType4pos" x="0" y="0" z="10.125000000000002" unit="cm"/>
+    <position name="slice10_100x11inlayerType4pos" x="0" y="0" z="10.400000000000002" unit="cm"/>
+    <position name="slice11_110x11inlayerType4pos" x="0" y="0" z="10.600000000000001" unit="cm"/>
+    <position name="slice12_120x11inlayerType4pos" x="0" y="0" z="10.800000000000001" unit="cm"/>
+    <position name="slice13_130x11inlayerType4pos" x="0" y="0" z="11.075000000000001" unit="cm"/>
+    <position name="slice14_140x11inlayerType4pos" x="0" y="0" z="11.300000000000002" unit="cm"/>
+    <position name="layerType4_4inendcappos" x="0" y="0" z="29.149999999999991" unit="cm"/>
+    <position name="slice0_00x12inlayerType5pos" x="0" y="0" z="-1.5000000000000036" unit="cm"/>
+    <position name="slice1_10x12inlayerType5pos" x="0" y="0" z="8.3999999999999968" unit="cm"/>
+    <position name="slice2_20x12inlayerType5pos" x="0" y="0" z="8.6249999999999982" unit="cm"/>
+    <position name="slice3_30x12inlayerType5pos" x="0" y="0" z="8.8999999999999986" unit="cm"/>
+    <position name="slice4_40x12inlayerType5pos" x="0" y="0" z="9.0999999999999979" unit="cm"/>
+    <position name="slice5_50x12inlayerType5pos" x="0" y="0" z="9.2999999999999972" unit="cm"/>
+    <position name="slice6_60x12inlayerType5pos" x="0" y="0" z="9.5749999999999975" unit="cm"/>
+    <position name="slice7_70x12inlayerType5pos" x="0" y="0" z="9.7999999999999989" unit="cm"/>
+    <position name="slice8_80x12inlayerType5pos" x="0" y="0" z="9.9000000000000004" unit="cm"/>
+    <position name="slice9_90x12inlayerType5pos" x="0" y="0" z="10.125000000000002" unit="cm"/>
+    <position name="slice10_100x12inlayerType5pos" x="0" y="0" z="10.400000000000002" unit="cm"/>
+    <position name="slice11_110x12inlayerType5pos" x="0" y="0" z="10.600000000000001" unit="cm"/>
+    <position name="slice12_120x12inlayerType5pos" x="0" y="0" z="10.800000000000001" unit="cm"/>
+    <position name="slice13_130x12inlayerType5pos" x="0" y="0" z="11.075000000000001" unit="cm"/>
+    <position name="slice14_140x12inlayerType5pos" x="0" y="0" z="11.300000000000002" unit="cm"/>
+    <position name="layerType5_5inendcappos" x="0" y="0" z="51.849999999999994" unit="cm"/>
+    <position name="slice0_00x13inlayerType6pos" x="0" y="0" z="0" unit="cm"/>
+    <position name="layerType6_6inendcappos" x="0" y="0" z="68.099999999999994" unit="cm"/>
+    <position name="endcap_0inYokeEndcap_envelopepos" x="0" y="0" z="490.90000000000009" unit="cm"/>
+    <position name="endcap_1inYokeEndcap_envelopepos" x="0" y="0" z="-490.90000000000009" unit="cm"/>
+    <rotation name="endcap_1inYokeEndcap_enveloperot" x="-180" y="-0" z="-180" unit="deg"/>
+    <position name="YokeEndcap_envelope_5inworld_volumepos" x="0" y="0" z="0" unit="cm"/>
+    <rotation name="YokeEndcap_envelope_5inworld_volumerot" x="-0" y="-0" z="-75" unit="deg"/>
+  </define>
+  <materials>
+    <element name="N_elm" formula="N" Z="7">
+      <atom unit="g/mole" value="14.006740000000001"/>
+    </element>
+    <element name="O_elm" formula="O" Z="8">
+      <atom unit="g/mole" value="15.9994"/>
+    </element>
+    <element name="AR_elm" formula="AR" Z="18">
+      <atom unit="g/mole" value="39.948"/>
+    </element>
+    <material name="Air">
+      <D unit="g/cm3" value="0.0011999999999999999"/>
+      <fraction n="0.012000000104308128" ref="AR_elm"/>
+      <fraction n="0.75400000810623169" ref="N_elm"/>
+      <fraction n="0.23399999737739563" ref="O_elm"/>
+    </material>
+    <element name="FE_elm" formula="FE" Z="26">
+      <atom unit="g/mole" value="55.844999999999999"/>
+    </element>
+    <material name="Iron">
+      <D unit="g/cm3" value="7.8739999999999997"/>
+      <fraction n="1" ref="FE_elm"/>
+    </material>
+    <element name="AL_elm" formula="AL" Z="13">
+      <atom unit="g/mole" value="26.981538"/>
+    </element>
+    <material name="Aluminium">
+      <D unit="g/cm3" value="2.6989999999999998"/>
+      <fraction n="1" ref="AL_elm"/>
+    </material>
+    <element name="W_elm" formula="W" Z="74">
+      <atom unit="g/mole" value="183.84"/>
+    </element>
+    <material name="Tungsten">
+      <D unit="g/cm3" value="19.300000000000001"/>
+      <fraction n="1" ref="W_elm"/>
+    </material>
+    <element name="H_elm" formula="H" Z="1">
+      <atom unit="g/mole" value="1.0079400000000001"/>
+    </element>
+    <element name="B_elm" formula="B" Z="5">
+      <atom unit="g/mole" value="10.811"/>
+    </element>
+    <element name="C_elm" formula="C" Z="6">
+      <atom unit="g/mole" value="12.0107"/>
+    </element>
+    <material name="BCH2">
+      <D unit="g/cm3" value="0.93000000000000005"/>
+      <fraction n="0.05000000074505806" ref="B_elm"/>
+      <fraction n="0.6119999885559082" ref="C_elm"/>
+      <fraction n="0.11599999666213989" ref="H_elm"/>
+      <fraction n="0.22200000286102295" ref="O_elm"/>
+    </material>
+    <element name="SI_elm" formula="SI" Z="14">
+      <atom unit="g/mole" value="28.0855"/>
+    </element>
+    <element name="NA_elm" formula="NA" Z="11">
+      <atom unit="g/mole" value="22.98977"/>
+    </element>
+    <material name="PyrexGlass">
+      <D unit="g/cm3" value="2.23"/>
+      <fraction n="0.012172766029834747" ref="AL_elm"/>
+      <fraction n="0.02967429906129837" ref="NA_elm"/>
+      <fraction n="0.58040040731430054" ref="O_elm"/>
+      <fraction n="0.37675255537033081" ref="SI_elm"/>
+    </material>
+    <element name="F_elm" formula="F" Z="9">
+      <atom unit="g/mole" value="18.998403199999998"/>
+    </element>
+    <material name="RPCGasDefault">
+      <D unit="g/cm3" value="0.0037000000000000002"/>
+      <fraction n="0.2512868344783783" ref="C_elm"/>
+      <fraction n="0.72459810972213745" ref="F_elm"/>
+      <fraction n="0.024115025997161865" ref="H_elm"/>
+    </material>
+  </materials>
+  <solids>
+    <box name="world_volume_shape_0x7f90b6f836d0" x="6000" y="6000" z="6000" lunit="cm"/>
+    <polycone name="NozzleW_right_shape_0x7f90b6ffb860" startphi="0" deltaphi="360" aunit="deg" lunit="cm">
+      <zplane z="6" rmin="1" rmax="1"/>
+      <zplane z="15" rmin="0.59999999999999998" rmax="2.5922299999999998"/>
+      <zplane z="100" rmin="0.29999999999999999" rmax="17.629999999999999"/>
+      <zplane z="100" rmin="0.29999999999999999" rmax="15"/>
+      <zplane z="200" rmin="0.59599999999999997" rmax="17"/>
+      <zplane z="600" rmin="1.78" rmax="50"/>
+    </polycone>
+    <polycone name="NozzleW_left_shape_0x7f90b982f790" startphi="0" deltaphi="360" aunit="deg" lunit="cm">
+      <zplane z="-600" rmin="1.78" rmax="50"/>
+      <zplane z="-200" rmin="0.59599999999999997" rmax="17"/>
+      <zplane z="-100" rmin="0.29999999999999999" rmax="15"/>
+      <zplane z="-100" rmin="0.29999999999999999" rmax="17.629999999999999"/>
+      <zplane z="-15" rmin="0.59999999999999998" rmax="2.5922299999999998"/>
+      <zplane z="-6" rmin="1" rmax="1"/>
+    </polycone>
+    <polycone name="NozzleBCH_right_shape_0x7f90b982fb40" startphi="0" deltaphi="360" aunit="deg" lunit="cm">
+      <zplane z="100" rmin="15" rmax="17.629999999999999"/>
+      <zplane z="200" rmin="17" rmax="26.103999999999999"/>
+      <zplane z="600" rmin="50" rmax="60"/>
+    </polycone>
+    <polycone name="NozzleBCH_left_shape_0x7f90b98302a0" startphi="0" deltaphi="360" aunit="deg" lunit="cm">
+      <zplane z="-600" rmin="50" rmax="60"/>
+      <zplane z="-200" rmin="17" rmax="26.103999999999999"/>
+      <zplane z="-100" rmin="15" rmax="17.629999999999999"/>
+    </polycone>
+    <polyhedra name="YokeBarrel_envelope_shape_0x7f90b987c1c0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-417.90000000000003" rmin="446" rmax="645.10000000000002"/>
+      <zplane z="417.90000000000003" rmin="446" rmax="645.10000000000002"/>
+    </polyhedra>
+    <trd name="stave_outer_shape_0x7f90b9883060" x1="239.06426948704768" x2="345.60086839766211" y1="835.80000000000007" y2="835.80000000000007" z="198.80000000000001" lunit="cm"/>
+    <trd name="stave_inner_shape_0x7f90b98833b0" x1="239.06426948704768" x2="345.60086839766211" y1="835.80000000000007" y2="835.80000000000007" z="198.80000000000001" lunit="cm"/>
+    <box name="layerType0_shape_0x7f90b9883850" x="239.06426948704768" y="835.80000000000007" z="28.399999999999999" lunit="cm"/>
+    <box name="slice0_shape_0x7f90b9883b30" x="239.06426948704768" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice1_shape_0x7f90b9883fc0" x="239.06426948704768" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice2_shape_0x7f90b9884420" x="239.06426948704768" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice3_shape_0x7f90b9884880" x="239.06426948704768" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice4_shape_0x7f90b9884d40" x="239.06426948704768" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice5_shape_0x7f90b98851a0" x="239.06426948704768" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice6_shape_0x7f90b9885600" x="239.06426948704768" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice7_shape_0x7f90b9885a60" x="239.06426948704768" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice8_shape_0x7f90b9885ec0" x="239.06426948704768" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice9_shape_0x7f90b9886320" x="239.06426948704768" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice10_shape_0x7f90b9886780" x="239.06426948704768" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice11_shape_0x7f90b9886c40" x="239.06426948704768" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice12_shape_0x7f90b98870a0" x="239.06426948704768" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice13_shape_0x7f90b9887500" x="239.06426948704768" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice14_shape_0x7f90b9887960" x="239.06426948704768" y="835.80000000000007" z="1" lunit="cm"/>
+    <box name="slice15_shape_0x7f90b9887dc0" x="239.06426948704768" y="835.80000000000007" z="24.399999999999999" lunit="cm"/>
+    <box name="layerType0_shape_0x7f90b9888300" x="254.28378361713544" y="835.80000000000007" z="28.399999999999999" lunit="cm"/>
+    <box name="slice0_shape_0x7f90b9888940" x="254.28378361713544" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice1_shape_0x7f90b9888dc0" x="254.28378361713544" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice2_shape_0x7f90b98891f0" x="254.28378361713544" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice3_shape_0x7f90b98895e0" x="254.28378361713544" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice4_shape_0x7f90b9889a30" x="254.28378361713544" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice5_shape_0x7f90b9889e60" x="254.28378361713544" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice6_shape_0x7f90b988a250" x="254.28378361713544" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice7_shape_0x7f90b988a640" x="254.28378361713544" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice8_shape_0x7f90b988aa30" x="254.28378361713544" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice9_shape_0x7f90b988ae20" x="254.28378361713544" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice10_shape_0x7f90b988b210" x="254.28378361713544" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice11_shape_0x7f90b988b660" x="254.28378361713544" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice12_shape_0x7f90b988ba50" x="254.28378361713544" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice13_shape_0x7f90b988be40" x="254.28378361713544" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice14_shape_0x7f90b988c230" x="254.28378361713544" y="835.80000000000007" z="1" lunit="cm"/>
+    <box name="slice15_shape_0x7f90b988c620" x="254.28378361713544" y="835.80000000000007" z="24.399999999999999" lunit="cm"/>
+    <box name="layerType0_shape_0x7f90b988cc40" x="269.5032977472232" y="835.80000000000007" z="28.399999999999999" lunit="cm"/>
+    <box name="slice0_shape_0x7f90b988d0d0" x="269.5032977472232" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice1_shape_0x7f90b988d530" x="269.5032977472232" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice2_shape_0x7f90b988d960" x="269.5032977472232" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice3_shape_0x7f90b988dd50" x="269.5032977472232" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice4_shape_0x7f90b988e1a0" x="269.5032977472232" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice5_shape_0x7f90b988e590" x="269.5032977472232" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice6_shape_0x7f90b988e980" x="269.5032977472232" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice7_shape_0x7f90b988ed70" x="269.5032977472232" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice8_shape_0x7f90b988f160" x="269.5032977472232" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice9_shape_0x7f90b988f550" x="269.5032977472232" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice10_shape_0x7f90b988f940" x="269.5032977472232" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice11_shape_0x7f90b988fd90" x="269.5032977472232" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice12_shape_0x7f90b98901c0" x="269.5032977472232" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice13_shape_0x7f90b98905b0" x="269.5032977472232" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice14_shape_0x7f90b98909a0" x="269.5032977472232" y="835.80000000000007" z="1" lunit="cm"/>
+    <box name="slice15_shape_0x7f90b9890d90" x="269.5032977472232" y="835.80000000000007" z="24.399999999999999" lunit="cm"/>
+    <box name="layerType0_shape_0x7f90b9891260" x="284.72281187731096" y="835.80000000000007" z="28.399999999999999" lunit="cm"/>
+    <box name="slice0_shape_0x7f90b98918d0" x="284.72281187731096" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice1_shape_0x7f90b9891cd0" x="284.72281187731096" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice2_shape_0x7f90b9892100" x="284.72281187731096" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice3_shape_0x7f90b98924f0" x="284.72281187731096" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice4_shape_0x7f90b9892940" x="284.72281187731096" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice5_shape_0x7f90b9892d70" x="284.72281187731096" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice6_shape_0x7f90b9893160" x="284.72281187731096" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice7_shape_0x7f90b9893550" x="284.72281187731096" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice8_shape_0x7f90b9893940" x="284.72281187731096" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice9_shape_0x7f90b9893d30" x="284.72281187731096" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice10_shape_0x7f90b9894120" x="284.72281187731096" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice11_shape_0x7f90b9894570" x="284.72281187731096" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice12_shape_0x7f90b9894960" x="284.72281187731096" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice13_shape_0x7f90b9894d50" x="284.72281187731096" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice14_shape_0x7f90b9895140" x="284.72281187731096" y="835.80000000000007" z="1" lunit="cm"/>
+    <box name="slice15_shape_0x7f90b9895530" x="284.72281187731096" y="835.80000000000007" z="24.399999999999999" lunit="cm"/>
+    <box name="layerType0_shape_0x7f90b9895a40" x="299.94232600739872" y="835.80000000000007" z="28.399999999999999" lunit="cm"/>
+    <box name="slice0_shape_0x7f90b9895f80" x="299.94232600739872" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice1_shape_0x7f90b98963e0" x="299.94232600739872" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice2_shape_0x7f90b9896810" x="299.94232600739872" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice3_shape_0x7f90b9896c00" x="299.94232600739872" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice4_shape_0x7f90b9897050" x="299.94232600739872" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice5_shape_0x7f90b9897440" x="299.94232600739872" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice6_shape_0x7f90b9897830" x="299.94232600739872" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice7_shape_0x7f90b9897c20" x="299.94232600739872" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice8_shape_0x7f90b9898010" x="299.94232600739872" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice9_shape_0x7f90b9898400" x="299.94232600739872" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice10_shape_0x7f90b98987f0" x="299.94232600739872" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice11_shape_0x7f90b9898c40" x="299.94232600739872" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice12_shape_0x7f90b9899070" x="299.94232600739872" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice13_shape_0x7f90b9899460" x="299.94232600739872" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice14_shape_0x7f90b9899850" x="299.94232600739872" y="835.80000000000007" z="1" lunit="cm"/>
+    <box name="slice15_shape_0x7f90b9899c40" x="299.94232600739872" y="835.80000000000007" z="24.399999999999999" lunit="cm"/>
+    <box name="layerType0_shape_0x7f90b989a110" x="315.16184013748648" y="835.80000000000007" z="28.399999999999999" lunit="cm"/>
+    <box name="slice0_shape_0x7f90b989a7d0" x="315.16184013748648" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice1_shape_0x7f90b989ac30" x="315.16184013748648" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice2_shape_0x7f90b989b060" x="315.16184013748648" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice3_shape_0x7f90b989b450" x="315.16184013748648" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice4_shape_0x7f90b989b8a0" x="315.16184013748648" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice5_shape_0x7f90b989bcd0" x="315.16184013748648" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice6_shape_0x7f90b989c0c0" x="315.16184013748648" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice7_shape_0x7f90b989c4b0" x="315.16184013748648" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice8_shape_0x7f90b989c8a0" x="315.16184013748648" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice9_shape_0x7f90b989cc90" x="315.16184013748648" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice10_shape_0x7f90b989d080" x="315.16184013748648" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice11_shape_0x7f90b989d4d0" x="315.16184013748648" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice12_shape_0x7f90b989d8c0" x="315.16184013748648" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice13_shape_0x7f90b989dcb0" x="315.16184013748648" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice14_shape_0x7f90b989e0a0" x="315.16184013748648" y="835.80000000000007" z="1" lunit="cm"/>
+    <box name="slice15_shape_0x7f90b989e490" x="315.16184013748648" y="835.80000000000007" z="24.399999999999999" lunit="cm"/>
+    <box name="layerType0_shape_0x7f90b989e9a0" x="330.38135426757424" y="835.80000000000007" z="28.399999999999999" lunit="cm"/>
+    <box name="slice0_shape_0x7f90b989eee0" x="330.38135426757424" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice1_shape_0x7f90b989f340" x="330.38135426757424" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice2_shape_0x7f90b989f770" x="330.38135426757424" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice3_shape_0x7f90b989fb60" x="330.38135426757424" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice4_shape_0x7f90b989ffb0" x="330.38135426757424" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice5_shape_0x7f90b98a03a0" x="330.38135426757424" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice6_shape_0x7f90b98a0790" x="330.38135426757424" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice7_shape_0x7f90b98a0b80" x="330.38135426757424" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice8_shape_0x7f90b98a0f70" x="330.38135426757424" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice9_shape_0x7f90b98a1360" x="330.38135426757424" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice10_shape_0x7f90b98a1750" x="330.38135426757424" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice11_shape_0x7f90b98a1ba0" x="330.38135426757424" y="835.80000000000007" z="0.20000000000000001" lunit="cm"/>
+    <box name="slice12_shape_0x7f90b98a1fd0" x="330.38135426757424" y="835.80000000000007" z="0.34999999999999998" lunit="cm"/>
+    <box name="slice13_shape_0x7f90b98a23c0" x="330.38135426757424" y="835.80000000000007" z="0.10000000000000001" lunit="cm"/>
+    <box name="slice14_shape_0x7f90b98a27b0" x="330.38135426757424" y="835.80000000000007" z="1" lunit="cm"/>
+    <box name="slice15_shape_0x7f90b98a2ba0" x="330.38135426757424" y="835.80000000000007" z="24.399999999999999" lunit="cm"/>
+    <polyhedra name="TGeoPgon" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-563.81000000000006" rmin="0" rmax="645.10000000000002"/>
+      <zplane z="563.81000000000006" rmin="0" rmax="645.10000000000002"/>
+    </polyhedra>
+    <polyhedra name="TGeoPgon0x1" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-417.90000000000003" rmin="0" rmax="645.20000000000005"/>
+      <zplane z="417.90000000000003" rmin="0" rmax="645.20000000000005"/>
+    </polyhedra>
+    <subtraction name="YokeEndcap_envelope_shape_0x7f90b98b7af0_left">
+      <first ref="TGeoPgon"/>
+      <second ref="TGeoPgon0x1"/>
+    </subtraction>
+    <polycone name="YokeEndcap_envelope_shape_0x7f90b98b7af0_right" startphi="0" deltaphi="360" aunit="deg" lunit="cm">
+      <zplane z="-563.82000000000005" rmin="0" rmax="57.5"/>
+      <zplane z="-417.88000000000005" rmin="0" rmax="44.600000000000001"/>
+      <zplane z="417.88000000000005" rmin="0" rmax="44.600000000000001"/>
+      <zplane z="563.82000000000005" rmin="0" rmax="57.5"/>
+    </polycone>
+    <subtraction name="YokeEndcap_envelope_shape_0x7f90b98b7af0">
+      <first ref="YokeEndcap_envelope_shape_0x7f90b98b7af0_left"/>
+      <second ref="YokeEndcap_envelope_shape_0x7f90b98b7af0_right"/>
+    </subtraction>
+    <polyhedra name="endcap_shape_0x7f90b98badc0_left" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-73.000000000000028" rmin="0" rmax="645"/>
+      <zplane z="73.000000000000028" rmin="0" rmax="645"/>
+    </polyhedra>
+    <cone name="endcap_shape_0x7f90b98badc0_right" z="146.73366834170861" rmin1="0" rmin2="0" rmax1="44.600000000000001" rmax2="57.5" startphi="0" deltaphi="360" aunit="deg" lunit="cm"/>
+    <subtraction name="endcap_shape_0x7f90b98badc0">
+      <first ref="endcap_shape_0x7f90b98badc0_left"/>
+      <second ref="endcap_shape_0x7f90b98badc0_right"/>
+    </subtraction>
+    <polyhedra name="layerType0_shape_0x7f90b98bb300" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-11.350000000000003" rmin="46.606220839813375" rmax="645"/>
+      <zplane z="11.350000000000003" rmin="46.606220839813375" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice0_shape_0x7f90b98bb8f0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-9.8499999999999996" rmin="46.606220839813375" rmax="645"/>
+      <zplane z="9.8499999999999996" rmin="46.606220839813375" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice1_shape_0x7f90b98bc080" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.050000000000000003" rmin="46.606220839813375" rmax="645"/>
+      <zplane z="0.050000000000000003" rmin="46.606220839813375" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice2_shape_0x7f90b98bc690" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.17499999999999999" rmin="46.606220839813375" rmax="645"/>
+      <zplane z="0.17499999999999999" rmin="46.606220839813375" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice3_shape_0x7f90b98bcca0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="46.606220839813375" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="46.606220839813375" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice4_shape_0x7f90b98bd2b0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="46.606220839813375" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="46.606220839813375" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice5_shape_0x7f90b98bd760" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="46.606220839813375" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="46.606220839813375" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice6_shape_0x7f90b98bdef0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.17499999999999999" rmin="46.606220839813375" rmax="645"/>
+      <zplane z="0.17499999999999999" rmin="46.606220839813375" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice7_shape_0x7f90b98be500" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.050000000000000003" rmin="46.606220839813375" rmax="645"/>
+      <zplane z="0.050000000000000003" rmin="46.606220839813375" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice8_shape_0x7f90b98beb10" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.050000000000000003" rmin="46.606220839813375" rmax="645"/>
+      <zplane z="0.050000000000000003" rmin="46.606220839813375" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice9_shape_0x7f90b98bf120" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.17499999999999999" rmin="46.606220839813375" rmax="645"/>
+      <zplane z="0.17499999999999999" rmin="46.606220839813375" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice10_shape_0x7f90b98bf730" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="46.606220839813375" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="46.606220839813375" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice11_shape_0x7f90b98bfd40" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="46.606220839813375" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="46.606220839813375" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice12_shape_0x7f90b98c01f0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="46.606220839813375" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="46.606220839813375" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice13_shape_0x7f90b98c0980" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.17499999999999999" rmin="46.606220839813375" rmax="645"/>
+      <zplane z="0.17499999999999999" rmin="46.606220839813375" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice14_shape_0x7f90b98c0f90" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.050000000000000003" rmin="46.606220839813375" rmax="645"/>
+      <zplane z="0.050000000000000003" rmin="46.606220839813375" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="layerType1_shape_0x7f90b98c1970" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-11.350000000000003" rmin="48.612441679626748" rmax="645"/>
+      <zplane z="11.350000000000003" rmin="48.612441679626748" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice0_shape_0x7f90b98c1e10" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-9.8499999999999996" rmin="48.612441679626748" rmax="645"/>
+      <zplane z="9.8499999999999996" rmin="48.612441679626748" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice1_shape_0x7f90b98c25a0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.050000000000000003" rmin="48.612441679626748" rmax="645"/>
+      <zplane z="0.050000000000000003" rmin="48.612441679626748" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice2_shape_0x7f90b98c2bb0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.17499999999999999" rmin="48.612441679626748" rmax="645"/>
+      <zplane z="0.17499999999999999" rmin="48.612441679626748" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice3_shape_0x7f90b98c31c0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="48.612441679626748" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="48.612441679626748" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice4_shape_0x7f90b98c37d0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="48.612441679626748" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="48.612441679626748" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice5_shape_0x7f90b98c3c80" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="48.612441679626748" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="48.612441679626748" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice6_shape_0x7f90b98c4410" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.17499999999999999" rmin="48.612441679626748" rmax="645"/>
+      <zplane z="0.17499999999999999" rmin="48.612441679626748" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice7_shape_0x7f90b98c4a20" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.050000000000000003" rmin="48.612441679626748" rmax="645"/>
+      <zplane z="0.050000000000000003" rmin="48.612441679626748" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice8_shape_0x7f90b98c5030" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.050000000000000003" rmin="48.612441679626748" rmax="645"/>
+      <zplane z="0.050000000000000003" rmin="48.612441679626748" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice9_shape_0x7f90b98c5640" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.17499999999999999" rmin="48.612441679626748" rmax="645"/>
+      <zplane z="0.17499999999999999" rmin="48.612441679626748" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice10_shape_0x7f90b98c5c50" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="48.612441679626748" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="48.612441679626748" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice11_shape_0x7f90b98c6260" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="48.612441679626748" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="48.612441679626748" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice12_shape_0x7f90b98c6710" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="48.612441679626748" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="48.612441679626748" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice13_shape_0x7f90b98c6ea0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.17499999999999999" rmin="48.612441679626748" rmax="645"/>
+      <zplane z="0.17499999999999999" rmin="48.612441679626748" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice14_shape_0x7f90b98c74b0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.050000000000000003" rmin="48.612441679626748" rmax="645"/>
+      <zplane z="0.050000000000000003" rmin="48.612441679626748" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="layerType2_shape_0x7f90b98c7bf0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-11.350000000000003" rmin="50.618662519440122" rmax="645"/>
+      <zplane z="11.350000000000003" rmin="50.618662519440122" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice0_shape_0x7f90b98c8210" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-9.8499999999999996" rmin="50.618662519440122" rmax="645"/>
+      <zplane z="9.8499999999999996" rmin="50.618662519440122" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice1_shape_0x7f90b98c89a0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.050000000000000003" rmin="50.618662519440122" rmax="645"/>
+      <zplane z="0.050000000000000003" rmin="50.618662519440122" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice2_shape_0x7f90b98c8fb0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.17499999999999999" rmin="50.618662519440122" rmax="645"/>
+      <zplane z="0.17499999999999999" rmin="50.618662519440122" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice3_shape_0x7f90b98c95c0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="50.618662519440122" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="50.618662519440122" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice4_shape_0x7f90b98c9bd0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="50.618662519440122" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="50.618662519440122" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice5_shape_0x7f90b98ca080" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="50.618662519440122" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="50.618662519440122" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice6_shape_0x7f90b98ca810" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.17499999999999999" rmin="50.618662519440122" rmax="645"/>
+      <zplane z="0.17499999999999999" rmin="50.618662519440122" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice7_shape_0x7f90b98cae20" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.050000000000000003" rmin="50.618662519440122" rmax="645"/>
+      <zplane z="0.050000000000000003" rmin="50.618662519440122" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice8_shape_0x7f90b98cb430" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.050000000000000003" rmin="50.618662519440122" rmax="645"/>
+      <zplane z="0.050000000000000003" rmin="50.618662519440122" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice9_shape_0x7f90b98cba40" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.17499999999999999" rmin="50.618662519440122" rmax="645"/>
+      <zplane z="0.17499999999999999" rmin="50.618662519440122" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice10_shape_0x7f90b98cc050" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="50.618662519440122" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="50.618662519440122" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice11_shape_0x7f90b98cc660" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="50.618662519440122" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="50.618662519440122" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice12_shape_0x7f90b98ccb10" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="50.618662519440122" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="50.618662519440122" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice13_shape_0x7f90b98cd2a0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.17499999999999999" rmin="50.618662519440122" rmax="645"/>
+      <zplane z="0.17499999999999999" rmin="50.618662519440122" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice14_shape_0x7f90b98cd8b0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.050000000000000003" rmin="50.618662519440122" rmax="645"/>
+      <zplane z="0.050000000000000003" rmin="50.618662519440122" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="layerType3_shape_0x7f90b98ce250" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-11.350000000000003" rmin="52.624883359253502" rmax="645"/>
+      <zplane z="11.350000000000003" rmin="52.624883359253502" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice0_shape_0x7f90b98ce680" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-9.8499999999999996" rmin="52.624883359253502" rmax="645"/>
+      <zplane z="9.8499999999999996" rmin="52.624883359253502" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice1_shape_0x7f90b98cee10" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.050000000000000003" rmin="52.624883359253502" rmax="645"/>
+      <zplane z="0.050000000000000003" rmin="52.624883359253502" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice2_shape_0x7f90b98cf420" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.17499999999999999" rmin="52.624883359253502" rmax="645"/>
+      <zplane z="0.17499999999999999" rmin="52.624883359253502" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice3_shape_0x7f90b98cfa30" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="52.624883359253502" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="52.624883359253502" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice4_shape_0x7f90b98d0040" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="52.624883359253502" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="52.624883359253502" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice5_shape_0x7f90b98d04f0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="52.624883359253502" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="52.624883359253502" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice6_shape_0x7f90b98d0c80" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.17499999999999999" rmin="52.624883359253502" rmax="645"/>
+      <zplane z="0.17499999999999999" rmin="52.624883359253502" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice7_shape_0x7f90b98d1290" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.050000000000000003" rmin="52.624883359253502" rmax="645"/>
+      <zplane z="0.050000000000000003" rmin="52.624883359253502" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice8_shape_0x7f90b98d18a0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.050000000000000003" rmin="52.624883359253502" rmax="645"/>
+      <zplane z="0.050000000000000003" rmin="52.624883359253502" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice9_shape_0x7f90b98d1eb0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.17499999999999999" rmin="52.624883359253502" rmax="645"/>
+      <zplane z="0.17499999999999999" rmin="52.624883359253502" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice10_shape_0x7f90b98d24c0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="52.624883359253502" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="52.624883359253502" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice11_shape_0x7f90b98d2ad0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="52.624883359253502" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="52.624883359253502" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice12_shape_0x7f90b98d2f80" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="52.624883359253502" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="52.624883359253502" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice13_shape_0x7f90b98d3710" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.17499999999999999" rmin="52.624883359253502" rmax="645"/>
+      <zplane z="0.17499999999999999" rmin="52.624883359253502" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice14_shape_0x7f90b98d3d20" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.050000000000000003" rmin="52.624883359253502" rmax="645"/>
+      <zplane z="0.050000000000000003" rmin="52.624883359253502" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="layerType4_shape_0x7f90b98d4420" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-11.350000000000003" rmin="54.631104199066876" rmax="645"/>
+      <zplane z="11.350000000000003" rmin="54.631104199066876" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice0_shape_0x7f90b98d4a40" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-9.8499999999999996" rmin="54.631104199066876" rmax="645"/>
+      <zplane z="9.8499999999999996" rmin="54.631104199066876" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice1_shape_0x7f90b98d51d0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.050000000000000003" rmin="54.631104199066876" rmax="645"/>
+      <zplane z="0.050000000000000003" rmin="54.631104199066876" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice2_shape_0x7f90b98d57e0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.17499999999999999" rmin="54.631104199066876" rmax="645"/>
+      <zplane z="0.17499999999999999" rmin="54.631104199066876" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice3_shape_0x7f90b98d5df0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="54.631104199066876" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="54.631104199066876" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice4_shape_0x7f90b98d6400" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="54.631104199066876" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="54.631104199066876" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice5_shape_0x7f90b98d68b0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="54.631104199066876" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="54.631104199066876" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice6_shape_0x7f90b98d7040" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.17499999999999999" rmin="54.631104199066876" rmax="645"/>
+      <zplane z="0.17499999999999999" rmin="54.631104199066876" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice7_shape_0x7f90b98d7650" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.050000000000000003" rmin="54.631104199066876" rmax="645"/>
+      <zplane z="0.050000000000000003" rmin="54.631104199066876" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice8_shape_0x7f90b98d7c60" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.050000000000000003" rmin="54.631104199066876" rmax="645"/>
+      <zplane z="0.050000000000000003" rmin="54.631104199066876" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice9_shape_0x7f90b98d8270" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.17499999999999999" rmin="54.631104199066876" rmax="645"/>
+      <zplane z="0.17499999999999999" rmin="54.631104199066876" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice10_shape_0x7f90b98d8880" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="54.631104199066876" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="54.631104199066876" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice11_shape_0x7f90b98d8e90" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="54.631104199066876" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="54.631104199066876" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice12_shape_0x7f90b98d9340" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="54.631104199066876" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="54.631104199066876" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice13_shape_0x7f90b98d9ad0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.17499999999999999" rmin="54.631104199066876" rmax="645"/>
+      <zplane z="0.17499999999999999" rmin="54.631104199066876" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice14_shape_0x7f90b98da0e0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.050000000000000003" rmin="54.631104199066876" rmax="645"/>
+      <zplane z="0.050000000000000003" rmin="54.631104199066876" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="layerType5_shape_0x7f90b98dab40" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-11.350000000000003" rmin="56.637325038880249" rmax="645"/>
+      <zplane z="11.350000000000003" rmin="56.637325038880249" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice0_shape_0x7f90b98dafe0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-9.8499999999999996" rmin="56.637325038880249" rmax="645"/>
+      <zplane z="9.8499999999999996" rmin="56.637325038880249" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice1_shape_0x7f90b98db770" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.050000000000000003" rmin="56.637325038880249" rmax="645"/>
+      <zplane z="0.050000000000000003" rmin="56.637325038880249" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice2_shape_0x7f90b98dbd80" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.17499999999999999" rmin="56.637325038880249" rmax="645"/>
+      <zplane z="0.17499999999999999" rmin="56.637325038880249" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice3_shape_0x7f90b98dc390" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="56.637325038880249" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="56.637325038880249" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice4_shape_0x7f90b98dc9a0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="56.637325038880249" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="56.637325038880249" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice5_shape_0x7f90b98dce50" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="56.637325038880249" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="56.637325038880249" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice6_shape_0x7f90b98dd5e0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.17499999999999999" rmin="56.637325038880249" rmax="645"/>
+      <zplane z="0.17499999999999999" rmin="56.637325038880249" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice7_shape_0x7f90b98ddbf0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.050000000000000003" rmin="56.637325038880249" rmax="645"/>
+      <zplane z="0.050000000000000003" rmin="56.637325038880249" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice8_shape_0x7f90b98de200" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.050000000000000003" rmin="56.637325038880249" rmax="645"/>
+      <zplane z="0.050000000000000003" rmin="56.637325038880249" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice9_shape_0x7f90b98de810" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.17499999999999999" rmin="56.637325038880249" rmax="645"/>
+      <zplane z="0.17499999999999999" rmin="56.637325038880249" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice10_shape_0x7f90b98dee20" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="56.637325038880249" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="56.637325038880249" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice11_shape_0x7f90b98df430" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="56.637325038880249" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="56.637325038880249" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice12_shape_0x7f90b98df8e0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.10000000000000001" rmin="56.637325038880249" rmax="645"/>
+      <zplane z="0.10000000000000001" rmin="56.637325038880249" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice13_shape_0x7f90b98e0070" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.17499999999999999" rmin="56.637325038880249" rmax="645"/>
+      <zplane z="0.17499999999999999" rmin="56.637325038880249" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice14_shape_0x7f90b98e0680" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-0.050000000000000003" rmin="56.637325038880249" rmax="645"/>
+      <zplane z="0.050000000000000003" rmin="56.637325038880249" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="layerType6_shape_0x7f90b98e0d80" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-4.9000000000000004" rmin="57.5" rmax="645"/>
+      <zplane z="4.9000000000000004" rmin="57.5" rmax="645"/>
+    </polyhedra>
+    <polyhedra name="slice0_shape_0x7f90b98e13a0" startphi="0" deltaphi="360" numsides="12" aunit="deg" lunit="cm">
+      <zplane z="-4.9000000000000004" rmin="57.5" rmax="645"/>
+      <zplane z="4.9000000000000004" rmin="57.5" rmax="645"/>
+    </polyhedra>
+  </solids>
+  <structure>
+    <volume name="NozzleW_right">
+      <materialref ref="Tungsten"/>
+      <solidref ref="NozzleW_right_shape_0x7f90b6ffb860"/>
+    </volume>
+    <volume name="NozzleW_left">
+      <materialref ref="Tungsten"/>
+      <solidref ref="NozzleW_left_shape_0x7f90b982f790"/>
+    </volume>
+    <volume name="NozzleBCH_right">
+      <materialref ref="BCH2"/>
+      <solidref ref="NozzleBCH_right_shape_0x7f90b982fb40"/>
+    </volume>
+    <volume name="NozzleBCH_left">
+      <materialref ref="BCH2"/>
+      <solidref ref="NozzleBCH_left_shape_0x7f90b98302a0"/>
+    </volume>
+    <volume name="slice0">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice0_shape_0x7f90b9883b30"/>
+    </volume>
+    <volume name="slice1">
+      <materialref ref="Air"/>
+      <solidref ref="slice1_shape_0x7f90b9883fc0"/>
+    </volume>
+    <volume name="slice2">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice2_shape_0x7f90b9884420"/>
+    </volume>
+    <volume name="slice3">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice3_shape_0x7f90b9884880"/>
+    </volume>
+    <volume name="slice4">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice4_shape_0x7f90b9884d40"/>
+    </volume>
+    <volume name="slice5">
+      <materialref ref="Air"/>
+      <solidref ref="slice5_shape_0x7f90b98851a0"/>
+    </volume>
+    <volume name="slice6">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice6_shape_0x7f90b9885600"/>
+    </volume>
+    <volume name="slice7">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice7_shape_0x7f90b9885a60"/>
+    </volume>
+    <volume name="slice8">
+      <materialref ref="Air"/>
+      <solidref ref="slice8_shape_0x7f90b9885ec0"/>
+    </volume>
+    <volume name="slice9">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice9_shape_0x7f90b9886320"/>
+    </volume>
+    <volume name="slice10">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice10_shape_0x7f90b9886780"/>
+    </volume>
+    <volume name="slice11">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice11_shape_0x7f90b9886c40"/>
+    </volume>
+    <volume name="slice12">
+      <materialref ref="Air"/>
+      <solidref ref="slice12_shape_0x7f90b98870a0"/>
+    </volume>
+    <volume name="slice13">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice13_shape_0x7f90b9887500"/>
+    </volume>
+    <volume name="slice14">
+      <materialref ref="Air"/>
+      <solidref ref="slice14_shape_0x7f90b9887960"/>
+    </volume>
+    <volume name="slice15">
+      <materialref ref="Iron"/>
+      <solidref ref="slice15_shape_0x7f90b9887dc0"/>
+    </volume>
+    <volume name="layerType0">
+      <materialref ref="Air"/>
+      <solidref ref="layerType0_shape_0x7f90b9883850"/>
+      <physvol name="slice0_0" copynumber="0">
+        <volumeref ref="slice0"/>
+        <positionref ref="slice0_0inlayerType0pos"/>
+      </physvol>
+      <physvol name="slice1_1" copynumber="1">
+        <volumeref ref="slice1"/>
+        <positionref ref="slice1_1inlayerType0pos"/>
+      </physvol>
+      <physvol name="slice2_2" copynumber="2">
+        <volumeref ref="slice2"/>
+        <positionref ref="slice2_2inlayerType0pos"/>
+      </physvol>
+      <physvol name="slice3_3" copynumber="3">
+        <volumeref ref="slice3"/>
+        <positionref ref="slice3_3inlayerType0pos"/>
+      </physvol>
+      <physvol name="slice4_4" copynumber="4">
+        <volumeref ref="slice4"/>
+        <positionref ref="slice4_4inlayerType0pos"/>
+      </physvol>
+      <physvol name="slice5_5" copynumber="5">
+        <volumeref ref="slice5"/>
+        <positionref ref="slice5_5inlayerType0pos"/>
+      </physvol>
+      <physvol name="slice6_6" copynumber="6">
+        <volumeref ref="slice6"/>
+        <positionref ref="slice6_6inlayerType0pos"/>
+      </physvol>
+      <physvol name="slice7_7" copynumber="7">
+        <volumeref ref="slice7"/>
+        <positionref ref="slice7_7inlayerType0pos"/>
+      </physvol>
+      <physvol name="slice8_8" copynumber="8">
+        <volumeref ref="slice8"/>
+        <positionref ref="slice8_8inlayerType0pos"/>
+      </physvol>
+      <physvol name="slice9_9" copynumber="9">
+        <volumeref ref="slice9"/>
+        <positionref ref="slice9_9inlayerType0pos"/>
+      </physvol>
+      <physvol name="slice10_10" copynumber="10">
+        <volumeref ref="slice10"/>
+        <positionref ref="slice10_10inlayerType0pos"/>
+      </physvol>
+      <physvol name="slice11_11" copynumber="11">
+        <volumeref ref="slice11"/>
+        <positionref ref="slice11_11inlayerType0pos"/>
+      </physvol>
+      <physvol name="slice12_12" copynumber="12">
+        <volumeref ref="slice12"/>
+        <positionref ref="slice12_12inlayerType0pos"/>
+      </physvol>
+      <physvol name="slice13_13" copynumber="13">
+        <volumeref ref="slice13"/>
+        <positionref ref="slice13_13inlayerType0pos"/>
+      </physvol>
+      <physvol name="slice14_14" copynumber="14">
+        <volumeref ref="slice14"/>
+        <positionref ref="slice14_14inlayerType0pos"/>
+      </physvol>
+      <physvol name="slice15_15" copynumber="15">
+        <volumeref ref="slice15"/>
+        <positionref ref="slice15_15inlayerType0pos"/>
+      </physvol>
+    </volume>
+    <volume name="slice00x1">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice0_shape_0x7f90b9888940"/>
+    </volume>
+    <volume name="slice10x1">
+      <materialref ref="Air"/>
+      <solidref ref="slice1_shape_0x7f90b9888dc0"/>
+    </volume>
+    <volume name="slice20x1">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice2_shape_0x7f90b98891f0"/>
+    </volume>
+    <volume name="slice30x1">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice3_shape_0x7f90b98895e0"/>
+    </volume>
+    <volume name="slice40x1">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice4_shape_0x7f90b9889a30"/>
+    </volume>
+    <volume name="slice50x1">
+      <materialref ref="Air"/>
+      <solidref ref="slice5_shape_0x7f90b9889e60"/>
+    </volume>
+    <volume name="slice60x1">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice6_shape_0x7f90b988a250"/>
+    </volume>
+    <volume name="slice70x1">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice7_shape_0x7f90b988a640"/>
+    </volume>
+    <volume name="slice80x1">
+      <materialref ref="Air"/>
+      <solidref ref="slice8_shape_0x7f90b988aa30"/>
+    </volume>
+    <volume name="slice90x1">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice9_shape_0x7f90b988ae20"/>
+    </volume>
+    <volume name="slice100x1">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice10_shape_0x7f90b988b210"/>
+    </volume>
+    <volume name="slice110x1">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice11_shape_0x7f90b988b660"/>
+    </volume>
+    <volume name="slice120x1">
+      <materialref ref="Air"/>
+      <solidref ref="slice12_shape_0x7f90b988ba50"/>
+    </volume>
+    <volume name="slice130x1">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice13_shape_0x7f90b988be40"/>
+    </volume>
+    <volume name="slice140x1">
+      <materialref ref="Air"/>
+      <solidref ref="slice14_shape_0x7f90b988c230"/>
+    </volume>
+    <volume name="slice150x1">
+      <materialref ref="Iron"/>
+      <solidref ref="slice15_shape_0x7f90b988c620"/>
+    </volume>
+    <volume name="layerType00x1">
+      <materialref ref="Air"/>
+      <solidref ref="layerType0_shape_0x7f90b9888300"/>
+      <physvol name="slice0_0" copynumber="0">
+        <volumeref ref="slice00x1"/>
+        <positionref ref="slice0_00x1inlayerType00x1pos"/>
+      </physvol>
+      <physvol name="slice1_1" copynumber="1">
+        <volumeref ref="slice10x1"/>
+        <positionref ref="slice1_10x1inlayerType00x1pos"/>
+      </physvol>
+      <physvol name="slice2_2" copynumber="2">
+        <volumeref ref="slice20x1"/>
+        <positionref ref="slice2_20x1inlayerType00x1pos"/>
+      </physvol>
+      <physvol name="slice3_3" copynumber="3">
+        <volumeref ref="slice30x1"/>
+        <positionref ref="slice3_30x1inlayerType00x1pos"/>
+      </physvol>
+      <physvol name="slice4_4" copynumber="4">
+        <volumeref ref="slice40x1"/>
+        <positionref ref="slice4_40x1inlayerType00x1pos"/>
+      </physvol>
+      <physvol name="slice5_5" copynumber="5">
+        <volumeref ref="slice50x1"/>
+        <positionref ref="slice5_50x1inlayerType00x1pos"/>
+      </physvol>
+      <physvol name="slice6_6" copynumber="6">
+        <volumeref ref="slice60x1"/>
+        <positionref ref="slice6_60x1inlayerType00x1pos"/>
+      </physvol>
+      <physvol name="slice7_7" copynumber="7">
+        <volumeref ref="slice70x1"/>
+        <positionref ref="slice7_70x1inlayerType00x1pos"/>
+      </physvol>
+      <physvol name="slice8_8" copynumber="8">
+        <volumeref ref="slice80x1"/>
+        <positionref ref="slice8_80x1inlayerType00x1pos"/>
+      </physvol>
+      <physvol name="slice9_9" copynumber="9">
+        <volumeref ref="slice90x1"/>
+        <positionref ref="slice9_90x1inlayerType00x1pos"/>
+      </physvol>
+      <physvol name="slice10_10" copynumber="10">
+        <volumeref ref="slice100x1"/>
+        <positionref ref="slice10_100x1inlayerType00x1pos"/>
+      </physvol>
+      <physvol name="slice11_11" copynumber="11">
+        <volumeref ref="slice110x1"/>
+        <positionref ref="slice11_110x1inlayerType00x1pos"/>
+      </physvol>
+      <physvol name="slice12_12" copynumber="12">
+        <volumeref ref="slice120x1"/>
+        <positionref ref="slice12_120x1inlayerType00x1pos"/>
+      </physvol>
+      <physvol name="slice13_13" copynumber="13">
+        <volumeref ref="slice130x1"/>
+        <positionref ref="slice13_130x1inlayerType00x1pos"/>
+      </physvol>
+      <physvol name="slice14_14" copynumber="14">
+        <volumeref ref="slice140x1"/>
+        <positionref ref="slice14_140x1inlayerType00x1pos"/>
+      </physvol>
+      <physvol name="slice15_15" copynumber="15">
+        <volumeref ref="slice150x1"/>
+        <positionref ref="slice15_150x1inlayerType00x1pos"/>
+      </physvol>
+    </volume>
+    <volume name="slice00x2">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice0_shape_0x7f90b988d0d0"/>
+    </volume>
+    <volume name="slice10x2">
+      <materialref ref="Air"/>
+      <solidref ref="slice1_shape_0x7f90b988d530"/>
+    </volume>
+    <volume name="slice20x2">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice2_shape_0x7f90b988d960"/>
+    </volume>
+    <volume name="slice30x2">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice3_shape_0x7f90b988dd50"/>
+    </volume>
+    <volume name="slice40x2">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice4_shape_0x7f90b988e1a0"/>
+    </volume>
+    <volume name="slice50x2">
+      <materialref ref="Air"/>
+      <solidref ref="slice5_shape_0x7f90b988e590"/>
+    </volume>
+    <volume name="slice60x2">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice6_shape_0x7f90b988e980"/>
+    </volume>
+    <volume name="slice70x2">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice7_shape_0x7f90b988ed70"/>
+    </volume>
+    <volume name="slice80x2">
+      <materialref ref="Air"/>
+      <solidref ref="slice8_shape_0x7f90b988f160"/>
+    </volume>
+    <volume name="slice90x2">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice9_shape_0x7f90b988f550"/>
+    </volume>
+    <volume name="slice100x2">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice10_shape_0x7f90b988f940"/>
+    </volume>
+    <volume name="slice110x2">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice11_shape_0x7f90b988fd90"/>
+    </volume>
+    <volume name="slice120x2">
+      <materialref ref="Air"/>
+      <solidref ref="slice12_shape_0x7f90b98901c0"/>
+    </volume>
+    <volume name="slice130x2">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice13_shape_0x7f90b98905b0"/>
+    </volume>
+    <volume name="slice140x2">
+      <materialref ref="Air"/>
+      <solidref ref="slice14_shape_0x7f90b98909a0"/>
+    </volume>
+    <volume name="slice150x2">
+      <materialref ref="Iron"/>
+      <solidref ref="slice15_shape_0x7f90b9890d90"/>
+    </volume>
+    <volume name="layerType00x2">
+      <materialref ref="Air"/>
+      <solidref ref="layerType0_shape_0x7f90b988cc40"/>
+      <physvol name="slice0_0" copynumber="0">
+        <volumeref ref="slice00x2"/>
+        <positionref ref="slice0_00x2inlayerType00x2pos"/>
+      </physvol>
+      <physvol name="slice1_1" copynumber="1">
+        <volumeref ref="slice10x2"/>
+        <positionref ref="slice1_10x2inlayerType00x2pos"/>
+      </physvol>
+      <physvol name="slice2_2" copynumber="2">
+        <volumeref ref="slice20x2"/>
+        <positionref ref="slice2_20x2inlayerType00x2pos"/>
+      </physvol>
+      <physvol name="slice3_3" copynumber="3">
+        <volumeref ref="slice30x2"/>
+        <positionref ref="slice3_30x2inlayerType00x2pos"/>
+      </physvol>
+      <physvol name="slice4_4" copynumber="4">
+        <volumeref ref="slice40x2"/>
+        <positionref ref="slice4_40x2inlayerType00x2pos"/>
+      </physvol>
+      <physvol name="slice5_5" copynumber="5">
+        <volumeref ref="slice50x2"/>
+        <positionref ref="slice5_50x2inlayerType00x2pos"/>
+      </physvol>
+      <physvol name="slice6_6" copynumber="6">
+        <volumeref ref="slice60x2"/>
+        <positionref ref="slice6_60x2inlayerType00x2pos"/>
+      </physvol>
+      <physvol name="slice7_7" copynumber="7">
+        <volumeref ref="slice70x2"/>
+        <positionref ref="slice7_70x2inlayerType00x2pos"/>
+      </physvol>
+      <physvol name="slice8_8" copynumber="8">
+        <volumeref ref="slice80x2"/>
+        <positionref ref="slice8_80x2inlayerType00x2pos"/>
+      </physvol>
+      <physvol name="slice9_9" copynumber="9">
+        <volumeref ref="slice90x2"/>
+        <positionref ref="slice9_90x2inlayerType00x2pos"/>
+      </physvol>
+      <physvol name="slice10_10" copynumber="10">
+        <volumeref ref="slice100x2"/>
+        <positionref ref="slice10_100x2inlayerType00x2pos"/>
+      </physvol>
+      <physvol name="slice11_11" copynumber="11">
+        <volumeref ref="slice110x2"/>
+        <positionref ref="slice11_110x2inlayerType00x2pos"/>
+      </physvol>
+      <physvol name="slice12_12" copynumber="12">
+        <volumeref ref="slice120x2"/>
+        <positionref ref="slice12_120x2inlayerType00x2pos"/>
+      </physvol>
+      <physvol name="slice13_13" copynumber="13">
+        <volumeref ref="slice130x2"/>
+        <positionref ref="slice13_130x2inlayerType00x2pos"/>
+      </physvol>
+      <physvol name="slice14_14" copynumber="14">
+        <volumeref ref="slice140x2"/>
+        <positionref ref="slice14_140x2inlayerType00x2pos"/>
+      </physvol>
+      <physvol name="slice15_15" copynumber="15">
+        <volumeref ref="slice150x2"/>
+        <positionref ref="slice15_150x2inlayerType00x2pos"/>
+      </physvol>
+    </volume>
+    <volume name="slice00x3">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice0_shape_0x7f90b98918d0"/>
+    </volume>
+    <volume name="slice10x3">
+      <materialref ref="Air"/>
+      <solidref ref="slice1_shape_0x7f90b9891cd0"/>
+    </volume>
+    <volume name="slice20x3">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice2_shape_0x7f90b9892100"/>
+    </volume>
+    <volume name="slice30x3">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice3_shape_0x7f90b98924f0"/>
+    </volume>
+    <volume name="slice40x3">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice4_shape_0x7f90b9892940"/>
+    </volume>
+    <volume name="slice50x3">
+      <materialref ref="Air"/>
+      <solidref ref="slice5_shape_0x7f90b9892d70"/>
+    </volume>
+    <volume name="slice60x3">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice6_shape_0x7f90b9893160"/>
+    </volume>
+    <volume name="slice70x3">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice7_shape_0x7f90b9893550"/>
+    </volume>
+    <volume name="slice80x3">
+      <materialref ref="Air"/>
+      <solidref ref="slice8_shape_0x7f90b9893940"/>
+    </volume>
+    <volume name="slice90x3">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice9_shape_0x7f90b9893d30"/>
+    </volume>
+    <volume name="slice100x3">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice10_shape_0x7f90b9894120"/>
+    </volume>
+    <volume name="slice110x3">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice11_shape_0x7f90b9894570"/>
+    </volume>
+    <volume name="slice120x3">
+      <materialref ref="Air"/>
+      <solidref ref="slice12_shape_0x7f90b9894960"/>
+    </volume>
+    <volume name="slice130x3">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice13_shape_0x7f90b9894d50"/>
+    </volume>
+    <volume name="slice140x3">
+      <materialref ref="Air"/>
+      <solidref ref="slice14_shape_0x7f90b9895140"/>
+    </volume>
+    <volume name="slice150x3">
+      <materialref ref="Iron"/>
+      <solidref ref="slice15_shape_0x7f90b9895530"/>
+    </volume>
+    <volume name="layerType00x3">
+      <materialref ref="Air"/>
+      <solidref ref="layerType0_shape_0x7f90b9891260"/>
+      <physvol name="slice0_0" copynumber="0">
+        <volumeref ref="slice00x3"/>
+        <positionref ref="slice0_00x3inlayerType00x3pos"/>
+      </physvol>
+      <physvol name="slice1_1" copynumber="1">
+        <volumeref ref="slice10x3"/>
+        <positionref ref="slice1_10x3inlayerType00x3pos"/>
+      </physvol>
+      <physvol name="slice2_2" copynumber="2">
+        <volumeref ref="slice20x3"/>
+        <positionref ref="slice2_20x3inlayerType00x3pos"/>
+      </physvol>
+      <physvol name="slice3_3" copynumber="3">
+        <volumeref ref="slice30x3"/>
+        <positionref ref="slice3_30x3inlayerType00x3pos"/>
+      </physvol>
+      <physvol name="slice4_4" copynumber="4">
+        <volumeref ref="slice40x3"/>
+        <positionref ref="slice4_40x3inlayerType00x3pos"/>
+      </physvol>
+      <physvol name="slice5_5" copynumber="5">
+        <volumeref ref="slice50x3"/>
+        <positionref ref="slice5_50x3inlayerType00x3pos"/>
+      </physvol>
+      <physvol name="slice6_6" copynumber="6">
+        <volumeref ref="slice60x3"/>
+        <positionref ref="slice6_60x3inlayerType00x3pos"/>
+      </physvol>
+      <physvol name="slice7_7" copynumber="7">
+        <volumeref ref="slice70x3"/>
+        <positionref ref="slice7_70x3inlayerType00x3pos"/>
+      </physvol>
+      <physvol name="slice8_8" copynumber="8">
+        <volumeref ref="slice80x3"/>
+        <positionref ref="slice8_80x3inlayerType00x3pos"/>
+      </physvol>
+      <physvol name="slice9_9" copynumber="9">
+        <volumeref ref="slice90x3"/>
+        <positionref ref="slice9_90x3inlayerType00x3pos"/>
+      </physvol>
+      <physvol name="slice10_10" copynumber="10">
+        <volumeref ref="slice100x3"/>
+        <positionref ref="slice10_100x3inlayerType00x3pos"/>
+      </physvol>
+      <physvol name="slice11_11" copynumber="11">
+        <volumeref ref="slice110x3"/>
+        <positionref ref="slice11_110x3inlayerType00x3pos"/>
+      </physvol>
+      <physvol name="slice12_12" copynumber="12">
+        <volumeref ref="slice120x3"/>
+        <positionref ref="slice12_120x3inlayerType00x3pos"/>
+      </physvol>
+      <physvol name="slice13_13" copynumber="13">
+        <volumeref ref="slice130x3"/>
+        <positionref ref="slice13_130x3inlayerType00x3pos"/>
+      </physvol>
+      <physvol name="slice14_14" copynumber="14">
+        <volumeref ref="slice140x3"/>
+        <positionref ref="slice14_140x3inlayerType00x3pos"/>
+      </physvol>
+      <physvol name="slice15_15" copynumber="15">
+        <volumeref ref="slice150x3"/>
+        <positionref ref="slice15_150x3inlayerType00x3pos"/>
+      </physvol>
+    </volume>
+    <volume name="slice00x4">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice0_shape_0x7f90b9895f80"/>
+    </volume>
+    <volume name="slice10x4">
+      <materialref ref="Air"/>
+      <solidref ref="slice1_shape_0x7f90b98963e0"/>
+    </volume>
+    <volume name="slice20x4">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice2_shape_0x7f90b9896810"/>
+    </volume>
+    <volume name="slice30x4">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice3_shape_0x7f90b9896c00"/>
+    </volume>
+    <volume name="slice40x4">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice4_shape_0x7f90b9897050"/>
+    </volume>
+    <volume name="slice50x4">
+      <materialref ref="Air"/>
+      <solidref ref="slice5_shape_0x7f90b9897440"/>
+    </volume>
+    <volume name="slice60x4">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice6_shape_0x7f90b9897830"/>
+    </volume>
+    <volume name="slice70x4">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice7_shape_0x7f90b9897c20"/>
+    </volume>
+    <volume name="slice80x4">
+      <materialref ref="Air"/>
+      <solidref ref="slice8_shape_0x7f90b9898010"/>
+    </volume>
+    <volume name="slice90x4">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice9_shape_0x7f90b9898400"/>
+    </volume>
+    <volume name="slice100x4">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice10_shape_0x7f90b98987f0"/>
+    </volume>
+    <volume name="slice110x4">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice11_shape_0x7f90b9898c40"/>
+    </volume>
+    <volume name="slice120x4">
+      <materialref ref="Air"/>
+      <solidref ref="slice12_shape_0x7f90b9899070"/>
+    </volume>
+    <volume name="slice130x4">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice13_shape_0x7f90b9899460"/>
+    </volume>
+    <volume name="slice140x4">
+      <materialref ref="Air"/>
+      <solidref ref="slice14_shape_0x7f90b9899850"/>
+    </volume>
+    <volume name="slice150x4">
+      <materialref ref="Iron"/>
+      <solidref ref="slice15_shape_0x7f90b9899c40"/>
+    </volume>
+    <volume name="layerType00x4">
+      <materialref ref="Air"/>
+      <solidref ref="layerType0_shape_0x7f90b9895a40"/>
+      <physvol name="slice0_0" copynumber="0">
+        <volumeref ref="slice00x4"/>
+        <positionref ref="slice0_00x4inlayerType00x4pos"/>
+      </physvol>
+      <physvol name="slice1_1" copynumber="1">
+        <volumeref ref="slice10x4"/>
+        <positionref ref="slice1_10x4inlayerType00x4pos"/>
+      </physvol>
+      <physvol name="slice2_2" copynumber="2">
+        <volumeref ref="slice20x4"/>
+        <positionref ref="slice2_20x4inlayerType00x4pos"/>
+      </physvol>
+      <physvol name="slice3_3" copynumber="3">
+        <volumeref ref="slice30x4"/>
+        <positionref ref="slice3_30x4inlayerType00x4pos"/>
+      </physvol>
+      <physvol name="slice4_4" copynumber="4">
+        <volumeref ref="slice40x4"/>
+        <positionref ref="slice4_40x4inlayerType00x4pos"/>
+      </physvol>
+      <physvol name="slice5_5" copynumber="5">
+        <volumeref ref="slice50x4"/>
+        <positionref ref="slice5_50x4inlayerType00x4pos"/>
+      </physvol>
+      <physvol name="slice6_6" copynumber="6">
+        <volumeref ref="slice60x4"/>
+        <positionref ref="slice6_60x4inlayerType00x4pos"/>
+      </physvol>
+      <physvol name="slice7_7" copynumber="7">
+        <volumeref ref="slice70x4"/>
+        <positionref ref="slice7_70x4inlayerType00x4pos"/>
+      </physvol>
+      <physvol name="slice8_8" copynumber="8">
+        <volumeref ref="slice80x4"/>
+        <positionref ref="slice8_80x4inlayerType00x4pos"/>
+      </physvol>
+      <physvol name="slice9_9" copynumber="9">
+        <volumeref ref="slice90x4"/>
+        <positionref ref="slice9_90x4inlayerType00x4pos"/>
+      </physvol>
+      <physvol name="slice10_10" copynumber="10">
+        <volumeref ref="slice100x4"/>
+        <positionref ref="slice10_100x4inlayerType00x4pos"/>
+      </physvol>
+      <physvol name="slice11_11" copynumber="11">
+        <volumeref ref="slice110x4"/>
+        <positionref ref="slice11_110x4inlayerType00x4pos"/>
+      </physvol>
+      <physvol name="slice12_12" copynumber="12">
+        <volumeref ref="slice120x4"/>
+        <positionref ref="slice12_120x4inlayerType00x4pos"/>
+      </physvol>
+      <physvol name="slice13_13" copynumber="13">
+        <volumeref ref="slice130x4"/>
+        <positionref ref="slice13_130x4inlayerType00x4pos"/>
+      </physvol>
+      <physvol name="slice14_14" copynumber="14">
+        <volumeref ref="slice140x4"/>
+        <positionref ref="slice14_140x4inlayerType00x4pos"/>
+      </physvol>
+      <physvol name="slice15_15" copynumber="15">
+        <volumeref ref="slice150x4"/>
+        <positionref ref="slice15_150x4inlayerType00x4pos"/>
+      </physvol>
+    </volume>
+    <volume name="slice00x5">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice0_shape_0x7f90b989a7d0"/>
+    </volume>
+    <volume name="slice10x5">
+      <materialref ref="Air"/>
+      <solidref ref="slice1_shape_0x7f90b989ac30"/>
+    </volume>
+    <volume name="slice20x5">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice2_shape_0x7f90b989b060"/>
+    </volume>
+    <volume name="slice30x5">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice3_shape_0x7f90b989b450"/>
+    </volume>
+    <volume name="slice40x5">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice4_shape_0x7f90b989b8a0"/>
+    </volume>
+    <volume name="slice50x5">
+      <materialref ref="Air"/>
+      <solidref ref="slice5_shape_0x7f90b989bcd0"/>
+    </volume>
+    <volume name="slice60x5">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice6_shape_0x7f90b989c0c0"/>
+    </volume>
+    <volume name="slice70x5">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice7_shape_0x7f90b989c4b0"/>
+    </volume>
+    <volume name="slice80x5">
+      <materialref ref="Air"/>
+      <solidref ref="slice8_shape_0x7f90b989c8a0"/>
+    </volume>
+    <volume name="slice90x5">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice9_shape_0x7f90b989cc90"/>
+    </volume>
+    <volume name="slice100x5">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice10_shape_0x7f90b989d080"/>
+    </volume>
+    <volume name="slice110x5">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice11_shape_0x7f90b989d4d0"/>
+    </volume>
+    <volume name="slice120x5">
+      <materialref ref="Air"/>
+      <solidref ref="slice12_shape_0x7f90b989d8c0"/>
+    </volume>
+    <volume name="slice130x5">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice13_shape_0x7f90b989dcb0"/>
+    </volume>
+    <volume name="slice140x5">
+      <materialref ref="Air"/>
+      <solidref ref="slice14_shape_0x7f90b989e0a0"/>
+    </volume>
+    <volume name="slice150x5">
+      <materialref ref="Iron"/>
+      <solidref ref="slice15_shape_0x7f90b989e490"/>
+    </volume>
+    <volume name="layerType00x5">
+      <materialref ref="Air"/>
+      <solidref ref="layerType0_shape_0x7f90b989a110"/>
+      <physvol name="slice0_0" copynumber="0">
+        <volumeref ref="slice00x5"/>
+        <positionref ref="slice0_00x5inlayerType00x5pos"/>
+      </physvol>
+      <physvol name="slice1_1" copynumber="1">
+        <volumeref ref="slice10x5"/>
+        <positionref ref="slice1_10x5inlayerType00x5pos"/>
+      </physvol>
+      <physvol name="slice2_2" copynumber="2">
+        <volumeref ref="slice20x5"/>
+        <positionref ref="slice2_20x5inlayerType00x5pos"/>
+      </physvol>
+      <physvol name="slice3_3" copynumber="3">
+        <volumeref ref="slice30x5"/>
+        <positionref ref="slice3_30x5inlayerType00x5pos"/>
+      </physvol>
+      <physvol name="slice4_4" copynumber="4">
+        <volumeref ref="slice40x5"/>
+        <positionref ref="slice4_40x5inlayerType00x5pos"/>
+      </physvol>
+      <physvol name="slice5_5" copynumber="5">
+        <volumeref ref="slice50x5"/>
+        <positionref ref="slice5_50x5inlayerType00x5pos"/>
+      </physvol>
+      <physvol name="slice6_6" copynumber="6">
+        <volumeref ref="slice60x5"/>
+        <positionref ref="slice6_60x5inlayerType00x5pos"/>
+      </physvol>
+      <physvol name="slice7_7" copynumber="7">
+        <volumeref ref="slice70x5"/>
+        <positionref ref="slice7_70x5inlayerType00x5pos"/>
+      </physvol>
+      <physvol name="slice8_8" copynumber="8">
+        <volumeref ref="slice80x5"/>
+        <positionref ref="slice8_80x5inlayerType00x5pos"/>
+      </physvol>
+      <physvol name="slice9_9" copynumber="9">
+        <volumeref ref="slice90x5"/>
+        <positionref ref="slice9_90x5inlayerType00x5pos"/>
+      </physvol>
+      <physvol name="slice10_10" copynumber="10">
+        <volumeref ref="slice100x5"/>
+        <positionref ref="slice10_100x5inlayerType00x5pos"/>
+      </physvol>
+      <physvol name="slice11_11" copynumber="11">
+        <volumeref ref="slice110x5"/>
+        <positionref ref="slice11_110x5inlayerType00x5pos"/>
+      </physvol>
+      <physvol name="slice12_12" copynumber="12">
+        <volumeref ref="slice120x5"/>
+        <positionref ref="slice12_120x5inlayerType00x5pos"/>
+      </physvol>
+      <physvol name="slice13_13" copynumber="13">
+        <volumeref ref="slice130x5"/>
+        <positionref ref="slice13_130x5inlayerType00x5pos"/>
+      </physvol>
+      <physvol name="slice14_14" copynumber="14">
+        <volumeref ref="slice140x5"/>
+        <positionref ref="slice14_140x5inlayerType00x5pos"/>
+      </physvol>
+      <physvol name="slice15_15" copynumber="15">
+        <volumeref ref="slice150x5"/>
+        <positionref ref="slice15_150x5inlayerType00x5pos"/>
+      </physvol>
+    </volume>
+    <volume name="slice00x6">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice0_shape_0x7f90b989eee0"/>
+    </volume>
+    <volume name="slice10x6">
+      <materialref ref="Air"/>
+      <solidref ref="slice1_shape_0x7f90b989f340"/>
+    </volume>
+    <volume name="slice20x6">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice2_shape_0x7f90b989f770"/>
+    </volume>
+    <volume name="slice30x6">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice3_shape_0x7f90b989fb60"/>
+    </volume>
+    <volume name="slice40x6">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice4_shape_0x7f90b989ffb0"/>
+    </volume>
+    <volume name="slice50x6">
+      <materialref ref="Air"/>
+      <solidref ref="slice5_shape_0x7f90b98a03a0"/>
+    </volume>
+    <volume name="slice60x6">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice6_shape_0x7f90b98a0790"/>
+    </volume>
+    <volume name="slice70x6">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice7_shape_0x7f90b98a0b80"/>
+    </volume>
+    <volume name="slice80x6">
+      <materialref ref="Air"/>
+      <solidref ref="slice8_shape_0x7f90b98a0f70"/>
+    </volume>
+    <volume name="slice90x6">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice9_shape_0x7f90b98a1360"/>
+    </volume>
+    <volume name="slice100x6">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice10_shape_0x7f90b98a1750"/>
+    </volume>
+    <volume name="slice110x6">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice11_shape_0x7f90b98a1ba0"/>
+    </volume>
+    <volume name="slice120x6">
+      <materialref ref="Air"/>
+      <solidref ref="slice12_shape_0x7f90b98a1fd0"/>
+    </volume>
+    <volume name="slice130x6">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice13_shape_0x7f90b98a23c0"/>
+    </volume>
+    <volume name="slice140x6">
+      <materialref ref="Air"/>
+      <solidref ref="slice14_shape_0x7f90b98a27b0"/>
+    </volume>
+    <volume name="slice150x6">
+      <materialref ref="Iron"/>
+      <solidref ref="slice15_shape_0x7f90b98a2ba0"/>
+    </volume>
+    <volume name="layerType00x6">
+      <materialref ref="Air"/>
+      <solidref ref="layerType0_shape_0x7f90b989e9a0"/>
+      <physvol name="slice0_0" copynumber="0">
+        <volumeref ref="slice00x6"/>
+        <positionref ref="slice0_00x6inlayerType00x6pos"/>
+      </physvol>
+      <physvol name="slice1_1" copynumber="1">
+        <volumeref ref="slice10x6"/>
+        <positionref ref="slice1_10x6inlayerType00x6pos"/>
+      </physvol>
+      <physvol name="slice2_2" copynumber="2">
+        <volumeref ref="slice20x6"/>
+        <positionref ref="slice2_20x6inlayerType00x6pos"/>
+      </physvol>
+      <physvol name="slice3_3" copynumber="3">
+        <volumeref ref="slice30x6"/>
+        <positionref ref="slice3_30x6inlayerType00x6pos"/>
+      </physvol>
+      <physvol name="slice4_4" copynumber="4">
+        <volumeref ref="slice40x6"/>
+        <positionref ref="slice4_40x6inlayerType00x6pos"/>
+      </physvol>
+      <physvol name="slice5_5" copynumber="5">
+        <volumeref ref="slice50x6"/>
+        <positionref ref="slice5_50x6inlayerType00x6pos"/>
+      </physvol>
+      <physvol name="slice6_6" copynumber="6">
+        <volumeref ref="slice60x6"/>
+        <positionref ref="slice6_60x6inlayerType00x6pos"/>
+      </physvol>
+      <physvol name="slice7_7" copynumber="7">
+        <volumeref ref="slice70x6"/>
+        <positionref ref="slice7_70x6inlayerType00x6pos"/>
+      </physvol>
+      <physvol name="slice8_8" copynumber="8">
+        <volumeref ref="slice80x6"/>
+        <positionref ref="slice8_80x6inlayerType00x6pos"/>
+      </physvol>
+      <physvol name="slice9_9" copynumber="9">
+        <volumeref ref="slice90x6"/>
+        <positionref ref="slice9_90x6inlayerType00x6pos"/>
+      </physvol>
+      <physvol name="slice10_10" copynumber="10">
+        <volumeref ref="slice100x6"/>
+        <positionref ref="slice10_100x6inlayerType00x6pos"/>
+      </physvol>
+      <physvol name="slice11_11" copynumber="11">
+        <volumeref ref="slice110x6"/>
+        <positionref ref="slice11_110x6inlayerType00x6pos"/>
+      </physvol>
+      <physvol name="slice12_12" copynumber="12">
+        <volumeref ref="slice120x6"/>
+        <positionref ref="slice12_120x6inlayerType00x6pos"/>
+      </physvol>
+      <physvol name="slice13_13" copynumber="13">
+        <volumeref ref="slice130x6"/>
+        <positionref ref="slice13_130x6inlayerType00x6pos"/>
+      </physvol>
+      <physvol name="slice14_14" copynumber="14">
+        <volumeref ref="slice140x6"/>
+        <positionref ref="slice14_140x6inlayerType00x6pos"/>
+      </physvol>
+      <physvol name="slice15_15" copynumber="15">
+        <volumeref ref="slice150x6"/>
+        <positionref ref="slice15_150x6inlayerType00x6pos"/>
+      </physvol>
+    </volume>
+    <volume name="stave_inner">
+      <materialref ref="Air"/>
+      <solidref ref="stave_inner_shape_0x7f90b98833b0"/>
+      <physvol name="layerType0_0" copynumber="0">
+        <volumeref ref="layerType0"/>
+        <positionref ref="layerType0_0instave_innerpos"/>
+      </physvol>
+      <physvol name="layerType0_1" copynumber="1">
+        <volumeref ref="layerType00x1"/>
+        <positionref ref="layerType0_1instave_innerpos"/>
+      </physvol>
+      <physvol name="layerType0_2" copynumber="2">
+        <volumeref ref="layerType00x2"/>
+        <positionref ref="layerType0_2instave_innerpos"/>
+      </physvol>
+      <physvol name="layerType0_3" copynumber="3">
+        <volumeref ref="layerType00x3"/>
+        <positionref ref="layerType0_3instave_innerpos"/>
+      </physvol>
+      <physvol name="layerType0_4" copynumber="4">
+        <volumeref ref="layerType00x4"/>
+        <positionref ref="layerType0_4instave_innerpos"/>
+      </physvol>
+      <physvol name="layerType0_5" copynumber="5">
+        <volumeref ref="layerType00x5"/>
+        <positionref ref="layerType0_5instave_innerpos"/>
+      </physvol>
+      <physvol name="layerType0_6" copynumber="6">
+        <volumeref ref="layerType00x6"/>
+        <positionref ref="layerType0_6instave_innerpos"/>
+      </physvol>
+    </volume>
+    <volume name="stave_outer">
+      <materialref ref="Air"/>
+      <solidref ref="stave_outer_shape_0x7f90b9883060"/>
+      <physvol name="stave_inner_0" copynumber="0">
+        <volumeref ref="stave_inner"/>
+        <positionref ref="stave_inner_0instave_outerpos"/>
+      </physvol>
+    </volume>
+    <volume name="YokeBarrel_envelope">
+      <materialref ref="Air"/>
+      <solidref ref="YokeBarrel_envelope_shape_0x7f90b987c1c0"/>
+      <physvol name="stave_outer_0" copynumber="0">
+        <volumeref ref="stave_outer"/>
+        <positionref ref="stave_outer_0inYokeBarrel_envelopepos"/>
+        <rotationref ref="stave_outer_0inYokeBarrel_enveloperot"/>
+      </physvol>
+      <physvol name="stave_outer_1" copynumber="1">
+        <volumeref ref="stave_outer"/>
+        <positionref ref="stave_outer_1inYokeBarrel_envelopepos"/>
+        <rotationref ref="stave_outer_1inYokeBarrel_enveloperot"/>
+      </physvol>
+      <physvol name="stave_outer_2" copynumber="2">
+        <volumeref ref="stave_outer"/>
+        <positionref ref="stave_outer_2inYokeBarrel_envelopepos"/>
+        <rotationref ref="stave_outer_2inYokeBarrel_enveloperot"/>
+      </physvol>
+      <physvol name="stave_outer_3" copynumber="3">
+        <volumeref ref="stave_outer"/>
+        <positionref ref="stave_outer_3inYokeBarrel_envelopepos"/>
+        <rotationref ref="stave_outer_3inYokeBarrel_enveloperot"/>
+      </physvol>
+      <physvol name="stave_outer_4" copynumber="4">
+        <volumeref ref="stave_outer"/>
+        <positionref ref="stave_outer_4inYokeBarrel_envelopepos"/>
+        <rotationref ref="stave_outer_4inYokeBarrel_enveloperot"/>
+      </physvol>
+      <physvol name="stave_outer_5" copynumber="5">
+        <volumeref ref="stave_outer"/>
+        <positionref ref="stave_outer_5inYokeBarrel_envelopepos"/>
+        <rotationref ref="stave_outer_5inYokeBarrel_enveloperot"/>
+      </physvol>
+      <physvol name="stave_outer_6" copynumber="6">
+        <volumeref ref="stave_outer"/>
+        <positionref ref="stave_outer_6inYokeBarrel_envelopepos"/>
+        <rotationref ref="stave_outer_6inYokeBarrel_enveloperot"/>
+      </physvol>
+      <physvol name="stave_outer_7" copynumber="7">
+        <volumeref ref="stave_outer"/>
+        <positionref ref="stave_outer_7inYokeBarrel_envelopepos"/>
+        <rotationref ref="stave_outer_7inYokeBarrel_enveloperot"/>
+      </physvol>
+      <physvol name="stave_outer_8" copynumber="8">
+        <volumeref ref="stave_outer"/>
+        <positionref ref="stave_outer_8inYokeBarrel_envelopepos"/>
+        <rotationref ref="stave_outer_8inYokeBarrel_enveloperot"/>
+      </physvol>
+      <physvol name="stave_outer_9" copynumber="9">
+        <volumeref ref="stave_outer"/>
+        <positionref ref="stave_outer_9inYokeBarrel_envelopepos"/>
+        <rotationref ref="stave_outer_9inYokeBarrel_enveloperot"/>
+      </physvol>
+      <physvol name="stave_outer_10" copynumber="10">
+        <volumeref ref="stave_outer"/>
+        <positionref ref="stave_outer_10inYokeBarrel_envelopepos"/>
+        <rotationref ref="stave_outer_10inYokeBarrel_enveloperot"/>
+      </physvol>
+      <physvol name="stave_outer_11" copynumber="11">
+        <volumeref ref="stave_outer"/>
+        <positionref ref="stave_outer_11inYokeBarrel_envelopepos"/>
+        <rotationref ref="stave_outer_11inYokeBarrel_enveloperot"/>
+      </physvol>
+    </volume>
+    <volume name="slice00x7">
+      <materialref ref="Iron"/>
+      <solidref ref="slice0_shape_0x7f90b98bb8f0"/>
+    </volume>
+    <volume name="slice10x7">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice1_shape_0x7f90b98bc080"/>
+    </volume>
+    <volume name="slice20x7">
+      <materialref ref="Air"/>
+      <solidref ref="slice2_shape_0x7f90b98bc690"/>
+    </volume>
+    <volume name="slice30x7">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice3_shape_0x7f90b98bcca0"/>
+    </volume>
+    <volume name="slice40x7">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice4_shape_0x7f90b98bd2b0"/>
+    </volume>
+    <volume name="slice50x7">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice5_shape_0x7f90b98bd760"/>
+    </volume>
+    <volume name="slice60x7">
+      <materialref ref="Air"/>
+      <solidref ref="slice6_shape_0x7f90b98bdef0"/>
+    </volume>
+    <volume name="slice70x7">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice7_shape_0x7f90b98be500"/>
+    </volume>
+    <volume name="slice80x7">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice8_shape_0x7f90b98beb10"/>
+    </volume>
+    <volume name="slice90x7">
+      <materialref ref="Air"/>
+      <solidref ref="slice9_shape_0x7f90b98bf120"/>
+    </volume>
+    <volume name="slice100x7">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice10_shape_0x7f90b98bf730"/>
+    </volume>
+    <volume name="slice110x7">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice11_shape_0x7f90b98bfd40"/>
+    </volume>
+    <volume name="slice120x7">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice12_shape_0x7f90b98c01f0"/>
+    </volume>
+    <volume name="slice130x7">
+      <materialref ref="Air"/>
+      <solidref ref="slice13_shape_0x7f90b98c0980"/>
+    </volume>
+    <volume name="slice140x7">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice14_shape_0x7f90b98c0f90"/>
+    </volume>
+    <volume name="layerType00x7">
+      <materialref ref="Air"/>
+      <solidref ref="layerType0_shape_0x7f90b98bb300"/>
+      <physvol name="slice0_0" copynumber="0">
+        <volumeref ref="slice00x7"/>
+        <positionref ref="slice0_00x7inlayerType00x7pos"/>
+      </physvol>
+      <physvol name="slice1_1" copynumber="1">
+        <volumeref ref="slice10x7"/>
+        <positionref ref="slice1_10x7inlayerType00x7pos"/>
+      </physvol>
+      <physvol name="slice2_2" copynumber="2">
+        <volumeref ref="slice20x7"/>
+        <positionref ref="slice2_20x7inlayerType00x7pos"/>
+      </physvol>
+      <physvol name="slice3_3" copynumber="3">
+        <volumeref ref="slice30x7"/>
+        <positionref ref="slice3_30x7inlayerType00x7pos"/>
+      </physvol>
+      <physvol name="slice4_4" copynumber="4">
+        <volumeref ref="slice40x7"/>
+        <positionref ref="slice4_40x7inlayerType00x7pos"/>
+      </physvol>
+      <physvol name="slice5_5" copynumber="5">
+        <volumeref ref="slice50x7"/>
+        <positionref ref="slice5_50x7inlayerType00x7pos"/>
+      </physvol>
+      <physvol name="slice6_6" copynumber="6">
+        <volumeref ref="slice60x7"/>
+        <positionref ref="slice6_60x7inlayerType00x7pos"/>
+      </physvol>
+      <physvol name="slice7_7" copynumber="7">
+        <volumeref ref="slice70x7"/>
+        <positionref ref="slice7_70x7inlayerType00x7pos"/>
+      </physvol>
+      <physvol name="slice8_8" copynumber="8">
+        <volumeref ref="slice80x7"/>
+        <positionref ref="slice8_80x7inlayerType00x7pos"/>
+      </physvol>
+      <physvol name="slice9_9" copynumber="9">
+        <volumeref ref="slice90x7"/>
+        <positionref ref="slice9_90x7inlayerType00x7pos"/>
+      </physvol>
+      <physvol name="slice10_10" copynumber="10">
+        <volumeref ref="slice100x7"/>
+        <positionref ref="slice10_100x7inlayerType00x7pos"/>
+      </physvol>
+      <physvol name="slice11_11" copynumber="11">
+        <volumeref ref="slice110x7"/>
+        <positionref ref="slice11_110x7inlayerType00x7pos"/>
+      </physvol>
+      <physvol name="slice12_12" copynumber="12">
+        <volumeref ref="slice120x7"/>
+        <positionref ref="slice12_120x7inlayerType00x7pos"/>
+      </physvol>
+      <physvol name="slice13_13" copynumber="13">
+        <volumeref ref="slice130x7"/>
+        <positionref ref="slice13_130x7inlayerType00x7pos"/>
+      </physvol>
+      <physvol name="slice14_14" copynumber="14">
+        <volumeref ref="slice140x7"/>
+        <positionref ref="slice14_140x7inlayerType00x7pos"/>
+      </physvol>
+    </volume>
+    <volume name="slice00x8">
+      <materialref ref="Iron"/>
+      <solidref ref="slice0_shape_0x7f90b98c1e10"/>
+    </volume>
+    <volume name="slice10x8">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice1_shape_0x7f90b98c25a0"/>
+    </volume>
+    <volume name="slice20x8">
+      <materialref ref="Air"/>
+      <solidref ref="slice2_shape_0x7f90b98c2bb0"/>
+    </volume>
+    <volume name="slice30x8">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice3_shape_0x7f90b98c31c0"/>
+    </volume>
+    <volume name="slice40x8">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice4_shape_0x7f90b98c37d0"/>
+    </volume>
+    <volume name="slice50x8">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice5_shape_0x7f90b98c3c80"/>
+    </volume>
+    <volume name="slice60x8">
+      <materialref ref="Air"/>
+      <solidref ref="slice6_shape_0x7f90b98c4410"/>
+    </volume>
+    <volume name="slice70x8">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice7_shape_0x7f90b98c4a20"/>
+    </volume>
+    <volume name="slice80x8">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice8_shape_0x7f90b98c5030"/>
+    </volume>
+    <volume name="slice90x8">
+      <materialref ref="Air"/>
+      <solidref ref="slice9_shape_0x7f90b98c5640"/>
+    </volume>
+    <volume name="slice100x8">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice10_shape_0x7f90b98c5c50"/>
+    </volume>
+    <volume name="slice110x8">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice11_shape_0x7f90b98c6260"/>
+    </volume>
+    <volume name="slice120x8">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice12_shape_0x7f90b98c6710"/>
+    </volume>
+    <volume name="slice130x8">
+      <materialref ref="Air"/>
+      <solidref ref="slice13_shape_0x7f90b98c6ea0"/>
+    </volume>
+    <volume name="slice140x8">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice14_shape_0x7f90b98c74b0"/>
+    </volume>
+    <volume name="layerType1">
+      <materialref ref="Air"/>
+      <solidref ref="layerType1_shape_0x7f90b98c1970"/>
+      <physvol name="slice0_0" copynumber="0">
+        <volumeref ref="slice00x8"/>
+        <positionref ref="slice0_00x8inlayerType1pos"/>
+      </physvol>
+      <physvol name="slice1_1" copynumber="1">
+        <volumeref ref="slice10x8"/>
+        <positionref ref="slice1_10x8inlayerType1pos"/>
+      </physvol>
+      <physvol name="slice2_2" copynumber="2">
+        <volumeref ref="slice20x8"/>
+        <positionref ref="slice2_20x8inlayerType1pos"/>
+      </physvol>
+      <physvol name="slice3_3" copynumber="3">
+        <volumeref ref="slice30x8"/>
+        <positionref ref="slice3_30x8inlayerType1pos"/>
+      </physvol>
+      <physvol name="slice4_4" copynumber="4">
+        <volumeref ref="slice40x8"/>
+        <positionref ref="slice4_40x8inlayerType1pos"/>
+      </physvol>
+      <physvol name="slice5_5" copynumber="5">
+        <volumeref ref="slice50x8"/>
+        <positionref ref="slice5_50x8inlayerType1pos"/>
+      </physvol>
+      <physvol name="slice6_6" copynumber="6">
+        <volumeref ref="slice60x8"/>
+        <positionref ref="slice6_60x8inlayerType1pos"/>
+      </physvol>
+      <physvol name="slice7_7" copynumber="7">
+        <volumeref ref="slice70x8"/>
+        <positionref ref="slice7_70x8inlayerType1pos"/>
+      </physvol>
+      <physvol name="slice8_8" copynumber="8">
+        <volumeref ref="slice80x8"/>
+        <positionref ref="slice8_80x8inlayerType1pos"/>
+      </physvol>
+      <physvol name="slice9_9" copynumber="9">
+        <volumeref ref="slice90x8"/>
+        <positionref ref="slice9_90x8inlayerType1pos"/>
+      </physvol>
+      <physvol name="slice10_10" copynumber="10">
+        <volumeref ref="slice100x8"/>
+        <positionref ref="slice10_100x8inlayerType1pos"/>
+      </physvol>
+      <physvol name="slice11_11" copynumber="11">
+        <volumeref ref="slice110x8"/>
+        <positionref ref="slice11_110x8inlayerType1pos"/>
+      </physvol>
+      <physvol name="slice12_12" copynumber="12">
+        <volumeref ref="slice120x8"/>
+        <positionref ref="slice12_120x8inlayerType1pos"/>
+      </physvol>
+      <physvol name="slice13_13" copynumber="13">
+        <volumeref ref="slice130x8"/>
+        <positionref ref="slice13_130x8inlayerType1pos"/>
+      </physvol>
+      <physvol name="slice14_14" copynumber="14">
+        <volumeref ref="slice140x8"/>
+        <positionref ref="slice14_140x8inlayerType1pos"/>
+      </physvol>
+    </volume>
+    <volume name="slice00x9">
+      <materialref ref="Iron"/>
+      <solidref ref="slice0_shape_0x7f90b98c8210"/>
+    </volume>
+    <volume name="slice10x9">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice1_shape_0x7f90b98c89a0"/>
+    </volume>
+    <volume name="slice20x9">
+      <materialref ref="Air"/>
+      <solidref ref="slice2_shape_0x7f90b98c8fb0"/>
+    </volume>
+    <volume name="slice30x9">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice3_shape_0x7f90b98c95c0"/>
+    </volume>
+    <volume name="slice40x9">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice4_shape_0x7f90b98c9bd0"/>
+    </volume>
+    <volume name="slice50x9">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice5_shape_0x7f90b98ca080"/>
+    </volume>
+    <volume name="slice60x9">
+      <materialref ref="Air"/>
+      <solidref ref="slice6_shape_0x7f90b98ca810"/>
+    </volume>
+    <volume name="slice70x9">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice7_shape_0x7f90b98cae20"/>
+    </volume>
+    <volume name="slice80x9">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice8_shape_0x7f90b98cb430"/>
+    </volume>
+    <volume name="slice90x9">
+      <materialref ref="Air"/>
+      <solidref ref="slice9_shape_0x7f90b98cba40"/>
+    </volume>
+    <volume name="slice100x9">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice10_shape_0x7f90b98cc050"/>
+    </volume>
+    <volume name="slice110x9">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice11_shape_0x7f90b98cc660"/>
+    </volume>
+    <volume name="slice120x9">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice12_shape_0x7f90b98ccb10"/>
+    </volume>
+    <volume name="slice130x9">
+      <materialref ref="Air"/>
+      <solidref ref="slice13_shape_0x7f90b98cd2a0"/>
+    </volume>
+    <volume name="slice140x9">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice14_shape_0x7f90b98cd8b0"/>
+    </volume>
+    <volume name="layerType2">
+      <materialref ref="Air"/>
+      <solidref ref="layerType2_shape_0x7f90b98c7bf0"/>
+      <physvol name="slice0_0" copynumber="0">
+        <volumeref ref="slice00x9"/>
+        <positionref ref="slice0_00x9inlayerType2pos"/>
+      </physvol>
+      <physvol name="slice1_1" copynumber="1">
+        <volumeref ref="slice10x9"/>
+        <positionref ref="slice1_10x9inlayerType2pos"/>
+      </physvol>
+      <physvol name="slice2_2" copynumber="2">
+        <volumeref ref="slice20x9"/>
+        <positionref ref="slice2_20x9inlayerType2pos"/>
+      </physvol>
+      <physvol name="slice3_3" copynumber="3">
+        <volumeref ref="slice30x9"/>
+        <positionref ref="slice3_30x9inlayerType2pos"/>
+      </physvol>
+      <physvol name="slice4_4" copynumber="4">
+        <volumeref ref="slice40x9"/>
+        <positionref ref="slice4_40x9inlayerType2pos"/>
+      </physvol>
+      <physvol name="slice5_5" copynumber="5">
+        <volumeref ref="slice50x9"/>
+        <positionref ref="slice5_50x9inlayerType2pos"/>
+      </physvol>
+      <physvol name="slice6_6" copynumber="6">
+        <volumeref ref="slice60x9"/>
+        <positionref ref="slice6_60x9inlayerType2pos"/>
+      </physvol>
+      <physvol name="slice7_7" copynumber="7">
+        <volumeref ref="slice70x9"/>
+        <positionref ref="slice7_70x9inlayerType2pos"/>
+      </physvol>
+      <physvol name="slice8_8" copynumber="8">
+        <volumeref ref="slice80x9"/>
+        <positionref ref="slice8_80x9inlayerType2pos"/>
+      </physvol>
+      <physvol name="slice9_9" copynumber="9">
+        <volumeref ref="slice90x9"/>
+        <positionref ref="slice9_90x9inlayerType2pos"/>
+      </physvol>
+      <physvol name="slice10_10" copynumber="10">
+        <volumeref ref="slice100x9"/>
+        <positionref ref="slice10_100x9inlayerType2pos"/>
+      </physvol>
+      <physvol name="slice11_11" copynumber="11">
+        <volumeref ref="slice110x9"/>
+        <positionref ref="slice11_110x9inlayerType2pos"/>
+      </physvol>
+      <physvol name="slice12_12" copynumber="12">
+        <volumeref ref="slice120x9"/>
+        <positionref ref="slice12_120x9inlayerType2pos"/>
+      </physvol>
+      <physvol name="slice13_13" copynumber="13">
+        <volumeref ref="slice130x9"/>
+        <positionref ref="slice13_130x9inlayerType2pos"/>
+      </physvol>
+      <physvol name="slice14_14" copynumber="14">
+        <volumeref ref="slice140x9"/>
+        <positionref ref="slice14_140x9inlayerType2pos"/>
+      </physvol>
+    </volume>
+    <volume name="slice00x10">
+      <materialref ref="Iron"/>
+      <solidref ref="slice0_shape_0x7f90b98ce680"/>
+    </volume>
+    <volume name="slice10x10">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice1_shape_0x7f90b98cee10"/>
+    </volume>
+    <volume name="slice20x10">
+      <materialref ref="Air"/>
+      <solidref ref="slice2_shape_0x7f90b98cf420"/>
+    </volume>
+    <volume name="slice30x10">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice3_shape_0x7f90b98cfa30"/>
+    </volume>
+    <volume name="slice40x10">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice4_shape_0x7f90b98d0040"/>
+    </volume>
+    <volume name="slice50x10">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice5_shape_0x7f90b98d04f0"/>
+    </volume>
+    <volume name="slice60x10">
+      <materialref ref="Air"/>
+      <solidref ref="slice6_shape_0x7f90b98d0c80"/>
+    </volume>
+    <volume name="slice70x10">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice7_shape_0x7f90b98d1290"/>
+    </volume>
+    <volume name="slice80x10">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice8_shape_0x7f90b98d18a0"/>
+    </volume>
+    <volume name="slice90x10">
+      <materialref ref="Air"/>
+      <solidref ref="slice9_shape_0x7f90b98d1eb0"/>
+    </volume>
+    <volume name="slice100x10">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice10_shape_0x7f90b98d24c0"/>
+    </volume>
+    <volume name="slice110x10">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice11_shape_0x7f90b98d2ad0"/>
+    </volume>
+    <volume name="slice120x10">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice12_shape_0x7f90b98d2f80"/>
+    </volume>
+    <volume name="slice130x10">
+      <materialref ref="Air"/>
+      <solidref ref="slice13_shape_0x7f90b98d3710"/>
+    </volume>
+    <volume name="slice140x10">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice14_shape_0x7f90b98d3d20"/>
+    </volume>
+    <volume name="layerType3">
+      <materialref ref="Air"/>
+      <solidref ref="layerType3_shape_0x7f90b98ce250"/>
+      <physvol name="slice0_0" copynumber="0">
+        <volumeref ref="slice00x10"/>
+        <positionref ref="slice0_00x10inlayerType3pos"/>
+      </physvol>
+      <physvol name="slice1_1" copynumber="1">
+        <volumeref ref="slice10x10"/>
+        <positionref ref="slice1_10x10inlayerType3pos"/>
+      </physvol>
+      <physvol name="slice2_2" copynumber="2">
+        <volumeref ref="slice20x10"/>
+        <positionref ref="slice2_20x10inlayerType3pos"/>
+      </physvol>
+      <physvol name="slice3_3" copynumber="3">
+        <volumeref ref="slice30x10"/>
+        <positionref ref="slice3_30x10inlayerType3pos"/>
+      </physvol>
+      <physvol name="slice4_4" copynumber="4">
+        <volumeref ref="slice40x10"/>
+        <positionref ref="slice4_40x10inlayerType3pos"/>
+      </physvol>
+      <physvol name="slice5_5" copynumber="5">
+        <volumeref ref="slice50x10"/>
+        <positionref ref="slice5_50x10inlayerType3pos"/>
+      </physvol>
+      <physvol name="slice6_6" copynumber="6">
+        <volumeref ref="slice60x10"/>
+        <positionref ref="slice6_60x10inlayerType3pos"/>
+      </physvol>
+      <physvol name="slice7_7" copynumber="7">
+        <volumeref ref="slice70x10"/>
+        <positionref ref="slice7_70x10inlayerType3pos"/>
+      </physvol>
+      <physvol name="slice8_8" copynumber="8">
+        <volumeref ref="slice80x10"/>
+        <positionref ref="slice8_80x10inlayerType3pos"/>
+      </physvol>
+      <physvol name="slice9_9" copynumber="9">
+        <volumeref ref="slice90x10"/>
+        <positionref ref="slice9_90x10inlayerType3pos"/>
+      </physvol>
+      <physvol name="slice10_10" copynumber="10">
+        <volumeref ref="slice100x10"/>
+        <positionref ref="slice10_100x10inlayerType3pos"/>
+      </physvol>
+      <physvol name="slice11_11" copynumber="11">
+        <volumeref ref="slice110x10"/>
+        <positionref ref="slice11_110x10inlayerType3pos"/>
+      </physvol>
+      <physvol name="slice12_12" copynumber="12">
+        <volumeref ref="slice120x10"/>
+        <positionref ref="slice12_120x10inlayerType3pos"/>
+      </physvol>
+      <physvol name="slice13_13" copynumber="13">
+        <volumeref ref="slice130x10"/>
+        <positionref ref="slice13_130x10inlayerType3pos"/>
+      </physvol>
+      <physvol name="slice14_14" copynumber="14">
+        <volumeref ref="slice140x10"/>
+        <positionref ref="slice14_140x10inlayerType3pos"/>
+      </physvol>
+    </volume>
+    <volume name="slice00x11">
+      <materialref ref="Iron"/>
+      <solidref ref="slice0_shape_0x7f90b98d4a40"/>
+    </volume>
+    <volume name="slice10x11">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice1_shape_0x7f90b98d51d0"/>
+    </volume>
+    <volume name="slice20x11">
+      <materialref ref="Air"/>
+      <solidref ref="slice2_shape_0x7f90b98d57e0"/>
+    </volume>
+    <volume name="slice30x11">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice3_shape_0x7f90b98d5df0"/>
+    </volume>
+    <volume name="slice40x11">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice4_shape_0x7f90b98d6400"/>
+    </volume>
+    <volume name="slice50x11">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice5_shape_0x7f90b98d68b0"/>
+    </volume>
+    <volume name="slice60x11">
+      <materialref ref="Air"/>
+      <solidref ref="slice6_shape_0x7f90b98d7040"/>
+    </volume>
+    <volume name="slice70x11">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice7_shape_0x7f90b98d7650"/>
+    </volume>
+    <volume name="slice80x11">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice8_shape_0x7f90b98d7c60"/>
+    </volume>
+    <volume name="slice90x11">
+      <materialref ref="Air"/>
+      <solidref ref="slice9_shape_0x7f90b98d8270"/>
+    </volume>
+    <volume name="slice100x11">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice10_shape_0x7f90b98d8880"/>
+    </volume>
+    <volume name="slice110x11">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice11_shape_0x7f90b98d8e90"/>
+    </volume>
+    <volume name="slice120x11">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice12_shape_0x7f90b98d9340"/>
+    </volume>
+    <volume name="slice130x11">
+      <materialref ref="Air"/>
+      <solidref ref="slice13_shape_0x7f90b98d9ad0"/>
+    </volume>
+    <volume name="slice140x11">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice14_shape_0x7f90b98da0e0"/>
+    </volume>
+    <volume name="layerType4">
+      <materialref ref="Air"/>
+      <solidref ref="layerType4_shape_0x7f90b98d4420"/>
+      <physvol name="slice0_0" copynumber="0">
+        <volumeref ref="slice00x11"/>
+        <positionref ref="slice0_00x11inlayerType4pos"/>
+      </physvol>
+      <physvol name="slice1_1" copynumber="1">
+        <volumeref ref="slice10x11"/>
+        <positionref ref="slice1_10x11inlayerType4pos"/>
+      </physvol>
+      <physvol name="slice2_2" copynumber="2">
+        <volumeref ref="slice20x11"/>
+        <positionref ref="slice2_20x11inlayerType4pos"/>
+      </physvol>
+      <physvol name="slice3_3" copynumber="3">
+        <volumeref ref="slice30x11"/>
+        <positionref ref="slice3_30x11inlayerType4pos"/>
+      </physvol>
+      <physvol name="slice4_4" copynumber="4">
+        <volumeref ref="slice40x11"/>
+        <positionref ref="slice4_40x11inlayerType4pos"/>
+      </physvol>
+      <physvol name="slice5_5" copynumber="5">
+        <volumeref ref="slice50x11"/>
+        <positionref ref="slice5_50x11inlayerType4pos"/>
+      </physvol>
+      <physvol name="slice6_6" copynumber="6">
+        <volumeref ref="slice60x11"/>
+        <positionref ref="slice6_60x11inlayerType4pos"/>
+      </physvol>
+      <physvol name="slice7_7" copynumber="7">
+        <volumeref ref="slice70x11"/>
+        <positionref ref="slice7_70x11inlayerType4pos"/>
+      </physvol>
+      <physvol name="slice8_8" copynumber="8">
+        <volumeref ref="slice80x11"/>
+        <positionref ref="slice8_80x11inlayerType4pos"/>
+      </physvol>
+      <physvol name="slice9_9" copynumber="9">
+        <volumeref ref="slice90x11"/>
+        <positionref ref="slice9_90x11inlayerType4pos"/>
+      </physvol>
+      <physvol name="slice10_10" copynumber="10">
+        <volumeref ref="slice100x11"/>
+        <positionref ref="slice10_100x11inlayerType4pos"/>
+      </physvol>
+      <physvol name="slice11_11" copynumber="11">
+        <volumeref ref="slice110x11"/>
+        <positionref ref="slice11_110x11inlayerType4pos"/>
+      </physvol>
+      <physvol name="slice12_12" copynumber="12">
+        <volumeref ref="slice120x11"/>
+        <positionref ref="slice12_120x11inlayerType4pos"/>
+      </physvol>
+      <physvol name="slice13_13" copynumber="13">
+        <volumeref ref="slice130x11"/>
+        <positionref ref="slice13_130x11inlayerType4pos"/>
+      </physvol>
+      <physvol name="slice14_14" copynumber="14">
+        <volumeref ref="slice140x11"/>
+        <positionref ref="slice14_140x11inlayerType4pos"/>
+      </physvol>
+    </volume>
+    <volume name="slice00x12">
+      <materialref ref="Iron"/>
+      <solidref ref="slice0_shape_0x7f90b98dafe0"/>
+    </volume>
+    <volume name="slice10x12">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice1_shape_0x7f90b98db770"/>
+    </volume>
+    <volume name="slice20x12">
+      <materialref ref="Air"/>
+      <solidref ref="slice2_shape_0x7f90b98dbd80"/>
+    </volume>
+    <volume name="slice30x12">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice3_shape_0x7f90b98dc390"/>
+    </volume>
+    <volume name="slice40x12">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice4_shape_0x7f90b98dc9a0"/>
+    </volume>
+    <volume name="slice50x12">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice5_shape_0x7f90b98dce50"/>
+    </volume>
+    <volume name="slice60x12">
+      <materialref ref="Air"/>
+      <solidref ref="slice6_shape_0x7f90b98dd5e0"/>
+    </volume>
+    <volume name="slice70x12">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice7_shape_0x7f90b98ddbf0"/>
+    </volume>
+    <volume name="slice80x12">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice8_shape_0x7f90b98de200"/>
+    </volume>
+    <volume name="slice90x12">
+      <materialref ref="Air"/>
+      <solidref ref="slice9_shape_0x7f90b98de810"/>
+    </volume>
+    <volume name="slice100x12">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice10_shape_0x7f90b98dee20"/>
+    </volume>
+    <volume name="slice110x12">
+      <materialref ref="RPCGasDefault"/>
+      <solidref ref="slice11_shape_0x7f90b98df430"/>
+    </volume>
+    <volume name="slice120x12">
+      <materialref ref="PyrexGlass"/>
+      <solidref ref="slice12_shape_0x7f90b98df8e0"/>
+    </volume>
+    <volume name="slice130x12">
+      <materialref ref="Air"/>
+      <solidref ref="slice13_shape_0x7f90b98e0070"/>
+    </volume>
+    <volume name="slice140x12">
+      <materialref ref="Aluminium"/>
+      <solidref ref="slice14_shape_0x7f90b98e0680"/>
+    </volume>
+    <volume name="layerType5">
+      <materialref ref="Air"/>
+      <solidref ref="layerType5_shape_0x7f90b98dab40"/>
+      <physvol name="slice0_0" copynumber="0">
+        <volumeref ref="slice00x12"/>
+        <positionref ref="slice0_00x12inlayerType5pos"/>
+      </physvol>
+      <physvol name="slice1_1" copynumber="1">
+        <volumeref ref="slice10x12"/>
+        <positionref ref="slice1_10x12inlayerType5pos"/>
+      </physvol>
+      <physvol name="slice2_2" copynumber="2">
+        <volumeref ref="slice20x12"/>
+        <positionref ref="slice2_20x12inlayerType5pos"/>
+      </physvol>
+      <physvol name="slice3_3" copynumber="3">
+        <volumeref ref="slice30x12"/>
+        <positionref ref="slice3_30x12inlayerType5pos"/>
+      </physvol>
+      <physvol name="slice4_4" copynumber="4">
+        <volumeref ref="slice40x12"/>
+        <positionref ref="slice4_40x12inlayerType5pos"/>
+      </physvol>
+      <physvol name="slice5_5" copynumber="5">
+        <volumeref ref="slice50x12"/>
+        <positionref ref="slice5_50x12inlayerType5pos"/>
+      </physvol>
+      <physvol name="slice6_6" copynumber="6">
+        <volumeref ref="slice60x12"/>
+        <positionref ref="slice6_60x12inlayerType5pos"/>
+      </physvol>
+      <physvol name="slice7_7" copynumber="7">
+        <volumeref ref="slice70x12"/>
+        <positionref ref="slice7_70x12inlayerType5pos"/>
+      </physvol>
+      <physvol name="slice8_8" copynumber="8">
+        <volumeref ref="slice80x12"/>
+        <positionref ref="slice8_80x12inlayerType5pos"/>
+      </physvol>
+      <physvol name="slice9_9" copynumber="9">
+        <volumeref ref="slice90x12"/>
+        <positionref ref="slice9_90x12inlayerType5pos"/>
+      </physvol>
+      <physvol name="slice10_10" copynumber="10">
+        <volumeref ref="slice100x12"/>
+        <positionref ref="slice10_100x12inlayerType5pos"/>
+      </physvol>
+      <physvol name="slice11_11" copynumber="11">
+        <volumeref ref="slice110x12"/>
+        <positionref ref="slice11_110x12inlayerType5pos"/>
+      </physvol>
+      <physvol name="slice12_12" copynumber="12">
+        <volumeref ref="slice120x12"/>
+        <positionref ref="slice12_120x12inlayerType5pos"/>
+      </physvol>
+      <physvol name="slice13_13" copynumber="13">
+        <volumeref ref="slice130x12"/>
+        <positionref ref="slice13_130x12inlayerType5pos"/>
+      </physvol>
+      <physvol name="slice14_14" copynumber="14">
+        <volumeref ref="slice140x12"/>
+        <positionref ref="slice14_140x12inlayerType5pos"/>
+      </physvol>
+    </volume>
+    <volume name="slice00x13">
+      <materialref ref="Iron"/>
+      <solidref ref="slice0_shape_0x7f90b98e13a0"/>
+    </volume>
+    <volume name="layerType6">
+      <materialref ref="Air"/>
+      <solidref ref="layerType6_shape_0x7f90b98e0d80"/>
+      <physvol name="slice0_0" copynumber="0">
+        <volumeref ref="slice00x13"/>
+        <positionref ref="slice0_00x13inlayerType6pos"/>
+      </physvol>
+    </volume>
+    <volume name="endcap">
+      <materialref ref="Air"/>
+      <solidref ref="endcap_shape_0x7f90b98badc0"/>
+      <physvol name="layerType0_0" copynumber="0">
+        <volumeref ref="layerType00x7"/>
+        <positionref ref="layerType0_00x1inendcappos"/>
+      </physvol>
+      <physvol name="layerType1_1" copynumber="1">
+        <volumeref ref="layerType1"/>
+        <positionref ref="layerType1_1inendcappos"/>
+      </physvol>
+      <physvol name="layerType2_2" copynumber="2">
+        <volumeref ref="layerType2"/>
+        <positionref ref="layerType2_2inendcappos"/>
+      </physvol>
+      <physvol name="layerType3_3" copynumber="3">
+        <volumeref ref="layerType3"/>
+        <positionref ref="layerType3_3inendcappos"/>
+      </physvol>
+      <physvol name="layerType4_4" copynumber="4">
+        <volumeref ref="layerType4"/>
+        <positionref ref="layerType4_4inendcappos"/>
+      </physvol>
+      <physvol name="layerType5_5" copynumber="5">
+        <volumeref ref="layerType5"/>
+        <positionref ref="layerType5_5inendcappos"/>
+      </physvol>
+      <physvol name="layerType6_6" copynumber="6">
+        <volumeref ref="layerType6"/>
+        <positionref ref="layerType6_6inendcappos"/>
+      </physvol>
+    </volume>
+    <volume name="YokeEndcap_envelope">
+      <materialref ref="Air"/>
+      <solidref ref="YokeEndcap_envelope_shape_0x7f90b98b7af0"/>
+      <physvol name="endcap_0" copynumber="0">
+        <volumeref ref="endcap"/>
+        <positionref ref="endcap_0inYokeEndcap_envelopepos"/>
+      </physvol>
+      <physvol name="endcap_1" copynumber="1">
+        <volumeref ref="endcap"/>
+        <positionref ref="endcap_1inYokeEndcap_envelopepos"/>
+        <rotationref ref="endcap_1inYokeEndcap_enveloperot"/>
+      </physvol>
+    </volume>
+    <volume name="world_volume">
+      <materialref ref="Air"/>
+      <solidref ref="world_volume_shape_0x7f90b6f836d0"/>
+      <physvol name="NozzleW_right_0" copynumber="0">
+        <volumeref ref="NozzleW_right"/>
+        <positionref ref="NozzleW_right_0inworld_volumepos"/>
+      </physvol>
+      <physvol name="NozzleW_left_1" copynumber="1">
+        <volumeref ref="NozzleW_left"/>
+        <positionref ref="NozzleW_left_1inworld_volumepos"/>
+      </physvol>
+      <physvol name="NozzleBCH_right_2" copynumber="2">
+        <volumeref ref="NozzleBCH_right"/>
+        <positionref ref="NozzleBCH_right_2inworld_volumepos"/>
+      </physvol>
+      <physvol name="NozzleBCH_left_3" copynumber="3">
+        <volumeref ref="NozzleBCH_left"/>
+        <positionref ref="NozzleBCH_left_3inworld_volumepos"/>
+      </physvol>
+      <physvol name="YokeBarrel_envelope_4" copynumber="4">
+        <volumeref ref="YokeBarrel_envelope"/>
+        <positionref ref="YokeBarrel_envelope_4inworld_volumepos"/>
+        <rotationref ref="YokeBarrel_envelope_4inworld_volumerot"/>
+      </physvol>
+      <physvol name="YokeEndcap_envelope_5" copynumber="5">
+        <volumeref ref="YokeEndcap_envelope"/>
+        <positionref ref="YokeEndcap_envelope_5inworld_volumepos"/>
+        <rotationref ref="YokeEndcap_envelope_5inworld_volumerot"/>
+      </physvol>
+    </volume>
+  </structure>
+  <setup name="default" version="1.0">
+    <world ref="world_volume"/>
+  </setup>
+</gdml>
