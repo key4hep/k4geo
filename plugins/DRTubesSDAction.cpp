@@ -201,7 +201,7 @@ namespace sim {
              : (IsRight && !IsScin) ? collection(m_userData.collection_cher_right)
              : (!IsRight && IsScin) ? collection(m_userData.collection_scin_left)
                                     : collection(m_userData.collection_cher_left);
-    } // end of encap VolumeID and hit collection creation
+    }      // end of encap VolumeID and hit collection creation
     else { // create VolumeID and hit collection for the barrel
 
       // We recreate the TubeID from the tube copynumber:
@@ -298,7 +298,7 @@ namespace sim {
           aStep->GetTrack()->SetTrackStatus(fStopAndKill);
           return true;
         } // end of swich cases
-      } // end of optical photon
+      }   // end of optical photon
       else {
         return true;
       }

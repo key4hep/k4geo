@@ -519,7 +519,7 @@ static Ref_t create_ARC_endcaps(Detector& desc, xml::Handle_t handle, SensitiveD
         cell_reflected_DE.setPlacement(cell_ref_PV);
       }
     } //-- end loop for sector
-  } //-- end loop for endcap
+  }   //-- end loop for endcap
 
   endcap_cells_vessel_envelope.placeVolume(endcap_cells_gas_envelope);
 

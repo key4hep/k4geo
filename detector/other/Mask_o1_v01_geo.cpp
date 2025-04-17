@@ -214,7 +214,7 @@ static Ref_t create_element(Detector& theDetector, xml_h xmlHandle, SensitiveDet
     }
 
     } // end switch
-  } // for all xmlSections
+  }   // for all xmlSections
 
   //--------------------------------------
   Volume mother = theDetector.pickMotherVolume(tube);
