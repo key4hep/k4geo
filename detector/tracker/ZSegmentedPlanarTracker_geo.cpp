@@ -34,7 +34,6 @@ using dd4hep::SensitiveDetector;
 using dd4hep::Transform3D;
 using dd4hep::Trapezoid;
 using dd4hep::Volume;
-using dd4hep::rec::NeighbourSurfacesData;
 using dd4hep::rec::SurfaceType;
 using dd4hep::rec::Vector3D;
 using dd4hep::rec::VolPlane;
@@ -63,7 +62,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
   encoder[lcio::LCTrackerCellID::side()] = lcio::ILDDetID::barrel;
 
   ZPlanarData* zPlanarData = new ZPlanarData;
-  NeighbourSurfacesData* neighbourSurfacesData = new NeighbourSurfacesData();
 
   dd4hep::xml::setDetectorTypeFlag(e, tracker);
 
@@ -252,43 +250,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         encoder[lcio::LCTrackerCellID::layer()] = layer_id;
         encoder[lcio::LCTrackerCellID::module()] = j;
         encoder[lcio::LCTrackerCellID::sensor()] = s;
-
-        const auto cellID = encoder.lowWord(); // 32 bits
-
-        // compute neighbours
-
-        int n_neighbours_ladder = 1; // 1 gives the adjacent modules
-        int n_neighbours_sensor = 1;
-        int newladder = 0;
-        int newsensor = 0;
-
-        for (int iladder = -n_neighbours_ladder; iladder <= n_neighbours_ladder; iladder++) { // neighbouring ladders
-          newladder = j + iladder;
-          // compute special case at the boundary
-          if (newladder < 0)
-            newladder = nLadders + newladder;
-          if (newladder >= nLadders)
-            newladder = newladder - nLadders;
-
-          for (int isensor = -n_neighbours_sensor; isensor <= n_neighbours_sensor; isensor++) { // neighbouring sensors
-            if (iladder == 0 && isensor == 0)
-              continue; // sensor we started with
-            newsensor = s + isensor;
-            // skip sensors outside boundaries
-            if (newsensor < 0)
-              continue;
-            if (newsensor >= sens_nmodules)
-              continue;
-
-            // encoding
-            encoder[lcio::LCTrackerCellID::module()] = newladder;
-            encoder[lcio::LCTrackerCellID::sensor()] = newsensor;
-
-            neighbourSurfacesData->sameLayer[cellID].push_back(encoder.lowWord());
-          }
-        }
-
-        ///////////////////
       }
     }
 
@@ -320,7 +281,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 #endif //----------------------------------------------------------------------------------
 
   tracker.addExtension<ZPlanarData>(zPlanarData);
-  tracker.addExtension<NeighbourSurfacesData>(neighbourSurfacesData);
 
   Volume mother = theDetector.pickMotherVolume(tracker);
 
