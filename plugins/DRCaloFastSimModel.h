@@ -355,6 +355,6 @@ public:
       G4cout << G4endl;
     }
   } // print
-}; // end of the class
+};  // end of the class
 
 #endif

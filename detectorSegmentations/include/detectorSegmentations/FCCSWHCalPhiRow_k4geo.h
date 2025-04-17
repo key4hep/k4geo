@@ -186,9 +186,7 @@ namespace DDSegmentation {
      *   @param[in] aCellID the cell ID
      *   return The layer number
      */
-    inline int layer(const CellID& aCellID) const {
-      return _decoder->get(aCellID, fieldNameLayer());
-    }
+    inline int layer(const CellID& aCellID) const { return _decoder->get(aCellID, fieldNameLayer()); }
 
     /**  Set the number of bins in azimuthal angle.
      *   @param[in] aNumberBins Number of bins in phi.
@@ -249,10 +247,10 @@ namespace DDSegmentation {
      *  in natural order of dimensions (phi, z)
      *  @param[in] cellID
      *  return a std::vector of size 2 with the cellDimensions of the given cell ID (phi, z)
-    */
+     */
     inline std::vector<double> cellDimensions(const CellID& id) const {
       const int aLayer = layer(id);
-      return {gridSizePhi(), m_gridSizeRow[aLayer]*m_dz_row};
+      return {gridSizePhi(), m_gridSizeRow[aLayer] * m_dz_row};
     }
 
   protected:
