@@ -53,15 +53,15 @@ Original version taken from [FCCDetectors](https://github.com/HEP-FCC/FCCDetecto
 ### o1_v02
 Changes wrt o1_v01: Added extension (LayeredCalorimeterData) to store radial layer radii and dimensions. To make this work, the whole code had to be reshuffled, but the way how the geometry and individual volumes are built remains the same as in o1_v01. 
 
-## dual-readout
+## Monolithic fiber dual-readout (subdirectory `dual-readout`)
 
-### o1_v03
+### o1_v01
 This sub-detector makes full 4-pi monolithic fiber dual-readout calorimeter.
 Inside the single tower (trapezoidal copper absorber), two types of optical fibers (Cherenkov and scintillation) are implemented. The readout (SiPM) is attached at the rear side of the tower. The tower is repeated in both eta and phi direction to cover both barrel and endcap region.
 
 Added an extension to (`LayeredCalorimeterData`) to store the barrel and endcap rmin, rmax, zmin, zmax.
 
-## dual-readout-tubes
+## Capillary tube dual-readout (subdirectory `dual-readout-tubes`)
 
-### o2_v01
+### o1_v01
 This folder containes the subdetectors (endcap + barrel) to make a full 4-pi fiber dual-readout calorimeter exploiting the INFN capillary-tubes technology. Each trapezoidal tower is constructed with brass capillary-tubes housing optical fibers (Cherenkov and scintillating). Endcap and barrel calorimeters are implemented ad separate subdetectors.
