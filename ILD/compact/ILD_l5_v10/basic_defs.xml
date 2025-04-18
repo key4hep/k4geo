@@ -34,4 +34,6 @@
   <constant name="ILDDetID_barrel"    value="  0"/>
   <constant name="ILDDetID_fwd"       value="  1"/>
 
+  <constant name="ILC_Main_Crossing_Angle" value="14*mrad"/>
+
 </define>

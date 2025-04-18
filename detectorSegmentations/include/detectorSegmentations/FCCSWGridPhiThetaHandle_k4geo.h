@@ -107,8 +107,8 @@ public:
       -# size in phi
       -# size in theta
   */
-  inline std::vector<double> cellDimensions(const CellID& /*id*/) const {
-    return {access()->implementation->gridSizePhi(), access()->implementation->gridSizeTheta()};
+  inline std::vector<double> cellDimensions(const CellID& id) const {
+    return access()->implementation->cellDimensions(id);
   }
 };
 

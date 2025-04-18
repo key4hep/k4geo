@@ -5,6 +5,17 @@ configure_file( ${DD4hep_ROOT}/cmake/run_test_package.sh run_test_${PackageName}
 INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/run_test_${PackageName}.sh
   DESTINATION bin )
 
+macro(SET_TEST_ENV test_name)
+  # Make sure to point our current installation for the compact files
+  SET_TESTS_PROPERTIES( t_${test_name}
+    PROPERTIES
+      FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error"
+      ENVIRONMENT
+        K4GEO=${CMAKE_INSTALL_PREFIX}/share/k4geo
+    )
+
+endmacro()
+
 #--------------------------------------------------
 #ADD_TEST( t_init source "${CMAKE_CURRENT_WORK_DIR}/thisdd4hep.sh" )
 
@@ -36,14 +47,16 @@ ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
 SET( test_name "test_ILD_FCCee_v01" )
-ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
-  ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ILD_FCCee/compact/ILD_FCCee_v01/ILD_FCCee_v01.xml --runType=batch -G -N=1 --outputFile=testILD_FCCee_v01.slcio )
-SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
+ADD_TEST( t_${test_name} sh -c "
+ ${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ILD_FCCee/compact/ILD_FCCee_v01/ILD_FCCee_v01.xml --runType=batch -G -N=1 --outputFile=testILD_FCCee_v01.slcio 2>&1 |
+  python3 ${CMAKE_CURRENT_SOURCE_DIR}/scripts/filter_G4Tessellated_warnings.py")
+SET_TEST_ENV(${test_name})
 
 SET( test_name "test_ILD_FCCee_v02" )
-ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
-  ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ILD_FCCee/compact/ILD_FCCee_v02/ILD_FCCee_v02.xml --runType=batch -G -N=1 --outputFile=testILD_FCCee_v02.slcio )
-SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
+ADD_TEST( t_${test_name} sh -c "
+ ${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ILD_FCCee/compact/ILD_FCCee_v02/ILD_FCCee_v02.xml --runType=batch -G -N=1 --outputFile=testILD_FCCee_v02.slcio 2>&1 |
+  python3 ${CMAKE_CURRENT_SOURCE_DIR}/scripts/filter_G4Tessellated_warnings.py")
+SET_TEST_ENV(${test_name})
 
 #--------------------------------------------------
 # tests for SiD

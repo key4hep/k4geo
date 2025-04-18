@@ -1,13 +1,14 @@
 <define>
 
+  <!-- the x-angle needs to be separated from det dims for FCC-ee models -->
+  <!-- <constant name="ILC_Main_Crossing_Angle" value="14*mrad"/> -->
+
   <comment>
     all hardcoded overall dimensions needed to define envelopes are in this file
     this file has the parts common to the different detector versions
 
     subdetector-specific ones are in separate files
   </comment>
-
-  <constant name="ILC_Main_Crossing_Angle" value="14*mrad"/>
 
   <!-- the field inside and outside the solenoid -->
   <constant name="outerField_nominal_value" value="-1.5*tesla"/>
@@ -126,7 +127,7 @@
   <constant name="TUBE_Lcal_clearance" value="20*mm"/>
 
   <!-- space left for envelopes (counting from inner beampipe surface) -->
-  <constant name="TUBE_inner_maxthick" value="1.0*mm"/> 
-  <constant name="TUBE_outer_maxthick" value="3.0*mm"/> 
+  <constant name="TUBE_inner_maxthick" value="1.0*mm"/>
+  <constant name="TUBE_outer_maxthick" value="3.0*mm"/>
 
 </define>

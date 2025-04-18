@@ -29,12 +29,14 @@
        <constant name = "psOverlapingY"                           value = "5*mm"/> <!-- the common distance between mRWELL chambers in Y direction -->
        <constant name = "psOverlapingZ"                           value = "5*mm"/> <!-- the common distance between mRWELL chambers in Z direction -->
        <constant name = "psClearance"                             value = "1*mm"/> <!-- it's a small distance to be used to avoid overlapping between the different volumes ~ 1 mm -->
+      <!-- %%%%%%                      Readout dsecription               %%%%%% -->
+      <constant name = "PreShowerReadoutID"            type="string"  value = "system:5,type:-2,layer:1,chamber:13,slice:1,y:-10,z:-10"/>  <!-- The bit field is divided into 2^5 systems(IDEA sub-detectors), 2^2 types(0 = Barrel Muon System, +1 = positive endcap, and -1 = negative endcap"), 2^1 layers(number of layers in barrel for example) ,2^13 chambers(the number of muRWELL chambers in every layer), 2^1 slice(number of sensitive layers inside every chambers), and 2^10 y&z strips in every sensitive layer-->
   </define>   
 
   <readouts>
     <readout name="PreshowerSystemCollection">
      <segmentation type="CartesianGridYZ" grid_size_y="1.2*mm" grid_size_z="1.2*mm"/>   <!-- Depending on strip pitch 1.4 mm  -->
-     <id>system:5,type:2,layer:4,side:6,rectangle:6,chamber:5,slice:1,y:-10,z:-10</id> <!-- The bit field is divided into 2^5 systems(IDEA sub-detectors), 2^4 layers(Muon System layers"barrel and endcap layers"), 2^11 chambers(the number of muRWELL chambers in every layer), 2^1 slice(number of sensitive layers inside every chambers), and 2^10 y&z strips in every sensitive layer-->
+     <id>${PreShowerReadoutID}</id>
   </readout>
   </readouts>   
 
@@ -67,7 +69,7 @@
   <plugins>
     <plugin name="DD4hep_GenericSurfaceInstallerPlugin"> <!-- Plugin needed for the surfaces-->
       <argument value="Preshower" />
-      <argument value="dimension=1" />
+      <argument value="dimension=2" />
       <argument value="u_y=1." />
       <argument value="v_z=1." />
       <argument value="n_x=1." />

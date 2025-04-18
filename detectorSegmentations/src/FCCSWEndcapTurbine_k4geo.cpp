@@ -249,12 +249,11 @@ namespace DDSegmentation {
     unsigned layerOffset = 0;
     if (iWheel == 1) {
       layerOffset = m_numCalibZLayers[0] * m_numCalibRhoLayers[0];
-    } else if (iWheel == 2) {
-      layerOffset =
-          m_numCalibZLayers[0] * m_numCalibRhoLayers[0] + layerOffset + m_numCalibZLayers[1] * m_numCalibRhoLayers[1];
     }
-    return layerOffset + iZ / (m_numReadoutZLayers[iWheel] / m_numCalibZLayers[iWheel]) +
-           iRho * m_numCalibZLayers[iWheel] / (m_numReadoutRhoLayers[iWheel] / m_numCalibRhoLayers[iWheel]);
+    else if (iWheel == 2) {
+      layerOffset = m_numCalibZLayers[0]*m_numCalibRhoLayers[0]+layerOffset + m_numCalibZLayers[1]*m_numCalibRhoLayers[1];
+    }
+    return layerOffset + iZ/(m_numReadoutZLayers[iWheel]/m_numCalibZLayers[iWheel]) + m_numCalibZLayers[iWheel]*(iRho/(m_numReadoutRhoLayers[iWheel]/m_numCalibRhoLayers[iWheel]));
   }
 } // namespace DDSegmentation
 } // namespace dd4hep
