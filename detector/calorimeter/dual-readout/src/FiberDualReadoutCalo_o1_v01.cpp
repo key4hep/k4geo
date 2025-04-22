@@ -7,6 +7,8 @@
 #include "DD4hep/Detector.h"
 #include "DD4hep/OpticalSurfaces.h"
 
+#include "DDRec/DetectorData.h"
+
 namespace ddDRcalo {
 static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h xmlElement,
                                      dd4hep::SensitiveDetector sensDet) {
@@ -27,6 +29,7 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h xmlEle
   xml_comp_t x_structure(x_det.child(_Unicode(structure)));
   xml_comp_t x_dim(x_structure.child(_Unicode(dim)));
   xml_comp_t x_sipmDim(x_det.child(_Unicode(sipmDim)));
+  xml_comp_t x_worldTube(x_structure.child(_Unicode(worldTube)));
 
   dd4hep::OpticalSurfaceManager surfMgr = description.surfaceManager();
   dd4hep::OpticalSurface sipmSurfProp = surfMgr.opticalSurface("/world/" + name + "#SiPMSurf");
@@ -67,6 +70,25 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h xmlEle
 
   paramBarrel->finalized();
   paramEndcap->finalized();
+
+  // create DDRec extension to fill dimensions needed downstream
+  auto extensionData = new dd4hep::rec::LayeredCalorimeterData;
+  // rmin, rmax, zmin, zmax, rmin2, rmax2
+  // inner r & z are avg values (for track extrapolation)
+  // outer r & z are envelope values
+  extensionData->extent[0] = x_barrel.rmin(); // barrel rmin
+  extensionData->extent[1] = x_worldTube.rmax(); // barrel rmax
+  extensionData->extent[2] = x_endcap.rmin(); // endcap zmin
+  extensionData->extent[3] = x_worldTube.height(); // endcap zmax
+  extensionData->extent[4] = x_worldTube.rmin(); // endcap rmin
+  extensionData->extent[5] = x_worldTube.rmax(); // endcap rmax
+
+  // TODO separate barrel & endcap
+  // type is barrel for the moment
+  extensionData->layoutType = dd4hep::rec::LayeredCalorimeterData::BarrelLayout;
+
+  // attach the calo data to the detector
+  drDet.addExtension<dd4hep::rec::LayeredCalorimeterData>(extensionData);
 
   return drDet;
 }
