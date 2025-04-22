@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 set( PackageName k4geo )
 #---------------------------
 
-project(${PackageName})
+project(${PackageName} LANGUAGES CXX)
 
 # project version
 SET( ${PackageName}_VERSION_MAJOR 0 )
@@ -101,6 +101,9 @@ if(${DD4hep_VERSION} VERSION_LESS 1.29)
   set(FILES_DEPENDINGON_DCH_INFO_H "DriftChamber_o1_v02.cpp" )
   list(FILTER sources EXCLUDE REGEX "${FILES_DEPENDINGON_DCH_INFO_H}")
   message(WARNING "Subdetector ${FILES_DEPENDINGON_DCH_INFO_H} will not be built because the current version of DD4hep does not ship with the header file DDRec/DCH_info.h")
+else()
+   set(DCH_INFO_H_EXIST "TRUE" CACHE STRING "Indicates whether the drift chamber data extension header file was found (TRUE if found, non set otherwise).")
+
 endif()
 
 find_package(EDM4HEP)

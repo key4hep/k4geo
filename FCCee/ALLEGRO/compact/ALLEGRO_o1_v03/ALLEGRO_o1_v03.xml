@@ -46,9 +46,9 @@
   <include ref="SiliconWrapper_o1_v03.xml"/>        <!-- symbolic link to ../../../IDEA/compact/IDEA_o1_v03/SiliconWrapper_o1_v03.xml -->
   <include ref="ECalBarrel_thetamodulemerged.xml"/> <!-- if you remove the ECalBarrel, you also have to remove or update the "GlobalSolenoid" field (it depends on ECAL dimensions) -->
   <include ref="HCalBarrel_TileCal_v03.xml"/>
-  <include ref="ECalEndcaps_Turbine.xml"/>
+  <include ref="ECalEndcaps_Turbine_o1_v03.xml"/>
   <include ref="HCalEndcaps_ThreeParts_TileCal_v03.xml"/>
-  <include ref="MuonTagger.xml"/>
+  <include ref="MuonTaggerPhiTheta.xml"/>
 
   <fields>
     <!-- FIXME this is a place holder to get a reasonable magnetic field, it should be a real MAP obtained from FEM tools taking into account HCAL return yoke -->

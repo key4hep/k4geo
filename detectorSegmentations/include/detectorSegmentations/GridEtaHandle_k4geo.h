@@ -13,7 +13,6 @@ namespace dd4hep {
 
 /// Namespace for base segmentations
 
-
 // Forward declarations
 class Segmentation;
 template <typename T>
@@ -100,4 +99,4 @@ public:
 };
 
 } /* End namespace dd4hep                */
-#endif  // DD4HEP_DDCORE_GRIDETA_H
+#endif // DD4HEP_DDCORE_GRIDETA_H

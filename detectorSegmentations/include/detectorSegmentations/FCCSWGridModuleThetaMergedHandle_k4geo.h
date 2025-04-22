@@ -13,14 +13,14 @@ namespace dd4hep {
 
 /// Namespace for base segmentations
 
-
 // Forward declarations
 class Segmentation;
 template <typename T>
 class SegmentationWrapper;
 
 /// We need some abbreviation to make the code more readable.
-typedef Handle<SegmentationWrapper<DDSegmentation::FCCSWGridModuleThetaMerged_k4geo>> FCCSWGridModuleThetaMergedHandle_k4geo;
+typedef Handle<SegmentationWrapper<DDSegmentation::FCCSWGridModuleThetaMerged_k4geo>>
+    FCCSWGridModuleThetaMergedHandle_k4geo;
 
 /// Implementation class for the module-theta (with per-layer merging) segmentation.
 /**
@@ -103,25 +103,19 @@ public:
   /// access the field name used for layer
   inline const std::string& fieldNameLayer() const { return access()->implementation->fieldNameLayer(); }
 
-
   /** \brief Returns a std::vector<double> of the cellDimensions of the given cell ID
-      in natural order of dimensions (nModules, dTheta). Not implemented yet.
+      in natural order of dimensions (nModules, dTheta)
 
       Returns a std::vector of the cellDimensions of the given cell ID
       \param cellID
       \return std::vector<double> size 2:
       -# size in module
       -# size in theta
-      Not implemented yet.
   */
-  inline std::vector<double> cellDimensions(const CellID& /*id*/) const {
-    //return {access()->implementation->gridSizePhi(), access()->implementation->gridSizeTheta()};
-    // not implemented
-    throw std::runtime_error( Form("Function %s not implemented", __PRETTY_FUNCTION__) );
-
-    return {0., 0.};
+  inline std::vector<double> cellDimensions(const CellID& id) const {
+    return access()->implementation->cellDimensions(id);
   }
 };
 
 } /* End namespace dd4hep                */
-#endif  // DD4HEP_DDCORE_GRIDMODULETHETAMERGED_H
+#endif // DD4HEP_DDCORE_GRIDMODULETHETAMERGED_H

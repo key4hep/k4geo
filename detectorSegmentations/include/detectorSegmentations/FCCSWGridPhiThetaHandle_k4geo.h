@@ -13,7 +13,6 @@ namespace dd4hep {
 
 /// Namespace for base segmentations
 
-
 // Forward declarations
 class Segmentation;
 template <typename T>
@@ -108,10 +107,10 @@ public:
       -# size in phi
       -# size in theta
   */
-  inline std::vector<double> cellDimensions(const CellID& /*id*/) const {
-    return {access()->implementation->gridSizePhi(), access()->implementation->gridSizeTheta()};
+  inline std::vector<double> cellDimensions(const CellID& id) const {
+    return access()->implementation->cellDimensions(id);
   }
 };
 
 } /* End namespace dd4hep                */
-#endif  // DD4HEP_DDCORE_GRIDPHITHETA_H
+#endif // DD4HEP_DDCORE_GRIDPHITHETA_H
