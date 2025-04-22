@@ -58,46 +58,6 @@ namespace sim {
     G4float fWavlenStep;
     G4float fTimeStep;
 
-  private:
-    // from 900 nm to 460 nm
-    const std::vector<double> fGraph_X = {
-        1.37760 * CLHEP::eV, 1.45864 * CLHEP::eV, 1.54980 * CLHEP::eV, 1.65312 * CLHEP::eV, 1.71013 * CLHEP::eV,
-        1.77120 * CLHEP::eV, 1.83680 * CLHEP::eV, 1.90745 * CLHEP::eV, 1.98375 * CLHEP::eV, 2.06640 * CLHEP::eV,
-
-        2.10143 * CLHEP::eV, 2.13766 * CLHEP::eV, 2.17516 * CLHEP::eV, 2.21400 * CLHEP::eV, 2.25426 * CLHEP::eV,
-        2.29600 * CLHEP::eV, 2.33932 * CLHEP::eV, 2.38431 * CLHEP::eV, 2.43106 * CLHEP::eV, 2.47968 * CLHEP::eV,
-
-        2.53029 * CLHEP::eV, 2.58300 * CLHEP::eV, 2.63796 * CLHEP::eV, 2.69531 * CLHEP::eV, 2.75520 * CLHEP::eV,
-        2.81782 * CLHEP::eV, 2.88335 * CLHEP::eV, 2.95200 * CLHEP::eV, 3.09960 * CLHEP::eV, 3.54241 * CLHEP::eV,
-
-        4.13281 * CLHEP::eV};
-    // filter efficiency of the Kodak Wratten No.9 filter
-    const std::vector<double> fKodakEff = {0.903, 0.903, 0.903, 0.903, 0.903, 0.903, 0.902, 0.901, 0.898, 0.895,
-
-                                           0.893, 0.891, 0.888, 0.883, 0.87,  0.838, 0.76,  0.62,  0.488, 0.345,
-
-                                           0.207, 0.083, 0.018, 0.,    0.,    0.,    0.,    0.,    0.,    0.,
-
-                                           0.};
-
-    // SiPM efficiency Hamamatsu S14160-1310PS
-    // TODO migrate this part to the digitization step!
-    // Note: Ideally, this should be part of the digitization step.
-    // (not the simulation step)
-    // But, to do this, we need to store the distribution
-    // of the optical photon wavelength.
-    // While we can develop another feature to enable this,
-    // let's emulate the SiPM efficiency in the simulation step for now.
-    // We just need a working code and without this,
-    // the number of Cherenkov photon will be order of magnitude higher
-    const std::vector<double> fSipmEff = {0.02,  0.025, 0.045, 0.06,  0.0675, 0.075, 0.0925, 0.11,  0.125, 0.14,
-
-                                          0.146, 0.152, 0.158, 0.164, 0.17,   0.173, 0.176,  0.178, 0.179, 0.18,
-
-                                          0.181, 0.182, 0.183, 0.184, 0.18,   0.173, 0.166,  0.158, 0.15,  0.12,
-
-                                          0.05};
-
   public:
     G4double wavToE(G4double wav) const { return CLHEP::h_Planck * CLHEP::c_light / wav; }
 
@@ -121,42 +81,6 @@ namespace sim {
       return i;
     }
 
-    // Linear interpolation function for calculating the efficiency of yellow filter
-    // used in rejectedByYellowFilter
-    double getFilterEff(const std::vector<double>& yarray, const G4double G4energy) const {
-      // If the photon energy <= 1.37760 eV, than return maximum filter efficiency
-      if (G4energy <= fGraph_X.at(0))
-        return yarray.at(0);
-
-      for (unsigned idx = 1; idx < yarray.size(); ++idx) {
-        if (G4energy <= fGraph_X.at(idx)) {
-          double x1 = fGraph_X.at(idx - 1);
-          double x2 = fGraph_X.at(idx);
-          double y1 = yarray.at(idx - 1);
-          double y2 = yarray.at(idx);
-
-          // return linear interpolated filter efficiency
-          return (y1 + ((y2 - y1) / (x2 - x1)) * (G4energy - x1));
-        }
-      }
-
-      return 0.;
-    }
-
-    // If true, then the photon is rejected by yellow filter
-    bool rejectedByYellowFilter(G4double G4energy, double rndVal) const {
-      const double FilterEff = getFilterEff(fKodakEff, G4energy); // Get efficiency of filter using photon's energy
-
-      // filter efficiency == probability of photon accepted by filter
-      // == Probability of random value (from uniform distribution with range 0 ~ 1) smaller than filter efficiency
-      // So if the rndVal is larger than the FilterEff, than the photon is rejected
-      return (rndVal > FilterEff);
-    }
-
-    // check sipm efficiency
-    // TODO migrate this to the digitization step
-    bool rejectedBySiPM(double G4energy, double rndVal) const { return (rndVal > getFilterEff(fSipmEff, G4energy)); }
-
     DRCData() : fWavBin(120), fTimeBin(650), fWavlenStart(900.), fWavlenEnd(300.), fTimeStart(5.), fTimeEnd(70.) {
       fWavlenStep = (fWavlenStart - fWavlenEnd) / (float)fWavBin;
       fTimeStep = (fTimeEnd - fTimeStart) / (float)fTimeBin;
@@ -175,6 +99,8 @@ namespace sim {
 
     m_userData.fastfiber.fSafety = 1;
     m_userData.fastfiber.fVerbose = 0;
+
+    m_hitCreationMode = HitCreationFlags::DETAILED_MODE; // always store step position
   }
 
   /// Define collections created by this sensitive action object
@@ -297,19 +223,7 @@ namespace sim {
         // for timing measurement
         double timeUnit = m_userData.fastfiber.mDataCurrent.globalTime - m_userData.fastfiber.mDataPrevious.globalTime;
         double timeShift = timeUnit * m_userData.fastfiber.mNtransport;
-
-        // check wheter the optical photon will be rejected by the SiPM
-        // TODO migrate this to the digitization step
-        Geant4Event& evt = context()->event();
-        Geant4Random& rnd = evt.random();  // Get random generator
-        double rndVal = rnd.uniform(0, 1); // Get random number from uniform distribution [0, 1]
         G4double energy = step->GetTrack()->GetTotalEnergy();
-
-        if (m_userData.rejectedBySiPM(energy, rndVal)) {
-          step->GetTrack()->SetTrackStatus(fStopAndKill);
-
-          return false;
-        }
 
         // default hit (optical photon count)
         Geant4DRCalorimeter::Hit* drHit =
@@ -318,6 +232,7 @@ namespace sim {
         if (!drHit) {
           drHit = new Geant4DRCalorimeter::Hit(m_userData.fWavlenStep, m_userData.fTimeStep);
           drHit->cellID = cID;
+          drHit->position = m_segmentation->position(cID)*CLHEP::mm/dd4hep::mm; // segmentation gives dd4hep unit
           drHit->SetSiPMnum(cID);
           drHit->SetTimeStart(m_userData.fTimeStart);
           drHit->SetTimeEnd(m_userData.fTimeEnd);
@@ -335,8 +250,6 @@ namespace sim {
         drHit->CountWavlenSpectrum(wavBin);
         int timeBin = m_userData.findTimeBin(hitTime);
         drHit->CountTimeStruct(timeBin);
-
-        drHit->position = glob;
 
         // finally kill optical photon
         step->GetTrack()->SetTrackStatus(fStopAndKill);
@@ -362,6 +275,7 @@ namespace sim {
         if (!caloHit) {
           caloHit = new Geant4Calorimeter::Hit(glob);
           caloHit->cellID = cID;
+          caloHit->position = m_segmentation->position(cID)*CLHEP::mm/dd4hep::mm; // segmentation gives dd4hep unit
           coll_scint->add(cID, caloHit);
         }
 
@@ -402,32 +316,10 @@ namespace sim {
       G4double hitTime = step->GetPostStepPoint()->GetGlobalTime();
       G4double energy = step->GetTrack()->GetTotalEnergy();
 
-      // Apply yellow filter here
-      // Get random number from (0~1) uniform distribution
-      // If the photon is from Scint. process, calculate the filter eff. based on its energy
-      // If  (random number) > (Eff), the photon is rejected by yellow filter (= do not make hit (or count photon) for
-      // that photon)
-      dd4hep::DDSegmentation::VolumeID ceren =
-          static_cast<dd4hep::DDSegmentation::VolumeID>(m_segmentation->decoder()->get(cID, "c"));
-      bool IsCeren = static_cast<bool>(ceren);
-
-      Geant4Event& evt = context()->event();
-      Geant4Random& rnd = evt.random();  // Get random generator
-      double rndVal = rnd.uniform(0, 1); // Get random number from uniform distribution [0, 1]
-
-      if (!IsCeren) {
-        if (m_userData.rejectedByYellowFilter(energy, rndVal))
-          return false;
-      }
-
-      // check wheter the optical photon will be rejected by the SiPM
-      // TODO migrate this to the digitization step
-      if (m_userData.rejectedBySiPM(energy, rndVal))
-        return false;
-
       if (!hit) {
         hit = new Geant4DRCalorimeter::Hit(m_userData.fWavlenStep, m_userData.fTimeStep);
         hit->cellID = cID;
+        hit->position = m_segmentation->position(cID)*CLHEP::mm/dd4hep::mm; // segmentation gives dd4hep unit
         hit->SetSiPMnum(cID);
         hit->SetTimeStart(m_userData.fTimeStart);
         hit->SetTimeEnd(m_userData.fTimeEnd);
@@ -441,8 +333,6 @@ namespace sim {
       hit->CountWavlenSpectrum(wavBin);
       int timeBin = m_userData.findTimeBin(hitTime);
       hit->CountTimeStruct(timeBin);
-
-      hit->position = glob;
 
       return true;
     } // !skipScint
