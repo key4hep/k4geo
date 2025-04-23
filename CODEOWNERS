@@ -12,3 +12,6 @@
 
 # Owners for CLIC geometries
 /CLIC   @andresailer
+
+# Ownvers for muon collider geometries
+/MuColl @madbaron @bartosik-hep @tmadlener
