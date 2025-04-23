@@ -1,0 +1,14 @@
+# See https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+# for more details and the explanation of the rules
+
+# Global owners (will get notified if no other rule applies)
+*       @atolosadelgado @andresailer @jmcarcell @tmadlener @gaede
+
+# Owners for ILD geometries
+/ILD/   @tmadlener @gaede
+
+# Owners for FCC geometries
+/FCCee  @atolosadelgado @BrieucF
+
+# Owners for CLIC geometries
+/CLIC   @andresailer
