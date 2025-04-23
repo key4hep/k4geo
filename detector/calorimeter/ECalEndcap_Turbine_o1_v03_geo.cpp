@@ -43,7 +43,7 @@ namespace ECalEndcap_Turbine_o1_v03 {
     dd4hep::Trd2 tmp1(thickness_inner / 2., thickness_outer / 2., width / 2., width / 2., (zmax - zmin) / 2.);
     shapeBeforeSubtraction = tmp1;
 
-    dd4hep::Tube allowedTube(ri, ro, delZ);
+    dd4hep::Tube allowedTube(ri, ro, delZ/2.);
 
     return dd4hep::IntersectionSolid(
         shapeBeforeSubtraction, allowedTube,
@@ -112,9 +112,7 @@ namespace ECalEndcap_Turbine_o1_v03 {
     double delrPhiNoGap;
 
     float GlueThick = glueElem.attr<float>(_Unicode(thickness));
-
     float CladdingThick = claddingElem.attr<float>(_Unicode(thickness));
-
     AbsThickMin = AbsThickMin - (GlueThick + CladdingThick);
     if (AbsThickMin < 0.) {
       dd4hep::printout(
@@ -130,7 +128,6 @@ namespace ECalEndcap_Turbine_o1_v03 {
     // make volumes for the noble liquid, electrode, and absorber blades
     float AbsThicko;
     AbsThicko = AbsThicki + BladeThicknessScaleFactor * ((ro / ri) - 1.) * AbsThicki;
-
     // Calculate gap thickness at inner layer
     double circ = 2 * TMath::Pi() * ri;
     double x2 = (AbsThickMin + (GlueThick + CladdingThick) + ElectrodeThick) / TMath::Sin(BladeAngle);
@@ -153,7 +150,6 @@ namespace ECalEndcap_Turbine_o1_v03 {
     leftoverS = (circ - nUnitCells * delrPhiNoGap);
     delrPhiGapOnly = leftoverS / (2 * nUnitCells);
     float LArgapo = delrPhiGapOnly * TMath::Sin(BladeAngle);
-    //    LArgapo *= 2.;
 
     float riLayer = ri;
 
@@ -245,12 +241,15 @@ namespace ECalEndcap_Turbine_o1_v03 {
 
     AbsThicki = AbsThickMin;
 
+    float LArgapiLayer = LArgapi;
+    
     for (unsigned iRhoLayer = 0; iRhoLayer < ECalEndcapNumCalibRhoLayers; iRhoLayer++) {
 
       float roLayer = riLayer + delrActive;
 
       AbsThicko = AbsThicki + BladeThicknessScaleFactor * ((roLayer / riLayer) - 1.) * AbsThicki;
 
+      /*
       // now find gap at outer layer
       circ = 2 * TMath::Pi() * roLayer;
       x2 = (AbsThicko + GlueThick + CladdingThick + ElectrodeThick) / TMath::Sin(BladeAngle);
@@ -261,17 +260,20 @@ namespace ECalEndcap_Turbine_o1_v03 {
       leftoverS = (circ - nUnitCells * delrPhiNoGap);
       delrPhiGapOnly = leftoverS / (2 * nUnitCells);
       LArgapo = delrPhiGapOnly * TMath::Sin(BladeAngle);
-      dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v03", "Outer LAr gap is %f", LArgapo);
+      */
+      float LArgapoLayer = LArgapi + (LArgapo - LArgapi)*(1.0*iRhoLayer)/ECalEndcapNumCalibRhoLayers;
+      
+      dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v03", "Outer LAr gap is %f", LArgapoLayer);
       dd4hep::printout(dd4hep::INFO, "ECalEndcap_Turbine_o1_v03",
-                       "Inner and outer thicknesses of noble liquid volume %f, %f", ElectrodeThick + LArgapi * 2,
-                       ElectrodeThick + LArgapo * 2);
+                       "Inner and outer thicknesses of noble liquid volume %f, %f", ElectrodeThick + LArgapiLayer * 2,
+                       ElectrodeThick + LArgapoLayer * 2);
 
       float zStart = -xRange / 2. + xRange / (2. * ECalEndcapNumCalibZLayers);
 
       for (unsigned iZLayer = 0; iZLayer < ECalEndcapNumCalibZLayers; iZLayer++) {
 
         dd4hep::Solid electrodeBladeAndGapLayer =
-            buildOneBlade(ElectrodeThick + LArgapi * 2, ElectrodeThick + LArgapo * 2,
+            buildOneBlade(ElectrodeThick + LArgapiLayer * 2, ElectrodeThick + LArgapoLayer * 2,
                           xRange / ECalEndcapNumCalibZLayers, roLayer, riLayer, BladeAngle, delZ, zStart);
 
         dd4hep::Solid electrodeBladeLayer =
@@ -296,7 +298,7 @@ namespace ECalEndcap_Turbine_o1_v03 {
         zStart += xRange / ECalEndcapNumCalibZLayers;
       }
       riLayer = roLayer;
-      LArgapi = LArgapo;
+      LArgapiLayer = LArgapoLayer;
       AbsThicki = AbsThicko;
     }
     dd4hep::printout(dd4hep::INFO, "ECalEndcap_Turbine_o1_v03",
