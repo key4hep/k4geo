@@ -122,8 +122,10 @@ namespace ECalEndcap_Turbine_o1_v02 {
     float LArgapi = nobleLiquidElem.attr<float>(_Unicode(gap));
 
     bool sameNUnitCells = genericBladeElem.attr<bool>(_Unicode(sameNUnitCells));
-    char* nUnitCellsStrArr = (char*)genericBladeElem.attr<std::string>(_Unicode(nUnitCells)).c_str();
-    char* nUnitCellsCStr = strtok(nUnitCellsStrArr, " ");
+    std::string nUnitCellsStrArr = genericBladeElem.attr<std::string>(_Unicode(nUnitCells));
+    char* nUnitCellsStrChar = new char[nUnitCellsStrArr.length() + 1];
+    std::strcpy(nUnitCellsStrChar, nUnitCellsStrArr.c_str());
+    char* nUnitCellsCStr = strtok(nUnitCellsStrChar, " ");
 
     if (!sameNUnitCells) {
       for (unsigned i = 0; i < iWheel; i++) {
