@@ -10,7 +10,8 @@
 # Owners for FCC geometries
 /FCCee  @BrieucF
 /FCCee/CLD @andresailer @jmcarcell 
-
+/FCCee/ALLEGRO @BrieucF @giovannimarchiori @scott-snyder
+/FCCee/IDEA @lopezzot @patriziaazzi @ndefilip
 # Owners for CLIC geometries
 /CLIC   @andresailer
 
