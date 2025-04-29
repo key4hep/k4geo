@@ -2,7 +2,7 @@
 # for more details and the explanation of the rules
 
 # Global owners (will get notified if no other rule applies)
-*       @andresailer @jmcarcell @tmadlener @gaede
+*       @andresailer @jmcarcell @tmadlener @gaede @BrieucF
 
 # Owners for ILD geometries
 /ILD/   @tmadlener @gaede @danieljeans 
