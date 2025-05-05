@@ -48,9 +48,13 @@ void ddDRcalo::DRconstructor::construct() {
   implementTowers(fX_barrel, fParamBarrel, AssemblyTubeVol);
   implementTowers(fX_endcap, fParamEndcap, AssemblyTubeVol);
 
+  // the following code is actually not a reflection, but a rotation
+  // since reflecting intersection/subtraction solid is currently not possible
+  // this causes a discontinuity of the neighboring cells at eta=0
+  // we handle this explicitly in the segmentation
   if (fX_det.reflect()) {
     auto refl_pos =
-        dd4hep::Transform3D(dd4hep::RotationZYX(0., 0., M_PI), dd4hep::Position(0, 0, -(fX_worldTube.height() / 2.)));
+        dd4hep::Transform3D(dd4hep::RotationX(M_PI), dd4hep::Position(0, 0, -(fX_worldTube.height() / 2.)));
     dd4hep::PlacedVolume PlacedAssemblyTubeVol_refl = fExperimentalHall->placeVolume(AssemblyTubeVol, 1, refl_pos);
     PlacedAssemblyTubeVol_refl.addPhysVolID("assembly", 1);
   }
@@ -80,6 +84,7 @@ void ddDRcalo::DRconstructor::implementTowers(xml_comp_t& x_theta, dd4hep::DDSeg
     double currentToC = currentTheta + x_deltaTheta.deltatheta() / 2.;
     currentTheta += x_deltaTheta.deltatheta();
     param->SetThetaOfCenter(currentToC);
+    param->SetCurrentTowerNum(towerNo);
     param->init();
 
     dd4hep::Trap tower(x_theta.height() / 2., 0., 0., param->GetH1(), param->GetBl1(), param->GetTl1(), 0.,
@@ -122,7 +127,7 @@ void ddDRcalo::DRconstructor::placeAssembly(dd4hep::DDSegmentation::DRparamBase_
                                             dd4hep::Volume& sipmWaferVol, int towerNo, int nPhi, bool isRHS) {
   param->SetIsRHS(isRHS);
   int towerNoLR = param->signedTowerNo(towerNo);
-  auto towerId64 = fSegmentation->setVolumeID(towerNoLR, nPhi);
+  auto towerId64 = fSegmentation->setVolumeID(fX_det.id(), towerNoLR, nPhi);
   int towerId32 = fSegmentation->getFirst32bits(towerId64);
 
   dd4hep::Position towerPos = param->GetTowerPos(nPhi) + dd4hep::Position(0, 0, -(fX_worldTube.height() / 2.));
@@ -242,6 +247,9 @@ void ddDRcalo::DRconstructor::implementFibers(xml_comp_t& x_theta, dd4hep::Volum
       }
     }
   }
+
+  // store rows & columns of full length fibers to the segmentation
+  param->SetFullLengthFibers(rmin,rmax,cmin,cmax);
 }
 
 // Remove cap (mirror or black paint in front of the fiber)
