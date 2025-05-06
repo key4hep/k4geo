@@ -461,9 +461,9 @@
             <constant name="VTXIB_curved_z4_offset2" value="+(VTXIB_curved_z4_passive1+VTXIB_curved_z4_passive2+VTXIB_curved_gap_z4)/2. - VTXIB_curved_z4_passive2/2."/> 
 
             <!-- Representation of curved sensitive elements by number of trapezoids with flat surface. Multiplies the number of surfaces by this number, careful! -->
-            <constant name="VTXIB_curved_nsegments" value="10"/>
+            <constant name="VTXIB_curved_nsegments" value="5"/>
 
-            <constant name="VTXIB_curved_tolerance_r" value="0.033*mm"/> <!-- Needed for curved inner vertex as otherwise overlaps would be detected. -->
+            <constant name="VTXIB_curved_tolerance_r" value="0.040*mm"/> <!-- Needed for curved inner vertex as otherwise overlaps would be detected. -->
     </define>
 
     <!-- Inner vertex tube, common to both inner vertex designs -->
@@ -486,11 +486,11 @@
         </readout>  
     </readouts>
 
-   <detectors>
- 
+    <detectors>
+
         <!-- Vertex inner barrel -->
         <detector name="VertexBarrel" type="VertexBarrel_detailed_o1_v03" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelCollection"  region="VTXBRegion">
-             <envelope vis="VXDVis">
+            <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>
 
@@ -685,7 +685,6 @@
                     <component sensitive="False" isCurved="true" name="Readout periph"  vis="VTXPeripheryVis" xmin="1.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing+RSU_phi_pixelArray" xmax="1.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing+RSU_phi_pixelArray+RSU_phi_readoutPeriphery"  ymin="-RSU_z/2." ymax="+RSU_z/2."/>
                     <component sensitive="False" isCurved="true" name="Readout periph"  vis="VTXPeripheryVis" xmin="1.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing+RSU_phi_pixelArray+RSU_phi_readoutPeriphery" xmax="1.0*RSU_phi"  ymin="-RSU_z/2." ymax="+RSU_z/2."/>
 
-
                     <!-- Bottom half -->
                     <component sensitive="False" isCurved="true" name="Biasing"         vis="VTXPeripheryVis" xmin="1.0*RSU_phi" xmax="1.0*RSU_phi+RSU_phi_biasing"  ymin="-RSU_z/2." ymax="+RSU_z/2."/>
                     <component sensitive="False" isCurved="true" name="Data backbone"   vis="VTXPeripheryVis" xmin="1.0*RSU_phi+RSU_phi_biasing" xmax="1.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray"  ymin="-RSU_z/2." ymax="-RSU_z/2.+RSU_z_dataBackbone"/>
@@ -763,7 +762,6 @@
                     <component sensitive="False" isCurved="true" name="Power switches"  vis="VTXPeripheryVis" xmin="0.0*RSU_phi+RSU_phi_biasing" xmax="0.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray"  ymin="-RSU_z/2.+2.*RSU_z_dataBackbone+6.*RSU_z_pixelArray+5.*RSU_z_powerSwitch" ymax="-RSU_z/2.+2.*RSU_z_dataBackbone+6.*RSU_z_pixelArray+6.*RSU_z_powerSwitch"/>
                     <component sensitive="False" isCurved="true" name="Readout periph"  vis="VTXPeripheryVis" xmin="0.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray" xmax="0.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray+RSU_phi_readoutPeriphery"  ymin="-RSU_z/2." ymax="+RSU_z/2."/>
                     <component sensitive="False" isCurved="true" name="Readout periph"  vis="VTXPeripheryVis" xmin="0.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray+RSU_phi_readoutPeriphery" xmax="0.0*RSU_phi+RSU_phi/2."  ymin="-RSU_z/2." ymax="+RSU_z/2."/>
-             
 
                     <component sensitive="False" isCurved="true" name="Biasing"         vis="VTXPeripheryVis" xmin="1.0*RSU_phi-RSU_phi/2." xmax="1.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing"  ymin="-RSU_z/2." ymax="+RSU_z/2."/>
                     <component sensitive="False" isCurved="true" name="Data backbone"   vis="VTXPeripheryVis" xmin="1.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing" xmax="1.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing+RSU_phi_pixelArray"  ymin="-RSU_z/2." ymax="-RSU_z/2.+RSU_z_dataBackbone"/>
@@ -891,7 +889,6 @@
                     <component sensitive="False" isCurved="true" name="Power switches"  vis="VTXPeripheryVis" xmin="0.0*RSU_phi+RSU_phi_biasing" xmax="0.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray"  ymin="-RSU_z/2.+2.*RSU_z_dataBackbone+6.*RSU_z_pixelArray+5.*RSU_z_powerSwitch" ymax="-RSU_z/2.+2.*RSU_z_dataBackbone+6.*RSU_z_pixelArray+6.*RSU_z_powerSwitch"/>
                     <component sensitive="False" isCurved="true" name="Readout periph"  vis="VTXPeripheryVis" xmin="0.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray" xmax="0.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray+RSU_phi_readoutPeriphery"  ymin="-RSU_z/2." ymax="+RSU_z/2."/>
                     <component sensitive="False" isCurved="true" name="Readout periph"  vis="VTXPeripheryVis" xmin="0.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray+RSU_phi_readoutPeriphery" xmax="0.0*RSU_phi+RSU_phi/2."  ymin="-RSU_z/2." ymax="+RSU_z/2."/>
-             
 
                     <component sensitive="False" isCurved="true" name="Biasing"         vis="VTXPeripheryVis" xmin="1.0*RSU_phi-RSU_phi/2." xmax="1.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing"  ymin="-RSU_z/2." ymax="+RSU_z/2."/>
                     <component sensitive="False" isCurved="true" name="Data backbone"   vis="VTXPeripheryVis" xmin="1.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing" xmax="1.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing+RSU_phi_pixelArray"  ymin="-RSU_z/2." ymax="-RSU_z/2.+RSU_z_dataBackbone"/>
@@ -1056,7 +1053,6 @@
                     <component sensitive="False" isCurved="true" name="Power switches"  vis="VTXPeripheryVis" xmin="0.0*RSU_phi+RSU_phi_biasing" xmax="0.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray"  ymin="-RSU_z/2.+2.*RSU_z_dataBackbone+6.*RSU_z_pixelArray+5.*RSU_z_powerSwitch" ymax="-RSU_z/2.+2.*RSU_z_dataBackbone+6.*RSU_z_pixelArray+6.*RSU_z_powerSwitch"/>
                     <component sensitive="False" isCurved="true" name="Readout periph"  vis="VTXPeripheryVis" xmin="0.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray" xmax="0.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray+RSU_phi_readoutPeriphery"  ymin="-RSU_z/2." ymax="+RSU_z/2."/>
                     <component sensitive="False" isCurved="true" name="Readout periph"  vis="VTXPeripheryVis" xmin="0.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray+RSU_phi_readoutPeriphery" xmax="0.0*RSU_phi+RSU_phi/2."  ymin="-RSU_z/2." ymax="+RSU_z/2."/>
-             
 
                     <component sensitive="False" isCurved="true" name="Biasing"         vis="VTXPeripheryVis" xmin="1.0*RSU_phi-RSU_phi/2." xmax="1.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing"  ymin="-RSU_z/2." ymax="+RSU_z/2."/>
                     <component sensitive="False" isCurved="true" name="Data backbone"   vis="VTXPeripheryVis" xmin="1.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing" xmax="1.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing+RSU_phi_pixelArray"  ymin="-RSU_z/2." ymax="-RSU_z/2.+RSU_z_dataBackbone"/>
@@ -1221,7 +1217,6 @@
                     <component sensitive="False" isCurved="true" name="Power switches"  vis="VTXPeripheryVis" xmin="0.0*RSU_phi+RSU_phi_biasing" xmax="0.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray"  ymin="-RSU_z/2.+2.*RSU_z_dataBackbone+6.*RSU_z_pixelArray+5.*RSU_z_powerSwitch" ymax="-RSU_z/2.+2.*RSU_z_dataBackbone+6.*RSU_z_pixelArray+6.*RSU_z_powerSwitch"/>
                     <component sensitive="False" isCurved="true" name="Readout periph"  vis="VTXPeripheryVis" xmin="0.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray" xmax="0.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray+RSU_phi_readoutPeriphery"  ymin="-RSU_z/2." ymax="+RSU_z/2."/>
                     <component sensitive="False" isCurved="true" name="Readout periph"  vis="VTXPeripheryVis" xmin="0.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray+RSU_phi_readoutPeriphery" xmax="0.0*RSU_phi+RSU_phi/2."  ymin="-RSU_z/2." ymax="+RSU_z/2."/>
-             
 
                     <component sensitive="False" isCurved="true" name="Biasing"         vis="VTXPeripheryVis" xmin="1.0*RSU_phi-RSU_phi/2." xmax="1.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing"  ymin="-RSU_z/2." ymax="+RSU_z/2."/>
                     <component sensitive="False" isCurved="true" name="Data backbone"   vis="VTXPeripheryVis" xmin="1.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing" xmax="1.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing+RSU_phi_pixelArray"  ymin="-RSU_z/2." ymax="-RSU_z/2.+RSU_z_dataBackbone"/>
@@ -1295,7 +1290,6 @@
                     <component sensitive="False" isCurved="true" name="Readout periph"  vis="VTXPeripheryVis" xmin="2.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray" xmax="2.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray+RSU_phi_readoutPeriphery"  ymin="-RSU_z/2." ymax="+RSU_z/2."/>
                     <component sensitive="False" isCurved="true" name="Readout periph"  vis="VTXPeripheryVis" xmin="2.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray+RSU_phi_readoutPeriphery" xmax="2.0*RSU_phi+RSU_phi/2."  ymin="-RSU_z/2." ymax="+RSU_z/2."/>
 
-
                     <component sensitive="False" isCurved="true" name="Biasing"         vis="VTXPeripheryVis" xmin="3.0*RSU_phi-RSU_phi/2." xmax="3.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing"  ymin="-RSU_z/2." ymax="+RSU_z/2."/>
                     <component sensitive="False" isCurved="true" name="Data backbone"   vis="VTXPeripheryVis" xmin="3.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing" xmax="3.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing+RSU_phi_pixelArray"  ymin="-RSU_z/2." ymax="-RSU_z/2.+RSU_z_dataBackbone"/>
                     <component sensitive="True"  isCurved="true" name="Pixel array"     vis="VTXSensitiveVis" nsegments="VTXIB_curved_nsegments" xmin="3.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing" xmax="3.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing+RSU_phi_pixelArray"  ymin="-RSU_z/2.+RSU_z_dataBackbone" ymax="-RSU_z/2.+RSU_z_dataBackbone+RSU_z_pixelArray"/>
@@ -1331,7 +1325,6 @@
                     <component sensitive="False" isCurved="true" name="Power switches"  vis="VTXPeripheryVis" xmin="3.0*RSU_phi+RSU_phi_biasing" xmax="3.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray"  ymin="-RSU_z/2.+2.*RSU_z_dataBackbone+6.*RSU_z_pixelArray+5.*RSU_z_powerSwitch" ymax="-RSU_z/2.+2.*RSU_z_dataBackbone+6.*RSU_z_pixelArray+6.*RSU_z_powerSwitch"/>
                     <component sensitive="False" isCurved="true" name="Readout periph"  vis="VTXPeripheryVis" xmin="3.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray" xmax="3.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray+RSU_phi_readoutPeriphery"  ymin="-RSU_z/2." ymax="+RSU_z/2."/>
                     <component sensitive="False" isCurved="true" name="Readout periph"  vis="VTXPeripheryVis" xmin="3.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray+RSU_phi_readoutPeriphery" xmax="3.0*RSU_phi+RSU_phi/2."  ymin="-RSU_z/2." ymax="+RSU_z/2."/>
-
 
                     <component sensitive="False" isCurved="true" name="Biasing"         vis="VTXPeripheryVis" xmin="4.0*RSU_phi-RSU_phi/2." xmax="4.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing"  ymin="-RSU_z/2." ymax="+RSU_z/2."/>
                     <component sensitive="False" isCurved="true" name="Data backbone"   vis="VTXPeripheryVis" xmin="4.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing" xmax="4.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing+RSU_phi_pixelArray"  ymin="-RSU_z/2." ymax="-RSU_z/2.+RSU_z_dataBackbone"/>
@@ -1423,7 +1416,6 @@
                     <component sensitive="False" isCurved="true" name="Power switches"  vis="VTXPeripheryVis" xmin="0.0*RSU_phi+RSU_phi_biasing" xmax="0.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray"  ymin="-RSU_z/2.+2.*RSU_z_dataBackbone+6.*RSU_z_pixelArray+5.*RSU_z_powerSwitch" ymax="-RSU_z/2.+2.*RSU_z_dataBackbone+6.*RSU_z_pixelArray+6.*RSU_z_powerSwitch"/>
                     <component sensitive="False" isCurved="true" name="Readout periph"  vis="VTXPeripheryVis" xmin="0.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray" xmax="0.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray+RSU_phi_readoutPeriphery"  ymin="-RSU_z/2." ymax="+RSU_z/2."/>
                     <component sensitive="False" isCurved="true" name="Readout periph"  vis="VTXPeripheryVis" xmin="0.0*RSU_phi+RSU_phi_biasing+RSU_phi_pixelArray+RSU_phi_readoutPeriphery" xmax="0.0*RSU_phi+RSU_phi/2."  ymin="-RSU_z/2." ymax="+RSU_z/2."/>
-             
 
                     <component sensitive="False" isCurved="true" name="Biasing"         vis="VTXPeripheryVis" xmin="1.0*RSU_phi-RSU_phi/2." xmax="1.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing"  ymin="-RSU_z/2." ymax="+RSU_z/2."/>
                     <component sensitive="False" isCurved="true" name="Data backbone"   vis="VTXPeripheryVis" xmin="1.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing" xmax="1.0*RSU_phi-RSU_phi/2.+RSU_phi_biasing+RSU_phi_pixelArray"  ymin="-RSU_z/2." ymax="-RSU_z/2.+RSU_z_dataBackbone"/>
@@ -1716,7 +1708,7 @@
             <layer nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r3)*360.*deg+90.*deg+VTXIB_curved_phi0_3" r="VTXIB_curved_r3" id="2" nmodules="VTXIB_curved_nModules3_2" name="VTXIBStave3Curved_2" step="0.0*mm" motherVolThickness="VTXIB_curved_r4-VTXIB_curved_r3"        motherVolLength="VTXIB_curved_z3_passive2" motherVolOffset="-(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap3_length_center-VTXIB_curved_endcap3_length_side)/2.)" side="+1" z_offset="VTXIB_curved_z3_offset2"/>
 
             <layer nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r4)*360.*deg+90.*deg+VTXIB_curved_phi0_4" r="VTXIB_curved_r4" id="3" nmodules="VTXIB_curved_nModules4_1" name="VTXIBStave4Curved_1" step="0.0*mm" motherVolThickness="VTXIB_curved_r_outer-VTXIB_curved_r4-VTXIB_tube_thickness"   motherVolLength="VTXIB_curved_z4_passive1" motherVolOffset="+(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap4_length_center-VTXIB_curved_endcap4_length_side)/2.)" side="-1" z_offset="VTXIB_curved_z4_offset1"/>
-            <layer nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r4)*360.*deg+90.*deg+VTXIB_curved_phi0_4" r="VTXIB_curved_r4" id="3" nmodules="VTXIB_curved_nModules4_2" name="VTXIBStave4Curved_2" step="0.0*mm" motherVolThickness="VTXIB_curved_r_outer-VTXIB_curved_r4-VTXIB_tube_thickness"   motherVolLength="VTXIB_curved_z4_passive2" motherVolOffset="-(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap4_length_center-VTXIB_curved_endcap4_length_side)/2.)" side="+1" z_offset="VTXIB_curved_z4_offset2"/>
+            <layer nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r4)*360.*deg+90.*deg+VTXIB_curved_phi0_4" r="VTXIB_curved_r4" id="3" nmodules="VTXIB_curved_nModules4_2" name="VTXIBStave4Curved_2" step="0.0*mm" motherVolThickness="VTXIB_curved_r_outer-VTXIB_curved_r4-VTXIB_tube_thickness"   motherVolLength="VTXIB_curved_z4_passive2" motherVolOffset="-(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap4_length_center-VTXIB_curved_endcap4_length_side)/2.)" side="+1" z_offset="VTXIB_curved_z4_offset2"/> 
 
             <!-- Vertex outer barrel -->
             <layer nLadders="VTXOB_Staves1" phi0="0.0" r="VTXOB_r1" offset="VTXOB_offset1" id="nInnerVertexLayers+0" nmodules="VTXOB_nModules1" name="VTXOBStave1" step="VTXOB_mod_z_spacing" motherVolThickness="1.2*cm" motherVolLength="VTXOB_z1_passive" z_offset="VTXOB_zoffset1"/>
@@ -1724,7 +1716,7 @@
         </detector>
 
 
-         <!-- Inner vertex tube just outside last inner vertex layer (for both normal and curved vertex)  -->
+        <!-- Inner vertex tube just outside last inner vertex layer (for both normal and curved vertex)  -->
         <detector name="VertexInnerBarrel_tube" type="VertexBarrel_detailed_o1_v02" vis="VXDVis" id="-2" readout="VertexDummyCollection"  region="VTXBRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
@@ -1741,7 +1733,7 @@
 
 
         <!-- Vertex inner barrel support structure and cooling cones imported via DDCAD. Disabled because of overlaps within and with Vertex detector -->
-       <!-- <detector id="DetID_NOTUSED" name="VTXIB_Support_PEEK" type="DD4hep_TestShape_Creator">
+        <!-- <detector id="DetID_NOTUSED" name="VTXIB_Support_PEEK" type="DD4hep_TestShape_Creator">
             <check>
                 <shape type="CAD_MultiVolume" ref="${K4GEO}/FCCee/IDEA/IDEA_o1_v03/stl_files/VertexSupport_PEEK_o1_v03.stl" material="PEEK" unit="mm">
                     <volume id="0"  name="Body1" material="PEEK" vis="VTXPEEKVis"/>
@@ -1759,7 +1751,7 @@
             </check>
         </detector> 
 
-         <detector id="DetID_NOTUSED" name="VTXIB_CoolingCones" type="DD4hep_TestShape_Creator">
+        <detector id="DetID_NOTUSED" name="VTXIB_CoolingCones" type="DD4hep_TestShape_Creator">
             <check>
                 <shape type="CAD_MultiVolume" ref="${K4GEO}/FCCee/IDEA/IDEA_o1_v03/stl_files/VertexCoolingCones_o1_v03.stl" material="CarbonFiberVtx" unit="mm">
                     <volume id="2"  name="Body1" material="CarbonFiberVtx" vis="VTXSupportVis"/>
@@ -1848,7 +1840,7 @@
             </module>
 
             <!-- Here we construct the disks, all disks use the same base stave (VTXDStave) with different numbers of modules and other properties -->
-           <layer id="0" z="VTXD_z1" nphi="2" dz="VTXD_dz1" rmin="VTXD_rmin1" rmax="VTXOB_r_max_layer-VTXOB_TerminalPart_L2_thickness1-12.771*mm" reflect_rot="pi/4.0">
+            <layer id="0" z="VTXD_z1" nphi="2" dz="VTXD_dz1" rmin="VTXD_rmin1" rmax="VTXOB_r_max_layer-VTXOB_TerminalPart_L2_thickness1-12.771*mm" reflect_rot="pi/4.0">
                 <!-- Face B, one half -->
                 <stave nmodules="2" z_offset="VTXD_disk1_zoffset_stave1B_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave1B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="VTXDStave"/>
                 <stave nmodules="3" z_offset="VTXD_disk1_zoffset_stave2B_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave2B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="VTXDStave"/>
@@ -1905,7 +1897,7 @@
 
             </layer>         
 
-             <layer id="2" z="VTXD_z3" nphi="4" dz="VTXD_dz3" rmin="VTXD_rmin3" rmax="VTXD_r_max" reflect_rot="pi/4.0">
+            <layer id="2" z="VTXD_z3" nphi="4" dz="VTXD_dz3" rmin="VTXD_rmin3" rmax="VTXD_r_max" reflect_rot="pi/4.0">
                 <!-- Face A -->
                 <stave nmodules="4" z_offset="VTXD_disk3_zoffset_stave1A" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave1A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="VTXDStave"/>
                 <stave nmodules="5" z_offset="VTXD_disk3_zoffset_stave2A" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave2A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="VTXDStave"/>
@@ -1922,7 +1914,7 @@
             </layer>  
         </detector>
 
-         <!-- Disk support proxy volumes  -->
+        <!-- Disk support proxy volumes  -->
         <detector name="VertexDisks_support" type="VertexBarrel_detailed_o1_v02" vis="VXDVis" id="-1" readout="VertexDummyCollection"  region="VTXDRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
@@ -1968,7 +1960,7 @@
 
 
     <!-- Plugin to define the sensitive surfaces -->
-   <plugins>
+    <plugins>
         <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
             <argument value="VertexDisks"/> 
             <argument value="dimension=2"/>

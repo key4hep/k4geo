@@ -481,9 +481,9 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                     for(int i=0; i<int(sensor.volumes.size()); i++){
                         double r_component_curved = 0.0;
                         r_offset_component = 0.;
-                        if(sensor.isCurved[i]){ // curved sensors
+                        if(sensor.isCurved[i]){ // curved sensor parts
                             double phi_i = phi + ( sensor.xmin[i] + abs(sensor.xmax[i]-sensor.xmin[i])/2.)/ m.stave_r;
-                            if(sensor.nsegments[i] == 1){
+                            if(sensor.nsegments[i] == 1){ // Truly curved, part of tube
                                 r_component_curved = sensor.thickness/2. + (iModule%2 == 0 ? 0.0 : m.stave_dr);
                                 x_pos = r_component_curved*cos(phi_i) - r_offset_component*sin(phi_i);
                                 y_pos = r_component_curved*sin(phi_i) + r_offset_component*cos(phi_i);
@@ -493,43 +493,41 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                                 Position pos2(0., 0., sensor.ymin[i]+abs(sensor.ymax[i]-sensor.ymin[i])/2.);
                                 RotationZYX rot2(phi_i, 0, 0);
                                 pv = module_assembly.placeVolume(sensor.volumes[i], Transform3D(rot,stave_pos).Inverse()*Transform3D(rot2, pos)*Translation3D(pos2));
+
+                                if(sensor.sensitives[i]) { // Define as sensitive and add sensitive surface
+                                    // Use a VolCylinder surface (not supported in reconstruction)
+                                    Vector3D ocyl(-(r_component_curved + m.stave_r + sensor.r), 0., 0.);
+                                    SurfaceType type = SurfaceType::Sensitive;
+                                    type.setProperty(SurfaceType::Cylinder, true);
+                                    VolCylinder surf(sensor.volumes[i], type, sensor.thickness/2., sensor.thickness/2., ocyl);
+                                }
                             }
-                            else{
+                            else{  // Approximated, sensor.nsegments[i] tapezoids forming a quasi-curved object
                                 for(int iSegment=0; iSegment<sensor.nsegments[i]; iSegment++){
                                     phi_i = phi + ( sensor.xmin[i] + abs(sensor.xmax[i]-sensor.xmin[i])*iSegment/sensor.nsegments[i] + abs(sensor.xmax[i]-sensor.xmin[i])/2./sensor.nsegments[i])/ m.stave_r;
-                                    // r_component_curved = sensor.thickness/2. + (iModule%2 == 0 ? 0.0 : m.stave_dr);
                                     r_component_curved = layer_r + sensor.thickness/2. + (iModule%2 == 0 ? 0.0 : m.stave_dr);
                                     x_pos = r_component_curved*cos(phi_i) - r_offset_component*sin(phi_i);
                                     y_pos = r_component_curved*sin(phi_i) + r_offset_component*cos(phi_i);
                                     z_pos = motherVolOffset -(nmodules-1)/2.*(sensor.length) - (nmodules-1)/2.*step + iModule*sensor.length + iModule*step + sensor.ymin[i]+abs(sensor.ymax[i]-sensor.ymin[i])/2.;
 
                                     pv = module_assembly.placeVolume(sensor.volumes[i], Transform3D(rot, stave_pos).Inverse()*RotationY(M_PI/2.)*Transform3D(RotationZYX(0, 0, -phi_i), Position(-z_pos, y_pos, x_pos)));
-                                    // pv = module_assembly.placeVolume(sensor.volumes[i], Transform3D(rot, stave_pos).Inverse()*RotationY(M_PI/2.)*Transform3D(RotationZYX(0, 0, -phi_i), Position(-z_pos, y_pos, x_pos)));
 
+                                    if(sensor.sensitives[i]) { // Define as sensitive and add sensitive surface
+                                        string sensor_name = module_name + _toString(iSensitive,"_sensor%d");
+                                        pv.addPhysVolID("sensor", iSensitive);                
+                                        DetElement sensorDE(moduleDE,sensor_name,x_det.id());
+                                        sensorDE.setPlacement(pv);
+        
+                                        Vector3D u( 0. , 1. , 0. ) ;
+                                        Vector3D v( 0. , 0. , 1. ) ;
+                                        Vector3D n( 1. , 0. , 0. ) ;
+                                        VolPlane surf( sensor.volumes[i] , dd4hep::rec::SurfaceType::Sensitive , sensor.thickness/2. , sensor.thickness/2. , u,n,v );
+        
+                                        volSurfaceList(sensorDE)->push_back(surf);
+                                        iSensitive++;
+                                    }
                                 }
-                            }
-
-                            if(sensor.sensitives[i]) { // Define as sensitive and add sensitive surface
-                                string sensor_name = module_name + _toString(iSensitive,"_sensor%d");
-                                pv.addPhysVolID("sensor", iSensitive);                
-                                DetElement sensorDE(moduleDE,sensor_name,x_det.id());
-                                sensorDE.setPlacement(pv);
-
-                                Vector3D u( 0. , 1. , 0. ) ;
-                                Vector3D v( 0. , 0. , 1. ) ;
-                                Vector3D n( 1. , 0. , 0. ) ;
-                                VolPlane surf( sensor.volumes[i] , dd4hep::rec::SurfaceType::Sensitive , sensor.thickness/2. , sensor.thickness/2. , u,v,n );
-
-                                //// Alternatively use a VolCylinder surface (not supported in reconstruction yet)
-                                // Vector3D ocyl(-(r_component_curved + m.stave_r + sensor.r), 0., 0.);
-                                // SurfaceType type = SurfaceType::Sensitive;
-                                // type.setProperty(SurfaceType::Cylinder, true);
-                                // VolCylinder surf(sensor.volumes[i], type, sensor.thickness/2., sensor.thickness/2., ocyl);
-
-                                volSurfaceList(sensorDE)->push_back(surf);
-                                iSensitive++;
-                            }
-                        
+                            }                        
                         }
                         else{ // not curved
                             x_pos = 0.0;
