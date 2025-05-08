@@ -25,8 +25,10 @@ namespace DDSegmentation {
     virtual CellID cellID(const Vector3D& aLocalPosition, const Vector3D& aGlobalPosition,
                           const VolumeID& aVolumeID) const override;
 
-    VolumeID setVolumeID(int numEta, int numPhi) const;
-    CellID setCellID(int numEta, int numPhi, int x, int y) const;
+    VolumeID setVolumeID(int systemId, int numEta, int numPhi) const;
+    CellID setCellID(bool isRHS, int systemId, int numEta, int numPhi, int x, int y) const;
+
+    void neighbours(const CellID& cellID, std::set<CellID>& neighbours) const override;
 
     void setGridSize(double grid) { fGridSize = grid; }
     void setSipmSize(double sipm) { fSipmSize = sipm; }
@@ -40,14 +42,15 @@ namespace DDSegmentation {
     int numY(const CellID& aCellID) const;
 
     // Get the identifier number of a SiPM in x or y direction (local coordinate)
-    int x(const CellID& aCellID) const; // approx eta direction
-    int y(const CellID& aCellID) const; // approx phi direction
+    int x(const CellID& aCellID) const; // approx phi direction
+    int y(const CellID& aCellID) const; // approx eta direction
 
     bool IsCerenkov(const CellID& aCellID) const;
     bool IsCerenkov(int col, int row) const;
 
     bool IsTower(const CellID& aCellID) const;
     bool IsSiPM(const CellID& aCellID) const;
+    bool IsRHS(const CellID& aCellID) const;
 
     int getFirst32bits(const CellID& aCellID) const { return (int)aCellID; }
     int getLast32bits(const CellID& aCellID) const;
