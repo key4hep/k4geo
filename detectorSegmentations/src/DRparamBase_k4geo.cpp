@@ -103,10 +103,9 @@ namespace DDSegmentation {
   void DRparamBase_k4geo::SetFullLengthFibers(int rmin, int rmax, int cmin, int cmax) {
     if (fFilled)
       throw std::runtime_error(
-        "DRparamBase_k4geo: An attempt to modify the geometry outside the detector construction is forbidden!"
-      );
+          "DRparamBase_k4geo: An attempt to modify the geometry outside the detector construction is forbidden!");
 
-    fFullLengthFibers.insert( std::make_pair(fCurrentTowerNum, fullLengthFibers(rmin,rmax,cmin,cmax)) );
+    fFullLengthFibers.insert(std::make_pair(fCurrentTowerNum, fullLengthFibers(rmin, rmax, cmin, cmax)));
   }
 
 } // namespace DDSegmentation

@@ -175,26 +175,23 @@ namespace DDSegmentation {
     // and the second-closest (dist=2) cells in the checkerboard
     // in the same tower
     // dist=sqrt(2) cells
-    auto northEast = setCellID(isRHS,systemId,noEta,noPhi,nX+1,nY+1);
-    auto southEast = setCellID(isRHS,systemId,noEta,noPhi,nX+1,nY-1);
-    auto southWest = setCellID(isRHS,systemId,noEta,noPhi,nX-1,nY-1);
-    auto northWest = setCellID(isRHS,systemId,noEta,noPhi,nX-1,nY+1);
+    auto northEast = setCellID(isRHS, systemId, noEta, noPhi, nX + 1, nY + 1);
+    auto southEast = setCellID(isRHS, systemId, noEta, noPhi, nX + 1, nY - 1);
+    auto southWest = setCellID(isRHS, systemId, noEta, noPhi, nX - 1, nY - 1);
+    auto northWest = setCellID(isRHS, systemId, noEta, noPhi, nX - 1, nY + 1);
     // dist=2 cells
-    auto north = setCellID(isRHS,systemId,noEta,noPhi,nX,nY+2);
-    auto east = setCellID(isRHS,systemId,noEta,noPhi,nX+2,nY);
-    auto south = setCellID(isRHS,systemId,noEta,noPhi,nX,nY-2);
-    auto west = setCellID(isRHS,systemId,noEta,noPhi,nX-2,nY);
+    auto north = setCellID(isRHS, systemId, noEta, noPhi, nX, nY + 2);
+    auto east = setCellID(isRHS, systemId, noEta, noPhi, nX + 2, nY);
+    auto south = setCellID(isRHS, systemId, noEta, noPhi, nX, nY - 2);
+    auto west = setCellID(isRHS, systemId, noEta, noPhi, nX - 2, nY);
 
     // the minimal neighborhood
-    std::set<CellID> nb = {
-      north, northEast, east, southEast,
-      south, southWest, west, northWest
-    };
+    std::set<CellID> nb = {north, northEast, east, southEast, south, southWest, west, northWest};
 
     // function to remove different channel in the set
-    auto removeDifferentChannel = [this] (bool isC, std::set<CellID>& input) {
+    auto removeDifferentChannel = [this](bool isC, std::set<CellID>& input) {
       for (auto it = input.begin(); it != input.end();) {
-        if (isC!=IsCerenkov(*it))
+        if (isC != IsCerenkov(*it))
           it = input.erase(it);
         else
           ++it;
@@ -205,9 +202,8 @@ namespace DDSegmentation {
     int margin = 2;
 
     // if the seed fiber is not on the edge of the tower, return the minimal neighborhood
-    if (nX > fl.cmin + margin && nX < fl.cmax - margin
-        && nY > fl.rmin + margin && nY < fl.rmax - margin) {
-      removeDifferentChannel(isCeren,nb);
+    if (nX > fl.cmin + margin && nX < fl.cmax - margin && nY > fl.rmin + margin && nY < fl.rmax - margin) {
+      removeDifferentChannel(isCeren, nb);
       neighbours = nb;
       return;
     }
@@ -222,44 +218,42 @@ namespace DDSegmentation {
     // then stitch the short length fibers
     // up to the closest full length fiber in the neighboring tower
     // first stitch phi direction first (it's easier)
-    auto modulo = [] (int in, int n) -> int {
-      return (in % n + n) % n;
-    };
+    auto modulo = [](int in, int n) -> int { return (in % n + n) % n; };
 
     if (nX >= fl.cmax - margin) { // to east
       // same tower
-      for (int idx = nX+1; idx < totX; idx++)
-        nb.insert( setCellID(isRHS,systemId,noEta,noPhi,idx,nY) );
+      for (int idx = nX + 1; idx < totX; idx++)
+        nb.insert(setCellID(isRHS, systemId, noEta, noPhi, idx, nY));
 
-      int nextPhi = modulo(noPhi-1,numZRot);
+      int nextPhi = modulo(noPhi - 1, numZRot);
 
       // next tower
       for (int idx = 0; idx <= fl.cmin + margin; idx++)
-        nb.insert( setCellID(isRHS,systemId,noEta,nextPhi,idx,nY) );
+        nb.insert(setCellID(isRHS, systemId, noEta, nextPhi, idx, nY));
     }
 
     if (nX <= fl.cmin + margin) { // to west
       // same tower
-      for (int idx = nX-1; idx >= 0; idx--)
-        nb.insert( setCellID(isRHS,systemId,noEta,noPhi,idx,nY) );
+      for (int idx = nX - 1; idx >= 0; idx--)
+        nb.insert(setCellID(isRHS, systemId, noEta, noPhi, idx, nY));
 
-      int nextPhi = modulo(noPhi+1,numZRot);
+      int nextPhi = modulo(noPhi + 1, numZRot);
 
       // next tower
-      for (int idx = totX-1; idx >= fl.cmax - margin; idx--)
-        nb.insert( setCellID(isRHS,systemId,noEta,nextPhi,idx,nY) );
+      for (int idx = totX - 1; idx >= fl.cmax - margin; idx--)
+        nb.insert(setCellID(isRHS, systemId, noEta, nextPhi, idx, nY));
     }
 
     // now stitch in eta direction
     // but first we need an explicit treatment at eta=0
     // because we use rotation instead of reflection
     // hence cellID is not consistent
-    bool isBarrelCenter = (noEta==0 && nY>=fl.rmax - margin);
+    bool isBarrelCenter = (noEta == 0 && nY >= fl.rmax - margin);
 
     if (isBarrelCenter) {
       // same tower
-      for (int idx = nY+1; idx < totY; idx++)
-        nb.insert( setCellID(isRHS,systemId,noEta,noPhi,nX,idx) );
+      for (int idx = nY + 1; idx < totY; idx++)
+        nb.insert(setCellID(isRHS, systemId, noEta, noPhi, nX, idx));
 
       // since we rotate by 180 deg, nextPhi is numZRot - noPhi
       int nextPhi = modulo(numZRot - noPhi, numZRot);
@@ -268,10 +262,10 @@ namespace DDSegmentation {
       int nextX = totX - nX;
 
       // next tower
-      for (int idx = totY-1; idx >= fl.rmax - margin; idx--)
-        nb.insert( setCellID(isRHS,systemId,noEta,nextPhi,nextX,idx) );
+      for (int idx = totY - 1; idx >= fl.rmax - margin; idx--)
+        nb.insert(setCellID(isRHS, systemId, noEta, nextPhi, nextX, idx));
 
-      removeDifferentChannel(isCeren,nb);
+      removeDifferentChannel(isCeren, nb);
       neighbours = nb;
       return;
     }
@@ -280,35 +274,35 @@ namespace DDSegmentation {
     // and treat the north & south bound case
     if (nY >= fl.rmax) { // to north
       // same tower
-      for (int idx = nY+1; idx < totY; idx++)
-        nb.insert( setCellID(isRHS,systemId,noEta,noPhi,nX,idx) );
+      for (int idx = nY + 1; idx < totY; idx++)
+        nb.insert(setCellID(isRHS, systemId, noEta, noPhi, nX, idx));
 
       // for different noEta rmin and rmax can be different
-      auto flNext = paramBase->GetFullLengthFibers(noEta-1);
+      auto flNext = paramBase->GetFullLengthFibers(noEta - 1);
 
       // next tower
       for (int idx = 0; idx <= flNext.rmin + margin; idx++)
-        nb.insert( setCellID(isRHS,systemId,noEta-1,noPhi,nX,idx) );
+        nb.insert(setCellID(isRHS, systemId, noEta - 1, noPhi, nX, idx));
     }
 
     if (nY <= fl.rmin) { // to south
       // same tower
-      for (int idx = nY-1; idx >= 0; idx--)
-        nb.insert( setCellID(isRHS,systemId,noEta,noPhi,nX,idx) );
+      for (int idx = nY - 1; idx >= 0; idx--)
+        nb.insert(setCellID(isRHS, systemId, noEta, noPhi, nX, idx));
 
       // for different noEta rmin and rmax can be different
-      auto flNext = paramBase->GetFullLengthFibers(noEta+1);
+      auto flNext = paramBase->GetFullLengthFibers(noEta + 1);
 
       // next tower
       // in principle totY is also different
       // but to southbound the next totY is always smaller
       // than the current one
-      for (int idx = totY-1; idx >= flNext.rmax - margin; idx--)
-        nb.insert( setCellID(isRHS,systemId,noEta+1,noPhi,nX,idx) );
+      for (int idx = totY - 1; idx >= flNext.rmax - margin; idx--)
+        nb.insert(setCellID(isRHS, systemId, noEta + 1, noPhi, nX, idx));
     }
 
     // finalize
-    removeDifferentChannel(isCeren,nb);
+    removeDifferentChannel(isCeren, nb);
     neighbours = nb;
     return;
   }
@@ -385,7 +379,7 @@ namespace DDSegmentation {
 
   bool GridDRcalo_k4geo::IsRHS(const CellID& aCellID) const {
     VolumeID assembly = static_cast<VolumeID>(_decoder->get(aCellID, fAssemblyId));
-    return assembly==0;
+    return assembly == 0;
   }
 
   int GridDRcalo_k4geo::getLast32bits(const CellID& aCellID) const {

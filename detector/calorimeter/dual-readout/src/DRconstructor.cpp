@@ -53,8 +53,7 @@ void ddDRcalo::DRconstructor::construct() {
   // this causes a discontinuity of the neighboring cells at eta=0
   // we handle this explicitly in the segmentation
   if (fX_det.reflect()) {
-    auto refl_pos =
-        dd4hep::Transform3D(dd4hep::RotationX(M_PI), dd4hep::Position(0, 0, -(fX_worldTube.height() / 2.)));
+    auto refl_pos = dd4hep::Transform3D(dd4hep::RotationX(M_PI), dd4hep::Position(0, 0, -(fX_worldTube.height() / 2.)));
     dd4hep::PlacedVolume PlacedAssemblyTubeVol_refl = fExperimentalHall->placeVolume(AssemblyTubeVol, 1, refl_pos);
     PlacedAssemblyTubeVol_refl.addPhysVolID("assembly", 1);
   }
@@ -249,7 +248,7 @@ void ddDRcalo::DRconstructor::implementFibers(xml_comp_t& x_theta, dd4hep::Volum
   }
 
   // store rows & columns of full length fibers to the segmentation
-  param->SetFullLengthFibers(rmin,rmax,cmin,cmax);
+  param->SetFullLengthFibers(rmin, rmax, cmin, cmax);
 }
 
 // Remove cap (mirror or black paint in front of the fiber)

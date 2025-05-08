@@ -63,7 +63,7 @@ namespace DDSegmentation {
     int GetCurrentTowerNum() { return fCurrentTowerNum; }
     void SetCurrentTowerNum(int numEta) { fCurrentTowerNum = numEta; }
 
-    virtual void init() {};
+    virtual void init(){};
     void filled() { fFilled = true; }
     void finalized() { fFinalized = true; }
     bool IsFinalized() { return fFinalized; }
@@ -73,10 +73,10 @@ namespace DDSegmentation {
     struct fullLengthFibers {
     public:
       fullLengthFibers(int rmin_, int rmax_, int cmin_, int cmax_)
-      : rmin(rmin_), rmax(rmax_), cmin(cmin_), cmax(cmax_) {}
+          : rmin(rmin_), rmax(rmax_), cmin(cmin_), cmax(cmax_) {}
 
       fullLengthFibers() // default constructor
-      : rmin(0), rmax(0), cmin(0), cmax(0) {}
+          : rmin(0), rmax(0), cmin(0), cmax(0) {}
 
       int rmin; // min n_row with full length fibers
       int rmax; // max n_row
@@ -84,7 +84,7 @@ namespace DDSegmentation {
       int cmax; // max n_column
     };
 
-    fullLengthFibers GetFullLengthFibers(int numEta) { return fFullLengthFibers.at( unsignedTowerNo(numEta) ); }
+    fullLengthFibers GetFullLengthFibers(int numEta) { return fFullLengthFibers.at(unsignedTowerNo(numEta)); }
     void SetFullLengthFibers(int rmin, int rmax, int cmin, int cmax);
 
   protected:
@@ -113,7 +113,7 @@ namespace DDSegmentation {
     int fCurrentTowerNum;
     std::vector<double> fDeltaThetaVec;
     std::vector<double> fThetaOfCenterVec;
-    std::map<int,fullLengthFibers> fFullLengthFibers;
+    std::map<int, fullLengthFibers> fFullLengthFibers;
     bool fFilled;
     bool fFinalized;
   };
