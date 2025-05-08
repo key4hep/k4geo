@@ -8,6 +8,7 @@
 //
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
+#include "DD4hep/Printout.h"
 #include "DDRec/DetectorData.h"
 #include "DDSegmentation/Segmentation.h"
 #include "XML/Layering.h"
@@ -39,6 +40,8 @@ using dd4hep::rec::LayeredCalorimeterData;
 #ifndef DD4HEP_VERSION_GE
 #define DD4HEP_VERSION_GE(a, b) 0
 #endif
+
+static constexpr auto LOG_SOURCE = "GenericCalEndcap_o1_v01";
 
 static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens) {
   xml_det_t x_det = e;
@@ -84,7 +87,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   if (zcutout > 0. || rcutout > 0.) {
     PolyhedraRegular cutoutPolyVolume(nsides_inner, 0, rmin + rcutout, zcutout);
     Position cutoutPos(0, 0, (zcutout - totalThickness) / 2.0);
-    std::cout << "Cutout z width will be  " << zcutout << std::endl;
+    dd4hep::printout(dd4hep::INFO, LOG_SOURCE, "Coutout z width will be %f", zcutout);
     endcapVol = Volume("endcap", SubtractionSolid(polyVolume, cutoutPolyVolume, cutoutPos), air);
   }
 
@@ -129,7 +132,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     int layer_repeat = x_layer.repeat();
     double layer_rcutout = x_layer.hasAttr(_U(gap)) ? x_layer.gap() : 0;
 
-    std::cout << "Number of layers in group " << layerType << " : " << layer_repeat << std::endl;
+    dd4hep::printout(dd4hep::INFO, LOG_SOURCE, "Number of layers in group %d : %d", layerType, layer_repeat);
 
     Volume layer_vol(layer_type_name, PolyhedraRegular(nsides_outer, rmin + layer_rcutout, rmax, layer_thick), air);
 
