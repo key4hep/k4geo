@@ -51,7 +51,7 @@ using dd4hep::rec::Vector3D;
 using dd4hep::rec::VolPlane;
 using dd4hep::rec::VolCylinder;
 using dd4hep::rec::SurfaceType;
-
+using dd4hep::Trd1;
 static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector sens)  {
 
     xml_det_t    x_det = e;
@@ -275,9 +275,22 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                     double rmin = m.stave_r + sensor.r;
                     double half_width = abs(component.xmax()-component.xmin())/rmin/2.;
                     if(sensor.nsegments.back() > 1){
-                        Trapezoid ele_box = Trapezoid( 
-                            abs(component.ymax()-component.ymin())/2., abs(component.ymax()-component.ymin())/2.,
-                            abs(component.xmax()-component.xmin())/2./sensor.nsegments.back(), abs(component.xmax()-component.xmin())/2./sensor.nsegments.back()*(rmin+sensor.thickness)/rmin,
+                        // Trapezoid ele_box = Trapezoid( 
+                        //     abs(component.ymax()-component.ymin())/2., abs(component.ymax()-component.ymin())/2.,
+                        //     abs(component.xmax()-component.xmin())/2./sensor.nsegments.back(), abs(component.xmax()-component.xmin())/2./sensor.nsegments.back()*(rmin+sensor.thickness)/rmin,
+                        //     sensor.thickness/2.
+                        // );
+                        // Trapezoid ele_box = Trapezoid( 
+                        //     abs(component.ymax()-component.ymin())/2., abs(component.ymax()-component.ymin())/2.,
+                        //     abs(component.xmax()-component.xmin())/2./sensor.nsegments.back(), abs(component.xmax()-component.xmin())/2./sensor.nsegments.back()*(rmin+sensor.thickness)/rmin,
+                        //     sensor.thickness/2.
+                        // );
+
+                        // temmporary way to get surfaces correctly oriented. Fix DD4hep Surface.cpp (https://github.com/AIDASoft/DD4hep/blob/d1f9239c7fea65110c8579ca478e29d01afa7801/DDRec/src/Surface.cpp#L1056) such that not only y direction can be the normal direction of the surface, similarly to how it's done for planes (isXY...)
+                        Trd1 ele_box = Trd1( 
+                           abs(component.xmax()-component.xmin())/2./sensor.nsegments.back(), abs(component.xmax()-component.xmin())/2./sensor.nsegments.back()*(rmin+sensor.thickness)/rmin, // The correct one!
+                            // abs(component.xmax()-component.xmin())/2./sensor.nsegments.back(), abs(component.xmax()-component.xmin())/2./sensor.nsegments.back(), // to avoid overlaps for the moment
+                            abs(component.ymax()-component.ymin())/2.,
                             sensor.thickness/2.
                         );
                         ele_vol = Volume(sensor.names.back() +  _toString(iSensor, "_%d"), ele_box, sensor.material);
@@ -309,7 +322,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         printout(DEBUG, det_name, "Read stave information of stave " + m.name) ;
     }
 
-    int iModule_tot = 0;
 
     //=========  loop over layer elements in xml  ======================================
 
@@ -317,6 +329,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     for(xml_coll_t c(e, _U(layer) ); c; ++c)  {
 
         xml_comp_t x_layer( c );
+
+        int iModule_tot = 0;
 
         // child elements: ladder, sensitive and periphery
 
@@ -349,7 +363,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         Volume whole_layer_volume = Volume(layer_name, whole_layer_tube, theDetector.material("Air"));
         whole_layer_volume.setVisAttributes(theDetector, x_det.visStr());
         pv = envelope.placeVolume(whole_layer_volume, Position(0., 0., z_offset));
-        pv.addPhysVolID("layer", layer_id);
+        pv.addPhysVolID("layer", layer_id).addPhysVolID("side",side );
 
         DetElement layerDE( sdet , _toString(layer_id,"layer_%d")+_toString(side,"_side%d"), x_det.id() );
         layerDE.setPlacement( pv ) ;
@@ -464,7 +478,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                     z_pos = motherVolOffset + -(nmodules-1)/2.*(sensor.length) - (nmodules-1)/2.*step + iModule*sensor.length + iModule*step;
                     Position pos(x_pos, y_pos, z_pos);
                         
-                    string module_name = stave_name + _toString(iModule,"_module%d");
+                    string module_name = stave_name + _toString(iModule_tot,"_module%d");
                     Assembly module_assembly(module_name);
                     if(m.motherVolThickness>0.0 && m.motherVolWidth>0.0)
                         pv = whole_stave_volume_v.placeVolume(module_assembly, Position(-m.motherVolThickness/2., 0., 0.));
@@ -510,7 +524,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                                     y_pos = r_component_curved*sin(phi_i) + r_offset_component*cos(phi_i);
                                     z_pos = motherVolOffset -(nmodules-1)/2.*(sensor.length) - (nmodules-1)/2.*step + iModule*sensor.length + iModule*step + sensor.ymin[i]+abs(sensor.ymax[i]-sensor.ymin[i])/2.;
 
-                                    pv = module_assembly.placeVolume(sensor.volumes[i], Transform3D(rot, stave_pos).Inverse()*RotationY(M_PI/2.)*Transform3D(RotationZYX(0, 0, -phi_i), Position(-z_pos, y_pos, x_pos)));
+                                    pv = module_assembly.placeVolume(sensor.volumes[i], Transform3D(rot, stave_pos).Inverse()*RotationY(M_PI/2.)*Transform3D(RotationZYX(M_PI/2., 0., -phi_i), Position(-z_pos, y_pos, x_pos)));
 
                                     if(sensor.sensitives[i]) { // Define as sensitive and add sensitive surface
                                         string sensor_name = module_name + _toString(iSensitive,"_sensor%d");
@@ -518,11 +532,9 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                                         DetElement sensorDE(moduleDE,sensor_name,x_det.id());
                                         sensorDE.setPlacement(pv);
         
-                                        Vector3D u( 0. , 1. , 0. ) ;
-                                        Vector3D v( 0. , 0. , 1. ) ;
-                                        Vector3D n( 1. , 0. , 0. ) ;
-                                        VolPlane surf( sensor.volumes[i] , dd4hep::rec::SurfaceType::Sensitive , sensor.thickness/2. , sensor.thickness/2. , u,n,v );
-        
+                                        // VolPlane surf( sensor.volumes[i] , dd4hep::rec::SurfaceType::Sensitive , sensor.thickness/2. , sensor.thickness/2. , Vector3D( -1. , 0 , 0. ), Vector3D( 0. , 0. , 1. ), Vector3D(0., -1., 0.) );
+                                        VolPlane surf( sensor.volumes[i] , dd4hep::rec::SurfaceType::Sensitive , sensor.thickness/2. , sensor.thickness/2. , Vector3D(1. , 0. , 0. ), Vector3D( 0. , 1. , 0. ), Vector3D(0., 0., 1.) );
+
                                         volSurfaceList(sensorDE)->push_back(surf);
                                         iSensitive++;
                                     }
@@ -563,7 +575,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         }
     }
 
-    pv.addPhysVolID( "system", x_det.id() ).addPhysVolID("side",0 )  ;
+    pv.addPhysVolID( "system", x_det.id() );
 
     sdet.setAttributes(theDetector,envelope,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
 
