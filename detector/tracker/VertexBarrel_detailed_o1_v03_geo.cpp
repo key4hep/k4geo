@@ -45,6 +45,7 @@ using dd4hep::getAttrOrDefault;
 using dd4hep::_toString;
 using dd4hep::DEBUG;
 using dd4hep::INFO;
+using dd4hep::NamedObject;
 
 using dd4hep::rec::volSurfaceList;
 using dd4hep::rec::Vector3D;
@@ -330,8 +331,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
         xml_comp_t x_layer( c );
 
-        int iModule_tot = 0;
-
         // child elements: ladder, sensitive and periphery
 
         int layer_id = x_layer.id();
@@ -478,13 +477,13 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                     z_pos = motherVolOffset + -(nmodules-1)/2.*(sensor.length) - (nmodules-1)/2.*step + iModule*sensor.length + iModule*step;
                     Position pos(x_pos, y_pos, z_pos);
                         
-                    string module_name = stave_name + _toString(iModule_tot,"_module%d");
+                    string module_name = stave_name + _toString(iModule,"_module%d");
                     Assembly module_assembly(module_name);
                     if(m.motherVolThickness>0.0 && m.motherVolWidth>0.0)
                         pv = whole_stave_volume_v.placeVolume(module_assembly, Position(-m.motherVolThickness/2., 0., 0.));
                     else
                         pv = whole_stave_volume_a.placeVolume(module_assembly);
-                    pv.addPhysVolID("module", iModule_tot);
+                    pv.addPhysVolID("module", iModule + nmodules*iStave);
 
                     DetElement moduleDE(layerDE,module_name,x_det.id());
                     moduleDE.setPlacement(pv);
@@ -524,16 +523,21 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                                     y_pos = r_component_curved*sin(phi_i) + r_offset_component*cos(phi_i);
                                     z_pos = motherVolOffset -(nmodules-1)/2.*(sensor.length) - (nmodules-1)/2.*step + iModule*sensor.length + iModule*step + sensor.ymin[i]+abs(sensor.ymax[i]-sensor.ymin[i])/2.;
 
-                                    pv = module_assembly.placeVolume(sensor.volumes[i], Transform3D(rot, stave_pos).Inverse()*RotationY(M_PI/2.)*Transform3D(RotationZYX(M_PI/2., 0., -phi_i), Position(-z_pos, y_pos, x_pos)));
+                                    Volume sensor_vol = iSegment==0 ? sensor.volumes[i] : Volume(sensor.volumes[i].name() + _toString(iSegment,"_iSegment%d"), sensor.volumes[i].solid(), sensor.material);
+                                    if(sensor.sensitives[i]) 
+                                        sensor_vol.setSensitiveDetector(sens);
+                                    sensor_vol.setAttributes(theDetector, x_det.regionStr(), x_det.limitsStr(), x_det.visStr()) ; // sensor.volumes[i].visAttributes().name());  
+                                    pv = module_assembly.placeVolume(sensor_vol, Transform3D(rot, stave_pos).Inverse()*RotationY(M_PI/2.)*Transform3D(RotationZYX(M_PI/2., 0., -phi_i), Position(-z_pos, y_pos, x_pos)));
 
                                     if(sensor.sensitives[i]) { // Define as sensitive and add sensitive surface
+                    
                                         string sensor_name = module_name + _toString(iSensitive,"_sensor%d");
                                         pv.addPhysVolID("sensor", iSensitive);                
                                         DetElement sensorDE(moduleDE,sensor_name,x_det.id());
                                         sensorDE.setPlacement(pv);
         
                                         // VolPlane surf( sensor.volumes[i] , dd4hep::rec::SurfaceType::Sensitive , sensor.thickness/2. , sensor.thickness/2. , Vector3D( -1. , 0 , 0. ), Vector3D( 0. , 0. , 1. ), Vector3D(0., -1., 0.) );
-                                        VolPlane surf( sensor.volumes[i] , dd4hep::rec::SurfaceType::Sensitive , sensor.thickness/2. , sensor.thickness/2. , Vector3D(1. , 0. , 0. ), Vector3D( 0. , 1. , 0. ), Vector3D(0., 0., 1.) );
+                                        VolPlane surf( sensor_vol , dd4hep::rec::SurfaceType::Sensitive , sensor.thickness/2. , sensor.thickness/2. , Vector3D(1. , 0. , 0. ), Vector3D( 0. , 1. , 0. ), Vector3D(0., 0., 1.) );
 
                                         volSurfaceList(sensorDE)->push_back(surf);
                                         iSensitive++;
@@ -563,7 +567,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                             }
                         }
                     }
-                    iModule_tot++;
                     module_assembly->GetShape()->ComputeBBox();
                 }
             }

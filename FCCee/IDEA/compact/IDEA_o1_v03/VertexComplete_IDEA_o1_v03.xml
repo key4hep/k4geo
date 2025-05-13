@@ -461,7 +461,7 @@
             <constant name="VTXIB_curved_z4_offset2" value="+(VTXIB_curved_z4_passive1+VTXIB_curved_z4_passive2+VTXIB_curved_gap_z4)/2. - VTXIB_curved_z4_passive2/2."/> 
 
             <!-- Representation of curved sensitive elements by number of trapezoids with flat surface. Multiplies the number of surfaces by this number, careful! -->
-            <constant name="VTXIB_curved_nsegments" value="5"/>
+            <constant name="VTXIB_curved_nsegments" value="8"/>
 
             <constant name="VTXIB_curved_tolerance_r" value="0.040*mm"/> <!-- Needed for curved inner vertex as otherwise overlaps would be detected. -->
     </define>
@@ -1702,7 +1702,7 @@
             <!-- Ultra-light inner vertex -->
             <layer nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r1)*360.*deg+90.*deg+VTXIB_curved_phi0_1" r="VTXIB_curved_r1" id="0" nmodules="VTXIB_curved_nModules1" name="VTXIBStave1Curved" step="0.0*mm" motherVolThickness="VTXIB_curved_r2-VTXIB_curved_r1"        motherVolLength="VTXIB_curved_z1_passive"/>
             
-            <layer nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r2)*360.*deg+90.*deg+VTXIB_curved_phi0_2" r="VTXIB_curved_r2" id="1" nmodules="VTXIB_curved_nModules2" name="VTXIBStave2Curved" step="0.0*mm" motherVolThickness="VTXIB_curved_r3-VTXIB_curved_r2"        motherVolLength="VTXIB_curved_z2_passive"/>
+            <layer nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r2)*360.*deg+90.*deg+VTXIB_curved_phi0_2" r="VTXIB_curved_r2" id="1" nmodules="VTXIB_curved_nModules2" name="VTXIBStave2Curved" step="0.0*mm" motherVolThickness="VTXIB_curved_r3-VTXIB_curved_r2"        motherVolLength="VTXIB_curved_z2_passive" z_offset="VTXIB_zoffset2"/>
 
             <layer nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r3)*360.*deg+90.*deg+VTXIB_curved_phi0_3" r="VTXIB_curved_r3" id="2" nmodules="VTXIB_curved_nModules3_1" name="VTXIBStave3Curved_1" step="0.0*mm" motherVolThickness="VTXIB_curved_r4-VTXIB_curved_r3"        motherVolLength="VTXIB_curved_z3_passive1" motherVolOffset="+(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap3_length_center-VTXIB_curved_endcap3_length_side)/2.)" side="-1" z_offset="VTXIB_curved_z3_offset1"/>
             <layer nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r3)*360.*deg+90.*deg+VTXIB_curved_phi0_3" r="VTXIB_curved_r3" id="2" nmodules="VTXIB_curved_nModules3_2" name="VTXIBStave3Curved_2" step="0.0*mm" motherVolThickness="VTXIB_curved_r4-VTXIB_curved_r3"        motherVolLength="VTXIB_curved_z3_passive2" motherVolOffset="-(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap3_length_center-VTXIB_curved_endcap3_length_side)/2.)" side="+1" z_offset="VTXIB_curved_z3_offset2"/>
