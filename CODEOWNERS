@@ -5,10 +5,10 @@
 *       @andresailer @jmcarcell @tmadlener @gaede @BrieucF
 
 # Owners for ILD geometries
-/ILD/   @tmadlener @gaede
+/ILD/   @tmadlener @gaede @danieljeans
 
 # Owners for FCC geometries
-/FCCee  @BrieucF @SanghyunKo @s6anloes @kjvbrt
+/FCCee  @BrieucF @SanghyunKo @kjvbrt
 /FCCee/CLD @andresailer @jmcarcell @Zehvogel
 /FCCee/ALLEGRO @BrieucF @giovannimarchiori @scott-snyder 
 /FCCee/IDEA @lopezzot
