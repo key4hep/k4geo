@@ -1,0 +1,84 @@
+<lccdd>
+
+	<!-- Loading constants and geometry configuration -->
+	<includes>
+		<file ref="include/elements.xml"/>
+		<file ref="include/materials.xml"/>
+		<file ref="config.xml"/>
+	</includes>
+
+	<!-- Including subdetector definitions -->
+	<include ref="include/Beampipe_o1_v01_02.xml"/>
+	<include ref="include/Nozzle_10deg_v0.xml"/>
+
+	<include ref="include/Vertex_o2_v06_01.xml"/>
+
+	<include ref="include/InnerTracker_o2_v06_01.xml"/>
+	<include ref="include/OuterTracker_o2_v06_01.xml"/>
+
+	<include ref="include/ECalBarrel_o2_v01_02.xml"/>
+	<include ref="include/ECalEndcap_o2_v01_02.xml"/>
+
+	<include ref="include/HCalBarrel_o1_v01_01.xml"/>
+	<include ref="include/HCalEndcap_o1_v01_01.xml"/>
+
+	<!-- Including plugins -->
+	<plugins>
+		<plugin name="DD4hepVolumeManager"/>
+		<plugin name="InstallSurfaceManager"/>
+		<plugin name="lcgeo_LinearSortingPolicy">
+
+			<argument value="/InnerTrackerEndcapSupport_layer8"/>
+			<argument value="InnerTracker_Barrel_half_length_0"/>
+			<argument value="InnerTracker_Barrel_radius_0 + 0.5*mm"/>
+			<argument value="0"/>
+
+			<argument value="/InnerTrackerEndcapSupport_layer9"/>
+			<argument value="InnerTracker_Barrel_half_length_0"/>
+			<argument value="InnerTracker_Barrel_radius_1 + 0.5*mm"/>
+			<argument value="0"/>
+
+			<argument value="/InnerTrackerEndcapSupport"/>
+			<argument value="InnerTracker_Barrel_half_length_0"/>
+			<argument value="InnerTracker_Barrel_radius_1 + 0.5*mm"/>
+			<argument value="(InnerTracker_outer_radius - InnerTracker_Barrel_radius_1) / (InnerTracker_half_length - InnerTracker_Barrel_half_length_0)"/>
+
+			<argument value="/InnerTrackerEndcap/"/>
+			<argument value="InnerTracker_Barrel_half_length_0"/>
+			<argument value="InnerTracker_Barrel_radius_1"/>
+			<argument value="(InnerTracker_outer_radius - InnerTracker_Barrel_radius_1) / (InnerTracker_half_length - InnerTracker_Barrel_half_length_0)"/>
+
+			<argument value="/OuterTrackerEndcap/"/>
+			<argument value="OuterTracker_Barrel_half_length"/>
+			<argument value="OuterTracker_Barrel_radius_1"/>
+			<argument value="(OuterTracker_Endcap_radius_2 - OuterTracker_Barrel_radius_1) / (OuterTracker_half_length - OuterTracker_Barrel_half_length)"/>
+
+			<argument value="/OuterTrackerEndcapSupport_layer4"/>
+			<argument value="OuterTracker_Barrel_half_length"/>
+			<argument value="OuterTracker_Barrel_radius_0 + 0.5*cm"/>
+			<argument value="0.0"/>
+
+			<argument value="/OuterTrackerEndcapSupport_layer5"/>
+			<argument value="OuterTracker_Barrel_half_length"/>
+			<argument value="OuterTracker_Barrel_radius_1 + 0.5*cm"/>
+			<argument value="0.0"/>
+
+			<argument value="/OuterTrackerEndcapSupport"/>
+			<argument value="OuterTracker_Barrel_half_length"/>
+			<argument value="OuterTracker_Barrel_radius_1 + 3*cm"/>
+			<argument value="(OuterTracker_Endcap_radius_2 - OuterTracker_Barrel_radius_1) / (OuterTracker_half_length - OuterTracker_Barrel_half_length)"/>
+
+			<argument value="/VertexEndcap/"/>
+			<argument value="VertexEndcap_zmin"/>
+			<argument value="VertexBarrel_r4 + 1*cm"/>
+			<argument value="(VertexEndcap_rmax - VertexBarrel_r4 + 1*cm) / (VertexEndcap_zmax - VertexEndcap_zmin)"/>
+
+			<argument value="/VertexVerticalCable"/>
+			<argument value="0"/>
+			<argument value="VertexBarrel_r4 + 0.5*cm"/>
+			<argument value="0"/>
+		</plugin>
+	</plugins>
+
+</lccdd>
+

@@ -1,0 +1,147 @@
+<lccdd>
+    <info name="MuColl_v1"
+          title="Muon Collider geometry: version frozen for SnowMass studies"
+          author="Nazar Bartosik"
+          url="https://confluence.infn.it/display/muoncollider/Muon+Collider+Home"
+          status="production"
+          version="$Id$">
+        <comment>Compact format for Muon Collider detector geometry based on CLIC design</comment>
+    </info>
+
+    <includes>
+        <gdmlFile  ref="elements.xml"/>
+        <gdmlFile  ref="materials.xml"/>
+        <gdmlFile  ref="constants.xml"/>
+    </includes>
+
+
+    <limits>
+        <limitset name="cal_limits">
+            <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
+        </limitset>
+    </limits>
+    <regions>
+        <region name="BeampipeRegion"            />
+        <region name="NozzleRegion"              />
+        <region name="VertexBarrelRegion"        />
+        <region name="VertexEndcapRegion"        />
+        <region name="InnerTrackerBarrelRegion"  />
+        <region name="OuterTrackerBarrelRegion"  />
+        <region name="InnerTrackerEndcapRegion"  />
+        <region name="OuterTrackerEndcapRegion"  />
+    </regions>
+
+
+    <display>
+        <vis name="VXDVis"      alpha="1.0" r="0.2"   g="0.2"     b="0.2"   showDaughters="true"  visible="false"/>
+        <vis name="ITVis"       alpha="1.0" r="0.54"  g="0.43"    b="0.04"  showDaughters="true"  visible="false"/>
+        <vis name="OTVis"       alpha="1.0" r="0.8"   g="0.8"     b="0.4"   showDaughters="true"  visible="false"/>
+        <vis name="ECALVis"     alpha="1.0" r="0.2"   g="0.6"     b="0"     showDaughters="true"  visible="true"/>
+        <vis name="HCALVis"     alpha="1.0" r="0.078" g="0.01176" b="0.588" showDaughters="true"  visible="true"/>
+        <vis name="SOLVis"      alpha="1.0" r="0.4"   g="0.4"     b="0.4"   showDaughters="true"  visible="true"/>
+        <vis name="YOKEVis"     alpha="1.0" r="0.6"   g="0.0"     b="0.0"   showDaughters="true"  visible="true"/>
+        <vis name="LCALVis"     alpha="1.0" r="0.35"  g="0.0"     b="0.47"  showDaughters="true"  visible="true"/>
+        <vis name="BCALVis"     alpha="1.0" r="0.0"   g="0.4"     b="0.4"   showDaughters="true"  visible="true"/>
+        <vis name="KICKVis"     alpha="1.0" r="1.0"   g="0.498"   b="0.0"   showDaughters="true"  visible="true"/>
+        <vis name="BPMVis"      alpha="1.0" r="0.25"  g="0.88"    b="0.81"  showDaughters="true"  visible="true"/>
+        <vis name="SupportVis"  alpha="1"   r="0.2"   g="0.2"     b="0.2"   showDaughters="false" visible="true"/>
+    </display>
+
+    <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
+
+    <include ref="Beampipe_o1_v01_02.xml"/>
+    <include ref="Nozzle_10deg_v0.xml"/>
+    <!-- <include ref="BeamInstrumentation_o1_v01_01.xml"/> -->
+
+    <include ref="Vertex_o2_v06_01.xml"/>
+
+    <include ref="InnerTracker_o2_v06_01.xml"/>
+    <include ref="OuterTracker_o2_v06_01.xml"/>
+
+    <include ref="ECalBarrel_o2_v01_02.xml"/>
+    <include ref="ECalEndcap_o2_v01_02.xml"/>
+
+    <include ref="HCalBarrel_o1_v01_01.xml"/>
+    <include ref="HCalEndcap_o1_v01_01.xml"/>
+
+    <include ref="Solenoid_o1_v01_01.xml"/>
+
+    <include ref="YokeBarrel_o1_v01_01.xml"/>
+    <include ref="YokeEndcap_o1_v01_01.xml"/>
+
+    <!-- <include ref="LumiCal_o1_v01_01.xml"/> -->
+
+    <!-- <include ref="BeamCal_o1_v01_01.xml"/> -->
+
+    <plugins>
+        <plugin name="DD4hepVolumeManager"/>
+        <plugin name="InstallSurfaceManager"/>
+        <plugin name="lcgeo_LinearSortingPolicy">
+
+          <argument value="/InnerTrackerEndcapSupport_layer8" />
+          <argument value="InnerTracker_Barrel_half_length_0" />
+          <argument value="InnerTracker_Barrel_radius_0+0.5*mm" />
+          <argument value="0" />
+
+          <argument value="/InnerTrackerEndcapSupport_layer9" />
+          <argument value="InnerTracker_Barrel_half_length_0" />
+          <argument value="InnerTracker_Barrel_radius_1+0.5*mm" />
+          <argument value="0" />
+
+          <argument value="/InnerTrackerEndcapSupport" />
+          <argument value="InnerTracker_Barrel_half_length_0" />
+          <argument value="InnerTracker_Barrel_radius_1+0.5*mm" />
+          <argument value="(InnerTracker_outer_radius-InnerTracker_Barrel_radius_1)/(InnerTracker_half_length-InnerTracker_Barrel_half_length_0)" />
+
+          <argument value="/InnerTrackerEndcap/" />
+          <argument value="InnerTracker_Barrel_half_length_0" />
+          <argument value="InnerTracker_Barrel_radius_1" />
+          <argument value="(InnerTracker_outer_radius-InnerTracker_Barrel_radius_1)/(InnerTracker_half_length-InnerTracker_Barrel_half_length_0)" />
+
+          <argument value="/OuterTrackerEndcap/" />
+          <argument value="OuterTracker_Barrel_half_length" />
+          <argument value="OuterTracker_Barrel_radius_1" />
+          <argument value="(OuterTracker_Endcap_radius_2-OuterTracker_Barrel_radius_1)/(OuterTracker_half_length-OuterTracker_Barrel_half_length)" />
+
+          <argument value="/OuterTrackerEndcapSupport_layer4" />
+          <argument value="OuterTracker_Barrel_half_length" />
+          <argument value="OuterTracker_Barrel_radius_0+0.5*cm" />
+          <argument value="0.0" />
+
+          <argument value="/OuterTrackerEndcapSupport_layer5" />
+          <argument value="OuterTracker_Barrel_half_length" />
+          <argument value="OuterTracker_Barrel_radius_1+0.5*cm" />
+          <argument value="0.0" />
+
+          <argument value="/OuterTrackerEndcapSupport" />
+          <argument value="OuterTracker_Barrel_half_length" />
+          <argument value="OuterTracker_Barrel_radius_1+3*cm" />
+          <argument value="(OuterTracker_Endcap_radius_2-OuterTracker_Barrel_radius_1)/(OuterTracker_half_length-OuterTracker_Barrel_half_length)" />
+
+          <argument value="/VertexEndcap/" />
+          <argument value="VertexEndcap_zmin" />
+          <argument value="VertexBarrel_r4+1*cm" />
+          <argument value="(VertexEndcap_rmax-VertexBarrel_r4+1*cm)/(VertexEndcap_zmax-VertexEndcap_zmin)" />
+
+          <argument value="/VertexVerticalCable" />
+          <argument value="0" />
+          <argument value="VertexBarrel_r4+0.5*cm" />
+          <argument value="0" />
+        </plugin>
+
+    </plugins>
+
+
+    <fields>
+        <field name="GlobalSolenoid" type="solenoid"
+               inner_field="3.57*tesla"
+               outer_field="-1.34*tesla"
+               zmax="Solenoid_Coil_half_length"
+               inner_radius="Solenoid_Coil_radius"
+               outer_radius="YokeBarrel_outer_radius">
+        </field>
+    </fields>
+
+
+</lccdd>
+

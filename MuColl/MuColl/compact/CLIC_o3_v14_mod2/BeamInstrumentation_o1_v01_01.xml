@@ -1,0 +1,27 @@
+<lccdd>    
+    
+    <detectors>
+        <comment>Beampipe Instrumentation</comment>
+        
+        <detector name="Kicker" type="DD4hep_Mask_o1_v01" vis="KICKVis">
+            <parameter crossingangle="CrossingAngle" />
+            <envelope vis="KICKVis">
+                <shape type="Assembly"/>
+            </envelope>
+            <!--             &A                                Z1                  Z2                    RIn1                       RIn2                             ROut1                        ROut2              Material -->
+            <section type="Upstream"               start="Kicker_min_z"    end="Kicker_max_z" rMin1="Kicker_inner_radius"  rMin2="Kicker_inner_radius"  rMax1="Kicker_outer_radius"  rMax2="Kicker_outer_radius"  material="Iron" name="Kicker"/>     
+        </detector>
+        
+        
+        <detector name="BPM" type="DD4hep_Mask_o1_v01" vis="BPMVis">
+            <parameter crossingangle="CrossingAngle" />
+            <envelope vis="BPMVis">
+                <shape type="Assembly"/>
+            </envelope>
+            <!--             &A                                Z1                  Z2                    RIn1                       RIn2                             ROut1                        ROut2              Material -->
+            <section type="Dnstream"               start="BPM_min_z"    end="BPM_max_z" rMin1="BPM_inner_radius"  rMin2="BPM_inner_radius"  rMax1="BPM_outer_radius"  rMax2="BPM_outer_radius"  material="Iron" name="BPM"/>     
+        </detector>
+        
+        
+    </detectors>
+</lccdd>
