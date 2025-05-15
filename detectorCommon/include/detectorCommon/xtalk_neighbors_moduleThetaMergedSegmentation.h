@@ -31,8 +31,8 @@ namespace crosstalk {
                                  const dd4hep::DDSegmentation::BitFieldCoder& aDecoder,
                                  const std::vector<std::string>& aFieldNames,
                                  const std::vector<std::vector<std::pair<int, int>>>& aFieldExtremes, uint64_t aCellId,
-				 const double aXtalkCoefRadial = 0.7e-2, const double aXtalkCoefTheta = 0.2e-2,
-				 const double aXtalkCoefDiagonal = 0.04e-2, const double aXtalkCoefTower = 0.1e-2);
+                                 const double aXtalkCoefRadial = 0.7e-2, const double aXtalkCoefTheta = 0.2e-2,
+                                 const double aXtalkCoefDiagonal = 0.04e-2, const double aXtalkCoefTower = 0.1e-2);
 
   // debug: return cell layer/module/theta indices
   std::vector<int> getCellIndices(const dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo& aSeg,
