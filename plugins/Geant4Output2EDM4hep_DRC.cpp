@@ -11,7 +11,6 @@
 #include <edm4hep/CaloHitContributionCollection.h>
 #include <edm4hep/EDM4hepVersion.h>
 #include <edm4hep/MCParticleCollection.h>
-#include <edm4hep/RawCalorimeterHitCollection.h>
 #include <edm4hep/RawTimeSeriesCollection.h>
 #include <edm4hep/SimCalorimeterHitCollection.h>
 #include <edm4hep/SimTrackerHitCollection.h>
@@ -53,7 +52,7 @@ namespace sim {
     using trackermap_t = std::map<std::string, edm4hep::SimTrackerHitCollection>;
     using calorimeterpair_t = std::pair<edm4hep::SimCalorimeterHitCollection, edm4hep::CaloHitContributionCollection>;
     using calorimetermap_t = std::map<std::string, calorimeterpair_t>;
-    using drcalopair_t = std::pair<edm4hep::RawCalorimeterHitCollection,
+    using drcalopair_t = std::pair<edm4hep::SimCalorimeterHitCollection,
                                    edm4hep::RawTimeSeriesCollection>; // Required info for IDEA DRC sim hit
     using drcalomap_t = std::map<std::string, drcalopair_t>;          // Required info for IDEA DRC sim hit
     using drcaloWavmap_t = std::map<std::string, edm4hep::RawTimeSeriesCollection>;
@@ -288,7 +287,7 @@ void Geant4Output2EDM4hep_DRC::commit(OutputContext<G4Event>& /* ctxt */) {
       m_frame.put(std::move(calorimeterHits.second), colName + "Contributions");
     }
     for (auto& [colName, calorimeterHits] : m_drcaloHits) {
-      m_frame.put(std::move(calorimeterHits.first), colName + "RawHit");
+      m_frame.put(std::move(calorimeterHits.first), colName + "SimHit");
       m_frame.put(std::move(calorimeterHits.second), colName + "TimeStruct");
     }
     for (auto it = m_drcaloWaves.begin(); it != m_drcaloWaves.end(); ++it) {
@@ -606,8 +605,8 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
     for (unsigned i = 0; i < nhits; ++i) {
       const Geant4DRCalorimeter::Hit* hit = coll->hit(i);
 
-      // For DRC raw calo hit & raw time series
-      auto rawCaloHits = DRhits.first->create();
+      // For DRC calo hit & time series
+      auto simCaloHits = DRhits.first->create();
       auto rawTimeStruct = DRhits.second->create();
       auto rawWaveStruct = DRwaves->create();
 
@@ -633,8 +632,6 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
 
       unsigned nbinTime = static_cast<unsigned>((timeEnd - timeStart) / samplingT);
       unsigned nbinWav = static_cast<unsigned>((wavMax - wavMin) / samplingW);
-      int peakTime = 0.;
-      int peakVal = 0;
 
       // same as the ROOT TH1 binning scheme (0: underflow, nbin+1:overflow)
       for (unsigned itime = 1; itime < nbinTime + 1; itime++) {
@@ -642,13 +639,6 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
 
         if (timemap.find(itime) != timemap.end())
           count = timemap.at(itime);
-
-        int candidate = std::max(peakVal, count);
-
-        if (peakVal < candidate) {
-          peakVal = candidate;
-          peakTime = itime;
-        }
 
         rawTimeStruct.addToAdcCounts(count);
       }
@@ -662,9 +652,13 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
         rawWaveStruct.addToAdcCounts(count);
       }
 
-      rawCaloHits.setCellID(hit->cellID);
-      rawCaloHits.setAmplitude(hit->GetPhotonCount());
-      rawCaloHits.setTimeStamp(peakTime - 1 + static_cast<int>(timeStart / samplingT));
+      const auto& pos = hit->position;
+      simCaloHits.setCellID(hit->cellID);
+      // store the number of photon in place of energy
+      // will become energy after the conversion to ADC counts
+      // no hit contribution is stored
+      simCaloHits.setEnergy(static_cast<float>(hit->GetPhotonCount()));
+      simCaloHits.setPosition({float(pos.x() / CLHEP::mm), float(pos.y() / CLHEP::mm), float(pos.z() / CLHEP::mm)});
     }
     //-------------------------------------------------------------------
   } else {

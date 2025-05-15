@@ -99,8 +99,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   std::cout << " - Main crossing angle: " << mradFullCrossingAngle << " radian" << std::endl;
   std::cout << " - LHCal begin Z         " << lhcalInnerZ / dd4hep::mm << " mm" << std::endl;
   std::cout << " - LHCal end Z           " << (lhcalInnerZ + lhcalThickness) / dd4hep::mm << " mm" << std::endl;
-  std::cout << " - LHCal center (X,Y,Z)  " << "( " << lhcaloffset / dd4hep::mm << ",0 ," << lhcalCentreZ / dd4hep::mm
-            << " ) mm" << std::endl;
+  std::cout << " - LHCal center (X,Y,Z)  "
+            << "( " << lhcaloffset / dd4hep::mm << ",0 ," << lhcalCentreZ / dd4hep::mm << " ) mm" << std::endl;
   std::cout << " - LHCal inner R         " << lhcalInnerR / dd4hep::mm << " mm" << std::endl;
   std::cout << " - LHCal thickness       " << lhcalThickness / dd4hep::mm << " mm" << std::endl;
 

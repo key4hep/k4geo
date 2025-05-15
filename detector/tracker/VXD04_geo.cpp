@@ -361,10 +361,9 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         // 			ThreeVector((layer_radius + metal_traces_thickness +
         // (flex_cable_thickness/2.))*sin(phirot2)+offset_phi*cos(phirot2),
         // 				      -(layer_radius + metal_traces_thickness +
-        // (flex_cable_thickness/2.))*cos(phirot2)+offset_phi*sin(phirot2), 				      0.), 			FlexCableLogical, 			"FlexCable",
-        // 			worldLog,
-        // 			false,
-        // 			0);
+        // (flex_cable_thickness/2.))*cos(phirot2)+offset_phi*sin(phirot2), 				      0.),
+        // FlexCableLogical, 			"FlexCable", 			worldLog, 			false,
+        // 0);
 
         supp_assembly.placeVolume(
             FoamSpacerLogical,
@@ -944,7 +943,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       //**fg, NB:  TGeoConeSeg( dz,rmin0,rmax0,rmin1,rmax1, phi0, phi1 )  -  G4Cons( rmin0,rmin1,rmax0,rmax1, dz, phi0,
-      //delta_phi ) !!!!!!!!!!!!!!!!!!!!
+      // delta_phi ) !!!!!!!!!!!!!!!!!!!!
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
       Volume KaptonLinesLogical(_toString(LayerId, "KaptonLines_%02d"), KaptonLinesSolid, flexCableMaterial);
@@ -1562,7 +1561,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   //**fg, NB:  TGeoConeSeg( dz,rmin0,rmax0,rmin1,rmax1, phi0, phi1 )  -  G4Cons( rmin0,rmin1,rmax0,rmax1, dz, phi0,
-  //delta_phi ) !!!!!!!!!!!!!!!!!!!!
+  // delta_phi ) !!!!!!!!!!!!!!!!!!!!
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   Volume SupportConeLogical("SupportCone", SupportShellCone, theDetector.material("G4_Be")); //"beryllium") ) ;
@@ -1746,7 +1745,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
   // 			   gearHelpLadders[i].distance , gearHelpLadders[i].offset,gearHelpLadders[i].thickness ,
   // 			   gearHelpLadders[i].length , gearHelpLadders[i].width , gearHelpLadders[i].radLength ,
   // 			   gearHelpSensitives[i].distance, gearHelpSensitives[i].offset , gearHelpSensitives[i].
-  // thickness , 			   gearHelpSensitives[i].length , gearHelpSensitives[i].width , gearHelpSensitives[i].radLength ) ;
+  // thickness , 			   gearHelpSensitives[i].length , gearHelpSensitives[i].width ,
+  // gearHelpSensitives[i].radLength ) ;
   //       gearMgr->setVXDParameters( vxdParams ) ;
   //     }
 

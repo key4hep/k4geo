@@ -30,8 +30,8 @@ using namespace rec;
 /// helper to wrap access to global constants
 struct EnvDetector {
   Detector* _theDetector;
-  EnvDetector() : _theDetector(0) {};
-  EnvDetector(Detector& theDetector) : _theDetector(&theDetector) {};
+  EnvDetector() : _theDetector(0){};
+  EnvDetector(Detector& theDetector) : _theDetector(&theDetector){};
   inline double GetParameterAsDouble(const std::string& name) const { return _theDetector->constant<double>(name); }
 };
 
@@ -695,7 +695,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     pv.addPhysVolID("layer", disk_number - 1).addPhysVolID("side", 1);
 
 #ifdef DEBUG_VALUES
-    cout << "===================================================================== " << "\n"
+    cout << "===================================================================== "
+         << "\n"
          << "FTDAirDisk:\n"
          << " Inner Radius= " << _inner_radius << "\n"
          << " Outer Radius= " << _outer_radius << "\n"
@@ -736,7 +737,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     pv.addPhysVolID("layer", disk_number - 1).addPhysVolID("side", -1);
 
 #ifdef DEBUG_VALUES
-    cout << "===================================================================== " << "\n"
+    cout << "===================================================================== "
+         << "\n"
          << "FTDAirDisk:\n"
          << " Inner Radius= " << _inner_radius << "\n"
          << " Outer Radius= " << _outer_radius << "\n"
@@ -884,7 +886,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
       petVecnegZ[i] = petalDEnegZ;
 
 #ifdef DEBUG_VALUES
-      cout << "===================================================================== " << "\n"
+      cout << "===================================================================== "
+           << "\n"
            << "FTDPetalAir:\n"
            << " Petal Offset = " << zsign * _dbParDisk.petal_support_zoffset << " Inner Radius= " << _inner_radius
            << "\n"
@@ -1419,7 +1422,8 @@ void petalSupport(Detector& theDetector, DetElement ftd, std::map<std::string, d
   //-END--------------------------- Central Part ----------------------------------END-/
 
 #ifdef DEBUG_VALUES
-  cout << "===================================================================== " << "\n"
+  cout << "===================================================================== "
+       << "\n"
        << "FTDPetalSupport:\n"
        << " Inner Radius= " << _inner_radius_petal << "\n"
        << " Outer Radius= " << _outer_radius << "\n"
@@ -1507,7 +1511,8 @@ VolVec petalSensor(Detector& theDetector, DetElement ftd, SensitiveDetector sens
   volV.push_back(std::make_pair(FTDPetalSensitiveLogical, pv));
 
 #ifdef DEBUG_VALUES
-  cout << "===================================================================== " << "\n"
+  cout << "===================================================================== "
+       << "\n"
        << "FTDPetalSensitive:\n"
        << " Inner Radius= " << _inner_radius_petalSensor << "\n"
        << " Outer Radius= " << _outer_radius << "\n"
@@ -1515,7 +1520,8 @@ VolVec petalSensor(Detector& theDetector, DetElement ftd, SensitiveDetector sens
        << " xMin = " << 2.0 * petal_half_dxMin << "\n"
        << " dy =   " << petal_dy << "\n"
        << " thickness =   " << _dbParDisk.disks_Si_thickness << "\n"
-       << " placed at\n " << " x =   " << Ta.X() << "\n"
+       << " placed at\n "
+       << " x =   " << Ta.X() << "\n"
        << " y =   " << Ta.Y() << "\n"
        << " z =   " << Ta.Z() << "\n"
        << endl;
@@ -1543,7 +1549,8 @@ VolVec petalSensor(Detector& theDetector, DetElement ftd, SensitiveDetector sens
     // registerPV(Phys_rear);
 
 #ifdef DEBUG_VALUES
-    cout << "===================================================================== " << "\n"
+    cout << "===================================================================== "
+         << "\n"
          << "FTDPetalSensitive:\n"
          << " Inner Radius= " << _inner_radius_petalSensor << "\n"
          << " Outer Radius= " << _outer_radius << "\n"
@@ -1551,7 +1558,8 @@ VolVec petalSensor(Detector& theDetector, DetElement ftd, SensitiveDetector sens
          << " xMin = " << 2.0 * petal_half_dxMin << "\n"
          << " dy =   " << petal_dy << "\n"
          << " thickness =   " << _dbParDisk.disks_Si_thickness << "\n"
-         << " placed at\n " << " x =   " << Ta.X() << "\n"
+         << " placed at\n "
+         << " x =   " << Ta.X() << "\n"
          << " y =   " << Ta.Y() << "\n"
          << " z =   " << Ta.Z() << "\n"
          << endl;
