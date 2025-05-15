@@ -9,7 +9,7 @@ namespace crosstalk {
   std::vector<std::pair<uint64_t, double>>
   getNeighboursModuleThetaMerged(const dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo& aSeg,
                                  const dd4hep::DDSegmentation::BitFieldCoder& aDecoder,
-				 const std::vector<std::string>& aFieldNames,
+                                 const std::vector<std::string>& aFieldNames,
                                  const std::vector<std::vector<std::pair<int, int>>>& aFieldExtremes_layer,
                                  uint64_t aCellId, const double aXtalkCoefRadial, const double aXtalkCoefTheta,
                                  const double aXtalkCoefDiagonal, const double aXtalkCoefTower) {
