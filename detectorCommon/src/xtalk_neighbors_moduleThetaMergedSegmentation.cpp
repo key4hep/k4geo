@@ -7,13 +7,11 @@ namespace crosstalk {
 
   // use it for module-theta merged readout (FCCSWGridModuleThetaMerged_k4geo)
   std::vector<std::pair<uint64_t, double>> getNeighboursModuleThetaMerged(
-      const double xtalk_coef_radial,
-      const double xtalk_coef_theta,
-      const double xtalk_coef_diagonal,
-      const double xtalk_coef_tower,
       const dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo& aSeg,
       const dd4hep::DDSegmentation::BitFieldCoder& aDecoder, const std::vector<std::string>& aFieldNames,
-      const std::vector<std::vector<std::pair<int, int>>>& aFieldExtremes_layer, uint64_t aCellId) {
+      const std::vector<std::vector<std::pair<int, int>>>& aFieldExtremes_layer, uint64_t aCellId,
+      const double aXtalkCoefRadial, const double aXtalkCoefTheta,
+      const double aXtalkCoefDiagonal, const double aXtalkCoefTower) {
 
     std::vector<std::pair<uint64_t, double>> xtalk_neighbours;
 
@@ -111,11 +109,11 @@ namespace crosstalk {
             (theta_id_neighbour < theta_id &&
              theta_id_neighbour >
                  (theta_id - aSeg.mergedThetaCells(layer_id + deltaLayer)))) { // crosstalk neighbour type 1
-          this_xtalk = xtalk_coef_radial;
+          this_xtalk = aXtalkCoefRadial;
         } else if ((theta_id_neighbour == (theta_id + aSeg.mergedThetaCells(layer_id))) or
                    (theta_id_neighbour ==
                     (theta_id - aSeg.mergedThetaCells(layer_id + deltaLayer)))) { // crosstalk neighbour type 3
-          this_xtalk = xtalk_coef_diagonal;
+          this_xtalk = aXtalkCoefDiagonal;
         } else
           continue;
 
@@ -143,7 +141,7 @@ namespace crosstalk {
         continue;
       // set theta_id of cell ID
       aDecoder[aSeg.fieldNameTheta()].set(cID, theta_id + i * aSeg.mergedThetaCells(layer_id));
-      xtalk_neighbours.emplace_back(cID, xtalk_coef_theta);
+      xtalk_neighbours.emplace_back(cID, aXtalkCoefTheta);
     }
 
     // cross talk type 4
@@ -168,14 +166,14 @@ namespace crosstalk {
             theta_id_neighbour <=
                 aFieldExtremes_layer[loopLayer_indice_offset][idThetaField].second) { // crosstalk neighbour type 4
           aDecoder.set(cID, aSeg.fieldNameTheta(), theta_id_neighbour);
-          xtalk_neighbours.emplace_back(cID, xtalk_coef_tower);
+          xtalk_neighbours.emplace_back(cID, aXtalkCoefTower);
         } else if (theta_id_neighbour < theta_id &&
                    theta_id_neighbour > (theta_id - aSeg.mergedThetaCells(loopLayer)) &&
                    theta_id_neighbour >= aFieldExtremes_layer[loopLayer_indice_offset][idThetaField].first &&
                    theta_id_neighbour <= aFieldExtremes_layer[loopLayer_indice_offset][idThetaField]
                                              .second) { // crosstalk neighbour type 4
           aDecoder.set(cID, aSeg.fieldNameTheta(), theta_id_neighbour);
-          xtalk_neighbours.emplace_back(cID, xtalk_coef_tower);
+          xtalk_neighbours.emplace_back(cID, aXtalkCoefTower);
         } else
           continue;
       }
