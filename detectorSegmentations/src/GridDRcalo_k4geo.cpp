@@ -295,7 +295,7 @@ namespace DDSegmentation {
       // but to southbound the next totY is always smaller
       // than the current one
       // also protect from looking for a tower with numEta greater than the total # of towers
-      if (noEta+1 < fParamEndcap->GetTotTowerNum() + fParamBarrel->GetTotTowerNum()) {
+      if (noEta + 1 < fParamEndcap->GetTotTowerNum() + fParamBarrel->GetTotTowerNum()) {
         auto flNext = paramBase->GetFullLengthFibers(noEta + 1);
 
         for (int idx = totY - 1; idx >= flNext.rmax - margin; idx--)
