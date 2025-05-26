@@ -47,10 +47,11 @@
       <fraction n="0.147" ref="Epoxy"/>
     </material>
 
-    <material name="Polystyrene">
-      <D value="1.032" unit="g/cm3"/>
-      <composite n="19" ref="C"/>
-      <composite n="21" ref="H"/>
+    <material name="G4_POLYSTYRENE">
+      <MEE unit="eV" value="68.7"/>
+      <D type="density" value="1.06" unit="g/cm3"/>
+      <fraction n="0.077418" ref="H"/>
+      <fraction n="0.922582" ref="C"/>
     </material>
 
     <material name="Steel235">
