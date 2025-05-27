@@ -1,0 +1,162 @@
+<lccdd>  
+  <readouts>
+    <readout name="StrawTubeTrackerReadout">
+      <id>system:5,side:2,multiLayer:4,sector:4,layer:4,tube:6,r:32:10,eta:-11,phi:-11</id>
+    </readout>
+  </readouts>
+  <display>
+    <vis name="MyVis" alpha="0.1"
+         r="0.1" g=".5" b=".5"
+         showDaughters="true"
+         visible="false" />
+  </display>
+  
+  <detectors>
+    <detector name="StrawTubeTracker_v01"
+              type="StrawTubeTracker"
+              id="DetID_DCH"
+              readout="StrawTubeTrackerReadout"
+              vis="MyVis">
+      <!-- 
+	   <dimensions> specifies global detector dimensions.
+
+           Args to <dimensions>:
+	    - zmax: Absolute value of max z coordinate.  Detector extends to -z -> +z.
+            - rmin: minimum straw tracker radius
+	    - rmax: maximum straw tracker radius
+	    - gap:  The radial gap between adjacent tubes.  Will be same in all multilayers, sectors.
+
+           All values must be specified, none can default.
+      -->
+      
+      <dimensions
+          zmax="DCH_half_length_total"
+          rmin="DCH_inner_cyl_R_total"
+          rmax="DCH_outer_cyl_R_total"
+	  gap ="1*mm"/> 
+
+      <!-- 
+	   Each block below describes a "multilayer": a set of layers of tubes in close proximity 
+	   (presumably glued to one another with gap on the order of dimensions.gap).
+	   
+	   Args to <layer> (default): 
+	    - thickness: (-1)     defines the size of the envelope volume for the ML
+	    - nsegments: (8)      number of "sectors" in the phi direction.  
+	    - repeat:    (-1)     requested number of tubes in the phi direction per sector.
+	    - count:     (10)     N tube layers in the radial direction (default 10).
+	                          Tube specs in <slice>
+            - gap:       (1.5*cm) gap between adjacent sectors in the phi direction.
+                                  This is the sector gap, not the tube-level gap, which is specified
+                                  in dimensions.gap.
+
+           Not all arguments must be specified.  The default values are specified.  If repeat is 
+	   not specified, as many tubes as possible will be added in the phi direction to fill the 
+	   multilayer.  This is the preferred method to ensure the detector has no large gaps.  
+
+           At least one of thickness or count must be specified to control the radial thickness of
+           the multilayer.  If only count is specified, the layer thickness will be automatically set 
+	   to encapsulate the tubes with a minimum radial gap size of gap.  If only thickness is
+	   specified, then the layer will be filled with tubes until there is a minimum radial gap 
+	   between multilayers of size gap.  By specifying both thickness and count the radial gap
+	   between mutlilayers can be modulated independently of the phi gap.
+
+           If no geo attributes are specified in <layer> the default multilayer has 10 layers, 8 phi
+           sectors, and the gap between adjacent multilayers in both the r and phi direction is 2cm.
+           The vis attribute should always be specified so that the detector can be drawn.
+
+           Within each <layer> block there are <slices> which define the tube geometry in concentric
+           annular rings.  The top slice is the inner most element.  For example, as shown the inner
+	   most element is the Tungsten wire, then gas, then a aluminum-coated mylar wall.
+
+           Args to <slice> (default):
+	    - material:  (N/A)   composition of this annular slice
+	    - thickness: (N/A)   radial thickness.  Each material is an annular slice.
+	    - sensitive: (false) true/false: if this is a sensitive detector
+
+           The material and thickness must be specified for each slice.  sensitive must only be 
+           specified for volumes which are sensitive, as it defaults to false.
+
+           NOTE:
+           In some cases the C++ code will assert that your geometry makes sense.
+           This will help avoid an overlap (but will not guarantee and the overlap.mac should
+           still be used).  For example, if you request a tube which is thicker than the total
+           layer thickness, it will throw an error.  It will similarly throw an error if the 
+           total thickness of the requested layers would go outside the detector rmax.
+      -->
+      
+      <layer vis="MyVis">
+        <slice material="W" thickness="0.001*cm"/>
+        <slice material="He" thickness="0.497*cm" sensitive="true"/>
+        <slice material="Al" thickness="0.000005*cm"/>
+        <slice material="Mylar" thickness="0.0012*cm"/>
+      </layer>
+      
+      <layer vis="MyVis">
+        <slice material="W" thickness="0.001*cm"/>
+        <slice material="He" thickness="0.497*cm" sensitive="true"/>
+        <slice material="Al" thickness="0.000005*cm"/>
+        <slice material="Mylar" thickness="0.0012*cm"/>
+      </layer>
+      
+      <layer vis="MyVis">
+        <slice material="W" thickness="0.001*cm"/>
+        <slice material="He" thickness="0.497*cm" sensitive="true"/>
+        <slice material="Al" thickness="0.000005*cm"/>
+        <slice material="Mylar" thickness="0.0012*cm"/>
+      </layer>            
+      
+      <!-- 12 mm tube layers -->
+      <layer nsegments="12" vis="MyVis">
+        <slice material="W" thickness="0.001*cm"/>
+        <slice material="He" thickness="0.597*cm" sensitive="true"/>
+        <slice material="Al" thickness="0.000005*cm"/>
+        <slice material="Mylar" thickness="0.0012*cm"/>
+      </layer>
+      
+      <layer nsegments="12" vis="MyVis">
+        <slice material="W" thickness="0.001*cm"/>
+        <slice material="He" thickness="0.597*cm" sensitive="true"/>
+        <slice material="Al" thickness="0.000005*cm"/>
+        <slice material="Mylar" thickness="0.0012*cm"/>
+      </layer>
+      
+      <layer nsegments="12" vis="MyVis">
+        <slice material="W" thickness="0.001*cm"/>
+        <slice material="He" thickness="0.597*cm" sensitive="true"/>
+        <slice material="Al" thickness="0.000005*cm"/>
+        <slice material="Mylar" thickness="0.0012*cm"/>
+      </layer>
+      
+      <layer nsegments="12" vis="MyVis">
+        <slice material="W" thickness="0.001*cm"/>
+        <slice material="He" thickness="0.597*cm" sensitive="true"/>
+        <slice material="Al" thickness="0.000005*cm"/>
+        <slice material="Mylar" thickness="0.0012*cm"/>
+      </layer>
+      
+      <!-- 15 mm tube layers -->
+      <layer nsegments="16" vis="MyVis">
+        <slice material="W" thickness="0.001*cm"/>
+        <slice material="He" thickness="0.747*cm" sensitive="true"/>
+        <slice material="Al" thickness="0.000005*cm"/>
+        <slice material="Mylar" thickness="0.0012*cm"/>
+      </layer>
+      
+      <layer nsegments="16" vis="MyVis">
+        <slice material="W" thickness="0.001*cm"/>
+        <slice material="He" thickness="0.747*cm" sensitive="true"/>
+        <slice material="Al" thickness="0.000005*cm"/>
+        <slice material="Mylar" thickness="0.0012*cm"/>
+      </layer>
+
+      <layer nsegments="16" vis="MyVis">
+        <slice material="W" thickness="0.001*cm"/>
+        <slice material="He" thickness="0.747*cm" sensitive="true"/>
+        <slice material="Al" thickness="0.000005*cm"/>
+        <slice material="Mylar" thickness="0.0012*cm"/>
+      </layer>
+      
+    </detector>
+  </detectors>
+</lccdd>
+

@@ -15,3 +15,8 @@ Added HCalBarrel_TileCal_v02.xml which uses HCalTileBarrel_o1_v02_geo.cpp and re
 Added HCalEndcaps_ThreeParts_TileCal_v02.xml which uses HCalThreePartsEndcap_o1_v02_geo.cpp. Additionally, wrt v02 the readout was migrated to the theta-phi segmentation; unused readout *Readout_phi was removed; radial dimensions of layers were modified, so the outer radius of all three cylinders is the same.
 For the muon tagger, switched from eta-phi to theta-phi segmentation.
 
+ALLEGRO_o1_v04:
+The drift chamber is replaced with a straw tube tracker.
+The straw tube tracker uses thin wall mylar (12um) straw tubes.
+While the straw tracker will inherently have a higher material budget (worse spatial resolution) and more dead volume (worse dN/dx resolution, provided no compensation is made with pressure) than the drift chamber, its modular design may provide a significant advantage.
+This version of ALLEGRO allows for direct comparison between the drift chamber and the straw tracker, as compared to o1_v04 the only change is the swap of drift chamber and straw.
