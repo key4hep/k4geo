@@ -280,7 +280,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
         Volume tileVol("HCalECTileVol_" + xComp.materialStr(), tileShape, lcdd.material(xComp.materialStr()));
         tileVol.setVisAttributes(lcdd, xComp.visStr());
 
-        dd4hep::Position tileOffset(0, 0, sign * (tileZOffset + 0.5 * xComp.thickness()) );
+        dd4hep::Position tileOffset(0, 0, sign * (tileZOffset + 0.5 * xComp.thickness()));
         dd4hep::PlacedVolume placedTileVol = tileSequenceVolume.placeVolume(tileVol, tileOffset);
 
         if (xComp.isSensitive()) {
@@ -292,7 +292,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
 
       // second z loop (place sequences in layer)
       std::vector<dd4hep::PlacedVolume> seqs;
-      double zOffset = -dzDetector1 + 0.5 * dzSequence + 2*dZEndPlate + space;
+      double zOffset = -dzDetector1 + 0.5 * dzSequence + 2 * dZEndPlate + space;
 
       for (uint numSeq = 0; numSeq < numSequencesZ1; numSeq++) {
         dd4hep::Position tileSequencePosition(0, 0, zOffset);
@@ -342,7 +342,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
         Volume tileVol("HCalECTileVol_", tileShape, lcdd.material(xComp.materialStr()));
         tileVol.setVisAttributes(lcdd, xComp.visStr());
 
-        dd4hep::Position tileOffset(0, 0, sign * (tileZOffset + 0.5 * xComp.thickness()) );
+        dd4hep::Position tileOffset(0, 0, sign * (tileZOffset + 0.5 * xComp.thickness()));
         dd4hep::PlacedVolume placedTileVol = tileSequenceVolume.placeVolume(tileVol, tileOffset);
 
         if (xComp.isSensitive()) {
@@ -414,7 +414,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
         Volume tileVol("HCalECTileVol_", tileShape, lcdd.material(xComp.materialStr()));
         tileVol.setVisAttributes(lcdd, xComp.visStr());
 
-        dd4hep::Position tileOffset(0, 0, sign * (tileZOffset + 0.5 * xComp.thickness()) );
+        dd4hep::Position tileOffset(0, 0, sign * (tileZOffset + 0.5 * xComp.thickness()));
         dd4hep::PlacedVolume placedTileVol = tileSequenceVolume.placeVolume(tileVol, tileOffset);
 
         if (xComp.isSensitive()) {
@@ -453,7 +453,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
     dd4hep::printout(dd4hep::DEBUG, "HCalThreePartsEndcap_o1_v02", "Layers in r : %d", layers.size());
     dd4hep::printout(dd4hep::DEBUG, "HCalThreePartsEndcap_o1_v02", "Tiles in layers : %d", tilesPerLayer.size());
 
-    // Place det elements wihtin each other to recover volume positions later via cellID
+    // Place det elements within each other to recover volume positions later via cellID
     for (uint iLayer = 0; iLayer < (layerDepths1.size() + layerDepths2.size() + layerDepths3.size()); iLayer++) {
       DetElement layerDet(caloDetElem, dd4hep::xml::_toString(sign * (iLayer + 1), "layer%d"), sign * (iLayer + 1));
       layerDet.setPlacement(layers[iLayer]);

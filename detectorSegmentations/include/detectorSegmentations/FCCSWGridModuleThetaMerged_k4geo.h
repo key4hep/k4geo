@@ -111,10 +111,10 @@ namespace DDSegmentation {
      *  in natural order of dimensions (nModules, dTheta)
      *  @param[in] cellID
      *  return a std::vector of size 2 with the cellDimensions of the given cell ID(modules, theta)
-    */
+     */
     inline std::vector<double> cellDimensions(const CellID& id) const {
       const int aLayer = layer(id);
-      return {(double) mergedModules(aLayer), gridSizeTheta()*mergedThetaCells(aLayer)};
+      return {(double)mergedModules(aLayer), gridSizeTheta() * mergedThetaCells(aLayer)};
     }
 
   protected:

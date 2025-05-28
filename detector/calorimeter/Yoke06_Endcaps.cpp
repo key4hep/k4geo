@@ -225,10 +225,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
       caloLayer.cellSize1 = cell_sizeY;
 
       //	PolyhedraRegular ChamberSolid( symmetry, M_PI/symmetry, rInnerEndcap + tolerance, rOuterEndcap -
-      //tolerance,  l_thickness);
+      // tolerance,  l_thickness);
 
       //	SubtractionSolid YokeEndcapSolid( PolyhedraRegular( symmetry, M_PI/symmetry, rInnerEndcap, rOuterEndcap,
-      //Yoke_Endcap_module_dim_z), innerBox, Position(0, 0, 0) );
+      // Yoke_Endcap_module_dim_z), innerBox, Position(0, 0, 0) );
 
       SubtractionSolid ChamberSolid(
           PolyhedraRegular(symmetry, M_PI / symmetry, rInnerEndcap + tolerance, rOuterEndcap - tolerance, l_thickness),
