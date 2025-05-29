@@ -59,6 +59,7 @@
     <D value="1.032" unit="g/cm3"/>
     <composite n="19" ref="C"/>
     <composite n="21" ref="H"/>
+    <constant name="BirksConstant" value="0.126*mm/MeV"/>
   </material>
 
   <material name="Steel235">

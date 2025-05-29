@@ -240,7 +240,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
     dd4hep::Position detectorLayerTrans(0., 0., 0.);
     dd4hep::PlacedVolume detectorLayerPhys = BarrelVolume.placeVolume(
         BarrelDetectorLayerVolume, dd4hep::Transform3D(dd4hep::RotationZ(0.), detectorLayerTrans));
-    detectorLayerPhys.addPhysVolID("layer", numBarrelLayer + 1);
+    detectorLayerPhys.addPhysVolID("layer", numBarrelLayer);
     dd4hep::DetElement BarrelDetectorLayerDE(
         BarrelDE, name + "-Barrel_DetectorLayerDE_" + std::to_string(numBarrelLayer + 1), numBarrelLayer + 1);
     BarrelDetectorLayerDE.setPlacement(detectorLayerPhys);
