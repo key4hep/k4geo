@@ -587,6 +587,7 @@
   <detectors>
     <detector id="DetID_FiberDRCalo" name="DRcalo" type="FiberDualReadoutCalo_o1_v01" readout="DRcaloSiPMreadout" region="FastSimOpFiberRegion" reflect="true" vis="DRCInvisible">
       <sensitive type="DRcaloSiPMSD"/>
+      <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_HADRONIC + DetType_BARREL + DetType_ENDCAP"/>
       <sipmDim height="0.3*mm" material="PolyvinylChloride" vis="DRCGenericVis">
         <sipmGlass material="DR_PyrexGlass" vis="DRCGlassVis"/>
         <sipmWafer height="0.3*mm" material="Silicon" vis="DRCWaferVis" sensitive="false"/> <!-- Original height : 0.01 mm, change to 0.3 mm, same as sipmDim (to reduce memory)-->
