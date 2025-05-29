@@ -103,6 +103,13 @@ SIM.action.calo = "Geant4ScintillatorCalorimeterAction"
 ## List of patterns matching sensitive detectors of type Calorimeter.
 SIM.action.calorimeterSDTypes = ["calorimeter"]
 
+## Replace SDAction for SCEPCal subdetector
+SIM.action.mapActions["SCEPCal_MainLayer"] = "SCEPCal_MainSDAction"
+SIM.action.mapActions["SCEPCal_TimingLayer"] = "SCEPCal_TimingSDAction"
+
+SIM.filter.mapDetFilter['SCEPCal_MainLayer'] = 'edep0'
+SIM.filter.mapDetFilter['SCEPCal_TimingLayer'] = 'edep0'
+
 ## Replace SDAction for DREndcapTubes subdetector
 SIM.action.mapActions["DREndcapTubes"] = "DRTubesSDAction"
 ## Configure the regexSD for DREndcapTubes subdetector
