@@ -797,7 +797,6 @@ namespace ECalEndcap_Turbine_o1_v03 {
 
       dd4hep::Tube supportTube(ro, ro + supportTubeThickness, bathDelZ-(bathThicknessBack-mechSupportZGap)/2.);
 
-      std::cout << "Support tube delz: " << bathDelZ << " " << bathThicknessBack << " " << mechSupportZGap << " " << bathDelZ-(bathThicknessBack+mechSupportZGap)/2. << std::endl;
       dd4hep::Volume supportTubeVol("supportTube", supportTube, aLcdd.material(supportTubeElem.materialStr()));
       if (supportTubeElem.isSensitive()) {
         supportTubeVol.setSensitiveDetector(aSensDet);
