@@ -308,7 +308,7 @@ namespace ECalEndcap_Turbine_o1_v03 {
 
     int nUnitCellsToDraw = nUnitCells;
     nUnitCellsToDraw = 2;
-    
+
     dd4hep::printout(dd4hep::INFO, "ECalEndcap_Turbine_o1_v03", "Number of unit cells %d", nUnitCells);
 
     // place all components of the absorber blade inside passive volume
@@ -546,102 +546,106 @@ namespace ECalEndcap_Turbine_o1_v03 {
     return;
   }
 
-  
-  void buildMechanicalSupport(dd4hep::Detector& aLcdd,
-			      dd4hep::Volume& aEnvelope,
-			      dd4hep::xml::Handle_t& aXmlElement,
-			      dd4hep::DetElement& bathDetElem) {
-    
-     dd4hep::xml::DetElement calo = aXmlElement.child(_Unicode(calorimeter));
-     dd4hep::xml::DetElement mechSupport = calo.child(_Unicode(mechSupport));
+  void buildMechanicalSupport(dd4hep::Detector& aLcdd, dd4hep::Volume& aEnvelope, dd4hep::xml::Handle_t& aXmlElement,
+                              dd4hep::DetElement& bathDetElem) {
 
-     float mechSupportZCenter = aLcdd.constant<float>("ECalEndcapSupportZCenter");
-     
-     //make inner ring
-     dd4hep::xml::DetElement innerRing = mechSupport.child(_Unicode(innerRing));
+    dd4hep::xml::DetElement calo = aXmlElement.child(_Unicode(calorimeter));
+    dd4hep::xml::DetElement mechSupport = calo.child(_Unicode(mechSupport));
 
-     dd4hep::xml::Dimension innerRingDim(innerRing.dimensions());
-     
-     double innerRingRmin = innerRingDim.rmin1();
-     double innerRingRmax = innerRingDim.rmax1();
-     double innerRingdZ = innerRingDim.dz();
+    float mechSupportZCenter = aLcdd.constant<float>("ECalEndcapSupportZCenter");
 
-     dd4hep::Tube innerRingTube(innerRingRmin, innerRingRmax, innerRingdZ);
-     dd4hep::Volume innerRingVol("mechSupportInnerRing", innerRingTube, aLcdd.material(mechSupport.materialStr()));
-     dd4hep::PlacedVolume innerRing_pv = aEnvelope.placeVolume(innerRingVol, dd4hep::Position(0,0,mechSupportZCenter));
-     dd4hep::DetElement innerRingDetElem(bathDetElem, "mechSupportInnerRing", 0);
-     innerRingDetElem.setPlacement(innerRing_pv);
-    
-     // make outer ring
-     dd4hep::xml::DetElement outerRing = mechSupport.child(_Unicode(outerRing));
+    // make inner ring
+    dd4hep::xml::DetElement innerRing = mechSupport.child(_Unicode(innerRing));
 
-     dd4hep::xml::Dimension outerRingDim(outerRing.dimensions());
-     
-     double outerRingRmin = outerRingDim.rmin1();
-     double outerRingRmax = outerRingDim.rmax1();
-     double outerRingdZ = outerRingDim.dz();
+    dd4hep::xml::Dimension innerRingDim(innerRing.dimensions());
 
-     dd4hep::Tube outerRingTube(outerRingRmin, outerRingRmax, outerRingdZ);
-     dd4hep::Volume outerRingVol("mechSupportOuterRing", outerRingTube, aLcdd.material(mechSupport.materialStr()));
-     dd4hep::PlacedVolume outerRing_pv = aEnvelope.placeVolume(outerRingVol, dd4hep::Position(0,0,mechSupportZCenter));
-     dd4hep::DetElement outerRingDetElem(bathDetElem, "mechSupportOuterRing", 0);
-     outerRingDetElem.setPlacement(outerRing_pv);
-     
-       // make intermediate rings
-     dd4hep::xml::DetElement supportTubeElem = calo.child(_Unicode(supportTube));
-     float supportTubeThickness = supportTubeElem.thickness();
-     unsigned nWheelsXML = supportTubeElem.attr<unsigned>(_Unicode(nWheels));
-     dd4hep::xml::DetElement cryostat = calo.child(_Unicode(cryostat));
-     dd4hep::xml::Dimension cryoDim(cryostat.dimensions());
+    double innerRingRmin = innerRingDim.rmin1();
+    double innerRingRmax = innerRingDim.rmax1();
+    double innerRingdZ = innerRingDim.dz();
 
-     float intermedRingdR = aLcdd.constant<float>("ECalEndcapSupportMidRingdR");
+    dd4hep::Tube innerRingTube(innerRingRmin, innerRingRmax, innerRingdZ);
+    dd4hep::Volume innerRingVol("mechSupportInnerRing", innerRingTube, aLcdd.material(mechSupport.materialStr()));
+    dd4hep::PlacedVolume innerRing_pv = aEnvelope.placeVolume(innerRingVol, dd4hep::Position(0, 0, mechSupportZCenter));
+    dd4hep::DetElement innerRingDetElem(bathDetElem, "mechSupportInnerRing", 0);
+    innerRingDetElem.setPlacement(innerRing_pv);
 
-     double rmin = cryoDim.rmin2();
-     double rmax = cryoDim.rmax1();
-     float radiusRatio = pow(rmax / rmin, 1. / nWheelsXML);
-     double ro = rmin * radiusRatio;
-     
-     for (unsigned iWheel = 0; iWheel < nWheelsXML-1; iWheel++) {
-       double rInner = ro+(supportTubeThickness-intermedRingdR)/2.;
-       double rOuter = rInner+intermedRingdR;
-       dd4hep::Tube intermedRingTube(rInner, rOuter, innerRingDim.dz());
-       dd4hep::Volume intermedRingVol("mechSupportIntermedRing", intermedRingTube, aLcdd.material(mechSupport.materialStr()));
-       dd4hep::PlacedVolume intermedRing_pv = aEnvelope.placeVolume(intermedRingVol, dd4hep::Position(0,0,mechSupportZCenter));
-       dd4hep::DetElement intermedRingDetElem(bathDetElem, "mechSupportInterMedRing"+std::to_string(iWheel), iWheel);
-       intermedRingDetElem.setPlacement(intermedRing_pv);
-       ro = ro*radiusRatio;
-     }
-     // make spokes
-     unsigned nSpokes = aLcdd.constant<unsigned>("ECalEndcapSupportNSpokes");
-     double rminSpoke =  innerRingRmax;
-     double rmaxSpoke = rmin*radiusRatio+(supportTubeThickness-intermedRingdR)/2.;
-     double spokeWidth = aLcdd.constant<float>("ECalEndcapSupportSpokeWidth");
-     for (unsigned iWheel = 0; iWheel < nWheelsXML; iWheel++) {
-       if (iWheel == nWheelsXML-1) rmaxSpoke = outerRingRmin;
-       
-       dd4hep::Tube allowedSpokeRegion(rminSpoke, rmaxSpoke, innerRingDim.dz());
-       dd4hep::Box spokeBox(spokeWidth/2., rmaxSpoke-rminSpoke/2., innerRingDim.dz());
-       dd4hep::IntersectionSolid spokeShape(spokeBox, allowedSpokeRegion, dd4hep::Position(0,-(rminSpoke+rmaxSpoke)/2.,  0));
-       dd4hep::Volume spokeVol("mechSupportSpoke", spokeShape, aLcdd.material(mechSupport.materialStr()));
+    // make outer ring
+    dd4hep::xml::DetElement outerRing = mechSupport.child(_Unicode(outerRing));
 
-       double rmid = (rminSpoke+rmaxSpoke)/2.;
-       for (unsigned iSpoke = 0; iSpoke < nSpokes; iSpoke++) {
-	 double phiSpoke = iSpoke*2.*TMath::Pi()/nSpokes;
-	 
-	 dd4hep::PlacedVolume spoke_pv = aEnvelope.placeVolume(spokeVol, dd4hep::Transform3D(dd4hep::RotationZYX(-phiSpoke, 0,0), dd4hep::Translation3D(rmid*TMath::Sin(phiSpoke), rmid*TMath::Cos(phiSpoke),mechSupportZCenter)));
-	 dd4hep::DetElement spokeDetElem(bathDetElem, "mechSupportSpoke"+std::to_string(iWheel)+std::to_string(iSpoke), 0);
-	 spokeDetElem.setPlacement(spoke_pv);
-       }
-       rminSpoke = rmaxSpoke+intermedRingdR;
-       if (iWheel == 0) {
-	 rmaxSpoke = rmin*radiusRatio*radiusRatio+(supportTubeThickness-intermedRingdR)/2.;
-       } else {
-	   rmaxSpoke = rminSpoke*radiusRatio+(supportTubeThickness-intermedRingdR)/2.;
-       }
-     }
-     
+    dd4hep::xml::Dimension outerRingDim(outerRing.dimensions());
+
+    double outerRingRmin = outerRingDim.rmin1();
+    double outerRingRmax = outerRingDim.rmax1();
+    double outerRingdZ = outerRingDim.dz();
+
+    dd4hep::Tube outerRingTube(outerRingRmin, outerRingRmax, outerRingdZ);
+    dd4hep::Volume outerRingVol("mechSupportOuterRing", outerRingTube, aLcdd.material(mechSupport.materialStr()));
+    dd4hep::PlacedVolume outerRing_pv = aEnvelope.placeVolume(outerRingVol, dd4hep::Position(0, 0, mechSupportZCenter));
+    dd4hep::DetElement outerRingDetElem(bathDetElem, "mechSupportOuterRing", 0);
+    outerRingDetElem.setPlacement(outerRing_pv);
+
+    // make intermediate rings
+    dd4hep::xml::DetElement supportTubeElem = calo.child(_Unicode(supportTube));
+    float supportTubeThickness = supportTubeElem.thickness();
+    unsigned nWheelsXML = supportTubeElem.attr<unsigned>(_Unicode(nWheels));
+    dd4hep::xml::DetElement cryostat = calo.child(_Unicode(cryostat));
+    dd4hep::xml::Dimension cryoDim(cryostat.dimensions());
+
+    float intermedRingdR = aLcdd.constant<float>("ECalEndcapSupportMidRingdR");
+
+    double rmin = cryoDim.rmin2();
+    double rmax = cryoDim.rmax1();
+    float radiusRatio = pow(rmax / rmin, 1. / nWheelsXML);
+    double ro = rmin * radiusRatio;
+
+    for (unsigned iWheel = 0; iWheel < nWheelsXML - 1; iWheel++) {
+      double rInner = ro + (supportTubeThickness - intermedRingdR) / 2.;
+      double rOuter = rInner + intermedRingdR;
+      dd4hep::Tube intermedRingTube(rInner, rOuter, innerRingDim.dz());
+      dd4hep::Volume intermedRingVol("mechSupportIntermedRing", intermedRingTube,
+                                     aLcdd.material(mechSupport.materialStr()));
+      dd4hep::PlacedVolume intermedRing_pv =
+          aEnvelope.placeVolume(intermedRingVol, dd4hep::Position(0, 0, mechSupportZCenter));
+      dd4hep::DetElement intermedRingDetElem(bathDetElem, "mechSupportInterMedRing" + std::to_string(iWheel), iWheel);
+      intermedRingDetElem.setPlacement(intermedRing_pv);
+      ro = ro * radiusRatio;
+    }
+    // make spokes
+    unsigned nSpokes = aLcdd.constant<unsigned>("ECalEndcapSupportNSpokes");
+    double rminSpoke = innerRingRmax;
+    double rmaxSpoke = rmin * radiusRatio + (supportTubeThickness - intermedRingdR) / 2.;
+    double spokeWidth = aLcdd.constant<float>("ECalEndcapSupportSpokeWidth");
+    for (unsigned iWheel = 0; iWheel < nWheelsXML; iWheel++) {
+      if (iWheel == nWheelsXML - 1)
+        rmaxSpoke = outerRingRmin;
+
+      dd4hep::Tube allowedSpokeRegion(rminSpoke, rmaxSpoke, innerRingDim.dz());
+      dd4hep::Box spokeBox(spokeWidth / 2., rmaxSpoke - rminSpoke / 2., innerRingDim.dz());
+      dd4hep::IntersectionSolid spokeShape(spokeBox, allowedSpokeRegion,
+                                           dd4hep::Position(0, -(rminSpoke + rmaxSpoke) / 2., 0));
+      dd4hep::Volume spokeVol("mechSupportSpoke", spokeShape, aLcdd.material(mechSupport.materialStr()));
+
+      double rmid = (rminSpoke + rmaxSpoke) / 2.;
+      for (unsigned iSpoke = 0; iSpoke < nSpokes; iSpoke++) {
+        double phiSpoke = iSpoke * 2. * TMath::Pi() / nSpokes;
+
+        dd4hep::PlacedVolume spoke_pv = aEnvelope.placeVolume(
+            spokeVol, dd4hep::Transform3D(dd4hep::RotationZYX(-phiSpoke, 0, 0),
+                                          dd4hep::Translation3D(rmid * TMath::Sin(phiSpoke),
+                                                                rmid * TMath::Cos(phiSpoke), mechSupportZCenter)));
+        dd4hep::DetElement spokeDetElem(bathDetElem,
+                                        "mechSupportSpoke" + std::to_string(iWheel) + std::to_string(iSpoke), 0);
+        spokeDetElem.setPlacement(spoke_pv);
+      }
+      rminSpoke = rmaxSpoke + intermedRingdR;
+      if (iWheel == 0) {
+        rmaxSpoke = rmin * radiusRatio * radiusRatio + (supportTubeThickness - intermedRingdR) / 2.;
+      } else {
+        rmaxSpoke = rminSpoke * radiusRatio + (supportTubeThickness - intermedRingdR) / 2.;
+      }
+    }
   }
-  
+
   void buildOneSide_Turbine(dd4hep::Detector& aLcdd, dd4hep::DetElement& caloDetElem,
                             dd4hep::SensitiveDetector& aSensDet, dd4hep::Volume& aEnvelope,
                             dd4hep::xml::Handle_t& aXmlElement, unsigned& iModule) {
@@ -782,7 +786,6 @@ namespace ECalEndcap_Turbine_o1_v03 {
                        nWheels);
     }
 
-   
     dd4hep::printout(dd4hep::INFO, "ECalEndcap_Turbine_o1_v03", "Will build %d wheels", nWheels);
     double rmin = bathRmin;
     double rmax = bathRmax;
@@ -792,17 +795,18 @@ namespace ECalEndcap_Turbine_o1_v03 {
 
     float supportTubeThickness = supportTubeElem.thickness();
     float mechSupportZGap = aLcdd.constant<float>("ECalEndcapSupportZGap");
-      
+
     for (unsigned iWheel = 0; iWheel < nWheels; iWheel++) {
 
-      dd4hep::Tube supportTube(ro, ro + supportTubeThickness, bathDelZ-(bathThicknessBack-mechSupportZGap)/2.);
+      dd4hep::Tube supportTube(ro, ro + supportTubeThickness, bathDelZ - (bathThicknessBack - mechSupportZGap) / 2.);
 
       dd4hep::Volume supportTubeVol("supportTube", supportTube, aLcdd.material(supportTubeElem.materialStr()));
       if (supportTubeElem.isSensitive()) {
         supportTubeVol.setSensitiveDetector(aSensDet);
       }
-      dd4hep::PlacedVolume supportTube_pv =
-          bathVol.placeVolume(supportTubeVol, dd4hep::Position(0, 0, zOffsetEnvelope + dim.dz()-(bathThicknessBack-mechSupportZGap)/2.));
+      dd4hep::PlacedVolume supportTube_pv = bathVol.placeVolume(
+          supportTubeVol,
+          dd4hep::Position(0, 0, zOffsetEnvelope + dim.dz() - (bathThicknessBack - mechSupportZGap) / 2.));
       supportTube_pv.addPhysVolID("cryo", 1);
       supportTube_pv.addPhysVolID("wheel", iWheel);
       dd4hep::DetElement supportTubeDetElem(bathDetElem, "supportTube_" + std::to_string(iWheel), 0);
@@ -818,12 +822,12 @@ namespace ECalEndcap_Turbine_o1_v03 {
     }
 
     buildMechanicalSupport(aLcdd, bathVol, aXmlElement, bathDetElem);
-    
+
     dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v03", "Total number of modules:  %d", iModule);
 
     return;
   }
-  
+
   static dd4hep::Ref_t createECalEndcapTurbine(dd4hep::Detector& aLcdd, dd4hep::xml::Handle_t aXmlElement,
                                                dd4hep::SensitiveDetector aSensDet) {
 
