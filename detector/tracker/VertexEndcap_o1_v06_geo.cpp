@@ -158,8 +158,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
       thisLayer.zOffsetSensitive = 0;
       thisLayer.distanceSensitive = r - mod_shape->GetDZ();
       thisLayer.thicknessSensitive = moduleSensThickness[m_nam];
-      thisLayer.widthInnerSensitive = 0;
-      thisLayer.widthOuterSensitive = 0;
+      thisLayer.widthInnerSensitive =  2 * mod_shape->GetDx1();
+      thisLayer.widthOuterSensitive = 2 * mod_shape->GetDx2();
       thisLayer.lengthSensitive = 2 * mod_shape->GetDZ();
 
       for (int k = 0; k < nmodules; ++k) {

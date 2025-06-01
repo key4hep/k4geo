@@ -68,6 +68,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   map<string, Volume> modules;
   map<string, Placements> sensitives;
   PlacedVolume pv;
+  std::map<std::string, double> module_dx_map;
 
   // for encoding
   std::string cellIDEncoding = sens.readout().idSpec().fieldDescription();
@@ -151,6 +152,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     int mod_num = 0;
     int ring_no = 0;
     int petal_num = 0;
+    Box mod_shape;   // déclare mod_shape ici
+    double dx = 0.;  // déclare dx ici
     // Cannot handle rings in ZDiskPetalsData, calculate approximate petal quantities
     double sumZ(0.), innerR(1e100), outerR(0.);
     double sensitiveThickness(0.0);
@@ -175,18 +178,21 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
       double phi = phi0;
       Placements& sensVols = sensitives[m_nam];
       sensitiveThickness = moduleSensThickness[m_nam];
+    //  Récupérer dx stocké pour ce module
+      dx = module_dx_map[m_nam];
 
-      Box mod_shape(m_vol.solid());
+    // Créer mod_shape depuis le volume m_vol
+      mod_shape = Box(m_vol.solid());
 
       if (r < innerR)
         innerR = r;
 
-      if (r + 2 * mod_shape->GetDY() > outerR)
-        outerR = r + 2 * mod_shape->GetDY();
+      if (r +  2 * mod_shape.y() > outerR)
+        outerR = r +  2 * mod_shape.y();
 
       sumZ += zstart;
 
-      r = r + mod_shape->GetDY();
+      r = r + mod_shape.y();
 
       petal_num = nmodules; // store the module number of this ring for nPetals in ZDiskPetalsData
 
@@ -311,7 +317,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     /// NOTE: Only filling what needed for CED/DDMarlinPandora
     thisLayer.zPosition = sumZ / ring_no; // calc average z
     thisLayer.distanceSensitive = innerR;
-    thisLayer.lengthSensitive = outerR - innerR;
+    thisLayer.lengthSensitive =  2 * mod_shape.y();
+    thisLayer.widthInnerSensitive = 2 * mod_shape.x();
+    thisLayer.widthOuterSensitive = 2 * mod_shape.x();
+
     thisLayer.petalNumber = petal_num;   // module number is the number of petals - needed for CED event display
     thisLayer.sensorsPerPetal = ring_no; // Store the number of rings as sensors per petal - needed for tracking
 
