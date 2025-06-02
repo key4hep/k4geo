@@ -1,0 +1,236 @@
+<lccdd>
+
+    <define>
+        <constant name="YokeEndcap_steps" value="6.43"/>
+        <constant name="YokeEndcapStep_dr" value="(YokeEndcap_inner_radius2 - YokeEndcap_inner_radius)/YokeEndcap_steps"/>
+    </define>
+
+    <!--  Definition of the readout segmentation/definition  -->
+    <readouts>
+        <readout name="YokeEndcapCollection">
+            <segmentation type="CartesianGridXY" grid_size_x="Yoke_cell_size" grid_size_y="Yoke_cell_size" />
+            <id>${GlobalCalorimeterReadoutID}</id>
+        </readout>
+    </readouts>
+
+        <!--  Definition of the used visualization attributes    -->
+    <display>
+        <vis name="YokeEndcapVis"          alpha="1" r="1"    g="0.4"  b="0.62" showDaughters="true" visible="true"/>
+    </display>
+
+    <!--  Includes for sensitives and support                -->
+    <detectors>
+        
+        <detector name="YokeEndcap" type="GenericCalEndcap_o2_v01" id="DetID_Yoke_Endcap" readout="YokeEndcapCollection" vis="YOKEVis" >
+            
+            <comment>Encap Yoke</comment>
+            
+            <type_flags type=" DetType_CALORIMETER + DetType_MUON + DetType_ENDCAP"/>
+
+            <envelope vis="YOKEVis">
+                <shape type="BooleanShape" operation="Subtraction" material="Air">
+                    <shape type="BooleanShape" operation="Subtraction">
+                        <shape type="PolyhedraRegular"  numsides="YokeEndcap_outer_symmetry" rmin="0" rmax="YokeEndcap_outer_radius+ 10.0*env_safety" dz="2.0*YokeEndcap_max_z+2.0*env_safety"/>
+                        <shape type="PolyhedraRegular"  numsides="YokeEndcap_outer_symmetry" rmin="0" rmax="YokeEndcap_outer_radius+ 20.0*env_safety" dz="2.0*YokeEndcap_min_z"/>
+                    </shape>
+                    <shape type="Polycone" startphi="0" deltaphi="2.0*pi*rad">
+                        <zplane z="-YokeEndcap_max_z-2.0*env_safety" rmin="0" rmax="YokeEndcap_inner_radius2"/>
+                        <zplane z="-YokeEndcap_min_z+2.0*env_safety" rmin="0" rmax="YokeEndcap_inner_radius"/>
+                        <zplane z="YokeEndcap_min_z-2.0*env_safety" rmin="0" rmax="YokeEndcap_inner_radius"/>
+                        <zplane z="YokeEndcap_max_z+2.0*env_safety" rmin="0" rmax="YokeEndcap_inner_radius2"/>
+                    </shape>
+                </shape>
+                <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/YokeEndcap_outer_symmetry"/>
+            </envelope>
+            
+            <dimensions nsides_inner="YokeEndcap_outer_symmetry" nsides_outer="YokeEndcap_outer_symmetry" zmin="YokeEndcap_min_z" rmin="YokeEndcap_inner_radius" rmin2="YokeEndcap_inner_radius2" rmax="YokeEndcap_outer_radius"/>
+            
+	   
+	    
+	    <layer repeat="1" vis="YokeEndcapLayerVis" rmin="YokeEndcap_inner_radius+YokeEndcapStep_dr">
+                <slice material="Iron" thickness="19.7*cm"  vis="YokeAbsorberVis" radiator="yes"/>
+                <slice material="Aluminium" thickness="0.1*cm" />
+                <slice material="Air" thickness="0.2*cm" />
+		<slice material="Radiator" thickness="0.3*cm" />
+		<slice material="Photocathode" thickness="0.000002*cm" />
+		<slice material="PCSupport" thickness="0.000001*cm" />
+		<slice material="PicosecGasDefault" thickness="0.02*cm" sensitive="yes" vis="YokeSensorVis"/>
+		<slice material="Mesh" thickness="0.0008*cm" />
+		<slice material="PicosecGasDefault" thickness="0.0128*cm" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0035*cm" />
+		<slice material="PCB" thickness="0.32*cm" />
+                <slice material="Air" thickness="0.2*cm" />
+                <slice material="Aluminium" thickness="0.1*cm" />
+            </layer>
+		
+	    <layer repeat="1" vis="YokeEndcapLayerVis" rmin="YokeEndcap_inner_radius+YokeEndcapStep_dr">
+                <slice material="Aluminium" thickness="0.1*cm" />
+ 		<slice material="Air" thickness="0.2*cm" />
+		<slice material="PCB" thickness="0.12*cm" />
+		<slice material="Kapton" thickness="0.005*cm" />
+		<slice material="Copper" thickness="0.0035*cm" />
+		<slice material="GEMGasDefault" thickness="0.3*cm" sensitive="yes" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="Kapton" thickness="0.005*cm" />
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="GEMGasDefault" thickness="0.1*cm" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="Kapton" thickness="0.005*cm" />
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="GEMGasDefault" thickness="0.2*cm" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="Kapton" thickness="0.005*cm" />
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="GEMGasDefault" thickness="0.1*cm" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0035*cm" />
+		<slice material="PCB" thickness="0.32*cm" />
+                <slice material="Air" thickness="0.2*cm" />
+                <slice material="Aluminium" thickness="0.1*cm" />
+            </layer>
+
+            <layer repeat="1" vis="YokeEndcapLayerVis" rmin="YokeEndcap_inner_radius+YokeEndcapStep_dr*2.0">
+                <slice material="Iron" thickness="19.7*cm"  vis="YokeAbsorberVis" radiator="yes"/>
+                <slice material="Aluminium" thickness="0.1*cm" />
+ 		<slice material="Air" thickness="0.5*cm" />
+		<slice material="PCB" thickness="0.12*cm" />
+		<slice material="Kapton" thickness="0.005*cm" />
+		<slice material="Copper" thickness="0.0035*cm" />
+		<slice material="GEMGasDefault" thickness="0.3*cm" sensitive="yes" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="Kapton" thickness="0.005*cm" />
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="GEMGasDefault" thickness="0.1*cm" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="Kapton" thickness="0.005*cm" />
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="GEMGasDefault" thickness="0.2*cm" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="Kapton" thickness="0.005*cm" />
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="GEMGasDefault" thickness="0.1*cm" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0035*cm" />
+		<slice material="PCB" thickness="0.32*cm" />
+                <slice material="Air" thickness="1.13*cm" />
+                <slice material="Aluminium" thickness="0.1*cm" />
+            </layer>
+
+            <layer repeat="1" vis="YokeEndcapLayerVis" rmin="YokeEndcap_inner_radius+YokeEndcapStep_dr*3.0">
+                <slice material="Iron" thickness="19.7*cm"  vis="YokeAbsorberVis" radiator="yes"/>
+                <slice material="Aluminium" thickness="0.1*cm" />
+ 		<slice material="Air" thickness="0.5*cm" />
+		<slice material="PCB" thickness="0.12*cm" />
+		<slice material="Kapton" thickness="0.005*cm" />
+		<slice material="Copper" thickness="0.0035*cm" />
+		<slice material="GEMGasDefault" thickness="0.3*cm" sensitive="yes" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="Kapton" thickness="0.005*cm" />
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="GEMGasDefault" thickness="0.1*cm" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="Kapton" thickness="0.005*cm" />
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="GEMGasDefault" thickness="0.2*cm" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="Kapton" thickness="0.005*cm" />
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="GEMGasDefault" thickness="0.1*cm" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0035*cm" />
+		<slice material="PCB" thickness="0.32*cm" />
+                <slice material="Air" thickness="1.13*cm" />
+                <slice material="Aluminium" thickness="0.1*cm" />
+            </layer>
+
+            <layer repeat="1" vis="YokeEndcapLayerVis" rmin="YokeEndcap_inner_radius+YokeEndcapStep_dr*4.0">
+                <slice material="Iron" thickness="19.7*cm"  vis="YokeAbsorberVis" radiator="yes"/>
+                <slice material="Aluminium" thickness="0.1*cm" />
+ 		<slice material="Air" thickness="0.5*cm" />
+		<slice material="PCB" thickness="0.12*cm" />
+		<slice material="Kapton" thickness="0.005*cm" />
+		<slice material="Copper" thickness="0.0035*cm" />
+		<slice material="GEMGasDefault" thickness="0.3*cm" sensitive="yes" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="Kapton" thickness="0.005*cm" />
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="GEMGasDefault" thickness="0.1*cm" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="Kapton" thickness="0.005*cm" />
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="GEMGasDefault" thickness="0.2*cm" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="Kapton" thickness="0.005*cm" />
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="GEMGasDefault" thickness="0.1*cm" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0035*cm" />
+		<slice material="PCB" thickness="0.32*cm" />
+                <slice material="Air" thickness="1.13*cm" />
+                <slice material="Aluminium" thickness="0.1*cm" />
+            </layer>
+
+            <layer repeat="1" vis="YokeEndcapLayerVis" rmin="YokeEndcap_inner_radius+YokeEndcapStep_dr*5.0">
+                <slice material="Iron" thickness="19.7*cm"  vis="YokeAbsorberVis" radiator="yes"/>
+                <slice material="Aluminium" thickness="0.1*cm" />
+ 		<slice material="Air" thickness="0.5*cm" />
+		<slice material="PCB" thickness="0.12*cm" />
+		<slice material="Kapton" thickness="0.005*cm" />
+		<slice material="Copper" thickness="0.0035*cm" />
+		<slice material="GEMGasDefault" thickness="0.3*cm" sensitive="yes" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="Kapton" thickness="0.005*cm" />
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="GEMGasDefault" thickness="0.1*cm" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="Kapton" thickness="0.005*cm" />
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="GEMGasDefault" thickness="0.2*cm" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="Kapton" thickness="0.005*cm" />
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="GEMGasDefault" thickness="0.1*cm" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0035*cm" />
+		<slice material="PCB" thickness="0.32*cm" />
+                <slice material="Air" thickness="1.13*cm" />
+                <slice material="Aluminium" thickness="0.1*cm" />
+            </layer>
+
+            <layer repeat="1" vis="YokeEndcapLayerVis" rmin="YokeEndcap_inner_radius+YokeEndcapStep_dr*6.0">
+                <slice material="Iron" thickness="19.7*cm"  vis="YokeAbsorberVis" radiator="yes"/>
+                <slice material="Aluminium" thickness="0.1*cm" />
+ 		<slice material="Air" thickness="0.5*cm" />
+		<slice material="PCB" thickness="0.12*cm" />
+		<slice material="Kapton" thickness="0.005*cm" />
+		<slice material="Copper" thickness="0.0035*cm" />
+		<slice material="GEMGasDefault" thickness="0.3*cm" sensitive="yes" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="Kapton" thickness="0.005*cm" />
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="GEMGasDefault" thickness="0.1*cm" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="Kapton" thickness="0.005*cm" />
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="GEMGasDefault" thickness="0.2*cm" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="Kapton" thickness="0.005*cm" />
+		<slice material="Copper" thickness="0.0005*cm" />
+		<slice material="GEMGasDefault" thickness="0.1*cm" vis="YokeSensorVis"/>
+		<slice material="Copper" thickness="0.0035*cm" />
+		<slice material="PCB" thickness="0.32*cm" />
+                <slice material="Air" thickness="1.13*cm" />
+                <slice material="Aluminium" thickness="0.1*cm" />
+            </layer>
+
+            <layer repeat="1" vis="YokeEndcapLayerVis" rmin="YokeEndcap_inner_radius2">
+                <slice material="Iron" thickness="9.8*cm"  vis="YokeAbsorberVis" radiator="yes"/>
+            </layer>
+        </detector>
+        
+    </detectors>
+    
+    
+    
+    
+    
+    
+    
+</lccdd>
+
+
