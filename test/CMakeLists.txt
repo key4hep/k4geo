@@ -206,6 +206,15 @@ ADD_TEST( t_SensThickness_CLIC_o3_v15 "${CMAKE_INSTALL_PREFIX}/bin/run_test_${Pa
           ${CMAKE_INSTALL_PREFIX}/bin/TestSensThickness ${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o3_v15/CLIC_o3_v15.xml 100 50 )
 
 #--------------------------------------------------
+# Tests for MuonCollider geometries
+#--------------------------------------------------
+SET( test_name "test_MAIA_v0_run" )
+ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
+  ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MAIA/compact/MAIA_v0/MAIA_v0.xml --runType=batch -G -N=1 --outputFile=test_MAIA_v0.edm4hep.root
+)
+SET_TEST_ENV(${test_name})
+
+#--------------------------------------------------
 # check if files named the same contain the same in FCCee
 ADD_TEST(
     NAME t_test_files_versions_FCCee
