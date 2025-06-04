@@ -33,9 +33,10 @@
     <constant name="DetID_SiWr_Barrel"            value=" 23"/>
     <constant name="DetID_SiWr_Disks"             value=" 24"/>
 
-    <constant name="DetID_Calo_Barrel"            value=" 4"/>
-    <constant name="DetID_Calo_Endcap"            value=" 5"/>
-    <constant name="DetID_Calo_Endcap_2"          value=" 6"/>
+    <constant name="DetID_ECAL_Barrel"            value=" 4"/>
+    <constant name="DetID_ECAL_Endcap"            value=" 5"/>
+    <constant name="DetID_Timing_Barrel"          value=" 6"/>
+    <constant name="DetID_Timing_Endcap"          value=" 7"/>
 
     <constant name="DetID_HCAL_Barrel"            value=" 10"/>
     <constant name="DetID_HCAL_Endcap"            value=" 11"/>
@@ -213,6 +214,23 @@
 
     <constant name="tracker_region_zmax" value="DCH_half_length_total"/>
     <constant name="tracker_region_rmax" value="DCH_outer_cyl_R_total"/>
+
+    <!-- SCEPCal dimensions (Wonyong Chung) -->
+    <constant name="scepcal_barrel_half_z" value="2.45*m"/>
+    <constant name="scepcal_barrel_inner_r" value="2.25*m"/>
+    <constant name="scepcal_phi_segments" value="128"/>
+    <constant name="scepcal_beampipe_opening" value="45*cm"/>
+    <constant name="scepcal_projective_offset_r" value="10*cm"/>
+    <constant name="scepcal_projective_offset_x" value="10*cm"/>
+    <constant name="scepcal_xtal_theta_width" value="1*cm"/>
+    <constant name="scepcal_xtal_divisions_f" value="1"/>
+    <constant name="scepcal_xtal_divisions_r" value="1"/>
+    <constant name="scepcal_xtal_length_f" value="5*cm"/>
+    <constant name="scepcal_xtal_length_r" value="15*cm"/>
+    <constant name="scepcal_mainlayer_reargap" value="1*cm"/>
+    <constant name="scepcal_timinglayer_gap" value="1*cm"/>
+    <constant name="scepcal_timing_xtal_depth" value="5*mm"/>
+    <constant name="scepcal_timing_xtal_length" value="10*cm"/>
 
     <!-- Dual-Readout Endcap Tubes (DRET) calorimeter dimensions-->
     <constant name="DRETinnerRadius" value="2.8*m"/>
