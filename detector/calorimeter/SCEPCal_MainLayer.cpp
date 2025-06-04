@@ -82,7 +82,7 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
   int           N_GAMMA_BARREL           =std::max(int(2*M_PI*BARREL_INNER_R/(PHI_SEGMENTS*XTAL_TH_WIDTH)),1);
   double        D_GAMMA_BARREL           =D_PHI_GLOBAL/N_GAMMA_BARREL;
 
-  XYZVector      DISP_PROJ_R              (-PROJ_OFFSET_R,0,0);
+  XYZVector     DISP_PROJ_R              (-PROJ_OFFSET_R,0,0);
   int           ENDCAP_THETA_START       =0;
 
   for (int iTheta=0; iTheta<N_THETA_ENDCAP; iTheta++) {
@@ -432,7 +432,7 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
 
             double rGlobal=r0e+XTAL_LEN_F/2;
             XYZVector dispGlobal(-center[1],center[0],rGlobal);
-            XYZVector posGlobal=(rotZphiGlobal*(rotYthGlobal*dispGlobal+DISP_PROJ_R))/dd4hep::mm;
+            XYZVector posGlobal=(rotZphiGlobal*(rotYthGlobal*dispGlobal+DISP_PROJ_R));
 
             CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
               "BarrelCrystalF", XTAL_LEN_F/2, vFsub, crystalFXML,
@@ -456,7 +456,7 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
 
             double rGlobal=r0e+XTAL_LEN_F+XTAL_LEN_R/2;
             XYZVector dispGlobal(-center[1],center[0],rGlobal);
-            XYZVector posGlobal=(rotZphiGlobal*(rotYthGlobal*dispGlobal+DISP_PROJ_R))/dd4hep::mm;
+            XYZVector posGlobal=(rotZphiGlobal*(rotYthGlobal*dispGlobal+DISP_PROJ_R));
 
             CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
               "BarrelCrystalR", XTAL_LEN_R/2, vRsub, crystalRXML,
@@ -607,7 +607,7 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
               
             double rGlobal=r0e+XTAL_LEN_F/2;
             XYZVector dispGlobal(-center[1],center[0],rGlobal);
-            XYZVector posGlobal=(rotZphiGlobal*(rotYthGlobal*dispGlobal+DISP_PROJ_R))/dd4hep::mm;
+            XYZVector posGlobal=(rotZphiGlobal*(rotYthGlobal*dispGlobal+DISP_PROJ_R));
 
             CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
               "EndcapCrystalF", XTAL_LEN_F/2, vFsub, crystalFXML,
@@ -640,7 +640,7 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
             
             double rGlobal=r0e+XTAL_LEN_F+XTAL_LEN_R/2;
             XYZVector dispGlobal(-center[1],center[0],rGlobal);
-            XYZVector posGlobal=(rotZphiGlobal*(rotYthGlobal*dispGlobal+DISP_PROJ_R))/dd4hep::mm;
+            XYZVector posGlobal=(rotZphiGlobal*(rotYthGlobal*dispGlobal+DISP_PROJ_R));
 
             CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
               "EndcapCrystalR", XTAL_LEN_R/2, vRsub, crystalRXML,

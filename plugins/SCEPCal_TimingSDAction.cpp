@@ -39,16 +39,16 @@ namespace dd4hep {
       dd4hep::Segmentation *_geoSeg=&m_segmentation;
       auto segmentation=dynamic_cast<dd4hep::DDSegmentation::SCEPCal_TimingSegmentation_k4geo *>(_geoSeg->segmentation());
 
-      DDSegmentation::Vector3D pos =segmentation->position(cellID);
-      Position global(pos.x(),pos.y(),pos.z());
-
       G4double edep =step->GetTotalEnergyDeposit();
 
       auto newOrExistingHitIn = [&](std::size_t id) {
         Geant4HitCollection* coll =collection(id);
         auto* hit =coll->findByKey<Geant4Calorimeter::Hit>(cellID);
         if(!hit) {
-          hit =new Geant4Calorimeter::Hit(global);
+          DDSegmentation::Vector3D pos =segmentation->position(cellID);
+          Position global(pos.x(),pos.y(),pos.z());
+
+          hit =new Geant4Calorimeter::Hit(global/dd4hep::mm);
           hit->cellID =cellID;
           coll->add(cellID, hit);
         }
@@ -66,7 +66,6 @@ namespace dd4hep {
           if (creatorProc->GetProcessType() == fOptical) {
             bool isCerenkov      = (creatorProc->GetProcessSubType() == fCerenkov);
             bool isScintillation = (creatorProc->GetProcessSubType() == fScintillation);
-        
         
             if (!isCerenkov && !isScintillation) return true;
 

@@ -35,7 +35,6 @@ SCEPCal_MainSegmentation_k4geo::SCEPCal_MainSegmentation_k4geo(const BitFieldCod
 SCEPCal_MainSegmentation_k4geo::~SCEPCal_MainSegmentation_k4geo() {}
 
 Vector3D SCEPCal_MainSegmentation_k4geo::position(const CellID& cellId) const {
-
     if (fPositionOf.find(cellId) != fPositionOf.end()) {
         return fPositionOf.find(cellId)->second;
     }

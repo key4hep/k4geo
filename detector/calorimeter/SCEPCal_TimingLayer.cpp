@@ -17,7 +17,6 @@ using dd4hep::Transform3D;
 using dd4hep::RotationZYX;
 using ROOT::Math::RotationY;
 using ROOT::Math::RotationZ;
-using dd4hep::Rotation3D;
 using dd4hep::Position;
 using ROOT::Math::XYZVector;
 using namespace dd4hep;
@@ -227,6 +226,7 @@ create_detector_SCEPCal_TimingLayer(dd4hep::Detector &theDetector,xml_h xmlEleme
   dd4hep::PlacedVolume tlendcapAssemblyPlacedVol_1=experimentalHall.placeVolume(tlendcapGlobalAssemblyVol_1);
   tlendcapAssemblyPlacedVol_1.addPhysVolID("system",TLENDCAP_SYSTEM_NO);
   tlendcapAssemblyPlacedVol_1.addPhysVolID("theta",1);
+
   ScepcalDetElement.setPlacement(tlbarrelAssemblyPlacedVol);
 
   // Lambda for crystals
@@ -453,6 +453,7 @@ create_detector_SCEPCal_TimingLayer(dd4hep::Detector &theDetector,xml_h xmlEleme
           TLENDCAP_SYSTEM_NO, iPhi, iTheta, nGamma,
           posGlobal
         );
+        numCrystalsTlEndcap+=1;
 
         CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
           "TlEndcapCrystal_1", XTAL_DEPTH_T/2, verticesT, crystalTXML,
@@ -461,7 +462,7 @@ create_detector_SCEPCal_TimingLayer(dd4hep::Detector &theDetector,xml_h xmlEleme
           TLENDCAP_SYSTEM_NO, iPhi, 2*N_THETA_TLENDCAP+N_THETA_TLBARREL-iTheta, nGamma,
           rotMirror*posGlobal
         );
-        numCrystalsTlEndcap+=2;
+        numCrystalsTlEndcap+=1;
       }
     }
   }
