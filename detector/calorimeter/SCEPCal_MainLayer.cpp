@@ -212,6 +212,7 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
   endcapAssemblyPlacedVol_1.addPhysVolID("system",ENDCAP_SYSTEM_NO);
   endcapAssemblyPlacedVol_1.addPhysVolID("theta",1);
 
+
   ScepcalDetElement.setPlacement(barrelAssemblyPlacedVol);
 
   // Lambda for crystals
@@ -243,6 +244,7 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
       }
 
       theVolume.setSensitiveDetector(sens);
+
       auto volID   =segmentation->setVolumeID(nSystem,nPhi,nTheta,nGamma,nEpsilon,nDepth);
       int  volID_32=segmentation->getFirst32bits(volID);
       dd4hep::PlacedVolume thePlacedVol=assemblyVol.placeVolume(theVolume,volID_32,transform);
@@ -284,7 +286,7 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
 
   auto getSingleCrystalVertices = [&] (
     int i, int j, int xtalDiv,
-    const double *vertices
+    const double *vertices, bool reflected
   ) -> std::array<double, 16> {
     double u0=double(i)  /double(xtalDiv);
     double u1=double(i+1)/double(xtalDiv);
@@ -299,6 +301,10 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
     std::array<double, 16> verticesSub = {P00[0],P00[1],P10[0],P10[1],P11[0],P11[1],P01[0],P01[1],
                                           P00[2],P00[3],P10[2],P10[3],P11[2],P11[3],P01[2],P01[3]};
 
+    std::array<double, 16> verticesSub_1 = {P00[2],P00[3],P10[2],P10[3],P11[2],P11[3],P01[2],P01[3],
+                                            P00[0],P00[1],P10[0],P10[1],P11[0],P11[1],P01[0],P01[1]};
+    
+    if (reflected) return verticesSub_1;
     return verticesSub;
   };
 
@@ -425,7 +431,7 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
           for(int j = 0; j < XTAL_DIV_F; j++) {
             int nEpsilon = i*XTAL_DIV_F+j;
 
-            auto vFsub =getSingleCrystalVertices(i,j,XTAL_DIV_F,verticesF);
+            auto vFsub =getSingleCrystalVertices(i,j,XTAL_DIV_F,verticesF,false);
             auto center=getSingleCrystalCenter(vFsub);
 
             Position dispFsub(0,0,-XTAL_LEN_R/2);
@@ -449,7 +455,7 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
           for(int j = 0; j < XTAL_DIV_R; j++) {
             int nEpsilon = i*XTAL_DIV_R+j;
 
-            auto vRsub =getSingleCrystalVertices(i,j,XTAL_DIV_R,verticesR);
+            auto vRsub =getSingleCrystalVertices(i,j,XTAL_DIV_R,verticesR,false);
             auto center=getSingleCrystalCenter(vRsub);
 
             Position dispRsub(0,0,XTAL_LEN_F/2);
@@ -484,22 +490,23 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
   for (int iPhi=CONSTRUCT_ENDCAP? ENDCAP_PHI_START:ENDCAP_PHI_END;iPhi<ENDCAP_PHI_END;iPhi++) {
     double phiGlobal=iPhi*D_PHI_GLOBAL;
     RotationZ rotZphiGlobal(phiGlobal);
-    RotationY rotMirror(M_PI);
 
     dd4hep::Polyhedra endcapPhiAssemblyShape(1,-D_PHI_GLOBAL/2,D_PHI_GLOBAL,zEndcapPolyhedra,rminEndcapPolyhedra,rmaxEndcapPolyhedra);
+    dd4hep::Polyhedra endcapPhiAssemblyShape_1(1,-D_PHI_GLOBAL/2,D_PHI_GLOBAL,zEndcapPolyhedra_1,rminEndcapPolyhedra_1,rmaxEndcapPolyhedra_1);
     
     dd4hep::Volume endcapPhiAssemblyVolume("endcapPhiVol", endcapPhiAssemblyShape, theDetector.material("Vacuum"));
     endcapPhiAssemblyVolume.setVisAttributes(theDetector,endcapAssemblyPhiVisXML.visStr());
     endcapGlobalAssemblyVol.placeVolume(endcapPhiAssemblyVolume,Transform3D(rotZphiGlobal));
 
-    dd4hep::Volume endcapPhiAssemblyVolume_1("endcapPhiVol_1", endcapPhiAssemblyShape, theDetector.material("Vacuum"));
+    dd4hep::Volume endcapPhiAssemblyVolume_1("endcapPhiVol_1", endcapPhiAssemblyShape_1, theDetector.material("Vacuum"));
     endcapPhiAssemblyVolume_1.setVisAttributes(theDetector,endcapAssemblyPhiVisXML.visStr());
-    endcapGlobalAssemblyVol_1.placeVolume(endcapPhiAssemblyVolume_1,Transform3D(rotMirror*rotZphiGlobal));
+    endcapGlobalAssemblyVol_1.placeVolume(endcapPhiAssemblyVolume_1,Transform3D(rotZphiGlobal));
 
     for (int iTheta=ENDCAP_THETA_START; iTheta<N_THETA_ENDCAP; iTheta++) {
       
       double thC=D_THETA_ENDCAP/2+iTheta*D_THETA_ENDCAP;
       RotationY rotYthGlobal(thC);
+      RotationY rotYthGlobal_1(-thC);
 
       double RinEndcap=(BARREL_HALF_Z)*tan(thC);
 
@@ -534,20 +541,27 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
 
       double verticesE[]={x0y0r_E,y0e,x1y0r_E,-y0e,x1y0l_E,-y0e,x0y0l_E,y0e,
                           x0y2r_E,y2e,x1y2r_E,-y2e,x1y2l_E,-y2e,x0y2l_E,y2e};
+      double verticesE_1[]={x0y2r_E,y2e,x1y2r_E,-y2e,x1y2l_E,-y2e,x0y2l_E,y2e,
+                          x0y0r_E,y0e,x1y0r_E,-y0e,x1y0l_E,-y0e,x0y0l_E,y0e};
 
       double rE=r0e+(XTAL_LEN_F+XTAL_LEN_R)/2.;
+
       RotationZYX rotE(M_PI/2,thC,0);
+      RotationZYX rotE_1(M_PI/2,-thC,0);
+
       Position    dispE(rE*sin(thC)-PROJ_OFFSET_R,0,rE*cos(thC));
+      Position    dispE_1(rE*sin(thC)-PROJ_OFFSET_R,0,-rE*cos(thC));
 
       dd4hep::EightPointSolid endcapThetaAssemblyShape((XTAL_LEN_F+XTAL_LEN_R)/2, verticesE);
+      dd4hep::EightPointSolid endcapThetaAssemblyShape_1((XTAL_LEN_F+XTAL_LEN_R)/2, verticesE_1);
 
       dd4hep::Volume endcapThetaAssemblyVolume("endcapThetaAssembly", endcapThetaAssemblyShape, theDetector.material("Vacuum"));
       endcapThetaAssemblyVolume.setVisAttributes(theDetector,endcapAssemblyThetaVisXML.visStr());
       endcapPhiAssemblyVolume.placeVolume(endcapThetaAssemblyVolume,Transform3D(rotE,dispE));      
 
-      dd4hep::Volume endcapThetaAssemblyVolume_1("endcapThetaAssembly_1", endcapThetaAssemblyShape, theDetector.material("Vacuum"));
+      dd4hep::Volume endcapThetaAssemblyVolume_1("endcapThetaAssembly_1", endcapThetaAssemblyShape_1, theDetector.material("Vacuum"));
       endcapThetaAssemblyVolume_1.setVisAttributes(theDetector,endcapAssemblyThetaVisXML.visStr());
-      endcapPhiAssemblyVolume_1.placeVolume(endcapThetaAssemblyVolume_1,Transform3D(rotE,dispE));   
+      endcapPhiAssemblyVolume_1.placeVolume(endcapThetaAssemblyVolume_1,Transform3D(rotE_1,dispE_1));
 
       for (int nGamma=0;nGamma<nGammaEndcap;nGamma++) {
         double gamma=-D_PHI_GLOBAL/2+dGammaEndcap/2+dGammaEndcap*nGamma;
@@ -600,14 +614,20 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
           for(int j = 0; j < XTAL_DIV_F; j++) {
             int nEpsilon = i*XTAL_DIV_F+j;
 
-            auto vFsub =getSingleCrystalVertices(i,j,XTAL_DIV_F,verticesF);
+            auto vFsub =getSingleCrystalVertices(i,j,XTAL_DIV_F,verticesF,false);
             auto center=getSingleCrystalCenter(vFsub);
-
             Position dispFsub(0,0,-XTAL_LEN_R/2);
+
+            auto vFsub_1 =getSingleCrystalVertices(i,j,XTAL_DIV_F,verticesF,true);
+            auto center_1=getSingleCrystalCenter(vFsub_1);
+            Position dispFsub_1(0,0,XTAL_LEN_R/2);
               
             double rGlobal=r0e+XTAL_LEN_F/2;
             XYZVector dispGlobal(-center[1],center[0],rGlobal);
             XYZVector posGlobal=(rotZphiGlobal*(rotYthGlobal*dispGlobal+DISP_PROJ_R));
+
+            XYZVector dispGlobal_1(-center_1[1],center_1[0],-rGlobal);
+            XYZVector posGlobal_1=(rotZphiGlobal*(rotYthGlobal_1*dispGlobal_1+DISP_PROJ_R));
 
             CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
               "EndcapCrystalF", XTAL_LEN_F/2, vFsub, crystalFXML,
@@ -619,11 +639,11 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
             numCrystalsEndcap+=1;
 
             CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
-              "EndcapCrystalF_1", XTAL_LEN_F/2, vFsub, crystalFXML,
-              Transform3D(dispFsub),
+                "EndcapCrystalF_1", XTAL_LEN_F/2, vFsub_1, crystalFXML,
+                Transform3D(dispFsub_1),
               endcapThetaAssemblyVolume_1,
               ENDCAP_SYSTEM_NO, iPhi, 2*N_THETA_ENDCAP+N_THETA_BARREL-iTheta, nGamma, nEpsilon, 0,
-              rotMirror*posGlobal
+                posGlobal_1
             );
             numCrystalsEndcap+=1; 
           }
@@ -633,14 +653,20 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
           for(int j = 0; j < XTAL_DIV_R; j++) {
             int nEpsilon = i*XTAL_DIV_R+j;
 
-            auto vRsub =getSingleCrystalVertices(i,j,XTAL_DIV_R,verticesR);
+            auto vRsub =getSingleCrystalVertices(i,j,XTAL_DIV_R,verticesR,false);
             auto center=getSingleCrystalCenter(vRsub);
-
             Position dispRsub(0,0,XTAL_LEN_F/2);
+
+            auto vRsub_1 =getSingleCrystalVertices(i,j,XTAL_DIV_R,verticesR,true);
+            auto center_1=getSingleCrystalCenter(vRsub_1);
+            Position dispRsub_1(0,0,-XTAL_LEN_F/2);
             
             double rGlobal=r0e+XTAL_LEN_F+XTAL_LEN_R/2;
             XYZVector dispGlobal(-center[1],center[0],rGlobal);
             XYZVector posGlobal=(rotZphiGlobal*(rotYthGlobal*dispGlobal+DISP_PROJ_R));
+
+            XYZVector dispGlobal_1(-center_1[1],center_1[0],-rGlobal);
+            XYZVector posGlobal_1=(rotZphiGlobal*(rotYthGlobal_1*dispGlobal_1+DISP_PROJ_R));
 
             CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
               "EndcapCrystalR", XTAL_LEN_R/2, vRsub, crystalRXML,
@@ -652,11 +678,11 @@ create_detector_SCEPCal_MainLayer(dd4hep::Detector &theDetector,xml_h xmlElement
             numCrystalsEndcap+=1;
             
             CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
-              "EndcapCrystalR_1", XTAL_LEN_R/2, vRsub, crystalRXML,
-              Transform3D(dispRsub),
+                "EndcapCrystalR_1", XTAL_LEN_R/2, vRsub_1, crystalRXML,
+                Transform3D(dispRsub_1),
               endcapThetaAssemblyVolume_1,
               ENDCAP_SYSTEM_NO, iPhi, 2*N_THETA_ENDCAP+N_THETA_BARREL-iTheta, nGamma, nEpsilon, 1,
-              rotMirror*posGlobal
+                posGlobal_1
             );
             numCrystalsEndcap+=1;
           }

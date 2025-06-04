@@ -69,4 +69,4 @@ This folder containes the subdetectors (endcap + barrel) to make a full 4-pi fib
 ## Segmented Crystal ECAL (SCEPCal)
 
 ### o1_v01
-Introduced the segmented crystal ECAL with timing layer. The main crystals in the segmented layer can be configured in towers with varying front/rear granularities, see https://github.com/wonyongc/SCEPCal for images. The main layer is pseudo-projective with a controllable pointing offset from the IP. The timing layer is pure-projective. The main layer of segmented crystals and timing layer are implemented as separate subdetectors.
+Introduced the segmented crystal ECAL with timing layer. The main crystals in the segmented layer can be configured in towers with varying front/rear granularities, see https://github.com/wonyongc/SCEPCal for images and a more thorough readme. The main layer is pseudo-projective with a controllable pointing offset from the IP. The timing layer is pure-projective. The main layer of segmented crystals and timing layer are implemented as separate subdetectors.

@@ -1092,7 +1092,7 @@
 
   <detectors>
 
-    <detector id="4"
+    <detector id="DetID_ECAL_Barrel"
               name="SCEPCal_MainLayer"
               type="SCEPCal_MainLayer" 
               readout="SCEPCal_Main"
@@ -1122,8 +1122,8 @@
               useOpticalSurfaces="false"
       />
 
-      <barrel    system="4" construct="true"/>
-      <endcap    system="5" construct="true"/>
+      <barrel    system="DetID_ECAL_Barrel" construct="true"/>
+      <endcap    system="DetID_ECAL_Endcap" construct="true"/>
 
       <crystalF  material="PbWO"          vis="crystalFVis"/>
       <crystalR  material="PbWO"          vis="crystalRVis"/>
@@ -1139,7 +1139,7 @@
       <scepcalAssemblyGlobalVis vis="scepcalAssemblyGlobalVis"/>
     </detector>
 
-    <detector id="6"
+    <detector id="DetID_Timing_Barrel"
               name="SCEPCal_TimingLayer"
               type="SCEPCal_TimingLayer" 
               readout="SCEPCal_Timing"
@@ -1164,8 +1164,8 @@
               useOpticalSurfaces="false"
       />
 
-      <tlbarrel  system="6" construct="false"/>
-      <tlendcap  system="7" construct="false"/>
+      <tlbarrel  system="DetID_Timing_Barrel" construct="true"/>
+      <tlendcap  system="DetID_Timing_Endcap" construct="true"/>
 
       <crystalT  material="LYSO"          vis="crystalTVis"/>
 
