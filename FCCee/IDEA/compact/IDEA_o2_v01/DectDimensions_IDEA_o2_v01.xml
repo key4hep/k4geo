@@ -33,9 +33,10 @@
     <constant name="DetID_SiWr_Barrel"            value=" 23"/>
     <constant name="DetID_SiWr_Disks"             value=" 24"/>
 
-    <constant name="DetID_Calo_Barrel"            value=" 4"/>
-    <constant name="DetID_Calo_Endcap"            value=" 5"/>
-    <constant name="DetID_Calo_Endcap_2"          value=" 6"/>
+    <constant name="DetID_ECAL_Barrel"            value=" 4"/>
+    <constant name="DetID_ECAL_Endcap"            value=" 5"/>
+    <constant name="DetID_Timing_Barrel"          value=" 6"/>
+    <constant name="DetID_Timing_Endcap"          value=" 7"/>
 
     <constant name="DetID_HCAL_Barrel"            value=" 10"/>
     <constant name="DetID_HCAL_Endcap"            value=" 11"/>

@@ -61,21 +61,16 @@ namespace dd4hep {
 
       // Scintillation and Cerenkov hits
       if(track->GetDefinition()==G4OpticalPhoton::OpticalPhotonDefinition()) {
-        auto* creatorProc =track->GetCreatorProcess();
-        if (creatorProc) {
-          if (creatorProc->GetProcessType() == fOptical) {
-            bool isCerenkov      = (creatorProc->GetProcessSubType() == fCerenkov);
-            bool isScintillation = (creatorProc->GetProcessSubType() == fScintillation);
-        
-            if (!isCerenkov && !isScintillation) return true;
+        auto procName =track->GetCreatorProcess()->GetProcessName();
+        bool isCerenkov       =(procName =="CerenkovPhys");
+        bool isScintillation  =(procName =="ScintillationPhys");
+        if (!isCerenkov && !isScintillation) return true;
 
-            if (track->GetCurrentStepNumber()==1) {
-              auto* hitSC =newOrExistingHitIn(isScintillation? m_userData.m_collectionID_scint:
-                                                              m_userData.m_collectionID_ceren);
-              hitSC->energyDeposit+=1/dd4hep::MeV;
-              track->SetTrackStatus(fStopAndKill);
-            }
-          }
+        if (track->GetCurrentStepNumber()==1) {
+          auto* hitSC =newOrExistingHitIn(isScintillation? m_userData.m_collectionID_scint:
+                                                           m_userData.m_collectionID_ceren);
+          hitSC->energyDeposit+=1/dd4hep::MeV;
+          track->SetTrackStatus(fStopAndKill);
         }
       }
       return true;

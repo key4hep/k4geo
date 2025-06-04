@@ -6,6 +6,8 @@
 #include <climits>
 #include <cmath>
 #include <stdexcept>
+#include "DD4hep/Printout.h"
+
 
 namespace dd4hep {
 namespace DDSegmentation {
@@ -35,7 +37,8 @@ Vector3D SCEPCal_TimingSegmentation_k4geo::position(const CellID& cellId) const 
         return fPositionOf.find(cellId)->second;
     }
 
-    return Vector3D(0,0,0);
+    dd4hep::printout(dd4hep::WARNING, "SCEPCal_TimingSegmentation_k4geo::position",
+        "cellID %lld not found, returning (0,0,0)!", cellId);    return Vector3D(0,0,0);
 }
 }
 }

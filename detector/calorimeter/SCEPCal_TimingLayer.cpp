@@ -258,6 +258,7 @@ create_detector_SCEPCal_TimingLayer(dd4hep::Detector &theDetector,xml_h xmlEleme
       }
 
       theVolume.setSensitiveDetector(sens);
+
       auto volID   =segmentation->setVolumeID(nSystem,nPhi,nTheta,nGamma);
       int  volID_32=segmentation->getFirst32bits(volID);
       dd4hep::PlacedVolume thePlacedVol=assemblyVol.placeVolume(theVolume,volID_32,transform);
@@ -343,7 +344,7 @@ create_detector_SCEPCal_TimingLayer(dd4hep::Detector &theDetector,xml_h xmlEleme
         Position dispT(0,0,0);
 
         XYZVector dispGlobal(rE*sin(thC),rE*sin(thC)*tan(gamma),rE*cos(thC));
-        XYZVector posGlobal=(rotZphiGlobal*dispGlobal)/dd4hep::mm;
+        XYZVector posGlobal=(rotZphiGlobal*dispGlobal);
 
         CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
           "TimingCrystal", XTAL_DEPTH_T/2, verticesT, crystalTXML,
@@ -367,17 +368,17 @@ create_detector_SCEPCal_TimingLayer(dd4hep::Detector &theDetector,xml_h xmlEleme
   for (int iPhi=CONSTRUCT_TLENDCAP? TLENDCAP_PHI_START:TLENDCAP_PHI_END;iPhi<TLENDCAP_PHI_END;iPhi++) {
     double phiGlobal=iPhi*D_PHI_GLOBAL;
     RotationZ rotZphiGlobal(phiGlobal);
-    RotationY rotMirror(M_PI);
 
     dd4hep::Polyhedra tlendcapPhiAssemblyShape(1,-D_PHI_GLOBAL/2,D_PHI_GLOBAL,zTlEndcapPolyhedra,rminTlEndcapPolyhedra,rmaxTlEndcapPolyhedra);
+    dd4hep::Polyhedra tlendcapPhiAssemblyShape_1(1,-D_PHI_GLOBAL/2,D_PHI_GLOBAL,zTlEndcapPolyhedra_1,rminTlEndcapPolyhedra_1,rmaxTlEndcapPolyhedra_1);
     
     dd4hep::Volume tlendcapPhiAssemblyVolume("tlendcapPhiVol", tlendcapPhiAssemblyShape, theDetector.material("Vacuum"));
     tlendcapPhiAssemblyVolume.setVisAttributes(theDetector,tlendcapAssemblyPhiVisXML.visStr());
     tlendcapGlobalAssemblyVol.placeVolume(tlendcapPhiAssemblyVolume,Transform3D(rotZphiGlobal));
 
-    dd4hep::Volume tlendcapPhiAssemblyVolume_1("tlendcapPhiVol_1", tlendcapPhiAssemblyShape, theDetector.material("Vacuum"));
+    dd4hep::Volume tlendcapPhiAssemblyVolume_1("tlendcapPhiVol_1", tlendcapPhiAssemblyShape_1, theDetector.material("Vacuum"));
     tlendcapPhiAssemblyVolume_1.setVisAttributes(theDetector,tlendcapAssemblyPhiVisXML.visStr());
-    tlendcapGlobalAssemblyVol_1.placeVolume(tlendcapPhiAssemblyVolume_1,Transform3D(rotMirror*rotZphiGlobal));
+    tlendcapGlobalAssemblyVol_1.placeVolume(tlendcapPhiAssemblyVolume_1,Transform3D(rotZphiGlobal));
 
     for (int iTheta=TLENDCAP_THETA_START; iTheta<N_THETA_TLENDCAP; iTheta++) {
       
@@ -410,20 +411,27 @@ create_detector_SCEPCal_TimingLayer(dd4hep::Detector &theDetector,xml_h xmlEleme
 
       double verticesE[]={x0y0r_E,y0e,x1y0r_E,-y0e,x1y0l_E,-y0e,x0y0l_E,y0e,
                           x0y2r_E,y2e,x1y2r_E,-y2e,x1y2l_E,-y2e,x0y2l_E,y2e};
+      double verticesE_1[]={x0y2r_E,y2e,x1y2r_E,-y2e,x1y2l_E,-y2e,x0y2l_E,y2e,
+                            x0y0r_E,y0e,x1y0r_E,-y0e,x1y0l_E,-y0e,x0y0l_E,y0e};
 
       double rE=r0e+XTAL_DEPTH_T/2.;
+
       RotationZYX rotE(M_PI/2,thC,0);
+      RotationZYX rotE_1(M_PI/2,-thC,0);
+
       Position    dispE(rE*sin(thC),0,rE*cos(thC));
+      Position    dispE_1(rE*sin(thC),0,-rE*cos(thC));
 
       dd4hep::EightPointSolid tlendcapThetaAssemblyShape(XTAL_DEPTH_T/2, verticesE);
+      dd4hep::EightPointSolid tlendcapThetaAssemblyShape_1(XTAL_DEPTH_T/2, verticesE_1);
 
       dd4hep::Volume tlendcapThetaAssemblyVolume("tlendcapThetaAssembly", tlendcapThetaAssemblyShape, theDetector.material("Vacuum"));
       tlendcapThetaAssemblyVolume.setVisAttributes(theDetector,tlendcapAssemblyThetaVisXML.visStr());
       tlendcapPhiAssemblyVolume.placeVolume(tlendcapThetaAssemblyVolume,Transform3D(rotE,dispE));      
 
-      dd4hep::Volume tlendcapThetaAssemblyVolume_1("tlendcapThetaAssembly_1", tlendcapThetaAssemblyShape, theDetector.material("Vacuum"));
+      dd4hep::Volume tlendcapThetaAssemblyVolume_1("tlendcapThetaAssembly_1", tlendcapThetaAssemblyShape_1, theDetector.material("Vacuum"));
       tlendcapThetaAssemblyVolume_1.setVisAttributes(theDetector,tlendcapAssemblyThetaVisXML.visStr());
-      tlendcapPhiAssemblyVolume_1.placeVolume(tlendcapThetaAssemblyVolume_1,Transform3D(rotE,dispE));   
+      tlendcapPhiAssemblyVolume_1.placeVolume(tlendcapThetaAssemblyVolume_1,Transform3D(rotE_1,dispE_1));   
 
       for (int nGamma=0;nGamma<nGammaEndcap;nGamma++) {
         double gamma=-D_PHI_GLOBAL/2+dGammaEndcap/2+dGammaEndcap*nGamma;
@@ -440,11 +448,16 @@ create_detector_SCEPCal_TimingLayer(dd4hep::Detector &theDetector,xml_h xmlEleme
 
         double verticesT[]={x0y0r,y0e,x1y0r,-y0e,x1y0l,-y0e,x0y0l,y0e,
                             x0y2r,y2e,x1y2r,-y2e,x1y2l,-y2e,x0y2l,y2e};
+        double verticesT_1[]={x0y2r,y2e,x1y2r,-y2e,x1y2l,-y2e,x0y2l,y2e,
+                              x0y0r,y0e,x1y0r,-y0e,x1y0l,-y0e,x0y0l,y0e};
 
         Position dispT(0,0,0);
 
         XYZVector dispGlobal(rE*sin(thC),rE*sin(thC)*tan(gamma),rE*cos(thC));
-        XYZVector posGlobal=(rotZphiGlobal*dispGlobal)/dd4hep::mm;
+        XYZVector posGlobal=(rotZphiGlobal*dispGlobal);
+
+        XYZVector dispGlobal_1(rE*sin(thC),rE*sin(thC)*tan(gamma),-rE*cos(thC));
+        XYZVector posGlobal_1=(rotZphiGlobal*dispGlobal_1);
 
         CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
           "TlEndcapCrystal", XTAL_DEPTH_T/2, verticesT, crystalTXML,
@@ -456,11 +469,11 @@ create_detector_SCEPCal_TimingLayer(dd4hep::Detector &theDetector,xml_h xmlEleme
         numCrystalsTlEndcap+=1;
 
         CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
-          "TlEndcapCrystal_1", XTAL_DEPTH_T/2, verticesT, crystalTXML,
+            "TlEndcapCrystal_1", XTAL_DEPTH_T/2, verticesT_1, crystalTXML,
           Transform3D(dispT),
           tlendcapThetaAssemblyVolume_1,
           TLENDCAP_SYSTEM_NO, iPhi, 2*N_THETA_TLENDCAP+N_THETA_TLBARREL-iTheta, nGamma,
-          rotMirror*posGlobal
+            posGlobal_1
         );
         numCrystalsTlEndcap+=1;
       }
