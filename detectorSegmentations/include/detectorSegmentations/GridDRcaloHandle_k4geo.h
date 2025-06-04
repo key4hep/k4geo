@@ -46,12 +46,16 @@ public:
     return access()->implementation->cellID(local, global, volID);
   }
 
-  inline VolumeID setVolumeID(int numEta, int numPhi) const {
-    return access()->implementation->setVolumeID(numEta, numPhi);
+  inline VolumeID setVolumeID(int systemId, int numEta, int numPhi) const {
+    return access()->implementation->setVolumeID(systemId, numEta, numPhi);
   }
-  inline CellID setCellID(int numEta, int numPhi, int x, int y) const {
-    return access()->implementation->setCellID(numEta, numPhi, x, y);
+  inline CellID setCellID(bool isRHS, int systemId, int numEta, int numPhi, int x, int y) const {
+    return access()->implementation->setCellID(isRHS, systemId, numEta, numPhi, x, y);
   }
+
+  inline void neighbours(const CellID& cellID, std::set<CellID>& neighbours) const {
+    return access()->implementation->neighbours(cellID, neighbours);
+  };
 
   inline void setGridSize(double grid) { access()->implementation->setGridSize(grid); }
 
@@ -72,6 +76,7 @@ public:
 
   inline bool IsTower(const CellID& aCellID) const { return access()->implementation->IsTower(aCellID); }
   inline bool IsSiPM(const CellID& aCellID) const { return access()->implementation->IsSiPM(aCellID); }
+  inline bool IsRHS(const CellID& aCellID) const { return access()->implementation->IsRHS(aCellID); }
 
   inline int getFirst32bits(const CellID& aCellID) const { return access()->implementation->getFirst32bits(aCellID); }
   inline int getLast32bits(const CellID& aCellID) const { return access()->implementation->getLast32bits(aCellID); }

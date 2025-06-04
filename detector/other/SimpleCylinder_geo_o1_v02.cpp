@@ -1,17 +1,12 @@
 #include "DD4hep/DetFactoryHelper.h"
+#include "DD4hep/Printout.h"
 #include "DDRec/MaterialManager.h"
 #include "DDRec/Vector3D.h"
 #include "XML/Utilities.h"
+#include "detectorSegmentations/FCCSWGridPhiTheta_k4geo.h"
 #include <DDRec/DetectorData.h>
-using dd4hep::_toString;
 
-#define endmsg std::endl
-#define lLog std::cout
-namespace MSG {
-const std::string ERROR = "createSimpleCylinder   ERROR  ";
-const std::string DEBUG = "createSimpleCylinder   DEBUG  ";
-const std::string INFO = "createSimpleCylinder   INFO   ";
-} // namespace MSG
+using dd4hep::_toString;
 
 namespace det {
 /**
@@ -44,11 +39,11 @@ static dd4hep::Ref_t createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4he
     }
     layersTotalDepth += layer.repeat() * layer.thickness();
   }
-  lLog << MSG::DEBUG << "Number of layers: " << nLayers << endmsg;
-  lLog << MSG::DEBUG << "Total thickness from sum of layers in xml description (cm): " << layersTotalDepth / dd4hep::cm
-       << endmsg;
-  lLog << MSG::INFO << "Ignoring layer thickness from xml description, assuming all layers have same thickness"
-       << endmsg;
+  dd4hep::printout(dd4hep::INFO, "SimpleCylinder_o1_v02", "Number of layers: %d", nLayers);
+  dd4hep::printout(dd4hep::INFO, "SimpleCylinder_o1_v02",
+                   "Total thickness from sum of layers in xml description (cm): %f", layersTotalDepth / dd4hep::cm);
+  dd4hep::printout(dd4hep::INFO, "SimpleCylinder_o1_v02",
+                   "Ignoring layer thickness from xml description, assuming all layers have same thickness");
 
   // create the mother Detector element to be returned at the end
   dd4hep::DetElement detMaster(name, detID);
@@ -103,11 +98,12 @@ static dd4hep::Ref_t createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4he
 
       // segment the endcap into layers
       double dzLayer = cylinderDim.dz() * 2.0 / nLayers;
-      lLog << MSG::DEBUG << "dZ of each layer : " << dzLayer << endmsg;
+      dd4hep::printout(dd4hep::DEBUG, "SimpleCylinder_o1_v02", "dZ of each layer : %f", dzLayer);
       for (int iLayer = 0; iLayer < nLayers; iLayer++) {
         // calculate z extent
         double zMiddle = -cylinderDim.dz() + dzLayer / 2.0 + iLayer * dzLayer;
-        lLog << MSG::DEBUG << "Layer : " << iLayer << " , z offset wrt center of detector : " << zMiddle << endmsg;
+        dd4hep::printout(dd4hep::DEBUG, "SimpleCylinder_o1_v02", "Layer : %d , z offset wrt center of detector : %f",
+                         iLayer, zMiddle);
 
         // create detector element as daughter of endcap
         dd4hep::DetElement layer(endcap);
@@ -154,10 +150,23 @@ static dd4hep::Ref_t createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4he
     caloData->extent[3] = zmax;
     caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::EndcapLayout;
 
+    // retrieve handle to segmentation, needed to get cell sizes
+    dd4hep::Segmentation segHandle = sensDet.readout().segmentation();
+    // try to retrieve segmentation itself so that we can order cell size as desired by pandora
+    // if we do not want this, then we'll have to handle it elsewhere i.e. when creating pandora's calo hits
+    // in DDMarlinPandora
+    dd4hep::DDSegmentation::FCCSWGridPhiTheta_k4geo* seg =
+        dynamic_cast<dd4hep::DDSegmentation::FCCSWGridPhiTheta_k4geo*>(segHandle.segmentation());
+    if (seg) {
+      dd4hep::printout(dd4hep::DEBUG, "SimpleCylinder_o1_v02", "Segmentation is of type FCCSWGridPhiTheta");
+    }
+
     dd4hep::rec::LayeredCalorimeterData::Layer caloLayer;
     double dzLayer = cylinderDim.dz() * 2.0 / nLayers;
     auto mat = lcdd.material(cylinderDim.materialStr());
+    dd4hep::printout(dd4hep::INFO, "SimpleCylinder_o1_v02", "Layer structure information:");
     for (int idxLayer = 0; idxLayer < nLayers; ++idxLayer) {
+      dd4hep::printout(dd4hep::INFO, "SimpleCylinder_o1_v02", "  Layer %d", idxLayer);
       double zIn = zmin + idxLayer * dzLayer;
       // double zOut = zIn + dzLayer;
 
@@ -179,12 +188,24 @@ static dd4hep::Ref_t createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4he
       caloLayer.outer_nInteractionLengths =
           caloLayer.outer_thickness / mat.intLength(); // absorber material behind sensitive element in layer
 
-      // FIXME! we should get the latter from segmentation class but requires also to set
-      // the cell geometry to pointing in theta-phi, which does not exist yet in Pandora
-      // For the moment, we use an approximation of fixed-size cells with reasonable numbers
-      // so that we can make Pandora run and then we can fix all the missing/outdated pieces
-      caloLayer.cellSize0 = 40 * dd4hep::mm; // 0.5 degrees in theta, R~4.5 m
-      caloLayer.cellSize1 = 40 * dd4hep::mm; // 704 bins in phi (2pi),  R~4.5 m
+      // assume cell sizes are the same so pass dummy cell ID
+      if (seg) {
+        // if the readout is FCCSWGridPhiTheta, we store in cellSize0 dTheta and in cellSize1 dPhi
+        std::vector<double> cellSizeVector = seg->cellDimensions(0);
+        double cellSizeTheta = cellSizeVector[1];
+        double cellSizePhi = cellSizeVector[0];
+        dd4hep::printout(dd4hep::INFO, "SimpleCylinder_o1_v02", "    cell sizes in theta, phi: %f, %f", cellSizeTheta,
+                         cellSizePhi);
+        caloLayer.cellSize0 = cellSizeTheta;
+        caloLayer.cellSize1 = cellSizePhi;
+      } else {
+        // otherwise we just assume that the segmentation (handle) returns the sizes in the proper order
+        std::vector<double> cellSizeVector = segHandle.cellDimensions(0);
+        dd4hep::printout(dd4hep::INFO, "SimpleCylinder_o1_v02", "    cell sizes: %f , %f", cellSizeVector[0],
+                         cellSizeVector[1]);
+        caloLayer.cellSize0 = cellSizeVector[0];
+        caloLayer.cellSize1 = cellSizeVector[1];
+      }
 
       // attach the layer to the caloData
       caloData->layers.push_back(caloLayer);
@@ -262,9 +283,23 @@ static dd4hep::Ref_t createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4he
     caloData->extent[3] = cylinderDim.dz();
     caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::BarrelLayout;
 
+    // retrieve handle to segmentation, needed to get cell sizes
+    dd4hep::Segmentation segHandle = sensDet.readout().segmentation();
+    // try to retrieve segmentation itself so that we can order cell size as desired by pandora
+    // if we do not want this, then we'll have to handle it elsewhere i.e. when creating pandora's calo hits
+    // in DDMarlinPandora
+    dd4hep::DDSegmentation::FCCSWGridPhiTheta_k4geo* seg =
+        dynamic_cast<dd4hep::DDSegmentation::FCCSWGridPhiTheta_k4geo*>(segHandle.segmentation());
+    if (seg) {
+      dd4hep::printout(dd4hep::DEBUG, "SimpleCylinder_o1_v02", "Segmentation is of type FCCSWGridPhiTheta");
+    }
+
     auto mat = lcdd.material(cylinderDim.materialStr());
     dd4hep::rec::LayeredCalorimeterData::Layer caloLayer;
+    dd4hep::printout(dd4hep::INFO, "SimpleCylinder_o1_v02", "Layer structure information:");
     for (int idxLayer = 0; idxLayer < nLayers; ++idxLayer) {
+      dd4hep::printout(dd4hep::INFO, "SimpleCylinder_o1_v02", "  Layer %d", idxLayer);
+
       rIn = cylinderDim.rmin() + idxLayer * drLayer;
       // double rOut = rIn + drLayer;
 
@@ -286,10 +321,24 @@ static dd4hep::Ref_t createSimpleCylinder(dd4hep::Detector& lcdd, xml_h e, dd4he
       caloLayer.outer_nInteractionLengths =
           caloLayer.outer_thickness / mat.intLength(); // absorber material behind sensitive element in layer
 
-      caloLayer.cellSize0 = 20 * dd4hep::mm; // FIXME! AD: should be corrected from DDGeometryCreatorALLEGRO. GM: get it
-                                             // from segmentation class
-      caloLayer.cellSize1 = 20 * dd4hep::mm; // FIXME! AD: should be corrected from DDGeometryCreatorALLEGRO. GM: get it
-                                             // from segmentation class
+      // assume cell sizes are the same so pass dummy cell ID
+      if (seg) {
+        // if the readout is FCCSWGridPhiTheta, we store in cellSize0 dTheta and in cellSize1 dPhi
+        std::vector<double> cellSizeVector = seg->cellDimensions(0);
+        double cellSizeTheta = cellSizeVector[1];
+        double cellSizePhi = cellSizeVector[0];
+        dd4hep::printout(dd4hep::INFO, "SimpleCylinder_o1_v02", "    cell sizes in theta, phi: %f, %f", cellSizeTheta,
+                         cellSizePhi);
+        caloLayer.cellSize0 = cellSizeTheta;
+        caloLayer.cellSize1 = cellSizePhi;
+      } else {
+        // otherwise we just assume that the segmentation (handle) returns the sizes in the proper order
+        std::vector<double> cellSizeVector = segHandle.cellDimensions(0);
+        dd4hep::printout(dd4hep::INFO, "SimpleCylinder_o1_v02", "    cell sizes: %f , %f", cellSizeVector[0],
+                         cellSizeVector[1]);
+        caloLayer.cellSize0 = cellSizeVector[0];
+        caloLayer.cellSize1 = cellSizeVector[1];
+      }
 
       // attach the layer to the caloData
       caloData->layers.push_back(caloLayer);

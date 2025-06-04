@@ -99,6 +99,8 @@ namespace sim {
 
     m_userData.fastfiber.fSafety = 1;
     m_userData.fastfiber.fVerbose = 0;
+
+    m_hitCreationMode = HitCreationFlags::DETAILED_MODE; // always store step position
   }
 
   /// Define collections created by this sensitive action object
@@ -230,6 +232,7 @@ namespace sim {
         if (!drHit) {
           drHit = new Geant4DRCalorimeter::Hit(m_userData.fWavlenStep, m_userData.fTimeStep);
           drHit->cellID = cID;
+          drHit->position = m_segmentation->position(cID) * CLHEP::mm / dd4hep::mm; // segmentation gives dd4hep unit
           drHit->SetSiPMnum(cID);
           drHit->SetTimeStart(m_userData.fTimeStart);
           drHit->SetTimeEnd(m_userData.fTimeEnd);
@@ -247,8 +250,6 @@ namespace sim {
         drHit->CountWavlenSpectrum(wavBin);
         int timeBin = m_userData.findTimeBin(hitTime);
         drHit->CountTimeStruct(timeBin);
-
-        drHit->position = glob;
 
         // finally kill optical photon
         step->GetTrack()->SetTrackStatus(fStopAndKill);
@@ -274,6 +275,7 @@ namespace sim {
         if (!caloHit) {
           caloHit = new Geant4Calorimeter::Hit(glob);
           caloHit->cellID = cID;
+          caloHit->position = m_segmentation->position(cID) * CLHEP::mm / dd4hep::mm; // segmentation gives dd4hep unit
           coll_scint->add(cID, caloHit);
         }
 
@@ -317,6 +319,7 @@ namespace sim {
       if (!hit) {
         hit = new Geant4DRCalorimeter::Hit(m_userData.fWavlenStep, m_userData.fTimeStep);
         hit->cellID = cID;
+        hit->position = m_segmentation->position(cID) * CLHEP::mm / dd4hep::mm; // segmentation gives dd4hep unit
         hit->SetSiPMnum(cID);
         hit->SetTimeStart(m_userData.fTimeStart);
         hit->SetTimeEnd(m_userData.fTimeEnd);
@@ -331,11 +334,9 @@ namespace sim {
       int timeBin = m_userData.findTimeBin(hitTime);
       hit->CountTimeStruct(timeBin);
 
-      hit->position = glob;
-
       return true;
     } // !skipScint
-  } // Geant4SensitiveAction::process
+  }   // Geant4SensitiveAction::process
 
   typedef Geant4SensitiveAction<DRCData> DRCaloSDAction;
 } // namespace sim

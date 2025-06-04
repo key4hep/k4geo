@@ -10,3 +10,8 @@ repos:
         entry: ruff format --force-exclude
         types: [python]
         language: system
+      - id: clang-format
+        name: clang-format
+        entry: .github/scripts/clang-format-hook
+        types: [c++]
+        language: system

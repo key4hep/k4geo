@@ -1,24 +1,18 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Handle.h"
+#include "DD4hep/Printout.h"
 #include "DDRec/MaterialManager.h"
 #include "DDRec/Vector3D.h"
 #include "XML/Utilities.h"
 #include <DDRec/DetectorData.h>
+
+#include "detectorSegmentations/FCCSWGridModuleThetaMerged_k4geo.h"
 
 // like v02, but in xml the layer dimensions are along the electrode
 // directions, without rescaling by R/L where R = radial extent of ECAL
 // and L = electrode length
 // in addition, the user can configure material in inner part of absorber
 // in first layer
-
-// todo: remove gaudi logging and properly capture output
-#define endmsg std::endl
-#define lLog std::cout
-namespace MSG {
-const std::string ERROR = "createECalBarrelInclined   ERROR  ";
-const std::string DEBUG = "createECalBarrelInclined   DEBUG  ";
-const std::string INFO = "createECalBarrelInclined   INFO   ";
-} // namespace MSG
 
 namespace det {
 static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, dd4hep::xml::Handle_t aXmlElement,
@@ -55,9 +49,9 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
   dd4hep::xml::DetElement overlap = active.child(_Unicode(overlap));
   double activePassiveOverlap = overlap.offset();
   if (activePassiveOverlap < 0 || activePassiveOverlap > 0.5) {
-    // todo: ServiceHandle<IIncidentSvc> incidentSvc("IncidentSvc", "ECalConstruction");
-    lLog << MSG::ERROR << "Overlap between active and passive cannot be more than half of passive plane!" << endmsg;
-    // todo: incidentSvc->fireIncident(Incident("ECalConstruction", "GeometryFailure"));
+    dd4hep::printout(dd4hep::ERROR, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                     "Overlap between active and passive cannot be more than half of passive plane!");
+    throw std::runtime_error("Overlap too large!");
   }
 
   // Retrieve length of layers along electrode
@@ -73,8 +67,8 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
     }
     layersTotalHeight += layer.repeat() * layer.thickness();
   }
-  lLog << MSG::DEBUG
-       << "Total electrode length from calorimeter xml description (cm): " << layersTotalHeight / dd4hep::cm << endmsg;
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "Total electrode length from calorimeter xml description (cm): %f ", layersTotalHeight / dd4hep::cm);
 
   // The following code checks if the xml geometry file contains a constant defining
   // the number of layers the barrel. In that case, it makes the program abort
@@ -89,12 +83,11 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
     ;
   }
   if (nLayers > 0 && nLayers != int(numLayers)) {
-    lLog << MSG::ERROR << "Incorrect number of layers (ECalBarrelNumLayers) in readout in calorimeter xml description!"
-         << endmsg;
-    lLog << MSG::ERROR << "Number of layers should be: " << numLayers << endmsg;
-    // todo: incidentSvc->fireIncident(Incident("ECalConstruction", "GeometryFailure"));
-    // make the code crash (incidentSvc does not work)
-    // Andre, Alvaro, assert replaced by exception
+    dd4hep::printout(dd4hep::ERROR, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                     "Incorrect number of layers (ECalBarrelNumLayers = %d) in readout in calorimeter xml description!",
+                     nLayers);
+    dd4hep::printout(dd4hep::ERROR, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                     "Number of layers should be: %d", numLayers);
     throw std::runtime_error("Incorrect number of layers (ECalBarrelNumLayers) in calorimeter xml description!");
   }
 
@@ -137,67 +130,87 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
     dd4hep::Tube cryoBackShape(cryoDim.rmax1(), cryoDim.rmax2(), cryoDim.dz());
     dd4hep::Tube cryoSideOuterShape(cryoDim.rmin2(), cryoDim.rmax1(), cryoDim.dz());
     dd4hep::SubtractionSolid cryoSideShape(cryoSideOuterShape, bathAndServicesOuterShape);
-    lLog << MSG::INFO << "ECAL cryostat: front: rmin (cm) = " << cryoDim.rmin1() / dd4hep::cm
-         << " rmax (cm) = " << cryoDim.rmin2() / dd4hep::cm << " dz (cm) = " << cryoDim.dz() / dd4hep::cm << endmsg;
-    lLog << MSG::INFO << "ECAL cryostat: back: rmin (cm) = " << cryoDim.rmax1() / dd4hep::cm
-         << " rmax (cm) = " << cryoDim.rmax2() / dd4hep::cm << " dz (cm) = " << cryoDim.dz() / dd4hep::cm << endmsg;
-    lLog << MSG::INFO << "ECAL cryostat: side: rmin (cm) = " << cryoDim.rmin2() / dd4hep::cm
-         << " rmax (cm) = " << cryoDim.rmax1() / dd4hep::cm
-         << " dz (cm) = " << (cryoDim.dz() - caloDim.dz()) / dd4hep::cm << endmsg;
+
+    dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                     "ECAL cryostat: front: rmin (cm) = %f  rmax (cm) = %f  dz (cm) = %f", cryoDim.rmin1() / dd4hep::cm,
+                     cryoDim.rmin2() / dd4hep::cm, cryoDim.dz() / dd4hep::cm);
+    dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                     "ECAL cryostat: back: rmin (cm) = %f  rmax (cm) = %f  dz (cm) = %f", cryoDim.rmax1() / dd4hep::cm,
+                     cryoDim.rmax2() / dd4hep::cm, cryoDim.dz() / dd4hep::cm);
+    dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                     "ECAL cryostat: side: rmin (cm) = %f  rmax (cm) = %f  dz (cm) = %f", cryoDim.rmin2() / dd4hep::cm,
+                     cryoDim.rmax1() / dd4hep::cm, (cryoDim.dz() - caloDim.dz()) / dd4hep::cm);
+
     dd4hep::Volume cryoFrontVol(cryostat.nameStr() + "_front", cryoFrontShape, aLcdd.material(cryostat.materialStr()));
     dd4hep::Volume cryoBackVol(cryostat.nameStr() + "_back", cryoBackShape, aLcdd.material(cryostat.materialStr()));
     dd4hep::Volume cryoSideVol(cryostat.nameStr() + "_side", cryoSideShape, aLcdd.material(cryostat.materialStr()));
     dd4hep::PlacedVolume cryoFrontPhysVol = envelopeVol.placeVolume(cryoFrontVol);
     dd4hep::PlacedVolume cryoBackPhysVol = envelopeVol.placeVolume(cryoBackVol);
     dd4hep::PlacedVolume cryoSidePhysVol = envelopeVol.placeVolume(cryoSideVol);
+
     if (cryoFrontSensitive) {
       cryoFrontVol.setSensitiveDetector(aSensDet);
       cryoFrontPhysVol.addPhysVolID("cryo", 1);
       cryoFrontPhysVol.addPhysVolID("type", 1);
-      lLog << MSG::INFO << "ECAL Cryostat front volume set as sensitive" << endmsg;
+      dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                       "ECAL Cryostat front volume set as sensitive");
     }
+
     if (cryoBackSensitive) {
       cryoBackVol.setSensitiveDetector(aSensDet);
       cryoBackPhysVol.addPhysVolID("cryo", 1);
       cryoBackPhysVol.addPhysVolID("type", 2);
-      lLog << MSG::INFO << "ECAL Cryostat back volume set as sensitive" << endmsg;
+      dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                       "ECAL Cryostat back volume set as sensitive");
     }
+
     if (cryoSideSensitive) {
       cryoSideVol.setSensitiveDetector(aSensDet);
       cryoSidePhysVol.addPhysVolID("cryo", 1);
       cryoSidePhysVol.addPhysVolID("type", 3);
-      lLog << MSG::INFO << "ECAL Cryostat front volume set as sensitive" << endmsg;
+      dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                       "ECAL Cryostat front volume set as sensitive");
     }
+
     dd4hep::DetElement cryoFrontDetElem(caloDetElem, "cryo_front", 0);
     cryoFrontDetElem.setPlacement(cryoFrontPhysVol);
     dd4hep::DetElement cryoBackDetElem(caloDetElem, "cryo_back", 0);
     cryoBackDetElem.setPlacement(cryoBackPhysVol);
     dd4hep::DetElement cryoSideDetElem(caloDetElem, "cryo_side", 0);
     cryoSideDetElem.setPlacement(cryoSidePhysVol);
+
     // 1.2. Create place-holder for services
     dd4hep::Tube servicesFrontShape(cryoDim.rmin2(), bathRmin, caloDim.dz());
     dd4hep::Tube servicesBackShape(bathRmax, cryoDim.rmax1(), caloDim.dz());
-    lLog << MSG::INFO << "ECAL services: front: rmin (cm) = " << cryoDim.rmin2() / dd4hep::cm
-         << " rmax (cm) = " << bathRmin / dd4hep::cm / dd4hep::cm << " dz (cm) = " << caloDim.dz() / dd4hep::cm
-         << endmsg;
-    lLog << MSG::INFO << "ECAL services: back: rmin (cm) = " << bathRmax / dd4hep::cm
-         << " rmax (cm) = " << cryoDim.rmax1() / dd4hep::cm << " dz (cm) = " << caloDim.dz() / dd4hep::cm << endmsg;
+
+    dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                     "ECAL services: front: rmin (cm) = %f  rmax (cm) = %f  dz (cm) = %f", cryoDim.rmin2() / dd4hep::cm,
+                     bathRmin / dd4hep::cm / dd4hep::cm, caloDim.dz() / dd4hep::cm);
+    dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                     "ECAL services: back: rmin (cm) = %f  rmax (cm) = %f  dz (cm) = %f", bathRmax / dd4hep::cm,
+                     cryoDim.rmax1() / dd4hep::cm, caloDim.dz() / dd4hep::cm);
+
     dd4hep::Volume servicesFrontVol("services_front", servicesFrontShape, aLcdd.material(activeMaterial));
     dd4hep::Volume servicesBackVol("services_back", servicesBackShape, aLcdd.material(activeMaterial));
     dd4hep::PlacedVolume servicesFrontPhysVol = envelopeVol.placeVolume(servicesFrontVol);
     dd4hep::PlacedVolume servicesBackPhysVol = envelopeVol.placeVolume(servicesBackVol);
+
     if (cryoFrontSensitive) {
       servicesFrontVol.setSensitiveDetector(aSensDet);
       servicesFrontPhysVol.addPhysVolID("cryo", 1);
       servicesFrontPhysVol.addPhysVolID("type", 4);
-      lLog << MSG::INFO << "ECAL Services front volume set as sensitive" << endmsg;
+      dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                       "ECAL Services front volume set as sensitive");
     }
+
     if (cryoBackSensitive) {
       servicesBackVol.setSensitiveDetector(aSensDet);
       servicesBackPhysVol.addPhysVolID("cryo", 1);
       servicesBackPhysVol.addPhysVolID("type", 5);
-      lLog << MSG::INFO << "ECAL Services back volume set as sensitive" << endmsg;
+      dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                       "ECAL Services back volume set as sensitive");
     }
+
     dd4hep::DetElement servicesFrontDetElem(caloDetElem, "services_front", 0);
     servicesFrontDetElem.setPlacement(servicesFrontPhysVol);
     dd4hep::DetElement servicesBackDetElem(caloDetElem, "services_back", 0);
@@ -207,18 +220,23 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
   // 2. Create bath that is inside the cryostat and surrounds the detector
   //    Bath is filled with active material -> but not sensitive
   dd4hep::Volume bathVol(activeMaterial + "_bath", bathOuterShape, aLcdd.material(activeMaterial));
-  lLog << MSG::INFO << "ECAL bath: material = " << activeMaterial << " rmin (cm) =  " << bathRmin / dd4hep::cm
-       << " rmax (cm) = " << bathRmax / dd4hep::cm << endmsg;
   double Rmin = caloDim.rmin();
   double Rmax = caloDim.rmax();
   double dR = Rmax - Rmin;
-  lLog << MSG::INFO << "ECAL calorimeter volume rmin (cm) =  " << Rmin / dd4hep::cm
-       << " rmax (cm) = " << Rmax / dd4hep::cm << endmsg;
-  lLog << MSG::INFO << "ECAL thickness of calorimeter (cm) = " << dR / dd4hep::cm << endmsg;
-  lLog << MSG::INFO << "ECAL thickness in front of calorimeter (between cryostat front and calorimeter) (cm) = "
-       << (Rmin - cryoDim.rmin2()) / dd4hep::cm << endmsg;
-  lLog << MSG::INFO << "ECAL thickness behind calorimeter (between calorimeter and cryostat back) (cm) = "
-       << (cryoDim.rmax1() - Rmax) / dd4hep::cm << endmsg;
+
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "ECAL bath: material = %s  rmin (cm) = %f  rmax (cm) = %f", activeMaterial.c_str(),
+                   bathRmin / dd4hep::cm, bathRmax / dd4hep::cm);
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "ECAL calorimeter volume rmin (cm) = %f  rmax (cm) = %f", Rmin / dd4hep::cm, Rmax / dd4hep::cm);
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "ECAL thickness of calorimeter (cm) = %f", dR / dd4hep::cm);
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "ECAL thickness in front of calorimeter (between cryostat front and calorimeter) (cm) = %f",
+                   (Rmin - cryoDim.rmin2()) / dd4hep::cm);
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "ECAL thickness behind calorimeter (between calorimeter and cryostat back) (cm) = %f",
+                   (cryoDim.rmax1() - Rmax) / dd4hep::cm);
 
   // 3. Create the calorimeter by placing the passive material, trapezoid active layers, readout and again trapezoid
   // active layers in the bath.
@@ -238,37 +256,45 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
   //////////////////////////////
 
   // passive volumes consist of inner part and two outer, joined by glue
-  lLog << MSG::INFO << "Passive elements:" << endmsg;
-  lLog << MSG::INFO << "   material in inner part of absorber (except 1st layer) = " << passiveInnerMaterial << endmsg;
-  lLog << MSG::INFO << "   material in inner part of absorber (1st layer) = " << passiveInnerMaterialFirstLayer
-       << endmsg;
-  lLog << MSG::INFO << "   material in outer part of absorber = " << passiveOuterMaterial << endmsg;
-  lLog << MSG::INFO << "   material in middle part between inner and outer = " << passiveGlueMaterial << endmsg;
-  lLog << MSG::INFO << "   thickness of inner part at inner radius (cm) = " << passiveInnerThicknessMin / dd4hep::cm
-       << endmsg;
-  lLog << MSG::INFO << "   thickness of inner part at outer radius (cm) = " << passiveInnerThicknessMax / dd4hep::cm
-       << endmsg;
-  lLog << MSG::INFO << "   thickness of outer part (cm) = " << passiveOuterThickness / dd4hep::cm << endmsg;
-  lLog << MSG::INFO << "   thickness of middle part (cm) = " << passiveGlueThickness / dd4hep::cm << endmsg;
-  lLog << MSG::INFO << "   total thickness of absorber at inner radius (cm) = " << passiveThickness / dd4hep::cm
-       << endmsg;
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03", "Passive elements:");
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "   material in inner part of absorber (except 1st layer) = %s", passiveInnerMaterial.c_str());
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "   material in inner part of absorber (1st layer) = %s", passiveInnerMaterialFirstLayer.c_str());
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "   material in outer part of absorber = %s", passiveOuterMaterial.c_str());
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "   material in middle part between inner and outer = %s", passiveGlueMaterial.c_str());
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "   thickness of inner part at inner radius (cm) = %f", passiveInnerThicknessMin / dd4hep::cm);
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "   thickness of inner part at outer radius (cm) = ", passiveInnerThicknessMax / dd4hep::cm);
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "   thickness of outer part (cm) = %f", passiveOuterThickness / dd4hep::cm);
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "   thickness of middle part (cm) = %f", passiveGlueThickness / dd4hep::cm);
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "   total thickness of absorber at inner radius (cm) = %f", passiveThickness / dd4hep::cm);
 
   //////////////////////////////
   // ELECTRODES
   //////////////////////////////
 
-  lLog << MSG::INFO << "Electrodes:" << endmsg;
-  lLog << MSG::INFO << "   rotation angle (radians) = " << angle << " , (degrees) = " << angle * 57.295780 << endmsg;
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03", "Electrodes:");
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "   rotation angle (radians) = %f , (degrees) = %f", angle, angle * 57.295780);
 
   // calculate number of modules
   uint numPlanes =
       round(M_PI / asin((passiveThickness + activeThickness + readoutThickness) / (2. * Rmin * cos(angle))));
 
   double dPhi = 2. * M_PI / numPlanes;
-  lLog << MSG::INFO << "   number of planes (calculated) = " << numPlanes << " , azim. angle difference =  " << dPhi
-       << endmsg;
-  lLog << MSG::INFO << "   distance at inner radius (cm) = " << 2. * M_PI * Rmin / dd4hep::cm / numPlanes << endmsg;
-  lLog << MSG::INFO << "   distance at outer radius (cm) = " << 2. * M_PI * Rmax / dd4hep::cm / numPlanes << endmsg;
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "   number of planes (calculated) = %d , azim. angle difference = %f", numPlanes, dPhi);
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "   distance at inner radius (cm) = %f", 2. * M_PI * Rmin / dd4hep::cm / numPlanes);
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "   distance at outer radius (cm) = %f", 2. * M_PI * Rmax / dd4hep::cm / numPlanes);
 
   // The following code checks if the xml geometry file contains a constant defining
   // the number of planes in the barrel. In that case, it makes the program abort
@@ -286,43 +312,45 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
     ;
   }
   if (nModules > 0 && nModules != int(numPlanes)) {
-    lLog << MSG::ERROR << "Incorrect number of planes (ECalBarrelNumPlanes) in calorimeter xml description!" << endmsg;
-    // todo: incidentSvc->fireIncident(Incident("ECalConstruction", "GeometryFailure"));
-    // make the code crash (incidentSvc does not work)
-    // Andre, Alvaro, assert replaced by exception
+    dd4hep::printout(dd4hep::ERROR, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                     "Incorrect number of planes (ECalBarrelNumPlanes) in calorimeter xml description!");
     throw std::runtime_error("Incorrect number of planes (ECalBarrelNumPlanes) in calorimeter xml description!");
   }
 
   // Readout is in the middle between two passive planes
   double offsetPassivePhi = caloDim.offset() + dPhi / 2.;
   double offsetReadoutPhi = caloDim.offset() + 0;
-  lLog << MSG::INFO << "   readout material = " << readoutMaterial << endmsg;
-  lLog << MSG::INFO << "   thickness of readout planes (cm) =  " << readoutThickness / dd4hep::cm << endmsg;
-  lLog << MSG::INFO << "   number of layers = " << numLayers << endmsg;
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03", "   readout material = %s",
+                   readoutMaterial.c_str());
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "   thickness of readout planes (cm) = %f", readoutThickness / dd4hep::cm);
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03", "   number of layers = %d",
+                   numLayers);
 
   // Electrode length, given inclination angle and min/max radius of the active calorimeter volume
   double planeLength = -Rmin * cos(angle) + sqrt(pow(Rmax, 2) - pow(Rmin * sin(angle), 2));
 
   double runningHeight = 0.;
-  lLog << MSG::INFO << "   total length from Rmin, Rmax and angle (cm) =  " << planeLength / dd4hep::cm << endmsg;
-  lLog << MSG::INFO << "   predicted layer radii: " << endmsg;
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "   total length from Rmin, Rmax and angle (cm) = %f", planeLength / dd4hep::cm);
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03", "   predicted layer radii:");
   for (uint iLay = 0; iLay < numLayers; iLay++) {
     double Lmin = runningHeight;
     double Lmax = runningHeight + layerHeight[iLay];
     runningHeight += layerHeight[iLay];
     double rMin = sqrt(Rmin * Rmin + Lmin * Lmin + 2 * Rmin * Lmin * cos(angle));
     double rMax = sqrt(Rmin * Rmin + Lmax * Lmax + 2 * Rmin * Lmax * cos(angle));
-    lLog << MSG::INFO << "      layer " << iLay << " (cm) = " << rMin / dd4hep::cm << " - " << rMax / dd4hep::cm
-         << endmsg;
+    dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03", "      layer %d (cm) = %f - %f",
+                     iLay, rMin / dd4hep::cm, rMax / dd4hep::cm);
   }
 
   // Check that electrode length is consistent with calorimeter radial extent
   // and inclination angle to within 0.5 mm
   if (fabs(planeLength - layersTotalHeight) > 0.05 * dd4hep::cm) {
-    lLog << MSG::ERROR
-         << "   the sum of the electrode lengths per layer in the calorimeter xml file is not consistent with the "
-            "length calculated from the calorimeter radial extent and the inclination angle"
-         << endmsg;
+    dd4hep::printout(
+        dd4hep::ERROR, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+        "   the sum of the electrode lengths per layer in the calorimeter xml file is not consistent with the "
+        "length calculated from the calorimeter radial extent and the inclination angle");
     throw std::runtime_error("Incorrect length of electrode layers in calorimeter xml description!");
   }
 
@@ -331,19 +359,20 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
   // the code calculates the (max) passive thickness per layer i.e. at Rout of layer
   // rescaling by runningHeight / Ltot
   std::vector<double> passiveInnerThicknessLayer(numLayers + 1);
-  lLog << MSG::DEBUG << "passiveInnerThickness: " << endmsg;
+  dd4hep::printout(dd4hep::DEBUG, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03", "passiveInnerThickness: ");
   runningHeight = 0.;
   for (uint iLay = 0; iLay < numLayers; iLay++) {
     passiveInnerThicknessLayer[iLay] =
         passiveInnerThicknessMin +
         (passiveInnerThicknessMax - passiveInnerThicknessMin) * (runningHeight) / layersTotalHeight;
-    lLog << MSG::DEBUG << "   layer " << iLay << " = " << passiveInnerThicknessLayer[iLay] << " cm" << endmsg;
+    dd4hep::printout(dd4hep::DEBUG, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03", "   layer %d = %f cm", iLay,
+                     passiveInnerThicknessLayer[iLay]);
   }
   passiveInnerThicknessLayer[numLayers] =
       passiveInnerThicknessMin +
       (passiveInnerThicknessMax - passiveInnerThicknessMin) * (runningHeight) / layersTotalHeight;
-
-  lLog << MSG::DEBUG << "   layer " << numLayers << " = " << passiveInnerThicknessLayer[numLayers] << " cm" << endmsg;
+  dd4hep::printout(dd4hep::DEBUG, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03", "   layer %d = %f cm", numLayers,
+                   passiveInnerThicknessLayer[numLayers]);
 
   // Calculate the angle of the passive elements if trapezoidal absorbers are used (Max != Min)
   // if parallel absorbers are used then passiveAngle = 0 and cosPassiveAngle = 1
@@ -387,18 +416,20 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
       2. * activeOutThickness - readoutThickness -
       2. * activePassiveOverlap *
           (passiveThickness + passiveInnerThicknessMax - passiveInnerThicknessMin); // correct thickness for trapezoid
-  lLog << MSG::INFO << "Active elements:" << endmsg;
-  lLog << MSG::INFO << "   material = " << activeMaterial << endmsg;
-  lLog << MSG::INFO << "   thickness at inner radius (cm) = " << activeInThicknessAfterSubtraction / dd4hep::cm
-       << endmsg;
-  lLog << MSG::INFO << "   thickness at outer radius (cm) = " << activeOutThicknessAfterSubtraction / dd4hep::cm
-       << endmsg;
-  lLog << MSG::INFO << "   thickness relative increase from inner to outer radius = "
-       << (activeOutThicknessAfterSubtraction - activeInThicknessAfterSubtraction) * 100 /
-              activeInThicknessAfterSubtraction
-       << " %." << endmsg;
-  lLog << MSG::INFO << "   active passive initial overlap (before subtraction) (cm) = "
-       << passiveThickness / dd4hep::cm * activePassiveOverlap << " = " << activePassiveOverlap * 100 << " %" << endmsg;
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03", "Active elements:");
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03", "   material = %s",
+                   activeMaterial.c_str());
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "   thickness at inner radius (cm) = %f", activeInThicknessAfterSubtraction / dd4hep::cm);
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "   thickness at outer radius (cm) = %f", activeOutThicknessAfterSubtraction / dd4hep::cm);
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "   thickness relative increase from inner to outer radius = %f %%",
+                   (activeOutThicknessAfterSubtraction - activeInThicknessAfterSubtraction) * 100 /
+                       activeInThicknessAfterSubtraction);
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                   "   active passive initial overlap (before subtraction) (cm) = %f  (%f %%)",
+                   passiveThickness / dd4hep::cm * activePassiveOverlap, activePassiveOverlap * 100);
 
   // Now create the volumes
 
@@ -484,7 +515,8 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
   // sampling fraction), then it is divided in layer volumes, and each layer volume is set as sensitive
   // first layer
   if (passiveInner.isSensitive()) {
-    lLog << MSG::DEBUG << "Passive inner volume (1st layer) set as sensitive" << endmsg;
+    dd4hep::printout(dd4hep::DEBUG, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                     "Passive inner volume (1st layer) set as sensitive");
     passiveInnerVolFirstLayer.setSensitiveDetector(aSensDet);
     passiveInnerPhysVolFirstLayer.addPhysVolID("layer", 0);
     dd4hep::DetElement passiveInnerDetElemFirstLayer("layer", 0);
@@ -492,7 +524,8 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
   }
   // other layers
   if (passiveInnerMax.isSensitive()) {
-    lLog << MSG::DEBUG << "Passive inner volume (2-N layers) set as sensitive" << endmsg;
+    dd4hep::printout(dd4hep::DEBUG, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                     "Passive inner volume (2-N layers) set as sensitive");
     double layerOffset = layerFirstOffset + layerHeight[1] / 2.;
     for (uint iLayer = 1; iLayer < numLayers; iLayer++) {
       dd4hep::Trd1 layerPassiveInnerShape(passiveInnerThicknessLayer[iLayer] / 2.,
@@ -515,7 +548,8 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
   if (passiveOuter.isSensitive()) {
     // if the outer part of the absorber is sensitive (to study energy deposited in it, for calculation of per-layer
     // sampling fraction), then it is divided in layer volumes, and each layer volume is set as sensitive
-    lLog << MSG::DEBUG << "Passive outer volume set as sensitive" << endmsg;
+    dd4hep::printout(dd4hep::DEBUG, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                     "Passive outer volume set as sensitive");
     double layerOffset = layerFirstOffset / cosPassiveAngle;
     for (uint iLayer = 0; iLayer < numLayers; iLayer++) {
       dd4hep::Box layerPassiveOuterShape(passiveOuterThickness / 4., caloDim.dz(),
@@ -537,7 +571,8 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
   if (passiveGlue.isSensitive()) {
     // if the glue is sensitive (to study energy deposited in it, for calculation of per-layer
     // sampling fraction), then it is divided in layer volumes, and each layer volume is set as sensitive
-    lLog << MSG::DEBUG << "Passive glue volume set as sensitive" << endmsg;
+    dd4hep::printout(dd4hep::DEBUG, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                     "Passive glue volume set as sensitive");
     double layerOffset = layerFirstOffset / cosPassiveAngle;
     for (uint iLayer = 0; iLayer < numLayers; iLayer++) {
       dd4hep::Box layerPassiveGlueShape(passiveGlueThickness / 4., caloDim.dz(),
@@ -564,7 +599,8 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
   // if the readout is sensitive (to study energy deposited in it, for calculation of per-layer
   // sampling fraction), then it is divided in layer volumes, and each layer volume is set as sensitive
   if (readout.isSensitive()) {
-    lLog << MSG::INFO << "ECAL readout volume set as sensitive" << endmsg;
+    dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                     "ECAL readout volume set as sensitive");
     double layerOffset = layerFirstOffset;
     for (uint iLayer = 0; iLayer < numLayers; iLayer++) {
       dd4hep::Box layerReadoutShape(readoutThickness / 2., caloDim.dz(), layerHeight[iLayer] / 2.);
@@ -772,6 +808,19 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
   caloData->extent[2] = 0.;
   caloData->extent[3] = caloDim.dz();
 
+  // Retrieve segmentation, needed to get cell size in theta and phi
+  dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo* seg =
+      dynamic_cast<dd4hep::DDSegmentation::FCCSWGridModuleThetaMerged_k4geo*>(
+          aSensDet.readout().segmentation().segmentation());
+  if (seg == nullptr) {
+    dd4hep::printout(dd4hep::ERROR, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                     "Incorrect readout, cannot cast to FCCSWGridModuleThetaMerged");
+    throw std::runtime_error("Incorrect readout in calorimeter xml description!");
+  }
+  std::string layerFieldName = seg->fieldNameLayer();
+  std::string cellIDEncoding = aSensDet.readout().idSpec().fieldDescription();
+  dd4hep::BitFieldCoder encoder(cellIDEncoding);
+
   // Information about each layer
   // double distance : distance from Origin (or the z-axis) to the inner-most face of the layer
   // double phi0 : phi0 of layer: potential rotation around normal to absorber plane, e.g. if layers are 'staggered' in
@@ -789,9 +838,10 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
   // direction cellSize0 and the depth of the layers
   dd4hep::rec::MaterialManager matMgr(envelopeVol);
   dd4hep::rec::LayeredCalorimeterData::Layer caloLayer;
-
+  dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03", "Layer structure information:");
   runningHeight = 0.0;
   for (uint iLay = 0; iLay < numLayers; iLay++) {
+    dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03", "  Layer %d", iLay);
     double Lmin = runningHeight;
     double Lmax = runningHeight + layerHeight[iLay];
     double Lmid = runningHeight + layerHeight[iLay] / 2.0;
@@ -808,8 +858,8 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
     dd4hep::rec::Vector3D ivr2 =
         dd4hep::rec::Vector3D(0., rad_last, 0); // defining end vector points of the given layer
 
-    lLog << MSG::DEBUG << "radius first " << rad_first << " radius last " << rad_last << " radius middle " << rad_mid
-         << endmsg;
+    dd4hep::printout(dd4hep::DEBUG, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                     "    radius first = %f, radius last = %f, radius middle = %f", rad_first, rad_last, rad_mid);
     const dd4hep::rec::MaterialVec& materials =
         matMgr.materialsBetween(ivr1, ivr2); // calling material manager to get material info between two points
     auto mat = matMgr.createAveragedMaterial(materials); // creating average of all the material between two points to
@@ -830,10 +880,12 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
         absorberThickness += materials.at(imat).second;
       }
     }
-    lLog << MSG::DEBUG << "The sensitive thickness is " << thickness_sen << endmsg;
-    lLog << MSG::DEBUG << "The absorber thickness is " << absorberThickness << endmsg;
-    lLog << MSG::DEBUG << "The radiation length is " << value_of_x0 << " and the interaction length is "
-         << value_of_lambda << endmsg;
+    dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03", "    sensitive thickness : %f",
+                     thickness_sen);
+    dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03", "    absorber thickness : %f",
+                     absorberThickness);
+    dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                     "    radiation length : %f , interaction length : %f", value_of_x0, value_of_lambda);
 
     caloLayer.distance = rad_first;
     caloLayer.absorberThickness = absorberThickness;
@@ -847,10 +899,19 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
     caloLayer.outer_nInteractionLengths = value_of_lambda * (rad_last - rad_mid) / (rad_last - rad_first);
     caloLayer.outer_thickness = rad_last - rad_mid;
 
-    // GM: rather retrieve cellDimensions vector from segmentation class
-    caloLayer.cellSize0 = 20 * dd4hep::mm; // GM: rather put delta_eta here and use pandora::POINTING cell type (should
-                                           // actually modify pandora to accept theta grid)
-    caloLayer.cellSize1 = 20 * dd4hep::mm; // GM: rather delta_phi here + pandora::POINTING cell type
+    // retrieve cell dimensions vector from segmentation class
+    // set volume ID and layer ID
+    // cell size does not depend on theta/module so no need to set moduleID and thetaID
+    dd4hep::CellID cID;
+    encoder.set(cID, layerFieldName, iLay);
+    std::vector<double> cellSizeVector = seg->cellDimensions(cID);
+    double cellSizeTheta = cellSizeVector[1];
+    double cellSizeModule = cellSizeVector[0];
+    double cellSizePhi = dPhi * cellSizeModule;
+    dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                     "    cell sizes in theta, phi: %f , %f", cellSizeTheta, cellSizePhi);
+    caloLayer.cellSize0 = cellSizeTheta;
+    caloLayer.cellSize1 = cellSizePhi;
 
     caloData->layers.push_back(caloLayer);
   }
