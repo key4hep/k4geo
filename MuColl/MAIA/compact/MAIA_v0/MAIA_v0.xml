@@ -115,8 +115,8 @@
 		<constant name="ECalEndcap_outer_symmetry"  value="12"/>
 		<constant name="ECalEndcap_inner_symmetry"  value="12"/>
 
-		<constant name="HCalBarrel_inner_radius"    value="2125.0*mm"/>
-		<constant name="HCalBarrel_outer_radius"    value="4112.5*mm"/>
+		<constant name="HCalBarrel_inner_radius"    value="2126.0*mm"/>
+		<constant name="HCalBarrel_outer_radius"    value="4113.5*mm"/>
 		<constant name="HCalBarrel_half_length"     value="2574.5*mm"/>
 		<constant name="HCalBarrel_symmetry"        value="12"/>
 
@@ -124,8 +124,8 @@
 		<constant name="HCalEndcap_inner_radius"    value="307*mm"/>
 		<constant name="HCalEndcap_inner_radius2"   value="445*mm"/>
 		<constant name="HCalEndcap_outer_radius"    value="HCalBarrel_outer_radius"/>
-		<constant name="HCalEndcap_min_z"           value="2574.5*mm"/>
-		<constant name="HCalEndcap_max_z"           value="4562*mm"/>
+		<constant name="HCalEndcap_min_z"           value="2575.5*mm"/>
+		<constant name="HCalEndcap_max_z"           value="4563*mm"/>
 		<constant name="HCalEndcap_symmetry"        value="12"/>
 		<constant name="HCalEndcap_zcutout"         value="200*mm"/>
 
