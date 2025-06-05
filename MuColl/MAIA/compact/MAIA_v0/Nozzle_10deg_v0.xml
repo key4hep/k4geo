@@ -2,6 +2,7 @@
     <!--  Definition of global dictionary constants          -->
     <define>
         <constant name="Nozzle_kink_z"  value="100*cm"/>
+        <constant name="Nozzle_kink_max_r"  value="17.57473619*cm"/>
     </define>
     
     <!--  Definition of the used visualization attributes    -->
@@ -18,7 +19,7 @@
             <material name="Tungsten_Alloy"/>
             <zplane z="Nozzle_zmin" rmin="1*cm" rmax="1*cm" />
             <zplane z="15*cm" rmin="0.6*cm" rmax="2.58694*cm" />
-            <zplane z="Nozzle_kink_z" rmin="0.3*cm" rmax="17.57473619*cm" />
+            <zplane z="Nozzle_kink_z" rmin="0.3*cm" rmax="Nozzle_kink_max_r" />
             <zplane z="Nozzle_kink_z" rmin="0.3*cm" rmax="13.47473619*cm" />
             <zplane z="204.48824*cm" rmin="0.6124092832*cm" rmax="13.47473619*cm" />
             <zplane z="595*cm" rmin="1.78*cm" rmax="43*cm" />
@@ -29,7 +30,7 @@
             <material name="Tungsten_Alloy"/>
             <zplane z="-Nozzle_zmin" rmin="1*cm" rmax="1*cm" />
             <zplane z="-15*cm" rmin="0.6*cm" rmax="2.58694*cm" />
-            <zplane z="-Nozzle_kink_z" rmin="0.3*cm" rmax="17.57473619*cm" />
+            <zplane z="-Nozzle_kink_z" rmin="0.3*cm" rmax="Nozzle_kink_max_r" />
             <zplane z="-Nozzle_kink_z" rmin="0.3*cm" rmax="13.47473619*cm" />
             <zplane z="-204.48824*cm" rmin="0.6124092832*cm" rmax="13.47473619*cm" />
             <zplane z="-595*cm" rmin="1.78*cm" rmax="43*cm" />
@@ -56,14 +57,14 @@
         <detector name="NozzleWCludding_right" type="DD4hep_PolyconeSupport" vis="NozzleWVis" region="NozzleRegion">
             <comment>Cludding part of the nozzle: Tungsten</comment>
             <material name="Tungsten_Alloy"/>
-            <zplane z="Nozzle_kink_z" rmin="13.57473619*cm" rmax="17.57473619*cm" />
+            <zplane z="Nozzle_kink_z" rmin="13.57473619*cm" rmax="Nozzle_kink_max_r" />
             <zplane z="595*cm" rmin="51*cm" rmax="55*cm" />
         </detector>
 
         <detector name="NozzleWCludding_left" type="DD4hep_PolyconeSupport" vis="NozzleWVis" region="NozzleRegion">
             <comment>Cludding part of the nozzle: Tungsten</comment>
             <material name="Tungsten_Alloy"/>
-            <zplane z="-Nozzle_kink_z" rmin="13.57473619*cm" rmax="17.57473619*cm" />
+            <zplane z="-Nozzle_kink_z" rmin="13.57473619*cm" rmax="Nozzle_kink_max_r" />
             <zplane z="-595*cm" rmin="51*cm" rmax="55*cm" />
         </detector>
 

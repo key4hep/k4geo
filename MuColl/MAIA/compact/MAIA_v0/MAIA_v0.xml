@@ -127,7 +127,7 @@
 		<constant name="HCalEndcap_min_z"           value="2575.5*mm"/>
 		<constant name="HCalEndcap_max_z"           value="4563*mm"/>
 		<constant name="HCalEndcap_symmetry"        value="12"/>
-		<constant name="HCalEndcap_zcutout"         value="200*mm"/>
+		<constant name="HCalEndcap_zcutout"         value="204.48824*cm"/>
 
         <constant name="HCalRing_inner_radius"      value="1738*mm"/>
         <constant name="HCalRing_outer_radius"      value="HCalEndcap_outer_radius"/>
