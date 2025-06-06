@@ -94,7 +94,7 @@
 		<constant name="InnerTracker_half_length"   value="2306*mm"/>
 
 		<constant name="OuterTracker_inner_radius"  value="580*mm"/>
-		<constant name="OuterTracker_outer_radius"  value="1500*mm - env_safety"/>  <!-- to avoid overlap with Solenoid-->
+		<constant name="OuterTracker_outer_radius"  value="1500*mm - 3*env_safety"/>  <!-- to avoid overlap with Solenoid-->
 		<constant name="OuterTracker_half_length"   value="2306*mm"/>
 
 		<constant name="Solenoid_inner_radius"      value="1500*mm"/>
