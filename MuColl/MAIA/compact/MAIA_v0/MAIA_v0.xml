@@ -94,14 +94,13 @@
 		<constant name="InnerTracker_half_length"   value="2306*mm"/>
 
 		<constant name="OuterTracker_inner_radius"  value="580*mm"/>
-		<constant name="OuterTracker_outer_radius"  value="1500*mm - 3*env_safety"/>  <!-- to avoid overlap with Solenoid-->
+		<constant name="OuterTracker_outer_radius"  value="1500*mm - 3*env_safety"/>  <!-- to avoid overlap with Solenoid Envelope-->
 		<constant name="OuterTracker_half_length"   value="2306*mm"/>
 
 		<constant name="Solenoid_inner_radius"      value="1500*mm"/>
-		<constant name="Solenoid_outer_radius"      value="1856.7*mm"/>
+        <constant name="SolenoidVacuumTank_thickness" value="30.*mm"/>
+        <constant name="SolenoidCoil_thickness"     value="296.7*mm"/>        
 		<constant name="Solenoid_half_length"       value="2307*mm"/>
-		<constant name="Solenoid_Coil_half_length"  value="2277*mm"/>
-		<constant name="Solenoid_Coil_radius"       value="1680*mm"/>
 
 		<constant name="ECalBarrel_inner_radius"    value="1857*mm"/>
 		<constant name="ECalBarrel_outer_radius"    value="2124.5*mm"/>
@@ -110,8 +109,8 @@
 
 		<constant name="ECalEndcap_inner_radius"    value="310*mm"/>
 		<constant name="ECalEndcap_outer_radius"    value="ECalBarrel_outer_radius"/>
-		<constant name="ECalEndcap_min_z"           value="2307*mm"/>
-		<constant name="ECalEndcap_max_z"           value="2574.5*mm"/>
+		<constant name="ECalEndcap_min_z"           value="2307*mm + 3*env_safety"/>
+		<constant name="ECalEndcap_max_z"           value="2574.5*mm + 3*env_safety"/>
 		<constant name="ECalEndcap_outer_symmetry"  value="12"/>
 		<constant name="ECalEndcap_inner_symmetry"  value="12"/>
 
@@ -124,8 +123,8 @@
 		<constant name="HCalEndcap_inner_radius"    value="307*mm"/>
 		<constant name="HCalEndcap_inner_radius2"   value="445*mm"/>
 		<constant name="HCalEndcap_outer_radius"    value="HCalBarrel_outer_radius"/>
-		<constant name="HCalEndcap_min_z"           value="2575.5*mm"/>
-		<constant name="HCalEndcap_max_z"           value="4563*mm"/>
+		<constant name="HCalEndcap_min_z"           value="2575.5*mm + 3*env_safety"/>
+		<constant name="HCalEndcap_max_z"           value="4563*mm + 3*env_safety"/>
 		<constant name="HCalEndcap_symmetry"        value="12"/>
 		<constant name="HCalEndcap_zcutout"         value="204.48824*cm"/>
 
@@ -269,8 +268,8 @@
 		<field name="GlobalSolenoid" type="solenoid"
 			inner_field="5.0*tesla"
 			outer_field="-0.936941*tesla"
-			zmax="Solenoid_Coil_half_length"
-			inner_radius="Solenoid_Coil_radius"
+			zmax="Solenoid_half_length-SolenoidVacuumTank_thickness"
+			inner_radius="Solenoid_inner_radius+SolenoidVacuumTank_thickness + SolenoidCoil_thickness/2"
 			outer_radius="HCalBarrel_outer_radius">
 		</field>
     </fields>
