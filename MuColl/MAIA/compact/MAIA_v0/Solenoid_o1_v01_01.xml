@@ -1,7 +1,7 @@
 <lccdd>
      
     <define>
-        <constant name="Solenoid_outer_radius" value="Solenoid_inner_radius + SolenoidVacuumTank_thickness + 2*SolenoidCoil_thickness"/>
+        <constant name="Solenoid_outer_radius" value="Solenoid_inner_radius + 2*SolenoidVacuumTank_thickness + SolenoidCoil_thickness"/>
     </define>
 
     <display>
@@ -13,12 +13,14 @@
     
     <detectors>
         <detector name="Solenoid" type="DD4hep_SubdetectorAssembly" vis="SOLVis">
-            <shape type="Tube" rmin="Solenoid_inner_radius-2*env_safety" rmax="Solenoid_inner_radius+2*SolenoidVacuumTank_thickness+2*env_safety" dz="Solenoid_half_length+2*env_safety" material="Vacuum"/>
+            <shape type="Tube" rmin="Solenoid_inner_radius-2*env_safety" rmax="Solenoid_outer_radius+2*env_safety" dz="Solenoid_half_length+2*env_safety" material="Vacuum"/>
             <composite name="SolenoidBarrel"/>
-            <composite name="SolenoidEndcaps"/> 
         </detector>
     </detectors>
     
+    <!-- Since we assume the vacuum tank could be done in aluminum a-la-ATLAS, everything is aluminum So the geometry can be simplified as a single Alu block -->
+    <!-- The "endcap" side plates will need to be implemented once a more detailed design becomes available -->
+
     <detectors>
         <detector name="SolenoidBarrel" type="DD4hep_Solenoid_o1_v01" id="0" reflect="true">
             <type_flags type=" DetType_COIL"/>
@@ -26,22 +28,15 @@
                 <shape type="Assembly"/>
             </envelope>
             
-            <layer id="0" inner_r="Solenoid_inner_radius" outer_z="Solenoid_half_length-SolenoidVacuumTank_thickness" vis="SolenoidBarrelLayerVis">
+            <layer id="0" inner_r="Solenoid_inner_radius" outer_z="Solenoid_half_length" vis="SolenoidBarrelLayerVis">
                 <slice material="Aluminium" thickness="SolenoidVacuumTank_thickness"/>
             </layer>
-            <layer id="1" inner_r="Solenoid_inner_radius + SolenoidVacuumTank_thickness" outer_z="Solenoid_half_length-SolenoidVacuumTank_thickness">
+            <layer id="1" inner_r="Solenoid_inner_radius + SolenoidVacuumTank_thickness" outer_z="Solenoid_half_length">
                 <slice material="Aluminium" thickness="SolenoidCoil_thickness" vis="SolenoidCoilEndsVis" />
             </layer>
-            <layer id="2" inner_r="Solenoid_inner_radius + SolenoidVacuumTank_thickness + SolenoidCoil_thickness" outer_z="Solenoid_half_length-SolenoidVacuumTank_thickness" vis="SolenoidBarrelLayerVis">
+            <layer id="2" inner_r="Solenoid_inner_radius + SolenoidVacuumTank_thickness + SolenoidCoil_thickness" outer_z="Solenoid_half_length" vis="SolenoidBarrelLayerVis">
                 <slice material="Aluminium" thickness="SolenoidVacuumTank_thickness"/>
             </layer>
-        </detector>
-        
-        <detector name="SolenoidEndcaps" type="DD4hep_DiskTracker" id="0" reflect="true" vis="SolenoidBarrelLayerVis">
-            <layer id="0" inner_r="Solenoid_inner_radius" inner_z="Solenoid_half_length-SolenoidVacuumTank_thickness/2" outer_r="Solenoid_outer_radius" vis="SolenoidBarrelLayerVis">
-            <!--  The inner_r here stands for the centre of the disk -->
-	        <slice material="Aluminium" thickness="SolenoidVacuumTank_thickness" />
-          </layer>
         </detector>
     </detectors>
 </lccdd>
