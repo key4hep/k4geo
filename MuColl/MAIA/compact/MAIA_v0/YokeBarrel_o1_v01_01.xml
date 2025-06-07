@@ -1,7 +1,7 @@
 <lccdd>
     <!--  Definition of global dictionary constants          -->
     <define>
-        <constant name="YokeBarrel_layers" value="7"/>
+        <constant name="YokeBarrel_layers" value="4"/>
         <constant name="YokeBarrel_layer_thickness" value="10.0*cm + 4.0*cm"/>
     </define>
     
