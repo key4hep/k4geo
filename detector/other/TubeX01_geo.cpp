@@ -698,7 +698,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector /*
       return 0; // fatal failure
     }
     } // switch (crossType)
-  }   // while (db->getTuple())
+  } // while (db->getTuple())
 
   // ######################################################################################################################################################################
 

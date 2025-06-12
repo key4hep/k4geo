@@ -70,7 +70,7 @@ namespace sim {
       /// Standard constructor
       Hit(const Position& cell_pos);
       /// Default destructor
-      virtual ~Hit(){};
+      virtual ~Hit() {};
       /// Move assignment operator
       Hit& operator=(Hit&& c) = delete;
 
