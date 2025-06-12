@@ -30,8 +30,8 @@ using namespace rec;
 /// helper to wrap access to global constants
 struct EnvDetector {
   Detector* _theDetector;
-  EnvDetector() : _theDetector(0){};
-  EnvDetector(Detector& theDetector) : _theDetector(&theDetector){};
+  EnvDetector() : _theDetector(0) {};
+  EnvDetector(Detector& theDetector) : _theDetector(&theDetector) {};
   inline double GetParameterAsDouble(const std::string& name) const { return _theDetector->constant<double>(name); }
 };
 
