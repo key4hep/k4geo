@@ -16,8 +16,8 @@
 
 			<envelope vis="ECALVis">
 				<shape type="BooleanShape" operation="Subtraction" material="Air">
-					<shape type="PolyhedraRegular"  numsides="ECalEndcap_outer_symmetry" rmin="ECalEndcap_inner_radius-env_safety" rmax="ECalEndcap_outer_radius+ 10.0*env_safety" dz="2.0*ECalEndcap_max_z+2*env_safety"/>
-					<shape type="PolyhedraRegular"  numsides="ECalEndcap_outer_symmetry" rmin="0" rmax="ECalEndcap_outer_radius+ 100.0*env_safety" dz="2.0*ECalEndcap_min_z-2*env_safety"/>
+					<shape type="PolyhedraRegular"  numsides="ECalEndcap_outer_symmetry" rmin="ECalEndcap_inner_radius-env_safety" rmax="ECalEndcap_outer_radius+2.0*env_safety" dz="2.0*ECalEndcap_max_z+2*env_safety"/>
+					<shape type="PolyhedraRegular"  numsides="ECalEndcap_outer_symmetry" rmin="0" rmax="ECalEndcap_outer_radius+2.0*env_safety" dz="2.0*ECalEndcap_min_z-2*env_safety"/>
 					</shape>
 				<rotation x="0*deg" y="0*deg" z="90*deg-180*deg/ECalEndcap_outer_symmetry"/>
 			</envelope>
@@ -48,5 +48,4 @@
 	  </plugin>
 	</plugins>
 </lccdd>
-
 

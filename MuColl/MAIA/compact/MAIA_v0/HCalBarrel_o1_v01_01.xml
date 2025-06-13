@@ -31,7 +31,7 @@
 			<type_flags type="DetType_CALORIMETER + DetType_HADRONIC + DetType_BARREL"/>
 
 			<envelope vis="HCALVis">
-				<shape type="PolyhedraRegular" numsides="HCalBarrel_symmetry"  rmin="HCalBarrel_inner_radius-10*env_safety" rmax="HCalBarrel_outer_radius+10*env_safety" dz="HCalBarrel_half_length*2+10*env_safety" material = "Air"/>
+				<shape type="PolyhedraRegular" numsides="HCalBarrel_symmetry"  rmin="HCalBarrel_inner_radius-10*env_safety" rmax="HCalBarrel_outer_radius+10*env_safety" dz="HCalBarrel_half_length*2+5*env_safety" material = "Air"/>
 				<rotation x="0*deg" y="0*deg" z="90*deg-180*deg/HCalBarrel_symmetry"/>
 			</envelope>
 
