@@ -27,7 +27,7 @@
 		<constant name="InnerTracker_Endcap_radius_6" value="284*mm"/>
 
 
-		<constant name="VertexCoolingGap"            value="2*mm"/>
+		<constant name="VertexCoolingGap"            value="1.5*mm"/>
 		<constant name="VertexCoolingShellThickness" value="0.3*mm"/>
 
 		<constant name="BeampipeShellZ1" value="50*mm"/>
@@ -412,7 +412,7 @@
 			<envelope>
 				<shape type="Assembly"/>
 			</envelope>
-			<section start="500*mm"  end="Nozzle_kink_z"        rMin1="BeampipeShellR1+VertexCoolingGap"  rMin2="BeampipeShellR2+VertexCoolingGap" rMax1="BeampipeShellR1+VertexCoolingGap+VertexCoolingShellThickness"           rMax2="BeampipeShellR2+VertexCoolingGap+VertexCoolingShellThickness" material="CarbonFiber" name="ConeSupport1" vis="SupportVis"/>
+			<section start="500*mm"  end="Nozzle_kink_z"        rMin1="BeampipeShellR1+VertexCoolingGap"  rMin2="BeampipeShellR2+VertexCoolingGap" rMax1="BeampipeShellR1+VertexCoolingGap+VertexCoolingShellThickness"          rMax2="BeampipeShellR2+VertexCoolingGap+VertexCoolingShellThickness" material="CarbonFiber" name="ConeSupport1" vis="SupportVis"/>
 			<section start="Nozzle_kink_z" end="InnerTracker_half_length" rMin1="BeampipeShellR2+VertexCoolingGap" rMin2="BeampipeShellR3+VertexCoolingGap" rMax1="BeampipeShellR2+VertexCoolingGap+VertexCoolingShellThickness" rMax2="BeampipeShellR3+VertexCoolingGap+VertexCoolingShellThickness" material="CarbonFiber" name="ConeSupport2" vis="SupportVis"/>
 		</detector>
 

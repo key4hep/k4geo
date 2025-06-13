@@ -31,13 +31,13 @@
                 <shape type="BooleanShape" operation="Subtraction" material="Air">
                     <shape type="BooleanShape" operation="Subtraction">
                         <shape type="PolyhedraRegular"  numsides="YokeEndcap_outer_symmetry" rmin="0" rmax="YokeEndcap_outer_radius+ 10.0*env_safety" dz="2.0*YokeEndcap_max_z+2.0*env_safety"/>
-                        <shape type="PolyhedraRegular"  numsides="YokeEndcap_outer_symmetry" rmin="0" rmax="YokeEndcap_outer_radius+ 20.0*env_safety" dz="2.0*YokeEndcap_min_z"/>
+                        <shape type="PolyhedraRegular"  numsides="YokeEndcap_outer_symmetry" rmin="0" rmax="YokeEndcap_outer_radius+ 20.0*env_safety" dz="2.0*YokeEndcap_min_z+2.0*env_safety"/>
                     </shape>
                     <shape type="Polycone" startphi="0" deltaphi="2.0*pi*rad">
-                        <zplane z="-YokeEndcap_max_z-2.0*env_safety" rmin="0" rmax="YokeEndcap_inner_radius2"/>
-                        <zplane z="-YokeEndcap_min_z+2.0*env_safety" rmin="0" rmax="YokeEndcap_inner_radius"/>
-                        <zplane z="YokeEndcap_min_z-2.0*env_safety" rmin="0" rmax="YokeEndcap_inner_radius"/>
-                        <zplane z="YokeEndcap_max_z+2.0*env_safety" rmin="0" rmax="YokeEndcap_inner_radius2"/>
+                        <zplane z="-YokeEndcap_max_z-2.0*env_safety" rmin="0" rmax="YokeEndcap_inner_radius2-2.0*env_safety"/>
+                        <zplane z="-YokeEndcap_min_z+2.0*env_safety" rmin="0" rmax="YokeEndcap_inner_radius-2.0*env_safety"/>
+                        <zplane z="YokeEndcap_min_z-2.0*env_safety" rmin="0" rmax="YokeEndcap_inner_radius-2.0*env_safety"/>
+                        <zplane z="YokeEndcap_max_z+2.0*env_safety" rmin="0" rmax="YokeEndcap_inner_radius2-2.0*env_safety"/>
                     </shape>
                 </shape>
                 <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/YokeEndcap_outer_symmetry"/>
