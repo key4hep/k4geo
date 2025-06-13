@@ -47,6 +47,13 @@ Additionally, a non-cylindrical (polycone) tracking volume was added that exclud
 needs to be used in `ddsim`. The definitions for the cylindrical volume were kept to be backwards compatible to the `Geant4TCUserParticleHandler`.
 Overlaps related to the LumiCal were fixed that were present in the v06 model
 
+CLD_o2_v08
+----------
+
+This model is based on `CLD_o2_v07` with the following changes:
+
+* correct the material used for the scintillator to G4_POLYSTYRENE so Birks' Law is taken into account.
+
 CLD_o3_v01
 ----------
 
