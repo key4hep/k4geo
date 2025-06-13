@@ -5,12 +5,12 @@
         <detector name="Vertex" type="DD4hep_SubdetectorAssembly" vis="VXDVis">
 			<shape type="Polycone" material="Air">
 				<zplane z="-Vertex_half_length" rmin="VertexEndcap_rmin4 - 5*env_safety" rmax="Vertex_outer_radius"/>
-				<zplane z="-VertexEndcap_z3"    rmin="VertexEndcap_rmin3 - 5*env_safety" rmax="Vertex_outer_radius"/>
+				<zplane z="-VertexEndcap_z3 - 20*env_safety"    rmin="VertexEndcap_rmin3 - 5*env_safety" rmax="Vertex_outer_radius"/>
 				<zplane z="-VertexEndcap_z2"    rmin="VertexEndcap_rmin2 - 5*env_safety" rmax="Vertex_outer_radius"/>
-				<zplane z="-VertexEndcap_z1"    rmin="VertexEndcap_rmin1 - 5*env_safety" rmax="Vertex_outer_radius"/>
-				<zplane z="VertexEndcap_z1"     rmin="VertexEndcap_rmin1 - 5*env_safety" rmax="Vertex_outer_radius"/>
+				<zplane z="-VertexEndcap_z1 - 15*env_safety"    rmin="VertexEndcap_rmin1 - 5*env_safety" rmax="Vertex_outer_radius"/>
+				<zplane z="VertexEndcap_z1 + 15*env_safety"     rmin="VertexEndcap_rmin1 - 5*env_safety" rmax="Vertex_outer_radius"/>
 				<zplane z="VertexEndcap_z2"     rmin="VertexEndcap_rmin2 - 5*env_safety" rmax="Vertex_outer_radius"/>
-				<zplane z="VertexEndcap_z3"     rmin="VertexEndcap_rmin3 - 5*env_safety" rmax="Vertex_outer_radius"/>
+				<zplane z="VertexEndcap_z3 + 20*env_safety"     rmin="VertexEndcap_rmin3 - 5*env_safety" rmax="Vertex_outer_radius"/>
 				<zplane z="Vertex_half_length"  rmin="VertexEndcap_rmin4 - 5*env_safety" rmax="Vertex_outer_radius"/>
 			</shape>
 			<comment>Vertex Detector Assembly</comment>
