@@ -14,8 +14,8 @@
 						<shape type="BooleanShape" operation="Subtraction">
 							<!--shape type="PolyhedraRegular"  numsides="HCalEndcap_symmetry" rmin="0" rmax="HCalEndcap_outer_radius+env_safety" dz="2.0*HCalEndcap_max_z+2.0*env_safety"/>
 							<shape type="PolyhedraRegular"  numsides="HCalEndcap_symmetry" rmin="0" rmax="HCalRing_inner_radius-env_safety" dz="2.0*HCalEndcap_min_z-2.0*env_safety"/-->
-							<shape type="PolyhedraRegular"  numsides="HCalEndcap_symmetry" rmin="HCalEndcap_inner_radius-env_safety" rmax="HCalEndcap_outer_radius+10.0*env_safety" dz="2.0*HCalEndcap_max_z"/>
-							<shape type="PolyhedraRegular"  numsides="HCalEndcap_symmetry" rmin="0" rmax="HCalEndcap_outer_radius+10.0*env_safety" dz="2.0*HCalEndcap_min_z"/>
+							<shape type="PolyhedraRegular"  numsides="HCalEndcap_symmetry" rmin="HCalEndcap_inner_radius-100*env_safety" rmax="HCalEndcap_outer_radius+env_safety" dz="2.0*HCalEndcap_max_z"/>
+							<shape type="PolyhedraRegular"  numsides="HCalEndcap_symmetry" rmin="0" rmax="HCalEndcap_outer_radius+env_safety" dz="2.0*HCalEndcap_min_z"/>
 						</shape>
 						<!--shape type="PolyhedraRegular"  numsides="HCalEndcap_symmetry" rmin="0" rmax="HCalEndcap_outer_radius+2.0*env_safety" dz="2.0*HCalRing_min_z-2.0*env_safety"/-->
 					</shape>
