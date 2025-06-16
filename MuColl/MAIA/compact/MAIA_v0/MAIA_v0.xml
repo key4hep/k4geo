@@ -119,7 +119,7 @@
 		<constant name="HCalEndcap_zcutout"         value="204.48824*cm"/>
                 
         <constant name="YokeBarrel_inner_radius"    value="4150*mm"/>
-        <constant name="YokeBarrel_outer_radius"    value="7150*mm"/>
+        <constant name="YokeBarrel_outer_radius"    value="5895*mm"/>
         <constant name="YokeBarrel_half_length"     value="HCalEndcap_max_z + 3*env_safety"/>
         <constant name="YokeBarrel_symmetry"        value="12"/>
 
