@@ -21,7 +21,7 @@
     <!--  Includes for sensitives and support                -->
     <detectors>
         
-        <detector name="YokeEndcap" type="GenericCalEndcap_o2_v01" id="DetID_Yoke_Endcap" readout="YokeEndcapCollection" vis="YOKEVis" >
+        <detector name="YokeEndcap" type="GenericCalEndcap_o1_v01" id="DetID_Yoke_Endcap" readout="YokeEndcapCollection" vis="YOKEVis" >
             
             <comment>Encap Yoke</comment>
             
@@ -43,7 +43,7 @@
                 <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/YokeEndcap_outer_symmetry"/>
             </envelope>
             
-            <dimensions nsides_inner="YokeEndcap_outer_symmetry" nsides_outer="YokeEndcap_outer_symmetry" zmin="YokeEndcap_min_z" rmin="YokeEndcap_inner_radius" rmin2="YokeEndcap_inner_radius2" rmax="YokeEndcap_outer_radius"/>
+            <dimensions nsides_inner="YokeEndcap_outer_symmetry" nsides_outer="YokeEndcap_outer_symmetry" zmin="YokeEndcap_min_z" rmin="YokeEndcap_inner_radius" rmin2="YokeEndcap_inner_radius2" rmax="YokeEndcap_outer_radius" conicalCutout="true"/>
             
 	   
 	    
