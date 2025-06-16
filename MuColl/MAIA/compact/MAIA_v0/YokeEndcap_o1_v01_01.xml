@@ -21,7 +21,7 @@
     <!--  Includes for sensitives and support                -->
     <detectors>
         
-        <detector name="YokeEndcap" type="GenericCalEndcap_o2_v01" id="DetID_Yoke_Endcap" readout="YokeEndcapCollection" vis="YOKEVis" calorimeterType="MUON_ENDCAP" gap="0.*cm" material="Air">
+        <detector name="YokeEndcap" type="GenericCalEndcap_o1_v01" id="DetID_Yoke_Endcap" readout="YokeEndcapCollection" vis="YOKEVis" calorimeterType="MUON_ENDCAP" gap="0.*cm" material="Air">
             
             <comment>Encap Yoke</comment>
             
@@ -43,7 +43,7 @@
                 <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/YokeEndcap_outer_symmetry"/>
             </envelope>
             
-            <dimensions nsides_inner="YokeEndcap_outer_symmetry" nsides_outer="YokeEndcap_outer_symmetry" zmin="YokeEndcap_min_z" rmin="YokeEndcap_inner_radius" rmin2="YokeEndcap_inner_radius2" rmax="YokeEndcap_outer_radius"/>
+            <dimensions nsides_inner="YokeEndcap_outer_symmetry" nsides_outer="YokeEndcap_outer_symmetry" zmin="YokeEndcap_min_z" rmin="YokeEndcap_inner_radius" rmin2="YokeEndcap_inner_radius2" rmax="YokeEndcap_outer_radius" conicalCutout="true"/>
             <layer repeat="1" vis="YokeEndcapLayerVis" rmin="YokeEndcap_inner_radius+YokeEndcapStep_dr">
                 <slice material="Air" thickness="19.7*cm"/>
                 <slice material="Aluminium" thickness="0.1*cm" />

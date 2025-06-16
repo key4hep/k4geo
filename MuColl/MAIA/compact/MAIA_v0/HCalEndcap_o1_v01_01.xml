@@ -16,7 +16,7 @@
 
 	<detectors>
 
-		<detector name="HCalEndcap" type="GenericCalEndcap_o2_v01" id="DetID_HCAL_Endcap" readout="HCalEndcapCollection" vis="HCALVis" >
+		<detector name="HCalEndcap" type="GenericCalEndcap_o1_v01" id="DetID_HCAL_Endcap" readout="HCalEndcapCollection" vis="HCALVis" >
 
 			<comment>Hadronic Calorimeter: Endcap</comment>
 
@@ -32,7 +32,7 @@
 
 			<dimensions nsides_inner="HCalEndcap_symmetry" nsides_outer="(int) HCalEndcap_symmetry"
 				zmin="HCalEndcap_min_z" rmin="HCalEndcap_inner_radius" rmin2="HCalEndcap_inner_radius2"
-				rmax="HCalEndcap_outer_radius"/>
+				rmax="HCalEndcap_outer_radius" conicalCutout="true"/>
 
 			<layer repeat="HCalStep_layers" vis="HCalEndcapLayerVis" rmin="HCalEndcap_inner_radius+HCalStep_dr">
 				<slice material="Steel235"       thickness="0.5*mm" vis="HCalAbsorberVis" radiator="yes"/>
