@@ -50,4 +50,15 @@
 
 	</detectors>
 
+	<plugins>
+		<plugin name="DD4hep_CaloFaceBarrelSurfacePlugin">
+			<argument value="HCalBarrel"/>
+			<argument value="length=2.*HCalBarrel_half_length"    />
+			<argument value="radius=HCalBarrel_inner_radius"  />
+			<argument value="phi0=0"    />
+			<argument value="symmetry=HCalBarrel_symmetry"/>
+			<argument value="systemID=DetID_HCAL_Barrel"/>
+		</plugin>
+	</plugins>
+
 </lccdd>

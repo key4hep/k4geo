@@ -8,7 +8,7 @@
 	</define>
 
 	<detectors>
-		<detector name="HCalEndcaps" type="DD4hep_SubdetectorAssembly" vis="HCALVis">
+		<detector name="HCalEndcap" type="DD4hep_SubdetectorAssembly" vis="HCALVis">
 				<shape type="BooleanShape" operation="Subtraction" material="Air">
 					<shape type="BooleanShape" operation="Subtraction">
 						<shape type="BooleanShape" operation="Subtraction">
@@ -150,11 +150,16 @@
 
 	</detectors -->
 
-
-
-
-
-
+	<plugins>
+		<plugin name="DD4hep_CaloFaceEndcapSurfacePlugin">
+			<argument value="HCalEndcap"/>
+			<argument value="zpos=HCalEndcap_min_z"    />
+			<argument value="radius=HCalEndcap_outer_radius"  />
+			<argument value="phi0=0"    />
+			<argument value="symmetry=HCalEndcap_symmetry"/>
+			<argument value="systemID=DetID_HCAL_Endcap"/>
+	  </plugin>
+	</plugins>
 
 </lccdd>
 
