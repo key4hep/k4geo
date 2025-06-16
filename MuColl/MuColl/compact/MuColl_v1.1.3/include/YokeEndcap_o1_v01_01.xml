@@ -20,7 +20,7 @@
 
 	<detectors>
 
-		<detector name="YokeEndcap" type="GenericCalEndcap_o2_v01" id="DetID_Yoke_Endcap" readout="YokeEndcapCollection" vis="YOKEVis" >
+		<detector name="YokeEndcap" type="GenericCalEndcap_o1_v01" id="DetID_Yoke_Endcap" readout="YokeEndcapCollection" vis="YOKEVis" >
 
 			<comment>Yoke Encap</comment>
 
@@ -45,7 +45,8 @@
 			</envelope>
 
 			<dimensions nsides_inner="YokeEndcap_outer_symmetry" nsides_outer="YokeEndcap_outer_symmetry"
-				zmin="YokeEndcap_min_z" rmin="YokeEndcap_inner_radius" rmin2="YokeEndcap_inner_radius2" rmax="YokeEndcap_outer_radius"/>
+				zmin="YokeEndcap_min_z" rmin="YokeEndcap_inner_radius" rmin2="YokeEndcap_inner_radius2" rmax="YokeEndcap_outer_radius"
+				conicalCutout="true"/>
 			<layer repeat="1" vis="YokeEndcapLayerVis" rmin="YokeEndcap_inner_radius + YokeEndcapStep_dr">
 				<slice material="Iron"          thickness="19.7*cm" radiator="yes" vis="YokeAbsorberVis"/>
 				<slice material="Aluminium"     thickness="0.1*cm"/>
