@@ -603,15 +603,15 @@ def setupCerenkov(kernel):
     from DDG4 import PhysicsList
 
     seq = kernel.physicsList()
-    cerenkov = PhysicsList(kernel, "Geant4CerenkovPhysics/CerenkovPhys")
+    cerenkov = PhysicsList(kernel, 'Geant4CerenkovPhysics/CerenkovPhys')
     cerenkov.MaxNumPhotonsPerStep = 1000
     # cerenkov.MaxBetaChangePerStep = 10.0
     # cerenkov.TrackSecondariesFirst = True
     cerenkov.VerboseLevel = 0
     cerenkov.enableUI()
     seq.adopt(cerenkov)
-    ph = PhysicsList(kernel, "Geant4OpticalPhotonPhysics/OpticalGammaPhys")
-    ph.addParticleConstructor("G4OpticalPhoton")
+    ph = PhysicsList(kernel, 'Geant4OpticalPhotonPhysics/OpticalGammaPhys')
+    ph.addParticleConstructor('G4OpticalPhoton')
     ph.VerboseLevel = 0
     ph.enableUI()
     seq.adopt(ph)
