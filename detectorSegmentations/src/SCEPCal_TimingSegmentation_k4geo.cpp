@@ -3,42 +3,44 @@
 //         Princeton University
 //===============================
 #include "detectorSegmentations/SCEPCal_TimingSegmentation_k4geo.h"
+#include "DD4hep/Printout.h"
 #include <climits>
 #include <cmath>
 #include <stdexcept>
-#include "DD4hep/Printout.h"
-
 
 namespace dd4hep {
 namespace DDSegmentation {
 
-SCEPCal_TimingSegmentation_k4geo::SCEPCal_TimingSegmentation_k4geo(const std::string& cellEncoding) : Segmentation(cellEncoding) {
+  SCEPCal_TimingSegmentation_k4geo::SCEPCal_TimingSegmentation_k4geo(const std::string& cellEncoding)
+      : Segmentation(cellEncoding) {
     _type = "SCEPCal_TimingSegmentation_k4geo";
     _description = "SCEPCal timing layer segmentation";
     registerIdentifier("identifier_system", "Cell ID identifier for System", fSystemId, "system");
-    registerIdentifier("identifier_phi",    "Cell ID identifier for Phi",    fPhiId,    "phi");
-    registerIdentifier("identifier_theta",  "Cell ID identifier for Theta",  fThetaId,  "theta");
-    registerIdentifier("identifier_gamma",  "Cell ID identifier for Gamma",  fGammaId,  "gamma");
-}
+    registerIdentifier("identifier_phi", "Cell ID identifier for Phi", fPhiId, "phi");
+    registerIdentifier("identifier_theta", "Cell ID identifier for Theta", fThetaId, "theta");
+    registerIdentifier("identifier_gamma", "Cell ID identifier for Gamma", fGammaId, "gamma");
+  }
 
-SCEPCal_TimingSegmentation_k4geo::SCEPCal_TimingSegmentation_k4geo(const BitFieldCoder* decoder) : Segmentation(decoder) {
+  SCEPCal_TimingSegmentation_k4geo::SCEPCal_TimingSegmentation_k4geo(const BitFieldCoder* decoder)
+      : Segmentation(decoder) {
     _type = "SCEPCal_TimingSegmentation_k4geo";
     _description = "SCEPCal timing layer segmentation";
     registerIdentifier("identifier_system", "Cell ID identifier for System", fSystemId, "system");
-    registerIdentifier("identifier_phi",    "Cell ID identifier for Phi",    fPhiId,    "phi");
-    registerIdentifier("identifier_theta",  "Cell ID identifier for Theta",  fThetaId,  "theta");
-    registerIdentifier("identifier_gamma",  "Cell ID identifier for Gamma",  fGammaId,  "gamma");
-}
+    registerIdentifier("identifier_phi", "Cell ID identifier for Phi", fPhiId, "phi");
+    registerIdentifier("identifier_theta", "Cell ID identifier for Theta", fThetaId, "theta");
+    registerIdentifier("identifier_gamma", "Cell ID identifier for Gamma", fGammaId, "gamma");
+  }
 
-SCEPCal_TimingSegmentation_k4geo::~SCEPCal_TimingSegmentation_k4geo() {}
+  SCEPCal_TimingSegmentation_k4geo::~SCEPCal_TimingSegmentation_k4geo() {}
 
-Vector3D SCEPCal_TimingSegmentation_k4geo::position(const CellID& cellId) const {
+  Vector3D SCEPCal_TimingSegmentation_k4geo::position(const CellID& cellId) const {
     if (fPositionOf.find(cellId) != fPositionOf.end()) {
-        return fPositionOf.find(cellId)->second;
+      return fPositionOf.find(cellId)->second;
     }
 
     dd4hep::printout(dd4hep::WARNING, "SCEPCal_TimingSegmentation_k4geo::position",
-        "cellID %lld not found, returning (0,0,0)!", cellId);    return Vector3D(0,0,0);
-}
-}
-}
+                     "cellID %lld not found, returning (0,0,0)!", cellId);
+    return Vector3D(0, 0, 0);
+  }
+} // namespace DDSegmentation
+} // namespace dd4hep
