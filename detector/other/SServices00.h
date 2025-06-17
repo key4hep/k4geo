@@ -14,8 +14,8 @@
 
 class BuildTPCEndplateServices {
 public:
-  BuildTPCEndplateServices(){};
-  ~BuildTPCEndplateServices(){};
+  BuildTPCEndplateServices() {};
+  ~BuildTPCEndplateServices() {};
 
   void setMaterial(dd4hep::Material copper4cooling) { cooling_Material = copper4cooling; };
   void sethalfZ(double TPC_Ecal_Hcal_barrel_halfZ) { TPC_barrel_halfZ = TPC_Ecal_Hcal_barrel_halfZ; };
@@ -38,8 +38,8 @@ private:
 class BuildEcalBarrelServices {
 
 public:
-  BuildEcalBarrelServices(){};
-  ~BuildEcalBarrelServices(){};
+  BuildEcalBarrelServices() {};
+  ~BuildEcalBarrelServices() {};
 
   void setMaterialAir(dd4hep::Material air4container) { air = air4container; };
   void setMaterialAluminium(dd4hep::Material al) { aluminium = al; };
@@ -115,8 +115,8 @@ private:
 class BuildEcalBarrel_EndCapServices {
 
 public:
-  BuildEcalBarrel_EndCapServices(){};
-  ~BuildEcalBarrel_EndCapServices(){};
+  BuildEcalBarrel_EndCapServices() {};
+  ~BuildEcalBarrel_EndCapServices() {};
 
   void setMaterialAir(dd4hep::Material air4container) { air = air4container; };
   void setMaterialPolyethylene(dd4hep::Material PE) { polyethylene = PE; };
@@ -172,8 +172,8 @@ private:
 class BuildSitCables {
 
 public:
-  BuildSitCables(dd4hep::DetElement det) : detElt(det){};
-  ~BuildSitCables(){};
+  BuildSitCables(dd4hep::DetElement det) : detElt(det) {};
+  ~BuildSitCables() {};
 
   void setMaterialAluminium(dd4hep::Material al) { aluminium = al; };
   void setSit_cables_cylinder_thickness(double cables_cylinder_thickness) {
@@ -236,8 +236,8 @@ private:
 class BuildHcalBarrel_EndCapServices {
 
 public:
-  BuildHcalBarrel_EndCapServices(){};
-  ~BuildHcalBarrel_EndCapServices(){};
+  BuildHcalBarrel_EndCapServices() {};
+  ~BuildHcalBarrel_EndCapServices() {};
 
 public:
   void setMaterialAir(dd4hep::Material Air) { air = Air; };
@@ -377,8 +377,8 @@ private:
 class BuildVXDCables {
 
 public:
-  BuildVXDCables(dd4hep::DetElement det) : detElt(det){};
-  ~BuildVXDCables(){};
+  BuildVXDCables(dd4hep::DetElement det) : detElt(det) {};
+  ~BuildVXDCables() {};
 
   void setMaterialCopper(dd4hep::Material Cu) { copper = Cu; };
   void setVXD_cable_cross_section_area(double cable_area) { VXD_cable_cross_section_area = cable_area; };

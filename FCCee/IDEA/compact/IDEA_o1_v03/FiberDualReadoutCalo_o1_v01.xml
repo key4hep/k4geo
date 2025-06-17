@@ -586,6 +586,7 @@
   <!-- this is where we actually define our detector: -->
   <detectors>
     <detector id="DetID_FiberDRCalo" name="DRcalo" type="FiberDualReadoutCalo_o1_v01" readout="DRcaloSiPMreadout" region="FastSimOpFiberRegion" reflect="true" vis="DRCInvisible">
+      <type_flags type="DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_HADRONIC + DetType_BARREL + DetType_ENDCAP"/>
       <sensitive type="DRcaloSiPMSD"/>
       <sipmDim height="0.3*mm" material="PolyvinylChloride" vis="DRCGenericVis">
         <sipmGlass material="DR_PyrexGlass" vis="DRCGlassVis"/>
