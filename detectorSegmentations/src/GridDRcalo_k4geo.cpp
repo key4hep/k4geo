@@ -1,4 +1,5 @@
 #include "detectorSegmentations/GridDRcalo_k4geo.h"
+#include "DD4hep/Printout.h"
 
 #include <climits>
 #include <cmath>
@@ -68,12 +69,26 @@ namespace DDSegmentation {
     auto rot = paramBase->GetRotationZYX(noPhi);
     auto translation = rot * localPos;
 
+    // we want the cell position to be the front end of the tower
+    // retrieve the fiber length
+    int row = y(cID);
+    int col = x(cID);
+    double fiberLen = paramBase->GetShortFibers(noEta).retrieveFiberLength(row, col);
+    // and vector to the front end
+    auto diff = paramBase->GetTowerPos(noPhi) - waferPos;
+    auto unitVec = diff/std::sqrt(diff.Mag2());
+
     // total vector is sum of the vector to the wafer center + rotated local coordinate
-    auto total = translation + waferPos;
+    // + the translation to the front end of the tower
+    auto total = translation + waferPos + unitVec*fiberLen;
 
     // if LHS rotate by 180 deg w.r.t. X axis (on par to the DRconstructor)
     if (!isRHS)
       total = dd4hep::RotationX(M_PI) * total;
+
+    dd4hep::printout(dd4hep::VERBOSE, "GridDRcalo_k4geo::position",
+                     "Hit position of (isRHS, noEta, noPhi, x, y) = (%d, %d, %d, %d, %d) is (x, y, z) = (%f, %f, %f)",
+                     isRHS, noEta, noPhi, col, row, total.x(), total.y(), total.z());
 
     return Vector3D(total.x(), total.y(), total.z());
   }
@@ -156,6 +171,7 @@ namespace DDSegmentation {
     return vID;
   }
 
+  // neighbor finding algorithm regardless of the type of the channel (mixing scintillation and Cherenkov)
   void GridDRcalo_k4geo::neighbours(const CellID& cID, std::set<CellID>& neighbours) const {
     int systemId = static_cast<int>(_decoder->get(cID, "system"));
     int noEta = numEta(cID);
@@ -164,7 +180,6 @@ namespace DDSegmentation {
     int nY = y(cID); // row
     int totX = numX(cID);
     int totY = numY(cID);
-    bool isCeren = IsCerenkov(cID);
     bool isRHS = IsRHS(cID);
 
     DRparamBase_k4geo* paramBase = setParamBase(noEta);
@@ -179,31 +194,20 @@ namespace DDSegmentation {
     auto southEast = setCellID(isRHS, systemId, noEta, noPhi, nX + 1, nY - 1);
     auto southWest = setCellID(isRHS, systemId, noEta, noPhi, nX - 1, nY - 1);
     auto northWest = setCellID(isRHS, systemId, noEta, noPhi, nX - 1, nY + 1);
-    // dist=2 cells
-    auto north = setCellID(isRHS, systemId, noEta, noPhi, nX, nY + 2);
-    auto east = setCellID(isRHS, systemId, noEta, noPhi, nX + 2, nY);
-    auto south = setCellID(isRHS, systemId, noEta, noPhi, nX, nY - 2);
-    auto west = setCellID(isRHS, systemId, noEta, noPhi, nX - 2, nY);
+    // dist=1 cells
+    auto north = setCellID(isRHS, systemId, noEta, noPhi, nX, nY + 1);
+    auto east = setCellID(isRHS, systemId, noEta, noPhi, nX + 1, nY);
+    auto south = setCellID(isRHS, systemId, noEta, noPhi, nX, nY - 1);
+    auto west = setCellID(isRHS, systemId, noEta, noPhi, nX - 1, nY);
 
     // the minimal neighborhood
     std::set<CellID> nb = {north, northEast, east, southEast, south, southWest, west, northWest};
-
-    // function to remove different channel in the set
-    auto removeDifferentChannel = [this](bool isC, std::set<CellID>& input) {
-      for (auto it = input.begin(); it != input.end();) {
-        if (isC != IsCerenkov(*it))
-          it = input.erase(it);
-        else
-          ++it;
-      }
-    };
 
     // margin to switch the definiton of the neighborhood at the edge of the tower
     int margin = 2;
 
     // if the seed fiber is not on the edge of the tower, return the minimal neighborhood
     if (nX > fl.cmin + margin && nX < fl.cmax - margin && nY > fl.rmin + margin && nY < fl.rmax - margin) {
-      removeDifferentChannel(isCeren, nb);
       neighbours = nb;
       return;
     }
@@ -265,7 +269,6 @@ namespace DDSegmentation {
       for (int idx = totY - 1; idx >= fl.rmax - margin; idx--)
         nb.insert(setCellID(!isRHS, systemId, noEta, nextPhi, nextX, idx));
 
-      removeDifferentChannel(isCeren, nb);
       neighbours = nb;
       return;
     }
@@ -304,7 +307,6 @@ namespace DDSegmentation {
     }
 
     // finalize
-    removeDifferentChannel(isCeren, nb);
     neighbours = nb;
     return;
   }

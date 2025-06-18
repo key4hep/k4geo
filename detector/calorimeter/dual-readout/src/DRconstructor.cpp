@@ -18,7 +18,6 @@ ddDRcalo::DRconstructor::DRconstructor(xml_det_t& x_det)
   fVis = false;
   fNumx = 0;
   fNumy = 0;
-  fFiberCoords.reserve(100000);
   fFiberEnvVec.reserve(4000);
   fFiberCoreCVec.reserve(4000);
   fFiberCoreSVec.reserve(4000);
@@ -109,9 +108,6 @@ void ddDRcalo::DRconstructor::implementTowers(xml_comp_t& x_theta, dd4hep::DDSeg
       sipmWaferVol.setSensitiveDetector(*fSensDet);
     }
 
-    // Remove sipmLayer, clear fFiberCoords instead of implementSipms()
-    fFiberCoords.clear();
-
     for (int nPhi = 0; nPhi < x_theta.nphi(); nPhi++) {
       placeAssembly(param, AssemblyBoxVol, towerVol, sipmWaferVol, towerNo, nPhi);
     }
@@ -189,6 +185,9 @@ void ddDRcalo::DRconstructor::implementFibers(xml_comp_t& x_theta, dd4hep::Volum
   double norm1[3] = {0., 0., 0.}, norm2[3] = {0., 0., 0.}, norm3[3] = {0., 0., 0.}, norm4[3] = {0., 0., 0.};
   getNormals(rootTrap, numxBl2, z1, norm1, norm2, norm3, norm4);
 
+  // std::map containing the length of short fibers
+  dd4hep::DDSegmentation::DRparamBase_k4geo::shortFibers shortFibers(towerHeight);
+
   for (int row = 0; row < fNumy; row++) {
     for (int column = 0; column < fNumx; column++) {
       auto localPosition = fSegmentation->localPosition(fNumx, fNumy, column, row);
@@ -201,7 +200,6 @@ void ddDRcalo::DRconstructor::implementFibers(xml_comp_t& x_theta, dd4hep::Volum
 
           if (check) {
             implementFiber(fullBoxVol, pos, column, row);
-            fFiberCoords.push_back(std::make_pair(column, row));
           }
         }
       } else {
@@ -241,14 +239,15 @@ void ddDRcalo::DRconstructor::implementFibers(xml_comp_t& x_theta, dd4hep::Volum
         if (checkContained(rootTrap, pos, towerHeight / 2. - fiberLen)) {
           dd4hep::Position centerPos(pos.x(), pos.y(), centerZ);
           implementFiber(towerVol, centerPos, column, row, fiberLen);
-          fFiberCoords.push_back(std::make_pair(column, row));
+          shortFibers.addShortFibers(row, column, fiberLen);
         }
-      }
-    }
-  }
+      } // outside tower
+    } // col
+  } // row
 
   // store rows & columns of full length fibers to the segmentation
   param->SetFullLengthFibers(rmin, rmax, cmin, cmax);
+  param->SetShortFibers(shortFibers);
 }
 
 // Remove cap (mirror or black paint in front of the fiber)
