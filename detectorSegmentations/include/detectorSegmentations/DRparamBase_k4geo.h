@@ -50,8 +50,8 @@ namespace DDSegmentation {
     dd4hep::Transform3D GetAssembleTransform3D(int numPhi);
     dd4hep::Transform3D GetSipmTransform3D(int numPhi);
 
-    int signedTowerNo(int unsignedTowerNo) { return fIsRHS ? unsignedTowerNo : -unsignedTowerNo - 1; }
-    int unsignedTowerNo(int signedTowerNo) { return signedTowerNo >= 0 ? signedTowerNo : -signedTowerNo - 1; }
+    int signedTowerNo(int unsignedTowerNo) const { return fIsRHS ? unsignedTowerNo : -unsignedTowerNo - 1; }
+    int unsignedTowerNo(int signedTowerNo) const { return signedTowerNo >= 0 ? signedTowerNo : -signedTowerNo - 1; }
 
     virtual void SetDeltaThetaByTowerNo(int, int) {}
     virtual void SetThetaOfCenterByTowerNo(int, int) {}
@@ -84,8 +84,28 @@ namespace DDSegmentation {
       int cmax; // max n_column
     };
 
-    fullLengthFibers GetFullLengthFibers(int numEta) { return fFullLengthFibers.at(unsignedTowerNo(numEta)); }
+    fullLengthFibers GetFullLengthFibers(int numEta) const { return fFullLengthFibers.at(unsignedTowerNo(numEta)); }
     void SetFullLengthFibers(int rmin, int rmax, int cmin, int cmax);
+
+    // length of fibers that don't have full length
+    // it is a map containing (row, col) as a key and the length of the fiber as a value
+    // and each tower in eta has one of it
+    struct shortFibers {
+    public:
+      shortFibers(const double towerH)
+          : fTowerH(towerH) {}
+      ~shortFibers()=default;
+
+      void addShortFibers(const int row, const int col, const double len) { m_fiberLengths_.insert(std::make_pair(std::make_pair(row, col), len)); }
+      double retrieveFiberLength(const int row, const int col) const;
+
+    private:
+      std::map<std::pair<int, int>, double> m_fiberLengths_;
+      const double fTowerH;
+    };
+
+    shortFibers GetShortFibers(int numEta) const { return fShortFibers.at(unsignedTowerNo(numEta)); }
+    void SetShortFibers(const shortFibers& input);
 
   protected:
     bool fIsRHS;
@@ -114,6 +134,7 @@ namespace DDSegmentation {
     std::vector<double> fDeltaThetaVec;
     std::vector<double> fThetaOfCenterVec;
     std::map<int, fullLengthFibers> fFullLengthFibers;
+    std::map<int, shortFibers> fShortFibers;
     bool fFilled;
     bool fFinalized;
   };
