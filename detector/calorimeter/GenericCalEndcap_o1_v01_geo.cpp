@@ -68,7 +68,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   double rmax = dim.rmax(); /// FIXME: IS THIS RIGHT?
   double zmin = dim.zmin();
 
-  const auto conicalCutout = [&dim]() {
+  const bool conicalCutout = [&dim]() {
     if (dim.hasAttr(_Unicode(conicalCutout))) {
       return dim.attr<bool>("conicalCutout");
     }
