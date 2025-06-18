@@ -98,7 +98,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
       // Make the Cone slightly longer than just the total thickness (==
       // dividing by exactly 2). This makes it extend slightly outside the
       // original volume to avoid potential edge effects in the boolean shape
-      // subratction
+      // subtraction
       Cone cutoutPolyVolume(totalThickness / 1.99, 0, rmin, 0, rcutout);
       dd4hep::printout(dd4hep::INFO, LOG_SOURCE, "Conical cutout with radius %f", rcutout);
       endcapVol = Volume("endcap", SubtractionSolid(polyVolume, cutoutPolyVolume, Position(0, 0, 0)), air);
