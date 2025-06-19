@@ -214,6 +214,12 @@ ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh
 )
 SET_TEST_ENV(${test_name})
 
+SET( test_name "test_MuColl_v1_run" )
+ADD_TEST(t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
+  ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuColl/compact/MuColl_v1/MuColl_v1.xml --runType=batch -G -N=1 --outputFile=test_MuColl_v1.edm4hep.root
+)
+SET_TEST_ENV(${test_name})
+
 #--------------------------------------------------
 # check if files named the same contain the same in FCCee
 ADD_TEST(
