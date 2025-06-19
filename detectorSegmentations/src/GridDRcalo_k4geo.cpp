@@ -76,11 +76,11 @@ namespace DDSegmentation {
     double fiberLen = paramBase->GetShortFibers(noEta).retrieveFiberLength(row, col);
     // and vector to the front end
     auto diff = paramBase->GetTowerPos(noPhi) - waferPos;
-    auto unitVec = diff/std::sqrt(diff.Mag2());
+    auto unitVec = diff / std::sqrt(diff.Mag2());
 
     // total vector is sum of the vector to the wafer center + rotated local coordinate
     // + the translation to the front end of the tower
-    auto total = translation + waferPos + unitVec*fiberLen;
+    auto total = translation + waferPos + unitVec * fiberLen;
 
     // if LHS rotate by 180 deg w.r.t. X axis (on par to the DRconstructor)
     if (!isRHS)
