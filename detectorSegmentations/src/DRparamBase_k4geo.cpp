@@ -109,7 +109,7 @@ namespace DDSegmentation {
   }
 
   double DRparamBase_k4geo::shortFibers::retrieveFiberLength(const int row, const int col) const {
-    if (m_fiberLengths_.find(std::make_pair(row,col))==m_fiberLengths_.end())
+    if (m_fiberLengths_.find(std::make_pair(row, col)) == m_fiberLengths_.end())
       return fTowerH;
 
     return m_fiberLengths_.at(std::make_pair(row, col));
