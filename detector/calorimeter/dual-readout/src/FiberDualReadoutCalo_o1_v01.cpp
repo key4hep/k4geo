@@ -8,6 +8,7 @@
 #include "DD4hep/OpticalSurfaces.h"
 
 #include "DDRec/DetectorData.h"
+#include "XML/Utilities.h"
 
 namespace ddDRcalo {
 static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h xmlElement,
@@ -89,6 +90,9 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h xmlEle
 
   // attach the calo data to the detector
   drDet.addExtension<dd4hep::rec::LayeredCalorimeterData>(extensionData);
+
+  // Set type flags
+  dd4hep::xml::setDetectorTypeFlag(x_det, drDet);
 
   return drDet;
 }

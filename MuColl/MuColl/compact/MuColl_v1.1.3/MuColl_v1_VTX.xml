@@ -1,0 +1,35 @@
+<lccdd>
+
+	<!-- Loading constants and geometry configuration -->
+	<includes>
+		<file ref="include/elements.xml"/>
+		<file ref="include/materials.xml"/>
+		<file ref="config.xml"/>
+	</includes>
+
+	<!-- Including subdetector definitions -->
+	<include ref="include/Beampipe_o1_v01_02.xml"/>
+	<include ref="include/Nozzle_10deg_v0.xml"/>
+
+	<include ref="include/Vertex_o2_v06_01.xml"/>
+
+	<!-- Including plugins -->
+	<plugins>
+		<plugin name="DD4hepVolumeManager"/>
+		<plugin name="InstallSurfaceManager"/>
+		<plugin name="lcgeo_LinearSortingPolicy">
+
+			<argument value="/VertexEndcap/"/>
+			<argument value="VertexEndcap_zmin"/>
+			<argument value="VertexBarrel_r4 + 1*cm"/>
+			<argument value="(VertexEndcap_rmax - VertexBarrel_r4 + 1*cm) / (VertexEndcap_zmax - VertexEndcap_zmin)"/>
+
+			<argument value="/VertexVerticalCable"/>
+			<argument value="0"/>
+			<argument value="VertexBarrel_r4 + 0.5*cm"/>
+			<argument value="0"/>
+		</plugin>
+	</plugins>
+
+</lccdd>
+

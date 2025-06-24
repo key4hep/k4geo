@@ -1,0 +1,28 @@
+<lccdd>
+    <!--  Definition of global dictionary constants          -->
+    <define>
+        <constant name="Beampipe_inner_radius" value="2.3*cm" />
+        <constant name="Beampipe_outer_radius" value="2.4*cm" />
+    </define>
+    
+    <!--  Definition of the used visualization attributes    -->
+    <display>
+        <vis name="BeamPipeVis" alpha="0.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="false"/>
+    </display>
+    
+    
+    <detectors>
+        <comment>Beampipe</comment>
+        
+        <detector name="Beampipe" type="DD4hep_Beampipe_o1_v01" insideTrackingVolume="true" nocore="true" vis="BeamPipeVis">
+            <parameter crossingangle="CrossingAngle" />
+            <envelope vis="BlueVis">
+                <shape type="Assembly"/>
+            </envelope>
+
+            <section type="Center" start="0*mm" end="Nozzle_zmin" rMin1="Beampipe_inner_radius" rMin2="Beampipe_inner_radius" rMax1="Beampipe_outer_radius" rMax2="Beampipe_outer_radius" material="Beryllium" name="VertexInnerBe" />
+
+        </detector>
+        
+    </detectors>
+</lccdd>
