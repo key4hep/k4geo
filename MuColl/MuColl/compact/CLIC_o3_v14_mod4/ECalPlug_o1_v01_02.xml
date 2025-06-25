@@ -1,0 +1,48 @@
+<lccdd>
+    
+       
+    
+    <!--  Definition of the readout segmentation/definition  -->
+    <readouts>
+        <readout name="ECalPlugCollection">
+            <segmentation type="CartesianGridXY" grid_size_x="ECal_cell_size" grid_size_y="ECal_cell_size" />
+            <id>${GlobalCalorimeterReadoutID}</id>
+        </readout>
+    </readouts>
+    
+    <!--  Includes for sensitives and support                -->
+    <detectors>
+        
+        <detector name="ECalPlug" type="GenericCalEndcap_o1_v01" id="DetID_ECal_Plug" readout="ECalPlugCollection" vis="ECALVis" >
+            
+            <comment>Hadronic Calorimeter Endcap</comment>
+            
+            <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_ENDCAP + DetType_AUXILIARY"/>
+
+            <envelope vis="ECALVis">
+                <shape type="BooleanShape" operation="Subtraction" material="Air">
+                        <shape type="PolyhedraRegular"  numsides="ECalPlug_outer_symmetry" rmin="ECalPlug_inner_radius-env_safety" rmax="ECalPlug_outer_radius+ 10.0*env_safety" dz="2.0*ECalPlug_max_z+2*env_safety"/>
+                        <shape type="PolyhedraRegular"  numsides="ECalPlug_outer_symmetry" rmin="0" rmax="ECalPlug_outer_radius+ 100.0*env_safety" dz="2.0*ECalPlug_min_z-2*env_safety"/>
+                    </shape>
+                <rotation x="0*deg" y="0*deg" z="90*deg-180*deg/ECalPlug_outer_symmetry"/>
+            </envelope>
+            
+            
+            <dimensions nsides_inner="ECalPlug_inner_symmetry" nsides_outer="(int) ECalPlug_outer_symmetry" zmin="ECalPlug_min_z" rmin="ECalPlug_inner_radius" rmax="ECalPlug_outer_radius" phi0="0"/>
+            
+            <layer repeat="40" vis="ECalLayerVis">
+                <slice material = "TungstenDens24" thickness = "1.90*mm" vis="ECalAbsorberVis" radiator="yes"/>
+                <slice material = "G10"            thickness = "0.15*mm" vis="InvisibleNoDaughters"/>
+                <slice material = "GroundOrHVMix"  thickness = "0.10*mm" vis="ECalAbsorberVis"/>
+                <slice material = "Silicon"        thickness = "0.50*mm" sensitive="yes" limits="cal_limits" vis="ECalSensitiveVis"/>
+                <slice material = "Air"            thickness = "0.10*mm" vis="InvisibleNoDaughters"/>
+                <slice material = "siPCBMix"       thickness = "1.30*mm" vis="ECalAbsorberVis"/>
+                <slice material = "Air"            thickness = "0.25*mm" vis="InvisibleNoDaughters"/>
+                <slice material = "G10"            thickness = "0.75*mm" vis="InvisibleNoDaughters"/>
+            </layer>
+            
+        </detector>
+    </detectors>
+</lccdd>
+
+
