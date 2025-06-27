@@ -191,7 +191,9 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
                      cryoDim.rmax1() / dd4hep::cm, caloDim.dz() / dd4hep::cm);
 
     dd4hep::Volume servicesFrontVol("services_front", servicesFrontShape, aLcdd.material(activeMaterial));
+    servicesFrontVol.setVisAttributes(aLcdd, "service_bath");
     dd4hep::Volume servicesBackVol("services_back", servicesBackShape, aLcdd.material(activeMaterial));
+    servicesBackVol.setVisAttributes(aLcdd, "service_bath");
     dd4hep::PlacedVolume servicesFrontPhysVol = envelopeVol.placeVolume(servicesFrontVol);
     dd4hep::PlacedVolume servicesBackPhysVol = envelopeVol.placeVolume(servicesBackVol);
 
@@ -456,14 +458,19 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
   dd4hep::Box passiveOuterShape(passiveOuterThickness / 4., caloDim.dz(), planeLength / 2. / cosPassiveAngle);
   dd4hep::Box passiveGlueShape(passiveGlueThickness / 4., caloDim.dz(), planeLength / 2. / cosPassiveAngle);
   dd4hep::Volume passiveVol("passive", passiveShape, aLcdd.material("Air"));
+  passiveVol.setVisAttributes(aLcdd, "absorbers");
   dd4hep::Volume passiveInnerVol(passiveInnerMaterial + "_passive", passiveInnerShape,
                                  aLcdd.material(passiveInnerMaterial));
+  passiveInnerVol.setVisAttributes(aLcdd, "absorbers");
   dd4hep::Volume passiveInnerVolFirstLayer(passiveInnerMaterialFirstLayer + "_passive", passiveInnerShapeFirstLayer,
                                            aLcdd.material(passiveInnerMaterialFirstLayer));
+  passiveInnerVolFirstLayer.setVisAttributes(aLcdd, "absorbers");
   dd4hep::Volume passiveOuterVol(passiveOuterMaterial + "_passive", passiveOuterShape,
                                  aLcdd.material(passiveOuterMaterial));
+  passiveOuterVol.setVisAttributes(aLcdd, "absorbers");
   dd4hep::Volume passiveGlueVol(passiveGlueMaterial + "_passive", passiveGlueShape,
                                 aLcdd.material(passiveGlueMaterial));
+  passiveGlueVol.setVisAttributes(aLcdd, "absorbers");
 
   // translate and rotate the elements of the module appropriately
   // the Pb absorber does not need to be rotated, but the glue and
@@ -596,6 +603,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
   //////////////////////////////
   dd4hep::Box readoutShape(readoutThickness / 2., caloDim.dz(), planeLength / 2.);
   dd4hep::Volume readoutVol(readoutMaterial, readoutShape, aLcdd.material(readoutMaterial));
+  readoutVol.setVisAttributes(aLcdd, "pcb");
   // if the readout is sensitive (to study energy deposited in it, for calculation of per-layer
   // sampling fraction), then it is divided in layer volumes, and each layer volume is set as sensitive
   if (readout.isSensitive()) {
@@ -660,6 +668,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
 
   // - create the active volume, which will contain the layers filled with LAr
   dd4hep::Volume activeVol("active", activeShape, aLcdd.material("Air"));
+  activeVol.setVisAttributes(aLcdd, "sensitive_bath");
 
   // place layers within active volume
   std::vector<dd4hep::PlacedVolume> layerPhysVols;
@@ -701,6 +710,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
 
     // create the volume, filled with active material, set as sensitive, and position it properly within active volume
     dd4hep::Volume layerVol("layer", layerShape, aLcdd.material(activeMaterial));
+    layerVol.setVisAttributes(aLcdd, "sensitive_bath");
     layerVol.setSensitiveDetector(aSensDet);
     layerPhysVols.push_back(activeVol.placeVolume(layerVol, dd4hep::Position(0, 0, layerOffset)));
     layerPhysVols.back().addPhysVolID("layer", iLayer);
