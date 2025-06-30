@@ -68,6 +68,12 @@ private:
   double m_calo_inner_r;
   double m_calo_outer_r;
   double m_calo_inner_half_z;
+  double m_start_calo_phi;
+  double m_end_calo_phi;
+  int m_number_tower_start;
+  int m_number_tower_end;
+  bool m_tower_reflection;
+
 
   double m_barrel_endcap_angle; // calculated from m_calo_inner_half_z and m_calo_inner_r
 

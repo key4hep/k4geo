@@ -260,7 +260,12 @@
                 outer_radius="DRBTOuterCaloRadius"
                 z_length="DRBTInnerCaloHalfLength"
                 deltatheta="DRBTTowerThetaCoverage"
-                deltaphi="DRBTTowerPhiCoverage" />
+		    deltaphi="DRBTTowerPhiCoverage"
+		    start_calo_phi = "DRBTStartCaloPhi"
+		    end_calo_phi = "DRBTStartCaloPhi"
+		    number_tower_start = "DRBTTowerNumberStart"
+		    number_tower_end = "DRBTTowerNumberEnd"
+		    tower_reflection = "DRBTTowerReflection"/>
 
             <trap>
                 <support material="DRBTBrass" width="DRBTSupportSideThickness" depth="DRBTSupportFrontThickness" z2="DRBTSupportBackThickness" vis="DRBTtrap_vis"/>

@@ -251,10 +251,23 @@
          the calo staves and the solenoid -->
     <constant name="DRBTInnerCaloRadius"     value="2.805*m"  />
     <constant name="DRBTOuterCaloRadius"     value="4.6*m"  />
+    <!-- HalfLength used in multiple tower dimension calculations, don't alter -->
     <constant name="DRBTInnerCaloHalfLength" value="2.805*m"  />
+    <!--These values are the start and end phi of the detector-->
+    <!-- Base values are: Start = '0*deg', End = '360*deg' -->
+    <constant name="DRBTStartCaloPhi" value ="10*deg" />
+    <constant name="DRBTEndCaloPhi" value = "30*deg"/>
 
     <constant name="DRBTTowerThetaCoverage"  value="1.0*deg"/>
     <constant name="DRBTTowerPhiCoverage"    value="5.0*deg"  />
+
+    <!-- Towers numbered 1-45, positive values only, if not starting at 1 turn reflection to FALSE -->
+    <constant name="DRBTTowerNumberStart" value = "1"/>
+    <constant name="DRBTTowerNumberEnd" value = "45"/>
+
+    <!-- Reflection on or off, standard is on "1" -->
+    <constant name="DRBTTowerReflection" value = "1"/>
+
 
     <constant name="DRBTSupportSideThickness" value="1.0*mm" />
     <constant name="DRBTSupportFrontThickness" value="1.0*mm" />
