@@ -112,7 +112,7 @@
     <detector id="BarHCal_id" name="HCalBarrel" type="HCalTileBarrel_o1_v02" readout="HCalBarrelReadout">
       <type_flags type="DetType_CALORIMETER + DetType_HADRONIC + DetType_BARREL"/>
       <dimensions rmin="BarHCal_rmin" rmax="BarHCal_rmax" dz="BarHCal_dz" vis="hcal_envelope" />
-      <sensitive type="Geant4ScintillatorCalorimeter"/>
+      <sensitive type="calorimeter"/>
       <end_plate name="end_plate" thickness="BarHCal_end_plate_thickness" material="Fe" sensitive="false" vis="hcal_end_plate_vis" />
       <face_plate name="face_plate" thickness="BarHCal_face_plate_thickness" material="Fe" sensitive="false" vis="hcal_face_plate_vis" />
       <plate_space name="plate_space" thickness="BarHCal_plate_space" material="Air" sensitive="false" vis="hcal_air_vis" />
