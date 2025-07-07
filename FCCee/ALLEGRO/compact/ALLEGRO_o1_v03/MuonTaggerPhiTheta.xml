@@ -61,7 +61,7 @@
       <!-- added for Pandora -->
       <type_flags type="DetType_CALORIMETER + DetType_MUON + DetType_ENDCAP"/>
       <!-- end -->
-      <sensitive type="SimpleTrackerSD"/>
+      <sensitive type="BirksLawCalorimeterSD"/>
       <dimensions rmin="MuonTaggerEndcap_inner_radius" rmax="MuonTaggerEndcap_outer_radius"
                   dz="(MuonTaggerEndcap_max_z - MuonTaggerEndcap_min_z)*0.5" z_offset = "MuonTaggerEndcap_min_z + (MuonTaggerEndcap_max_z - MuonTaggerEndcap_min_z)*0.5" material="Polystyrene" phi0="0" deltaphi="360*deg" vis="muon_vis"/>
       <layers>
