@@ -214,15 +214,15 @@ namespace ECalEndcap_Turbine_o1_v03 {
                                                     riLayer, BladeAngle, delZ, zStart);
 
         dd4hep::Volume claddingLayerVol("claddingLayer", claddingLayer, aLcdd.material(claddingElem.materialStr()));
-	if (claddingElem.isSensitive()) {
+        if (claddingElem.isSensitive()) {
           claddingLayerVol.setSensitiveDetector(aSensDet);
-	}
+        }
         claddingLayerVols.push_back(claddingLayerVol);
 
         dd4hep::Volume glueLayerVol("glueLayer", glueLayer, aLcdd.material(glueElem.materialStr()));
-	 if (glueElem.isSensitive()) {
+        if (glueElem.isSensitive()) {
           glueLayerVol.setSensitiveDetector(aSensDet);
-	 }
+        }
         glueLayerVols.push_back(glueLayerVol);
 
         dd4hep::Volume absBladeLayerVol("absBladeLayer", absBladeLayer, aLcdd.material(absBladeElem.materialStr()));
@@ -307,7 +307,7 @@ namespace ECalEndcap_Turbine_o1_v03 {
                      electrodeBladeElem.materialStr().c_str());
 
     int nUnitCellsToDraw = nUnitCells;
-    
+
     dd4hep::printout(dd4hep::INFO, "ECalEndcap_Turbine_o1_v03", "Number of unit cells %d", nUnitCells);
 
     // place all components of the absorber blade inside passive volume
@@ -331,7 +331,6 @@ namespace ECalEndcap_Turbine_o1_v03 {
                        absBladeVol_pv.position().Rho(), roLayer / 2.);
       absBladeVol_pv.addPhysVolID("layer", LayerIndexBaseline + iLayer);
 
-
       dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v03_geo", "AbsBalde volume %s",
                        absBladeVol_pv.toString().c_str());
 
@@ -348,7 +347,7 @@ namespace ECalEndcap_Turbine_o1_v03 {
     xOffset = -xRange / 2 + xRange / (2 * numNonActiveZLayers);
 
     std::vector<dd4hep::PlacedVolume> glueVol_pvs;
-     
+
     for (auto glueLayerVol : glueLayerVols) {
 
       float roLayer = riLayer + delrNonActive;
@@ -361,7 +360,7 @@ namespace ECalEndcap_Turbine_o1_v03 {
       glueVol_pv.addPhysVolID("layer", LayerIndexBaseline + iLayer);
 
       glueVol_pvs.push_back(glueVol_pv);
-      
+
       dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v03_geo", "Glue volume %s", glueVol_pv.toString().c_str());
 
       iLayer++;
@@ -382,21 +381,20 @@ namespace ECalEndcap_Turbine_o1_v03 {
 
     for (auto claddingLayerVol : claddingLayerVols) {
 
-    
       float roLayer = riLayer + delrNonActive;
 
       double zminLayer = getZmin(riLayer, BladeAngle, delZ);
 
       dd4hep::Position posLayer(0, xOffset, (zminLayer - zminri + roLayer - ro) / 2.);
       xOffset += xRange / numNonActiveZLayers;
-      
+
       dd4hep::PlacedVolume claddingVol_pv = passiveVol.placeVolume(claddingLayerVol, posLayer);
 
       claddingVol_pv.addPhysVolID("subtype", 3); // 1 = absorber, 2 = glue, 3 = cladding
       claddingVol_pv.addPhysVolID("layer", LayerIndexBaseline + iLayer);
 
       claddingVol_pvs.push_back(claddingVol_pv);
-      
+
       dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v03_geo", "Cladding volume %s",
                        claddingVol_pv.toString().c_str());
 
@@ -515,7 +513,7 @@ namespace ECalEndcap_Turbine_o1_v03 {
       dd4hep::DetElement passiveDetElem("passive_" + std::to_string(iUnitCell) + "_" + std::to_string(iWheel),
                                         modIndex);
       passiveDetElem.setPlacement(passivePhysVol);
-      
+
       dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v03_geo", "Passive volume %s",
                        passivePhysVol.toString().c_str());
 
@@ -540,21 +538,22 @@ namespace ECalEndcap_Turbine_o1_v03 {
       iLayer = 0;
       for (auto LArVol_pv : LArVol_pvs) {
         dd4hep::DetElement LArDetElem(
-				      activeDetElem,
-				      "layer" + std::to_string(modIndex) + "_" + std::to_string(iWheel) + "_" + std::to_string(iLayer), iLayer);
+            activeDetElem,
+            "layer" + std::to_string(modIndex) + "_" + std::to_string(iWheel) + "_" + std::to_string(iLayer), iLayer);
         LArDetElem.setPlacement(LArVol_pv);
         iLayer++;
       }
 
       iLayer = 0;
       for (auto claddingVol_pv : claddingVol_pvs) {
-        dd4hep::DetElement claddingDetElem(
-				      passiveDetElem,
-				      "claddinglayer" + std::to_string(modIndex) + "_" + std::to_string(iWheel) + "_" + std::to_string(iLayer), iLayer);
+        dd4hep::DetElement claddingDetElem(passiveDetElem,
+                                           "claddinglayer" + std::to_string(modIndex) + "_" + std::to_string(iWheel) +
+                                               "_" + std::to_string(iLayer),
+                                           iLayer);
         claddingDetElem.setPlacement(claddingVol_pv);
         iLayer++;
       }
- 
+
       dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v03", "LArTotalLayerVols.size = %d",
                        LArTotalLayerVols.size());
     }
@@ -806,13 +805,13 @@ namespace ECalEndcap_Turbine_o1_v03 {
 
     float supportTubeThickness = supportTubeElem.thickness();
     float mechSupportZGap = aLcdd.constant<float>("ECalEndcapSupportZGap");
-    
+
     double rmin = bathRmin;
-    double rmax = bathRmax-supportTubeThickness;
+    double rmax = bathRmax - supportTubeThickness;
     float radiusRatio = pow(rmax / rmin, 1. / nWheels);
     double ro = rmin * radiusRatio;
     double ri = rmin;
-    
+
     for (unsigned iWheel = 0; iWheel < nWheels; iWheel++) {
 
       dd4hep::Tube supportTube(ro, ro + supportTubeThickness, bathDelZ - (bathThicknessBack - mechSupportZGap) / 2.);
