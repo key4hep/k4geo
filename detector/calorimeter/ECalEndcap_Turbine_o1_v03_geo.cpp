@@ -307,7 +307,6 @@ namespace ECalEndcap_Turbine_o1_v03 {
                      electrodeBladeElem.materialStr().c_str());
 
     int nUnitCellsToDraw = nUnitCells;
-    nUnitCellsToDraw = 1;
     
     dd4hep::printout(dd4hep::INFO, "ECalEndcap_Turbine_o1_v03", "Number of unit cells %d", nUnitCells);
 
