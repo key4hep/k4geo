@@ -617,7 +617,7 @@ static Ref_t create_element(Detector& theDetector, xml_h element, SensitiveDetec
     }
 
     } // end switch
-  }   // for all xmlSections
+  } // for all xmlSections
 
   // ######################################################################################################################################################################
 

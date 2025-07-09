@@ -1,0 +1,1 @@
+Based on `MuColl_v1` moving the solenoid after the tracker, making calorimeters thicker and adding a muon system

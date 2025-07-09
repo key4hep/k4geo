@@ -1,0 +1,18 @@
+<lccdd>
+  <fields>
+    <field name="SolenoidMap" type="FieldBrBz"
+	   filename="${lcgeo_DIR}/fieldmaps/mucoll_fieldMap_3.57T_solenoid.root"
+	   treeName="fieldmap"
+	   rhoVarName="r"
+	   zVarName="z"
+	   BrhoVarName="Br"
+	   BzVarName="Bz"
+           rScale = "1.0"
+           zScale = "1.0"
+           bScale = "1.0"
+	   coorUnits="m"
+	   BfieldUnits="tesla"
+	   >
+    </field>
+  </fields>
+</lccdd>

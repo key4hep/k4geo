@@ -17,4 +17,4 @@ ALLEGRO_o1_v03:
 - Added HCalEndcaps_ThreeParts_TileCal_v03.xml which uses HCalThreePartsEndcap_o1_v02_geo.cpp. Additionally, wrt v02 the readout was migrated to the theta-phi segmentation; unused readout *Readout_phi was removed; radial dimensions of layers were modified, so the outer radius of all three cylinders is the same.
 - Row-phi segmentation is added for HCalBarrel_TileCal_v03.xml and HCalEndcaps_ThreeParts_TileCal_v03.xml.
 - Birks constant value is set for Polystyrene scintillator used by HCal. This fixed the abnormal response to hadrons that was observed when migrated from k4SimGeant4 to DDSim.
-- For the muon tagger, switched from eta-phi to theta-phi segmentation.
+- For the muon tagger, switched from eta-phi to theta-phi segmentation. Outer R set to 5m as in initial conceptual design (to be replaced in the future by more realistic detector).
