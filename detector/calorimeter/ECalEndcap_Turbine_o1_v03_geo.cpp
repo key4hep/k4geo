@@ -329,7 +329,7 @@ namespace ECalEndcap_Turbine_o1_v03 {
       absBladeVol_pv.addPhysVolID("subtype", 1); // 1 = absorber, 2 = glue, 3 = cladding
       dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v03_geo", "Blade layer, rho is %d, %f, %f", iLayer,
                        absBladeVol_pv.position().Rho(), roLayer / 2.);
-      
+
       dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v03_geo", "AbsBalde volume %s",
                        absBladeVol_pv.toString().c_str());
 
@@ -388,7 +388,7 @@ namespace ECalEndcap_Turbine_o1_v03 {
 
       dd4hep::PlacedVolume claddingVol_pv = passiveVol.placeVolume(claddingLayerVol, posLayer);
 
-      //claddingVol_pv.addPhysVolID("subtype", 3); // 1 = absorber, 2 = glue, 3 = cladding
+      // claddingVol_pv.addPhysVolID("subtype", 3); // 1 = absorber, 2 = glue, 3 = cladding
       claddingVol_pv.addPhysVolID("layer", LayerIndexBaseline + iLayer);
 
       claddingVol_pvs.push_back(claddingVol_pv);
@@ -416,7 +416,7 @@ namespace ECalEndcap_Turbine_o1_v03 {
       dd4hep::PlacedVolume electrodeBladeVol_pv =
           LArTotalLayerVols[iLayer].placeVolume(electrodeBladeLayerVol, posLayer);
       xOffset += xRange / ECalEndcapNumCalibZLayers;
-      //electrodeBladeVol_pv.addPhysVolID("layer", LayerIndexBaseline + iLayer);
+      // electrodeBladeVol_pv.addPhysVolID("layer", LayerIndexBaseline + iLayer);
       electrodeBladeVol_pv.addPhysVolID("type", 2); // 0 = active, 1 = passive, 2 = readout
 
       dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v03_geo", "Electrode volume %s",
@@ -507,7 +507,7 @@ namespace ECalEndcap_Turbine_o1_v03 {
       dd4hep::PlacedVolume passivePhysVol = aEnvelope.placeVolume(passiveVol, comCell);
 
       std::cout << "Creating passivePhysVol with wheel and module " << iWheel << " " << modIndex << std::endl;
-      
+
       passivePhysVol.addPhysVolID("module", modIndex);
       passivePhysVol.addPhysVolID("wheel", iWheel);
       passivePhysVol.addPhysVolID("type", 1); // 0 = active, 1 = passive, 2 = readout
