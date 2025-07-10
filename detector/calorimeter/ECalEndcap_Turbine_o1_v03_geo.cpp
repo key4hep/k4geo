@@ -381,7 +381,6 @@ namespace ECalEndcap_Turbine_o1_v03 {
 
       dd4hep::Position posLayer(0, xOffset, (zminLayer - zminri + roLayer - ro) / 2.);
       xOffset += xRange / numNonActiveZLayers;
-
       dd4hep::PlacedVolume claddingVol_pv = passiveVol.placeVolume(claddingLayerVol, posLayer);
 
       claddingVol_pv.addPhysVolID("layer", LayerIndexBaseline + iLayer);
@@ -411,7 +410,6 @@ namespace ECalEndcap_Turbine_o1_v03 {
       dd4hep::PlacedVolume electrodeBladeVol_pv =
           LArTotalLayerVols[iLayer].placeVolume(electrodeBladeLayerVol, posLayer);
       xOffset += xRange / ECalEndcapNumCalibZLayers;
-
       electrodeBladeVol_pv.addPhysVolID("type", 2); // 0 = active, 1 = passive, 2 = readout
 
       dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v03_geo", "Electrode volume %s",
@@ -500,14 +498,12 @@ namespace ECalEndcap_Turbine_o1_v03 {
 
       // place passive volume in LAr bath
       dd4hep::PlacedVolume passivePhysVol = aEnvelope.placeVolume(passiveVol, comCell);
-
       passivePhysVol.addPhysVolID("module", modIndex);
       passivePhysVol.addPhysVolID("wheel", iWheel);
       passivePhysVol.addPhysVolID("type", 1); // 0 = active, 1 = passive, 2 = readout
       dd4hep::DetElement passiveDetElem("passive_" + std::to_string(iUnitCell) + "_" + std::to_string(iWheel),
                                         modIndex);
       passiveDetElem.setPlacement(passivePhysVol);
-
       dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v03_geo", "Passive volume %s",
                        passivePhysVol.toString().c_str());
 
