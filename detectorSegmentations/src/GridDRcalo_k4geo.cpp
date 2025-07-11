@@ -234,10 +234,10 @@ namespace DDSegmentation {
     for (int ix = 0; ix <= radiusFloor; ix++) {
       for (int iy = 0; iy <= radiusFloor; iy++) {
         // skip the cell of interest
-        if (ix==0 && iy==0)
+        if (ix == 0 && iy == 0)
           continue;
 
-        if (static_cast<float>(ix*ix + iy*iy) <= neighbourSize*neighbourSize) {
+        if (static_cast<float>(ix * ix + iy * iy) <= neighbourSize * neighbourSize) {
           // need to cover four quadrants of (+,+), (-,-), (+,-), (-,+)
           nb.insert(setCellID(isRHS, systemId, noEta, noPhi, nX + ix, nY + iy));
           nb.insert(setCellID(isRHS, systemId, noEta, noPhi, nX - ix, nY - iy));
@@ -344,8 +344,9 @@ namespace DDSegmentation {
 
       // for different noEta rmin and rmax can be different
       // also protect from map::at exception at the barrel-endcap boundary
-      auto flNext = paramBase->unsignedTowerNo(noEta) == fParamBarrel->GetTotTowerNum() ?
-          fParamBarrel->GetFullLengthFibers(noEta - 1) : paramBase->GetFullLengthFibers(noEta - 1);
+      auto flNext = paramBase->unsignedTowerNo(noEta) == fParamBarrel->GetTotTowerNum()
+                        ? fParamBarrel->GetFullLengthFibers(noEta - 1)
+                        : paramBase->GetFullLengthFibers(noEta - 1);
 
       // next tower
       for (int idx = 0; idx <= flNext.rmin + margin; idx++)
@@ -364,8 +365,9 @@ namespace DDSegmentation {
       // also protect from looking for a tower with numEta greater than the total # of towers
       if (noEta + 1 < fParamEndcap->GetTotTowerNum() + fParamBarrel->GetTotTowerNum()) {
         // protect from map::at exception at the barrel-endcap boundary
-        auto flNext = paramBase->unsignedTowerNo(noEta) + 1 == fParamBarrel->GetTotTowerNum() ?
-            fParamEndcap->GetFullLengthFibers(noEta + 1) : paramBase->GetFullLengthFibers(noEta + 1);
+        auto flNext = paramBase->unsignedTowerNo(noEta) + 1 == fParamBarrel->GetTotTowerNum()
+                          ? fParamEndcap->GetFullLengthFibers(noEta + 1)
+                          : paramBase->GetFullLengthFibers(noEta + 1);
 
         for (int idx = totY - 1; idx >= flNext.rmax - margin; idx--)
           nb.insert(setCellID(isRHS, systemId, noEta + 1, noPhi, nX, idx));
