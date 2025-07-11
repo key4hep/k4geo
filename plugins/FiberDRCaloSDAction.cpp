@@ -148,8 +148,8 @@ namespace sim {
       if (touchable->GetHistoryDepth() < 2)
         return false;
 
-      // we're only interested in the fiber core
-      if (logicalVol->GetNoDaughters() != 0)
+      // we're only interested in the fiber core for optical photons
+      if (step->GetTrack()->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition() && logicalVol->GetNoDaughters() != 0)
         return false;
 
       // now let's make the touchable points to the tower
