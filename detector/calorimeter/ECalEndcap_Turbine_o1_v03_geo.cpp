@@ -371,8 +371,6 @@ namespace ECalEndcap_Turbine_o1_v03 {
 
     xOffset = -xRange / 2 + xRange / (2 * numNonActiveZLayers);
 
-    std::vector<dd4hep::PlacedVolume> claddingVol_pvs;
-
     for (auto claddingLayerVol : claddingLayerVols) {
 
       float roLayer = riLayer + delrNonActive;
@@ -384,8 +382,6 @@ namespace ECalEndcap_Turbine_o1_v03 {
       dd4hep::PlacedVolume claddingVol_pv = passiveVol.placeVolume(claddingLayerVol, posLayer);
 
       claddingVol_pv.addPhysVolID("layer", LayerIndexBaseline + iLayer);
-
-      claddingVol_pvs.push_back(claddingVol_pv);
 
       dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v03_geo", "Cladding volume %s",
                        claddingVol_pv.toString().c_str());
@@ -534,17 +530,6 @@ namespace ECalEndcap_Turbine_o1_v03 {
         iLayer++;
       }
 
-      /*
-      iLayer = 0;
-      for (auto claddingVol_pv : claddingVol_pvs) {
-        dd4hep::DetElement claddingDetElem(passiveDetElem,
-                                           "claddinglayer" + std::to_string(modIndex) + "_" + std::to_string(iWheel) +
-                                               "_" + std::to_string(iLayer),
-                                           iLayer);
-        claddingDetElem.setPlacement(claddingVol_pv);
-        iLayer++;
-      }
-      */
       dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v03", "LArTotalLayerVols.size = %d",
                        LArTotalLayerVols.size());
     }
