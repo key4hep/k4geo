@@ -65,10 +65,10 @@ namespace DDSegmentation {
 
     // the size of the neighborhood (radius) in units of fiber-fiber distance (i.e. grid size)
     void SetNeighborSize(double nsize) { fNeighborSize = nsize; }
-    double GetNeighborSize() { return fNeighborSize; }
+    double GetNeighborSize() const { return fNeighborSize; }
     // the margin in units of fiber-fiber distance when incorporating satelite cells at the edge of the tower
     void SetMargin(int margin) { fMargin = margin; }
-    int GetMargin() { return fMargin; }
+    int GetMargin() const { return fMargin; }
 
     virtual void init() {};
     void filled() { fFilled = true; }
