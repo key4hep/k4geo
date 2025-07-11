@@ -50,6 +50,7 @@ namespace DDSegmentation {
     delete fParamEndcap;
   }
 
+  // front end position (default calo hit position)
   Vector3D GridDRcalo_k4geo::position(const CellID& cID) const {
     int noEta = numEta(cID); // always positive since we replicated the RHS
     int noPhi = numPhi(cID);
@@ -88,6 +89,43 @@ namespace DDSegmentation {
 
     dd4hep::printout(dd4hep::VERBOSE, "GridDRcalo_k4geo::position",
                      "Hit position of (isRHS, noEta, noPhi, x, y) = (%d, %d, %d, %d, %d) is (x, y, z) = (%f, %f, %f)",
+                     isRHS, noEta, noPhi, col, row, total.x(), total.y(), total.z());
+
+    return Vector3D(total.x(), total.y(), total.z());
+  }
+
+  // rear end position (used for the digitization)
+  Vector3D GridDRcalo_k4geo::sipmPosition(const CellID& cID) const {
+    int noEta = numEta(cID); // always positive since we replicated the RHS
+    int noPhi = numPhi(cID);
+    bool isRHS = IsRHS(cID);
+
+    // first get a vector to the center of the wafer (per tower)
+    DRparamBase_k4geo* paramBase = setParamBase(noEta);
+    auto waferPos = paramBase->GetSipmLayerPos(noPhi);
+
+    dd4hep::Position localPos = dd4hep::Position(0., 0., 0.);
+
+    // get local coordinate
+    if (IsSiPM(cID))
+      localPos = dd4hep::Position(localPosition(cID));
+
+    // rotate the local coordinate on par to the tower
+    auto rot = paramBase->GetRotationZYX(noPhi);
+    auto translation = rot * localPos;
+
+    // total vector is sum of the vector to the wafer center + rotated local coordinate
+    auto total = translation + waferPos;
+
+    // if LHS rotate by 180 deg w.r.t. X axis (on par to the DRconstructor)
+    if (!isRHS)
+      total = dd4hep::RotationX(M_PI) * total;
+
+    int row = y(cID);
+    int col = x(cID);
+
+    dd4hep::printout(dd4hep::VERBOSE, "GridDRcalo_k4geo::sipmPosition",
+                     "SiPM position of (isRHS, noEta, noPhi, x, y) = (%d, %d, %d, %d, %d) is (x, y, z) = (%f, %f, %f)",
                      isRHS, noEta, noPhi, col, row, total.x(), total.y(), total.z());
 
     return Vector3D(total.x(), total.y(), total.z());
@@ -181,33 +219,54 @@ namespace DDSegmentation {
     int totX = numX(cID);
     int totY = numY(cID);
     bool isRHS = IsRHS(cID);
+    bool isCeren = IsCerenkov(cID);
 
     DRparamBase_k4geo* paramBase = setParamBase(noEta);
     auto fl = paramBase->GetFullLengthFibers(noEta);
     int numZRot = paramBase->GetNumZRot();
 
-    // First we look for the closest (dist=sqrt(2))
-    // and the second-closest (dist=2) cells in the checkerboard
-    // in the same tower
-    // dist=sqrt(2) cells
-    auto northEast = setCellID(isRHS, systemId, noEta, noPhi, nX + 1, nY + 1);
-    auto southEast = setCellID(isRHS, systemId, noEta, noPhi, nX + 1, nY - 1);
-    auto southWest = setCellID(isRHS, systemId, noEta, noPhi, nX - 1, nY - 1);
-    auto northWest = setCellID(isRHS, systemId, noEta, noPhi, nX - 1, nY + 1);
-    // dist=1 cells
-    auto north = setCellID(isRHS, systemId, noEta, noPhi, nX, nY + 1);
-    auto east = setCellID(isRHS, systemId, noEta, noPhi, nX + 1, nY);
-    auto south = setCellID(isRHS, systemId, noEta, noPhi, nX, nY - 1);
-    auto west = setCellID(isRHS, systemId, noEta, noPhi, nX - 1, nY);
+    std::set<CellID> nb;
+    float neighbourSize = paramBase->GetNeighborSize();
+    int radiusFloor = static_cast<int>(std::floor(neighbourSize));
 
-    // the minimal neighborhood
-    std::set<CellID> nb = {north, northEast, east, southEast, south, southWest, west, northWest};
+    // loop over (2n+1) x (2n+1) cells (n = radius)
+    // and define the minimal neighborhood with the cells that dist <= radius
+    for (int ix = 0; ix <= radiusFloor; ix++) {
+      for (int iy = 0; iy <= radiusFloor; iy++) {
+        // skip the cell of interest
+        if (ix==0 && iy==0)
+          continue;
 
-    // margin to switch the definiton of the neighborhood at the edge of the tower
-    int margin = 2;
+        if (static_cast<float>(ix*ix + iy*iy) <= neighbourSize*neighbourSize) {
+          // need to cover four quadrants of (+,+), (-,-), (+,-), (-,+)
+          nb.insert(setCellID(isRHS, systemId, noEta, noPhi, nX + ix, nY + iy));
+          nb.insert(setCellID(isRHS, systemId, noEta, noPhi, nX - ix, nY - iy));
+          // duplicated cellID when either ix or iy = 0 but std::set will handle it
+          nb.insert(setCellID(isRHS, systemId, noEta, noPhi, nX + ix, nY - iy));
+          nb.insert(setCellID(isRHS, systemId, noEta, noPhi, nX - ix, nY + iy));
+        }
+      }
+    }
+
+    // function to remove different channel in the set
+    auto removeDifferentChannel = [this](bool isC, std::set<CellID>& input) {
+      for (auto it = input.begin(); it != input.end();) {
+        if (isC != IsCerenkov(*it))
+          it = input.erase(it);
+        else
+          ++it;
+      }
+    };
+
+    // now handle the (tower) edge cases
+    // margin to switch the definition of the neighborhood at the edge of the tower
+    int margin = paramBase->GetMargin();
 
     // if the seed fiber is not on the edge of the tower, return the minimal neighborhood
     if (nX > fl.cmin + margin && nX < fl.cmax - margin && nY > fl.rmin + margin && nY < fl.rmax - margin) {
+      if (fRemoveDifferentCh)
+        removeDifferentChannel(isCeren, nb);
+
       neighbours = nb;
       return;
     }
@@ -269,6 +328,9 @@ namespace DDSegmentation {
       for (int idx = totY - 1; idx >= fl.rmax - margin; idx--)
         nb.insert(setCellID(!isRHS, systemId, noEta, nextPhi, nextX, idx));
 
+      if (fRemoveDifferentCh)
+        removeDifferentChannel(isCeren, nb);
+
       neighbours = nb;
       return;
     }
@@ -281,7 +343,9 @@ namespace DDSegmentation {
         nb.insert(setCellID(isRHS, systemId, noEta, noPhi, nX, idx));
 
       // for different noEta rmin and rmax can be different
-      auto flNext = paramBase->GetFullLengthFibers(noEta - 1);
+      // also protect from map::at exception at the barrel-endcap boundary
+      auto flNext = paramBase->unsignedTowerNo(noEta) == fParamBarrel->GetTotTowerNum() ?
+          fParamBarrel->GetFullLengthFibers(noEta - 1) : paramBase->GetFullLengthFibers(noEta - 1);
 
       // next tower
       for (int idx = 0; idx <= flNext.rmin + margin; idx++)
@@ -299,7 +363,9 @@ namespace DDSegmentation {
       // than the current one
       // also protect from looking for a tower with numEta greater than the total # of towers
       if (noEta + 1 < fParamEndcap->GetTotTowerNum() + fParamBarrel->GetTotTowerNum()) {
-        auto flNext = paramBase->GetFullLengthFibers(noEta + 1);
+        // protect from map::at exception at the barrel-endcap boundary
+        auto flNext = paramBase->unsignedTowerNo(noEta) + 1 == fParamBarrel->GetTotTowerNum() ?
+            fParamEndcap->GetFullLengthFibers(noEta + 1) : paramBase->GetFullLengthFibers(noEta + 1);
 
         for (int idx = totY - 1; idx >= flNext.rmax - margin; idx--)
           nb.insert(setCellID(isRHS, systemId, noEta + 1, noPhi, nX, idx));
@@ -307,6 +373,9 @@ namespace DDSegmentation {
     }
 
     // finalize
+    if (fRemoveDifferentCh)
+      removeDifferentChannel(isCeren, nb);
+
     neighbours = nb;
     return;
   }

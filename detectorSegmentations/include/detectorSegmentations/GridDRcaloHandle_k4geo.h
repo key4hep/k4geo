@@ -34,6 +34,7 @@ public:
   bool operator==(const GridDRcalo_k4geo& seg) const { return m_element == seg.m_element; }
   /// determine the position based on the cell ID
   inline Position position(const CellID& id) const { return Position(access()->implementation->position(id)); }
+  inline Position sipmPosition(const CellID& id) const { return Position(access()->implementation->sipmPosition(id)); }
   inline Position localPosition(const CellID& id) const {
     return Position(access()->implementation->localPosition(id));
   }

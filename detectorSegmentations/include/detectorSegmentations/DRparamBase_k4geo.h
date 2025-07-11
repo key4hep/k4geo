@@ -63,6 +63,13 @@ namespace DDSegmentation {
     int GetCurrentTowerNum() { return fCurrentTowerNum; }
     void SetCurrentTowerNum(int numEta) { fCurrentTowerNum = numEta; }
 
+    // the size of the neighborhood (radius) in units of fiber-fiber distance (i.e. grid size)
+    void SetNeighborSize(double nsize) { fNeighborSize = nsize; }
+    double GetNeighborSize() { return fNeighborSize; }
+    // the margin in units of fiber-fiber distance when incorporating satelite cells at the edge of the tower
+    void SetMargin(int margin) { fMargin = margin; }
+    int GetMargin() { return fMargin; }
+
     virtual void init() {};
     void filled() { fFilled = true; }
     void finalized() { fFinalized = true; }
@@ -129,6 +136,10 @@ namespace DDSegmentation {
     double fCurrentInnerHalf;
     double fCurrentOuterHalf;
     double fCurrentOuterHalfSipm;
+
+    // parameters for neighbour finding algorithm
+    double fNeighborSize;
+    int fMargin;
 
     int fTotNum;
     int fCurrentTowerNum;

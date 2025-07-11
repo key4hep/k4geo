@@ -30,6 +30,8 @@ Febraury 2025: Added surface plugins for both muon-system and preshower, with ad
 
 March 2025: The SiPM & optical filter part of the fiber DRC SD action are now moved to the k4RecCalorimeter (now part of the SiPM simulation)
 
+July 2025: Added the fiber DRC neighborhood finding algorithm with configure size definition for topological clustering in downstream.
+
 IDEA_o2_v01
 ------------
 
