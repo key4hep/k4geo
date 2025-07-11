@@ -17,10 +17,14 @@ namespace DDSegmentation {
     /// destructor
     virtual ~GridDRcalo_k4geo() override;
 
-    //  Determine the global(local) position based on the cell ID.
+    // Determine the global (local) position based on the cell ID.
+    // position of the front end of the fiber
     virtual Vector3D position(const CellID& aCellID) const override;
     Vector3D localPosition(const CellID& aCellID) const;
     Vector3D localPosition(int numx, int numy, int x_, int y_) const;
+
+    // position of the rear end (readout location) of the fiber
+    Vector3D sipmPosition(const CellID& aCellID) const;
 
     virtual CellID cellID(const Vector3D& aLocalPosition, const Vector3D& aGlobalPosition,
                           const VolumeID& aVolumeID) const override;
@@ -32,6 +36,9 @@ namespace DDSegmentation {
 
     void setGridSize(double grid) { fGridSize = grid; }
     void setSipmSize(double sipm) { fSipmSize = sipm; }
+
+    // remove different type of channels in the neighborhood set if set to true
+    void setRemoveDifferentCh(bool rmDiffCh) { fRemoveDifferentCh = rmDiffCh; }
 
     // Get the identifier number of a mother tower in eta or phi direction
     int numEta(const CellID& aCellID) const;
@@ -105,7 +112,9 @@ namespace DDSegmentation {
     double fGridSize;
     double fSipmSize;
 
-  private:
+    // switch to remove different type cells from the neighborhood
+    bool fRemoveDifferentCh;
+
     DRparamBarrel_k4geo* fParamBarrel;
     DRparamEndcap_k4geo* fParamEndcap;
   };
