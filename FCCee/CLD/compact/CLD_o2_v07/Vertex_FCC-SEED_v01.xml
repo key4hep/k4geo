@@ -1,0 +1,287 @@
+<!-- Changes :
+   o4_v04 : scaled version of the CLIC VTX Barrel (CLIC_04_v11); distance between sensitive layers in double layers are set to 1*mm and is similar in all 3 layers
+-->
+
+<lccdd>
+
+    <comment>Tracking detectors</comment>
+    <detectors>
+       <!-- The envelope consists of a tube generally surrounding the vertex barrel and endcap disks, subtracted by a
+            cone describing the upper acceptance of the LumiCal, about 110 mrad in this version of the detector.
+       -->
+        <detector name="Vertex" type="DD4hep_SubdetectorAssembly" vis="VXDVis">
+            <shape type="Polycone" material="Air">
+              <zplane z="-Vertex_half_length"  rmin="Vertex_LumiCal_Clearence * Vertex_half_length" rmax="Vertex_outer_radius" />
+              <zplane z="-(111 * mm)"          rmin="Vertex_inner_radius + 0.5*mm"                  rmax="Vertex_outer_radius" />
+              <zplane z="+(111 * mm)"          rmin="Vertex_inner_radius + 0.5*mm"                  rmax="Vertex_outer_radius" />
+              <zplane z="+Vertex_half_length"  rmin="Vertex_LumiCal_Clearence * Vertex_half_length" rmax="Vertex_outer_radius" />
+	    </shape>
+
+            <comment>Vertex Assembly</comment>
+            <composite name="VertexBarrel"/>
+            <composite name="VertexEndcap"/>
+            <composite name="VertexVerticalCable"/>
+        </detector>
+    </detectors>
+
+    <display>
+        <vis name="SiVertexModuleVis"    alpha="1.0" r="1" g="1"    b="0.6"     showDaughters="true"  visible="false"/>
+        <vis name="SiVertexSensitiveVis" alpha="1.0" r="1" g="0.2"  b="0.2"     showDaughters="true"  visible="true"/>
+        <vis name="SiVertexPassiveVis"   alpha="1.0" r="0.274" g="0.274"  b="0.274"       showDaughters="true"  visible="true"/>
+        <vis name="SiVertexCableVis"     alpha="1.0" r="0.85" g="0.53"    b="0.4"       showDaughters="true"  visible="true"/>
+        <vis name="SiVertexAir"          alpha="1.0" r="0" g="0"    b="0"       showDaughters="false"  visible="false"/>
+    </display>
+
+    <define>
+<!--
+	<constant name="VertexBarrel_r1" value="1.75*cm"/>
+        <constant name="VertexBarrel_r2" value="3.7*cm"/>
+        <constant name="VertexBarrel_r3" value="5.7*cm"/>
+-->
+	<constant name="VertexBarrel_r1" value="1.3*cm"/>
+        <constant name="VertexBarrel_r2" value="3.5*cm"/>
+        <constant name="VertexBarrel_r3" value="5.7*cm"/>
+
+        <constant name="VertexBarrel_Sensitive_Thickness"   value="5.000000000e-02*mm"/>
+	<constant name="VertexBarrel_Support_Thickness"     value="23.500000000e-02*mm"/> <!-- +50% more material budget as in CLIC VTX -->
+	<constant name="VertexBarrel_DoubleLayer_Gap"       value="1.0*mm"/> <!-- FCC-ee VTX detector is "scaled" version of the CLIC VTX. However one want to keep constant width of double layers (which is not the case if one directly scale all dimentions). This is why gap was chosen to be 1mm to avoid holes in coverage as function of phi -->
+
+        <constant name="VertexEndcap_Sensitive_Thickness"   value="5.000000000e-02*mm"/>
+        <constant name="VertexEndcap_Support_Thickness"     value="28.000000000e-02*mm"/> <!-- +50% more material budget as in CLIC VTX -->
+        <constant name="VertexEndcap_DoubleLayer_Gap"       value="2.0*mm"/>
+
+        <constant name="VertexBarrel_Layer1_width" value="5.5*mm"/>
+        <constant name="VertexBarrel_Layer2_width" value="19.25*mm"/>
+        <constant name="VertexBarrel_Layer3_width" value="23.0948*mm"/>
+
+        <constant name="VertexBarrel_Layer1_offset" value="1.12903*mm"/>
+        <constant name="VertexBarrel_Layer2_offset" value="0.840909*mm"/>
+        <constant name="VertexBarrel_Layer3_offset" value="0.982759*mm"/>
+
+        <constant name="VertexBarrel_Layer1_Staves" value="16"/>
+        <constant name="VertexBarrel_Layer2_Staves" value="12"/>
+        <constant name="VertexBarrel_Layer3_Staves" value="16"/>
+
+        <constant name="VertexEndcap_rmax" value="102*mm"/>
+        <constant name="VertexEndcap_z1" value="160*mm"/>
+        <constant name="VertexEndcap_z2" value="230*mm"/>
+        <constant name="VertexEndcap_z3" value="300*mm"/>
+        <constant name="VertexEndcapModules" value="8"/>
+	<constant name="VertexEndcap_rmin1" value="24*mm"/>
+        <constant name="VertexEndcap_rmin2" value="34.5*mm"/>
+        <constant name="VertexEndcap_rmin3" value="45*mm"/>
+        <constant name="VertexEndcapModuleThickness" value="1.22*mm"/>
+        <constant name="VertexEndcapOverlap" value="0*mm"/>
+
+
+        <!-- FCC-SEED Option -->
+        <constant name="VTXIB_SEED_sensor_phi_sensitive" value="19.0*mm"/>
+        <constant name="VTXIB_SEED_sensor_phi_periphery" value="2.0*mm"/>
+        <constant name="VTXIB_SEED_sensor_phi" value="VTXIB_SEED_sensor_phi_sensitive+VTXIB_SEED_sensor_phi_periphery"/>
+        <constant name="VTXIB_SEED_sensor_z_sensitive" value="29.8*mm"/>
+        <constant name="VTXIB_SEED_sensor_z_periphery" value="0.200*mm"/>
+        <constant name="VTXIB_SEED_sensor_z" value="VTXIB_SEED_sensor_z_sensitive+VTXIB_SEED_sensor_z_periphery"/>
+
+        <constant name="VTXIB_SEED_r1" value="12.0*mm"/>
+        <constant name="VTXIB_SEED_r2" value="24.0*mm"/>
+        <constant name="VTXIB_SEED_r3" value="36.0*mm"/>
+        <constant name="VTXIB_SEED_r4" value="48.0*mm"/>
+        <constant name="VTXIB_SEED_r5" value="60.0*mm"/>
+
+        <constant name="VTXIB_SEED_nModules1" value="6"/>
+        <constant name="VTXIB_SEED_nModules2" value="8"/>
+        <constant name="VTXIB_SEED_nModules3" value="8"/>
+        <constant name="VTXIB_SEED_nModules4" value="8"/>
+        <constant name="VTXIB_SEED_nModules5" value="8"/>
+
+        <constant name="VTXIB_SEED_staves1" value="4"/>
+        <constant name="VTXIB_SEED_staves2" value="8"/>
+        <constant name="VTXIB_SEED_staves3" value="12"/>
+        <constant name="VTXIB_SEED_staves4" value="16"/>
+        <constant name="VTXIB_SEED_staves5" value="20"/>
+
+        <constant name="VTXIB_SEED_sensitive_thickness" value="50e-03*mm"/>
+        <constant name="VTXIB_curved_nsegments" value="8"/>
+        <constant name="VTXIB_curved_tolerance_r" value="0.040*mm"/> <!-- Needed for curved inner vertex as otherwise overlaps would be detected. -->
+
+        <constant name="VertexBarrel_zmax" value="VTXIB_SEED_nModules5*VTXIB_SEED_sensor_z/2.+5.0*mm"/>
+
+    </define>
+
+
+    <!--  Definition of the readout segmentation/definition  -->
+    <readouts>
+        <readout name="VertexBarrelCollection">
+            <id>${GlobalTrackerReadoutID}</id>
+        </readout>
+        <readout name="VertexEndcapCollection">
+            <id>${GlobalTrackerReadoutID}</id>
+        </readout>
+    </readouts>
+
+
+    <detectors>
+
+        <!-- Vertex inner barrel -->
+        <detector name="VertexBarrel" type="VertexBarrel_detailed_o1_v03" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelCollection"  region="VertexBarrelRegion">
+            <envelope vis="VXDVis">
+                <shape type="Assembly"/>
+            </envelope>
+
+            <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_BARREL"/>
+
+            <stave name="VTXIBStave1SEED" r="VTXIB_SEED_r1" length="VTXIB_SEED_nModules1*VTXIB_SEED_nModules1">
+                <sensor name="sensor" thickness="VTXIB_SEED_sensitive_thickness" material="Silicon">
+                    <component sensitive="False" isCurved="true" name="Periphery"       vis="VTXPeripheryVis" xmin="-VTXIB_SEED_sensor_phi/2." xmax="-VTXIB_SEED_sensor_phi/2.+VTXIB_SEED_sensor_phi_periphery"  ymin="-VTXIB_SEED_sensor_z/2." ymax="+VTXIB_SEED_sensor_z/2."/>
+                    <component sensitive="True"  isCurved="true" name="Pixel array"     vis="VTXSensitiveVis" nsegments="VTXIB_curved_nsegments" xmin="-VTXIB_SEED_sensor_phi/2.+VTXIB_SEED_sensor_phi_periphery" xmax="VTXIB_SEED_sensor_phi/2."  ymin="-VTXIB_SEED_sensor_z/2.+VTXIB_SEED_sensor_z_periphery/2." ymax="+VTXIB_SEED_sensor_z/2.-VTXIB_SEED_sensor_z_periphery/2."/>
+                    <component sensitive="False" isCurved="true" name="Periphery"       vis="VTXPeripheryVis" xmin="-VTXIB_SEED_sensor_phi/2.+VTXIB_SEED_sensor_phi_periphery" xmax="VTXIB_SEED_sensor_phi/2."  ymin="-VTXIB_SEED_sensor_z/2." ymax="-VTXIB_SEED_sensor_z/2.+VTXIB_SEED_sensor_z_periphery/2."/>
+                    <component sensitive="False" isCurved="true" name="Periphery"       vis="VTXPeripheryVis" xmin="-VTXIB_SEED_sensor_phi/2.+VTXIB_SEED_sensor_phi_periphery" xmax="VTXIB_SEED_sensor_phi/2."  ymin="+VTXIB_SEED_sensor_z/2.-VTXIB_SEED_sensor_z_periphery/2." ymax="+VTXIB_SEED_sensor_z/2."/>
+                </sensor>
+            </stave>
+
+            <stave name="VTXIBStave2SEED" r="VTXIB_SEED_r2" length="VTXIB_SEED_nModules2*VTXIB_SEED_nModules2">
+                <sensor name="sensor" thickness="VTXIB_SEED_sensitive_thickness" material="Silicon">
+                    <component sensitive="False" isCurved="true" name="Periphery"       vis="VTXPeripheryVis" xmin="-VTXIB_SEED_sensor_phi/2." xmax="-VTXIB_SEED_sensor_phi/2.+VTXIB_SEED_sensor_phi_periphery"  ymin="-VTXIB_SEED_sensor_z/2." ymax="+VTXIB_SEED_sensor_z/2."/>
+                    <component sensitive="True"  isCurved="true" name="Pixel array"     vis="VTXSensitiveVis" nsegments="VTXIB_curved_nsegments" xmin="-VTXIB_SEED_sensor_phi/2.+VTXIB_SEED_sensor_phi_periphery" xmax="VTXIB_SEED_sensor_phi/2."  ymin="-VTXIB_SEED_sensor_z/2.+VTXIB_SEED_sensor_z_periphery/2." ymax="+VTXIB_SEED_sensor_z/2.-VTXIB_SEED_sensor_z_periphery/2."/>
+                    <component sensitive="False" isCurved="true" name="Periphery"       vis="VTXPeripheryVis" xmin="-VTXIB_SEED_sensor_phi/2.+VTXIB_SEED_sensor_phi_periphery" xmax="VTXIB_SEED_sensor_phi/2."  ymin="-VTXIB_SEED_sensor_z/2." ymax="-VTXIB_SEED_sensor_z/2.+VTXIB_SEED_sensor_z_periphery/2."/>
+                    <component sensitive="False" isCurved="true" name="Periphery"       vis="VTXPeripheryVis" xmin="-VTXIB_SEED_sensor_phi/2.+VTXIB_SEED_sensor_phi_periphery" xmax="VTXIB_SEED_sensor_phi/2."  ymin="+VTXIB_SEED_sensor_z/2.-VTXIB_SEED_sensor_z_periphery/2." ymax="+VTXIB_SEED_sensor_z/2."/>
+                </sensor>
+            </stave>
+
+            <stave name="VTXIBStave3SEED" r="VTXIB_SEED_r3" length="VTXIB_SEED_nModules3*VTXIB_SEED_nModules3">
+                <sensor name="sensor" thickness="VTXIB_SEED_sensitive_thickness" material="Silicon">
+                    <component sensitive="False" isCurved="true" name="Periphery"       vis="VTXPeripheryVis" xmin="-VTXIB_SEED_sensor_phi/2." xmax="-VTXIB_SEED_sensor_phi/2.+VTXIB_SEED_sensor_phi_periphery"  ymin="-VTXIB_SEED_sensor_z/2." ymax="+VTXIB_SEED_sensor_z/2."/>
+                    <component sensitive="True"  isCurved="true" name="Pixel array"     vis="VTXSensitiveVis" nsegments="VTXIB_curved_nsegments" xmin="-VTXIB_SEED_sensor_phi/2.+VTXIB_SEED_sensor_phi_periphery" xmax="VTXIB_SEED_sensor_phi/2."  ymin="-VTXIB_SEED_sensor_z/2.+VTXIB_SEED_sensor_z_periphery/2." ymax="+VTXIB_SEED_sensor_z/2.-VTXIB_SEED_sensor_z_periphery/2."/>
+                    <component sensitive="False" isCurved="true" name="Periphery"       vis="VTXPeripheryVis" xmin="-VTXIB_SEED_sensor_phi/2.+VTXIB_SEED_sensor_phi_periphery" xmax="VTXIB_SEED_sensor_phi/2."  ymin="-VTXIB_SEED_sensor_z/2." ymax="-VTXIB_SEED_sensor_z/2.+VTXIB_SEED_sensor_z_periphery/2."/>
+                    <component sensitive="False" isCurved="true" name="Periphery"       vis="VTXPeripheryVis" xmin="-VTXIB_SEED_sensor_phi/2.+VTXIB_SEED_sensor_phi_periphery" xmax="VTXIB_SEED_sensor_phi/2."  ymin="+VTXIB_SEED_sensor_z/2.-VTXIB_SEED_sensor_z_periphery/2." ymax="+VTXIB_SEED_sensor_z/2."/>
+                </sensor>
+            </stave>
+
+            <stave name="VTXIBStave4SEED" r="VTXIB_SEED_r4" length="VTXIB_SEED_nModules4*VTXIB_SEED_nModules4">
+                <sensor name="sensor" thickness="VTXIB_SEED_sensitive_thickness" material="Silicon">
+                    <component sensitive="False" isCurved="true" name="Periphery"       vis="VTXPeripheryVis" xmin="-VTXIB_SEED_sensor_phi/2." xmax="-VTXIB_SEED_sensor_phi/2.+VTXIB_SEED_sensor_phi_periphery"  ymin="-VTXIB_SEED_sensor_z/2." ymax="+VTXIB_SEED_sensor_z/2."/>
+                    <component sensitive="True"  isCurved="true" name="Pixel array"     vis="VTXSensitiveVis" nsegments="VTXIB_curved_nsegments" xmin="-VTXIB_SEED_sensor_phi/2.+VTXIB_SEED_sensor_phi_periphery" xmax="VTXIB_SEED_sensor_phi/2."  ymin="-VTXIB_SEED_sensor_z/2.+VTXIB_SEED_sensor_z_periphery/2." ymax="+VTXIB_SEED_sensor_z/2.-VTXIB_SEED_sensor_z_periphery/2."/>
+                    <component sensitive="False" isCurved="true" name="Periphery"       vis="VTXPeripheryVis" xmin="-VTXIB_SEED_sensor_phi/2.+VTXIB_SEED_sensor_phi_periphery" xmax="VTXIB_SEED_sensor_phi/2."  ymin="-VTXIB_SEED_sensor_z/2." ymax="-VTXIB_SEED_sensor_z/2.+VTXIB_SEED_sensor_z_periphery/2."/>
+                    <component sensitive="False" isCurved="true" name="Periphery"       vis="VTXPeripheryVis" xmin="-VTXIB_SEED_sensor_phi/2.+VTXIB_SEED_sensor_phi_periphery" xmax="VTXIB_SEED_sensor_phi/2."  ymin="+VTXIB_SEED_sensor_z/2.-VTXIB_SEED_sensor_z_periphery/2." ymax="+VTXIB_SEED_sensor_z/2."/>
+                </sensor>
+            </stave>
+
+            <stave name="VTXIBStave5SEED" r="VTXIB_SEED_r5" length="VTXIB_SEED_nModules5*VTXIB_SEED_nModules5">
+                <sensor name="sensor" thickness="VTXIB_SEED_sensitive_thickness" material="Silicon">
+                    <component sensitive="False" isCurved="true" name="Periphery"       vis="VTXPeripheryVis" xmin="-VTXIB_SEED_sensor_phi/2." xmax="-VTXIB_SEED_sensor_phi/2.+VTXIB_SEED_sensor_phi_periphery"  ymin="-VTXIB_SEED_sensor_z/2." ymax="+VTXIB_SEED_sensor_z/2."/>
+                    <component sensitive="True"  isCurved="true" name="Pixel array"     vis="VTXSensitiveVis" nsegments="VTXIB_curved_nsegments" xmin="-VTXIB_SEED_sensor_phi/2.+VTXIB_SEED_sensor_phi_periphery" xmax="VTXIB_SEED_sensor_phi/2."  ymin="-VTXIB_SEED_sensor_z/2.+VTXIB_SEED_sensor_z_periphery/2." ymax="+VTXIB_SEED_sensor_z/2.-VTXIB_SEED_sensor_z_periphery/2."/>
+                    <component sensitive="False" isCurved="true" name="Periphery"       vis="VTXPeripheryVis" xmin="-VTXIB_SEED_sensor_phi/2.+VTXIB_SEED_sensor_phi_periphery" xmax="VTXIB_SEED_sensor_phi/2."  ymin="-VTXIB_SEED_sensor_z/2." ymax="-VTXIB_SEED_sensor_z/2.+VTXIB_SEED_sensor_z_periphery/2."/>
+                    <component sensitive="False" isCurved="true" name="Periphery"       vis="VTXPeripheryVis" xmin="-VTXIB_SEED_sensor_phi/2.+VTXIB_SEED_sensor_phi_periphery" xmax="VTXIB_SEED_sensor_phi/2."  ymin="+VTXIB_SEED_sensor_z/2.-VTXIB_SEED_sensor_z_periphery/2." ymax="+VTXIB_SEED_sensor_z/2."/>
+                </sensor>
+            </stave>
+
+            <layer nLadders="VTXIB_SEED_staves1" phi0="0." r="VTXIB_SEED_r1" id="0" nmodules="VTXIB_SEED_nModules1" name="VTXIBStave1SEED" step="0.0*mm" motherVolThickness="VTXIB_SEED_r2-VTXIB_SEED_r1"        motherVolLength="VTXIB_SEED_nModules1*VTXIB_SEED_sensor_z" offset="-0.2*mm"/>
+            <layer nLadders="VTXIB_SEED_staves2" phi0="0." r="VTXIB_SEED_r2" id="1" nmodules="VTXIB_SEED_nModules2" name="VTXIBStave2SEED" step="0.0*mm" motherVolThickness="VTXIB_SEED_r3-VTXIB_SEED_r2"        motherVolLength="VTXIB_SEED_nModules2*VTXIB_SEED_sensor_z" offset="-0.2*mm"/>
+            <layer nLadders="VTXIB_SEED_staves3" phi0="0." r="VTXIB_SEED_r3" id="2" nmodules="VTXIB_SEED_nModules3" name="VTXIBStave3SEED" step="0.0*mm" motherVolThickness="VTXIB_SEED_r4-VTXIB_SEED_r3"        motherVolLength="VTXIB_SEED_nModules3*VTXIB_SEED_sensor_z" offset="-0.2*mm"/>
+            <layer nLadders="VTXIB_SEED_staves4" phi0="0." r="VTXIB_SEED_r4" id="3" nmodules="VTXIB_SEED_nModules4" name="VTXIBStave4SEED" step="0.0*mm" motherVolThickness="VTXIB_SEED_r5-VTXIB_SEED_r4"        motherVolLength="VTXIB_SEED_nModules4*VTXIB_SEED_sensor_z" offset="-0.2*mm"/>
+            <layer nLadders="VTXIB_SEED_staves5" phi0="0." r="VTXIB_SEED_r5" id="4" nmodules="VTXIB_SEED_nModules5" name="VTXIBStave5SEED" step="0.0*mm" motherVolThickness="Vertex_outer_radius-VTXIB_SEED_r5"    motherVolLength="VTXIB_SEED_nModules5*VTXIB_SEED_sensor_z" offset="-0.2*mm"/>
+        </detector>
+
+
+
+
+
+
+        <detector id="DetID_VXD_Endcap" name="VertexEndcap" type="VertexEndcap_o1_v06" readout="VertexEndcapCollection" reflect="true" region="VertexEndcapRegion">
+            <envelope vis="VXDVis">
+                <shape type="Assembly"/>
+            </envelope>
+            <comment>Vertex Detector Endcaps</comment>
+
+	    <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_ENDCAP"/>
+
+            <module name="SiVertexEndcapModule1" vis="SiVertexModuleVis">
+                <trd x1="VertexEndcap_rmin1 * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" x2="VertexEndcap_rmax * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" z="(VertexEndcap_rmax - VertexEndcap_rmin1) / 2" />
+                <module_component thickness="VertexEndcap_Support_Thickness/2.0"  material="Silicon" vis="SiVertexPassiveVis"/>
+                <module_component thickness="VertexEndcap_Sensitive_Thickness/2.0"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
+                <module_component thickness="VertexEndcap_DoubleLayer_Gap/2.0"  material="Air" vis="SiVertexAir" />
+            </module>
+
+            <module name="SiVertexEndcapModule2" vis="SiVertexModuleVis">
+                <trd x1="VertexEndcap_rmin1 * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" x2="VertexEndcap_rmax * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" z="(VertexEndcap_rmax - VertexEndcap_rmin1) / 2" />
+                <module_component thickness="VertexEndcap_DoubleLayer_Gap/2.0"  material="Air" vis="SiVertexAir" />
+                <module_component thickness="VertexEndcap_Sensitive_Thickness/2.0"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
+                <module_component thickness="VertexEndcap_Support_Thickness/2.0"  material="Silicon" vis="SiVertexPassiveVis"/>
+            </module>
+
+            <module name="SiVertexEndcapModule3" vis="SiVertexModuleVis">
+                <trd x1="VertexEndcap_rmin2 * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" x2="VertexEndcap_rmax * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" z="(VertexEndcap_rmax - VertexEndcap_rmin2) / 2" />
+                <module_component thickness="VertexEndcap_Support_Thickness/2.0"  material="Silicon" vis="SiVertexPassiveVis"/>
+                <module_component thickness="VertexEndcap_Sensitive_Thickness/2.0"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
+                <module_component thickness="VertexEndcap_DoubleLayer_Gap/2.0"  material="Air" vis="SiVertexAir" />
+            </module>
+
+            <module name="SiVertexEndcapModule4" vis="SiVertexModuleVis">
+                <trd x1="VertexEndcap_rmin2 * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" x2="VertexEndcap_rmax * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" z="(VertexEndcap_rmax - VertexEndcap_rmin2) / 2" />
+                <module_component thickness="VertexEndcap_DoubleLayer_Gap/2.0"  material="Air" vis="SiVertexAir" />
+                <module_component thickness="VertexEndcap_Sensitive_Thickness/2.0"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
+                <module_component thickness="VertexEndcap_Support_Thickness/2.0"  material="Silicon" vis="SiVertexPassiveVis"/>
+            </module>
+
+	    <module name="SiVertexEndcapModule5" vis="SiVertexModuleVis">
+                <trd x1="VertexEndcap_rmin3 * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" x2="VertexEndcap_rmax * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" z="(VertexEndcap_rmax - VertexEndcap_rmin3) / 2" />
+                <module_component thickness="VertexEndcap_Support_Thickness/2.0"  material="Silicon" vis="SiVertexPassiveVis"/>
+                <module_component thickness="VertexEndcap_Sensitive_Thickness/2.0"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
+                <module_component thickness="VertexEndcap_DoubleLayer_Gap/2.0"  material="Air" vis="SiVertexAir" />
+            </module>
+
+            <module name="SiVertexEndcapModule6" vis="SiVertexModuleVis">
+                <trd x1="VertexEndcap_rmin3 * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" x2="VertexEndcap_rmax * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" z="(VertexEndcap_rmax - VertexEndcap_rmin3) / 2" />
+                <module_component thickness="VertexEndcap_DoubleLayer_Gap/2.0"  material="Air" vis="SiVertexAir" />
+                <module_component thickness="VertexEndcap_Sensitive_Thickness/2.0"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
+                <module_component thickness="VertexEndcap_Support_Thickness/2.0"  material="Silicon" vis="SiVertexPassiveVis"/>
+            </module>
+
+            <layer id="0"  vis="SiVertexLayerVis">
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin1) / 2" zstart="VertexEndcap_z1 - VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0*cm" phi0="pi/(VertexEndcapModules)" module="SiVertexEndcapModule1"/>
+            </layer>
+            <layer id="1"  vis="SiVertexLayerVis">
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin1) / 2" zstart="VertexEndcap_z1+VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0*cm" phi0="pi/(VertexEndcapModules)" module="SiVertexEndcapModule2"/>
+            </layer>
+            <layer id="2"  vis="SiVertexLayerVis">
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin2) / 2" zstart="VertexEndcap_z2-VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0*cm" phi0="pi/(VertexEndcapModules)" module="SiVertexEndcapModule3"/>
+            </layer>
+            <layer id="3"  vis="SiVertexLayerVis">
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin2) / 2" zstart="VertexEndcap_z2+VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0*cm" phi0="pi/(VertexEndcapModules)" module="SiVertexEndcapModule4"/>
+            </layer>
+
+            <layer id="4"  vis="SiVertexLayerVis">
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin3) / 2" zstart="VertexEndcap_z3-VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0*cm" phi0="pi/(VertexEndcapModules)" module="SiVertexEndcapModule5"/>
+            </layer>
+            <layer id="5"  vis="SiVertexLayerVis">
+                <ring r="(VertexEndcap_rmax + VertexEndcap_rmin3) / 2" zstart="VertexEndcap_z3+VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0*cm" phi0="pi/(VertexEndcapModules)" module="SiVertexEndcapModule6"/>
+            </layer>
+
+    </detector>
+        <detector name="VertexVerticalCable" type="TrackerEndcapSupport_o1_v02" reflect="true"  region="VertexEndcapRegion">
+	    <envelope>
+		    <shape type="Assembly"/>
+	    </envelope>
+	    <layer id="1" inner_r="VertexBarrel_r1" inner_z="VertexBarrel_zmax+1*mm" outer_r="Vertex_outer_radius-5*env_safety" vis="SiVertexCableVis">
+		    <slice material="Copper" thickness="0.02*mm" />
+	    </layer>
+        </detector>
+
+    </detectors>
+
+
+    <plugins>
+        <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
+            <argument value="VertexEndcap"/>
+            <argument value="dimension=2"/>
+            <argument value="u_x=-1."/>
+            <argument value="v_z=1."/>
+            <argument value="n_y=1."/>
+        </plugin>
+    </plugins>
+
+
+
+
+
+</lccdd>
