@@ -6,6 +6,12 @@
 
      http://www.engineeringtoolbox.com/air-composition-24_212.html
      -->
+  <material name="DefaultMaterial">
+    <D value="7.85" unit="g/cm3"/>
+    <fraction n="0.998" ref="Fe"/>
+    <fraction n=".002"  ref="C"/>
+  </material>
+  
     <material name="Air">
       <D type="density" unit="g/cm3" value="0.0012"/>
       <fraction n="0.754" ref="N"/>
