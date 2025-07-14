@@ -32,8 +32,8 @@
 
     <define>
         <!-- To change to ultra-light inner vertex design: Set nInnerVertexLayers to 4 disable/enable the layers below under "Ultra-light inner vertex" -->
-        <constant name="nInnerVertexLayers" value="4"/> 
-        <!-- <constant name="nInnerVertexLayers" value="3"/> -->
+        <!-- <constant name="nInnerVertexLayers" value="4"/>  -->
+        <constant name="nInnerVertexLayers" value="3"/>
     </define>
 
     <detectors>
