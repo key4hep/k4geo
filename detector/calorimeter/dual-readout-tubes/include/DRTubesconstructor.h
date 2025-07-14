@@ -60,8 +60,8 @@ public:
   void construct_calorimeter(dd4hep::Volume& calorimeter_volume);
 
   // Function to place stave throughout phi
-  void place_stave(dd4hep::Volume& calorimeter_volume, dd4hep::Volume& stave_volume, unsigned int stave_number, double centre_stave_, double angle_phi);
-
+  void place_stave(dd4hep::Volume& calorimeter_volume, dd4hep::Volume& stave_volume, unsigned int stave_number,
+		   double centre_stave_, double angle_phi);
 
 
 private:
@@ -81,7 +81,6 @@ private:
   int m_number_tower_start;
   int m_number_tower_end;
   bool m_include_bwd_region;
-
 
   // Tube parameters
   double m_capillary_outer_r;
