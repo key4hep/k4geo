@@ -276,21 +276,9 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                     double rmin = m.stave_r + sensor.r;
                     double half_width = abs(component.xmax()-component.xmin())/rmin/2.;
                     if(sensor.nsegments.back() > 1){
-                        // Trapezoid ele_box = Trapezoid( 
-                        //     abs(component.ymax()-component.ymin())/2., abs(component.ymax()-component.ymin())/2.,
-                        //     abs(component.xmax()-component.xmin())/2./sensor.nsegments.back(), abs(component.xmax()-component.xmin())/2./sensor.nsegments.back()*(rmin+sensor.thickness)/rmin,
-                        //     sensor.thickness/2.
-                        // );
-                        // Trapezoid ele_box = Trapezoid( 
-                        //     abs(component.ymax()-component.ymin())/2., abs(component.ymax()-component.ymin())/2.,
-                        //     abs(component.xmax()-component.xmin())/2./sensor.nsegments.back(), abs(component.xmax()-component.xmin())/2./sensor.nsegments.back()*(rmin+sensor.thickness)/rmin,
-                        //     sensor.thickness/2.
-                        // );
-
-                        // temmporary way to get surfaces correctly oriented. Fix DD4hep Surface.cpp (https://github.com/AIDASoft/DD4hep/blob/d1f9239c7fea65110c8579ca478e29d01afa7801/DDRec/src/Surface.cpp#L1056) such that not only y direction can be the normal direction of the surface, similarly to how it's done for planes (isXY...)
+                        // Use trapezoids to mimic curved sensors, leaving no cracks and not creating overlaps. To get surfaces correctly oriented fix DD4hep Surface.cpp (https://github.com/AIDASoft/DD4hep/blob/d1f9239c7fea65110c8579ca478e29d01afa7801/DDRec/src/Surface.cpp#L1056) such that not only y direction can be the normal direction of the surface, similarly to how it's done for planes (isXY...)
                         Trd1 ele_box = Trd1( 
-                           abs(component.xmax()-component.xmin())/2./sensor.nsegments.back(), abs(component.xmax()-component.xmin())/2./sensor.nsegments.back()*(rmin+sensor.thickness)/rmin, // The correct one!
-                            // abs(component.xmax()-component.xmin())/2./sensor.nsegments.back(), abs(component.xmax()-component.xmin())/2./sensor.nsegments.back(), // to avoid overlaps for the moment
+                            abs(component.xmax()-component.xmin())/2./sensor.nsegments.back(), abs(component.xmax()-component.xmin())/2./sensor.nsegments.back()*(rmin+sensor.thickness)/rmin,
                             abs(component.ymax()-component.ymin())/2.,
                             sensor.thickness/2.
                         );
@@ -369,7 +357,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
         int nLadders = x_layer.attr<int>(  _Unicode(nLadders) ) ;
         double dphi = 2.*M_PI / double(nLadders);
-        double phi0 = x_layer.phi0(0);
+        double phi0 = x_layer.phi0(0.);
 
         //--------- loop over ladders ---------------------------
         for(int iStave=0; iStave<nLadders; ++iStave) {
@@ -492,60 +480,63 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                     // Place all sensor parts
                     int iSensitive = 0;
                     for(int i=0; i<int(sensor.volumes.size()); i++){
-                        double r_component_curved = 0.0;
-                        r_offset_component = 0.;
-                        if(sensor.isCurved[i]){ // curved sensor parts
+                        if(sensor.isCurved[i] && sensor.nsegments[i] == 1){ // Truly curved, part of tube
+                            r_offset_component = m.motherVolThickness>0.0 && m.motherVolWidth>0.0 ? 0. : layer_offset;
                             double phi_i = phi + ( sensor.xmin[i] + abs(sensor.xmax[i]-sensor.xmin[i])/2.)/ m.stave_r;
-                            if(sensor.nsegments[i] == 1){ // Truly curved, part of tube
-                                r_component_curved = sensor.thickness/2. + (iModule%2 == 0 ? 0.0 : m.stave_dr);
-                                x_pos = r_component_curved*cos(phi_i) - r_offset_component*sin(phi_i);
-                                y_pos = r_component_curved*sin(phi_i) + r_offset_component*cos(phi_i);
-                                z_pos = motherVolOffset -(nmodules-1)/2.*(sensor.length) - (nmodules-1)/2.*step + iModule*sensor.length + iModule*step;
-                                pos = Position(x_pos, y_pos, z_pos);
-        
-                                Position pos2(0., 0., sensor.ymin[i]+abs(sensor.ymax[i]-sensor.ymin[i])/2.);
-                                RotationZYX rot2(phi_i, 0, 0);
-                                pv = module_assembly.placeVolume(sensor.volumes[i], Transform3D(rot,stave_pos).Inverse()*Transform3D(rot2, pos)*Translation3D(pos2));
+                            double r_component_curved = sensor.thickness/2. + (iModule%2 == 0 ? 0.0 : m.stave_dr);
+                            x_pos = r_component_curved*cos(phi_i);
+                            y_pos = r_component_curved*sin(phi_i);
+                            z_pos = motherVolOffset -(nmodules-1)/2.*(sensor.length) - (nmodules-1)/2.*step + iModule*sensor.length + iModule*step;
+
+                            pos = Position(x_pos, y_pos, z_pos);
+                            Position pos2(0., 0., sensor.ymin[i]+abs(sensor.ymax[i]-sensor.ymin[i])/2.);
+                            RotationZYX rot2(phi_i, 0, 0);
+
+                            Position pos_offset(0., r_offset_component, 0.);
+                            pv = module_assembly.placeVolume(sensor.volumes[i], Translation3D(pos_offset)*Transform3D(rot,stave_pos).Inverse()*Transform3D(rot2, pos)*Translation3D(pos2)); // To do: Simplify transformations, the orientation of Trd1 is strange...
+
+                            if(sensor.sensitives[i]) { // Define as sensitive and add sensitive surface
+                                pv.addPhysVolID("sensor", iSensitive);
+                                DetElement sensorDE(moduleDE, module_name + _toString(iSensitive, "_sensor%d"), x_det.id());
+                                sensorDE.setPlacement(pv);
+
+                                // Use a VolCylinder surface (not supported in reconstruction)
+                                Vector3D ocyl(-(r_component_curved + m.stave_r + sensor.r), 0., 0.);
+                                SurfaceType type = SurfaceType::Sensitive;
+                                type.setProperty(SurfaceType::Cylinder, true);
+                                VolCylinder surf(sensor.volumes[i], type, sensor.thickness/2., sensor.thickness/2., ocyl);
+                                volSurfaceList(sensorDE)->push_back(surf);
+                                iSensitive++;
+                            }
+                        }
+                        else if(sensor.isCurved[i]){  // Approximated quasi-curved sensors, using sensor.nsegments[i] tapezoids
+                            r_offset_component = m.motherVolThickness>0.0 && m.motherVolWidth>0.0 ? 0. : layer_offset;
+                            for(int iSegment=0; iSegment<sensor.nsegments[i]; iSegment++){
+                                double phi_i = phi + ( sensor.xmin[i] + abs(sensor.xmax[i]-sensor.xmin[i])*iSegment/sensor.nsegments[i] + abs(sensor.xmax[i]-sensor.xmin[i])/2./sensor.nsegments[i])/ m.stave_r;
+                                double r_component_curved = layer_r + sensor.thickness/2. + (iModule%2 == 0 ? 0.0 : m.stave_dr);
+                                x_pos = r_component_curved*cos(phi_i);
+                                y_pos = r_component_curved*sin(phi_i);
+                                z_pos = motherVolOffset -(nmodules-1)/2.*(sensor.length) - (nmodules-1)/2.*step + iModule*sensor.length + iModule*step + sensor.ymin[i]+abs(sensor.ymax[i]-sensor.ymin[i])/2.;
+
+                                Position pos_offset(0., r_offset_component, 0.);
+                                if(r_offset_component > 0.)
+                                    std::cout << "Offset component: " << "x_pos: " << -r_offset_component*sin(phi+sensor.xmin[0]/m.stave_r) << ", y_pos: " << +r_offset_component*cos(phi+sensor.xmin[0]/m.stave_r) << std::endl;
+
+                                pv = module_assembly.placeVolume(sensor.volumes[i], Translation3D(pos_offset)*Transform3D(rot, stave_pos).Inverse()*RotationY(M_PI/2.)*Transform3D(RotationZYX(M_PI/2., 0., -phi_i), Position(-z_pos, y_pos, x_pos))); // To do: Simplify transformations, the orientation of Trd1 is strange...
 
                                 if(sensor.sensitives[i]) { // Define as sensitive and add sensitive surface
-                                    // Use a VolCylinder surface (not supported in reconstruction)
-                                    Vector3D ocyl(-(r_component_curved + m.stave_r + sensor.r), 0., 0.);
-                                    SurfaceType type = SurfaceType::Sensitive;
-                                    type.setProperty(SurfaceType::Cylinder, true);
-                                    VolCylinder surf(sensor.volumes[i], type, sensor.thickness/2., sensor.thickness/2., ocyl);
+                                    pv.addPhysVolID("sensor", iSensitive);                
+                                    DetElement sensorDE(moduleDE, module_name + _toString(iSensitive,"_sensor%d"), x_det.id());
+                                    sensorDE.setPlacement(pv);
+    
+                                    // Use plane surface on top of trapezoid, supported e.g. in conformal tracking
+                                    VolPlane surf( sensor.volumes[i] , dd4hep::rec::SurfaceType::Sensitive , sensor.thickness/2. , sensor.thickness/2. , Vector3D(1. , 0. , 0. ), Vector3D( 0. , 1. , 0. ), Vector3D(0., 0., 1.) );
+                                    volSurfaceList(sensorDE)->push_back(surf);
+                                    iSensitive++;
                                 }
-                            }
-                            else{  // Approximated, sensor.nsegments[i] tapezoids forming a quasi-curved object
-                                for(int iSegment=0; iSegment<sensor.nsegments[i]; iSegment++){
-                                    phi_i = phi + ( sensor.xmin[i] + abs(sensor.xmax[i]-sensor.xmin[i])*iSegment/sensor.nsegments[i] + abs(sensor.xmax[i]-sensor.xmin[i])/2./sensor.nsegments[i])/ m.stave_r;
-                                    r_component_curved = layer_r + sensor.thickness/2. + (iModule%2 == 0 ? 0.0 : m.stave_dr);
-                                    x_pos = r_component_curved*cos(phi_i) - r_offset_component*sin(phi_i);
-                                    y_pos = r_component_curved*sin(phi_i) + r_offset_component*cos(phi_i);
-                                    z_pos = motherVolOffset -(nmodules-1)/2.*(sensor.length) - (nmodules-1)/2.*step + iModule*sensor.length + iModule*step + sensor.ymin[i]+abs(sensor.ymax[i]-sensor.ymin[i])/2.;
-
-                                    Volume sensor_vol = iSegment==0 ? sensor.volumes[i] : Volume(sensor.volumes[i].name() + _toString(iSegment,"_iSegment%d"), sensor.volumes[i].solid(), sensor.material);
-                                    if(sensor.sensitives[i]) 
-                                        sensor_vol.setSensitiveDetector(sens);
-                                    sensor_vol.setAttributes(theDetector, x_det.regionStr(), x_det.limitsStr(), x_det.visStr()) ; // sensor.volumes[i].visAttributes().name());  
-                                    pv = module_assembly.placeVolume(sensor_vol, Transform3D(rot, stave_pos).Inverse()*RotationY(M_PI/2.)*Transform3D(RotationZYX(M_PI/2., 0., -phi_i), Position(-z_pos, y_pos, x_pos)));
-
-                                    if(sensor.sensitives[i]) { // Define as sensitive and add sensitive surface
-                    
-                                        string sensor_name = module_name + _toString(iSensitive,"_sensor%d");
-                                        pv.addPhysVolID("sensor", iSensitive);                
-                                        DetElement sensorDE(moduleDE,sensor_name,x_det.id());
-                                        sensorDE.setPlacement(pv);
-        
-                                        // VolPlane surf( sensor.volumes[i] , dd4hep::rec::SurfaceType::Sensitive , sensor.thickness/2. , sensor.thickness/2. , Vector3D( -1. , 0 , 0. ), Vector3D( 0. , 0. , 1. ), Vector3D(0., -1., 0.) );
-                                        VolPlane surf( sensor_vol , dd4hep::rec::SurfaceType::Sensitive , sensor.thickness/2. , sensor.thickness/2. , Vector3D(1. , 0. , 0. ), Vector3D( 0. , 1. , 0. ), Vector3D(0., 0., 1.) );
-
-                                        volSurfaceList(sensorDE)->push_back(surf);
-                                        iSensitive++;
-                                    }
-                                }
-                            }                        
+                            }                    
                         }
-                        else{ // not curved
+                        else{ // not curved, use boxes
                             x_pos = 0.0;
                             y_pos = sensor.xmin[i]+abs(sensor.xmax[i]-sensor.xmin[i])/2.;
                             z_pos = sensor.ymin[i]+abs(sensor.ymax[i]-sensor.ymin[i])/2.;
@@ -553,15 +544,11 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                             pv = module_assembly.placeVolume(sensor.volumes[i], pos+pos2);
 
                             if(sensor.sensitives[i]) { // Define as sensitive and add sensitive surface
-                                string sensor_name = module_name + _toString(iSensitive,"_sensor%d");
                                 pv.addPhysVolID("sensor", iSensitive);                
-                                DetElement sensorDE(moduleDE,sensor_name,x_det.id());
+                                DetElement sensorDE(moduleDE,module_name + _toString(iSensitive,"_sensor%d"),x_det.id());
                                 sensorDE.setPlacement(pv);
 
-                                Vector3D u( 0. , 1. , 0. ) ;
-                                Vector3D v( 0. , 0. , 1. ) ;
-                                Vector3D n( 1. , 0. , 0. ) ;
-                                VolPlane surf( sensor.volumes[i] , dd4hep::rec::SurfaceType::Sensitive , sensor.thickness/2. , sensor.thickness/2. , u,v,n );
+                                VolPlane surf( sensor.volumes[i] , dd4hep::rec::SurfaceType::Sensitive , sensor.thickness/2. , sensor.thickness/2. , Vector3D( 0. , 1. , 0. ), Vector3D( 0. , 0. , 1. ), Vector3D( 1. , 0. , 0. ) );
                                 volSurfaceList(sensorDE)->push_back(surf);
                                 iSensitive++;
                             }
