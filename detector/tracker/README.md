@@ -59,7 +59,7 @@ The straw tracker concept uses O(100k) thin wall straw tubes to track particles.
 It likely must be paired with a silicon wrapper to achieve the reqiured spatial resolution, similar to the drift chamber.
 While the straw will always have more material budget and more dead volume than a drift chamber, the performance degredation is slight and a possible advantage is the modular construction.
 The straw tracker has been discussed at FCC meetings [here](https://indico.fnal.gov/event/67484/contributions/313363/attachments/187186/258081/straw_USFCC.pdf) and [here](https://indico.cern.ch/event/1516157/contributions/6444547/attachments/3063289/5418866/straw_TrackerWorkshop_BNL_05082025.pptx%20(2).pdf).
-There was also a mini workshop on tracking, focusing on fabrication of straw and drift chambers, including lessons learned from other experiments, which can be found [here](https://indico.cern.ch/event/1408681/).
+There was also a mini workshop on tracking, focusing on fabrication of straw and drift chambers, including lessons learned from other experiments, which can be found [here](https://indico.cern.ch/event/1408681/).  The detector builder is described in detail [here](https://indico.cern.ch/event/1551837/#71-straw-tube-tracker-implemen).
 
 ### o1_v01
 Initial design for a tracker based on thin-wall straw tubes.  This will likely be part of the ALLEGRO concept, but can similarly be swapped with the IDEA drift chamber for apples-to-apples comparison studies.
@@ -68,3 +68,4 @@ Initial design for a tracker based on thin-wall straw tubes.  This will likely b
  - 200MB memory usage for straw detector.
  - Stereo angle is not implemented yet, will likely come in summer 2025.
  - No consideration yet to endcap.  Current studies are limited to 90 degrees.
+ 

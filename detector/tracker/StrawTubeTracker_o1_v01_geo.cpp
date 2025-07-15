@@ -2,8 +2,13 @@
 #include "DDRec/DetectorData.h"
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
+
 #include <cassert>
 #include <cmath>
+
+#include "Math/AxisAngle.h"
+#include "Math/Vector3D.h"
+
 
 /*
  * Define a simple assert function which prints a message when the assert will fail
@@ -54,7 +59,9 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector &theDetector,
   int    MLNum         = 0;
   int    tubeNum       = 0;
   double tubeThickness = 0.0;
+  double mloffset      = 0.0;
 
+  std::list<double> offsets;
   // convenience class to add all slice thicknesses together
   dd4hep::Layering layering(x_det); 
 
@@ -78,6 +85,10 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector &theDetector,
     double MLLayers    = x_layer.hasAttr(_U(count))     ? x_layer.count()     : 10;
     double MLphiGap    = x_layer.hasAttr(_U(gap))       ? x_layer.gap()       : 1.5*dd4hep::cm;
     double MLphiRepeat = x_layer.hasAttr(_U(repeat))    ? x_layer.repeat()    : -1;
+    
+    double MLoffset    = x_layer.hasAttr(_U(offset))    ? x_layer.offset()    : 0.0;
+    double Angle       = x_layer.hasAttr(_U(angle))     ? x_layer.angle()     : 0.0;
+
 
     // check that the thickness is set
     // and it is a sensible value
@@ -124,12 +135,14 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector &theDetector,
     // populate the envelope volume for the tube with slices: the annular rings of material
     double tubeInnerRadius = 0.0;
     int    sliceNum        = 0;
+    
     for (xml_coll_t slice(x_layer, _U(slice)); slice; ++slice, ++sliceNum) {
       xml_comp_t       x_slice        = slice;
       double           sliceThickness = x_slice.thickness();
       dd4hep::Material sliceMat       = theDetector.material(x_slice.materialStr());
       std::string      sliceName      = MLName + x_slice.materialStr() +
                                         dd4hep::_toString(sliceNum, "slice%d");
+
       dd4hep::Tube     sliceTube      = dd4hep::Tube(tubeInnerRadius,
 						     tubeInnerRadius + sliceThickness, zmax);
       dd4hep::Volume   sliceVol       = dd4hep::Volume(sliceName, sliceTube, sliceMat);
@@ -153,14 +166,22 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector &theDetector,
       for (int l = 0; l < MLSectors; ++l, ++tubeNum) {
         for (int i = 0; i < MLphiRepeat; ++i, ++tubeNum) {
           // place the envelope volume in the multilayer envelope
-	  double               phi              = l*2*dd4hep::pi/MLSectors + (j+2*i)*delta_phi;
+	  double               phi              = l*2*dd4hep::pi/MLSectors + (j+2*i)*delta_phi*pow(-1,MLNum); //direction of diagonal gap changes per ML
+          
           std::string          placedTubeName   = MLName + dd4hep::_toString(l, "sector%d") +
 	                                          dd4hep::_toString(j, "layer%d") +
 	                                          dd4hep::_toString(i, "tube%d");
 	  dd4hep::DetElement   tubeElement      = dd4hep::DetElement(sdet, placedTubeName, tubeNum);
-          dd4hep::PlacedVolume tubePlacedVolume = MLVol.placeVolume(singleVol,
-						  dd4hep::Position(layerRadius*sin(phi),
-								   layerRadius*cos(phi),0));
+
+          ROOT::Math::XYZVector    axis(layerRadius*cos(phi+mloffset),
+                                        layerRadius*sin(phi+mloffset),0);
+          
+          ROOT::Math::AxisAngle    rot(axis,Angle);
+
+          ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<double>> pos(layerRadius*cos(phi+mloffset),
+                                                                                layerRadius*sin(phi+mloffset),0);
+          dd4hep::Transform3D  tubeTransform    = dd4hep::Transform3D(rot, pos);
+          dd4hep::PlacedVolume tubePlacedVolume = MLVol.placeVolume(singleVol, tubeTransform);
 
 	  // add physical volume IDs corresponding to <readout> <ids> in .xml
 	  // and set placement of sensitive detector
@@ -172,8 +193,9 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector &theDetector,
       layerRadius += (tubeThickness + tube_gap)*0.866; // equal tube gap
     } // layers within mutlilayer
     MLInnerRadius += MLThickness;
+    mloffset      += MLoffset;
+    
   } // multi-layers aka _U(layer)
-
   return sdet;
 }
 DECLARE_DETELEMENT(StrawTubeTracker, create_detector)
