@@ -92,7 +92,7 @@ ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh
 	ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/FCCee_o1_v05/FCCee_o1_v05.xml --runType=batch -G -N=1 --outputFile=testFCCee_o1_v05.slcio )
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
-SET( det_name "CLD_o2_v07" )
+SET( det_name "CLD_o2_v08" )
 ADD_TEST( t_test_${det_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
 	ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/${det_name}/${det_name}.xml --runType=batch -G -N=1 --outputFile=test${det_name}.slcio )
 SET_TESTS_PROPERTIES( t_test_${det_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
@@ -204,6 +204,21 @@ ADD_TEST( t_SensThickness_Clic_o2_v4 "${CMAKE_INSTALL_PREFIX}/bin/run_test_${Pac
           ${CMAKE_INSTALL_PREFIX}/bin/TestSensThickness ${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o2_v04/CLIC_o2_v04.xml 300 50 )
 ADD_TEST( t_SensThickness_CLIC_o3_v15 "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
           ${CMAKE_INSTALL_PREFIX}/bin/TestSensThickness ${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o3_v15/CLIC_o3_v15.xml 100 50 )
+
+#--------------------------------------------------
+# Tests for MuonCollider geometries
+#--------------------------------------------------
+SET( test_name "test_MAIA_v0_run" )
+ADD_TEST( t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
+  ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MAIA/compact/MAIA_v0/MAIA_v0.xml --runType=batch -G -N=1 --outputFile=test_MAIA_v0.edm4hep.root
+)
+SET_TEST_ENV(${test_name})
+
+SET( test_name "test_MuColl_v1_run" )
+ADD_TEST(t_${test_name} "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
+  ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuColl/compact/MuColl_v1/MuColl_v1.xml --runType=batch -G -N=1 --outputFile=test_MuColl_v1.edm4hep.root
+)
+SET_TEST_ENV(${test_name})
 
 #--------------------------------------------------
 # check if files named the same contain the same in FCCee

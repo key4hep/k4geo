@@ -227,7 +227,7 @@ std::vector<SEcal05_Helpers::dimposXYStruct> SEcal05_Helpers::getSlabXYDimension
         layerslabdims.push_back(ss);
         totTow++;
       } // towers
-    }   // modules
+    } // modules
 
     // if slab dimensions do not change layer-by-layer, memorise for next time
     if (_module_XZtype == 0)
@@ -738,12 +738,12 @@ void SEcal05_Helpers::makeModule(dd4hep::Volume& mod_vol,                       
           ++s_num;
 
         } // end slice within one slab
-      }   // slabs
+      } // slabs
       myLayerNum = myLayerNumTemp;
       currentLayerBase_pos_Z += slab_dim_Z;
       layer_index++; // this is the structural layer counter (one per slab, not per sensitive layer)
-    }                // layers in compact file
-  }                  // layer types in compact file
+    } // layers in compact file
+  } // layer types in compact file
 
   // add material after last slab. Just CF
   updateCaloLayers(_CF_alvWall + _CF_back, _carbon_fibre_material, false, false, -1, -1, true); // the last layer

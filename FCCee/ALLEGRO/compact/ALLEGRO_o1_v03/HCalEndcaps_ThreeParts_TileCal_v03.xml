@@ -117,7 +117,7 @@
     <detector id="DetID_HCAL_Endcap" name="HCalThreePartsEndcap" type="CaloThreePartsEndcap_o1_v02" readout="HCalEndcapReadout" >
       <type_flags type="DetType_CALORIMETER + DetType_HADRONIC + DetType_ENDCAP"/>
       <!-- vis="endcapHcal_envelope"> -->
-      <sensitive type="BirksLawCalorimeterSD"/>
+      <sensitive type="calorimeter"/>
       <dimensions rmin1="HCalEndcap_inner_radius1" rmin2="HCalEndcap_inner_radius2" rmin="HCalEndcap_inner_radius3"
 		  rmax1="HCalEndcap_outer_radius1" rmax2="HCalEndcap_outer_radius2" rmax="HCalEndcap_outer_radius3"
 		  width="(HCalEndcap_max_z1 - HCalEndcap_min_z1)*0.5"  dz="(HCalEndcap_max_z2 - HCalEndcap_min_z2)*0.5" z_length="(HCalEndcap_max_z3 - HCalEndcap_min_z3)*0.5"

@@ -1,0 +1,47 @@
+<lccdd>
+    <!--  Definition of global dictionary constants          -->
+    <define>
+        <constant name="R_inner" value="2.2*cm" />
+    </define>
+    
+    <!--  Definition of the used visualization attributes    -->
+    <display>
+        <vis name="BeampipeInnerVis" alpha="1.0" r="0.8" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+        <vis name="BeampipeOuterVis" alpha="0.6" r="0.8" g="0.1" b="1.0" showDaughters="true" visible="true"/>
+        <vis name="VacVis"   alpha="1.0" r="1.0" g="1.0"  b="1.0"   showDaughters="true"  visible="false"/>
+    </display>
+    
+    
+    <detectors>
+        <comment>Beampipe</comment>
+        
+        <detector name="BeampipeInner" type="DD4hep_PolyconeSupport" vis="BeampipeInnerVis" region="BeampipeRegion">
+            <comment>Inner part of the vacuum beampipe: Beryllium walls</comment>
+            <material name="Vacuum"/>
+            <zplane z="-Nozzle_zmax" rmin="0" rmax="1.78*cm" />
+            <zplane z="-400*cm" rmin="0" rmax="1.19*cm" />
+            <zplane z="-200*cm" rmin="0" rmax="0.6*cm" />
+            <zplane z="-100*cm" rmin="0" rmax="0.3*cm" />
+            <zplane z="-15*cm" rmin="0" rmax="0.6*cm" />
+            <zplane z="-6*cm" rmin="0" rmax="1*cm" />
+            <zplane z="6*cm" rmin="0" rmax="1*cm" />
+            <zplane z="15*cm" rmin="0" rmax="0.6*cm" />
+            <zplane z="100*cm" rmin="0" rmax="0.3*cm" />
+            <zplane z="200*cm" rmin="0" rmax="0.6*cm" />
+            <zplane z="400*cm" rmin="0" rmax="1.19*cm" />
+            <zplane z="Nozzle_zmax" rmin="0" rmax="1.78*cm" />
+        </detector>
+
+        <detector name="BeampipeOuter" type="DD4hep_PolyconeSupport" vis="BeampipeOuterVis" region="BeampipeRegion">
+            <comment>Outer part of the vacuum beampipe: Beryllium walls</comment>
+            <material name="Vacuum"/>
+            <zplane z="-13.23*cm" rmin="2.281*cm" rmax="2.281*cm" />
+            <zplane z="-6.25*cm" rmin="1.02483*cm" rmax="R_inner" />
+            <zplane z="-6*cm" rmin="1*cm" rmax="R_inner" />
+            <zplane z="6*cm" rmin="1*cm" rmax="R_inner" />
+            <zplane z="6.25*cm" rmin="1.02483*cm" rmax="R_inner" />
+            <zplane z="13.23*cm" rmin="2.281*cm" rmax="2.281*cm" />
+        </detector>
+        
+    </detectors>
+</lccdd>

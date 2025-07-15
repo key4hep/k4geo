@@ -452,7 +452,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
           cell_v.placeVolume(fwire_v, fwireTr);
         }
       } // end building field wires
-    }   /// end building wires
+    } /// end building wires
     int maxphi = ncells;
     if (debugGeometry)
       maxphi = 3;

@@ -103,6 +103,13 @@ SIM.action.calo = "Geant4ScintillatorCalorimeterAction"
 ## List of patterns matching sensitive detectors of type Calorimeter.
 SIM.action.calorimeterSDTypes = ["calorimeter"]
 
+## Replace SDAction for SCEPCal subdetector
+SIM.action.mapActions["SCEPCal_MainLayer"] = "SCEPCal_MainSDAction"
+SIM.action.mapActions["SCEPCal_TimingLayer"] = "SCEPCal_TimingSDAction"
+
+SIM.filter.mapDetFilter["SCEPCal_MainLayer"] = "edep1kev"
+SIM.filter.mapDetFilter["SCEPCal_TimingLayer"] = "edep1kev"
+
 ## Replace SDAction for DREndcapTubes subdetector
 SIM.action.mapActions["DREndcapTubes"] = "DRTubesSDAction"
 ## Configure the regexSD for DREndcapTubes subdetector
@@ -608,6 +615,34 @@ def setupCerenkov(kernel):
     ph.VerboseLevel = 0
     ph.enableUI()
     seq.adopt(ph)
+    return None
+
+
+def setupCerenkovScint(kernel):
+    from DDG4 import PhysicsList
+
+    seq = kernel.physicsList()
+
+    scint = PhysicsList(kernel, "Geant4ScintillationPhysics/ScintillationPhys")
+    scint.VerboseLevel = 0
+    scint.TrackSecondariesFirst = True
+    scint.enableUI()
+    seq.adopt(scint)
+
+    cerenkov = PhysicsList(kernel, "Geant4CerenkovPhysics/CerenkovPhys")
+    cerenkov.VerboseLevel = 0
+    cerenkov.MaxNumPhotonsPerStep = 10
+    cerenkov.MaxBetaChangePerStep = 10.0
+    cerenkov.TrackSecondariesFirst = True
+    cerenkov.enableUI()
+    seq.adopt(cerenkov)
+
+    ph = PhysicsList(kernel, "Geant4OpticalPhotonPhysics/OpticalGammaPhys")
+    ph.addParticleConstructor("G4OpticalPhoton")
+    ph.VerboseLevel = 0
+    ph.enableUI()
+    seq.adopt(ph)
+
     return None
 
 

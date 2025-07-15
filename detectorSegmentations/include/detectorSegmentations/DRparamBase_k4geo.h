@@ -63,7 +63,7 @@ namespace DDSegmentation {
     int GetCurrentTowerNum() { return fCurrentTowerNum; }
     void SetCurrentTowerNum(int numEta) { fCurrentTowerNum = numEta; }
 
-    virtual void init(){};
+    virtual void init() {};
     void filled() { fFilled = true; }
     void finalized() { fFinalized = true; }
     bool IsFinalized() { return fFinalized; }

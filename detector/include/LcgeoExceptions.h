@@ -15,9 +15,7 @@ class GeometryException : public std::exception {
 
 protected:
   std::string message;
-  GeometryException() { /*no_op*/
-    ;
-  }
+  GeometryException() { /*no_op*/ ; }
 
 public:
   GeometryException(std::string text) { message = "GeometryException: " + text; }

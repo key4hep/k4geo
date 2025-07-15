@@ -256,8 +256,7 @@ void CDCHBuild::build_layer(DetElement parent, Volume parentVol, dd4hep::Sensiti
   string wirecol, gascol, wholeHyperboloidVolumeName;
   string lvFwireName, lvSwireName;
 
-  struct wire guard_wires {
-  }, field_wires_bottom{}, field_wires_center{}, field_wires_top{}, sense_wires{};
+  struct wire guard_wires{}, field_wires_bottom{}, field_wires_center{}, field_wires_top{}, sense_wires{};
 
   for (int SL = 0; SL < nSuperLayer; ++SL) {
 

@@ -336,7 +336,7 @@ namespace sim {
 
       return true;
     } // !skipScint
-  }   // Geant4SensitiveAction::process
+  } // Geant4SensitiveAction::process
 
   typedef Geant4SensitiveAction<DRCData> DRCaloSDAction;
 } // namespace sim
