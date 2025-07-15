@@ -771,8 +771,8 @@ void DRBarrelTubes::DRTubesconstructor::place_stave(Volume& calorimeter_volume, 
   // Placing of the staves
   RotationZ rot_third = RotationZ(angle);
   // stave position in the calorimeter volume
-  dd4hep::printout(dd4hep::INFO, "DRBarrelTubes::DRTubesconstructor::place_stave",
-                   "Placing stave %d at phi = %f deg", stave_num, angle / deg);
+  dd4hep::printout(dd4hep::INFO, "DRBarrelTubes::DRTubesconstructor::place_stave", "Placing stave %d at phi = %f deg",
+                   stave_num, angle / deg);
 
   double stave_x = centre_stave_volume * std::cos(angle);
   double stave_y = centre_stave_volume * std::sin(angle);
@@ -836,7 +836,7 @@ void DRBarrelTubes::DRTubesconstructor::construct_calorimeter(Volume& calorimete
       }
     }
   }
-  
+
   // Print length of tube map m_cher_tube_volume_map and m_scin_tube_volume_map
   dd4hep::printout(dd4hep::INFO, "DRBarrelTubes::DRTubesconstructor::construct_calorimeter",
                    "----> DRBarrelTubes: Length of C map = %u", m_cher_tube_volume_map.size());
