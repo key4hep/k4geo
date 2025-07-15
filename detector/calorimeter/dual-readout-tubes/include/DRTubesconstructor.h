@@ -63,7 +63,6 @@ public:
   void place_stave(dd4hep::Volume& calorimeter_volume, dd4hep::Volume& stave_volume, unsigned int stave_number,
                    double centre_stave_, double angle_phi);
 
-
 private:
   dd4hep::Detector* m_description;
   xml_h m_entities;
