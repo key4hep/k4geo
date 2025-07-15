@@ -158,7 +158,7 @@
     
     <!-- Muon tagger -->
     <constant name="MuonTagger_inner_radius" value="4550*mm"/>
-    <constant name="MuonTagger_outer_radius" value="4650*mm"/>
+    <constant name="MuonTagger_outer_radius" value="5000*mm"/>
     <constant name="MuonTagger_half_length" value="6000*mm"/>
    
     <constant name="MuonTaggerEndcap_inner_radius" value="1100*mm"/>

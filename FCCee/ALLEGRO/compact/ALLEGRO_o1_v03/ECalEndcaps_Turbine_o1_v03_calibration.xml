@@ -106,7 +106,7 @@
      <!-- electromagnetic calorimeter -->
     <detector id="ECalEndcap_id" name="EMEC_turbine" type="ECalEndcap_Turbine_o1_v03" readout="ECalEndcapTurbine" vis="emec_envelope_vis" sensitive="true">
       <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_ENDCAP"/>
-      <sensitive type="SimpleCalorimeterSD"/>
+      <sensitive type="calorimeter"/>
        <dimensions rmin1="CryoEndcap_front_rmin" rmin2="CryoEndcap_front_rmin" rmax1="CryoEndcap_rmax" rmax2="CryoEndcap_rmax" dz="(CryoEndcap_z2-CryoEndcap_z1)/2." z_offset="CryoEndcap_z1+(CryoEndcap_z2-CryoEndcap_z1)/2."/>
       <calorimeter name="EM_endcap">
 	<dimensions rmin="EMEC_rmin1" rmax="EMEC_rmax" dz="(EMEC_z2-EMEC_z1)/2." z_offset="EMEC_z1+(EMEC_z2-EMEC_z1)/2."/>
