@@ -3,14 +3,14 @@
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-  <info name="ALLEGRO_o1_v03 Master"
-    title="ALLEGRO_o1_v03 Master"
-    author="Giovanni Marchiori"
+  <info name="ALLEGRO_o2_v01 Master"
+    title="ALLEGRO_o2_v01 Master"
+    author="Kevin Nelson"
     url="no"
     status="development"
     version="1.0">
     <comment>
-      Master compact file describing the latest developments of the FCCee ALLEGRO detector concept. With respect to v02 it features an ECal barrel with 11 layers and cell corners projective along phi
+      Master compact file describing the latest developments of the FCCee ALLEGRO detector concept. With respect to option 1 this file includes a straw tube tracker in place of the drift chamber
     </comment>
   </info>
 
@@ -28,7 +28,7 @@
     <constant name="world_z" value="world_size"/>
   </define>
 
-  <include ref="./DectDimensions.xml" />
+  <include ref="../ALLEGRO_o1_v03/DectDimensions.xml" />
 
   <!-- shape based model of the beam pipe -->
   <include ref="../../../MDI/compact/MDI_o1_v00/Beampipe_o4_v05.xml" />
@@ -40,15 +40,15 @@
   <!-- <include ref="../../../MDI/compact/MDI_o1_v01/Beampipe_CADimport_o1_v02.xml" /> -->
   <!-- <include ref="../../../MDI/compact/MDI_o1_v01/BeamInstrumentation_o1_v01.xml"/> -->
 
-  <include ref="LumiCal.xml"/>
-  <include ref="VertexComplete_IDEA_o1_v03.xml"/>   <!-- symbolic link to ../../../IDEA/compact/IDEA_o1_v03/VertexComplete_IDEA_o1_v03.xml -->
-  <include ref="StrawTubeTracker_o1_v01.xml"/>
-  <include ref="SiliconWrapper_o1_v03.xml"/>        <!-- symbolic link to ../../../IDEA/compact/IDEA_o1_v03/SiliconWrapper_o1_v03.xml -->
-  <include ref="ECalBarrel_thetamodulemerged.xml"/> <!-- if you remove the ECalBarrel, you also have to remove or update the "GlobalSolenoid" field (it depends on ECAL dimensions) -->
-  <include ref="HCalBarrel_TileCal_v03.xml"/>
-  <include ref="ECalEndcaps_Turbine_o1_v03.xml"/>
-  <include ref="HCalEndcaps_ThreeParts_TileCal_v03.xml"/>
-  <include ref="MuonTaggerPhiTheta.xml"/>
+  <include ref="../ALLEGRO_o1_v03/LumiCal.xml"/>
+  <include ref="../ALLEGRO_o1_v03/VertexComplete_IDEA_o1_v03.xml"/> 
+  <include ref="StrawTubeTracker_o2_v01.xml"/> <!-- the only difference wrt o1_v03 -->
+  <include ref="../ALLEGRO_o1_v03/SiliconWrapper_o1_v03.xml"/> 
+  <include ref="../ALLEGRO_o1_v03/ECalBarrel_thetamodulemerged.xml"/> <!-- if you remove the ECalBarrel, you also have to remove or update the "GlobalSolenoid" field (it depends on ECAL dimensions) -->
+  <include ref="../ALLEGRO_o1_v03/HCalBarrel_TileCal_v03.xml"/>
+  <include ref="../ALLEGRO_o1_v03/ECalEndcaps_Turbine_o1_v03.xml"/>
+  <include ref="../ALLEGRO_o1_v03/HCalEndcaps_ThreeParts_TileCal_v03.xml"/>
+  <include ref="../ALLEGRO_o1_v03/MuonTaggerPhiTheta.xml"/>
 
   <fields>
     <!-- FIXME this is a place holder to get a reasonable magnetic field, it should be a real MAP obtained from FEM tools taking into account HCAL return yoke -->
