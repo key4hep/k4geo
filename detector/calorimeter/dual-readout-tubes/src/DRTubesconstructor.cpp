@@ -1,4 +1,5 @@
 #include "DRTubesconstructor.h"
+#include "DD4hep/Printout.h"
 
 #include <TMatrixD.h>
 
@@ -760,8 +761,8 @@ void DRBarrelTubes::DRTubesconstructor::place_tower(Volume& stave_volume, Volume
 }
 
 void DRBarrelTubes::DRTubesconstructor::place_stave(Volume& calorimeter_volume, Volume& stave_volume,
-	       					    unsigned int stave_num, double centre_stave_volume, double angle) {
-  // Calculate neccesary parameters for stave contruction. Shape is a trapezoid over the full barrel region (forward and 
+                                                    unsigned int stave_num, double centre_stave_volume, double angle) {
+  // Calculate neccesary parameters for stave contruction. Shape is a trapezoid over the full barrel region (forward and
   // backward)
 
   // Rotations needed to place the staves
@@ -770,7 +771,9 @@ void DRBarrelTubes::DRTubesconstructor::place_stave(Volume& calorimeter_volume, 
   // Placing of the staves
   RotationZ rot_third = RotationZ(angle);
   // stave position in the calorimeter volume
-  std::cout << "Placing stave " << stave_num << " at phi = " << angle / deg << " deg" << std::endl;
+  dd4hep::printout(dd4hep::INFO, "DRBarrelTubes::DRTubesconstructor::place_stave",
+                   "Placing stave %d at phi = %f deg", stave_num, angle / deg);
+
   double stave_x = centre_stave_volume * std::cos(angle);
   double stave_y = centre_stave_volume * std::sin(angle);
   Transform3D stave_tr(rot_third * rot_second * rot_first, Position(stave_x, stave_y, 0));
@@ -798,7 +801,9 @@ void DRBarrelTubes::DRTubesconstructor::construct_calorimeter(Volume& calorimete
     if (m_covered_theta < m_barrel_endcap_angle) {
       // Requires m_number_tower_end to be bigger than m_number_tower_start
       if (tower >= m_number_tower_start) {
-        std::cout << "----> DRBarrelTubes: tower = " << tower << std::endl;
+        dd4hep::printout(dd4hep::INFO, "DRBarrelTubes::DRTubesconstructor::construct_calorimeter",
+                         "----> DRBarrelTubes: tower = %d", tower);
+
         Volume trap_volume("tower");
         trap_volume.setMaterial(m_trap_material);
 
@@ -811,7 +816,9 @@ void DRBarrelTubes::DRTubesconstructor::construct_calorimeter(Volume& calorimete
     }
   }
 
-  std::cout << "start phi is: " << m_start_calo_phi / deg << " and end phi is: " << m_end_calo_phi / deg << std::endl; 
+  dd4hep::printout(dd4hep::INFO, "DRBarrelTubes::DRTubesconstructor::construct_calorimeter",
+                   "Start phi: %f and End phi: %f", m_start_calo_phi / deg, m_end_calo_phi / deg);
+
   for (unsigned int stave = 0; stave < m_num_phi_towers; stave++, phi += m_tower_phi) {
     if (m_end_calo_phi > m_start_calo_phi) {
       if ((phi + m_tower_phi > m_start_calo_phi) && (phi < m_end_calo_phi)) {
@@ -821,17 +828,18 @@ void DRBarrelTubes::DRTubesconstructor::construct_calorimeter(Volume& calorimete
       }
     }
     // added to allow for over boundary phi ranges
-    else if(m_start_calo_phi > m_end_calo_phi) {
+    else if (m_start_calo_phi > m_end_calo_phi) {
       if ((phi + m_tower_phi > m_start_calo_phi) || (phi < m_end_calo_phi)) {
         this->place_stave(calorimeter_volume, stave_volume, stave, centre_stave_vol, phi);
-      }
-      else {
+      } else {
         continue;
       }
     }
   }
   
   // Print length of tube map m_cher_tube_volume_map and m_scin_tube_volume_map
-  std::cout << "----> DRBarrelTubes: Length of C map = " << m_cher_tube_volume_map.size() << std::endl;
-  std::cout << "----> DRBarrelTubes: Length of S map = " << m_scin_tube_volume_map.size() << std::endl;
+  dd4hep::printout(dd4hep::INFO, "DRBarrelTubes::DRTubesconstructor::construct_calorimeter",
+                   "----> DRBarrelTubes: Length of C map = %u", m_cher_tube_volume_map.size());
+  dd4hep::printout(dd4hep::INFO, "DRBarrelTubes::DRTubesconstructor::construct_calorimeter",
+                   "----> DRBarrelTubes: Length of S map = %u", m_scin_tube_volume_map.size());
 }

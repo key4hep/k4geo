@@ -61,7 +61,7 @@ public:
 
   // Function to place stave throughout phi
   void place_stave(dd4hep::Volume& calorimeter_volume, dd4hep::Volume& stave_volume, unsigned int stave_number,
-		   double centre_stave_, double angle_phi);
+                   double centre_stave_, double angle_phi);
 
 
 private:
