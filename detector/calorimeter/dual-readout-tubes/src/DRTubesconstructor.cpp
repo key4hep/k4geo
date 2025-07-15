@@ -757,7 +757,7 @@ void DRBarrelTubes::DRTubesconstructor::place_tower(Volume& stave_volume, Volume
     Transform3D tower_bwd_tr(rot_second_bwd * rot_first_bwd, m_tower_bwd_pos);
     PlacedVolume tower_bwd_placed = stave_volume.placeVolume(tower_volume, -tower, tower_bwd_tr);
     tower_bwd_placed.addPhysVolID("tower", -tower);
-    }
+  }
 }
 
 void DRBarrelTubes::DRTubesconstructor::place_stave(Volume& calorimeter_volume, Volume& stave_volume,
