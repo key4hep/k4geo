@@ -17,8 +17,8 @@
   <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml" />
 
   <includes>
-    <gdmlFile  ref="elements.xml"/>
-    <gdmlFile  ref="materials.xml"/>
+    <gdmlFile  ref="../ALLEGRO_o1_v03/elements.xml"/>
+    <gdmlFile  ref="./materials.xml"/>
   </includes>
 
   <define>

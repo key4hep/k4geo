@@ -13,7 +13,7 @@
   
   <detectors>
     <detector name="STT_o1_v01"
-              type="StrawTubeTracker"
+              type="StrawTubeTracker_o1_v01"
               id="DetID_DCH"
               readout="STTCollection"
               vis="STTVis">
