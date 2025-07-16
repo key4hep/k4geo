@@ -5,6 +5,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <list>
 
 #include "Math/AxisAngle.h"
 #include "Math/Vector3D.h"
@@ -26,9 +27,9 @@ void strawAssert(bool condition, std::string message) {
  * Constructor for straw tube tracker detector
  * 
  */
-static dd4hep::Ref_t create_detector(dd4hep::Detector &theDetector,
-                                     xml_h entities,
-                                     dd4hep::SensitiveDetector sens) {
+static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector &theDetector,
+					  xml_h entities,
+					  dd4hep::SensitiveDetector sens) {
 
   // XML Detector Element (confusingly also XML::DetElement)
   xml_det_t          x_det   = entities;
@@ -198,4 +199,4 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector &theDetector,
   } // multi-layers aka _U(layer)
   return sdet;
 }
-DECLARE_DETELEMENT(StrawTubeTracker, create_detector)
+DECLARE_DETELEMENT(StrawTubeTracker_o1_v01, create_straw_tracker)
