@@ -33,7 +33,7 @@
           zmax="STT_half_length_total"
           rmin="DCH_inner_cyl_R_total"
           rmax="DCH_outer_cyl_R_total"
-	  gap ="1*mm"/> 
+	  gap ="1.15*mm"/> 
 
       <!-- 
 	   Each block below describes a "multilayer": a set of layers of tubes in close proximity 
@@ -89,21 +89,21 @@
       -->
 
       <!-- 8 segment tube layers (N modules in phi direction) -->      
-      <layer vis="STTVis" offset="0.2094" angle="0.035" thickness="10*cm" count="10">
+      <layer vis="STTVis" offset="0.2094" angle="0.0349" thickness="10*cm" count="10">
         <slice material="W" thickness="0.001*cm"/>
         <slice material="He" thickness="0.4*cm" sensitive="true"/>
         <slice material="Al" thickness="0.000005*cm"/>
         <slice material="Mylar" thickness="0.0012*cm"/>
       </layer>
       
-      <layer vis="STTVis" offset="0.1745" angle="-0.035" thickness="12*cm" count="10">
+      <layer vis="STTVis" offset="0.1745" angle="-0.0349" thickness="12*cm" count="10">
         <slice material="W" thickness="0.001*cm"/>
         <slice material="He" thickness="0.5*cm" sensitive="true"/>
         <slice material="Al" thickness="0.000005*cm"/>
         <slice material="Mylar" thickness="0.0012*cm"/>
       </layer>
       
-      <layer vis="STTVis"  offset="0.1396" angle="0.035" thickness="15*cm" count="10">
+      <layer vis="STTVis"  offset="0.1396" angle="0.0349" thickness="15*cm" count="10">
         <slice material="W" thickness="0.001*cm"/>
         <slice material="He" thickness="0.65*cm" sensitive="true"/>
         <slice material="Al" thickness="0.000005*cm"/>
@@ -111,14 +111,14 @@
       </layer>            
       
       <!-- 12 segment tube layers (N modules in phi direction) -->
-      <layer nsegments="12" vis="STTVis" offset="0.1396" angle="-0.035" thickness="18*cm" count="10">
+      <layer nsegments="12" vis="STTVis" offset="0.1396" angle="-0.0349" thickness="18*cm" count="10">
         <slice material="W" thickness="0.001*cm"/>
         <slice material="He" thickness="0.8*cm" sensitive="true"/>
         <slice material="Al" thickness="0.000005*cm"/>
         <slice material="Mylar" thickness="0.0012*cm"/>
       </layer>
       
-      <layer nsegments="12" vis="STTVis" offset="0.1222" angle="0.035" thickness="25.1*cm" count="10">
+      <layer nsegments="12" vis="STTVis" offset="0.1222" angle="0.0349" thickness="25.1*cm" count="10">
         <slice material="W" thickness="0.001*cm"/>
         <slice material="He" thickness="1.25*cm" sensitive="true"/>
         <slice material="Al" thickness="0.000005*cm"/>
@@ -126,21 +126,21 @@
       </layer>
       
       <!-- 16 segment tube layers (N modules in phi direction) -->
-      <layer nsegments="16" vis="STTVis" offset="0.1047" angle="-0.035" thickness="25.1*cm" count="10">
+      <layer nsegments="16" vis="STTVis" offset="0.1047" angle="-0.0349" thickness="25.1*cm" count="10">
         <slice material="W" thickness="0.001*cm"/>
         <slice material="He" thickness="1.25*cm" sensitive="true"/>
         <slice material="Al" thickness="0.000005*cm"/>
         <slice material="Mylar" thickness="0.0012*cm"/>
       </layer>
       
-      <layer nsegments="16" vis="STTVis" offset="0.0873" angle="0.035" thickness="25.1*cm" count="10">
+      <layer nsegments="16" vis="STTVis" offset="0.0873" angle="0.0349" thickness="25.1*cm" count="10">
         <slice material="W" thickness="0.001*cm"/>
         <slice material="He" thickness="1.25*cm" sensitive="true"/>
         <slice material="Al" thickness="0.000005*cm"/>
         <slice material="Mylar" thickness="0.0012*cm"/>
       </layer>
 
-      <layer nsegments="16" vis="STTVis" offset="0.0873" angle="-0.035" thickness="25.1*cm" count="10">
+      <layer nsegments="16" vis="STTVis" offset="0.0873" angle="-0.0349" thickness="25.1*cm" count="10">
         <slice material="W" thickness="0.001*cm"/>
         <slice material="He" thickness="1.25*cm" sensitive="true"/>
         <slice material="Al" thickness="0.000005*cm"/>
