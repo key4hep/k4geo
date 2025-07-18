@@ -44,7 +44,7 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
 
   // Create top-level envelope for the straw tube tracker
   dd4hep::Tube envelope = dd4hep::Tube(rmin, rmax, zmax);
-  dd4hep::Material gas = theDetector.material("He");
+  dd4hep::Material gas = theDetector.material("Air");
   dd4hep::Volume envelopeVol = dd4hep::Volume(detName + "_envelope", envelope, gas);
   dd4hep::PlacedVolume physvol = theDetector.pickMotherVolume(sdet).placeVolume(envelopeVol);
 
