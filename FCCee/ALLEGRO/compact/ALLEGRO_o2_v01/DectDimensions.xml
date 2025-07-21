@@ -28,7 +28,7 @@
     <constant name="DetID_VXD_Barrel"             value=" 1"/>
     <constant name="DetID_VXD_Disks"              value=" 2"/>
 
-    <constant name="DetID_DCH"                    value=" 3"/>
+    <constant name="DetID_STT"                    value=" 3"/>
 
     <constant name="DetID_SiWr_Barrel"            value=" 23"/>
     <constant name="DetID_SiWr_Disks"             value=" 24"/>
