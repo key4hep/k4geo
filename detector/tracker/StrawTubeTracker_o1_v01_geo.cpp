@@ -74,7 +74,8 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
     //
     xml_comp_t x_layer = c;
     tubeThickness = 2 * (layering.singleLayerThickness(x_layer));
-    double layerRadius = MLInnerRadius + 0.5*(tubeThickness + tube_gap); // first layer is half a tube outside of ML edge
+    double layerRadius =
+        MLInnerRadius + 0.5*(tubeThickness + tube_gap); // first layer is half a tube outside of ML edge
     double delta_phi = asin((tube_gap + tubeThickness) * 0.5 / layerRadius);
 
     double MLThickness = x_layer.hasAttr(_U(thickness)) ? x_layer.thickness() : -1;
@@ -91,7 +92,7 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
     strawAssert(MLThickness > 0 || MLLayers > 0, "ERROR: Each <layer> in straw tube tracker must have either\n"
                                                  "       thickness or count attribute defined.");
 
-    double minThickness = (tubeThickness + tube_gap) * (1 + 0.866 * (MLLayers-1));
+    double minThickness = (tubeThickness + tube_gap) * (1 + 0.866 * (MLLayers - 1));
     if (MLThickness < 0) {
       MLThickness = minThickness + MLphiGap; // add default gap to minimum possible thickness
     }
