@@ -111,8 +111,14 @@
     <constant name="DCH_inner_cyl_R_total"          value=" 349.8  * mm "  />
     <constant name="DCH_outer_cyl_R_total"          value=" 2015   * mm "  />
     <constant name="DCH_half_length_total"          value=" 2250   * mm "  />
-    <constant name="STT_half_length_total"          value=" 2750   * mm "  />
+
     <!-- End of Drift Chamber parameters    -->
+
+    <!--  Straw tracker parameters    -->
+    <constant name="STT_inner_cyl_R_total"          value=" 349.8  * mm "  />
+    <constant name="STT_outer_cyl_R_total"          value=" 2015   * mm "  />    
+    <constant name="STT_half_length_total"          value=" 2750   * mm "  />
+    <!-- End of Straw tracker parameters    -->
 
     <!-- Silicon wrapper. Changing the values of the disk parameters is not enough, please contact the expert (Armin Ilg) -->
     <constant name="SiWrB_inner_radius" value="2040*mm"/>

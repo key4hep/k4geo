@@ -59,7 +59,6 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
   double tubeThickness = 0.0;
   double mloffset = 0.0;
 
-  std::list<double> offsets;
   // convenience class to add all slice thicknesses together
   dd4hep::Layering layering(x_det);
 
@@ -75,8 +74,8 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
     //
     xml_comp_t x_layer = c;
     tubeThickness = 2 * (layering.singleLayerThickness(x_layer));
-    double layerRadius = MLInnerRadius + tubeThickness + tube_gap;
-    double delta_phi = asin((0.1 + tubeThickness) * 0.5 / layerRadius);
+    double layerRadius = MLInnerRadius + 0.5*(tubeThickness + tube_gap); // first layer is half a tube outside of ML edge
+    double delta_phi = asin((tube_gap + tubeThickness) * 0.5 / layerRadius);
 
     double MLThickness = x_layer.hasAttr(_U(thickness)) ? x_layer.thickness() : -1;
     double MLSectors = x_layer.hasAttr(_U(nsegments)) ? x_layer.nsegments() : 8;
@@ -92,7 +91,7 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
     strawAssert(MLThickness > 0 || MLLayers > 0, "ERROR: Each <layer> in straw tube tracker must have either\n"
                                                  "       thickness or count attribute defined.");
 
-    double minThickness = (tubeThickness + tube_gap) * 0.866 * MLLayers;
+    double minThickness = (tubeThickness + tube_gap) * (1 + 0.866 * (MLLayers-1));
     if (MLThickness < 0) {
       MLThickness = minThickness + MLphiGap; // add default gap to minimum possible thickness
     }
@@ -153,16 +152,16 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
     // loop over layers, sectors, and tubes all within one multilayer
     // each tube gets a unique placement of the shared abstract "volume"
     // increment tube number on all loops so that it is unique for each placement
-    for (int j = 0; j < MLLayers; ++j, ++tubeNum) {
-      for (int l = 0; l < MLSectors; ++l, ++tubeNum) {
-        for (int i = 0; i < MLphiRepeat; ++i, ++tubeNum) {
+    for (int j = 0; j < MLLayers; ++j) {
+      for (int l = 0; l < MLSectors; ++l) {
+        for (int i = 0; i < MLphiRepeat; ++i) {
           // place the envelope volume in the multilayer envelope
           double phi = l * 2 * dd4hep::pi / MLSectors +
                        (j + 2 * i) * delta_phi * pow(-1, MLNum); // direction of diagonal gap changes per ML
 
           std::string placedTubeName = MLName + dd4hep::_toString(l, "sector%d") + dd4hep::_toString(j, "layer%d") +
                                        dd4hep::_toString(i, "tube%d");
-          dd4hep::DetElement tubeElement = dd4hep::DetElement(sdet, placedTubeName, tubeNum);
+          dd4hep::DetElement tubeElement = dd4hep::DetElement(sdet, placedTubeName, ++tubeNum);
 
           ROOT::Math::XYZVector axis(layerRadius * cos(phi + mloffset), layerRadius * sin(phi + mloffset), 0);
 

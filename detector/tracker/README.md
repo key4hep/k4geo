@@ -66,6 +66,6 @@ Initial design for a tracker based on thin-wall straw tubes.  This will likely b
  - Flexible implementation allows for user to customize n tube layers; thickness of wire, mylar, coating, and gas volumes; size of gaps between mutlilayers; etc.
  - Low logical volume count of 61 for a realistic straw concept.
  - 200MB memory usage for straw detector.
- - Stereo angle is not implemented yet, will likely come in summer 2025.
- - No consideration yet to endcap.  Current studies are limited to 90 degrees.
+ - Stereo angle is implemented, is +/- 2 degress in ALLEGRO_o2_v01
+ - No consideration yet to endcap.
  

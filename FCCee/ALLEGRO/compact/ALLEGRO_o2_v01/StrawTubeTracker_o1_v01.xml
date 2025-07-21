@@ -31,8 +31,8 @@
       
       <dimensions
           zmax="STT_half_length_total"
-          rmin="DCH_inner_cyl_R_total"
-          rmax="DCH_outer_cyl_R_total"
+          rmin="STT_inner_cyl_R_total"
+          rmax="STT_outer_cyl_R_total"
 	  gap ="1.15*mm"/> 
 
       <!-- 
