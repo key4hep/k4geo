@@ -75,7 +75,7 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
     xml_comp_t x_layer = c;
     tubeThickness = 2 * (layering.singleLayerThickness(x_layer));
     double layerRadius =
-        MLInnerRadius + 0.5*(tubeThickness + tube_gap); // first layer is half a tube outside of ML edge
+        MLInnerRadius + 0.5 * (tubeThickness + tube_gap); // first layer is half a tube outside of ML edge
     double delta_phi = asin((tube_gap + tubeThickness) * 0.5 / layerRadius);
 
     double MLThickness = x_layer.hasAttr(_U(thickness)) ? x_layer.thickness() : -1;
