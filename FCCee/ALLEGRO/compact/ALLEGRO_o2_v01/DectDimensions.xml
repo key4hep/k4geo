@@ -106,13 +106,6 @@
     <constant name="VTX_z_max" value="VTXD_z_max+4.5*cm"/>
     <!-- End of VTX parameters -->
 
-    <!--  Drift Chamber parameters    -->
-    <!-- Changing the radius is not enough to resize the detector, please contact the experts-->
-    <constant name="DCH_inner_cyl_R_total"          value=" 349.8  * mm "  />
-    <constant name="DCH_outer_cyl_R_total"          value=" 2015   * mm "  />
-    <constant name="DCH_half_length_total"          value=" 2250   * mm "  />
-
-    <!-- End of Drift Chamber parameters    -->
 
     <!--  Straw tracker parameters    -->
     <constant name="STT_inner_cyl_R_total"          value=" 349.8  * mm "  />
