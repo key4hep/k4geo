@@ -18,3 +18,10 @@ ALLEGRO_o1_v03:
 - Row-phi segmentation is added for HCalBarrel_TileCal_v03.xml and HCalEndcaps_ThreeParts_TileCal_v03.xml.
 - Birks constant value is set for Polystyrene scintillator used by HCal. This fixed the abnormal response to hadrons that was observed when migrated from k4SimGeant4 to DDSim.
 - For the muon tagger, switched from eta-phi to theta-phi segmentation. Outer R set to 5m as in initial conceptual design (to be replaced in the future by more realistic detector).
+
+ALLEGRO_o2_v01:
+- The drift chamber is replaced with a straw tube tracker.
+- The straw tube tracker uses thin wall mylar (12um) straw tubes.
+- While the straw tracker will inherently have a higher material budget (worse spatial resolution) and more dead volume (worse dN/dx resolution, provided no compensation is made with pressure) than the drift chamber, its modular design may provide a significant advantage.
+- This version of ALLEGRO allows for direct comparison between the drift chamber and the straw tracker, as compared to o1_v04 the only change is the swap of drift chamber and straw.
+
