@@ -162,7 +162,7 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
 
           std::string placedTubeName = MLName + dd4hep::_toString(l, "sector%d") + dd4hep::_toString(j, "layer%d") +
                                        dd4hep::_toString(i, "tube%d");
-          dd4hep::DetElement tubeElement = dd4hep::DetElement(sdet, placedTubeName, ++tubeNum);
+          dd4hep::DetElement tubeElement = dd4hep::DetElement(sdet, placedTubeName, tubeNum++);
 
           ROOT::Math::XYZVector axis(layerRadius * cos(phi + mloffset), layerRadius * sin(phi + mloffset), 0);
 
