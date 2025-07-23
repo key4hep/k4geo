@@ -23,5 +23,5 @@ ALLEGRO_o2_v01:
 - The drift chamber is replaced with a straw tube tracker.
 - The straw tube tracker uses thin wall mylar (12um) straw tubes.
 - While the straw tracker will inherently have a higher material budget (worse spatial resolution) and more dead volume (worse dN/dx resolution, provided no compensation is made with pressure) than the drift chamber, its modular design may provide a significant advantage.
-- This version of ALLEGRO allows for direct comparison between the drift chamber and the straw tracker, as compared to o1_v04 the only change is the swap of drift chamber and straw.
-
+- This version of ALLEGRO allows for direct comparison between the drift chamber and the straw tracker, as compared to o1_v03 the only changes are (i) the swap of drift chamber and straw and (ii) elongating the tracking volume, including the silicon wrapper.
+- The elongated wrapper is +660mm longer in both the positive and negative z directions with a 60mm buffer between the ends of the straw and the silicon wrapper endcap, to be filled later with straw RO/HV and support.
