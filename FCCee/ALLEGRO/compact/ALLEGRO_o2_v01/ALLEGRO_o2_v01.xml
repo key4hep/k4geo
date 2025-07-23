@@ -10,7 +10,7 @@
     status="development"
     version="1.0">
     <comment>
-      Master compact file describing the latest developments of the FCCee ALLEGRO detector concept. With respect to option 1 this file includes a straw tube tracker in place of the drift chamber
+      Master compact file describing the latest developments of the FCCee ALLEGRO detector concept. With respect to option 1 this file includes a straw tube tracker in place of the drift chamber. Additionally, the straw tracker and silicon wrapper are extended to cover the larger z extent compared to IDEA.
     </comment>
   </info>
 
@@ -28,7 +28,7 @@
     <constant name="world_z" value="world_size"/>
   </define>
 
-  <include ref="../ALLEGRO_o1_v03/DectDimensions.xml" />
+  <include ref="./DectDimensions.xml" />
 
   <!-- shape based model of the beam pipe -->
   <include ref="../../../MDI/compact/MDI_o1_v00/Beampipe_o4_v05.xml" />
@@ -42,7 +42,7 @@
 
   <include ref="../ALLEGRO_o1_v03/LumiCal.xml"/>
   <include ref="../ALLEGRO_o1_v03/VertexComplete_IDEA_o1_v03.xml"/> 
-  <include ref="StrawTubeTracker_o1_v01.xml"/> <!-- the only difference with ALLEGRO o1_v03 -->
+  <include ref="StrawTubeTracker_o1_v01.xml"/>
   <include ref="../ALLEGRO_o1_v03/SiliconWrapper_o1_v03.xml"/> 
   <include ref="../ALLEGRO_o1_v03/ECalBarrel_thetamodulemerged.xml"/> <!-- if you remove the ECalBarrel, you also have to remove or update the "GlobalSolenoid" field (it depends on ECAL dimensions) -->
   <include ref="../ALLEGRO_o1_v03/HCalBarrel_TileCal_v03.xml"/>
