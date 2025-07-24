@@ -254,7 +254,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
       whole_disk_volume_placed.addPhysVolID("layer", layer_id);
 
-      DetElement diskDE(sdet, disk_name, layer_id);
+      DetElement diskDE(sdet, disk_name, side*layer_id);
       diskDE.setPlacement(whole_disk_volume_placed);
 
       int iModule_tot = 0;
