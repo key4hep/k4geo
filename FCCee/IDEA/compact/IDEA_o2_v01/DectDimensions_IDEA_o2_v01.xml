@@ -232,6 +232,19 @@
     <constant name="scepcal_timing_xtal_depth" value="5*mm"/>
     <constant name="scepcal_timing_xtal_length" value="10*cm"/>
 
+    <!-- SCEPCal variables for partial construction -->
+    <!-- Barrel and endcap phi segment loading, base start = "0", end = "127", main layer only" -->
+    <constant name="scepcal_barrel_phi_load_start" value="0"/>
+    <constant name="scepcal_barrel_phi_load_end" value="127"/>
+    <!-- Barrel Theta loading, start = "0", end = "489" -->
+    <constant name="scepcal_barrel_theta_load_start" value="0"/>
+    <constant name="scepcal_barrel_theta_load_end" value="489"/>
+    <!-- Barrel Gamma loading, start = "0", end = "10" -->
+    <constant name="scepcal_barrel_gamma_load_start" value="0"/>
+    <constant name="scepcal_barrel_gamma_load_end" value="10"/>
+    <!-- End of SCEPCal Dimensions -->
+
+
     <!-- Dual-Readout Endcap Tubes (DRET) calorimeter dimensions-->
     <constant name="DRETinnerRadius" value="2.8*m"/>
     <constant name="DRETtowerHeight" value="1.8*m"/>
