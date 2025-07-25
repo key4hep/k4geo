@@ -12,8 +12,8 @@
         <detector name="Vertex" type="DD4hep_SubdetectorAssembly" vis="VXDVis">
             <shape type="Polycone" material="Air">
               <zplane z="-Vertex_half_length"  rmin="Vertex_LumiCal_Clearence * Vertex_half_length" rmax="Vertex_outer_radius" />
-              <zplane z="-(111 * mm)"          rmin="Vertex_inner_radius + 0.5*mm"                  rmax="Vertex_outer_radius" />
-              <zplane z="+(111 * mm)"          rmin="Vertex_inner_radius + 0.5*mm"                  rmax="Vertex_outer_radius" />
+              <zplane z="-(111 * mm)"          rmin="Vertex_inner_radius"                  rmax="Vertex_outer_radius" />
+              <zplane z="+(111 * mm)"          rmin="Vertex_inner_radius"                  rmax="Vertex_outer_radius" />
               <zplane z="+Vertex_half_length"  rmin="Vertex_LumiCal_Clearence * Vertex_half_length" rmax="Vertex_outer_radius" />
 	    </shape>
 
@@ -175,11 +175,11 @@
                 </sensor>
             </stave>
 
-            <layer nLadders="VTXIB_SEED_staves1" phi0="0." r="VTXIB_SEED_r1" id="0" nmodules="VTXIB_SEED_nModules1" name="VTXIBStave1SEED" step="0.0*mm" motherVolThickness="VTXIB_SEED_r2-VTXIB_SEED_r1"        motherVolLength="VTXIB_SEED_nModules1*VTXIB_SEED_sensor_z" offset="-0.2*mm"/>
-            <layer nLadders="VTXIB_SEED_staves2" phi0="0." r="VTXIB_SEED_r2" id="1" nmodules="VTXIB_SEED_nModules2" name="VTXIBStave2SEED" step="0.0*mm" motherVolThickness="VTXIB_SEED_r3-VTXIB_SEED_r2"        motherVolLength="VTXIB_SEED_nModules2*VTXIB_SEED_sensor_z" offset="-0.2*mm"/>
-            <layer nLadders="VTXIB_SEED_staves3" phi0="0." r="VTXIB_SEED_r3" id="2" nmodules="VTXIB_SEED_nModules3" name="VTXIBStave3SEED" step="0.0*mm" motherVolThickness="VTXIB_SEED_r4-VTXIB_SEED_r3"        motherVolLength="VTXIB_SEED_nModules3*VTXIB_SEED_sensor_z" offset="-0.2*mm"/>
-            <layer nLadders="VTXIB_SEED_staves4" phi0="0." r="VTXIB_SEED_r4" id="3" nmodules="VTXIB_SEED_nModules4" name="VTXIBStave4SEED" step="0.0*mm" motherVolThickness="VTXIB_SEED_r5-VTXIB_SEED_r4"        motherVolLength="VTXIB_SEED_nModules4*VTXIB_SEED_sensor_z" offset="-0.2*mm"/>
-            <layer nLadders="VTXIB_SEED_staves5" phi0="0." r="VTXIB_SEED_r5" id="4" nmodules="VTXIB_SEED_nModules5" name="VTXIBStave5SEED" step="0.0*mm" motherVolThickness="Vertex_outer_radius-VTXIB_SEED_r5"    motherVolLength="VTXIB_SEED_nModules5*VTXIB_SEED_sensor_z" offset="-0.2*mm"/>
+            <layer nLadders="VTXIB_SEED_staves1" phi0="0." r="VTXIB_SEED_r1" id="0" nmodules="VTXIB_SEED_nModules1" name="VTXIBStave1SEED" step="0.0*mm" motherVolRmin="VTXIB_SEED_r1-0.15*mm" motherVolThickness="VTXIB_SEED_r2-VTXIB_SEED_r1"        motherVolLength="VTXIB_SEED_nModules1*VTXIB_SEED_sensor_z" offset="0.2*mm"/>
+            <layer nLadders="VTXIB_SEED_staves2" phi0="0." r="VTXIB_SEED_r2" id="1" nmodules="VTXIB_SEED_nModules2" name="VTXIBStave2SEED" step="0.0*mm" motherVolRmin="VTXIB_SEED_r2-0.15*mm" motherVolThickness="VTXIB_SEED_r3-VTXIB_SEED_r2"        motherVolLength="VTXIB_SEED_nModules2*VTXIB_SEED_sensor_z" offset="0.2*mm"/>
+            <layer nLadders="VTXIB_SEED_staves3" phi0="0." r="VTXIB_SEED_r3" id="2" nmodules="VTXIB_SEED_nModules3" name="VTXIBStave3SEED" step="0.0*mm" motherVolRmin="VTXIB_SEED_r3-0.15*mm" motherVolThickness="VTXIB_SEED_r4-VTXIB_SEED_r3"        motherVolLength="VTXIB_SEED_nModules3*VTXIB_SEED_sensor_z" offset="0.2*mm"/>
+            <layer nLadders="VTXIB_SEED_staves4" phi0="0." r="VTXIB_SEED_r4" id="3" nmodules="VTXIB_SEED_nModules4" name="VTXIBStave4SEED" step="0.0*mm" motherVolRmin="VTXIB_SEED_r4-0.15*mm" motherVolThickness="VTXIB_SEED_r5-VTXIB_SEED_r4"        motherVolLength="VTXIB_SEED_nModules4*VTXIB_SEED_sensor_z" offset="0.2*mm"/>
+            <layer nLadders="VTXIB_SEED_staves5" phi0="0." r="VTXIB_SEED_r5" id="4" nmodules="VTXIB_SEED_nModules5" name="VTXIBStave5SEED" step="0.0*mm" motherVolRmin="VTXIB_SEED_r5-0.15*mm" motherVolThickness="Vertex_outer_radius-VTXIB_SEED_r5"    motherVolLength="VTXIB_SEED_nModules5*VTXIB_SEED_sensor_z" offset="0.2*mm"/>
         </detector>
 
 
