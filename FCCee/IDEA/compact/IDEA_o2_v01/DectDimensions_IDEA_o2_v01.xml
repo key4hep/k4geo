@@ -233,9 +233,9 @@
     <constant name="scepcal_timing_xtal_length" value="10*cm"/>
 
     <!-- SCEPCal variables for partial construction -->
-    <!-- Barrel phi segment loading, no. segments defined above, base start="0", main layer only -->
-    <constant name="scepcal_barrel_phi_load_start" value="0"/>
-    <constant name="scepcal_barrel_phi_load_end" value="127"/>
+    <!-- Barrel and endcap phi segment loading, no. segments defined above, base start="0", main layer only -->
+    <constant name="scepcal_phi_load_start" value="0"/>
+    <constant name="scepcal_phi_load_end" value="127"/>
     <!-- Barrel Theta loading, no. segments depends on barrel size, outputted upon constructing, base start = "0" -->
     <constant name="scepcal_barrel_theta_load_start" value="0"/>
     <constant name="scepcal_barrel_theta_load_end" value="489"/>

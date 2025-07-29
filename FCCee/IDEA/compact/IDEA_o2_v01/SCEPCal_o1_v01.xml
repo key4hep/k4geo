@@ -1123,8 +1123,8 @@
               
 	      useOpticalSurfaces="false"
 
-	      phi_load_start="scepcal_barrel_phi_load_start"
-	      phi_load_end="scepcal_barrel_phi_load_end"
+	      phi_load_start="scepcal_phi_load_start"
+	      phi_load_end="scepcal_phi_load_end"
 	      theta_load_start="scepcal_barrel_theta_load_start"
 	      theta_load_end="scepcal_barrel_theta_load_end"
 	      gamma_load_start="scepcal_barrel_gamma_load_start"
