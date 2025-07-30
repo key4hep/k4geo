@@ -28,7 +28,7 @@ set(CMAKE_INSTALL_CMAKEDIR ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 
 IF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   SET( CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR} CACHE PATH
-    "install prefix path  - overwrite with -D CMAKE_INSTALL_PREFIX = ..." 
+    "install prefix path  - overwrite with -D CMAKE_INSTALL_PREFIX = ..."
     FORCE )
   MESSAGE(STATUS "CMAKE_INSTALL_PREFIX is ${CMAKE_INSTALL_PREFIX} - overwrite with -D CMAKE_INSTALL_PREFIX" )
 ENDIF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
@@ -63,7 +63,7 @@ if(K4GEO_USE_LCIO)
   endif()
 endif()
 
-file(GLOB sources 
+file(GLOB sources
   ./detector/tracker/*.cpp
   ./detector/calorimeter/*.cpp
   ./detector/calorimeter/dual-readout/src/*.cpp
@@ -171,8 +171,8 @@ endif(BUILD_TESTING)
 
 #--- install remaining targets--------------------------
 FILE(GLOB hfiles "ILD/include/*.h")
-INSTALL(FILES ${hfiles} 
-  DESTINATION include/${PackageName} 
+INSTALL(FILES ${hfiles}
+  DESTINATION include/${PackageName}
   )
 
 #--- install compact files------------------------------
