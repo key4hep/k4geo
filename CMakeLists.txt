@@ -87,6 +87,7 @@ if(NOT K4GEO_USE_LCIO)
     TrackerBarrel_o1_v06_geo.cpp
     TrackerEndcap_o1_v05_geo.cpp
     TrackerEndcap_o2_v06_geo.cpp
+    StrawTubeTracker_o1_v01_geo.cpp
     VertexBarrel_detailed_o1_v01_geo.cpp
     VertexEndcap_o1_v05_geo.cpp
     ZPlanarTracker_geo.cpp
