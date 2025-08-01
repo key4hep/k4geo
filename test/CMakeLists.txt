@@ -118,21 +118,12 @@ add_test_with_env(t_${test_name} ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  " Exception; EXCEPTION;ERROR;Error" TIMEOUT 900)
 endif()
 
-#--------------------------------------------------
-# test for IDEA o1 v03, with DRC, with Geantinos
-if(DCH_INFO_H_EXIST)
-SET( test_name "test_IDEA_with_DRC_o1_v03" )
-ADD_TEST( t_${test_name} "${CMAKE_CURRENT_BINARY_DIR}/run_test_${PackageName}.sh"
-	ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/compact/IDEA_withDRC_o1_v03.xml --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o1_v03.py -G -N=1 --gun.distribution uniform --gun.particle geantino --random.seed 1988301045 )
-    SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  " Exception; EXCEPTION;ERROR;Error" TIMEOUT 900)
-endif()
-
-#--------------------------------------------------
 # test for IDEA o1 v03, with DRC, with electrons
 if(DCH_INFO_H_EXIST)
 SET( test_name "test_IDEA_with_DRC_o1_v03" )
 add_test_with_env(t_${test_name} ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/compact/IDEA_withDRC_o1_v03.xml --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o1_v03.py -G -N=50000 --gun.distribution uniform --gun.particle geantino --random.seed 1988301045 )
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  " Exception; EXCEPTION;ERROR;Error" TIMEOUT 900)
+endif()
 
 #--------------------------------------------------
 # test for IDEA o2 v01
@@ -166,11 +157,11 @@ SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Except
 #--------------------------------------------------
 # test for ARC o1 v01
 SET( test_name "test_ARC_o1_v01_run" )
-add_test_with_env(t_${test_name} python3 ${CMAKE_CURRENT_SOURCE_DIR}/../example/arcfullsim.py --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/CLD_o3_v01/CLD_o3_v01.xml --runType batch  )
+add_test_with_env(t_${test_name} python3 ${CMAKE_CURRENT_SOURCE_DIR}/../example/arcfullsim.py --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/compact/ARC_standalone_o1_v01.xml --runType batch  )
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  " Exception;EXCEPTION;ERROR;Error" TIMEOUT 120)
 
 SET( test_name "test_ARC_o1_v01_overlap" )
-add_test_with_env(t_${test_name} ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/CLD_o3_v01/CLD_o3_v01.xml --runType run --part.userParticleHandler= --macroFile=${CMAKE_CURRENT_SOURCE_DIR}/../utils/overlap.mac  )
+add_test_with_env(t_${test_name} ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/compact/ARC_standalone_o1_v01.xml --runType run --part.userParticleHandler= --macroFile=${CMAKE_CURRENT_SOURCE_DIR}/../utils/overlap.mac  )
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" TIMEOUT 240)
 
 #--------------------------------------------------
