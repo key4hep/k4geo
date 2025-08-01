@@ -49,13 +49,13 @@ SET( test_name "test_ILD_FCCee_v01" )
 add_test(NAME t_${test_name} COMMAND sh -c "
  ${CMAKE_CURRENT_BINARY_DIR}/run_test_${PackageName}.sh ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ILD_FCCee/compact/ILD_FCCee_v01/ILD_FCCee_v01.xml --runType=batch -G -N=1 --outputFile=testILD_FCCee_v01.slcio 2>&1 |
   python3 ${CMAKE_CURRENT_SOURCE_DIR}/scripts/filter_G4Tessellated_warnings.py")
-SET_TEST_ENV(${test_name})
+SET_TEST_ENV(t_${test_name})
 
 SET( test_name "test_ILD_FCCee_v02" )
 add_test(NAME t_${test_name} COMMAND sh -c "
  ${CMAKE_CURRENT_BINARY_DIR}/run_test_${PackageName}.sh ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ILD_FCCee/compact/ILD_FCCee_v02/ILD_FCCee_v02.xml --runType=batch -G -N=1 --outputFile=testILD_FCCee_v02.slcio 2>&1 |
   python3 ${CMAKE_CURRENT_SOURCE_DIR}/scripts/filter_G4Tessellated_warnings.py")
-SET_TEST_ENV(${test_name})
+SET_TEST_ENV(t_${test_name})
 
 #--------------------------------------------------
 # tests for SiD
@@ -144,8 +144,7 @@ endif()
 #--------------------------------------------------
 # test for ALLEGRO o2 v01
 SET( test_name "test_ALLEGRO_o2_v01" )
-add_test(NAME t_${test_name} COMMAND "${CMAKE_INSTALL_PREFIX}/bin/run_test_${PackageName}.sh"
-  ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o2_v01/ALLEGRO_o2_v01.xml --runType=batch -G -N=1 --gun.distribution uniform --gun.particle geantino --outputFile=testALLEGRO_o2_v01.root )
+add_test(NAME t_${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o2_v01/ALLEGRO_o2_v01.xml --runType=batch -G -N=1 --gun.distribution uniform --gun.particle geantino --outputFile=testALLEGRO_o2_v01.root )
 SET_TESTS_PROPERTIES( t_${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
 #--------------------------------------------------
@@ -184,21 +183,17 @@ add_test(NAME t_SensThickness_Clic_o3_v15 COMMAND ${PROJECT_BINARY_DIR}/bin/Test
 # Tests for MuonCollider geometries
 #--------------------------------------------------
 SET( test_name "test_MAIA_v0_run" )
-add_test(NAME t_${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MAIA/compact/MAIA_v0/MAIA_v0.xml --runType=batch -G -N=1 --outputFile=test_MAIA_v0.edm4hep.root
-)
-SET_TEST_ENV(${test_name})
+add_test(NAME t_${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MAIA/compact/MAIA_v0/MAIA_v0.xml --runType=batch -G -N=1 --outputFile=test_MAIA_v0.edm4hep.root)
+SET_TEST_ENV(t_${test_name})
 
 SET( test_name "test_MuColl_v1_run" )
-add_test(NAME t_${test_name} COMMAND "${CMAKE_CURRENT_BINARY_DIR}/run_test_${PackageName}.sh"
-  ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuColl/compact/MuColl_v1/MuColl_v1.xml --runType=batch -G -N=1 --outputFile=test_MuColl_v1.edm4hep.root
-)
-SET_TEST_ENV(${test_name})
+add_test(NAME t_${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuColl/compact/MuColl_v1/MuColl_v1.xml --runType=batch -G -N=1 --outputFile=test_MuColl_v1.edm4hep.root)
+SET_TEST_ENV(t_${test_name})
 
 #--------------------------------------------------
 # check if files named the same contain the same in FCCee
 add_test(NAME t_test_files_versions_FCCee
-    COMMAND "${CMAKE_CURRENT_BINARY_DIR}/run_test_${PackageName}.sh"
-            "${PROJECT_SOURCE_DIR}/utils/compareIdenticalFiles.sh"
+    COMMAND "${PROJECT_SOURCE_DIR}/utils/compareIdenticalFiles.sh"
             "${PROJECT_SOURCE_DIR}/FCCee"
             "${PROJECT_SOURCE_DIR}/utils/IdenticalFiles_ToBeIgnored.txt"
 )
