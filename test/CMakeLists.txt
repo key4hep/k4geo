@@ -1,11 +1,8 @@
-
-#--------------------------------------------------
-
 configure_file( ${DD4hep_ROOT}/cmake/run_test_package.sh run_test_${PackageName}.sh FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE @ONLY)
 INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/run_test_${PackageName}.sh
   DESTINATION bin )
 
-macro(SET_TEST_ENV test_name)
+function(SET_TEST_ENV test_name)
   # Make sure to point our current installation for the compact files
   SET_TESTS_PROPERTIES( ${test_name}
     PROPERTIES
@@ -13,15 +10,7 @@ macro(SET_TEST_ENV test_name)
       ENVIRONMENT
         K4GEO=${CMAKE_INSTALL_PREFIX}/share/k4geo
     )
-endmacro()
-
-function(set_test_env testname)
-  message(WARNING ${PROJECT_BINARY_DIR})
-  set_property(TEST ${testname} APPEND PROPERTY ENVIRONMENT "LD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/lib:$ENV{LD_LIBRARY_PATH}")
 endfunction()
-
-#--------------------------------------------------
-#ADD_TEST( t_init source "${CMAKE_CURRENT_WORK_DIR}/thisdd4hep.sh" )
 
 #--------------------------------------------------
 # test(s) for ILD
