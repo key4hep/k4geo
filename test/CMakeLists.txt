@@ -193,7 +193,7 @@ Target_Link_Libraries( BeamCalZtest lcgeo )
 INSTALL( TARGETS BeamCalZtest DESTINATION bin )
 
 add_test_with_env( t_SensThickness_Clic_o2_v4 ${PROJECT_BINARY_DIR}/bin/TestSensThickness ${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o2_v04/CLIC_o2_v04.xml 300 50 )
-add_test_with_env( t_SensThickness_Clic_o3_v15 ${PROJECT_BINARY_DIR}/bin/TestSensThickness ${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o3_v15/CLIC_o3_v15.xml 300 50 )
+add_test_with_env( t_SensThickness_Clic_o3_v15 ${PROJECT_BINARY_DIR}/bin/TestSensThickness ${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o3_v15/CLIC_o3_v15.xml 100 50 )
 
 #--------------------------------------------------
 # Tests for MuonCollider geometries
