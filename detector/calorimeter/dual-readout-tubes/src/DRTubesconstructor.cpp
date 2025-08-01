@@ -1,4 +1,5 @@
 #include "DRTubesconstructor.h"
+#include "DD4hep/Printout.h"
 
 #include <TMatrixD.h>
 
@@ -18,6 +19,14 @@ DRBarrelTubes::DRTubesconstructor::DRTubesconstructor(Detector* description, xml
   m_calo_inner_r = x_dim.inner_radius();
   m_calo_outer_r = x_dim.outer_radius();
   m_calo_inner_half_z = x_dim.z_length();
+
+  // Section of calorimeter parameters
+  // Values can be changed in DectDimensions... xml to load a specific section
+  m_start_calo_phi = x_dim.attr<double>("start_calo_phi");
+  m_end_calo_phi = x_dim.attr<double>("end_calo_phi");
+  m_number_tower_start = x_dim.attr<int>("number_tower_start");
+  m_number_tower_end = x_dim.attr<int>("number_tower_end");
+  m_include_bwd_region = x_dim.attr<bool>("include_bwd_region");
 
   // Trap parameters
   xml_comp_t x_trap = entities.child(_Unicode(trap));
@@ -739,22 +748,45 @@ void DRBarrelTubes::DRTubesconstructor::place_tower(Volume& stave_volume, Volume
   Transform3D tower_fwd_tr(rot_fwd, Position(tower_x, tower_y, tower_z));
   PlacedVolume tower_fwd_placed = stave_volume.placeVolume(tower_volume, tower, tower_fwd_tr);
   tower_fwd_placed.addPhysVolID("tower", tower);
+  // Places backward barrel region if specified
+  if (m_include_bwd_region) {
+    Position m_tower_bwd_pos = Position(tower_x, -tower_y, tower_z);
+    // First rotation is to mirror orientation with repsect to the forward region
+    RotationZ rot_first_bwd = RotationZ(180 * deg);
+    RotationX rot_second_bwd = RotationX(m_covered_theta);
+    Transform3D tower_bwd_tr(rot_second_bwd * rot_first_bwd, m_tower_bwd_pos);
+    PlacedVolume tower_bwd_placed = stave_volume.placeVolume(tower_volume, -tower, tower_bwd_tr);
+    tower_bwd_placed.addPhysVolID("tower", -tower);
+  }
+}
 
-  // Backward barrel region
-  Position m_tower_bwd_pos = Position(tower_x, -tower_y, tower_z);
-  // First rotation is to mirror orientation with repsect to the forward region
-  RotationZ rot_first_bwd = RotationZ(180 * deg);
-  RotationX rot_second_bwd = RotationX(m_covered_theta);
-  Transform3D tower_bwd_tr(rot_second_bwd * rot_first_bwd, m_tower_bwd_pos);
-  PlacedVolume tower_bwd_placed = stave_volume.placeVolume(tower_volume, -tower, tower_bwd_tr);
-  tower_bwd_placed.addPhysVolID("tower", -tower);
+void DRBarrelTubes::DRTubesconstructor::place_stave(Volume& calorimeter_volume, Volume& stave_volume,
+                                                    unsigned int stave_num, double centre_stave_volume, double angle) {
+  // Calculate neccesary parameters for stave contruction. Shape is a trapezoid over the full barrel region (forward and
+  // backward)
+
+  // Rotations needed to place the staves
+  RotationZ rot_first = RotationZ(90 * deg);
+  RotationY rot_second = RotationY(90 * deg);
+  // Placing of the staves
+  RotationZ rot_third = RotationZ(angle);
+  // stave position in the calorimeter volume
+  dd4hep::printout(dd4hep::INFO, "DRBarrelTubes::DRTubesconstructor::place_stave", "Placing stave %d at phi = %f deg",
+                   stave_num, angle / deg);
+
+  double stave_x = centre_stave_volume * std::cos(angle);
+  double stave_y = centre_stave_volume * std::sin(angle);
+  Transform3D stave_tr(rot_third * rot_second * rot_first, Position(stave_x, stave_y, 0));
+  PlacedVolume stave_placed = calorimeter_volume.placeVolume(stave_volume, stave_num, stave_tr);
+  stave_placed.addPhysVolID("stave", stave_num);
 }
 
 // Highest level function to construct the calorimeter
 // In first loop all the towers are created and placed inside a stave
 // In the second loop the staves are placed in the calorimeter
 void DRBarrelTubes::DRTubesconstructor::construct_calorimeter(Volume& calorimeter_volume) {
-  // Parameters for stave contruction. Shape is a trapezoid over the full barrel region (forward and backward)
+  // Start value for placing the towers in phi
+  double phi = 0 * deg;
   double dy1 = m_calo_inner_half_z;
   double dy2 = m_calo_inner_half_z + 2 * m_stave_half_length;
   double dx1 = m_calo_inner_r * m_tower_tan_half_phi;
@@ -762,45 +794,52 @@ void DRBarrelTubes::DRTubesconstructor::construct_calorimeter(Volume& calorimete
   Trap stave_solid("stave_solid", m_stave_half_length, 0., 0., dy1, dx1, dx1, 0., dy2, dx2, dx2, 0.);
   Volume stave_volume("stave_volume", stave_solid, m_air);
   stave_volume.setVisAttributes(*m_description, "DRBTstave_vis");
-
-  // TowerID starts at 1, so that negative values can be used for the backward region
-  short int tower = 1;
-  // Place towers in theta direection into the stave as long we are in the barrel region
-  while (m_covered_theta < m_barrel_endcap_angle) {
-    std::cout << "----> DRBarrelTubes: tower = " << tower << std::endl;
-    Volume trap_volume("tower");
-    trap_volume.setMaterial(m_trap_material);
-
-    // Function in which the shape of the tower is calculated and constructed
-    this->construct_tower(trap_volume);
-
-    this->calculate_tower_position();
-    this->place_tower(stave_volume, trap_volume, tower);
-    this->increase_covered_theta(m_tower_theta);
-
-    tower++;
-  }
-
-  // Start value for placing the towers in phi
-  double phi = 0 * deg;
   // Variable used to calculate stave position
   double centre_stave_vol = m_calo_inner_r + m_stave_half_length;
+  // Place towers in theta direection into the stave as long we are in the barrel region
+  for (int tower = 1; tower <= m_number_tower_end; tower++) {
+    if (m_covered_theta < m_barrel_endcap_angle) {
+      // Requires m_number_tower_end to be bigger than m_number_tower_start
+      if (tower >= m_number_tower_start) {
+        dd4hep::printout(dd4hep::INFO, "DRBarrelTubes::DRTubesconstructor::construct_calorimeter",
+                         "----> DRBarrelTubes: tower = %d", tower);
 
-  // Rotations needed to place the staves
-  RotationZ rot_first = RotationZ(90 * deg);
-  RotationY rot_second = RotationY(90 * deg);
-  // Placing of the staves
+        Volume trap_volume("tower");
+        trap_volume.setMaterial(m_trap_material);
+
+        // Function in which the shape of the tower is calculated and constructed
+        this->construct_tower(trap_volume);
+        this->calculate_tower_position();
+        this->place_tower(stave_volume, trap_volume, tower);
+      }
+      this->increase_covered_theta(m_tower_theta);
+    }
+  }
+
+  dd4hep::printout(dd4hep::INFO, "DRBarrelTubes::DRTubesconstructor::construct_calorimeter",
+                   "Start phi: %f and End phi: %f", m_start_calo_phi / deg, m_end_calo_phi / deg);
+
   for (unsigned int stave = 0; stave < m_num_phi_towers; stave++, phi += m_tower_phi) {
-    RotationZ rot_third = RotationZ(phi);
-    // stave position in the calorimeter volume
-    double stave_x = centre_stave_vol * std::cos(phi);
-    double stave_y = centre_stave_vol * std::sin(phi);
-    Transform3D stave_tr(rot_third * rot_second * rot_first, Position(stave_x, stave_y, 0));
-    PlacedVolume stave_placed = calorimeter_volume.placeVolume(stave_volume, stave, stave_tr);
-    stave_placed.addPhysVolID("stave", stave);
+    if (m_end_calo_phi > m_start_calo_phi) {
+      if ((phi + m_tower_phi > m_start_calo_phi) && (phi < m_end_calo_phi)) {
+        this->place_stave(calorimeter_volume, stave_volume, stave, centre_stave_vol, phi);
+      } else {
+        continue;
+      }
+    }
+    // added to allow for over boundary phi ranges
+    else if (m_start_calo_phi > m_end_calo_phi) {
+      if ((phi + m_tower_phi > m_start_calo_phi) || (phi < m_end_calo_phi)) {
+        this->place_stave(calorimeter_volume, stave_volume, stave, centre_stave_vol, phi);
+      } else {
+        continue;
+      }
+    }
   }
 
   // Print length of tube map m_cher_tube_volume_map and m_scin_tube_volume_map
-  std::cout << "----> DRBarrelTubes: Length of C map = " << m_cher_tube_volume_map.size() << std::endl;
-  std::cout << "----> DRBarrelTubes: Length of S map = " << m_scin_tube_volume_map.size() << std::endl;
+  dd4hep::printout(dd4hep::INFO, "DRBarrelTubes::DRTubesconstructor::construct_calorimeter",
+                   "----> DRBarrelTubes: Length of C map = %u", m_cher_tube_volume_map.size());
+  dd4hep::printout(dd4hep::INFO, "DRBarrelTubes::DRTubesconstructor::construct_calorimeter",
+                   "----> DRBarrelTubes: Length of S map = %u", m_scin_tube_volume_map.size());
 }
