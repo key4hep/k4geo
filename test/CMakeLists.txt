@@ -99,7 +99,7 @@ endif()
 # test for IDEA o1 v03, with DRC, with electrons
 if(DCH_INFO_H_EXIST)
 SET( test_name "test_IDEA_with_DRC_o1_v03" )
-add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/compact/IDEA_withDRC_o1_v03.xml --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o1_v03.py -G -N=50000 --gun.distribution uniform --gun.particle geantino --random.seed 1988301045 )
+add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/compact/IDEA_withDRC_o1_v03.xml --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o1_v03.py -G --gun.distribution uniform --gun.particle e- --random.seed 1988301045 )
 SET_TESTS_PROPERTIES( ${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  " Exception; EXCEPTION;ERROR;Error" TIMEOUT 900)
 endif()
 
