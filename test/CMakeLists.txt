@@ -1,11 +1,5 @@
 function(SET_TEST_ENV test_name)
-  # Make sure to point our current installation for the compact files
-  SET_TESTS_PROPERTIES( ${test_name}
-    PROPERTIES
-      FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error"
-      ENVIRONMENT
-        K4GEO=${CMAKE_INSTALL_PREFIX}/share/k4geo
-    )
+  SET_TESTS_PROPERTIES( ${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error")
 endfunction()
 
 #--------------------------------------------------
