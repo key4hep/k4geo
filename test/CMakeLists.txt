@@ -1,7 +1,3 @@
-configure_file( ${DD4hep_ROOT}/cmake/run_test_package.sh run_test_${PackageName}.sh FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE @ONLY)
-INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/run_test_${PackageName}.sh
-  DESTINATION bin )
-
 function(SET_TEST_ENV test_name)
   # Make sure to point our current installation for the compact files
   SET_TESTS_PROPERTIES( ${test_name}
@@ -36,13 +32,13 @@ SET_TESTS_PROPERTIES( ${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exceptio
 
 SET( test_name "test_ILD_FCCee_v01" )
 add_test(NAME ${test_name} COMMAND sh -c "
- ${CMAKE_CURRENT_BINARY_DIR}/run_test_${PackageName}.sh ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ILD_FCCee/compact/ILD_FCCee_v01/ILD_FCCee_v01.xml --runType=batch -G -N=1 --outputFile=testILD_FCCee_v01.slcio 2>&1 |
+  ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ILD_FCCee/compact/ILD_FCCee_v01/ILD_FCCee_v01.xml --runType=batch -G -N=1 --outputFile=testILD_FCCee_v01.slcio 2>&1 |
   python3 ${CMAKE_CURRENT_SOURCE_DIR}/scripts/filter_G4Tessellated_warnings.py")
 SET_TEST_ENV(${test_name})
 
 SET( test_name "test_ILD_FCCee_v02" )
 add_test(NAME ${test_name} COMMAND sh -c "
- ${CMAKE_CURRENT_BINARY_DIR}/run_test_${PackageName}.sh ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ILD_FCCee/compact/ILD_FCCee_v02/ILD_FCCee_v02.xml --runType=batch -G -N=1 --outputFile=testILD_FCCee_v02.slcio 2>&1 |
+  ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ILD_FCCee/compact/ILD_FCCee_v02/ILD_FCCee_v02.xml --runType=batch -G -N=1 --outputFile=testILD_FCCee_v02.slcio 2>&1 |
   python3 ${CMAKE_CURRENT_SOURCE_DIR}/scripts/filter_G4Tessellated_warnings.py")
 SET_TEST_ENV(${test_name})
 
@@ -75,13 +71,11 @@ add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DI
 SET_TESTS_PROPERTIES( ${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
 SET( det_name "CLD_o2_v08" )
-add_test(NAME t_test_${det_name} COMMAND "${CMAKE_CURRENT_BINARY_DIR}/run_test_${PackageName}.sh"
-	ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/${det_name}/${det_name}.xml --runType=batch -G -N=1 --outputFile=test${det_name}.slcio )
+add_test(NAME t_test_${det_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/${det_name}/${det_name}.xml --runType=batch -G -N=1 --outputFile=test${det_name}.slcio )
 SET_TESTS_PROPERTIES( t_test_${det_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
 SET( det_name "CLD_o4_v05" )
-add_test(NAME t_test_${det_name} COMMAND "${CMAKE_CURRENT_BINARY_DIR}/run_test_${PackageName}.sh"
-	ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/${det_name}/${det_name}.xml --runType=batch -G -N=1 --outputFile=test${det_name}.slcio )
+add_test(NAME t_test_${det_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/${det_name}/${det_name}.xml --runType=batch -G -N=1 --outputFile=test${det_name}.slcio )
 SET_TESTS_PROPERTIES( t_test_${det_name} PROPERTIES FAIL_REGULAR_EXPRESSION  "Exception;EXCEPTION;ERROR;Error" )
 
 SET( test_name "test_steeringFile" )
