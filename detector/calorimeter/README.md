@@ -62,6 +62,7 @@ This sub-detector makes full 4-pi monolithic fiber dual-readout calorimeter.
 Inside the single tower (trapezoidal copper absorber), two types of optical fibers (Cherenkov and scintillation) are implemented. The readout (SiPM) is attached at the rear side of the tower. The tower is repeated in both eta and phi direction to cover both barrel and endcap region.
 
 Added an extension to (`LayeredCalorimeterData`) to store the barrel and endcap rmin, rmax, zmin, zmax.
+The definition of the topological neighborhood of cells is configurable via the xml file (function itself is defined in the `GridDRcalo_k4geo`).
 
 ## Capillary tube dual-readout (subdirectory `dual-readout-tubes`)
 
