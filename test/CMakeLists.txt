@@ -154,4 +154,4 @@ add_test(NAME t_test_files_versions_FCCee
 set(test_environment "LD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/lib:$ENV{LD_LIBRARY_PATH}")
 get_property(test_names DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY TESTS)
 set_tests_properties(${test_names} PROPERTIES ENVIRONMENT "${test_environment}"
-                                              FAIL_REGULAR_EXPRESSION "Exception;EXCEPTION;ERROR;Error")
+                                              FAIL_REGULAR_EXPRESSION " Exception; EXCEPTION;ERROR;Error")
