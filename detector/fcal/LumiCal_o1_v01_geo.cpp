@@ -56,6 +56,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   xml_det_t xmlLumiCal = element;
   const std::string detName = xmlLumiCal.nameStr();
 
+  // only set detector like type flags if there is a sensitive element in this detector, needed to unambniguously
+  // identify the actual lumical in e.g., Pandora
+  bool haveSensitive = false;
+
   DetElement sdet(detName, xmlLumiCal.id());
 
   // --- create an envelope volume and position it into the world ---------------------
@@ -63,8 +67,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   Volume envelope = dd4hep::xml::createPlacedEnvelope(theDetector, element, sdet);
   DetElement lumiCalDE_1(sdet, "Calorimeter1", 1);
   DetElement lumiCalDE_2(sdet, "Calorimeter2", 2);
-
-  sdet.setTypeFlag(DetType::CALORIMETER | DetType::ENDCAP | DetType::ELECTROMAGNETIC | DetType::FORWARD);
 
   if (theDetector.buildType() == BUILD_ENVELOPE)
     return sdet;
@@ -158,6 +160,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
         thickness_sum += slice_thickness / 2;
 
         if (compSlice.isSensitive()) {
+          haveSensitive = true;
 
 #if DD4HEP_VERSION_GE(0, 15)
           // Store "inner" quantities
@@ -231,6 +234,12 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   lumiCalDE_2.setPlacement(pv2);
 
   sdet.addExtension<LayeredCalorimeterData>(caloData);
+
+  if (haveSensitive) {
+    sdet.setTypeFlag(DetType::CALORIMETER | DetType::ENDCAP | DetType::ELECTROMAGNETIC | DetType::FORWARD);
+  } else {
+    sdet.setTypeFlag(DetType::SUPPORT | DetType::AUXILIARY | DetType::ENDCAP | DetType::FORWARD);
+  }
 
   return sdet;
 }
