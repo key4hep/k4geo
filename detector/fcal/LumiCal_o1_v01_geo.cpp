@@ -1,39 +1,27 @@
-#include "DD4hep/DetType.h"
-#include "DDRec/DetectorData.h"
-#include "XML/Utilities.h"
 #include <DD4hep/DetFactoryHelper.h>
+#include <DD4hep/DetType.h>
+#include <DDRec/DetectorData.h>
 #include <XML/Layering.h>
+#include <XML/Utilities.h>
 
 #include <string>
 
 using dd4hep::_toString;
-using dd4hep::Assembly;
-using dd4hep::Box;
 using dd4hep::BUILD_ENVELOPE;
-using dd4hep::Cone;
 using dd4hep::Detector;
 using dd4hep::DetElement;
 using dd4hep::DetType;
-using dd4hep::IntersectionSolid;
-using dd4hep::Layer;
 using dd4hep::Layering;
 using dd4hep::Material;
 using dd4hep::PlacedVolume;
-using dd4hep::PolyhedraRegular;
 using dd4hep::Position;
-using dd4hep::Readout;
 using dd4hep::Ref_t;
 using dd4hep::Rotation3D;
 using dd4hep::RotationY;
 using dd4hep::RotationZYX;
-using dd4hep::Segmentation;
 using dd4hep::SensitiveDetector;
-using dd4hep::SubtractionSolid;
 using dd4hep::Transform3D;
-using dd4hep::Translation3D;
-using dd4hep::Trapezoid;
 using dd4hep::Tube;
-using dd4hep::UnionSolid;
 using dd4hep::Volume;
 
 using dd4hep::rec::LayeredCalorimeterData;
