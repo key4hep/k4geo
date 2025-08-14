@@ -409,10 +409,10 @@ void Geant4Output2EDM4hep_DRC::saveParticles(Geant4ParticleMap* particles) {
       if (mcp.isCreatedInSimulation())
         mcp.setGeneratorStatus(0);
 
-#if EDM4HEP_BUILD_VERSION <= EDM4HEP_VERSION(0, 99, 2)
-      mcp.setSpin(p->spin);
-#else
+#ifdef EDM4HEP_MCPARTICLE_HAS_HELICITY
       mcp.setHelicity(p->spin[2]);
+#else
+      mcp.setSpin(p->spin);
 #endif
 
       p_ids[id] = cnt++;
