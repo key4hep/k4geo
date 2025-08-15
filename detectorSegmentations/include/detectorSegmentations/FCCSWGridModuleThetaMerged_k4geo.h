@@ -36,7 +36,7 @@ namespace DDSegmentation {
      *   The position is in the local coordinate system of the associated
      *   dd4hep volume.
      */
-    virtual Vector3D position(const CellID& aCellID) const;
+    virtual Vector3D position(const CellID& aCellID) const override;
     /**  Determine the cell ID based on the position.
      *   @param[in] aLocalPosition (not used).
      *   @param[in] aGlobalPosition
@@ -44,22 +44,22 @@ namespace DDSegmentation {
      *   return Cell ID.
      */
     virtual CellID cellID(const Vector3D& aLocalPosition, const Vector3D& aGlobalPosition,
-                          const VolumeID& aVolumeID) const;
+                          const VolumeID& aVolumeID) const override;
     /**  Determine the azimuthal angle (relative to the G4 volume) based on the cell ID.
      *   @param[in] aCellId ID of a cell.
      *   return Phi.
      */
-    double phi(const CellID& aCellID) const;
+    double phi(const CellID aCellID) const;
     /**  Determine the polar angle (relative to the G4 volume) based on the cell ID.
      *   @param[in] aCellId ID of a cell.
      *   return Theta.
      */
-    double theta(const CellID& aCellID) const;
+    double theta(const CellID aCellID) const;
     /**  Determine the radius based on the cell ID.
      *   @param[in] aCellId ID of a cell.
      *   return Radius.
      */
-    // double radius(const CellID& aCellID) const;
+    // double radius(const CellID aCellID) const;
     /**  Get the number of merged cells in theta for given layer
      *   @param[in] layer
      *   return The number of merged cells in theta
@@ -98,22 +98,22 @@ namespace DDSegmentation {
     inline const std::string& fieldNameModule() const { return m_moduleID; }
 
     /// Extract the layer index fom a cell ID.
-    int layer(const CellID& aCellID) const;
+    int layer(const CellID aCellID) const;
 
     /// Determine the volume ID from the full cell ID by removing all local fields
-    virtual VolumeID volumeID(const CellID& cellID) const;
+    virtual VolumeID volumeID(const CellID& cellID) const override;
 
     /// Return true if this segmentation can have cells that span multiple
     /// volumes.  That is, points from multiple distinct volumes may
     /// be assigned to the same cell.
-    virtual bool cellsSpanVolumes() const { return true; }
+    virtual bool cellsSpanVolumes() const override { return true; }
 
     /** Returns a std::vector<double> of the cellDimensions of the given cell ID
      *  in natural order of dimensions (nModules, dTheta)
      *  @param[in] cellID
      *  return a std::vector of size 2 with the cellDimensions of the given cell ID(modules, theta)
      */
-    inline std::vector<double> cellDimensions(const CellID& id) const {
+    virtual std::vector<double> cellDimensions(const CellID& id) const override {
       const int aLayer = layer(id);
       return {(double)mergedModules(aLayer), gridSizeTheta() * mergedThetaCells(aLayer)};
     }
@@ -150,6 +150,15 @@ namespace DDSegmentation {
     // been created yet.  Instead, build it lazily the first time it's needed.
     // Since that's in a const method, make it thread-safe.
     mutable std::atomic<const std::vector<LayerInfo>*> m_layerInfo = nullptr;
+
+    /// Initialization common to all ctors.
+    void commonSetup();
+    /// the field index used for layer
+    int m_layerIndex = -1;
+    /// the field index used for theta
+    int m_thetaIndex = -1;
+    /// the field index used for module
+    int m_moduleIndex = -1;
   };
 } // namespace DDSegmentation
 } // namespace dd4hep

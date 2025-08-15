@@ -27,7 +27,7 @@ namespace DDSegmentation {
     virtual ~FCCSWEndcapTurbine_k4geo() = default;
 
     /**  Determine the global position based on the cell ID. **/
-    virtual Vector3D position(const CellID& aCellID) const;
+    virtual Vector3D position(const CellID& aCellID) const override;
     /**  Determine the cell ID based on the position.
      *   @param[in] aLocalPosition (not used).
      *   @param[in] aGlobalPosition position in the global coordinates.
@@ -35,13 +35,13 @@ namespace DDSegmentation {
      *   return Cell ID.
      */
     virtual CellID cellID(const Vector3D& aLocalPosition, const Vector3D& aGlobalPosition,
-                          const VolumeID& aVolumeID) const;
+                          const VolumeID& aVolumeID) const override;
 
     /**  Determine the transverse distance from the beamline (rho) based on the cell ID.
      *   @param[in] aCellId ID of a cell.
      *   return rho.
      */
-    double rho(const CellID& aCellID) const;
+    double rho(const CellID aCellID) const;
     /** Get the grid size in rho for a given wheel
      * return grid size in rho
      */
@@ -71,7 +71,7 @@ namespace DDSegmentation {
      *   @param[in] aCellId ID of a cell.
      *   return Phi.
      */
-    double phi(const CellID& aCellID) const;
+    double phi(const CellID aCellID) const;
 
     /**  Get the coordinate offset in azimuthal angle.
      *   return The offset in phi.
@@ -114,12 +114,12 @@ namespace DDSegmentation {
      *   @param[in] aCellId ID of a cell.
      *   return x.
      */
-    double x(const CellID& aCellID) const;
+    double x(const CellID aCellID) const;
     /**  Determine the z coordinate based on the cell ID.
      *   @param[in] aCellId ID of a cell.
      *   return z.
      */
-    double z(const CellID& aCellID) const;
+    double z(const CellID aCellID) const;
     /** Get the grid size in z for a given wheel
      * return grid size in z
      */
@@ -180,7 +180,7 @@ namespace DDSegmentation {
      */
     unsigned expLayer(unsigned iWheel, unsigned iRho, unsigned iZ) const;
 
-  protected:
+  private:
     /// turbine blade angle in each wheel
     std::vector<double> m_bladeAngle;
     /// number of unit cells in each wheel
@@ -224,6 +224,19 @@ namespace DDSegmentation {
     std::string m_zID;
     std::string m_sideID;
     std::string m_layerID;
+
+    /// the field index used for rho
+    int m_rhoIndex = -1;
+    /// the field index used for wheel
+    int m_wheelIndex = -1;
+    /// the field index used for module
+    int m_moduleIndex = -1;
+    /// the field index used for z
+    int m_zIndex = -1;
+    /// the field index used for side
+    int m_sideIndex = -1;
+    /// the field index used for layer
+    int m_layerIndex = -1;
   };
 } // namespace DDSegmentation
 } // namespace dd4hep

@@ -9,45 +9,41 @@ namespace dd4hep {
 namespace DDSegmentation {
 
   /// default constructor using an encoding string
-  GridDRcalo_k4geo::GridDRcalo_k4geo(const std::string& cellEncoding) : Segmentation(cellEncoding) {
-    // define type and description
-    _type = "GridDRcalo_k4geo";
-    _description = "DRcalo segmentation based on the tower / (Cerenkov or Scintillation) fiber / SiPM hierarchy";
+  GridDRcalo_k4geo::GridDRcalo_k4geo(const std::string& cellEncoding) : Segmentation(cellEncoding) { commonSetup(); }
 
-    // register all necessary parameters
-    registerIdentifier("identifier_assembly", "Cell ID identifier for assembly", fAssemblyId, "assembly");
-    registerIdentifier("identifier_eta", "Cell ID identifier for numEta", fNumEtaId, "eta");
-    registerIdentifier("identifier_phi", "Cell ID identifier for numPhi", fNumPhiId, "phi");
-    registerIdentifier("identifier_x", "Cell ID identifier for x", fXId, "x");
-    registerIdentifier("identifier_y", "Cell ID identifier for y", fYId, "y");
-    registerIdentifier("identifier_IsCerenkov", "Cell ID identifier for IsCerenkov", fIsCerenkovId, "c");
-    registerIdentifier("identifier_module", "Cell ID identifier for module", fModule, "module");
-
-    fParamBarrel = new DRparamBarrel_k4geo();
-    fParamEndcap = new DRparamEndcap_k4geo();
-  }
-
-  GridDRcalo_k4geo::GridDRcalo_k4geo(const BitFieldCoder* decoder) : Segmentation(decoder) {
-    // define type and description
-    _type = "GridDRcalo_k4geo";
-    _description = "DRcalo segmentation based on the tower / (Cerenkov or Scintillation) fiber / SiPM hierarchy";
-
-    // register all necessary parameters
-    registerIdentifier("identifier_assembly", "Cell ID identifier for assembly", fAssemblyId, "assembly");
-    registerIdentifier("identifier_eta", "Cell ID identifier for numEta", fNumEtaId, "eta");
-    registerIdentifier("identifier_phi", "Cell ID identifier for numPhi", fNumPhiId, "phi");
-    registerIdentifier("identifier_x", "Cell ID identifier for x", fXId, "x");
-    registerIdentifier("identifier_y", "Cell ID identifier for y", fYId, "y");
-    registerIdentifier("identifier_IsCerenkov", "Cell ID identifier for IsCerenkov", fIsCerenkovId, "c");
-    registerIdentifier("identifier_module", "Cell ID identifier for module", fModule, "module");
-
-    fParamBarrel = new DRparamBarrel_k4geo();
-    fParamEndcap = new DRparamEndcap_k4geo();
-  }
+  GridDRcalo_k4geo::GridDRcalo_k4geo(const BitFieldCoder* decoder) : Segmentation(decoder) { commonSetup(); }
 
   GridDRcalo_k4geo::~GridDRcalo_k4geo() {
-    delete fParamBarrel;
-    delete fParamEndcap;
+    delete m_paramBarrel;
+    delete m_paramEndcap;
+  }
+
+  /// Initialization common to all ctors.
+  void GridDRcalo_k4geo::commonSetup() {
+    // define type and description
+    _type = "GridDRcalo_k4geo";
+    _description = "DRcalo segmentation based on the tower / (Cerenkov or Scintillation) fiber / SiPM hierarchy";
+
+    // register all necessary parameters
+    registerIdentifier("identifier_assembly", "Cell ID identifier for assembly", m_assemblyID, "assembly");
+    registerIdentifier("identifier_eta", "Cell ID identifier for numEta", m_numEtaID, "eta");
+    registerIdentifier("identifier_phi", "Cell ID identifier for numPhi", m_numPhiID, "phi");
+    registerIdentifier("identifier_x", "Cell ID identifier for x", m_xID, "x");
+    registerIdentifier("identifier_y", "Cell ID identifier for y", m_yID, "y");
+    registerIdentifier("identifier_IsCerenkov", "Cell ID identifier for IsCerenkov", m_isCerenkovID, "c");
+    registerIdentifier("identifier_module", "Cell ID identifier for module", m_moduleID, "module");
+
+    m_paramBarrel = new DRparamBarrel_k4geo();
+    m_paramEndcap = new DRparamEndcap_k4geo();
+
+    m_systemIndex = decoder()->index("system");
+    m_numEtaIndex = decoder()->index(m_numEtaID);
+    m_numPhiIndex = decoder()->index(m_numPhiID);
+    m_moduleIndex = decoder()->index(m_moduleID);
+    m_xIndex = decoder()->index(m_xID);
+    m_yIndex = decoder()->index(m_yID);
+    m_isCerenkovIndex = decoder()->index(m_isCerenkovID);
+    m_assemblyIndex = decoder()->index(m_assemblyID);
   }
 
   // front end position (default calo hit position)
@@ -137,7 +133,7 @@ namespace DDSegmentation {
     return Vector3D(total.x(), total.y(), total.z());
   }
 
-  Vector3D GridDRcalo_k4geo::localPosition(const CellID& cID) const {
+  Vector3D GridDRcalo_k4geo::localPosition(const CellID cID) const {
     int numx = numX(cID);
     int numy = numY(cID);
     int x_ = x(cID);
@@ -148,10 +144,10 @@ namespace DDSegmentation {
 
   Vector3D GridDRcalo_k4geo::localPosition(int numx, int numy, int x_, int y_) const {
     // Here x & y range from 0 to numx & numy (used for the geometry construction)
-    float ptX = -fGridSize * static_cast<float>(numx / 2) + static_cast<float>(x_) * fGridSize +
-                (numx % 2 == 0 ? fGridSize / 2. : 0.);
-    float ptY = -fGridSize * static_cast<float>(numy / 2) + static_cast<float>(y_) * fGridSize +
-                (numy % 2 == 0 ? fGridSize / 2. : 0.);
+    float ptX = -m_gridSize * static_cast<float>(numx / 2) + static_cast<float>(x_) * m_gridSize +
+                (numx % 2 == 0 ? m_gridSize / 2. : 0.);
+    float ptY = -m_gridSize * static_cast<float>(numy / 2) + static_cast<float>(y_) * m_gridSize +
+                (numy % 2 == 0 ? m_gridSize / 2. : 0.);
 
     return Vector3D(ptX, ptY, 0.);
   }
@@ -161,7 +157,7 @@ namespace DDSegmentation {
                                   const VolumeID& vID) const {
     // vID is assume to be the tower's
     // so we use z position instead to determine isRHS
-    int systemId = static_cast<int>(_decoder->get(vID, "system"));
+    int systemId = static_cast<int>(decoder()->get(vID, m_systemIndex));
     int numx = numX(vID);
     int numy = numY(vID);
     bool isRHS = globalPosition.z() > 0.;
@@ -169,8 +165,8 @@ namespace DDSegmentation {
     auto localX = localPosition.x();
     auto localY = localPosition.y();
 
-    int x = std::floor((localX + (numx % 2 == 0 ? 0. : fGridSize / 2.)) / fGridSize) + numx / 2;
-    int y = std::floor((localY + (numy % 2 == 0 ? 0. : fGridSize / 2.)) / fGridSize) + numy / 2;
+    int x = std::floor((localX + (numx % 2 == 0 ? 0. : m_gridSize / 2.)) / m_gridSize) + numx / 2;
+    int y = std::floor((localY + (numy % 2 == 0 ? 0. : m_gridSize / 2.)) / m_gridSize) + numy / 2;
 
     return setCellID(isRHS, systemId, numEta(vID), numPhi(vID), x, y);
   }
@@ -180,12 +176,12 @@ namespace DDSegmentation {
     VolumeID numEtaId = static_cast<VolumeID>(numEta);
     VolumeID numPhiId = static_cast<VolumeID>(numPhi);
     VolumeID vID = 0;
-    _decoder->set(vID, "system", systemId);
-    _decoder->set(vID, fNumEtaId, numEtaId);
-    _decoder->set(vID, fNumPhiId, numPhiId);
+    decoder()->set(vID, m_systemIndex, systemId);
+    decoder()->set(vID, m_numEtaIndex, numEtaId);
+    decoder()->set(vID, m_numPhiIndex, numPhiId);
 
     VolumeID module = 0; // Tower, SiPM layer attached to the tower, etc.
-    _decoder->set(vID, fModule, module);
+    decoder()->set(vID, m_moduleIndex, module);
 
     return vID;
   }
@@ -197,27 +193,27 @@ namespace DDSegmentation {
     VolumeID xId = static_cast<VolumeID>(x);
     VolumeID yId = static_cast<VolumeID>(y);
     VolumeID vID = 0;
-    _decoder->set(vID, "system", systemId);
-    _decoder->set(vID, fNumEtaId, numEtaId);
-    _decoder->set(vID, fNumPhiId, numPhiId);
-    _decoder->set(vID, fXId, xId);
-    _decoder->set(vID, fYId, yId);
+    decoder()->set(vID, m_systemIndex, systemId);
+    decoder()->set(vID, m_numEtaIndex, numEtaId);
+    decoder()->set(vID, m_numPhiIndex, numPhiId);
+    decoder()->set(vID, m_xIndex, xId);
+    decoder()->set(vID, m_yIndex, yId);
 
     VolumeID module = 1; // Fiber, SiPM, etc.
-    _decoder->set(vID, fModule, module);
+    decoder()->set(vID, m_moduleIndex, module);
 
     VolumeID isCeren = IsCerenkov(x, y) ? 1 : 0;
-    _decoder->set(vID, fIsCerenkovId, isCeren);
+    decoder()->set(vID, m_isCerenkovIndex, isCeren);
 
     VolumeID assemblyId = isRHS ? 0 : 1;
-    _decoder->set(vID, fAssemblyId, assemblyId);
+    decoder()->set(vID, m_assemblyIndex, assemblyId);
 
     return vID;
   }
 
   // neighbor finding algorithm regardless of the type of the channel (mixing scintillation and Cherenkov)
   void GridDRcalo_k4geo::neighbours(const CellID& cID, std::set<CellID>& neighbours) const {
-    int systemId = static_cast<int>(_decoder->get(cID, "system"));
+    int systemId = static_cast<int>(decoder()->get(cID, m_systemIndex));
     int noEta = numEta(cID);
     int noPhi = numPhi(cID);
     int nX = x(cID); // col
@@ -270,7 +266,7 @@ namespace DDSegmentation {
 
     // if the seed fiber is not on the edge of the tower, return the minimal neighborhood
     if (nX > fl.cmin + margin && nX < fl.cmax - margin && nY > fl.rmin + margin && nY < fl.rmax - margin) {
-      if (fRemoveDifferentCh)
+      if (m_removeDifferentCh)
         removeDifferentChannel(isCeren, nb);
 
       neighbours = nb;
@@ -334,7 +330,7 @@ namespace DDSegmentation {
       for (int idx = totY - 1; idx >= fl.rmax - margin; idx--)
         nb.insert(setCellID(!isRHS, systemId, noEta, nextPhi, nextX, idx));
 
-      if (fRemoveDifferentCh)
+      if (m_removeDifferentCh)
         removeDifferentChannel(isCeren, nb);
 
       neighbours = nb;
@@ -350,8 +346,8 @@ namespace DDSegmentation {
 
       // for different noEta rmin and rmax can be different
       // also protect from map::at exception at the barrel-endcap boundary
-      auto flNext = paramBase->unsignedTowerNo(noEta) == fParamBarrel->GetTotTowerNum()
-                        ? fParamBarrel->GetFullLengthFibers(noEta - 1)
+      auto flNext = paramBase->unsignedTowerNo(noEta) == m_paramBarrel->GetTotTowerNum()
+                        ? m_paramBarrel->GetFullLengthFibers(noEta - 1)
                         : paramBase->GetFullLengthFibers(noEta - 1);
 
       // next tower
@@ -369,10 +365,10 @@ namespace DDSegmentation {
       // but to southbound the next totY is always smaller
       // than the current one
       // also protect from looking for a tower with numEta greater than the total # of towers
-      if (noEta + 1 < fParamEndcap->GetTotTowerNum() + fParamBarrel->GetTotTowerNum()) {
+      if (noEta + 1 < m_paramEndcap->GetTotTowerNum() + m_paramBarrel->GetTotTowerNum()) {
         // protect from map::at exception at the barrel-endcap boundary
-        auto flNext = paramBase->unsignedTowerNo(noEta) + 1 == fParamBarrel->GetTotTowerNum()
-                          ? fParamEndcap->GetFullLengthFibers(noEta + 1)
+        auto flNext = paramBase->unsignedTowerNo(noEta) + 1 == m_paramBarrel->GetTotTowerNum()
+                          ? m_paramEndcap->GetFullLengthFibers(noEta + 1)
                           : paramBase->GetFullLengthFibers(noEta + 1);
 
         for (int idx = totY - 1; idx >= flNext.rmax - margin; idx--)
@@ -381,7 +377,7 @@ namespace DDSegmentation {
     }
 
     // finalize
-    if (fRemoveDifferentCh)
+    if (m_removeDifferentCh)
       removeDifferentChannel(isCeren, nb);
 
     neighbours = nb;
@@ -389,51 +385,51 @@ namespace DDSegmentation {
   }
 
   // Get the identifier number of a mother tower in eta or phi direction
-  int GridDRcalo_k4geo::numEta(const CellID& aCellID) const {
-    VolumeID numEta = static_cast<VolumeID>(_decoder->get(aCellID, fNumEtaId));
+  int GridDRcalo_k4geo::numEta(const CellID aCellID) const {
+    VolumeID numEta = static_cast<VolumeID>(decoder()->get(aCellID, m_numEtaIndex));
     return static_cast<int>(numEta);
   }
 
-  int GridDRcalo_k4geo::numPhi(const CellID& aCellID) const {
-    VolumeID numPhi = static_cast<VolumeID>(_decoder->get(aCellID, fNumPhiId));
+  int GridDRcalo_k4geo::numPhi(const CellID aCellID) const {
+    VolumeID numPhi = static_cast<VolumeID>(decoder()->get(aCellID, m_numPhiIndex));
     return static_cast<int>(numPhi);
   }
 
   // Get the total number of SiPMs of the mother tower in x or y direction (local coordinate)
-  int GridDRcalo_k4geo::numX(const CellID& aCellID) const {
+  int GridDRcalo_k4geo::numX(const CellID aCellID) const {
     int noEta = numEta(aCellID);
 
     DRparamBase_k4geo* paramBase = setParamBase(noEta);
 
     int noX =
-        static_cast<int>(std::floor((paramBase->GetTl2() * 2. - fSipmSize / 2.) / fGridSize)) + 1; // in phi direction
+        static_cast<int>(std::floor((paramBase->GetTl2() * 2. - m_sipmSize / 2.) / m_gridSize)) + 1; // in phi direction
 
     return noX;
   }
 
-  int GridDRcalo_k4geo::numY(const CellID& aCellID) const {
+  int GridDRcalo_k4geo::numY(const CellID aCellID) const {
     int noEta = numEta(aCellID);
 
     DRparamBase_k4geo* paramBase = setParamBase(noEta);
 
     int noY =
-        static_cast<int>(std::floor((paramBase->GetH2() * 2. - fSipmSize / 2.) / fGridSize)) + 1; // in eta direction
+        static_cast<int>(std::floor((paramBase->GetH2() * 2. - m_sipmSize / 2.) / m_gridSize)) + 1; // in eta direction
 
     return noY;
   }
 
   // Get the identifier number of a SiPM in x or y direction (local coordinate)
-  int GridDRcalo_k4geo::x(const CellID& aCellID) const { // approx phi direction
-    VolumeID x = static_cast<VolumeID>(_decoder->get(aCellID, fXId));
+  int GridDRcalo_k4geo::x(const CellID aCellID) const { // approx phi direction
+    VolumeID x = static_cast<VolumeID>(decoder()->get(aCellID, m_xIndex));
     return static_cast<int>(x);
   }
-  int GridDRcalo_k4geo::y(const CellID& aCellID) const { // approx eta direction
-    VolumeID y = static_cast<VolumeID>(_decoder->get(aCellID, fYId));
+  int GridDRcalo_k4geo::y(const CellID aCellID) const { // approx eta direction
+    VolumeID y = static_cast<VolumeID>(decoder()->get(aCellID, m_yIndex));
     return static_cast<int>(y);
   }
 
-  bool GridDRcalo_k4geo::IsCerenkov(const CellID& aCellID) const {
-    VolumeID isCeren = static_cast<VolumeID>(_decoder->get(aCellID, fIsCerenkovId));
+  bool GridDRcalo_k4geo::IsCerenkov(const CellID aCellID) const {
+    VolumeID isCeren = static_cast<VolumeID>(decoder()->get(aCellID, m_isCerenkovIndex));
     return static_cast<bool>(isCeren);
   }
   // Identify if the fiber is Cerenkov or scintillation by its column and row number
@@ -448,22 +444,22 @@ namespace DDSegmentation {
     return isCeren;
   }
 
-  bool GridDRcalo_k4geo::IsTower(const CellID& aCellID) const {
-    VolumeID module = static_cast<VolumeID>(_decoder->get(aCellID, fModule));
+  bool GridDRcalo_k4geo::IsTower(const CellID aCellID) const {
+    VolumeID module = static_cast<VolumeID>(decoder()->get(aCellID, m_moduleIndex));
     return module == 0;
   }
 
-  bool GridDRcalo_k4geo::IsSiPM(const CellID& aCellID) const {
-    VolumeID module = static_cast<VolumeID>(_decoder->get(aCellID, fModule));
+  bool GridDRcalo_k4geo::IsSiPM(const CellID aCellID) const {
+    VolumeID module = static_cast<VolumeID>(decoder()->get(aCellID, m_moduleIndex));
     return module == 1;
   }
 
-  bool GridDRcalo_k4geo::IsRHS(const CellID& aCellID) const {
-    VolumeID assembly = static_cast<VolumeID>(_decoder->get(aCellID, fAssemblyId));
+  bool GridDRcalo_k4geo::IsRHS(const CellID aCellID) const {
+    VolumeID assembly = static_cast<VolumeID>(decoder()->get(aCellID, m_assemblyIndex));
     return assembly == 0;
   }
 
-  int GridDRcalo_k4geo::getLast32bits(const CellID& aCellID) const {
+  int GridDRcalo_k4geo::getLast32bits(const CellID aCellID) const {
     CellID aId64 = aCellID >> sizeof(int) * CHAR_BIT;
     int aId32 = (int)aId64;
 
@@ -480,10 +476,10 @@ namespace DDSegmentation {
   DRparamBase_k4geo* GridDRcalo_k4geo::setParamBase(int noEta) const {
     DRparamBase_k4geo* paramBase = nullptr;
 
-    if (fParamEndcap->unsignedTowerNo(noEta) >= fParamBarrel->GetTotTowerNum())
-      paramBase = static_cast<DRparamBase_k4geo*>(fParamEndcap);
+    if (m_paramEndcap->unsignedTowerNo(noEta) >= m_paramBarrel->GetTotTowerNum())
+      paramBase = static_cast<DRparamBase_k4geo*>(m_paramEndcap);
     else
-      paramBase = static_cast<DRparamBase_k4geo*>(fParamBarrel);
+      paramBase = static_cast<DRparamBase_k4geo*>(m_paramBarrel);
 
     if (paramBase->GetCurrentTowerNum() == noEta)
       return paramBase;
@@ -492,8 +488,8 @@ namespace DDSegmentation {
     if (!paramBase->IsFinalized())
       throw std::runtime_error("GridDRcalo_k4geo::position should not be called while building detector geometry!");
 
-    paramBase->SetDeltaThetaByTowerNo(noEta, fParamBarrel->GetTotTowerNum());
-    paramBase->SetThetaOfCenterByTowerNo(noEta, fParamBarrel->GetTotTowerNum());
+    paramBase->SetDeltaThetaByTowerNo(noEta, m_paramBarrel->GetTotTowerNum());
+    paramBase->SetThetaOfCenterByTowerNo(noEta, m_paramBarrel->GetTotTowerNum());
     paramBase->SetIsRHSByTowerNo(noEta);
     paramBase->SetCurrentTowerNum(noEta);
     paramBase->init();
