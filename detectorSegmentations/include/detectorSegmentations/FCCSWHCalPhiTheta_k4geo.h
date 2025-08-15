@@ -52,7 +52,7 @@ namespace DDSegmentation {
      *   @param[in] aDiagonal if true, will include neighbours from diagonal positions in the next and previous layers.
      *   return vector of neighbour cellIDs.
      */
-    std::vector<uint64_t> neighbours(const CellID& cID, bool aDiagonal) const;
+    std::vector<uint64_t> neighbours(const CellID cID, bool aDiagonal) const;
 
     /**  Find neighbours of the cell.
      *   Implement the signature from the Segmentation base class.
@@ -81,7 +81,7 @@ namespace DDSegmentation {
      *   @param[in] aCellID ID of a cell.
      *   return Phi.
      */
-    double phi(const CellID& aCellID) const;
+    double phi(const CellID aCellID) const;
 
     /**  Get the grid size in phi.
      *   return Grid size in phi.
@@ -114,32 +114,32 @@ namespace DDSegmentation {
      *   For the Barrel, the vector size is 1, while for the Endcap - number of section.
      *   return The offset in z.
      */
-    inline std::vector<double> offsetZ() const { return m_offsetZ; }
+    inline const std::vector<double>& offsetZ() const { return m_offsetZ; }
 
     /**  Get the z length of the layer.
      *   return the z length.
      */
-    inline std::vector<double> widthZ() const { return m_widthZ; }
+    inline const std::vector<double>& widthZ() const { return m_widthZ; }
 
     /**  Get the coordinate offset in radius.
      *   Offset is the inner radius of the first layer in the Barrel or in each section of the Endcap.
      *   For the Barrel, the vector size is 1, while for the Endcap - number of sections.
      *   return the offset in radius.
      */
-    inline std::vector<double> offsetR() const { return m_offsetR; }
+    inline const std::vector<double>& offsetR() const { return m_offsetR; }
 
     /**  Get the number of layers for each different thickness retrieved with dRlayer().
      *   For the Barrel, the vector size equals to the number of different thicknesses used to form the layers.
      *   For the Endcap, the vector size equals to the number of sections in the Endcap times the number of different
      * thicknesses used to form the layers. return the number of layers.
      */
-    inline std::vector<int> numLayers() const { return m_numLayers; }
+    inline const std::vector<int>& numLayers() const { return m_numLayers; }
 
     /**  Get the dR (thickness) of layers.
      *   The size of the vector equals to the number of different thicknesses used to form the layers.
      *   return the dR.
      */
-    inline std::vector<double> dRlayer() const { return m_dRlayer; }
+    inline const std::vector<double>& dRlayer() const { return m_dRlayer; }
 
     /**  Get the field name for azimuthal angle.
      *   return The field name for phi.
@@ -155,7 +155,7 @@ namespace DDSegmentation {
      *   @param[in] cID ID of a cell.
      *   return Theta.
      */
-    std::array<double, 2> cellTheta(const CellID& cID) const;
+    std::array<double, 2> cellTheta(const CellID cID) const;
 
     /**  Get the min and max layer indexes of each HCal part.
      * For Endcap, returns the three elements vector, while for Barrel - single element vector.
@@ -212,11 +212,11 @@ namespace DDSegmentation {
      *  @param[in] cellID
      *  return a std::vector of size 2 with the cellDimensions of the given cell ID (phi, theta)
      */
-    inline std::vector<double> cellDimensions(const CellID& /* id */) const override {
+    virtual std::vector<double> cellDimensions(const CellID& /* id */) const override {
       return {gridSizePhi(), gridSizeTheta()};
     }
 
-  protected:
+  private:
     /// determine the azimuthal angle phi based on the current cell ID
     double phi() const;
     /// the number of bins in phi
@@ -249,6 +249,19 @@ namespace DDSegmentation {
     mutable std::vector<std::vector<int>> m_thetaBins;
     /// z-min and z-max of each cell (theta bin) in each layer
     mutable std::vector<std::unordered_map<int, std::pair<double, double>>> m_cellEdges;
+
+    /// Initialization common to all ctors.
+    void commonSetup();
+    /// the field index used for layer
+    int m_layerIndex = -1;
+    /// the field index used for row
+    int m_rowIndex = -1;
+    /// the field index used for type
+    int m_typeIndex = -1;
+    /// the field index used for theta
+    int m_thetaIndex = -1;
+    /// the field index used for phi
+    int m_phiIndex = -1;
   };
 } // namespace DDSegmentation
 } // namespace dd4hep

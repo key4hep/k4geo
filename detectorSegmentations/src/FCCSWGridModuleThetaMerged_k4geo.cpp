@@ -10,6 +10,16 @@ namespace DDSegmentation {
   /// default constructor using an encoding string
   FCCSWGridModuleThetaMerged_k4geo::FCCSWGridModuleThetaMerged_k4geo(const std::string& cellEncoding)
       : GridTheta_k4geo(cellEncoding) {
+    commonSetup();
+  }
+
+  FCCSWGridModuleThetaMerged_k4geo::FCCSWGridModuleThetaMerged_k4geo(const BitFieldCoder* decoder)
+      : GridTheta_k4geo(decoder) {
+    commonSetup();
+  }
+
+  /// Initialization common to all ctors.
+  void FCCSWGridModuleThetaMerged_k4geo::commonSetup() {
     // define type and description
     _type = "FCCSWGridModuleThetaMerged_k4geo";
     _description = "Module-theta segmentation with per-layer merging along theta and/or module";
@@ -22,22 +32,10 @@ namespace DDSegmentation {
     registerParameter("mergedModules", "Numbers of merged modules per layer", m_mergedModules, std::vector<int>());
     GetNModulesFromGeom();
     GetNLayersFromGeom();
-  }
 
-  FCCSWGridModuleThetaMerged_k4geo::FCCSWGridModuleThetaMerged_k4geo(const BitFieldCoder* decoder)
-      : GridTheta_k4geo(decoder) {
-    // define type and description
-    _type = "FCCSWGridModuleThetaMerged_k4geo";
-    _description = "Module-theta segmentation with per-layer merging along theta and/or module";
-
-    // register all necessary parameters (additional to those registered in GridTheta_k4geo)
-    registerIdentifier("identifier_layer", "Cell ID identifier for layer", m_layerID, "layer");
-    registerIdentifier("identifier_module", "Cell ID identifier for module", m_moduleID, "module");
-    registerParameter("mergedCells_Theta", "Numbers of merged cells in theta per layer", m_mergedCellsTheta,
-                      std::vector<int>());
-    registerParameter("mergedModules", "Numbers of merged modules per layer", m_mergedModules, std::vector<int>());
-    GetNModulesFromGeom();
-    GetNLayersFromGeom();
+    m_layerIndex = decoder()->index(m_layerID);
+    m_thetaIndex = decoder()->index(fieldNameTheta());
+    m_moduleIndex = decoder()->index(m_moduleID);
   }
 
   FCCSWGridModuleThetaMerged_k4geo::~FCCSWGridModuleThetaMerged_k4geo() { delete m_layerInfo; }
@@ -74,13 +72,13 @@ namespace DDSegmentation {
     std::vector<LayerInfo> out;
     out.reserve(m_nLayers);
     VolumeID vID = cID;
-    _decoder->set(vID, m_thetaID, 0);
+    decoder()->set(vID, m_thetaIndex, 0);
     for (int l = 0; l < m_nLayers; l++) {
 
       // Look up a volume in layer l in the volume manager, and find its radius
       // by transforming the origin in the local coordinate system to global
       // coordinates.
-      _decoder->set(vID, m_layerID, l);
+      decoder()->set(vID, m_layerIndex, l);
       VolumeManagerContext* vc = vman.lookupContext(vID);
       Position wpos = vc->localToWorld({0, 0, 0});
       double rho = wpos.Rho();
@@ -136,7 +134,7 @@ namespace DDSegmentation {
     }
 
     VolumeID vID = cID;
-    _decoder->set(vID, m_thetaID, 0);
+    decoder()->set(vID, m_thetaIndex, 0);
     int layer = this->layer(vID);
 
     // debug
@@ -163,24 +161,24 @@ namespace DDSegmentation {
     double lTheta = thetaFromXYZ(globalPosition);
 
     // calculate theta bin with original segmentation
-    int thetaBin = positionToBin(lTheta, m_gridSizeTheta, m_offsetTheta);
+    int thetaBin = positionToBin(lTheta, gridSizeTheta(), offsetTheta());
 
     // adjust theta bin if cells are merged along theta in this layer
     // assume that m_mergedCellsTheta[layer]>=1
     thetaBin -= (thetaBin % m_mergedCellsTheta[layer]);
 
     // set theta field of cellID
-    _decoder->set(cID, m_thetaID, thetaBin);
+    decoder()->set(cID, m_thetaIndex, thetaBin);
 
     // retrieve module number
-    int module = _decoder->get(vID, m_moduleID);
+    int module = decoder()->get(vID, m_moduleIndex);
 
     // adjust module number if modules are merged in this layer
     // assume that m_mergedModules[layer]>=1
     module -= (module % m_mergedModules[layer]);
 
     // set module field of cellID
-    _decoder->set(cID, m_moduleID, module);
+    decoder()->set(cID, m_moduleIndex, module);
 
     return cID;
   }
@@ -191,7 +189,7 @@ namespace DDSegmentation {
   /// merged ones - which will be then added on top of
   /// the phi of the volume containing the first cell
   /// by the positioning tool
-  double FCCSWGridModuleThetaMerged_k4geo::phi(const CellID& cID) const {
+  double FCCSWGridModuleThetaMerged_k4geo::phi(const CellID cID) const {
 
     // retrieve layer
     int layer = this->layer(cID);
@@ -210,19 +208,19 @@ namespace DDSegmentation {
 
   /// determine the polar angle based on the cell ID and the
   /// number of merged theta cells
-  double FCCSWGridModuleThetaMerged_k4geo::theta(const CellID& cID) const {
+  double FCCSWGridModuleThetaMerged_k4geo::theta(const CellID cID) const {
 
     // retrieve layer
     int layer = this->layer(cID);
 
     // retrieve theta bin from cellID and determine theta position
-    CellID thetaValue = _decoder->get(cID, m_thetaID);
-    double _theta = binToPosition(thetaValue, m_gridSizeTheta, m_offsetTheta);
+    CellID thetaValue = decoder()->get(cID, m_thetaIndex);
+    double _theta = binToPosition(thetaValue, gridSizeTheta(), offsetTheta());
 
     // adjust return value if cells are merged along theta in this layer
     // shift by (N-1)*half theta grid size
     // assume that m_mergedCellsTheta[layer]>=1
-    _theta += (m_mergedCellsTheta[layer] - 1) * m_gridSizeTheta / 2.0;
+    _theta += (m_mergedCellsTheta[layer] - 1) * gridSizeTheta() / 2.0;
 
     // debug
     // std::cout << "layer: " << layer << std::endl;
@@ -235,12 +233,12 @@ namespace DDSegmentation {
   }
 
   /// Extract the layer index fom a cell ID.
-  int FCCSWGridModuleThetaMerged_k4geo::layer(const CellID& cID) const { return _decoder->get(cID, m_layerID); }
+  int FCCSWGridModuleThetaMerged_k4geo::layer(const CellID cID) const { return decoder()->get(cID, m_layerIndex); }
 
   /// Determine the volume ID from the full cell ID by removing all local fields
   VolumeID FCCSWGridModuleThetaMerged_k4geo::volumeID(const CellID& cID) const {
     VolumeID vID = cID;
-    _decoder->set(vID, m_thetaID, 0);
+    decoder()->set(vID, m_thetaIndex, 0);
     return vID;
   }
 

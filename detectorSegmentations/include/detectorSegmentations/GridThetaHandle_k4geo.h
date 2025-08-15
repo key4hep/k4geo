@@ -35,8 +35,8 @@ typedef Handle<SegmentationWrapper<DDSegmentation::GridTheta_k4geo>> GridThetaHa
  *  fiddled with the handled object directly.....
  *
  *  Note:
- *  The handle base corrsponding to this object in for
- *  conveniance reasons instantiated in DD4hep/src/Segmentations.cpp.
+ *  The handle base corresponding to this object is for
+ *  convenience reasons instantiated in DD4hep/src/Segmentations.cpp.
  *
  *  \author  A. Zaborowska
  *  \version 1.0
@@ -63,10 +63,10 @@ public:
   /// Equality operator
   bool operator==(const GridTheta_k4geo& seg) const { return m_element == seg.m_element; }
   /// determine the position based on the cell ID
-  inline Position position(const CellID& id) const { return Position(access()->implementation->position(id)); }
+  inline Position position(const CellID id) const { return Position(access()->implementation->position(id)); }
 
   /// determine the cell ID based on the position
-  inline dd4hep::CellID cellID(const Position& local, const Position& global, const VolumeID& volID) const {
+  inline dd4hep::CellID cellID(const Position& local, const Position& global, const VolumeID volID) const {
     return access()->implementation->cellID(local, global, volID);
   }
 
@@ -93,7 +93,7 @@ public:
       \return std::vector<double> size 1:
       -# size in theta
   */
-  inline std::vector<double> cellDimensions(const CellID& /*id*/) const {
+  inline std::vector<double> cellDimensions(const CellID /*id*/) const {
     return {access()->implementation->gridSizeTheta()};
   }
 };
