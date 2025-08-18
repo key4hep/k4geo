@@ -41,25 +41,18 @@ jobs:
 
   histcmp_test:
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/key4hep/key4hep-images/alma9-key4hep:latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up miniforge
-        uses: conda-incubator/setup-miniconda@v3
-        with:
-          miniforge-variant: Miniforge3
-          python-version: "3.12"
-          channels: conda-forge
-
-      - name: Install ROOT and histcmp
-        shell: bash -l {0}
+      - name: Install histcmp
         run: |
-          conda install -y root
+          # Key4hep stack is already available in the container
           pip install histcmp==0.8.1
-      
+
       - name: Generate new histograms and download reference
-        shell: bash -l {0}
         run: |
           # Make the script executable
           chmod +x CI/generate_material_comparisons.sh
