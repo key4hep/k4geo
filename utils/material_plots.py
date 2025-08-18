@@ -12,6 +12,7 @@ import ROOT
 def main():
     parser = argparse.ArgumentParser(description="Material Plotter")
     parser.add_argument("--fname", "-f", dest="fname", type=str, help="name of file to read")
+    parser.add_argument("--outputDir", "-o", dest="outputDir", default=".", type=str, help="Output directory for plots")
     parser.add_argument(
         "--angleMin", dest="angleMin", default=-6, type=float, help="minimum eta/theta/cosTheta"
     )
@@ -201,9 +202,10 @@ def main():
             ths.SetMaximum(args.x0max)
 
         ths.GetXaxis().SetRangeUser(args.angleMin, args.angleMax)
-        cv.Print(plot + ".pdf")
-        cv.Print(plot + ".png")
-        cv.SaveAs(plot + ".root")
+        output_path = os.path.join(args.outputDir, plot)
+        cv.Print(output_path + ".pdf")
+        cv.Print(output_path + ".png")
+        cv.SaveAs(output_path + ".root")
 
 
 if __name__ == "__main__":
