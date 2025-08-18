@@ -1,5 +1,5 @@
 #!/bin/bash
-# filepath: /home/fshaw/Documents/Code/k4geo/CI/generate_material_histograms.sh
+# filepath: /home/fshaw/Documents/Code/k4geo/CI/generate_material_comparisons.sh
 
 set -e  # Exit on any error
 
@@ -83,9 +83,6 @@ process_geometries() {
 
 # Main execution
 echo "=== Starting material histogram generation ==="
-
-# Run initial material scan histogram generation
-CI/generate_material_histograms.sh
 
 # Clone the main branch for reference data generation
 echo "=== Cloning main branch for reference data ==="
