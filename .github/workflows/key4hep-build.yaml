@@ -42,7 +42,7 @@ jobs:
   histcmp_test:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/key4hep/key4hep-images/alma9-key4hep:latest
+      image: ghcr.io/key4hep/key4hep-stack/alma9-key4hep:latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
