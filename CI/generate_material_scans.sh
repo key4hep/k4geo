@@ -86,7 +86,7 @@ echo "=== Starting material histogram generation ==="
 
 # Clone the main branch for reference data generation
 echo "=== Cloning main branch for reference data ==="
-git clone --branch main --depth 1 https://github.com/key4hep/k4geo.git k4geo_main_ref
+git clone --branch implement-histcmp --depth 1 https://github.com/fredrikshaw/k4geo.git k4geo_main_ref # THIS NEEDS TO BE CHANGED TO THE REAL MAIN BRANCH ON K4GEO BEFORE MERGE!!!!!!!
 
 # Generate reference histograms from main branch
 cd k4geo_main_ref
