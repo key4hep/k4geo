@@ -49,8 +49,15 @@ jobs:
         container: el9
         view-path: /cvmfs/sw-nightlies.hsf.org/key4hep
         run: |
+          # Create virtual environment like pre-commit does
+          python -m venv /root/histcmp-venv
+          source /root/histcmp-venv/bin/activate
+          
           # Install histcmp
           pip install histcmp==0.8.1
+          
+          # Export PYTHONPATH like pre-commit does
+          export PYTHONPATH=$VIRTUAL_ENV/lib/python3.$(python3 -c 'import sys; print(f"{sys.version_info[1]}")')/site-packages:$PYTHONPATH
           
           # Make the script executable
           chmod +x CI/generate_material_comparisons.sh
