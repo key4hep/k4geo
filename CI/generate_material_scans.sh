@@ -50,13 +50,17 @@ process_geometries() {
           
           # Check if the XML file exists
           if [ -f "$xml_file" ]; then
-
             if [ "$QUIET_MODE" = true ]; then
-                echo "Processing: $xml_file (output suppressed)"
+              echo "Processing: $xml_file (output suppressed)"
             else
-                echo "Processing: $xml_file"
+              echo "Processing: $xml_file"
             fi
+
+            # ADD THIS LINE - Define output directory
+            output_dir="${output_base}/${geometry_name}/${compact_name}"
+            mkdir -p "$output_dir"
             
+            # Run material scan with optional output suppression
             run_with_output k4run utils/material_scan.py \
               --GeoSvc.detector "$xml_file" \
               --GeoDump.filename "${output_dir}/out_material_scan${file_suffix}.root" \
