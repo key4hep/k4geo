@@ -60,10 +60,10 @@ jobs:
           export PYTHONPATH=$VIRTUAL_ENV/lib/python3.$(python3 -c 'import sys; print(f"{sys.version_info[1]}")')/site-packages:$PYTHONPATH
           
           # Make the script executable
-          chmod +x CI/generate_material_comparisons.sh
+          chmod +x CI/generate_material_scans.sh
           
           # Run the material histogram generation script
-          ./CI/generate_material_comparisons.sh
+          ./CI/generate_material_scans.sh
           
           # Compare each geometry's histograms
           mkdir -p histcmp_results
