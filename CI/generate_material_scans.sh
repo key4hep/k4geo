@@ -1,5 +1,5 @@
 #!/bin/bash
-# filepath: /home/fshaw/Documents/Code/k4geo/CI/generate_material_comparisons.sh
+# filepath: /home/fshaw/Documents/Code/k4geo/CI/generate_material_scans.sh
 
 set -e  # Exit on any error
 

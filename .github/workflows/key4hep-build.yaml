@@ -18,33 +18,43 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  histcmp_test:
+  build:
+    strategy:
+      matrix:
+        build_type: ["release", "nightly"]
+        image: ["alma9"]
+        stack: ["key4hep"]
+        include:
+          - build_type: nightly
+            image: ubuntu24
+            stack: key4hep
+      fail-fast: false
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - uses: key4hep/key4hep-actions/cache-external-data@main
     - uses: key4hep/key4hep-actions/key4hep-build@main
       with:
-        build_type: "release"
-        image: "alma9" 
-        stack: "key4hep"
-        
+        build_type: ${{ matrix.build_type }}
+        image: ${{ matrix.image }}
+        stack: ${{ matrix.stack }}
+
+  histcmp_test:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/key4hep/key4hep-stack/alma9:latest
+    steps:
+    - uses: actions/checkout@v4
+    
     - name: Install histcmp
-      shell: bash -l {0}
       run: |
         pip install histcmp==0.8.1
 
     - name: Generate new histograms and download reference
-      shell: bash -l {0}
       run: |
-        # Source Key4hep environment
-        source /cvmfs/sw.hsf.org/key4hep/setup.sh
-        
-        # Make the script executable
-        chmod +x CI/generate_material_comparisons.sh
-        
-        # Run the material histogram generation script
-        ./CI/generate_material_comparisons.sh
+        # Key4hep tools should be available in the container
+        chmod +x CI/generate_material_scans.sh
+        ./CI/generate_material_scans.sh
 
     - name: Run histcmp tests
       shell: bash -l {0}
@@ -93,24 +103,3 @@ jobs:
           histcmp_results/
           mat_scan_results/
           reference_results/
-
-  build:
-    strategy:
-      matrix:
-        build_type: ["release", "nightly"]
-        image: ["alma9"]
-        stack: ["key4hep"]
-        include:
-          - build_type: nightly
-            image: ubuntu24
-            stack: key4hep
-      fail-fast: false
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: key4hep/key4hep-actions/cache-external-data@main
-    - uses: key4hep/key4hep-actions/key4hep-build@main
-      with:
-        build_type: ${{ matrix.build_type }}
-        image: ${{ matrix.image }}
-        stack: ${{ matrix.stack }}
