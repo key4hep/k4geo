@@ -12,7 +12,14 @@ import ROOT
 def main():
     parser = argparse.ArgumentParser(description="Material Plotter")
     parser.add_argument("--fname", "-f", dest="fname", type=str, help="name of file to read")
-    parser.add_argument("--outputDir", "-o", dest="outputDir", default=".", type=str, help="Output directory for plots")
+    parser.add_argument(
+        "--outputDir",
+        "-o",
+        dest="outputDir",
+        default=".",
+        type=str,
+        help="Output directory for plots",
+    )
     parser.add_argument(
         "--angleMin", dest="angleMin", default=-6, type=float, help="minimum eta/theta/cosTheta"
     )
