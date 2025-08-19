@@ -63,7 +63,7 @@ jobs:
           chmod +x CI/generate_material_scans.sh
           
           # Run the material histogram generation script
-          ./CI/generate_material_scans.sh
+          ./CI/generate_material_scans.sh --quiet
           
           # Compare each geometry's histograms
           mkdir -p histcmp_results

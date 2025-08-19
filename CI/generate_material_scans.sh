@@ -3,6 +3,32 @@
 
 set -e  # Exit on any error
 
+# Default values
+QUIET_MODE=false
+
+# Parse command line arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --quiet|-q)
+            QUIET_MODE=true
+            shift
+            ;;
+        *)
+            echo "Unknown option: $1"
+            exit 1
+            ;;
+    esac
+done
+
+# Function to run commands with optional output suppression
+run_with_output() {
+    if [ "$QUIET_MODE" = true ]; then
+        "$@" > /dev/null 2>&1
+    else
+        "$@"
+    fi
+}
+
 # Function to process geometries and generate material scans
 process_geometries() {
   local source_dir="$1"
@@ -24,12 +50,14 @@ process_geometries() {
           
           # Check if the XML file exists
           if [ -f "$xml_file" ]; then
-            echo "Processing: $xml_file"
 
-            output_dir="${output_base}/${geometry_name}/${compact_name}"
-            mkdir -p "$output_dir"
+            if [ "$QUIET_MODE" = true ]; then
+                echo "Processing: $xml_file (output suppressed)"
+            else
+                echo "Processing: $xml_file"
+            fi
             
-            k4run utils/material_scan.py \
+            run_with_output k4run utils/material_scan.py \
               --GeoSvc.detector "$xml_file" \
               --GeoDump.filename "${output_dir}/out_material_scan${file_suffix}.root" \
               --angleDef theta \
@@ -39,7 +67,7 @@ process_geometries() {
               --nPhi 100
             
             # Generate plots
-            python utils/material_plots.py \
+            run_with_output python utils/material_plots.py \
               -f "${output_dir}/out_material_scan${file_suffix}.root" \
               -o "${output_dir}" \
               --angleDef theta \
