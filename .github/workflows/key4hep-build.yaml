@@ -41,69 +41,73 @@ jobs:
 
   histcmp_test:
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/key4hep/key4hep-stack/alma9-key4hep:latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - uses: actions/checkout@v4
+    - uses: key4hep/key4hep-actions/cache-external-data@main
+    - uses: key4hep/key4hep-actions/key4hep-build@main
+      with:
+        build_type: "release"
+        image: "alma9" 
+        stack: "key4hep"
+        
+    - name: Install histcmp
+      shell: bash -l {0}
+      run: |
+        pip install histcmp==0.8.1
 
-      - name: Install histcmp
-        run: |
-          # Key4hep stack is already available in the container
-          pip install histcmp==0.8.1
+    - name: Generate new histograms and download reference
+      shell: bash -l {0}
+      run: |
+        # Make the script executable
+        chmod +x CI/generate_material_comparisons.sh
+        
+        # Run the material histogram generation script
+        ./CI/generate_material_comparisons.sh
 
-      - name: Generate new histograms and download reference
-        run: |
-          # Make the script executable
-          chmod +x CI/generate_material_comparisons.sh
-          
-          # Run the material histogram generation script
-          ./CI/generate_material_comparisons.sh
-
-      - name: Run histcmp tests
-        shell: bash -l {0}
-        run: |
-          # Compare each geometry's histograms
-          mkdir -p histcmp_results
-          
-          for geometry_dir in mat_scan_results/*/; do
-            if [ -d "$geometry_dir" ]; then
-              geometry_name=$(basename "$geometry_dir")
-              
-              for compact_dir in "${geometry_dir}"*/; do
-                if [ -d "$compact_dir" ]; then
-                  compact_name=$(basename "$compact_dir")
+    - name: Run histcmp tests
+      shell: bash -l {0}
+      run: |
+        # Compare each geometry's histograms
+        mkdir -p histcmp_results
+        
+        for geometry_dir in mat_scan_results/*/; do
+          if [ -d "$geometry_dir" ]; then
+            geometry_name=$(basename "$geometry_dir")
+            
+            for compact_dir in "${geometry_dir}"*/; do
+              if [ -d "$compact_dir" ]; then
+                compact_name=$(basename "$compact_dir")
+                
+                # Compare each histogram type
+                for hist_type in x0 lambda depth; do
+                  current_file="${compact_dir}/${hist_type}_summed_hist.root"
+                  ref_file="${compact_dir}/${hist_type}_ref_summed_hist.root"
                   
-                  # Compare each histogram type
-                  for hist_type in x0 lambda depth; do
-                    current_file="${compact_dir}/${hist_type}_summed_hist.root"
-                    ref_file="${compact_dir}/${hist_type}_ref_summed_hist.root"
+                  if [ -f "$current_file" ] && [ -f "$ref_file" ]; then
+                    echo "Comparing ${geometry_name}/${compact_name}/${hist_type}"
                     
-                    if [ -f "$current_file" ] && [ -f "$ref_file" ]; then
-                      echo "Comparing ${geometry_name}/${compact_name}/${hist_type}"
-                      
-                      histcmp "$ref_file" "$current_file" \
-                        --title "Material Scan Comparison: ${geometry_name}/${compact_name}/${hist_type}" \
-                        --output "histcmp_results/${geometry_name}_${compact_name}_${hist_type}" \
-                        --format png \
-                        || echo "Comparison failed for ${geometry_name}_${compact_name}_${hist_type}"
-                    else
-                      echo "Warning: Missing files for comparison of ${geometry_name}/${compact_name}/${hist_type}"
-                      echo "  Current file: $current_file (exists: $([ -f "$current_file" ] && echo "yes" || echo "no"))"
-                      echo "  Ref file: $ref_file (exists: $([ -f "$ref_file" ] && echo "yes" || echo "no"))"
-                    fi
-                  done
-                fi
-              done
-            fi
-          done
+                    histcmp "$ref_file" "$current_file" \
+                      --title "Material Scan Comparison: ${geometry_name}/${compact_name}/${hist_type}" \
+                      --output "histcmp_results/${geometry_name}_${compact_name}_${hist_type}" \
+                      --format png \
+                      || echo "Comparison failed for ${geometry_name}_${compact_name}_${hist_type}"
+                  else
+                    echo "Warning: Missing files for comparison of ${geometry_name}/${compact_name}/${hist_type}"
+                    echo "  Current file: $current_file (exists: $([ -f "$current_file" ] && echo "yes" || echo "no"))"
+                    echo "  Ref file: $ref_file (exists: $([ -f "$ref_file" ] && echo "yes" || echo "no"))"
+                  fi
+                done
+              fi
+            done
+          fi
+        done
 
-      - name: Upload histcmp plots and results
-        uses: actions/upload-artifact@v4
-        if: always()  # Upload even if tests fail
-        with:
-          name: histcmp-results
-          path: |
-            histcmp_results/
-            mat_scan_results/
-            reference_results/
+    - name: Upload histcmp plots and results
+      uses: actions/upload-artifact@v4
+      if: always()  # Upload even if tests fail
+      with:
+        name: histcmp-results
+        path: |
+          histcmp_results/
+          mat_scan_results/
+          reference_results/
