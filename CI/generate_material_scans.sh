@@ -97,9 +97,9 @@ process_geometries() {
             # Set parameters based on mode
             if [ "$FAST_PARAMS" = true ]; then
               # Fast test parameters - much reduced resolution
-              ANGLE_BINNING=10
-              ANGLE_MIN=85
-              ANGLE_MAX=95
+              ANGLE_BINNING=1
+              ANGLE_MIN=0
+              ANGLE_MAX=180
               NPHI=10
               echo "Using fast parameters: θ=${ANGLE_MIN}-${ANGLE_MAX}°, binning=${ANGLE_BINNING}°, φ=${NPHI}"
             else
