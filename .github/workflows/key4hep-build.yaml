@@ -62,8 +62,8 @@ jobs:
           # Make the script executable
           chmod +x CI/generate_material_scans.sh
           
-          # Run the material histogram generation script
-          ./CI/generate_material_scans.sh --quiet
+          # Run in TEST and FAST mode for quick CI testing
+          ./CI/generate_material_scans.sh --test --fast --quiet
           
           echo "=== Checking for generated files ==="
           find mat_scan_results/ -name "*.root" | head -10
