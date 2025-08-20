@@ -84,6 +84,10 @@ process_geometries() {
               --angleMin 0 \
               --angleMax 180
 
+            # Combine histogram channels BEFORE renaming
+            echo "Combining histograms for ${geometry_name}/${compact_name}"
+            ./CI/combine_material_histograms.sh --input-dir "${output_dir}" --output-dir "${output_dir}"
+
             # Rename plot files if this is reference data
             if [ "$file_suffix" = "_ref" ]; then
               cd "$output_dir"
@@ -94,9 +98,6 @@ process_geometries() {
               done
               cd - > /dev/null
             fi
-
-            # Combine histogram channels
-            ./CI/combine_material_histograms.sh --input-dir "${output_dir}" --output-dir "${output_dir}"
             
             # Rename summed files if this is reference data
             if [ "$file_suffix" = "_ref" ]; then
