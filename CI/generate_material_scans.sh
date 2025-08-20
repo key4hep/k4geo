@@ -20,15 +20,6 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Function to run commands with optional output suppression
-run_with_output() {
-    if [ "$QUIET_MODE" = true ]; then
-        "$@" > /dev/null 2>&1
-    else
-        "$@"
-    fi
-}
-
 # Function to process geometries and generate material scans
 process_geometries() {
   local source_dir="$1"
@@ -61,17 +52,31 @@ process_geometries() {
             mkdir -p "$output_dir"
             
             # Run material scan with optional output suppression
-            run_with_output k4run utils/material_scan.py \
-              --GeoSvc.detector "$xml_file" \
-              --GeoDump.filename "${output_dir}/out_material_scan${file_suffix}.root" \
-              --angleDef theta \
-              --angleBinning 1 \
-              --angleMin 0 \
-              --angleMax 180 \
-              --nPhi 100
+            if [ "$QUIET_MODE" = true ]; then
+              echo "Running material scan: $xml_file (k4run output suppressed)"
+              k4run utils/material_scan.py \
+                --GeoSvc.detector "$xml_file" \
+                --GeoDump.filename "${output_dir}/out_material_scan${file_suffix}.root" \
+                --angleDef theta \
+                --angleBinning 1 \
+                --angleMin 0 \
+                --angleMax 180 \
+                --nPhi 100 > /dev/null 2>&1
+            else
+              echo "Running material scan: $xml_file"
+              k4run utils/material_scan.py \
+                --GeoSvc.detector "$xml_file" \
+                --GeoDump.filename "${output_dir}/out_material_scan${file_suffix}.root" \
+                --angleDef theta \
+                --angleBinning 1 \
+                --angleMin 0 \
+                --angleMax 180 \
+                --nPhi 100
+            fi
             
-            # Generate plots
-            run_with_output python utils/material_plots.py \
+            # Generate plots (always show output)
+            echo "Generating material plots..."
+            python utils/material_plots.py \
               -f "${output_dir}/out_material_scan${file_suffix}.root" \
               -o "${output_dir}" \
               --angleDef theta \

@@ -54,6 +54,7 @@ if [ ! -d "$OUTPUT_DIR" ]; then
 fi
 
 echo "Using input directory: $INPUT_DIR"
+ls -la "$INPUT_DIR" || echo "No files found in input directory"
 echo "Using output directory: $OUTPUT_DIR"
 
 # Function to process a ROOT file and create combined histogram
