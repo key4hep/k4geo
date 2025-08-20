@@ -65,6 +65,10 @@ jobs:
           # Run the material histogram generation script
           ./CI/generate_material_scans.sh --quiet
           
+          echo "=== Checking for generated files ==="
+          find mat_scan_results/ -name "*.root" | head -10
+          find reference_results/ -name "*.root" | head -10
+          
           # Compare each geometry's histograms
           mkdir -p histcmp_results
           
