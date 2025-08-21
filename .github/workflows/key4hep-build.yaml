@@ -63,7 +63,7 @@ jobs:
           chmod +x CI/generate_material_scans.sh
           
           # Run in TEST and FAST mode for quick CI testing
-          ./CI/generate_material_scans.sh --fast --quiet
+          ./CI/generate_material_scans.sh --fast --quiet --test
           
           echo "=== Checking for generated files ==="
           find mat_scan_results/ -name "*.root" | head -10

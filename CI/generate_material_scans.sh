@@ -13,14 +13,14 @@ show_usage() {
     echo "Usage: $0 [OPTIONS]"
     echo "Options:"
     echo "  -q, --quiet          Suppress verbose output from k4run material scanning"
-    echo "  -t, --test           Test mode: process only first geometry and first compact file"
+    echo "  -t, --test           Test mode: process only first 3 geometries and first compact file per geometry"
     echo "  -f, --fast           Fast parameters: reduced angular resolution for quicker scanning"
     echo "  -h, --help           Show this help message"
     echo ""
     echo "Examples:"
     echo "  $0                   # Full processing with verbose output"
     echo "  $0 --quiet           # Full processing with minimal output"
-    echo "  $0 --test --quiet    # Test single geometry with minimal output"
+    echo "  $0 --test --quiet    # Test first 3 geometries with minimal output"
     echo "  $0 --fast --quiet    # Fast parameters with minimal output"
     echo "  $0 --test --fast     # Test mode with fast parameters (fastest)"
 }
@@ -61,7 +61,7 @@ process_geometries() {
   echo "=== Processing geometries from $source_dir ==="
   
   if [ "$TEST_MODE" = true ]; then
-    echo "TEST MODE: Processing only first geometry and first compact file"
+    echo "TEST MODE: Processing only first 3 geometries and first compact file per geometry"
   fi
   
   if [ "$FAST_PARAMS" = true ]; then
@@ -169,11 +169,11 @@ process_geometries() {
               cd - > /dev/null
             fi
             
-            # In test mode, limit processing
+            # In test mode, limit processing to first compact per geometry
             if [ "$TEST_MODE" = true ]; then
               compact_count=$((compact_count + 1))
               if [ $compact_count -ge 1 ]; then
-                echo "Test mode: stopping after first compact directory"
+                echo "Test mode: stopping after first compact directory for geometry $geometry_name"
                 break
               fi
             fi
@@ -184,11 +184,12 @@ process_geometries() {
         fi
       done
       
-      # In test mode, limit to one geometry
+      # In test mode, limit to first 3 geometries
       if [ "$TEST_MODE" = true ]; then
         geometry_count=$((geometry_count + 1))
-        if [ $geometry_count -ge 1 ]; then
-          echo "Test mode: stopping after first geometry"
+        echo "Test mode: processed $geometry_count of 3 geometries"
+        if [ $geometry_count -ge 3 ]; then
+          echo "Test mode: stopping after first 3 geometries"
           break
         fi
       fi
