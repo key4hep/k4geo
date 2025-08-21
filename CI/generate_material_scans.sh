@@ -155,8 +155,19 @@ process_geometries() {
           
           # Check if the XML file exists
           if [ -f "$xml_file" ]; then
-            total_processed=$((total_processed + 1))
             
+            # Skip known slow/problematic geometries in test mode
+            if [ "$TEST_MODE" = true ] || [ "$FAST_PARAMS" = true ]; then
+              case "$compact_name" in
+                "IDEA_o2_v01"|"CLD_o3_v01")
+                  echo "⚠️  Skipping slow geometry in fast/test mode: $compact_name"
+                  continue
+                  ;;
+              esac
+            fi
+            
+            total_processed=$((total_processed + 1))
+
             if [ "$QUIET_MODE" = true ]; then
               echo "Processing: $xml_file (output suppressed)"
             else
