@@ -63,46 +63,42 @@ jobs:
           chmod +x CI/generate_material_scans.sh
           
           # Run in TEST and FAST mode for quick CI testing
-          ./CI/generate_material_scans.sh --fast --quiet --test
+          ./CI/generate_material_scans.sh --test --fast --quiet
           
           echo "=== Checking for generated files ==="
           find mat_scan_results/ -name "*.root" | head -10
           find reference_results/ -name "*.root" | head -10
           
-          # Compare each geometry's histograms
+          echo "=== Checking consolidated files ==="
+          ls -la detector_geometries_*.root
+          
+          # Single histcmp comparison using consolidated files
           mkdir -p histcmp_results
           
-          for geometry_dir in mat_scan_results/*/; do
-            if [ -d "$geometry_dir" ]; then
-              geometry_name=$(basename "$geometry_dir")
+          if [ -f "detector_geometries_ref.root" ] && [ -f "detector_geometries_monitored.root" ]; then
+            echo "Running single histcmp comparison on consolidated files..."
+            
+            histcmp detector_geometries_ref.root detector_geometries_monitored.root \
+              --title "Material Budget Comparison: All Detector Geometries" \
+              --output "histcmp_results/detector_geometries_comparison" \
+              --format png \
+              || echo "Histcmp comparison failed"
               
-              for compact_dir in "${geometry_dir}"*/; do
-                if [ -d "$compact_dir" ]; then
-                  compact_name=$(basename "$compact_dir")
-                  
-                  # Compare each histogram type
-                  for hist_type in x0 lambda depth; do
-                    current_file="${compact_dir}/${hist_type}_summed_hist.root"
-                    ref_file="${compact_dir}/${hist_type}_ref_summed_hist.root"
-                    
-                    if [ -f "$current_file" ] && [ -f "$ref_file" ]; then
-                      echo "Comparing ${geometry_name}/${compact_name}/${hist_type}"
-                      
-                      histcmp "$ref_file" "$current_file" \
-                        --title "Material Scan Comparison: ${geometry_name}/${compact_name}/${hist_type}" \
-                        --output "histcmp_results/${geometry_name}_${compact_name}_${hist_type}" \
-                        --format png \
-                        || echo "Comparison failed for ${geometry_name}_${compact_name}_${hist_type}"
-                    else
-                      echo "Warning: Missing files for comparison of ${geometry_name}/${compact_name}/${hist_type}"
-                      echo "  Current file: $current_file (exists: $([ -f "$current_file" ] && echo "yes" || echo "no"))"
-                      echo "  Ref file: $ref_file (exists: $([ -f "$ref_file" ] && echo "yes" || echo "no"))"
-                    fi
-                  done
-                fi
-              done
-            fi
-          done
+            echo "=== Histcmp comparison completed ==="
+            
+            # List histograms in consolidated files for verification
+            echo "=== Reference file contents ==="
+            root -l -b -q -e "TFile f(\"detector_geometries_ref.root\"); f.ls(); f.Close();"
+            
+            echo "=== Monitored file contents ==="
+            root -l -b -q -e "TFile f(\"detector_geometries_monitored.root\"); f.ls(); f.Close();"
+            
+          else
+            echo "ERROR: Consolidated ROOT files not found"
+            echo "  detector_geometries_ref.root exists: $([ -f detector_geometries_ref.root ] && echo yes || echo no)"
+            echo "  detector_geometries_monitored.root exists: $([ -f detector_geometries_monitored.root ] && echo yes || echo no)"
+            exit 1
+          fi
 
     - name: Upload histcmp plots and results
       uses: actions/upload-artifact@v4
@@ -111,5 +107,6 @@ jobs:
         name: histcmp-results
         path: |
           histcmp_results/
+          detector_geometries_*.root
           mat_scan_results/
           reference_results/

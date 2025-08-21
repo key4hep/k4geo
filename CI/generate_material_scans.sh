@@ -1,5 +1,4 @@
 #!/bin/bash
-# filepath: /home/fshaw/Documents/Code/k4geo/CI/generate_material_scans.sh
 
 set -e  # Exit on any error
 
@@ -52,13 +51,13 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Function to process geometries and generate material scans
+# Function to process geometries and generate material scans directly into consolidated files
 process_geometries() {
   local source_dir="$1"
-  local output_base="$2"
+  local consolidated_file="$2"
   local file_suffix="$3"
   
-  echo "=== Processing geometries from $source_dir ==="
+  echo "=== Processing geometries from $source_dir directly into $consolidated_file ==="
   
   if [ "$TEST_MODE" = true ]; then
     echo "TEST MODE: Processing only first 3 geometries and first compact file per geometry"
@@ -67,6 +66,9 @@ process_geometries() {
   if [ "$FAST_PARAMS" = true ]; then
     echo "FAST MODE: Using reduced angular resolution"
   fi
+  
+  # Initialize the consolidated ROOT file
+  ./CI/combine_material_histograms.sh --initialize "$consolidated_file"
   
   local geometry_count=0
   
@@ -91,7 +93,7 @@ process_geometries() {
               echo "Processing: $xml_file"
             fi
 
-            output_dir="${output_base}/${geometry_name}/${compact_name}"
+            output_dir="${source_dir}_temp/${geometry_name}/${compact_name}"
             mkdir -p "$output_dir"
             
             # Set parameters based on mode
@@ -133,7 +135,7 @@ process_geometries() {
                 --nPhi $NPHI
             fi
             
-            # Generate plots (always show output)
+            # Generate plots directly into temporary directory
             echo "Generating material plots..."
             python utils/material_plots.py \
               -f "${output_dir}/out_material_scan${file_suffix}.root" \
@@ -143,31 +145,15 @@ process_geometries() {
               --angleMin $ANGLE_MIN \
               --angleMax $ANGLE_MAX
 
-            # Combine histogram channels BEFORE renaming
-            echo "Combining histograms for ${geometry_name}/${compact_name}"
-            ./CI/combine_material_histograms.sh --input-dir "${output_dir}" --output-dir "${output_dir}"
-
-            # Rename plot files if this is reference data
-            if [ "$file_suffix" = "_ref" ]; then
-              cd "$output_dir"
-              for file in x0.root lambda.root depth.root; do
-                if [ -f "$file" ]; then
-                  mv "$file" "${file%.root}${file_suffix}.root"
-                fi
-              done
-              cd - > /dev/null
-            fi
+            # Add histograms directly to consolidated file
+            echo "Adding histograms to consolidated file for ${compact_name}"
+            ./CI/combine_material_histograms.sh --add-to-consolidated \
+              --input-dir "${output_dir}" \
+              --output-file "$consolidated_file" \
+              --histogram-prefix "${compact_name}"
             
-            # Rename summed files if this is reference data
-            if [ "$file_suffix" = "_ref" ]; then
-              cd "$output_dir"
-              for file in *_summed_hist.root; do
-                if [ -f "$file" ]; then
-                  mv "$file" "${file%_summed_hist.root}${file_suffix}_summed_hist.root"
-                fi
-              done
-              cd - > /dev/null
-            fi
+            # Clean up temporary files
+            rm -rf "${output_dir}"
             
             # In test mode, limit processing to first compact per geometry
             if [ "$TEST_MODE" = true ]; then
@@ -195,6 +181,9 @@ process_geometries() {
       fi
     fi
   done
+  
+  # Finalize the consolidated ROOT file
+  ./CI/combine_material_histograms.sh --finalize "$consolidated_file"
 }
 
 # Main execution
@@ -208,32 +197,18 @@ else
   git clone --branch implement-histcmp --depth 1 https://github.com/fredrikshaw/k4geo.git k4geo_main_ref # THIS NEEDS TO BE CHANGED TO THE REAL MAIN BRANCH ON K4GEO BEFORE MERGE!!!!!!!
 fi
 
-# Generate reference histograms from main branch
+# Generate reference histograms directly into consolidated file
 cd k4geo_main_ref
-process_geometries "." "../reference_results" "_ref"
+process_geometries "." "../detector_geometries_ref.root" "_ref"
 cd ..
 
-# Generate current branch histograms
-process_geometries "." "mat_scan_results" ""
+# Generate current branch histograms directly into consolidated file
+process_geometries "." "detector_geometries_monitored.root" ""
 
-# Copy reference files to current branch directories for comparison
-echo "=== Copying reference files for comparison ==="
-for geometry_dir in mat_scan_results/*/; do
-  if [ -d "$geometry_dir" ]; then
-    geometry_name=$(basename "$geometry_dir")
-    
-    for compact_dir in "${geometry_dir}"*/; do
-      if [ -d "$compact_dir" ]; then
-        compact_name=$(basename "$compact_dir")
-        ref_source_dir="reference_results/${geometry_name}/${compact_name}"
-        
-        if [ -d "$ref_source_dir" ]; then
-          echo "Copying reference files for ${geometry_name}/${compact_name}"
-          cp "$ref_source_dir"/*_ref*.root "$compact_dir/" 2>/dev/null || echo "No reference files to copy"
-        fi
-      fi
-    done
-  fi
-done
+# Clean up temporary directories
+rm -rf reference_results_temp mat_scan_results_temp k4geo_main_ref
 
 echo "=== Material histogram generation completed ==="
+echo "=== Consolidated files created: ==="
+echo "  - detector_geometries_ref.root"
+echo "  - detector_geometries_monitored.root"
