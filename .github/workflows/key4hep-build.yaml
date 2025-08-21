@@ -108,5 +108,18 @@ jobs:
         path: |
           histcmp_results/
           detector_geometries_*.root
+          material_scan_errors.md
           mat_scan_results/
           reference_results/
+
+    - name: Check for failed material scans
+      if: always()
+      run: |
+        if [ -f "material_scan_errors.md" ]; then
+          echo "::warning::Material scan failures detected. Check artifacts for details."
+          echo "::group::Failed Material Scans"
+          cat material_scan_errors.md
+          echo "::endgroup::"
+        else
+          echo "✅ All material scans completed successfully"
+        fi
