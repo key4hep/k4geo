@@ -5,9 +5,6 @@
 name: Key4hep build
 on:
   push:
-    branches:
-    - main
-    - implement-histcmp
   pull_request:
   workflow_dispatch:
   schedule:
