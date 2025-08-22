@@ -59,8 +59,9 @@ jobs:
           # Export PYTHONPATH like pre-commit does
           export PYTHONPATH=$VIRTUAL_ENV/lib/python3.$(python3 -c 'import sys; print(f"{sys.version_info[1]}")')/site-packages:$PYTHONPATH
           
-          # Make the script executable
+          # Make the scripts executable
           chmod +x CI/generate_material_scans.sh
+          chmod +x CI/compare_histograms.sh
           
           # Run in TEST and FAST mode for quick CI testing
           ./CI/generate_material_scans.sh --test --fast --quiet
