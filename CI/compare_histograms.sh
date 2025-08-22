@@ -48,11 +48,11 @@ function run_histcmp() {
     mkdir -p "$outdir/html/$plots_path"
 
     run histcmp $a $b \
-        --label-reference=reference \
-        --label-monitored=monitored \
+        --label-reference=k4geo-master \
+        --label-monitored=local-branch \
         --title="$title" \
         -o $outdir/html/$html_path \
-        -p $outdir/html/$plots_path \
+        -p $outdir/$plots_path \
         "$@"
 
     this_ec=$?
@@ -71,6 +71,6 @@ run_histcmp \
     $newpath \
     $refpath \
     "Test comparison" \
-    performance_trackfitting.html \
-    performance_trackfitting_plots \
+    detector_compaisons.html \
+    detector_comparison_plots \
     --config CI/config/test_config.yml

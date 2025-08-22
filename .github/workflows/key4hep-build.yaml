@@ -78,11 +78,10 @@ jobs:
           if [ -f "detector_geometries_ref.root" ] && [ -f "detector_geometries_monitored.root" ]; then
             echo "Running single histcmp comparison on consolidated files..."
             
-            histcmp detector_geometries_ref.root detector_geometries_monitored.root \
-              --title "Material Budget Comparison: All Detector Geometries" \
-              --output "histcmp_results/detector_geometries_comparison" \
-              --format png \
-              || echo "Histcmp comparison failed"
+            CI/compare_histograms.sh \
+              detector_geometries_ref.root \
+              detector_geometries_monitored.root \
+              "Detector Geometries Comparison"
               
             echo "=== Histcmp comparison completed ==="
             
