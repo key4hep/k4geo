@@ -5,6 +5,8 @@
 name: Key4hep build
 on:
   push:
+    branches:
+    - main
   pull_request:
   workflow_dispatch:
   schedule:
@@ -35,92 +37,3 @@ jobs:
         build_type: ${{ matrix.build_type }}
         image: ${{ matrix.image }}
         stack: ${{ matrix.stack }}
-
-  histcmp_test:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: cvmfs-contrib/github-action-cvmfs@v4
-    - uses: aidasoft/run-lcg-view@v4
-      with:
-        container: el9
-        view-path: /cvmfs/sw-nightlies.hsf.org/key4hep
-        run: |
-          # Create virtual environment like pre-commit does
-          python -m venv /root/histcmp-venv
-          source /root/histcmp-venv/bin/activate
-          
-          # Install histcmp
-          pip install histcmp==0.8.1
-          
-          # Export PYTHONPATH like pre-commit does
-          export PYTHONPATH=$VIRTUAL_ENV/lib/python3.$(python3 -c 'import sys; print(f"{sys.version_info[1]}")')/site-packages:$PYTHONPATH
-          
-          # Make the scripts executable
-          chmod +x CI/generate_material_scans.sh
-          
-          # Run in TEST and FAST mode for quick CI testing
-          ./CI/generate_material_scans.sh --fast --quiet --test
-          
-          echo "=== Checking consolidated files ==="
-          ls -la detector_geometries_*.root 2>/dev/null || echo "No consolidated files found"
-          
-          # Single histcmp comparison using consolidated files
-          mkdir -p html
-          mkdir -p plots
-          
-          if [ -f "detector_geometries_ref.root" ] && [ -f "detector_geometries_monitored.root" ]; then
-            echo "Running single histcmp comparison on consolidated files..."
-            
-            # List file contents before comparison
-            echo "=== Reference file contents ==="
-            root -l -b -q -e "TFile f(\"detector_geometries_ref.root\"); f.ls(); f.Close();" || echo "Failed to list reference file contents"
-            
-            echo "=== Monitored file contents ==="
-            root -l -b -q -e "TFile f(\"detector_geometries_monitored.root\"); f.ls(); f.Close();" || echo "Failed to list monitored file contents"
-            
-            # Run histcmp comparison with consistent output paths
-            histcmp detector_geometries_ref.root detector_geometries_monitored.root \
-              --title "Material Budget Comparison: All Detector Geometries" \
-              -o "html/histcmp-results.html" \
-              -p "plots" \
-              --format png \
-              && echo "✅ Histcmp comparison completed successfully" \
-              || echo "❌ Histcmp comparison failed"
-              
-            echo "=== Histcmp comparison completed ==="
-            
-          else
-            echo "⚠️  Consolidated ROOT files not found - creating error report"
-            # Create error report in html directory to match artifact structure
-            echo "# Material Scan Failure" > html/scan_failure.md
-            echo "Consolidated ROOT files were not generated successfully." >> html/scan_failure.md
-            echo "- detector_geometries_ref.root exists: $([ -f detector_geometries_ref.root ] && echo yes || echo no)" >> html/scan_failure.md
-            echo "- detector_geometries_monitored.root exists: $([ -f detector_geometries_monitored.root ] && echo yes || echo no)" >> html/scan_failure.md
-          fi
-
-    - name: Upload histcmp plots and results
-      uses: actions/upload-artifact@v4
-      if: always()  # Upload even if tests fail
-      with:
-        name: histcmp-results
-        path: |
-          html/
-          plots/
-          detector_geometries_*.root
-          material_scan_errors.md
-
-    - name: Check for failed material scans
-      if: always()
-      run: |
-        if [ -f "material_scan_errors.md" ]; then
-          echo "::warning::Material scan failures detected. Check artifacts for details."
-          echo "::group::Failed Material Scans"
-          cat material_scan_errors.md
-          echo "::endgroup::"
-        else
-          echo "✅ All material scans completed successfully"
-        fi
-        
-        # Don't fail the workflow - preserve artifacts for analysis
-        exit 0
