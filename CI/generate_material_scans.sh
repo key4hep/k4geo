@@ -59,24 +59,24 @@ read_geometry_list() {
     local config_file="$1"
     
     if [ ! -f "$config_file" ]; then
-        echo "ERROR: Geometry configuration file not found: $config_file"
+        echo "ERROR: Geometry configuration file not found: $config_file" >&2
         exit 1
     fi
     
-    echo "Reading geometry list from: $config_file"
+    echo "Reading geometry list from: $config_file" >&2
     
     # Extract geometry paths from YAML (simple parsing)
     # This extracts lines that start with "  - " and removes the prefix
     local geometries=($(grep "^  - " "$config_file" | grep -v "^  - #" | sed 's/^  - //'))
     
     if [ ${#geometries[@]} -eq 0 ]; then
-        echo "ERROR: No geometries found in config file: $config_file"
+        echo "ERROR: No geometries found in config file: $config_file" >&2
         exit 1
     fi
     
-    echo "Found ${#geometries[@]} geometries in config:"
+    echo "Found ${#geometries[@]} geometries in config:" >&2
     for geom in "${geometries[@]}"; do
-        echo "  - $geom"
+        echo "  - $geom" >&2
     done
     
     echo "${geometries[@]}"
@@ -190,7 +190,7 @@ process_geometries() {
     
     # Check if the XML file exists
     if [ -f "$xml_file" ]; then
-    
+
         total_processed=$((total_processed + 1))
 
         if [ "$QUIET_MODE" = true ]; then
