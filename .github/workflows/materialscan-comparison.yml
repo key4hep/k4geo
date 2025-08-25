@@ -3,6 +3,12 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+    inputs:
+      geometry_config:
+        description: 'Geometry configuration file'
+        required: false
+        default: 'CI/config/geometry_list.yml'
+        type: string
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -10,7 +16,7 @@ concurrency:
 
 jobs:
   histcmp_test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04  # Fixed Ubuntu version for CVMFS compatibility
     steps:
     - uses: actions/checkout@v4
     - uses: cvmfs-contrib/github-action-cvmfs@v4
@@ -32,8 +38,11 @@ jobs:
           # Make the scripts executable
           chmod +x CI/generate_material_scans.sh
           
-          # Run in TEST and FAST mode for quick CI testing
-          ./CI/generate_material_scans.sh --fast --quiet --test
+          # Set geometry config based on workflow input or default
+          GEOMETRY_CONFIG="${{ github.event.inputs.geometry_config || 'CI/config/geometry_list.yml' }}"
+          
+          # Run with specified geometry configuration (no --test needed)
+          ./CI/generate_material_scans.sh --fast --quiet --config "$GEOMETRY_CONFIG"
           
           echo "=== Checking consolidated files ==="
           ls -la detector_geometries_*.root 2>/dev/null || echo "No consolidated files found"
