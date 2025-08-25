@@ -57,7 +57,7 @@
         <constant name="DetID_HOMAbsorber"          value=" 19"/>
 
         <!-- BPW: Beam Pipe Width -->
-        <constant name="BPWWall"       value="30.0*mm" />
+        <constant name="BPWWall"       value="0.35*mm" />
         <constant name="BPWCool"       value="1.0*mm" />
         <constant name="BeamPipeWidth" value="2.0*BPWWall + BPWCool"/>
 
@@ -157,7 +157,7 @@
         <constant name="ECalPlug_inner_symmetry" value="12"/>
 
         <constant name="HCalBarrel_inner_radius" value="2400*mm"/>
-        <constant name="HCalBarrel_outer_radius" value="4500*mm"/>
+        <constant name="HCalBarrel_outer_radius" value="3566*mm"/>
         <constant name="HCalBarrel_half_length" value="2210*mm"/>
         <constant name="HCalBarrel_symmetry" value="12"/>
 
