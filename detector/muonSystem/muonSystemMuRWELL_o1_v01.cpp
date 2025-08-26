@@ -173,10 +173,11 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
   dd4hep::Volume detectorVolume(name, systemEnvelope, mat);
 
   dd4hep::Position detectorTrans(0., 0., 0.);
-  dd4hep::PlacedVolume detectorPhys = experimentalHall.placeVolume(detectorVolume, dd4hep::Transform3D(dd4hep::RotationZ(shapeAngle_radians), detectorTrans));
+  dd4hep::PlacedVolume detectorPhys = experimentalHall.placeVolume(
+      detectorVolume, dd4hep::Transform3D(dd4hep::RotationZ(shapeAngle_radians), detectorTrans));
   detectorPhys.addPhysVolID("system", xmlDet.id());
   detElement.setPlacement(detectorPhys);
-  detectorVolume.setVisAttributes(lcdd.visAttributes("no_vis")); 
+  detectorVolume.setVisAttributes(lcdd.visAttributes("no_vis"));
 
   // ----------------------------------------------------------------------------------------------------
   // ------------------------------// B A R R E L // ----------------------------------------------------
@@ -239,7 +240,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
     dd4hep::Position detectorLayerTrans(0., 0., 0.);
     dd4hep::PlacedVolume detectorLayerPhys = BarrelVolume.placeVolume(
         BarrelDetectorLayerVolume, dd4hep::Transform3D(dd4hep::RotationZ(0.), detectorLayerTrans));
-    detectorLayerPhys.addPhysVolID("layer", numBarrelLayer + 1);
+    detectorLayerPhys.addPhysVolID("layer", numBarrelLayer);
     dd4hep::DetElement BarrelDetectorLayerDE(
         BarrelDE, name + "-Barrel_DetectorLayerDE_" + std::to_string(numBarrelLayer + 1), numBarrelLayer + 1);
     BarrelDetectorLayerDE.setPlacement(detectorLayerPhys);
@@ -999,9 +1000,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
           dd4hep::Position rectangeEnvelopeTrans(rectangleEnvXPos, rectangleEnvYPos, rectangleEnvZPos);
           dd4hep::PlacedVolume rectangleEnvelopePhys = endcapDetectorSideEnvVol.placeVolume(
               rectangleEnvVol, dd4hep::Transform3D(rotationY, rectangeEnvelopeTrans));
-          dd4hep::DetElement rectangleEnvelopeDE(
-              endcapDetectorSideEnvDE, rectangleEnvelopeName + "DE",
-              rectangle);
+          dd4hep::DetElement rectangleEnvelopeDE(endcapDetectorSideEnvDE, rectangleEnvelopeName + "DE", rectangle);
           rectangleEnvelopeDE.setPlacement(rectangleEnvelopePhys);
           rectangleEnvVol.setVisAttributes(lcdd, xmlDet.visStr());
 
@@ -1248,8 +1247,8 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
       }
     }
   }
-  
-  // ------------------------------------------------------------------------------------------- 
+
+  // -------------------------------------------------------------------------------------------
   return detElement;
 }
 

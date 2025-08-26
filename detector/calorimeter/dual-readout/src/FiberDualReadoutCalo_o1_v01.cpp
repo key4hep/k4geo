@@ -8,6 +8,7 @@
 #include "DD4hep/OpticalSurfaces.h"
 
 #include "DDRec/DetectorData.h"
+#include "XML/Utilities.h"
 
 namespace ddDRcalo {
 static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h xmlElement,
@@ -76,12 +77,12 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h xmlEle
   // rmin, rmax, zmin, zmax, rmin2, rmax2
   // inner r & z are avg values (for track extrapolation)
   // outer r & z are envelope values
-  extensionData->extent[0] = x_barrel.rmin(); // barrel rmin
-  extensionData->extent[1] = x_worldTube.rmax(); // barrel rmax
-  extensionData->extent[2] = x_endcap.rmin(); // endcap zmin
+  extensionData->extent[0] = x_barrel.rmin();      // barrel rmin
+  extensionData->extent[1] = x_worldTube.rmax();   // barrel rmax
+  extensionData->extent[2] = x_endcap.rmin();      // endcap zmin
   extensionData->extent[3] = x_worldTube.height(); // endcap zmax
-  extensionData->extent[4] = x_worldTube.rmin(); // endcap rmin
-  extensionData->extent[5] = x_worldTube.rmax(); // endcap rmax
+  extensionData->extent[4] = x_worldTube.rmin();   // endcap rmin
+  extensionData->extent[5] = x_worldTube.rmax();   // endcap rmax
 
   // TODO separate barrel & endcap
   // type is barrel for the moment
@@ -89,6 +90,9 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h xmlEle
 
   // attach the calo data to the detector
   drDet.addExtension<dd4hep::rec::LayeredCalorimeterData>(extensionData);
+
+  // Set type flags
+  dd4hep::xml::setDetectorTypeFlag(x_det, drDet);
 
   return drDet;
 }

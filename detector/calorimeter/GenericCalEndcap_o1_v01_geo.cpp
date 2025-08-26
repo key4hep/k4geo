@@ -8,6 +8,7 @@
 //
 //====================================================================
 #include "DD4hep/DetFactoryHelper.h"
+#include "DD4hep/Printout.h"
 #include "DDRec/DetectorData.h"
 #include "DDSegmentation/Segmentation.h"
 #include "XML/Layering.h"
@@ -17,6 +18,7 @@ using namespace std;
 
 using dd4hep::_toString;
 using dd4hep::BUILD_ENVELOPE;
+using dd4hep::Cone;
 using dd4hep::Detector;
 using dd4hep::DetElement;
 using dd4hep::Layering;
@@ -39,6 +41,8 @@ using dd4hep::rec::LayeredCalorimeterData;
 #ifndef DD4HEP_VERSION_GE
 #define DD4HEP_VERSION_GE(a, b) 0
 #endif
+
+static constexpr auto LOG_SOURCE = "GenericCalEndcap_o1_v01";
 
 static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens) {
   xml_det_t x_det = e;
@@ -64,6 +68,14 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   double rmax = dim.rmax(); /// FIXME: IS THIS RIGHT?
   double zmin = dim.zmin();
 
+  const bool conicalCutout = [&dim]() {
+    if (dim.hasAttr(_Unicode(conicalCutout))) {
+      return dim.attr<bool>("conicalCutout");
+    }
+    return false;
+  }();
+
+  // rcutout defines the second inner radius if a conical cutout is used
   double rcutout = dim.hasAttr(_U(rmin2)) ? dim.rmin2() : 0.;
   double zcutout = dim.hasAttr(_U(z2)) ? dim.z2() : 0.;
 
@@ -78,14 +90,26 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   double cell_sizeX = cellSizeVector[0];
   double cell_sizeY = cellSizeVector[1];
 
-  PolyhedraRegular polyVolume(nsides_outer, rmin, rmax, totalThickness);
+  PolyhedraRegular polyVolume(nsides_outer, conicalCutout ? 0 : rmin, rmax, totalThickness);
   Volume endcapVol("endcap", polyVolume, air);
 
-  if (zcutout > 0. || rcutout > 0.) {
-    PolyhedraRegular cutoutPolyVolume(nsides_inner, 0, rmin + rcutout, zcutout);
-    Position cutoutPos(0, 0, (zcutout - totalThickness) / 2.0);
-    std::cout << "Cutout z width will be  " << zcutout << std::endl;
-    endcapVol = Volume("endcap", SubtractionSolid(polyVolume, cutoutPolyVolume, cutoutPos), air);
+  if (conicalCutout) {
+    if (rcutout != rmin) {
+      // Make the Cone slightly longer than just the total thickness (==
+      // dividing by exactly 2). This makes it extend slightly outside the
+      // original volume to avoid potential edge effects in the boolean shape
+      // subtraction
+      Cone cutoutPolyVolume(totalThickness / 1.99, 0, rmin, 0, rcutout);
+      dd4hep::printout(dd4hep::INFO, LOG_SOURCE, "Conical cutout with radius %f", rcutout);
+      endcapVol = Volume("endcap", SubtractionSolid(polyVolume, cutoutPolyVolume, Position(0, 0, 0)), air);
+    }
+  } else {
+    if (zcutout > 0. || rcutout > 0.) {
+      PolyhedraRegular cutoutPolyVolume(nsides_inner, 0, rmin + rcutout, zcutout);
+      Position cutoutPos(0, 0, (zcutout - totalThickness) / 2.0);
+      dd4hep::printout(dd4hep::INFO, LOG_SOURCE, "Coutout z width will be %f", zcutout);
+      endcapVol = Volume("endcap", SubtractionSolid(polyVolume, cutoutPolyVolume, cutoutPos), air);
+    }
   }
 
   DetElement endcapA(sdet, "endcap", det_id);
@@ -127,11 +151,16 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     double layer_thick = layering.layer(layer_num)->thickness();
     string layer_type_name = _toString(layerType, "layerType%d");
     int layer_repeat = x_layer.repeat();
-    double layer_rcutout = x_layer.hasAttr(_U(gap)) ? x_layer.gap() : 0;
+    const double layer_rmin = [&]() {
+      if (conicalCutout) {
+        return x_layer.rmin();
+      }
+      return rmin + (x_layer.hasAttr(_U(gap)) ? x_layer.gap() : 0);
+    }();
 
-    std::cout << "Number of layers in group " << layerType << " : " << layer_repeat << std::endl;
+    dd4hep::printout(dd4hep::INFO, LOG_SOURCE, "Number of layers in group %d : %d", layerType, layer_repeat);
 
-    Volume layer_vol(layer_type_name, PolyhedraRegular(nsides_outer, rmin + layer_rcutout, rmax, layer_thick), air);
+    Volume layer_vol(layer_type_name, PolyhedraRegular(nsides_outer, layer_rmin, rmax, layer_thick), air);
 
     int slice_num = 0;
     double sliceZ = -layer_thick / 2;
@@ -150,8 +179,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
       string slice_name = _toString(slice_num, "slice%d");
       double slice_thickness = x_slice.thickness();
       Material slice_material = theDetector.material(x_slice.materialStr());
-      Volume slice_vol(slice_name, PolyhedraRegular(nsides_outer, rmin + layer_rcutout, rmax, slice_thickness),
-                       slice_material);
+      Volume slice_vol(slice_name, PolyhedraRegular(nsides_outer, layer_rmin, rmax, slice_thickness), slice_material);
 
       slice_vol.setVisAttributes(theDetector.visAttributes(x_slice.visStr()));
       sliceZ += slice_thickness / 2;

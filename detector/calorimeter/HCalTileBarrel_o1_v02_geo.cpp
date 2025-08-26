@@ -238,9 +238,9 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   // try to retrieve segmentation itself
   std::string layerFieldName;
   dd4hep::DDSegmentation::FCCSWHCalPhiTheta_k4geo* seg_phitheta =
-    dynamic_cast<dd4hep::DDSegmentation::FCCSWHCalPhiTheta_k4geo*>(segHandle.segmentation());
+      dynamic_cast<dd4hep::DDSegmentation::FCCSWHCalPhiTheta_k4geo*>(segHandle.segmentation());
   dd4hep::DDSegmentation::FCCSWHCalPhiRow_k4geo* seg_phirow =
-    dynamic_cast<dd4hep::DDSegmentation::FCCSWHCalPhiRow_k4geo*>(segHandle.segmentation());
+      dynamic_cast<dd4hep::DDSegmentation::FCCSWHCalPhiRow_k4geo*>(segHandle.segmentation());
   if (seg_phitheta) {
     dd4hep::printout(dd4hep::DEBUG, "HCalTileBarrel_o1_v02", "Segmentation is of type FCCSWHCalPhiTheta_k4geo");
     layerFieldName = seg_phitheta->fieldNameLayer();
@@ -307,8 +307,10 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
     }
     dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "    sensitive thickness is: %lf", thickness_sen);
     dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "    absorber thickness is: %lf", absorberThickness);
-    dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "    number of radiation length is: %lf", nRadiationLengths);
-    dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "    number of interaction length is: %lf", nInteractionLengths);
+    dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "    number of radiation length is: %lf",
+                     nRadiationLengths);
+    dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "    number of interaction length is: %lf",
+                     nInteractionLengths);
 
     caloLayer.distance = layerInnerRadii.at(idxLayer);   // radius of the current layer
     caloLayer.sensitive_thickness = difference_bet_r1r2; // radial dimension of the current layer
@@ -327,11 +329,11 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
       std::vector<double> cellSizeVector = seg_phitheta->cellDimensions(0);
       double cellSizeTheta = cellSizeVector[1];
       double cellSizePhi = cellSizeVector[0];
-      dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "    cell sizes in theta, phi: %lf , %lf", cellSizeTheta, cellSizePhi);
+      dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "    cell sizes in theta, phi: %lf , %lf", cellSizeTheta,
+                       cellSizePhi);
       caloLayer.cellSize0 = cellSizeTheta;
       caloLayer.cellSize1 = cellSizePhi;
-    }
-    else if (seg_phirow) {
+    } else if (seg_phirow) {
       // the merging of the rows into cells can differ layer by layer so need to pass
       // cellID with layer field properly filled in order to get good dimension
       dd4hep::CellID cID;
@@ -339,7 +341,8 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
       std::vector<double> cellSizeVector = seg_phirow->cellDimensions(cID);
       double cellSizeZ = cellSizeVector[1];
       double cellSizePhi = cellSizeVector[0];
-      dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "    cell sizes in z, phi: %lf , %lf", cellSizeZ, cellSizePhi);
+      dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "    cell sizes in z, phi: %lf , %lf", cellSizeZ,
+                       cellSizePhi);
       caloLayer.cellSize0 = cellSizeZ;
       caloLayer.cellSize1 = cellSizePhi;
     }
