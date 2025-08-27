@@ -29,7 +29,8 @@
       </check>
     </detector>
     
-    
+
+    <!-- cylindrical part of central chamber defined via shapes -->
     <detector name="Beampipe_inner" type="DD4hep_Mask_o1_v01" insideTrackingVolume="true" vis="AlBeMet_vis">
       <parameter crossingangle="0" />
       <envelope vis="AlBeMet_vis">
@@ -79,9 +80,9 @@
                rMin1="10.35*mm"  rMin2="10.35*mm"  rMax1="11.35*mm" rMax2="11.35*mm"
                material="LiquidNDecane"  name="ParaffineLayer" />
     </detector>
+    <!-- end of shape based central chamber -->
 
-
-    
+    <!-- vacuum volume causing troubles for now, keep commented
     <detector name="Beam_STL" type="DD4hep_TestShape_Creator">
       <check>
         <shape type="CAD_MultiVolume" ref="${K4GEO}/FCCee/MDI/compact/MDI_o1_v01/stl_files/Pipe_04022025/Beam_nocentral_04022025.stl"
@@ -93,7 +94,8 @@
         </shape>
       </check>
     </detector>
-    
+    -->
+
     <detector name="Paraffin_STL" type="DD4hep_TestShape_Creator">
       <check>
         <shape type="CAD_MultiVolume" ref="${K4GEO}/FCCee/MDI/compact/MDI_o1_v01/stl_files/Pipe_04022025/Paraffine_nocentral_04022025.stl"
