@@ -32,8 +32,8 @@
   </define>
 
   <!-- Import dimensions -->
-  <include ref="DectDimensions_IDEA_o1_v03.xml"/>
   <include ref="../../../MDI/compact/MDI_o1_v00/MDI_Dimensions_Materials_o1_v00.xml" />
+  <include ref="DectDimensions_IDEA_o1_v03.xml"/>
   
   <!-- Import accelerator components -->
   <!-- shape based model of the beam pipe -->
@@ -48,11 +48,13 @@
 
   <include ref="../../../MDI/compact/MDI_o1_v00/LumiCal_o3_v02_05_common.xml"/>
   <include ref="../../../MDI/compact/MDI_o1_v00/HOMAbsorber.xml"/>
+  
   <!-- must use one FFQuads_params_xxx.xml BEFORE FFQuads_v01.xml -->
   <!--<include ref="../../../MDI/compact/MDI_o1_v00/FFQuads_params_v530_Z.xml"/>-->
   <include ref="../../../MDI/compact/MDI_o1_v00/FFQuads_params_v572_Z.xml"/>
   <!-- <include ref="../../../MDI/compact/MDI_o1_v00/FFQuads_params_v572_T.xml"/>-->
   <include ref="../../../MDI/compact/MDI_o1_v00/FFQuads_v01.xml"/>
+
   <include ref="../../../MDI/compact/MDI_o1_v00/fields_antisol_map.xml"/>
   <!--<include ref="../../../MDI/compact/MDI_o1_v00/fields_antisol_ideal.xml"/>-->
   
