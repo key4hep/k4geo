@@ -169,13 +169,20 @@
     <!-- MDI -->
     <constant name="CompSol_min_z" value="1230*mm"/>
 
-    <constant name="LumiCal_max_z" value="1186.5*mm" />
-    <constant name="LumiCal_min_z" value="1074*mm"/>
+    <!-- LumiCal -->
+    <!-- _prime marks the coordinate system along the beamline instead of the detector coordinate frame -->
+    <constant name="LumiCal_min_z_prime" value="1074*mm"/>
+    <constant name="LumiCal_dz_prime" value="0.5 * 25 * 4.5 * mm"/> <!-- Must be consistent with layers defined in the lumiCal xml, half-length-->
+    <constant name="LumiCal_max_z_prime" value="LumiCal_min_z_prime + LumiCal_dz_prime * 2" />
+    <!-- calculate the Z position in the detector reference frame for consistency with existing drivers -->
+    <constant name="LumiCal_min_z" value="LumiCal_min_z_prime*cos(0.5*CrossingAngle)"/>
+    <constant name="LumiCal_max_z" value="LumiCal_max_z_prime*cos(0.5*CrossingAngle)" />
     
-    <constant name="LumiCal_dz" value="(LumiCal_max_z-LumiCal_min_z)/2.0"/>
+    <!-- This has nothing to do with the actual length of the LumiCal, the value is only used for the positioning -->
+    <constant name="LumiCal_dz" value="LumiCal_dz_prime * cos(0.5 * CrossingAngle)"/>
     
     <constant name="LumiCal_inner_radius" value="55.0*mm"/>
-    <constant name="LumiCal_outer_radius" value="112.0*mm- env_safety"/>
+    <constant name="LumiCal_outer_radius" value="115.0*mm- env_safety"/>
     
     <constant name="LumiCal_Instr_thickness" value="20*mm"/>
     <constant name="LumiCal_Instr_inner_radius" value="LumiCal_outer_radius"/>
@@ -187,11 +194,18 @@
     
     <constant name="Lcal_services_rmax" value="LumiCal_outer_radius+30*mm"/>
     <constant name="Lcal_offset_phi" value=" 0."/>
+    
+
+    
     <!--preliminary LumiCal shielding-->
     <!--back shielding-->
     <constant name="LumiCal_Shield_inner_radius" value="LumiCal_inner_radius"/>
     <constant name="LumiCal_Shield_outer_radius" value="LumiCal_outer_radius+LumiCal_Instr_thickness+LumiCal_Cool_thickness"/>
-    <constant name="LumiCal_shield_dz" value="1.75*mm"/> 
+    <!-- For convenience, z here refers to dimensions *along the beam pipe*, which is tilted by CrossingAngle/2 w.r.t the global z axis -->
+    <constant name="LumiCal_shield_dz_prime" value="3.5/2.0*mm"/> <!-- Must be consistent with layers defined in the lumiCal xml (1*3.5 mm)-->
+    <constant name="LumiCal_shield_dz" value="LumiCal_shield_dz_prime  * cos(0.5 * CrossingAngle)"/>
+
+
     <!--nose-->
     <constant name="LumiCal_NoseShield_inner_radius" value="LumiCal_inner_radius-5*mm"/>
     <constant name="LumiCal_NoseShield_outer_radius" value="LumiCal_inner_radius+10*mm"/>
