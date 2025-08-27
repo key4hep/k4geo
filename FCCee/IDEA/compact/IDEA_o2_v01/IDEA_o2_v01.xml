@@ -29,20 +29,32 @@
   </define>
 
   <!-- Import dimensions -->
+  <include ref="../../../MDI/compact/MDI_o1_v00/MDI_Dimensions_Materials_o1_v00.xml" />
   <include ref="DectDimensions_IDEA_o2_v01.xml"/>
 
   <!-- Import accelerator components -->
   <!-- shape based model of the beam pipe -->
   <include ref="../../../MDI/compact/MDI_o1_v00/Beampipe_o4_v05.xml" />
   <include ref="../../../MDI/compact/MDI_o1_v00/BeamInstrumentation_o1_v01.xml" />
+  <include ref="../../../MDI/compact/MDI_o1_v00/HOMAbsorber.xml"/>
   
   <!-- engineered CAD model of the beam pipe -->
   <!-- In order to use the CAD beampipe, build k4geo with the following CMake option: 
   cmake -D INSTALL_BEAMPIPE_STL_FILES=ON which will download the files needed -->
   <!-- <include ref="../../../MDI/compact/MDI_o1_v01/Beampipe_CADimport_o1_v02.xml" /> -->
   <!-- <include ref="../../../MDI/compact/MDI_o1_v01/BeamInstrumentation_o1_v01.xml"/> -->
-  <include ref="../IDEA_o1_v03/LumiCal_o1_v01.xml"/>
 
+  <!-- must use one FFQuads_params_xxx.xml BEFORE FFQuads_v01.xml -->
+  <!--<include ref="../../../MDI/compact/MDI_o1_v00/FFQuads_params_v530_Z.xml"/>-->
+  <include ref="../../../MDI/compact/MDI_o1_v00/FFQuads_params_v572_Z.xml"/>
+  <!-- <include ref="../../../MDI/compact/MDI_o1_v00/FFQuads_params_v572_T.xml"/>-->
+  <include ref="../../../MDI/compact/MDI_o1_v00/FFQuads_v01.xml"/>
+
+  <include ref="../../../MDI/compact/MDI_o1_v00/fields_antisol_map.xml"/>
+  <!--<include ref="../../../MDI/compact/MDI_o1_v00/fields_antisol_ideal.xml"/>-->
+
+  <include ref="../../../MDI/compact/MDI_o1_v00/LumiCal_o3_v02_05_common.xml"/>
+  
   <!-- Import vertex -->
   <include ref="../IDEA_o1_v03/VertexComplete_IDEA_o1_v03.xml"/>
 
@@ -75,6 +87,8 @@
     <plugin name="InstallSurfaceManager"/>
   </plugins>
 
+  
+
   <fields>
     <!-- FIXME The magnetic field should be a map derived from FEM tools including all field sources, the return yoke geometry, etc -->
     <!-- Currently the outer field value is kind of arbitrary and it will also impregnate the calorimeter volume while the field there is very small -->
@@ -83,22 +97,6 @@
            outer_field="-1.7*tesla"
            zmax="Solenoid_Coil_half_length"
            outer_radius="Solenoid_Coil_radius">
-    </field>
-
-    <field name="CompensatingSolenoidZplus" type="solenoid"
-           inner_field="-SolenoidField -SolenoidField * QD0_min_z / ( QD0_min_z - CompSol_min_z)"
-           outer_field="0*tesla"
-           zmax="QD0_min_z"
-           zmin="CompSol_min_z"
-           outer_radius="20*cm">
-    </field>
-
-    <field name="CompensatingSolenoidZminus" type="solenoid"
-           inner_field="-SolenoidField -SolenoidField * QD0_min_z / ( QD0_min_z - CompSol_min_z)"
-           outer_field="0*tesla"
-           zmin="-QD0_min_z"
-           zmax="-CompSol_min_z"
-           outer_radius="20*cm">
     </field>
   </fields>
 
