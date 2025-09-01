@@ -33,7 +33,8 @@ namespace DDSegmentation {
 
     /**  Determine the local position based on the cell ID.
      *   @param[in] aCellId ID of a cell.
-     *   return Position (relative to R, phi of Geant4 volume it belongs to, scaled for R=1).
+     *   The position is in the local coordinate system of the associated
+     *   dd4hep volume.
      */
     virtual Vector3D position(const CellID& aCellID) const;
     /**  Determine the cell ID based on the position.
