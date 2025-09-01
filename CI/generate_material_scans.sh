@@ -1,5 +1,15 @@
 #!/bin/bash
 
+
+# REMEMBER TO FIX MAIN BRANCH LOCATION BEFOR PR WITH MAIN!!!!!
+# DONT
+# FORGET
+# THIS
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# LALALALALALAAAA DONT FORGET THIS!!!!!!!!!!!!!!
+# PS If I do forget this and you're reading this on the PR, please let me know
+
+
 set -e  # Exit on any error
 
 # Default values
