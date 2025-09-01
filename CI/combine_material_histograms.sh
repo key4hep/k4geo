@@ -251,7 +251,6 @@ case $MODE in
         fi
 
         echo "Using input directory: $INPUT_DIR"
-        ls -la "$INPUT_DIR" || echo "No files found in input directory"
         echo "Using output directory: $OUTPUT_DIR"
 
         # Function to process a ROOT file and create combined histogram
@@ -259,9 +258,6 @@ case $MODE in
             local input_file="$1"
             local output_file="$2"
             local hist_title="$3"
-            
-            # echo "Input file directory: $(dirname "$input_file")"
-            # ls -la "$(dirname "$input_file")"
 
             if [ ! -f "$input_file" ]; then
                 echo "Warning: $input_file not found, skipping..."
