@@ -123,7 +123,7 @@ namespace DDSegmentation {
 
     /**  Get the vector of cell indexes in a given layer.
      */
-    inline std::vector<int> cellIndexes(const uint layer) const {
+    inline const std::vector<int>& cellIndexes(const uint layer) const {
       const LayerInfo& li = getLayerInfo(layer);
       return li.cellIndexes;
     }
@@ -310,8 +310,24 @@ namespace DDSegmentation {
       /// cell indexes in each layer
       std::vector<int> cellIndexes{};
 
-      /// z-min and z-max of each cell in each layer
-      std::unordered_map<int, std::pair<double, double>> cellEdges{};
+      /// z-min and z-max of each cell in the layer
+      // For the endcap, we only store the positive half.
+      std::vector<std::pair<double, double>> m_cellEdges{};
+      int m_ibin = 0; // Index of first bin in m_cellEdges.
+
+      /// Return z-min and z-max for cell with row index idx.
+      std::pair<double, double> cellEdges(int idx) const {
+        if (idx > 0) {
+          if (idx < m_ibin)
+            throw std::out_of_range("cellEdges");
+          return m_cellEdges[idx - m_ibin];
+        } else {
+          if (-idx < m_ibin)
+            throw std::out_of_range("cellEdges");
+          const auto& e = m_cellEdges[-idx - m_ibin];
+          return std::make_pair(e.second, e.first);
+        }
+      }
     };
 
     // The vector of tabulated values, indexed by layer number.

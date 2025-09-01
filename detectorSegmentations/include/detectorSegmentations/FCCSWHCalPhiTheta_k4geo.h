@@ -101,7 +101,7 @@ namespace DDSegmentation {
 
     /**  Get the vector of theta bins (cells) in a given layer.
      */
-    inline std::vector<int> thetaBins(const uint layer) const {
+    inline const std::vector<int>& thetaBins(const uint layer) const {
       const LayerInfo& li = getLayerInfo(layer);
       return li.thetaBins;
     }
@@ -265,8 +265,42 @@ namespace DDSegmentation {
       /// theta bins (cells) in the layer
       std::vector<int> thetaBins{};
 
-      /// z-min and z-max of each cell (theta bin) in each layer
-      std::unordered_map<int, std::pair<double, double>> cellEdges{};
+      /// Information about each theta bin in the layer: z-min and z-max
+      // For the barrel, we store this in the m_cellInfo1 vector;
+      // the first entry of the vector corresponds to bin number m_ibin1.
+      // For the endcap, we have two disjoint bin ranges, corresponding
+      // to the positive and negative endcaps.  In that case, the two
+      // ranges are stored in m_cellInfo1 and m_cellInfo2; m_ibin1
+      // gives the bin number of the first entry of m_cellInfo1 and
+      // m_ibin2 gives the bin number of the first entry of m_cellInfo2.
+      // To access the information, use the cellInfo() functions,
+      // which handle the lookup by bin number, throwing std::out_of_range
+      // for a nonexistent bin.
+      using Edges = std::pair<double, double>;
+      int m_ibin1 = 0;
+      int m_ibin2 = 9999999;
+
+      struct CellInfo {
+        CellInfo(double lo, double hi) : edges(lo, hi) {}
+        Edges edges{0, 0};
+      };
+      std::vector<CellInfo> m_cellInfo1{};
+      std::vector<CellInfo> m_cellInfo2{};
+
+      const CellInfo& cellInfo(int ibin) const {
+        if (ibin < m_ibin1)
+          throw std::out_of_range("cellInfo");
+        if (ibin < m_ibin2)
+          return m_cellInfo1.at(ibin - m_ibin1);
+        return m_cellInfo2.at(ibin - m_ibin2);
+      }
+      CellInfo& cellInfo(int ibin) {
+        if (ibin < m_ibin1)
+          throw std::out_of_range("cellInfo");
+        if (ibin < m_ibin2)
+          return m_cellInfo1.at(ibin - m_ibin1);
+        return m_cellInfo2.at(ibin - m_ibin2);
+      }
     };
 
     // The vector of tabulated values, indexed by layer number.
@@ -279,7 +313,6 @@ namespace DDSegmentation {
     const LayerInfo& getLayerInfo(const unsigned layer) const;
 
     /**  Construct the derived geometrical information.
-     *xxx
      * Calculate layer radii and edges in z-axis, then define cell edges in each layer using defineCellEdges().
      *    Following member variables are calculated:
      *      radius
