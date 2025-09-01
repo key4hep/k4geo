@@ -409,7 +409,11 @@ void Geant4Output2EDM4hep_DRC::saveParticles(Geant4ParticleMap* particles) {
       if (mcp.isCreatedInSimulation())
         mcp.setGeneratorStatus(0);
 
+#ifdef EDM4HEP_MCPARTICLE_HAS_HELICITY
+      mcp.setHelicity(p->spin[2]);
+#else
       mcp.setSpin(p->spin);
+#endif
 
       p_ids[id] = cnt++;
       p_part.push_back(p);
@@ -535,7 +539,7 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
     // Create the hit container even if there are no entries!
     auto& hits = m_trackerHits[colName];
     for (unsigned i = 0; i < nhits; ++i) {
-      auto sth = hits->create();
+      auto sth = hits.create();
       const Geant4Tracker::Hit* hit = coll->hit(i);
       const Geant4Tracker::Hit::Contribution& t = hit->truth;
       int trackID = pm->particleID(t.trackID);
@@ -569,7 +573,7 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
     // Create the hit container even if there are no entries!
     auto& hits = m_calorimeterHits[colName];
     for (unsigned i = 0; i < nhits; ++i) {
-      auto sch = hits.first->create();
+      auto sch = hits.first.create();
       const Geant4Calorimeter::Hit* hit = coll->hit(i);
       const auto& pos = hit->position;
       sch.setCellID(hit->cellID);
@@ -579,7 +583,7 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
       // now add the individual step contributions
       for (auto ci = hit->truth.begin(); ci != hit->truth.end(); ++ci) {
 
-        auto sCaloHitCont = hits.second->create();
+        auto sCaloHitCont = hits.second.create();
         sch.addToContributions(sCaloHitCont);
 
         const Geant4HitData::Contribution& c = *ci;
@@ -606,9 +610,9 @@ void Geant4Output2EDM4hep_DRC::saveCollection(OutputContext<G4Event>& /*ctxt*/, 
       const Geant4DRCalorimeter::Hit* hit = coll->hit(i);
 
       // For DRC calo hit & time series
-      auto simCaloHits = DRhits.first->create();
-      auto rawTimeStruct = DRhits.second->create();
-      auto rawWaveStruct = DRwaves->create();
+      auto simCaloHits = DRhits.first.create();
+      auto rawTimeStruct = DRhits.second.create();
+      auto rawWaveStruct = DRwaves.create();
 
       float samplingT = hit->GetSamplingTime();
       float timeStart = hit->GetTimeStart();

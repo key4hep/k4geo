@@ -128,7 +128,7 @@
       <!--  superlayer: from 0 to 13                  -->
       <!--  layer: from 0 to 7 (within a superlayer)  -->
       <!--  nphi: max of nphi will be 816 (192+13*48) -->
-      <id>system:5,superlayer:5,layer:4,nphi:11,stereosign:-1</id>
+      <id>system:5,superlayer:5,layer:4,nphi:11,stereosign:-2</id>
     </readout>
   </readouts>
 
