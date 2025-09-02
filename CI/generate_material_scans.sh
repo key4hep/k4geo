@@ -378,15 +378,76 @@ process_geometries() {
   echo "=========================="
 }
 
+# Function to detect the comparison target
+detect_comparison_target() {
+    local target_branch=""
+    local target_repo=""
+    
+    echo "=== Detecting comparison target ==="
+    
+    # Method 1: GitHub Actions environment (most reliable)
+    if [ -n "$GITHUB_BASE_REF" ] && [ -n "$GITHUB_REPOSITORY" ]; then
+        target_branch="$GITHUB_BASE_REF"
+        target_repo="https://github.com/${GITHUB_REPOSITORY}.git"
+        echo "✅ Detected from GitHub Actions:"
+        echo "   Branch: $target_branch"
+        echo "   Repository: $target_repo"
+    
+    # Method 2: Git commands (fallback)
+    elif git rev-parse --verify HEAD >/dev/null 2>&1; then
+        # Get the default branch
+        target_branch=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@')
+        target_repo=$(git remote get-url origin 2>/dev/null)
+        
+        if [ -z "$target_branch" ]; then
+            target_branch="main"
+        fi
+        
+        if [ -z "$target_repo" ]; then
+            target_repo="https://github.com/key4hep/k4geo.git"
+        fi
+        
+        echo "✅ Detected from git:"
+        echo "   Branch: $target_branch"
+        echo "   Repository: $target_repo"
+    
+    # Method 3: Defaults
+    else
+        target_branch="main"
+        target_repo="https://github.com/key4hep/k4geo.git"
+        echo "⚠️  Using defaults:"
+        echo "   Branch: $target_branch"
+        echo "   Repository: $target_repo"
+    fi
+    
+    # Export for use in main script
+    TARGET_BRANCH="$target_branch"
+    TARGET_REPO="$target_repo"
+}
+
+# Call the detection function
+detect_comparison_target
+
 # Main execution
 echo "=== Starting material histogram generation ==="
 
 # Clone the main branch for reference data generation
-echo "=== Cloning main branch for reference data ==="
+echo "=== Cloning comparison target ==="
+echo "Repository: $TARGET_REPO"
+echo "Branch: $TARGET_BRANCH"
+
 if [ "$QUIET_MODE" = true ]; then
-  git clone --branch implement-histcmp --depth 1 https://github.com/fredrikshaw/k4geo.git k4geo_main_ref > /dev/null 2>&1
+  git clone --branch "$TARGET_BRANCH" --depth 1 "$TARGET_REPO" k4geo_main_ref > /dev/null 2>&1 || {
+    echo "❌ Failed to clone $TARGET_BRANCH from $TARGET_REPO"
+    echo "   Falling back to main branch..."
+    git clone --branch main --depth 1 "https://github.com/key4hep/k4geo.git" k4geo_main_ref > /dev/null 2>&1
+  }
 else
-  git clone --branch implement-histcmp --depth 1 https://github.com/fredrikshaw/k4geo.git k4geo_main_ref # THIS NEEDS TO BE CHANGED TO THE REAL MAIN BRANCH ON K4GEO BEFORE MERGE!!!!!!!
+  git clone --branch "$TARGET_BRANCH" --depth 1 "$TARGET_REPO" k4geo_main_ref || {
+    echo "❌ Failed to clone $TARGET_BRANCH from $TARGET_REPO"
+    echo "   Falling back to main branch..."
+    git clone --branch main --depth 1 "https://github.com/key4hep/k4geo.git" k4geo_main_ref
+  }
 fi
 
 # Generate reference histograms directly into consolidated file
