@@ -66,7 +66,69 @@ jobs:
           # Make scripts executable
           chmod +x CI/generate_material_scans.sh
           
-          # Run material scans with explicit environment variables
+          # Determine which geometries to scan based on trigger type
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "=== PR Mode: Detecting changed geometries ==="
+            
+            # Get changed files between base and head
+            BASE_SHA="${{ github.event.pull_request.base.sha }}"
+            HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+            
+            echo "Comparing changes from $BASE_SHA to $HEAD_SHA"
+            
+            # Get all changed files
+            git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
+            CHANGED_FILES=$(git diff --name-only $BASE_SHA..$HEAD_SHA)
+            
+            echo "=== Changed files in this PR ==="
+            echo "$CHANGED_FILES"
+            
+            # Extract changed geometries
+            CHANGED_GEOMETRIES=""
+            while IFS= read -r file; do
+              # Match pattern: FCCee/{detector}/compact/{version}/...
+              if [[ "$file" =~ ^FCCee/([^/]+)/compact/([^/]+)/ ]]; then
+                DETECTOR="${BASH_REMATCH[1]}"
+                VERSION="${BASH_REMATCH[2]}"
+                GEOMETRY_PATH="$DETECTOR/$VERSION"
+                
+                # Add to list if not already present
+                if [[ ! "$CHANGED_GEOMETRIES" =~ $GEOMETRY_PATH ]]; then
+                  CHANGED_GEOMETRIES="$CHANGED_GEOMETRIES$GEOMETRY_PATH"$'\n'
+                  echo "  → Detected changed geometry: $GEOMETRY_PATH"
+                fi
+              fi
+            done <<< "$CHANGED_FILES"
+            
+            # Remove empty lines and create config
+            CHANGED_GEOMETRIES=$(echo "$CHANGED_GEOMETRIES" | grep -v '^$' | sort -u)
+            
+            if [ -n "$CHANGED_GEOMETRIES" ]; then
+              echo "=== Creating dynamic geometry config ==="
+              echo "geometries:" > /tmp/pr_geometries.yml
+              echo "$CHANGED_GEOMETRIES" | while read -r geometry; do
+                if [ -n "$geometry" ]; then
+                  echo "  - $geometry" >> /tmp/pr_geometries.yml
+                fi
+              done
+              
+              GEOMETRY_CONFIG="/tmp/pr_geometries.yml"
+              echo "✅ Will scan $(echo "$CHANGED_GEOMETRIES" | wc -l) changed geometries"
+            else
+              echo "🎯 No geometry changes detected - creating minimal config"
+              echo "geometries: []" > /tmp/pr_geometries.yml
+              GEOMETRY_CONFIG="/tmp/pr_geometries.yml"
+            fi
+            
+            echo "=== Generated PR geometry config ==="
+            cat "$GEOMETRY_CONFIG"
+            
+          else
+            echo "=== Manual Mode: Using default geometry list ==="
+            GEOMETRY_CONFIG="${{ github.event.inputs.geometry_config || 'CI/config/geometry_list.yml' }}"
+          fi
+          
+          # Export environment variables
           export GITHUB_BASE_REF="${{ github.event.pull_request.base.ref || 'main' }}"
           export GITHUB_REPOSITORY="${{ github.repository }}"
           export GITHUB_HEAD_REF="${{ github.event.pull_request.head.ref || github.ref_name }}"
@@ -76,8 +138,8 @@ jobs:
           echo "GITHUB_REPOSITORY: $GITHUB_REPOSITORY"
           echo "GITHUB_HEAD_REF: $GITHUB_HEAD_REF"
           echo "Event name: ${{ github.event_name }}"
+          echo "Geometry config: $GEOMETRY_CONFIG"
           
-          GEOMETRY_CONFIG="${{ github.event.inputs.geometry_config || 'CI/config/geometry_list.yml' }}"
           ./CI/generate_material_scans.sh --fast --quiet --config "$GEOMETRY_CONFIG"
           
           echo "=== Checking consolidated files ==="

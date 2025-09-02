@@ -76,13 +76,7 @@ read_geometry_list() {
     echo "Reading geometry list from: $config_file" >&2
     
     # Extract geometry paths from YAML (simple parsing)
-    # This extracts lines that start with "  - " and removes the prefix
     local geometries=($(grep "^  - " "$config_file" | grep -v "^  - #" | sed 's/^  - //'))
-    
-    if [ ${#geometries[@]} -eq 0 ]; then
-        echo "ERROR: No geometries found in config file: $config_file" >&2
-        exit 1
-    fi
     
     echo "Found ${#geometries[@]} geometries in config:" >&2
     for geom in "${geometries[@]}"; do
@@ -164,6 +158,25 @@ process_geometries() {
   echo "=== Processing geometries from $source_dir directly into $consolidated_file ==="
   echo "Using configuration: $GEOMETRY_CONFIG"
   
+  # Read geometry list from config
+  local geometry_list=($(read_geometry_list "$GEOMETRY_CONFIG"))
+  
+  # Handle empty geometry list
+  if [ ${#geometry_list[@]} -eq 0 ]; then
+    echo "=== No geometries to process ==="
+    echo "Creating minimal consolidated file for empty geometry list..."
+    
+    # Create minimal ROOT file with just headers
+    ./CI/combine_material_histograms.sh --initialize "$consolidated_file"
+    ./CI/combine_material_histograms.sh --finalize "$consolidated_file"
+    
+    echo "✅ Empty consolidated file created: $consolidated_file"
+    return 0
+  fi
+  
+  # Continue with existing processing logic...
+  echo "Processing ${#geometry_list[@]} geometries"
+  
   # Initialize error tracking
   local failed_scans=()
   local total_processed=0
@@ -172,12 +185,6 @@ process_geometries() {
   if [ "$FAST_PARAMS" = true ]; then
     echo "FAST MODE: Using reduced angular resolution"
   fi
-  
-  # Read geometry list from config
-  local geometry_list=($(read_geometry_list "$GEOMETRY_CONFIG"))
-  
-  # Initialize the consolidated ROOT file
-  ./CI/combine_material_histograms.sh --initialize "$consolidated_file"
   
   # Process each geometry from the config list
   for geometry_path in "${geometry_list[@]}"; do
