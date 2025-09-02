@@ -1,8 +1,5 @@
 name: MaterialScan Comparison
 on:
-  push:
-    branches:
-    - main
   pull_request:
   workflow_dispatch:
     inputs:
@@ -69,7 +66,17 @@ jobs:
           # Make scripts executable
           chmod +x CI/generate_material_scans.sh
           
-          # Run material scans
+          # Run material scans with explicit environment variables
+          export GITHUB_BASE_REF="${{ github.event.pull_request.base.ref || 'main' }}"
+          export GITHUB_REPOSITORY="${{ github.repository }}"
+          export GITHUB_HEAD_REF="${{ github.event.pull_request.head.ref || github.ref_name }}"
+          
+          echo "=== Environment Debug ==="
+          echo "GITHUB_BASE_REF: $GITHUB_BASE_REF"
+          echo "GITHUB_REPOSITORY: $GITHUB_REPOSITORY"
+          echo "GITHUB_HEAD_REF: $GITHUB_HEAD_REF"
+          echo "Event name: ${{ github.event_name }}"
+          
           GEOMETRY_CONFIG="${{ github.event.inputs.geometry_config || 'CI/config/geometry_list.yml' }}"
           ./CI/generate_material_scans.sh --fast --quiet --config "$GEOMETRY_CONFIG"
           

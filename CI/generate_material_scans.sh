@@ -384,6 +384,21 @@ detect_comparison_target() {
     local target_repo=""
     
     echo "=== Detecting comparison target ==="
+    echo "DEBUG: Environment variables:"
+    echo "  GITHUB_BASE_REF='$GITHUB_BASE_REF'"
+    echo "  GITHUB_REPOSITORY='$GITHUB_REPOSITORY'"
+    echo "  GITHUB_HEAD_REF='$GITHUB_HEAD_REF'"
+    echo "  PWD='$PWD'"
+    
+    # Check if we're in a git repository
+    if git rev-parse --verify HEAD >/dev/null 2>&1; then
+        echo "DEBUG: Git repository detected"
+        echo "  Current branch: $(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo 'unknown')"
+        echo "  Remote origin: $(git remote get-url origin 2>/dev/null || echo 'unknown')"
+        echo "  Default branch: $(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo 'unknown')"
+    else
+        echo "DEBUG: Not in a git repository"
+    fi
     
     # Method 1: GitHub Actions environment (most reliable)
     if [ -n "$GITHUB_BASE_REF" ] && [ -n "$GITHUB_REPOSITORY" ]; then
@@ -393,17 +408,26 @@ detect_comparison_target() {
         echo "   Branch: $target_branch"
         echo "   Repository: $target_repo"
     
-    # Method 2: Git commands (fallback)
+    # Method 2: Git commands (enhanced fallback)
     elif git rev-parse --verify HEAD >/dev/null 2>&1; then
-        # Get the default branch
-        target_branch=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@')
-        target_repo=$(git remote get-url origin 2>/dev/null)
+        echo "Attempting to determine target branch from git..."
         
-        if [ -z "$target_branch" ]; then
+        # Try to get remote information
+        if git remote get-url origin >/dev/null 2>&1; then
+            target_repo=$(git remote get-url origin)
+            echo "Found remote repository: $target_repo"
+            
+            # Try to fetch remote branch info
+            if git ls-remote --symref origin HEAD >/dev/null 2>&1; then
+                target_branch=$(git ls-remote --symref origin HEAD | head -1 | sed 's/^ref: refs\/heads\///' | cut -f1)
+                echo "Found default branch: $target_branch"
+            else
+                echo "Could not determine default branch, using 'main'"
+                target_branch="main"
+            fi
+        else
+            echo "No git remote found, using defaults"
             target_branch="main"
-        fi
-        
-        if [ -z "$target_repo" ]; then
             target_repo="https://github.com/key4hep/k4geo.git"
         fi
         
@@ -439,14 +463,20 @@ echo "Branch: $TARGET_BRANCH"
 if [ "$QUIET_MODE" = true ]; then
   git clone --branch "$TARGET_BRANCH" --depth 1 "$TARGET_REPO" k4geo_main_ref > /dev/null 2>&1 || {
     echo "❌ Failed to clone $TARGET_BRANCH from $TARGET_REPO"
-    echo "   Falling back to main branch..."
-    git clone --branch main --depth 1 "https://github.com/key4hep/k4geo.git" k4geo_main_ref > /dev/null 2>&1
+    echo "   Falling back to main branch from upstream..."
+    git clone --branch main --depth 1 "https://github.com/key4hep/k4geo.git" k4geo_main_ref > /dev/null 2>&1 || {
+      echo "❌ FATAL: Could not clone any reference branch"
+      exit 1
+    }
   }
 else
   git clone --branch "$TARGET_BRANCH" --depth 1 "$TARGET_REPO" k4geo_main_ref || {
     echo "❌ Failed to clone $TARGET_BRANCH from $TARGET_REPO"
-    echo "   Falling back to main branch..."
-    git clone --branch main --depth 1 "https://github.com/key4hep/k4geo.git" k4geo_main_ref
+    echo "   Falling back to main branch from upstream..."
+    git clone --branch main --depth 1 "https://github.com/key4hep/k4geo.git" k4geo_main_ref || {
+      echo "❌ FATAL: Could not clone any reference branch"
+      exit 1
+    }
   }
 fi
 
