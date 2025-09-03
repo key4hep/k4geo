@@ -271,6 +271,14 @@ namespace DDSegmentation {
       return {cellSize0, cellSize1};
     }
 
+    /// Determine the volume ID containing a cellID.
+    virtual VolumeID volumeID(const CellID& cellID) const override;
+
+    /// Return true if this segmentation can have cells that span multiple
+    /// volumes.  That is, points from multiple distinct volumes may
+    /// be assigned to the same cell.
+    virtual bool cellsSpanVolumes() const override { return true; }
+
   private:
     /// the number of bins in phi
     int m_phiBins;
@@ -302,6 +310,12 @@ namespace DDSegmentation {
     std::vector<int> m_numLayers;
     /// dR of the layer
     std::vector<double> m_dRlayer;
+    /// Offset in z of the center of the sensitive volume within a row
+    /// for even layers.  (sequence_a for barrel, sequence_b for endcap.)
+    double m_evenVolOffset;
+    /// Offset in z of the center of the sensitive volume within a row
+    /// for odd layers.  (sequence_b for barrel, sequence_a for endcap.)
+    double m_oddVolOffset;
 
     /// Initialization common to all ctors.
     void commonSetup();
@@ -318,6 +332,9 @@ namespace DDSegmentation {
 
     // Derived geometrical information about each layer.
     struct LayerInfo {
+      /// Type/section of the layer (only relevant for endcap).
+      unsigned int type = 0;
+
       /// Radius of the layer.
       double radius = 1;
 
@@ -327,6 +344,9 @@ namespace DDSegmentation {
       /// z-min and z-max of the layer
       double zmin = 0;
       double zmax = 0;
+
+      /// z-offset between cell centers and volume centers.
+      double zOffset = 0;
 
       /// cell indexes in each layer
       std::vector<int> cellIndexes{};
