@@ -51,6 +51,7 @@ void ddDRcalo::DRconstructor::construct() {
   // since reflecting intersection/subtraction solid is currently not possible
   // this causes a discontinuity of the neighboring cells at eta=0
   // we handle this explicitly in the segmentation
+  // be aware that it needs to be synchronized with GridDRcalo_k4geo::position()
   if (fX_det.reflect()) {
     auto refl_pos = dd4hep::Transform3D(dd4hep::RotationX(M_PI), dd4hep::Position(0, 0, -(fX_worldTube.height() / 2.)));
     dd4hep::PlacedVolume PlacedAssemblyTubeVol_refl = fExperimentalHall->placeVolume(AssemblyTubeVol, 1, refl_pos);

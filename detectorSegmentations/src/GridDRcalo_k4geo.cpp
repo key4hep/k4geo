@@ -74,6 +74,8 @@ namespace DDSegmentation {
     // retrieve the fiber length
     int row = y(cID);
     int col = x(cID);
+    // retrieving fiber lengths - if the fiber is not within the wing region of the tower
+    // then the method will return the full length
     double fiberLen = paramBase->GetShortFibers(noEta).retrieveFiberLength(row, col);
     // and vector to the front end
     auto diff = paramBase->GetTowerPos(noPhi) - waferPos;
