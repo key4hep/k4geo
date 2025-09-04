@@ -92,7 +92,6 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
   int N_GAMMA_BARREL = std::max(int(2 * M_PI * BARREL_INNER_R / (PHI_SEGMENTS * XTAL_TH_WIDTH)), 1);
   double D_GAMMA_BARREL = D_PHI_GLOBAL / N_GAMMA_BARREL;
 
-
   XYZVector DISP_PROJ_R(-PROJ_OFFSET_R, 0, 0);
   int ENDCAP_THETA_START = 0;
 
@@ -326,7 +325,7 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
   // Gamma - divide a theta slab into square NxN crystal towers in phi
   // Epsilon - index of single crystal in a NxN tower
   // Projective offsets - tilt the rear face of the trapezoids to point at specified offset away from IP
-  /////////////////////////////
+  //////////////////////////////
 
   for (int iPhi = CONSTRUCT_BARREL ? BARREL_PHI_START : BARREL_PHI_END; iPhi < BARREL_PHI_END; iPhi++) {
     double phiGlobal = iPhi * D_PHI_GLOBAL;
@@ -461,7 +460,7 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
                               x0y1r, y1e, x1y1r, -y1e, x1y1l, -y1e, x0y1l, y1e};
         double verticesR[] = {x0y1r, y1e, x1y1r, -y1e, x1y1l, -y1e, x0y1l, y1e,
                               x0y2r, y2e, x1y2r, -y2e, x1y2l, -y2e, x0y2l, y2e};
-	
+
         for (int i = 0; i < XTAL_DIV_F; i++) {
           for (int j = 0; j < XTAL_DIV_F; j++) {
             int nEpsilon = i * XTAL_DIV_F + j;
@@ -479,12 +478,12 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
 
               CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
                   "BarrelCrystalF", XTAL_LEN_F / 2, vFsub, crystalFXML, Transform3D(dispFsub), 
-		  barrelThetaAssemblyVolume, BARREL_SYSTEM_NO, iPhi, N_THETA_ENDCAP + iTheta, nGamma, nEpsilon, 0, 
-		  posGlobal);
+                  barrelThetaAssemblyVolume, BARREL_SYSTEM_NO, iPhi, N_THETA_ENDCAP + iTheta, nGamma, nEpsilon, 0, 
+                  posGlobal);
               numCrystalsBarrel += 1;
             }
           }
-	}
+        }
 
         for (int i = 0; i < XTAL_DIV_R; i++) {
           for (int j = 0; j < XTAL_DIV_R; j++) {
@@ -500,15 +499,14 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
             XYZVector posGlobal = (rotZphiGlobal * (rotYthGlobal * dispGlobal + DISP_PROJ_R));
 
 	    if ((nGamma >= GAMMA_LOAD_START) && (nGamma <= GAMMA_LOAD_END)) {
-
               CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
                   "BarrelCrystalR", XTAL_LEN_R / 2, vRsub, crystalRXML, Transform3D(dispRsub),
-		  barrelThetaAssemblyVolume, BARREL_SYSTEM_NO, iPhi, N_THETA_ENDCAP + iTheta, nGamma, nEpsilon, 1, 
-		  posGlobal);
+                  barrelThetaAssemblyVolume, BARREL_SYSTEM_NO, iPhi, N_THETA_ENDCAP + iTheta, nGamma, nEpsilon, 1, 
+                  posGlobal);
               numCrystalsBarrel += 1;
             }
           }
-	}
+        }
       }
     }
   }

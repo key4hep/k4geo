@@ -1067,16 +1067,16 @@
   </readouts>
 
   <display>
-    <vis name="crystalFVis"  alpha="1"   r="0.0"  g="0.0"  b="1.0"  showDaughters="true"  visible="true"/>
-    <vis name="crystalRVis"  alpha="1"   r="0.0"  g="0.5"  b="1.0"  showDaughters="true"  visible="true"/>
-    <vis name="crystalTVis"  alpha="1"   r="0.0"  g="1.0"  b="0.1"  showDaughters="true"  visible="true"/>
+    <vis name="crystalFVis"  alpha="1"   r="0.0"  g="0.0"  b="1.0"  showDaughters="true"  visible="false"/>
+    <vis name="crystalRVis"  alpha="1"   r="0.0"  g="0.5"  b="1.0"  showDaughters="true"  visible="false"/>
+    <vis name="crystalTVis"  alpha="1"   r="0.0"  g="1.0"  b="0.1"  showDaughters="true"  visible="false"/>
 
-    <vis name="barrelAssemblyGlobalVis"  alpha="0.1" r="1."  g="0."  b="0."  showDaughters="true"  visible="true"/>
+    <vis name="barrelAssemblyGlobalVis"  alpha="0.1" r="1."  g="0."  b="0."  showDaughters="true"  visible="false"/>
     <vis name="barrelAssemblyPhiVis"     alpha="0.1" r="0."  g="1."  b="0."  showDaughters="true"  visible="true"/>
-    <vis name="barrelAssemblyThetaVis"   alpha="0.1" r="0."  g="0."  b="1."  showDaughters="true"  visible="true"/>
+    <vis name="barrelAssemblyThetaVis"   alpha="0.1" r="0."  g="0."  b="1."  showDaughters="true"  visible="false"/>
     
     <vis name="endcapAssemblyGlobalVis"  alpha="0.1" r="1."  g="0."  b="0."  showDaughters="true"  visible="false"/>
-    <vis name="endcapAssemblyPhiVis"     alpha="0.1" r="0."  g="1."  b="0."  showDaughters="true"  visible="false"/>
+    <vis name="endcapAssemblyPhiVis"     alpha="0.1" r="0."  g="1."  b="0."  showDaughters="true"  visible="true"/>
     <vis name="endcapAssemblyThetaVis"   alpha="0.1" r="0."  g="0."  b="1."  showDaughters="true"  visible="false"/>
 
     <vis name="tlbarrelAssemblyGlobalVis"  alpha="0.1" r="1."  g="0."  b="0."  showDaughters="true"  visible="false"/>
@@ -1120,19 +1120,19 @@
               
               projectiveOffsetR="scepcal_projective_offset_r"
               projectiveOffsetX="scepcal_projective_offset_x"
-              
-	      useOpticalSurfaces="false"
 
-	      phi_load_start="scepcal_phi_load_start"
-	      phi_load_end="scepcal_phi_load_end"
-	      theta_load_start="scepcal_barrel_theta_load_start"
-	      theta_load_end="scepcal_barrel_theta_load_end"
-	      gamma_load_start="scepcal_barrel_gamma_load_start"
-	      gamma_load_end="scepcal_barrel_gamma_load_end"
+              useOpticalSurfaces="false"
+
+              phi_load_start="scepcal_phi_load_start"
+              phi_load_end="scepcal_phi_load_end"
+              theta_load_start="scepcal_barrel_theta_load_start"
+              theta_load_end="scepcal_barrel_theta_load_end"
+              gamma_load_start="scepcal_barrel_gamma_load_start"
+              gamma_load_end="scepcal_barrel_gamma_load_end"
               />
 
       <barrel    system="DetID_ECAL_Barrel" construct="true"/>
-      <endcap    system="DetID_ECAL_Endcap" construct="false"/>
+      <endcap    system="DetID_ECAL_Endcap" construct="true"/>
 
       <crystalF  material="PbWO"          vis="crystalFVis"/>
       <crystalR  material="PbWO"          vis="crystalRVis"/>
@@ -1171,10 +1171,10 @@
               projectiveOffsetR="scepcal_projective_offset_r"
               
               useOpticalSurfaces="false"
-	      />
+              />
 
-      <tlbarrel  system="DetID_Timing_Barrel" construct="false"/>
-      <tlendcap  system="DetID_Timing_Endcap" construct="false"/>
+      <tlbarrel  system="DetID_Timing_Barrel" construct="true"/>
+      <tlendcap  system="DetID_Timing_Endcap" construct="true"/>
 
       <crystalT  material="LYSO"          vis="crystalTVis"/>
 
