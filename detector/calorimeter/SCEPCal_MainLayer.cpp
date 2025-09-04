@@ -474,11 +474,11 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
             XYZVector dispGlobal(-center[1], center[0], rGlobal);
             XYZVector posGlobal = (rotZphiGlobal * (rotYthGlobal * dispGlobal + DISP_PROJ_R));
 
-	    if ((nGamma >= GAMMA_LOAD_START) && (nGamma <= GAMMA_LOAD_END)) {
+            if ((nGamma >= GAMMA_LOAD_START) && (nGamma <= GAMMA_LOAD_END)) {
 
               CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
-                  "BarrelCrystalF", XTAL_LEN_F / 2, vFsub, crystalFXML, Transform3D(dispFsub), 
-                  barrelThetaAssemblyVolume, BARREL_SYSTEM_NO, iPhi, N_THETA_ENDCAP + iTheta, nGamma, nEpsilon, 0, 
+                  "BarrelCrystalF", XTAL_LEN_F / 2, vFsub, crystalFXML, Transform3D(dispFsub),
+                  barrelThetaAssemblyVolume, BARREL_SYSTEM_NO, iPhi, N_THETA_ENDCAP + iTheta, nGamma, nEpsilon, 0,
                   posGlobal);
               numCrystalsBarrel += 1;
             }
@@ -498,10 +498,10 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
             XYZVector dispGlobal(-center[1], center[0], rGlobal);
             XYZVector posGlobal = (rotZphiGlobal * (rotYthGlobal * dispGlobal + DISP_PROJ_R));
 
-	    if ((nGamma >= GAMMA_LOAD_START) && (nGamma <= GAMMA_LOAD_END)) {
+            if ((nGamma >= GAMMA_LOAD_START) && (nGamma <= GAMMA_LOAD_END)) {
               CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
                   "BarrelCrystalR", XTAL_LEN_R / 2, vRsub, crystalRXML, Transform3D(dispRsub),
-                  barrelThetaAssemblyVolume, BARREL_SYSTEM_NO, iPhi, N_THETA_ENDCAP + iTheta, nGamma, nEpsilon, 1, 
+                  barrelThetaAssemblyVolume, BARREL_SYSTEM_NO, iPhi, N_THETA_ENDCAP + iTheta, nGamma, nEpsilon, 1,
                   posGlobal);
               numCrystalsBarrel += 1;
             }
