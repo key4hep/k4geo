@@ -255,7 +255,7 @@
     <constant name="DRBTTowerThetaCoverage"  value="1.0*deg"/>      
     <constant name="DRBTTowerPhiCoverage"    value="5.0*deg"  />
     <constant name="DRBTSupportSideThickness" value="1.0*mm" />
-    <constant name="DRBTSupportFrontThickness" value="1.0*mm" />    
+    <constant name="DRBTSupportFrontThickness" value="1.0*mm" />
     <constant name="DRBTSupportBackThickness" value="0.0*cm" />
     <!--Variables to construct only part of the calorimeter-->
     <!-- Base values are: Start = '0*deg', End = '360*deg' -->

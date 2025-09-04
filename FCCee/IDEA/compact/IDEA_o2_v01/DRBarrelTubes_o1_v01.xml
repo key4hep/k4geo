@@ -144,7 +144,7 @@
             1.90745*eV 17.37*m
             1.98375*eV 36.19*m
             2.06640*eV 5.429*m
-	    2.10143*eV 13.00*m
+            2.10143*eV 13.00*m
             2.13766*eV 14.50*m
             2.17516*eV 16.00*m
             2.21400*eV 18.00*m
@@ -255,18 +255,18 @@
 
             <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_BARREL"/>
             <!-- First group is base variables, second is for loading just a section of the calorimeter-->
-	    <dimensions
+            <dimensions
                 inner_radius="DRBTInnerCaloRadius"
                 outer_radius="DRBTOuterCaloRadius"
                 z_length="DRBTInnerCaloHalfLength"
                 deltatheta="DRBTTowerThetaCoverage"
-	        deltaphi="DRBTTowerPhiCoverage"
-	    
-		start_calo_phi = "DRBTStartCaloPhi"
-		end_calo_phi = "DRBTEndCaloPhi"
-		number_tower_start = "DRBTTowerNumberStart"
-		number_tower_end = "DRBTTowerNumberEnd"
-		include_bwd_region = "DRBTIncludeBwdRegion"/>
+                deltaphi="DRBTTowerPhiCoverage"
+
+                start_calo_phi = "DRBTStartCaloPhi"
+                end_calo_phi = "DRBTEndCaloPhi"
+                number_tower_start = "DRBTTowerNumberStart"
+                number_tower_end = "DRBTTowerNumberEnd"
+                include_bwd_region = "DRBTIncludeBwdRegion"/>
 
             <trap>
                 <support material="DRBTBrass" width="DRBTSupportSideThickness" depth="DRBTSupportFrontThickness" z2="DRBTSupportBackThickness" vis="DRBTtrap_vis"/>
