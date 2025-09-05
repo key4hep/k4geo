@@ -63,6 +63,8 @@ namespace DDSegmentation {
     dd4hep::Position localPos = dd4hep::Position(0., 0., 0.);
 
     // get local coordinate
+    // if IsSiPM is false, the local position is (0, 0, 0)
+    // and the function returns the tower's position
     if (IsSiPM(cID))
       localPos = dd4hep::Position(localPosition(cID));
 
@@ -109,6 +111,8 @@ namespace DDSegmentation {
     dd4hep::Position localPos = dd4hep::Position(0., 0., 0.);
 
     // get local coordinate
+    // if IsSiPM is false, the local position is (0, 0, 0)
+    // and the function returns the wafer's position
     if (IsSiPM(cID))
       localPos = dd4hep::Position(localPosition(cID));
 
