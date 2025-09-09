@@ -17,8 +17,8 @@ jobs:
   histcmp_test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - uses: actions/checkout@v5
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
     
     - name: Setup ccache
       uses: hendrikmuhs/ccache-action@v1.2
