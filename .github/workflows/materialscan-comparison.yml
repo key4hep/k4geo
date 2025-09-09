@@ -21,14 +21,12 @@ jobs:
     - uses: cvmfs-contrib/github-action-cvmfs@v5
     
     
-    - uses: aidasoft/run-lcg-view@v4
+    - uses: aidasoft/run-lcg-view@v5
       with:
         container: el9
         view-path: /cvmfs/sw-nightlies.hsf.org/key4hep
+        ccache-key: ccache-materialscan-comparisan
         run: |
-          # Install build tools
-          dnf install -y ccache ninja-build
-          
           # Setup build directory
           mkdir -p build install
           cd build
@@ -39,12 +37,12 @@ jobs:
             -DCMAKE_INSTALL_PREFIX=../install \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
             -DCMAKE_CXX_FLAGS="-Werror -Wno-error=cpp -Wno-error=deprecated-declarations" \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
             -G Ninja \
             -DBUILD_TESTING=OFF \
             -DINSTALL_COMPACT_FILES=OFF
           
-          # Build with ninja (much faster than make)
-          echo "=== Building k4geo with caching ==="
+          echo "::group::Building k4geo with caching"
           time ninja -k0 install
           
           # Setup environment
