@@ -1,15 +1,5 @@
 #!/bin/bash
 
-
-# REMEMBER TO FIX MAIN BRANCH LOCATION BEFOR PR WITH MAIN!!!!!
-# DONT
-# FORGET
-# THIS
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# LALALALALALAAAA DONT FORGET THIS!!!!!!!!!!!!!!
-# PS If I do forget this and you're reading this on the PR, please let me know
-
-
 set -e  # Exit on any error
 
 # Default values
@@ -181,11 +171,6 @@ process_geometries() {
   
   # Process each geometry from the config list
   for geometry_path in "${geometry_list[@]}"; do
-    
-    # Skip comments or empty lines
-    if [[ "$geometry_path" =~ ^#.* ]] || [ -z "$geometry_path" ]; then
-        continue
-    fi
     
     # Parse geometry path (format: GEOMETRY/COMPACT_NAME)
     local geometry_name=$(dirname "$geometry_path")
