@@ -1,0 +1,13 @@
+# Default geometry list for material scan
+
+geometries:
+  # CLD geometries
+  - CLD/CLD_o2_v07
+  
+  # ALLEGRO geometries  
+  - ALLEGRO/ALLEGRO_o1_v03
+  
+  # IDEA geometries
+  - IDEA/IDEA_o1_v03
+  
+  # Add more as needed based on codebase available geometries
