@@ -100,7 +100,6 @@ namespace DDSegmentation {
     struct shortFibers {
     public:
       shortFibers(const double towerH) : fTowerH(towerH) {}
-      ~shortFibers() = default;
 
       void addShortFibers(const int row, const int col, const double len) {
         m_fiberLengths_.insert(std::make_pair(std::make_pair(row, col), len));
