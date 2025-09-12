@@ -1,2 +1,3 @@
-Based on `MuColl_v0` with a fix of the +/- side asymmetry in the Tracker Endcap support structures
-   * Using `TrackerEndcapSupport_o1_v02` instead of `TrackerEndcapSupport_o1_v01` type
+Initial implementation of the **MUon System for Interesting Collision** (MuSIC)
+- obsolete version
+- Compact file: [./MuSIC_v1.xml](./MuSIC_v1.xml)
