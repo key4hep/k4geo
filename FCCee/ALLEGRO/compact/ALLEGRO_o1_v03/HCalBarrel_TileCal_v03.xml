@@ -96,7 +96,7 @@
       <segmentation type="FCCSWHCalPhiRow_k4geo" 
          detLayout="0"
          offset_z="0"
-         width_z="2795.5*2*mm"
+         width_z="2795.5*2*mm-2*BarHCal_end_plate_thickness-2*BarHCal_plate_space"
          offset_r="BarHCal_rmin+BarHCal_face_plate_thickness+BarHCal_plate_space"
          numLayers="4 6 3"
          dRlayer="BarHCal_layer_size1 BarHCal_layer_size2 BarHCal_layer_size3"
