@@ -1098,7 +1098,9 @@
               readout="SCEPCal_Main"
               vis="scepcalAssemblyGlobalVis"
               sensitive="true">
-      <sensitive type="calorimeter"/>
+    <sensitive type="calorimeter"/>
+
+    <!-- SCEPCal main layer dimensions, last block is for partial visualisation -->
 
       <dim    barrelHalfZ="scepcal_barrel_half_z"
               barrelInnerR="scepcal_barrel_inner_r" 
@@ -1118,9 +1120,16 @@
               
               projectiveOffsetR="scepcal_projective_offset_r"
               projectiveOffsetX="scepcal_projective_offset_x"
-              
+
               useOpticalSurfaces="false"
-      />
+
+              phi_load_start="scepcal_phi_load_start"
+              phi_load_end="scepcal_phi_load_end"
+              theta_load_start="scepcal_barrel_theta_load_start"
+              theta_load_end="scepcal_barrel_theta_load_end"
+              gamma_load_start="scepcal_barrel_gamma_load_start"
+              gamma_load_end="scepcal_barrel_gamma_load_end"
+              />
 
       <barrel    system="DetID_ECAL_Barrel" construct="true"/>
       <endcap    system="DetID_ECAL_Endcap" construct="true"/>
@@ -1162,7 +1171,7 @@
               projectiveOffsetR="scepcal_projective_offset_r"
               
               useOpticalSurfaces="false"
-      />
+              />
 
       <tlbarrel  system="DetID_Timing_Barrel" construct="true"/>
       <tlendcap  system="DetID_Timing_Endcap" construct="true"/>
