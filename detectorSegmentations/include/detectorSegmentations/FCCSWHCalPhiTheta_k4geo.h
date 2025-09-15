@@ -52,6 +52,11 @@ namespace DDSegmentation {
      */
     std::vector<uint64_t> neighbours(const CellID& cID, bool aDiagonal) const;
 
+    /**  Find neighbours of the cell.
+     *   Implement the signature from the Segmentation base class.
+     */
+    virtual void neighbours(const CellID& cellID, std::set<CellID>& neighbours) const override;
+
     /**  Calculate layer radii and edges in z-axis, then define cell edges in each layer using defineCellEdges().
      *    Following member variables are calculated:
      *      m_radii
@@ -69,11 +74,6 @@ namespace DDSegmentation {
      *   @param[in] layer index
      */
     void defineCellEdges(const unsigned int layer) const;
-
-    /**  Find neighbours of the cell.
-     *   Implement the signature from the Segmentation base class.
-     */
-    virtual void neighbours(const CellID& cellID, std::set<CellID>& neighbours) const override;
 
     /**  Determine the azimuthal angle of HCal cell based on the cellID.
      *   @param[in] aCellId ID of a cell.
