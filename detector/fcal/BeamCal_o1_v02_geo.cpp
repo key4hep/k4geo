@@ -155,16 +155,13 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector& theDetector, dd4hep::xml:
         dd4hep::Material slice_material = theDetector.material(compSlice.materialStr());
 
         bool isAbsorberStructure(false);
-        try {
+        if (compSlice.hasAttr(_Unicode(layerType))) {
           const std::string& sliceType = compSlice.attr<std::string>(_Unicode(layerType));
           if (sliceType.compare("holeForIncomingBeampipe") == 0) {
             isAbsorberStructure = true;
           } // else {
           //   throw std::runtime_error("Unknown type of slice in BeamCal, use \"absorber\" or nothing");
           // }//Do we want this to fail or not?
-        } catch (std::runtime_error& e) {
-          // std::cout << "Catching " << e.what()  << std::endl;
-          // std::cout << e.what()  << std::endl;
         }
 
         // Check if a separate outer_radius is declared.
