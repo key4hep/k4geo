@@ -178,7 +178,7 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector& theDetector, dd4hep::xml:
         double outerR = bcalOuterR;
         try {
           outerR = compSlice.outer_radius();
-        } catch (std::runtime_error& e) {
+        } catch (std::runtime_error&) {
           // Nothing to catch. Everything is fine.
         }
 
