@@ -4,8 +4,6 @@
 namespace dd4hep {
 namespace DDSegmentation {
 
-  using std::runtime_error;
-
   /// default constructor using an encoding string
   FCCSWHCalPhiRow_k4geo::FCCSWHCalPhiRow_k4geo(const std::string& cellEncoding) : Segmentation(cellEncoding) {
     // define type and description
@@ -586,6 +584,13 @@ namespace DDSegmentation {
     cellNeighbours.push_back(nID);
 
     return cellNeighbours;
+  }
+
+  // Implement the signature from the Segmentations base class.
+  void FCCSWHCalPhiRow_k4geo::neighbours(const CellID& cellID, std::set<CellID>& neighbours) const {
+    std::vector<uint64_t> neigh = this->neighbours(cellID);
+    neighbours.clear();
+    neighbours.insert(neigh.begin(), neigh.end());
   }
 
   /// Determine minimum and maximum polar angle of the cell
