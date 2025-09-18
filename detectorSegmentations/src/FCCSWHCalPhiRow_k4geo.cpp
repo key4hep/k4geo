@@ -4,8 +4,6 @@
 namespace dd4hep {
 namespace DDSegmentation {
 
-  using std::runtime_error;
-
   /// default constructor using an encoding string
   FCCSWHCalPhiRow_k4geo::FCCSWHCalPhiRow_k4geo(const std::string& cellEncoding) : Segmentation(cellEncoding) {
     // define type and description
