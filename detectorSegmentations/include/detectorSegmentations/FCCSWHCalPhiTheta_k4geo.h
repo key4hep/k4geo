@@ -4,6 +4,11 @@
 // FCCSW
 #include "detectorSegmentations/GridTheta_k4geo.h"
 
+#include <array>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
 /** FCCSWHCalPhiTheta_k4geo Detector/detectorSegmentations/detectorSegmentations/FCCSWHCalPhiTheta_k4geo.h
  * FCCSWHCalPhiTheta_k4geo.h
  *
@@ -25,28 +30,25 @@ namespace DDSegmentation {
     /// Default constructor used by derived classes passing an existing decoder
     FCCSWHCalPhiTheta_k4geo(const BitFieldCoder* decoder);
 
-    /// destructor
-    virtual ~FCCSWHCalPhiTheta_k4geo() = default;
-
     /**  Get the postion of the geometric center of the cell based on the cellID
      *   @param[in] aCellID
      *   return the global coordinates of cell center
      */
-    virtual Vector3D position(const CellID& aCellID) const;
+    virtual Vector3D position(const CellID& aCellID) const override;
 
     /**  Assign a cellID based on the global position.
      *  @param[in] aLocalPosition (not used).
      *  @param[in] aGlobalPosition position in the global coordinates.
-     *  @param[in] aVolumeId ID of a volume.
+     *  @param[in] aVolumeID ID of a volume.
      *  return Cell ID.
      */
     virtual CellID cellID(const Vector3D& aLocalPosition, const Vector3D& aGlobalPosition,
-                          const VolumeID& aVolumeID) const;
+                          const VolumeID& aVolumeID) const override;
 
     /**  Find neighbours of the cell.
      *   Definition of neighbours is explained on slide 9:
      * https://indico.cern.ch/event/1475808/contributions/6219554/attachments/2966253/5218774/FCC_FullSim_HCal_slides.pdf
-     *   @param[in] aCellId ID of a cell.
+     *   @param[in] cID ID of a cell.
      *   @param[in] aDiagonal if true, will include neighbours from diagonal positions in the next and previous layers.
      *   return vector of neighbour cellIDs.
      */
@@ -76,7 +78,7 @@ namespace DDSegmentation {
     void defineCellEdges(const unsigned int layer) const;
 
     /**  Determine the azimuthal angle of HCal cell based on the cellID.
-     *   @param[in] aCellId ID of a cell.
+     *   @param[in] aCellID ID of a cell.
      *   return Phi.
      */
     double phi(const CellID& aCellID) const;
@@ -150,7 +152,7 @@ namespace DDSegmentation {
     inline const std::string& fieldNameLayer() const { return m_layerID; }
 
     /**  Determine the minimum and maximum polar angle of HCal cell based on the cellID.
-     *   @param[in] aCellId ID of a cell.
+     *   @param[in] cID ID of a cell.
      *   return Theta.
      */
     std::array<double, 2> cellTheta(const CellID& cID) const;
@@ -161,12 +163,12 @@ namespace DDSegmentation {
     std::vector<std::pair<uint, uint>> getMinMaxLayerId() const;
 
     /**  Set the number of bins in azimuthal angle.
-     *   @param[in] aNumberBins Number of bins in phi.
+     *   @param[in] bins Number of bins in phi.
      */
     inline void setPhiBins(int bins) { m_phiBins = bins; }
 
     /**  Set the coordinate offset in azimuthal angle.
-     *   @param[in] aOffset Offset in phi.
+     *   @param[in] offset Offset in phi.
      */
     inline void setOffsetPhi(double offset) { m_offsetPhi = offset; }
 
@@ -191,17 +193,17 @@ namespace DDSegmentation {
     inline void setOffsetR(std::vector<double> const& offset) { m_offsetR = offset; }
 
     /**  Set the number of layers.
-     *   @param[in] number of layers
+     *   @param[in] num number of layers
      */
     inline void setNumLayers(std::vector<int> const& num) { m_numLayers = num; }
 
     /**  Set the dR of layers.
-     *   @param[in] dR of layers.
+     *   @param[in] dRlayer dR of layers.
      */
     inline void setdRlayer(std::vector<double> const& dRlayer) { m_dRlayer = dRlayer; }
 
     /**  Set the field name used for azimuthal angle.
-     *   @param[in] aFieldName Field name for phi.
+     *   @param[in] fieldName Field name for phi.
      */
     inline void setFieldNamePhi(const std::string& fieldName) { m_phiID = fieldName; }
 
@@ -210,7 +212,9 @@ namespace DDSegmentation {
      *  @param[in] cellID
      *  return a std::vector of size 2 with the cellDimensions of the given cell ID (phi, theta)
      */
-    inline std::vector<double> cellDimensions(const CellID& /* id */) const { return {gridSizePhi(), gridSizeTheta()}; }
+    inline std::vector<double> cellDimensions(const CellID& /* id */) const override {
+      return {gridSizePhi(), gridSizeTheta()};
+    }
 
   protected:
     /// determine the azimuthal angle phi based on the current cell ID
