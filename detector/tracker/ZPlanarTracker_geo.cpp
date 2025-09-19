@@ -70,10 +70,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
   double minZhalf = 1e99;
 
   bool isStripDetector = false;
-  try {
+  if (x_det.hasAttr(_Unicode(isStripDetector))) {
     isStripDetector = x_det.attr<bool>(_Unicode(isStripDetector));
-
-  } catch (const std::runtime_error&) {
   }
 
   //=========  loop over layer elements in xml  ======================================
