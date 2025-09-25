@@ -59,8 +59,8 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   double dzSequence = dimensionsB.dz();
   dd4hep::printout(dd4hep::DEBUG, "HCalTileBarrel_o1_v02", "sequence thickness %.2f", dzSequence);
 
-  // calculate the number of sequences fitting in Z
-  unsigned int numSequencesZ = static_cast<unsigned>((2 * xDimensions.dz() - 2 * dZEndPlate - 2 * space) / dzSequence);
+  // number of sequences fitting in Z
+  unsigned int numSequencesZ = lcdd.constant<unsigned>("BarHCal_numSequencesZ");
 
   // get all 'layer' children of the 'layers' tag
   std::vector<xml_comp_t> Layers;
@@ -203,7 +203,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
     std::vector<dd4hep::PlacedVolume> sq_vector;
 
     for (uint numSeq = 0; numSeq < numSequencesZ; numSeq++) {
-      double zOffset = -dzDetector + (2 * numSeq + 1) * (dzSequence * 0.5);
+      double zOffset = -dzDetector + numSeq * dzSequence + dzSequence / 2 + dZEndPlate + space;
       dd4hep::Position tileSequencePosition(0, 0, zOffset);
       dd4hep::PlacedVolume placedTileSequenceVolume = layerVolume.placeVolume(tileSequenceVolume, tileSequencePosition);
       placedTileSequenceVolume.addPhysVolID("row", numSeq);

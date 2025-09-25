@@ -733,6 +733,13 @@ namespace DDSegmentation {
     return cellNeighbours;
   }
 
+  // Implement the signature from the Segmentations base class.
+  void FCCSWHCalPhiTheta_k4geo::neighbours(const CellID& cellID, std::set<CellID>& neighbours) const {
+    std::vector<uint64_t> neigh = this->neighbours(cellID, false);
+    neighbours.clear();
+    neighbours.insert(neigh.begin(), neigh.end());
+  }
+
   /// Determine minimum and maximum polar angle of the cell
   std::array<double, 2> FCCSWHCalPhiTheta_k4geo::cellTheta(const CellID& cID) const {
     std::array<double, 2> cTheta = {M_PI, M_PI};
