@@ -12,7 +12,7 @@ namespace DDSegmentation {
   void GridTheta_k4geo::commonSetup() {
     // define type and description
     _type = "GridTheta_k4geo";
-    _description = "Etheta segmentation in the global coordinates";
+    _description = "Theta segmentation in the global coordinates";
 
     // register all necessary parameters
     registerParameter("grid_size_theta", "Cell size in Theta", m_gridSizeTheta, 1., SegmentationParameter::LengthUnit);
