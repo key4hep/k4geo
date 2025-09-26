@@ -29,7 +29,7 @@ namespace DDSegmentation {
      *   @param[in] aCellId ID of a cell.
      *   return Position (radius = 1).
      */
-    virtual Vector3D position(const CellID& aCellID) const;
+    virtual Vector3D position(const CellID& aCellID) const override;
     /**  Determine the cell ID based on the position.
      *   @param[in] aLocalPosition (not used).
      *   @param[in] aGlobalPosition position in the global coordinates.
@@ -37,12 +37,12 @@ namespace DDSegmentation {
      *   return Cell ID.
      */
     virtual CellID cellID(const Vector3D& aLocalPosition, const Vector3D& aGlobalPosition,
-                          const VolumeID& aVolumeID) const;
+                          const VolumeID& aVolumeID) const override;
     /**  Determine the theta angle based on the cell ID.
      *   @param[in] aCellId ID of a cell.
      *   return Pseudorapidity.
      */
-    double theta(const CellID& aCellID) const;
+    double theta(const CellID aCellID) const;
     /**  Get the grid size in theta angle.
      *   return Grid size in theta.
      */
@@ -81,21 +81,25 @@ namespace DDSegmentation {
     /// calculates the azimuthal angle phi from Cartesian coordinates
     inline double phiFromXYZ(const Vector3D& aposition) const { return std::atan2(aposition.Y, aposition.X); }
     /// from SegmentationUtil
+
     /// to be removed once SegmentationUtil can be included w/o linker error
     /// calculates the radius in the xy-plane from Cartesian coordinates
     inline double radiusFromXYZ(const Vector3D& aposition) const {
       return std::sqrt(aposition.X * aposition.X + aposition.Y * aposition.Y);
     }
 
-  protected:
-    /// determine the theta angle based on the current cell ID
-    double theta() const;
+  private:
     /// the grid size in theta
     double m_gridSizeTheta;
     /// the coordinate offset in theta
     double m_offsetTheta;
     /// the field name used for theta
     std::string m_thetaID;
+
+    /// Initialization common to all ctors.
+    void commonSetup();
+    /// the field index used for theta
+    int m_thetaIndex = -1;
   };
 } // namespace DDSegmentation
 } // namespace dd4hep

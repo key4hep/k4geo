@@ -63,7 +63,7 @@ public:
   bool operator==(const FCCSWGridModuleThetaMerged_k4geo& seg) const { return m_element == seg.m_element; }
 
   /// determine the position based on the cell ID
-  inline Position position(const CellID& id) const { return Position(access()->implementation->position(id)); }
+  inline Position position(const CellID id) const { return Position(access()->implementation->position(id)); }
 
   /// determine the cell ID based on the position
   inline dd4hep::CellID cellID(const Position& local, const Position& global, const VolumeID& volID) const {

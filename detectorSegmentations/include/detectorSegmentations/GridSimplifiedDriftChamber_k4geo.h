@@ -26,14 +26,14 @@ namespace DDSegmentation {
     /// destructor
     virtual ~GridSimplifiedDriftChamber_k4geo() = default;
 
-    virtual Vector3D position(const CellID& aCellID) const;
+    virtual Vector3D position(const CellID& aCellID) const override;
     virtual CellID cellID(const Vector3D& aLocalPosition, const Vector3D& aGlobalPosition,
-                          const VolumeID& aVolumeID) const;
-    virtual TVector3 distanceClosestApproach(const CellID& cID, const TVector3& hitPos) const;
-    virtual double distanceTrackWire(const CellID& cID, const TVector3& hit_start, const TVector3& hit_end) const;
-    virtual TVector3 Line_TrackWire(const CellID& cID, const TVector3& hit_start, const TVector3& hit_end) const;
-    virtual TVector3 IntersectionTrackWire(const CellID& cID, const TVector3& hit_start, const TVector3& hit_end) const;
-    virtual TVector3 wirePos_vs_z(const CellID& cID, const double& zpos) const;
+                          const VolumeID& aVolumeID) const override;
+    virtual TVector3 distanceClosestApproach(const CellID cID, const TVector3& hitPos) const;
+    virtual double distanceTrackWire(const CellID cID, const TVector3& hit_start, const TVector3& hit_end) const;
+    virtual TVector3 Line_TrackWire(const CellID cID, const TVector3& hit_start, const TVector3& hit_end) const;
+    virtual TVector3 IntersectionTrackWire(const CellID cID, const TVector3& hit_start, const TVector3& hit_end) const;
+    virtual TVector3 wirePos_vs_z(const CellID cID, const double zpos) const;
 
     inline double epsilon() const { return m_epsilon; }
 
@@ -198,9 +198,9 @@ namespace DDSegmentation {
       return layer;
     }
 
-  protected:
+  private:
     /* *** nalipour *** */
-    double phi(const CellID& cID) const;
+    double phi(const CellID cID) const;
 
     std::map<int, std::vector<double>> layer_params; // <layer, {phi, R, eps}>
     std::map<int, std::vector<std::pair<TVector3, TVector3>>>
@@ -216,6 +216,13 @@ namespace DDSegmentation {
     mutable double _currentGridSizePhi; // current size Phi
     mutable double _currentRadius;      // current size radius
     mutable double m_epsilon;
+
+    /// Initialization common to all ctors.
+    void commonSetup();
+    /// the field index used for layer
+    int m_layerIndex = -1;
+    /// the field index used for phi
+    int m_phiIndex = -1;
   };
 } // namespace DDSegmentation
 } // namespace dd4hep

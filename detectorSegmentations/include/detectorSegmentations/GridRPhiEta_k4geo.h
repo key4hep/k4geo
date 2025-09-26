@@ -28,7 +28,7 @@ namespace DDSegmentation {
      *   @param[in] aCellId ID of a cell.
      *   return Position.
      */
-    virtual Vector3D position(const CellID& aCellID) const;
+    virtual Vector3D position(const CellID& aCellID) const override;
     /**  Determine the cell ID based on the position.
      *   @param[in] aLocalPosition (not used).
      *   @param[in] aGlobalPosition position in the global coordinates.
@@ -36,12 +36,12 @@ namespace DDSegmentation {
      *   return Cell ID.
      */
     virtual CellID cellID(const Vector3D& aLocalPosition, const Vector3D& aGlobalPosition,
-                          const VolumeID& aVolumeID) const;
+                          const VolumeID& aVolumeID) const override;
     /**  Determine the radius based on the cell ID.
      *   @param[in] aCellId ID of a cell.
      *   return Radius.
      */
-    double r(const CellID& aCellID) const;
+    double r(const CellID aCellID) const;
     /**  Get the grid size in radial distance from the detector centre.
      *   return Grid size in radial distance.
      */
@@ -68,14 +68,21 @@ namespace DDSegmentation {
     inline void setFieldNameR(const std::string& fieldName) { m_rID = fieldName; }
 
   private:
-    /// determine the radial distance R based on the current cell ID
-    double r() const;
     /// the grid size in r
     double m_gridSizeR;
     /// the coordinate offset in r
     double m_offsetR;
     /// the field name used for r
     std::string m_rID;
+
+    /// Initialization common to all ctors.
+    void commonSetup();
+    /// the field index used for eta
+    int m_etaIndex = -1;
+    /// the field index used for phi
+    int m_phiIndex = -1;
+    /// the field index used for r
+    int m_rIndex = -1;
   };
 } // namespace DDSegmentation
 } // namespace dd4hep

@@ -35,8 +35,8 @@ typedef Handle<SegmentationWrapper<DDSegmentation::GridRPhiEta_k4geo>> GridRPhiE
  *  fiddled with the handled object directly.....
  *
  *  Note:
- *  The handle base corrsponding to this object in for
- *  conveniance reasons instantiated in DD4hep/src/Segmentations.cpp.
+ *  The handle base corresponding to this object is for
+ *  convenience reasons instantiated in DD4hep/src/Segmentations.cpp.
  *
  *  \author  A. Zaborowska
  *  \version 1.0
@@ -63,10 +63,10 @@ public:
   /// Equality operator
   bool operator==(const GridRPhiEta_k4geo& seg) const { return m_element == seg.m_element; }
   /// determine the position based on the cell ID
-  inline Position position(const CellID& id) const { return Position(access()->implementation->position(id)); }
+  inline Position position(const CellID id) const { return Position(access()->implementation->position(id)); }
 
   /// determine the cell ID based on the position
-  inline dd4hep::CellID cellID(const Position& local, const Position& global, const VolumeID& volID) const {
+  inline dd4hep::CellID cellID(const Position& local, const Position& global, const VolumeID volID) const {
     return access()->implementation->cellID(local, global, volID);
   }
 
@@ -124,7 +124,7 @@ public:
       -# size in phi
       -# size in eta
   */
-  inline std::vector<double> cellDimensions(const CellID& /*id*/) const {
+  inline std::vector<double> cellDimensions(const CellID /*id*/) const {
     return {access()->implementation->gridSizeR(), access()->implementation->gridSizePhi(),
             access()->implementation->gridSizeEta()};
   }
