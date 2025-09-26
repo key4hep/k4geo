@@ -77,7 +77,7 @@ namespace DDSegmentation {
     bool IsCerenkov(const int aId32) const { return IsCerenkov(convertLast32to64(aId32)); }
 
     bool IsTower(const int aId32) const { return IsTower(convertLast32to64(aId32)); }
-    bool IsSiPM(const int& aId32) const { return IsSiPM(convertLast32to64(aId32)); }
+    bool IsSiPM(const int aId32) const { return IsSiPM(convertLast32to64(aId32)); }
 
     inline const std::string& fieldNameAssembly() const { return m_assemblyID; }
     inline const std::string& fieldNameNumEta() const { return m_numEtaID; }
