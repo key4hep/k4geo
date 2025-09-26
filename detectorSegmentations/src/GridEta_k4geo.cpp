@@ -12,7 +12,7 @@ namespace DDSegmentation {
   void GridEta_k4geo::commonSetup() {
     // define type and description
     _type = "GridEta_k4geo";
-    _description = "Eeta segmentation in the global coordinates";
+    _description = "Eta segmentation in the global coordinates";
 
     // register all necessary parameters
     registerParameter("grid_size_eta", "Cell size in eta", m_gridSizeEta, 1., SegmentationParameter::LengthUnit);
