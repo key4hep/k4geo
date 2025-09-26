@@ -143,12 +143,6 @@
         <constant name="HCalEndcap_zcutout"         value="200*mm"/>
         <constant name="HCalEndcap_rcutout"         value="128*mm"/>
 
-        <!-- <constant name="HCalRing_inner_radius"      value="1738*mm"/>
-        <constant name="HCalRing_outer_radius"      value="HCalEndcap_outer_radius"/>
-        <constant name="HCalRing_min_z"             value="2353.5*mm"/>
-        <constant name="HCalRing_max_z"             value="HCalEndcap_min_z"/>
-        <constant name="HCalRing_symmetry"          value="12"/> -->
-
         <constant name="YokeBarrel_inner_radius"    value="4806*mm"/>
         <constant name="YokeBarrel_outer_radius"    value="6800*mm"/>
         <constant name="YokeBarrel_half_length"     value="4444*mm"/>
@@ -162,37 +156,12 @@
         <constant name="YokeEndcap_outer_symmetry"  value="12"/>
         <constant name="YokeEndcap_inner_symmetry"  value="0"/>
 
-        <constant name="LumiCal_inner_radius"       value="100*mm"/>
-        <constant name="LumiCal_outer_radius"       value="340*mm"/>
-        <constant name="LumiCal_min_z"              value="2539*mm"/>
-        <constant name="LumiCal_max_z"              value="2712*mm"/>
-        <constant name="LumiCal_dz"                 value="(LumiCal_max_z-LumiCal_min_z)/2.0"/>
-
-        <constant name="BeamCal_inner_radius"       value="32*mm"/>
-        <constant name="BeamCal_outer_radius"       value="150*mm"/>
-        <constant name="BeamCal_min_z"              value="3181*mm"/>
-        <constant name="BeamCal_max_z"              value="3441.032*mm"/>
-        <constant name="BeamCal_dz"                 value="(BeamCal_max_z-BeamCal_min_z)/2.0"/>
-
-        <constant name="Kicker_inner_radius"        value="4*mm"/>
-        <constant name="Kicker_outer_radius"        value="25*mm"/>
-        <constant name="Kicker_min_z"               value="3455*mm"/>
-        <constant name="Kicker_max_z"               value="3715*mm"/>
-
-        <constant name="BPM_inner_radius"           value="36*mm"/>
-        <constant name="BPM_outer_radius"           value="55*mm"/>
-        <constant name="BPM_min_z"                  value="3730*mm"/>
-        <constant name="BPM_max_z"                  value="3820*mm"/>
-
-
         <constant name="tracker_region_zmax"        value="OuterTracker_half_length"/>
         <constant name="tracker_region_rmax"        value="OuterTracker_outer_radius"/>
 
         <constant name="ECal_cell_size"             value="10.2*mm"/>
         <constant name="HCal_cell_size"             value="3.0*cm"/>
         <constant name="Yoke_cell_size"             value="3.0*cm"/>
-        <constant name="BeamCal_cell_size"          value="1*mm"/>
-        <constant name="LumiCal_cell_size"          value="1*mm"/>
 
         <constant name="GlobalTrackerReadoutID"     type="string" value="system:5,side:-2,layer:6,module:11,sensor:8"/>
         <constant name="GlobalCalorimeterReadoutID" type="string" value="system:5,side:-2,module:8,stave:4,layer:9,submodule:4,x:32:-16,y:-16"/>
@@ -223,10 +192,6 @@
         <vis name="HCALVis"     alpha="1.0" r="0.078" g="0.01176" b="0.588" showDaughters="true"  visible="true"/>
         <vis name="SOLVis"      alpha="1.0" r="0.4"   g="0.4"     b="0.4"   showDaughters="true"  visible="true"/>
         <vis name="YOKEVis"     alpha="1.0" r="0.6"   g="0.0"     b="0.0"   showDaughters="true"  visible="true"/>
-        <vis name="LCALVis"     alpha="1.0" r="0.35"  g="0.0"     b="0.47"  showDaughters="true"  visible="true"/>
-        <vis name="BCALVis"     alpha="1.0" r="0.0"   g="0.4"     b="0.4"   showDaughters="true"  visible="true"/>
-        <vis name="KICKVis"     alpha="1.0" r="1.0"   g="0.498"   b="0.0"   showDaughters="true"  visible="true"/>
-        <vis name="BPMVis"      alpha="1.0" r="0.25"  g="0.88"    b="0.81"  showDaughters="true"  visible="true"/>
         <vis name="SupportVis"  alpha="1"   r="0.2"   g="0.2"     b="0.2"   showDaughters="false" visible="true"/>
     </display>
 
@@ -234,7 +199,6 @@
 
     <include ref="Beampipe_o1_v01_02.xml"/> 
     <include ref="Nozzle_10deg_v1.xml"/>
-    <!-- <include ref="BeamInstrumentation_o1_v01_01.xml"/> -->
 
     <include ref="Vertex_o2_v06_01.xml"/>
 
@@ -251,10 +215,6 @@
 
     <include ref="YokeBarrel_o1_v01_01.xml"/>
     <include ref="YokeEndcap_o1_v01_01.xml"/>
-
-    <!-- <include ref="LumiCal_o1_v01_01.xml"/> -->
-
-    <!-- <include ref="BeamCal_o1_v01_01.xml"/> -->
 
     <plugins>
         <plugin name="DD4hepVolumeManager"/>
@@ -324,10 +284,6 @@
                outer_radius="YokeBarrel_outer_radius">
         </field>
     </fields>
-
-    <!-- load magnetic field map -->
-    <!-- <include ref="Field_Solenoid_Map_3.57T.xml"/> -->
-
 
 </lccdd>
 

@@ -16,7 +16,7 @@
         
         <detector name="NozzleW_right" type="DD4hep_PolyconeSupport" vis="NozzleWVis" region="NozzleRegion">
             <comment>Internal part of the nozzle: Tungsten</comment>
-            <material name="Tungsten_MuSIC"/>
+            <material name="Tungsten_light"/>
             <zplane z="Nozzle_zmin" rmin="1*cm" rmax="1*cm" />
             <zplane z="15*cm" rmin="0.6*cm" rmax="2.58694*cm" />
             <zplane z="Nozzle_kink_z" rmin="0.3*cm" rmax="17.57473619*cm" />
@@ -27,7 +27,7 @@
 
         <detector name="NozzleW_left" type="DD4hep_PolyconeSupport" vis="NozzleWVis" region="NozzleRegion">
             <comment>Internal part of the nozzle: Tungsten</comment>
-            <material name="Tungsten_MuSIC"/>
+            <material name="Tungsten_light"/>
             <zplane z="-Nozzle_zmin" rmin="1*cm" rmax="1*cm" />
             <zplane z="-15*cm" rmin="0.6*cm" rmax="2.58694*cm" />
             <zplane z="-Nozzle_kink_z" rmin="0.3*cm" rmax="17.57473619*cm" />
@@ -39,7 +39,7 @@
 
         <detector name="NozzleBCH_right" type="DD4hep_PolyconeSupport" vis="NozzleBCHVis" region="NozzleRegion">
             <comment>Middle part of the nozzle: Borated Polyehtylene</comment>
-            <material name="BCH2_MuSIC"/>
+            <material name="BCH2_composite"/>
             <zplane z="Nozzle_kink_z" rmin="13.48473619*cm" rmax="13.57473619*cm" />
             <zplane z="204.48824*cm" rmin="13.48473619*cm" rmax="21.3958448184*cm" />
             <zplane z="595*cm" rmin="43.01*cm" rmax="51*cm" />
@@ -47,7 +47,7 @@
 
         <detector name="NozzleBCH_left" type="DD4hep_PolyconeSupport" vis="NozzleBCHVis" region="NozzleRegion">
             <comment>Middle part of the nozzle: Borated Polyehtylene</comment>
-            <material name="BCH2_MuSIC"/>
+            <material name="BCH2_composite"/>
             <zplane z="-Nozzle_kink_z" rmin="13.48473619*cm" rmax="13.57473619*cm" />
             <zplane z="-204.48824*cm" rmin="13.48473619*cm" rmax="21.3958448184*cm" />
             <zplane z="-595*cm" rmin="43.01*cm" rmax="51*cm" />
@@ -56,14 +56,14 @@
 
         <detector name="NozzleWCludding_right" type="DD4hep_PolyconeSupport" vis="NozzleWVis" region="NozzleRegion">
             <comment>Cludding part of the nozzle: Tungsten</comment>
-            <material name="Tungsten_MuSIC"/>
+            <material name="Tungsten_light"/>
             <zplane z="Nozzle_kink_z" rmin="13.57473619*cm" rmax="17.57473619*cm" />
             <zplane z="595*cm" rmin="51*cm" rmax="55*cm" />
         </detector>
 
         <detector name="NozzleWCludding_left" type="DD4hep_PolyconeSupport" vis="NozzleWVis" region="NozzleRegion">
             <comment>Cludding part of the nozzle: Tungsten</comment>
-            <material name="Tungsten_MuSIC"/>
+            <material name="Tungsten_light"/>
             <zplane z="-Nozzle_kink_z" rmin="13.57473619*cm" rmax="17.57473619*cm" />
             <zplane z="-595*cm" rmin="51*cm" rmax="55*cm" />
         </detector>

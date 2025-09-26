@@ -143,7 +143,7 @@ SET( test_name "test_MuColl_v1_run" )
 add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuColl/compact/MuColl_v1/MuColl_v1.xml --runType=batch -G -N=1 --outputFile=test_MuColl_v1.edm4hep.root)
 
 SET( test_name "test_MuSIC_v2_run" )
-add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuColl/compact/MuSIC_v2/MuSIC_v2.xml --runType=batch -G -N=1 --outputFile=test_MuSIC_v2.edm4hep.root)
+add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuSIC/compact/MuSIC_v2/MuSIC_v2.xml --runType=batch -G -N=1 --outputFile=test_MuSIC_v2.edm4hep.root)
 
 #--------------------------------------------------
 # check if files named the same contain the same in FCCee

@@ -165,14 +165,14 @@
         <composite n="1" ref="W" />
     </material>
 
-    <material name="BCH2_MuSIC" state="solid">
+    <material name="BCH2_composite" state="solid">
         <D type="density" unit="g/cm3" value="0.93"/>
         <composite n="2" ref="H"/>
         <composite n="1" ref="B"/>
         <composite n="1" ref="C"/>
     </material>
 
-    <material name="Tungsten_MuSIC" state="solid">
+    <material name="Tungsten_light" state="solid">
         <D type="density" value="17.8" unit="g/cm3"/>
         <fraction n="0.95" ref="W"/>
         <fraction n="0.035" ref="Ni"/>
