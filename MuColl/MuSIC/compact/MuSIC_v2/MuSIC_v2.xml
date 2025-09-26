@@ -35,7 +35,6 @@
 
         <constant name="DetID_ECal_Barrel"      value="20"/>
         <constant name="DetID_ECal_Endcap"      value="29"/>
-        <constant name="DetID_ECal_Plug"        value="21"/>
 
         <constant name="DetID_HCAL_Barrel"      value="10"/>
         <constant name="DetID_HCAL_Endcap"      value="11"/>
@@ -43,9 +42,6 @@
 
         <constant name="DetID_Yoke_Barrel"      value="13"/>
         <constant name="DetID_Yoke_Endcap"      value="14"/>
-
-        <constant name="DetID_LumiCal"          value="15"/>
-        <constant name="DetID_BeamCal"          value="16"/>
 
         <constant name="CentralBeamPipe_zmax"   value="308*mm"/>
         <!-- <constant name="CentralBeamPipe_rmax"   value="37*mm"/> -->
@@ -112,13 +108,6 @@
         <constant name="ECalEndcap_max_z"           value="2577*mm"/>
         <constant name="ECalEndcap_outer_symmetry"  value="12"/>
         <constant name="ECalEndcap_inner_symmetry"  value="12"/>
-
-        <constant name="ECalPlug_inner_radius"      value="260*mm"/>
-        <constant name="ECalPlug_outer_radius"      value="380*mm"/>
-        <constant name="ECalPlug_min_z"             value="2307*mm"/>
-        <constant name="ECalPlug_max_z"             value="2577*mm"/>
-        <constant name="ECalPlug_outer_symmetry"    value="12"/>
-        <constant name="ECalPlug_inner_symmetry"    value="12"/>
 
         <!-- solenoid -->
         <constant name="Solenoid_inner_radius"      value="2055*mm"/>
