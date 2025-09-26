@@ -28,7 +28,7 @@
             </envelope>
             
             
-            <dimensions nsides_inner="ECalEndcap_inner_symmetry" nsides_outer="(int) ECalEndcap_outer_symmetry" zmin="ECalEndcap_min_z" rmin="ECalEndcap_inner_radius" rmax="ECalEndcap_outer_radius" conicalCutout="true"/>
+            <dimensions nsides_inner="ECalEndcap_inner_symmetry" nsides_outer="(int) ECalEndcap_outer_symmetry" zmin="ECalEndcap_min_z" rmin="ECalEndcap_inner_radius" rmax="ECalEndcap_outer_radius"/>
             
             <layer repeat="6" vis="ECalLayerVis">   
                 <slice material = "LeadDiflourite" thickness = "40*mm" sensitive="yes" limits="cal_limits" vis="ECalSensitiveVis"/>
