@@ -31,8 +31,8 @@
 
 	<constant name="InnerTrackerEndcap_PixSize_x" value="0.050*mm"/>
 	<constant name="InnerTrackerEndcap_PixSize_y" value="0.300*mm"/>
-	<constant name="InnerTrackerEndcap_FirstLayer_PixSize_x" value="0.025*mm"/>
-	<constant name="InnerTrackerEndcap_FirstLayer_PixSize_y" value="0.025*mm"/>
+	<constant name="InnerTrackerEndcap_FirstLayer_PixSize_x" value="0.020*mm"/>
+	<constant name="InnerTrackerEndcap_FirstLayer_PixSize_y" value="0.020*mm"/>
 	
         <constant name="VertexCoolingGap"            value="5*mm"/>
         <constant name="VertexCoolingShellThickness" value="1*mm"/>
