@@ -6,24 +6,15 @@ namespace DDSegmentation {
 
   /// default constructor using an encoding string
   FCCSWHCalPhiTheta_k4geo::FCCSWHCalPhiTheta_k4geo(const std::string& cellEncoding) : GridTheta_k4geo(cellEncoding) {
-    // define type and description
-    _type = "FCCSWHCalPhiTheta_k4geo";
-    _description = "Phi-theta segmentation in the global coordinates";
-
-    // register all necessary parameters (additional to those registered in GridTheta_k4geo)
-    registerParameter("phi_bins", "Number of bins phi", m_phiBins, 1);
-    registerParameter("offset_phi", "Angular offset in phi", m_offsetPhi, 0., SegmentationParameter::AngleUnit, true);
-    registerParameter("detLayout", "The detector layout (0 = Barrel; 1 = Endcap)", m_detLayout, -1);
-    registerParameter("offset_z", "Offset in z-axis of the layer center", m_offsetZ, std::vector<double>());
-    registerParameter("width_z", "Width in z of the layer", m_widthZ, std::vector<double>());
-    registerParameter("offset_r", "Offset in radius of the layer (Rmin)", m_offsetR, std::vector<double>());
-    registerParameter("numLayers", "Number of layers", m_numLayers, std::vector<int>());
-    registerParameter("dRlayer", "dR of the layer", m_dRlayer, std::vector<double>());
-    registerIdentifier("identifier_phi", "Cell ID identifier for phi", m_phiID, "phi");
-    registerIdentifier("identifier_layer", "Cell ID identifier for layer", m_layerID, "layer");
+    commonSetup();
   }
 
   FCCSWHCalPhiTheta_k4geo::FCCSWHCalPhiTheta_k4geo(const BitFieldCoder* decoder) : GridTheta_k4geo(decoder) {
+    commonSetup();
+  }
+
+  /// Initialization common to all ctors.
+  void FCCSWHCalPhiTheta_k4geo::commonSetup() {
     // define type and description
     _type = "FCCSWHCalPhiTheta_k4geo";
     _description = "Phi-theta segmentation in the global coordinates";
@@ -39,11 +30,24 @@ namespace DDSegmentation {
     registerParameter("dRlayer", "dR of the layer", m_dRlayer, std::vector<double>());
     registerIdentifier("identifier_phi", "Cell ID identifier for phi", m_phiID, "phi");
     registerIdentifier("identifier_layer", "Cell ID identifier for layer", m_layerID, "layer");
+
+    m_layerIndex = decoder()->index(m_layerID);
+    m_rowIndex = decoder()->index("row");
+    m_thetaIndex = decoder()->index(fieldNameTheta());
+    m_phiIndex = decoder()->index(m_phiID);
+
+    // Only endcap has "type" --- but it's too early to look at m_detLayout.
+    for (const dd4hep::DDSegmentation::BitFieldElement& bfe : decoder()->fields()) {
+      if (bfe.name() == "type") {
+        m_typeIndex = decoder()->index("type");
+        break;
+      }
+    }
   }
 
   /** /// determine the global position based on the cell ID
   Vector3D FCCSWHCalPhiTheta_k4geo::position(const CellID& cID) const {
-    uint layer = _decoder->get(cID,m_layerID);
+    uint layer = decoder()->get(cID,m_layerIndex);
     double radius = 1.0;
 
     if(m_radii.empty()) defineCellsInRZplan();
@@ -56,8 +60,8 @@ namespace DDSegmentation {
   /// determine the global position based on the cell ID
   /// returns the geometric center of the cell
   Vector3D FCCSWHCalPhiTheta_k4geo::position(const CellID& cID) const {
-    uint layer = _decoder->get(cID, m_layerID);
-    int thetaID = _decoder->get(cID, m_thetaID);
+    uint layer = decoder()->get(cID, m_layerIndex);
+    int thetaID = decoder()->get(cID, m_thetaIndex);
     double zpos = 0.;
     double radius = 1.0;
 
@@ -160,12 +164,12 @@ namespace DDSegmentation {
     if (m_thetaBins[layer].size() == 0 && m_radii.size() > 0) {
       // find theta bins that fit within the given layer
       int ibin =
-          positionToBin(0.02, m_gridSizeTheta, m_offsetTheta); // <--- start from theta bin outside the HCal theta range
-      while (m_radii[layer] * std::cos(m_offsetTheta + ibin * m_gridSizeTheta) /
-                 std::sin(m_offsetTheta + ibin * m_gridSizeTheta) >
+          positionToBin(0.02, gridSizeTheta(), offsetTheta()); // <--- start from theta bin outside the HCal theta range
+      while (m_radii[layer] * std::cos(offsetTheta() + ibin * gridSizeTheta()) /
+                 std::sin(offsetTheta() + ibin * gridSizeTheta()) >
              m_layerEdges[layer].first) {
-        if (m_radii[layer] * std::cos(m_offsetTheta + ibin * m_gridSizeTheta) /
-                std::sin(m_offsetTheta + ibin * m_gridSizeTheta) <
+        if (m_radii[layer] * std::cos(offsetTheta() + ibin * gridSizeTheta()) /
+                std::sin(offsetTheta() + ibin * gridSizeTheta()) <
             m_layerEdges[layer].second) {
           m_thetaBins[layer].push_back(ibin);
         }
@@ -178,10 +182,10 @@ namespace DDSegmentation {
       m_cellEdges[layer][prevBin] = std::make_pair(0., m_layerEdges[layer].second);
       for (auto bin : m_thetaBins[layer]) {
         if (bin != prevBin) {
-          double z1 = m_radii[layer] * std::cos(m_offsetTheta + bin * m_gridSizeTheta) /
-                      std::sin(m_offsetTheta + bin * m_gridSizeTheta);
-          double z2 = m_radii[layer] * std::cos(m_offsetTheta + prevBin * m_gridSizeTheta) /
-                      std::sin(m_offsetTheta + prevBin * m_gridSizeTheta);
+          double z1 = m_radii[layer] * std::cos(offsetTheta() + bin * gridSizeTheta()) /
+                      std::sin(offsetTheta() + bin * gridSizeTheta());
+          double z2 = m_radii[layer] * std::cos(offsetTheta() + prevBin * gridSizeTheta()) /
+                      std::sin(offsetTheta() + prevBin * gridSizeTheta());
           // set the lower edge of the prevBin cell
           m_cellEdges[layer][prevBin].first = z1 + 0.5 * (z2 - z1);
           // set the upper edge of current bin cell
@@ -194,11 +198,11 @@ namespace DDSegmentation {
 
       // for the EndCap, do it again but for negative z part
       if (m_detLayout == 1) {
-        while (m_radii[layer] * std::cos(m_offsetTheta + ibin * m_gridSizeTheta) /
-                   std::sin(m_offsetTheta + ibin * m_gridSizeTheta) >
+        while (m_radii[layer] * std::cos(offsetTheta() + ibin * gridSizeTheta()) /
+                   std::sin(offsetTheta() + ibin * gridSizeTheta()) >
                (-m_layerEdges[layer].second)) {
-          if (m_radii[layer] * std::cos(m_offsetTheta + ibin * m_gridSizeTheta) /
-                  std::sin(m_offsetTheta + ibin * m_gridSizeTheta) <
+          if (m_radii[layer] * std::cos(offsetTheta() + ibin * gridSizeTheta()) /
+                  std::sin(offsetTheta() + ibin * gridSizeTheta()) <
               (-m_layerEdges[layer].first)) {
             m_thetaBins[layer].push_back(ibin);
           }
@@ -213,10 +217,10 @@ namespace DDSegmentation {
         m_cellEdges[layer][prevBin] = std::make_pair(0., -m_layerEdges[layer].first);
         for (auto bin : thetaBins) {
           if (bin != prevBin) {
-            double z1 = m_radii[layer] * std::cos(m_offsetTheta + bin * m_gridSizeTheta) /
-                        std::sin(m_offsetTheta + bin * m_gridSizeTheta);
-            double z2 = m_radii[layer] * std::cos(m_offsetTheta + prevBin * m_gridSizeTheta) /
-                        std::sin(m_offsetTheta + prevBin * m_gridSizeTheta);
+            double z1 = m_radii[layer] * std::cos(offsetTheta() + bin * gridSizeTheta()) /
+                        std::sin(offsetTheta() + bin * gridSizeTheta());
+            double z2 = m_radii[layer] * std::cos(offsetTheta() + prevBin * gridSizeTheta()) /
+                        std::sin(offsetTheta() + prevBin * gridSizeTheta());
             // set the lower edge of the prevBin cell
             m_cellEdges[layer][prevBin].first = z1 + 0.5 * (z2 - z1);
             // set the upper edge of current bin cell
@@ -245,16 +249,16 @@ namespace DDSegmentation {
     // The volume ID comes with "row" field information (number of sequences) that would screw up the topo-clustering
     // using cell neighbours map produced with RecFCCeeCalorimeter/src/components/CreateFCCeeCaloNeighbours.cpp,
     // therefore, lets set it to zero, as it is for the cell IDs in the neighbours map.
-    _decoder->set(cID, "row", 0);
+    decoder()->set(cID, m_rowIndex, 0);
 
     // For endcap, the volume ID comes with "type" field information which would screw up the topo-clustering as the
     // "row" field, therefore, lets set it to zero, as it is for the cell IDs in the neighbours map.
     if (m_detLayout == 1)
-      _decoder->set(cID, "type", 0);
+      decoder()->set(cID, m_typeIndex, 0);
 
     double lTheta = thetaFromXYZ(globalPosition);
     double lPhi = phiFromXYZ(globalPosition);
-    uint layer = _decoder->get(vID, m_layerID);
+    uint layer = decoder()->get(vID, m_layerIndex);
 
     // define cell boundaries in R-z plan
     if (m_radii.empty())
@@ -268,8 +272,8 @@ namespace DDSegmentation {
     for (auto bin : m_thetaBins[layer]) {
       double posz = globalPosition.z();
       if (posz > m_cellEdges[layer][bin].first && posz < m_cellEdges[layer][bin].second) {
-        _decoder->set(cID, m_thetaID, bin);
-        _decoder->set(cID, m_phiID, positionToBin(lPhi, 2 * M_PI / (double)m_phiBins, m_offsetPhi));
+        decoder()->set(cID, m_thetaIndex, bin);
+        decoder()->set(cID, m_phiIndex, positionToBin(lPhi, 2 * M_PI / (double)m_phiBins, m_offsetPhi));
         return cID;
       }
     }
@@ -277,14 +281,14 @@ namespace DDSegmentation {
     dd4hep::printout(dd4hep::WARNING, "FCCSWHCalPhiTheta_k4geo", "The hit is outside the defined range of the layer %d",
                      layer);
 
-    _decoder->set(cID, m_thetaID, positionToBin(lTheta, m_gridSizeTheta, m_offsetTheta));
-    _decoder->set(cID, m_phiID, positionToBin(lPhi, 2 * M_PI / (double)m_phiBins, m_offsetPhi));
+    decoder()->set(cID, m_thetaIndex, positionToBin(lTheta, gridSizeTheta(), offsetTheta()));
+    decoder()->set(cID, m_phiIndex, positionToBin(lPhi, 2 * M_PI / (double)m_phiBins, m_offsetPhi));
     return cID;
   }
 
   /// determine the azimuthal angle phi based on the cell ID
-  double FCCSWHCalPhiTheta_k4geo::phi(const CellID& cID) const {
-    CellID phiValue = _decoder->get(cID, m_phiID);
+  double FCCSWHCalPhiTheta_k4geo::phi(const CellID cID) const {
+    CellID phiValue = decoder()->get(cID, m_phiIndex);
     return binToPosition(phiValue, 2. * M_PI / (double)m_phiBins, m_offsetPhi);
   }
 
@@ -322,7 +326,7 @@ namespace DDSegmentation {
   }
 
   /// Calculates the neighbours of the given cell ID and adds them to the list of neighbours
-  std::vector<uint64_t> FCCSWHCalPhiTheta_k4geo::neighbours(const CellID& cID, bool aDiagonal) const {
+  std::vector<uint64_t> FCCSWHCalPhiTheta_k4geo::neighbours(const CellID cID, bool aDiagonal) const {
     std::vector<uint64_t> cellNeighbours;
 
     if (m_radii.empty())
@@ -334,8 +338,8 @@ namespace DDSegmentation {
     int minLayerId = -1;
     int maxLayerId = -1;
 
-    int currentLayerId = _decoder->get(cID, m_layerID);
-    int currentCellThetaBin = _decoder->get(cID, m_thetaID);
+    int currentLayerId = decoder()->get(cID, m_layerIndex);
+    int currentCellThetaBin = decoder()->get(cID, m_thetaIndex);
 
     int minCellThetaBin = m_thetaBins[currentLayerId].front();
     int maxCellThetaBin = m_thetaBins[currentLayerId].back();
@@ -394,13 +398,13 @@ namespace DDSegmentation {
     // if this is not the first cell in the given layer then add the previous cell
     if (currentCellThetaBin > minCellThetaBin) {
       CellID nID = cID;
-      _decoder->set(nID, m_thetaID, currentCellThetaBin - 1);
+      decoder()->set(nID, m_thetaIndex, currentCellThetaBin - 1);
       cellNeighbours.push_back(nID); // add the previous cell from current layer of the same phi module
     }
     // if this is not the last cell in the given layer then add the next cell
     if (currentCellThetaBin < maxCellThetaBin) {
       CellID nID = cID;
-      _decoder->set(nID, m_thetaID, currentCellThetaBin + 1);
+      decoder()->set(nID, m_thetaIndex, currentCellThetaBin + 1);
       cellNeighbours.push_back(nID); // add the next cell from current layer of the same phi module
     }
     //----------------------------------------------
@@ -414,16 +418,16 @@ namespace DDSegmentation {
       if (currentLayerId > minLayerId) {
         CellID nID = cID;
         int prevLayerId = currentLayerId - 1;
-        _decoder->set(nID, m_layerID, prevLayerId);
+        decoder()->set(nID, m_layerIndex, prevLayerId);
 
-        _decoder->set(nID, m_thetaID, currentCellThetaBin);
+        decoder()->set(nID, m_thetaIndex, currentCellThetaBin);
         cellNeighbours.push_back(
             nID); // add the cell with the same theta bin from the previous layer of the same phi module
 
         // if the cID is in the positive-z side and prev layer cell is not in the first theta bin then add the cell from
         // previous theta bin
         if (theta(cID) < M_PI / 2. && currentCellThetaBin > m_thetaBins[prevLayerId].front()) {
-          _decoder->set(nID, m_thetaID, currentCellThetaBin - 1);
+          decoder()->set(nID, m_thetaIndex, currentCellThetaBin - 1);
           cellNeighbours.push_back(nID); // add the cell from the previous layer of the same phi module
           if (aDiagonal && currentCellThetaBin > (m_thetaBins[prevLayerId].front() + 1)) {
             // add the previous layer cell from the prev to prev theta bin if it overlaps with the current cell in
@@ -431,7 +435,7 @@ namespace DDSegmentation {
             double zmin = m_cellEdges[prevLayerId][currentCellThetaBin - 2].first;
             if (zmin <= currentCellZmax) {
               // add the previous layer cell from the prev to prev theta bin
-              _decoder->set(nID, m_thetaID, currentCellThetaBin - 2);
+              decoder()->set(nID, m_thetaIndex, currentCellThetaBin - 2);
               cellNeighbours.push_back(nID);
             }
           }
@@ -439,7 +443,7 @@ namespace DDSegmentation {
         // if the cID is in the negative-z side and prev layer cell is not in the last theta bin then add the cell from
         // previous theta bin
         if (theta(cID) > M_PI / 2. && currentCellThetaBin < m_thetaBins[prevLayerId].back()) {
-          _decoder->set(nID, m_thetaID, currentCellThetaBin + 1);
+          decoder()->set(nID, m_thetaIndex, currentCellThetaBin + 1);
           cellNeighbours.push_back(nID); // add the cell from the previous layer of the same phi module
           if (aDiagonal && currentCellThetaBin < (m_thetaBins[prevLayerId].back() - 1)) {
             // add the previous layer cell from the next to next theta bin if it overlaps with the current cell in
@@ -447,7 +451,7 @@ namespace DDSegmentation {
             double zmax = m_cellEdges[prevLayerId][currentCellThetaBin + 2].second;
             if (zmax >= currentCellZmin) {
               // add the previous layer cell from the next to next theta bin
-              _decoder->set(nID, m_thetaID, currentCellThetaBin + 2);
+              decoder()->set(nID, m_thetaIndex, currentCellThetaBin + 2);
               cellNeighbours.push_back(nID);
             }
           }
@@ -458,16 +462,16 @@ namespace DDSegmentation {
       if (currentLayerId < maxLayerId) {
         CellID nID = cID;
         int nextLayerId = currentLayerId + 1;
-        _decoder->set(nID, m_layerID, nextLayerId);
+        decoder()->set(nID, m_layerIndex, nextLayerId);
 
-        _decoder->set(nID, m_thetaID, currentCellThetaBin);
+        decoder()->set(nID, m_thetaIndex, currentCellThetaBin);
         cellNeighbours.push_back(
             nID); // add the cell with the same theta bin from the next layer of the same phi module
 
         // if the cID is in the positive-z side
         if (theta(cID) < M_PI / 2.) {
           // add the next layer cell from the next theta bin
-          _decoder->set(nID, m_thetaID, currentCellThetaBin + 1);
+          decoder()->set(nID, m_thetaIndex, currentCellThetaBin + 1);
           cellNeighbours.push_back(nID);
 
           if (aDiagonal) {
@@ -476,7 +480,7 @@ namespace DDSegmentation {
             double zmax = m_cellEdges[nextLayerId][currentCellThetaBin + 2].second;
             if (zmax >= currentCellZmin) {
               // add the next layer cell from the next to next theta bin
-              _decoder->set(nID, m_thetaID, currentCellThetaBin + 2);
+              decoder()->set(nID, m_thetaIndex, currentCellThetaBin + 2);
               cellNeighbours.push_back(nID);
             }
           }
@@ -484,7 +488,7 @@ namespace DDSegmentation {
         // if the cID is in the negative-z side
         if (theta(cID) > M_PI / 2.) {
           // add the next layer cell from the previous theta bin
-          _decoder->set(nID, m_thetaID, currentCellThetaBin - 1);
+          decoder()->set(nID, m_thetaIndex, currentCellThetaBin - 1);
           cellNeighbours.push_back(nID);
 
           if (aDiagonal) {
@@ -493,7 +497,7 @@ namespace DDSegmentation {
             double zmin = m_cellEdges[nextLayerId][currentCellThetaBin - 2].first;
             if (zmin <= currentCellZmax) {
               // add the next layer cell from the prev to prev theta bin
-              _decoder->set(nID, m_thetaID, currentCellThetaBin - 2);
+              decoder()->set(nID, m_thetaIndex, currentCellThetaBin - 2);
               cellNeighbours.push_back(nID);
             }
           }
@@ -510,7 +514,7 @@ namespace DDSegmentation {
       if (currentLayerId > minLayerId) {
         CellID nID = cID;
         int prevLayerId = currentLayerId - 1;
-        _decoder->set(nID, m_layerID, prevLayerId);
+        decoder()->set(nID, m_layerIndex, prevLayerId);
         // find the ones that share at least part of a border with the current cell
         for (auto bin : m_thetaBins[prevLayerId]) {
           double zmin = m_cellEdges[prevLayerId][bin].first;
@@ -521,11 +525,11 @@ namespace DDSegmentation {
             if ((zmin >= currentCellZmin && zmin < currentCellZmax) ||
                 (zmax >= currentCellZmin && zmax <= currentCellZmax) ||
                 (currentCellZmin >= zmin && currentCellZmax <= zmax)) {
-              _decoder->set(nID, m_thetaID, bin);
+              decoder()->set(nID, m_thetaIndex, bin);
               cellNeighbours.push_back(nID); // add the cell from the previous layer of the same phi module
             }
             if (aDiagonal && zmin == currentCellZmax) {
-              _decoder->set(nID, m_thetaID, bin);
+              decoder()->set(nID, m_thetaIndex, bin);
               cellNeighbours.push_back(nID); // add the cell from the previous layer of the same phi module
             }
           }
@@ -534,11 +538,11 @@ namespace DDSegmentation {
             if ((zmin >= currentCellZmin && zmin <= currentCellZmax) ||
                 (zmax > currentCellZmin && zmax <= currentCellZmax) ||
                 (currentCellZmin >= zmin && currentCellZmax <= zmax)) {
-              _decoder->set(nID, m_thetaID, bin);
+              decoder()->set(nID, m_thetaIndex, bin);
               cellNeighbours.push_back(nID); // add the cell from the previous layer of the same phi module
             }
             if (aDiagonal && zmax == currentCellZmin) {
-              _decoder->set(nID, m_thetaID, bin);
+              decoder()->set(nID, m_thetaIndex, bin);
               cellNeighbours.push_back(nID); // add the cell from the previous layer of the same phi module
             }
           }
@@ -548,7 +552,7 @@ namespace DDSegmentation {
       if (currentLayerId < maxLayerId) {
         CellID nID = cID;
         int nextLayerId = currentLayerId + 1;
-        _decoder->set(nID, m_layerID, nextLayerId);
+        decoder()->set(nID, m_layerIndex, nextLayerId);
         // find the ones that share at least part of a border with the current cell
         for (auto bin : m_thetaBins[nextLayerId]) {
           double zmin = m_cellEdges[nextLayerId][bin].first;
@@ -558,11 +562,11 @@ namespace DDSegmentation {
             if ((zmin >= currentCellZmin && zmin <= currentCellZmax) ||
                 (zmax > currentCellZmin && zmax <= currentCellZmax) ||
                 (currentCellZmin >= zmin && currentCellZmax <= zmax)) {
-              _decoder->set(nID, m_thetaID, bin);
+              decoder()->set(nID, m_thetaIndex, bin);
               cellNeighbours.push_back(nID); // add the cell from the next layer of the same phi module
             }
             if (aDiagonal && zmax == currentCellZmin) {
-              _decoder->set(nID, m_thetaID, bin);
+              decoder()->set(nID, m_thetaIndex, bin);
               cellNeighbours.push_back(nID); // add the cell from the next layer of the same phi module
             }
           }
@@ -571,11 +575,11 @@ namespace DDSegmentation {
             if ((zmin >= currentCellZmin && zmin < currentCellZmax) ||
                 (zmax >= currentCellZmin && zmax <= currentCellZmax) ||
                 (currentCellZmin >= zmin && currentCellZmax <= zmax)) {
-              _decoder->set(nID, m_thetaID, bin);
+              decoder()->set(nID, m_thetaIndex, bin);
               cellNeighbours.push_back(nID); // add the cell from the next layer of the same phi module
             }
             if (aDiagonal && zmin == currentCellZmax) {
-              _decoder->set(nID, m_thetaID, bin);
+              decoder()->set(nID, m_thetaIndex, bin);
               cellNeighbours.push_back(nID); // add the cell from the next layer of the same phi module
             }
           }
@@ -606,14 +610,14 @@ namespace DDSegmentation {
                 (currentLayerRmin >= Rmin && currentLayerRmin < Rmax) ||
                 (currentLayerRmax >= Rmin && currentLayerRmax <= Rmax)) {
               CellID nID = cID;
-              _decoder->set(nID, m_layerID, part2layerId);
-              _decoder->set(nID, m_thetaID, maxCellThetaBin);
+              decoder()->set(nID, m_layerIndex, part2layerId);
+              decoder()->set(nID, m_thetaIndex, maxCellThetaBin);
               cellNeighbours.push_back(nID); // add the last theta bin cell from part2 layer
             }
             if (aDiagonal && Rmax == currentLayerRmin) {
               CellID nID = cID;
-              _decoder->set(nID, m_layerID, part2layerId);
-              _decoder->set(nID, m_thetaID, maxCellThetaBin);
+              decoder()->set(nID, m_layerIndex, part2layerId);
+              decoder()->set(nID, m_thetaIndex, maxCellThetaBin);
               cellNeighbours.push_back(nID); // add the last theta bin cell from part2 layer
             }
           }
@@ -637,14 +641,14 @@ namespace DDSegmentation {
                   (currentLayerRmin >= Rmin && currentLayerRmin <= Rmax) ||
                   (currentLayerRmax > Rmin && currentLayerRmax <= Rmax)) {
                 CellID nID = cID;
-                _decoder->set(nID, m_layerID, prevPartLayerId);
-                _decoder->set(nID, m_thetaID, minCellThetaBin);
+                decoder()->set(nID, m_layerIndex, prevPartLayerId);
+                decoder()->set(nID, m_thetaIndex, minCellThetaBin);
                 cellNeighbours.push_back(nID); // add the first theta bin cell from the part1 layer
               }
               if (aDiagonal && Rmin == currentLayerRmax) {
                 CellID nID = cID;
-                _decoder->set(nID, m_layerID, prevPartLayerId);
-                _decoder->set(nID, m_thetaID, minCellThetaBin);
+                decoder()->set(nID, m_layerIndex, prevPartLayerId);
+                decoder()->set(nID, m_thetaIndex, minCellThetaBin);
                 cellNeighbours.push_back(nID); // add the first theta bin cell from the part1 layer
               }
             }
@@ -663,14 +667,14 @@ namespace DDSegmentation {
                   (currentLayerRmin >= Rmin && currentLayerRmin < Rmax) ||
                   (currentLayerRmax >= Rmin && currentLayerRmax <= Rmax)) {
                 CellID nID = cID;
-                _decoder->set(nID, m_layerID, nextPartLayerId);
-                _decoder->set(nID, m_thetaID, maxCellThetaBin);
+                decoder()->set(nID, m_layerIndex, nextPartLayerId);
+                decoder()->set(nID, m_thetaIndex, maxCellThetaBin);
                 cellNeighbours.push_back(nID); // add the first cell from the part3 layer
               }
               if (aDiagonal && Rmax == currentLayerRmin) {
                 CellID nID = cID;
-                _decoder->set(nID, m_layerID, nextPartLayerId);
-                _decoder->set(nID, m_thetaID, maxCellThetaBin);
+                decoder()->set(nID, m_layerIndex, nextPartLayerId);
+                decoder()->set(nID, m_thetaIndex, maxCellThetaBin);
                 cellNeighbours.push_back(nID); // add the first cell from the part3 layer
               }
             }
@@ -690,14 +694,14 @@ namespace DDSegmentation {
                 (currentLayerRmin >= Rmin && currentLayerRmin <= Rmax) ||
                 (currentLayerRmax > Rmin && currentLayerRmax <= Rmax)) {
               CellID nID = cID;
-              _decoder->set(nID, m_layerID, prevPartLayerId);
-              _decoder->set(nID, m_thetaID, minCellThetaBin);
+              decoder()->set(nID, m_layerIndex, prevPartLayerId);
+              decoder()->set(nID, m_thetaIndex, minCellThetaBin);
               cellNeighbours.push_back(nID); // add the first theta bin cell from the part2 layer
             }
             if (aDiagonal && Rmin == currentLayerRmax) {
               CellID nID = cID;
-              _decoder->set(nID, m_layerID, prevPartLayerId);
-              _decoder->set(nID, m_thetaID, minCellThetaBin);
+              decoder()->set(nID, m_layerIndex, prevPartLayerId);
+              decoder()->set(nID, m_thetaIndex, minCellThetaBin);
               cellNeighbours.push_back(nID); // add the first theta bin cell from the part2 layer
             }
           }
@@ -710,24 +714,26 @@ namespace DDSegmentation {
     for (auto nID : cellNeighboursCopy) {
       CellID newID = nID;
       // previous: if the current is 0 then previous is the last bin (id = m_phiBins - 1) else current - 1
-      _decoder->set(newID, m_phiID,
-                    (_decoder->get(nID, m_phiID) == 0) ? m_phiBins - 1 : _decoder->get(nID, m_phiID) - 1);
+      decoder()->set(newID, m_phiIndex,
+                     (decoder()->get(nID, m_phiIndex) == 0) ? m_phiBins - 1 : decoder()->get(nID, m_phiIndex) - 1);
       cellNeighbours.push_back(newID);
       // next: if the current is the last bin (id = m_phiBins - 1) then the next is the first bin (id = 0) else current
       // + 1
-      _decoder->set(newID, m_phiID,
-                    (_decoder->get(nID, m_phiID) == (m_phiBins - 1)) ? 0 : _decoder->get(nID, m_phiID) + 1);
+      decoder()->set(newID, m_phiIndex,
+                     (decoder()->get(nID, m_phiIndex) == (m_phiBins - 1)) ? 0 : decoder()->get(nID, m_phiIndex) + 1);
       cellNeighbours.push_back(newID);
     }
 
     // At the end, find neighbours with the same layer/row in next/previous phi module
     CellID nID = cID;
     // previous: if the current is 0 then previous is the last bin (id = m_phiBins - 1) else current - 1
-    _decoder->set(nID, m_phiID, (_decoder->get(cID, m_phiID) == 0) ? m_phiBins - 1 : _decoder->get(cID, m_phiID) - 1);
+    decoder()->set(nID, m_phiIndex,
+                   (decoder()->get(cID, m_phiIndex) == 0) ? m_phiBins - 1 : decoder()->get(cID, m_phiIndex) - 1);
     cellNeighbours.push_back(nID);
     // next: if the current is the last bin (id = m_phiBins - 1) then the next is the first bin (id = 0) else current +
     // 1
-    _decoder->set(nID, m_phiID, (_decoder->get(cID, m_phiID) == (m_phiBins - 1)) ? 0 : _decoder->get(cID, m_phiID) + 1);
+    decoder()->set(nID, m_phiIndex,
+                   (decoder()->get(cID, m_phiIndex) == (m_phiBins - 1)) ? 0 : decoder()->get(cID, m_phiIndex) + 1);
     cellNeighbours.push_back(nID);
 
     return cellNeighbours;
@@ -741,13 +747,13 @@ namespace DDSegmentation {
   }
 
   /// Determine minimum and maximum polar angle of the cell
-  std::array<double, 2> FCCSWHCalPhiTheta_k4geo::cellTheta(const CellID& cID) const {
+  std::array<double, 2> FCCSWHCalPhiTheta_k4geo::cellTheta(const CellID cID) const {
     std::array<double, 2> cTheta = {M_PI, M_PI};
 
     // get the cell index
-    int idx = _decoder->get(cID, m_thetaID);
+    int idx = decoder()->get(cID, m_thetaIndex);
     // get the layer index
-    uint layer = _decoder->get(cID, m_layerID);
+    uint layer = decoder()->get(cID, m_layerIndex);
 
     if (m_radii.empty())
       defineCellsInRZplan();

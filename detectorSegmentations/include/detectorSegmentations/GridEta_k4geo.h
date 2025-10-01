@@ -30,7 +30,7 @@ namespace DDSegmentation {
      *   @param[in] aCellId ID of a cell.
      *   return Position (radius = 1).
      */
-    virtual Vector3D position(const CellID& aCellID) const;
+    virtual Vector3D position(const CellID& aCellID) const override;
     /**  Determine the cell ID based on the position.
      *   @param[in] aLocalPosition (not used).
      *   @param[in] aGlobalPosition position in the global coordinates.
@@ -38,12 +38,12 @@ namespace DDSegmentation {
      *   return Cell ID.
      */
     virtual CellID cellID(const Vector3D& aLocalPosition, const Vector3D& aGlobalPosition,
-                          const VolumeID& aVolumeID) const;
+                          const VolumeID& aVolumeID) const override;
     /**  Determine the pseudorapidity based on the cell ID.
      *   @param[in] aCellId ID of a cell.
      *   return Pseudorapidity.
      */
-    double eta(const CellID& aCellID) const;
+    double eta(const CellID aCellID) const;
     /**  Get the grid size in pseudorapidity.
      *   return Grid size in eta.
      */
@@ -88,15 +88,18 @@ namespace DDSegmentation {
       return std::sqrt(aposition.X * aposition.X + aposition.Y * aposition.Y);
     }
 
-  protected:
-    /// determine the pseudorapidity based on the current cell ID
-    double eta() const;
+  private:
     /// the grid size in eta
     double m_gridSizeEta;
     /// the coordinate offset in eta
     double m_offsetEta;
     /// the field name used for eta
     std::string m_etaID;
+
+    /// Initialization common to all ctors.
+    void commonSetup();
+    /// the field index used for eta
+    int m_etaIndex = -1;
   };
 } // namespace DDSegmentation
 } // namespace dd4hep
