@@ -312,7 +312,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     thisLayer.zPosition = sumZ / ring_no; // calc average z
     thisLayer.distanceSensitive = innerR;
     thisLayer.lengthSensitive = outerR - innerR;
-
     thisLayer.petalNumber = petal_num;   // module number is the number of petals - needed for CED event display
     thisLayer.sensorsPerPetal = ring_no; // Store the number of rings as sensors per petal - needed for tracking
 
