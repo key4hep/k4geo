@@ -68,7 +68,7 @@ if __name__ == "__main__":
     SIM.action.mapActions["ARCBARREL"] = "Geant4OpticalTrackerAction"
     SIM.action.mapActions["ARCENDCAP"] = "Geant4OpticalTrackerAction"
 
-    # Disable user tracker particle handler, so hits can be associated to photons
+    # Disable user tracker particle handler because no tracking region is defined in arc_full_v0.xml
     SIM.part.userParticleHandler = ""
 
     # Particle gun settings: pions with fixed energy and theta, varying phi
