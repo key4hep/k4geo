@@ -45,7 +45,7 @@ if __name__ == "__main__":
         ph = PhysicsList(kernel, "Geant4OpticalPhotonPhysics/OpticalGammaPhys")
         ph.addParticleConstructor("G4OpticalPhoton")
         ph.VerboseLevel = 0
-        ph.BoundaryInvokeSD = True
+        ph.BoundaryInvokeSD = False
         ph.enableUI()
         seq.adopt(ph)
         return None
