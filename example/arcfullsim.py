@@ -104,22 +104,26 @@ if __name__ == "__main__":
         outImagePrefix = "arcsim_"
         ROOT.gROOT.SetBatch(1)
         rootfile = ROOT.TFile(SIM.outputFile)
+        number_of_events = []
         if not "edm4hep" in SIM.outputFile:
             EVENT = rootfile.Get("EVENT")
-            EVENT.Draw(
+            n1 = EVENT.Draw(
                 "ArcCollection.position.Z():ArcCollection.position.phi()",
                 "((ArcCollection.cellID>>5)&0x7)==0",
             )
+            number_of_events.append(n1)
             ROOT.gPad.SaveAs(outImagePrefix + "barrel_" + SIM.gun.particle + ".png")
-            EVENT.Draw(
+            n2 = EVENT.Draw(
                 "ArcCollection.position.Y():ArcCollection.position.X()",
                 "((ArcCollection.cellID>>5)&0x7)==1",
             )
+            number_of_events.append(n2)
             ROOT.gPad.SaveAs(outImagePrefix + "endcapZpos_" + SIM.gun.particle + ".png")
-            EVENT.Draw(
+            n3 = EVENT.Draw(
                 "ArcCollection.position.Y():ArcCollection.position.X()",
                 "((ArcCollection.cellID>>5)&0x7)==2",
             )
+            number_of_events.append(n3)
             ROOT.gPad.SaveAs(outImagePrefix + "endcapZneg_" + SIM.gun.particle + ".png")
             EVENT.Draw(
                 "ArcCollection.position.Y():ArcCollection.position.X()",
@@ -150,8 +154,11 @@ if __name__ == "__main__":
             ROOT.gPad.SaveAs(outImagePrefix + "endcapZneg_" + SIM.gun.particle + "zoom.png")
 
         rootfile.Close()
-
-        logger.info("TEST: passed")
+        if any(0 == val for val in number_of_events):
+        	logger.fatal("TEST: failed. At least 1 ARC subsystem did not record any hit")
+        	raise RuntimeError("TEST: failed. At least 1 ARC subsystem did not record any hit")
+        else:
+                logger.info("TEST: passed")
 
     except NameError as e:
         logger.fatal("TEST: failed")
