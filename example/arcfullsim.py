@@ -64,7 +64,7 @@ if __name__ == "__main__":
     SIM.filter.mapDetFilter["ARCBARREL"] = None
     SIM.filter.mapDetFilter["ARCENDCAP"] = None
 
-    # Use the optical tracker for the PFRICH
+    # Use DD4hep optical tracker
     SIM.action.mapActions["ARCBARREL"] = "Geant4OpticalTrackerAction"
     SIM.action.mapActions["ARCENDCAP"] = "Geant4OpticalTrackerAction"
 
