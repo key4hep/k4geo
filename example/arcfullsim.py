@@ -45,14 +45,14 @@ if __name__ == "__main__":
         ph = PhysicsList(kernel, "Geant4OpticalPhotonPhysics/OpticalGammaPhys")
         ph.addParticleConstructor("G4OpticalPhoton")
         ph.VerboseLevel = 0
-	# BoundaryInvokeSD is disabled:
-	# if the SD action is triggered at a boundary, the default cellID calculation fails
-	# because DD4hep uses the step midpoint, which lies outside the active volume,
-	# making a valid cellID assignment impossible.
-	# Temporary workaround: ARC light sensors are given a fake refractive index so
-	# photons enter the active volume and the default DD4hep SD action for
-	# opticalTracker can be used.
-	# A custom SD action would be required to safely enable this option.
+        # BoundaryInvokeSD is disabled:
+        # if the SD action is triggered at a boundary, the default cellID calculation fails
+        # because DD4hep uses the step midpoint, which lies outside the active volume,
+        # making a valid cellID assignment impossible.
+        # Temporary workaround: ARC light sensors are given a fake refractive index so
+        # photons enter the active volume and the default DD4hep SD action for
+        # opticalTracker can be used.
+        # A custom SD action would be required to safely enable this option.
         ph.BoundaryInvokeSD = False
         ph.enableUI()
         seq.adopt(ph)
@@ -158,10 +158,10 @@ if __name__ == "__main__":
 
         rootfile.Close()
         if any(0 == val for val in number_of_events):
-        	logger.fatal("TEST: failed. At least 1 ARC subsystem did not record any hit")
-        	raise RuntimeError("TEST: failed. At least 1 ARC subsystem did not record any hit")
+            logger.fatal("TEST: failed. At least 1 ARC subsystem did not record any hit")
+            raise RuntimeError("TEST: failed. At least 1 ARC subsystem did not record any hit")
         else:
-                logger.info("TEST: passed")
+            logger.info("TEST: passed")
 
     except NameError as e:
         logger.fatal("TEST: failed")
