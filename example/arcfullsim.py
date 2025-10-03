@@ -132,20 +132,23 @@ if __name__ == "__main__":
             ROOT.gPad.SaveAs(outImagePrefix + "endcapZneg_" + SIM.gun.particle + "zoom.png")
         else:
             EVENT = rootfile.Get("events")
-            EVENT.Draw(
+            n1 = EVENT.Draw(
                 "ArcCollection.position.z:atan(ArcCollection.position.y/ArcCollection.position.x)",
                 "((ArcCollection.cellID>>5)&0x7)==0&& ArcCollection.position.x>0",
             )
+            number_of_events.append(n1)
             ROOT.gPad.SaveAs(outImagePrefix + "barrel_" + SIM.gun.particle + ".png")
-            EVENT.Draw(
+            n2 = EVENT.Draw(
                 "ArcCollection.position.y:ArcCollection.position.x",
                 "((ArcCollection.cellID>>5)&0x7)==1",
             )
+            number_of_events.append(n2)
             ROOT.gPad.SaveAs(outImagePrefix + "endcapZpos_" + SIM.gun.particle + ".png")
-            EVENT.Draw(
+            n3 = EVENT.Draw(
                 "ArcCollection.position.y:ArcCollection.position.x",
                 "((ArcCollection.cellID>>5)&0x7)==2",
             )
+            number_of_events.append(n3)
             ROOT.gPad.SaveAs(outImagePrefix + "endcapZneg_" + SIM.gun.particle + ".png")
             EVENT.Draw(
                 "ArcCollection.position.y:ArcCollection.position.x",
