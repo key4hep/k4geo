@@ -60,16 +60,9 @@ if __name__ == "__main__":
 
     SIM.physics.setupUserPhysics(setupCerenkov)
 
-    # Allow energy depositions to 0 energy in trackers (which include optical detectors)
-    SIM.filter.tracker = "edep0"
-
-    # Some detectors are only sensitive to optical photons
-    SIM.filter.filters["opticalphotons"] = dict(
-        name="ParticleSelectFilter/OpticalPhotonSelector",
-        parameter={"particle": "opticalphoton"},
-    )
-    SIM.filter.mapDetFilter["ARCBARREL"] = "opticalphotons"
-    SIM.filter.mapDetFilter["ARCENDCAP"] = "opticalphotons"
+    # Disable filtering for ARC detectors (no hits are filtered out)
+    SIM.filter.mapDetFilter["ARCBARREL"] = None
+    SIM.filter.mapDetFilter["ARCENDCAP"] = None
 
     # Use the optical tracker for the PFRICH
     SIM.action.mapActions["ARCBARREL"] = "Geant4OpticalTrackerAction"
