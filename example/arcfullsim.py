@@ -105,7 +105,7 @@ if __name__ == "__main__":
         ROOT.gROOT.SetBatch(1)
         rootfile = ROOT.TFile(SIM.outputFile)
         number_of_events = []
-        if not "edm4hep" in SIM.outputFile:
+        if "edm4hep" not in SIM.outputFile:
             EVENT = rootfile.Get("EVENT")
             n1 = EVENT.Draw(
                 "ArcCollection.position.Z():ArcCollection.position.phi()",
