@@ -105,58 +105,32 @@ if __name__ == "__main__":
         ROOT.gROOT.SetBatch(1)
         rootfile = ROOT.TFile(SIM.outputFile)
         number_of_events = []
-        if "edm4hep" not in SIM.outputFile:
-            EVENT = rootfile.Get("EVENT")
-            n1 = EVENT.Draw(
-                "ArcCollection.position.Z():ArcCollection.position.phi()",
-                "((ArcCollection.cellID>>5)&0x7)==0",
-            )
-            number_of_events.append(n1)
-            ROOT.gPad.SaveAs(outImagePrefix + "barrel_" + SIM.gun.particle + ".png")
-            n2 = EVENT.Draw(
-                "ArcCollection.position.Y():ArcCollection.position.X()",
-                "((ArcCollection.cellID>>5)&0x7)==1",
-            )
-            number_of_events.append(n2)
-            ROOT.gPad.SaveAs(outImagePrefix + "endcapZpos_" + SIM.gun.particle + ".png")
-            n3 = EVENT.Draw(
-                "ArcCollection.position.Y():ArcCollection.position.X()",
-                "((ArcCollection.cellID>>5)&0x7)==2",
-            )
-            number_of_events.append(n3)
-            ROOT.gPad.SaveAs(outImagePrefix + "endcapZneg_" + SIM.gun.particle + ".png")
-            EVENT.Draw(
-                "ArcCollection.position.Y():ArcCollection.position.X()",
-                "((ArcCollection.cellID>>5)&0x7)==2&&ArcCollection.position.Y()>0&&ArcCollection.position.X()>0",
-            )
-            ROOT.gPad.SaveAs(outImagePrefix + "endcapZneg_" + SIM.gun.particle + "zoom.png")
-        else:
-            EVENT = rootfile.Get("events")
-            n1 = EVENT.Draw(
-                "ArcCollection.position.z:atan(ArcCollection.position.y/ArcCollection.position.x)",
-                "((ArcCollection.cellID>>5)&0x7)==0&& ArcCollection.position.x>0",
-            )
-            number_of_events.append(n1)
-            ROOT.gPad.SaveAs(outImagePrefix + "barrel_" + SIM.gun.particle + ".png")
-            n2 = EVENT.Draw(
-                "ArcCollection.position.y:ArcCollection.position.x",
-                "((ArcCollection.cellID>>5)&0x7)==1",
-            )
-            number_of_events.append(n2)
-            ROOT.gPad.SaveAs(outImagePrefix + "endcapZpos_" + SIM.gun.particle + ".png")
-            n3 = EVENT.Draw(
-                "ArcCollection.position.y:ArcCollection.position.x",
-                "((ArcCollection.cellID>>5)&0x7)==2",
-            )
-            number_of_events.append(n3)
-            ROOT.gPad.SaveAs(outImagePrefix + "endcapZneg_" + SIM.gun.particle + ".png")
-            EVENT.Draw(
-                "ArcCollection.position.y:ArcCollection.position.x",
-                "((ArcCollection.cellID>>5)&0x7)==2&& ArcCollection.position.x>0&& ArcCollection.position.y>0",
-            )
-            ROOT.gPad.SaveAs(outImagePrefix + "endcapZneg_" + SIM.gun.particle + "zoom.png")
-
+        EVENT = rootfile.Get("EVENT")
+        n1 = EVENT.Draw(
+            "ArcCollection.position.Z():ArcCollection.position.phi()",
+            "((ArcCollection.cellID>>5)&0x7)==0",
+        )
+        number_of_events.append(n1)
+        ROOT.gPad.SaveAs(outImagePrefix + "barrel_" + SIM.gun.particle + ".png")
+        n2 = EVENT.Draw(
+            "ArcCollection.position.Y():ArcCollection.position.X()",
+            "((ArcCollection.cellID>>5)&0x7)==1",
+        )
+        number_of_events.append(n2)
+        ROOT.gPad.SaveAs(outImagePrefix + "endcapZpos_" + SIM.gun.particle + ".png")
+        n3 = EVENT.Draw(
+            "ArcCollection.position.Y():ArcCollection.position.X()",
+            "((ArcCollection.cellID>>5)&0x7)==2",
+        )
+        number_of_events.append(n3)
+        ROOT.gPad.SaveAs(outImagePrefix + "endcapZneg_" + SIM.gun.particle + ".png")
+        EVENT.Draw(
+            "ArcCollection.position.Y():ArcCollection.position.X()",
+            "((ArcCollection.cellID>>5)&0x7)==2&&ArcCollection.position.Y()>0&&ArcCollection.position.X()>0",
+        )
+        ROOT.gPad.SaveAs(outImagePrefix + "endcapZneg_" + SIM.gun.particle + "zoom.png")
         rootfile.Close()
+
         if any(0 == val for val in number_of_events):
             logger.fatal("TEST: failed. At least 1 ARC subsystem did not record any hit")
             raise RuntimeError("TEST: failed. At least 1 ARC subsystem did not record any hit")
