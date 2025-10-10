@@ -49,15 +49,10 @@ namespace DDSegmentation {
   Vector3D FCCSWHCalPhiRow_k4geo::position(const CellID& cID) const {
     uint layer = decoder()->get(cID, m_layerIndex);
 
-    if (m_radii.empty())
-      calculateLayerRadii();
-    if (m_radii.empty() || m_layerEdges.empty()) {
-      dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiRow_k4geo", "Could not calculate layer radii!");
-      return Vector3D(0., 0., 0.);
-    }
+    const LayerInfo& li = getLayerInfo(layer);
 
-    double radius = m_radii[layer];
-    double minLayerZ = m_layerEdges[layer].first;
+    double radius = li.radius;
+    double minLayerZ = li.zmin;
 
     // get index of the cell in the layer (index starts from 1!)
     int idx = decoder()->get(cID, m_rowIndex);
@@ -71,152 +66,183 @@ namespace DDSegmentation {
     return Vector3D(radius * std::cos(phi(cID)), radius * std::sin(phi(cID)), zpos);
   }
 
-  void FCCSWHCalPhiRow_k4geo::calculateLayerRadii() const {
-    if (m_radii.empty()) {
-      // check if all necessary variables are available
-      if (m_detLayout == -1 || m_offsetZ.empty() || m_widthZ.empty() || m_offsetR.empty() || m_numLayers.empty() ||
-          m_dRlayer.empty()) {
-        dd4hep::printout(
-            dd4hep::ERROR, "FCCSWHCalPhiRow_k4geo", "Please check the readout description in the XML file!\n%s",
-            "One of the variables is missing: detLayout | offset_z | width_z | offset_r | numLayers | dRlayer");
-        return;
+  auto FCCSWHCalPhiRow_k4geo::getLayerInfo(const unsigned layer) const -> const LayerInfo& {
+    // If the LayerInfo vector hasn't been made yet, calculate it now.
+    const std::vector<LayerInfo>* liv = m_layerInfo.load();
+    if (!liv) {
+      auto liv_new = new std::vector<LayerInfo>(initLayerInfo());
+      if (m_layerInfo.compare_exchange_strong(liv, liv_new)) {
+        liv = liv_new;
+      } else {
+        delete liv_new;
       }
+    }
 
-      // some sanity checks of the xml
-      if (m_offsetZ.size() != m_offsetR.size()) {
-        dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiRow_k4geo",
-                         "Please check the readout description in the XML file!\n%s",
-                         "Number of elements in offsetZ and offsetR must be the same!");
-        return;
-      }
-      if (m_widthZ.size() != m_offsetR.size()) {
-        dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiRow_k4geo",
-                         "Please check the readout description in the XML file!\n%s",
-                         "Number of elements in widthZ and offsetR must be the same!");
-        return;
-      }
-      if (m_detLayout == 0 && m_offsetZ.size() != 1) {
-        dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiRow_k4geo",
-                         "Please check the readout description in the XML file!\n%s",
-                         "Number of elements in offsetZ/offsetR/widthZ must be 1 for the Barrel!");
-        return;
-      }
-      if (m_numLayers.size() % m_offsetZ.size() != 0) {
-        dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiRow_k4geo",
-                         "Please check the readout description in the XML file!\n%s",
-                         "Number of elements in numLayers must be multiple of offsetZ.size()!");
-        return;
-      }
-      if (m_dRlayer.size() != m_numLayers.size() / m_offsetZ.size()) {
-        dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiRow_k4geo",
-                         "Please check the readout description in the XML file!\n%s",
-                         "Number of elements in dRlayer must be equal to numLayers.size()/offsetZ.size()!");
-        return;
-      }
-      uint nlayers = 0;
-      for (auto n : m_numLayers)
-        nlayers += n;
-      if (m_gridSizeRow.size() != nlayers) {
-        dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiRow_k4geo",
-                         "Please check the readout description in the XML file!\n%s",
-                         "Number of elements in gridSizeRow must be equal to sum of contents of numLayers!");
-        return;
-      }
+    return liv->at(layer);
+  }
 
-      if (m_detLayout == 0)
-        dd4hep::printout(dd4hep::INFO, "FCCSWHCalPhiRow_k4geo", "Barrel configuration found!");
-      else
-        dd4hep::printout(dd4hep::INFO, "FCCSWHCalPhiRow_k4geo", "EndCap configuration found!");
+  // Initialize derived derived layer information.
+  std::vector<FCCSWHCalPhiRow_k4geo::LayerInfo> FCCSWHCalPhiRow_k4geo::initLayerInfo() const {
+    std::vector<LayerInfo> out;
+    if (!checkParameters()) {
+      out.resize((*decoder())[m_layerIndex].maxValue() + 1);
+      return out;
+    }
 
-      // calculate the radius for each layer
-      uint N_dR = m_numLayers.size() / m_offsetZ.size();
-      std::vector<double> moduleDepth(m_offsetZ.size());
-      for (uint i_section = 0; i_section < m_offsetZ.size(); i_section++) {
-        for (uint i_dR = 0; i_dR < N_dR; i_dR++) {
-          for (int i_row = 1; i_row <= m_numLayers[i_dR + i_section * N_dR]; i_row++) {
-            moduleDepth[i_section] += m_dRlayer[i_dR];
-            m_radii.push_back(m_offsetR[i_section] + moduleDepth[i_section] - m_dRlayer[i_dR] * 0.5);
-            // layer lower and upper edges in z-axis
-            m_layerEdges.push_back(std::make_pair(m_offsetZ[i_section] - 0.5 * m_widthZ[i_section],
-                                                  m_offsetZ[i_section] + 0.5 * m_widthZ[i_section]));
-            m_layerDepth.push_back(m_dRlayer[i_dR]);
-          }
+    if (m_detLayout == 0)
+      dd4hep::printout(dd4hep::INFO, "FCCSWHCalPhiRow_k4geo", "Barrel configuration found!");
+    else
+      dd4hep::printout(dd4hep::INFO, "FCCSWHCalPhiRow_k4geo", "EndCap configuration found!");
+
+    // calculate the radius for each layer
+    uint N_dR = m_numLayers.size() / m_offsetZ.size();
+    std::vector<double> moduleDepth = m_offsetR;
+    for (uint i_section = 0; i_section < m_offsetZ.size(); i_section++) {
+      // lower and upper edges in z-axis
+      double zmin = m_offsetZ[i_section] - 0.5 * m_widthZ[i_section];
+      double zmax = m_offsetZ[i_section] + 0.5 * m_widthZ[i_section];
+
+      // Loop over groups of layers.
+      for (uint i_dR = 0; i_dR < N_dR; i_dR++) {
+        // Loop over individual layers.
+        for (int i_lay = 0; i_lay < m_numLayers[i_dR + i_section * N_dR]; i_lay++) {
+          moduleDepth[i_section] += m_dRlayer[i_dR];
+          out.push_back(LayerInfo{.radius = moduleDepth[i_section] - m_dRlayer[i_dR] * 0.5,
+                                  .halfDepth = m_dRlayer[i_dR] / 2,
+                                  .zmin = zmin,
+                                  .zmax = zmax});
         }
       }
-
-      // print info of calculated radii and edges
-      for (uint i_layer = 0; i_layer < m_radii.size(); i_layer++) {
-        dd4hep::printout(dd4hep::INFO, "FCCSWHCalPhiRow_k4geo", "layer %d radius: %.2f, z range: %.2f - %.2f cm",
-                         i_layer, m_radii[i_layer], m_layerEdges[i_layer].first, m_layerEdges[i_layer].second);
-      }
-
-      // allocate cellIndexes vector for each layer
-      m_cellIndexes.resize(m_radii.size());
-      // allocate cellEdges vector for each layer
-      m_cellEdges.resize(m_radii.size());
-
-      // determine row bins for each layer
-      for (uint i_layer = 0; i_layer < m_radii.size(); i_layer++)
-        defineCellIndexes(i_layer);
     }
+
+    // print info of calculated radii and edges
+    for (uint i_layer = 0; const LayerInfo& li : out) {
+      dd4hep::printout(dd4hep::INFO, "FCCSWHCalPhiRow_k4geo", "layer %d radius: %.2f, z range: %.2f - %.2f cm",
+                       i_layer++, li.radius, li.zmin, li.zmax);
+    }
+
+    // determine theta bins and cell edges for each layer
+    for (uint i_layer = 0; LayerInfo& li : out) {
+      defineCellIndexes(li, i_layer);
+      ++i_layer;
+    }
+    return out;
   }
 
   /*
-   *  This function fills the m_cellIndexes vector per layer with the cell indexes.
+   *  This function fills the cellIndexes vector per layer with the cell indexes.
    *  The cell index is encoded in CellID with "row" field.
    *  In case of a cell with single row/sequence, the index is directly the number of row in the layer.
    *  In case of a cell with several rows/sequences merged, the index is the number of cell in the layer.
    *  For the layers of negative-z Endcap, indexes of cells are negative (-1, -2, ..., -N).
    *
-   *  m_cellIndexes vector can be used to define the neighbours using CreateFCCeeCaloNeighbours tool.
+   *  cellIndexes vector can be used to define the neighbours using CreateFCCeeCaloNeighbours tool.
    */
-  void FCCSWHCalPhiRow_k4geo::defineCellIndexes(const uint layer) const {
-    if (m_cellIndexes[layer].size() == 0 && m_radii.size() > 0) {
-      double minLayerZ = m_layerEdges[layer].first;
-      double maxLayerZ = m_layerEdges[layer].second;
+  void FCCSWHCalPhiRow_k4geo::defineCellIndexes(LayerInfo& li, const uint layer) const {
+    double minLayerZ = li.zmin;
+    double maxLayerZ = li.zmax;
 
-      // find rows/sequences that fit within the given layer range along z
-      int irow = 0;
+    // find rows/sequences that fit within the given layer range along z
+    int irow = 0;
+    while ((minLayerZ + (irow + 1) * m_dz_row) < (maxLayerZ + 0.0001)) {
+      // define the cell index
+      int idx = floor(irow / m_gridSizeRow[layer]) + 1;
+      // add the index if it is not already there
+      if (std::find(li.cellIndexes.begin(), li.cellIndexes.end(), idx) == li.cellIndexes.end())
+        li.cellIndexes.push_back(idx);
+      irow++;
+    }
+
+    // for the EndCap, do it again but for negative-z part
+    if (m_detLayout == 1) {
+      irow = 0;
       while ((minLayerZ + (irow + 1) * m_dz_row) < (maxLayerZ + 0.0001)) {
-        // define the cell index
-        int idx = floor(irow / m_gridSizeRow[layer]) + 1;
+        // define the cell index with negative sign
+        int idx = -(floor(irow / m_gridSizeRow[layer]) + 1);
         // add the index if it is not already there
-        if (std::find(m_cellIndexes[layer].begin(), m_cellIndexes[layer].end(), idx) == m_cellIndexes[layer].end())
-          m_cellIndexes[layer].push_back(idx);
+        if (std::find(li.cellIndexes.begin(), li.cellIndexes.end(), idx) == li.cellIndexes.end())
+          li.cellIndexes.push_back(idx);
         irow++;
       }
-
-      // for the EndCap, do it again but for negative-z part
-      if (m_detLayout == 1) {
-        irow = 0;
-        while ((minLayerZ + (irow + 1) * m_dz_row) < (maxLayerZ + 0.0001)) {
-          // define the cell index with negative sign
-          int idx = -(floor(irow / m_gridSizeRow[layer]) + 1);
-          // add the index if it is not already there
-          if (std::find(m_cellIndexes[layer].begin(), m_cellIndexes[layer].end(), idx) == m_cellIndexes[layer].end())
-            m_cellIndexes[layer].push_back(idx);
-          irow++;
-        }
-      }
-
-      // find edges of each cell in the given layer along z axis
-      for (auto idx : m_cellIndexes[layer]) {
-        // calculate z-coordinates of the cell edges
-        double z1 = minLayerZ + (idx - 1) * m_dz_row * m_gridSizeRow[layer]; // lower edge
-        double z2 = minLayerZ + (idx)*m_dz_row * m_gridSizeRow[layer];       // upper edge
-
-        // for negative-z Endcap, the index is negative (starts from -1!)
-        if (idx < 0) {
-          z1 = -minLayerZ + (idx)*m_dz_row * m_gridSizeRow[layer];       // lower edge
-          z2 = -minLayerZ + (idx + 1) * m_dz_row * m_gridSizeRow[layer]; // upper edge
-        }
-
-        m_cellEdges[layer][idx] = std::make_pair(z1, z2);
-      }
-
-      dd4hep::printout(dd4hep::DEBUG, "FCCSWHCalPhiRow_k4geo", "Number of cells in layer %d: %d", layer,
-                       m_cellIndexes[layer].size());
     }
+
+    // find edges of each cell in the given layer along z axis
+    for (auto idx : li.cellIndexes) {
+      // calculate z-coordinates of the cell edges
+      double z1 = minLayerZ + (idx - 1) * m_dz_row * m_gridSizeRow[layer]; // lower edge
+      double z2 = minLayerZ + (idx)*m_dz_row * m_gridSizeRow[layer];       // upper edge
+
+      // for negative-z Endcap, the index is negative (starts from -1!)
+      if (idx < 0) {
+        z1 = -minLayerZ + (idx)*m_dz_row * m_gridSizeRow[layer];       // lower edge
+        z2 = -minLayerZ + (idx + 1) * m_dz_row * m_gridSizeRow[layer]; // upper edge
+      }
+
+      li.cellEdges[idx] = std::make_pair(z1, z2);
+    }
+
+    dd4hep::printout(dd4hep::DEBUG, "FCCSWHCalPhiRow_k4geo", "Number of cells in layer %d: %d", layer,
+                     li.cellIndexes.size());
+  }
+
+  // Check consistency of input geometric variables.
+  bool FCCSWHCalPhiRow_k4geo::checkParameters() const {
+    // check if all necessary variables are available
+    if (m_detLayout == -1 || m_offsetZ.empty() || m_widthZ.empty() || m_offsetR.empty() || m_numLayers.empty() ||
+        m_dRlayer.empty()) {
+      dd4hep::printout(
+          dd4hep::ERROR, "FCCSWHCalPhiRow_k4geo", "Please check the readout description in the XML file!\n%s",
+          "One of the variables is missing: detLayout | offset_z | width_z | offset_r | numLayers | dRlayer");
+      return false;
+    }
+
+    // some sanity checks of the xml
+    if (m_offsetZ.size() != m_offsetR.size()) {
+      dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiRow_k4geo",
+                       "Please check the readout description in the XML file!\n%s",
+                       "Number of elements in offsetZ and offsetR must be the same!");
+      return false;
+    }
+
+    if (m_widthZ.size() != m_offsetR.size()) {
+      dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiRow_k4geo",
+                       "Please check the readout description in the XML file!\n%s",
+                       "Number of elements in widthZ and offsetR must be the same!");
+      return false;
+    }
+
+    if (m_detLayout == 0 && m_offsetZ.size() != 1) {
+      dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiRow_k4geo",
+                       "Please check the readout description in the XML file!\n%s",
+                       "Number of elements in offsetZ/offsetR/widthZ must be 1 for the Barrel!");
+      return false;
+    }
+
+    if (m_numLayers.size() % m_offsetZ.size() != 0) {
+      dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiRow_k4geo",
+                       "Please check the readout description in the XML file!\n%s",
+                       "Number of elements in numLayers must be multiple of offsetZ.size()!");
+      return false;
+    }
+
+    if (m_dRlayer.size() != m_numLayers.size() / m_offsetZ.size()) {
+      dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiRow_k4geo",
+                       "Please check the readout description in the XML file!\n%s",
+                       "Number of elements in dRlayer must be equal to numLayers.size()/offsetZ.size()!");
+      return false;
+    }
+
+    uint nlayers = 0;
+    for (auto n : m_numLayers)
+      nlayers += n;
+    if (m_gridSizeRow.size() != nlayers) {
+      dd4hep::printout(dd4hep::ERROR, "FCCSWHCalPhiRow_k4geo",
+                       "Please check the readout description in the XML file!\n%s",
+                       "Number of elements in gridSizeRow must be equal to sum of contents of numLayers!");
+      return false;
+    }
+
+    return true;
   }
 
   /// create the cell ID based on the position
@@ -261,11 +287,6 @@ namespace DDSegmentation {
 
     std::vector<std::pair<uint, uint>> minMaxLayerId;
 
-    if (m_radii.empty())
-      calculateLayerRadii();
-    if (m_radii.empty())
-      return minMaxLayerId;
-
     std::vector<uint> minLayerId(m_offsetZ.size(), 0);
     std::vector<uint> maxLayerId(m_offsetZ.size(), 0);
 
@@ -294,11 +315,6 @@ namespace DDSegmentation {
   std::vector<uint64_t> FCCSWHCalPhiRow_k4geo::neighbours(const CellID cID) const {
     std::vector<uint64_t> cellNeighbours;
 
-    if (m_radii.empty())
-      calculateLayerRadii();
-    if (m_cellIndexes.empty())
-      return cellNeighbours;
-
     uint EndcapPart = 0;
     int minLayerId = -1;
     int maxLayerId = -1;
@@ -306,8 +322,10 @@ namespace DDSegmentation {
     int currentLayerId = decoder()->get(cID, m_layerIndex);
     int currentCellId = decoder()->get(cID, m_rowIndex);
 
-    int minCellId = m_cellIndexes[currentLayerId].front();
-    int maxCellId = m_cellIndexes[currentLayerId].back();
+    const LayerInfo& li = getLayerInfo(currentLayerId);
+
+    int minCellId = li.cellIndexes.front();
+    int maxCellId = li.cellIndexes.back();
 
     //--------------------------------
     // Determine min and max layer Id
@@ -338,19 +356,19 @@ namespace DDSegmentation {
       // correct the min and max CellId for endcap
       if (currentCellId < 0) // negative-z part (cell index is negative (-1, -2, ... -N))
       {
-        // second half of elements in m_cellIndexes[currentLayerId] vector corresponds to the negative-z layer cells
-        minCellId = m_cellIndexes[currentLayerId].back();
-        maxCellId = m_cellIndexes[currentLayerId][m_cellIndexes[currentLayerId].size() / 2];
+        // second half of elements in li.cellIndexes vector corresponds to the negative-z layer cells
+        minCellId = li.cellIndexes.back();
+        maxCellId = li.cellIndexes[li.cellIndexes.size() / 2];
       } else // positive-z part (cell index is positive (1, 2, ... N))
       {
-        // first half of elements in m_cellIndexes[currentLayerId] vector corresponds to the positive-z layer cells
-        minCellId = m_cellIndexes[currentLayerId].front();
-        maxCellId = m_cellIndexes[currentLayerId][m_cellIndexes[currentLayerId].size() / 2 - 1];
+        // first half of elements in li.cellIndexes vector corresponds to the positive-z layer cells
+        minCellId = li.cellIndexes.front();
+        maxCellId = li.cellIndexes[li.cellIndexes.size() / 2 - 1];
       }
     } else // for Barrel
     {
       minLayerId = 0;
-      maxLayerId = m_radii.size() - 1;
+      maxLayerId = m_layerInfo.load()->size() - 1;
     }
     //--------------------------------
 
@@ -462,21 +480,22 @@ namespace DDSegmentation {
     // if this is the Endcap (and consists of more than 1 part/section) then look for neighbours in different parts as
     // well
     if (m_detLayout == 1 && m_offsetZ.size() > 1) {
-      double currentLayerRmin = m_radii[currentLayerId] - 0.5 * m_layerDepth[currentLayerId];
-      double currentLayerRmax = m_radii[currentLayerId] + 0.5 * m_layerDepth[currentLayerId];
+      double currentLayerRmin = li.radius - li.halfDepth;
+      double currentLayerRmax = li.radius + li.halfDepth;
 
       // if the cell is in negative-z part, then swap min and max cell indexes
       if (currentCellId < 0) {
-        minCellId = m_cellIndexes[currentLayerId][m_cellIndexes[currentLayerId].size() / 2]; // this should be -1
-        maxCellId = m_cellIndexes[currentLayerId].back();                                    // this should be -N
+        minCellId = li.cellIndexes[li.cellIndexes.size() / 2]; // this should be -1
+        maxCellId = li.cellIndexes.back();                     // this should be -N
       }
 
       // if it is the last cell in the first part
       if (EndcapPart == 0 && currentCellId == maxCellId) {
         // find the layers in the part2 that share a border with the current layer
         for (int part2layerId = minLayerIdEndcap[1]; part2layerId <= maxLayerIdEndcap[1]; part2layerId++) {
-          double Rmin = m_radii[part2layerId] - 0.5 * m_layerDepth[part2layerId];
-          double Rmax = m_radii[part2layerId] + 0.5 * m_layerDepth[part2layerId];
+          const LayerInfo& part2li = getLayerInfo(part2layerId);
+          double Rmin = part2li.radius - part2li.halfDepth;
+          double Rmax = part2li.radius + part2li.halfDepth;
 
           if ((Rmin >= currentLayerRmin && Rmin <= currentLayerRmax) ||
               (Rmax >= currentLayerRmin && Rmax <= currentLayerRmax) ||
@@ -500,8 +519,9 @@ namespace DDSegmentation {
           // find the layers in previous part that share a border with the current layer
           for (int prevPartLayerId = minLayerIdEndcap[i_section - 1];
                prevPartLayerId <= maxLayerIdEndcap[i_section - 1]; prevPartLayerId++) {
-            double Rmin = m_radii[prevPartLayerId] - 0.5 * m_layerDepth[prevPartLayerId];
-            double Rmax = m_radii[prevPartLayerId] + 0.5 * m_layerDepth[prevPartLayerId];
+            const LayerInfo& prevPartli = getLayerInfo(prevPartLayerId);
+            double Rmin = prevPartli.radius - prevPartli.halfDepth;
+            double Rmax = prevPartli.radius + prevPartli.halfDepth;
 
             if ((Rmin >= currentLayerRmin && Rmin <= currentLayerRmax) ||
                 (Rmax >= currentLayerRmin && Rmax <= currentLayerRmax) ||
@@ -519,8 +539,9 @@ namespace DDSegmentation {
           // find the layers in the next that share a border with the current layer
           for (int nextPartLayerId = minLayerIdEndcap[i_section + 1];
                nextPartLayerId <= maxLayerIdEndcap[i_section + 1]; nextPartLayerId++) {
-            double Rmin = m_radii[nextPartLayerId] - 0.5 * m_layerDepth[nextPartLayerId];
-            double Rmax = m_radii[nextPartLayerId] + 0.5 * m_layerDepth[nextPartLayerId];
+            const LayerInfo& nextPartli = getLayerInfo(nextPartLayerId);
+            double Rmin = nextPartli.radius - nextPartli.halfDepth;
+            double Rmax = nextPartli.radius + nextPartli.halfDepth;
 
             if ((Rmin >= currentLayerRmin && Rmin <= currentLayerRmax) ||
                 (Rmax >= currentLayerRmin && Rmax <= currentLayerRmax) ||
@@ -540,8 +561,9 @@ namespace DDSegmentation {
         // find the layers in the previous part that share a border with the current layer
         for (int prevPartLayerId = minLayerIdEndcap[m_offsetZ.size() - 2];
              prevPartLayerId <= maxLayerIdEndcap[m_offsetZ.size() - 2]; prevPartLayerId++) {
-          double Rmin = m_radii[prevPartLayerId] - 0.5 * m_layerDepth[prevPartLayerId];
-          double Rmax = m_radii[prevPartLayerId] + 0.5 * m_layerDepth[prevPartLayerId];
+          const LayerInfo& prevPartli = getLayerInfo(prevPartLayerId);
+          double Rmin = prevPartli.radius - prevPartli.halfDepth;
+          double Rmax = prevPartli.radius + prevPartli.halfDepth;
 
           if ((Rmin >= currentLayerRmin && Rmin <= currentLayerRmax) ||
               (Rmax >= currentLayerRmin && Rmax <= currentLayerRmax) ||
@@ -602,16 +624,14 @@ namespace DDSegmentation {
     // get the layer index
     uint layer = decoder()->get(cID, m_layerIndex);
 
-    if (m_radii.empty())
-      calculateLayerRadii();
-    if (m_cellEdges.empty())
-      return cTheta;
+    const LayerInfo& li = getLayerInfo(layer);
 
-    double zlow = m_cellEdges[layer][idx].first;
-    double zhigh = m_cellEdges[layer][idx].second;
+    const auto& edges = li.cellEdges.find(idx)->second;
+    double zlow = edges.first;
+    double zhigh = edges.second;
 
-    double Rmin = m_radii[layer] - 0.5 * m_layerDepth[layer];
-    double Rmax = m_radii[layer] + 0.5 * m_layerDepth[layer];
+    double Rmin = li.radius - li.halfDepth;
+    double Rmax = li.radius + li.halfDepth;
 
     if (theta(cID) < M_PI / 2.) {
       cTheta[0] = std::atan2(Rmin, zhigh); // theta min
@@ -633,19 +653,17 @@ namespace DDSegmentation {
     // get the first layerId in the Barrel or in the last part of the Endcap
     uint layer = minMaxLayerId[minMaxLayerId.size() - 1].first;
 
-    if (m_radii.empty())
-      calculateLayerRadii();
-    if (m_cellEdges.empty())
-      return 0;
+    const LayerInfo& li = getLayerInfo(layer);
 
     // get the last cell index (which is in the positive-z side)
-    int idx = abs(m_cellIndexes[layer].back());
+    int idx = abs(li.cellIndexes.back());
 
     // get the z-coordinate of the right-hand edge of the last cell
-    double zhigh = m_cellEdges[layer][idx].second;
+    const auto& edges = li.cellEdges.find(idx)->second;
+    double zhigh = edges.second;
 
     // get the inner radius of the first layer
-    double Rmin = m_radii[layer] - 0.5 * m_layerDepth[layer];
+    double Rmin = li.radius - 0.5 * li.halfDepth;
 
     // calculate the minimum theta of the last cell in the first layer -> this is the minimum theta of the detector
     // (Barrel or Endcap)
