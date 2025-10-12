@@ -860,7 +860,6 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
 
       int detElementID = (numEndcapLayer < 0) ? numEndcapLayer + numEndcapDetectorLayers
                                               : numEndcapLayer + numEndcapDetectorLayers + 1;
- 
 
       dd4hep::Position endcapDetectorEnvelopeTrans(endcapDetectorEnvXPos, endcapDetectorEnvYPos, endcapDetectorEnvZPos);
       dd4hep::PlacedVolume endcapDetectorEnvelopePhys = endcapVolume.placeVolume(
