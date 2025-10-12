@@ -835,11 +835,21 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
       dd4hep::PolyhedraRegular endcapDetectorEnvelope(numSides, endcapDetectorLayerInnerRadius,
                                                       endcapDetectorLayerOuterRadius, 2 * endcapDetectorEnvZ);
 
-      endcapLayerZOffset =
-          -EndcaptotalLength / 2.0 + endcapDetectorEnvZ + numEndcapLayer * (2 * endcapDetectorEnvZ) +
-          numEndcapLayer *
-              endcapRadiatorThickness; // Automation of inner Z-Offset of different layers, taking into account that
-                                       // every detector layer is followed by a yoke(radiator) layer
+      // Automation of inner Z-Offset of different layers, taking into account that 
+      // every detector layer is followed by a yoke(radiator) layer
+      if (endcapType == -1) {
+        // For negative endcap: reverse the layer positioning so layer 0 is closest to IP
+        int reversedLayer = numEndcapDetectorLayers - 1 - numEndcapLayer;
+        endcapLayerZOffset =
+            -EndcaptotalLength / 2.0 + endcapDetectorEnvZ + reversedLayer * (2 * endcapDetectorEnvZ) +
+            reversedLayer * endcapRadiatorThickness;
+      } else {
+        // For positive endcap: use normal positioning
+        endcapLayerZOffset =
+            -EndcaptotalLength / 2.0 + endcapDetectorEnvZ + numEndcapLayer * (2 * endcapDetectorEnvZ) +
+            numEndcapLayer * endcapRadiatorThickness;
+      }
+      
       endcapDetectorEnvelopeName = name + "-EndcapDetectorLayer" + std::to_string(numEndcapLayer + 1);
       endcapDetectorEnvZPos = endcapLayerZOffset;
 
@@ -851,21 +861,13 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
       int detElementID = (numEndcapLayer < 0) ? numEndcapLayer + numEndcapDetectorLayers
                                               : numEndcapLayer + numEndcapDetectorLayers + 1;
  
-      int layerID;
-      if (endcapType == -1) {
-          // Negative endcap: reverse numbering (layer 0 closest to IP)
-          layerID = numEndcapDetectorLayers - 1 - numEndcapLayer;
-      } else {
-          // Positive endcap: natural numbering (layer 0 closest to IP)
-          layerID = numEndcapLayer;
-      }
 
       dd4hep::Position endcapDetectorEnvelopeTrans(endcapDetectorEnvXPos, endcapDetectorEnvYPos, endcapDetectorEnvZPos);
       dd4hep::PlacedVolume endcapDetectorEnvelopePhys = endcapVolume.placeVolume(
           endcapDetectorEnvVol, dd4hep::Transform3D(dd4hep::RotationZ(0.), endcapDetectorEnvelopeTrans));
       dd4hep::DetElement endcapDetectorEnvelopeDE(EndcapDE, endcapDetectorEnvelopeName + "DE", detElementID);
       endcapDetectorEnvelopeDE.setPlacement(endcapDetectorEnvelopePhys);
-      endcapDetectorEnvelopePhys.addPhysVolID("layer", layerID);
+      endcapDetectorEnvelopePhys.addPhysVolID("layer", numEndcapLayer);
       endcapDetectorEnvVol.setVisAttributes(lcdd, xmlDet.visStr());
 
       // -------------------------- Building detector sides ---------------------
@@ -1197,12 +1199,23 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
 
     for (int numEndcapRadiatorLayer = 0; numEndcapRadiatorLayer < numEndcapRadiators; ++numEndcapRadiatorLayer) {
 
-      double endcapRadiatorLayerZOffset =
-          -EndcaptotalLength / 2.0 + (endcapRadiatorThickness / 2.0) +
-          (numEndcapRadiatorLayer + 1) * (2 * endcapDetectorEnvZ) +
-          numEndcapRadiatorLayer *
-              endcapRadiatorThickness; // Automation of inner Z-Offset of different layers, taking into account that
-                                       // every detector layer is followed by a yoke(radiator) layer
+      // Automation of inner Z-Offset of different layers, taking into account that 
+      // every detector layer is followed by a yoke(radiator) layer
+      double endcapRadiatorLayerZOffset;
+      if (endcapType == -1) {
+        // For negative endcap: reverse the radiator layer positioning
+        int reversedRadiatorLayer = numEndcapRadiators - 1 - numEndcapRadiatorLayer;
+        endcapRadiatorLayerZOffset =
+            -EndcaptotalLength / 2.0 + (endcapRadiatorThickness / 2.0) +
+            (reversedRadiatorLayer + 1) * (2 * endcapDetectorEnvZ) +
+            reversedRadiatorLayer * endcapRadiatorThickness;
+      } else {
+        // For positive endcap: use normal positioning
+        endcapRadiatorLayerZOffset =
+            -EndcaptotalLength / 2.0 + (endcapRadiatorThickness / 2.0) +
+            (numEndcapRadiatorLayer + 1) * (2 * endcapDetectorEnvZ) +
+            numEndcapRadiatorLayer * endcapRadiatorThickness;
+      }
 
       dd4hep::PolyhedraRegular endcapRadiatorEnvelope(numSides, endcapRadiatorLayerInnerRadius,
                                                       endcapRadiatorLayerOuterRadius, endcapRadiatorThickness);
