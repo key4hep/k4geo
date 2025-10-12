@@ -76,12 +76,10 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
   auto Endcap = xmlElement.child(_Unicode(Endcap));
   int numEndcapDetectorLayers = Endcap.attr<double>("numDetectorLayers");
   double endcapDetectorLayerInnerRadius = Endcap.attr<double>("rmin");
-  double endcapDetectorLayerOuterRadius = Endcap.attr<double>("rmax");
   double endcapZOffset = Endcap.attr<double>("z_offset");
   int numEndcapRadiators = Endcap.attr<double>("numYokes");
   double endcapRadiatorThickness = Endcap.attr<double>("yoke_Thickness");
   double endcapRadiatorLayerInnerRadius = endcapDetectorLayerInnerRadius;
-  double endcapRadiatorLayerOuterRadius = endcapDetectorLayerOuterRadius;
   dd4hep::Material endcapRadiatorMaterial = lcdd.material(Endcap.attr<std::string>("yoke_Material"));
 
   // -----------------------------------------------------------------------------------------------------------
@@ -111,6 +109,11 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
         (2 * dimensions.z()) * std::sin(rectangleAngle_rad) + rectangleThickness * std::cos(rectangleAngle_rad);
     endcapDetectorEnvZ = detectorVolumeThickness;
   }
+
+  // Automizing Endcap R-max to be enclosed by Barrel last layer
+  double endcapDetectorLayerOuterRadius = radius + (numBarrelDetectorLayers -1) * (
+                                          2 * detectorVolumeThickness) + numBarrelRadiators * barrelRadiatorThickness;
+  double endcapRadiatorLayerOuterRadius = endcapDetectorLayerOuterRadius;
 
   double endcapDetectorSideLength =
       (2 * (endcapDetectorLayerInnerRadius + 2 * dimensions.y()) * std::tan(shapeAngle_radians)) + 2 * clearance;
