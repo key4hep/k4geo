@@ -847,13 +847,22 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
 
       int detElementID = (numEndcapLayer < 0) ? numEndcapLayer + numEndcapDetectorLayers
                                               : numEndcapLayer + numEndcapDetectorLayers + 1;
+ 
+      int layerID;
+      if (endcapType == -1) {
+          // Negative endcap: reverse numbering (layer 0 closest to IP)
+          layerID = numEndcapDetectorLayers - 1 - numEndcapLayer;
+      } else {
+          // Positive endcap: natural numbering (layer 0 closest to IP)
+          layerID = numEndcapLayer;
+      }
 
       dd4hep::Position endcapDetectorEnvelopeTrans(endcapDetectorEnvXPos, endcapDetectorEnvYPos, endcapDetectorEnvZPos);
       dd4hep::PlacedVolume endcapDetectorEnvelopePhys = endcapVolume.placeVolume(
           endcapDetectorEnvVol, dd4hep::Transform3D(dd4hep::RotationZ(0.), endcapDetectorEnvelopeTrans));
       dd4hep::DetElement endcapDetectorEnvelopeDE(EndcapDE, endcapDetectorEnvelopeName + "DE", detElementID);
       endcapDetectorEnvelopeDE.setPlacement(endcapDetectorEnvelopePhys);
-      endcapDetectorEnvelopePhys.addPhysVolID("layer", numEndcapLayer);
+      endcapDetectorEnvelopePhys.addPhysVolID("layer", layerID);
       endcapDetectorEnvVol.setVisAttributes(lcdd, xmlDet.visStr());
 
       // -------------------------- Building detector sides ---------------------
