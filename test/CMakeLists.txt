@@ -16,7 +16,7 @@ add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DI
 SET( test_name "test_ILD_l5_v11" )
 add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_l5_v11/ILD_l5_v11.xml --runType=batch -G -N=1 --outputFile=testILD_l5_v11.slcio )
 
-if (INSTALL_BEAMPIPE_STL_FILES)
+if(INSTALL_BEAMPIPE_STL_FILES)
   SET( test_name "test_ILD_FCCee_v01" )
   add_test(NAME ${test_name} COMMAND sh -c "
     ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ILD_FCCee/compact/ILD_FCCee_v01/ILD_FCCee_v01.xml --runType=batch -G -N=1 --outputFile=testILD_FCCee_v01.slcio 2>&1 |
