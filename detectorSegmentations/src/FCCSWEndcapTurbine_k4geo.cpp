@@ -6,18 +6,16 @@ namespace DDSegmentation {
 
   /// default constructor using an encoding string
   FCCSWEndcapTurbine_k4geo::FCCSWEndcapTurbine_k4geo(const std::string& cellEncoding) : Segmentation(cellEncoding) {
-
     commonSetup();
   }
 
   FCCSWEndcapTurbine_k4geo::FCCSWEndcapTurbine_k4geo(const BitFieldCoder* decoder) : Segmentation(decoder) {
-    // define type and description
-
     commonSetup();
   }
 
   /// initialize variables, etc (needed for either version of the ctor)
   void FCCSWEndcapTurbine_k4geo::commonSetup() {
+    // define type and description
     _type = "FCCSWEndcapTurbine_k4geo";
     _description = "Turbine-specific segmentation in the global coordinates";
 
@@ -159,6 +157,13 @@ namespace DDSegmentation {
       std::cout << "ECalEndcapNumCalibZLayersWheel3 not found in detector metadata, exiting..." << std::endl;
       exit(1);
     }
+
+    m_rhoIndex = decoder()->index(m_rhoID);
+    m_wheelIndex = decoder()->index(m_wheelID);
+    m_moduleIndex = decoder()->index(m_moduleID);
+    m_zIndex = decoder()->index(m_zID);
+    m_sideIndex = decoder()->index(m_sideID);
+    m_layerIndex = decoder()->index(m_layerID);
   }
 
   /// determine the local position based on the cell ID
@@ -179,9 +184,9 @@ namespace DDSegmentation {
   CellID FCCSWEndcapTurbine_k4geo::cellID(const Vector3D& /* localPosition */, const Vector3D& globalPosition,
                                           const VolumeID& vID) const {
     CellID cID = vID;
-    CellID iWheel = _decoder->get(cID, m_wheelID);
-    CellID iLayer = _decoder->get(cID, m_layerID);
-    CellID iModule = _decoder->get(cID, m_moduleID);
+    CellID iWheel = decoder()->get(cID, m_wheelIndex);
+    CellID iLayer = decoder()->get(cID, m_layerIndex);
+    CellID iModule = decoder()->get(cID, m_moduleIndex);
 
     double lRho = rhoFromXYZ(globalPosition);
     int iRho = positionToBin(lRho, m_gridSizeRho[iWheel], m_offsetRho[iWheel] + m_gridSizeRho[iWheel] / 2.);
@@ -191,7 +196,7 @@ namespace DDSegmentation {
     if (iRho >= m_numReadoutRhoLayers[iWheel]) {
       iRho = m_numReadoutRhoLayers[iWheel] - 1;
     }
-    _decoder->set(cID, m_rhoID, iRho);
+    decoder()->set(cID, m_rhoIndex, iRho);
 
     double lZ = TMath::Abs(globalPosition.Z);
     int iZ = positionToBin(lZ, m_gridSizeZ[iWheel], m_offsetZ[iWheel] + m_gridSizeZ[iWheel] / 2.);
@@ -201,32 +206,32 @@ namespace DDSegmentation {
     if (iZ >= m_numReadoutZLayers[iWheel]) {
       iZ = m_numReadoutZLayers[iWheel] - 1;
     }
-    _decoder->set(cID, m_zID, iZ);
+    decoder()->set(cID, m_zIndex, iZ);
 
     if (expLayer(iWheel, iRho, iZ) != iLayer) {
-      _decoder->set(cID, m_layerID, expLayer(iWheel, iRho, iZ));
+      decoder()->set(cID, m_layerIndex, expLayer(iWheel, iRho, iZ));
     }
 
     // adjust module number to account for merging
     iModule = iModule / m_mergedModules[iWheel];
 
-    _decoder->set(cID, m_moduleID, iModule);
+    decoder()->set(cID, m_moduleIndex, iModule);
 
     return cID;
   }
 
   /// determine rho based on the cell ID
-  double FCCSWEndcapTurbine_k4geo::rho(const CellID& cID) const {
-    CellID rhoValue = _decoder->get(cID, m_rhoID);
-    CellID iWheel = _decoder->get(cID, m_wheelID);
+  double FCCSWEndcapTurbine_k4geo::rho(const CellID cID) const {
+    CellID rhoValue = decoder()->get(cID, m_rhoIndex);
+    CellID iWheel = decoder()->get(cID, m_wheelIndex);
 
     return binToPosition(rhoValue, m_gridSizeRho[iWheel], m_offsetRho[iWheel]) + m_gridSizeRho[iWheel] / 2.;
   }
 
   /// determine the azimuthal angle phi based on the cell ID
-  double FCCSWEndcapTurbine_k4geo::phi(const CellID& cID) const {
-    CellID iModule = _decoder->get(cID, m_moduleID);
-    CellID iWheel = _decoder->get(cID, m_wheelID);
+  double FCCSWEndcapTurbine_k4geo::phi(const CellID cID) const {
+    CellID iModule = decoder()->get(cID, m_moduleIndex);
+    CellID iWheel = decoder()->get(cID, m_wheelIndex);
 
     double phiCent = twopi * (iModule + 0.5) / (m_nUnitCells[iWheel] / m_mergedModules[iWheel]);
     double rhoLoc = rho(cID);
@@ -244,10 +249,10 @@ namespace DDSegmentation {
   }
 
   /// determine local x in plane of blade based on the cell ID
-  double FCCSWEndcapTurbine_k4geo::z(const CellID& cID) const {
-    CellID zValue = _decoder->get(cID, m_zID);
-    CellID sideValue = _decoder->get(cID, m_sideID);
-    CellID iWheel = _decoder->get(cID, m_wheelID);
+  double FCCSWEndcapTurbine_k4geo::z(const CellID cID) const {
+    CellID zValue = decoder()->get(cID, m_zIndex);
+    CellID sideValue = decoder()->get(cID, m_sideIndex);
+    CellID iWheel = decoder()->get(cID, m_wheelIndex);
     return ((long long int)sideValue) *
            (binToPosition(zValue, m_gridSizeZ[iWheel], m_offsetZ[iWheel]) + m_gridSizeZ[iWheel] / 2.);
   }

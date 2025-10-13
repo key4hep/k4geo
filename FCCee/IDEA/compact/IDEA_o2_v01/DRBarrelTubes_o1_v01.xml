@@ -20,7 +20,7 @@
 
 <lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">-->
+    xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
     <info name="DRBarrelTubes"
         title=""
@@ -254,13 +254,19 @@
             vis="DRBTVis" >
 
             <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_BARREL"/>
-
+            <!-- First group is base variables, second is for loading just a section of the calorimeter-->
             <dimensions
                 inner_radius="DRBTInnerCaloRadius"
                 outer_radius="DRBTOuterCaloRadius"
                 z_length="DRBTInnerCaloHalfLength"
                 deltatheta="DRBTTowerThetaCoverage"
-                deltaphi="DRBTTowerPhiCoverage" />
+                deltaphi="DRBTTowerPhiCoverage"
+
+                start_calo_phi = "DRBTStartCaloPhi"
+                end_calo_phi = "DRBTEndCaloPhi"
+                number_tower_start = "DRBTTowerNumberStart"
+                number_tower_end = "DRBTTowerNumberEnd"
+                include_bwd_region = "DRBTIncludeBwdRegion"/>
 
             <trap>
                 <support material="DRBTBrass" width="DRBTSupportSideThickness" depth="DRBTSupportFrontThickness" z2="DRBTSupportBackThickness" vis="DRBTtrap_vis"/>

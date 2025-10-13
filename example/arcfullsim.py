@@ -45,29 +45,30 @@ if __name__ == "__main__":
         ph = PhysicsList(kernel, "Geant4OpticalPhotonPhysics/OpticalGammaPhys")
         ph.addParticleConstructor("G4OpticalPhoton")
         ph.VerboseLevel = 0
-        ph.BoundaryInvokeSD = True
+        # BoundaryInvokeSD is disabled:
+        # if the SD action is triggered at a boundary, the default cellID calculation fails
+        # because DD4hep uses the step midpoint, which lies outside the active volume,
+        # making a valid cellID assignment impossible.
+        # Temporary workaround: ARC light sensors are given a fake refractive index so
+        # photons enter the active volume and the default DD4hep SD action for
+        # opticalTracker can be used.
+        # A custom SD action would be required to safely enable this option.
+        ph.BoundaryInvokeSD = False
         ph.enableUI()
         seq.adopt(ph)
         return None
 
     SIM.physics.setupUserPhysics(setupCerenkov)
 
-    # Allow energy depositions to 0 energy in trackers (which include optical detectors)
-    SIM.filter.tracker = "edep0"
+    # Disable filtering for ARC detectors (no hits are filtered out)
+    SIM.filter.mapDetFilter["ARCBARREL"] = None
+    SIM.filter.mapDetFilter["ARCENDCAP"] = None
 
-    # Some detectors are only sensitive to optical photons
-    SIM.filter.filters["opticalphotons"] = dict(
-        name="ParticleSelectFilter/OpticalPhotonSelector",
-        parameter={"particle": "opticalphoton"},
-    )
-    SIM.filter.mapDetFilter["ARCBARREL"] = "opticalphotons"
-    SIM.filter.mapDetFilter["ARCENDCAP"] = "opticalphotons"
-
-    # Use the optical tracker for the PFRICH
+    # Use DD4hep optical tracker
     SIM.action.mapActions["ARCBARREL"] = "Geant4OpticalTrackerAction"
     SIM.action.mapActions["ARCENDCAP"] = "Geant4OpticalTrackerAction"
 
-    # Disable user tracker particle handler, so hits can be associated to photons
+    # Disable user tracker particle handler because no tracking region is defined in arc_full_v0.xml
     SIM.part.userParticleHandler = ""
 
     # Particle gun settings: pions with fixed energy and theta, varying phi
@@ -90,7 +91,6 @@ if __name__ == "__main__":
     SIM.outputFile = "arcsim.root"
     if hasattr(SIM, "outputConfig") and hasattr(SIM.outputConfig, "forceDD4HEP"):
         SIM.outputConfig.forceDD4HEP = True  # use DD4hep root format, not EDM4HEP
-    # SIM.outputFile = "arcsim_edm4hep.root"
 
     # Override with user options
     SIM.parseOptions()
@@ -104,54 +104,38 @@ if __name__ == "__main__":
         outImagePrefix = "arcsim_"
         ROOT.gROOT.SetBatch(1)
         rootfile = ROOT.TFile(SIM.outputFile)
-        if not "edm4hep" in SIM.outputFile:
-            EVENT = rootfile.Get("EVENT")
-            EVENT.Draw(
-                "ArcCollection.position.Z():ArcCollection.position.phi()",
-                "((ArcCollection.cellID>>5)&0x7)==0",
-            )
-            ROOT.gPad.SaveAs(outImagePrefix + "barrel_" + SIM.gun.particle + ".png")
-            EVENT.Draw(
-                "ArcCollection.position.Y():ArcCollection.position.X()",
-                "((ArcCollection.cellID>>5)&0x7)==1",
-            )
-            ROOT.gPad.SaveAs(outImagePrefix + "endcapZpos_" + SIM.gun.particle + ".png")
-            EVENT.Draw(
-                "ArcCollection.position.Y():ArcCollection.position.X()",
-                "((ArcCollection.cellID>>5)&0x7)==2",
-            )
-            ROOT.gPad.SaveAs(outImagePrefix + "endcapZneg_" + SIM.gun.particle + ".png")
-            EVENT.Draw(
-                "ArcCollection.position.Y():ArcCollection.position.X()",
-                "((ArcCollection.cellID>>5)&0x7)==2&&ArcCollection.position.Y()>0&&ArcCollection.position.X()>0",
-            )
-            ROOT.gPad.SaveAs(outImagePrefix + "endcapZneg_" + SIM.gun.particle + "zoom.png")
-        else:
-            EVENT = rootfile.Get("events")
-            EVENT.Draw(
-                "ArcCollection.position.z:atan(ArcCollection.position.y/ArcCollection.position.x)",
-                "((ArcCollection.cellID>>5)&0x7)==0&& ArcCollection.position.x>0",
-            )
-            ROOT.gPad.SaveAs(outImagePrefix + "barrel_" + SIM.gun.particle + ".png")
-            EVENT.Draw(
-                "ArcCollection.position.y:ArcCollection.position.x",
-                "((ArcCollection.cellID>>5)&0x7)==1",
-            )
-            ROOT.gPad.SaveAs(outImagePrefix + "endcapZpos_" + SIM.gun.particle + ".png")
-            EVENT.Draw(
-                "ArcCollection.position.y:ArcCollection.position.x",
-                "((ArcCollection.cellID>>5)&0x7)==2",
-            )
-            ROOT.gPad.SaveAs(outImagePrefix + "endcapZneg_" + SIM.gun.particle + ".png")
-            EVENT.Draw(
-                "ArcCollection.position.y:ArcCollection.position.x",
-                "((ArcCollection.cellID>>5)&0x7)==2&& ArcCollection.position.x>0&& ArcCollection.position.y>0",
-            )
-            ROOT.gPad.SaveAs(outImagePrefix + "endcapZneg_" + SIM.gun.particle + "zoom.png")
-
+        number_of_events = []
+        EVENT = rootfile.Get("EVENT")
+        n1 = EVENT.Draw(
+            "ArcCollection.position.Z():ArcCollection.position.phi()",
+            "((ArcCollection.cellID>>5)&0x7)==0",
+        )
+        number_of_events.append(n1)
+        ROOT.gPad.SaveAs(outImagePrefix + "barrel_" + SIM.gun.particle + ".png")
+        n2 = EVENT.Draw(
+            "ArcCollection.position.Y():ArcCollection.position.X()",
+            "((ArcCollection.cellID>>5)&0x7)==1",
+        )
+        number_of_events.append(n2)
+        ROOT.gPad.SaveAs(outImagePrefix + "endcapZpos_" + SIM.gun.particle + ".png")
+        n3 = EVENT.Draw(
+            "ArcCollection.position.Y():ArcCollection.position.X()",
+            "((ArcCollection.cellID>>5)&0x7)==2",
+        )
+        number_of_events.append(n3)
+        ROOT.gPad.SaveAs(outImagePrefix + "endcapZneg_" + SIM.gun.particle + ".png")
+        EVENT.Draw(
+            "ArcCollection.position.Y():ArcCollection.position.X()",
+            "((ArcCollection.cellID>>5)&0x7)==2&&ArcCollection.position.Y()>0&&ArcCollection.position.X()>0",
+        )
+        ROOT.gPad.SaveAs(outImagePrefix + "endcapZneg_" + SIM.gun.particle + "zoom.png")
         rootfile.Close()
 
-        logger.info("TEST: passed")
+        if any(0 == val for val in number_of_events):
+            logger.fatal("TEST: failed. At least 1 ARC subsystem did not record any hit")
+            raise RuntimeError("TEST: failed. At least 1 ARC subsystem did not record any hit")
+        else:
+            logger.info("TEST: passed")
 
     except NameError as e:
         logger.fatal("TEST: failed")

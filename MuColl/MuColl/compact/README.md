@@ -1,6 +1,6 @@
 ## Geometries of the Muon Collider detector
 
-Current baseline version: **`MuColl_v1.1`**
+Current baseline version: **`MuColl_v1.1.3`**
 
 | Geometry name             | Description |
 |---------------------------|-------------|
@@ -14,7 +14,6 @@ Current baseline version: **`MuColl_v1.1`**
 | `MuColl_v1.1.1`           | Copy of `MuColl_v1.1` with 500um of Si added to passive material thickness in VTX detector |
 | `MuColl_v1.1.2`           | Copy of `MuColl_v1.1` with a stronger magnetic field: 5.0 T |
 | `MuColl_v1.1.3`           | Copy of `MuColl_v1.1` with increased double-layer gap in VTX: 4.0 mm |
-
 
 ### Geometry versioning
 
