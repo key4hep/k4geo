@@ -40,7 +40,7 @@
   <!-- <include ref="../../../MDI/compact/MDI_o1_v01/Beampipe_CADimport_o1_v02.xml" /> -->
   <!-- <include ref="../../../MDI/compact/MDI_o1_v01/BeamInstrumentation_o1_v01.xml"/> -->
 
-  <include ref="../ALLEGRO_o1_v03/LumiCal.xml"/>
+  <include ref="../../../MDI/compact/MDI_o1_v00/LumiCal_o3_v02_05_common.xml"/>
   <include ref="../ALLEGRO_o1_v03/VertexComplete_IDEA_o1_v03.xml"/> 
   <include ref="StrawTubeTracker_o1_v01.xml"/>
   <include ref="../ALLEGRO_o1_v03/SiliconWrapper_o1_v03.xml"/> 
