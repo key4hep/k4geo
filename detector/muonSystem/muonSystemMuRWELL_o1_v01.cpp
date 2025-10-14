@@ -110,7 +110,7 @@ static dd4hep::Ref_t createmuonSystemMuRWELL_o1_v01(dd4hep::Detector& lcdd, dd4h
     endcapDetectorEnvZ = detectorVolumeThickness;
   }
 
-  // Automizing Endcap R-max to be enclosed by Barrel last layer
+  // Automation Endcap R-max to be enclosed by Barrel last layer
   double endcapDetectorLayerOuterRadius = radius + (numBarrelDetectorLayers - 1) * (2 * detectorVolumeThickness) +
                                           numBarrelRadiators * barrelRadiatorThickness;
   double endcapRadiatorLayerOuterRadius = endcapDetectorLayerOuterRadius;
