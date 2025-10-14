@@ -239,7 +239,6 @@
                                                 <!-- Endcap -->
     <constant name = "EndcapFirstLayerZOffset"                     value = "4530*mm"/>  <!-- 1st Endcap microRWELL detector inner ZOffset-> its the start point of thicknesses of the microRWELL volume -->
     <constant name = "EndcapLayersInnerRadius"                    value = "700*mm"/> <!--Endcap detector inner radius, its the start point of thicknesses of the detector material ** it applies for both detector layers and yoke-->
-    <constant name = "EndcapLayersOuterRadius"                    value = "5350*mm"/> <!--Endcap detector outer radius, its the end point of thicknesses of the detector material ** it applies for both detector layers and yoke-->
     <!-- End of Muon system Parameters-->
   </define>
 
