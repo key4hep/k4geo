@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+
+  <info name="FCCee"
+        title="FCCee Beam pipe from CAD drawings"
+        author="aciarma"
+        url="no"
+        status="development"
+        version="1.0">
+    <comment>A beampipe for FCCee coming from F. Fransesini CAD drawings. </comment>
+  </info>
+
+
+
+  <detectors>
+
+    <detector name="Beampipe_STL" type="DD4hep_TestShape_Creator">
+      <check>
+        <shape type="CAD_MultiVolume" ref="${K4GEO}/FCCee/MDI/compact/MDI_o1_v01/stl_files/Pipe_240430/AlBeMet162_30042024.stl"
+	       unit="mm" material="AlBeMet162">
+	  <volume id="0" name="s1" vis="AlBeMet_vis" material="AlBeMet162"> 
+	    <position x="0*cm"  y="0*cm"  z="0*cm"/>
+            <rotation x="0*rad" y="0*rad" z="0*rad"/>
+	  </volume> 
+        </shape>
+      </check>
+    </detector>
+
+    <detector name="Beampipe_crotch_STL" type="DD4hep_TestShape_Creator">
+      <check>
+        <shape type="CAD_MultiVolume" ref="${K4GEO}/FCCee/MDI/compact/MDI_o1_v01/stl_files/Pipe_240430/Copper_pipe_28092023.stl"
+               unit="mm" material="Copper">
+          <volume id="0" name="s1" vis="CopperCooling_vis" material="Cu">
+            <position x="0*cm"  y="0*cm"  z="0*cm"/>
+            <rotation x="0*rad" y="-pi/2.*rad" z="0*rad"/>
+          </volume>
+        </shape>
+      </check>
+    </detector>
+
+
+    <detector name="Gold_STL" type="DD4hep_TestShape_Creator">
+      <check>
+        <shape type="CAD_MultiVolume" ref="${K4GEO}/FCCee/MDI/compact/MDI_o1_v01/stl_files/Pipe_240430/Gold_19042024.stl"
+	       unit="mm" material="Gold">
+          <volume id="0" name="s1" vis="Gold_vis" material="Au">
+            <position x="0*cm"  y="0*cm"  z="0*cm"/>
+            <rotation x="0*rad" y="0*rad" z="0*rad"/>
+          </volume>
+	</shape>
+      </check>
+    </detector>
+
+    
+    <detector name="Paraffin_STL" type="DD4hep_TestShape_Creator">
+      <check>
+        <shape type="CAD_MultiVolume" ref="${K4GEO}/FCCee/MDI/compact/MDI_o1_v01/stl_files/Pipe_240430/Paraffine_19042024.stl"
+	       unit="mm" material="LiquidNDecane">
+          <volume id="0" name="s1" vis="Paraffin_vis" material="LiquidNDecane">
+            <position x="0*cm"  y="0*cm"  z="0*cm"/>
+            <rotation x="0*rad" y="0*rad" z="0*rad"/>
+          </volume>
+        </shape>
+      </check>
+    </detector>
+
+    <detector name="Water_STL" type="DD4hep_TestShape_Creator">
+      <check>
+        <shape type="CAD_MultiVolume" ref="${K4GEO}/FCCee/MDI/compact/MDI_o1_v01/stl_files/Pipe_240430/Water_30042024.stl"
+               unit="mm" material="Water">
+          <volume id="0" name="s1" vis="Water_vis" material="Water">
+            <position x="0*cm"  y="0*cm"  z="0*cm"/>
+            <rotation x="0*rad" y="0*rad" z="0*rad"/>
+          </volume>
+        </shape>
+      </check>
+    </detector>
+
+    <detector name="Tungsten_STL" type="DD4hep_TestShape_Creator">
+      <check>
+        <shape type="CAD_MultiVolume" ref="${K4GEO}/FCCee/MDI/compact/MDI_o1_v01/stl_files/Pipe_240430/Tungsten_mask_02102023.stl"
+               unit="mm" material="Tungsten">
+          <volume id="0" name="s1" vis="Tungsten_vis" material="W">
+            <position x="0*cm"  y="0*cm"  z="0*cm"/>
+            <rotation x="0*rad" y="-pi/2.*rad" z="0*rad"/>
+          </volume>
+        </shape>
+      </check>
+    </detector>
+
+
+  </detectors>
+  
+
+
+</lccdd>
