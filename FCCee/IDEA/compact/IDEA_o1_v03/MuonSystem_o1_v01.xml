@@ -51,7 +51,7 @@
       <!-- Specify the detector parameters and the overlap /// if you want exclude any component, e.g: endcap, just put endcapDetectorLayerss=0 in the Endcap Entry  // radius is put in the middle, so its not the inner neither the outer -->
       <generalParameters numSides="numberOfSides" overlapY="overlapingY" overlapZ="overlapingZ" clearance="clearance"/>
       <Barrel numDetectorLayers ="3"  rmin="BarrelFirstLayerRadius" length="BarrelLength" numYokes="2" yoke_Thickness="YokeThickness" yoke_Material="G4_Fe"/> 
-      <Endcap numDetectorLayers="3"  rmin="EndcapLayersInnerRadius" rmax="EndcapLayersOuterRadius" z_offset="EndcapFirstLayerZOffset" numYokes="2" yoke_Thickness="YokeThickness" yoke_Material="G4_Fe" />
+      <Endcap numDetectorLayers="3"  rmin="EndcapLayersInnerRadius"  z_offset="EndcapFirstLayerZOffset" numYokes="2" yoke_Thickness="YokeThickness" yoke_Material="G4_Fe" />
 
       <!-- mRWELL chamber -->
       <!-- note: all thicknesses are half-lengths -->

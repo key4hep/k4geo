@@ -61,10 +61,10 @@ public:
   bool operator==(const FCCSWHCalPhiTheta_k4geo& seg) const { return m_element == seg.m_element; }
 
   /// determine the position based on the cell ID
-  inline Position position(const CellID& id) const { return Position(access()->implementation->position(id)); }
+  inline Position position(const CellID id) const { return Position(access()->implementation->position(id)); }
 
   /// determine the cell ID based on the position
-  inline dd4hep::CellID cellID(const Position& local, const Position& global, const VolumeID& volID) const {
+  inline dd4hep::CellID cellID(const Position& local, const Position& global, const VolumeID volID) const {
     return access()->implementation->cellID(local, global, volID);
   }
 
@@ -128,7 +128,7 @@ public:
       -# size in phi
       -# size in theta
   */
-  inline std::vector<double> cellDimensions(const CellID& /*id*/) const {
+  inline std::vector<double> cellDimensions(const CellID /*id*/) const {
     return {access()->implementation->gridSizePhi(), access()->implementation->gridSizeTheta()};
   }
 };

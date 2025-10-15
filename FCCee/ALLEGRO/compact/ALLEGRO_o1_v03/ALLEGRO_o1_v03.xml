@@ -119,4 +119,11 @@
 
   </fields>
 
+    <!-- Include plugins attaching additional info to the geometry and needed to generate edm4hep::TrackerHitPlane, see e.g. CLD detector-concept case https://github.com/key4hep/k4geo/blob/main/FCCee/CLD/compact/CLD_o2_v08/CLD_o2_v08.xml#L333-L390 -->
+  <plugins>
+
+    <plugin name="InstallSurfaceManager"/>
+
+  </plugins>
+
 </lccdd>

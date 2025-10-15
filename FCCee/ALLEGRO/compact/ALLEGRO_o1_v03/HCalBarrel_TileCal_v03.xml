@@ -31,6 +31,9 @@
     <constant name="BarHCal_layer_size1" value="50*mm" />
     <constant name="BarHCal_layer_size2" value="100*mm" />
     <constant name="BarHCal_layer_size3" value="200*mm" />
+    <!-- division into rows -->
+    <constant name="BarHCal_sequence_thickness" value="2*BarHCal_master_plate_thickness + BarHCal_spacer_plate_thickness + BarHCal_scintillator_thickness + 2*BarHCal_air_space_thickness" />
+    <constant name="BarHCal_numSequencesZ" value="floor(2*(BarHCal_dz-BarHCal_end_plate_thickness-BarHCal_plate_space)/BarHCal_sequence_thickness)" />
   </define>
 
   <display>
@@ -67,7 +70,7 @@
       <segmentation type="FCCSWHCalPhiTheta_k4geo" 
          detLayout="0"
          offset_z="0"
-         width_z="BarHCal_dz*2"
+         width_z="BarHCal_numSequencesZ*BarHCal_sequence_thickness"
          offset_r="BarHCal_rmin+BarHCal_face_plate_thickness+BarHCal_plate_space"
          numLayers="4 6 3"
          dRlayer="BarHCal_layer_size1 BarHCal_layer_size2 BarHCal_layer_size3"
@@ -96,7 +99,7 @@
       <segmentation type="FCCSWHCalPhiRow_k4geo" 
          detLayout="0"
          offset_z="0"
-         width_z="2795.5*2*mm"
+         width_z="BarHCal_numSequencesZ*BarHCal_sequence_thickness"
          offset_r="BarHCal_rmin+BarHCal_face_plate_thickness+BarHCal_plate_space"
          numLayers="4 6 3"
          dRlayer="BarHCal_layer_size1 BarHCal_layer_size2 BarHCal_layer_size3"
@@ -140,7 +143,7 @@
 
       <sequence_a id="3" name="sequence_1" material="Air" vis="hcal_barrel_seq1_vis">
         <dimensions
-          dz="2*BarHCal_master_plate_thickness + BarHCal_spacer_plate_thickness + BarHCal_scintillator_thickness + 2*BarHCal_air_space_thickness"
+          dz="BarHCal_sequence_thickness"
           phiBins="BarHCal_n_phi_modules"
           x="BarHCAL_module_spacing_phi"
         />
@@ -159,7 +162,7 @@
       </sequence_a>
       <sequence_b id="4" name="sequence_2" material="Air" vis="hcal_barrel_seq2_vis">
         <dimensions
-          dz="2*BarHCal_master_plate_thickness + BarHCal_spacer_plate_thickness + BarHCal_scintillator_thickness + 2*BarHCal_air_space_thickness"
+          dz="BarHCal_sequence_thickness"
           phiBins="BarHCal_n_phi_modules"
           x="BarHCAL_module_spacing_phi"
         />
