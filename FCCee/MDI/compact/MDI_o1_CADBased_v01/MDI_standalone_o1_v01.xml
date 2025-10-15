@@ -46,7 +46,7 @@
 
   <include ref="MDI_Dimensions_Materials_o1_v01.xml" />
 
-  <include ref="Beampipe_CADimport_o1_v02.xml"/>
+  <include ref="Beampipe_CADimport_o1_v03.xml"/>
   
   <include ref="BeamInstrumentation_o1_v01.xml"/>
   <!--<include ref="LumiCal_o3_v02_05.xml"/>-->
