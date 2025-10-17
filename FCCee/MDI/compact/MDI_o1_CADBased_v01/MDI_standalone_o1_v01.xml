@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+  <info name="MDI Standalone"
+    title="MDI Standalone"
+    author="Andrea Ciarma"
+    url="no"
+    status="development"
+    version="1.0">
+    <comment>
+      Master compact file for the common FCCee Machine Detector Interface. For debug only.
+    </comment>
+  </info>
+
+  <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml" />
+
+  <includes>
+    <gdmlFile  ref="local_elements.xml"/>
+    <gdmlFile  ref="local_materials.xml"/>
+  </includes>
+  
+  <define>
+    <constant name="world_size" value="25*m"/>
+    <constant name="world_x" value="world_size"/>
+    <constant name="world_y" value="world_size"/>
+    <constant name="world_z" value="world_size"/>
+
+    <constant name="FFQ_ON" value="1"/>   <!-- turn on/off FFQ magnetic field -->
+    
+    <!-- only for standalone, should normally be included in the detector dimensions compact -->
+    <constant name="env_safety" value="0.1*mm"/>
+    <constant name="world_side" value="6100*mm"/>
+    <constant name="tracker_region_zmax" value="10*m"/>
+    <constant name="tracker_region_rmax" value="0.5*m"/>
+    
+    <constant name="DetID_LumiCal"          value=" 15"/>
+    <constant name="DetID_LumiCalInstrumentation"          value=" 16"/>
+    <constant name="DetID_LumiCalCooling"          value=" 17"/>
+    <constant name="DetID_LumiCalBackShield"          value=" 18"/>
+    <constant name="DetID_HOMAbsorber"          value=" 19"/>
+    <constant name="DetID_LumiCalNoseShield"          value=" 22"/>
+    <constant name="DetID_FFQs"  value="23"/>
+  </define>
+
+  <include ref="MDI_Dimensions_Materials_o1_v01.xml" />
+
+  <include ref="Beampipe_CADimport_o1_v03.xml"/>
+  
+  <include ref="BeamInstrumentation_o1_v01.xml"/>
+  <!--<include ref="LumiCal_o3_v02_05.xml"/>-->
+
+  <!-- must use one FFQuads_params_xxx.xml BEFORE FFQuads_v01.xml -->
+  <!--<include ref="FFQuads_params_v530_Z.xml"/>-->
+  <!-- <include ref="FFQuads_params_v572_Z.xml"/>-->
+  <!-- <include ref="FFQuads_params_v572_T.xml"/>-->
+  <!-- <include ref="FFQuads_v01.xml"/>-->
+  <!--<include ref="FFQuads_v01_sens.xml"/>-->
+  
+  <!--<include ref="fields_solenoid.xml"/>-->
+  <!--<include ref="fields_antisol_map.xml"/>-->
+  <!--<include ref="fields_antisol_ideal.xml"/>-->
+  
+</lccdd>
