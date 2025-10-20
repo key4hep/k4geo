@@ -1,0 +1,6 @@
+<lccdd>
+
+    <include ref="BeamInstrumentation_o1_v01.xml"/>
+    <include ref="Beampipe_CADimport_o1_v03.xml"/>
+
+</lccdd>
