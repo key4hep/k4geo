@@ -214,7 +214,7 @@ if(INSTALL_BEAMPIPE_STL_FILES)
         )
     # Set main FCC url
     set(FCC_URL "https://fccsw.web.cern.ch/fccsw/filesForSimDigiReco")
-    set(STL_PATH "MDI_o1_v01/stl_files/Pipe_240430")
+    set(STL_PATH "stl_files/Pipe_240430")
 
     # Set the output directory where the file will be placed
     set(OUTPUT_DIR "${PROJECT_SOURCE_DIR}/FCCee/MDI/compact/${STL_PATH}")
@@ -242,6 +242,6 @@ if(INSTALL_BEAMPIPE_STL_FILES)
     endforeach()
 
     file(MAKE_DIRECTORY share/k4geo/FCCee)
-    INSTALL(DIRECTORY ${OUTPUT_DIR} DESTINATION share/k4geo/FCCee/MDI/compact/MDI_o1_v01/stl_files )
+    INSTALL(DIRECTORY ${OUTPUT_DIR} DESTINATION share/k4geo/FCCee/MDI/compact/stl_files )
 
 endif()
