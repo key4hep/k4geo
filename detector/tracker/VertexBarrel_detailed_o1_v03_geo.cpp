@@ -136,6 +136,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         double stave_dr;
         double stave_r;
         double stave_length;
+        string stave_vis;
     };
     list<stave_information> stave_information_list;
 
@@ -153,6 +154,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         m.motherVolThickness = getAttrOrDefault(x_stave, _Unicode(motherVolThickness), double(0.0));
         m.motherVolWidth     = getAttrOrDefault(x_stave, _Unicode(motherVolWidth), double(0.0));
 
+        m.stave_vis = x_stave.visStr(x_det.visStr());
+        
         // Components
         xml_coll_t c_components(x_stave,_U(components));
         for(c_components.reset(); c_components; ++c_components){
@@ -339,20 +342,31 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         });    
 
         
-        double motherVolThickness = getAttrOrDefault(x_layer, _Unicode(motherVolThickness), double(5.0));
+        double motherVolThickness = getAttrOrDefault(x_layer, _Unicode(motherVolThickness), double(0.0));
         double motherVolLength = getAttrOrDefault(x_layer, _Unicode(motherVolLength), double(m.stave_length));
         double motherVolOffset = getAttrOrDefault(x_layer, _Unicode(motherVolOffset), double(0.0)); // In case wafer/stave is asymmetric
 
-        std::string layer_name = det_name+_toString(layer_id,"_layer%d")+_toString(side,"_side%d");
-        double motherVolRmin = getAttrOrDefault(x_layer, _Unicode(motherVolRmin), double(x_layer.r()));
-        Tube whole_layer_tube = Tube(motherVolRmin, motherVolRmin+motherVolThickness, motherVolLength/2.);
+        std::string layer_name = _toString(layer_id,"layer%d")+_toString(side,"_side%d");
 
-        Volume whole_layer_volume = Volume(layer_name, whole_layer_tube, theDetector.material("Air"));
-        whole_layer_volume.setVisAttributes(theDetector, x_det.visStr());
-        pv = envelope.placeVolume(whole_layer_volume, Position(0., 0., z_offset));
+        PlacedVolume whole_layer_volume_placed;
+        Volume whole_layer_volume_v;
+        Assembly whole_layer_volume_a;
+        if(motherVolThickness>0.0){
+            double motherVolRmin = getAttrOrDefault(x_layer, _Unicode(motherVolRmin), double(x_layer.r()));
+            Tube whole_layer_tube = Tube(motherVolRmin, motherVolRmin+motherVolThickness, motherVolLength/2.);
+            whole_layer_volume_v = Volume(layer_name, whole_layer_tube, theDetector.material("Air"));
+            whole_layer_volume_v.setVisAttributes(theDetector, x_det.visStr());
+            pv = envelope.placeVolume(whole_layer_volume_v, Position(0., 0., z_offset));
+        }
+        else{
+            //// Use just assembly to avoid overlap between layers
+            whole_layer_volume_a = Assembly(layer_name);
+            pv = envelope.placeVolume(whole_layer_volume_a, Position(0., 0., z_offset));
+        }
+
         pv.addPhysVolID("layer", layer_id).addPhysVolID("side",side );
 
-        DetElement layerDE( sdet , _toString(layer_id,"layer_%d")+_toString(side,"_side%d"), x_det.id() );
+        DetElement layerDE( sdet , _toString(layer_id,"layer_%d")+_toString(side,"_side%d"), layer_id );
         layerDE.setPlacement( pv ) ;
 
         int nLadders = x_layer.attr<int>(  _Unicode(nLadders) ) ;
@@ -373,7 +387,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
             double z_pos = motherVolOffset;
             Position stave_pos = Position(x_pos, y_pos, z_pos);
             
-            string stave_name = layer_name + _toString(iStave,"_stave%d");
+            string stave_name = _toString(iStave,"stave%d");
 
             PlacedVolume whole_stave_volume_placed;
             Volume whole_stave_volume_v;
@@ -385,13 +399,20 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 y_pos = r*sin(phi) + r_offset_component*cos(phi);
                 Box whole_stave_box = Box(m.motherVolThickness/2., m.motherVolWidth/2., m.stave_length/2.);
                 whole_stave_volume_v = Volume(stave_name, whole_stave_box, theDetector.material("Air"));
-                whole_stave_volume_v.setVisAttributes(theDetector, x_det.visStr());
-                whole_stave_volume_placed = whole_layer_volume.placeVolume(whole_stave_volume_v, Transform3D(rot,Position(x_pos, y_pos, z_pos)));
+                whole_stave_volume_v.setVisAttributes(theDetector, m.stave_vis);
+                if(motherVolThickness>0.)
+                    pv = whole_layer_volume_v.placeVolume(whole_stave_volume_v, Transform3D(rot,Position(x_pos, y_pos, z_pos)));
+                else
+                    pv = whole_layer_volume_a.placeVolume(whole_stave_volume_v, Transform3D(rot,Position(x_pos, y_pos, z_pos)));
             }
             else{
                 //// Use just assembly to avoid overlap between stave volume and other volumes
                 whole_stave_volume_a = Assembly(stave_name);
-                whole_stave_volume_placed = whole_layer_volume.placeVolume(whole_stave_volume_a, Transform3D(rot,stave_pos));
+
+                if(motherVolThickness>0.)
+                    pv = whole_layer_volume_v.placeVolume(whole_stave_volume_a, Transform3D(rot,stave_pos));
+                else
+                    pv = whole_layer_volume_a.placeVolume(whole_stave_volume_a, Transform3D(rot,stave_pos));
             }
             
             // Place components
@@ -473,7 +494,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                         pv = whole_stave_volume_a.placeVolume(module_assembly);
                     pv.addPhysVolID("module", iModule + nmodules*iStave);
 
-                    DetElement moduleDE(layerDE,module_name,x_det.id());
+                    DetElement moduleDE(layerDE,module_name,iModule + nmodules*iStave);
                     moduleDE.setPlacement(pv);
 
 
@@ -497,7 +518,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
                             if(sensor.sensitives[i]) { // Define as sensitive and add sensitive surface
                                 pv.addPhysVolID("sensor", iSensitive);
-                                DetElement sensorDE(moduleDE, module_name + _toString(iSensitive, "_sensor%d"), x_det.id());
+                                DetElement sensorDE(moduleDE, _toString(iSensitive, "_sensor%d"), iSensitive);
                                 sensorDE.setPlacement(pv);
 
                                 // Use a VolCylinder surface (not supported in reconstruction)
@@ -526,7 +547,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
                                 if(sensor.sensitives[i]) { // Define as sensitive and add sensitive surface
                                     pv.addPhysVolID("sensor", iSensitive);                
-                                    DetElement sensorDE(moduleDE, module_name + _toString(iSensitive,"_sensor%d"), x_det.id());
+                                    DetElement sensorDE(moduleDE, _toString(iSensitive,"_sensor%d"), iSensitive);
                                     sensorDE.setPlacement(pv);
     
                                     // Use plane surface on top of trapezoid, supported e.g. in conformal tracking
@@ -545,7 +566,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
                             if(sensor.sensitives[i]) { // Define as sensitive and add sensitive surface
                                 pv.addPhysVolID("sensor", iSensitive);                
-                                DetElement sensorDE(moduleDE,module_name + _toString(iSensitive,"_sensor%d"),x_det.id());
+                                DetElement sensorDE(moduleDE,_toString(iSensitive,"_sensor%d"),iSensitive);
                                 sensorDE.setPlacement(pv);
 
                                 VolPlane surf( sensor.volumes[i] , dd4hep::rec::SurfaceType::Sensitive , sensor.thickness/2. , sensor.thickness/2. , Vector3D( 0. , 1. , 0. ), Vector3D( 0. , 0. , 1. ), Vector3D( 1. , 0. , 0. ) );

@@ -19,6 +19,7 @@
     <constant name="CrossingAngle" value="0.030*rad"/>
 
     <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:3,module:13,sensor:9"/>
+    <constant name="SiliconWrapperReadoutID" type="string" value="system:5,side:-2,layer:5,module:14,sensor:6"/>
 
     <constant name="SolenoidField" value="2*tesla"/>
 
@@ -30,8 +31,8 @@
 
     <constant name="DetID_DCH"                    value=" 3"/>
 
-    <constant name="DetID_SiWr_Barrel"            value=" 23"/>
-    <constant name="DetID_SiWr_Disks"             value=" 24"/>
+    <constant name="DetID_SiWr_Barrel"            value=" 7"/>
+    <constant name="DetID_SiWr_Disks"             value=" 8"/>
 
     <constant name="DetID_Calo_Barrel"            value=" 4"/>
     <constant name="DetID_Calo_Endcap"            value=" 5"/>

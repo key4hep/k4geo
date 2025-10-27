@@ -52,7 +52,7 @@
   <include ref="DriftChamber_o1_v02.xml"/>
 
   <!-- Import silicon wrapper -->
-  <include ref="SiliconWrapper_o1_v03.xml"/>
+  <include ref="SiliconWrapper_o1_v02.xml"/>
 
   <!-- Import solenoid -->
   <include ref="Solenoid_o1_v01.xml"/>
@@ -74,6 +74,17 @@
     <plugin name="DD4hepVolumeManager"/>
     <plugin name="InstallSurfaceManager"/>
   </plugins>
+
+  <parallelworld_volume name="tracking_volume" anchor="/world" material="Air" connected="true"
+      vis="VisibleBlue">
+      <shape type="Polycone" material="Air">
+          <!-- small-angle approximation for tan(theta) -->
+          <zplane z="-SiWrD_zmax"   rmin="120*mrad * SiWrD_zmax" rmax="SiWrD_outer_radius" />
+          <zplane z="-CentralBeamPipe_zmax"       rmin="0"                            rmax="SiWrD_outer_radius" />
+          <zplane z="+CentralBeamPipe_zmax"       rmin="0"                            rmax="SiWrD_outer_radius" />
+          <zplane z="+SiWrD_zmax"   rmin="120*mrad * SiWrD_zmax" rmax="SiWrD_outer_radius" />
+      </shape>
+  </parallelworld_volume>
 
   <fields>
     <!-- FIXME The magnetic field should be a map derived from FEM tools including all field sources, the return yoke geometry, etc -->
