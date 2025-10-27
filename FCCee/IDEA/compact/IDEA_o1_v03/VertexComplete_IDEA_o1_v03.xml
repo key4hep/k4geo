@@ -68,7 +68,9 @@
         <constant name="VTXIB_sensor_rphi_periphery" value="2.0*mm"/> <comment> 2.0*mm insensitive periphery in r-phi </comment>
         <constant name="VTXIB_sensor_rphi" value="VTXIB_sensor_rphi_sensitive+VTXIB_sensor_rphi_periphery"/>
         <constant name="VTXIB_sensor_z_spacing" value="0.2*mm"/> <comment> Distance between individual sensors along z </comment>
-        <constant name="VTXIB_sensitive_thickness"   value="50e-03*mm"/>
+        <constant name="VTXIB_sensitive_thickness"   value="25e-03*mm"/> <comment> Assume 25 microns thick sensitive volume </comment>
+        <constant name="VTXIB_insensitive_thickness"   value="25e-03*mm"/> <comment> Assume 25 microns thick insensitive volume </comment>
+        <constant name="VTXIB_sensor_thickness"   value="VTXIB_sensitive_thickness+VTXIB_insensitive_thickness"/>
 
         <comment> Vertex inner barrel (VTXIB) layout parameters </comment>
         <constant name="VTXIB_nStaves1" value="ceil(VTXIB_r_min_layer*2.*pi/VTXIB_sensor_rphi_sensitive)+1"/> <comment> ceil(13.7*2*pi/6.4+1) = 15 staves, ceil(11.7*2*pi/6.4+1) = 13 staves for rmin=11.7 mm </comment>
@@ -106,7 +108,7 @@
         <constant name="VTXIB_hybrid_length"        value="12.0*mm"/> <comment> Hybrid PCB at the end of the stave </comment>
         <constant name="VTXIB_hybrid_thickness"     value="0.250*mm"/>
 
-        <constant name="VTXIB_holder_thickness1"        value="5.0*mm"/> <comment> Stave holder <comment>
+        <constant name="VTXIB_holder_thickness1"        value="5.0*mm"/> <comment> Stave holder </comment>
         <constant name="VTXIB_holder_thickness2"        value="7.0*mm"/>
         <constant name="VTXIB_holder_thickness3"        value="10.0*mm"/>
         <constant name="VTXIB_holder_carbonFiber_width" value="0.2*mm"/>
@@ -115,7 +117,7 @@
         <constant name="VTXIB_holder_rohacell_width3"   value="1.0*mm"/>
 
         <constant name="VTXIB_flex_width"               value="1.8*mm"/>
-        <constant name="VTXIB_flex_offset"              value="VTXIB_support_width/2.+VTXIB_flex_width/2."/> <comment> offset in r-phi <comment>
+        <constant name="VTXIB_flex_offset"              value="VTXIB_support_width/2.+VTXIB_flex_width/2."/> <comment> offset in r-phi </comment>
         <constant name="VTXIB_flex_Aluminium_thickness" value="0.050*mm"/>
         <constant name="VTXIB_flex_Kapton_thickness"    value="0.200*mm"/>
     </define>
@@ -482,12 +484,13 @@
             <!-- Definition of our "stave" object that is used to build the barrel -->
             <stave name="VTXIBStave1" length="2.*VTXIB_halfLength1">
                 <!-- Sensor -->
-                <sensor name="ARCADIA" r="0.0*mm" thickness="VTXIB_sensitive_thickness" material="Silicon">
-                    <component name="periphery" sensitive="False" vis="VTXPeripheryVis" xmin="-VTXIB_sensor_rphi/2.0" xmax="-VTXIB_sensor_rphi/2.0 + VTXIB_sensor_rphi_periphery" ymin="-VTXIB_sensor_z/2.0" ymax="+VTXIB_sensor_z/2.0"/>
-                    <component name="sensor"    sensitive="True"  vis="VTXSensitiveVis" xmin="-VTXIB_sensor_rphi/2.0 + VTXIB_sensor_rphi_periphery" xmax="VTXIB_sensor_rphi/2.0" ymin="-VTXIB_sensor_z/2.0" ymax="+VTXIB_sensor_z/2.0"/>
+                <sensor name="ARCADIA" r="0.0*mm" thickness="VTXIB_sensor_thickness" material="Silicon">
+                    <component name="periphery" sensitive="False" vis="VTXPeripheryVis" xmin="-VTXIB_sensor_rphi/2.0" xmax="-VTXIB_sensor_rphi/2.0 + VTXIB_sensor_rphi_periphery" ymin="-VTXIB_sensor_z/2.0" ymax="+VTXIB_sensor_z/2.0" thickness="VTXIB_sensitive_thickness"/>
+                    <component name="sensor"    sensitive="True"  vis="VTXSensitiveVis" xmin="-VTXIB_sensor_rphi/2.0 + VTXIB_sensor_rphi_periphery" xmax="VTXIB_sensor_rphi/2.0" ymin="-VTXIB_sensor_z/2.0" ymax="+VTXIB_sensor_z/2.0" thickness="VTXIB_sensitive_thickness"/>
+                    <component name="insensitive_backside" sensitive="False" vis="VTXPeripheryVis" xmin="-VTXIB_sensor_rphi/2.0" xmax="VTXIB_sensor_rphi/2.0" ymin="-VTXIB_sensor_z/2.0" ymax="+VTXIB_sensor_z/2.0" z_offset="VTXIB_sensitive_thickness" thickness="VTXIB_insensitive_thickness"/>
                 </sensor>
 
-                <components name="support" r="VTXIB_sensitive_thickness" length="VTXIB_halfLength1">
+                <components name="support" r="VTXIB_sensor_thickness" length="VTXIB_halfLength1">
                     <component thickness="VTXIB_glue_thickness" width="VTXIB_sensor_rphi" offset="0.0*mm" r="0.0*mm" material="GlueEcobond45" vis="VTXGlueVis"/>
                     <component thickness="VTXIB_support_thickness" width="VTXIB_support_width" offset="0.0*mm" r="VTXIB_glue_thickness" material="CarbonFiberVtx" vis="VTXSupportVis"/>
                     <component thickness="VTXIB_holder_thickness1"  width="VTXIB_holder_rohacell_width1" offset="0.0*mm" r="VTXIB_glue_thickness+VTXIB_support_thickness" material="RohacellVtx66D" vis="VTXRohacellVis"/> <!-- Holder structure -->
@@ -495,7 +498,7 @@
                     <component thickness="VTXIB_holder_thickness1"  width="VTXIB_holder_carbonFiber_width" offset="VTXIB_holder_rohacell_width1/2.0+VTXIB_holder_carbonFiber_width/2.0"  r="VTXIB_glue_thickness+VTXIB_support_thickness" material="CarbonFiberVtx66D" vis="VTXSupportVis"/> <!-- Holder structure -->
                 </components>
 
-                <components name="flexes" r="VTXIB_sensitive_thickness+VTXIB_glue_thickness+VTXIB_support_thickness" length="VTXIB_halfLength1">
+                <components name="flexes" r="VTXIB_sensor_thickness+VTXIB_glue_thickness+VTXIB_support_thickness" length="VTXIB_halfLength1">
                     <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" r="0.0*mm" offset="VTXIB_flex_offset" material="KaptonVtx" vis="VTXCableVis"/>
                     <component thickness="VTXIB_flex_Aluminium_thickness"    width="VTXIB_flex_width" r="VTXIB_flex_Kapton_thickness" offset="VTXIB_flex_offset" material="Al" vis="VTXCableVis"/>
                     <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" r="0.0*mm" offset="-VTXIB_flex_offset" material="KaptonVtx" vis="VTXCableVis"/>
@@ -523,12 +526,13 @@
             <!-- Definition of our "stave" object that is used to build the barrel, this time for layer 2 -->
             <stave name="VTXIBStave2" length="2.*VTXIB_halfLength2">
                 <!-- Sensor -->
-                <sensor name="ARCADIA" r="0.0*mm" thickness="VTXIB_sensitive_thickness" material="Silicon">
-                    <component name="periphery" sensitive="False" vis="VTXPeripheryVis" xmin="-VTXIB_sensor_rphi/2.0" xmax="-VTXIB_sensor_rphi/2.0 + VTXIB_sensor_rphi_periphery" ymin="-VTXIB_sensor_z/2.0" ymax="+VTXIB_sensor_z/2.0"/>
-                    <component name="sensor"    sensitive="True"  vis="VTXSensitiveVis" xmin="-VTXIB_sensor_rphi/2.0 + VTXIB_sensor_rphi_periphery" xmax="VTXIB_sensor_rphi/2.0" ymin="-VTXIB_sensor_z/2.0" ymax="+VTXIB_sensor_z/2.0"/>
+                <sensor name="ARCADIA" r="0.0*mm" thickness="VTXIB_sensor_thickness" material="Silicon">
+                    <component name="periphery" sensitive="False" vis="VTXPeripheryVis" xmin="-VTXIB_sensor_rphi/2.0" xmax="-VTXIB_sensor_rphi/2.0 + VTXIB_sensor_rphi_periphery" ymin="-VTXIB_sensor_z/2.0" ymax="+VTXIB_sensor_z/2.0" thickness="VTXIB_sensitive_thickness"/>
+                    <component name="sensor"    sensitive="True"  vis="VTXSensitiveVis" xmin="-VTXIB_sensor_rphi/2.0 + VTXIB_sensor_rphi_periphery" xmax="VTXIB_sensor_rphi/2.0" ymin="-VTXIB_sensor_z/2.0" ymax="+VTXIB_sensor_z/2.0" thickness="VTXIB_sensitive_thickness"/>
+                    <component name="insensitive_backside" sensitive="False" vis="VTXPeripheryVis" xmin="-VTXIB_sensor_rphi/2.0" xmax="VTXIB_sensor_rphi/2.0" ymin="-VTXIB_sensor_z/2.0" ymax="+VTXIB_sensor_z/2.0" z_offset="VTXIB_sensitive_thickness" thickness="VTXIB_insensitive_thickness"/>
                 </sensor>
 
-                <components name="support" r="VTXIB_sensitive_thickness" length="VTXIB_halfLength2">
+                <components name="support" r="VTXIB_sensor_thickness" length="VTXIB_halfLength2">
                     <component thickness="VTXIB_glue_thickness" width="VTXIB_sensor_rphi" offset="0.0*mm" r="0.0*mm" material="GlueEcobond45" vis="VTXGlueVis"/>
                     <component thickness="VTXIB_support_thickness" width="VTXIB_support_width" offset="0.0*mm" r="VTXIB_glue_thickness" material="CarbonFiberVtx" vis="VTXSupportVis"/>
                     <component thickness="VTXIB_holder_thickness2"  width="VTXIB_holder_rohacell_width2" offset="0.0*mm" r="VTXIB_glue_thickness+VTXIB_support_thickness" material="RohacellVtx66D" vis="VTXRohacellVis"/> <!-- Holder structure -->
@@ -536,7 +540,7 @@
                     <component thickness="VTXIB_holder_thickness2"  width="VTXIB_holder_carbonFiber_width" offset="VTXIB_holder_rohacell_width2/2.0+VTXIB_holder_carbonFiber_width/2.0"  r="VTXIB_glue_thickness+VTXIB_support_thickness" material="CarbonFiberVtx66D" vis="VTXSupportVis"/> <!-- Holder structure -->
                 </components>
 
-                <components name="flexes" r="VTXIB_sensitive_thickness+VTXIB_glue_thickness+VTXIB_support_thickness" length="VTXIB_halfLength2">
+                <components name="flexes" r="VTXIB_sensor_thickness+VTXIB_glue_thickness+VTXIB_support_thickness" length="VTXIB_halfLength2">
                     <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" r="0.0*mm" offset="VTXIB_flex_offset" material="KaptonVtx" vis="VTXCableVis"/>
                     <component thickness="VTXIB_flex_Aluminium_thickness"    width="VTXIB_flex_width" r="VTXIB_flex_Kapton_thickness" offset="VTXIB_flex_offset" material="Al" vis="VTXCableVis"/>
                     <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" r="0.0*mm" offset="-VTXIB_flex_offset" material="KaptonVtx" vis="VTXCableVis"/>
@@ -564,12 +568,13 @@
             <!-- Definition of our "stave" object that is used to build the barrel. There are two different versions for layer 3 as they are mirrored in x-y and are at a different r -->
             <stave name="VTXIBStave3" length="2.*VTXIB_halfLength3">
                 <!-- Sensor -->
-                <sensor name="ARCADIA" r="0.0*mm" thickness="VTXIB_sensitive_thickness" material="Silicon">
-                    <component name="periphery" sensitive="False" vis="VTXPeripheryVis" xmin="-VTXIB_sensor_rphi/2.0" xmax="-VTXIB_sensor_rphi/2.0 + VTXIB_sensor_rphi_periphery" ymin="-VTXIB_sensor_z/2.0" ymax="+VTXIB_sensor_z/2.0"/>
-                    <component name="sensor"    sensitive="True"  vis="VTXSensitiveVis" xmin="-VTXIB_sensor_rphi/2.0 + VTXIB_sensor_rphi_periphery" xmax="VTXIB_sensor_rphi/2.0" ymin="-VTXIB_sensor_z/2.0" ymax="+VTXIB_sensor_z/2.0"/>
+                <sensor name="ARCADIA" r="0.0*mm" thickness="VTXIB_sensor_thickness" material="Silicon">
+                    <component name="periphery" sensitive="False" vis="VTXPeripheryVis" xmin="-VTXIB_sensor_rphi/2.0" xmax="-VTXIB_sensor_rphi/2.0 + VTXIB_sensor_rphi_periphery" ymin="-VTXIB_sensor_z/2.0" ymax="+VTXIB_sensor_z/2.0" thickness="VTXIB_sensitive_thickness"/>
+                    <component name="sensor"    sensitive="True"  vis="VTXSensitiveVis" xmin="-VTXIB_sensor_rphi/2.0 + VTXIB_sensor_rphi_periphery" xmax="VTXIB_sensor_rphi/2.0" ymin="-VTXIB_sensor_z/2.0" ymax="+VTXIB_sensor_z/2.0" thickness="VTXIB_sensitive_thickness"/>
+                    <component name="insensitive_backside" sensitive="False" vis="VTXPeripheryVis" xmin="-VTXIB_sensor_rphi/2.0" xmax="VTXIB_sensor_rphi/2.0" ymin="-VTXIB_sensor_z/2.0" ymax="+VTXIB_sensor_z/2.0" z_offset="VTXIB_sensitive_thickness" thickness="VTXIB_insensitive_thickness"/>
                 </sensor>
 
-                <components name="support" r="VTXIB_sensitive_thickness" length="VTXIB_halfLength3">
+                <components name="support" r="VTXIB_sensor_thickness" length="VTXIB_halfLength3">
                     <component thickness="VTXIB_glue_thickness" width="VTXIB_sensor_rphi" offset="0.0*mm" r="0.0*mm" material="GlueEcobond45" vis="VTXGlueVis"/>
                     <component thickness="VTXIB_support_thickness" width="VTXIB_support_width" offset="0.0*mm" r="VTXIB_glue_thickness" material="CarbonFiberVtx" vis="VTXSupportVis"/> 
                     <component thickness="VTXIB_holder_thickness3"  width="VTXIB_holder_rohacell_width3" offset="0.0*mm" r="VTXIB_glue_thickness+VTXIB_support_thickness" material="RohacellVtx66D" vis="VTXRohacellVis"/> <!-- Holder structure -->
@@ -577,7 +582,7 @@
                     <component thickness="VTXIB_holder_thickness3"  width="VTXIB_holder_carbonFiber_width" offset="VTXIB_holder_rohacell_width3/2.0+VTXIB_holder_carbonFiber_width/2.0"  r="VTXIB_glue_thickness+VTXIB_support_thickness" material="CarbonFiberVtx66D" vis="VTXSupportVis"/> <!-- Holder structure -->
                 </components>
 
-                <components name="flexes" r="VTXIB_sensitive_thickness+VTXIB_glue_thickness+VTXIB_support_thickness" length="VTXIB_halfLength3">
+                <components name="flexes" r="VTXIB_sensor_thickness+VTXIB_glue_thickness+VTXIB_support_thickness" length="VTXIB_halfLength3">
                     <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" r="0.0*mm" offset="VTXIB_flex_offset" material="KaptonVtx" vis="VTXCableVis"/>
                     <component thickness="VTXIB_flex_Aluminium_thickness"    width="VTXIB_flex_width" r="VTXIB_flex_Kapton_thickness" offset="VTXIB_flex_offset" material="Al" vis="VTXCableVis"/>
                     <component thickness="VTXIB_flex_Kapton_thickness"       width="VTXIB_flex_width" r="0.0*mm" offset="-VTXIB_flex_offset" material="KaptonVtx" vis="VTXCableVis"/>
