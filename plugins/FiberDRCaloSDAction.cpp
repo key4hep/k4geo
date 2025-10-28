@@ -1,6 +1,6 @@
 // DD4hep Framework include files
-#include "DD4hep/Segmentations.h"
 #include "DD4hep/Printout.h"
+#include "DD4hep/Segmentations.h"
 #include "DDG4/Geant4Mapping.h"
 #include "DDG4/Geant4Random.h"
 #include "DDG4/Geant4SensDetAction.inl"
@@ -101,8 +101,8 @@ namespace sim {
       throw std::invalid_argument("Geant4SensitiveAction<DRCData>::Geant4SensitiveAction");
     }
 
-    m_userData.fTimeBin = static_cast<int>(
-        std::ceil((m_userData.fTimeEnd - m_userData.fTimeStart) / m_userData.fTimeStep));
+    m_userData.fTimeBin =
+        static_cast<int>(std::ceil((m_userData.fTimeEnd - m_userData.fTimeStart) / m_userData.fTimeStep));
 
     m_userData.fastfiber.fSafety = 1;
     m_userData.fastfiber.fVerbose = 0;
