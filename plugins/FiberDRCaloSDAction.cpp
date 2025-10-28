@@ -1,5 +1,6 @@
 // DD4hep Framework include files
 #include "DD4hep/Segmentations.h"
+#include "DD4hep/Printout.h"
 #include "DDG4/Geant4Mapping.h"
 #include "DDG4/Geant4Random.h"
 #include "DDG4/Geant4SensDetAction.inl"
@@ -75,7 +76,8 @@ namespace sim {
       return i;
     }
 
-    DRCData() : fWavBin(120), fTimeBin(650), fWavlenStart(900.), fWavlenEnd(300.), fTimeStart(5.), fTimeEnd(70.) {
+    // default constructor
+    DRCData() : fWavBin(120), fTimeBin(2000), fWavlenStart(900.), fWavlenEnd(300.), fTimeStart(-100.), fTimeEnd(100.) {
       fWavlenStep = (fWavlenStart - fWavlenEnd) / (float)fWavBin;
       fTimeStep = (fTimeEnd - fTimeStart) / (float)fTimeBin;
     }
@@ -88,8 +90,19 @@ namespace sim {
     declareProperty("skipScint", m_userData.skipScint = true);
     declareProperty("ReadoutName", m_readoutName);
     declareProperty("CollectionName", m_collectionName);
+    declareProperty("timeStart", m_userData.fTimeStart); // in ns
+    declareProperty("timeEnd", m_userData.fTimeEnd);     // in ns
+    declareProperty("timeStep", m_userData.fTimeStep);   // in ns
     initialize();
     InstanceCount::increment(this);
+
+    if (m_userData.fTimeStart >= m_userData.fTimeEnd) {
+      dd4hep::except("Geant4SensitiveAction<DRCData>: timeStart must be smaller than timeEnd.", name().c_str());
+      throw std::invalid_argument("Geant4SensitiveAction<DRCData>::Geant4SensitiveAction");
+    }
+
+    m_userData.fTimeBin = static_cast<int>(
+        std::ceil((m_userData.fTimeEnd - m_userData.fTimeStart) / m_userData.fTimeStep));
 
     m_userData.fastfiber.fSafety = 1;
     m_userData.fastfiber.fVerbose = 0;
