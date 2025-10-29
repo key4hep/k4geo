@@ -34,7 +34,6 @@ using dd4hep::Volume;
 
 using dd4hep::rec::LayeredCalorimeterData;
 
-
 static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDetector sens) {
 
   double boundarySafety = 0.0001;
