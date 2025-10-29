@@ -44,11 +44,6 @@ using dd4hep::rec::LayeredCalorimeterData;
 
 using lcgeo::GeometryException;
 
-// workaround for DD4hep v00-14 (and older)
-#ifndef DD4HEP_VERSION_GE
-#define DD4HEP_VERSION_GE(a, b) 0
-#endif
-
 // After reading in all the necessary parameters.
 // To check the radius range and the space for placing the total layers
 static bool validateEnvelope(double rInner, double rOuter, double radiatorThickness, double layerThickness,
@@ -464,14 +459,13 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
       if (x_slice.isSensitive()) {
         slice_vol.setSensitiveDetector(sens);
 
-#if DD4HEP_VERSION_GE(0, 15)
         // Store "inner" quantities
         caloLayer.inner_nRadiationLengths = nRadiationLengths;
         caloLayer.inner_nInteractionLengths = nInteractionLengths;
         caloLayer.inner_thickness = thickness_sum;
         // Store scintillator thickness
         caloLayer.sensitive_thickness = slice_thickness;
-#endif
+
         // Reset counters to measure "outside" quantitites
         nRadiationLengths = 0.;
         nInteractionLengths = 0.;
@@ -499,12 +493,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
       ++slice_number;
     }
 
-#if DD4HEP_VERSION_GE(0, 15)
     // Store "outer" quantities
     caloLayer.outer_nRadiationLengths = nRadiationLengths;
     caloLayer.outer_nInteractionLengths = nInteractionLengths;
     caloLayer.outer_thickness = thickness_sum;
-#endif
 
     //---------------------------  Chamber Placements -----------------------------------------
 

@@ -42,11 +42,6 @@ using dd4hep::DDSegmentation::WaferGridXY;
 
 // #define VERBOSE 1
 
-// workaround for DD4hep v00-14 (and older)
-#ifndef DD4HEP_VERSION_GE
-#define DD4HEP_VERSION_GE(a, b) 0
-#endif
-
 /** SEcal04.cc
  *
  *  @author: Shaojun Lu, DESY
@@ -402,7 +397,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
           radiator_dim_y = s_thick;
           // W StructureLayer has the same thickness as W radiator layer in the Alveolus layer
 
-#if DD4HEP_VERSION_GE(0, 15)
           caloLayer.outer_nRadiationLengths = nRadiationLengths;
           caloLayer.outer_nInteractionLengths = nInteractionLengths;
           caloLayer.outer_thickness = thickness_sum;
@@ -425,7 +419,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
                       << caloLayer.inner_thickness + caloLayer.outer_thickness << std::endl;
 #endif
           }
-#endif
           // Init for inner
           nRadiationLengths = 0.;
           nInteractionLengths = 0.;
@@ -517,7 +510,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
             }
           }
 
-#if DD4HEP_VERSION_GE(0, 15)
           // Store "inner" quantities
           caloLayer.inner_nRadiationLengths = nRadiationLengths;
           caloLayer.inner_nInteractionLengths = nInteractionLengths;
@@ -541,7 +533,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
           caloLayer.absorberThickness = radiator_dim_y;
 
           //-----------------------------------------------------------------------------------------
-#endif
+
           // Init for outer
           nRadiationLengths = 0.;
           nInteractionLengths = 0.;
@@ -569,7 +561,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
         ++s_num;
       }
 
-#if DD4HEP_VERSION_GE(0, 15)
       caloLayer.outer_nRadiationLengths =
           nRadiationLengths + (Ecal_fiber_thickness * (N_FIBERS_ALVOULUS + N_FIBERS_W_STRUCTURE)) / air.radLength();
       caloLayer.outer_nInteractionLengths =
@@ -592,7 +583,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 
       std::cout << " EcalBarrel[2]==>caloLayer.inner_thickness + caloLayer.outer_thickness: "
                 << caloLayer.inner_thickness + caloLayer.outer_thickness << std::endl;
-#endif
 #endif
       // Init for next double layer
       nRadiationLengths = radiator_dim_y / (stave_material.radLength()) +

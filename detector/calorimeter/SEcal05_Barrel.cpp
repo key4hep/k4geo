@@ -46,11 +46,6 @@ using dd4hep::rec::LayeredCalorimeterData;
 
 #define VERBOSE 1
 
-// workaround for DD4hep v00-14 (and older)
-#ifndef DD4HEP_VERSION_GE
-#define DD4HEP_VERSION_GE(a, b) 0
-#endif
-
 /** SEcal05.cc
  *
  * new SEcal05 barrel driver: allows removal of preshower layer. DJeans UTokyo, sep/2016
