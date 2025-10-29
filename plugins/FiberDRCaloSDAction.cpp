@@ -93,8 +93,8 @@ namespace sim {
     declareProperty("timeStart", m_userData.fTimeStart); // in ns
     declareProperty("timeEnd", m_userData.fTimeEnd);     // in ns
     // delegate to user's responsibility to ensure timeStep divides (timeEnd - timeStart)
-    declareProperty("timeStep", m_userData.fTimeStep);   // in ns
-    declareProperty("timeBin", m_userData.fTimeBin);     // in ns
+    declareProperty("timeStep", m_userData.fTimeStep); // in ns
+    declareProperty("timeBin", m_userData.fTimeBin);   // in ns
     declareProperty("verbose", m_userData.fastfiber.fVerbose);
     declareProperty("safety", m_userData.fastfiber.fSafety);
     InstanceCount::increment(this);
