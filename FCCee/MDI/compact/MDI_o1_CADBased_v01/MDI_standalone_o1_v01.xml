@@ -58,8 +58,7 @@
   <!-- <include ref="FFQuads_v01.xml"/>-->
   <!--<include ref="FFQuads_v01_sens.xml"/>-->
   
-  <!--<include ref="fields_solenoid.xml"/>-->
-  <!--<include ref="fields_antisol_map.xml"/>-->
-  <!--<include ref="fields_antisol_ideal.xml"/>-->
+  <include ref="fields_solenoid.xml"/>
+  <include ref="fields_antisol_map.xml"/>
   
 </lccdd>
