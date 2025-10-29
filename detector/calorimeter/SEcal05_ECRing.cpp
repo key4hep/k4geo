@@ -102,11 +102,6 @@ using dd4hep::rec::LayeredCalorimeterData;
 
 // #define VERBOSE 1
 
-// workaround for DD4hep v00-14 (and older)
-#ifndef DD4HEP_VERSION_GE
-#define DD4HEP_VERSION_GE(a, b) 0
-#endif
-
 static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDetector sens) {
   static double tolerance = 0e0;
 
@@ -494,18 +489,16 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 
             absorber_index++;
 
-#if DD4HEP_VERSION_GE(0, 15)
             caloLayer.outer_nRadiationLengths = nRadiationLengths;
             caloLayer.outer_nInteractionLengths = nInteractionLengths;
             caloLayer.outer_thickness = thickness_sum;
             caloLayer.distance = distance_ip_to_front_face + dist_from_front_face_tally;
-#endif
+
             if (Ecal_Barrel_PreshowerLayer == 0 || !isFirstSens) { // add this layer to the caloData (unless its the
                                                                    // first absorber layer of a no-preshower calo)
               if (module_num == 0) {
                 caloData->layers.push_back(caloLayer);
 #ifdef VERBOSE
-#if DD4HEP_VERSION_GE(0, 15)
                 std::cout << " caloLayer.distance: " << caloLayer.distance << std::endl;
                 std::cout << " caloLayer.inner_nRadiationLengths: " << caloLayer.inner_nRadiationLengths << std::endl;
                 std::cout << " caloLayer.inner_nInteractionLengths: " << caloLayer.inner_nInteractionLengths
@@ -520,7 +513,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
                 std::cout << " caloLayer.outer_thickness: " << caloLayer.outer_thickness << std::endl;
                 std::cout << " EcalECRing[1]==>caloLayer.inner_thickness + caloLayer.outer_thickness: "
                           << caloLayer.inner_thickness + caloLayer.outer_thickness << std::endl;
-#endif
 #endif
                 dist_from_front_face_tally += caloLayer.inner_thickness + caloLayer.outer_thickness;
               }
@@ -539,7 +531,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
           if (x_slice.isSensitive()) {
             s_vol.setSensitiveDetector(sens);
 
-#if DD4HEP_VERSION_GE(0, 15)
             // Store "inner" quantities
             caloLayer.inner_nRadiationLengths = nRadiationLengths;
             caloLayer.inner_nInteractionLengths = nInteractionLengths;
@@ -557,7 +548,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
             std::cout << " radiator_dim_y: " << radiator_dim_y << std::endl;
 #endif
             caloLayer.absorberThickness = radiator_dim_y;
-#endif
             nRadiationLengths = 0.;
             nInteractionLengths = 0.;
             thickness_sum = 0.;
@@ -606,16 +596,13 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
         }
 
         if (module_num == 0) {
-#if DD4HEP_VERSION_GE(0, 15)
           caloLayer.distance = distance_ip_to_front_face + dist_from_front_face_tally;
           caloLayer.outer_nRadiationLengths = nRadiationLengths + cf_thick / CF.radLength();
           caloLayer.outer_nInteractionLengths = nInteractionLengths + cf_thick / CF.intLength();
           caloLayer.outer_thickness = thickness_sum + cf_thick;
-#endif
           caloData->layers.push_back(caloLayer);
 
 #ifdef VERBOSE
-#if DD4HEP_VERSION_GE(0, 15)
           std::cout << " caloLayer.distance: " << caloLayer.distance << std::endl;
           std::cout << " caloLayer.inner_nRadiationLengths: " << caloLayer.inner_nRadiationLengths << std::endl;
           std::cout << " caloLayer.inner_nInteractionLengths: " << caloLayer.inner_nInteractionLengths << std::endl;
@@ -628,7 +615,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 
           std::cout << " EcalECRing[2]==>caloLayer.inner_thickness + caloLayer.outer_thickness: "
                     << caloLayer.inner_thickness + caloLayer.outer_thickness << std::endl;
-#endif
 #endif
           dist_from_front_face_tally += caloLayer.inner_thickness + caloLayer.outer_thickness;
         }

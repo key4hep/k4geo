@@ -28,11 +28,6 @@ using dd4hep::Segmentation;
 using dd4hep::SensitiveDetector;
 using dd4hep::Volume;
 
-// workaround for DD4hep v00-14 (and older)
-#ifndef DD4HEP_VERSION_GE
-#define DD4HEP_VERSION_GE(a, b) 0
-#endif
-
 static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDetector sens) {
 
   xml_det_t x_det = element;
