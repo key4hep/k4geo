@@ -211,10 +211,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
       // Store the position up to the inner face of the layer
       caloLayer.distance = rmin + layer_pos_z + totalThickness / 2 - layer_thickness / 2;
       std::cout << "MuonBarrel layer: " << layer_num << " Rmin: " << rmin << " layer_pos_z: " << layer_pos_z
-                << " Dist: " << caloLayer.distance
-                << " inner_thickness: " << caloLayer.inner_thickness
-                << " outer_thickness: " << caloLayer.outer_thickness
-                << std::endl;
+                << " Dist: " << caloLayer.distance << " inner_thickness: " << caloLayer.inner_thickness
+                << " outer_thickness: " << caloLayer.outer_thickness << std::endl;
 
       // Push back a copy to the caloData structure
       caloData->layers.push_back(caloLayer);
