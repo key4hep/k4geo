@@ -1,5 +1,4 @@
 // DD4hep Framework include files
-#include "DD4hep/Printout.h"
 #include "DD4hep/Segmentations.h"
 #include "DDG4/Geant4Mapping.h"
 #include "DDG4/Geant4Random.h"
