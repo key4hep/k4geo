@@ -92,20 +92,12 @@ namespace sim {
     declareProperty("CollectionName", m_collectionName);
     declareProperty("timeStart", m_userData.fTimeStart); // in ns
     declareProperty("timeEnd", m_userData.fTimeEnd);     // in ns
+    // delegate to user's responsibility to ensure timeStep divides (timeEnd - timeStart)
     declareProperty("timeStep", m_userData.fTimeStep);   // in ns
-    initialize();
+    declareProperty("timeBin", m_userData.fTimeBin);     // in ns
+    declareProperty("verbose", m_userData.fastfiber.fVerbose);
+    declareProperty("safety", m_userData.fastfiber.fSafety);
     InstanceCount::increment(this);
-
-    if (m_userData.fTimeStart >= m_userData.fTimeEnd) {
-      dd4hep::except("Geant4SensitiveAction<DRCData>: timeStart must be smaller than timeEnd.", name().c_str());
-      throw std::invalid_argument("Geant4SensitiveAction<DRCData>::Geant4SensitiveAction");
-    }
-
-    m_userData.fTimeBin =
-        static_cast<int>(std::ceil((m_userData.fTimeEnd - m_userData.fTimeStart) / m_userData.fTimeStep));
-
-    m_userData.fastfiber.fSafety = 1;
-    m_userData.fastfiber.fVerbose = 0;
 
     m_hitCreationMode = HitCreationFlags::DETAILED_MODE; // always store step position
   }
