@@ -43,7 +43,7 @@ option(INSTALL_BEAMPIPE_STL_FILES "Download CAD files for building the detailed 
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-find_package(DD4hep REQUIRED COMPONENTS DDRec DDG4 DDParsers)
+find_package(DD4hep 1.31 REQUIRED COMPONENTS DDRec DDG4 DDParsers)
 
 find_package ( ROOT REQUIRED COMPONENTS Geom GenVector)
 message ( STATUS "ROOT_VERSION: ${ROOT_VERSION}" )
