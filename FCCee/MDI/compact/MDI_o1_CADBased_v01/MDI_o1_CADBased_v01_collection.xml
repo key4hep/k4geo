@@ -4,6 +4,5 @@
     <include ref="Beampipe_CADimport_o1_v03.xml"/>
 
     <include ref="fields_antisol_map.xml"/>
-    <include ref="fields_solenoid.xml"/>
 
 </lccdd>
