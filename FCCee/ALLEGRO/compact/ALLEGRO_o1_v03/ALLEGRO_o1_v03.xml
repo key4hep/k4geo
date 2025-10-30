@@ -37,8 +37,8 @@
   <!-- In order to use the CAD beampipe, build k4geo with the following CMake option: 
   cmake -D INSTALL_BEAMPIPE_STL_FILES=ON which will download the files needed -->
   <!-- engineered CAD model of the beam pipe -->
-  <!-- <include ref="../../../MDI/compact/MDI_o1_v01/Beampipe_CADimport_o1_v02.xml" /> -->
-  <!-- <include ref="../../../MDI/compact/MDI_o1_v01/BeamInstrumentation_o1_v01.xml"/> -->
+  <!-- <include ref="../../../MDI/compact/MDI_o1_CADBased_v01/MDI_o1_CADBased_v01_collection.xml" />
+  <world material="Vacuum"/> -->
 
   <include ref="LumiCal.xml"/>
   <include ref="VertexComplete_IDEA_o1_v03.xml"/>   <!-- symbolic link to ../../../IDEA/compact/IDEA_o1_v03/VertexComplete_IDEA_o1_v03.xml -->
