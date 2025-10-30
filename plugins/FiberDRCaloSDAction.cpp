@@ -24,12 +24,6 @@
 #include "G4ThreeVector.hh"
 #include "G4TouchableHistory.hh"
 
-#if DD4HEP_VERSION_GE(1, 21)
-#define GEANT4_CONST_STEP const
-#else
-#define GEANT4_CONST_STEP
-#endif
-
 /// Namespace for the AIDA detector description toolkit
 namespace dd4hep {
 
@@ -120,7 +114,7 @@ namespace sim {
 
   /// Method for generating hit(s) using the information of G4Step object.
   template <>
-  G4bool Geant4SensitiveAction<DRCData>::process(G4Step GEANT4_CONST_STEP* step, G4TouchableHistory*) {
+  G4bool Geant4SensitiveAction<DRCData>::process(G4Step const* step, G4TouchableHistory*) {
     // optical photons traveling through the cladding is not interesting
     // but consume lots of computation power
     // let's kill optical photons inside the cladding whose status is not StepTooSmall
