@@ -37,8 +37,8 @@
   <!-- In order to use the CAD beampipe, build k4geo with the following CMake option: 
   cmake -D INSTALL_BEAMPIPE_STL_FILES=ON which will download the files needed -->
   <!-- engineered CAD model of the beam pipe -->
-  <!-- <include ref="../../../MDI/compact/MDI_o1_v01/Beampipe_CADimport_o1_v02.xml" /> -->
-  <!-- <include ref="../../../MDI/compact/MDI_o1_v01/BeamInstrumentation_o1_v01.xml"/> -->
+  <!-- <include ref="../../../MDI/compact/MDI_o1_CADBased_v01/MDI_o1_CADBased_v01_collection.xml" />
+  <world material="Vacuum"/> -->
 
   <include ref="LumiCal.xml"/>
   <include ref="VertexComplete_IDEA_o1_v03.xml"/>   <!-- symbolic link to ../../../IDEA/compact/IDEA_o1_v03/VertexComplete_IDEA_o1_v03.xml -->
@@ -60,25 +60,6 @@
            outer_radius="BarCryoECal_rmax-CryoBarrelBackWarm-CryoBarrelBackCold">
     </field>
 
-
-    <!-- MDI magnetic fields  -->
-    <!-- Important for background studies  -->
-
-    <field name="CompensatingSolenoidZplus" type="solenoid"
-           inner_field="-SolenoidField -SolenoidField * QD0_min_z / ( QD0_min_z - CompSol_min_z)"
-           outer_field="0*tesla"
-           zmax="QD0_min_z"
-           zmin="CompSol_min_z"
-           outer_radius="20*cm">
-    </field>
-
-    <field name="CompensatingSolenoidZminus" type="solenoid"
-           inner_field="-SolenoidField -SolenoidField * QD0_min_z / ( QD0_min_z - CompSol_min_z)"
-           outer_field="0*tesla"
-           zmin="-QD0_min_z"
-           zmax="-CompSol_min_z"
-           outer_radius="20*cm">
-    </field>
 
     <!-- FFQ fields at Z pole, V23) -->
     <!--

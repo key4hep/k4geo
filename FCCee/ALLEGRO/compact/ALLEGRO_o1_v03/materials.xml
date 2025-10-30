@@ -31,7 +31,7 @@
   </material>
 
   <material name="Vacuum">
-    <D type="density" unit="g/cm3" value="0.00000001" />
+    <D type="density" unit="g/cm3" value="1e-16" />
     <fraction n="1" ref="H" />
   </material>
 
