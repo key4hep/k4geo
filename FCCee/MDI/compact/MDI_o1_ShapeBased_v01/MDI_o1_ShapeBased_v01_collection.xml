@@ -1,0 +1,9 @@
+<lccdd>
+
+    <include ref="BeamInstrumentation_o1_v01.xml"/>
+    <include ref="Beampipe_o4_v05.xml"/>
+    <include ref="HOMAbsorber.xml"/>
+
+    <include ref="fields_antisol_map.xml"/>
+    
+</lccdd>

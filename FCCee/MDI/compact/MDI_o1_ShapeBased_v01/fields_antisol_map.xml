@@ -1,0 +1,32 @@
+<lccdd>
+    <info name="fields_antisol_map"
+        title="Magnetic field for the compensating and screening solenoids only. Field map from M. Koratzinos"
+	author="Andrea Ciarma"
+        url=""
+        status="development"
+        version="1">
+        <comment>Dimensions and Materials for the FCCee common MDI</comment>
+    </info>
+
+    <fields>
+      <!-- Detailed field map -->
+      <field name="AntisolField" type="FieldXYZ"
+	     filename    = "${K4GEO}/fieldmaps/FCCee_antisolenoid_fieldmapXYZ_20180212.root"
+             treeName    = "ntuple"
+             xVarName    = "X"
+             yVarName    = "Y"
+             zVarName    = "Z"
+             BxVarName   = "Bx"
+             ByVarName   = "By"
+             BzVarName   = "Bz"
+             xScale      = "1.0"
+             yScale      = "1.0"
+             zScale      = "1.0"
+             bScale      = "1.0"
+             coorUnits   = "mm"
+             BfieldUnits = "tesla"
+	     >
+      </field>
+    </fields>
+
+</lccdd>
