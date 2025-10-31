@@ -3,6 +3,9 @@
     <include ref="BeamInstrumentation_o1_v01.xml"/>
     <include ref="Beampipe_CADimport_o1_v03.xml"/>
 
+
+    <constant name="FFQ_ON" value="1"/>   <!-- turn on/off FFQ magnetic field -->
+
     <!-- must use one FFQuads_params_xxx.xml BEFORE FFQuads_v01.xml -->
     <!--<include ref="FFQuads_params_v530_Z.xml"/>-->
     <include ref="FFQuads_params_v572_Z.xml"/>
