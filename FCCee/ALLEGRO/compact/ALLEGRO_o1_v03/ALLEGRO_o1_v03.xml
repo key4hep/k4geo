@@ -61,43 +61,6 @@
     </field>
 
 
-    <!-- FFQ fields at Z pole, V23) -->
-    <!--
-    <field name="QC1L1_field_ED" type="MultipoleMagnet" Z="0.0*tesla">
-      <position y="0*cm" x="(QC1L1_len/2. + QC1L1_start)*sin(CrossingAngle/2.)" z="(QC1L1_len/2. + QC1L1_start)*cos(CrossingAngle/2.)"/>
-      <rotation x="0" y="CrossingAngle/2." z="0.0"/>
-      <coefficient coefficient="0*tesla"/>
-      <coefficient coefficient="(-1)*(45.6)*(-0.273)/0.3*tesla/m"/>
-      <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L1_len/2." />
-    </field>
-
-    <field name="QC1L1_field_EU" type="MultipoleMagnet" Z="0.0*tesla">
-      <position y="0*cm" x="-(QC1L1_len/2. + QC1L1_start)*sin(CrossingAngle/2.)" z="-(QC1L1_len/2. + QC1L1_start)*cos(CrossingAngle/2.)"/>
-      <rotation x="0" y="CrossingAngle/2." z="0.0"/>
-      <coefficient coefficient="0*tesla"/>
-      <coefficient coefficient="(-1)*(45.6)*(-0.273)/0.3*tesla/m"/>
-      <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L1_len/2." />
-    </field>
-
-    <field name="QC1L1_field_PD" type="MultipoleMagnet" Z="0.0*tesla">
-      <position y="0*cm" x="(QC1L1_len/2. + QC1L1_start)*sin(CrossingAngle/2.)" z="-(QC1L1_len/2. + QC1L1_start)*cos(CrossingAngle/2.)"/>
-      <rotation x="0" y="-CrossingAngle/2." z="0.0"/>
-      <coefficient coefficient="0*tesla"/>
-      <coefficient coefficient="(+1)*(45.6)*(-0.273)/0.3*tesla/m"/>
-      <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L1_len/2." />
-    </field>
-
-    <field name="QC1L1_field_PU" type="MultipoleMagnet" Z="0.0*tesla">
-      <position y="0*cm" x="-(QC1L1_len/2. + QC1L1_start)*sin(CrossingAngle/2.)" z="(QC1L1_len/2. + QC1L1_start)*cos(CrossingAngle/2.)"/>
-      <rotation x="0" y="-CrossingAngle/2.+pi" z="0.0"/>
-      <coefficient coefficient="0*tesla"/>
-      <coefficient coefficient="(-1)*(45.6)*(-0.273)/0.3*tesla/m"/>
-      <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L1_len/2." />
-    </field>
-    -->
-    
-    <!--End of MDI magnetic fields  -->
-
   </fields>
 
     <!-- Include plugins attaching additional info to the geometry and needed to generate edm4hep::TrackerHitPlane, see e.g. CLD detector-concept case https://github.com/key4hep/k4geo/blob/main/FCCee/CLD/compact/CLD_o2_v08/CLD_o2_v08.xml#L333-L390 -->

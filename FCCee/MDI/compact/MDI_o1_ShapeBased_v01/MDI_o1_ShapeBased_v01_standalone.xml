@@ -46,17 +46,15 @@
 
   <include ref="MDI_Dimensions_Materials_o1_v01.xml" />
 
-  <include ref="Beampipe_CADimport_o1_v03.xml"/>
-  
+  <include ref="Beampipe_o4_v05.xml"/>
   <include ref="BeamInstrumentation_o1_v01.xml"/>
-  <!--<include ref="LumiCal_o3_v02_05.xml"/>-->
+  <include ref="HOMAbsorber.xml"/>
 
   <!-- must use one FFQuads_params_xxx.xml BEFORE FFQuads_v01.xml -->
-  <!--<include ref="FFQuads_params_v530_Z.xml"/>-->
+  <!-- <include ref="FFQuads_params_v530_Z.xml"/>-->
   <include ref="FFQuads_params_v572_Z.xml"/>
   <!-- <include ref="FFQuads_params_v572_T.xml"/>-->
   <include ref="FFQuads_v01.xml"/>
-  <!--<include ref="FFQuads_v01_sens.xml"/>-->
   
   <include ref="fields_solenoid.xml"/>
   <include ref="fields_antisol_map.xml"/>

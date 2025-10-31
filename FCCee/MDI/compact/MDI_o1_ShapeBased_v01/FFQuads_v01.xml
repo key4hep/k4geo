@@ -1,0 +1,231 @@
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+
+<lccdd>
+
+  <info name="FFQs"
+        title="Final Focusing Quadrupoles"
+        author="Andrea Ciarma"
+        url="no"
+        status="development"
+        version="1">
+    <comment>Final Focusing Quadrupoles simplified geometry + fields - Started from MaskTrafos.xml by A. Sailer</comment>
+  </info>
+
+
+  <detectors>
+    <detector name="QC1" type="DD4hep_Mask_o1_v01" vis="KICKVis">
+      <parameter crossingangle="CrossingAngle" />
+      <envelope vis="KICKVis">
+        <shape type="Assembly"/>
+      </envelope>
+      <section type="Upstream"               start="QC1L1_start"    end="QC1L1_start+QC1L1_len"
+               rMin1="QC1_rmin"              rMin2="QC1_rmin"
+               rMax1="QC1_rmax"              rMax2="QC1_rmax"
+               material="FFQMaterial" name="QC1L1u"/>
+      <section type="Dnstream"               start="QC1L1_start"    end="QC1L1_start+QC1L1_len"
+               rMin1="QC1_rmin"              rMin2="QC1_rmin"
+               rMax1="QC1_rmax"              rMax2="QC1_rmax"
+               material="FFQMaterial" name="QC1L1d"/>
+      <section type="Upstream"               start="QC1L2_start"    end="QC1L2_start+QC1L2_len"
+               rMin1="QC1_rmin"              rMin2="QC1_rmin"
+               rMax1="QC1_rmax"              rMax2="QC1_rmax"
+               material="FFQMaterial" name="QC1L2u"/>
+      <section type="Dnstream"               start="QC1L2_start"    end="QC1L2_start+QC1L2_len"
+               rMin1="QC1_rmin"              rMin2="QC1_rmin"
+               rMax1="QC1_rmax"              rMax2="QC1_rmax"
+               material="FFQMaterial" name="QC1L2d"/>
+      <section type="Upstream"               start="QC1L3_start"    end="QC1L3_start+QC1L3_len"
+               rMin1="QC1_rmin"              rMin2="QC1_rmin"
+               rMax1="QC1_rmax"              rMax2="QC1_rmax"
+               material="FFQMaterial" name="QC1L3u"/>
+      <section type="Dnstream"               start="QC1L3_start"    end="QC1L3_start+QC1L3_len"
+               rMin1="QC1_rmin"              rMin2="QC1_rmin"
+               rMax1="QC1_rmax"              rMax2="QC1_rmax"
+               material="FFQMaterial" name="QC1L3d"/>
+      <section type="Upstream"               start="QC2L1_start"    end="QC2L1_start+QC2L1_len"
+               rMin1="QC2_rmin"              rMin2="QC2_rmin"
+               rMax1="QC2_rmax"              rMax2="QC2_rmax"
+               material="FFQMaterial" name="QC2L1u"/>
+      <section type="Dnstream"               start="QC2L1_start"    end="QC2L1_start+QC2L1_len"
+               rMin1="QC2_rmin"              rMin2="QC2_rmin"
+	       rMax1="QC2_rmax"              rMax2="QC2_rmax"
+               material="FFQMaterial" name="QC2L1d"/>
+      <section type="Upstream"               start="QC2L2_start"    end="QC2L2_start+QC2L2_len"
+               rMin1="QC2_rmin"              rMin2="QC2_rmin"
+               rMax1="QC2_rmax"              rMax2="QC2_rmax"
+               material="FFQMaterial" name="QC2L2u"/>
+      <section type="Dnstream"               start="QC2L2_start"    end="QC2L2_start+QC2L2_len"
+               rMin1="QC2_rmin"              rMin2="QC2_rmin"
+               rMax1="QC2_rmax"              rMax2="QC2_rmax"
+               material="FFQMaterial" name="QC2L2d"/>
+    </detector>
+  </detectors>
+
+
+  
+  <comment>
+    Note that the coefficient should be adjusted for the beam energy AND charge!
+    B'[T/m] = k[m-2]/0.3 * P[GeV/c] / (q/e)
+    Also, rotate everything in one direction only.
+  </comment>
+  <comment>[P]ositron/[E]lectron, [U]pstream/[D]ownstream</comment>
+  
+  <fields>
+    <!-- QC1L1 -->
+    <field name="QC1L1_field_ED" type="MultipoleMagnet" Z="0.0*tesla">
+      <position y="0*cm" x="(QC1L1_len/2. + QC1L1_start)*sin(CrossingAngle/2.)" z="(QC1L1_len/2. + QC1L1_start)*cos(CrossingAngle/2.)"/>
+      <rotation x="0" y="CrossingAngle/2." z="0.0"/>
+      <coefficient coefficient="0*tesla"/>
+      <coefficient coefficient="(-1)*(BEAM_E)*(KQC1R1)/0.3*tesla/m"/>
+      <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L1_len/2." />
+    </field>
+    <field name="QC1L1_field_EU" type="MultipoleMagnet" Z="0.0*tesla">
+      <position y="0*cm" x="-(QC1L1_len/2. + QC1L1_start)*sin(CrossingAngle/2.)" z="-(QC1L1_len/2. + QC1L1_start)*cos(CrossingAngle/2.)"/>
+      <rotation x="0" y="CrossingAngle/2." z="0.0"/>
+      <coefficient coefficient="0*tesla"/>
+      <coefficient coefficient="(-1)*(BEAM_E)*(KQC1R1)/0.3*tesla/m"/>
+      <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L1_len/2." />
+    </field>
+    
+    <field name="QC1L1_field_PD" type="MultipoleMagnet" Z="0.0*tesla">
+      <position y="0*cm" x="(QC1L1_len/2. + QC1L1_start)*sin(CrossingAngle/2.)" z="-(QC1L1_len/2. + QC1L1_start)*cos(CrossingAngle/2.)"/>
+      <rotation x="0" y="-CrossingAngle/2." z="0.0"/>
+      <coefficient coefficient="0*tesla"/>
+      <coefficient coefficient="(+1)*(BEAM_E)*(KQC1R1)/0.3*tesla/m"/>
+      <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L1_len/2." />
+    </field>
+    <field name="QC1L1_field_PU" type="MultipoleMagnet" Z="0.0*tesla">
+      <position y="0*cm" x="-(QC1L1_len/2. + QC1L1_start)*sin(CrossingAngle/2.)" z="(QC1L1_len/2. + QC1L1_start)*cos(CrossingAngle/2.)"/>
+      <rotation x="0" y="-CrossingAngle/2." z="0.0"/>
+      <coefficient coefficient="0*tesla"/>
+      <coefficient coefficient="(+1)*(BEAM_E)*(KQC1R1)/0.3*tesla/m"/>
+      <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L1_len/2." />
+    </field>
+
+    <!-- QC1L2 -->
+    <field name="QC1L2_field_ED" type="MultipoleMagnet" Z="0.0*tesla">
+      <position y="0*cm" x="(QC1L2_len/2. + QC1L2_start)*sin(CrossingAngle/2.)" z="(QC1L2_len/2. + QC1L2_start)*cos(CrossingAngle/2.)"/>
+      <rotation x="0" y="CrossingAngle/2." z="0.0"/>
+      <coefficient coefficient="0*tesla"/>
+      <coefficient coefficient="(-1)*(BEAM_E)*(KQC1R2)/0.3*tesla/m"/>
+      <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L2_len/2." />
+    </field>
+    <field name="QC1L2_field_EU" type="MultipoleMagnet" Z="0.0*tesla">
+      <position y="0*cm" x="-(QC1L2_len/2. + QC1L2_start)*sin(CrossingAngle/2.)" z="-(QC1L2_len/2. + QC1L2_start)*cos(CrossingAngle/2.)"/>
+      <rotation x="0" y="CrossingAngle/2." z="0.0"/>
+      <coefficient coefficient="0*tesla"/>
+      <coefficient coefficient="(-1)*(BEAM_E)*(KQC1R2)/0.3*tesla/m"/>
+      <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L2_len/2." />
+    </field>
+
+    <field name="QC1L2_field_PD" type="MultipoleMagnet" Z="0.0*tesla">
+      <position y="0*cm" x="(QC1L2_len/2. + QC1L2_start)*sin(CrossingAngle/2.)" z="-(QC1L2_len/2. + QC1L2_start)*cos(CrossingAngle/2.)"/>
+      <rotation x="0" y="-CrossingAngle/2." z="0.0"/>
+      <coefficient coefficient="0*tesla"/>
+      <coefficient coefficient="(+1)*(BEAM_E)*(KQC1R2)/0.3*tesla/m"/>
+      <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L2_len/2." />
+    </field>
+    <field name="QC1L2_field_PU" type="MultipoleMagnet" Z="0.0*tesla">
+      <position y="0*cm" x="-(QC1L2_len/2. + QC1L2_start)*sin(CrossingAngle/2.)" z="(QC1L2_len/2. + QC1L2_start)*cos(CrossingAngle/2.)"/>
+      <rotation x="0" y="-CrossingAngle/2." z="0.0"/>
+      <coefficient coefficient="0*tesla"/>
+      <coefficient coefficient="(+1)*(BEAM_E)*(KQC1R2)/0.3*tesla/m"/>
+      <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L2_len/2." />
+    </field>
+
+    <!-- QC1L3 -->
+    <field name="QC1L3_field_ED" type="MultipoleMagnet" Z="0.0*tesla">
+      <position y="0*cm" x="(QC1L3_len/2. + QC1L3_start)*sin(CrossingAngle/2.)" z="(QC1L3_len/2. + QC1L3_start)*cos(CrossingAngle/2.)"/>
+      <rotation x="0" y="CrossingAngle/2." z="0.0"/>
+      <coefficient coefficient="0*tesla"/>
+      <coefficient coefficient="(-1)*(BEAM_E)*(KQC1R3)/0.3*tesla/m"/>
+      <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L3_len/2." />
+    </field>
+    <field name="QC1L3_field_EU" type="MultipoleMagnet" Z="0.0*tesla">
+      <position y="0*cm" x="-(QC1L3_len/2. + QC1L3_start)*sin(CrossingAngle/2.)" z="-(QC1L3_len/2. + QC1L3_start)*cos(CrossingAngle/2.)"/>
+      <rotation x="0" y="CrossingAngle/2." z="0.0"/>
+      <coefficient coefficient="0*tesla"/>
+      <coefficient coefficient="(-1)*(BEAM_E)*(KQC1R3)/0.3*tesla/m"/>
+      <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L3_len/2." />
+    </field>
+
+    <field name="QC1L3_field_PD" type="MultipoleMagnet" Z="0.0*tesla">
+      <position y="0*cm" x="(QC1L3_len/2. + QC1L3_start)*sin(CrossingAngle/2.)" z="-(QC1L3_len/2. + QC1L3_start)*cos(CrossingAngle/2.)"/>
+      <rotation x="0" y="-CrossingAngle/2." z="0.0"/>
+      <coefficient coefficient="0*tesla"/>
+      <coefficient coefficient="(+1)*(BEAM_E)*(KQC1R3)/0.3*tesla/m"/>
+      <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L3_len/2." />
+    </field>
+    <field name="QC1L3_field_PU" type="MultipoleMagnet" Z="0.0*tesla">
+      <position y="0*cm" x="-(QC1L3_len/2. + QC1L3_start)*sin(CrossingAngle/2.)" z="(QC1L3_len/2. + QC1L3_start)*cos(CrossingAngle/2.)"/>
+      <rotation x="0" y="-CrossingAngle/2." z="0.0"/>
+      <coefficient coefficient="0*tesla"/>
+      <coefficient coefficient="(+1)*(BEAM_E)*(KQC1R3)/0.3*tesla/m"/>
+      <shape type="Tube" rmin="0.*cm" rmax="QC1_rmin" dz="QC1L3_len/2." />
+    </field>
+    
+    <!-- QC2L1 -->
+    <field name="QC2L1_field_ED" type="MultipoleMagnet" Z="0.0*tesla">
+      <position y="0*cm" x="(QC2L1_len/2. + QC2L1_start)*sin(CrossingAngle/2.)" z="(QC2L1_len/2. + QC2L1_start)*cos(CrossingAngle/2.)"/>
+      <rotation x="0" y="CrossingAngle/2." z="0.0"/>
+      <coefficient coefficient="0*tesla"/>
+      <coefficient coefficient="(-1)*(BEAM_E)*(KQC2R1)/0.3*tesla/m"/>
+      <shape type="Tube" rmin="0.*cm" rmax="QC2_rmin" dz="QC2L1_len/2." />
+    </field>
+    <field name="QC2L1_field_EU" type="MultipoleMagnet" Z="0.0*tesla">
+      <position y="0*cm" x="-(QC2L1_len/2. + QC2L1_start)*sin(CrossingAngle/2.)" z="-(QC2L1_len/2. + QC2L1_start)*cos(CrossingAngle/2.)"/>
+      <rotation x="0" y="CrossingAngle/2." z="0.0"/>
+      <coefficient coefficient="0*tesla"/>
+      <coefficient coefficient="(-1)*(BEAM_E)*(KQC2R1)/0.3*tesla/m"/>
+      <shape type="Tube" rmin="0.*cm" rmax="QC2_rmin" dz="QC2L1_len/2." />
+    </field>
+
+    <field name="QC2L1_field_PD" type="MultipoleMagnet" Z="0.0*tesla">
+      <position y="0*cm" x="(QC2L1_len/2. + QC2L1_start)*sin(CrossingAngle/2.)" z="-(QC2L1_len/2. + QC2L1_start)*cos(CrossingAngle/2.)"/>
+      <rotation x="0" y="-CrossingAngle/2." z="0.0"/>
+      <coefficient coefficient="0*tesla"/>
+      <coefficient coefficient="(+1)*(BEAM_E)*(KQC2R1)/0.3*tesla/m"/>
+      <shape type="Tube" rmin="0.*cm" rmax="QC2_rmin" dz="QC2L1_len/2." />
+    </field>
+    <field name="QC2L1_field_PU" type="MultipoleMagnet" Z="0.0*tesla">
+      <position y="0*cm" x="-(QC2L1_len/2. + QC2L1_start)*sin(CrossingAngle/2.)" z="(QC2L1_len/2. + QC2L1_start)*cos(CrossingAngle/2.)"/>
+      <rotation x="0" y="-CrossingAngle/2." z="0.0"/>
+      <coefficient coefficient="0*tesla"/>
+      <coefficient coefficient="(+1)*(BEAM_E)*(KQC2R1)/0.3*tesla/m"/>
+      <shape type="Tube" rmin="0.*cm" rmax="QC2_rmin" dz="QC2L1_len/2." />
+    </field>
+    
+    <!-- QC2L2 -->
+    <field name="QC2L2_field_ED" type="MultipoleMagnet" Z="0.0*tesla">
+      <position y="0*cm" x="(QC2L2_len/2. + QC2L2_start)*sin(CrossingAngle/2.)" z="(QC2L2_len/2. + QC2L2_start)*cos(CrossingAngle/2.)"/>
+      <rotation x="0" y="CrossingAngle/2." z="0.0"/>
+      <coefficient coefficient="0*tesla"/>
+      <coefficient coefficient="(-1)*(BEAM_E)*(KQC2R2)/0.3*tesla/m"/>
+      <shape type="Tube" rmin="0.*cm" rmax="QC2_rmin" dz="QC2L2_len/2." />
+    </field>
+    <field name="QC2L2_field_EU" type="MultipoleMagnet" Z="0.0*tesla">
+      <position y="0*cm" x="-(QC2L2_len/2. + QC2L2_start)*sin(CrossingAngle/2.)" z="-(QC2L2_len/2. + QC2L2_start)*cos(CrossingAngle/2.)"/>
+      <rotation x="0" y="CrossingAngle/2." z="0.0"/>
+      <coefficient coefficient="0*tesla"/>
+      <coefficient coefficient="(-1)*(BEAM_E)*(KQC2R2)/0.3*tesla/m"/>
+      <shape type="Tube" rmin="0.*cm" rmax="QC2_rmin" dz="QC2L2_len/2." />
+    </field>
+
+    <field name="QC2L2_field_PD" type="MultipoleMagnet" Z="0.0*tesla">
+      <position y="0*cm" x="(QC2L2_len/2. + QC2L2_start)*sin(CrossingAngle/2.)" z="-(QC2L2_len/2. + QC2L2_start)*cos(CrossingAngle/2.)"/>
+      <rotation x="0" y="-CrossingAngle/2." z="0.0"/>
+      <coefficient coefficient="0*tesla"/>
+      <coefficient coefficient="(+1)*(BEAM_E)*(KQC2R2)/0.3*tesla/m"/>
+      <shape type="Tube" rmin="0.*cm" rmax="QC2_rmin" dz="QC2L2_len/2." />
+    </field>
+    <field name="QC2L2_field_PU" type="MultipoleMagnet" Z="0.0*tesla">
+      <position y="0*cm" x="-(QC2L2_len/2. + QC2L2_start)*sin(CrossingAngle/2.)" z="(QC2L2_len/2. + QC2L2_start)*cos(CrossingAngle/2.)"/>
+      <rotation x="0" y="-CrossingAngle/2." z="0.0"/>
+      <coefficient coefficient="0*tesla"/>
+      <coefficient coefficient="(+1)*(BEAM_E)*(KQC2R2)/0.3*tesla/m"/>
+      <shape type="Tube" rmin="0.*cm" rmax="QC2_rmin" dz="QC2L2_len/2." />
+    </field>
+    
+  </fields>
+
+</lccdd>
