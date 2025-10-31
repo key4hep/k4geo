@@ -323,6 +323,22 @@
       <composite n="22" ref="H" />
     </material>
 
+    <material name="Paraffine" state="solid">
+        <D unit="g/cm3" value="0.8"/>
+        <fraction n="0.334" ref="C"/>
+        <fraction n="0.666" ref="H"/>
+      </material>
+
+      <material name="FFQMaterial">
+        <D type="density" value="3.367" unit="g/cm3"/>
+        <fraction n="0.654058214" ref="Al"/>
+        <fraction n="0.03095534" ref="Nb"/>
+        <fraction n="0.03095534" ref="Ti"/>
+        <fraction n="0.117630293" ref="Cu"/>
+        <fraction n="0.097743288" ref="Paraffine"/>
+        <fraction n="0.068657524" ref="Kapton"/>
+      </material>
+    
   <!-- FCCeeIDEA: material for the drift chamber -->
   <material name="CarbonFiber_50D">
     <D type="density" value="0.75" unit="g/cm3"/>

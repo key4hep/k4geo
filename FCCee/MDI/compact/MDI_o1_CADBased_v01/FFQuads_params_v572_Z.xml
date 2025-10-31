@@ -10,6 +10,7 @@
 
   
   <define>
+    <constant name="FFQ_ON" value="1"/> <!-- hardcoded only for now -->
     
     <constant name="KQC1R1"  value="-.28756251406040245  * FFQ_ON"/>
     <constant name="KQC1R2"  value="-.20365990263873562 * FFQ_ON"/>
