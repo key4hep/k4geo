@@ -55,11 +55,6 @@ using dd4hep::Volume;
 
 using dd4hep::rec::LayeredCalorimeterData;
 
-// workaround for DD4hep v00-14 (and older)
-#ifndef DD4HEP_VERSION_GE
-#define DD4HEP_VERSION_GE(a, b) 0
-#endif
-
 static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDetector sens) {
   xml_det_t x_det = element;
   Layering layering(x_det);
@@ -270,14 +265,12 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
           sens.setType("calorimeter");
           slice_vol.setSensitiveDetector(sens);
 
-#if DD4HEP_VERSION_GE(0, 15)
           // Store "inner" quantities
           caloLayer.inner_nRadiationLengths = nRadiationLengths;
           caloLayer.inner_nInteractionLengths = nInteractionLengths;
           caloLayer.inner_thickness = thickness_sum;
           // Store scintillator thickness
           caloLayer.sensitive_thickness = slice_thickness;
-#endif
           // Reset counters to measure "outside" quantitites
           nRadiationLengths = 0.;
           nInteractionLengths = 0.;
@@ -303,12 +296,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
       // Set region, limitset, and vis.
       layer_vol.setAttributes(theDetector, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
 
-#if DD4HEP_VERSION_GE(0, 15)
       // Store "outer" quantities
       caloLayer.outer_nRadiationLengths = nRadiationLengths;
       caloLayer.outer_nInteractionLengths = nInteractionLengths;
       caloLayer.outer_thickness = thickness_sum;
-#endif
 
       // ========= Place the Layer (i.e. Chamber) =================================
       // Place the Layer into the Hcal Endcap module envelope.

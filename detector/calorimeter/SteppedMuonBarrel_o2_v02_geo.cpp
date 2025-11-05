@@ -38,11 +38,6 @@ using dd4hep::Volume;
 
 using dd4hep::rec::LayeredCalorimeterData;
 
-// workaround for DD4hep v00-14 (and older)
-#ifndef DD4HEP_VERSION_GE
-#define DD4HEP_VERSION_GE(a, b) 0
-#endif
-
 static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens) {
   xml_det_t x_det = e;
   Layering layering(x_det);
@@ -176,7 +171,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
           slice_vol.setSensitiveDetector(sens);
           slice_pv.addPhysVolID("submodule", sensor);
 
-#if DD4HEP_VERSION_GE(0, 15)
           // Store "inner" quantities
           caloLayer.inner_nRadiationLengths = nRadiationLengths;
           caloLayer.inner_nInteractionLengths = nInteractionLengths;
@@ -184,7 +178,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
           // Store scintillator thickness
           caloLayer.sensitive_thickness = slice_thickness;
-#endif
+
           // Reset counters to measure "outside" quantitites
           nRadiationLengths = 0.;
           nInteractionLengths = 0.;
@@ -202,12 +196,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         ++slice_number;
       }
 
-#if DD4HEP_VERSION_GE(0, 15)
       // Store "outer" quantities
       caloLayer.outer_nRadiationLengths = nRadiationLengths;
       caloLayer.outer_nInteractionLengths = nInteractionLengths;
       caloLayer.outer_thickness = thickness_sum;
-#endif
 
       // Set region, limitset, and vis.
       layer_vol.setAttributes(theDetector, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
@@ -219,12 +211,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
       // Store the position up to the inner face of the layer
       caloLayer.distance = rmin + layer_pos_z + totalThickness / 2 - layer_thickness / 2;
       std::cout << "MuonBarrel layer: " << layer_num << " Rmin: " << rmin << " layer_pos_z: " << layer_pos_z
-                << " Dist: " << caloLayer.distance
-#if DD4HEP_VERSION_GE(0, 15)
-                << " inner_thickness: " << caloLayer.inner_thickness
-                << " outer_thickness: " << caloLayer.outer_thickness
-#endif
-                << std::endl;
+                << " Dist: " << caloLayer.distance << " inner_thickness: " << caloLayer.inner_thickness
+                << " outer_thickness: " << caloLayer.outer_thickness << std::endl;
 
       // Push back a copy to the caloData structure
       caloData->layers.push_back(caloLayer);

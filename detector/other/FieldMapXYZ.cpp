@@ -1,11 +1,6 @@
 #include "FieldMapXYZ.h"
 
-#include <DD4hep/Version.h>
-#if DD4HEP_VERSION_GE(0, 24)
 #include <DD4hep/detail/Handle.inl>
-#else
-#include <DD4hep/Handle.inl>
-#endif
 
 #include <DD4hep/DetFactoryHelper.h>
 

@@ -182,14 +182,13 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
         if (compSlice.isSensitive()) {
           slice_vol.setSensitiveDetector(sens);
 
-#if DD4HEP_VERSION_GE(0, 15)
           // Store "inner" quantities
           caloLayer.inner_nRadiationLengths = nRadiationLengths;
           caloLayer.inner_nInteractionLengths = nInteractionLengths;
           caloLayer.inner_thickness = thickness_sum;
           // Store scintillator thickness
           caloLayer.sensitive_thickness = sliceThickness;
-#endif
+
           // Reset counters to measure "outside" quantitites
           nRadiationLengths = 0.;
           nInteractionLengths = 0.;
@@ -209,12 +208,11 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
         ++sliceID;
       } // For all slices in this layer
 
-#if DD4HEP_VERSION_GE(0, 15)
       // Store "outer" quantities
       caloLayer.outer_nRadiationLengths = nRadiationLengths;
       caloLayer.outer_nInteractionLengths = nInteractionLengths;
       caloLayer.outer_thickness = thickness_sum;
-#endif
+
       //-----------------------------------------------------------------------------------------
       caloLayer.distance = lhcalCentreZ + referencePosition; //+0.5*layerThickness ;
       caloLayer.absorberThickness = radiator_thickness;
