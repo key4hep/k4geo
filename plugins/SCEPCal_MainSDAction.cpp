@@ -9,6 +9,18 @@
 #include "G4ProcessType.hh"
 #include "G4VProcess.hh"
 #include "detectorSegmentations/SCEPCal_MainSegmentation_k4geo.h"
+#include "G4Poisson.hh"
+
+// This function takes in input the ionizing energy deposit (in MeV) from a step in the main scepcal section
+// and returns the corresponding number of sipm fired cells (or photo-electrons).
+// It reproduces a scintillating light yield of 2000 p.e./GeV which is expected from test-beam data.
+// The smearing is done by a single poissoninan sampling. De facto one must have two samplings:
+// a poissonian sampling for light emission fluctuations and a Binomial sampling for light detection
+// fluctuations. Thanks to the Poissonian thinning theorem this is equivalent to a single poissonian
+// sampling reproducing on average the expected light yield.
+int SmearSsignal(G4double edep){
+   return G4Poisson((edep/1000.)*2000); // MeV->GeV
+}
 
 namespace SCEPCal {
 class SCEPCal_MainSDAction {
@@ -56,24 +68,33 @@ namespace sim {
       return hit;
     };
 
-    // edep hits
-    auto* hitedep = newOrExistingHitIn(m_collectionID);
-    hitedep->energyDeposit += edep;
+    // Do not fill edep and S hits if there is no ionizing energy deposit
+    //
+    if(edep > 0.){
+      // edep hits
+      auto* hitedep = newOrExistingHitIn(m_collectionID);
+      hitedep->energyDeposit += edep;
 
-    // Scintillation and Cerenkov hits
+      // scintillation hits
+      auto* hitS = newOrExistingHitIn(m_userData.m_collectionID_scint);
+      auto Scount = SmearSsignal(edep);
+      if(Scount > 0) hitS->energyDeposit += Scount / dd4hep::MeV;
+    }
+
+    // Cerenkov hits
     if (track->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()) {
       auto procName = track->GetCreatorProcess()->GetProcessName();
       bool isCerenkov = (procName == "CerenkovPhys");
-      bool isScintillation = (procName == "ScintillationPhys");
-      if (!isCerenkov && !isScintillation)
+      if (!isCerenkov){
+        track->SetTrackStatus(fStopAndKill);
         return true;
-
-      if (track->GetCurrentStepNumber() == 1) {
-        auto* hitSC =
-            newOrExistingHitIn(isScintillation ? m_userData.m_collectionID_scint : m_userData.m_collectionID_ceren);
-        hitSC->energyDeposit += 1 / dd4hep::MeV;
+      }
+      else if (track->GetCurrentStepNumber() == 1) {
+        auto* hitC = newOrExistingHitIn(m_userData.m_collectionID_ceren);
+        hitC->energyDeposit += 1 / dd4hep::MeV;
         track->SetTrackStatus(fStopAndKill);
       }
+      else return true;
     }
     return true;
   }
