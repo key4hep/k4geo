@@ -10,6 +10,7 @@
 #include "G4VProcess.hh"
 #include "detectorSegmentations/SCEPCal_MainSegmentation_k4geo.h"
 #include "G4Poisson.hh"
+#include "Randomize.hh"
 
 // This function takes in input the ionizing energy deposit (in MeV) from a step in the main scepcal section
 // and returns the corresponding number of sipm fired cells (or photo-electrons).
@@ -20,6 +21,14 @@
 // sampling reproducing on average the expected light yield.
 int SmearSsignal(G4double edep){
    return G4Poisson((edep/1000.)*2000); // MeV->GeV
+}
+
+// This function is a Bernoully trial to decide wether a Cerenkov photon is detected or not
+// in the scepcal. Cerenkov photons are created by Geant4 inside crystals, already taking
+// into account their poissonian emission fluctuations, therefore we only need to add a
+// Binomial sampling that reproduces the expected light yield of 100 p.e./GeV
+bool SmearCsignal(){
+  return G4UniformRand()<0.00147; 
 }
 
 namespace SCEPCal {
@@ -83,15 +92,15 @@ namespace sim {
 
     // Cerenkov hits
     if (track->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()) {
-      auto procName = track->GetCreatorProcess()->GetProcessName();
-      bool isCerenkov = (procName == "CerenkovPhys");
+      auto procSubType = track->GetCreatorProcess()->GetProcessSubType();
+      bool isCerenkov = (procSubType == 21); // Cerenkov process sub type is int 21
       if (!isCerenkov){
         track->SetTrackStatus(fStopAndKill);
         return true;
       }
       else if (track->GetCurrentStepNumber() == 1) {
         auto* hitC = newOrExistingHitIn(m_userData.m_collectionID_ceren);
-        hitC->energyDeposit += 1 / dd4hep::MeV;
+        if(SmearCsignal()) hitC->energyDeposit += 1 / dd4hep::MeV;
         track->SetTrackStatus(fStopAndKill);
       }
       else return true;
