@@ -1021,14 +1021,14 @@
       <composite n="2" ref="Lu"/>
       <composite n="1" ref="Si"/>
       <composite n="5" ref="O"/>
-      <property name="RINDEX"                       ref="RI_LYSO"/>
+      <!-- <property name="RINDEX"                       ref="RI_LYSO"/>
       <property name="ABSLENGTH"                    ref="AbsLen_LYSO"/>
       <property name="SCINTILLATIONCOMPONENT1"      ref="scintFast_LYSO"/>
       <constant name="SCINTILLATIONYIELD"           value="1000/MeV"/>
       <constant name="SCINTILLATIONTIMECONSTANT1"   value="40.*ns"/>
       <constant name="SCINTILLATIONRISETIME1"       value="0.1*ns"/>
       <constant name="RESOLUTIONSCALE"              value="3.4"/>
-      <constant name="SCINTILLATIONYIELD1"          value="1.0"/>
+      <constant name="SCINTILLATIONYIELD1"          value="1.0"/> -->
     </material>
   </materials>
 

@@ -14,7 +14,6 @@ namespace SCEPCal {
 class SCEPCal_TimingSDAction {
 public:
   std::size_t m_collectionID_scint{0};
-  std::size_t m_collectionID_ceren{0};
 };
 } // namespace SCEPCal
 
@@ -26,7 +25,6 @@ namespace sim {
   void Geant4SensitiveAction<SCEPCal_TimingSDAction>::defineCollections() {
     m_collectionID = defineCollection<Geant4Calorimeter::Hit>("SCEPCal_TimingEdep");
     m_userData.m_collectionID_scint = defineCollection<Geant4Calorimeter::Hit>("SCEPCal_TimingScounts");
-    m_userData.m_collectionID_ceren = defineCollection<Geant4Calorimeter::Hit>("SCEPCal_TimingCcounts");
   }
 
   template <>
@@ -61,18 +59,17 @@ namespace sim {
     auto* hitedep = newOrExistingHitIn(m_collectionID);
     hitedep->energyDeposit += edep;
 
-    // Scintillation and Cerenkov hits
+    // Scintillation hits
     if (track->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()) {
       auto procName = track->GetCreatorProcess()->GetProcessName();
-      bool isCerenkov = (procName == "CerenkovPhys");
       bool isScintillation = (procName == "ScintillationPhys");
-      if (!isCerenkov && !isScintillation)
+      if (!isScintillation)
         return true;
 
       if (track->GetCurrentStepNumber() == 1) {
-        auto* hitSC =
-            newOrExistingHitIn(isScintillation ? m_userData.m_collectionID_scint : m_userData.m_collectionID_ceren);
-        hitSC->energyDeposit += 1 / dd4hep::MeV;
+        auto* hitS =
+            newOrExistingHitIn(m_userData.m_collectionID_scint);
+        hitS->energyDeposit += 1 / dd4hep::MeV;
         track->SetTrackStatus(fStopAndKill);
       }
     }
