@@ -164,7 +164,7 @@ namespace DDSegmentation {
     }
 
     // find edges of each cell in the given layer along z axis
-    li.m_cellEdges.reserve(sz);
+    li.m_cellEdge.reserve(sz);
     li.m_ibin = li.cellIndexes[0];
     for (auto idx : li.cellIndexes) {
       // calculate z-coordinates of the cell edges
@@ -177,7 +177,7 @@ namespace DDSegmentation {
         break;
       }
 
-      li.m_cellEdges.emplace_back(z1, z2);
+      li.m_cellEdge.emplace_back(z1, z2);
     }
 
     dd4hep::printout(dd4hep::DEBUG, "FCCSWHCalPhiRow_k4geo", "Number of cells in layer %d: %d", layer,
@@ -625,7 +625,7 @@ namespace DDSegmentation {
 
     const LayerInfo& li = getLayerInfo(layer);
 
-    auto [zlow, zhigh] = li.cellEdges(idx);
+    auto [zlow, zhigh] = li.cellEdge(idx);
 
     double Rmin = li.radius - li.halfDepth;
     double Rmax = li.radius + li.halfDepth;
@@ -656,7 +656,7 @@ namespace DDSegmentation {
     int idx = abs(li.cellIndexes.back());
 
     // get the z-coordinate of the right-hand edge of the last cell
-    double zhigh = li.cellEdges(idx).second;
+    double zhigh = li.cellEdge(idx).high;
 
     // get the inner radius of the first layer
     double Rmin = li.radius - 0.5 * li.halfDepth;

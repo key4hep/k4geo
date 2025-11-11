@@ -54,8 +54,8 @@ namespace DDSegmentation {
 
     const LayerInfo& li = getLayerInfo(layer);
     double radius = li.radius;
-    const LayerInfo::Edges& edges = li.cellInfo(thetaID).edges;
-    double zpos = (edges.first + edges.second) * 0.5;
+    const LayerInfo::Edge& edge = li.cellInfo(thetaID).edge;
+    double zpos = (edge.low + edge.high) * 0.5;
 
     auto pos = positionFromRThetaPhi(radius, theta(cID), phi(cID));
 
@@ -165,7 +165,7 @@ namespace DDSegmentation {
         prevEdge = edge;
       }
       // set the lower edge of the last cell in the given layer
-      li.m_cellInfo1.back().edges.first = li.zmin;
+      li.m_cellInfo1.back().edge.low = li.zmin;
     }
 
     // for the EndCap, do it again but for negative z part
@@ -198,16 +198,16 @@ namespace DDSegmentation {
           prevEdge = edge;
         }
         // set the lower edge of the last cell in the given layer
-        li.m_cellInfo2.back().edges.first = -li.zmax;
+        li.m_cellInfo2.back().edge.low = -li.zmax;
       }
     } // negative-z endcap
 
     dd4hep::printout(dd4hep::DEBUG, "FCCSWHCalPhiTheta_k4geo", "Number of cells in layer %d: %d", layer,
                      li.thetaBins.size());
     for (auto bin : li.thetaBins) {
-      const LayerInfo::Edges& edges = li.cellInfo(bin).edges;
+      const LayerInfo::Edge& edge = li.cellInfo(bin).edge;
       dd4hep::printout(dd4hep::DEBUG, "FCCSWHCalPhiTheta_k4geo", "Layer %d cell theta bin: %d, edges: %.2f - %.2f cm",
-                       layer, bin, edges.first, edges.second);
+                       layer, bin, edge.low, edge.high);
     }
   }
 
@@ -285,8 +285,8 @@ namespace DDSegmentation {
     // find the cell (theta bin) corresponding to the hit and return the cellID
     for (auto bin : li.thetaBins) {
       double posz = globalPosition.z();
-      const LayerInfo::Edges& edges = li.cellInfo(bin).edges;
-      if (posz > edges.first && posz < edges.second) {
+      const LayerInfo::Edge& edge = li.cellInfo(bin).edge;
+      if (posz > edge.low && posz < edge.high) {
         decoder()->set(cID, m_thetaIndex, bin);
         decoder()->set(cID, m_phiIndex, positionToBin(lPhi, 2 * M_PI / (double)m_phiBins, m_offsetPhi));
         return cID;
@@ -416,7 +416,7 @@ namespace DDSegmentation {
     }
     //----------------------------------------------
 
-    auto [currentCellZmin, currentCellZmax] = li.cellInfo(currentCellThetaBin).edges;
+    auto [currentCellZmin, currentCellZmax] = li.cellInfo(currentCellThetaBin).edge;
 
     // deal with the Barrel
     if (m_detLayout == 0) {
@@ -439,7 +439,7 @@ namespace DDSegmentation {
           if (aDiagonal && currentCellThetaBin > (prevLI.thetaBins.front() + 1)) {
             // add the previous layer cell from the prev to prev theta bin if it overlaps with the current cell in
             // z-coordinate
-            double zmin = prevLI.cellInfo(currentCellThetaBin - 2).edges.first;
+            double zmin = prevLI.cellInfo(currentCellThetaBin - 2).edge.low;
             if (zmin <= currentCellZmax) {
               // add the previous layer cell from the prev to prev theta bin
               decoder()->set(nID, m_thetaIndex, currentCellThetaBin - 2);
@@ -455,7 +455,7 @@ namespace DDSegmentation {
           if (aDiagonal && currentCellThetaBin < (prevLI.thetaBins.back() - 1)) {
             // add the previous layer cell from the next to next theta bin if it overlaps with the current cell in
             // z-coordinate
-            double zmax = prevLI.cellInfo(currentCellThetaBin + 2).edges.second;
+            double zmax = prevLI.cellInfo(currentCellThetaBin + 2).edge.high;
             if (zmax >= currentCellZmin) {
               // add the previous layer cell from the next to next theta bin
               decoder()->set(nID, m_thetaIndex, currentCellThetaBin + 2);
@@ -485,7 +485,7 @@ namespace DDSegmentation {
           if (aDiagonal) {
             // add the next layer cell from the next-to-next theta bin if it overlaps with the current cell in
             // z-coordinate
-            double zmax = nextLI.cellInfo(currentCellThetaBin + 2).edges.second;
+            double zmax = nextLI.cellInfo(currentCellThetaBin + 2).edge.high;
             if (zmax >= currentCellZmin) {
               // add the next layer cell from the next to next theta bin
               decoder()->set(nID, m_thetaIndex, currentCellThetaBin + 2);
@@ -502,7 +502,7 @@ namespace DDSegmentation {
           if (aDiagonal) {
             // add the next layer cell from the prev to prev theta bin if it overlaps with the current cell in
             // z-coordinate
-            double zmin = nextLI.cellInfo(currentCellThetaBin - 2).edges.first;
+            double zmin = nextLI.cellInfo(currentCellThetaBin - 2).edge.low;
             if (zmin <= currentCellZmax) {
               // add the next layer cell from the prev to prev theta bin
               decoder()->set(nID, m_thetaIndex, currentCellThetaBin - 2);
@@ -523,7 +523,7 @@ namespace DDSegmentation {
         decoder()->set(nID, m_layerIndex, prevLayerId);
         // find the ones that share at least part of a border with the current cell
         for (auto bin : prevLI.thetaBins) {
-          auto [zmin, zmax] = prevLI.cellInfo(bin).edges;
+          auto [zmin, zmax] = prevLI.cellInfo(bin).edge;
 
           // if the cID is in the positive-z side
           if (theta(cID) < M_PI / 2.) {
@@ -561,7 +561,7 @@ namespace DDSegmentation {
         decoder()->set(nID, m_layerIndex, nextLayerId);
         // find the ones that share at least part of a border with the current cell
         for (auto bin : nextLI.thetaBins) {
-          auto [zmin, zmax] = nextLI.cellInfo(bin).edges;
+          auto [zmin, zmax] = nextLI.cellInfo(bin).edge;
 
           // if the cID is in the positive-z side
           if (theta(cID) < M_PI / 2.) {
@@ -767,7 +767,7 @@ namespace DDSegmentation {
 
     const LayerInfo& li = getLayerInfo(layer);
 
-    auto [zlow, zhigh] = li.cellInfo(idx).edges;
+    auto [zlow, zhigh] = li.cellInfo(idx).edge;
 
     double Rmin = li.radius - li.halfDepth;
     double Rmax = li.radius + li.halfDepth;

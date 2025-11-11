@@ -276,13 +276,16 @@ namespace DDSegmentation {
       // To access the information, use the cellInfo() functions,
       // which handle the lookup by bin number, throwing std::out_of_range
       // for a nonexistent bin.
-      using Edges = std::pair<double, double>;
+      struct Edge {
+        double low;
+        double high;
+      };
       int m_ibin1 = 0;
       int m_ibin2 = 9999999;
 
       struct CellInfo {
-        CellInfo(double lo, double hi) : edges(lo, hi) {}
-        Edges edges{0, 0};
+        CellInfo(double lo, double hi) : edge{lo, hi} {}
+        Edge edge{0, 0};
       };
       std::vector<CellInfo> m_cellInfo1{};
       std::vector<CellInfo> m_cellInfo2{};
