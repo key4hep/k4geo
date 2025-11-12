@@ -19,3 +19,7 @@ The CMake option `INSTALL_BEAMPIPE_STL_FILES=ON` downloads these STL.
     └── Water_30042024.stl         : cooling for elliptoconical chambers
 -- BeamInstrumentation_o1_v01.xml : compensating and screening solenoids
 ```
+
+- MDI_o1_CADBased_v01
+-- continuation of MDI_o1_v01, fixed issue of a mis-rotation of the beam pipe separation
+Added MDI_standalone.xml to help debug MDI geometry

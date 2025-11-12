@@ -1,0 +1,21 @@
+<lccdd>
+
+  <define>
+    <constant name="Solenoid_inner_radius" value="3719*mm"/>
+    <constant name="Solenoid_outer_radius" value="4272*mm"/>
+    <constant name="Solenoid_half_length" value="3705*mm"/>
+    <constant name="Solenoid_Coil_half_length" value="3476*mm"/>
+    <constant name="Solenoid_Coil_radius" value="3930*mm"/>
+  </define>
+  
+    <fields>
+      <field name="GlobalSolenoid" type="solenoid"
+             inner_field="SolenoidField"
+             outer_field="-1.0*tesla"
+             zmax="Solenoid_Coil_half_length"
+             outer_radius="Solenoid_Coil_radius">
+      </field>
+    </fields>
+
+
+</lccdd>

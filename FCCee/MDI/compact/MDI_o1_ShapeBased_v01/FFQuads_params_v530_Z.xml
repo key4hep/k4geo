@@ -1,0 +1,38 @@
+<lccdd>
+
+  <info name="FFQuads_params_v530_Z"
+        title="FFQs parameters from lattive v530 - Z"
+        author="Andrea Ciarma"
+        url="no"
+        status="development"
+        version="1">
+  </info>
+
+  
+  <define>
+    <constant name="KQC1R1"  value="-0.2728374282738313  * FFQ_ON"/>
+    <constant name="KQC1R2"  value="-.2728374343227249   * FFQ_ON"/>
+    <constant name="KQC1R3"  value="-.01636493881963944  * FFQ_ON"/>
+    <constant name="KQC2R1"  value=" 0.2613697584691405  * FFQ_ON"/>
+    <constant name="KQC2R2"  value="-0.03334180344925814 * FFQ_ON"/>
+    <constant name="BEAM_E"  value="45.6"/>
+    
+    <constant name="QC1_rmin" value="42/2*mm"/>
+    <constant name="QC1_rmax" value="64/2*mm"/>
+    <constant name="QC2_rmin" value="42/2*mm"/>
+    <constant name="QC2_rmax" value="64/2*mm"/>
+    <constant name="QC1L1_len"   value="700*mm"/>
+    <constant name="QC1L2_len"   value="1250*mm"/>
+    <constant name="QC1L3_len"   value="1250*mm"/>
+    <constant name="QC2L1_len"   value="1250*mm"/>
+    <constant name="QC2L2_len"   value="1250*mm"/>
+    <constant name="QC1L1_start" value="2200*mm"/>
+    <constant name="QC1L2_start" value="2980*mm"/>
+    <constant name="QC1L3_start" value="4310*mm"/>
+    <constant name="QC2L1_start" value="5860*mm"/>
+    <constant name="QC2L2_start" value="7190*mm"/>
+   
+  </define>
+
+
+</lccdd>

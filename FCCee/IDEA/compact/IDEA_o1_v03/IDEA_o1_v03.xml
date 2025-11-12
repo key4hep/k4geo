@@ -41,8 +41,8 @@
   <!-- engineered CAD model of the beam pipe -->
   <!-- In order to use the CAD beampipe, build k4geo with the following CMake option:
   cmake -D INSTALL_BEAMPIPE_STL_FILES=ON which will download the files needed -->
-  <!-- <include ref="../../../MDI/compact/MDI_o1_v01/Beampipe_CADimport_o1_v02.xml" /> -->
-  <!-- <include ref="../../../MDI/compact/MDI_o1_v01/BeamInstrumentation_o1_v01.xml"/> -->
+  <!-- <include ref="../../../MDI/compact/MDI_o1_CADBased_v01/MDI_o1_CADBased_v01_collection.xml" />
+  <world material="Vacuum"/> -->
   <include ref="LumiCal_o1_v01.xml"/>
 
   <!-- Import vertex -->
@@ -85,21 +85,6 @@
            outer_radius="Solenoid_Coil_radius">
     </field>
 
-    <field name="CompensatingSolenoidZplus" type="solenoid"
-           inner_field="-SolenoidField -SolenoidField * QD0_min_z / ( QD0_min_z - CompSol_min_z)"
-           outer_field="0*tesla"
-           zmax="QD0_min_z"
-           zmin="CompSol_min_z"
-           outer_radius="20*cm">
-    </field>
-
-    <field name="CompensatingSolenoidZminus" type="solenoid"
-           inner_field="-SolenoidField -SolenoidField * QD0_min_z / ( QD0_min_z - CompSol_min_z)"
-           outer_field="0*tesla"
-           zmin="-QD0_min_z"
-           zmax="-CompSol_min_z"
-           outer_radius="20*cm">
-    </field>
   </fields>
 
 </lccdd>

@@ -34,12 +34,6 @@ using dd4hep::Volume;
 
 using dd4hep::rec::LayeredCalorimeterData;
 
-// workaround for DD4hep v00-14 (and older)
-#ifndef DD4HEP_VERSION_GE
-#define DD4HEP_VERSION_GE(a, b) 0
-#endif
-//
-
 static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDetector sens) {
 
   double boundarySafety = 0.0001;
@@ -287,7 +281,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 
       if (x_slice.isSensitive()) {
         slice_vol.setSensitiveDetector(sens);
-#if DD4HEP_VERSION_GE(0, 15)
         // Store "inner" quantities
         caloLayer.inner_nRadiationLengths = nRadiationLengths;
         caloLayer.inner_nInteractionLengths = nInteractionLengths;
@@ -296,7 +289,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
           cout << "Hcal_Barrel:  inner_thickness= " << thickness_sum << endl;
         // Store readout gasgap thickness
         caloLayer.sensitive_thickness = slice_thickness;
-#endif
+
         // Reset counters to measure "outside" quantitites
         nRadiationLengths = 0.;
         nInteractionLengths = 0.;
@@ -321,14 +314,12 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
       // Increment slice number.
       ++slice_number;
     }
-#if DD4HEP_VERSION_GE(0, 15)
     // Store "outer" quantities
     caloLayer.outer_nRadiationLengths = nRadiationLengths;
     caloLayer.outer_nInteractionLengths = nInteractionLengths;
     caloLayer.outer_thickness = thickness_sum;
     if (layer_id == 1)
       cout << "Hcal_Barrel:  outer_thickness= " << thickness_sum << endl;
-#endif
 
     //---------------------------  Chamber Placements -----------------------------------------
 

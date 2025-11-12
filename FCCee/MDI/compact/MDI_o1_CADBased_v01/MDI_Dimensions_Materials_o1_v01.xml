@@ -1,0 +1,153 @@
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+    <info name="MDI_Dimensions_Materials"
+        title="Dimensions and Materials for the FCCee common MDI"
+	author="Andrea Ciarma"
+        url=""
+        status="development"
+        version="1">
+        <comment>Dimensions and Materials for the FCCee common MDI</comment>
+    </info>
+
+    <!-- Materials unique to the MDI -->
+    <materials>
+
+      <!-- for Beam Pipe -->
+      <material name="SolenoidMixture">
+	<D value="4.38" unit="g/cm3"/>
+	<fraction n="0.666" ref="Al"/>
+	<fraction n="0.166" ref="Cu"/>
+	<fraction n="0.084" ref="Ti"/>
+	<fraction n="0.084" ref="Nb"/>
+      </material>
+      
+      <material name="AlBeMet162">
+	<D value="2.1" unit="g/cm3"/>
+	<fraction n="0.38" ref="Al"/>
+	<fraction n="0.62" ref="Be"/>
+      </material>
+      
+      <material name="LiquidNDecane">
+	<D value="0.73" unit="g/cm3"/>
+	<composite n="10" ref="C" />
+	<composite n="22" ref="H" />
+      </material>
+
+      <material name="Water">
+	<D value="1" unit="g/cm3" />
+	<composite n="2" ref="H" />
+	<composite n="1" ref="O" />
+      </material>
+      
+      <!-- for LumiCal -->
+      <material name="TungstenDens24">
+	<D value="17.8" unit="g/cm3"/>
+	<fraction n="0.93" ref="W"/>
+	<fraction n="0.061" ref="Ni"/>
+	<fraction n="0.009" ref="Fe"/>
+      </material>
+
+      <!-- for Final Focus Quadrupoles, from M. Koratzinos -->
+      <material name="Paraffine" state="solid">
+	<D unit="g/cm3" value="0.8"/>
+	<fraction n="0.334" ref="C"/>
+	<fraction n="0.666" ref="H"/>
+      </material>
+      
+      <material name="FFQMaterial">
+	<D type="density" value="3.367" unit="g/cm3"/>
+	<fraction n="0.654058214" ref="Al"/>
+	<fraction n="0.03095534" ref="Nb"/>
+	<fraction n="0.03095534" ref="Ti"/>
+	<fraction n="0.117630293" ref="Cu"/>
+	<fraction n="0.097743288" ref="Paraffine"/>
+	<fraction n="0.068657524" ref="Kapton"/>
+      </material>
+
+      <!-- needed for CAD import, not really used. It's Steel but can be changed -->
+      <material name="DefaultMaterial">
+	<D value="7.85" unit="g/cm3"/>
+	<fraction n="0.998" ref="Fe"/>
+	<fraction n=".002"  ref="C"/>
+      </material>
+      
+    </materials>
+
+    
+    <define>
+        <constant name="CrossingAngle" value="0.030*rad"/>
+        <constant name="SolenoidField" value="2*tesla"/>
+
+        <!-- Central Chamber -->
+        <constant name="CentralBeamPipe_zmax" value="90*mm"/>
+        <constant name="CentralBeamPipe_rmax" value="10.0*mm"/> <!-- inner value -->
+        <constant name="BPWWall"       value="0.35*mm" /> <!-- Beam Pipe Width -->
+        <constant name="BPWCool"       value="1.0*mm" />
+        <constant name="BeamPipeWidth" value="2.0*BPWWall + BPWCool"/>
+
+        <constant name="BeamPipeGoldWidth" value="0.005*mm" />
+	<constant name="BeamPipeGoldTolerance" value="0.001*mm" />  <!-- dummy tolerance, some small non zero value -->
+
+	<!-- Conical Chamber -->
+	<constant name="SeparatedBeamPipe_rmax"  value="15*mm"/>
+        <constant name="SeparatedBeamPipe_z" value="1190.0*mm"/>
+	<constant name="BeamPipeWidthFirstCone" value="2.0*mm" />
+	<constant name="ConeBeamPipe_Rmax" value="28.9*mm" /> <!-- this is the inner length of the longer elipse axis -->
+	<constant name="BeamPipeConeHalfAngle" value="(ConeBeamPipe_Rmax+BeamPipeWidthFirstCone-CentralBeamPipe_rmax) / (SeparatedBeamPipe_z-CentralBeamPipe_zmax)"/>
+
+
+        <constant name="BeamPipeTantalShieldWidth"  value="15*mm"/>
+        <constant name="SideFillerShieldWidth"  value="7*mm"/>
+        <constant name="TopFillerShieldWidth"  value="8*mm"/>
+        <constant name="BeamPipe_end" value="12500*mm"/>
+
+        <!-- Mike Sullivan's Synch Rad mask -->
+        <constant name="MiddleOfSRMask_z" value="2.1*m" />
+        <constant name="SynchRadMaskSize" value="5*mm" /> <!-- mask tip is at 10 mm from the beamline -->
+        <constant name="mask_epsilon" value="0.001*mm" />
+
+	<!-- compensating and screening solenoids -->
+	<constant name="CompSol_min_z" value="1230*mm"/>
+	<constant name="QD0_min_z" value="2000*mm"/>
+        <constant name="QD0_max_z" value="5400*mm"/>
+        <constant name="QD0Coil_outer_radius" value="30*mm"/> <!-- ? -->
+
+	<!-- LumiCal -->
+        <!-- _prime marks the coordinate system along the beamline instead of the detector coordinate frame -->
+        <constant name="LumiCal_min_z_prime" value="1074*mm"/>
+        <constant name="LumiCal_dz_prime" value="0.5 * 25 * 4.5 * mm"/> <!-- Must be consistent with layers defined in the lumiCal xml, half-length-->
+	<constant name="LumiCal_max_z_prime" value="LumiCal_min_z_prime + LumiCal_dz_prime * 2" />
+	
+        <!-- calculate the Z position in the detector reference frame for consistency with existing drivers -->
+        <constant name="LumiCal_min_z" value="LumiCal_min_z_prime*cos(0.5*CrossingAngle)"/>
+	<constant name="LumiCal_max_z" value="LumiCal_max_z_prime*cos(0.5*CrossingAngle)" />
+	
+        <!-- This has nothing to do with the actual length of the LumiCal, the value is only used for the positioning -->
+        <constant name="LumiCal_dz" value="LumiCal_dz_prime * cos(0.5 * CrossingAngle)"/>
+        
+        <constant name="LumiCal_inner_radius" value="55.0*mm"/>
+        <constant name="LumiCal_outer_radius" value="115.0*mm- env_safety"/>
+
+	<constant name="LumiCal_Instr_thickness" value="20*mm"/>
+	<constant name="LumiCal_Instr_inner_radius" value="LumiCal_outer_radius"/>
+	<constant name="LumiCal_Instr_outer_radius" value="LumiCal_outer_radius+LumiCal_Instr_thickness - env_safety"/>
+
+	<constant name="LumiCal_Cool_thickness" value="9.75*mm"/>
+	<constant name="LumiCal_Cool_inner_radius" value="LumiCal_Instr_outer_radius"/>
+	<constant name="LumiCal_Cool_outer_radius" value="LumiCal_Instr_outer_radius+LumiCal_Cool_thickness"/>
+
+        <constant name="Lcal_services_rmax" value="LumiCal_outer_radius+30*mm"/>
+        <constant name="Lcal_offset_phi" value=" 0."/>
+        <!--preliminary LumiCal shielding-->
+        <!--back shielding-->
+        <constant name="LumiCal_Shield_inner_radius" value="LumiCal_inner_radius"/>
+        <constant name="LumiCal_Shield_outer_radius" value="LumiCal_outer_radius+LumiCal_Instr_thickness+LumiCal_Cool_thickness"/>
+        <!-- For convenience, z here refers to dimensions *along the beam pipe*, which is tilted by CrossingAngle/2 w.r.t the global z axis -->
+	<constant name="LumiCal_shield_dz_prime" value="3.5/2.0*mm"/> <!-- Must be consistent with layers defined in the lumiCal xml (1*3.5 mm)-->
+        <constant name="LumiCal_shield_dz" value="LumiCal_shield_dz_prime  * cos(0.5 * CrossingAngle)"/>
+	
+    </define>
+
+</lccdd>
