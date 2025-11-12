@@ -329,7 +329,7 @@ namespace DDSegmentation {
           if (-idx < m_ibin)
             throw std::out_of_range("cellEdge");
           const auto& e = m_cellEdge[-idx - m_ibin];
-          return Edge {e.high, e.low};
+          return Edge{e.high, e.low};
         }
       }
     };
