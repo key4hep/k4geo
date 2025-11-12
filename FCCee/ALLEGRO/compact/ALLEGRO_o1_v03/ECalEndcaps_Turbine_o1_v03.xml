@@ -33,7 +33,7 @@
     <constant name="BathThicknessFront" value="10*mm"/>
     <constant name="BathThicknessBack" value="40*mm"/>
     <constant name="BathThicknessOuter" value="50*mm"/>
-    <!-- electromagnetic calorimeter: EMEC -->
+    <!-- electromegnetic calorimeter: EMEC -->
     <constant name="EMEC_z1" value="CryoEndcap_z1 + CryoEMECThicknessFront + BathThicknessFront"/>offset
     <constant name="EMEC_z2" value="ECalEndcap_max_z - CryoEMECThicknessBack - BathThicknessBack"/>
     <constant name="EMEC_rmin1" value="CryoEndcap_front_rmin + CryoEMECThicknessInner + BathThicknessFront"/>
@@ -65,51 +65,8 @@
     <constant name="AbsorberBladeThicknessScaleFactor2" value="1.0" />
     <constant name="AbsorberBladeThicknessScaleFactor3" value="1.0" />
     <constant name="ECalEndcapSupportTubeThickness" value="10.0*mm" />
-    
-    <!-- total amount of steel in one passive plate: it is divided for the outside layer on top and bottom -->
-    <constant name="EMEC_steel_thickness" value="0.1*mm"/>
-     <!-- total amount of glue in one passive plate: it is divided for the outside layer on top and bottom -->
-     <constant name="EMEC_glue_thickness" value="0.1*mm"/> 
-     <constant name="nUnitCells1" value="384"/>
-     <constant name="nUnitCells2" value="720"/>
-     <constant name="nUnitCells3" value="1360"/>
-     <!-- constants related to mechanical support structure -->
-     <constant name="ECalEndcapSupportNIbeams" value="3"/>
-     <constant name="ECalEndcapSupportIbeamHeight" value="240*mm"/>
-     <constant name="ECalEndcapSupportIbeamWebThickness" value="6.7*mm"/>
-     <constant name="ECalEndcapSupportIbeamFlangeWidth" value="120*mm"/>
-      <constant name="ECalEndcapSupportIbeamFlangeThickness" value="10.25*mm"/>
-     <constant name="ECalEndcapSupportIbeamFirstZ" value="EMEC_z1+ECalEndcapSupportIbeamFlangeWidth/2.-(EMEC_z1+EMEC_z2)/2." />
-     <constant name="ECalEndcapSupportIbeamLastZ" value="EMEC_z2-ECalEndcapSupportIbeamFlangeWidth/2.-(EMEC_z1+EMEC_z2)/2." />
-     <constant name="ECalEndcapSupportIbeamRmax" value="CryoEndcap_rmax-CryoEMECThicknessOuter" />
-     <constant name="ECalEndcapSupportIbeamRmin" value="ECalEndcapSupportIbeamRmax-ECalEndcapSupportIbeamHeight" />
-     <constant name="ECalEndcapSupportRearZGap" value="1*cm"/>
-     <constant name="ECalEndcapSupportRearThickness" value="3*cm"/>
-     <constant name="ECalEndcapSupportRearNSpokes" value="8"/>
-     <constant name="ECalEndcapSupportRearSpokeWidth" value="5*cm"/>
-     <constant name="ECalEndcapSupportInnerRingReardR" value="5*cm"/>
-     <constant name="ECalEndcapSupportInnerRingRearInnerRadius" value="CryoEndcap_front_rmin+CryoEMECThicknessInner"/>
-     <constant name="ECalEndcapSupportInnerRingRearOuterRadius" value="CryoEndcap_front_rmin+CryoEMECThicknessInner+ECalEndcapSupportInnerRingReardR"/>
-     <constant name="ECalEndcapSupportOuterRingReardR" value="10*cm"/>
-     <constant name="ECalEndcapSupportOuterRingRearOuterRadius" value="CryoEndcap_rmax-CryoEMECThicknessOuter-ECalEndcapSupportIbeamHeight"/>
-     <constant name="ECalEndcapSupportOuterRingRearInnerRadius" value="ECalEndcapSupportOuterRingRearOuterRadius-ECalEndcapSupportOuterRingReardR"/>
-     <constant name="ECalEndcapSupportMidRingReardR" value="3*cm"/>
-     <constant name="ECalEndcapSupportRearZCenter" value="EMEC_z2+ECalEndcapSupportRearZGap+ECalEndcapSupportRearThickness/2.-(EMEC_z1-BathThicknessFront+EMEC_z2+BathThicknessBack)/2."/>
-     
-     <constant name="ECalEndcapSupportFrontZGap" value="0*mm"/>
-     <constant name="ECalEndcapSupportFrontThickness" value="1*cm"/>
-     <constant name="ECalEndcapSupportFrontNSpokes" value="8"/>
-     <constant name="ECalEndcapSupportFrontSpokeWidth" value="10*cm"/>
-     <constant name="ECalEndcapSupportInnerRingFrontdR" value="5*cm"/>
-     <constant name="ECalEndcapSupportInnerRingFrontInnerRadius" value="CryoEndcap_front_rmin+CryoEMECThicknessInner"/>
-     <constant name="ECalEndcapSupportInnerRingFrontOuterRadius" value="CryoEndcap_front_rmin+CryoEMECThicknessInner+ECalEndcapSupportInnerRingFrontdR"/>
-     <constant name="ECalEndcapSupportOuterRingFrontdR" value="25*cm"/>
-     <constant name="ECalEndcapSupportOuterRingFrontOuterRadius" value="CryoEndcap_rmax-CryoEMECThicknessOuter-ECalEndcapSupportIbeamHeight"/>
-     <constant name="ECalEndcapSupportOuterRingFrontInnerRadius" value="ECalEndcapSupportOuterRingFrontOuterRadius-ECalEndcapSupportOuterRingFrontdR"/>
-     <constant name="ECalEndcapSupportMidRingFrontdR" value="7.5*cm"/>
-     <constant name="ECalEndcapSupportFrontZCenter" value="EMEC_z1-ECalEndcapSupportFrontZGap-ECalEndcapSupportFrontThickness/2.-(EMEC_z1-BathThicknessFront+EMEC_z2+BathThicknessBack)/2."/>
     <constant name="ECalEndcapRmin" value="CryoEndcap_front_rmin+CryoEMECThicknessInner" />
-    <constant name="ECalEndcapRmax" value="CryoEndcap_rmax-CryoEMECThicknessOuter-ECalEndcapSupportIbeamHeight" />
+    <constant name="ECalEndcapRmax" value="CryoEndcap_rmax-CryoEMECThicknessOuter" />
     <constant name="ECalEndcapRadiusRatio" value="(ECalEndcapRmax/ECalEndcapRmin)^(1./nWheels)" />
     <constant name="ECalEndcapRmin1" value="ECalEndcapRmin" />
     <constant name="ECalEndcapRmax1" value="ECalEndcapRmin1*ECalEndcapRadiusRatio" />
@@ -123,6 +80,27 @@
     <constant name="ECalEndcapGridSizeZ1" value="(EMEC_z2-EMEC_z1)/ECalEndcapNumReadoutZLayersWheel1" />
     <constant name="ECalEndcapGridSizeZ2" value="(EMEC_z2-EMEC_z1)/ECalEndcapNumReadoutZLayersWheel2" />
     <constant name="ECalEndcapGridSizeZ3" value="(EMEC_z2-EMEC_z1)/ECalEndcapNumReadoutZLayersWheel3" />
+   
+    <!-- total amount of steel in one passive plate: it is divided for the outside layer on top and bottom -->
+    <constant name="EMEC_steel_thickness" value="0.1*mm"/>
+     <!-- total amount of glue in one passive plate: it is divided for the outside layer on top and bottom -->
+     <constant name="EMEC_glue_thickness" value="0.1*mm"/> 
+     <constant name="nUnitCells1" value="384"/>
+     <constant name="nUnitCells2" value="720"/>
+     <constant name="nUnitCells3" value="1360"/>
+     <!-- constants related to mechanical support structure -->
+     <constant name="ECalEndcapSupportZGap" value="1*cm"/>
+     <constant name="ECalEndcapSupportThickness" value="3*cm"/>
+     <constant name="ECalEndcapSupportNSpokes" value="8"/>
+     <constant name="ECalEndcapSupportSpokeWidth" value="5*cm"/>
+     <constant name="ECalEndcapSupportInnerRingdR" value="5*cm"/>
+     <constant name="ECalEndcapSupportInnerRingInnerRadius" value="ECalEndcapRmin"/>
+     <constant name="ECalEndcapSupportInnerRingOuterRadius" value="ECalEndcapRmin+ECalEndcapSupportInnerRingdR"/>
+     <constant name="ECalEndcapSupportOuterRingdR" value="10*cm"/>
+     <constant name="ECalEndcapSupportOuterRingOuterRadius" value="ECalEndcapRmax"/>
+     <constant name="ECalEndcapSupportOuterRingInnerRadius" value="ECalEndcapSupportOuterRingOuterRadius-ECalEndcapSupportOuterRingdR"/>
+     <constant name="ECalEndcapSupportMidRingdR" value="3*cm"/>
+     <constant name="ECalEndcapSupportZCenter" value="EMEC_z2+ECalEndcapSupportZGap-(EMEC_z1+EMEC_z2)/2."/>
   </define>
 
   <display>
@@ -181,75 +159,26 @@
 	    <material name="LAr" />
 	  </nobleLiquidGap>
 	</turbineBlade>
-	<mechSupportOuterIbeams name="mechSupportOuterIbeams"
-			   sensitive="false"
-			   nBeams="ECalEndcapSupportNIbeams">
-	      <web name = "mechSupportOuterIbeamsWeb">
-		<dimensions rmin = "ECalEndcapSupportIbeamRmin+ECalEndcapSupportIbeamFlangeThickness"
-			    rmax = "ECalEndcapSupportIbeamRmax-ECalEndcapSupportIbeamFlangeThickness"
-			    dz = "ECalEndcapSupportIbeamWebThickness/2."
-			    />
-	      </web>
-	      <flange1 name = "mechSupportOuterIbeamsFlange1">
-		<dimensions rmin = "ECalEndcapSupportIbeamRmin"
-			    rmax = "ECalEndcapSupportIbeamRmin+ECalEndcapSupportIbeamFlangeThickness"
-			    dz = "ECalEndcapSupportIbeamFlangeWidth/2."
-			    />
-	      </flange1>
-	      <flange2 name = "mechSupportOuterIbeamsFlange2">
-		<dimensions rmin = "ECalEndcapSupportIbeamRmax-ECalEndcapSupportIbeamFlangeThickness"
-			    rmax = "ECalEndcapSupportIbeamRmax"
-			    dz = "ECalEndcapSupportIbeamFlangeWidth/2."
-			    />
-	      </flange2>
-	      <material name="lArCaloSteel"/>
-	</mechSupportOuterIbeams>
-	<mechSupportRear name="mechSupportRear"
+	<mechSupport name="mechSupport"
 		     sensitive="false"
-		     nSpokes="ECalEndcapSupportRearNSpokes"
-		     spokeWidth="ECalEndcapSupportRearSpokeWidth"
-		     innerRingDr = "ECalEndcapSupportInnerRingReardR"
-		     midRingDr = "ECalEndcapSupportMidRingReardR"
-		     outerRingDr = "ECalEndcapSupportOuterRingReardR" >
+		     nSpokes="ECalEndcapSupportNSpokes"
+		     spokeWidth="ECalEndcapSupportSpokeWidth">
 		     <innerRing>
-		       <dimensions rmin1 = "ECalEndcapSupportInnerRingRearInnerRadius"
-				   rmin2 = "ECalEndcapSupportInnerRingRearInnerRadius"
-				   rmax1= "ECalEndcapSupportInnerRingRearOuterRadius"
-				   rmax2= "ECalEndcapSupportInnerRingRearOuterRadius"
-				   dz= "ECalEndcapSupportRearThickness/2." />
+		       <dimensions rmin1 = "ECalEndcapSupportInnerRingInnerRadius"
+				   rmin2 = "ECalEndcapSupportInnerRingInnerRadius"
+				   rmax1= "ECalEndcapSupportInnerRingOuterRadius"
+				   rmax2= "ECalEndcapSupportInnerRingOuterRadius"
+				   dz= "ECalEndcapSupportThickness/2." />
 		     </innerRing>
 		     <outerRing>
-		       <dimensions rmin1 = "ECalEndcapSupportOuterRingRearInnerRadius"
-				   rmin2 = "ECalEndcapSupportOuterRingRearInnerRadius"
-				   rmax1= "ECalEndcapSupportOuterRingRearOuterRadius"
-				   rmax2= "ECalEndcapSupportOuterRingRearOuterRadius"
-				   dz= "ECalEndcapSupportRearThickness/2." />
+		       <dimensions rmin1 = "ECalEndcapSupportOuterRingInnerRadius"
+				   rmin2 = "ECalEndcapSupportOuterRingInnerRadius"
+				   rmax1= "ECalEndcapSupportOuterRingOuterRadius"
+				   rmax2= "ECalEndcapSupportOuterRingOuterRadius"
+				   dz= "ECalEndcapSupportThickness/2." />
 		     </outerRing>
 	  <material name="lArCaloSteel"/>
-	</mechSupportRear>
-	<mechSupportFront name="mechSupportFront"
-		     sensitive="false"
-		     nSpokes="ECalEndcapSupportFrontNSpokes"
-		     spokeWidth="ECalEndcapSupportFrontSpokeWidth"
-		     innerRingDr = "ECalEndcapSupportInnerRingFrontdR"
-		     midRingDr = "ECalEndcapSupportMidRingFrontdR"
-		     outerRingDr = "ECalEndcapSupportOuterRingFrontdR" >
-		     <innerRing>
-		       <dimensions rmin1 = "ECalEndcapSupportInnerRingFrontInnerRadius"
-				   rmin2 = "ECalEndcapSupportInnerRingFrontInnerRadius"
-				   rmax1= "ECalEndcapSupportInnerRingFrontOuterRadius"
-				   rmax2= "ECalEndcapSupportInnerRingFrontOuterRadius"
-				   dz= "ECalEndcapSupportFrontThickness/2." />
-		     </innerRing>
-		     <outerRing>
-		       <dimensions rmin1 = "ECalEndcapSupportOuterRingFrontInnerRadius"
-				   rmin2 = "ECalEndcapSupportOuterRingFrontInnerRadius"
-				   rmax1= "ECalEndcapSupportOuterRingFrontOuterRadius"
-				   rmax2= "ECalEndcapSupportOuterRingFrontOuterRadius"
-				   dz= "ECalEndcapSupportFrontThickness/2." />
-		     </outerRing>
-		     <material name="CarbonFiber" />
-	</mechSupportFront>	
+	</mechSupport>
       </calorimeter>
     </detector>
  
