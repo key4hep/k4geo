@@ -11,12 +11,6 @@
 
 #include <map>
 
-#if DD4HEP_VERSION_GE(1, 21)
-#define GEANT4_CONST_STEP const
-#else
-#define GEANT4_CONST_STEP
-#endif
-
 /// Namespace for the AIDA detector description toolkit
 namespace dd4hep {
 

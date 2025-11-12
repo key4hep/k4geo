@@ -349,7 +349,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     pv = envelope.placeVolume(whole_layer_volume, Position(0., 0., z_offset));
     pv.addPhysVolID("layer", layer_id);
 
-    DetElement layerDE(sdet, _toString(layer_id, "layer_%d") + _toString(side, "_side%d"), x_det.id());
+    DetElement layerDE(sdet, _toString(layer_id, "layer_%d") + _toString(side, "_side%d"), layer_id);
     layerDE.setPlacement(pv);
 
     int nLadders = x_layer.attr<int>(_Unicode(nLadders));

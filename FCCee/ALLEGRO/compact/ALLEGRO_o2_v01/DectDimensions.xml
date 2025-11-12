@@ -220,11 +220,6 @@
     <constant name="CollimatorInFrontOfQD0_radius" value="10*mm"/>
     <constant name="CollimatorInFrontOfQD0_dr" value="16*mm"/>
 
-    <constant name="QC1_rmin" value="42/2*mm"/>
-    <constant name="QC1_rmax" value="64/2*mm"/>
-    <constant name="QC1L1_len" value="700*mm"/>
-    <constant name="QC1L1_start" value="2200*mm"/>
-    <constant name="screenstart" value="-10*mm"/>
     <!-- end MDI -->
 
     <!-- these constants are used to define the full tracking volume in reconstruction (e.g. pandora) -->

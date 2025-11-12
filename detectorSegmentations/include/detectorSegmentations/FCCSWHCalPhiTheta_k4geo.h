@@ -5,6 +5,7 @@
 #include "detectorSegmentations/GridTheta_k4geo.h"
 
 #include <array>
+#include <atomic>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -101,12 +102,8 @@ namespace DDSegmentation {
     /**  Get the vector of theta bins (cells) in a given layer.
      */
     inline std::vector<int> thetaBins(const uint layer) const {
-      if (m_radii.empty())
-        defineCellsInRZplan();
-      if (!m_thetaBins.empty())
-        return m_thetaBins[layer];
-      else
-        return std::vector<int>();
+      const LayerInfo& li = getLayerInfo(layer);
+      return li.thetaBins;
     }
 
     /**  Get the coordinate offset in z-axis.
@@ -239,16 +236,6 @@ namespace DDSegmentation {
     std::vector<int> m_numLayers;
     /// dR of the layer
     std::vector<double> m_dRlayer;
-    /// radius of each layer
-    mutable std::vector<double> m_radii;
-    /// z-min and z-max of each layer
-    mutable std::vector<std::pair<double, double>> m_layerEdges;
-    /// dR of each layer
-    mutable std::vector<double> m_layerDepth;
-    /// theta bins (cells) in each layer
-    mutable std::vector<std::vector<int>> m_thetaBins;
-    /// z-min and z-max of each cell (theta bin) in each layer
-    mutable std::vector<std::unordered_map<int, std::pair<double, double>>> m_cellEdges;
 
     /// Initialization common to all ctors.
     void commonSetup();
@@ -262,6 +249,58 @@ namespace DDSegmentation {
     int m_thetaIndex = -1;
     /// the field index used for phi
     int m_phiIndex = -1;
+
+    // Derived geometrical information about each layer.
+    struct LayerInfo {
+      /// Radius of the layer.
+      double radius = 1;
+
+      /// Half the layer depth (dR).
+      double halfDepth = 0;
+
+      /// z-min and z-max of the layer
+      double zmin = 0;
+      double zmax = 0;
+
+      /// theta bins (cells) in the layer
+      std::vector<int> thetaBins{};
+
+      /// z-min and z-max of each cell (theta bin) in each layer
+      std::unordered_map<int, std::pair<double, double>> cellEdges{};
+    };
+
+    // The vector of tabulated values, indexed by layer number.
+    // We can't build this in the constructor --- the volumes won't have
+    // been created yet.  Instead, build it lazily the first time it's needed.
+    // Since that's in a const method, make it thread-safe.
+    mutable std::atomic<const std::vector<LayerInfo>*> m_layerInfo = nullptr;
+
+    // Retrieve the derived geometrical information for a given layer.
+    const LayerInfo& getLayerInfo(const unsigned layer) const;
+
+    /**  Construct the derived geometrical information.
+     *xxx
+     * Calculate layer radii and edges in z-axis, then define cell edges in each layer using defineCellEdges().
+     *    Following member variables are calculated:
+     *      radius
+     *      layerEdges
+     *      layerDepth
+     *      thetaBins (updated through defineCellEdges())
+     *      cellEdges* (updated through defineCellEdges())
+     */
+    std::vector<LayerInfo> initLayerInfo() const;
+
+    /**  Define cell edges in z-axis for the given layer.
+     *   Logic:
+     *      1) Find theta bin centers that fit within the given layer;
+     *      2) Define a cell edge in z-axis as the middle of each pair of theta bin centers
+     *   @param[in] li Layer info entry corresponding to layer.
+     *   @param[in] layer index
+     */
+    void defineCellEdges(LayerInfo& li, const unsigned int layer) const;
+
+    // Check consistency of input geometric variables.
+    bool checkParameters() const;
   };
 } // namespace DDSegmentation
 } // namespace dd4hep

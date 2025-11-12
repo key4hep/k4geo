@@ -4,12 +4,6 @@
 #include "DDG4/Geant4SensDetAction.inl"
 #include "G4VProcess.hh"
 
-#if DD4HEP_VERSION_GE(1, 21)
-#define GEANT4_CONST_STEP const
-#else
-#define GEANT4_CONST_STEP
-#endif
-
 /// Namespace for the AIDA detector description toolkit
 namespace dd4hep {
 
@@ -47,7 +41,7 @@ namespace sim {
     G4int fSpaceHitCollectionID{};
     G4int fLowPtHitCollectionID{};
 
-    G4Step GEANT4_CONST_STEP* StepAtEntranceToPadRing{};
+    G4Step const* StepAtEntranceToPadRing{};
     G4ThreeVector CrossingOfPadRingCentre{};
     G4ThreeVector MomentumAtPadRingCentre{};
     G4double dEInPadRow{};
@@ -61,7 +55,7 @@ namespace sim {
     G4ThreeVector CumulativeMeanMomentum{};
     G4int CumulativeNumSteps{};
 
-    G4Step GEANT4_CONST_STEP* previousStep{};
+    G4Step const* previousStep{};
     std::map<int, G4double> padRowCentralRadii{};
 
     TPCSDData() : fThresholdEnergyDeposit(0), fHCID(-1), fSpaceHitCollectionID(-1), fLowPtHitCollectionID(-1) {
@@ -77,7 +71,7 @@ namespace sim {
     }
 
     /// return the layer number of the volume (either pre or post-position )
-    int getCopyNumber(G4Step GEANT4_CONST_STEP* step, bool usePostPos) {
+    int getCopyNumber(G4Step const* step, bool usePostPos) {
 
       int cellID = this->volID(step, usePostPos);
 
@@ -85,7 +79,7 @@ namespace sim {
     }
 
     /// Returns the volumeID of sensitive volume corresponding to the step (either pre or post-position )
-    long long int volID(G4Step GEANT4_CONST_STEP* step, bool usePostPos = false) {
+    long long int volID(G4Step const* step, bool usePostPos = false) {
 
       Geant4StepHandler h(step);
 
@@ -96,7 +90,7 @@ namespace sim {
       return volID;
     }
 
-    void dumpStep(Geant4StepHandler h, G4Step GEANT4_CONST_STEP* s) {
+    void dumpStep(Geant4StepHandler h, G4Step const* s) {
 
       std::cout << " ----- step in detector " << h.sdName(s->GetPreStepPoint()) << " prePos  " << h.prePos()
                 << " postPos " << h.postPos() << " preStatus  " << h.preStepStatus() << " postStatus  "
@@ -111,7 +105,7 @@ namespace sim {
     }
 
     /// Method for generating hit(s) using the information of G4Step object.
-    G4bool process(G4Step GEANT4_CONST_STEP* step, G4TouchableHistory*) {
+    G4bool process(G4Step const* step, G4TouchableHistory*) {
 
       fHitCollection = sensitive->collection(0);
       fSpaceHitCollection = sensitive->collection(1);
@@ -290,7 +284,7 @@ namespace sim {
       StepAtEntranceToPadRing = 0;
     }
 
-    void DepositHiPtHit(G4Step GEANT4_CONST_STEP* step) // DJ extracted to separate fn
+    void DepositHiPtHit(G4Step const* step) // DJ extracted to separate fn
     {
       if (dEInPadRow > fThresholdEnergyDeposit) {
 
@@ -348,7 +342,7 @@ namespace sim {
       CumulativePathLength = 0;
     }
 
-    void DepositLowPtHit(G4Step GEANT4_CONST_STEP* step) {
+    void DepositLowPtHit(G4Step const* step) {
 
       Geant4Tracker::Hit* hit = new Geant4Tracker::Hit(
           step->GetTrack()->GetTrackID(), step->GetTrack()->GetDefinition()->GetPDGEncoding(), CumulativeEnergyDeposit,
@@ -365,7 +359,7 @@ namespace sim {
       ResetCumulativeVariables();
     }
 
-    void CumulateLowPtStep(G4Step GEANT4_CONST_STEP* step) {
+    void CumulateLowPtStep(G4Step const* step) {
 
       const G4ThreeVector meanPosition =
           (step->GetPreStepPoint()->GetPosition() + step->GetPostStepPoint()->GetPosition()) / 2;
@@ -413,7 +407,7 @@ namespace sim {
 
   /// Method for generating hit(s) using the information of G4Step object.
   template <>
-  G4bool Geant4SensitiveAction<TPCSDData>::process(G4Step GEANT4_CONST_STEP* step, G4TouchableHistory* history) {
+  G4bool Geant4SensitiveAction<TPCSDData>::process(G4Step const* step, G4TouchableHistory* history) {
     return m_userData.process(step, history);
   }
 

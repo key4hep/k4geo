@@ -41,11 +41,6 @@ using dd4hep::Volume;
 
 using dd4hep::rec::LayeredCalorimeterData;
 
-// workaround for DD4hep v00-14 (and older)
-#ifndef DD4HEP_VERSION_GE
-#define DD4HEP_VERSION_GE(a, b) 0
-#endif
-
 static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDetector sens) {
 
   std::cout << __PRETTY_FUNCTION__ << std::endl << std::endl;
@@ -274,7 +269,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 
           mtotalRadLen += nRadiationLengths;
           mtotalDepthZ += thickness_sum;
-#if DD4HEP_VERSION_GE(0, 15)
           // Store "inner" quantities
           caloLayer.inner_nRadiationLengths = nRadiationLengths;
           caloLayer.inner_nInteractionLengths = nInteractionLengths;
@@ -285,7 +279,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
           nRadiationLengths = 0.;
           nInteractionLengths = 0.;
           thickness_sum = 0.;
-#endif
+
           slice_vol.setSensitiveDetector(sens);
         }
 
@@ -308,7 +302,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
       /// Needs to be innermost face distance
       caloLayer.distance = lcalCentreZ + referencePosition;
 
-#if DD4HEP_VERSION_GE(0, 15)
       caloLayer.outer_nRadiationLengths = nRadiationLengths;
       caloLayer.outer_nInteractionLengths = nInteractionLengths;
       caloLayer.outer_thickness = thickness_sum;
@@ -316,11 +309,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
         std::cout << "  Layer thickness : " << (caloLayer.inner_thickness + caloLayer.outer_thickness) / dd4hep::mm
                   << "   ( rad. length X0:  " << (caloLayer.outer_nRadiationLengths + caloLayer.inner_nRadiationLengths)
                   << " )" << std::endl;
-#else
-      if (thisLayerId == 0)
-        std::cout << "  Layer thickness : " << mtotalDepthZ / dd4hep::mm << "   ( rad. length X0:  " << mtotalRadLen
-                  << " )" << std::endl;
-#endif
       caloLayer.cellSize0 = cellRsize;
       caloLayer.cellSize1 = cellPhiSize;
 
