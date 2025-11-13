@@ -220,7 +220,7 @@ namespace DDSegmentation {
     return cID;
   }
 
-  /// determine rho based on the cell ID
+  /// determine the radial position in transverse plane (rho) based on the cell ID
   double FCCSWEndcapTurbine_k4geo::rho(const CellID cID) const {
     CellID rhoValue = decoder()->get(cID, m_rhoIndex);
     CellID iWheel = decoder()->get(cID, m_wheelIndex);
@@ -228,7 +228,7 @@ namespace DDSegmentation {
     return binToPosition(rhoValue, m_gridSizeRho[iWheel], m_offsetRho[iWheel]) + m_gridSizeRho[iWheel] / 2.;
   }
 
-  /// determine the azimuthal angle phi based on the cell ID
+  /// determine the azimuthal angle (phi) based on the cell ID
   double FCCSWEndcapTurbine_k4geo::phi(const CellID cID) const {
     CellID iModule = decoder()->get(cID, m_moduleIndex);
     CellID iWheel = decoder()->get(cID, m_wheelIndex);
@@ -248,7 +248,7 @@ namespace DDSegmentation {
     return TMath::ATan2(xprime, yprime);
   }
 
-  /// determine local x in plane of blade based on the cell ID
+  /// determine the longitudinal position (z) based on the cell ID
   double FCCSWEndcapTurbine_k4geo::z(const CellID cID) const {
     CellID zValue = decoder()->get(cID, m_zIndex);
     CellID sideValue = decoder()->get(cID, m_sideIndex);
