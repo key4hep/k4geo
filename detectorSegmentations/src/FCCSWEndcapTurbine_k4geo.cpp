@@ -248,7 +248,7 @@ namespace DDSegmentation {
     return TMath::ATan2(xprime, yprime);
   }
 
-  /// determine absolute x position based on the cell ID
+  /// determine absolute z position based on the cell ID
   double FCCSWEndcapTurbine_k4geo::z(const CellID cID) const {
     CellID zValue = decoder()->get(cID, m_zIndex);
     CellID sideValue = decoder()->get(cID, m_sideIndex);
