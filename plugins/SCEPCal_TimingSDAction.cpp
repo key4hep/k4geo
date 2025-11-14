@@ -6,10 +6,10 @@
 #include "DDG4/Geant4SensDetAction.inl"
 #include "G4EmProcessSubType.hh"
 #include "G4OpticalPhoton.hh"
+#include "G4Poisson.hh"
 #include "G4ProcessType.hh"
 #include "G4VProcess.hh"
 #include "detectorSegmentations/SCEPCal_TimingSegmentation_k4geo.h"
-#include "G4Poisson.hh"
 
 namespace SCEPCal {
 class SCEPCal_TimingSDAction {
@@ -25,9 +25,7 @@ public:
   // a poissonian sampling for light emission fluctuations and a Binomial sampling for light detection
   // fluctuations. Thanks to the Poissonian thinning theorem this is equivalent to a single poissonian
   // sampling reproducing on average the expected light yield.
-  int SmearTimingLayersignal(G4double edep){
-    return G4Poisson(edep*m_scintTLPhotoEleMeV);
-  }
+  int SmearTimingLayersignal(G4double edep) { return G4Poisson(edep * m_scintTLPhotoEleMeV); }
 };
 } // namespace SCEPCal
 
@@ -42,9 +40,8 @@ namespace sim {
   }
 
   template <>
-  Geant4SensitiveAction<SCEPCal_TimingSDAction>::Geant4SensitiveAction(Geant4Context* ctxt,
-                                                                       const std::string& nam, DetElement det,
-                                                                       Detector& lcdd_ref)
+  Geant4SensitiveAction<SCEPCal_TimingSDAction>::Geant4SensitiveAction(Geant4Context* ctxt, const std::string& nam,
+                                                                       DetElement det, Detector& lcdd_ref)
       : Geant4Sensitive(ctxt, nam, det, lcdd_ref), m_collectionID(0) {
     initialize();
     defineCollections();
@@ -80,15 +77,16 @@ namespace sim {
     };
 
     // edep hits
-    if(edep > 0.) { // skip non-ionizing steps
+    if (edep > 0.) { // skip non-ionizing steps
       auto* hitedep = newOrExistingHitIn(m_collectionID);
       hitedep->energyDeposit += edep;
- 
+
       auto* hitS = newOrExistingHitIn(m_userData.m_collectionID_scint);
       auto Scount = m_userData.SmearTimingLayersignal(edep);
       // The EDM4HEP converter divides this entry by CLHEP::GeV to save energies in GeV unit.
       // Here, we are saving S counts so we multiply by CLHEP::GeV to have the correct number in the output file.
-      if(Scount > 0) hitS->energyDeposit += Scount * CLHEP::GeV;
+      if (Scount > 0)
+        hitS->energyDeposit += Scount * CLHEP::GeV;
     }
 
     return true;

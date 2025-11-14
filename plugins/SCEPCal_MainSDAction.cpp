@@ -6,11 +6,11 @@
 #include "DDG4/Geant4SensDetAction.inl"
 #include "G4EmProcessSubType.hh"
 #include "G4OpticalPhoton.hh"
+#include "G4Poisson.hh"
 #include "G4ProcessType.hh"
 #include "G4VProcess.hh"
-#include "detectorSegmentations/SCEPCal_MainSegmentation_k4geo.h"
-#include "G4Poisson.hh"
 #include "Randomize.hh"
+#include "detectorSegmentations/SCEPCal_MainSegmentation_k4geo.h"
 
 namespace SCEPCal {
 class SCEPCal_MainSDAction {
@@ -29,23 +29,21 @@ public:
   // fluctuations. Thanks to the Poissonian thinning theorem this is equivalent to a single poissonian
   // sampling reproducing on average the expected light yield.
   int SmearSsignal(G4double edep) const {
-    return G4Poisson((edep/CLHEP::GeV) * m_scintPhotoEleGeV); // MeV->GeV
+    return G4Poisson((edep / CLHEP::GeV) * m_scintPhotoEleGeV); // MeV->GeV
   }
 
   // This function is a Bernoully trial to decide wether a Cerenkov photon is detected or not
   // in the scepcal. Cerenkov photons are created by Geant4 inside crystals, already taking
   // into account their poissonian emission fluctuations, therefore we only need to add a
   // Binomial sampling that reproduces the expected light yield of 100 p.e./GeV
-  bool SmearCsignal() const {
-    return G4UniformRand() < m_cherenBinomialCut; 
-  }
+  bool SmearCsignal() const { return G4UniformRand() < m_cherenBinomialCut; }
 };
 } // namespace SCEPCal
 
 namespace dd4hep {
 namespace sim {
   using namespace SCEPCal;
-  
+
   template <>
   void Geant4SensitiveAction<SCEPCal_MainSDAction>::defineCollections() {
     m_collectionID = defineCollection<Geant4Calorimeter::Hit>("SCEPCal_MainEdep");
@@ -54,15 +52,14 @@ namespace sim {
   }
 
   template <>
-  Geant4SensitiveAction<SCEPCal_MainSDAction>::Geant4SensitiveAction(Geant4Context* ctxt,
-                                                                     const std::string& nam, DetElement det,
-                                                                     Detector& lcdd_ref)
+  Geant4SensitiveAction<SCEPCal_MainSDAction>::Geant4SensitiveAction(Geant4Context* ctxt, const std::string& nam,
+                                                                     DetElement det, Detector& lcdd_ref)
       : Geant4Sensitive(ctxt, nam, det, lcdd_ref), m_collectionID(0) {
     initialize();
     defineCollections();
     InstanceCount::increment(this);
     declareProperty("scintPhotoElePerGeV", m_userData.m_scintPhotoEleGeV = 2000.);
-    declareProperty("cherenBinomialCut",   m_userData.m_cherenBinomialCut = 0.00147);
+    declareProperty("cherenBinomialCut", m_userData.m_cherenBinomialCut = 0.00147);
   }
 
   template <>
@@ -94,7 +91,7 @@ namespace sim {
 
     // Do not fill edep and S hits if there is no ionizing energy deposit
     //
-    if(edep > 0.){
+    if (edep > 0.) {
       // edep hits
       auto* hitedep = newOrExistingHitIn(m_collectionID);
       hitedep->energyDeposit += edep;
@@ -104,25 +101,26 @@ namespace sim {
       auto Scount = m_userData.SmearSsignal(edep);
       // The EDM4HEP converter divides this entry by CLHEP::GeV to save energies in GeV unit.
       // Here, we are saving S counts so we multiply by CLHEP::GeV to have the correct number in the output file.
-      if(Scount > 0) hitS->energyDeposit += Scount * CLHEP::GeV;
+      if (Scount > 0)
+        hitS->energyDeposit += Scount * CLHEP::GeV;
     }
 
     // Cerenkov hits
     if (track->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()) {
       auto procSubType = track->GetCreatorProcess()->GetProcessSubType();
       bool isCerenkov = (procSubType == G4EmProcessSubType::fCerenkov);
-      if (!isCerenkov){
+      if (!isCerenkov) {
         track->SetTrackStatus(fStopAndKill);
         return true;
-      }
-      else if (track->GetCurrentStepNumber() == 1) {
+      } else if (track->GetCurrentStepNumber() == 1) {
         auto* hitC = newOrExistingHitIn(m_userData.m_collectionID_ceren);
         // The EDM4HEP converter divides this entry by CLHEP::GeV to save energies in GeV unit.
         // Here, we are saving C counts so we multiply by CLHEP::GeV to have the correct number in the output file.
-        if(m_userData.SmearCsignal()) hitC->energyDeposit += 1 * CLHEP::GeV;
+        if (m_userData.SmearCsignal())
+          hitC->energyDeposit += 1 * CLHEP::GeV;
         track->SetTrackStatus(fStopAndKill);
-      }
-      else return true;
+      } else
+        return true;
     }
     return true;
   }
