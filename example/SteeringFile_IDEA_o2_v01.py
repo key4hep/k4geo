@@ -107,8 +107,11 @@ SIM.action.calorimeterSDTypes = ["calorimeter"]
 SIM.action.mapActions["SCEPCal_MainLayer"] = "SCEPCal_MainSDAction"
 SIM.action.mapActions["SCEPCal_TimingLayer"] = "SCEPCal_TimingSDAction"
 
-SIM.filter.mapDetFilter["SCEPCal_MainLayer"] = "edep1kev"
-SIM.filter.mapDetFilter["SCEPCal_TimingLayer"] = "edep1kev"
+## Do not add filter to crystal calorimeter (e.g. edep1kev)
+## otherwise optical photons will not be processed by its SDAction
+## and corresponding collections are empty
+SIM.filter.mapDetFilter["SCEPCal_MainLayer"] = ""
+SIM.filter.mapDetFilter["SCEPCal_TimingLayer"] = ""
 
 ## Replace SDAction for DREndcapTubes subdetector
 SIM.action.mapActions["DREndcapTubes"] = "DRTubesSDAction"

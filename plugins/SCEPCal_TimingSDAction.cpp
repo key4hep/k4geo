@@ -6,6 +6,7 @@
 #include "DDG4/Geant4SensDetAction.inl"
 #include "G4EmProcessSubType.hh"
 #include "G4OpticalPhoton.hh"
+#include "G4Poisson.hh"
 #include "G4ProcessType.hh"
 #include "G4VProcess.hh"
 #include "detectorSegmentations/SCEPCal_TimingSegmentation_k4geo.h"
@@ -14,7 +15,17 @@ namespace SCEPCal {
 class SCEPCal_TimingSDAction {
 public:
   std::size_t m_collectionID_scint{0};
-  std::size_t m_collectionID_ceren{0};
+
+  double m_scintTLPhotoEleMeV{6000.0}; // default value
+
+  // This function takes in input the ionizing energy deposit (in MeV) from a step in the scepcal timing
+  // layer and returns the corresponding number of sipm fired cells (or photo-electrons).
+  // It reproduces the expected very-high LYSO light yield of 6000 p.e./MeV.
+  // The smearing is done by a single poissoninan sampling. De facto one must have two samplings:
+  // a poissonian sampling for light emission fluctuations and a Binomial sampling for light detection
+  // fluctuations. Thanks to the Poissonian thinning theorem this is equivalent to a single poissonian
+  // sampling reproducing on average the expected light yield.
+  int SmearTimingLayersignal(G4double edep) { return G4Poisson(edep * m_scintTLPhotoEleMeV); }
 };
 } // namespace SCEPCal
 
@@ -26,7 +37,16 @@ namespace sim {
   void Geant4SensitiveAction<SCEPCal_TimingSDAction>::defineCollections() {
     m_collectionID = defineCollection<Geant4Calorimeter::Hit>("SCEPCal_TimingEdep");
     m_userData.m_collectionID_scint = defineCollection<Geant4Calorimeter::Hit>("SCEPCal_TimingScounts");
-    m_userData.m_collectionID_ceren = defineCollection<Geant4Calorimeter::Hit>("SCEPCal_TimingCcounts");
+  }
+
+  template <>
+  Geant4SensitiveAction<SCEPCal_TimingSDAction>::Geant4SensitiveAction(Geant4Context* ctxt, const std::string& nam,
+                                                                       DetElement det, Detector& lcdd_ref)
+      : Geant4Sensitive(ctxt, nam, det, lcdd_ref), m_collectionID(0) {
+    initialize();
+    defineCollections();
+    InstanceCount::increment(this);
+    declareProperty("scintTLPhotoEleMeV", m_userData.m_scintTLPhotoEleMeV = 6000.0);
   }
 
   template <>
@@ -35,7 +55,6 @@ namespace sim {
     G4TouchableHandle thePreStepTouchable = thePrePoint->GetTouchableHandle();
 
     auto cellID = thePreStepTouchable->GetCopyNumber(0);
-    G4Track* track = step->GetTrack();
 
     dd4hep::Segmentation* _geoSeg = &m_segmentation;
     auto segmentation =
@@ -58,24 +77,18 @@ namespace sim {
     };
 
     // edep hits
-    auto* hitedep = newOrExistingHitIn(m_collectionID);
-    hitedep->energyDeposit += edep;
+    if (edep > 0.) { // skip non-ionizing steps
+      auto* hitedep = newOrExistingHitIn(m_collectionID);
+      hitedep->energyDeposit += edep;
 
-    // Scintillation and Cerenkov hits
-    if (track->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()) {
-      auto procName = track->GetCreatorProcess()->GetProcessName();
-      bool isCerenkov = (procName == "CerenkovPhys");
-      bool isScintillation = (procName == "ScintillationPhys");
-      if (!isCerenkov && !isScintillation)
-        return true;
-
-      if (track->GetCurrentStepNumber() == 1) {
-        auto* hitSC =
-            newOrExistingHitIn(isScintillation ? m_userData.m_collectionID_scint : m_userData.m_collectionID_ceren);
-        hitSC->energyDeposit += 1 / dd4hep::MeV;
-        track->SetTrackStatus(fStopAndKill);
-      }
+      auto* hitS = newOrExistingHitIn(m_userData.m_collectionID_scint);
+      auto Scount = m_userData.SmearTimingLayersignal(edep);
+      // The EDM4HEP converter divides this entry by CLHEP::GeV to save energies in GeV unit.
+      // Here, we are saving S counts so we multiply by CLHEP::GeV to have the correct number in the output file.
+      if (Scount > 0)
+        hitS->energyDeposit += Scount * CLHEP::GeV;
     }
+
     return true;
   }
 } // namespace sim
