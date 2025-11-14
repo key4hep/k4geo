@@ -251,7 +251,7 @@
     <constant name="DRETNbOfZRot"    value="72"/>
     <constant name="DRETTubeRadius"  value="1.0*mm"/>
     <constant name="DRETCladRadius"  value="0.5*mm"/>
-    <constant name="DRETCoreRadius"  value="0.45*mm"/>
+    <constant name="DRETCoreRadius"  value="0.485*mm"/>
     <!-- end of Dual-Readout Endcap Tubes (DRET) calorimeter dimensions-->
 
     <!-- Dual-Readout Barrel Tubes (DRBT) calorimeter dimensions-->
@@ -267,8 +267,8 @@
     <constant name="DRBTInnerCaloHalfLength" value="2.805*m"  />
     <constant name="DRBTTowerThetaCoverage"  value="1.0*deg"/>      
     <constant name="DRBTTowerPhiCoverage"    value="5.0*deg"  />
-    <constant name="DRBTSupportSideThickness" value="1.0*mm" />
-    <constant name="DRBTSupportFrontThickness" value="1.0*mm" />
+    <constant name="DRBTSupportSideThickness" value="0.0*mm" />
+    <constant name="DRBTSupportFrontThickness" value="0.0*mm" />
     <constant name="DRBTSupportBackThickness" value="0.0*cm" />
     <!--Variables to construct only part of the calorimeter-->
     <!-- Base values are: Start = '0*deg', End = '360*deg' -->
