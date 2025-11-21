@@ -329,6 +329,7 @@ namespace DDSegmentation {
           if (-idx < m_ibin)
             throw std::out_of_range("cellEdge");
           const auto& e = m_cellEdge[-idx - m_ibin];
+          // Swap the edges for the negative endcap side
           return Edge{e.high, e.low};
         }
       }
