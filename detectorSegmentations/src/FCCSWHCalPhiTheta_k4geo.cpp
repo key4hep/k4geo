@@ -1,5 +1,6 @@
 #include "detectorSegmentations/FCCSWHCalPhiTheta_k4geo.h"
 #include "DD4hep/Printout.h"
+#include <ranges>
 
 namespace dd4hep {
 namespace DDSegmentation {
@@ -50,10 +51,11 @@ namespace DDSegmentation {
   Vector3D FCCSWHCalPhiTheta_k4geo::position(const CellID& cID) const {
     uint layer = decoder()->get(cID, m_layerIndex);
     int thetaID = decoder()->get(cID, m_thetaIndex);
+
     const LayerInfo& li = getLayerInfo(layer);
     double radius = li.radius;
-    const auto& edges = li.cellEdges.find(thetaID)->second;
-    double zpos = (edges.first + edges.second) * 0.5;
+    const LayerInfo::Edge& edge = li.cellInfo(thetaID).edge;
+    double zpos = (edge.low + edge.high) * 0.5;
 
     auto pos = positionFromRThetaPhi(radius, theta(cID), phi(cID));
 
@@ -125,82 +127,88 @@ namespace DDSegmentation {
   }
 
   void FCCSWHCalPhiTheta_k4geo::defineCellEdges(LayerInfo& li, const unsigned int layer) const {
+    // Helper to find the z-coordinate corresponding to a theta bin number.
+    auto binToZ = [&](int ibin) {
+      double theta = offsetTheta() + ibin * gridSizeTheta();
+      return li.radius / std::tan(theta);
+    };
+
     // find theta bins that fit within the given layer
-    int ibin =
-        positionToBin(0.02, gridSizeTheta(), offsetTheta()); // <--- start from theta bin outside the HCal theta range
-    while (li.radius * std::cos(offsetTheta() + ibin * gridSizeTheta()) /
-               std::sin(offsetTheta() + ibin * gridSizeTheta()) >
-           li.zmin) {
-      if (li.radius * std::cos(offsetTheta() + ibin * gridSizeTheta()) /
-              std::sin(offsetTheta() + ibin * gridSizeTheta()) <
-          li.zmax) {
+    // <--- start from theta bin outside the HCal theta range
+    int ibin = positionToBin(0.02, gridSizeTheta(), offsetTheta());
+    // Go in increasing theta bin number, which corresponds to a
+    // decreasing z-coordinate.  So we start remembering bin numbesr
+    // once the z-coordinate is less than the maximum and stop once the
+    // z-coordinate is less than the minimum.
+    for (;; ++ibin) {
+      double z = binToZ(ibin);
+      if (z <= li.zmin)
+        break;
+      if (z < li.zmax) {
         li.thetaBins.push_back(ibin);
       }
-      ibin++;
     }
 
-    // find edges of each cell (theta bin) in the given layer
-    auto prevBin = li.thetaBins[0];
-    // set the upper edge of the first cell in the given layer (starting from positive z part)
-    li.cellEdges[prevBin] = std::make_pair(0., li.zmax);
-    for (auto bin : li.thetaBins) {
-      if (bin != prevBin) {
-        double z1 = li.radius * std::cos(offsetTheta() + bin * gridSizeTheta()) /
-                    std::sin(offsetTheta() + bin * gridSizeTheta());
-        double z2 = li.radius * std::cos(offsetTheta() + prevBin * gridSizeTheta()) /
-                    std::sin(offsetTheta() + prevBin * gridSizeTheta());
-        // set the lower edge of the prevBin cell
-        li.cellEdges[prevBin].first = z1 + 0.5 * (z2 - z1);
-        // set the upper edge of current bin cell
-        li.cellEdges[bin] = std::make_pair(0., li.cellEdges[prevBin].first);
-        prevBin = bin;
+    {
+      // find edges of each cell (theta bin) in the given layer,
+      // initializing the first range of bins (m_cellInfo1).
+      // set the upper edge of the first cell in the given layer (starting from positive z part)
+      li.m_ibin1 = li.thetaBins[0];
+      li.m_cellInfo1.reserve(li.thetaBins.size());
+      double prevZ = binToZ(li.m_ibin1);
+      double prevEdge = li.zmax;
+      for (auto bin : li.thetaBins) {
+        double z = binToZ(bin + 1);
+        double edge = prevZ + 0.5 * (z - prevZ);
+        li.m_cellInfo1.emplace_back(edge, prevEdge);
+        prevZ = z;
+        prevEdge = edge;
       }
+      // set the lower edge of the last cell in the given layer
+      li.m_cellInfo1.back().edge.low = li.zmin;
     }
-
-    // set the lower edge of the last cell in the given layer
-    li.cellEdges[prevBin].first = li.zmin;
 
     // for the EndCap, do it again but for negative z part
     if (m_detLayout == 1) {
-      while (li.radius * std::cos(offsetTheta() + ibin * gridSizeTheta()) /
-                 std::sin(offsetTheta() + ibin * gridSizeTheta()) >
-             (-li.zmax)) {
-        if (li.radius * std::cos(offsetTheta() + ibin * gridSizeTheta()) /
-                std::sin(offsetTheta() + ibin * gridSizeTheta()) <
-            (-li.zmin)) {
+      for (;; ++ibin) {
+        double z = binToZ(ibin);
+        if (z <= (-li.zmax))
+          break;
+        if (z < (-li.zmin)) {
           li.thetaBins.push_back(ibin);
         }
-        ibin++;
       }
 
-      // Create a span view over the theta bins corresponding to the Endcap in negative z part
-      std::span<int> thetaBins(li.thetaBins.begin() + li.thetaBins.size() / 2, li.thetaBins.end());
-      prevBin = thetaBins[0];
+      {
+        // Create a range over the theta bins corresponding to the Endcap in negative z part,
+        // initializing the second range of bins (m_cellInfo2).
+        // Make a range for the second range of bins.
+        auto thetaBins = std::ranges::drop_view(li.thetaBins, li.thetaBins.size() / 2);
 
-      // set the upper edge of the first cell in the given layer at negative z part
-      li.cellEdges[prevBin] = std::make_pair(0., -li.zmin);
-      for (auto bin : thetaBins) {
-        if (bin != prevBin) {
-          double z1 = li.radius * std::cos(offsetTheta() + bin * gridSizeTheta()) /
-                      std::sin(offsetTheta() + bin * gridSizeTheta());
-          double z2 = li.radius * std::cos(offsetTheta() + prevBin * gridSizeTheta()) /
-                      std::sin(offsetTheta() + prevBin * gridSizeTheta());
-          // set the lower edge of the prevBin cell
-          li.cellEdges[prevBin].first = z1 + 0.5 * (z2 - z1);
-          // set the upper edge of current bin cell
-          li.cellEdges[bin] = std::make_pair(0., li.cellEdges[prevBin].first);
-          prevBin = bin;
+        // set the upper edge of the first cell in the given layer at negative z part
+        li.m_ibin2 = thetaBins[0];
+        li.m_cellInfo2.reserve(thetaBins.size());
+        double prevZ = binToZ(li.m_ibin2);
+        double prevEdge = -li.zmin;
+        for (auto bin : thetaBins) {
+          double z = binToZ(bin + 1);
+          double edge = prevZ + 0.5 * (z - prevZ);
+          li.m_cellInfo2.emplace_back(edge, prevEdge);
+          prevZ = z;
+          prevEdge = edge;
         }
+        // set the lower edge of the last cell in the given layer
+        li.m_cellInfo2.back().edge.low = -li.zmax;
       }
-      // set the lower edge of the last cell in the given layer
-      li.cellEdges[prevBin].first = (-li.zmax);
     } // negative-z endcap
 
     dd4hep::printout(dd4hep::DEBUG, "FCCSWHCalPhiTheta_k4geo", "Number of cells in layer %d: %d", layer,
                      li.thetaBins.size());
-    for (auto bin : li.thetaBins)
+    for (auto bin : li.thetaBins) {
+      const LayerInfo::Edge& edge = li.cellInfo(bin).edge;
       dd4hep::printout(dd4hep::DEBUG, "FCCSWHCalPhiTheta_k4geo", "Layer %d cell theta bin: %d, edges: %.2f - %.2f cm",
-                       layer, bin, li.cellEdges[bin].first, li.cellEdges[bin].second);
+                       layer, bin, edge.low, edge.high);
+    }
   }
 
   // Check consistency of input geometric variables.
@@ -277,8 +285,8 @@ namespace DDSegmentation {
     // find the cell (theta bin) corresponding to the hit and return the cellID
     for (auto bin : li.thetaBins) {
       double posz = globalPosition.z();
-      const auto& edges = li.cellEdges.find(bin)->second;
-      if (posz > edges.first && posz < edges.second) {
+      const LayerInfo::Edge& edge = li.cellInfo(bin).edge;
+      if (posz > edge.low && posz < edge.high) {
         decoder()->set(cID, m_thetaIndex, bin);
         decoder()->set(cID, m_phiIndex, positionToBin(lPhi, 2 * M_PI / (double)m_phiBins, m_offsetPhi));
         return cID;
@@ -408,12 +416,10 @@ namespace DDSegmentation {
     }
     //----------------------------------------------
 
+    auto [currentCellZmin, currentCellZmax] = li.cellInfo(currentCellThetaBin).edge;
+
     // deal with the Barrel
     if (m_detLayout == 0) {
-      const auto& edges = li.cellEdges.find(currentCellThetaBin)->second;
-      double currentCellZmin = edges.first;
-      double currentCellZmax = edges.second;
-
       // if this is not the first layer then look for neighbours in the previous layer
       if (currentLayerId > minLayerId) {
         CellID nID = cID;
@@ -433,8 +439,7 @@ namespace DDSegmentation {
           if (aDiagonal && currentCellThetaBin > (prevLI.thetaBins.front() + 1)) {
             // add the previous layer cell from the prev to prev theta bin if it overlaps with the current cell in
             // z-coordinate
-            const auto& edgesm2 = prevLI.cellEdges.find(currentCellThetaBin - 2)->second;
-            double zmin = edgesm2.first;
+            double zmin = prevLI.cellInfo(currentCellThetaBin - 2).edge.low;
             if (zmin <= currentCellZmax) {
               // add the previous layer cell from the prev to prev theta bin
               decoder()->set(nID, m_thetaIndex, currentCellThetaBin - 2);
@@ -450,8 +455,7 @@ namespace DDSegmentation {
           if (aDiagonal && currentCellThetaBin < (prevLI.thetaBins.back() - 1)) {
             // add the previous layer cell from the next to next theta bin if it overlaps with the current cell in
             // z-coordinate
-            const auto& edgesp2 = prevLI.cellEdges.find(currentCellThetaBin + 2)->second;
-            double zmax = edgesp2.second;
+            double zmax = prevLI.cellInfo(currentCellThetaBin + 2).edge.high;
             if (zmax >= currentCellZmin) {
               // add the previous layer cell from the next to next theta bin
               decoder()->set(nID, m_thetaIndex, currentCellThetaBin + 2);
@@ -481,8 +485,7 @@ namespace DDSegmentation {
           if (aDiagonal) {
             // add the next layer cell from the next-to-next theta bin if it overlaps with the current cell in
             // z-coordinate
-            const auto& edgesp2 = nextLI.cellEdges.find(currentCellThetaBin + 2)->second;
-            double zmax = edgesp2.second;
+            double zmax = nextLI.cellInfo(currentCellThetaBin + 2).edge.high;
             if (zmax >= currentCellZmin) {
               // add the next layer cell from the next to next theta bin
               decoder()->set(nID, m_thetaIndex, currentCellThetaBin + 2);
@@ -499,8 +502,7 @@ namespace DDSegmentation {
           if (aDiagonal) {
             // add the next layer cell from the prev to prev theta bin if it overlaps with the current cell in
             // z-coordinate
-            const auto& edgesm2 = nextLI.cellEdges.find(currentCellThetaBin - 2)->second;
-            double zmin = edgesm2.first;
+            double zmin = nextLI.cellInfo(currentCellThetaBin - 2).edge.low;
             if (zmin <= currentCellZmax) {
               // add the next layer cell from the prev to prev theta bin
               decoder()->set(nID, m_thetaIndex, currentCellThetaBin - 2);
@@ -513,10 +515,6 @@ namespace DDSegmentation {
 
     // Endcap
     if (m_detLayout == 1) {
-      const auto& edges = li.cellEdges.find(currentCellThetaBin)->second;
-      double currentCellZmin = edges.first;
-      double currentCellZmax = edges.second;
-
       // if this is not the first layer then look for neighbours in the previous layer
       if (currentLayerId > minLayerId) {
         CellID nID = cID;
@@ -525,9 +523,7 @@ namespace DDSegmentation {
         decoder()->set(nID, m_layerIndex, prevLayerId);
         // find the ones that share at least part of a border with the current cell
         for (auto bin : prevLI.thetaBins) {
-          const auto& edgesp = prevLI.cellEdges.find(bin)->second;
-          double zmin = edgesp.first;
-          double zmax = edgesp.second;
+          auto [zmin, zmax] = prevLI.cellInfo(bin).edge;
 
           // if the cID is in the positive-z side
           if (theta(cID) < M_PI / 2.) {
@@ -565,9 +561,8 @@ namespace DDSegmentation {
         decoder()->set(nID, m_layerIndex, nextLayerId);
         // find the ones that share at least part of a border with the current cell
         for (auto bin : nextLI.thetaBins) {
-          const auto& edgesn = nextLI.cellEdges.find(bin)->second;
-          double zmin = edgesn.first;
-          double zmax = edgesn.second;
+          auto [zmin, zmax] = nextLI.cellInfo(bin).edge;
+
           // if the cID is in the positive-z side
           if (theta(cID) < M_PI / 2.) {
             if ((zmin >= currentCellZmin && zmin <= currentCellZmax) ||
@@ -772,9 +767,7 @@ namespace DDSegmentation {
 
     const LayerInfo& li = getLayerInfo(layer);
 
-    const auto& edges = li.cellEdges.find(idx)->second;
-    double zlow = edges.first;
-    double zhigh = edges.second;
+    auto [zlow, zhigh] = li.cellInfo(idx).edge;
 
     double Rmin = li.radius - li.halfDepth;
     double Rmax = li.radius + li.halfDepth;
