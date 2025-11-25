@@ -148,37 +148,36 @@ namespace DDSegmentation {
       // define the cell index
       int idx = floor(irow / m_gridSizeRow[layer]) + 1;
       // add the index if it is not already there
-      if (std::find(li.cellIndexes.begin(), li.cellIndexes.end(), idx) == li.cellIndexes.end())
+      if (li.cellIndexes.empty() || li.cellIndexes.back() != idx) {
         li.cellIndexes.push_back(idx);
-      irow++;
+      }
+      irow += m_gridSizeRow[layer];
     }
+    size_t sz = li.cellIndexes.size();
 
-    // for the EndCap, do it again but for negative-z part
+    // for the EndCap, we have the same indices but negative for the other half
     if (m_detLayout == 1) {
-      irow = 0;
-      while ((minLayerZ + (irow + 1) * m_dz_row) < (maxLayerZ + 0.0001)) {
-        // define the cell index with negative sign
-        int idx = -(floor(irow / m_gridSizeRow[layer]) + 1);
-        // add the index if it is not already there
-        if (std::find(li.cellIndexes.begin(), li.cellIndexes.end(), idx) == li.cellIndexes.end())
-          li.cellIndexes.push_back(idx);
-        irow++;
+      li.cellIndexes.resize(sz * 2);
+      for (size_t i = 0; i < sz; i++) {
+        li.cellIndexes[i + sz] = -li.cellIndexes[i];
       }
     }
 
     // find edges of each cell in the given layer along z axis
+    li.m_cellEdge.reserve(sz);
+    li.m_ibin = li.cellIndexes[0];
     for (auto idx : li.cellIndexes) {
       // calculate z-coordinates of the cell edges
       double z1 = minLayerZ + (idx - 1) * m_dz_row * m_gridSizeRow[layer]; // lower edge
-      double z2 = minLayerZ + (idx)*m_dz_row * m_gridSizeRow[layer];       // upper edge
+      double z2 = z1 + m_dz_row;                                           // upper edge
 
-      // for negative-z Endcap, the index is negative (starts from -1!)
+      // We don't store the edges for the negative endcap, since they're
+      // exactly the same as positive but flipped.
       if (idx < 0) {
-        z1 = -minLayerZ + (idx)*m_dz_row * m_gridSizeRow[layer];       // lower edge
-        z2 = -minLayerZ + (idx + 1) * m_dz_row * m_gridSizeRow[layer]; // upper edge
+        break;
       }
 
-      li.cellEdges[idx] = std::make_pair(z1, z2);
+      li.m_cellEdge.emplace_back(z1, z2);
     }
 
     dd4hep::printout(dd4hep::DEBUG, "FCCSWHCalPhiRow_k4geo", "Number of cells in layer %d: %d", layer,
@@ -626,9 +625,7 @@ namespace DDSegmentation {
 
     const LayerInfo& li = getLayerInfo(layer);
 
-    const auto& edges = li.cellEdges.find(idx)->second;
-    double zlow = edges.first;
-    double zhigh = edges.second;
+    auto [zlow, zhigh] = li.cellEdge(idx);
 
     double Rmin = li.radius - li.halfDepth;
     double Rmax = li.radius + li.halfDepth;
@@ -659,8 +656,7 @@ namespace DDSegmentation {
     int idx = abs(li.cellIndexes.back());
 
     // get the z-coordinate of the right-hand edge of the last cell
-    const auto& edges = li.cellEdges.find(idx)->second;
-    double zhigh = edges.second;
+    double zhigh = li.cellEdge(idx).high;
 
     // get the inner radius of the first layer
     double Rmin = li.radius - 0.5 * li.halfDepth;
