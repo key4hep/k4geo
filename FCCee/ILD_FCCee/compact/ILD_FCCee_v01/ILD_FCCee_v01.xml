@@ -61,9 +61,12 @@
 
   <include ref="../ILD_common_v02/display.xml"/>
 
+  <!-- this ensures that there is vacuum in the beampipe (also in the whole world volume)
+       hack needed for the CAD modeled beampipe  -->
+  <world material="Vacuum"/>
 
-  <!-- Include the MDI Collection for Option 1 Version 01 (MDI_o1_v01) -->
-  <include ref="../../../MDI/compact/MDI_o1_v01/MDI_o1_v01_collection.xml"/>
+  <!-- Include the MDI Collection for (CAD-based) Option 1 Version 01 (MDI_o1_CADBased_v01) -->
+  <include ref="../../../MDI/compact/MDI_o1_CADBased_v01/MDI_o1_CADBased_v01_collection.xml"/>
 
   <!-- vertex and lumiCal from CLD_02_v07 -->
   <include ref="../../../CLD/compact/CLD_o2_v07/LumiCal_o3_v02_05.xml"/>
