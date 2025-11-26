@@ -1,3 +1,99 @@
+# v00-24
+
+* 2025-11-26 Lorenzo Pezzotti ([PR#545](https://github.com/key4hep/k4geo/pull/545))
+  - Set optical fiber radius identical for IDEA_o2 endcap and barrel hadronic calorimeters
+  - Do not include IDEA_o2 hadronic barrel calorimeter casing by default
+
+* 2025-11-26 Daniel Jeans ([PR#540](https://github.com/key4hep/k4geo/pull/540))
+  - Updated ILD_FCCee_v0{1,2} to use MDI description MDI_o1_CADBased_v01
+  - world volume material changed to vacuum (to ensure vacuum within beampipe)
+
+* 2025-11-21 sss ([PR#535](https://github.com/key4hep/k4geo/pull/535))
+  - Updated HCal segmentation classes to more efficiently store cell edge information as vectors rather than as hash maps.
+
+* 2025-11-19 Juan Miguel Carceller ([PR#546](https://github.com/key4hep/k4geo/pull/546))
+  - Set the env variable K4GEO in thisk4geo.sh to the current source directory, since in the installation there may be or not a folder with the compact files (depending on the cmake option `INSTALL_COMPACT_FILES`)
+
+* 2025-11-17 Lorenzo Pezzotti ([PR#539](https://github.com/key4hep/k4geo/pull/539))
+  - Avoid energy deposition filters for the scepcal in the IDEA_o2 steering file for correct usage of its SDAction
+  - Reproduce the expected experimental light yields and light fluctuations for the scepcal main crystals and timing layer
+  - Do not simulate Cerenkov light in the scepcal timing layer
+
+* 2025-11-17 sss ([PR#536](https://github.com/key4hep/k4geo/pull/536))
+  - Fixed cmake development warnings.
+
+* 2025-11-13 Giovanni Marchiori ([PR#543](https://github.com/key4hep/k4geo/pull/543))
+  - fix comments in turbine segmentation class
+
+* 2025-11-05 Juan Miguel Carceller ([PR#531](https://github.com/key4hep/k4geo/pull/531))
+  - Remove checks for old versions of DD4hep (10+ years old)
+
+* 2025-11-05 SanghyunKo ([PR#529](https://github.com/key4hep/k4geo/pull/529))
+  - Allow negative time optical photons (from BIB overlay) in the DRCaloSDAction
+
+* 2025-10-31 aciarma ([PR#534](https://github.com/key4hep/k4geo/pull/534))
+  - [FCCee] MDI_o1_ShapeBased_v01 started from MDI_o1_v00 
+  - [FCCee] added antisolenoid field map to ShapeBased
+  - [FCCee] added final focus quadrupoles and their field to ShapeBased. Dimension and magnetic field defined via parameter xml based on different accelerator lattice versions and beam energy
+  - [FCCee] add quadrupoles also to MDI_CADbased_o1_v01"
+
+* 2025-10-30 BrieucF ([PR#532](https://github.com/key4hep/k4geo/pull/532))
+  - [FCCee] Remove the detector solenoid field from the CAD imports (it is defined by the detector xml's)
+  - [FCCee] Remove the compensating solenoid analytical field map from the detector xml
+  - [FCCee] Switch the commented CAD beampipe to a newer version and add a workaround to have vacuum inside the pipe
+
+* 2025-10-29 aciarma ([PR#530](https://github.com/key4hep/k4geo/pull/530))
+  Added field map from Mike Koratzinos for the magnetic field of IR antisolenoids.
+  The fieldmap accounts only for the antisolenoids, so it must be overlapped with the detector field.
+  For the moment I used an example description for the 2T detector solenoid field (fields_solenoid.xml) but this part may be different for each experiment and therefore in each dedicated xml, not in /MDI.
+  The antisolenoids are common instead.
+  
+  Example of the field on the ZX plane from `dumpBfield`:
+  <img width="927" height="587" alt="image" src="https://github.com/user-attachments/assets/435946c8-d8ab-416b-8576-9f205401613d" />
+
+* 2025-10-24 sss ([PR#524](https://github.com/key4hep/k4geo/pull/524))
+  - Updated FCCSWHCalPhiTheta_k4geo and FCCSWHCalPhiRow_k4geo to avoid the thread-unsafe use of mutable members.
+
+* 2025-10-22 Stefano Fanchellucci ([PR#497](https://github.com/key4hep/k4geo/pull/497))
+  - Harmonize object ID for Vertex Barrel
+
+* 2025-10-21 aciarma ([PR#528](https://github.com/key4hep/k4geo/pull/528))
+  * FCCee/MDI: Moved the `stl_files` folder up one level:
+    from `FCCee/MDI/compact/MDI_o1_v01/stl_files` to `FCCee/MDI/compact/stl_files`
+    Provide a common space for CAD versions sharing the same files.
+
+* 2025-10-17 aciarma ([PR#527](https://github.com/key4hep/k4geo/pull/527))
+  CAD version of MDI had the crotch rotated 180deg, so that the notch for the SR mask was on the wrong side.
+  The SR mask is only on the lower part of the upstream beampipes - negative x coordinates.
+  
+  Created new folder MDI_o1_CADBased_v01 with the following fixes:
+  - fixed orientation of crotch beam pipe
+  - added MDI_standalone_v01.xml files to ease debug of MDI geometries
+  
+  New naming convention decided:
+  - MDI_o1_ShapeBased_vXX for shape based geometries
+  - MDI_o1_CADBased_vXX    for CAD based geometries
+
+* 2025-10-14 mahmoudali2 ([PR#526](https://github.com/key4hep/k4geo/pull/526))
+  This PR introduces improvements to the muon system of the IDEA detector:
+  1. Automated Endcap Rmax Calculation:
+  - The maximum radius (Rmax) of the endcap is now calculated automatically based on barrel detector geometry, which its last layer encloses the endcap within it. Resulting in reducing the need for parameters manual adjustments.
+  - It also simplifies changes to the number of layers, as Rmax no longer needs to be adapted manually for each design.
+  
+  2. Fixed Negative Endcap Layering Order:
+  
+  - Corrected the ordering of layers in the negative endcap to ensure proper reconstruction and simulation consistency.
+  - This fix addresses issues where layer sequences in negative endcap were previously inverted, improving track propagation and hit association.
+
+* 2025-10-13 Juan Miguel Carceller ([PR#525](https://github.com/key4hep/k4geo/pull/525))
+  - Do not run tests that require the beampipe files when not downloading them, since they will fail
+
+* 2025-10-13 Andrea Sciandra ([PR#523](https://github.com/key4hep/k4geo/pull/523))
+  - FCC-ee ALLEGRO detector concept: include plugins attaching additional info to the geometry, needed to generate `edm4hep::TrackerHitPlane`.
+
+* 2025-10-06 Alvaro Tolosa Delgado ([PR#522](https://github.com/key4hep/k4geo/pull/522))
+  - Refactor of the ARC DDSim configuration example, used in CI. The main change is that hit cellID assignment now works correctly, thanks to consistent handling between the optical physics configuration (SD not triggered at boundaries) and the DD4hep SD action for the optical tracker.
+
 # v00-23
 
 * 2025-10-01 sss ([PR#517](https://github.com/key4hep/k4geo/pull/517))
