@@ -205,10 +205,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         double y = -r * std::sin(phi);
         DetElement module(lay_elt_pos, m_base + "_pos", det_id);
         pv = lay_vol_pos.placeVolume(m_vol, Transform3D(RotationZ(phi + M_PI / 2), Position(x, y, zstart + dz)));
-        pv.addPhysVolID("side", 1)
-            .addPhysVolID("layer", l_id)
-            .addPhysVolID("module", mod_num)
-            .addPhysVolID("sensor", k);
+        pv.addPhysVolID("module", mod_num).addPhysVolID("sensor", k);
         module.setPlacement(pv);
 
         for (size_t ic = 0; ic < sensVols.size(); ++ic) {
@@ -220,10 +217,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         if (reflect) {
           pv = lay_vol_neg.placeVolume(
               m_vol, Transform3D(RotationZ(phi + M_PI / 2) * RotationX(M_PI), Position(x, y, -zstart - dz)));
-          pv.addPhysVolID("side", -1)
-              .addPhysVolID("layer", l_id)
-              .addPhysVolID("module", mod_num)
-              .addPhysVolID("sensor", k);
+          pv.addPhysVolID("module", mod_num).addPhysVolID("sensor", k);
           DetElement r_module(lay_elt_neg, m_base + "_neg", det_id);
           r_module.setPlacement(pv);
           for (size_t ic = 0; ic < sensVols.size(); ++ic) {
@@ -326,12 +320,14 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
     pv = envelope.placeVolume(lay_vol_pos);
     pv.addPhysVolID("layer", l_id);
+    pv.addPhysVolID("side", 1);
     lay_elt_pos.setAttributes(theDetector, lay_vol_pos, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
     lay_elt_pos.setPlacement(pv);
 
     if (reflect) {
       pv = envelope.placeVolume(lay_vol_neg);
       pv.addPhysVolID("layer", l_id);
+      pv.addPhysVolID("side", -1);
       lay_elt_neg.setAttributes(theDetector, lay_vol_neg, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
       lay_elt_neg.setPlacement(pv);
     }
