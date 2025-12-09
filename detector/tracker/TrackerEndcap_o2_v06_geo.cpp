@@ -152,11 +152,11 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     double sumZ(0.), innerR(1e100), outerR(0.);
     double sensitiveThickness(0.0);
 
-    Assembly lay_vol_pos(_toString(x_layer.id(), "layer_pos%d"));
-    Assembly lay_vol_neg(_toString(x_layer.id(), "layer_neg%d"));
+    Assembly lay_vol_pos(_toString(l_id, "layer_pos%d"));
+    Assembly lay_vol_neg(_toString(l_id, "layer_neg%d"));
 
-    DetElement lay_elt_pos(sdet, _toString(x_layer.id(), "layer_pos%d"), l_id);
-    DetElement lay_elt_neg(sdet, _toString(x_layer.id(), "layer_neg%d"), l_id);
+    DetElement lay_elt_pos(sdet, _toString(l_id, "layer_pos%d"), l_id);
+    DetElement lay_elt_neg(sdet, _toString(l_id, "layer_neg%d"), l_id);
 
     // loop only to count the number of rings in a disk - it is then needed for looking for neighborous when you are in
     // a "border" cell
