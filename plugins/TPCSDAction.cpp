@@ -41,7 +41,6 @@ namespace sim {
     G4int fSpaceHitCollectionID{};
     G4int fLowPtHitCollectionID{};
 
-    G4Step const* StepAtEntranceToPadRing{};
     G4ThreeVector CrossingOfPadRingCentre{};
     G4ThreeVector MomentumAtPadRingCentre{};
     G4double dEInPadRow{};
@@ -55,7 +54,6 @@ namespace sim {
     G4ThreeVector CumulativeMeanMomentum{};
     G4int CumulativeNumSteps{};
 
-    G4Step const* previousStep{};
     std::map<int, G4double> padRowCentralRadii{};
 
     struct stepInfo {
@@ -150,17 +148,9 @@ namespace sim {
       thisStepInfo.cellID                = sensitive->cellID(step);
       thisStepInfo.innercopy             = getCopyNumber(step, false);
 
-
-
-      const G4ThreeVector PrePosition = step->GetPreStepPoint()->GetPosition();
-      const G4ThreeVector PostPosition = step->GetPostStepPoint()->GetPosition();
-      const G4ThreeVector thisMomentum = step->GetPostStepPoint()->GetMomentum();
-
-      float ptSQRD = thisMomentum[0] * thisMomentum[0] + thisMomentum[1] * thisMomentum[1];
-
       //=========================================================================================================
 
-      if (ptSQRD >= (Control.TPCLowPtCut * Control.TPCLowPtCut)) {
+      if (thisStepInfo.PostStepPointMomentum.perp2() >= pow(Control.TPCLowPtCut,2) ) { // high pT class
 
         // ===================== first check we have no left-over low-pt stuff
         // This step does not continue the previous path. Deposit the energy up to the previous step
@@ -184,19 +174,17 @@ namespace sim {
           // accumulate step in current pad row
           dEInPadRow += step->GetTotalEnergyDeposit();
           pathLengthInPadRow += step->GetStepLength();
-          int innercopy = getCopyNumber(step, false);
-          if (innercopy ==
-              getCopyNumber(step, true)) { // pre == post; step within the same pair of upper and lower pad ring halves
+          if (thisStepInfo.innercopy == getCopyNumber(step, true)) {
+	    // pre == post; step within the same pair of upper and lower pad ring halves
             // this step must have ended on the boundry between these two pad ring halfves
             // record the tracks coordinates at this position
-            CrossingOfPadRingCentre = PostPosition;
-            MomentumAtPadRingCentre = thisMomentum;
-            globalTimeAtPadRingCentre = step->GetTrack()->GetGlobalTime();
+            CrossingOfPadRingCentre = thisStepInfo.PostStepPointPosition;
+            MomentumAtPadRingCentre = thisStepInfo.PostStepPointMomentum;
+            globalTimeAtPadRingCentre = thisStepInfo.TrackTime;
 
             // here we memorise the padrow positions, we need them in some special cases
-            if (padRowCentralRadii.find(innercopy) == padRowCentralRadii.end()) {
-              padRowCentralRadii[innercopy] =
-                  sqrt(pow(CrossingOfPadRingCentre.x(), 2) + pow(CrossingOfPadRingCentre.y(), 2));
+            if (padRowCentralRadii.find(thisStepInfo.innercopy) == padRowCentralRadii.end()) {
+              padRowCentralRadii[thisStepInfo.innercopy] = CrossingOfPadRingCentre.perp();
             }
 
           } else { // has crossed into new padrow, consider making hit
@@ -215,13 +203,13 @@ namespace sim {
                      "StepLimiter") { // step limited by distance
             // write out a zero energy hit in the spacehitcollection
             Geant4Tracker::Hit* hit = new Geant4Tracker::Hit(
-                step->GetTrack()->GetTrackID(), step->GetTrack()->GetDefinition()->GetPDGEncoding(),
+                thisStepInfo.TrackID, thisStepInfo.TrackPDGEncoding,
                 0.0,                        // dE set to ZERO
                 globalTimeAtPadRingCentre); // this time may or may not be defined already
-            hit->position = 0.5 * (PrePosition + PostPosition);
-            hit->momentum = thisMomentum;
+            hit->position = 0.5 * (thisStepInfo.PreStepPointPosition + thisStepInfo.PostStepPointPosition);
+            hit->momentum = thisStepInfo.PostStepPointMomentum;
             hit->length = step->GetStepLength();
-            hit->cellID = sensitive->cellID(step);
+            hit->cellID = thisStepInfo.cellID;
             fSpaceHitCollection->add(hit);
           }
         }
@@ -241,7 +229,7 @@ namespace sim {
         }
         //--------------------------------
 
-	if ( (previousStepInfo.PostStepPointPosition - step->GetPreStepPoint()->GetPosition()).mag() > 1.0e-6 * CLHEP::mm) {
+	if ( (previousStepInfo.PostStepPointPosition - thisStepInfo.PreStepPointPosition).mag() > 1.0e-6 * CLHEP::mm) {
           // This step does not continue the previous path. Deposit the energy and begin a new Pt hit.
           if (CumulativeEnergyDeposit > fThresholdEnergyDeposit) {
             // dumpStep( h , step ) ;
@@ -302,12 +290,10 @@ namespace sim {
       dEInPadRow = 0.0;
       globalTimeAtPadRingCentre = 0.0;
       pathLengthInPadRow = 0.0;
-      CrossingOfPadRingCentre[0] = 0.0;
-      CrossingOfPadRingCentre[1] = 0.0;
-      CrossingOfPadRingCentre[2] = 0.0;
-      MomentumAtPadRingCentre[0] = 0.0;
-      MomentumAtPadRingCentre[1] = 0.0;
-      MomentumAtPadRingCentre[2] = 0.0;
+      for (int i=0; i<3; i++) {
+	CrossingOfPadRingCentre[i] = 0.0;
+	MomentumAtPadRingCentre[i] = 0.0;
+      }
       stepAtEntranceToPadRingInfo.isValid=false;
     }
 
