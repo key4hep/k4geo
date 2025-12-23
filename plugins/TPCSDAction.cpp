@@ -316,7 +316,7 @@ namespace sim {
             // average of first and last points of this series of steps
             const G4ThreeVector AvePos = 0.5 * (stepAtEntranceToPadRingInfo.PreStepPointPosition +
                                                 mainStepInfo.PostStepPointPosition );
-            G4double radius = sqrt(pow(AvePos.x(), 2) + pow(AvePos.y(), 2));
+            G4double radius = AvePos.perp();
             CrossingOfPadRingCentre =
                 AvePos * (padRowCentralRadii[innercopy] / radius); // move radially to centre of pad row
             // time and momentum: average of intial and final
