@@ -56,7 +56,7 @@ namespace sim {
 
     std::map<int, G4double> padRowCentralRadii{};
 
-    struct stepInfo {
+    struct StepInfo {
       bool isValid{};
       G4ThreeVector PreStepPointPosition{};
       G4ThreeVector PreStepPointMomentum{};
