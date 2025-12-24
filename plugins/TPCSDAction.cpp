@@ -68,8 +68,8 @@ namespace sim {
       G4int cellID{};
       G4int innercopy{};
     };
-    stepInfo previousStepInfo{};
-    stepInfo stepAtEntranceToPadRingInfo{};
+    StepInfo previousStepInfo{};
+    StepInfo stepAtEntranceToPadRingInfo{};
 
     TPCSDData() : fThresholdEnergyDeposit(0), fHCID(-1), fSpaceHitCollectionID(-1), fLowPtHitCollectionID(-1) {
 
@@ -103,18 +103,24 @@ namespace sim {
       return volID;
     }
 
-    void dumpStep(Geant4StepHandler h, G4Step const* s) {
-
-      std::cout << " ----- step in detector " << h.sdName(s->GetPreStepPoint()) << " prePos  " << h.prePos()
-                << " postPos " << h.postPos() << " preStatus  " << h.preStepStatus() << " postStatus  "
-                << h.postStepStatus() << " preVolume " << h.volName(s->GetPreStepPoint()) << " postVolume "
-                << h.volName(s->GetPostStepPoint()) << " CurrentCopyNumbers " << getCopyNumber(s, false) << " -  "
-                << getCopyNumber(s, true) << std::endl
-                << "     momentum : " << std::scientific << s->GetPreStepPoint()->GetMomentum()[0] << ", "
-                << s->GetPreStepPoint()->GetMomentum()[1] << ", " << s->GetPreStepPoint()->GetMomentum()[2] << " / "
-                << s->GetPostStepPoint()->GetMomentum()[0] << ", " << s->GetPostStepPoint()->GetMomentum()[1] << ", "
-                << s->GetPostStepPoint()->GetMomentum()[2]
-                << ", PDG: " << s->GetTrack()->GetDefinition()->GetPDGEncoding() << std::endl;
+    void dumpStep(Geant4StepHandler& h, G4Step const* s) {
+      sensitive->debug(
+          "TPCSDAction considering step in detector %s ; "
+          "prePos: (%e, %e, %e), "
+          "postPos: (%e, %e, %e) ; "
+          "preStatus : %s postStatus : %s ; "
+          "preVolume : %s postVolume : %s ; "
+          "CurrentCopyNumbers : %d, %d ; "
+          "momentum : pre-step (%e, %e, %e), post-step (%e, %e, %e) ; "
+          "PDG : %d ",
+          h.sdName(s->GetPreStepPoint()).c_str(), h.prePos().X() / CLHEP::mm, h.prePos().Y() / CLHEP::mm,
+          h.prePos().Z() / CLHEP::mm, h.postPos().X() / CLHEP::mm, h.postPos().Y() / CLHEP::mm,
+          h.postPos().Z() / CLHEP::mm, h.preStepStatus(), h.postStepStatus(), h.volName(s->GetPreStepPoint()),
+          h.volName(s->GetPostStepPoint()), getCopyNumber(s, false), getCopyNumber(s, true),
+          s->GetPreStepPoint()->GetMomentum()[0] / CLHEP::GeV, s->GetPreStepPoint()->GetMomentum()[1] / CLHEP::GeV,
+          s->GetPreStepPoint()->GetMomentum()[2] / CLHEP::GeV, s->GetPostStepPoint()->GetMomentum()[0] / CLHEP::GeV,
+          s->GetPostStepPoint()->GetMomentum()[1] / CLHEP::GeV, s->GetPostStepPoint()->GetMomentum()[2] / CLHEP::GeV,
+          s->GetTrack()->GetDefinition()->GetPDGEncoding());
     }
 
     /// Method for generating hit(s) using the information of G4Step object.
@@ -125,7 +131,7 @@ namespace sim {
       fLowPtHitCollection = sensitive->collection(2);
 
       Geant4StepHandler h(step);
-      //	dumpStep( h , step ) ;
+      dumpStep(h, step);
 
       // FIXME:
       // a particle that crosses the boundry between two pad-ring halves will have the hit
@@ -136,7 +142,7 @@ namespace sim {
         return true;
 
       // this is the info we may need to make a hit
-      stepInfo thisStepInfo;
+      StepInfo thisStepInfo;
       thisStepInfo.isValid = true;
       thisStepInfo.PreStepPointPosition = step->GetPreStepPoint()->GetPosition();
       thisStepInfo.PreStepPointMomentum = step->GetPreStepPoint()->GetMomentum();
@@ -224,7 +230,7 @@ namespace sim {
         //--------------------------------
         // first check if there is padrow stuff left over to deposit
         if (dEInPadRow > 0) {
-          G4cout << " WARNING left over padrow stuff (from high pt tracks) deposit hipt" << std::endl;
+          sensitive->debug("left-over padrow energy from high pt tracks: deposit HiPtHit");
           DepositHiPtHit(previousStepInfo); // use stored previous step
         }
         //--------------------------------
@@ -297,11 +303,12 @@ namespace sim {
       stepAtEntranceToPadRingInfo.isValid = false;
     }
 
-    void DepositHiPtHit(stepInfo mainStepInfo) {
+    void DepositHiPtHit(StepInfo mainStepInfo) {
 
       if (!mainStepInfo.isValid || !stepAtEntranceToPadRingInfo.isValid) {
-        std::cerr << "DepositHiPtHit ERROR, invalid stepInfo " << mainStepInfo.isValid << " "
-                  << stepAtEntranceToPadRingInfo.isValid << std::endl;
+        sensitive->error(
+            "ERROR from TPCSDAction DepositHiPtHit, invalid StepInfo (main step %d, step at padrow entrance %d",
+            mainStepInfo.isValid, stepAtEntranceToPadRingInfo.isValid);
       }
 
       if (dEInPadRow > fThresholdEnergyDeposit) {
@@ -324,9 +331,9 @@ namespace sim {
                 0.5 * (stepAtEntranceToPadRingInfo.PreStepPointMomentum + mainStepInfo.PostStepPointMomentum);
           } else { // have not yet seen this pad row in this job
             // in principle we can get this from geometry information, but don't want to add extra dependencies...
-            G4cout << " WARNING: dont yet know radius of this pad row...ignoring this energy deposit (should be v "
-                      "rare: eg possibly in first track(s) of first event)"
-                   << std::endl;
+            sensitive->warning("WARNING: dont yet know radius of this pad row."
+                               "ignoring this energy deposit (should be very rare,"
+                               "eg possibly in first track(s) of first event)");
             rareError = true;
           }
         }
@@ -357,9 +364,10 @@ namespace sim {
       CumulativePathLength = 0;
     }
 
-    void DepositLowPtHit(stepInfo stInf) {
+    void DepositLowPtHit(StepInfo stInf) {
       if (!stInf.isValid) {
-        std::cerr << "DepositLowPtHit ERROR, invalid step info" << std::endl;
+        sensitive->error("ERROR from TPCSDAction DepositLowPtHit: invalid step info, ignoring");
+        return;
       }
       Geant4Tracker::Hit* hit = new Geant4Tracker::Hit(stInf.TrackID, stInf.TrackPDGEncoding, CumulativeEnergyDeposit,
                                                        CumulativeMeanTime / CumulativeNumSteps);
