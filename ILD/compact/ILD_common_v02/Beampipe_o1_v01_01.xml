@@ -169,11 +169,6 @@
   <section start="TUBE_QD0_Lstar-20*mm" end="TUBE_QD0_Lstar+TUBE_QD0_cryostat_length"
 	   rMin="235.*mm" rMax="250.*mm"
 	   material="stainless_steel"
-	   name="qd0_cryostat"/>
-
-  <section start="TUBE_QD0_Lstar-20*mm" end="TUBE_QD0_Lstar+TUBE_QD0_cryostat_length"
-	   rMin="235.*mm" rMax="250.*mm"
-	   material="stainless_steel"
 	   name="qd0_cryostat_wall"/>
 
   <!-- some attempt to model other materials in cryostat -->
