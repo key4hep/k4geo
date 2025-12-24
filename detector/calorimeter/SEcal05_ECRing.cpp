@@ -246,7 +246,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   std::cout << " module_thickness = " << module_thickness << std::endl;
 #endif
 
-  double ECRingSiplateSize = 2*( EcalEndcapRing_outer_radius - Ecal_lateral_face_thickness );
+  double ECRingSiplateSize = 2 * (EcalEndcapRing_outer_radius - Ecal_lateral_face_thickness);
 
   // central hole is not centred on detector axis, but on outgoing beampipe (as is the lumical)
   // ---- above comment is for ILC-like design
