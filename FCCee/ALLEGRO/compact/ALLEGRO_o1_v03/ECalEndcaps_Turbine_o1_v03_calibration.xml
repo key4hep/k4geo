@@ -58,8 +58,8 @@
     <constant name="AbsorberBladeThicknessScaleFactor3" value="1.0"/>
     <constant name="ECalEndcapSupportTubeThickness" value="10.0*mm"/>
     <constant name="ECalEndcapRmin" value="CryoEndcap_front_rmin+CryoEMECThicknessInner"/>
-    <constant name="ECalEndcapRMax" value="CryoEndcap_rmax-CryoEMECThicknessOuter"/>
-    <constant name="ECalEndcapRadiusRatio" value="(ECalEndcapRMax/ECalEndcapRmin)^(1./nWheels)"/>
+    <constant name="ECalEndcapRmax" value="CryoEndcap_rmax-CryoEMECThicknessOuter"/>
+    <constant name="ECalEndcapRadiusRatio" value="(ECalEndcapRmax/ECalEndcapRmin)^(1./nWheels)"/>
     <constant name="ECalEndcapRmin1" value="ECalEndcapRmin"/>
     <constant name="ECalEndcapRmax1" value="ECalEndcapRmin1*ECalEndcapRadiusRatio"/>
     <constant name="ECalEndcapRmin2" value="ECalEndcapRmax1"/>
@@ -80,6 +80,19 @@
      <constant name="nUnitCells1" value="384"/>
      <constant name="nUnitCells2" value="720"/>
      <constant name="nUnitCells3" value="1360"/>
+     <!-- constants related to mechanical support structure -->
+     <constant name="ECalEndcapSupportZGap" value="1*cm"/>
+     <constant name="ECalEndcapSupportThickness" value="3*cm"/>
+     <constant name="ECalEndcapSupportNSpokes" value="8"/>
+     <constant name="ECalEndcapSupportSpokeWidth" value="5*cm"/>
+     <constant name="ECalEndcapSupportInnerRingdR" value="5*cm"/>
+     <constant name="ECalEndcapSupportInnerRingInnerRadius" value="ECalEndcapRmin"/>
+     <constant name="ECalEndcapSupportInnerRingOuterRadius" value="ECalEndcapRmin+ECalEndcapSupportInnerRingdR"/>
+     <constant name="ECalEndcapSupportOuterRingdR" value="10*cm"/>
+     <constant name="ECalEndcapSupportOuterRingOuterRadius" value="ECalEndcapRmax"/>
+     <constant name="ECalEndcapSupportOuterRingInnerRadius" value="ECalEndcapSupportOuterRingOuterRadius-ECalEndcapSupportOuterRingdR"/>
+     <constant name="ECalEndcapSupportMidRingdR" value="3*cm"/>
+     <constant name="ECalEndcapSupportZCenter" value="EMEC_z2+ECalEndcapSupportZGap-(EMEC_z1+EMEC_z2)/2."/>
   </define>
 
   <display>
@@ -138,6 +151,15 @@
 	    <material name="LAr"/>
 	  </nobleLiquidGap>
 	</turbineBlade>
+	<mechSupport name="mechSupport" sensitive="false" nSpokes="ECalEndcapSupportNSpokes" spokeWidth="ECalEndcapSupportSpokeWidth">
+		     <innerRing>
+		       <dimensions rmin1="ECalEndcapSupportInnerRingInnerRadius" rmin2="ECalEndcapSupportInnerRingInnerRadius" rmax1="ECalEndcapSupportInnerRingOuterRadius" rmax2="ECalEndcapSupportInnerRingOuterRadius" dz="ECalEndcapSupportThickness/2."/>
+		     </innerRing>
+		     <outerRing>
+		       <dimensions rmin1="ECalEndcapSupportOuterRingInnerRadius" rmin2="ECalEndcapSupportOuterRingInnerRadius" rmax1="ECalEndcapSupportOuterRingOuterRadius" rmax2="ECalEndcapSupportOuterRingOuterRadius" dz="ECalEndcapSupportThickness/2."/>
+		     </outerRing>
+	  <material name="lArCaloSteel"/>
+	</mechSupport>
       </calorimeter>
     </detector>
  
