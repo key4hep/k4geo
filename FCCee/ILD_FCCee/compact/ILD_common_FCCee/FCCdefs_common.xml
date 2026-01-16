@@ -10,7 +10,7 @@
 
   <constant name="CrossingAngle" value="0.030*rad"/>
 
-  <constant name="ILC_Main_Crossing_Angle" value="0*mrad"/> <!-- this is used only for the ECAL endcap ring ... -->
+  <constant name="EcalEndcapRing_hole_offset" value="0*mm"/>
 
   <!-- info copied from CLD_o2_v07.xml -->
   <!-- BPW: Beam Pipe Width -->

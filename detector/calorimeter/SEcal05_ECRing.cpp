@@ -171,7 +171,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   double EcalEndcapRing_min_z = theDetector.constant<double>("EcalEndcapRing_min_z");
   double EcalEndcapRing_max_z = theDetector.constant<double>("EcalEndcapRing_max_z");
 
-  double crossing_angle = theDetector.constant<double>("ILC_Main_Crossing_Angle");
+  double EcalEndcapRing_hole_offset = theDetector.constant<double>("EcalEndcapRing_hole_offset");
+
   bool Ecal_Barrel_PreshowerLayer = theDetector.constant<int>("Ecal_Barrel_Preshower") > 0;
 
   double Ecal_barrel_thickness = theDetector.constant<double>("Ecal_barrel_thickness");
@@ -248,11 +249,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 
   double ECRingSiplateSize = 2 * (EcalEndcapRing_outer_radius - Ecal_lateral_face_thickness);
 
-  // central hole is not centred on detector axis, but on outgoing beampipe (as is the lumical)
-  // ---- above comment is for ILC-like design
-  //      for FCCee design, should be centered. Ugly hack is to set ILC_Main_Crossing_Angle parameter to zero!
-  double hole_x_offset = tan(crossing_angle / 2.) * (EcalEndcapRing_min_z + EcalEndcapRing_max_z) / 2.;
-
   // ========= Create Ecal end cap ring   ====================================
   //  It will be the volume for palcing the Ecal endcaps alveolus(i.e. Layers).
   //  And the structure W plate.
@@ -267,7 +263,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 
     DetElement module_det(_toString(module_num, "module%d"), det_id);
 
-    double thismodule_hole_dx = hole_x_offset;
+    double thismodule_hole_dx = EcalEndcapRing_hole_offset;
     if (module_num == 0)
       thismodule_hole_dx *= -1;
     Position hole_position(thismodule_hole_dx, 0, 0);

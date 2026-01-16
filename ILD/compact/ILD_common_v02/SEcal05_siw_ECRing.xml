@@ -10,10 +10,7 @@
             <shape type="Box" dx="EcalEndcapRing_outer_radius + env_safety" dy="EcalEndcapRing_outer_radius + env_safety"
                    dz="EcalEndcapRing_max_z + env_safety"/>
             <shape type="Tube" rmin="0" rmax="EcalEndcapRing_inner_radius - env_safety" dz="2.0*EcalEndcapRing_max_z + env_safety"/>
-
-            <position x="0.5*(EcalEndcapRing_min_z + EcalEndcapRing_max_z)*tan(ILC_Main_Crossing_Angle/2)" y="0" z="0"/>
-            <!-- position x="0" y="0" z="0"/ -->
-
+	    <position x="EcalEndcapRing_hole_offset" y="0" z="0"/>
           </shape>
           <shape type="Box" dx="EcalEndcapRing_outer_radius + 1.5*env_safety" dy="EcalEndcapRing_outer_radius + 1.5*env_safety"
                  dz="EcalEndcapRing_min_z - env_safety"/>
