@@ -59,6 +59,7 @@
   <constant name="EcalEndcapRing_max_z"        value="EcalEndcap_max_z"/>
   <constant name="EcalEndcapRing_outer_radius" value="Ecal_endcap_center_box_size/2.0-Ecal_EC_Ring_gap"/>
   <constant name="EcalEndcapRing_inner_radius" value="EcalEndcapRing_FCCee_inner_radius"/>
+  <constant name="EcalEndcapRing_hole_offset"  value="0.0"/>
   
   <constant name="HcalEndcap_inner_radius"    value="Hcal_endcap_center_box_size/2.0"/>
   <constant name="HcalEndcap_outer_radius"    value="Hcal_outer_radius - Hcal_endcap_cryostat_gap"/>
