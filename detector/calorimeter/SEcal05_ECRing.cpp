@@ -157,10 +157,18 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   double Ecal_radiator_thickness1 = theDetector.constant<double>("Ecal_radiator_layers_set1_thickness");
   double Ecal_radiator_thickness2 = theDetector.constant<double>("Ecal_radiator_layers_set2_thickness");
   double Ecal_radiator_thickness3 = theDetector.constant<double>("Ecal_radiator_layers_set3_thickness");
+  double Ecal_Barrel_halfZ = theDetector.constant<double>("Ecal_Barrel_halfZ");
 
   double Ecal_support_thickness = theDetector.constant<double>("Ecal_support_thickness");
   double Ecal_front_face_thickness = theDetector.constant<double>("Ecal_front_face_thickness");
   double Ecal_lateral_face_thickness = theDetector.constant<double>("Ecal_lateral_face_thickness");
+
+  double Ecal_EC_Ring_gap = theDetector.constant<double>("Ecal_EC_Ring_gap");
+
+  double Ecal_cables_gap = theDetector.constant<double>("Ecal_cables_gap");
+  double Lcal_outer_radius = theDetector.constant<double>("Lcal_outer_radius");
+  double Ecal_Lcal_ring_gap = theDetector.constant<double>("Ecal_Lcal_ring_gap");
+  double Ecal_endcap_center_box_size = theDetector.constant<double>("Ecal_endcap_center_box_size");
 
   int Ecal_nlayers1 = theDetector.constant<int>("Ecal_nlayers1");
   int Ecal_nlayers2 = theDetector.constant<int>("Ecal_nlayers2");
@@ -171,8 +179,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   double EcalEndcapRing_min_z = theDetector.constant<double>("EcalEndcapRing_min_z");
   double EcalEndcapRing_max_z = theDetector.constant<double>("EcalEndcapRing_max_z");
 
-  double EcalEndcapRing_hole_offset = theDetector.constant<double>("EcalEndcapRing_hole_offset");
-
+  double crossing_angle = theDetector.constant<double>("ILC_Main_Crossing_Angle");
   bool Ecal_Barrel_PreshowerLayer = theDetector.constant<int>("Ecal_Barrel_Preshower") > 0;
 
   double Ecal_barrel_thickness = theDetector.constant<double>("Ecal_barrel_thickness");
@@ -247,7 +254,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
   std::cout << " module_thickness = " << module_thickness << std::endl;
 #endif
 
-  double ECRingSiplateSize = 2 * (EcalEndcapRing_outer_radius - Ecal_lateral_face_thickness);
+  double ECRingSiplateSize = Ecal_endcap_center_box_size - 2 * Ecal_EC_Ring_gap - 2 * Ecal_lateral_face_thickness;
+
+  // central hole is not centred on detector axis, but on outgoing beampipe (as is the lumical)
+  double hole_x_offset = tan(crossing_angle / 2.) * (EcalEndcapRing_min_z + EcalEndcapRing_max_z) / 2.;
 
   // ========= Create Ecal end cap ring   ====================================
   //  It will be the volume for palcing the Ecal endcaps alveolus(i.e. Layers).
@@ -263,18 +273,20 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
 
     DetElement module_det(_toString(module_num, "module%d"), det_id);
 
-    double thismodule_hole_dx = EcalEndcapRing_hole_offset;
+    double thismodule_hole_dx = hole_x_offset;
     if (module_num == 0)
       thismodule_hole_dx *= -1;
     Position hole_position(thismodule_hole_dx, 0, 0);
 
-    double Ecal_endcap_Tube_rmax = EcalEndcapRing_inner_radius;
+    double Ecal_endcap_Tube_rmax = Lcal_outer_radius + Ecal_Lcal_ring_gap;
 
     Tube CenterECTub(0., Ecal_endcap_Tube_rmax, module_thickness);
-    Box CenterECBox(EcalEndcapRing_outer_radius, EcalEndcapRing_outer_radius, module_thickness / 2.);
+    Box CenterECBox((Ecal_endcap_center_box_size / 2. - Ecal_EC_Ring_gap),
+                    (Ecal_endcap_center_box_size / 2. - Ecal_EC_Ring_gap), module_thickness / 2.);
 
     SubtractionSolid ECRingSolid(CenterECBox, CenterECTub, hole_position);
 
+    //  Volume EnvLogECRing("ECRing",ECRingSolid,theDetector.material("g10"));
     Volume EnvLogECRing("ECRing", ECRingSolid, theDetector.material("CarbonFiber")); // DJeans 5-sep-2016
 
     //==============================================================
@@ -290,7 +302,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
     // even ones on the structure.
     //
 
-    double distance_ip_to_front_face = EcalEndcapRing_min_z;
+    double distance_ip_to_front_face = Ecal_Barrel_halfZ + Ecal_cables_gap;
     double dist_from_front_face_tally(0);
 
     double z_floor = -module_thickness / 2;
@@ -383,7 +395,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h element, SensitiveDete
         // #########################
 
         Tube CenterECTubForSi(0.,
-                              EcalEndcapRing_inner_radius + 0.001, // + tolerance,
+                              Lcal_outer_radius + Ecal_Lcal_ring_gap + 0.001, // + tolerance,
                               module_thickness, 0., 2 * M_PI);
 
         string l_name = _toString(l_num, "layer%d");

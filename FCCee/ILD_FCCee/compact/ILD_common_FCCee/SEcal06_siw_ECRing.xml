@@ -1,7 +1,7 @@
 <lccdd>
 
   <detectors>
-    <detector name="EcalPlug" type="SEcal05_ECRing" id="ILDDetID_ECAL_PLUG" readout="EcalEndcapRingCollection" vis="ILD_BlueVis" >
+    <detector name="EcalPlug" type="SEcal06_ECRing" id="ILDDetID_ECAL_PLUG" readout="EcalEndcapRingCollection" vis="ILD_BlueVis" >
       <comment>EM Calorimeter Endcap plugs for FCCee, has phi symmetry unlike at ILC </comment>
 
       <envelope vis="ILD_ECALVis">

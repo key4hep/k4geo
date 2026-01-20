@@ -61,7 +61,7 @@
   <include ref="../ILD_common_v02/OuterTracker_v01.xml"/>
   <include ref="../ILD_common_v02/SEcal06_hybrid_Barrel.xml"/>
   <include ref="../ILD_common_v02/SEcal06_hybrid_Endcaps.xml"/>
-  <include ref="../ILD_common_v02/SEcal05_siw_ECRing.xml"/>
+  <include ref="../ILD_common_v02/SEcal06_siw_ECRing.xml"/>
   <include ref="../ILD_common_v02/SHcalSc04_Barrel_v04.xml"/>
   <include ref="../ILD_common_v02/SHcalSc04_Endcaps_v01_LARGE.xml"/>
   <include ref="../ILD_common_v02/SHcalSc04_EndcapRing_v01.xml"/>
