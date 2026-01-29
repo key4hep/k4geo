@@ -51,7 +51,7 @@ namespace DDSegmentation {
       exit(1);
     }
     dd4hep::printout(dd4hep::INFO, "FCCSWGridModuleThetaMerged_k4geo",
-                     "Number of modules read from detector metadata and used in readout class = %d",  m_nModules);
+                     "Number of modules read from detector metadata and used in readout class = %d", m_nModules);
   }
 
   void FCCSWGridModuleThetaMerged_k4geo::GetNLayersFromGeom() {
@@ -64,7 +64,7 @@ namespace DDSegmentation {
       exit(1);
     }
     dd4hep::printout(dd4hep::INFO, "FCCSWGridModuleThetaMerged_k4geo",
-                     "Number of layers read from detector metadata and used in readout class = %d",  m_nLayers);
+                     "Number of layers read from detector metadata and used in readout class = %d", m_nLayers);
   }
 
   /// Tabulate the cylindrical radii of all layers, as well as the
@@ -81,7 +81,7 @@ namespace DDSegmentation {
     VolumeID vID = cID;
     decoder()->set(vID, m_thetaIndex, 0);
     for (int l = 0; l < m_nLayers; l++) {
-      dd4hep::printout(dd4hep::INFO, "FCCSWGridModuleThetaMerged_k4geo", "Layer = %d",  l);
+      dd4hep::printout(dd4hep::INFO, "FCCSWGridModuleThetaMerged_k4geo", "Layer = %d", l);
       // Look up a volume in layer l in the volume manager, and find its radius
       // by transforming the origin in the local coordinate system to global
       // coordinates.
@@ -134,7 +134,7 @@ namespace DDSegmentation {
     // skip cells in cryo
     int cryo = decoder()->get(cID, "cryo");
     if (cryo) {
-      return Vector3D(0,0,0);
+      return Vector3D(0, 0, 0);
     } else {
       const std::vector<LayerInfo>* liv = m_layerInfo.load();
       if (!liv) {
@@ -151,8 +151,7 @@ namespace DDSegmentation {
       int layer = this->layer(vID);
 
       // debug (run ddsim with --printLevel 1 option to see these messages)
-      dd4hep::printout(dd4hep::VERBOSE, "FCCSWGridModuleThetaMerged_k4geo",
-                       "cellID = %lu", cID);
+      dd4hep::printout(dd4hep::VERBOSE, "FCCSWGridModuleThetaMerged_k4geo", "cellID = %lu", cID);
 
       // Calculate the position in local coordinates.
       // The volume here has the cross-section of a cell in the x-z plane;
@@ -214,8 +213,7 @@ namespace DDSegmentation {
     double phi = (m_mergedModules[layer] - 1) * M_PI / m_nModules;
 
     // debug
-    dd4hep::printout(dd4hep::VERBOSE, "FCCSWGridModuleThetaMerged_k4geo",
-                     "layer = %d, merged modules = %d, phi = %lf",
+    dd4hep::printout(dd4hep::VERBOSE, "FCCSWGridModuleThetaMerged_k4geo", "layer = %d, merged modules = %d, phi = %lf",
                      layer, m_mergedModules[layer], phi);
 
     return phi;
@@ -239,8 +237,8 @@ namespace DDSegmentation {
 
     // debug
     dd4hep::printout(dd4hep::VERBOSE, "FCCSWGridModuleThetaMerged_k4geo",
-                     "layer = %d, theta bin = %d, merged cells in theta = %d, theta = %lf",
-                     layer, thetaValue, m_mergedCellsTheta[layer], _theta);
+                     "layer = %d, theta bin = %d, merged cells in theta = %d, theta = %lf", layer, thetaValue,
+                     m_mergedCellsTheta[layer], _theta);
     // std::cout << "gridSizeTheta, offsetTheta: " << m_gridSizeTheta << " , " << m_offsetTheta << std::endl;
     return _theta;
   }
