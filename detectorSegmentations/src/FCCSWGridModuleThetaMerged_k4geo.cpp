@@ -1,8 +1,8 @@
 #include "detectorSegmentations/FCCSWGridModuleThetaMerged_k4geo.h"
 
 #include "DD4hep/Detector.h"
-#include "DD4hep/VolumeManager.h"
 #include "DD4hep/Printout.h"
+#include "DD4hep/VolumeManager.h"
 #include <iostream>
 
 namespace dd4hep {
@@ -46,10 +46,12 @@ namespace DDSegmentation {
     try {
       m_nModules = dd4hepgeo->constant<int>("ECalBarrelNumPlanes");
     } catch (...) {
-      dd4hep::printout(dd4hep::ERROR, "FCCSWGridModuleThetaMerged_k4geo", "Number of modules not found in detector metadata, exiting...");
+      dd4hep::printout(dd4hep::ERROR, "FCCSWGridModuleThetaMerged_k4geo",
+                       "Number of modules not found in detector metadata, exiting...");
       exit(1);
     }
-    dd4hep::printout(dd4hep::INFO, "FCCSWGridModuleThetaMerged_k4geo", "Number of modules read from detector metadata and used in readout class = %d",  m_nModules);
+    dd4hep::printout(dd4hep::INFO, "FCCSWGridModuleThetaMerged_k4geo",
+                     "Number of modules read from detector metadata and used in readout class = %d",  m_nModules);
   }
 
   void FCCSWGridModuleThetaMerged_k4geo::GetNLayersFromGeom() {
@@ -57,10 +59,12 @@ namespace DDSegmentation {
     try {
       m_nLayers = dd4hepgeo->constant<int>("ECalBarrelNumLayers");
     } catch (...) {
-      dd4hep::printout(dd4hep::ERROR, "FCCSWGridModuleThetaMerged_k4geo", "Number of layers not found in detector metadata, exiting...");
+      dd4hep::printout(dd4hep::ERROR, "FCCSWGridModuleThetaMerged_k4geo",
+                       "Number of layers not found in detector metadata, exiting...");
       exit(1);
     }
-    dd4hep::printout(dd4hep::INFO, "FCCSWGridModuleThetaMerged_k4geo", "Number of layers read from detector metadata and used in readout class = %d",  m_nLayers);
+    dd4hep::printout(dd4hep::INFO, "FCCSWGridModuleThetaMerged_k4geo",
+                     "Number of layers read from detector metadata and used in readout class = %d",  m_nLayers);
   }
 
   /// Tabulate the cylindrical radii of all layers, as well as the
@@ -115,7 +119,8 @@ namespace DDSegmentation {
         xloc = lpos2.X();
         zloc = lpos2.Z();
       }
-      dd4hep::printout(dd4hep::INFO, "FCCSWGridModuleThetaMerged_k4geo", "rho, xloc, zloc = %lf %lf %lf (cm)", rho / dd4hep::cm, xloc / dd4hep::cm, zloc / dd4hep::cm);
+      dd4hep::printout(dd4hep::INFO, "FCCSWGridModuleThetaMerged_k4geo", "rho, xloc, zloc = %lf %lf %lf (cm)",
+                       rho / dd4hep::cm, xloc / dd4hep::cm, zloc / dd4hep::cm);
       out.emplace_back(rho, xloc, zloc);
     }
     return out;
@@ -130,8 +135,7 @@ namespace DDSegmentation {
     int cryo = decoder()->get(cID, "cryo");
     if (cryo) {
       return Vector3D(0,0,0);
-    }
-    else {
+    } else {
       const std::vector<LayerInfo>* liv = m_layerInfo.load();
       if (!liv) {
         auto liv_new = new std::vector<LayerInfo>(initLayerInfo(cID));
@@ -147,7 +151,8 @@ namespace DDSegmentation {
       int layer = this->layer(vID);
 
       // debug (run ddsim with --printLevel 1 option to see these messages)
-      dd4hep::printout(dd4hep::VERBOSE, "FCCSWGridModuleThetaMerged_k4geo", "cellID = %lu", cID);
+      dd4hep::printout(dd4hep::VERBOSE, "FCCSWGridModuleThetaMerged_k4geo",
+                       "cellID = %lu", cID);
 
       // Calculate the position in local coordinates.
       // The volume here has the cross-section of a cell in the x-z plane;
