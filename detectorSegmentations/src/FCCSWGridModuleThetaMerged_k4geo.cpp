@@ -213,7 +213,8 @@ namespace DDSegmentation {
     double phi = (m_mergedModules[layer] - 1) * M_PI / m_nModules;
 
     // debug
-    // dd4hep::printout(dd4hep::VERBOSE, "FCCSWGridModuleThetaMerged_k4geo", "layer = %d, merged modules = %d, phi = %lf",
+    // dd4hep::printout(dd4hep::VERBOSE, "FCCSWGridModuleThetaMerged_k4geo", "layer = %d, merged modules = %d, phi =
+    // %lf",
     //                  layer, m_mergedModules[layer], phi);
 
     return phi;
