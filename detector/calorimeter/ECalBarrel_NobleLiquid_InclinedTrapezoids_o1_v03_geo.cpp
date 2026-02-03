@@ -169,7 +169,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
       cryoSidePhysVol.addPhysVolID("cryo", 1);
       cryoSidePhysVol.addPhysVolID("type", 3);
       dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
-                       "ECAL Cryostat front volume set as sensitive");
+                       "ECAL Cryostat side volume set as sensitive");
     }
 
     dd4hep::DetElement cryoFrontDetElem(caloDetElem, "cryo_front", 0);
