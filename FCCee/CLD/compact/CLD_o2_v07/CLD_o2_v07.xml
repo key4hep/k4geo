@@ -123,7 +123,7 @@
 
 
 
-        <constant name="Vertex_inner_radius" value="11.7*mm"/>
+        <constant name="Vertex_inner_radius" value="12.5*mm"/>
         <constant name="Vertex_outer_radius" value="111*mm"/>
         <constant name="Vertex_half_length" value="302*mm"/>
         <!-- cone to describe the upper acceptance of the LumiCal -->
@@ -314,8 +314,7 @@
 
     <include ref="LumiCal_o3_v02_05.xml"/>
 
-    <!-- <include ref="Vertex_o4_v07_smallBP.xml"/> -->
-    <include ref="Vertex_FCC-SEED_v01.xml"/>
+    <include ref="Vertex_o4_v07_smallBP.xml"/>
 
     <include ref="InnerTracker_o2_v08.xml"/>
     <include ref="OuterTracker_o2_v08.xml"/>
