@@ -41,9 +41,9 @@
   <world material="Vacuum"/> -->
 
   <include ref="LumiCal.xml"/>
-  <include ref="VertexComplete_IDEA_o1_v03.xml"/>   <!-- symbolic link to ../../../IDEA/compact/IDEA_o1_v03/VertexComplete_IDEA_o1_v03.xml -->
+  <include ref="VertexComplete_IDEA_o1_v04.xml"/>   <!-- symbolic link to ../../../IDEA/compact/IDEA_o1_v04/VertexComplete_IDEA_o1_v04.xml -->
   <include ref="DriftChamber_o1_v02.xml"/>          <!-- symbolic link to ../../../IDEA/compact/IDEA_o1_v03/DriftChamber_o1_v02.xml -->
-  <include ref="SiliconWrapper_o1_v03.xml"/>        <!-- symbolic link to ../../../IDEA/compact/IDEA_o1_v03/SiliconWrapper_o1_v03.xml -->
+  <include ref="SiliconWrapper_o1_v02.xml"/>        <!-- symbolic link to ../../../IDEA/compact/IDEA_o1_v04/SiliconWrapper_o1_v02.xml -->
   <include ref="ECalBarrel_thetamodulemerged.xml"/> <!-- if you remove the ECalBarrel, you also have to remove or update the "GlobalSolenoid" field (it depends on ECAL dimensions) -->
   <include ref="HCalBarrel_TileCal_v03.xml"/>
   <include ref="ECalEndcaps_Turbine_o1_v03.xml"/>

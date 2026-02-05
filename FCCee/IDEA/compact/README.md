@@ -32,6 +32,17 @@ March 2025: The SiPM & optical filter part of the fiber DRC SD action are now mo
 
 July 2025: Added the fiber DRC neighborhood finding algorithm with configure size definition for topological clustering in downstream.
 
+IDEA_o1_v04
+------------
+
+Based on o1_v03, but updated vertex detector and silicon wrapper:
+
+February 2026: Added feature to have part of the vertex barrel sensors insensitive in thickness (relevant if epi-layer is not same size as sensor thickness). This is especially relevant for the ultra-light curved vertex variant, which only has 10 µm active thickness (TPSCo 65 nm process).
+In the curved vertex detector variant, the curved sensors can be approximated by trapezoids such that Conformal tracking (from CLD) could be used to evaluate the performance.
+The silicon wrapper is completely revamped. It has a more efficient volume hierarchy and thus enabling to use a detailed sensor description (each sensor is 4x4 cm^2 in size). There are two barrel layers and two disks per side which together make sure that in almost the complete detector coverage one gets at least one hit.
+The total area of sensors is reduced compared to the o1_v03 version.
+
+
 IDEA_o2_v01
 ------------
 
@@ -42,3 +53,5 @@ October 2024: first implementation using the dual-readout capillary-tubes endcap
 December 2024: Added the dual-readout capillary-tubes barrel calorimeter.
 
 April 2025: Added the dual-readout segmented crystal ECAL
+
+February 2026: Using vertex detector and silicon wrapper from IDEA_o1_v04.
