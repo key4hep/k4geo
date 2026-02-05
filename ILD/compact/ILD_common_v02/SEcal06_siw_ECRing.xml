@@ -2,15 +2,15 @@
 
   <detectors>
     <detector name="EcalPlug" type="SEcal06_ECRing" id="ILDDetID_ECAL_PLUG" readout="EcalEndcapRingCollection" vis="ILD_BlueVis" >
-      <comment>EM Calorimeter Endcap plugs for FCCee, has phi symmetry unlike at ILC </comment>
+      <comment>EM Calorimeter Endcaps</comment>
 
       <envelope vis="ILD_ECALVis">
         <shape type="BooleanShape" operation="Subtraction" material="Air">
           <shape type="BooleanShape" operation="Subtraction" material="Air">
             <shape type="Box" dx="EcalEndcapRing_outer_radius + env_safety" dy="EcalEndcapRing_outer_radius + env_safety"
                    dz="EcalEndcapRing_max_z + env_safety"/>
-            <shape type="Tube" rmin="0" rmax="EcalEndcapRing_FCCee_inner_radius - env_safety" dz="2.0*EcalEndcapRing_max_z + env_safety"/>
-            <position x="0" y="0" z="0"/>
+            <shape type="Tube" rmin="0" rmax="EcalEndcapRing_inner_radius - env_safety" dz="2.0*EcalEndcapRing_max_z + env_safety"/>
+	    <position x="EcalEndcapRing_hole_offset" y="0" z="0"/>
           </shape>
           <shape type="Box" dx="EcalEndcapRing_outer_radius + 1.5*env_safety" dy="EcalEndcapRing_outer_radius + 1.5*env_safety"
                  dz="EcalEndcapRing_min_z - env_safety"/>
