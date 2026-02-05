@@ -263,7 +263,7 @@
 
 
   <display> <!-- Note: If the colors should be correctly displayed when geometry is saved as a root file using k4geo/scripts/save_detector_to_root.sh, then colors should be picked that are defined in TColor::InitializeColors(): https://root.cern/doc/master/classTColor.html#a383d38e0cb4f29614310a0653d6b2342 -->
-    <vis name="VXDVis"          alpha="0.2" r="0.1" 	  g=".5"      b=".5"    showDaughters="true"  visible="true"/>
+    <vis name="VXDVis"          alpha="0.2" r="0.1" 	  g=".5"      b=".5"    showDaughters="false" visible="true"/>
     <vis name="SiWrVis"         alpha="0.2" r="1.0"  	  g="1.0"     b="0.0"   showDaughters="false" visible="true"/>
     <vis name="ECALVis"     	  alpha="1.0" r="0.2"   	g="0.6"     b="0"     showDaughters="true"  visible="true"/>
     <vis name="HCALVis"     	  alpha="1.0" r="0.078" 	g="0.01176" b="0.588" showDaughters="true"  visible="true"/>

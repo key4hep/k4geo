@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+
+
+  <info name="IDEA_o1_v04"
+    title="FCCee IDEA detector geometry master file"
+    author="Niloufar Alipour Tehrani, vertex detector and silicon wrapper by Armin Ilg, DCH by Alvaro Tolosa-Delgado"
+    url="no"
+    status="development"
+    version="o1_v04">
+    <comment>
+      Version o1_v04 of the IDEA detector
+    </comment>
+  </info>
+
+  <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml" />
+
+  <includes>
+    <gdmlFile  ref="../IDEA_o1_v03/elements_o1_v01.xml"/>
+    <gdmlFile  ref="../IDEA_o1_v03/materials_o1_v03.xml"/>
+  </includes>
+
+  <define>
+    <constant name="world_size" value="25*m"/>
+    <constant name="world_x" value="world_size"/>
+    <constant name="world_y" value="world_size"/>
+    <constant name="world_z" value="world_size"/>
+  </define>
+
+  <!-- Import dimensions -->
+  <include ref="../IDEA_o1_v03/DectDimensions_IDEA_o1_v03.xml"/>
+
+  <!-- Import accelerator components -->
+  <!-- shape based model of the beam pipe -->
+  <include ref="../../../MDI/compact/MDI_o1_v00/Beampipe_o4_v05.xml" />
+  <include ref="../../../MDI/compact/MDI_o1_v00/BeamInstrumentation_o1_v01.xml" />
+
+  <!-- engineered CAD model of the beam pipe -->
+  <!-- In order to use the CAD beampipe, build k4geo with the following CMake option:
+  cmake -D INSTALL_BEAMPIPE_STL_FILES=ON which will download the files needed -->
+  <!-- <include ref="../../../MDI/compact/MDI_o1_v01/Beampipe_CADimport_o1_v02.xml" /> -->
+  <!-- <include ref="../../../MDI/compact/MDI_o1_v01/BeamInstrumentation_o1_v01.xml"/> -->
+  <include ref="../IDEA_o1_v03/LumiCal_o1_v01.xml"/>
+
+  <!-- Import vertex -->
+  <include ref="VertexComplete_IDEA_o1_v04.xml"/>
+
+  <!-- Import drift chamber -->
+  <include ref="../IDEA_o1_v03/DriftChamber_o1_v02.xml"/>
+
+  <!-- Import silicon wrapper -->
+  <include ref="SiliconWrapper_o1_v02.xml"/>
+
+  <!-- Import solenoid -->
+  <include ref="../IDEA_o1_v03/Solenoid_o1_v01.xml"/>
+
+  <!-- Import Endcap plate absorber -->
+  <include ref="../IDEA_o1_v03/EndPlateAbsorber_o1_v01.xml"/>
+
+  <!-- Import pre-shower -->
+  <include ref="../IDEA_o1_v03/Preshower_o1_v01.xml"/>
+
+  <!-- Import fiber-based dual-readout calorimeter -->
+  <!-- (uncomment the following line to effectively include it) -->
+  <include ref="../IDEA_o1_v03/FiberDualReadoutCalo_o1_v01.xml"/>
+
+  <!-- Import muon system -->
+  <include ref="../IDEA_o1_v03/MuonSystem_o1_v01.xml"/>
+
+  <plugins>
+    <plugin name="DD4hepVolumeManager"/>
+    <plugin name="InstallSurfaceManager"/>
+  </plugins>
+
+  <parallelworld_volume name="tracking_volume" anchor="/world" material="Air" connected="true"
+      vis="VisibleBlue">
+      <shape type="Polycone" material="Air">
+          <!-- small-angle approximation for tan(theta) -->
+          <zplane z="-SiWrD_zmax"   rmin="120*mrad * SiWrD_zmax" rmax="SiWrD_outer_radius" />
+          <zplane z="-CentralBeamPipe_zmax"       rmin="0"                            rmax="SiWrD_outer_radius" />
+          <zplane z="+CentralBeamPipe_zmax"       rmin="0"                            rmax="SiWrD_outer_radius" />
+          <zplane z="+SiWrD_zmax"   rmin="120*mrad * SiWrD_zmax" rmax="SiWrD_outer_radius" />
+      </shape>
+  </parallelworld_volume>
+
+  <fields>
+    <!-- FIXME The magnetic field should be a map derived from FEM tools including all field sources, the return yoke geometry, etc -->
+    <!-- Currently the outer field value is kind of arbitrary and it will also impregnate the calorimeter volume while the field there is very small -->
+    <field name="GlobalSolenoid" type="solenoid"
+           inner_field="SolenoidField"
+           outer_field="-1.7*tesla"
+           zmax="Solenoid_Coil_half_length"
+           outer_radius="Solenoid_Coil_radius">
+    </field>
+
+    <field name="CompensatingSolenoidZplus" type="solenoid"
+           inner_field="-SolenoidField -SolenoidField * QD0_min_z / ( QD0_min_z - CompSol_min_z)"
+           outer_field="0*tesla"
+           zmax="QD0_min_z"
+           zmin="CompSol_min_z"
+           outer_radius="20*cm">
+    </field>
+
+    <field name="CompensatingSolenoidZminus" type="solenoid"
+           inner_field="-SolenoidField -SolenoidField * QD0_min_z / ( QD0_min_z - CompSol_min_z)"
+           outer_field="0*tesla"
+           zmin="-QD0_min_z"
+           zmax="-CompSol_min_z"
+           outer_radius="20*cm">
+    </field>
+  </fields>
+
+</lccdd>
