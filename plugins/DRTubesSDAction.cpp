@@ -4,6 +4,8 @@
 //         dual-readout-tubes calorimeters
 // \author: Lorenzo Pezzotti (CERN) @lopezzot
 // \start date: 11 August 2024
+// History:
+// 5/2/2026 Added calo hit contributions (Lorenzo Pezzotti)
 //**************************************************************************
 
 // Includers from DD4HEP
@@ -39,6 +41,15 @@ namespace sim {
   public:
     DRTubesSDData() = default;
     ~DRTubesSDData() = default;
+
+  public:
+    // Time bin width to save photo-electrons at SiPM
+    // in bunches
+    double PhotonsTimeBinWidth = 0.1 * CLHEP::ns;
+    // Constants
+    const double PMMARefractiveIndex = 1.49;
+    const double FluorinatedPolymerRefractiveIndex = 1.42;
+    const double C_mm_ns = 299.792458; // speed of light in mm/ns
 
     // Fields
     //
@@ -201,7 +212,7 @@ namespace sim {
              : (IsRight && !IsScin) ? collection(m_userData.collection_cher_right)
              : (!IsRight && IsScin) ? collection(m_userData.collection_scin_left)
                                     : collection(m_userData.collection_cher_left);
-    } // end of encap VolumeID and hit collection creation
+    }      // end of encap VolumeID and hit collection creation
     else { // create VolumeID and hit collection for the barrel
 
       // We recreate the TubeID from the tube copynumber:
@@ -249,7 +260,9 @@ namespace sim {
     // We now calculate the hit signal
     G4double steplength = aStep->GetStepLength();
     G4int signalhit = 0;
-    if (IsScin) { // it is a scintillating fiber
+    G4double hitTimeOfArrival = 0.;    // time of arrival of hit photons at SiPM
+    G4double hitBinTimeOfArrival = 0.; // bin time of arrival of hit photons at SiPM
+    if (IsScin) {                      // it is a scintillating fiber
 
       if (aStep->GetTrack()->GetDefinition()->GetPDGCharge() == 0 || steplength == 0.) {
         return true; // not ionizing particle
@@ -257,6 +270,11 @@ namespace sim {
       G4double distance_to_sipm = DRTubesSglHpr::GetDistanceToSiPM(aStep);
       signalhit = DRTubesSglHpr::SmearSSignal(DRTubesSglHpr::ApplyBirks(Edep, steplength));
       signalhit = DRTubesSglHpr::AttenuateSSignal(signalhit, distance_to_sipm);
+      hitTimeOfArrival =
+          (distance_to_sipm * m_userData.PMMARefractiveIndex) / m_userData.C_mm_ns; // time of arrival at SiPM (ns)
+      hitBinTimeOfArrival = static_cast<double>(
+          std::floor((aStep->GetPostStepPoint()->GetGlobalTime() + hitTimeOfArrival) / m_userData.PhotonsTimeBinWidth) *
+          m_userData.PhotonsTimeBinWidth);
       if (signalhit == 0)
         return true;
     } // end of scintillating fibre sigal calculation
@@ -289,6 +307,12 @@ namespace sim {
           G4double distance_to_sipm = DRTubesSglHpr::GetDistanceToSiPM(aStep);
           G4int c_signal = DRTubesSglHpr::SmearCSignal();
           signalhit = DRTubesSglHpr::AttenuateCSignal(c_signal, distance_to_sipm);
+          hitTimeOfArrival = (distance_to_sipm * m_userData.FluorinatedPolymerRefractiveIndex) /
+                             m_userData.C_mm_ns; // time of arrival at SiPM (ns)
+          hitBinTimeOfArrival =
+              static_cast<double>(std::floor((aStep->GetPostStepPoint()->GetGlobalTime() + hitTimeOfArrival) /
+                                             m_userData.PhotonsTimeBinWidth) *
+                                  m_userData.PhotonsTimeBinWidth);
           if (signalhit == 0)
             return true;
           aStep->GetTrack()->SetTrackStatus(fStopAndKill);
@@ -298,7 +322,7 @@ namespace sim {
           aStep->GetTrack()->SetTrackStatus(fStopAndKill);
           return true;
         } // end of swich cases
-      } // end of optical photon
+      }   // end of optical photon
       else {
         return true;
       }
@@ -317,10 +341,39 @@ namespace sim {
       // Note, when the hit is saved in edm4hep format the energyDeposit is
       // divided by 1000, i.e. it translates from MeV (Geant4 unit) to GeV (EDM4hep unit).
       // Here I am using this field to save photo-electrons, so I multiply it by 1000
-      hit->energyDeposit = signalhit * 1000;
+      hit->energyDeposit = signalhit * CLHEP::GeV;
+
+      // Crete the first contribution associated to this hit(fiber)
+      Geant4Calorimeter::Hit::Contribution contrib;
+      contrib.trackID = aStep->GetTrack()->GetTrackID();
+      contrib.deposit = signalhit * CLHEP::GeV;
+      contrib.time = hitBinTimeOfArrival;
+      // contrib position is not needed, they are all inside the same fiber
+      // contrib.x = FiberVec.x(); contrib.y = FiberVec.y(); contrib.z = FiberVec.z(); // use the fiber tip position
+      hit->truth.emplace_back(contrib);
+
       coll->add(VolID, hit); // add the hit to the hit collection
     } else {                 // if the hit exists already, increment its fields
-      hit->energyDeposit += signalhit * 1000;
+      hit->energyDeposit += signalhit * CLHEP::GeV;
+
+      bool foundBin = false;
+      // Assess if this temporal bin already exists as a contribution
+      for (auto& contrib : hit->truth) {
+        // Set a small tolerance to compare floats (0.0001 ns)
+        if (std::abs(contrib.time - hitBinTimeOfArrival) < 0.0001) {
+          contrib.deposit += signalhit * CLHEP::GeV;
+          foundBin = true;
+          break; // exit loop
+        }
+      }
+      // if contribution does not exist we create it
+      if (!foundBin) {
+        Geant4Calorimeter::Hit::Contribution newContrib;
+        newContrib.trackID = aStep->GetTrack()->GetTrackID();
+        newContrib.deposit = signalhit * CLHEP::GeV;
+        newContrib.time = hitBinTimeOfArrival;
+        hit->truth.emplace_back(newContrib);
+      }
     }
     return true;
   } // end of Geant4SensitiveAction::process() method specialization
