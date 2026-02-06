@@ -18,8 +18,7 @@
     <constant name="world_side" value="6100*mm"/>           <!-- Used in LumiCal and HOMAbsorber, != world_size -->
     <constant name="CrossingAngle" value="0.030*rad"/>
 
-    <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:3,module:13,sensor:9"/>
-    <constant name="SiliconWrapperReadoutID" type="string" value="system:5,side:-2,layer:5,module:14,sensor:6"/>
+    <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:3,module:16,sensor:6"/>
 
     <constant name="SolenoidField" value="2*tesla"/>
 
