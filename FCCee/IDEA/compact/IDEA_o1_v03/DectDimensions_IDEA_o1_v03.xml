@@ -18,8 +18,8 @@
     <constant name="world_side" value="6100*mm"/>           <!-- Used in LumiCal and HOMAbsorber, != world_size -->
     <constant name="CrossingAngle" value="0.030*rad"/>
 
-    <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:3,module:16,sensor:6"/>
-
+    <comment> Silicon wrapper disk has a maximum of 22 layers, so 5 bits for the layers. Silicon wrapper barrel has a maximum of 81 staves * 31 'modules' (each a tile of 8 sensors) per stave = 2551 modules, so 12 bits for modules. Curved inner vertex has a maximum of 60 pixel matrices per module * number of segments to make straight surfaces (default: 4), so 8 bits.   </comment>
+    <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:5,module:12,sensor:8"/>
     <constant name="SolenoidField" value="2*tesla"/>
 
     <!-- Detector IDs -->
