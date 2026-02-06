@@ -41,9 +41,9 @@
   <world material="Vacuum"/> -->
 
   <include ref="../ALLEGRO_o1_v03/LumiCal.xml"/>
-  <include ref="../ALLEGRO_o1_v03/VertexComplete_IDEA_o1_v03.xml"/> 
+  <include ref="../ALLEGRO_o1_v03/VertexComplete_IDEA_o1_v04.xml"/> 
   <include ref="StrawTubeTracker_o1_v01.xml"/>
-  <include ref="../ALLEGRO_o1_v03/SiliconWrapper_o1_v03.xml"/> 
+  <include ref="../ALLEGRO_o1_v03/SiliconWrapper_o1_v02.xml"/> 
   <include ref="../ALLEGRO_o1_v03/ECalBarrel_thetamodulemerged.xml"/> <!-- if you remove the ECalBarrel, you also have to remove or update the "GlobalSolenoid" field (it depends on ECAL dimensions) -->
   <include ref="../ALLEGRO_o1_v03/HCalBarrel_TileCal_v03.xml"/>
   <include ref="../ALLEGRO_o1_v03/ECalEndcaps_Turbine_o1_v03.xml"/>
