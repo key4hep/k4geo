@@ -133,8 +133,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
       for (c_component.reset(); c_component; ++c_component) {
         xml_comp_t component = c_component;
         double thickness = component.thickness();
-        if(thickness == 0.)
-            continue; // Skip components with zero thickness
+        if (thickness == 0.)
+          continue; // Skip components with zero thickness
         components.thicknesses.push_back(thickness);
         components.widths.push_back(component.width());
         components.offsets.push_back(component.offset(0));
@@ -157,8 +157,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
       for (c_component.reset(); c_component; ++c_component) {
         xml_comp_t component = c_component;
         double thickness = component.thickness();
-        if(thickness == 0.)
-            continue; // Skip components with zero thickness
+        if (thickness == 0.)
+          continue; // Skip components with zero thickness
         endOfStave.thicknesses.push_back(thickness);
         endOfStave.lengths.push_back(component.length());
         endOfStave.offsets.push_back(component.offset(0));
@@ -239,7 +239,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
       double z = x_layer.z();
       double layer_dz = x_layer.dz(0);
       int nPetals = x_layer.nphi();
-      double phiTot = x_layer.attr<double>(_Unicode(phiTot), 2.*M_PI);  // Option to not use full 2*Pi for a layer
+      double phiTot = x_layer.attr<double>(_Unicode(phiTot), 2. * M_PI); // Option to not use full 2*Pi for a layer
       double phi0_layer = x_layer.phi0(0);
       double reflect_rot = x_layer.attr<double>(_Unicode(reflect_rot), 0.0);
 
@@ -254,11 +254,12 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         Tube whole_disk_tube = Tube(rmin, rmax, disk_motherVolThickness / 2.);
         whole_disk_volume_v = Volume(disk_name, whole_disk_tube, theDetector.material("Air"));
         whole_disk_volume_v.setVisAttributes(theDetector, x_layer.visStr());
-        whole_disk_volume_placed = side_assembly.placeVolume(whole_disk_volume_v, Position(0.0, 0.0, (z+disk_motherVolThickness/2.)*side));
+        whole_disk_volume_placed = side_assembly.placeVolume(
+            whole_disk_volume_v, Position(0.0, 0.0, (z + disk_motherVolThickness / 2.) * side));
       } else {
         //// Use just assembly to avoid overlap between disk volume and other volumes
         whole_disk_volume_a = Assembly(disk_name);
-        whole_disk_volume_placed = side_assembly.placeVolume(whole_disk_volume_a, Position(0.0, 0.0, z*side));
+        whole_disk_volume_placed = side_assembly.placeVolume(whole_disk_volume_a, Position(0.0, 0.0, z * side));
       }
 
       whole_disk_volume_placed.addPhysVolID("layer", layer_id);
@@ -273,7 +274,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         string petal_name = disk_name + _toString(iPetal, "_petal%d");
         Assembly petal_assembly(petal_name);
         if (disk_motherVolThickness > 0.)
-          pv = whole_disk_volume_v.placeVolume(petal_assembly, Position(0., 0., -disk_motherVolThickness/2. * side));
+          pv = whole_disk_volume_v.placeVolume(petal_assembly, Position(0., 0., -disk_motherVolThickness / 2. * side));
         else
           pv = whole_disk_volume_a.placeVolume(petal_assembly);
 
@@ -319,7 +320,9 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             Box whole_stave_box = Box(stave_motherVolWidth / 2., stave_length / 2., stave_motherVolThickness / 2.);
             whole_stave_volume_v = Volume(stave_name, whole_stave_box, theDetector.material("Air"));
             whole_stave_volume_v.setVisAttributes(theDetector, x_stave.visStr(x_det.visStr()));
-            whole_stave_volume_placed = petal_assembly.placeVolume(whole_stave_volume_v, Transform3D(rot, stave_pos+Position(0.0, 0.0, stave_motherVolThickness/2.*side)));
+            whole_stave_volume_placed = petal_assembly.placeVolume(
+                whole_stave_volume_v,
+                Transform3D(rot, stave_pos + Position(0.0, 0.0, stave_motherVolThickness / 2. * side)));
           } else {
             //// Use just assembly to avoid overlap between stave volume and other volumes
             whole_stave_volume_a = Assembly(stave_name);
@@ -331,7 +334,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             Assembly component_assembly(stave_name + "_" + component.name);
 
             if (stave_motherVolThickness > 0.0 && stave_motherVolWidth > 0.0)
-              pv = whole_stave_volume_v.placeVolume(component_assembly, Position(0.0, 0.0, -stave_motherVolThickness/2.*side));
+              pv = whole_stave_volume_v.placeVolume(component_assembly,
+                                                    Position(0.0, 0.0, -stave_motherVolThickness / 2. * side));
             else
               pv = whole_stave_volume_a.placeVolume(component_assembly);
 
@@ -360,7 +364,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             Assembly endOfStave_assembly(stave_name + "_" + endOfStave.name + _toString(iEndOfStave, "_%d"));
 
             if (stave_motherVolThickness > 0.0 && stave_motherVolWidth > 0.0)
-              pv = whole_stave_volume_v.placeVolume(endOfStave_assembly, Position(0.0, 0.0, -stave_motherVolThickness/2.*side));
+              pv = whole_stave_volume_v.placeVolume(endOfStave_assembly,
+                                                    Position(0.0, 0.0, -stave_motherVolThickness / 2. * side));
             else
               pv = whole_stave_volume_a.placeVolume(endOfStave_assembly);
 
@@ -396,7 +401,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             Assembly module_assembly(module_name);
 
             if (stave_motherVolThickness > 0.0 && stave_motherVolWidth > 0.0)
-              pv = whole_stave_volume_v.placeVolume(module_assembly, Position(0.0, 0.0, -stave_motherVolThickness/2.*side));
+              pv = whole_stave_volume_v.placeVolume(module_assembly,
+                                                    Position(0.0, 0.0, -stave_motherVolThickness / 2. * side));
             else
               pv = whole_stave_volume_a.placeVolume(module_assembly);
 
