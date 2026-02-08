@@ -333,7 +333,7 @@
 
     <comment> Detailed silicon wrapper disks using tiles of ATLASPix3-sized modules </comment>
     <detectors>
-        <detector id="DetID_SiWr_Disks" name="SiWrD" vis="SiWrVis" type="VertexEndcap_detailed_o1_v02" readout="SiWrDCollection" reflect="true" region="SiWrDRegion">
+        <detector id="DetID_SiWr_Disks" name="SiWrD" vis="SiWrVis" type="VertexEndcap_detailed_o1_v03" readout="SiWrDCollection" reflect="true" region="SiWrDRegion">
             <envelope vis="SiWrEnvVis">
                 <shape type="BooleanShape" operation="Subtraction" material="Air">                   
                     <shape type="BooleanShape" operation="Subtraction" material="Air">                   
