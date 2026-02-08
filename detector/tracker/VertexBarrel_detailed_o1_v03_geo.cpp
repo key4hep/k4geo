@@ -8,12 +8,15 @@
 //  individual modules, that consist of sensitive and insensitive
 //  sensor elements. 
 //  From o1_v01 to o1_v02: It is possible to define curved
-//  sensor and support elements.
+//  sensor and support elements (using the 'isCurved' option).
 //  From o1_v02 to o1_v03: One can now have a partially-
 //  insensitive sensor using 'sensor_insensitive_thickness_below' and
 //  'sensor_insensitive_thickness_above'. Components with zero thickness 
-//  are now ignored when building the detector.
-
+//  are now ignored when building the detector. Curved sensors can now 
+//  also be approximated by trapezoidal volumes with the 'nsegments' 
+//  option. This allows to perform track reconstruction with conformal
+//  tracking, which currently doesn't support curved sensors (=sensitive
+//  surfaces) yet. 
 //--------------------------------------------------------------------
 //
 //  Author     : Armin Ilg
