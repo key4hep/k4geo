@@ -16,6 +16,7 @@
 //  modules can be bult. When using this detector constructor, in addition,
 //  the DD4hep_GenericSurfaceInstallerPlugin plugin needs to be instantiated
 //  in the xml compact file to define the sensitive surfaces.
+//  Updates from o1_v02 to o1_v03: ignoring components with zero thickness, changes to volume naming
 //====================================================================
 
 #include "DD4hep/DetFactoryHelper.h"

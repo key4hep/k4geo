@@ -6,10 +6,14 @@
 //  The vertex detector is assembled of stave structures which feature
 //  support and readout (flex) elements. Each stave features multiple
 //  individual modules, that consist of sensitive and insensitive
-//  sensor elements. From o1_v03 it is possible to define curved
-//  sensor and support elements. Futhermore, one can now have a partially-
+//  sensor elements. 
+//  From o1_v01 to o1_v02: It is possible to define curved
+//  sensor and support elements.
+//  From o1_v02 to o1_v03: One can now have a partially-
 //  insensitive sensor using 'sensor_insensitive_thickness_below' and
-//  'sensor_insensitive_thickness_above'
+//  'sensor_insensitive_thickness_above'. Components with zero thickness 
+//  are now ignored when building the detector.
+
 //--------------------------------------------------------------------
 //
 //  Author     : Armin Ilg
