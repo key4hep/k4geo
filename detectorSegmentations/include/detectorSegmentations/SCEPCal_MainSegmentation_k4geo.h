@@ -158,13 +158,13 @@ namespace DDSegmentation {
     int m_isCherenIndex = -1;
 
     // geometry parameters
-    int m_detId_barrel_ = 0; // system id for barrel
-    int m_detId_endcap_ = 0; // system id for endcap
+    int m_detId_barrel_ = 0;         // system id for barrel
+    int m_detId_endcap_ = 0;         // system id for endcap
     int m_iTheta_barrel_start_ = -1; // theta index start for barrel
-    int m_iTheta_barrel_end_ = -1; // theta index end for barrel
-    int m_nPhi_ = -1; // number of phi segments
-    int m_nGamma_ = -1; // number of gamma segments
-    int m_nEpsilon_ = 0; // note: always zero in this segmentation
+    int m_iTheta_barrel_end_ = -1;   // theta index end for barrel
+    int m_nPhi_ = -1;                // number of phi segments
+    int m_nGamma_ = -1;              // number of gamma segments
+    int m_nEpsilon_ = 0;             // note: always zero in this segmentation
 
     std::unordered_map<int, Vector3D> m_positionOf;
   };
