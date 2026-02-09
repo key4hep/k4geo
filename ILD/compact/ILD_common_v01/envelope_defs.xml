@@ -137,6 +137,7 @@
   <constant name="EcalEndcapRing_outer_radius"    value="Ecal_endcap_center_box_size/2.0-Ecal_EC_Ring_gap"/>
   <constant name="EcalEndcapRing_min_z"           value="EcalEndcap_min_z"/>
   <constant name="EcalEndcapRing_max_z"           value="EcalEndcap_max_z"/>
+  <constant name="EcalEndcapRing_hole_offset"     value="tan(ILC_Main_Crossing_Angle/2.)*(EcalEndcapRing_min_z+EcalEndcapRing_max_z)/2."/>
 
 
 

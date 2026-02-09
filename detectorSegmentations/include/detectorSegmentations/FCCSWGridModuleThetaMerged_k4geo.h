@@ -119,6 +119,8 @@ namespace DDSegmentation {
     }
 
   protected:
+    /// the field name used for the cryostat
+    std::string m_cryoID;
     /// the field name used for layer
     std::string m_layerID;
     /// the field name used for the read-out module (can differ from module due to merging)
@@ -153,6 +155,8 @@ namespace DDSegmentation {
 
     /// Initialization common to all ctors.
     void commonSetup();
+    /// the field index used for the cryostat
+    int m_cryoIndex = -1;
     /// the field index used for layer
     int m_layerIndex = -1;
     /// the field index used for theta
