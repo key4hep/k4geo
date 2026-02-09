@@ -51,7 +51,7 @@
   <include ref="../IDEA_o1_v03/DriftChamber_o1_v02.xml"/>
 
   <!-- Import silicon wrapper -->
-  <include ref="../IDEA_o1_v03/SiliconWrapper_o1_v03.xml"/>
+  <include ref="../IDEA_o1_v04/SiliconWrapper_o1_v02.xml"/>
 
   <!-- Import solenoid -->
   <include ref="../IDEA_o1_v03/Solenoid_o1_v01.xml"/>
