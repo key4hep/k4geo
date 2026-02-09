@@ -42,3 +42,5 @@ October 2024: first implementation using the dual-readout capillary-tubes endcap
 December 2024: Added the dual-readout capillary-tubes barrel calorimeter.
 
 April 2025: Added the dual-readout segmented crystal ECAL
+
+February 2026: Added the neighborhood finding algorithm for the crystal dual-readout calorimeter.
