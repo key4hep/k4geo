@@ -1,6 +1,6 @@
 <!-- Changes :
    o1_v03 : IDEA/ALLEGRO vertex detector described in FCC Feasibility Study Final Report (2025). An ultra-light inner vertex detector design with four layers is included as well, enabled by setting "nInnerVertexLayers" to 4, disabling the layers below "Vertex inner barrel" and instead enabling the ultra-light layers below "Ultra-light inner vertex"
-   o1_v04 : Reduced sensitive thickness for ultra-light curved vertex
+   o1_v04 : Reduced sensitive thickness for ultra-light curved vertex. Removed 'auxiliary pads' in the ultra-light curved vertex to increase the area that is sensitive by about 2.5% (see ALICE IT3 TDR). Ultra-light curved vertex detector sensors are now approximated by trapezoidal volumes, enabling the use of conformal tracking that currently requires non-bent surfaces.
 -->
 
 <lccdd>
