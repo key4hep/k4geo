@@ -23,7 +23,8 @@ namespace DDSegmentation {
 
     CellID cellID(const Vector3D& /*localPosition*/, const Vector3D& /*globalPosition*/,
                   const VolumeID& vID) const override {
-      return setCellID(System(vID), Phi(vID), Theta(vID), Gamma(vID), Epsilon(vID), Depth(vID));
+      // crystal cell ID returns scintillation channel by default
+      return setCellID(System(vID), Phi(vID), Theta(vID), Gamma(vID), Epsilon(vID), Depth(vID), false);
     }
 
     VolumeID setVolumeID(int System, int Phi, int Theta, int Gamma, int Epsilon, int Depth) const {
@@ -43,7 +44,7 @@ namespace DDSegmentation {
       return vID;
     }
 
-    CellID setCellID(int System, int Phi, int Theta, int Gamma, int Epsilon, int Depth) const {
+    CellID setCellID(int System, int Phi, int Theta, int Gamma, int Epsilon, int Depth, bool isCheren) const {
       VolumeID SystemId = static_cast<VolumeID>(System);
       VolumeID PhiId = static_cast<VolumeID>(Phi);
       VolumeID ThetaId = static_cast<VolumeID>(Theta);
@@ -57,8 +58,18 @@ namespace DDSegmentation {
       decoder()->set(vID, m_gammaIndex, GammaId);
       decoder()->set(vID, m_epsilonIndex, EpsilonId);
       decoder()->set(vID, m_depthIndex, DepthId);
+      decoder()->set(vID, m_isCherenIndex, static_cast<VolumeID>(isCheren));
+
       return vID;
     }
+
+    CellID setCellID(CellID cID, bool isCheren) const {
+      return setCellID(System(cID), Phi(cID), Theta(cID), Gamma(cID), Epsilon(cID), Depth(cID), isCheren);
+    }
+
+    // function that retrieves the std::set of neighbouring cell IDs
+    // overrides the DDSegmentation::Segmentation::neighbours method
+    virtual void neighbours(const CellID& cellID, std::set<CellID>& neighbours) const override;
 
     int System(const CellID aCellID) const {
       VolumeID System = static_cast<VolumeID>(decoder()->get(aCellID, m_systemIndex));
@@ -90,6 +101,11 @@ namespace DDSegmentation {
       return static_cast<int>(Depth);
     }
 
+    bool isCherenkov(const CellID aCellID) const {
+      VolumeID isCheren = static_cast<VolumeID>(decoder()->get(aCellID, m_isCherenIndex));
+      return static_cast<bool>(isCheren);
+    }
+
     int getFirst32bits(const CellID aCellID) const { return static_cast<int>(aCellID); }
     int getLast32bits(const CellID aCellID) const {
       CellID aId64 = aCellID >> sizeof(int) * CHAR_BIT;
@@ -113,6 +129,14 @@ namespace DDSegmentation {
 
     inline void savePosition(int volID_32, Vector3D pos) { m_positionOf.emplace(volID_32, pos); }
 
+    // setters for geometry parameters
+    void setDetIdBarrel(int detId) { m_detId_barrel_ = detId; }
+    void setDetIdEndcap(int detId) { m_detId_endcap_ = detId; }
+    void setIThetaBarrelStart(int iThetaStart) { m_iTheta_barrel_start_ = iThetaStart; }
+    void setIThetaBarrelEnd(int iThetaEnd) { m_iTheta_barrel_end_ = iThetaEnd; }
+    void setNPhi(int nPhi) { m_nPhi_ = nPhi; }
+    void setNGamma(int nGamma) { m_nGamma_ = nGamma; }
+
   private:
     /// Initialization common to all ctors.
     void commonSetup();
@@ -123,6 +147,7 @@ namespace DDSegmentation {
     std::string m_gammaId;
     std::string m_epsilonId;
     std::string m_depthId;
+    std::string m_isCherenId;
 
     int m_systemIndex = -1;
     int m_phiIndex = -1;
@@ -130,6 +155,16 @@ namespace DDSegmentation {
     int m_gammaIndex = -1;
     int m_epsilonIndex = -1;
     int m_depthIndex = -1;
+    int m_isCherenIndex = -1;
+
+    // geometry parameters
+    int m_detId_barrel_ = 0; // system id for barrel
+    int m_detId_endcap_ = 0; // system id for endcap
+    int m_iTheta_barrel_start_ = -1; // theta index start for barrel
+    int m_iTheta_barrel_end_ = -1; // theta index end for barrel
+    int m_nPhi_ = -1; // number of phi segments
+    int m_nGamma_ = -1; // number of gamma segments
+    int m_nEpsilon_ = 0; // note: always zero in this segmentation
 
     std::unordered_map<int, Vector3D> m_positionOf;
   };
