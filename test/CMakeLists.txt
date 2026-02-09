@@ -80,6 +80,14 @@ SET_TESTS_PROPERTIES( ${test_name} PROPERTIES TIMEOUT 900)
 endif()
 
 #--------------------------------------------------
+# test for IDEA o1 v04
+if(DCH_INFO_H_EXIST)
+SET( test_name "test_IDEA_o1_v04" )
+add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o1_v04/IDEA_o1_v04.xml -G -N=1 --gun.distribution uniform --gun.particle geantino --random.seed 1988301045 --steeringFile ${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o1_v03.py)
+SET_TESTS_PROPERTIES( ${test_name} PROPERTIES TIMEOUT 900)
+endif()
+
+#--------------------------------------------------
 # test for IDEA o2 v01
 #if(DCH_INFO_H_EXIST)
 #SET( test_name "test_IDEA_o2_v01" )
