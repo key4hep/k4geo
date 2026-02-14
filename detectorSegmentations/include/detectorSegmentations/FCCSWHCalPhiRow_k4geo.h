@@ -60,27 +60,6 @@ namespace DDSegmentation {
      */
     virtual void neighbours(const CellID& cellID, std::set<CellID>& neighbours) const override;
 
-    /**  Calculate layer radii and edges in z-axis.
-     *    Following member variables are calculated:
-     *      m_radii
-     *      m_layerEdges
-     *      m_layerDepth
-     */
-    void calculateLayerRadii() const;
-
-    /**  Define cell indexes for the given layer.
-     *  This function fills the m_cellIndexes vector per layer with the cell indexes.
-     *  The cell index is encoded in CellID with "row" field.
-     *  In case of a cell with single row/sequence, the index is directly the number of row in the layer.
-     *  In case of a cell with several rows/sequences merged, the index is the number of cell in the layer.
-     *  For the layers of negative-z Endcap, indexes of cells are negative.
-     *  Following member variables are calculated:
-     *   m_cellIndexes
-     *   m_cellEdges
-     *   @param[in] layer index
-     */
-    void defineCellIndexes(const unsigned int layer) const;
-
     /**  Determine the azimuthal angle of HCal cell based on the cellID.
      *   @param[in] aCellID ID of a cell.
      *   return Phi.
