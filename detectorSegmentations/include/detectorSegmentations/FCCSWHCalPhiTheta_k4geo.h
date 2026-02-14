@@ -60,24 +60,6 @@ namespace DDSegmentation {
      */
     virtual void neighbours(const CellID& cellID, std::set<CellID>& neighbours) const override;
 
-    /**  Calculate layer radii and edges in z-axis, then define cell edges in each layer using defineCellEdges().
-     *    Following member variables are calculated:
-     *      m_radii
-     *      m_layerEdges
-     *      m_layerDepth
-     *      m_thetaBins (updated through defineCellEdges())
-     *      m_cellEdges (updated through defineCellEdges())
-     */
-    void defineCellsInRZplan() const;
-
-    /**  Define cell edges in z-axis for the given layer.
-     *   Logic:
-     *      1) Find theta bin centers that fit within the given layer;
-     *      2) Define a cell edge in z-axis as the middle of each pair of theta bin centers
-     *   @param[in] layer index
-     */
-    void defineCellEdges(const unsigned int layer) const;
-
     /**  Determine the azimuthal angle of HCal cell based on the cellID.
      *   @param[in] aCellID ID of a cell.
      *   return Phi.
