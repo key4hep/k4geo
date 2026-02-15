@@ -9,6 +9,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <span>
 
 /** FCCSWHCalPhiRow_k4geo Detector/detectorSegmentations/detectorSegmentations/FCCSWHCalPhiRow_k4geo.h
  * FCCSWHCalPhiRow_k4geo.h
@@ -149,6 +150,12 @@ namespace DDSegmentation {
      */
     inline const std::vector<double>& dRlayer() const { return m_dRlayer; }
 
+    /**  Get the number of rows per physical radial layer to be grouped in a longitudinal pseudo-layer.
+     *   This is used only for the Endcap.
+     *   The vector size equals to the number of sections in the Endcap times the number of pseudo-layers per section.
+     */
+    inline const std::vector<int>& groupedRows() const { return m_groupedRows; }
+
     /**  Get the field name for azimuthal angle.
      *   return The field name for phi.
      */
@@ -158,6 +165,11 @@ namespace DDSegmentation {
      *   return The field name for layer.
      */
     inline const std::string& fieldNameLayer() const { return m_layerID; }
+
+    /**  Get the field name for layer.
+     *   return The field name for layer.
+     */
+    inline const std::string& fieldNamePseudoLayer() const { return m_pseudoLayerID; }
 
     /**  Get the field name for row number.
      *   return The field name for row.
@@ -184,6 +196,11 @@ namespace DDSegmentation {
      *   @param[in] size Cell size in theta.
      */
     inline void setGridSizeRow(std::vector<int> const& size) { m_gridSizeRow = size; }
+
+    /**  Set the number of rows to be grouped in a pseudo-layer of the Endcap.
+     *   @param[in] aSize number of rows to be grouped.
+     */
+    inline void setGroupedRows(std::vector<int> const& size) { m_groupedRows = size; }
 
     /**  Set the detector layout (0 = Barrel; 1 = Endcap).
      *   @param[in] detLayout
@@ -225,14 +242,23 @@ namespace DDSegmentation {
      */
     inline void setFieldNameRow(const std::string& fieldName) { m_rowID = fieldName; }
 
-    /** Returns a std::vector<double> of the cellDimensions of the given cell ID
-     *  in natural order of dimensions (phi, z)
-     *  @param[in] id
-     *  return a std::vector of size 2 with the cellDimensions of the given cell ID (phi, z)
+    /** Returns a std::vector<double> of the cellDimensions of the given cell ID as required by PandoraPFA
+     *  cellSize0: cell size along the z-axis in BARREL, cell size in radial direction in ENDCAP
+     *  cellSize1: cell size along the axis perpendicular to the cellSize0 and thickness
+     *  @param[in] cID
+     *  return a std::vector of size 2 with the cellDimensions of the given cell ID (cellSize0, cellSize1)
      */
-    virtual std::vector<double> cellDimensions(const CellID& id) const override {
-      const int aLayer = layer(id);
-      return {gridSizePhi(), m_gridSizeRow[aLayer] * m_dz_row};
+    virtual std::vector<double> cellDimensions(const CellID& cID) const override {
+      float cellSize0 = 0.;
+      float cellSize1 = 0.;
+
+      const int layerID = layer(cID);
+      const LayerInfo& li = getLayerInfo(layerID);
+
+      cellSize0 = (m_detLayout == 0) ? gridSizeRow()[layerID] * m_dz_row : 2.*li.halfDepth;
+      cellSize1 = 2.*li.radius * std::sin(gridSizePhi()/2.);
+
+      return {cellSize0, cellSize1};
     }
 
   private:
@@ -244,8 +270,12 @@ namespace DDSegmentation {
     std::string m_phiID;
     /// the field name used for layer
     std::string m_layerID;
+    /// the field name used for pseudo-layer
+    std::string m_pseudoLayerID;
     /// the grid size in row for each layer
     std::vector<int> m_gridSizeRow;
+    /// number of rows to be grouped in a pseudo-layer of the Endcap
+    std::vector<int> m_groupedRows;
     /// dz of row
     double m_dz_row;
     /// the field name used for row
@@ -267,6 +297,8 @@ namespace DDSegmentation {
     void commonSetup();
     /// the field index used for layer
     int m_layerIndex = -1;
+    /// the field index used for pseudo-layer
+    int m_pseudoLayerIndex = -1;
     /// the field index used for row
     int m_rowIndex = -1;
     /// the field index used for type
@@ -308,10 +340,13 @@ namespace DDSegmentation {
           if (-idx < m_ibin)
             throw std::out_of_range("cellEdge");
           const auto& e = m_cellEdge[-idx - m_ibin];
-          // Swap the edges for the negative endcap side
-          return Edge{e.high, e.low};
+          // Swap the edges and make them negative for the negative endcap side
+          return Edge{-e.high, -e.low};
         }
       }
+
+      /// number of rows to be grouped in a pseudo-layer of the Endcap
+      std::span<const int> groupedRows{};
     };
 
     // The vector of tabulated values, indexed by layer number.
