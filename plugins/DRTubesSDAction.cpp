@@ -27,6 +27,7 @@
 #include "G4UserSteppingAction.hh"
 #include "G4VProcess.hh"
 #include "globals.hh"
+#include "CLHEP/Units/PhysicalConstants.h"
 
 // Includers from project files
 #include "DRTubesSglHpr.hh"
@@ -49,7 +50,6 @@ namespace sim {
     // Constants
     const double PMMARefractiveIndex = 1.49;
     const double FluorinatedPolymerRefractiveIndex = 1.42;
-    const double C_mm_ns = 299.792458; // speed of light in mm/ns
 
     // Fields
     //
@@ -271,7 +271,7 @@ namespace sim {
       signalhit = DRTubesSglHpr::SmearSSignal(DRTubesSglHpr::ApplyBirks(Edep, steplength));
       signalhit = DRTubesSglHpr::AttenuateSSignal(signalhit, distance_to_sipm);
       hitTimeOfArrival =
-          (distance_to_sipm * m_userData.PMMARefractiveIndex) / m_userData.C_mm_ns; // time of arrival at SiPM (ns)
+          (distance_to_sipm * m_userData.PMMARefractiveIndex) / CLHEP::c_light; // time of arrival at SiPM (ns)
       hitBinTimeOfArrival = static_cast<double>(
           std::floor((aStep->GetPostStepPoint()->GetGlobalTime() + hitTimeOfArrival) / m_userData.PhotonsTimeBinWidth) *
           m_userData.PhotonsTimeBinWidth);
@@ -308,7 +308,7 @@ namespace sim {
           G4int c_signal = DRTubesSglHpr::SmearCSignal();
           signalhit = DRTubesSglHpr::AttenuateCSignal(c_signal, distance_to_sipm);
           hitTimeOfArrival = (distance_to_sipm * m_userData.FluorinatedPolymerRefractiveIndex) /
-                             m_userData.C_mm_ns; // time of arrival at SiPM (ns)
+                             CLHEP::c_light; // time of arrival at SiPM (ns)
           hitBinTimeOfArrival =
               static_cast<double>(std::floor((aStep->GetPostStepPoint()->GetGlobalTime() + hitTimeOfArrival) /
                                              m_userData.PhotonsTimeBinWidth) *
