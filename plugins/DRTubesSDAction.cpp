@@ -19,6 +19,7 @@
 #include "DDG4/Geant4SensDetAction.inl"
 
 // Includers from Geant4
+#include "CLHEP/Units/PhysicalConstants.h"
 #include "G4OpBoundaryProcess.hh"
 #include "G4OpticalPhoton.hh"
 #include "G4Poisson.hh"
@@ -27,7 +28,6 @@
 #include "G4UserSteppingAction.hh"
 #include "G4VProcess.hh"
 #include "globals.hh"
-#include "CLHEP/Units/PhysicalConstants.h"
 
 // Includers from project files
 #include "DRTubesSglHpr.hh"
@@ -46,7 +46,7 @@ namespace sim {
   public:
     // Time bin width to save photo-electrons at SiPM
     // in bunches
-    double PhotonsTimeBinWidth = 0.1 * CLHEP::ns;
+    double m_PhotonsTimeBinWidth{0.1 * CLHEP::ns}; // default value
     // Constants
     const double PMMARefractiveIndex = 1.49;
     const double FluorinatedPolymerRefractiveIndex = 1.42;
@@ -68,13 +68,6 @@ namespace dd4hep {
 namespace sim {
 
   // Function template specialization of Geant4SensitiveAction class.
-  // Define actions
-  template <>
-  void Geant4SensitiveAction<DRTubesSDData>::initialize() {
-    m_userData.sensitive = this;
-  }
-
-  // Function template specialization of Geant4SensitiveAction class.
   // Define collections created by this sensitivie action object
   template <>
   void Geant4SensitiveAction<DRTubesSDData>::defineCollections() {
@@ -85,6 +78,16 @@ namespace sim {
     m_userData.collection_cher_left = defineCollection<Geant4Calorimeter::Hit>("DRETCherLeft");
     m_userData.collection_drbt_cher = defineCollection<Geant4Calorimeter::Hit>("DRBTCher");
     m_userData.collection_drbt_scin = defineCollection<Geant4Calorimeter::Hit>("DRBTScin");
+  }
+
+  template <>
+  Geant4SensitiveAction<DRTubesSDData>::Geant4SensitiveAction(Geant4Context* ctxt, const std::string& nam,
+                                                              DetElement det, Detector& lcdd_ref)
+      : Geant4Sensitive(ctxt, nam, det, lcdd_ref), m_collectionID(0) {
+    initialize();
+    defineCollections();
+    InstanceCount::increment(this);
+    declareProperty("PhotonsTimeBinWidth", m_userData.m_PhotonsTimeBinWidth = 0.1 * CLHEP::ns);
   }
 
   // Function template specialization of Geant4SensitiveAction class.
@@ -212,7 +215,7 @@ namespace sim {
              : (IsRight && !IsScin) ? collection(m_userData.collection_cher_right)
              : (!IsRight && IsScin) ? collection(m_userData.collection_scin_left)
                                     : collection(m_userData.collection_cher_left);
-    }      // end of encap VolumeID and hit collection creation
+    } // end of encap VolumeID and hit collection creation
     else { // create VolumeID and hit collection for the barrel
 
       // We recreate the TubeID from the tube copynumber:
@@ -272,9 +275,10 @@ namespace sim {
       signalhit = DRTubesSglHpr::AttenuateSSignal(signalhit, distance_to_sipm);
       hitTimeOfArrival =
           (distance_to_sipm * m_userData.PMMARefractiveIndex) / CLHEP::c_light; // time of arrival at SiPM (ns)
-      hitBinTimeOfArrival = static_cast<double>(
-          std::floor((aStep->GetPostStepPoint()->GetGlobalTime() + hitTimeOfArrival) / m_userData.PhotonsTimeBinWidth) *
-          m_userData.PhotonsTimeBinWidth);
+      hitBinTimeOfArrival =
+          static_cast<double>(std::floor((aStep->GetPostStepPoint()->GetGlobalTime() + hitTimeOfArrival) /
+                                         m_userData.m_PhotonsTimeBinWidth) *
+                              m_userData.m_PhotonsTimeBinWidth);
       if (signalhit == 0)
         return true;
     } // end of scintillating fibre sigal calculation
@@ -311,8 +315,8 @@ namespace sim {
                              CLHEP::c_light; // time of arrival at SiPM (ns)
           hitBinTimeOfArrival =
               static_cast<double>(std::floor((aStep->GetPostStepPoint()->GetGlobalTime() + hitTimeOfArrival) /
-                                             m_userData.PhotonsTimeBinWidth) *
-                                  m_userData.PhotonsTimeBinWidth);
+                                             m_userData.m_PhotonsTimeBinWidth) *
+                                  m_userData.m_PhotonsTimeBinWidth);
           if (signalhit == 0)
             return true;
           aStep->GetTrack()->SetTrackStatus(fStopAndKill);
@@ -322,7 +326,7 @@ namespace sim {
           aStep->GetTrack()->SetTrackStatus(fStopAndKill);
           return true;
         } // end of swich cases
-      }   // end of optical photon
+      } // end of optical photon
       else {
         return true;
       }
