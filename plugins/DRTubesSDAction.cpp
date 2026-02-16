@@ -261,6 +261,11 @@ namespace sim {
     } // end of Volume ID and hit collection creation for barrel
 
     // We now calculate the hit signal
+    // If m_PhotonsTimeBinWidth <= 0 we set it to 0.1 ns
+    double thisPhotonsTimeBinWidth = m_userData.m_PhotonsTimeBinWidth;
+    if (thisPhotonsTimeBinWidth <= 0) {
+      thisPhotonsTimeBinWidth = 0.1 * CLHEP::ns;
+    }
     G4double steplength = aStep->GetStepLength();
     G4int signalhit = 0;
     G4double hitTimeOfArrival = 0.;    // time of arrival of hit photons at SiPM
@@ -275,10 +280,9 @@ namespace sim {
       signalhit = DRTubesSglHpr::AttenuateSSignal(signalhit, distance_to_sipm);
       hitTimeOfArrival =
           (distance_to_sipm * m_userData.PMMARefractiveIndex) / CLHEP::c_light; // time of arrival at SiPM (ns)
-      hitBinTimeOfArrival =
-          static_cast<double>(std::floor((aStep->GetPostStepPoint()->GetGlobalTime() + hitTimeOfArrival) /
-                                         m_userData.m_PhotonsTimeBinWidth) *
-                              m_userData.m_PhotonsTimeBinWidth);
+      hitBinTimeOfArrival = static_cast<double>(
+          std::floor((aStep->GetPostStepPoint()->GetGlobalTime() + hitTimeOfArrival) / thisPhotonsTimeBinWidth) *
+          thisPhotonsTimeBinWidth);
       if (signalhit == 0)
         return true;
     } // end of scintillating fibre sigal calculation
@@ -313,10 +317,9 @@ namespace sim {
           signalhit = DRTubesSglHpr::AttenuateCSignal(c_signal, distance_to_sipm);
           hitTimeOfArrival = (distance_to_sipm * m_userData.FluorinatedPolymerRefractiveIndex) /
                              CLHEP::c_light; // time of arrival at SiPM (ns)
-          hitBinTimeOfArrival =
-              static_cast<double>(std::floor((aStep->GetPostStepPoint()->GetGlobalTime() + hitTimeOfArrival) /
-                                             m_userData.m_PhotonsTimeBinWidth) *
-                                  m_userData.m_PhotonsTimeBinWidth);
+          hitBinTimeOfArrival = static_cast<double>(
+              std::floor((aStep->GetPostStepPoint()->GetGlobalTime() + hitTimeOfArrival) / thisPhotonsTimeBinWidth) *
+              thisPhotonsTimeBinWidth);
           if (signalhit == 0)
             return true;
           aStep->GetTrack()->SetTrackStatus(fStopAndKill);
