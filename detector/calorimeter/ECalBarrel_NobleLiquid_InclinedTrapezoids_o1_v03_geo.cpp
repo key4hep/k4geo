@@ -867,7 +867,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
         dd4hep::rec::Vector3D(0., rad_first, 0); // defining starting vector points of the given layer
     dd4hep::rec::Vector3D ivr2 =
         dd4hep::rec::Vector3D(0., rad_last, 0); // defining end vector points of the given layer
-    // calculate theta ID of cells at lateral edge
+    // for debug: calculate and print theta ID of cells at lateral edge, in addition to radial information
     dd4hep::DDSegmentation::Vector3D edge1(0., rad_first, caloDim.dz());
     dd4hep::DDSegmentation::Vector3D edge2(0., rad_last - 1e-5, caloDim.dz());
     dd4hep::CellID vID(0);
