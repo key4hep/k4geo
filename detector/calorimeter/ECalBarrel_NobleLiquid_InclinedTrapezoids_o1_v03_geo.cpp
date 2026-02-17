@@ -867,9 +867,18 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
         dd4hep::rec::Vector3D(0., rad_first, 0); // defining starting vector points of the given layer
     dd4hep::rec::Vector3D ivr2 =
         dd4hep::rec::Vector3D(0., rad_last, 0); // defining end vector points of the given layer
-
+    // calculate theta ID of cells at lateral edge
+    dd4hep::DDSegmentation::Vector3D edge1(0., rad_first, caloDim.dz());
+    dd4hep::DDSegmentation::Vector3D edge2(0., rad_last - 1e-5, caloDim.dz());
+    dd4hep::CellID vID(0);
+    encoder.set(vID, layerFieldName, iLay);
+    dd4hep::CellID cID1 = seg->cellID(edge1, edge1, vID);
+    dd4hep::CellID cID2 = seg->cellID(edge2, edge2, vID);
+    int theta_min = encoder.get(cID1, "theta");
+    int theta_max = encoder.get(cID2, "theta");
     dd4hep::printout(dd4hep::DEBUG, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
-                     "    radius first = %f, radius last = %f, radius middle = %f", rad_first, rad_last, rad_mid);
+                     "    radius first = %f, radius last = %f, radius middle = %f, thetaID = %d-%d", rad_first, rad_last, rad_mid, theta_min, theta_max);
+
     const dd4hep::rec::MaterialVec& materials =
         matMgr.materialsBetween(ivr1, ivr2); // calling material manager to get material info between two points
     auto mat = matMgr.createAveragedMaterial(materials); // creating average of all the material between two points to
@@ -912,7 +921,7 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
     // retrieve cell dimensions vector from segmentation class
     // set volume ID and layer ID
     // cell size does not depend on theta/module so no need to set moduleID and thetaID
-    dd4hep::CellID cID;
+    dd4hep::CellID cID(0);
     encoder.set(cID, layerFieldName, iLay);
     std::vector<double> cellSizeVector = seg->cellDimensions(cID);
     double cellSizeTheta = cellSizeVector[1];
