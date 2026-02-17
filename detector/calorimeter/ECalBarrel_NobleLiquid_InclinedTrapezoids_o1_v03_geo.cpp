@@ -877,7 +877,8 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
     int theta_min = encoder.get(cID1, "theta");
     int theta_max = encoder.get(cID2, "theta");
     dd4hep::printout(dd4hep::DEBUG, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
-                     "    radius first = %f, radius last = %f, radius middle = %f, thetaID = %d-%d", rad_first, rad_last, rad_mid, theta_min, theta_max);
+                     "    radius first = %f, radius last = %f, radius middle = %f, thetaID = %d-%d", rad_first,
+                     rad_last, rad_mid, theta_min, theta_max);
 
     const dd4hep::rec::MaterialVec& materials =
         matMgr.materialsBetween(ivr1, ivr2); // calling material manager to get material info between two points
