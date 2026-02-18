@@ -49,6 +49,7 @@ using dd4hep::RotationX;
 using dd4hep::RotationY;
 using dd4hep::RotationZ;
 using dd4hep::RotationZYX;
+using dd4hep::Rotation3D;
 using dd4hep::SensitiveDetector;
 using dd4hep::Transform3D;
 using dd4hep::Translation3D;
@@ -355,8 +356,9 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
               ele_vol = Volume(sensor_part_names[i], ele_box, sensor.material);
             }
           } else {
-            Box ele_box = Box(thicknesses_split[i] / 2., abs(component.xmax() - component.xmin()) / 2.,
-                              abs(component.ymax() - component.ymin()) / 2.);
+            Box ele_box = Box(abs(component.xmax() - component.xmin()) / 2.,
+                              abs(component.ymax() - component.ymin()) / 2.,
+                              thicknesses_split[i] / 2.);
             ele_vol = Volume(sensor_part_names[i], ele_box, sensor.material);
           }
 
@@ -648,11 +650,14 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
               }
             } else { // not curved, use boxes
               x_pos = sensor.rs[i] + sensor.thicknesses[i] / 2.;
-              ;
               y_pos = sensor.xmin[i] + abs(sensor.xmax[i] - sensor.xmin[i]) / 2.;
               z_pos = sensor.ymin[i] + abs(sensor.ymax[i] - sensor.ymin[i]) / 2.;
               Position pos2(x_pos, y_pos, z_pos);
-              pv = module_assembly.placeVolume(sensor.volumes[i], pos + pos2);
+              Rotation3D rot3(0,0,1,
+                             0,1,0,
+                             1,0,0);
+
+              pv = module_assembly.placeVolume(sensor.volumes[i], Translation3D(pos + pos2) * rot3 * RotationZ(M_PI / 2.));
 
               if (sensor.sensitives[i]) { // Define as sensitive and add sensitive surface
                 pv.addPhysVolID("sensor", iSensitive);
@@ -662,7 +667,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 VolPlane surf(sensor.volumes[i], dd4hep::rec::SurfaceType::Sensitive,
                               sensor.thicknesses[i] / 2. + sensor.insensitive_thicknesses_below[i],
                               sensor.thicknesses[i] / 2. + sensor.insensitive_thicknesses_above[i],
-                              Vector3D(0., 1., 0.), Vector3D(0., 0., 1.), Vector3D(1., 0., 0.));
+                              Vector3D(1., 0., 0.), Vector3D(0, 1., 0.), Vector3D(0., 0., -1.));
                 volSurfaceList(sensorDE)->push_back(surf);
                 iSensitive++;
               }

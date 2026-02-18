@@ -33,7 +33,10 @@
     </display>
 
     <define>
-        <comment> To change to ultra-light inner vertex design: Set nInnerVertexLayers to 4 disable/enable the layers below under "Ultra-light inner vertex" </comment>
+        <comment> To change to ultra-light inner vertex design: 
+                  - Set nInnerVertexLayers to 4
+                  - Disable/enable the layers under "Ultra-light inner vertex" 
+        </comment>
         <constant name="nInnerVertexLayers" value="3"/>
     </define>
 
@@ -349,6 +352,15 @@
         <constant name="VTXD_disk3_rmin" value="VTXD_rmin3"/>
     </define>
 
+    <define> <comment> Pitch of the various detector layers, used for segmentation </comment>
+        <constant name="VTXIB_pitch_z"      value="0.025*mm"/>  <comment> Assume 25um pixel pitch both for classic and ultra light inner vertex (ARCADIA has 25 um pitch) </comment> 
+        <constant name="VTXIB_pitch_phi"    value="0.025*mm"/>
+        <constant name="VTXOB_pitch_z"      value="0.150*mm"/>  <comment> Assume 50x150 um^2 pixel pitch for outer barrel and disks, as in ATLASPix3 </comment>
+        <constant name="VTXOB_pitch_phi"    value="0.050*mm"/>
+        <constant name="VTXD_pitch_r"       value="0.050*mm"/>  <comment> This represents the geometry of the vertex disk staves, but may not be optimal, one may want to rotate the sensor by 90 degree to have a smaller pitch (and thus resolution) in the phi direction </comment>
+        <constant name="VTXD_pitch_phi"     value="0.150*mm"/>
+    </define>
+
 
     <define> <comment> Ultra-light, curved inner vertex (VTXIB_curved) properties </comment>
         <constant name="VTXIB_curved_gap_phi" value="1.25*mm"/> <comment> Gap between two halves of a layer </comment>
@@ -463,21 +475,28 @@
         <constant name="VTXIB_tube_r"           value="(4-nInnerVertexLayers)*(VTXIB_r_max-VTXIB_tube_thickness) + (nInnerVertexLayers-3)*(VTXIB_curved_r_outer-VTXIB_tube_thickness)"/>
     </define>
 
-    <comment>  Definition of the readout segmentation/definition  </comment>
-    <readouts>
-        <readout name="VertexBarrelCollection">
-            <id>${GlobalTrackerReadoutID}</id>
+    <readouts> <comment>  Definition of the readout segmentation/definition </comment>
+        <readout name="VertexBarrelCollection"> 
+            <segmentation type="MultiSegmentation" key="layer">
+                <segmentation name="VTXIBgrid" type="CartesianGridXY" key_min="0" key_max="nInnerVertexLayers-1" grid_size_x="VTXIB_pitch_phi" grid_size_y="VTXIB_pitch_z"/> <comment> Segmentation for the classic inner vertex or curved ultra-light inner vertex </comment>
+                <segmentation name="VTXOBgrid" type="CartesianGridXY" key_min="nInnerVertexLayers" key_max="nInnerVertexLayers+1" grid_size_x="VTXOB_pitch_phi" grid_size_y="VTXOB_pitch_z"/>
+            </segmentation>
+            <id>${GlobalTrackerReadoutID},x:32:-16,y:-16</id>
         </readout>  
-        <readout name="VertexEndcapCollection">
-            <id>${GlobalTrackerReadoutID}</id>
-        </readout>
+        <readout name="VertexEndcapCollection"> 
+            <segmentation type="MultiSegmentation" key="layer">
+                <segmentation name="Disk0grid" type="CartesianGridXY" key_min="0" key_max="0" grid_size_x="VTXD_pitch_r" grid_size_y="VTXD_pitch_phi"/>
+                <segmentation name="Disk1grid" type="CartesianGridXY" key_min="1" key_max="1" grid_size_x="VTXD_pitch_r" grid_size_y="VTXD_pitch_phi"/>
+                <segmentation name="Disk2grid" type="CartesianGridXY" key_min="2" key_max="2" grid_size_x="VTXD_pitch_r" grid_size_y="VTXD_pitch_phi"/>
+            </segmentation>
+            <id>${GlobalTrackerReadoutID},x:32:-16,y:-16</id>
+        </readout>  
         <readout name="VertexDummyCollection">    <comment> For disk supports, should not have any hits but better safe than sorry </comment>
             <id>${GlobalTrackerReadoutID}</id>
         </readout>  
     </readouts>
 
     <detectors>
-
         <detector name="VertexBarrel" type="VertexBarrel_detailed_o1_v03" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelCollection"  region="VTXBRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
@@ -1700,16 +1719,15 @@
 
             <comment> Ultra-light inner vertex </comment>
             <comment>
-                <layer nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r1)*360.*deg+90.*deg+VTXIB_curved_phi0_1" r="VTXIB_curved_r1" id="0" nmodules="VTXIB_curved_nModules1" name="VTXIBStave1Curved" step="0.0*mm" motherVolThickness="VTXIB_curved_r2-VTXIB_curved_r1"        motherVolLength="VTXIB_curved_z1_passive" z_offset="VTXIB_zoffset1"/>
-                
-                <layer nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r2)*360.*deg+90.*deg+VTXIB_curved_phi0_2" r="VTXIB_curved_r2" id="1" nmodules="VTXIB_curved_nModules2" name="VTXIBStave2Curved" step="0.0*mm" motherVolThickness="VTXIB_curved_r3-VTXIB_curved_r2"        motherVolLength="VTXIB_curved_z2_passive" z_offset="VTXIB_zoffset2"/>
+            <layer nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r1)*360.*deg+90.*deg+VTXIB_curved_phi0_1" r="VTXIB_curved_r1" id="0" nmodules="VTXIB_curved_nModules1" name="VTXIBStave1Curved" step="0.0*mm" motherVolThickness="VTXIB_curved_r2-VTXIB_curved_r1"        motherVolLength="VTXIB_curved_z1_passive" z_offset="VTXIB_zoffset1"/>
+            <layer nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r2)*360.*deg+90.*deg+VTXIB_curved_phi0_2" r="VTXIB_curved_r2" id="1" nmodules="VTXIB_curved_nModules2" name="VTXIBStave2Curved" step="0.0*mm" motherVolThickness="VTXIB_curved_r3-VTXIB_curved_r2"        motherVolLength="VTXIB_curved_z2_passive" z_offset="VTXIB_zoffset2"/>
 
-                <comment> Layer 3 and 4 are constructed out of two pieces on the +z and -z side, with different lengths in z to optimise coverage </comment>
-                <layer nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r3)*360.*deg+90.*deg+VTXIB_curved_phi0_3" r="VTXIB_curved_r3" id="2" nmodules="VTXIB_curved_nModules3_1" name="VTXIBStave3Curved_1" step="0.0*mm" motherVolThickness="VTXIB_curved_r4-VTXIB_curved_r3"        motherVolLength="VTXIB_curved_z3_passive1" motherVolOffset="+(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap3_length_center-VTXIB_curved_endcap3_length_side)/2.)" side="-1" z_offset="VTXIB_curved_z3_offset1"/>
-                <layer nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r3)*360.*deg+90.*deg+VTXIB_curved_phi0_3" r="VTXIB_curved_r3" id="2" nmodules="VTXIB_curved_nModules3_2" name="VTXIBStave3Curved_2" step="0.0*mm" motherVolThickness="VTXIB_curved_r4-VTXIB_curved_r3"        motherVolLength="VTXIB_curved_z3_passive2" motherVolOffset="-(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap3_length_center-VTXIB_curved_endcap3_length_side)/2.)" side="+1" z_offset="VTXIB_curved_z3_offset2"/>
+            <comment> Layer 3 and 4 are constructed out of two pieces on the +z and -z side, with different lengths in z to optimise coverage </comment>
+            <layer nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r3)*360.*deg+90.*deg+VTXIB_curved_phi0_3" r="VTXIB_curved_r3" id="2" nmodules="VTXIB_curved_nModules3_1" name="VTXIBStave3Curved_1" step="0.0*mm" motherVolThickness="VTXIB_curved_r4-VTXIB_curved_r3"        motherVolLength="VTXIB_curved_z3_passive1" motherVolOffset="+(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap3_length_center-VTXIB_curved_endcap3_length_side)/2.)" side="-1" z_offset="VTXIB_curved_z3_offset1"/>
+            <layer nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r3)*360.*deg+90.*deg+VTXIB_curved_phi0_3" r="VTXIB_curved_r3" id="2" nmodules="VTXIB_curved_nModules3_2" name="VTXIBStave3Curved_2" step="0.0*mm" motherVolThickness="VTXIB_curved_r4-VTXIB_curved_r3"        motherVolLength="VTXIB_curved_z3_passive2" motherVolOffset="-(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap3_length_center-VTXIB_curved_endcap3_length_side)/2.)" side="+1" z_offset="VTXIB_curved_z3_offset2"/>
 
-                <layer nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r4)*360.*deg+90.*deg+VTXIB_curved_phi0_4" r="VTXIB_curved_r4" id="3" nmodules="VTXIB_curved_nModules4_1" name="VTXIBStave4Curved_1" step="0.0*mm" motherVolThickness="VTXIB_curved_r_outer-VTXIB_curved_r4-VTXIB_tube_thickness"   motherVolLength="VTXIB_curved_z4_passive1" motherVolOffset="+(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap4_length_center-VTXIB_curved_endcap4_length_side)/2.)" side="-1" z_offset="VTXIB_curved_z4_offset1"/>
-                <layer nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r4)*360.*deg+90.*deg+VTXIB_curved_phi0_4" r="VTXIB_curved_r4" id="3" nmodules="VTXIB_curved_nModules4_2" name="VTXIBStave4Curved_2" step="0.0*mm" motherVolThickness="VTXIB_curved_r_outer-VTXIB_curved_r4-VTXIB_tube_thickness"   motherVolLength="VTXIB_curved_z4_passive2" motherVolOffset="-(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap4_length_center-VTXIB_curved_endcap4_length_side)/2.)" side="+1" z_offset="VTXIB_curved_z4_offset2"/>   
+            <layer nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r4)*360.*deg+90.*deg+VTXIB_curved_phi0_4" r="VTXIB_curved_r4" id="3" nmodules="VTXIB_curved_nModules4_1" name="VTXIBStave4Curved_1" step="0.0*mm" motherVolThickness="VTXIB_curved_r_outer-VTXIB_curved_r4-VTXIB_tube_thickness"   motherVolLength="VTXIB_curved_z4_passive1" motherVolOffset="+(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap4_length_center-VTXIB_curved_endcap4_length_side)/2.)" side="-1" z_offset="VTXIB_curved_z4_offset1"/>
+            <layer nLadders="2" phi0="0.5*RSU_phi/(2*pi*VTXIB_curved_r4)*360.*deg+90.*deg+VTXIB_curved_phi0_4" r="VTXIB_curved_r4" id="3" nmodules="VTXIB_curved_nModules4_2" name="VTXIBStave4Curved_2" step="0.0*mm" motherVolThickness="VTXIB_curved_r_outer-VTXIB_curved_r4-VTXIB_tube_thickness"   motherVolLength="VTXIB_curved_z4_passive2" motherVolOffset="-(VTXIB_curved_flex_length/2.-(VTXIB_curved_endcap4_length_center-VTXIB_curved_endcap4_length_side)/2.)" side="+1" z_offset="VTXIB_curved_z4_offset2"/>   
             </comment>
 
             <comment> Outer vertex barrel </comment>

@@ -168,12 +168,19 @@
         <constant name="SiWrD_support_outer_radius" value="SiWrD_disk0_ring21_rmin+SiWr_mod_rphi"/>
     </define>        
 
-    <readouts>
-        <readout name="SiWrBCollection">
-            <id>${GlobalTrackerReadoutID}</id>
+    <define> <comment> Pitch of the silicon wrapper sensor, used for segmentation </comment>
+        <constant name="SiWrB_pitch_z"      value="1.000*mm"/>  <comment> 50x1000 um^2 pitch is really just an assumption, impact on physics needs to be studied in detail! </comment> 
+        <constant name="SiWrB_pitch_phi"    value="0.050*mm"/>
+        <constant name="SiWrD_pitch_r"      value="1.000*mm"/>
+        <constant name="SiWrD_pitch_phi"    value="0.050*mm"/>
+    </define>
+
+    <readouts> <comment>  Definition of the readout segmentation/definition </comment>
+        <readout name="SiWrBCollection" type="CartesianGridXY" grid_size_x="SiWrB_pitch_phi" grid_size_y="SiWrB_pitch_z">
+            <id>${GlobalTrackerReadoutID},y:32:-16,z:-16</id>
         </readout>       
-        <readout name="SiWrDCollection">
-            <id>${GlobalTrackerReadoutID}</id>
+        <readout name="SiWrDCollection" type="CartesianGridXY" grid_size_x="SiWrD_pitch_r" grid_size_y="SiWrD_pitch_phi">
+            <id>${GlobalTrackerReadoutID},x:32:-16,y:-16</id>
         </readout>
         <readout name="SiWrDummyCollection">    <comment> For support tube, should not have any hits but better safe than sorry </comment>
             <id>${GlobalTrackerReadoutID}</id>
