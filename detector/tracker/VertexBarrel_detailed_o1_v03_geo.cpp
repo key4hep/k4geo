@@ -653,11 +653,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
               y_pos = sensor.xmin[i] + abs(sensor.xmax[i] - sensor.xmin[i]) / 2.;
               z_pos = sensor.ymin[i] + abs(sensor.ymax[i] - sensor.ymin[i]) / 2.;
               Position pos2(x_pos, y_pos, z_pos);
-              Rotation3D rot3(0,0,1,
-                             0,1,0,
-                             1,0,0);
 
-              pv = module_assembly.placeVolume(sensor.volumes[i], Translation3D(pos + pos2) * rot3 * RotationZ(M_PI / 2.));
+              pv = module_assembly.placeVolume(sensor.volumes[i], Translation3D(pos + pos2) * RotationY(M_PI/2.) * RotationZ(M_PI / 2.));
 
               if (sensor.sensitives[i]) { // Define as sensitive and add sensitive surface
                 pv.addPhysVolID("sensor", iSensitive);
