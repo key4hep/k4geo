@@ -272,7 +272,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
       for (int iPetal = 0; iPetal < nPetals; iPetal++) {
         double z_alternate_petal = (iPetal % 2 == 0) ? 0.0 : layer_dz;
 
-        string petal_name = disk_name + _toString(iPetal, "_petal%d");
+        string petal_name = _toString(iPetal, "petal%d");
         Assembly petal_assembly(petal_name);
         if (disk_motherVolThickness > 0.)
           pv = whole_disk_volume_v.placeVolume(petal_assembly, Position(0., 0., -disk_motherVolThickness / 2. * side));
@@ -310,7 +310,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
           }
           Position stave_pos = Position(x_pos, y_pos, z_pos);
 
-          string stave_name = petal_name + _toString(iStave, "_stave%d");
+          string stave_name = _toString(iStave, "stave%d");
 
           PlacedVolume whole_stave_volume_placed;
           Volume whole_stave_volume_v;
@@ -332,7 +332,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
           // Place components
           for (auto& component : m.components_vec) {
-            Assembly component_assembly(stave_name + "_" + component.name);
+            Assembly component_assembly(component.name);
 
             if (stave_motherVolThickness > 0.0 && stave_motherVolWidth > 0.0)
               pv = whole_stave_volume_v.placeVolume(component_assembly,
@@ -362,7 +362,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
           // Place end of stave structures
           int iEndOfStave = 0;
           for (auto& endOfStave : m.endOfStaves) {
-            Assembly endOfStave_assembly(stave_name + "_" + endOfStave.name + _toString(iEndOfStave, "_%d"));
+            Assembly endOfStave_assembly(endOfStave.name + _toString(iEndOfStave, "_%d"));
 
             if (stave_motherVolThickness > 0.0 && stave_motherVolWidth > 0.0)
               pv = whole_stave_volume_v.placeVolume(endOfStave_assembly,
@@ -398,7 +398,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             }
             Position pos(x_pos, y_pos, z_pos);
 
-            string module_name = stave_name + _toString(iModule, "_module%d");
+            string module_name = _toString(iModule, "module%d");
             Assembly module_assembly(module_name);
 
             if (stave_motherVolThickness > 0.0 && stave_motherVolWidth > 0.0)
@@ -408,7 +408,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
               pv = whole_stave_volume_a.placeVolume(module_assembly);
 
             pv.addPhysVolID("module", iModule_tot);
-            DetElement moduleDE(diskDE, module_name, iModule_tot);
+            DetElement moduleDE(diskDE, petal_name + "/" + stave_name + "/" + module_name, iModule_tot);
             moduleDE.setPlacement(pv);
 
             int iSensitive = 0;
