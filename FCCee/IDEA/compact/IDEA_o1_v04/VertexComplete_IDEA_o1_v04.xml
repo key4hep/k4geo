@@ -55,15 +55,8 @@
             </shape>
 
             <comment>Vertex Assembly</comment>
-            <composite name="VertexBarrel"/>
-            <composite name="VertexDisks"/>
-            <composite name="VertexInnerBarrel_tube"/>
-            <composite name="VertexDisks_support"/>
-            <comment>
-                <composite name="VTXIB_Support_PEEK"/>
-                <composite name="VTXIB_Support_CarbonFiber"/>
-                <composite name="VTXIB_CoolingCones"/>
-            </comment>
+            <composite name="VertexBarrel_assembly"/>
+            <composite name="VertexDisks_assembly"/>
         </detector>
     </detectors>
 
@@ -497,6 +490,16 @@
     </readouts>
 
     <detectors>
+        <detector name="VertexBarrel_assembly" type="DD4hep_SubdetectorAssembly" vis="VXDVis">
+            <composite name="VertexBarrel"/>
+            <composite name="VertexInnerBarrel_tube"/>
+            <comment>
+                <composite name="VTXIB_Support_PEEK"/>
+                <composite name="VTXIB_Support_CarbonFiber"/>
+                <composite name="VTXIB_CoolingCones"/>
+            </comment>
+        </detector>
+
         <detector name="VertexBarrel" type="VertexBarrel_detailed_o1_v03" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelCollection"  region="VTXBRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
@@ -1780,6 +1783,10 @@
             </check>
         </detector>  -->
 
+        <detector name="VertexDisks_assembly" type="DD4hep_SubdetectorAssembly" vis="VTXVis">
+            <composite name="VertexDisks"/>
+            <composite name="VertexDisks_support"/>
+        </detector>
 
         <comment> Vertex disks </comment>
         <detector id="DetID_VXD_Disks" name="VertexDisks" vis="VXDVis" type="VertexEndcap_detailed_o1_v03" readout="VertexEndcapCollection" reflect="true" region="VTXDRegion">
