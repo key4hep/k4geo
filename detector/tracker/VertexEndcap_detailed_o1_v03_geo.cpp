@@ -233,6 +233,11 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
     for (xml_coll_t li(x_det, _U(layer)); li; ++li) {
       xml_comp_t x_layer(li);
+
+      if(x_layer.attr<bool>(_Unicode(ignore), false))
+        continue; // Skip layers marked to be ignored. This can be used for example to easily switch 
+                  // off layers that are outside the envelopes of the detector
+
       int layer_id = x_layer.id();
       double rmin = x_layer.rmin();
       double rmax = x_layer.rmax();

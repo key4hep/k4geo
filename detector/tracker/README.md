@@ -14,6 +14,7 @@ o1_v02 of the barrel also enables the use of curved support and sensor volumes n
 
 ### o1_v03
 Barrel: One can now have a partially insensitive sensor using 'sensor_insensitive_thickness_below' and 'sensor_insensitive_thickness_above', which enables the detailed description of sensors that are not fully sensitive in thickness (e.g. sensors in TPSCo 65 nm process for curved vertex detectors). Curved sensors can now also be approximated by trapezoidal volumes with the 'nsegments' option. This allows to perform track reconstruction with conformal tracking, which currently doesn't support curved sensors (=curved sensitive surfaces) yet. 
+Disks: Added feature to ignore a layer using the 'ignore' boolean key. This is used in the SiliconWrapper_o1_v02.xml model to dynamically adjust the disk radii.
 For both detector builders, volumes with 0 thickness are ignored now and the naming scheme is more consistent. Some of these changes have been presented in this [FCC Full Sim Meeting](https://indico.cern.ch/event/1649968/#56-update-on-vtx-and-silicon-w).
 
 # Trackers

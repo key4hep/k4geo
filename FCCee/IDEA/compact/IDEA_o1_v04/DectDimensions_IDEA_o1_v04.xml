@@ -121,12 +121,13 @@
     <constant name="Solenoid_Coil_half_length" value="Solenoid_half_length-200*mm"/>
     <constant name="Solenoid_Coil_radius" value="Solenoid_inner_radius+200*mm"/>
 
-    <!-- Silicon wrapper. These values can be changed at will and the geometry will adapt accordingly as of SiliconWrapper_o1_v02. For questions contact Armin Ilg -->
-    <constant name="SiWrB_inner_radius" value="2040*mm"/> <!-- Can be freely changed, as long as SiWrB_outer_radius-SiWrB_inner_radius is kept constant -->
-    <constant name="SiWrB_outer_radius" value="2080*mm"/> <!-- Can be freely changed, as long as SiWrB_outer_radius-SiWrB_inner_radius is kept constant -->
-    <constant name="SiWrB_half_length"  value="2400*mm"/> <!-- Can be freely changed -->
-    <constant name="SiWrD_inner_radius" value="350.0*mm"/>
-    <constant name="SiWrD_outer_radius" value="2040.0*mm"/>
+    <!-- Silicon wrapper. These values can be changed at will and the geometry will adapt accordingly. For questions contact Armin Ilg -->
+    <constant name="SiWrB_inner_radius" value="2040*mm"/>   <!-- Can be freely changed, as long as SiWrB_outer_radius-SiWrB_inner_radius is kept constant -->
+    <constant name="SiWrB_outer_radius" value="2080*mm"/>   <!-- Can be freely changed, as long as SiWrB_outer_radius-SiWrB_inner_radius is kept constant -->
+    <constant name="SiWrB_half_length"  value="2400*mm"/>   <!-- Can be freely changed -->
+    <constant name="SiWrD_inner_radius" value="350.0*mm"/>  <!-- Can be freely changed. Must be smaller than 'SiWrB_inner_radius' -->
+    <constant name="SiWrD_outer_radius" value="2040.0*mm"/> <!-- Can be freely changed. Must be larger than 'SiWrD_inner_radius' and SiWrD_outer_radius-SiWrD_inner_radius must be smaller than ~ 2450 mm, otherwise the number of available rings is not large enough to cover the whole area -->
+    <constant name="SiWrD_services_opening"  value="40*mm"/><!-- Can be freely changed. -->
     <constant name="SiWrD_zmin"         value="2300.0*mm"/> <!-- Can be freely changed, as long as SiWrD_zmax-SiWrD_zmin is kept constant or is increased -->
     <constant name="SiWrD_zmax"         value="2340.0*mm"/> <!-- Can be freely changed, as long as SiWrD_zmax-SiWrD_zmin is kept constant or is increased -->
 
