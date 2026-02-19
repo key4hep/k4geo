@@ -12,6 +12,10 @@ More details can be found in the talks at the [FCC week 2023](https://indico.cer
 These versions for the vertex barrel and disks fix previous issues with overlaps and enable to define in the xml file mother volumes to speed up the simulation by having less volumes per node in the volume hierarchy (especially relevant for the large-area silicon wrapper that also uses these constructors).
 o1_v02 of the barrel also enables the use of curved support and sensor volumes needed to describe the ultra-light vertex detector proposed in the 2024 [FCC Physics Workshop](https://indico.cern.ch/event/1307378/timetable/?view=standard#84-vertex-detector-and-silicon) and [FCC Week](https://indico.cern.ch/event/1298458/timetable/#15-optimization-of-si-tracking).
 
+### o1_v03
+Barrel: One can now have a partially insensitive sensor using 'sensor_insensitive_thickness_below' and 'sensor_insensitive_thickness_above', which enables the detailed description of sensors that are not fully sensitive in thickness (e.g. sensors in TPSCo 65 nm process for curved vertex detectors). Curved sensors can now also be approximated by trapezoidal volumes with the 'nsegments' option. This allows to perform track reconstruction with conformal tracking, which currently doesn't support curved sensors (=curved sensitive surfaces) yet. 
+For both detector builders, volumes with 0 thickness are ignored now and the naming scheme is more consistent. Some of these changes have been presented in this [FCC Full Sim Meeting](https://indico.cern.ch/event/1649968/#56-update-on-vtx-and-silicon-w).
+
 # Trackers
 
 ## parametrised_SimplifiedDriftChamber
