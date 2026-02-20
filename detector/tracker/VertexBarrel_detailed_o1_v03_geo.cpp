@@ -664,7 +664,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 VolPlane surf(sensor.volumes[i], dd4hep::rec::SurfaceType::Sensitive,
                               sensor.thicknesses[i] / 2. + sensor.insensitive_thicknesses_below[i],
                               sensor.thicknesses[i] / 2. + sensor.insensitive_thicknesses_above[i],
-                              Vector3D(1., 0., 0.), Vector3D(0, 1., 0.), Vector3D(0., 0., -1.));
+                              Vector3D(1., 0., 0.), Vector3D(0, 1., 0.), Vector3D(0., 0., 1.));
                 volSurfaceList(sensorDE)->push_back(surf);
                 iSensitive++;
               }
