@@ -635,7 +635,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
           }
         }
 
-        dd4hep::CellID cID;
+        dd4hep::CellID cID = 0;
         encoder.set(cID, layerFieldName, firstLayerId[i_section]);
         encoder.set(cID, rowFieldName, idx);
 
