@@ -182,6 +182,12 @@ namespace DDSegmentation {
      */
     inline int layer(const CellID aCellID) const { return _decoder->get(aCellID, fieldNameLayer()); }
 
+    /**  Get the pseudo-layer for a given cell ID (available only for endcap)
+     *   @param[in] cID the cell ID
+     *   return The pseudo-layer number
+     */
+    unsigned int definePseudoLayer(const CellID cID) const;
+
     /**  Set the number of bins in azimuthal angle.
      *   @param[in] bins Number of bins in phi.
      */

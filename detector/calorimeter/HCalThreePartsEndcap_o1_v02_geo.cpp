@@ -640,7 +640,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
         encoder.set(cID, rowFieldName, idx);
 
         // add if it is not already added
-        if (std::find(rowNumber.begin(), rowNumber.end(), idx) == rowNumber.end())
+        if(rowNumber.empty() || rowNumber.back() != idx)
         {
           double xpos = seg_phirow->position(cID).x();
           double ypos = seg_phirow->position(cID).y();

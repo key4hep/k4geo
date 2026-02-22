@@ -180,7 +180,7 @@ namespace DDSegmentation {
       int idx = floor(irow / m_gridSizeRow[layer]) + 1;
 
       // If this is Endcap and m_groupedRows is provided from the xml file, then group the rows into the pseudo-layer cells
-      // according to the provided numbers by redefining the cell index (idx).
+      // according to the provided numbers by redefining the cell index (idx), and do not use granularity set by grid_size_row parameter.
       if (m_detLayout == 1 && !m_groupedRows.empty())
       {
         int nrows = 0;
@@ -193,13 +193,15 @@ namespace DDSegmentation {
             break;
           }
         }
+
+        irow +=1;
       }
+      else irow += m_gridSizeRow[layer];
 
       // add the index if it is not already there
       if (li.cellIndexes.empty() || li.cellIndexes.back() != idx) {
         li.cellIndexes.push_back(idx);
       }
-      irow += m_gridSizeRow[layer];
     }
     size_t sz = li.cellIndexes.size();
 
@@ -308,7 +310,7 @@ namespace DDSegmentation {
     int idx = floor(nrow / m_gridSizeRow[layer]) + 1;
 
     // If this is Endcap and m_groupedRows is provided from the xml file, then group the rows into the pseudo-layer cells
-    // according to the provided numbers.
+    // according to the provided numbers, and do not use granularity set by grid_size_row parameter.
     if (m_detLayout == 1 && !m_groupedRows.empty())
     {
       int nrows = 0;
@@ -337,50 +339,47 @@ namespace DDSegmentation {
       // For endcap, the volume ID comes with "type" field information which would screw up the topo-clustering,
       // therefore, lets set it to zero, as it is for the cell IDs in the neighbours map.
       decoder()->set(cID, m_typeIndex, 0);
-
-      // Determine pseudo-layer index.
-      // Pseudo-layer is defined as the vertical tower of rows/cells from different physical layers in a give section.
-      // This is passed to PandoraPFA as a longitudinal layer.
-      // NOTE: The pseudo-layer definition breaks down if different physical layers in a given section have different granularities.
-      // If in any of the sections the granularity is different between the layers, then will set pseudo-layer to 0 for all cells.
-      auto checkEqual = [](const std::vector<int> &v, size_t first, size_t last) {
-        if ( first>last || v.size() == 0 || v.size()<=last) return false;
-        for (size_t i = first+1; i <= last; ++i)
-        {
-          if (v[i] != v[first])  return false;
-        }
-       return true;
-      };
-
-      uint pseudoLayer = 0;
-      std::vector<std::pair<uint, uint>> minMaxLayerId(getMinMaxLayerId());
-      for (uint i_section = 0; i_section < minMaxLayerId.size(); i_section++) {
-        uint minLayerId = minMaxLayerId[i_section].first;
-        uint maxLayerId = minMaxLayerId[i_section].second;
-
-        // check if the granularity is same between the physical layers in the i_section, if not, set the pseudo-layer bit to 0.
-        // We need to check this only if m_groupedRows is empty. Othewise, pseudo-layers are defined according to m_groupedRows.
-        if (m_groupedRows.empty() && !checkEqual(m_gridSizeRow, minLayerId, maxLayerId))
-        {
-          // Granularity is different between the layers in a given section -> pseudo-layers can not be defined.
-          // This could happen if doing a study without PandoraPFA.
-          decoder()->set(cID, m_pseudoLayerIndex, 0);
-          return cID;
-        }
-
-        // check if the given cell is in the i_section
-        if (layer >= minLayerId && layer <= maxLayerId) {
-          pseudoLayer += (abs(idx)-1);
-          decoder()->set(cID, m_pseudoLayerIndex, pseudoLayer);
-          break;
-        }
-        // if the cell is not in the i_section then start pseudoLayer from number of rows/cells in the i_section.
-        pseudoLayer+=(getLayerInfo(minLayerId).cellIndexes.size()/2); // cellIndexes contains cell indexes from both positive- and negative-z endcaps,
-                                                                      // hence divide the size by 2.
-      }
+      // Set the pseudo-layer index.
+      unsigned int pseudoLayer = definePseudoLayer(cID);
+      decoder()->set(cID, m_pseudoLayerIndex, pseudoLayer);
     }
 
     return cID;
+  }
+
+  /*
+  * Determine pseudo-layer index.
+  * Pseudo-layer is defined as the vertical tower of rows/cells from different physical layers in a give section.
+  * This is passed to PandoraPFA as a longitudinal layer.
+  * NOTE: The pseudo-layer definition breaks down if different physical layers in any of the sections have different granularities,
+  *       This could happen if doing a study without PandoraPFA, so the pseudo-layers will not be used anyway.
+  */
+  unsigned int FCCSWHCalPhiRow_k4geo::definePseudoLayer(const CellID cID) const {
+    // pseudo-layer can only be defined for the endcap.
+    if (m_detLayout != 1) return 0;
+
+    // get index of the cell in the layer
+    int idx = decoder()->get(cID, m_rowIndex);
+    // get the layer number
+    uint layer = decoder()->get(cID, m_layerIndex);
+
+    uint pseudoLayer = 0;
+    std::vector<std::pair<uint, uint>> minMaxLayerId(getMinMaxLayerId());
+    for (uint i_section = 0; i_section < minMaxLayerId.size(); i_section++) {
+      uint minLayerId = minMaxLayerId[i_section].first;
+      uint maxLayerId = minMaxLayerId[i_section].second;
+
+      // check if the given cell is in the i_section
+      if (layer >= minLayerId && layer <= maxLayerId) {
+        pseudoLayer += (abs(idx)-1);
+        return pseudoLayer;
+      }
+      // if the cell is not in the i_section then start pseudoLayer from number of rows/cells in the i_section.
+      pseudoLayer+=(getLayerInfo(minLayerId).cellIndexes.size()/2); // cellIndexes contains cell indexes from both positive- and negative-z endcaps,
+                                                                      // hence divide the size by 2.
+    }
+
+    return pseudoLayer;
   }
 
   /// determine the azimuthal angle phi based on the cell ID
