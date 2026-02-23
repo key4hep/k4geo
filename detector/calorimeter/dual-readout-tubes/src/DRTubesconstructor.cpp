@@ -128,9 +128,8 @@ void DRBarrelTubes::DRTubesconstructor::calculate_tower_parameters() {
   Calculate the maximal distance a tower can stick out, by looping over all tower and saving the maximal one
   In the end, make the trapezoids (towers) a bit shorter to accomodate for this */
   double shortening = 0.0;
-  unsigned int tower_number = 2;
   // First tower has protrusion 0 because it is placed without tilting, so start with second tower
-  for (double theta = m_tower_theta; theta < m_barrel_endcap_angle; theta += m_tower_theta, tower_number++) {
+  for (double theta = m_tower_theta; theta < m_barrel_endcap_angle; theta += m_tower_theta) {
     double protection_covered_z = std::tan(theta) * m_calo_inner_r;
     double protection_tower_z = std::tan(theta + m_tower_theta) * m_calo_inner_r - protection_covered_z;
     double protection_back_shift = std::sin(theta) * protection_tower_z;
@@ -141,7 +140,6 @@ void DRBarrelTubes::DRTubesconstructor::calculate_tower_parameters() {
 
     if (protection_shortening > shortening) {
       shortening = protection_shortening; // Save the new highest shortening value
-      // std::cout << "Tower number: " << tower_number << " shortening: " << shortening/mm << "mm" << std::endl;
     } else
       break; // If the required shortening is decreasing, we have found the maximal value
   }

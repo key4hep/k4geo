@@ -153,7 +153,6 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
     Volume layerVolume("HCalLayerVol", layerShape, lcdd.air());
 
     layerVolume.setVisAttributes(lcdd.invisible());
-    unsigned int idxSubMod = 0;
 
     dd4hep::PlacedVolume placedLayerVolume = envelopeVolume.placeVolume(layerVolume);
     placedLayerVolume.addPhysVolID("layer", idxLayer);
@@ -161,8 +160,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
 
     double tileZOffset = -0.5 * dzSequence;
     // first Z loop (tiles that make up a sequence)
-    for (xml_coll_t xCompColl(sequences[sequenceIdx], _Unicode(module_component)); xCompColl;
-         ++xCompColl, ++idxSubMod) {
+    for (xml_coll_t xCompColl(sequences[sequenceIdx], _Unicode(module_component)); xCompColl; ++xCompColl) {
       xml_comp_t xComp = xCompColl;
       dd4hep::Tube tileShape(rminLayer, rmaxLayer, 0.5 * xComp.thickness());
 
