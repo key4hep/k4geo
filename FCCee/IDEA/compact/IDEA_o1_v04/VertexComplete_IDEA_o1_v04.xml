@@ -133,9 +133,9 @@
         <constant name="VTXO_sens_rphi_sens_spacing" value="0.2*mm"/> <comment>Distance between individual readout chips in rphi</comment>
         <constant name="VTXO_sens_z_sens_spacing" value="0.2*mm"/> <comment>Distance between individual readout chips in rphi</comment>
 
-        <constant name="VTXO_insensitive_thickness_below"  value="20e-03*mm"/> <comment> Assume no insensitive thickness </comment>
-        <constant name="VTXO_sensitive_thickness"          value="10e-03*mm"/> <comment> Assume 50 microns thick sensitive volume </comment>
-        <constant name="VTXO_insensitive_thickness_above"  value="20e-03*mm"/> <comment> Assume no insensitive thickness </comment>
+        <constant name="VTXO_insensitive_thickness_below"  value="0e-03*mm"/> <comment> Assume no insensitive thickness </comment>
+        <constant name="VTXO_sensitive_thickness"          value="50e-03*mm"/> <comment> Assume 50 microns thick sensitive volume </comment>
+        <constant name="VTXO_insensitive_thickness_above"  value="0e-03*mm"/> <comment> Assume no insensitive thickness </comment>
         <constant name="VTXO_sensor_thickness"   value="VTXO_insensitive_thickness_below+VTXO_sensitive_thickness+VTXO_insensitive_thickness_above"/>
 
         <comment> We use modules of four ATLASPix3 sensors </comment>
