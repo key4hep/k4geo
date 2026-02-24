@@ -122,8 +122,8 @@
     <constant name="Solenoid_Coil_radius" value="Solenoid_inner_radius+200*mm"/>
 
     <!-- Silicon wrapper. These values can be changed at will and the geometry will adapt accordingly. For questions contact Armin Ilg -->
-    <constant name="SiWrB_inner_radius" value="2040*mm"/>   <!-- Can be freely changed, as long as SiWrB_outer_radius-SiWrB_inner_radius is kept constant -->
-    <constant name="SiWrB_outer_radius" value="2080*mm"/>   <!-- Can be freely changed, as long as SiWrB_outer_radius-SiWrB_inner_radius is kept constant -->
+    <constant name="SiWrB_inner_radius" value="2040*mm"/>   <!-- Can be freely changed, as long as SiWrB_outer_radius-SiWrB_inner_radius is kept constant. A radius of up to ~3 m is supported with the currently assumed sensor size -->
+    <constant name="SiWrB_outer_radius" value="2080*mm"/>   <!-- Can be freely changed, as long as SiWrB_outer_radius-SiWrB_inner_radius is kept constant. A radius of up to ~3 m is supported with the currently assumed sensor size -->
     <constant name="SiWrB_half_length"  value="2400*mm"/>   <!-- Can be freely changed -->
     <constant name="SiWrD_inner_radius" value="350.0*mm"/>  <!-- Can be freely changed. Must be smaller than 'SiWrB_inner_radius' -->
     <constant name="SiWrD_outer_radius" value="2040.0*mm"/> <!-- Can be freely changed. Must be larger than 'SiWrD_inner_radius' and SiWrD_outer_radius-SiWrD_inner_radius must be smaller than ~ 2450 mm, otherwise the number of available rings is not large enough to cover the whole area -->

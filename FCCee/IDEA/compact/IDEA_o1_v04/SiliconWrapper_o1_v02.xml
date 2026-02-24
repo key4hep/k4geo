@@ -123,7 +123,7 @@
         <constant name="SiWrD_support_outer_radius" value="SiWrD_outer_radius-SiWrD_services_opening"/> <comment> Keep an opening for drift chamber (or other tracker) services going out through crack between SiWr barrel and disk </comment>
     </define>
 
-    <define> <comment> Parameters for the ring design of the silicon wrapper disks. Up to 32 rings are used, but rings that would fall outside the allocated radius ('SiWrD_support_outer_radius') are ignored. A maximal radius of XXX for the base sensor width is supported. </comment>
+    <define> <comment> Parameters for the ring design of the silicon wrapper disks. Up to 32 rings are used, but rings that would fall outside the allocated radius ('SiWrD_support_outer_radius') are ignored. A maximal radius of about 3 meters for the base sensor width is supported. </comment>
         <constant name="SiWrD_ring0_rmin" value="SiWrD_inner_radius"/>
         <constant name="SiWrD_ring1_rmin" value="SiWrD_inner_radius+1.*SiWr_mod_rphi-1.*SiWrD_petals_overlap_r"/>
         <constant name="SiWrD_ring2_rmin" value="SiWrD_inner_radius+2.*SiWr_mod_rphi-2.*SiWrD_petals_overlap_r"/>
