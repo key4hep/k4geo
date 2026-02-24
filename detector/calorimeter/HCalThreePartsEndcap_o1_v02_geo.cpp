@@ -642,9 +642,10 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
         // add if it is not already added
         if(rowNumber.empty() || rowNumber.back() != idx)
         {
-          double xpos = seg_phirow->position(cID).x();
-          double ypos = seg_phirow->position(cID).y();
-          double zpos = seg_phirow->position(cID).z();
+          dd4hep::DDSegmentation::Vector3D positionVector = seg_phirow->position(cID);
+          double xpos = positionVector.x();
+          double ypos = positionVector.y();
+          double zpos = positionVector.z();
           double radius = sqrt(xpos*xpos + ypos*ypos);
 
           dd4hep::rec::Vector3D ivr1 = dd4hep::rec::Vector3D(0, radius, zpos - 0.5 * dzCell ); // defining starting vector points of the given layer
@@ -677,7 +678,7 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
           dd4hep::printout(dd4hep::INFO, "HCalThreePartsEndcap_o1_v02", "    number of radiation length is: %.2f", nRadiationLengths);
           dd4hep::printout(dd4hep::INFO, "HCalThreePartsEndcap_o1_v02", "    number of interaction length is: %.2f", nInteractionLengths);
 
-          caloLayer.distance = seg_phirow->position(cID).z();   // z-position of the pseudoLayer
+          caloLayer.distance = zpos;   // z-position of the pseudoLayer
           caloLayer.sensitive_thickness = dzCell; // dimension along the z-axis
           //caloLayer.sensitive_thickness = thickness_sen;
           caloLayer.absorberThickness = absorberThickness;

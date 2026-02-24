@@ -19,9 +19,13 @@
  *  Cells are defined in r-z plan by merging the row/sequence of scintillator/absorber.
  *  Each row consists of 2 * Master_Plate + 1 * Spacer_Plate + 1 * Scintillator.
  *  Considering a single row as a single cell gives the highest possible granularity.
+ *  Cells in both Barrel and Endcap compose radial layers.
+ *  Cells with the same index in different radial layers of a given Endcap section share the same z-coordinate
+ * and can therefore be grouped into pseudo-layers along z.
  *  More details:
  * https://indico.cern.ch/event/1475808/contributions/6219554/attachments/2966253/5218774/FCC_FullSim_HCal_slides.pdf
- *
+ *  Illustration of Endcap pseudo-layers (slide 15):
+ * https://indico.cern.ch/event/1593770/contributions/6745243/attachments/3155256/5604202/ALLEGRO_HCAL_simulation_studies.pdf
  */
 
 namespace dd4hep {
@@ -166,8 +170,8 @@ namespace DDSegmentation {
      */
     inline const std::string& fieldNameLayer() const { return m_layerID; }
 
-    /**  Get the field name for layer.
-     *   return The field name for layer.
+    /**  Get the field name for pseudoLayer.
+     *   return The field name for pseudoLayer.
      */
     inline const std::string& fieldNamePseudoLayer() const { return m_pseudoLayerID; }
 
