@@ -31,7 +31,7 @@
   </define>
 
   <!-- Import dimensions -->
-  <include ref="../IDEA_o1_v03/DectDimensions_IDEA_o1_v03.xml"/>
+  <include ref="DectDimensions_IDEA_o1_v04.xml"/>
 
   <!-- Import accelerator components -->
   <!-- shape based model of the beam pipe -->
