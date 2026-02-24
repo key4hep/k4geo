@@ -22,6 +22,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
 #include "XML/Utilities.h"
+#include "XMLHandlerDB.h"
 
 #include <list>
 
@@ -100,14 +101,17 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
     vector<componentsStruct> components_vec;
     vector<endOfStaveStruct> endOfStaves;
-    double sensor_z_offset;
     double sensor_offset;
     double sensor_thickness;
+    double sensor_z_offset;
+    vector<double> sensor_thicknesses;
     vector<bool> sensor_sensitives;
+    vector<double> sensor_z_offsets;
     vector<double> sensor_xmin;
     vector<double> sensor_xmax;
     vector<double> sensor_ymin;
     vector<double> sensor_ymax;
+    string sensor_name;
     vector<string> sensor_names;
     double sensor_width;
     double sensor_length;
@@ -179,31 +183,70 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
     // Sensor
     xml_coll_t c_sensor(x_mod, _U(sensor));
-    m.sensor_z_offset = xml_comp_t(c_sensor).z_offset(0);
-    m.sensor_offset = xml_comp_t(c_sensor).offset(0);
-    m.sensor_thickness = xml_comp_t(c_sensor).thickness();
-    m.sensor_material = theDetector.material(xml_comp_t(c_sensor).materialStr());
-    xml_coll_t c_component = xml_coll_t(c_sensor, _U(component));
-
     int iSensor = 0;
+    m.sensor_offset = xml_comp_t(c_sensor).offset(0);
+    m.sensor_material = theDetector.material(xml_comp_t(c_sensor).materialStr());
+    m.sensor_thickness = xml_comp_t(c_sensor).thickness();
+    m.sensor_z_offset = xml_comp_t(c_sensor).z_offset(0);
+    m.sensor_name = xml_comp_t(c_sensor).nameStr("sensor");
+    
+    // Try to load sensor components from external include file first
+    bool use_include = false;
+    dd4hep::xml::Handle_t component_source;
+    std::unique_ptr<dd4hep::xml::DocumentHolder> doc;
+    try {
+      xml_coll_t incl(c_sensor, _U(include));
+      if (incl) {
+        doc = std::make_unique<dd4hep::xml::DocumentHolder>(
+          dd4hep::xml::DocumentHandler().load(incl, incl.attr_value(_U(ref))));
+          printout(DEBUG, det_name, "Using sensor description from external file: " + _toString(incl.attr_value(_U(ref))));
+          component_source = doc->root();
+          use_include = true;
+        }
+    } catch (...) {
+      printout(DEBUG, det_name, "No sensor description from external file found, using inline description instead");
+      use_include = false;
+    }
+      
+    // Either use external include file or inline sensor description
+    xml_coll_t c_component = use_include ? xml_coll_t(component_source, _U(component)) 
+                                          : xml_coll_t(c_sensor, _U(component));
+    
     for (c_component.reset(); c_component; ++c_component) {
       xml_comp_t component = c_component;
-      m.sensor_sensitives.push_back(component.isSensitive());
-      m.sensor_xmin.push_back(component.xmin());
-      m.sensor_xmax.push_back(component.xmax());
-      m.sensor_ymin.push_back(component.ymin());
-      m.sensor_ymax.push_back(component.ymax());
-      m.sensor_names.push_back(component.nameStr("sensor"));
+      double sensitive_thickness = getAttrOrDefault(component, _Unicode(thickness), m.sensor_thickness); // Take the overall sensor thickness as default
+      vector<double> thicknesses_split = {getAttrOrDefault(c_component, _Unicode(sensor_insensitive_thickness_below), double(0.0)), sensitive_thickness,
+                                        getAttrOrDefault(c_component, _Unicode(sensor_insensitive_thickness_above), double(0.0))};
+      vector<string> sensor_part_names = {component.nameStr("sensor") + _toString(iSensor, "_insensitive_below_%d"),
+                                          component.nameStr("sensor") + _toString(iSensor, "_%d"),
+                                          component.nameStr("sensor") + _toString(iSensor, "_insensitive_above_%d")};
+      vector<bool> isSensitive_split = {false, component.isSensitive(), false};
+      vector<double> z_offsets = {m.sensor_z_offset + component.z_offset(0), m.sensor_z_offset + component.z_offset(0) + thicknesses_split[0],
+                          m.sensor_z_offset + component.z_offset(0) + thicknesses_split[0] + thicknesses_split[1]};
+  
+      for (int i = 0; i < int(thicknesses_split.size()); i++) { // Loop over sensitive and insensitive parts of sensor, but skip parts with zero thickness
+        if (thicknesses_split[i] == 0.)
+          continue; // Skip components with zero thickness
 
-      Box ele_box = Box(abs(component.xmax() - component.xmin()) / 2., abs(component.ymax() - component.ymin()) / 2.,
-                        m.sensor_thickness / 2.);
-      Volume ele_vol = Volume(m.sensor_names.back() + _toString(iSensor, "_%d"), ele_box, m.sensor_material);
-      ele_vol.setAttributes(theDetector, x_det.regionStr(), x_det.limitsStr(), component.visStr());
+        m.sensor_thicknesses.push_back(thicknesses_split[i]);
+        m.sensor_sensitives.push_back(isSensitive_split[i]);
+        m.sensor_xmin.push_back(component.xmin());
+        m.sensor_xmax.push_back(component.xmax());
+        m.sensor_ymin.push_back(component.ymin());
+        m.sensor_ymax.push_back(component.ymax());
+        m.sensor_names.push_back(sensor_part_names[i]);
+        m.sensor_z_offsets.push_back(z_offsets[i]);
 
-      if (m.sensor_sensitives.back())
-        ele_vol.setSensitiveDetector(sens);
-      m.sensor_volumes.push_back(ele_vol);
-      iSensor++;
+        Box ele_box = Box(abs(component.xmax() - component.xmin()) / 2., abs(component.ymax() - component.ymin()) / 2.,
+                          m.sensor_thicknesses.back() / 2.);
+        Volume ele_vol = Volume(m.sensor_names.back() + _toString(iSensor, "_%d"), ele_box, m.sensor_material);
+        ele_vol.setAttributes(theDetector, x_det.regionStr(), x_det.limitsStr(), component.visStr());
+
+        if (m.sensor_sensitives.back())
+          ele_vol.setSensitiveDetector(sens);
+        m.sensor_volumes.push_back(ele_vol);
+        iSensor++;
+      }
     }
     m.sensor_width = *max_element(m.sensor_xmax.begin(), m.sensor_xmax.end()) -
                      *min_element(m.sensor_xmin.begin(), m.sensor_xmin.end());
@@ -394,16 +437,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
           // Place sensor
           for (int iModule = 0; iModule < nmodules; iModule++) {
-            double z_alternate_module = (iModule % 2 == 0) ? 0.0 : stave_dz;
-            x_pos = m.sensor_offset;
-            y_pos = -stave_length / 2. + m.sensor_length / 2. + iModule * m.sensor_length + iModule * step;
-            z_pos = m.sensor_z_offset + z_alternate_module + m.sensor_thickness / 2.;
-            if (side == -1) {
-              z_pos = -z_pos;
-            }
-            Position pos(x_pos, y_pos, z_pos);
-
-            string module_name = _toString(iModule, "module%d");
+            string module_name = m.sensor_name + _toString(iModule, "_module%d");
             Assembly module_assembly(module_name);
 
             if (stave_motherVolThickness > 0.0 && stave_motherVolWidth > 0.0)
@@ -418,6 +452,15 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
             int iSensitive = 0;
             for (int i = 0; i < int(m.sensor_volumes.size()); i++) {
+              double z_alternate_module = (iModule % 2 == 0) ? 0.0 : stave_dz;
+              x_pos = m.sensor_offset;
+              y_pos = -stave_length / 2. + m.sensor_length / 2. + iModule * m.sensor_length + iModule * step;
+              z_pos = m.sensor_z_offsets[i] + z_alternate_module + m.sensor_thicknesses[i] / 2.;
+              if (side == -1) {
+                z_pos = -z_pos;
+              }
+              Position pos(x_pos, y_pos, z_pos);
+
               x_pos = m.sensor_xmin[i] + abs(m.sensor_xmax[i] - m.sensor_xmin[i]) / 2.;
               y_pos = m.sensor_ymin[i] + abs(m.sensor_ymax[i] - m.sensor_ymin[i]) / 2.;
               z_pos = 0;
