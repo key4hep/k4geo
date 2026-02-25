@@ -45,7 +45,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   string det_name = x_det.nameStr();
   bool reflect = x_det.reflect(false);
   DetElement sdet(det_name, x_det.id());
-  int m_id = 0;
   PlacedVolume pv;
 
   // --- create an envelope volume and position it into the world ---------------------
@@ -109,7 +108,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   list<module_information> module_information_list;
 
   // --- Collect module(s) information
-  for (xml_coll_t mi(x_det, _U(module)); mi; ++mi, ++m_id) {
+  for (xml_coll_t mi(x_det, _U(module)); mi; ++mi) {
     xml_comp_t x_mod = mi;
 
     module_information m;
