@@ -47,7 +47,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   string det_name = x_det.nameStr();
   bool reflect = x_det.reflect(false);
   DetElement sdet(det_name, det_id);
-  int m_id = 0, c_id = 0, n_sensor = 0;
+  int c_id = 0;
   map<string, Volume> modules;
   map<string, Placements> sensitives;
   PlacedVolume pv;
@@ -67,7 +67,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   envelope.setVisAttributes(theDetector.invisible());
   sens.setType("tracker");
 
-  for (xml_coll_t mi(x_det, _U(module)); mi; ++mi, ++m_id) {
+  for (xml_coll_t mi(x_det, _U(module)); mi; ++mi) {
     xml_comp_t x_mod = mi;
     string m_nam = x_mod.nameStr();
     xml_comp_t trd = x_mod.trd();
@@ -86,7 +86,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
     // Loop over slices
     // The first slice (top in the xml) is placed at the "bottom" of the module
-    for (ci.reset(), n_sensor = 1, c_id = 0, posY = -y1; ci; ++ci, ++c_id) {
+    for (ci.reset(), c_id = 0, posY = -y1; ci; ++ci, ++c_id) {
       xml_comp_t c = ci;
       double c_thick = c.thickness();
       Material c_mat = theDetector.material(c.materialStr());
@@ -98,7 +98,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
       if (c.isSensitive()) {
         c_vol.setSensitiveDetector(sens);
         sensitives[m_nam].push_back(pv);
-        ++n_sensor;
       }
       posY += c_thick;
     }
