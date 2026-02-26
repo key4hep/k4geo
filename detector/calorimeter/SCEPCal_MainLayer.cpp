@@ -199,6 +199,13 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
   dd4hep::OpticalSurfaceManager surfMgr = theDetector.surfaceManager();
   dd4hep::OpticalSurface PbWO4_to_ESR = surfMgr.opticalSurface("/world/" + detName + "#PbWO4_to_ESR");
 
+  segmentation->setDetIdBarrel(BARREL_SYSTEM_NO);
+  segmentation->setDetIdEndcap(ENDCAP_SYSTEM_NO);
+  segmentation->setIThetaBarrelStart(N_THETA_ENDCAP);
+  segmentation->setIThetaBarrelEnd(N_THETA_BARREL + N_THETA_ENDCAP - 1);
+  segmentation->setNPhi(PHI_SEGMENTS);
+  segmentation->setNGamma(N_GAMMA_BARREL);
+
   // Global assembly volumes
   std::vector<double> zBarrelPolyhedra = {-br_phislice_8pa_y2, -br_phislice_8pa_y0, br_phislice_8pa_y0,
                                           br_phislice_8pa_y2};

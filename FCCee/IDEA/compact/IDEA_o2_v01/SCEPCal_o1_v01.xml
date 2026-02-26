@@ -1058,7 +1058,7 @@
     <!--  -->
     <readout name="SCEPCal_Main">
       <segmentation type="SCEPCal_MainSegmentation_k4geo"/>
-      <id>system:5,phi:7,theta:11,gamma:4,epsilon:4,depth:1</id>
+      <id>system:5,phi:7,theta:11,gamma:4,epsilon:4,depth:1,isCheren:1</id>
     </readout>
     <readout name="SCEPCal_Timing">
       <segmentation type="SCEPCal_TimingSegmentation_k4geo"/>
