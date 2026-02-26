@@ -29,6 +29,11 @@
     <constant name="EndcapHCal_layer_size1" value="100*mm" />
     <constant name="EndcapHCal_layer_size2" value="150*mm" />
     <constant name="EndcapHCal_layer_size3" value="250*mm" />
+    <!-- division into rows -->
+    <constant name="EndcapHCal_sequence_thickness" value="2*EndcapHCal_master_plate_thickness + EndcapHCal_spacer_plate_thickness + EndcapHCal_scintillator_thickness + 2*EndcapHCal_air_space_thickness" />
+    <constant name="EndcapHCal_numSequencesZ1" value="floor(((HCalEndcap_max_z1-HCalEndcap_min_z1)-2*(EndcapHCal_end_plate_thickness+EndcapHCal_plate_space))/EndcapHCal_sequence_thickness)" />
+    <constant name="EndcapHCal_numSequencesZ2" value="floor(((HCalEndcap_max_z2-HCalEndcap_min_z2)-2*(EndcapHCal_end_plate_thickness+EndcapHCal_plate_space))/EndcapHCal_sequence_thickness)" />
+    <constant name="EndcapHCal_numSequencesZ3" value="floor(((HCalEndcap_max_z3-HCalEndcap_min_z3)-2*(EndcapHCal_end_plate_thickness+EndcapHCal_plate_space))/EndcapHCal_sequence_thickness)" />
   </define>
 
   <display>
@@ -90,6 +95,11 @@
            dRlayer - all different dRs/thicknesses used to form the layers.  
            grid_size_row - takes 37 numbers which equals to the number of layers in all three sections of the Endcap;
                            each value is the number of rows/scintillators grouped in a cell in each layer.
+           grouped_rows - takes Nx3 numbers: N is the number of longitudinal pseudo-layers per section;
+                          each set of N numbers corresponds to different sections of the Endcap; 
+                          each element in the vector is the number of rows per physical layer to be grouped in the longitudinal pseudo-layer;
+                          The number of non-zero elements corresponds to the total number of longitudinal pseudo-layers.
+                          Example: "3 3 3 6 6 6   6 6 6 9 0 0   10 10 10 15 15 25"
            dz_row - size of the row consisting of 2 * Master plate + 1 * Spacer plate + 1 * Scintillator + Air.
            phi_bins - number of bins in phi
            offset_phi - center of the first phi bin.
@@ -97,15 +107,16 @@
       <segmentation type="FCCSWHCalPhiRow_k4geo" 
          detLayout="1"
          offset_z="HCalEndcap_min_z1+(HCalEndcap_max_z1-HCalEndcap_min_z1)*0.5 HCalEndcap_min_z2+(HCalEndcap_max_z2-HCalEndcap_min_z2)*0.5 HCalEndcap_min_z3+(HCalEndcap_max_z3-HCalEndcap_min_z3)*0.5" 
-         width_z="248.5*2*mm 243.0*2*mm 770.5*2*mm"
+         width_z="EndcapHCal_numSequencesZ1*EndcapHCal_sequence_thickness EndcapHCal_numSequencesZ2*EndcapHCal_sequence_thickness EndcapHCal_numSequencesZ3*EndcapHCal_sequence_thickness"
          offset_r="HCalEndcap_inner_radius1+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space HCalEndcap_inner_radius2+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space HCalEndcap_inner_radius3+EndcapHCal_face_plate_thickness+EndcapHCal_plate_space"
          numLayers="5 1 0  4 3 2  4 10 8"
          dRlayer="EndcapHCal_layer_size1 EndcapHCal_layer_size2 EndcapHCal_layer_size3"
          grid_size_row="1 1 1 1 1 1   1 1 1 1 1 1 1 1 1   1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1"
+         grouped_rows=""
          dz_row="2*EndcapHCal_master_plate_thickness + EndcapHCal_spacer_plate_thickness + EndcapHCal_scintillator_thickness + 2*EndcapHCal_air_space_thickness" 
          phi_bins="EndcapHCal_n_phi_modules" 
          offset_phi="-pi+(pi/EndcapHCal_n_phi_modules)"/>
-      <id>system:4,type:3,layer:6,row:-8,phi:10</id>
+      <id>system:4,type:3,layer:6,pseudoLayer:8,row:-8,phi:10</id>
     </readout>
   </readouts>
 

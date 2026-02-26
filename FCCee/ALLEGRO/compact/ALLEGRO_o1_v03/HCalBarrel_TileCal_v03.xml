@@ -92,6 +92,7 @@
            dRlayer - all different dRs/thicknesses used to form the layers.
            grid_size_row - takes 13 numbers which equals to the number of layers in the Barrel;
                            each value is the number of rows/scintillators grouped in a cell in each layer.
+           grouped_rows - this is not used for the Barrel.
            dz_row - size of the row consisting of 2 * Master plate + 1 * Spacer plate + 1 * Scintillator + Air.
            phi_bins - number of bins in phi
            offset_phi - center of the first phi bin.
@@ -104,6 +105,7 @@
          numLayers="4 6 3"
          dRlayer="BarHCal_layer_size1 BarHCal_layer_size2 BarHCal_layer_size3"
          grid_size_row="1 1 1 1 1 1 1 1 1 1 1 1 1"
+         grouped_rows=""
          dz_row="2*BarHCal_master_plate_thickness + BarHCal_spacer_plate_thickness + BarHCal_scintillator_thickness + 2*BarHCal_air_space_thickness"
          phi_bins="BarHCal_n_phi_modules"
          offset_phi="-pi+(pi/BarHCal_n_phi_modules)"/>

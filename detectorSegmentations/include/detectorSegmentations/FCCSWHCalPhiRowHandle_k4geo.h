@@ -69,7 +69,10 @@ public:
   }
 
   /// access the grid size in row for each layer
-  inline std::vector<int> gridSizeRow() const { return access()->implementation->gridSizeRow(); }
+  inline const std::vector<int>& gridSizeRow() const { return access()->implementation->gridSizeRow(); }
+
+  /// access the number of rows grouped in the pseudo-layers of the Endcap
+  inline const std::vector<int>& groupedRows() const { return access()->implementation->groupedRows(); }
 
   /// access the grid size in Phi
   inline int phiBins() const { return access()->implementation->phiBins(); }
@@ -101,6 +104,11 @@ public:
   /// set the grid size in theta
   inline void setGridSizeRow(std::vector<int> const& cellSize) const {
     access()->implementation->setGridSizeRow(cellSize);
+  }
+
+  /// set the number of rows grouped in the pseudo-layer of the Endcap
+  inline void setGroupedRows(std::vector<int> const& cellSize) const {
+    access()->implementation->setGroupedRows(cellSize);
   }
 
   /// set the grid size in Phi
