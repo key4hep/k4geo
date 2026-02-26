@@ -44,7 +44,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   string det_name = x_det.nameStr();
   bool reflect = x_det.reflect(false);
   DetElement sdet(det_name, det_id);
-  int m_id = 0, c_id = 0, n_sensor = 0;
+  int c_id = 0, n_sensor = 0;
   map<string, Volume> modules;
   map<string, Placements> sensitives;
   PlacedVolume pv;
@@ -64,7 +64,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
   // Build the sensor units
   // Loop over 'modules' as defined in the XML
-  for (xml_coll_t mi(x_det, _U(module)); mi; ++mi, ++m_id) {
+  for (xml_coll_t mi(x_det, _U(module)); mi; ++mi) {
     xml_comp_t x_mod = mi;
     string m_nam = x_mod.nameStr();
     xml_comp_t trd = x_mod.trd();
