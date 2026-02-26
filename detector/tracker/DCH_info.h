@@ -5,7 +5,8 @@
 
 #include "DDRec/DetectorData.h"
 #include <map>
-#include "TVector3.h"
+#include <Math/Vector3D.h>
+#include <Math/GenVector/RotationY.h>
 
 namespace dd4hep {  namespace rec {
 
@@ -32,13 +33,15 @@ namespace dd4hep {  namespace rec {
 struct DCH_info_struct
 {
 public:
+    // use alias for root 3D vectors
+    using Vector3D = ROOT::Math::XYZVector;
     // use alias of types to show more clearly what the variable is
     // if everything is double, the code is not readable
     /// type for layer number
     using DCH_layer = int;
-    /// tpye for lengths
+    /// type for lengths
     using DCH_length_t = double;
-    /// tpye for angles
+    /// type for angles
     using DCH_angle_t = double;
     /// Half length of the active volume
     DCH_length_t Lhalf = {0};
@@ -149,13 +152,13 @@ public:
         /// cell parameter
         double width_z0 = {0.};
 
-        /// radius (cylindral coord) of sensitive wire
+        /// radius (cylindrical coord) of sensitive wire
         DCH_length_t radius_sw_z0 = {0.};
 
-        /// radius (cylindral coord) of 'down' field wires
+        /// radius (cylindrical coord) of 'down' field wires
         DCH_length_t radius_fdw_z0 = {0.};
 
-        /// radius (cylindral coord) of 'up' field wires
+        /// radius (cylindrical coord) of 'up' field wires
         DCH_length_t radius_fuw_z0 = {0.};
 
         /// some quantities are derived from previous-layer ones
@@ -187,9 +190,9 @@ public:
     // The following functions are used in the digitization/reconstruction
     // Notation: ILayer is the correlative number of the layer. Layer is reserved to number within a superlayer
     inline DCH_layer CalculateILayerFromCellIDFields(int layer, int superlayer) const { DCH_layer ilayer = layer + (this->nlayersPerSuperlayer)*superlayer + 1; return ilayer;}
-    inline TVector3 Calculate_hitpos_to_wire_vector(int ilayer, int nphi, const TVector3& hit_position /*in cm*/) const;
-    inline TVector3 Calculate_wire_vector_ez       (int ilayer, int nphi) const;
-    inline TVector3 Calculate_wire_z0_point        (int ilayer, int nphi) const;
+    inline Vector3D Calculate_hitpos_to_wire_vector(int ilayer, int nphi, const Vector3D& hit_position /*in cm*/) const;
+    inline Vector3D Calculate_wire_vector_ez       (int ilayer, int nphi) const;
+    inline Vector3D Calculate_wire_z0_point        (int ilayer, int nphi) const;
     inline double   Calculate_wire_phi_z0          (int ilayer, int nphi) const;
 
 };
@@ -233,7 +236,7 @@ inline void DCH_info_struct::BuildLayerDatabase()
     ff_check_positive_parameter(this->first_sense_r,"radius of first layer cells" );
 
 
-    // intialize layer 1 from input parameters
+    // initialize layer 1 from input parameters
     {
         DCH_info_layer layer1_info;
         layer1_info.layer         = 1;
@@ -360,7 +363,7 @@ inline void DCH_info_struct::Show_DCH_info_database(std::ostream & oss) const
 /////       Ancillary functions for calculating the distance to the wire       ////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
-inline TVector3 DCH_info_struct::Calculate_wire_vector_ez(int ilayer, int nphi) const {
+inline DCH_info_struct::Vector3D DCH_info_struct::Calculate_wire_vector_ez(int ilayer, int nphi) const {
   auto& l = this->database.at(ilayer);
 
   // See original paper Hoshina et al, Computer Physics Communications 153 (2003) 3
@@ -381,31 +384,33 @@ inline TVector3 DCH_info_struct::Calculate_wire_vector_ez(int ilayer, int nphi) 
   double y1 = -stereosign * rz0 * kappa * this->Lhalf;  // m
   double z1 = -this->Lhalf;                             // m
 
-  TVector3 p1(x1, y1, z1);
+  Vector3D p1(x1, y1, z1);
 
   // point 2
   double x2 = rz0;                                     // m
   double y2 = stereosign * rz0 * kappa * this->Lhalf;  // m
   double z2 = this->Lhalf;                             // m
 
-  TVector3 p2(x2, y2, z2);
+  Vector3D p2(x2, y2, z2);
 
   // calculate phi rotation of whole twisted tube, ie, rotation at z=0
   double phi_z0 = Calculate_wire_phi_z0(ilayer, nphi);
-  p1.RotateZ(phi_z0);
-  p2.RotateZ(phi_z0);
+  auto z_rotation = ROOT::Math::RotationZ(phi_z0);
+  z_rotation(p1);
+  z_rotation(p2);
 
   //--- end calculating wire position
 
-  return (p2 - p1).Unit();
+  return (p2 -p1).Unit(); //Unit();
 }
 
-inline TVector3 DCH_info_struct::Calculate_wire_z0_point(int ilayer, int nphi) const {
+inline DCH_info_struct::Vector3D DCH_info_struct::Calculate_wire_z0_point(int ilayer, int nphi) const {
   auto&    l   = this->database.at(ilayer);
   double   rz0 = l.radius_sw_z0;
-  TVector3 p1(rz0, 0, 0);
+  Vector3D p1(rz0, 0, 0);
   double   phi_z0 = Calculate_wire_phi_z0(ilayer, nphi);
-  p1.RotateZ(phi_z0);
+  ROOT::Math::RotationZ z_rotation = ROOT::Math::RotationZ(phi_z0);
+  z_rotation(p1);
   return p1;
 }
 
@@ -421,17 +426,17 @@ inline double DCH_info_struct::Calculate_wire_phi_z0(int ilayer, int nphi) const
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////  Calculate vector from hit position to wire   /////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
-inline TVector3 DCH_info_struct::Calculate_hitpos_to_wire_vector(int ilayer, int nphi, const TVector3& hit_position /*in cm*/) const {
+inline DCH_info_struct::Vector3D DCH_info_struct::Calculate_hitpos_to_wire_vector(int ilayer, int nphi, const Vector3D& hit_position /*in cm*/) const {
   // Solution distance from a point to a line given here:
   // https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line#Vector_formulation
-  TVector3 n = this->Calculate_wire_vector_ez(ilayer, nphi);
-  TVector3 a = this->Calculate_wire_z0_point(ilayer, nphi);
+  Vector3D n = this->Calculate_wire_vector_ez(ilayer, nphi);
+  Vector3D a = this->Calculate_wire_z0_point(ilayer, nphi);
   // Remember using cm as natural units of DD4hep consistently!
-  // TVector3 p {hit_position.x()*MM_TO_CM,hit_position.y()*MM_TO_CM,hit_position.z()*MM_TO_CM};
+  // Vector3D p {hit_position.x()*MM_TO_CM,hit_position.y()*MM_TO_CM,hit_position.z()*MM_TO_CM};
 
-  TVector3 a_minus_p       = a - hit_position;
+  Vector3D a_minus_p       = a - hit_position;
   double   a_minus_p_dot_n = a_minus_p.Dot(n);
-  TVector3 scaled_n        = a_minus_p_dot_n * n;
+  Vector3D scaled_n        = a_minus_p_dot_n * n;
   //hit_to_wire_vector = a_minus_p - scaled_n;
   return (a_minus_p - scaled_n);
 }

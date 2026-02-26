@@ -17,7 +17,7 @@
 #include "DD4hep/Shapes.h"
 #include "XML/Utilities.h"
 
-#include "DDRec/DCH_info.h"
+#include "DCH_info.h"
 
 namespace DCH_v2 {
 
