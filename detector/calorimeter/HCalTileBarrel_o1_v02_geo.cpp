@@ -329,8 +329,8 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
       std::vector<double> cellSizeVector = seg_phitheta->cellDimensions(0);
       double cellSizeTheta = cellSizeVector[1];
       double cellSizePhi = cellSizeVector[0];
-      dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "    cell sizes in theta, phi: %lf rad , %lf rad", cellSizeTheta,
-                       cellSizePhi);
+      dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "    cell sizes in theta, phi: %lf rad , %lf rad",
+                       cellSizeTheta, cellSizePhi);
       caloLayer.cellSize0 = cellSizeTheta;
       caloLayer.cellSize1 = cellSizePhi;
     } else if (seg_phirow) {

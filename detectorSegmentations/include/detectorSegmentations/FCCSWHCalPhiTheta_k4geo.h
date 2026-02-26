@@ -201,7 +201,8 @@ namespace DDSegmentation {
      */
     virtual std::vector<double> cellDimensions(const CellID& cID) const override {
       // if the cellID is not provided then return the cell dimensions in phi and theta
-      if(cID == 0) return {gridSizePhi(), gridSizeTheta()};
+      if (cID == 0)
+        return {gridSizePhi(), gridSizeTheta()};
 
       float cellSize0 = 0.;
       float cellSize1 = 0.;
@@ -213,7 +214,7 @@ namespace DDSegmentation {
       const LayerInfo::Edge& edge = li.cellInfo(thetaID).edge;
 
       cellSize0 = fabs(edge.high - edge.low);
-      cellSize1 = 2.* li.radius * std::sin(gridSizePhi()/2.);
+      cellSize1 = 2. * li.radius * std::sin(gridSizePhi() / 2.);
 
       return {cellSize0, cellSize1};
     }

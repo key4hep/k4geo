@@ -67,15 +67,15 @@ namespace DDSegmentation {
     if (idx < 0)
       zpos = -minLayerZ + (idx + 1) * m_dz_row * m_gridSizeRow[layer] - 0.5 * m_dz_row * m_gridSizeRow[layer];
 
-    // If this is the Endcap and m_groupedRows is provided from the xml file, then rows are grouped to the pseudo-layers.
-    // Need to recalculate the cell position:
-    if (m_detLayout == 1 && !m_groupedRows.empty())
-    {
+    // If this is the Endcap and m_groupedRows is provided from the xml file, then rows are grouped to the
+    // pseudo-layers. Need to recalculate the cell position:
+    if (m_detLayout == 1 && !m_groupedRows.empty()) {
       int nrows = 0;
       for (size_t i = 0; i < abs(idx); i++)
         nrows += li.groupedRows[i];
-      zpos = minLayerZ + nrows * m_dz_row - 0.5 * li.groupedRows[abs(idx)-1] * m_dz_row;
-      if (idx < 0) zpos = -zpos;
+      zpos = minLayerZ + nrows * m_dz_row - 0.5 * li.groupedRows[abs(idx) - 1] * m_dz_row;
+      if (idx < 0)
+        zpos = -zpos;
     }
 
     return Vector3D(radius * std::cos(phi(cID)), radius * std::sin(phi(cID)), zpos);
@@ -117,16 +117,15 @@ namespace DDSegmentation {
       double zmin = m_offsetZ[i_section] - 0.5 * m_widthZ[i_section];
       double zmax = m_offsetZ[i_section] + 0.5 * m_widthZ[i_section];
 
-      // If this is the Endcap and m_groupedRows is provided from the xml file, then rows should be grouped into the pseudo-layers.
-      // In the li.groupedRows we store the numbers extracted from m_groupedRows vector provided from the xml file.
-      // The number of non-zero elements in li.groupedRows corresponds to the number of pseudo-layers in i_section.
-      // Each non-zero element in li.groupedRows corresponds to the number of rows form the physical layer of i_section
-      // to be grouped in a pseudo-layer.
+      // If this is the Endcap and m_groupedRows is provided from the xml file, then rows should be grouped into the
+      // pseudo-layers. In the li.groupedRows we store the numbers extracted from m_groupedRows vector provided from the
+      // xml file. The number of non-zero elements in li.groupedRows corresponds to the number of pseudo-layers in
+      // i_section. Each non-zero element in li.groupedRows corresponds to the number of rows form the physical layer of
+      // i_section to be grouped in a pseudo-layer.
       auto groupedRows_start = m_groupedRows.begin();
-      auto groupedRows_end =  m_groupedRows.end();
-      if (m_detLayout == 1 && !m_groupedRows.empty())
-      {
-        size_t nGroupedRows = m_groupedRows.size()/m_offsetZ.size();
+      auto groupedRows_end = m_groupedRows.end();
+      if (m_detLayout == 1 && !m_groupedRows.empty()) {
+        size_t nGroupedRows = m_groupedRows.size() / m_offsetZ.size();
         groupedRows_start = m_groupedRows.begin() + i_section * nGroupedRows;
         groupedRows_end = (i_section == m_offsetZ.size() - 1) ? m_groupedRows.end() : groupedRows_start + nGroupedRows;
       }
@@ -140,8 +139,8 @@ namespace DDSegmentation {
                                   .halfDepth = m_dRlayer[i_dR] / 2,
                                   .zmin = zmin,
                                   .zmax = zmax,
-                                  .groupedRows = std::span<const int>(std::to_address(groupedRows_start), std::to_address(groupedRows_end))
-                                 });
+                                  .groupedRows = std::span<const int>(std::to_address(groupedRows_start),
+                                                                      std::to_address(groupedRows_end))});
         }
       }
     }
@@ -179,24 +178,22 @@ namespace DDSegmentation {
       // define the cell index
       int idx = floor(irow / m_gridSizeRow[layer]) + 1;
 
-      // If this is Endcap and m_groupedRows is provided from the xml file, then group the rows into the pseudo-layer cells
-      // according to the provided numbers by redefining the cell index (idx), and do not use granularity set by grid_size_row parameter.
-      if (m_detLayout == 1 && !m_groupedRows.empty())
-      {
+      // If this is Endcap and m_groupedRows is provided from the xml file, then group the rows into the pseudo-layer
+      // cells according to the provided numbers by redefining the cell index (idx), and do not use granularity set by
+      // grid_size_row parameter.
+      if (m_detLayout == 1 && !m_groupedRows.empty()) {
         int nrows = 0;
-        for(size_t i = 0; i < li.groupedRows.size(); i++)
-        {
+        for (size_t i = 0; i < li.groupedRows.size(); i++) {
           nrows += li.groupedRows[i];
-          if (irow < nrows)
-          {
-            idx = (i+1);
+          if (irow < nrows) {
+            idx = (i + 1);
             break;
           }
         }
 
-        irow +=1;
-      }
-      else irow += m_gridSizeRow[layer];
+        irow += 1;
+      } else
+        irow += m_gridSizeRow[layer];
 
       // add the index if it is not already there
       if (li.cellIndexes.empty() || li.cellIndexes.back() != idx) {
@@ -309,17 +306,14 @@ namespace DDSegmentation {
     // get the cell index (start from 1!)
     int idx = floor(nrow / m_gridSizeRow[layer]) + 1;
 
-    // If this is Endcap and m_groupedRows is provided from the xml file, then group the rows into the pseudo-layer cells
-    // according to the provided numbers, and do not use granularity set by grid_size_row parameter.
-    if (m_detLayout == 1 && !m_groupedRows.empty())
-    {
+    // If this is Endcap and m_groupedRows is provided from the xml file, then group the rows into the pseudo-layer
+    // cells according to the provided numbers, and do not use granularity set by grid_size_row parameter.
+    if (m_detLayout == 1 && !m_groupedRows.empty()) {
       int nrows = 0;
-      for(size_t i = 0; i < li.groupedRows.size(); i++)
-      {
+      for (size_t i = 0; i < li.groupedRows.size(); i++) {
         nrows += li.groupedRows[i];
-        if (nrow < nrows)
-        {
-          idx = (i+1);
+        if (nrow < nrows) {
+          idx = (i + 1);
           break;
         }
       }
@@ -334,8 +328,7 @@ namespace DDSegmentation {
                    positionToBin(dd4hep::DDSegmentation::Util::phiFromXYZ(globalPosition), 2 * M_PI / (double)m_phiBins,
                                  m_offsetPhi));
 
-    if (m_detLayout == 1)
-    {
+    if (m_detLayout == 1) {
       // For endcap, the volume ID comes with "type" field information which would screw up the topo-clustering,
       // therefore, lets set it to zero, as it is for the cell IDs in the neighbours map.
       decoder()->set(cID, m_typeIndex, 0);
@@ -348,15 +341,16 @@ namespace DDSegmentation {
   }
 
   /*
-  * Determine pseudo-layer index.
-  * Pseudo-layer is defined as the vertical tower of rows/cells from different physical layers in a give section.
-  * This is passed to PandoraPFA as a longitudinal layer.
-  * NOTE: The pseudo-layer definition breaks down if different physical layers in any of the sections have different granularities,
-  *       This could happen if doing a study without PandoraPFA, so the pseudo-layers will not be used anyway.
-  */
+   * Determine pseudo-layer index.
+   * Pseudo-layer is defined as the vertical tower of rows/cells from different physical layers in a give section.
+   * This is passed to PandoraPFA as a longitudinal layer.
+   * NOTE: The pseudo-layer definition breaks down if different physical layers in any of the sections have different
+   * granularities, This could happen if doing a study without PandoraPFA, so the pseudo-layers will not be used anyway.
+   */
   unsigned int FCCSWHCalPhiRow_k4geo::definePseudoLayer(const CellID cID) const {
     // pseudo-layer can only be defined for the endcap.
-    if (m_detLayout != 1) return 0;
+    if (m_detLayout != 1)
+      return 0;
 
     // get index of the cell in the layer
     int idx = decoder()->get(cID, m_rowIndex);
@@ -371,12 +365,13 @@ namespace DDSegmentation {
 
       // check if the given cell is in the i_section
       if (layer >= minLayerId && layer <= maxLayerId) {
-        pseudoLayer += (abs(idx)-1);
+        pseudoLayer += (abs(idx) - 1);
         return pseudoLayer;
       }
       // if the cell is not in the i_section then start pseudoLayer from number of rows/cells in the i_section.
-      pseudoLayer+=(getLayerInfo(minLayerId).cellIndexes.size()/2); // cellIndexes contains cell indexes from both positive- and negative-z endcaps,
-                                                                      // hence divide the size by 2.
+      pseudoLayer +=
+          (getLayerInfo(minLayerId).cellIndexes.size() / 2); // cellIndexes contains cell indexes from both positive-
+                                                             // and negative-z endcaps, hence divide the size by 2.
     }
 
     return pseudoLayer;
@@ -736,7 +731,6 @@ namespace DDSegmentation {
 
     double Rmin = li.radius - li.halfDepth;
     double Rmax = li.radius + li.halfDepth;
-
 
     if (theta(cID) < M_PI / 2.) {
       cTheta[0] = std::atan2(Rmin, zhigh); // theta min

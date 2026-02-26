@@ -6,10 +6,10 @@
 
 #include <array>
 #include <atomic>
+#include <span>
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include <span>
 
 /** FCCSWHCalPhiRow_k4geo Detector/detectorSegmentations/detectorSegmentations/FCCSWHCalPhiRow_k4geo.h
  * FCCSWHCalPhiRow_k4geo.h
@@ -265,8 +265,8 @@ namespace DDSegmentation {
       const int layerID = layer(cID);
       const LayerInfo& li = getLayerInfo(layerID);
 
-      cellSize0 = (m_detLayout == 0) ? gridSizeRow()[layerID] * m_dz_row : 2.*li.halfDepth;
-      cellSize1 = 2.*li.radius * std::sin(gridSizePhi()/2.);
+      cellSize0 = (m_detLayout == 0) ? gridSizeRow()[layerID] * m_dz_row : 2. * li.halfDepth;
+      cellSize1 = 2. * li.radius * std::sin(gridSizePhi() / 2.);
 
       return {cellSize0, cellSize1};
     }
