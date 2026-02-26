@@ -34,11 +34,11 @@
     <vis name="endcapHcal_face_plate_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
     <vis name="endcapHcal_end_plate_vis" r="0.8" g="0.3" b="0.3" alpha="1" showDaughters="true" visible="true" drawingStyle="solid" />
     <vis name="endcapHcal_polystyrene_vis" r="0.0" g="0.6" b="0.3" alpha="0.8" showDaughters="true" visible="true" />
-    <vis name="endcapHcal_envelope" r="0.6" g="0.8" b="0.6" alpha="1" showDaughers="true" visible="true" />
-    <vis name="endcapHcal_barrel_seq1_vis" r="0.1" g="0.8" b="0.6" alpha="1" showDaughers="true" visible="true" />
-    <vis name="endcapHcal_barrel_seq2_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughers="true" visible="true" />
-    <vis name="endcapHcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughers="true" visible="true" />
-    <vis name="endcapHhcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughers="true" visible="true" />
+    <vis name="endcapHcal_envelope" r="0.6" g="0.8" b="0.6" alpha="1" showDaughters="true" visible="true" />
+    <vis name="endcapHcal_barrel_seq1_vis" r="0.1" g="0.8" b="0.6" alpha="1" showDaughters="true" visible="true" />
+    <vis name="endcapHcal_barrel_seq2_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
+    <vis name="endcapHcal_barrel_layer_vis" r="0.1" g="0.6" b="0.8" alpha="1" showDaughters="true" visible="true" />
+    <vis name="endcapHhcal_air_vis" r="1" g="1" b="1" alpha="1" showDaughters="true" visible="true" />
   </display>
 
   <readouts>

@@ -68,4 +68,9 @@ Initial design for a tracker based on thin-wall straw tubes.  This will likely b
  - 200MB memory usage for straw detector.
  - Stereo angle is implemented, is +/- 2 degrees in ALLEGRO_o2_v01
  - No consideration yet to endcap.
- 
+
+## TPC
+
+### TPC10
+Scalable TPC model, intended to be used with plugins/TPCSDAction to combine G4 steps into SimTrackerHits.
+TPCSDaction has some ingrained assumptions that G4 steps are passed to it in a logical way, i.e. in the order that they are produced.
