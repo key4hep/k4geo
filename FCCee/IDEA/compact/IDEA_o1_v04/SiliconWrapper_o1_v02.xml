@@ -551,13 +551,13 @@
         </detector>
     </detectors>   
 
-    <comment> Plugin needed for the surfaces of the silicon wrapper disks </comment>
+    <comment> Plugin to define the sensitive surfaces of the disks </comment>
     <plugins>
         <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
             <argument value="SiWrD"/> 
             <argument value="dimension=2"/>
-            <argument value="u_x=-1."/>
-            <argument value="v_y=1."/>
+            <argument value="u_y=1."/> <comment> The better measurement direction should be in u (by convention), which we want to be in phi for the track momentum measurement. In local sensor coordinates, this is in the y direction (along the SiWr tiles) </comment>
+            <argument value="v_x=1."/> <comment> The worse measurement direction should be in v (by convention), which we want to be in r. In local sensor coordinates, this is in the x direction (across the SiWr tiles) </comment>
             <argument value="n_z=-1."/>
         </plugin>
     </plugins>

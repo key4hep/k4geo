@@ -16,7 +16,8 @@
 //  also be approximated by trapezoidal volumes with the 'nsegments' 
 //  option. This allows to perform track reconstruction with conformal
 //  tracking, which currently doesn't support curved sensors (=sensitive
-//  surfaces) yet. 
+//  surfaces) yet. Sensor components can now also be defined in an 
+//  external xml file to avoid repetion in the detector xml file.
 //--------------------------------------------------------------------
 //
 //  Author     : Armin Ilg

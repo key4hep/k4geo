@@ -350,8 +350,8 @@
         <constant name="VTXIB_pitch_phi"    value="0.025*mm"/>
         <constant name="VTXOB_pitch_z"      value="0.150*mm"/>  <comment> Assume 50x150 um^2 pixel pitch for outer barrel and disks, as in ATLASPix3 </comment>
         <constant name="VTXOB_pitch_phi"    value="0.050*mm"/>
-        <constant name="VTXD_pitch_r"       value="0.050*mm"/>  <comment> This represents the geometry of the vertex disk staves, but may not be optimal, one may want to rotate the sensor by 90 degree to have a smaller pitch (and thus resolution) in the phi direction </comment>
-        <constant name="VTXD_pitch_phi"     value="0.150*mm"/>
+        <constant name="VTXD_pitch_r"       value="0.150*mm"/>  <comment> Assume 50x150 um^2 pixel pitch for the disks. One wants to have the better measurement (50 um pitch) in phi direction. The way the modules are constructed in the disks is actually not this way, but 90 degrees rotated (better resolution in r direction). The vertex disks geometry needs to be updated to reflect this properly, but the segmentation is such that indeed the better resolution is in phi direction. </comment>
+        <constant name="VTXD_pitch_phi"     value="0.050*mm"/>
     </define>
 
 
@@ -478,7 +478,7 @@
         </readout>  
         <readout name="VertexEndcapCollection"> 
             <segmentation type="MultiSegmentation" key="layer">
-                <segmentation name="VTXDgrid" type="CartesianGridXY" key_min="0" key_max="0" grid_size_x="VTXD_pitch_r" grid_size_y="VTXD_pitch_phi"/>
+                <segmentation name="VTXDgrid" type="CartesianGridXY" key_min="0" key_max="0" grid_size_x="VTXD_pitch_r" grid_size_y="VTXD_pitch_phi"/> 
                 <segmentation name="VTXDgrid" type="CartesianGridXY" key_min="1" key_max="1" grid_size_x="VTXD_pitch_r" grid_size_y="VTXD_pitch_phi"/>
                 <segmentation name="VTXDgrid" type="CartesianGridXY" key_min="2" key_max="2" grid_size_x="VTXD_pitch_r" grid_size_y="VTXD_pitch_phi"/>
             </segmentation>
@@ -1083,8 +1083,8 @@
         <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
             <argument value="VertexDisks"/> 
             <argument value="dimension=2"/>
-            <argument value="u_x=-1."/>
-            <argument value="v_y=1."/>
+            <argument value="u_y=1."/> <comment> The better measurement direction should be in u (by convention), which we want to be in phi for the track momentum measurement. In local sensor coordinates, this is in the y direction (along the vertex disk stave) </comment>
+            <argument value="v_x=1."/> <comment> The worse measurement direction should be in v (by convention), which we want to be in r. In local sensor coordinates, this is in the x direction (across the vertex disk stave) </comment>
             <argument value="n_z=-1."/>
         </plugin>
     </plugins>
