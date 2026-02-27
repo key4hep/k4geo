@@ -16,9 +16,9 @@
 //  modules can be bult. When using this detector constructor, in addition,
 //  the DD4hep_GenericSurfaceInstallerPlugin plugin needs to be instantiated
 //  in the xml compact file to define the sensitive surfaces.
-//  Updates from o1_v02 to o1_v03: ignoring components with zero thickness, 
+//  Updates from o1_v02 to o1_v03: ignoring components with zero thickness,
 //  changes to volume naming, possibility to include sensor definition with
-// external file, possibliity to have partially insensitive sensors (in 
+// external file, possibliity to have partially insensitive sensors (in
 // thickness).
 //====================================================================
 
@@ -50,7 +50,6 @@ using dd4hep::Transform3D;
 using dd4hep::Translation3D;
 using dd4hep::Tube;
 using dd4hep::Volume;
-
 
 static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens) {
   xml_det_t x_det = e;
@@ -195,7 +194,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     m.sensor_thickness = xml_comp_t(c_sensor).thickness();
     m.sensor_z_offset = xml_comp_t(c_sensor).z_offset(0);
     m.sensor_name = xml_comp_t(c_sensor).nameStr("sensor");
-    
+
     // Try to load sensor components from external include file first
     bool use_include = false;
     dd4hep::xml::Handle_t component_source;
@@ -204,54 +203,58 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
       xml_coll_t incl(c_sensor, _U(include));
       if (incl) {
         doc = std::make_unique<dd4hep::xml::DocumentHolder>(
-          dd4hep::xml::DocumentHandler().load(incl, incl.attr_value(_U(ref))));
-          printout(DEBUG, det_name, "Using sensor description from external file: " + _toString(incl.attr_value(_U(ref))));
-          component_source = doc->root();
-          use_include = true;
-        }
+            dd4hep::xml::DocumentHandler().load(incl, incl.attr_value(_U(ref))));
+        printout(DEBUG, det_name,
+                 "Using sensor description from external file: " + _toString(incl.attr_value(_U(ref))));
+        component_source = doc->root();
+        use_include = true;
+      }
     } catch (...) {
       printout(DEBUG, det_name, "No sensor description from external file found, using inline description instead");
       use_include = false;
     }
-      
+
     // Either use external include file or inline sensor description
-    xml_coll_t c_component = use_include ? xml_coll_t(component_source, _U(component)) 
-                                          : xml_coll_t(c_sensor, _U(component));
-    
+    xml_coll_t c_component =
+        use_include ? xml_coll_t(component_source, _U(component)) : xml_coll_t(c_sensor, _U(component));
+
     for (c_component.reset(); c_component; ++c_component) {
       xml_comp_t component = c_component;
-      double sensitive_thickness = getAttrOrDefault(component, _Unicode(thickness), m.sensor_thickness); // Take the overall sensor thickness as default
+      double sensitive_thickness = getAttrOrDefault(component, _Unicode(thickness),
+                                                    m.sensor_thickness); // Take the overall sensor thickness as default
 
       double sensor_insensitive_thickness_below = getAttrOrDefault(
-        component, _Unicode(sensor_insensitive_thickness_below),
-        0.); // Thickness of insensitive material in sensor before the sensitive material (i.e. closer to IP)
+          component, _Unicode(sensor_insensitive_thickness_below),
+          0.); // Thickness of insensitive material in sensor before the sensitive material (i.e. closer to IP)
       double sensor_insensitive_thickness_above = getAttrOrDefault(
-        component, _Unicode(sensor_insensitive_thickness_above),
-        0.); // Thickness of insensitive material in sensor after the sensitive material (i.e. farther from IP)
+          component, _Unicode(sensor_insensitive_thickness_above),
+          0.); // Thickness of insensitive material in sensor after the sensitive material (i.e. farther from IP)
 
       vector<double> thicknesses_split = {sensor_insensitive_thickness_below, sensitive_thickness,
-                                        sensor_insensitive_thickness_above};
+                                          sensor_insensitive_thickness_above};
       vector<double> innerInsensitiveThickness_split = {
-        0.,
-        getAttrOrDefault(component, _Unicode(other_insensitive_thickness_below), 0.) +
-            sensor_insensitive_thickness_below,
-        0.}; // Thickness of insensitive material in front of sensitive volume (within sensor and e.g. from supports
-            // before). Only the sensitive volume has this property
+          0.,
+          getAttrOrDefault(component, _Unicode(other_insensitive_thickness_below), 0.) +
+              sensor_insensitive_thickness_below,
+          0.}; // Thickness of insensitive material in front of sensitive volume (within sensor and e.g. from supports
+               // before). Only the sensitive volume has this property
       vector<double> outerInsensitiveThickness_split = {
-        0.,
-        getAttrOrDefault(component, _Unicode(other_insensitive_thickness_above), 0.) +
-            sensor_insensitive_thickness_above,
-        0.}; // Thickness of insensitive material behind sensitive volume (within sensor and e.g. from supports
-            // after). Only the sensitive volume has this property
+          0.,
+          getAttrOrDefault(component, _Unicode(other_insensitive_thickness_above), 0.) +
+              sensor_insensitive_thickness_above,
+          0.}; // Thickness of insensitive material behind sensitive volume (within sensor and e.g. from supports
+               // after). Only the sensitive volume has this property
 
       vector<string> sensor_part_names = {component.nameStr("sensor") + _toString(iSensor, "_insensitive_below_%d"),
-        component.nameStr("sensor") + _toString(iSensor, "_%d"),
-        component.nameStr("sensor") + _toString(iSensor, "_insensitive_above_%d")};
+                                          component.nameStr("sensor") + _toString(iSensor, "_%d"),
+                                          component.nameStr("sensor") + _toString(iSensor, "_insensitive_above_%d")};
       vector<bool> isSensitive_split = {false, component.isSensitive(), false};
-      vector<double> z_offsets = {m.sensor_z_offset + component.z_offset(0), m.sensor_z_offset + component.z_offset(0) + thicknesses_split[0],
-                          m.sensor_z_offset + component.z_offset(0) + thicknesses_split[0] + thicknesses_split[1]};
-  
-      for (int i = 0; i < int(thicknesses_split.size()); i++) { // Loop over sensitive and insensitive parts of sensor, but skip parts with zero thickness
+      vector<double> z_offsets = {
+          m.sensor_z_offset + component.z_offset(0), m.sensor_z_offset + component.z_offset(0) + thicknesses_split[0],
+          m.sensor_z_offset + component.z_offset(0) + thicknesses_split[0] + thicknesses_split[1]};
+
+      for (int i = 0; i < int(thicknesses_split.size());
+           i++) { // Loop over sensitive and insensitive parts of sensor, but skip parts with zero thickness
         if (thicknesses_split[i] == 0.)
           continue; // Skip components with zero thickness
 
@@ -306,8 +309,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     for (xml_coll_t li(x_det, _U(layer)); li; ++li) {
       xml_comp_t x_layer(li);
 
-      if(x_layer.attr<bool>(_Unicode(ignore), false))
-        continue; // Skip layers marked to be ignored. This can be used for example to easily switch 
+      if (x_layer.attr<bool>(_Unicode(ignore), false))
+        continue; // Skip layers marked to be ignored. This can be used for example to easily switch
                   // off layers that are outside the envelopes of the detector
 
       int layer_id = x_layer.id();

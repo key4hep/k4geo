@@ -6,17 +6,17 @@
 //  The vertex detector is assembled of stave structures which feature
 //  support and readout (flex) elements. Each stave features multiple
 //  individual modules, that consist of sensitive and insensitive
-//  sensor elements. 
+//  sensor elements.
 //  From o1_v01 to o1_v02: It is possible to define curved
 //  sensor and support elements (using the 'isCurved' option).
 //  From o1_v02 to o1_v03: One can now have a partially-
 //  insensitive sensor using 'sensor_insensitive_thickness_below' and
-//  'sensor_insensitive_thickness_above'. Components with zero thickness 
-//  are now ignored when building the detector. Curved sensors can now 
-//  also be approximated by trapezoidal volumes with the 'nsegments' 
+//  'sensor_insensitive_thickness_above'. Components with zero thickness
+//  are now ignored when building the detector. Curved sensors can now
+//  also be approximated by trapezoidal volumes with the 'nsegments'
 //  option. This allows to perform track reconstruction with conformal
 //  tracking, which currently doesn't support curved sensors (=sensitive
-//  surfaces) yet. Sensor components can now also be defined in an 
+//  surfaces) yet. Sensor components can now also be defined in an
 //  external xml file to avoid repetion in the detector xml file.
 //--------------------------------------------------------------------
 //
@@ -278,7 +278,9 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
       sensor.offset = xml_comp_t(c_sensor).offset(0);
       sensor.material = theDetector.material(xml_comp_t(c_sensor).materialStr());
       sensor.name = xml_comp_t(c_sensor).nameStr();
-      sensor.nx = getAttrOrDefault(xml_comp_t(c_sensor), _Unicode(nx), int(1)); // Duplicate entries nx times in phi (local x) direction, default is 1 (no duplication)
+      sensor.nx = getAttrOrDefault(
+          xml_comp_t(c_sensor), _Unicode(nx),
+          int(1)); // Duplicate entries nx times in phi (local x) direction, default is 1 (no duplication)
       double default_sensor_thickness = xml_comp_t(c_sensor).thickness();
 
       // Try to load sensor components from external include file first
@@ -290,7 +292,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         if (incl) {
           doc = std::make_unique<dd4hep::xml::DocumentHolder>(
               dd4hep::xml::DocumentHandler().load(incl, incl.attr_value(_U(ref))));
-          printout(DEBUG, det_name, "Using sensor description from external file: " + _toString(incl.attr_value(_U(ref))));
+          printout(DEBUG, det_name,
+                   "Using sensor description from external file: " + _toString(incl.attr_value(_U(ref))));
           component_source = doc->root();
           use_include = true;
         }
@@ -300,8 +303,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
       }
 
       // Either use external include file or inline sensor description
-      xml_coll_t c_component = use_include ? xml_coll_t(component_source, _U(component)) 
-                                            : xml_coll_t(c_sensor, _U(component));
+      xml_coll_t c_component =
+          use_include ? xml_coll_t(component_source, _U(component)) : xml_coll_t(c_sensor, _U(component));
       int iSensor = 0;
 
       for (c_component.reset(); c_component; ++c_component) {
@@ -320,13 +323,13 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
             getAttrOrDefault(component, _Unicode(other_insensitive_thickness_below), 0.) +
                 sensor_insensitive_thickness_below,
             0.}; // Thickness of insensitive material in front of sensitive volume (within sensor and e.g. from supports
-                // before). Only the sensitive volume has this property
+                 // before). Only the sensitive volume has this property
         vector<double> outerInsensitiveThickness_split = {
             0.,
             getAttrOrDefault(component, _Unicode(other_insensitive_thickness_above), 0.) +
                 sensor_insensitive_thickness_above,
             0.}; // Thickness of insensitive material behind sensitive volume (within sensor and e.g. from supports
-                // after). Only the sensitive volume has this property
+                 // after). Only the sensitive volume has this property
 
         vector<double> thicknesses_split = {sensor_insensitive_thickness_below, sensitive_thickness,
                                             sensor_insensitive_thickness_above};
@@ -335,7 +338,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                                             component.nameStr() + _toString(iSensor, "_insensitive_above_%d")};
         vector<bool> isSensitive_split = {false, component.isSensitive(), false};
         vector<double> rs = {component.r(0), component.r(0) + sensor_insensitive_thickness_below,
-                            component.r(0) + sensor_insensitive_thickness_below + sensitive_thickness};
+                             component.r(0) + sensor_insensitive_thickness_below + sensitive_thickness};
 
         for (int i = 0; i < int(thicknesses_split.size()); i++) {
           if (thicknesses_split[i] == 0.)
@@ -368,8 +371,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
               // for planes (isXY...)
               Trd1 ele_box =
                   Trd1(abs(component.xmax() - component.xmin()) / 2. / nsegment,
-                      abs(component.xmax() - component.xmin()) / 2. / nsegment * (rmin + thicknesses_split[i]) / rmin,
-                      abs(component.ymax() - component.ymin()) / 2., thicknesses_split[i] / 2.);
+                       abs(component.xmax() - component.xmin()) / 2. / nsegment * (rmin + thicknesses_split[i]) / rmin,
+                       abs(component.ymax() - component.ymin()) / 2., thicknesses_split[i] / 2.);
               ele_vol = Volume(sensor_part_names[i], ele_box, sensor.material);
             } else {
               double phi_offset = getAttrOrDefault(component, _Unicode(phi_offset), double(0.0));
@@ -379,8 +382,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
             }
           } else {
             Box ele_box = Box(abs(component.xmax() - component.xmin()) / 2.,
-                              abs(component.ymax() - component.ymin()) / 2.,
-                              thicknesses_split[i] / 2.);
+                              abs(component.ymax() - component.ymin()) / 2., thicknesses_split[i] / 2.);
             ele_vol = Volume(sensor_part_names[i], ele_box, sensor.material);
           }
 
@@ -397,8 +399,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
           *max_element(sensor.ymax.begin(), sensor.ymax.end()) - *min_element(sensor.ymin.begin(), sensor.ymin.end());
 
       printout(DEBUG, det_name,
-              "Module: " + sensor.name + ", sensor width: " + to_string(sensor.width) +
-                  ", sensor length: " + to_string(sensor.length));
+               "Module: " + sensor.name + ", sensor width: " + to_string(sensor.width) +
+                   ", sensor length: " + to_string(sensor.length));
       m.sensorsVec.push_back(sensor);
     }
 
@@ -577,9 +579,9 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
           x_pos = sensor.r + (iModule % 2 == 0 ? 0.0 : m.stave_dr);
           y_pos = sensor.offset;
           z_pos = motherVolOffset + -(nmodules - 1) / 2. * (sensor.length) - (nmodules - 1) / 2. * step +
-          iModule * sensor.length + iModule * step;
+                  iModule * sensor.length + iModule * step;
           Position pos(x_pos, y_pos, z_pos);
-          
+
           string module_name = stave_name + _toString(iModule, "_module%d");
           Assembly module_assembly(module_name);
           if (m.motherVolThickness > 0.0 && m.motherVolWidth > 0.0)
@@ -587,17 +589,18 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
           else
             pv = whole_stave_volume_a.placeVolume(module_assembly);
           pv.addPhysVolID("module", iModule + nmodules * iStave);
-        
+
           DetElement moduleDE(layerDE, module_name, iModule + nmodules * iStave);
           moduleDE.setPlacement(pv);
-      
+
           // Place all sensor parts
           int iSensitive = 0;
-          for (int x_i = 0; x_i < sensor.nx; x_i++){ // Loop over duplicates in local x (global phi) direction
+          for (int x_i = 0; x_i < sensor.nx; x_i++) { // Loop over duplicates in local x (global phi) direction
             for (int i = 0; i < int(sensor.volumes.size()); i++) {
               if (sensor.isCurved[i] && sensor.nsegments[i] == 1) { // Truly curved, part of tube
                 r_offset_component = m.motherVolThickness > 0.0 && m.motherVolWidth > 0.0 ? 0. : layer_offset;
-                double phi_i = phi + (sensor.xmin[i] + abs(sensor.xmax[i] - sensor.xmin[i]) / 2. + x_i*sensor.width) / m.stave_r;
+                double phi_i =
+                    phi + (sensor.xmin[i] + abs(sensor.xmax[i] - sensor.xmin[i]) / 2. + x_i * sensor.width) / m.stave_r;
                 double r_component_curved = (iModule % 2 == 0 ? 0.0 : m.stave_dr);
                 x_pos = r_component_curved * cos(phi_i);
                 y_pos = r_component_curved * sin(phi_i);
@@ -624,8 +627,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                   SurfaceType type = SurfaceType::Sensitive;
                   type.setProperty(SurfaceType::Cylinder, true);
                   VolCylinder surf(sensor.volumes[i], type,
-                                  sensor.thicknesses[i] / 2. + sensor.insensitive_thicknesses_below[i],
-                                  sensor.thicknesses[i] / 2. + sensor.insensitive_thicknesses_above[i], ocyl);
+                                   sensor.thicknesses[i] / 2. + sensor.insensitive_thicknesses_below[i],
+                                   sensor.thicknesses[i] / 2. + sensor.insensitive_thicknesses_above[i], ocyl);
                   volSurfaceList(sensorDE)->push_back(surf);
                   iSensitive++;
                 }
@@ -634,7 +637,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 for (int iSegment = 0; iSegment < sensor.nsegments[i]; iSegment++) {
                   double phi_i =
                       phi + (sensor.xmin[i] + abs(sensor.xmax[i] - sensor.xmin[i]) * iSegment / sensor.nsegments[i] +
-                            abs(sensor.xmax[i] - sensor.xmin[i]) / 2. / sensor.nsegments[i] + x_i*sensor.width) /
+                             abs(sensor.xmax[i] - sensor.xmin[i]) / 2. / sensor.nsegments[i] + x_i * sensor.width) /
                                 m.stave_r;
                   double r_component_curved =
                       layer_r + sensor.thicknesses[i] / 2. + (iModule % 2 == 0 ? 0.0 : m.stave_dr) + sensor.rs[i];
@@ -651,8 +654,9 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                       Translation3D(pos_offset) * Transform3D(rot, stave_pos).Inverse() * RotationY(M_PI / 2.) *
                           Transform3D(
                               RotationZYX(M_PI / 2., 0., -phi_i),
-                              Position(-z_pos, y_pos,
-                                      x_pos))); // To do: Simplify transformations, the orientation of Trd1 is strange...
+                              Position(
+                                  -z_pos, y_pos,
+                                  x_pos))); // To do: Simplify transformations, the orientation of Trd1 is strange...
 
                   if (sensor.sensitives[i]) { // Define as sensitive and add sensitive surface
                     pv.addPhysVolID("sensor", iSensitive);
@@ -674,7 +678,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 z_pos = sensor.ymin[i] + abs(sensor.ymax[i] - sensor.ymin[i]) / 2.;
                 Position pos2(x_pos, y_pos, z_pos);
 
-                pv = module_assembly.placeVolume(sensor.volumes[i], Translation3D(pos + pos2) * RotationY(M_PI/2.) * RotationZ(M_PI / 2.));
+                pv = module_assembly.placeVolume(sensor.volumes[i], Translation3D(pos + pos2) * RotationY(M_PI / 2.) *
+                                                                        RotationZ(M_PI / 2.));
 
                 if (sensor.sensitives[i]) { // Define as sensitive and add sensitive surface
                   pv.addPhysVolID("sensor", iSensitive);
