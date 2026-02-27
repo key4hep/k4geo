@@ -18,7 +18,8 @@
     <constant name="world_side" value="6100*mm"/>
     <constant name="CrossingAngle" value="0.030*rad"/>  
 
-    <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:3,module:16,sensor:6"/>
+    <comment> Silicon wrapper disk has a maximum of 22 layers, so 5 bits for the layers. Silicon wrapper barrel has a maximum of 81 staves * 31 'modules' (each a tile of 8 sensors) per stave = 2551 modules, so 12 bits for modules. Curved inner vertex has a maximum of 60 pixel matrices per module * number of segments to make straight surfaces (default: 4), so 8 bits.   </comment>
+    <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:5,module:12,sensor:8"/>
 
     <constant name="SolenoidField" value="2*tesla"/>
 
@@ -81,47 +82,45 @@
     
     <constant name="env_safety" value="0.1*mm"/>
 
-    <!-- Vertex detector. Changing the values here it not enough to resize the detector, contact expert (Armin Ilg) -->
-    <constant name="VertexClearanceTheta" value="0.1035*rad"/> <!-- Clearance of vertex detector in mrad from IP. !!!Too high currently, should be 110 mrad -> Need to adapt vertex disks!!! -->
-    <constant name="VTXIB_r_min_clearance" value="1.0*mm"/>    <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
-    <constant name="VTXIB_r_min_layer"    value="13.7*mm"/>   <!-- Start of inner vertex detector layers. To keep distance of 1.3 mm from outer beam pipe end (10+0.35+1+0.35 mm = 11.7 mm). This changes to 13.7 mm due to cooling issues (see https://indico.cern.ch/event/1176398/contributions/5207171/attachments/2581129/4451907/Krakow%202023_v23_final.pdf) -->
-    <constant name="VTXIB_r_max_layer"    value="34.0*mm"/>   <!-- Position of the outermost vertex inner barrel layer -->
-    <constant name="VTXIB_r_max"          value="50.0*mm"/>  <!-- End of inner vertex = outer radius of inner vertex tube -->
-    <constant name="VTXIB_half_length"          value="556.2/2.*mm"/> <!-- 278.1*mm, half length of inner vertex tube -->
+    <!-- Vertex detector as in the engineering design (INFN Pisa) Changing the values here generally is not enough to resize the detector, except for the first layer radius. Contact in case of questions or desired adaptations: Armin Ilg -->
+    <constant name="VertexClearanceTheta"   value="0.1035*rad"/>  <!-- Clearance of vertex detector in mrad from IP. !!! Too high currently, lumical acceptance is 107 mrad so consider 110 mrad as limit -> Need to adapt vertex disks!!! -->
+    <constant name="VertexAcceptanceLimit"  value="0.125*rad"/>   <!-- Acceptance limit of vertex detector, used to define number of modules per stave  -->
+    <constant name="VTXIB_r_min_layer"      value="13.7*mm"/>     <!-- Start of inner vertex detector layers. To keep distance of 1.3 mm from outer beam pipe end (10+0.35+1+0.35 mm = 11.7 mm). This changes to 13.7 mm due to cooling issues (see https://indico.cern.ch/event/1176398/contributions/5207171/attachments/2581129/4451907/Krakow%202023_v23_final.pdf). 
+                                                                       Radius can be reduced down to the beam pipe outer radius, changing automatically the number of modules used.  -->
+    <constant name="VTXIB_r_min_clearance"  value="(VTXIB_r_min_layer-CentralBeamPipe_rmax-BeamPipeWidth)/2."/>    <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
+    <constant name="VTXIB_r_max_layer"      value="34.0*mm"/>     <!-- Position of the outermost vertex inner barrel layer -->
+    <constant name="VTXIB_r_max"            value="50.0*mm"/>     <!-- End of inner vertex = outer radius of inner vertex tube -->
+    <constant name="VTXIB_half_length"      value="556.2/2.*mm"/> <!-- 278.1*mm, half length of inner vertex tube -->
 
-    <constant name="VTXOB_r_min_layer"    value="130*mm"/>      <!-- R of the innermost layer of the outer vertex -->
-    <constant name="VTXOB_r_min_clearance" value="15.0*mm"/>     <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
-    <constant name="VTXOB_r_max_layer"    value="315*mm"/>      <!-- R of the outermost layer of the outer vertex -->
-    <constant name="VTXOB_rmax_clearance" value="15.0*mm"/>     <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
+    <constant name="VTXOB_r_min_layer"    value="130*mm"/>        <!-- R of the innermost layer of the outer vertex -->
+    <constant name="VTXOB_r_max_layer"    value="315*mm"/>        <!-- R of the outermost layer of the outer vertex -->
+    <constant name="VTXOB_rmax_clearance" value="15.0*mm"/>       <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
 
-    <constant name="VTXD_z_min" value="279.06*mm"/>            <!-- Start of VTX disks in z -->
-    <constant name="VTXD_z_min_total" value="VTXD_z_min-1.5*cm"/>      <!-- Outermost edge of VTX disks in z -->
-    <constant name="VTXD_z_max" value="918.641*mm"/>            <!-- Outermost VTX disk in z -->
-    <constant name="VTXD_z_max_total" value="VTXD_z_max+4.5*cm"/>            <!-- Outermost edge of VTX disk in z -->
-    <constant name="VTXD_r_min" value="34.5*mm"/>        <!-- Start of VTX disks in r -->
-    <constant name="VTXD_r_max" value="315.0*mm"/>        <!-- Start of VTX disks in r -->
+    <constant name="VTXD_z_min" value="279.06*mm"/>               <!-- Start of VTX disks in z -->
+    <constant name="VTXD_z_min_total" value="VTXD_z_min-1.5*cm"/> <!-- Outermost edge of VTX disks in z -->
+    <constant name="VTXD_z_max" value="918.641*mm"/>              <!-- Outermost VTX disk in z -->
+    <constant name="VTXD_z_max_total" value="VTXD_z_max+4.5*cm"/> <!-- Outermost edge of VTX disk in z -->
+    <constant name="VTXD_r_min" value="34.5*mm"/>                 <!-- Start of VTX disks in r -->
+    <constant name="VTXD_r_max" value="315.0*mm"/>                <!-- Start of VTX disks in r -->
 
-    <constant name="VTX_r_min" value="VTXIB_r_min_layer-VTXIB_r_min_clearance"/> 
-    <constant name="VTX_r_max" value="VTXOB_r_max_layer+VTXOB_rmax_clearance"/>
-    <constant name="VTX_z_max" value="VTXD_z_max+4.5*cm"/>
-    <!-- End of VTX parameters -->
-
+    <constant name="VTX_r_min" value="VTXIB_r_min_layer-VTXIB_r_min_clearance"/>  <!-- Not used, just do indicate the vertex detector envelope limits -->
+    <constant name="VTX_r_max" value="VTXOB_r_max_layer+VTXOB_rmax_clearance"/>   <!-- Not used, just do indicate the vertex detector envelope limits -->
+    <constant name="VTX_z_max" value="VTXD_z_max_total"/>                         <!-- Not used, just do indicate the vertex detector envelope limits -->
 
     <!--  Straw tracker parameters    -->
     <constant name="STT_inner_cyl_R_total"          value=" 349.8  * mm "  />
     <constant name="STT_outer_cyl_R_total"          value=" 2015   * mm "  />    
     <constant name="STT_half_length_total"          value=" 2750   * mm "  />
-    <!-- End of Straw tracker parameters    -->
 
-    <!-- Silicon wrapper. Changing the values of the disk parameters is not enough, please contact the expert (Armin Ilg) -->
-    <constant name="SiWrB_inner_radius" value="2040*mm"/>
-    <constant name="SiWrB_outer_radius" value="2080*mm"/>   
-    <constant name="SiWrB_half_length"  value="3060*mm"/>
-    <constant name="SiWrD_inner_radius" value="350.0*mm"/>
-    <constant name="SiWrD_outer_radius" value="2040.0*mm"/>
-    <constant name="SiWrD_zmin"         value="2960.0*mm"/>
-    <constant name="SiWrD_zmax"         value="3000.0*mm"/>
-    <!-- End of Silicon Wrapper parameters -->
+    <!-- Silicon wrapper. These values can be changed at will and the geometry will adapt accordingly. For questions contact Armin Ilg -->
+    <constant name="SiWrB_inner_radius" value="2040*mm"/>   <!-- Can be freely changed, as long as SiWrB_outer_radius-SiWrB_inner_radius is kept constant.  A radius of up to ~3 m is supported with the currently assumed sensor size -->
+    <constant name="SiWrB_outer_radius" value="2080*mm"/>   <!-- Can be freely changed, as long as SiWrB_outer_radius-SiWrB_inner_radius is kept constant.  A radius of up to ~3 m is supported with the currently assumed sensor size -->
+    <constant name="SiWrB_half_length"  value="3060*mm"/>   <!-- Can be freely changed -->
+    <constant name="SiWrD_inner_radius" value="350.0*mm"/>  <!-- Can be freely changed. Must be smaller than 'SiWrB_inner_radius' -->
+    <constant name="SiWrD_outer_radius" value="2040.0*mm"/> <!-- Can be freely changed. Must be larger than 'SiWrD_inner_radius' and SiWrD_outer_radius-SiWrD_inner_radius must be smaller than ~ 2450 mm, otherwise the number of available rings is not large enough to cover the whole area -->
+    <constant name="SiWrD_services_opening"  value="40*mm"/> <!-- Can be freely changed. -->
+    <constant name="SiWrD_zmin"         value="2960.0*mm"/> <!-- Can be freely changed, as long as SiWrD_zmax-SiWrD_zmin is kept constant or is increased -->
+    <constant name="SiWrD_zmax"         value="3000.0*mm"/> <!-- Can be freely changed, as long as SiWrD_zmax-SiWrD_zmin is kept constant or is increased -->
 
     <!-- LAr ECAL Calo Barrel -->
     <constant name="BarECal_id" value="DetID_ECAL_Barrel"/>
@@ -250,7 +249,7 @@
 
 
   <display>
-    <vis name="VXDVis"        alpha="0.2" r="0.1" 	  g=".5"      b=".5"    showDaughters="true"  visible="true"/>
+    <vis name="VXDVis"        alpha="0.2" r="0.1" 	  g=".5"      b=".5"    showDaughters="false"  visible="true"/>
     <vis name="SiWrVis"       alpha="0.2" r="1.0"  	  g="1.0"     b="0.0"   showDaughters="false" visible="true"/>
     <vis name="ITVis"       	alpha="1.0" r="0.54"  	g="0.43"    b="0.04"  showDaughters="true"  visible="true"/>
     <vis name="OTVis"       	alpha="1.0" r="0.8"   	g="0.8"     b="0.4"   showDaughters="true"  visible="false"/>

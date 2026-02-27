@@ -5,22 +5,22 @@
 
 
 
-  <info name="IDEA_o1_v03"
+  <info name="IDEA_o1_v04"
     title="FCCee IDEA detector geometry master file"
     author="Niloufar Alipour Tehrani, vertex detector and silicon wrapper by Armin Ilg, DCH by Alvaro Tolosa-Delgado"
     url="no"
     status="development"
-    version="o1_v03">
+    version="o1_v04">
     <comment>
-      Version o1_v03 of the IDEA detector
+      Version o1_v04 of the IDEA detector
     </comment>
   </info>
 
   <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml" />
 
   <includes>
-    <gdmlFile  ref="elements_o1_v01.xml"/>
-    <gdmlFile  ref="materials_o1_v03.xml"/>
+    <gdmlFile  ref="../IDEA_o1_v03/elements_o1_v01.xml"/>
+    <gdmlFile  ref="../IDEA_o1_v03/materials_o1_v03.xml"/>
   </includes>
 
   <define>
@@ -31,7 +31,7 @@
   </define>
 
   <!-- Import dimensions -->
-  <include ref="DectDimensions_IDEA_o1_v03.xml"/>
+  <include ref="DectDimensions_IDEA_o1_v04.xml"/>
 
   <!-- Import accelerator components -->
   <!-- shape based model of the beam pipe -->
@@ -41,34 +41,34 @@
   <!-- engineered CAD model of the beam pipe -->
   <!-- In order to use the CAD beampipe, build k4geo with the following CMake option:
   cmake -D INSTALL_BEAMPIPE_STL_FILES=ON which will download the files needed -->
-  <!-- <include ref="../../../MDI/compact/MDI_o1_CADBased_v01/MDI_o1_CADBased_v01_collection.xml" />
+<!-- <include ref="../../../MDI/compact/MDI_o1_CADBased_v01/MDI_o1_CADBased_v01_collection.xml" />
   <world material="Vacuum"/> -->
-  <include ref="LumiCal_o1_v01.xml"/>
+  <include ref="../IDEA_o1_v03/LumiCal_o1_v01.xml"/>
 
   <!-- Import vertex -->
-  <include ref="VertexComplete_IDEA_o1_v03.xml"/>
+  <include ref="VertexComplete_IDEA_o1_v04.xml"/>
 
   <!-- Import drift chamber -->
-  <include ref="DriftChamber_o1_v02.xml"/>
+  <include ref="../IDEA_o1_v03/DriftChamber_o1_v02.xml"/>
 
   <!-- Import silicon wrapper -->
-  <include ref="SiliconWrapper_o1_v01.xml"/>
+  <include ref="SiliconWrapper_o1_v02.xml"/>
 
   <!-- Import solenoid -->
-  <include ref="Solenoid_o1_v01.xml"/>
+  <include ref="../IDEA_o1_v03/Solenoid_o1_v01.xml"/>
 
   <!-- Import Endcap plate absorber -->
-  <include ref="EndPlateAbsorber_o1_v01.xml"/>
+  <include ref="../IDEA_o1_v03/EndPlateAbsorber_o1_v01.xml"/>
 
   <!-- Import pre-shower -->
-  <include ref="Preshower_o1_v01.xml"/>
+  <include ref="../IDEA_o1_v03/Preshower_o1_v01.xml"/>
 
   <!-- Import fiber-based dual-readout calorimeter -->
   <!-- (uncomment the following line to effectively include it) -->
-  <include ref="FiberDualReadoutCalo_o1_v01.xml"/>
+  <include ref="../IDEA_o1_v03/FiberDualReadoutCalo_o1_v01.xml"/>
 
   <!-- Import muon system -->
-  <include ref="MuonSystem_o1_v01.xml"/>
+  <include ref="../IDEA_o1_v03/MuonSystem_o1_v01.xml"/>
 
   <plugins>
     <plugin name="DD4hepVolumeManager"/>
