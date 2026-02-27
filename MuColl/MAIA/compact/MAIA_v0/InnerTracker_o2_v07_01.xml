@@ -101,7 +101,7 @@
 		</detector>
 
 
-		<detector id="DetID_IT_Endcap" name="InnerTrackerEndcap" type="TrackerEndcap_o2_v06" readout="InnerTrackerEndcapCollection" reflect="true" region="InnerTrackerEndcapRegion">
+		<detector id="DetID_IT_Endcap" name="InnerTrackerEndcap" type="TrackerEndcap_o2_v07" readout="InnerTrackerEndcapCollection" reflect="true" region="InnerTrackerEndcapRegion">
 			<envelope vis="ITVis">
 				<shape type="Assembly"/>
 			</envelope>
