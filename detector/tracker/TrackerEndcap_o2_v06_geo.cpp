@@ -152,12 +152,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     double sumZ(0.), innerR(1e100), outerR(0.);
     double sensitiveThickness(0.0);
 
-    Assembly lay_vol_pos(_toString(l_id, "layer_pos%d"));
-    Assembly lay_vol_neg(_toString(l_id, "layer_neg%d"));
-
-    DetElement lay_elt_pos(sdet, _toString(l_id, "layer_pos%d"), l_id);
-    DetElement lay_elt_neg(sdet, _toString(l_id, "layer_neg%d"), l_id);
-
     // loop only to count the number of rings in a disk - it is then needed for looking for neighborous when you are in
     // a "border" cell
     int nrings = 0;
@@ -203,9 +197,12 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
         double x = -r * std::cos(phi);
         double y = -r * std::sin(phi);
-        DetElement module(lay_elt_pos, m_base + "_pos", det_id);
-        pv = lay_vol_pos.placeVolume(m_vol, Transform3D(RotationZ(phi + M_PI / 2), Position(x, y, zstart + dz)));
-        pv.addPhysVolID("module", mod_num).addPhysVolID("sensor", k);
+        DetElement module(sdet, m_base + "_pos", det_id);
+        pv = envelope.placeVolume(m_vol, Transform3D(RotationZ(phi + M_PI / 2), Position(x, y, zstart + dz)));
+        pv.addPhysVolID("side", 1)
+            .addPhysVolID("layer", l_id)
+            .addPhysVolID("module", mod_num)
+            .addPhysVolID("sensor", k);
         module.setPlacement(pv);
 
         for (size_t ic = 0; ic < sensVols.size(); ++ic) {
@@ -215,10 +212,13 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         }
 
         if (reflect) {
-          pv = lay_vol_neg.placeVolume(
+          pv = envelope.placeVolume(
               m_vol, Transform3D(RotationZ(phi + M_PI / 2) * RotationX(M_PI), Position(x, y, -zstart - dz)));
-          pv.addPhysVolID("module", mod_num).addPhysVolID("sensor", k);
-          DetElement r_module(lay_elt_neg, m_base + "_neg", det_id);
+          pv.addPhysVolID("side", -1)
+              .addPhysVolID("layer", l_id)
+              .addPhysVolID("module", mod_num)
+              .addPhysVolID("sensor", k);
+          DetElement r_module(sdet, m_base + "_neg", det_id);
           r_module.setPlacement(pv);
           for (size_t ic = 0; ic < sensVols.size(); ++ic) {
             PlacedVolume sens_pv = sensVols[ic];
@@ -317,20 +317,6 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     thisLayer.thicknessSensitive = sensitiveThickness;
 
     zDiskPetalsData->layers.push_back(thisLayer);
-
-    pv = envelope.placeVolume(lay_vol_pos);
-    pv.addPhysVolID("layer", l_id);
-    pv.addPhysVolID("side", 1);
-    lay_elt_pos.setAttributes(theDetector, lay_vol_pos, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
-    lay_elt_pos.setPlacement(pv);
-
-    if (reflect) {
-      pv = envelope.placeVolume(lay_vol_neg);
-      pv.addPhysVolID("layer", l_id);
-      pv.addPhysVolID("side", -1);
-      lay_elt_neg.setAttributes(theDetector, lay_vol_neg, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
-      lay_elt_neg.setPlacement(pv);
-    }
   }
 
   sdet.addExtension<ZDiskPetalsData>(zDiskPetalsData);
