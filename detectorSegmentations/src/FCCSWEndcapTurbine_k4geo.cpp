@@ -239,13 +239,18 @@ namespace DDSegmentation {
     double zdepth = m_numReadoutZLayers[iWheel] * m_gridSizeZ[iWheel];
 
     double zLoc = TMath::Abs(z(cID)) - m_offsetZ[iWheel] - zdepth / 2;
-    double x = zLoc / TMath::Tan(m_bladeAngle[iWheel]);
-    double y = TMath::Sqrt(rhoLoc * rhoLoc - x * x);
-    // rotate about z axis by phiCent
-    double xprime = x * TMath::Cos(phiCent) + y * TMath::Sin(phiCent);
-    double yprime = y * TMath::Cos(phiCent) - x * TMath::Sin(phiCent);
 
-    return TMath::ATan2(xprime, yprime);
+    // calculation position in frame with unit cell at phi = 0
+    double y = zLoc / TMath::Tan(m_bladeAngle[iWheel]);
+    double x = TMath::Sqrt(rhoLoc * rhoLoc - y * y);
+    double locPhi = TMath::ATan2(y, x);
+
+    // now rotate by phi position of the unit cell
+    double phi = locPhi + phiCent;
+    if (phi > TMath::Pi())
+      phi = phi - TMath::TwoPi();
+
+    return phi;
   }
 
   /// determine the longitudinal position (z) based on the cell ID
