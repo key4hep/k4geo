@@ -1,15 +1,15 @@
 <!-- Changes :
    o1_v03 : IDEA/ALLEGRO vertex detector described in FCC Feasibility Study Final Report (2025). An ultra-light inner vertex detector design with four layers is included as well, enabled by setting "nInnerVertexLayers" to 4, disabling the layers below "Vertex inner barrel" and instead enabling the ultra-light layers below "Ultra-light inner vertex"
-   o1_v04 : Reduced sensitive thickness for ultra-light curved vertex. Removed 'auxiliary pads' in the ultra-light curved vertex to increase the area that is sensitive by about 2.5% (see ALICE IT3 TDR). Ultra-light curved vertex detector sensors are now approximated by trapezoidal volumes, enabling the use of conformal tracking that currently requires non-bent surfaces.
+   o1_v04 : Vertex disks have the better measurement direction now in phi (geometry unchanged). Reduced sensitive thickness for ultra-light curved vertex. Removed 'auxiliary pads' in the ultra-light curved vertex to increase the area that is sensitive by about 2.5% (see ALICE IT3 TDR). Ultra-light curved vertex detector sensors are now approximated by trapezoidal volumes, enabling the use of conformal tracking that currently requires non-bent surfaces.
 -->
 
 <lccdd>
-    <info name="Vertex_IDEA_o1_v03"
+    <info name="Vertex_IDEA_o1_v04"
         title="IDEA vertex detector: Started with CLD vertex detector design from FCCDetectors, but adapted to IDEA vertex detector and extended functionality of detector builders"
         author="Niloufar Alipour Tehrani (adapting original CLD version), Armin Ilg (adapting and extending to IDEA)"
         url="no"
         status="development"
-        version="o1_v03"> 
+        version="o1_v04"> 
         <comment>A Vertex Detector for the FCC-ee IDEA detector concept, based on the engineered design by Fabrizio Palla and Filippo Bosi (INFN Pisa), implemented in DD4hep by Armin Ilg (UZH)</comment>
     </info>
     <comment>Vertex inner barrel </comment>
