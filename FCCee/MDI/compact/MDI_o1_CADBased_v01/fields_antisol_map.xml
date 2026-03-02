@@ -1,12 +1,8 @@
 <lccdd>
-    <info name="fields_antisol_map"
-        title="Magnetic field for the compensating and screening solenoids only. Field map from M. Koratzinos"
-	author="Andrea Ciarma"
-        url=""
-        status="development"
-        version="1">
-        <comment>Dimensions and Materials for the FCCee common MDI</comment>
-    </info>
+
+    <!-- Magnetic field for the compensating and screening solenoids only. Field map from M. Koratzinos & Andrea Ciarma
+
+    Dimensions and Materials for the FCCee common MDI</comment -->
 
     <fields>
       <!-- Detailed field map -->

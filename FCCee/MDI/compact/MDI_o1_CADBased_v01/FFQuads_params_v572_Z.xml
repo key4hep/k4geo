@@ -1,13 +1,6 @@
 <lccdd>
 
-  <info name="FFQs_params_v572_Z"
-        title="FFQs parameters for lattice v572 - Z"
-        author="Andrea Ciarma"
-        url="no"
-        status="development"
-        version="1">
-  </info>
-
+  <!-- FFQs parameters for lattice v572 - Z. Andrea Ciarma -->
   
   <define>
     <constant name="FFQ_ON" value="1"/> <!-- hardcoded only for now -->
