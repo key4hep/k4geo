@@ -10,22 +10,22 @@
 	status="development"
 	version="1.0">
     <comment>
+      Changes with respect to DectDimensions_IDEA_o1_v03: Indication which silicon wrapper parameters can now be changed freely.
     </comment>
   </info>
 
 
   <define>
     <constant name="world_side" value="6100*mm"/>           <!-- Used in LumiCal and HOMAbsorber, != world_size -->
-    <constant name="CrossingAngle" value="0.030*rad"/>  
+    <constant name="CrossingAngle" value="0.030*rad"/>
 
     <comment> Silicon wrapper disk has a maximum of 22 layers, so 5 bits for the layers. Silicon wrapper barrel has a maximum of 81 staves * 31 'modules' (each a tile of 8 sensors) per stave = 2551 modules, so 12 bits for modules. Curved inner vertex has a maximum of 60 pixel matrices per module * number of segments to make straight surfaces (default: 4), so 8 bits.   </comment>
     <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:5,module:12,sensor:8"/>
-
     <constant name="SolenoidField" value="2*tesla"/>
-    
+
     <!-- Detector IDs -->
     <constant name="DetID_NOTUSED"                value=" 0"/>
-    
+
     <constant name="DetID_VXD_Barrel"             value=" 1"/>
     <constant name="DetID_VXD_Disks"              value=" 2"/>
 
@@ -34,18 +34,17 @@
     <constant name="DetID_SiWr_Barrel"            value=" 23"/>
     <constant name="DetID_SiWr_Disks"             value=" 24"/>
 
-    <constant name="DetID_ECAL_Barrel"            value=" 4"/>
-    <constant name="DetID_ECAL_Endcap"            value=" 5"/>
-    <constant name="DetID_Timing_Barrel"          value=" 6"/>
-    <constant name="DetID_Timing_Endcap"          value=" 7"/>
+    <constant name="DetID_Calo_Barrel"            value=" 4"/>
+    <constant name="DetID_Calo_Endcap"            value=" 5"/>
+    <constant name="DetID_Calo_Endcap_2"          value=" 6"/>
 
     <constant name="DetID_HCAL_Barrel"            value=" 10"/>
     <constant name="DetID_HCAL_Endcap"            value=" 11"/>
     <constant name="DetID_HCAL_Ring"              value=" 12"/>
-    
+
     <constant name="DetID_Yoke_Barrel"            value=" 13"/>
     <constant name="DetID_Yoke_Endcap"            value=" 14"/>
-    
+
     <constant name="DetID_LumiCal"                value=" 15"/>
     <constant name="DetID_LumiCalInstrumentation" value=" 16"/>
     <constant name="DetID_LumiCalCooling"         value=" 17"/>
@@ -54,19 +53,11 @@
     <constant name="DetID_LumiCalNoseShield"      value=" 22"/>
 
 
-    <!-- Dual-Readout Endcap Tubes (DRET) calorimeter DetID-->
-    <!-- This number is used in DRTubesSDAction to recreate
-	 the volume ids for this subdetector.
-	 Do not change it, contact the experts (Lorenzo Pezzoti)
-	 before any modification.
-    -->
-    <constant name="DetID_DREndcapTubes"          value=" 25"/>
+    <!-- Fiber dual-readout calorimeter DetID -->
+    <constant name="DetID_FiberDRCalo"             value=" 25"/>
 
     <constant name="DetID_muonSystem"       value=" 26"/>
     <constant name="DetID_Preshower"       value=" 27"/>
-
-    <!-- Dual-Readout Barrel Tubes (DRBT) calorimeter DetID-->
-    <constant name="DetID_DRBarrelTubes"       value=" 28"/>
 
     <!-- BPW: Beam Pipe Width -->
     <constant name="BPWWall"       value="0.35*mm" />
@@ -78,7 +69,7 @@
     <constant name="SeparatedBeamPipe_z" value="1190.0*mm"/> <!-- was 1159.97*mm in FCCDetectors/> -->
     <constant name="CentralBeamPipe_rmax" value="10.0*mm"/>
     <constant name="ConeBeamPipe_Rmax" value="28.9*mm" />
-    <constant name="BeamPipeGoldWidth" value="0.005*mm" /> 
+    <constant name="BeamPipeGoldWidth" value="0.005*mm" />
     <constant name="BeamPipeGoldTolerance" value="0.001*mm" />  <!-- dummy tolerance, some small non zero value -->
     <constant name="BeamPipeConeHalfAngle" value="(ConeBeamPipe_Rmax + BeamPipeWidthFirstCone - CentralBeamPipe_rmax ) / (SeparatedBeamPipe_z - CentralBeamPipe_zmax)" />
 
@@ -92,7 +83,7 @@
     <constant name="MiddleOfSRMask_z" value="2.1*m" />
     <constant name="SynchRadMaskSize" value="5*mm" /> <!-- mask tip is at 10 mm from the beamline -->
     <constant name="mask_epsilon" value="0.001*mm" />
-        
+
     <!-- Vertex detector as in the engineering design (INFN Pisa) Changing the values here generally is not enough to resize the detector, except for the first layer radius. Contact in case of questions or desired adaptations: Armin Ilg -->
     <constant name="VertexClearanceTheta"   value="0.1035*rad"/>  <!-- Clearance of vertex detector in mrad from IP. !!! Too high currently, lumical acceptance is 107 mrad so consider 110 mrad as limit -> Need to adapt vertex disks!!! -->
     <constant name="VertexAcceptanceLimit"  value="0.125*rad"/>   <!-- Acceptance limit of vertex detector, used to define number of modules per stave  -->
@@ -117,15 +108,15 @@
     <constant name="VTX_r_min" value="VTXIB_r_min_layer-VTXIB_r_min_clearance"/>  <!-- Not used, just do indicate the vertex detector envelope limits -->
     <constant name="VTX_r_max" value="VTXOB_r_max_layer+VTXOB_rmax_clearance"/>   <!-- Not used, just do indicate the vertex detector envelope limits -->
     <constant name="VTX_z_max" value="VTXD_z_max_total"/>                         <!-- Not used, just do indicate the vertex detector envelope limits -->
-
+    
     <!--  Drift Chamber parameters    -->
     <!-- Changing the radius is not enough to resize the detector, please contact the experts-->
     <constant name="DCH_inner_cyl_R_total"          value=" 349.8  * mm"  />
     <constant name="DCH_outer_cyl_R_total"          value=" 2015.   * mm"  />
     <constant name="DCH_half_length_total"          value=" 2250.   * mm"  />
-    
-    <constant name="Solenoid_inner_radius" value="2500*mm"/>
-    <constant name="Solenoid_outer_radius" value="2800*mm"/>
+
+    <constant name="Solenoid_inner_radius" value="2100*mm"/>
+    <constant name="Solenoid_outer_radius" value="2400*mm"/>
     <constant name="Solenoid_half_length" value="2380*mm"/>
     <constant name="Solenoid_Coil_half_length" value="Solenoid_half_length-200*mm"/>
     <constant name="Solenoid_Coil_radius" value="Solenoid_inner_radius+200*mm"/>
@@ -136,7 +127,7 @@
     <constant name="SiWrB_half_length"  value="2400*mm"/>   <!-- Can be freely changed -->
     <constant name="SiWrD_inner_radius" value="350.0*mm"/>  <!-- Can be freely changed. Must be smaller than 'SiWrB_inner_radius' -->
     <constant name="SiWrD_outer_radius" value="2040.0*mm"/> <!-- Can be freely changed. Must be larger than 'SiWrD_inner_radius' and SiWrD_outer_radius-SiWrD_inner_radius must be smaller than ~ 2450 mm, otherwise the number of available rings is not large enough to cover the whole area -->
-    <constant name="SiWrD_services_opening"  value="40*mm"/> <!-- Can be freely changed. -->
+    <constant name="SiWrD_services_opening"  value="40*mm"/><!-- Can be freely changed. -->
     <constant name="SiWrD_zmin"         value="2300.0*mm"/> <!-- Can be freely changed, as long as SiWrD_zmax-SiWrD_zmin is kept constant or is increased -->
     <constant name="SiWrD_zmax"         value="2340.0*mm"/> <!-- Can be freely changed, as long as SiWrD_zmax-SiWrD_zmin is kept constant or is increased -->
 
@@ -145,156 +136,114 @@
     <constant name="EndPlateAbsorber_outer_radius" value="2030*mm"/>
     <constant name="EndPlateAbsorber_z_min" value="2350*mm"/>
     <constant name="EndPlateAbsorber_z_half_length" value="4.209/2.0*mm"/>
-    
+
     <constant name="YokeBarrel_inner_radius" value="4479*mm"/>
     <constant name="YokeBarrel_outer_radius" value="6000*mm"/>
     <constant name="YokeBarrel_half_length" value="3755*mm"/>
     <constant name="YokeBarrel_symmetry" value="12"/>
-    
+
     <constant name="YokeEndcap_inner_radius" value="400*mm"/>
     <constant name="YokeEndcap_outer_radius" value="6000*mm"/>
     <constant name="YokeEndcap_min_z" value="3755*mm"/>
     <constant name="YokeEndcap_max_z" value="5300*mm"/>
     <constant name="YokeEndcap_outer_symmetry" value="12"/>
     <constant name="YokeEndcap_inner_symmetry" value="0"/>
-    
+
     <constant name="CompSol_min_z" value="1230*mm"/>
 
     <constant name="env_safety" value="0.1*mm"/>
 
     <constant name="LumiCal_max_z" value="1186.5*mm" />
     <constant name="LumiCal_min_z" value="1074*mm"/>
-    
+
     <constant name="LumiCal_dz" value="(LumiCal_max_z-LumiCal_min_z)/2.0"/>
-    
+
     <constant name="LumiCal_inner_radius" value="55.0*mm"/>
     <constant name="LumiCal_outer_radius" value="112.0*mm- env_safety"/>
-    
+
     <constant name="LumiCal_Instr_thickness" value="20*mm"/>
     <constant name="LumiCal_Instr_inner_radius" value="LumiCal_outer_radius"/>
     <constant name="LumiCal_Instr_outer_radius" value="LumiCal_outer_radius+LumiCal_Instr_thickness - env_safety"/>
-    
+
     <constant name="LumiCal_Cool_thickness" value="9.75*mm"/>
     <constant name="LumiCal_Cool_inner_radius" value="LumiCal_Instr_outer_radius"/>
     <constant name="LumiCal_Cool_outer_radius" value="LumiCal_Instr_outer_radius+LumiCal_Cool_thickness"/>
-    
+
     <constant name="Lcal_services_rmax" value="LumiCal_outer_radius+30*mm"/>
     <constant name="Lcal_offset_phi" value=" 0."/>
     <!--preliminary LumiCal shielding-->
     <!--back shielding-->
     <constant name="LumiCal_Shield_inner_radius" value="LumiCal_inner_radius"/>
     <constant name="LumiCal_Shield_outer_radius" value="LumiCal_outer_radius+LumiCal_Instr_thickness+LumiCal_Cool_thickness"/>
-    <constant name="LumiCal_shield_dz" value="1.75*mm"/> 
+    <constant name="LumiCal_shield_dz" value="1.75*mm"/>
     <!--nose-->
     <constant name="LumiCal_NoseShield_inner_radius" value="LumiCal_inner_radius-5*mm"/>
     <constant name="LumiCal_NoseShield_outer_radius" value="LumiCal_inner_radius+10*mm"/>
     <constant name="LumiCal_nose_shield_dz" value="12*mm"/>
-    
+
     <constant name="BeamCal_inner_radius" value="32*mm"/>
     <constant name="BeamCal_outer_radius" value="150*mm"/>
     <constant name="BeamCal_min_z" value="3181*mm"/>
     <constant name="BeamCal_max_z" value="3441*mm"/>
     <constant name="BeamCal_dz" value="(BeamCal_max_z-BeamCal_min_z)/2.0"/>
-    
+
     <constant name="Kicker_inner_radius" value="4*mm"/>
     <constant name="Kicker_outer_radius" value="25*mm"/>
     <constant name="Kicker_min_z" value="3480*mm"/>
     <constant name="Kicker_max_z" value="3780*mm"/>
-    
+
     <constant name="BPM_inner_radius" value="36*mm"/>
     <constant name="BPM_outer_radius" value="55*mm"/>
     <constant name="BPM_min_z" value="3790*mm"/>
-    <constant name="BPM_max_z" value="3880*mm"/>        
+    <constant name="BPM_max_z" value="3880*mm"/>
 
     <constant name="QD0_min_z" value="2000*mm"/>
     <constant name="QD0_max_z" value="5200*mm"/>
     <constant name="QD0Coil_outer_radius" value="30*mm"/>
-    <constant name="CollimatorInFrontOfQD0_dz" value="20*cm"/>   
+    <constant name="CollimatorInFrontOfQD0_dz" value="20*cm"/>
     <constant name="CollimatorInFrontOfQD0_radius" value="10*mm"/>
     <constant name="CollimatorInFrontOfQD0_dr" value="16*mm"/>
 
     <constant name="tracker_region_zmax" value="DCH_half_length_total"/>
     <constant name="tracker_region_rmax" value="DCH_outer_cyl_R_total"/>
 
-    <!-- SCEPCal dimensions (Wonyong Chung) -->
-    <constant name="scepcal_barrel_half_z" value="2.45*m"/>
-    <constant name="scepcal_barrel_inner_r" value="2.25*m"/>
-    <constant name="scepcal_phi_segments" value="128"/>
-    <constant name="scepcal_beampipe_opening" value="45*cm"/>
-    <constant name="scepcal_projective_offset_r" value="10*cm"/>
-    <constant name="scepcal_projective_offset_x" value="10*cm"/>
-    <constant name="scepcal_xtal_theta_width" value="1*cm"/>
-    <constant name="scepcal_xtal_divisions_f" value="1"/>
-    <constant name="scepcal_xtal_divisions_r" value="1"/>
-    <constant name="scepcal_xtal_length_f" value="5*cm"/>
-    <constant name="scepcal_xtal_length_r" value="15*cm"/>
-    <constant name="scepcal_mainlayer_reargap" value="1*cm"/>
-    <constant name="scepcal_timinglayer_gap" value="1*cm"/>
-    <constant name="scepcal_timing_xtal_depth" value="5*mm"/>
-    <constant name="scepcal_timing_xtal_length" value="10*cm"/>
+    <!-- Pre-shower Parameters-->
+    <constant name = "psNumSides"                              value = "32"/>        <!-- The number of sides of the pre-shower -->
+                                                <!-- Barrel -->
+    <constant name = "psBarrelFirstLayerRadius"                     value = "2420*mm"/>  <!-- 1st Barrel microRWELL detector inner radius-> its the start point of thicknesses of the microRWELL material. In our case the shape is Polygon, so the radius is in the middle of the polygon side. -->
+    <constant name = "psBarrelLength"                               value = "4900*mm"/> <!--Barrel detector length, in the description of the detctor we always use the half-length -->
+                                                <!-- Endcap -->
+    <constant name = "psEndcapFirstLayerZOffset"                     value = "2400*mm"/>  <!-- 1st Endcap microRWELL detector inner ZOffset-> its the start point of thicknesses of the microRWELL volume -->
+    <constant name = "psEndcapLayersInnerRadius"                    value = "390*mm"/> <!--Endcap detector inner radius, its the start point of thicknesses of the detector material ** it applies for both detector layers and yoke-->
+    <constant name = "psEndcapLayersOuterRadius"                    value = "2420*mm"/> <!--Endcap detector outer radius, its the end point of thicknesses of the detector material ** it applies for both detector layers and yoke-->
+    <!-- End of Pre-shower Parameters-->
 
-    <!-- SCEPCal variables for partial construction -->
-    <!-- Barrel and endcap phi segment loading, no. segments defined above, base start="0", main layer only -->
-    <constant name="scepcal_phi_load_start" value="0"/>
-    <constant name="scepcal_phi_load_end" value="127"/>
-    <!-- Barrel Theta loading, no. segments depends on barrel size, outputted upon constructing, base start = "0" -->
-    <constant name="scepcal_barrel_theta_load_start" value="0"/>
-    <constant name="scepcal_barrel_theta_load_end" value="489"/>
-    <!-- Barrel Gamma loading, 11 segments, base start = "0" -->
-    <constant name="scepcal_barrel_gamma_load_start" value="0"/>
-    <constant name="scepcal_barrel_gamma_load_end" value="10"/>
-    <!-- End of SCEPCal Dimensions -->
-
-
-    <!-- Dual-Readout Endcap Tubes (DRET) calorimeter dimensions-->
-    <constant name="DRETinnerRadius" value="2.8*m"/>
-    <constant name="DRETtowerHeight" value="1.8*m"/>
-    <constant name="DRETNbOfZRot"    value="72"/>
-    <constant name="DRETTubeRadius"  value="1.0*mm"/>
-    <constant name="DRETCladRadius"  value="0.5*mm"/>
-    <constant name="DRETCoreRadius"  value="0.485*mm"/>
-    <!-- end of Dual-Readout Endcap Tubes (DRET) calorimeter dimensions-->
-
-    <!-- Dual-Readout Barrel Tubes (DRBT) calorimeter dimensions-->
-    <constant name="DRBTCoreOuterRadius" value="0.485*mm"/>
-    <constant name="DRBTCladOuterRadius"  value="0.5*mm"  />
-    <constant name="DRBTTubeOuterRadius"  value="1.0*mm"  />
-    <constant name="DRBTTubeTolerance"    value="50*um" />
-    <!-- The barrel calorimeter starts at 2.8 m but we add
-         a 0.5 cm displacement to avoid overlap between
-         the calo staves and the solenoid -->
-    <constant name="DRBTInnerCaloRadius"     value="2.805*m"  />
-    <constant name="DRBTOuterCaloRadius"     value="4.6*m"  />
-    <constant name="DRBTInnerCaloHalfLength" value="2.805*m"  />
-    <constant name="DRBTTowerThetaCoverage"  value="1.0*deg"/>      
-    <constant name="DRBTTowerPhiCoverage"    value="5.0*deg"  />
-    <constant name="DRBTSupportSideThickness" value="0.0*mm" />
-    <constant name="DRBTSupportFrontThickness" value="0.0*mm" />
-    <constant name="DRBTSupportBackThickness" value="0.0*cm" />
-    <!--Variables to construct only part of the calorimeter-->
-    <!-- Base values are: Start = '0*deg', End = '360*deg' -->
-    <constant name="DRBTStartCaloPhi" value ="0*deg" />
-    <constant name="DRBTEndCaloPhi" value = "360*deg"/>
-    <!-- Towers numbered 1-45, positive values only, if not starting at 1 turn IncludeBwdRegion to '0' -->
-    <constant name="DRBTTowerNumberStart" value = "1"/>
-    <constant name="DRBTTowerNumberEnd" value = "45"/>
-    <!-- Standard is on "1" -->
-    <constant name="DRBTIncludeBwdRegion" value = "1"/>
-    <!-- end of Dual-Readout Barrel Tubes (DRBT) calorimeter dimensions-->
+    <!-- Fiber dual-readout calorimeter tower dim-->
+    <constant name="FiberDRCalo_world_outer_radius" value="4525.*mm"/>
+    <constant name="FiberDRCalo_world_inner_radius" value="252.*mm"/>
+    <constant name="FiberDRCalo_world_z_extent" value="4525.*mm"/>
+    <constant name="FiberDRCalo_barrel_tube_outer_radius" value="2475.*mm"/>
+    <constant name="FiberDRCalo_barrel_tube_inner_radius" value="252.*mm"/>
+    <constant name="FiberDRCalo_barrel_tube_z_extent" value="2475.*mm"/>
+    <constant name="FiberDRCalo_barrel_z_extent"       value="2.*m"/>
+    <constant name="FiberDRCalo_barrel_z_start" value="2.5*m"/>
+    <constant name="FiberDRCalo_barrel_nphi"         value="144"/>
+    <constant name="FiberDRCalo_endcap_z_extent"       value="2.*m"/>
+    <constant name="FiberDRCalo_endcap_z_start" value="2.5*m"/>
+    <constant name="FiberDRCalo_endcap_nphi"         value="144"/>
 
     <!-- Muon System Parameters-->
-    <constant name = "numberOfSides"                              value = "8"/>        
-    <!-- The number of sides of the muon system e.g (Octagon, Hexagon, ...)--> 
-    <!-- Barrel -->
-    <constant name = "BarrelFirstLayerRadius"                     value = "4630*mm"/>  <!-- 1st Barrel microRWELL detector inner radius-> its the start point of thicknesses of the microRWELL material. In our case the shape is Polygon, so the radius is in the middle of the polygon side. -->
-    <constant name = "BarrelLength"                               value = "9260*mm"/> <!--Barrel detector length, in the description of the detctor we always use the half-length -->      
+    <constant name = "numberOfSides"                              value = "8"/>        <!-- The number of sides of the muon system e.g (Octagon, Hexagon, ...)-->
+                                                <!-- Barrel -->
+    <constant name = "BarrelFirstLayerRadius"                     value = "4530*mm"/>  <!-- 1st Barrel microRWELL detector inner radius-> its the start point of thicknesses of the microRWELL material. In our case the shape is Polygon, so the radius is in the middle of the polygon side. -->
+    <constant name = "BarrelLength"                               value = "9060*mm"/> <!--Barrel detector length, in the description of the detctor we always use the half-length -->
                                                 <!-- Endcap -->
-    <constant name = "EndcapFirstLayerZOffset"                     value = "4630*mm"/>  <!-- 1st Endcap microRWELL detector inner ZOffset-> its the start point of thicknesses of the microRWELL volume -->
+    <constant name = "EndcapFirstLayerZOffset"                     value = "4530*mm"/>  <!-- 1st Endcap microRWELL detector inner ZOffset-> its the start point of thicknesses of the microRWELL volume -->
     <constant name = "EndcapLayersInnerRadius"                    value = "700*mm"/> <!--Endcap detector inner radius, its the start point of thicknesses of the detector material ** it applies for both detector layers and yoke-->
     <!-- End of Muon system Parameters-->
   </define>
-  
-  
+
+
   <limits>
     <limitset name="cal_limits">
       <limit name="step_length_max" particles="*" value="5.0" unit="mm" />
@@ -308,11 +257,12 @@
     <region name="SiWrBRegion"/>
     <region name="SiWrDRegion"/>
 
+    <region name="FastSimOpFiberRegion"/>
 </regions>
 
 
   <display> <!-- Note: If the colors should be correctly displayed when geometry is saved as a root file using k4geo/scripts/save_detector_to_root.sh, then colors should be picked that are defined in TColor::InitializeColors(): https://root.cern/doc/master/classTColor.html#a383d38e0cb4f29614310a0653d6b2342 -->
-    <vis name="VXDVis"          alpha="0.2" r="0.1" 	  g=".5"      b=".5"    showDaughters="true"  visible="true"/>
+    <vis name="VXDVis"          alpha="0.2" r="0.1" 	  g=".5"      b=".5"    showDaughters="false" visible="true"/>
     <vis name="SiWrVis"         alpha="0.2" r="1.0"  	  g="1.0"     b="0.0"   showDaughters="false" visible="true"/>
     <vis name="ECALVis"     	  alpha="1.0" r="0.2"   	g="0.6"     b="0"     showDaughters="true"  visible="true"/>
     <vis name="HCALVis"     	  alpha="1.0" r="0.078" 	g="0.01176" b="0.588" showDaughters="true"  visible="true"/>
@@ -329,29 +279,15 @@
     <vis name="TantalumVis"     alpha="1.0" r="1"   	  g="0.5"     b="0.5"   showDaughters="true"  visible="true"/>
     <vis name="BPMVis"      	  alpha="1.0" r="0.25"  	g="0.88"    b="0.81"  showDaughters="true"  visible="true"/>
     <vis name="AirVis"          alpha="0.1" r="0.1"     g="0.1"     b="1.0"   showDaughters="false" visible="true"/>
-    <!-- Dual-Readout Endcap Tubes vis-->
-    <vis name="DRETAssemblyVis" alpha="0.05" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false"/>
-    <vis name="DRETStaveVis" alpha="0.1" r="0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
-    <vis name="DRETTowerVis" alpha="0.5" r="1.0" g="0.624" b="0.0" showDaughters="false" visible="true"/>
-    <vis name="DRETtube_S_Vis" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
-    <vis name="DRETtube_C_Vis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
-    <vis name="DRETclad_S_Vis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="false"/>
-    <vis name="DRETclad_C_Vis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="false"/>
-    <vis name="DRETcore_S_Vis" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false"/>
-    <vis name="DRETcore_C_Vis" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false"/>
-    <!-- end of DRET vis-->
-    <!-- Dual-Readout Battel Tubs vis-->
-    <vis name="DRBTVis" alpha="0.1" r="0.1" g=".5" b=".5" showDaughters="true" visible="false"/>
-    <vis name="DRBTcapillary_vis" alpha="1.0" r="0.855" g="0.647" b="0.125" showDaughters="false" visible="false" />
-    <vis name="DRBTscin_clad_vis" alpha="1.0" r="0.800" g="0.188" b="0.078" showDaughters="false" visible="false" />
-    <vis name="DRBTscin_core_vis" alpha="1.0" r="1.000" g="0.388" b="0.278" showDaughters="false" visible="false" />
-    <vis name="DRBTcher_clad_vis" alpha="1.0" r="0.192" g="0.484" b="0.729" showDaughters="false" visible="false" />
-    <vis name="DRBTcher_core_vis" alpha="1.0" r="0.392" g="0.584" b="0.929" showDaughters="false" visible="false" />
-    <vis name="DRBTair_vis" alpha="0.10" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false" />
-    <vis name="DRBTtrap_vis" alpha="1.0" r="0.855" g="0.647" b="0.125" showDaughters="false" visible="true" />
-    <vis name="DRBTstave_vis" alpha="0.1" r="0.2" g="0.2" b="0.2" showDaughters="true" visible="true" />
-    <vis name="DRBTassembly_vis" alpha="0.0" r="0.33" g="0.33" b="0.33" showDaughters="true" visible="true" />
-    <!-- end of DRBT vis-->
+    <vis name="DRCInvisible" showDaughters="false" visible="false"/> <!-- For fiber-based dual-readout calorimeter -->
+    <vis name="DRCTowerVis" alpha="1." r="0.7" g="0.4" b="0.1" showDaughters="false" visible="true"/>
+    <vis name="DRCCerenVis" alpha="0.5" r="0.3" g="0.6" b="0.9" showDaughters="false" visible="false"/>
+    <vis name="DRCScintVis" alpha="0.5" r="1.0" g="0.8" b="0.1" showDaughters="false" visible="false"/>
+    <vis name="DRCCladVis" alpha="0.5" r="0.0" g="0.5" b="0.5" showDaughters="false" visible="false"/>
+    <vis name="DRCGenericVis" alpha="0.8" r="0.5" g="0.5" b="0.5" showDaughters="false" visible="false"/>
+    <vis name="DRCGlassVis" alpha="0.5" r="0.0" g="0.1" b="0.9" showDaughters="false" visible="false"/>
+    <vis name="DRCWaferVis" alpha="1." r="0.0" g="0.9" b="0.2" showDaughters="false" visible="false"/>
+    <vis name="DRCWorldVis" alpha="0.2" r="0.9" g="0.8" b="0.1" showDaughters="false" visible="false"/>
     <vis name="yoke_vis" r="255/256" g="0/256" b="0/256" alpha="1.0" showDaughters="true" visible="true" />
     <vis name="no_vis" showDaughters="true" visible="false" />
     <vis name="G10_FR4_vis" r="0.6" g="0.4" b="0.2" alpha="1.0" showDaughters="true" visible="true" />
