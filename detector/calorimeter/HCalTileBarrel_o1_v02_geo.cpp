@@ -327,19 +327,19 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
       std::vector<double> cellSizeVector = seg_phitheta->cellDimensions(0);
       double cellSizeTheta = cellSizeVector[1];
       double cellSizePhi = cellSizeVector[0];
-      dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "    cell sizes in theta, phi: %lf , %lf", cellSizeTheta,
-                       cellSizePhi);
+      dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "    cell sizes in theta, phi: %lf rad , %lf rad",
+                       cellSizeTheta, cellSizePhi);
       caloLayer.cellSize0 = cellSizeTheta;
       caloLayer.cellSize1 = cellSizePhi;
     } else if (seg_phirow) {
       // the merging of the rows into cells can differ layer by layer so need to pass
-      // cellID with layer field properly filled in order to get good dimension
-      dd4hep::CellID cID;
+      // cellID with layer field properly filled in order to get good dimension.
+      dd4hep::CellID cID = 0;
       encoder.set(cID, layerFieldName, idxLayer);
       std::vector<double> cellSizeVector = seg_phirow->cellDimensions(cID);
-      double cellSizeZ = cellSizeVector[1];
-      double cellSizePhi = cellSizeVector[0];
-      dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "    cell sizes in z, phi: %lf , %lf", cellSizeZ,
+      double cellSizeZ = cellSizeVector[0];
+      double cellSizePhi = cellSizeVector[1];
+      dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "    cell sizes in z, phi: %.4f cm , %.4f cm", cellSizeZ,
                        cellSizePhi);
       caloLayer.cellSize0 = cellSizeZ;
       caloLayer.cellSize1 = cellSizePhi;
