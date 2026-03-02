@@ -4,6 +4,8 @@
 //         dual-readout-tubes calorimeters
 // \author: Lorenzo Pezzotti (CERN) @lopezzot
 // \start date: 11 August 2024
+// History:
+// 5/2/2026 Added calo hit contributions (Lorenzo Pezzotti)
 //**************************************************************************
 
 // Includers from DD4HEP
@@ -17,6 +19,7 @@
 #include "DDG4/Geant4SensDetAction.inl"
 
 // Includers from Geant4
+#include "CLHEP/Units/PhysicalConstants.h"
 #include "G4OpBoundaryProcess.hh"
 #include "G4OpticalPhoton.hh"
 #include "G4Poisson.hh"
@@ -40,6 +43,14 @@ namespace sim {
     DRTubesSDData() = default;
     ~DRTubesSDData() = default;
 
+  public:
+    // Time bin width to save photo-electrons at SiPM
+    // in bunches
+    double m_PhotonsTimeBinWidth{0.1 * CLHEP::ns}; // default value
+    // Constants
+    const double PMMARefractiveIndex = 1.49;
+    const double FluorinatedPolymerRefractiveIndex = 1.42;
+
     // Fields
     //
   public:
@@ -57,13 +68,6 @@ namespace dd4hep {
 namespace sim {
 
   // Function template specialization of Geant4SensitiveAction class.
-  // Define actions
-  template <>
-  void Geant4SensitiveAction<DRTubesSDData>::initialize() {
-    m_userData.sensitive = this;
-  }
-
-  // Function template specialization of Geant4SensitiveAction class.
   // Define collections created by this sensitivie action object
   template <>
   void Geant4SensitiveAction<DRTubesSDData>::defineCollections() {
@@ -74,6 +78,16 @@ namespace sim {
     m_userData.collection_cher_left = defineCollection<Geant4Calorimeter::Hit>("DRETCherLeft");
     m_userData.collection_drbt_cher = defineCollection<Geant4Calorimeter::Hit>("DRBTCher");
     m_userData.collection_drbt_scin = defineCollection<Geant4Calorimeter::Hit>("DRBTScin");
+  }
+
+  template <>
+  Geant4SensitiveAction<DRTubesSDData>::Geant4SensitiveAction(Geant4Context* ctxt, const std::string& nam,
+                                                              DetElement det, Detector& lcdd_ref)
+      : Geant4Sensitive(ctxt, nam, det, lcdd_ref), m_collectionID(0) {
+    initialize();
+    defineCollections();
+    InstanceCount::increment(this);
+    declareProperty("PhotonsTimeBinWidth", m_userData.m_PhotonsTimeBinWidth = 0.1 * CLHEP::ns);
   }
 
   // Function template specialization of Geant4SensitiveAction class.
@@ -247,9 +261,16 @@ namespace sim {
     } // end of Volume ID and hit collection creation for barrel
 
     // We now calculate the hit signal
+    // If m_PhotonsTimeBinWidth <= 0 we set it to 0.1 ns
+    double thisPhotonsTimeBinWidth = m_userData.m_PhotonsTimeBinWidth;
+    if (thisPhotonsTimeBinWidth <= 0) {
+      thisPhotonsTimeBinWidth = 0.1 * CLHEP::ns;
+    }
     G4double steplength = aStep->GetStepLength();
     G4int signalhit = 0;
-    if (IsScin) { // it is a scintillating fiber
+    G4double hitTimeOfArrival = 0.;    // time of arrival of hit photons at SiPM
+    G4double hitBinTimeOfArrival = 0.; // bin time of arrival of hit photons at SiPM
+    if (IsScin) {                      // it is a scintillating fiber
 
       if (aStep->GetTrack()->GetDefinition()->GetPDGCharge() == 0 || steplength == 0.) {
         return true; // not ionizing particle
@@ -257,6 +278,11 @@ namespace sim {
       G4double distance_to_sipm = DRTubesSglHpr::GetDistanceToSiPM(aStep);
       signalhit = DRTubesSglHpr::SmearSSignal(DRTubesSglHpr::ApplyBirks(Edep, steplength));
       signalhit = DRTubesSglHpr::AttenuateSSignal(signalhit, distance_to_sipm);
+      hitTimeOfArrival =
+          (distance_to_sipm * m_userData.PMMARefractiveIndex) / CLHEP::c_light; // time of arrival at SiPM (ns)
+      hitBinTimeOfArrival = static_cast<double>(
+          std::floor((aStep->GetPostStepPoint()->GetGlobalTime() + hitTimeOfArrival) / thisPhotonsTimeBinWidth) *
+          thisPhotonsTimeBinWidth);
       if (signalhit == 0)
         return true;
     } // end of scintillating fibre sigal calculation
@@ -289,6 +315,11 @@ namespace sim {
           G4double distance_to_sipm = DRTubesSglHpr::GetDistanceToSiPM(aStep);
           G4int c_signal = DRTubesSglHpr::SmearCSignal();
           signalhit = DRTubesSglHpr::AttenuateCSignal(c_signal, distance_to_sipm);
+          hitTimeOfArrival = (distance_to_sipm * m_userData.FluorinatedPolymerRefractiveIndex) /
+                             CLHEP::c_light; // time of arrival at SiPM (ns)
+          hitBinTimeOfArrival = static_cast<double>(
+              std::floor((aStep->GetPostStepPoint()->GetGlobalTime() + hitTimeOfArrival) / thisPhotonsTimeBinWidth) *
+              thisPhotonsTimeBinWidth);
           if (signalhit == 0)
             return true;
           aStep->GetTrack()->SetTrackStatus(fStopAndKill);
@@ -317,10 +348,39 @@ namespace sim {
       // Note, when the hit is saved in edm4hep format the energyDeposit is
       // divided by 1000, i.e. it translates from MeV (Geant4 unit) to GeV (EDM4hep unit).
       // Here I am using this field to save photo-electrons, so I multiply it by 1000
-      hit->energyDeposit = signalhit * 1000;
+      hit->energyDeposit = signalhit * CLHEP::GeV;
+
+      // Crete the first contribution associated to this hit(fiber)
+      Geant4Calorimeter::Hit::Contribution contrib;
+      contrib.trackID = aStep->GetTrack()->GetTrackID();
+      contrib.deposit = signalhit * CLHEP::GeV;
+      contrib.time = hitBinTimeOfArrival;
+      // contrib position is not needed, they are all inside the same fiber
+      // contrib.x = FiberVec.x(); contrib.y = FiberVec.y(); contrib.z = FiberVec.z(); // use the fiber tip position
+      hit->truth.emplace_back(contrib);
+
       coll->add(VolID, hit); // add the hit to the hit collection
     } else {                 // if the hit exists already, increment its fields
-      hit->energyDeposit += signalhit * 1000;
+      hit->energyDeposit += signalhit * CLHEP::GeV;
+
+      bool foundBin = false;
+      // Assess if this temporal bin already exists as a contribution
+      for (auto& contrib : hit->truth) {
+        // Set a small tolerance to compare floats (0.0001 ns)
+        if (std::abs(contrib.time - hitBinTimeOfArrival) < 0.0001) {
+          contrib.deposit += signalhit * CLHEP::GeV;
+          foundBin = true;
+          break; // exit loop
+        }
+      }
+      // if contribution does not exist we create it
+      if (!foundBin) {
+        Geant4Calorimeter::Hit::Contribution newContrib;
+        newContrib.trackID = aStep->GetTrack()->GetTrackID();
+        newContrib.deposit = signalhit * CLHEP::GeV;
+        newContrib.time = hitBinTimeOfArrival;
+        hit->truth.emplace_back(newContrib);
+      }
     }
     return true;
   } // end of Geant4SensitiveAction::process() method specialization

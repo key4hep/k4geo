@@ -7,6 +7,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DDSegmentation/Segmentation.h"
 #include "Math/Vector3D.h"
+#include <climits> // For CHAR_BIT
 #include <cmath>
 #include <vector>
 

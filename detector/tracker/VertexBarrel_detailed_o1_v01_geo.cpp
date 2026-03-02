@@ -43,7 +43,6 @@ using dd4hep::rec::VolPlane;
 static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector sens) {
 
   xml_det_t x_det = e;
-  int m_id = 0;
   std::string det_name = x_det.nameStr();
 
   DetElement sdet(det_name, x_det.id());
@@ -109,7 +108,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
   list<stave_information> stave_information_list;
 
   // --- Collect stave(s) information
-  for (xml_coll_t mi(x_det, _U(stave)); mi; ++mi, ++m_id) {
+  for (xml_coll_t mi(x_det, _U(stave)); mi; ++mi) {
     xml_comp_t x_stave = mi;
 
     stave_information m;
