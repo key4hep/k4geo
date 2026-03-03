@@ -1,25 +1,25 @@
-#ifndef DCH_INFO_H
-#define DCH_INFO_H
+#ifndef WIRE_TRACKER_INFO_H
+#define WIRE_TRACKER_INFO_H
 
 #include "TMath.h"
 
 #include "DDRec/DetectorData.h"
 #include <map>
 #include <Math/Vector3D.h>
-#include <Math/GenVector/RotationY.h>
+#include <Math/GenVector/RotationZ.h>
 
 namespace dd4hep {  namespace rec {
 
 
-/* Data structure to store DCH geometry parameters
+/* Data structure to store Wire Trackers geometry parameters
  *
  * Global parameters are members of this class
  *
  * Parameters of each layer are stored in the helper
- * class DCH_info_layer.
+ * class WireTracker_info_layer.
  *
  * The member database is a container which stores one
- * DCH_info_layer object per layer.
+ * WireTracker_info_layer object per layer.
  *
  * To use this class, instantiate an object and define the global parameters.
  * Then call the method BuildLayerDatabase, which calculates
@@ -30,7 +30,7 @@ namespace dd4hep {  namespace rec {
  * @version Drift chamber v2
  *
  */
-struct DCH_info_struct
+struct WireTracker_info_struct
 {
 public:
     // use alias for root 3D vectors
@@ -38,57 +38,57 @@ public:
     // use alias of types to show more clearly what the variable is
     // if everything is double, the code is not readable
     /// type for layer number
-    using DCH_layer = int;
+    using layer_t = int;
     /// type for lengths
-    using DCH_length_t = double;
+    using length_t = double;
     /// type for angles
-    using DCH_angle_t = double;
+    using angle_t = double;
     /// Half length of the active volume
-    DCH_length_t Lhalf = {0};
+    length_t Lhalf = {0};
     /// Inner radius of the active volume
-    DCH_length_t rin = {0};
+    length_t rin = {0};
     /// Outer radius of the active volume
-    DCH_length_t rout = {0};
+    length_t rout = {0};
 
     /// Inner guard wires radius
-    DCH_length_t guard_inner_r_at_z0 = {0};
+    length_t guard_inner_r_at_z0 = {0};
     /// Outer guard wires radius
-    DCH_length_t guard_outer_r_at_zL2 = {0};
+    length_t guard_outer_r_at_zL2 = {0};
 
     /// number of cells of first layer
     int ncell0 = {0};
     /// increment the number of cells for each superlayer as:
     ///   ncells(ilayer) = dch_ncell0 + increment*superlayer(ilayer)
-    ///   See DCH_info::Get_nsuperlayer_minus_1(ilayer)
+    ///   See WireTracker_info::Get_nsuperlayer_minus_1(ilayer)
     int ncell_increment = {0};
 
     /// cells within the same layer may be grouped into sectors, not in use atm
     int ncell_per_sector = {0};
 
     /// input number of layers in each superlayer
-    DCH_layer nlayersPerSuperlayer = {0};
+    layer_t nlayersPerSuperlayer = {0};
     /// input number of superlayers
     /// superlayer is an abstract level of grouping layers used to
     /// parametrize the increment of cells in each layer
-    DCH_layer nsuperlayers = {0};
+    layer_t nsuperlayers = {0};
     /// Calculated as dch_nlayersPerSuperlayer * dch_nsuperlayers
-    DCH_layer nlayers = {0};
+    layer_t nlayers = {0};
 
     /// global twist angle
     /// alternating layers will change its sign
-    DCH_angle_t  twist_angle = {0};
+    angle_t  twist_angle = {0};
 
     /// Cell width for the first layer
     double first_width = {0};
     /// Cell radius for the first layer
-    DCH_length_t first_sense_r = {0};
+    length_t first_sense_r = {0};
 
-    void Set_lhalf(DCH_length_t _dch_Lhalf){Lhalf=_dch_Lhalf;}
-    void Set_rin  (DCH_length_t _dch_rin  ){rin  = _dch_rin; }
-    void Set_rout (DCH_length_t _dch_rout ){rout = _dch_rout;}
+    void Set_lhalf(length_t _Lhalf){Lhalf= _Lhalf;}
+    void Set_rin  (length_t _rin  ){rin  = _rin;  }
+    void Set_rout (length_t _rout ){rout = _rout; }
 
-    void Set_guard_rin_at_z0  (DCH_length_t _dch_rin_z0_guard  ){guard_inner_r_at_z0  = _dch_rin_z0_guard;   }
-    void Set_guard_rout_at_zL2(DCH_length_t _dch_rout_zL2_guard){guard_outer_r_at_zL2 = _dch_rout_zL2_guard; }
+    void Set_guard_rin_at_z0  (length_t _rin_z0_guard  ){guard_inner_r_at_z0  = _rin_z0_guard;   }
+    void Set_guard_rout_at_zL2(length_t _rout_zL2_guard){guard_outer_r_at_zL2 = _rout_zL2_guard; }
 
     void Set_ncell0              (int _ncell0              ){ncell0               = _ncell0;              }
     void Set_ncell_increment     (int _ncell_increment     ){ncell_increment      = _ncell_increment;     }
@@ -98,7 +98,7 @@ public:
 
     void Set_ncell_per_sector(int _ncell_per_sector){ncell_per_sector = _ncell_per_sector;}
 
-    void Set_twist_angle (DCH_length_t _dch_twist_angle ){twist_angle = _dch_twist_angle;}
+    void Set_twist_angle (length_t _dch_twist_angle ){twist_angle = _dch_twist_angle;}
 
     void Set_first_width  (double _first_width  ){first_width   = _first_width;   }
     void Set_first_sense_r(double _first_sense_r){first_sense_r = _first_sense_r; }
@@ -109,42 +109,42 @@ public:
     int Get_ncells(int ilayer){return database.at(ilayer).nwires/2;}
 
     /// Get phi width for the twisted tube and the step (phi distance between cells)
-    DCH_angle_t Get_phi_width(int ilayer){return (TMath::TwoPi()/Get_ncells(ilayer))*dd4hep::rad;}
+    angle_t Get_phi_width(int ilayer){return (TMath::TwoPi()/Get_ncells(ilayer))*dd4hep::rad;}
 
     /// phi positioning, adding offset for odd ilayers
     /// there is a staggering in phi for alternating layers, 0.25*cell_phi_width*(ilayer%2);
-    DCH_angle_t Get_cell_phi_angle(int ilayer, int nphi){ return (Get_phi_width(ilayer) * (nphi + 0.25*(ilayer%2)));}
+    angle_t Get_cell_phi_angle(int ilayer, int nphi){ return (Get_phi_width(ilayer) * (nphi + 0.25*(ilayer%2)));}
 
     /// calculate superlayer for a given ilayer.
     /// WARNING: division of integers on purpose!
     int Get_nsuperlayer_minus_1(int ilayer){ return int((ilayer-1)/nlayersPerSuperlayer);}
 
     /// Calculate radius at z=L/2 given at z=0
-    DCH_length_t Radius_zLhalf(DCH_length_t r_z0) const {
+    length_t Radius_zLhalf(length_t r_z0) const {
         return r_z0/cos(twist_angle/2/dd4hep::rad);
     }
 
     /// tan(stereoangle) = R(z=0)   / (L/2) * tan( twist_angle/2)
-    DCH_angle_t stereoangle_z0(DCH_length_t r_z0) const {
+    angle_t stereoangle_z0(length_t r_z0) const {
         return atan( r_z0/Lhalf*tan(twist_angle/2/dd4hep::rad));
     }
 
     /// tan(stereoangle) = R(z=L/2) / (L/2) * sin( twist_angle/2)
-    DCH_angle_t stereoangle_zLhalf(DCH_length_t r_zLhalf) const {
+    angle_t stereoangle_zLhalf(length_t r_zLhalf) const {
         return atan( r_zLhalf/Lhalf*sin(twist_angle/2/dd4hep::rad));
     }
 
     /// WireLength = 2*dch_Lhalf/cos(atan(Pitch_z0(r_z0)/(2*dch_Lhalf)))/cos(stereoangle_z0(r_z0))
-    DCH_length_t WireLength(int nlayer, DCH_length_t r_z0) const {
+    length_t WireLength(int nlayer, length_t r_z0) const {
         auto Pitch_z0 = database.at(nlayer).Pitch_z0(r_z0);
         return  2*Lhalf/cos(atan(Pitch_z0/(2*Lhalf)))/cos(stereoangle_z0(r_z0)/dd4hep::rad) ;
     };
 
     /// Internal helper struct for defining the layer layout
-    struct DCH_info_layer
+    struct Layer_info_struct
     {
         /// layer number
-        DCH_layer layer = {0};
+        layer_t layer = {0};
         /// 2x number of cells in that layer
         int nwires = {0};
         /// cell parameter
@@ -153,13 +153,13 @@ public:
         double width_z0 = {0.};
 
         /// radius (cylindrical coord) of sensitive wire
-        DCH_length_t radius_sw_z0 = {0.};
+        length_t radius_sw_z0 = {0.};
 
         /// radius (cylindrical coord) of 'down' field wires
-        DCH_length_t radius_fdw_z0 = {0.};
+        length_t radius_fdw_z0 = {0.};
 
         /// radius (cylindrical coord) of 'up' field wires
-        DCH_length_t radius_fuw_z0 = {0.};
+        length_t radius_fuw_z0 = {0.};
 
         /// some quantities are derived from previous-layer ones
         ///  stereo angle is positive for odd layer number
@@ -172,34 +172,34 @@ public:
         }
 
         /// separation between wires (along the circle)
-        DCH_length_t Pitch_z0(DCH_length_t r_z0) const {
+        length_t Pitch_z0(length_t r_z0) const {
             return TMath::TwoPi()*r_z0/nwires;
         };
 
     };
     /// map to store parameters for each layer
-    std::map<DCH_layer, DCH_info_layer> database;
+    std::map<layer_t, Layer_info_struct> database;
     bool IsDatabaseEmpty() const { return database.empty(); }
 
     inline void BuildLayerDatabase();
-    inline void Show_DCH_info_database(std::ostream& io) const;
+    inline void Show_WireTracker_info_database(std::ostream& io) const;
 
     /// Check if outer volume is not zero (0 < Lhalf*rout), and if the database was filled
     inline bool IsValid() const {return ((0 < Lhalf*rout) && (not IsDatabaseEmpty() ) );  }
     //--------
     // The following functions are used in the digitization/reconstruction
     // Notation: ILayer is the correlative number of the layer. Layer is reserved to number within a superlayer
-    inline DCH_layer CalculateILayerFromCellIDFields(int layer, int superlayer) const { DCH_layer ilayer = layer + (this->nlayersPerSuperlayer)*superlayer + 1; return ilayer;}
+    inline layer_t CalculateILayerFromCellIDFields(int layer, int superlayer) const { layer_t ilayer = layer + (this->nlayersPerSuperlayer)*superlayer + 1; return ilayer;}
     inline Vector3D Calculate_hitpos_to_wire_vector(int ilayer, int nphi, const Vector3D& hit_position /*in cm*/) const;
     inline Vector3D Calculate_wire_vector_ez       (int ilayer, int nphi) const;
     inline Vector3D Calculate_wire_z0_point        (int ilayer, int nphi) const;
     inline double   Calculate_wire_phi_z0          (int ilayer, int nphi) const;
 
 };
-typedef StructExtension<DCH_info_struct> DCH_info ;
-inline std::ostream& operator<<( std::ostream& io , const DCH_info& d ){d.Show_DCH_info_database(io); return io;}
+typedef StructExtension<WireTracker_info_struct> WireTracker_info ;
+inline std::ostream& operator<<( std::ostream& io , const WireTracker_info& d ){d.Show_WireTracker_info_database(io); return io;}
 
-inline void DCH_info_struct::BuildLayerDatabase()
+inline void WireTracker_info_struct::BuildLayerDatabase()
 {
     // do not fill twice the database
     if( not this->IsDatabaseEmpty() ) return;
@@ -238,7 +238,7 @@ inline void DCH_info_struct::BuildLayerDatabase()
 
     // initialize layer 1 from input parameters
     {
-        DCH_info_layer layer1_info;
+        Layer_info_struct layer1_info;
         layer1_info.layer         = 1;
         layer1_info.nwires        = 2*this->ncell0;
         layer1_info.height_z0     = first_width;
@@ -251,12 +251,12 @@ inline void DCH_info_struct::BuildLayerDatabase()
     }
 
     // some parameters of the following layer are calculated based on the previous ones
-    // the rest are left as methods of DCH_info or DCH_info_layer class
+    // the rest are left as methods of WireTracker_info or WireTracker_info_layer class
     // loop over all layers, skipping the first one
     for(int ilayer = 2; ilayer<= this->nlayers; ++ilayer)
     {
         // initialize empty object, parameters are set later
-        DCH_info_layer layer_info;
+        Layer_info_struct layer_info;
 
         // the loop counter actually corresponds to the layer number
         layer_info.layer = ilayer;
@@ -298,7 +298,7 @@ inline void DCH_info_struct::BuildLayerDatabase()
     return;
 }
 
-inline void DCH_info_struct::Show_DCH_info_database(std::ostream & oss) const
+inline void WireTracker_info_struct::Show_WireTracker_info_database(std::ostream & oss) const
 {
     oss << "\n";
     oss << "Global parameters of DCH:\n";
@@ -363,7 +363,28 @@ inline void DCH_info_struct::Show_DCH_info_database(std::ostream & oss) const
 /////       Ancillary functions for calculating the distance to the wire       ////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
-inline DCH_info_struct::Vector3D DCH_info_struct::Calculate_wire_vector_ez(int ilayer, int nphi) const {
+// calculate phi rotation of whole twisted tube, ie, rotation at z=0
+inline double WireTracker_info_struct::Calculate_wire_phi_z0(int ilayer, int nphi) const {
+  auto&  l       = this->database.at(ilayer); 
+  int    ncells  = l.nwires / 2;
+  double phistep = TMath::TwoPi() / ncells;
+  double phi_z0  = (nphi + 0.25 * (l.layer % 2)) * phistep;
+  return phi_z0;
+}
+
+// calculate the postion vector of the wire centre (i.e. at z=0)
+inline WireTracker_info_struct::Vector3D WireTracker_info_struct::Calculate_wire_z0_point(int ilayer, int nphi) const {
+  auto&    l   = this->database.at(ilayer);
+  double   rz0 = l.radius_sw_z0;
+  Vector3D p1(rz0, 0, 0);
+  double   phi_z0 = Calculate_wire_phi_z0(ilayer, nphi);
+  ROOT::Math::RotationZ z_rotation = ROOT::Math::RotationZ(phi_z0);
+  z_rotation(p1);
+  return p1;
+}
+
+// calculate wire direction vector
+inline WireTracker_info_struct::Vector3D WireTracker_info_struct::Calculate_wire_vector_ez(int ilayer, int nphi) const {
   auto& l = this->database.at(ilayer);
 
   // See original paper Hoshina et al, Computer Physics Communications 153 (2003) 3
@@ -401,32 +422,13 @@ inline DCH_info_struct::Vector3D DCH_info_struct::Calculate_wire_vector_ez(int i
 
   //--- end calculating wire position
 
-  return (p2 -p1).Unit(); //Unit();
-}
-
-inline DCH_info_struct::Vector3D DCH_info_struct::Calculate_wire_z0_point(int ilayer, int nphi) const {
-  auto&    l   = this->database.at(ilayer);
-  double   rz0 = l.radius_sw_z0;
-  Vector3D p1(rz0, 0, 0);
-  double   phi_z0 = Calculate_wire_phi_z0(ilayer, nphi);
-  ROOT::Math::RotationZ z_rotation = ROOT::Math::RotationZ(phi_z0);
-  z_rotation(p1);
-  return p1;
-}
-
-// calculate phi rotation of whole twisted tube, ie, rotation at z=0
-inline double DCH_info_struct::Calculate_wire_phi_z0(int ilayer, int nphi) const {
-  auto&  l       = this->database.at(ilayer);
-  int    ncells  = l.nwires / 2;
-  double phistep = TMath::TwoPi() / ncells;
-  double phi_z0  = (nphi + 0.25 * (l.layer % 2)) * phistep;
-  return phi_z0;
+  return (p2 -p1).Unit();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////  Calculate vector from hit position to wire   /////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
-inline DCH_info_struct::Vector3D DCH_info_struct::Calculate_hitpos_to_wire_vector(int ilayer, int nphi, const Vector3D& hit_position /*in cm*/) const {
+inline WireTracker_info_struct::Vector3D WireTracker_info_struct::Calculate_hitpos_to_wire_vector(int ilayer, int nphi, const Vector3D& hit_position /*in cm*/) const {
   // Solution distance from a point to a line given here:
   // https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line#Vector_formulation
   Vector3D n = this->Calculate_wire_vector_ez(ilayer, nphi);
@@ -443,4 +445,4 @@ inline DCH_info_struct::Vector3D DCH_info_struct::Calculate_hitpos_to_wire_vecto
 
 }} // end namespace dd4hep::rec::
 
-#endif // DCH_INFO_H
+#endif // WIRE_TRACKER_INFO_H
