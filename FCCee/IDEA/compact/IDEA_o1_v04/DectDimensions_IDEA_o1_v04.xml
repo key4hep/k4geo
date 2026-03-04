@@ -130,6 +130,11 @@
     <constant name="SiWrD_services_opening"  value="40*mm"/><!-- Can be freely changed. -->
     <constant name="SiWrD_zmin"         value="2300.0*mm"/> <!-- Can be freely changed, as long as SiWrD_zmax-SiWrD_zmin is kept constant or is increased -->
     <constant name="SiWrD_zmax"         value="2340.0*mm"/> <!-- Can be freely changed, as long as SiWrD_zmax-SiWrD_zmin is kept constant or is increased -->
+    <constant name="SiWr_nLayers"       value="2"/>         <!-- Can be either 1 or 2 -->
+    <constant name="SiWrB_pitch_z0"     value="1.000*mm"/>  <!-- The pitches can be freely changed and can be different for the two layers. These pitches here are just an assumption, impact on physics needs to be studied in detail! -->
+    <constant name="SiWrB_pitch_z1"     value="0.050*mm"/>
+    <constant name="SiWrB_pitch_phi0"   value="0.050*mm"/>
+    <constant name="SiWrB_pitch_phi1"   value="1.000*mm"/>
 
     <!-- These are lead plates that we put in the endcap to have the same material budget (from solenoid) as in the barrel-->
     <constant name="EndPlateAbsorber_inner_radius" value="380*mm"/>
