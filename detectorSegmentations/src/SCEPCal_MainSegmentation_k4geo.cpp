@@ -30,7 +30,7 @@ namespace DDSegmentation {
     registerIdentifier("identifier_gamma", "Cell ID identifier for Gamma", m_gammaId, "gamma");
     registerIdentifier("identifier_epsilon", "Cell ID identifier for Epsilon", m_epsilonId, "epsilon");
     registerIdentifier("identifier_depth", "Cell ID identifier for Depth", m_depthId, "depth");
-    registerIdentifier("identifier_isCheren", "Cell ID identifier for isCherenkov flag", m_isCherenId, "isCheren");
+    registerIdentifier("identifier_isCheren", "Cell ID identifier for isCherenkov flag", m_isCherenId, "cherenkov");
 
     m_systemIndex = decoder()->index(m_systemId);
     m_phiIndex = decoder()->index(m_phiId);
