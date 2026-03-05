@@ -3,16 +3,6 @@
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-  <info name="ALLEGRO_o1_v03 Master"
-    title="ALLEGRO_o1_v03 Master"
-    author="Giovanni Marchiori"
-    url="no"
-    status="development"
-    version="1.0">
-    <comment>
-      Master compact file describing the latest developments of the FCCee ALLEGRO detector concept. With respect to v02 it features an ECal barrel with 11 layers and cell corners projective along phi
-    </comment>
-  </info>
 
   <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml" />
 
