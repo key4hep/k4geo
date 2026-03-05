@@ -159,28 +159,22 @@ public:
         /// radius (cylindrical coord) of 'up' field wires
         length_t radius_fuw_z0 = {0.};
 
-        /// some quantities are derived from previous-layer ones
-        ///  stereo angle is positive for odd layer number
-        bool IsStereoPositive() const {
-            return (1 == layer%2);
-        }
-        /// calculate sign based on IsStereoPositive
-        int StereoSign() const {
-            return (IsStereoPositive()*2 - 1); // this needs to be updated fo!
-        }
-
         /// separation between wires (along the circle)
         length_t Pitch_z0(length_t r_z0) const {
             return dd4hep::twopi*r_z0/nwires;
         };
 
     };
+
+    bool virtual IsStereoPositive(Layer_info_struct layer_info) const = 0;
+    int virtual StereoSign(Layer_info_struct layer_info) const = 0;
+
     /// map to store parameters for each layer
     std::map<layer_t, Layer_info_struct> database;
     bool IsDatabaseEmpty() const { return database.empty(); }
 
-    inline void BuildLayerDatabase();
-    inline void Show_WireTracker_info_database(std::ostream& io) const;
+    inline virtual void BuildLayerDatabase() = 0;
+    inline virtual void ShowDatabase(std::ostream& io) const = 0;
 
     /// Check if outer volume is not zero (0 < Lhalf*rout), and if the database was filled
     inline bool IsValid() const {return ((0 < Lhalf*rout) && (not IsDatabaseEmpty() ) );  }
@@ -193,169 +187,10 @@ public:
     inline Vector3D Calculate_wire_z0_point        (int ilayer, int nphi) const;
     inline double   Calculate_wire_phi_z0          (int ilayer, int nphi) const;
 
+    virtual ~WireTracker_info_struct(){};
 };
 typedef StructExtension<WireTracker_info_struct> WireTracker_info ;  // <-- what is this really required for?
-inline std::ostream& operator<<( std::ostream& io , const WireTracker_info& d ){d.Show_WireTracker_info_database(io); return io;}
-
-inline void WireTracker_info_struct::BuildLayerDatabase()
-{
-    // do not fill twice the database
-    if( not this->IsDatabaseEmpty() ) return;
-
-    auto ff_check_positive_parameter = [](double p, std::string pname) -> void {
-        if(p<=0)throw std::runtime_error(Form("DCH: %s must be positive",pname.c_str()));
-        return;
-    };
-    ff_check_positive_parameter(this->rin  ,"inner radius");
-    ff_check_positive_parameter(this->rout ,"outer radius");
-    ff_check_positive_parameter(this->Lhalf,"half length" );
-
-    ff_check_positive_parameter(this->guard_inner_r_at_z0 ,"inner radius of guard wires" );
-    ff_check_positive_parameter(this->guard_outer_r_at_zL2,"outer radius of guard wires" );
-
-
-    ff_check_positive_parameter(this->ncell0,"ncells in the first layer" );
-    ff_check_positive_parameter(this->ncell_increment,"ncells increment per superlayer" );
-    ff_check_positive_parameter(this->ncell_per_sector,"ncells per sector" );
-
-    // if dch_ncell_per_sector is not divisor of dch_ncell0 and dch_ncell_increment
-    // throw an error
-    if( 0 != (ncell0 % ncell_per_sector) || 0 != (ncell_increment % ncell_per_sector) )
-        throw std::runtime_error("dch_ncell_per_sector is not divisor of dch_ncell0 or dch_ncell_increment");
-
-    ff_check_positive_parameter(this->nsuperlayers,"number of superlayers" );
-    ff_check_positive_parameter(this->nlayersPerSuperlayer,"number of layers per superlayer" );
-
-    /// nlayers = nsuperlayers * nlayersPerSuperlayer
-    /// default: 112 = 14 * 8
-    this->nlayers = this->nsuperlayers * this->nlayersPerSuperlayer;
-
-    ff_check_positive_parameter(this->first_width,"width of first layer cells" );
-    ff_check_positive_parameter(this->first_sense_r,"radius of first layer cells" );
-
-
-    // initialize layer 1 from input parameters
-    {
-        Layer_info_struct layer1_info;
-        layer1_info.layer         = 1;
-        layer1_info.nwires        = 2*this->ncell0;
-        layer1_info.height_z0     = first_width;
-        layer1_info.radius_sw_z0  = first_sense_r;
-        layer1_info.radius_fdw_z0 = first_sense_r - 0.5*first_width;
-        layer1_info.radius_fuw_z0 = first_sense_r + 0.5*first_width;
-        layer1_info.width_z0      = dd4hep::twopi*first_sense_r/this->ncell0;
-
-        this->database.emplace(layer1_info.layer, layer1_info);
-    }
-
-    // some parameters of the following layer are calculated based on the previous ones
-    // the rest are left as methods of WireTracker_info or WireTracker_info_layer class
-    // loop over all layers, skipping the first one
-    for(int ilayer = 2; ilayer<= this->nlayers; ++ilayer)
-    {
-        // initialize empty object, parameters are set later
-        Layer_info_struct layer_info;
-
-        // the loop counter actually corresponds to the layer number
-        layer_info.layer = ilayer;
-        // nwires is twice the number of cells in this particular layer (ilayer)
-        layer_info.nwires = 2*(this->ncell0 + this->ncell_increment*Get_nsuperlayer_minus_1(ilayer) );
-
-        // the previous layer info is needed to calculate parameters of current layer
-        const auto& previousLayer = this->database.at(ilayer-1);
-
-        //calculate height_z0, radius_sw_z0
-        {
-            double h  = previousLayer.height_z0;
-            double ru = previousLayer.radius_fuw_z0;
-            double rd = previousLayer.radius_fdw_z0;
-
-            if(0 == Get_nsuperlayer_minus_1(ilayer))
-                layer_info.height_z0 = h*ru/rd;
-            else
-                layer_info.height_z0 = dd4hep::twopi*ru/(0.5*layer_info.nwires - dd4hep::pi);
-
-            layer_info.radius_sw_z0 = 0.5*layer_info.height_z0 + ru;
-        }
-
-        //calculate radius_fdw_z0, radius_fuw_z0, width_z0
-        layer_info.radius_fdw_z0 = previousLayer.radius_fuw_z0;
-        layer_info.radius_fuw_z0 = previousLayer.radius_fuw_z0 + layer_info.height_z0;
-        layer_info.width_z0 = dd4hep::twopi*layer_info.radius_sw_z0/(0.5*layer_info.nwires);
-
-        // according to expert prescription, width_z0 == height_z0
-        if(fabs(layer_info.width_z0 - layer_info.height_z0)>1e-4)
-            throw std::runtime_error("fabs(l.width_z0 - l.height_z0)>1e-4");
-
-
-
-        this->database.emplace(ilayer, layer_info);
-    }
-
-    std::cout << "\t+ Total size of DCH database = " << database.size() << std::endl;
-    return;
-}
-
-inline void WireTracker_info_struct::Show_WireTracker_info_database(std::ostream & oss) const
-{
-    oss << "\n";
-    oss << "Global parameters of DCH:\n";
-    oss << "\tGas, half length/mm = " << Lhalf/dd4hep::mm << '\n';
-    oss << "\tGas, radius in/mm  = " << rin/dd4hep::mm << '\n';
-    oss << "\tGas, radius out/mm = " << rout/dd4hep::mm<< '\n';
-    oss << "\tGuard, radius in(z=0)/mm  = " << guard_inner_r_at_z0/dd4hep::mm << '\n';
-    oss << "\tGuard, radius out(z=L/2)/mm = " << guard_outer_r_at_zL2/dd4hep::mm << '\n';
-    oss << "\n";
-    oss << "\tTwist angle (2*alpha) / deg = " << twist_angle/dd4hep::deg << '\n';
-    oss << "\n";
-    oss << "\tN superlayers = " << nsuperlayers << '\n';
-    oss << "\tN layers per superlayer = " << nlayersPerSuperlayer << '\n';
-    oss << "\tN layers = " << nlayers << '\n';
-    oss << "\n";
-    oss << "\tN cells layer1 = " << ncell0 << '\n';
-    oss << "\tN cells increment per superlayer = " << ncell_increment << '\n';
-    oss << "\tN cells per sector = " << ncell_per_sector << '\n';
-    oss << "\n";
-    oss << "Layer parameters of DCH:\n";
-    oss
-            << "\t" << "layer"
-            << "\t" << "nwires"
-            << "\t" << "height_z0/mm"
-            << "\t" << "width_z0/mm"
-            << "\t" << "radius_fdw_z0/mm"
-            << "\t" << "radius_sw_z0/mm"
-            << "\t" << "radius_fuw_z0/mm"
-            << "\t" << "stereoangle_z0/deg"
-            << "\t" << "Pitch_z0/mm"
-            << "\t" << "radius_sw_zLhalf/mm"
-            << "\t" << "WireLength/mm"
-            << "\n" << std::endl;
-
-    if( this->IsDatabaseEmpty() )
-    {
-        oss << "\nDatabase empty\n";
-        return;
-    }
-
-    for(const auto& [nlayer, l]  : database )
-    {
-        oss
-                << "\t" << l.layer
-                << "\t" << l.nwires
-                << "\t" << l.height_z0/dd4hep::mm
-                << "\t" << l.width_z0/dd4hep::mm
-                << "\t" << l.radius_fdw_z0/dd4hep::mm
-                << "\t" << l.radius_sw_z0/dd4hep::mm
-                << "\t" << l.radius_fuw_z0/dd4hep::mm
-                << "\t" << l.StereoSign()*this->stereoangle_z0(l.radius_sw_z0)/dd4hep::deg
-                << "\t" << l.Pitch_z0(l.radius_sw_z0)/dd4hep::mm
-                << "\t" << this->Radius_zLhalf(l.radius_sw_z0)/dd4hep::mm
-                << "\t" << this->WireLength(l.layer,l.radius_sw_z0)/dd4hep::mm
-                << "\n" << std::endl;
-    }
-    return;
-}
-
+inline std::ostream& operator<<( std::ostream& io , const WireTracker_info& d ){d.ShowDatabase(io); return io;}
 
 ///////////////////////////////////////////////////////////////////////////////////////
 /////       Ancillary functions for calculating the distance to the wire       ////////
@@ -389,7 +224,7 @@ inline WireTracker_info_struct::Vector3D WireTracker_info_struct::Calculate_wire
   // eq. 2.9, for the definition of ez, vector along the wire
 
   // initialize some variables
-  int    stereosign = l.StereoSign();
+  int    stereosign = this->StereoSign(l);
   double rz0        = l.radius_sw_z0;
   double dphi       = this->twist_angle;
   // kappa is the same as in eq. 2.9
@@ -439,6 +274,177 @@ inline WireTracker_info_struct::Vector3D WireTracker_info_struct::Calculate_hitp
   Vector3D scaled_n        = a_minus_p_dot_n * n;
   return (a_minus_p - scaled_n);
 }
+
+
+
+/* Data structure to store Drift Chamber geometry parameters,
+ * implementing virtual methods of WireTracker_info_struct.
+ */
+struct DCH_info_struct : WireTracker_info_struct {
+
+    ///  stereo angle is positive for odd layer number
+    bool IsStereoPositive(Layer_info_struct layer_info) const override final{
+        return (1 == layer_info.layer%2);
+    };
+    /// calculate sign based on IsStereoPositive
+    int StereoSign(Layer_info_struct layer) const override final{
+        return (IsStereoPositive(layer)*2 - 1);
+    };
+
+    inline void BuildLayerDatabase() override final {
+        // do not fill twice the database
+        if( not this->IsDatabaseEmpty() ) return;
+
+        auto ff_check_positive_parameter = [](double p, std::string pname) -> void {
+            if(p<=0)throw std::runtime_error(Form("DCH: %s must be positive",pname.c_str()));
+            return;
+        };
+        ff_check_positive_parameter(this->rin  ,"inner radius");
+        ff_check_positive_parameter(this->rout ,"outer radius");
+        ff_check_positive_parameter(this->Lhalf,"half length" );
+
+        ff_check_positive_parameter(this->guard_inner_r_at_z0 ,"inner radius of guard wires" );
+        ff_check_positive_parameter(this->guard_outer_r_at_zL2,"outer radius of guard wires" );
+
+        ff_check_positive_parameter(this->ncell0,"ncells in the first layer" );
+        ff_check_positive_parameter(this->ncell_increment,"ncells increment per superlayer" );
+        ff_check_positive_parameter(this->ncell_per_sector,"ncells per sector" );
+
+        // if dch_ncell_per_sector is not divisor of dch_ncell0 and dch_ncell_increment
+        // throw an error
+        if( 0 != (ncell0 % ncell_per_sector) || 0 != (ncell_increment % ncell_per_sector) )
+            throw std::runtime_error("dch_ncell_per_sector is not divisor of dch_ncell0 or dch_ncell_increment");
+
+        ff_check_positive_parameter(this->nsuperlayers,"number of superlayers" );
+        ff_check_positive_parameter(this->nlayersPerSuperlayer,"number of layers per superlayer" );
+
+        /// nlayers = nsuperlayers * nlayersPerSuperlayer
+        /// default: 112 = 14 * 8
+        this->nlayers = this->nsuperlayers * this->nlayersPerSuperlayer;
+
+        ff_check_positive_parameter(this->first_width,"width of first layer cells" );
+        ff_check_positive_parameter(this->first_sense_r,"radius of first layer cells" );
+
+        // initialize layer 1 from input parameters
+        {
+            Layer_info_struct layer1_info;
+            layer1_info.layer         = 1;
+            layer1_info.nwires        = 2*this->ncell0;
+            layer1_info.height_z0     = first_width;
+            layer1_info.radius_sw_z0  = first_sense_r;
+            layer1_info.radius_fdw_z0 = first_sense_r - 0.5*first_width;
+            layer1_info.radius_fuw_z0 = first_sense_r + 0.5*first_width;
+            layer1_info.width_z0      = dd4hep::twopi*first_sense_r/this->ncell0;
+
+            this->database.emplace(layer1_info.layer, layer1_info);
+        }
+
+        // some parameters of the following layer are calculated based on the previous ones
+        // the rest are left as methods of WireTracker_info or WireTracker_info_layer class
+        // loop over all layers, skipping the first one
+        for(int ilayer = 2; ilayer<= this->nlayers; ++ilayer) {
+            // initialize empty object, parameters are set later
+            Layer_info_struct layer_info;
+
+            // the loop counter actually corresponds to the layer number
+            layer_info.layer = ilayer;
+            // nwires is twice the number of cells in this particular layer (ilayer)
+            layer_info.nwires = 2*(this->ncell0 + this->ncell_increment*Get_nsuperlayer_minus_1(ilayer) );
+
+            // the previous layer info is needed to calculate parameters of current layer
+            const auto& previousLayer = this->database.at(ilayer-1);
+
+            //calculate height_z0, radius_sw_z0
+            {
+                double h  = previousLayer.height_z0;
+                double ru = previousLayer.radius_fuw_z0;
+                double rd = previousLayer.radius_fdw_z0;
+
+                if(0 == Get_nsuperlayer_minus_1(ilayer))
+                    layer_info.height_z0 = h*ru/rd;
+                else
+                    layer_info.height_z0 = dd4hep::twopi*ru/(0.5*layer_info.nwires - dd4hep::pi);
+
+                layer_info.radius_sw_z0 = 0.5*layer_info.height_z0 + ru;
+            }
+
+            //calculate radius_fdw_z0, radius_fuw_z0, width_z0
+            layer_info.radius_fdw_z0 = previousLayer.radius_fuw_z0;
+            layer_info.radius_fuw_z0 = previousLayer.radius_fuw_z0 + layer_info.height_z0;
+            layer_info.width_z0 = dd4hep::twopi*layer_info.radius_sw_z0/(0.5*layer_info.nwires);
+
+            // according to expert prescription, width_z0 == height_z0
+            if(fabs(layer_info.width_z0 - layer_info.height_z0)>1e-4)
+                throw std::runtime_error("fabs(l.width_z0 - l.height_z0)>1e-4");
+
+            this->database.emplace(ilayer, layer_info);
+        }
+
+        std::cout << "\t+ Total size of DCH database = " << database.size() << std::endl;
+        return;
+    }
+
+    inline void ShowDatabase(std::ostream & oss) const override final {
+        oss << "\n";
+        oss << "Global parameters of DCH:\n";
+        oss << "\tGas, half length/mm = " << Lhalf/dd4hep::mm << '\n';
+        oss << "\tGas, radius in/mm  = " << rin/dd4hep::mm << '\n';
+        oss << "\tGas, radius out/mm = " << rout/dd4hep::mm<< '\n';
+        oss << "\tGuard, radius in(z=0)/mm  = " << guard_inner_r_at_z0/dd4hep::mm << '\n';
+        oss << "\tGuard, radius out(z=L/2)/mm = " << guard_outer_r_at_zL2/dd4hep::mm << '\n';
+        oss << "\n";
+        oss << "\tTwist angle (2*alpha) / deg = " << twist_angle/dd4hep::deg << '\n';
+        oss << "\n";
+        oss << "\tN superlayers = " << nsuperlayers << '\n';
+        oss << "\tN layers per superlayer = " << nlayersPerSuperlayer << '\n';
+        oss << "\tN layers = " << nlayers << '\n';
+        oss << "\n";
+        oss << "\tN cells layer1 = " << ncell0 << '\n';
+        oss << "\tN cells increment per superlayer = " << ncell_increment << '\n';
+        oss << "\tN cells per sector = " << ncell_per_sector << '\n';
+        oss << "\n";
+        oss << "Layer parameters of DCH:\n";
+        oss
+                << "\t" << "layer"
+                << "\t" << "nwires"
+                << "\t" << "height_z0/mm"
+                << "\t" << "width_z0/mm"
+                << "\t" << "radius_fdw_z0/mm"
+                << "\t" << "radius_sw_z0/mm"
+                << "\t" << "radius_fuw_z0/mm"
+                << "\t" << "stereoangle_z0/deg"
+                << "\t" << "Pitch_z0/mm"
+                << "\t" << "radius_sw_zLhalf/mm"
+                << "\t" << "WireLength/mm"
+                << "\n" << std::endl;
+
+        if( this->IsDatabaseEmpty() )
+        {
+            oss << "\nDatabase empty\n";
+            return;
+        }
+
+        for(const auto& [nlayer, l]  : database )
+        {
+            oss
+                    << "\t" << l.layer
+                    << "\t" << l.nwires
+                    << "\t" << l.height_z0/dd4hep::mm
+                    << "\t" << l.width_z0/dd4hep::mm
+                    << "\t" << l.radius_fdw_z0/dd4hep::mm
+                    << "\t" << l.radius_sw_z0/dd4hep::mm
+                    << "\t" << l.radius_fuw_z0/dd4hep::mm
+                    << "\t" << this->StereoSign(l)*this->stereoangle_z0(l.radius_sw_z0)/dd4hep::deg
+                    << "\t" << l.Pitch_z0(l.radius_sw_z0)/dd4hep::mm
+                    << "\t" << this->Radius_zLhalf(l.radius_sw_z0)/dd4hep::mm
+                    << "\t" << this->WireLength(l.layer,l.radius_sw_z0)/dd4hep::mm
+                    << "\n" << std::endl;
+        }
+        return;
+    }
+};  // end of DCH_info_struct
+typedef StructExtension<DCH_info_struct> DCH_info ;
+
 
 }} // end namespace dd4hep::rec::
 
