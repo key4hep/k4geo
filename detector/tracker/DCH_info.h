@@ -1,14 +1,12 @@
 #ifndef WIRE_TRACKER_INFO_H
 #define WIRE_TRACKER_INFO_H
 
-#include "TMath.h"
-
 #include "DDRec/DetectorData.h"
 #include <map>
 #include <Math/Vector3D.h>
 #include <Math/GenVector/RotationZ.h>
 
-namespace dd4hep {  namespace rec {
+namespace dd4hep {  namespace rec {  // <-- Shall this be updated?
 
 
 /* Data structure to store Wire Trackers geometry parameters
@@ -109,7 +107,7 @@ public:
     int Get_ncells(int ilayer){return database.at(ilayer).nwires/2;}
 
     /// Get phi width for the twisted tube and the step (phi distance between cells)
-    angle_t Get_phi_width(int ilayer){return (TMath::TwoPi()/Get_ncells(ilayer))*dd4hep::rad;}
+    angle_t Get_phi_width(int ilayer){return (dd4hep::twopi/Get_ncells(ilayer))*dd4hep::rad;}
 
     /// phi positioning, adding offset for odd ilayers
     /// there is a staggering in phi for alternating layers, 0.25*cell_phi_width*(ilayer%2);
@@ -168,12 +166,12 @@ public:
         }
         /// calculate sign based on IsStereoPositive
         int StereoSign() const {
-            return (IsStereoPositive()*2 - 1);
+            return (IsStereoPositive()*2 - 1); // this needs to be updated fo!
         }
 
         /// separation between wires (along the circle)
         length_t Pitch_z0(length_t r_z0) const {
-            return TMath::TwoPi()*r_z0/nwires;
+            return dd4hep::twopi*r_z0/nwires;
         };
 
     };
@@ -196,7 +194,7 @@ public:
     inline double   Calculate_wire_phi_z0          (int ilayer, int nphi) const;
 
 };
-typedef StructExtension<WireTracker_info_struct> WireTracker_info ;
+typedef StructExtension<WireTracker_info_struct> WireTracker_info ;  // <-- what is this really required for?
 inline std::ostream& operator<<( std::ostream& io , const WireTracker_info& d ){d.Show_WireTracker_info_database(io); return io;}
 
 inline void WireTracker_info_struct::BuildLayerDatabase()
@@ -245,7 +243,7 @@ inline void WireTracker_info_struct::BuildLayerDatabase()
         layer1_info.radius_sw_z0  = first_sense_r;
         layer1_info.radius_fdw_z0 = first_sense_r - 0.5*first_width;
         layer1_info.radius_fuw_z0 = first_sense_r + 0.5*first_width;
-        layer1_info.width_z0      = TMath::TwoPi()*first_sense_r/this->ncell0;
+        layer1_info.width_z0      = dd4hep::twopi*first_sense_r/this->ncell0;
 
         this->database.emplace(layer1_info.layer, layer1_info);
     }
@@ -275,7 +273,7 @@ inline void WireTracker_info_struct::BuildLayerDatabase()
             if(0 == Get_nsuperlayer_minus_1(ilayer))
                 layer_info.height_z0 = h*ru/rd;
             else
-                layer_info.height_z0 = TMath::TwoPi()*ru/(0.5*layer_info.nwires - TMath::Pi());
+                layer_info.height_z0 = dd4hep::twopi*ru/(0.5*layer_info.nwires - dd4hep::pi);
 
             layer_info.radius_sw_z0 = 0.5*layer_info.height_z0 + ru;
         }
@@ -283,7 +281,7 @@ inline void WireTracker_info_struct::BuildLayerDatabase()
         //calculate radius_fdw_z0, radius_fuw_z0, width_z0
         layer_info.radius_fdw_z0 = previousLayer.radius_fuw_z0;
         layer_info.radius_fuw_z0 = previousLayer.radius_fuw_z0 + layer_info.height_z0;
-        layer_info.width_z0 = TMath::TwoPi()*layer_info.radius_sw_z0/(0.5*layer_info.nwires);
+        layer_info.width_z0 = dd4hep::twopi*layer_info.radius_sw_z0/(0.5*layer_info.nwires);
 
         // according to expert prescription, width_z0 == height_z0
         if(fabs(layer_info.width_z0 - layer_info.height_z0)>1e-4)
@@ -367,7 +365,7 @@ inline void WireTracker_info_struct::Show_WireTracker_info_database(std::ostream
 inline double WireTracker_info_struct::Calculate_wire_phi_z0(int ilayer, int nphi) const {
   auto&  l       = this->database.at(ilayer); 
   int    ncells  = l.nwires / 2;
-  double phistep = TMath::TwoPi() / ncells;
+  double phistep = dd4hep::twopi / ncells;
   double phi_z0  = (nphi + 0.25 * (l.layer % 2)) * phistep;
   return phi_z0;
 }
@@ -439,7 +437,6 @@ inline WireTracker_info_struct::Vector3D WireTracker_info_struct::Calculate_hitp
   Vector3D a_minus_p       = a - hit_position;
   double   a_minus_p_dot_n = a_minus_p.Dot(n);
   Vector3D scaled_n        = a_minus_p_dot_n * n;
-  //hit_to_wire_vector = a_minus_p - scaled_n;
   return (a_minus_p - scaled_n);
 }
 
