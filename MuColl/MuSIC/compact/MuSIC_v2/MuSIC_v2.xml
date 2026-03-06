@@ -191,8 +191,8 @@
 
     <include ref="Vertex_o2_v06_01.xml"/>
 
-    <include ref="InnerTracker_o2_v06_01.xml"/>
-    <include ref="OuterTracker_o2_v06_01.xml"/>
+    <include ref="InnerTracker_o2_v07_01.xml"/>
+    <include ref="OuterTracker_o2_v07_01.xml"/>
 
     <include ref="ECalBarrel_crilin.xml"/>
     <include ref="ECalEndcap_crilin.xml"/>
