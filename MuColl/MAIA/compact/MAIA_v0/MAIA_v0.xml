@@ -176,8 +176,8 @@
 	<include ref="Nozzle_10deg_v0.xml"/>
 
 	<include ref="Vertex_o2_v06_01.xml"/>
-	<include ref="InnerTracker_o2_v06_01.xml"/>
-	<include ref="OuterTracker_o2_v06_01.xml"/>
+	<include ref="InnerTracker_o2_v07_01.xml"/>
+	<include ref="OuterTracker_o2_v07_01.xml"/>
 
 	<include ref="Solenoid_o1_v01_01.xml"/>
 

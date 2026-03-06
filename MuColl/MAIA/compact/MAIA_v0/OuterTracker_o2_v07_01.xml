@@ -90,7 +90,7 @@
 		</detector>
 
 
-		<detector id="DetID_OT_Endcap" name="OuterTrackerEndcap" type="TrackerEndcap_o2_v06" readout="OuterTrackerEndcapCollection" reflect="true" region="OuterTrackerEndcapRegion">
+		<detector id="DetID_OT_Endcap" name="OuterTrackerEndcap" type="TrackerEndcap_o2_v07" readout="OuterTrackerEndcapCollection" reflect="true" region="OuterTrackerEndcapRegion">
 			<envelope vis="OTVis">
 				<shape type="Assembly"/>
 			</envelope>
