@@ -2,6 +2,7 @@
    o1_v02 : Optimisation of the complete silicon wrapper simulation:
             - Minimising sensor area: Only two barrel and two disk layers, giving at least one hit almost everywhere in the tracker acceptance
             - Each stave has overlapping modules to guarantee almost full coverage (cracks between modules however)
+            - Either one or two layers (=1 or 2 hits), defined by 'SiWr_nLayers'
             - Barrel: Dual modules in phi (8 x 4 cm^2), forming long staves
             - Barrel: Ferris wheel design, with one support tube on the outside holding the staves of both layers. Carbon fibre rings on the inside to support the silicon wrapper on the tracker (drift chamber).
             - Disks: Ring design to minimise sensor area. Tiles of 6 dual modules or 3 dual modules (half tiles, used at low r to more efficiently tile the area). 
@@ -17,7 +18,7 @@
         url="no"
         status="development"
         version="o1_v02"> 
-        <comment>A Silicon Wrapper layer for the FCC-ee IDEA detector concept with timing to enable excellent PID together with drift chamber. </comment>
+        <comment>A Silicon Wrapper layer for the FCC-ee IDEA/ALLEGRO detector concept with timing to enable excellent PID together with drift chamber. </comment>
     </info>
 
     <comment> Number of layers: Either one layer (with staves at two different radii) or two layers (with staves at four different radii). To be chosen with 'SiWr_nLayers' in detector dimensions xml </comment>
@@ -73,7 +74,6 @@
         <constant name="SiWr_flex_thickness" value="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness+SiWr_flex_Glue_thickness"/>
 
         <constant name="SiWr_stave_thickness" value="2.*SiWr_flex_thickness+2.*SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness"/>
-
         <constant name="SiWr_module_distance_sides"    value="SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness"/> <comment> Distance between sensor modules along thickness when having alternating modules in front and in the back </comment>
     </define>
 
@@ -84,42 +84,37 @@
         <constant name="SiWrB_holder_width" value="10.0*mm"/> <comment> More than twice that of VTXIB holder (4.4 mm) </comment>
         <constant name="SiWrB_inner_structure_thickness" value="5.0*mm"/> 
         <constant name="SiWrB_inner_structure_length" value="10.0*cm"/>
-        <constant name="SiWrB_support_tube_thickness" value="5.0*mm + (SiWr_nLayers-1)*5.0*mm - SiWrB_tolerance"/> <comment> Thickness of support tube of SiWr barrel. Naively assume that 100% more tube thickness is needed if one has two layers </comment>
+        <constant name="SiWrB_support_tube_thickness" value="SiWr_nLayers*5.0*mm - SiWrB_tolerance"/> <comment> Thickness of support tube of SiWr barrel. Naively assume that 100% more tube thickness is needed if one has two layers </comment>
 
         <comment> Stave properties </comment>
         <constant name="SiWrB_nSensors_per_module_z" value="4"/> <comment> Grouping of sensors in modules reduces the number of module ids that are needed, to be compliant with GlobalTrackerReadoutID definition. </comment>
         <constant name="SiWrB_module_length" value="SiWr_mod_z*SiWrB_nSensors_per_module_z - (SiWrB_nSensors_per_module_z-1)*SiWr_mod_overlap"/>
-        <constant name="SiWrB_nModules1" value="floor(2*SiWrB_half_length/SiWrB_module_length)"/>
-        <constant name="SiWrB_nModules2" value="SiWrB_nModules1"/> <comment> Same number of modules so that gaps in r-phi in layer 1 can be filled by layer 2 </comment>
-        <constant name="SiWrB_nModules3" value="SiWrB_nModules1"/>
-        <constant name="SiWrB_nModules4" value="SiWrB_nModules1"/>
-
         <constant name="SiWrB_stave_overlap" value="2.0*mm"/> <comment> Overlap of staves in phi to also always detect particles traversing the SiWr with an angle </comment>
         <constant name="SiWrB_module_spacing" value="SiWr_mod_overlap"/>
 
-        <comment> First layer properties </comment>
+        <comment> First layer properties. First layer consists of staves at two positions (r1 and r2). </comment>
+        <constant name="SiWrB_nModules1" value="floor(2*SiWrB_half_length/SiWrB_module_length)"/>
+        <constant name="SiWrB_nModules2" value="SiWrB_nModules1"/> <comment> Same number of modules so that gaps in r-phi in layer 1 can be filled by layer 2 </comment>
         <constant name="SiWrB_r1" value="SiWrB_inner_radius+SiWrB_inner_structure_thickness+1.0*mm"/>
         <constant name="SiWrB_r2" value="SiWrB_r1 + SiWr_stave_thickness + 1.0*mm"/>
-
-        <comment> Second layer properties (if second layer is enabled) </comment>
-        <constant name="SiWrB_r4" value="SiWrB_outer_radius-SiWr_stave_thickness - 1.0*mm"/> <comment> Place outer stave of second layer as far out as possible </comment>
-        <constant name="SiWrB_r3" value="SiWrB_r4 - SiWr_stave_thickness - 1.0*mm"/>
-
-        <constant name="SiWrB_support_tube_r" value="(SiWrB_r2+SiWr_stave_thickness + SiWrB_r3)/2. - SiWrB_support_tube_thickness/2."/> <comment> Place support tube in the middle of the outer stave of the first and the inner stave of the second layer </comment>
-
-        <constant name="SiWrB_nStaves4" value="ceil(2.*pi*SiWrB_r4/(SiWr_mod_rphi_sensitive-SiWrB_stave_overlap)/2.)"/> <comment> Circumference of 2*pi*SiWrB_r4 divided by width of stave, taking into account desired stave overlap. Ceil to get to integer number </comment>
-        <constant name="SiWrB_nStaves3" value="SiWrB_nStaves4"/> <comment>  Use same number of staves for both stave types of the layer </comment>
         <constant name="SiWrB_nStaves2" value="ceil(2.*pi*SiWrB_r2/(SiWr_mod_rphi_sensitive-SiWrB_stave_overlap)/2.)"/>
         <constant name="SiWrB_nStaves1" value="SiWrB_nStaves2"/> 
-
         <constant name="SiWrB_phiOffset1" value="0."/> 
         <constant name="SiWrB_phiOffset2" value="2.*pi/SiWrB_nStaves2/2.*rad"/> <comment> Offset of half a sensor width  </comment>
+
+        <comment> Second layer properties (if second layer is enabled). Consists of staves at two possible positions (r3 and r4) </comment>
+        <constant name="SiWrB_nModules3" value="SiWrB_nModules1"/>
+        <constant name="SiWrB_nModules4" value="SiWrB_nModules1"/>
+        <constant name="SiWrB_r4" value="SiWrB_outer_radius-SiWr_stave_thickness - 1.0*mm"/> <comment> Place outer stave of second layer as far out as possible </comment>
+        <constant name="SiWrB_r3" value="SiWrB_r4 - SiWr_stave_thickness - 1.0*mm"/>
+        <constant name="SiWrB_nStaves4" value="ceil(2.*pi*SiWrB_r4/(SiWr_mod_rphi_sensitive-SiWrB_stave_overlap)/2.)"/> <comment> Circumference of 2*pi*SiWrB_r4 divided by width of stave, taking into account desired stave overlap. Ceil to get to integer number </comment>
+        <constant name="SiWrB_nStaves3" value="SiWrB_nStaves4"/> <comment>  Use same number of staves for both stave types of the layer </comment>
         <constant name="SiWrB_phiOffset3" value="0."/> <comment> Offset of quater a sensor width</comment>
         <constant name="SiWrB_phiOffset4" value="2.*pi/SiWrB_nStaves4/2.*rad"/> <comment> Offset of half a sensor width </comment>
 
+        <comment> Silicon wrapper barrel support parameters </comment>
+        <constant name="SiWrB_support_tube_r" value="(SiWrB_r2+SiWr_stave_thickness + SiWrB_r3)/2. - SiWrB_support_tube_thickness/2."/> <comment> Place support tube in the middle of the outer stave of the first and the inner stave of the second layer </comment>
         <constant name="SiWrB_z_half" value="(SiWrB_nModules1*SiWrB_module_length - (SiWrB_nModules1-1)*SiWrB_module_spacing)/2."/>
-
-        <comment> Other parameters </comment>
         <constant name="SiWrB_inner_structure_pos_z1" value="SiWrB_z_half*1./8.0"/>
         <constant name="SiWrB_inner_structure_pos_z2" value="SiWrB_z_half*3./8.0"/>
         <constant name="SiWrB_inner_structure_pos_z3" value="SiWrB_z_half*5./8.0"/>
@@ -127,20 +122,23 @@
     </define>
 
     <define> <comment> Silicon wrapper disk parameters </comment>
-        <constant name="SiWrD_tile_nmodules"        value="6"/> 
-        <constant name="SiWrD_half_tile_nmodules"   value="3"/> 
-        <constant name="SiWrD_tile_length"          value="SiWrD_tile_nmodules*SiWr_mod_z-(SiWrD_tile_nmodules-1)*SiWr_mod_overlap"/>  
-        <constant name="SiWrD_half_tile_length"     value="SiWrD_half_tile_nmodules*SiWr_mod_z-(SiWrD_half_tile_nmodules-1)*SiWr_mod_overlap"/> 
+        <comment> Tile properties. Two different tiles are used. Half-tiles with three dual-modules along the stave and full-tiles with six dual-modules along the stave. The half-tiles are used at low r to more efficiently tile the area, while the full-tiles are used at larger r. </comment>
+        <constant name="SiWrD_tile_nmodules"         value="1"/> <comment> Grouping of sensors in modules reduces the number of module ids that are needed, to be compliant with GlobalTrackerReadoutID definition. </comment>
+        <constant name="SiWrD_half_tile_nmodules"    value="1"/> <comment> Six sensors are defined within one tile, three within one half-tile </comment>
+        <constant name="SiWrD_tile_length"           value="6*SiWrD_tile_nmodules*SiWr_mod_z-(6*SiWrD_tile_nmodules-1)*SiWr_mod_overlap"/>  
+        <constant name="SiWrD_half_tile_length"      value="3*SiWrD_half_tile_nmodules*SiWr_mod_z-(3*SiWrD_half_tile_nmodules-1)*SiWr_mod_overlap"/> 
 
+        <comment> One or two disks (depending on 'SiWr_nLayers' parameter) make up the silicon wrapper disk system. Each disk provides at least one hit. </comment>
         <constant name="SiWrD_z1" value="SiWrD_zmin"/>
         <constant name="SiWrD_support_disk_thickness" value="10.0*mm"/>
-        <constant name="SiWrD_z2" value="SiWrD_zmin+2.*SiWr_stave_thickness+SiWrD_support_disk_thickness+0.4*mm"/> <comment> 0.4 mm of additional space to avoid overlaps </comment>
+        <constant name="SiWrD_z1_z2_distance" value="5.0*mm"/>
+        <constant name="SiWrD_z2" value="SiWrD_z1+4.*SiWr_stave_thickness+SiWrD_support_disk_thickness+SiWrD_z1_z2_distance"/>
 
         <constant name="SiWrD_petals_overlap_r"   value="7.0*mm"/> <comment> Overlap in r between disks to cover gaps in coverage </comment>
-        <constant name="SiWrD_support_outer_radius" value="SiWrD_outer_radius-SiWrD_services_opening"/> <comment> Keep an opening for drift chamber (or other tracker) services going out through crack between SiWr barrel and disk </comment>
+        <constant name="SiWrD_support_outer_radius" value="SiWrD_outer_radius-SiWrD_services_opening"/> <comment> Keep an opening of at least this size in r for drift chamber (or other tracker) services going out through crack between SiWr barrel and disk </comment>
     </define>
 
-    <define> <comment> Parameters for the ring design of the silicon wrapper disks. Up to 32 rings are used, but rings that would fall outside the allocated radius ('SiWrD_support_outer_radius') are ignored. A maximal radius of about 3 meters for the base sensor width is supported. </comment>
+    <define> <comment> Each disk consists of rings of tiles at different radii. Up to 32 rings are used, but rings that would fall outside the allocated radius ('SiWrD_support_outer_radius') are ignored. A maximal radius of about 3 meters for the base sensor width is supported. </comment>
         <constant name="SiWrD_ring0_rmin" value="SiWrD_inner_radius"/>
         <constant name="SiWrD_ring1_rmin" value="SiWrD_inner_radius+1.*SiWr_mod_rphi-1.*SiWrD_petals_overlap_r"/>
         <constant name="SiWrD_ring2_rmin" value="SiWrD_inner_radius+2.*SiWr_mod_rphi-2.*SiWrD_petals_overlap_r"/>
@@ -215,12 +213,16 @@
     <readouts> <comment>  Definition of the readout segmentation/definition </comment>
         <readout name="SiWrBCollection"> 
             <segmentation type="MultiSegmentation" key="layer">
-                <segmentation name="SiWrBgrid0" type="CartesianGridXY" key_min="0" key_max="0" grid_size_x="SiWrB_pitch_phi0" grid_size_y="SiWrB_pitch_z0"/>
-                <segmentation name="SiWrBgrid1" type="CartesianGridXY" key_min="1" key_max="1" grid_size_x="SiWrB_pitch_phi1" grid_size_y="SiWrB_pitch_z1"/>
+                <segmentation name="SiWrBgrid0" type="CartesianGridXY" key_min="0" key_max="1" grid_size_x="SiWrB_pitch_phi0" grid_size_y="SiWrB_pitch_z0"/>
+                <segmentation name="SiWrBgrid1" type="CartesianGridXY" key_min="2" key_max="3" grid_size_x="SiWrB_pitch_phi1" grid_size_y="SiWrB_pitch_z1"/>
             </segmentation>
             <id>${GlobalTrackerReadoutID},x:32:-16,y:-16</id>
         </readout>  
-        <readout name="SiWrDCollection" type="CartesianGridXY" grid_size_x="SiWrD_pitch_r" grid_size_y="SiWrD_pitch_phi">
+        <readout name="SiWrDCollection">
+            <segmentation type="MultiSegmentation" key="layer">
+                <segmentation name="SiWrDgrid0" type="CartesianGridXY" key_min="0" key_max="0" grid_size_x="SiWrD_pitch_r0" grid_size_y="SiWrD_pitch_phi0"/>
+                <segmentation name="SiWrDgrid1" type="CartesianGridXY" key_min="1" key_max="1" grid_size_x="SiWrD_pitch_r1" grid_size_y="SiWrD_pitch_phi1"/>
+            </segmentation>
             <id>${GlobalTrackerReadoutID},x:32:-16,y:-16</id>
         </readout>
         <readout name="SiWrDummyCollection">    <comment> For support tube, should not have any hits but better safe than sorry </comment>
@@ -238,7 +240,7 @@
     <comment> Silicon wrapper barrel </comment>
     <detectors>
         <detector name="SiWrB" type="VertexBarrel_detailed_o1_v03" vis="SiWrVis" id="DetID_SiWr_Barrel" readout="SiWrBCollection" region="SiWrBRegion">
-            <envelope vis="SiWrEnvVis">       
+            <envelope vis="SiWrVis">       
                 <shape type="Tube" rmin="SiWrB_inner_radius" rmax="SiWrB_outer_radius" dz="SiWrB_half_length" material="Air"/>
             </envelope>
             <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_BARREL"/>
@@ -356,11 +358,11 @@
                 </components> 
             </stave>
 
-            <comment> Here we construct the barrel </comment>
+            <comment> Here we construct the barrel. Staves at r1 and r2 from the first layer, staves at r3 and r4 from the second layer </comment>
             <layer nLadders="SiWrB_nStaves1" r="SiWrB_r1" id="0" nmodules="SiWrB_nModules1" name="SiWrBStave_layer0" step="-SiWrB_module_spacing" phi0="SiWrB_phiOffset1"/>
             <layer nLadders="SiWrB_nStaves2" r="SiWrB_r2" id="1" nmodules="SiWrB_nModules2" name="SiWrBStave_layer0" step="-SiWrB_module_spacing" phi0="SiWrB_phiOffset2"/>
-            <layer nLadders="SiWrB_nStaves3" r="SiWrB_r3" id="2" nmodules="SiWrB_nModules3" name="SiWrBStave_layer1" step="-SiWrB_module_spacing" phi0="SiWrB_phiOffset3"/>
-            <layer nLadders="SiWrB_nStaves4" r="SiWrB_r4" id="3" nmodules="SiWrB_nModules4" name="SiWrBStave_layer1" step="-SiWrB_module_spacing" phi0="SiWrB_phiOffset4"/>
+            <layer nLadders="SiWrB_nStaves3" r="SiWrB_r3" id="2" nmodules="SiWrB_nModules3" name="SiWrBStave_layer1" step="-SiWrB_module_spacing" phi0="SiWrB_phiOffset3" ignore="SiWr_nLayers==1"/>
+            <layer nLadders="SiWrB_nStaves4" r="SiWrB_r4" id="3" nmodules="SiWrB_nModules4" name="SiWrBStave_layer1" step="-SiWrB_module_spacing" phi0="SiWrB_phiOffset4" ignore="SiWr_nLayers==1"/>
 
             <comment> Rest of stave holders (to optimise mother volumes and avoid overlaps of mother volumes) </comment>
             <stave name="SiWrBStave1_support_bars" length="2.*SiWrB_z_half" motherVolWidth="SiWrB_holder_width" motherVolThickness="SiWrB_support_tube_r-SiWrB_r1-SiWr_stave_thickness-SiWrB_tolerance">
@@ -393,8 +395,8 @@
             </stave>
             <layer nLadders="SiWrB_nStaves1" r="SiWrB_r1+SiWr_stave_thickness" id="10" nmodules="SiWrB_nModules1" name="SiWrBStave1_support_bars" phi0="SiWrB_phiOffset1"/>
             <layer nLadders="SiWrB_nStaves2" r="SiWrB_r2+SiWr_stave_thickness" id="11" nmodules="SiWrB_nModules2" name="SiWrBStave2_support_bars" phi0="SiWrB_phiOffset2"/>
-            <layer nLadders="SiWrB_nStaves3" r="SiWrB_support_tube_r+SiWrB_support_tube_thickness" id="12" nmodules="SiWrB_nModules3" name="SiWrBStave3_support_bars" phi0="SiWrB_phiOffset3"/>
-            <layer nLadders="SiWrB_nStaves4" r="SiWrB_support_tube_r+SiWrB_support_tube_thickness" id="13" nmodules="SiWrB_nModules4" name="SiWrBStave4_support_bars" phi0="SiWrB_phiOffset4"/>
+            <layer nLadders="SiWrB_nStaves3" r="SiWrB_support_tube_r+SiWrB_support_tube_thickness" id="12" nmodules="SiWrB_nModules3" name="SiWrBStave3_support_bars" phi0="SiWrB_phiOffset3" ignore="SiWr_nLayers==1"/>
+            <layer nLadders="SiWrB_nStaves4" r="SiWrB_support_tube_r+SiWrB_support_tube_thickness" id="13" nmodules="SiWrB_nModules4" name="SiWrBStave4_support_bars" phi0="SiWrB_phiOffset4" ignore="SiWr_nLayers==1"/>
 
 
             <comment> Silicon wrapper barrel inner support rings </comment>
@@ -419,7 +421,7 @@
     </detectors>
     
     <detectors>
-        <detector name="SiWrD_assembly" type="DD4hep_SubdetectorAssembly" vis="SiWrEnvVis">
+        <detector name="SiWrD_assembly" type="DD4hep_SubdetectorAssembly" vis="SiWrVis">
             <shape type="BooleanShape" operation="Subtraction" material="Air">
                 <shape type="Tube" rmin="SiWrD_inner_radius" rmax="SiWrD_support_outer_radius" dz="SiWrD_zmax"/>
                 <position x="0" y="0" z="0"/>
@@ -444,7 +446,7 @@
 
 
             <comment> Definition of our "stave" object that is used to build the disks. </comment>
-            <module name="SiWrDStave_new">
+            <module name="SiWrDStave_halfTile">
                 <components z_offset="0." name="flexes">
                     <component thickness="SiWr_flex_Aluminium_thickness"    width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." z_offset="0.0*mm" material="Al" vis="SiWrCableVis"/>
                     <component thickness="SiWr_flex_Kapton_thickness"       width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." z_offset="SiWr_flex_Aluminium_thickness" material="KaptonVtx" vis="SiWrCableVis"/>
@@ -457,11 +459,7 @@
 
                 <comment> Two ATLASPix3-sized sensors, but with only one periphery region each. </comment>
                 <sensor z_offset="SiWr_flex_thickness" thickness="SiWr_Sensitive_Thickness" material="Silicon">
-                    <component name="Left quad" sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="-SiWr_mod_rphi/2." xmax="-SiWr_mod_quad_spacing/2." vis="SiWrSensitiveVis"/> <!-- Left quad -->
-                    <component name="Right quad" sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="SiWr_mod_quad_spacing/2." xmax="SiWr_mod_rphi/2." vis="SiWrSensitiveVis"/> <!-- Right quad -->
-
-                    <component name="Space between quads" sensitive="False" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="-SiWr_mod_quad_spacing/2." xmax="SiWr_mod_quad_spacing/2." vis="SiWrPeripheryVis"/> <!-- Space between quads -->          
-                    <component name="Periphery"           sensitive="False" ymin="-SiWr_mod_z/2." ymax="-SiWr_mod_z/2.+SiWr_mod_z_periphery" xmin="-SiWr_mod_rphi/2." xmax="SiWr_mod_rphi/2." vis="SiWrPeripheryVis"/> <!-- Periphery -->          
+                    <include ref="SiliconWrapper_disk_halfTile_module.xml"/>
                 </sensor>
 
                 <components name="support_low_z" z_offset="SiWr_flex_thickness+SiWr_Sensitive_Thickness">
@@ -495,101 +493,122 @@
                 </components>
             </module>
 
-            <layer id="0" z="SiWrD_z1" nphi="SiWrD_ring0_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring0_rmin" rmax="SiWrD_ring0_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring0_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_half_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
+
+            <module name="SiWrDStave_fullTile">
+                <components z_offset="0." name="flexes">
+                    <component thickness="SiWr_flex_Aluminium_thickness"    width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." z_offset="0.0*mm" material="Al" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Kapton_thickness"       width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." z_offset="SiWr_flex_Aluminium_thickness" material="KaptonVtx" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Glue_thickness"         width="SiWr_flex_width" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." z_offset="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness" material="GlueEcobond45" vis="SiWrCableVis"/>
+
+                    <component thickness="SiWr_flex_Aluminium_thickness"    width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." z_offset="0.0*mm" material="Al" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Kapton_thickness"       width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." z_offset="SiWr_flex_Aluminium_thickness" material="KaptonVtx" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Glue_thickness"         width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." z_offset="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness" material="GlueEcobond45" vis="SiWrCableVis"/>
+                </components>
+
+                <comment> Two ATLASPix3-sized sensors, but with only one periphery region each. </comment>
+                <sensor z_offset="SiWr_flex_thickness" thickness="SiWr_Sensitive_Thickness" material="Silicon">
+                    <include ref="SiliconWrapper_disk_fullTile_module.xml"/>
+                </sensor>
+
+                <components name="support_low_z" z_offset="SiWr_flex_thickness+SiWr_Sensitive_Thickness">
+                    <component thickness="SiWr_support_CarbonFiber_thickness/2." width="SiWr_mod_rphi" material="CarbonFiberVtx" vis="SupportVis"/>
+                </components>
+
+                <components name="cooling_pipes" z_offset="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness/2.">
+                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="-SiWr_Pipe_offset" z_offset="0.0*mm" material="KaptonVtx" vis="SiWrPipingVis"/> 
+                    <component thickness="SiWr_Water_thickness" width="SiWr_Pipe_rphi" offset="-SiWr_Pipe_offset" z_offset="SiWr_Pipe_thickness" material="Water" vis="SiWrWaterVis"/>
+                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="-SiWr_Pipe_offset" z_offset="SiWr_Pipe_thickness+SiWr_Water_thickness" material="KaptonVtx" vis="SiWrPipingVis"/>
+
+                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" z_offset="0.0*mm" material="KaptonVtx" vis="SiWrPipingVis"/> 
+                    <component thickness="SiWr_Water_thickness" width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" z_offset="SiWr_Pipe_thickness" material="Water" vis="SiWrWaterVis"/>
+                    <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" z_offset="SiWr_Pipe_thickness+SiWr_Water_thickness" material="KaptonVtx" vis="SiWrPipingVis"/>
+                </components> 
+
+                <components name="support_low_z" z_offset="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness/2.+SiWr_Cooling_thickness">
+                    <component thickness="SiWr_support_CarbonFiber_thickness/2." width="SiWr_mod_rphi" material="CarbonFiberVtx" vis="SupportVis"/>
+                </components>
+
+                <comment> Second layer of sensor (inserted automatically) </comment>
+
+                <components z_offset="SiWr_flex_thickness+2.*SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness" name="flexes">
+                    <component thickness="SiWr_flex_Aluminium_thickness"    width="SiWr_flex_width" offset="-SiWr_flex_width/2.-SiWr_mod_quad_spacing/2." z_offset="0.0*mm" material="Al" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Kapton_thickness"       width="SiWr_flex_width" offset="-SiWr_flex_width/2.-SiWr_mod_quad_spacing/2." z_offset="SiWr_flex_Aluminium_thickness" material="KaptonVtx" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Glue_thickness"         width="SiWr_flex_width" offset="-SiWr_flex_width/2.-SiWr_mod_quad_spacing/2." z_offset="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness" material="GlueEcobond45" vis="SiWrCableVis"/>
+
+                    <component thickness="SiWr_flex_Aluminium_thickness"    width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." z_offset="0.0*mm" material="Al" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Kapton_thickness"       width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." z_offset="SiWr_flex_Aluminium_thickness" material="KaptonVtx" vis="SiWrCableVis"/>
+                    <component thickness="SiWr_flex_Glue_thickness"         width="SiWr_flex_width" offset="+SiWr_flex_width/2.+SiWr_mod_quad_spacing/2." z_offset="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness" material="GlueEcobond45" vis="SiWrCableVis"/>
+                </components>
+            </module>
+
+            <layer id="0" z="SiWrD_z1" dz="SiWr_stave_thickness" rmin="SiWrD_ring0_rmin" rmax="SiWrD_support_outer_radius" dr="0.0*mm">
+                <stave nmodules="SiWrD_half_tile_nmodules" id="0"  r="SiWrD_ring0_rmin-SiWrD_inner_radius"  nphi="SiWrD_ring0_nphi"  step="-SiWr_mod_overlap" module="SiWrDStave_halfTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring0_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_half_tile_nmodules" id="1"  r="SiWrD_ring1_rmin-SiWrD_inner_radius"  nphi="SiWrD_ring1_nphi"  step="-SiWr_mod_overlap" module="SiWrDStave_halfTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring1_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_half_tile_nmodules" id="2"  r="SiWrD_ring2_rmin-SiWrD_inner_radius"  nphi="SiWrD_ring2_nphi"  step="-SiWr_mod_overlap" module="SiWrDStave_halfTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring2_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="3"  r="SiWrD_ring3_rmin-SiWrD_inner_radius"  nphi="SiWrD_ring3_nphi"  step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring3_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="4"  r="SiWrD_ring4_rmin-SiWrD_inner_radius"  nphi="SiWrD_ring4_nphi"  step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring4_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="5"  r="SiWrD_ring5_rmin-SiWrD_inner_radius"  nphi="SiWrD_ring5_nphi"  step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring5_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="6"  r="SiWrD_ring6_rmin-SiWrD_inner_radius"  nphi="SiWrD_ring6_nphi"  step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring6_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="7"  r="SiWrD_ring7_rmin-SiWrD_inner_radius"  nphi="SiWrD_ring7_nphi"  step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring7_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="8"  r="SiWrD_ring8_rmin-SiWrD_inner_radius"  nphi="SiWrD_ring8_nphi"  step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring8_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="9"  r="SiWrD_ring9_rmin-SiWrD_inner_radius"  nphi="SiWrD_ring9_nphi"  step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring9_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="10" r="SiWrD_ring10_rmin-SiWrD_inner_radius" nphi="SiWrD_ring10_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring10_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="11" r="SiWrD_ring11_rmin-SiWrD_inner_radius" nphi="SiWrD_ring11_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring11_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="12" r="SiWrD_ring12_rmin-SiWrD_inner_radius" nphi="SiWrD_ring12_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring12_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="13" r="SiWrD_ring13_rmin-SiWrD_inner_radius" nphi="SiWrD_ring13_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring13_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="14" r="SiWrD_ring14_rmin-SiWrD_inner_radius" nphi="SiWrD_ring14_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring14_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="15" r="SiWrD_ring15_rmin-SiWrD_inner_radius" nphi="SiWrD_ring15_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring15_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="16" r="SiWrD_ring16_rmin-SiWrD_inner_radius" nphi="SiWrD_ring16_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring16_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="17" r="SiWrD_ring17_rmin-SiWrD_inner_radius" nphi="SiWrD_ring17_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring17_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="18" r="SiWrD_ring18_rmin-SiWrD_inner_radius" nphi="SiWrD_ring18_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring18_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="19" r="SiWrD_ring19_rmin-SiWrD_inner_radius" nphi="SiWrD_ring19_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring19_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="20" r="SiWrD_ring20_rmin-SiWrD_inner_radius" nphi="SiWrD_ring20_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring20_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="21" r="SiWrD_ring21_rmin-SiWrD_inner_radius" nphi="SiWrD_ring21_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring21_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="22" r="SiWrD_ring22_rmin-SiWrD_inner_radius" nphi="SiWrD_ring22_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring22_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="23" r="SiWrD_ring23_rmin-SiWrD_inner_radius" nphi="SiWrD_ring23_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring23_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="24" r="SiWrD_ring24_rmin-SiWrD_inner_radius" nphi="SiWrD_ring24_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring24_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="25" r="SiWrD_ring25_rmin-SiWrD_inner_radius" nphi="SiWrD_ring25_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring25_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="26" r="SiWrD_ring26_rmin-SiWrD_inner_radius" nphi="SiWrD_ring26_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring26_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="27" r="SiWrD_ring27_rmin-SiWrD_inner_radius" nphi="SiWrD_ring27_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring27_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="28" r="SiWrD_ring28_rmin-SiWrD_inner_radius" nphi="SiWrD_ring28_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring28_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="29" r="SiWrD_ring29_rmin-SiWrD_inner_radius" nphi="SiWrD_ring29_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring29_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="30" r="SiWrD_ring30_rmin-SiWrD_inner_radius" nphi="SiWrD_ring30_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring30_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="31" r="SiWrD_ring31_rmin-SiWrD_inner_radius" nphi="SiWrD_ring31_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring31_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
             </layer>
-            <layer id="1" z="SiWrD_z2" nphi="SiWrD_ring1_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring1_rmin" rmax="SiWrD_ring1_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring1_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_half_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="2" z="SiWrD_z1" nphi="SiWrD_ring2_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring2_rmin" rmax="SiWrD_ring2_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring2_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_half_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="3" z="SiWrD_z2" nphi="SiWrD_ring3_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring3_rmin" rmax="SiWrD_ring3_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring3_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="4" z="SiWrD_z1" nphi="SiWrD_ring4_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring4_rmin" rmax="SiWrD_ring4_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring4_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="5" z="SiWrD_z2" nphi="SiWrD_ring5_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring5_rmin" rmax="SiWrD_ring5_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring5_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="6" z="SiWrD_z1" nphi="SiWrD_ring6_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring6_rmin" rmax="SiWrD_ring6_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring6_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="7" z="SiWrD_z2" nphi="SiWrD_ring7_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring7_rmin" rmax="SiWrD_ring7_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring7_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="8" z="SiWrD_z1" nphi="SiWrD_ring8_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring8_rmin" rmax="SiWrD_ring8_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring8_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="9" z="SiWrD_z2" nphi="SiWrD_ring9_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring9_rmin" rmax="SiWrD_ring9_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring9_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="10" z="SiWrD_z1" nphi="SiWrD_ring10_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring10_rmin" rmax="SiWrD_ring10_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring10_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="11" z="SiWrD_z2" nphi="SiWrD_ring11_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring11_rmin" rmax="SiWrD_ring11_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring11_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="12" z="SiWrD_z1" nphi="SiWrD_ring12_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring12_rmin" rmax="SiWrD_ring12_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring12_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="13" z="SiWrD_z2" nphi="SiWrD_ring13_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring13_rmin" rmax="SiWrD_ring13_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring13_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="14" z="SiWrD_z1" nphi="SiWrD_ring14_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring14_rmin" rmax="SiWrD_ring14_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring14_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="15" z="SiWrD_z2" nphi="SiWrD_ring15_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring15_rmin" rmax="SiWrD_ring15_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring15_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="16" z="SiWrD_z1" nphi="SiWrD_ring16_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring16_rmin" rmax="SiWrD_ring16_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring16_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="17" z="SiWrD_z2" nphi="SiWrD_ring17_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring17_rmin" rmax="SiWrD_ring17_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring17_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="18" z="SiWrD_z1" nphi="SiWrD_ring18_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring18_rmin" rmax="SiWrD_ring18_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring18_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="19" z="SiWrD_z2" nphi="SiWrD_ring19_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring19_rmin" rmax="SiWrD_ring19_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring19_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="20" z="SiWrD_z1" nphi="SiWrD_ring20_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring20_rmin" rmax="SiWrD_ring20_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring20_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="21" z="SiWrD_z2" nphi="SiWrD_ring21_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring21_rmin" rmax="SiWrD_ring21_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring21_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="22" z="SiWrD_z1" nphi="SiWrD_ring22_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring22_rmin" rmax="SiWrD_ring22_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring22_rmin+1.3*SiWr_mod_rphi >SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="23" z="SiWrD_z2" nphi="SiWrD_ring23_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring23_rmin" rmax="SiWrD_ring23_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring23_rmin+1.3*SiWr_mod_rphi >SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="24" z="SiWrD_z1" nphi="SiWrD_ring24_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring24_rmin" rmax="SiWrD_ring24_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring24_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="25" z="SiWrD_z2" nphi="SiWrD_ring25_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring25_rmin" rmax="SiWrD_ring25_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring25_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="26" z="SiWrD_z1" nphi="SiWrD_ring26_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring26_rmin" rmax="SiWrD_ring26_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring26_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="27" z="SiWrD_z2" nphi="SiWrD_ring27_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring27_rmin" rmax="SiWrD_ring27_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring27_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="28" z="SiWrD_z1" nphi="SiWrD_ring28_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring28_rmin" rmax="SiWrD_ring28_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring28_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="29" z="SiWrD_z2" nphi="SiWrD_ring29_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring29_rmin" rmax="SiWrD_ring29_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring29_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="30" z="SiWrD_z1" nphi="SiWrD_ring30_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring30_rmin" rmax="SiWrD_ring30_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring30_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
-            </layer>
-            <layer id="31" z="SiWrD_z2" nphi="SiWrD_ring31_nphi" dz="SiWr_stave_thickness" rmin="SiWrD_ring31_rmin" rmax="SiWrD_ring31_rmin+1.3*SiWr_mod_rphi" dr="0.0*mm" motherVolThickness="2.*SiWr_stave_thickness" ignore="SiWrD_ring31_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius">
-                <stave nmodules="SiWrD_tile_nmodules" r="0." dz="SiWr_module_distance_sides" step="-SiWr_mod_overlap" module="SiWrDStave_new" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis"/>
+
+            <layer id="1" z="SiWrD_z2" dz="SiWr_stave_thickness" rmin="SiWrD_ring0_rmin" rmax="SiWrD_support_outer_radius" dr="0.0*mm" ignore="SiWr_nLayers==1">
+                <stave nmodules="SiWrD_half_tile_nmodules" id="0"  r="SiWrD_ring0_rmin-SiWrD_inner_radius"  nphi="SiWrD_ring0_nphi"  step="-SiWr_mod_overlap" module="SiWrDStave_halfTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring0_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_half_tile_nmodules" id="1"  r="SiWrD_ring1_rmin-SiWrD_inner_radius"  nphi="SiWrD_ring1_nphi"  step="-SiWr_mod_overlap" module="SiWrDStave_halfTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring1_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_half_tile_nmodules" id="2"  r="SiWrD_ring2_rmin-SiWrD_inner_radius"  nphi="SiWrD_ring2_nphi"  step="-SiWr_mod_overlap" module="SiWrDStave_halfTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring2_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="3"  r="SiWrD_ring3_rmin-SiWrD_inner_radius"  nphi="SiWrD_ring3_nphi"  step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring3_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="4"  r="SiWrD_ring4_rmin-SiWrD_inner_radius"  nphi="SiWrD_ring4_nphi"  step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring4_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="5"  r="SiWrD_ring5_rmin-SiWrD_inner_radius"  nphi="SiWrD_ring5_nphi"  step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring5_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="6"  r="SiWrD_ring6_rmin-SiWrD_inner_radius"  nphi="SiWrD_ring6_nphi"  step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring6_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="7"  r="SiWrD_ring7_rmin-SiWrD_inner_radius"  nphi="SiWrD_ring7_nphi"  step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring7_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="8"  r="SiWrD_ring8_rmin-SiWrD_inner_radius"  nphi="SiWrD_ring8_nphi"  step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring8_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="9"  r="SiWrD_ring9_rmin-SiWrD_inner_radius"  nphi="SiWrD_ring9_nphi"  step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring9_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="10" r="SiWrD_ring10_rmin-SiWrD_inner_radius" nphi="SiWrD_ring10_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring10_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="11" r="SiWrD_ring11_rmin-SiWrD_inner_radius" nphi="SiWrD_ring11_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring11_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="12" r="SiWrD_ring12_rmin-SiWrD_inner_radius" nphi="SiWrD_ring12_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring12_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="13" r="SiWrD_ring13_rmin-SiWrD_inner_radius" nphi="SiWrD_ring13_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring13_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="14" r="SiWrD_ring14_rmin-SiWrD_inner_radius" nphi="SiWrD_ring14_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring14_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="15" r="SiWrD_ring15_rmin-SiWrD_inner_radius" nphi="SiWrD_ring15_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring15_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="16" r="SiWrD_ring16_rmin-SiWrD_inner_radius" nphi="SiWrD_ring16_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring16_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="17" r="SiWrD_ring17_rmin-SiWrD_inner_radius" nphi="SiWrD_ring17_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring17_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="18" r="SiWrD_ring18_rmin-SiWrD_inner_radius" nphi="SiWrD_ring18_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring18_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="19" r="SiWrD_ring19_rmin-SiWrD_inner_radius" nphi="SiWrD_ring19_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring19_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="20" r="SiWrD_ring20_rmin-SiWrD_inner_radius" nphi="SiWrD_ring20_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring20_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="21" r="SiWrD_ring21_rmin-SiWrD_inner_radius" nphi="SiWrD_ring21_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring21_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="22" r="SiWrD_ring22_rmin-SiWrD_inner_radius" nphi="SiWrD_ring22_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring22_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="23" r="SiWrD_ring23_rmin-SiWrD_inner_radius" nphi="SiWrD_ring23_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring23_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="24" r="SiWrD_ring24_rmin-SiWrD_inner_radius" nphi="SiWrD_ring24_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring24_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="25" r="SiWrD_ring25_rmin-SiWrD_inner_radius" nphi="SiWrD_ring25_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring25_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="26" r="SiWrD_ring26_rmin-SiWrD_inner_radius" nphi="SiWrD_ring26_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring26_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="27" r="SiWrD_ring27_rmin-SiWrD_inner_radius" nphi="SiWrD_ring27_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring27_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="28" r="SiWrD_ring28_rmin-SiWrD_inner_radius" nphi="SiWrD_ring28_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring28_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="29" r="SiWrD_ring29_rmin-SiWrD_inner_radius" nphi="SiWrD_ring29_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring29_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="30" r="SiWrD_ring30_rmin-SiWrD_inner_radius" nphi="SiWrD_ring30_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring30_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius"/>
+                <stave nmodules="SiWrD_tile_nmodules"      id="31" r="SiWrD_ring31_rmin-SiWrD_inner_radius" nphi="SiWrD_ring31_nphi" step="-SiWr_mod_overlap" module="SiWrDStave_fullTile" motherVolThickness="SiWr_stave_thickness" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" ignore="SiWrD_ring31_rmin+1.3*SiWr_mod_rphi > SiWrD_support_outer_radius" z_offset="2.*SiWr_stave_thickness+SiWrD_support_disk_thickness"/>
             </layer>
         </detector>
 
@@ -606,8 +625,10 @@
                     <component thickness="SiWrD_support_outer_radius-SiWrD_inner_radius" width="2.*pi*SiWrD_inner_radius" length="0.05*SiWrD_support_disk_thickness" isCurved="true" vis="SiWrSupportVis" material="CarbonFiberVtx" side="+1" dz="-SiWrD_support_disk_thickness+0.05*SiWrD_support_disk_thickness+0.90*SiWrD_support_disk_thickness"/>
                 </end_z>
             </stave>
-            <layer id="62" nLadders="1" r="SiWrD_inner_radius" name="SiWrD_support_disk" nmodules="1" motherVolThickness="SiWrD_support_outer_radius-SiWrD_inner_radius" side="+1" z_offset="+(SiWrD_zmin+SiWr_stave_thickness+SiWrD_support_disk_thickness)"/>
-            <layer id="63" nLadders="1" r="SiWrD_inner_radius" name="SiWrD_support_disk" nmodules="1" motherVolThickness="SiWrD_support_outer_radius-SiWrD_inner_radius" side="-1" z_offset="-(SiWrD_zmin+SiWr_stave_thickness+SiWrD_support_disk_thickness)"/>
+            <layer id="60" nLadders="1" r="SiWrD_inner_radius" name="SiWrD_support_disk" nmodules="1" motherVolThickness="SiWrD_support_outer_radius-SiWrD_inner_radius" side="+1" z_offset="+(SiWrD_z1+2.*SiWr_stave_thickness+SiWrD_support_disk_thickness/2.)"/>
+            <layer id="61" nLadders="1" r="SiWrD_inner_radius" name="SiWrD_support_disk" nmodules="1" motherVolThickness="SiWrD_support_outer_radius-SiWrD_inner_radius" side="-1" z_offset="-(SiWrD_z1+2.*SiWr_stave_thickness+SiWrD_support_disk_thickness/2.)"/>
+            <layer id="62" nLadders="1" r="SiWrD_inner_radius" name="SiWrD_support_disk" nmodules="1" motherVolThickness="SiWrD_support_outer_radius-SiWrD_inner_radius" side="+1" z_offset="+(SiWrD_z2+2.*SiWr_stave_thickness+SiWrD_support_disk_thickness/2.)" ignore="SiWr_nLayers==1"/>
+            <layer id="63" nLadders="1" r="SiWrD_inner_radius" name="SiWrD_support_disk" nmodules="1" motherVolThickness="SiWrD_support_outer_radius-SiWrD_inner_radius" side="-1" z_offset="-(SiWrD_z2+2.*SiWr_stave_thickness+SiWrD_support_disk_thickness/2.)" ignore="SiWr_nLayers==1"/>
         </detector>
     </detectors>   
 
