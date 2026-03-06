@@ -1,13 +1,10 @@
 <lccdd>
 
-    <info name="FCCee"
-        title="FCCee CLD HCAL Barrel : taken corresponding to : HCalBarrel_o1_v01_01.xml "
-        author="from ILCSOFT/lcgeo/FCCee/compact/FCCee_o1_v04"
-        url="no"
-        status="development"
-        version="1.0">
-    <comment>CLD Barrel Hadronic  Calorimeter for FCCee</comment>
-  </info>
+    <!--
+  FCCee CLD HCAL Barrel : taken corresponding to : HCalBarrel_o1_v01_01.xml.
+  from ILCSOFT/lcgeo/FCCee/compact/FCCee_o1_v04
+  CLD Barrel Hadronic  Calorimeter for FCCee
+    -->
 
 
     <!--  Definition of global dictionary constants          -->

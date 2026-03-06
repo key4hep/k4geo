@@ -2,14 +2,11 @@
 <lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
-  <info name="FCCee_HCalEndcap_TileCal"
-    title="Extended Barrel Calorimeter"
-    author="C. Neubueser, J. Faltova, M. Mlynarikova, updated by A. Durglishvili in 2024"
-    url="no"
-    status="development"
-    version="1.0">
-    <comment>HCal layout based on ATLAS HCal, with realistic longitudinal segmentation and steel support</comment>
-  </info>
+  <!--
+  Extended Barrel Calorimeter.
+  C. Neubueser, J. Faltova, M. Mlynarikova, updated by A. Durglishvili in 2024
+  HCal layout based on ATLAS HCal, with realistic longitudinal segmentation and steel support
+  -->
   <define>
     <!-- dimensions in R / rho of actual detector modules (face-plate is placed inside)-->
     <!-- tile dimensions -->

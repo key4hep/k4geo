@@ -1032,13 +1032,10 @@
     </material>
   </materials>
 
-  <info name="SCEPCal"
-        title="Segmented Crystal Electromagnetic Precision ECAL"
-        author="Wonyong Chung"
-        url="https://github.com/wonyongc/SCEPCal"
-        status="release"
-        version="1.0">
-  </info>
+  <!--
+      Segmented Crystal Electromagnetic Precision ECAL.
+      Wonyong Chung
+  -->
 
   <readouts>
     <!-- Different segmentations used to accommodate different granularities in main and timing layer -->
