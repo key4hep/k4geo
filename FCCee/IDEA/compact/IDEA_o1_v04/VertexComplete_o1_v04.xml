@@ -4,8 +4,8 @@
 -->
 
 <lccdd>
-    <info name="Vertex_IDEA_o1_v04"
-        title="IDEA vertex detector: Started with CLD vertex detector design from FCCDetectors, but adapted to IDEA vertex detector and extended functionality of detector builders"
+    <info name="VertexComplete_o1_v04"
+        title="Complete, detailed vertex detector: Started with CLD vertex detector design from FCCDetectors, but adapted to describe IDEA engineered vertex detector design and extended functionality of detector builders"
         author="Niloufar Alipour Tehrani (adapting original CLD version), Armin Ilg (adapting and extending to IDEA)"
         url="no"
         status="development"

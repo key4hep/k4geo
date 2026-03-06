@@ -12,8 +12,8 @@
 -->
 
 <lccdd>
-    <info name="SiliconWrapper_IDEA_o1_v02"
-        title="IDEA silicon wrapper detector"
+    <info name="SiliconWrapper_o1_v02"
+        title="Silicon wrapper detector"
         author="Armin Ilg"
         url="no"
         status="development"
