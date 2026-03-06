@@ -3,14 +3,11 @@
        xmlns:xs="http://www.w3.org/2001/XMLSchema"
        xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-  <info name="FCCee"
-        title="FCCee: dummy calorimeter"
-        author="nalipour"
-        url="no"
-        status="development"
-        version="1.0">
-    <comment>A Dummy Calorimeter: to be rewritten based on the dual readout technology</comment>
-  </info>
+  <!--
+  FCCee: dummy calorimeter.
+  nalipour
+  A Dummy Calorimeter: to be rewritten based on the dual readout technology
+  -->
 
 
   <define>

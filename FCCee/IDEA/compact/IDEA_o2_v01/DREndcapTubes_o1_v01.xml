@@ -19,14 +19,10 @@
      #
      #==========================================================================
 -->
-  <info name="DREndcapTubes"
-    title="IDEA dual-readout endcap calorimeter with capillary tubes"
-    author="Lorenzo Pezzotti"
-    url="None"
-    status="development"
-    version="0.1">
-    <comment></comment>
-  </info>
+  <!--
+  IDEA dual-readout endcap calorimeter with capillary tubes.
+  Lorenzo Pezzotti
+-->
 
   <properties>
         <matrix name="RI_DR_Polystyrene" coldim="2" values="

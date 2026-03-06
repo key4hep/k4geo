@@ -2,8 +2,8 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-    <info name="CLD_o2_v07"
-        title="FCCee detector model option 2 version 07 (updated TrackerBarrel)"
+    <info name="CLD_o2_v08"
+        title="FCCee detector model option 2 version 08"
         author="Andre Sailer, Leonhard Reichenbach"
         url="http://ilcsoft.desy.de"
         status="development"

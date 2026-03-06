@@ -3,16 +3,11 @@
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-  <info name="FCCeeMuonTagger"
-        title="Muon Tagger for ALLEGRO, with phi-theta segmentation"
-        author="Created by A. Duglishvili from MuonTagger.xml, moving from eta to theta segmentation. Further mods by G. Marchiori to allow longitudinal layers"
-        url="no"
-        status="development"
-        version="1.0">
-    <comment>
-      Simple muon tagger with phi-theta segmentation - barrel and endcaps. The detector is a simple cylinder of plastic scintillator.
-    </comment>
-  </info>
+  <!--
+  Muon Tagger for ALLEGRO, with phi-theta segmentation.
+  Created by A. Duglishvili from MuonTagger.xml, moving from eta to theta segmentation. Further mods by G. Marchiori to allow longitudinal layers
+  Simple muon tagger with phi-theta segmentation - barrel and endcaps. The detector is a simple cylinder of plastic scintillator.
+  -->
 
   <define>
     <!-- define here the number of radial (barrel) or longitudinal, z (endcap) layers into which the overall cylinder(s) will be segmented -->

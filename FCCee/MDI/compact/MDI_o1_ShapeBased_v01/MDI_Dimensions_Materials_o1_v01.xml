@@ -2,14 +2,10 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-    <info name="MDI_Dimensions_Materials"
-        title="Dimensions and Materials for the FCCee common MDI"
-	author="Andrea Ciarma"
-        url=""
-        status="development"
-        version="1">
-        <comment>Dimensions and Materials for the FCCee common MDI</comment>
-    </info>
+  <!--
+      Dimensions and Materials for the FCCee common MDI. Andrea Ciarma
+      Dimensions and Materials for the FCCee common MDI
+  -->
 
     <!-- Materials unique to the MDI -->
     <materials>
