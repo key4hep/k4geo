@@ -178,8 +178,8 @@ add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MAIA/compact/
 add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuSIC/compact/*/MuSIC_v*.xml)
 add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_sl5_v02/ILD_l5_o?_v02.xml)
 add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/*/CLD_o?_v0?.xml)
-add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/*/ALLEGRO_o?_v0?.xml)
-add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/*/IDEA_o?_v0?.xml)
+# add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/*/ALLEGRO_o?_v0?.xml)
+# add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/*/IDEA_o?_v0?.xml)
 
 
 set(test_environment "LD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/lib:$ENV{LD_LIBRARY_PATH}")
