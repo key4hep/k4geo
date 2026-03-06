@@ -1,6 +1,8 @@
 <lccdd>
 
-  <!-- FFQs parameters for lattice v572 - Z. Andrea Ciarma -->
+  <!--
+      FFQs parameters for lattice v572 - Z. Andrea Ciarma
+  -->
   
   <define>
     <constant name="FFQ_ON" value="1"/> <!-- hardcoded only for now -->

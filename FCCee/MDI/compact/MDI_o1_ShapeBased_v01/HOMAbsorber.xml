@@ -1,8 +1,9 @@
 <lccdd>
+
   <!--
-      FCCee Beam instrumentation: taken correspoding to CLD: HOMAbsorber_v00.xml
+      FCCee Beam instrumentation: taken correspoding to CLD: HOMAbsorber_v00.xml.
       from ILCSOFT/lcgeo/FCCee/compact/FCCee_o1_v04
-      Higher mode absorber for FCCee 
+      Higher mode absorber for FCCee
   -->
 
   <detectors>

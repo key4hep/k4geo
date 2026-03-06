@@ -1,8 +1,8 @@
 <lccdd>
-
-    <!-- Magnetic field for the compensating and screening solenoids only. Field map from M. Koratzinos & Andrea Ciarma
-
-    Dimensions and Materials for the FCCee common MDI</comment -->
+  <!--
+      Magnetic field for the compensating and screening solenoids only. Field map from M. Koratzinos. Andrea Ciarma
+      Dimensions and Materials for the FCCee common MDI
+  -->
 
     <fields>
       <!-- Detailed field map -->

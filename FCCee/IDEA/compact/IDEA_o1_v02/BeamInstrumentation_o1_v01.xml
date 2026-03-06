@@ -1,11 +1,10 @@
 <lccdd>    
 
   <!--
-  FCCee Beam instrumentation: taken correspoding to CLD: BeamInstrumentation_o3_v02_fitShield.xml.
-  from ILCSOFT/lcgeo/FCCee/compact/FCCee_o1_v04
-  Compensating and screening solenoids for FCCee
+      FCCee Beam instrumentation: taken correspoding to CLD: BeamInstrumentation_o3_v02_fitShield.xml.
+      from ILCSOFT/lcgeo/FCCee/compact/FCCee_o1_v04
+      Compensating and screening solenoids for FCCee
   -->
-
     
     <detectors>
         <comment>Beampipe Instrumentation</comment>

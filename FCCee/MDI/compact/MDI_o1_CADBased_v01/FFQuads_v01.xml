@@ -2,9 +2,10 @@
 
 <lccdd>
 
-  <!-- Final Focusing Quadrupoles. Andrea Ciarma
-  Final Focusing Quadrupoles simplified geometry + fields - Started from MaskTrafos.xml by A. Sailer -->
-
+  <!--
+     Final Focusing Quadrupoles. Andrea Ciarma
+     Final Focusing Quadrupoles simplified geometry + fields - Started from MaskTrafos.xml by A. Sailer 
+  -->
 
   <detectors>
     <detector name="QC1" type="DD4hep_Mask_o1_v01" vis="KICKVis">
