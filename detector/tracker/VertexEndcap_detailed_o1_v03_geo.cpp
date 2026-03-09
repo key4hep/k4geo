@@ -177,7 +177,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
         endOfStave.z_offsets.push_back(component.z_offset(0));
         endOfStave.dxs.push_back(component.dx());
         endOfStave.xs.push_back(component.x());
-        total_lengths.push_back(component.length() + component.z_offset(0) + endOfStave.z_offset + component.thickness());
+        total_lengths.push_back(component.length() + component.z_offset(0) + endOfStave.z_offset +
+                                component.thickness());
 
         Box ele_box = Box(component.width() / 2., component.length() / 2., component.thickness() / 2.);
         Volume ele_vol = Volume(endOfStave.name + _toString(iEndOfStave, "_%d"), ele_box,
@@ -186,7 +187,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
         endOfStave.volumes.push_back(ele_vol);
       }
-      endOfStave.max_length = *max_element(total_lengths.begin(), total_lengths.end()); // Calculate max. length for stave mother volume size calculation
+      endOfStave.max_length = *max_element(
+          total_lengths.begin(), total_lengths.end()); // Calculate max. length for stave mother volume size calculation
       m.endOfStaves.push_back(endOfStave);
     }
 
@@ -330,7 +332,9 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
       double dr = x_layer.dr(0);
       double z = x_layer.z();
       double layer_dz = x_layer.dz(0);
-      int nPetals = x_layer.attr<int>(_Unicode(nphi), 1); // If no nphi is given for the layer, one does not build petals but instead looks for the nphi attribute within the stave, creating a ring-like structure
+      int nPetals = x_layer.attr<int>(
+          _Unicode(nphi), 1); // If no nphi is given for the layer, one does not build petals but instead looks for the
+                              // nphi attribute within the stave, creating a ring-like structure
       double phiTot = x_layer.attr<double>(_Unicode(phiTot), 2. * M_PI); // Option to not use full 2*Pi for a layer
       double phi0_layer = x_layer.phi0(0);
       double reflect_rot = x_layer.attr<double>(_Unicode(reflect_rot), 0.0);
@@ -379,18 +383,22 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
           double step = x_stave.step(); // Spacing of modules
           string moduleStr = x_stave.moduleStr();
           double phi0_stave = x_stave.phi0(0);
-          double stave_offset = x_stave.offset(0); // Offset of stave in r-phi
-          int    stave_nphi = x_stave.attr<int>(_Unicode(nphi), 1); // To create a ring-like structure within a layer
-          bool   stave_ignore = x_stave.attr<bool>(_Unicode(ignore), false);
+          double stave_offset = x_stave.offset(0);               // Offset of stave in r-phi
+          int stave_nphi = x_stave.attr<int>(_Unicode(nphi), 1); // To create a ring-like structure within a layer
+          bool stave_ignore = x_stave.attr<bool>(_Unicode(ignore), false);
           if (stave_ignore)
             continue; // Skip staves marked to be ignored. This can be used for example to easily switch
                       // off staves that are outside the envelopes of the detector
 
           assert(!(stave_nphi > 1 && nPetals > 1)); // nPetals > 1 and stave_nphi > 1 cannot be used simultaneously
 
-          for(int stave_nphi_i = 0; stave_nphi_i < stave_nphi; stave_nphi_i++) {
-            double phi = phiTot / nPetals * iPetal + phiTot / stave_nphi * stave_nphi_i + phi0_layer + phi0_stave + (side == -1 ? reflect_rot : 0.0);
-            double z_alternate = ((iPetal+stave_nphi_i) % 2 == 0) ? 0.0 : layer_dz; // Have every second petal (nPetals > 1) or stave (stave_nphi > 1) shifted in z to create a staggered structure in z
+          for (int stave_nphi_i = 0; stave_nphi_i < stave_nphi; stave_nphi_i++) {
+            double phi = phiTot / nPetals * iPetal + phiTot / stave_nphi * stave_nphi_i + phi0_layer + phi0_stave +
+                         (side == -1 ? reflect_rot : 0.0);
+            double z_alternate = ((iPetal + stave_nphi_i) % 2 == 0)
+                                     ? 0.0
+                                     : layer_dz; // Have every second petal (nPetals > 1) or stave (stave_nphi > 1)
+                                                 // shifted in z to create a staggered structure in z
 
             // Use the correct module
             auto m = *find_if(module_information_list.cbegin(), module_information_list.cend(),
@@ -417,7 +425,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
             double stave_motherVolThickness = getAttrOrDefault(x_stave, _Unicode(motherVolThickness), double(0.0));
             double stave_motherVolWidth = getAttrOrDefault(x_stave, _Unicode(motherVolWidth), double(0.0));
             if (stave_motherVolThickness > 0.0 && stave_motherVolWidth > 0.0) {
-              Box whole_stave_box = Box(stave_motherVolWidth / 2., (stave_length+2.*endOfStave_max_length) / 2., stave_motherVolThickness / 2.);
+              Box whole_stave_box = Box(stave_motherVolWidth / 2., (stave_length + 2. * endOfStave_max_length) / 2.,
+                                        stave_motherVolThickness / 2.);
               whole_stave_volume_v = Volume(stave_name, whole_stave_box, theDetector.material("Air"));
               whole_stave_volume_v.setVisAttributes(theDetector, x_stave.visStr(x_det.visStr()));
               whole_stave_volume_placed = petal_assembly.placeVolume(
@@ -448,7 +457,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                 }
                 Position pos(x_pos, y_pos, z_pos);
 
-                // Volumes for stave elements cannot be defined for all staves together as they can have different lengths
+                // Volumes for stave elements cannot be defined for all staves together as they can have different
+                // lengths
                 Box ele_box = Box(component.widths[i] / 2., stave_length / 2., component.thicknesses[i] / 2.);
                 Volume ele_vol = Volume(component.name + _toString(i, "_%d"), ele_box, component.materials[i]);
                 ele_vol.setAttributes(theDetector, x_det.regionStr(), x_det.limitsStr(), component.viss[i]);
@@ -472,7 +482,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
               for (int i = 0; i < int(endOfStave.thicknesses.size()); i++) {
                 x_pos = endOfStave.offset + endOfStave.offsets[i];
                 y_pos = endOfStave.xs[i] > 0 ? stave_length / 2. + endOfStave.lengths[i] / 2. + endOfStave.dxs[i]
-                                            : -(stave_length / 2. + endOfStave.lengths[i] / 2. + endOfStave.dxs[i]);
+                                             : -(stave_length / 2. + endOfStave.lengths[i] / 2. + endOfStave.dxs[i]);
                 z_pos = endOfStave.z_offset + endOfStave.z_offsets[i] + endOfStave.thicknesses[i] / 2.;
 
                 if (side == -1) {
