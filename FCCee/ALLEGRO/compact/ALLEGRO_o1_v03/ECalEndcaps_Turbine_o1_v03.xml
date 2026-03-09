@@ -3,18 +3,13 @@
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-  <info name="FCCee_ECalEndcaps_Turbine"
-        title="Calorimeter endcaps"
-        author="E.Varnes, J.Rutherfoord, R.Walker"
-        url="no"
-        status="development"
-        version="1.0">
-    <comment>
-      Liquid argon EM calorimeter endcap design.
-      Electromagnetic part (EMEC) includes lead+steel absorber.
-      Turbine geometry.
-    </comment>
-  </info>
+  <!--
+  Calorimeter endcaps.
+  E.Varnes, J.Rutherfoord, R.Walker
+  Liquid argon EM calorimeter endcap design.
+  Electromagnetic part (EMEC) includes lead+steel absorber.
+  Turbine geometry.
+  -->
 
   <define>
     <!-- cryostat -->

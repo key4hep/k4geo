@@ -1,13 +1,8 @@
 <lccdd>
 
-  <info name="FFQuads_params_v530_Z"
-        title="FFQs parameters from lattive v530 - Z"
-        author="Andrea Ciarma"
-        url="no"
-        status="development"
-        version="1">
-  </info>
-
+  <!--
+      FFQs parameters from lattive v530 - Z. Andrea Ciarma
+  -->
   
   <define>
     <constant name="KQC1R1"  value="-0.2728374282738313  * FFQ_ON"/>

@@ -1,13 +1,9 @@
 <lccdd>
 
-  <info name="FCCee"
-        title="FCCee low impedance Beam pipe with small radius"
-        author="Andre Sailer"
-        url="no"
-        status="development"
-        version="1.0">
-    <comment>A beampipe for FCCee detector based on CLD</comment>
-  </info>
+  <!--
+      FCCee low impedance Beam pipe with small radius. Andre Sailer
+      A beampipe for FCCee detector based on CLD
+  -->
     
     <!--  Definition of global dictionary constants          -->
     <define>

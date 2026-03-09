@@ -3,14 +3,11 @@
 -->
 
 <lccdd>
-    <info name="Vertex_IDEA_o1_v01"
-        title="IDEA vertex detector: Started with CLD vertex detector design from FCCDetectors, but adapted to IDEA vertex detector and extended functionality of detector builders"
-        author="Niloufar Alipour Tehrani (adapting original CLD version), Armin Ilg (adapting and extending to IDEA)"
-        url="no"
-        status="development"
-        version="o1_v01"> 
-        <comment>A Vertex Detector for the FCC-ee IDEA detector concept, based on the engineered design by Fabrizio Palla and Filippo Bosi (INFN Pisa)</comment>
-    </info>
+    <!--
+  IDEA vertex detector: Started with CLD vertex detector design from FCCDetectors, but adapted to IDEA vertex detector and extended functionality of detector builders.
+  Niloufar Alipour Tehrani (adapting original CLD version), Armin Ilg (adapting and extending to IDEA)
+  A Vertex Detector for the FCC-ee IDEA detector concept, based on the engineered design by Fabrizio Palla and Filippo Bosi (INFN Pisa)
+    -->
     <comment>Vertex detector</comment>
     <detectors>
         <detector name="Vertex" type="DD4hep_SubdetectorAssembly" vis="VXDVis">

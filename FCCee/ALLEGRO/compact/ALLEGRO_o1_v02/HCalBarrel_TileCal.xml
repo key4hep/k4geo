@@ -2,15 +2,11 @@
 <lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
-  <info name="FCCee_HCalBarrel_TileCal"
-    title="Barrel Calorimeter"
-    author="C. Solans, J. Lingemann"
-    url="no"
-    status="development"
-    version="1.0">
-    <comment>The first FCCee HCal layout based on ATLAS HCal, not optimised yet</comment>
-    <comment>1. Nov 2022, J. Faltova: update material and radial segmentation for FCCee </comment>
-  </info>
+  <!--
+  Barrel Calorimeter.
+  C. Solans, J. Lingemann
+  The first FCCee HCal layout based on ATLAS HCal, not optimised yet
+  -->
   <define>
     <constant name="BarHCal_zOff" value="0"/>
     <!-- dimensions in R / rho of actual detector modules (face-plate is placed inside)-->
