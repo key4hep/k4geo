@@ -126,7 +126,7 @@
     </detectors>
 
     <detectors>
-        <detector id="DetID_VXD_Endcap" name="VertexEndcap" type="VertexEndcap_o1_v06" readout="VertexEndcapCollection" reflect="true" region="VertexEndcapRegion">
+        <detector id="DetID_VXD_Endcap" name="VertexEndcap" type="VertexEndcap_o1_v07" readout="VertexEndcapCollection" reflect="true" region="VertexEndcapRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>
