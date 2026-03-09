@@ -172,13 +172,30 @@ namespace DDSegmentation {
     /** return the number of unit cells in each wheel
      * @param[in] iWheel wheel identifier
      */
-    inline int nModules(int iWheel) { return m_nUnitCells[iWheel] / m_mergedModules[iWheel]; }
+    inline int nModules(int iWheel) const { return m_nUnitCells[iWheel] / m_mergedModules[iWheel]; }
     /** return the expected value of the layer index
      * @param[in] iWheel wheel identifier
      * @param[in] iRho rho readout cell identifier
      * @param[in] iZ z readout cell identifier
      */
     unsigned expLayer(unsigned iWheel, unsigned iRho, unsigned iZ) const;
+
+    /**  Get the field name for side.
+     *   return The field name for side.
+     */
+    inline const std::string& fieldNameSide() const { return m_sideID; }
+    /**  Get the field name for the wheel.
+     *   return The field name for wheel.
+     */
+    inline const std::string& fieldNameWheel() const { return m_wheelID; }
+    /**  Get the field name for the module.
+     *   return The field name for module.
+     */
+    inline const std::string& fieldNameModule() const { return m_moduleID; }
+    /**  Get the field name for the layer.
+     *   return The field name for layer.
+     */
+    inline const std::string& fieldNameLayer() const { return m_layerID; }
 
   private:
     /// turbine blade angle in each wheel
