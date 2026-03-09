@@ -3,18 +3,13 @@
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-  <info name="FCChh_CaloEndcap_Discs"
-        title="Calorimeter endcaps"
-        author="M.Aleksa,J.Faltova,A.Zaborowska"
-        url="no"
-        status="development"
-        version="1.0">
-    <comment>
-      Liquid argon EM calorimeter endcap design.
-      Electromagnetic part (EMEC) includes lead+steel absorber.
-      Absorbers have shape of simple discs.
-    </comment>
-  </info>
+  <!--
+  Calorimeter endcaps.
+  M.Aleksa,J.Faltova,A.Zaborowska
+  Liquid argon EM calorimeter endcap design.
+  Electromagnetic part (EMEC) includes lead+steel absorber.
+  Absorbers have shape of simple discs.
+  -->
 
   <define>
     <!-- cryostat -->

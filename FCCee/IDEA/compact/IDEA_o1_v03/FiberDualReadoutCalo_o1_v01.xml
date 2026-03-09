@@ -3,16 +3,11 @@
   <!-- use DD4hep elements and material definitions: -->
 
   <!-- some information about your detector: -->
-  <info name="FiberDualReadoutCalo_o1_v01"
-    title="dual-readout calorimeter"
-    author="Sanghyun Ko, Sungwon Kim"
-    url="no"
-    status="development"
-    version="0.0.2">
-    <comment>
-      The compact format for the dual-readout calorimeter (for FCCee IDEA)
-    </comment>
-  </info>
+  <!--
+  dual-readout calorimeter.
+  Sanghyun Ko, Sungwon Kim
+  The compact format for the dual-readout calorimeter (for FCCee IDEA)
+  -->
 
   <!-- For optics -->
   <properties>

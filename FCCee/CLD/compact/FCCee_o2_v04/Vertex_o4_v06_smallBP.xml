@@ -1,13 +1,10 @@
 <lccdd>
 
-    <info name="FCCee"
-        title="FCCee Vertex detector: taken correspoding to CLD: Vertex_o4_v05.xml"
-        author="from FCCDetectors/FCCee_o2_v03"
-        url="no"
-        status="development"
-        version="1.0">
-    <comment>CLD Vertex Detector for FCCee</comment>
-  </info>
+    <!--
+  FCCee Vertex detector: taken correspoding to CLD: Vertex_o4_v05.xml.
+  from FCCDetectors/FCCee_o2_v03
+  CLD Vertex Detector for FCCee
+    -->
 
   <define>
     <!--<constant name="VertexBarrel_zmax" value="12.5*cm"/>-->

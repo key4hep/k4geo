@@ -3,14 +3,11 @@
 -->
 
 <lccdd>
-    <info name="SiliconWrapper_IDEA_o1_v01"
-        title="IDEA silicon wrapper detector"
-        author="Armin Ilg"
-        url="no"
-        status="development"
-        version="o1_v01"> 
-        <comment>A Silicon Wrapper layer for the FCC-ee IDEA detector concept with timing to enable excellent PID together with drift chamber. </comment>
-    </info>
+    <!--
+  IDEA silicon wrapper detector.
+  Armin Ilg
+  A Silicon Wrapper layer for the FCC-ee IDEA detector concept with timing to enable excellent PID together with drift chamber.
+    -->
     <comment>Silicon wrapper</comment>
 
     <display>
