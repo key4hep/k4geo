@@ -91,10 +91,9 @@
         <constant name="SiWrB_nSensors_per_module_z" value="4"/> <comment> Grouping of sensors in modules reduces the number of module ids that are needed, to be compliant with GlobalTrackerReadoutID definition. </comment>
         <constant name="SiWrB_module_length" value="SiWr_mod_z*SiWrB_nSensors_per_module_z - (SiWrB_nSensors_per_module_z-1)*SiWr_mod_overlap"/>
         <constant name="SiWrB_stave_overlap" value="2.0*mm"/> <comment> Overlap of staves in phi to also always detect particles traversing the SiWr with an angle </comment>
-        <constant name="SiWrB_module_spacing" value="SiWr_mod_overlap"/>
 
         <comment> First layer properties. First layer consists of staves at two positions (r1 and r2). </comment>
-        <constant name="SiWrB_nModules1" value="floor(2*SiWrB_half_length/SiWrB_module_length)"/>
+        <constant name="SiWrB_nModules1" value="ceil(2*SiWrB_half_length/(SiWrB_nSensors_per_module_z*SiWrB_module_length))*SiWrB_nSensors_per_module_z"/>
         <constant name="SiWrB_nModules2" value="SiWrB_nModules1"/> <comment> Same number of modules so that gaps in r-phi in layer 1 can be filled by layer 2 </comment>
         <constant name="SiWrB_r1" value="SiWrB_inner_radius+SiWrB_inner_structure_thickness+1.0*mm"/>
         <constant name="SiWrB_r2" value="SiWrB_r1 + SiWr_stave_thickness + 1.0*mm"/>
@@ -113,13 +112,15 @@
         <constant name="SiWrB_phiOffset3" value="0."/> <comment> Offset of quater a sensor width</comment>
         <constant name="SiWrB_phiOffset4" value="2.*pi/SiWrB_nStaves4/2.*rad"/> <comment> Offset of half a sensor width </comment>
 
+        <comment> Module spacing to make silicon wrapper barrel as long as possible (respecting max. length of SiWrB_half_length), solving 2.*SiWrB_half_length=SiWrB_nModules1*SiWrB_module_length+(SiWrB_nModules1-1)*SiWrB_module_spacing </comment>
+        <constant name="SiWrB_module_spacing" value="(2.*SiWrB_half_length - SiWrB_nModules1*SiWrB_module_length)/(SiWrB_nModules1-1)"/>
+
         <comment> Silicon wrapper barrel support parameters </comment>
         <constant name="SiWrB_support_tube_r" value="(SiWrB_r2+SiWr_stave_thickness + SiWrB_r3)/2. - SiWrB_support_tube_thickness/2."/> <comment> Place support tube in the middle of the outer stave of the first and the inner stave of the second layer </comment>
-        <constant name="SiWrB_z_half" value="(SiWrB_nModules1*SiWrB_module_length - (SiWrB_nModules1-1)*SiWrB_module_spacing)/2."/>
-        <constant name="SiWrB_inner_structure_pos_z1" value="SiWrB_z_half*1./8.0"/>
-        <constant name="SiWrB_inner_structure_pos_z2" value="SiWrB_z_half*3./8.0"/>
-        <constant name="SiWrB_inner_structure_pos_z3" value="SiWrB_z_half*5./8.0"/>
-        <constant name="SiWrB_inner_structure_pos_z4" value="SiWrB_z_half*7./8.0"/>
+        <constant name="SiWrB_inner_structure_pos_z1" value="SiWrB_half_length*1./8.0"/>
+        <constant name="SiWrB_inner_structure_pos_z2" value="SiWrB_half_length*3./8.0"/>
+        <constant name="SiWrB_inner_structure_pos_z3" value="SiWrB_half_length*5./8.0"/>
+        <constant name="SiWrB_inner_structure_pos_z4" value="SiWrB_half_length*7./8.0"/>
     </define>
 
     <define> <comment> Silicon wrapper disk parameters </comment>
@@ -248,14 +249,14 @@
             <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_BARREL"/>
             
             <comment> Definition of our "stave" object that is used to build the barrel. This one is used for the first layer </comment>
-            <stave name="SiWrBStave_layer0" length="2.*SiWrB_z_half" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" motherVolThickness="SiWr_stave_thickness">
-                <components name="inner_flex_leftQuads" r="0." offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." length="SiWrB_z_half">
+            <stave name="SiWrBStave_layer0" length="2.*SiWrB_half_length" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" motherVolThickness="SiWr_stave_thickness">
+                <components name="inner_flex_leftQuads" r="0." offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." length="SiWrB_half_length">
                     <component thickness="SiWr_flex_Aluminium_thickness" width="SiWr_flex_width"  r="0.0*mm"                                                    material="Al" vis="SiWrCableVis"/>
                     <component thickness="SiWr_flex_Kapton_thickness"    width="SiWr_flex_width"  r="SiWr_flex_Aluminium_thickness"                             material="KaptonVtx" vis="SiWrCableVis"/>
                     <component thickness="SiWr_flex_Glue_thickness"      width="SiWr_flex_width"  r="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness"  material="GlueEcobond45" vis="SiWrCableVis"/>
                 </components>
 
-                <components name="inner_flex_rightQuads" r="0." length="SiWrB_z_half">
+                <components name="inner_flex_rightQuads" r="0." length="SiWrB_half_length">
                     <component thickness="SiWr_flex_Aluminium_thickness" width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="0.0*mm"                                                       material="Al" vis="SiWrCableVis"/>
                     <component thickness="SiWr_flex_Kapton_thickness"    width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="SiWr_flex_Aluminium_thickness"                               material="KaptonVtx" vis="SiWrCableVis"/>
                     <component thickness="SiWr_flex_Glue_thickness"      width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness"   material="GlueEcobond45" vis="SiWrCableVis"/>
@@ -266,11 +267,11 @@
                     <include ref="SiliconWrapper_barrel_module.xml"/>
                 </sensor>
 
-                <components name="support" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness" length="SiWrB_z_half">
+                <components name="support" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness" length="SiWrB_half_length">
                     <component thickness="SiWr_support_CarbonFiber_thickness/2."    width="SiWr_mod_rphi" r="0.0*mm" material="CarbonFiberVtx" vis="SupportVis"/>
                 </components>
 
-                <components name="coolingPipes" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness/2." length="SiWrB_z_half">
+                <components name="coolingPipes" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness/2." length="SiWrB_half_length">
                     <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" r="0.0*mm" material="KaptonVtx" vis="SiWrPipingVis"/> 
                     <component thickness="SiWr_Water_thickness" width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" r="SiWr_Pipe_thickness" material="Water" vis="SiWrWaterVis"/>
                     <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" r="SiWr_Pipe_thickness+SiWr_Water_thickness" material="KaptonVtx" vis="SiWrPipingVis"/>
@@ -280,23 +281,23 @@
                     <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="-SiWr_Pipe_offset" r="SiWr_Pipe_thickness+SiWr_Water_thickness" material="KaptonVtx" vis="SiWrPipingVis"/>
                 </components>  
 
-                <components name="support" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness/2.+SiWr_Cooling_thickness" length="SiWrB_z_half">
+                <components name="support" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness/2.+SiWr_Cooling_thickness" length="SiWrB_half_length">
                     <component thickness="SiWr_support_CarbonFiber_thickness/2."    width="SiWr_mod_rphi" r="0.0*mm" material="CarbonFiberVtx" vis="SupportVis"/>
                 </components>
 
-                <components name="outer_flex_leftQuads" r="SiWr_flex_thickness+2.*SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." length="SiWrB_z_half">
+                <components name="outer_flex_leftQuads" r="SiWr_flex_thickness+2.*SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." length="SiWrB_half_length">
                     <component thickness="SiWr_flex_Aluminium_thickness" width="SiWr_flex_width"  r="0.0*mm"                                                    material="Al" vis="SiWrCableVis"/>
                     <component thickness="SiWr_flex_Kapton_thickness"    width="SiWr_flex_width"  r="SiWr_flex_Aluminium_thickness"                             material="KaptonVtx" vis="SiWrCableVis"/>
                     <component thickness="SiWr_flex_Glue_thickness"      width="SiWr_flex_width"  r="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness"  material="GlueEcobond45" vis="SiWrCableVis"/>
                 </components>
 
-                <components name="outer_flex_rightQuads" r="SiWr_flex_thickness+2.*SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness" length="SiWrB_z_half">
+                <components name="outer_flex_rightQuads" r="SiWr_flex_thickness+2.*SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness" length="SiWrB_half_length">
                     <component thickness="SiWr_flex_Aluminium_thickness" width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="0.0*mm"                                                       material="Al" vis="SiWrCableVis"/>
                     <component thickness="SiWr_flex_Kapton_thickness"    width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="SiWr_flex_Aluminium_thickness"                               material="KaptonVtx" vis="SiWrCableVis"/>
                     <component thickness="SiWr_flex_Glue_thickness"      width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness"   material="GlueEcobond45" vis="SiWrCableVis"/>
                 </components> 
 
-                <components name="support_stave_holder" r="SiWr_flex_thickness+2.*SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness" length="SiWrB_z_half">
+                <components name="support_stave_holder" r="SiWr_flex_thickness+2.*SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness" length="SiWrB_half_length">
                     <component thickness="SiWr_flex_thickness"  width="SiWrB_holder_width*0.7"  offset="0." r="0." material="RohacellVtx66D" vis="VTXRohacellVis"/>
                     <component thickness="SiWr_flex_thickness"  width="SiWrB_holder_width*0.15" offset="-SiWrB_holder_width*0.425" r="0." material="CarbonFiberVtx66D" vis="VTXSupportVis"/>
                     <component thickness="SiWr_flex_thickness"  width="SiWrB_holder_width*0.15" offset="+SiWrB_holder_width*0.425" r="0." material="CarbonFiberVtx66D" vis="VTXSupportVis"/>
@@ -304,21 +305,21 @@
             </stave>
 
             <comment> Definition of our "stave" object that is used to build the barrel. This one is used for the second layer </comment>
-            <stave name="SiWrBStave_layer1" length="2.*SiWrB_z_half" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" motherVolThickness="SiWr_stave_thickness">
+            <stave name="SiWrBStave_layer1" length="2.*SiWrB_half_length" motherVolWidth="SiWr_mod_rphi" vis="SiWrStaveVis" motherVolThickness="SiWr_stave_thickness">
                 <comment> Here, part of the stave holder comes first as the second layer is outside the support tube </comment>
-                <components name="support_stave_holder" r="0." length="SiWrB_z_half">
+                <components name="support_stave_holder" r="0." length="SiWrB_half_length">
                     <component thickness="SiWr_flex_thickness"  width="SiWrB_holder_width*0.7"  offset="0." r="0." material="RohacellVtx66D" vis="VTXRohacellVis"/>
                     <component thickness="SiWr_flex_thickness"  width="SiWrB_holder_width*0.15" offset="-SiWrB_holder_width*0.425" r="0." material="CarbonFiberVtx66D" vis="VTXSupportVis"/>
                     <component thickness="SiWr_flex_thickness"  width="SiWrB_holder_width*0.15" offset="+SiWrB_holder_width*0.425" r="0." material="CarbonFiberVtx66D" vis="VTXSupportVis"/>
                 </components>
 
-                <components name="inner_flex_leftQuads" r="0." offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." length="SiWrB_z_half">
+                <components name="inner_flex_leftQuads" r="0." offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." length="SiWrB_half_length">
                     <component thickness="SiWr_flex_Aluminium_thickness" width="SiWr_flex_width"  r="0.0*mm"                                                    material="Al" vis="SiWrCableVis"/>
                     <component thickness="SiWr_flex_Kapton_thickness"    width="SiWr_flex_width"  r="SiWr_flex_Aluminium_thickness"                             material="KaptonVtx" vis="SiWrCableVis"/>
                     <component thickness="SiWr_flex_Glue_thickness"      width="SiWr_flex_width"  r="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness"  material="GlueEcobond45" vis="SiWrCableVis"/>
                 </components>
 
-                <components name="inner_flex_rightQuads" r="0." length="SiWrB_z_half">
+                <components name="inner_flex_rightQuads" r="0." length="SiWrB_half_length">
                     <component thickness="SiWr_flex_Aluminium_thickness" width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="0.0*mm"                                                       material="Al" vis="SiWrCableVis"/>
                     <component thickness="SiWr_flex_Kapton_thickness"    width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="SiWr_flex_Aluminium_thickness"                               material="KaptonVtx" vis="SiWrCableVis"/>
                     <component thickness="SiWr_flex_Glue_thickness"      width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness"   material="GlueEcobond45" vis="SiWrCableVis"/>
@@ -329,11 +330,11 @@
                     <include ref="SiliconWrapper_barrel_module.xml"/>
                 </sensor>
 
-                <components name="support" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness" length="SiWrB_z_half">
+                <components name="support" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness" length="SiWrB_half_length">
                     <component thickness="SiWr_support_CarbonFiber_thickness/2."    width="SiWr_mod_rphi" r="0.0*mm" material="CarbonFiberVtx" vis="SupportVis"/>
                 </components>
 
-                <components name="coolingPipes" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness/2." length="SiWrB_z_half">
+                <components name="coolingPipes" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness/2." length="SiWrB_half_length">
                     <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" r="0.0*mm" material="KaptonVtx" vis="SiWrPipingVis"/> 
                     <component thickness="SiWr_Water_thickness" width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" r="SiWr_Pipe_thickness" material="Water" vis="SiWrWaterVis"/>
                     <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="+SiWr_Pipe_offset" r="SiWr_Pipe_thickness+SiWr_Water_thickness" material="KaptonVtx" vis="SiWrPipingVis"/>
@@ -343,17 +344,17 @@
                     <component thickness="SiWr_Pipe_thickness"  width="SiWr_Pipe_rphi" offset="-SiWr_Pipe_offset" r="SiWr_Pipe_thickness+SiWr_Water_thickness" material="KaptonVtx" vis="SiWrPipingVis"/>
                 </components>  
 
-                <components name="support" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness/2.+SiWr_Cooling_thickness" length="SiWrB_z_half">
+                <components name="support" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness/2.+SiWr_Cooling_thickness" length="SiWrB_half_length">
                     <component thickness="SiWr_support_CarbonFiber_thickness/2."    width="SiWr_mod_rphi" r="0.0*mm" material="CarbonFiberVtx" vis="SupportVis"/>
                 </components>
 
-                <components name="outer_flex_leftQuads" r="SiWr_flex_thickness+2.*SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." length="SiWrB_z_half">
+                <components name="outer_flex_leftQuads" r="SiWr_flex_thickness+2.*SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness" offset="-SiWr_mod_rphi/2.+SiWr_flex_width/2." length="SiWrB_half_length">
                     <component thickness="SiWr_flex_Aluminium_thickness" width="SiWr_flex_width"  r="0.0*mm"                                                    material="Al" vis="SiWrCableVis"/>
                     <component thickness="SiWr_flex_Kapton_thickness"    width="SiWr_flex_width"  r="SiWr_flex_Aluminium_thickness"                             material="KaptonVtx" vis="SiWrCableVis"/>
                     <component thickness="SiWr_flex_Glue_thickness"      width="SiWr_flex_width"  r="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness"  material="GlueEcobond45" vis="SiWrCableVis"/>
                 </components>
 
-                <components name="outer_flex_rightQuads" r="SiWr_flex_thickness+2.*SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness" length="SiWrB_z_half">
+                <components name="outer_flex_rightQuads" r="SiWr_flex_thickness+2.*SiWr_Sensitive_Thickness+SiWr_support_CarbonFiber_thickness+SiWr_Cooling_thickness" length="SiWrB_half_length">
                     <component thickness="SiWr_flex_Aluminium_thickness" width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="0.0*mm"                                                       material="Al" vis="SiWrCableVis"/>
                     <component thickness="SiWr_flex_Kapton_thickness"    width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="SiWr_flex_Aluminium_thickness"                               material="KaptonVtx" vis="SiWrCableVis"/>
                     <component thickness="SiWr_flex_Glue_thickness"      width="SiWr_flex_width" offset="+SiWr_mod_rphi/2.-SiWr_flex_width/2." r="SiWr_flex_Aluminium_thickness+SiWr_flex_Kapton_thickness"   material="GlueEcobond45" vis="SiWrCableVis"/>
@@ -361,35 +362,35 @@
             </stave>
 
             <comment> Here we construct the barrel. Staves at r1 and r2 from the first layer, staves at r3 and r4 from the second layer </comment>
-            <layer nLadders="SiWrB_nStaves1" r="SiWrB_r1" id="0" nmodules="SiWrB_nModules1" name="SiWrBStave_layer0" step="-SiWrB_module_spacing" phi0="SiWrB_phiOffset1"/>
-            <layer nLadders="SiWrB_nStaves2" r="SiWrB_r2" id="1" nmodules="SiWrB_nModules2" name="SiWrBStave_layer0" step="-SiWrB_module_spacing" phi0="SiWrB_phiOffset2"/>
-            <layer nLadders="SiWrB_nStaves3" r="SiWrB_r3" id="2" nmodules="SiWrB_nModules3" name="SiWrBStave_layer1" step="-SiWrB_module_spacing" phi0="SiWrB_phiOffset3" ignore="SiWr_nLayers==1"/>
-            <layer nLadders="SiWrB_nStaves4" r="SiWrB_r4" id="3" nmodules="SiWrB_nModules4" name="SiWrBStave_layer1" step="-SiWrB_module_spacing" phi0="SiWrB_phiOffset4" ignore="SiWr_nLayers==1"/>
+            <layer nLadders="SiWrB_nStaves1" r="SiWrB_r1" id="0" nmodules="SiWrB_nModules1" name="SiWrBStave_layer0" step="SiWrB_module_spacing" phi0="SiWrB_phiOffset1"/>
+            <layer nLadders="SiWrB_nStaves2" r="SiWrB_r2" id="1" nmodules="SiWrB_nModules2" name="SiWrBStave_layer0" step="SiWrB_module_spacing" phi0="SiWrB_phiOffset2"/>
+            <layer nLadders="SiWrB_nStaves3" r="SiWrB_r3" id="2" nmodules="SiWrB_nModules3" name="SiWrBStave_layer1" step="SiWrB_module_spacing" phi0="SiWrB_phiOffset3" ignore="SiWr_nLayers==1"/>
+            <layer nLadders="SiWrB_nStaves4" r="SiWrB_r4" id="3" nmodules="SiWrB_nModules4" name="SiWrBStave_layer1" step="SiWrB_module_spacing" phi0="SiWrB_phiOffset4" ignore="SiWr_nLayers==1"/>
 
             <comment> Rest of stave holders (to optimise mother volumes and avoid overlaps of mother volumes) </comment>
-            <stave name="SiWrBStave1_support_bars" length="2.*SiWrB_z_half" motherVolWidth="SiWrB_holder_width" motherVolThickness="SiWrB_support_tube_r-SiWrB_r1-SiWr_stave_thickness-SiWrB_tolerance">
-                <components name="support_stave_holder" length="SiWrB_z_half">
+            <stave name="SiWrBStave1_support_bars" length="2.*SiWrB_half_length" motherVolWidth="SiWrB_holder_width" motherVolThickness="SiWrB_support_tube_r-SiWrB_r1-SiWr_stave_thickness-SiWrB_tolerance">
+                <components name="support_stave_holder" length="SiWrB_half_length">
                     <component thickness="SiWrB_support_tube_r-SiWrB_r1-SiWr_stave_thickness-SiWrB_tolerance"  width="SiWrB_holder_width*0.7"  offset="0." r="0." material="RohacellVtx66D" vis="VTXRohacellVis"/>
                     <component thickness="SiWrB_support_tube_r-SiWrB_r1-SiWr_stave_thickness-SiWrB_tolerance"  width="SiWrB_holder_width*0.15" offset="-SiWrB_holder_width*0.425" r="0." material="CarbonFiberVtx66D" vis="VTXSupportVis"/>
                     <component thickness="SiWrB_support_tube_r-SiWrB_r1-SiWr_stave_thickness-SiWrB_tolerance"  width="SiWrB_holder_width*0.15" offset="+SiWrB_holder_width*0.425" r="0." material="CarbonFiberVtx66D" vis="VTXSupportVis"/>
                 </components>
             </stave>
-            <stave name="SiWrBStave2_support_bars" length="2.*SiWrB_z_half" motherVolWidth="SiWrB_holder_width" motherVolThickness="SiWrB_support_tube_r-SiWrB_r2-SiWr_stave_thickness-SiWrB_tolerance">
-                <components name="support_stave_holder" length="SiWrB_z_half">
+            <stave name="SiWrBStave2_support_bars" length="2.*SiWrB_half_length" motherVolWidth="SiWrB_holder_width" motherVolThickness="SiWrB_support_tube_r-SiWrB_r2-SiWr_stave_thickness-SiWrB_tolerance">
+                <components name="support_stave_holder" length="SiWrB_half_length">
                     <component thickness="SiWrB_support_tube_r-SiWrB_r2-SiWr_stave_thickness-SiWrB_tolerance"  width="SiWrB_holder_width*0.7"  offset="0." r="0." material="RohacellVtx66D" vis="VTXRohacellVis"/>
                     <component thickness="SiWrB_support_tube_r-SiWrB_r2-SiWr_stave_thickness-SiWrB_tolerance"  width="SiWrB_holder_width*0.15" offset="-SiWrB_holder_width*0.425" r="0." material="CarbonFiberVtx66D" vis="VTXSupportVis"/>
                     <component thickness="SiWrB_support_tube_r-SiWrB_r2-SiWr_stave_thickness-SiWrB_tolerance"  width="SiWrB_holder_width*0.15" offset="+SiWrB_holder_width*0.425" r="0." material="CarbonFiberVtx66D" vis="VTXSupportVis"/>
                 </components>
             </stave>
-            <stave name="SiWrBStave3_support_bars" length="2.*SiWrB_z_half" motherVolWidth="SiWrB_holder_width" motherVolThickness="SiWrB_r3-(SiWrB_support_tube_r+SiWrB_support_tube_thickness)">
-                <components name="support_stave_holder" length="SiWrB_z_half">
+            <stave name="SiWrBStave3_support_bars" length="2.*SiWrB_half_length" motherVolWidth="SiWrB_holder_width" motherVolThickness="SiWrB_r3-(SiWrB_support_tube_r+SiWrB_support_tube_thickness)">
+                <components name="support_stave_holder" length="SiWrB_half_length">
                     <component thickness="SiWrB_r3-(SiWrB_support_tube_r+SiWrB_support_tube_thickness)"  width="SiWrB_holder_width*0.7"  offset="0." r="0." material="RohacellVtx66D" vis="VTXRohacellVis"/>
                     <component thickness="SiWrB_r3-(SiWrB_support_tube_r+SiWrB_support_tube_thickness)"  width="SiWrB_holder_width*0.15" offset="-SiWrB_holder_width*0.425" r="0." material="CarbonFiberVtx66D" vis="VTXSupportVis"/>
                     <component thickness="SiWrB_r3-(SiWrB_support_tube_r+SiWrB_support_tube_thickness)"  width="SiWrB_holder_width*0.15" offset="+SiWrB_holder_width*0.425" r="0." material="CarbonFiberVtx66D" vis="VTXSupportVis"/>
                 </components>
             </stave>
-            <stave name="SiWrBStave4_support_bars" length="2.*SiWrB_z_half" motherVolWidth="SiWrB_holder_width" motherVolThickness="SiWrB_r4-(SiWrB_support_tube_r+SiWrB_support_tube_thickness)">
-                <components name="support_stave_holder" length="SiWrB_z_half">
+            <stave name="SiWrBStave4_support_bars" length="2.*SiWrB_half_length" motherVolWidth="SiWrB_holder_width" motherVolThickness="SiWrB_r4-(SiWrB_support_tube_r+SiWrB_support_tube_thickness)">
+                <components name="support_stave_holder" length="SiWrB_half_length">
                     <component thickness="SiWrB_r4-(SiWrB_support_tube_r+SiWrB_support_tube_thickness)"  width="SiWrB_holder_width*0.7"  offset="0." r="0." material="RohacellVtx66D" vis="VTXRohacellVis"/>
                     <component thickness="SiWrB_r4-(SiWrB_support_tube_r+SiWrB_support_tube_thickness)"  width="SiWrB_holder_width*0.15" offset="-SiWrB_holder_width*0.425" r="0." material="CarbonFiberVtx66D" vis="VTXSupportVis"/>
                     <component thickness="SiWrB_r4-(SiWrB_support_tube_r+SiWrB_support_tube_thickness)"  width="SiWrB_holder_width*0.15" offset="+SiWrB_holder_width*0.425" r="0." material="CarbonFiberVtx66D" vis="VTXSupportVis"/>
@@ -402,30 +403,30 @@
 
 
             <comment> Silicon wrapper barrel inner support rings </comment>
-            <stave name="SiWrB_inner_support_rings" r="SiWrB_inner_radius" length="2.*SiWrB_z_half">
+            <stave name="SiWrB_inner_support_rings" r="SiWrB_inner_radius" length="2.*SiWrB_half_length">
                 <end_z name="SiWrB_support_rings">
-                    <component thickness="0.05*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" width="2.*pi*SiWrB_inner_radius" length="SiWrB_inner_structure_length" isCurved="true" material="CarbonFiberVtx"  r="0."                                                     vis="SiWrSupportVis" dz="-SiWrB_z_half+SiWrB_inner_structure_pos_z1"/>
-                    <component thickness="0.90*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" width="2.*pi*SiWrB_inner_radius" length="SiWrB_inner_structure_length" isCurved="true" material="RohacellVtx"     r="0.05*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" vis="SiWrSupportVis" dz="-SiWrB_z_half+SiWrB_inner_structure_pos_z1"/>
-                    <component thickness="0.05*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" width="2.*pi*SiWrB_inner_radius" length="SiWrB_inner_structure_length" isCurved="true" material="CarbonFiberVtx"  r="0.95*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" vis="SiWrSupportVis" dz="-SiWrB_z_half+SiWrB_inner_structure_pos_z1"/>
+                    <component thickness="0.05*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" width="2.*pi*SiWrB_inner_radius" length="SiWrB_inner_structure_length" isCurved="true" material="CarbonFiberVtx"  r="0."                                                     vis="SiWrSupportVis" dz="-SiWrB_half_length+SiWrB_inner_structure_pos_z1"/>
+                    <component thickness="0.90*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" width="2.*pi*SiWrB_inner_radius" length="SiWrB_inner_structure_length" isCurved="true" material="RohacellVtx"     r="0.05*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" vis="SiWrSupportVis" dz="-SiWrB_half_length+SiWrB_inner_structure_pos_z1"/>
+                    <component thickness="0.05*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" width="2.*pi*SiWrB_inner_radius" length="SiWrB_inner_structure_length" isCurved="true" material="CarbonFiberVtx"  r="0.95*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" vis="SiWrSupportVis" dz="-SiWrB_half_length+SiWrB_inner_structure_pos_z1"/>
 
-                    <component thickness="0.05*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" width="2.*pi*SiWrB_inner_radius" length="SiWrB_inner_structure_length" isCurved="true" material="CarbonFiberVtx"  r="0."                                                     vis="SiWrSupportVis" dz="-SiWrB_z_half+SiWrB_inner_structure_pos_z2"/>
-                    <component thickness="0.90*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" width="2.*pi*SiWrB_inner_radius" length="SiWrB_inner_structure_length" isCurved="true" material="RohacellVtx"     r="0.05*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" vis="SiWrSupportVis" dz="-SiWrB_z_half+SiWrB_inner_structure_pos_z2"/>
-                    <component thickness="0.05*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" width="2.*pi*SiWrB_inner_radius" length="SiWrB_inner_structure_length" isCurved="true" material="CarbonFiberVtx"  r="0.95*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" vis="SiWrSupportVis" dz="-SiWrB_z_half+SiWrB_inner_structure_pos_z2"/>
+                    <component thickness="0.05*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" width="2.*pi*SiWrB_inner_radius" length="SiWrB_inner_structure_length" isCurved="true" material="CarbonFiberVtx"  r="0."                                                     vis="SiWrSupportVis" dz="-SiWrB_half_length+SiWrB_inner_structure_pos_z2"/>
+                    <component thickness="0.90*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" width="2.*pi*SiWrB_inner_radius" length="SiWrB_inner_structure_length" isCurved="true" material="RohacellVtx"     r="0.05*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" vis="SiWrSupportVis" dz="-SiWrB_half_length+SiWrB_inner_structure_pos_z2"/>
+                    <component thickness="0.05*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" width="2.*pi*SiWrB_inner_radius" length="SiWrB_inner_structure_length" isCurved="true" material="CarbonFiberVtx"  r="0.95*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" vis="SiWrSupportVis" dz="-SiWrB_half_length+SiWrB_inner_structure_pos_z2"/>
 
-                    <component thickness="0.05*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" width="2.*pi*SiWrB_inner_radius" length="SiWrB_inner_structure_length" isCurved="true" material="CarbonFiberVtx"  r="0."                                                     vis="SiWrSupportVis" dz="-SiWrB_z_half+SiWrB_inner_structure_pos_z3"/>
-                    <component thickness="0.90*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" width="2.*pi*SiWrB_inner_radius" length="SiWrB_inner_structure_length" isCurved="true" material="RohacellVtx"     r="0.05*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" vis="SiWrSupportVis" dz="-SiWrB_z_half+SiWrB_inner_structure_pos_z3"/>
-                    <component thickness="0.05*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" width="2.*pi*SiWrB_inner_radius" length="SiWrB_inner_structure_length" isCurved="true" material="CarbonFiberVtx"  r="0.95*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" vis="SiWrSupportVis" dz="-SiWrB_z_half+SiWrB_inner_structure_pos_z3"/>
+                    <component thickness="0.05*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" width="2.*pi*SiWrB_inner_radius" length="SiWrB_inner_structure_length" isCurved="true" material="CarbonFiberVtx"  r="0."                                                     vis="SiWrSupportVis" dz="-SiWrB_half_length+SiWrB_inner_structure_pos_z3"/>
+                    <component thickness="0.90*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" width="2.*pi*SiWrB_inner_radius" length="SiWrB_inner_structure_length" isCurved="true" material="RohacellVtx"     r="0.05*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" vis="SiWrSupportVis" dz="-SiWrB_half_length+SiWrB_inner_structure_pos_z3"/>
+                    <component thickness="0.05*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" width="2.*pi*SiWrB_inner_radius" length="SiWrB_inner_structure_length" isCurved="true" material="CarbonFiberVtx"  r="0.95*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" vis="SiWrSupportVis" dz="-SiWrB_half_length+SiWrB_inner_structure_pos_z3"/>
 
-                    <component thickness="0.05*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" width="2.*pi*SiWrB_inner_radius" length="SiWrB_inner_structure_length" isCurved="true" material="CarbonFiberVtx"  r="0."                                                     vis="SiWrSupportVis" dz="-SiWrB_z_half+SiWrB_inner_structure_pos_z4"/>
-                    <component thickness="0.90*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" width="2.*pi*SiWrB_inner_radius" length="SiWrB_inner_structure_length" isCurved="true" material="RohacellVtx"     r="0.05*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" vis="SiWrSupportVis" dz="-SiWrB_z_half+SiWrB_inner_structure_pos_z4"/>
-                    <component thickness="0.05*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" width="2.*pi*SiWrB_inner_radius" length="SiWrB_inner_structure_length" isCurved="true" material="CarbonFiberVtx"  r="0.95*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" vis="SiWrSupportVis" dz="-SiWrB_z_half+SiWrB_inner_structure_pos_z4"/>
+                    <component thickness="0.05*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" width="2.*pi*SiWrB_inner_radius" length="SiWrB_inner_structure_length" isCurved="true" material="CarbonFiberVtx"  r="0."                                                     vis="SiWrSupportVis" dz="-SiWrB_half_length+SiWrB_inner_structure_pos_z4"/>
+                    <component thickness="0.90*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" width="2.*pi*SiWrB_inner_radius" length="SiWrB_inner_structure_length" isCurved="true" material="RohacellVtx"     r="0.05*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" vis="SiWrSupportVis" dz="-SiWrB_half_length+SiWrB_inner_structure_pos_z4"/>
+                    <component thickness="0.05*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" width="2.*pi*SiWrB_inner_radius" length="SiWrB_inner_structure_length" isCurved="true" material="CarbonFiberVtx"  r="0.95*(SiWrB_inner_structure_thickness-SiWrB_tolerance)" vis="SiWrSupportVis" dz="-SiWrB_half_length+SiWrB_inner_structure_pos_z4"/>
                 </end_z>
             </stave>
             <layer nLadders="1" r="SiWrB_inner_radius" id="14" name="SiWrB_inner_support_rings" nmodules="1"/>
 
             <comment> Silicon wrapper barrel support tube </comment>
-            <stave name="SiWrB_support_tube" r="SiWrB_support_tube_r" length="2.*SiWrB_z_half">
-                <components name="SiWrB_support_tube" length="SiWrB_z_half">
+            <stave name="SiWrB_support_tube" r="SiWrB_support_tube_r" length="2.*SiWrB_half_length">
+                <components name="SiWrB_support_tube" length="SiWrB_half_length">
                     <component thickness="0.05*SiWrB_support_tube_thickness" width="2.*pi*SiWrB_support_tube_r" material="CarbonFiberVtx" isCurved="true" vis="SiWrSupportVis" r="0."/>
                     <component thickness="0.90*SiWrB_support_tube_thickness" width="2.*pi*SiWrB_support_tube_r" material="RohacellVtx"    isCurved="true" vis="SiWrSupportVis" r="0.05*SiWrB_support_tube_thickness"/>
                     <component thickness="0.05*SiWrB_support_tube_thickness" width="2.*pi*SiWrB_support_tube_r" material="CarbonFiberVtx" isCurved="true" vis="SiWrSupportVis" r="0.95*SiWrB_support_tube_thickness"/>
