@@ -3,15 +3,10 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-    <info name="FCCDectDimensions"
-	  title="master file with includes and world dimension"
-	  author="nalipour"
-	  url="no"
-	  status="development"
-	  version="1.0">
-      <comment>
-      </comment>
-    </info>
+    <!--
+  master file with includes and world dimension.
+  nalipour
+    -->
 
 
     <define>

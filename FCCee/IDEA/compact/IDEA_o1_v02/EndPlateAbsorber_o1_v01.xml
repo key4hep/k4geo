@@ -1,10 +1,9 @@
 <lccdd>
 
-  <info name="EndPlateAbsorber" title="EndPlateAbsorber" status="development" version="$Id: $">
-    <comment>
-      Endcap plate absorber to mimic the material budget from the solenoid (0.75 X0) present only in the barrel and start the showers.
-    </comment>
-  </info>
+  <!--
+  EndPlateAbsorber.
+  Endcap plate absorber to mimic the material budget from the solenoid (0.75 X0) present only in the barrel and start the showers.
+  -->
 
   <detectors>
 

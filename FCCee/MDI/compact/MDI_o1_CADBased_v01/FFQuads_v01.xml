@@ -2,15 +2,10 @@
 
 <lccdd>
 
-  <info name="FFQs"
-        title="Final Focusing Quadrupoles"
-        author="Andrea Ciarma"
-        url="no"
-        status="development"
-        version="1">
-    <comment>Final Focusing Quadrupoles simplified geometry + fields - Started from MaskTrafos.xml by A. Sailer</comment>
-  </info>
-
+  <!--
+     Final Focusing Quadrupoles. Andrea Ciarma
+     Final Focusing Quadrupoles simplified geometry + fields - Started from MaskTrafos.xml by A. Sailer 
+  -->
 
   <detectors>
     <detector name="QC1" type="DD4hep_Mask_o1_v01" vis="KICKVis">

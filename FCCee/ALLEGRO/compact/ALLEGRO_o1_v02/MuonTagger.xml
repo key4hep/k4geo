@@ -3,16 +3,11 @@
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-  <info name="FCCeeMuonTagger"
-        title="Muon Tagger for IDEA-LAr"
-        author="M.Aleksa,J.Faltova"
-        url="no"
-        status="development"
-        version="1.0">
-    <comment>
-      Simple muon tagger - barrel and endcaps
-    </comment>
-  </info>
+  <!--
+  Muon Tagger for IDEA-LAr.
+  M.Aleksa,J.Faltova
+  Simple muon tagger - barrel and endcaps
+  -->
 
   <display>
     <vis name="muon_vis" r="1.0" g="0.1" b="0.1" showDaughters="true" visible="true" />

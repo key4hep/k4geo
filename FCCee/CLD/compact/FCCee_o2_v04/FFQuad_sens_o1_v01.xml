@@ -13,14 +13,11 @@
        #
        #==========================================================================
   -->
-  <info name="FFQs"
-        title="Final Focusing Quadrupoles"
-        author="Andrea Ciarma"
-        url="no"
-        status="development"
-        version="1">
-    <comment>Final Focusing Quadrupoles simplified model - Started from MaskTrafos.xml by A. Sailer</comment>
-  </info>
+  <!--
+  Final Focusing Quadrupoles.
+  Andrea Ciarma
+  Final Focusing Quadrupoles simplified model - Started from MaskTrafos.xml by A. Sailer
+  -->
 
   <define>
     <constant name="QC1_rmin" value="42/2*mm"/>

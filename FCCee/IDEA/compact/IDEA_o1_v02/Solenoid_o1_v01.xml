@@ -1,9 +1,8 @@
 <lccdd>
-  <info name="Solenoid" title="Solenoid" status="development" version="$Id: $">
-    <comment>
-      This is a solenoid place holder. It has the right spacial extent and overall accounts for the 0.75 X0 but its internals should be revised by ultra-thin magnet designers -->
-    </comment>
-  </info>
+  <!--
+      Solenoid.
+      This is a solenoid place holder. It has the right spacial extent and overall accounts for the 0.75 X0 but its internals should be revised by ultra-thin magnet designers
+  -->
 
   <define>
       <constant name="SolenoidVacuumTank_thickness" value="5*mm"/>

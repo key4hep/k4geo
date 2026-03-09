@@ -1,13 +1,10 @@
 <lccdd>
 
-    <info name="FCCee"
-        title="FCCee CLD Barrel Yoke : taken corresponding to : YokeBarrel_o1_v01_02.xml"
-        author="from ILCSOFT/lcgeo/FCCee/compact/FCCee_o1_v04"
-        url="no"
-        status="development"
-        version="1.0">
-    <comment>CLD Barrel Yoke for FCCee</comment>
-  </info>
+    <!--
+  FCCee CLD Barrel Yoke : taken corresponding to : YokeBarrel_o1_v01_02.xml.
+  from ILCSOFT/lcgeo/FCCee/compact/FCCee_o1_v04
+  CLD Barrel Yoke for FCCee
+    -->
 
     <!--  Definition of global dictionary constants          -->
     <define>

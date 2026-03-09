@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lccdd>
 
-  <info name="pre-shower"
-	title=" detailed version of IDEA pre-shower system for FCC-ee"
-	author="Nitika Nitika- nitika.nitika@cern.ch, Mahmoud Ali- mahmoud.ali@cern.ch"
-	url="no"
-	status="development"
-	version="2.0">
-    <comment> It depends on the factory: muonSystemMuRWELL_o1_v01 </comment>
-  </info>
+  <!--
+  detailed version of IDEA pre-shower system for FCC-ee.
+  Nitika Nitika- nitika.nitika@cern.ch, Mahmoud Ali- mahmoud.ali@cern.ch
+  It depends on the factory: muonSystemMuRWELL_o1_v01
+  -->
 
   <define>
      <!---                            Pre-shower System Parameters                       -->
