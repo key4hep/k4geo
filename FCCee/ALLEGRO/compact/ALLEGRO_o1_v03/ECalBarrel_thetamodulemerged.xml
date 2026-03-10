@@ -3,22 +3,17 @@
        xmlns:xs="http://www.w3.org/2001/XMLSchema"
        xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-  <info name="ALLEGRO_ECalBarrel"
-        title="Settings for FCCee ALLEGRO Inclined ECal Barrel Calorimeter"
-        author="M.Aleksa,J.Faltova,A.Zaborowska,V. Volkl,G.Marchiori"
-        url="no"
-        status="development"
-        version="1.0">
-    <comment>
-      Settings for the inclined EM calorimeter.
-      The barrel is filled with liquid argon. Passive material includes lead in the middle and steal on the outside, glued together.
-      Passive plates are inclined by a certain angle from the radial direction.
-      In between of two passive plates there is a readout.
-      Space between the plate and readout is of trapezoidal shape and filled with liquid argon.
-      Definition of sizes, visualization settings, readout and longitudinal segmentation are specified.
-      The geometrical parameters (tilt and plane lengths) are adjusted, based on EMBarrel_rmin/max, to yield 1536 modules and cell corners aligned in phi
-    </comment>
-  </info>
+  <!--
+  Settings for FCCee ALLEGRO Inclined ECal Barrel Calorimeter.
+  M.Aleksa,J.Faltova,A.Zaborowska,V. Volkl,G.Marchiori
+  Settings for the inclined EM calorimeter.
+  The barrel is filled with liquid argon. Passive material includes lead in the middle and steal on the outside, glued together.
+  Passive plates are inclined by a certain angle from the radial direction.
+  In between of two passive plates there is a readout.
+  Space between the plate and readout is of trapezoidal shape and filled with liquid argon.
+  Definition of sizes, visualization settings, readout and longitudinal segmentation are specified.
+  The geometrical parameters (tilt and plane lengths) are adjusted, based on EMBarrel_rmin/max, to yield 1536 modules and cell corners aligned in phi
+  -->
 
   <define>
     <!-- Inclination angle of the lead plates -->
