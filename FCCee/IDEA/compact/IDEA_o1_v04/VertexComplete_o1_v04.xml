@@ -4,14 +4,12 @@
 -->
 
 <lccdd>
-    <info name="VertexComplete_o1_v04"
-        title="Complete, detailed vertex detector: Started with CLD vertex detector design from FCCDetectors, but adapted to describe IDEA engineered vertex detector design and extended functionality of detector builders"
-        author="Niloufar Alipour Tehrani (adapting original CLD version), Armin Ilg (adapting and extending to IDEA)"
-        url="no"
-        status="development"
-        version="o1_v04"> 
-        <comment>A Vertex Detector for the FCC-ee IDEA detector concept, based on the engineered design by Fabrizio Palla and Filippo Bosi (INFN Pisa), implemented in DD4hep by Armin Ilg (UZH)</comment>
-    </info>
+    <!--
+        Complete, detailed vertex detector: Started with CLD vertex detector design from FCCDetectors, but adapted to describe IDEA engineered vertex detector design and extended functionality of detector builders
+        Niloufar Alipour Tehrani (adapting original CLD version), Armin Ilg (adapting and extending to IDEA)
+        A Vertex Detector for the FCC-ee IDEA detector concept, based on the engineered design by Fabrizio Palla and Filippo Bosi (INFN Pisa), implemented in DD4hep by Armin Ilg (UZH)
+    -->
+
     <comment>Vertex inner barrel </comment>
 
     <display>
@@ -41,6 +39,7 @@
         <comment> The envelope consists of a tube generally surrounding the vertex barrel and endcap disks, subtracted by a
             cone describing the upper acceptance of the LumiCal </comment>
         <detector name="Vertex" type="DD4hep_SubdetectorAssembly" vis="VXDVis">
+            <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX"/>
             <shape type="BooleanShape" operation="Subtraction" material="Air">
                 <shape type="BooleanShape" operation="Subtraction" material="Air">
                     <shape type="Tube" rmin="VTXIB_r_min_layer-VTXIB_r_min_clearance" rmax="VTXOB_r_max_layer+VTXOB_rmax_clearance" dz="VTXD_z_max_total"/>
@@ -488,6 +487,7 @@
 
     <detectors>
         <detector name="VertexBarrel_assembly" type="DD4hep_SubdetectorAssembly" vis="VXDVis">
+            <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX"/>
             <composite name="VertexBarrel"/>
             <composite name="VertexInnerBarrel_tube"/>
             <comment>
@@ -842,6 +842,7 @@
     
         <comment> Inner vertex tube just outside last inner vertex layer (for both normal and curved vertex) </comment>
         <detector name="VertexInnerBarrel_tube" type="VertexBarrel_detailed_o1_v02" vis="VXDVis" id="-2" readout="VertexDummyCollection"  region="VTXBRegion">
+            <type_flags type="DetType_SUPPORT"/>
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -885,6 +886,7 @@
         </detector>  -->
 
         <detector name="VertexDisks_assembly" type="DD4hep_SubdetectorAssembly" vis="VTXVis">
+            <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_ENDCAP"/>
             <composite name="VertexDisks"/>
             <composite name="VertexDisks_support"/>
         </detector>
@@ -1030,6 +1032,7 @@
 
         <comment> Disk support proxy volumes  </comment>
         <detector name="VertexDisks_support" type="VertexBarrel_detailed_o1_v02" vis="VXDVis" id="-1" readout="VertexDummyCollection"  region="VTXDRegion">
+            <type_flags type="DetType_SUPPORT"/>
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>
