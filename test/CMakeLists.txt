@@ -156,6 +156,32 @@ add_test(NAME t_test_files_versions_FCCee
 )
 
 
+#--------------------------------------------------
+# detector name checks
+function(add_detector_name_check compact_file)
+  cmake_path(GET compact_file STEM det_name)
+  add_test(NAME t_name_check_${det_name}
+    COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/../utils/detector_name_check.py
+            -c ${compact_file} -n ${det_name})
+endfunction()
+
+# Add name checks for all files matching a given GLOB pattern.
+function(add_detector_name_checks_for glob_pattern)
+  file(GLOB compact_files LIST_DIRECTORIES false "${glob_pattern}")
+  foreach(compact_file ${compact_files})
+    add_detector_name_check(${compact_file})
+  endforeach()
+endfunction()
+
+add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ILD_FCCee/compact/*/ILD_FCCee_v0?.xml)
+add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MAIA/compact/*/MAIA_v*.xml)
+add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuSIC/compact/*/MuSIC_v*.xml)
+add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_sl5_v02/ILD_l5_o?_v02.xml)
+add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/*/CLD_o?_v0?.xml)
+# add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/*/ALLEGRO_o?_v0?.xml)
+# add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/*/IDEA_o?_v0?.xml)
+
+
 set(test_environment "LD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/lib:$ENV{LD_LIBRARY_PATH}")
 get_property(test_names DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY TESTS)
 set_tests_properties(${test_names} PROPERTIES ENVIRONMENT "${test_environment}"

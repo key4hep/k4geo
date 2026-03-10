@@ -1,13 +1,10 @@
 <lccdd>
 
-  <info name="FCCee"
-        title="FCCee Beam pipe: added Synchrotron radiation absorber insert, modified dimensions"
-        author="Andrea Ciarma in FCCDetectors"
-        url="no"
-        status="development"
-        version="1.0">
-    <comment>A beampipe for FCCee detector based on CLD</comment>
-  </info>
+  <!--
+  FCCee Beam pipe: added Synchrotron radiation absorber insert, modified dimensions.
+  Andrea Ciarma in FCCDetectors
+  A beampipe for FCCee detector based on CLD
+  -->
     
     <!--  Definition of global dictionary constants          -->
     <define>

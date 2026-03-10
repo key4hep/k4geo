@@ -4,14 +4,11 @@
        xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
 
-  <info name="FCCee"
-        title="FCCee: Simplified IDEA Drift chamber"
-        author="nalipour"
-        url="no"
-        status="development"
-        version="1.0">
-    <comment>A simplified implementation of the drift chamber for the FCCee-IDEA concept</comment>
-  </info>
+  <!--
+  FCCee: Simplified IDEA Drift chamber.
+  nalipour
+  A simplified implementation of the drift chamber for the FCCee-IDEA concept
+  -->
 
   <define>
     <constant name="detectorLength" value="2*DCH_half_length" />
