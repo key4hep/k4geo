@@ -3,17 +3,10 @@
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-
-  <info name="FCCee"
-        title="FCCee Beam pipe from CAD drawings"
-        author="aciarma"
-        url="no"
-        status="development"
-        version="1.0">
-    <comment>A beampipe for FCCee coming from F. Fransesini CAD drawings. </comment>
-  </info>
-
-
+  <!--
+      FCCee Beam pipe from CAD drawings. aciarma
+      A beampipe for FCCee coming from F. Fransesini CAD drawings.  
+  -->
 
   <detectors>
 

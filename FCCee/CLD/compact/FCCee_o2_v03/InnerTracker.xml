@@ -1,13 +1,10 @@
 <lccdd>
 
-    <info name="FCCee"
-        title="FCCee CLD Inner Tracker: taken corresponding to : InnerTracker_o2_v06_02.xml"
-        author="from ILCSOFT/lcgeo/FCCee/compact/FCCee_o1_v04"
-        url="no"
-        status="development"
-        version="1.0">
-    <comment>CLD Inner Tracker for FCCee</comment>
-  </info>
+    <!--
+  FCCee CLD Inner Tracker: taken corresponding to : InnerTracker_o2_v06_02.xml.
+  from ILCSOFT/lcgeo/FCCee/compact/FCCee_o1_v04
+  CLD Inner Tracker for FCCee
+    -->
 
     <define>
 

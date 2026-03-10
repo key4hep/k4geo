@@ -1,13 +1,10 @@
 <lccdd>
 
-    <info name="FCCee"
-        title="FCCee CLD Endcap Yoke : taken corresponding to : YokeEndcap_o1_v01_02.xml"
-        author="from ILCSOFT/lcgeo/FCCee/compact/FCCee_o1_v04"
-        url="no"
-        status="development"
-        version="1.0">
-    <comment>CLD Endcap  Yoke for FCCee</comment>
-  </info>
+    <!--
+  FCCee CLD Endcap Yoke : taken corresponding to : YokeEndcap_o1_v01_02.xml.
+  from ILCSOFT/lcgeo/FCCee/compact/FCCee_o1_v04
+  CLD Endcap  Yoke for FCCee
+    -->
 
     <!--  Definition of the readout segmentation/definition  -->
     <readouts>

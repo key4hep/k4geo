@@ -22,13 +22,9 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-    <info name="DRBarrelTubes"
-        title=""
-	    author="Andreas Loeschcke Centeno"
-        status="development"
-        version="0.1">
-        <comment></comment>
-    </info>
+    <!--
+        Andreas Loeschcke Centeno
+    -->
 
     <properties>
         <matrix name="DRBTRI_DR_Polystyrene" coldim="2" values="

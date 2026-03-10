@@ -1,9 +1,9 @@
 <lccdd>
-  <info name="CDCH" title="CDCH" author="CDCH" status="development" version="$Id: $">
-    <comment>
-      Detector description for the IDEA Drift Chamber. To understand the free parameters below, look e.g. at https://indico.cern.ch/event/932973/contributions/4041314/attachments/2139657/3664808/primavera_FCCworkshop_2020.pdf
-    </comment>
-  </info>
+  <!--
+  CDCH.
+  CDCH
+  Detector description for the IDEA Drift Chamber. To understand the free parameters below, look e.g. at https://indico.cern.ch/event/932973/contributions/4041314/attachments/2139657/3664808/primavera_FCCworkshop_2020.pdf
+  -->
 
   <!-- %%%%%%             Central Drift Chamber Basic Parameters                 %%%%%% -->
   <define>

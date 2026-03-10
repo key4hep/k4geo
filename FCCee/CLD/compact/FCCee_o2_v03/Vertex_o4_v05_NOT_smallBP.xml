@@ -4,14 +4,11 @@
 
 <lccdd>
 
-    <info name="FCCee"
-        title="FCCee Vertex detector: taken correspoding to CLD: Vertex_o4_v05.xml"
-        author="from ILCSOFT/lcgeo/FCCee/compact/FCCee_o1_v04"
-        url="no"
-        status="development"
-        version="1.0">
-    <comment>CLD Vertex Detector for FCCee</comment>
-  </info>
+    <!--
+  FCCee Vertex detector: taken correspoding to CLD: Vertex_o4_v05.xml.
+  from ILCSOFT/lcgeo/FCCee/compact/FCCee_o1_v04
+  CLD Vertex Detector for FCCee
+    -->
 
     <comment>Tracking detectors</comment>
     <detectors>
