@@ -12,14 +12,11 @@
 -->
 
 <lccdd>
-    <info name="SiliconWrapper_o1_v02"
-        title="Silicon wrapper detector"
-        author="Armin Ilg"
-        url="no"
-        status="development"
-        version="o1_v02"> 
-        <comment>A Silicon Wrapper layer for the FCC-ee IDEA/ALLEGRO detector concept with timing to enable excellent PID together with drift chamber. </comment>
-    </info>
+    <!--
+    IDEA silicon wrapper detector.
+    Armin Ilg
+    A Silicon Wrapper layer for the FCC-ee IDEA detector concept with timing to enable excellent PID together with drift chamber.
+    -->   
 
     <comment> Number of layers: Either one layer (with staves at two different radii) or two layers (with staves at four different radii). To be chosen with 'SiWr_nLayers' in detector dimensions xml </comment>
 

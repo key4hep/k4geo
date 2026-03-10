@@ -3,16 +3,12 @@
        xmlns:xs="http://www.w3.org/2001/XMLSchema"
        xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-  <info name="FCCDectDimensions"
-	title="master file with includes and world dimension"
-	author="nalipour"
-	url="no"
-	status="development"
-	version="1.0">
-    <comment>
-      Changes with respect to DectDimensions_IDEA_o1_v03: Indication which silicon wrapper parameters can now be changed freely.
-    </comment>
-  </info>
+  <!--
+  master file with includes and world dimension.
+  nalipour
+
+  Changes with respect to DectDimensions_IDEA_o1_v03: Indication which silicon wrapper parameters can now be changed freely, extend silicon wrapper disks envelope by 3 cm in z towards IP to allow for second layer placement
+  -->
 
 
   <define>
