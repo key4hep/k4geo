@@ -303,8 +303,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
   double endOfStave_max_length = 0.0;
   for (const auto& m : module_information_list) {
-    for (const auto& e : m.endOfStaves) {
-      endOfStave_max_length = std::max(endOfStave_max_length, e.max_length);
+    for (const auto& endOfStave : m.endOfStaves) {
+      endOfStave_max_length = std::max(endOfStave_max_length, endOfStave.max_length);
     }
   }
 
