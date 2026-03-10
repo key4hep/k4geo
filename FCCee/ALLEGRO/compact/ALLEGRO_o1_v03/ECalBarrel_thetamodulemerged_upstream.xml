@@ -150,7 +150,7 @@
 	  <layer thickness="5.73371*cm" repeat="1"/>
 	  <layer thickness="5.94607*cm" repeat="1"/>
 	  <layer thickness="6.15843*cm" repeat="1"/>
-	  <layer thickness="6.39910*cm" repeat="1"/>
+	  <layer thickness="6.39909*cm" repeat="1"/> <!-- change from 6.39910 to 6.39909 to avoid ~ 49 nm overlaps between layer10 and active volume-->
         </layers>
       </calorimeter>
     </detector>
