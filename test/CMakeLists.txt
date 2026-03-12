@@ -1,82 +1,106 @@
 
+# Helper function to add a ddsim test with a simple particle gun (-G flag).
+# The test name and output file are derived from the compact file stem.
+# Usage:
+#   add_ddsim_gun_test(<compact_file>
+#     [NAME <name>]                # override derived test name (test_<stem>)
+#     [N_EVENTS <n>]               # number of events (default: 1)
+#     [FILTER_SCRIPT <path>]       # pipe output through: 2>&1 | python3 <path>
+#     [EXTRA_ARGS <arg1> ...]      # additional ddsim arguments
+#     [PROPERTIES <key> <val> ...] # passed verbatim to set_tests_properties
+#   )
+function(add_ddsim_gun_test compact_file)
+  cmake_parse_arguments(ARG
+    ""
+    "NAME;N_EVENTS;FILTER_SCRIPT"
+    "EXTRA_ARGS;PROPERTIES"
+    ${ARGN})
+
+  get_filename_component(stem ${compact_file} NAME_WE)
+
+  if(ARG_NAME)
+    set(test_name ${ARG_NAME})
+  else()
+    set(test_name test_${stem})
+  endif()
+
+  if(NOT ARG_N_EVENTS)
+    set(ARG_N_EVENTS 1)
+  endif()
+
+  set(cmd ddsim --compactFile=${compact_file} --runType=batch -G -N=${ARG_N_EVENTS}
+    --outputFile=test${stem}.edm4hep.root)
+
+  if(ARG_EXTRA_ARGS)
+    list(APPEND cmd ${ARG_EXTRA_ARGS})
+  endif()
+
+  if(ARG_FILTER_SCRIPT)
+    string(JOIN " " cmd_str ${cmd})
+    add_test(NAME ${test_name} COMMAND sh -c "${cmd_str} 2>&1 | python3 ${ARG_FILTER_SCRIPT}")
+  else()
+    add_test(NAME ${test_name} COMMAND ${cmd})
+  endif()
+
+  if(ARG_PROPERTIES)
+    set_tests_properties(${test_name} PROPERTIES ${ARG_PROPERTIES})
+  endif()
+endfunction()
+
 #--------------------------------------------------
-# test(s) for ILD
-SET( test_name "test_ILD_l5_v02" )
-add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_l5_v02/ILD_l5_v02.xml --runType=batch -G -N=1 --outputFile=testILD_l5_v02.slcio )
-
-SET( test_name "test_ILD_s5_v08" )
-add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_s5_v08/ILD_s5_v08.xml --runType=batch -G -N=1 --outputFile=testSILD_s5_v08.slcio )
-
-SET( test_name "test_ILD_l5_v09" )
-add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_l5_v09/ILD_l5_v09.xml --runType=batch -G -N=1 --outputFile=testILD_l5_v09.slcio )
-
-SET( test_name "test_ILD_l5_v10" )
-add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_l5_v10/ILD_l5_v10.xml --runType=batch -G -N=1 --outputFile=testILD_l5_v10.slcio )
-
-SET( test_name "test_ILD_l5_v11" )
-add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_l5_v11/ILD_l5_v11.xml --runType=batch -G -N=1 --outputFile=testILD_l5_v11.slcio )
+# tests for ILD
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_l5_v02/ILD_l5_v02.xml)
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_s5_v08/ILD_s5_v08.xml)
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_l5_v09/ILD_l5_v09.xml)
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_l5_v10/ILD_l5_v10.xml)
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_l5_v11/ILD_l5_v11.xml)
 
 if(INSTALL_BEAMPIPE_STL_FILES)
-  SET( test_name "test_ILD_FCCee_v01" )
-  add_test(NAME ${test_name} COMMAND sh -c "
-    ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ILD_FCCee/compact/ILD_FCCee_v01/ILD_FCCee_v01.xml --runType=batch -G -N=1 --outputFile=testILD_FCCee_v01.slcio 2>&1 |
-    python3 ${CMAKE_CURRENT_SOURCE_DIR}/scripts/filter_G4Tessellated_warnings.py")
+  add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ILD_FCCee/compact/ILD_FCCee_v01/ILD_FCCee_v01.xml
+    FILTER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/scripts/filter_G4Tessellated_warnings.py)
 
-  SET( test_name "test_ILD_FCCee_v02" )
-  add_test(NAME ${test_name} COMMAND sh -c "
-    ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ILD_FCCee/compact/ILD_FCCee_v02/ILD_FCCee_v02.xml --runType=batch -G -N=1 --outputFile=testILD_FCCee_v02.slcio 2>&1 |
-    python3 ${CMAKE_CURRENT_SOURCE_DIR}/scripts/filter_G4Tessellated_warnings.py")
+  add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ILD_FCCee/compact/ILD_FCCee_v02/ILD_FCCee_v02.xml
+    FILTER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/scripts/filter_G4Tessellated_warnings.py)
 endif()
 
 #--------------------------------------------------
 # tests for SiD
-SET( test_name "test_SiD_o2_v03" )
-add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../SiD/compact/SiD_o2_v03/SiD_o2_v03.xml --runType=batch -G -N=1 --outputFile=testSiD_o2_v03.slcio )
-SET( test_name "test_SiD_o2_v04" )
-add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../SiD/compact/SiD_o2_v04/SiD_o2_v04.xml --runType=batch -G -N=1 --outputFile=testSiD_o2_v04.slcio )
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../SiD/compact/SiD_o2_v03/SiD_o2_v03.xml)
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../SiD/compact/SiD_o2_v04/SiD_o2_v04.xml)
 
 #--------------------------------------------------
-# test for CLIC_o1_v01
-SET( test_name "test_CLIC_o1_v01" )
-add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o1_v01/CLIC_o1_v01.xml --runType=batch -G -N=1 --outputFile=testCLIC.slcio )
+# tests for CLIC
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o1_v01/CLIC_o1_v01.xml)
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o2_v04/CLIC_o2_v04.xml)
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o3_v15/CLIC_o3_v15.xml)
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/FCCee_o1_v05/FCCee_o1_v05.xml)
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/CLD_o2_v08/CLD_o2_v08.xml)
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/CLD_o4_v05/CLD_o4_v05.xml)
 
-SET( test_name "test_CLIC_o2_v04" )
-add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o2_v04/CLIC_o2_v04.xml --runType=batch -G -N=1 --outputFile=testCLIC_o2_v04.slcio )
-
-SET( test_name "test_CLIC_o3_v15" )
-add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o3_v15/CLIC_o3_v15.xml --runType=batch -G -N=1 --outputFile=testCLIC_o3_v15.slcio )
-
-SET( test_name "test_FCCee_o1_v05" )
-add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/FCCee_o1_v05/FCCee_o1_v05.xml --runType=batch -G -N=1 --outputFile=testFCCee_o1_v05.slcio )
-
-SET( det_name "CLD_o2_v08" )
-add_test(NAME t_test_${det_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/${det_name}/${det_name}.xml --runType=batch -G -N=1 --outputFile=test${det_name}.slcio )
-
-SET( det_name "CLD_o4_v05" )
-add_test(NAME t_test_${det_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/${det_name}/${det_name}.xml --runType=batch -G -N=1 --outputFile=test${det_name}.slcio )
-
-SET( test_name "test_steeringFile" )
-add_test(NAME ${test_name} COMMAND ddsim --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/steeringFile.py --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o2_v04/CLIC_o2_v04.xml --runType=batch -G -N=1 --outputFile=testCLIC_o2_v04.slcio )
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o2_v04/CLIC_o2_v04.xml
+  NAME test_steeringFile
+  EXTRA_ARGS --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/steeringFile.py)
 
 #--------------------------------------------------
 # test for IDEA o1 v02
-SET( test_name "test_IDEA_o1_v02" )
-add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o1_v02/IDEA_o1_v02.xml --runType=batch -G -N=51000 --gun.distribution uniform --gun.particle geantino --random.seed 1988301045 --outputFile=testIDEA_o1_v02.slcio )
-SET_TESTS_PROPERTIES( ${test_name} PROPERTIES TIMEOUT 360)
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o1_v02/IDEA_o1_v02.xml
+  N_EVENTS 51000
+  EXTRA_ARGS --gun.distribution uniform --gun.particle geantino --random.seed 1988301045
+  PROPERTIES TIMEOUT 360)
 
 #--------------------------------------------------
 # test for IDEA o1 v03
 if(DCH_INFO_H_EXIST)
-SET( test_name "test_IDEA_o1_v03" )
-add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o1_v03/IDEA_o1_v03.xml -G -N=1 --gun.distribution uniform --gun.particle geantino --random.seed 1988301045 --steeringFile ${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o1_v03.py)
-SET_TESTS_PROPERTIES( ${test_name} PROPERTIES TIMEOUT 900)
-endif()
+  add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o1_v03/IDEA_o1_v03.xml
+    EXTRA_ARGS --gun.distribution uniform --gun.particle geantino --random.seed 1988301045
+      --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o1_v03.py
+    PROPERTIES TIMEOUT 900)
 
-# test for IDEA o1 v03, with DRC, with electrons
-if(DCH_INFO_H_EXIST)
-SET( test_name "test_IDEA_with_DRC_o1_v03" )
-add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/compact/IDEA_withDRC_o1_v03.xml --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o1_v03.py -G --gun.distribution uniform --gun.particle e- --random.seed 1988301045 )
-SET_TESTS_PROPERTIES( ${test_name} PROPERTIES TIMEOUT 900)
+  # test for IDEA o1 v03, with DRC, with electrons
+  add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/compact/IDEA_withDRC_o1_v03.xml
+    EXTRA_ARGS --gun.distribution uniform --gun.particle e- --random.seed 1988301045
+      --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o1_v03.py
+    PROPERTIES TIMEOUT 900)
 endif()
 
 #--------------------------------------------------
@@ -89,20 +113,21 @@ endif()
 
 #--------------------------------------------------
 # test for ALLEGRO o1 v02
-SET( test_name "test_ALLEGRO_o1_v02" )
-add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o1_v02/ALLEGRO_o1_v02.xml --runType=batch -G -N=1 --gun.distribution uniform --gun.particle geantino --outputFile=testALLEGRO_o1_v02.root )
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o1_v02/ALLEGRO_o1_v02.xml
+  EXTRA_ARGS --gun.distribution uniform --gun.particle geantino)
 
 #--------------------------------------------------
 # test for ALLEGRO o1 v03
 if(DCH_INFO_H_EXIST)
-  SET( test_name "test_ALLEGRO_o1_v03" )
-  add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o1_v03/ALLEGRO_o1_v03.xml --runType=batch -G -N=1 --gun.distribution uniform --gun.particle geantino --outputFile=testALLEGRO_o1_v03.root )
-  SET_TESTS_PROPERTIES( ${test_name} PROPERTIES TIMEOUT 600)
+  add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o1_v03/ALLEGRO_o1_v03.xml
+    EXTRA_ARGS --gun.distribution uniform --gun.particle geantino
+    PROPERTIES TIMEOUT 600)
 endif()
+
 #--------------------------------------------------
 # test for ALLEGRO o2 v01
-SET( test_name "test_ALLEGRO_o2_v01" )
-add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o2_v01/ALLEGRO_o2_v01.xml --runType=batch -G -N=1 --gun.distribution uniform --gun.particle geantino --outputFile=testALLEGRO_o2_v01.root )
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o2_v01/ALLEGRO_o2_v01.xml
+  EXTRA_ARGS --gun.distribution uniform --gun.particle geantino)
 
 #--------------------------------------------------
 # test for ARC o1 v01
@@ -138,14 +163,9 @@ add_test(NAME t_SensThickness_Clic_o3_v15 COMMAND ${PROJECT_BINARY_DIR}/bin/Test
 #--------------------------------------------------
 # Tests for MuonCollider geometries
 #--------------------------------------------------
-SET( test_name "test_MAIA_v0_run" )
-add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MAIA/compact/MAIA_v0/MAIA_v0.xml --runType=batch -G -N=1 --outputFile=test_MAIA_v0.edm4hep.root)
-
-SET( test_name "test_MuColl_v1_run" )
-add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuColl/compact/MuColl_v1/MuColl_v1.xml --runType=batch -G -N=1 --outputFile=test_MuColl_v1.edm4hep.root)
-
-SET( test_name "test_MuSIC_v2_run" )
-add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuSIC/compact/MuSIC_v2/MuSIC_v2.xml --runType=batch -G -N=1 --outputFile=test_MuSIC_v2.edm4hep.root)
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MAIA/compact/MAIA_v0/MAIA_v0.xml)
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuColl/compact/MuColl_v1/MuColl_v1.xml)
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuSIC/compact/MuSIC_v2/MuSIC_v2.xml)
 
 #--------------------------------------------------
 # check if files named the same contain the same in FCCee
