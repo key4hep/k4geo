@@ -245,9 +245,9 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
   // Lambda for crystals
   auto CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId =
       [&theDetector, &sens, &segmentation, &ScepcalDetElement, &USE_OPTICAL_SURFACES,
-       &PbWO4_to_ESR](std::string volName, double dz, const std::array<double, 16> vertices, xml_comp_t compXml,
-                      dd4hep::Transform3D transform, dd4hep::Volume assemblyVol, int nSystem, int nPhi, int nTheta,
-                      int nGamma, int nEpsilon, int nDepth, XYZVector posGlobal) {
+       &PbWO4_to_ESR](const std::string &volName, double dz, const std::array<double, 16> &vertices, const xml_comp_t &compXml,
+                      const dd4hep::Transform3D &transform, const dd4hep::Volume &assemblyVol, int nSystem, int nPhi, int nTheta,
+                      int nGamma, int nEpsilon, int nDepth, const XYZVector &posGlobal) {
         dd4hep::EightPointSolid theShape(dz, vertices.data());
         dd4hep::Volume theVolume(volName, theShape, theDetector.material(compXml.materialStr()));
         theVolume.setVisAttributes(theDetector, compXml.visStr());
@@ -276,46 +276,37 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
       };
 
   // Lambdas for crystal tower divisions
-  auto bilinearInterpolateTower = [&](const double* vf, double u, double v) {
-    double x0 = (1 - u) * (1 - v) * vf[0] + u * (1 - v) * vf[2] + u * v * vf[4] + (1 - u) * v * vf[6];
-
-    double y0 = (1 - u) * (1 - v) * vf[1] + u * (1 - v) * vf[3] + u * v * vf[5] + (1 - u) * v * vf[7];
-
-    double x1 = (1 - u) * (1 - v) * vf[8] + u * (1 - v) * vf[10] + u * v * vf[12] + (1 - u) * v * vf[14];
-
-    double y1 = (1 - u) * (1 - v) * vf[9] + u * (1 - v) * vf[11] + u * v * vf[13] + (1 - u) * v * vf[15];
-
-    return std::array<double, 4>{x0, y0, x1, y1};
+  auto bilinearInterpolateTower = [&](const double* vf, double u, double v, std::array<double, 4> &result) {
+    result[0] = (1 - u) * (1 - v) * vf[0] + u * (1 - v) * vf[2] + u * v * vf[4] + (1 - u) * v * vf[6];
+    result[1] = (1 - u) * (1 - v) * vf[1] + u * (1 - v) * vf[3] + u * v * vf[5] + (1 - u) * v * vf[7];
+    result[2] = (1 - u) * (1 - v) * vf[8] + u * (1 - v) * vf[10] + u * v * vf[12] + (1 - u) * v * vf[14];
+    result[3] = (1 - u) * (1 - v) * vf[9] + u * (1 - v) * vf[11] + u * v * vf[13] + (1 - u) * v * vf[15];
   };
 
   auto getSingleCrystalVertices = [&](int i, int j, int xtalDiv, const double* vertices,
-                                      bool reflected) -> std::array<double, 16> {
+                                      bool reflected, std::array<double, 16> &result) {
     double u0 = double(i) / double(xtalDiv);
     double u1 = double(i + 1) / double(xtalDiv);
     double v0 = double(j) / double(xtalDiv);
     double v1 = double(j + 1) / double(xtalDiv);
 
-    auto P00 = bilinearInterpolateTower(vertices, u0, v0);
-    auto P10 = bilinearInterpolateTower(vertices, u1, v0);
-    auto P11 = bilinearInterpolateTower(vertices, u1, v1);
-    auto P01 = bilinearInterpolateTower(vertices, u0, v1);
-
-    std::array<double, 16> verticesSub = {P00[0], P00[1], P10[0], P10[1], P11[0], P11[1], P01[0], P01[1],
-                                          P00[2], P00[3], P10[2], P10[3], P11[2], P11[3], P01[2], P01[3]};
-
-    std::array<double, 16> verticesSub_1 = {P00[2], P00[3], P10[2], P10[3], P11[2], P11[3], P01[2], P01[3],
-                                            P00[0], P00[1], P10[0], P10[1], P11[0], P11[1], P01[0], P01[1]};
+    std::array<double, 4> P00, P10, P11, P01;
+    bilinearInterpolateTower(vertices, u0, v0, P00);
+    bilinearInterpolateTower(vertices, u1, v0, P10);
+    bilinearInterpolateTower(vertices, u1, v1, P11);
+    bilinearInterpolateTower(vertices, u0, v1, P01);
 
     if (reflected)
-      return verticesSub_1;
-    return verticesSub;
+      result = {P00[2], P00[3], P10[2], P10[3], P11[2], P11[3], P01[2], P01[3],
+	        P00[0], P00[1], P10[0], P10[1], P11[0], P11[1], P01[0], P01[1]};
+    else
+      result  = {P00[0], P00[1], P10[0], P10[1], P11[0], P11[1], P01[0], P01[1],
+                 P00[2], P00[3], P10[2], P10[3], P11[2], P11[3], P01[2], P01[3]};
   };
 
-  auto getSingleCrystalCenter = [&](const std::array<double, 16> vSub) -> std::array<double, 2> {
-    std::array<double, 2> center = {
-        0.125 * (vSub[0] + vSub[2] + vSub[4] + vSub[6] + vSub[8] + vSub[10] + vSub[12] + vSub[14]),
-        0.125 * (vSub[1] + vSub[3] + vSub[5] + vSub[7] + vSub[9] + vSub[11] + vSub[13] + vSub[15])};
-    return center;
+  auto getSingleCrystalCenter = [&](const std::array<double, 16> &vSub, std::array<double, 2> &result) {
+    result[0] = 0.125 * (vSub[0] + vSub[2] + vSub[4] + vSub[6] + vSub[8] + vSub[10] + vSub[12] + vSub[14]);
+    result[1] = 0.125 * (vSub[1] + vSub[3] + vSub[5] + vSub[7] + vSub[9] + vSub[11] + vSub[13] + vSub[15]);
   };
 
   //////////////////////////////
@@ -327,6 +318,10 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
   // Projective offsets - tilt the rear face of the trapezoids to point at specified offset away from IP
   //////////////////////////////
 
+  double tan_d_theta_barrel2 = tan(D_THETA_BARREL / 2.);
+  double tan_d_phi_global2 = tan(D_PHI_GLOBAL / 2.);
+  double tan_m_d_phi_global2 = -1.0*tan_d_phi_global2;
+  
   for (int iPhi = CONSTRUCT_BARREL ? BARREL_PHI_START : BARREL_PHI_END; iPhi < BARREL_PHI_END; iPhi++) {
     double phiGlobal = iPhi * D_PHI_GLOBAL;
     RotationZ rotZphiGlobal(phiGlobal);
@@ -346,40 +341,42 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
 
     for (int iTheta = 0; iTheta < N_THETA_BARREL; iTheta++) {
       double thC = THETA_SIZE_ENDCAP + D_THETA_BARREL / 2 + (iTheta * D_THETA_BARREL);
+      double sin_thC = sin(thC);
+      double cos_thC = cos(thC);
       RotationY rotYthGlobal(thC);
 
-      double r0e = (BARREL_INNER_R + PROJ_OFFSET_R) / sin(thC);
+      double r0e = (BARREL_INNER_R + PROJ_OFFSET_R) / sin_thC;
       double r1e = r0e + XTAL_LEN_F;
       double r2e = r1e + XTAL_LEN_R;
-      double y0e = r0e * tan(D_THETA_BARREL / 2.);
-      double y1e = r1e * tan(D_THETA_BARREL / 2.);
-      double y2e = r2e * tan(D_THETA_BARREL / 2.);
+      double y0e = r0e * tan_d_theta_barrel2;
+      double y1e = r1e * tan_d_theta_barrel2;
+      double y2e = r2e * tan_d_theta_barrel2;
 
-      double x0y0 = r0e * sin(thC) - y0e * cos(thC) - PROJ_OFFSET_R;
-      double x1y0 = r0e * sin(thC) + y0e * cos(thC) - PROJ_OFFSET_R;
+      double x0y0 = r0e * sin_thC - y0e * cos_thC - PROJ_OFFSET_R;
+      double x1y0 = r0e * sin_thC + y0e * cos_thC - PROJ_OFFSET_R;
 
-      double x0y1 = r1e * sin(thC) - y1e * cos(thC) - PROJ_OFFSET_R;
-      double x1y1 = r1e * sin(thC) + y1e * cos(thC) - PROJ_OFFSET_R;
+      double x0y1 = r1e * sin_thC - y1e * cos_thC - PROJ_OFFSET_R;
+      double x1y1 = r1e * sin_thC + y1e * cos_thC - PROJ_OFFSET_R;
 
-      double x0y2 = r2e * sin(thC) - y2e * cos(thC) - PROJ_OFFSET_R;
-      double x1y2 = r2e * sin(thC) + y2e * cos(thC) - PROJ_OFFSET_R;
+      double x0y2 = r2e * sin_thC - y2e * cos_thC - PROJ_OFFSET_R;
+      double x1y2 = r2e * sin_thC + y2e * cos_thC - PROJ_OFFSET_R;
 
-      double x0y0l_E = x0y0 * tan(-D_PHI_GLOBAL / 2);
-      double x0y0r_E = x0y0 * tan(D_PHI_GLOBAL / 2);
-      double x1y0l_E = x1y0 * tan(-D_PHI_GLOBAL / 2);
-      double x1y0r_E = x1y0 * tan(D_PHI_GLOBAL / 2);
+      double x0y0l_E = x0y0 * tan_m_d_phi_global2;
+      double x0y0r_E = x0y0 * tan_d_phi_global2;
+      double x1y0l_E = x1y0 * tan_m_d_phi_global2;
+      double x1y0r_E = x1y0 * tan_d_phi_global2;
 
-      double x0y2l_E = x0y2 * tan(-D_PHI_GLOBAL / 2);
-      double x0y2r_E = x0y2 * tan(D_PHI_GLOBAL / 2);
-      double x1y2l_E = x1y2 * tan(-D_PHI_GLOBAL / 2);
-      double x1y2r_E = x1y2 * tan(D_PHI_GLOBAL / 2);
+      double x0y2l_E = x0y2 * tan_m_d_phi_global2;
+      double x0y2r_E = x0y2 * tan_d_phi_global2;
+      double x1y2l_E = x1y2 * tan_m_d_phi_global2;
+      double x1y2r_E = x1y2 * tan_d_phi_global2;
 
       double verticesE[] = {x0y0r_E, y0e, x1y0r_E, -y0e, x1y0l_E, -y0e, x0y0l_E, y0e,
                             x0y2r_E, y2e, x1y2r_E, -y2e, x1y2l_E, -y2e, x0y2l_E, y2e};
 
       double rE = r0e + (XTAL_LEN_F + XTAL_LEN_R) / 2.;
       RotationZYX rotE(M_PI / 2, thC, 0);
-      Position dispE(rE * sin(thC) - PROJ_OFFSET_R, 0, rE * cos(thC));
+      Position dispE(rE * sin_thC - PROJ_OFFSET_R, 0, rE * cos_thC);
 
       dd4hep::EightPointSolid barrelThetaAssemblyShape((XTAL_LEN_F + XTAL_LEN_R) / 2, verticesE);
       dd4hep::Volume barrelThetaAssemblyVolume("barrelThetaAssembly", barrelThetaAssemblyShape,
@@ -392,7 +389,8 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
 
       for (int nGamma = 0; nGamma < N_GAMMA_BARREL; nGamma++) {
         double gamma = -D_PHI_GLOBAL / 2 + D_GAMMA_BARREL / 2 + D_GAMMA_BARREL * nGamma;
-
+	double tan_gamma_m_dgb2 = tan(gamma - D_GAMMA_BARREL / 2);
+	double tan_gamma_p_dgb2 = tan(gamma + D_GAMMA_BARREL / 2);
         double projOffsetXmax =
             std::min(r0e * tan(N_GAMMA_BARREL % 2 == 0 ? D_GAMMA_BARREL / 2 : D_GAMMA_BARREL / 2), PROJ_OFFSET_X);
 
@@ -441,34 +439,36 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
           right = 0;
         }
 
-        double x0y0l = x0y0 * tan(gamma - D_GAMMA_BARREL / 2);
-        double x0y0r = x0y0 * tan(gamma + D_GAMMA_BARREL / 2);
-        double x1y0l = x1y0 * tan(gamma - D_GAMMA_BARREL / 2);
-        double x1y0r = x1y0 * tan(gamma + D_GAMMA_BARREL / 2);
+        double x0y0l = x0y0 * tan_gamma_m_dgb2;
+        double x0y0r = x0y0 * tan_gamma_p_dgb2;
+        double x1y0l = x1y0 * tan_gamma_m_dgb2;
+        double x1y0r = x1y0 * tan_gamma_p_dgb2;
 
-        double x0y1l = x0y1 * tan(gamma - D_GAMMA_BARREL / 2) + left * r1_x_gamma_shift;
-        double x0y1r = x0y1 * tan(gamma + D_GAMMA_BARREL / 2) + right * r1_x_gamma_shift;
-        double x1y1l = x1y1 * tan(gamma - D_GAMMA_BARREL / 2) + left * r1_x_gamma_shift;
-        double x1y1r = x1y1 * tan(gamma + D_GAMMA_BARREL / 2) + right * r1_x_gamma_shift;
+        double x0y1l = x0y1 * tan_gamma_m_dgb2 + left * r1_x_gamma_shift;
+        double x0y1r = x0y1 * tan_gamma_p_dgb2 + right * r1_x_gamma_shift;
+        double x1y1l = x1y1 * tan_gamma_m_dgb2 + left * r1_x_gamma_shift;
+        double x1y1r = x1y1 * tan_gamma_p_dgb2 + right * r1_x_gamma_shift;
 
-        double x0y2l = x0y2 * tan(gamma - D_GAMMA_BARREL / 2) + left * r2_x_gamma_shift;
-        double x0y2r = x0y2 * tan(gamma + D_GAMMA_BARREL / 2) + right * r2_x_gamma_shift;
-        double x1y2l = x1y2 * tan(gamma - D_GAMMA_BARREL / 2) + left * r2_x_gamma_shift;
-        double x1y2r = x1y2 * tan(gamma + D_GAMMA_BARREL / 2) + right * r2_x_gamma_shift;
+        double x0y2l = x0y2 * tan_gamma_m_dgb2 + left * r2_x_gamma_shift;
+        double x0y2r = x0y2 * tan_gamma_p_dgb2 + right * r2_x_gamma_shift;
+        double x1y2l = x1y2 * tan_gamma_m_dgb2 + left * r2_x_gamma_shift;
+        double x1y2r = x1y2 * tan_gamma_p_dgb2 + right * r2_x_gamma_shift;
 
         double verticesF[] = {x0y0r, y0e, x1y0r, -y0e, x1y0l, -y0e, x0y0l, y0e,
                               x0y1r, y1e, x1y1r, -y1e, x1y1l, -y1e, x0y1l, y1e};
         double verticesR[] = {x0y1r, y1e, x1y1r, -y1e, x1y1l, -y1e, x0y1l, y1e,
                               x0y2r, y2e, x1y2r, -y2e, x1y2l, -y2e, x0y2l, y2e};
 
+	std::array<double, 16> vsub;
+	std::array<double, 2> center;
+	Transform3D trans_dispFsub(Position(0, 0, -XTAL_LEN_R / 2));
+
         for (int i = 0; i < XTAL_DIV_F; i++) {
           for (int j = 0; j < XTAL_DIV_F; j++) {
             int nEpsilon = i * XTAL_DIV_F + j;
 
-            auto vFsub = getSingleCrystalVertices(i, j, XTAL_DIV_F, verticesF, false);
-            auto center = getSingleCrystalCenter(vFsub);
-
-            Position dispFsub(0, 0, -XTAL_LEN_R / 2);
+            getSingleCrystalVertices(i, j, XTAL_DIV_F, verticesF, false, vsub);
+            getSingleCrystalCenter(vsub, center);
 
             double rGlobal = r0e + XTAL_LEN_F / 2;
             XYZVector dispGlobal(-center[1], center[0], rGlobal);
@@ -477,7 +477,7 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
             if ((nGamma >= GAMMA_LOAD_START) && (nGamma <= GAMMA_LOAD_END)) {
 
               CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
-                  "BarrelCrystalF", XTAL_LEN_F / 2, vFsub, crystalFXML, Transform3D(dispFsub),
+                  "BarrelCrystalF", XTAL_LEN_F / 2, vsub, crystalFXML, trans_dispFsub,
                   barrelThetaAssemblyVolume, BARREL_SYSTEM_NO, iPhi, N_THETA_ENDCAP + iTheta, nGamma, nEpsilon, 0,
                   posGlobal);
               numCrystalsBarrel += 1;
@@ -485,14 +485,13 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
           }
         }
 
+	Position dispRsub(0, 0, XTAL_LEN_F / 2);
         for (int i = 0; i < XTAL_DIV_R; i++) {
           for (int j = 0; j < XTAL_DIV_R; j++) {
             int nEpsilon = i * XTAL_DIV_R + j;
 
-            auto vRsub = getSingleCrystalVertices(i, j, XTAL_DIV_R, verticesR, false);
-            auto center = getSingleCrystalCenter(vRsub);
-
-            Position dispRsub(0, 0, XTAL_LEN_F / 2);
+            getSingleCrystalVertices(i, j, XTAL_DIV_R, verticesR, false, vsub);
+            getSingleCrystalCenter(vsub, center);
 
             double rGlobal = r0e + XTAL_LEN_F + XTAL_LEN_R / 2;
             XYZVector dispGlobal(-center[1], center[0], rGlobal);
@@ -500,7 +499,7 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
 
             if ((nGamma >= GAMMA_LOAD_START) && (nGamma <= GAMMA_LOAD_END)) {
               CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
-                  "BarrelCrystalR", XTAL_LEN_R / 2, vRsub, crystalRXML, Transform3D(dispRsub),
+                  "BarrelCrystalR", XTAL_LEN_R / 2, vsub, crystalRXML, Transform3D(dispRsub),
                   barrelThetaAssemblyVolume, BARREL_SYSTEM_NO, iPhi, N_THETA_ENDCAP + iTheta, nGamma, nEpsilon, 1,
                   posGlobal);
               numCrystalsBarrel += 1;
@@ -519,6 +518,7 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
   // Epsilon - index of single crystal in a NxN tower
   // Projective offsets - tilt the rear face of the trapezoids to point at specified offset away from IP
   //////////////////////////////
+  double tan_d_theta_endcap2 = tan(D_THETA_ENDCAP / 2.);
 
   for (int iPhi = CONSTRUCT_ENDCAP ? ENDCAP_PHI_START : ENDCAP_PHI_END; iPhi < ENDCAP_PHI_END; iPhi++) {
     double phiGlobal = iPhi * D_PHI_GLOBAL;
@@ -550,6 +550,8 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
     for (int iTheta = ENDCAP_THETA_START; iTheta < N_THETA_ENDCAP; iTheta++) {
 
       double thC = D_THETA_ENDCAP / 2 + iTheta * D_THETA_ENDCAP;
+      double sin_thC=sin(thC);
+      double cos_thC=cos(thC);
       RotationY rotYthGlobal(thC);
       RotationY rotYthGlobal_1(-thC);
 
@@ -558,31 +560,31 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
       int nGammaEndcap = std::max(int(2 * M_PI * RinEndcap / (PHI_SEGMENTS * XTAL_TH_WIDTH)), 1);
       double dGammaEndcap = D_PHI_GLOBAL / nGammaEndcap;
 
-      double r0e = RinEndcap / sin(thC);
+      double r0e = RinEndcap / sin_thC;
       double r1e = r0e + XTAL_LEN_F;
       double r2e = r1e + XTAL_LEN_R;
-      double y0e = r0e * tan(D_THETA_ENDCAP / 2.);
-      double y1e = r1e * tan(D_THETA_ENDCAP / 2.);
-      double y2e = r2e * tan(D_THETA_ENDCAP / 2.);
+      double y0e = r0e * tan_d_theta_endcap2;
+      double y1e = r1e * tan_d_theta_endcap2;
+      double y2e = r2e * tan_d_theta_endcap2;
 
-      double x0y0 = r0e * sin(thC) - y0e * cos(thC) - PROJ_OFFSET_R;
-      double x1y0 = r0e * sin(thC) + y0e * cos(thC) - PROJ_OFFSET_R;
+      double x0y0 = r0e * sin_thC - y0e * cos_thC - PROJ_OFFSET_R;
+      double x1y0 = r0e * sin_thC + y0e * cos_thC - PROJ_OFFSET_R;
 
-      double x0y1 = r1e * sin(thC) - y1e * cos(thC) - PROJ_OFFSET_R;
-      double x1y1 = r1e * sin(thC) + y1e * cos(thC) - PROJ_OFFSET_R;
+      double x0y1 = r1e * sin_thC - y1e * cos_thC - PROJ_OFFSET_R;
+      double x1y1 = r1e * sin_thC + y1e * cos_thC - PROJ_OFFSET_R;
 
-      double x0y2 = r2e * sin(thC) - y2e * cos(thC) - PROJ_OFFSET_R;
-      double x1y2 = r2e * sin(thC) + y2e * cos(thC) - PROJ_OFFSET_R;
+      double x0y2 = r2e * sin_thC - y2e * cos_thC - PROJ_OFFSET_R;
+      double x1y2 = r2e * sin_thC + y2e * cos_thC - PROJ_OFFSET_R;
 
-      double x0y0l_E = x0y0 * tan(-D_PHI_GLOBAL / 2);
-      double x0y0r_E = x0y0 * tan(D_PHI_GLOBAL / 2);
-      double x1y0l_E = x1y0 * tan(-D_PHI_GLOBAL / 2);
-      double x1y0r_E = x1y0 * tan(D_PHI_GLOBAL / 2);
+      double x0y0l_E = x0y0 * tan_m_d_phi_global2;
+      double x0y0r_E = x0y0 * tan_d_phi_global2;
+      double x1y0l_E = x1y0 * tan_m_d_phi_global2;
+      double x1y0r_E = x1y0 * tan_d_phi_global2;
 
-      double x0y2l_E = x0y2 * tan(-D_PHI_GLOBAL / 2);
-      double x0y2r_E = x0y2 * tan(D_PHI_GLOBAL / 2);
-      double x1y2l_E = x1y2 * tan(-D_PHI_GLOBAL / 2);
-      double x1y2r_E = x1y2 * tan(D_PHI_GLOBAL / 2);
+      double x0y2l_E = x0y2 * tan_m_d_phi_global2;
+      double x0y2r_E = x0y2 * tan_d_phi_global2;
+      double x1y2l_E = x1y2 * tan_m_d_phi_global2;
+      double x1y2r_E = x1y2 * tan_d_phi_global2;
 
       double verticesE[] = {x0y0r_E, y0e, x1y0r_E, -y0e, x1y0l_E, -y0e, x0y0l_E, y0e,
                             x0y2r_E, y2e, x1y2r_E, -y2e, x1y2l_E, -y2e, x0y2l_E, y2e};
@@ -611,7 +613,8 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
 
       for (int nGamma = 0; nGamma < nGammaEndcap; nGamma++) {
         double gamma = -D_PHI_GLOBAL / 2 + dGammaEndcap / 2 + dGammaEndcap * nGamma;
-
+	double tan_g_m_dg2 = tan(gamma - dGammaEndcap / 2);
+	double tan_g_p_dg2 = tan(gamma + dGammaEndcap / 2);
         double projOffsetXmax =
             std::min(r0e * tan(nGammaEndcap % 2 == 0 ? dGammaEndcap / 2 : dGammaEndcap / 2), PROJ_OFFSET_X);
 
@@ -660,84 +663,88 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
           right = 0;
         }
 
-        double x0y0l = x0y0 * tan(gamma - dGammaEndcap / 2);
-        double x0y0r = x0y0 * tan(gamma + dGammaEndcap / 2);
-        double x1y0l = x1y0 * tan(gamma - dGammaEndcap / 2);
-        double x1y0r = x1y0 * tan(gamma + dGammaEndcap / 2);
+        double x0y0l = x0y0 * tan_g_m_dg2;
+        double x0y0r = x0y0 * tan_g_p_dg2;
+        double x1y0l = x1y0 * tan_g_m_dg2;
+        double x1y0r = x1y0 * tan_g_p_dg2;
 
-        double x0y1l = x0y1 * tan(gamma - dGammaEndcap / 2) + left * r1_x_gamma_shift;
-        double x0y1r = x0y1 * tan(gamma + dGammaEndcap / 2) + right * r1_x_gamma_shift;
-        double x1y1l = x1y1 * tan(gamma - dGammaEndcap / 2) + left * r1_x_gamma_shift;
-        double x1y1r = x1y1 * tan(gamma + dGammaEndcap / 2) + right * r1_x_gamma_shift;
+        double x0y1l = x0y1 * tan_g_m_dg2 + left * r1_x_gamma_shift;
+        double x0y1r = x0y1 * tan_g_p_dg2 + right * r1_x_gamma_shift;
+        double x1y1l = x1y1 * tan_g_m_dg2 + left * r1_x_gamma_shift;
+        double x1y1r = x1y1 * tan_g_p_dg2 + right * r1_x_gamma_shift;
 
-        double x0y2l = x0y2 * tan(gamma - dGammaEndcap / 2) + left * r2_x_gamma_shift;
-        double x0y2r = x0y2 * tan(gamma + dGammaEndcap / 2) + right * r2_x_gamma_shift;
-        double x1y2l = x1y2 * tan(gamma - dGammaEndcap / 2) + left * r2_x_gamma_shift;
-        double x1y2r = x1y2 * tan(gamma + dGammaEndcap / 2) + right * r2_x_gamma_shift;
+        double x0y2l = x0y2 * tan_g_m_dg2 + left * r2_x_gamma_shift;
+        double x0y2r = x0y2 * tan_g_p_dg2 + right * r2_x_gamma_shift;
+        double x1y2l = x1y2 * tan_g_m_dg2 + left * r2_x_gamma_shift;
+        double x1y2r = x1y2 * tan_g_p_dg2 + right * r2_x_gamma_shift;
 
         double verticesF[] = {x0y0r, y0e, x1y0r, -y0e, x1y0l, -y0e, x0y0l, y0e,
                               x0y1r, y1e, x1y1r, -y1e, x1y1l, -y1e, x0y1l, y1e};
         double verticesR[] = {x0y1r, y1e, x1y1r, -y1e, x1y1l, -y1e, x0y1l, y1e,
                               x0y2r, y2e, x1y2r, -y2e, x1y2l, -y2e, x0y2l, y2e};
 
+	std::array<double, 16> vsub, vsub1;
+	std::array<double, 2> center, center1;
+	Transform3D trans_dispFsub(Position (0, 0, -XTAL_LEN_R / 2));
+	Transform3D trans_dispFsub_1(Position(0, 0, XTAL_LEN_R / 2));
+
         for (int i = 0; i < XTAL_DIV_F; i++) {
           for (int j = 0; j < XTAL_DIV_F; j++) {
             int nEpsilon = i * XTAL_DIV_F + j;
 
-            auto vFsub = getSingleCrystalVertices(i, j, XTAL_DIV_F, verticesF, false);
-            auto center = getSingleCrystalCenter(vFsub);
-            Position dispFsub(0, 0, -XTAL_LEN_R / 2);
+            getSingleCrystalVertices(i, j, XTAL_DIV_F, verticesF, false, vsub);
+            getSingleCrystalCenter(vsub, center);
 
-            auto vFsub_1 = getSingleCrystalVertices(i, j, XTAL_DIV_F, verticesF, true);
-            auto center_1 = getSingleCrystalCenter(vFsub_1);
-            Position dispFsub_1(0, 0, XTAL_LEN_R / 2);
+            getSingleCrystalVertices(i, j, XTAL_DIV_F, verticesF, true, vsub1);
+            getSingleCrystalCenter(vsub1, center1);
 
             double rGlobal = r0e + XTAL_LEN_F / 2;
             XYZVector dispGlobal(-center[1], center[0], rGlobal);
             XYZVector posGlobal = (rotZphiGlobal * (rotYthGlobal * dispGlobal + DISP_PROJ_R));
 
-            XYZVector dispGlobal_1(-center_1[1], center_1[0], -rGlobal);
+            XYZVector dispGlobal_1(-center1[1], center1[0], -rGlobal); 
             XYZVector posGlobal_1 = (rotZphiGlobal * (rotYthGlobal_1 * dispGlobal_1 + DISP_PROJ_R));
 
             CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
-                "EndcapCrystalF", XTAL_LEN_F / 2, vFsub, crystalFXML, Transform3D(dispFsub), endcapThetaAssemblyVolume,
+                "EndcapCrystalF", XTAL_LEN_F / 2, vsub, crystalFXML, trans_dispFsub, endcapThetaAssemblyVolume,
                 ENDCAP_SYSTEM_NO, iPhi, iTheta, nGamma, nEpsilon, 0, posGlobal);
             numCrystalsEndcap += 1;
 
             CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
-                "EndcapCrystalF_1", XTAL_LEN_F / 2, vFsub_1, crystalFXML, Transform3D(dispFsub_1),
+                "EndcapCrystalF_1", XTAL_LEN_F / 2, vsub1, crystalFXML, trans_dispFsub_1,
                 endcapThetaAssemblyVolume_1, ENDCAP_SYSTEM_NO, iPhi, 2 * N_THETA_ENDCAP + N_THETA_BARREL - iTheta,
                 nGamma, nEpsilon, 0, posGlobal_1);
             numCrystalsEndcap += 1;
           }
         }
 
+	Transform3D trans_dispRsub(Position(0, 0, XTAL_LEN_F / 2));
+	Transform3D trans_dispRsub_1(Position(0, 0, -XTAL_LEN_F / 2));
+
         for (int i = 0; i < XTAL_DIV_R; i++) {
           for (int j = 0; j < XTAL_DIV_R; j++) {
             int nEpsilon = i * XTAL_DIV_R + j;
 
-            auto vRsub = getSingleCrystalVertices(i, j, XTAL_DIV_R, verticesR, false);
-            auto center = getSingleCrystalCenter(vRsub);
-            Position dispRsub(0, 0, XTAL_LEN_F / 2);
+            getSingleCrystalVertices(i, j, XTAL_DIV_R, verticesR, false, vsub);
+            getSingleCrystalCenter(vsub, center);
 
-            auto vRsub_1 = getSingleCrystalVertices(i, j, XTAL_DIV_R, verticesR, true);
-            auto center_1 = getSingleCrystalCenter(vRsub_1);
-            Position dispRsub_1(0, 0, -XTAL_LEN_F / 2);
-
+            getSingleCrystalVertices(i, j, XTAL_DIV_R, verticesR, true, vsub1);
+            getSingleCrystalCenter(vsub1, center1);
+	    
             double rGlobal = r0e + XTAL_LEN_F + XTAL_LEN_R / 2;
             XYZVector dispGlobal(-center[1], center[0], rGlobal);
             XYZVector posGlobal = (rotZphiGlobal * (rotYthGlobal * dispGlobal + DISP_PROJ_R));
 
-            XYZVector dispGlobal_1(-center_1[1], center_1[0], -rGlobal);
+            XYZVector dispGlobal_1(-center1[1], center1[0], -rGlobal);
             XYZVector posGlobal_1 = (rotZphiGlobal * (rotYthGlobal_1 * dispGlobal_1 + DISP_PROJ_R));
 
             CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
-                "EndcapCrystalR", XTAL_LEN_R / 2, vRsub, crystalRXML, Transform3D(dispRsub), endcapThetaAssemblyVolume,
+                "EndcapCrystalR", XTAL_LEN_R / 2, vsub, crystalRXML, trans_dispRsub, endcapThetaAssemblyVolume,
                 ENDCAP_SYSTEM_NO, iPhi, iTheta, nGamma, nEpsilon, 1, posGlobal);
             numCrystalsEndcap += 1;
 
             CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
-                "EndcapCrystalR_1", XTAL_LEN_R / 2, vRsub_1, crystalRXML, Transform3D(dispRsub_1),
+                "EndcapCrystalR_1", XTAL_LEN_R / 2, vsub1, crystalRXML, transdispRsub_1,
                 endcapThetaAssemblyVolume_1, ENDCAP_SYSTEM_NO, iPhi, 2 * N_THETA_ENDCAP + N_THETA_BARREL - iTheta,
                 nGamma, nEpsilon, 1, posGlobal_1);
             numCrystalsEndcap += 1;
