@@ -353,7 +353,20 @@ static dd4hep::detail::Ref_t createECalBarrelInclined(dd4hep::Detector& aLcdd, d
         dd4hep::ERROR, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
         "   the sum of the electrode lengths per layer in the calorimeter xml file is not consistent with the "
         "length calculated from the calorimeter radial extent and the inclination angle");
+    dd4hep::printout(dd4hep::ERROR, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                     "   difference: %f cm (xml: %f cm, calculated: %f cm)",
+                     (planeLength - layersTotalHeight) / dd4hep::cm, layersTotalHeight / dd4hep::cm,
+                     planeLength / dd4hep::cm);
     throw std::runtime_error("Incorrect length of electrode layers in calorimeter xml description!");
+  } else {
+    dd4hep::printout(
+        dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+        "   the sum of the electrode lengths per layer in the calorimeter xml file is consistent with the length "
+        "calculated from the calorimeter radial extent and the inclination angle within 0.5 mm");
+    dd4hep::printout(dd4hep::INFO, "ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v03",
+                     "   difference: %f cm (xml: %f cm, calculated: %f cm)",
+                     (planeLength - layersTotalHeight) / dd4hep::cm, layersTotalHeight / dd4hep::cm,
+                     planeLength / dd4hep::cm);
   }
 
   // Calculate the thickness of the passive material in each layer
