@@ -17,13 +17,12 @@
 #include "DD4hep/Shapes.h"
 #include "XML/Utilities.h"
 
-#include "DCH_info.h"
+#include "WireTracker_info.h"
 
 namespace DCH_v2 {
 
 using DCH_length_t = dd4hep::rec::WireTracker_info_struct::length_t;
 using DCH_angle_t = dd4hep::rec::WireTracker_info_struct::angle_t;
-using DCH_layer = dd4hep::rec::WireTracker_info_struct::layer_t;
 
 dd4hep::Solid CompositeTT(double twist_angle, double cell_rin_z0, double cell_rout_z0, double dz, double dphi,
                           const dd4hep::rec::DCH_info& DCH_i);

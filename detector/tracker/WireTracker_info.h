@@ -2,11 +2,12 @@
 #define WIRE_TRACKER_INFO_H
 
 #include "DDRec/DetectorData.h"
+#include <Evaluator/DD4hepUnits.h>
 #include <map>
 #include <Math/Vector3D.h>
 #include <Math/GenVector/RotationZ.h>
 
-namespace dd4hep {  namespace rec {  // <-- Shall this be updated?
+namespace dd4hep {  namespace rec {
 
 
 /* Data structure to store Wire Trackers geometry parameters
@@ -22,11 +23,6 @@ namespace dd4hep {  namespace rec {  // <-- Shall this be updated?
  * To use this class, instantiate an object and define the global parameters.
  * Then call the method BuildLayerDatabase, which calculates
  * the parameters of each layer based on the global parameters.
- *
- * @author A. Tolosa Delgado, CERN
- * @date April 2024
- * @version Drift chamber v2
- *
  */
 struct WireTracker_info_struct
 {
@@ -74,7 +70,7 @@ public:
 
     /// global twist angle
     /// alternating layers will change its sign
-    angle_t  twist_angle = {0};
+    angle_t twist_angle = {0};
 
     /// Cell width for the first layer
     double first_width = {0};
@@ -109,9 +105,8 @@ public:
     /// Get phi width for the twisted tube and the step (phi distance between cells)
     angle_t Get_phi_width(int ilayer){return (dd4hep::twopi/Get_ncells(ilayer))*dd4hep::rad;}
 
-    /// phi positioning, adding offset for odd ilayers
-    /// there is a staggering in phi for alternating layers, 0.25*cell_phi_width*(ilayer%2);
-    angle_t Get_cell_phi_angle(int ilayer, int nphi){ return (Get_phi_width(ilayer) * (nphi + 0.25*(ilayer%2)));}
+    /// phi positioning
+    virtual angle_t Get_cell_phi_angle(int isuperlayer, int ilayer, int isector, int iphi) = 0;
 
     /// calculate superlayer for a given ilayer.
     /// WARNING: division of integers on purpose!
@@ -276,6 +271,10 @@ inline WireTracker_info_struct::Vector3D WireTracker_info_struct::Calculate_hitp
 }
 
 
+///////////////////////////////////////////////////////////////////////////////////////
+//                       Derived Structures                                          //
+///////////////////////////////////////////////////////////////////////////////////////
+
 
 /* Data structure to store Drift Chamber geometry parameters,
  * implementing virtual methods of WireTracker_info_struct.
@@ -290,6 +289,12 @@ struct DCH_info_struct : WireTracker_info_struct {
     int StereoSign(Layer_info_struct layer) const override final{
         return (IsStereoPositive(layer)*2 - 1);
     };
+
+    /// phi positioning, adding offset for odd ilayers
+    /// there is a staggering in phi for alternating layers, 0.25*cell_phi_width*(ilayer%2);
+    angle_t Get_cell_phi_angle(int, int ilayer, int, int iphi) override final { 
+        return (Get_phi_width(ilayer) * (iphi + 0.25*(ilayer%2)));
+    }
 
     inline void BuildLayerDatabase() override final {
         // do not fill twice the database
@@ -443,7 +448,47 @@ struct DCH_info_struct : WireTracker_info_struct {
         return;
     }
 };  // end of DCH_info_struct
-typedef StructExtension<DCH_info_struct> DCH_info ;
+typedef StructExtension<DCH_info_struct> DCH_info;
+
+
+
+/* Data structure to store StrawTubeTracker geometry parameters,
+ * implementing virtual methods of WireTracker_info_struct.
+ */
+struct STT_info_struct : WireTracker_info_struct {
+
+    /// number of sectors
+    std::vector<int> nsectors {};
+    /// phi gap between sectors
+    //std::vector<double> phi_gap {};
+    /// dphi between tubes,
+    /// in StrawTrackerTubes_o1_v01 same definition across superlayers is used
+    std::vector<double> delta_phi {};
+    /// stereo angles at z0, same across each multilayer
+    std::vector<double> stereo_angles_z0 {};
+
+    /// phi positioning, adding offset for odd ilayers
+    /// there is a staggering in phi for alternating layers, 0.25*cell_phi_width*(ilayer%2);
+    angle_t Get_cell_phi_angle(int isuperlayer, int ilayer, int isector, int itube) override final {
+        const auto & l = this->database.at(ilayer);
+        angle_t phi_start = isector * (2 * dd4hep::pi  / this->nsectors.at(isuperlayer));
+        angle_t phi_rel = (ilayer + 2 * itube) * this->delta_phi.at(isuperlayer) * pow(-1, isuperlayer);
+        return phi_start + phi_rel;
+    }
+
+    ///  stereo angle is positive for odd superlayer number
+    bool IsStereoPositive(Layer_info_struct layer_info) const override final{
+        int n_super_layer = floor((double) layer_info.layer / this->nlayersPerSuperlayer);
+        return (1 == n_super_layer%2);
+    };
+
+    /// calculate sign based on IsStereoPositive
+    int StereoSign(Layer_info_struct layer) const override final{
+        return (IsStereoPositive(layer)*2 - 1);
+    };
+
+};  // end of STT_info_struct
+typedef StructExtension<STT_info_struct> STT_info;
 
 
 }} // end namespace dd4hep::rec::
