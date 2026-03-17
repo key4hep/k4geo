@@ -6,6 +6,7 @@
 #include <map>
 #include <Math/Vector3D.h>
 #include <Math/GenVector/RotationZ.h>
+#include <vector>
 
 namespace dd4hep {  namespace rec {
 
@@ -44,20 +45,6 @@ public:
     /// Outer radius of the active volume
     length_t rout = {0};
 
-    /// Inner guard wires radius
-    length_t guard_inner_r_at_z0 = {0};
-    /// Outer guard wires radius
-    length_t guard_outer_r_at_zL2 = {0};
-
-    /// number of cells of first layer
-    int ncell0 = {0};
-    /// increment the number of cells for each superlayer as:
-    ///   ncells(ilayer) = dch_ncell0 + increment*superlayer(ilayer)
-    ///   See WireTracker_info::Get_nsuperlayer_minus_1(ilayer)
-    int ncell_increment = {0};
-
-    /// cells within the same layer may be grouped into sectors, not in use atm
-    int ncell_per_sector = {0};
 
     /// input number of layers in each superlayer
     layer_t nlayersPerSuperlayer = {0};
@@ -72,41 +59,24 @@ public:
     /// alternating layers will change its sign
     angle_t twist_angle = {0};
 
-    /// Cell width for the first layer
-    double first_width = {0};
-    /// Cell radius for the first layer
-    length_t first_sense_r = {0};
-
     void Set_lhalf(length_t _Lhalf){Lhalf= _Lhalf;}
     void Set_rin  (length_t _rin  ){rin  = _rin;  }
     void Set_rout (length_t _rout ){rout = _rout; }
 
-    void Set_guard_rin_at_z0  (length_t _rin_z0_guard  ){guard_inner_r_at_z0  = _rin_z0_guard;   }
-    void Set_guard_rout_at_zL2(length_t _rout_zL2_guard){guard_outer_r_at_zL2 = _rout_zL2_guard; }
-
-    void Set_ncell0              (int _ncell0              ){ncell0               = _ncell0;              }
-    void Set_ncell_increment     (int _ncell_increment     ){ncell_increment      = _ncell_increment;     }
-
     void Set_nlayersPerSuperlayer(int _nlayersPerSuperlayer){nlayersPerSuperlayer = _nlayersPerSuperlayer;}
     void Set_nsuperlayers        (int _nsuperlayers        ){nsuperlayers         = _nsuperlayers;        }
 
-    void Set_ncell_per_sector(int _ncell_per_sector){ncell_per_sector = _ncell_per_sector;}
-
     void Set_twist_angle (length_t _dch_twist_angle ){twist_angle = _dch_twist_angle;}
-
-    void Set_first_width  (double _first_width  ){first_width   = _first_width;   }
-    void Set_first_sense_r(double _first_sense_r){first_sense_r = _first_sense_r; }
-
 
     /// Get number of cells in a given layer
     ///   ncells = number of wires/2
-    int Get_ncells(int ilayer){return database.at(ilayer).nwires/2;}
+    virtual int Get_ncells(int ilayer) const {return database.at(ilayer).nwires/2;}
 
     /// Get phi width for the twisted tube and the step (phi distance between cells)
-    angle_t Get_phi_width(int ilayer){return (dd4hep::twopi/Get_ncells(ilayer))*dd4hep::rad;}
+    angle_t Get_phi_width(int ilayer) const {return (dd4hep::twopi/Get_ncells(ilayer))*dd4hep::rad;}
 
     /// phi positioning
-    virtual angle_t Get_cell_phi_angle(int isuperlayer, int ilayer, int isector, int iphi) = 0;
+    virtual angle_t Get_cell_phi_angle(int isuperlayer, int ilayer, int isector, int iphi) const = 0;
 
     /// calculate superlayer for a given ilayer.
     /// WARNING: division of integers on purpose!
@@ -123,15 +93,11 @@ public:
     }
 
     /// tan(stereoangle) = R(z=L/2) / (L/2) * sin( twist_angle/2)
-    angle_t stereoangle_zLhalf(length_t r_zLhalf) const {
-        return atan( r_zLhalf/Lhalf*sin(twist_angle/2/dd4hep::rad));
-    }
+    // Appears to be not required at the moment
+    // angle_t stereoangle_zLhalf(length_t r_zLhalf) const {
+    //     return atan( r_zLhalf/Lhalf*sin(twist_angle/2/dd4hep::rad));
+    // }
 
-    /// WireLength = 2*dch_Lhalf/cos(atan(Pitch_z0(r_z0)/(2*dch_Lhalf)))/cos(stereoangle_z0(r_z0))
-    length_t WireLength(int nlayer, length_t r_z0) const {
-        auto Pitch_z0 = database.at(nlayer).Pitch_z0(r_z0);
-        return  2*Lhalf/cos(atan(Pitch_z0/(2*Lhalf)))/cos(stereoangle_z0(r_z0)/dd4hep::rad) ;
-    };
 
     /// Internal helper struct for defining the layer layout
     struct Layer_info_struct
@@ -141,28 +107,21 @@ public:
         /// 2x number of cells in that layer
         int nwires = {0};
         /// cell parameter
-        double height_z0 = {0.};
+        double height_z0 = {0};
         /// cell parameter
-        double width_z0 = {0.};
-
+        double width_z0 = {0};
+        /// stereoangle at z=0
+        angle_t stereo_sw_z0 = {0};
         /// radius (cylindrical coord) of sensitive wire
-        length_t radius_sw_z0 = {0.};
-
+        length_t radius_sw_z0 = {0};
         /// radius (cylindrical coord) of 'down' field wires
-        length_t radius_fdw_z0 = {0.};
-
+        length_t radius_fdw_z0 = {0};
         /// radius (cylindrical coord) of 'up' field wires
-        length_t radius_fuw_z0 = {0.};
-
-        /// separation between wires (along the circle)
-        length_t Pitch_z0(length_t r_z0) const {
-            return dd4hep::twopi*r_z0/nwires;
-        };
-
+        length_t radius_fuw_z0 = {0};
     };
 
-    bool virtual IsStereoPositive(Layer_info_struct layer_info) const = 0;
-    int virtual StereoSign(Layer_info_struct layer_info) const = 0;
+    virtual bool IsStereoPositive(Layer_info_struct layer_info) const = 0;
+    virtual int StereoSign(Layer_info_struct layer_info) const = 0;
 
     /// map to store parameters for each layer
     std::map<layer_t, Layer_info_struct> database;
@@ -176,43 +135,37 @@ public:
     //--------
     // The following functions are used in the digitization/reconstruction
     // Notation: ILayer is the correlative number of the layer. Layer is reserved to number within a superlayer
-    inline layer_t CalculateILayerFromCellIDFields(int layer, int superlayer) const { layer_t ilayer = layer + (this->nlayersPerSuperlayer)*superlayer + 1; return ilayer;}
-    inline Vector3D Calculate_hitpos_to_wire_vector(int ilayer, int nphi, const Vector3D& hit_position /*in cm*/) const;
-    inline Vector3D Calculate_wire_vector_ez       (int ilayer, int nphi) const;
-    inline Vector3D Calculate_wire_z0_point        (int ilayer, int nphi) const;
-    inline double   Calculate_wire_phi_z0          (int ilayer, int nphi) const;
+    inline layer_t  CalculateILayerFromCellIDFields(int layer, int superlayer) const { layer_t ilayer = layer + (this->nlayersPerSuperlayer)*superlayer + 1; return ilayer;}
+    inline Vector3D Calculate_hitpos_to_wire_vector(int isuperlayer, int ilayer, int isector, int nphi, const Vector3D& hit_position /*in cm*/) const;
+    inline Vector3D Calculate_wire_vector_ez       (int isuperlayer, int ilayer, int isector, int nphi) const;
+    inline Vector3D Calculate_wire_z0_point        (int isuperlayer, int ilayer, int sector, int nphi) const;
 
     virtual ~WireTracker_info_struct(){};
 };
-typedef StructExtension<WireTracker_info_struct> WireTracker_info ;  // <-- what is this really required for?
+typedef StructExtension<WireTracker_info_struct> WireTracker_info ;
 inline std::ostream& operator<<( std::ostream& io , const WireTracker_info& d ){d.ShowDatabase(io); return io;}
 
-///////////////////////////////////////////////////////////////////////////////////////
-/////       Ancillary functions for calculating the distance to the wire       ////////
-///////////////////////////////////////////////////////////////////////////////////////
+//--------------------------------------------------------------
+// Ancillary functions for calculating the distance to the wire
+//
 
-// calculate phi rotation of whole twisted tube, ie, rotation at z=0
-inline double WireTracker_info_struct::Calculate_wire_phi_z0(int ilayer, int nphi) const {
-  auto&  l       = this->database.at(ilayer); 
-  int    ncells  = l.nwires / 2;
-  double phistep = dd4hep::twopi / ncells;
-  double phi_z0  = (nphi + 0.25 * (l.layer % 2)) * phistep;
-  return phi_z0;
-}
-
-// calculate the postion vector of the wire centre (i.e. at z=0)
-inline WireTracker_info_struct::Vector3D WireTracker_info_struct::Calculate_wire_z0_point(int ilayer, int nphi) const {
+///
+/// Calculate the postion vector of the wire centre (i.e. at z=0)
+///
+inline WireTracker_info_struct::Vector3D WireTracker_info_struct::Calculate_wire_z0_point(int isuperlayer, int ilayer, int isector, int nphi) const {
   auto&    l   = this->database.at(ilayer);
   double   rz0 = l.radius_sw_z0;
   Vector3D p1(rz0, 0, 0);
-  double   phi_z0 = Calculate_wire_phi_z0(ilayer, nphi);
+  double   phi_z0 = Get_cell_phi_angle(isuperlayer, ilayer, isector, nphi);
   ROOT::Math::RotationZ z_rotation = ROOT::Math::RotationZ(phi_z0);
   z_rotation(p1);
   return p1;
 }
 
-// calculate wire direction vector
-inline WireTracker_info_struct::Vector3D WireTracker_info_struct::Calculate_wire_vector_ez(int ilayer, int nphi) const {
+///
+/// Calculate wire direction vector
+///
+inline WireTracker_info_struct::Vector3D WireTracker_info_struct::Calculate_wire_vector_ez(int isuperlayer, int ilayer, int isector, int nphi) const {
   auto& l = this->database.at(ilayer);
 
   // See original paper Hoshina et al, Computer Physics Communications 153 (2003) 3
@@ -221,9 +174,10 @@ inline WireTracker_info_struct::Vector3D WireTracker_info_struct::Calculate_wire
   // initialize some variables
   int    stereosign = this->StereoSign(l);
   double rz0        = l.radius_sw_z0;
-  double dphi       = this->twist_angle;
-  // kappa is the same as in eq. 2.9
-  double kappa = (1. / this->Lhalf) * tan(dphi / 2);
+  double stereo     = l.stereo_sw_z0;
+  // kappa is the same as in eq. 2.9 
+  // using the relation: tan(stereoangle) = R(z=0)   / (L/2) * tan( twist_angle/2))
+  double kappa = tan(stereo) / rz0;
 
   //--- calculating wire position
   // the points p1 and p2 correspond to the ends of the wire
@@ -243,7 +197,7 @@ inline WireTracker_info_struct::Vector3D WireTracker_info_struct::Calculate_wire
   Vector3D p2(x2, y2, z2);
 
   // calculate phi rotation of whole twisted tube, ie, rotation at z=0
-  double phi_z0 = Calculate_wire_phi_z0(ilayer, nphi);
+  double phi_z0 = Get_cell_phi_angle(isuperlayer, ilayer, isector, nphi);
   auto z_rotation = ROOT::Math::RotationZ(phi_z0);
   z_rotation(p1);
   z_rotation(p2);
@@ -253,14 +207,14 @@ inline WireTracker_info_struct::Vector3D WireTracker_info_struct::Calculate_wire
   return (p2 -p1).Unit();
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-///////////////////////  Calculate vector from hit position to wire   /////////////////
-///////////////////////////////////////////////////////////////////////////////////////
-inline WireTracker_info_struct::Vector3D WireTracker_info_struct::Calculate_hitpos_to_wire_vector(int ilayer, int nphi, const Vector3D& hit_position /*in cm*/) const {
+///
+/// Calculate vector from hit position to wire
+///
+inline WireTracker_info_struct::Vector3D WireTracker_info_struct::Calculate_hitpos_to_wire_vector(int isuperlayer, int ilayer, int isector, int nphi, const Vector3D& hit_position /*in cm*/) const {
   // Solution distance from a point to a line given here:
   // https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line#Vector_formulation
-  Vector3D n = this->Calculate_wire_vector_ez(ilayer, nphi);
-  Vector3D a = this->Calculate_wire_z0_point(ilayer, nphi);
+  Vector3D n = this->Calculate_wire_vector_ez(isuperlayer, ilayer, isector, nphi);
+  Vector3D a = this->Calculate_wire_z0_point(isuperlayer, ilayer, isector, nphi);
   // Remember using cm as natural units of DD4hep consistently!
   // Vector3D p {hit_position.x()*MM_TO_CM,hit_position.y()*MM_TO_CM,hit_position.z()*MM_TO_CM};
 
@@ -281,6 +235,44 @@ inline WireTracker_info_struct::Vector3D WireTracker_info_struct::Calculate_hitp
  */
 struct DCH_info_struct : WireTracker_info_struct {
 
+    /// Inner and outer guard wires radius
+    length_t guard_inner_r_at_z0 = {0};
+    length_t guard_outer_r_at_zL2 = {0};
+
+    /// number of cells of first layer
+    int ncell0 = {0};
+    /// increment the number of cells for each superlayer as:
+    ///   ncells(ilayer) = dch_ncell0 + increment*superlayer(ilayer)
+    ///   See WireTracker_info::Get_nsuperlayer_minus_1(ilayer)
+    int ncell_increment = {0};
+    /// cells within the same layer may be grouped into sectors, not in use atm
+    int ncell_per_sector = {0};
+    /// Cell width for the first layer
+    double first_width = {0};
+    /// Cell radius for the first layer
+    length_t first_sense_r = {0};
+
+    void Set_guard_rin_at_z0  (length_t _rin_z0_guard  ){guard_inner_r_at_z0  = _rin_z0_guard;   }
+    void Set_guard_rout_at_zL2(length_t _rout_zL2_guard){guard_outer_r_at_zL2 = _rout_zL2_guard; }
+
+    void Set_ncell0          (int _ncell0          ){ncell0           = _ncell0;          }
+    void Set_ncell_increment (int _ncell_increment ){ncell_increment  = _ncell_increment; }
+    void Set_ncell_per_sector(int _ncell_per_sector){ncell_per_sector = _ncell_per_sector;}
+
+    void Set_first_width  (double _first_width  ){first_width   = _first_width;   }
+    void Set_first_sense_r(double _first_sense_r){first_sense_r = _first_sense_r; }
+
+    /// separation between wires (along the circle)
+    length_t Pitch_z0(Layer_info_struct layer, length_t r_z0) const {
+        return dd4hep::twopi*r_z0/layer.nwires;
+    };
+
+    /// WireLength = 2*dch_Lhalf/cos(atan(Pitch_z0(r_z0)/(2*dch_Lhalf)))/cos(stereoangle_z0(r_z0))
+    length_t WireLength(int nlayer, length_t r_z0) const {
+        auto Pitch_z0 = this->Pitch_z0(database.at(nlayer), r_z0);
+        return  2*this->Lhalf/cos(atan(Pitch_z0/(2*this->Lhalf)))/cos(stereoangle_z0(r_z0)/dd4hep::rad) ;
+    };
+
     ///  stereo angle is positive for odd layer number
     bool IsStereoPositive(Layer_info_struct layer_info) const override final{
         return (1 == layer_info.layer%2);
@@ -292,7 +284,7 @@ struct DCH_info_struct : WireTracker_info_struct {
 
     /// phi positioning, adding offset for odd ilayers
     /// there is a staggering in phi for alternating layers, 0.25*cell_phi_width*(ilayer%2);
-    angle_t Get_cell_phi_angle(int, int ilayer, int, int iphi) override final { 
+    angle_t Get_cell_phi_angle(int, int ilayer, int, int iphi) const override final { 
         return (Get_phi_width(ilayer) * (iphi + 0.25*(ilayer%2)));
     }
 
@@ -313,7 +305,7 @@ struct DCH_info_struct : WireTracker_info_struct {
 
         ff_check_positive_parameter(this->ncell0,"ncells in the first layer" );
         ff_check_positive_parameter(this->ncell_increment,"ncells increment per superlayer" );
-        ff_check_positive_parameter(this->ncell_per_sector,"ncells per sector" );
+        // ff_check_positive_parameter(this->ncell_per_sector,"ncells per sector" );
 
         // if dch_ncell_per_sector is not divisor of dch_ncell0 and dch_ncell_increment
         // throw an error
@@ -335,11 +327,12 @@ struct DCH_info_struct : WireTracker_info_struct {
             Layer_info_struct layer1_info;
             layer1_info.layer         = 1;
             layer1_info.nwires        = 2*this->ncell0;
-            layer1_info.height_z0     = first_width;
+            layer1_info.height_z0     = first_width;    // cell height = cell width
             layer1_info.radius_sw_z0  = first_sense_r;
             layer1_info.radius_fdw_z0 = first_sense_r - 0.5*first_width;
             layer1_info.radius_fuw_z0 = first_sense_r + 0.5*first_width;
             layer1_info.width_z0      = dd4hep::twopi*first_sense_r/this->ncell0;
+            layer1_info.stereo_sw_z0  = this->stereoangle_z0(first_sense_r);
 
             this->database.emplace(layer1_info.layer, layer1_info);
         }
@@ -368,7 +361,8 @@ struct DCH_info_struct : WireTracker_info_struct {
                 if(0 == Get_nsuperlayer_minus_1(ilayer))
                     layer_info.height_z0 = h*ru/rd;
                 else
-                    layer_info.height_z0 = dd4hep::twopi*ru/(0.5*layer_info.nwires - dd4hep::pi);
+                    // we calculate the height (=width) as  h =  (ru + 1/2 * h) * (2pi / n_cells)
+                    layer_info.height_z0 = ru*dd4hep::twopi/(0.5*layer_info.nwires - dd4hep::pi);
 
                 layer_info.radius_sw_z0 = 0.5*layer_info.height_z0 + ru;
             }
@@ -440,7 +434,7 @@ struct DCH_info_struct : WireTracker_info_struct {
                     << "\t" << l.radius_sw_z0/dd4hep::mm
                     << "\t" << l.radius_fuw_z0/dd4hep::mm
                     << "\t" << this->StereoSign(l)*this->stereoangle_z0(l.radius_sw_z0)/dd4hep::deg
-                    << "\t" << l.Pitch_z0(l.radius_sw_z0)/dd4hep::mm
+                    << "\t" << this->Pitch_z0(l, l.radius_sw_z0)/dd4hep::mm
                     << "\t" << this->Radius_zLhalf(l.radius_sw_z0)/dd4hep::mm
                     << "\t" << this->WireLength(l.layer,l.radius_sw_z0)/dd4hep::mm
                     << "\n" << std::endl;
@@ -461,15 +455,17 @@ struct STT_info_struct : WireTracker_info_struct {
     std::vector<int> nsectors {};
     /// phi gap between sectors
     //std::vector<double> phi_gap {};
-    /// dphi between tubes,
-    /// in StrawTrackerTubes_o1_v01 same definition across superlayers is used
+    /// cells within the same layer are grouped into sectors
+    std::vector<int> ncell_per_sector = {};
+    /// dphi between two consecutive tubes within the same layer, for each multilayer
+    /// N.B. if dphi changes to be defined per individual layer, this will have to be updated
     std::vector<double> delta_phi {};
     /// stereo angles at z0, same across each multilayer
     std::vector<double> stereo_angles_z0 {};
 
     /// phi positioning, adding offset for odd ilayers
     /// there is a staggering in phi for alternating layers, 0.25*cell_phi_width*(ilayer%2);
-    angle_t Get_cell_phi_angle(int isuperlayer, int ilayer, int isector, int itube) override final {
+    angle_t Get_cell_phi_angle(int isuperlayer, int ilayer, int isector, int itube) const override final {
         const auto & l = this->database.at(ilayer);
         angle_t phi_start = isector * (2 * dd4hep::pi  / this->nsectors.at(isuperlayer));
         angle_t phi_rel = (ilayer + 2 * itube) * this->delta_phi.at(isuperlayer) * pow(-1, isuperlayer);

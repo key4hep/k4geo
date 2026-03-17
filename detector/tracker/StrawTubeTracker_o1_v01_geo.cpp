@@ -52,7 +52,7 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
   physvol.addPhysVolID("system", sdet.id()).addPhysVolID(_U(side), 0);
   sdet.setPlacement(physvol);
 
-  // Initialize running variables which are updated per superlayer
+  // Initialize running variables which are updated per superlayer (SL*)
   double SLInnerRadius = rmin;
   int SLNum = 0;
   int tubeNum = 0;
