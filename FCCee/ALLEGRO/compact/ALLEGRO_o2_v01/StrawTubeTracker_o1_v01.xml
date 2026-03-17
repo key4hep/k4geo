@@ -1,7 +1,7 @@
 <lccdd>  
   <readouts>
     <readout name="STTCollection">
-      <id>system:5,side:2,multiLayer:4,sector:4,layer:4,tube:6,r:32:10,eta:-11,phi:-11</id>
+      <id>system:5,side:2,superlayer:4,sector:4,layer:4,tube:6,r:32:10,eta:-11,phi:-11</id>
     </readout>
   </readouts>
   <display>
@@ -24,7 +24,7 @@
 	    - zmax: Absolute value of max z coordinate.  Detector extends to -z -> +z.
             - rmin: minimum straw tracker radius
 	    - rmax: maximum straw tracker radius
-	    - gap:  The radial gap between adjacent tubes.  Will be same in all multilayers, sectors.
+	    - gap:  The radial gap between adjacent tubes.  Will be same in all superlayers, sectors.
 
            All values must be specified, none can default.
       -->
@@ -36,7 +36,7 @@
 	  gap ="1.15*mm"/> 
 
       <!-- 
-	   Each block below describes a "multilayer": a set of layers of tubes in close proximity 
+	   Each block below describes a "superlayer": a set of layers of tubes in close proximity 
 	   (presumably glued to one another with gap on the order of dimensions.gap).
 	   
 	   Args to <layer> (default): 
@@ -55,17 +55,17 @@
 
            Not all arguments must be specified.  The default values are specified.  If repeat is 
 	   not specified, as many tubes as possible will be added in the phi direction to fill the 
-	   multilayer.  This is the preferred method to ensure the detector has no large gaps.  
+	   superlayer.  This is the preferred method to ensure the detector has no large gaps.  
 
            At least one of thickness or count must be specified to control the radial thickness of
-           the multilayer.  If only count is specified, the layer thickness will be automatically set 
+           the superlayer.  If only count is specified, the layer thickness will be automatically set 
 	   to encapsulate the tubes with a minimum radial gap size of gap.  If only thickness is
 	   specified, then the layer will be filled with tubes until there is a minimum radial gap 
-	   between multilayers of size gap.  By specifying both thickness and count the radial gap
-	   between mutlilayers can be modulated independently of the phi gap.
+	   between superlayers of size gap.  By specifying both thickness and count the radial gap
+	   between superlayers can be modulated independently of the phi gap.
 
-           If no geo attributes are specified in <layer> the default multilayer has 10 layers, 8 phi
-           sectors, and the gap between adjacent multilayers in both the r and phi direction is 2cm.
+           If no geo attributes are specified in <layer> the default superlayer has 10 layers, 8 phi
+           sectors, and the gap between adjacent superlayers in both the r and phi direction is 2cm.
            The vis attribute should always be specified so that the detector can be drawn.           
 
            Within each <layer> block there are <slices> which define the tube geometry in concentric
