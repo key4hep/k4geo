@@ -16,7 +16,9 @@
               type="StrawTubeTracker_o1_v01"
               id="DetID_STT"
               readout="STTCollection"
-              vis="STTVis">
+              vis="STTVis"
+              buildLayers="True"
+              printExcelTable="False">
       <!-- 
 	   <dimensions> specifies global detector dimensions.
 
