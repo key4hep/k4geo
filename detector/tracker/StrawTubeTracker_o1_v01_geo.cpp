@@ -10,6 +10,8 @@
 #include "Math/AxisAngle.h"
 #include "Math/Vector3D.h"
 
+#include "WireTracker_info.h"
+
 /*
  * Define a simple assert function which prints a message when the assert will fail
  * so that the user gets some printout
@@ -35,12 +37,21 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
 
   sens.setType("tracker"); // use default "tracker" built-in
 
+  // initialize empty STT_info object
+  // data extension mechanism requires it to be a raw pointer
+  dd4hep::rec::STT_info* STT_i = new dd4hep::rec::STT_info();
+
   // read detector-level attributes
   xml_dim_t dim = x_det.dimensions();
   double rmin = dim.rmin();
   double rmax = dim.rmax();
   double zmax = dim.zmax();
   double tube_gap = dim.gap();
+
+  // fill global values of STT_info that are specified in the XML
+  STT_i->Set_rin(rmin);
+  STT_i->Set_rout(rmax);
+  STT_i->Set_lhalf(zmax);
 
   // Create top-level envelope for the straw tube tracker
   dd4hep::Tube envelope = dd4hep::Tube(rmin, rmax, zmax);
@@ -76,7 +87,7 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
     tubeThickness = 2 * (layering.singleLayerThickness(x_layer));
     double layerRadius =
         SLInnerRadius + 0.5 * (tubeThickness + tube_gap); // first layer is half a tube outside of SL edge
-    double delta_phi = asin((tube_gap + tubeThickness) * 0.5 / layerRadius);
+    double SLDelta_phi = asin((tube_gap + tubeThickness) * 0.5 / layerRadius);
 
     double SLThickness = x_layer.hasAttr(_U(thickness)) ? x_layer.thickness() : -1;
     double SLSectors = x_layer.hasAttr(_U(nsegments)) ? x_layer.nsegments() : 8;
@@ -87,11 +98,25 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
     double SLoffset = x_layer.hasAttr(_U(offset)) ? x_layer.offset() : 0.0;
     double Angle = x_layer.hasAttr(_U(angle)) ? x_layer.angle() : 0.0;
 
+    // fill per-superlayer values of STT_info
+    STT_i->innermost_radius.push_back(layerRadius);
+    STT_i->nsectors.push_back(SLSectors);
+    STT_i->delta_phi.push_back(SLDelta_phi);
+    STT_i->stereo.push_back(Angle);
+
+    if (STT_i->nlayersPerSuperlayer != 0){
+      strawAssert(STT_i->nlayersPerSuperlayer == SLLayers,
+        "ERROR: specifying different number of layers per superlayer!\n"
+        "       This is currently not supported by STT_info.");
+    } else
+      STT_i->Set_nlayersPerSuperlayer(SLLayers);
+
     // check that the thickness is set
     // and it is a sensible value
     strawAssert(SLThickness > 0 || SLLayers > 0, "ERROR: Each <layer> in straw tube tracker must have either\n"
                                                  "       thickness or count attribute defined.");
-    // N.B. 0.866 = sqrt(3)/2 -> minimal radial distance between  staggered tubes centers 
+
+    // N.B. 0.866 = sqrt(3)/2 ==> minimal radial distance between  staggered tubes centers 
     // in consecutive layers, in units of the diameter (i.e. tube thickness)
     double minThickness = (tubeThickness + tube_gap) * (1 + 0.866 * (SLLayers - 1));
     if (SLThickness < 0) {
@@ -159,7 +184,7 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
         for (int i = 0; i < SLphiRepeat; ++i) {
           // place the envelope volume in the superlayer envelope
           double phi = l * 2 * dd4hep::pi / SLSectors +
-                       (j + 2 * i) * delta_phi * pow(-1, SLNum); // direction of diagonal gap changes per SL
+                       (j + 2 * i) * SLDelta_phi * pow(-1, SLNum); // direction of diagonal gap changes per SL
 
           std::string placedTubeName = SLName + dd4hep::_toString(l, "sector%d") + dd4hep::_toString(j, "layer%d") +
                                        dd4hep::_toString(i, "tube%d");
@@ -190,7 +215,27 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
     SLInnerRadius += SLThickness;
     mloffset += SLoffset;
 
-  } // multi-layers aka _U(layer)
+  } // superlayers aka _U(layer)
+
+  // Save the total number of superlayers
+  STT_i->Set_nsuperlayers(SLNum);
+
+  // build layers database
+  bool buildLayers = x_det.attr<bool>(_Unicode(buildLayers));
+  if (buildLayers) {
+    STT_i->BuildLayerDatabase();
+    // safety check just in case something went wrong...
+    if(STT_i->IsDatabaseEmpty())
+      throw std::runtime_error("Empty database");
+  }
+
+  bool printExcelTable = x_det.attr<bool>(_Unicode(printExcelTable));
+  if (printExcelTable)
+    STT_i->ShowDatabase(std::cout);
+
+  // attach the STT_i pointer to the detector
+  sdet.addExtension<dd4hep::rec::STT_info>(STT_i);
+
   return sdet;
 }
 DECLARE_DETELEMENT(StrawTubeTracker_o1_v01, create_straw_tracker)
