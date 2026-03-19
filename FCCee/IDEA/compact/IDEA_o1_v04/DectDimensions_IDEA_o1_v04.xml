@@ -6,6 +6,8 @@
   <!--
   master file with includes and world dimension.
   nalipour
+
+  Changes with respect to DectDimensions_IDEA_o1_v03: Indication which silicon wrapper parameters can now be changed freely, extend silicon wrapper disks envelope by 3 cm in z towards IP to allow for second layer placement
   -->
 
 
@@ -115,14 +117,24 @@
     <constant name="Solenoid_Coil_half_length" value="Solenoid_half_length-200*mm"/>
     <constant name="Solenoid_Coil_radius" value="Solenoid_inner_radius+200*mm"/>
 
-    <!-- Silicon wrapper. Only the silicon wrapper barrel half length ('SiWrB_half_length') and the absolute position of the silicon wrapper disks (SiWrD_zmax-SiWrD_zmin) can be freely changed. For other changes please contact Armin Ilg -->
-    <constant name="SiWrB_inner_radius" value="2040*mm"/>
-    <constant name="SiWrB_outer_radius" value="2080*mm"/>
-    <constant name="SiWrB_half_length"  value="2400*mm"/>
-    <constant name="SiWrD_inner_radius" value="350.0*mm"/>
-    <constant name="SiWrD_outer_radius" value="2040.0*mm"/>
-    <constant name="SiWrD_zmin"         value="2300.0*mm"/>
-    <constant name="SiWrD_zmax"         value="2340.0*mm"/>
+    <!-- Silicon wrapper. These values can be changed at will and the geometry will adapt accordingly. For questions contact Armin Ilg -->
+    <constant name="SiWrB_inner_radius" value="2040*mm"/>   <!-- Can be freely changed, as long as SiWrB_outer_radius-SiWrB_inner_radius is kept constant. A radius of up to ~3 m is supported with the currently assumed sensor size -->
+    <constant name="SiWrB_outer_radius" value="2080*mm"/>   <!-- Can be freely changed, as long as SiWrB_outer_radius-SiWrB_inner_radius is kept constant. A radius of up to ~3 m is supported with the currently assumed sensor size -->
+    <constant name="SiWrB_half_length"  value="2400*mm"/>   <!-- Can be freely changed -->
+    <constant name="SiWrD_inner_radius" value="350.0*mm"/>  <!-- Can be freely changed. Must be smaller than 'SiWrB_inner_radius' -->
+    <constant name="SiWrD_outer_radius" value="2040.0*mm"/> <!-- Can be freely changed. Must be larger than 'SiWrD_inner_radius' and SiWrD_outer_radius-SiWrD_inner_radius must be smaller than ~ 2450 mm, otherwise the number of available rings is not large enough to cover the whole area -->
+    <constant name="SiWrD_services_opening"  value="30*mm"/><!-- Can be freely changed. -->
+    <constant name="SiWr_nLayers"       value="2"/>         <!-- Can be either 1 or 2 -->
+    <constant name="SiWrD_zmin"         value="2270.0*mm"/> <!-- Can be freely changed, as long as SiWrD_zmax-SiWrD_zmin is >7cm (SiWr_nLayers=2) or >=5cm (SiWr_nLayers=1) -->
+    <constant name="SiWrD_zmax"         value="2340.0*mm"/> <!-- Can be freely changed, as long as SiWrD_zmax-SiWrD_zmin is kept constant or is increased -->
+    <constant name="SiWrB_pitch_z0"     value="1.000*mm"/>  <!-- The pitches can be freely changed and can be different for the two layers. These pitches here are just an assumption, impact on physics needs to be studied in detail! -->
+    <constant name="SiWrB_pitch_z1"     value="0.050*mm"/>
+    <constant name="SiWrB_pitch_phi0"   value="0.050*mm"/>
+    <constant name="SiWrB_pitch_phi1"   value="1.000*mm"/>
+    <constant name="SiWrD_pitch_r0"     value="1.000*mm"/>
+    <constant name="SiWrD_pitch_r1"     value="0.050*mm"/>
+    <constant name="SiWrD_pitch_phi0"   value="0.050*mm"/>
+    <constant name="SiWrD_pitch_phi1"   value="1.000*mm"/>
 
     <!-- These are lead plates that we put in the endcap to have the same material budget (from solenoid) as in the barrel-->
     <constant name="EndPlateAbsorber_inner_radius" value="380*mm"/>

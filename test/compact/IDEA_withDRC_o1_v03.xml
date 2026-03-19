@@ -49,7 +49,7 @@
   <include ref="../../FCCee/IDEA/compact/IDEA_o1_v03/DriftChamber_o1_v02.xml"/>
 
   <!-- Import silicon wrapper -->
-  <include ref="../../FCCee/IDEA/compact/IDEA_o1_v03/SiliconWrapper_o1_v03.xml"/>
+  <include ref="../../FCCee/IDEA/compact/IDEA_o1_v03/SiliconWrapper_o1_v01.xml"/>
 
   <!-- Import solenoid -->
   <include ref="../../FCCee/IDEA/compact/IDEA_o1_v03/Solenoid_o1_v01.xml"/>

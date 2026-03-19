@@ -3,14 +3,16 @@
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-  <info name="IDEA_o2_v01"
-    title="FCCee IDEA option 2 detector geometry master file"
-    author="Niloufar Alipour Tehrani, vertex detector and silicon wrapper by Armin Ilg, DCH by Alvaro Tolosa-Delgado, dual-readout-tubes calorimeter by Lorenzo Pezzotti, SCEPCal by Wonyong Chung"
+
+
+  <info name="IDEA_o1_v04"
+    title="FCCee IDEA detector geometry master file"
+    author="Niloufar Alipour Tehrani, vertex detector and silicon wrapper by Armin Ilg, DCH by Alvaro Tolosa-Delgado"
     url="no"
     status="development"
-    version="o2_v01">
-    <comment> 
-      Version o2_v01 of the IDEA detector
+    version="o1_v04">
+    <comment>
+      Version o1_v04 of the IDEA detector
     </comment>
   </info>
 
@@ -18,7 +20,7 @@
 
   <includes>
     <gdmlFile  ref="../IDEA_o1_v03/elements_o1_v01.xml"/>
-    <gdmlFile  ref="materials_o2_v01.xml"/>
+    <gdmlFile  ref="../IDEA_o1_v03/materials_o1_v03.xml"/>
   </includes>
 
   <define>
@@ -29,29 +31,28 @@
   </define>
 
   <!-- Import dimensions -->
-  <include ref="DectDimensions_IDEA_o2_v01.xml"/>
+  <include ref="DectDimensions_IDEA_o1_v04.xml"/>
 
   <!-- Import accelerator components -->
   <!-- shape based model of the beam pipe -->
   <include ref="../../../MDI/compact/MDI_o1_v00/Beampipe_o4_v05.xml" />
   <include ref="../../../MDI/compact/MDI_o1_v00/BeamInstrumentation_o1_v01.xml" />
-  
-  <!-- engineered CAD model of the beam pipe -->
-  <!-- In order to use the CAD beampipe, build k4geo with the following CMake option: 
-  cmake -D INSTALL_BEAMPIPE_STL_FILES=ON which will download the files needed -->
-  <!-- <include ref="../../../MDI/compact/MDI_o1_CADBased_v01/MDI_o1_CADBased_v01_collection.xml" />
-  <world material="Vacuum"/> -->
 
+  <!-- engineered CAD model of the beam pipe -->
+  <!-- In order to use the CAD beampipe, build k4geo with the following CMake option:
+  cmake -D INSTALL_BEAMPIPE_STL_FILES=ON which will download the files needed -->
+<!-- <include ref="../../../MDI/compact/MDI_o1_CADBased_v01/MDI_o1_CADBased_v01_collection.xml" />
+  <world material="Vacuum"/> -->
   <include ref="../IDEA_o1_v03/LumiCal_o1_v01.xml"/>
 
   <!-- Import vertex -->
-  <include ref="../IDEA_o1_v04/VertexComplete_o1_v04.xml"/>
+  <include ref="VertexComplete_o1_v04.xml"/>
 
   <!-- Import drift chamber -->
   <include ref="../IDEA_o1_v03/DriftChamber_o1_v02.xml"/>
 
   <!-- Import silicon wrapper -->
-  <include ref="../IDEA_o1_v04/SiliconWrapper_o1_v02.xml"/>
+  <include ref="SiliconWrapper_o1_v02.xml"/>
 
   <!-- Import solenoid -->
   <include ref="../IDEA_o1_v03/Solenoid_o1_v01.xml"/>
@@ -59,14 +60,12 @@
   <!-- Import Endcap plate absorber -->
   <include ref="../IDEA_o1_v03/EndPlateAbsorber_o1_v01.xml"/>
 
-  <!-- Import dual-readout segmented crystal calorimeter -->
-  <include ref="SCEPCal_o1_v01.xml"/>
+  <!-- Import pre-shower -->
+  <include ref="../IDEA_o1_v03/Preshower_o1_v01.xml"/>
 
-  <!-- Import tubes-based dual-readout endcap calorimeter -->
-  <include ref="DREndcapTubes_o1_v01.xml"/>
-
-  <!-- Import tubes-based dual-readout barrel calorimeter -->
-  <include ref="DRBarrelTubes_o1_v01.xml"/>
+  <!-- Import fiber-based dual-readout calorimeter -->
+  <!-- (uncomment the following line to effectively include it) -->
+  <include ref="../IDEA_o1_v03/FiberDualReadoutCalo_o1_v01.xml"/>
 
   <!-- Import muon system -->
   <include ref="../IDEA_o1_v03/MuonSystem_o1_v01.xml"/>
@@ -75,6 +74,17 @@
     <plugin name="DD4hepVolumeManager"/>
     <plugin name="InstallSurfaceManager"/>
   </plugins>
+
+  <parallelworld_volume name="tracking_volume" anchor="/world" material="Air" connected="true"
+      vis="VisibleBlue">
+      <shape type="Polycone" material="Air">
+          <!-- small-angle approximation for tan(theta) -->
+          <zplane z="-SiWrD_zmax"   rmin="120*mrad * SiWrD_zmax" rmax="SiWrD_outer_radius" />
+          <zplane z="-CentralBeamPipe_zmax"       rmin="0"                            rmax="SiWrD_outer_radius" />
+          <zplane z="+CentralBeamPipe_zmax"       rmin="0"                            rmax="SiWrD_outer_radius" />
+          <zplane z="+SiWrD_zmax"   rmin="120*mrad * SiWrD_zmax" rmax="SiWrD_outer_radius" />
+      </shape>
+  </parallelworld_volume>
 
   <fields>
     <!-- FIXME The magnetic field should be a map derived from FEM tools including all field sources, the return yoke geometry, etc -->

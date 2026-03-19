@@ -1,0 +1,46 @@
+<!-- 
+    Sensor components of the silicon wrapper disk half-tile module (with three sensor modules in z). Multiple sensors are grouped into a 'module' to reduce the number of module IDs needed. 
+-->
+<lccdd>
+    <!-- First module on top -->
+    <component name="Left quad"  sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery-2.5*(SiWr_mod_z-SiWr_mod_overlap)" ymax="SiWr_mod_z/2.-2.5*(SiWr_mod_z-SiWr_mod_overlap)" xmin="-SiWr_mod_rphi/2." xmax="-SiWr_mod_quad_spacing/2." vis="SiWrSensitiveVis"/> <!-- Left quad -->
+    <component name="Right quad" sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery-2.5*(SiWr_mod_z-SiWr_mod_overlap)" ymax="SiWr_mod_z/2.-2.5*(SiWr_mod_z-SiWr_mod_overlap)" xmin="SiWr_mod_quad_spacing/2." xmax="SiWr_mod_rphi/2." vis="SiWrSensitiveVis"/> <!-- Right quad -->
+
+    <component name="Space between quads" sensitive="False" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery-2.5*(SiWr_mod_z-SiWr_mod_overlap)" ymax="SiWr_mod_z/2.-2.5*(SiWr_mod_z-SiWr_mod_overlap)" xmin="-SiWr_mod_quad_spacing/2." xmax="SiWr_mod_quad_spacing/2." vis="SiWrPeripheryVis"/> <!-- Space between quads -->          
+    <component name="Periphery"           sensitive="False" ymin="-SiWr_mod_z/2.-2.5*(SiWr_mod_z-SiWr_mod_overlap)" ymax="-SiWr_mod_z/2.+SiWr_mod_z_periphery-2.5*(SiWr_mod_z-SiWr_mod_overlap)" xmin="-SiWr_mod_rphi/2." xmax="SiWr_mod_rphi/2." vis="SiWrPeripheryVis"/> <!-- Periphery -->          
+
+    <!-- Second module on bottom -->
+    <component name="Left quad"  sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery-1.5*(SiWr_mod_z-SiWr_mod_overlap)" ymax="SiWr_mod_z/2.-1.5*(SiWr_mod_z-SiWr_mod_overlap)" xmin="-SiWr_mod_rphi/2." xmax="-SiWr_mod_quad_spacing/2." vis="SiWrSensitiveVis" z_offset="SiWr_module_distance_sides"/> <!-- Left quad -->
+    <component name="Right quad" sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery-1.5*(SiWr_mod_z-SiWr_mod_overlap)" ymax="SiWr_mod_z/2.-1.5*(SiWr_mod_z-SiWr_mod_overlap)" xmin="SiWr_mod_quad_spacing/2." xmax="SiWr_mod_rphi/2." vis="SiWrSensitiveVis" z_offset="SiWr_module_distance_sides"/> <!-- Right quad -->
+
+    <component name="Space between quads" sensitive="False" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery-1.5*(SiWr_mod_z-SiWr_mod_overlap)" ymax="SiWr_mod_z/2.-1.5*(SiWr_mod_z-SiWr_mod_overlap)" xmin="-SiWr_mod_quad_spacing/2." xmax="SiWr_mod_quad_spacing/2." vis="SiWrPeripheryVis" z_offset="SiWr_module_distance_sides"/> <!-- Space between quads -->          
+    <component name="Periphery"           sensitive="False" ymin="-SiWr_mod_z/2.-1.5*(SiWr_mod_z-SiWr_mod_overlap)" ymax="-SiWr_mod_z/2.+SiWr_mod_z_periphery-1.5*(SiWr_mod_z-SiWr_mod_overlap)" xmin="-SiWr_mod_rphi/2." xmax="SiWr_mod_rphi/2." vis="SiWrPeripheryVis" z_offset="SiWr_module_distance_sides"/> <!-- Periphery -->          
+
+    <!-- Third module on top -->
+    <component name="Left quad"  sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery-0.5*(SiWr_mod_z-SiWr_mod_overlap)" ymax="SiWr_mod_z/2.-0.5*(SiWr_mod_z-SiWr_mod_overlap)" xmin="-SiWr_mod_rphi/2." xmax="-SiWr_mod_quad_spacing/2." vis="SiWrSensitiveVis"/> <!-- Left quad -->
+    <component name="Right quad" sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery-0.5*(SiWr_mod_z-SiWr_mod_overlap)" ymax="SiWr_mod_z/2.-0.5*(SiWr_mod_z-SiWr_mod_overlap)" xmin="SiWr_mod_quad_spacing/2." xmax="SiWr_mod_rphi/2." vis="SiWrSensitiveVis"/> <!-- Right quad -->
+
+    <component name="Space between quads" sensitive="False" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery-0.5*(SiWr_mod_z-SiWr_mod_overlap)" ymax="SiWr_mod_z/2.-0.5*(SiWr_mod_z-SiWr_mod_overlap)" xmin="-SiWr_mod_quad_spacing/2." xmax="SiWr_mod_quad_spacing/2." vis="SiWrPeripheryVis"/> <!-- Space between quads -->          
+    <component name="Periphery"           sensitive="False" ymin="-SiWr_mod_z/2.-0.5*(SiWr_mod_z-SiWr_mod_overlap)" ymax="-SiWr_mod_z/2.+SiWr_mod_z_periphery-0.5*(SiWr_mod_z-SiWr_mod_overlap)" xmin="-SiWr_mod_rphi/2." xmax="SiWr_mod_rphi/2." vis="SiWrPeripheryVis"/> <!-- Periphery -->          
+
+    <!-- Fourth module on bottom -->
+    <component name="Left quad"  sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery+0.5*(SiWr_mod_z-SiWr_mod_overlap)" ymax="SiWr_mod_z/2.+0.5*(SiWr_mod_z-SiWr_mod_overlap)" xmin="-SiWr_mod_rphi/2." xmax="-SiWr_mod_quad_spacing/2." vis="SiWrSensitiveVis" z_offset="SiWr_module_distance_sides"/> <!-- Left quad -->
+    <component name="Right quad" sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery+0.5*(SiWr_mod_z-SiWr_mod_overlap)" ymax="SiWr_mod_z/2.+0.5*(SiWr_mod_z-SiWr_mod_overlap)" xmin="SiWr_mod_quad_spacing/2." xmax="SiWr_mod_rphi/2." vis="SiWrSensitiveVis" z_offset="SiWr_module_distance_sides"/> <!-- Right quad -->
+
+    <component name="Space between quads" sensitive="False" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery+0.5*(SiWr_mod_z-SiWr_mod_overlap)" ymax="SiWr_mod_z/2.+0.5*(SiWr_mod_z-SiWr_mod_overlap)" xmin="-SiWr_mod_quad_spacing/2." xmax="SiWr_mod_quad_spacing/2." vis="SiWrPeripheryVis" z_offset="SiWr_module_distance_sides"/> <!-- Space between quads -->          
+    <component name="Periphery"           sensitive="False" ymin="-SiWr_mod_z/2.+0.5*(SiWr_mod_z-SiWr_mod_overlap)" ymax="-SiWr_mod_z/2.+SiWr_mod_z_periphery+0.5*(SiWr_mod_z-SiWr_mod_overlap)" xmin="-SiWr_mod_rphi/2." xmax="SiWr_mod_rphi/2." vis="SiWrPeripheryVis" z_offset="SiWr_module_distance_sides"/> <!-- Periphery -->          
+
+    <!-- Fifth module on top -->
+    <component name="Left quad"  sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery+1.5*(SiWr_mod_z-SiWr_mod_overlap)" ymax="SiWr_mod_z/2.+1.5*(SiWr_mod_z-SiWr_mod_overlap)" xmin="-SiWr_mod_rphi/2." xmax="-SiWr_mod_quad_spacing/2." vis="SiWrSensitiveVis"/> <!-- Left quad -->
+    <component name="Right quad" sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery+1.5*(SiWr_mod_z-SiWr_mod_overlap)" ymax="SiWr_mod_z/2.+1.5*(SiWr_mod_z-SiWr_mod_overlap)" xmin="SiWr_mod_quad_spacing/2." xmax="SiWr_mod_rphi/2." vis="SiWrSensitiveVis"/> <!-- Right quad -->
+
+    <component name="Space between quads" sensitive="False" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery+1.5*(SiWr_mod_z-SiWr_mod_overlap)" ymax="SiWr_mod_z/2.+1.5*(SiWr_mod_z-SiWr_mod_overlap)" xmin="-SiWr_mod_quad_spacing/2." xmax="SiWr_mod_quad_spacing/2." vis="SiWrPeripheryVis"/> <!-- Space between quads -->          
+    <component name="Periphery"           sensitive="False" ymin="-SiWr_mod_z/2.+1.5*(SiWr_mod_z-SiWr_mod_overlap)" ymax="-SiWr_mod_z/2.+SiWr_mod_z_periphery+1.5*(SiWr_mod_z-SiWr_mod_overlap)" xmin="-SiWr_mod_rphi/2." xmax="SiWr_mod_rphi/2." vis="SiWrPeripheryVis"/> <!-- Periphery -->          
+
+    <!-- Sixth module on bottom -->
+    <component name="Left quad"  sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery+2.5*(SiWr_mod_z-SiWr_mod_overlap)" ymax="SiWr_mod_z/2.+2.5*(SiWr_mod_z-SiWr_mod_overlap)" xmin="-SiWr_mod_rphi/2." xmax="-SiWr_mod_quad_spacing/2." vis="SiWrSensitiveVis" z_offset="SiWr_module_distance_sides"/> <!-- Left quad -->
+    <component name="Right quad" sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery+2.5*(SiWr_mod_z-SiWr_mod_overlap)" ymax="SiWr_mod_z/2.+2.5*(SiWr_mod_z-SiWr_mod_overlap)" xmin="SiWr_mod_quad_spacing/2." xmax="SiWr_mod_rphi/2." vis="SiWrSensitiveVis" z_offset="SiWr_module_distance_sides"/> <!-- Right quad -->
+
+    <component name="Space between quads" sensitive="False" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery+2.5*(SiWr_mod_z-SiWr_mod_overlap)" ymax="SiWr_mod_z/2.+2.5*(SiWr_mod_z-SiWr_mod_overlap)" xmin="-SiWr_mod_quad_spacing/2." xmax="SiWr_mod_quad_spacing/2." vis="SiWrPeripheryVis" z_offset="SiWr_module_distance_sides"/> <!-- Space between quads -->          
+    <component name="Periphery"           sensitive="False" ymin="-SiWr_mod_z/2.+2.5*(SiWr_mod_z-SiWr_mod_overlap)" ymax="-SiWr_mod_z/2.+SiWr_mod_z_periphery+2.5*(SiWr_mod_z-SiWr_mod_overlap)" xmin="-SiWr_mod_rphi/2." xmax="SiWr_mod_rphi/2." vis="SiWrPeripheryVis" z_offset="SiWr_module_distance_sides"/> <!-- Periphery -->          
+</lccdd>
