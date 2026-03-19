@@ -67,7 +67,7 @@ namespace sim {
     G4StepPoint* thePrePoint = step->GetPreStepPoint();
     G4TouchableHandle thePreStepTouchable = thePrePoint->GetTouchableHandle();
 
-    auto cellID = thePreStepTouchable->GetCopyNumber(0);
+    auto vID = thePreStepTouchable->GetCopyNumber(0);
     G4Track* track = step->GetTrack();
 
     dd4hep::Segmentation* _geoSeg = &m_segmentation;
@@ -75,17 +75,22 @@ namespace sim {
 
     G4double edep = step->GetTotalEnergyDeposit();
 
-    auto newOrExistingHitIn = [&](std::size_t id) {
+    auto newOrExistingHitIn = [&](std::size_t id, bool isCherenkov = false) -> Geant4Calorimeter::Hit* {
       Geant4HitCollection* coll = collection(id);
-      auto* hit = coll->findByKey<Geant4Calorimeter::Hit>(cellID);
+
+      auto cIDwithChannel = segmentation->setCellID(vID, isCherenkov);
+
+      auto* hit = coll->findByKey<Geant4Calorimeter::Hit>(cIDwithChannel);
+
       if (!hit) {
-        DDSegmentation::Vector3D pos = segmentation->position(cellID);
+        DDSegmentation::Vector3D pos = segmentation->position(vID); // always use scintillation channel for position
         Position global(pos.x(), pos.y(), pos.z());
 
         hit = new Geant4Calorimeter::Hit(global / dd4hep::mm);
-        hit->cellID = cellID;
-        coll->add(cellID, hit);
+        hit->cellID = cIDwithChannel;
+        coll->add(cIDwithChannel, hit);
       }
+
       return hit;
     };
 
@@ -93,11 +98,11 @@ namespace sim {
     //
     if (edep > 0.) {
       // edep hits
-      auto* hitedep = newOrExistingHitIn(m_collectionID);
+      auto* hitedep = newOrExistingHitIn(m_collectionID, false);
       hitedep->energyDeposit += edep;
 
       // scintillation hits
-      auto* hitS = newOrExistingHitIn(m_userData.m_collectionID_scint);
+      auto* hitS = newOrExistingHitIn(m_userData.m_collectionID_scint, false);
       auto Scount = m_userData.SmearSsignal(edep);
       // The EDM4HEP converter divides this entry by CLHEP::GeV to save energies in GeV unit.
       // Here, we are saving S counts so we multiply by CLHEP::GeV to have the correct number in the output file.
@@ -113,7 +118,7 @@ namespace sim {
         track->SetTrackStatus(fStopAndKill);
         return true;
       } else if (track->GetCurrentStepNumber() == 1) {
-        auto* hitC = newOrExistingHitIn(m_userData.m_collectionID_ceren);
+        auto* hitC = newOrExistingHitIn(m_userData.m_collectionID_ceren, true);
         // The EDM4HEP converter divides this entry by CLHEP::GeV to save energies in GeV unit.
         // Here, we are saving C counts so we multiply by CLHEP::GeV to have the correct number in the output file.
         if (m_userData.SmearCsignal())

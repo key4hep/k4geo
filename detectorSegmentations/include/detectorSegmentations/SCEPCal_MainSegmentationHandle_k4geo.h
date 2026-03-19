@@ -42,9 +42,13 @@ public:
     return access()->implementation->setVolumeID(System, Phi, Theta, Gamma, Epsilon, Depth);
   }
 
-  inline CellID setCellID(int System, int Phi, int Theta, int Gamma, int Epsilon, int Depth) const {
-    return access()->implementation->setCellID(System, Phi, Theta, Gamma, Epsilon, Depth);
+  inline CellID setCellID(int System, int Phi, int Theta, int Gamma, int Epsilon, int Depth, bool isCheren) const {
+    return access()->implementation->setCellID(System, Phi, Theta, Gamma, Epsilon, Depth, isCheren);
   }
+
+  inline void neighbours(const CellID& cellID, std::set<CellID>& neighbours) const {
+    return access()->implementation->neighbours(cellID, neighbours);
+  };
 
   inline int System(const CellID& aCellID) const { return access()->implementation->System(aCellID); }
   inline int Phi(const CellID& aCellID) const { return access()->implementation->Phi(aCellID); }
@@ -52,7 +56,7 @@ public:
   inline int Gamma(const CellID& aCellID) const { return access()->implementation->Gamma(aCellID); }
   inline int Epsilon(const CellID& aCellID) const { return access()->implementation->Epsilon(aCellID); }
   inline int Depth(const CellID& aCellID) const { return access()->implementation->Depth(aCellID); }
-
+  inline bool isCherenkov(const CellID& aCellID) const { return access()->implementation->isCherenkov(aCellID); }
   inline int getFirst32bits(const CellID& aCellID) const { return access()->implementation->getFirst32bits(aCellID); }
   inline int getLast32bits(const CellID& aCellID) const { return access()->implementation->getLast32bits(aCellID); }
 
