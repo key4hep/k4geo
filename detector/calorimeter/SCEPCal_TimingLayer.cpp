@@ -241,28 +241,28 @@ static dd4hep::Ref_t create_detector_SCEPCal_TimingLayer(dd4hep::Detector& theDe
 
   // Lambda for crystals
   auto CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId =
-      [&theDetector, &sens, &segmentation, &ScepcalDetElement, &USE_OPTICAL_SURFACES, &LYSO_to_ESR](
-          std::string volName, double dz, const double* vertices, xml_comp_t compXml, dd4hep::Transform3D transform,
-          dd4hep::Volume assemblyVol, int nSystem, int nPhi, int nTheta, int nGamma, XYZVector posGlobal) {
+      [&theDetector, &sens, &segmentation, &ScepcalDetElement, &USE_OPTICAL_SURFACES,
+       &LYSO_to_ESR](const std::string& volName, double dz, const double* vertices, const xml_comp_t& compXml,
+                     const dd4hep::Transform3D& transform, const dd4hep::Volume& assemblyVol, int nSystem, int nTheta,
+                     int nGamma, const XYZVector& posGlobal) {
         dd4hep::EightPointSolid theShape(dz, vertices);
         dd4hep::Volume theVolume(volName, theShape, theDetector.material(compXml.materialStr()));
         theVolume.setVisAttributes(theDetector, compXml.visStr());
 
         if (USE_OPTICAL_SURFACES) {
           dd4hep::SkinSurface(theDetector, ScepcalDetElement,
-                              volName + "Surface_" + std::to_string(nPhi) + "_" + std::to_string(nTheta) + "_" +
-                                  std::to_string(nGamma),
-                              LYSO_to_ESR, theVolume);
+                              volName + "Surface_" + std::to_string(nTheta) + "_" + std::to_string(nGamma), LYSO_to_ESR,
+                              theVolume);
         }
 
         theVolume.setSensitiveDetector(sens);
 
-        auto volID = segmentation->setVolumeID(nSystem, nPhi, nTheta, nGamma);
+        auto volID = segmentation->setVolumeID(nSystem, 0, nTheta, nGamma);
         int volID_32 = segmentation->getFirst32bits(volID);
         dd4hep::PlacedVolume thePlacedVol = assemblyVol.placeVolume(theVolume, volID_32, transform);
 
         thePlacedVol.addPhysVolID("system", nSystem);
-        thePlacedVol.addPhysVolID("phi", nPhi);
+        // thePlacedVol.addPhysVolID("phi", nPhi);
         thePlacedVol.addPhysVolID("theta", nTheta);
         thePlacedVol.addPhysVolID("gamma", nGamma);
 
@@ -275,83 +275,92 @@ static dd4hep::Ref_t create_detector_SCEPCal_TimingLayer(dd4hep::Detector& theDe
   // Theta - divide phi slice into slabs in theta
   // Gamma - divide a theta slab into shorter segments in phi
   //////////////////////////////
+  double tan_d_phi_global2 = tan(D_PHI_GLOBAL / 2);
+  double tan_m_d_phi_global2 = -1.0 * tan_d_phi_global2;
+  Transform3D trans_dispT(Position(0, 0, 0));
 
+  dd4hep::Polyhedra timingPhiAssemblyShape(1, -D_PHI_GLOBAL / 2, D_PHI_GLOBAL, zTimingPolyhedra, rminTimingPolyhedra,
+                                           rmaxTimingPolyhedra);
+  dd4hep::Volume timingPhiAssemblyVolume("timingPhiAssembly", timingPhiAssemblyShape, theDetector.material("Vacuum"));
+  timingPhiAssemblyVolume.setVisAttributes(theDetector, tlbarrelAssemblyPhiVisXML.visStr());
+
+  for (int iTheta = 0; iTheta < N_THETA_TLBARREL; iTheta++) {
+
+    double thC = THETA_SIZE_TLENDCAP + D_THETA_TLBARREL / 2 + (iTheta * D_THETA_TLBARREL);
+    double sin_thC = sin(thC);
+    double cos_thC = cos(thC);
+
+    double r0e = (rT) / sin_thC;
+    double r2e = r0e + XTAL_DEPTH_T;
+    double y0e = r0e * tan(D_THETA_TLBARREL / 2.);
+    double y2e = r2e * tan(D_THETA_TLBARREL / 2.);
+
+    double x0y0 = r0e * sin_thC - y0e * cos_thC;
+    double x1y0 = r0e * sin_thC + y0e * cos_thC;
+
+    double x0y2 = r2e * sin_thC - y2e * cos_thC;
+    double x1y2 = r2e * sin_thC + y2e * cos_thC;
+
+    double x0y0l_E = x0y0 * tan_m_d_phi_global2;
+    double x0y0r_E = x0y0 * tan_d_phi_global2;
+    double x1y0l_E = x1y0 * tan_m_d_phi_global2;
+    double x1y0r_E = x1y0 * tan_d_phi_global2;
+
+    double x0y2l_E = x0y2 * tan_m_d_phi_global2;
+    double x0y2r_E = x0y2 * tan_d_phi_global2;
+    double x1y2l_E = x1y2 * tan_m_d_phi_global2;
+    double x1y2r_E = x1y2 * tan_d_phi_global2;
+
+    double verticesE[] = {x0y0r_E, y0e, x1y0r_E, -y0e, x1y0l_E, -y0e, x0y0l_E, y0e,
+                          x0y2r_E, y2e, x1y2r_E, -y2e, x1y2l_E, -y2e, x0y2l_E, y2e};
+
+    double rE = r0e + XTAL_DEPTH_T / 2.;
+    RotationZYX rotE(M_PI / 2, thC, 0);
+    Position dispE(rE * sin_thC, 0, rE * cos_thC);
+
+    dd4hep::EightPointSolid timingThetaAssemblyShape(XTAL_DEPTH_T / 2, verticesE);
+    dd4hep::Volume timingThetaAssemblyVolume("timingThetaAssembly", timingThetaAssemblyShape,
+                                             theDetector.material("Vacuum"));
+    timingThetaAssemblyVolume.setVisAttributes(theDetector, tlbarrelAssemblyThetaVisXML.visStr());
+    timingPhiAssemblyVolume.placeVolume(timingThetaAssemblyVolume, Transform3D(rotE, dispE));
+
+    for (int nGamma = 0; nGamma < N_GAMMA_TLBARREL; nGamma++) {
+      double gamma = -D_PHI_GLOBAL / 2 + D_GAMMA_TLBARREL / 2 + D_GAMMA_TLBARREL * nGamma;
+      double tan_g_m_dg = tan(gamma - D_GAMMA_TLBARREL / 2);
+      double tan_g_p_dg = tan(gamma + D_GAMMA_TLBARREL / 2);
+
+      double x0y0l = x0y0 * tan_g_m_dg;
+      double x0y0r = x0y0 * tan_g_p_dg;
+      double x1y0l = x1y0 * tan_g_m_dg;
+      double x1y0r = x1y0 * tan_g_p_dg;
+
+      double x0y2l = x0y2 * tan_g_m_dg;
+      double x0y2r = x0y2 * tan_g_p_dg;
+      double x1y2l = x1y2 * tan_g_m_dg;
+      double x1y2r = x1y2 * tan_g_p_dg;
+
+      double verticesT[] = {x0y0r, y0e, x1y0r, -y0e, x1y0l, -y0e, x0y0l, y0e,
+                            x0y2r, y2e, x1y2r, -y2e, x1y2l, -y2e, x0y2l, y2e};
+
+      XYZVector dispGlobal(rE * sin_thC, rE * sin_thC * tan(gamma), rE * cos_thC);
+      XYZVector posGlobal = (dispGlobal);
+
+      CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
+          "TimingCrystal", XTAL_DEPTH_T / 2, verticesT, crystalTXML, trans_dispT, timingThetaAssemblyVolume,
+          TLBARREL_SYSTEM_NO, N_THETA_TLENDCAP + iTheta, nGamma, posGlobal);
+      numCrystalsTiming += 1;
+    }
+  }
+
+  unsigned int nPhiPlaced = 0;
   for (int iPhi = CONSTRUCT_TLBARREL ? TIMING_PHI_START : TIMING_PHI_END; iPhi < TIMING_PHI_END; iPhi++) {
     double phiGlobal = iPhi * D_PHI_GLOBAL;
     RotationZ rotZphiGlobal(phiGlobal);
-
-    dd4hep::Polyhedra timingPhiAssemblyShape(1, -D_PHI_GLOBAL / 2, D_PHI_GLOBAL, zTimingPolyhedra, rminTimingPolyhedra,
-                                             rmaxTimingPolyhedra);
-    dd4hep::Volume timingPhiAssemblyVolume("timingPhiAssembly", timingPhiAssemblyShape, theDetector.material("Vacuum"));
-    timingPhiAssemblyVolume.setVisAttributes(theDetector, tlbarrelAssemblyPhiVisXML.visStr());
-    timingGlobalAssemblyVol.placeVolume(timingPhiAssemblyVolume, Transform3D(rotZphiGlobal));
-
-    for (int iTheta = 0; iTheta < N_THETA_TLBARREL; iTheta++) {
-
-      double thC = THETA_SIZE_TLENDCAP + D_THETA_TLBARREL / 2 + (iTheta * D_THETA_TLBARREL);
-
-      double r0e = (rT) / sin(thC);
-      double r2e = r0e + XTAL_DEPTH_T;
-      double y0e = r0e * tan(D_THETA_TLBARREL / 2.);
-      double y2e = r2e * tan(D_THETA_TLBARREL / 2.);
-
-      double x0y0 = r0e * sin(thC) - y0e * cos(thC);
-      double x1y0 = r0e * sin(thC) + y0e * cos(thC);
-
-      double x0y2 = r2e * sin(thC) - y2e * cos(thC);
-      double x1y2 = r2e * sin(thC) + y2e * cos(thC);
-
-      double x0y0l_E = x0y0 * tan(-D_PHI_GLOBAL / 2);
-      double x0y0r_E = x0y0 * tan(D_PHI_GLOBAL / 2);
-      double x1y0l_E = x1y0 * tan(-D_PHI_GLOBAL / 2);
-      double x1y0r_E = x1y0 * tan(D_PHI_GLOBAL / 2);
-
-      double x0y2l_E = x0y2 * tan(-D_PHI_GLOBAL / 2);
-      double x0y2r_E = x0y2 * tan(D_PHI_GLOBAL / 2);
-      double x1y2l_E = x1y2 * tan(-D_PHI_GLOBAL / 2);
-      double x1y2r_E = x1y2 * tan(D_PHI_GLOBAL / 2);
-
-      double verticesE[] = {x0y0r_E, y0e, x1y0r_E, -y0e, x1y0l_E, -y0e, x0y0l_E, y0e,
-                            x0y2r_E, y2e, x1y2r_E, -y2e, x1y2l_E, -y2e, x0y2l_E, y2e};
-
-      double rE = r0e + XTAL_DEPTH_T / 2.;
-      RotationZYX rotE(M_PI / 2, thC, 0);
-      Position dispE(rE * sin(thC), 0, rE * cos(thC));
-
-      dd4hep::EightPointSolid timingThetaAssemblyShape(XTAL_DEPTH_T / 2, verticesE);
-      dd4hep::Volume timingThetaAssemblyVolume("timingThetaAssembly", timingThetaAssemblyShape,
-                                               theDetector.material("Vacuum"));
-      timingThetaAssemblyVolume.setVisAttributes(theDetector, tlbarrelAssemblyThetaVisXML.visStr());
-      timingPhiAssemblyVolume.placeVolume(timingThetaAssemblyVolume, Transform3D(rotE, dispE));
-
-      for (int nGamma = 0; nGamma < N_GAMMA_TLBARREL; nGamma++) {
-        double gamma = -D_PHI_GLOBAL / 2 + D_GAMMA_TLBARREL / 2 + D_GAMMA_TLBARREL * nGamma;
-
-        double x0y0l = x0y0 * tan(gamma - D_GAMMA_TLBARREL / 2);
-        double x0y0r = x0y0 * tan(gamma + D_GAMMA_TLBARREL / 2);
-        double x1y0l = x1y0 * tan(gamma - D_GAMMA_TLBARREL / 2);
-        double x1y0r = x1y0 * tan(gamma + D_GAMMA_TLBARREL / 2);
-
-        double x0y2l = x0y2 * tan(gamma - D_GAMMA_TLBARREL / 2);
-        double x0y2r = x0y2 * tan(gamma + D_GAMMA_TLBARREL / 2);
-        double x1y2l = x1y2 * tan(gamma - D_GAMMA_TLBARREL / 2);
-        double x1y2r = x1y2 * tan(gamma + D_GAMMA_TLBARREL / 2);
-
-        double verticesT[] = {x0y0r, y0e, x1y0r, -y0e, x1y0l, -y0e, x0y0l, y0e,
-                              x0y2r, y2e, x1y2r, -y2e, x1y2l, -y2e, x0y2l, y2e};
-
-        Position dispT(0, 0, 0);
-
-        XYZVector dispGlobal(rE * sin(thC), rE * sin(thC) * tan(gamma), rE * cos(thC));
-        XYZVector posGlobal = (rotZphiGlobal * dispGlobal);
-
-        CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
-            "TimingCrystal", XTAL_DEPTH_T / 2, verticesT, crystalTXML, Transform3D(dispT), timingThetaAssemblyVolume,
-            TLBARREL_SYSTEM_NO, iPhi, N_THETA_TLENDCAP + iTheta, nGamma, posGlobal);
-        numCrystalsTiming += 1;
-      }
-    }
+    auto pv = timingGlobalAssemblyVol.placeVolume(timingPhiAssemblyVolume, Transform3D(rotZphiGlobal));
+    pv.addPhysVolID("phi", iPhi);
+    nPhiPlaced++;
   }
+  numCrystalsTiming *= nPhiPlaced;
 
   //////////////////////////////
   // Timing Endcap
@@ -359,120 +368,132 @@ static dd4hep::Ref_t create_detector_SCEPCal_TimingLayer(dd4hep::Detector& theDe
   // Theta - divide phi slice into slabs in theta
   // Gamma - divide a theta slab into shorter segments in phi
   //////////////////////////////
+  double tan_d_theta_tl2 = tan(D_THETA_TLENDCAP / 2.);
+  double tan_d_phig2 = tan(D_PHI_GLOBAL / 2);
+  double tan_m_d_phig2 = -1.0 * tan_d_phig2;
 
+  dd4hep::Polyhedra tlendcapPhiAssemblyShape(1, -D_PHI_GLOBAL / 2, D_PHI_GLOBAL, zTlEndcapPolyhedra,
+                                             rminTlEndcapPolyhedra, rmaxTlEndcapPolyhedra);
+  dd4hep::Polyhedra tlendcapPhiAssemblyShape_1(1, -D_PHI_GLOBAL / 2, D_PHI_GLOBAL, zTlEndcapPolyhedra_1,
+                                               rminTlEndcapPolyhedra_1, rmaxTlEndcapPolyhedra_1);
+
+  dd4hep::Volume tlendcapPhiAssemblyVolume("tlendcapPhiVol", tlendcapPhiAssemblyShape, theDetector.material("Vacuum"));
+  tlendcapPhiAssemblyVolume.setVisAttributes(theDetector, tlendcapAssemblyPhiVisXML.visStr());
+
+  dd4hep::Volume tlendcapPhiAssemblyVolume_1("tlendcapPhiVol_1", tlendcapPhiAssemblyShape_1,
+                                             theDetector.material("Vacuum"));
+  tlendcapPhiAssemblyVolume_1.setVisAttributes(theDetector, tlendcapAssemblyPhiVisXML.visStr());
+  tlendcapGlobalAssemblyVol_1.placeVolume(tlendcapPhiAssemblyVolume_1);
+
+  for (int iTheta = TLENDCAP_THETA_START; iTheta < N_THETA_TLENDCAP; iTheta++) {
+
+    double thC = D_THETA_TLENDCAP / 2 + iTheta * D_THETA_TLENDCAP;
+    double sin_thC = sin(thC);
+    double cos_thC = cos(thC);
+
+    double RinEndcap = (zT)*tan(thC);
+
+    int nGammaEndcap = std::max(int(2 * M_PI * RinEndcap / (PHI_SEGMENTS * XTAL_LENGTH_T)), 1);
+    double dGammaEndcap = D_PHI_GLOBAL / nGammaEndcap;
+
+    double r0e = RinEndcap / sin_thC;
+    double r2e = r0e + XTAL_DEPTH_T;
+    double y0e = r0e * tan_d_theta_tl2;
+    double y2e = r2e * tan_d_theta_tl2;
+
+    double x0y0 = r0e * sin_thC - y0e * cos_thC;
+    double x1y0 = r0e * sin_thC + y0e * cos_thC;
+
+    double x0y2 = r2e * sin_thC - y2e * cos_thC;
+    double x1y2 = r2e * sin_thC + y2e * cos_thC;
+
+    double x0y0l_E = x0y0 * tan_m_d_phig2;
+    double x0y0r_E = x0y0 * tan_d_phig2;
+    double x1y0l_E = x1y0 * tan_m_d_phig2;
+    double x1y0r_E = x1y0 * tan_d_phig2;
+
+    double x0y2l_E = x0y2 * tan_m_d_phig2;
+    double x0y2r_E = x0y2 * tan_d_phig2;
+    double x1y2l_E = x1y2 * tan_m_d_phig2;
+    double x1y2r_E = x1y2 * tan_d_phig2;
+
+    double verticesE[] = {x0y0r_E, y0e, x1y0r_E, -y0e, x1y0l_E, -y0e, x0y0l_E, y0e,
+                          x0y2r_E, y2e, x1y2r_E, -y2e, x1y2l_E, -y2e, x0y2l_E, y2e};
+    double verticesE_1[] = {x0y2r_E, y2e, x1y2r_E, -y2e, x1y2l_E, -y2e, x0y2l_E, y2e,
+                            x0y0r_E, y0e, x1y0r_E, -y0e, x1y0l_E, -y0e, x0y0l_E, y0e};
+
+    double rE = r0e + XTAL_DEPTH_T / 2.;
+
+    RotationZYX rotE(M_PI / 2, thC, 0);
+    RotationZYX rotE_1(M_PI / 2, -thC, 0);
+
+    Position dispE(rE * sin_thC, 0, rE * cos_thC);
+    Position dispE_1(rE * sin_thC, 0, -rE * cos_thC);
+
+    dd4hep::EightPointSolid tlendcapThetaAssemblyShape(XTAL_DEPTH_T / 2, verticesE);
+    dd4hep::EightPointSolid tlendcapThetaAssemblyShape_1(XTAL_DEPTH_T / 2, verticesE_1);
+
+    dd4hep::Volume tlendcapThetaAssemblyVolume("tlendcapThetaAssembly", tlendcapThetaAssemblyShape,
+                                               theDetector.material("Vacuum"));
+    tlendcapThetaAssemblyVolume.setVisAttributes(theDetector, tlendcapAssemblyThetaVisXML.visStr());
+    tlendcapPhiAssemblyVolume.placeVolume(tlendcapThetaAssemblyVolume, Transform3D(rotE, dispE));
+
+    dd4hep::Volume tlendcapThetaAssemblyVolume_1("tlendcapThetaAssembly_1", tlendcapThetaAssemblyShape_1,
+                                                 theDetector.material("Vacuum"));
+    tlendcapThetaAssemblyVolume_1.setVisAttributes(theDetector, tlendcapAssemblyThetaVisXML.visStr());
+    tlendcapPhiAssemblyVolume_1.placeVolume(tlendcapThetaAssemblyVolume_1, Transform3D(rotE_1, dispE_1));
+
+    for (int nGamma = 0; nGamma < nGammaEndcap; nGamma++) {
+      double gamma = -D_PHI_GLOBAL / 2 + dGammaEndcap / 2 + dGammaEndcap * nGamma;
+      double tan_g_m_dg2 = tan(gamma - dGammaEndcap / 2);
+      double tan_g_p_dg2 = tan(gamma + dGammaEndcap / 2);
+
+      double x0y0l = x0y0 * tan_g_m_dg2;
+      double x0y0r = x0y0 * tan_g_p_dg2;
+      double x1y0l = x1y0 * tan_g_m_dg2;
+      double x1y0r = x1y0 * tan_g_p_dg2;
+
+      double x0y2l = x0y2 * tan_g_m_dg2;
+      double x0y2r = x0y2 * tan_g_p_dg2;
+      double x1y2l = x1y2 * tan_g_m_dg2;
+      double x1y2r = x1y2 * tan_g_p_dg2;
+
+      double verticesT[] = {x0y0r, y0e, x1y0r, -y0e, x1y0l, -y0e, x0y0l, y0e,
+                            x0y2r, y2e, x1y2r, -y2e, x1y2l, -y2e, x0y2l, y2e};
+      double verticesT_1[] = {x0y2r, y2e, x1y2r, -y2e, x1y2l, -y2e, x0y2l, y2e,
+                              x0y0r, y0e, x1y0r, -y0e, x1y0l, -y0e, x0y0l, y0e};
+
+      Position dispT(0, 0, 0);
+
+      XYZVector dispGlobal(rE * sin_thC, rE * sin_thC * tan(gamma), rE * cos_thC);
+      XYZVector posGlobal = (dispGlobal);
+
+      XYZVector dispGlobal_1(rE * sin(thC), rE * sin_thC * tan(gamma), -rE * cos_thC);
+      XYZVector posGlobal_1 = (dispGlobal_1);
+
+      CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
+          "TlEndcapCrystal", XTAL_DEPTH_T / 2, verticesT, crystalTXML, Transform3D(dispT), tlendcapThetaAssemblyVolume,
+          TLENDCAP_SYSTEM_NO, iTheta, nGamma, posGlobal);
+      numCrystalsTlEndcap += 1;
+
+      CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
+          "TlEndcapCrystal_1", XTAL_DEPTH_T / 2, verticesT_1, crystalTXML, Transform3D(dispT),
+          tlendcapThetaAssemblyVolume_1, TLENDCAP_SYSTEM_NO, 2 * N_THETA_TLENDCAP + N_THETA_TLBARREL - iTheta, nGamma,
+          posGlobal_1);
+      numCrystalsTlEndcap += 1;
+    }
+  }
+
+  nPhiPlaced = 0;
   for (int iPhi = CONSTRUCT_TLENDCAP ? TLENDCAP_PHI_START : TLENDCAP_PHI_END; iPhi < TLENDCAP_PHI_END; iPhi++) {
     double phiGlobal = iPhi * D_PHI_GLOBAL;
     RotationZ rotZphiGlobal(phiGlobal);
 
-    dd4hep::Polyhedra tlendcapPhiAssemblyShape(1, -D_PHI_GLOBAL / 2, D_PHI_GLOBAL, zTlEndcapPolyhedra,
-                                               rminTlEndcapPolyhedra, rmaxTlEndcapPolyhedra);
-    dd4hep::Polyhedra tlendcapPhiAssemblyShape_1(1, -D_PHI_GLOBAL / 2, D_PHI_GLOBAL, zTlEndcapPolyhedra_1,
-                                                 rminTlEndcapPolyhedra_1, rmaxTlEndcapPolyhedra_1);
-
-    dd4hep::Volume tlendcapPhiAssemblyVolume("tlendcapPhiVol", tlendcapPhiAssemblyShape,
-                                             theDetector.material("Vacuum"));
-    tlendcapPhiAssemblyVolume.setVisAttributes(theDetector, tlendcapAssemblyPhiVisXML.visStr());
-    tlendcapGlobalAssemblyVol.placeVolume(tlendcapPhiAssemblyVolume, Transform3D(rotZphiGlobal));
-
-    dd4hep::Volume tlendcapPhiAssemblyVolume_1("tlendcapPhiVol_1", tlendcapPhiAssemblyShape_1,
-                                               theDetector.material("Vacuum"));
-    tlendcapPhiAssemblyVolume_1.setVisAttributes(theDetector, tlendcapAssemblyPhiVisXML.visStr());
-    tlendcapGlobalAssemblyVol_1.placeVolume(tlendcapPhiAssemblyVolume_1, Transform3D(rotZphiGlobal));
-
-    for (int iTheta = TLENDCAP_THETA_START; iTheta < N_THETA_TLENDCAP; iTheta++) {
-
-      double thC = D_THETA_TLENDCAP / 2 + iTheta * D_THETA_TLENDCAP;
-      double RinEndcap = (zT)*tan(thC);
-
-      int nGammaEndcap = std::max(int(2 * M_PI * RinEndcap / (PHI_SEGMENTS * XTAL_LENGTH_T)), 1);
-      double dGammaEndcap = D_PHI_GLOBAL / nGammaEndcap;
-
-      double r0e = RinEndcap / sin(thC);
-      double r2e = r0e + XTAL_DEPTH_T;
-      double y0e = r0e * tan(D_THETA_TLENDCAP / 2.);
-      double y2e = r2e * tan(D_THETA_TLENDCAP / 2.);
-
-      double x0y0 = r0e * sin(thC) - y0e * cos(thC);
-      double x1y0 = r0e * sin(thC) + y0e * cos(thC);
-
-      double x0y2 = r2e * sin(thC) - y2e * cos(thC);
-      double x1y2 = r2e * sin(thC) + y2e * cos(thC);
-
-      double x0y0l_E = x0y0 * tan(-D_PHI_GLOBAL / 2);
-      double x0y0r_E = x0y0 * tan(D_PHI_GLOBAL / 2);
-      double x1y0l_E = x1y0 * tan(-D_PHI_GLOBAL / 2);
-      double x1y0r_E = x1y0 * tan(D_PHI_GLOBAL / 2);
-
-      double x0y2l_E = x0y2 * tan(-D_PHI_GLOBAL / 2);
-      double x0y2r_E = x0y2 * tan(D_PHI_GLOBAL / 2);
-      double x1y2l_E = x1y2 * tan(-D_PHI_GLOBAL / 2);
-      double x1y2r_E = x1y2 * tan(D_PHI_GLOBAL / 2);
-
-      double verticesE[] = {x0y0r_E, y0e, x1y0r_E, -y0e, x1y0l_E, -y0e, x0y0l_E, y0e,
-                            x0y2r_E, y2e, x1y2r_E, -y2e, x1y2l_E, -y2e, x0y2l_E, y2e};
-      double verticesE_1[] = {x0y2r_E, y2e, x1y2r_E, -y2e, x1y2l_E, -y2e, x0y2l_E, y2e,
-                              x0y0r_E, y0e, x1y0r_E, -y0e, x1y0l_E, -y0e, x0y0l_E, y0e};
-
-      double rE = r0e + XTAL_DEPTH_T / 2.;
-
-      RotationZYX rotE(M_PI / 2, thC, 0);
-      RotationZYX rotE_1(M_PI / 2, -thC, 0);
-
-      Position dispE(rE * sin(thC), 0, rE * cos(thC));
-      Position dispE_1(rE * sin(thC), 0, -rE * cos(thC));
-
-      dd4hep::EightPointSolid tlendcapThetaAssemblyShape(XTAL_DEPTH_T / 2, verticesE);
-      dd4hep::EightPointSolid tlendcapThetaAssemblyShape_1(XTAL_DEPTH_T / 2, verticesE_1);
-
-      dd4hep::Volume tlendcapThetaAssemblyVolume("tlendcapThetaAssembly", tlendcapThetaAssemblyShape,
-                                                 theDetector.material("Vacuum"));
-      tlendcapThetaAssemblyVolume.setVisAttributes(theDetector, tlendcapAssemblyThetaVisXML.visStr());
-      tlendcapPhiAssemblyVolume.placeVolume(tlendcapThetaAssemblyVolume, Transform3D(rotE, dispE));
-
-      dd4hep::Volume tlendcapThetaAssemblyVolume_1("tlendcapThetaAssembly_1", tlendcapThetaAssemblyShape_1,
-                                                   theDetector.material("Vacuum"));
-      tlendcapThetaAssemblyVolume_1.setVisAttributes(theDetector, tlendcapAssemblyThetaVisXML.visStr());
-      tlendcapPhiAssemblyVolume_1.placeVolume(tlendcapThetaAssemblyVolume_1, Transform3D(rotE_1, dispE_1));
-
-      for (int nGamma = 0; nGamma < nGammaEndcap; nGamma++) {
-        double gamma = -D_PHI_GLOBAL / 2 + dGammaEndcap / 2 + dGammaEndcap * nGamma;
-
-        double x0y0l = x0y0 * tan(gamma - dGammaEndcap / 2);
-        double x0y0r = x0y0 * tan(gamma + dGammaEndcap / 2);
-        double x1y0l = x1y0 * tan(gamma - dGammaEndcap / 2);
-        double x1y0r = x1y0 * tan(gamma + dGammaEndcap / 2);
-
-        double x0y2l = x0y2 * tan(gamma - dGammaEndcap / 2);
-        double x0y2r = x0y2 * tan(gamma + dGammaEndcap / 2);
-        double x1y2l = x1y2 * tan(gamma - dGammaEndcap / 2);
-        double x1y2r = x1y2 * tan(gamma + dGammaEndcap / 2);
-
-        double verticesT[] = {x0y0r, y0e, x1y0r, -y0e, x1y0l, -y0e, x0y0l, y0e,
-                              x0y2r, y2e, x1y2r, -y2e, x1y2l, -y2e, x0y2l, y2e};
-        double verticesT_1[] = {x0y2r, y2e, x1y2r, -y2e, x1y2l, -y2e, x0y2l, y2e,
-                                x0y0r, y0e, x1y0r, -y0e, x1y0l, -y0e, x0y0l, y0e};
-
-        Position dispT(0, 0, 0);
-
-        XYZVector dispGlobal(rE * sin(thC), rE * sin(thC) * tan(gamma), rE * cos(thC));
-        XYZVector posGlobal = (rotZphiGlobal * dispGlobal);
-
-        XYZVector dispGlobal_1(rE * sin(thC), rE * sin(thC) * tan(gamma), -rE * cos(thC));
-        XYZVector posGlobal_1 = (rotZphiGlobal * dispGlobal_1);
-
-        CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
-            "TlEndcapCrystal", XTAL_DEPTH_T / 2, verticesT, crystalTXML, Transform3D(dispT),
-            tlendcapThetaAssemblyVolume, TLENDCAP_SYSTEM_NO, iPhi, iTheta, nGamma, posGlobal);
-        numCrystalsTlEndcap += 1;
-
-        CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
-            "TlEndcapCrystal_1", XTAL_DEPTH_T / 2, verticesT_1, crystalTXML, Transform3D(dispT),
-            tlendcapThetaAssemblyVolume_1, TLENDCAP_SYSTEM_NO, iPhi, 2 * N_THETA_TLENDCAP + N_THETA_TLBARREL - iTheta,
-            nGamma, posGlobal_1);
-        numCrystalsTlEndcap += 1;
-      }
-    }
+    auto pv = tlendcapGlobalAssemblyVol.placeVolume(tlendcapPhiAssemblyVolume, Transform3D(rotZphiGlobal));
+    pv.addPhysVolID("phi", iPhi);
+    nPhiPlaced++;
   }
+  numCrystalsTlEndcap *= nPhiPlaced;
 
   std::cout << std::endl;
   std::cout << "NUM_CRYSTALS_TLBARREL:" << numCrystalsTiming << std::endl;
