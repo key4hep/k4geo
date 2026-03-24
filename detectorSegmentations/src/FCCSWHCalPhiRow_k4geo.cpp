@@ -71,7 +71,7 @@ namespace DDSegmentation {
     // pseudo-layers. Need to recalculate the cell position:
     if (m_detLayout == 1 && !m_groupedRows.empty()) {
       int nrows = 0;
-      for (size_t i = 0; i < abs(idx); i++)
+      for (size_t i = 0; i < static_cast<size_t>(std::abs(idx)); i++)
         nrows += li.groupedRows[i];
       zpos = minLayerZ + nrows * m_dz_row - 0.5 * li.groupedRows[abs(idx) - 1] * m_dz_row;
       if (idx < 0)
