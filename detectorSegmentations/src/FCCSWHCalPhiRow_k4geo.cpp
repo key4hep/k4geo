@@ -176,7 +176,7 @@ namespace DDSegmentation {
     int irow = 0;
     while ((minLayerZ + (irow + 1) * m_dz_row) < (maxLayerZ + 0.0001)) {
       // define the cell index
-      int idx = floor(irow / m_gridSizeRow[layer]) + 1;
+      int idx = floor(irow / m_gridSizeRow.at(layer)) + 1;
 
       // If this is Endcap and m_groupedRows is provided from the xml file, then group the rows into the pseudo-layer
       // cells according to the provided numbers by redefining the cell index (idx), and do not use granularity set by
@@ -193,7 +193,7 @@ namespace DDSegmentation {
 
         irow += 1;
       } else
-        irow += m_gridSizeRow[layer];
+        irow += m_gridSizeRow.at(layer);
 
       // add the index if it is not already there
       if (li.cellIndexes.empty() || li.cellIndexes.back() != idx) {
@@ -206,22 +206,31 @@ namespace DDSegmentation {
     if (m_detLayout == 1) {
       li.cellIndexes.resize(sz * 2);
       for (size_t i = 0; i < sz; i++) {
-        li.cellIndexes[i + sz] = -li.cellIndexes[i];
+        li.cellIndexes.at(i + sz) = -li.cellIndexes.at(i);
       }
     }
 
     // find edges of each cell in the given layer along z axis
     li.m_cellEdge.reserve(sz);
-    li.m_ibin = li.cellIndexes[0];
+    li.m_ibin = li.cellIndexes.at(0);
     for (auto idx : li.cellIndexes) {
-      // calculate z-coordinates of the cell edges
-      double z1 = minLayerZ + (idx - 1) * m_dz_row * m_gridSizeRow[layer]; // lower edge
-      double z2 = z1 + m_dz_row * m_gridSizeRow[layer];                    // upper edge
-
       // We don't store the edges for the negative endcap, since they're
       // exactly the same as positive but flipped.
       if (idx < 0) {
         break;
+      }
+
+      // calculate z-coordinates of the cell edges
+      double z1, z2;
+      if (m_detLayout == 1 && !m_groupedRows.empty()) {
+        int nrows = 0;
+        for (int i = 0; i < idx - 1; i++)
+          nrows += li.groupedRows[i];
+        z1 = minLayerZ + nrows * m_dz_row;
+        z2 = z1 + m_dz_row * li.groupedRows[idx - 1];
+      } else {
+        z1 = minLayerZ + (idx - 1) * m_dz_row * m_gridSizeRow.at(layer); // lower edge
+        z2 = z1 + m_dz_row * m_gridSizeRow.at(layer);                    // upper edge
       }
 
       li.m_cellEdge.emplace_back(z1, z2);
