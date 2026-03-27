@@ -220,11 +220,11 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
     // // // // // // // // // // // // // // // // // // // //
     // Hyperboloid parameters:
     /// inner radius at z=0
-    DCH_length_t rin = l.radius_fdw_z0 + safety_r_interspace;
+    DCH_length_t rin = (l.radius_sw_z0 - 0.5 * l.height_z0) + safety_r_interspace;
     /// inner stereoangle, calculated from rin(z=0)
     DCH_angle_t stin = DCH_i->stereoangle_z0(rin);
     /// outer radius at z=0
-    DCH_length_t rout = l.radius_fuw_z0 - safety_r_interspace;
+    DCH_length_t rout = (l.radius_sw_z0 + 0.5 * l.height_z0)- safety_r_interspace;
     /// outer stereoangle, calculated from rout(z=0)
     DCH_angle_t stout = DCH_i->stereoangle_z0(rout);
     /// half-length
@@ -260,8 +260,8 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
     // unitary cell (Twisted tube) is repeated for each layer l.ncells times
     // Twisted tube parameters
     DCH_angle_t cell_twistangle = DCH_i->StereoSign(l) * DCH_i->twist_angle;
-    DCH_length_t cell_rin_z0 = l.radius_fdw_z0 + 2 * safety_r_interspace;
-    DCH_length_t cell_rout_z0 = l.radius_fuw_z0 - 2 * safety_r_interspace;
+    DCH_length_t cell_rin_z0 = (l.radius_sw_z0 - 0.5 * l.height_z0) + 2 * safety_r_interspace;
+    DCH_length_t cell_rout_z0 = (l.radius_sw_z0 + 0.5 * l.height_z0) - 2 * safety_r_interspace;
     DCH_length_t cell_rin_zLhalf = DCH_i->Radius_zLhalf(cell_rin_z0);
     DCH_length_t cell_rout_zLhalf = DCH_i->Radius_zLhalf(cell_rout_z0);
     DCH_length_t cell_dz = DCH_i->Lhalf;
@@ -310,11 +310,11 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
         //
         //   ^ radius
         //
-        //   O(1)---O(4)---O(6)    radius_z0 = l.radius_fuw_z0 == (++l).radius_fdw_z0
+        //   O(1)---O(4)---O(6)    radius_z0 = (l.radius_sw_z0 + 0.5 * l.height_z0) == ((l++).radius_sw_z0 - 0.5 * (l++).height_z0)
         //
-        //   O(2)   X      O(7)    radius_z0 = average(l.radius_fuw_z0, l.radius_fdw_z0)
+        //   O(2)   X      O(7)    radius_z0 = average(cell_rin_z0, cell_rout_z0) == l.radius_sw_z0
         //
-        //   O(3)---O(5)---O(8)    radius_z0 = l.radius_fdw_z0 == (--l).radius_fuw_z0
+        //   O(3)---O(5)---O(8)    radius_z0 = (l.radius_sw_z0 - 0.5 * l.height_z0) == ((l--).radius_sw_z0 + 0.5 * (l--).height_z0)
         //
         //   --> phi axis
         //
@@ -326,11 +326,11 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
         //  in such a manner that the wires are fully contained in one cell.
         //  The following code implements the following sketch:
         //
-        //   O(1)---O(4)---    radius_z0 = l.radius_fuw_z0 - wire_thickness/2
+        //   O(1)---O(4)---    radius_z0 = (l.radius_sw_z0 + 0.5 * l.height_z0) - wire_thickness/2
         //
-        //   O(2)   X          radius_z0 = average(l.radius_fuw_z0, l.radius_fdw_z0)
+        //   O(2)   X          radius_z0 = average(cell_rin_z0, cell_rout_z0) == l.radius_sw_z0
         //
-        //   O(3)---O(5)---    radius_z0 = l.radius_fdw_z0 + wire_thickness/2
+        //   O(3)---O(5)---    radius_z0 = (l.radius_sw_z0 - 0.5 * l.height_z0) + wire_thickness/2
         //
         //  phi_offset(n) = atan(  wire_thickness/2 / radius_z0 )
         //

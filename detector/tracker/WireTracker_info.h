@@ -60,10 +60,6 @@ public:
         angle_t stereo_sw_z0 = {0};
         /// radius (cylindrical coord) of sensitive wire
         length_t radius_sw_z0 = {0};
-        /// radius (cylindrical coord) of 'down' field wires
-        length_t radius_fdw_z0 = {0};
-        /// radius (cylindrical coord) of 'up' field wires
-        length_t radius_fuw_z0 = {0};
     };
 
     //--------------------------------------------------------------
@@ -360,8 +356,6 @@ struct DCH_info_struct : WireTracker_info_struct {
             layer1_info.ncells        = this->ncell0;
             layer1_info.height_z0     = first_width;    // cell height = cell width
             layer1_info.radius_sw_z0  = first_sense_r;
-            layer1_info.radius_fdw_z0 = first_sense_r - 0.5*first_width;
-            layer1_info.radius_fuw_z0 = first_sense_r + 0.5*first_width;
             layer1_info.width_z0      = dd4hep::twopi*first_sense_r/this->ncell0;
             layer1_info.stereo_sw_z0  = StereoSign(layer1_info) * this->stereoangle_z0(first_sense_r);
 
@@ -386,8 +380,8 @@ struct DCH_info_struct : WireTracker_info_struct {
             //calculate height_z0, radius_sw_z0, stereo_sw_z0
             {
                 double h  = previousLayer.height_z0;
-                double ru = previousLayer.radius_fuw_z0;
-                double rd = previousLayer.radius_fdw_z0;
+                double ru = previousLayer.radius_sw_z0 + 0.5 * h;
+                double rd = previousLayer.radius_sw_z0 - 0.5 * h;
 
                 if(0 == Get_nsuperlayer_minus_1(ilayer))
                     layer_info.height_z0 = h*ru/rd;
@@ -399,9 +393,7 @@ struct DCH_info_struct : WireTracker_info_struct {
                 layer_info.stereo_sw_z0  = StereoSign(layer_info) * this->stereoangle_z0(layer_info.radius_sw_z0);
             }
 
-            //calculate radius_fdw_z0, radius_fuw_z0, width_z0
-            layer_info.radius_fdw_z0 = previousLayer.radius_fuw_z0;
-            layer_info.radius_fuw_z0 = previousLayer.radius_fuw_z0 + layer_info.height_z0;
+            //calculate width_z0
             layer_info.width_z0 = dd4hep::twopi*layer_info.radius_sw_z0/(layer_info.ncells);
 
             // according to expert prescription, width_z0 == height_z0
@@ -441,9 +433,7 @@ struct DCH_info_struct : WireTracker_info_struct {
                 << "\t" << "ncells"
                 << "\t" << "height_z0/mm"
                 << "\t" << "width_z0/mm"
-                << "\t" << "radius_fdw_z0/mm"
                 << "\t" << "radius_sw_z0/mm"
-                << "\t" << "radius_fuw_z0/mm"
                 << "\t" << "stereo_sw_z0/deg"
                 << "\t" << "stereoangle_z0/deg"
                 << "\t" << "Pitch_z0/mm"
@@ -464,9 +454,7 @@ struct DCH_info_struct : WireTracker_info_struct {
                     << "\t" << l.ncells
                     << "\t" << l.height_z0/dd4hep::mm
                     << "\t" << l.width_z0/dd4hep::mm
-                    << "\t" << l.radius_fdw_z0/dd4hep::mm
                     << "\t" << l.radius_sw_z0/dd4hep::mm
-                    << "\t" << l.radius_fuw_z0/dd4hep::mm
                     << "\t" << l.stereo_sw_z0/dd4hep::deg
                     << "\t" << this->StereoSign(l)*this->stereoangle_z0(l.radius_sw_z0)/dd4hep::deg
                     << "\t" << this->Pitch_z0(l, l.radius_sw_z0)/dd4hep::mm
