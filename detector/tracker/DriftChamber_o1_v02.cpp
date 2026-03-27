@@ -253,11 +253,11 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
     // // // // // INTO CELLS (TWISTED TUBES) // // // // // //
     // // // // // // // // // // // // // // // // // // // //
 
-    // ncells in this layer = 2x number of wires
-    int ncells = l.nwires / 2;
+    // ncells in this layer (= 2x number of wires)
+    int ncells = l.ncells;
     DCH_angle_t phi_step = (TMath::TwoPi() / ncells) * dd4hep::rad;
 
-    // unitary cell (Twisted tube) is repeated for each layer l.nwires/2 times
+    // unitary cell (Twisted tube) is repeated for each layer l.ncells times
     // Twisted tube parameters
     DCH_angle_t cell_twistangle = DCH_i->StereoSign(l) * DCH_i->twist_angle;
     DCH_length_t cell_rin_z0 = l.radius_fdw_z0 + 2 * safety_r_interspace;

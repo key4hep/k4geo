@@ -50,8 +50,8 @@ public:
     {
         /// layer number
         layer_t layer = {0};
-        /// 2x number of cells in that layer
-        int nwires = {0};
+        /// number of cells in that layer
+        int ncells = {0};
         /// cell parameter
         double height_z0 = {0};
         /// cell parameter
@@ -280,9 +280,9 @@ struct DCH_info_struct : WireTracker_info_struct {
         return atan( r_zLhalf/Lhalf*sin(twist_angle/2/dd4hep::rad));
     }
 
-    /// separation between wires (along the circle)
+    /// separation between wires along the circle (counting 2 wires per cell)
     length_t Pitch_z0(LayerInfo layer, length_t r_z0) const {
-        return dd4hep::twopi*r_z0/layer.nwires;
+        return dd4hep::twopi*r_z0/(2 * layer.ncells);
     };
 
     /// WireLength = 2*dch_Lhalf/cos(atan(Pitch_z0(r_z0)/(2*dch_Lhalf)))/cos(stereoangle_z0(r_z0))
@@ -301,21 +301,16 @@ struct DCH_info_struct : WireTracker_info_struct {
         return (IsStereoPositive(layer)*2 - 1);
     };
 
-    /// number of cells per layer, calculated as the total number of wires / 2
-    int Get_ncells(int ilayer) const {
-        return database.at(ilayer).nwires/2;
-    };
-
     /// dphi between two sensing wires
     angle_t Get_phi_width(int ilayer) const {
-        return (dd4hep::twopi/Get_ncells(ilayer))*dd4hep::rad;
+        return (dd4hep::twopi/(database.at(ilayer).ncells))*dd4hep::rad;
     };
 
     //--------------------------------------------------------------
     // DCH geo interface implementation
 
     /// phi positioning, adding offset for odd ilayers
-    /// there is a staggering in phi for al {return database.at(ilayer).nwires/2;}ternating layers, 0.25*cell_phi_width*(ilayer%2);
+    /// there is a staggering in phi for alternating layers, 0.25*cell_phi_width*(ilayer%2);
     angle_t Get_cell_phi_angle(int, int ilayer, int, int iphi) const override final { 
         return (Get_phi_width(ilayer) * (iphi + 0.25*(ilayer%2)));
     }
@@ -362,7 +357,7 @@ struct DCH_info_struct : WireTracker_info_struct {
         {
             LayerInfo layer1_info;
             layer1_info.layer         = 1;
-            layer1_info.nwires        = 2*this->ncell0;
+            layer1_info.ncells        = this->ncell0;
             layer1_info.height_z0     = first_width;    // cell height = cell width
             layer1_info.radius_sw_z0  = first_sense_r;
             layer1_info.radius_fdw_z0 = first_sense_r - 0.5*first_width;
@@ -382,8 +377,8 @@ struct DCH_info_struct : WireTracker_info_struct {
 
             // the loop counter actually corresponds to the layer number
             layer_info.layer = ilayer;
-            // nwires is twice the number of cells in this particular layer (ilayer)
-            layer_info.nwires = 2*(this->ncell0 + this->ncell_increment*Get_nsuperlayer_minus_1(ilayer) );
+            // ncells has currently fixed increment per layer
+            layer_info.ncells = (this->ncell0 + this->ncell_increment*Get_nsuperlayer_minus_1(ilayer) );
 
             // the previous layer info is needed to calculate parameters of current layer
             const auto& previousLayer = this->database.at(ilayer-1);
@@ -398,7 +393,7 @@ struct DCH_info_struct : WireTracker_info_struct {
                     layer_info.height_z0 = h*ru/rd;
                 else
                     // we calculate the height (=width) as  h =  (ru + 1/2 * h) * (2pi / n_cells)
-                    layer_info.height_z0 = ru*dd4hep::twopi/(0.5*layer_info.nwires - dd4hep::pi);
+                    layer_info.height_z0 = ru*dd4hep::twopi/(layer_info.ncells - dd4hep::pi);
 
                 layer_info.radius_sw_z0 = 0.5*layer_info.height_z0 + ru;
                 layer_info.stereo_sw_z0  = StereoSign(layer_info) * this->stereoangle_z0(layer_info.radius_sw_z0);
@@ -407,7 +402,7 @@ struct DCH_info_struct : WireTracker_info_struct {
             //calculate radius_fdw_z0, radius_fuw_z0, width_z0
             layer_info.radius_fdw_z0 = previousLayer.radius_fuw_z0;
             layer_info.radius_fuw_z0 = previousLayer.radius_fuw_z0 + layer_info.height_z0;
-            layer_info.width_z0 = dd4hep::twopi*layer_info.radius_sw_z0/(0.5*layer_info.nwires);
+            layer_info.width_z0 = dd4hep::twopi*layer_info.radius_sw_z0/(layer_info.ncells);
 
             // according to expert prescription, width_z0 == height_z0
             if(fabs(layer_info.width_z0 - layer_info.height_z0)>1e-4)
@@ -443,7 +438,7 @@ struct DCH_info_struct : WireTracker_info_struct {
         oss << "Layer parameters of DCH:\n";
         oss
                 << "\t" << "layer"
-                << "\t" << "nwires"
+                << "\t" << "ncells"
                 << "\t" << "height_z0/mm"
                 << "\t" << "width_z0/mm"
                 << "\t" << "radius_fdw_z0/mm"
@@ -466,7 +461,7 @@ struct DCH_info_struct : WireTracker_info_struct {
         {
             oss
                     << "\t" << l.layer
-                    << "\t" << l.nwires
+                    << "\t" << l.ncells
                     << "\t" << l.height_z0/dd4hep::mm
                     << "\t" << l.width_z0/dd4hep::mm
                     << "\t" << l.radius_fdw_z0/dd4hep::mm
