@@ -44,7 +44,7 @@
   <include ref="VertexComplete_IDEA_o1_v03.xml"/>   <!-- symbolic link to ../../../IDEA/compact/IDEA_o1_v03/VertexComplete_IDEA_o1_v03.xml -->
   <include ref="DriftChamber_o1_v02.xml"/>          <!-- symbolic link to ../../../IDEA/compact/IDEA_o1_v03/DriftChamber_o1_v02.xml -->
   <include ref="SiliconWrapper_o1_v03.xml"/>        <!-- symbolic link to ../../../IDEA/compact/IDEA_o1_v03/SiliconWrapper_o1_v03.xml -->
-  <include ref="ECalBarrel_thetamodulemerged.xml"/> <!-- if you remove the ECalBarrel, you also have to remove or update the "GlobalSolenoid" field (it depends on ECAL dimensions) -->
+  <include ref="ECalBarrel_thetamodulemerged.xml"/> <!-- Caution: removing the ECAL barrel also removes the magnetic field! The solenoid is hosted in the ECAL barrel cryostat and therefore the B-field is defined there -->
   <include ref="HCalBarrel_TileCal_v03.xml"/>
   <include ref="ECalEndcaps_Turbine_o1_v03.xml"/>
   <include ref="HCalEndcaps_ThreeParts_TileCal_v03.xml"/>
