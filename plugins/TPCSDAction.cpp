@@ -67,6 +67,7 @@ namespace sim {
       G4int TrackPDGEncoding{};
       G4int cellID{};
       G4int innercopy{};
+      G4Step const* theStep = nullptr;
     };
     StepInfo previousStepInfo{};
     StepInfo stepAtEntranceToPadRingInfo{};
@@ -153,6 +154,7 @@ namespace sim {
       thisStepInfo.TrackPDGEncoding = step->GetTrack()->GetDefinition()->GetPDGEncoding();
       thisStepInfo.cellID = sensitive->cellID(step);
       thisStepInfo.innercopy = getCopyNumber(step, false);
+      thisStepInfo.theStep = step;
 
       //=========================================================================================================
 
@@ -217,6 +219,7 @@ namespace sim {
             hit->length = step->GetStepLength();
             hit->cellID = thisStepInfo.cellID;
             fSpaceHitCollection->add(hit);
+            sensitive->mark(step);
           }
         }
 
@@ -346,6 +349,7 @@ namespace sim {
           hit->length = pathLengthInPadRow;
           hit->cellID = mainStepInfo.cellID;
           fHitCollection->add(hit);
+          sensitive->mark(mainStepInfo.theStep);
           sensitive->printM2("+++ TrackID:%6d [%s] CREATE TPC hit at pad row crossing :"
                              " %e MeV  Pos:%8.2f %8.2f %8.2f",
                              mainStepInfo.TrackID, sensitive->c_name(), dEInPadRow, hit->position.X() / CLHEP::mm,
@@ -377,6 +381,7 @@ namespace sim {
       hit->length = CumulativePathLength;
       hit->cellID = stInf.cellID;
       fLowPtHitCollection->add(hit);
+      sensitive->mark(stInf.theStep);
       // reset the cumulative variables after positioning the hit
       ResetCumulativeVariables();
     }
