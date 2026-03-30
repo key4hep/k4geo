@@ -18,6 +18,7 @@
 #include "XML/Utilities.h"
 
 #include "WireTracker_info.h"
+#include <cmath>
 
 namespace DCH_v2 {
 
@@ -224,7 +225,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
     /// inner stereoangle, calculated from rin(z=0)
     DCH_angle_t stin = DCH_i->stereoangle_z0(rin);
     /// outer radius at z=0
-    DCH_length_t rout = (l.radius_sw_z0 + 0.5 * l.height_z0)- safety_r_interspace;
+    DCH_length_t rout = (l.radius_sw_z0 + 0.5 * l.height_z0) - safety_r_interspace;
     /// outer stereoangle, calculated from rout(z=0)
     DCH_angle_t stout = DCH_i->stereoangle_z0(rout);
     /// half-length
@@ -500,7 +501,7 @@ dd4hep::Solid CompositeTT(double twist_angle, double cell_rin_z0, double cell_ro
   double poly_angle = dphi / 2;
   double twist_angle_half = twist_angle / 2.;
   // change sign, so the final shape has the same orientation as G4 twisted tube
-  twist_angle_half *= -1;
+  twist_angle_half *= -1; // this might not be true
 
   // define points of 8 genenric trapezoid
   struct point2d {
@@ -542,9 +543,9 @@ dd4hep::Solid CompositeTT(double twist_angle, double cell_rin_z0, double cell_ro
   //----------------- Hyperboloid -------------
   // ROOT hyperboloid require stereoangles stin and stout
   //-- stereo for rmin
-  double stin = DCH_i.stereoangle_z0(cell_rin_z0);
+  double stin = DCH_i.stereoangle_z0(cell_rin_z0); //std::copysign(DCH_i.stereoangle_z0(cell_rin_z0), twist_angle);
   //-- stereo for rout
-  double stout = DCH_i.stereoangle_z0(cell_rout_z0);
+  double stout = DCH_i.stereoangle_z0(cell_rout_z0); //std::copysign(DCH_i.stereoangle_z0(cell_rout_z0), twist_angle);
 
   // make hyperboloid longer, later intersection with gtrap will lead to proper length
   double dz_safe = 1.1 * dz;

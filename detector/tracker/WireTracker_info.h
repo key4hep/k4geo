@@ -293,8 +293,8 @@ struct DCH_info_struct : WireTracker_info_struct {
     };
 
     /// calculate sign based on IsStereoPositive
-    int StereoSign(LayerInfo layer) const {
-        return (IsStereoPositive(layer)*2 - 1);
+    int StereoSign(LayerInfo layer_info) const {
+        return (IsStereoPositive(layer_info)*2 - 1);
     };
 
     /// dphi between two sensing wires
