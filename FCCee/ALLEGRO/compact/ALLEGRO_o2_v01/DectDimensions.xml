@@ -17,6 +17,7 @@
     <constant name="GlobalTrackerReadoutID" type="string" value="system:5,side:-2,layer:5,module:12,sensor:8"/>
 
     <constant name="SolenoidField" value="2*tesla"/>
+    <constant name="SolenoidReturnField" value="-1.0*tesla"/> <!-- this number is somewhat arbitrary, to be studied with FEM and HCAL material -->
 
     <!-- Detector IDs -->
     <constant name="DetID_NOTUSED"                value=" 0"/>
