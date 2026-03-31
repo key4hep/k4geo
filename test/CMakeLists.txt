@@ -148,6 +148,11 @@ set_tests_properties( ${test_name} PROPERTIES TIMEOUT 400)
 endif()
 
 #--------------------------------------------------
+# test for FCChh
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCChh/compact/FCChhBaseline/FCChh_DectMaster.xml
+  EXTRA_ARGS --gun.distribution uniform --gun.particle geantino)
+
+#--------------------------------------------------
 
 ADD_EXECUTABLE( TestSensThickness src/TestSensThickness.cpp )
 Target_Link_Libraries( TestSensThickness lcgeo )

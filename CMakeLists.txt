@@ -188,7 +188,7 @@ INSTALL(FILES ${hfiles}
 
 #--- install compact files------------------------------
 if(INSTALL_COMPACT_FILES)
-  INSTALL(DIRECTORY CaloTB CLIC FCalTB FCCee ILD fieldmaps MuColl SiD DESTINATION share/k4geo )
+  INSTALL(DIRECTORY CaloTB CLIC FCalTB FCCee FCChh ILD fieldmaps MuColl SiD DESTINATION share/k4geo )
 endif()
 
 # create k4geoConfig and friends

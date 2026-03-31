@@ -1,5 +1,6 @@
 // DD4hep
 #include "DD4hep/DetFactoryHelper.h"
+#include "XML/Utilities.h"
 
 using dd4hep::DetElement;
 using dd4hep::PlacedVolume;
@@ -210,6 +211,11 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   PlacedVolume placedHCal = motherVol.placeVolume(envelopeVolume);
   placedHCal.addPhysVolID("system", hCal.id());
   hCal.setPlacement(placedHCal);
+
+  // Set type flags
+  dd4hep::xml::DetElement xmlDetElem = xmlDet;
+  dd4hep::xml::setDetectorTypeFlag(xmlDetElem, hCal);
+
   return hCal;
 }
 } // namespace det

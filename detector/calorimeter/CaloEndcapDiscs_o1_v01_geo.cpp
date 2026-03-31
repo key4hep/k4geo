@@ -1,4 +1,5 @@
 #include "DD4hep/DetFactoryHelper.h"
+#include "XML/Utilities.h"
 
 // todo: remove gaudi logging and properly capture output
 #define endmsg std::endl
@@ -310,6 +311,10 @@ static dd4hep::Ref_t createCaloDiscs(dd4hep::Detector& aLcdd, dd4hep::xml::Handl
   dd4hep::PlacedVolume envelopePhysVol = motherVol.placeVolume(envelopeVol, dd4hep::Position(0., 0., dim.z_offset()));
   caloDetElem.setPlacement(envelopePhysVol);
   envelopePhysVol.addPhysVolID("system", idDet);
+
+  // Set type flags
+  dd4hep::xml::setDetectorTypeFlag(xmlDetElem, caloDetElem);
+
   return caloDetElem;
 }
 } // namespace det
