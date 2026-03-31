@@ -157,8 +157,8 @@ WireTracker_info_struct::Calculate_wire_vector_ez(int superlayer, int ilayer, in
   // eq. 2.9, for the definition of ez, vector along the wire
 
   // initialize some variables
-  double rz0        = l.radius_sw_z0;
-  double stereo     = l.stereo_sw_z0;
+  double rz0    = l.radius_sw_z0;
+  double stereo = l.stereo_sw_z0;
   // kappa is the same as in eq. 2.9 
   // using the relation: tan(stereoangle) = R(z=0)   / (L/2) * tan( twist_angle/2))
   double kappa = tan(stereo) / rz0;
