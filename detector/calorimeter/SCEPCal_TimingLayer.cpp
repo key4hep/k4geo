@@ -12,6 +12,7 @@
 #include "TGeoTrd2.h"
 #include "detectorSegmentations/SCEPCal_TimingSegmentationHandle_k4geo.h"
 #include <bitset>
+#include <unordered_map>
 
 using dd4hep::Position;
 using dd4hep::RotationZYX;
@@ -239,12 +240,26 @@ static dd4hep::Ref_t create_detector_SCEPCal_TimingLayer(dd4hep::Detector& theDe
 
   ScepcalDetElement.setPlacement(tlbarrelAssemblyPlacedVol);
 
+  std::unordered_map<int, RotationZ> phi_barrel_rotations, phi_endcap_rotations;
+  for (int iPhi = TIMING_PHI_START; iPhi < TIMING_PHI_END; iPhi++) {
+    double phiGlobal = iPhi * D_PHI_GLOBAL;
+    RotationZ rotZPhiGlobal(phiGlobal);
+    phi_barrel_rotations[iPhi]=rotZPhiGlobal;
+  }
+  for (int iPhi = TLENDCAP_PHI_START; iPhi < TLENDCAP_PHI_END; iPhi++) {
+    double phiGlobal = iPhi * D_PHI_GLOBAL;
+    RotationZ rotZPhiGlobal(phiGlobal);
+    phi_endcap_rotations[iPhi]=rotZPhiGlobal;
+  }
+  
   // Lambda for crystals
   auto CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId =
       [&theDetector, &sens, &segmentation, &ScepcalDetElement, &USE_OPTICAL_SURFACES,
-       &LYSO_to_ESR](const std::string& volName, double dz, const double* vertices, const xml_comp_t& compXml,
-                     const dd4hep::Transform3D& transform, const dd4hep::Volume& assemblyVol, int nSystem, int nTheta,
-                     int nGamma, const XYZVector& posGlobal) {
+       &LYSO_to_ESR, &D_PHI_GLOBAL]
+                (const std::string& volName, double dz, const double* vertices, const xml_comp_t& compXml,
+                 const dd4hep::Transform3D& transform, const dd4hep::Volume& assemblyVol, int nSystem, int nTheta,
+		 int nGamma, const XYZVector& posGlobal, int phi_start, int phi_end,
+		 std::unordered_map<int, RotationZ> &phi_rotations) {
         dd4hep::EightPointSolid theShape(dz, vertices);
         dd4hep::Volume theVolume(volName, theShape, theDetector.material(compXml.materialStr()));
         theVolume.setVisAttributes(theDetector, compXml.visStr());
@@ -257,16 +272,21 @@ static dd4hep::Ref_t create_detector_SCEPCal_TimingLayer(dd4hep::Detector& theDe
 
         theVolume.setSensitiveDetector(sens);
 
-        auto volID = segmentation->setVolumeID(nSystem, 0, nTheta, nGamma);
-        int volID_32 = segmentation->getFirst32bits(volID);
-        dd4hep::PlacedVolume thePlacedVol = assemblyVol.placeVolume(theVolume, volID_32, transform);
+        auto volID_0 = segmentation->setVolumeID(nSystem, 0, nTheta, nGamma);
+        int volID_0_32 = segmentation->getFirst32bits(volID_0);
+        dd4hep::PlacedVolume thePlacedVol = assemblyVol.placeVolume(theVolume, volID_0_32, transform);
 
         thePlacedVol.addPhysVolID("system", nSystem);
-        // thePlacedVol.addPhysVolID("phi", nPhi);
         thePlacedVol.addPhysVolID("theta", nTheta);
         thePlacedVol.addPhysVolID("gamma", nGamma);
 
-        segmentation->savePosition(volID_32, posGlobal);
+	for ( int iPhi=phi_start; iPhi< phi_end; iPhi++ ) {
+	  XYZVector posGlobalPhi = phi_rotations[iPhi] * posGlobal;
+	  auto volID = segmentation->setVolumeID(nSystem, iPhi, nTheta, nGamma);
+	  int volID_32 = segmentation->getFirst32bits(volID);
+	  //std::cout << posGlobalPhi << " " << volID_32 << std::endl;
+	  segmentation->savePosition(volID_32, posGlobalPhi);
+	}
       };
 
   //////////////////////////////
@@ -347,7 +367,8 @@ static dd4hep::Ref_t create_detector_SCEPCal_TimingLayer(dd4hep::Detector& theDe
 
       CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
           "TimingCrystal", XTAL_DEPTH_T / 2, verticesT, crystalTXML, trans_dispT, timingThetaAssemblyVolume,
-          TLBARREL_SYSTEM_NO, N_THETA_TLENDCAP + iTheta, nGamma, posGlobal);
+          TLBARREL_SYSTEM_NO, N_THETA_TLENDCAP + iTheta, nGamma, posGlobal, TIMING_PHI_START, TIMING_PHI_END,
+	  phi_barrel_rotations);
       numCrystalsTiming += 1;
     }
   }
@@ -473,13 +494,13 @@ static dd4hep::Ref_t create_detector_SCEPCal_TimingLayer(dd4hep::Detector& theDe
 
       CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
           "TlEndcapCrystal", XTAL_DEPTH_T / 2, verticesT, crystalTXML, Transform3D(dispT), tlendcapThetaAssemblyVolume,
-          TLENDCAP_SYSTEM_NO, iTheta, nGamma, posGlobal);
+          TLENDCAP_SYSTEM_NO, iTheta, nGamma, posGlobal, TLENDCAP_PHI_START, TLENDCAP_PHI_END, phi_endcap_rotations);
       numCrystalsTlEndcap += 1;
 
       CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
           "TlEndcapCrystal_1", XTAL_DEPTH_T / 2, verticesT_1, crystalTXML, Transform3D(dispT),
           tlendcapThetaAssemblyVolume_1, TLENDCAP_SYSTEM_NO, 2 * N_THETA_TLENDCAP + N_THETA_TLBARREL - iTheta, nGamma,
-          posGlobal_1);
+          posGlobal_1, TLENDCAP_PHI_START, TLENDCAP_PHI_END, phi_endcap_rotations);
       numCrystalsTlEndcap += 1;
     }
   }
@@ -491,6 +512,7 @@ static dd4hep::Ref_t create_detector_SCEPCal_TimingLayer(dd4hep::Detector& theDe
 
     auto pv = tlendcapGlobalAssemblyVol.placeVolume(tlendcapPhiAssemblyVolume, Transform3D(rotZphiGlobal));
     pv.addPhysVolID("phi", iPhi);
+
     nPhiPlaced++;
   }
   numCrystalsTlEndcap *= nPhiPlaced;
