@@ -21,6 +21,7 @@
 #include <assert.h>
 #include <cmath>
 #include <map>
+#include <optional>
 #include <string>
 
 using namespace std;
@@ -1033,8 +1034,10 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     // sensor and has only the silicon
     VolPlane surf0(volV[0].first, surfType, active_silicon_thickness / 2, active_silicon_thickness / 2 + supp_thick, u0,
                    v0, n0);
-    VolPlane surf1(volV[1].first, surfType, active_silicon_thickness / 2, active_silicon_thickness / 2, u1, v1, n1);
-    ;
+    std::optional<VolPlane> surf1;
+    if (_dbParDisk.double_sided == 1) {
+      surf1.emplace(volV[1].first, surfType, active_silicon_thickness / 2, active_silicon_thickness / 2, u1, v1, n1);
+    }
 
     //----
 
@@ -1075,8 +1078,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         sensorDEposZ_2.setPlacement(volV[1].second);
         sensorDEnegZ_2.setPlacement(volV[1].second);
 
-        volSurfaceList(sensorDEposZ_2)->push_back(surf1);
-        volSurfaceList(sensorDEnegZ_2)->push_back(surf1);
+        volSurfaceList(sensorDEposZ_2)->push_back(*surf1);
+        volSurfaceList(sensorDEnegZ_2)->push_back(*surf1);
       }
     }
 
