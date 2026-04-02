@@ -67,24 +67,37 @@ namespace sim {
     G4StepPoint* thePrePoint = step->GetPreStepPoint();
     G4TouchableHandle thePreStepTouchable = thePrePoint->GetTouchableHandle();
 
-    auto cellID = thePreStepTouchable->GetCopyNumber(0);
-    G4Track* track = step->GetTrack();
+    //lower 32 bits of cellID but with phi=0
+    auto cellID0 = thePreStepTouchable->GetCopyNumber(0);
+    //get phi from grandparent
+    auto cellID2 = thePreStepTouchable->GetCopyNumber(2);
 
     dd4hep::Segmentation* _geoSeg = &m_segmentation;
     auto segmentation = dynamic_cast<dd4hep::DDSegmentation::SCEPCal_MainSegmentation_k4geo*>(_geoSeg->segmentation());
 
-    G4double edep = step->GetTotalEnergyDeposit();
+    //int system = segmentation->System(cellID2);
+    //int theta = segmentation->Theta(cellID2);
+    //int gamma = segmentation->Gamma(cellID2);
+    //int epilson = segmentation->Epsilon(cellID2);
+    //int depth = segmentation->Depth(cellID2);
 
+    //auto cellID_phi = segmentation->setVolumeID(system, cellID2_2, theta, gamma, epilson, depth);
+    auto cellID_phi = segmentation->setPhi(cellID0, cellID2);
+    auto cellID_phi32 = segmentation->getFirst32bits(cellID_phi);
+    
+    G4Track* track = step->GetTrack();
+
+    G4double edep = step->GetTotalEnergyDeposit();
+    
     auto newOrExistingHitIn = [&](std::size_t id) {
       Geant4HitCollection* coll = collection(id);
-      auto* hit = coll->findByKey<Geant4Calorimeter::Hit>(cellID);
+      auto* hit = coll->findByKey<Geant4Calorimeter::Hit>(cellID_phi32);
       if (!hit) {
-        DDSegmentation::Vector3D pos = segmentation->position(cellID);
+        DDSegmentation::Vector3D pos = segmentation->position(cellID_phi32);
         Position global(pos.x(), pos.y(), pos.z());
-
         hit = new Geant4Calorimeter::Hit(global / dd4hep::mm);
-        hit->cellID = cellID;
-        coll->add(cellID, hit);
+        hit->cellID = cellID_phi32;
+        coll->add(cellID_phi32, hit);
       }
       return hit;
     };
