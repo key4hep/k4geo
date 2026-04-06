@@ -74,3 +74,17 @@ Initial design for a tracker based on thin-wall straw tubes.  This will likely b
 ### TPC10
 Scalable TPC model, intended to be used with plugins/TPCSDAction to combine G4 steps into SimTrackerHits.
 TPCSDaction has some ingrained assumptions that G4 steps are passed to it in a logical way, i.e. in the order that they are produced.
+
+
+## TkLayoutTrackerBarrel
+FCChh barrel tracker as designed by tkLayout.
+
+### o1_v01
+Original version taken from [FCCDetectors](https://github.com/HEP-FCC/FCCDetectors/blob/f2268e282c6c77d93e7079d0d235cabd06a03599/Detector/DetFCChhTrackerTkLayout/src/TkLayoutBarrel_Geo.cpp).
+
+
+## TkLayoutTrackerEndcap
+FCChh endcap tracker as designed by tkLayout.
+
+### o1_v01
+Original version taken from [FCCDetectors](https://github.com/HEP-FCC/FCCDetectors/blob/f2268e282c6c77d93e7079d0d235cabd06a03599/Detector/DetFCChhTrackerTkLayout/src/TkLayoutEndcap_Geo.cpp).
