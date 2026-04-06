@@ -155,4 +155,16 @@
       </calorimeter>
     </detector>
   </detectors>
+
+  <fields>
+    <!-- FIXME this is a place holder to get a reasonable magnetic field, it should be a real MAP obtained from FEM tools taking into account HCAL return yoke -->
+    <!-- The z extent should also accomodate space for the feedthroughs, need input from R&D and decisions on cold/warm electronics -->
+    <field name="GlobalSolenoid" type="solenoid"
+           inner_field="SolenoidField"
+           outer_field="SolenoidReturnField"
+           zmax="EMBarrel_dz"
+           outer_radius="BarCryoECal_rmax-CryoBarrelBackWarm-CryoBarrelBackCold">
+    </field>
+  </fields>
+
 </lccdd>

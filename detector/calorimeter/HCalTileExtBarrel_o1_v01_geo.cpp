@@ -1,5 +1,6 @@
 // DD4hep
 #include "DD4hep/DetFactoryHelper.h"
+#include "XML/Utilities.h"
 
 // todo: remove gaudi logging and properly capture output
 #define endmsg std::endl
@@ -14,9 +15,8 @@ using dd4hep::PlacedVolume;
 using dd4hep::Volume;
 using dd4hep::xml::Dimension;
 
-namespace det {
-void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4hep::Volume& aEnvelope,
-             dd4hep::DetElement& aHCal, xml_det_t aXmlElement, int sign) {
+static void buildEB(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4hep::Volume& aEnvelope,
+                    dd4hep::DetElement& aHCal, xml_det_t aXmlElement, int sign) {
 
   dd4hep::SensitiveDetector sensDet = aSensDet;
   Dimension sensDetType = aXmlElement.child(_Unicode(sensitive));
@@ -36,12 +36,10 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
 
   double sensitiveBarrel1Rmin = dimensions.rmin1() + 2 * dRhoFacePlate + space;
   double sensitiveBarrel2Rmin = dimensions.rmin2() + 2 * dRhoFacePlate + space;
-  double sensitiveBarrel3Rmin = dimensions.rmin() + 2 * dRhoFacePlate + space;
 
   // Offset in z is given as distance from 0 to the middle of the Calorimeter volume
   double extBarrelOffset1 = dimensions.offset();
   double extBarrelOffset2 = dimensions.z_offset();
-  double extBarrelOffset3 = dimensions.v_offset();
 
   // Hard-coded assumption that we have two different sequences for the modules
   std::vector<xml_comp_t> sequences = {aXmlElement.child(_Unicode(sequence_a)),
@@ -54,18 +52,13 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
   // calculate the number of modules fitting in  Z
   unsigned int numSequencesZ1 = static_cast<unsigned>((2 * dimensions.width() - 2 * dZEndPlate - space) / dzSequence);
   unsigned int numSequencesZ2 = static_cast<unsigned>((2 * dimensions.dz() - 2 * dZEndPlate - space) / dzSequence);
-  unsigned int numSequencesZ3 =
-      static_cast<unsigned>((2 * dimensions.z_length() - 2 * dZEndPlate - space) / dzSequence);
 
   unsigned int numSequencesR1 = 0;
   unsigned int numSequencesR2 = 0;
-  unsigned int numSequencesR3 = 0;
   double moduleDepth1 = 0.;
   double moduleDepth2 = 0.;
-  double moduleDepth3 = 0.;
   std::vector<double> layerDepths1 = std::vector<double>();
   std::vector<double> layerDepths2 = std::vector<double>();
-  std::vector<double> layerDepths3 = std::vector<double>();
 
   // get all 'layer' children of the 'layers' tag
   std::vector<xml_comp_t> Layers;
@@ -78,60 +71,44 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
     Dimension layerDimension(layer.dimensions());
     numSequencesR1 += layerDimension.nmodules();
     numSequencesR2 += layerDimension.nModules();
-    numSequencesR3 += layerDimension.nPads();
-    for (int nLayer = 0; nLayer < layerDimension.nmodules(); nLayer++) {
-      moduleDepth1 += layerDimension.dr();
-      layerDepths1.push_back(layerDimension.dr());
-    }
     for (int nLayer = 0; nLayer < layerDimension.nModules(); nLayer++) {
       moduleDepth2 += layerDimension.dr();
       layerDepths2.push_back(layerDimension.dr());
     }
-    for (int nLayer = 0; nLayer < layerDimension.nPads(); nLayer++) {
-      moduleDepth3 += layerDimension.dr();
-      layerDepths3.push_back(layerDimension.dr());
+    for (int nLayer = 0; nLayer < layerDimension.nmodules(); nLayer++) {
+      moduleDepth1 += layerDimension.dr();
+      layerDepths1.push_back(layerDimension.dr());
     }
   }
 
-  lLog << DEBUG << "retrieved number of layers in first Endcap part:  " << numSequencesR1
+  lLog << DEBUG << "retrieved number of layers in first ExtBarrel part:  " << numSequencesR1
        << " , which end up to a full module depth in rho of " << moduleDepth1 << endmsg;
-  lLog << DEBUG << "retrieved number of layers in first Endcap part:  " << layerDepths1.size() << endmsg;
-  lLog << DEBUG << "retrieved number of layers in second Endcap part:  " << numSequencesR2
+  lLog << DEBUG << "retrieved number of layers in first ExtBarrel part:  " << layerDepths1.size() << endmsg;
+  lLog << DEBUG << "retrieved number of layers in second ExtBarrel part:  " << numSequencesR2
        << " , which end up to a full module depth in rho of " << moduleDepth2 << endmsg;
-  lLog << DEBUG << "retrieved number of layers in second Endcap part:  " << layerDepths2.size() << endmsg;
-  lLog << DEBUG << "retrieved number of layers in third Endcap part:  " << numSequencesR3
-       << " , which end up to a full module depth in rho of " << moduleDepth3 << endmsg;
-  lLog << DEBUG << "retrieved number of layers in third Endcap part:  " << layerDepths3.size() << endmsg;
+  lLog << DEBUG << "retrieved number of layers in second ExtBarrel part:  " << layerDepths2.size() << endmsg;
 
-  lLog << INFO << "constructing first part EC: with offset " << extBarrelOffset1 << ": " << numSequencesZ1
+  lLog << INFO << "constructing first part EB: with offset " << extBarrelOffset1 << ": " << numSequencesZ1
        << " rings in Z, " << numSequencesR1 << " layers in Rho, " << numSequencesR1 * numSequencesZ1 << " tiles"
        << endmsg;
 
-  lLog << INFO << "constructing second part EC: with offset " << extBarrelOffset2 << ": " << numSequencesZ2
+  lLog << INFO << "constructing second part EB: with offset " << extBarrelOffset2 << ": " << numSequencesZ2
        << " rings in Z, " << numSequencesR2 << " layers in Rho, " << layerDepths2.size() * numSequencesZ2 << " tiles"
        << endmsg;
 
-  lLog << INFO << "constructing third part EC: with offset " << extBarrelOffset3 << ": " << numSequencesZ3
-       << " rings in Z, " << numSequencesR3 << " layers in Rho, " << layerDepths3.size() * numSequencesZ3 << " tiles"
-       << endmsg;
-
-  lLog << INFO << "number of channels: "
-       << (numSequencesR1 * numSequencesZ1) + (numSequencesR2 * numSequencesZ2) + (numSequencesR3 * numSequencesZ3)
+  lLog << INFO << "number of channels: " << (numSequencesR2 * numSequencesZ2) + (numSequencesR1 * numSequencesZ1)
        << endmsg;
 
   // Calculate correction along z based on the module size (can only have natural number of modules)
   double dzDetector1 = (numSequencesZ1 * dzSequence) / 2 + 2 * dZEndPlate + space;
   lLog << INFO
-       << "correction of dz (negative = size reduced) first part EC :" << dzDetector1 * 2 - dimensions.width() * 2
+       << "correction of dz (negative = size reduced) first part EB :" << dzDetector1 * 2 - dimensions.width() * 2
        << endmsg;
-  double dzDetector2 = (numSequencesZ2 * dzSequence) / 2;
-  lLog << INFO << "dz second part EC:" << dzDetector2 * 2 << endmsg;
-  lLog << INFO << "width second part EC:" << dimensions.dz() * 2 << endmsg;
+  double dzDetector2 = (numSequencesZ2 * dzSequence) / 2 + 2 * dZEndPlate + space;
+  lLog << INFO << "dz second part EB:" << dzDetector2 * 2 << endmsg;
+  lLog << INFO << "width second part EB:" << dimensions.dz() * 2 << endmsg;
   lLog << INFO << "correction of dz (negative = size reduced) second part EB:" << dzDetector2 * 2 - dimensions.dz() * 2
        << endmsg;
-
-  double dzDetector3 = (numSequencesZ3 * dzSequence) / 2 + 2 * dZEndPlate + space;
-  lLog << INFO << "dz third part EC:" << dzDetector2 * 2 << endmsg;
 
   // Add structural support made of steel inside of HCal
   DetElement facePlate1(aHCal, "FacePlate_" + std::to_string(1 * sign), 0);
@@ -143,38 +120,29 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
 
   // Faceplate for 2nd part of extended Barrel
   DetElement facePlate2(aHCal, "FacePlate_" + std::to_string(2 * sign), 0);
-  dd4hep::Tube facePlateShape2(dimensions.rmin2(), (sensitiveBarrel2Rmin - space), dzDetector2);
+  dd4hep::Tube facePlateShape2(dimensions.rmin2(), (sensitiveBarrel2Rmin - space),
+                               (dzDetector2 - 2 * dZEndPlate - space));
   Volume facePlateVol2("facePlateVol2", facePlateShape2, aLcdd.material(xFacePlate.materialStr()));
   facePlateVol2.setVisAttributes(aLcdd, xFacePlate.visStr());
   dd4hep::Position offsetFace2(0, 0, sign * extBarrelOffset2);
-
-  // Faceplate for 3rd part of extended Barrel
-  DetElement facePlate3(aHCal, "FacePlate_" + std::to_string(3 * sign), 0);
-  dd4hep::Tube facePlateShape3(dimensions.rmin(), (sensitiveBarrel3Rmin - space),
-                               (dzDetector3 - 2 * dZEndPlate - space));
-  Volume facePlateVol3("facePlateVol3", facePlateShape3, aLcdd.material(xFacePlate.materialStr()));
-  facePlateVol3.setVisAttributes(aLcdd, xFacePlate.visStr());
-  dd4hep::Position offsetFace3(0, 0, sign * extBarrelOffset3);
 
   PlacedVolume placedFacePlate1 = aEnvelope.placeVolume(facePlateVol1, offsetFace1);
   facePlate1.setPlacement(placedFacePlate1);
   PlacedVolume placedFacePlate2 = aEnvelope.placeVolume(facePlateVol2, offsetFace2);
   facePlate2.setPlacement(placedFacePlate2);
-  PlacedVolume placedFacePlate3 = aEnvelope.placeVolume(facePlateVol3, offsetFace3);
-  facePlate3.setPlacement(placedFacePlate3);
 
   // Add structural support made of steel at both ends of extHCal
   dd4hep::Tube endPlateShape1(dimensions.rmin1(), (dimensions.rmax1() - dSteelSupport), dZEndPlate);
   Volume endPlateVol1("endPlateVol1", endPlateShape1, aLcdd.material(xEndPlate.materialStr()));
   endPlateVol1.setVisAttributes(aLcdd, xEndPlate.visStr());
-  dd4hep::Tube endPlateShape3(dimensions.rmin(), (dimensions.rmax() - dSteelSupport), dZEndPlate);
-  Volume endPlateVol3("endPlateVol3", endPlateShape3, aLcdd.material(xEndPlate.materialStr()));
-  endPlateVol3.setVisAttributes(aLcdd, xEndPlate.visStr());
+  dd4hep::Tube endPlateShape2(dimensions.rmin2(), (dimensions.rmax2() - dSteelSupport), dZEndPlate);
+  Volume endPlateVol2("endPlateVol2", endPlateShape2, aLcdd.material(xEndPlate.materialStr()));
+  endPlateVol2.setVisAttributes(aLcdd, xEndPlate.visStr());
 
   // Endplates placed for the extended Barrels in front and in the back to the central Barrel
   DetElement endPlatePos(aHCal, "endPlate_" + std::to_string(1 * sign), 0);
-  dd4hep::Position posOffset(0, 0, sign * (extBarrelOffset3 + dzDetector3 - dZEndPlate));
-  PlacedVolume placedEndPlatePos = aEnvelope.placeVolume(endPlateVol3, posOffset);
+  dd4hep::Position posOffset(0, 0, sign * (extBarrelOffset2 + dzDetector2 - dZEndPlate));
+  PlacedVolume placedEndPlatePos = aEnvelope.placeVolume(endPlateVol2, posOffset);
   endPlatePos.setPlacement(placedEndPlatePos);
 
   DetElement endPlateNeg(aHCal, "endPlate_" + std::to_string(2 * sign), 0);
@@ -183,11 +151,11 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
   endPlateNeg.setPlacement(placedEndPlateNeg);
 
   std::vector<dd4hep::PlacedVolume> layers;
-  layers.reserve(layerDepths1.size() + layerDepths2.size() + layerDepths3.size());
+  layers.reserve(layerDepths1.size() + layerDepths2.size());
   std::vector<std::vector<dd4hep::PlacedVolume>> seqInLayers;
-  seqInLayers.reserve(layerDepths1.size() + layerDepths2.size() + layerDepths3.size());
+  seqInLayers.reserve(layerDepths1.size() + layerDepths2.size());
   std::vector<dd4hep::PlacedVolume> tilesPerLayer;
-  tilesPerLayer.reserve(layerDepths1.size() + layerDepths2.size() + layerDepths3.size());
+  tilesPerLayer.reserve(layerDepths1.size() + layerDepths2.size());
 
   // loop over R ("layers")
   double layerR = 0.;
@@ -201,23 +169,19 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
     unsigned int sequenceIdx = (idxLayer + 1) % 2;
 
     dd4hep::Tube tileSequenceShape(rminLayer, rmaxLayer, 0.5 * dzSequence);
-    Volume tileSequenceVolume("HCalECTileSequenceVol1", tileSequenceShape, aLcdd.air());
+    Volume tileSequenceVolume("HCalEBTileSequenceVol1", tileSequenceShape, aLcdd.air());
 
     lLog << DEBUG << "layer radii:  " << rminLayer << " - " << rmaxLayer << " [cm]" << endmsg;
 
     dd4hep::Tube layerShape(rminLayer, rmaxLayer, dzDetector1);
-    Volume layerVolume("HCalECLayerVol1", layerShape, aLcdd.air());
+    Volume layerVolume("HCalEBLayerVol1", layerShape, aLcdd.air());
 
     layerVolume.setVisAttributes(aLcdd.invisible());
 
     dd4hep::Position moduleOffset1(0, 0, sign * extBarrelOffset1);
 
     dd4hep::PlacedVolume placedLayerVolume = aEnvelope.placeVolume(layerVolume, moduleOffset1);
-    unsigned int type1 = 0;
-    if (sign < 0) {
-      type1 = 3;
-    }
-    placedLayerVolume.addPhysVolID("type", type1); // First module type=0,3 in front of second +/-
+    placedLayerVolume.addPhysVolID("type", 1 - sign); // First module type=0,2 in front of second +/-
     placedLayerVolume.addPhysVolID("layer", idxLayer);
     layers.push_back(placedLayerVolume);
 
@@ -228,7 +192,7 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
       xml_comp_t xComp = xCompColl;
       dd4hep::Tube tileShape(rminLayer, rmaxLayer, 0.5 * xComp.thickness());
 
-      Volume tileVol("HCalECTileVol_" + xComp.materialStr(), tileShape, aLcdd.material(xComp.materialStr()));
+      Volume tileVol("HCalEBTileVol_" + xComp.materialStr(), tileShape, aLcdd.material(xComp.materialStr()));
       tileVol.setVisAttributes(aLcdd, xComp.visStr());
 
       dd4hep::Position tileOffset(0, 0, tileZOffset + 0.5 * xComp.thickness());
@@ -267,12 +231,12 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
     unsigned int sequenceIdx = (idxLayer + 1) % 2;
 
     dd4hep::Tube tileSequenceShape(rminLayer, rmaxLayer, 0.5 * dzSequence);
-    Volume tileSequenceVolume("HCalECTileSequenceVol2", tileSequenceShape, aLcdd.air());
+    Volume tileSequenceVolume("HCalEBTileSequenceVol2", tileSequenceShape, aLcdd.air());
 
     lLog << DEBUG << "layer radii:  " << rminLayer << " - " << rmaxLayer << " [cm]" << endmsg;
 
     dd4hep::Tube layerShape(rminLayer, rmaxLayer, dzDetector2);
-    Volume layerVolume("HCalECLayerVol2", layerShape, aLcdd.air());
+    Volume layerVolume("HCalEBLayerVol2", layerShape, aLcdd.air());
 
     layerVolume.setVisAttributes(aLcdd.invisible());
 
@@ -283,7 +247,7 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
       xml_comp_t xComp = xCompColl;
       dd4hep::Tube tileShape(rminLayer, rmaxLayer, 0.5 * xComp.thickness());
 
-      Volume tileVol("HCalECTileVol_", tileShape, aLcdd.material(xComp.materialStr()));
+      Volume tileVol("HCalEBTileVol_", tileShape, aLcdd.material(xComp.materialStr()));
       tileVol.setVisAttributes(aLcdd, xComp.visStr());
 
       dd4hep::Position tileOffset(0, 0, tileZOffset + 0.5 * xComp.thickness());
@@ -298,7 +262,7 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
 
     // second z loop (place sequences in layer)
     std::vector<dd4hep::PlacedVolume> seqs;
-    double zOffset = -dzDetector2 + 0.5 * dzSequence; //(dzSequence * 0.5);
+    double zOffset = -dzDetector2 + 0.5 * dzSequence; // 2*dZEndPlate + space + (dzSequence * 0.5);
 
     for (uint numSeq = 0; numSeq < numSequencesZ2; numSeq++) {
       dd4hep::Position tileSequencePosition(0, 0, zOffset);
@@ -311,77 +275,8 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
 
     dd4hep::Position moduleOffset2(0, 0, sign * extBarrelOffset2);
     dd4hep::PlacedVolume placedLayerVolume = aEnvelope.placeVolume(layerVolume, moduleOffset2);
-    unsigned int type2 = 1;
-    if (sign < 0) {
-      type2 = 4;
-    }
-    placedLayerVolume.addPhysVolID("type", type2); // Second module type=1,4 behind the first +/-
+    placedLayerVolume.addPhysVolID("type", 2 - sign); // Second module type=1,3 behind the first +/-
     placedLayerVolume.addPhysVolID("layer", layerDepths1.size() + idxLayer);
-    layers.push_back(placedLayerVolume);
-  }
-
-  layerR = 0.;
-  // Placement of subWedges in Wedge, 3th part
-  for (unsigned int idxLayer = 0; idxLayer < layerDepths3.size(); ++idxLayer) {
-    // in Module rmin = 0  for first wedge, changed radius to the full radius starting at (0,0,0)
-    double rminLayer = sensitiveBarrel3Rmin + layerR;
-    double rmaxLayer = sensitiveBarrel3Rmin + layerR + layerDepths3.at(idxLayer);
-    layerR += layerDepths3.at(idxLayer);
-
-    // alternate: even layers consist of tile sequence b, odd layer of tile sequence a
-    unsigned int sequenceIdx = (idxLayer + 1) % 2;
-
-    dd4hep::Tube tileSequenceShape(rminLayer, rmaxLayer, 0.5 * dzSequence);
-    Volume tileSequenceVolume("HCalECTileSequenceVol3", tileSequenceShape, aLcdd.air());
-
-    lLog << DEBUG << "layer radii:  " << rminLayer << " - " << rmaxLayer << " [cm]" << endmsg;
-
-    dd4hep::Tube layerShape(rminLayer, rmaxLayer, dzDetector3);
-    Volume layerVolume("HCalECLayerVol3", layerShape, aLcdd.air());
-
-    layerVolume.setVisAttributes(aLcdd.invisible());
-
-    double tileZOffset = -0.5 * dzSequence;
-
-    // first Z loop (tiles that make up a sequence)
-    for (xml_coll_t xCompColl(sequences[sequenceIdx], _Unicode(module_component)); xCompColl; ++xCompColl) {
-      xml_comp_t xComp = xCompColl;
-      dd4hep::Tube tileShape(rminLayer, rmaxLayer, 0.5 * xComp.thickness());
-
-      Volume tileVol("HCalECTileVol_", tileShape, aLcdd.material(xComp.materialStr()));
-      tileVol.setVisAttributes(aLcdd, xComp.visStr());
-
-      dd4hep::Position tileOffset(0, 0, tileZOffset + 0.5 * xComp.thickness());
-      dd4hep::PlacedVolume placedTileVol = tileSequenceVolume.placeVolume(tileVol, tileOffset);
-
-      if (xComp.isSensitive()) {
-        tileVol.setSensitiveDetector(sensDet);
-        tilesPerLayer.push_back(placedTileVol);
-      }
-      tileZOffset += xComp.thickness();
-    }
-
-    // second z loop (place sequences in layer)
-    std::vector<dd4hep::PlacedVolume> seqs;
-    double zOffset = -dzDetector3 + 0.5 * dzSequence; // 2*dZEndPlate + space + (dzSequence * 0.5);
-
-    for (uint numSeq = 0; numSeq < numSequencesZ3; numSeq++) {
-      dd4hep::Position tileSequencePosition(0, 0, zOffset);
-      dd4hep::PlacedVolume placedTileSequenceVolume = layerVolume.placeVolume(tileSequenceVolume, tileSequencePosition);
-      placedTileSequenceVolume.addPhysVolID("row", numSeq);
-      seqs.push_back(placedTileSequenceVolume);
-      zOffset += dzSequence;
-    }
-    seqInLayers.push_back(seqs);
-
-    dd4hep::Position moduleOffset3(0, 0, sign * extBarrelOffset3);
-    dd4hep::PlacedVolume placedLayerVolume = aEnvelope.placeVolume(layerVolume, moduleOffset3);
-    unsigned int type3 = 2;
-    if (sign < 0) {
-      type3 = 5;
-    }
-    placedLayerVolume.addPhysVolID("type", type3); // Second module type=2,5 behind the first +/-
-    placedLayerVolume.addPhysVolID("layer", layerDepths1.size() + layerDepths2.size() + idxLayer);
     layers.push_back(placedLayerVolume);
   }
 
@@ -389,7 +284,7 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
   lLog << DEBUG << "Layers in r :    " << layers.size() << std::endl;
   lLog << DEBUG << "Tiles in layers :" << tilesPerLayer.size() << std::endl;
 
-  for (uint iLayer = 0; iLayer < (layerDepths1.size() + layerDepths2.size() + layerDepths3.size()); iLayer++) {
+  for (uint iLayer = 0; iLayer < (layerDepths1.size() + layerDepths2.size()); iLayer++) {
     DetElement layerDet(aHCal, dd4hep::xml::_toString(sign * (iLayer + 1), "layer%d"), sign * (iLayer + 1));
     layerDet.setPlacement(layers[iLayer]);
 
@@ -403,42 +298,41 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
   }
 }
 
-static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4hep::SensitiveDetector sensDet) {
+static dd4hep::Ref_t createHCalEB(dd4hep::Detector& lcdd, xml_h xmlElement, dd4hep::SensitiveDetector sensDet) {
 
   xml_det_t xmlDet = xmlElement;
   std::string detName = xmlDet.nameStr();
 
   // Make DetElement
-  dd4hep::DetElement hCalEC(detName, xmlDet.id());
+  dd4hep::DetElement hCalEB(detName, xmlDet.id());
 
   // Make volume that envelopes the whole barrel; set material to air
   Dimension dimensions(xmlDet.dimensions());
 
-  dd4hep::Tube envelope(dimensions.rmin(), dimensions.rmax1(), (dimensions.v_offset() + dimensions.z_length()));
-  dd4hep::Tube negative1(dimensions.rmin(), dimensions.rmax1(), (dimensions.offset() - dimensions.width()));
-  dd4hep::Tube negative2(dimensions.rmin(), dimensions.rmin1(), (dimensions.z_offset() - dimensions.dz()));
-  dd4hep::Tube negative3(dimensions.rmin(), dimensions.rmin2(), (dimensions.v_offset() - dimensions.z_length()));
-  dd4hep::SubtractionSolid envelopeShapeTmp1(envelope, negative1);
-  dd4hep::SubtractionSolid envelopeShapeTmp2(envelopeShapeTmp1, negative2);
-  dd4hep::SubtractionSolid envelopeShape(envelopeShapeTmp2, negative3);
+  dd4hep::Tube envelope(dimensions.rmin2(), dimensions.rmax1(), (dimensions.z_offset() + dimensions.dz()));
+  dd4hep::Tube negative(dimensions.rmin2(), dimensions.rmax1(), (dimensions.offset() - dimensions.width()));
+  dd4hep::SubtractionSolid envelopeShape(envelope, negative);
 
   Volume envelopeVolume(detName + "_volume", envelopeShape, lcdd.air());
   envelopeVolume.setVisAttributes(lcdd, dimensions.visStr());
 
   lLog << DEBUG << "Placing detector on the positive side: (cm) " << (dimensions.offset() + dimensions.dz()) << endmsg;
-  buildEC(lcdd, sensDet, envelopeVolume, hCalEC, xmlElement, 1);
+  buildEB(lcdd, sensDet, envelopeVolume, hCalEB, xmlElement, 1);
   lLog << DEBUG << "Placing detector on the negative side: (cm) " << -(dimensions.offset() + dimensions.dz()) << endmsg;
-  buildEC(lcdd, sensDet, envelopeVolume, hCalEC, xmlElement, -1);
+  buildEB(lcdd, sensDet, envelopeVolume, hCalEB, xmlElement, -1);
 
   // Place envelope volume
-  Volume motherVol = lcdd.pickMotherVolume(hCalEC);
+  Volume motherVol = lcdd.pickMotherVolume(hCalEB);
 
   PlacedVolume placedHCal = motherVol.placeVolume(envelopeVolume);
   placedHCal.addPhysVolID("system", xmlDet.id());
-  hCalEC.setPlacement(placedHCal);
+  hCalEB.setPlacement(placedHCal);
 
-  return hCalEC;
+  // Set type flags
+  dd4hep::xml::DetElement xmlDetElem = xmlElement;
+  dd4hep::xml::setDetectorTypeFlag(xmlDetElem, hCalEB);
+
+  return hCalEB;
 }
-} // namespace det
 
-DECLARE_DETELEMENT(CaloThreePartsEndcap_o1_v01, det::createHCalEC)
+DECLARE_DETELEMENT(HCalTileExtBarrel_o1_v01, createHCalEB)

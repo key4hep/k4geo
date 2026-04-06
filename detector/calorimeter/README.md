@@ -21,6 +21,7 @@ This sub-detector makes calorimeter endcaps (original and reflected). It is used
 
 ### o1_v01 
 Original version taken from [FCCDetectors](https://github.com/HEP-FCC/FCCDetectors/blob/70a989a6fc333610e3b1b979c3596da9c41543d8/Detector/DetFCChhCalDiscs/src/CaloEndcapDiscs_geo.cpp).
+Adjusted to propagate detector flags.
 
 ## ECalEndcap_Turbine
 
@@ -42,9 +43,17 @@ This sub-detector makes calorimeter barrel. It is used in ALLEGRO detector conce
 
 ### o1_v01
 Original version taken from [FCCDetectors](https://github.com/HEP-FCC/FCCDetectors/blob/70a989a6fc333610e3b1b979c3596da9c41543d8/Detector/DetFCChhHCalTile/src/HCalBarrel_geo.cpp). 
+Adjusted to propagate detector flags.
 
 ### o1_v02
 Changes wrt o1_v01: Added extension (LayeredCalorimeterData) to store radial layer radii and dimensions. Added several checks for the geometry building and made small changes in the code to improve readibility.
+
+## HCalTileExtBarrel
+Tile hadronic calorimeter extended barrel, as used in the FCChh concept.
+
+### o1_v01
+Original version taken from [FCCDetectors](https://github.com/HEP-FCC/FCCDetectors/blob/f2268e282c6c77d93e7079d0d235cabd06a03599/Detector/DetFCChhHCalTile/src/HCalExtBarrel_geo.cpp). 
+Adjusted to propagate detector flags.
 
 ## HCalThreePartsEndcap
 This sub-detector makes calorimeter endcaps. Each endcap is made up by three cylindrical pieces with different thickness and inner radius, but same outer radius. It is used in ALLEGRO detector concept.

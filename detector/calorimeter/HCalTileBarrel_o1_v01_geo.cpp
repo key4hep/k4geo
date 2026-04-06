@@ -1,5 +1,6 @@
 // DD4hep
 #include "DD4hep/DetFactoryHelper.h"
+#include "XML/Utilities.h"
 
 using dd4hep::DetElement;
 using dd4hep::PlacedVolume;
@@ -9,10 +10,10 @@ using dd4hep::xml::Dimension;
 // todo: remove gaudi logging and properly capture output
 #define endmsg std::endl
 #define lLog std::cout
-namespace MSG {
+namespace {
 const std::string DEBUG = " Debug: ";
 const std::string INFO = " Info: ";
-} // namespace MSG
+} // anonymous namespace
 
 namespace det {
 
@@ -35,8 +36,8 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   xml_comp_t xSteelSupport = xmlDet.child(_Unicode(steel_support));
   double dSteelSupport = xSteelSupport.thickness();
 
-  lLog << MSG::DEBUG << "steel support thickness: " << dSteelSupport << " [cm]" << endmsg;
-  lLog << MSG::DEBUG << "steel support material:  " << xSteelSupport.materialStr() << endmsg;
+  lLog << DEBUG << "steel support thickness: " << dSteelSupport << " [cm]" << endmsg;
+  lLog << DEBUG << "steel support material:  " << xSteelSupport.materialStr() << endmsg;
 
   double sensitiveBarrelRmin = xDimensions.rmin() + xFacePlate.thickness() + space;
 
@@ -45,7 +46,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   // NOTE: This assumes that both have the same dimensions!
   Dimension sequenceDimensions(sequences[1].dimensions());
   double dzSequence = sequenceDimensions.dz();
-  lLog << MSG::DEBUG << "sequence thickness " << dzSequence << endmsg;
+  lLog << DEBUG << "sequence thickness " << dzSequence << endmsg;
 
   // calculate the number of modules fitting in Z
   unsigned int numSequencesZ = static_cast<unsigned>((2 * xDimensions.dz() - 2 * dZEndPlate - 2 * space) / dzSequence);
@@ -67,17 +68,17 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
       layerDepths.push_back(layerDimension.dr());
     }
   }
-  lLog << MSG::DEBUG << "retrieved number of layers:  " << numSequencesR
+  lLog << DEBUG << "retrieved number of layers:  " << numSequencesR
        << " , which end up to a full module depth in rho of " << moduleDepth << endmsg;
-  lLog << MSG::DEBUG << "retrieved number of layers:  " << layerDepths.size() << endmsg;
+  lLog << DEBUG << "retrieved number of layers:  " << layerDepths.size() << endmsg;
 
-  lLog << MSG::INFO << "constructing: " << numSequencesZ << " rings in Z, " << numSequencesR << " layers in Rho, "
+  lLog << INFO << "constructing: " << numSequencesZ << " rings in Z, " << numSequencesR << " layers in Rho, "
        << numSequencesR * numSequencesZ << " tiles" << endmsg;
 
   // Calculate correction along z based on the module size (can only have natural number of modules)
   double dzDetector = (numSequencesZ * dzSequence) / 2 + dZEndPlate + space;
-  lLog << MSG::DEBUG << "dzDetector:  " << dzDetector << endmsg;
-  lLog << MSG::INFO << "correction of dz (negative = size reduced):" << dzDetector - xDimensions.dz() << endmsg;
+  lLog << DEBUG << "dzDetector:  " << dzDetector << endmsg;
+  lLog << INFO << "correction of dz (negative = size reduced):" << dzDetector - xDimensions.dz() << endmsg;
 
   double rminSupport = sensitiveBarrelRmin + moduleDepth;
   double rmaxSupport = sensitiveBarrelRmin + moduleDepth + dSteelSupport;
@@ -147,7 +148,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
     dd4hep::Tube tileSequenceShape(rminLayer, rmaxLayer, 0.5 * dzSequence);
     Volume tileSequenceVolume("HCalTileSequenceVol", tileSequenceShape, lcdd.air());
 
-    lLog << MSG::DEBUG << "layer radii:  " << rminLayer << " - " << rmaxLayer << " [cm]" << endmsg;
+    lLog << DEBUG << "layer radii:  " << rminLayer << " - " << rmaxLayer << " [cm]" << endmsg;
 
     dd4hep::Tube layerShape(rminLayer, rmaxLayer, dzDetector - dZEndPlate - space);
     Volume layerVolume("HCalLayerVol", layerShape, lcdd.air());
@@ -210,6 +211,11 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   PlacedVolume placedHCal = motherVol.placeVolume(envelopeVolume);
   placedHCal.addPhysVolID("system", hCal.id());
   hCal.setPlacement(placedHCal);
+
+  // Set type flags
+  dd4hep::xml::DetElement xmlDetElem = xmlDet;
+  dd4hep::xml::setDetectorTypeFlag(xmlDetElem, hCal);
+
   return hCal;
 }
 } // namespace det
