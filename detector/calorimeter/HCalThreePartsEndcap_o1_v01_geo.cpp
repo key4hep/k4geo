@@ -4,10 +4,10 @@
 // todo: remove gaudi logging and properly capture output
 #define endmsg std::endl
 #define lLog std::cout
-namespace MSG {
+namespace {
 const std::string DEBUG = " Debug: ";
 const std::string INFO = " Info: ";
-} // namespace MSG
+} // anonymous namespace
 
 using dd4hep::DetElement;
 using dd4hep::PlacedVolume;
@@ -31,8 +31,8 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
   double space = xSpace.thickness();
   xml_comp_t xSteelSupport = aXmlElement.child(_Unicode(steel_support));
   double dSteelSupport = xSteelSupport.thickness();
-  lLog << MSG::DEBUG << "steel support thickness " << dSteelSupport << endmsg;
-  lLog << MSG::DEBUG << "steel support material  " << xSteelSupport.materialStr() << endmsg;
+  lLog << DEBUG << "steel support thickness " << dSteelSupport << endmsg;
+  lLog << DEBUG << "steel support material  " << xSteelSupport.materialStr() << endmsg;
 
   double sensitiveBarrel1Rmin = dimensions.rmin1() + 2 * dRhoFacePlate + space;
   double sensitiveBarrel2Rmin = dimensions.rmin2() + 2 * dRhoFacePlate + space;
@@ -49,7 +49,7 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
   // NOTE: This assumes that both have the same dimensions!
   Dimension sequenceDimensions(sequences[1].dimensions());
   double dzSequence = sequenceDimensions.dz();
-  lLog << MSG::DEBUG << "sequence thickness " << dzSequence << endmsg;
+  lLog << DEBUG << "sequence thickness " << dzSequence << endmsg;
 
   // calculate the number of modules fitting in  Z
   unsigned int numSequencesZ1 = static_cast<unsigned>((2 * dimensions.width() - 2 * dZEndPlate - space) / dzSequence);
@@ -93,46 +93,45 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
     }
   }
 
-  lLog << MSG::DEBUG << "retrieved number of layers in first Endcap part:  " << numSequencesR1
+  lLog << DEBUG << "retrieved number of layers in first Endcap part:  " << numSequencesR1
        << " , which end up to a full module depth in rho of " << moduleDepth1 << endmsg;
-  lLog << MSG::DEBUG << "retrieved number of layers in first Endcap part:  " << layerDepths1.size() << endmsg;
-  lLog << MSG::DEBUG << "retrieved number of layers in second Endcap part:  " << numSequencesR2
+  lLog << DEBUG << "retrieved number of layers in first Endcap part:  " << layerDepths1.size() << endmsg;
+  lLog << DEBUG << "retrieved number of layers in second Endcap part:  " << numSequencesR2
        << " , which end up to a full module depth in rho of " << moduleDepth2 << endmsg;
-  lLog << MSG::DEBUG << "retrieved number of layers in second Endcap part:  " << layerDepths2.size() << endmsg;
-  lLog << MSG::DEBUG << "retrieved number of layers in third Endcap part:  " << numSequencesR3
+  lLog << DEBUG << "retrieved number of layers in second Endcap part:  " << layerDepths2.size() << endmsg;
+  lLog << DEBUG << "retrieved number of layers in third Endcap part:  " << numSequencesR3
        << " , which end up to a full module depth in rho of " << moduleDepth3 << endmsg;
-  lLog << MSG::DEBUG << "retrieved number of layers in third Endcap part:  " << layerDepths3.size() << endmsg;
+  lLog << DEBUG << "retrieved number of layers in third Endcap part:  " << layerDepths3.size() << endmsg;
 
-  lLog << MSG::INFO << "constructing first part EC: with offset " << extBarrelOffset1 << ": " << numSequencesZ1
+  lLog << INFO << "constructing first part EC: with offset " << extBarrelOffset1 << ": " << numSequencesZ1
        << " rings in Z, " << numSequencesR1 << " layers in Rho, " << numSequencesR1 * numSequencesZ1 << " tiles"
        << endmsg;
 
-  lLog << MSG::INFO << "constructing second part EC: with offset " << extBarrelOffset2 << ": " << numSequencesZ2
+  lLog << INFO << "constructing second part EC: with offset " << extBarrelOffset2 << ": " << numSequencesZ2
        << " rings in Z, " << numSequencesR2 << " layers in Rho, " << layerDepths2.size() * numSequencesZ2 << " tiles"
        << endmsg;
 
-  lLog << MSG::INFO << "constructing third part EC: with offset " << extBarrelOffset3 << ": " << numSequencesZ3
+  lLog << INFO << "constructing third part EC: with offset " << extBarrelOffset3 << ": " << numSequencesZ3
        << " rings in Z, " << numSequencesR3 << " layers in Rho, " << layerDepths3.size() * numSequencesZ3 << " tiles"
        << endmsg;
 
-  lLog << MSG::INFO << "number of channels: "
+  lLog << INFO << "number of channels: "
        << (numSequencesR1 * numSequencesZ1) + (numSequencesR2 * numSequencesZ2) + (numSequencesR3 * numSequencesZ3)
        << endmsg;
 
   // Calculate correction along z based on the module size (can only have natural number of modules)
   double dzDetector1 = (numSequencesZ1 * dzSequence) / 2 + 2 * dZEndPlate + space;
-  lLog << MSG::INFO
+  lLog << INFO
        << "correction of dz (negative = size reduced) first part EC :" << dzDetector1 * 2 - dimensions.width() * 2
        << endmsg;
   double dzDetector2 = (numSequencesZ2 * dzSequence) / 2;
-  lLog << MSG::INFO << "dz second part EC:" << dzDetector2 * 2 << endmsg;
-  lLog << MSG::INFO << "width second part EC:" << dimensions.dz() * 2 << endmsg;
-  lLog << MSG::INFO
-       << "correction of dz (negative = size reduced) second part EB:" << dzDetector2 * 2 - dimensions.dz() * 2
+  lLog << INFO << "dz second part EC:" << dzDetector2 * 2 << endmsg;
+  lLog << INFO << "width second part EC:" << dimensions.dz() * 2 << endmsg;
+  lLog << INFO << "correction of dz (negative = size reduced) second part EB:" << dzDetector2 * 2 - dimensions.dz() * 2
        << endmsg;
 
   double dzDetector3 = (numSequencesZ3 * dzSequence) / 2 + 2 * dZEndPlate + space;
-  lLog << MSG::INFO << "dz third part EC:" << dzDetector2 * 2 << endmsg;
+  lLog << INFO << "dz third part EC:" << dzDetector2 * 2 << endmsg;
 
   // Add structural support made of steel inside of HCal
   DetElement facePlate1(aHCal, "FacePlate_" + std::to_string(1 * sign), 0);
@@ -204,7 +203,7 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
     dd4hep::Tube tileSequenceShape(rminLayer, rmaxLayer, 0.5 * dzSequence);
     Volume tileSequenceVolume("HCalECTileSequenceVol1", tileSequenceShape, aLcdd.air());
 
-    lLog << MSG::DEBUG << "layer radii:  " << rminLayer << " - " << rmaxLayer << " [cm]" << endmsg;
+    lLog << DEBUG << "layer radii:  " << rminLayer << " - " << rmaxLayer << " [cm]" << endmsg;
 
     dd4hep::Tube layerShape(rminLayer, rmaxLayer, dzDetector1);
     Volume layerVolume("HCalECLayerVol1", layerShape, aLcdd.air());
@@ -270,7 +269,7 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
     dd4hep::Tube tileSequenceShape(rminLayer, rmaxLayer, 0.5 * dzSequence);
     Volume tileSequenceVolume("HCalECTileSequenceVol2", tileSequenceShape, aLcdd.air());
 
-    lLog << MSG::DEBUG << "layer radii:  " << rminLayer << " - " << rmaxLayer << " [cm]" << endmsg;
+    lLog << DEBUG << "layer radii:  " << rminLayer << " - " << rmaxLayer << " [cm]" << endmsg;
 
     dd4hep::Tube layerShape(rminLayer, rmaxLayer, dzDetector2);
     Volume layerVolume("HCalECLayerVol2", layerShape, aLcdd.air());
@@ -335,7 +334,7 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
     dd4hep::Tube tileSequenceShape(rminLayer, rmaxLayer, 0.5 * dzSequence);
     Volume tileSequenceVolume("HCalECTileSequenceVol3", tileSequenceShape, aLcdd.air());
 
-    lLog << MSG::DEBUG << "layer radii:  " << rminLayer << " - " << rmaxLayer << " [cm]" << endmsg;
+    lLog << DEBUG << "layer radii:  " << rminLayer << " - " << rmaxLayer << " [cm]" << endmsg;
 
     dd4hep::Tube layerShape(rminLayer, rmaxLayer, dzDetector3);
     Volume layerVolume("HCalECLayerVol3", layerShape, aLcdd.air());
@@ -387,8 +386,8 @@ void buildEC(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, dd4he
   }
 
   // Placement of DetElements
-  lLog << MSG::DEBUG << "Layers in r :    " << layers.size() << std::endl;
-  lLog << MSG::DEBUG << "Tiles in layers :" << tilesPerLayer.size() << std::endl;
+  lLog << DEBUG << "Layers in r :    " << layers.size() << std::endl;
+  lLog << DEBUG << "Tiles in layers :" << tilesPerLayer.size() << std::endl;
 
   for (uint iLayer = 0; iLayer < (layerDepths1.size() + layerDepths2.size() + layerDepths3.size()); iLayer++) {
     DetElement layerDet(aHCal, dd4hep::xml::_toString(sign * (iLayer + 1), "layer%d"), sign * (iLayer + 1));
@@ -426,11 +425,9 @@ static dd4hep::Ref_t createHCalEC(dd4hep::Detector& lcdd, xml_h xmlElement, dd4h
   Volume envelopeVolume(detName + "_volume", envelopeShape, lcdd.air());
   envelopeVolume.setVisAttributes(lcdd, dimensions.visStr());
 
-  lLog << MSG::DEBUG << "Placing detector on the positive side: (cm) " << (dimensions.offset() + dimensions.dz())
-       << endmsg;
+  lLog << DEBUG << "Placing detector on the positive side: (cm) " << (dimensions.offset() + dimensions.dz()) << endmsg;
   buildEC(lcdd, sensDet, envelopeVolume, hCalEC, xmlElement, 1);
-  lLog << MSG::DEBUG << "Placing detector on the negative side: (cm) " << -(dimensions.offset() + dimensions.dz())
-       << endmsg;
+  lLog << DEBUG << "Placing detector on the negative side: (cm) " << -(dimensions.offset() + dimensions.dz()) << endmsg;
   buildEC(lcdd, sensDet, envelopeVolume, hCalEC, xmlElement, -1);
 
   // Place envelope volume
