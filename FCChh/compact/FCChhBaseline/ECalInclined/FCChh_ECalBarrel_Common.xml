@@ -66,7 +66,7 @@
   </readouts>
 
   <detectors>
-    <detector id="BarECal_id" name="ECalBarrel" type="ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v01" readout="ECalBarrelPhiEta">
+    <detector id="BarECal_id" name="ECalBarrel" type="ECalBarrel_NobleLiquid_InclinedTrapezoids_o1_v01" readout="ECalBarrelEta">
       <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_BARREL"/>
       <sensitive type="calorimeter"/>
       <dimensions rmin="BarCryoECal_rmin" rmax="BarCryoECal_rmax" dz="BarCryoECal_dz" vis="ecal_envelope"/>
