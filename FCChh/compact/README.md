@@ -7,5 +7,6 @@ Further notes:
     for the latter.  It appears that in previous configurations, the first
     one was what was used.  These variables have been adjusted to make them
     unique.
-  - The simulation and reconstruction segmentations have been made consistent,
-    adding additional CellID fields where needed.
+  - Multiple segmentations are defined, as in the original FCChh workflow
+    (where they were used for either simulation and reconstruction)
+    By default, the detector uses the readout of the simulation
