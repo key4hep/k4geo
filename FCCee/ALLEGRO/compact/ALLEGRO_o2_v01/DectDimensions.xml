@@ -126,11 +126,11 @@
     <constant name="BarECal_dz" value="3100*mm"/>
 
     <!-- LAr ECAL Endcaps -->
-    <constant name="ECalEndcap_id" value="DetID_ECAL_Endcap"/> 
-    <constant name="ECalEndcap_inner_radius" value="350*mm"/>
-    <constant name="ECalEndcap_outer_radius" value="2900*mm"/>
-    <constant name="ECalEndcap_min_z" value="3200*mm"/>
-    <constant name="ECalEndcap_max_z" value="3850*mm"/>
+    <constant name="EMEC_id" value="DetID_ECAL_Endcap"/> 
+    <constant name="EMEC_inner_radius" value="350*mm"/>
+    <constant name="EMEC_outer_radius" value="2900*mm"/>
+    <constant name="EMEC_min_z" value="3200*mm"/>
+    <constant name="EMEC_max_z" value="3850*mm"/>
 
     <!-- HCAL Barrel -->
     <constant name="BarHCal_id" value="DetID_HCAL_Barrel"/>
@@ -225,7 +225,7 @@
     <!-- the two alternatives below should be equivalent, the latter being safer -->
     <!-- constant name="tracker_region_zmax" value="SiWrD_zmax"/ -->
     <!-- constant name="tracker_region_rmax" value="SiWrB_outer_radius"/ -->
-    <constant name="tracker_region_zmax" value="ECalEndcap_min_z"/>
+    <constant name="tracker_region_zmax" value="EMEC_min_z"/>
     <constant name="tracker_region_rmax" value="BarECal_rmin"/>
 
   </define>
