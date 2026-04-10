@@ -120,7 +120,7 @@ namespace ECalEndcap_Turbine_o1_v03 {
           "Error: requested absorber thickness is negative after accounting for glue and cladding thickness");
     }
     float ElectrodeThick = electrodeBladeElem.attr<float>(_Unicode(thickness));
-    float LArgapi = nobleLiquidElem.attr<float>(_Unicode(gap));
+    float LArgapi;
 
     dd4hep::printout(dd4hep::DEBUG, "ECalEndcap_Turbine_o1_v03", "nUnitCells: %d", nUnitCells);
 
@@ -543,7 +543,7 @@ namespace ECalEndcap_Turbine_o1_v03 {
     dd4hep::xml::DetElement calo = aXmlElement.child(_Unicode(calorimeter));
     dd4hep::xml::DetElement mechSupport = calo.child(_Unicode(mechSupport));
 
-    float mechSupportZCenter = aLcdd.constant<float>("ECalEndcapSupportZCenter");
+    float mechSupportZCenter = aLcdd.constant<float>("EMECSupportZCenter");
 
     // make inner ring
     dd4hep::xml::DetElement innerRing = mechSupport.child(_Unicode(innerRing));
@@ -582,7 +582,7 @@ namespace ECalEndcap_Turbine_o1_v03 {
     dd4hep::xml::DetElement cryostat = calo.child(_Unicode(cryostat));
     dd4hep::xml::Dimension cryoDim(cryostat.dimensions());
 
-    float intermedRingdR = aLcdd.constant<float>("ECalEndcapSupportMidRingdR");
+    float intermedRingdR = aLcdd.constant<float>("EMECSupportMidRingdR");
 
     double rmin = cryoDim.rmin2();
     double rmax = cryoDim.rmax1();
@@ -602,10 +602,10 @@ namespace ECalEndcap_Turbine_o1_v03 {
       ro = ro * radiusRatio;
     }
     // make spokes
-    unsigned nSpokes = aLcdd.constant<unsigned>("ECalEndcapSupportNSpokes");
+    unsigned nSpokes = aLcdd.constant<unsigned>("EMECSupportNSpokes");
     double rminSpoke = innerRingRmax;
     double rmaxSpoke = rmin * radiusRatio + (supportTubeThickness - intermedRingdR) / 2.;
-    double spokeWidth = aLcdd.constant<float>("ECalEndcapSupportSpokeWidth");
+    double spokeWidth = aLcdd.constant<float>("EMECSupportSpokeWidth");
     for (unsigned iWheel = 0; iWheel < nWheelsXML; iWheel++) {
       if (iWheel == nWheelsXML - 1)
         rmaxSpoke = outerRingRmin;
@@ -780,7 +780,7 @@ namespace ECalEndcap_Turbine_o1_v03 {
     dd4hep::printout(dd4hep::INFO, "ECalEndcap_Turbine_o1_v03", "Will build %d wheels", nWheels);
 
     float supportTubeThickness = supportTubeElem.thickness();
-    float mechSupportZGap = aLcdd.constant<float>("ECalEndcapSupportZGap");
+    float mechSupportZGap = aLcdd.constant<float>("EMECSupportZGap");
 
     double rmin = bathRmin;
     double rmax = bathRmax - supportTubeThickness;
@@ -832,38 +832,38 @@ namespace ECalEndcap_Turbine_o1_v03 {
     aSensDet.setType(sdType.typeStr());
 
     unsigned numReadoutRhoLayers, numReadoutZLayers;
-    ECalEndcapNumCalibRhoLayersArr[0] = aLcdd.constant<int>("ECalEndcapNumCalibRhoLayersWheel1");
-    numReadoutRhoLayers = aLcdd.constant<int>("ECalEndcapNumReadoutRhoLayersWheel1");
+    ECalEndcapNumCalibRhoLayersArr[0] = aLcdd.constant<int>("EMECNumCalibRhoLayersWheel1");
+    numReadoutRhoLayers = aLcdd.constant<int>("EMECNumReadoutRhoLayersWheel1");
     if ((numReadoutRhoLayers % ECalEndcapNumCalibRhoLayersArr[0]) != 0) {
       dd4hep::printout(dd4hep::ERROR, "ECalEndcap_Turbine_o1_v03",
                        "Number of readout layers must be a multiple of number of calibration layers");
     }
-    ECalEndcapNumCalibRhoLayersArr[1] = aLcdd.constant<int>("ECalEndcapNumCalibRhoLayersWheel2");
-    numReadoutRhoLayers = aLcdd.constant<int>("ECalEndcapNumReadoutRhoLayersWheel2");
+    ECalEndcapNumCalibRhoLayersArr[1] = aLcdd.constant<int>("EMECNumCalibRhoLayersWheel2");
+    numReadoutRhoLayers = aLcdd.constant<int>("EMECNumReadoutRhoLayersWheel2");
     if ((numReadoutRhoLayers % ECalEndcapNumCalibRhoLayersArr[1]) != 0) {
       dd4hep::printout(dd4hep::ERROR, "ECalEndcap_Turbine_o1_v03",
                        "Number of readout layers must be a multiple of number of calibration layers");
     }
-    ECalEndcapNumCalibRhoLayersArr[2] = aLcdd.constant<int>("ECalEndcapNumCalibRhoLayersWheel3");
-    numReadoutRhoLayers = aLcdd.constant<int>("ECalEndcapNumReadoutRhoLayersWheel3");
+    ECalEndcapNumCalibRhoLayersArr[2] = aLcdd.constant<int>("EMECNumCalibRhoLayersWheel3");
+    numReadoutRhoLayers = aLcdd.constant<int>("EMECNumReadoutRhoLayersWheel3");
     if ((numReadoutRhoLayers % ECalEndcapNumCalibRhoLayersArr[2]) != 0) {
       dd4hep::printout(dd4hep::ERROR, "ECalEndcap_Turbine_o1_v03",
                        "Number of readout layers must be a multiple of number of calibration layers");
     }
-    ECalEndcapNumCalibZLayersArr[0] = aLcdd.constant<int>("ECalEndcapNumCalibZLayersWheel1");
-    numReadoutZLayers = aLcdd.constant<int>("ECalEndcapNumReadoutZLayersWheel1");
+    ECalEndcapNumCalibZLayersArr[0] = aLcdd.constant<int>("EMECNumCalibZLayersWheel1");
+    numReadoutZLayers = aLcdd.constant<int>("EMECNumReadoutZLayersWheel1");
     if ((numReadoutZLayers % ECalEndcapNumCalibZLayersArr[0]) != 0) {
       dd4hep::printout(dd4hep::ERROR, "ECalEndcap_Turbine_o1_v03",
                        "Number of readout layers must be a multiple of number of calibration layers");
     }
-    ECalEndcapNumCalibZLayersArr[1] = aLcdd.constant<int>("ECalEndcapNumCalibZLayersWheel2");
-    numReadoutZLayers = aLcdd.constant<int>("ECalEndcapNumReadoutZLayersWheel2");
+    ECalEndcapNumCalibZLayersArr[1] = aLcdd.constant<int>("EMECNumCalibZLayersWheel2");
+    numReadoutZLayers = aLcdd.constant<int>("EMECNumReadoutZLayersWheel2");
     if ((numReadoutZLayers % ECalEndcapNumCalibZLayersArr[1]) != 0) {
       dd4hep::printout(dd4hep::ERROR, "ECalEndcap_Turbine_o1_v03",
                        "Number of readout layers must be a multiple of number of calibration layers");
     }
-    ECalEndcapNumCalibZLayersArr[2] = aLcdd.constant<int>("ECalEndcapNumCalibZLayersWheel3");
-    numReadoutZLayers = aLcdd.constant<int>("ECalEndcapNumReadoutZLayersWheel3");
+    ECalEndcapNumCalibZLayersArr[2] = aLcdd.constant<int>("EMECNumCalibZLayersWheel3");
+    numReadoutZLayers = aLcdd.constant<int>("EMECNumReadoutZLayersWheel3");
     if ((numReadoutZLayers % ECalEndcapNumCalibZLayersArr[2]) != 0) {
       dd4hep::printout(dd4hep::ERROR, "ECalEndcap_Turbine_o1_v03",
                        "Number of readout layers must be a multiple of number of calibration layers");
