@@ -473,6 +473,12 @@
     <fraction n="0.009" ref="Fe"/>
   </material>
 
+  <material name="CuW90">
+    <D value="16.75" unit="g/cm3"/>
+    <fraction n="0.757" ref="W" />
+    <fraction n="0.243" ref="Cu" />
+  </material>
+    
   <material name="SolenoidMixture">
     <D value="4.38" unit="g/cm3"/>
     <fraction n="0.666" ref="Al"/>

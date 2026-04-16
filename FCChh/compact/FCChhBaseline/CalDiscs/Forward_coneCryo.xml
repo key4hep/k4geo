@@ -60,22 +60,18 @@
       <segmentation type="FCCSWGridPhiEta_k4geo" phi_bins="256" offset_phi="-pi+(pi/256.)" grid_size_eta="0.025" offset_eta="-6.00024"/>
       <id>system:4,subsystem:1,type:3,subtype:3,layer:8,sublayer:8,eta:11,phi:10</id>
     </readout>
-    <!--
     <readout name="EMFwdPhiEtaReco">
       <segmentation type="FCCSWGridPhiEta_k4geo" phi_bins="256" offset_phi="-pi+(pi/256.)" grid_size_eta="0.025" offset_eta="-6.00024"/>
       <id>system:4,subsystem:1,type:3,subtype:3,layer:8,eta:11,phi:10</id>
     </readout>
-    -->
     <readout name="HFwdPhiEta">
       <segmentation type="FCCSWGridPhiEta_k4geo" phi_bins="128" offset_phi="-pi+(pi/128.)" grid_size_eta="0.05" offset_eta="-6.00024"/>
       <id>system:4,subsystem:1,type:3,subtype:3,layer:8,sublayer:8,eta:11,phi:10</id>
     </readout>
-    <!--
     <readout name="HFwdPhiEtaReco">
       <segmentation type="FCCSWGridPhiEta_k4geo" phi_bins="128" offset_phi="-pi+(pi/128.)" grid_size_eta="0.05" offset_eta="-6.00024"/>
       <id>system:4,subsystem:1,type:3,subtype:3,layer:8,eta:11,phi:10</id>
     </readout>
-    -->
   </readouts>
   <detectors>
     <!-- positive side: cryostat -->
