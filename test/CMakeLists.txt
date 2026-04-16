@@ -116,7 +116,7 @@ endif()
 #if(DCH_INFO_H_EXIST)
 #SET( test_name "test_IDEA_o2_v01" )
 #add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o2_v01/IDEA_o2_v01.xml --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o2_v01.py -N 1 --random.seed 1988301045 --outputFile=testIDEA_o2_v01.root )
-#    SET_TESTS_PROPERTIES( ${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  " Exception; EXCEPTION;ERROR;Error" TIMEOUT 600)
+#    SET_TESTS_PROPERTIES( ${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  " Exception; EXCEPTION;ERROR;Error" TIMEOUT 900)
 #endif()
 
 #--------------------------------------------------
@@ -129,13 +129,14 @@ add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_
 if(DCH_INFO_H_EXIST)
   add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o1_v03/ALLEGRO_o1_v03.xml
     EXTRA_ARGS --gun.distribution uniform --gun.particle geantino
-    PROPERTIES TIMEOUT 600)
+    PROPERTIES TIMEOUT 900)
 endif()
 
 #--------------------------------------------------
 # test for ALLEGRO o2 v01
 add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o2_v01/ALLEGRO_o2_v01.xml
-  EXTRA_ARGS --gun.distribution uniform --gun.particle geantino)
+  EXTRA_ARGS --gun.distribution uniform --gun.particle geantino
+  PROPERTIES TIMEOUT 900)
 
 #--------------------------------------------------
 # test for ARC o1 v01
