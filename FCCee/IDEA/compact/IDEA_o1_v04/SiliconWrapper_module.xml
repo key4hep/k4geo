@@ -1,0 +1,10 @@
+<!-- 
+    Sensor components of the silicon wrapper barrel or disk
+-->
+<lccdd>
+    <component name="Left quad"  sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="-SiWr_mod_rphi/2."        xmax="-SiWr_mod_quad_spacing/2." vis="SiWrSensitiveVis"/>
+    <component name="Right quad" sensitive="True" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2." xmin="SiWr_mod_quad_spacing/2." xmax="SiWr_mod_rphi/2."          vis="SiWrSensitiveVis"/>
+
+    <component name="Space between quads" sensitive="False" ymin="-SiWr_mod_z/2.+SiWr_mod_z_periphery" ymax="SiWr_mod_z/2."                       xmin="-SiWr_mod_quad_spacing/2." xmax="SiWr_mod_quad_spacing/2." vis="SiWrPeripheryVis"/>
+    <component name="Periphery"           sensitive="False" ymin="-SiWr_mod_z/2."                      ymax="-SiWr_mod_z/2.+SiWr_mod_z_periphery" xmin="-SiWr_mod_rphi/2."         xmax="SiWr_mod_rphi/2."         vis="SiWrPeripheryVis"/>
+</lccdd>

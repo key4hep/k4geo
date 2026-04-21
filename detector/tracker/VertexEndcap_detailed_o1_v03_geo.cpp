@@ -123,6 +123,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     double sensor_length;
     vector<Volume> sensor_volumes;
     Material sensor_material;
+    int nSensitivePerModule = 0;
+    int nGroupingModules;
   };
   list<module_information> module_information_list;
 
@@ -200,6 +202,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     m.sensor_thickness = xml_comp_t(c_sensor).thickness();
     m.sensor_z_offset = xml_comp_t(c_sensor).z_offset(0);
     m.sensor_name = xml_comp_t(c_sensor).nameStr("sensor");
+    m.nGroupingModules =
+        getAttrOrDefault(xml_comp_t(c_sensor), _Unicode(nGroupingModules),
+                         int(1)); // Number of modules that are together using the same module id, but different sensor
+                                  // ids (to more efficiently use GlobalTrackerReadoutID bits)
 
     // Try to load sensor components from external include file first
     bool use_include = false;
@@ -255,6 +261,9 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                                           component.nameStr("sensor") + _toString(iSensor, "_%d"),
                                           component.nameStr("sensor") + _toString(iSensor, "_insensitive_above_%d")};
       vector<bool> isSensitive_split = {false, component.isSensitive(), false};
+      m.nSensitivePerModule +=
+          component.isSensitive() ? 1 : 0; // Count how many sensitive components there are per module
+
       vector<double> z_offsets = {
           m.sensor_z_offset + component.z_offset(0), m.sensor_z_offset + component.z_offset(0) + thicknesses_split[0],
           m.sensor_z_offset + component.z_offset(0) + thicknesses_split[0] + thicknesses_split[1]};
@@ -498,6 +507,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
             // Place sensor
             for (int iModule = 0; iModule < nmodules; iModule++) {
+              int iModule_VolID =
+                  int(iModule_tot / m.nGroupingModules); // To more efficiently use GlobalTrackerReadoutID bits, use the
+                                                         // same module id for every nGroupingModules modules and
+                                                         // distinguish them by the sensor id instead
               string module_name = stave_name + "_" + m.sensor_name + _toString(iModule_tot, "_module%d");
               Assembly module_assembly(module_name);
 
@@ -507,11 +520,14 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
               else
                 pv = whole_stave_volume_a.placeVolume(module_assembly);
 
-              pv.addPhysVolID("module", iModule_tot);
+              pv.addPhysVolID("module", iModule_VolID);
               DetElement moduleDE(diskDE, module_name, iModule_tot);
               moduleDE.setPlacement(pv);
 
-              int iSensitive = 0;
+              int iSensitive = iModule_tot % m.nGroupingModules *
+                               m.nSensitivePerModule; // To more efficiently use GlobalTrackerReadoutID bits, use the
+                                                      // same module id for every nGroupingModules modules and
+                                                      // distinguish them by the sensor id instead
               for (int i = 0; i < int(m.sensor_volumes.size()); i++) {
                 double z_alternate_module = (iModule % 2 == 0) ? 0.0 : stave_dz;
                 x_pos = m.sensor_offset;

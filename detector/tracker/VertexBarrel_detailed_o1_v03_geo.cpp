@@ -134,6 +134,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     double length = 0.;
     vector<Volume> volumes;
     vector<int> nsegments;
+    int nSensitivePerModule = 0;
+    int nGroupingModules;
   };
 
   // --- Module information struct ---
@@ -281,6 +283,10 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
       sensor.nx = getAttrOrDefault(
           xml_comp_t(c_sensor), _Unicode(nx),
           int(1)); // Duplicate entries nx times in phi (local x) direction, default is 1 (no duplication)
+      sensor.nGroupingModules =
+          getAttrOrDefault(xml_comp_t(c_sensor), _Unicode(nGroupingModules),
+                           int(1)); // Number of modules that are together using the same module id, but different
+                                    // sensor ids (to more efficiently use GlobalTrackerReadoutID bits)
       double default_sensor_thickness = xml_comp_t(c_sensor).thickness();
 
       // Try to load sensor components from external include file first
@@ -337,6 +343,9 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                                             component.nameStr() + _toString(iSensor, "_%d"),
                                             component.nameStr() + _toString(iSensor, "_insensitive_above_%d")};
         vector<bool> isSensitive_split = {false, component.isSensitive(), false};
+        sensor.nSensitivePerModule +=
+            component.isSensitive() ? 1 : 0; // Count how many sensitive components there are per module
+
         vector<double> rs = {component.r(0), component.r(0) + sensor_insensitive_thickness_below,
                              component.r(0) + sensor_insensitive_thickness_below + sensitive_thickness};
 
@@ -584,20 +593,28 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                   iModule * sensor.length + iModule * step;
           Position pos(x_pos, y_pos, z_pos);
 
+          int iModule_VolID =
+              int(iModule / sensor.nGroupingModules); // To more efficiently use GlobalTrackerReadoutID bits, use the
+                                                      // same module id for every nGroupingModules modules and
+                                                      // distinguish them by the sensor id instead
+
           string module_name = stave_name + _toString(iModule, "_module%d");
           Assembly module_assembly(module_name);
           if (m.motherVolThickness > 0.0 && m.motherVolWidth > 0.0)
             pv = whole_stave_volume_v.placeVolume(module_assembly, Position(-m.motherVolThickness / 2., 0., 0.));
           else
             pv = whole_stave_volume_a.placeVolume(module_assembly);
-          pv.addPhysVolID("module", iModule + nmodules * iStave);
+          pv.addPhysVolID("module", iModule_VolID + nmodules * iStave);
 
           DetElement moduleDE(layerDE, module_name, iModule + nmodules * iStave);
           moduleDE.setPlacement(pv);
 
           // Place all sensor parts
-          int iSensitive = 0;
-          for (int x_i = 0; x_i < sensor.nx; x_i++) { // Loop over duplicates in local x (global phi) direction
+          int iSensitive = iModule % sensor.nGroupingModules *
+                           sensor.nSensitivePerModule; // To more efficiently use GlobalTrackerReadoutID bits, use the
+                                                       // same module id for every nGroupingModules modules and
+                                                       // distinguish them by the sensor id instead
+          for (int x_i = 0; x_i < sensor.nx; x_i++) {  // Loop over duplicates in local x (global phi) direction
             for (int i = 0; i < int(sensor.volumes.size()); i++) {
               if (sensor.isCurved[i] && sensor.nsegments[i] == 1) { // Truly curved, part of tube
                 r_offset_component = m.motherVolThickness > 0.0 && m.motherVolWidth > 0.0 ? 0. : layer_offset;
