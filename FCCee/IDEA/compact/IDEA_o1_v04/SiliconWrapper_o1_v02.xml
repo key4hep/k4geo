@@ -261,7 +261,7 @@
 
                 <comment> Two ATLASPix3-sized sensors, but with only one periphery region each. </comment>
                 <sensor name="SiWrSensor_ATLASPix3-like" r="SiWr_flex_thickness" thickness="SiWr_Sensitive_Thickness" material="Silicon" nGroupingModules="SiWrB_nGroupingModules">
-                    <include ref="SiliconWrapper_module.xml"/>
+                    <include ref="../../../IDEA/compact/IDEA_o1_v04/SiliconWrapper_module.xml"/>
                 </sensor>
 
                 <components name="support" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness" length="SiWrB_half_length">
@@ -324,7 +324,7 @@
 
                 <comment> Two ATLASPix3-sized sensors, but with only one periphery region each. </comment>
                 <sensor name="SiWrSensor_ATLASPix3-like" r="SiWr_flex_thickness" thickness="SiWr_Sensitive_Thickness" material="Silicon" nGroupingModules="SiWrB_nGroupingModules">
-                    <include ref="SiliconWrapper_module.xml"/>
+                    <include ref="../../../IDEA/compact/IDEA_o1_v04/SiliconWrapper_module.xml"/>
                 </sensor>
 
                 <components name="support" r="SiWr_flex_thickness+SiWr_Sensitive_Thickness" length="SiWrB_half_length">
@@ -472,7 +472,7 @@
 
                 <comment> Two ATLASPix3-sized sensors, but with only one periphery region each. </comment>
                 <sensor z_offset="SiWr_flex_thickness" thickness="SiWr_Sensitive_Thickness" nGroupingModules="SiWrD_nGroupingModules" material="Silicon">
-                    <include ref="SiliconWrapper_module.xml"/>
+                    <include ref="../../../IDEA/compact/IDEA_o1_v04/SiliconWrapper_module.xml"/>
                 </sensor>
 
                 <components name="support_low_z" z_offset="SiWr_flex_thickness+SiWr_Sensitive_Thickness">
@@ -520,7 +520,7 @@
 
                 <comment> Two ATLASPix3-sized sensors, but with only one periphery region each. </comment>
                 <sensor z_offset="SiWr_flex_thickness" thickness="SiWr_Sensitive_Thickness" nGroupingModules="SiWrD_nGroupingModules" material="Silicon">
-                    <include ref="SiliconWrapper_module.xml"/>
+                    <include ref="../../../IDEA/compact/IDEA_o1_v04/SiliconWrapper_module.xml"/>
                 </sensor>
 
                 <components name="support_low_z" z_offset="SiWr_flex_thickness+SiWr_Sensitive_Thickness">

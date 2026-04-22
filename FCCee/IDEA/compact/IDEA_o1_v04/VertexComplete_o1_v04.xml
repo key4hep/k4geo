@@ -622,7 +622,7 @@
             <comment> Definition of our "stave" object that is used to build the barrel, this time for the curved inner vertex layer </comment>
             <stave name="VTXIBStave1Curved" r="VTXIB_curved_r1" length="2.*VTXIB_curved_z1">
                 <sensor name="sensor" thickness="VTXIB_curved_total_sensor_thickness" nx="2" material="Silicon">
-                    <include ref="Vertex_curvedUltraLight_module.xml"/>
+                    <include ref="../../../IDEA/compact/IDEA_o1_v04/Vertex_curvedUltraLight_module.xml"/>
                 </sensor>
 
                 <components name="support_longeron" r="VTXIB_curved_total_sensor_thickness+VTXIB_curved_tolerance_r" length="VTXIB_curved_z1+VTXIB_curved_endcap1_length-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
@@ -641,7 +641,7 @@
 
             <stave name="VTXIBStave2Curved" r="VTXIB_curved_r2" length="2.*VTXIB_curved_z2">
                 <sensor name="sensor" thickness="VTXIB_curved_total_sensor_thickness" nx="3" material="Silicon">
-                    <include ref="Vertex_curvedUltraLight_module.xml"/>
+                    <include ref="../../../IDEA/compact/IDEA_o1_v04/Vertex_curvedUltraLight_module.xml"/>
                 </sensor>
 
                 <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r" length="VTXIB_curved_z2+VTXIB_curved_endcap2_length-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
@@ -661,7 +661,7 @@
 
             <stave name="VTXIBStave3Curved_1" r="VTXIB_curved_r3" length="2.*VTXIB_curved_z3_1">
                 <sensor name="sensor" thickness="VTXIB_curved_total_sensor_thickness" nx="4" material="Silicon">
-                    <include ref="Vertex_curvedUltraLight_module.xml"/>
+                    <include ref="../../../IDEA/compact/IDEA_o1_v04/Vertex_curvedUltraLight_module.xml"/>
                 </sensor>
 
                 <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r" length="VTXIB_curved_z3_1+VTXIB_curved_endcap3_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
@@ -683,7 +683,7 @@
             <comment> Layer 3 is different on the +z and -z sides, define two 'stave' objects </comment>
             <stave name="VTXIBStave3Curved_2" r="VTXIB_curved_r3" length="2.*VTXIB_curved_z3_2">
                 <sensor name="sensor" thickness="VTXIB_curved_total_sensor_thickness" nx="4" material="Silicon">
-                    <include ref="Vertex_curvedUltraLight_module.xml"/>
+                    <include ref="../../../IDEA/compact/IDEA_o1_v04/Vertex_curvedUltraLight_module.xml"/>
                 </sensor>
 
                 <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r" length="VTXIB_curved_z3_2+VTXIB_curved_endcap3_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
@@ -704,7 +704,7 @@
 
             <stave name="VTXIBStave4Curved_1" r="VTXIB_curved_r4" length="2.*VTXIB_curved_z4_1">
                 <sensor name="sensor" thickness="VTXIB_curved_total_sensor_thickness" nx="5" material="Silicon">
-                    <include ref="Vertex_curvedUltraLight_module.xml"/>
+                    <include ref="../../../IDEA/compact/IDEA_o1_v04/Vertex_curvedUltraLight_module.xml"/>
                 </sensor>
 
                 <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r" length="VTXIB_curved_z4_1+VTXIB_curved_endcap4_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
@@ -726,7 +726,7 @@
             <comment> Layer 4 is different on the +z and -z sides, define two 'stave' objects </comment>
             <stave name="VTXIBStave4Curved_2" r="VTXIB_curved_r4" length="2.*VTXIB_curved_z4_2">
                 <sensor name="sensor" thickness="VTXIB_curved_total_sensor_thickness" nx="5" material="Silicon">
-                    <include ref="Vertex_curvedUltraLight_module.xml"/>
+                    <include ref="../../../IDEA/compact/IDEA_o1_v04/Vertex_curvedUltraLight_module.xml"/>
                 </sensor>
 
                 <components name="support_longeron" r="VTXIB_curved_sensitive_thickness+VTXIB_curved_tolerance_r" length="VTXIB_curved_z4_2+VTXIB_curved_endcap4_length_center-VTXIB_curved_support_ring_length+VTXIB_curved_ring_zoffset">
@@ -755,7 +755,7 @@
                 </components>
 
                 <sensor name="ATLASPix3Quad" r="VTXO_flex_thickness" thickness="VTXO_sensor_thickness" material="Silicon">
-                    <include ref="Vertex_outerVertex_module.xml"/>
+                    <include ref="../../../IDEA/compact/IDEA_o1_v04/Vertex_outerVertex_module.xml"/>
                 </sensor>
 
                 <components name="support" r="VTXO_flex_thickness+VTXO_sensor_thickness" length="VTXOB_halfLength1">
@@ -808,7 +808,7 @@
                 </components>
 
                 <sensor name="ATLASPix3Quad" r="VTXOB_support_thickness" thickness="VTXO_sensor_thickness" material="Silicon">
-                    <include ref="Vertex_outerVertex_module.xml"/>
+                    <include ref="../../../IDEA/compact/IDEA_o1_v04/Vertex_outerVertex_module.xml"/>
                 </sensor>
 
                 <components name="flexes" r="VTXOB_support_thickness+VTXO_sensor_thickness" length="VTXOB_halfLength2">
@@ -932,7 +932,7 @@
                 </components>
 
                 <sensor name="ATLASPix3Quad" z_offset="VTXO_flex_thickness" thickness="VTXO_sensor_thickness" material="Silicon">
-                    <include ref="Vertex_outerVertex_module.xml"/>
+                    <include ref="../../../IDEA/compact/IDEA_o1_v04/Vertex_outerVertex_module.xml"/>
                 </sensor>
 
                 <components name="support_low_z" z_offset="VTXO_flex_thickness+VTXO_sensor_thickness">
