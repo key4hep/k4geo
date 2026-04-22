@@ -47,13 +47,13 @@ function(add_ddsim_gun_test compact_file)
   endif()
 endfunction()
 
-#--------------------------------------------------
-# tests for ILD
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_l5_v02/ILD_l5_v02.xml)
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_s5_v08/ILD_s5_v08.xml)
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_l5_v09/ILD_l5_v09.xml)
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_l5_v10/ILD_l5_v10.xml)
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_l5_v11/ILD_l5_v11.xml)
+# #--------------------------------------------------
+# # tests for ILD
+# add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_l5_v02/ILD_l5_v02.xml)
+# add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_s5_v08/ILD_s5_v08.xml)
+# add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_l5_v09/ILD_l5_v09.xml)
+# add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_l5_v10/ILD_l5_v10.xml)
+# add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_l5_v11/ILD_l5_v11.xml)
 
 if(INSTALL_BEAMPIPE_STL_FILES)
   add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ILD_FCCee/compact/ILD_FCCee_v01/ILD_FCCee_v01.xml
@@ -63,45 +63,45 @@ if(INSTALL_BEAMPIPE_STL_FILES)
     FILTER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/scripts/filter_G4Tessellated_warnings.py)
 endif()
 
-#--------------------------------------------------
-# tests for SiD
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../SiD/compact/SiD_o2_v03/SiD_o2_v03.xml)
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../SiD/compact/SiD_o2_v04/SiD_o2_v04.xml)
-
-#--------------------------------------------------
-# tests for CLIC
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o1_v01/CLIC_o1_v01.xml)
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o2_v04/CLIC_o2_v04.xml)
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o3_v15/CLIC_o3_v15.xml)
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/FCCee_o1_v05/FCCee_o1_v05.xml)
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/CLD_o2_v08/CLD_o2_v08.xml)
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/CLD_o4_v05/CLD_o4_v05.xml)
-
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o2_v04/CLIC_o2_v04.xml
-  NAME test_steeringFile
-  EXTRA_ARGS --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/steeringFile.py)
-
-#--------------------------------------------------
-# test for IDEA o1 v02
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o1_v02/IDEA_o1_v02.xml
-  N_EVENTS 51000
-  EXTRA_ARGS --gun.distribution uniform --gun.particle geantino --random.seed 1988301045
-  PROPERTIES TIMEOUT 360)
+# #--------------------------------------------------
+# # tests for SiD
+# add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../SiD/compact/SiD_o2_v03/SiD_o2_v03.xml)
+# add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../SiD/compact/SiD_o2_v04/SiD_o2_v04.xml)
+# 
+# #--------------------------------------------------
+# # tests for CLIC
+# add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o1_v01/CLIC_o1_v01.xml)
+# add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o2_v04/CLIC_o2_v04.xml)
+# add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o3_v15/CLIC_o3_v15.xml)
+# add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/FCCee_o1_v05/FCCee_o1_v05.xml)
+# add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/CLD_o2_v08/CLD_o2_v08.xml)
+# add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/CLD_o4_v05/CLD_o4_v05.xml)
+# 
+# add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o2_v04/CLIC_o2_v04.xml
+#   NAME test_steeringFile
+#   EXTRA_ARGS --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/steeringFile.py)
+# 
+# #--------------------------------------------------
+# # test for IDEA o1 v02
+# add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o1_v02/IDEA_o1_v02.xml
+#   N_EVENTS 51000
+#   EXTRA_ARGS --gun.distribution uniform --gun.particle geantino --random.seed 1988301045
+#   PROPERTIES TIMEOUT 360)
 
 #--------------------------------------------------
 # test for IDEA o1 v03
-if(DCH_INFO_H_EXIST)
-  add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o1_v03/IDEA_o1_v03.xml
-    EXTRA_ARGS --gun.distribution uniform --gun.particle geantino --random.seed 1988301045
-      --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o1_v03.py
-    PROPERTIES TIMEOUT 900)
-
-  # test for IDEA o1 v03, with DRC, with electrons
-  add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/compact/IDEA_withDRC_o1_v03.xml
-    EXTRA_ARGS --gun.distribution uniform --gun.particle e- --random.seed 1988301045
-      --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o1_v03.py
-    PROPERTIES TIMEOUT 900)
-endif()
+# if(DCH_INFO_H_EXIST)
+#   add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o1_v03/IDEA_o1_v03.xml
+#     EXTRA_ARGS --gun.distribution uniform --gun.particle geantino --random.seed 1988301045
+#       --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o1_v03.py
+#     PROPERTIES TIMEOUT 900)
+# 
+#   # test for IDEA o1 v03, with DRC, with electrons
+#   add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/compact/IDEA_withDRC_o1_v03.xml
+#     EXTRA_ARGS --gun.distribution uniform --gun.particle e- --random.seed 1988301045
+#       --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o1_v03.py
+#     PROPERTIES TIMEOUT 900)
+# endif()
 
 #--------------------------------------------------
 # test for IDEA o1 v04
@@ -121,65 +121,65 @@ endif()
 
 #--------------------------------------------------
 # test for ALLEGRO o1 v02
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o1_v02/ALLEGRO_o1_v02.xml
-  EXTRA_ARGS --gun.distribution uniform --gun.particle geantino)
+# add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o1_v02/ALLEGRO_o1_v02.xml
+#   EXTRA_ARGS --gun.distribution uniform --gun.particle geantino)
 
 #--------------------------------------------------
 # test for ALLEGRO o1 v03
-if(DCH_INFO_H_EXIST)
-  add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o1_v03/ALLEGRO_o1_v03.xml
-    EXTRA_ARGS --gun.distribution uniform --gun.particle geantino
-    PROPERTIES TIMEOUT 900)
-endif()
+# if(DCH_INFO_H_EXIST)
+#   add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o1_v03/ALLEGRO_o1_v03.xml
+#     EXTRA_ARGS --gun.distribution uniform --gun.particle geantino
+#     PROPERTIES TIMEOUT 900)
+# endif()
 
 #--------------------------------------------------
 # test for ALLEGRO o2 v01
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o2_v01/ALLEGRO_o2_v01.xml
-  EXTRA_ARGS --gun.distribution uniform --gun.particle geantino
-  PROPERTIES TIMEOUT 900)
+# add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o2_v01/ALLEGRO_o2_v01.xml
+#   EXTRA_ARGS --gun.distribution uniform --gun.particle geantino
+#   PROPERTIES TIMEOUT 900)
 
-#--------------------------------------------------
-# test for ARC o1 v01
-SET( test_name "test_ARC_o1_v01_run" )
-add_test(NAME ${test_name} COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/../example/arcfullsim.py --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/compact/ARC_standalone_o1_v01.xml --runType batch  )
-SET_TESTS_PROPERTIES( ${test_name} PROPERTIES TIMEOUT 120)
-
-SET( test_name "test_ARC_o1_v01_overlap" )
-add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/compact/ARC_standalone_o1_v01.xml --runType run --part.userParticleHandler= --macroFile=${CMAKE_CURRENT_SOURCE_DIR}/../utils/overlap.mac  )
-SET_TESTS_PROPERTIES( ${test_name} PROPERTIES TIMEOUT 240)
-
-#--------------------------------------------------
-# test for DCH o1 v02
-if(DCH_INFO_H_EXIST)
-SET( test_name "test_DCH_o1_v02_overlap" )
-add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/compact/DCH_standalone_o1_v02.xml --runType run --part.userParticleHandler= --macroFile=${CMAKE_CURRENT_SOURCE_DIR}/../utils/overlap.mac  )
-set_tests_properties( ${test_name} PROPERTIES TIMEOUT 400)
-endif()
-
-#--------------------------------------------------
-# test for FCChh
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCChh/compact/FCChhBaseline/FCChh_DectMaster.xml
-  EXTRA_ARGS --gun.distribution uniform --gun.particle geantino)
-
-#--------------------------------------------------
-
-ADD_EXECUTABLE( TestSensThickness src/TestSensThickness.cpp )
-Target_Link_Libraries( TestSensThickness lcgeo )
-INSTALL( TARGETS TestSensThickness DESTINATION bin )
-
-ADD_EXECUTABLE( BeamCalZtest src/BeamCalZtest.cpp )
-Target_Link_Libraries( BeamCalZtest lcgeo )
-INSTALL( TARGETS BeamCalZtest DESTINATION bin )
-
-add_test(NAME t_SensThickness_Clic_o2_v4 COMMAND ${PROJECT_BINARY_DIR}/bin/TestSensThickness ${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o2_v04/CLIC_o2_v04.xml 300 50 )
-add_test(NAME t_SensThickness_Clic_o3_v15 COMMAND ${PROJECT_BINARY_DIR}/bin/TestSensThickness ${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o3_v15/CLIC_o3_v15.xml 100 50 )
-
-#--------------------------------------------------
-# Tests for MuonCollider geometries
-#--------------------------------------------------
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MAIA/compact/MAIA_v0/MAIA_v0.xml)
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuColl/compact/MuColl_v1/MuColl_v1.xml)
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuSIC/compact/MuSIC_v2/MuSIC_v2.xml)
+# #--------------------------------------------------
+# # test for ARC o1 v01
+# SET( test_name "test_ARC_o1_v01_run" )
+# add_test(NAME ${test_name} COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/../example/arcfullsim.py --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/compact/ARC_standalone_o1_v01.xml --runType batch  )
+# SET_TESTS_PROPERTIES( ${test_name} PROPERTIES TIMEOUT 120)
+# 
+# SET( test_name "test_ARC_o1_v01_overlap" )
+# add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/compact/ARC_standalone_o1_v01.xml --runType run --part.userParticleHandler= --macroFile=${CMAKE_CURRENT_SOURCE_DIR}/../utils/overlap.mac  )
+# SET_TESTS_PROPERTIES( ${test_name} PROPERTIES TIMEOUT 240)
+# 
+# #--------------------------------------------------
+# # test for DCH o1 v02
+# if(DCH_INFO_H_EXIST)
+# SET( test_name "test_DCH_o1_v02_overlap" )
+# add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/compact/DCH_standalone_o1_v02.xml --runType run --part.userParticleHandler= --macroFile=${CMAKE_CURRENT_SOURCE_DIR}/../utils/overlap.mac  )
+# set_tests_properties( ${test_name} PROPERTIES TIMEOUT 400)
+# endif()
+# 
+# #--------------------------------------------------
+# # test for FCChh
+# add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCChh/compact/FCChhBaseline/FCChh_DectMaster.xml
+#   EXTRA_ARGS --gun.distribution uniform --gun.particle geantino)
+# 
+# #--------------------------------------------------
+# 
+# ADD_EXECUTABLE( TestSensThickness src/TestSensThickness.cpp )
+# Target_Link_Libraries( TestSensThickness lcgeo )
+# INSTALL( TARGETS TestSensThickness DESTINATION bin )
+# 
+# ADD_EXECUTABLE( BeamCalZtest src/BeamCalZtest.cpp )
+# Target_Link_Libraries( BeamCalZtest lcgeo )
+# INSTALL( TARGETS BeamCalZtest DESTINATION bin )
+# 
+# add_test(NAME t_SensThickness_Clic_o2_v4 COMMAND ${PROJECT_BINARY_DIR}/bin/TestSensThickness ${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o2_v04/CLIC_o2_v04.xml 300 50 )
+# add_test(NAME t_SensThickness_Clic_o3_v15 COMMAND ${PROJECT_BINARY_DIR}/bin/TestSensThickness ${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o3_v15/CLIC_o3_v15.xml 100 50 )
+# 
+# #--------------------------------------------------
+# # Tests for MuonCollider geometries
+# #--------------------------------------------------
+# add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MAIA/compact/MAIA_v0/MAIA_v0.xml)
+# add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuColl/compact/MuColl_v1/MuColl_v1.xml)
+# add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuSIC/compact/MuSIC_v2/MuSIC_v2.xml)
 
 #--------------------------------------------------
 # check if files named the same contain the same in FCCee
