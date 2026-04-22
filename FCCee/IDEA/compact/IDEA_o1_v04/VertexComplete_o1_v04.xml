@@ -42,7 +42,7 @@
             <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX"/>
             <shape type="BooleanShape" operation="Subtraction" material="Air">
                 <shape type="BooleanShape" operation="Subtraction" material="Air">
-                    <shape type="Tube" rmin="VTXIB_r_min_layer-VTXIB_r_min_clearance" rmax="VTXOB_r_max_layer+VTXOB_rmax_clearance" dz="VTXD_z_max_total"/>
+                    <shape type="Tube" rmin="CentralBeamPipe_rmax+BeamPipeWidth" rmax="VTXOB_r_max_layer+VTXOB_rmax_clearance" dz="VTXD_z_max_total"/>
                     <shape type="Cone" rmin1="0" rmax1="tan(VertexClearanceTheta)*2000.0*mm" rmin2="0" rmax2="0" z="2000.0*mm/2."/>
                     <position x="0" y="0" z="-2000.0*mm/2." />
                 </shape>                            
@@ -55,7 +55,7 @@
             <composite name="VertexDisks_assembly"/>
         </detector>
     </detectors>
-
+    
     <define> <comment> Vertex inner barrel (VTXIB) properties </comment>
         <comment> ARCADIA sensor properties </comment>
         <constant name="VTXIB_sensor_z" value="32.0*mm"/> <comment> Two reticles with 16 mm each, stitched together thus 32 mm long, forming one module </comment>
@@ -457,12 +457,19 @@
         <constant name="VTXIB_curved_tolerance_r" value="0.100*mm"/> <comment> Needed for curved inner vertex as otherwise overlaps would be detected. Can be reduced if `VTXIB_curved_nsegments` is increased </comment>
     </define>
 
+    <define> <comment> Kapton layer between the beam pipe and the first vertex layer for electrical insulation. Only used if first layer radius is exactly at outer radius of beam pipe + kapton layer thickness ('VTXIB_Kapton_beampipe_r+VTXIB_Kapton_beampipe_thickness less than VTXIB_r_min_layer' ignore command) </comment>
+        <constant name="VTXIB_Kapton_beampipe_thickness" value="0.1*mm"/> 
+        <constant name="VTXIB_Kapton_beampipe_r" value="CentralBeamPipe_rmax+BeamPipeWidth"/> 
+        <constant name="VTXIB_Kapton_beampipe_halfLength" value="(4-nInnerVertexLayers)*VTXIB_halfLength1 + (nInnerVertexLayers-3)*VTXIB_curved_z1_passive/2."/>
+    </define>
+
     <comment> Inner vertex tube, common to both inner vertex designs </comment>
     <define>
         <constant name="VTXIB_tube_length"      value="(4-nInnerVertexLayers)*VTXIB_half_length + (nInnerVertexLayers-3)*(2.*VTXIB_curved_z4_1+2.*VTXIB_curved_z4_2+VTXIB_curved_support_ring_length+VTXIB_curved_gap_z4)/2."/>
         <constant name="VTXIB_tube_thickness"   value="0.2*mm"/> <comment> Thickness of the tube surrounding the inner vertex, to contain the cooling air of the outermost layer </comment>
         <constant name="VTXIB_tube_r"           value="(4-nInnerVertexLayers)*(VTXIB_r_max-VTXIB_tube_thickness) + (nInnerVertexLayers-3)*(VTXIB_curved_r_outer-VTXIB_tube_thickness)"/>
     </define>
+
 
     <readouts> <comment>  Definition of the readout segmentation/definition </comment>
         <readout name="VertexBarrelCollection"> 
@@ -488,6 +495,7 @@
     <detectors>
         <detector name="VertexBarrel_assembly" type="DD4hep_SubdetectorAssembly" vis="VXDVis">
             <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX"/>
+            <composite name="Kapton_on_beampipe"/>
             <composite name="VertexBarrel"/>
             <composite name="VertexInnerBarrel_tube"/>
             <comment>
@@ -856,6 +864,20 @@
             <layer nLadders="1" r="VTXIB_tube_r" id="0" name="VertexInnerBarrel_tube_stave" nmodules="1" motherVolThickness="VTXIB_tube_thickness"/>
         </detector>
 
+        <comment> Kapton layer on top of beam pipe before first layer </comment>
+        <detector name="Kapton_on_beampipe" type="VertexBarrel_detailed_o1_v03" vis="KaptonVis" id="-3" readout="VertexDummyCollection" region="VTXBRegion">
+            <envelope vis="KaptonVis">
+                <shape type="Assembly"/>
+            </envelope>
+
+            <stave name="Kapton_on_beampipe_stave" r="VTXIB_Kapton_beampipe_r" length="2.*VTXIB_Kapton_beampipe_halfLength">
+                <components name="Kapton_on_beampipe" length="VTXIB_Kapton_beampipe_halfLength">
+                    <component thickness="VTXIB_Kapton_beampipe_thickness" width="2.*pi*VTXIB_Kapton_beampipe_r" material="Kapton" isCurved="true" vis="KaptonVis"/>
+                </components>
+            </stave>
+
+            <layer nLadders="1" r="VTXIB_Kapton_beampipe_r" id="-3" name="Kapton_on_beampipe_stave" nmodules="1" motherVolThickness="VTXIB_Kapton_beampipe_thickness" ignore="VTXIB_r_min_layer == 13.7*mm"/>
+        </detector>
 
         <comment> Vertex inner barrel support structure and cooling cones imported via DDCAD. Disabled because of overlaps within and with Vertex detector </comment>
         <!-- <detector id="DetID_NOTUSED" name="VTXIB_Support_PEEK" type="DD4hep_TestShape_Creator">

@@ -55,6 +55,7 @@ using dd4hep::Translation3D;
 using dd4hep::Trapezoid;
 using dd4hep::Tube;
 using dd4hep::Volume;
+using dd4hep::WARNING;
 
 using dd4hep::Trd1;
 using dd4hep::rec::SurfaceType;
@@ -420,6 +421,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
   //=========  loop over layer elements in xml  ======================================
 
   printout(INFO, det_name, "Building of detector ...");
+  int nLayers = 0;
+
   for (xml_coll_t c(e, _U(layer)); c; ++c) {
 
     xml_comp_t x_layer(c);
@@ -427,6 +430,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     if (x_layer.attr<bool>(_Unicode(ignore), false))
       continue; // Skip layers marked to be ignored. This can be used for example to easily switch
                 // off layers that are outside the envelopes of the detector
+    else
+      nLayers++;
 
     int layer_id = x_layer.id();
     int side = getAttrOrDefault(x_layer, _Unicode(side),
@@ -726,12 +731,15 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     }
   }
 
-  pv.addPhysVolID("system", x_det.id());
-
-  sdet.setAttributes(theDetector, envelope, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
+  if (nLayers > 0) {
+    pv.addPhysVolID("system", x_det.id());
+    sdet.setAttributes(theDetector, envelope, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
+  } else {
+    printout(WARNING, det_name,
+             "No layer found for this detector. Did you ignore all layers using 'ignore' in layer definition?");
+  }
 
   printout(INFO, det_name, "Building of detector successfully completed");
-
   return sdet;
 }
 
