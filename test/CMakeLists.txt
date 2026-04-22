@@ -113,11 +113,11 @@ endif()
 
 #--------------------------------------------------
 # test for IDEA o2 v01
-#if(DCH_INFO_H_EXIST)
-#SET( test_name "test_IDEA_o2_v01" )
-#add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o2_v01/IDEA_o2_v01.xml --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o2_v01.py -N 1 --random.seed 1988301045 --outputFile=testIDEA_o2_v01.root )
-#    SET_TESTS_PROPERTIES( ${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  " Exception; EXCEPTION;ERROR;Error" TIMEOUT 900)
-#endif()
+if(DCH_INFO_H_EXIST)
+SET( test_name "test_IDEA_o2_v01" )
+add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o2_v01/IDEA_o2_v01.xml --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o2_v01.py -N 1 --random.seed 1988301045 --outputFile=testIDEA_o2_v01.root )
+    SET_TESTS_PROPERTIES( ${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  " Exception; EXCEPTION;ERROR;Error" TIMEOUT 900)
+endif()
 
 #--------------------------------------------------
 # test for ALLEGRO o1 v02
@@ -126,17 +126,17 @@ endif()
 
 #--------------------------------------------------
 # test for ALLEGRO o1 v03
-# if(DCH_INFO_H_EXIST)
-#   add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o1_v03/ALLEGRO_o1_v03.xml
-#     EXTRA_ARGS --gun.distribution uniform --gun.particle geantino
-#     PROPERTIES TIMEOUT 900)
-# endif()
+if(DCH_INFO_H_EXIST)
+  add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o1_v03/ALLEGRO_o1_v03.xml
+    EXTRA_ARGS --gun.distribution uniform --gun.particle geantino
+    PROPERTIES TIMEOUT 900)
+endif()
 
 #--------------------------------------------------
 # test for ALLEGRO o2 v01
-# add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o2_v01/ALLEGRO_o2_v01.xml
-#   EXTRA_ARGS --gun.distribution uniform --gun.particle geantino
-#   PROPERTIES TIMEOUT 900)
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o2_v01/ALLEGRO_o2_v01.xml
+  EXTRA_ARGS --gun.distribution uniform --gun.particle geantino
+  PROPERTIES TIMEOUT 900)
 
 # #--------------------------------------------------
 # # test for ARC o1 v01
@@ -212,8 +212,8 @@ add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MAIA/compact/
 add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../MuColl/MuSIC/compact/*/MuSIC_v*.xml)
 add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../ILD/compact/ILD_sl5_v02/ILD_l5_o?_v02.xml)
 add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/*/CLD_o?_v0?.xml)
-# add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/*/ALLEGRO_o?_v0?.xml)
-# add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/*/IDEA_o?_v0?.xml)
+add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/*/ALLEGRO_o?_v0?.xml)
+add_detector_name_checks_for(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/*/IDEA_o?_v0?.xml)
 
 
 set(test_environment "LD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/lib:$ENV{LD_LIBRARY_PATH}")
