@@ -70,6 +70,9 @@
     <constant name="Glue_thickness" value="0.1*mm"/>
     <!-- readout in between two absorber plates -->
     <constant name="readout_thickness" value="1.2*mm"/>
+    <!-- solenoid radii -->
+    <constant name="SolenoidOuterRadius" value="BarCryoECal_rmax-CryoBarrelBackWarm-CryoBarrelBackCold"/>
+    <constant name="SolenoidInnerRadius" value="SolenoidOuterRadius-SolenoidBarrel"/>
   </define>
 
   <display>
@@ -98,7 +101,7 @@
       <dimensions rmin="BarCryoECal_rmin" rmax="BarCryoECal_rmax" dz="BarCryoECal_dz" vis="ecal_envelope"/>
       <cryostat name="ECAL_Cryo">
         <material name="Aluminum"/>
-	<dimensions rmin1="BarCryoECal_rmin" rmin2="BarCryoECal_rmin+CryoBarrelFront" rmax1="BarCryoECal_rmax-CryoBarrelBack" rmax2="BarCryoECal_rmax" dz="BarCryoECal_dz"/>
+        <dimensions rmin1="BarCryoECal_rmin" rmin2="BarCryoECal_rmin+CryoBarrelFront" rmax1="BarCryoECal_rmax-CryoBarrelBack" rmax2="BarCryoECal_rmax" dz="BarCryoECal_dz"/>
         <front sensitive="true"/> <!-- inner wall of the cryostat -->
         <side sensitive="true"/> <!-- both sides of the cryostat -->
         <back sensitive="true"/> <!-- outer wall of the cryostat -->
@@ -119,7 +122,7 @@
         <passive>
           <rotation angle="InclinationAngle"/>  <!-- inclination angle -->
           <inner thickness="Pb_thickness" sensitive="false"> <!-- thickness of inner part of the absorber, at Rmin, and whether its is active in layer 1 -->
-	    <material name="LAr"/> <!-- material of the inner part of the absorber, in the first layer of the calorimeter -->
+            <material name="LAr"/> <!-- material of the inner part of the absorber, in the first layer of the calorimeter -->
             <!--material name="G10"/--> <!-- material of the inner part of the absorber, in the first layer of the calorimeter -->
           </inner>
           <innerMax thickness="Pb_thickness_max" sensitive="false"> <!-- thickness of the inner part of the absorber, at Rmax, and whether its is active in layers 2-N -->
@@ -139,18 +142,18 @@
           <!-- pcb electrode segmentation (length of each layer along the electrode direction) -->
           <!-- calculated given calo Rmin and inclination angle to yield cell corners aligned  -->
           <!-- in rho-phi view, with constant number of crossings vs phi for projective particles -->
-	  <!-- (2 crossings in L0 and 4 in L1-10 -->
+          <!-- (2 crossings in L0 and 4 in L1-10 -->
           <layer thickness="2.33596*cm" repeat="1"/>
-	  <layer thickness="4.75685*cm" repeat="1"/>
-	  <layer thickness="4.89843*cm" repeat="1"/>
-	  <layer thickness="5.04000*cm" repeat="1"/>
-	  <layer thickness="5.20989*cm" repeat="1"/>
-	  <layer thickness="5.36562*cm" repeat="1"/>
-	  <layer thickness="5.54966*cm" repeat="1"/>
-	  <layer thickness="5.73371*cm" repeat="1"/>
-	  <layer thickness="5.94607*cm" repeat="1"/>
-	  <layer thickness="6.15843*cm" repeat="1"/>
-	  <layer thickness="6.39909*cm" repeat="1"/> <!-- change from 6.39910 to 6.39909 to avoid ~ 49 nm overlaps between layer10 and active volume-->
+          <layer thickness="4.75685*cm" repeat="1"/>
+          <layer thickness="4.89843*cm" repeat="1"/>
+          <layer thickness="5.04000*cm" repeat="1"/>
+          <layer thickness="5.20989*cm" repeat="1"/>
+          <layer thickness="5.36562*cm" repeat="1"/>
+          <layer thickness="5.54966*cm" repeat="1"/>
+          <layer thickness="5.73371*cm" repeat="1"/>
+          <layer thickness="5.94607*cm" repeat="1"/>
+          <layer thickness="6.15843*cm" repeat="1"/>
+          <layer thickness="6.39909*cm" repeat="1"/> <!-- change from 6.39910 to 6.39909 to avoid ~ 49 nm overlaps between layer10 and active volume-->
         </layers>
       </calorimeter>
     </detector>
@@ -163,7 +166,7 @@
            inner_field="SolenoidField"
            outer_field="SolenoidReturnField"
            zmax="EMBarrel_dz"
-           outer_radius="BarCryoECal_rmax-CryoBarrelBackWarm-CryoBarrelBackCold">
+           outer_radius="SolenoidOuterRadius">
     </field>
   </fields>
 
