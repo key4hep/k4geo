@@ -136,18 +136,6 @@ SET_TESTS_PROPERTIES( ${test_name} PROPERTIES TIMEOUT 240)
 add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o1_v02/ALLEGRO_o1_v02.xml
   EXTRA_ARGS --gun.distribution uniform --gun.particle geantino)
 
-#--------------------------------------------------
-# test for ALLEGRO o1 v03
-if(DCH_INFO_H_EXIST)
-  add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o1_v03/ALLEGRO_o1_v03.xml
-    EXTRA_ARGS --gun.distribution uniform --gun.particle geantino
-    PROPERTIES TIMEOUT 600)
-endif()
-
-#--------------------------------------------------
-# test for ALLEGRO o2 v01
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o2_v01/ALLEGRO_o2_v01.xml
-  EXTRA_ARGS --gun.distribution uniform --gun.particle geantino)
 
 #--------------------------------------------------
 # test for DCH o1 v02
@@ -174,6 +162,19 @@ INSTALL( TARGETS BeamCalZtest DESTINATION bin )
 
 add_test(NAME t_SensThickness_Clic_o2_v4 COMMAND ${PROJECT_BINARY_DIR}/bin/TestSensThickness ${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o2_v04/CLIC_o2_v04.xml 300 50 )
 add_test(NAME t_SensThickness_Clic_o3_v15 COMMAND ${PROJECT_BINARY_DIR}/bin/TestSensThickness ${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o3_v15/CLIC_o3_v15.xml 100 50 )
+
+#--------------------------------------------------
+# test for ALLEGRO o1 v03
+if(DCH_INFO_H_EXIST)
+  add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o1_v03/ALLEGRO_o1_v03.xml
+    EXTRA_ARGS --gun.distribution uniform --gun.particle geantino
+    PROPERTIES TIMEOUT 600)
+endif()
+
+#--------------------------------------------------
+# test for ALLEGRO o2 v01
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_o2_v01/ALLEGRO_o2_v01.xml
+  EXTRA_ARGS --gun.distribution uniform --gun.particle geantino)
 
 #--------------------------------------------------
 # Tests for MuonCollider geometries
