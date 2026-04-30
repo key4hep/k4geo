@@ -501,7 +501,7 @@ dd4hep::Solid CompositeTT(double twist_angle, double cell_rin_z0, double cell_ro
   double poly_angle = dphi / 2;
   double twist_angle_half = twist_angle / 2.;
   // change sign, so the final shape has the same orientation as G4 twisted tube
-  twist_angle_half *= -1; // this might not be true
+  twist_angle_half *= -1;   // not sure about this
 
   // define points of 8 genenric trapezoid
   struct point2d {

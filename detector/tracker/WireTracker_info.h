@@ -58,7 +58,7 @@ public:
         double width_z0 = {0};
         /// stereoangle at z=0
         angle_t stereo_sw_z0 = {0};
-        /// radius (cylindrical coord) of sensitive wire
+        /// placement radius (cylindrical coord) of sensitive wire
         length_t radius_sw_z0 = {0};
     };
 
@@ -81,10 +81,6 @@ public:
     /// Calculated as nlayersPerSuperlayer * nsuperlayers
     layer_t nlayers = {0};
 
-    /// global twist angle
-    /// alternating layers will change its sign
-    angle_t twist_angle = {0};
-
     // ------------------------------------------------------------------
     //  Convenience setters
 
@@ -94,8 +90,6 @@ public:
 
     void Set_nlayersPerSuperlayer(int _nlayersPerSuperlayer){nlayersPerSuperlayer = _nlayersPerSuperlayer;}
     void Set_nsuperlayers        (int _nsuperlayers        ){nsuperlayers         = _nsuperlayers;        }
-
-    void Set_twist_angle (length_t _dch_twist_angle ){twist_angle = _dch_twist_angle;}
 
     /// ------------------------------------------------------------------
     // Wire-distance calculations  (used by digitisation / reconstruction)
@@ -223,6 +217,10 @@ struct DCH_info_struct : WireTracker_info_struct {
     //--------------------------------------------------------------
     //  DCH-specific global parameters
 
+    /// global twist angle
+    /// alternating layers will change its sign
+    angle_t twist_angle = {0};
+
     /// Inner and outer guard wires radius
     length_t guard_inner_r_at_z0 = {0};
     length_t guard_outer_r_at_zL2 = {0};
@@ -242,6 +240,8 @@ struct DCH_info_struct : WireTracker_info_struct {
 
     //--------------------------------------------------------------
     // Setters
+
+    void Set_twist_angle (length_t _dch_twist_angle ){twist_angle = _dch_twist_angle;}
 
     void Set_guard_rin_at_z0  (length_t _rin_z0_guard  ){guard_inner_r_at_z0  = _rin_z0_guard;   }
     void Set_guard_rout_at_zL2(length_t _rout_zL2_guard){guard_outer_r_at_zL2 = _rout_zL2_guard; }
@@ -532,8 +532,8 @@ struct STT_info_struct : WireTracker_info_struct {
 
                 // set parameters
                 layer_info.layer = layer;
-                // in consecutive layers, minimal radial distance between staggered tubes centers
-                // is cell_diameter * sqrt(3)/2
+                // in consecutive layers, minimal radial distance between
+                // staggered tubes centers is: cell_diameter * sqrt(3)/2
                 layer_info.radius_sw_z0 = R + (ilayer * cell_diameter * sqrt(3)/2);
                 layer_info.stereo_sw_z0 = sl_stereo;
 
