@@ -75,7 +75,7 @@ public:
     /// input number of layers in each superlayer
     layer_t nlayersPerSuperlayer = {0};
     /// input number of superlayers
-    /// superlayer is an abstract level of grouping layers used to
+    /// superlayer is an (abstract) level of grouping layers used to
     /// parametrize the increment of cells in each layer
     layer_t nsuperlayers = {0};
     /// Calculated as dch_nlayersPerSuperlayer * nsuperlayers
