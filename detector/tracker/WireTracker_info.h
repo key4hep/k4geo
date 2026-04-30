@@ -533,8 +533,8 @@ struct STT_info_struct : WireTracker_info_struct {
                 // set parameters
                 layer_info.layer = layer;
                 // in consecutive layers, minimal radial distance between staggered tubes centers
-                // is cell_diameter * sqrt(3)/2 (=0.866)
-                layer_info.radius_sw_z0 = R + (ilayer * cell_diameter * 0.866);
+                // is cell_diameter * sqrt(3)/2
+                layer_info.radius_sw_z0 = R + (ilayer * cell_diameter * sqrt(3)/2);
                 layer_info.stereo_sw_z0 = sl_stereo;
 
                 this->database.emplace(layer, layer_info);
