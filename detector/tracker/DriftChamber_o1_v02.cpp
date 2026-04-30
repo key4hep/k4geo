@@ -522,23 +522,21 @@ dd4hep::Solid CompositeTT(double twist_angle, double cell_rin_z0, double cell_ro
   // The generic trapezoid is built in such a manner as to circumscribe the twisted tube
   // The following points correspond to the corners of the twisted tube
 
-  fZneg.A = {trap_rin * cos(-poly_angle - twist_angle_half), trap_rin * sin(-poly_angle - twist_angle_half)};
-  fZneg.B = {trap_rin * cos(poly_angle - twist_angle_half),  trap_rin * sin(poly_angle - twist_angle_half)};
+  fZpos.A = {trap_rin * cos(poly_angle + twist_angle_half), trap_rin * sin(poly_angle + twist_angle_half)};
+  fZpos.B = {trap_rin * cos(-poly_angle + twist_angle_half), trap_rin * sin(-poly_angle + twist_angle_half)};
 
-  fZpos.A = {trap_rin * cos(-poly_angle + twist_angle_half), trap_rin * sin(-poly_angle + twist_angle_half)};
-  fZpos.B = {trap_rin * cos(poly_angle + twist_angle_half), trap_rin * sin(poly_angle + twist_angle_half)};
+  fZneg.A = {trap_rin * cos(poly_angle - twist_angle_half), trap_rin * sin(poly_angle - twist_angle_half)};
+  fZneg.B = {trap_rin * cos(-poly_angle - twist_angle_half), trap_rin * sin(-poly_angle - twist_angle_half)};
 
-  fZneg.C = {trap_rout * cos(poly_angle - twist_angle_half),  trap_rout * sin(poly_angle - twist_angle_half)};
-  fZneg.D = {trap_rout * cos(-poly_angle - twist_angle_half),  trap_rout * sin(-poly_angle - twist_angle_half)};
-
-  fZpos.C = {trap_rout * cos(poly_angle + twist_angle_half),  trap_rout * sin(poly_angle + twist_angle_half)};
+  fZpos.C = {trap_rout * cos(poly_angle + twist_angle_half), trap_rout * sin(poly_angle + twist_angle_half)};
   fZpos.D = {trap_rout * cos(-poly_angle + twist_angle_half), trap_rout * sin(-poly_angle + twist_angle_half)};
 
+  fZneg.C = {trap_rout * cos(poly_angle - twist_angle_half), trap_rout * sin(poly_angle - twist_angle_half)};
+  fZneg.D = {trap_rout * cos(-poly_angle - twist_angle_half), trap_rout * sin(-poly_angle - twist_angle_half)};
 
-  std::vector<double> vertices_array = {fZneg.A.x, fZneg.A.y, fZneg.B.x, fZneg.B.y,
-                                        fZneg.C.x, fZneg.C.y, fZneg.D.x, fZneg.D.y,
-                                        fZpos.A.x, fZpos.A.y, fZpos.B.x, fZpos.B.y,
-                                        fZpos.C.x, fZpos.C.y, fZpos.D.x, fZpos.D.y};
+  std::vector<double> vertices_array = {fZpos.B.x, fZpos.B.y, fZpos.A.x, fZpos.A.y, fZpos.C.x, fZpos.C.y,
+                                        fZpos.D.x, fZpos.D.y, fZneg.B.x, fZneg.B.y, fZneg.A.x, fZneg.A.y,
+                                        fZneg.C.x, fZneg.C.y, fZneg.D.x, fZneg.D.y};
 
   dd4hep::EightPointSolid gtrap_shape(dz, vertices_array.data());
 
