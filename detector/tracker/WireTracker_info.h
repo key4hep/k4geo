@@ -78,7 +78,7 @@ public:
     /// superlayer is an (abstract) level of grouping layers used to
     /// parametrize the increment of cells in each layer
     layer_t nsuperlayers = {0};
-    /// Calculated as dch_nlayersPerSuperlayer * nsuperlayers
+    /// Calculated as nlayersPerSuperlayer * nsuperlayers
     layer_t nlayers = {0};
 
     /// global twist angle
