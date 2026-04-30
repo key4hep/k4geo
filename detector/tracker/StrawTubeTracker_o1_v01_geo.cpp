@@ -116,9 +116,9 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
     strawAssert(SLThickness > 0 || SLLayers > 0, "ERROR: Each <layer> in straw tube tracker must have either\n"
                                                  "       thickness or count attribute defined.");
 
-    // N.B. 0.866 = sqrt(3)/2 ==> minimal radial distance between  staggered tubes centers 
+    // N.B. sqrt(3)/2 ==> minimal radial distance between  staggered tubes centers 
     // in consecutive layers, in units of the diameter (i.e. tube thickness)
-    double minThickness = (tubeThickness + tube_gap) * (1 + 0.866 * (SLLayers - 1));
+    double minThickness = (tubeThickness + tube_gap) * (1 + sqrt(3)/2 * (SLLayers - 1));
     if (SLThickness < 0) {
       SLThickness = minThickness + SLphiGap; // add default gap to minimum possible thickness
     }
