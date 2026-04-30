@@ -142,8 +142,8 @@ WireTracker_info_struct::Calculate_wire_z0_point(int superlayer, int ilayer, int
   Vector3D p1(rz0, 0, 0);
   double   phi_z0 = Get_cell_phi_angle(superlayer, ilayer, sector, nphi);
   ROOT::Math::RotationZ z_rotation = ROOT::Math::RotationZ(phi_z0);
-  z_rotation(p1);
-  return p1;
+  Vector3D p1_rot = z_rotation(p1);
+  return p1_rot;
 }
 
 ///
@@ -176,12 +176,12 @@ WireTracker_info_struct::Calculate_wire_vector_ez(int superlayer, int ilayer, in
   // calculate phi rotation of whole twisted tube, ie, rotation at z=0
   double phi_z0 = Get_cell_phi_angle(superlayer, ilayer, sector, nphi);
   auto z_rotation = ROOT::Math::RotationZ(phi_z0);
-  z_rotation(p1);
-  z_rotation(p2);
+  Vector3D p1_rot = z_rotation(p1);
+  Vector3D p2_rot = z_rotation(p2);
 
   //--- end calculating wire position
 
-  return (p2 -p1).Unit();
+  return (p2_rot -p1_rot).Unit();
 }
 
 ///
@@ -488,7 +488,7 @@ struct STT_info_struct : WireTracker_info_struct {
     std::vector<angle_t> delta_phi {};
     /// stereo angle of superlayers
     std::vector<angle_t> stereo {};
-    // radius of sensitive in wire in innermost layers of each superlayer
+    // placement radius of sensitive wire in innermost layers of each superlayer
     std::vector<length_t> innermost_radius {};
 
     //--------------------------------------------------------------
@@ -542,14 +542,14 @@ struct STT_info_struct : WireTracker_info_struct {
             }
         }
 
-        std::cout << "\t+ Total size of DCH database = " << database.size() << std::endl;
+        std::cout << "\t+ Total size of STT database = " << database.size() << std::endl;
         return;
     }
 
     // STT database dumper
     void ShowDatabase(std::ostream & oss) const override final {
         oss << "\n";
-        oss << "Global parameters of DCH:\n";
+        oss << "Global parameters of STT:\n";
         oss << "\tGas, half length/mm = " << Lhalf/dd4hep::mm << '\n';
         oss << "\tGas, radius in/mm  = " << rin/dd4hep::mm << '\n';
         oss << "\tGas, radius out/mm = " << rout/dd4hep::mm<< '\n';
@@ -558,7 +558,7 @@ struct STT_info_struct : WireTracker_info_struct {
         oss << "\tN layers per superlayer = " << nlayersPerSuperlayer << '\n';
         oss << "\tN layers = " << nlayers << '\n';
         oss << "\n";
-        oss << "Layer parameters of DCH:\n";
+        oss << "Layer parameters of STT:\n";
         oss
                 << "\t" << "layer"
                 << "\t" << "radius_sw_z0/mm"
