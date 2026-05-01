@@ -6,6 +6,7 @@
 #include <map>
 #include <Math/Vector3D.h>
 #include <Math/GenVector/RotationZ.h>
+#include <numeric>
 #include <vector>
 
 namespace dd4hep {  namespace rec {
@@ -260,7 +261,9 @@ struct DCH_info_struct : WireTracker_info_struct {
 
     /// calculate superlayer for a given ilayer.
     /// WARNING: division of integers on purpose!
-    int Get_nsuperlayer_minus_1(int ilayer){ return int((ilayer-1)/nlayersPerSuperlayer);}
+    int Get_nsuperlayer_minus_1(int ilayer) const {
+        return int((ilayer-1)/nlayersPerSuperlayer);
+    }
 
     /// Calculate radius at z=L/2 given at z=0
     length_t Radius_zLhalf(length_t r_z0) const {
@@ -526,8 +529,12 @@ struct STT_info_struct : WireTracker_info_struct {
         return phi_start + phi_rel;
     }
 
+    /// Calculate the global layer starting form the layer index within the super layer
+    /// (super)layer counting starts at 0, while global layer numbers starts at 1.
     layer_t CalculateILayerFromCellIDFields(int layer, int superlayer) const override final {
-        layer_t ilayer = layer + (this->nlayersPerSuperlayer.at(superlayer)) * superlayer + 1;
+        auto sum_begin = nlayersPerSuperlayer.begin();
+        int inner_layers = std::accumulate(sum_begin, sum_begin + superlayer, 0);
+        layer_t ilayer = layer + inner_layers + 1;
         return ilayer;
     }
 
@@ -593,7 +600,7 @@ struct STT_info_struct : WireTracker_info_struct {
                 << "\t" << "layer"
                 << "\t" << "ncells"
                 << "\t" << "radius_sw_z0/mm"
-                << "\t" << "stereo_sw_z0/mm"
+                << "\t" << "stereo_sw_z0/deg"
                 << "\n" << std::endl;
 
         if( this->IsDatabaseEmpty() )
