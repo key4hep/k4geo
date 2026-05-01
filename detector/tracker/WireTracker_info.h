@@ -483,6 +483,8 @@ struct STT_info_struct : WireTracker_info_struct {
 
     /// number of sectors
     std::vector<int> nsectors {};
+    /// number of tubes per sector
+    std::vector<int> ntubesPerSector {};
     /// Half angular distance between two consecutive tubes within the same layer, for each superlayer.
     /// This also corresponds to the delta_phi staggering of tubes across layers.
     std::vector<angle_t> delta_phi {};
@@ -498,9 +500,9 @@ struct STT_info_struct : WireTracker_info_struct {
     // STT geo interface implementation
 
     /// Global phi positioning in STT,
-    /// sum of sector phi + phi offset due to layer staggering + tube phi within the layer
+    /// sum of sector phi + phi offset due to layer staggering + tube phi within the layer.
+    /// Note that the direction of diagonal gap between sectors changes per superlayer.
     angle_t Get_cell_phi_angle(int superlayer, int ilayer, int sector, int tube) const override final {
-        //const auto & l = this->database.at(ilayer);
         angle_t phi_start = sector * (2 * dd4hep::pi  / this->nsectors.at(superlayer));
         angle_t phi_rel = (ilayer + 2 * tube) * this->delta_phi.at(superlayer) * pow(-1, superlayer);
         return phi_start + phi_rel;
@@ -532,6 +534,7 @@ struct STT_info_struct : WireTracker_info_struct {
 
                 // set parameters
                 layer_info.layer = layer;
+                layer_info.ncells = nsectors.at(superlayer) * ntubesPerSector.at(superlayer);
                 // in consecutive layers, minimal radial distance between
                 // staggered tubes centers is: cell_diameter * sqrt(3)/2
                 layer_info.radius_sw_z0 = R + (ilayer * cell_diameter * sqrt(3)/2);
@@ -561,6 +564,7 @@ struct STT_info_struct : WireTracker_info_struct {
         oss << "Layer parameters of STT:\n";
         oss
                 << "\t" << "layer"
+                << "\t" << "ncells"
                 << "\t" << "radius_sw_z0/mm"
                 << "\t" << "stereo_sw_z0/mm"
                 << "\n" << std::endl;
@@ -575,6 +579,7 @@ struct STT_info_struct : WireTracker_info_struct {
         {
             oss
                     << "\t" << l.layer
+                    << "\t" << l.ncells
                     << "\t" << l.radius_sw_z0/dd4hep::mm
                     << "\t" << l.stereo_sw_z0/dd4hep::deg
                     << "\n" << std::endl;

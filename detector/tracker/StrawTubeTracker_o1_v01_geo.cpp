@@ -137,7 +137,7 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
 
     strawAssert(SLphiRepeat <= maxRepeat, "ERROR: The specified number of tubes in the phi direction is greater"
                                           "       than the maximum allowable value, likely leading to overlaps!");
-
+    STT_i->ntubesPerSector.push_back(SLphiRepeat);
     // all asserts passed, can start building!
 
     // make a volume for the multi-layer
@@ -183,8 +183,7 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
       for (int l = 0; l < SLSectors; ++l) {
         for (int i = 0; i < SLphiRepeat; ++i) {
           // place the envelope volume in the superlayer envelope
-          double phi = l * 2 * dd4hep::pi / SLSectors +
-                       (j + 2 * i) * SLDelta_phi * pow(-1, SLNum); // direction of diagonal gap changes per SL
+          double phi = STT_i->Get_cell_phi_angle(SLNum, j, l, i);
 
           std::string placedTubeName = SLName + dd4hep::_toString(l, "sector%d") + dd4hep::_toString(j, "layer%d") +
                                        dd4hep::_toString(i, "tube%d");
