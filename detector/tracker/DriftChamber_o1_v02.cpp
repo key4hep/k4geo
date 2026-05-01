@@ -311,11 +311,13 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
         //
         //   ^ radius
         //
-        //   O(1)---O(4)---O(6)    radius_z0 = (l.radius_sw_z0 + 0.5 * l.height_z0) == ((l++).radius_sw_z0 - 0.5 * (l++).height_z0)
+        //   O(1)---O(4)---O(6)    radius_z0 = (l.radius_sw_z0 + 0.5 * l.height_z0) == ((l++).radius_sw_z0 - 0.5 *
+        //   (l++).height_z0)
         //
         //   O(2)   X      O(7)    radius_z0 = average(cell_rin_z0, cell_rout_z0) == l.radius_sw_z0
         //
-        //   O(3)---O(5)---O(8)    radius_z0 = (l.radius_sw_z0 - 0.5 * l.height_z0) == ((l--).radius_sw_z0 + 0.5 * (l--).height_z0)
+        //   O(3)---O(5)---O(8)    radius_z0 = (l.radius_sw_z0 - 0.5 * l.height_z0) == ((l--).radius_sw_z0 + 0.5 *
+        //   (l--).height_z0)
         //
         //   --> phi axis
         //
@@ -501,7 +503,7 @@ dd4hep::Solid CompositeTT(double twist_angle, double cell_rin_z0, double cell_ro
   double poly_angle = dphi / 2;
   double twist_angle_half = twist_angle / 2.;
   // change sign, so the final shape has the same orientation as G4 twisted tube
-  twist_angle_half *= -1;   // not sure about this
+  twist_angle_half *= -1; // not sure about this
 
   // define points of 8 genenric trapezoid
   struct point2d {
