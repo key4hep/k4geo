@@ -72,8 +72,6 @@ public:
     /// Outer radius of the active volume
     length_t rout = {0};
 
-    /// input number of layers in each superlayer
-    layer_t nlayersPerSuperlayer = {0};
     /// input number of superlayers
     /// superlayer is an (abstract) level of grouping layers used to
     /// parametrize the increment of cells in each layer
@@ -88,19 +86,18 @@ public:
     void Set_rin  (length_t _rin  ){rin  = _rin;  }
     void Set_rout (length_t _rout ){rout = _rout; }
 
-    void Set_nlayersPerSuperlayer(int _nlayersPerSuperlayer){nlayersPerSuperlayer = _nlayersPerSuperlayer;}
-    void Set_nsuperlayers        (int _nsuperlayers        ){nsuperlayers         = _nsuperlayers;        }
+    void Set_nsuperlayers(int _nsuperlayers){nsuperlayers = _nsuperlayers;}
 
     /// ------------------------------------------------------------------
     // Wire-distance calculations  (used by digitisation / reconstruction)
     // Notation: `ilayer` is the correlative number of the layer, `layer` is reserved to number within a superlayer
-    layer_t  CalculateILayerFromCellIDFields(int layer, int superlayer) const { layer_t ilayer = layer + (this->nlayersPerSuperlayer)*superlayer + 1; return ilayer;}
     Vector3D Calculate_hitpos_to_wire_vector(int superlayer, int ilayer, int sector, int nphi, const Vector3D& hit_position /*in cm*/) const;
     Vector3D Calculate_wire_vector_ez       (int superlayer, int ilayer, int sector, int nphi) const;
     Vector3D Calculate_wire_z0_point        (int superlayer, int ilayer, int sector, int nphi) const;
 
     //--- virtual interface methods
     virtual angle_t Get_cell_phi_angle      (int superlayer, int ilayer, int sector, int nphi) const = 0;
+    virtual layer_t CalculateILayerFromCellIDFields(int layer, int superlayer) const = 0;
 
     // ------------------------------------------------------------------
     //  Per-layer database
@@ -225,6 +222,8 @@ struct DCH_info_struct : WireTracker_info_struct {
     length_t guard_inner_r_at_z0 = {0};
     length_t guard_outer_r_at_zL2 = {0};
 
+    /// input number of layers in each superlayer
+    layer_t nlayersPerSuperlayer = {0};
     /// number of cells of first layer
     int ncell0 = {0};
     /// increment the number of cells for each superlayer as:
@@ -246,12 +245,14 @@ struct DCH_info_struct : WireTracker_info_struct {
     void Set_guard_rin_at_z0  (length_t _rin_z0_guard  ){guard_inner_r_at_z0  = _rin_z0_guard;   }
     void Set_guard_rout_at_zL2(length_t _rout_zL2_guard){guard_outer_r_at_zL2 = _rout_zL2_guard; }
 
+    void Set_nlayersPerSuperlayer(int _nlayersPerSuperlayer){nlayersPerSuperlayer = _nlayersPerSuperlayer;}
+
     void Set_ncell0          (int _ncell0          ){ncell0           = _ncell0;          }
     void Set_ncell_increment (int _ncell_increment ){ncell_increment  = _ncell_increment; }
     void Set_ncell_per_sector(int _ncell_per_sector){ncell_per_sector = _ncell_per_sector;}
 
-    void Set_first_width  (double _first_width  ){first_width   = _first_width;   }
-    void Set_first_sense_r(double _first_sense_r){first_sense_r = _first_sense_r; }
+    void Set_first_width  (length_t _first_width  ){first_width   = _first_width;   }
+    void Set_first_sense_r(length_t _first_sense_r){first_sense_r = _first_sense_r; }
 
 
     //--------------------------------------------------------------
@@ -311,6 +312,10 @@ struct DCH_info_struct : WireTracker_info_struct {
         return (Get_phi_width(ilayer) * (iphi + 0.25*(ilayer%2)));
     }
 
+    layer_t CalculateILayerFromCellIDFields(int layer, int superlayer) const override final { 
+        layer_t ilayer = layer + (this->nlayersPerSuperlayer) * superlayer + 1;
+        return ilayer;
+    }
     //--------------------------------------------------------------
     // Database construction
 
@@ -482,6 +487,8 @@ struct STT_info_struct : WireTracker_info_struct {
     //  STT-specific global parameters
 
     /// number of sectors
+    std::vector<layer_t> nlayersPerSuperlayer{};
+    /// number of sectors
     std::vector<int> nsectors {};
     /// number of tubes per sector
     std::vector<int> ntubesPerSector {};
@@ -492,6 +499,17 @@ struct STT_info_struct : WireTracker_info_struct {
     std::vector<angle_t> stereo {};
     // placement radius of sensitive wire in innermost layers of each superlayer
     std::vector<length_t> innermost_radius {};
+
+    //--------------------------------------------------------------
+    // setters
+
+    void Add_nlayersPerSuperlayer(layer_t _val){nlayersPerSuperlayer.push_back(_val);}
+
+    void Add_nsectors        (int _val)     {nsectors.push_back(_val);        }
+    void Add_ntubesPerSector (int _val)     {ntubesPerSector.push_back(_val); }
+    void Add_delta_phi       (angle_t  _val){delta_phi.push_back(_val);       }
+    void Add_stereo          (angle_t  _val){stereo.push_back(_val);          }
+    void Add_innermost_radius(length_t _val){innermost_radius.push_back(_val);}
 
     //--------------------------------------------------------------
     // STT geo helpers
@@ -508,6 +526,11 @@ struct STT_info_struct : WireTracker_info_struct {
         return phi_start + phi_rel;
     }
 
+    layer_t CalculateILayerFromCellIDFields(int layer, int superlayer) const override final {
+        layer_t ilayer = layer + (this->nlayersPerSuperlayer.at(superlayer)) * superlayer + 1;
+        return ilayer;
+    }
+
     //--------------------------------------------------------------
     // Database construction
 
@@ -516,9 +539,10 @@ struct STT_info_struct : WireTracker_info_struct {
         // do not fill twice the database
         if( not this->IsDatabaseEmpty() ) return;
 
-        /// nlayers = nsuperlayers * nlayersPerSuperlayer
+        /// nlayers = sum(nlayersPerSuperlayer)
         /// default: 80 = 8 * 10
-        this->nlayers = this->nsuperlayers * this->nlayersPerSuperlayer;
+        this->nlayers = 0;
+        for (const int nl : this->nlayersPerSuperlayer) this->nlayers += nl;
 
         int layer = 1; //
         for(int superlayer = 0; superlayer < this->nsuperlayers; ++superlayer) {
@@ -528,7 +552,7 @@ struct STT_info_struct : WireTracker_info_struct {
             length_t cell_diameter = 2 * R * sin(this->delta_phi.at(superlayer));
             angle_t sl_stereo = this->stereo.at(superlayer);
 
-            for(int ilayer = 0; ilayer < this->nlayersPerSuperlayer; ++ilayer) {
+            for(int ilayer = 0; ilayer < this->nlayersPerSuperlayer.at(superlayer); ++ilayer) {
                 // initialize empty object
                 LayerInfo layer_info;
 
@@ -558,7 +582,10 @@ struct STT_info_struct : WireTracker_info_struct {
         oss << "\tGas, radius out/mm = " << rout/dd4hep::mm<< '\n';
         oss << "\n";
         oss << "\tN superlayers = " << nsuperlayers << '\n';
-        oss << "\tN layers per superlayer = " << nlayersPerSuperlayer << '\n';
+        oss << "\tN layers per superlayer = ";
+        std::copy(nlayersPerSuperlayer.begin(), nlayersPerSuperlayer.end(),
+                  std::ostream_iterator<int>(oss, ", "));
+        oss << "\n";
         oss << "\tN layers = " << nlayers << '\n';
         oss << "\n";
         oss << "Layer parameters of STT:\n";

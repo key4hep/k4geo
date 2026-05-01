@@ -98,19 +98,6 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
     double SLoffset = x_layer.hasAttr(_U(offset)) ? x_layer.offset() : 0.0;
     double Angle = x_layer.hasAttr(_U(angle)) ? x_layer.angle() : 0.0;
 
-    // fill per-superlayer values of STT_info
-    STT_i->innermost_radius.push_back(layerRadius);
-    STT_i->nsectors.push_back(SLSectors);
-    STT_i->delta_phi.push_back(SLDelta_phi);
-    STT_i->stereo.push_back(Angle);
-
-    if (STT_i->nlayersPerSuperlayer != 0){
-      strawAssert(STT_i->nlayersPerSuperlayer == SLLayers,
-        "ERROR: specifying different number of layers per superlayer!\n"
-        "       This is currently not supported by STT_info.");
-    } else
-      STT_i->Set_nlayersPerSuperlayer(SLLayers);
-
     // check that the thickness is set
     // and it is a sensible value
     strawAssert(SLThickness > 0 || SLLayers > 0, "ERROR: Each <layer> in straw tube tracker must have either\n"
@@ -137,7 +124,14 @@ static dd4hep::Ref_t create_straw_tracker(dd4hep::Detector& theDetector, xml_h e
 
     strawAssert(SLphiRepeat <= maxRepeat, "ERROR: The specified number of tubes in the phi direction is greater"
                                           "       than the maximum allowable value, likely leading to overlaps!");
-    STT_i->ntubesPerSector.push_back(SLphiRepeat);
+    // fill per-superlayer values of STT_info
+    STT_i->Add_nlayersPerSuperlayer(SLLayers);
+    STT_i->Add_ntubesPerSector(SLphiRepeat);
+    STT_i->Add_nsectors(SLSectors);
+    STT_i->Add_delta_phi(SLDelta_phi);
+    STT_i->Add_stereo(Angle);
+    STT_i->Add_innermost_radius(layerRadius);
+
     // all asserts passed, can start building!
 
     // make a volume for the multi-layer
