@@ -92,7 +92,7 @@
     <field name="GlobalSolenoid" type="solenoid"
            inner_field="SolenoidField"
            outer_field="-1.7*tesla"
-           zmax="FiberDRCalo_endcap_z_start * 1.1"
+           zmax="Solenoid_Coil_half_length"
            outer_radius="Solenoid_Coil_radius">
     </field>
 
