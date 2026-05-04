@@ -455,7 +455,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
     std::string layer_name = _toString(layer_id, "layer%d") + _toString(side, "_side%d");
 
-    PlacedVolume whole_layer_volume_placed;
     Volume whole_layer_volume_v;
     Assembly whole_layer_volume_a;
     if (motherVolThickness > 0.0) {
@@ -495,7 +494,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
       string stave_name = _toString(iStave, "stave%d");
 
-      PlacedVolume whole_stave_volume_placed;
       Volume whole_stave_volume_v;
       Assembly whole_stave_volume_a;
       if (m.motherVolThickness > 0.0 && m.motherVolWidth > 0.0) {
