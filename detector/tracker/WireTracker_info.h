@@ -58,6 +58,14 @@ namespace rec {
       angle_t stereo_sw_z0 = {0};
       /// placement radius (cylindrical coord) of sensitive wire
       length_t radius_sw_z0 = {0};
+
+      // field wire positions are being kept to obtain identical results
+      // with previous implementation of the Drift Chamber.
+
+      /// placement radius (cylindrical coord) of 'down' field wires
+      length_t radius_fdw_z0 = {0};
+      /// placement radius (cylindrical coord) of 'up' field wires
+      length_t radius_fuw_z0 = {0};
     };
 
     //--------------------------------------------------------------
@@ -351,6 +359,8 @@ namespace rec {
         layer1_info.ncells = this->ncell0;
         layer1_info.height_z0 = first_width; // cell height = cell width
         layer1_info.radius_sw_z0 = first_sense_r;
+        layer1_info.radius_fdw_z0 = first_sense_r - 0.5 * first_width;
+        layer1_info.radius_fuw_z0 = first_sense_r + 0.5 * first_width;
         layer1_info.width_z0 = dd4hep::twopi * first_sense_r / this->ncell0;
         layer1_info.stereo_sw_z0 = StereoSign(layer1_info) * this->stereoangle_z0(first_sense_r);
 
@@ -375,8 +385,8 @@ namespace rec {
         // calculate height_z0, radius_sw_z0, stereo_sw_z0
         {
           double h = previousLayer.height_z0;
-          double ru = previousLayer.radius_sw_z0 + 0.5 * h;
-          double rd = previousLayer.radius_sw_z0 - 0.5 * h;
+          double ru = previousLayer.radius_fuw_z0; // can be replaced with -> previousLayer.radius_sw_z0 + 0.5 * h;
+          double rd = previousLayer.radius_fdw_z0; // can be replaced with -> previousLayer.radius_sw_z0 - 0.5 * h;
 
           if (0 == Get_nsuperlayer_minus_1(ilayer))
             layer_info.height_z0 = h * ru / rd;
@@ -390,6 +400,10 @@ namespace rec {
 
         // calculate width_z0
         layer_info.width_z0 = dd4hep::twopi * layer_info.radius_sw_z0 / (layer_info.ncells);
+
+        // calculate radius_fdw_z0, radius_fuw_z0
+        layer_info.radius_fdw_z0 = previousLayer.radius_fuw_z0;
+        layer_info.radius_fuw_z0 = previousLayer.radius_fuw_z0 + layer_info.height_z0;
 
         // according to expert prescription, width_z0 == height_z0
         if (fabs(layer_info.width_z0 - layer_info.height_z0) > 1e-4)
