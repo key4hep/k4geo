@@ -167,7 +167,6 @@ namespace rec {
     //--- calculating wire position
     // the points p1 and p2 correspond to the ends of the wire
 
-    // point 1
     double dy = rz0 * kappa * Lhalf; // m
 
     // (x, y, z)  [m]

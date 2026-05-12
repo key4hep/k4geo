@@ -220,8 +220,8 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
     // // // // // // // // // // // // // // // // // // // //
     // Hyperboloid parameters:
     /// field wires radii at z=0
-    DCH_length_t radius_fdw_z0 = l.radius_fdw_z0;  // -> (l.radius_sw_z0 - 0.5 * l.height_z0)
-    DCH_length_t radius_fuw_z0 = l.radius_fuw_z0;  // -> (l.radius_sw_z0 + 0.5 * l.height_z0)
+    DCH_length_t radius_fdw_z0 = l.radius_fdw_z0; // -> (l.radius_sw_z0 - 0.5 * l.height_z0)
+    DCH_length_t radius_fuw_z0 = l.radius_fuw_z0; // -> (l.radius_sw_z0 + 0.5 * l.height_z0)
     /// inner radius at z=0
     DCH_length_t rin = radius_fdw_z0 + safety_r_interspace;
     /// inner stereoangle, calculated from rin(z=0)
