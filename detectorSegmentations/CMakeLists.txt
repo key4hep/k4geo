@@ -36,8 +36,3 @@ install(TARGETS detectorSegmentations detectorSegmentationsPlugin
   PUBLIC_HEADER DESTINATION include/detectorSegmentations COMPONENT dev
 )
 
-#
-#include(CTest)
-#gaudi_add_test(TestSegmentationPhiEta
-#               WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-#               FRAMEWORK tests/options/phiEtaSegmentation.py)
