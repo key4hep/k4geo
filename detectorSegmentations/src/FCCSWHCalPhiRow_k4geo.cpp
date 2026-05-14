@@ -15,7 +15,7 @@ namespace DDSegmentation {
   void FCCSWHCalPhiRow_k4geo::commonSetup() {
     // define type and description
     _type = "FCCSWHCalPhiRow_k4geo";
-    _description = "Phi-theta segmentation in the global coordinates";
+    _description = "Phi-row segmentation for HCal";
 
     // register all necessary parameters
     registerParameter("phi_bins", "Number of bins phi", m_phiBins, 1);
@@ -73,7 +73,7 @@ namespace DDSegmentation {
     // pseudo-layers. Need to adjust the cell position:
     if (m_detLayout == 1 && !m_groupedRows.empty()) {
       int aidx = std::abs(idx);
-      zpos += 0.5 * m_dz_row * (li.groupedRows[aidx - 1] - m_gridSizeRow.at(layer));
+      zpos += 0.5 * m_dz_row * li.groupedRows[aidx - 1];
     }
 
     if (idx < 0) {
@@ -127,7 +127,9 @@ namespace DDSegmentation {
       // i_section to be grouped in a pseudo-layer.
       auto groupedRows_start = m_groupedRows.begin();
       auto groupedRows_end = m_groupedRows.end();
+      bool grouped = false;
       if (m_detLayout == 1 && !m_groupedRows.empty()) {
+        grouped = true;
         size_t nGroupedRows = m_groupedRows.size() / m_offsetZ.size();
         groupedRows_start = m_groupedRows.begin() + i_section * nGroupedRows;
         groupedRows_end = (i_section == m_offsetZ.size() - 1) ? m_groupedRows.end() : groupedRows_start + nGroupedRows;
@@ -141,7 +143,13 @@ namespace DDSegmentation {
         for (int i_lay = 0; i_lay < m_numLayers.at(i_dR + i_section * N_dR); i_lay++) {
 
           double volOffset = (layerInSection % 2) ? m_oddVolOffset : m_evenVolOffset;
-          double zOffset = m_dz_row * m_gridSizeRow.at(out.size()) * 0.5 - volOffset;
+          double zOffset = - volOffset;
+          if (!grouped) {
+            // Offset to middle of cell for this layer.
+            // But if we're using groupedRows, then this is row-dependent,
+            // and we apply this instead in position().
+            zOffset += m_dz_row * m_gridSizeRow.at(out.size()) * 0.5;
+          }
 
           moduleDepth[i_section] += m_dRlayer.at(i_dR);
           out.push_back(LayerInfo{.type = i_section,
@@ -805,9 +813,10 @@ namespace DDSegmentation {
     // For the endcap, we need to fill in the type field.  For the negative
     // endcap, types are offset by three, and we also need to make the row
     // index positive.
+    const LayerInfo* li = nullptr;
     if (m_detLayout == 1) {
-      const LayerInfo& li = getLayerInfo(layer);
-      int type = li.type;
+      li = &getLayerInfo(layer);
+      int type = li->type;
       if (irow < 0) {
         irow = -irow;
         type += 3;
@@ -819,11 +828,10 @@ namespace DDSegmentation {
     // volume indices start with 0!
     int vrow = 0;
     if (m_detLayout == 1 && !m_groupedRows.empty()) {
-      const LayerInfo& li = getLayerInfo(layer);
-
-      // Rows grouped according to groupedRows rather than by grid_size_row
+      // Rows grouped according to groupedRows rather than by gridSizeRow.
+      // li was fetched in the stanza above.
       for (size_t i = 1; i < static_cast<size_t>(irow); i++)
-        vrow += li.groupedRows[i - 1];
+        vrow += li->groupedRows[i - 1];
     } else {
       // Normal case.
       vrow = (irow - 1) * m_gridSizeRow.at(layer);

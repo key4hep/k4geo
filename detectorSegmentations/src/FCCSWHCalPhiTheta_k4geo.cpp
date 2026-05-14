@@ -21,7 +21,7 @@ namespace DDSegmentation {
   void FCCSWHCalPhiTheta_k4geo::commonSetup() {
     // define type and description
     _type = "FCCSWHCalPhiTheta_k4geo";
-    _description = "Phi-theta segmentation in the global coordinates";
+    _description = "Phi-theta segmentation for HCal";
 
     // register all necessary parameters (additional to those registered in GridTheta_k4geo)
     registerParameter("phi_bins", "Number of bins phi", m_phiBins, 1);
