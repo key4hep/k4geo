@@ -6,7 +6,7 @@ The following ILD detector models are available in lcgeo ( current production mo
 
 In this table, *simulation* models are intended to be used with:
 ```bash
-ddsim --compactFile $k4geo_DIR/ILD/compact/ILD_l5_v02/ILD_l5_v02.xml ....
+ddsim --compactFile $K4GEO/ILD/compact/ILD_l5_v02/ILD_l5_v02.xml ....
 ```
 They can produce hit collections for multiple calorimeter technology options in a single run (to reduce computing cost). The *reconstruction* models are intended for:
 ```bash
