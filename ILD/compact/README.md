@@ -12,7 +12,7 @@ They can produce hit collections for multiple calorimeter technology options in 
 ```bash
 k4run ILDReconstruction.py --compactFile $K4GEO/ILD/compact/ILD_l5_v02/ILD_l5_o1_v02.xml ...
 ```
-, where the reconstruction configuration must select which calorimeter option should be used to reconstruct the event from the corresponding hits. Simulation-only models must not be used for reconstruction.
+where the reconstruction configuration must select which calorimeter option should be used to reconstruct the event from the corresponding hits. Simulation-only models must not be used for reconstruction.
 
 
 | Model         |  Description               | Hcal   |  Ecal   | geometry | Status            |
