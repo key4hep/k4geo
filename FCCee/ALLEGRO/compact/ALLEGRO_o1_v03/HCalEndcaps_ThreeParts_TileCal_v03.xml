@@ -100,6 +100,9 @@
            dz_row - size of the row consisting of 2 * Master plate + 1 * Spacer plate + 1 * Scintillator + Air.
            phi_bins - number of bins in phi
            offset_phi - center of the first phi bin.
+           [even,odd]_vol_offset - offset in z of the center of the sensitive
+             volume within a row, for even (sequence_b) and odd (sequence_a)
+             layers
       -->
       <segmentation type="FCCSWHCalPhiRow_k4geo" 
          detLayout="1"
@@ -112,7 +115,10 @@
          grouped_rows=""
          dz_row="2*EndcapHCal_master_plate_thickness + EndcapHCal_spacer_plate_thickness + EndcapHCal_scintillator_thickness + 2*EndcapHCal_air_space_thickness" 
          phi_bins="EndcapHCal_n_phi_modules" 
-         offset_phi="-pi+(pi/EndcapHCal_n_phi_modules)"/>
+         offset_phi="-pi+(pi/EndcapHCal_n_phi_modules)"
+         even_vol_offset="EndcapHCal_master_plate_thickness + EndcapHCal_air_space_thickness + EndcapHCal_scintillator_thickness/2"
+         odd_vol_offset="2*EndcapHCal_master_plate_thickness + EndcapHCal_spacer_plate_thickness + EndcapHCal_air_space_thickness + EndcapHCal_scintillator_thickness/2"
+         />
       <id>system:4,type:3,layer:6,pseudoLayer:8,row:-8,phi:10</id>
     </readout>
   </readouts>
