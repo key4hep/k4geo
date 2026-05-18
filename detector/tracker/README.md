@@ -19,6 +19,20 @@ For both detector builders, volumes with 0 thickness are ignored now and the nam
 
 # Trackers
 
+## WireTracker_info
+
+`WireTracker_info_struct` is an abstract base class that defines 
+the common geometry interface and data layout for wire-based tracking detectors.
+It holds the global parameters (`Lhalf`, `rin`, `rout`) and
+a per-layer info database implemented as a `std::map<layer_t, LayerInfo>`.
+Most importantly it defines  utility methods for computing wire-distance quantities
+used by digitisation and reconstruction. 
+
+Derived structures provided: 
+- `DCH_info_struct`, compatible with drift chamber: [o1_v02](#DCH_o1_v02).
+- `STT_info_struct`, compatible with straw-tube tracker: [o1_v01](#STT_o1_v01).
+
+
 ## parametrised_SimplifiedDriftChamber
 This sub-detector implements a simplied drift chamber (there is no actual wire). It is used in ALLEGRO and IDEA detector concepts.
 
@@ -43,7 +57,7 @@ What to improve:
 - make sense out of the many layer radiuses defined
 
 
-### o1_v02
+### <a id="DCH_o1_v01"></a> o1_v02
 Reimplementation of the drift chamber concept, based on a fully detailed spreadsheet. The improvements with respect the previous implementation are the following:
 - The standalone simulation consumes 400MB of memory, out of which the geometry represents 150MB.
 - The DCH is built out of few global parameters, thanks to the prescription given in the spreadsheet
@@ -66,7 +80,7 @@ While the straw will always have more material budget and more dead volume than 
 The straw tracker has been discussed at FCC meetings [here](https://indico.fnal.gov/event/67484/contributions/313363/attachments/187186/258081/straw_USFCC.pdf) and [here](https://indico.cern.ch/event/1516157/contributions/6444547/attachments/3063289/5418866/straw_TrackerWorkshop_BNL_05082025.pptx%20(2).pdf).
 There was also a mini workshop on tracking, focusing on fabrication of straw and drift chambers, including lessons learned from other experiments, which can be found [here](https://indico.cern.ch/event/1408681/).  The detector builder is described in detail [here](https://indico.cern.ch/event/1551837/#71-straw-tube-tracker-implemen).
 
-### o1_v01
+### <a id="STT_o1_v01"></a> o1_v01
 Initial design for a tracker based on thin-wall straw tubes.  This will likely be part of the ALLEGRO concept, but can similarly be swapped with the IDEA drift chamber for apples-to-apples comparison studies.
  - Flexible implementation allows for user to customize n tube layers; thickness of wire, mylar, coating, and gas volumes; size of gaps between mutlilayers; etc.
  - Low logical volume count of 61 for a realistic straw concept.

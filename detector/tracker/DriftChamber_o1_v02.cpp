@@ -17,13 +17,12 @@
 #include "DD4hep/Shapes.h"
 #include "XML/Utilities.h"
 
-#include "DDRec/DCH_info.h"
+#include "WireTracker_info.h"
 
 namespace DCH_v2 {
 
-using DCH_length_t = dd4hep::rec::DCH_info_struct::DCH_length_t;
-using DCH_angle_t = dd4hep::rec::DCH_info_struct::DCH_angle_t;
-using DCH_layer = dd4hep::rec::DCH_info_struct::DCH_layer;
+using DCH_length_t = dd4hep::rec::WireTracker_info_struct::length_t;
+using DCH_angle_t = dd4hep::rec::WireTracker_info_struct::angle_t;
 
 dd4hep::Solid CompositeTT(double twist_angle, double cell_rin_z0, double cell_rout_z0, double dz, double dphi,
                           const dd4hep::rec::DCH_info& DCH_i);
@@ -75,7 +74,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
 
     bool printExcelTable = detElem.attr<bool>(_Unicode(printExcelTable));
     if (printExcelTable)
-      DCH_i->Show_DCH_info_database(std::cout);
+      DCH_i->ShowDatabase(std::cout);
   }
 
   bool debugGeometry = detElem.hasChild(_Unicode(debugGeometry));
@@ -220,12 +219,15 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
     // // // // // INITIALIZATION OF THE LAYER // // // // // //
     // // // // // // // // // // // // // // // // // // // //
     // Hyperboloid parameters:
+    /// field wires radii at z=0
+    DCH_length_t radius_fdw_z0 = l.radius_fdw_z0; // -> (l.radius_sw_z0 - 0.5 * l.height_z0)
+    DCH_length_t radius_fuw_z0 = l.radius_fuw_z0; // -> (l.radius_sw_z0 + 0.5 * l.height_z0)
     /// inner radius at z=0
-    DCH_length_t rin = l.radius_fdw_z0 + safety_r_interspace;
+    DCH_length_t rin = radius_fdw_z0 + safety_r_interspace;
     /// inner stereoangle, calculated from rin(z=0)
     DCH_angle_t stin = DCH_i->stereoangle_z0(rin);
     /// outer radius at z=0
-    DCH_length_t rout = l.radius_fuw_z0 - safety_r_interspace;
+    DCH_length_t rout = radius_fuw_z0 - safety_r_interspace;
     /// outer stereoangle, calculated from rout(z=0)
     DCH_angle_t stout = DCH_i->stereoangle_z0(rout);
     /// half-length
@@ -254,15 +256,15 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
     // // // // // INTO CELLS (TWISTED TUBES) // // // // // //
     // // // // // // // // // // // // // // // // // // // //
 
-    // ncells in this layer = 2x number of wires
-    int ncells = l.nwires / 2;
+    // ncells in this layer (= 2x number of wires)
+    int ncells = l.ncells;
     DCH_angle_t phi_step = (TMath::TwoPi() / ncells) * dd4hep::rad;
 
-    // unitary cell (Twisted tube) is repeated for each layer l.nwires/2 times
+    // unitary cell (Twisted tube) is repeated for each layer l.ncells times
     // Twisted tube parameters
-    DCH_angle_t cell_twistangle = l.StereoSign() * DCH_i->twist_angle;
-    DCH_length_t cell_rin_z0 = l.radius_fdw_z0 + 2 * safety_r_interspace;
-    DCH_length_t cell_rout_z0 = l.radius_fuw_z0 - 2 * safety_r_interspace;
+    DCH_angle_t cell_twistangle = DCH_i->StereoSign(l) * DCH_i->twist_angle;
+    DCH_length_t cell_rin_z0 = radius_fdw_z0 + 2 * safety_r_interspace;
+    DCH_length_t cell_rout_z0 = radius_fuw_z0 - 2 * safety_r_interspace;
     DCH_length_t cell_rin_zLhalf = DCH_i->Radius_zLhalf(cell_rin_z0);
     DCH_length_t cell_rout_zLhalf = DCH_i->Radius_zLhalf(cell_rout_z0);
     DCH_length_t cell_dz = DCH_i->Lhalf;
@@ -296,7 +298,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
         dd4hep::Volume swire_v(cell_name + "_swire", swire_s, dch_SWire_material);
         swire_v.setVisAttributes(wiresVis);
         // Change sign of stereo angle to place properly the wire inside the twisted tube
-        dd4hep::RotationX stereoTr((-1.) * l.StereoSign() * DCH_i->stereoangle_z0(cell_rave_z0));
+        dd4hep::RotationX stereoTr((-1.) * DCH_i->StereoSign(l) * DCH_i->stereoangle_z0(cell_rave_z0));
         dd4hep::Transform3D swireTr(stereoTr * dd4hep::Translation3D(cell_rave_z0, 0., 0.));
         cell_v.placeVolume(swire_v, swireTr);
       }
@@ -311,11 +313,13 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
         //
         //   ^ radius
         //
-        //   O(1)---O(4)---O(6)    radius_z0 = l.radius_fuw_z0 == (++l).radius_fdw_z0
+        //   O(1)---O(4)---O(6)    radius_z0 = (l.radius_sw_z0 + 0.5 * l.height_z0) == ((l++).radius_sw_z0 - 0.5 *
+        //   (l++).height_z0)
         //
-        //   O(2)   X      O(7)    radius_z0 = average(l.radius_fuw_z0, l.radius_fdw_z0)
+        //   O(2)   X      O(7)    radius_z0 = average(cell_rin_z0, cell_rout_z0) == l.radius_sw_z0
         //
-        //   O(3)---O(5)---O(8)    radius_z0 = l.radius_fdw_z0 == (--l).radius_fuw_z0
+        //   O(3)---O(5)---O(8)    radius_z0 = (l.radius_sw_z0 - 0.5 * l.height_z0) == ((l--).radius_sw_z0 + 0.5 *
+        //   (l--).height_z0)
         //
         //   --> phi axis
         //
@@ -327,11 +331,11 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
         //  in such a manner that the wires are fully contained in one cell.
         //  The following code implements the following sketch:
         //
-        //   O(1)---O(4)---    radius_z0 = l.radius_fuw_z0 - wire_thickness/2
+        //   O(1)---O(4)---    radius_z0 = (l.radius_sw_z0 + 0.5 * l.height_z0) - wire_thickness/2
         //
-        //   O(2)   X          radius_z0 = average(l.radius_fuw_z0, l.radius_fdw_z0)
+        //   O(2)   X          radius_z0 = average(cell_rin_z0, cell_rout_z0) == l.radius_sw_z0
         //
-        //   O(3)---O(5)---    radius_z0 = l.radius_fdw_z0 + wire_thickness/2
+        //   O(3)---O(5)---    radius_z0 = (l.radius_sw_z0 - 0.5 * l.height_z0) + wire_thickness/2
         //
         //  phi_offset(n) = atan(  wire_thickness/2 / radius_z0 )
         //
@@ -352,7 +356,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
         {
           DCH_length_t fwire_radius = dch_FCentralWire_thickness / 2;
           DCH_length_t fwire_r_z0 = cell_rave_z0;
-          DCH_angle_t fwire_stereo = (-1.) * l.StereoSign() * DCH_i->stereoangle_z0(fwire_r_z0);
+          DCH_angle_t fwire_stereo = (-1.) * DCH_i->StereoSign(l) * DCH_i->stereoangle_z0(fwire_r_z0);
           DCH_angle_t fwire_phi = -cell_phi_width / 2 + fwire_phi_offset(fwire_r_z0, fwire_radius);
           DCH_length_t fwire_length = 0.5 * DCH_i->WireLength(ilayer, fwire_r_z0) -
                                       fwire_radius * cos(DCH_i->stereoangle_z0(fwire_r_z0)) - safety_z_interspace;
@@ -375,7 +379,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
           DCH_length_t fwire_radius = dch_FSideWire_thickness / 2;
           // decrease radial distance, move it closer to the sense wire
           DCH_length_t fwire_r_z0 = cell_rout_z0 - fwire_radius;
-          DCH_angle_t fwire_stereo = (-1.) * l.StereoSign() * DCH_i->stereoangle_z0(fwire_r_z0);
+          DCH_angle_t fwire_stereo = (-1.) * DCH_i->StereoSign(l) * DCH_i->stereoangle_z0(fwire_r_z0);
           DCH_angle_t fwire_phi = -cell_phi_width / 2 + fwire_phi_offset(fwire_r_z0, fwire_radius);
           DCH_length_t fwire_length = 0.5 * DCH_i->WireLength(ilayer, fwire_r_z0) -
                                       fwire_radius * cos(DCH_i->stereoangle_z0(fwire_r_z0)) - safety_z_interspace;
@@ -397,7 +401,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
           DCH_length_t fwire_radius = dch_FSideWire_thickness / 2;
           // increase radial distance, move it closer to the sense wire
           DCH_length_t fwire_r_z0 = cell_rin_z0 + fwire_radius;
-          DCH_angle_t fwire_stereo = (-1.) * l.StereoSign() * DCH_i->stereoangle_z0(fwire_r_z0);
+          DCH_angle_t fwire_stereo = (-1.) * DCH_i->StereoSign(l) * DCH_i->stereoangle_z0(fwire_r_z0);
           DCH_angle_t fwire_phi = -cell_phi_width / 2 + fwire_phi_offset(fwire_r_z0, fwire_radius);
           DCH_length_t fwire_length = 0.5 * DCH_i->WireLength(ilayer, fwire_r_z0) -
                                       fwire_radius * cos(DCH_i->stereoangle_z0(fwire_r_z0)) - safety_z_interspace;
@@ -419,7 +423,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
           DCH_length_t fwire_radius = dch_FSideWire_thickness / 2;
           // increase radial distance, move it closer to the sense wire
           DCH_length_t fwire_r_z0 = cell_rin_z0 + fwire_radius;
-          DCH_angle_t fwire_stereo = (-1.) * l.StereoSign() * DCH_i->stereoangle_z0(fwire_r_z0);
+          DCH_angle_t fwire_stereo = (-1.) * DCH_i->StereoSign(l) * DCH_i->stereoangle_z0(fwire_r_z0);
           DCH_length_t fwire_length = 0.5 * DCH_i->WireLength(ilayer, fwire_r_z0) -
                                       fwire_radius * cos(DCH_i->stereoangle_z0(fwire_r_z0)) - safety_z_interspace;
 
@@ -439,7 +443,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
           DCH_length_t fwire_radius = dch_FSideWire_thickness / 2;
           // increase radial distance, move it closer to the sense wire
           DCH_length_t fwire_r_z0 = cell_rout_z0 - fwire_radius;
-          DCH_angle_t fwire_stereo = (-1.) * l.StereoSign() * DCH_i->stereoangle_z0(fwire_r_z0);
+          DCH_angle_t fwire_stereo = (-1.) * DCH_i->StereoSign(l) * DCH_i->stereoangle_z0(fwire_r_z0);
           DCH_length_t fwire_length = 0.5 * DCH_i->WireLength(ilayer, fwire_r_z0) -
                                       fwire_radius * cos(DCH_i->stereoangle_z0(fwire_r_z0)) - safety_z_interspace;
 
@@ -464,7 +468,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
       dd4hep::Transform3D cellTr{dd4hep::RotationZ(cell_phi_angle)};
       auto cell_pv = layer_v.placeVolume(cell_v, cellTr);
       cell_pv.addPhysVolID("nphi", nphi);
-      cell_pv.addPhysVolID("stereosign", l.StereoSign());
+      cell_pv.addPhysVolID("stereosign", DCH_i->StereoSign(l));
 
       dd4hep::DetElement cell_DE(layer_DE, cell_name + std::to_string(nphi) + "DE", nphi);
       cell_DE.setPlacement(cell_pv);
@@ -478,7 +482,7 @@ static dd4hep::Ref_t create_DCH_o1_v02(dd4hep::Detector& desc, dd4hep::xml::Hand
   det.setPlacement(vessel_pv);
   // Assign the system ID to our mother volume
   vessel_pv.addPhysVolID("system", detID);
-  det.addExtension<dd4hep::rec::DCH_info>(DCH_i);
+  det.addExtension<dd4hep::rec::WireTracker_info_struct>(DCH_i);
 
   return det;
 }
@@ -501,7 +505,7 @@ dd4hep::Solid CompositeTT(double twist_angle, double cell_rin_z0, double cell_ro
   double poly_angle = dphi / 2;
   double twist_angle_half = twist_angle / 2.;
   // change sign, so the final shape has the same orientation as G4 twisted tube
-  twist_angle_half *= -1;
+  twist_angle_half *= -1; // not sure about this
 
   // define points of 8 genenric trapezoid
   struct point2d {
