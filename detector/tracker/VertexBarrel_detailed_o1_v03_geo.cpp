@@ -411,6 +411,11 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
   //=========  loop over layer elements in xml  ======================================
 
   printout(INFO, det_name, "Building of detector ...");
+  int nLayers = 0;
+  vector<int> layer_ids;
+  DetElement layerDE;
+  std::map<int, int> iModuleTot_map; // Map to keep track of the total number of modules for each layer id, to give
+                                     // unique IDs to modules even when there are multiple layers with the same layer ID
   for (xml_coll_t c(e, _U(layer)); c; ++c) {
 
     xml_comp_t x_layer(c);
@@ -420,16 +425,14 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                 // off layers that are outside the envelopes of the detector
 
     int layer_id = x_layer.id();
-    int side = getAttrOrDefault(x_layer, _Unicode(side),
-                                0); // Use side=1 or -1 to use two staves/wafers with the same layer id
-
     double dr = x_layer.dr(0); // Spacing in r for every second stave.
     double layer_offset = x_layer.offset(0);
     double z_offset = x_layer.z_offset(0);
 
     string nameStr = x_layer.nameStr();
     int nmodules = x_layer.nmodules();
-    double step = x_layer.step(0); // Spacing of modules
+    int iModuleTot = iModuleTot_map[layer_id]; // Counter to give unique IDs to modules
+    double step = x_layer.step(0);             // Spacing of modules
 
     // Use the correct stave
     auto m = *find_if(stave_information_list.cbegin(), stave_information_list.cend(),
@@ -440,7 +443,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     double motherVolOffset =
         getAttrOrDefault(x_layer, _Unicode(motherVolOffset), double(0.0)); // In case wafer/stave is asymmetric
 
-    std::string layer_name = _toString(layer_id, "layer%d") + _toString(side, "_side%d");
+    std::string layer_name = _toString(layer_id, "layer%d");
 
     PlacedVolume whole_layer_volume_placed;
     Volume whole_layer_volume_v;
@@ -457,10 +460,28 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
       pv = envelope.placeVolume(whole_layer_volume_a, Position(0., 0., z_offset));
     }
 
-    pv.addPhysVolID("layer", layer_id).addPhysVolID("side", side);
-
-    DetElement layerDE(sdet, _toString(layer_id, "layer_%d") + _toString(side, "_side%d"), layer_id);
-    layerDE.setPlacement(pv);
+    // Check if we already have a layer with this id, if not create a new one, otherwise use the existing one and make
+    // sure that the module IDs stay unique
+    pv.addPhysVolID("layer", layer_id).addPhysVolID("side", 0);
+    if (find(layer_ids.begin(), layer_ids.end(), layer_id) == layer_ids.end()) {
+      layer_ids.push_back(layer_id);
+      layerDE = DetElement(sdet,
+                           _toString(layer_id, "layer_%d") +
+                               _toString(int(count(layer_ids.begin(), layer_ids.end(), layer_id)), "_%d"),
+                           layer_id);
+      layerDE.setPlacement(pv);
+    } else {
+      layer_ids.push_back(layer_id);
+      layerDE = DetElement(sdet,
+                           _toString(layer_id, "layer_%d") +
+                               _toString(int(count(layer_ids.begin(), layer_ids.end(), layer_id)), "_%d"),
+                           layer_id);
+      layerDE.setPlacement(pv);
+      printout(
+          INFO, det_name,
+          "Defining multiple layers with the same layer ID: layer_id: " + _toString(layer_id) +
+              ", this is okay. Just make sure you have enough bits in GlobalTrackerReadoutID for layers and modules.");
+    }
 
     int nLadders = x_layer.attr<int>(_Unicode(nLadders));
     double dphi = 2. * M_PI / double(nLadders);
@@ -584,20 +605,28 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                   iModule * sensor.length + iModule * step;
           Position pos(x_pos, y_pos, z_pos);
 
-          string module_name = stave_name + _toString(iModule, "_module%d");
+          string module_name = stave_name + _toString(iModuleTot, "_module%d");
           Assembly module_assembly(module_name);
           if (m.motherVolThickness > 0.0 && m.motherVolWidth > 0.0)
             pv = whole_stave_volume_v.placeVolume(module_assembly, Position(-m.motherVolThickness / 2., 0., 0.));
           else
             pv = whole_stave_volume_a.placeVolume(module_assembly);
-          pv.addPhysVolID("module", iModule + nmodules * iStave);
 
-          DetElement moduleDE(layerDE, module_name, iModule + nmodules * iStave);
+          int iModule_VolID =
+              int(iModuleTot / sensor.nGroupingModules); // To more efficiently use GlobalTrackerReadoutID bits, use the
+                                                         // same module id for every nGroupingModules modules and
+                                                         // distinguish them by the sensor id instead
+
+          pv.addPhysVolID("module", iModule_VolID);
+          DetElement moduleDE(layerDE, module_name, iModuleTot);
           moduleDE.setPlacement(pv);
 
           // Place all sensor parts
-          int iSensitive = 0;
-          for (int x_i = 0; x_i < sensor.nx; x_i++) { // Loop over duplicates in local x (global phi) direction
+          int iSensitive = iModuleTot % sensor.nGroupingModules *
+                           sensor.nSensitivePerModule; // To more efficiently use GlobalTrackerReadoutID bits, use the
+                                                       // same module id for every nGroupingModules modules and
+                                                       // distinguish them by the sensor id instead
+          for (int x_i = 0; x_i < sensor.nx; x_i++) {  // Loop over duplicates in local x (global phi) direction
             for (int i = 0; i < int(sensor.volumes.size()); i++) {
               if (sensor.isCurved[i] && sensor.nsegments[i] == 1) { // Truly curved, part of tube
                 r_offset_component = m.motherVolThickness > 0.0 && m.motherVolWidth > 0.0 ? 0. : layer_offset;
@@ -699,6 +728,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
             }
             module_assembly->GetShape()->ComputeBBox();
           }
+          iModuleTot++;
         }
       }
 
@@ -707,6 +737,10 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         whole_stave_volume_a->GetShape()->ComputeBBox();
       }
     }
+
+    // Save layer DetElement and maximal number of module IDs for later in case multiple layers with the same layer ID
+    // are called
+    iModuleTot_map[layer_id] += iModuleTot;
   }
 
   pv.addPhysVolID("system", x_det.id());
