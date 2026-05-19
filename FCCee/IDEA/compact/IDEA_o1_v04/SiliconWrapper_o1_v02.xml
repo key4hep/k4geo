@@ -360,9 +360,9 @@
 
             <comment> Here we construct the barrel. Staves at r1 and r2 from the first layer, staves at r3 and r4 from the second layer </comment>
             <layer nLadders="SiWrB_nStaves1" r="SiWrB_r1" id="0" nmodules="SiWrB_nModules1" name="SiWrBStave_layer0" step="SiWrB_module_spacing" phi0="SiWrB_phiOffset1"/>
-            <layer nLadders="SiWrB_nStaves2" r="SiWrB_r2" id="1" nmodules="SiWrB_nModules2" name="SiWrBStave_layer0" step="SiWrB_module_spacing" phi0="SiWrB_phiOffset2"/>
-            <layer nLadders="SiWrB_nStaves3" r="SiWrB_r3" id="2" nmodules="SiWrB_nModules3" name="SiWrBStave_layer1" step="SiWrB_module_spacing" phi0="SiWrB_phiOffset3" ignore="SiWr_nLayers==1"/>
-            <layer nLadders="SiWrB_nStaves4" r="SiWrB_r4" id="3" nmodules="SiWrB_nModules4" name="SiWrBStave_layer1" step="SiWrB_module_spacing" phi0="SiWrB_phiOffset4" ignore="SiWr_nLayers==1"/>
+            <layer nLadders="SiWrB_nStaves2" r="SiWrB_r2" id="0" nmodules="SiWrB_nModules2" name="SiWrBStave_layer0" step="SiWrB_module_spacing" phi0="SiWrB_phiOffset2"/>
+            <layer nLadders="SiWrB_nStaves3" r="SiWrB_r3" id="1" nmodules="SiWrB_nModules3" name="SiWrBStave_layer1" step="SiWrB_module_spacing" phi0="SiWrB_phiOffset3" ignore="SiWr_nLayers==1"/>
+            <layer nLadders="SiWrB_nStaves4" r="SiWrB_r4" id="1" nmodules="SiWrB_nModules4" name="SiWrBStave_layer1" step="SiWrB_module_spacing" phi0="SiWrB_phiOffset4" ignore="SiWr_nLayers==1"/>
 
             <comment> Rest of stave holders (to optimise mother volumes and avoid overlaps of mother volumes) </comment>
             <stave name="SiWrBStave1_support_bars" length="2.*SiWrB_half_length" motherVolWidth="SiWrB_holder_width" motherVolThickness="SiWrB_support_tube_r-SiWrB_r1-SiWr_stave_thickness-SiWrB_tolerance">
