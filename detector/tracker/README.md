@@ -87,9 +87,14 @@ FCChh barrel tracker as designed by tkLayout.
 ### o1_v01
 Original version taken from [FCCDetectors](https://github.com/HEP-FCC/FCCDetectors/blob/f2268e282c6c77d93e7079d0d235cabd06a03599/Detector/DetFCChhTrackerTkLayout/src/TkLayoutBarrel_Geo.cpp).
 
+### o1_v02
+Version taken from Mehrunnisa's [fork](https://github.com/mehrunnisamirza2/FCCDetectors/tree/feature-acts-gen1) of the `FCCDetectors` repository, branch `feature-acts-gen1`.
 
 ## TkLayoutTrackerEndcap
 FCChh endcap tracker as designed by tkLayout.
 
 ### o1_v01
 Original version taken from [FCCDetectors](https://github.com/HEP-FCC/FCCDetectors/blob/f2268e282c6c77d93e7079d0d235cabd06a03599/Detector/DetFCChhTrackerTkLayout/src/TkLayoutEndcap_Geo.cpp).
+
+### o1_v02
+Version taken from Mehrunnisa's [fork](https://github.com/mehrunnisamirza2/FCCDetectors/tree/feature-acts-gen1) of the `FCCDetectors` repository, branch `feature-acts-gen1`.
