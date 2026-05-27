@@ -379,9 +379,16 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
               // such that not only y direction can be the normal direction of the surface, similarly to how it's done
               // for planes (isXY...)
               Trd1 ele_box =
-                  Trd1(abs(component.xmax() - component.xmin()) / 2. / nsegment,
-                       abs(component.xmax() - component.xmin()) / 2. / nsegment * (rmin + thicknesses_split[i]) / rmin,
-                       abs(component.ymax() - component.ymin()) / 2., thicknesses_split[i] / 2.);
+                  Trd1(abs(component.xmax() - component.xmin()) / 2. / nsegment *
+                           (1 + (1 - (rmin + thicknesses_split[i]) / rmin)),
+                       abs(component.xmax() - component.xmin()) / 2. / nsegment *
+                           (1 - (1 - (rmin + thicknesses_split[i]) / rmin)),
+                       abs(component.ymax() - component.ymin()) / 2.,
+                       thicknesses_split[i] /
+                           2.); // The trapezoid has an average width of 'abs(component.xmax() -
+                                // component.xmin()) / 2. / nsegment', so the inner width must be a bit smaller
+                                // and the outer width a bit larger depending on the radius where it is placed.
+                                // This is given by the scaling factor '(rmin + thicknesses_split[i]) / rmin'
               ele_vol = Volume(sensor_part_names[i], ele_box, sensor.material);
             } else {
               double phi_offset = getAttrOrDefault(component, _Unicode(phi_offset), double(0.0));

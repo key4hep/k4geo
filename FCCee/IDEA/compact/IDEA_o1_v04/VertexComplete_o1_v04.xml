@@ -366,8 +366,8 @@
         <constant name="RSU_phi_pixelArray"         value="9.197*mm*RSU_phi/RSU_phi_ITS3"/>  <comment> sensitive, 12 per RSU, scale up to reach desired rmin </comment>
         <constant name="RSU_phi_readoutPeripheryDicingLane"   value="0.275*mm*RSU_phi/RSU_phi_ITS3"/>    <comment> readout periphery (0.2 mm) and dicing lane (0.075 mm),insensitive, 2 per RSU, scale up to reach desired rmin </comment>
 
-        <constant name="VTXIB_curved_insensitive_thickness_below"   value="40e-03*mm"/> <comment> Assume 40 µm of insensitive sensor thickness </comment>
-        <constant name="VTXIB_curved_sensitive_thickness"           value="10e-03*mm"/> <comment> Assume 10 µm of sensitive sensor thickness, reflecting epi-layer thickness in TPSCo 65 nm process </comment>
+        <constant name="VTXIB_curved_insensitive_thickness_below"   value="38e-03*mm"/> <comment> Assume 38 µm of insensitive sensor thickness </comment>
+        <constant name="VTXIB_curved_sensitive_thickness"           value="12e-03*mm"/> <comment> Assume 12 µm of sensitive sensor thickness, reflecting epi-layer thickness in TPSCo 65 nm process </comment>
         <constant name="VTXIB_curved_insensitive_thickness_above"   value="16e-03*mm"/> <comment> Assume 16 µm of Si-equivalent for metal layer connecting RSUs for powering (see ALICE ITS3 TDR) </comment>
         <constant name="VTXIB_curved_total_sensor_thickness"        value="VTXIB_curved_insensitive_thickness_below+VTXIB_curved_sensitive_thickness+VTXIB_curved_insensitive_thickness_above"/>
     
@@ -454,6 +454,9 @@
         </comment>
         <constant name="VTXIB_curved_nsegments" value="4"/>
 
+        <constant name="VTXIB_curved_pitch_phi"  value="RSU_phi_pixelArray/VTXIB_curved_nsegments / ceil(RSU_phi_pixelArray/VTXIB_curved_nsegments/(VTXIB_pitch_phi))"/>  <comment> Make sure that the sensor size is a multiple of the pitch. Effective sensor size is RSU_phi_pixelArray*(VTXIB_r_min_layer+VTXIB_curved_insensitive_thickness_below)/VTXIB_r_min_layer (so a bit larger since the actually sensitive volume is at a larger radius). Choose a pitch as close as possible to target pitch </comment> 
+        <constant name="VTXIB_curved_pitch_z"    value="RSU_z_pixelArray / ceil(RSU_z_pixelArray/(VTXIB_pitch_z))"/> <comment> Make sure that the sensor size is a multiple of the pitch. Choose a pitch as close as possible to target pitch  </comment> 
+
         <constant name="VTXIB_curved_tolerance_r" value="0.100*mm"/> <comment> Needed for curved inner vertex as otherwise overlaps would be detected. Can be reduced if `VTXIB_curved_nsegments` is increased </comment>
     </define>
 
@@ -474,7 +477,7 @@
     <readouts> <comment>  Definition of the readout segmentation/definition </comment>
         <readout name="VertexBarrelCollection"> 
             <segmentation type="MultiSegmentation" key="layer">
-                <segmentation name="VTXIBgrid" type="CartesianGridXY" key_min="0" key_max="nInnerVertexLayers-1" grid_size_x="VTXIB_pitch_phi" grid_size_y="VTXIB_pitch_z"/> <comment> Segmentation for the classic inner vertex or curved ultra-light inner vertex </comment>
+                <segmentation name="VTXIBgrid" type="CartesianGridXY" key_min="0" key_max="nInnerVertexLayers-1" grid_size_x="(4-nInnerVertexLayers)*VTXIB_pitch_phi + (nInnerVertexLayers-3)*VTXIB_curved_pitch_phi" grid_size_y="(4-nInnerVertexLayers)*VTXIB_pitch_z + (nInnerVertexLayers-3)*VTXIB_curved_pitch_z"/> <comment> Segmentation for the classic inner vertex or curved ultra-light inner vertex </comment>
                 <segmentation name="VTXOBgrid" type="CartesianGridXY" key_min="nInnerVertexLayers" key_max="nInnerVertexLayers+1" grid_size_x="VTXOB_pitch_phi" grid_size_y="VTXOB_pitch_z"/>
             </segmentation>
             <id>${GlobalTrackerReadoutID},x:32:-16,y:-16</id>
