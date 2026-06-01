@@ -10,7 +10,7 @@
 #include "Math/AxisAngle.h"
 #include "Math/Vector3D.h"
 
-#include "WireTracker_info.h"
+#include "detectorCommon/WireTracker_info.h"
 
 /*
  * Define a simple assert function which prints a message when the assert will fail

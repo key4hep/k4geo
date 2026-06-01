@@ -17,7 +17,7 @@
 #include "DD4hep/Shapes.h"
 #include "XML/Utilities.h"
 
-#include "WireTracker_info.h"
+#include "detectorCommon/WireTracker_info.h"
 
 namespace DCH_v2 {
 
