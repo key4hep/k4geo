@@ -91,8 +91,8 @@ void buildOneSide(dd4hep::Detector& aLcdd, dd4hep::SensitiveDetector& aSensDet, 
   std::vector<double> layerThickness;
   std::vector<dd4hep::Cone> layerEnvelopes;
   std::vector<double> layerRmin;
-  layerThickness.reserve(numLayers);
-  layerRmin.reserve(numLayers + 1);
+  layerThickness.resize(numLayers);
+  layerRmin.resize(numLayers + 1);
   for (uint iLayerSize = 0; iLayerSize < layerHeight.size(); iLayerSize++) {
     if (iLayerSize == 0) {
       layerThickness[0] = unitLayerThicknessFirst + (layerHeight[0] - 1) * unitLayerThickness;
