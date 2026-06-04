@@ -13,11 +13,6 @@ namespace DDSegmentation {
 
   GridDRcalo_k4geo::GridDRcalo_k4geo(const BitFieldCoder* decoder) : Segmentation(decoder) { commonSetup(); }
 
-  GridDRcalo_k4geo::~GridDRcalo_k4geo() {
-    delete m_paramBarrel;
-    delete m_paramEndcap;
-  }
-
   /// Initialization common to all ctors.
   void GridDRcalo_k4geo::commonSetup() {
     // define type and description
@@ -32,9 +27,6 @@ namespace DDSegmentation {
     registerIdentifier("identifier_y", "Cell ID identifier for y", m_yID, "y");
     registerIdentifier("identifier_IsCerenkov", "Cell ID identifier for IsCerenkov", m_isCerenkovID, "c");
     registerIdentifier("identifier_module", "Cell ID identifier for module", m_moduleID, "module");
-
-    m_paramBarrel = new DRparamBarrel_k4geo();
-    m_paramEndcap = new DRparamEndcap_k4geo();
 
     m_systemIndex = decoder()->index("system");
     m_numEtaIndex = decoder()->index(m_numEtaID);
@@ -346,8 +338,8 @@ namespace DDSegmentation {
 
       // for different noEta rmin and rmax can be different
       // also protect from map::at exception at the barrel-endcap boundary
-      auto flNext = paramBase->unsignedTowerNo(noEta) == m_paramBarrel->GetTotTowerNum()
-                        ? m_paramBarrel->GetFullLengthFibers(noEta - 1)
+      auto flNext = paramBase->unsignedTowerNo(noEta) == m_paramBarrel.GetTotTowerNum()
+                        ? m_paramBarrel.GetFullLengthFibers(noEta - 1)
                         : paramBase->GetFullLengthFibers(noEta - 1);
 
       // next tower
@@ -365,10 +357,10 @@ namespace DDSegmentation {
       // but to southbound the next totY is always smaller
       // than the current one
       // also protect from looking for a tower with numEta greater than the total # of towers
-      if (noEta + 1 < m_paramEndcap->GetTotTowerNum() + m_paramBarrel->GetTotTowerNum()) {
+      if (noEta + 1 < m_paramEndcap.GetTotTowerNum() + m_paramBarrel.GetTotTowerNum()) {
         // protect from map::at exception at the barrel-endcap boundary
-        auto flNext = paramBase->unsignedTowerNo(noEta) + 1 == m_paramBarrel->GetTotTowerNum()
-                          ? m_paramEndcap->GetFullLengthFibers(noEta + 1)
+        auto flNext = paramBase->unsignedTowerNo(noEta) + 1 == m_paramBarrel.GetTotTowerNum()
+                          ? m_paramEndcap.GetFullLengthFibers(noEta + 1)
                           : paramBase->GetFullLengthFibers(noEta + 1);
 
         for (int idx = totY - 1; idx >= flNext.rmax - margin; idx--)
@@ -476,10 +468,10 @@ namespace DDSegmentation {
   DRparamBase_k4geo* GridDRcalo_k4geo::setParamBase(int noEta) const {
     DRparamBase_k4geo* paramBase = nullptr;
 
-    if (m_paramEndcap->unsignedTowerNo(noEta) >= m_paramBarrel->GetTotTowerNum())
-      paramBase = static_cast<DRparamBase_k4geo*>(m_paramEndcap);
+    if (m_paramEndcap.unsignedTowerNo(noEta) >= m_paramBarrel.GetTotTowerNum())
+      paramBase = static_cast<DRparamBase_k4geo*>(&m_paramEndcap);
     else
-      paramBase = static_cast<DRparamBase_k4geo*>(m_paramBarrel);
+      paramBase = static_cast<DRparamBase_k4geo*>(&m_paramBarrel);
 
     if (paramBase->GetCurrentTowerNum() == noEta)
       return paramBase;
@@ -488,8 +480,8 @@ namespace DDSegmentation {
     if (!paramBase->IsFinalized())
       throw std::runtime_error("GridDRcalo_k4geo::position should not be called while building detector geometry!");
 
-    paramBase->SetDeltaThetaByTowerNo(noEta, m_paramBarrel->GetTotTowerNum());
-    paramBase->SetThetaOfCenterByTowerNo(noEta, m_paramBarrel->GetTotTowerNum());
+    paramBase->SetDeltaThetaByTowerNo(noEta, m_paramBarrel.GetTotTowerNum());
+    paramBase->SetThetaOfCenterByTowerNo(noEta, m_paramBarrel.GetTotTowerNum());
     paramBase->SetIsRHSByTowerNo(noEta);
     paramBase->SetCurrentTowerNum(noEta);
     paramBase->init();
