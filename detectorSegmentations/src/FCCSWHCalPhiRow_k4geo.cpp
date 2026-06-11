@@ -143,7 +143,7 @@ namespace DDSegmentation {
         for (int i_lay = 0; i_lay < m_numLayers.at(i_dR + i_section * N_dR); i_lay++) {
 
           double volOffset = (layerInSection % 2) ? m_oddVolOffset : m_evenVolOffset;
-          double zOffset = - volOffset;
+          double zOffset = -volOffset;
           if (!grouped) {
             // Offset to middle of cell for this layer.
             // But if we're using groupedRows, then this is row-dependent,
