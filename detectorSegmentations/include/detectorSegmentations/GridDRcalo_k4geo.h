@@ -15,7 +15,7 @@ namespace DDSegmentation {
     /// Default constructor used by derived classes passing an existing decoder
     GridDRcalo_k4geo(const BitFieldCoder* decoder);
     /// destructor
-    virtual ~GridDRcalo_k4geo() override;
+    virtual ~GridDRcalo_k4geo() override = default;
 
     // Determine the global (local) position based on the cell ID.
     // position of the front end of the fiber
@@ -95,8 +95,8 @@ namespace DDSegmentation {
     inline void setFieldNameIsCerenkov(const std::string& fieldName) { m_isCerenkovID = fieldName; }
     inline void setFieldNameModule(const std::string& fieldName) { m_moduleID = fieldName; }
 
-    DRparamBarrel_k4geo* paramBarrel() { return m_paramBarrel; }
-    DRparamEndcap_k4geo* paramEndcap() { return m_paramEndcap; }
+    DRparamBarrel_k4geo* paramBarrel() { return &m_paramBarrel; }
+    DRparamEndcap_k4geo* paramEndcap() { return &m_paramEndcap; }
 
     DRparamBase_k4geo* setParamBase(int noEta) const;
 
@@ -115,8 +115,9 @@ namespace DDSegmentation {
     // switch to remove different type cells from the neighborhood
     bool m_removeDifferentCh;
 
-    DRparamBarrel_k4geo* m_paramBarrel;
-    DRparamEndcap_k4geo* m_paramEndcap;
+    // setParamBase updates cached per-tower state from const segmentation queries.
+    mutable DRparamBarrel_k4geo m_paramBarrel;
+    mutable DRparamEndcap_k4geo m_paramEndcap;
 
     /// Initialization common to all ctors.
     void commonSetup();
