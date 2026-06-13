@@ -228,6 +228,14 @@ INSTALL(EXPORT ${PROJECT_NAME}Targets
 
 include(CMakePackageConfigHelpers)
 
+# Only pull Geant4 into the exported config when k4geo was built against it,
+# otherwise downstream find_package(k4geo) fails in a Geant4-free environment.
+if(K4GEO_USE_GEANT4)
+  set(K4GEO_GEANT4_FIND_DEPENDENCY "find_dependency(Geant4 REQUIRED)")
+else()
+  set(K4GEO_GEANT4_FIND_DEPENDENCY "# Geant4 dependency omitted: k4geo built with K4GEO_USE_GEANT4=OFF")
+endif()
+
 configure_package_config_file(cmake/k4geoConfig.cmake.in ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_CMAKEDIR}/k4geoConfig.cmake
   PATH_VARS CMAKE_INSTALL_CMAKEDIR
   INSTALL_DESTINATION ${CMAKE_INSTALL_CMAKEDIR} )
