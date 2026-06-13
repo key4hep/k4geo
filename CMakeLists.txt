@@ -184,7 +184,12 @@ else()
 endif()
 
 add_subdirectory(detectorSegmentations)
-add_subdirectory(detectorCommon)
+# detectorCommon provides Geant4-based digitization utilities (DetUtils_k4geo
+# uses DDG4/Geant4Mapping and G4Step) and links DD4hep::DDG4, so it is only
+# built when Geant4 support is enabled. Nothing else in k4geo links it.
+if(K4GEO_USE_GEANT4)
+  add_subdirectory(detectorCommon)
+endif()
 
 # Destination directories are hardcoded because GNUdirectories are not included
 set(k4geo_install_targets ${PackageName})
