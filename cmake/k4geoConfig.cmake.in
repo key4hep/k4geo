@@ -7,7 +7,7 @@ set_and_check(k4geo_CMAKE_DIR "@PACKAGE_CMAKE_INSTALL_CMAKEDIR@")
 include(CMakeFindDependencyMacro)
 
 find_dependency(DD4hep REQUIRED)
-find_dependency(Geant4 REQUIRED)
+@K4GEO_GEANT4_FIND_DEPENDENCY@
 find_dependency(ROOT REQUIRED COMPONENTS Geom GenVector)
 find_dependency(LCIO REQUIRED)
 

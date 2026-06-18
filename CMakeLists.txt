@@ -44,15 +44,23 @@ ENDIF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 option(BUILD_TESTING "Enable and build tests" ON)
 option(INSTALL_COMPACT_FILES "Copy compact files to install area" OFF)
 option(INSTALL_BEAMPIPE_STL_FILES "Download CAD files for building the detailed beampipe" OFF)
+option(K4GEO_USE_GEANT4 "Build the Geant4-dependent geometry plugin (k4geoG4); requires DD4hep DDG4 and Geant4" ON)
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-find_package(DD4hep 1.31 REQUIRED COMPONENTS DDRec DDG4 DDParsers)
+# The DDG4 component and Geant4 itself are only needed for the k4geoG4 plugin.
+if(K4GEO_USE_GEANT4)
+  find_package(DD4hep 1.31 REQUIRED COMPONENTS DDRec DDG4 DDParsers)
+else()
+  find_package(DD4hep 1.31 REQUIRED COMPONENTS DDRec DDParsers)
+endif()
 
 find_package ( ROOT REQUIRED COMPONENTS Geom GenVector)
 message ( STATUS "ROOT_VERSION: ${ROOT_VERSION}" )
 
-find_package( Geant4 REQUIRED ) 
+if(K4GEO_USE_GEANT4)
+  find_package( Geant4 REQUIRED )
+endif()
 OPTION(K4GEO_USE_LCIO "Enable or disable the use of LCIO, which is needed for some detector constructors and plugins" ON)
 if(K4GEO_USE_LCIO)
   find_package(LCIO REQUIRED)
@@ -134,25 +142,35 @@ if(DD4HEP_USE_PYROOT)
 endif()
 
 add_dd4hep_plugin(${PackageName} SHARED ${sources})
-add_dd4hep_plugin(${PackageName}G4 SHARED ${G4sources})
 
 add_library(lcgeo ALIAS k4geo)
 
 target_include_directories(${PackageName}   PRIVATE ${PROJECT_SOURCE_DIR}/detector/include )
-target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detector/include )
-
 target_include_directories(${PackageName}   PRIVATE ${PROJECT_SOURCE_DIR}/detector/calorimeter/dual-readout/include )
-target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detector/calorimeter/dual-readout/include )
-
 target_include_directories(${PackageName}   PRIVATE ${PROJECT_SOURCE_DIR}/detector/calorimeter/dual-readout-tubes/include )
-target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detector/calorimeter/dual-readout-tubes/include )
 
 target_link_libraries(${PackageName}   DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers ROOT::Core detectorSegmentations)
-target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ROOT::Core detectorSegmentations podio::podioRootIO EDM4HEP::edm4hep ${Geant4_LIBRARIES})
 
 if(K4GEO_USE_LCIO)
   target_link_libraries(${PackageName}   LCIO::lcio)
-  target_link_libraries(${PackageName}G4 LCIO::lcio)
+endif()
+
+# The Geant4-dependent plugin (sensitive detectors, fast-sim models, G4->EDM4hep
+# output). It is the only part of k4geo that links DD4hep::DDG4 and Geant4, so
+# building it is gated on K4GEO_USE_GEANT4: with the option OFF, k4geo builds
+# (and installs) without any Geant4 dependency.
+if(K4GEO_USE_GEANT4)
+  add_dd4hep_plugin(${PackageName}G4 SHARED ${G4sources})
+
+  target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detector/include )
+  target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detector/calorimeter/dual-readout/include )
+  target_include_directories(${PackageName}G4 PRIVATE ${PROJECT_SOURCE_DIR}/detector/calorimeter/dual-readout-tubes/include )
+
+  target_link_libraries(${PackageName}G4 DD4hep::DDCore DD4hep::DDRec DD4hep::DDParsers DD4hep::DDG4 ROOT::Core detectorSegmentations podio::podioRootIO EDM4HEP::edm4hep ${Geant4_LIBRARIES})
+
+  if(K4GEO_USE_LCIO)
+    target_link_libraries(${PackageName}G4 LCIO::lcio)
+  endif()
 endif()
 
 #Create this_package.sh file, and install
@@ -166,10 +184,19 @@ else()
 endif()
 
 add_subdirectory(detectorSegmentations)
-add_subdirectory(detectorCommon)
+# detectorCommon provides Geant4-based digitization utilities (DetUtils_k4geo
+# uses DDG4/Geant4Mapping and G4Step) and links DD4hep::DDG4, so it is only
+# built when Geant4 support is enabled. Nothing else in k4geo links it.
+if(K4GEO_USE_GEANT4)
+  add_subdirectory(detectorCommon)
+endif()
 
 # Destination directories are hardcoded because GNUdirectories are not included
-install(TARGETS ${PackageName}  ${PackageName}G4
+set(k4geo_install_targets ${PackageName})
+if(K4GEO_USE_GEANT4)
+  list(APPEND k4geo_install_targets ${PackageName}G4)
+endif()
+install(TARGETS ${k4geo_install_targets}
   EXPORT ${PROJECT_NAME}Targets
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT shlib
 )
@@ -200,6 +227,14 @@ INSTALL(EXPORT ${PROJECT_NAME}Targets
   FILE k4geoConfig-targets.cmake)
 
 include(CMakePackageConfigHelpers)
+
+# Only pull Geant4 into the exported config when k4geo was built against it,
+# otherwise downstream find_package(k4geo) fails in a Geant4-free environment.
+if(K4GEO_USE_GEANT4)
+  set(K4GEO_GEANT4_FIND_DEPENDENCY "find_dependency(Geant4 REQUIRED)")
+else()
+  set(K4GEO_GEANT4_FIND_DEPENDENCY "# Geant4 dependency omitted: k4geo built with K4GEO_USE_GEANT4=OFF")
+endif()
 
 configure_package_config_file(cmake/k4geoConfig.cmake.in ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_CMAKEDIR}/k4geoConfig.cmake
   PATH_VARS CMAKE_INSTALL_CMAKEDIR
