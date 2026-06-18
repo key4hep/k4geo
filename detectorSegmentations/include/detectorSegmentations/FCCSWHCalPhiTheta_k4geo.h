@@ -31,9 +31,10 @@ namespace DDSegmentation {
     /// Default constructor used by derived classes passing an existing decoder
     FCCSWHCalPhiTheta_k4geo(const BitFieldCoder* decoder);
 
-    /**  Get the postion of the geometric center of the cell based on the cellID
+    /**  Get the position of the geometric center of the cell based on the cellID
      *   @param[in] aCellID
-     *   return the global coordinates of cell center
+     *   return the cell center in the local coordinate system of the
+     *   associated dd4hep volume
      */
     virtual Vector3D position(const CellID& aCellID) const override;
 
@@ -219,6 +220,14 @@ namespace DDSegmentation {
       return {cellSize0, cellSize1};
     }
 
+    /// Determine the volume ID containing a cellID.
+    virtual VolumeID volumeID(const CellID& cellID) const override;
+
+    /// Return true if this segmentation can have cells that span multiple
+    /// volumes.  That is, points from multiple distinct volumes may
+    /// be assigned to the same cell.
+    virtual bool cellsSpanVolumes() const override { return true; }
+
   private:
     /// determine the azimuthal angle phi based on the current cell ID
     double phi() const;
@@ -245,6 +254,8 @@ namespace DDSegmentation {
 
     /// Initialization common to all ctors.
     void commonSetup();
+    /// the field index used for system
+    int m_systemIndex = -1;
     /// the field index used for layer
     int m_layerIndex = -1;
     /// the field index used for row
@@ -271,7 +282,8 @@ namespace DDSegmentation {
       /// theta bins (cells) in the layer
       std::vector<int> thetaBins{};
 
-      /// Information about each theta bin in the layer: z-min and z-max
+      /// Information about each theta bin in the layer: z-min and z-max,
+      // as well as the containing dd4hep volume ID and its z-center.
       // For the barrel, we store this in the m_cellInfo1 vector;
       // the first entry of the vector corresponds to bin number m_ibin1.
       // For the endcap, we have two disjoint bin ranges, corresponding
@@ -291,7 +303,15 @@ namespace DDSegmentation {
 
       struct CellInfo {
         CellInfo(double lo, double hi) : edge{lo, hi} {}
+
+        // Cell edges.
         Edge edge{0, 0};
+
+        // The ID of the dd4hep volume containing this cell.
+        VolumeID volumeID{0};
+
+        // The z-center of the dd4hep volume.
+        double volumeZ{0};
       };
       std::vector<CellInfo> m_cellInfo1{};
       std::vector<CellInfo> m_cellInfo2{};
@@ -340,6 +360,12 @@ namespace DDSegmentation {
      *   @param[in] layer index
      */
     void defineCellEdges(LayerInfo& li, const unsigned int layer) const;
+
+    /**  Define mapping between cells and dd4hep volumes.
+     *
+     *   Fills in the volumeID and volumeZ fields of cellInfo.
+     */
+    void defineVolIDMappings(LayerInfo& li, const unsigned int layer) const;
 
     // Check consistency of input geometric variables.
     bool checkParameters() const;

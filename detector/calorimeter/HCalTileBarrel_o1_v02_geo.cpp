@@ -163,7 +163,7 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
     dd4hep::printout(dd4hep::INFO, "HCalTileBarrel_o1_v02", "layer %d (cm): %.2f - %.2f", idxLayer, rminLayer,
                      rmaxLayer);
 
-    // alternate: even layers consist of tile sequence b, odd layer of tile sequence a
+    // alternate: even layers consist of tile sequence a, odd layer of tile sequence b
     unsigned int sequenceIdx = idxLayer % 2;
 
     dd4hep::Tube tileSequenceShape(rminLayer, rmaxLayer, 0.5 * dzSequence);
