@@ -8,11 +8,6 @@
   <!--     <constant name="DCH_outer_cyl_R_total"          value=" 2001 * mm "  /> -->
   <!--     <constant name="DCH_half_length_total"          value=" 2250 * mm "  /> -->
 
-  <!-- Gas (active volume) geometry     -->
-  <constant name="DCH_gas_inner_cyl_R"          value=" 350 * mm "   />
-  <constant name="DCH_gas_outer_cyl_R"          value=" 2000 * mm "  />
-  <constant name="DCH_gas_Lhalf"                value=" 2000 * mm "  />
-
   <!--    Vessel cylinder surrounds the gas cylinder in radius and z     -->
   <!--    Inner wall and outer wall have different thickness-->
   <constant name="DCH_vessel_thickness_innerR"           value=" DCH_gas_inner_cyl_R - DCH_inner_cyl_R_total"      />
