@@ -94,6 +94,12 @@ namespace DDSegmentation {
      */
     double getGlobalZ(const CellID aCellID) const;
 
+     /**  Determine the global phi coordinate based on the cell ID.
+     *   @param[in] aCellId ID of a cell.
+     *   return global phi.
+     */
+    double getGlobalPhi(const CellID aCellID) const;
+    
     /** Get the grid size in z for a given wheel
      * return grid size in z
      */

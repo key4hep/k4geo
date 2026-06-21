@@ -254,6 +254,35 @@ namespace DDSegmentation {
            (binToPosition(zValue, m_gridSizeZ[iWheel], m_offsetZ[iWheel]) + m_gridSizeZ[iWheel] / 2.);
   }
 
+  /// determine the phi position based on the cell ID, in the
+  /// global coordinate frame of the detector
+  double FCCSWEndcapTurbine_k4geo::getGlobalPhi(const CellID cID) const {
+    CellID iModule = decoder()->get(cID, m_moduleIndex);
+    CellID iWheel = decoder()->get(cID, m_wheelIndex);
+    CellID iSide = decoder()->get(cID, m_sideIndex);
+    
+    double phiCent = twopi * (iModule + 0.5) / (m_nUnitCells[iWheel] / m_mergedModules[iWheel]);
+    double rho = getGlobalRho(cID);
+
+    double zdepth = m_numReadoutZLayers[iWheel] * m_gridSizeZ[iWheel];
+
+    double zFromCent = TMath::Abs(getGlobalZ(cID)) - m_offsetZ[iWheel] - zdepth / 2;
+
+    // calculation position in frame with unit cell at phi = 0
+    double y = zFromCent / TMath::Tan(m_bladeAngle[iWheel]);
+    double x = TMath::Sqrt(rho * rho - y * y);
+    double locPhi = TMath::ATan2(y, x);
+
+    // now rotate by phi position of the unit cell
+    double phi = locPhi + phiCent;
+    if (phi > TMath::Pi())
+      phi = phi - TMath::TwoPi();
+
+    if (iSide != 1) phi = -phi;
+    
+    return phi;
+  }
+  
   /// determine the local z position of a readout cell with respect to the
   /// parent calibration cell.  In the local coordinates, z is the direction
   /// pointing upward from the beamline through the center of a turbine blade
