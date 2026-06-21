@@ -166,32 +166,32 @@ namespace DDSegmentation {
     m_layerIndex = decoder()->index(m_layerID);
 
     // precalculate some quantities that will be used to determine positions
-    for (const auto& bladeAngle: m_bladeAngle) {
-       m_sinBladeAngle.push_back(TMath::Sin(bladeAngle));
+    for (const auto& bladeAngle : m_bladeAngle) {
+      m_sinBladeAngle.push_back(TMath::Sin(bladeAngle));
     }
     unsigned iWheel = 0;
     for (const auto& readoutRhoLayers : m_numReadoutRhoLayers) {
-      m_gangedRhoLayers.push_back(readoutRhoLayers/m_numCalibRhoLayers[iWheel]);
+      m_gangedRhoLayers.push_back(readoutRhoLayers / m_numCalibRhoLayers[iWheel]);
       iWheel++;
     }
     iWheel = 0;
     for (const auto& readoutZLayers : m_numReadoutZLayers) {
-      m_gangedZLayers.push_back(readoutZLayers/m_numCalibZLayers[iWheel]);
+      m_gangedZLayers.push_back(readoutZLayers / m_numCalibZLayers[iWheel]);
       iWheel++;
     }
-  
   }
 
-  /// determine the local position based on the cell ID
+  /// determine the local position of the readout cell with respect to its
+  /// parent calibration cell based on the cell ID
   Vector3D FCCSWEndcapTurbine_k4geo::position(const CellID& cID) const {
 
-    double xVal = 0.;  // this is the direction perpendicular to the blade
-    double zVal = getZ(cID);  // coincides with the rho direction in the center
-                              // of the blade
-    double yVal = getY(cID);
+    double xVal = 0.;             // this is the direction perpendicular to the blade face
+    double zVal = getLocalZ(cID); // coincides with the rho direction in the center
+                                  // of the blade
+    double yVal = getLocalY(cID);
 
     Vector3D pos = Position(xVal, yVal, zVal);
-    
+
     return pos;
   }
 
@@ -235,95 +235,127 @@ namespace DDSegmentation {
     return cID;
   }
 
-  double FCCSWEndcapTurbine_k4geo::getZ(const CellID cID) const {
+  /// determine the radial position in transverse plane (rho) based on the
+  /// cell ID (this is in the global coordinate frame of the detector)
+  double FCCSWEndcapTurbine_k4geo::getGlobalRho(const CellID cID) const {
+    CellID rhoValue = decoder()->get(cID, m_rhoIndex);
+    CellID iWheel = decoder()->get(cID, m_wheelIndex);
+
+    return binToPosition(rhoValue, m_gridSizeRho[iWheel], m_offsetRho[iWheel]) + m_gridSizeRho[iWheel] / 2.;
+  }
+
+  /// determine the longitudinal position (z) based on the cell ID, in the
+  /// global coordinate frame of the detector
+  double FCCSWEndcapTurbine_k4geo::getGlobalZ(const CellID cID) const {
+    CellID zValue = decoder()->get(cID, m_zIndex);
+    CellID sideValue = decoder()->get(cID, m_sideIndex);
+    CellID iWheel = decoder()->get(cID, m_wheelIndex);
+    return ((long long int)sideValue) *
+           (binToPosition(zValue, m_gridSizeZ[iWheel], m_offsetZ[iWheel]) + m_gridSizeZ[iWheel] / 2.);
+  }
+
+  /// determine the local z position of a readout cell with respect to the
+  /// parent calibration cell.  In the local coordinates, z is the direction
+  /// pointing upward from the beamline through the center of a turbine blade
+
+  double FCCSWEndcapTurbine_k4geo::getLocalZ(const CellID cID) const {
 
     /// initialize vector of local Z positions if necessary
     if (m_localZPositions.size() == 0) {
       int nWheels = m_numReadoutRhoLayers.size();
       m_localZPositions.resize(nWheels);
       for (int jWheel = 0; jWheel < nWheels; jWheel++) {
-	m_localZPositions[jWheel].resize(m_numReadoutRhoLayers[jWheel]);
-	for (int jRho = 0; jRho < m_numReadoutRhoLayers[jWheel]; jRho++) {
-	  for (int jZ = 0; jZ < m_numReadoutZLayers[jWheel]; jZ++) {
-	    /// get center position of calibration cell
-	    unsigned jCalibRho = jRho/m_gangedRhoLayers[jWheel];
-	    float calibRhoMin = m_offsetRho[jWheel]+jCalibRho*m_gangedRhoLayers[jWheel]*m_gridSizeRho[jWheel];
-	    float calibRhoMax = calibRhoMin+m_gangedRhoLayers[jWheel]*m_gridSizeRho[jWheel];
-	    int jCalibZ = jZ/m_gangedZLayers[jWheel];
-	    float calibZPos[3];
-	    calibZPos[0] = (jCalibZ - m_numCalibZLayers[jWheel]/2)*m_gridSizeZ[jWheel]*m_gangedZLayers[jWheel]+(1-m_numCalibZLayers[jWheel]%2)*m_gridSizeZ[jWheel]*m_gangedZLayers[jWheel]/2;
-	    calibZPos[1] = calibZPos[0] + m_gridSizeZ[jWheel]*m_gangedZLayers[jWheel]/2;
-	    calibZPos[2] = calibZPos[1] - m_gridSizeZ[jWheel]*m_gangedZLayers[jWheel];
+        m_localZPositions[jWheel].resize(m_numReadoutRhoLayers[jWheel]);
+        for (int jRho = 0; jRho < m_numReadoutRhoLayers[jWheel]; jRho++) {
+          for (int jZ = 0; jZ < m_numReadoutZLayers[jWheel]; jZ++) {
+            /// get center position of calibration cell
+            unsigned jCalibRho = jRho / m_gangedRhoLayers[jWheel];
+            float calibRhoMin = m_offsetRho[jWheel] + jCalibRho * m_gangedRhoLayers[jWheel] * m_gridSizeRho[jWheel];
+            float calibRhoMax = calibRhoMin + m_gangedRhoLayers[jWheel] * m_gridSizeRho[jWheel];
+            int jCalibZ = jZ / m_gangedZLayers[jWheel];
+            float calibZPos[3];
+            calibZPos[0] = (jCalibZ - m_numCalibZLayers[jWheel] / 2) * m_gridSizeZ[jWheel] * m_gangedZLayers[jWheel] +
+                           (1 - m_numCalibZLayers[jWheel] % 2) * m_gridSizeZ[jWheel] * m_gangedZLayers[jWheel] / 2;
+            calibZPos[1] = calibZPos[0] + m_gridSizeZ[jWheel] * m_gangedZLayers[jWheel] / 2;
+            calibZPos[2] = calibZPos[1] - m_gridSizeZ[jWheel] * m_gangedZLayers[jWheel];
 
-	    float calibZmaxArr[3], calibZminArr[3];
-	    for (int jPos = 0; jPos<3; jPos++) {
-	      if (calibRhoMax > TMath::Abs(calibZPos[jPos])) {
-		calibZmaxArr[jPos] = TMath::Sqrt(calibRhoMax*calibRhoMax - calibZPos[jPos]*calibZPos[jPos]);
-	      } else {
-		calibRhoMax = 0;
-	      }
-	      if (calibRhoMin > TMath::Abs(calibZPos[jPos])) {
-		calibZminArr[jPos] = TMath::Sqrt(calibRhoMin*calibRhoMin - calibZPos[jPos]*calibZPos[jPos]);
-	      } else {
-		calibRhoMin = 1000000;
-	      }
-	    }
-	    float calibZmax = TMath::MaxElement(3, calibZmaxArr);
-	    float calibZmin = TMath::MinElement(3, calibZminArr);
-	    float calibZcent = (calibZmax+calibZmin)/2.;
-    
-	    // get center position of readout cell
-	    float readoutRhoMin = m_offsetRho[jWheel]+jRho*m_gridSizeRho[jWheel];
-	    float readoutRhoMax = readoutRhoMin+m_gridSizeRho[jWheel];
-	    float readoutZPos[3];
-	    readoutZPos[0] = (jZ - m_numReadoutZLayers[jWheel]/2)*m_gridSizeZ[jWheel]+(1-m_numReadoutZLayers[jWheel]%2)*m_gridSizeZ[jWheel]/2;
-	    readoutZPos[1] = readoutZPos[0] + m_gridSizeZ[jWheel]/2;
-	    readoutZPos[2] = readoutZPos[1] - m_gridSizeZ[jWheel];
-	    
-	    float readoutZmaxArr[3], readoutZminArr[3];
-	    for (int jPos = 0; jPos<3; jPos++) {
-	      if (readoutRhoMax > TMath::Abs(readoutZPos[jPos])) {
-		readoutZmaxArr[jPos] = TMath::Sqrt(readoutRhoMax*readoutRhoMax - readoutZPos[jPos]*readoutZPos[jPos]);
-	      } else {
-		std::cout << "Odd: readoutRhoMax < readoutZPos " << readoutRhoMax << " " << readoutZPos[jPos] << std::endl;
-		readoutRhoMax = 0;
-	      }
+            float calibZmaxArr[3], calibZminArr[3];
+            for (int jPos = 0; jPos < 3; jPos++) {
+              if (calibRhoMax > TMath::Abs(calibZPos[jPos])) {
+                calibZmaxArr[jPos] = TMath::Sqrt(calibRhoMax * calibRhoMax - calibZPos[jPos] * calibZPos[jPos]);
+              } else {
+                calibZmaxArr[jPos] = 0;
+              }
+              if (calibRhoMin > TMath::Abs(calibZPos[jPos])) {
+                calibZminArr[jPos] = TMath::Sqrt(calibRhoMin * calibRhoMin - calibZPos[jPos] * calibZPos[jPos]);
+              } else {
+                calibZminArr[jPos] = 1000000;
+              }
+            }
+            float calibZmax = TMath::MaxElement(3, calibZmaxArr);
+            float calibZmin = TMath::MinElement(3, calibZminArr);
+            float calibZcent = (calibZmax + calibZmin) / 2.;
 
-	      if (readoutRhoMin > TMath::Abs(readoutZPos[jPos])) {
-		readoutZminArr[jPos] = TMath::Sqrt(readoutRhoMin*readoutRhoMin - readoutZPos[jPos]*readoutZPos[jPos]);
-	      } else {
-		std::cout << "Odd: readoutRhoMin < readoutZPos " << readoutRhoMin << " " << readoutZPos[jPos] << std::endl;
-		readoutRhoMin = 1000000;
-	      }
-	    }
-	    float readoutZmax = TMath::MaxElement(3, readoutZmaxArr);
-	    float readoutZmin = TMath::MinElement(3, calibZminArr);
-	    float readoutZcent = (readoutZmax+readoutZmin)/2.;
-	    
-	    m_localZPositions[jWheel][jRho].push_back(calibZcent - readoutZcent);
-	  }
-	}
+            // get center position of readout cell
+            float readoutRhoMin = m_offsetRho[jWheel] + jRho * m_gridSizeRho[jWheel];
+            float readoutRhoMax = readoutRhoMin + m_gridSizeRho[jWheel];
+            float readoutZPos[3];
+            readoutZPos[0] = (jZ - m_numReadoutZLayers[jWheel] / 2) * m_gridSizeZ[jWheel] +
+                             (1 - m_numReadoutZLayers[jWheel] % 2) * m_gridSizeZ[jWheel] / 2;
+            readoutZPos[1] = readoutZPos[0] + m_gridSizeZ[jWheel] / 2;
+            readoutZPos[2] = readoutZPos[1] - m_gridSizeZ[jWheel];
+
+            float readoutZmaxArr[3], readoutZminArr[3];
+            for (int jPos = 0; jPos < 3; jPos++) {
+              if (readoutRhoMax > TMath::Abs(readoutZPos[jPos])) {
+                readoutZmaxArr[jPos] =
+                    TMath::Sqrt(readoutRhoMax * readoutRhoMax - readoutZPos[jPos] * readoutZPos[jPos]);
+              } else {
+                std::cout << "Odd: readoutRhoMax < readoutZPos " << readoutRhoMax << " " << readoutZPos[jPos]
+                          << std::endl;
+                readoutZmaxArr[jPos] = 0;
+              }
+
+              if (readoutRhoMin > TMath::Abs(readoutZPos[jPos])) {
+                readoutZminArr[jPos] =
+                    TMath::Sqrt(readoutRhoMin * readoutRhoMin - readoutZPos[jPos] * readoutZPos[jPos]);
+              } else {
+                std::cout << "Odd: readoutRhoMin < readoutZPos " << readoutRhoMin << " " << readoutZPos[jPos]
+                          << std::endl;
+                readoutZminArr[jPos] = 1000000;
+              }
+            }
+            float readoutZmax = TMath::MaxElement(3, readoutZmaxArr);
+            float readoutZmin = TMath::MinElement(3, readoutZminArr);
+            float readoutZcent = (readoutZmax + readoutZmin) / 2.;
+
+            m_localZPositions[jWheel][jRho].push_back(readoutZcent - calibZcent);
+          }
+        }
       }
     }
 
-    
     CellID iWheel = decoder()->get(cID, m_wheelIndex);
     CellID iRho = decoder()->get(cID, m_rhoIndex);
     CellID iZ = decoder()->get(cID, m_rhoIndex);
 
     return m_localZPositions[iWheel][iRho][iZ];
-    
   }
 
-  double FCCSWEndcapTurbine_k4geo::getY(const CellID cID) const {
+  /// determine the local y position of a readout cell with respect to the
+  /// parent calibration cell.  In the local coordinates, y is the direction
+  /// pointing across the turbine blade, from one straight edge to the other
+
+  double FCCSWEndcapTurbine_k4geo::getLocalY(const CellID cID) const {
 
     CellID iWheel = decoder()->get(cID, m_wheelIndex);
     CellID iZ = decoder()->get(cID, m_zIndex);
 
-    return ((iZ%m_gangedZLayers[iWheel]-m_gangedZLayers[iWheel]/2.)*m_gridSizeZ[iWheel]+(1-m_gangedZLayers[iWheel]%2 )*m_gridSizeZ[iWheel]/2)/m_sinBladeAngle[iWheel];
-   
+    return ((iZ % m_gangedZLayers[iWheel] - m_gangedZLayers[iWheel] / 2.) * m_gridSizeZ[iWheel] +
+            (1 - m_gangedZLayers[iWheel] % 2) * m_gridSizeZ[iWheel] / 2) /
+           m_sinBladeAngle[iWheel];
   }
-  
+
   /// determine expected layer value based on wheel, rho, and z indices
   unsigned FCCSWEndcapTurbine_k4geo::expLayer(unsigned iWheel, unsigned iRho, unsigned iZ) const {
     unsigned layerOffset = 0;
