@@ -110,7 +110,9 @@
     <constant name="DCH_outer_cyl_R_total"          value=" 2015   * mm "  />
     <constant name="DCH_gas_outer_cyl_R"          value=" 2000 * mm "  />
     <constant name="DCH_half_length_total"          value=" 3000   * mm "  />
-    <constant name="DCH_gas_Lhalf"                value=" 2750 * mm "  />
+    <constant name="DCH_gas_Lhalf"                value=" 2750 * mm "  /> <!-- Important note: the z extent of the DCH has been enlarged for ALLEGRO to cover the available space but a more thorough re-engineering of the whole layout should be performed (e.g. the cell size should be adapted) to have a realistic implementation -->
+    <!-- Alfa = twistangle/2   -->
+    <constant name="DCH_alpha"                value=" 20.847 * deg "    /> <!-- Tuned to have similar stereo angle than for the IDEA implementation, using eq 2.1 of Hoshina et al, Computer Physics Communications 153 (2003) 3 -->
 
     <!-- End of Drift Chamber parameters    -->
 
