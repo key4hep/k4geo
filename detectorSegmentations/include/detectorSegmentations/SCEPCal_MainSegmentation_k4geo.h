@@ -165,7 +165,6 @@ namespace DDSegmentation {
     int m_iTheta_barrel_end_ = -1;   // theta index end for barrel
     int m_nPhi_ = -1;                // number of phi segments
     int m_nGamma_ = -1;              // number of gamma segments
-    int m_nEpsilon_ = 0;             // note: always zero in this segmentation
 
     std::unordered_map<int, Vector3D> m_positionOf;
   };

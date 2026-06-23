@@ -15,7 +15,7 @@ namespace DDSegmentation {
   void FCCSWHCalPhiRow_k4geo::commonSetup() {
     // define type and description
     _type = "FCCSWHCalPhiRow_k4geo";
-    _description = "Phi-theta segmentation in the global coordinates";
+    _description = "Phi-row segmentation for HCal";
 
     // register all necessary parameters
     registerParameter("phi_bins", "Number of bins phi", m_phiBins, 1);
@@ -29,6 +29,12 @@ namespace DDSegmentation {
     registerParameter("numLayers", "Number of layers", m_numLayers, std::vector<int>());
     registerParameter("dRlayer", "dR of the layer", m_dRlayer, std::vector<double>());
     registerParameter("grouped_rows", "Number of rows combined in a pseudo-layer", m_groupedRows, std::vector<int>());
+    registerParameter("even_vol_offset",
+                      "Offset in z of the center of the sensitive volume within a row for even layers", m_evenVolOffset,
+                      0.);
+    registerParameter("odd_vol_offset", "Offset in z of the center of the sensitive volume within a row for odd layers",
+                      m_oddVolOffset, 0.);
+
     registerIdentifier("identifier_phi", "Cell ID identifier for phi", m_phiID, "phi");
     registerIdentifier("identifier_row", "Cell ID identifier for row", m_rowID, "row");
     registerIdentifier("identifier_layer", "Cell ID identifier for layer", m_layerID, "layer");
@@ -56,26 +62,23 @@ namespace DDSegmentation {
     const LayerInfo& li = getLayerInfo(layer);
 
     double radius = li.radius;
-    double minLayerZ = li.zmin;
 
     // get index of the cell in the layer (index starts from 1!)
     int idx = decoder()->get(cID, m_rowIndex);
     // calculate z-coordinate of the cell center
-    double zpos = minLayerZ + (idx - 1) * m_dz_row * m_gridSizeRow[layer] + 0.5 * m_dz_row * m_gridSizeRow[layer];
-
-    // for negative-z Endcap, the index is negative (starts from -1!)
-    if (idx < 0)
-      zpos = -minLayerZ + (idx + 1) * m_dz_row * m_gridSizeRow[layer] - 0.5 * m_dz_row * m_gridSizeRow[layer];
+    // Should be relative to the center of the first volume of the row.
+    double zpos = li.zOffset;
 
     // If this is the Endcap and m_groupedRows is provided from the xml file, then rows are grouped to the
-    // pseudo-layers. Need to recalculate the cell position:
+    // pseudo-layers. Need to adjust the cell position:
     if (m_detLayout == 1 && !m_groupedRows.empty()) {
-      int nrows = 0;
-      for (size_t i = 0; i < static_cast<size_t>(std::abs(idx)); i++)
-        nrows += li.groupedRows[i];
-      zpos = minLayerZ + nrows * m_dz_row - 0.5 * li.groupedRows[abs(idx) - 1] * m_dz_row;
-      if (idx < 0)
-        zpos = -zpos;
+      int aidx = std::abs(idx);
+      zpos += 0.5 * m_dz_row * li.groupedRows[aidx - 1];
+    }
+
+    if (idx < 0) {
+      // for negative-z Endcap, the index is negative (starts from -1!)
+      zpos = -zpos;
     }
 
     return Vector3D(radius * std::cos(phi(cID)), radius * std::sin(phi(cID)), zpos);
@@ -124,23 +127,40 @@ namespace DDSegmentation {
       // i_section to be grouped in a pseudo-layer.
       auto groupedRows_start = m_groupedRows.begin();
       auto groupedRows_end = m_groupedRows.end();
+      bool grouped = false;
       if (m_detLayout == 1 && !m_groupedRows.empty()) {
+        grouped = true;
         size_t nGroupedRows = m_groupedRows.size() / m_offsetZ.size();
         groupedRows_start = m_groupedRows.begin() + i_section * nGroupedRows;
         groupedRows_end = (i_section == m_offsetZ.size() - 1) ? m_groupedRows.end() : groupedRows_start + nGroupedRows;
       }
 
+      int layerInSection = 0;
+
       // Loop over groups of layers.
       for (uint i_dR = 0; i_dR < N_dR; i_dR++) {
         // Loop over individual layers.
-        for (int i_lay = 0; i_lay < m_numLayers[i_dR + i_section * N_dR]; i_lay++) {
-          moduleDepth[i_section] += m_dRlayer[i_dR];
-          out.push_back(LayerInfo{.radius = moduleDepth[i_section] - m_dRlayer[i_dR] * 0.5,
-                                  .halfDepth = m_dRlayer[i_dR] / 2,
+        for (int i_lay = 0; i_lay < m_numLayers.at(i_dR + i_section * N_dR); i_lay++) {
+
+          double volOffset = (layerInSection % 2) ? m_oddVolOffset : m_evenVolOffset;
+          double zOffset = -volOffset;
+          if (!grouped) {
+            // Offset to middle of cell for this layer.
+            // But if we're using groupedRows, then this is row-dependent,
+            // and we apply this instead in position().
+            zOffset += m_dz_row * m_gridSizeRow.at(out.size()) * 0.5;
+          }
+
+          moduleDepth[i_section] += m_dRlayer.at(i_dR);
+          out.push_back(LayerInfo{.type = i_section,
+                                  .radius = moduleDepth.at(i_section) - m_dRlayer.at(i_dR) * 0.5,
+                                  .halfDepth = m_dRlayer.at(i_dR) / 2,
                                   .zmin = zmin,
                                   .zmax = zmax,
+                                  .zOffset = zOffset,
                                   .groupedRows = std::span<const int>(std::to_address(groupedRows_start),
                                                                       std::to_address(groupedRows_end))});
+          ++layerInSection;
         }
       }
     }
@@ -777,6 +797,48 @@ namespace DDSegmentation {
     double thetaMin = std::atan2(Rmin, zhigh); // theta min
 
     return (M_PI - thetaMin); // theta max
+  }
+
+  // Determine the volume ID containing a cellID.
+  VolumeID FCCSWHCalPhiRow_k4geo::volumeID(const CellID& cID) const {
+    VolumeID vID = cID;
+
+    // Null out the phi index.
+    decoder()->set(vID, m_phiIndex, 0);
+
+    // Get layer and row.
+    uint layer = decoder()->get(cID, m_layerIndex);
+    int irow = decoder()->get(vID, m_rowIndex);
+
+    // For the endcap, we need to fill in the type field.  For the negative
+    // endcap, types are offset by three, and we also need to make the row
+    // index positive.
+    const LayerInfo* li = nullptr;
+    if (m_detLayout == 1) {
+      li = &getLayerInfo(layer);
+      int type = li->type;
+      if (irow < 0) {
+        irow = -irow;
+        type += 3;
+      }
+      decoder()->set(vID, m_typeIndex, type);
+    }
+
+    // Calculate the volume row.  Careful --- cell indices start with 1,
+    // volume indices start with 0!
+    int vrow = 0;
+    if (m_detLayout == 1 && !m_groupedRows.empty()) {
+      // Rows grouped according to groupedRows rather than by gridSizeRow.
+      // li was fetched in the stanza above.
+      for (size_t i = 1; i < static_cast<size_t>(irow); i++)
+        vrow += li->groupedRows[i - 1];
+    } else {
+      // Normal case.
+      vrow = (irow - 1) * m_gridSizeRow.at(layer);
+    }
+    decoder()->set(vID, m_rowIndex, vrow);
+
+    return vID;
   }
 
 } // namespace DDSegmentation

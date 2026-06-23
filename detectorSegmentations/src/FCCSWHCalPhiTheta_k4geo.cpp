@@ -1,5 +1,8 @@
 #include "detectorSegmentations/FCCSWHCalPhiTheta_k4geo.h"
+#include "DD4hep/Detector.h"
 #include "DD4hep/Printout.h"
+#include "DD4hep/VolumeManager.h"
+#include "DD4hep/detail/DetectorInterna.h"
 #include <ranges>
 
 namespace dd4hep {
@@ -18,7 +21,7 @@ namespace DDSegmentation {
   void FCCSWHCalPhiTheta_k4geo::commonSetup() {
     // define type and description
     _type = "FCCSWHCalPhiTheta_k4geo";
-    _description = "Phi-theta segmentation in the global coordinates";
+    _description = "Phi-theta segmentation for HCal";
 
     // register all necessary parameters (additional to those registered in GridTheta_k4geo)
     registerParameter("phi_bins", "Number of bins phi", m_phiBins, 1);
@@ -32,6 +35,7 @@ namespace DDSegmentation {
     registerIdentifier("identifier_phi", "Cell ID identifier for phi", m_phiID, "phi");
     registerIdentifier("identifier_layer", "Cell ID identifier for layer", m_layerID, "layer");
 
+    m_systemIndex = decoder()->index("system");
     m_layerIndex = decoder()->index(m_layerID);
     m_rowIndex = decoder()->index("row");
     m_thetaIndex = decoder()->index(fieldNameTheta());
@@ -47,19 +51,17 @@ namespace DDSegmentation {
   }
 
   /// determine the global position based on the cell ID
-  /// returns the geometric center of the cell
+  /// returns the geometric center of the cell in the local coordinate
+  /// system of the associated dd4hep volume
   Vector3D FCCSWHCalPhiTheta_k4geo::position(const CellID& cID) const {
     uint layer = decoder()->get(cID, m_layerIndex);
     int thetaID = decoder()->get(cID, m_thetaIndex);
 
     const LayerInfo& li = getLayerInfo(layer);
-    double radius = li.radius;
-    const LayerInfo::Edge& edge = li.cellInfo(thetaID).edge;
-    double zpos = (edge.low + edge.high) * 0.5;
+    const LayerInfo::CellInfo& ci = li.cellInfo(thetaID);
+    double zpos = (ci.edge.low + ci.edge.high) * 0.5 - ci.volumeZ;
 
-    auto pos = positionFromRThetaPhi(radius, theta(cID), phi(cID));
-
-    // return the position with corrected z coordinate to match to the geometric center
+    auto pos = positionFromRThetaPhi(li.radius, theta(cID), phi(cID));
     return Vector3D(pos.x(), pos.y(), zpos);
   }
 
@@ -121,11 +123,13 @@ namespace DDSegmentation {
     // determine theta bins and cell edges for each layer
     for (uint i_layer = 0; LayerInfo& li : out) {
       defineCellEdges(li, i_layer);
+      defineVolIDMappings(li, i_layer);
       ++i_layer;
     }
     return out;
   }
 
+  // Define cell edges in z-axis for the given layer.
   void FCCSWHCalPhiTheta_k4geo::defineCellEdges(LayerInfo& li, const unsigned int layer) const {
     // Helper to find the z-coordinate corresponding to a theta bin number.
     auto binToZ = [&](int ibin) {
@@ -137,7 +141,7 @@ namespace DDSegmentation {
     // <--- start from theta bin outside the HCal theta range
     int ibin = positionToBin(0.02, gridSizeTheta(), offsetTheta());
     // Go in increasing theta bin number, which corresponds to a
-    // decreasing z-coordinate.  So we start remembering bin numbesr
+    // decreasing z-coordinate.  So we start remembering bin numbers
     // once the z-coordinate is less than the maximum and stop once the
     // z-coordinate is less than the minimum.
     for (;; ++ibin) {
@@ -208,6 +212,122 @@ namespace DDSegmentation {
       const LayerInfo::Edge& edge = li.cellInfo(bin).edge;
       dd4hep::printout(dd4hep::DEBUG, "FCCSWHCalPhiTheta_k4geo", "Layer %d cell theta bin: %d, edges: %.2f - %.2f cm",
                        layer, bin, edge.low, edge.high);
+    }
+  }
+
+  // Define mapping between cells and dd4hep volumes.
+  void FCCSWHCalPhiTheta_k4geo::defineVolIDMappings(LayerInfo& li, const unsigned int layer) const {
+    // Get information from dd4hep.
+    dd4hep::Detector* dd4hepgeo = &(dd4hep::Detector::getInstance());
+    const DetElementObject& de = *dd4hepgeo->readout(this->name()).segmentation().detector();
+    VolumeManager vman_glob = VolumeManager::getVolumeManager(*dd4hepgeo);
+    VolumeManager vman = vman_glob.subdetector(de.id);
+
+    // Process a contiguous set of theta bins.
+    // zmin is the minimum z-coordinate of the range.
+    // layernum is the dd4hep layer number (different from the layer number
+    // used in the segmentation).
+    // thetaBins is the set of bins to process.
+    auto scanRows = [&](double zmin, int layernum, std::span<const int> thetaBins) {
+      // Find the DetectorElement corresponding to the layer.
+      auto layer_it = de.children.find("layer" + std::to_string(layernum));
+      if (layer_it == de.children.end()) {
+        std::abort();
+      }
+
+      // Number of volumes (rows) to process.
+      size_t nrows = layer_it->second.children().size();
+
+      // Fill in the fields of a VolumeID.
+      VolumeID vID = 0;
+      decoder()->set(vID, m_systemIndex, de.id);
+      dd4hep::PlacedVolume placement = layer_it->second.placement();
+      for (const auto& [name, val] : placement.volIDs()) {
+        decoder()->set(vID, name, val);
+      }
+
+      // We are going to step through each volume in order of increasing z.
+      // In the barrel and positive endcap, this corresponds to increasing
+      // row index, but the other way around in the negative endcap.
+      // We are going to match the volumes with cells.  However, increasing
+      // cell indexes correspond to decreasing
+      // z position, so we step through the cell list in reverse order,
+      // to also get them in order of increasing z.
+      // We keep track of the cell we're looking at in itbin and its edges
+      // in edges.  For each cell, we examine all the rows with center
+      // within the cell and choose the one that's closest to the center
+      // of the cell.
+
+      // Iterator of the cell we're looking at.  Start off of the end.
+      auto itbin = thetaBins.end();
+
+      // Edges of the cell we're looking it.  Start with an empty cell.
+      LayerInfo::Edge edge{zmin, zmin};
+
+      // The z-position of the row which is so far closest to the
+      // center of the cell.
+      double last_zpos = zmin - 100;
+
+      // Step through rows.  In increasing order in the barrel/positive endcap,
+      // in decreasing order in the negative endcap.  In all cases, this
+      // corresponds to increasing z.
+      for (size_t ir0 = 0; ir0 < nrows; ++ir0) {
+        int ir = ir0;
+        if (m_detLayout == 1 && zmin < 0)
+          ir = nrows - 1 - ir;
+
+        // Make the volume ID for this row and find the position of its center.
+        decoder()->set(vID, m_rowIndex, ir);
+        VolumeManagerContext* vc = vman.lookupContext(vID);
+        double zpos = vc->localToWorld({0, 0, 0}).Z();
+
+        if (zpos < edge.low)
+          continue; // We haven't gotten to the current cell yet.
+
+        if (zpos > edge.high) {
+          // We've moved past the current cell.  Stop if we've reached the end;
+          // otherwise move to the next cell.
+          if (itbin == thetaBins.begin())
+            break;
+          --itbin;
+
+          // Check that this cell matches the row.
+          edge = li.cellInfo(*itbin).edge;
+          if (zpos < edge.low)
+            continue;
+          if (zpos > edge.high)
+            break;
+
+          // Initialize the information for this cell from this row.
+          // We'll update later if we find another row closer to the center.
+          li.cellInfo(*itbin).volumeID = vID;
+          li.cellInfo(*itbin).volumeZ = zpos;
+          last_zpos = zpos;
+        } else {
+          // We found another row matching the current cell.
+          // See if it closer to the cell center than the last row we saw.
+          // If so, update.
+          assert(itbin != thetaBins.end());
+          double center = (edge.low + edge.high) / 2;
+          if (std::abs(zpos - center) < std::abs(last_zpos - center)) {
+            li.cellInfo(*itbin).volumeID = vID;
+            li.cellInfo(*itbin).volumeZ = zpos;
+            last_zpos = zpos;
+          }
+        }
+      }
+    };
+
+    // Process the ranges of bins.
+    if (m_detLayout == 0) {
+      // Barrel
+      scanRows(li.zmin, layer, li.thetaBins);
+    } else {
+      // positive endcap
+      scanRows(li.zmin, layer + 1, std::ranges::take_view(li.thetaBins, li.thetaBins.size() / 2));
+
+      // negative endcap
+      scanRows(-li.zmax, -(layer + 1), std::ranges::drop_view(li.thetaBins, li.thetaBins.size() / 2));
     }
   }
 
@@ -781,6 +901,14 @@ namespace DDSegmentation {
     }
 
     return cTheta;
+  }
+
+  // Determine the volume ID containing a cellID.
+  VolumeID FCCSWHCalPhiTheta_k4geo::volumeID(const CellID& cID) const {
+    uint layer = decoder()->get(cID, m_layerIndex);
+    int thetaID = decoder()->get(cID, m_thetaIndex);
+    const LayerInfo& li = getLayerInfo(layer);
+    return li.cellInfo(thetaID).volumeID;
   }
 
 } // namespace DDSegmentation
