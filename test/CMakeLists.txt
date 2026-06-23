@@ -10,6 +10,11 @@
 #     [PROPERTIES <key> <val> ...] # passed verbatim to set_tests_properties
 #   )
 function(add_ddsim_gun_test compact_file)
+  # ddsim requires Geant4; skip these tests when k4geo is built without it.
+  if(NOT K4GEO_USE_GEANT4)
+    return()
+  endif()
+
   cmake_parse_arguments(ARG
     ""
     "NAME;N_EVENTS;FILTER_SCRIPT"
@@ -107,7 +112,7 @@ add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o1_v02
 
 #--------------------------------------------------
 # test for IDEA o1 v04
-if(DCH_INFO_H_EXIST)
+if(DCH_INFO_H_EXIST AND K4GEO_USE_GEANT4)
 SET( test_name "test_IDEA_o1_v04" )
 add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o1_v04/IDEA_o1_v04.xml -G -N=1 --gun.distribution uniform --gun.particle geantino --random.seed 1988301045 --steeringFile ${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o1_v03.py)
 SET_TESTS_PROPERTIES( ${test_name} PROPERTIES TIMEOUT 900)
@@ -123,6 +128,7 @@ endif()
 
 #--------------------------------------------------
 # test for ARC o1 v01
+if(K4GEO_USE_GEANT4)
 SET( test_name "test_ARC_o1_v01_run" )
 add_test(NAME ${test_name} COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/../example/arcfullsim.py --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/compact/ARC_standalone_o1_v01.xml --runType batch  )
 SET_TESTS_PROPERTIES( ${test_name} PROPERTIES TIMEOUT 120)
@@ -130,6 +136,7 @@ SET_TESTS_PROPERTIES( ${test_name} PROPERTIES TIMEOUT 120)
 SET( test_name "test_ARC_o1_v01_overlap" )
 add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/compact/ARC_standalone_o1_v01.xml --runType run --part.userParticleHandler= --macroFile=${CMAKE_CURRENT_SOURCE_DIR}/../utils/overlap.mac  )
 SET_TESTS_PROPERTIES( ${test_name} PROPERTIES TIMEOUT 240)
+endif()
 
 #--------------------------------------------------
 # test for ALLEGRO o1 v02
@@ -139,7 +146,7 @@ add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/ALLEGRO/compact/ALLEGRO_
 
 #--------------------------------------------------
 # test for DCH o1 v02
-if(DCH_INFO_H_EXIST)
+if(DCH_INFO_H_EXIST AND K4GEO_USE_GEANT4)
 SET( test_name "test_DCH_o1_v02_overlap" )
 add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/compact/DCH_standalone_o1_v02.xml --runType run --part.userParticleHandler= --macroFile=${CMAKE_CURRENT_SOURCE_DIR}/../utils/overlap.mac  )
 set_tests_properties( ${test_name} PROPERTIES TIMEOUT 400)
