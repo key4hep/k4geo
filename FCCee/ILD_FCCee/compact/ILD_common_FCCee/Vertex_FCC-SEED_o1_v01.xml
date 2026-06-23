@@ -1,0 +1,90 @@
+<!-- Changes :
+   o1_v01 : First version of the FCC-SEED vertex detector. Barrel: 5 layers of curved, overlapping sensors. Endcaps: Adapted from CLD, single-hit
+-->
+
+<lccdd>
+    <!-- 
+        Authors: Armin Ilg (armin.ilg@cern.ch)
+        FCC-SEED vertex detector with curved, overlapping sensors in the barrel and single-hit endcaps adapted from CLD. 
+        Based on design by FCC-SEED team. 
+        EoI: https://indico.cern.ch/event/1529896/contributions/6436857/attachments/3036741/5363070/Expression_Of_Interest_for_a_Vertex_detector_at_FCCee-january2025.pdf
+        Latest presentation: https://indico.cern.ch/event/1599906/contributions/7019099/ 
+    -->
+
+    <define>
+        <constant name="VertexDisksAcceptanceLimit" value="0.135*rad"/>
+    </define>
+
+    <comment>Tracking detectors</comment>
+    <detectors>
+       <!-- The envelope consists of a tube generally surrounding the vertex barrel and endcap disks, subtracted by a
+            cone describing the upper acceptance of the LumiCal, about 110 mrad in this version of the detector.
+       -->
+        <detector name="Vertex" type="DD4hep_SubdetectorAssembly" vis="VXDVis">
+                <shape type="BooleanShape" operation="Subtraction" material="Air">
+                    <shape type="BooleanShape" operation="Subtraction" material="Air">
+                        <shape type="BooleanShape" operation="Subtraction" material="Air">
+                            <shape type="Tube" rmin="CentralBeamPipe_rmax+BeamPipeWidth" rmax="VTXOB_r_max_layer+VTXOB_rmax_clearance" dz="Vertex_half_length"/>
+                            <shape type="Cone" rmin1="0" rmax1="tan(VertexClearanceTheta)*2000.0*mm" rmin2="0" rmax2="0" z="2000.0*mm/2."/>
+                            <position x="0" y="0" z="-2000.0*mm/2." />
+                        </shape>                            
+                        <shape type="Cone" rmin1="0" rmax1="0" rmin2="0" rmax2="tan(VertexClearanceTheta)*2000.0*mm" z="2000.0*mm/2."/>
+                        <position x="0" y="0" z="2000.0*mm/2." />
+                    </shape>
+                    <shape type="Tube" rmin="0" rmax="CentralBeamPipe_rmax+BeamPipeWidth" dz="Vertex_half_length"/> <comment> Cut out the central beam pipe area to avoid overlaps </comment>
+                    <position x="0" y="0" z="0"/>
+                </shape>
+                <!-- <shape type="BooleanShape" operation="Union" material="Air">
+                    <shape type="Tube" rmin="CentralBeamPipe_rmax+BeamPipeWidth" rmax="24.0*mm" dz="90.0*mm+15.0*mm"/> <comment> +15mm to include hybrid flex </comment>
+                    <shape type="Tube" rmin="24.0*mm" rmax="VTXOB_r_max_layer+VTXOB_rmax_clearance" dz="Vertex_half_length"/>
+                </shape> -->
+            <comment>Vertex Assembly</comment>
+            <composite name="Kapton_on_beampipe"/>
+            <composite name="VertexBarrel"/>
+            <composite name="VertexInnerBarrel_tube"/>
+            <composite name="VertexVerticalCable"/>
+            <composite name="VertexEndcap"/>
+
+        </detector>
+    </detectors>
+
+    <display>
+        <vis name="SiVertexModuleVis"    alpha="1.0" r="1" g="1"    b="0.6"     showDaughters="true"  visible="false"/>
+        <vis name="SiVertexSensitiveVis" alpha="1.0" r="1" g="0.2"  b="0.2"     showDaughters="true"  visible="true"/>
+        <vis name="SiVertexPassiveVis"   alpha="1.0" r="0.274" g="0.274"  b="0.274"       showDaughters="true"  visible="true"/>
+        <vis name="SiVertexCableVis"     alpha="1.0" r="0.85" g="0.53"    b="0.4"       showDaughters="true"  visible="true"/>
+        <vis name="FlexVis"              alpha="1.0" r="0.0" g="1"        b="0.4"       showDaughters="true"  visible="true"/>
+        <vis name="OptoElVis"            alpha="1.0" r="1" g="0.6"    b="0.0"     showDaughters="true"  visible="true"/>
+        <vis name="KaptonVis"            alpha="1.0" r="1.0" g="191/255"    b="0.0"       showDaughters="true"  visible="true"/>
+        <vis name="CarbonVis"            alpha="1.0" r="0.0" g="0.0"     b="0.4"       showDaughters="true"  visible="true"/>
+        <vis name="VTXSensitiveVis"      alpha="1.0" r="1.0"     g="1.0"     b="0.0"   showDaughters="true"  visible="true"/>
+        <vis name="VTXPeripheryVis"      alpha="1.0" r="200/255" g="254/255" b="0.0"   showDaughters="true"  visible="true"/>    
+        <vis name="VTXSupportRingVis"    alpha="1.0" r="1.0" g="0.0"      b="0.4"       showDaughters="true"  visible="true"/>
+        <vis name="SiVertexAir"          alpha="1.0" r="0" g="0"    b="0"       showDaughters="false"  visible="false"/>
+        <vis name="VTXIBTubeVis"  	     alpha="0.8" r="0.25"   	g="0.25"    b="0.2"   showDaughters="true"  visible="true"/>
+        <vis name="VTXCarbonFoamVis"     alpha="0.5" r="0.2" 	g="0.2"     b="0.2"   showDaughters="true"  visible="true"/>
+    </display>
+
+    <!--  Definition of the readout segmentation/definition  -->
+    <readouts>
+        <readout name="VertexBarrelCollection">
+            <id>${GlobalTrackerReadoutID}</id>
+        </readout>
+        <readout name="VertexEndcapCollection">
+            <id>${GlobalTrackerReadoutID}</id>
+        </readout>
+        <readout name="VertexDummyCollection">    <comment> For supports, should not have any hits but better safe than sorry </comment>
+            <id>${GlobalTrackerReadoutID}</id>
+        </readout>  
+    </readouts>
+
+    <comment> Vertex barrel </comment>
+    <include ref="Vertex_FCC-SEED_barrel_o1_v01.xml"/>
+    <include ref="Vertex_kapton_on_beampipe_o1_v01.xml"/>
+    <include ref="Vertex_inner_barrel_support_tube_o1_v01.xml"/>
+
+    <include ref="Vertex_inner_barrel_vertical_cable_o1_v01.xml"/>
+
+    <comment> Vertex endcap </comment>
+    <include ref="Vertex_FCC-SEED_endcap_o1_v01.xml"/>
+</lccdd>

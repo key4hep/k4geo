@@ -45,14 +45,24 @@
 
   <constant name="CompSol_min_z" value="1230*mm"/>
 
-  
-  <constant name="Vertex_inner_radius" value="12.5*mm"/>
+  <!-- Vertex variables. Adjustable -->  
+  <constant name="Vertex_inner_radius" value="CentralBeamPipe_rmax+BeamPipeWidth"/> <!-- Envelope starts right outside beam pipe, needed if vertex goes on top of beam pipe (if possible) -->
   <constant name="Vertex_outer_radius" value="111*mm"/>
-  <constant name="Vertex_half_length" value="302*mm"/>
+  <constant name="Vertex_half_length" value="302*mm"/> <!-- Defines envelope for vertex endcap and of the placement of the disks -->
   <!-- cone to describe the upper acceptance of the LumiCal -->
   <constant name="Vertex_LumiCal_Clearence" value="110*mrad"/>
+  <constant name="VertexClearanceTheta" value="0.1035*rad"/> <!-- Clearance of vertex detector in mrad from IP -->
   <!-- END vertex info copied from CLD_o2_v07.xml -->
 
+  <!-- Changes necessary for FCC-SEED -->
+  <constant name="VertexAcceptanceLimit" value="0.125*rad"/> <!-- Acceptance limit of vertex detector, used to define number of modules per stave  -->
+  <constant name="VTXOB_r_max_layer" value="Vertex_outer_radius"/> 
+  <constant name="VTXOB_rmax_clearance" value="0.0*mm"/>
+  <constant name="VTX_r_max" value="Vertex_outer_radius"/>
+  <constant name="env_safety" value="0.1*mm"/>
+  <constant name="VTXIB_SEED_Kapton_beampipe_thickness" value="0.1*mm"/>
+
+  <!-- end of changes for FCC-SEED -->
 
   <!-- _prime marks the coordinate system along the beamline instead of the detector coordinate frame -->
   <constant name="LumiCal_min_z_prime" value="1074*mm"/>

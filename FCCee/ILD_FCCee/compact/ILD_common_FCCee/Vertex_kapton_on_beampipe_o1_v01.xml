@@ -1,0 +1,23 @@
+<lccdd>
+    <comment> Kapton layer on top of beam pipe before first layer </comment>
+
+    <define> 
+        <constant name="VTXIB_SEED_Kapton_beampipe_r" value="CentralBeamPipe_rmax+BeamPipeWidth+VTXIB_SEED_Kapton_beampipe_thickness"/>
+    </define>
+
+    <detectors>
+        <detector name="Kapton_on_beampipe" type="VertexBarrel_detailed_o1_v03" vis="KaptonVis" id="-2" readout="VertexDummyCollection" region="VertexBarrelRegion">
+            <envelope vis="KaptonVis">
+                <shape type="Assembly"/>
+            </envelope>
+
+            <stave name="Kapton_on_beampipe_stave" r="VTXIB_SEED_Kapton_beampipe_r" length="2.*VTXIB_SEED_half_length1">
+                <components name="Kapton_on_beampipe" length="VTXIB_SEED_half_length1">
+                    <component thickness="VTXIB_SEED_Kapton_beampipe_thickness" width="2.*pi*VTXIB_SEED_Kapton_beampipe_r" material="Kapton" isCurved="true" vis="KaptonVis"/>
+                </components>
+            </stave>
+
+            <layer nLadders="1" r="VTXIB_SEED_Kapton_beampipe_r" id="0" name="Kapton_on_beampipe_stave" nmodules="1" motherVolThickness="VTXIB_SEED_Kapton_beampipe_thickness"/>
+        </detector>
+    </detectors>
+</lccdd>
