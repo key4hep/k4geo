@@ -17,7 +17,7 @@
                 </components>
             </stave>
 
-            <layer nLadders="1" r="VTXIB_SEED_Kapton_beampipe_r" id="0" name="Kapton_on_beampipe_stave" nmodules="1" motherVolThickness="VTXIB_SEED_Kapton_beampipe_thickness" ignore="VTXIB_r_min_layer != VTXIB_SEED_Kapton_beampipe_r+VTXIB_SEED_Kapton_beampipe_thickness"/> <comment> ignore if the first layer of the vertex barrel is not directly on top of the beam pipe </comment>
+            <layer nLadders="1" r="VTXIB_SEED_Kapton_beampipe_r" id="0" name="Kapton_on_beampipe_stave" nmodules="1" motherVolThickness="VTXIB_SEED_Kapton_beampipe_thickness" ignore="VTXIB_r_min_layer > VTXIB_SEED_Kapton_beampipe_r+VTXIB_SEED_Kapton_beampipe_thickness + 0.1*mm"/> <comment> ignore if the first layer of the vertex barrel is not directly on top of the beam pipe </comment>
         </detector>
     </detectors>
 </lccdd>
