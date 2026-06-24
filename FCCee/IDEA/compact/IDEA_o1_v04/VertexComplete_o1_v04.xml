@@ -508,7 +508,7 @@
             </comment>
         </detector>
 
-        <detector name="VertexBarrel" type="VertexBarrel_detailed_o1_v03" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelCollection"  region="VTXBRegion">
+        <detector name="VertexBarrel" type="VertexBarrel_detailed_o1_v03" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelCollection"  region="VertexBarrelRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -850,9 +850,12 @@
             <layer nLadders="VTXOB_nStaves2" phi0="0.0" r="VTXOB_r2" offset="VTXOB_offset2" id="nInnerVertexLayers+1" nmodules="VTXOB_nModules2" name="VTXOBStave2" step="VTXOB_mod_z_spacing" motherVolThickness="3.0*cm" motherVolRmin="VTXOB_r2-VTXOB_terminalPart2_thickness1-12.771*mm" motherVolLength="VTXOB_halfLength2_passive" z_offset="VTXOB_zoffset2"/>
         </detector>
 
-    
+        <comment> Kapton layer on the beampipe, to separate the first vertex layer electrically from the beam pipe if the first layer is at r=11.8 mm </comment>
+        <include ref="../../../IDEA/compact/IDEA_o1_v04/Vertex_kapton_on_beampipe_o1_v01.xml"/>
+
+
         <comment> Inner vertex tube just outside last inner vertex layer (for both normal and curved vertex) </comment>
-        <detector name="VertexInnerBarrel_tube" type="VertexBarrel_detailed_o1_v02" vis="VXDVis" id="-2" readout="VertexDummyCollection"  region="VTXBRegion">
+        <detector name="VertexInnerBarrel_tube" type="VertexBarrel_detailed_o1_v02" vis="VXDVis" id="-2" readout="VertexDummyCollection"  region="VertexBarrelRegion">
             <type_flags type="DetType_SUPPORT"/>
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
@@ -865,21 +868,6 @@
             </stave>
 
             <layer nLadders="1" r="VTXIB_tube_r" id="0" name="VertexInnerBarrel_tube_stave" nmodules="1" motherVolThickness="VTXIB_tube_thickness"/>
-        </detector>
-
-        <comment> Kapton layer on top of beam pipe before first layer </comment>
-        <detector name="Kapton_on_beampipe" type="VertexBarrel_detailed_o1_v03" vis="KaptonVis" id="-3" readout="VertexDummyCollection" region="VTXBRegion">
-            <envelope vis="KaptonVis">
-                <shape type="Assembly"/>
-            </envelope>
-
-            <stave name="Kapton_on_beampipe_stave" r="VTXIB_Kapton_beampipe_r" length="2.*VTXIB_Kapton_beampipe_halfLength">
-                <components name="Kapton_on_beampipe" length="VTXIB_Kapton_beampipe_halfLength">
-                    <component thickness="VTXIB_Kapton_beampipe_thickness" width="2.*pi*VTXIB_Kapton_beampipe_r" material="Kapton" isCurved="true" vis="KaptonVis"/>
-                </components>
-            </stave>
-
-            <layer nLadders="1" r="VTXIB_Kapton_beampipe_r" id="-3" name="Kapton_on_beampipe_stave" nmodules="1" motherVolThickness="VTXIB_Kapton_beampipe_thickness" ignore="VTXIB_r_min_layer == 13.7*mm"/>
         </detector>
 
         <comment> Vertex inner barrel support structure and cooling cones imported via DDCAD. Disabled because of overlaps within and with Vertex detector </comment>
@@ -917,7 +905,7 @@
         </detector>
 
         <comment> Vertex disks </comment>
-        <detector id="DetID_VXD_Disks" name="VertexDisks" vis="VXDVis" type="VertexEndcap_detailed_o1_v03" readout="VertexEndcapCollection" reflect="true" region="VTXDRegion">
+        <detector id="DetID_VXD_Disks" name="VertexDisks" vis="VXDVis" type="VertexEndcap_detailed_o1_v03" readout="VertexEndcapCollection" reflect="true" region="VertexEndcapRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -1056,7 +1044,7 @@
         </detector>
 
         <comment> Disk support proxy volumes  </comment>
-        <detector name="VertexDisks_support" type="VertexBarrel_detailed_o1_v02" vis="VXDVis" id="-1" readout="VertexDummyCollection"  region="VTXDRegion">
+        <detector name="VertexDisks_support" type="VertexBarrel_detailed_o1_v02" vis="VXDVis" id="-1" readout="VertexDummyCollection"  region="VertexEndcapRegion">
             <type_flags type="DetType_SUPPORT"/>
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
