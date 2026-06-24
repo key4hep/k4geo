@@ -52,8 +52,6 @@
         <constant name="VTXIB_SEED_half_length4" value="VTXIB_SEED_nModules4*VTXIB_SEED_sensor_z/2."/>
         <constant name="VTXIB_SEED_half_length5" value="VTXIB_SEED_nModules5*VTXIB_SEED_sensor_z/2."/>
 
-        <constant name="VTXIB_Kapton_beampipe_halfLength" value="VTXIB_SEED_half_length1"/>
-
         <constant name="VTXIB_SEED_zoffset1" value="0.0*mm"/> 
         <constant name="VTXIB_SEED_zoffset2" value="-0.5*mm"/> <comment> To make sure no gap at theta=90 degrees exists </comment>
         <constant name="VTXIB_SEED_zoffset3" value="+0.5*mm"/>
@@ -164,8 +162,10 @@
         <constant name="Support_ring_offset_phi3" value= "(VTXIB_SEED_sensor_phi+Flex_width-Support_ring_width3/2.)/VTXIB_SEED_curvature3*rad"/>
         <constant name="Support_ring_offset_phi4" value= "(VTXIB_SEED_sensor_phi+Flex_width-Support_ring_width4/2.)/VTXIB_SEED_curvature4*rad"/>
 
-        <constant name="VTXIB_tube_r" value="VTXIB_SEED_curvature5+2.*VTXIB_SEED_total_sensor_thickness+Support_longeron_betweenSensors_thickness+Support_longeron_betweenSensors_tolerance+Flex_total_thickness+7.*VTXIB_curved_tolerance_r"/> 
-
+        <comment> Variables used for imported xmls </comment>
+        <constant name="VTXIB_tube_r"                       value="VTXIB_SEED_curvature5+2.*VTXIB_SEED_total_sensor_thickness+Support_longeron_betweenSensors_thickness+Support_longeron_betweenSensors_tolerance+Flex_total_thickness+7.*VTXIB_curved_tolerance_r"/> 
+        <constant name="VTXIB_Kapton_beampipe_halfLength"   value="VTXIB_SEED_half_length1"/>
+        <constant name="VTXIB_tube_half_length"             value="VTXIB_SEED_half_length5"/>
     </define>
 
     <!-- Inner vertex detector made of overlapping, curved sensors -->
