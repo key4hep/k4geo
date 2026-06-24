@@ -47,6 +47,7 @@
 
   <!-- Vertex variables. Adjustable -->  
   <constant name="Vertex_inner_radius" value="CentralBeamPipe_rmax+BeamPipeWidth"/> <!-- Envelope starts right outside beam pipe, needed if vertex goes on top of beam pipe (if possible) -->
+  <constant name="VTXIB_r_min_layer" value="11.8*mm"/> <!-- Position of the first layer of the vertex barrel -->
   <constant name="Vertex_outer_radius" value="111*mm"/>
   <constant name="Vertex_half_length" value="302*mm"/> <!-- Defines envelope for vertex endcap and of the placement of the disks -->
   <!-- cone to describe the upper acceptance of the LumiCal -->

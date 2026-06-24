@@ -21,7 +21,7 @@
         <constant name="VTXIB_curved_tolerance_r" value="0.100*mm"/> <!-- Needed for curved inner vertex as otherwise overlaps would be detected. -->
 
         <comment> FCC-SEED global crucial layer properties innermost positions </comment>
-        <constant name="VTXIB_SEED_r1" value="CentralBeamPipe_rmax+BeamPipeWidth+VTXIB_SEED_Kapton_beampipe_thickness"/>
+        <constant name="VTXIB_SEED_r1" value="VTXIB_r_min_layer"/>
         <constant name="VTXIB_SEED_r2" value="24.0*mm"/>
         <constant name="VTXIB_SEED_r3" value="36.0*mm"/>
         <constant name="VTXIB_SEED_r4" value="48.0*mm"/>
@@ -51,6 +51,8 @@
         <constant name="VTXIB_SEED_half_length3" value="VTXIB_SEED_nModules3*VTXIB_SEED_sensor_z/2."/>
         <constant name="VTXIB_SEED_half_length4" value="VTXIB_SEED_nModules4*VTXIB_SEED_sensor_z/2."/>
         <constant name="VTXIB_SEED_half_length5" value="VTXIB_SEED_nModules5*VTXIB_SEED_sensor_z/2."/>
+
+        <constant name="VTXIB_Kapton_beampipe_halfLength" value="VTXIB_SEED_half_length1"/>
 
         <constant name="VTXIB_SEED_zoffset1" value="0.0*mm"/> 
         <constant name="VTXIB_SEED_zoffset2" value="-0.5*mm"/> <comment> To make sure no gap at theta=90 degrees exists </comment>

@@ -13,6 +13,7 @@
   <includes>
     <gdmlFile  ref="../ILD_common_v02/elements.xml"/>
     <gdmlFile  ref="../ILD_common_v02/materials.xml"/>
+    <gdmlFile  ref="../ILD_common_FCCee/materials.xml"/>
   </includes>
 
   <define>

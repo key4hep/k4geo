@@ -55,6 +55,7 @@ using dd4hep::Translation3D;
 using dd4hep::Trapezoid;
 using dd4hep::Tube;
 using dd4hep::Volume;
+using dd4hep::WARNING;
 
 using dd4hep::Trd1;
 using dd4hep::rec::SurfaceType;
@@ -65,7 +66,6 @@ using dd4hep::rec::volSurfaceList;
 static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector sens) {
 
   xml_det_t x_det = e;
-  int m_id = 0;
   std::string det_name = x_det.nameStr();
 
   DetElement sdet(det_name, x_det.id());
@@ -134,6 +134,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     double length = 0.;
     vector<Volume> volumes;
     vector<int> nsegments;
+    int nSensitivePerModule = 0;
+    int nGroupingModules;
   };
 
   // --- Module information struct ---
@@ -154,7 +156,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
   list<stave_information> stave_information_list;
 
   // --- Collect stave(s) information
-  for (xml_coll_t mi(x_det, _U(stave)); mi; ++mi, ++m_id) {
+  for (xml_coll_t mi(x_det, _U(stave)); mi; ++mi) {
     xml_comp_t x_stave = mi;
 
     stave_information m;
@@ -258,7 +260,7 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                            theDetector.material(component.materialStr()));
         } else {
           Box ele_box = Box(thickness / 2., component.width() / 2., component.length() / 2.);
-          ele_vol = Volume(component.nameStr("vol") + _toString(iEndOfStave, "_%d"), ele_box,
+          ele_vol = Volume(endOfStave.name + _toString(iEndOfStave, "_%d"), ele_box,
                            theDetector.material(component.materialStr()));
         }
         ele_vol.setAttributes(theDetector, x_det.regionStr(), x_det.limitsStr(), component.visStr());
@@ -281,6 +283,10 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
       sensor.nx = getAttrOrDefault(
           xml_comp_t(c_sensor), _Unicode(nx),
           int(1)); // Duplicate entries nx times in phi (local x) direction, default is 1 (no duplication)
+      sensor.nGroupingModules =
+          getAttrOrDefault(xml_comp_t(c_sensor), _Unicode(nGroupingModules),
+                           int(1)); // Number of modules that are together using the same module id, but different
+                                    // sensor ids (to more efficiently use GlobalTrackerReadoutID bits)
       double default_sensor_thickness = xml_comp_t(c_sensor).thickness();
 
       // Try to load sensor components from external include file first
@@ -337,6 +343,9 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
                                             component.nameStr() + _toString(iSensor, "_%d"),
                                             component.nameStr() + _toString(iSensor, "_insensitive_above_%d")};
         vector<bool> isSensitive_split = {false, component.isSensitive(), false};
+        sensor.nSensitivePerModule +=
+            component.isSensitive() ? 1 : 0; // Count how many sensitive components there are per module
+
         vector<double> rs = {component.r(0), component.r(0) + sensor_insensitive_thickness_below,
                              component.r(0) + sensor_insensitive_thickness_below + sensitive_thickness};
 
@@ -430,6 +439,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     if (x_layer.attr<bool>(_Unicode(ignore), false))
       continue; // Skip layers marked to be ignored. This can be used for example to easily switch
                 // off layers that are outside the envelopes of the detector
+    else
+      nLayers++;
 
     int layer_id = x_layer.id();
     double dr = x_layer.dr(0); // Spacing in r for every second stave.
@@ -452,7 +463,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
     std::string layer_name = _toString(layer_id, "layer%d");
 
-    PlacedVolume whole_layer_volume_placed;
     Volume whole_layer_volume_v;
     Assembly whole_layer_volume_a;
     if (motherVolThickness > 0.0) {
@@ -510,7 +520,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
       string stave_name = _toString(iStave, "stave%d");
 
-      PlacedVolume whole_stave_volume_placed;
       Volume whole_stave_volume_v;
       Assembly whole_stave_volume_a;
       if (m.motherVolThickness > 0.0 && m.motherVolWidth > 0.0) {
@@ -750,12 +759,15 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     iModuleTot_map[layer_id] += iModuleTot;
   }
 
-  pv.addPhysVolID("system", x_det.id());
-
-  sdet.setAttributes(theDetector, envelope, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
+  if (nLayers > 0) {
+    pv.addPhysVolID("system", x_det.id());
+    sdet.setAttributes(theDetector, envelope, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
+  } else {
+    printout(WARNING, det_name,
+             "No layer found for this detector. Did you ignore all layers using 'ignore' in layer definition?");
+  }
 
   printout(INFO, det_name, "Building of detector successfully completed");
-
   return sdet;
 }
 

@@ -50,13 +50,13 @@ using dd4hep::Transform3D;
 using dd4hep::Translation3D;
 using dd4hep::Tube;
 using dd4hep::Volume;
+using dd4hep::WARNING;
 
 static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector sens) {
   xml_det_t x_det = e;
   string det_name = x_det.nameStr();
   bool reflect = x_det.reflect(false);
   DetElement sdet(det_name, x_det.id());
-  int m_id = 0;
   PlacedVolume pv;
 
   // --- create an envelope volume and position it into the world ---------------------
@@ -123,11 +123,13 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     double sensor_length;
     vector<Volume> sensor_volumes;
     Material sensor_material;
+    int nSensitivePerModule = 0;
+    int nGroupingModules;
   };
   list<module_information> module_information_list;
 
   // --- Collect module(s) information
-  for (xml_coll_t mi(x_det, _U(module)); mi; ++mi, ++m_id) {
+  for (xml_coll_t mi(x_det, _U(module)); mi; ++mi) {
     xml_comp_t x_mod = mi;
 
     module_information m;
@@ -200,6 +202,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     m.sensor_thickness = xml_comp_t(c_sensor).thickness();
     m.sensor_z_offset = xml_comp_t(c_sensor).z_offset(0);
     m.sensor_name = xml_comp_t(c_sensor).nameStr("sensor");
+    m.nGroupingModules =
+        getAttrOrDefault(xml_comp_t(c_sensor), _Unicode(nGroupingModules),
+                         int(1)); // Number of modules that are together using the same module id, but different sensor
+                                  // ids (to more efficiently use GlobalTrackerReadoutID bits)
 
     // Try to load sensor components from external include file first
     bool use_include = false;
@@ -255,6 +261,9 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
                                           component.nameStr("sensor") + _toString(iSensor, "_%d"),
                                           component.nameStr("sensor") + _toString(iSensor, "_insensitive_above_%d")};
       vector<bool> isSensitive_split = {false, component.isSensitive(), false};
+      m.nSensitivePerModule +=
+          component.isSensitive() ? 1 : 0; // Count how many sensitive components there are per module
+
       vector<double> z_offsets = {
           m.sensor_z_offset + component.z_offset(0), m.sensor_z_offset + component.z_offset(0) + thicknesses_split[0],
           m.sensor_z_offset + component.z_offset(0) + thicknesses_split[0] + thicknesses_split[1]};
@@ -309,6 +318,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   }
 
   printout(INFO, det_name, "Building of detector ...");
+  int nLayers = 0;
   for (auto& side : sides) {
     string side_name = _toString(side, "side%d");
 
@@ -325,6 +335,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
       if (x_layer.attr<bool>(_Unicode(ignore), false))
         continue; // Skip layers marked to be ignored. This can be used for example to easily switch
                   // off layers that are outside the envelopes of the detector
+      else
+        nLayers++;
 
       int layer_id = x_layer.id();
       double rmin = x_layer.rmin();
@@ -498,6 +510,10 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
             // Place sensor
             for (int iModule = 0; iModule < nmodules; iModule++) {
+              int iModule_VolID =
+                  int(iModule_tot / m.nGroupingModules); // To more efficiently use GlobalTrackerReadoutID bits, use the
+                                                         // same module id for every nGroupingModules modules and
+                                                         // distinguish them by the sensor id instead
               string module_name = stave_name + "_" + m.sensor_name + _toString(iModule_tot, "_module%d");
               Assembly module_assembly(module_name);
 
@@ -507,11 +523,14 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
               else
                 pv = whole_stave_volume_a.placeVolume(module_assembly);
 
-              pv.addPhysVolID("module", iModule_tot);
+              pv.addPhysVolID("module", iModule_VolID);
               DetElement moduleDE(diskDE, module_name, iModule_tot);
               moduleDE.setPlacement(pv);
 
-              int iSensitive = 0;
+              int iSensitive = iModule_tot % m.nGroupingModules *
+                               m.nSensitivePerModule; // To more efficiently use GlobalTrackerReadoutID bits, use the
+                                                      // same module id for every nGroupingModules modules and
+                                                      // distinguish them by the sensor id instead
               for (int i = 0; i < int(m.sensor_volumes.size()); i++) {
                 double z_alternate_module = (iModule % 2 == 0) ? 0.0 : stave_dz;
                 x_pos = m.sensor_offset;
@@ -561,10 +580,15 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
     side_assembly->GetShape()->ComputeBBox();
   }
 
-  sdet.setAttributes(theDetector, envelope, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
-  pv.addPhysVolID("system", x_det.id());
+  if (nLayers > 0) {
+    sdet.setAttributes(theDetector, envelope, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
+    pv.addPhysVolID("system", x_det.id());
+  } else {
+    printout(WARNING, det_name,
+             "No layer found for this detector. Did you ignore all layers using 'ignore' in layer definition?");
+  }
 
-  printout(INFO, det_name, "Building of detector successfully completed.");
+  printout(INFO, det_name, "Building of detector successfully completed");
 
   return sdet;
 }

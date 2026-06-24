@@ -39,8 +39,8 @@
                     <shape type="Tube" rmin="24.0*mm" rmax="VTXOB_r_max_layer+VTXOB_rmax_clearance" dz="Vertex_half_length"/>
                 </shape> -->
             <comment>Vertex Assembly</comment>
-            <composite name="Kapton_on_beampipe"/>
             <composite name="VertexBarrel"/>
+            <composite name="Kapton_on_beampipe"/>
             <composite name="VertexInnerBarrel_tube"/>
             <composite name="VertexVerticalCable"/>
             <composite name="VertexEndcap"/>
