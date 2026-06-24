@@ -88,6 +88,7 @@
     <constant name="VTXIB_r_max_layer"      value="34.0*mm"/>     <!-- Position of the outermost vertex inner barrel layer -->
     <constant name="VTXIB_r_max"            value="50.0*mm"/>     <!-- End of inner vertex = outer radius of inner vertex tube -->
     <constant name="VTXIB_half_length"      value="556.2/2.*mm"/> <!-- 278.1*mm, half length of inner vertex tube -->
+    <constant name="VTXIB_tube_thickness"   value="0.2*mm"/>      <!-- Thickness of the inner vertex tube needed for air-cooling -->
 
     <constant name="VTXOB_r_min_layer"    value="130*mm"/>        <!-- R of the innermost layer of the outer vertex -->
     <constant name="VTXOB_r_max_layer"    value="315*mm"/>        <!-- R of the outermost layer of the outer vertex -->
@@ -103,6 +104,7 @@
     <constant name="VTX_r_min" value="VTXIB_r_min_layer-VTXIB_r_min_clearance"/>  <!-- Not used, just do indicate the vertex detector envelope limits -->
     <constant name="VTX_r_max" value="VTXOB_r_max_layer+VTXOB_rmax_clearance"/>   <!-- Not used, just do indicate the vertex detector envelope limits -->
     <constant name="VTX_z_max" value="VTXD_z_max_total"/>                         <!-- Not used, just do indicate the vertex detector envelope limits -->
+
 
     <!--  Straw tracker parameters    -->
     <constant name="STT_inner_cyl_R_total"          value=" 349.8  * mm "  />

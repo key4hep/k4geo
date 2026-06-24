@@ -84,7 +84,8 @@
     <comment> Kapton layer on the beampipe, to separate the first vertex layer electrically from the beam pipe if the first layer is at r=11.8 mm </comment>
     <include ref="../../../IDEA/compact/IDEA_o1_v04/Vertex_kapton_on_beampipe_o1_v01.xml"/>
 
-    <include ref="Vertex_inner_barrel_support_tube_o1_v01.xml"/>
+    <comment> Inner vertex outer tube, for keeping the air in for air cooling </comment>
+    <include ref="../../../IDEA/compact/IDEA_o1_v04/Vertex_inner_barrel_support_tube_o1_v01.xml"/>
 
     <include ref="Vertex_inner_barrel_vertical_cable_o1_v01.xml"/>
 
