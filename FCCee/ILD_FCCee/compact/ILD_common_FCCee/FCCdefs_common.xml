@@ -57,11 +57,11 @@
 
   <!-- Changes necessary for FCC-SEED -->
   <constant name="VertexAcceptanceLimit" value="0.125*rad"/> <!-- Acceptance limit of vertex detector, used to define number of modules per stave  -->
+  <constant name="VTXIB_SEED_Kapton_beampipe_thickness" value="0.1*mm"/> <!-- Thickness of the Kapton layer on the beampipe. Kapton layer is used if Vertex_inner_radius+VTXIB_SEED_Kapton_beampipe_thickness = VTXIB_r_min_layer -->
   <constant name="VTXOB_r_max_layer" value="Vertex_outer_radius"/> 
   <constant name="VTXOB_rmax_clearance" value="0.0*mm"/>
   <constant name="VTX_r_max" value="Vertex_outer_radius"/>
   <constant name="env_safety" value="0.1*mm"/>
-  <constant name="VTXIB_SEED_Kapton_beampipe_thickness" value="0.1*mm"/>
 
   <!-- end of changes for FCC-SEED -->
 
