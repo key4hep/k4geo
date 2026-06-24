@@ -37,11 +37,25 @@ namespace DDSegmentation {
     virtual CellID cellID(const Vector3D& aLocalPosition, const Vector3D& aGlobalPosition,
                           const VolumeID& aVolumeID) const override;
 
+    /**  Determine the local y position of readout cell wrt to its parent
+     * calibration cell based on the cell ID.
+     *   @param[in] aCellID ID of a call
+     *   return local y position.
+     */
+    double getLocalY(const CellID aCellID) const;
+
+    /**  Determine the local z position of readout cell wrt to its parent
+     * calibration cell based on the cell ID.
+     *   @param[in] aCellID ID of a call
+     *   return local z position.
+     */
+    double getLocalZ(const CellID aCellID) const;
+
     /**  Determine the transverse distance from the beamline (rho) based on the cell ID.
      *   @param[in] aCellId ID of a cell.
-     *   return rho.
+     *   return rho in global coordinates.
      */
-    double rho(const CellID aCellID) const;
+    double getGlobalRho(const CellID aCellID) const;
     /** Get the grid size in rho for a given wheel
      * return grid size in rho
      */
@@ -67,59 +81,25 @@ namespace DDSegmentation {
      */
 
     inline const std::string& fieldNameRho() const { return m_rhoID; }
-    /**  Determine the azimuthal angle based on the cell ID.
-     *   @param[in] aCellId ID of a cell.
-     *   return Phi.
-     */
-    double phi(const CellID aCellID) const;
 
-    /**  Get the coordinate offset in azimuthal angle.
-     *   return The offset in phi.
-     */
-    inline double offsetPhi() const { return m_offsetPhi; }
-    /**  Get the coordinate offset in theta angle.
-     *   return The offset in theta.
-     */
-    inline double offsetTheta() const { return m_offsetTheta; }
-    /**  Get the field name for azimuthal angle.
-     *   return The field name for phi.
-     */
-    inline const std::string& fieldNamePhi() const { return m_phiID; }
-    /** Get the angle of the turbine blades in a given wheel
-     *   @param[in] iWheel index of wheel.
-     *  return the blade angle for the requested wheel
-     */
     double bladeAngle(unsigned iWheel) const { return m_bladeAngle[iWheel]; }
-    /**  Set the number of bins in azimuthal angle.
-     *   @param[in] aNumberBins Number of bins in phi.
-     */
-    inline void setPhiBins(int bins) { m_phiBins = bins; }
-    /**  Set the coordinate offset in azimuthal angle.
-     *   @param[in] aOffset Offset in phi.
-     */
-    inline void setOffsetPhi(double offset) { m_offsetPhi = offset; }
-    /**  Set the coordinate offset in theta angle.
-     *   @param[in] aOffset Offset in theta.
-     */
-    inline void setOffsetTheta(double offset) { m_offsetTheta = offset; }
-    /**  Set the field name used for phi.
-     *   @param[in] aFieldName Field name for phi.
-     */
-    inline void setFieldNamePhi(const std::string& fieldName) { m_phiID = fieldName; }
+
     /**  Set the field name used for the wheel ID.
      *   @param[in] aFieldName Field name for wheel.
      */
     inline void setFieldNameWheel(const std::string& fieldName) { m_wheelID = fieldName; }
-    /**  Determine the x coordinate based on the cell ID.
+    /**  Determine the global z coordinate based on the cell ID.
      *   @param[in] aCellId ID of a cell.
-     *   return x.
+     *   return global z.
      */
-    double x(const CellID aCellID) const;
-    /**  Determine the z coordinate based on the cell ID.
+    double getGlobalZ(const CellID aCellID) const;
+
+     /**  Determine the global phi coordinate based on the cell ID.
      *   @param[in] aCellId ID of a cell.
-     *   return z.
+     *   return global phi.
      */
-    double z(const CellID aCellID) const;
+    double getGlobalPhi(const CellID aCellID) const;
+    
     /** Get the grid size in z for a given wheel
      * return grid size in z
      */
@@ -136,26 +116,16 @@ namespace DDSegmentation {
      * @param[in] iWheel wheel index
      * return number of calibration cells in z for the specified wheel
      */
-    inline int numCellsZCalib(int iWheel) const {
-      return m_numCalibZLayers[iWheel];
-    } /** Get the offset in z for a given wheel
-       * @param[in] iWheel wheel index
-       * return offset in z for the specified wheel
-       */
+    inline int numCellsZCalib(int iWheel) const { return m_numCalibZLayers[iWheel]; }
+    /** Get the offset in z for a given wheel
+     * @param[in] iWheel wheel index
+     * return offset in z for the specified wheel
+     */
     inline double offsetZ(int iWheel) const { return m_offsetZ[iWheel]; }
     /**  Get the field name for z.
      *   return The field name for z.
      */
     inline const std::string& fieldNameZ() const { return m_zID; }
-    /**  Set the number of bins in z.
-     *   @param[in] aNumberBins Number of bins in z.
-     */
-    inline void setZBins(int bins) { m_zBins = bins; }
-    /**  Set the coordinate offset in z for the specified wheel.
-     *   @param[in] iWheel wheel index
-     *   @param[in] aOffset Offset in z.
-     */
-    inline void setOffsetZ(int iWheel, double offset) { m_offsetZ[iWheel] = offset; }
     /**  Set the field name used for z.
      *   @param[in] aFieldName Field name for z.
      */
@@ -163,10 +133,6 @@ namespace DDSegmentation {
     inline double rhoFromXYZ(const Vector3D& aposition) const {
       TVector3 vec(aposition.X, aposition.Y, aposition.Z);
       return vec.Perp();
-    }
-    inline double phiFromXYZ(const Vector3D& aposition) const {
-      TVector3 vec(aposition.X, aposition.Y, aposition.Z);
-      return vec.Phi();
     }
 
     /** return the number of unit cells in each wheel
@@ -200,6 +166,8 @@ namespace DDSegmentation {
   private:
     /// turbine blade angle in each wheel
     std::vector<double> m_bladeAngle;
+    /// sine of turbine blade angle in each wheel
+    std::vector<double> m_sinBladeAngle;
     /// number of unit cells in each wheel
     std::vector<int> m_nUnitCells;
     /// number of merged modules in each wheel
@@ -212,6 +180,12 @@ namespace DDSegmentation {
     std::vector<int> m_numCalibRhoLayers;
     /// the number of calibration cells in z for each wheel
     std::vector<int> m_numCalibZLayers;
+    /// the number of readout cells ganged into a single calibration cell
+    /// in rho
+    std::vector<int> m_gangedRhoLayers;
+    /// the number of readout cells ganged into a single calibration cell
+    /// in Z
+    std::vector<int> m_gangedZLayers;
     /// the number of bins in phi
     int m_phiBins;
     /// the coordinate offset in phi
@@ -223,6 +197,10 @@ namespace DDSegmentation {
     int m_rhoBins;
     ////grid size in rho
     std::vector<double> m_gridSizeRho;
+    /// "effective" grid size in rho for cells away from the center strip in z
+    mutable std::vector<std::vector<double>> m_effGridSizeRho;
+    /// vector of calculated local z positions.  Indices are [iWheel][iRho][iZ]
+    mutable std::vector<std::vector<std::vector<double>>> m_localZPositions;
     /// the coordinate offset in rho
     std::vector<double> m_offsetRho;
     /// the field name used for rho
@@ -231,8 +209,6 @@ namespace DDSegmentation {
     std::string m_wheelID;
     /// the field name used for module
     std::string m_moduleID;
-    /// the number of bins in z
-    int m_zBins;
     /// grid size in z
     std::vector<double> m_gridSizeZ;
     /// the coordinate offset in z
