@@ -466,7 +466,7 @@
    <detectors>
  
         <!-- Vertex inner barrel -->
-        <detector name="VertexBarrel" type="VertexBarrel_detailed_o1_v02" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelCollection"  region="VTXBRegion">
+        <detector name="VertexBarrel" type="VertexBarrel_detailed_o1_v02" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelCollection"  region="VertexBarrelRegion">
              <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -1702,7 +1702,7 @@
 
 
          <!-- Inner vertex tube just outside last inner vertex layer (for both normal and curved vertex)  -->
-        <detector name="VertexInnerBarrel_tube" type="VertexBarrel_detailed_o1_v02" vis="VXDVis" id="-2" readout="VertexDummyCollection"  region="VTXBRegion">
+        <detector name="VertexInnerBarrel_tube" type="VertexBarrel_detailed_o1_v02" vis="VXDVis" id="-2" readout="VertexDummyCollection"  region="VertexBarrelRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -1747,7 +1747,7 @@
 
 
         <!-- Vertex disks  -->
-        <detector id="DetID_VXD_Disks" name="VertexDisks" vis="VXDVis" type="VertexEndcap_detailed_o1_v02" readout="VertexEndcapCollection" reflect="true" region="VTXDRegion">
+        <detector id="DetID_VXD_Disks" name="VertexDisks" vis="VXDVis" type="VertexEndcap_detailed_o1_v02" readout="VertexEndcapCollection" reflect="true" region="VertexEndcapRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -1900,7 +1900,7 @@
         </detector>
 
          <!-- Disk support proxy volumes  -->
-        <detector name="VertexDisks_support" type="VertexBarrel_detailed_o1_v02" vis="VXDVis" id="-1" readout="VertexDummyCollection"  region="VTXDRegion">
+        <detector name="VertexDisks_support" type="VertexBarrel_detailed_o1_v02" vis="VXDVis" id="-1" readout="VertexDummyCollection"  region="VertexEndcapRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>

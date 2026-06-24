@@ -6,7 +6,7 @@
     </define>
 
     <detectors>
-        <detector name="Kapton_on_beampipe" type="VertexBarrel_detailed_o1_v03" vis="KaptonVis" id="-2" readout="VertexDummyCollection" region="VertexBarrelRegion">
+        <detector name="Kapton_on_beampipe" type="VertexBarrel_detailed_o1_v03" vis="KaptonVis" id="-1" readout="VertexDummyCollection" region="VertexBarrelRegion">
             <envelope vis="KaptonVis">
                 <shape type="Assembly"/>
             </envelope>
