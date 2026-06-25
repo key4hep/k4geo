@@ -61,19 +61,6 @@
         <vis name="VTXCarbonFoamVis"     alpha="0.5" r="0.2" 	g="0.2"     b="0.2"   showDaughters="true"  visible="true"/>
     </display>
 
-    <!--  Definition of the readout segmentation/definition  -->
-    <readouts>
-        <readout name="VertexBarrelCollection">
-            <id>${GlobalTrackerReadoutID}</id>
-        </readout>
-        <readout name="VertexEndcapCollection">
-            <id>${GlobalTrackerReadoutID}</id>
-        </readout>
-        <readout name="VertexDummyCollection">    <comment> For supports, should not have any hits but better safe than sorry </comment>
-            <id>${GlobalTrackerReadoutID}</id>
-        </readout>  
-    </readouts>
-
     <comment> Vertex barrel </comment>
     <include ref="Vertex_FCC-SEED_barrel_o1_v01.xml"/>
 

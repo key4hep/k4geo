@@ -61,16 +61,6 @@
         </detector>
     </detectors>
     
-
-    <define> <comment> Pitch of the various detector layers, used for segmentation </comment>
-        <constant name="VTXIB_pitch_z"      value="0.025*mm"/>  <comment> Assume 25um pixel pitch both for classic and ultra light inner vertex (ARCADIA has 25 um pitch) </comment> 
-        <constant name="VTXIB_pitch_phi"    value="0.025*mm"/>
-        <constant name="VTXOB_pitch_z"      value="0.150*mm"/>  <comment> Assume 50x150 um^2 pixel pitch for outer barrel and disks, as in ATLASPix3 </comment>
-        <constant name="VTXOB_pitch_phi"    value="0.050*mm"/>
-        <constant name="VTXD_pitch_r"       value="0.150*mm"/>  <comment> Assume 50x150 um^2 pixel pitch for the disks. One wants to have the better measurement (50 um pitch) in phi direction. The way the modules are constructed in the disks is actually not this way, but 90 degrees rotated (better resolution in r direction). The vertex disks geometry needs to be updated to reflect this properly, but the segmentation is such that indeed the better resolution is in phi direction. </comment>
-        <constant name="VTXD_pitch_phi"     value="0.050*mm"/>
-    </define>
-
     <comment> IDEA inner vertex detector based IDEA engineering design (INFN Pisa) using ARCADIA MAPS </comment>
     <include ref="../../../IDEA/compact/IDEA_o1_v04/VertexInnerBarrel_o1_v04.xml"/>
     <readouts> <comment>  Definition of the readout segmentation/definition </comment>

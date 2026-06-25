@@ -65,6 +65,11 @@
   <constant name="VTX_r_max" value="Vertex_outer_radius"/>
   <constant name="env_safety" value="0.1*mm"/>
 
+  <constant name="VTXIB_pitch_z"      value="0.020*mm"/>  <!-- Assume 20x20 µm pitch, DRD3 OCTOPUS-like sensors -->
+  <constant name="VTXIB_pitch_phi"    value="0.020*mm"/>
+  <constant name="VTXD_pitch_r"       value="0.020*mm"/>  <!-- Assume 20x20 µm pitch, DRD3 OCTOPUS-like sensors -->
+  <constant name="VTXD_pitch_phi"     value="0.020*mm"/>
+
   <!-- end of changes for FCC-SEED -->
 
   <!-- _prime marks the coordinate system along the beamline instead of the detector coordinate frame -->

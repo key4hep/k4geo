@@ -106,6 +106,13 @@
     <constant name="VTX_r_max" value="VTXOB_r_max_layer+VTXOB_rmax_clearance"/>   <!-- Not used, just do indicate the vertex detector envelope limits -->
     <constant name="VTX_z_max" value="VTXD_z_max_total"/>                         <!-- Not used, just do indicate the vertex detector envelope limits -->
 
+    <constant name="VTXIB_pitch_z"      value="0.020*mm"/>  <!-- Assume 20x20 µm pitch, DRD3 OCTOPUS-like sensors -->
+    <constant name="VTXIB_pitch_phi"    value="0.020*mm"/>
+    <constant name="VTXOB_pitch_z"      value="0.020*mm"/>  <!-- Assume 20x20 µm pitch, DRD3 OCTOPUS-like sensors -->
+    <constant name="VTXOB_pitch_phi"    value="0.020*mm"/>
+    <constant name="VTXD_pitch_r"       value="0.020*mm"/>  <!-- Assume 20x20 µm pitch, DRD3 OCTOPUS-like sensors -->
+    <constant name="VTXD_pitch_phi"     value="0.020*mm"/>
+
     <!--  Drift Chamber parameters    -->
     <!-- Changing the radius is not enough to resize the detector, please contact the experts-->
     <constant name="DCH_inner_cyl_R_total"          value=" 349.8  * mm "  />
@@ -120,17 +127,17 @@
     <constant name="SiWrD_inner_radius" value="350.0*mm"/>  <!-- Can be freely changed. Must be smaller than 'SiWrB_inner_radius' -->
     <constant name="SiWrD_outer_radius" value="2040.0*mm"/> <!-- Can be freely changed. Must be larger than 'SiWrD_inner_radius' and SiWrD_outer_radius-SiWrD_inner_radius must be smaller than ~ 2450 mm, otherwise the number of available rings is not large enough to cover the whole area -->
     <constant name="SiWrD_services_opening"  value="30*mm"/><!-- Can be freely changed. -->
-    <constant name="SiWr_nLayers"       value="2"/>         <!-- Can be either 1 or 2 -->
+    <constant name="SiWr_nLayers"       value="1"/>         <!-- Can be either 1 or 2 -->
     <constant name="SiWrD_zmin"         value="2270.0*mm"/> <!-- Can be freely changed, as long as SiWrD_zmax-SiWrD_zmin is >7cm (SiWr_nLayers=2) or >=5cm (SiWr_nLayers=1) -->
     <constant name="SiWrD_zmax"         value="2340.0*mm"/> <!-- Can be freely changed, as long as SiWrD_zmax-SiWrD_zmin is kept constant or is increased -->
-    <constant name="SiWrB_pitch_z0"     value="1.000*mm"/>  <!-- The pitches can be freely changed and can be different for the two layers. These pitches here are just an assumption, impact on physics needs to be studied in detail! -->
+    <constant name="SiWrB_pitch_z0"     value="0.050*mm"/>  <!-- The pitches can be freely changed and can be different for the two layers. These pitches here are just an assumption, impact on physics needs to be studied in detail! Currently assuming 50x50 um2 pixels, AC-LGADs or MAPS -->
     <constant name="SiWrB_pitch_z1"     value="0.050*mm"/>
     <constant name="SiWrB_pitch_phi0"   value="0.050*mm"/>
-    <constant name="SiWrB_pitch_phi1"   value="1.000*mm"/>
-    <constant name="SiWrD_pitch_r0"     value="1.000*mm"/>
+    <constant name="SiWrB_pitch_phi1"   value="0.050*mm"/>
+    <constant name="SiWrD_pitch_r0"     value="0.050*mm"/>
     <constant name="SiWrD_pitch_r1"     value="0.050*mm"/>
     <constant name="SiWrD_pitch_phi0"   value="0.050*mm"/>
-    <constant name="SiWrD_pitch_phi1"   value="1.000*mm"/>
+    <constant name="SiWrD_pitch_phi1"   value="0.050*mm"/>
 
     <!-- LAr ECAL Calo Barrel -->
     <constant name="BarECal_id" value="DetID_ECAL_Barrel"/>

@@ -116,6 +116,13 @@
     <constant name="VTX_r_max" value="VTXOB_r_max_layer+VTXOB_rmax_clearance"/>   <!-- Not used, just do indicate the vertex detector envelope limits -->
     <constant name="VTX_z_max" value="VTXD_z_max_total"/>                         <!-- Not used, just do indicate the vertex detector envelope limits -->
 
+    <constant name="VTXIB_pitch_z"      value="0.025*mm"/>  <!-- Assume 25um pixel pitch both for classic and ultra light inner vertex (ARCADIA has 25 um pitch) -->
+    <constant name="VTXIB_pitch_phi"    value="0.025*mm"/>
+    <constant name="VTXOB_pitch_z"      value="0.150*mm"/>  <!-- Assume 50x150 um^2 pixel pitch for outer barrel and disks, as in ATLASPix3 -->
+    <constant name="VTXOB_pitch_phi"    value="0.050*mm"/>
+    <constant name="VTXD_pitch_r"       value="0.150*mm"/>  <!-- Assume 50x150 um^2 pixel pitch for the disks. One wants to have the better measurement (50 um pitch) in phi direction. The way the modules are constructed in the disks is actually not this way, but 90 degrees rotated (better resolution in r direction). The vertex disks geometry needs to be updated to reflect this properly, but the segmentation is such that indeed the better resolution is in phi direction. -->
+    <constant name="VTXD_pitch_phi"     value="0.050*mm"/>
+    
     <!--  Drift Chamber parameters    -->
     <!-- Changing the radius is not enough to resize the detector, please contact the experts-->
     <constant name="DCH_inner_cyl_R_total"          value=" 349.8  * mm"  />
