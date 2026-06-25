@@ -124,7 +124,7 @@ namespace DDSegmentation {
      * return The number of wheels
      */
     inline int numWheels() const { return m_numWheels; }
-      
+
     /** Get the grid size in z for a given wheel
      * return grid size in z
      */
