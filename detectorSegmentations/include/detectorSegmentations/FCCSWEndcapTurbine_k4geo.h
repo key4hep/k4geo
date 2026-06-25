@@ -123,7 +123,7 @@ namespace DDSegmentation {
     /** Get the number of wheels
      * return The number of wheels
      */
-    inline int numWheels() const { return m_nWheels; }
+    inline int numWheels() const { return m_numWheels; }
       
     /** Get the grid size in z for a given wheel
      * return grid size in z
@@ -204,7 +204,7 @@ namespace DDSegmentation {
 
   private:
     /// number of wheels
-    int m_nWheels;
+    int m_numWheels;
     /// turbine blade angle in each wheel
     std::vector<double> m_bladeAngle;
     /// number of unit cells in each wheel
