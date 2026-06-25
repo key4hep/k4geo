@@ -162,24 +162,16 @@
         <constant name="Support_ring_offset_phi3" value= "(VTXIB_SEED_sensor_phi+Flex_width-Support_ring_width3/2.)/VTXIB_SEED_curvature3*rad"/>
         <constant name="Support_ring_offset_phi4" value= "(VTXIB_SEED_sensor_phi+Flex_width-Support_ring_width4/2.)/VTXIB_SEED_curvature4*rad"/>
 
-        <comment> Variables used for imported xmls </comment>
+        <comment> Variables used for other imported xmls </comment>
         <constant name="VTXIB_tube_r"                       value="VTXIB_SEED_curvature5+2.*VTXIB_SEED_total_sensor_thickness+Support_longeron_betweenSensors_thickness+Support_longeron_betweenSensors_tolerance+Flex_total_thickness+7.*VTXIB_curved_tolerance_r"/> 
         <constant name="VTXIB_Kapton_beampipe_halfLength"   value="VTXIB_SEED_half_length1"/>
         <constant name="VTXIB_tube_half_length"             value="VTXIB_SEED_half_length5"/>
+        <constant name="nInnerVertexLayers"                 value="5"/>
     </define>
-
-    <readouts> <comment>  Definition of the readout segmentation/definition </comment>
-        <readout name="VertexBarrelCollection"> 
-            <segmentation type="MultiSegmentation" key="layer">
-                <segmentation name="VTXIBgrid" type="CartesianGridXY" key_min="0" key_max="4" grid_size_x="VTXIB_pitch_phi" grid_size_y="VTXIB_pitch_z"/>
-            </segmentation>
-            <id>${GlobalTrackerReadoutID},x:32:-16,y:-16</id>
-        </readout>  
-    </readouts>
 
     <!-- Inner vertex detector made of overlapping, curved sensors -->
     <detectors>
-        <detector name="VertexBarrel" type="VertexBarrel_detailed_o1_v03" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelCollection"  region="VertexBarrelRegion">
+        <detector name="VertexInnerBarrel" type="VertexBarrel_detailed_o1_v03" vis="VXDVis" id="DetID_VXD_Barrel" readout="VertexBarrelCollection"  region="VertexBarrelRegion">
             <envelope vis="VXDVis">
                 <shape type="Assembly"/>
             </envelope>
