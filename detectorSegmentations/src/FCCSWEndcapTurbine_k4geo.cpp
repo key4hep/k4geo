@@ -40,7 +40,7 @@ namespace DDSegmentation {
     m_bladeAngle.clear();
 
     try {
-      m_numWheels.push_back(dd4hepgeo->constant<double>("EMECnWheels"));
+      m_numWheels = dd4hepgeo->constant<int>("EMECnWheels");
     } catch (...) {
       std::cout << "EMECnWheels not found in detector metadata, exiting..." << std::endl;
       exit(1);
