@@ -120,6 +120,11 @@ namespace DDSegmentation {
      *   return z.
      */
     double z(const CellID aCellID) const;
+    /** Get the number of wheels
+     * return The number of wheels
+     */
+    inline int numWheels() const { return 3; }
+      
     /** Get the grid size in z for a given wheel
      * return grid size in z
      */
