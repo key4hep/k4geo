@@ -6,7 +6,7 @@
     </define>
 
     <detectors>
-        <detector name="Kapton_on_beampipe" type="VertexBarrel_detailed_o1_v03" vis="KaptonVis" id="-1" readout="VertexDummyCollection" region="VertexBarrelRegion">
+        <detector name="Kapton_on_beampipe" type="VertexBarrel_detailed_o1_v03" vis="KaptonVis" id="-1" readout="VertexKaptonBeampipeDummyCollection" region="VertexBarrelRegion">
             <envelope vis="KaptonVis">
                 <shape type="Assembly"/>
             </envelope>
@@ -20,4 +20,10 @@
             <layer nLadders="1" r="VTXIB_SEED_Kapton_beampipe_r" id="0" name="Kapton_on_beampipe_stave" nmodules="1" motherVolThickness="VTXIB_SEED_Kapton_beampipe_thickness" ignore="VTXIB_r_min_layer > VTXIB_SEED_Kapton_beampipe_r+VTXIB_SEED_Kapton_beampipe_thickness + 0.1*mm"/> <comment> ignore if the first layer of the vertex barrel is not directly on top of the beam pipe </comment>
         </detector>
     </detectors>
+
+    <readouts>
+        <readout name="VertexKaptonBeampipeDummyCollection">
+            <id>${GlobalTrackerReadoutID}</id>
+        </readout>  
+    </readouts>
 </lccdd>
