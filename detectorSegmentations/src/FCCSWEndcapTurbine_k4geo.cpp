@@ -166,18 +166,11 @@ namespace DDSegmentation {
     m_layerIndex = decoder()->index(m_layerID);
 
     // precalculate some quantities that will be used to determine positions
-    for (const auto& bladeAngle : m_bladeAngle) {
-      m_sinBladeAngle.push_back(TMath::Sin(bladeAngle));
-    }
-    unsigned iWheel = 0;
-    for (const auto& readoutRhoLayers : m_numReadoutRhoLayers) {
-      m_gangedRhoLayers.push_back(readoutRhoLayers / m_numCalibRhoLayers[iWheel]);
-      iWheel++;
-    }
-    iWheel = 0;
-    for (const auto& readoutZLayers : m_numReadoutZLayers) {
-      m_gangedZLayers.push_back(readoutZLayers / m_numCalibZLayers[iWheel]);
-      iWheel++;
+    unsigned nWheels = m_bladeAngle.size();
+    for (unsigned iWheel = 0; iWheel < nWheels; iWheel++) {
+      m_cscBladeAngle.push_back(1. / std::sin(m_bladeAngle[iWheel]));
+      m_gangedRhoLayers.push_back(m_numReadoutRhoLayers[iWheel] / m_numCalibRhoLayers[iWheel]);
+      m_gangedZLayers.push_back(m_numReadoutZLayers[iWheel] / m_numCalibZLayers[iWheel]);
     }
   }
 
@@ -213,7 +206,7 @@ namespace DDSegmentation {
     }
     decoder()->set(cID, m_rhoIndex, iRho);
 
-    double lZ = TMath::Abs(globalPosition.Z);
+    double lZ = std::abs(globalPosition.Z);
     int iZ = positionToBin(lZ, m_gridSizeZ[iWheel], m_offsetZ[iWheel] + m_gridSizeZ[iWheel] / 2.);
     if (iZ < 0) {
       iZ = 0;
@@ -260,29 +253,31 @@ namespace DDSegmentation {
     CellID iModule = decoder()->get(cID, m_moduleIndex);
     CellID iWheel = decoder()->get(cID, m_wheelIndex);
     CellID iSide = decoder()->get(cID, m_sideIndex);
-    
-    double phiCent = twopi * (iModule + 0.5) / (m_nUnitCells[iWheel] / m_mergedModules[iWheel]);
+
+    double phiCent = dd4hep::twopi * (iModule + 0.5) / (m_nUnitCells[iWheel] / m_mergedModules[iWheel]);
     double rho = getGlobalRho(cID);
 
     double zdepth = m_numReadoutZLayers[iWheel] * m_gridSizeZ[iWheel];
 
-    double zFromCent = TMath::Abs(getGlobalZ(cID)) - m_offsetZ[iWheel] - zdepth / 2;
+    double zFromCent = std::abs(getGlobalZ(cID)) - m_offsetZ[iWheel] - zdepth / 2;
 
     // calculation position in frame with unit cell at phi = 0
-    double y = zFromCent / TMath::Tan(m_bladeAngle[iWheel]);
-    double x = TMath::Sqrt(rho * rho - y * y);
-    double locPhi = TMath::ATan2(y, x);
+    // line below is equivalent to zFromCent/tan(bladeAngle)
+    double y = zFromCent * std::sqrt(m_cscBladeAngle[iWheel] * m_cscBladeAngle[iWheel] - 1.);
+    double x = std::sqrt(rho * rho - y * y);
+    double locPhi = std::atan2(y, x);
 
     // now rotate by phi position of the unit cell
     double phi = locPhi + phiCent;
-    if (phi > TMath::Pi())
-      phi = phi - TMath::TwoPi();
+    if (phi > std::numbers::pi)
+      phi = phi - dd4hep::twopi;
 
-    if (iSide != 1) phi = -phi;
-    
+    if (iSide != 1)
+      phi = -phi;
+
     return phi;
   }
-  
+
   /// determine the local z position of a readout cell with respect to the
   /// parent calibration cell.  In the local coordinates, z is the direction
   /// pointing upward from the beamline through the center of a turbine blade
@@ -308,21 +303,21 @@ namespace DDSegmentation {
             calibZPos[1] = calibZPos[0] + m_gridSizeZ[jWheel] * m_gangedZLayers[jWheel] / 2;
             calibZPos[2] = calibZPos[1] - m_gridSizeZ[jWheel] * m_gangedZLayers[jWheel];
 
-            float calibZmaxArr[3], calibZminArr[3];
+            std::vector<float> calibZmaxArr, calibZminArr;
             for (int jPos = 0; jPos < 3; jPos++) {
-              if (calibRhoMax > TMath::Abs(calibZPos[jPos])) {
-                calibZmaxArr[jPos] = TMath::Sqrt(calibRhoMax * calibRhoMax - calibZPos[jPos] * calibZPos[jPos]);
+              if (calibRhoMax > std::abs(calibZPos[jPos])) {
+                calibZmaxArr.push_back(std::sqrt(calibRhoMax * calibRhoMax - calibZPos[jPos] * calibZPos[jPos]));
               } else {
-                calibZmaxArr[jPos] = 0;
+                calibZmaxArr.push_back(0);
               }
-              if (calibRhoMin > TMath::Abs(calibZPos[jPos])) {
-                calibZminArr[jPos] = TMath::Sqrt(calibRhoMin * calibRhoMin - calibZPos[jPos] * calibZPos[jPos]);
+              if (calibRhoMin > std::abs(calibZPos[jPos])) {
+                calibZminArr.push_back(std::sqrt(calibRhoMin * calibRhoMin - calibZPos[jPos] * calibZPos[jPos]));
               } else {
-                calibZminArr[jPos] = 1000000;
+                calibZminArr.push_back(1000000);
               }
             }
-            float calibZmax = TMath::MaxElement(3, calibZmaxArr);
-            float calibZmin = TMath::MinElement(3, calibZminArr);
+            float calibZmax = *(std::ranges::max_element(calibZmaxArr));
+            float calibZmin = *(std::ranges::min_element(calibZminArr));
             float calibZcent = (calibZmax + calibZmin) / 2.;
 
             // get center position of readout cell
@@ -334,28 +329,24 @@ namespace DDSegmentation {
             readoutZPos[1] = readoutZPos[0] + m_gridSizeZ[jWheel] / 2;
             readoutZPos[2] = readoutZPos[1] - m_gridSizeZ[jWheel];
 
-            float readoutZmaxArr[3], readoutZminArr[3];
+            std::vector<float> readoutZmaxArr, readoutZminArr;
             for (int jPos = 0; jPos < 3; jPos++) {
-              if (readoutRhoMax > TMath::Abs(readoutZPos[jPos])) {
-                readoutZmaxArr[jPos] =
-                    TMath::Sqrt(readoutRhoMax * readoutRhoMax - readoutZPos[jPos] * readoutZPos[jPos]);
+              if (readoutRhoMax > std::abs(readoutZPos[jPos])) {
+                readoutZmaxArr.push_back(
+                    std::sqrt(readoutRhoMax * readoutRhoMax - readoutZPos[jPos] * readoutZPos[jPos]));
               } else {
-                std::cout << "Odd: readoutRhoMax < readoutZPos " << readoutRhoMax << " " << readoutZPos[jPos]
-                          << std::endl;
-                readoutZmaxArr[jPos] = 0;
+                readoutZmaxArr.push_back(0);
               }
 
-              if (readoutRhoMin > TMath::Abs(readoutZPos[jPos])) {
-                readoutZminArr[jPos] =
-                    TMath::Sqrt(readoutRhoMin * readoutRhoMin - readoutZPos[jPos] * readoutZPos[jPos]);
+              if (readoutRhoMin > std::abs(readoutZPos[jPos])) {
+                readoutZminArr.push_back(
+                    std::sqrt(readoutRhoMin * readoutRhoMin - readoutZPos[jPos] * readoutZPos[jPos]));
               } else {
-                std::cout << "Odd: readoutRhoMin < readoutZPos " << readoutRhoMin << " " << readoutZPos[jPos]
-                          << std::endl;
-                readoutZminArr[jPos] = 1000000;
+                readoutZminArr.push_back(1000000);
               }
             }
-            float readoutZmax = TMath::MaxElement(3, readoutZmaxArr);
-            float readoutZmin = TMath::MinElement(3, readoutZminArr);
+            float readoutZmax = *(std::ranges::max_element(readoutZmaxArr));
+            float readoutZmin = *(std::ranges::min_element(readoutZminArr));
             float readoutZcent = (readoutZmax + readoutZmin) / 2.;
 
             m_localZPositions[jWheel][jRho].push_back(readoutZcent - calibZcent);
@@ -381,8 +372,8 @@ namespace DDSegmentation {
     CellID iZ = decoder()->get(cID, m_zIndex);
 
     return ((iZ % m_gangedZLayers[iWheel] - m_gangedZLayers[iWheel] / 2.) * m_gridSizeZ[iWheel] +
-            (1 - m_gangedZLayers[iWheel] % 2) * m_gridSizeZ[iWheel] / 2) /
-           m_sinBladeAngle[iWheel];
+            (1 - m_gangedZLayers[iWheel] % 2) * m_gridSizeZ[iWheel] / 2) *
+           m_cscBladeAngle[iWheel];
   }
 
   /// determine expected layer value based on wheel, rho, and z indices

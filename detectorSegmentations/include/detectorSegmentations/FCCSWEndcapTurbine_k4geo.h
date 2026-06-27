@@ -94,12 +94,12 @@ namespace DDSegmentation {
      */
     double getGlobalZ(const CellID aCellID) const;
 
-     /**  Determine the global phi coordinate based on the cell ID.
+    /**  Determine the global phi coordinate based on the cell ID.
      *   @param[in] aCellId ID of a cell.
      *   return global phi.
      */
     double getGlobalPhi(const CellID aCellID) const;
-    
+
     /** Get the grid size in z for a given wheel
      * return grid size in z
      */
@@ -166,8 +166,8 @@ namespace DDSegmentation {
   private:
     /// turbine blade angle in each wheel
     std::vector<double> m_bladeAngle;
-    /// sine of turbine blade angle in each wheel
-    std::vector<double> m_sinBladeAngle;
+    /// cosecant of turbine blade angle in each wheel
+    std::vector<double> m_cscBladeAngle;
     /// number of unit cells in each wheel
     std::vector<int> m_nUnitCells;
     /// number of merged modules in each wheel
@@ -197,8 +197,6 @@ namespace DDSegmentation {
     int m_rhoBins;
     ////grid size in rho
     std::vector<double> m_gridSizeRho;
-    /// "effective" grid size in rho for cells away from the center strip in z
-    mutable std::vector<std::vector<double>> m_effGridSizeRho;
     /// vector of calculated local z positions.  Indices are [iWheel][iRho][iZ]
     mutable std::vector<std::vector<std::vector<double>>> m_localZPositions;
     /// the coordinate offset in rho
