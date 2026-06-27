@@ -22,7 +22,7 @@ namespace DDSegmentation {
     // set the value of the local z position for a given rho, z cell index
     void setLocalZ(unsigned iRho, unsigned iZ, float zpos) {m_localZ[iRho*iZ] = zpos;}
     // return the value of the local z position for a given rho, z cell index
-    float getLocalZ(unsigned iRho, unsigned iZ) { return m_localZ[iRho*iZ];}
+    float getLocalZ(unsigned iRho, unsigned iZ) const { return m_localZ[iRho*iZ];}
   private:
     std::vector<float> m_localZ;  
   };
@@ -210,7 +210,7 @@ namespace DDSegmentation {
     ////grid size in rho
     std::vector<double> m_gridSizeRho;
     /// vector that holds local z positions.
-    mutable std::vector<EndcapTurbineWheelLocalZ> m_localZPositions;
+    mutable std::atomic<const std::vector<EndcapTurbineWheelLocalZ>*> m_localZPositions = nullptr;
     /// the coordinate offset in rho
     std::vector<double> m_offsetRho;
     /// the field name used for rho
