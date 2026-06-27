@@ -287,9 +287,9 @@ namespace DDSegmentation {
     /// initialize vector of local Z positions if necessary
     if (m_localZPositions.size() == 0) {
       int nWheels = m_numReadoutRhoLayers.size();
-      m_localZPositions.resize(nWheels);
       for (int jWheel = 0; jWheel < nWheels; jWheel++) {
-        m_localZPositions[jWheel].resize(m_numReadoutRhoLayers[jWheel]);
+        EndcapTurbineWheelLocalZ wlz(m_numReadoutRhoLayers[jWheel], m_numReadoutZLayers[jWheel]);
+        m_localZPositions.push_back(wlz);
         for (int jRho = 0; jRho < m_numReadoutRhoLayers[jWheel]; jRho++) {
           for (int jZ = 0; jZ < m_numReadoutZLayers[jWheel]; jZ++) {
             /// get center position of calibration cell
@@ -349,7 +349,7 @@ namespace DDSegmentation {
             float readoutZmin = *(std::ranges::min_element(readoutZminArr));
             float readoutZcent = (readoutZmax + readoutZmin) / 2.;
 
-            m_localZPositions[jWheel][jRho].push_back(readoutZcent - calibZcent);
+            m_localZPositions[jWheel].setLocalZ(jRho, jZ, readoutZcent - calibZcent);
           }
         }
       }
@@ -359,7 +359,7 @@ namespace DDSegmentation {
     CellID iRho = decoder()->get(cID, m_rhoIndex);
     CellID iZ = decoder()->get(cID, m_rhoIndex);
 
-    return m_localZPositions[iWheel][iRho][iZ];
+    return m_localZPositions[iWheel].getLocalZ(iRho, iZ);
   }
 
   /// determine the local y position of a readout cell with respect to the

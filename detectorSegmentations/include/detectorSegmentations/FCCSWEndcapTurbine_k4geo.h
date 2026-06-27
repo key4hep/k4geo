@@ -15,6 +15,18 @@
 
 namespace dd4hep {
 namespace DDSegmentation {
+  class EndcapTurbineWheelLocalZ {
+  public:
+    // constructor with number of rho and z cells in wheel
+    EndcapTurbineWheelLocalZ(unsigned numReadoutLayersRho, unsigned numReadoutLayersZ) {m_localZ.resize(numReadoutLayersRho*numReadoutLayersZ);}
+    // set the value of the local z position for a given rho, z cell index
+    void setLocalZ(unsigned iRho, unsigned iZ, float zpos) {m_localZ[iRho*iZ] = zpos;}
+    // return the value of the local z position for a given rho, z cell index
+    float getLocalZ(unsigned iRho, unsigned iZ) { return m_localZ[iRho*iZ];}
+  private:
+    std::vector<float> m_localZ;  
+  };
+
   class FCCSWEndcapTurbine_k4geo : public Segmentation {
   public:
     /// default constructor using an arbitrary type
@@ -197,8 +209,8 @@ namespace DDSegmentation {
     int m_rhoBins;
     ////grid size in rho
     std::vector<double> m_gridSizeRho;
-    /// vector of calculated local z positions.  Indices are [iWheel][iRho][iZ]
-    mutable std::vector<std::vector<std::vector<double>>> m_localZPositions;
+    /// vector that holds local z positions.
+    mutable std::vector<EndcapTurbineWheelLocalZ> m_localZPositions;
     /// the coordinate offset in rho
     std::vector<double> m_offsetRho;
     /// the field name used for rho
@@ -215,7 +227,6 @@ namespace DDSegmentation {
     std::string m_zID;
     std::string m_sideID;
     std::string m_layerID;
-
     /// the field index used for rho
     int m_rhoIndex = -1;
     /// the field index used for wheel
