@@ -63,6 +63,7 @@
         <constant name="VTXIB_flex_Kapton_thickness"    value="0.200*mm"/>
     </define>
 
+    <define>
         <comment> Variables used for other imported xmls </comment>
         <constant name="VTXIB_tube_r"                       value="VTXIB_r_max"/> 
         <constant name="VTXIB_Kapton_beampipe_halfLength"   value="VTXIB_halfLength1"/>

@@ -109,6 +109,7 @@
         <constant name="VTXIB_curved_tolerance_r" value="0.100*mm"/> <comment> Needed for curved inner vertex as otherwise overlaps would be detected. Can be reduced if `VTXIB_curved_nsegments` is increased </comment>
     </define>
 
+    <define>
         <comment> Variables used for other imported xmls </comment>
         <constant name="VTXIB_Kapton_beampipe_halfLength"   value="VTXIB_curved_z1_passive/2."/>
         <constant name="VTXIB_tube_r"                       value="VTXIB_curved_r_outer-VTXIB_tube_thickness"/>

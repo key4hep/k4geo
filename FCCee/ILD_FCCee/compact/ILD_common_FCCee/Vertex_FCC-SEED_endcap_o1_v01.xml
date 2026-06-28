@@ -12,16 +12,16 @@
         <constant name="VTXD_Overlap" value="0*mm"/>
 
         <comment> Double-hit disk layout </comment>
-        <constant name="VTXD_z1" value="160*mm"/>
-        <constant name="VTXD_z3" value="Vertex_half_length-2.0*mm"/> <comment> Last disk goes up to the end of the vertex envelope minus 2 mm clearance </comment>
+        <constant name="VTXD_z1" value="VertexEndcap_zmin"/>
+        <constant name="VTXD_z3" value="VertexEndcap_zmax"/>
         <constant name="VTXD_z2" value="VTXD_z1+(VTXD_z3-VTXD_z1)/2.0"/> <comment> Middle disk is in at the mid point between first and last disk </comment>
 	    <constant name="VTXD_rmin1" value="VTXD_z1 * atan(VertexDisksAcceptanceLimit)"/> <comment> tan(r/z) = VertexDisksAcceptanceLimit, so r = z * atan(VertexDisksAcceptanceLimit). Place the disks as close as possible to the beam pipe fulfilling the acceptance limit </comment>
         <constant name="VTXD_rmin2" value="VTXD_z2 * atan(VertexDisksAcceptanceLimit)"/>
         <constant name="VTXD_rmin3" value="VTXD_z3 * atan(VertexDisksAcceptanceLimit)"/>
 
         <comment> Single-hit disk layout </comment>
-        <constant name="VTXD_singleHit_z1" value="160*mm"/>
-        <constant name="VTXD_singleHit_z6" value="Vertex_half_length-2.0*mm"/> <comment> Last disk goes up to the end of the vertex envelope minus 2 mm clearance </comment>
+        <constant name="VTXD_singleHit_z1" value="VertexEndcap_zmin"/>
+        <constant name="VTXD_singleHit_z6" value="VertexEndcap_zmax"/>
         <constant name="VTXD_singleHit_z2" value="VTXD_singleHit_z1+1.*(VTXD_singleHit_z6-VTXD_singleHit_z1)/5.0"/> <comment> Other disks are placed with even spacing betweeen first and last disk </comment>
         <constant name="VTXD_singleHit_z3" value="VTXD_singleHit_z1+2.*(VTXD_singleHit_z6-VTXD_singleHit_z1)/5.0"/>
         <constant name="VTXD_singleHit_z4" value="VTXD_singleHit_z1+3.*(VTXD_singleHit_z6-VTXD_singleHit_z1)/5.0"/>
@@ -33,6 +33,10 @@
         <constant name="VTXD_singleHit_rmin4" value="VTXD_singleHit_z4 * atan(VertexDisksAcceptanceLimit)"/>
         <constant name="VTXD_singleHit_rmin5" value="VTXD_singleHit_z5 * atan(VertexDisksAcceptanceLimit)"/>
         <constant name="VTXD_singleHit_rmin6" value="VTXD_singleHit_z6 * atan(VertexDisksAcceptanceLimit)"/>
+    </define>
+
+    <define> <comment> Variables for the inclusion of other sub-detectors </comment>
+        <constant name="VertexEndcap_rmax" value="VTXD_rmax"/>
     </define>
 
     <readouts> <comment>  Definition of the readout segmentation/definition </comment>

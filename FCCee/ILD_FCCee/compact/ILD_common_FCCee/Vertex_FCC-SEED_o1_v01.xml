@@ -40,7 +40,6 @@
             <composite name="VertexInnerBarrel_tube"/>
             <composite name="VertexVerticalCable"/>
             <composite name="VertexEndcap"/>
-
         </detector>
     </detectors>
 
@@ -62,7 +61,7 @@
     </display>
 
     <comment> Vertex barrel </comment>
-    <include ref="Vertex_FCC-SEED_barrel_o1_v01.xml"/>
+    <include ref="../../../ILD_FCCee/compact/ILD_common_FCCee/Vertex_FCC-SEED_barrel_o1_v01.xml"/>
 
     <readouts> <comment>  Definition of the readout segmentation/definition for the barrel. The one for the disks is included in the disk xml </comment>
         <readout name="VertexBarrelCollection"> 
@@ -79,9 +78,6 @@
     <comment> Inner vertex outer tube, for keeping the air in for air cooling </comment>
     <include ref="../../../IDEA/compact/IDEA_o1_v04/VertexInnerBarrel_support_tube_o1_v01.xml"/>
 
-    <comment> Vertex inner barrel off-detector services representation, based on CLD </comment>
-    <include ref="Vertex_inner_barrel_vertical_cable_o1_v01.xml"/>
-
     <comment> Vertex endcap, based on CLD disks </comment>
-    <include ref="Vertex_FCC-SEED_endcap_o1_v01.xml"/>
+    <include ref="../../../ILD_FCCee/compact/ILD_common_FCCee/Vertex_FCC-SEED_endcap_o1_v01.xml"/>
 </lccdd>
