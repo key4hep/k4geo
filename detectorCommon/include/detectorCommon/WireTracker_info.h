@@ -41,6 +41,12 @@ namespace rec {
     /// type for angles
     using angle_t = double;
 
+    WireTracker_info_struct() = default;
+    WireTracker_info_struct(const WireTracker_info_struct&) = default;
+    WireTracker_info_struct& operator=(const WireTracker_info_struct&) = default;
+    WireTracker_info_struct(WireTracker_info_struct&&) = default;
+    WireTracker_info_struct& operator=(WireTracker_info_struct&&) = default;
+
     //--------------------------------------------------------------
     // Per-layer geometry record
 
