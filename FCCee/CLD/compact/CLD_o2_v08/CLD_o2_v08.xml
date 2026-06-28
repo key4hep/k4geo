@@ -337,10 +337,10 @@
     <include ref="LumiCal_o3_v02_05.xml"/>
 
     <comment> CLD vertex detector </comment>
-    <!-- <include ref="Vertex_o4_v07_smallBP.xml"/> -->
+    <include ref="Vertex_o4_v07_smallBP.xml"/>
 
     <comment> FCC-SEED barrel and adapted CLD endcaps instead </comment>
-    <include ref="../../../ILD_FCCee/compact/ILD_common_FCCee/Vertex_FCC-SEED_o1_v01.xml"/>
+    <!-- <include ref="../../../ILD_FCCee/compact/ILD_common_FCCee/Vertex_FCC-SEED_o1_v01.xml"/> -->
 
 
     <include ref="InnerTracker_o2_v08.xml"/>
