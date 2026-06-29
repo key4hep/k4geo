@@ -168,9 +168,6 @@
         <constant name="VTXIB_tube_half_length"             value="VTXIB_SEED_half_length5"/>
         <constant name="VertexBarrel_rmax"                  value="VTXIB_tube_r"/>
         <constant name="nInnerVertexLayers"                 value="5"/>
-        <constant name="VertexVerticalCable_inner_z" value="Vertex_half_length"/>
-        <constant name="VertexVerticalCable_inner_r" value="VTXIB_r_min_layer"/>
-        <constant name="VertexVerticalCable_outer_r" value="Vertex_outer_radius-5.*mm"/>
     </define>
 
     <!-- Inner vertex detector made of overlapping, curved sensors -->
