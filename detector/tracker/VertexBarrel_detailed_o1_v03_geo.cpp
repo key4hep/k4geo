@@ -476,7 +476,6 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
       whole_layer_volume_a = Assembly(layer_name);
       pv = envelope.placeVolume(whole_layer_volume_a, Position(0., 0., z_offset));
     }
-    
     if (find(layer_ids.begin(), layer_ids.end(), layer_id) != layer_ids.end()) {
       printout(
           INFO, det_name,
@@ -486,9 +485,9 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     pv.addPhysVolID("layer", layer_id).addPhysVolID("side", 0);
     layer_ids.push_back(layer_id);
     layerDE = DetElement(sdet,
-                          _toString(layer_id, "layer_%d") +
-                              _toString(int(count(layer_ids.begin(), layer_ids.end(), layer_id)), "_%d"),
-                          layer_id);
+                         _toString(layer_id, "layer_%d") +
+                             _toString(int(count(layer_ids.begin(), layer_ids.end(), layer_id)), "_%d"),
+                         layer_id);
     layerDE.setPlacement(pv);
 
     int nLadders = x_layer.attr<int>(_Unicode(nLadders));
