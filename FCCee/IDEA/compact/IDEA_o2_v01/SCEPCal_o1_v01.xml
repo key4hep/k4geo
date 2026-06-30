@@ -1096,6 +1096,7 @@
               vis="scepcalAssemblyGlobalVis"
               sensitive="true">
     <sensitive type="calorimeter"/>
+    <type_flags type="DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_BARREL + DetType_ENDCAP"/>
 
     <!-- SCEPCal main layer dimensions, last block is for partial visualisation -->
 
