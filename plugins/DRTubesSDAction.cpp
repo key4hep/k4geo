@@ -20,6 +20,7 @@
 
 // Includers from Geant4
 #include "CLHEP/Units/PhysicalConstants.h"
+#include "G4EmProcessSubType.hh"
 #include "G4OpBoundaryProcess.hh"
 #include "G4OpticalPhoton.hh"
 #include "G4Poisson.hh"
@@ -60,6 +61,7 @@ namespace sim {
     int collection_scin_left;
     int collection_drbt_cher;
     int collection_drbt_scin;
+    int collection_edep;
   };
 } // namespace sim
 } // namespace dd4hep
@@ -78,6 +80,10 @@ namespace sim {
     m_userData.collection_cher_left = defineCollection<Geant4Calorimeter::Hit>("DRETCherLeft");
     m_userData.collection_drbt_cher = defineCollection<Geant4Calorimeter::Hit>("DRBTCher");
     m_userData.collection_drbt_scin = defineCollection<Geant4Calorimeter::Hit>("DRBTScin");
+    // Combined MC-truth energy-deposit collection for both scintillating and
+    // Cherenkov fibers. The two are kept separable downstream by the cellID
+    // (cherenkov bit: scint=0, Cherenkov=1; system field: endcap=25, barrel=28).
+    m_userData.collection_edep = defineCollection<Geant4Calorimeter::Hit>("DRTubeEdep");
   }
 
   template <>
@@ -270,7 +276,35 @@ namespace sim {
     G4int signalhit = 0;
     G4double hitTimeOfArrival = 0.;    // time of arrival of hit photons at SiPM
     G4double hitBinTimeOfArrival = 0.; // bin time of arrival of hit photons at SiPM
-    if (IsScin) {                      // it is a scintillating fiber
+
+    // Record the raw (un-quenched) MC-truth energy deposit of this step into the
+    // combined DREdep collection, keyed by this fiber's VolID. One contribution
+    // per step, same convention as SCEPCal_MainSDAction (the ECAL). No Birks and
+    // no signal smearing here: this is pure truth info, not an estimate of the
+    // reconstructed signal. The lambda carries no threshold of its own; each call
+    // site below applies the appropriate sub-threshold gate.
+    auto recordTruthEdep = [&]() {
+      Geant4HitCollection* edepColl = collection(m_userData.collection_edep);
+      auto* edepHit = edepColl->findByKey<Geant4Calorimeter::Hit>(VolID);
+      if (!edepHit) {
+        edepHit = new Geant4Calorimeter::Hit();
+        edepHit->cellID = VolID;
+        G4ThreeVector eFiberVec = DRTubesSglHpr::CalculateFiberPosition(aStep);
+        edepHit->position = Position(eFiberVec.x(), eFiberVec.y(), eFiberVec.z());
+        edepHit->energyDeposit = 0.;
+        edepColl->add(VolID, edepHit);
+      }
+      // extractContribution(aStep) returns the raw ionizing deposit (MeV, no Birks);
+      // the EDM4hep converter divides by 1000 -> GeV, so we do NOT multiply by GeV
+      // here (unlike the photo-electron signal hits below).
+      auto edepContrib = Geant4Calorimeter::Hit::extractContribution(aStep);
+      edepHit->energyDeposit += edepContrib.deposit;
+      edepHit->truth.emplace_back(edepContrib);
+      Geant4StepHandler eStepHandler(aStep);
+      mark(eStepHandler.track); // keep the depositing track so getParticle() resolves
+    };
+
+    if (IsScin) { // it is a scintillating fiber
 
       if (aStep->GetTrack()->GetDefinition()->GetPDGCharge() == 0 || steplength == 0.) {
         return true; // not ionizing particle
@@ -285,6 +319,9 @@ namespace sim {
           thisPhotonsTimeBinWidth);
       if (signalhit == 0)
         return true;
+      // We are past the signalhit>0 check, so this scintillating step is above
+      // threshold: record its truth energy deposit (gate = the signal itself).
+      recordTruthEdep();
     } // end of scintillating fibre sigal calculation
 
     else { // it is a Cherenkov fiber
@@ -330,9 +367,36 @@ namespace sim {
           return true;
         } // end of swich cases
       } // end of optical photon
-      else {
+      else { // a charged ionizing particle crossing the Cherenkov fiber core
+        // The Cherenkov fiber has no scintillation signal of its own, and its
+        // optical signal is carried by separate optical-photon tracks (handled
+        // above) that are decoupled from this charged step -- so there is no native
+        // per-step signal here to gate on. Instead we record this fiber's MC-truth
+        // deposit only if the step actually RADIATED Cherenkov light, i.e. it
+        // produced an optical-photon secondary via the Cerenkov process. This is
+        // the physically meaningful gate for a Cherenkov fiber: it ties the truth
+        // deposit to the relativistic, EM-like steps the C channel is sensitive to,
+        // and it naturally drops non-radiating / sub-threshold ionization so the
+        // truth collection does not blow up. We inspect the per-step secondaries
+        // (GetSecondaryInCurrentStep), so the condition means "this step radiated".
+        bool emittedCerenkov = false;
+        const auto* secondaries = aStep->GetSecondaryInCurrentStep();
+        if (secondaries) {
+          for (const auto* sec : *secondaries) {
+            const G4VProcess* creator = sec->GetCreatorProcess();
+            if (sec->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition() && creator &&
+                creator->GetProcessSubType() == G4EmProcessSubType::fCerenkov) {
+              emittedCerenkov = true;
+              break;
+            }
+          } // loop over secondaries
+        } // if secondaries
+
+        if (emittedCerenkov)
+          recordTruthEdep();
+
         return true;
-      }
+      } // end of not optical photon
     } // end of Cherenkov fiber
 
     // We are going to create an hit per each fiber with a signal above 0
