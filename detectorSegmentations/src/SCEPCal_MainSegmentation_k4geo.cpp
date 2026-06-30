@@ -68,8 +68,10 @@ namespace DDSegmentation {
     // get gamma
     int igamma = Gamma(cID);
     int iphi = Phi(cID);
+    // gamma count for THIS cell's theta ring (barrel: constant; endcap: projective/per-ring)
+    const int nGammaHere = nGammaAtTheta(Theta(cID));
 
-    if (igamma > 0 && igamma < m_nGamma_ - 1) {
+    if (igamma > 0 && igamma < nGammaHere - 1) {
       // middle crystals, just add +/-1 in gamma
       CellID cID_low =
           setCellID(System(cID), Phi(cID), Theta(cID), igamma - 1, Epsilon(cID), Depth(cID), isCherenkov(cID));
@@ -83,10 +85,10 @@ namespace DDSegmentation {
           setCellID(System(cID), Phi(cID), Theta(cID), igamma + 1, Epsilon(cID), Depth(cID), isCherenkov(cID));
       int iphi_low = modulo(iphi - 1, m_nPhi_);
       CellID cID_low =
-          setCellID(System(cID), iphi_low, Theta(cID), m_nGamma_ - 1, Epsilon(cID), Depth(cID), isCherenkov(cID));
+          setCellID(System(cID), iphi_low, Theta(cID), nGammaHere - 1, Epsilon(cID), Depth(cID), isCherenkov(cID));
       neighbours.insert(cID_low);
       neighbours.insert(cID_high);
-    } else if (igamma == m_nGamma_ - 1) {
+    } else if (igamma == nGammaHere - 1) {
       // highest gamma, add -1 in gamma and +1 in phi (with wrap-around)
       CellID cID_low =
           setCellID(System(cID), Phi(cID), Theta(cID), igamma - 1, Epsilon(cID), Depth(cID), isCherenkov(cID));

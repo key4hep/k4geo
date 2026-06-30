@@ -7,7 +7,9 @@
 //**************************************************************************
 
 // Includers from DD4hep
+#include "DDRec/DetectorData.h"
 #include "DDRec/Vector3D.h"
+#include "XML/Utilities.h"
 #include <DD4hep/DetFactoryHelper.h>
 
 // Includers from stl
@@ -498,6 +500,21 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   PlacedVolume AssemblyEndcapPV = motherVolume.placeVolume(AssemblyEndcap);
   AssemblyEndcapPV.addPhysVolID("system", x_det.id());
   sdet.setPlacement(AssemblyEndcapPV);
+
+  // apply <type_flags> and expose r-z extent for downstream reco
+  dd4hep::xml::setDetectorTypeFlag(e, sdet);
+
+  const double dtheta = thetaB / NbOfEndcap;                    // per-tower theta
+  const double theta_min = thetaB - NbOfEndcapReduced * dtheta; // innermost built tower edge
+  const double zmin = innerR * tan(thetaB);                     // front-face plane
+
+  dd4hep::rec::LayeredCalorimeterData* caloData = new dd4hep::rec::LayeredCalorimeterData;
+  caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::EndcapLayout;
+  caloData->extent[0] = zmin * tan(theta_min); // rmin (innermost instrumented tower)
+  caloData->extent[1] = innerR + tower_height; // rmax
+  caloData->extent[2] = zmin;                  // zmin (front-face plane)
+  caloData->extent[3] = zmin + tower_height;   // zmax
+  sdet.addExtension<dd4hep::rec::LayeredCalorimeterData>(caloData);
 
   std::cout << "--> DREndcapTubes::create_detector() end" << std::endl;
 

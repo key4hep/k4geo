@@ -249,7 +249,7 @@
             readout="DRBarrelTubeRO"
             vis="DRBTVis" >
 
-            <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_BARREL"/>
+            <type_flags type=" DetType_CALORIMETER + DetType_HADRONIC + DetType_BARREL"/>
             <!-- First group is base variables, second is for loading just a section of the calorimeter-->
             <dimensions
                 inner_radius="DRBTInnerCaloRadius"
