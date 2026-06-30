@@ -9,6 +9,7 @@
 #include "Math/Vector3D.h"
 #include <climits> // For CHAR_BIT
 #include <cmath>
+#include <map>
 #include <vector>
 
 namespace dd4hep {
@@ -137,6 +138,16 @@ namespace DDSegmentation {
     void setIThetaBarrelEnd(int iThetaEnd) { m_iTheta_barrel_end_ = iThetaEnd; }
     void setNPhi(int nPhi) { m_nPhi_ = nPhi; }
     void setNGamma(int nGamma) { m_nGamma_ = nGamma; }
+    /// gamma count per global theta field, set for barrel (constant) and endcap (per-ring).
+    /// The endcap is projective, so its gamma count varies with the theta ring.
+    void setNGammaPerTheta(const std::map<int, int>& nGammaPerTheta) { m_nGammaPerTheta_ = nGammaPerTheta; }
+
+    /// gamma count for a given global theta field (barrel: constant; endcap: per-ring).
+    /// Falls back to m_nGamma_ if the map was never populated (backward compatibility).
+    inline int nGammaAtTheta(int theta) const {
+      auto it = m_nGammaPerTheta_.find(theta);
+      return (it != m_nGammaPerTheta_.end()) ? it->second : m_nGamma_;
+    }
 
   private:
     /// Initialization common to all ctors.
@@ -159,12 +170,13 @@ namespace DDSegmentation {
     int m_isCherenIndex = -1;
 
     // geometry parameters
-    int m_detId_barrel_ = 0;         // system id for barrel
-    int m_detId_endcap_ = 0;         // system id for endcap
-    int m_iTheta_barrel_start_ = -1; // theta index start for barrel
-    int m_iTheta_barrel_end_ = -1;   // theta index end for barrel
-    int m_nPhi_ = -1;                // number of phi segments
-    int m_nGamma_ = -1;              // number of gamma segments
+    int m_detId_barrel_ = 0;              // system id for barrel
+    int m_detId_endcap_ = 0;              // system id for endcap
+    int m_iTheta_barrel_start_ = -1;      // theta index start for barrel
+    int m_iTheta_barrel_end_ = -1;        // theta index end for barrel
+    int m_nPhi_ = -1;                     // number of phi segments
+    int m_nGamma_ = -1;                   // number of gamma segments (barrel; fallback)
+    std::map<int, int> m_nGammaPerTheta_; // gamma count per global theta field (endcap is projective)
 
     std::unordered_map<int, Vector3D> m_positionOf;
   };
