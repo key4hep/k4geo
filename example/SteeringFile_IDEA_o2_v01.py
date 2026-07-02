@@ -1,3 +1,5 @@
+import os
+
 from DDSim.DD4hepSimulation import DD4hepSimulation
 from g4units import cm, mm, GeV, MeV
 
@@ -113,13 +115,16 @@ SIM.action.mapActions["SCEPCal_TimingLayer"] = "SCEPCal_TimingSDAction"
 SIM.filter.mapDetFilter["SCEPCal_MainLayer"] = ""
 SIM.filter.mapDetFilter["SCEPCal_TimingLayer"] = ""
 
-## Replace SDAction for DREndcapTubes subdetector
-SIM.action.mapActions["DREndcapTubes"] = "DRTubesSDAction"
-## Configure the regexSD for DREndcapTubes subdetector
-SIM.geometry.regexSensitiveDetector["DREndcapTubes"] = {
-    "Match": ["DRETS"],
-    "OutputLevel": 4,
-}
+## DREndcapTubes only exists in the full geometry; the CI wedge (IDEA_O2_CI=1) drops it, so skip its
+## SDAction/regexSD here -- otherwise they reference a missing detector and ddsim exits.
+if not os.environ.get("IDEA_O2_CI"):
+    ## Replace SDAction for DREndcapTubes subdetector
+    SIM.action.mapActions["DREndcapTubes"] = "DRTubesSDAction"
+    ## Configure the regexSD for DREndcapTubes subdetector
+    SIM.geometry.regexSensitiveDetector["DREndcapTubes"] = {
+        "Match": ["DRETS"],
+        "OutputLevel": 4,
+    }
 
 ## Replace SDAction for DRBarrelTubes subdetector
 SIM.action.mapActions["DRBarrelTubes"] = "DRTubesSDAction"
