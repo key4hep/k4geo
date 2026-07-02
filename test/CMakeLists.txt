@@ -124,7 +124,7 @@ add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o2_v01
   EXTRA_ARGS --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o2_v01.py
              --gun.particle pi- --gun.energy 10*GeV --gun.direction 0.966,0.259,0
              --random.seed 1988301045
-  PROPERTIES ENVIRONMENT "IDEA_O2_CI=1" TIMEOUT 900)
+  PROPERTIES ENVIRONMENT "IDEA_O2_CI=1" TIMEOUT 900 RUN_SERIAL TRUE)
 endif()
 
 #--------------------------------------------------
