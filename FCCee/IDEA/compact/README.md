@@ -56,3 +56,7 @@ April 2025: Added the dual-readout segmented crystal ECAL
 
 February 2026: Added the neighborhood finding algorithm for the crystal dual-readout calorimeter.
 April 2026: Switch to vertex detector and silicon wrapper from IDEA_o1_v04.
+
+July 2026: Added `LayeredCalorimeterData` extensions (r-z extent and DetType flags) to the dual-readout barrel and endcap tubes calorimeters, so downstream reconstruction can retrieve their inner radius / z directly from the geometry.
+
+July 2026: Added a reduced geometry for continuous integration, `IDEA_o2_v01_CI.xml`. The full IDEA_o2_v01 geometry needs ~18 GB of memory and cannot be built on CI runners, so the CI variant loads only a barrel wedge in phi/theta (via the partial-construction parameters in `DectDimensions_IDEA_o2_v01_CI.xml`), drops the dual-readout endcap, and disables the SCEPCal main-endcap and timing layers (`SCEPCal_o1_v01_CI.xml`, which also strips the scintillation optical properties, keeping only RINDEX/ABSLENGTH needed for Cherenkov). The wedge is sized to contain a barrel hadronic shower fired at theta = 90, phi = 15 deg; the corresponding `ddsim` gun test lives in `test/CMakeLists.txt`. The shared `example/SteeringFile_IDEA_o2_v01.py` skips the (absent) DREndcapTubes sensitive detector when the environment variable `IDEA_O2_CI=1` is set.
