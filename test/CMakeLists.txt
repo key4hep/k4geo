@@ -114,12 +114,18 @@ SET_TESTS_PROPERTIES( ${test_name} PROPERTIES TIMEOUT 900)
 endif()
 
 #--------------------------------------------------
-# test for IDEA o2 v01
-#if(DCH_INFO_H_EXIST)
-#SET( test_name "test_IDEA_o2_v01" )
-#add_test(NAME ${test_name} COMMAND ddsim --compactFile=${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o2_v01/IDEA_o2_v01.xml --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o2_v01.py -N 1 --random.seed 1988301045 --outputFile=testIDEA_o2_v01.root )
-#    SET_TESTS_PROPERTIES( ${test_name} PROPERTIES FAIL_REGULAR_EXPRESSION  " Exception; EXCEPTION;ERROR;Error" TIMEOUT 600)
-#endif()
+# test for IDEA o2 v01 -- CI wedge (partial barrel geometry).
+# The full IDEA_o2_v01 geometry needs ~18 GB and cannot run on CI, so we load a barrel phi/theta
+# wedge (IDEA_o2_v01_CI.xml) and fire a pi- into it to exercise the SCEPCal + DRBT sensitive
+# detectors.  IDEA_O2_CI=1 makes the steering skip the DREndcapTubes SD (dropped from the wedge).
+if(DCH_INFO_H_EXIST)
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/IDEA/compact/IDEA_o2_v01/IDEA_o2_v01_CI.xml
+  N_EVENTS 1
+  EXTRA_ARGS --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o2_v01.py
+             --gun.particle pi- --gun.energy 10*GeV --gun.direction 0.966,0.259,0
+             --random.seed 1988301045
+  PROPERTIES ENVIRONMENT "IDEA_O2_CI=1" TIMEOUT 900)
+endif()
 
 #--------------------------------------------------
 # test for ARC o1 v01
