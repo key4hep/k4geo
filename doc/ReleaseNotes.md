@@ -1,3 +1,143 @@
+# v00-25
+
+* 2026-06-11 sss ([PR#594](https://github.com/key4hep/k4geo/pull/594))
+  - Fix position calculations for Allegro HCal segmentations so that the positions are correct on the hits output by the simulation.
+
+* 2026-06-04 Maxwell Cui ([PR#604](https://github.com/key4hep/k4geo/pull/604))
+  - Exclude `TrackerEndcap_o2_v07_geo.cpp` when LCIO is disabled in the build
+
+* 2026-06-04 Juan Miguel Carceller ([PR#603](https://github.com/key4hep/k4geo/pull/603))
+  - Declare two members of GridDRcalo_k4geo as part of the class. Dynamic allocation is not needed, and mutable expresses how they are being changed in a const method. The behaviour is the same as now, but it is more explicit.
+
+* 2026-06-03 Juan Miguel Carceller ([PR#602](https://github.com/key4hep/k4geo/pull/602))
+  - Fix an out of bounds access in `CaloEndcapDiscs_o1_v01_geo.cpp` by creating the vectors with the correct number of elements, to make sure the vector has enough elements.
+
+* 2026-05-20 Stefano Franchellucci ([PR#598](https://github.com/key4hep/k4geo/pull/598))
+  - Add SurfaceManager plugins in ALLEGRO_o2_v01, allowing for tracker hit digitization
+
+* 2026-05-16 Victor Schwan ([PR#597](https://github.com/key4hep/k4geo/pull/597))
+  - ILD Documentation: Add a paragraph on the difference between *simulation* and *reconstruction* detector models
+
+* 2026-05-14 Juan Miguel Carceller ([PR#596](https://github.com/key4hep/k4geo/pull/596))
+  - Delete a test that was never run
+
+* 2026-05-07 sss ([PR#595](https://github.com/key4hep/k4geo/pull/595))
+  - Fix some warnings seen when compiling with clang.
+
+* 2026-05-06 andread3vita ([PR#592](https://github.com/key4hep/k4geo/pull/592))
+  - Update the z boundary of the magnetic field definition from `Solenoid_Coil_half_length` to `1.2 * Solenoid_Coil_half_length`
+
+* 2026-04-30 sss ([PR#593](https://github.com/key4hep/k4geo/pull/593))
+  - Remove some unused variables about which gcc16 was warning.
+
+* 2026-04-23 Giovanni Marchiori ([PR#591](https://github.com/key4hep/k4geo/pull/591))
+  - add some constants used for calculation of solenoid radii in ALLEGRO
+
+* 2026-04-23 armin-ilg ([PR#557](https://github.com/key4hep/k4geo/pull/557))
+  - Update of IDEA/ALLEGRO vertex detector to enable having part of the sensor insensitive (in thickness). The ultra-light, curved vertex detector can now be approximated by trapezoidal volumes, allowing track reconstruction with conformal tracking.
+  - Update of IDEA/ALLEGRO silicon wrapper: Only two layers and disks per side, leading to at least one hit almost everywhere. 4x4 cm^2 large sensors, both in barrel and disks. Simplification of disk design featuring ring-like module arrangement. Ferris-wheel geometry of silicon wrapper barrel supporting modules from and outside support shell, which is sitting on the drift chamber outer wall.
+
+* 2026-04-20 Thomas Madlener ([PR#579](https://github.com/key4hep/k4geo/pull/579))
+  - Use the more hierarchical detector drivers for MuSIC_v2 introduced in #549 in more detector concepts to facilitate conversion to  ACTS
+
+* 2026-04-20 SanghyunKo ([PR#560](https://github.com/key4hep/k4geo/pull/560))
+  - Add neighborhood finding algorithm for the IDEA o2 crystal dual-readout calorimeter
+  - Add CellID bit for distinguishing the Cherenkov/scintillation channel of the crystal dual-readout calorimeter
+
+* 2026-04-14 Erich Varnes ([PR#589](https://github.com/key4hep/k4geo/pull/589))
+  This PR pulls back an accidental change to the detector geometry that was causing CI tests to fail due to inconsistency between the geometry and neighbors map file.
+
+* 2026-04-14 Thomas Madlener ([PR#588](https://github.com/key4hep/k4geo/pull/588))
+  - Revert changes introduced in [#570](https://github.com/key4hep/k4geo/pull/570) that removed the majority of the components from `ILD_FCCee_v01`
+
+* 2026-04-10 Erich Varnes ([PR#587](https://github.com/key4hep/k4geo/pull/587))
+  Change the names of xml parameters related to the ECal endcap so that all of them begin with the prefix "EMEC".  This required corresponding changes in the geometry and segmentation codes.  
+  
+  An entry was also added to the materials.xml file, corresponding to sintered tungsten (10% copper mixture), which might be used for the absorbers.
+
+* 2026-04-09 Giovanni Marchiori ([PR#586](https://github.com/key4hep/k4geo/pull/586))
+  - Restore readout used for simulation of FCC-hh ECAL
+
+* 2026-04-06 sss ([PR#585](https://github.com/key4hep/k4geo/pull/585))
+  - Copy FCChh configuration from FCCDetectors, adjusting it to work with k4geo.
+
+* 2026-03-30 BrieucF ([PR#584](https://github.com/key4hep/k4geo/pull/584))
+  - [ALLEGRO] Move B field definition in the ECAl barrel xml since the solenoid is tight to the ECAL barrel (they share the same cryostat. This ensures that the derivation of the sampling fraction is consistent with the conditions used in productions for physics.
+
+* 2026-03-29 sss ([PR#582](https://github.com/key4hep/k4geo/pull/582))
+  - Fix cell edge calculation for HCal endcap grouped row segmentation.
+
+* 2026-03-27 Juan Miguel Carceller ([PR#583](https://github.com/key4hep/k4geo/pull/583))
+  - volV[1] was unconditionally accessed to construct surf1, but petalSensor only pushes a second element when double_sided == 1. Now the construction is guarded with std::optional<VolPlane> and only accessed when `double_sided == 1`.
+
+* 2026-03-19 Andre Sailer ([PR#577](https://github.com/key4hep/k4geo/pull/577))
+  - TPCSDAction: mark particles as having created hits if they leave hits in the TPC. I am fairly sure, this is necessary to fix the issue of backscattered particles' MC History for ILD (see https://github.com/AIDASoft/DD4hep/issues/471)
+
+* 2026-03-19 Thomas Madlener ([PR#575](https://github.com/key4hep/k4geo/pull/575))
+  - Introduce a `add_ddsim_gun_test` to facilitate adding simple tests that essentially ensure that a geometry can be loaded and used for simulation.
+
+* 2026-03-17 sss ([PR#580](https://github.com/key4hep/k4geo/pull/580))
+  - Fix a compilation warning seen with clang.
+
+* 2026-03-10 Jiashun Luo ([PR#574](https://github.com/key4hep/k4geo/pull/574))
+  Reduce thickness of last ALLEGRO ECAL barrel layer by 0.1 micron to avoid 49 nm overlap with volume beyond active material
+
+* 2026-03-10 Erich Varnes ([PR#569](https://github.com/key4hep/k4geo/pull/569))
+  The code for calculating the phi position of cells in the endcap turbine calorimeter was simplified to make it more efficient and understandable.  Comments were added to further facilitate understanding.  The output values are unchanged.
+
+* 2026-03-09 Thomas Madlener ([PR#570](https://github.com/key4hep/k4geo/pull/570))
+  - Remove unnecessary `<info>` tags from xml files that are not the top level detector compact files. See #544 for a discussion about this.
+    - Some were handled manually be me. The bulk of the work was done via some Claude automation.
+  - Add a script to check whether the `description.header().name()` of a loaded detector gives the expected value and use it in tests to enforce that the convention of using the stem of the top level xml file as a detector name is followed.
+    - e.g. `FCCee/CLD/compact/CLD_o2_v08/CLD_o2_v08.xml` will report `"CLD_o2_v08"` as its name.
+
+* 2026-03-09 sss ([PR#567](https://github.com/key4hep/k4geo/pull/567))
+  - Fixes/additions for FCCSWEndcapTurbine_k4geo.
+
+* 2026-03-06 Thomas Madlener ([PR#549](https://github.com/key4hep/k4geo/pull/549))
+  - Introduce new versions of `TrackerEndcap_o2_v07` and `VertexEndcap_o1_v07` based on the corresponding `v06` versions.
+    - Introduce a `layer_pos` (and `layer_neg` if `reflect == True`) `DetElement` and an assembly volume to make the resulting subdetector more hierarchical. This allows one to more easily walk the geometry tree as now the modules are placed into dedicated layers instead of being just placed into the top level sub detector volume.
+  - Use the new versions for the `MAIA_v0` geometry.
+  - **Other geometries that want this behavior have to actively opt-in!**
+
+* 2026-03-02 Archil Durglishvili ([PR#562](https://github.com/key4hep/k4geo/pull/562))
+  - HCAL endcap phi-row segmentation class (FCCSWHCalPhiRow_k4geo) is updated to group cells into the longitudinal pseudo-layers. This allows direct use of the HCAL endcap in the PandoraPFA without modifying LCPseudoLayerPlugin of LCContent. 
+  - A bug is fixed that caused incorrect cell positions in the negative-z part HCAL endcap in case of phi-row segmentation.
+
+* 2026-02-23 sss ([PR#564](https://github.com/key4hep/k4geo/pull/564))
+  - Fix a bunch of unused variable warnings seen with gcc16.
+
+* 2026-02-23 sss ([PR#563](https://github.com/key4hep/k4geo/pull/563))
+  - Fix some compilation failures seen with gcc16. Need to include <climits> for CHAR_BIT.
+
+* 2026-02-20 Lorenzo Pezzotti ([PR#558](https://github.com/key4hep/k4geo/pull/558))
+  - Added calo hit contributions in the hadronic calorimeter of IDEA_o2 to store the time of arrival of photons (photo-electrons) at SiPMs. Divided the time of arrivals into temporal bins.
+
+* 2026-02-17 Giovanni Marchiori ([PR#561](https://github.com/key4hep/k4geo/pull/561))
+  - Add to debug printout of ECal barrel with inclined absorbers the information about cellIDs span by cells at lateral surface of calorimeter
+
+* 2026-02-09 Jacopo Fanini ([PR#559](https://github.com/key4hep/k4geo/pull/559))
+  - Corrected a typo in the visualisation tags of ALLEGRO compact files and CLD_o4_v05
+
+* 2026-02-05 Daniel Jeans ([PR#552](https://github.com/key4hep/k4geo/pull/552))
+  - this code previously used a mixture of dimensions calculated in the xml description, and the more basic parameters from which they are calculated. Now use those calculated in the compact description, explicitly remove others. 
+  - remove duplicated material in QD0 cryostat (remove qd0_cryostat, duplicate of qd0_cryostat_wall).
+
+* 2026-02-03 Giovanni Marchiori ([PR#556](https://github.com/key4hep/k4geo/pull/556))
+  - fix crash when cryo of noble liquid calorimeter  is made active
+
+* 2026-01-16 Juan Miguel Carceller ([PR#555](https://github.com/key4hep/k4geo/pull/555))
+  - Remove a few unused files related to CI and tests, all ten years older or more
+
+* 2026-01-16 Daniel Jeans ([PR#551](https://github.com/key4hep/k4geo/pull/551))
+  - Fix the logic of TPCAction: information of previous G4 steps was not correctly accessed.
+
+* 2026-01-13 Juan Miguel Carceller ([PR#554](https://github.com/key4hep/k4geo/pull/554))
+  - Remove unused variable in LumiCal_o1_v02_geo.cpp to fix a compiler warning and some namespaces that are not being used
+
+* 2026-01-12 Erich Varnes ([PR#553](https://github.com/key4hep/k4geo/pull/553))
+  Update ECalEndcap_Turbine calibration and upstream xmls to keep in sync with default
+
 # v00-24
 
 * 2025-11-26 Lorenzo Pezzotti ([PR#545](https://github.com/key4hep/k4geo/pull/545))
