@@ -136,7 +136,7 @@
             </envelope>
             <comment>Vertex Detector Endcaps</comment>
 
-	    <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_ENDCAP"/>
+	        <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_ENDCAP"/>
 
             <module name="SiVertexEndcapModule1" vis="SiVertexModuleVis">
                 <trd x1="VertexEndcap_rmin1 * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" x2="VertexEndcap_rmax * tan(pi/(VertexEndcapModules))+VertexEndcapOverlap*sin(pi/VertexEndcapModules)" z="(VertexEndcap_rmax - VertexEndcap_rmin1) / 2" />
@@ -200,16 +200,14 @@
                 <ring r="(VertexEndcap_rmax + VertexEndcap_rmin3) / 2" zstart="VertexEndcap_z3+VertexEndcapModuleThickness/2.0" nmodules="(int) VertexEndcapModules" dz="0*cm" phi0="pi/(VertexEndcapModules)" module="SiVertexEndcapModule6"/>
             </layer>
         </detector>
-    </detectors>
 
-    </detector>
         <detector name="VertexVerticalCable" type="TrackerEndcapSupport_o1_v02" reflect="true"  region="VertexEndcapRegion">
-	    <envelope>
-		    <shape type="Assembly"/>
-	    </envelope>
-	    <layer id="1" inner_r="VertexBarrel_r1" inner_z="VertexBarrel_zmax+1*mm" outer_r="Vertex_outer_radius-5*env_safety" vis="SiVertexCableVis">
-		    <slice material="Copper" thickness="0.02*mm" />
-	    </layer>
+            <envelope>
+                <shape type="Assembly"/>
+            </envelope>
+            <layer id="1" inner_r="VertexBarrel_r1" inner_z="VertexBarrel_zmax+1*mm" outer_r="Vertex_outer_radius-5*env_safety" vis="SiVertexCableVis">
+                <slice material="Copper" thickness="0.02*mm" />
+            </layer>
         </detector>
     </detectors>
 
@@ -222,9 +220,4 @@
             <argument value="n_y=1."/>
         </plugin>
     </plugins>
-
-
-
-
-
 </lccdd>
