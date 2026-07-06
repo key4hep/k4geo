@@ -78,6 +78,7 @@
       buildLayers="True"
       printExcelTable="False"
       >
+    <useG4TT/>
     <!-- /detectors/detector/vessel -->
     <vessel
         mainMaterial="CarbonFibStr"
