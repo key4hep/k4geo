@@ -69,7 +69,7 @@
   <include ref="DRBarrelTubes_o1_v01.xml"/>
 
   <!-- Import muon system -->
-  <include ref="../IDEA_o1_v03/MuonSystem_o1_v01.xml"/>
+  <include ref="../IDEA_o1_v03/MuonSystemMuRWELL_o1_v01.xml"/>
 
   <plugins>
     <plugin name="DD4hepVolumeManager"/>
