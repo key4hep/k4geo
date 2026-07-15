@@ -15,9 +15,9 @@
         <constant name="VTXD_z1" value="VertexEndcap_zmin"/>
         <constant name="VTXD_z3" value="VertexEndcap_zmax"/>
         <constant name="VTXD_z2" value="VTXD_z1+(VTXD_z3-VTXD_z1)/2.0"/> <comment> Middle disk is in at the mid point between first and last disk </comment>
-	    <constant name="VTXD_rmin1" value="VTXD_z1 * atan(VertexDisksAcceptanceLimit)"/> <comment> tan(r/z) = VertexDisksAcceptanceLimit, so r = z * atan(VertexDisksAcceptanceLimit). Place the disks as close as possible to the beam pipe fulfilling the acceptance limit </comment>
-        <constant name="VTXD_rmin2" value="VTXD_z2 * atan(VertexDisksAcceptanceLimit)"/>
-        <constant name="VTXD_rmin3" value="VTXD_z3 * atan(VertexDisksAcceptanceLimit)"/>
+	    <constant name="VTXD_rmin1" value="VTXD_z1 * atan(VertexAcceptanceLimit)"/> <comment> tan(r/z) = VertexAcceptanceLimit, so r = z * atan(VertexAcceptanceLimit). Place the disks as close as possible to the beam pipe fulfilling the acceptance limit </comment>
+        <constant name="VTXD_rmin2" value="VTXD_z2 * atan(VertexAcceptanceLimit)"/>
+        <constant name="VTXD_rmin3" value="VTXD_z3 * atan(VertexAcceptanceLimit)"/>
 
         <comment> Single-hit disk layout </comment>
         <constant name="VTXD_singleHit_z1" value="VertexEndcap_zmin"/>
@@ -27,12 +27,12 @@
         <constant name="VTXD_singleHit_z4" value="VTXD_singleHit_z1+3.*(VTXD_singleHit_z6-VTXD_singleHit_z1)/5.0"/>
         <constant name="VTXD_singleHit_z5" value="VTXD_singleHit_z1+4.*(VTXD_singleHit_z6-VTXD_singleHit_z1)/5.0"/>
 
-        <constant name="VTXD_singleHit_rmin1" value="VTXD_singleHit_z1 * atan(VertexDisksAcceptanceLimit)"/> <comment> tan(r/z) = VertexDisksAcceptanceLimit, so r = z * atan(VertexDisksAcceptanceLimit). Place the disks as close as possible to the beam pipe fulfilling the acceptance limit </comment>
-        <constant name="VTXD_singleHit_rmin2" value="VTXD_singleHit_z2 * atan(VertexDisksAcceptanceLimit)"/>
-        <constant name="VTXD_singleHit_rmin3" value="VTXD_singleHit_z3 * atan(VertexDisksAcceptanceLimit)"/>
-        <constant name="VTXD_singleHit_rmin4" value="VTXD_singleHit_z4 * atan(VertexDisksAcceptanceLimit)"/>
-        <constant name="VTXD_singleHit_rmin5" value="VTXD_singleHit_z5 * atan(VertexDisksAcceptanceLimit)"/>
-        <constant name="VTXD_singleHit_rmin6" value="VTXD_singleHit_z6 * atan(VertexDisksAcceptanceLimit)"/>
+        <constant name="VTXD_singleHit_rmin1" value="VTXD_singleHit_z1 * atan(VertexAcceptanceLimit)"/> <comment> tan(r/z) = VertexAcceptanceLimit, so r = z * atan(VertexAcceptanceLimit). Place the disks as close as possible to the beam pipe fulfilling the acceptance limit </comment>
+        <constant name="VTXD_singleHit_rmin2" value="VTXD_singleHit_z2 * atan(VertexAcceptanceLimit)"/>
+        <constant name="VTXD_singleHit_rmin3" value="VTXD_singleHit_z3 * atan(VertexAcceptanceLimit)"/>
+        <constant name="VTXD_singleHit_rmin4" value="VTXD_singleHit_z4 * atan(VertexAcceptanceLimit)"/>
+        <constant name="VTXD_singleHit_rmin5" value="VTXD_singleHit_z5 * atan(VertexAcceptanceLimit)"/>
+        <constant name="VTXD_singleHit_rmin6" value="VTXD_singleHit_z6 * atan(VertexAcceptanceLimit)"/>
     </define>
 
     <define> <comment> Variables for the inclusion of other sub-detectors </comment>
@@ -61,87 +61,87 @@
 
             <module name="SiVertexEndcapModule1" vis="SiVertexModuleVis">
                 <trd x1="VTXD_rmin1 * tan(pi/(VTXD_nModules))+VTXD_Overlap*sin(pi/VTXD_nModules)" x2="VTXD_rmax * tan(pi/(VTXD_nModules))+VTXD_Overlap*sin(pi/VTXD_nModules)" z="(VTXD_rmax - VTXD_rmin1) / 2" />
-                <module_component thickness="VTXD_Support_Thickness/2.0"  material="Silicon" vis="SiVertexPassiveVis"/>
-                <module_component thickness="VTXD_Sensitive_Thickness/2.0"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
+                <module_component thickness="VTXD_Support_Thickness"  material="Silicon" vis="SiVertexPassiveVis"/>
+                <module_component thickness="VTXD_Sensitive_Thickness"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
                 <module_component thickness="VTXD_DoubleLayer_Gap/2.0"  material="Air" vis="SiVertexAir" />
             </module>
 
             <module name="SiVertexEndcapModule2" vis="SiVertexModuleVis">
                 <trd x1="VTXD_rmin1 * tan(pi/(VTXD_nModules))+VTXD_Overlap*sin(pi/VTXD_nModules)" x2="VTXD_rmax * tan(pi/(VTXD_nModules))+VTXD_Overlap*sin(pi/VTXD_nModules)" z="(VTXD_rmax - VTXD_rmin1) / 2" />
                 <module_component thickness="VTXD_DoubleLayer_Gap/2.0"  material="Air" vis="SiVertexAir" />
-                <module_component thickness="VTXD_Sensitive_Thickness/2.0"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
-                <module_component thickness="VTXD_Support_Thickness/2.0"  material="Silicon" vis="SiVertexPassiveVis"/>
+                <module_component thickness="VTXD_Sensitive_Thickness"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
+                <module_component thickness="VTXD_Support_Thickness"  material="Silicon" vis="SiVertexPassiveVis"/>
             </module>
 
             <module name="SiVertexEndcapModule3" vis="SiVertexModuleVis">
                 <trd x1="VTXD_rmin2 * tan(pi/(VTXD_nModules))+VTXD_Overlap*sin(pi/VTXD_nModules)" x2="VTXD_rmax * tan(pi/(VTXD_nModules))+VTXD_Overlap*sin(pi/VTXD_nModules)" z="(VTXD_rmax - VTXD_rmin2) / 2" />
-                <module_component thickness="VTXD_Support_Thickness/2.0"  material="Silicon" vis="SiVertexPassiveVis"/>
-                <module_component thickness="VTXD_Sensitive_Thickness/2.0"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
+                <module_component thickness="VTXD_Support_Thickness"  material="Silicon" vis="SiVertexPassiveVis"/>
+                <module_component thickness="VTXD_Sensitive_Thickness"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
                 <module_component thickness="VTXD_DoubleLayer_Gap/2.0"  material="Air" vis="SiVertexAir" />
             </module>
 
             <module name="SiVertexEndcapModule4" vis="SiVertexModuleVis">
                 <trd x1="VTXD_rmin2 * tan(pi/(VTXD_nModules))+VTXD_Overlap*sin(pi/VTXD_nModules)" x2="VTXD_rmax * tan(pi/(VTXD_nModules))+VTXD_Overlap*sin(pi/VTXD_nModules)" z="(VTXD_rmax - VTXD_rmin2) / 2" />
                 <module_component thickness="VTXD_DoubleLayer_Gap/2.0"  material="Air" vis="SiVertexAir" />
-                <module_component thickness="VTXD_Sensitive_Thickness/2.0"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
-                <module_component thickness="VTXD_Support_Thickness/2.0"  material="Silicon" vis="SiVertexPassiveVis"/>
+                <module_component thickness="VTXD_Sensitive_Thickness"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
+                <module_component thickness="VTXD_Support_Thickness"  material="Silicon" vis="SiVertexPassiveVis"/>
             </module>
 
             <module name="SiVertexEndcapModule5" vis="SiVertexModuleVis">
                 <trd x1="VTXD_rmin3 * tan(pi/(VTXD_nModules))+VTXD_Overlap*sin(pi/VTXD_nModules)" x2="VTXD_rmax * tan(pi/(VTXD_nModules))+VTXD_Overlap*sin(pi/VTXD_nModules)" z="(VTXD_rmax - VTXD_rmin3) / 2" />
-                <module_component thickness="VTXD_Support_Thickness/2.0"  material="Silicon" vis="SiVertexPassiveVis"/>
-                <module_component thickness="VTXD_Sensitive_Thickness/2.0"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
+                <module_component thickness="VTXD_Support_Thickness"  material="Silicon" vis="SiVertexPassiveVis"/>
+                <module_component thickness="VTXD_Sensitive_Thickness"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
                 <module_component thickness="VTXD_DoubleLayer_Gap/2.0"  material="Air" vis="SiVertexAir" />
             </module>
 
             <module name="SiVertexEndcapModule6" vis="SiVertexModuleVis">
                 <trd x1="VTXD_rmin3 * tan(pi/(VTXD_nModules))+VTXD_Overlap*sin(pi/VTXD_nModules)" x2="VTXD_rmax * tan(pi/(VTXD_nModules))+VTXD_Overlap*sin(pi/VTXD_nModules)" z="(VTXD_rmax - VTXD_rmin3) / 2" />
                 <module_component thickness="VTXD_DoubleLayer_Gap/2.0"  material="Air" vis="SiVertexAir" />
-                <module_component thickness="VTXD_Sensitive_Thickness/2.0"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
-                <module_component thickness="VTXD_Support_Thickness/2.0"  material="Silicon" vis="SiVertexPassiveVis"/>
+                <module_component thickness="VTXD_Sensitive_Thickness"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
+                <module_component thickness="VTXD_Support_Thickness"  material="Silicon" vis="SiVertexPassiveVis"/>
             </module>
 
             <comment> Single-hit disk module definition (adapted from CLD) </comment>
             <module name="SiVertexSingleHitEndcapModule1" vis="SiVertexModuleVis">
                 <trd x1="VTXD_singleHit_rmin1 * tan(pi/(VTXD_nModules))+VTXD_Overlap*sin(pi/VTXD_nModules)" x2="VTXD_rmax * tan(pi/(VTXD_nModules))+VTXD_Overlap*sin(pi/VTXD_nModules)" z="(VTXD_rmax - VTXD_singleHit_rmin1) / 2" />
-                <module_component thickness="VTXD_Support_Thickness/2.0"  material="Silicon" vis="SiVertexPassiveVis"/>
-                <module_component thickness="VTXD_Sensitive_Thickness/2.0"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
+                <module_component thickness="VTXD_Support_Thickness"  material="Silicon" vis="SiVertexPassiveVis"/>
+                <module_component thickness="VTXD_Sensitive_Thickness"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
                 <module_component thickness="VTXD_DoubleLayer_Gap/2.0"  material="Air" vis="SiVertexAir" />
             </module>
 
             <module name="SiVertexSingleHitEndcapModule2" vis="SiVertexModuleVis">
                 <trd x1="VTXD_singleHit_rmin2 * tan(pi/(VTXD_nModules))+VTXD_Overlap*sin(pi/VTXD_nModules)" x2="VTXD_rmax * tan(pi/(VTXD_nModules))+VTXD_Overlap*sin(pi/VTXD_nModules)" z="(VTXD_rmax - VTXD_singleHit_rmin2) / 2" />
                 <module_component thickness="VTXD_DoubleLayer_Gap/2.0"  material="Air" vis="SiVertexAir" />
-                <module_component thickness="VTXD_Sensitive_Thickness/2.0"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
-                <module_component thickness="VTXD_Support_Thickness/2.0"  material="Silicon" vis="SiVertexPassiveVis"/>
+                <module_component thickness="VTXD_Sensitive_Thickness"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
+                <module_component thickness="VTXD_Support_Thickness"  material="Silicon" vis="SiVertexPassiveVis"/>
             </module>
 
             <module name="SiVertexSingleHitEndcapModule3" vis="SiVertexModuleVis">
                 <trd x1="VTXD_singleHit_rmin3 * tan(pi/(VTXD_nModules))+VTXD_Overlap*sin(pi/VTXD_nModules)" x2="VTXD_rmax * tan(pi/(VTXD_nModules))+VTXD_Overlap*sin(pi/VTXD_nModules)" z="(VTXD_rmax - VTXD_singleHit_rmin3) / 2" />
-                <module_component thickness="VTXD_Support_Thickness/2.0"  material="Silicon" vis="SiVertexPassiveVis"/>
-                <module_component thickness="VTXD_Sensitive_Thickness/2.0"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
+                <module_component thickness="VTXD_Support_Thickness"  material="Silicon" vis="SiVertexPassiveVis"/>
+                <module_component thickness="VTXD_Sensitive_Thickness"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
                 <module_component thickness="VTXD_DoubleLayer_Gap/2.0"  material="Air" vis="SiVertexAir" />
             </module>
 
             <module name="SiVertexSingleHitEndcapModule4" vis="SiVertexModuleVis">
                 <trd x1="VTXD_singleHit_rmin4 * tan(pi/(VTXD_nModules))+VTXD_Overlap*sin(pi/VTXD_nModules)" x2="VTXD_rmax * tan(pi/(VTXD_nModules))+VTXD_Overlap*sin(pi/VTXD_nModules)" z="(VTXD_rmax - VTXD_singleHit_rmin4) / 2" />
                 <module_component thickness="VTXD_DoubleLayer_Gap/2.0"  material="Air" vis="SiVertexAir" />
-                <module_component thickness="VTXD_Sensitive_Thickness/2.0"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
-                <module_component thickness="VTXD_Support_Thickness/2.0"  material="Silicon" vis="SiVertexPassiveVis"/>
+                <module_component thickness="VTXD_Sensitive_Thickness"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
+                <module_component thickness="VTXD_Support_Thickness"  material="Silicon" vis="SiVertexPassiveVis"/>
             </module>
 
             <module name="SiVertexSingleHitEndcapModule5" vis="SiVertexModuleVis">
                 <trd x1="VTXD_singleHit_rmin5 * tan(pi/(VTXD_nModules))+VTXD_Overlap*sin(pi/VTXD_nModules)" x2="VTXD_rmax * tan(pi/(VTXD_nModules))+VTXD_Overlap*sin(pi/VTXD_nModules)" z="(VTXD_rmax - VTXD_singleHit_rmin5) / 2" />
-                <module_component thickness="VTXD_Support_Thickness/2.0"  material="Silicon" vis="SiVertexPassiveVis"/>
-                <module_component thickness="VTXD_Sensitive_Thickness/2.0"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
+                <module_component thickness="VTXD_Support_Thickness"  material="Silicon" vis="SiVertexPassiveVis"/>
+                <module_component thickness="VTXD_Sensitive_Thickness"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
                 <module_component thickness="VTXD_DoubleLayer_Gap/2.0"  material="Air" vis="SiVertexAir" />
             </module>
 
             <module name="SiVertexSingleHitEndcapModule6" vis="SiVertexModuleVis">
                 <trd x1="VTXD_singleHit_rmin6 * tan(pi/(VTXD_nModules))+VTXD_Overlap*sin(pi/VTXD_nModules)" x2="VTXD_rmax * tan(pi/(VTXD_nModules))+VTXD_Overlap*sin(pi/VTXD_nModules)" z="(VTXD_rmax - VTXD_singleHit_rmin6) / 2" />
                 <module_component thickness="VTXD_DoubleLayer_Gap/2.0"  material="Air" vis="SiVertexAir" />
-                <module_component thickness="VTXD_Sensitive_Thickness/2.0"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
-                <module_component thickness="VTXD_Support_Thickness/2.0"  material="Silicon" vis="SiVertexPassiveVis"/>
+                <module_component thickness="VTXD_Sensitive_Thickness"  material="Silicon" sensitive="true" vis="SiVertexSensitiveVis"/>
+                <module_component thickness="VTXD_Support_Thickness"  material="Silicon" vis="SiVertexPassiveVis"/>
             </module>
 
             <comment> Double-hit disks (CLD design) </comment>

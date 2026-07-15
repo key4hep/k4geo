@@ -59,8 +59,7 @@
   <!-- END vertex info copied from CLD_o2_v07.xml -->
 
   <!-- Changes necessary for FCC-SEED -->
-  <constant name="VertexAcceptanceLimit" value="0.125*rad"/> <!-- Acceptance limit of vertex detector, used to define number of modules per stave  -->
-  <constant name="VertexDisksAcceptanceLimit" value="0.135*rad"/>
+  <constant name="VertexAcceptanceLimit" value="0.125*rad"/> <!-- Acceptance limit of vertex detector, used to define number of modules per stave in the barrel and r_min of the disks -->
   <constant name="VTXIB_SEED_Kapton_beampipe_thickness" value="0.1*mm"/> <!-- Thickness of the Kapton layer on the beampipe. Kapton layer is used if Vertex_inner_radius+VTXIB_SEED_Kapton_beampipe_thickness = VTXIB_r_min_layer -->
   <constant name="VTXIB_tube_thickness"   value="0.2*mm"/>      <!-- Thickness of the inner vertex tube needed for air-cooling -->
   <constant name="VTXOB_r_max_layer" value="Vertex_outer_radius"/> 
