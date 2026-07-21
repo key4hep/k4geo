@@ -110,6 +110,11 @@
         <constant name="VTXIB_hybrid_width"     value="2.*Flex_width"/>
         <constant name="VTXIB_hybrid_opto_thickness" value="0.100*mm"/> <comment> Assume 100 µm of silicon-equivalent opto-electronics thickness </comment>
         <constant name="VTXIB_hybrid_opto_width" value="5.0*mm"/> <comment> Assume 5x5 mm^2 size of opto-electronics ASIC </comment>
+        <constant name="VTXIB_SEED_hybrid_tilt1" value="10.0*deg"/> <comment> Tilt of the hybrid away from the beam pipe </comment>
+        <constant name="VTXIB_SEED_hybrid_tilt2" value="10.0*deg"/>
+        <constant name="VTXIB_SEED_hybrid_tilt3" value="10.0*deg"/>
+        <constant name="VTXIB_SEED_hybrid_tilt4" value="10.0*deg"/>
+        <constant name="VTXIB_SEED_hybrid_tilt5" value="0.0*deg"/> 
 
         <comment> Further longeron properties </comment>
         <constant name="Support_longeron_betweenSensors_offset_r1" value="VTXIB_SEED_r1-VTXIB_SEED_curvature1-VTXIB_SEED_total_sensor_thickness-Support_longeron_betweenSensors_thickness"/>
@@ -203,8 +208,8 @@
                 </components>
 
                 <end_z name="end_of_stave_hybrid_flex" r="0.0*mm">
-                    <component thickness="VTXIB_hybrid_thickness"      isCurved="true" width="VTXIB_hybrid_width" length="VTXIB_hybrid_length" dz="Support_ring_length" r="0.0*mm" material="PCB" vis="VTXHybridVis" phi_offset="Flex_offset_phi1-VTXIB_SEED_sensor_phi_periphery/2."/>
-                    <component thickness="VTXIB_hybrid_opto_thickness" isCurved="true" width="VTXIB_hybrid_opto_width" length="VTXIB_hybrid_opto_width" dz="Support_ring_length + VTXIB_hybrid_length/2. - VTXIB_hybrid_opto_width/2." r="VTXIB_hybrid_thickness" material="Silicon" vis="OptoElVis" phi_offset="Flex_offset_phi1-VTXIB_SEED_sensor_phi_periphery/2."/>
+                    <component thickness="VTXIB_hybrid_thickness"      isCurved="true" width="VTXIB_hybrid_width" length="VTXIB_hybrid_length" dz="Support_ring_length" r="0.0*mm" material="PCB" vis="VTXHybridVis" phi_offset="Flex_offset_phi1-VTXIB_SEED_sensor_phi_periphery/2." tilt="VTXIB_SEED_hybrid_tilt1"/>
+                    <component thickness="VTXIB_hybrid_opto_thickness" isCurved="true" width="VTXIB_hybrid_opto_width" length="VTXIB_hybrid_opto_width" dz="Support_ring_length + VTXIB_hybrid_length/2. - VTXIB_hybrid_opto_width/2." r="VTXIB_hybrid_thickness" material="Silicon" vis="OptoElVis" phi_offset="Flex_offset_phi1-VTXIB_SEED_sensor_phi_periphery/2." tilt="VTXIB_SEED_hybrid_tilt1"/>
                 </end_z>
 
                 <end_z name="support_ring" r="Support_ring_offset_r">
@@ -234,8 +239,8 @@
                 </components>
 
                 <end_z name="end_of_stave_hybrid_flex" r="0.0*mm">
-                    <component thickness="VTXIB_hybrid_thickness"      isCurved="true" width="VTXIB_hybrid_width" length="VTXIB_hybrid_length" dz="Support_ring_length" r="0.0*mm" material="PCB" vis="VTXHybridVis" phi_offset="Flex_offset_phi2-VTXIB_SEED_sensor_phi_periphery/2."/>
-                    <component thickness="VTXIB_hybrid_opto_thickness" isCurved="true" width="VTXIB_hybrid_opto_width" length="VTXIB_hybrid_opto_width" dz="Support_ring_length + VTXIB_hybrid_length/2. - VTXIB_hybrid_opto_width/2." r="VTXIB_hybrid_thickness" material="Silicon" vis="OptoElVis" phi_offset="Flex_offset_phi2-VTXIB_SEED_sensor_phi_periphery/2."/>
+                    <component thickness="VTXIB_hybrid_thickness"      isCurved="true" width="VTXIB_hybrid_width" length="VTXIB_hybrid_length" dz="Support_ring_length" r="0.0*mm" material="PCB" vis="VTXHybridVis" phi_offset="Flex_offset_phi2-VTXIB_SEED_sensor_phi_periphery/2." tilt="VTXIB_SEED_hybrid_tilt2"/>
+                    <component thickness="VTXIB_hybrid_opto_thickness" isCurved="true" width="VTXIB_hybrid_opto_width" length="VTXIB_hybrid_opto_width" dz="Support_ring_length + VTXIB_hybrid_length/2. - VTXIB_hybrid_opto_width/2." r="VTXIB_hybrid_thickness" material="Silicon" vis="OptoElVis" phi_offset="Flex_offset_phi2-VTXIB_SEED_sensor_phi_periphery/2." tilt="VTXIB_SEED_hybrid_tilt2"/>
                 </end_z>
 
                 <end_z name="support_ring" r="Support_ring_offset_r">
@@ -266,8 +271,8 @@
                 </components>
 
                 <end_z name="end_of_stave_hybrid_flex" r="0.0*mm">
-                    <component thickness="VTXIB_hybrid_thickness"      isCurved="true" width="VTXIB_hybrid_width" length="VTXIB_hybrid_length" dz="Support_ring_length" r="0.0*mm" material="PCB" vis="VTXHybridVis" phi_offset="Flex_offset_phi3-VTXIB_SEED_sensor_phi_periphery/2."/>
-                    <component thickness="VTXIB_hybrid_opto_thickness" isCurved="true" width="VTXIB_hybrid_opto_width" length="VTXIB_hybrid_opto_width" dz="Support_ring_length + VTXIB_hybrid_length/2. - VTXIB_hybrid_opto_width/2." r="VTXIB_hybrid_thickness" material="Silicon" vis="OptoElVis" phi_offset="Flex_offset_phi3-VTXIB_SEED_sensor_phi_periphery/2."/>
+                    <component thickness="VTXIB_hybrid_thickness"      isCurved="true" width="VTXIB_hybrid_width" length="VTXIB_hybrid_length" dz="Support_ring_length" r="0.0*mm" material="PCB" vis="VTXHybridVis" phi_offset="Flex_offset_phi3-VTXIB_SEED_sensor_phi_periphery/2." tilt="VTXIB_SEED_hybrid_tilt3"/>
+                    <component thickness="VTXIB_hybrid_opto_thickness" isCurved="true" width="VTXIB_hybrid_opto_width" length="VTXIB_hybrid_opto_width" dz="Support_ring_length + VTXIB_hybrid_length/2. - VTXIB_hybrid_opto_width/2." r="VTXIB_hybrid_thickness" material="Silicon" vis="OptoElVis" phi_offset="Flex_offset_phi3-VTXIB_SEED_sensor_phi_periphery/2." tilt="VTXIB_SEED_hybrid_tilt3"/>
                 </end_z>
 
                 <end_z name="support_ring" r="Support_ring_offset_r">
@@ -297,8 +302,8 @@
                 </components>
 
                 <end_z name="end_of_stave_hybrid_flex" r="0.0*mm">
-                    <component thickness="VTXIB_hybrid_thickness"      isCurved="true" width="VTXIB_hybrid_width" length="VTXIB_hybrid_length" dz="Support_ring_length" r="0.0*mm" material="PCB" vis="VTXHybridVis" phi_offset="Flex_offset_phi4-VTXIB_SEED_sensor_phi_periphery/2."/>
-                    <component thickness="VTXIB_hybrid_opto_thickness" isCurved="true" width="VTXIB_hybrid_opto_width" length="VTXIB_hybrid_opto_width" dz="Support_ring_length + VTXIB_hybrid_length/2. - VTXIB_hybrid_opto_width/2." r="VTXIB_hybrid_thickness" material="Silicon" vis="OptoElVis" phi_offset="Flex_offset_phi4-VTXIB_SEED_sensor_phi_periphery/2."/>
+                    <component thickness="VTXIB_hybrid_thickness"      isCurved="true" width="VTXIB_hybrid_width" length="VTXIB_hybrid_length" dz="Support_ring_length" r="0.0*mm" material="PCB" vis="VTXHybridVis" phi_offset="Flex_offset_phi4-VTXIB_SEED_sensor_phi_periphery/2." tilt="VTXIB_SEED_hybrid_tilt4"/>
+                    <component thickness="VTXIB_hybrid_opto_thickness" isCurved="true" width="VTXIB_hybrid_opto_width" length="VTXIB_hybrid_opto_width" dz="Support_ring_length + VTXIB_hybrid_length/2. - VTXIB_hybrid_opto_width/2." r="VTXIB_hybrid_thickness" material="Silicon" vis="OptoElVis" phi_offset="Flex_offset_phi4-VTXIB_SEED_sensor_phi_periphery/2." tilt="VTXIB_SEED_hybrid_tilt4"/>
                 </end_z>
 
                 <end_z name="support_ring" r="Support_ring_offset_r">
@@ -325,8 +330,8 @@
                 </components>
 
                 <end_z name="end_of_stave_hybrid_flex" r="0.0*mm">
-                    <component thickness="VTXIB_hybrid_thickness"      isCurved="true" width="VTXIB_hybrid_width" length="VTXIB_hybrid_length" dz="Support_ring_length" r="0.0*mm" material="PCB" vis="VTXHybridVis" phi_offset="Flex_offset_phi5-VTXIB_SEED_sensor_phi_periphery/2."/>
-                    <component thickness="VTXIB_hybrid_opto_thickness" isCurved="true" width="VTXIB_hybrid_opto_width" length="VTXIB_hybrid_opto_width" dz="Support_ring_length + VTXIB_hybrid_length/2. - VTXIB_hybrid_opto_width/2." r="VTXIB_hybrid_thickness" material="Silicon" vis="OptoElVis" phi_offset="Flex_offset_phi5-VTXIB_SEED_sensor_phi_periphery/2."/>
+                    <component thickness="VTXIB_hybrid_thickness"      isCurved="true" width="VTXIB_hybrid_width" length="VTXIB_hybrid_length" dz="Support_ring_length" r="0.0*mm" material="PCB" vis="VTXHybridVis" phi_offset="Flex_offset_phi5-VTXIB_SEED_sensor_phi_periphery/2." tilt="VTXIB_SEED_hybrid_tilt5"/>
+                    <component thickness="VTXIB_hybrid_opto_thickness" isCurved="true" width="VTXIB_hybrid_opto_width" length="VTXIB_hybrid_opto_width" dz="Support_ring_length + VTXIB_hybrid_length/2. - VTXIB_hybrid_opto_width/2." r="VTXIB_hybrid_thickness" material="Silicon" vis="OptoElVis" phi_offset="Flex_offset_phi5-VTXIB_SEED_sensor_phi_periphery/2." tilt="VTXIB_SEED_hybrid_tilt5"/>
                 </end_z>
             </stave> 
 
