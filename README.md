@@ -78,7 +78,7 @@ For detector specific configuration for running ddsim, see the following reposit
 
 ### Linear Collider detectors
 
-- `CLD`: [CLDConfig](https://github.com/key4hep/CLDConfig)
+- `CLD`: [`${CLDConfig}/share/CLDConfig/`](https://github.com/key4hep/CLDConfig)
 - `ILD`: [ILDConfig](https://github.com/iLCSoft/ILDConfig)
 
 ## Visualisation
