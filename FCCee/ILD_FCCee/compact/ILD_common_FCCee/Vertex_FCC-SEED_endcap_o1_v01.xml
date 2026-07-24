@@ -27,12 +27,13 @@
         <constant name="VTXD_singleHit_z4" value="VTXD_singleHit_z1+3.*(VTXD_singleHit_z6-VTXD_singleHit_z1)/5.0"/>
         <constant name="VTXD_singleHit_z5" value="VTXD_singleHit_z1+4.*(VTXD_singleHit_z6-VTXD_singleHit_z1)/5.0"/>
 
-        <constant name="VTXD_singleHit_rmin1" value="VTXD_singleHit_z1 * atan(VertexAcceptanceLimit)"/> <comment> tan(r/z) = VertexAcceptanceLimit, so r = z * atan(VertexAcceptanceLimit). Place the disks as close as possible to the beam pipe fulfilling the acceptance limit </comment>
-        <constant name="VTXD_singleHit_rmin2" value="VTXD_singleHit_z2 * atan(VertexAcceptanceLimit)"/>
-        <constant name="VTXD_singleHit_rmin3" value="VTXD_singleHit_z3 * atan(VertexAcceptanceLimit)"/>
-        <constant name="VTXD_singleHit_rmin4" value="VTXD_singleHit_z4 * atan(VertexAcceptanceLimit)"/>
-        <constant name="VTXD_singleHit_rmin5" value="VTXD_singleHit_z5 * atan(VertexAcceptanceLimit)"/>
-        <constant name="VTXD_singleHit_rmin6" value="VTXD_singleHit_z6 * atan(VertexAcceptanceLimit)"/>
+        <constant name="VTXD_rmin_safety" value="2.0*mm"/> <comment> The r_min of the actually placed disks is lower than what is set, thus a fafety margin for the r_min of the disks is set to avoid going out of VertexAcceptanceLimit.</comment>
+        <constant name="VTXD_singleHit_rmin1" value="VTXD_singleHit_z1 * atan(VertexAcceptanceLimit)+2.*VTXD_rmin_safety"/> <comment> tan(r/z) = VertexAcceptanceLimit, so r = z * atan(VertexAcceptanceLimit). Place the disks as close as possible to the beam pipe fulfilling the acceptance limit </comment>
+        <constant name="VTXD_singleHit_rmin2" value="VTXD_singleHit_z2 * atan(VertexAcceptanceLimit)+2.*VTXD_rmin_safety"/>
+        <constant name="VTXD_singleHit_rmin3" value="VTXD_singleHit_z3 * atan(VertexAcceptanceLimit)+VTXD_rmin_safety"/>
+        <constant name="VTXD_singleHit_rmin4" value="VTXD_singleHit_z4 * atan(VertexAcceptanceLimit)+VTXD_rmin_safety"/>
+        <constant name="VTXD_singleHit_rmin5" value="VTXD_singleHit_z5 * atan(VertexAcceptanceLimit)+VTXD_rmin_safety"/>
+        <constant name="VTXD_singleHit_rmin6" value="VTXD_singleHit_z6 * atan(VertexAcceptanceLimit)+VTXD_rmin_safety"/>
     </define>
 
     <define> <comment> Variables for the inclusion of other sub-detectors </comment>
@@ -166,22 +167,22 @@
 
             <comment> Single-hit disk (adapted from CLD design) </comment>
             <layer id="0"  vis="SiVertexLayerVis">
-                <ring r="(VTXD_rmax + VTXD_singleHit_rmin1) / 2" zstart="VTXD_singleHit_z1" nmodules="(int) VTXD_nModules" dz="0*cm" phi0="pi/(VTXD_nModules)" module="SiVertexSingleHitEndcapModule1"/>
+                <ring r="(VTXD_rmax + VTXD_singleHit_rmin1) / 2" zstart="VTXD_singleHit_z1+VTXD_ModuleThickness" nmodules="(int) VTXD_nModules" dz="0*cm" phi0="pi/(VTXD_nModules)" module="SiVertexSingleHitEndcapModule1"/>
             </layer>
             <layer id="1"  vis="SiVertexLayerVis">
-                <ring r="(VTXD_rmax + VTXD_singleHit_rmin2) / 2" zstart="VTXD_singleHit_z2" nmodules="(int) VTXD_nModules" dz="0*cm" phi0="pi/(VTXD_nModules)" module="SiVertexSingleHitEndcapModule2"/>
+                <ring r="(VTXD_rmax + VTXD_singleHit_rmin2) / 2" zstart="VTXD_singleHit_z2+VTXD_ModuleThickness/2." nmodules="(int) VTXD_nModules" dz="0*cm" phi0="pi/(VTXD_nModules)" module="SiVertexSingleHitEndcapModule2"/>
             </layer>
             <layer id="2"  vis="SiVertexLayerVis">
-                <ring r="(VTXD_rmax + VTXD_singleHit_rmin3) / 2" zstart="VTXD_singleHit_z3" nmodules="(int) VTXD_nModules" dz="0*cm" phi0="pi/(VTXD_nModules)" module="SiVertexSingleHitEndcapModule3"/>
+                <ring r="(VTXD_rmax + VTXD_singleHit_rmin3) / 2" zstart="VTXD_singleHit_z3+VTXD_ModuleThickness/2." nmodules="(int) VTXD_nModules" dz="0*cm" phi0="pi/(VTXD_nModules)" module="SiVertexSingleHitEndcapModule3"/>
             </layer>
             <layer id="3"  vis="SiVertexLayerVis">
-                <ring r="(VTXD_rmax + VTXD_singleHit_rmin4) / 2" zstart="VTXD_singleHit_z4" nmodules="(int) VTXD_nModules" dz="0*cm" phi0="pi/(VTXD_nModules)" module="SiVertexSingleHitEndcapModule4"/>
+                <ring r="(VTXD_rmax + VTXD_singleHit_rmin4) / 2" zstart="VTXD_singleHit_z4+VTXD_ModuleThickness/2." nmodules="(int) VTXD_nModules" dz="0*cm" phi0="pi/(VTXD_nModules)" module="SiVertexSingleHitEndcapModule4"/>
             </layer>
             <layer id="4"  vis="SiVertexLayerVis">
-                <ring r="(VTXD_rmax + VTXD_singleHit_rmin5) / 2" zstart="VTXD_singleHit_z5" nmodules="(int) VTXD_nModules" dz="0*cm" phi0="pi/(VTXD_nModules)" module="SiVertexSingleHitEndcapModule5"/>
+                <ring r="(VTXD_rmax + VTXD_singleHit_rmin5) / 2" zstart="VTXD_singleHit_z5+VTXD_ModuleThickness/2." nmodules="(int) VTXD_nModules" dz="0*cm" phi0="pi/(VTXD_nModules)" module="SiVertexSingleHitEndcapModule5"/>
             </layer>
             <layer id="5"  vis="SiVertexLayerVis">
-                <ring r="(VTXD_rmax + VTXD_singleHit_rmin6) / 2" zstart="VTXD_singleHit_z6" nmodules="(int) VTXD_nModules" dz="0*cm" phi0="pi/(VTXD_nModules)" module="SiVertexSingleHitEndcapModule6"/>
+                <ring r="(VTXD_rmax + VTXD_singleHit_rmin6) / 2" zstart="VTXD_singleHit_z6-VTXD_ModuleThickness/2." nmodules="(int) VTXD_nModules" dz="0*cm" phi0="pi/(VTXD_nModules)" module="SiVertexSingleHitEndcapModule6"/>
             </layer>
         </detector>
     </detectors>

@@ -13,27 +13,23 @@
 
     <comment>Tracking detectors</comment>
     <detectors>
-       <!-- The envelope consists of a tube generally surrounding the vertex barrel and endcap disks, subtracted by a
-            cone describing the upper acceptance of the LumiCal, about 110 mrad in this version of the detector.
+       <!-- The envelope consists of a tube generally surrounding the vertex barrel and endcap disks, subtracted by two
+            cones to cut out the LumiCal acceptance area.
        -->
         <detector name="Vertex" type="DD4hep_SubdetectorAssembly" vis="VXDVis">
                 <shape type="BooleanShape" operation="Subtraction" material="Air">
                     <shape type="BooleanShape" operation="Subtraction" material="Air">
-                        <shape type="BooleanShape" operation="Subtraction" material="Air">
-                            <shape type="Tube" rmin="CentralBeamPipe_rmax+BeamPipeWidth" rmax="VTXOB_r_max_layer+VTXOB_rmax_clearance" dz="Vertex_half_length"/>
-                            <shape type="Cone" rmin1="0" rmax1="tan(VertexClearanceTheta)*2000.0*mm" rmin2="0" rmax2="0" z="2000.0*mm/2."/>
-                            <position x="0" y="0" z="-2000.0*mm/2." />
-                        </shape>                            
-                        <shape type="Cone" rmin1="0" rmax1="0" rmin2="0" rmax2="tan(VertexClearanceTheta)*2000.0*mm" z="2000.0*mm/2."/>
-                        <position x="0" y="0" z="2000.0*mm/2." />
+                        <shape type="BooleanShape" operation="Union" material="Air">
+                            <shape type="Tube" rmin="CentralBeamPipe_rmax+BeamPipeWidth" rmax="24.0*mm" dz="90.0*mm"/>
+                            <shape type="Tube" rmin="24.0*mm" rmax="VTXOB_r_max_layer+VTXOB_rmax_clearance" dz="Vertex_half_length"/>
+                        </shape>
+                        <shape type="Cone" rmin1="0" rmax1="tan(VertexAcceptanceLimit)*2000.0*mm" rmin2="0" rmax2="0" z="2000.0*mm/2."/>
+                        <position x="0" y="0" z="-2000.0*mm/2." />
                     </shape>
-                    <shape type="Tube" rmin="0" rmax="CentralBeamPipe_rmax+BeamPipeWidth" dz="Vertex_half_length"/> <comment> Cut out the central beam pipe area to avoid overlaps </comment>
-                    <position x="0" y="0" z="0"/>
-                </shape>
-                <!-- <shape type="BooleanShape" operation="Union" material="Air">
-                    <shape type="Tube" rmin="CentralBeamPipe_rmax+BeamPipeWidth" rmax="24.0*mm" dz="90.0*mm+15.0*mm"/> <comment> +15mm to include hybrid flex </comment>
-                    <shape type="Tube" rmin="24.0*mm" rmax="VTXOB_r_max_layer+VTXOB_rmax_clearance" dz="Vertex_half_length"/>
-                </shape> -->
+                    <shape type="Cone" rmin1="0" rmax1="0" rmin2="0" rmax2="tan(VertexAcceptanceLimit)*2000.0*mm" z="2000.0*mm/2."/>
+                    <position x="0" y="0" z="2000.0*mm/2." />
+                </shape>                            
+
             <comment>Vertex Assembly</comment>
             <composite name="VertexInnerBarrel"/>
             <composite name="Kapton_on_beampipe"/>
