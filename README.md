@@ -101,9 +101,7 @@ For detector specific configuration for running ddsim, see the following reposit
     - "SERVER" - CED Codebase: [https://github.com/iLCSoft/CED](https://github.com/iLCSoft/CED)
 - for FCC detectors: `Phoenix@FCC`
     - Codebase: [https://github.com/HEP-FCC/phoenix-at-fcc](https://github.com/HEP-FCC/phoenix-at-fcc)
-    - Deployment: [https://hep-fcc.github.io/phoenix-at-fcc/#/](https://hep-fcc.github.io/phoenix-at-fcc/#/) 
-
-Detailed instructions for running visualtion will follow.
+    - Deployment: [https://hep-fcc.github.io/phoenix-at-fcc/#/](https://hep-fcc.github.io/phoenix-at-fcc/#/)
 
 ## License and Copyright
 
