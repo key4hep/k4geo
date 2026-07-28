@@ -75,6 +75,7 @@ namespace sim {
 
     dd4hep::Segmentation* _geoSeg = &m_segmentation;
     auto segmentation = dynamic_cast<dd4hep::DDSegmentation::SCEPCal_MainSegmentation_k4geo*>(_geoSeg->segmentation());
+    G4double edep = step->GetTotalEnergyDeposit();
 
     auto newOrExistingHitIn = [&](std::size_t id, bool isCherenkov = false) -> Geant4Calorimeter::Hit* {
       Geant4HitCollection* coll = collection(id);
@@ -86,6 +87,7 @@ namespace sim {
 
       if (!hit) {
         DDSegmentation::Vector3D pos = segmentation->position(vID); // always use scintillation channel for position
+	Position global(pos.x(), pos.y(), pos.z());
         hit = new Geant4Calorimeter::Hit(global / dd4hep::mm);
 
         hit->cellID = cIDwithChannel;
