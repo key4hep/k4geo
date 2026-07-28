@@ -1,113 +1,114 @@
-# lcgeo (Lepton Collider Geometry)
+# k4geo (Key4hep Detector Geometries)
+
 [![DOI](https://zenodo.org/badge/60772160.svg)](https://doi.org/10.5281/zenodo.596333)
 [![Key4hep build](https://github.com/key4hep/k4geo/actions/workflows/key4hep-build.yaml/badge.svg)](https://github.com/key4hep/k4geo/actions/workflows/key4hep-build.yaml)
-[![Coverity Scan Build Status](https://scan.coverity.com/projects/12359/badge.svg)](https://scan.coverity.com/projects/ilcsoft-lcgeo)
 
-Implementation of Lepton Collider detector models in DD4hep.
+Implementation of detector models in DD4hep, for use within the [Key4hep](https://github.com/key4hep) software stack.
 
-lcgeo is distributed under the [GPLv3 License](http://www.gnu.org/licenses/gpl-3.0.en.html)
+k4geo is distributed under the [GPLv3 License](http://www.gnu.org/licenses/gpl-3.0.en.html)
 
 [![License](https://www.gnu.org/graphics/gplv3-127x51.png)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 ## Requirements
-DD4hep built with Geant4 and LCIO
+
+To build `k4geo` the following packages are required:
+- DD4hep
+- Geant4
+- LCIO
+- ROOT
+
+They are available for instance via the [Key4hep software stack](https://key4hep.github.io/key4hep-doc/), available on machines which have CVMFS mounted (e.g. lxplus).
+
 ## Download and Installation
-### Download
-  * `git clone https://github.com/iLCSoft/lcgeo.git`
 
-  * `cd lcgeo ; mkdir build ; cd build`
-### Initialize dependency
-  
-  * `source __path_to_DD4hep__/bin/thisdd4hep.sh`
-  
-  * `cmake -DBoost_NO_BOOST_CMAKE=ON ..`
-### Build
-  * `make -j4 install`
-### Initialize
-  * `source ../bin/thislcgeo.sh`
+```bash
+git clone https://github.com/key4hep/k4geo.git
+cd k4geo
+mkdir build install
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=../install
+make install -j4
+cd ..
+```
+<details>
 
-## Running some examples
-go to `cd ./example`
+<summary>For people using the key4hep stack</summary>
 
-### Create single particle input file
-Modify the python script `./example/lcio_particle_gun.py` in order to create
-an LCIO input file with single particles:
-  * `export PYTHONPATH=${LCIO}/src/python:${ROOTSYS}/lib:$PYTHONPATH`
-  * `python lcio_particle_gun.py`
+The required packages for installation are available via the [Key4hep software stack](https://key4hep.github.io/key4hep-doc/), available on machines which have CVMFS mounted (e.g. lxplus). <br>
 
-There is also example input file with 10 singe muons: ./mcparticles.slcio
+### Source the Key4hep stack
 
-### Run the simulation:
-   * `ddsim --compactFile ../ILD/compact/ILD_o1_v05/ILD_o1_v05.xml --inputFiles mcparticles.slcio -N 10`
+For development and to pick up the latest changes from the rest of the stack, source the nightly build:
 
-This creates an lcio file simple_lcio.slcio with sim hits and MCParticles.
+```bash
+source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+```
+Alternatively, source the stable `key4hep` release:
+```bash
+source /cvmfs/sw.hsf.org/key4hep/setup.sh
+```
+Be aware that the version of `k4geo` you cloned may not be compatible with the stable release.
 
-You can look at it in the usual way
+Sourcing the key4hep stack gives you access to the central version of `k4geo` via the `$K4GEO` environment variable.
+When using the nightly stack, this will point to a `k4geo` version with all the latest updates (up until the previous night), whereas using the stable stack will point to the latest release version. <br>
+The local installation of `k4geo` is thus only required if you plan to make local changes for development. <br>
+See section [After Installation](#after-installation) for instructions how to use your local `k4geo` with the rest of the key4hep stack. 
 
-   * `anajob simple_lcio.slcio`
+### Download and Installation
 
-   * `dumpevent simple_lcio.slcio 1`
+Same steps as above
 
-Change the ddsim command line parameters as needed to read other input files.
+### After Installation
 
-## Event displays:
+To make the `$K4GEO` variable point to your local version of `k4geo` use the command
 
-There are several ways for visualizing the detector geometry and the simulated events:
+```bash
+k4_local_repo
+```
 
-1) CED event display
+in the top-level `k4geo` directory (where you should end up being after following the installation instructions above). 
+This command adds your local `k4geo` path to the environment variable `$K4GEO` such that other processes will use your version rather than the central one.
 
-   `ced2go -d gear_ILD_o1_v05_ORG.xml -t ced2go-template.xml simple_lcio.slcio`
+</details>
 
+## Simulating some events
 
-2) teveDisplay
+To simulate events for a given detector use the `ddsim` command:
 
-   `ln -s simple_lcio.slcio teve_infile.slcio`
-   
-   `teveDisplay ../ILD/compact/ILD_o1_v05/ILD_o1_v05.xml`
+```bash
+ddsim -G -N 10 path/to/DETECTOR.xml
+``` 
+`-G` enables the particle gun (10 GeV electrons per default) and `-N 10` sets the number of events to 10.
 
+Note that this uses the `ddsim` default settings which are likely not appropriate for your detector.
+For detector specific configuration for running ddsim, see the following repositories:
 
-3) DDEve:
+### FCCee detectors
 
-   `root`
-   
-   `.x $DD4hepINSTALL/examples/DDEve/DDEve.C()`
-   
-   and then load
-  
-   `../ILD/compact/ILD_o1_v05/DDEve.xml`
+- `ALLEGRO`: [`${FCCCONFIG}/FullSim/ALLEGRO/`](https://github.com/HEP-FCC/FCC-config/tree/main/FCCee/FullSim/ALLEGRO)
+- `IDEA`: [`${FCCCONFIG}/FullSim/IDEA/`](https://github.com/HEP-FCC/FCC-config/tree/main/FCCee/FullSim/IDEA)
+- `ILD@FCCee`: [`${FCCCONFIG}/FullSim/ILD_FCCee/`](https://github.com/HEP-FCC/FCC-config/tree/main/FCCee/FullSim/ILD_FCCee)
 
-## Running the reconstruction with Marlin (EXPERIMENTAL)
- 
- 1) create a gear file from the DD4hep detector model, e.g.
+### Linear Collider detectors
 
-    `convertToGear default ../trunk/ILD/compact/ILD_o1_v05.xml gear_ILD_o1_v05_dd4hep.xml`
+- `CLD`: [`${CLDCONFIG}/share/CLDConfig/`](https://github.com/key4hep/CLDConfig)
+- `ILD`: [ILDConfig](https://github.com/iLCSoft/ILDConfig)
 
-    [ Friendly reminder: in order to work you need to explicitly build DD4hep with GEAR enabled. Use the flag `-DDD4HEP_USE_GEAR="ON"` for the cmake command. ]
+## Visualisation
 
-    Note: currently this might still be incomplete and you can copy missing information for example from the original Mokka gear files ( or use `$DDSIM/example/gear_ILD_o1_v05_dd4hep.xml` )
-
-
- 2) run simulation (as described above), e.g.:
-
-    `python ddsim.py ../ILD/compact/ILD_o1_v05/ILD_o1_v05.xml`
-
-
-
- 3) run the standard reconstruction ( tracking only so far ):
-
-    `Marlin ../example/ild_dd4hep_stdreco.xml`  
-    `--global.LCIOInputFiles=./simple_lcio.slcio`
-    `--MyLCIOOutputProcessor.LCIOOutputFile=./simple_lcio_REC.slcio`
-
- 4) look at the result w/ the CED event display, e.g.
- 
-    `ced2go -d ../example/gear_ILD_o1_v05_ORG.xml -t ../example/ced2go-template.xml simple_lcio_REC.slcio`
+- `k4CEDViewer/CED`:
+    - "CLIENT" - k4CEDViewer Codebase: [https://github.com/key4hep/k4CEDViewer](https://github.com/key4hep/k4CEDViewer)
+    - "SERVER" - CED Codebase: [https://github.com/iLCSoft/CED](https://github.com/iLCSoft/CED)
+- for FCC detectors: `Phoenix@FCC`
+    - Codebase: [https://github.com/HEP-FCC/phoenix-at-fcc](https://github.com/HEP-FCC/phoenix-at-fcc)
+    - Deployment: [https://hep-fcc.github.io/phoenix-at-fcc/#/](https://hep-fcc.github.io/phoenix-at-fcc/#/)
 
 ## License and Copyright
-Copyright (C), lcgeo Authors
 
-lcgeo is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+Copyright (C), k4geo Authors
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+k4geo is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-You should have received a copy of the GNU General Public License long with this program.  If not, see <http://www.gnu.org/licenses/>.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program. If not, see <http://www.gnu.org/licenses/>.
