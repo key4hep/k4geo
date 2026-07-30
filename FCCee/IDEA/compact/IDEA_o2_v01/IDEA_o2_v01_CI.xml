@@ -3,7 +3,7 @@
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
 
-  <info name="IDEA_o2_v01"
+  <info name="IDEA_o2_v01_CI"
     title="FCCee IDEA option 2 detector geometry master file"
     author="Niloufar Alipour Tehrani, vertex detector and silicon wrapper by Armin Ilg, DCH by Alvaro Tolosa-Delgado, dual-readout-tubes calorimeter by Lorenzo Pezzotti, SCEPCal by Wonyong Chung"
     url="no"
