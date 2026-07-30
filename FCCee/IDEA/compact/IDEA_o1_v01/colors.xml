@@ -40,7 +40,7 @@
     <vis name="GoldCoatingVis" alpha="0.0" r="0.0" g="1.0" b="1.0" showDaughters="true" visible="true"/>
     <vis name="TubeVis" alpha="1.0" r="1.0" g="0.7" b="0.5" showDaughters="true" visible="true"/>
     <vis name="VacVis" alpha="1.0" r="1.0" g="1.0" b="1.0" showDaughters="true" visible="false"/>
-    <vis name="BlueVis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>  <!-- Missing definiton -->
+    <vis name="BlueVis" alpha="1.0" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/> <!-- Missing definiton -->
 
     <!-- Calorimeter (retrieved from Calorimeter.xml) -->
     <vis name="EndCalVis" r="0.8" g="0.8" b="0" showDaughters="false" visible="true"/>
@@ -67,10 +67,10 @@
     <vis name="vCDCH:ROSteel" alpha="1.0" r="0.8" g="0.5" b="0.0" showDaughters="true" visible="true"/>
     <vis name="vCDCH:Air" showDaughters="true" visible="false"/>
 
-    <!-- Beam instrumentation (defined in BeamInstrumentation.xml) -->
+    <!-- Missing definition. Beam instrumentation (defined in BeamInstrumentation.xml) -->
     <vis name="CoilVis" alpha="1.0" r="0.5" g="0.5" b="0.5" showDaughters="true" visible="true"/>
 
-    <!-- LumiCal / HOMAbsorber (defined in LumiCal.xml and HOMAbsorber.xml) -->
+    <!-- Missing definitions. LumiCal / HOMAbsorber (defined in LumiCal.xml and HOMAbsorber.xml) -->
     <vis name="SeeThrough" alpha="0.0" r="0" g="0" b="0" showDaughters="true" visible="false"/>
     <vis name="BCLayerVis1" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>
     <vis name="BCLayerVis2" alpha="1.0" r="0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
