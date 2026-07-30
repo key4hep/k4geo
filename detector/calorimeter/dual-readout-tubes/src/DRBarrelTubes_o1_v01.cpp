@@ -48,6 +48,7 @@ static Ref_t create_detector(Detector& description, xml_h entities, SensitiveDet
   // apply <type_flags> and expose r-z extent for downstream reco
   dd4hep::xml::setDetectorTypeFlag(entities, s_detElement);
 
+  // DD4hep DetElement takes ownership and deletes the extension on destruction
   dd4hep::rec::LayeredCalorimeterData* caloData = new dd4hep::rec::LayeredCalorimeterData;
   caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::BarrelLayout;
   caloData->extent[0] = calo_inner_r; // rmin

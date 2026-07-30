@@ -508,8 +508,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   const double theta_min = thetaB - NbOfEndcapReduced * dtheta; // innermost built tower edge
   const double zmin = innerR * tan(thetaB);                     // front-face plane
 
+  // DD4hep DetElement takes ownership and deletes the extension on destruction
   dd4hep::rec::LayeredCalorimeterData* caloData = new dd4hep::rec::LayeredCalorimeterData;
   caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::EndcapLayout;
+  caloData->inner_symmetry = NbOfZRot;
+  caloData->outer_symmetry = NbOfZRot;
   caloData->extent[0] = zmin * tan(theta_min); // rmin (innermost instrumented tower)
   caloData->extent[1] = innerR + tower_height; // rmax
   caloData->extent[2] = zmin;                  // zmin (front-face plane)

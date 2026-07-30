@@ -176,7 +176,8 @@ namespace DDSegmentation {
     int m_iTheta_barrel_end_ = -1;        // theta index end for barrel
     int m_nPhi_ = -1;                     // number of phi segments
     int m_nGamma_ = -1;                   // number of gamma segments (barrel; fallback)
-    std::map<int, int> m_nGammaPerTheta_; // gamma count per global theta field (endcap is projective)
+    std::map<int, int> m_nGammaPerTheta_; // endcap gamma count per global theta field
+                                          // (barrel has a constant gamma and fallbacks to m_nGamma_)
 
     std::unordered_map<int, Vector3D> m_positionOf;
   };
