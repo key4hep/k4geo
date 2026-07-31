@@ -210,13 +210,6 @@ namespace DDSegmentation {
     /// the number of readout cells ganged into a single calibration cell
     /// in Z
     std::vector<int> m_gangedZLayers;
-<<<<<<< HEAD
-=======
-    /// the number of bins in phi
-    int m_phiBins;
-    /// the coordinate offset in phi
-    double m_offsetPhi;
->>>>>>> 52b59b4e (Fix calculation of sim hit positions in turbine ecal endcap (#608))
     /// the coordinate offset in theta
     double m_offsetTheta; /// the field name used for phi
     std::string m_phiID;
