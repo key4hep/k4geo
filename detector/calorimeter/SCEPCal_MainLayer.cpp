@@ -216,7 +216,9 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
     double RinEndcap = BARREL_HALF_Z * std::tan(thC);
     int nGammaEndcap = std::max(int(2 * M_PI * RinEndcap / (PHI_SEGMENTS * XTAL_TH_WIDTH)), 1);
     nGammaPerTheta[iTheta] = nGammaEndcap;                                       // +z endcap (theta = iTheta)
-    nGammaPerTheta[2 * N_THETA_ENDCAP + N_THETA_BARREL - iTheta] = nGammaEndcap; // -z endcap
+    // -z endcap: mirror of the +z index range, placed immediately after the barrel so that the
+    // theta numbering is contiguous across the barrel/endcap boundary (see the placement below)
+    nGammaPerTheta[2 * N_THETA_ENDCAP + N_THETA_BARREL - 1 - iTheta] = nGammaEndcap;
   }
   segmentation->setNGammaPerTheta(nGammaPerTheta);
 
@@ -232,7 +234,10 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
   extensionData->extent[1] = BARREL_INNER_R + XTAL_LEN_F + XTAL_LEN_R; // barrel rmax
   extensionData->extent[2] = BARREL_HALF_Z;                            // endcap zmin
   extensionData->extent[3] = BARREL_HALF_Z + XTAL_LEN_F + XTAL_LEN_R;  // endcap zmax
-  extensionData->extent[4] = BARREL_HALF_Z * std::tan(thC_ec_beg);     // endcap rmin
+  // endcap rmin: inner edge of the first constructed ring (thC_ec_beg is its centre), converted
+  // from the projective frame to a physical radius (r = z*tan(theta) - PROJ_OFFSET_R), the same
+  // convention used for the phi-slice envelope and the beampipe-clearance test above
+  extensionData->extent[4] = BARREL_HALF_Z * std::tan(thC_ec_beg - D_THETA_ENDCAP / 2) - PROJ_OFFSET_R;
   extensionData->extent[5] = BARREL_INNER_R + XTAL_LEN_F + XTAL_LEN_R; // endcap rmax
   extensionData->layers.resize(2);
   extensionData->layers.at(0).distance = BARREL_INNER_R;              // z-axis to the front layer
@@ -754,7 +759,8 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
 
             CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
                 "EndcapCrystalF_1", XTAL_LEN_F / 2, vFsub_1, crystalFXML, Transform3D(dispFsub_1),
-                endcapThetaAssemblyVolume_1, ENDCAP_SYSTEM_NO, iPhi, 2 * N_THETA_ENDCAP + N_THETA_BARREL - iTheta,
+                endcapThetaAssemblyVolume_1, ENDCAP_SYSTEM_NO, iPhi,
+                2 * N_THETA_ENDCAP + N_THETA_BARREL - 1 - iTheta,
                 nGamma, nEpsilon, 0, posGlobal_1);
             numCrystalsEndcap += 1;
           }
@@ -786,7 +792,8 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
 
             CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
                 "EndcapCrystalR_1", XTAL_LEN_R / 2, vRsub_1, crystalRXML, Transform3D(dispRsub_1),
-                endcapThetaAssemblyVolume_1, ENDCAP_SYSTEM_NO, iPhi, 2 * N_THETA_ENDCAP + N_THETA_BARREL - iTheta,
+                endcapThetaAssemblyVolume_1, ENDCAP_SYSTEM_NO, iPhi,
+                2 * N_THETA_ENDCAP + N_THETA_BARREL - 1 - iTheta,
                 nGamma, nEpsilon, 1, posGlobal_1);
             numCrystalsEndcap += 1;
           }

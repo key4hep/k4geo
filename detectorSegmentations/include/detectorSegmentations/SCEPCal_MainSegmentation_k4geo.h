@@ -149,6 +149,31 @@ namespace DDSegmentation {
       return (it != m_nGammaPerTheta_.end()) ? it->second : m_nGamma_;
     }
 
+    /// Gamma indices in the theta ring at thetaTo whose azimuthal span overlaps cell
+    /// (gamma, thetaFrom).  The endcap is projective, so adjacent theta rings can hold different
+    /// gamma counts; a wider cell then genuinely touches two narrower ones, so this returns a
+    /// list rather than a single index.
+    inline std::vector<int> gammaRange(int gamma, int thetaFrom, int thetaTo) const {
+      const int nFrom = nGammaAtTheta(thetaFrom);
+      const int nTo = nGammaAtTheta(thetaTo);
+
+      if (nFrom == nTo)
+        return {gamma};
+
+      // the cell covers [gamma, gamma + 1] / nFrom of the phi slice; collect every cell of the
+      // target ring that this interval overlaps (cells merely touching at a boundary are excluded)
+      const int first = (gamma * nTo) / nFrom;                       // floor
+      const int last = ((gamma + 1) * nTo + nFrom - 1) / nFrom - 1;  // ceil - 1
+
+      std::vector<int> gammas;
+      gammas.reserve(last - first + 1);
+
+      for (int g = first; g <= last; ++g)
+        gammas.push_back(g);
+
+      return gammas;
+    }
+
   private:
     /// Initialization common to all ctors.
     void commonSetup();
