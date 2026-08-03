@@ -215,7 +215,7 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
     double thC = D_THETA_ENDCAP / 2 + iTheta * D_THETA_ENDCAP;
     double RinEndcap = BARREL_HALF_Z * std::tan(thC);
     int nGammaEndcap = std::max(int(2 * M_PI * RinEndcap / (PHI_SEGMENTS * XTAL_TH_WIDTH)), 1);
-    nGammaPerTheta[iTheta] = nGammaEndcap;                                       // +z endcap (theta = iTheta)
+    nGammaPerTheta[iTheta] = nGammaEndcap; // +z endcap (theta = iTheta)
     // -z endcap: mirror of the +z index range, placed immediately after the barrel so that the
     // theta numbering is contiguous across the barrel/endcap boundary (see the placement below)
     nGammaPerTheta[2 * N_THETA_ENDCAP + N_THETA_BARREL - 1 - iTheta] = nGammaEndcap;
@@ -759,8 +759,7 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
 
             CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
                 "EndcapCrystalF_1", XTAL_LEN_F / 2, vFsub_1, crystalFXML, Transform3D(dispFsub_1),
-                endcapThetaAssemblyVolume_1, ENDCAP_SYSTEM_NO, iPhi,
-                2 * N_THETA_ENDCAP + N_THETA_BARREL - 1 - iTheta,
+                endcapThetaAssemblyVolume_1, ENDCAP_SYSTEM_NO, iPhi, 2 * N_THETA_ENDCAP + N_THETA_BARREL - 1 - iTheta,
                 nGamma, nEpsilon, 0, posGlobal_1);
             numCrystalsEndcap += 1;
           }
@@ -792,8 +791,7 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
 
             CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
                 "EndcapCrystalR_1", XTAL_LEN_R / 2, vRsub_1, crystalRXML, Transform3D(dispRsub_1),
-                endcapThetaAssemblyVolume_1, ENDCAP_SYSTEM_NO, iPhi,
-                2 * N_THETA_ENDCAP + N_THETA_BARREL - 1 - iTheta,
+                endcapThetaAssemblyVolume_1, ENDCAP_SYSTEM_NO, iPhi, 2 * N_THETA_ENDCAP + N_THETA_BARREL - 1 - iTheta,
                 nGamma, nEpsilon, 1, posGlobal_1);
             numCrystalsEndcap += 1;
           }
