@@ -467,7 +467,8 @@ static dd4hep::Ref_t create_detector_SCEPCal_TimingLayer(dd4hep::Detector& theDe
 
         CreateEightPointShapeVolume_SetVolAttributes_Place_SetCellId(
             "TlEndcapCrystal_1", XTAL_DEPTH_T / 2, verticesT_1, crystalTXML, Transform3D(dispT),
-            tlendcapThetaAssemblyVolume_1, TLENDCAP_SYSTEM_NO, iPhi, 2 * N_THETA_TLENDCAP + N_THETA_TLBARREL - iTheta,
+            tlendcapThetaAssemblyVolume_1, TLENDCAP_SYSTEM_NO, iPhi,
+            2 * N_THETA_TLENDCAP + N_THETA_TLBARREL - 1 - iTheta,
             nGamma, posGlobal_1);
         numCrystalsTlEndcap += 1;
       }

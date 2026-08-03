@@ -119,12 +119,16 @@ namespace sim {
     if (edep <= 0.)
       return true; // do not save hits with no energy deposit
 
-    // Do not fill edep and S hits if there is no ionizing energy deposit
+    // Scintillation signal for this step.  NOTE: this early return also gates the edep collection
+    // below, so SCEPCal_MainEdep is deliberately NOT a complete record of the ionizing energy
+    // deposited in the crystals.  It stores only the deposits that produced a scintillation signal,
+    // so that every edep hit -- and the MC-truth contribution attached to it -- has a matching S hit
+    // in the same cell.
     auto Scount = m_userData.SmearSsignal(edep);
     if (Scount <= 0)
-      return true; // do not save hits with no scintillation signal
+      return true;
 
-    // edep hits (truth)
+    // edep hits (truth): only for steps with a scintillation signal -- see the note above
     auto* hitedep = newOrExistingHitIn(m_collectionID, false);
     HitContribution contrib = Geant4Calorimeter::Hit::extractContribution(step);
     hitedep->energyDeposit += contrib.deposit;
