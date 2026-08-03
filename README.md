@@ -94,6 +94,7 @@ For detector specific configuration for running ddsim, see the following reposit
 
 - `CLIC`: [CLICPerformance/clicConfig](https://github.com/iLCSoft/CLICPerformance/tree/master/clicConfig)
 - `ILD`: [ILDConfig](https://github.com/iLCSoft/ILDConfig)
+- `SiD`: [SiDPerformance](https://github.com/iLCSoft/SiDPerformance)
 
 ### Muon Collider detectors
 
