@@ -86,12 +86,12 @@ For detector specific configuration for running ddsim, see the following reposit
 ### FCCee detectors
 
 - `ALLEGRO`: [`${FCCCONFIG}/FullSim/ALLEGRO/`](https://github.com/HEP-FCC/FCC-config/tree/main/FCCee/FullSim/ALLEGRO)
+- `CLD`: [`${CLDCONFIG}/share/CLDConfig/`](https://github.com/key4hep/CLDConfig)
 - `IDEA`: [`${FCCCONFIG}/FullSim/IDEA/`](https://github.com/HEP-FCC/FCC-config/tree/main/FCCee/FullSim/IDEA)
 - `ILD@FCCee`: [`${FCCCONFIG}/FullSim/ILD_FCCee/`](https://github.com/HEP-FCC/FCC-config/tree/main/FCCee/FullSim/ILD_FCCee)
 
 ### Linear Collider detectors
 
-- `CLD`: [`${CLDCONFIG}/share/CLDConfig/`](https://github.com/key4hep/CLDConfig)
 - `ILD`: [ILDConfig](https://github.com/iLCSoft/ILDConfig)
 
 ## Visualisation
