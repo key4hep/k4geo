@@ -208,15 +208,9 @@ namespace DDSegmentation {
     /// the number of readout cells ganged into a single calibration cell
     /// in Z
     std::vector<int> m_gangedZLayers;
-    /// the number of bins in phi
-    int m_phiBins;
-    /// the coordinate offset in phi
-    double m_offsetPhi;
     /// the coordinate offset in theta
     double m_offsetTheta; /// the field name used for phi
     std::string m_phiID;
-    /// the number of bins in rho
-    int m_rhoBins;
     ////grid size in rho
     std::vector<double> m_gridSizeRho;
     /// vector that holds local z positions.
