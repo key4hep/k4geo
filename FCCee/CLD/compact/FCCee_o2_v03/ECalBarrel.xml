@@ -36,7 +36,7 @@
             
             <type_flags type=" DetType_CALORIMETER + DetType_ELECTROMAGNETIC + DetType_BARREL"/>
 
-            <sensitive type="SimpleCalorimeterSD"/>
+            <sensitive type="calorimeter"/>
 
             <envelope vis="ECALVis">
                 <shape type="PolyhedraRegular" numsides="ECalBarrel_symmetry"  rmin="ECalBarrel_inner_radius" rmax="ECalBarrel_outer_radius" dz="2.*ECalBarrel_half_length"  material="Air"/>
@@ -72,7 +72,6 @@
     
     
 </lccdd>
-
 
 
 
