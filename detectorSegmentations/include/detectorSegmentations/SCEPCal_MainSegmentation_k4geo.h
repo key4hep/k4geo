@@ -162,8 +162,8 @@ namespace DDSegmentation {
 
       // the cell covers [gamma, gamma + 1] / nFrom of the phi slice; collect every cell of the
       // target ring that this interval overlaps (cells merely touching at a boundary are excluded)
-      const int first = (gamma * nTo) / nFrom;                       // floor
-      const int last = ((gamma + 1) * nTo + nFrom - 1) / nFrom - 1;  // ceil - 1
+      const int first = (gamma * nTo) / nFrom;                      // floor
+      const int last = ((gamma + 1) * nTo + nFrom - 1) / nFrom - 1; // ceil - 1
 
       std::vector<int> gammas;
       gammas.reserve(last - first + 1);
