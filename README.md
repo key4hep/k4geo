@@ -92,12 +92,21 @@ For detector specific configuration for running ddsim, see the following reposit
 
 ### Linear Collider detectors
 
+- `CLIC`: [CLICPerformance/clicConfig](https://github.com/iLCSoft/CLICPerformance/tree/master/clicConfig)
 - `ILD`: [ILDConfig](https://github.com/iLCSoft/ILDConfig)
 
 ### Muon Collider detectors
 
+#### Simulation
+
+The simulation workflow is the same for all muon collider detector concepts, kept centrally at
+[MuonColliderSoft/mucoll-benchmarks](https://github.com/MuonColliderSoft/mucoll-benchmarks).
+
+#### Reconstruction
+
 - `MAIA`: [MAIAConfig](https://github.com/MuonColliderSoft/MAIAConfig)
 - `MuSIC`: [MuSICConfig](https://github.com/MuonColliderSoft/MuSICConfig)
+- `MuColl (3 TeV concept)`: [MuCollConfig](https://github.com/MuonColliderSoft/MuCollConfig)
 
 ## Visualisation
 
