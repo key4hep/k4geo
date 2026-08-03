@@ -513,10 +513,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   caloData->layoutType = dd4hep::rec::LayeredCalorimeterData::EndcapLayout;
   caloData->inner_symmetry = NbOfZRot;
   caloData->outer_symmetry = NbOfZRot;
-  caloData->extent[0] = zmin * tan(theta_min); // rmin (innermost instrumented tower)
-  caloData->extent[1] = innerR + tower_height; // rmax
-  caloData->extent[2] = zmin;                  // zmin (front-face plane)
-  caloData->extent[3] = zmin + tower_height;   // zmax
+  // The towers are projective, so each one only gains a projection of its height: the outermost
+  // tower (theta = thetaB) sets rmax, the innermost one (theta = theta_min) sets zmax.
+  caloData->extent[0] = zmin * tan(theta_min);                // rmin (innermost instrumented tower)
+  caloData->extent[1] = innerR + tower_height * sin(thetaB);  // rmax (outermost tower, inclined)
+  caloData->extent[2] = zmin;                                 // zmin (front-face plane)
+  caloData->extent[3] = zmin + tower_height * cos(theta_min); // zmax (innermost tower, inclined)
   sdet.addExtension<dd4hep::rec::LayeredCalorimeterData>(caloData);
 
   std::cout << "--> DREndcapTubes::create_detector() end" << std::endl;
