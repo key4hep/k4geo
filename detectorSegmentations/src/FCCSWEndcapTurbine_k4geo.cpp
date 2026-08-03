@@ -358,7 +358,7 @@ namespace DDSegmentation {
 
     CellID iWheel = decoder()->get(cID, m_wheelIndex);
     CellID iRho = decoder()->get(cID, m_rhoIndex);
-    CellID iZ = decoder()->get(cID, m_rhoIndex);
+    CellID iZ = decoder()->get(cID, m_zIndex);
 
     return wlzs->at(iWheel).getLocalZ(iRho, iZ);
   }
