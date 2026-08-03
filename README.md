@@ -94,6 +94,11 @@ For detector specific configuration for running ddsim, see the following reposit
 
 - `ILD`: [ILDConfig](https://github.com/iLCSoft/ILDConfig)
 
+### Muon Collider detectors
+
+- `MAIA`: [MAIAConfig](https://github.com/MuonColliderSoft/MAIAConfig)
+- `MuSIC`: [MuSICConfig](https://github.com/MuonColliderSoft/MuSICConfig)
+
 ## Visualisation
 
 - `k4CEDViewer/CED`:
