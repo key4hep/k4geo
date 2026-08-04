@@ -21,7 +21,7 @@
       The wedge is sized to contain a barrel hadronic shower fired at theta = 90, phi = 15 deg; the
       corresponding ddsim gun test lives in test/CMakeLists.txt.  The shared
       example/SteeringFile_IDEA_o2_v01.py skips the (absent) DREndcapTubes sensitive detector when
-      the environment variable IDEA_O2_CI=1 is set.
+      the compact file passed on the command line is a "*_CI.xml".
     </comment>
   </info>
 

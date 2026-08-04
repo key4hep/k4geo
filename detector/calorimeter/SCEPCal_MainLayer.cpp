@@ -230,15 +230,20 @@ static dd4hep::Ref_t create_detector_SCEPCal_MainLayer(dd4hep::Detector& theDete
   // rmin, rmax, zmin, zmax, rmin2, rmax2
   // inner r & z are avg values (for track extrapolation)
   // outer r & z are the (cylinder's) envelope values
-  extensionData->extent[0] = BARREL_INNER_R;                           // barrel rmin
-  extensionData->extent[1] = BARREL_INNER_R + XTAL_LEN_F + XTAL_LEN_R; // barrel rmax
-  extensionData->extent[2] = BARREL_HALF_Z;                            // endcap zmin
-  extensionData->extent[3] = BARREL_HALF_Z + XTAL_LEN_F + XTAL_LEN_R;  // endcap zmax
-  // endcap rmin: inner edge of the first constructed ring (thC_ec_beg is its centre), converted
-  // from the projective frame to a physical radius (r = z*tan(theta) - PROJ_OFFSET_R), the same
-  // convention used for the phi-slice envelope and the beampipe-clearance test above
-  extensionData->extent[4] = BARREL_HALF_Z * std::tan(thC_ec_beg - D_THETA_ENDCAP / 2) - PROJ_OFFSET_R;
-  extensionData->extent[5] = BARREL_INNER_R + XTAL_LEN_F + XTAL_LEN_R; // endcap rmax
+  // The crystals are projective, so an endcap tower gains only a projection of its length: the
+  // outermost ring (theta = THETA_SIZE_ENDCAP) sets rmax, the innermost one sets zmax.
+  const double XTAL_LEN = XTAL_LEN_F + XTAL_LEN_R;
+  // inner edge of the innermost constructed ring (thC_ec_beg is that ring's centre)
+  const double thEcInner = thC_ec_beg - D_THETA_ENDCAP / 2;
+
+  extensionData->extent[0] = BARREL_INNER_R;                                 // barrel rmin
+  extensionData->extent[1] = BARREL_INNER_R + XTAL_LEN;                      // barrel rmax
+  extensionData->extent[2] = BARREL_HALF_Z;                                  // endcap zmin
+  extensionData->extent[3] = BARREL_HALF_Z + XTAL_LEN * std::cos(thEcInner); // endcap zmax
+  // endcap rmin: converted from the projective frame to a physical radius
+  // (r = z*tan(theta) - PROJ_OFFSET_R), as used for the phi-slice envelope and beampipe test above
+  extensionData->extent[4] = BARREL_HALF_Z * std::tan(thEcInner) - PROJ_OFFSET_R;     // endcap rmin
+  extensionData->extent[5] = BARREL_INNER_R + XTAL_LEN * std::sin(THETA_SIZE_ENDCAP); // endcap rmax
   extensionData->layers.resize(2);
   extensionData->layers.at(0).distance = BARREL_INNER_R;              // z-axis to the front layer
   extensionData->layers.at(1).distance = BARREL_INNER_R + XTAL_LEN_F; // z-axis to the rear layer
