@@ -117,14 +117,14 @@ endif()
 # test for IDEA o2 v01 -- CI wedge (partial barrel geometry).
 # The full IDEA_o2_v01 geometry needs ~18 GB and cannot run on CI, so we load a barrel phi/theta
 # wedge (IDEA_o2_v01_CI.xml) and fire a pi- into it to exercise the SCEPCal + DRBT sensitive
-# detectors.  IDEA_O2_CI=1 makes the steering skip the DREndcapTubes SD (dropped from the wedge).
+# detectors.  The steering skips the DREndcapTubes SD when the compact file is a "*_CI.xml".
 if(DCH_INFO_H_EXIST)
 add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/compact/IDEA_o2_v01_CI/IDEA_o2_v01_CI.xml
   N_EVENTS 1
   EXTRA_ARGS --steeringFile=${CMAKE_CURRENT_SOURCE_DIR}/../example/SteeringFile_IDEA_o2_v01.py
              --gun.particle pi- --gun.energy 10*GeV --gun.direction 0.966,0.259,0.01
              --random.seed 1988301045
-  PROPERTIES ENVIRONMENT "IDEA_O2_CI=1" TIMEOUT 900 RUN_SERIAL TRUE)
+  PROPERTIES TIMEOUT 900 RUN_SERIAL TRUE)
 endif()
 
 #--------------------------------------------------
