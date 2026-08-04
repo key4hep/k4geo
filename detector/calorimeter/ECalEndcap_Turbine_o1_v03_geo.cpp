@@ -585,8 +585,7 @@ namespace ECalEndcap_Turbine_o1_v03 {
     float intermedRingdR = aLcdd.constant<float>("EMECSupportMidRingdR");
 
     double rmin = cryoDim.rmin2();
-    double rmax = cryoDim.rmax1();
-    float radiusRatio = pow(rmax / rmin, 1. / nWheelsXML);
+    float radiusRatio = aLcdd.constant<float>("EMECRadiusRatio");
     double ro = rmin * radiusRatio;
 
     for (unsigned iWheel = 0; iWheel < nWheelsXML - 1; iWheel++) {
