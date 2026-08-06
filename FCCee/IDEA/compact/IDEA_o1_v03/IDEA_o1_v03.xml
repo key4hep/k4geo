@@ -61,14 +61,14 @@
   <include ref="EndPlateAbsorber_o1_v01.xml"/>
 
   <!-- Import pre-shower -->
-  <include ref="Preshower_o1_v01.xml"/>
+  <include ref="PreshowerMuRWELL_o1_v01.xml"/>
 
   <!-- Import fiber-based dual-readout calorimeter -->
   <!-- (uncomment the following line to effectively include it) -->
   <include ref="FiberDualReadoutCalo_o1_v01.xml"/>
 
   <!-- Import muon system -->
-  <include ref="MuonSystem_o1_v01.xml"/>
+  <include ref="MuonSystemMuRWELL_o1_v01.xml"/>
 
   <plugins>
     <plugin name="DD4hepVolumeManager"/>
