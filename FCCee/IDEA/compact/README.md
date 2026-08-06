@@ -56,3 +56,5 @@ April 2025: Added the dual-readout segmented crystal ECAL
 
 February 2026: Added the neighborhood finding algorithm for the crystal dual-readout calorimeter.
 April 2026: Switch to vertex detector and silicon wrapper from IDEA_o1_v04.
+
+July 2026: Added reconstruction metadata to the dual-readout barrel and endcap tubes calorimeters: `LayeredCalorimeterData` extensions provide their r-z extents, while the XML `DetType` flags are applied to their `DetElement`s. This allows downstream reconstruction to retrieve their inner radius / z directly from the geometry.

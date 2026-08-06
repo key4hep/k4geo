@@ -50,6 +50,8 @@ public:
     return access()->implementation->neighbours(cellID, neighbours);
   };
 
+  inline int nGammaAtTheta(int theta) const { return access()->implementation->nGammaAtTheta(theta); }
+
   inline int System(const CellID& aCellID) const { return access()->implementation->System(aCellID); }
   inline int Phi(const CellID& aCellID) const { return access()->implementation->Phi(aCellID); }
   inline int Theta(const CellID& aCellID) const { return access()->implementation->Theta(aCellID); }

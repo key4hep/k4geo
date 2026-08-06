@@ -9,6 +9,7 @@
 #include "Math/Vector3D.h"
 #include <climits> // For CHAR_BIT
 #include <cmath>
+#include <map>
 #include <vector>
 
 namespace dd4hep {
@@ -137,6 +138,45 @@ namespace DDSegmentation {
     void setIThetaBarrelEnd(int iThetaEnd) { m_iTheta_barrel_end_ = iThetaEnd; }
     void setNPhi(int nPhi) { m_nPhi_ = nPhi; }
     void setNGamma(int nGamma) { m_nGamma_ = nGamma; }
+    /// gamma count per global theta field, set for barrel (constant) and endcap (per-ring).
+    /// The endcap is projective, so its gamma count varies with the theta ring.
+    void setNGammaPerTheta(const std::map<int, int>& nGammaPerTheta) { m_nGammaPerTheta_ = nGammaPerTheta; }
+
+    /// gamma count for a given global theta field (barrel: constant; endcap: per-ring).
+    /// Falls back to m_nGamma_ if the map was never populated (backward compatibility).
+    inline int nGammaAtTheta(int theta) const {
+      auto it = m_nGammaPerTheta_.find(theta);
+      return (it != m_nGammaPerTheta_.end()) ? it->second : m_nGamma_;
+    }
+
+    /// Gamma indices in the theta ring at thetaTo whose azimuthal span overlaps cell
+    /// (gamma, thetaFrom).  The endcap is projective, so adjacent theta rings can hold different
+    /// gamma counts; a wider cell then genuinely touches two narrower ones, so this returns a
+    /// list rather than a single index.
+    inline std::vector<int> gammaRange(int gamma, int thetaFrom, int thetaTo) const {
+      const int nFrom = nGammaAtTheta(thetaFrom);
+      const int nTo = nGammaAtTheta(thetaTo);
+
+      if (nFrom == nTo)
+        return {gamma};
+
+      // Express the cell's azimuthal span in units of target-ring cells, then take every target
+      // cell it covers.  The -1 on the ceiling drops a cell that the span only touches at its edge,
+      // and keeps the last cell of the ring in range (highEdge is exactly nTo there).
+      const double lowEdge = static_cast<double>(gamma) * nTo / nFrom;
+      const double highEdge = static_cast<double>(gamma + 1) * nTo / nFrom;
+
+      const int first = static_cast<int>(std::floor(lowEdge));
+      const int last = static_cast<int>(std::ceil(highEdge)) - 1;
+
+      std::vector<int> gammas;
+      gammas.reserve(last - first + 1);
+
+      for (int g = first; g <= last; ++g)
+        gammas.push_back(g);
+
+      return gammas;
+    }
 
   private:
     /// Initialization common to all ctors.
@@ -159,12 +199,14 @@ namespace DDSegmentation {
     int m_isCherenIndex = -1;
 
     // geometry parameters
-    int m_detId_barrel_ = 0;         // system id for barrel
-    int m_detId_endcap_ = 0;         // system id for endcap
-    int m_iTheta_barrel_start_ = -1; // theta index start for barrel
-    int m_iTheta_barrel_end_ = -1;   // theta index end for barrel
-    int m_nPhi_ = -1;                // number of phi segments
-    int m_nGamma_ = -1;              // number of gamma segments
+    int m_detId_barrel_ = 0;              // system id for barrel
+    int m_detId_endcap_ = 0;              // system id for endcap
+    int m_iTheta_barrel_start_ = -1;      // theta index start for barrel
+    int m_iTheta_barrel_end_ = -1;        // theta index end for barrel
+    int m_nPhi_ = -1;                     // number of phi segments
+    int m_nGamma_ = -1;                   // number of gamma segments (barrel; fallback)
+    std::map<int, int> m_nGammaPerTheta_; // endcap gamma count per global theta field
+                                          // (barrel has a constant gamma and fallbacks to m_nGamma_)
 
     std::unordered_map<int, Vector3D> m_positionOf;
   };
