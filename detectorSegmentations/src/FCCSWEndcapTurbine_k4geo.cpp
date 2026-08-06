@@ -310,7 +310,6 @@ namespace DDSegmentation {
             float calibZmax = calibRhoMax;
             /// angFactor is equivalent to 1/tan(bladeAngle)^2
             float angFactor = m_cscBladeAngle[jWheel] * m_cscBladeAngle[jWheel] - 1.;
-
             float calibZmin = std::sqrt(calibRhoMin * calibRhoMin -
                                         ((m_numReadoutZLayers[jWheel] + 1) * (m_numReadoutZLayers[jWheel] + 1) *
                                          m_gridSizeZ[jWheel] * m_gridSizeZ[jWheel] / 4) *
