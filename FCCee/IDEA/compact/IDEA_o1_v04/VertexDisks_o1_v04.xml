@@ -1,0 +1,387 @@
+<lccdd>
+    <comment> IDEA vertex disks based on IDEA engineering design (INFN Pisa) using ATLASPix3 </comment>
+
+    <define> <comment> ATLASPix3 sensor properties (same as vertex outer barrel) </comment>
+        <constant name="VTXO_sens_z_sensitive" value="19.8*mm"/> <comment>Chip length in z: Sensitive</comment>
+        <constant name="VTXO_sens_z_periphery" value="0.4*mm"/> <comment>Chip length in z: Periphery</comment>
+        <constant name="VTXO_sens_z" value="VTXO_sens_z_sensitive+VTXO_sens_z_periphery"/> <comment>Chip length in z: Total</comment>
+        <constant name="VTXO_sens_rphi_sensitive" value="18.6*mm"/> <comment>Chip length in r-phi: Sensitive</comment>
+        <constant name="VTXO_sens_rphi_periphery" value="2.4*mm"/> <comment>Chip length in r-phi: Periphery</comment>
+        <constant name="VTXO_sens_rphi" value="VTXO_sens_rphi_sensitive+VTXO_sens_rphi_periphery"/> <comment>Chip length in r-phi: Total</comment>
+        <constant name="VTXO_sens_rphi_sens_spacing" value="0.2*mm"/> <comment>Distance between individual readout chips in rphi</comment>
+        <constant name="VTXO_sens_z_sens_spacing" value="0.2*mm"/> <comment>Distance between individual readout chips in rphi</comment>
+
+        <constant name="VTXO_insensitive_thickness_below"  value="0e-03*mm"/> <comment> Assume no insensitive thickness </comment>
+        <constant name="VTXO_sensitive_thickness"          value="50e-03*mm"/> <comment> Assume 50 microns thick sensitive volume </comment>
+        <constant name="VTXO_insensitive_thickness_above"  value="0e-03*mm"/> <comment> Assume no insensitive thickness </comment>
+        <constant name="VTXO_sensor_thickness"   value="VTXO_insensitive_thickness_below+VTXO_sensitive_thickness+VTXO_insensitive_thickness_above"/>
+
+        <comment> We use modules of four ATLASPix3 sensors </comment>
+        <constant name="VTXO_mod_z_sensitive" value="VTXO_sens_z_sensitive*2"/>
+        <constant name="VTXO_mod_z_periphery" value="VTXO_sens_z_periphery*2+VTXO_sens_z_sens_spacing"/>
+        <constant name="VTXO_mod_z" value="VTXO_mod_z_sensitive+VTXO_mod_z_periphery"/>
+        <constant name="VTXO_mod_rphi_sensitive" value="VTXO_sens_rphi_sensitive*2"/>
+        <constant name="VTXO_mod_rphi_periphery" value="VTXO_sens_rphi_periphery*2+VTXO_sens_rphi_sens_spacing"/>
+        <constant name="VTXO_mod_rphi" value="VTXO_mod_rphi_sensitive+VTXO_mod_rphi_periphery"/>
+    
+        <comment> Common VTXOB and VTXD support and readout parameters </comment>
+        <constant name="VTXO_support_fleece_thickness"          value="20e-03*mm"/>
+        <constant name="VTXO_support_paperGraphite_thickness"   value="25e-03*mm"/>
+        <constant name="VTXO_support_carbonFiber_thickness"     value="120e-03*mm"/>
+
+        <constant name="VTXO_coolingPipe_thickness"     value="0.0955*mm"/>
+        <constant name="VTXO_coolingPipe_width"         value="2.0*mm"/>
+        <constant name="VTXO_coolingWater_thickness"    value="2.0*mm"/>
+
+        <constant name="VTXO_flex_width"                value="16.2*mm"/>
+        <constant name="VTXO_flex_Aluminium_thickness"  value="0.100*mm"/>
+        <constant name="VTXO_flex_Kapton_thickness"     value="0.300*mm"/>
+        <constant name="VTXO_flex_glue_thickness"       value="0.100*mm"/>
+        <constant name="VTXO_flex_thickness"            value="VTXO_flex_Aluminium_thickness+VTXO_flex_Kapton_thickness+VTXO_flex_glue_thickness"/>
+
+        <constant name="VTXO_hybrid_thickness" value="0.4*mm"/> <comment> Hybrid PCB at the end of the stave </comment>
+        <constant name="VTXO_hybrid_length" value="12.1*mm"/>
+        <constant name="VTXO_hybrid_dx" value="0.1*mm"/>
+    </define>
+
+    <define> <comment> Vertex disks (VTXD) layout parameters </comment>
+        <constant name="VTXD_z1" value="VTXD_z_min"/>
+        <constant name="VTXD_z2" value="609.086*mm"/>
+        <constant name="VTXD_z3" value="VTXD_z_max"/>
+
+        <constant name="VTXD_dz1" value="0.0*mm"/> <comment> This is not correct, but needed to increase it to avoid clashes of end-of-stave volumes as they are only approximated! </comment>
+        <constant name="VTXD_dz2" value="0.0*mm"/>
+        <constant name="VTXD_dz3" value="0.0*mm"/>
+
+        <constant name="VTXD_rmin1" value="VTXD_r_min"/>
+        <constant name="VTXD_rmin2" value="140.0/2.0*mm"/>
+        <constant name="VTXD_rmin3" value="210.0/2.0*mm"/>
+
+        <constant name="VTXD_rmax1" value="275.*mm"/>
+        <constant name="VTXD_rmax2" value="VTXD_r_max"/>
+        <constant name="VTXD_rmax3" value="VTXD_r_max"/>
+
+        <constant name="VTXD_phi1A" value="0.0*rad"/>
+        <constant name="VTXD_phi1B" value="pi/4.0*rad"/> <comment> face B of first disk is offset by 45 degrees </comment>
+        <constant name="VTXD_zoffset_faceB1" value="32.621*mm"/> <comment> face B has different position in z than face A </comment>
+        <constant name="VTXD_zoffset_faceB2" value="15.121*mm"/> <comment> face B has different position in z than face A </comment>
+        <constant name="VTXD_zoffset_faceB3" value="15.871*mm"/> <comment> face B has different position in z than face A </comment>
+
+        <constant name="VTXD_stave_dz" value="5.0*mm"/> <comment> Distance between front and back of stave (inner empty space) </comment>
+        <constant name="VTXDModOverlap" value="-13.0*mm"/>
+
+        <comment> Precise positioning of all the staves inside the disks. Aim to simplify this in a future version </comment>
+        <constant name="VTXD_disk1_roffset_stave1A" value="0.0*mm"/>
+        <constant name="VTXD_disk1_roffset_stave2A" value="VTXD_disk1_roffset_stave1A+VTXO_mod_z-4.739*mm"/>
+        <constant name="VTXD_disk1_roffset_stave3A" value="VTXD_disk1_roffset_stave2A+VTXO_mod_z-6.2*mm"/>
+        <constant name="VTXD_disk1_roffset_stave4A" value="VTXD_disk1_roffset_stave3A+VTXO_mod_z-6.2*mm"/>
+        <constant name="VTXD_disk1_roffset_stave5A" value="VTXD_disk1_roffset_stave4A+VTXO_mod_z-6.5*mm"/>
+        <constant name="VTXD_disk1_roffset_stave6A" value="VTXD_disk1_roffset_stave5A+VTXO_mod_z-9.305*mm"/>
+        <constant name="VTXD_disk1_roffset_stave7A" value="VTXD_disk1_roffset_stave6A+VTXO_mod_z-12.757*mm"/>
+
+        <constant name="VTXD_disk1_roffset_stave1B" value="0.0*mm"/>
+        <constant name="VTXD_disk1_roffset_stave2B" value="VTXD_disk1_roffset_stave1B+VTXO_mod_z-5.898*mm"/>
+        <constant name="VTXD_disk1_roffset_stave3B" value="VTXD_disk1_roffset_stave2B+VTXO_mod_z-6.448*mm"/>
+        <constant name="VTXD_disk1_roffset_stave4B" value="VTXD_disk1_roffset_stave3B+VTXO_mod_z-5.788*mm"/>
+        <constant name="VTXD_disk1_roffset_stave5B" value="VTXD_disk1_roffset_stave4B+VTXO_mod_z-6.5*mm"/>
+        <constant name="VTXD_disk1_roffset_stave6B" value="VTXD_disk1_roffset_stave5B+VTXO_mod_z-8.49*mm"/>
+        <constant name="VTXD_disk1_roffset_stave7B" value="VTXD_disk1_roffset_stave6B+VTXO_mod_z-12.375*mm"/>
+
+        <constant name="VTXD_disk2_roffset_stave1" value="0.0*mm"/>
+        <constant name="VTXD_disk2_roffset_stave2" value="VTXD_disk2_roffset_stave1+VTXO_mod_z-4.0*mm"/>
+        <constant name="VTXD_disk2_roffset_stave3" value="VTXD_disk2_roffset_stave2+VTXO_mod_z-4.0*mm"/>
+        <constant name="VTXD_disk2_roffset_stave4" value="VTXD_disk2_roffset_stave3+VTXO_mod_z-4.508*mm"/>
+        <constant name="VTXD_disk2_roffset_stave5" value="VTXD_disk2_roffset_stave4+VTXO_mod_z-5.0*mm"/>
+        <constant name="VTXD_disk2_roffset_stave6" value="VTXD_disk2_roffset_stave5+VTXO_mod_z-11.095*mm"/>
+
+        <constant name="VTXD_disk3_roffset_stave1A" value="0.0*mm"/>
+        <constant name="VTXD_disk3_roffset_stave2A" value="VTXD_disk3_roffset_stave1A+VTXO_mod_z-5.5*mm"/>
+        <constant name="VTXD_disk3_roffset_stave3A" value="VTXD_disk3_roffset_stave2A+VTXO_mod_z-5.5*mm"/>
+        <constant name="VTXD_disk3_roffset_stave4A" value="VTXD_disk3_roffset_stave3A+VTXO_mod_z-6.0*mm"/>
+        <constant name="VTXD_disk3_roffset_stave5A" value="VTXD_disk3_roffset_stave4A+VTXO_mod_z-6.0*mm"/>
+
+        <constant name="VTXD_disk3_roffset_stave1B" value="0.0*mm"/>
+        <constant name="VTXD_disk3_roffset_stave2B" value="VTXD_disk3_roffset_stave1B+VTXO_mod_z-6.0*mm"/>
+        <constant name="VTXD_disk3_roffset_stave3B" value="VTXD_disk3_roffset_stave2B+VTXO_mod_z-6.0*mm"/>
+        <constant name="VTXD_disk3_roffset_stave4B" value="VTXD_disk3_roffset_stave3B+VTXO_mod_z-6.0*mm"/>
+        <constant name="VTXD_disk3_roffset_stave5B" value="VTXD_disk3_roffset_stave4B+VTXO_mod_z-5.0*mm"/>
+
+        <constant name="VTXD_disk1_zoffset_stave1A_1" value="0.0*mm"/>
+        <constant name="VTXD_disk1_zoffset_stave2A_1" value="7.0*mm"/>
+        <constant name="VTXD_disk1_zoffset_stave3A_1" value="14.0*mm"/>
+        <constant name="VTXD_disk1_zoffset_stave4A_1" value="7.0*mm"/>
+        <constant name="VTXD_disk1_zoffset_stave5A_1" value="13.5*mm"/>
+        <constant name="VTXD_disk1_zoffset_stave6A_1" value="7.5*mm"/>
+        <constant name="VTXD_disk1_zoffset_stave7A_1" value="-5.0*mm"/>
+
+        <constant name="VTXD_disk1_zoffset_stave1A_2" value="0.0*mm"/>
+        <constant name="VTXD_disk1_zoffset_stave2A_2" value="-6.48*mm"/>
+        <constant name="VTXD_disk1_zoffset_stave3A_2" value="0.5*mm"/>
+        <constant name="VTXD_disk1_zoffset_stave4A_2" value="-6.5*mm"/>
+        <constant name="VTXD_disk1_zoffset_stave5A_2" value="0.0*mm"/>
+        <constant name="VTXD_disk1_zoffset_stave6A_2" value="-6.0*mm"/>
+        <constant name="VTXD_disk1_zoffset_stave7A_2" value="-18.5*mm"/>
+
+        <constant name="VTXD_disk1_zoffset_stave1B_1" value="0.0*mm"/>
+        <constant name="VTXD_disk1_zoffset_stave2B_1" value="6.02*mm"/>
+        <constant name="VTXD_disk1_zoffset_stave3B_1" value="-0.5*mm"/>
+        <constant name="VTXD_disk1_zoffset_stave4B_1" value="6.5*mm"/>
+        <constant name="VTXD_disk1_zoffset_stave5B_1" value="0.5*mm"/>
+        <constant name="VTXD_disk1_zoffset_stave6B_1" value="-6.0*mm"/>
+        <constant name="VTXD_disk1_zoffset_stave7B_1" value="-12.5*mm"/>
+
+        <constant name="VTXD_disk1_zoffset_stave1B_2" value="0.0*mm"/>
+        <constant name="VTXD_disk1_zoffset_stave2B_2" value="14.52*mm"/>
+        <constant name="VTXD_disk1_zoffset_stave3B_2" value="8.0*mm"/>
+        <constant name="VTXD_disk1_zoffset_stave4B_2" value="15.0*mm"/>
+        <constant name="VTXD_disk1_zoffset_stave5B_2" value="8.0*mm"/>
+        <constant name="VTXD_disk1_zoffset_stave6B_2" value="2.0*mm"/>
+        <constant name="VTXD_disk1_zoffset_stave7B_2" value="-4.0*mm"/>
+
+        <constant name="VTXD_disk2_zoffset_stave1" value="0.0*mm"/>
+        <constant name="VTXD_disk2_zoffset_stave2" value="-7.52*mm"/>
+        <constant name="VTXD_disk2_zoffset_stave3" value="1.02*mm"/>
+        <constant name="VTXD_disk2_zoffset_stave4" value="-7.52*mm"/>
+        <constant name="VTXD_disk2_zoffset_stave5" value="1.02*mm"/>
+        <constant name="VTXD_disk2_zoffset_stave6" value="-7.02*mm"/>
+
+        <constant name="VTXD_disk3_zoffset_stave1A" value="0.0*mm"/>
+        <constant name="VTXD_disk3_zoffset_stave2A" value="-11.904*mm"/>
+        <constant name="VTXD_disk3_zoffset_stave3A" value="0.5*mm"/>
+        <constant name="VTXD_disk3_zoffset_stave4A" value="-7.0*mm"/>
+        <constant name="VTXD_disk3_zoffset_stave5A" value="0.0*mm"/>
+
+        <constant name="VTXD_disk3_zoffset_stave1B" value="0.0*mm"/>
+        <constant name="VTXD_disk3_zoffset_stave2B" value="7.25*mm"/>
+        <constant name="VTXD_disk3_zoffset_stave3B" value="0.75*mm"/>
+        <constant name="VTXD_disk3_zoffset_stave4B" value="7.25*mm"/>
+        <constant name="VTXD_disk3_zoffset_stave5B" value="0.25*mm"/>
+
+        <comment> VTXD support and readout properties </comment>
+        <constant name="VTXD_support_thickness"     value="VTXO_support_fleece_thickness+VTXO_support_carbonFiber_thickness+VTXO_support_paperGraphite_thickness"/>
+        <constant name="VTXD_coolingPipe_offset"    value="5.42*mm/2.0"/> 
+
+        <constant name="VTXD_terminalPart_length"   value="9.0*mm"/> <comment> Terminal part of VTXD, volume: Is between ~1700 and 4000 mm^3, depending on where on the stave. Let's assume 2500 mm^3. This is modelled by one volumes with thickness of 6.84 mm and length of 9 mm so that 6.84*9*40.6=2500 mm^3. In principle some of this material should be between the front and back of the stave, but in this simplified description it is just on the sides of the stave </comment>
+        <constant name="VTXD_terminal_thickness"    value="5.84*mm"/> 
+
+        <comment> Properties of VTXD global disk supports </comment>
+        <constant name="VTXD_support_thickness_disk1" value="3.3*mm"/>  <comment> Area of 1307*cm^2, with a thickness of 6 mm -> 784.2 cm^3. Use proxy volume with reduced thickness according to (VTXD_rmax1^2*pi-VTXD_rmin1^2*pi)*thickness =  784.2 cm^3 (VTXD_rmax1 = 27.5 cm), so 784/pi/(27.5^2-3.56^2) ~ 3.3 mm. Disk support is sandwich of 5% carbonFibre, 90% Rohacell and 5% carbonFibre </comment>
+        <constant name="VTXD_support_thickness_disk2" value="2.56*mm"/> <comment> Area of 1331*cm^2, with a thickness of 6 mm -> 798.6 cm^3. Use proxy volume with reduced thickness according to (VTXD_rmax3^2*pi-VTXD_rmin2^2*pi)*thickness =  798.6 cm^3 (VTXD_rmax2 = 32.25 cm), so 798.6/pi/(32.25^2-7^2) ~ 2.56 mm. Disk support is sandwich of 5% carbonFibre, 90% Rohacell and 5% carbonFibre </comment>
+        <constant name="VTXD_support_thickness_disk3" value="2.51*mm"/> <comment> Area of 1220*cm^2, with a thickness of 6 mm -> 732 cm^3. Use proxy volume with reduced thickness according to (VTXD_rmax3^2*pi-VTXD_rmin3^2*pi)*thickness =  732 cm^3 (VTXD_rmax3 = 32.25 cm), so 732/pi/(32.5^2-10.5^2) ~ 2.51 mm. Disk support is sandwich of 5% carbonFibre, 90% Rohacell and 5% carbonFibre </comment>
+        <constant name="VTXD_disk1_z" value="307.7*mm + 27.0*mm"/> <comment> Adding 27 mm so that disk support is after disk, to avoid overlaps. FIX when updated vertex disks are available </comment>
+        <constant name="VTXD_disk2_z" value="620.0*mm"/>
+        <constant name="VTXD_disk3_z" value="930.0*mm"/>
+        <constant name="VTXD_disk1_rmin" value="VTXD_rmin1+2.0*mm"/> <comment> Adding 2 mm so that disk support is not clashing with vertex envelope (related to fix on VTXD_disk1_z) </comment>
+        <constant name="VTXD_disk2_rmin" value="VTXD_rmin2"/>
+        <constant name="VTXD_disk3_rmin" value="VTXD_rmin3"/>
+    </define>
+
+    <detectors>
+        <detector id="DetID_VXD_Disks" name="VertexDisks" vis="VXDVis" type="VertexEndcap_detailed_o1_v03" readout="VertexEndcapCollection" reflect="true" region="VertexEndcapRegion">
+            <envelope vis="VXDVis">
+                <shape type="Assembly"/>
+            </envelope>
+
+            <comment>Vertex Detector Disks</comment>
+
+            <type_flags type=" DetType_TRACKER + DetType_PIXEL + DetType_VERTEX + DetType_ENDCAP"/>
+
+            <comment> Definition of our stave that is used to build the disks </comment>
+            <module name="VTXDStave">
+                <components name="flex_low_z" z_offset="0.0*mm">
+                    <component thickness="VTXO_flex_Aluminium_thickness"    width="VTXO_flex_width" z_offset="0.0*mm" material="Al" vis="VTXCableVis"/>
+                    <component thickness="VTXO_flex_Kapton_thickness"       width="VTXO_flex_width" z_offset="VTXO_flex_Aluminium_thickness" material="KaptonVtx" vis="VTXCableVis"/>
+                    <component thickness="VTXO_flex_glue_thickness"         width="VTXO_flex_width" z_offset="VTXO_flex_Aluminium_thickness+VTXO_flex_Kapton_thickness" material="GlueEcobond45" vis="VTXCableVis"/> <comment> Need to update glue definition! </comment>
+                </components>
+
+                <sensor name="ATLASPix3Quad" z_offset="VTXO_flex_thickness" thickness="VTXO_sensor_thickness" material="Silicon">
+                    <include ref="../../../IDEA/compact/IDEA_o1_v04/Vertex_outerVertex_module.xml"/>
+                </sensor>
+
+                <components name="support_low_z" z_offset="VTXO_flex_thickness+VTXO_sensor_thickness">
+                    <component thickness="VTXO_support_fleece_thickness"         width="VTXO_mod_z" z_offset="0.0*mm" material="CarbonFleece" vis="VTXSupportVis"/> 
+                    <component thickness="VTXO_support_carbonFiber_thickness"    width="VTXO_mod_z" z_offset="VTXO_support_fleece_thickness" material="CarbonFiberVtx" vis="VTXSupportVis"/>
+                    <component thickness="VTXO_support_paperGraphite_thickness"  width="VTXO_mod_z" z_offset="VTXO_support_fleece_thickness+VTXO_support_carbonFiber_thickness" material="CarbonFiberVtx" vis="VTXSupportVis"/> <comment> should be material="CarbonPaperGraphite", not implemented yet! </comment>
+                    <component thickness="VTXO_support_fleece_thickness"         width="VTXO_mod_z" z_offset="VTXO_support_fleece_thickness+VTXO_support_carbonFiber_thickness+VTXO_support_paperGraphite_thickness" material="CarbonFleece" vis="VTXSupportVis"/>
+                </components>
+
+                <components name="cooling_pipes" z_offset="VTXO_flex_thickness+VTXO_sensor_thickness+VTXD_stave_dz/2.0-VTXO_coolingPipe_thickness-VTXO_coolingWater_thickness/2.0">
+                    <component thickness="VTXO_coolingPipe_thickness"  width="VTXO_coolingPipe_width" offset="-VTXD_coolingPipe_offset" z_offset="0.0*mm" material="KaptonVtx" vis="VTXPipingVis"/> 
+                    <component thickness="VTXO_coolingWater_thickness" width="VTXO_coolingPipe_width" offset="-VTXD_coolingPipe_offset" z_offset="VTXO_coolingPipe_thickness" material="Water" vis="VTXWaterVis"/>
+                    <component thickness="VTXO_coolingPipe_thickness"  width="VTXO_coolingPipe_width" offset="-VTXD_coolingPipe_offset" z_offset="VTXO_coolingPipe_thickness+VTXO_coolingWater_thickness" material="KaptonVtx" vis="VTXPipingVis"/>
+
+                    <component thickness="VTXO_coolingPipe_thickness"  width="VTXO_coolingPipe_width" offset="VTXD_coolingPipe_offset" z_offset="0.0*mm" material="KaptonVtx" vis="VTXPipingVis"/> 
+                    <component thickness="VTXO_coolingWater_thickness" width="VTXO_coolingPipe_width" offset="VTXD_coolingPipe_offset" z_offset="VTXO_coolingPipe_thickness" material="Water" vis="VTXWaterVis"/>
+                    <component thickness="VTXO_coolingPipe_thickness"  width="VTXO_coolingPipe_width" offset="VTXD_coolingPipe_offset" z_offset="VTXO_coolingPipe_thickness+VTXO_coolingWater_thickness" material="KaptonVtx" vis="VTXPipingVis"/>
+                </components>
+
+                <components name="support_high_z" z_offset="VTXO_flex_thickness+VTXO_sensor_thickness+VTXD_stave_dz">
+                    <component thickness="VTXO_support_fleece_thickness"         width="VTXO_mod_z" z_offset="0.0*mm" material="CarbonFleece" vis="VTXSupportVis"/>
+                    <component thickness="VTXO_support_paperGraphite_thickness"  width="VTXO_mod_z" z_offset="VTXO_support_fleece_thickness" material="CarbonFiberVtx" vis="VTXSupportVis"/> <comment> should be material="CarbonPaperGraphite", not implemented yet! </comment>
+                    <component thickness="VTXO_support_carbonFiber_thickness"    width="VTXO_mod_z" z_offset="VTXO_support_fleece_thickness+VTXO_support_paperGraphite_thickness" material="CarbonFiberVtx" vis="VTXSupportVis"/>
+                    <component thickness="VTXO_support_fleece_thickness"         width="VTXO_mod_z" z_offset="VTXO_support_fleece_thickness+VTXO_support_paperGraphite_thickness+VTXO_support_carbonFiber_thickness" material="CarbonFleece" vis="VTXSupportVis"/>
+                </components>
+
+                <components name="flex_high_z" z_offset="VTXO_flex_thickness+2.0*(VTXO_sensor_thickness+VTXD_support_thickness)+VTXD_stave_dz">
+                    <component thickness="VTXO_flex_glue_thickness"         width="VTXO_flex_width" z_offset="0.0*mm" material="GlueEcobond45" vis="VTXCableVis"/> <comment> Need to update glue definition! </comment>
+                    <component thickness="VTXO_flex_Kapton_thickness"       width="VTXO_flex_width" z_offset="VTXO_flex_glue_thickness" material="KaptonVtx" vis="VTXCableVis"/>
+                    <component thickness="VTXO_flex_Aluminium_thickness"    width="VTXO_flex_width" z_offset="VTXO_flex_glue_thickness+VTXO_flex_Kapton_thickness" material="Al" vis="VTXCableVis"/>
+                </components>
+
+
+                <end_z name="hybrids" z_offset="VTXO_flex_thickness+VTXO_sensor_thickness">
+                    <component thickness="VTXO_hybrid_thickness" width="VTXO_mod_rphi" length="VTXO_hybrid_length" dx="VTXO_hybrid_dx" x="0.001*mm" z_offset="0.0*mm" material="PCB" vis="VTXHybridVis"/> <comment> Hybrid in front, only on one side (x larger than 0) </comment>
+                    <component thickness="VTXO_hybrid_thickness" width="VTXO_mod_rphi" length="VTXO_hybrid_length" dx="VTXO_hybrid_dx" x="0.001*mm" z_offset="VTXO_hybrid_thickness+VTXD_stave_dz-VTXO_hybrid_thickness" material="PCB" vis="VTXHybridVis"/> <comment> Hybrid in back, only on one side (x larger than 0) </comment>
+                </end_z>
+
+                <end_z name="terminal_parts" z_offset="VTXO_flex_thickness+VTXO_sensor_thickness+VTXD_stave_dz/2.0-VTXD_terminal_thickness/2.">
+                    <component thickness="VTXD_terminal_thickness" width="VTXO_mod_rphi" length="VTXD_terminalPart_length" dx="VTXO_hybrid_length+VTXO_hybrid_dx" x="0.001*mm"  material="PEEK" vis="VTXPEEKVis"/>  <comment> Terminal part left (x larger than 0) </comment>
+                    <component thickness="VTXD_terminal_thickness" width="VTXO_mod_rphi" length="VTXD_terminalPart_length" dx="0.0*mm" x="-0.001*mm"  material="PEEK" vis="VTXPEEKVis"/> <comment> Terminal part right (x smaller than 0) </comment>
+                </end_z>
+            </module>
+
+            <comment> Here we construct the disks, all disks use the same base stave (VTXDStave) with different numbers of modules and other properties </comment>
+            <layer id="0" z="VTXD_z1" nphi="2" dz="VTXD_dz1" rmin="VTXD_rmin1" rmax="VTXOB_r_max_layer-VTXOB_terminalPart2_thickness1-12.771*mm">
+                <comment> Face B, one half </comment>
+                <stave nmodules="2" z_offset="VTXD_disk1_zoffset_stave1B_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave1B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="VTXDStave"/>
+                <stave nmodules="3" z_offset="VTXD_disk1_zoffset_stave2B_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave2B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="VTXDStave"/>
+                <stave nmodules="4" z_offset="VTXD_disk1_zoffset_stave3B_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave3B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="VTXDStave"/>
+                <stave nmodules="4" z_offset="VTXD_disk1_zoffset_stave4B_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave4B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="VTXDStave"/>
+                <stave nmodules="5" z_offset="VTXD_disk1_zoffset_stave5B_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave5B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="VTXDStave"/>
+                <stave nmodules="6" z_offset="VTXD_disk1_zoffset_stave6B_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave6B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="VTXDStave"/>
+                <stave nmodules="6" z_offset="VTXD_disk1_zoffset_stave7B_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave7B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="VTXDStave"/>
+
+                <comment> Face B, other half </comment>
+                <stave nmodules="2" z_offset="8.5*mm+VTXD_disk1_zoffset_stave1B_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave1B" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1B" module="VTXDStave"/>
+                <stave nmodules="3" z_offset="8.5*mm+VTXD_disk1_zoffset_stave2B_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave2B" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1B" module="VTXDStave"/>
+                <stave nmodules="4" z_offset="8.5*mm+VTXD_disk1_zoffset_stave3B_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave3B" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1B" module="VTXDStave"/>
+                <stave nmodules="4" z_offset="8.5*mm+VTXD_disk1_zoffset_stave4B_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave4B" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1B" module="VTXDStave"/>
+                <stave nmodules="5" z_offset="8.5*mm+VTXD_disk1_zoffset_stave5B_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave5B" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1B" module="VTXDStave"/>
+                <stave nmodules="6" z_offset="8.5*mm+VTXD_disk1_zoffset_stave6B_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave6B" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1B" module="VTXDStave"/>
+                <stave nmodules="6" z_offset="8.5*mm+VTXD_disk1_zoffset_stave7B_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave7B" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1B" module="VTXDStave"/>
+
+                <comment> Face A, one half </comment>
+                <stave nmodules="2" z_offset="VTXD_zoffset_faceB1+VTXD_disk1_zoffset_stave1A_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave1A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="VTXDStave"/>
+                <stave nmodules="3" z_offset="VTXD_zoffset_faceB1+VTXD_disk1_zoffset_stave2A_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave2A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="VTXDStave"/>
+                <stave nmodules="4" z_offset="VTXD_zoffset_faceB1+VTXD_disk1_zoffset_stave3A_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave3A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="VTXDStave"/>
+                <stave nmodules="5" z_offset="VTXD_zoffset_faceB1+VTXD_disk1_zoffset_stave4A_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave4A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="VTXDStave"/>
+                <stave nmodules="5" z_offset="VTXD_zoffset_faceB1+VTXD_disk1_zoffset_stave5A_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave5A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="VTXDStave"/>
+                <stave nmodules="6" z_offset="VTXD_zoffset_faceB1+VTXD_disk1_zoffset_stave6A_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave6A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="VTXDStave"/>
+                <stave nmodules="6" z_offset="VTXD_zoffset_faceB1+VTXD_disk1_zoffset_stave7A_1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave7A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="VTXDStave"/>
+
+                <comment> Face A, other half </comment>
+                <stave nmodules="2" z_offset="VTXD_zoffset_faceB1+13.5*mm+VTXD_disk1_zoffset_stave1A_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave1A" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1A" module="VTXDStave"/>
+                <stave nmodules="3" z_offset="VTXD_zoffset_faceB1+13.5*mm+VTXD_disk1_zoffset_stave2A_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave2A" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1A" module="VTXDStave"/>
+                <stave nmodules="4" z_offset="VTXD_zoffset_faceB1+13.5*mm+VTXD_disk1_zoffset_stave3A_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave3A" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1A" module="VTXDStave"/>
+                <stave nmodules="5" z_offset="VTXD_zoffset_faceB1+13.5*mm+VTXD_disk1_zoffset_stave4A_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave4A" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1A" module="VTXDStave"/>
+                <stave nmodules="5" z_offset="VTXD_zoffset_faceB1+13.5*mm+VTXD_disk1_zoffset_stave5A_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave5A" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1A" module="VTXDStave"/>
+                <stave nmodules="6" z_offset="VTXD_zoffset_faceB1+13.5*mm+VTXD_disk1_zoffset_stave6A_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave6A" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1A" module="VTXDStave"/>
+                <stave nmodules="6" z_offset="VTXD_zoffset_faceB1+13.5*mm+VTXD_disk1_zoffset_stave7A_2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk1_roffset_stave7A" step="VTXDModOverlap" phi0="pi/2.0*rad+VTXD_phi1A" module="VTXDStave"/>
+            </layer>
+
+            <layer id="1" z="VTXD_z2" nphi="4" dz="VTXD_dz2" rmin="VTXD_rmin2" rmax="VTXD_r_max">
+                <comment> Face A </comment>
+                <stave nmodules="3" z_offset="VTXD_disk2_zoffset_stave1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave1" step="VTXDModOverlap" phi0="VTXD_phi1A" module="VTXDStave"/>
+                <stave nmodules="4" z_offset="VTXD_disk2_zoffset_stave2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave2" step="VTXDModOverlap" phi0="VTXD_phi1A" module="VTXDStave"/>
+                <stave nmodules="5" z_offset="VTXD_disk2_zoffset_stave3" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave3" step="VTXDModOverlap" phi0="VTXD_phi1A" module="VTXDStave"/>
+                <stave nmodules="6" z_offset="VTXD_disk2_zoffset_stave4" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave4" step="VTXDModOverlap" phi0="VTXD_phi1A" module="VTXDStave"/>
+                <stave nmodules="6" z_offset="VTXD_disk2_zoffset_stave5" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave5" step="VTXDModOverlap" phi0="VTXD_phi1A" module="VTXDStave"/>
+                <stave nmodules="7" z_offset="VTXD_disk2_zoffset_stave6" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave6" step="VTXDModOverlap" phi0="VTXD_phi1A" module="VTXDStave"/>
+
+                <comment> Face B </comment>
+                <stave nmodules="3" z_offset="VTXD_zoffset_faceB2-VTXD_disk2_zoffset_stave1" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave1" step="VTXDModOverlap" phi0="VTXD_phi1B" module="VTXDStave"/>
+                <stave nmodules="4" z_offset="VTXD_zoffset_faceB2-VTXD_disk2_zoffset_stave2" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave2" step="VTXDModOverlap" phi0="VTXD_phi1B" module="VTXDStave"/>
+                <stave nmodules="5" z_offset="VTXD_zoffset_faceB2-VTXD_disk2_zoffset_stave3" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave3" step="VTXDModOverlap" phi0="VTXD_phi1B" module="VTXDStave"/>
+                <stave nmodules="6" z_offset="VTXD_zoffset_faceB2-VTXD_disk2_zoffset_stave4" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave4" step="VTXDModOverlap" phi0="VTXD_phi1B" module="VTXDStave"/>
+                <stave nmodules="6" z_offset="VTXD_zoffset_faceB2-VTXD_disk2_zoffset_stave5" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave5" step="VTXDModOverlap" phi0="VTXD_phi1B" module="VTXDStave"/>
+                <stave nmodules="7" z_offset="VTXD_zoffset_faceB2-VTXD_disk2_zoffset_stave6" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk2_roffset_stave6" step="VTXDModOverlap" phi0="VTXD_phi1B" module="VTXDStave"/>
+
+            </layer>         
+
+            <layer id="2" z="VTXD_z3" nphi="4" dz="VTXD_dz3" rmin="VTXD_rmin3" rmax="VTXD_r_max">
+                <comment> Face A </comment>
+                <stave nmodules="4" z_offset="VTXD_disk3_zoffset_stave1A" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave1A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="VTXDStave"/>
+                <stave nmodules="5" z_offset="VTXD_disk3_zoffset_stave2A" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave2A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="VTXDStave"/>
+                <stave nmodules="5" z_offset="VTXD_disk3_zoffset_stave3A" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave3A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="VTXDStave"/>
+                <stave nmodules="6" z_offset="VTXD_disk3_zoffset_stave4A" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave4A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="VTXDStave"/>
+                <stave nmodules="7" z_offset="VTXD_disk3_zoffset_stave5A" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave5A" step="VTXDModOverlap" phi0="VTXD_phi1A" module="VTXDStave"/>
+
+                <comment> Face B </comment>
+                <stave nmodules="4" z_offset="VTXD_zoffset_faceB3+VTXD_disk3_zoffset_stave1B" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave1B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="VTXDStave"/>
+                <stave nmodules="5" z_offset="VTXD_zoffset_faceB3+VTXD_disk3_zoffset_stave2B" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave2B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="VTXDStave"/>
+                <stave nmodules="5" z_offset="VTXD_zoffset_faceB3+VTXD_disk3_zoffset_stave3B" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave3B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="VTXDStave"/>
+                <stave nmodules="6" z_offset="VTXD_zoffset_faceB3+VTXD_disk3_zoffset_stave4B" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave4B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="VTXDStave"/>
+                <stave nmodules="7" z_offset="VTXD_zoffset_faceB3+VTXD_disk3_zoffset_stave5B" dz="VTXD_support_thickness+VTXD_stave_dz+VTXD_support_thickness" r="VTXD_disk3_roffset_stave5B" step="VTXDModOverlap" phi0="VTXD_phi1B" module="VTXDStave"/>
+            </layer>  
+        </detector>
+
+        <comment> Disk support proxy volumes  </comment>
+        <detector name="VertexDisks_support" type="VertexBarrel_detailed_o1_v02" vis="VXDVis" id="-1" readout="VertexDummyCollection"  region="VertexEndcapRegion">
+            <type_flags type="DetType_SUPPORT"/>
+            <envelope vis="VXDVis">
+                <shape type="Assembly"/>
+            </envelope>
+
+            <stave name="VTXD_support_disk1" r="VTXD_disk1_rmin" length="VTXD_support_thickness_disk1">
+                <end_z name="support" r="0.0" length="VTXD_support_thickness_disk1/2.">
+                    <component thickness="VTXD_rmax1-VTXD_disk1_rmin" width="2.*pi*VTXD_disk1_rmin" length="0.05*VTXD_support_thickness_disk1" isCurved="true" vis="VTXDiskSupportVis" material="CarbonFiberVtx" side="+1" dz="-VTXD_support_thickness_disk1+0."/>
+                    <component thickness="VTXD_rmax1-VTXD_disk1_rmin" width="2.*pi*VTXD_disk1_rmin" length="0.90*VTXD_support_thickness_disk1" isCurved="true" vis="VTXDiskSupportVis" material="RohacellVtx"    side="+1" dz="-VTXD_support_thickness_disk1+0.05*VTXD_support_thickness_disk1"/>
+                    <component thickness="VTXD_rmax1-VTXD_disk1_rmin" width="2.*pi*VTXD_disk1_rmin" length="0.05*VTXD_support_thickness_disk1" isCurved="true" vis="VTXDiskSupportVis" material="CarbonFiberVtx" side="+1" dz="-VTXD_support_thickness_disk1+0.05*VTXD_support_thickness_disk1+0.90*VTXD_support_thickness_disk1"/>
+                </end_z>
+            </stave>
+
+            <stave name="VTXD_support_disk2" r="VTXD_disk2_rmin" length="VTXD_support_thickness_disk2">
+                <end_z name="support" r="0.0" length="VTXD_support_thickness_disk2/2.">
+                    <component thickness="VTXD_rmax2-VTXD_disk2_rmin" width="2.*pi*VTXD_disk2_rmin" length="0.05*VTXD_support_thickness_disk2" isCurved="true" vis="VTXDiskSupportVis" material="CarbonFiberVtx" side="+1" dz="-VTXD_support_thickness_disk2+0."/>
+                    <component thickness="VTXD_rmax2-VTXD_disk2_rmin" width="2.*pi*VTXD_disk2_rmin" length="0.90*VTXD_support_thickness_disk2" isCurved="true" vis="VTXDiskSupportVis" material="RohacellVtx"    side="+1" dz="-VTXD_support_thickness_disk2+0.05*VTXD_support_thickness_disk2"/>
+                    <component thickness="VTXD_rmax2-VTXD_disk2_rmin" width="2.*pi*VTXD_disk2_rmin" length="0.05*VTXD_support_thickness_disk2" isCurved="true" vis="VTXDiskSupportVis" material="CarbonFiberVtx" side="+1" dz="-VTXD_support_thickness_disk2+0.05*VTXD_support_thickness_disk2+0.90*VTXD_support_thickness_disk2"/>
+                </end_z>
+            </stave>
+
+            <stave name="VTXD_support_disk3" r="VTXD_disk3_rmin" length="VTXD_support_thickness_disk3">
+                <end_z name="support" r="0.0" length="VTXD_support_thickness_disk3/2.">
+                    <component thickness="VTXD_rmax3-VTXD_disk3_rmin" width="2.*pi*VTXD_disk3_rmin" length="0.05*VTXD_support_thickness_disk3" isCurved="true" vis="VTXDiskSupportVis" material="CarbonFiberVtx" side="+1" dz="-VTXD_support_thickness_disk3+0."/>
+                    <component thickness="VTXD_rmax3-VTXD_disk3_rmin" width="2.*pi*VTXD_disk3_rmin" length="0.90*VTXD_support_thickness_disk3" isCurved="true" vis="VTXDiskSupportVis" material="RohacellVtx"    side="+1" dz="-VTXD_support_thickness_disk3+0.05*VTXD_support_thickness_disk3"/>
+                    <component thickness="VTXD_rmax3-VTXD_disk3_rmin" width="2.*pi*VTXD_disk3_rmin" length="0.05*VTXD_support_thickness_disk3" isCurved="true" vis="VTXDiskSupportVis" material="CarbonFiberVtx" side="+1" dz="-VTXD_support_thickness_disk3+0.05*VTXD_support_thickness_disk3+0.90*VTXD_support_thickness_disk3"/>
+                </end_z>
+            </stave>
+
+            <comment> Disk supports for layer 1 </comment>
+            <layer nLadders="1" r="VTXD_disk1_rmin" id="0" name="VTXD_support_disk1" nmodules="1" motherVolThickness="VTXD_rmax1-VTXD_disk1_rmin" side="+1" z_offset="+VTXD_disk1_z"/>
+            <layer nLadders="1" r="VTXD_disk1_rmin" id="1" name="VTXD_support_disk1" nmodules="1" motherVolThickness="VTXD_rmax1-VTXD_disk1_rmin" side="-1" z_offset="-VTXD_disk1_z"/>
+
+            <comment> Disk supports for layer 2 </comment>
+            <layer nLadders="1" r="VTXD_disk2_rmin" id="2" name="VTXD_support_disk2" nmodules="1" motherVolThickness="VTXD_rmax2-VTXD_disk2_rmin" side="+1" z_offset="+VTXD_disk2_z"/>
+            <layer nLadders="1" r="VTXD_disk2_rmin" id="3" name="VTXD_support_disk2" nmodules="1" motherVolThickness="VTXD_rmax2-VTXD_disk2_rmin" side="-1" z_offset="-VTXD_disk2_z"/>
+
+            <comment> Disk supports for layer 3 </comment>
+            <layer nLadders="1" r="VTXD_disk3_rmin" id="4" name="VTXD_support_disk3" nmodules="1" motherVolThickness="VTXD_rmax3-VTXD_disk3_rmin" side="+1" z_offset="+VTXD_disk3_z"/>
+            <layer nLadders="1" r="VTXD_disk3_rmin" id="5" name="VTXD_support_disk3" nmodules="1" motherVolThickness="VTXD_rmax3-VTXD_disk3_rmin" side="-1" z_offset="-VTXD_disk3_z"/>
+        </detector>
+    </detectors>
+
+    <readouts> <comment>  Definition of the readout segmentation/definition </comment>
+        <readout name="VertexEndcapCollection"> 
+            <segmentation type="MultiSegmentation" key="layer">
+                <segmentation name="VTXDgrid" type="CartesianGridXY" key_min="0" key_max="0" grid_size_x="VTXD_pitch_r" grid_size_y="VTXD_pitch_phi"/> 
+                <segmentation name="VTXDgrid" type="CartesianGridXY" key_min="1" key_max="1" grid_size_x="VTXD_pitch_r" grid_size_y="VTXD_pitch_phi"/>
+                <segmentation name="VTXDgrid" type="CartesianGridXY" key_min="2" key_max="2" grid_size_x="VTXD_pitch_r" grid_size_y="VTXD_pitch_phi"/>
+            </segmentation>
+            <id>${GlobalTrackerReadoutID},x:32:-16,y:-16</id>
+        </readout>  
+        <readout name="VertexDummyCollection">    <comment> For disk supports, should not have any hits but better safe than sorry </comment>
+            <id>${GlobalTrackerReadoutID}</id>
+        </readout>  
+    </readouts>    
+
+    <comment> Plugin to define the sensitive surfaces of the disks </comment>
+    <plugins>
+        <plugin name="DD4hep_GenericSurfaceInstallerPlugin">
+            <argument value="VertexDisks"/> 
+            <argument value="dimension=2"/>
+            <argument value="u_y=1."/> <comment> The better measurement direction should be in u (by convention), which we want to be in phi for the track momentum measurement. In local sensor coordinates, this is in the y direction (along the vertex disk stave) </comment>
+            <argument value="v_x=1."/> <comment> The worse measurement direction should be in v (by convention), which we want to be in r. In local sensor coordinates, this is in the x direction (across the vertex disk stave) </comment>
+            <argument value="n_z=-1."/>
+        </plugin>
+    </plugins>
+</lccdd>

@@ -91,8 +91,9 @@ add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o1_v01/CLIC_
 add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o2_v04/CLIC_o2_v04.xml)
 add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o3_v15/CLIC_o3_v15.xml)
 add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/FCCee_o1_v05/FCCee_o1_v05.xml)
-add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/CLD_o2_v08/CLD_o2_v08.xml)
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/CLD_o2_v09/CLD_o2_v09.xml)
 add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/CLD_o4_v05/CLD_o4_v05.xml)
+add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../FCCee/CLD/compact/CLD_o5_v01/CLD_o5_v01.xml)
 
 add_ddsim_gun_test(${CMAKE_CURRENT_SOURCE_DIR}/../CLIC/compact/CLIC_o2_v04/CLIC_o2_v04.xml
   NAME test_steeringFile

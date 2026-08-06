@@ -111,6 +111,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
     vector<Volume> volumes;
     vector<int> side;
     vector<bool> isCurved;
+    vector<double> tilts;
+    vector<double> phi_offsets;
   };
 
   // Struct for sensors
@@ -242,6 +244,9 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         endOfStave.z_offsets.push_back(component.z_offset(0));
         endOfStave.lengths.push_back(component.length());
         endOfStave.rs.push_back(component.r(0));
+        endOfStave.tilts.push_back(
+            getAttrOrDefault(component, _Unicode(tilt),
+                             double(0.))); // Tilt of end-of-stave components to point not along z but at a custom angle
 
         int side = getAttrOrDefault(component, _Unicode(side), int(0));
 
@@ -253,9 +258,10 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         if (isCurved) {
           double rmin = m.stave_r + endOfStave.r + endOfStave.rs.back();
           double half_width = component.width() / (2. * M_PI * rmin) * (2.0 * M_PI) / 2.;
-          double phi_offset = getAttrOrDefault(component, _Unicode(phi_offset), double(0.0));
-          Tube ele_box =
-              Tube(rmin, rmin + thickness, component.length() / 2., -half_width + phi_offset, half_width + phi_offset);
+          endOfStave.phi_offsets.push_back(getAttrOrDefault(component, _Unicode(phi_offset), double(0.0)));
+          Tube ele_box = Tube(rmin, rmin + thickness, component.length() / 2.,
+                              -half_width + endOfStave.phi_offsets.back(),
+                              half_width + endOfStave.phi_offsets.back());
           ele_vol = Volume(endOfStave.name + _toString(iEndOfStave, "_%d"), ele_box,
                            theDetector.material(component.materialStr()));
         } else {
@@ -545,7 +551,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
         for (int i = 0; i < int(component.thicknesses.size()); i++) {
           if (component.isCurved[i]) {
             double r_component_curved = 0.0; // component.r + component.rs[i]+ component.thicknesses[i]/2.;
-            r_offset_component = component.offset + component.offsets[i];
+            r_offset_component = component.offset + component.offsets[i] +
+                                 (m.motherVolThickness > 0.0 && m.motherVolWidth > 0.0 ? 0. : layer_offset);
             x_pos = r_component_curved * cos(phi) - r_offset_component * sin(phi);
             y_pos = r_component_curved * sin(phi) + r_offset_component * cos(phi);
             z_pos = component.z_offset + component.z_offsets[i] + motherVolOffset;
@@ -577,25 +584,51 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
           if (endOfStave.side[i] != 0)
             endOfStave_sides = {endOfStave.side[i]};
           for (auto& endOfStave_side : endOfStave_sides) { // Place it on both sides of the stave
+            Transform3D transform_tilt(RotationZYX(0., 0., 0.),
+                                       Position(0., 0., 0.)); // Initialize transform_tilt to identity transformation
+
             if (endOfStave.isCurved[i]) {
+              // Rotation of volume to be placed to allow for a tilt away from the beam axis (z axis)
+              if (endOfStave.tilts[i] != 0.) {
+                double pivot_r = m.stave_r + endOfStave.r + endOfStave.rs[i] + endOfStave.thicknesses[i] / 2.;
+                Position pivot =
+                    Position(pivot_r * cos(endOfStave.phi_offsets[i]), pivot_r * sin(endOfStave.phi_offsets[i]),
+                             -endOfStave.lengths[i] / 2. * endOfStave_side);
+                transform_tilt =
+                    Translation3D(pivot) * RotationZ(endOfStave.phi_offsets[i]) *
+                    RotationY(endOfStave.tilts[i] * endOfStave_side) * RotationZ(-endOfStave.phi_offsets[i]) *
+                    Translation3D(-pivot); // Rotate in local tube frame so radial placement stays unchanged
+              }
+
               double r_component_curved =
                   0.0; // endOfStave.r + endOfStave.rs[i] + endOfStave.thicknesses[i]/2; // Correct for the fact that a
                        // tube element's origin is offset compared to the origin of a box
-              r_offset_component = endOfStave.offset + endOfStave.offsets[i];
+              r_offset_component = endOfStave.offset + endOfStave.offsets[i] +
+                                   (m.motherVolThickness > 0.0 && m.motherVolWidth > 0.0 ? 0. : layer_offset);
               x_pos = r_component_curved * cos(phi) - r_offset_component * sin(phi);
               y_pos = r_component_curved * sin(phi) + r_offset_component * cos(phi);
               z_pos = m.stave_length / 2. + endOfStave.lengths[i] / 2. + endOfStave.dzs[i] + endOfStave.z_offset +
-                      endOfStave.z_offsets[i];
+                      endOfStave.z_offsets[i]
+                      + sin(endOfStave.tilts[i]) * endOfStave.thicknesses[i]; // Move slightly in z to avoid collision of tilted end-of-stave volume with stave
               Position pos = Position(x_pos, y_pos, z_pos * endOfStave_side + motherVolOffset);
-              endOfStave_assembly.placeVolume(endOfStave.volumes[i],
-                                              Transform3D(rot, stave_pos).Inverse() * Transform3D(rot, pos));
+              endOfStave_assembly.placeVolume(endOfStave.volumes[i], Transform3D(rot, stave_pos).Inverse() *
+                                                                         Transform3D(rot, pos) * transform_tilt);
             } else {
+              // Rotation of volume to be placed to allow for a tilt away from the beam axis (z axis)
+              if (endOfStave.tilts[i] != 0) {
+                Position pivot = Position(0., 0., -endOfStave.lengths[i] / 2. * endOfStave_side);
+                transform_tilt =
+                    Translation3D(pivot) * RotationY(endOfStave.tilts[i] * endOfStave_side) *
+                    Translation3D(-pivot); // Rotate in local tube frame so radial placement stays unchanged
+              }
+
               x_pos = endOfStave.r + endOfStave.rs[i] + endOfStave.thicknesses[i] / 2.;
               y_pos = endOfStave.offset + endOfStave.offsets[i];
               z_pos = m.stave_length / 2. + endOfStave.lengths[i] / 2. + endOfStave.dzs[i] + endOfStave.z_offset +
-                      endOfStave.z_offsets[i];
+                      endOfStave.z_offsets[i]
+                      + sin(endOfStave.tilts[i]) * endOfStave.thicknesses[i]; // Move slightly in z to avoid collision of tilted end-of-stave volume with stave
               Position pos(x_pos, y_pos, z_pos * endOfStave_side + motherVolOffset);
-              endOfStave_assembly.placeVolume(endOfStave.volumes[i], pos);
+              endOfStave_assembly.placeVolume(endOfStave.volumes[i], Transform3D(rot, pos) * transform_tilt);
             }
           }
         }

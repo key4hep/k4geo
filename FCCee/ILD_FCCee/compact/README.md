@@ -16,6 +16,7 @@ These are based on the ILC-specific models located under ILD/compact
 - MDI taken from FCCee common MDI design
 - ECal ring removed
 - other subdetectors same as ILD_l5_v02
+- 07.2026: Replaced CLD vertex with FCC-SEED vertex consisting of a novel barrel design with overlapping, curved sensors, and modified CLD disks with six single-hit disks with 0.35% X0 per disk.
 
 ##########################
 # ILD_FCCee_v02
@@ -30,4 +31,5 @@ These are based on the ILC-specific models located under ILD/compact
 - MDI taken from FCCee common MDI design
 - ECal ring removed
 - other subdetectors same as ILD_l5_v02
+- 07.2026: Replaced CLD vertex with FCC-SEED vertex consisting of a novel barrel design with overlapping, curved sensors, and modified CLD disks with six single-hit disks with 0.35% X0 per disk.
 

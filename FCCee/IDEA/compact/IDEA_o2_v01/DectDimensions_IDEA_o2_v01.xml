@@ -23,6 +23,7 @@
     
     <constant name="DetID_VXD_Barrel"             value=" 1"/>
     <constant name="DetID_VXD_Disks"              value=" 2"/>
+    <constant name="DetID_VXD_OuterBarrel"        value=" 31"/>
 
     <constant name="DetID_DCH"                    value=" 3"/>
 
@@ -93,10 +94,12 @@
     <constant name="VertexAcceptanceLimit"  value="0.125*rad"/>   <!-- Acceptance limit of vertex detector, used to define number of modules per stave  -->
     <constant name="VTXIB_r_min_layer"      value="13.7*mm"/>     <!-- Start of inner vertex detector layers. To keep distance of 1.3 mm from outer beam pipe end (10+0.35+1+0.35 mm = 11.7 mm). This changes to 13.7 mm due to cooling issues (see https://indico.cern.ch/event/1176398/contributions/5207171/attachments/2581129/4451907/Krakow%202023_v23_final.pdf). 
                                                                        Radius can be reduced down to the beam pipe outer radius, changing automatically the number of modules used.  -->
+    <constant name="VTXIB_SEED_Kapton_beampipe_thickness" value="0.1*mm"/> <!-- Thickness of the Kapton layer on the beampipe. Kapton layer is used if Vertex_inner_radius+VTXIB_SEED_Kapton_beampipe_thickness = VTXIB_r_min_layer -->
     <constant name="VTXIB_r_min_clearance"  value="(VTXIB_r_min_layer-CentralBeamPipe_rmax-BeamPipeWidth)/2."/>    <!-- Clearance of vertex detector in radius, used for definiton of vertex DD4hep_SubdetectorAssembly -->
     <constant name="VTXIB_r_max_layer"      value="34.0*mm"/>     <!-- Position of the outermost vertex inner barrel layer -->
     <constant name="VTXIB_r_max"            value="50.0*mm"/>     <!-- End of inner vertex = outer radius of inner vertex tube -->
     <constant name="VTXIB_half_length"      value="556.2/2.*mm"/> <!-- 278.1*mm, half length of inner vertex tube -->
+    <constant name="VTXIB_tube_thickness"   value="0.2*mm"/>      <!-- Thickness of the inner vertex tube needed for air-cooling -->
 
     <constant name="VTXOB_r_min_layer"    value="130*mm"/>        <!-- R of the innermost layer of the outer vertex -->
     <constant name="VTXOB_r_max_layer"    value="315*mm"/>        <!-- R of the outermost layer of the outer vertex -->
@@ -113,6 +116,13 @@
     <constant name="VTX_r_max" value="VTXOB_r_max_layer+VTXOB_rmax_clearance"/>   <!-- Not used, just do indicate the vertex detector envelope limits -->
     <constant name="VTX_z_max" value="VTXD_z_max_total"/>                         <!-- Not used, just do indicate the vertex detector envelope limits -->
 
+    <constant name="VTXIB_pitch_z"      value="0.025*mm"/>  <!-- Assume 25um pixel pitch both for classic and ultra light inner vertex (ARCADIA has 25 um pitch) -->
+    <constant name="VTXIB_pitch_phi"    value="0.025*mm"/>
+    <constant name="VTXOB_pitch_z"      value="0.150*mm"/>  <!-- Assume 50x150 um^2 pixel pitch for outer barrel and disks, as in ATLASPix3 -->
+    <constant name="VTXOB_pitch_phi"    value="0.050*mm"/>
+    <constant name="VTXD_pitch_r"       value="0.150*mm"/>  <!-- Assume 50x150 um^2 pixel pitch for the disks. One wants to have the better measurement (50 um pitch) in phi direction. The way the modules are constructed in the disks is actually not this way, but 90 degrees rotated (better resolution in r direction). The vertex disks geometry needs to be updated to reflect this properly, but the segmentation is such that indeed the better resolution is in phi direction. -->
+    <constant name="VTXD_pitch_phi"     value="0.050*mm"/>
+    
     <!--  Drift Chamber parameters    -->
     <!-- Changing the radius is not enough to resize the detector, please contact the experts-->
     <constant name="DCH_inner_cyl_R_total"          value=" 349.8  * mm"  />
@@ -311,8 +321,8 @@
   </limits>
   <regions>
     <region name="BeampipeRegion"/>
-    <region name="VTXBRegion"/>
-    <region name="VTXDRegion"/>
+    <region name="VertexBarrelRegion"/>
+    <region name="VertexEndcapRegion"/>
 
     <region name="SiWrBRegion"/>
     <region name="SiWrDRegion"/>

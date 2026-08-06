@@ -40,7 +40,9 @@ Based on o1_v03, but updated vertex detector and silicon wrapper:
 April 2026: Added feature to have part of the vertex barrel sensors insensitive in thickness (relevant if epi-layer is not same size as sensor thickness). This is especially relevant for the ultra-light curved vertex variant, which only has 10 µm active thickness (TPSCo 65 nm process).
 In the curved vertex detector variant, the curved sensors can be approximated by trapezoids such that Conformal tracking (from CLD) could be used to evaluate the performance. Furthermore, the fraction of area that is sensitive is increased by about 2.5% by removing the insensitive volumes corresponding to 'auxiliary pads' (see ALICE ITS3 TDR).
 The silicon wrapper is completely revamped. It has a more efficient volume hierarchy and thus enabling to use a detailed sensor description (each sensor is 4x4 cm^2 in size). There are two barrel layers and two disks per side which together make sure that in almost the complete detector coverage one gets at least one hit.
-The total area of sensors is reduced compared to the o1_v03 version. Also added a standalone DectDimensions_IDEA_o1_v04.xml file as description of Silicon Wrapper needed to be updated. Added feature to ignore layers in VertexEndcap_detailed_o1_v03. This enables a dynamic scaling of the radii of the SiliconWrapper_o1_v02.xml model, making all global parameters of the silicon wrapper (almost) freely changable.)
+The total area of sensors is reduced compared to the o1_v03 version. Also added a standalone DectDimensions_IDEA_o1_v04.xml file as description of Silicon Wrapper needed to be updated. Added feature to ignore layers in VertexEndcap_detailed_o1_v03. This enables a dynamic scaling of the radii of the SiliconWrapper_o1_v02.xml model, making all global parameters of the silicon wrapper (almost) freely changable.
+
+July 2026: The IDEA vertex detector is refactored, such that the individual pieces (Vertex_kapton_on_beampipe_o1_v01.xml, VertexInnerBarrel_o1_v04.xml, VertexInnerBarrel_support_tube_o1_v01.xml, VertexOuterBarrel_o1_v04.xml, VertexDisks_o1_v04.xml) can from now on be easily reused and combined. The ultra-light inner vertex option is now in a separate xml file (VertexInnerBarrelUltraLight_o1_v04.xml) and can be selected in the overall vertex xml file (VertexComplete_o1_v04.xml). Similarly, the FCC-SEED vertex detector can be used. 
 
 
 IDEA_o2_v01
@@ -55,4 +57,7 @@ December 2024: Added the dual-readout capillary-tubes barrel calorimeter.
 April 2025: Added the dual-readout segmented crystal ECAL
 
 February 2026: Added the neighborhood finding algorithm for the crystal dual-readout calorimeter.
+
 April 2026: Switch to vertex detector and silicon wrapper from IDEA_o1_v04.
+
+July 2026: Update of vertex detector, as in IDEA_o1_v04.
