@@ -310,40 +310,17 @@ namespace DDSegmentation {
             float calibZmax = calibRhoMax;
             /// angFactor is equivalent to 1/tan(bladeAngle)^2
             float angFactor = m_cscBladeAngle[jWheel] * m_cscBladeAngle[jWheel] - 1.;
-            float calibZmin =
-                std::sqrt(calibRhoMin * calibRhoMin - (m_numReadoutZLayers[jWheel] * m_numReadoutZLayers[jWheel] *
-                                                       m_gridSizeZ[jWheel] * m_gridSizeZ[jWheel] / 4) *
-                                                          angFactor);
+            float calibZmin = std::sqrt(calibRhoMin * calibRhoMin -
+                                        ((m_numReadoutZLayers[jWheel] + 1) * (m_numReadoutZLayers[jWheel] + 1) *
+                                         m_gridSizeZ[jWheel] * m_gridSizeZ[jWheel] / 4) *
+                                            angFactor);
             float calibZcent = (calibZmax + calibZmin) / 2.;
 
             // get center position of readout cell
-            float readoutRhoMin = m_offsetRho[jWheel] + jRho * m_gridSizeRho[jWheel];
-            float readoutRhoMax = readoutRhoMin + m_gridSizeRho[jWheel];
-            float readoutZPos[3];
-            readoutZPos[0] = (jZ - m_numReadoutZLayers[jWheel] / 2) * m_gridSizeZ[jWheel] +
-                             (1 - m_numReadoutZLayers[jWheel] % 2) * m_gridSizeZ[jWheel] / 2;
-            readoutZPos[1] = readoutZPos[0] + m_gridSizeZ[jWheel] / 2;
-            readoutZPos[2] = readoutZPos[1] - m_gridSizeZ[jWheel];
+            float readoutRhoCent = m_offsetRho[jWheel] + (jRho + 0.5) * m_gridSizeRho[jWheel];
+            float readoutZPos = (jZ - m_numReadoutZLayers[jWheel] / 2 + 0.5) * m_gridSizeZ[jWheel];
 
-            std::vector<float> readoutZmaxArr, readoutZminArr;
-            for (int jPos = 0; jPos < 3; jPos++) {
-              if (readoutRhoMax > std::abs(readoutZPos[jPos])) {
-                readoutZmaxArr.push_back(
-                    std::sqrt(readoutRhoMax * readoutRhoMax - readoutZPos[jPos] * readoutZPos[jPos]));
-              } else {
-                readoutZmaxArr.push_back(0);
-              }
-
-              if (readoutRhoMin > std::abs(readoutZPos[jPos])) {
-                readoutZminArr.push_back(
-                    std::sqrt(readoutRhoMin * readoutRhoMin - readoutZPos[jPos] * readoutZPos[jPos]));
-              } else {
-                readoutZminArr.push_back(1000000);
-              }
-            }
-            float readoutZmax = *(std::ranges::max_element(readoutZmaxArr));
-            float readoutZmin = *(std::ranges::min_element(readoutZminArr));
-            float readoutZcent = (readoutZmax + readoutZmin) / 2.;
+            float readoutZcent = std::sqrt(readoutRhoCent * readoutRhoCent - readoutZPos * readoutZPos * angFactor);
 
             wlzs_new->at(jWheel).setLocalZ(jRho, jZ, readoutZcent - calibZcent);
           }
