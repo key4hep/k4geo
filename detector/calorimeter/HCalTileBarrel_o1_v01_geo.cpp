@@ -24,9 +24,8 @@ static dd4hep::Ref_t createHCal(dd4hep::Detector& lcdd, xml_det_t xmlDet, dd4hep
   // Make volume that envelopes the whole barrel; set material to air
   Dimension xDimensions(xmlDet.dimensions());
 
-  // sensitive detector type read from xml (for example "SimpleCalorimeterSD")
-  Dimension xSensitive = xmlDet.child(_U(sensitive));
-  sensDet.setType(xSensitive.typeStr());
+  // sensitive detector type: generic calorimeter (BirksLawCalorimeterSD is obsolete)
+  sensDet.setType("calorimeter");
 
   xml_comp_t xEndPlate = xmlDet.child(_Unicode(end_plate));
   double dZEndPlate = xEndPlate.thickness();
