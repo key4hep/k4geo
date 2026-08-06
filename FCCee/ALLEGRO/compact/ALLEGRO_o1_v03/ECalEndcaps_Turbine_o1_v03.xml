@@ -27,7 +27,7 @@
     <!-- space between the cryostat and calorimeter -->
     <constant name="BathThicknessFront" value="10*mm"/>
     <constant name="BathThicknessBack" value="40*mm"/>
-    <constant name="BathThicknessInner" value="0*mm"/>
+    <constant name="BathThicknessInner" value="0*mm"/> <!-- placeholder in case future designs require space here -->
     <constant name="BathThicknessOuter" value="50*mm"/>
     <!-- electromegnetic calorimeter: EMEC -->
     <constant name="EMEC_z1" value="CryoEndcap_z1 + CryoEMECThicknessFront + BathThicknessFront"/>offset
