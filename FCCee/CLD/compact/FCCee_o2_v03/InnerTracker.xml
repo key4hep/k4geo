@@ -106,7 +106,6 @@
                 <shape type="Assembly"/>
             </envelope>
             <comment>Silicon Inner Tracker Barrel</comment>
-            <!-- <sensitive type="tracker"/>   -->   <!-- hardcoded in the driver -->
 
             <type_flags type=" DetType_TRACKER + DetType_BARREL"/>
 
@@ -136,7 +135,6 @@
                 <shape type="Assembly"/>
             </envelope>
             <comment>Silicon Inner Tracker Endcaps</comment>
-            <sensitive type="tracker"/>
 
             <type_flags type=" DetType_TRACKER + DetType_ENDCAP"/>
 
