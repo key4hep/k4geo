@@ -53,6 +53,13 @@ namespace DDSegmentation {
       return vID;
     }
 
+    CellID setPhi(const CellID &id, int Phi) const {
+      VolumeID PhiId = static_cast<VolumeID>(Phi);
+      VolumeID vID(id);
+      decoder()->set(vID, m_phiIndex, PhiId);
+      return vID;
+    }
+
     int System(const CellID aCellID) const {
       VolumeID System = static_cast<VolumeID>(decoder()->get(aCellID, m_systemIndex));
       return static_cast<int>(System);

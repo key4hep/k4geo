@@ -69,46 +69,33 @@ namespace sim {
 
     auto vID = thePreStepTouchable->GetCopyNumber(0);
     G4Track* track = step->GetTrack();
+    //get phi from grandparent
+    auto cellID2 = thePreStepTouchable->GetCopyNumber(2);
+
 
     dd4hep::Segmentation* _geoSeg = &m_segmentation;
     auto segmentation = dynamic_cast<dd4hep::DDSegmentation::SCEPCal_MainSegmentation_k4geo*>(_geoSeg->segmentation());
-
     G4double edep = step->GetTotalEnergyDeposit();
 
     auto newOrExistingHitIn = [&](std::size_t id, bool isCherenkov = false) -> Geant4Calorimeter::Hit* {
       Geant4HitCollection* coll = collection(id);
 
-      auto cIDwithChannel = segmentation->setCellID(vID, isCherenkov);
-
+      auto cellID_phi = segmentation->setPhi(vID, cellID2);
+      auto cIDwithChannel = segmentation->setCellID(cellID_phi, isCherenkov);
+      
       auto* hit = coll->findByKey<Geant4Calorimeter::Hit>(cIDwithChannel);
 
       if (!hit) {
         DDSegmentation::Vector3D pos = segmentation->position(vID); // always use scintillation channel for position
-        Position global(pos.x(), pos.y(), pos.z());
-
+	Position global(pos.x(), pos.y(), pos.z());
         hit = new Geant4Calorimeter::Hit(global / dd4hep::mm);
+
         hit->cellID = cIDwithChannel;
         coll->add(cIDwithChannel, hit);
       }
 
       return hit;
     };
-
-    // Do not fill edep and S hits if there is no ionizing energy deposit
-    //
-    if (edep > 0.) {
-      // edep hits
-      auto* hitedep = newOrExistingHitIn(m_collectionID, false);
-      hitedep->energyDeposit += edep;
-
-      // scintillation hits
-      auto* hitS = newOrExistingHitIn(m_userData.m_collectionID_scint, false);
-      auto Scount = m_userData.SmearSsignal(edep);
-      // The EDM4HEP converter divides this entry by CLHEP::GeV to save energies in GeV unit.
-      // Here, we are saving S counts so we multiply by CLHEP::GeV to have the correct number in the output file.
-      if (Scount > 0)
-        hitS->energyDeposit += Scount * CLHEP::GeV;
-    }
 
     // Cerenkov hits
     if (track->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()) {
@@ -118,17 +105,44 @@ namespace sim {
         track->SetTrackStatus(fStopAndKill);
         return true;
       } else if (track->GetCurrentStepNumber() == 1) {
-        auto* hitC = newOrExistingHitIn(m_userData.m_collectionID_ceren, true);
-        // The EDM4HEP converter divides this entry by CLHEP::GeV to save energies in GeV unit.
-        // Here, we are saving C counts so we multiply by CLHEP::GeV to have the correct number in the output file.
-        if (m_userData.SmearCsignal())
+        // create a hit only if the photon is detected
+        if (m_userData.SmearCsignal()) {
+          auto* hitC = newOrExistingHitIn(m_userData.m_collectionID_ceren, true);
+          // The EDM4HEP converter divides this entry by CLHEP::GeV to save energies in GeV unit.
+          // Here, we are saving C counts so we multiply by CLHEP::GeV to have the correct number in the output file.
           hitC->energyDeposit += 1 * CLHEP::GeV;
+        } // if SmearCsignal
+
+        // counted -> kill || not detected -> kill
         track->SetTrackStatus(fStopAndKill);
-      } else
+      } else // keep it until it passes the reflection
         return true;
-    }
+    } // if optical photon
+
+    if (edep <= 0.)
+      return true; // do not save hits with no energy deposit
+
+    // Do not fill edep and S hits if there is no ionizing energy deposit
+    auto Scount = m_userData.SmearSsignal(edep);
+    if (Scount <= 0)
+      return true; // do not save hits with no scintillation signal
+
+    // edep hits (truth)
+    auto* hitedep = newOrExistingHitIn(m_collectionID, false);
+    HitContribution contrib = Geant4Calorimeter::Hit::extractContribution(step);
+    hitedep->energyDeposit += contrib.deposit;
+    hitedep->truth.emplace_back(contrib);
+    Geant4StepHandler h(step);
+    mark(h.track);
+
+    // scintillation hits
+    auto* hitS = newOrExistingHitIn(m_userData.m_collectionID_scint, false);
+    // The EDM4HEP converter divides this entry by CLHEP::GeV to save energies in GeV unit.
+    // Here, we are saving S counts so we multiply by CLHEP::GeV to have the correct number in the output file.
+    hitS->energyDeposit += Scount * CLHEP::GeV;
+
     return true;
-  }
+  } // process
 } // namespace sim
 } // namespace dd4hep
 
