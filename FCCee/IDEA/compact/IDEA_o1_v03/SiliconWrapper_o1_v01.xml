@@ -10,14 +10,6 @@
     -->
     <comment>Silicon wrapper</comment>
 
-    <display>
-        <vis name="SiWrSensitiveVis"      alpha="1.0" r="1.0"     g="1.0"     b="0.0"   showDaughters="true"  visible="true"/>
-        <vis name="SiWrPeripheryVis"      alpha="1.0" r="200/255" g="254/255" b="0.0"   showDaughters="true"  visible="true"/>    
-        <vis name="SiWrCableVis"            alpha="1.0" r="0.0"     g="1.0"     b="0.4"   showDaughters="true"  visible="true"/>
-        <vis name="SiWrPipingVis"           alpha="1.0" r="1.0"     g="1.0"     b="1.0"   showDaughters="true"  visible="true"/>
-        <vis name="SiWrWaterVis"            alpha="1.0" r="0.0"     g="0.0"     b="1.0"   showDaughters="true"  visible="true"/>
-    </display>
-
     <define>
         <!-- ATLASPix3 properties -->
             <constant name="SiWr_sens_rphi_sensitive"       value="19.8*mm"/> 
