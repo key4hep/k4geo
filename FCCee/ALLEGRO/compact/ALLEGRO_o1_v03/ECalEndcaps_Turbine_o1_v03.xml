@@ -27,11 +27,12 @@
     <!-- space between the cryostat and calorimeter -->
     <constant name="BathThicknessFront" value="10*mm"/>
     <constant name="BathThicknessBack" value="40*mm"/>
+    <constant name="BathThicknessInner" value="0*mm"/> <!-- placeholder in case future designs require space here -->
     <constant name="BathThicknessOuter" value="50*mm"/>
     <!-- electromegnetic calorimeter: EMEC -->
     <constant name="EMEC_z1" value="CryoEndcap_z1 + CryoEMECThicknessFront + BathThicknessFront"/>offset
     <constant name="EMEC_z2" value="EMEC_max_z - CryoEMECThicknessBack - BathThicknessBack"/>
-    <constant name="EMEC_rmin1" value="CryoEndcap_front_rmin + CryoEMECThicknessInner + BathThicknessFront"/>
+    <constant name="EMEC_rmin1" value="CryoEndcap_front_rmin + CryoEMECThicknessInner + BathThicknessInner"/>
     <constant name="EMEC_rmin2" value="EMEC_rmin1"/>
     <constant name="EMEC_rmax" value="EMEC_outer_radius - CryoEMECThicknessOuter - BathThicknessOuter"/>
     <!-- LAr thickness: double gap size -->
@@ -60,17 +61,17 @@
     <constant name="EMECAbsorberBladeThicknessScaleFactor3" value="1.0" />
     <constant name="EMECSupportTubeThickness" value="10.0*mm" />
     <constant name="EMECRmin" value="CryoEndcap_front_rmin+CryoEMECThicknessInner" />
-    <constant name="EMECRmax" value="CryoEndcap_rmax-CryoEMECThicknessOuter" />
+    <constant name="EMECRmax" value="CryoEndcap_rmax-CryoEMECThicknessOuter-EMECSupportTubeThickness" />
     <constant name="EMECRadiusRatio" value="(EMECRmax/EMECRmin)^(1./EMECnWheels)" />
-    <constant name="EMECRmin1" value="EMECRmin" />
-    <constant name="EMECRmax1" value="EMECRmin1*EMECRadiusRatio" />
-    <constant name="EMECRmin2" value="EMECRmax1" />
-    <constant name="EMECRmax2" value="EMECRmin2*EMECRadiusRatio" />
-    <constant name="EMECRmin3" value="EMECRmax2" />
-    <constant name="EMECRmax3" value="EMECRmin3*EMECRadiusRatio" />
-    <constant name="EMECGridSizeRho1" value="(EMECRmax1-EMECRmin1-EMECSupportTubeThickness)/EMECNumReadoutRhoLayersWheel1" />
-    <constant name="EMECGridSizeRho2" value="(EMECRmax2-EMECRmin2-EMECSupportTubeThickness)/EMECNumReadoutRhoLayersWheel2" />
-    <constant name="EMECGridSizeRho3" value="(EMECRmax3-EMECRmin3-EMECSupportTubeThickness)/EMECNumReadoutRhoLayersWheel3" />
+    <constant name="EMECRminWheel1" value="EMECRmin" />
+    <constant name="EMECRmaxWheel1" value="EMECRminWheel1*EMECRadiusRatio" />
+    <constant name="EMECRminWheel2" value="EMECRmaxWheel1" />
+    <constant name="EMECRmaxWheel2" value="EMECRminWheel2*EMECRadiusRatio" />
+    <constant name="EMECRminWheel3" value="EMECRmaxWheel2" />
+    <constant name="EMECRmaxWheel3" value="EMECRminWheel3*EMECRadiusRatio" />
+    <constant name="EMECGridSizeRho1" value="(EMECRmaxWheel1-EMECRminWheel1-EMECSupportTubeThickness)/EMECNumReadoutRhoLayersWheel1" />
+    <constant name="EMECGridSizeRho2" value="(EMECRmaxWheel2-EMECRminWheel2-EMECSupportTubeThickness)/EMECNumReadoutRhoLayersWheel2" />
+    <constant name="EMECGridSizeRho3" value="(EMECRmaxWheel3-EMECRminWheel3-EMECSupportTubeThickness)/EMECNumReadoutRhoLayersWheel3" />
     <constant name="EMECGridSizeZ1" value="(EMEC_z2-EMEC_z1)/EMECNumReadoutZLayersWheel1" />
     <constant name="EMECGridSizeZ2" value="(EMEC_z2-EMEC_z1)/EMECNumReadoutZLayersWheel2" />
     <constant name="EMECGridSizeZ3" value="(EMEC_z2-EMEC_z1)/EMECNumReadoutZLayersWheel3" />
@@ -111,7 +112,7 @@
 
   <readouts>
    <readout name="ECalEndcapTurbine">
-     <segmentation type="FCCSWEndcapTurbine_k4geo" offset_rho="EMECRmin1+EMECSupportTubeThickness EMECRmin2+EMECSupportTubeThickness EMECRmin3+EMECSupportTubeThickness" offset_z="EMEC_z1 EMEC_z1 EMEC_z1" offset_theta="0.1127" grid_size_rho="EMECGridSizeRho1 EMECGridSizeRho2 EMECGridSizeRho3" grid_size_z="EMECGridSizeZ1 EMECGridSizeZ2 EMECGridSizeZ3" mergedModules="1 1 1"/>
+     <segmentation type="FCCSWEndcapTurbine_k4geo" offset_rho="EMECRminWheel1+EMECSupportTubeThickness EMECRminWheel2+EMECSupportTubeThickness EMECRminWheel3+EMECSupportTubeThickness" offset_z="EMEC_z1 EMEC_z1 EMEC_z1" offset_theta="0.1127" grid_size_rho="EMECGridSizeRho1 EMECGridSizeRho2 EMECGridSizeRho3" grid_size_z="EMECGridSizeZ1 EMECGridSizeZ2 EMECGridSizeZ3" mergedModules="1 1 1"/>
      <id>system:4,cryo:1,type:3,subtype:3,side:-2,wheel:3,layer:12,module:11,rho:8,z:8</id> 
 
     </readout> 
