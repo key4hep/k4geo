@@ -77,17 +77,27 @@ namespace sim {
     const BitFieldCoder EndcapCoder("system:5,stave:10,tower:6,air:1,col:16,row:16,clad:1,core:1,cherenkov:1");
     const BitFieldCoder BarrelCoder("system:5,stave:10,tower:-8,air:6,col:-16,row:16,clad:1,core:1,cherenkov:1");
 
-    // Cache each coder's indexes separately so descriptor fields can be reordered independently.
-    const std::size_t EndcapStaveIndex = EndcapCoder.index("stave");
-    const std::size_t EndcapTowerIndex = EndcapCoder.index("tower");
-    const std::size_t EndcapColumnIndex = EndcapCoder.index("col");
-    const std::size_t EndcapRowIndex = EndcapCoder.index("row");
-    const std::size_t EndcapCherenkovIndex = EndcapCoder.index("cherenkov");
-    const std::size_t BarrelStaveIndex = BarrelCoder.index("stave");
-    const std::size_t BarrelTowerIndex = BarrelCoder.index("tower");
-    const std::size_t BarrelColumnIndex = BarrelCoder.index("col");
-    const std::size_t BarrelRowIndex = BarrelCoder.index("row");
-    const std::size_t BarrelCherenkovIndex = BarrelCoder.index("cherenkov");
+    struct FieldIndexes {
+      std::size_t stave;
+      std::size_t tower;
+      std::size_t column;
+      std::size_t row;
+      std::size_t cherenkov;
+    };
+
+    FieldIndexes fieldIndexes(const BitFieldCoder& coder) {
+      return {
+          .stave = coder.index("stave"),
+          .tower = coder.index("tower"),
+          .column = coder.index("col"),
+          .row = coder.index("row"),
+          .cherenkov = coder.index("cherenkov"),
+      };
+    }
+
+    // Resolve each coder's indexes independently so their fields can be reordered safely.
+    const FieldIndexes EndcapIndexes = fieldIndexes(EndcapCoder);
+    const FieldIndexes BarrelIndexes = fieldIndexes(BarrelCoder);
 
     VolumeID makeBaseVolumeID(const BitFieldCoder& coder, int system, int air) {
       VolumeID volumeID = 0;
@@ -102,23 +112,13 @@ namespace sim {
     const VolumeID EndcapBaseID = makeBaseVolumeID(EndcapCoder, /*system*/ 25, /*air*/ 0);
     const VolumeID BarrelBaseID = makeBaseVolumeID(BarrelCoder, /*system*/ 28, /*air*/ 63);
 
-    VolumeID encodeEndcapVolumeID(int stave, int tower, int column, int row, int cherenkov) {
-      VolumeID volumeID = EndcapBaseID;
-      EndcapCoder.set(volumeID, EndcapStaveIndex, stave);
-      EndcapCoder.set(volumeID, EndcapTowerIndex, tower);
-      EndcapCoder.set(volumeID, EndcapColumnIndex, column);
-      EndcapCoder.set(volumeID, EndcapRowIndex, row);
-      EndcapCoder.set(volumeID, EndcapCherenkovIndex, cherenkov);
-      return volumeID;
-    }
-
-    VolumeID encodeBarrelVolumeID(int stave, int tower, int column, int row, int cherenkov) {
-      VolumeID volumeID = BarrelBaseID;
-      BarrelCoder.set(volumeID, BarrelStaveIndex, stave);
-      BarrelCoder.set(volumeID, BarrelTowerIndex, tower);
-      BarrelCoder.set(volumeID, BarrelColumnIndex, column);
-      BarrelCoder.set(volumeID, BarrelRowIndex, row);
-      BarrelCoder.set(volumeID, BarrelCherenkovIndex, cherenkov);
+    VolumeID encodeVolumeID(const BitFieldCoder& coder, const FieldIndexes& indexes, VolumeID volumeID, int stave,
+                            int tower, int column, int row, int cherenkov) {
+      coder.set(volumeID, indexes.stave, stave);
+      coder.set(volumeID, indexes.tower, tower);
+      coder.set(volumeID, indexes.column, column);
+      coder.set(volumeID, indexes.row, row);
+      coder.set(volumeID, indexes.cherenkov, cherenkov);
       return volumeID;
     }
   } // namespace
@@ -234,7 +234,7 @@ namespace sim {
       auto TowerID = static_cast<unsigned int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(3));
       auto StaveID = static_cast<unsigned int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(4));
 
-      VolID = encodeEndcapVolumeID(StaveID, TowerID, ColumnID, RowID, CherenkovID);
+      VolID = encodeVolumeID(EndcapCoder, EndcapIndexes, EndcapBaseID, StaveID, TowerID, ColumnID, RowID, CherenkovID);
 
       /* If you want to compare the 64-bits VolID created here
        * with the original DD4hep volumeID:
@@ -273,7 +273,7 @@ namespace sim {
       auto TowerID = static_cast<int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(4));
       auto StaveID = static_cast<unsigned int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(5));
 
-      VolID = encodeBarrelVolumeID(StaveID, TowerID, ColumnID, RowID, CherenkovID);
+      VolID = encodeVolumeID(BarrelCoder, BarrelIndexes, BarrelBaseID, StaveID, TowerID, ColumnID, RowID, CherenkovID);
 
       /* If you want to compare the 64-bits VolID created here
        * with the original DD4hep volumeID:
