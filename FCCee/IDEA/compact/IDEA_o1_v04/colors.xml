@@ -3,7 +3,7 @@
 
   <!-- FCCee IDEA_o1_v04: consolidated visualization (color) definitions -->
 
-  <display> <!-- Note: If the colors should be correctly displayed when geometry is saved as a root file using k4geo/scripts/save_detector_to_root.sh, then colors should be picked that are defined in TColor::InitializeColors(): https://root.cern/doc/master/classTColor.html#a383d38e0cb4f29614310a0653d6b2342 -->
+  <display>
 
     <!-- Global palette (retrieved from DectDimensions_IDEA_o1_v04.xml) -->
     <vis name="VXDVis" alpha="0.2" r="0.1" g=".5" b=".5" showDaughters="false" visible="true"/>
@@ -76,6 +76,18 @@
 
     <!-- Missing definition. Parallel world volume outline (defined in IDEA_o1_v04.xml) -->
     <vis name="VisibleBlue" alpha="0.1" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+
+    <!-- 
+    
+    This version reuses some subparts from ../IDEA_o1_v03/ as-is:
+    - LumiCal_o1_v01.xml
+    - DriftChamber_o1_v02.xml
+    - Solenoid_o1_v01.xml
+    - EndPlateAbsorber_o1_v01.xml
+      
+    The vis entries below are duplicated from that version colors.xml file to keep this file self-contained
+    
+    -->
 
     <!-- Drift chamber (reused as-is from ../IDEA_o1_v03/DriftChamber_o1_v02.xml) -->
     <vis name="dch_aerogel_vis" r="236/256" g="237/256" b="232/256" alpha="0.5" showDaughters="true" visible="true"/>

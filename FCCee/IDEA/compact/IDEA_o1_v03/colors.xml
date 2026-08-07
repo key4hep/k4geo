@@ -3,8 +3,8 @@
 
   <!-- FCCee IDEA_o1_v03: legacy visualization (color) definitions -->
 
-  <display> <!-- Note: If the colors should be correctly displayed when geometry is saved as a root file using k4geo/scripts/save_detector_to_root.sh, then colors should be picked that are defined in TColor::InitializeColors(): https://root.cern/doc/master/classTColor.html#a383d38e0cb4f29614310a0653d6b2342 -->
-
+  <display>
+  
     <!-- Global palette (retrieved from DectDimensions_IDEA_o1_v03.xml) -->
     <vis name="VXDVis" alpha="0.2" r="0.1" g=".5" b=".5" showDaughters="false" visible="true"/>
     <vis name="SiWrVis" alpha="0.2" r="1.0" g="1.0" b="0.0" showDaughters="false" visible="true"/>
