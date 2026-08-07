@@ -31,6 +31,9 @@
   <!-- Import dimensions -->
   <include ref="DectDimensions_IDEA_o2_v01.xml"/>
 
+  <!-- Import visualization (color) definitions -->
+  <include ref="colors.xml"/>
+
   <!-- Import accelerator components -->
   <!-- shape based model of the beam pipe -->
   <include ref="../../../MDI/compact/MDI_o1_v00/Beampipe_o4_v05.xml" />
