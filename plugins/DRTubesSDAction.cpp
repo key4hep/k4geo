@@ -32,6 +32,10 @@
 // Includers from project files
 #include "DRTubesSglHpr.hh"
 
+// Standard library includes
+#include <cstddef>
+#include <string>
+
 // #define DRTubesSDDebug
 
 namespace dd4hep {
@@ -66,6 +70,58 @@ namespace sim {
 
 namespace dd4hep {
 namespace sim {
+
+  namespace {
+    // These descriptors must match the <readout> id strings in
+    // DREndcapTubes_o1_v01.xml and DRBarrelTubes_o1_v01.xml.
+    const BitFieldCoder EndcapCoder("system:5,stave:10,tower:6,air:1,col:16,row:16,clad:1,core:1,cherenkov:1");
+    const BitFieldCoder BarrelCoder("system:5,stave:10,tower:-8,air:6,col:-16,row:16,clad:1,core:1,cherenkov:1");
+
+    struct FieldIndexes {
+      std::size_t stave;
+      std::size_t tower;
+      std::size_t column;
+      std::size_t row;
+      std::size_t cherenkov;
+    };
+
+    FieldIndexes fieldIndexes(const BitFieldCoder& coder) {
+      return {
+          .stave = coder.index("stave"),
+          .tower = coder.index("tower"),
+          .column = coder.index("col"),
+          .row = coder.index("row"),
+          .cherenkov = coder.index("cherenkov"),
+      };
+    }
+
+    // Resolve each coder's indexes independently so their fields can be reordered safely.
+    const FieldIndexes EndcapIndexes = fieldIndexes(EndcapCoder);
+    const FieldIndexes BarrelIndexes = fieldIndexes(BarrelCoder);
+
+    VolumeID makeBaseVolumeID(const BitFieldCoder& coder, int system, int air) {
+      VolumeID volumeID = 0;
+      coder.set(volumeID, "system", system);
+      coder.set(volumeID, "air", air);
+      coder.set(volumeID, "clad", 1);
+      coder.set(volumeID, "core", 1);
+      return volumeID;
+    }
+
+    // Cladding steps return before encoding, so core is always 1 for accepted steps.
+    const VolumeID EndcapBaseID = makeBaseVolumeID(EndcapCoder, /*system*/ 25, /*air*/ 0);
+    const VolumeID BarrelBaseID = makeBaseVolumeID(BarrelCoder, /*system*/ 28, /*air*/ 63);
+
+    VolumeID encodeVolumeID(const BitFieldCoder& coder, const FieldIndexes& indexes, VolumeID volumeID, int stave,
+                            int tower, int column, int row, int cherenkov) {
+      coder.set(volumeID, indexes.stave, stave);
+      coder.set(volumeID, indexes.tower, tower);
+      coder.set(volumeID, indexes.column, column);
+      coder.set(volumeID, indexes.row, row);
+      coder.set(volumeID, indexes.cherenkov, cherenkov);
+      return volumeID;
+    }
+  } // namespace
 
   // Function template specialization of Geant4SensitiveAction class.
   // Define collections created by this sensitivie action object
@@ -178,16 +234,7 @@ namespace sim {
       auto TowerID = static_cast<unsigned int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(3));
       auto StaveID = static_cast<unsigned int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(4));
 
-      BitFieldCoder bc("system:5,stave:10,tower:6,air:1,col:16,row:16,clad:1,core:1,cherenkov:1");
-      bc.set(VolID, "system", 25); // this number is set in DectDimensions_IDEA_o2_v01.xml
-      bc.set(VolID, "stave", StaveID);
-      bc.set(VolID, "tower", TowerID);
-      bc.set(VolID, "air", 0);
-      bc.set(VolID, "col", ColumnID);
-      bc.set(VolID, "row", RowID);
-      bc.set(VolID, "clad", 1);
-      bc.set(VolID, "core", CoreID);
-      bc.set(VolID, "cherenkov", CherenkovID);
+      VolID = encodeVolumeID(EndcapCoder, EndcapIndexes, EndcapBaseID, StaveID, TowerID, ColumnID, RowID, CherenkovID);
 
       /* If you want to compare the 64-bits VolID created here
        * with the original DD4hep volumeID:
@@ -198,15 +245,15 @@ namespace sim {
        * 3. Uncomment the code below */
       // clang-format off
     /*std::cout<<"Volume id, created "<<VolID<<" and DD4hep original "<<volumeID(aStep)<<std::endl;
-    std::cout<<"system id, created "<<25<<" and DD4hep original "<<bc.get(volumeID(aStep),"system")<<std::endl;
-    std::cout<<"stave id, created "<<StaveID<<" and DD4hep original "<<bc.get(volumeID(aStep),"stave")<<std::endl;
-    std::cout<<"tower id, created "<<TowerID<<" and DD4hep original "<<bc.get(volumeID(aStep),"tower")<<std::endl;
-    std::cout<<"air id, created "<<0<<" and DD4hep original "<<bc.get(volumeID(aStep),"air")<<std::endl;
-    std::cout<<"col id, created "<<ColumnID<<" and DD4hep original "<<bc.get(volumeID(aStep),"col")<<std::endl;
-    std::cout<<"row id, created "<<RowID<<" and DD4hep original "<<bc.get(volumeID(aStep),"row")<<std::endl;
-    std::cout<<"clad id, created "<<1<<" and DD4hep original "<<bc.get(volumeID(aStep),"clad")<<std::endl;
-    std::cout<<"core id, created "<<CoreID<<" and DD4hep original "<<bc.get(volumeID(aStep),"core")<<std::endl;
-    std::cout<<"cherenkov id, created "<<CherenkovID<<" and DD4hep original "<<bc.get(volumeID(aStep),"cherenkov")<<std::endl;*/
+    std::cout<<"system id, created "<<25<<" and DD4hep original "<<EndcapCoder.get(volumeID(aStep),"system")<<std::endl;
+    std::cout<<"stave id, created "<<StaveID<<" and DD4hep original "<<EndcapCoder.get(volumeID(aStep),"stave")<<std::endl;
+    std::cout<<"tower id, created "<<TowerID<<" and DD4hep original "<<EndcapCoder.get(volumeID(aStep),"tower")<<std::endl;
+    std::cout<<"air id, created "<<0<<" and DD4hep original "<<EndcapCoder.get(volumeID(aStep),"air")<<std::endl;
+    std::cout<<"col id, created "<<ColumnID<<" and DD4hep original "<<EndcapCoder.get(volumeID(aStep),"col")<<std::endl;
+    std::cout<<"row id, created "<<RowID<<" and DD4hep original "<<EndcapCoder.get(volumeID(aStep),"row")<<std::endl;
+    std::cout<<"clad id, created "<<1<<" and DD4hep original "<<EndcapCoder.get(volumeID(aStep),"clad")<<std::endl;
+    std::cout<<"core id, created "<<CoreID<<" and DD4hep original "<<EndcapCoder.get(volumeID(aStep),"core")<<std::endl;
+    std::cout<<"cherenkov id, created "<<CherenkovID<<" and DD4hep original "<<EndcapCoder.get(volumeID(aStep),"cherenkov")<<std::endl;*/
       // clang-format on
 
       bool IsRight = (aStep->GetPreStepPoint()->GetPosition().z() > 0.);
@@ -226,16 +273,7 @@ namespace sim {
       auto TowerID = static_cast<int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(4));
       auto StaveID = static_cast<unsigned int>(aStep->GetPreStepPoint()->GetTouchable()->GetCopyNumber(5));
 
-      BitFieldCoder bcbarrel("system:5,stave:10,tower:-8,air:6,col:-16,row:16,clad:1,core:1,cherenkov:1");
-      bcbarrel.set(VolID, "system", 28); // this number is set in DectDimensions_IDEA_o2_v01.xml
-      bcbarrel.set(VolID, "stave", StaveID);
-      bcbarrel.set(VolID, "tower", TowerID);
-      bcbarrel.set(VolID, "air", 63);
-      bcbarrel.set(VolID, "col", ColumnID);
-      bcbarrel.set(VolID, "row", RowID);
-      bcbarrel.set(VolID, "clad", 1);
-      bcbarrel.set(VolID, "core", CoreID);
-      bcbarrel.set(VolID, "cherenkov", CherenkovID);
+      VolID = encodeVolumeID(BarrelCoder, BarrelIndexes, BarrelBaseID, StaveID, TowerID, ColumnID, RowID, CherenkovID);
 
       /* If you want to compare the 64-bits VolID created here
        * with the original DD4hep volumeID:
@@ -246,15 +284,15 @@ namespace sim {
        * 3. Uncomment the code below */
       // clang-format off
     /*std::cout<<"Volume id, created "<<VolID<<" and DD4hep original "<<volumeID(aStep)<<std::endl;
-    std::cout<<"system id, created "<<28<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"system")<<std::endl;
-    std::cout<<"stave id, created "<<StaveID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"stave")<<std::endl;
-    std::cout<<"tower id, created "<<TowerID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"tower")<<std::endl;
-    std::cout<<"air id, created "<<1<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"air")<<std::endl;
-    std::cout<<"col id, created "<<ColumnID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"col")<<std::endl;
-    std::cout<<"row id, created "<<RowID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"row")<<std::endl;
-    std::cout<<"clad id, created "<<1<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"clad")<<std::endl;
-    std::cout<<"core id, created "<<CoreID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"core")<<std::endl;
-    std::cout<<"cherenkov id, created "<<CherenkovID<<" and DD4hep original "<<bcbarrel.get(volumeID(aStep),"cherenkov")<<std::endl;*/
+    std::cout<<"system id, created "<<28<<" and DD4hep original "<<BarrelCoder.get(volumeID(aStep),"system")<<std::endl;
+    std::cout<<"stave id, created "<<StaveID<<" and DD4hep original "<<BarrelCoder.get(volumeID(aStep),"stave")<<std::endl;
+    std::cout<<"tower id, created "<<TowerID<<" and DD4hep original "<<BarrelCoder.get(volumeID(aStep),"tower")<<std::endl;
+    std::cout<<"air id, created "<<63<<" and DD4hep original "<<BarrelCoder.get(volumeID(aStep),"air")<<std::endl;
+    std::cout<<"col id, created "<<ColumnID<<" and DD4hep original "<<BarrelCoder.get(volumeID(aStep),"col")<<std::endl;
+    std::cout<<"row id, created "<<RowID<<" and DD4hep original "<<BarrelCoder.get(volumeID(aStep),"row")<<std::endl;
+    std::cout<<"clad id, created "<<1<<" and DD4hep original "<<BarrelCoder.get(volumeID(aStep),"clad")<<std::endl;
+    std::cout<<"core id, created "<<CoreID<<" and DD4hep original "<<BarrelCoder.get(volumeID(aStep),"core")<<std::endl;
+    std::cout<<"cherenkov id, created "<<CherenkovID<<" and DD4hep original "<<BarrelCoder.get(volumeID(aStep),"cherenkov")<<std::endl;*/
       // clang-format on
 
       coll = (IsScin) ? collection(m_userData.collection_drbt_scin) : collection(m_userData.collection_drbt_cher);
