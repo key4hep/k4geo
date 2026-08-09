@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+
+  <!-- PbWO optical properties needed for Cherenkov production and propagation.  Shared by
+       SCEPCal_o1_v01.xml and its reduced CI variant, which keeps Cherenkov but drops the
+       scintillation optical model. -->
+  <properties>
+    <matrix name="RI_PbWO" coldim="2" values="
+      1.1*eV  2.19414
+      1.2*eV  2.19762
+      1.3*eV  2.20149
+      1.4*eV  2.20577
+      1.5*eV  2.2105
+      1.6*eV 2.21571
+      1.7*eV  2.22144
+      1.8*eV 2.22773
+      1.9*eV 2.23463
+      2.0*eV  2.24221
+      2.1*eV  2.25053
+      2.2*eV 2.25968
+      2.256*eV 2.26974
+      2.3*eV 2.26974
+      2.4*eV 2.28084
+      2.5*eV 2.2931
+      2.6*eV 2.30668
+      2.7*eV 2.32177
+      2.8*eV  2.3386
+      2.9*eV 2.35745
+      3.0*eV 2.37866
+      3.1*eV 2.40268
+      3.2*eV  2.43006
+      3.3*eV  2.4615
+      3.4*eV 2.49794
+      3.5*eV  2.54063
+      3.6*eV  2.59128
+      3.7*eV  2.6523
+      3.8*eV  2.72722
+      3.9*eV  2.82141
+    "/>
+    <matrix name="AbsLen_PbWO" coldim="2" values="
+      1.56942*eV 390.8*mm
+      1.58954*eV 390.9*mm
+      1.61018*eV 390.7*mm
+      1.63137*eV 390.2*mm
+      1.65312*eV 390.7*mm
+      1.67546*eV 390.5*mm
+      1.69841*eV 390.6*mm
+      1.722*eV 390.7*mm
+      1.74626*eV 390.3*mm
+      1.7712*eV 390.2*mm
+      1.79687*eV 390.8*mm
+      1.8233*eV 390.9*mm
+      1.85051*eV 390.7*mm
+      1.87855*eV 390.2*mm
+      1.90745*eV 390.7*mm
+      1.93725*eV 390.5*mm
+      1.968*eV 390.6*mm
+      1.99974*eV 390.7*mm
+      2.03253*eV 390.3*mm
+      2.0664*eV 390.2*mm
+      2.10143*eV 390.8*mm
+      2.13766*eV 390.5*mm
+      2.17516*eV 390.3*mm
+      2.214*eV 390.4*mm
+      2.25426*eV 390.3*mm
+      2.296*eV 390.8*mm
+      2.33932*eV 390.9*mm
+      2.38431*eV 390.9*mm
+      2.43106*eV 390.4*mm
+      2.47968*eV 390.9*mm
+      2.53029*eV 390*mm
+      2.583*eV 390.2*mm
+      2.63796*eV 390.1*mm
+      2.69531*eV 345.3*mm
+      2.7552*eV 298.9*mm
+      2.81782*eV 256.7*mm
+      2.88335*eV 219.8*mm
+      2.952*eV 185.4*mm
+      3.024*eV 150.9*mm
+      3.0996*eV 116.4*mm
+      3.17908*eV 84.8*mm
+      3.26274*eV 59.4*mm
+      3.35092*eV 41.1*mm
+      3.44401*eV 0*mm
+      3.54241*eV 0*mm
+      3.64659*eV 0*mm
+      3.7571*eV 0*mm
+      3.87451*eV 0*mm
+      3.99949*eV 0*mm
+      4.13281*eV 0*mm
+    "/>
+  </properties>
+
+</lccdd>
