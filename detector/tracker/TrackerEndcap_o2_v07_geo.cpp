@@ -279,6 +279,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
               continue; // out of disk
 
             // encoding
+            // NB: side has to be set explicitly here, the reflect block below leaves it at bwd
+            encoder[lcio::LCTrackerCellID::side()] = lcio::ILDDetID::fwd;
             encoder[lcio::LCTrackerCellID::module()] = newmodule;
             encoder[lcio::LCTrackerCellID::sensor()] = newsensor;
 
