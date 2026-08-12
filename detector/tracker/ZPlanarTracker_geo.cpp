@@ -14,9 +14,8 @@
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
 
-#include "UTIL/LCTrackerConf.h"
-#include <UTIL/BitField64.h>
-#include <UTIL/ILDConf.h>
+#include "DDSegmentation/BitFieldCoder.h"
+#include "TrackerCellID_k4geo.h"
 
 using dd4hep::_toString;
 using dd4hep::Assembly;
@@ -33,6 +32,7 @@ using dd4hep::SensitiveDetector;
 using dd4hep::Transform3D;
 using dd4hep::Trapezoid;
 using dd4hep::Volume;
+using dd4hep::DDSegmentation::BitFieldCoder;
 using dd4hep::rec::NeighbourSurfacesData;
 using dd4hep::rec::SurfaceType;
 using dd4hep::rec::Vector3D;
@@ -55,11 +55,10 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
   PlacedVolume pv;
 
   // for encoding
-  std::string cellIDEncoding = sens.readout().idSpec().fieldDescription();
-  UTIL::BitField64 encoder(cellIDEncoding);
-  encoder.reset();
-  encoder[lcio::LCTrackerCellID::subdet()] = x_det.id();
-  encoder[lcio::LCTrackerCellID::side()] = lcio::ILDDetID::barrel;
+  const BitFieldCoder& encoder = *sens.readout().idSpec().decoder();
+  dd4hep::CellID encoderValue = 0;
+  encoder.set(encoderValue, k4geo::TrackerCellID::subdet, x_det.id());
+  encoder.set(encoderValue, k4geo::TrackerCellID::side, k4geo::DetSide::barrel);
 
   ZPlanarData* zPlanarData = new ZPlanarData;
   NeighbourSurfacesData* neighbourSurfacesData = new NeighbourSurfacesData();
@@ -240,12 +239,13 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
       // encoding
 
-      encoder[lcio::LCTrackerCellID::side()] = lcio::ILDDetID::barrel;
-      encoder[lcio::LCTrackerCellID::layer()] = layer_id;
-      encoder[lcio::LCTrackerCellID::module()] = nLadders;
-      encoder[lcio::LCTrackerCellID::sensor()] = 0; // there is no sensor defintion in VertexBarrel at the moment
+      encoder.set(encoderValue, k4geo::TrackerCellID::side, k4geo::DetSide::barrel);
+      encoder.set(encoderValue, k4geo::TrackerCellID::layer, layer_id);
+      encoder.set(encoderValue, k4geo::TrackerCellID::module, nLadders);
+      encoder.set(encoderValue, k4geo::TrackerCellID::sensor,
+                  0); // there is no sensor defintion in VertexBarrel at the moment
 
-      const dd4hep::CellID cellID = encoder.lowWord(); // 32 bits
+      const dd4hep::CellID cellID = BitFieldCoder::lowWord(encoderValue); // 32 bits
 
       // compute neighbours
 
@@ -267,10 +267,10 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
           newmodule = newmodule - nLadders;
 
         // encoding
-        encoder[lcio::LCTrackerCellID::module()] = newmodule;
-        encoder[lcio::LCTrackerCellID::sensor()] = 0;
+        encoder.set(encoderValue, k4geo::TrackerCellID::module, newmodule);
+        encoder.set(encoderValue, k4geo::TrackerCellID::sensor, 0);
 
-        neighbourSurfacesData->sameLayer[cellID].push_back(encoder.lowWord());
+        neighbourSurfacesData->sameLayer[cellID].push_back(BitFieldCoder::lowWord(encoderValue));
       }
 
       ///////////////////
