@@ -2,6 +2,7 @@ README.md
 CMakeLists.txt
 DectDimensions.xml
 materials.xml
+colors.xml
 #__CLD_ill_named_files__
 additional_materials.xml
 BeamInstrumentation_o3_v01_overlap.xml
