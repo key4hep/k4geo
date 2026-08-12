@@ -17,7 +17,7 @@
 #include "XML/Utilities.h"
 
 #include "DDSegmentation/BitFieldCoder.h"
-#include "TrackerCellID_k4geo.h"
+#include "DetSide_k4geo.h"
 
 using namespace std;
 
@@ -56,8 +56,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   // for encoding
   const BitFieldCoder& encoder = *sens.readout().idSpec().decoder();
   dd4hep::CellID encoderValue = 0;
-  encoder.set(encoderValue, k4geo::TrackerCellID::subdet, det_id);
-  encoder.set(encoderValue, k4geo::TrackerCellID::side, k4geo::DetSide::barrel);
+  encoder.set(encoderValue, "system", det_id);
+  encoder.set(encoderValue, "side", k4geo::DetSide::barrel);
 
   // --- create an envelope volume and position it into the world ---------------------
 
@@ -184,9 +184,9 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
         // encoding
 
-        encoder.set(encoderValue, k4geo::TrackerCellID::layer, lay_id);
-        encoder.set(encoderValue, k4geo::TrackerCellID::module, module_idx);
-        encoder.set(encoderValue, k4geo::TrackerCellID::sensor, sensor_idx);
+        encoder.set(encoderValue, "layer", lay_id);
+        encoder.set(encoderValue, "module", module_idx);
+        encoder.set(encoderValue, "sensor", sensor_idx);
 
         const dd4hep::CellID cellID = BitFieldCoder::lowWord(encoderValue); // 32 bits
 
@@ -217,8 +217,8 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
               continue; // out of the stave
 
             // encoding
-            encoder.set(encoderValue, k4geo::TrackerCellID::module, newmodule);
-            encoder.set(encoderValue, k4geo::TrackerCellID::sensor, newsensor);
+            encoder.set(encoderValue, "module", newmodule);
+            encoder.set(encoderValue, "sensor", newsensor);
 
             neighbourSurfacesData->sameLayer[cellID].push_back(BitFieldCoder::lowWord(encoderValue));
           }

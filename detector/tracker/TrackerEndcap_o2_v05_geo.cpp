@@ -26,7 +26,7 @@
 #include <map>
 
 #include "DDSegmentation/BitFieldCoder.h"
-#include "TrackerCellID_k4geo.h"
+#include "DetSide_k4geo.h"
 
 using namespace std;
 
@@ -68,7 +68,7 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
   // for encoding
   const BitFieldCoder& encoder = *sens.readout().idSpec().decoder();
   dd4hep::CellID encoderValue = 0;
-  encoder.set(encoderValue, k4geo::TrackerCellID::subdet, det_id);
+  encoder.set(encoderValue, "system", det_id);
 
   // --- create an envelope volume and position it into the world ---------------------
 
@@ -218,18 +218,18 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
 
         dd4hep::CellID cellID_reflect;
         if (reflect) {
-          encoder.set(encoderValue, k4geo::TrackerCellID::side, k4geo::DetSide::bwd);
-          encoder.set(encoderValue, k4geo::TrackerCellID::layer, l_id);
-          encoder.set(encoderValue, k4geo::TrackerCellID::module, mod_num);
-          encoder.set(encoderValue, k4geo::TrackerCellID::sensor, k);
+          encoder.set(encoderValue, "side", k4geo::DetSide::bwd);
+          encoder.set(encoderValue, "layer", l_id);
+          encoder.set(encoderValue, "module", mod_num);
+          encoder.set(encoderValue, "sensor", k);
 
           cellID_reflect = BitFieldCoder::lowWord(encoderValue); // 32 bits
         }
 
-        encoder.set(encoderValue, k4geo::TrackerCellID::side, k4geo::DetSide::fwd);
-        encoder.set(encoderValue, k4geo::TrackerCellID::layer, l_id);
-        encoder.set(encoderValue, k4geo::TrackerCellID::module, mod_num);
-        encoder.set(encoderValue, k4geo::TrackerCellID::sensor, k);
+        encoder.set(encoderValue, "side", k4geo::DetSide::fwd);
+        encoder.set(encoderValue, "layer", l_id);
+        encoder.set(encoderValue, "module", mod_num);
+        encoder.set(encoderValue, "sensor", k);
 
         const dd4hep::CellID cellID = BitFieldCoder::lowWord(encoderValue); // 32 bits
 
@@ -259,16 +259,16 @@ static Ref_t create_detector(Detector& theDetector, xml_h e, SensitiveDetector s
               continue; // out of disk
 
             // encoding
-            encoder.set(encoderValue, k4geo::TrackerCellID::module, newmodule);
-            encoder.set(encoderValue, k4geo::TrackerCellID::sensor, newsensor);
+            encoder.set(encoderValue, "module", newmodule);
+            encoder.set(encoderValue, "sensor", newsensor);
 
             neighbourSurfacesData->sameLayer[cellID].push_back(BitFieldCoder::lowWord(encoderValue));
 
             if (reflect) {
-              encoder.set(encoderValue, k4geo::TrackerCellID::side, k4geo::DetSide::bwd);
-              encoder.set(encoderValue, k4geo::TrackerCellID::layer, l_id);
-              encoder.set(encoderValue, k4geo::TrackerCellID::module, newmodule);
-              encoder.set(encoderValue, k4geo::TrackerCellID::sensor, newsensor);
+              encoder.set(encoderValue, "side", k4geo::DetSide::bwd);
+              encoder.set(encoderValue, "layer", l_id);
+              encoder.set(encoderValue, "module", newmodule);
+              encoder.set(encoderValue, "sensor", newsensor);
 
               neighbourSurfacesData->sameLayer[cellID_reflect].push_back(BitFieldCoder::lowWord(encoderValue));
             }

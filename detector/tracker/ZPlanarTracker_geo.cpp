@@ -15,7 +15,7 @@
 #include "DDRec/Surface.h"
 
 #include "DDSegmentation/BitFieldCoder.h"
-#include "TrackerCellID_k4geo.h"
+#include "DetSide_k4geo.h"
 
 using dd4hep::_toString;
 using dd4hep::Assembly;
@@ -57,8 +57,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
   // for encoding
   const BitFieldCoder& encoder = *sens.readout().idSpec().decoder();
   dd4hep::CellID encoderValue = 0;
-  encoder.set(encoderValue, k4geo::TrackerCellID::subdet, x_det.id());
-  encoder.set(encoderValue, k4geo::TrackerCellID::side, k4geo::DetSide::barrel);
+  encoder.set(encoderValue, "system", x_det.id());
+  encoder.set(encoderValue, "side", k4geo::DetSide::barrel);
 
   ZPlanarData* zPlanarData = new ZPlanarData;
   NeighbourSurfacesData* neighbourSurfacesData = new NeighbourSurfacesData();
@@ -239,10 +239,10 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
 
       // encoding
 
-      encoder.set(encoderValue, k4geo::TrackerCellID::side, k4geo::DetSide::barrel);
-      encoder.set(encoderValue, k4geo::TrackerCellID::layer, layer_id);
-      encoder.set(encoderValue, k4geo::TrackerCellID::module, nLadders);
-      encoder.set(encoderValue, k4geo::TrackerCellID::sensor,
+      encoder.set(encoderValue, "side", k4geo::DetSide::barrel);
+      encoder.set(encoderValue, "layer", layer_id);
+      encoder.set(encoderValue, "module", nLadders);
+      encoder.set(encoderValue, "sensor",
                   0); // there is no sensor defintion in VertexBarrel at the moment
 
       const dd4hep::CellID cellID = BitFieldCoder::lowWord(encoderValue); // 32 bits
@@ -267,8 +267,8 @@ static Ref_t create_element(Detector& theDetector, xml_h e, SensitiveDetector se
           newmodule = newmodule - nLadders;
 
         // encoding
-        encoder.set(encoderValue, k4geo::TrackerCellID::module, newmodule);
-        encoder.set(encoderValue, k4geo::TrackerCellID::sensor, 0);
+        encoder.set(encoderValue, "module", newmodule);
+        encoder.set(encoderValue, "sensor", 0);
 
         neighbourSurfacesData->sameLayer[cellID].push_back(BitFieldCoder::lowWord(encoderValue));
       }
