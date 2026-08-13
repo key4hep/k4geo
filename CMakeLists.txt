@@ -75,6 +75,25 @@ file(GLOB sources
   ./detector/PID/ARC_geo_o1_v01.cpp
   )
 
+if(NOT K4GEO_USE_LCIO)
+  set(lcio_sources # in ./detector/tracker
+    TrackerEndcap_o2_v05_geo.cpp
+    SiTrackerEndcap_o2_v02ext_geo.cpp
+    TrackerBarrel_o1_v03_geo.cpp
+    TrackerBarrel_o1_v04_geo.cpp
+    TrackerBarrel_o1_v05_geo.cpp
+    TrackerEndcap_o1_v05_geo.cpp
+    TrackerEndcap_o2_v06_geo.cpp
+    TrackerEndcap_o2_v07_geo.cpp
+    VertexEndcap_o1_v05_geo.cpp
+    ZPlanarTracker_geo.cpp
+    )
+  foreach(lcio_source ${lcio_sources})
+    list(FILTER sources EXCLUDE REGEX "${lcio_source}")
+  endforeach()
+  message(STATUS "Use of LCIO is DISABLED, some detectors that depend on LCIO will not be built: ${lcio_sources}")
+endif()
+
 if(${DD4hep_VERSION} VERSION_LESS 1.29)
   set(FILES_DEPENDINGON_DCH_INFO_H "DriftChamber_o1_v02.cpp" )
   list(FILTER sources EXCLUDE REGEX "${FILES_DEPENDINGON_DCH_INFO_H}")
