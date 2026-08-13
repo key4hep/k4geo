@@ -1,3 +1,80 @@
+# v00-26
+
+* 2026-08-13 Federico Meloni ([PR#633](https://github.com/key4hep/k4geo/pull/633))
+  - Removed unused dependencies on LCIO classes from TrackerBarrel_o1_v06 and ZSegmentedPlanarTracker
+  - Removed drivers not depending on LCIO from K4GEO_USE_LCIO exclusion list in CMakeLists
+
+* 2026-08-13 Andreas Loeschcke Centeno ([PR#626](https://github.com/key4hep/k4geo/pull/626))
+  - Smaller README updates
+    - Moved CLD to FCCee detectors
+    - Added muon collider detectors
+
+* 2026-08-12 pablo ([PR#630](https://github.com/key4hep/k4geo/pull/630))
+  - Create `colors.xml` file with vis attributes for each IDEA version
+  - Fix dangling references in each version
+  - Fix dangling references in other configs that include isolated files from IDEA_o1_v03 and IDEA_o1_v04, now that the `vis` tags have been removed from them
+  - Solve `Error. Files with the same name but different contents` from tests, by removing the `vis` tags from the files below, thus matching IDEA's new content:
+    - `FCCee/ALLEGRO/compact/ALLEGRO_o1_v01/SimplifiedDriftChamber.xml`
+    -  `FCCee/ALLEGRO/compact/ALLEGRO_o1_v01/Vertex.xml`
+    - `FCCee/ALLEGRO/compact/ALLEGRO_o1_v01/Beampipe.xml`
+    - `FCCee/ALLEGRO/compact/ALLEGRO_o1_v02/Vertex.xml`
+    - `FCCee/ALLEGRO/compact/ALLEGRO_o1_v02/Beampipe.xml`
+  - Consequently, create `colors.xml` file for ALLEGRO_o1_v01 with the removed `vis` tags. 
+  - Consequently, create `colors.xml` file for ALLEGRO_o1_v02 with the removed `vis` tags.
+
+* 2026-08-11 Federico Meloni ([PR#631](https://github.com/key4hep/k4geo/pull/631))
+  - Fixed propagation of cmake arguments to turn off lcio dependencies.
+
+* 2026-08-06 Erich Varnes ([PR#629](https://github.com/key4hep/k4geo/pull/629))
+  This PR fixes a few small errors in cell positioning (  detectorSegmentations/src/FCCSWEndcapTurbine_k4geo.cpp ) and updates the xml to calculate the geometry in a consistent way as was done in the code.  The detector code was also modified to read the radiusRatio parameter from the xml rather than calculating it, to prevent any divergences between values in the future.  Some variables in the xml were also given more descriptive names to improve readability.
+  
+  In the process of these updates, I noticed that the calibration and upstream versions of the xml had fallen out of sync with the default xml, so these have been updated as well.
+
+* 2026-08-03 Joshua Beirer ([PR#624](https://github.com/key4hep/k4geo/pull/624))
+  Fix flat index in turbine endcap local z lookup
+
+* 2026-08-03 Joshua Beirer ([PR#623](https://github.com/key4hep/k4geo/pull/623))
+  Fix z index decoding in turbine endcap getLocalZ
+
+* 2026-07-31 Juan Miguel Carceller ([PR#622](https://github.com/key4hep/k4geo/pull/622))
+  - Removed unused private fields (m_phiBins, m_offsetPhi, m_rhoBins) from FCCSWEndcapTurbine_k4geo class to eliminate compiler warnings
+
+* 2026-07-29 Juan Miguel Carceller ([PR#619](https://github.com/key4hep/k4geo/pull/619))
+  - Remove a few unused functions in detectorCommon
+
+* 2026-07-29 Erich Varnes ([PR#608](https://github.com/key4hep/k4geo/pull/608))
+  Implements the correct position calculation where the position() method of the segmentation returns the location of the segmented readout cell with respect to its parent G4 volume.  Since there are some calculation steps involved for one of the coordinates, the calculations are done on the first call and then cached to speed things up.  Ideally this would be done in the commonSetup() method, but some needed quantities (m_offsetRho, m_offsetZ) are not initialized before commonSetup() is run.
+  
+  Needs to be syncronized with corresponding k4RecCalorimeter PR (https://github.com/HEP-FCC/k4RecCalorimeter/pull/264) so that the reconstructed cell positions are also correct.
+
+* 2026-07-27 Juan Miguel Carceller ([PR#621](https://github.com/key4hep/k4geo/pull/621))
+  - Fix thickness in the sense wires in the drift chamber, where the radius of the tubes is set to the thickness causing them to have a diameter of 2*thickness
+
+* 2026-07-27 Joshua Beirer ([PR#620](https://github.com/key4hep/k4geo/pull/620))
+  - Fixed severe simulation slowdowns in DRcalo and pre-shower sensitive detectors by using keyed calorimeter hit lookups.
+
+* 2026-07-27 Andreas Loeschcke Centeno ([PR#618](https://github.com/key4hep/k4geo/pull/618))
+  - Updating k4geo README
+
+* 2026-06-29 armin-ilg ([PR#606](https://github.com/key4hep/k4geo/pull/606))
+  - Improved the module and layer numbering scheme in vertex and silicon wrapper, allowing for layer IDs to be consistently used (1 layerID for one layer, 2 layerIDs for two layers in silicon wrapper, and no usage of 'side' value for ultra-light inner vertex).
+  - Properly interfacing in the case of two silicon wrapper layers with bib-studies  (see https://github.com/HEP-FCC/bib-studies/pull/19)
+  - Realistic sensitive/insensitive thickness in IDEA/ALLEGRO inner vertex (6.5 µm insensitive, then 43.5 µm sensitive, after discussion with ARCADIA experts)
+  - Redefine trapezoidal used to approximate curved sensors so that the average trapezoid width is equal to the sensor surface width.
+
+* 2026-06-28 Juan Miguel Carceller ([PR#610](https://github.com/key4hep/k4geo/pull/610))
+  - Fix compiler warnings about an implicit copy constructor
+
+* 2026-06-26 Giovanni Marchiori ([PR#609](https://github.com/key4hep/k4geo/pull/609))
+  - add method to return number of wheels for Turbine endcap segmentation
+
+* 2026-06-24 BrieucF ([PR#607](https://github.com/key4hep/k4geo/pull/607))
+  - [FCCee] Put envelope DCH parameters in DectDimensions and resize ALLEGRO DCH
+
+* 2026-06-18 Stefano Franchellucci ([PR#581](https://github.com/key4hep/k4geo/pull/581))
+  - Implementation of `WireTracker_info` interface structure, generalizing the DD4HEP implementation of the `DCH_info` helper struct. The latter is now a child struct of `WireTracker_info`, together with the new `STT_info_struct`.
+  - Update naming convention in the Straw Tube Tracker (`multilayer` -> `superlayer`) for easier code sharing with Drift Chamber.
+
 # v00-25
 
 * 2026-06-11 sss ([PR#594](https://github.com/key4hep/k4geo/pull/594))
